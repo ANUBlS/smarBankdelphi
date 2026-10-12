@@ -1,0 +1,661 @@
+object MedBDataMod: TMedBDataMod
+  OldCreateOrder = False
+  OnCreate = DataModuleCreate
+  OnDestroy = DataModuleDestroy
+  Height = 480
+  Width = 696
+  object ODSMedical: TOracleDataSet
+    SQL.Strings = (
+      'select im.rowid, im.* from ins_medical im'
+      'where cid =:cid')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000080000003A00430049004400040000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000001E00000004000000490044000100000000000C00000045004D005000
+      4E0055004D000100000000000C000000470052004F0055005000410001000000
+      00001C000000470052004F0055005000410043004F0056004500520041004700
+      45000100000000000C000000470052004F005500500042000100000000001C00
+      0000470052004F0055005000420043004F005600450052004100470045000100
+      000000000C000000470052004F005500500043000100000000001C0000004700
+      52004F0055005000430043004F00560045005200410047004500010000000000
+      1400000049004E005300500052004F004700520041004D000100000000000E00
+      000053004500520056005F004900440001000000000012000000420045004700
+      49004E0044004100540045000100000000000E00000045004E00440044004100
+      540045000100000000000E00000045004D00500053005F004900440001000000
+      00001200000049004E0050004100540053004500520056000100000000001400
+      00004F005500540050004100540053004500520056000100000000000E000000
+      45004D0045005200410049004400010000000000140000005000520045005300
+      43004400520055004700530001000000000010000000440045004E0054005300
+      45005200560001000000000014000000500052004F0050004800590053004500
+      5200560001000000000012000000500052004F0050004800590049004E005300
+      01000000000014000000530041004E00410054004F005200490055004D000100
+      00000000140000004300480049004C0044004200490052005400480001000000
+      00001A0000005000520049005600410054004500440052005300450052005600
+      010000000000160000004D00450044004900430041004C004500560041004300
+      01000000000010000000500052004F005300540049004E005300010000000000
+      220000004300480045004D004F0052004100440049004F005400480045005200
+      4100500059000100000000000C0000004B004C0049005F004900440001000000
+      00000C0000005400590050004500490044000100000000001800000043004C00
+      4F00530045005F00500052004500460049005800010000000000060000004300
+      49004400010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 56
+    Top = 32
+    object ODSMedicalID: TIntegerField
+      FieldName = 'ID'
+    end
+    object ODSMedicalEMPNUM: TIntegerField
+      FieldName = 'EMPNUM'
+    end
+    object ODSMedicalGROUPA: TIntegerField
+      FieldName = 'GROUPA'
+    end
+    object ODSMedicalGROUPACOVERAGE: TWideStringField
+      FieldName = 'GROUPACOVERAGE'
+      Size = 1024
+    end
+    object ODSMedicalGROUPB: TIntegerField
+      FieldName = 'GROUPB'
+    end
+    object ODSMedicalGROUPBCOVERAGE: TWideStringField
+      FieldName = 'GROUPBCOVERAGE'
+      Size = 1024
+    end
+    object ODSMedicalGROUPC: TIntegerField
+      FieldName = 'GROUPC'
+    end
+    object ODSMedicalGROUPCCOVERAGE: TWideStringField
+      FieldName = 'GROUPCCOVERAGE'
+      Size = 1024
+    end
+    object ODSMedicalINSPROGRAM: TWideStringField
+      FieldName = 'INSPROGRAM'
+      Size = 256
+    end
+    object ODSMedicalSERV_ID: TIntegerField
+      FieldName = 'SERV_ID'
+    end
+    object ODSMedicalBEGINDATE: TDateTimeField
+      FieldName = 'BEGINDATE'
+    end
+    object ODSMedicalENDDATE: TDateTimeField
+      FieldName = 'ENDDATE'
+    end
+    object ODSMedicalEMPS_ID: TWideStringField
+      FieldName = 'EMPS_ID'
+      Size = 1
+    end
+    object ODSMedicalINPATSERV: TIntegerField
+      Tag = 777
+      FieldName = 'INPATSERV'
+    end
+    object ODSMedicalOUTPATSERV: TIntegerField
+      Tag = 777
+      FieldName = 'OUTPATSERV'
+    end
+    object ODSMedicalEMERAID: TIntegerField
+      Tag = 777
+      FieldName = 'EMERAID'
+    end
+    object ODSMedicalPRESCDRUGS: TIntegerField
+      Tag = 777
+      FieldName = 'PRESCDRUGS'
+    end
+    object ODSMedicalDENTSERV: TIntegerField
+      Tag = 777
+      FieldName = 'DENTSERV'
+    end
+    object ODSMedicalPROPHYSERV: TIntegerField
+      Tag = 777
+      FieldName = 'PROPHYSERV'
+    end
+    object ODSMedicalPROPHYINS: TIntegerField
+      Tag = 777
+      FieldName = 'PROPHYINS'
+    end
+    object ODSMedicalSANATORIUM: TIntegerField
+      Tag = 777
+      FieldName = 'SANATORIUM'
+    end
+    object ODSMedicalCHILDBIRTH: TIntegerField
+      Tag = 777
+      FieldName = 'CHILDBIRTH'
+    end
+    object ODSMedicalPRIVATEDRSERV: TIntegerField
+      Tag = 777
+      FieldName = 'PRIVATEDRSERV'
+    end
+    object ODSMedicalMEDICALEVAC: TIntegerField
+      Tag = 777
+      FieldName = 'MEDICALEVAC'
+    end
+    object ODSMedicalPROSTINS: TIntegerField
+      Tag = 777
+      FieldName = 'PROSTINS'
+    end
+    object ODSMedicalCHEMORADIOTHERAPY: TIntegerField
+      Tag = 777
+      FieldName = 'CHEMORADIOTHERAPY'
+    end
+    object ODSMedicalKLI_ID: TIntegerField
+      FieldName = 'KLI_ID'
+      Required = True
+    end
+    object ODSMedicalCID: TFloatField
+      FieldName = 'CID'
+    end
+  end
+  object ODSCusts: TOracleDataSet
+    SQL.Strings = (
+      'select * from ('
+      'SELECT a.id, a.surname || '#39'  '#39' ||a.name name, a.ADDRESS'
+      '  FROM ins_customers a'
+      '  order by a.surname'
+      ''
+      ')')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000030000000400000049004400010000000000080000004E0041004D00
+      45000100000000000E0000004100440044005200450053005300010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 168
+    Top = 32
+    object ODSCustsID: TIntegerField
+      FieldName = 'ID'
+      Required = True
+    end
+    object ODSCustsNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 258
+    end
+    object ODSCustsADDRESS: TWideStringField
+      FieldName = 'ADDRESS'
+      Size = 1024
+    end
+  end
+  object DSCusts: TDataSource
+    DataSet = ODSCusts
+    Left = 168
+    Top = 80
+  end
+  object ODSMedServices: TOracleDataSet
+    SQL.Strings = (
+      'select * from ins_dict_medicalservices'
+      '')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000400000049004400010000000000080000004E0041004D00
+      4500010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 168
+    Top = 144
+    object ODSMedServicesID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object ODSMedServicesNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 90
+    end
+  end
+  object DSMedServices: TDataSource
+    DataSet = ODSMedServices
+    Left = 248
+    Top = 144
+  end
+  object ODSEmployees: TOracleDataSet
+    SQL.Strings = (
+      'select ie.rowid, ie.* from ins_employees ie'
+      'where med_id = :med_id')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000E0000003A004D00450044005F0049004400040000000000
+      000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000900000004000000490044000100000000000C0000004D0045004400
+      5F0049004400010000000000080000004E0041004D0045000100000000000E00
+      00005300550052004E0041004D00450001000000000014000000460041005400
+      4800450052004E0041004D004500010000000000160000004400410054004500
+      4F00460042004900520054004800010000000000060000005300450058000100
+      000000000C0000004F00430043005F00490044000100000000000C0000004700
+      52004F00550050005F00010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    AfterInsert = ODSEmployeesAfterInsert
+    Left = 248
+    Top = 33
+    object ODSEmployeesID: TIntegerField
+      FieldName = 'ID'
+    end
+    object ODSEmployeesMED_ID: TIntegerField
+      FieldName = 'MED_ID'
+      Required = True
+    end
+    object ODSEmployeesNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 256
+    end
+    object ODSEmployeesSURNAME: TWideStringField
+      FieldName = 'SURNAME'
+      Size = 256
+    end
+    object ODSEmployeesFATHERNAME: TWideStringField
+      FieldName = 'FATHERNAME'
+      Size = 256
+    end
+    object ODSEmployeesDATEOFBIRTH: TDateTimeField
+      FieldName = 'DATEOFBIRTH'
+      EditMask = '!99/99/0000;1;_'
+    end
+    object ODSEmployeesSEX: TWideStringField
+      FieldName = 'SEX'
+      Size = 40
+    end
+    object ODSEmployeesOCC_ID: TIntegerField
+      FieldName = 'OCC_ID'
+    end
+    object ODSEmployeesGROUP_: TWideStringField
+      FieldName = 'GROUP_'
+      Size = 5
+    end
+    object ODSEmployeesOCCCombo: TWideStringField
+      FieldKind = fkLookup
+      FieldName = 'OCCCombo'
+      LookupDataSet = ODSOccupation
+      LookupKeyFields = 'ID'
+      LookupResultField = 'NAME'
+      KeyFields = 'OCC_ID'
+      Lookup = True
+    end
+  end
+  object DSEmployees: TDataSource
+    DataSet = ODSEmployees
+    Left = 248
+    Top = 81
+  end
+  object ODSOccupation: TOracleDataSet
+    SQL.Strings = (
+      'select * from ins_dict_occupations')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000400000049004400010000000000080000004E0041004D00
+      4500010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 336
+    Top = 32
+    object ODSOccupationID: TFloatField
+      FieldName = 'ID'
+    end
+    object ODSOccupationNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 90
+    end
+  end
+  object DSOccupation: TDataSource
+    DataSet = ODSOccupation
+    Left = 416
+    Top = 32
+  end
+  object DSMedical: TDataSource
+    DataSet = ODSMedical
+    Left = 56
+    Top = 80
+  end
+  object OPCOMMON: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'INS_COMMON'
+    Left = 72
+    Top = 160
+  end
+  object DsSysdat: TOracleDataSet
+    SQL.Strings = (
+      'select * from sysdat')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000040000000E000000540045004B005F00440041005400010000000000
+      1000000050005200450044005F004400410054000100000000000E0000004100
+      520043005F004400410059000100000000000A00000043004C004F0053004500
+      010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 592
+    Top = 24
+    object DsSysdatTEK_DAT: TDateTimeField
+      FieldName = 'TEK_DAT'
+      Required = True
+    end
+    object DsSysdatPRED_DAT: TDateTimeField
+      FieldName = 'PRED_DAT'
+    end
+    object DsSysdatARC_DAY: TDateTimeField
+      FieldName = 'ARC_DAY'
+    end
+    object DsSysdatCLOSE: TIntegerField
+      FieldName = 'CLOSE'
+    end
+  end
+  object DSRAgent: TDataSource
+    DataSet = DSAgent
+    Left = 248
+    Top = 208
+  end
+  object DSAgent: TOracleDataSet
+    SQL.Strings = (
+      'SELECT id, surname||'#39' '#39'||name||'#39' '#39'||fathername as name'
+      '  FROM ins_agents ')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000400000049004400010000000000080000004E0041004D00
+      4500010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 168
+    Top = 208
+    object DSAgentID: TFloatField
+      FieldName = 'ID'
+    end
+    object DSAgentNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 1536
+    end
+  end
+  object DSContract: TOracleDataSet
+    SQL.Strings = (
+      'select c.rowid,c.* from ins_contracts c'
+      'where c.id=:cid')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000080000003A00430049004400030000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000002100000004000000490044000100000000000E000000540059005000
+      45005F00490044000100000000001000000049004E0053005F00440041005400
+      45000100000000001400000042004500470049004E005F004400410054004500
+      0100000000001000000045004E0044005F004400410054004500010000000000
+      12000000560041004C005500540045005F00490044000100000000000E000000
+      41004D004D004F0055004E0054000100000000001800000043004C004F005300
+      45005F005000520045004600490058000100000000000C0000004B004C004900
+      5F0049004400010000000000140000004C004F0041004E004100430043005F00
+      490044000100000000001400000043005500520052004100430043005F004900
+      44000100000000001400000050004F004C004900430059005F004E0055004D00
+      0100000000000E00000049004E005300530055004D004D000100000000001000
+      00004600520041004E005300480049005A000100000000000C00000054004100
+      52004900460046000100000000000A0000005300540041005400450001000000
+      0000100000004100470045004E0054005F004900440001000000000008000000
+      50004E0055004D000100000000000C000000420045004E005F00490044000100
+      0000000016000000420045004E00450046004900430049004100520059000100
+      000000001400000043004F004E0044004900540049004F004E00530001000000
+      00000C0000005300550047004E0055004D000100000000001000000042004C00
+      41004E004B005F00490044000100000000000A0000004F0050005F0049004400
+      0100000000000A0000005200450049004E0053000100000000000E0000004300
+      48004B00410053004B004F0001000000000006000000430048004D0001000000
+      00000800000043004800460051000100000000001600000043004F004D004D00
+      490054004F0050005F00490044000100000000001600000043004F004D004D00
+      490054005F00440041005400450001000000000014000000430041004E004300
+      45004C004F0050004900440001000000000014000000430041004E0043004500
+      4C0044004100540045000100000000000C000000460049004C00490041004C00
+      010000000000}
+    Session = sboapiDataModule.SBSession
+    AfterInsert = DSContractAfterInsert
+    Left = 336
+    Top = 88
+    object DSContractID: TFloatField
+      FieldName = 'ID'
+    end
+    object DSContractTYPE_ID: TFloatField
+      FieldName = 'TYPE_ID'
+    end
+    object DSContractINS_DATE: TDateTimeField
+      FieldName = 'INS_DATE'
+    end
+    object DSContractBEGIN_DATE: TDateTimeField
+      FieldName = 'BEGIN_DATE'
+    end
+    object DSContractEND_DATE: TDateTimeField
+      FieldName = 'END_DATE'
+    end
+    object DSContractVALUTE_ID: TFloatField
+      FieldName = 'VALUTE_ID'
+    end
+    object DSContractAMMOUNT: TFloatField
+      FieldName = 'AMMOUNT'
+    end
+    object DSContractCLOSE_PREFIX: TIntegerField
+      FieldName = 'CLOSE_PREFIX'
+    end
+    object DSContractKLI_ID: TFloatField
+      FieldName = 'KLI_ID'
+    end
+    object DSContractLOANACC_ID: TFloatField
+      FieldName = 'LOANACC_ID'
+    end
+    object DSContractCURRACC_ID: TFloatField
+      FieldName = 'CURRACC_ID'
+    end
+    object DSContractPOLICY_NUM: TWideStringField
+      FieldName = 'POLICY_NUM'
+      Size = 128
+    end
+    object DSContractINSSUMM: TFloatField
+      FieldName = 'INSSUMM'
+    end
+    object DSContractFRANSHIZ: TFloatField
+      FieldName = 'FRANSHIZ'
+    end
+    object DSContractTARIFF: TFloatField
+      FieldName = 'TARIFF'
+    end
+    object DSContractSTATE: TIntegerField
+      FieldName = 'STATE'
+    end
+    object DSContractAGENT_ID: TFloatField
+      FieldName = 'AGENT_ID'
+    end
+    object DSContractPNUM: TFloatField
+      FieldName = 'PNUM'
+    end
+    object DSContractBEN_ID: TFloatField
+      FieldName = 'BEN_ID'
+    end
+    object DSContractBENEFICIARY: TWideStringField
+      FieldName = 'BENEFICIARY'
+      Size = 4000
+    end
+    object DSContractCONDITIONS: TWideStringField
+      FieldName = 'CONDITIONS'
+      Size = 4000
+    end
+    object DSContractSUGNUM: TWideStringField
+      FieldName = 'SUGNUM'
+      Size = 128
+    end
+    object DSContractBLANK_ID: TFloatField
+      FieldName = 'BLANK_ID'
+    end
+    object DSContractOP_ID: TFloatField
+      FieldName = 'OP_ID'
+      Visible = False
+    end
+    object DSContractREINS: TFloatField
+      FieldName = 'REINS'
+      Visible = False
+    end
+    object DSContractCHKASKO: TFloatField
+      FieldName = 'CHKASKO'
+      Visible = False
+    end
+    object DSContractCHM: TFloatField
+      FieldName = 'CHM'
+      Visible = False
+    end
+    object DSContractCHFQ: TFloatField
+      FieldName = 'CHFQ'
+      Visible = False
+    end
+    object DSContractCOMMITOP_ID: TFloatField
+      FieldName = 'COMMITOP_ID'
+      Visible = False
+    end
+    object DSContractCOMMIT_DATE: TDateTimeField
+      FieldName = 'COMMIT_DATE'
+      Visible = False
+    end
+    object DSContractCANCELOPID: TFloatField
+      FieldName = 'CANCELOPID'
+      Visible = False
+    end
+    object DSContractCANCELDATE: TDateTimeField
+      FieldName = 'CANCELDATE'
+      Visible = False
+    end
+    object DSContractFILIAL: TFloatField
+      FieldName = 'FILIAL'
+      Visible = False
+    end
+  end
+  object DSRContract: TDataSource
+    DataSet = DSContract
+    Left = 416
+    Top = 88
+  end
+  object Sb_aca: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'Sb_aca'
+    Left = 592
+    Top = 72
+  end
+  object DSavalute: TOracleDataSet
+    SQL.Strings = (
+      'select valute, val_name, valu_name, valu_short from avalute')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000040000000C000000560041004C005500540045000100000000001000
+      0000560041004C005F004E0041004D0045000100000000001200000056004100
+      4C0055005F004E0041004D00450001000000000014000000560041004C005500
+      5F00530048004F0052005400010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 168
+    Top = 256
+    object DSavaluteVALUTE: TIntegerField
+      FieldName = 'VALUTE'
+    end
+    object DSavaluteVAL_NAME: TWideStringField
+      FieldName = 'VAL_NAME'
+      Size = 160
+    end
+    object DSavaluteVALU_NAME: TWideStringField
+      FieldName = 'VALU_NAME'
+      Size = 400
+    end
+    object DSavaluteVALU_SHORT: TWideStringField
+      FieldName = 'VALU_SHORT'
+      Size = 160
+    end
+  end
+  object DSRavalute: TDataSource
+    DataSet = DSavalute
+    Left = 248
+    Top = 256
+  end
+  object DSRins_med_suggestion: TDataSource
+    DataSet = DSins_med_suggestion
+    Left = 248
+    Top = 312
+  end
+  object DSins_med_suggestion: TOracleDataSet
+    SQL.Strings = (
+      'select m.rowid,m.* from ins_med_suggestion m'
+      'where med_id=:pmed_id')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000100000003A0050004D00450044005F004900440003000000
+      0000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000C00000004000000490044000100000000000C0000004D0045004400
+      5F00490044000100000000001A00000049004E0053005500520041004E004300
+      4500540049004D0045000100000000000E00000045004E004400440041005400
+      45000100000000000C0000004900540053005000450043000100000000000C00
+      000049004E005300530055004D000100000000002400000049004E0053004100
+      4D004D004F0055004E005400450056004500520059004F004E00450001000000
+      00001A00000049004E00530041004D004D004F0055004E00540041004C004C00
+      0100000000001E00000049004E005300530055004D0054004500560045005200
+      59004F004E0045000100000000002600000049004E005300530055004D004D00
+      4500440053004500520056004900430045004F004E0045000100000000002400
+      000049004E005300530055004D004D00450044004400450052004D0041004E00
+      4F004E0045000100000000002400000049004E005300530055004D004D004500
+      44004400450052004D0041004E00530055004D00010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 168
+    Top = 312
+    object DSins_med_suggestionID: TFloatField
+      FieldName = 'ID'
+    end
+    object DSins_med_suggestionMED_ID: TFloatField
+      FieldName = 'MED_ID'
+    end
+    object DSins_med_suggestionINSURANCETIME: TFloatField
+      FieldName = 'INSURANCETIME'
+    end
+    object DSins_med_suggestionENDDATE: TDateTimeField
+      FieldName = 'ENDDATE'
+    end
+    object DSins_med_suggestionITSPEC: TWideStringField
+      FieldName = 'ITSPEC'
+      Size = 1
+    end
+    object DSins_med_suggestionINSSUM: TFloatField
+      FieldName = 'INSSUM'
+    end
+    object DSins_med_suggestionINSAMMOUNTEVERYONE: TFloatField
+      FieldName = 'INSAMMOUNTEVERYONE'
+    end
+    object DSins_med_suggestionINSAMMOUNTALL: TFloatField
+      FieldName = 'INSAMMOUNTALL'
+    end
+    object DSins_med_suggestionINSSUMTEVERYONE: TFloatField
+      FieldName = 'INSSUMTEVERYONE'
+    end
+    object DSins_med_suggestionINSSUMMEDSERVICEONE: TFloatField
+      FieldName = 'INSSUMMEDSERVICEONE'
+    end
+    object DSins_med_suggestionINSSUMMEDDERMANONE: TFloatField
+      FieldName = 'INSSUMMEDDERMANONE'
+    end
+    object DSins_med_suggestionINSSUMMEDDERMANSUM: TFloatField
+      FieldName = 'INSSUMMEDDERMANSUM'
+    end
+  end
+  object DSRFilial: TDataSource
+    DataSet = DSFilial
+    Left = 424
+    Top = 152
+  end
+  object DSFilial: TOracleDataSet
+    SQL.Strings = (
+      'select * from filial'
+      'order by id')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000030000000400000049004400010000000000080000004E0041004D00
+      4500010000000000140000004B004F0044005F00460049004C00490041004C00
+      010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 344
+    Top = 152
+    object DSFilialID: TFloatField
+      FieldName = 'ID'
+    end
+    object DSFilialNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 360
+    end
+    object DSFilialKOD_FILIAL: TWideStringField
+      FieldName = 'KOD_FILIAL'
+      Size = 24
+    end
+  end
+end

@@ -1,0 +1,320 @@
+﻿unit cfile_addi;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ImgList, ComCtrls, ToolWin, xmldom, XMLIntf, msxmldom, XMLDoc,
+  StdCtrls, Grids, DBGrids;
+
+type
+  TAdditional_cfile = class(TForm)
+    ToolBar1: TToolBar;
+    ToolButton3: TToolButton;
+    isertbtn: TToolButton;
+    ToolButton1: TToolButton;
+    ImageList1: TImageList;
+    XMLDocument1: TXMLDocument;
+    OpenDialog1: TOpenDialog;
+    RichEdit1: TRichEdit;
+    Memo1: TMemo;
+    Button1: TButton;
+    DBGrid1: TDBGrid;
+    DBGrid2: TDBGrid;
+    procedure isertbtnClick(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure ToolButton3Click(Sender: TObject);
+    procedure DBGrid1TitleClick(Column: TColumn);
+    procedure ToolButton1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Additional_cfile: TAdditional_cfile;
+
+implementation
+
+uses Unit18,SBTranslateProc,sboapiDataModuleImpl;
+
+{$R *.dfm}
+
+
+function SearchForText_AndSelect(RichEdit: TRichEdit; SearchText: string): Boolean;
+var
+  StartPos, Position, Endpos: Integer;
+begin
+  StartPos := 0;
+  with RichEdit do
+  begin
+    Endpos := Length(RichEdit.Text);
+    Lines.BeginUpdate;
+    while FindText(SearchText, StartPos, Endpos, [stMatchCase])<>-1 do
+    begin
+      Endpos   := Length(RichEdit.Text) - startpos;
+      Position := FindText(SearchText, StartPos, Endpos, [stMatchCase]);
+      Inc(StartPos, Length(SearchText));
+      SetFocus;
+      SelStart  := Position;
+      SelLength := Length(SearchText);
+    end;
+    Lines.EndUpdate;
+  end;
+end;
+
+procedure TAdditional_cfile.Button1Click(Sender: TObject);
+var
+RootNode, xmlNode: IXMLNode;
+i,j,k,tr,sr:Integer;
+fname:string;
+begin
+
+ if OpenDialog1.Execute then
+   begin
+    FName := OpenDialog1.FileName;
+   end;
+
+
+XMLDocument1.LoadFromFile(FName);
+XMLDocument1.Active := True;
+
+RootNode := XMLDocument1.DocumentElement;
+
+        for j :=0 to RootNode.ChildNodes['DocTransList'].ChildNodes.Count-1 do
+        begin
+               fname:= RootNode.ChildNodes['DocTransList'].ChildNodes[j].ChildNodes['DocID'].Text;
+                DataMod_CARDS.mainpacket.CallProcedure('multi_del',[fname]);
+            for i :=0 to RootNode.ChildNodes['DocTransList'].ChildNodes['DocDetails'].ChildNodes['SynteticTransList'].ChildNodes.Count-1 do
+              begin
+
+              xmlNode :=RootNode.ChildNodes['DocTransList'].ChildNodes[j].ChildNodes['SynteticTransList'].ChildNodes[i];
+
+              tr:=strtoint(xmlNode.ChildNodes['TransferedAmount'].ChildNodes['GMTrCurrency'].Text) ;
+              sr:=strtoint(xmlNode.ChildNodes['AccountAmount'].ChildNodes['GMCurrency'].Text);
+                     if tr<>sr then
+                       begin
+                         Memo1.Lines.Add(StringOfChar('#', 20));
+                         Memo1.Lines.Add(xmlNode.ChildNodes['AccountAmount'].ChildNodes['GMAmount'].Text);
+                         Memo1.Lines.Add(StringOfChar('*', 20));
+                         Memo1.Lines.Add( RootNode.ChildNodes['DocTransList'].ChildNodes[j].ChildNodes['DocID'].Text);
+                         DataMod_CARDS.mainpacket.CallProcedure('multi_ins',[ RootNode.ChildNodes['DocTransList'].ChildNodes[j].ChildNodes['DocID'].Text,xmlNode.ChildNodes['AccountAmount'].ChildNodes['GMAmount'].Text,sr]);
+                        end;
+              end;
+        end;
+
+
+
+XMLDocument1.Active := False;
+
+ ToolButton3.Click;
+
+
+end;
+
+procedure TAdditional_cfile.DBGrid1TitleClick(Column: TColumn);
+var
+   TitleName :string;
+   SortPosition: word;
+begin
+ SortPosition :=100;
+ //OrderedTitle :=Column.FieldName; //H.R. 24.06.2008
+ if (DBGrid1.DataSource.DataSet.IsEmpty) or (Column.FieldName = EmptyStr) then Exit;
+ Screen.Cursor :=crHourGlass;
+ TitleName :=Column.FieldName;
+ with DBGrid1.DataSource.DataSet do
+  try
+
+   DataMod_CARDS.caddi.SQL.Add('ORDER BY '+ TitleName);
+   Refresh;
+  finally
+
+   Screen.Cursor :=crDefault;
+  end;
+end;
+
+procedure TAdditional_cfile.isertbtnClick(Sender: TObject);
+
+var xml:TXMLDocument;
+    i,k,j:integer;
+    dt,st,fname:string;
+     fl:textfile;
+     stpos,endpos: integer;
+   ref : String;
+    pos1,num1,kk,row:integer;
+ Arr : array of array[0..1] of Integer;
+begin
+button1.Click;
+      {
+ if OpenDialog1.Execute then
+   begin
+    FName := OpenDialog1.FileName;
+   end;
+ {
+ RichEdit1.Lines.LoadFromFile(FName);
+ AssignFile(fl,FName);
+ reset(fl);
+
+
+ while not Eof(fl) do begin
+      Readln(fl,st);
+
+ end;
+  CloseFile(fl);
+                    }
+
+{repeat
+RichEdit1.SetFocus();
+Pos(ref, Richedit1.Lines.Text) ;
+RichEdit1.SelStart:=Pos(ref,RichEdit1.Lines.Text)-1;
+RichEdit1.SelAttributes.Color:=clred;
+//RichEdit1.SelLength:=Length(FIND);
+
+
+until Pos(ref,RichEdit1.Lines.Text)=0;
+ }
+
+    {
+
+  for i := 0 to 5 do
+    begin
+      stpos:=RichEdit1.FindText('<GMAmount>',0,RichEdit1.GetTextLen,[stMatchCase]);
+      endpos:=RichEdit1.FindText('</GMAmount>',0,RichEdit1.GetTextLen,[stMatchCase]);
+      RichEdit1.SelStart:=stpos+length('<GMAmount>');
+      RichEdit1.SelLength:=abs(endpos-stpos)-length('</GMAmount>');
+      ref:=RichEdit1.SelText;
+
+        memo1.Lines.Add(ref);
+    end;
+
+          }
+   //  xml := TXMLDocument.Create(nil);
+       //if not DirectoryExists('C:\AZCARD\IN') then MkDir('C:\AZCARD\IN');
+
+    {
+      XMLDocument1.LoadFromFile(FName);
+
+     XMLDocument1.Active:=true;
+     ShowMessage( XMLDocument1.DocumentElement.ChildNodes['AnalyticTransfer'].Text);
+
+ShowMessage( XMLDocument1.DocumentElement.ChildNodes['AnalyticTransfer'].ChildNodes['DocTransList'].ChildNodes['DocDetails'].ChildNodes['SynteticTransList'].ChildNodes['SyntheticDoc'].ChildNodes['AccountAmount'].ChildNodes['GMAmount'].Text);
+
+          {   for i  := 0 to xml.DocumentElement.ChildNodes.Count-1 do
+            begin
+                 dt := xml.DocumentElement.ChildNodes[i].ChildNodes['GMTrCurrency'].Text;
+                 st := xml.DocumentElement.ChildNodes[i].ChildNodes['GMTrAmount'].Text;
+              Memo1.Lines.Add(dt);
+                 Memo1.Lines.Add(st);
+            end;
+            XMLDocument1.Active := False;
+                      }
+
+
+
+
+
+
+
+
+
+
+end;
+
+procedure TAdditional_cfile.ToolButton1Click(Sender: TObject);
+var
+
+
+   V,Sheet,Sheets,excel  :Variant;
+   cell,row,l,m    :Integer;
+   i,j,ids : integer;
+   formats,debet,kredit,summa,destination,vbic:string;
+   output:TextFile;
+   FileName,Swmessage,dir,edit_ref,BeginMessage,Endmesage,valu:String;
+   Index :Integer;
+   WaitNextConfirm, WillRefresh: Boolean;
+   TransactionID :Integer;
+begin
+
+
+  WaitNextConfirm :=True;
+  WillRefresh :=False;
+  if DBGrid1.CanFocus then
+  DBGrid1.SetFocus;
+
+  //Focus;
+  with  DBGrid1, SelectedRows, DataSource.DataSet, DataMod_CARDS do
+  try
+    if Count = 0 then CurrentRowSelected := True;
+
+
+
+    for  Index :=0 to  Count - 1 do
+    begin
+      GotoBookmark(Pointer(Items[Index]));
+      TransactionID :=FieldbyName('ID').AsInteger;
+
+      if  WaitNextConfirm  then
+      case MessageDlg(
+        Format('Əmaliyyat təsdiq edilsin? №',[TransactionID])
+       ,mtConfirmation
+       ,[mbYes, mbNo ,mbCancel ,mbYesToAll]
+       ,0
+       )   of
+        mrNo       : begin Continue;  end;
+        mrCancel   : begin Break; end;
+        mrYesToAll :
+          if MessageDlg(Format('%d  sayda əməliyyat təsdiq edildi?', [Count - Index]), mtConfirmation, [mbYes, mbCancel], 0) = mrYes then
+           WaitNextConfirm :=False
+          else
+           Continue;
+      end;
+      Application.ProcessMessages;
+      //------------------------------------------------------------------------------------create prows
+
+                DataMod_CARDS.mainpacket.CallProcedure('transaction_multi',[TransactionID]) ;
+
+
+
+
+      WillRefresh :=True;
+
+
+    end;
+  finally
+   if WillRefresh then
+
+
+   begin
+
+
+
+
+                            // Excel.Range[Excel.Cells[1, 1], Excel.Cells[index+1,27]].Select;
+                            // excel.Cells[index+1,27].SELECT;
+                           // Excel.Selection.Borders.LineStyle:=1;
+                           // excel.Selection.HorizontalAlignment:=2;
+
+
+                            // Excel.Visible := True;
+
+                         ToolButton3.Click;
+                          ShowMessage('Əməliyyatlar günün sənədlərinə göndərildi!');
+
+
+
+
+   end; //else Excel.Workbooks.close;
+
+  end;
+end;
+
+procedure TAdditional_cfile.ToolButton3Click(Sender: TObject);
+begin
+dbgrid1.DataSource.DataSet.close;
+dbgrid1.DataSource.DataSet.open;
+dbgrid2.DataSource.DataSet.close;
+dbgrid2.DataSource.DataSet.open;
+end;
+
+end.

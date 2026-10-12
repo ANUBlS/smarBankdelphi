@@ -1,0 +1,177 @@
+unit ReportImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ExtCtrls, QuickRpt, Qrctrls, DBCtrls,jpeg;
+
+type
+  TReportForm = class(TForm)
+    QrpfrmRep: TQuickRep;
+    TitleBand1: TQRBand;
+    QRLabel13: TQRLabel;
+    QRLabel16: TQRLabel;
+    QRLabel17: TQRLabel;
+    QRLabel18: TQRLabel;
+    QRLabel19: TQRLabel;
+    QRLabel9: TQRLabel;
+    QRLabel8: TQRLabel;
+    QRLabel7: TQRLabel;
+    QRLabel6: TQRLabel;
+    QRLabel5: TQRLabel;
+    QRLabel4: TQRLabel;
+    QRLabel3: TQRLabel;
+    QRLabel2: TQRLabel;
+    QRLabel1: TQRLabel;
+    CustomerName: TQRDBText;
+    QRDBText1: TQRDBText;
+    CustAccno: TQRDBText;
+    Loanaccno: TQRDBText;
+    Creditamount: TQRDBText;
+    Period: TQRDBText;
+    Creditdate: TQRDBText;
+    MonthPayment: TQRDBText;
+    FullIntPayment: TQRLabel;
+    ANNUALYINTERESTRATE: TQRLabel;
+    QRLabel11: TQRLabel;
+    QRDBText3: TQRDBText;
+    QRLabel14: TQRLabel;
+    QRLabel21: TQRLabel;
+    QRLabel22: TQRLabel;
+    QRDBText11: TQRDBText;
+    QRImage1: TQRImage;
+    QRBand2: TQRBand;
+    SeqNo: TQRDBText;
+    QRDBText9: TQRDBText;
+    QRDBText2: TQRDBText;
+    QRDBText8: TQRDBText;
+    QRDBText5: TQRDBText;
+    QRShape1: TQRShape;
+    QRShape2: TQRShape;
+    QRShape3: TQRShape;
+    QRShape4: TQRShape;
+    QRShape5: TQRShape;
+    QRShape6: TQRShape;
+    QRShape7: TQRShape;
+    QRShape8: TQRShape;
+    SummaryBand1: TQRBand;
+    QRLabel20: TQRLabel;
+    QRExpr1: TQRExpr;
+    QRExpr2: TQRExpr;
+    QRExpr3: TQRExpr;
+    QRLabel10: TQRLabel;
+    QRDBText6: TQRDBText;
+    QRBand1: TQRBand;
+    QRDBText4: TQRDBText;
+    QRLabel12: TQRLabel;
+    QRLabel15: TQRLabel;
+    QRImage2: TQRImage;
+    procedure QrpfrmRepBeforePrint(Sender: TCustomQuickRep;
+      var PrintReport: Boolean);
+  private
+
+
+  public
+
+  end;
+
+var
+  ReportForm: TReportForm;
+    var path,path_b:string;
+implementation
+
+{$R *.DFM}
+uses  ScheduleMainFormImpl,ScheduleDataModuleImpl{,sboapiDataModuleImpl, SBTranslateProc};
+
+
+procedure GetPath;
+var
+  ImagesPath: String;
+
+begin
+  ImagesPath := Format('%s\..\Bin\photo', [ExtractFilePath(ParamStr(0))]);
+  Path := Format('%s\temp.jpg', [ImagesPath]);
+  Path_B := Format('%s\blank.jpg', [ImagesPath]);
+end;
+
+
+procedure logo ;
+ var
+  F: File of byte;
+  begin
+  GetPath;
+ if (ScheduleDataModule.BankInfoLOGO.IsNull) then
+  begin
+    ReportForm.qrImage1.Picture.LoadFromFile(Path_B);
+   end
+  else
+  begin
+    ScheduleDataModule.BankInfoLOGO.SaveToFile(Path);
+    AssignFile(F, Path);
+    Reset(F);
+    if FileSize(F) > 0 then
+    begin
+      CloseFile(F);
+      ReportForm.qrImage1.Picture.LoadFromFile(Path);
+     end
+    else
+    begin
+      CloseFile(F);
+      ReportForm.qrImage1.Picture.LoadFromFile(Path_B);
+    end;
+  end;
+
+  end;
+
+  procedure imza_logo;
+      var
+  F: File of byte;
+ bS : TStream;
+ Pic : TJPEGImage;
+  begin
+  GetPath;
+   Pic := TJPEGImage.Create;
+
+    if (ScheduleDataModule.BankInfoIMZA_LOGO.IsNull) then
+  begin
+    Pic.LoadFromFile(Path_B);
+    ReportForm.qrImage2.Picture.Bitmap.Assign(Pic);// LoadFromFile(Path_B);
+
+   end
+  else
+  begin
+    ScheduleDataModule.BankInfoIMZA_LOGO.SaveToFile(Path);
+    AssignFile(F, Path);
+    Reset(F);
+    if FileSize(F) > 0 then
+    begin
+      CloseFile(F);
+       Pic.LoadFromFile(Path);
+      ReportForm.qrImage2.Picture.Bitmap.Assign(Pic);//  LoadFromFile(Path);
+     end
+    else
+    begin
+      CloseFile(F);
+       Pic.LoadFromFile(Path_B);
+      ReportForm.qrImage2.Picture.Bitmap.Assign(Pic);// LoadFromFile(Path_B);
+    end;
+  end;
+
+end;
+
+procedure TReportForm.QrpfrmRepBeforePrint(Sender: TCustomQuickRep;
+  var PrintReport: Boolean);
+begin
+logo;
+if v_visable=true then
+begin
+imza_logo;
+end;
+
+
+//SBTranslateProc.TranslateAllCompQuickRep(Self,sboapiDataModule.OrPack_SL);
+end;
+
+
+end.

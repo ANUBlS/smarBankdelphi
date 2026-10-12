@@ -1,0 +1,848 @@
+object FrmDaily: TFrmDaily
+  Left = 434
+  Top = 210
+  ClientHeight = 290
+  ClientWidth = 425
+  Color = clBtnFace
+  Font.Charset = RUSSIAN_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poScreenCenter
+  OnCanResize = FormCanResize
+  OnCreate = FormCreate
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 425
+    Height = 290
+    Align = alClient
+    BevelOuter = bvLowered
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 0
+    object SpeedButton2: TSpeedButton
+      Left = 334
+      Top = 254
+      Width = 83
+      Height = 32
+      Caption = 'Ba'#287'la'
+      Flat = True
+      Glyph.Data = {
+        DE010000424DDE01000000000000760000002800000024000000120000000100
+        0400000000006801000000000000000000001000000000000000000000000000
+        80000080000000808000800000008000800080800000C0C0C000808080000000
+        FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00333333333333
+        333333333333333333333333000033338833333333333333333F333333333333
+        0000333C44833333C83333333388F333333F33330000333C4448333C44833333
+        38F38F333F88F3330000333C444483C44448333338F338F3F8338F3300003333
+        C44448444448333338F3338F833338F3000033333C44444444833333338F3338
+        3333F8330000333333C44444483333333338F333333F83330000333333344444
+        8333333333338F333338333300003333333C444483333333333338F333833333
+        0000333333C444448333333333333833338F3333000033333C44484448333333
+        33338333338F333300003333C44483C44483333333383338F338F33300003333
+        C448333C44483333338F33838F338F33000033333C433333C4443333338FF833
+        38F338F300003333333333333C4C333333388333338FFF830000333333333333
+        3333333333333333333888330000333333333333333333333333333333333333
+        0000}
+      NumGlyphs = 2
+      OnClick = SpeedButton2Click
+    end
+    object SpeedButton1: TSpeedButton
+      Left = 253
+      Top = 254
+      Width = 80
+      Height = 33
+      Caption = 'Q'#601'bul'
+      Flat = True
+      Glyph.Data = {
+        DE010000424DDE01000000000000760000002800000024000000120000000100
+        0400000000006801000000000000000000001000000000000000000000000000
+        80000080000000808000800000008000800080800000C0C0C000808080000000
+        FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00333333333333
+        3333333333333333333333330000333333333333333333333333F33333333333
+        00003333300333333333333333388F3333333333000033330440333333333333
+        338338F3333333330000333044440333333333333833338F3333333300003304
+        444440333333333383333338F3333333000030444C44440333333338F338F333
+        8F33333300003444C3C4440333333338F3838F338F33333300003C4C333C4440
+        33333338F83338F338F33333000033C33333C444033333338333338F338F3333
+        0000333333333C444033333333333338F338F33300003333333333C444033333
+        333333338F338F33000033333333333C444033333333333338F338F300003333
+        33333333C444033333333333338F338F00003333333333333C44033333333333
+        3338F38F000033333333333333C443333333333333338F830000333333333333
+        333C333333333333333338330000333333333333333333333333333333333333
+        0000}
+      NumGlyphs = 2
+      OnClick = SpeedButton1Click
+    end
+    object Panel2: TPanel
+      Left = 1
+      Top = 1
+      Width = 423
+      Height = 30
+      Align = alTop
+      BevelOuter = bvLowered
+      TabOrder = 0
+      object Label1: TLabel
+        Left = 6
+        Top = 7
+        Width = 23
+        Height = 14
+        Caption = 'Tarix'
+      end
+      object DateTimePicker1: TDateTimePicker
+        Left = 40
+        Top = 3
+        Width = 186
+        Height = 21
+        Date = 40331.517226319400000000
+        Time = 40331.517226319400000000
+        TabOrder = 0
+      end
+    end
+    object GroupBox1: TGroupBox
+      Left = 4
+      Top = 33
+      Width = 211
+      Height = 220
+      Caption = 'Filial'
+      Color = clBtnFace
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clBlue
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = [fsBold]
+      ParentColor = False
+      ParentFont = False
+      TabOrder = 1
+      object LookFilGrp: TEvanescence
+        Tag = 3112
+        Left = 3
+        Top = 32
+        Width = 203
+        Height = 185
+        Color = clWhite
+        Flat = False
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clNavy
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ItemHeight = 14
+        ParentFont = False
+        TabOrder = 0
+        DataSource = srcFilial
+        ListField = 'NAME'
+        KeyField = 'ID'
+      end
+      object CheckBox2: TCheckBox
+        Left = 6
+        Top = 14
+        Width = 97
+        Height = 17
+        Caption = 'Hams'#305'n'#305' se'#231
+        Checked = True
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clNavy
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ParentFont = False
+        State = cbChecked
+        TabOrder = 1
+        OnClick = CheckBox2Click
+      end
+    end
+    object GroupBox2: TGroupBox
+      Left = 214
+      Top = 33
+      Width = 211
+      Height = 220
+      Caption = 'Valute'
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clBlue
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 2
+      object LookVAlGrp: TEvanescence
+        Tag = 3112
+        Left = 3
+        Top = 31
+        Width = 202
+        Height = 185
+        Color = clWhite
+        Flat = False
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clNavy
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ItemHeight = 14
+        ParentFont = False
+        TabOrder = 0
+        DataSource = DataSource1
+        ListField = 'VALU_NAME'
+        KeyField = 'VALUTE'
+      end
+      object CheckBox1: TCheckBox
+        Left = 6
+        Top = 14
+        Width = 97
+        Height = 17
+        Caption = 'Hams'#305'n'#305' se'#231
+        Checked = True
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clNavy
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ParentFont = False
+        State = cbChecked
+        TabOrder = 1
+        OnClick = CheckBox1Click
+      end
+    end
+  end
+  object FilialDataSet: TOracleDataSet
+    SQL.Strings = (
+      '  SELECT id, name'
+      '    FROM smart.filial_t')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000400000049004400010000000000080000004E0041004D00
+      4500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 136
+    Top = 111
+    object FilialDataSetID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object FilialDataSetNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 90
+    end
+  end
+  object srcFilial: TDataSource
+    DataSet = FilialDataSet
+    Left = 136
+    Top = 151
+  end
+  object OracleDataSet1: TOracleDataSet
+    SQL.Strings = (
+      'select * from smart.avalute')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000170000000C000000560041004C005500540045000100000000001000
+      0000560041004C005F004E0041004D0045000100000000001200000056004100
+      4C0055005F004E0041004D00450001000000000014000000560041004C005500
+      5F00530048004F00520054000100000000000C0000005500530054004F005200
+      47000100000000000C00000055005300540050004F004B000100000000001000
+      0000560041004C0055005F00470045004E000100000000000E00000056004100
+      4C0055005F0041005A000100000000000A0000005500530049004E0047000100
+      0000000014000000560041004C0055005F004F00540048004500520001000000
+      000014000000560041004C0055005F0049004E00540045005200010000000000
+      12000000560041004C0055005F00420041004C00410001000000000012000000
+      50005200490053005400410056004B0041000100000000000E00000043004F00
+      55004E00540052005900010000000000100000005500530054005F0050004F00
+      4B0031000100000000000E0000004F00460046004900430041004C0001000000
+      00000A0000004C0049004D00490054000100000000000A000000440045004200
+      450054000100000000000C0000004B0052004500440049005400010000000000
+      0C0000004600350035003000310050000100000000000C000000460035003500
+      3000310056000100000000000C00000053004400450042004500540001000000
+      00000E0000005300430052004500440049005400010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 278
+    Top = 97
+    object OracleDataSet1VALUTE: TIntegerField
+      FieldName = 'VALUTE'
+      Required = True
+    end
+    object OracleDataSet1VAL_NAME: TWideStringField
+      FieldName = 'VAL_NAME'
+      Size = 10
+    end
+    object OracleDataSet1VALU_NAME: TWideStringField
+      FieldName = 'VALU_NAME'
+      Size = 25
+    end
+  end
+  object DataSource1: TDataSource
+    DataSet = OracleDataSet1
+    Left = 278
+    Top = 145
+  end
+  object sysdate: TOracleDataSet
+    SQL.Strings = (
+      'select * from sysdat')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000040000000E000000540045004B005F00440041005400010000000000
+      1000000050005200450044005F004400410054000100000000000E0000004100
+      520043005F004400410059000100000000000A00000043004C004F0053004500
+      010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 20
+    Top = 201
+    object sysdateTEK_DAT: TDateTimeField
+      FieldName = 'TEK_DAT'
+      Required = True
+    end
+    object sysdatePRED_DAT: TDateTimeField
+      FieldName = 'PRED_DAT'
+    end
+    object sysdateARC_DAY: TDateTimeField
+      FieldName = 'ARC_DAY'
+    end
+    object sysdateCLOSE: TIntegerField
+      FieldName = 'CLOSE'
+    end
+  end
+  object Main: TOracleDataSet
+    SQL.Strings = (
+      
+        'SELECT rownum sira,f.*,(select val_name from smart.avalute where' +
+        ' valute=p.currency) val'
+      
+        ',p.dateofconclusion, p.creditlineamount krxet,p.gurletter,p. cre' +
+        'dittype,p.gurinfo,p.annualyinterestrate,'
+      
+        ' trunc(months_between( p.duedatefirstcontract ,p.dateofconclusio' +
+        'n)) muddet,p.duedatefirstcontract , p.creditlineamount,'
+      
+        '(select description from cr_credittypes where id=p.credittype) t' +
+        'ip , '
+      
+        '/*(select name from cr_guarantyorgname where id=p.gur_id)*/BOORO' +
+        'WERNAME as name,'
+      
+        '(select description from cr_categories where id=p.customertype)a' +
+        's crtyp,'
+      
+        '(select description from cr_credittypes where id=p.credittype)as' +
+        ' teyp'
+      ''
+      'FROM cr_report_f1 f,cr_active_credits p'
+      ''
+      'where f.creditid=p.id '
+      'ORDER BY'
+      '  sira'
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ' '
+      ' '
+      ''
+      ''
+      ''
+      ''
+      ' '
+      '')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000004A0000002000000044004100540045004F00460043004F004E004300
+      4C005500530049004F004E000100000000002800000044005500450044004100
+      540045004600490052005300540043004F004E00540052004100430054000100
+      00000000160000004400450053004300520049005000540049004F004E000100
+      0000000008000000530049005200410001000000000010000000430052004500
+      440049005400490044000100000000001400000042004F004F0052004F005700
+      45005200490044000100000000000C0000004300520044004E0055004D000100
+      000000001800000042004F004F0052004F005700450052004E0041004D004500
+      010000000000100000004200520041004E004300480049004400010000000000
+      0C0000004200520041004E004300480001000000000014000000440049005300
+      5400520049004300540049004400010000000000100000004400490053005400
+      520049004300540001000000000012000000560049004C004C00410047004500
+      490044000100000000000E000000560049004C004C0041004700450001000000
+      00001200000050005500520050004F0053004500490044000100000000000E00
+      000050005500520050004F00530045000100000000000C000000540059005000
+      4500490044000100000000001000000054005900500045004400450053004300
+      0100000000001000000043005200440043004F0055004E005400010000000000
+      1A0000005000410059004500440043005200440043004F0055004E0054000100
+      000000001A000000460049005200530054005400520043004800440041005400
+      4500010000000000160000004C00410053005400500041005900440041005400
+      45000100000000001600000047004900560045004E0041004D004F0055004E00
+      540001000000000022000000430041004C00430055004C004100540045004400
+      500045005200430045004E005400010000000000180000004400410054004500
+      44004500420054004D00410049004E0001000000000016000000440041005400
+      4500440045004200540049004E00540001000000000012000000500041005900
+      450044004D00410049004E000100000000001000000050004100590045004400
+      49004E00540001000000000018000000500041005900450044004D004F004E00
+      4D00410049004E0001000000000016000000500041005900450044004D004F00
+      4E0049004E0054000100000000001000000044004500420054004D0041004900
+      4E000100000000000E000000440045004200540049004E005400010000000000
+      1800000044004500420054004F005600450052004D00410049004E0001000000
+      00001600000044004500420054004F0056004500520049004E00540001000000
+      000014000000430041004C004300530054004100540055005300010000000000
+      14000000430052004500440050004500520049004F0044000100000000000E00
+      000049004E00540052004100540045000100000000000C0000004F0044005200
+      4100540045000100000000000A000000530042004F0055005400010000000000
+      16000000500052004F004C004F004E0047004400410054004500010000000000
+      14000000500052004F004C004F004E00470043004E0054000100000000002000
+      000044005500450049004E005400450052004500530054004400450042004900
+      540001000000000014000000440045005300430052004900500049004F004E00
+      0100000000001000000053004600450052004100440041005900010000000000
+      1E00000050005500520050004F00530045004F00460043005200450044004900
+      540001000000000010000000430055005200520045004E004300590001000000
+      0000120000004C004F0041004E00410043004300490044000100000000001A00
+      000042004F004F0052004F005700450052004100430043004900440001000000
+      00001E00000042004F004F0052004F0057004500520041004300430052004500
+      530054000100000000000E000000410044004400520045005300530001000000
+      00000C000000530041004C004100520059000100000000001600000050004800
+      4F004E0045004E0055004D004200450052000100000000000E00000052004500
+      530045005200560045000100000000000E0000004C0041005400450044004100
+      5900010000000000120000004700490052004F00560052004500530054000100
+      00000000260000005000520049004D0041005200590052004500530045005200
+      56004500410052004500530054000100000000002C0000005000520049004D00
+      4100520059005000550052005200450053004500520056004500410052004500
+      5300540001000000000014000000470045004300470055004E00460041004900
+      5A000100000000001400000050004C0045004400470045004E0041004D004500
+      010000000000180000004F00440045004D0045005F0045004D00530041004C00
+      4900010000000000180000004500580050004500520054005F005F004E004100
+      4D0045000100000000000A0000004B0055005200550053000100000000000600
+      0000560041004C000100000000000A0000004B00520058004500540001000000
+      00000C0000004D00550044004400450054000100000000000600000054004900
+      5000010000000000120000004700550052004C00450054005400450052000100
+      0000000014000000430052004500440049005400540059005000450001000000
+      00000E00000047005500520049004E0046004F00010000000000260000004100
+      4E004E00550041004C00590049004E0054004500520045005300540052004100
+      54004500010000000000200000004300520045004400490054004C0049004E00
+      450041004D004F0055004E005400010000000000080000004E0041004D004500
+      0100000000000A00000043005200540059005000010000000000080000005400
+      450059005000010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 28
+    Top = 232
+    object MainSIRA: TFloatField
+      FieldName = 'SIRA'
+    end
+    object MainCREDITID: TFloatField
+      FieldName = 'CREDITID'
+      Required = True
+    end
+    object MainBOOROWERID: TFloatField
+      FieldName = 'BOOROWERID'
+      Required = True
+    end
+    object MainCRDNUM: TWideStringField
+      FieldName = 'CRDNUM'
+      Required = True
+      Size = 255
+    end
+    object MainBOOROWERNAME: TWideStringField
+      FieldName = 'BOOROWERNAME'
+      Required = True
+      Size = 255
+    end
+    object MainBRANCHID: TFloatField
+      FieldName = 'BRANCHID'
+      Required = True
+    end
+    object MainBRANCH: TWideStringField
+      FieldName = 'BRANCH'
+      Required = True
+      Size = 294
+    end
+    object MainDISTRICTID: TFloatField
+      FieldName = 'DISTRICTID'
+      Required = True
+    end
+    object MainDISTRICT: TWideStringField
+      FieldName = 'DISTRICT'
+      Required = True
+      Size = 255
+    end
+    object MainVILLAGEID: TFloatField
+      FieldName = 'VILLAGEID'
+      Required = True
+    end
+    object MainVILLAGE: TWideStringField
+      FieldName = 'VILLAGE'
+      Required = True
+      Size = 255
+    end
+    object MainPURPOSEID: TFloatField
+      FieldName = 'PURPOSEID'
+      Required = True
+    end
+    object MainPURPOSE: TWideStringField
+      FieldName = 'PURPOSE'
+      Required = True
+      Size = 255
+    end
+    object MainTYPEID: TFloatField
+      FieldName = 'TYPEID'
+      Required = True
+    end
+    object MainTYPEDESC: TWideStringField
+      FieldName = 'TYPEDESC'
+      Required = True
+      Size = 10
+    end
+    object MainCRDCOUNT: TFloatField
+      FieldName = 'CRDCOUNT'
+      Required = True
+    end
+    object MainPAYEDCRDCOUNT: TFloatField
+      FieldName = 'PAYEDCRDCOUNT'
+      Required = True
+    end
+    object MainFIRSTTRCHDATE: TDateTimeField
+      FieldName = 'FIRSTTRCHDATE'
+    end
+    object MainLASTPAYDATE: TDateTimeField
+      FieldName = 'LASTPAYDATE'
+    end
+    object MainGIVENAMOUNT: TFloatField
+      FieldName = 'GIVENAMOUNT'
+      Required = True
+    end
+    object MainCALCULATEDPERCENT: TFloatField
+      FieldName = 'CALCULATEDPERCENT'
+      Required = True
+    end
+    object MainDATEDEBTMAIN: TFloatField
+      FieldName = 'DATEDEBTMAIN'
+      Required = True
+    end
+    object MainDATEDEBTINT: TFloatField
+      FieldName = 'DATEDEBTINT'
+      Required = True
+    end
+    object MainPAYEDMAIN: TFloatField
+      FieldName = 'PAYEDMAIN'
+      Required = True
+    end
+    object MainPAYEDINT: TFloatField
+      FieldName = 'PAYEDINT'
+      Required = True
+    end
+    object MainPAYEDMONMAIN: TFloatField
+      FieldName = 'PAYEDMONMAIN'
+      Required = True
+    end
+    object MainPAYEDMONINT: TFloatField
+      FieldName = 'PAYEDMONINT'
+      Required = True
+    end
+    object MainDEBTMAIN: TFloatField
+      FieldName = 'DEBTMAIN'
+      Required = True
+    end
+    object MainDEBTINT: TFloatField
+      FieldName = 'DEBTINT'
+      Required = True
+    end
+    object MainDEBTOVERMAIN: TFloatField
+      FieldName = 'DEBTOVERMAIN'
+      Required = True
+    end
+    object MainDEBTOVERINT: TFloatField
+      FieldName = 'DEBTOVERINT'
+      Required = True
+    end
+    object MainCALCSTATUS: TWideStringField
+      FieldName = 'CALCSTATUS'
+      Required = True
+      Size = 12
+    end
+    object MainCREDPERIOD: TWideStringField
+      FieldName = 'CREDPERIOD'
+      Required = True
+      Size = 35
+    end
+    object MainINTRATE: TFloatField
+      FieldName = 'INTRATE'
+    end
+    object MainODRATE: TFloatField
+      FieldName = 'ODRATE'
+    end
+    object MainSBOUT: TFloatField
+      FieldName = 'SBOUT'
+    end
+    object MainPROLONGDATE: TDateTimeField
+      FieldName = 'PROLONGDATE'
+    end
+    object MainPROLONGCNT: TFloatField
+      FieldName = 'PROLONGCNT'
+    end
+    object MainDUEINTERESTDEBIT: TFloatField
+      FieldName = 'DUEINTERESTDEBIT'
+    end
+    object MainDESCRIPION: TWideStringField
+      FieldName = 'DESCRIPION'
+      Size = 50
+    end
+    object MainSFERADAY: TWideStringField
+      FieldName = 'SFERADAY'
+      Size = 50
+    end
+    object MainPURPOSEOFCREDIT: TWideStringField
+      FieldName = 'PURPOSEOFCREDIT'
+      Size = 50
+    end
+    object MainCURRENCY: TWideStringField
+      FieldName = 'CURRENCY'
+      Size = 65
+    end
+    object MainLOANACCID: TWideStringField
+      FieldName = 'LOANACCID'
+      Size = 30
+    end
+    object MainBOOROWERACCID: TWideStringField
+      FieldName = 'BOOROWERACCID'
+      Size = 30
+    end
+    object MainBOOROWERACCREST: TFloatField
+      FieldName = 'BOOROWERACCREST'
+    end
+    object MainADDRESS: TWideStringField
+      FieldName = 'ADDRESS'
+      Size = 80
+    end
+    object MainSALARY: TWideStringField
+      FieldName = 'SALARY'
+      Size = 100
+    end
+    object MainPHONENUMBER: TWideStringField
+      FieldName = 'PHONENUMBER'
+      Size = 350
+    end
+    object MainRESERVE: TWideStringField
+      FieldName = 'RESERVE'
+      Size = 29
+    end
+    object MainLATEDAY: TFloatField
+      FieldName = 'LATEDAY'
+    end
+    object MainDESCRIPTION: TWideStringField
+      FieldName = 'DESCRIPTION'
+      Size = 100
+    end
+    object MainGIROVREST: TFloatField
+      FieldName = 'GIROVREST'
+    end
+    object MainPRIMARYRESERVEAREST: TFloatField
+      FieldName = 'PRIMARYRESERVEAREST'
+    end
+    object MainPRIMARYPURRESERVEAREST: TFloatField
+      FieldName = 'PRIMARYPURRESERVEAREST'
+    end
+    object MainGECGUNFAIZ: TFloatField
+      FieldName = 'GECGUNFAIZ'
+    end
+    object MainPLEDGENAME: TWideStringField
+      FieldName = 'PLEDGENAME'
+      Size = 80
+    end
+    object MainODEME_EMSALI: TFloatField
+      FieldName = 'ODEME_EMSALI'
+    end
+    object MainEXPERT__NAME: TWideStringField
+      FieldName = 'EXPERT__NAME'
+      Size = 50
+    end
+    object MainKURUS: TFloatField
+      FieldName = 'KURUS'
+    end
+    object MainVAL: TWideStringField
+      FieldName = 'VAL'
+      Size = 10
+    end
+    object MainDATEOFCONCLUSION: TDateTimeField
+      FieldName = 'DATEOFCONCLUSION'
+      Required = True
+    end
+    object MainKRXET: TFloatField
+      FieldName = 'KRXET'
+      Required = True
+    end
+    object MainGURLETTER: TWideStringField
+      FieldName = 'GURLETTER'
+      Size = 200
+    end
+    object MainCREDITTYPE: TFloatField
+      FieldName = 'CREDITTYPE'
+      Required = True
+    end
+    object MainGURINFO: TWideStringField
+      FieldName = 'GURINFO'
+      Size = 200
+    end
+    object MainANNUALYINTERESTRATE: TFloatField
+      FieldName = 'ANNUALYINTERESTRATE'
+      Required = True
+    end
+    object MainMUDDET: TFloatField
+      FieldName = 'MUDDET'
+    end
+    object MainDUEDATEFIRSTCONTRACT: TDateTimeField
+      FieldName = 'DUEDATEFIRSTCONTRACT'
+      Required = True
+    end
+    object MainCREDITLINEAMOUNT: TFloatField
+      FieldName = 'CREDITLINEAMOUNT'
+      Required = True
+    end
+    object MainTIP: TWideStringField
+      FieldName = 'TIP'
+      Size = 128
+    end
+    object MainNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 150
+    end
+    object MainCRTYP: TWideStringField
+      FieldName = 'CRTYP'
+      Size = 128
+    end
+    object MainTEYP: TWideStringField
+      FieldName = 'TEYP'
+      Size = 128
+    end
+  end
+  object OraclePackage1: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'CR_AK_REPORTS'
+    ParameterMode = pmNamed
+    Left = 72
+    Top = 176
+  end
+  object ExcelExport: TCMExcelExport
+    ConnectTo = ctNewInstance
+    StyleColumnWidth = cwAutoFit
+    ColumnWidth = 0
+    FontTitles.Charset = DEFAULT_CHARSET
+    FontTitles.Color = clNavy
+    FontTitles.Height = -13
+    FontTitles.Name = 'Azl Sans Serif'
+    FontTitles.Style = [fsBold]
+    BorderTitles.Weight = bwThin
+    BorderTitles.LineStyle = blLine
+    OrientationTitles = 0
+    FontData.Charset = RUSSIAN_CHARSET
+    FontData.Color = clWindowText
+    FontData.Height = -11
+    FontData.Name = 'Azl Sans Serif'
+    FontData.Style = []
+    FontSummary.Charset = DEFAULT_CHARSET
+    FontSummary.Color = clWindowText
+    FontSummary.Height = -11
+    FontSummary.Name = 'Azl Sans Serif'
+    FontSummary.Style = []
+    SummarySelection = ssNone
+    SummaryCalculation = scSUM
+    Left = 344
+    Top = 136
+  end
+  object OracleDataSet2: TOracleDataSet
+    SQL.Strings = (
+      'select rownum c,gu.name,ca.description,'
+      'p.gurletter,cr.cardtype,p.gurinfo,'
+      'p.dateofconclusion,p.duedatefirstcontract,'
+      ' vl.val_name,p.creditlineamount,'
+      'p.annualyinterestrate,'
+      'r.percent||r.description,'
+      'r.percent*h.rest/100,h.interestrest,'
+      ' t.description,'
+      
+        '(select sum(PAYEDINTAMT) from cr_payments where creditid=p.id an' +
+        'd PAYDATE<=:sysdat) as odenish'
+      'from cr_portfolio p,'
+      'CR_GUARANTYORGNAME gu,'
+      'cr_categories ca,'
+      'cr_credittypes cr,'
+      'avalute vl,'
+      'cr_history h,'
+      'CR_RESERVEs r,'
+      'cr_guarantee g,'
+      'CR_PLEDGES_T t'
+      ''
+      'where'
+      'gu.id=p.gur_id and'
+      'p.customertype=ca.id and'
+      'p.credittype=cr.id and'
+      'p.currency=vl.valute and '
+      'p.id=h.creditid and'
+      'h.reserveid=r.id and g.pledgeid_p=t.id and '
+      '--h.hdate =(select tek_dat from sysdat)and'
+      'p.id=g.creditid'
+      ' and h.hdate=:sysdat')
+    Optimize = False
+    Left = 96
+    Top = 232
+  end
+  object OracleDataSet3: TOracleDataSet
+    SQL.Strings = (
+      'select id from cr_active_credits p'
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ' '
+      ''
+      '')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {05000000010000000400000049004400010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 168
+    Top = 216
+    object OracleDataSet3ID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+  end
+end

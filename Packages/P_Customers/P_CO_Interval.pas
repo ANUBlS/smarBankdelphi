@@ -1,0 +1,85 @@
+﻿unit P_CO_Interval;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, ComCtrls;
+
+type
+  TP_CO_IntervalForm = class(TForm)
+    GroupBox1: TGroupBox;
+    Label1: TLabel;
+    Label2: TLabel;
+    EndDateEdit: TDateTimePicker;
+    StartDateEdit: TDateTimePicker;
+    OkButton: TButton;
+    CancelButton: TButton;
+    procedure FormShow(Sender: TObject);
+    procedure OkButtonClick(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
+    procedure WMNCACTIVATE(var message: TWMNCActivate); message WM_NCACTIVATE;
+    procedure WMNCPaint(var message: TWMNCPaint); message WM_NCPAINT;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  P_CO_IntervalForm: TP_CO_IntervalForm;
+
+implementation
+
+uses P_Datamod_Unit;
+
+{$R *.DFM}
+
+procedure TP_CO_IntervalForm.WMNCACTIVATE(var message: TWMNCActivate);
+var
+  S: TWMNCPaint;
+begin
+  inherited;
+  WMNCPaint(S);
+end;
+
+procedure TP_CO_IntervalForm.WMNCPaint(var message: TWMNCPaint);
+const
+  Capt = 'İnterval';
+var
+  dc: hDc;
+begin
+  inherited;
+  Caption := '';
+  dc := GetWindowDC(Handle);
+  SetBkMode(dc, Transparent);
+  SetTextColor(dc, clWhite);
+  SelectObject(dc, Font.Handle);
+  TextOut(dc, 23, 6, Capt, Length(Capt));
+end;
+
+procedure TP_CO_IntervalForm.FormActivate(Sender: TObject);
+begin
+  StartDateEdit.DateTime := P_Datamodule.Sysdat.fieldbyname('tek_dat')
+    .asdatetime;
+  EndDateEdit.DateTime := P_Datamodule.Sysdat.fieldbyname('tek_dat').asdatetime;
+end;
+
+procedure TP_CO_IntervalForm.FormShow(Sender: TObject);
+begin
+  ActiveControl := StartDateEdit;
+end;
+
+procedure TP_CO_IntervalForm.OkButtonClick(Sender: TObject);
+var
+  S_date: Tdatetime;
+  E_date: Tdatetime;
+begin
+  S_date := Trunc(StartDateEdit.DateTime);
+  E_date := Trunc(EndDateEdit.DateTime);
+  P_Datamodule.OPackage.CallProcedure('ins_date', [S_date, E_date]);
+  P_Datamodule.memorial_date.refresh;
+
+end;
+
+end.

@@ -1,0 +1,30 @@
+
+unit About1;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, ExtCtrls, Buttons;
+
+type
+  TBusinessProcessSetupAbout = class(TForm)
+  end;
+
+procedure ShowBusinessProcessSetupAbout;
+
+implementation
+
+{$R *.DFM}
+
+procedure ShowBusinessProcessSetupAbout;
+begin
+  with TBusinessProcessSetupAbout.Create(nil) do
+    try
+      ShowModal;
+    finally
+      Free;
+    end;
+end;
+
+end.

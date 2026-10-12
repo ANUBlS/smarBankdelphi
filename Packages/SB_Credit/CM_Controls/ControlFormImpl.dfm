@@ -1,0 +1,235 @@
+object FormControl: TFormControl
+  Left = 352
+  Top = 277
+  BorderIcons = [biSystemMenu]
+  ClientHeight = 98
+  ClientWidth = 380
+  Color = clBtnFace
+  Font.Charset = RUSSIAN_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poScreenCenter
+  OnCanResize = FormCanResize
+  OnClose = FormClose
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  OnKeyPress = FormKeyPress
+  PixelsPerInch = 96
+  TextHeight = 13
+  object PageControl1: TPageControl
+    Left = 0
+    Top = 0
+    Width = 380
+    Height = 98
+    ActivePage = TabSheet1
+    Align = alClient
+    TabOrder = 0
+    ExplicitHeight = 99
+    object TabSheet1: TTabSheet
+      Caption = 'Qal'#305'qlar '#252'zr'#601
+      ExplicitHeight = 71
+      object Label3: TLabel
+        Left = 2
+        Top = 17
+        Width = 24
+        Height = 13
+        Caption = 'Tarix'
+      end
+      object Label4: TLabel
+        Left = 188
+        Top = 17
+        Width = 20
+        Height = 13
+        Caption = 'Filial'
+      end
+      object DateTimePicker1: TDateTimePicker
+        Left = 30
+        Top = 14
+        Width = 139
+        Height = 21
+        Date = 38862.899022893500000000
+        Time = 38862.899022893500000000
+        TabOrder = 0
+      end
+      object DBLookupComboBox1: TDBLookupComboBox
+        Left = 214
+        Top = 13
+        Width = 156
+        Height = 22
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -12
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        KeyField = 'ID'
+        ListField = 'NAME'
+        ListSource = ControlDatMod.BranchsDatScr
+        ParentFont = False
+        TabOrder = 1
+      end
+      object BitBtn1: TBitBtn
+        Left = 188
+        Top = 41
+        Width = 78
+        Height = 27
+        Caption = 'Q'#601'bul'
+        Default = True
+        DoubleBuffered = True
+        Glyph.Data = {
+          DE010000424DDE01000000000000760000002800000024000000120000000100
+          0400000000006801000000000000000000001000000000000000000000000000
+          80000080000000808000800000008000800080800000C0C0C000808080000000
+          FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00333333333333
+          3333333333333333333333330000333333333333333333333333F33333333333
+          00003333344333333333333333388F3333333333000033334224333333333333
+          338338F3333333330000333422224333333333333833338F3333333300003342
+          222224333333333383333338F3333333000034222A22224333333338F338F333
+          8F33333300003222A3A2224333333338F3838F338F33333300003A2A333A2224
+          33333338F83338F338F33333000033A33333A222433333338333338F338F3333
+          0000333333333A222433333333333338F338F33300003333333333A222433333
+          333333338F338F33000033333333333A222433333333333338F338F300003333
+          33333333A222433333333333338F338F00003333333333333A22433333333333
+          3338F38F000033333333333333A223333333333333338F830000333333333333
+          333A333333333333333338330000333333333333333333333333333333333333
+          0000}
+        NumGlyphs = 2
+        ParentDoubleBuffered = False
+        TabOrder = 2
+        OnClick = BitBtn1Click
+      end
+      object BitBtn2: TBitBtn
+        Left = 289
+        Top = 42
+        Width = 80
+        Height = 27
+        Caption = #304'mtina'
+        DoubleBuffered = True
+        Kind = bkCancel
+        NumGlyphs = 2
+        ParentDoubleBuffered = False
+        TabOrder = 3
+      end
+    end
+    object TabSheet2: TTabSheet
+      Caption = 'Dovriy'#601'l'#601'r '#252'zr'#601
+      ImageIndex = 1
+      ExplicitHeight = 71
+      object Label5: TLabel
+        Left = 2
+        Top = 17
+        Width = 55
+        Height = 13
+        Caption = 'Tarix aral'#305#287#305
+      end
+      object Label1: TLabel
+        Left = 172
+        Top = 15
+        Width = 24
+        Height = 13
+        Caption = '<=>'
+      end
+      object DateTimePicker2: TDateTimePicker
+        Left = 61
+        Top = 14
+        Width = 111
+        Height = 21
+        Date = 38862.899022893500000000
+        Time = 38862.899022893500000000
+        TabOrder = 0
+      end
+      object BitBtn3: TBitBtn
+        Left = 197
+        Top = 42
+        Width = 78
+        Height = 27
+        Caption = 'Q'#601'bul'
+        Default = True
+        DoubleBuffered = True
+        Glyph.Data = {
+          DE010000424DDE01000000000000760000002800000024000000120000000100
+          0400000000006801000000000000000000001000000000000000000000000000
+          80000080000000808000800000008000800080800000C0C0C000808080000000
+          FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00333333333333
+          3333333333333333333333330000333333333333333333333333F33333333333
+          00003333344333333333333333388F3333333333000033334224333333333333
+          338338F3333333330000333422224333333333333833338F3333333300003342
+          222224333333333383333338F3333333000034222A22224333333338F338F333
+          8F33333300003222A3A2224333333338F3838F338F33333300003A2A333A2224
+          33333338F83338F338F33333000033A33333A222433333338333338F338F3333
+          0000333333333A222433333333333338F338F33300003333333333A222433333
+          333333338F338F33000033333333333A222433333333333338F338F300003333
+          33333333A222433333333333338F338F00003333333333333A22433333333333
+          3338F38F000033333333333333A223333333333333338F830000333333333333
+          333A333333333333333338330000333333333333333333333333333333333333
+          0000}
+        NumGlyphs = 2
+        ParentDoubleBuffered = False
+        TabOrder = 1
+        OnClick = BitBtn3Click
+      end
+      object BitBtn4: TBitBtn
+        Left = 289
+        Top = 42
+        Width = 80
+        Height = 27
+        Caption = #304'mtina'
+        DoubleBuffered = True
+        Kind = bkCancel
+        NumGlyphs = 2
+        ParentDoubleBuffered = False
+        TabOrder = 2
+      end
+      object DateTimePicker3: TDateTimePicker
+        Left = 198
+        Top = 13
+        Width = 111
+        Height = 21
+        Date = 38862.899022893500000000
+        Time = 38862.899022893500000000
+        TabOrder = 3
+      end
+    end
+    object TabSheet3: TTabSheet
+      Caption = 'G'#252'nd'#601'lik Faizl'#601'ri yoxlamaq'
+      ImageIndex = 2
+      ExplicitHeight = 71
+      object Button1: TButton
+        Left = 248
+        Top = 24
+        Width = 75
+        Height = 25
+        Caption = 'Yoxla'
+        TabOrder = 0
+        OnClick = Button1Click
+      end
+    end
+  end
+  object CMExcelExport: TCMExcelExport
+    StyleColumnWidth = cwDefault
+    ColumnWidth = 0
+    FontTitles.Charset = RUSSIAN_CHARSET
+    FontTitles.Color = clWindowText
+    FontTitles.Height = -11
+    FontTitles.Name = 'Tahoma'
+    FontTitles.Style = []
+    OrientationTitles = 0
+    FontData.Charset = RUSSIAN_CHARSET
+    FontData.Color = clWindowText
+    FontData.Height = -11
+    FontData.Name = 'Tahoma'
+    FontData.Style = []
+    FontSummary.Charset = RUSSIAN_CHARSET
+    FontSummary.Color = clWindowText
+    FontSummary.Height = -11
+    FontSummary.Name = 'Tahoma'
+    FontSummary.Style = []
+    SummarySelection = ssNone
+    SummaryCalculation = scSUM
+    Left = 8
+    Top = 64
+  end
+end

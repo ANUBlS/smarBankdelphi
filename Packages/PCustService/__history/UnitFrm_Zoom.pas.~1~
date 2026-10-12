@@ -1,0 +1,31 @@
+unit UnitFrmZoom;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ExtCtrls;
+
+type
+  TFormZoom = class(TForm)
+    Image1: TImage;
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormZoom: TFormZoom;
+
+implementation
+
+{$R *.DFM}
+
+procedure TFormZoom.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+if key=#27 then  FormZoom.Close;
+end;
+
+end.

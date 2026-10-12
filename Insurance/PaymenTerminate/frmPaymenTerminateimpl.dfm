@@ -1,0 +1,221 @@
+object frmPaymentTer: TfrmPaymentTer
+  Left = 0
+  Top = 0
+  BorderIcons = [biSystemMenu]
+  BorderStyle = bsSingle
+  Caption = 'Xitam'#305'n '#214'd'#601'nm'#601'si'
+  ClientHeight = 292
+  ClientWidth = 597
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poDesktopCenter
+  OnCreate = FormCreate
+  OnKeyPress = FormKeyPress
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object XFPanel1: TXFPanel
+    Left = 0
+    Top = 0
+    Width = 597
+    Height = 292
+    TabOrder = 0
+    object XFPanel2: TXFPanel
+      Left = 1
+      Top = 1
+      Width = 595
+      Height = 40
+      Align = alTop
+      TabOrder = 0
+      object XFButton1: TXFButton
+        Left = 1
+        Top = 1
+        Width = 75
+        Height = 38
+        Align = alLeft
+        Caption = 'Yeni'
+        DoubleBuffered = True
+        ParentDoubleBuffered = False
+        TabOrder = 0
+        OnClick = XFButton1Click
+      end
+      object XFButton2: TXFButton
+        Left = 76
+        Top = 1
+        Width = 75
+        Height = 38
+        Align = alLeft
+        Caption = 'Silm'#601'k'
+        DoubleBuffered = True
+        ParentDoubleBuffered = False
+        TabOrder = 1
+        OnClick = XFButton2Click
+      end
+      object XFButton3: TXFButton
+        Left = 151
+        Top = 1
+        Width = 75
+        Height = 38
+        Align = alLeft
+        Caption = 'Excel-'#601' at'
+        DoubleBuffered = True
+        ParentDoubleBuffered = False
+        TabOrder = 2
+        OnClick = XFButton3Click
+      end
+    end
+    object XFPanel3: TXFPanel
+      Left = 1
+      Top = 250
+      Width = 595
+      Height = 41
+      Align = alBottom
+      TabOrder = 1
+      object XFButton4: TXFButton
+        Left = 485
+        Top = 8
+        Width = 75
+        Height = 25
+        Caption = 'Ba'#287'la'
+        DoubleBuffered = True
+        ParentDoubleBuffered = False
+        TabOrder = 0
+        OnClick = XFButton4Click
+      end
+    end
+    object XFGroupBox1: TXFGroupBox
+      Left = 1
+      Top = 145
+      Width = 595
+      Height = 105
+      Align = alBottom
+      Caption = 'Tan'#305'nm'#305#351' xitam'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 2
+      object DBGrid2: TDBGrid
+        Left = 2
+        Top = 16
+        Width = 591
+        Height = 87
+        Align = alClient
+        DataSource = dmPaymentTer.DSRPaymentTer
+        DrawingStyle = gdsGradient
+        TabOrder = 0
+        TitleFont.Charset = DEFAULT_CHARSET
+        TitleFont.Color = clWindowText
+        TitleFont.Height = -12
+        TitleFont.Name = 'Tahoma'
+        TitleFont.Style = [fsBold]
+        Columns = <
+          item
+            Expanded = False
+            FieldName = 'STAGE_TESDIQ_DAT'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'NAME'
+            Width = 150
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'MEBLEG'
+            Visible = True
+          end>
+      end
+    end
+    object XFGroupBox2: TXFGroupBox
+      Left = 1
+      Top = 41
+      Width = 595
+      Height = 105
+      Align = alTop
+      Caption = #214'd'#601'nm'#305#351' xitam'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 3
+      object DBGrid1: TDBGrid
+        Left = 2
+        Top = 15
+        Width = 591
+        Height = 89
+        DataSource = dmPaymentTer.DSRPaymentTerReal
+        DrawingStyle = gdsGradient
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -12
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 0
+        TitleFont.Charset = DEFAULT_CHARSET
+        TitleFont.Color = clWindowText
+        TitleFont.Height = -12
+        TitleFont.Name = 'Tahoma'
+        TitleFont.Style = [fsBold]
+        Columns = <
+          item
+            Expanded = False
+            FieldName = 'TRAID'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'PAYDATE'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'NAME'
+            Width = 140
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'MEBLEG'
+            Visible = True
+          end>
+      end
+    end
+  end
+  object ExcelExport: TCMExcelExport
+    StyleColumnWidth = cwDefault
+    ColumnWidth = 0
+    FontTitles.Charset = DEFAULT_CHARSET
+    FontTitles.Color = clWindowText
+    FontTitles.Height = -11
+    FontTitles.Name = 'Tahoma'
+    FontTitles.Style = []
+    OrientationTitles = 0
+    FontData.Charset = DEFAULT_CHARSET
+    FontData.Color = clWindowText
+    FontData.Height = -11
+    FontData.Name = 'Tahoma'
+    FontData.Style = []
+    FontSummary.Charset = DEFAULT_CHARSET
+    FontSummary.Color = clWindowText
+    FontSummary.Height = -11
+    FontSummary.Name = 'Tahoma'
+    FontSummary.Style = []
+    SummarySelection = ssNone
+    SummaryCalculation = scSUM
+    Left = 408
+    Top = 104
+  end
+end

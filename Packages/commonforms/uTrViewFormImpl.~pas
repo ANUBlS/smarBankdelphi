@@ -1,0 +1,102 @@
+unit uTrViewFormImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, OracleData, StdCtrls, Mask, DBCtrls;
+
+type
+  TfrmTrView = class(TForm)
+    odsTr: TOracleDataSet;
+    Tr: TDataSource;
+    odsTrID: TFloatField;
+    odsTrDEBT: TStringField;
+    odsTrKREDIT: TStringField;
+    odsTrVAL_ACC: TStringField;
+    odsTrCURRENCYID_C: TStringField;
+    odsTrAMMOUNT: TFloatField;
+    odsTrLAMMOUNT: TFloatField;
+    odsTrAMMOUNT_C: TFloatField;
+    odsTrUSNAME: TStringField;
+    odsTrCOMUSNAME: TStringField;
+    odsTrTIM: TDateTimeField;
+    odsTrCOMMITTIME: TDateTimeField;
+    odsTrKASSA_B: TStringField;
+    odsTrKASSA_Z: TStringField;
+    odsTrRATE_D: TFloatField;
+    odsTrRATE_C: TFloatField;
+    odsTrNAME: TStringField;
+    odsTrREPORTID: TStringField;
+    odsTrCOUNTRID: TStringField;
+    Label1: TLabel;
+    DBEdit1: TDBEdit;
+    Label2: TLabel;
+    DBEdit2: TDBEdit;
+    Label3: TLabel;
+    DBEdit3: TDBEdit;
+    Label4: TLabel;
+    DBEdit4: TDBEdit;
+    Label5: TLabel;
+    DBEdit5: TDBEdit;
+    Label6: TLabel;
+    DBEdit6: TDBEdit;
+    Label7: TLabel;
+    DBEdit7: TDBEdit;
+    Label8: TLabel;
+    DBEdit8: TDBEdit;
+    Label9: TLabel;
+    DBEdit9: TDBEdit;
+    Label10: TLabel;
+    DBEdit10: TDBEdit;
+    Label11: TLabel;
+    DBEdit11: TDBEdit;
+    Label12: TLabel;
+    DBEdit12: TDBEdit;
+    Label13: TLabel;
+    DBEdit13: TDBEdit;
+    Label14: TLabel;
+    DBEdit14: TDBEdit;
+    Label15: TLabel;
+    DBEdit15: TDBEdit;
+    Label16: TLabel;
+    DBEdit16: TDBEdit;
+    Label17: TLabel;
+    DBEdit17: TDBEdit;
+    Label18: TLabel;
+    DBEdit18: TDBEdit;
+    Label19: TLabel;
+    DBEdit19: TDBEdit;
+    Button1: TButton;
+    procedure Button1Click(Sender: TObject);
+  private
+    FTrID: Integer;
+  public
+    property TrID: Integer read FTrID write FTrID;
+    procedure ShowTrInfo;
+  end;
+
+var
+  frmTrView: TfrmTrView;
+
+implementation
+
+uses sboapidatamoduleimpl;
+
+{$R *.DFM}
+       
+procedure TfrmTrView.ShowTrInfo;
+begin
+  with odsTr do begin
+    ClearVariables;
+    Close;
+    SetVariable('trid',FTrID);
+    Open;
+  end;
+end;
+
+procedure TfrmTrView.Button1Click(Sender: TObject);
+begin
+  Close;
+end;
+end.

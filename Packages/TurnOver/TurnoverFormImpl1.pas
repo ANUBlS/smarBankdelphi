@@ -1,0 +1,448 @@
+unit TurnoverFormImpl1;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActiveX, AxCtrls, TurnoverFormProj1_TLB, StdVcl, Buttons, ComCtrls,
+  StdCtrls, Grids, DBGrids, Db, OracleData, OleServer, Excel97, ExtCtrls;
+
+type
+  TTurnoverForm = class(TActiveForm, ITurnoverForm)
+    GroupBox1: TGroupBox;
+    GroupBox2: TGroupBox;
+    Edit_min: TEdit;
+    Edit_max: TEdit;
+    Label1: TLabel;
+    Label2: TLabel;
+    B_Date: TDateTimePicker;
+    E_Date: TDateTimePicker;
+    Label3: TLabel;
+    Label4: TLabel;
+    SButtonGoster: TSpeedButton;
+    SButtonExel: TSpeedButton;
+    ODSet: TOracleDataSet;
+    DSource: TDataSource;
+    DBGrid: TDBGrid;
+    ExcelApplication1: TExcelApplication;
+    Panel1: TPanel;
+    procedure Edit_minKeyPress(Sender: TObject; var Key: Char);
+    procedure Edit_maxKeyPress(Sender: TObject; var Key: Char);
+    procedure SButtonGosterClick(Sender: TObject);
+    procedure SButtonExelClick(Sender: TObject);
+  private
+    { Private declarations }
+    FEvents: ITurnoverFormEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+  public
+    { Public declarations }
+    procedure Initialize; override;
+  end;
+
+implementation
+
+uses ComObj, ComServ;
+
+{$R *.DFM}
+
+{ TTurnoverForm }
+
+procedure TTurnoverForm.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_TurnoverFormPage); }
+end;
+
+procedure TTurnoverForm.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as ITurnoverFormEvents;
+end;
+
+procedure TTurnoverForm.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TTurnoverForm.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TTurnoverForm.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TTurnoverForm.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TTurnoverForm.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TTurnoverForm.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TTurnoverForm.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TTurnoverForm.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TTurnoverForm.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TTurnoverForm.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TTurnoverForm.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TTurnoverForm.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TTurnoverForm.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TTurnoverForm.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TTurnoverForm.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TTurnoverForm.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TTurnoverForm.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TTurnoverForm.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TTurnoverForm.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TTurnoverForm._Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TTurnoverForm.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TTurnoverForm.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TTurnoverForm.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TTurnoverForm.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TTurnoverForm.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TTurnoverForm.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TTurnoverForm.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TTurnoverForm.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TTurnoverForm.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TTurnoverForm.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TTurnoverForm.Set_AxBorderStyle(Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TTurnoverForm.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TTurnoverForm.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TTurnoverForm.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TTurnoverForm.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TTurnoverForm.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TTurnoverForm.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TTurnoverForm.Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TTurnoverForm.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TTurnoverForm.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TTurnoverForm.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TTurnoverForm.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TTurnoverForm.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TTurnoverForm.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+procedure TTurnoverForm.Edit_minKeyPress(Sender: TObject; var Key: Char);
+begin
+if not ( (key in ['0'..'9']) or (key=#8) or (key='.') ) then
+  key:=#0;
+
+end;
+
+procedure TTurnoverForm.Edit_maxKeyPress(Sender: TObject; var Key: Char);
+begin
+if not ( (key in ['0'..'9']) or (key=#8) or (key='.') ) then
+  key:=#0;
+end;
+
+procedure TTurnoverForm.SButtonGosterClick(Sender: TObject);
+var
+    min, max, s_min_d, s_max_d, s_min_k, s_max_k, s :string;
+begin
+
+   min:=Edit_min.Text;
+   max:=Edit_max.Text;
+
+ if min='' then
+  begin
+    s_min_d:='';
+    s_min_k:='' ;
+  end
+ else
+   begin
+     s_min_d:='  and  wi.POK_obr_d >= ' + min;
+     s_min_k:='  and  wi.POK_obr_k >= ' + min;
+   end;
+ if max='' then
+  begin
+    s_max_d:='';
+    s_max_k:='';
+  end
+ else
+   begin
+     s_max_d:=' and  wi.pok_obr_d <= ' + max;
+     s_max_k:=' and  wi.POK_obr_k <= ' + max;
+   end;
+   ODSet.SetVariable('B_date',FormatDateTime('dd.mm.yyyy',B_Date.DateTime));
+   ODSet.SetVariable('E_date',FormatDateTime('dd.mm.yyyy',E_Date.DateTime));
+   s:='SELECT c.id, c.name,ac.acc_no, ac.name, wi.pok_obr_d, wi.pok_obr_k';
+   s:=s+' FROM customers c, ACCOUNT ac, (select ar.acc_id, sum(ar.pok_obr_d) as pok_obr_d, ' ;
+   s:=s+'sum(ar.pok_obr_k) as pok_obr_k from archost ar  where ar.datdate> :B_DATE and  ar.datdate  <  :E_DATE group by   ar.acc_id) wi ';
+   s:=s+' WHERE c.ID = ac.kli_id AND  ac.ID = wi.acc_id '+ s_min_d+s_max_d;
+   s:=s+s_min_k+s_max_k;
+   ODSet.Close;
+   ODSet.SQL.Clear;
+   ODSet.SQL.Add(  s );
+   ODSet.active:=true;
+   dbgrid.Columns[1].Width:=300;
+   dbgrid.Columns[2].Width:=150;
+   dbgrid.Columns[3].Width:=300;
+   DBGrid.TitleFont.Name:='Azl Sans Serif';
+end;
+
+procedure TTurnoverForm.SButtonExelClick(Sender: TObject);
+var Sheets,Sheet,V:variant;
+       i,k:integer;
+
+begin
+ ExcelApplication1.Disconnect;
+ V:=ExcelApplication1.Application;
+ ExcelApplication1.Connect;
+ ExcelApplication1.Application.Visible[0]:=true;
+ V.Workbooks.Open(ExtractFilePath(ParamStr(0))+'\Turnover.xls');
+ Sheet:= ExcelApplication1.Application.Workbooks[1].Worksheets['Turnover'];
+ Sheets:=ExcelApplication1.Application.Sheets;
+ Sheets.Item['Turnover'].Activate;
+ Sheets.Item['Turnover'].Range['A1:IV2000'].Clear;
+ Sheets.Item['Turnover'].Range['A1:IV2000'].AutoFormat(1, 0, true, 0, 0, 0, 1);
+ Sheets.Item['Turnover'].Range['A1:IV2000'].Font.Name := 'Arial AzLat';
+ Sheets.Item['Turnover'].Range['A1:IV2000'].Font.Size := 10;
+
+ For i:=0 to ODSet.FieldCount-1 do
+  begin
+    Sheet.cells[3,i+1]:=dbgrid.columns[i].Title.Caption;
+    Sheet.cells[3,i+1].ColumnWidth:=DBGrid.Columns[i].Width/8;
+    Sheet.cells[3,i+1].Borders.Weight := 2;
+    Sheet.cells[3,i+1].WrapText := True;
+    Sheet.cells[3,i+1].HorizontalAlignment := xlCenter;
+  end;
+ ODSet.First;
+  for i:=1 to ODSet.RecordCount do
+   begin
+    sheet.cells[i+3,3].NumberFormat:='###';
+    for k:=0 to ODSet.FieldCount-1 do
+     begin
+      Sheet.cells[i+3,k+1]:=ODSet.FieldByName(DBGrid.Columns[k].Title.Caption).Asstring;
+      Sheet.cells[i+3,k+1].Borders.weight:=2;
+     end;
+    ODSet.Next;
+   end;
+end;
+
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TTurnoverForm,
+    Class_TurnoverForm,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

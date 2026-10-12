@@ -1,0 +1,218 @@
+object Forminsurance: TForminsurance
+  Left = 0
+  Top = 0
+  BorderIcons = [biSystemMenu]
+  Caption = '                   S'#305#287'orta haqlar'#305'n'#305'n yarad'#305'lmas'#305' ay '#601'rzind'#601
+  ClientHeight = 499
+  ClientWidth = 774
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poMainFormCenter
+  OnCreate = FormCreate
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object XFPanel1: TXFPanel
+    Left = 0
+    Top = 0
+    Width = 774
+    Height = 33
+    Align = alTop
+    TabOrder = 0
+    ExplicitWidth = 619
+    object XFLabel1: TXFLabel
+      Left = 108
+      Top = 10
+      Width = 75
+      Height = 13
+      Caption = #399'm'#601'liyyat tarixi'
+    end
+    object TransDate: TDateTimePicker
+      Left = 191
+      Top = 7
+      Width = 132
+      Height = 21
+      Date = 0.661002002299937900
+      Time = 0.661002002299937900
+      TabOrder = 0
+    end
+    object XFButton1: TXFButton
+      Left = 365
+      Top = 4
+      Width = 75
+      Height = 25
+      Caption = 'Q'#601'bul'
+      DoubleBuffered = True
+      ParentDoubleBuffered = False
+      TabOrder = 1
+      OnClick = XFButton1Click
+    end
+    object XFButton2: TXFButton
+      Left = 444
+      Top = 4
+      Width = 76
+      Height = 25
+      Caption = #399'm'#601'lliyat'
+      DoubleBuffered = True
+      ParentDoubleBuffered = False
+      TabOrder = 2
+      OnClick = XFButton2Click
+    end
+  end
+  object XFPanel2: TXFPanel
+    Left = 0
+    Top = 33
+    Width = 774
+    Height = 466
+    Align = alClient
+    TabOrder = 1
+    ExplicitWidth = 619
+    object XDBGrid1: TXDBGrid
+      Left = 1
+      Top = 1
+      Width = 772
+      Height = 464
+      Align = alClient
+      DataSource = Dsrc_schedule
+      GridStyle.VisualStyle = vsXPStyle
+      StretchMode = True
+      TabOrder = 0
+      Columns = <
+        item
+          Expanded = False
+          FieldName = 'CREDITID'
+          Title.Alignment = taCenter
+          Title.Caption = #304'D'
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'MUQ'
+          Title.Alignment = taCenter
+          Title.Caption = 'M'#252'qavil'#601' '#8470
+          Visible = True
+          Width = 167
+        end
+        item
+          Expanded = False
+          FieldName = 'PAYMENTDATE'
+          Title.Alignment = taCenter
+          Title.Caption = 'Tarix'
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'INSURANCE'
+          Title.Alignment = taCenter
+          Title.Caption = 'S'#305#287'orta haqq'#305
+          Visible = True
+          Width = 78
+        end
+        item
+          Expanded = False
+          FieldName = 'INSURANCE_ACCNO'
+          LookupDataSet = OracleDataSet1
+          LookupKeyField = 'ACC_NO'
+          LookupListFields = 'ACC'
+          Title.Alignment = taCenter
+          Title.Caption = 'S'#305#287'orta '#351'irk'#601'ti'
+          Visible = True
+          Width = 230
+        end
+        item
+          Expanded = False
+          Title.Caption = 'Status'
+          Visible = True
+        end>
+    end
+  end
+  object ods_schedule: TOracleDataSet
+    SQL.Strings = (
+      'select  rowid,a.*   from cm_payshedule_insurance a '
+      'where paymentdate>=:v_dat and paymentdate<=last_day(:v_dat)')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000C0000003A0056005F004400410054000C00000000000000
+      00000000}
+    QBEDefinition.QBEFieldDefs = {
+      0500000005000000100000004300520045004400490054004900440001000000
+      0000060000004D0055005100010000000000160000005000410059004D004500
+      4E00540044004100540045000100000000001200000049004E00530055005200
+      41004E00430045000100000000001E00000049004E0053005500520041004E00
+      430045005F004100430043004E004F00010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 200
+    Top = 152
+    object ods_scheduleCREDITID: TFloatField
+      FieldName = 'CREDITID'
+    end
+    object ods_scheduleMUQ: TWideStringField
+      FieldName = 'MUQ'
+      Size = 32
+    end
+    object ods_schedulePAYMENTDATE: TDateTimeField
+      FieldName = 'PAYMENTDATE'
+    end
+    object ods_scheduleINSURANCE: TFloatField
+      FieldName = 'INSURANCE'
+    end
+    object ods_scheduleINSURANCE_ACCNO: TWideStringField
+      FieldName = 'INSURANCE_ACCNO'
+      Size = 30
+    end
+  end
+  object Dsrc_schedule: TDataSource
+    DataSet = ods_schedule
+    Left = 296
+    Top = 168
+  end
+  object ods_dat: TOracleDataSet
+    SQL.Strings = (
+      'select trunc(to_date(tek_dat),'#39'MM'#39') dat from sysdat')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {050000000100000006000000440041005400010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 72
+    Top = 88
+    object ods_datDAT: TDateTimeField
+      FieldName = 'DAT'
+    end
+  end
+  object OracleDataSet1: TOracleDataSet
+    SQL.Strings = (
+      
+        'select id, acc_no, acc_no||'#39'  '#39'||name acc from account where id ' +
+        'in(551990,'
+      '62409)')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000300000004000000490044000100000000000C000000410043004300
+      5F004E004F0001000000000006000000410043004300010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 448
+    Top = 112
+    object OracleDataSet1ID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object OracleDataSet1ACC_NO: TWideStringField
+      FieldName = 'ACC_NO'
+      Size = 28
+    end
+    object OracleDataSet1ACC: TWideStringField
+      FieldName = 'ACC'
+      Size = 200
+    end
+  end
+  object cm_schedule: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'cm_schedule'
+    Left = 488
+    Top = 232
+  end
+end

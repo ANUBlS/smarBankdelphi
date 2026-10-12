@@ -1,0 +1,109 @@
+﻿unit CustomersImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Grids, DBGrids, ExtCtrls, DB, OracleData, SboapiDataModuleImpl,
+  ComCtrls, ToolWin, StdCtrls;
+
+type
+  TFormCustomers = class(TForm)
+    Panel1: TPanel;
+    DBGrid1: TDBGrid;
+    Panel2: TPanel;
+    ODS_CUSTOMERS: TOracleDataSet;
+    DS_CUSTOMERS: TDataSource;
+    ODS_CUSTOMERSID: TIntegerField;
+    ODS_CUSTOMERSFULLNAME: TWideStringField;
+    ODS_CUSTOMERSSONAME: TWideStringField;
+    ODS_CUSTOMERSNAME: TWideStringField;
+    ODS_CUSTOMERSLASTNAME: TWideStringField;
+    ToolBar1: TToolBar;
+    ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
+    CBSearch: TComboBox;
+    EditSearch: TEdit;
+    procedure FormShow(Sender: TObject);
+    procedure FormCanResize(Sender: TObject; var NewWidth, NewHeight: Integer;
+      var Resize: Boolean);
+    procedure ToolButton1Click(Sender: TObject);
+    procedure ToolButton2Click(Sender: TObject);
+    procedure DBGrid1DblClick(Sender: TObject);
+    procedure EditSearchChange(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    vCustId: Integer;
+  end;
+
+var
+  FormCustomers: TFormCustomers;
+
+implementation
+
+{$R *.dfm}
+
+procedure TFormCustomers.DBGrid1DblClick(Sender: TObject);
+begin
+  vCustId := ODS_CUSTOMERSID.AsInteger;
+  FormCustomers.Close;
+end;
+
+procedure TFormCustomers.EditSearchChange(Sender: TObject);
+begin
+  if Length(EditSearch.Text)<>0 then
+  begin
+  ODS_CUSTOMERS.Close;
+  case CBSearch.ItemIndex of
+  0:ODS_CUSTOMERS.SQL[3]:='and c.ID like '''+EditSearch.Text+'%''';
+  1:ODS_CUSTOMERS.SQL[3]:='and upper(c.name) like upper(''%'+EditSearch.Text+'%'')';
+  2:ODS_CUSTOMERS.SQL[3]:='and upper(ci.'+ODS_CUSTOMERS.Fields[CBSearch.ItemIndex].FieldName+') like upper(''%'+EditSearch.Text+'%'')';
+  3:ODS_CUSTOMERS.SQL[3]:='and upper(ci.'+ODS_CUSTOMERS.Fields[CBSearch.ItemIndex].FieldName+') like upper(''%'+EditSearch.Text+'%'')';
+  4:ODS_CUSTOMERS.SQL[3]:='and upper(ci.'+ODS_CUSTOMERS.Fields[CBSearch.ItemIndex].FieldName+') like upper(''%'+EditSearch.Text+'%'')';
+  end;
+  ODS_CUSTOMERS.Open;
+  end
+  else
+  begin
+  ODS_CUSTOMERS.Close;
+  ODS_CUSTOMERS.SQL[3]:='';
+  ODS_CUSTOMERS.Open;
+  end;
+end;
+
+procedure TFormCustomers.FormCanResize(Sender: TObject;
+  var NewWidth, NewHeight: Integer; var Resize: Boolean);
+begin
+  Resize := False;
+end;
+
+procedure TFormCustomers.FormShow(Sender: TObject);
+var i:integer;
+begin
+CBSearch.Clear;
+for i := 0 to DBGrid1.Columns.Count-1 do
+CBSearch.Items.Add(DBGrid1.Columns[i].Title.Caption);
+
+ CBSearch.ItemIndex:=0;
+  if not(ODS_CUSTOMERS.Active = True) then
+    ODS_CUSTOMERS.Open
+  else
+    ODS_CUSTOMERS.Refresh;
+  vCustId := -1;
+end;
+
+procedure TFormCustomers.ToolButton1Click(Sender: TObject);
+begin
+  vCustId := ODS_CUSTOMERSID.AsInteger;
+  FormCustomers.Close;
+end;
+
+procedure TFormCustomers.ToolButton2Click(Sender: TObject);
+begin
+  vCustId := -1;
+  FormCustomers.Close;
+end;
+
+end.

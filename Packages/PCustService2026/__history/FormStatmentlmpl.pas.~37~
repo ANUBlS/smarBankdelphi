@@ -1,0 +1,1011 @@
+﻿unit FormStatmentlmpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ComCtrls, Gauges, ExtCtrls, DBCtrls, Buttons, Oracle,
+  QuickRpt, QRExport,
+  XFSCtrls, Grids, XDBGrids, Mask;
+
+type
+  TFormStatement = class(TForm)
+    XFGroupBox1: TXFGroupBox;
+    XFGroupBox2: TXFGroupBox;
+    XFGroupBox3: TXFGroupBox;
+    XDBGrid1: TXDBGrid;
+    XFGroupBox4: TXFGroupBox;
+    PanelProgress: TXFPanel;
+    DTP_End: TDateTimePicker;
+    DTP_Begin: TDateTimePicker;
+    XFLabel1: TXFLabel;
+    XFLabel2: TXFLabel;
+    CBRateDiff: TXFCheckBox;
+    CBTurnOver: TXFCheckBox;
+    EditCli_Id: TEdit;
+    XFLabel3: TXFLabel;
+    DBLCBavalute: TDBLookupComboBox;
+    CBCurrency: TXFCheckBox;
+    DBLCBfilial: TDBLookupComboBox;
+    dblcbUser: TDBLookupComboBox;
+    XFLabel5: TXFLabel;
+    RGroupPrintMode: TXFRadioGroup;
+    RGroupSetting: TXFRadioGroup;
+    RGroupValView: TXFRadioGroup;
+    CBoxExtractCheck: TComboBox;
+    BtnOk: TBitBtn;
+    PrBarChild: TXFProgressBar;
+    PrBarParent: TGauge;
+    SaveDialog: TSaveDialog;
+    Edit_Acc_No: TEdit;
+    Edit_Bal_Cn: TEdit;
+    CBFilial: TXFCheckBox;
+    XFPanel1: TXFPanel;
+    Label1: TLabel;
+    DBEdit1: TDBEdit;
+    procedure FormCreate(Sender: TObject);
+    procedure BtnOkClick(Sender: TObject);
+    procedure XDBGrid1DrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TXColumn; State: TGridDrawState);
+    procedure FormCanResize(Sender: TObject; var NewWidth, NewHeight: Integer;
+      var Resize: Boolean);
+    procedure EditCli_IdChange(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure CBCurrencyClick(Sender: TObject);
+    procedure CBFilialClick(Sender: TObject);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure DBLCBfilialClick(Sender: TObject);
+    procedure DBLCBavaluteClick(Sender: TObject);
+
+  private
+    { Private declarations }
+    Function UpdateStr(InpStr: string): string;
+    function SB_SysDate: TDateTime;
+    procedure PreviewClick;
+    procedure ToExcelClick;
+    procedure PostClick;
+    procedure ExportDataTable;
+    procedure ShowReport;
+    procedure ShowReportR;
+    procedure ShowTransClick;
+    procedure ShowCardState;
+  public
+    { Public declarations }
+  end;
+
+var
+  FormStatement: TFormStatement;
+
+implementation
+
+uses ComObj, UnitDataModPCustService, SBTranslateProc,
+  sboapiDataModuleImpl, UnitReport, UnitReportR, UnitTransView,
+  PCustServiceFormImpl1;
+{$R *.dfm}
+
+function TFormStatement.SB_SysDate: TDateTime;
+begin
+  with DataModPCustService.SB_STATEMENT do
+  begin
+
+    Result := CallDateFunction('get_date', []);
+  end;
+end;
+
+// procedure Initialize; override;
+// end;
+Function TFormStatement.UpdateStr(InpStr: string): string;
+var
+  TempString, EndString: String;
+  flag, TempCount, i, Count, Beg_Index, k: Integer;
+const
+  Commas = '''';
+  Comma = ',';
+begin
+  Result := InpStr;
+  if Result <> '' then
+  { } begin
+    TempString := '';
+    EndString := '';
+    Beg_Index := 1;
+    k := Length(Result);
+    TempCount := 0;
+    flag := 1;
+    for i := 1 to k do
+      if Result[i] <> ' ' then
+        TempString := TempString + Result[i];
+    InpStr := TempString;
+    Result := InpStr;
+    TempString := '';
+    k := Length(Result);
+    for i := 1 to k do
+    begin
+      if Result[i] = ',' then
+      begin
+        Count := (i - 1) - TempCount;
+        Result := Copy(Result, Beg_Index, Count);
+        TempString := TempString + Result + Commas + Comma + Commas;
+        Result := InpStr;
+        Beg_Index := i + 1;
+        TempCount := i;
+        flag := 0;
+      end;
+      if flag = 1 then
+        EndString := EndString + Result[i]
+      else
+      begin
+        EndString := '';
+        flag := 1;
+      end;
+    end;
+    Result := Commas + TempString + EndString + Commas;
+
+    { } end
+  else
+    Result := ''' ''';
+end;
+
+procedure TFormStatement.XDBGrid1DrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TXColumn; State: TGridDrawState);
+Var
+  Style: Integer;
+begin
+  IF Column.Title.Caption = '' Then
+  begin
+    // IF  DepoziProps.FieldByName('DONR').value=1
+    // Style := DFCS_CHECKED;
+
+    // DrawFrameControl(TXDBGrid(Sender).Canvas.Handle,
+    // Rect, DFC_BUTTON, Style);
+  end;
+
+end;
+
+procedure TFormStatement.CBFilialClick(Sender: TObject);
+begin
+  { if CBFilial.Checked=true then
+    dblcbfilial.KeyValue:=0
+    else
+    dblcbfilial.KeyValue:=-1;
+  }
+  With DataModPCustService.ODS_State do
+  Begin
+    close;
+    if CBFilial.Checked and CBCurrency.Checked then
+      sql[7] := 'and ac.filial=' + inttostr(DBLCBfilial.KeyValue) +
+        ' and ac.val_acc=' + inttostr(DBLCBavalute.KeyValue)
+    else if CBFilial.Checked then
+      sql[7] := 'and ac.filial=' + inttostr(DBLCBfilial.KeyValue)
+    else
+      sql[7] := '';
+    open;
+  End;
+end;
+
+procedure TFormStatement.DBLCBavaluteClick(Sender: TObject);
+begin
+  CBCurrency.Checked := False
+end;
+
+procedure TFormStatement.DBLCBfilialClick(Sender: TObject);
+begin
+  CBFilial.Checked := False
+end;
+
+Var
+  v_BDate: TDateTime;
+  v_EDate: TDateTime;
+  notAccId: string;
+  v_filial, v_val, v_user: integer;
+  TurnYesNo, RateDif: Integer;
+  Exl, Sheet: Variant;
+  Turn_and_RateDiff: string;
+
+procedure TFormStatement.ShowReport;
+begin
+  FormRep := TFormRep.Create(Self);
+  with FormRep do
+  begin
+    QRD_Begin.Caption := DateToStr(v_BDate);
+    QRD_End.Caption := DateToStr(v_EDate);
+
+    case RGroupPrintMode.ItemIndex of
+      0:
+        QRBandDetail.ForceNewPage := False;
+      1:
+        QRBandDetail.ForceNewPage := True;
+    end;
+
+    QRep.Preview;
+  end;
+
+end;
+
+procedure TFormStatement.ShowReportR;
+begin
+  FormRepR := TFormRepR.Create(Self);
+  with FormRepR do
+  begin
+    QRD_Begin.Caption := DateToStr(v_BDate);
+    QRD_End.Caption := DateToStr(v_EDate);
+    case RGroupPrintMode.ItemIndex of
+      0:
+        QRBandDetail.ForceNewPage := False;
+      1:
+        QRBandDetail.ForceNewPage := True;
+    end;
+    case RGroupValView.ItemIndex of
+      0:
+        QRDBTextCurr.DataField := 'PairCurrencyId';
+      1:
+        QRDBTextCurr.DataField := 'aValname';
+    end;
+
+    QRep.Preview;
+  end;
+
+end;
+
+procedure TFormStatement.PostClick;
+begin
+
+  ExportDataTable;
+  if not Assigned(FormRep) then
+    FormRep := TFormRep.Create(nil);
+
+  with SaveDialog do
+  begin
+    if Execute then
+    begin // TQRExportFilter
+      FormRep.QRep.ExportToFilter(TQRAsciiExportFilter.Create(FileName));
+    end;
+  end;
+
+end;
+
+procedure TFormStatement.ShowTransClick;
+begin
+  ExportDataTable;
+  FormTransView := TFormTransView.Create(Self);
+  FormTransView.ShowModal;
+end;
+
+procedure TFormStatement.ShowCardState;
+begin
+  close;
+end;
+
+procedure TFormStatement.BtnOkClick(Sender: TObject);
+begin
+
+  case CBoxExtractCheck.ItemIndex of
+
+    0:
+      PreviewClick;
+    1:
+      PostClick;
+    2:
+      ToExcelClick;
+    3:
+      ShowTransClick;
+    4:
+      ShowCardState;
+  end;
+
+end;
+
+procedure TFormStatement.CBCurrencyClick(Sender: TObject);
+begin
+  { if CBCurrency.Checked=true then
+    dblcbavalute.KeyValue:=0
+    else
+    dblcbavalute.KeyValue:=-1;
+    end; }
+  With DataModPCustService.ODS_State do
+  Begin
+    close;
+    if CBCurrency.Checked and CBFilial.Checked then
+      sql[7] := 'and ac.val_acc=' + inttostr(DBLCBavalute.KeyValue) +
+        ' and ac.filial=' + inttostr(DBLCBfilial.KeyValue)
+    else if CBCurrency.Checked then
+      sql[7] := 'and ac.val_acc=' + inttostr(DBLCBavalute.KeyValue)
+    else
+      sql[7] := '';
+    open;
+
+  End;
+end;
+
+procedure TFormStatement.EditCli_IdChange(Sender: TObject);
+begin
+
+  // DataModPCustService.ODS_State.Close;
+  // DataModPCustService.ODS_State.SetVariable('custid',FieldByName('ID').);
+  // DataModPCustService.ODS_State.Open;
+  // EditCli_Id.Text:=DataModPCustService.ODS_CUSTOMERS_PHYS_FS.FieldByName('id').AsString;
+end;
+
+procedure TFormStatement.ExportDataTable;
+var
+  v_Acc_no: string;
+  v_Bal_cn: string;
+  v_Cli_id: string;
+  FilterTrans: string;
+  FilterExt: string;
+  AStrParam: string;
+  BStrParam: string;
+  CStrParam: string;
+  i: integer;
+  S: string;
+  Index: Integer;
+  WaitNextConfirm, WillRefresh: Boolean;
+  accno2, accno: string;
+begin
+  // Screen.Cursor:=crSQLWait ;
+
+  if CBTurnOver.Checked = True then
+    Turn_and_RateDiff := 'ch_turn';
+  if CBRateDiff.Checked = True then
+    Turn_and_RateDiff := 'ch_rate';
+  if CBTurnOver.Checked = True and CBRateDiff.Checked = True then
+    Turn_and_RateDiff := 'ch_rate_and_turn';
+  if CBTurnOver.Checked = False and CBRateDiff.Checked = True then
+    Turn_and_RateDiff := 'ch_nothink';
+
+  v_BDate := Integer(Trunc(DTP_Begin.DateTime));
+  v_EDate := Integer(Trunc(DTP_End.DateTime));
+
+  v_user := dblcbUser.KeyValue;
+  v_val := DBLCBavalute.KeyValue;
+  v_filial := DBLCBfilial.KeyValue;
+
+  if Edit_Bal_Cn.Text = '' then
+    v_Bal_cn := '-1'
+  else
+    v_Bal_cn := UpdateStr(Edit_Bal_Cn.Text);
+
+  { if Edit_Acc_No.Text = '' then
+    v_Acc_no:= '''-1'''
+    else
+    v_Acc_no:= UpdateStr(Edit_Acc_No.Text);
+  }
+
+  with XDBGrid1, SelectedRows, DataSource.DataSet, DataModPCustService do
+  begin
+    // if Count = 0 then CurrentRowSelected := True;
+    for Index := 0 to Count - 1 do
+    begin
+
+      GotoBookmark(Pointer(Items[Index]));
+      accno := FieldByName('acc_no').AsString;
+      accno2 := accno2 + accno + ',';
+    end;
+
+    if Count = 0 then
+    begin
+      v_Acc_no := '''-1''';
+      /// ///////////////////////////////////////
+      if EditCli_Id.Text = '' then
+        v_Cli_id := '-1'
+      else
+        v_Cli_id := EditCli_Id.Text;
+      /// ///////////////////////////////  /////
+    end
+    else
+    begin
+      v_Acc_no := UpdateStr(Copy(accno2, 1, Length(accno2) - 1));
+      v_Cli_id := '-1';
+    end;
+  end;
+  // ShowMessage(v_Acc_no);
+
+  if (CBRateDiff.Checked = False) then
+    FilterTrans := ' (OperationCode<>1)  '
+  else
+    FilterTrans := '';
+
+  CStrParam := DataModPCustService.SB_STATEMENT.CallStringFunction('notAccId',
+    [v_BDate, v_EDate, v_Cli_id, v_Acc_no, v_Bal_cn, v_filial, v_val, v_user,
+    Turn_and_RateDiff]);
+
+  if CBTurnOver.Checked = True then
+  begin
+    with DataModPCustService.ODSNotAccId do
+    begin
+      close;
+      sql.Clear;
+      sql.Add(CStrParam);
+      open;
+      for i := 1 to RecordCount do
+      begin
+        S := S + '(accountid<>' + inttostr(FieldByName('accountid').asinteger)
+          + ') and ';
+        Next;
+      end;
+      S := Copy(S, 1, Length(S) - 4);
+    end;
+    FilterExt := S;
+  end
+  else
+    FilterExt := '';
+
+  { AStrParam:=DataModSTX.SB_STATEMENT.CallStringFunction('GetExtraction',
+    [
+    v_BDate,
+    v_EDate,
+    v_Cli_id,
+    v_Acc_no,
+    v_Bal_cn,
+    v_filial,
+    v_val,
+    v_user
+    ]
+    ); }
+  with DataModPCustService.ODS_GetExtraction do
+  begin
+    close;
+    SetVariable('bDate', v_BDate);
+    SetVariable('eDate', v_EDate);
+    SetVariable('ClientID', v_Cli_id);
+    SetVariable('AccountNo', v_Acc_no);
+    SetVariable('BalanceNo', v_Bal_cn);
+    SetVariable('BranchID', v_filial);
+    SetVariable('CurrencyID', v_val);
+    SetVariable('UserID', v_user);
+    open;
+    AStrParam := FieldByName('str').AsString;
+  end;
+
+  { BStrParam:=DataModSTX.SB_STATEMENT.CallStringFunction('Extraction_Trans',
+    [
+    v_BDate,
+    v_EDate,
+    v_Cli_id,
+    v_Acc_no,
+    v_Bal_cn,
+    v_filial,
+    v_val,
+    v_user
+    ]
+    ); }
+  with DataModPCustService.ODS_ExtractionTrans do
+  begin
+    close;
+    SetVariable('bDate', v_BDate);
+    SetVariable('eDate', v_EDate);
+    SetVariable('ClientID', v_Cli_id);
+    SetVariable('AccountNo', v_Acc_no);
+    SetVariable('BalanceNo', v_Bal_cn);
+    SetVariable('BranchID', v_filial);
+    SetVariable('CurrencyID', v_val);
+    SetVariable('UserID', v_user);
+    open;
+    BStrParam := FieldByName('str').AsString;
+  end;
+
+  with DataModPCustService do
+  begin
+
+    with ODSMainState do
+    begin
+
+      close;
+      sql.Clear;
+      sql.Add(AStrParam);
+      Filtered := False;
+      FilterExt := '';
+      Filter := FilterExt;
+      Filtered := True;
+
+      open;
+    end;
+
+    with ODSExtractTrans do
+    begin
+
+      close;
+      sql.Clear;
+      DeclareVariable('OwnAccountId', otInteger);
+      sql.Add(BStrParam);
+      Filtered := False;
+      Filter := FilterTrans;
+      Filtered := True;
+      open;
+    end;
+
+    Screen.Cursor := crDefault;
+
+  end;
+
+end;
+
+procedure TFormStatement.PreviewClick;
+begin
+
+  ExportDataTable;
+
+  case RGroupSetting.ItemIndex of
+    0:
+      begin
+        ShowReportR;
+      end;
+    1:
+      begin
+        ShowReport;
+      end;
+  end;
+end;
+
+procedure CreateSheet;
+begin
+  try
+    Exl := CreateOleObject('Excel.Application');
+    Exl.WorkBooks.Add;
+    Sheet := Exl.Application.Worksheets.Item[1];
+  except
+  end;
+end;
+
+procedure DestroySheet;
+begin
+  try
+    Finalize(Sheet);
+    Finalize(Exl);
+  except
+
+  end;
+end;
+
+procedure ShowSheet;
+begin
+  try
+    Exl.Visible := True;
+  except
+    DestroySheet;
+  end;
+end;
+
+procedure TFormStatement.ToExcelClick;
+const
+  d = 6;
+  f = 3;
+  dd = 2;
+var
+  i, j, k, m, www, n: Integer;
+  t_val: integer;
+  v_LDebit, v_LKredit, v_Debit, v_Kredit: real;
+  bash: string;
+begin
+  try
+    CreateSheet;
+    ExportDataTable;
+    PanelProgress.Visible := True;
+    PrBarParent.Progress := 0;
+    PrBarChild.Position := 0;
+    Sheet.Range['A1:A60000'].ColumnWidth := 20;
+    Sheet.Range['B1:B60000'].ColumnWidth := 15;
+    Sheet.Range['C1:C60000'].ColumnWidth := 15;
+    Sheet.Range['D1:D60000'].NumberFormat := '#######';
+    Sheet.Range['D1:D60000'].ColumnWidth := 30;
+    Sheet.Range['E1:E60000'].NumberFormat := '#,##0.00';
+    Sheet.Range['E1:E60000'].ColumnWidth := 12;
+    Sheet.Range['F1:F60000'].NumberFormat := '#,##0.00';
+    Sheet.Range['F1:F60000'].ColumnWidth := 12;
+    Sheet.Range['G1:G60000'].ColumnWidth := 100;
+
+    k := 0;
+    with DataModPCustService do
+      for i := 1 to ODSMainState.RecordCount do
+      begin
+        // begin
+        t_val := ODSMainState.FieldByName('CurrencyId').AsInteger;
+        if t_val = 0 then
+        begin
+
+          // for i:=1 to  ODSMainState.RecordCount do begin
+          PrBarParent.Progress := (100 * i) div ODSMainState.RecordCount;
+          bash := inttostr(i + k);
+          Sheet.Cells[i + k, 3] := ' Hesab № :';
+          Sheet.Cells[i + k, 3].Font.Name := 'Tahoma';
+          Sheet.Cells[i + k, 3].Font.Bold := True;
+
+          Sheet.Cells[i + k, 4] := ODSMainState.FieldByName
+            ('AccountNumber').AsString;
+
+          Sheet.Cells[i + k + 1, 1] := 'Hesabın adı :';
+          Sheet.Cells[i + k + 1, 1].Font.Name := 'Tahoma';
+          Sheet.Cells[i + k + 1, 1].Font.Bold := True;
+          Sheet.Cells[i + k + 1, 2].Value :=
+            ODSMainState.FieldByName('AccountName').AsString;
+          Sheet.Cells[i + k + 1, 2].Font.Name := 'Tahoma';
+
+          Sheet.Cells[i + k + 2, 1] := 'Valyuta :';
+          Sheet.Cells[i + k + 2, 1].Font.Name := 'Tahoma';
+          Sheet.Cells[i + k + 2, 1].Font.Bold := True;
+
+          Sheet.Cells[i + k + 2, 2] := ODSMainState.FieldByName
+            ('CurrencyName').AsString;
+
+          Sheet.Cells[i + k + 3, 1] := 'Əməl. tarixi :';
+          Sheet.Cells[i + k + 3, 1].Font.Name := 'Tahoma';
+          Sheet.Cells[i + k + 3, 1].Font.Bold := True;
+
+          Sheet.Cells[i + k + 3, 2] := DTP_Begin.DateTime;
+          Sheet.Cells[i + k + 3, 3] := DTP_End.DateTime;
+
+          Sheet.Cells[i + k + 4, 1] := 'Əvv əm. tarix : ';
+          Sheet.Cells[i + k + 4, 1].Font.Name := 'Tahoma';
+          Sheet.Cells[i + k + 4, 1].Font.Bold := True;
+
+          Sheet.Cells[i + k + 4, 2].Value :=
+            ODSMainState.FieldByName('lastopdate').AsDateTime;
+
+          Sheet.Cells[i + k + 5, 1] := 'Günün əvv. qal:';
+          Sheet.Cells[i + k + 5, 1].Font.Name := 'Tahoma';
+          Sheet.Cells[i + k + 5, 1].Font.Bold := True;
+          Sheet.Cells[i + k + 5, 2] := 'Manat :';
+          Sheet.Cells[i + k + 5, 3].Value :=
+            FormatFloat('#,##0.00',
+            ABS(ODSMainState.FieldByName('Ostat').AsFloat));
+
+          Sheet.Cells[i + k + 6, 2] := 'Тарих';
+          Sheet.Cells[i + k + 6, 2].Font.Name := 'Tahoma';
+          Sheet.Cells[i + k + 6, 2].Font.Bold := True;
+          Sheet.Cells[i + k + 6, 2].Font.Color := clBlue;
+
+          Sheet.Cells[i + k + 6, 3].Value := 'Valyuta';
+          Sheet.Cells[i + k + 6, 3].Font.Name := 'Tahoma';
+          Sheet.Cells[i + k + 6, 3].Font.Bold := True;
+          Sheet.Cells[i + k + 6, 3].Font.Color := clBlue;
+
+          Sheet.Cells[i + k + 6, 4] := 'Qarşı hesab';
+          Sheet.Cells[i + k + 6, 4].Font.Name := 'Tahoma';
+          Sheet.Cells[i + k + 6, 4].Font.Bold := True;
+          Sheet.Cells[i + k + 6, 4].Font.Color := clBlue;
+
+          Sheet.Cells[i + k + 6, 5] := 'Debit';
+          Sheet.Cells[i + k + 6, 5].Font.Name := 'Tahoma';
+          Sheet.Cells[i + k + 6, 5].Font.Bold := True;
+          Sheet.Cells[i + k + 6, 5].Font.Color := clBlue;
+
+          Sheet.Cells[i + k + 6, 6] := 'Kredit';
+          Sheet.Cells[i + k + 6, 6].Font.Name := 'Tahoma';
+          Sheet.Cells[i + k + 6, 6].Font.Bold := True;
+          Sheet.Cells[i + k + 6, 6].Font.Color := clBlue;
+
+          Sheet.Cells[i + k + 6, 7] := 'Təyinatı';
+          Sheet.Cells[i + k + 6, 7].Font.Name := 'Tahoma';
+          Sheet.Cells[i + k + 6, 7].Font.Bold := True;
+          Sheet.Cells[i + k + 6, 7].Font.Color := clBlue;
+
+          v_LDebit := 0;
+          v_LKredit := 0;
+          n := 0;
+          for j := 1 to ODSExtractTrans.RecordCount do
+          begin
+            PrBarChild.Position := (100 * j) div ODSExtractTrans.RecordCount;
+            v_LDebit := v_LDebit + ODSExtractTrans.FieldByName
+              ('LDebit').AsFloat;
+            v_LKredit := v_LKredit + ODSExtractTrans.FieldByName
+              ('LKredit').AsFloat;
+
+            Sheet.Cells[i + k + j + d + n, 2] :=
+              ODSExtractTrans.FieldByName('Dat').AsDateTime;
+            Sheet.Cells[i + k + j + d + n, 3] :=
+              ODSExtractTrans.FieldByName('PairCurrencyid').AsString;
+            Sheet.Cells[i + k + j + d + n, 4] :=
+              ODSExtractTrans.FieldByName('PairAccountName').AsString;
+            Sheet.Cells[i + k + j + d + n, 5] :=
+              FormatFloat('#,##0.00',
+              ODSExtractTrans.FieldByName('LDebit').AsFloat);
+            Sheet.Cells[i + k + j + d + n, 6] :=
+              FormatFloat('#,##0.00',
+              ODSExtractTrans.FieldByName('LKredit').AsFloat);
+            Sheet.Cells[i + k + j + d + n, 7] :=
+              ODSExtractTrans.FieldByName('Name').AsString;
+            Sheet.Cells[i + k + j + d + n, 7].Font.Name := 'Tahoma';
+
+            if ODSExtractTrans.FieldByName('PairCurrencyid').AsInteger <> 0 then
+            begin
+              n := n + 1;
+
+              Sheet.Cells[i + k + j + d + n, 5] :=
+                FormatFloat('#,##0.00',
+                ODSExtractTrans.FieldByName('Debit').AsFloat);
+              Sheet.Cells[i + k + j + d + n, 5].Font.Bold := True;
+              Sheet.Cells[i + k + j + d + n, 5].Font.Color := clMaroon;
+
+              Sheet.Cells[i + k + j + d + n, 6] :=
+                FormatFloat('#,##0.00',
+                ODSExtractTrans.FieldByName('Kredit').AsFloat);
+              Sheet.Cells[i + k + j + d + n, 6].Font.Bold := True;
+              Sheet.Cells[i + k + j + d + n, 6].Font.Color := clMaroon;
+            end;
+            ODSExtractTrans.Next;
+            // if ODSExtractTrans.FieldByName('PairCurrencyid').AsInteger<>0 then
+            // begin
+            www := www + 1;
+            if (j = ODSExtractTrans.RecordCount) and (www <> 0) then
+              www := www + 1;
+            // end; {if}
+          end;
+          PrBarChild.Position := 0;
+          m := ODSExtractTrans.RecordCount;
+          Sheet.Cells[i + k + m + d + n + 1, 5] :=
+            FormatFloat('#,##0.00', v_LDebit);
+          Sheet.Cells[i + k + m + d + n + 1, 6] :=
+            FormatFloat('#,##0.00', v_LKredit);
+          Sheet.Cells[i + k + m + d + n + 2, 1] := 'Günün son. qal:';
+          Sheet.Cells[i + k + m + d + n + 2, 2] := 'Manat:';
+          Sheet.Cells[i + k + m + d + n + 2, 3] :=
+            FormatFloat('#,##0.00', ABS(ODSMainState.FieldByName('EndOstat')
+            .AsFloat));
+          Sheet.Cells[i + k + m + d + n + 2, 1].Font.Name := 'Tahoma';
+          Sheet.Cells[i + k + m + d + n + 2, 1].Font.Bold := True;
+          Sheet.Cells[i + k + m + d + n + 3, 1] := '';
+          Exl.Range['A' + bash + ':G' + inttostr(i + k + m + d + n + 2)].select;
+          Exl.Selection.Interior.ColorIndex := 2;
+          Sheet.Range['A' + bash + ':G' + inttostr(i + k + m + d + n + 2)
+            ].Borders.Color := clRed;
+
+          Exl.Range['A' + Inttostr(i + k + m + d + n + 3) + ':G' +
+            Inttostr(i + k + m + d + n + 3)].select;
+          Exl.Selection.Interior.ColorIndex := 8;
+
+          k := k + d + f + m + n;
+          ODSMainState.Next;
+          // end;{for}
+        end { if t_val=0 }
+        else
+        begin
+
+          // for i:=1 to  ODSMainState.RecordCount do begin
+          PrBarParent.Progress := (100 * i) div ODSMainState.RecordCount;
+          bash := inttostr(i + k);
+          Sheet.Cells[i + k, 3] := ' Hesab № :';
+          Sheet.Cells[i + k, 3].Font.Name := 'Tahoma';
+          Sheet.Cells[i + k, 3].Font.Bold := True;
+
+          Sheet.Cells[i + k, 4] := ODSMainState.FieldByName
+            ('AccountNumber').AsString;
+
+          Sheet.Cells[i + k + 1, 1] := 'Hesabın adı :';
+          Sheet.Cells[i + k + 1, 1].Font.Name := 'Tahoma';
+          Sheet.Cells[i + k + 1, 1].Font.Bold := True;
+          Sheet.Cells[i + k + 1, 2].Value :=
+            ODSMainState.FieldByName('AccountName').AsString;
+          Sheet.Cells[i + k + 1, 2].Font.Name := 'Tahoma';
+
+          Sheet.Cells[i + k + 2, 1] := 'Valyuta :';
+          Sheet.Cells[i + k + 2, 1].Font.Name := 'Tahoma';
+          Sheet.Cells[i + k + 2, 1].Font.Bold := True;
+
+          Sheet.Cells[i + k + 2, 2] := ODSMainState.FieldByName
+            ('CurrencyName').AsString;
+
+          Sheet.Cells[i + k + 3, 1] := 'Əməliy. tarixi :';
+          Sheet.Cells[i + k + 3, 1].Font.Name := 'Tahoma';
+          Sheet.Cells[i + k + 3, 1].Font.Bold := True;
+
+          Sheet.Cells[i + k + 3, 2] := DTP_Begin.DateTime;
+          Sheet.Cells[i + k + 3, 3] := DTP_End.DateTime;
+
+          Sheet.Cells[i + k + 4, 1] := 'Əvv əm. tarixi : ';
+          Sheet.Cells[i + k + 4, 1].Font.Name := 'Tahoma';
+          Sheet.Cells[i + k + 4, 1].Font.Bold := True;
+
+          Sheet.Cells[i + k + 4, 2].Value :=
+            ODSMainState.FieldByName('lastopdate').AsDateTime;
+
+          Sheet.Cells[i + k + 5, 1] := 'Günün əvv. qal:';
+          Sheet.Cells[i + k + 5, 1].Font.Name := 'Tahoma';
+          Sheet.Cells[i + k + 5, 1].Font.Bold := True;
+          Sheet.Cells[i + k + 5, 2] := 'Valyuta :';
+          Sheet.Cells[i + k + 5, 2].Font.Name := 'Tahoma';
+          Sheet.Cells[i + k + 5, 3].Value :=
+            FormatFloat('#,##0.00',
+            ABS(ODSMainState.FieldByName('Ostat').AsFloat));
+          Sheet.Cells[i + k + 6, 2] := 'Manat :';
+          Sheet.Cells[i + k + 6, 3] := FormatFloat('#,##0.00',
+            ABS(ODSMainState.FieldByName('PokOstat').AsCurrency));
+
+          Sheet.Cells[i + k + 6, 2].Font.Name := 'Tahoma';
+          Sheet.Cells[i + k + 7, 2] := 'Rəsimi məzənnə :';
+          Sheet.Cells[i + k + 7, 2].Font.Name := 'Tahoma';
+          Sheet.Cells[i + k + 7, 3] := FormatFloat('#,##0.0000',
+            ABS(RatesDataSetBegin.FieldByName('Ostat').AsCurrency));
+
+          Sheet.Cells[i + k + 8, 2] := 'Tarix';
+          Sheet.Cells[i + k + 8, 2].Font.Name := 'Tahoma';
+          Sheet.Cells[i + k + 8, 2].Font.Bold := True;
+          Sheet.Cells[i + k + 8, 2].Font.Color := clBlue;
+
+          Sheet.Cells[i + k + 8, 3].Value := 'Valyuta';
+          Sheet.Cells[i + k + 8, 3].Font.Name := 'Tahoma';
+          Sheet.Cells[i + k + 8, 3].Font.Bold := True;
+          Sheet.Cells[i + k + 8, 3].Font.Color := clBlue;
+
+          Sheet.Cells[i + k + 8, 4] := 'Qarşı hesab';
+          Sheet.Cells[i + k + 8, 4].Font.Name := 'Tahoma';
+          Sheet.Cells[i + k + 8, 4].Font.Bold := True;
+          Sheet.Cells[i + k + 8, 4].Font.Color := clBlue;
+
+          Sheet.Cells[i + k + 8, 5] := 'Debit';
+          Sheet.Cells[i + k + 8, 5].Font.Name := 'Tahoma';
+          Sheet.Cells[i + k + 8, 5].Font.Bold := True;
+          Sheet.Cells[i + k + 8, 5].Font.Color := clBlue;
+
+          Sheet.Cells[i + k + 8, 6] := 'Kredit';
+          Sheet.Cells[i + k + 8, 6].Font.Name := 'Tahoma';
+          Sheet.Cells[i + k + 8, 6].Font.Bold := True;
+          Sheet.Cells[i + k + 8, 6].Font.Color := clBlue;
+
+          Sheet.Cells[i + k + 8, 7] := 'Təyinatı';
+          Sheet.Cells[i + k + 8, 7].Font.Name := 'Tahoma';
+          Sheet.Cells[i + k + 8, 7].Font.Bold := True;
+          Sheet.Cells[i + k + 8, 7].Font.Color := clBlue;
+          www := 0;
+          v_LDebit := 0;
+          v_Debit := 0;
+          v_LKredit := 0;
+          v_Kredit := 0;
+          for j := 1 to ODSExtractTrans.RecordCount do
+          begin
+            PrBarChild.Position := (100 * j) div ODSExtractTrans.RecordCount;
+            v_Debit := v_Debit + ODSExtractTrans.FieldByName('Debit').AsFloat;
+            v_Kredit := v_Kredit + ODSExtractTrans.FieldByName
+              ('Kredit').AsFloat;
+            v_LDebit := v_LDebit + ODSExtractTrans.FieldByName
+              ('LDebit').AsFloat;
+            v_LKredit := v_LKredit + ODSExtractTrans.FieldByName
+              ('LKredit').AsFloat;
+            Sheet.Cells[i + k + j + d + dd + www, 2] :=
+              ODSExtractTrans.FieldByName('Dat').AsDateTime;
+            Sheet.Cells[i + k + j + d + dd + www, 3] :=
+              ODSExtractTrans.FieldByName('PairCurrencyid').AsString;
+            Sheet.Cells[i + k + j + d + dd + www, 4] :=
+              ODSExtractTrans.FieldByName('PairAccountName').AsString;
+            Sheet.Cells[i + k + j + d + dd + www, 5] :=
+              FormatFloat('#,##0.00',
+              ODSExtractTrans.FieldByName('LDebit').AsFloat);
+            Sheet.Cells[i + k + j + d + dd + www, 6] :=
+              FormatFloat('#,##0.00',
+              ODSExtractTrans.FieldByName('LKredit').AsFloat);
+            Sheet.Cells[i + k + j + d + dd + www, 7] :=
+              ODSExtractTrans.FieldByName('Name').AsString;
+            Sheet.Cells[i + k + j + d + dd + www, 7].Font.Name := 'Tahoma';
+
+            Sheet.Cells[i + k + j + d + dd + www + 1, 5] :=
+              FormatFloat('#,##0.00',
+              ODSExtractTrans.FieldByName('Debit').AsFloat);
+            Sheet.Cells[i + k + j + d + dd + www + 1, 5].Font.Bold := True;
+            Sheet.Cells[i + k + j + d + dd + www + 1, 5].Font.Color := clMaroon;
+
+            Sheet.Cells[i + k + j + d + dd + www + 1, 6] :=
+              FormatFloat('#,##0.00',
+              ODSExtractTrans.FieldByName('Kredit').AsFloat);
+            Sheet.Cells[i + k + j + d + dd + www + 1, 6].Font.Bold := True;
+            Sheet.Cells[i + k + j + d + dd + www + 1, 6].Font.Color := clMaroon;
+
+            ODSExtractTrans.Next;
+
+            // if ODSExtractTrans.FieldByName('PairCurrencyid').AsInteger<>0 then
+            // begin
+            www := www + 1;
+            if (j = ODSExtractTrans.RecordCount) and (www <> 0) then
+              www := www + 1;
+            // end; {if}
+
+          end; { for }
+
+          PrBarChild.Position := 0;
+          m := ODSExtractTrans.RecordCount;
+
+          Sheet.Cells[i + k + m + d + dd + www, 5] :=
+            FormatFloat('#,##0.00', v_LDebit);
+          Sheet.Cells[i + k + m + d + dd + www, 6] :=
+            FormatFloat('#,##0.00', v_LKredit);
+
+          Sheet.Cells[i + k + m + d + dd + www + 1, 5] :=
+            FormatFloat('#,##0.00', v_Debit);
+          Sheet.Cells[i + k + m + d + dd + www + 1, 5].Font.Color := clMaroon;
+          Sheet.Cells[i + k + m + d + dd + www + 1, 5].Font.Bold := True;
+          Sheet.Cells[i + k + m + d + dd + www + 1, 6] :=
+            FormatFloat('#,##0.00', v_Kredit);
+          Sheet.Cells[i + k + m + d + dd + www + 1, 6].Font.Color := clMaroon;
+          Sheet.Cells[i + k + m + d + dd + www + 1, 6].Font.Bold := True;
+
+          Sheet.Cells[i + k + m + d + dd + www + 2, 1] := 'Gün son. qal:';
+          Sheet.Cells[i + k + m + d + dd + www + 2, 2] := 'Valyuta :';
+          Sheet.Cells[i + k + m + d + dd + www + 2, 2].Font.Name := 'Tahoma';
+          Sheet.Cells[i + k + m + d + dd + www + 2, 3] :=
+            FormatFloat('#,##0.00', ABS(ODSMainState.FieldByName('EndOstat')
+            .AsFloat));
+          Sheet.Cells[i + k + m + d + dd + www + 2, 1].Font.Name := 'Tahoma';
+          Sheet.Cells[i + k + m + d + dd + www + 2, 1].Font.Bold := True;
+          Sheet.Cells[i + k + m + d + dd + www + 3, 2] := 'Manat :';
+          Sheet.Cells[i + k + m + d + dd + www + 3, 3] :=
+            FormatFloat('#,##0.00',
+            ABS(DataModPCustService.ODSMainState.FieldByName('EndPokOstat')
+            .AsCurrency));
+
+          Sheet.Cells[i + k + m + d + dd + www + 4, 2] := 'Rəsmi məzənnə :';
+          Sheet.Cells[i + k + m + d + dd + www + 4, 2].Font.Name := 'Tahoma';
+          Sheet.Cells[i + k + m + d + dd + www + 4, 3] :=
+            FormatFloat('#,##0.0000',
+            ABS(RatesDataSet.FieldByName('Ostat').AsCurrency));
+
+          Sheet.Cells[i + k + m + d + dd + www + 5, 1] := '';
+          Exl.Range['A' + bash + ':G' + inttostr(i + k + m + d + dd + www +
+            4)].select;
+          Exl.Selection.Interior.ColorIndex := 2;
+          Sheet.Range['A' + bash + ':G' + inttostr(i + k + m + d + dd + www + 4)
+            ].Borders.Color := clRed;
+          Exl.Range['A' + Inttostr(i + k + m + d + dd + www + 5) + ':G' +
+            Inttostr(i + k + m + d + dd + www + 5)].select;
+
+          Exl.Selection.Interior.ColorIndex := 8;
+
+          k := k + d + 2 * dd + www + f + m;
+          ODSMainState.Next;
+          // end;{for}
+
+        end; { else }
+      end; { with }
+
+    ShowSheet;
+  finally
+
+    Exl.Range['A1:A1'].select;
+    PanelProgress.Visible := False;
+    Screen.Cursor := crDefault;
+    DestroySheet;
+  end;
+
+end;
+
+procedure TFormStatement.FormCanResize(Sender: TObject;
+  var NewWidth, NewHeight: Integer; var Resize: Boolean);
+begin
+  Resize := False;
+end;
+
+procedure TFormStatement.FormCreate(Sender: TObject);
+begin
+
+  DataModPCustService.ODSUsers.open;
+
+  // taModPCustService.ODSNotAccId.open;
+  // taModPCustService.ODS_ExtractionTrans.Open;
+  // taModPCustService.ODSMainState.Open;
+  // taModPCustService.ODSExtractTrans.Open;
+
+  CBoxExtractCheck.ItemIndex := 0;
+  DTP_Begin.DateTime := SB_SysDate;
+  DTP_End.DateTime := SB_SysDate;
+
+  dblcbUser.KeyValue := -1;
+  DBLCBfilial.KeyValue := -1;
+  DBLCBavalute.KeyValue := -1;
+
+  SBTranslateProc.TranslateAllCompForms(Self, sboapiDataModule.OrPack_SL);
+end;
+
+procedure TFormStatement.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+  if ord(Key) = 27 then
+    close;
+end;
+
+procedure TFormStatement.FormShow(Sender: TObject);
+var
+SPos :integer;
+begin
+  SPos := DataModPCustService.SBOP.CallIntegerFunction('get_acc_no_sub',[]);
+  DataModPCustService.ODS_State.SetVariable('ACCSRCHPOS', SPos);
+  EditCli_Id.Text := DataModPCustService.ODS_CUSTOMERS_PHYS_FS.FieldByName
+    ('id').AsString;
+
+end;
+
+end.

@@ -1,0 +1,795 @@
+﻿unit OnlineViewUnit;
+
+{$WARN SYMBOL_PLATFORM OFF}
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActiveX, AxCtrls, OnlineView_TLB, StdVcl, StdCtrls, Mask, DBCtrlsEh, XFSCtrls,
+  Grids, XDBGrids, ComCtrls, ToolWin, ExtCtrls, ImgList, CurrencyEdit, dblookup,
+  DBCtrls, CMHintDBLookupComboBox, Buttons, sboapiDataModuleImpl, CMExcelExport;
+
+type
+  TOnlineView = class(TActiveForm, IOnlineView)
+    PageControl1: TPageControl;
+    TabSheet1: TTabSheet;
+    XFPanel2: TXFPanel;
+    ToolBar1: TToolBar;
+    ToolButton1: TToolButton;
+    XFRadioButton1: TXFRadioButton;
+    XFRadioButton2: TXFRadioButton;
+    XFRadioButton3: TXFRadioButton;
+    XDBGrid1: TXDBGrid;
+    TabSheet2: TTabSheet;
+    XDBGrid2: TXDBGrid;
+    XFPanel1: TXFPanel;
+    XFLabel1: TXFLabel;
+    ImageList1: TImageList;
+    ImageList: TImageList;
+    XFLabel2: TXFLabel;
+    CurrencyEdit1: TCurrencyEdit;
+    CMHintDBLookupComboBox1: TCMHintDBLookupComboBox;
+    XFLabel3: TXFLabel;
+    SpeedButton1: TSpeedButton;
+    CMHintDBLookupComboBox3: TCMHintDBLookupComboBox;
+    DateTi_samelydate: TDBDateTimeEditEh;
+    ToolButton2: TToolButton;
+    CMExcelExport1: TCMExcelExport;
+    SpeedButton2: TSpeedButton;
+    DateTimePicker1: TDateTimePicker;
+    Memo1: TMemo;
+    DateTimePicker2: TDateTimePicker;
+    XFLabel4: TXFLabel;
+    ToolButton3: TToolButton;
+    ToolButton4: TToolButton;
+    procedure ToolButton1Click(Sender: TObject);
+    procedure XFRadioButton1Click(Sender: TObject);
+    procedure XFRadioButton2Click(Sender: TObject);
+    procedure XFRadioButton3Click(Sender: TObject);
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure CMHintDBLookupComboBox1CloseUp(Sender: TObject);
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure CMHintDBLookupComboBox3CloseUp(Sender: TObject);
+    procedure ToolButton2Click(Sender: TObject);
+    procedure SpeedButton2Click(Sender: TObject);
+    procedure ToolButton3Click(Sender: TObject);
+    procedure ToolButton4Click(Sender: TObject);
+  private
+    { Private declarations }
+    FEvents: IOnlineViewEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure MouseEnterEvent(Sender: TObject);
+    procedure MouseLeaveEvent(Sender: TObject);
+    procedure PaintEvent(Sender: TObject);
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AlignDisabled: WordBool; safecall;
+    function Get_AlignWithMargins: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_BorderWidth: Integer; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_DockSite: WordBool; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_ExplicitHeight: Integer; safecall;
+    function Get_ExplicitLeft: Integer; safecall;
+    function Get_ExplicitTop: Integer; safecall;
+    function Get_ExplicitWidth: Integer; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_MouseInClient: WordBool; safecall;
+    function Get_ParentCustomHint: WordBool; safecall;
+    function Get_ParentDoubleBuffered: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PopupMode: TxPopupMode; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_ScreenSnap: WordBool; safecall;
+    function Get_SnapBuffer: Integer; safecall;
+    function Get_UseDockManager: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_AlignWithMargins(Value: WordBool); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_BorderWidth(Value: Integer); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_DockSite(Value: WordBool); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_ParentCustomHint(Value: WordBool); safecall;
+    procedure Set_ParentDoubleBuffered(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PopupMode(Value: TxPopupMode); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_ScreenSnap(Value: WordBool); safecall;
+    procedure Set_SnapBuffer(Value: Integer); safecall;
+    procedure Set_UseDockManager(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+  public
+    { Public declarations }
+    procedure Initialize; override;
+  end;
+
+implementation
+
+uses ComObj, ComServ,WspayDataUnit;
+
+{$R *.DFM}
+
+{ TOnlineView }
+
+procedure TOnlineView.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_OnlineViewPage); }
+end;
+
+procedure TOnlineView.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as IOnlineViewEvents;
+  inherited EventSinkChanged(EventSink);
+end;
+
+procedure TOnlineView.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnMouseEnter := MouseEnterEvent;
+  OnMouseLeave := MouseLeaveEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TOnlineView.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TOnlineView.Get_AlignDisabled: WordBool;
+begin
+  Result := AlignDisabled;
+end;
+
+function TOnlineView.Get_AlignWithMargins: WordBool;
+begin
+  Result := AlignWithMargins;
+end;
+
+function TOnlineView.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TOnlineView.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TOnlineView.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TOnlineView.Get_BorderWidth: Integer;
+begin
+  Result := Integer(BorderWidth);
+end;
+
+function TOnlineView.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TOnlineView.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TOnlineView.Get_DockSite: WordBool;
+begin
+  Result := DockSite;
+end;
+
+function TOnlineView.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TOnlineView.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TOnlineView.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TOnlineView.Get_ExplicitHeight: Integer;
+begin
+  Result := ExplicitHeight;
+end;
+
+function TOnlineView.Get_ExplicitLeft: Integer;
+begin
+  Result := ExplicitLeft;
+end;
+
+function TOnlineView.Get_ExplicitTop: Integer;
+begin
+  Result := ExplicitTop;
+end;
+
+function TOnlineView.Get_ExplicitWidth: Integer;
+begin
+  Result := ExplicitWidth;
+end;
+
+function TOnlineView.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TOnlineView.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TOnlineView.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TOnlineView.Get_MouseInClient: WordBool;
+begin
+  Result := MouseInClient;
+end;
+
+function TOnlineView.Get_ParentCustomHint: WordBool;
+begin
+  Result := ParentCustomHint;
+end;
+
+function TOnlineView.Get_ParentDoubleBuffered: WordBool;
+begin
+  Result := ParentDoubleBuffered;
+end;
+
+function TOnlineView.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TOnlineView.Get_PopupMode: TxPopupMode;
+begin
+  Result := Ord(PopupMode);
+end;
+
+function TOnlineView.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TOnlineView.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TOnlineView.Get_ScreenSnap: WordBool;
+begin
+  Result := ScreenSnap;
+end;
+
+function TOnlineView.Get_SnapBuffer: Integer;
+begin
+  Result := SnapBuffer;
+end;
+
+function TOnlineView.Get_UseDockManager: WordBool;
+begin
+  Result := UseDockManager;
+end;
+
+function TOnlineView.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TOnlineView.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TOnlineView._Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TOnlineView.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TOnlineView.ActiveFormCreate(Sender: TObject);
+begin
+WS_PAYDataModule:=TWS_PAYDataModule.Create(self);
+WS_PAYDataModule.Ods_wspayment.open;
+WS_PAYDataModule.ods_combolist.Open;
+CMHintDBLookupComboBox1.KeyValue:= 'Bütün ';
+CMHintDBLookupComboBox3.KeyValue:= 'Bütün ';
+
+DateTimePicker1.date:=now;
+DateTimePicker2.date:=now;
+
+
+//DateTi_samelydate.value:=WS_PAYDataModule.Ods_wssysdateSYSDATE.AsDateTime;
+
+with WS_PAYDataModule,Ods_wspayment do
+begin
+close;
+SQL[5]:='';
+SQL[5]:=' where 1=1 ';
+SQL[7]:='';
+SQL[7]:='and status in (1,0) /*and trunc(respdatetime)=trunc(sysdate)*/ ';
+
+
+open;
+end;
+
+
+end;
+
+procedure TOnlineView.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TOnlineView.CMHintDBLookupComboBox1CloseUp(Sender: TObject);
+begin
+
+with WS_PAYDataModule,Ods_wspayment do
+begin
+
+ SQL[5]:='';
+SQL[5]:=' where 1=1 ';
+SQL[6]:='';
+if CMHintDBLookupComboBox1.KeyValue='Bütün ' then
+ SQL[6]:='/*and trunc(respdatetime)=trunc(sysdate)*/'
+ else
+SQL[6]:=' and  terminal_type='+''''+CMHintDBLookupComboBox1.KeyValue  +'''';
+//ShowMessage(sql.Text);
+refresh;
+end;
+
+with WS_PAYDataModule,ods_sum do
+begin
+close;
+SQL[5]:='';
+SQL[5]:=' where 1=1  ';
+SQL[6]:='';
+if CMHintDBLookupComboBox1.KeyValue='Bütün ' then
+ SQL[6]:=' and trunc(respdatetime)=trunc(sysdate) '
+ else
+SQL[6]:=' and  terminal_type='+''''+CMHintDBLookupComboBox1.KeyValue  +'''';
+//ShowMessage(sql.Text);
+open;
+CurrencyEdit1.Value:=WS_PAYDataModule.Ods_sumAMOUNT.AsFloat;
+
+end;
+
+end;
+
+procedure TOnlineView.CMHintDBLookupComboBox3CloseUp(Sender: TObject);
+var p_date:variant;
+begin
+with WS_PAYDataModule,Ods_wspaymentarch do
+begin
+close;
+  SQL[6]:='';
+  SQL[7]:='';
+  SQL[8]:='';
+
+ // p_date:= DateTi_samelydate.value;
+
+
+
+ p_date:= DateTi_samelydate.Value;
+    SetVariable('v_dat',trunc(DateTimePicker1.Date));
+
+
+         if CMHintDBLookupComboBox3.KeyValue='Bütün ' then
+          SQL[7]:=''
+          else
+        SQL[7]:=' and terminal_type='+''''+CMHintDBLookupComboBox3.KeyValue  +'''' ;
+  //ShowMessage(sql.Text);
+      open;
+ end;
+end;
+
+procedure TOnlineView.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TOnlineView.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TOnlineView.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TOnlineView.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TOnlineView.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TOnlineView.MouseEnterEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnMouseEnter;
+end;
+
+procedure TOnlineView.MouseLeaveEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnMouseLeave;
+end;
+
+procedure TOnlineView.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TOnlineView.Set_AlignWithMargins(Value: WordBool);
+begin
+  AlignWithMargins := Value;
+end;
+
+procedure TOnlineView.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TOnlineView.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TOnlineView.Set_AxBorderStyle(Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TOnlineView.Set_BorderWidth(Value: Integer);
+begin
+  BorderWidth := TBorderWidth(Value);
+end;
+
+procedure TOnlineView.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TOnlineView.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TOnlineView.Set_DockSite(Value: WordBool);
+begin
+  DockSite := Value;
+end;
+
+procedure TOnlineView.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TOnlineView.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TOnlineView.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TOnlineView.Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TOnlineView.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := string(Value);
+end;
+
+procedure TOnlineView.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TOnlineView.Set_ParentCustomHint(Value: WordBool);
+begin
+  ParentCustomHint := Value;
+end;
+
+procedure TOnlineView.Set_ParentDoubleBuffered(Value: WordBool);
+begin
+  ParentDoubleBuffered := Value;
+end;
+
+procedure TOnlineView.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TOnlineView.Set_PopupMode(Value: TxPopupMode);
+begin
+  PopupMode := TPopupMode(Value);
+end;
+
+procedure TOnlineView.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TOnlineView.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TOnlineView.Set_ScreenSnap(Value: WordBool);
+begin
+  ScreenSnap := Value;
+end;
+
+procedure TOnlineView.Set_SnapBuffer(Value: Integer);
+begin
+  SnapBuffer := Value;
+end;
+
+procedure TOnlineView.Set_UseDockManager(Value: WordBool);
+begin
+  UseDockManager := Value;
+end;
+
+procedure TOnlineView.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+procedure TOnlineView.SpeedButton1Click(Sender: TObject);
+var p_date: variant;
+begin
+with WS_PAYDataModule,Ods_wspaymentarch do
+begin
+close;
+
+
+
+  SQL[7]:='';
+
+ // p_date:= DateTi_samelydate.value;
+
+
+         if CMHintDBLookupComboBox3.KeyValue='Bütün ' then
+          SQL[7]:=''
+          else
+        SQL[7]:=' and terminal_type='+''''+CMHintDBLookupComboBox3.KeyValue  +'''' ;
+
+
+ p_date:= DateTi_samelydate.Value;
+
+   SetVariable('v_dat',trunc(DateTimePicker1.Date));
+   SetVariable('v_dat2',trunc(DateTimePicker2.Date));
+
+
+
+
+      open;
+      memo1.Text:=sql.Text;
+  //  showmessage('-----')  ;
+       memo1.Text :=getvariable(0);
+ end;
+
+
+end;
+
+procedure TOnlineView.SpeedButton2Click(Sender: TObject);
+begin
+ with CMExcelExport1 do
+   begin
+      Connect;
+      ExportDataset( WS_PAYDataModule.Ods_wspaymentarch,'Terminalpayment',True);
+      Disconnect;
+   end;
+end;
+
+procedure TOnlineView.ToolButton1Click(Sender: TObject);
+begin
+if XFRadioButton1.Checked then
+begin
+
+with WS_PAYDataModule,Ods_wspayment do
+begin
+
+ SQL[5]:='';
+SQL[5]:=' where 1=1 ';
+SQL[6]:='';
+if CMHintDBLookupComboBox1.KeyValue='Bütün ' then
+ SQL[6]:='/*and trunc(respdatetime)=trunc(sysdate)*/'
+ else
+SQL[6]:=' and  terminal_type='+''''+CMHintDBLookupComboBox1.KeyValue  +'''';
+//ShowMessage(sql.Text);
+refresh;
+end;
+
+
+end;
+//ShowMessage(WS_PAYDataModule.Ods_wspayment.SQL.Text);
+
+ WS_PAYDataModule.Ods_wspayment.Refresh;
+
+
+ if XFRadioButton2.Checked then
+  begin
+ WS_PAYDataModule.Ods_sum.close;
+ WS_PAYDataModule.Ods_sum.open;
+
+  end;
+
+end;
+
+procedure TOnlineView.ToolButton2Click(Sender: TObject);
+begin
+   with CMExcelExport1 do
+   begin
+      Connect;
+      ExportDataset( WS_PAYDataModule.Ods_wspayment,'Terminalpayment',True);
+      Disconnect;
+   end;
+end;
+
+procedure TOnlineView.ToolButton3Click(Sender: TObject);
+begin
+
+WS_PAYDataModule.mainpacket.CallProcedure ('Payments',[WS_PAYDataModule.dsrc_wspaymen.DataSet.FieldByName('id').AsInteger]);
+ToolButton1.Click;
+sboapiDataModule.SBSession.commit;
+end;
+
+procedure TOnlineView.ToolButton4Click(Sender: TObject);
+begin
+  WS_PAYDataModule.Payment.close;
+  WS_PAYDataModule.Payment.Open;
+  with CMExcelExport1 do
+   begin
+      Connect;
+      ExportDataset( WS_PAYDataModule.Payment,'Ödənişlər',True);
+      Disconnect;
+   end;
+end;
+
+procedure TOnlineView.XFRadioButton1Click(Sender: TObject);
+begin
+XFLabel2.Visible:=false;
+CurrencyEdit1.Visible:=false;
+
+//if True then
+
+
+with WS_PAYDataModule,Ods_wspayment do
+begin
+close;
+SQL[5]:='';
+SQL[5]:=' where 1=1 ';
+SQL[7]:='';
+SQL[7]:='and status in (1,0) /*and trunc(respdatetime)=trunc(sysdate) */';
+
+
+open;
+end;
+end;
+
+
+procedure TOnlineView.XFRadioButton2Click(Sender: TObject);
+begin
+XFLabel2.Visible:=true;
+CurrencyEdit1.Visible:=true;
+with WS_PAYDataModule,Ods_wspayment do
+begin
+close;
+SQL[5]:='';
+SQL[5]:=' where 1=1 ';
+SQL[7]:='';
+SQL[7]:='and status=1 and trunc(respdatetime)=trunc(sysdate) ';
+
+
+open;
+end;
+
+with WS_PAYDataModule, ods_sum do
+begin
+close;
+SQL[5]:='';
+SQL[5]:=' where 1=1 ';
+SQL[7]:='';
+SQL[7]:='and  trunc(respdatetime)=trunc(sysdate) ';
+
+ open;
+
+end;
+CurrencyEdit1.Value:=WS_PAYDataModule.Ods_sumAMOUNT.AsFloat;
+end;
+
+procedure TOnlineView.XFRadioButton3Click(Sender: TObject);
+begin
+XFLabel2.Visible:=false;
+CurrencyEdit1.Visible:=false;
+
+with WS_PAYDataModule,Ods_wspayment do
+begin
+close;
+SQL[5]:='';
+SQL[5]:=' where 1=1 ';
+SQL[7]:='';
+SQL[7]:='and status=0 and trunc(respdatetime)=trunc(sysdate) ';
+
+open;
+
+end;
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TOnlineView,
+    Class_OnlineView,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

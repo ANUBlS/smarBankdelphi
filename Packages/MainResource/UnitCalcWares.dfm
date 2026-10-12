@@ -1,0 +1,85 @@
+object FormCalcWares: TFormCalcWares
+  Left = 658
+  Top = 303
+  ActiveControl = DTP_CalcDate
+  BorderStyle = bsDialog
+  Caption = 'Hesablama.........'
+  ClientHeight = 210
+  ClientWidth = 208
+  Color = clBtnFace
+  Font.Charset = RUSSIAN_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poDesktopCenter
+  OnCreate = FormCreate
+  PixelsPerInch = 96
+  TextHeight = 14
+  object SBtnCalc: TSpeedButton
+    Tag = 1
+    Left = 0
+    Top = 185
+    Width = 208
+    Height = 25
+    Glyph.Data = {
+      36010000424D3601000000000000760000002800000015000000100000000100
+      040000000000C000000000000000000000001000000000000000000000000000
+      80000080000000808000800000008000800080800000C0C0C000808080000000
+      FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00333333333333
+      333333333000333333333333333333333000338FF3FF3333333333333000338C
+      F38CFF33333333333000338CF38CCCFF333333333000338CF38CCCCCFF333333
+      3000338CF38CCCCCCCFF33333000338CF38CCCCCCCCCFF333000338CF38CCCCC
+      CCCC88F33000338CF38CCCCCCC8833333000338CF38CCCCC883333333000338C
+      F38CCC88333333333000338CF38C88333333333330003388F388333333333333
+      3000333333333333333333333000333333333333333333333000}
+    OnClick = SBtnCalcClick
+  end
+  object GroupBoxB: TGroupBox
+    Left = 0
+    Top = 50
+    Width = 208
+    Height = 47
+    Caption = #1065#1077#1089#1072#1073#1083#1072#1084#1072' '#1090#1072#1088#1080#1093#1080
+    TabOrder = 0
+    object DTP_CalcDate: TDateTimePicker
+      Left = 3
+      Top = 17
+      Width = 202
+      Height = 21
+      Date = 38822.257419849500000000
+      Time = 38822.257419849500000000
+      TabOrder = 0
+    end
+  end
+  object RGroupSt: TRadioGroup
+    Left = 0
+    Top = 97
+    Width = 209
+    Height = 85
+    ItemIndex = 1
+    Items.Strings = (
+      #1048#1089#1090#1103#1085#1080#1083#1103#1085' '#1090#1072#1088#1080#1093#1103' '#1097#1077#1089#1072#1073#1083#1072#1084#1072#1075
+      '30 '#1101#1094#1085#1083#1094#1082' '#1097#1077#1089#1072#1073#1083#1072#1084#1072#1075)
+    TabOrder = 1
+  end
+  object GroupBoxLastDate: TGroupBox
+    Left = 0
+    Top = 0
+    Width = 208
+    Height = 47
+    Caption = #1057#1086#1085' '#1097#1077#1089#1072#1073#1083#1072#1085#1084#1072' '#1090#1072#1088#1080#1093#1080
+    TabOrder = 2
+    object DTP_LastDate: TDateTimePicker
+      Left = 3
+      Top = 23
+      Width = 202
+      Height = 21
+      Date = 38822.257419849500000000
+      Time = 38822.257419849500000000
+      Enabled = False
+      TabOrder = 0
+    end
+  end
+end

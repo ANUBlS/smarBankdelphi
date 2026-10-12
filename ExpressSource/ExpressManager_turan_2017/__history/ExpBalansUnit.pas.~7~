@@ -1,0 +1,61 @@
+unit ExpBalansUnit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Grids, XDBGrids, ExtCtrls, DBCtrls, XDBCtrls, DB, OracleData;
+
+type
+  TFormBalans = class(TForm)
+    Panel1: TPanel;
+    Panel2: TPanel;
+    Panel3: TPanel;
+    Panel4: TPanel;
+    Panel5: TPanel;
+    XDBNavigator1: TXDBNavigator;
+    XDBNavigator2: TXDBNavigator;
+    XDBGrid1: TXDBGrid;
+    XDBGrid2: TXDBGrid;
+    DSDebet: TDataSource;
+    DSKredit: TDataSource;
+    ODSDebetBalans: TOracleDataSet;
+    ODSKreditBalans: TOracleDataSet;
+    procedure XDBNavigator1Click(Sender: TObject; Button: TNavigateBtn);
+    procedure XDBNavigator2Click(Sender: TObject; Button: TNavigateBtn);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormBalans: TFormBalans;
+
+implementation
+uses  sboapiDataModuleImpl;
+
+{$R *.dfm}
+
+
+
+procedure TFormBalans.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  ODSDebetBalans.Close;
+  ODSDebetBalans.Open;
+  ODSKreditBalans.Close;
+  ODSKreditBalans.Open;
+end;
+
+procedure TFormBalans.XDBNavigator1Click(Sender: TObject; Button: TNavigateBtn);
+begin
+  ODSDebetBalans.FieldByName('type').AsInteger:=0;
+end;
+
+procedure TFormBalans.XDBNavigator2Click(Sender: TObject; Button: TNavigateBtn);
+begin
+  ODSKreditBalans.FieldByName('type').AsInteger:=1;
+end;
+
+end.

@@ -1,0 +1,625 @@
+﻿unit FrmTravelBlankImpl;
+          //CMCurrencyEdit1
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ComCtrls, StdCtrls, CurrencyEdit, DBCtrls, XFSCtrls, ExtCtrls, Mask,
+  CMCurrencyEdit;
+
+type
+  TFrmTravelBlank = class(TForm)
+    XFPanel1: TXFPanel;
+    XFButton1: TXFButton;
+    XFButton2: TXFButton;
+    PageControl1: TPageControl;
+    TabSheet1: TTabSheet;
+    XFPanel2: TXFPanel;
+    XFLabel5: TXFLabel;
+    XFLabel2: TXFLabel;
+    XFPanel3: TXFPanel;
+    XFLabel28: TXFLabel;
+    XFLabel27: TXFLabel;
+    XFLabel31: TXFLabel;
+    XFLabel30: TXFLabel;
+    XFLabel17: TXFLabel;
+    dblcValute: TDBLookupComboBox;
+    dbcFranshiz: TDBComboBox;
+    dbeTarif: TCurrencyEdit;
+    dbeAmmount: TCurrencyEdit;
+    dbeSum: TCurrencyEdit;
+    DBLookupComboBox2: TDBLookupComboBox;
+    InsLookupComboBox: TDBLookupComboBox;
+    XFPanel4: TXFPanel;
+    XFLabel1: TXFLabel;
+    XFLabel3: TXFLabel;
+    XFLabel7: TXFLabel;
+    edIns_Date: TDateTimePicker;
+    DateTimePicker1: TDateTimePicker;
+    DateTimePicker2: TDateTimePicker;
+    XFLabel6: TXFLabel;
+    Edit1: TEdit;
+    XFButton3: TXFButton;
+    XFButton4: TXFButton;
+    XFGroupBox1: TXFGroupBox;
+    XFRadioButton1: TXFRadioButton;
+    XFRadioButton2: TXFRadioButton;
+    XFRadioButton3: TXFRadioButton;
+    DBEdit2: TDBEdit;
+    DBEdit1: TDBEdit;
+    DBLookupComboBox1: TDBLookupComboBox;
+    XFLabel4: TXFLabel;
+    DBLookupComboBox3: TDBLookupComboBox;
+    CMCurrencyEdit1: TCMCurrencyEdit;
+    CMCurrencyEdit2: TCMCurrencyEdit;
+    XFLabel8: TXFLabel;
+    XFLabel9: TXFLabel;
+    ComboBox1: TComboBox;
+    XFLabel10: TXFLabel;
+    procedure XFButton2Click(Sender: TObject);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormCreate(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure XFButton1Click(Sender: TObject);
+    procedure XFButton3Click(Sender: TObject);
+    procedure XFButton4Click(Sender: TObject);
+    procedure XFRadioButton1Click(Sender: TObject);
+    procedure XFRadioButton2Click(Sender: TObject);
+    procedure XFRadioButton3Click(Sender: TObject);
+    procedure dbeSumChange(Sender: TObject);
+    procedure Edit1KeyPress(Sender: TObject; var Key: Char);
+    procedure dbeAmmountChange(Sender: TObject);
+    procedure dblcValuteClick(Sender: TObject);
+    procedure DateTimePicker1Change(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmTravelBlank: TFrmTravelBlank;
+    CID:integer;
+        procedure InitPlugin(s:string);export;
+implementation
+
+{$R *.dfm}
+       uses CommanParametrs,DMTravelBlankImpl,sboapiDataModuleImpl;
+
+procedure InitPlugin(s:string);export;
+begin
+
+
+   FrmTravelBlank.ShowModal;
+end;
+exports
+     InitPlugin;
+procedure TFrmTravelBlank.DateTimePicker1Change(Sender: TObject);
+begin
+if DateTimePicker1.DateTime<edIns_Date.DateTime then
+   begin
+     showmessage('Diqqət ! Başlanma tarixi müqavilə tarixindən kiçik ola bilməz.');
+    DateTimePicker1.DateTime:=edIns_Date.DateTime;
+   end;
+end;
+
+procedure TFrmTravelBlank.dbeAmmountChange(Sender: TObject);
+begin
+  DMTravelBlank.ds_ekvalent.Close;
+DMTravelBlank.ds_ekvalent.SetVariable('pdat',edIns_Date.DateTime);
+DMTravelBlank.ds_ekvalent.SetVariable('pval_id',dblcValute.KeyValue);
+ DMTravelBlank.ds_ekvalent.open;
+
+CMCurrencyEdit2.Value:=dbeAmmount.Value*DMTravelBlank.ds_ekvalent.FieldByName('OSTAT').AsFloat;
+end;
+
+
+procedure TFrmTravelBlank.dbeSumChange(Sender: TObject);
+     var
+     a :real;
+begin
+if (dbeTarif.Text<>'') and (dbeSum.Text<>'') then
+           begin
+
+//dbeAmmount.Value:=(dbeSum.Value*dbeTarif.Value)/100;
+
+DMTravelBlank.ds_ekvalent.Close;
+DMTravelBlank.ds_ekvalent.SetVariable('pdat',edIns_Date.DateTime);
+DMTravelBlank.ds_ekvalent.SetVariable('pval_id',dblcValute.KeyValue);
+ DMTravelBlank.ds_ekvalent.open;
+
+
+CMCurrencyEdit1.Value:= dbeSum.Value* DMTravelBlank.ds_ekvalent.FieldByName('OSTAT').AsFloat;
+//CMCurrencyEdit2.Value:= dbeAmmount.Value* DMTravelBlank.ds_ekvalent.FieldByName('OSTAT').AsFloat;
+           end ;
+       //a:=dbeSum.Value*1;
+           //showmessage(floattostr(a));
+
+           if dbeSum.Text='0' then
+           begin
+
+           //dbeAmmount.Value:=0;
+           CMCurrencyEdit1.Value:= 0;
+           CMCurrencyEdit2.Value:= 0 ;
+           end;
+
+
+end;
+
+procedure TFrmTravelBlank.dblcValuteClick(Sender: TObject);
+begin
+FrmTravelBlank.dbeSumChange(self);
+FrmTravelBlank.dbeAmmountChange(self);
+end;
+
+procedure TFrmTravelBlank.Edit1KeyPress(Sender: TObject; var Key: Char);
+begin
+if not (Key in ['A'..'Z','a'..'z','0'..'9',#8] )then begin Key:=#0; end;
+end;
+
+procedure TFrmTravelBlank.FormCreate(Sender: TObject);
+begin
+   DMTravelBlank:=TDMTravelBlank.Create(self);
+end;
+
+procedure TFrmTravelBlank.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+if ord(key)=vk_escape then  close;
+
+end;
+
+procedure TFrmTravelBlank.FormShow(Sender: TObject);
+begin
+
+
+if opetion='ins' then
+begin
+with DMTravelBlank do
+begin
+  DSins_contracts.Close;
+  DSins_contracts.SetVariable('cid',-1);
+  DSins_contracts.Open;
+
+  DSins_contract_travel.Close;
+  DSins_contract_travel.SetVariable('p_cid',-1);
+  DSins_contract_travel.Open;
+end;
+          InsLookupComboBox.Enabled:=true;
+if ins_cutsid<>0 then
+begin
+  FrmTravelBlank.InsLookupComboBox.KeyValue:=ins_cutsid;
+  end;
+
+  if ins_cutsid=0 then
+begin
+  FrmTravelBlank.InsLookupComboBox.KeyValue:=null;
+  end;
+
+  ComboBox1.Text:='';
+  DBEdit1.Text:='';
+  DBEdit2.Text:='';
+  FrmTravelBlank.DBLookupComboBox1.KeyValue:=null;
+  FrmTravelBlank.DBLookupComboBox2.KeyValue:=null;
+  edIns_Date.DateTime:=DMTravelBlank.DsSysdat.FieldByName('tek_dat').AsDateTime;
+  DateTimePicker1.DateTime:=DMTravelBlank.DsSysdat.FieldByName('tek_dat').AsDateTime;
+  DateTimePicker2.DateTime:=DMTravelBlank.DsSysdat.FieldByName('tek_dat').AsDateTime;
+  FrmTravelBlank.dblcValute.KeyValue:=0;
+  FrmTravelBlank.dbeSum.Text:=floattostr(0);
+  FrmTravelBlank.dbcFranshiz.Text:=floattostr(0);
+  FrmTravelBlank.dbeTarif.Text:=floattostr(0);
+  FrmTravelBlank.dbeAmmount.Text:=floattostr(0);
+  FrmTravelBlank.Edit1.Text:='';
+  FrmTravelBlank.DBLookupComboBox3.KeyValue:=null;
+  XFRadioButton1.Checked:=false;
+  XFRadioButton2.Checked:=false;
+  XFRadioButton3.Checked:=false;
+
+  end;
+   //////////////////////////////
+  if opetion='See' then
+begin
+with DMTravelBlank do
+begin
+  DSins_contracts.Close;
+  DSins_contracts.SetVariable('cid',contactid);
+  DSins_contracts.Open;
+
+  DSins_contract_travel.Close;
+  DSins_contract_travel.SetVariable('p_cid',contactid);
+  DSins_contract_travel.Open;
+end;
+
+ XFButton1.Visible:=false;
+
+InsLookupComboBox.Enabled:=false;
+ if (p_contractstate=6) or (p_contractstate=7) or(p_contractstate=8)  then
+        begin
+        XFButton1.Enabled:=false;
+        end
+        else
+        begin
+        XFButton1.Enabled:=true;
+         XFPanel3.Enabled:=true;
+         end;
+  FrmTravelBlank.InsLookupComboBox.KeyValue:=DMTravelBlank.DSins_contracts.FieldByName('kli_id').AsInteger;
+  FrmTravelBlank.DBLookupComboBox2.KeyValue:=DMTravelBlank.DSins_contracts.FieldByName('agent_id').AsInteger;
+  edIns_Date.DateTime:=DMTravelBlank.DSins_contracts.FieldByName('ins_date').AsDateTime;
+  DateTimePicker1.DateTime:=DMTravelBlank.DSins_contracts.FieldByName('begin_date').AsDateTime;
+  DateTimePicker2.DateTime:=DMTravelBlank.DSins_contracts.FieldByName('end_date').AsDateTime;
+  FrmTravelBlank.dblcValute.KeyValue:=DMTravelBlank.DSins_contracts.FieldByName('valute_id').AsInteger;
+  FrmTravelBlank.dbeSum.Value:=DMTravelBlank.DSins_contracts.FieldByName('inssumm').AsFloat;
+  FrmTravelBlank.dbcFranshiz.Text:=DMTravelBlank.DSins_contracts.FieldByName('franshiz').AsString;
+  FrmTravelBlank.dbeTarif.Value:=DMTravelBlank.DSins_contracts.FieldByName('tariff').AsFloat;
+  FrmTravelBlank.dbeAmmount.Value:=DMTravelBlank.DSins_contracts.FieldByName('ammount').AsFloat;
+  FrmTravelBlank.Edit1.Text:=DMTravelBlank.DSins_contracts.FieldByName('POLICY_NUM').AsString;
+  FrmTravelBlank.DBLookupComboBox3.KeyValue:=DMTravelBlank.DSins_contracts.FieldByName('FILIAL').AsInteger;
+  FrmTravelBlank.ComboBox1.ItemIndex:= DMTravelBlank.DSins_contracts.FieldByName('BNF_TYPE').AsInteger;
+end;
+ FrmTravelBlank.dbeSumChange(self);
+
+ FrmTravelBlank.dbeAmmountChange(self);
+    if DMTravelBlank.DSins_contracts.FieldByName('BEN_ID').AsInteger=0 then
+    begin
+   XFRadioButton1.Checked:=true;
+  XFRadioButton2.Checked:=false;
+  XFRadioButton3.Checked:=false;
+       end;
+
+           if DMTravelBlank.DSins_contracts.FieldByName('BEN_ID').AsInteger=1 then
+    begin
+   XFRadioButton1.Checked:=false;
+  XFRadioButton2.Checked:=true;
+  XFRadioButton3.Checked:=false;
+       end;
+
+       if DMTravelBlank.DSins_contracts.FieldByName('BEN_ID').AsInteger=2 then
+    begin
+   XFRadioButton1.Checked:=false;
+  XFRadioButton2.Checked:=false;
+  XFRadioButton3.Checked:=true;
+       end;
+
+   //////////////////////////////
+
+
+
+
+   if opetion='upd' then
+begin
+
+with DMTravelBlank do
+begin
+  DSins_contracts.Close;
+  DSins_contracts.SetVariable('cid',contactid);
+  DSins_contracts.Open;
+
+  DSins_contract_travel.Close;
+  DSins_contract_travel.SetVariable('p_cid',contactid);
+  DSins_contract_travel.Open;
+end;
+InsLookupComboBox.Enabled:=false;
+
+ if (p_contractstate=6) or (p_contractstate=7) or(p_contractstate=8)  then
+        begin
+
+
+          XFButton1.Enabled:=false;
+
+
+        { if DMTravelBlank.DSins_contracts.FieldByName('BEGIN_DATE').AsDateTime > StrToDateTime('27.12.2013') then
+        begin
+
+          XFButton1.Enabled:=false;
+          XFPanel3.Enabled:=true;
+        end
+        else
+        begin
+          XFButton1.Enabled:=true;
+
+          XFPanel3.Enabled:=false;
+        end; }
+        end
+        else
+        begin
+        XFButton1.Enabled:=true;
+         XFPanel3.Enabled:=true;
+         end;
+
+
+
+       //ShowMessage(InsLookupComboBox.Text);
+  FrmTravelBlank.InsLookupComboBox.KeyValue:=DMTravelBlank.DSins_contracts.FieldByName('kli_id').AsInteger;
+  //FrmResponsibilityBlank.DBLookupComboBox3.KeyValue:=DMResponsibilityBlank.DSins_contracts.FieldByName('kli_id').AsInteger;
+  FrmTravelBlank.DBLookupComboBox2.KeyValue:=DMTravelBlank.DSins_contracts.FieldByName('agent_id').AsInteger;
+  edIns_Date.DateTime:=DMTravelBlank.DSins_contracts.FieldByName('ins_date').AsDateTime;
+  DateTimePicker1.DateTime:=DMTravelBlank.DSins_contracts.FieldByName('begin_date').AsDateTime;
+  DateTimePicker2.DateTime:=DMTravelBlank.DSins_contracts.FieldByName('end_date').AsDateTime;
+  FrmTravelBlank.dblcValute.KeyValue:=DMTravelBlank.DSins_contracts.FieldByName('valute_id').AsInteger;
+  FrmTravelBlank.dbeSum.Value:=DMTravelBlank.DSins_contracts.FieldByName('inssumm').AsFloat;
+  FrmTravelBlank.dbcFranshiz.Text:=DMTravelBlank.DSins_contracts.FieldByName('franshiz').AsString;
+  FrmTravelBlank.dbeTarif.Value:=DMTravelBlank.DSins_contracts.FieldByName('tariff').AsFloat;
+  FrmTravelBlank.dbeAmmount.Value:=DMTravelBlank.DSins_contracts.FieldByName('ammount').AsFloat;
+  FrmTravelBlank.Edit1.Text:=DMTravelBlank.DSins_contracts.FieldByName('POLICY_NUM').AsString;
+  FrmTravelBlank.DBLookupComboBox3.KeyValue:=DMTravelBlank.DSins_contracts.FieldByName('FILIAL').AsInteger;
+  FrmTravelBlank.ComboBox1.ItemIndex:= DMTravelBlank.DSins_contracts.FieldByName('BNF_TYPE').AsInteger;
+end;
+ FrmTravelBlank.dbeSumChange(self);
+
+ FrmTravelBlank.dbeAmmountChange(self);
+    if DMTravelBlank.DSins_contracts.FieldByName('BEN_ID').AsInteger=0 then
+    begin
+   XFRadioButton1.Checked:=true;
+  XFRadioButton2.Checked:=false;
+  XFRadioButton3.Checked:=false;
+       end;
+
+           if DMTravelBlank.DSins_contracts.FieldByName('BEN_ID').AsInteger=1 then
+    begin
+   XFRadioButton1.Checked:=false;
+  XFRadioButton2.Checked:=true;
+  XFRadioButton3.Checked:=false;
+       end;
+
+       if DMTravelBlank.DSins_contracts.FieldByName('BEN_ID').AsInteger=2 then
+    begin
+   XFRadioButton1.Checked:=false;
+  XFRadioButton2.Checked:=false;
+  XFRadioButton3.Checked:=true;
+       end;
+
+end;
+
+procedure TFrmTravelBlank.XFButton1Click(Sender: TObject);
+var
+   a,c_acc:integer;
+begin
+
+ with DMTravelBlank,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['EDITCONTRACT_ALLTRAVEL']);
+ end;
+
+with DMTravelBlank,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['SAVECONTRACT_TRAVEL']);
+ end;
+
+ if Edit1.Text='' then
+ begin
+   showmessage('Diqqət! Polis №-i daxil olunmayıb!');
+   exit;
+ end;
+
+  if InsLookupComboBox.Text='' then
+ begin
+   showmessage('Diqqət! Sığorta etdirən daxil olunmayıb!');
+   exit;
+ end;
+
+   if DBLookupComboBox2.Text='' then
+ begin
+   showmessage('Diqqət! Agent daxil olunmayıb!');
+   exit;
+ end;
+
+     if dblcValute.Text='' then
+ begin
+   showmessage('Diqqət! Valyuta daxil olunmayıb!');
+   exit;
+ end;
+      if DBLookupComboBox3.Text='' then
+ begin
+   showmessage('Diqqət! Filial daxil olunmayıb!');
+   exit;
+ end;
+
+     if dbeSum.Text='' then
+ begin
+   showmessage('Diqqət! Sığorta məbləği daxil olunmayıb!');
+   exit;
+ end;
+
+        if dbcFranshiz.Text='' then
+ begin
+   showmessage('Diqqət! Franşiza daxil olunmayıb!');
+   exit;
+ end;
+
+
+      if ComboBox1.Text='' then
+ begin
+   showmessage('Diqqət! Bank/Kənar daxil olunmayıb!');
+   exit;
+ end;
+
+         if dbeTarif.Text='' then
+ begin
+   showmessage('Diqqət! Tarif daxil olunmayıb!');
+   exit;
+ end;
+
+          if dbeAmmount.Text='' then
+ begin
+   showmessage('Diqqət! Sığorta haqqı daxil olunmayıb!');
+   exit;
+ end;
+
+
+with DMTravelBlank, ins_common do
+   begin
+     a:=CallIntegerFunction('get_acc_balanc_hesab',[21]);
+
+     if a=0 then
+     begin
+       showmessage('Diqqət ! Bu müqavilə tipində avtomatik hesabların açılası üçün balans hesabları sazlanmayıb!.');
+       exit;
+     end;
+   end;
+
+with   DMTravelBlank,DSins_contracts do
+//
+begin
+  Edit;
+begin
+  FieldByName('kli_id').AsInteger:=FrmTravelBlank.InsLookupComboBox.KeyValue;
+  //FrmResponsibilityBlank.DBLookupComboBox3.KeyValue:=DMResponsibilityBlank.DSins_contracts.FieldByName('kli_id').AsInteger;
+  FieldByName('agent_id').AsInteger:=FrmTravelBlank.DBLookupComboBox2.KeyValue;
+  FieldByName('ins_date').AsDateTime:=edIns_Date.DateTime;
+  FieldByName('begin_date').AsDateTime:=DateTimePicker1.DateTime;
+  FieldByName('end_date').AsDateTime:=DateTimePicker2.DateTime;
+  FieldByName('valute_id').AsInteger:=FrmTravelBlank.dblcValute.KeyValue;
+  FieldByName('inssumm').AsFloat:=FrmTravelBlank.dbeSum.Value;
+  FieldByName('franshiz').AsFloat:=strtofloat(FrmTravelBlank.dbcFranshiz.Text);
+  FieldByName('tariff').AsFloat:=FrmTravelBlank.dbeTarif.Value;
+  FieldByName('ammount').AsFloat:=FrmTravelBlank.dbeAmmount.Value;
+  FieldByName('type_id').AsFloat:=21;
+  FieldByName('POLICY_NUM').AsString:=Edit1.Text;
+  FieldByName('FILIAL').AsInteger:=FrmTravelBlank.DBLookupComboBox3.KeyValue;
+  FieldByName('BNF_TYPE').AsInteger:=ComboBox1.ItemIndex;
+   Post;
+      RefreshRecord;
+      CID := FieldByName('id').asInteger;
+      //showmessage(FieldByName('id').AsString);
+
+end;
+end;
+
+with   DMTravelBlank,DSins_contract_travel do
+//
+begin
+  Edit;
+       begin
+  FieldByName('cid').AsFloat:=CID;
+  FieldByName('close_prefix').AsFloat:=0;
+  FieldByName('TYPEID').AsFloat:=21;
+   Post;
+      RefreshRecord;
+
+       end;
+
+            with DMTravelBlank, ins_common do
+   begin
+     c_acc:=CallIntegerFunction('get_acc_id',[CID]);
+
+     if c_acc=0 then
+       begin
+    CallProcedure('account_open',[CID,DBLookupComboBox3.KeyValue]);
+       end;
+       end;
+
+       FrmTravelBlank.Close ;
+
+       //ShowMessage(moduletype);
+
+       if moduletype='c' then  begin
+        commandataset.Refresh ;
+        end;
+
+        if moduletype=null then begin
+         commandatasetTravel.Refresh;
+         end;
+
+end;
+
+end;
+
+procedure TFrmTravelBlank.XFButton2Click(Sender: TObject);
+begin
+FrmTravelBlank.Close;
+end;
+
+procedure TFrmTravelBlank.XFButton3Click(Sender: TObject);
+begin
+with DMTravelBlank,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['SEEBARDERO_PREMIYA']);
+ end;
+loadPlugin('Reinsurance.bpl','');
+end;
+
+procedure TFrmTravelBlank.XFButton4Click(Sender: TObject);
+begin
+commoncid:=contactid;
+ if DMTravelBlank.DSins_contracts.FieldByName('type_id').AsInteger=21 then
+ begin
+ with DMTravelBlank,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['SEELOSSSEYAHET']);
+ end;
+ end;
+   loadPlugin('loss.bpl','');
+end;
+
+procedure TFrmTravelBlank.XFRadioButton1Click(Sender: TObject);
+begin
+       if  XFRadioButton1.Checked=True then
+       begin
+
+       DBLookupComboBox1.Enabled:=true;
+       //DBEdit1.Enabled:=false;
+       //DBEdit2.Enabled:=false ;
+       //DBEdit1.Text:='';
+       //DBEdit2.Text:='';
+       DMTravelBlank.DSins_contracts.FieldByName('BEN_ID').AsInteger:=0;
+       end
+       else
+       DBLookupComboBox1.Enabled:=false;
+end;
+
+procedure TFrmTravelBlank.XFRadioButton2Click(Sender: TObject);
+begin
+//(InsLookupComboBox.KeyValue='') or
+if  (InsLookupComboBox.KeyValue=0) then
+begin
+  showmessage('Diqqət! Sığortalı seçilməyib');
+  exit;
+end;
+
+if  XFRadioButton2.Checked=True then
+       begin
+      // showmessage(inttostr(insLookupComboBox.KeyValue));
+       DMTravelBlank.DSinscust.Close;
+       DMTravelBlank.DSinscust.SetVariable('pid',InsLookupComboBox.KeyValue);
+       DMTravelBlank.DSinscust.Open;
+       DBLookupComboBox1.KeyValue:='';
+       //showmessage(DMTravelBlank.DSinscust.FieldByName('cus_name').AsString);
+       DBEdit1.Text:=DMTravelBlank.DSinscust.FieldByName('cus_name').AsString;
+       DBEdit2.Text:=DMTravelBlank.DSinscust.FieldByName('cus_name').AsString;
+       DMTravelBlank.DSins_contracts.FieldByName('BENEFICIARY').AsString:=DMTravelBlank.DSinscust.FieldByName('cus_name').AsString;
+       DMTravelBlank.DSins_contracts.FieldByName('BEN_ID').AsInteger:=1;
+       DBLookupComboBox1.Enabled:=false;
+       //DMTravelBlank.DSins_contracts.RefreshRecord;
+       //DBEdit1.Enabled:=false;
+       //DBEdit2.Enabled:=false ;
+       end
+       else
+       DBEdit1.Enabled:=false;
+
+end;
+
+procedure TFrmTravelBlank.XFRadioButton3Click(Sender: TObject);
+begin
+if  XFRadioButton3.Checked=True then
+       begin
+       //showmessage(inttostr(insLookupComboBox.KeyValue));
+       DMTravelBlank.DSinscust.Close;
+       DMTravelBlank.DSinscust.SetVariable('pid',InsLookupComboBox.KeyValue);
+       DMTravelBlank.DSinscust.Open;
+       //showmessage(DMTravelBlank.DSinscust.FieldByName('ins_name').AsString);
+       DBEdit2.Text:=DMTravelBlank.DSinscust.FieldByName('ins_name').AsString;
+       DBEdit1.Text:=DMTravelBlank.DSinscust.FieldByName('ins_name').AsString;
+       DMTravelBlank.DSins_contracts.FieldByName('BENEFICIARY').AsString:=DMTravelBlank.DSinscust.FieldByName('ins_name').AsString;
+       DMTravelBlank.DSins_contracts.FieldByName('BEN_ID').AsInteger:=2;
+       DBLookupComboBox1.Enabled:=false;
+         //DMTravelBlank.DSins_contracts.RefreshRecord;
+       //DBEdit1.Enabled:=false;
+       //DBEdit2.Enabled:=false ;
+       end
+       else
+       DBEdit2.Enabled:=false;
+
+end;
+
+initialization
+ FrmTravelBlank := TFrmTravelBlank.Create(Application);
+end.

@@ -1,0 +1,49 @@
+unit UnitRepTurn;
+
+interface
+
+uses Windows, SysUtils, Messages, Classes, Graphics, Controls,
+  StdCtrls, ExtCtrls, Forms, Quickrpt, QRCtrls;
+
+type
+  TQRepTurn = class(TQuickRep)
+    QRBand1: TQRBand;
+    QRDBText1: TQRDBText;
+    QRDBText2: TQRDBText;
+    QRDBText6: TQRDBText;
+    QRDBText3: TQRDBText;
+    QRDBText7: TQRDBText;
+    QRDBText4: TQRDBText;
+    QRDBText5: TQRDBText;
+    QRBand2: TQRBand;
+    QRLabel1: TQRLabel;
+    QRLabel2: TQRLabel;
+    QRLabel3: TQRLabel;
+    QRLabel4: TQRLabel;
+    QRLabel5: TQRLabel;
+    QRLabel6: TQRLabel;
+    QRLabel7: TQRLabel;
+    QRLabel8: TQRLabel;
+    QRDBText8: TQRDBText;
+    procedure QuickRepBeforePrint(Sender: TCustomQuickRep;
+      var PrintReport: Boolean);
+  private
+
+  public
+
+  end;
+
+var
+  QRepTurn: TQRepTurn;
+
+implementation
+             uses UnitDateExch,sboapiDataModuleImpl, SBTranslateProc;
+{$R *.DFM}
+
+procedure TQRepTurn.QuickRepBeforePrint(Sender: TCustomQuickRep;
+  var PrintReport: Boolean);
+begin
+SBTranslateProc.TranslateAllCompQuickRep(Self,sboapiDataModule.OrPack_SL);
+end;
+
+end.

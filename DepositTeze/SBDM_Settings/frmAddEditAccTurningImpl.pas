@@ -1,0 +1,75 @@
+unit frmAddEditAccTurningImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, NLSLocalizer, Mask, DBCtrlsEh, DBLookupEh, DBCtrls;
+
+type
+  TfrmAddEditAccTurning = class(TForm)
+    GroupBox1: TGroupBox;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    CBBranch: TDBLookupComboBox;
+    DBLookupComboBox2: TDBLookupComboBox;
+    DBLookupComboboxEh1: TDBLookupComboboxEh;
+    Button1: TButton;
+    Button2: TButton;
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure Button1Click(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  frmAddEditAccTurning: TfrmAddEditAccTurning;
+
+implementation
+
+{$R *.DFM}
+
+uses frmAccountTurningImpl,SBTranslateProc,sboapiDataModuleimpl;
+
+procedure TfrmAddEditAccTurning.FormCanResize(Sender: TObject;
+  var NewWidth, NewHeight: Integer; var Resize: Boolean);
+begin
+   Resize := False;
+end;
+
+procedure TfrmAddEditAccTurning.FormCreate(Sender: TObject);
+begin
+SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TfrmAddEditAccTurning.FormKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+   if Ord(Key) = VK_ESCAPE then Close;
+end;
+
+procedure TfrmAddEditAccTurning.Button1Click(Sender: TObject);
+begin
+   with frmAccountTurning do begin
+        settings.FieldByName('CurrencyID').AsInteger := valute.FieldByName('Valute').AsInteger;
+        settings.Post;
+    end;    
+   Close;     
+end;
+
+procedure TfrmAddEditAccTurning.Button2Click(Sender: TObject);
+begin
+   with frmAccountTurning,settings do
+        Cancel;
+   Close;     
+
+end;
+
+end.

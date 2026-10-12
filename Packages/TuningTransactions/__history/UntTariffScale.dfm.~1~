@@ -1,0 +1,243 @@
+object FormReferences: TFormReferences
+  Left = 362
+  Top = 184
+  Width = 379
+  Height = 527
+  Caption = 'FormReferences'
+  Color = clBtnFace
+  Font.Charset = RUSSIAN_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  OnKeyDown = FormKeyDown
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Splitter1: TSplitter
+    Left = 0
+    Top = 209
+    Width = 371
+    Height = 3
+    Cursor = crVSplit
+    Align = alTop
+    Color = clWindowText
+    ParentColor = False
+  end
+  object StatusBar1: TStatusBar
+    Left = 0
+    Top = 481
+    Width = 371
+    Height = 19
+    Panels = <>
+    SimplePanel = False
+  end
+  object GroupBox1: TGroupBox
+    Left = 0
+    Top = 0
+    Width = 371
+    Height = 209
+    Align = alTop
+    Caption = 'ћцшт€ри груплары'
+    TabOrder = 1
+    object Panel1: TPanel
+      Left = 2
+      Top = 15
+      Width = 367
+      Height = 41
+      Align = alTop
+      BorderStyle = bsSingle
+      TabOrder = 0
+      object DBNavigator1: TDBNavigator
+        Left = 4
+        Top = 4
+        Width = 240
+        Height = 25
+        DataSource = TuningDataModule.DSCustomerGroups
+        TabOrder = 0
+      end
+    end
+    object GridGroups: TDBGrid
+      Left = 2
+      Top = 56
+      Width = 367
+      Height = 128
+      Align = alClient
+      DataSource = TuningDataModule.DSCustomerGroups
+      TabOrder = 1
+      TitleFont.Charset = RUSSIAN_CHARSET
+      TitleFont.Color = clWindowText
+      TitleFont.Height = -11
+      TitleFont.Name = 'Azl Sans Serif'
+      TitleFont.Style = []
+      Columns = <
+        item
+          Expanded = False
+          FieldName = 'ID'
+          Title.Caption = 'є'
+          Title.Color = clNavy
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = []
+          Width = 42
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'NAME'
+          Title.Caption = '√рупун ады'
+          Title.Color = clNavy
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = []
+          Width = 306
+          Visible = True
+        end>
+    end
+    object Panel3: TPanel
+      Left = 2
+      Top = 184
+      Width = 367
+      Height = 23
+      Align = alBottom
+      TabOrder = 2
+      object EditID: TEdit
+        Left = 0
+        Top = 1
+        Width = 63
+        Height = 21
+        Anchors = [akLeft, akTop, akRight]
+        TabOrder = 0
+        OnChange = EditIDChange
+        OnExit = EditIDExit
+        OnKeyPress = EditIDKeyPress
+      end
+      object EditName: TEdit
+        Left = 68
+        Top = 1
+        Width = 298
+        Height = 21
+        Anchors = [akLeft, akTop, akRight]
+        TabOrder = 1
+        OnChange = EditIDChange
+        OnExit = EditIDExit
+      end
+    end
+  end
+  object GroupBox2: TGroupBox
+    Left = 0
+    Top = 212
+    Width = 371
+    Height = 269
+    Align = alClient
+    Caption = '“ариф интерваллары'
+    TabOrder = 2
+    object Panel2: TPanel
+      Left = 2
+      Top = 15
+      Width = 367
+      Height = 41
+      Align = alTop
+      BorderStyle = bsSingle
+      TabOrder = 0
+      object DBNavigator2: TDBNavigator
+        Left = 4
+        Top = 4
+        Width = 240
+        Height = 25
+        DataSource = TuningDataModule.DSTariffScale
+        TabOrder = 0
+      end
+    end
+    object GridTariffs: TDBGrid
+      Left = 2
+      Top = 56
+      Width = 367
+      Height = 211
+      Align = alClient
+      DataSource = TuningDataModule.DSTariffScale
+      TabOrder = 1
+      TitleFont.Charset = RUSSIAN_CHARSET
+      TitleFont.Color = clWindowText
+      TitleFont.Height = -11
+      TitleFont.Name = 'Azl Sans Serif'
+      TitleFont.Style = []
+      Columns = <
+        item
+          Expanded = False
+          FieldName = 'GROUPID'
+          Title.Caption = 'є'
+          Title.Color = clNavy
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = []
+          Width = 42
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'AMMOUNT'
+          Title.Alignment = taRightJustify
+          Title.Caption = 'ћ€бл€ь'
+          Title.Color = clNavy
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = []
+          Width = 83
+          Visible = True
+        end
+        item
+          Alignment = taCenter
+          Expanded = False
+          FieldName = 'PERCENT'
+          Title.Alignment = taCenter
+          Title.Caption = '%'
+          Title.Color = clNavy
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = []
+          Width = 30
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'MINVALUE'
+          Title.Alignment = taRightJustify
+          Title.Caption = 'ћин м€бл€ь'
+          Title.Color = clNavy
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = []
+          Width = 95
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'MAXVALUE'
+          Title.Alignment = taRightJustify
+          Title.Caption = 'ћах м€бл€ь'
+          Title.Color = clNavy
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = []
+          Width = 95
+          Visible = True
+        end>
+    end
+  end
+end

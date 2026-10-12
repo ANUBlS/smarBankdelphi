@@ -1,0 +1,1537 @@
+object FrmTransactionsViewer: TFrmTransactionsViewer
+  Left = 117
+  Top = 29
+  Width = 1153
+  Height = 688
+  Caption = 'Transactions Viewer'
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  OnCreate = ActiveFormCreate
+  PixelsPerInch = 96
+  TextHeight = 13
+  object rrr: TPanel
+    Left = 0
+    Top = 0
+    Width = 1153
+    Height = 113
+    Align = alTop
+    TabOrder = 0
+    object gb: TGroupBox
+      Left = 1
+      Top = 1
+      Width = 159
+      Height = 111
+      Align = alLeft
+      Caption = #1058#1072#1088#1080#1093' '#1072#1088#1072#1083#1099#1100#1099
+      TabOrder = 0
+      object DateTimePicker1: TDateTimePicker
+        Left = 5
+        Top = 17
+        Width = 150
+        Height = 21
+        Date = 37756.455915069400000000
+        Time = 37756.455915069400000000
+        TabOrder = 0
+      end
+      object DateTimePicker2: TDateTimePicker
+        Left = 5
+        Top = 46
+        Width = 150
+        Height = 21
+        Date = 37756.456156319400000000
+        Time = 37756.456156319400000000
+        TabOrder = 1
+      end
+      object BtnOK: TButton
+        Left = 4
+        Top = 78
+        Width = 75
+        Height = 26
+        Caption = #1043#1103#1073#1091#1083
+        Default = True
+        TabOrder = 2
+        OnClick = BtnOKClick
+      end
+      object Button5: TButton
+        Left = 81
+        Top = 78
+        Width = 74
+        Height = 26
+        Caption = #1060#1080#1083#1090#1088
+        TabOrder = 3
+        OnClick = Button5Click
+      end
+    end
+    object GroupBox1: TGroupBox
+      Left = 261
+      Top = 1
+      Width = 891
+      Height = 111
+      Align = alClient
+      Caption = #1041#1072#1083#1072#1085#1089' '#1065#1077#1089#1072#1073#1083#1072#1088#1099
+      TabOrder = 1
+      object Label1: TLabel
+        Left = 6
+        Top = 32
+        Width = 32
+        Height = 13
+        Caption = #1044#1077#1073#1077#1090
+      end
+      object Label2: TLabel
+        Left = 6
+        Top = 85
+        Width = 38
+        Height = 13
+        Caption = #1050#1088#1077#1076#1080#1090
+      end
+      object EditDebt: TEdit
+        Left = 41
+        Top = 25
+        Width = 313
+        Height = 21
+        ParentShowHint = False
+        ShowHint = True
+        TabOrder = 0
+      end
+      object EditCredit: TEdit
+        Left = 41
+        Top = 78
+        Width = 313
+        Height = 21
+        ParentShowHint = False
+        ShowHint = True
+        TabOrder = 1
+      end
+      object RG1: TRadioGroup
+        Left = 356
+        Top = 6
+        Width = 266
+        Height = 51
+        Columns = 3
+        ItemIndex = 0
+        Items.Strings = (
+          #1041'.'#1065'.'
+          #1057'.'#1065'.'
+          #1050#1083#1072#1089#1089'. '#1043#1088#1091#1087
+          #1050#1083#1072#1089#1089'.'#1053#1091#1084)
+        TabOrder = 2
+      end
+      object RG2: TRadioGroup
+        Left = 358
+        Top = 58
+        Width = 264
+        Height = 49
+        Columns = 3
+        ItemIndex = 0
+        Items.Strings = (
+          #1041'.'#1065'.'
+          #1057'.'#1065'.'
+          #1050#1083#1072#1089#1089'. '#1043#1088#1091#1087
+          #1050#1083#1072#1089#1089'.'#1053#1091#1084)
+        TabOrder = 3
+      end
+      object RG3: TRadioGroup
+        Left = 623
+        Top = 6
+        Width = 121
+        Height = 98
+        ItemIndex = 0
+        Items.Strings = (
+          'Balans'
+          'Balanasdank'#601'nar')
+        TabOrder = 4
+      end
+    end
+    object GroupBox3: TGroupBox
+      Left = 160
+      Top = 1
+      Width = 101
+      Height = 111
+      Align = alLeft
+      Caption = #1071#1083#1072#1074#1103
+      TabOrder = 2
+      object Button2: TButton
+        Left = 11
+        Top = 78
+        Width = 81
+        Height = 26
+        Caption = 'Excel'
+        TabOrder = 0
+        OnClick = Button2Click
+      end
+      object Button3: TButton
+        Left = 11
+        Top = 34
+        Width = 81
+        Height = 27
+        Caption = #1065#1077#1089#1072#1073#1072#1090
+        TabOrder = 1
+        OnClick = Button3Click
+      end
+    end
+  end
+  object PanelFilter: TPanel
+    Left = 0
+    Top = 113
+    Width = 199
+    Height = 575
+    Align = alLeft
+    BevelOuter = bvNone
+    TabOrder = 1
+    Visible = False
+    object PageControl1: TPageControl
+      Left = 0
+      Top = 0
+      Width = 199
+      Height = 575
+      ActivePage = TabSheetFilter
+      Align = alClient
+      TabOrder = 0
+      object TabSheetFilter: TTabSheet
+        Caption = #1060#1080#1083#1090#1077#1088
+        OnShow = TabSheetFilterShow
+        object PanelF: TPanel
+          Left = 0
+          Top = 0
+          Width = 191
+          Height = 525
+          Align = alClient
+          BevelOuter = bvNone
+          TabOrder = 0
+          object Splitter1: TSplitter
+            Left = 0
+            Top = 321
+            Width = 191
+            Height = 1
+            Cursor = crVSplit
+            Align = alTop
+            Color = clBtnFace
+            ParentColor = False
+            ExplicitTop = 322
+          end
+          object GroupBox2: TGroupBox
+            Left = 0
+            Top = 0
+            Width = 191
+            Height = 107
+            Align = alTop
+            Caption = #1060#1080#1083#1090#1088
+            TabOrder = 0
+            OnClick = ActionFilterExecute
+            DesignSize = (
+              191
+              107)
+            object Panel3: TPanel
+              Left = 4
+              Top = 13
+              Width = 63
+              Height = 23
+              Alignment = taLeftJustify
+              BevelOuter = bvLowered
+              Caption = #1044'. '#1060#1080#1083#1080#1072#1083
+              TabOrder = 0
+              object CBDebetFilial: TCheckBox
+                Tag = 2
+                Left = 46
+                Top = 2
+                Width = 15
+                Height = 18
+                Caption = 'CheckBox1'
+                TabOrder = 0
+                OnClick = CBDebetFilialClick
+              end
+            end
+            object Panel4: TPanel
+              Left = 4
+              Top = 80
+              Width = 63
+              Height = 22
+              Alignment = taLeftJustify
+              BevelOuter = bvLowered
+              Caption = #1054#1087#1077#1088#1072#1090#1086#1088
+              TabOrder = 1
+              object CBOperator: TCheckBox
+                Tag = 3
+                Left = 46
+                Top = 2
+                Width = 15
+                Height = 18
+                Caption = 'CBOperator'
+                TabOrder = 0
+                OnClick = CBDebetFilialClick
+              end
+            end
+            object DBLookup2: TDBLookupComboBox
+              Left = 68
+              Top = 13
+              Width = 119
+              Height = 21
+              Anchors = [akLeft, akTop, akRight]
+              KeyField = 'ID'
+              ListField = 'NAME'
+              ListSource = TransDataModule.DataDFilials
+              TabOrder = 2
+            end
+            object DBLookup3: TDBLookupComboBox
+              Left = 68
+              Top = 80
+              Width = 119
+              Height = 21
+              Anchors = [akLeft, akTop, akRight]
+              KeyField = 'ID'
+              ListField = 'NAME'
+              ListSource = TransDataModule.DataUsers
+              TabOrder = 3
+            end
+            object Panel5: TPanel
+              Left = 4
+              Top = 46
+              Width = 63
+              Height = 23
+              Alignment = taLeftJustify
+              BevelOuter = bvLowered
+              Caption = #1050'. '#1060#1080#1083#1080#1072#1083
+              TabOrder = 4
+              object CBCreditFilial: TCheckBox
+                Tag = 1
+                Left = 46
+                Top = 2
+                Width = 15
+                Height = 18
+                Caption = 'CBCreditFilial'
+                TabOrder = 0
+                OnClick = CBDebetFilialClick
+              end
+            end
+            object DBLookup1: TDBLookupComboBox
+              Left = 68
+              Top = 46
+              Width = 119
+              Height = 21
+              KeyField = 'ID'
+              ListField = 'NAME'
+              ListSource = TransDataModule.DataCFilial
+              TabOrder = 5
+            end
+          end
+          object CBOperationTypes: TCheckListBox
+            Left = 0
+            Top = 124
+            Width = 191
+            Height = 197
+            Align = alTop
+            Color = clBtnFace
+            ItemHeight = 13
+            TabOrder = 1
+            OnKeyDown = CBOperationTypesKeyDown
+          end
+          object StaticText1: TStaticText
+            Left = 0
+            Top = 322
+            Width = 191
+            Height = 17
+            Align = alTop
+            Alignment = taCenter
+            BorderStyle = sbsSingle
+            Caption = #1042#1072#1083#1081#1091#1090#1072' '#1092#1080#1083#1090#1077#1088#1080
+            Color = clSilver
+            ParentColor = False
+            TabOrder = 2
+          end
+          object CLBCurrency: TCheckListBox
+            Left = 0
+            Top = 339
+            Width = 191
+            Height = 125
+            Align = alClient
+            Color = clBtnFace
+            ItemHeight = 13
+            TabOrder = 3
+            OnKeyDown = CBOperationTypesKeyDown
+          end
+          object StaticText2: TStaticText
+            Left = 0
+            Top = 107
+            Width = 191
+            Height = 17
+            Align = alTop
+            Alignment = taCenter
+            BorderStyle = sbsSingle
+            Caption = #1071#1084#1103#1083#1080#1081#1081#1072#1090' '#1090#1080#1087#1080
+            Color = clSilver
+            ParentColor = False
+            TabOrder = 4
+          end
+          object GroupBox5: TGroupBox
+            Left = 0
+            Top = 464
+            Width = 191
+            Height = 61
+            Align = alBottom
+            Caption = #399'm'#601'liyyat n'#246'v'#252
+            TabOrder = 5
+            object CBCommited: TCheckBox
+              Tag = 2
+              Left = 2
+              Top = 17
+              Width = 97
+              Height = 17
+              Caption = 'T'#601'sdiql'#601'nmi'#351
+              Checked = True
+              State = cbChecked
+              TabOrder = 0
+              OnClick = CBCommitedClick
+            end
+            object CBDelayed: TCheckBox
+              Tag = 1
+              Left = 3
+              Top = 40
+              Width = 97
+              Height = 17
+              Caption = 'Planla'#351'd'#305'r'#305'lm'#305#351
+              Checked = True
+              State = cbChecked
+              TabOrder = 1
+              OnClick = CBDelayedClick
+            end
+          end
+        end
+        object Panel6: TPanel
+          Left = 0
+          Top = 525
+          Width = 191
+          Height = 22
+          Align = alBottom
+          BevelOuter = bvLowered
+          TabOrder = 1
+          object CheckBox1: TCheckBox
+            Left = 4
+            Top = 1
+            Width = 161
+            Height = 18
+            Caption = #1048#1089#1090#1080#1092#1072#1076#1103#1095#1080' '#1089#1077#1095#1084#1103#1082
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = [fsBold]
+            ParentFont = False
+            TabOrder = 0
+            OnClick = CheckBox1Click
+          end
+        end
+      end
+    end
+  end
+  object Panel1: TPanel
+    Left = 199
+    Top = 113
+    Width = 954
+    Height = 575
+    Align = alClient
+    BevelOuter = bvNone
+    TabOrder = 2
+    object TransactionsViewer: TDBGrid
+      Left = 0
+      Top = 0
+      Width = 954
+      Height = 525
+      Align = alClient
+      DataSource = TransDataModule.DataSrcTransactions
+      DrawingStyle = gdsGradient
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgConfirmDelete, dgCancelOnExit, dgTitleClick]
+      ParentFont = False
+      TabOrder = 0
+      TitleFont.Charset = RUSSIAN_CHARSET
+      TitleFont.Color = clWhite
+      TitleFont.Height = -13
+      TitleFont.Name = 'Tahoma'
+      TitleFont.Style = []
+      OnDrawColumnCell = TransactionsViewerDrawColumnCell
+      OnTitleClick = TransactionsViewerTitleClick
+      Columns = <
+        item
+          Color = clSilver
+          Expanded = False
+          FieldName = 'DAT'
+          Title.Caption = #1058#1072#1088#1080#1093
+          Title.Color = clNavy
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -12
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 50
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'DBAL_CN'
+          Title.Color = clNavy
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -12
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 43
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'DEB_KLI_ID'
+          Title.Color = clNavy
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -12
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 32
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'DEBITOR'
+          Title.Color = clNavy
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -12
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 100
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'DNAME'
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -12
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 150
+          Visible = True
+        end
+        item
+          Alignment = taCenter
+          Color = clSilver
+          Expanded = False
+          FieldName = 'VAL_ACC'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clNavy
+          Font.Height = -11
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = []
+          Title.Alignment = taCenter
+          Title.Caption = '$'
+          Title.Color = clNavy
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -12
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 20
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'KBAL_CN'
+          Title.Color = clNavy
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -12
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 32
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'KRED_KLI_ID'
+          Title.Color = clNavy
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -12
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 32
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'KREDITOR'
+          Title.Color = clNavy
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -12
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 100
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'KNAME'
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -12
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 150
+          Visible = True
+        end
+        item
+          Alignment = taCenter
+          Color = clSilver
+          Expanded = False
+          FieldName = 'CURRENCYID_C'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clNavy
+          Font.Height = -11
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = []
+          Title.Alignment = taCenter
+          Title.Caption = '$'
+          Title.Color = clNavy
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -12
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 20
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'AMMOUNT'
+          Title.Color = clNavy
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -12
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 100
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'AMMOUNT_C'
+          Title.Color = clNavy
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -12
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 100
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'LAMMOUNT'
+          Title.Color = clNavy
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -12
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 100
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'USERNAME'
+          Title.Caption = 'Daxil Ed'#601'n'
+          Title.Color = clNavy
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -12
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 100
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'COMMITTER'
+          Title.Color = clNavy
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -12
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 100
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'CNTR_NAME'
+          Title.Color = clNavy
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -12
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 100
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'RATE_D'
+          Title.Caption = 'D. m'#601'z'#601'nn'#601
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -12
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 50
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'RATE_c'
+          Title.Caption = 'K. m'#601'z'#601'nn'#601
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -12
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 50
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'BDG_CODE'
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -13
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 50
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'Status'
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -13
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'DEBT_NN'
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -13
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'KRED_NN'
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -13
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Visible = True
+        end>
+    end
+    object Panel2: TPanel
+      Left = 0
+      Top = 525
+      Width = 954
+      Height = 27
+      Align = alBottom
+      BevelOuter = bvLowered
+      TabOrder = 1
+      DesignSize = (
+        954
+        27)
+      object DBEdit1: TDBEdit
+        Left = 1
+        Top = 2
+        Width = 951
+        Height = 21
+        Anchors = [akLeft, akTop, akRight]
+        DataField = 'NAME'
+        DataSource = TransDataModule.DataSrcTransactions
+        TabOrder = 0
+      end
+    end
+    object Panel7: TPanel
+      Left = 0
+      Top = 552
+      Width = 954
+      Height = 23
+      Align = alBottom
+      BevelOuter = bvLowered
+      TabOrder = 2
+      object Panel8: TPanel
+        Left = 1
+        Top = 1
+        Width = 236
+        Height = 21
+        Align = alLeft
+        Alignment = taLeftJustify
+        BevelOuter = bvNone
+        Caption = #1044#1077#1073#1077#1090' '#1084#1103#1073#1083#1103#1100
+        TabOrder = 0
+        object EditSumAmount: TEdit
+          Left = 82
+          Top = -1
+          Width = 152
+          Height = 22
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -12
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          ParentFont = False
+          ReadOnly = True
+          TabOrder = 0
+        end
+      end
+      object Panel9: TPanel
+        Left = 237
+        Top = 1
+        Width = 235
+        Height = 21
+        Align = alLeft
+        Alignment = taLeftJustify
+        BevelOuter = bvNone
+        Caption = #1050#1088#1077#1076#1080#1090' '#1084#1103#1073#1083#1103#1100
+        TabOrder = 1
+        object EditSumAmountC: TEdit
+          Left = 81
+          Top = -1
+          Width = 152
+          Height = 22
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -12
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          ParentFont = False
+          ReadOnly = True
+          TabOrder = 0
+        end
+      end
+      object Panel10: TPanel
+        Left = 472
+        Top = 1
+        Width = 219
+        Height = 21
+        Align = alLeft
+        Alignment = taLeftJustify
+        BevelOuter = bvNone
+        Caption = #1045#1082#1074#1080#1074#1072#1083#1077#1085#1090
+        TabOrder = 2
+        object EditSumLAmount: TEdit
+          Left = 66
+          Top = -1
+          Width = 152
+          Height = 22
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -12
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          ParentFont = False
+          ReadOnly = True
+          TabOrder = 0
+        end
+      end
+    end
+    object Memo1: TMemo
+      Left = 237
+      Top = 206
+      Width = 451
+      Height = 195
+      Lines.Strings = (
+        'Memo1'
+        ''
+        ''
+        ''
+        ''
+        ''
+        ''
+        ''
+        '')
+      TabOrder = 3
+      Visible = False
+    end
+    object DBGrid1: TDBGrid
+      Left = 0
+      Top = 0
+      Width = 954
+      Height = 525
+      Align = alClient
+      DataSource = TransDataModule.INS_DATSRC
+      DrawingStyle = gdsGradient
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgConfirmDelete, dgCancelOnExit, dgTitleClick]
+      ParentFont = False
+      TabOrder = 4
+      TitleFont.Charset = RUSSIAN_CHARSET
+      TitleFont.Color = clWhite
+      TitleFont.Height = -13
+      TitleFont.Name = 'Tahoma'
+      TitleFont.Style = []
+      OnDrawColumnCell = TransactionsViewerDrawColumnCell
+      OnTitleClick = TransactionsViewerTitleClick
+      Columns = <
+        item
+          Color = clSilver
+          Expanded = False
+          FieldName = 'DAT'
+          Title.Caption = #1058#1072#1088#1080#1093
+          Title.Color = clNavy
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -12
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 50
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'DBAL_CN'
+          Title.Color = clNavy
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -12
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 43
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'DEB_KLI_ID'
+          Title.Color = clNavy
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -12
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 32
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'DEBITOR'
+          Title.Color = clNavy
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -12
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 100
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'DNAME'
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -12
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 150
+          Visible = True
+        end
+        item
+          Alignment = taCenter
+          Color = clSilver
+          Expanded = False
+          FieldName = 'VAL_ACC'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clNavy
+          Font.Height = -11
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = []
+          Title.Alignment = taCenter
+          Title.Caption = '$'
+          Title.Color = clNavy
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -12
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 20
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'KBAL_CN'
+          Title.Color = clNavy
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -12
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 32
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'KRED_KLI_ID'
+          Title.Color = clNavy
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -12
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 32
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'KREDITOR'
+          Title.Color = clNavy
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -12
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 100
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'KNAME'
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -12
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 150
+          Visible = True
+        end
+        item
+          Alignment = taCenter
+          Color = clSilver
+          Expanded = False
+          FieldName = 'CURRENCYID_C'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clNavy
+          Font.Height = -11
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = []
+          Title.Alignment = taCenter
+          Title.Caption = '$'
+          Title.Color = clNavy
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -12
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 20
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'AMMOUNT'
+          Title.Color = clNavy
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -12
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 100
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'AMMOUNT_C'
+          Title.Color = clNavy
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -12
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 100
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'LAMMOUNT'
+          Title.Color = clNavy
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -12
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 100
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'USERNAME'
+          Title.Caption = 'Daxil Ed'#601'n'
+          Title.Color = clNavy
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -12
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 100
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'COMMITTER'
+          Title.Color = clNavy
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -12
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 100
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'CNTR_NAME'
+          Title.Color = clNavy
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -12
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 100
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'RATE_D'
+          Title.Caption = 'D. m'#601'z'#601'nn'#601
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -12
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 50
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'RATE_c'
+          Title.Caption = 'K. m'#601'z'#601'nn'#601
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -12
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 50
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'BDG_CODE'
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -13
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 50
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'Status'
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -13
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'DEBT_NN'
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -13
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'KRED_NN'
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -13
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'debt_ins_bnftype'
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -13
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'kred_ins_bnftype'
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -13
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Visible = True
+        end>
+    end
+  end
+  object ActionList1: TActionList
+    Left = 616
+    Top = 184
+    object ActionFilter: TAction
+      Caption = 'ActionFilter'
+      OnExecute = ActionFilterExecute
+    end
+    object ActionLoadFilters: TAction
+      Caption = 'ActionLoadFilters'
+      OnExecute = ActionLoadFiltersExecute
+    end
+  end
+  object TransactionsExporter: TCMExcelExport
+    StyleColumnWidth = cwDefault
+    ColumnWidth = 0
+    FontTitles.Charset = DEFAULT_CHARSET
+    FontTitles.Color = clWindowText
+    FontTitles.Height = -11
+    FontTitles.Name = 'Tahoma'
+    FontTitles.Style = [fsBold]
+    OrientationTitles = 0
+    FontData.Charset = DEFAULT_CHARSET
+    FontData.Color = clWindowText
+    FontData.Height = -11
+    FontData.Name = 'Tahoma'
+    FontData.Style = []
+    FontSummary.Charset = DEFAULT_CHARSET
+    FontSummary.Color = clWindowText
+    FontSummary.Height = -11
+    FontSummary.Name = 'Tahoma'
+    FontSummary.Style = []
+    SummarySelection = ssNone
+    SummaryCalculation = scSUM
+    Left = 328
+    Top = 224
+  end
+  object CMExcelExport1: TCMExcelExport
+    StyleColumnWidth = cwDefault
+    ColumnWidth = 0
+    FontTitles.Charset = DEFAULT_CHARSET
+    FontTitles.Color = clWindowText
+    FontTitles.Height = -11
+    FontTitles.Name = 'Tahoma'
+    FontTitles.Style = []
+    OrientationTitles = 0
+    FontData.Charset = DEFAULT_CHARSET
+    FontData.Color = clWindowText
+    FontData.Height = -11
+    FontData.Name = 'Tahoma'
+    FontData.Style = []
+    FontSummary.Charset = DEFAULT_CHARSET
+    FontSummary.Color = clWindowText
+    FontSummary.Height = -11
+    FontSummary.Name = 'Tahoma'
+    FontSummary.Style = []
+    SummarySelection = ssNone
+    SummaryCalculation = scSUM
+    Left = 240
+    Top = 184
+  end
+  object QExport4XLS1: TQExport4XLS
+    About = '(About EMS AdvancedExport)'
+    _Version = '4.10.0.1'
+    Formats.DecimalSeparator = '.'
+    Formats.ThousandSeparator = ','
+    Formats.DateSeparator = '.'
+    Formats.TimeSeparator = ':'
+    Formats.BooleanTrue = 'true'
+    Formats.BooleanFalse = 'false'
+    Formats.IntegerFormat = '#,###,##0'
+    Formats.FloatFormat = '#,###,##0.00'
+    Formats.DateFormat = 'dd/MM/yyyy'
+    Formats.TimeFormat = 'hh:mm'
+    Formats.DateTimeFormat = 'dd/MM/yyyy'
+    Formats.CurrencyFormat = ' #,###,##0.00'
+    Options.PageFooter = 'Page &P of &N'
+    Options.SheetTitle = 'Sheet 1'
+    Options.CaptionsFormat.Font.Style = [xfsBold]
+    Options.HyperlinkFormat.Font.Color = clrBlue
+    Options.HyperlinkFormat.Font.Underline = fulSingle
+    Options.NoteFormat.Alignment.Horizontal = halLeft
+    Options.NoteFormat.Alignment.Vertical = valTop
+    Options.NoteFormat.Font.Size = 8
+    Options.NoteFormat.Font.Style = [xfsBold]
+    Options.NoteFormat.Font.Name = 'Tahoma'
+    FieldFormats = <>
+    StripStyles = <>
+    Hyperlinks = <>
+    Notes = <>
+    Charts = <>
+    Sheets = <>
+    Pictures = <>
+    Images = <>
+    Cells = <>
+    Aggregates = <>
+    MergedCells = <>
+    Left = 416
+    Top = 152
+  end
+  object QExport4Xlsx1: TQExport4Xlsx
+    About = '(About EMS AdvancedExport)'
+    _Version = '4.10.0.1'
+    Formats.DecimalSeparator = '.'
+    Formats.ThousandSeparator = ','
+    Formats.DateSeparator = '.'
+    Formats.TimeSeparator = ':'
+    Formats.BooleanTrue = 'true'
+    Formats.BooleanFalse = 'false'
+    Formats.IntegerFormat = '#,###,##'
+    Formats.FloatFormat = '#,###,##'
+    Formats.DateFormat = 'dd/MM/yyyy'
+    Formats.TimeFormat = 'hh:mm'
+    Formats.DateTimeFormat = 'dd/MM/yyyy'
+    Formats.CurrencyFormat = ' #,###,##0.00'
+    SheetName = 'sheet1'
+    XlsxOptions.HeaderStyle.Font.Charset = DEFAULT_CHARSET
+    XlsxOptions.HeaderStyle.Font.Color = clBlack
+    XlsxOptions.HeaderStyle.Font.Height = -15
+    XlsxOptions.HeaderStyle.Font.Name = 'Calibri'
+    XlsxOptions.HeaderStyle.Font.Style = []
+    XlsxOptions.CaptionRowStyle.Font.Charset = DEFAULT_CHARSET
+    XlsxOptions.CaptionRowStyle.Font.Color = clBlack
+    XlsxOptions.CaptionRowStyle.Font.Height = -15
+    XlsxOptions.CaptionRowStyle.Font.Name = 'Calibri'
+    XlsxOptions.CaptionRowStyle.Font.Style = []
+    XlsxOptions.DataStyle.Font.Charset = DEFAULT_CHARSET
+    XlsxOptions.DataStyle.Font.Color = clBlack
+    XlsxOptions.DataStyle.Font.Height = -15
+    XlsxOptions.DataStyle.Font.Name = 'Calibri'
+    XlsxOptions.DataStyle.Font.Style = []
+    XlsxOptions.FooterStyle.Font.Charset = DEFAULT_CHARSET
+    XlsxOptions.FooterStyle.Font.Color = clBlack
+    XlsxOptions.FooterStyle.Font.Height = -15
+    XlsxOptions.FooterStyle.Font.Name = 'Calibri'
+    XlsxOptions.FooterStyle.Font.Style = []
+    XlsxOptions.StripStylesList = <>
+    Left = 432
+    Top = 264
+  end
+  object QExport4Dialog1: TQExport4Dialog
+    Formats.DecimalSeparator = '.'
+    Formats.ThousandSeparator = ','
+    Formats.DateSeparator = '.'
+    Formats.TimeSeparator = ':'
+    Formats.BooleanTrue = 'true'
+    Formats.BooleanFalse = 'false'
+    Formats.IntegerFormat = '#,###,##0'
+    Formats.FloatFormat = '#,###,##0.00'
+    Formats.DateFormat = 'dd/MM/yyyy'
+    Formats.TimeFormat = 'h:mm AMPM'
+    Formats.DateTimeFormat = 'dd/MM/yyyy h:mm:ss AMPM'
+    Formats.CurrencyFormat = ' #,###,##0.00'
+    RTFOptions.CaptionStyle.Font.Charset = DEFAULT_CHARSET
+    RTFOptions.CaptionStyle.Font.Color = clBlack
+    RTFOptions.CaptionStyle.Font.Height = -13
+    RTFOptions.CaptionStyle.Font.Name = 'Arial'
+    RTFOptions.CaptionStyle.Font.Style = [fsBold]
+    RTFOptions.CaptionStyle.AllowHighlight = True
+    RTFOptions.CaptionStyle.Alignment = talCenter
+    RTFOptions.DataStyle.Font.Charset = DEFAULT_CHARSET
+    RTFOptions.DataStyle.Font.Color = clBlack
+    RTFOptions.DataStyle.Font.Height = -13
+    RTFOptions.DataStyle.Font.Name = 'Arial'
+    RTFOptions.DataStyle.Font.Style = []
+    RTFOptions.DataStyle.AllowHighlight = True
+    RTFOptions.FooterStyle.Font.Charset = DEFAULT_CHARSET
+    RTFOptions.FooterStyle.Font.Color = clBlack
+    RTFOptions.FooterStyle.Font.Height = -13
+    RTFOptions.FooterStyle.Font.Name = 'Arial'
+    RTFOptions.FooterStyle.Font.Style = []
+    RTFOptions.FooterStyle.AllowHighlight = True
+    RTFOptions.HeaderStyle.Font.Charset = DEFAULT_CHARSET
+    RTFOptions.HeaderStyle.Font.Color = clBlack
+    RTFOptions.HeaderStyle.Font.Height = -13
+    RTFOptions.HeaderStyle.Font.Name = 'Arial'
+    RTFOptions.HeaderStyle.Font.Style = []
+    RTFOptions.HeaderStyle.AllowHighlight = True
+    RTFOptions.StripStyles = <>
+    HTMLPageOptions.TextFont.Charset = DEFAULT_CHARSET
+    HTMLPageOptions.TextFont.Color = clWhite
+    HTMLPageOptions.TextFont.Height = -11
+    HTMLPageOptions.TextFont.Name = 'Arial'
+    HTMLPageOptions.TextFont.Style = []
+    CSVOptions.Comma = ','
+    PDFOptions.PageOptions.MarginLeft = 1.170000000000000000
+    PDFOptions.PageOptions.MarginRight = 0.570000000000000000
+    PDFOptions.PageOptions.MarginTop = 0.780000000000000000
+    PDFOptions.PageOptions.MarginBottom = 0.780000000000000000
+    PDFOptions.HeaderFont.UserFont.Charset = DEFAULT_CHARSET
+    PDFOptions.HeaderFont.UserFont.Color = clWindowText
+    PDFOptions.HeaderFont.UserFont.Height = -13
+    PDFOptions.HeaderFont.UserFont.Name = 'Arial'
+    PDFOptions.HeaderFont.UserFont.Style = []
+    PDFOptions.HeaderFont.Charset = ANSI_CHARSET
+    PDFOptions.CaptionFont.UserFont.Charset = DEFAULT_CHARSET
+    PDFOptions.CaptionFont.UserFont.Color = clWindowText
+    PDFOptions.CaptionFont.UserFont.Height = -13
+    PDFOptions.CaptionFont.UserFont.Name = 'Arial'
+    PDFOptions.CaptionFont.UserFont.Style = []
+    PDFOptions.CaptionFont.Charset = ANSI_CHARSET
+    PDFOptions.DataFont.UserFont.Charset = DEFAULT_CHARSET
+    PDFOptions.DataFont.UserFont.Color = clWindowText
+    PDFOptions.DataFont.UserFont.Height = -13
+    PDFOptions.DataFont.UserFont.Name = 'Arial'
+    PDFOptions.DataFont.UserFont.Style = []
+    PDFOptions.DataFont.Charset = ANSI_CHARSET
+    PDFOptions.FooterFont.UserFont.Charset = DEFAULT_CHARSET
+    PDFOptions.FooterFont.UserFont.Color = clWindowText
+    PDFOptions.FooterFont.UserFont.Height = -13
+    PDFOptions.FooterFont.UserFont.Name = 'Arial'
+    PDFOptions.FooterFont.UserFont.Style = []
+    PDFOptions.FooterFont.Charset = ANSI_CHARSET
+    XLSOptions.PageFooter = 'Page &P of &N'
+    XLSOptions.SheetTitle = 'Sheet 1'
+    XLSOptions.CaptionFormat.Font.Style = [xfsBold]
+    XLSOptions.HyperlinkFormat.Font.Color = clrBlue
+    XLSOptions.HyperlinkFormat.Font.Underline = fulSingle
+    XLSOptions.NoteFormat.Alignment.Horizontal = halLeft
+    XLSOptions.NoteFormat.Alignment.Vertical = valTop
+    XLSOptions.NoteFormat.Font.Size = 8
+    XLSOptions.NoteFormat.Font.Style = [xfsBold]
+    XLSOptions.NoteFormat.Font.Name = 'Tahoma'
+    XLSOptions.FieldFormats = <>
+    XLSOptions.StripStyles = <>
+    XLSOptions.Hyperlinks = <>
+    XLSOptions.Notes = <>
+    XLSOptions.Charts = <>
+    XLSOptions.Pictures = <>
+    XLSOptions.Images = <>
+    XLSOptions.Cells = <>
+    XLSOptions.MergedCells = <>
+    ODSOptions.HeaderStyle.Font.Charset = DEFAULT_CHARSET
+    ODSOptions.HeaderStyle.Font.Color = clBlack
+    ODSOptions.HeaderStyle.Font.Height = -13
+    ODSOptions.HeaderStyle.Font.Name = 'Arial'
+    ODSOptions.HeaderStyle.Font.Style = []
+    ODSOptions.FooterStyle.Font.Charset = DEFAULT_CHARSET
+    ODSOptions.FooterStyle.Font.Color = clBlack
+    ODSOptions.FooterStyle.Font.Height = -13
+    ODSOptions.FooterStyle.Font.Name = 'Arial'
+    ODSOptions.FooterStyle.Font.Style = []
+    ODSOptions.CaptionRowStyle.Font.Charset = DEFAULT_CHARSET
+    ODSOptions.CaptionRowStyle.Font.Color = clBlack
+    ODSOptions.CaptionRowStyle.Font.Height = -13
+    ODSOptions.CaptionRowStyle.Font.Name = 'Arial'
+    ODSOptions.CaptionRowStyle.Font.Style = []
+    ODSOptions.DataStyle.Font.Charset = DEFAULT_CHARSET
+    ODSOptions.DataStyle.Font.Color = clBlack
+    ODSOptions.DataStyle.Font.Height = -13
+    ODSOptions.DataStyle.Font.Name = 'Arial'
+    ODSOptions.DataStyle.Font.Style = []
+    ODSOptions.StripStylesList = <>
+    ODTOptions.HeaderStyle.Font.Charset = DEFAULT_CHARSET
+    ODTOptions.HeaderStyle.Font.Color = clBlack
+    ODTOptions.HeaderStyle.Font.Height = -13
+    ODTOptions.HeaderStyle.Font.Name = 'Arial'
+    ODTOptions.HeaderStyle.Font.Style = []
+    ODTOptions.FooterStyle.Font.Charset = DEFAULT_CHARSET
+    ODTOptions.FooterStyle.Font.Color = clBlack
+    ODTOptions.FooterStyle.Font.Height = -13
+    ODTOptions.FooterStyle.Font.Name = 'Arial'
+    ODTOptions.FooterStyle.Font.Style = []
+    ODTOptions.CaptionRowStyle.Font.Charset = DEFAULT_CHARSET
+    ODTOptions.CaptionRowStyle.Font.Color = clBlack
+    ODTOptions.CaptionRowStyle.Font.Height = -13
+    ODTOptions.CaptionRowStyle.Font.Name = 'Arial'
+    ODTOptions.CaptionRowStyle.Font.Style = []
+    ODTOptions.DataStyle.Font.Charset = DEFAULT_CHARSET
+    ODTOptions.DataStyle.Font.Color = clBlack
+    ODTOptions.DataStyle.Font.Height = -13
+    ODTOptions.DataStyle.Font.Name = 'Arial'
+    ODTOptions.DataStyle.Font.Style = []
+    ODTOptions.StripStylesList = <>
+    ODTOptions.Border.BorderStyle = bsODFSolid
+    XlsxOptions.HeaderStyle.Font.Charset = DEFAULT_CHARSET
+    XlsxOptions.HeaderStyle.Font.Color = clBlack
+    XlsxOptions.HeaderStyle.Font.Height = -15
+    XlsxOptions.HeaderStyle.Font.Name = 'Calibri'
+    XlsxOptions.HeaderStyle.Font.Style = []
+    XlsxOptions.CaptionRowStyle.Font.Charset = DEFAULT_CHARSET
+    XlsxOptions.CaptionRowStyle.Font.Color = clBlack
+    XlsxOptions.CaptionRowStyle.Font.Height = -15
+    XlsxOptions.CaptionRowStyle.Font.Name = 'Calibri'
+    XlsxOptions.CaptionRowStyle.Font.Style = []
+    XlsxOptions.DataStyle.Font.Charset = DEFAULT_CHARSET
+    XlsxOptions.DataStyle.Font.Color = clBlack
+    XlsxOptions.DataStyle.Font.Height = -15
+    XlsxOptions.DataStyle.Font.Name = 'Calibri'
+    XlsxOptions.DataStyle.Font.Style = []
+    XlsxOptions.FooterStyle.Font.Charset = DEFAULT_CHARSET
+    XlsxOptions.FooterStyle.Font.Color = clBlack
+    XlsxOptions.FooterStyle.Font.Height = -15
+    XlsxOptions.FooterStyle.Font.Name = 'Calibri'
+    XlsxOptions.FooterStyle.Font.Style = []
+    XlsxOptions.StripStylesList = <>
+    DocxOptions.HeaderStyle.Font.Charset = DEFAULT_CHARSET
+    DocxOptions.HeaderStyle.Font.Color = clBlack
+    DocxOptions.HeaderStyle.Font.Height = -15
+    DocxOptions.HeaderStyle.Font.Name = 'Calibri'
+    DocxOptions.HeaderStyle.Font.Style = []
+    DocxOptions.CaptionRowStyle.Font.Charset = DEFAULT_CHARSET
+    DocxOptions.CaptionRowStyle.Font.Color = clBlack
+    DocxOptions.CaptionRowStyle.Font.Height = -15
+    DocxOptions.CaptionRowStyle.Font.Name = 'Calibri'
+    DocxOptions.CaptionRowStyle.Font.Style = []
+    DocxOptions.DataStyle.Font.Charset = DEFAULT_CHARSET
+    DocxOptions.DataStyle.Font.Color = clBlack
+    DocxOptions.DataStyle.Font.Height = -15
+    DocxOptions.DataStyle.Font.Name = 'Calibri'
+    DocxOptions.DataStyle.Font.Style = []
+    DocxOptions.StripStylesList = <>
+    DocxOptions.FooterStyle.Font.Charset = DEFAULT_CHARSET
+    DocxOptions.FooterStyle.Font.Color = clBlack
+    DocxOptions.FooterStyle.Font.Height = -15
+    DocxOptions.FooterStyle.Font.Name = 'Calibri'
+    DocxOptions.FooterStyle.Font.Style = []
+    AccessOptions.TableName = 'EXPORT_TABLE'
+    Left = 512
+    Top = 208
+  end
+  object QRPDFFilter1: TQRPDFFilter
+    CompressionOn = False
+    TextEncoding = UnicodeEncoding
+    Codepage = '1252'
+    Left = 288
+    Top = 296
+  end
+end

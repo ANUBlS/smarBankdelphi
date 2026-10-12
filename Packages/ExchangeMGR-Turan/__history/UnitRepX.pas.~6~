@@ -1,0 +1,97 @@
+unit UnitRepX;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ExtCtrls, QuickRpt, Qrctrls, grimgctrl;
+
+type
+  TFormRepX = class(TForm)
+    QuickRep: TQuickRep;
+    BandDetail: TQRBand;
+    QRShape12: TQRShape;
+    QRShape11: TQRShape;
+    QRShape10: TQRShape;
+    QRShape9: TQRShape;
+    QRShape8: TQRShape;
+    QRDBText1: TQRDBText;
+    QRDBText2: TQRDBText;
+    z: TQRShape;
+    QRDBText8: TQRDBText;
+    QRDBText4: TQRDBText;
+    QRLabel4: TQRLabel;
+    QRDBText3: TQRDBText;
+    QRLabel3: TQRLabel;
+    QRShape2: TQRShape;
+    QRLabel9: TQRLabel;
+    QRDBText9: TQRDBText;
+    QRLabel10: TQRLabel;
+    LabelBankName: TQRLabel;
+    QRShape3: TQRShape;
+    QRLabel13: TQRLabel;
+    QRLabel14: TQRLabel;
+    QRShape4: TQRShape;
+    QRLabel15: TQRLabel;
+    QRShape5: TQRShape;
+    QRLabel16: TQRLabel;
+    QRShape6: TQRShape;
+    QRLabel1: TQRLabel;
+    QRLabel7: TQRLabel;
+    QRShape7: TQRShape;
+    QRLabel17: TQRLabel;
+    QRDBText6: TQRDBText;
+    QRShape13: TQRShape;
+    QRShape14: TQRShape;
+    QRLabel2: TQRLabel;
+    QRShape15: TQRShape;
+    QRDBText7: TQRDBText;
+    LabelStatus: TQRLabel;
+    QRLabel8: TQRLabel;
+    QRLabel18: TQRLabel;
+    QRShape16: TQRShape;
+    QRShape17: TQRShape;
+    QRLabel19: TQRLabel;
+    LabelDate: TQRLabel;
+    LabelTime: TQRLabel;
+    QRShape18: TQRShape;
+    QRLabel5: TQRLabel;
+    QRShape19: TQRShape;
+    QRShape20: TQRShape;
+    QRShape21: TQRShape;
+    QRShape22: TQRShape;
+    QRDBText14: TQRDBText;
+    LabelCustomer: TQRLabel;
+    LabelPassport: TQRLabel;
+    LabelDifference: TQRLabel;
+    LabelCourse: TQRLabel;
+    QRDBText5: TQRDBText;
+    Label_Cust_Giving_Member: TQRLabel;
+    QRShape23: TQRShape;
+    QRDBText10: TQRDBText;
+    QRLabel6: TQRLabel;
+    QRShape24: TQRShape;
+    QRDBText11: TQRDBText;
+    QRLabel11: TQRLabel;
+    QRLabel12: TQRLabel;
+    QRGrDBImage1: TQRGrDBImage;
+    procedure FormCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormRepX: TFormRepX;
+
+implementation
+             uses UnitDateExch,sboapiDataModuleImpl, SBTranslateProc;
+{$R *.DFM}
+
+procedure TFormRepX.FormCreate(Sender: TObject);
+begin
+SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+end.

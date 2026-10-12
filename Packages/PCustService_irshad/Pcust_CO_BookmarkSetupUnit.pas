@@ -1,0 +1,176 @@
+﻿unit Pcust_CO_BookmarkSetupUnit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ImgList, ActnList, StdCtrls, Mask, DBCtrls, Grids, DBGrids,
+  ComCtrls, ToolWin;
+
+type
+  TPh_CO_BookmarkSetupFrom = class(TForm)
+    ToolBar1: TToolBar;
+    ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
+    ToolButton3: TToolButton;
+    ToolButton4: TToolButton;
+    ToolButton5: TToolButton;
+    ToolButton6: TToolButton;
+    ToolButton7: TToolButton;
+    DBGrid1: TDBGrid;
+    OpenDlg: TOpenDialog;
+    ActionList2: TActionList;
+    ActionAddTemplare: TAction;
+    ActionEditTemplate: TAction;
+    ActionDeleteTemplate: TAction;
+    ActionRfreshTemplate: TAction;
+    ActionClose: TAction;
+    GroupBox1: TGroupBox;
+    DBEdit1: TDBEdit;
+    ToolBar2: TToolBar;
+    ToolButton8: TToolButton;
+    ToolButton9: TToolButton;
+    ToolButton10: TToolButton;
+    ToolButton11: TToolButton;
+    ToolButton12: TToolButton;
+    ToolButton13: TToolButton;
+    ToolButton14: TToolButton;
+    ImageList1: TImageList;
+    ActionList1: TActionList;
+    ActnAddBookmark: TAction;
+    ActnDeleteBookmark: TAction;
+    ActnEditBookmark: TAction;
+    ActnNewBookmark: TAction;
+    ActnClose: TAction;
+    DBGrid2: TDBGrid;
+    procedure ActionAddTemplareExecute(Sender: TObject);
+    procedure ActionEditTemplateExecute(Sender: TObject);
+    procedure ActionDeleteTemplateExecute(Sender: TObject);
+    procedure ActionRfreshTemplateExecute(Sender: TObject);
+    procedure ActnAddBookmarkExecute(Sender: TObject);
+    procedure ActnEditBookmarkExecute(Sender: TObject);
+    procedure ActnDeleteBookmarkExecute(Sender: TObject);
+    procedure ActnNewBookmarkExecute(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Ph_CO_BookmarkSetupFrom: TPh_CO_BookmarkSetupFrom;
+
+implementation
+
+uses UnitDataModPCustService, Pcust_CO_TemplAddEditUnit, Pcust_CO_BookmarkAddEditUnit,sboapiDataModuleImpl, SBTranslateProc;
+
+{$R *.DFM}
+
+procedure TPh_CO_BookmarkSetupFrom.ActionAddTemplareExecute(Sender: TObject);
+resourcestring
+  rsTemplateCaption = 'Yeni şablon';
+var
+  i: integer;
+begin
+
+  with DataModPCustService.Templates do
+    Insert;
+  // Ph_CO_TemplAddEditForm.NLSLocalizer1.Caption:= rsTemplateCaption;
+  i := Ph_CO_TemplAddEditForm.ShowModal;
+  if i = mrOK then
+  begin
+    with DataModPCustService.Templates do
+      Refresh;
+  end;
+end;
+
+procedure TPh_CO_BookmarkSetupFrom.ActionEditTemplateExecute(Sender: TObject);
+resourcestring
+  rsUpdTemplateCaption = 'Şablonun redaktəsi';
+begin
+
+  with DataModPCustService.Templates do
+    Edit;
+  // Ph_CO_TemplAddEditForm.NLSLocalizer1.Caption:=  rsUpdTemplateCaption;
+  Ph_CO_TemplAddEditForm.ShowModal;
+end;
+
+procedure TPh_CO_BookmarkSetupFrom.ActionDeleteTemplateExecute(Sender: TObject);
+resourcestring
+  TempdeleteMsg = 'Silinsin?';
+begin
+
+  if MessageDlg(TempdeleteMsg, mtConfirmation, [mbYes, mbNo], 0) = mrYes then
+  begin
+    with DataModPCustService.Templates do
+      Delete;
+  end;
+
+end;
+
+procedure TPh_CO_BookmarkSetupFrom.ActionRfreshTemplateExecute(Sender: TObject);
+begin
+  with DataModPCustService.Templates do
+  begin
+    close;
+    open;
+  end;
+
+end;
+
+procedure TPh_CO_BookmarkSetupFrom.ActnAddBookmarkExecute(Sender: TObject);
+resourcestring
+  rsBookmarkCaption = 'Yeni';
+var
+  i: integer;
+begin
+
+  with DataModPCustService.Bookmarks do
+    Insert;
+  i := Ph_CO_BookmarkAddEditForm.ShowModal;
+  // Ph_CO_BookmarkAddEditForm.NLSLocalizer1.Caption := rsBookmarkCaption;
+  if i = mrOK then
+  begin
+    DataModPCustService.Bookmarks.Refresh;
+  end;
+end;
+
+procedure TPh_CO_BookmarkSetupFrom.ActnEditBookmarkExecute(Sender: TObject);
+resourcestring
+  rsBookmarkUpdCaption = 'Redaktə';
+begin
+  with DataModPCustService.Bookmarks do
+    Edit;
+  // Ph_CO_BookmarkAddEditForm.NLSLocalizer1.Caption:=rsBookmarkUpdCaption;
+  Ph_CO_BookmarkAddEditForm.ShowModal;
+end;
+
+procedure TPh_CO_BookmarkSetupFrom.ActnDeleteBookmarkExecute(Sender: TObject);
+resourcestring
+  BookmarkDelete = 'Silinsin?';
+begin
+
+  if MessageDlg(BookmarkDelete, mtConfirmation, [mbYes, mbNo], 0) = mrYes then
+  begin
+    with DataModPCustService.Bookmarks do
+      Delete;
+  end;
+end;
+
+procedure TPh_CO_BookmarkSetupFrom.ActnNewBookmarkExecute(Sender: TObject);
+begin
+  with DataModPCustService.Bookmarks do
+  begin
+    close;
+    open;
+  end;
+end;
+
+procedure TPh_CO_BookmarkSetupFrom.FormCreate(Sender: TObject);
+begin
+  Ph_CO_TemplAddEditForm := TPh_CO_TemplAddEditForm.Create(Self);
+  SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+end.

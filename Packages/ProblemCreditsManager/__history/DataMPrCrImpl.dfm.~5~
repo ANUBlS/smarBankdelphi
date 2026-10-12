@@ -1,0 +1,274 @@
+object DataMPrCredit: TDataMPrCredit
+  OldCreateOrder = False
+  OnCreate = DataModuleCreate
+  OnDestroy = DataModuleDestroy
+  Height = 431
+  Width = 832
+  object IntCache: TOracleDataSet
+    SQL.Strings = (
+      
+        'select p.id,p.numberofcredit,VAL_NAME,b.name,REST,DUEREST, INTER' +
+        'ESTREST,creditlineamount,dateofconclusion,duedatefirstcontract,p' +
+        '.stop,cm_folder.Get_dosyestatus(q.id,h.dueday,p.id) dstatus,'
+      ' case when nvl(fl.status ,0)=1then'
+      '0 else q.id end as'
+      
+        ' TRPROCESSED,(select count(*) from cm_folderplace_info where cre' +
+        'ditid=p.id) qeydsayi,cr.description crtype,q_dat,q_rest,q_intres' +
+        't,q_penya,'
+      ' case '
+      ' when nvl(dueday,0) between 1 and 30 then '
+      ' 1'
+      ' when nvl(dueday,0) between 31 and 300000 then '
+      ' 2'
+      ' else'
+      ' 0'
+      
+        ' end as due, cm_utils.get_qetname(p.id,1)+cm_utils.get_qetname(p' +
+        '.id,2)+cm_utils.get_qetname(p.id,3) cemqet, '
+      
+        'cm_utils.get_qetname(p.id,1) ebqal_meh, cm_utils.get_qetname(p.i' +
+        'd,2)fbqal_meh,cm_utils.get_qetname(p.id,3)penqal_meh,'
+      
+        'b.phonenumber,gr.anyinfotodisting,gr.pledgeprice,(select name fr' +
+        'om cm_mehkeme s where s.id=fl.mehid)meh,fl.mehid,'
+      
+        'DUEINTERESTREST,REST+DUEREST+INTERESTREST+DUEINTERESTREST fullre' +
+        'st, dueday,q.id qovid,q.name qovluq,f.name filial,nvl(fl.status ' +
+        ',0)status,p.currency,p.BRANCHID,p.credittype from '
+      'cm_active_credits p,cm_credittypes cr,'
+      'cm_curr_state h,cm_guarantee gr,'
+      'cm_boorowerinfo b,'
+      'cm_qovluq q,'
+      'filial_t f,'
+      'avalute_t v,'
+      
+        '(select * from  cm_folderplace s where  senddate= (select max(se' +
+        'nddate) from cm_folderplace where creditid=s.creditid)) fl'
+      ' '
+      'where p.id=h.creditid and'
+      'p.id=b.creditid and'
+      'p.qovid=q.id and'
+      
+        'p.id=gr.creditid(+)  and h.rest+h.duerest+h.interestrest+h.inter' +
+        'estrest>0 and'
+      'p.BRANCHID=f.id and'
+      '(p.id=fl.creditid(+)) and'
+      '--fl.status=1 and '
+      
+        '-- (fl.senddate= (select max(senddate) from cm_folderplace where' +
+        ' creditid=p.id))) and '
+      'p.currency=v.valute  and p.credittype=cr.id --and p.id=43112'
+      ''
+      ''
+      ''
+      ''
+      ''
+      '    order by :OrderField')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000160000003A004F0052004400450052004600490045004C00
+      440001000000050000004E414D450000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000002700000004000000490044000100000000001C0000004E0055004D00
+      4200450052004F00460043005200450044004900540001000000000008000000
+      52004500530054000100000000001800000049004E0054004500520045005300
+      540052004500530054000100000000000E000000440055004500520045005300
+      54000100000000001E00000044005500450049004E0054004500520045005300
+      5400520045005300540001000000000010000000560041004C005F004E004100
+      4D004500010000000000080000004E0041004D0045000100000000000C000000
+      4400550045004400410059000100000000000C00000051004F0056004C005500
+      51000100000000000C000000460049004C00490041004C000100000000001000
+      0000460055004C004C0052004500530054000100000000000A00000051004F00
+      5600490044000100000000001600000054005200500052004F00430045005300
+      5300450044000100000000000C00000053005400410054005500530001000000
+      000010000000430055005200520045004E004300590001000000000010000000
+      4200520041004E00430048004900440001000000000014000000430052004500
+      4400490054005400590050004500010000000000060000004400550045000100
+      00000000200000004300520045004400490054004C0049004E00450041004D00
+      4F0055004E005400010000000000100000005100450059004400530041005900
+      49000100000000002000000044004100540045004F00460043004F004E004300
+      4C005500530049004F004E000100000000002800000044005500450044004100
+      540045004600490052005300540043004F004E00540052004100430054000100
+      000000000C000000430052005400590050004500010000000000160000005000
+      48004F004E0045004E0055004D00420045005200010000000000200000004100
+      4E00590049004E0046004F0054004F00440049005300540049004E0047000100
+      000000001600000050004C004500440047004500500052004900430045000100
+      0000000008000000530054004F005000010000000000060000004D0045004800
+      0100000000000E00000044005300540041005400550053000100000000000A00
+      000051005F004400410054000100000000000C00000051005F00520045005300
+      54000100000000001200000051005F0049004E00540052004500530054000100
+      000000000E00000051005F00500045004E00590041000100000000000A000000
+      4D0045004800490044000100000000000C000000430045004D00510045005400
+      0100000000001200000045004200510041004C005F004D004500480001000000
+      00001200000046004200510041004C005F004D00450048000100000000001400
+      0000500045004E00510041004C005F004D0045004800010000000000}
+    Cursor = crSQLWait
+    Left = 40
+    Top = 32
+    object IntCacheID: TFloatField
+      FieldName = 'ID'
+    end
+    object IntCacheNUMBEROFCREDIT: TWideStringField
+      DisplayLabel = 'M'#252'qavile no'
+      FieldName = 'NUMBEROFCREDIT'
+      Size = 32
+    end
+    object IntCacheVAL_NAME: TWideStringField
+      DisplayLabel = 'Valyuta'
+      FieldName = 'VAL_NAME'
+      Size = 160
+    end
+    object IntCacheCREDITLINEAMOUNT: TFloatField
+      DisplayLabel = 'Kreditin m'#601'bl'#601#287'i'
+      FieldName = 'CREDITLINEAMOUNT'
+    end
+    object IntCacheNAME: TWideStringField
+      DisplayLabel = 'Borcalan'
+      FieldName = 'NAME'
+      Size = 256
+    end
+    object IntCacheDATEOFCONCLUSION: TDateTimeField
+      DisplayLabel = 'M'#252'qavil'#601'nin verilm'#601' tarixi'
+      FieldName = 'DATEOFCONCLUSION'
+    end
+    object IntCacheDUEDATEFIRSTCONTRACT: TDateTimeField
+      DisplayLabel = 'M'#252'qavil'#601'nin bitm'#601' tarixi'
+      FieldName = 'DUEDATEFIRSTCONTRACT'
+    end
+    object IntCacheCRTYPE: TWideStringField
+      DisplayLabel = 'Kredit m'#601'hsulu'
+      FieldName = 'CRTYPE'
+      Size = 512
+    end
+    object IntCacheREST: TFloatField
+      DisplayLabel = #399'.B qal'#305'q'
+      FieldName = 'REST'
+    end
+    object IntCacheDUEREST: TFloatField
+      DisplayLabel = 'G.B qal'#305'q'
+      FieldName = 'DUEREST'
+    end
+    object IntCacheINTERESTREST: TFloatField
+      DisplayLabel = 'F.B qal'#305'q'
+      FieldName = 'INTERESTREST'
+    end
+    object IntCacheDUEINTERESTREST: TFloatField
+      DisplayLabel = 'GF.B qal'#305'q'
+      FieldName = 'DUEINTERESTREST'
+    end
+    object IntCacheDUEDAY: TFloatField
+      DisplayLabel = 'Gec g'#252'n'
+      FieldName = 'DUEDAY'
+    end
+    object IntCacheQOVLUQ: TWideStringField
+      DisplayLabel = 'Qovluq'
+      FieldName = 'QOVLUQ'
+      Size = 120
+    end
+    object IntCacheFILIAL: TWideStringField
+      DisplayLabel = 'Filal'
+      FieldName = 'FILIAL'
+      Size = 360
+    end
+    object IntCacheFULLREST: TFloatField
+      FieldName = 'FULLREST'
+    end
+    object IntCacheQOVID: TFloatField
+      FieldName = 'QOVID'
+      Visible = False
+    end
+    object IntCacheTRPROCESSED: TFloatField
+      FieldName = 'TRPROCESSED'
+      Visible = False
+    end
+    object IntCacheSTATUS: TFloatField
+      FieldName = 'STATUS'
+    end
+    object IntCacheCURRENCY: TFloatField
+      FieldName = 'CURRENCY'
+      Visible = False
+    end
+    object IntCacheBRANCHID: TFloatField
+      FieldName = 'BRANCHID'
+      Visible = False
+    end
+    object IntCacheCREDITTYPE: TFloatField
+      FieldName = 'CREDITTYPE'
+      Visible = False
+    end
+    object IntCacheDUE: TFloatField
+      FieldName = 'DUE'
+    end
+    object IntCachePHONENUMBER: TWideStringField
+      DisplayLabel = 'Telefon'
+      FieldName = 'PHONENUMBER'
+      Size = 1020
+    end
+    object IntCacheANYINFOTODISTING: TWideStringField
+      DisplayLabel = 'Girovu f'#601'riql'#601'ndir'#601'n m'#601'lumat'
+      FieldName = 'ANYINFOTODISTING'
+      Size = 512
+    end
+    object IntCachePLEDGEPRICE: TFloatField
+      DisplayLabel = 'Girovun d'#601'y'#601'ri'
+      FieldName = 'PLEDGEPRICE'
+    end
+    object IntCacheQEYDSAYI: TFloatField
+      DisplayLabel = 'Qeyd say'#305
+      FieldName = 'QEYDSAYI'
+    end
+    object IntCacheSTOP: TWideStringField
+      FieldName = 'STOP'
+      Size = 1
+    end
+    object IntCacheMEH: TWideStringField
+      DisplayLabel = #304'cra '#351#246'b'#601'si'
+      FieldName = 'MEH'
+      Size = 150
+    end
+    object IntCacheDSTATUS: TFloatField
+      FieldName = 'DSTATUS'
+    end
+    object IntCacheQ_DAT: TDateTimeField
+      DisplayLabel = 'Q'#601'tnam'#601' tarixi'
+      FieldName = 'Q_DAT'
+    end
+    object IntCacheQ_REST: TFloatField
+      DisplayLabel = 'Q '#399'sas '
+      FieldName = 'Q_REST'
+    end
+    object IntCacheQ_INTREST: TFloatField
+      DisplayLabel = 'Q fazi'
+      FieldName = 'Q_INTREST'
+    end
+    object IntCacheQ_PENYA: TFloatField
+      DisplayLabel = 'Q c'#601'rim'#601
+      FieldName = 'Q_PENYA'
+    end
+    object IntCacheMEHID: TFloatField
+      FieldName = 'MEHID'
+      Visible = False
+    end
+    object IntCacheEBQAL_MEH: TFloatField
+      DisplayLabel = 'Q'#601'tnam'#601' '#399'.B qal'#305'q'
+      FieldName = 'EBQAL_MEH'
+    end
+    object IntCacheFBQAL_MEH: TFloatField
+      DisplayLabel = 'Q'#601'tnam'#601' F.B qal'#305'q'
+      FieldName = 'FBQAL_MEH'
+    end
+    object IntCachePENQAL_MEH: TFloatField
+      DisplayLabel = 'Q'#601'tnam'#601' penya qal'#305'q'
+      FieldName = 'PENQAL_MEH'
+    end
+    object IntCacheCEMQET: TFloatField
+      FieldName = 'CEMQET'
+    end
+  end
+  object DataSrcIntCache: TDataSource
+    DataSet = IntCache
+    Left = 40
+    Top = 120
+  end
+end

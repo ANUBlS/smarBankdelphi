@@ -1,0 +1,80 @@
+﻿unit CourtSend;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, DBGridEh, StdCtrls, Buttons, Mask, DBCtrlsEh, DBLookupEh, ExtCtrls,
+  XFSCtrls;
+
+type
+  TFormSend = class(TForm)
+    XFPanel1: TXFPanel;
+    Label1: TLabel;
+    DBLookupComboboxEh2: TDBLookupComboboxEh;
+    BitBtn1: TBitBtn;
+    BitBtn2: TBitBtn;
+    procedure BitBtn1Click(Sender: TObject);
+  private
+    { Private declarations }
+    function ExcuseMeUser(Question : String) : Boolean;
+  public
+    { Public declarations }
+  end;
+
+var
+  FormSend: TFormSend;
+
+implementation
+uses UnitDataModuleCourt;
+
+{$R *.dfm}
+
+function TFormSend.ExcuseMeUser(Question : String) : Boolean;
+begin
+  Result :=
+    MessageDlg(
+      Question
+     ,mtConfirmation
+     ,[mbYes,mbNo]
+     ,0
+     ) = mrYes;
+end;
+
+
+procedure TFormSend.BitBtn1Click(Sender: TObject);
+resourcestring
+  rsConfirmForOne = '%s  - № li kredit  %s. Əminsiniz?';
+  rsConfirmForAll = '%d - sayda kredit dosyesi %s. Əminsiniz?';
+  rsCalcPercent   = 'göndəriləcək';
+  var
+  id:integer;
+begin
+ if DBLookupComboboxEh2.text='' then
+   begin
+   ShowMessage('Gondərəcəyiniz yeri seçin!');
+   exit;
+   end;
+      with DataModuleCourt.ODSCourt do
+      begin
+      id:=FieldByName('id').AsInteger;
+      if not
+        ExcuseMeUser(
+              Format(rsConfirmForOne,[FieldByName('numberofcredit').AsString,rsCalcPercent])
+              ) then   Exit;
+
+  with DataModuleCourt.ct_control do
+  begin
+    CallProcedure('add_folder',[
+    'p_id', FieldByName('id').AsInteger ,
+    'p_courtidsender', FieldByName('courtid').AsInteger,
+    'p_courtidreciver',DBLookupComboboxEh2.KeyValue
+    ]);
+   end;
+     Refresh;
+     Locate('id', id, []);
+    end;
+    FormSend.Close;
+end;
+
+end.

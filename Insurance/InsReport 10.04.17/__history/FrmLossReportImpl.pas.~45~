@@ -1,0 +1,387 @@
+﻿unit FrmLossReportImpl;
+                      //XFCheckBox3
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ExtCtrls, XFSCtrls, StdCtrls, ComCtrls, DBCtrls, CMExcelExport;
+
+type
+  TFrmLossReport = class(TForm)
+    XFPanel1: TXFPanel;
+    XFPanel2: TXFPanel;
+    XFButton1: TXFButton;
+    XFButton2: TXFButton;
+    XFPanel3: TXFPanel;
+    XFGroupBox3: TXFGroupBox;
+    XFCheckBox1: TXFCheckBox;
+    DBLookupComboBox1: TDBLookupComboBox;
+    XFGroupBox6: TXFGroupBox;
+    XFCheckBox3: TXFCheckBox;
+    ComboBox1: TComboBox;
+    XFGroupBox8: TXFGroupBox;
+    DBLookupComboBox2: TDBLookupComboBox;
+    XFCheckBox5: TXFCheckBox;
+    XFPanel4: TXFPanel;
+    XFGroupBox7: TXFGroupBox;
+    XFCheckBox4: TXFCheckBox;
+    DBLookupComboBox3: TDBLookupComboBox;
+    XFGroupBox5: TXFGroupBox;
+    XFCheckBox2: TXFCheckBox;
+    Edit1: TEdit;
+    XFGroupBox9: TXFGroupBox;
+    XFCheckBox6: TXFCheckBox;
+    DateTimePicker10: TDateTimePicker;
+    DateTimePicker11: TDateTimePicker;
+    Memo1: TMemo;
+    ExcelExport: TCMExcelExport;
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure XFButton2Click(Sender: TObject);
+    procedure XFButton1Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+       procedure ActionFilterExecute(Sender: TObject);
+       var
+       FilterStr1,FilterStrimtina,FilterStrarasdirma,FilterStrodenis,Filterall,FilterOdenmeReal:string;
+  end;
+
+var
+  FrmLossReport: TFrmLossReport;
+
+implementation
+
+{$R *.dfm}
+       uses DMReportImpl;
+procedure TFrmLossReport.FormCreate(Sender: TObject);
+begin
+DMReport.DSALLImtinaReploss.open;
+DMReport.DSALLarasdirmaReploss.open;
+DMReport.DSALLarodenisReploss.open;
+DMReport.DSALLReploss.Open;
+DMReport.DSPaymentReal_Reploss.Open;
+
+//showmessage('salam1');
+DMReport.DSALLins_type.open;
+DMReport.DSALLCust.open;
+DMReport.DSAlldict_emp_acc.open;
+  //showmessage('salam2');
+FilterStrimtina:=DMReport.DSALLImtinaReploss.SQL.Text;
+FilterStrarasdirma:=DMReport.DSALLarasdirmaReploss.SQL.Text;
+FilterStrodenis:=DMReport.DSALLarodenisReploss.SQL.Text;
+Filterall:=DMReport.DSALLReploss.SQL.Text;
+FilterOdenmeReal:=DMReport.DSPaymentReal_Reploss.SQL.Text;
+//showmessage('salam3');
+end;
+
+procedure TFrmLossReport.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+if ord(key)=vk_escape then  close;
+
+end;
+
+procedure TFrmLossReport.FormShow(Sender: TObject);
+begin
+XFCheckBox1.Checked:=false;
+XFCheckBox2.Checked:=false;
+XFCheckBox3.Checked:=false;
+XFCheckBox4.Checked:=false;
+XFCheckBox5.Checked:=false;
+XFCheckBox6.Checked:=false;
+DBLookupComboBox1.KeyValue:='';
+DBLookupComboBox2.KeyValue:='';
+DBLookupComboBox3.KeyValue:='';
+ComboBox1.Text:='';
+Edit1.Text:='';
+
+DateTimePicker10.DateTime:=DMReport.DSsysdat.FieldByName('tek_dat').AsDateTime;
+DateTimePicker11.DateTime:=DMReport.DSsysdat.FieldByName('tek_dat').AsDateTime;
+end;
+
+procedure TFrmLossReport.XFButton1Click(Sender: TObject);
+begin
+if (XFCheckBox3.Checked=false) or(XFCheckBox3.Checked=true) and (ComboBox1.Text='')  then
+begin
+  showmessage('Diqqet . status secilmeyib');
+end;
+
+
+ActionFilterExecute(Sender);
+end;
+    procedure TFrmLossReport.ActionFilterExecute(Sender: TObject);
+
+   function  CheckFiltered(IsChecked: Boolean; const FilterStr: String; Args: array of const): String;
+   begin
+    Result :='';
+    if  IsChecked  then
+     Result :=Format(FilterStr, Args);
+
+   end;
+
+const
+   BooleanPrefix = ' AND ';
+   p_instypeFilter= '(ii.id=%d)';
+   p_polisno= '(icr.policy_num=%d)';
+   nameFilter = '(ic.cust_id=%d)';
+   p_status='(inscs.STATUS=%d)';
+   p_EMPL_ACCFilter='(ids.EMPL_ACC=%d)';
+
+
+var
+   p_instype: String;
+   p_Polis:String;
+   p_d_status:String;
+   p_claim_dat:String;
+   p_name:string;
+   p_EMPL_ACC:string;
+
+   FilterStr: String;
+begin
+ FilterStr :='';
+
+p_instype:=CheckFiltered(
+              XFCheckBox1.Checked
+             ,p_instypeFilter
+             ,[DBLookupComboBox1.ListSource.DataSet.FieldByName('id').asinteger]
+              );
+{if  (ComboBox1.ItemIndex<>3) then
+begin
+p_d_status:=CheckFiltered(
+              XFCheckBox3.Checked
+             ,p_status
+             ,[ComboBox1.ItemIndex]
+              );
+              end;}
+
+p_name:=CheckFiltered(
+              XFCheckBox4.Checked
+             ,nameFilter
+             ,[DBLookupComboBox3.ListSource.DataSet.FieldByName('id').asinteger]
+              );
+
+ p_EMPL_ACC:=CheckFiltered(
+              XFCheckBox5.Checked
+             ,p_EMPL_ACCFilter
+             ,[DBLookupComboBox2.ListSource.DataSet.FieldByName('id').asinteger]
+              );
+
+    if XFCheckBox2.Checked=true then
+    begin
+    p_Polis:=' icr.policy_num='+''''+Edit1.Text+'''';
+
+    end
+    else
+    begin
+     p_Polis:='';
+    end;
+
+
+        if XFCheckBox6.Checked=true then
+    begin
+    p_claim_dat:=' TO_DATE(ids.claim_date,''dd.MM.yyyy'')'+ ' between  '+''''+datetostr(DateTimePicker10.DateTime)+''''+' and '+''''+datetostr(DateTimePicker11.DateTime)+'''';
+    //p_claim_dat:=' c_d.claim_date='+ ' between  ' ;
+    //+''''+datetostr(DateTimePicker10.DateTime)+''''+' and '+''''+datetostr(DateTimePicker11.DateTime)+'''';
+    end
+    else
+    begin
+     p_claim_dat:='';
+    end;
+
+
+
+   if  XFCheckBox1.Checked
+  then
+  if  FilterStr=''  then
+    FilterStr :=p_instype
+  else
+    FilterStr :=FilterStr + BooleanPrefix + p_instype;
+
+      if  XFCheckBox2.Checked
+  then
+  if  FilterStr=''  then
+    FilterStr :=p_Polis
+  else
+    FilterStr :=FilterStr + BooleanPrefix + p_Polis;
+
+
+    {if  XFCheckBox3.Checked
+  then
+  if  FilterStr=''  then
+    FilterStr :=p_d_status
+  else
+    FilterStr :=FilterStr + BooleanPrefix + p_d_status;
+      }
+
+    if  XFCheckBox4.Checked
+  then
+  if  FilterStr=''  then
+    FilterStr :=p_name
+  else
+    FilterStr :=FilterStr + BooleanPrefix + p_name;
+
+
+    if  XFCheckBox6.Checked
+  then
+  if  FilterStr=''  then
+    FilterStr :=p_claim_dat
+  else
+    FilterStr :=FilterStr + BooleanPrefix + p_claim_dat;
+
+      if  XFCheckBox5.Checked
+  then
+  if  FilterStr=''  then
+    FilterStr :=p_EMPL_ACC
+  else
+    FilterStr :=FilterStr + BooleanPrefix + p_EMPL_ACC;
+
+
+
+         FilterStr:=' and '+ FilterStr;
+
+        if (XFCheckBox1.Checked=false)
+        and (XFCheckBox2.Checked=false)
+        and (XFCheckBox3.Checked=false)
+        and (XFCheckBox4.Checked=false)
+        and (XFCheckBox6.Checked=false) then
+          begin
+          FilterStr:='';
+          end;
+          if FilterStr=' and ' then
+          begin
+             FilterStr:='';
+          end;
+
+
+        //showmessage(FilterStr);
+
+
+       if (ComboBox1.ItemIndex=1)and (XFCheckBox3.Checked=true) then
+begin
+       FilterStr:=FilterStrimtina+FilterStr;
+      with ExcelExport do
+   begin
+     DMReport.DSALLImtinaReploss.sql.Clear;
+ DMReport.DSALLImtinaReploss.sql.Text:=FilterStr;
+  memo1.Text:=DMReport.DSALLImtinaReploss.sql.Text;
+  DMReport.DSALLImtinaReploss.close;
+   DMReport.DSALLImtinaReploss.Open;
+   if DMReport.DSALLImtinaReploss.RecordCount<>0 then
+         begin
+      Connect;
+      ExportDataset(DMReport.DSALLImtinaReploss,'Imtina zererleri.',True,false);
+      Disconnect;
+      end
+      else
+
+      showmessage('Uyğun seçimlərə uyğun məluamt yoxdur!');
+   end  ;
+
+end;
+
+
+       if (ComboBox1.ItemIndex=0)and (XFCheckBox3.Checked=true) then
+begin
+       FilterStr:=FilterStrarasdirma+FilterStr;
+      with ExcelExport do
+   begin
+     DMReport.DSALLarasdirmaReploss.sql.Clear;
+ DMReport.DSALLarasdirmaReploss.sql.Text:=FilterStr;
+  memo1.Text:=DMReport.DSALLarasdirmaReploss.sql.Text;
+  DMReport.DSALLarasdirmaReploss.close;
+   DMReport.DSALLarasdirmaReploss.Open;
+   if DMReport.DSALLarasdirmaReploss.RecordCount<>0 then
+         begin
+      Connect;
+      ExportDataset(DMReport.DSALLarasdirmaReploss,'Arasdirilan zererleri.',True,false);
+      Disconnect;
+      end
+      else
+
+      showmessage('Uyğun seçimlərə uyğun məluamt yoxdur!');
+   end  ;
+
+end;
+
+
+       if (ComboBox1.ItemIndex=2)and (XFCheckBox3.Checked=true) then
+begin
+       FilterStr:=FilterStrodenis+FilterStr;
+      with ExcelExport do
+   begin
+     DMReport.DSALLarodenisReploss.sql.Clear;
+ DMReport.DSALLarodenisReploss.sql.Text:=FilterStr;
+  memo1.Text:=DMReport.DSALLarodenisReploss.sql.Text;
+  DMReport.DSALLarodenisReploss.close;
+   DMReport.DSALLarodenisReploss.Open;
+   if DMReport.DSALLarodenisReploss.RecordCount<>0 then
+         begin
+      Connect;
+      ExportDataset(DMReport.DSALLarodenisReploss,'Ödəniş zererleri.',True,false);
+      Disconnect;
+      end
+      else
+
+      showmessage('Uyğun seçimlərə uyğun məluamt yoxdur!');
+   end  ;
+
+   end  ;
+
+   if (ComboBox1.ItemIndex=3) and (XFCheckBox3.Checked=true) then
+begin
+       FilterStr:=FilterOdenmeReal+FilterStr;
+      with ExcelExport do
+   begin
+     DMReport.DSPaymentReal_Reploss.sql.Clear;
+ DMReport.DSPaymentReal_Reploss.sql.Text:=FilterStr;
+  memo1.Text:=DMReport.DSPaymentReal_Reploss.sql.Text;
+  DMReport.DSPaymentReal_Reploss.close;
+   DMReport.DSPaymentReal_Reploss.Open;
+   if DMReport.DSPaymentReal_Reploss.RecordCount<>0 then
+         begin
+      Connect;
+      ExportDataset(DMReport.DSPaymentReal_Reploss,' zererleri.',True,false);
+      Disconnect;
+      end
+      else
+
+      showmessage('Uyğun seçimlərə uyğun məluamt yoxdur!');
+   end  ;
+
+end;
+
+   if (ComboBox1.ItemIndex=4) and (XFCheckBox3.Checked=true) then
+begin
+       FilterStr:=Filterall+FilterStr;
+      with ExcelExport do
+   begin
+     DMReport.DSALLReploss.sql.Clear;
+ DMReport.DSALLReploss.sql.Text:=FilterStr;
+  memo1.Text:=DMReport.DSALLReploss.sql.Text;
+  DMReport.DSALLReploss.close;
+   DMReport.DSALLReploss.Open;
+   if DMReport.DSALLReploss.RecordCount<>0 then
+         begin
+      Connect;
+      ExportDataset(DMReport.DSALLReploss,' zererleri.',True,false);
+      Disconnect;
+      end
+      else
+
+      showmessage('Uyğun seçimlərə uyğun məluamt yoxdur!');
+   end  ;
+
+end;
+
+
+
+end;
+
+procedure TFrmLossReport.XFButton2Click(Sender: TObject);
+begin
+close;
+end;
+
+end.

@@ -1,0 +1,697 @@
+object AccountsForPeriodForm: TAccountsForPeriodForm
+  Left = 388
+  Top = 44
+  Width = 767
+  Height = 499
+  Caption = 'Accounts For Period'
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  OnCreate = ActiveFormCreate
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 767
+    Height = 87
+    Align = alTop
+    TabOrder = 0
+    object SBExecute: TSpeedButton
+      Left = 568
+      Top = 8
+      Width = 70
+      Height = 36
+      Flat = True
+      Glyph.Data = {
+        36010000424D3601000000000000760000002800000015000000100000000100
+        040000000000C000000000000000000000001000000000000000000000000000
+        80000080000000808000800000008000800080800000C0C0C000808080000000
+        FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00333333333333
+        333333333000333333333333333333333000338FF3FF3333333333333000338C
+        F38CFF33333333333000338CF38CCCFF333333333000338CF38CCCCCFF333333
+        3000338CF38CCCCCCCFF33333000338CF38CCCCCCCCCFF333000338CF38CCCCC
+        CCCC88F33000338CF38CCCCCCC8833333000338CF38CCCCC883333333000338C
+        F38CCC88333333333000338CF38C88333333333330003388F388333333333333
+        3000333333333333333333333000333333333333333333333000}
+      OnClick = SBExecuteClick
+    end
+    object SBExcelExport: TSpeedButton
+      Left = 644
+      Top = 8
+      Width = 70
+      Height = 36
+      Hint = 'Excel  Export '
+      Flat = True
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      Glyph.Data = {
+        36040000424D3604000000000000360000002800000010000000100000000100
+        2000000000000004000000000000000000000000000000000000FF00FF00FF00
+        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF000080
+        0000008000000080000000800000008000000080000000800000008000000080
+        00000080000000800000008000000080000000800000FF00FF00FF00FF000080
+        0000008000000080000000800000008000000080000000800000008000000080
+        00000080000000800000008000000080000000800000FF00FF00FF00FF000080
+        0000FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF000080000000800000FF00FF00FF00FF000080
+        0000FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF000080000000800000FF00FF00FF00FF000080
+        0000FFFFFF000080000000800000008000000080000000800000008000000080
+        00000080000000800000008000000080000000800000FF00FF00FF00FF000080
+        0000FFFFFF000080000000800000008000000080000000800000FFFFFF000080
+        00000080000000800000FFFFFF000080000000800000FF00FF00FF00FF000080
+        0000FFFFFF00FFFFFF00008000000080000000800000FFFFFF00008000000080
+        00000080000000800000FFFFFF000080000000800000FF00FF00FF00FF000080
+        0000FFFFFF00FFFFFF00FFFFFF0000800000FFFFFF0000800000008000000080
+        0000FFFFFF00FFFFFF00FFFFFF000080000000800000FF00FF00FF00FF000080
+        0000FFFFFF00FFFFFF00FFFFFF00FFFFFF000080000000800000008000000080
+        0000FFFFFF00FFFFFF00FFFFFF000080000000800000FF00FF00FF00FF000080
+        0000FFFFFF00FFFFFF00FFFFFF00008000000080000000800000008000000080
+        000000800000FFFFFF00FFFFFF000080000000800000FF00FF00FF00FF000080
+        0000FFFFFF00FFFFFF00008000000080000000800000FFFFFF00008000000080
+        00000080000000800000FFFFFF000080000000800000FF00FF00FF00FF000080
+        0000FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF000080000000800000FF00FF00FF00FF000080
+        0000FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF000080000000800000FF00FF00FF00FF000080
+        0000008000000080000000800000008000000080000000800000008000000080
+        00000080000000800000008000000080000000800000FF00FF00FF00FF00FF00
+        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00}
+      Layout = blGlyphRight
+      ParentFont = False
+      ParentShowHint = False
+      ShowHint = True
+      OnClick = SBExcelExportClick
+    end
+    object Label1: TLabel
+      Left = 153
+      Top = 59
+      Width = 78
+      Height = 13
+      Caption = #1041#1072#1083#1072#1085#1089' '#1097#1077#1089#1072#1073#1099
+    end
+    object Label2: TLabel
+      Left = 547
+      Top = 59
+      Width = 76
+      Height = 13
+      Caption = #1097#1077#1089#1072#1073' '#1089#1080#1084#1074#1086#1083#1091
+    end
+    object GroupBox1: TGroupBox
+      Left = 1
+      Top = 1
+      Width = 147
+      Height = 85
+      Align = alLeft
+      Caption = #1058#1072#1088#1080#1093' '#1072#1088#1072#1083#1099#1100#1099
+      TabOrder = 0
+      object DTPFirstDate: TDateTimePicker
+        Left = 9
+        Top = 18
+        Width = 129
+        Height = 21
+        Date = 37910.636930740700000000
+        Time = 37910.636930740700000000
+        TabOrder = 0
+      end
+      object DTPLastDate: TDateTimePicker
+        Left = 9
+        Top = 53
+        Width = 129
+        Height = 21
+        Date = 37910.636940868100000000
+        Time = 37910.636940868100000000
+        TabOrder = 1
+      end
+    end
+    object GroupBox2: TGroupBox
+      Left = 148
+      Top = 1
+      Width = 198
+      Height = 45
+      Caption = #1060#1080#1083#1080#1072#1083
+      TabOrder = 1
+      object BranchesCB: TSearchCombo
+        Left = 4
+        Top = 16
+        Width = 189
+        Height = 22
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -12
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 0
+        DataSource = FPADataMod.DataSrcBranches
+        ViewField = 'Name'
+        DefaultString = #220'mumi bank '#252'zr'#601
+        DefaultStringUse = True
+        DefaultStringColor = clNavy
+      end
+    end
+    object AccountsListEdit: TEdit
+      Left = 230
+      Top = 55
+      Width = 307
+      Height = 21
+      TabOrder = 2
+    end
+    object GroupBox3: TGroupBox
+      Left = 347
+      Top = 1
+      Width = 188
+      Height = 45
+      Caption = #1048#1089#1090#1080#1092#1072#1076#1103#1095#1080
+      TabOrder = 3
+      object UsersCB: TSearchCombo
+        Left = 4
+        Top = 16
+        Width = 178
+        Height = 22
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -12
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 0
+        DataSource = FPADataMod.DataSrcSysUsers
+        ViewField = 'NAME'
+        DefaultString = 'B'#252't'#252'n istifad'#601#231'il'#601'r'
+        DefaultStringUse = True
+        DefaultStringColor = clNavy
+      end
+    end
+    object simvoledit: TEdit
+      Left = 625
+      Top = 54
+      Width = 185
+      Height = 21
+      CharCase = ecUpperCase
+      TabOrder = 4
+    end
+  end
+  object AccountsViewer: TDBGrid
+    Left = 0
+    Top = 87
+    Width = 767
+    Height = 412
+    Align = alClient
+    DataSource = FPADataMod.DataSrcAccounts
+    DrawingStyle = gdsGradient
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -12
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit, dgTitleClick]
+    ParentFont = False
+    TabOrder = 1
+    TitleFont.Charset = DEFAULT_CHARSET
+    TitleFont.Color = clWhite
+    TitleFont.Height = -11
+    TitleFont.Name = 'Azl Sans Serif'
+    TitleFont.Style = []
+    OnTitleClick = AccountsViewerTitleClick
+    Columns = <
+      item
+        Color = clSilver
+        Expanded = False
+        FieldName = 'ACCCURRENCY'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clNavy
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        Title.Caption = '   $'
+        Title.Color = clNavy
+        Title.Font.Charset = DEFAULT_CHARSET
+        Title.Font.Color = clNavy
+        Title.Font.Height = -11
+        Title.Font.Name = 'Tahoma'
+        Title.Font.Style = []
+        Width = 30
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'BALANCENO'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        Title.Color = clNavy
+        Title.Font.Charset = DEFAULT_CHARSET
+        Title.Font.Color = clNavy
+        Title.Font.Height = -11
+        Title.Font.Name = 'Tahoma'
+        Title.Font.Style = []
+        Width = 73
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'ACCNAME'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        Title.Color = clNavy
+        Title.Font.Charset = DEFAULT_CHARSET
+        Title.Font.Color = clNavy
+        Title.Font.Height = -11
+        Title.Font.Name = 'Tahoma'
+        Title.Font.Style = []
+        Width = 152
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'OPENDATE'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        Title.Color = clNavy
+        Title.Font.Charset = DEFAULT_CHARSET
+        Title.Font.Color = clNavy
+        Title.Font.Height = -11
+        Title.Font.Name = 'Tahoma'
+        Title.Font.Style = []
+        Width = 90
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'CLOSEDATE'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        Title.Color = clNavy
+        Title.Font.Charset = DEFAULT_CHARSET
+        Title.Font.Color = clNavy
+        Title.Font.Height = -11
+        Title.Font.Name = 'Tahoma'
+        Title.Font.Style = []
+        Width = 90
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'TAXID'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        Title.Color = clNavy
+        Title.Font.Charset = DEFAULT_CHARSET
+        Title.Font.Color = clNavy
+        Title.Font.Height = -11
+        Title.Font.Name = 'Tahoma'
+        Title.Font.Style = []
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'ACCNO'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        Title.Color = clNavy
+        Title.Font.Charset = DEFAULT_CHARSET
+        Title.Font.Color = clNavy
+        Title.Font.Height = -11
+        Title.Font.Name = 'Tahoma'
+        Title.Font.Style = []
+        Width = 190
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'OPERATORID'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        Title.Color = clNavy
+        Title.Font.Charset = DEFAULT_CHARSET
+        Title.Font.Color = clNavy
+        Title.Font.Height = -11
+        Title.Font.Name = 'Tahoma'
+        Title.Font.Style = []
+        Width = 92
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'SEXSIYYETID'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        Title.Color = clNavy
+        Title.Font.Charset = DEFAULT_CHARSET
+        Title.Font.Color = clNavy
+        Title.Font.Height = -11
+        Title.Font.Name = 'Tahoma'
+        Title.Font.Style = []
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'REZ'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        Title.Color = clNavy
+        Title.Font.Charset = DEFAULT_CHARSET
+        Title.Font.Color = clNavy
+        Title.Font.Height = -11
+        Title.Font.Name = 'Tahoma'
+        Title.Font.Style = []
+        Width = 64
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'PHONE'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        Title.Color = clNavy
+        Title.Font.Charset = DEFAULT_CHARSET
+        Title.Font.Color = clNavy
+        Title.Font.Height = -11
+        Title.Font.Name = 'Tahoma'
+        Title.Font.Style = []
+        Width = 64
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'DOGUM'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        Title.Color = clNavy
+        Title.Font.Charset = DEFAULT_CHARSET
+        Title.Font.Color = clNavy
+        Title.Font.Height = -11
+        Title.Font.Name = 'Tahoma'
+        Title.Font.Style = []
+        Width = 64
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'ADRESS'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        Title.Color = clNavy
+        Title.Font.Charset = DEFAULT_CHARSET
+        Title.Font.Color = clNavy
+        Title.Font.Height = -11
+        Title.Font.Name = 'Tahoma'
+        Title.Font.Style = []
+        Width = 64
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'ADI'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        Title.Color = clNavy
+        Title.Font.Charset = DEFAULT_CHARSET
+        Title.Font.Color = clNavy
+        Title.Font.Height = -11
+        Title.Font.Name = 'Tahoma'
+        Title.Font.Style = []
+        Width = 64
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'ENGADI'
+        Visible = True
+      end>
+  end
+  object Memo1: TMemo
+    Left = 48
+    Top = 160
+    Width = 393
+    Height = 145
+    Lines.Strings = (
+      'Memo1')
+    TabOrder = 2
+    Visible = False
+  end
+  object AccountsExporter: TExcelExporter
+    ExportSource = FPADataMod.DataSrcAccounts
+    SheetName = 'Accounts'
+    ShowTitles = True
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    Left = 600
+    Top = 176
+  end
+  object CMExcelExport1: TCMExcelExport
+    StyleColumnWidth = cwDefault
+    ColumnWidth = 0
+    FontTitles.Charset = DEFAULT_CHARSET
+    FontTitles.Color = clWindowText
+    FontTitles.Height = -11
+    FontTitles.Name = 'Tahoma'
+    FontTitles.Style = []
+    OrientationTitles = 0
+    FontData.Charset = DEFAULT_CHARSET
+    FontData.Color = clWindowText
+    FontData.Height = -11
+    FontData.Name = 'Tahoma'
+    FontData.Style = []
+    FontSummary.Charset = DEFAULT_CHARSET
+    FontSummary.Color = clWindowText
+    FontSummary.Height = -11
+    FontSummary.Name = 'Tahoma'
+    FontSummary.Style = []
+    SummarySelection = ssNone
+    SummaryCalculation = scSUM
+    Left = 528
+    Top = 232
+  end
+  object QExport4Dialog1: TQExport4Dialog
+    AllowedExports = [aeXlsx]
+    Formats.DecimalSeparator = '.'
+    Formats.ThousandSeparator = ','
+    Formats.DateSeparator = '.'
+    Formats.TimeSeparator = ':'
+    Formats.BooleanTrue = 'true'
+    Formats.BooleanFalse = 'false'
+    Formats.IntegerFormat = '#,###,##0'
+    Formats.FloatFormat = '#,###,##0.00'
+    Formats.DateFormat = 'dd/MM/yyyy'
+    Formats.TimeFormat = 'hh:mm'
+    Formats.DateTimeFormat = 'dd/MM/yyyy hh:mm'
+    Formats.CurrencyFormat = ' #,###,##0.00'
+    RTFOptions.CaptionStyle.Font.Charset = DEFAULT_CHARSET
+    RTFOptions.CaptionStyle.Font.Color = clBlack
+    RTFOptions.CaptionStyle.Font.Height = -13
+    RTFOptions.CaptionStyle.Font.Name = 'Arial'
+    RTFOptions.CaptionStyle.Font.Style = [fsBold]
+    RTFOptions.CaptionStyle.AllowHighlight = True
+    RTFOptions.CaptionStyle.Alignment = talCenter
+    RTFOptions.DataStyle.Font.Charset = DEFAULT_CHARSET
+    RTFOptions.DataStyle.Font.Color = clBlack
+    RTFOptions.DataStyle.Font.Height = -13
+    RTFOptions.DataStyle.Font.Name = 'Arial'
+    RTFOptions.DataStyle.Font.Style = []
+    RTFOptions.DataStyle.AllowHighlight = True
+    RTFOptions.FooterStyle.Font.Charset = DEFAULT_CHARSET
+    RTFOptions.FooterStyle.Font.Color = clBlack
+    RTFOptions.FooterStyle.Font.Height = -13
+    RTFOptions.FooterStyle.Font.Name = 'Arial'
+    RTFOptions.FooterStyle.Font.Style = []
+    RTFOptions.FooterStyle.AllowHighlight = True
+    RTFOptions.HeaderStyle.Font.Charset = DEFAULT_CHARSET
+    RTFOptions.HeaderStyle.Font.Color = clBlack
+    RTFOptions.HeaderStyle.Font.Height = -13
+    RTFOptions.HeaderStyle.Font.Name = 'Arial'
+    RTFOptions.HeaderStyle.Font.Style = []
+    RTFOptions.HeaderStyle.AllowHighlight = True
+    RTFOptions.StripStyles = <>
+    HTMLPageOptions.TextFont.Charset = DEFAULT_CHARSET
+    HTMLPageOptions.TextFont.Color = clWhite
+    HTMLPageOptions.TextFont.Height = -11
+    HTMLPageOptions.TextFont.Name = 'Arial'
+    HTMLPageOptions.TextFont.Style = []
+    CSVOptions.Comma = ','
+    PDFOptions.PageOptions.MarginLeft = 1.170000000000000000
+    PDFOptions.PageOptions.MarginRight = 0.570000000000000000
+    PDFOptions.PageOptions.MarginTop = 0.780000000000000000
+    PDFOptions.PageOptions.MarginBottom = 0.780000000000000000
+    PDFOptions.HeaderFont.UserFont.Charset = DEFAULT_CHARSET
+    PDFOptions.HeaderFont.UserFont.Color = clWindowText
+    PDFOptions.HeaderFont.UserFont.Height = -13
+    PDFOptions.HeaderFont.UserFont.Name = 'Arial'
+    PDFOptions.HeaderFont.UserFont.Style = []
+    PDFOptions.CaptionFont.UserFont.Charset = DEFAULT_CHARSET
+    PDFOptions.CaptionFont.UserFont.Color = clWindowText
+    PDFOptions.CaptionFont.UserFont.Height = -13
+    PDFOptions.CaptionFont.UserFont.Name = 'Arial'
+    PDFOptions.CaptionFont.UserFont.Style = []
+    PDFOptions.DataFont.UserFont.Charset = DEFAULT_CHARSET
+    PDFOptions.DataFont.UserFont.Color = clWindowText
+    PDFOptions.DataFont.UserFont.Height = -13
+    PDFOptions.DataFont.UserFont.Name = 'Arial'
+    PDFOptions.DataFont.UserFont.Style = []
+    PDFOptions.FooterFont.UserFont.Charset = DEFAULT_CHARSET
+    PDFOptions.FooterFont.UserFont.Color = clWindowText
+    PDFOptions.FooterFont.UserFont.Height = -13
+    PDFOptions.FooterFont.UserFont.Name = 'Arial'
+    PDFOptions.FooterFont.UserFont.Style = []
+    XLSOptions.PageFooter = 'Page &P of &N'
+    XLSOptions.SheetTitle = 'Sheet 1'
+    XLSOptions.CaptionFormat.Font.Style = [xfsBold]
+    XLSOptions.HyperlinkFormat.Font.Color = clrBlue
+    XLSOptions.HyperlinkFormat.Font.Underline = fulSingle
+    XLSOptions.NoteFormat.Alignment.Horizontal = halLeft
+    XLSOptions.NoteFormat.Alignment.Vertical = valTop
+    XLSOptions.NoteFormat.Font.Size = 8
+    XLSOptions.NoteFormat.Font.Style = [xfsBold]
+    XLSOptions.NoteFormat.Font.Name = 'Tahoma'
+    XLSOptions.FieldFormats = <>
+    XLSOptions.StripStyles = <>
+    XLSOptions.Hyperlinks = <>
+    XLSOptions.Notes = <>
+    XLSOptions.Charts = <>
+    XLSOptions.Pictures = <>
+    XLSOptions.Images = <>
+    XLSOptions.Cells = <>
+    XLSOptions.MergedCells = <>
+    XLSOptions.DefRowHeight = 12.750000000000000000
+    ODSOptions.HeaderStyle.Font.Charset = DEFAULT_CHARSET
+    ODSOptions.HeaderStyle.Font.Color = clBlack
+    ODSOptions.HeaderStyle.Font.Height = -13
+    ODSOptions.HeaderStyle.Font.Name = 'Arial'
+    ODSOptions.HeaderStyle.Font.Style = []
+    ODSOptions.FooterStyle.Font.Charset = DEFAULT_CHARSET
+    ODSOptions.FooterStyle.Font.Color = clBlack
+    ODSOptions.FooterStyle.Font.Height = -13
+    ODSOptions.FooterStyle.Font.Name = 'Arial'
+    ODSOptions.FooterStyle.Font.Style = []
+    ODSOptions.CaptionRowStyle.Font.Charset = DEFAULT_CHARSET
+    ODSOptions.CaptionRowStyle.Font.Color = clBlack
+    ODSOptions.CaptionRowStyle.Font.Height = -13
+    ODSOptions.CaptionRowStyle.Font.Name = 'Arial'
+    ODSOptions.CaptionRowStyle.Font.Style = []
+    ODSOptions.DataStyle.Font.Charset = DEFAULT_CHARSET
+    ODSOptions.DataStyle.Font.Color = clBlack
+    ODSOptions.DataStyle.Font.Height = -13
+    ODSOptions.DataStyle.Font.Name = 'Arial'
+    ODSOptions.DataStyle.Font.Style = []
+    ODSOptions.StripStylesList = <>
+    ODTOptions.HeaderStyle.Font.Charset = DEFAULT_CHARSET
+    ODTOptions.HeaderStyle.Font.Color = clBlack
+    ODTOptions.HeaderStyle.Font.Height = -13
+    ODTOptions.HeaderStyle.Font.Name = 'Arial'
+    ODTOptions.HeaderStyle.Font.Style = []
+    ODTOptions.FooterStyle.Font.Charset = DEFAULT_CHARSET
+    ODTOptions.FooterStyle.Font.Color = clBlack
+    ODTOptions.FooterStyle.Font.Height = -13
+    ODTOptions.FooterStyle.Font.Name = 'Arial'
+    ODTOptions.FooterStyle.Font.Style = []
+    ODTOptions.CaptionRowStyle.Font.Charset = DEFAULT_CHARSET
+    ODTOptions.CaptionRowStyle.Font.Color = clBlack
+    ODTOptions.CaptionRowStyle.Font.Height = -13
+    ODTOptions.CaptionRowStyle.Font.Name = 'Arial'
+    ODTOptions.CaptionRowStyle.Font.Style = []
+    ODTOptions.DataStyle.Font.Charset = DEFAULT_CHARSET
+    ODTOptions.DataStyle.Font.Color = clBlack
+    ODTOptions.DataStyle.Font.Height = -13
+    ODTOptions.DataStyle.Font.Name = 'Arial'
+    ODTOptions.DataStyle.Font.Style = []
+    ODTOptions.StripStylesList = <>
+    ODTOptions.Border.BorderStyle = bsODFSolid
+    XlsxOptions.HeaderStyle.Font.Charset = DEFAULT_CHARSET
+    XlsxOptions.HeaderStyle.Font.Color = clBlack
+    XlsxOptions.HeaderStyle.Font.Height = -15
+    XlsxOptions.HeaderStyle.Font.Name = 'Calibri'
+    XlsxOptions.HeaderStyle.Font.Style = []
+    XlsxOptions.CaptionRowStyle.Font.Charset = DEFAULT_CHARSET
+    XlsxOptions.CaptionRowStyle.Font.Color = clBlack
+    XlsxOptions.CaptionRowStyle.Font.Height = -15
+    XlsxOptions.CaptionRowStyle.Font.Name = 'Calibri'
+    XlsxOptions.CaptionRowStyle.Font.Style = []
+    XlsxOptions.DataStyle.Font.Charset = DEFAULT_CHARSET
+    XlsxOptions.DataStyle.Font.Color = clBlack
+    XlsxOptions.DataStyle.Font.Height = -15
+    XlsxOptions.DataStyle.Font.Name = 'Calibri'
+    XlsxOptions.DataStyle.Font.Style = []
+    XlsxOptions.FooterStyle.Font.Charset = DEFAULT_CHARSET
+    XlsxOptions.FooterStyle.Font.Color = clBlack
+    XlsxOptions.FooterStyle.Font.Height = -15
+    XlsxOptions.FooterStyle.Font.Name = 'Calibri'
+    XlsxOptions.FooterStyle.Font.Style = []
+    XlsxOptions.StripStylesList = <>
+    DocxOptions.HeaderStyle.Font.Charset = DEFAULT_CHARSET
+    DocxOptions.HeaderStyle.Font.Color = clBlack
+    DocxOptions.HeaderStyle.Font.Height = -15
+    DocxOptions.HeaderStyle.Font.Name = 'Calibri'
+    DocxOptions.HeaderStyle.Font.Style = []
+    DocxOptions.CaptionRowStyle.Font.Charset = DEFAULT_CHARSET
+    DocxOptions.CaptionRowStyle.Font.Color = clBlack
+    DocxOptions.CaptionRowStyle.Font.Height = -15
+    DocxOptions.CaptionRowStyle.Font.Name = 'Calibri'
+    DocxOptions.CaptionRowStyle.Font.Style = []
+    DocxOptions.DataStyle.Font.Charset = DEFAULT_CHARSET
+    DocxOptions.DataStyle.Font.Color = clBlack
+    DocxOptions.DataStyle.Font.Height = -15
+    DocxOptions.DataStyle.Font.Name = 'Calibri'
+    DocxOptions.DataStyle.Font.Style = []
+    DocxOptions.StripStylesList = <>
+    DocxOptions.FooterStyle.Font.Charset = DEFAULT_CHARSET
+    DocxOptions.FooterStyle.Font.Color = clBlack
+    DocxOptions.FooterStyle.Font.Height = -15
+    DocxOptions.FooterStyle.Font.Name = 'Calibri'
+    DocxOptions.FooterStyle.Font.Style = []
+    AccessOptions.TableName = 'EXPORT_TABLE'
+    Left = 504
+    Top = 176
+  end
+end

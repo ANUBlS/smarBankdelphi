@@ -1,0 +1,1081 @@
+﻿unit PrudensialImpl1;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActiveX, AxCtrls, Prudensialhes_TLB, StdVcl, StdCtrls, OleServer, ExcelXP,filectrl,
+  ComCtrls, Db, OracleData, CMExcelExport, ExcelExporter , Oracle, Buttons;
+
+
+
+
+  type
+  TPrudensial = class(TActiveForm, IPrudensial)
+    Button1: TButton;
+    rer: TExcelWorksheet;
+    ExcelWorkbook1: TExcelWorkbook;
+    prd: TExcelApplication;
+    ExcelApplication2: TExcelApplication;
+    ExcelApplication3: TExcelApplication;
+    ExcelApplication4: TExcelApplication;
+    Label1: TLabel;
+    tem: TRichEdit;
+    prud: TRichEdit;
+    dl: TRichEdit;
+    Button2: TButton;
+    gelirxerc: TOracleDataSet;
+    DataSource1: TDataSource;
+    balan: TOracleDataSet;
+    CMExcelExport1: TCMExcelExport;
+    Button3: TButton;
+    Button4: TButton;
+    bln: TCMExcelExport;
+    DateTimePicker1: TDateTimePicker;
+    DateTimePicker2: TDateTimePicker;
+    Button5: TButton;
+    dep1: TOracleDataSet;
+    CMExcelExport3: TCMExcelExport;
+    dep2: TOracleDataSet;
+    CMExcelExport4: TCMExcelExport;
+    dep3: TOracleDataSet;
+    CMExcelExport5: TCMExcelExport;
+    Button8: TButton;
+    Button9: TButton;
+    OraclePackage1: TOraclePackage;
+    saldo: TOracleDataSet;
+    CMExcelExport6: TCMExcelExport;
+    CemSet: TOracleDataSet;
+    OraclePackage10: TOraclePackage;
+    ExcelExport: TCMExcelExport;
+    CMExcelExport10: TCMExcelExport;
+    Active: TOracleDataSet;
+    Girov: TOracleDataSet;
+    GirovSAY: TFloatField;
+    GirovPURCODE: TWideStringField;
+    GirovTEMINAT: TWideStringField;
+    GirovTEMCODE: TWideStringField;
+    GirovDESCRIPTION: TWideStringField;
+    GirovQALIQ: TFloatField;
+    GirovGIROV: TFloatField;
+    GirovQENAITBEXSH: TFloatField;
+    GirovNEZARETALT: TFloatField;
+    GirovMEQSEDLI: TFloatField;
+    GirovTEHLUKELI: TFloatField;
+    GirovUMUDSUZ: TFloatField;
+    GirovTESNIFATA_DAXIL_EDILMEMISH: TFloatField;
+    odenish: TOracleDataSet;
+    pr: TButton;
+    Label2: TLabel;
+    Label3: TLabel;
+    CMExcelExport7: TCMExcelExport;
+    sbop: TOraclePackage;
+    sexi: TOracleDataSet;
+    balanFIRSTACTIVE: TFloatField;
+    balanFIRSTPASSIVE: TFloatField;
+    balanLASTACTIVE: TFloatField;
+    balanLASTPASSIVE: TFloatField;
+    balanDTURNOVER: TFloatField;
+    balanKTURNOVER: TFloatField;
+    balanBAL_CN: TFloatField;
+    CheckBox1: TCheckBox;
+    rt: TCMExcelExport;
+    gx2: TButton;
+    gx: TExcelApplication;
+    OraclePackage2: TOraclePackage;
+    RadioButton1: TRadioButton;
+    RadioButton2: TRadioButton;
+    GirovG_QENAITBEXSH: TFloatField;
+    GirovG_NEZARETALT: TFloatField;
+    GirovG_MEQSEDLI: TFloatField;
+    GirovG_TEHLUKELI: TFloatField;
+    GirovG_UMUDSUZ: TFloatField;
+    GirovG_TESNIFATA_DAXIL_EDILMEMISH: TFloatField;
+    CemSetCODE: TWideStringField;
+    CemSetNAME: TWideStringField;
+    CemSetM_KODU: TWideStringField;
+    CemSetMulkiyyetnovu: TWideStringField;
+    CemSetS_KODU: TWideStringField;
+    CemSetBorcalanunsektoru: TWideStringField;
+    CemSetF_KODU: TWideStringField;
+    CemSetBorcalaninfaliyyeti: TWideStringField;
+    CemSetFN_KODU: TWideStringField;
+    CemSetBorcalaninfaliyyetnovu: TWideStringField;
+    CemSetVAL_NAME: TWideStringField;
+    CemSetSUMCREDITLINEAMOUNT: TFloatField;
+    CemSetSUMEKVALENT: TFloatField;
+    CemSetSUMUZADILMISHDAR: TFloatField;
+    CemSetSUMHESABLANMAYAN: TFloatField;
+    CemSetSUMADI: TFloatField;
+    CemSetSUMMEQSEDLI: TFloatField;
+    CemSetSUMDS_REST: TFloatField;
+    CemSetSUMDSREST_EK: TFloatField;
+    CemSetSUMDSINTERESTREST: TFloatField;
+    CemSetSUMDSINT_EK: TFloatField;
+    CemSetSUMDSDUEREST: TFloatField;
+    CemSetSUMDSDUEREST_EK: TFloatField;
+    CemSetSUMDSDUEINTERESTREST: TFloatField;
+    CemSetSUMDSDOEINT_EK: TFloatField;
+    CemSetSUMFAIZLERUZREBORCLAR: TFloatField;
+    CemSetSUMFAIZLERUZREBORCLAREK: TFloatField;
+    CemSetSUMCARIBORCLAR: TFloatField;
+    CemSetSUMCARIBORCLAREK: TFloatField;
+    CemSetSUM130: TFloatField;
+    CemSetSUM3160: TFloatField;
+    CemSetSUM6190: TFloatField;
+    CemSetSUM91120: TFloatField;
+    CemSetSUM121150: TFloatField;
+    CemSetSUM151180: TFloatField;
+    CemSetSUM181210: TFloatField;
+    CemSetSUM211240: TFloatField;
+    CemSetSUM241270: TFloatField;
+    CemSetSUM271300: TFloatField;
+    CemSetSUM301330: TFloatField;
+    CemSetSUM331365: TFloatField;
+    CemSetSUMBIRILDENARTIQ: TFloatField;
+    CemSetSUM0: TFloatField;
+    CemSetSUM2: TFloatField;
+    CemSetSUM10: TFloatField;
+    CemSetSUM30: TFloatField;
+    CemSetSUM60: TFloatField;
+    CemSetSUM100: TFloatField;
+    CemSetSUMGIROV: TFloatField;
+    gelirxercBAL_CN1: TFloatField;
+    gelirxercACC_NO: TWideStringField;
+    gelirxercNAME: TWideStringField;
+    gelirxercREST: TFloatField;
+   procedure Button1Click(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+    procedure Button3Click(Sender: TObject);
+    procedure Button5Click(Sender: TObject);
+    //procedure Button7Click(Sender: TObject);
+    procedure Button4Click(Sender: TObject);
+    procedure Button8Click(Sender: TObject);
+    procedure Button9Click(Sender: TObject);
+    procedure prClick(Sender: TObject);
+    procedure BitBtn1Click(Sender: TObject);
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure CheckBox1Click(Sender: TObject);
+    procedure gx2Click(Sender: TObject);
+    procedure RadioButton1Click(Sender: TObject);
+    procedure RadioButton2Click(Sender: TObject);
+    procedure ActiveFormDestroy(Sender: TObject);
+  private
+    { Private declarations }
+    FEvents: IPrudensialEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+  public
+    { Public declarations }
+    procedure Initialize; override;
+  end;
+
+implementation
+
+uses ComObj, ComServ,sboapiDataModuleImpl,SBTranslateProc;
+ var path: string;
+{$R *.DFM}
+
+{ TPrudensial }
+
+
+
+
+procedure TPrudensial.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_PrudensialPage); }
+end;
+
+procedure TPrudensial.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as IPrudensialEvents;
+end;
+
+procedure TPrudensial.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TPrudensial.Get_Active: WordBool;
+begin
+  //Result := Active;
+end;
+
+function TPrudensial.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TPrudensial.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TPrudensial.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TPrudensial.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TPrudensial.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TPrudensial.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TPrudensial.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TPrudensial.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TPrudensial.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TPrudensial.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TPrudensial.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TPrudensial.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TPrudensial.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TPrudensial.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TPrudensial.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TPrudensial.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TPrudensial.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TPrudensial._Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TPrudensial.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TPrudensial.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TPrudensial.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TPrudensial.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TPrudensial.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TPrudensial.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TPrudensial.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TPrudensial.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TPrudensial.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TPrudensial.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TPrudensial.Set_AxBorderStyle(Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TPrudensial.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TPrudensial.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TPrudensial.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TPrudensial.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TPrudensial.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TPrudensial.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TPrudensial.Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TPrudensial.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TPrudensial.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TPrudensial.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TPrudensial.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TPrudensial.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TPrudensial.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+
+
+
+procedure TPrudensial.Button1Click(Sender: TObject);
+  var
+  Sheet, Sheets ,v :Variant;
+  c, r, kr, i, j, z  :Integer;
+  st, s, name1   :String;
+  DepartmentName,Filename :String;
+  DepartmentCount, DepRow:Integer;
+  v_Obn, v_bdntm :Real;
+  pruden,temizlemek,del2 :Textfile;
+  Excel             : OleVariant;
+begin
+//pr.click;
+//Button2.Click;
+//Button3.Click;
+//Button4.Click;
+//Button5.Click;
+//Button8.Click;
+//Button9.Click;
+
+
+    begin
+     Excel := CreateOleObject('Excel.Application');
+      Excel.Workbooks.Open('D:\Smart-Bank\Env\prudesial\PRUDEN.xlsm');
+     Excel.Run('PERSONAL.XLSB!Abotest'); // <<--- Error here.
+     Excel.Quit;
+ //    Excel := CreateOleObject('Excel.Application');
+ //    Excel.Workbooks.Open('C:\Documents and Settings\Abdulla1\Desktop\macro.xlsx');
+ //    Excel.Run('Abotest');
+   //  Excel.Quit;
+    end;
+
+{
+if not DirectoryExists('D:\Smart-Bank\Env\prudesial\mac') then
+MkDir('D:\Smart-Bank\Env\prudesial\mac');
+
+ //-------------------------------------------create files-
+     //FileName:=dir+'sw'+edit_ref+'.inp';
+   AssignFile(pruden,'D:\Smart-Bank\Env\prudesial\mac\pruden.bas');
+   Rewrite(pruden);
+   for i:=0 to prud.Lines.Count do
+   writeln(pruden,prud.lines[i]);
+   CloseFile(pruden);
+   AssignFile(temizlemek,'D:\Smart-Bank\Env\prudesial\mac\temizlemek.bas');
+   Rewrite(temizlemek);
+   for c:=0 to tem.Lines.Count do
+   writeln(temizlemek,tem.lines[c]);
+    CloseFile(temizlemek);
+
+   AssignFile(del2,'D:\Smart-Bank\Env\prudesial\mac\del.bas');
+   Rewrite(del2);
+
+      for r:=0 to dl.Lines.Count do
+   writeln(del2,dl.lines[r]);
+    CloseFile(del2);
+ //------------------------------------------end create files-
+
+  //ShowMessage('test');
+V:=null;
+  ExcelApplication1.Disconnect;
+V := ExcelApplication1.Application;
+  ExcelApplication1.Connect;
+V.Workbooks.Open('D:\Smart-Bank\Env\prudesial\PRUDEN.xls');
+
+
+
+
+//ExcelApplication1:= TExcelApplication.Create(self);
+
+
+
+//ExcelApplication1.Workbooks.Add('D:\Smart-Bank\Env\prudesial\PRUDEN.xls',0);
+//ExcelApplication1.Connect;
+ExcelApplication1.Visible[0]:= True;
+ ExcelApplication1.VBE.ActiveVBProject.VBComponents.Import('D:\Smart-Bank\Env\prudesial\mac\pruden.bas');
+ ExcelApplication1.VBE.ActiveVBProject.VBComponents.Import('D:\Smart-Bank\Env\prudesial\mac\temizlemek.bas');
+  ExcelApplication1.VBE.ActiveVBProject.VBComponents.Import('D:\Smart-Bank\Env\prudesial\mac\del.bas');;
+
+ //
+
+
+ //ExcelApplication1.Run('temizlemek');
+  try
+  //ExcelApplication1.Run('temizlemek');
+
+
+// ExcelApplication1.VBE.ActiveVBProject.VBComponents.Import('D:\Smart-Bank\Env\prudesial\mac\open.bas');
+ //
+  //ExcelApplication1.Run('Macro1');
+
+
+
+
+
+//
+  ExcelApplication1.Run('pruden');
+
+
+
+   except
+
+    ExcelApplication1.Run('del');
+
+     //ShowMessage('test');
+
+
+
+   //ExcelApplication1.Run('Macro2');
+    end;
+
+DeleteFile ('D:\Smart-Bank\Env\prudesial\mac\pruden.bas');
+DeleteFile ('D:\Smart-Bank\Env\prudesial\mac\del.bas');
+DeleteFile ('D:\Smart-Bank\Env\prudesial\mac\temizlemek.bas');   }
+end;
+
+procedure TPrudensial.Button2Click(Sender: TObject);
+var
+st:Tfileformat;
+dat1:Tdatetime;
+dat2:Tdatetime;
+begin
+     //OracleDataSet1.Session:=sboapidatamodule.sbsession;
+//
+ dat1:=integer(trunc(DateTimePicker1.datetime));
+ dat2:=integer(trunc(DateTimePicker2.datetime));
+ gelirxerc.SetVariable('dtrn', dat1);
+ gelirxerc.SetVariable('dtr' , dat2);
+   st:=ffxls;
+ CMExcelExport1.Connect;
+ gelirxerc.Open;
+
+ //ShowMessage(inttostr(gelirxerc.RecordCount));
+   if gelirxerc.RecordCount>0 then
+                             begin
+  CMExcelExport1.Filename:=path+'Env\prudesial\celir-xerc.xls';
+
+
+CMExcelExport1.ExportDataset(gelirxerc,'IncExp',true,true);
+CMExcelExport1.SaveAs(path+'Env\prudesial\celir-xerc',ffxls);
+                             end
+
+                             else ShowMessage('Gəlir-xərcdə hec bir məlumat yoxdur!');
+
+gelirxerc.Close;
+
+
+//CMExcelExport1.Disconnect;
+
+end;
+
+procedure TPrudensial.Button3Click(Sender: TObject);
+
+{var
+st:Tfileformat;
+begin
+     //OracleDataSet1.Session:=sboapidatamodule.sbsession;
+//
+   st:=ffxls;
+ CMExcelExport2.Connect;
+ balan.Open;
+  CMExcelExport1.Filename:='D:\Smart-Bank\Env\prudesial\balans.xls';
+
+
+CMExcelExport2.ExportDataset(balan,'IncExp',true);
+CMExcelExport2.SaveAs('D:\Smart-Bank\Env\prudesial\balans.xls',st);
+CMExcelExport2.Disconnect;
+end;}
+
+
+ var
+st:Tfileformat;
+dat11:Tdatetime;
+dat22:Tdatetime;
+dat33:TDateTime;
+begin
+     //OracleDataSet1.Session:=sboapidatamodule.sbsession;
+//
+
+  balan.close;
+ dat11:=integer(trunc(DateTimePicker1.datetime));
+ dat22:=integer(trunc(DateTimePicker2.datetime));
+ balan.SetVariable('dat1', dat11);
+ balan.SetVariable('dat2' , dat22);
+ sexi.close;
+  sexi.SetVariable('dat',dat11);
+  sexi.open;
+  dat33:=sexi.Fieldbyname('sex').asdatetime;
+    //ShowMessage(DateToStr(dat33));
+  balan.SetVariable('dat3' , dat33);
+   st:=ffxls;
+ bln.Connect;
+ balan.Open;
+  bln.Filename:=path+'Env\prudesial\balans.xls';
+
+
+bln.ExportDataset(balan,'FullBalance',true);
+bln.SaveAs(path+'Env\prudesial\balans',st);
+balan.close;
+
+
+
+//bln.Disconnect;
+
+end;
+
+
+
+{begin
+ CMExcelExport1.Connect;
+balan.Open;
+CMExcelExport1.ExportDataset(balan,'FullBalance',true);
+CMExcelExport1.Disconnect;
+end;}
+
+procedure TPrudensial.Button5Click(Sender: TObject);
+var
+st:Tfileformat;
+dat:Tdatetime;
+begin
+     //OracleDataSet1.Session:=sboapidatamodule.sbsession;
+//
+  dat:=integer(trunc(DateTimePicker2.datetime));
+ dep1.SetVariable('v_date',dat );
+ dep2.SetVariable('v_date',dat);
+ dep3.SetVariable('v_date',dat);
+
+   st:=ffxls;
+ CMExcelExport3.Connect;
+
+  CMExcelExport3.Filename:=path+'Env\prudesial\depozit_pru1';
+
+ dep3.Open;
+
+ if dep3.RecordCount>0 then
+
+ CMExcelExport3.ExportDataset(dep3,'DepozitCem2',true)
+ else ShowMessage('DepozitCem2-də heç bir məlumat yoxdur');
+dep2.Open;
+if dep2.RecordCount>0 then
+
+CMExcelExport3.ExportDataset(dep2,'DepozitCem3',true) else
+ShowMessage('DepozitCem3-də heç bir məlumat yoxdur');
+dep1.Open;
+if dep1.RecordCount>0 then
+
+CMExcelExport3.ExportDataset(dep1,'DepozitCem1',true)
+else ShowMessage('DepozitCem1-də heç bir məlumat yoxdur');
+
+CMExcelExport3.SaveAs(path+'Env\prudesial\depozit_pru1',st);
+//CMExcelExport3.Disconnect;
+end;
+
+procedure TPrudensial.Button4Click(Sender: TObject);
+var
+dat1:Tdatetime;
+st:Tfileformat;
+begin
+dat1:=integer(trunc(datetimepicker2.datetime));
+    st:=ffxls;
+
+
+
+    OraclePackage2.CallProcedure('out_GetMarignAndTurn',[dat1,
+                                               -1,1,'@',0,-1
+                                               ]);
+  //CMExcelExport1.Filename:='C:\Smart-Bank\Env\prudesial\saldo.xls.xls';
+OraclePackage1.CallProcedure('GetMarignAndTurn',[dat1,
+                                               -1,1,'@',0,-1
+                                               ]);
+
+
+
+  CMExcelExport6.Connect;
+ saldo.Open;
+
+   CMExcelExport6.Filename:=path+'Env\prudesial\saldo.xls';
+
+
+CMExcelExport6.ExportDataset(saldo,'Saldo',true);
+CMExcelExport6.SaveAs(path+'Env\prudesial\saldo',st);
+saldo.close;
+//CMExcelExport6.Disconnect;
+
+end;
+
+procedure TPrudensial.Button8Click(Sender: TObject);
+var dat:tdatetime ;
+st:Tfileformat;
+begin
+
+ st:=ffxls;
+ active.open;
+  dat:=integer(trunc(DateTimePicker2.DateTime));
+with active  do
+
+  while not EOF do
+    begin
+        OraclePackage10.CallProcedure('Gec_gun',[
+                                                  'p_id',FieldByName('ID').AsInteger,
+                                                  'p_date',dat
+
+                                                 ]);
+
+     Next;
+
+   end ;
+
+with CemSet do begin
+
+  if Active then CloseAll;
+   SetVariable('dat',dat);
+  open;
+
+
+  with ExcelExport do
+   begin
+   ExcelExport.Filename:=path+'Env\prudesial\kredit_pru1.xlsx';
+     Connect;
+     if CemSet.RecordCount>0 then
+    begin
+      ExportDataset(CemSet,'Purdensal cem',True);
+      ExcelExport.SaveAs(path+'Env\prudesial\kredit_pru1',st);
+    end else ShowMessage('kredit_pru1-də heç bir məlumat yoxdur');
+
+    //Disconnect;
+
+   end;
+end;
+ end;
+procedure TPrudensial.Button9Click(Sender: TObject);
+var
+dat : Tdatetime;
+st:Tfileformat;
+begin
+st:=ffxls;
+  dat:=integer(trunc(DateTimePicker2.DateTime));
+ with odenish do
+   begin
+         if Active then CloseAll;//ShowMessage( datetostr(dat));
+         SetVariable('dat',dat);
+        open;
+   end;
+ with Girov do
+   begin
+        if Active then CloseAll;
+         SetVariable('dat',dat);
+        open;
+   end;
+   with CMExcelExport10 do
+   begin
+   CMExcelExport10.Filename:=path+'Env\prudesial\kredit_pru2.xlsx';
+     Connect;
+
+     if girov.RecordCount>0 then
+
+      ExportDataset(Girov,'prugirov',True) else
+      ShowMessage('prugirovda-da heç bir məlumat yoxdur');
+
+     if odenish.RecordCount>0 then
+
+      ExportDataset(odenish,'ODMBC',True) else
+     ShowMessage('ODMBC-də heç bir məlumat yoxdur');
+      CMExcelExport10.SaveAs(path+'Env\prudesial\kredit_pru2',st);
+     // Disconnect;
+   end;
+   end;
+
+procedure TPrudensial.prClick(Sender: TObject);
+  var
+  excel,Sheet, Sheets ,v :Variant;
+  c, r, kr, i, j, z  :Integer;
+  st, s, name1   :String;
+  DepartmentName,Filename :String;
+  DepartmentCount, DepRow:Integer;
+  v_Obn, v_bdntm :Real;
+  pruden,temizlemek,del2 :Textfile;
+
+begin
+
+
+
+
+  {
+
+if not DirectoryExists('C:\Smart-Bank\Env\prudesial\mac') then
+MkDir('C:\Smart-Bank\Env\prudesial\mac');
+
+ //-------------------------------------------create files-
+     //FileName:=dir+'sw'+edit_ref+'.inp';
+   AssignFile(pruden,'C:\Smart-Bank\Env\prudesial\mac\pruden.bas');
+   Rewrite(pruden);
+   for i:=0 to prud.Lines.Count do
+   writeln(pruden,prud.lines[i]);
+   CloseFile(pruden);
+   AssignFile(temizlemek,'C:\Smart-Bank\Env\prudesial\mac\temizlemek.bas');
+   Rewrite(temizlemek);
+   for c:=0 to tem.Lines.Count do
+   writeln(temizlemek,tem.lines[c]);
+    CloseFile(temizlemek);
+
+   AssignFile(del2,'C:\Smart-Bank\Env\prudesial\mac\del.bas');
+   Rewrite(del2);
+
+      for r:=0 to dl.Lines.Count do
+   writeln(del2,dl.lines[r]);
+    CloseFile(del2);
+ //------------------------------------------end create files-
+
+  //ShowMessage('test');
+
+  //ExcelApplication1.Disconnect;
+  //ExcelApplication1:=TExcelApplication.Create(self);
+
+ prd.Workbooks.Add('C:\Smart-Bank\Env\prudesial\PRUDEN.xls',0);
+ prd.Visible[0]:=true;
+
+
+ //prd.Disconnect;
+
+
+ prd.VBE.ActiveVBProject.VBComponents.Import('C:\Smart-Bank\Env\prudesial\mac\temizlemek.bas');
+  prd.Run('temizlemek');
+//ExcelApplication1.Workbooks.Add('D:\Smart-Bank\Env\prudesial\PRUDEN.xls',0);
+//ExcelApplication1.Connect;
+
+ prd.VBE.ActiveVBProject.VBComponents.Import('C:\Smart-Bank\Env\prudesial\mac\pruden.bas');
+ prd.Run('pruden');
+
+
+
+
+ v.VBE.ActiveVBProject.VBComponents.Import('C:\Smart-Bank\Env\prudesial\mac\del.bas');
+ v.Run('del');}
+Excel := CreateOleObject('Excel.Application');
+Excel.Workbooks.Open(path+'Env\prudesial\PRUDEN.xlsm');
+Excel.Visible := True;
+//Excel.Application.Quit;
+ {
+DeleteFile ('C:\Smart-Bank\Env\prudesial\mac\pruden.bas');
+DeleteFile ('C:\Smart-Bank\Env\prudesial\mac\del.bas');
+DeleteFile ('C:\Smart-Bank\Env\prudesial\mac\temizlemek.bas'); }
+end;
+
+procedure TPrudensial.BitBtn1Click(Sender: TObject);
+  var
+  Sheet, Sheets ,v :Variant;
+  c, r, kr, i, j, z  :Integer;
+  st, s, name1   :String;
+  DepartmentName,Filename :String;
+  DepartmentCount, DepRow:Integer;
+  v_Obn, v_bdntm :Real;
+  pruden,temizlemek,del2 :Textfile;
+  del:Tcomponent;
+
+begin
+
+prd.Visible[0]:= true;
+
+
+ try
+ prd.Run('temizlemek');
+ except
+ prd.Run('pruden');
+ prd.Run('del');
+ end;
+end;
+
+procedure TPrudensial.ActiveFormCreate(Sender: TObject);
+begin
+RadioButton1.Checked;
+DateTimePicker1.DateTime:=sbop.CallDateFunction('get_date',[]);
+DateTimePicker2.DateTime:=sbop.CallDateFunction('get_date',[]);
+ Button2.Visible:=False;
+ Button3.Visible:=False;
+ Button4.Visible:=False;
+ Button5.Visible:=False;
+ Button8.Visible:=False;
+ Button9.Visible:=False;
+ PR.Visible:=False;
+ path:=Copy(GetCurrentDir, 0, 14);//length(GetCurrentDir)-3);
+ SBTranslateProc.TranslateAllComponents(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TPrudensial.ActiveFormDestroy(Sender: TObject);
+begin
+CMExcelExport1.Disconnect;
+ bln.Disconnect;
+ CMExcelExport6.Disconnect;
+  CMExcelExport3.Disconnect;
+  ExcelExport.Disconnect;
+
+CMExcelExport10.Disconnect;
+//ExcelExport.Disconnect;
+end;
+
+procedure TPrudensial.CheckBox1Click(Sender: TObject);
+var
+v:variant;
+begin
+
+
+
+end;
+
+procedure TPrudensial.gx2Click(Sender: TObject);
+  var
+  excel,Sheet, Sheets ,v :Variant;
+  c, r, kr, i, j, z  :Integer;
+  st, s, name1   :String;
+  DepartmentName,Filename :String;
+  DepartmentCount, DepRow:Integer;
+  v_Obn, v_bdntm :Real;
+  pruden,temizlemek,del2 :Textfile;
+
+begin
+Excel.Visible := false;
+
+
+
+
+
+if not DirectoryExists('C:\Smart-Bank\Env\prudesial\mac') then
+MkDir('C:\Smart-Bank\Env\prudesial\mac');
+
+ //-------------------------------------------create files-
+     //FileName:=dir+'sw'+edit_ref+'.inp';
+   AssignFile(pruden,'C:\Smart-Bank\Env\prudesial\mac\pruden.bas');
+   Rewrite(pruden);
+   for i:=0 to prud.Lines.Count do
+   writeln(pruden,prud.lines[i]);
+   CloseFile(pruden);
+   AssignFile(temizlemek,'C:\Smart-Bank\Env\prudesial\mac\temizlemek.bas');
+   Rewrite(temizlemek);
+   for c:=0 to tem.Lines.Count do
+   writeln(temizlemek,tem.lines[c]);
+    CloseFile(temizlemek);
+
+   AssignFile(del2,'C:\Smart-Bank\Env\prudesial\mac\del.bas');
+   Rewrite(del2);
+
+      for r:=0 to dl.Lines.Count do
+   writeln(del2,dl.lines[r]);
+    CloseFile(del2);
+ //------------------------------------------end create files-
+
+  //ShowMessage('test');
+
+  //ExcelApplication1.Disconnect;
+  //ExcelApplication1:=TExcelApplication.Create(self);
+
+
+
+
+ //prd.Disconnect;
+     v:=prd.Application;
+ v.workbooks.add('C:\Smart-Bank\Env\prudesial\pruden.xlsm');
+ v.VBE.ActiveVBProject.VBComponents.Import('C:\Smart-Bank\Env\prudesial\mac\temizlemek.bas');
+  v.Run('temizlemek');
+//ExcelApplication1.Workbooks.Add('D:\Smart-Bank\Env\prudesial\PRUDEN.xls',0);
+//ExcelApplication1.Connect;
+
+ v.VBE.ActiveVBProject.VBComponents.Import('C:\Smart-Bank\Env\prudesial\mac\pruden.bas');
+ v.Run('pruden');
+
+
+ 
+
+ v.VBE.ActiveVBProject.VBComponents.Import('C:\Smart-Bank\Env\prudesial\mac\del.bas');
+ v.Run('del');
+  end;
+
+procedure TPrudensial.RadioButton1Click(Sender: TObject);
+begin
+ Button1.Visible:=True;
+ Button2.Visible:=False;
+ Button3.Visible:=False;
+ Button4.Visible:=False;
+ Button5.Visible:=False;
+ Button8.Visible:=False;
+ Button9.Visible:=False;
+ PR.Visible:=False;
+end;
+
+procedure TPrudensial.RadioButton2Click(Sender: TObject);
+begin
+ Button1.Visible:=False;
+ Button2.Visible:=True;
+ Button3.Visible:=True;
+ Button4.Visible:=True;
+ Button5.Visible:=True;
+ Button8.Visible:=True;
+ Button9.Visible:=True;
+ PR.Visible:=True;
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TPrudensial,
+    Class_Prudensial,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.
+

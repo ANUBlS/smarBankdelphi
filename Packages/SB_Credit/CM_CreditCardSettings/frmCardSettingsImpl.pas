@@ -1,0 +1,190 @@
+﻿unit frmCardSettingsImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,Dialogs,
+  ExtCtrls,  StdCtrls, Grids, DBGridEh, ComCtrls, ToolWin,
+  ImgList, ActnList, DBCtrls, Buttons;
+
+type
+  TfrmCardSettings = class(TForm)
+    Panel1: TPanel;
+    GroupBox1: TGroupBox;
+    DBGridEh1: TDBGridEh;
+    ImageList1: TImageList;
+    Panel2: TPanel;
+    ToolBar1: TToolBar;
+    ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
+    ToolButton3: TToolButton;
+    ToolButton4: TToolButton;
+    ToolButton5: TToolButton;
+    ToolButton9: TToolButton;
+    ToolButton7: TToolButton;
+    ActionList1: TActionList;
+    GroupBox2: TGroupBox;
+    DBGridEh2: TDBGridEh;
+    ActnAdd: TAction;
+    ActnEdit: TAction;
+    ActnProps: TAction;
+    ActnDel: TAction;
+    DBNavigator1: TDBNavigator;
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure ActnAddExecute(Sender: TObject);
+    procedure ActnEditExecute(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure ActnDelExecute(Sender: TObject);
+    procedure ToolButton7Click(Sender: TObject);
+    procedure DBNavigator1Click(Sender: TObject; Button: TNavigateBtn);
+  private
+    procedure AddNewCards;
+    procedure EditCards;
+    procedure DeleteCards(p_cardID :Integer);
+    procedure RefreshCards;
+  public
+
+  end;
+
+var
+  frmCardSettings: TfrmCardSettings;
+
+  procedure InitPlugin(s:string);export;
+
+implementation
+
+uses CommonDecls,DMCardSettings, frmCardAddEditImpl, FrmCardPropertiesImpl;
+
+{$R *.DFM}
+
+
+
+
+procedure InitPlugin(s:string);export;
+begin
+   frmCardSettings.ShowModal;
+end;
+
+exports
+  InitPlugin;
+
+procedure TfrmCardSettings.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+   Resize := False
+end;
+
+procedure TfrmCardSettings.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+   if ord(Key) = VK_ESCAPE then close
+end;
+
+procedure TfrmCardSettings.AddNewCards;
+resourcestring rs_AddCards = 'Yeni';
+var CalcmethodID : Integer;
+begin
+
+  CalcmethodID := DMCardSeting.cardmethods.FieldByName('ID').AsInteger;
+  with DMCardSeting, cardsorts do
+  begin
+       FieldByName('CalcMethod').AsInteger := CalcmethodID;
+       Insert;
+  end;
+
+ with frmCardAddEdit do
+ begin
+    Caption := rs_AddCards;
+    LCBCALCMethod.KeyValue := CalcmethodID;
+    ShowModal;
+ end;
+
+ RefreshCards;
+
+end;
+
+procedure TfrmCardSettings.EditCards;
+resourcestring rs_EditCards = 'Redaktə';
+begin
+
+  with DMCardSeting, cardsorts do
+       Edit ;
+
+ with FrmCardProperties do
+ begin
+    Caption := rs_EditCards;
+    ShowModal;
+ end;
+
+   RefreshCards;
+end;
+
+procedure TfrmCardSettings.DeleteCards(p_cardID :Integer);
+begin
+   with DMCardSeting,cm_cards do
+        CallProcedure('del_cards',[p_cardID]);
+   RefreshCards;     
+end;
+
+procedure TfrmCardSettings.RefreshCards;
+begin
+    with DMCardSeting,cardsorts do
+         Refresh;
+end;
+
+procedure TfrmCardSettings.ActnAddExecute(Sender: TObject);
+begin
+   AddNewCards;
+end;
+
+procedure TfrmCardSettings.ActnEditExecute(Sender: TObject);
+begin
+  EditCards;
+end;
+
+procedure TfrmCardSettings.FormCreate(Sender: TObject);
+begin
+   frmCardAddEdit := TfrmCardAddEdit.Create(Self);
+   DMCardSeting := TDMCardSeting.Create(Self);
+   FrmCardProperties := TFrmCardProperties.Create(Self);
+end;
+
+procedure TfrmCardSettings.FormDestroy(Sender: TObject);
+begin
+   frmCardAddEdit.Free;
+   DMCardSeting.Free;
+   FrmCardProperties.Free;
+end;
+
+procedure TfrmCardSettings.ActnDelExecute(Sender: TObject);
+var CrdID :Integer;
+begin
+   if MessageDlg('Ləğv edilməsinə əminsinizmi?',
+           mtConfirmation, [mbYes, mbNo], 0) = mrNo then exit;
+
+
+   with DMCardSeting,cardsorts do
+        CrdID := FieldByName('ID').AsInteger;
+
+   DeleteCards(CrdID);
+
+end;
+
+procedure TfrmCardSettings.ToolButton7Click(Sender: TObject);
+begin
+   Close
+end;
+
+procedure TfrmCardSettings.DBNavigator1Click(Sender: TObject;
+  Button: TNavigateBtn);
+begin
+   if Button = nbDelete	 then
+      RefreshCards;
+end;
+
+initialization
+
+      frmCardSettings := TfrmCardSettings.Create(CommonApplication)
+end.

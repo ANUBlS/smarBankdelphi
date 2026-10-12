@@ -1,0 +1,147 @@
+unit FlatSpeed;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ExtCtrls, Buttons, PanelSpeed;
+
+
+type
+
+  TFlatSpeed = class(TPanel)
+  private
+   FButtonCount : Integer;
+   pTop :Integer;
+   pTag : Integer;
+   FButtonsOnClick : TNotifyEvent;
+   procedure SetButtonCount(value : Integer);
+   procedure InitializePanel;
+  protected
+   procedure Resize; override;
+   procedure DoResize(Sender : TObject);
+   procedure ButtonClick(Sender: TObject);
+  public
+   buts : array of TPanelSpeed;
+   function   AddButton(Capt : String; Image : TIcon; Guid : TGuid):Integer;
+   constructor Create(AOwner: TComponent); override;
+   destructor  Destroy; override;
+   function    getIdByTag(vTag : Integer):Integer;
+  published
+   property ButtonCount : Integer read FButtonCount write SetButtonCount;
+   property OnButtonsClick : TNotifyEvent read FButtonsOnClick write FButtonsOnClick;
+  end;
+
+
+
+procedure Register;
+
+
+implementation
+
+procedure Register;
+begin
+  RegisterComponents('Smart', [TFlatSpeed]);
+end;
+
+function TFlatSpeed.getIdByTag(vTag : Integer):Integer;
+var
+  i : Integer;
+begin
+  Result := -1;
+   for i:= 0  to Length(Buts)-1 do
+   if Buts[i].Tag = vTag then begin
+     Result := i;
+     exit;
+   end;
+end;
+
+procedure TFlatSpeed.DoResize(Sender : TObject);
+const
+    pHeight = 20;
+var
+   i : Integer;
+   pLeft : Integer ;
+begin
+ pLeft := 2;
+ for i:=0 to (Sender as TPanel).ControlCount-1 do
+  if (Sender as TPanel).Controls[i] is (TPanelSpeed) then
+  with ((Sender as TPanel).Controls[i] as TPanelSpeed) do
+  begin
+    Width := (Sender as TPanel).Width-4;
+    Height := pHeight+2;
+    Left := PLeft;
+  end
+
+end;
+
+procedure TFlatSpeed.Resize;
+begin
+  DoResize(Self)
+end;
+
+constructor TFlatSpeed.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  pTop := 2;
+  pTag := 30;
+  InitializePanel;
+end;
+
+destructor TFlatSpeed.Destroy;
+begin
+  buts := nil;
+  inherited Destroy;
+end;
+
+
+
+procedure TFlatSpeed.InitializePanel;
+begin
+  Self.BevelInner := bvRaised;
+  Self.BevelOuter := bvLowered;
+  Self.BorderStyle := bsNone;
+end;
+
+procedure TFlatSpeed.SetButtonCount(value : Integer);
+var
+  i : integer;
+begin
+  if value <= FButtonCount then exit;
+  for i:=1 to Value - FButtonCount do
+    AddButton('But'+IntToStr(i),nil, IUnknown);
+  FButtonCount := Value;
+end;
+
+function TFlatSpeed.AddButton(Capt : String; Image : TBitmap; Guid : TGuid):Integer;
+var
+  idx : Integer;
+begin
+  idx := Length(buts)+1;
+  SetLength(buts, idx);
+  buts[idx-1]:= TPanelSpeed.Create(self);
+  buts[idx-1].parent := self;
+  buts[idx-1].OnClick := ButtonClick;
+  buts[idx-1].PluginGuid := Guid;
+  buts[idx-1].Caption := Capt;
+  if Assigned( Image ) then
+     buts[idx-1].Glyph := Image;//.Canvas.Draw(0,0, Image);
+  buts[idx-1].Top := pTop;
+  buts[idx-1].Tag := pTag;
+  Result := pTag;
+  inc(pTag);
+  inc(pTop, 20);
+  DoResize(Self)
+end;
+
+procedure TFlatSpeed.ButtonClick(Sender: TObject);
+begin
+  if Assigned(FButtonsOnClick) then
+       begin
+         Self.tag := (Sender as TPanelSpeed) .tag;
+//         OnClick(Self);
+        FButtonsOnClick(Self);
+       end;
+end;
+
+end.

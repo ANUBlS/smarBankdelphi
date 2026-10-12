@@ -1,0 +1,302 @@
+unit RtDmImpl;
+
+interface
+
+uses
+  SysUtils, Classes, DB, OracleData, Oracle;
+
+type
+  TRtDataModule = class(TDataModule)
+    PersonLink: TOracleDataSet;
+    PersonLinkID: TFloatField;
+    PersonLinkNAME: TWideStringField;
+    PersonLinkPERSONID: TFloatField;
+    PersonLinkCURRENCY: TFloatField;
+    PersonLinkCREDITLINEAMOUNT: TFloatField;
+    PersonLinkANNUALYINTERESTRATE: TFloatField;
+    PersonLinkANNUALYOVERDUERATE: TFloatField;
+    PersonLinkANNUALYPENALTYRATE: TFloatField;
+    PersonLinkDATEOFCONCLUSION: TDateTimeField;
+    PersonLinkDUEDATEFIRSTCONTRACT: TDateTimeField;
+    PersonLinkDUEDATELASTCONTRACT: TDateTimeField;
+    PersonLinkNUMBEROFCREDIT: TWideStringField;
+    PersonLinkPURPOSEOFCREDIT: TWideStringField;
+    PersonLinkCUSTOMERTYPE: TFloatField;
+    PersonLinkCREDITTYPE: TFloatField;
+    PersonLinkPERSONALTYPE: TFloatField;
+    PersonLinkAUTOPAYMENT: TFloatField;
+    PersonLinkAUTOEXPIRE: TFloatField;
+    PersonLinkUSRGROUP: TFloatField;
+    PersonLinkBRANCHID: TFloatField;
+    PersonLinkANNUALBANKRATE: TFloatField;
+    PersonLinkNEWFINANCEAMOUNT: TFloatField;
+    PersonLinkNUMBEROFBANKCREDIT: TWideStringField;
+    PersonLinkINTCALCMETHOD: TFloatField;
+    PersonLinkPERIODID: TFloatField;
+    PersonLinkACTIVITIES: TFloatField;
+    PersonLinkCREDITACT: TFloatField;
+    PersonLinkACTIVITIES_TYPE: TFloatField;
+    PersonLinkAIM_ID: TFloatField;
+    PersonLinkEXPERTID: TFloatField;
+    PersonLinkOLDCUSTOMERTYPE: TFloatField;
+    PersonLinkPAYINTDAY: TFloatField;
+    PersonLinkPAYPERIOD: TFloatField;
+    PersonLinkERIZEDAT: TDateTimeField;
+    PersonLinkINFO: TWideStringField;
+    PersonLinkMEHSULID: TFloatField;
+    PersonLinkPLEDGEID_P: TFloatField;
+    PersonLinkRESERVEID: TFloatField;
+    PersonLinkDUERESERVEID: TFloatField;
+    SrcPersonLink: TDataSource;
+    DataSrcBranches: TDataSource;
+    Branches: TOracleDataSet;
+    BranchesID: TFloatField;
+    BranchesNAME: TWideStringField;
+    CurrencysData: TOracleDataSet;
+    CurrencysDataCURRID: TIntegerField;
+    CurrencysDataCURRNAME: TWideStringField;
+    CurrencysDataVAL_NAME: TWideStringField;
+    DataSrcCurrencys: TDataSource;
+    PldDataSrc: TDataSource;
+    PgRetel: TOraclePackage;
+    PersonLinkKOD: TWideStringField;
+    PldDataSet: TOracleDataSet;
+    comp: TOracleDataSet;
+    TemplatesDataSet: TOracleDataSet;
+    TemplatesDataSetID: TFloatField;
+    TemplatesDataSetPATH: TWideStringField;
+    TemplatesDataSetNAME: TWideStringField;
+    TemplatesDataSrc: TDataSource;
+    CreditInfoDataSet: TOracleDataSet;
+    CreditInfoDataSrc: TDataSource;
+    BookmarksDataSet: TOracleDataSet;
+    BookmarksDataSrc: TDataSource;
+    FieldsDataSet: TOracleDataSet;
+    FieldsDataSrc: TDataSource;
+    ReplaceDataSet: TOracleDataSet;
+    yazi: TOracleDataSet;
+    FieldsDataSetID: TFloatField;
+    FieldsDataSetFIELDNAME: TWideStringField;
+    FieldsDataSetDESCRIPTION: TWideStringField;
+    Percent: TOracleDataSet;
+    Customers: TOracleDataSet;
+    OracleDataSet1: TOracleDataSet;
+    OracleDataSet1END: TDateTimeField;
+    CM_COMMON: TOraclePackage;
+    PersonLinkPERIODCONTRACTS: TFloatField;
+    OracleDataSet2: TOracleDataSet;
+    OracleDataSet2NUM: TWideStringField;
+    PersonLinkAUTOTRANCE: TFloatField;
+    PersonLinkAUTOCONTRACTNO: TFloatField;
+    BankInfo: TOracleDataSet;
+    BankInfoLOGO: TBlobField;
+    BankInfoBANK: TWideStringField;
+    BankInfoAZ_NAME: TWideStringField;
+    FilialInfods: TDataSource;
+    FilialInfo: TOracleDataSet;
+    FilialInfoNAME: TWideStringField;
+    FilialInfoID: TFloatField;
+    BoorowerInfo: TOracleDataSet;
+    BoorowerInfoCUSTACCNO: TWideStringField;
+    BoorowerInfoLOANACCNO: TWideStringField;
+    BoorowerInfoNAME: TWideStringField;
+    DSBoorowerInfo: TDataSource;
+    CreditInfo: TOracleDataSet;
+    FloatField1: TFloatField;
+    FloatField2: TFloatField;
+    FloatField3: TFloatField;
+    FloatField4: TFloatField;
+    DateTimeField1: TDateTimeField;
+    DateTimeField2: TDateTimeField;
+    FloatField5: TFloatField;
+    CreditInfoPERIOD: TFloatField;
+    CreditInfoREST: TFloatField;
+    CreditInfoBRANCHID: TFloatField;
+    CreditInfoVAL_NAME: TWideStringField;
+    DataSrcCreditInfo: TDataSource;
+    ScheduleData: TOracleDataSet;
+    ScheduleDataSeqNo: TIntegerField;
+    ScheduleDataID: TFloatField;
+    ScheduleDataCREDITID: TFloatField;
+    ScheduleDataPAYMENTDATE: TDateTimeField;
+    ScheduleDataREST: TFloatField;
+    ScheduleDataPRINCIPAL: TFloatField;
+    ScheduleDataINTEREST: TFloatField;
+    ScheduleDataTOTALPAY: TFloatField;
+    DataSrcScheduleData: TDataSource;
+    HeadOfficeID: TOracleDataSet;
+    HeadOfficeIDMINID: TFloatField;
+    PersonLinkAUTOSCEDULE: TFloatField;
+    PersonLinkANUITET: TFloatField;
+    PersonLinkGUZESHT: TFloatField;
+    PersonLinkPERRATE: TFloatField;
+    perodcurr: TOracleDataSet;
+    perodcurrID: TFloatField;
+    perodcurrMEHSULID: TFloatField;
+    perodcurrVALUTE: TFloatField;
+    perodcurrVALU_NAME: TWideStringField;
+    PersonLinkF1: TFloatField;
+    PersonLinkF2: TFloatField;
+    PersonLinkF3: TFloatField;
+    EstateTypeData: TOracleDataSet;
+    EstateTypeDataID: TFloatField;
+    EstateTypeDataNAME: TWideStringField;
+    EstateTypeDataKODU: TWideStringField;
+    EstateType: TDataSource;
+    creditcat: TDataSource;
+    creditcatData: TOracleDataSet;
+    creditcatDataID: TFloatField;
+    creditcatDataNAME: TWideStringField;
+    creditcatDataKOD: TWideStringField;
+    creditcatDataVID_SOB: TFloatField;
+    DataSrcActivities: TDataSource;
+    DataSetActivities: TOracleDataSet;
+    DataSetActivitiesID: TFloatField;
+    DataSetActivitiesDESCRIPTION: TWideStringField;
+    DataSetActivitiesBANK_KOD: TWideStringField;
+    DataSetActivitiesACT_ID: TFloatField;
+    DataSetActivitiesNEWID: TFloatField;
+    DataSrcClientCategories: TDataSource;
+    ClientCategories: TOracleDataSet;
+    ClientCategoriesID: TFloatField;
+    ClientCategoriesPERSON: TFloatField;
+    ClientCategoriesDESCRIPTION: TWideStringField;
+    ClientCategoriesCODE: TWideStringField;
+    ClientCategoriesACT_ID: TFloatField;
+    ClientCategoriesKODU: TWideStringField;
+    DataSrcCreditTypes: TDataSource;
+    CreditTypes: TOracleDataSet;
+    DataSrcReserves: TDataSource;
+    Reserves: TOracleDataSet;
+    ReservesID: TFloatField;
+    ReservesPERCENT: TFloatField;
+    ReservesDESCRIPTION: TWideStringField;
+    ReservesFullDesc: TWideStringField;
+    DataSrcAutoPayment: TDataSource;
+    AutoPayment: TOracleDataSet;
+    CalcIntMethod: TOracleDataSet;
+    CalcIntMethodID: TFloatField;
+    CalcIntMethodDESCRIPTION: TWideStringField;
+    DatSrcCalcIntMethod: TDataSource;
+    ExpertSet: TOracleDataSet;
+    ExpertSrc: TDataSource;
+    dsrc_reg: TDataSource;
+    Ods_reg: TOracleDataSet;
+    Ods_regID: TFloatField;
+    Ods_regNAME: TWideStringField;
+    Ods_regdistrict: TOracleDataSet;
+    Ods_regdistrictID: TFloatField;
+    Ods_regdistrictREG_ID: TFloatField;
+    Ods_regdistrictNAME: TWideStringField;
+    Dsrc_regdistrict: TDataSource;
+    procedure DataModuleDestroy(Sender: TObject);
+    procedure DataModuleCreate(Sender: TObject);
+    procedure PersonLinkApplyRecord(Sender: TOracleDataSet; Action: Char;
+      var Applied: Boolean; var NewRowId: string);
+    procedure PersonLinkCalcFields(DataSet: TDataSet);
+    procedure ScheduleDataCalcFields(DataSet: TDataSet);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  RtDataModule: TRtDataModule;
+  Result : Integer;
+implementation
+
+{$R *.dfm}
+ uses sboapiDataModuleImpl,retelcommon;
+procedure TRtDataModule.DataModuleCreate(Sender: TObject);
+begin
+Branches.Open;
+CurrencysData.open  ;
+PldDataSet.Open;
+EstateTypeData.Open;
+CreditTypes.open;
+Reserves.Open;
+AutoPayment.Open;
+CalcIntMethod.Open;
+ExpertSet.Open;
+Ods_reg.Open;
+end;
+
+procedure TRtDataModule.DataModuleDestroy(Sender: TObject);
+begin
+PersonLink.Close;
+Branches.Close;
+CurrencysData.Close  ;
+PldDataSet.CloseAll;
+TemplatesDataSet.CloseAll;
+CreditInfoDataSet.CloseAll;
+BookmarksDataSet.CloseAll;
+FieldsDataSet.CloseAll;
+ReplaceDataSet.CloseAll;
+yazi.CloseAll;
+
+EstateTypeData.CloseAll;
+CreditTypes.CloseAll;
+Reserves.CloseAll;
+AutoPayment.CloseAll;
+CalcIntMethod.CloseAll;
+ExpertSet.CloseAll;
+Ods_reg.CloseAll;
+
+
+end;
+
+procedure TRtDataModule.PersonLinkApplyRecord(Sender: TOracleDataSet;
+  Action: Char; var Applied: Boolean; var NewRowId: string);
+
+begin
+Result := 0;
+if SavedCredit.ins=1 then
+
+  case Action of
+  'I' :  begin
+         Result := 0;
+       end;
+  'U' :
+       begin
+         with PgRetel ,SavedCredit do
+           Result := CallIntegerFunction('cred_add',[
+           'CreditID',PersonLink.FieldByName('id').AsInteger,
+           'boorowerid',boorowerid,
+           'Currency',Currency,
+           'CreditLineAmount',CreditLineAmount,
+           'AnnualyInterestRate',AnnualyInterestRate,
+           'AnnualyOverdueRate',AnnualyOverdueRate,
+           'AnnualyPenaltyRate',AnnualyPenaltyRate,
+           'DateOfConclusion',DateOfConclusion,
+           'DueDateFirstContract',DueDateFirstContract,
+           'NumberOfCredit',NumberOfCredit,
+           'PurposeOfCredit',PurposeOfCredit,
+           'BranchID',BranchID,
+           'pldgid_t',pldgid_t
+         ]);
+         Applied := True;
+       end;
+    end;
+
+
+
+end;
+
+procedure TRtDataModule.PersonLinkCalcFields(DataSet: TDataSet);
+begin
+  { with DataSet do
+        FieldByName('PeriodContracts').AsInteger
+          := cm_common.CallIntegerFunction('GetPeriod',
+          [FieldByname('DATEOFCONCLUSION').AsDateTime,
+           FieldByname('DUEDATEFIRSTCONTRACT').AsDateTime ]);    }
+end;
+
+procedure TRtDataModule.ScheduleDataCalcFields(DataSet: TDataSet);
+begin
+ with DataSet do
+  FieldByName('TOTALPAY').AsFloat := FieldByName('PRINCIPAL').AsFloat + FieldByName('INTEREST').AsFloat;
+
+end;
+
+end.

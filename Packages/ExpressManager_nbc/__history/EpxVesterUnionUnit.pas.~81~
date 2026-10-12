@@ -1,0 +1,489 @@
+﻿unit EpxVesterUnionUnit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls, XFSCtrls, DBGridEh, Buttons, Mask, DBCtrlsEh,
+  DBLookupEh, CMCurrencyEdit, CMDBSearchEdit;
+
+type
+  TFormVesterUnion = class(TForm)
+    XFPanel1: TXFPanel;
+    XFPanel2: TXFPanel;
+    XFPanel3: TXFPanel;
+    XFilial: TXFPanel;
+    XFPanel5: TXFPanel;
+    XFPanel6: TXFPanel;
+    XFPanel7: TXFPanel;
+    XFPanel8: TXFPanel;
+    EditFilial: TEdit;
+    XFLabel1: TXFLabel;
+    XFLabel2: TXFLabel;
+    XFLabel3: TXFLabel;
+    Transtype: TComboBox;
+    XFLabel4: TXFLabel;
+    XFLabel5: TXFLabel;
+    XFLabel6: TXFLabel;
+    XFLabel7: TXFLabel;
+    XFLabel8: TXFLabel;
+    XFPanel4: TXFPanel;
+    XFLabel9: TXFLabel;
+    XFPanel9: TXFPanel;
+    XFLabel10: TXFLabel;
+    XFPanel10: TXFPanel;
+    XFLabel11: TXFLabel;
+    XFPanel11: TXFPanel;
+    XFLabel12: TXFLabel;
+    SpeedButton1: TSpeedButton;
+    XFPanel12: TXFPanel;
+    XFLabel13: TXFLabel;
+    XFPanel13: TXFPanel;
+    XFLabel14: TXFLabel;
+    AmountEdit: TCMCurrencyEdit;
+    XFLabel15: TXFLabel;
+    PriceAmountEdit: TCMCurrencyEdit;
+    SumAmountEdit: TCMCurrencyEdit;
+    DBCountrName: TDBLookupComboboxEh;
+    EditFrontname: TEdit;
+    EditCustName: TEdit;
+    AccNameEdit: TEdit;
+    OstatAmountEdit: TCMCurrencyEdit;
+    SpeedButton2: TSpeedButton;
+    XFPanel14: TXFPanel;
+    Valname: TComboBox;
+    ComboBox4: TComboBox;
+    Label2: TLabel;
+    EditDescription: TEdit;
+    SpeedButton3: TSpeedButton;
+    SpeedButton4: TSpeedButton;
+    SpeedButton5: TSpeedButton;
+    DateEdit: TDBDateTimeEditEh;
+    EditCustid: TCMSearchEdit;
+    EqueAmountEdit: TCMCurrencyEdit;
+    TPKS: TDBLookupComboboxEh;
+    procedure FormShow(Sender: TObject);
+    procedure SpeedButton4Click(Sender: TObject);
+    procedure SpeedButton2Click(Sender: TObject);
+    procedure PriceAmountEditChange(Sender: TObject);
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure EditDescriptionKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure ComboBox4Click(Sender: TObject);
+    procedure ComboBox4DropDown(Sender: TObject);
+    procedure SpeedButton5Click(Sender: TObject);
+    procedure TPKSCloseUp(Sender: TObject; Accept: Boolean);
+    procedure AmountEditChange(Sender: TObject);
+    procedure SpeedButton3Click(Sender: TObject);
+    procedure TranstypeChange(Sender: TObject);
+    procedure ValnameChange(Sender: TObject);
+
+  private
+    procedure AccountOpen;
+  public
+    var FInsert:integer;
+        pexid:integer;
+        poptype:integer;
+  end;
+
+var
+  FormVesterUnion: TFormVesterUnion;
+  TransferAccno:integer=0;
+implementation
+
+{$R *.dfm}
+ uses ExpDataModuleUnit,OpenAccountImpl,UnitPaymentsCredit,ExpUnitImpl,
+  ExpCustomersTypeUnit,ExpressManagerImpl, ExpVesterPrintUnit;
+
+
+
+procedure TFormVesterUnion.AccountOpen;
+var
+   Accno:string;
+begin
+  With  ExpDataModule do
+  begin
+    Accno:=EXPESSPAC.CallStringFunction('ExpAccountOpen',['custid', EditCustid.Text,
+                                                          'vfilial',EditFilial.Text,
+                                                          'valname',Valname.Text]);
+                                              AccNameEdit.Text:=Accno;
+                                              Accountid.Close;
+                                              Accountid.SetVariable('accno',Accno);
+                                              Accountid.Open;
+                                              ODSTenostat.Close;
+                                              ODSTenostat.SetVariable('accid',AccountidID.AsInteger);
+                                              ODSTenostat.Open;
+                                              OstatAmountEdit.Value:= ODSTenostatOSTAT.AsFloat;
+  end;
+
+end;
+
+procedure TFormVesterUnion.AmountEditChange(Sender: TObject);
+var
+  Ekv:real;
+begin
+  Ekv:=ExpDataModule.EXPESSPAC.CallFloatFunction ('AmountCompare',
+                                                  ['Amount'     ,AmountEdit.Value,
+                                                  'valname'     ,Valname.Text]
+                                                  );
+  EqueAmountEdit.Value:=Ekv;
+  if (Transtype.ItemIndex<>0)  then  SumAmountEdit.Value:=AmountEdit.Value
+                               else   SumAmountEdit.Value:=AmountEdit.Value+PriceAmountEdit.Value;
+
+end;
+
+procedure TFormVesterUnion.ComboBox4Click(Sender: TObject);
+begin
+  EditDescription.Text:=(Sender as TComboBox).Text;
+end;
+
+procedure TFormVesterUnion.ComboBox4DropDown(Sender: TObject);
+begin
+   FormPaymentsCredit.LoadComboData(TComboBox(Sender));
+end;
+
+procedure TFormVesterUnion.EditDescriptionKeyDown(Sender: TObject;
+  var Key: Word; Shift: TShiftState);
+begin
+  if Key=VK_F3 then exit;
+  {with ExpFormDestination, ExpDataModule do
+  begin
+    ShowModal;
+    if ModalResult = mrOk then
+    EditDescription.Text :=Value;
+  end
+  else
+    if Key = VK_ESCAPE then
+    Close;     }
+end;
+
+procedure TFormVesterUnion.FormShow(Sender: TObject);
+BEGIN
+  WITH ExpDataModule DO
+  BEGIN
+    IF FInsert=0 THEN  BEGIN
+                         EditFilial.Text:=FilialDataSetNAME.AsString;
+                         EditCustid.Text:=IntToStr(OpenAccount.retrun_custid);
+                         CustDataSet.Close;
+                         CustDataSet.SetVariable('custid',OpenAccount.retrun_custid);
+                         CustDataSet.Open;
+                         EditCustName.Text:=CustDataSet.FieldByName('name').AsString;
+                         Exp_settingstype.Close;
+                         Exp_settingstype.SetVariable('stypeid',poptype);
+                         Exp_settingstype.Open;
+                         TPKS.KeyValue:=-1;
+                         Transtype.ItemIndex:=-1;
+                         Valname.Text:='';
+                         DateEdit.Text:='';
+                         AmountEdit.Value:=0;
+                         EqueAmountEdit.Value:=0;
+                         PriceAmountEdit.Value:=0;
+                         SumAmountEdit.Value:=0;
+                         DBCountrName.Text:='';
+                         EditFrontname.Clear;
+                         AccNameEdit.Clear;
+                         OstatAmountEdit.Value:=0;
+                         SpeedButton1.Font.Color:=clRed;
+                         SpeedButton2.Font.Color:=clRed;
+                         EditDescription.Clear;
+                         TPKS.SetFocus;
+                       END
+                 ELSE BEGIN
+                        EditFilial.Text:=ExpBatchsDataSetFILIALNAME.AsString;
+                        Exp_settingstype.Close;
+                        Exp_settingstype.SetVariable('stypeid',ExpBatchsDataSetOPTYPE.AsInteger);
+                        Exp_settingstype.Open;
+                        TPKS.KeyValue:=ExpBatchsDataSetSETID.AsInteger;
+                        CustDataSet.Close;
+                        CustDataSet.SetVariable('custid',ExpBatchsDataSetKLIID.AsInteger);
+                        CustDataSet.Open;
+                        EditCustid.Text:=CustDataSet.FieldByName('id').AsString;
+                        EditCustName.Text:=CustDataSet.FieldByName('name').AsString;
+                        Valname.Text:=ExpBatchsDataSetVALNAME.AsString;
+                        DBCountrName.KeyValue:=ExpBatchsDataSetCOUNTRYID.AsInteger;
+                        Transtype.ItemIndex:=ExpBatchsDataSetTRANSTYPE.AsInteger;
+                        AmountEdit.Value:=ExpBatchsDataSetAMOUNT.AsFloat;
+                        PriceAmountEdit.Value:=ExpBatchsDataSetPRICEAMOUNT.AsFloat;
+                        SumAmountEdit.Value:=AmountEdit.Value+PriceAmountEdit.Value;
+                        DBCountrName.KeyValue:=ExpBatchsDataSetCOUNTRYID.AsVariant;
+                        pexid:= ExpBatchsDataSetEXPID.AsInteger;
+                        poptype:= ExpBatchsDataSetOPTYPE.AsInteger;
+                        EditFrontname.Text:=ExpBatchsDataSetBKLINAME.AsString;
+                        AccDataSet.Close;
+                        AccDataSet.SetVariable('ID',ExpBatchsDataSetDEBETACCID.AsInteger);
+                        AccDataSet.Open;
+                        AccNameEdit.Text:=AccDataSet.FieldByName('acc_no').AsString;
+                        ODSTenostat.Close;
+                        ODSTenostat.SetVariable('accid',ExpBatchsDataSetDEBETACCID.AsInteger);
+                        ODSTenostat.Open;
+                        OstatAmountEdit.Value:=ODSTenostatOSTAT.AsInteger;
+                        EditDescription.Text:=ExpBatchsDataSetREMIT_INF.AsString;
+                        TransferAccno:=ExpBatchsDataSetTRANSFERS_ACCNO.AsInteger;
+                        if TransferAccno=1 then SpeedButton2.Font.Color:=clBlue
+                                           else SpeedButton2.Font.Color:=clRed;
+
+                        DateEdit.Value:=ExpBatchsDataSetRECDATE.AsVariant;
+
+
+                      END;
+  END;
+END;
+
+procedure TFormVesterUnion.PriceAmountEditChange(Sender: TObject);
+begin
+  SumAmountEdit.Value:=AmountEdit.Value+PriceAmountEdit.Value;
+end;
+
+procedure TFormVesterUnion.SpeedButton1Click(Sender: TObject);
+BEGIN
+  IF SpeedButton1.Font.Color=clRed THEN
+  BEGIN
+    IF (EqueAmountEdit.Value-1000)>0 THEN BEGIN
+                                            AccountOpen;
+                                            SpeedButton1.Font.Color:=clBlue;
+                                          END
+                                     ELSE BEGIN
+                                            IF MessageDlg('Köçürmə məbləği 1000 usd ekvivalentindən kiçik olduğu üçün hesab aça bilmərsiz!!!',mtWarning,[mbYes, mbNo], 0) = mrYes
+                                            THEN
+                                            IF MessageDlg('Əgər bu xəbərdarlığa baxmayaraq hesab açmaq istəyirsinisə onda Bəli əks halda İmtina düyməsini basın',mtConfirmation,[mbYes, mbNo], 0,mbYes)=mrYes THEN
+                                            BEGIN
+                                              AccountOpen;
+                                              SpeedButton1.Font.Color:=clBlue
+                                            END
+                                           ELSE
+                                            EXIT;
+                                          END;
+
+  END
+  ELSE BEGIN
+         AccNameEdit.Clear;
+         OstatAmountEdit.Value:=0;
+         SpeedButton1.Font.Color:=clRed;
+       END;
+
+
+END;
+
+procedure TFormVesterUnion.SpeedButton2Click(Sender: TObject);
+begin
+  if length(AccNameEdit.Text)>0 then
+  begin
+    if SpeedButton2.Font.Color=clRed then begin
+                                            TransferAccno:=1;
+                                            SpeedButton2.Font.Color:=clBlue;
+                                           end
+                                     else begin
+                                            TransferAccno:=0;
+                                            SpeedButton2.Font.Color:=clRed;
+                                          end;
+  end;
+end;
+
+procedure TFormVesterUnion.SpeedButton3Click(Sender: TObject);
+begin
+  if AccNameEdit.Text='' then exit;
+  ExpDataModule.Accountid.Close;
+  ExpDataModule.Accountid.SetVariable('accno',AccNameEdit.Text);
+  ExpDataModule.Accountid.Open;
+  if trunc(integer(ExpDataModule.AccountidOPEN_DAT.AsVariant))< trunc(integer(ExpDataModule.SysdateDataSet.fieldbyname('dat').AsVariant)) then
+  begin
+    ShowMessage('Hesab artıq mövcud olduğu üçün sənəd çapa verilmədi');
+    exit;
+  end;
+
+  FormExpVesterPrint:=TFormExpVesterPrint.Create(Self);
+  FormExpVesterPrint.CustomerInfoDataSet.Close;
+  FormExpVesterPrint.CustomerInfoDataSet.SetVariable('acc_id',ExpDataModule.AccountidID.AsInteger);
+  FormExpVesterPrint.CustomerInfoDataSet.Open;
+  FormExpVesterPrint.DBLookupComboboxEh1.Text:='';
+  FormExpVesterPrint.ShowModal;
+end;
+
+procedure TFormVesterUnion.SpeedButton4Click(Sender: TObject);
+var pTPKS:string;
+    pTranstype:Integer;
+    pValname:string;
+    pAmountEdit:real;
+    pPriceAmountEdit:real;
+    pDBCountrName:variant;
+    pEditFrontname:string;
+    pCustid:integer;
+    pDescript:string;
+    pFilalName:string;
+    psetid:integer;
+    pAccNameEdit:string;
+    pdate:string;
+    pid:integer;
+    v_id:integer;
+
+begin
+
+
+  if VarIsNull(TPKS.Value)         then begin
+                                          ShowMessage('TPKS-in növünü seçin!....');
+                                          exit;
+                                        end;
+
+  if Transtype.Text=''             then begin
+                                          ShowMessage('Əməliyyatın növünü seçin!....');
+                                          exit;
+                                        end;
+
+  if Valname.Text=''               then begin
+                                          ShowMessage('Valyutanı  seçin!....');
+                                          exit;
+                                        end;
+
+  if AmountEdit.Value=0            then begin
+                                          ShowMessage('Köçürmə məbləğini daxil edin!....');
+                                          exit;
+                                        end;
+
+
+  if (Transtype.ItemIndex=0)   then
+  begin
+  if PriceAmountEdit.Value=0       then begin
+                                          ShowMessage('Xidmət haqqını daxil edin!....');
+                                          exit;
+                                        end;
+   end;
+
+
+
+
+  if VarIsNull(DBCountrName.Value) then  begin
+                                           ShowMessage('Ölkəni seçin!....');
+                                           exit;
+                                         end;
+
+
+
+
+
+  if EditFrontname.Text=''  then begin
+                                   ShowMessage('Qarşı tərəfi daxil edin!....');
+                                   exit;
+                                 end;
+
+
+  if Transtype.ItemIndex=2 then
+  begin
+  if VarIsNull(DateEdit.Value) then
+                                 begin
+                                   ShowMessage('Tarixi seçin!....');
+                                   exit;
+                                 end;
+  end;
+
+
+
+  pCustid:=StrToInt(EditCustid.Text);
+  psetid:=ExpDataModule.Exp_settingstype.FieldByName('id').AsInteger;
+  pAccNameEdit:=AccNameEdit.Text;
+  pValname:=Valname.Text;
+  pAmountEdit:=AmountEdit.Value;
+  pPriceAmountEdit:=PriceAmountEdit.value;
+  pFilalName:=EditFilial.Text;
+  pDescript:=EditDescription.Text;
+  pDBCountrName:=DBCountrName.KeyValue;
+  pEditFrontname:=EditFrontname.Text;
+  pTranstype:=Transtype.ItemIndex;
+  if VarIsNull(DateEdit.Value) then pdate:=''
+                               else pdate:=DateEdit.Text;
+
+  IF FInsert=0 THEN
+  BEGIN
+    ExpDataModule.EXPESSPAC.CallProcedure('exp_vester_insert',
+                                          ['v_id'         ,pid
+                                          ,'v_exid'       ,pexid
+                                          ,'v_kliid'      ,pCustid
+                                          ,'v_optype'     ,poptype
+                                          ,'v_setid'      ,psetid
+                                          ,'v_accname'    ,pAccNameEdit
+                                          ,'v_valname'    ,pValname
+                                          ,'v_amount'     ,pAmountEdit
+                                          ,'v_priceamount',pPriceAmountEdit
+                                          ,'v_filname'    ,pFilalName
+                                          ,'v_remit_inf'  ,pDescript
+                                          ,'v_doc_country',pDBCountrName
+                                          ,'v_bkliname'   ,pEditFrontname
+                                          ,'v_transtype'  ,pTranstype
+                                          ,'v_transaccno' ,TransferAccno
+                                          ,'v_date'       ,pdate
+                                          ]
+                                          );
+  pid:=ExpDataModule.EXPESSPAC.GetParameter(0);
+  END
+  ELSE
+   BEGIN
+
+     pid:=ExpDataModule.ExpBatchsDataSource.DataSet.FieldByName('id').AsInteger;
+     ExpDataModule.EXPESSPAC.CallProcedure('exp_vester_update',
+                                          ['v_id'         ,pid
+                                          ,'v_exid'       ,pexid
+                                          ,'v_kliid'      ,pCustid
+                                          ,'v_optype'     ,poptype
+                                          ,'v_setid'      ,psetid
+                                          ,'v_accname'    ,pAccNameEdit
+                                          ,'v_valname'    ,pValname
+                                          ,'v_amount'     ,pAmountEdit
+                                          ,'v_priceamount',pPriceAmountEdit
+                                          ,'v_filname'    ,pFilalName
+                                          ,'v_remit_inf'  ,pDescript
+                                          ,'v_doc_country',pDBCountrName
+                                          ,'v_bkliname'   ,pEditFrontname
+                                          ,'v_transtype'  ,pTranstype
+                                          ,'v_transaccno' ,TransferAccno
+                                          ,'v_date'       ,pdate
+                                          ]
+                                          );
+   END;
+
+
+
+  FormVesterUnion.Close;
+  ExpCustomersType.Close;
+
+  ExpDataModule.ExpBatchsDataSet.Refresh;
+  ExpDataModule.ExpBatchsDataSet.Locate('ID',pid,[]);
+
+end;
+
+procedure TFormVesterUnion.SpeedButton5Click(Sender: TObject);
+begin
+  Close;
+end;
+
+procedure TFormVesterUnion.TPKSCloseUp(Sender: TObject; Accept: Boolean);
+begin
+  EditDescription.Text:=ExpDataModule.DSExp_settingstype.DataSet.FieldByName('description').AsString;
+end;
+
+procedure TFormVesterUnion.TranstypeChange(Sender: TObject);
+begin
+  if Transtype.ItemIndex=2 then  begin
+                                   PriceAmountEdit.ReadOnly:=True;
+                                   DateEdit.ReadOnly:=False;
+                                 end
+                           else  begin
+                                   PriceAmountEdit.ReadOnly:=False;
+                                   DateEdit.ReadOnly:=True;
+                                   DateEdit.Text:='';
+                                   PriceAmountEdit.Value:=0;
+                                   SumAmountEdit.Value:=AmountEdit.Value;
+                                 end;
+
+end;
+
+procedure TFormVesterUnion.ValnameChange(Sender: TObject);
+begin
+  AmountEdit.Value:=0;
+  EqueAmountEdit.Value:=0;
+  PriceAmountEdit.Value:=0;
+  SumAmountEdit.Value:=0;
+end;
+
+end.
+
+
+

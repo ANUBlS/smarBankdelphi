@@ -1,0 +1,131 @@
+unit uUsrGroupDMImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Oracle, Db, OracleData;
+
+type
+  TUsrGrDataMod = class(TDataModule)
+    CM_SETUP: TOraclePackage;
+    UserGroupsDataSrc: TDataSource;
+    CatDataSet: TOracleDataSet;
+    CatDataSource: TDataSource;
+    PersonsDataSet: TOracleDataSet;
+    PersonsDataSource: TDataSource;
+    DataSource1: TDataSource;
+    OracleDataSet1: TOracleDataSet;
+    CatDataSetID: TFloatField;
+    CatDataSetPERSON: TFloatField;
+    CatDataSetCODE: TWideStringField;
+    CatDataSetDESCRIPTION: TWideStringField;
+    CatDataSetACT_ID: TFloatField;
+    CatDataSetKODU: TWideStringField;
+    PersonsDataSetID: TFloatField;
+    PersonsDataSetNAME: TWideStringField;
+    PersonsDataSetDESCRIPION: TWideStringField;
+    OracleDataSet1ID: TFloatField;
+    OracleDataSet1NAME: TWideStringField;
+    OracleDataSet1NEWID: TFloatField;
+    OracleDataSet1CODE: TWideStringField;
+    OracleDataSet1CUSTTYPE: TFloatField;
+    DataSource2: TDataSource;
+    OracleDataSet2: TOracleDataSet;
+    OracleDataSet2ID: TFloatField;
+    OracleDataSet2NAME: TWideStringField;
+    UserGroupsDataSet: TOracleDataSet;
+    UserGroupsDataSetDESCRIPTION: TWideStringField;
+    UserGroupsDataSetFAIZ: TFloatField;
+    UserGroupsDataSetKART: TFloatField;
+    UserGroupsDataSetKOMISSYA: TFloatField;
+    UserGroupsDataSetID: TFloatField;
+    UserGroupsDataSetBANK_KOD: TWideStringField;
+    procedure DataModuleCreate(Sender: TObject);
+    procedure UserGroupsDataSet1212ApplyRecord(Sender: TOracleDataSet;
+      Action: Char; var Applied: Boolean; var NewRowId: String);
+    procedure CatDataSetApplyRecord(Sender: TOracleDataSet; Action: Char;
+      var Applied: Boolean; var NewRowId: String);
+    procedure DataModuleDestroy(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  UsrGrDataMod: TUsrGrDataMod;
+
+implementation
+
+{$R *.DFM}
+
+uses sboapiDataModuleImpl;
+
+procedure TUsrGrDataMod.DataModuleCreate(Sender: TObject);
+begin
+  UserGroupsDataSet.Open;
+  CatDataSet.Open;
+  PersonsDataSet.Open;
+  OracleDataSet1.open;
+  OracleDataSet2.open;
+
+end;
+
+procedure TUsrGrDataMod.UserGroupsDataSet1212ApplyRecord(
+  Sender: TOracleDataSet; Action: Char; var Applied: Boolean;
+  var NewRowId: String);
+var id,sed : integer; description :String;
+begin
+   with Sender do
+   begin
+    id := FieldByName('id').AsInteger;
+    description := FieldByName('description').AsString;
+//    sed:=FieldByName('schedule').AsInteger;
+   end;
+
+ Applied := True;
+ Case Action of
+
+     'I':CM_SETUP.CallProcedure('UsrGroupAdd',[description]);
+     'U':CM_SETUP.CallProcedure('UsrGroupEdit',[id,description]);
+     'D':CM_SETUP.CallProcedure('UsrGroupDelete',[id])
+     else Applied := False;
+
+ end;
+end;
+procedure TUsrGrDataMod.CatDataSetApplyRecord(Sender: TOracleDataSet;
+  Action: Char; var Applied: Boolean; var NewRowId: String);
+var v_id,v_person :integer; v_code,v_description :String;
+begin
+
+   with Sender do
+   begin
+      v_id := FieldByName('id').AsInteger;
+      v_code :=  FieldByName('code').AsString;
+      v_person :=  FieldByName('person').AsInteger;;
+      v_description := FieldByName('description').Asstring;
+   end;
+
+   Applied := True;
+   Case Action of
+    'I':CM_SETUP.CallProcedure('CategoriesAdd',[v_person,
+                                                v_code,
+                                                v_description]);
+    'U':CM_SETUP.CallProcedure('CategoriesEdit',[v_id,
+                                                 v_person,
+                                                 v_code,
+                                                 v_description]);
+    'D':CM_SETUP.CallProcedure('CategoriesDelete',[v_id])                                             
+    else Applied := False;
+  end;
+end;
+
+procedure TUsrGrDataMod.DataModuleDestroy(Sender: TObject);
+begin
+  UserGroupsDataSet.CloseAll;
+  CatDataSet.CloseAll;
+  PersonsDataSet.CloseAll;
+end;
+
+end.

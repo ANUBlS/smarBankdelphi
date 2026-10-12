@@ -1,0 +1,497 @@
+object WS_PAYDataModule: TWS_PAYDataModule
+  OldCreateOrder = False
+  Height = 313
+  Width = 848
+  object Ods_wspayment: TOracleDataSet
+    SQL.Strings = (
+      
+        'select  terminal_type,id ,account,creditid,Amount,rrn,currency,c' +
+        'ustomer,respdatetime,sys_date,payment_id,status, paymethod, fili' +
+        'al from('
+      
+        'select terminal_type,id ,account,creditid,Amount,rrn,currency,cu' +
+        'stomer,respdatetime,sys_date,payment_id,1 as status, paymethod, ' +
+        'filial from terminal_payments'
+      'union'
+      
+        'select terminal_type,id ,account,creditid,Amount,rrn,currency,cu' +
+        'stomer,respdatetime,sys_date,'#39'0'#39' as payment_id,0 as status, paym' +
+        'ethod,filial from terminal_temppayments)'
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      'order by respdatetime')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000E00000004000000490044000100000000000E000000410043004300
+      4F0055004E0054000100000000000C00000041004D004F0055004E0054000100
+      0000000010000000430055005200520045004E00430059000100000000001000
+      000043005500530054004F004D00450052000100000000001800000052004500
+      530050004400410054004500540049004D004500010000000000060000005200
+      52004E00010000000000100000005300590053005F0044004100540045000100
+      00000000140000005000410059004D0045004E0054005F004900440001000000
+      00001A0000005400450052004D0049004E0041004C005F005400590050004500
+      0100000000000C00000053005400410054005500530001000000000010000000
+      4300520045004400490054004900440001000000000012000000500041005900
+      4D004500540048004F0044000100000000000C000000460049004C0049004100
+      4C00010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 48
+    Top = 16
+    object Ods_wspaymentTERMINAL_TYPE: TWideStringField
+      DisplayLabel = #214'd'#601'm'#601' n'#246'v'#252
+      FieldName = 'TERMINAL_TYPE'
+      Size = 8
+    end
+    object Ods_wspaymentID: TFloatField
+      FieldName = 'ID'
+    end
+    object Ods_wspaymentACCOUNT: TWideStringField
+      Alignment = taRightJustify
+      DisplayLabel = 'Hesab'
+      FieldName = 'ACCOUNT'
+      Size = 255
+    end
+    object Ods_wspaymentAMOUNT: TFloatField
+      DisplayLabel = 'M'#601'bl'#601#287
+      FieldName = 'AMOUNT'
+    end
+    object Ods_wspaymentRRN: TWideStringField
+      FieldName = 'RRN'
+      Size = 255
+    end
+    object Ods_wspaymentCURRENCY: TWideStringField
+      DisplayLabel = 'Valyuta'
+      FieldName = 'CURRENCY'
+      Size = 255
+    end
+    object Ods_wspaymentCUSTOMER: TWideStringField
+      DisplayLabel = 'M'#252#351't'#601'ri'
+      FieldName = 'CUSTOMER'
+      Size = 255
+    end
+    object Ods_wspaymentRESPDATETIME: TDateTimeField
+      DisplayLabel = #214'd'#601'ni'#351' tarixi '
+      FieldName = 'RESPDATETIME'
+    end
+    object Ods_wspaymentSYS_DATE: TDateTimeField
+      DisplayLabel = 'Sistem Tarixi'
+      FieldName = 'SYS_DATE'
+    end
+    object Ods_wspaymentPAYMENT_ID: TWideStringField
+      DisplayLabel = #214'd'#601'ni'#351' '#304'd'
+      FieldName = 'PAYMENT_ID'
+      Size = 40
+    end
+    object Ods_wspaymentSTATUS: TFloatField
+      DisplayLabel = 'Status'
+      FieldName = 'STATUS'
+    end
+    object Ods_wspaymentPAYMETHOD: TWideStringField
+      DisplayLabel = #214'd'#601'ni'#351' n'#246'v'#252
+      FieldName = 'PAYMETHOD'
+      Size = 35
+    end
+    object Ods_wspaymentFILIAL: TWideStringField
+      DisplayLabel = 'Filial'
+      FieldName = 'FILIAL'
+      Size = 25
+    end
+    object Ods_wspaymentCREDITID: TWideStringField
+      DisplayLabel = 'Kredit id'
+      FieldName = 'CREDITID'
+      Size = 40
+    end
+  end
+  object dsrc_wspaymen: TDataSource
+    DataSet = Ods_wspayment
+    Left = 56
+    Top = 88
+  end
+  object ods_arxipayment: TOracleDataSet
+    SQL.Strings = (
+      'select p.* from ws_payment p where trunc(sys_date)=:v_dat'
+      ''
+      'order by sys_date desc')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000C0000003A0056005F004400410054000C00000000000000
+      00000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000001000000004000000490044000100000000000E000000410043004300
+      4F0055004E0054000100000000000C00000041004D004F0055004E0054000100
+      0000000010000000430055005200520045004E00430059000100000000001000
+      000043005500530054004F004D00450052000100000000001800000052004500
+      530050004400410054004500540049004D004500010000000000100000005200
+      4500530050004400410054004500010000000000100000005200450053005000
+      540049004D00450001000000000006000000520052004E000100000000000C00
+      0000530055004200520052004E00010000000000100000005300590053005F00
+      44004100540045000100000000000C0000005400410052004700450054000100
+      00000000100000005400450052004D0049004E0041004C000100000000001400
+      00005000410059004D0045004E0054005F00490044000100000000000C000000
+      530054004100540055005300010000000000100000005400520041004E005300
+      5F0049004400010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 40
+    Top = 176
+    object ods_arxipaymentID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object ods_arxipaymentACCOUNT: TWideStringField
+      DisplayWidth = 12
+      FieldName = 'ACCOUNT'
+      Size = 255
+    end
+    object ods_arxipaymentAMOUNT: TFloatField
+      FieldName = 'AMOUNT'
+    end
+    object ods_arxipaymentCURRENCY: TWideStringField
+      DisplayWidth = 12
+      FieldName = 'CURRENCY'
+      Size = 255
+    end
+    object ods_arxipaymentCUSTOMER: TWideStringField
+      DisplayWidth = 12
+      FieldName = 'CUSTOMER'
+      Size = 255
+    end
+    object ods_arxipaymentRESPDATETIME: TDateTimeField
+      FieldName = 'RESPDATETIME'
+    end
+    object ods_arxipaymentRESPDATE: TWideStringField
+      DisplayWidth = 12
+      FieldName = 'RESPDATE'
+      Size = 255
+    end
+    object ods_arxipaymentRESPTIME: TWideStringField
+      DisplayWidth = 12
+      FieldName = 'RESPTIME'
+      Size = 255
+    end
+    object ods_arxipaymentRRN: TWideStringField
+      DisplayWidth = 12
+      FieldName = 'RRN'
+      Size = 255
+    end
+    object ods_arxipaymentSUBRRN: TFloatField
+      FieldName = 'SUBRRN'
+    end
+    object ods_arxipaymentSYS_DATE: TDateTimeField
+      FieldName = 'SYS_DATE'
+    end
+    object ods_arxipaymentTARGET: TWideStringField
+      DisplayWidth = 12
+      FieldName = 'TARGET'
+      Size = 255
+    end
+    object ods_arxipaymentTERMINAL: TWideStringField
+      DisplayWidth = 12
+      FieldName = 'TERMINAL'
+      Size = 255
+    end
+    object ods_arxipaymentPAYMENT_ID: TFloatField
+      FieldName = 'PAYMENT_ID'
+    end
+    object ods_arxipaymentSTATUS: TFloatField
+      FieldName = 'STATUS'
+    end
+    object ods_arxipaymentTRANS_ID: TFloatField
+      FieldName = 'TRANS_ID'
+    end
+  end
+  object Dsrc_arxipayment: TDataSource
+    DataSet = ods_arxipayment
+    Left = 48
+    Top = 232
+  end
+  object Ods_wssysdate: TOracleDataSet
+    SQL.Strings = (
+      'SELECT TO_CHAR(sysdate, '#39'HH24:MI'#39') AS saat, sysdate'
+      'FROM dual')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000800000053004100410054000100000000000E0000005300
+      590053004400410054004500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 224
+    Top = 16
+    object Ods_wssysdateSAAT: TWideStringField
+      FieldName = 'SAAT'
+      Size = 5
+    end
+    object Ods_wssysdateSYSDATE: TDateTimeField
+      FieldName = 'SYSDATE'
+    end
+  end
+  object Ods_sum: TOracleDataSet
+    SQL.Strings = (
+      'select sum(amount)as amount from terminal_payments'
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      '')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {05000000010000000C00000041004D004F0055004E005400010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 412
+    Top = 96
+    object Ods_sumAMOUNT: TFloatField
+      FieldName = 'AMOUNT'
+    end
+  end
+  object ods_combolist: TOracleDataSet
+    SQL.Strings = (
+      
+        'select  '#39'B'#252't'#252'n Ham'#305's'#305#39' terminal_type from  terminal_arctemppayme' +
+        'nts'
+      'Union '
+      'select  distinct terminal_type  from  terminal_arcpayments')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000010000001A0000005400450052004D0049004E0041004C005F005400
+      590050004500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 468
+    Top = 224
+    object ods_combolistTERMINAL_TYPE: TWideStringField
+      FieldName = 'TERMINAL_TYPE'
+      Size = 8
+    end
+  end
+  object dt_combo: TDataSource
+    DataSet = ods_combolist
+    Left = 568
+    Top = 232
+  end
+  object Ods_wspaymentarch: TOracleDataSet
+    SQL.Strings = (
+      
+        'select  terminal_type,id ,account,creditid,Amount,rrn,currency,c' +
+        'ustomer,respdatetime,sys_date,payment_id,status,  paymethod, fil' +
+        'ial from('
+      
+        'select terminal_type,id ,account,creditid,Amount,rrn,currency,cu' +
+        'stomer,respdatetime,sys_date,payment_id,1 as status, paymethod,f' +
+        'ilial from terminal_arcpayments'
+      'union'
+      
+        'select terminal_type,id ,account,creditid,Amount,rrn,currency,cu' +
+        'stomer,respdatetime,sys_date,'#39'0'#39' as payment_id,0 as status, paym' +
+        'ethod, filial from terminal_arctemppayments)'
+      'where trunc(sys_date) between :v_dat and :v_dat2'
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      'order by respdatetime')
+    Optimize = False
+    Variables.Data = {
+      04000000020000000C0000003A0056005F004400410054000C00000000000000
+      000000000E0000003A0056005F0044004100540032000C000000000000000000
+      0000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000E00000004000000490044000100000000000E000000410043004300
+      4F0055004E0054000100000000000C00000041004D004F0055004E0054000100
+      0000000010000000430055005200520045004E00430059000100000000001000
+      000043005500530054004F004D00450052000100000000001800000052004500
+      530050004400410054004500540049004D004500010000000000060000005200
+      52004E00010000000000100000005300590053005F0044004100540045000100
+      00000000140000005000410059004D0045004E0054005F004900440001000000
+      00001A0000005400450052004D0049004E0041004C005F005400590050004500
+      0100000000000C00000053005400410054005500530001000000000010000000
+      4300520045004400490054004900440001000000000012000000500041005900
+      4D004500540048004F0044000100000000000C000000460049004C0049004100
+      4C00010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 216
+    Top = 136
+    object Ods_wspaymentarchTERMINAL_TYPE: TWideStringField
+      DisplayLabel = #214'd'#601'm'#601' n'#246'v'#252
+      FieldName = 'TERMINAL_TYPE'
+      Size = 8
+    end
+    object Ods_wspaymentarchID: TFloatField
+      FieldName = 'ID'
+    end
+    object Ods_wspaymentarchACCOUNT: TWideStringField
+      DisplayLabel = 'Hesab'
+      FieldName = 'ACCOUNT'
+      Size = 255
+    end
+    object Ods_wspaymentarchAMOUNT: TFloatField
+      DisplayLabel = 'M'#601'bl'#601#287
+      FieldName = 'AMOUNT'
+    end
+    object Ods_wspaymentarchRRN: TWideStringField
+      FieldName = 'RRN'
+      Size = 255
+    end
+    object Ods_wspaymentarchCURRENCY: TWideStringField
+      DisplayLabel = 'Valyuta'
+      FieldName = 'CURRENCY'
+      Size = 255
+    end
+    object Ods_wspaymentarchCUSTOMER: TWideStringField
+      DisplayLabel = 'M'#252#351't'#601'ri'
+      FieldName = 'CUSTOMER'
+      Size = 255
+    end
+    object Ods_wspaymentarchRESPDATETIME: TDateTimeField
+      DisplayLabel = #214'd'#601'ni'#351' Tarixi'
+      FieldName = 'RESPDATETIME'
+    end
+    object Ods_wspaymentarchSYS_DATE: TDateTimeField
+      DisplayLabel = 'Sistem Tarixi'
+      FieldName = 'SYS_DATE'
+    end
+    object Ods_wspaymentarchPAYMENT_ID: TWideStringField
+      DisplayLabel = #214'd'#601'ni'#351' '#304'd'
+      FieldName = 'PAYMENT_ID'
+      Size = 40
+    end
+    object Ods_wspaymentarchSTATUS: TFloatField
+      DisplayLabel = 'Status'
+      FieldName = 'STATUS'
+    end
+    object Ods_wspaymentarchPAYMETHOD: TWideStringField
+      DisplayLabel = #214'd'#601'ni'#351' n'#246'v'#252
+      FieldName = 'PAYMETHOD'
+      Size = 35
+    end
+    object Ods_wspaymentarchFILIAL: TWideStringField
+      DisplayLabel = 'Filial'
+      FieldName = 'FILIAL'
+      Size = 35
+    end
+    object Ods_wspaymentarchCREDITID: TWideStringField
+      DisplayLabel = 'Kredit '#304'd'
+      FieldName = 'CREDITID'
+      Size = 40
+    end
+  end
+  object Dt_arcpay: TDataSource
+    DataSet = Ods_wspaymentarch
+    Left = 216
+    Top = 192
+  end
+  object OracleDataSet1: TOracleDataSet
+    SQL.Strings = (
+      'select  '#39'B'#252't'#252'n Ham'#305's'#305#39' terminal_type from terminal_temppayments'
+      'Union '
+      'select  distinct terminal_type  from '
+      'terminal_payments'
+      'Union'
+      'select  distinct terminal_type  from'
+      'terminal_temppayments')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000010000001A0000005400450052004D0049004E0041004C005F005400
+      590050004500010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 508
+    Top = 160
+    object WideStringField6: TWideStringField
+      FieldName = 'TERMINAL_TYPE'
+      Size = 8
+    end
+  end
+  object DataSource1: TDataSource
+    DataSet = OracleDataSet1
+    Left = 584
+    Top = 176
+  end
+  object DataSource2: TDataSource
+    DataSet = Ods_wssysdate
+    Left = 224
+    Top = 64
+  end
+  object mainpacket: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'terminalpayments'
+    Left = 352
+    Top = 208
+  end
+  object Payment: TOracleDataSet
+    SQL.Strings = (
+      'select '
+      '       customer,'
+      '       cr.creditid,'
+      '       cr.rest,'
+      '       cr.duerest,'
+      '       cr.interestrest,'
+      '       cr.dueinterestrest,'
+      
+        '      (select ostat from tenostat where acc_id=a.booroweraccid)o' +
+        'stat'
+      ''
+      
+        'from terminal_arcpayments ta,cm_curr_state cr,cm_accounts a wher' +
+        'e sys_date>=sbop.PRED_DATE and sys_date<=sbop.get_date and ta.cr' +
+        'editid=cr.creditid and ta.creditid=a.creditid')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000070000001000000043005500530054004F004D004500520001000000
+      0000100000004300520045004400490054004900440001000000000008000000
+      52004500530054000100000000000E0000004400550045005200450053005400
+      0100000000001800000049004E00540045005200450053005400520045005300
+      54000100000000001E00000044005500450049004E0054004500520045005300
+      540052004500530054000100000000000A0000004F0053005400410054000100
+      00000000}
+    Session = sboapiDataModule.SBSession
+    Left = 624
+    Top = 72
+    object PaymentCUSTOMER: TWideStringField
+      DisplayLabel = 'M'#252#351't'#601'rinin ad'#305
+      FieldName = 'CUSTOMER'
+      Size = 255
+    end
+    object PaymentCREDITID: TFloatField
+      DisplayLabel = 'Kreditin '#304'd-si'
+      FieldName = 'CREDITID'
+      Required = True
+    end
+    object PaymentREST: TFloatField
+      DisplayLabel = #399'sas Borc'
+      FieldName = 'REST'
+    end
+    object PaymentDUEREST: TFloatField
+      DisplayLabel = 'Gecikmi'#351' '#399'sas Borc'
+      FieldName = 'DUEREST'
+    end
+    object PaymentINTERESTREST: TFloatField
+      DisplayLabel = 'Faiz Borc'
+      FieldName = 'INTERESTREST'
+    end
+    object PaymentDUEINTERESTREST: TFloatField
+      DisplayLabel = 'Gecikmi'#351' Faiz Borc'
+      FieldName = 'DUEINTERESTREST'
+    end
+    object PaymentOSTAT: TFloatField
+      DisplayLabel = 'Cari Qal'#305'q'
+      FieldName = 'OSTAT'
+    end
+  end
+end

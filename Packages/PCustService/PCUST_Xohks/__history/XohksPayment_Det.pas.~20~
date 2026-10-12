@@ -1,0 +1,551 @@
+﻿unit XohksPayment_Det;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, DBCtrls, CurrencyEdit, Buttons, XFSCtrls, ExtCtrls,
+  SearchEdit;
+
+type
+  TFormPayment_Det = class(TForm)
+    XFGroupBox1: TXFGroupBox;
+    XFPanel13: TXFPanel;
+    XFGroupBox3: TXFGroupBox;
+    XFGroupBox5: TXFGroupBox;
+    XFPanel21: TXFPanel;
+    XFPanel22: TXFPanel;
+    XFPanel25: TXFPanel;
+    XFPanel26: TXFPanel;
+    XFPanel12: TXFPanel;
+    XFPanel28: TXFPanel;
+    XFPanel33: TXFPanel;
+    XFGroupBox2: TXFGroupBox;
+    XFPanel1: TXFPanel;
+    XFPanel2: TXFPanel;
+    XFPanel3: TXFPanel;
+    XFPanel4: TXFPanel;
+    XFPanel5: TXFPanel;
+    XFPanel6: TXFPanel;
+    XFGroupBox4: TXFGroupBox;
+    XFPanel8: TXFPanel;
+    XFPanel9: TXFPanel;
+    XFPanel11: TXFPanel;
+    XFPanel10: TXFPanel;
+    XFPanel23: TXFPanel;
+    XFBitBtn1: TXFBitBtn;
+    Edit_BankName_Self: TEdit;
+    Edit_BankCode_Self: TEdit;
+    Edit_account_Self: TEdit;
+    Edit_Voen_Self: TEdit;
+    Edit_account_sub_Self: TEdit;
+    Edit_BIK_Self: TEdit;
+    Edit_Referens: TEdit;
+    SpeedButton2: TSpeedButton;
+    Combo_Valute: TComboBox;
+    Edit_amount: TCurrencyEdit;
+    Edit_TransCode: TEdit;
+    SpeedButton1: TSpeedButton;
+    //SpeedButton2: TSpeedButton;
+    XFBitBtn2: TXFBitBtn;
+    XFBitBtn3: TXFBitBtn;
+    XFPanel7: TXFPanel;
+    XFPanel14: TXFPanel;
+    XFPanel15: TXFPanel;
+    XFPanel16: TXFPanel;
+    XFPanel17: TXFPanel;
+    XFPanel18: TXFPanel;
+    XFPanel19: TXFPanel;
+    Combo_BankName: TComboBox;
+    Bank_ID: TListBox;
+    Edit_BankCode: TEdit;
+    Edit_account: TEdit;
+    Edit_Voen: TEdit;
+    Edit_Account_Sub: TEdit;
+    Edit_Bik: TEdit;
+    Edit_Client_Name: TEdit;
+    Edit_Client_Code: TEdit;
+    Edit_Client_Voen: TEdit;
+    XFGroupBox6: TXFGroupBox;
+    XFGroupBox7: TXFGroupBox;
+    Edit_tey1: TEdit;
+    Edit_tey2: TEdit;
+    DBComboBox_BudgetLevel: TDBLookupComboBox;
+    DBComboBox_Destination: TDBLookupComboBox;
+    Edit_tey3: TEdit;
+    Edit_tey4: TEdit;
+    Edit_inf1: TEdit;
+    Edit_inf2: TEdit;
+    Edit_inf3: TEdit;
+    XFGroupBox8: TXFGroupBox;
+    XFBitBtn4: TXFBitBtn;
+    ButtonFinish: TXFBitBtn;
+    XFBitBtn6: TXFBitBtn;
+    XFBitBtn7: TXFBitBtn;
+    RB_102: TRadioButton;
+    RB_102T: TRadioButton;
+    Edit_Client_acc_no: TEdit;
+    SearchBankM: TSearchEdit;
+    DBComboBox_Institution: TDBLookupComboBox;
+    Valute_ID: TListBox;
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure XFBitBtn2Click(Sender: TObject);
+    procedure XFBitBtn3Click(Sender: TObject);
+    procedure Combo_BankNameChange(Sender: TObject);
+    procedure XFBitBtn4Click(Sender: TObject);
+    procedure XFBitBtn7Click(Sender: TObject);
+    procedure XFBitBtn6Click(Sender: TObject);
+    procedure ButtonFinishClick(Sender: TObject);
+    procedure Edit_BankName_SelfChange(Sender: TObject);
+    procedure Edit_account_sub_SelfKeyPress(Sender: TObject; var Key: Char);
+    procedure Combo_BankNameKeyPress(Sender: TObject; var Key: Char);
+    procedure Edit_Client_acc_noKeyPress(Sender: TObject; var Key: Char);
+    procedure Edit_Client_NameKeyPress(Sender: TObject; var Key: Char);
+    procedure Edit_Client_CodeKeyPress(Sender: TObject; var Key: Char);
+    procedure Edit_Client_VoenKeyPress(Sender: TObject; var Key: Char);
+    procedure Edit_amountEnter(Sender: TObject);
+    procedure Edit_amountExit(Sender: TObject);
+    procedure RB_102Click(Sender: TObject);
+    procedure SpeedButton2Click(Sender: TObject);
+    procedure Edit_ReferensKeyPress(Sender: TObject; var Key: Char);
+    procedure FormCanResize(Sender: TObject; var NewWidth, NewHeight: Integer;
+      var Resize: Boolean);
+  private
+    { Private declarations }
+  public
+  bnf_count : integer;
+    { Public declarations }
+  end;
+
+  var
+  FormPayment_Det: TFormPayment_Det;
+  insert_shablon   : array[1..17] of string;
+
+ implementation
+
+uses DataXohks, TransType_Unit, XohksMain,MainXhoksFormImpl,sboapiDataModuleImpl, Get_to_shablonunit;
+
+{$R *.dfm}
+
+Function CheckField: Boolean;
+    var i : integer;
+begin
+    if (Trim(FormPayment_Det.Edit_Referens.Text) = '')or
+       (FormPayment_Det.Edit_Amount.Value=0)or
+       (Trim(FormPayment_Det.Edit_TransCode.Text)='')or
+       (FormPayment_Det.Combo_BankName.ItemIndex=-1)or
+       (Trim(FormPayment_Det.Edit_BankCode.Text)='')or
+       (Trim(FormPayment_Det.Edit_account.Text)='')or
+       (Trim(FormPayment_Det.Edit_Voen.Text)='')or
+       (Trim(FormPayment_Det.Edit_Account_Sub.Text)='')or
+       (Trim(FormPayment_Det.Edit_Bik.Text)='')or
+       (Trim(FormPayment_Det.Edit_Client_acc_no.Text)='')or
+       (Trim(FormPayment_Det.Edit_Client_Name.Text)='')or
+       (Trim(FormPayment_Det.Edit_Client_Voen.Text)='')or
+       (Trim(FormPayment_Det.Edit_tey1.Text)='') then begin Result :=  false;MessageDlg('Melumat Tam deyil !',mtWarning,[mbok],0);exit;end else Result:=true;
+        with FormPayment_Det do
+        for i :=0 to ComponentCount-1 do
+        begin
+           if Components[i].ClassName =  'TEdit' then
+           if ((Components[i] as TEdit).Text<>'') and(
+              (Components[i].Name='Edit_tey1')  or
+              (Components[i].Name='Edit_tey2')  or
+              (Components[i].Name='Edit_tey3')  or
+              (Components[i].Name='Edit_tey4')  or
+              (Components[i].Name='Edit_inf1')  or
+              (Components[i].Name='Edit_inf2')  or
+              (Components[i].Name='Edit_inf3'))  then
+              if ((Components[i] as TEdit).Text[1] in ['0'..'9','A'..'Z']) then
+                  Result:=true
+              else
+                  begin
+                    Result :=  false;
+                    MessageDlg('Melumat duzgun deyil !',mtWarning,[mbok],0);
+                    exit;
+                  end;
+        end;
+end;
+
+procedure TFormPayment_Det.ButtonFinishClick(Sender: TObject);
+var Format:string;
+begin
+    IF mess_edit then
+    begin
+    if RB_102T.Checked then Format:='MT102T';
+    if RB_102.Checked  then Format:='MT102';
+    if (checkfield = false)or(DataModXhoks.XS_BENEFICIARY.fieldbyname('status').AsInteger=2) then exit;
+    DataModXhoks.INS.Callprocedure('xs_Beneficiary_update',[    DataModXhoks.XS_BENEFICIARY.fieldbyname('ID').AsInteger,
+                                                           strtofloat(Bank_ID.Items[Combo_BankName.itemindex]),
+                                                           Edit_Account_Sub.text,
+                                                           Edit_Client_acc_no.text,
+                                                           edit_client_name.text,
+                                                           edit_client_code.text,
+                                                           Edit_Client_Voen.text,
+                                                           edit_tey1.text+'|'+edit_tey2.text+'|'+edit_tey3.text+'|'+Edit_tey4.Text+'|',
+                                                           strtofloat(Edit_TransCode.text),
+                                                           edit_inf1.text+'|'+edit_inf2.text+'|'+edit_inf3.text+'|',
+                                                           strtofloat(valute_id.items[combo_valute.itemindex]),
+                                                           edit_referens.text,
+                                                           Edit_Amount.value,
+                                                           bnf_count]);
+   sboapiDataModule.SBSession.Commit;
+   DataModXhoks.INS.Callprocedure('xs_BatchAmount_update',[DataModXhoks.XS_BATCHS.fieldbyname('ID').asinteger]);
+   DataModXhoks.INS.Callprocedure('xs_format_update',[DataModXhoks.XS_BATCHS.fieldbyname('ID').asinteger,Format]);
+   DataModXhoks.Ins.callprocedure('xs_beneficiary_ChangeStatus',[DataModXhoks.XS_BENEFICIARY.fieldbyname('ID').ASinteger,0]);
+   DataModXhoks.Ins.callintegerfunction('xs_Batchs_ChangeStatus',[DataModXhoks.XS_BATCHS.fieldbyname('ID').ASinteger,0]);
+   //ButtonFinish.Enabled:=false;
+   DataModXhoks.XS_BENEFICIARY.RefreshRecord;
+   DataModXhoks.XS_BATCHS.RefreshRecord;
+   end
+   else
+   begin
+    if CheckField = false then exit;
+    XFBitBtn4.Click;
+   end;
+   close;
+
+end;
+
+procedure TFormPayment_Det.Combo_BankNameChange(Sender: TObject);
+ var tempStr: String;
+begin
+      DataModXhoks.DataBankM.Locate('ID',Bank_ID.Items[Combo_BankName.ItemIndex],[]);
+      Bank_ID.ItemIndex:= Combo_BankName.ItemIndex;
+      Edit_BankCode.Text:=DataModXhoks.DataBankM.fieldbyname('BankCode').AsString;
+      Edit_account.Text:=DataModXhoks.DataBankM.fieldbyname('KRNO').AsString;
+      Edit_Voen.Text:=DataModXhoks.DataBankM.fieldbyname('INN').AsString;
+      Edit_Bik.Text:=DataModXhoks.DataBankM.fieldbyname('SWIFT').AsString;
+      tempStr:=DataModXhoks.DataBankM.fieldbyname('KRNO').AsString;
+//      for i:= length(tempStr) to 12 do tempStr:='0'+tempStr;
+//      Edit_Account_Sub.Text:=Copy(tempStr,0,6)+'3'+Copy(tempStr,8,8);
+      Edit_Account_Sub.Text:= DataModXhoks.DataBankM.fieldbyname('SUBKRNO').AsString;
+      if mess_edit then
+         XFBitBtn6.Enabled:=true;
+
+end;
+
+procedure TFormPayment_Det.Combo_BankNameKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  key:=#0;
+end;
+
+procedure TFormPayment_Det.Edit_account_sub_SelfKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+ key := MainXohksForm.OnlyNumber(KEY);
+end;
+
+procedure TFormPayment_Det.Edit_amountEnter(Sender: TObject);
+begin
+if Edit_amount.Text='0' then
+      Edit_amount.Clear;
+end;
+
+procedure TFormPayment_Det.Edit_amountExit(Sender: TObject);
+begin
+ if Edit_amount.Text='' then
+      Edit_amount.Text:='0'
+end;
+
+procedure TFormPayment_Det.Edit_BankName_SelfChange(Sender: TObject);
+var i:integer;
+begin
+   
+  if mess_edit then
+  begin
+    ButtonFinish.Enabled:=true;
+    XFBitBtn6.Enabled:=true;
+  end;
+  {Change TabOrder}
+  if Length((sender as TEdit).text) =35 then
+  begin
+    if FormPayment_Det.Visible then
+       FindNextControl((sender as tedit),true, false, false).SetFocus;
+
+
+
+ end;
+
+end;
+
+procedure TFormPayment_Det.Edit_Client_acc_noKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+if ((not (key in ['0'..'9','a'..'z','A'..'Z','/','-',':','(',')','.',',','''','+','{','}',' ',#8]))
+//       or((Key = '/')and(Length(TEdit(Sender).Text) > 0))
+       or(TEdit(Sender).Text = '/'))
+       and(key <> #8)
+   then
+   Begin
+     key:=#0;
+   end;
+end;
+
+procedure TFormPayment_Det.Edit_Client_CodeKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+if ((not (key in ['0'..'9','a'..'z','A'..'Z','/','-',':','(',')','.',',','''','+','{','}',' ',#8]))
+//       or((Key = '/')and(Length(TEdit(Sender).Text) > 0))
+       or(TEdit(Sender).Text = '/'))
+       and(key <> #8)
+   then
+   Begin
+     key:=#0;
+   end;
+end;
+
+procedure TFormPayment_Det.Edit_Client_NameKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+if ((not (key in ['0'..'9','a'..'z','A'..'Z','/','-',':','(',')','.',',','''','+','{','}',' ',#8]))
+//       or((Key = '/')and(Length(TEdit(Sender).Text) > 0))
+       or(TEdit(Sender).Text = '/'))
+       and(key <> #8)
+   then
+   Begin
+     key:=#0;
+   end;
+end;
+
+procedure TFormPayment_Det.Edit_Client_VoenKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+if ((not (key in ['0'..'9','a'..'z','A'..'Z','/','-',':','(',')','.',',','''','+','{','}',' ',#8]))
+//       or((Key = '/')and(Length(TEdit(Sender).Text) > 0))
+       or(TEdit(Sender).Text = '/'))
+       and(key <> #8)
+   then
+   Begin
+     key:=#0;
+   end;
+end;
+
+procedure TFormPayment_Det.Edit_ReferensKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+ Case Key of
+   'A'..'H':key:=Key;
+   'J'..'Z':key:=Key;
+   'a'..'h':key:=Key;
+   'j'..'z':key:=Key;
+   'Ə':key:=Key;
+   'Ü':key:=Key;
+   'Ö':key:=Key;
+   'Ğ':key:=Key;
+   'Ş':key:=Key;
+   'Ç':key:=Key;
+   'İ':key:=Key;
+   'I':key:=Key;
+   'ə':key:=Key;
+   'ü':key:=Key;
+   'ö':key:=Key;
+   'ğ':key:=Key;
+   'ş':key:=Key;
+   'ç':key:=Key;
+   'i':key:=Key;
+   'ı':key:='I';
+   '0'..'9':key:=Key;
+   '/','-',':','(',')','.',',','''','+','{','}',' ':key:=Key;
+   #8 :key:=Key;
+   else key:=#0;
+  End;
+end;
+
+procedure TFormPayment_Det.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+Resize:=false;
+end;
+
+procedure TFormPayment_Det.RB_102Click(Sender: TObject);
+begin
+ if RB_102.Checked then
+   begin
+      XFBitBtn2.Visible:=True;
+      XFBitBtn3.Visible:=True;
+
+      DBComboBox_Institution.Visible:=false;
+      DBComboBox_BudgetLevel.Visible:=false;
+      DBComboBox_Destination.Visible:=false;
+      DataModXhoks.ODS_Institution.Close;
+      DataModXhoks.ODS_BudgetLevel.Close;
+      DataModXhoks.ODS_Destination.Close;
+
+      Edit_Client_Name.Enabled:=true;
+      Edit_Client_Code.Enabled:=true;
+      Edit_Client_Voen.Enabled:=true;
+      Edit_Client_acc_no.Enabled:=true;
+
+      Edit_tey1.Clear;
+      Edit_tey2.Clear;
+      Edit_tey3.Clear;
+      Edit_tey4.Clear;
+
+      Edit_Client_Name.Clear;
+      Edit_Client_Code.Clear;
+      Edit_Client_Voen.Clear;
+      Edit_Client_acc_no.Clear;
+
+      Edit_Client_Code.Text:='/';
+
+      DataModXhoks.DataBankM.Filter:='';
+      DataModXhoks.DataBankM.Filtered:=false;
+      DataModXhoks.DataBankM.Refresh;
+
+      SearchBankM.Enabled:=true;
+      Combo_BankName.Enabled:=true;
+   end;
+end;
+
+procedure TFormPayment_Det.SpeedButton1Click(Sender: TObject);
+ var i: integer;
+begin
+    TransCodeForm.typecode:=0;
+    TransCodeForm.typetext:='';
+    for i:=0 to TransCodeForm.TreeView1.Items.Count-1 do TransCodeForm.TreeView1.Items[i].Expanded:=false;;
+    TransCodeForm.ShowModal;
+
+end;
+
+procedure TFormPayment_Det.SpeedButton2Click(Sender: TObject);
+begin
+ XFBitBtn2.Enabled:=true;
+    FormPayment_Det.Edit_Referens.Text:=DataModXhoks.INS.CallStringFunction('GetNewBeneficiaryReference',[]);
+end;
+
+
+procedure TFormPayment_Det.XFBitBtn2Click(Sender: TObject);
+begin
+XFBitBtn2.Enabled:=false;
+  insert_shablon[1]:=StringReplace(trim(Edit_amount.Text),',','',[rfReplaceAll,rfIgnoreCase]);
+  {insert_shablon[1]:=copy(insert_shablon[1],1,length(insert_shablon[1])-2);}
+  insert_shablon[2]:=Edit_TransCode.Text;
+  insert_shablon[3]:=Combo_BankName.Text;
+  insert_shablon[4]:=Edit_Client_acc_no.Text;
+  insert_shablon[5]:=Edit_Client_Name.Text;
+  insert_shablon[6]:=Edit_Client_Code.Text;
+  insert_shablon[7]:=Edit_Client_Voen.Text;
+  insert_shablon[8]:=Edit_tey1.Text;
+  insert_shablon[9]:=Edit_tey2.Text;
+  insert_shablon[10]:=Edit_tey3.Text;
+  insert_shablon[11]:=Edit_tey4.Text;
+  insert_shablon[12]:=Edit_inf1.Text;
+  insert_shablon[13]:=Edit_inf2.Text;
+  insert_shablon[14]:=Edit_inf3.Text;
+  insert_shablon[15]:=Edit_Referens.Text;
+  insert_shablon[16]:=Edit_BankCode.Text;
+  insert_shablon[17]:=trim(XohksMain.FormXohks.Edit_clientName.Text);
+  DataModXhoks.INS.Callprocedure('xs_Beneficiary_shablon_insert',[         insert_shablon[1],
+                                                                      insert_shablon[2],
+                                                                      insert_shablon[3],
+                                                                      insert_shablon[4],
+                                                                      insert_shablon[5],
+                                                                      insert_shablon[6],
+                                                                      insert_shablon[7],
+                                                                      insert_shablon[8],
+                                                                      insert_shablon[9],
+                                                                      insert_shablon[10],
+                                                                      insert_shablon[11],
+                                                                      insert_shablon[12],
+                                                                      insert_shablon[13],
+                                                                      insert_shablon[14],
+                                                                      insert_shablon[15],
+                                                                      insert_shablon[16],
+                                                                      insert_shablon[17]
+                                                             ]);
+   MessageDlg('Məlumat yadda saxlanıldı!',mtInformation,[mbok],0);
+end;
+
+procedure TFormPayment_Det.XFBitBtn3Click(Sender: TObject);
+begin
+if not Assigned(Form_get_to_shablon) then Form_get_to_shablon:=TForm_get_to_shablon.Create(self);
+  DataModXhoks.ODS_shablon.close;
+  DataModXhoks.ODS_shablon.open;
+  Form_get_to_shablon.ShowModal;
+end;
+
+procedure TFormPayment_Det.XFBitBtn4Click(Sender: TObject);
+begin
+ if CheckField = false then exit;
+    bnf_count:=bnf_count+1;
+    DataModXhoks.INS.Callprocedure('xs_beneficiary_insert',[ new_id,
+                                                        strtofloat(Bank_ID.Items[Combo_BankName.itemindex]),
+                                                        Edit_Account_Sub.text,
+                                                        Edit_Client_acc_no.text,
+                                                        edit_client_name.text,
+                                                        edit_client_code.text,
+                                                        Edit_Client_Voen.text,
+                                                        edit_tey1.text+'|'+edit_tey2.text+'|'+edit_tey3.text+'|'+Edit_tey4.text+'|',
+                                                        strtofloat(Edit_TransCode.text),
+                                                        edit_inf1.text+'|'+edit_inf2.text+'|'+edit_inf3.text+'|',
+                                                        strtofloat(valute_id.items[combo_valute.itemindex]),
+                                                        edit_referens.text,
+                                                        Edit_Amount.value,
+                                                        bnf_count]);
+    if after_add then
+    begin
+      sboapiDataModule.SBSession.Commit;
+      DataModXhoks.INS.Callprocedure('xs_BatchAmount_update',[DataModXhoks.XS_BATCHS.fieldbyname('ID').asinteger]);
+      DataModXhoks.Ins.callintegerfunction('xs_Batchs_ChangeStatus',[DataModXhoks.XS_BATCHS.fieldbyname('ID').ASinteger,0]);
+      DataModXhoks.XS_BATCHS.RefreshRecord; //LVPCSSForm.RefreshWithPos;
+      DataModXhoks.XS_BENEFICIARY.Refresh;
+    end
+     else
+      begin
+        FormXohks.Edit_BNF.Text:='\BNF\'+inttostr(FormPayment_Det.bnf_count);
+        FormXohks.Edit_Amount.text:=floattostr(FormXohks.Edit_Amount.value+edit_Amount.value);
+      end;
+    {CLEAR EDIT}
+    Combo_BankName.ItemIndex:=-1;
+    Edit_BIK.Clear;
+    Edit_BankCode.clear;
+    Edit_account.Clear;
+    Edit_account_sub.Clear;
+    Edit_Voen.Clear;
+    Edit_Amount.Clear;
+    Edit_TransCode.Clear;
+    {NEW REF NUMBER for messages}
+    if Edit_Referens.Text='' then
+    FormPayment_Det.Edit_Referens.Text := DataModXhoks.INS.CallStringFunction('GetNewBeneficiaryReference',[]);
+    Edit_Client_Name.Clear;
+    Edit_Client_Code.Text:='/';
+    Edit_Client_acc_no.Clear;
+    Edit_Client_Voen.Clear;
+    Edit_Referens.Clear;
+    Edit_inf1.Clear;
+    Edit_inf2.Clear;
+    Edit_inf3.Clear;
+    Edit_tey1.Clear;
+    Edit_tey2.Clear;
+    Edit_tey3.Clear;
+    Edit_tey4.Clear;
+     If RB_102T.Checked then
+      begin
+        RB_102T.Checked:=false;
+        RB_102.Checked:=true;
+        RB_102.Checked:=false;
+        RB_102T.Checked:=true;
+
+      end;
+    FormXohks.ButtonPost.Enabled:=true;
+    FormPayment_Det.ButtonFinish.Enabled:=true ;
+    DataModXhoks.XS_BENEFICIARY.Last;
+end;
+
+procedure TFormPayment_Det.XFBitBtn6Click(Sender: TObject);
+begin
+ IF mess_edit then
+    begin
+       MainXohksForm.showdetals;
+    end
+      else
+         close;
+end;
+
+procedure TFormPayment_Det.XFBitBtn7Click(Sender: TObject);
+begin
+close;
+end;
+
+end.

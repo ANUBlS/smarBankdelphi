@@ -1,0 +1,1319 @@
+object AccountMainForm: TAccountMainForm
+  Left = -116
+  Top = 36
+  Width = 1032
+  Height = 727
+  Caption = 'Hesablar'
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  OldCreateOrder = False
+  OnCreate = ActiveFormCreate
+  PixelsPerInch = 96
+  TextHeight = 13
+  object GroupBox1: TGroupBox
+    Left = 185
+    Top = 44
+    Width = 839
+    Height = 656
+    Align = alClient
+    Caption = 'Accounts'
+    TabOrder = 0
+    object DBGrid1: TDBGrid
+      Left = 2
+      Top = 15
+      Width = 835
+      Height = 594
+      Align = alClient
+      DataSource = AccountDataModule.Accounts
+      Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit]
+      PopupMenu = AccGridPopupMenu
+      TabOrder = 0
+      TitleFont.Charset = DEFAULT_CHARSET
+      TitleFont.Color = clWindowText
+      TitleFont.Height = -11
+      TitleFont.Name = 'Azl Sans Serif'
+      TitleFont.Style = []
+      OnDblClick = DBGrid1DblClick
+      Columns = <
+        item
+          Color = clSilver
+          Expanded = False
+          FieldName = 'ACCNO'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clNavy
+          Font.Height = -11
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = []
+          Title.Color = clNavy
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = []
+          Width = 101
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'SACC'
+          Title.Caption = 'Баланс'
+          Title.Color = clNavy
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = []
+          Width = 48
+          Visible = True
+        end
+        item
+          Color = clSilver
+          Expanded = False
+          FieldName = 'CURRENCYSNAME'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clNavy
+          Font.Height = -11
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = []
+          Title.Caption = '$'
+          Title.Color = clNavy
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = []
+          Width = 34
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'ACCNAME'
+          Title.Caption = 'Щесабын ады'
+          Title.Color = clNavy
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = []
+          Width = 115
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'AMOUNT'
+          Title.Caption = 'Галыг'
+          Title.Color = clNavy
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = []
+          Width = 87
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'LAMOUNT'
+          Title.Caption = 'Еквивалент'
+          Title.Color = clNavy
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = []
+          Width = 89
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'DELAYEDAMOUNT'
+          Title.Color = clNavy
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = []
+          Width = 86
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'DELAYEDLAMOUNT'
+          Title.Color = clNavy
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = []
+          Width = 82
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'OPENDATE'
+          Title.Color = clNavy
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = []
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'CLOSEDATE'
+          Title.Color = clNavy
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = []
+          Width = 75
+          Visible = True
+        end>
+    end
+    object ToolBar1: TToolBar
+      Left = 2
+      Top = 627
+      Width = 835
+      Height = 27
+      Align = alBottom
+      ButtonHeight = 23
+      Caption = 'ToolBar1'
+      Flat = True
+      Images = ImageList1
+      TabOrder = 1
+      object Panel1: TPanel
+        Left = 0
+        Top = 0
+        Width = 610
+        Height = 23
+        TabOrder = 0
+        object AccNoSearchEdit: TEdit
+          Left = 0
+          Top = 1
+          Width = 137
+          Height = 21
+          TabOrder = 0
+          OnExit = AccNoSearchEditExit
+        end
+        object SAccSearchEdit: TEdit
+          Left = 137
+          Top = 1
+          Width = 42
+          Height = 21
+          TabOrder = 1
+          OnExit = AccNoSearchEditExit
+        end
+        object CurrencySNameSearchEdit: TEdit
+          Left = 179
+          Top = 1
+          Width = 35
+          Height = 21
+          TabOrder = 2
+          OnExit = AccNoSearchEditExit
+        end
+        object AccNameSearchEdit: TEdit
+          Left = 214
+          Top = 1
+          Width = 128
+          Height = 21
+          TabOrder = 3
+          OnExit = AccNoSearchEditExit
+        end
+        object AmountSearchEdit: TEdit
+          Left = 342
+          Top = 1
+          Width = 66
+          Height = 21
+          TabOrder = 4
+          OnExit = AccNoSearchEditExit
+        end
+        object LAmountSearchEdit: TEdit
+          Left = 408
+          Top = 1
+          Width = 67
+          Height = 21
+          TabOrder = 5
+          OnExit = AccNoSearchEditExit
+        end
+        object OpenDateSearchEdit: TEdit
+          Left = 475
+          Top = 1
+          Width = 68
+          Height = 21
+          TabOrder = 6
+          OnExit = AccNoSearchEditExit
+        end
+        object CloseDateSearchEdit: TEdit
+          Left = 543
+          Top = 1
+          Width = 66
+          Height = 21
+          TabOrder = 7
+          OnExit = AccNoSearchEditExit
+        end
+      end
+      object ToolButton9: TToolButton
+        Left = 610
+        Top = 0
+        Action = FindAccount
+        DropdownMenu = AccSearchDirectionPopupMenu
+        Style = tbsDropDown
+      end
+    end
+    object HintPanel: TPanel
+      Left = 2
+      Top = 609
+      Width = 835
+      Height = 18
+      Align = alBottom
+      BevelOuter = bvNone
+      TabOrder = 2
+      Visible = False
+      object ErrorHintBox: THintBox
+        Left = 2
+        Top = 0
+        Width = 311
+        Height = 18
+        AutoSize = True
+        BevelOuter = bvNone
+        Caption = 'ErrorHintBox'
+        TabOrder = 0
+        Visible = False
+        HintStyle = hsAlert
+        Timeout = 10000
+        BeepOnMessage = False
+        AfterShow = ErrorHintBoxAfterMessage
+        AfterHide = ErrorHintBoxAfterHide
+      end
+    end
+    object Memo1: TMemo
+      Left = 144
+      Top = 88
+      Width = 449
+      Height = 441
+      Lines.Strings = (
+        'Memo1')
+      ScrollBars = ssVertical
+      TabOrder = 3
+      Visible = False
+    end
+  end
+  object FilterGB: TGroupBox
+    Left = 0
+    Top = 44
+    Width = 185
+    Height = 656
+    Align = alLeft
+    TabOrder = 1
+    Visible = False
+    object Panel2: TPanel
+      Left = 2
+      Top = 15
+      Width = 181
+      Height = 26
+      Align = alTop
+      Alignment = taLeftJustify
+      BevelOuter = bvNone
+      Caption = '   Filter'
+      TabOrder = 0
+      object SpeedButton1: TSpeedButton
+        Left = 158
+        Top = 1
+        Width = 23
+        Height = 22
+        Caption = 'X'
+        Flat = True
+        OnClick = SpeedButton1Click
+      end
+      object Bevel1: TBevel
+        Left = -1
+        Top = 22
+        Width = 182
+        Height = 2
+      end
+      object Bevel2: TBevel
+        Left = -1
+        Top = 0
+        Width = 182
+        Height = 2
+      end
+    end
+    object GroupBox2: TGroupBox
+      Left = 2
+      Top = 41
+      Width = 181
+      Height = 69
+      Align = alTop
+      Caption = 'Щесаб ачылмасына ьюря'
+      TabOrder = 1
+      object RadioButton1: TRadioButton
+        Left = 16
+        Top = 16
+        Width = 113
+        Height = 17
+        Action = ActiveAccounts
+        TabOrder = 0
+        TabStop = True
+      end
+      object RadioButton2: TRadioButton
+        Left = 16
+        Top = 32
+        Width = 113
+        Height = 17
+        Action = ClosedAccounts
+        TabOrder = 1
+      end
+      object RadioButton3: TRadioButton
+        Left = 16
+        Top = 48
+        Width = 113
+        Height = 17
+        Action = AllAccounts
+        TabOrder = 2
+      end
+    end
+    object GroupBox3: TGroupBox
+      Left = 2
+      Top = 110
+      Width = 181
+      Height = 107
+      Align = alTop
+      Caption = 'Баланс щесабына ьюря'
+      TabOrder = 2
+      object Label1: TLabel
+        Left = 8
+        Top = 40
+        Width = 113
+        Height = 13
+        Caption = 'Баланс щесабыны дахил ет:'
+      end
+      object SAccNameLabel: TLabel
+        Left = 8
+        Top = 79
+        Width = 3
+        Height = 13
+      end
+      object CheckBox1: TCheckBox
+        Left = 8
+        Top = 16
+        Width = 153
+        Height = 17
+        Action = UseBalanceFilter
+        TabOrder = 0
+      end
+      object DBViewComboBox1: TDBViewComboBox
+        Left = 8
+        Top = 56
+        Width = 81
+        Height = 21
+        Style = csDropDownList
+        ItemHeight = 13
+        TabOrder = 1
+        OnChange = SAccsDataAfterScroll
+        ListSource = AccountDataModule.SAccs
+        ListFields = 'BAL_CN'
+        FieldInterval = 5
+        DropDownOnEnter = False
+      end
+    end
+    object ToolBar3: TToolBar
+      Left = 2
+      Top = 632
+      Width = 181
+      Height = 22
+      Align = alBottom
+      ButtonHeight = 21
+      ButtonWidth = 73
+      Caption = 'ToolBar3'
+      Flat = True
+      ShowCaptions = True
+      TabOrder = 3
+      object ToolButton8: TToolButton
+        Left = 0
+        Top = 0
+        Action = ApplyFilter
+        Style = tbsCheck
+      end
+      object ToolButton7: TToolButton
+        Left = 73
+        Top = 0
+        Action = ResetFilter
+      end
+    end
+    object GroupBox4: TGroupBox
+      Left = 2
+      Top = 217
+      Width = 181
+      Height = 85
+      Align = alTop
+      Caption = 'Мцштярийя эюря'
+      TabOrder = 4
+      object Label2: TLabel
+        Left = 16
+        Top = 37
+        Width = 78
+        Height = 13
+        Caption = 'Мцштяринин коду:'
+      end
+      object CheckBox2: TCheckBox
+        Left = 16
+        Top = 16
+        Width = 156
+        Height = 17
+        Action = UseCustomerFilter
+        Caption = 'Мцштяри филтерини истифадя етмяк'
+        TabOrder = 0
+      end
+      object CustomerIDSearchEdit: TEdit
+        Left = 104
+        Top = 33
+        Width = 65
+        Height = 21
+        TabOrder = 1
+        OnChange = CustomerIDSearchEditChange
+      end
+      object CustomerNameCB: TDBViewComboBox
+        Left = 16
+        Top = 56
+        Width = 153
+        Height = 21
+        Style = csDropDownList
+        ItemHeight = 13
+        TabOrder = 2
+        OnChange = CustomersDataAfterScroll
+        ListSource = AccountDataModule.Customers
+        ListFields = 'NAME'
+        FieldInterval = 5
+        DropDownOnEnter = False
+      end
+    end
+    object GroupBox5: TGroupBox
+      Left = 2
+      Top = 302
+      Width = 181
+      Height = 67
+      Align = alTop
+      Caption = 'Валйутайа эюря'
+      TabOrder = 5
+      object CheckBox3: TCheckBox
+        Left = 16
+        Top = 16
+        Width = 161
+        Height = 17
+        Action = UseCurrencyFilter
+        Caption = 'Валйута филтерини истифадя етмяк'
+        TabOrder = 0
+      end
+      object CurrencyNameCB: TDBViewComboBox
+        Left = 16
+        Top = 36
+        Width = 145
+        Height = 21
+        Style = csDropDownList
+        ItemHeight = 13
+        TabOrder = 1
+        OnChange = CurrencyNameCBChange
+        ListSource = AccountDataModule.Currency
+        ListFields = 'VALU_NAME'
+        FieldInterval = 5
+        DropDownOnEnter = False
+      end
+    end
+    object GroupBox6: TGroupBox
+      Left = 2
+      Top = 369
+      Width = 181
+      Height = 70
+      Align = alTop
+      Caption = 'Филиаллар эюря'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 6
+      object CheckBox4: TCheckBox
+        Left = 16
+        Top = 16
+        Width = 153
+        Height = 17
+        Action = UseFilialFilter
+        TabOrder = 0
+      end
+      object FilialNameCB: TDBViewComboBox
+        Left = 16
+        Top = 40
+        Width = 145
+        Height = 21
+        Style = csDropDownList
+        ItemHeight = 13
+        TabOrder = 1
+        ListSource = AccountDataModule.Filials
+        ListFields = 'NAME'
+        FieldInterval = 5
+        DropDownOnEnter = False
+      end
+    end
+    object GroupBox7: TGroupBox
+      Left = 2
+      Top = 439
+      Width = 181
+      Height = 54
+      Align = alTop
+      Caption = 'Щесабын нювляри'
+      TabOrder = 7
+      object CBAccSymbols: TDBViewComboBox
+        Left = 4
+        Top = 30
+        Width = 172
+        Height = 21
+        Style = csDropDownList
+        ItemHeight = 13
+        TabOrder = 0
+        ListSource = AccountDataModule.DataSrcAccountFlagsData
+        ListFields = 'SYMBOL,DESCRIPTION'
+        FieldInterval = 5
+        DropDownOnEnter = False
+        FirstAfterOpen = True
+      end
+      object CBUseAccFlags: TCheckBox
+        Left = 5
+        Top = 12
+        Width = 119
+        Height = 17
+        Caption = 'Щесабын нювц'
+        TabOrder = 1
+      end
+    end
+  end
+  object ControlBar1: TControlBar
+    Left = 0
+    Top = 0
+    Width = 1024
+    Height = 44
+    Align = alTop
+    AutoSize = True
+    TabOrder = 2
+    object LTimeShow: TLabel
+      Left = 848
+      Top = 2
+      Width = 56
+      Height = 22
+      Caption = 'LTimeShow'
+      OnClick = LTimeShowClick
+    end
+    object ToolBar2: TToolBar
+      Left = 11
+      Top = 2
+      Width = 566
+      Height = 36
+      AutoSize = True
+      ButtonHeight = 36
+      ButtonWidth = 80
+      Caption = 'ToolBar2'
+      EdgeBorders = []
+      Flat = True
+      Images = ImageList1
+      ShowCaptions = True
+      TabOrder = 0
+      object ToolButton1: TToolButton
+        Left = 0
+        Top = 0
+        Action = Add
+        AutoSize = True
+      end
+      object ToolButton2: TToolButton
+        Left = 64
+        Top = 0
+        Action = Edit
+        AutoSize = True
+      end
+      object ToolButton3: TToolButton
+        Left = 148
+        Top = 0
+        Action = Close
+        AutoSize = True
+        Caption = 'Баьламаг'
+      end
+      object ToolButton4: TToolButton
+        Left = 206
+        Top = 0
+        Action = Refresh
+        AutoSize = True
+      end
+      object FilterButton: TToolButton
+        Left = 266
+        Top = 0
+        Action = ToggleFilter
+        AutoSize = True
+        Caption = 'Филтер панели'
+        Style = tbsCheck
+      end
+      object AccOrderButton: TToolButton
+        Left = 330
+        Top = 0
+        AutoSize = True
+        Caption = 'Сыралашма'
+        DropdownMenu = AccOrderPopupMenu
+        ImageIndex = 0
+      end
+      object ToolButton5: TToolButton
+        Left = 386
+        Top = 0
+        Caption = 'TESTTT'
+        ImageIndex = 1
+        Visible = False
+        OnClick = ToolButton5Click
+      end
+    end
+  end
+  object ActionList1: TActionList
+    Images = ImageList1
+    Left = 416
+    Top = 120
+    object Add: TAction
+      Category = 'Account'
+      Caption = 'Йени щесаб'
+      ImageIndex = 3
+      ShortCut = 45
+      OnExecute = AddExecute
+    end
+    object Close: TAction
+      Category = 'Account'
+      Caption = 'Багламаг'
+      ImageIndex = 1
+      OnExecute = CloseExecute
+      OnUpdate = CloseUpdate
+    end
+    object Edit: TAction
+      Category = 'Account'
+      Caption = 'Редактя етмяк'
+      ImageIndex = 8
+      OnExecute = EditExecute
+    end
+    object Refresh: TAction
+      Category = 'Account'
+      Caption = 'Йенилямяк'
+      ImageIndex = 5
+      OnExecute = RefreshExecute
+    end
+    object ToggleFilter: TAction
+      Caption = 'Филтерин панели'
+      ImageIndex = 9
+      OnExecute = ToggleFilterExecute
+    end
+    object ActiveAccounts: TAction
+      Category = 'AccActive'
+      Caption = 'Ачыг щесаблар'
+      Checked = True
+      OnExecute = ActiveAccountsExecute
+    end
+    object ClosedAccounts: TAction
+      Category = 'AccActive'
+      Caption = 'Баьланмыш щесаблар'
+      OnExecute = ActiveAccountsExecute
+    end
+    object AllAccounts: TAction
+      Category = 'AccActive'
+      Caption = 'Бцтцн щесаблар'
+      OnExecute = ActiveAccountsExecute
+    end
+    object UseBalanceFilter: TAction
+      Category = 'FilterUsage'
+      Caption = 'Баланс филтрини истифадя етмяк'
+      OnExecute = ToggleAndRefresh
+    end
+    object ApplyFilter: TAction
+      Category = 'FilterActions'
+      Caption = 'Филтри истифадя ет'
+      Checked = True
+      OnExecute = ToggleAndRefresh
+    end
+    object ResetFilter: TAction
+      Category = 'FilterActions'
+      Caption = 'ResetFilter'
+      OnExecute = ToggleAndRefresh
+    end
+    object UseCustomerFilter: TAction
+      Category = 'FilterUsage'
+      Caption = 'Клиент филтрини истифадя етмяк'
+      OnExecute = ToggleAndRefresh
+    end
+    object UseCurrencyFilter: TAction
+      Category = 'FilterUsage'
+      Caption = 'Валцта филтрини истифадя етмяк'
+      OnExecute = ToggleAndRefresh
+    end
+    object SearchForward: TAction
+      Category = 'AccSearch'
+      Caption = 'Иряли ахтарыш'
+      Checked = True
+      ImageIndex = 10
+      OnExecute = SearchForwardExecute
+    end
+    object SearchBackward: TAction
+      Category = 'AccSearch'
+      Caption = 'Ьери ахтарыш'
+      ImageIndex = 11
+      OnExecute = SearchForwardExecute
+    end
+    object FindAccount: TAction
+      Category = 'AccSearch'
+      Caption = 'Find'
+      ImageIndex = 12
+      ShortCut = 13
+      OnExecute = FindAccountExecute
+      OnUpdate = FindAccountUpdate
+    end
+    object OrderAccNo: TAction
+      Category = 'AccOrder'
+      Caption = 'Щесабын нюмрясиня ьюря'
+      Checked = True
+      ImageIndex = 0
+      OnExecute = OrderAccNoExecute
+    end
+    object OrderAccName: TAction
+      Category = 'AccOrder'
+      Caption = 'Щесабын адына ьюря'
+      ImageIndex = 0
+      OnExecute = OrderAccNoExecute
+    end
+    object OrderAccCurrency: TAction
+      Category = 'AccOrder'
+      Caption = 'Валцтайа ьюря'
+      ImageIndex = 0
+      OnExecute = OrderAccNoExecute
+    end
+    object ViewTransactions: TAction
+      Category = 'Account'
+      Caption = 'Щесабын сянядляри'
+      ShortCut = 16500
+      OnExecute = ViewTransactionsExecute
+    end
+    object ViewStates: TAction
+      Category = 'Account'
+      Caption = 'Щесабдаки галыглары'
+      ShortCut = 32884
+      OnExecute = ViewStatesExecute
+    end
+    object ReOpen: TAction
+      Category = 'Account'
+      Caption = 'ReOpen'
+    end
+    object CustomAction: TAction
+      Category = 'Account'
+      Caption = 'CustomAction'
+      OnUpdate = CustomActionUpdate
+    end
+    object UseFilialFilter: TAction
+      Category = 'FilterUsage'
+      Caption = 'Филиал филтрини истифадя етмяк'
+      OnExecute = ToggleAndRefresh
+    end
+    object Arest: TAction
+      Caption = 'Arest hesablari'
+      OnExecute = ArestExecute
+    end
+    object SafeRefresh: TAction
+      Category = 'Account'
+      OnExecute = SafeRefreshExecute
+    end
+  end
+  object ImageList1: TImageList
+    Left = 448
+    Top = 120
+    Bitmap = {
+      494C01010E001300040010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      0000000000003600000028000000400000005000000001001000000000000028
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000104200001042000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000001042004200420000104200000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000420042004200420000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000001042186300420042000010420000
+      0000000000000000000000000000000000000000000000000000000000001863
+      1863186300420042004200420042004200000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000004218630042004200001042
+      0000000000000000000000000000000000000000000000000042004200421863
+      1863186300000000000000000042004200000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000421863004200420000
+      1042104210421042104210420000000000000000004200420042004200420000
+      0000000000420042004200420000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000042186300420042
+      000000000000000000001042104200000000004200420042E07FE07F00000000
+      0000000000420042004200420042004200000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000004218630042
+      0042104218631863186310420000104200000042E07FE07F0042004200420000
+      0000000000000000000000000042004200000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000042
+      1042FF7F1863FF7F186318631042000010420000004200420042004200420000
+      0000000000420042004200420000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000001042
+      FF7F1F001F001F001F001F00186310421042004200420042E07FE07F00000000
+      0000000000420042004200420042004200000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000001F0000000000FF7F
+      18631F001863FF7F18631F001863186300000042E07FE07F0042004200420000
+      000000001863E07F1863E07F0042004200000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000001F001F0000001863
+      FF7F1F001F001F001F001F00FF7F186300000000004200420042004200420000
+      00000000E07F1863E07F1863E07F186300000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000001F0000000000FF7F
+      18631F00FF7FFF7F1F00FF7F1863186300000042004200421863E07F18630000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000000000000000000000000000000000001F0010421042
+      FF7F1F001F001F001F001863FF7F104210420042E07F1863E07F1863E07F0000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      1042FF7F1863FF7F1863FF7F1042000000000042E07FE07F1863E07F1863E07F
+      1863E07F1863E07F000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00001042FF7F1863FF7F1042000000000000000000420042E07FE07FE07FE07F
+      E07FE07F00420042000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000104200000000000010420000000000000000000000000042004200420042
+      0042004200000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000001700FF7F000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      007C000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000170017001700FF7F00000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      007C000000000000000000000000000000000000000000000000000000000000
+      007C000000000000000000000000000000000000000000000000000000000000
+      1700170017001700FF7F00000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      007C000000000000000000000000000000000000000000000000000000000000
+      007C000000000000000000000000000000000000000000000000000000001700
+      17001700FF7F17001700FF7F0000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      007C00000000000000000000000000000000000000000000000000000000007C
+      007C007C000000000000000000000000000000000000FF7FFF7FFF7F17001700
+      1700FF7F0000000017001700FF7F000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      007C00000000000000000000000000000000000000000000000000000000007C
+      007C007C000000000000000000000000000000000000FF7F1042104210421700
+      FF7FFF7F0000000000001700FF7F000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      007C0000000000000000000000000000000000000000000000000000007C007C
+      007C007C007C00000000000000000000000000000000FF7FFF7FFF7FFF7FFF7F
+      FF7FFF7F00000000000000001700FF7F00000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000007C007C007C
+      007C007C007C007C0000000000000000000000000000000000000000007C007C
+      007C007C007C00000000000000000000000000000000FF7F1042104210421042
+      1042FF7F000000000000000000001700FF7F0000000000000000000000000000
+      00000000000000000000000000000000000000000000000000000000007C007C
+      007C007C007C0000000000000000000000000000000000000000007C007C007C
+      007C007C007C007C0000000000000000000000000000FF7FFF7FFF7FFF7FFF7F
+      FF7FFF7F00000000000000000000000017000000000000000000000000000000
+      00000000000000000000000000000000000000000000000000000000007C007C
+      007C007C007C0000000000000000000000000000000000000000000000000000
+      007C0000000000000000000000000000000000000000FF7F1042104200000000
+      0000FF7F00000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000000000000000000000000000007C
+      007C007C00000000000000000000000000000000000000000000000000000000
+      007C0000000000000000000000000000000000000000FF7FFF7FFF7FFF7F0000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000000000000000000000000000007C
+      007C007C00000000000000000000000000000000000000000000000000000000
+      007C0000000000000000000000000000000000000000FF7F1042104200000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      007C000000000000000000000000000000000000000000000000000000000000
+      007C0000000000000000000000000000000000000000FF7FFF7FFF7FFF7F0000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      007C000000000000000000000000000000000000000000000000000000000000
+      007C000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      007C000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000FF7FFF7FFF7FFF7FFF7FFF7F
+      FF7FFF7FFF7FFF7FFF7FFF7FFF7FFF7FFF7F0000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000F75EF75EF75EF75EF75EF75E
+      F75EF75EF75EF75EF75EF75EF75EF75E0000EF3DEF3DEF3DEF3DEF3DEF3DEF3D
+      EF3DEF3DEF3DEF3DEF3DEF3DEF3DEF3DFF7F0000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000F75EF75EF75EF75EF75EF75E
+      F75EF75EF75EF75EF75EF75EF75EF75E0000EF3DEF3DEF3DEF3DEF3DEF3DEF3D
+      EF3DEF3DEF3DEF3DEF3DEF3DEF3DEF3DFF7F0000000000000000186310421042
+      1042104210421042104210420000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000FF7FFF7FFF7FFF7FFF7FFF7FFF7F
+      FF7FFF7FFF7FFF7FFF7FFF7FFF7FFF7FFF7F0000000000000000FF7F18631863
+      1863186318631863186310420000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000FF7FF75EFF7FF75EFF7FF75E
+      FF7FF75EFF7FF75EFF7FF75EFF7FF75E0000EF3DEF3DEF3DEF3DEF3DEF3DEF3D
+      EF3DEF3DEF3DEF3DEF3DEF3DEF3DEF3DFF7F0000000000000000FF7F18631863
+      1863000018631863186310420000000000000000000000001000104200000000
+      0000000000000000000000000000000000000000F75EFF7FF75EFF7FF75EFF7F
+      F75EFF7FF75EFF7FF75EFF7F007CFF7F0000EF3DEF3DEF3DEF3DEF3DEF3DEF3D
+      EF3DEF3DEF3DEF3DEF3DEF3DEF3DEF3DFF7F0000000000000000FF7F18631863
+      1863000018631863186310420000000000000000000010421000000000000000
+      0000000010001000100010001000000000000000FF7FF75EFF7FF75EFF7FF75E
+      FF7FF75EFF7FF75EFF7FF75EFF7FF75E0000EF3DEF3DEF3DEF3DEF3DEF3DEF3D
+      EF3DEF3DEF3DEF3DEF3DEF3DFF7FEF3DFF7F0000000000000000FF7F18630000
+      0000000000000000186310420000000000000000000010000000000000000000
+      0000000000001000100010001000000000000000000000000000000000000000
+      000000000000000000000000000000000000EF3DEF3DEF3DEF3DEF3DEF3DEF3D
+      EF3DEF3DEF3DEF3DEF3DEF3DEF3DEF3DFF7F0000000000000000FF7F18631863
+      1863000018631863186310420000000000000000000010000000000000000000
+      0000000000000000100010001000000000000000000000000000FF7FFF7FFF7F
+      FF7FFF7FFF7FFF7FFF7F0000000000000000000000000000EF3DFF7F0000FF7F
+      FF7FFF7FFF7F0000FF7FEF3DFF7F000000000000000000000000FF7F18631863
+      1863000018631863186310420000000000000000000010000000000000000000
+      0000000000001000000010001000000000000000000000000000FF7F00000000
+      00000000FF7F0000FF7F0000000000000000000000000000EF3DFF7FEF3DEF3D
+      EF3DEF3D0000EF3D0000EF3DFF7F000000000000000000000000FF7F18631863
+      1863186318631863186310420000000000000000000010421000000000000000
+      0000100010000000000000001000000000000000000000000000FF7FFF7FFF7F
+      FF7FFF7FFF7FFF7FFF7F0000000000000000000000000000EF3DFF7F0000FF7F
+      FF7F0000FF7FFF7FFF7FEF3DFF7F000000000000000000000000FF7FFF7FFF7F
+      FF7FFF7FFF7FFF7FFF7F18630000000000000000000000001042100010001000
+      1000000000000000000000000000000000000000000000000000FF7F00000000
+      FF7F00000000000000000000000000000000000000000000EF3DFF7FEF3DEF3D
+      0000EF3DEF3DEF3DEF3DEF3D0000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000FF7FFF7FFF7F
+      FF7F0000FF7FFF7F00000000000000000000000000000000EF3DFF7F0000FF7F
+      FF7FEF3DFF7F0000EF3D00000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000FF7F0000F75E
+      FF7F0000FF7F000000000000000000000000000000000000EF3DFF7FEF3DEF3D
+      0000EF3DFF7FEF3D000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000FF7FFF7FFF7F
+      FF7F00000000000000000000000000000000000000000000EF3DFF7FFF7FFF7F
+      FF7FEF3DEF3D0000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000000000000000EF3DEF3DEF3DEF3D
+      EF3DEF3D00000000000000000000000000000000000017001700170000001700
+      1700170000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000010421700000000000000
+      1700104200000000000010420000104200000000000000000000000000000000
+      00000000000000000000000000000000FF7F0000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000001700170017001700
+      17000000000000000000000000000000000000000000000000000000FF7F0000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000001042170000001700
+      104200000000000010420000000000001042000000000000000000000000FF7F
+      0000000000000000000000000000FF7F00000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000170017001700
+      000000000000000000000000000000000000000000000000000000000000FF7F
+      000000000000000000000000FF7F000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000104217001042
+      0000000000000000000000000000000000000000000000000000000000000000
+      FF7F00000000000000000000FF7F000000000000000000000000000000000000
+      1F00000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000017000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000FF7F000000000000FF7F0000000000000000000000000000000000000000
+      1F00000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000FF7F00000000000000000000000000000000000000000000
+      1F00000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000000000000000000000000000005C005C005C005C005C
+      005C000000000000000000000000000000000000000000000000000000000000
+      000000000000FF7F0000000000000000000000000000000000001F001F001F00
+      1F001F001F001F00000000000000000000000000000000000000000000000000
+      00000000000000000000000000000000000000000000005C005C000000000000
+      005C000000000000000000000000000000000000000000000000000000000000
+      0000000000000000FF7F00000000000000000000000000000000000000000000
+      1F00000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000000000000000005C005C00000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000FF7F00000000FF7F00000000000000000000000000000000000000000000
+      1F00000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000005C005C0000
+      0000000000000000000000000000000000000000000000000000000000000000
+      FF7F00000000000000000000FF7F000000000000000000000000000000000000
+      1F00000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000000000000000000000000000000000000000005C005C
+      000000000000000000000000000000000000000000000000000000000000FF7F
+      0000000000000000000000000000FF7F00000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000000000000000000000000000005C000000000000005C
+      005C000000000000000000000000000000000000000000000000FF7F00000000
+      00000000000000000000000000000000FF7F0000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000000000000000000000000000005C005C005C005C005C
+      005C000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000424D3E000000000000003E000000
+      2800000040000000500000000100010000000000800200000000000000000000
+      000000000000000000000000FFFFFF0000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000008FFFFF870000000007FFFF8100000000
+      03FFE0000000000081FF800000000000C007800100000000E003000000000000
+      F001000000000000F800800100000000F800000000000000E800000000000000
+      E000800000000000E800000F00000000F000000F00000000FC01000F00000000
+      FE03801F00000000FF07E07F00000000FFFFFFFFFC7FFEFFFF9FFFFFFC7FFEFF
+      FF0FFFFFFC7FFC7FFE0FFFFFFC7FFC7F8007FBFFFC7FF83F8023F9FFFC7FF83F
+      8033F8FFE00FF01F8039F87FE00FF01F803CF83FF01FE00F803EF81FF01FE00F
+      873FF83FF83FFC7F803FF87FF83FFC7F857FF8FFFC7FFC7F80FFF9FFFC7FFC7F
+      81FFFBFFFEFFFC7FFFFFFFFFFEFFFC7FFFFFFFFF80018000FFFFFFFF00000000
+      E003FFFF00000000E003FFFF00000000E003FFFF00000000E003E7FF00000000
+      E003CF8300000000E003DFC300000000E003DFE3E007E423E003DFD3E007E053
+      E003CF3BE007E483E003E0FFE007E107E003FFFFE00FE42FFFFFFFFFE01FE11F
+      FFFFFFFFE03FE03FFFFFFFFFE07FE07FC47BFFFFFFFFFFFFCE71FFFCFFFFFFFF
+      E0F1F3FFFFFFFFFFE4E0E1F9FFFFFFFFF1E0E1F3FC7FFC7FF1FBF0E3FC7FFD7F
+      FBFBF847FC7FFD7FFFFBFC0FE00FE10FC0FBFE1FE00FEFEFCEFBFC0FE00FE10F
+      E7FBF84FFC7FFD7FF3FBE0E3FC7FFD7FF9FBC1F1FC7FFC7FDCFBC7F8FFFFFFFF
+      C0FBFFFFFFFFFFFFFFFFFFFFFFFFFFFF00000000000000000000000000000000
+      000000000000}
+  end
+  object AccSearchDirectionPopupMenu: TPopupMenu
+    Images = ImageList1
+    Left = 812
+    Top = 380
+    object Action11: TMenuItem
+      Action = SearchForward
+      RadioItem = True
+      OnDrawItem = DrawMenuItem
+    end
+    object Action21: TMenuItem
+      Action = SearchBackward
+      RadioItem = True
+      OnDrawItem = DrawMenuItem
+    end
+  end
+  object AccOrderPopupMenu: TPopupMenu
+    Images = ImageList1
+    OwnerDraw = True
+    Left = 381
+    Top = 116
+    object OrderAccNo1: TMenuItem
+      Action = OrderAccNo
+    end
+    object OrderAccName1: TMenuItem
+      Action = OrderAccName
+    end
+    object OrderAccCurrency1: TMenuItem
+      Action = OrderAccCurrency
+    end
+  end
+  object AccGridPopupMenu: TPopupMenu
+    AutoHotkeys = maManual
+    Images = ImageList1
+    OwnerDraw = True
+    Left = 220
+    Top = 164
+    object Add1: TMenuItem
+      Action = Add
+      OnDrawItem = DrawMenuItem
+    end
+    object Edit1: TMenuItem
+      Action = Edit
+      Default = True
+      OnDrawItem = DrawMenuItem
+    end
+    object Close1: TMenuItem
+      Action = Close
+      OnDrawItem = DrawMenuItem
+    end
+    object OrderItem: TMenuItem
+      Caption = 'Filter'
+      OnDrawItem = DrawMenuItem
+      object N7: TMenuItem
+        Action = ToggleFilter
+        OnDrawItem = DrawMenuItem
+      end
+      object N8: TMenuItem
+        Caption = '-'
+        OnDrawItem = DrawMenuItem
+      end
+      object ApplyFilter1: TMenuItem
+        Action = ApplyFilter
+        OnDrawItem = DrawMenuItem
+      end
+      object ResetFilter1: TMenuItem
+        Action = ResetFilter
+        OnDrawItem = DrawMenuItem
+      end
+      object N6: TMenuItem
+        Caption = '-'
+        OnDrawItem = DrawMenuItem
+      end
+      object N3: TMenuItem
+        Action = UseBalanceFilter
+        OnDrawItem = DrawMenuItem
+      end
+      object N4: TMenuItem
+        Action = UseCustomerFilter
+        OnDrawItem = DrawMenuItem
+      end
+      object N5: TMenuItem
+        Action = UseCurrencyFilter
+        OnDrawItem = DrawMenuItem
+      end
+      object N2: TMenuItem
+        Caption = '-'
+        OnDrawItem = DrawMenuItem
+      end
+      object AllAccounts1: TMenuItem
+        Action = AllAccounts
+        GroupIndex = 1
+        RadioItem = True
+        OnDrawItem = DrawMenuItem
+      end
+      object ClosedAccounts1: TMenuItem
+        Action = ClosedAccounts
+        GroupIndex = 1
+        RadioItem = True
+        OnDrawItem = DrawMenuItem
+      end
+      object ActiveAccounts1: TMenuItem
+        Action = ActiveAccounts
+        GroupIndex = 1
+        RadioItem = True
+        OnDrawItem = DrawMenuItem
+      end
+    end
+    object N1: TMenuItem
+      Action = ViewTransactions
+      OnDrawItem = DrawMenuItem
+    end
+    object ViewStates1: TMenuItem
+      Action = ViewStates
+      OnDrawItem = DrawMenuItem
+    end
+    object N9: TMenuItem
+      Caption = '-'
+    end
+  end
+  object MainMenu1: TMainMenu
+    Left = 217
+    Top = 132
+    object File1: TMenuItem
+      Caption = 'File'
+      GroupIndex = 2
+      object File11: TMenuItem
+        Caption = 'File1'
+        GroupIndex = 2
+      end
+      object File21: TMenuItem
+        Caption = 'File2'
+        GroupIndex = 2
+      end
+    end
+    object Edit2: TMenuItem
+      Caption = 'Edit'
+      GroupIndex = 2
+    end
+  end
+end

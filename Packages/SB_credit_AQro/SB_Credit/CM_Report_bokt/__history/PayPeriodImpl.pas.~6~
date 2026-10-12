@@ -1,0 +1,61 @@
+unit PayPeriodImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, Mask, DBCtrlsEh, DBLookupEh, ExtCtrls, ComCtrls, Buttons,
+  DB, OracleData;
+
+type
+  TForm1 = class(TForm)
+    GroupBox1: TGroupBox;
+    DateTimePicker1: TDateTimePicker;
+    DateTimePicker2: TDateTimePicker;
+    Label1: TLabel;
+    GroupBox2: TGroupBox;
+    RadioGroup1: TRadioGroup;
+    DBLookupComboboxEh7: TDBLookupComboboxEh;
+    DBLookupComboboxEh1: TDBLookupComboboxEh;
+    CheckBox1: TCheckBox;
+    CheckBox2: TCheckBox;
+    SpeedButton1: TSpeedButton;
+    SpeedButton2: TSpeedButton;
+    OracleDataSet1: TOracleDataSet;
+    OracleDataSet2: TOracleDataSet;
+    OracleDataSet3: TOracleDataSet;
+    Main: TOracleDataSet;
+    DataSource1: TDataSource;
+    DataSource2: TDataSource;
+    procedure FormCanResize(Sender: TObject; var NewWidth, NewHeight: Integer;
+      var Resize: Boolean);
+    procedure FormCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form1: TForm1;
+
+implementation
+
+{$R *.dfm}
+ uses sboapiDataModuleImpl;
+procedure TForm1.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+resize:=false
+end;
+
+procedure TForm1.FormCreate(Sender: TObject);
+begin
+OracleDataSet1.Open;
+OracleDataSet2.Open;
+OracleDataSet3.Open;
+DateTimePicker1.DateTime:=OracleDataSet1.FieldByName('tek_dat').AsDateTime;
+DateTimePicker2.DateTime:=OracleDataSet1.FieldByName('tek_dat').AsDateTime;
+end;
+
+end.

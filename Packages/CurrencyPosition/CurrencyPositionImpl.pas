@@ -1,0 +1,913 @@
+﻿        {------------------------------------}
+        {(c) Smart Systems Technology Ltd.   }
+        {            2002.                   }
+        {------------------------------------}
+unit CurrencyPositionImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActiveX, AxCtrls, CurrencyPosition_TLB, StdVcl, StdCtrls, ExtCtrls,
+  ComCtrls, ActnList, Buttons, ImgList, ToolWin,SBPlgAx50_TLB, Grids,
+  DBGrids, Mask, DBCtrls, Db, DBTables, OracleData, Oracle;
+
+type
+  TFrmCurrencyPosition = class(TActiveForm, IFrmCurrencyPosition, IIconExporter)
+    Panel1: TPanel;
+    Panel2: TPanel;
+    GroupBox1: TGroupBox;
+    DTPBegin: TDateTimePicker;
+    DTPEnd: TDateTimePicker;
+    StaticText1: TStaticText;
+    StaticText2: TStaticText;
+    GroupBox2: TGroupBox;
+    CmbBoxPlan: TComboBox;
+    ImageList1: TImageList;
+    Panel3: TPanel;
+    DBGrid1: TDBGrid;
+    GroupBox3: TGroupBox;
+    Panel4: TPanel;
+    StaticText3: TStaticText;
+    DBEdit1: TDBEdit;
+    DBEdit2: TDBEdit;
+    GroupBox4: TGroupBox;
+    SaveDlg: TSaveDialog;
+    GroupBox5: TGroupBox;
+    ProgressBar: TProgressBar;
+    CmbBoxDate: TComboBox;
+    CmbBoxCurrency: TComboBox;
+    TblMain: TTable;
+    Edit1: TEdit;
+    SpeedButton1: TSpeedButton;
+    ODSFillFile: TOracleDataSet;
+    ODSSVM: TOracleDataSet;
+    ToolBar1: TToolBar;
+    ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
+    TBRefresh: TToolButton;
+    ToolButton4: TToolButton;
+    ToolButton5: TToolButton;
+    ToolButton6: TToolButton;
+    TBTuning: TToolButton;
+    ToolButton3: TToolButton;
+    ToolButton7: TToolButton;
+    ToolButton8: TToolButton;
+    tb_Capital: TToolButton;
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure ActiveFormDestroy(Sender: TObject);
+    procedure DTPBeginChange(Sender: TObject);
+    procedure ToolButton1Click(Sender: TObject);
+    procedure TBRefreshClick(Sender: TObject);
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure ToolButton5Click(Sender: TObject);
+    procedure TBTuningClick(Sender: TObject);
+    procedure ToolButton7Click(Sender: TObject);
+    procedure tb_CapitalClick(Sender: TObject);
+  private
+    { Private declarations }
+    FEvents: IFrmCurrencyPositionEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+    function  Get_Icon: OLE_HANDLE; safecall;
+  public
+    { Public declarations }
+    Rate     :array of Integer;
+    Dates    :array of TDateTime;
+    Modified :Boolean;
+    DateIndex:Integer;
+    function  sb_GetBankDate:TDateTime;
+    function  sb_GetUserName:String;
+    procedure sb_GetCurrPosition(FDate,LDate:TDateTime;BalanceType:Integer);
+    procedure Do_Open(FilterString:WideString);overload;
+    procedure GetRemainders(FilterString:WideString);overload;
+    procedure Initialize; override;
+    procedure FillCurrency;
+    procedure FillDate;
+    procedure GetRemainders(DataSet :TOracleDataSet;QueryString :WideString;Variable1,Variable2 :String;Value1,Value2 :Variant;In1,In2:Boolean);overload;
+    procedure DO_OPEN(DataSet :TOracleDataSet;QueryString:WideString;Variable1,Variable2:String;Value1,Value2:Variant;In1,In2:Boolean);overload;
+    procedure InputQueryToDataSet(DataSet :TOracleDataSet;QueryString :WideString);
+    function GetCapital(CapitalDate: Variant): String;
+  end;
+
+var
+   FrmCurrencyPosition:TFrmCurrencyPosition;
+implementation
+
+uses ComObj, ComServ, DataModCurrPositin, UntMore,sboapiDataModuleImpl,
+  UntCPReport, UntChecking, UntCapital, SBTranslateProc;
+
+{$R *.DFM}
+
+{ TFrmCurrencyPosition }
+
+procedure TFrmCurrencyPosition.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_FrmCurrencyPositionPage); }
+end;
+
+procedure TFrmCurrencyPosition.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as IFrmCurrencyPositionEvents;
+end;
+
+procedure TFrmCurrencyPosition.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TFrmCurrencyPosition.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TFrmCurrencyPosition.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TFrmCurrencyPosition.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TFrmCurrencyPosition.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TFrmCurrencyPosition.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TFrmCurrencyPosition.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TFrmCurrencyPosition.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TFrmCurrencyPosition.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TFrmCurrencyPosition.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TFrmCurrencyPosition.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TFrmCurrencyPosition.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TFrmCurrencyPosition.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TFrmCurrencyPosition.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TFrmCurrencyPosition.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TFrmCurrencyPosition.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TFrmCurrencyPosition.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TFrmCurrencyPosition.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TFrmCurrencyPosition.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TFrmCurrencyPosition._Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TFrmCurrencyPosition.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TFrmCurrencyPosition.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TFrmCurrencyPosition.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TFrmCurrencyPosition.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TFrmCurrencyPosition.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TFrmCurrencyPosition.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TFrmCurrencyPosition.KeyPressEvent(Sender: TObject;
+  var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TFrmCurrencyPosition.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TFrmCurrencyPosition.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TFrmCurrencyPosition.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TFrmCurrencyPosition.Set_AxBorderStyle(
+  Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TFrmCurrencyPosition.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TFrmCurrencyPosition.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TFrmCurrencyPosition.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TFrmCurrencyPosition.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TFrmCurrencyPosition.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TFrmCurrencyPosition.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TFrmCurrencyPosition.Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TFrmCurrencyPosition.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TFrmCurrencyPosition.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TFrmCurrencyPosition.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TFrmCurrencyPosition.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TFrmCurrencyPosition.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TFrmCurrencyPosition.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+function TFrmCurrencyPosition.Get_Icon: OLE_HANDLE;
+const
+  ImageIndex = 0;
+begin
+  ImageList1.GetIcon(ImageIndex, Icon);
+  Result := Icon.Handle;
+end;
+//*****************************************************************
+procedure TFrmCurrencyPosition.InputQueryToDataSet(DataSet :TOracleDataSet;QueryString :WideString);
+begin
+  with  DataSet.SQL  do
+  begin
+    Clear;
+    Add(QueryString)
+  end;
+end;
+procedure TFrmCurrencyPosition.DO_OPEN(DataSet :TOracleDataSet;QueryString:WideString;Variable1,Variable2:String;Value1,Value2:Variant;In1,In2:Boolean);
+begin
+  with   DataSet  do
+  begin
+    if  Active  then  Close;
+    with  SQL  do
+    begin
+       Clear;
+       DeleteVariables;
+       Add(QueryString);
+      if  In1  then
+      begin
+        DeclareVariable(Variable1,otDate);
+        SetVariable(Variable1,Value1);
+      end;
+      if  In2  then
+      begin
+        DeclareVariable(Variable2,otInteger);
+        SetVariable(Variable2,Value2);
+      end;
+    end;
+    Open;
+  end;
+end;
+procedure TFrmCurrencyPosition.GetRemainders(DataSet :TOracleDataSet;QueryString :WideString;Variable1,Variable2 :String;Value1,Value2 :Variant;In1,In2:Boolean);
+begin
+  with   DataSet  do
+  begin
+    if  Active  then  Close;
+    with   SQL  do
+    begin
+        Clear;
+        DeleteVariables;
+        Add(QueryString);
+      if   In1  then
+      begin
+        DeclareVariable(Variable1,otDate);
+        SetVariable(Variable1,Value1);
+      end;
+      if   In2  then
+      begin
+        DeclareVariable(Variable2,otInteger);
+        SetVariable(Variable2,Value2);
+      end;
+    end;
+    Open;
+  end;
+end;
+procedure TFrmCurrencyPosition.FillDate;
+var
+    TableName:String;
+begin
+   TableName:='CurrencyPosition_'+sb_GetUserName;
+   with   CPDataMod.ODSDate  do
+   begin
+      if  Active  then  Close;
+      with   SQL   do
+      begin
+         Clear;
+         Add('Select Distinct PresentDate From '+TableName);
+      end;
+      Open;
+      First;
+
+      if Assigned(Dates) then
+        SetLength(Dates,0);
+
+      SetLength(Dates,RecordCount);
+      with   CmbBoxDate.Items  do
+      begin
+         Clear;
+         Add('Bütün tarixlər');
+         DateIndex :=0;
+         while  not Eof  do
+         begin
+            Dates[DateIndex] :=FieldByName('PresentDate').AsDateTime;
+            Add(FormatDateTime('dd/mmm/yyyy',Trunc(FieldByName('PresentDate').AsDateTime)));
+            Inc(DateIndex);
+            Next;
+         end;
+      end;
+   end;
+end;
+procedure TFrmCurrencyPosition.GetRemainders(FilterString:WideString);
+var
+   TableName :String;
+begin
+   TableName :='CurrencyPosition_'+sb_GetUserName;
+   with   CPDataMod.ODSSum  do
+   begin
+     if  Active  then  Close;
+       DeleteVariables;
+     with   SQL  do
+     begin
+       Clear;
+       Add('Select Sum(Active),Sum(Passive) From '+TableName+FilterString);
+     end;
+     Open;
+   end;
+end;
+procedure TFrmCurrencyPosition.FillCurrency;
+var
+    RateIndex :Integer;
+begin
+  RateIndex:=0;
+   with   CmbBoxCurrency.Items  do
+   begin
+     Clear;
+     Add('Bütün valyutalar')
+   end;
+  with  CPDataMod.ODSCurrency  do
+  begin
+    Open;
+    SetLength(Rate,RecordCount);
+    First;
+    while  not EOF  do
+    begin
+      Rate[RateIndex] :=FieldByName('Valute').AsInteger;
+      CmbBoxCurrency.Items.Add(FieldByName('Valu_Name').AsString);
+      Inc(RateIndex);
+      Next
+    end;
+  end;
+end;
+function  TFrmCurrencyPosition.sb_GetUserName:String;
+begin
+  with  CPDataMod.OPackage do
+   Result :=CallStringFunction('GetUserName',[]);
+end;
+procedure   TFrmCurrencyPosition.sb_GetCurrPosition(FDate,LDate:TDateTime;BalanceType:Integer);
+begin
+  with  CPDataMod.OPackage do
+    CallProcedure('Get_CurrencyPosition',[FDate,LDate,BalanceType]);
+end;
+function   TFrmCurrencyPosition.sb_GetBankDate:TDateTime;
+begin
+  with  CPDataMod.OPackage  do
+    Result :=CallDateFunction('GetBankDay',[]);
+end;
+procedure  TFrmCurrencyPosition.Do_Open(FilterString:WideString);
+var
+    TableName:String;
+begin
+    TableName :='CurrencyPosition_'+sb_GetUserName;
+     with  CPDataMod.ODSCurrPosition  do
+     begin
+      if   Active  then  Close;
+       DeleteVariables;
+        with  SQL  do
+        begin
+           Clear;
+           Add('Select  *  From '+TableName+' '+FilterString+' Order By  PresentDate,Balance');
+        end;
+        Open;
+     end;
+end;
+procedure TFrmCurrencyPosition.ActiveFormCreate(Sender: TObject);
+begin
+  FrmCurrencyPosition :=Self;
+  CPDataMod:=TCPDataMod.Create(Self);
+  FrmTuning :=TFrmTuning.Create(Self);
+  FrmChecking :=TFrmChecking.Create(Self);
+  CPReport :=TCPReport.Create(Self);
+  DTPBegin.DateTime :=sb_GetBankDate;
+  DTPEnd.DateTime   :=sb_GetBankDate;
+  FillCurrency;
+  Modified:=True;
+  CmbBoxCurrency.ItemIndex :=0;
+  CmbBoxPlan.ItemIndex :=0;
+   SBTranslateProc.TranslateAllComponents(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TFrmCurrencyPosition.ActiveFormDestroy(Sender: TObject);
+begin
+  if Assigned(Rate) then
+   SetLength(Rate,0);
+  if Assigned(Dates) then
+   SetLength(Dates,0);
+end;
+
+procedure TFrmCurrencyPosition.DTPBeginChange(Sender: TObject);
+begin
+    Modified :=True;
+    ToolButton1.Enabled :=Modified;
+end;
+
+procedure TFrmCurrencyPosition.ToolButton1Click(Sender: TObject);
+begin
+  Screen.Cursor :=crHourGlass;
+  with  ProgressBar  do
+  begin
+    Visible :=TRUE;
+    Max :=100;
+  end;
+ try
+   if   Modified   then
+   begin
+       ProgressBar.StepBy(30);
+       sb_GetCurrPosition(Trunc(DTPBegin.DateTime),Trunc(DTPEnd.DateTime),CmbBoxPlan.ItemIndex+1);
+       ProgressBar.StepBy(40);
+       Do_Open('');
+       ProgressBar.StepBy(15);
+       GetRemainders('');
+       ProgressBar.StepBy(10);
+       FillDate;
+       CmbBoxDate.ItemIndex:=0;
+       Modified:=False;
+       ToolButton1.Enabled :=Modified;
+       ProgressBar.StepBy(5);
+       Screen.Cursor :=crDefault;
+       with  ProgressBar do
+       begin
+         Position :=0;
+         Hide;
+       end;
+   end;
+   if  not  TBTuning.Enabled  then
+    TBTuning.Enabled :=True;
+   if  not ToolButton7.Enabled  then
+   ToolButton7.Enabled :=True;
+  except
+     Screen.Cursor :=crDefault;
+     with  ProgressBar do
+     begin
+       Position :=0;
+       Hide;
+     end;
+   raise;
+  end;
+end;
+
+procedure TFrmCurrencyPosition.TBRefreshClick(Sender: TObject);
+const
+    SelectStatement = 'Select * From ';
+var
+    FilterString :WideString;
+    TempruaryString :WideString;
+    QueryString : WideString;
+    V1,V2  :Variant;
+    TableName :String;
+    IsIncoming1,IsIncoming2 :Boolean;
+begin
+  TableName := 'CurrencyPosition_'+sb_GetUserName;
+  QueryString :='';
+  IsIncoming1:=False;
+  IsIncoming2:=False;
+  Screen.Cursor :=crHourGlass;
+  if  CPDataMod.ODSDate.Active  then  // and (CPDataMod.ODSDate.RecordCount<>0)
+  try
+
+     if   CmbBoxDate.ItemIndex<>0  then
+     begin
+       FilterString :=' (PresentDate=:ADate)';
+       V1 :=Integer(Trunc(Dates[CmbBoxDate.ItemIndex-1]));
+       IsIncoming1 :=True
+     end  else FilterString :='';
+
+      if  CmbBoxCurrency.ItemIndex <> 0  then
+      begin
+        TempruaryString :=' (Currency =:Currency)';
+        V2 := Rate[CmbBoxCurrency.ItemIndex-1];
+        IsIncoming2 :=True;
+      end  else    TempruaryString:='';
+
+      if   (FilterString<>'')  or  (TempruaryString<>'')  then
+      begin
+        if  FilterString<>''  then
+          QueryString :=' Where '+FilterString;
+        if  TempruaryString<>''  then
+        if  QueryString=''  then
+          QueryString :=' Where '+TempruaryString
+        else
+        QueryString := QueryString +'And'+ TempruaryString;
+
+        DO_OPEN(
+                CPDataMod.ODSCurrPosition,
+                SelectStatement+TableName+QueryString+' Order By  PresentDate,Balance',
+                'ADate',
+                'Currency',
+                V1,V2,
+                IsIncoming1,IsIncoming2);
+
+        GETREMAINDERS(CPDataMod.ODSSum,
+                'Select Sum(Active),Sum(Passive) From '+TableName+QueryString,
+                'ADate',
+                'Currency',
+                V1,V2,
+                IsIncoming1,IsIncoming2)
+
+      end else
+      begin
+         Do_Open('');
+         GetRemainders('');
+      end;
+    finally
+      Screen.Cursor :=crDefault;
+    end
+    else
+    ShowMessage('No  Records  in  DataSet!'+#13+'Use  Command for Fill  DataSet');
+end;
+
+procedure TFrmCurrencyPosition.SpeedButton1Click(Sender: TObject);
+begin
+   with   SaveDlg  do
+   if  Execute  then
+   Edit1.Text :=FileName;
+end;
+
+procedure TFrmCurrencyPosition.ToolButton5Click(Sender: TObject);
+var
+   DBaseName,TblName:String;
+   DumDat: TDateTime;
+   Path  :String;
+   DateCount :Integer;
+   V  :Variant;
+   CapitalString:String;
+   lpExistingFileName :array [0..255] of Char;
+   lpNewFileName :array [0..255] of Char;
+begin
+ Screen.Cursor :=crHourGlass;
+ try
+ try
+   Path :=ExtractFilePath(Application.ExeName)+'Balansb.dbf';
+   StrPCopy(lpExistingFileName,Path);
+   StrPCopy(lpNewFileName,Edit1.Text);
+
+   if  FileExists(Edit1.Text) then
+   if  MessageDlg(
+           Format('Overrite the Existing File ?'+#13+' %s  ',[Edit1.Text])
+           ,mtConfirmation
+           ,MBYESNOCANCEL,0
+        )<>mrYes  then  Exit;
+
+   if not CopyFile(lpExistingFileName,lpNewFileName,False) then
+   begin
+     ShowMessage('File Creation UnSuccesful Terminated!');
+     Exit;
+   end;
+
+   DBaseName :=ExtractFileDir(Edit1.Text);
+   TblName  :=ExtractFileName(Edit1.Text);
+   if   CPDataMod.ODSCurrPosition.Active   then
+   begin
+     CPDataMod.ODSCurrPosition.Close;
+     Do_Open('');
+     FillDate;
+     GetRemainders('');
+     CmbBoxCurrency.ItemIndex :=0;
+     CmbBoxDate.ItemIndex :=0;
+     with   TblMain  do
+     begin
+       if  Active  then  Close;
+       DatabaseName :=DBaseName;
+       TableName :=TblName;
+
+     {  if  Exists   then
+       if  MessageDlg(
+           Format('Overrite the Existing File ?'+#13+' %s  ',[Edit1.Text])
+           ,mtConfirmation
+           ,MBYESNOCANCEL,0
+        )<>mrYes  then  Exit else  DeleteTable;
+
+       TableType :=ttDBase;
+       with   FieldDefs  do
+       begin
+         Clear;
+         Add('BANK_CODE',ftString,3);
+         Add('TARIX',ftDate);
+         Add('VALUTE',ftString,3);
+         Add('BALANS',ftString,5);
+         Add('ACTIVES',ftBCD);
+         Add('PASSIVES',ftBCD);
+         Add('POUL',ftBCD);
+       end;
+       CreateTable;}
+       Open;
+       CPDataMod.ODSCurrPosition.First;
+       with  ProgressBar do
+       begin
+          Visible :=True;
+          Max :=CPDataMod.ODSCurrPosition.RecordCount;
+       end;
+
+       while  not  CPDataMod.ODSCurrPosition.Eof  do
+       begin
+        Insert;
+         FieldByName('BANK_CODE').AsString :=CPDataMod.ODSCurrPosition.FieldByName('BANKID').AsString;
+         FieldByName('TARIX').AsDateTime :=CPDataMod.ODSCurrPosition.FieldByName('PRESENTDATE').AsDateTime;
+         FieldByName('VALUTE').AsString :=CPDataMod.ODSCurrPosition.FieldByName('OFFICAL').AsString;
+         FieldByName('BALANS').AsString :=CPDataMod.ODSCurrPosition.FieldByName('BALANCE').AsString;
+         FieldByName('ACTIVES').AsString :=FloatToStrF((100*CPDataMod.ODSCurrPosition.FieldByName('ACTIVE').Value)/100,fffixed,15,2);
+         FieldByName('PASSIVES').AsString :=FloatToStrF((100*CPDataMod.ODSCurrPosition.FieldByName('PASSIVE').Value)/100,fffixed,15,2);
+         FieldByName('POUL').AsString :=FloatToStr((100*CPDataMod.ODSCurrPosition.FieldByName('RATE').Value)/100);
+        Post;
+        CPDataMod.ODSCurrPosition.Next;
+        ProgressBar.StepIt;
+       end;
+          for  DateCount :=0 to  DateIndex-1  do
+          begin
+           V :=Integer(Trunc(Dates[DateCount]));
+            with  ODSFillFile  do
+            begin
+              if  Active  then  Close;
+               SetVariable('CurrentDate',V);
+               SetVariable('Currency',1);
+               Open;
+               ODSSVM.Open;
+            end;
+
+            //--TNariman
+             //CapitalString:=GetCapital(V);
+            //TNariman
+
+           //ASIF
+           //CapitalString:=InputBox('BANKIN  KAPITALI ','BANKIN '+FormatDateTime('dd/mm/yyyy',Trunc(Dates[DateCount]))+' IL TARIXINDE KAPITALI :','0');
+
+           //eldar
+           DumDat:= Trunc(Dates[DateCount]);
+           CapitalString:=InputBox('BANKIN  KAPITALI ','BANKIN '+FormatDateTime('dd/mm/yyyy',Trunc(Dates[DateCount]))+' IL TARIXINDE KAPITALI :',GetCapital(DumDat));
+
+
+
+           Insert;
+             FieldByName('BANK_CODE').AsString :=CPDataMod.ODSCurrPosition.FieldByName('BANKID').AsString;
+             FieldByName('TARIX').AsDateTime :=Dates[DateCount];
+             FieldByName('VALUTE').AsString :='AZM';
+             FieldByName('BALANS').AsString :='9601';
+             FieldByName('ACTIVES').AsString :=FormatFloat('0.00',ODSSVM.FieldByName('SVM').AsFloat*ODSFillFile.FieldbyName('Rate').AsFloat);
+             FieldByName('PASSIVES').AsString :=CapitalString;
+             FieldByName('POUL').AsString :='1';
+           Post;
+           Insert;
+             FieldByName('BANK_CODE').AsString :=CPDataMod.ODSCurrPosition.FieldByName('BANKID').AsString;
+             FieldByName('TARIX').AsDateTime :=Dates[DateCount];
+             FieldByName('VALUTE').AsString :='USD';
+             FieldByName('BALANS').AsString :='9601';
+             FieldByName('ACTIVES').AsString :=ODSSVM.FieldByName('SVM').AsString;
+             FieldByName('PASSIVES').AsString :='0.00';
+             FieldByName('POUL').AsString :=FormatFloat('0.00',ODSFillFile.FieldbyName('Rate').Value);
+           Post;
+          end;
+       ShowMessage('Creating  File was Succesful.');
+     end;
+   end;
+   except
+     ShowMessage('Creating  File  UnSuccesful Terminated!.');
+    raise;
+   end;
+   finally
+     ODSSVM.Close;
+     TblMain.Close;
+     ODSFillFile.Close;
+     Screen.Cursor :=crDefault;
+     ProgressBar.Position :=0;
+     ProgressBar.Hide;
+   end;
+end;
+
+procedure TFrmCurrencyPosition.TBTuningClick(Sender: TObject);
+begin
+  with   FrmTuning  do   ShowModal;
+end;
+
+procedure TFrmCurrencyPosition.ToolButton7Click(Sender: TObject);
+begin
+   with  FrmChecking  do  ShowModal
+end;
+
+function TFrmCurrencyPosition.GetCapital(CapitalDate: Variant): String;
+var S:real;
+begin
+  S:= CPDataMod.CAPITAL_PAK.CallFloatFunction('calculate_capumhes',[CapitalDate]);
+  Result:=FloatToStr(S);
+
+(*  with CPDataMod.CapitalData do
+  begin
+   CloseAll;
+   SetVariable('ADATE', CapitalDate);
+   Open;
+   Result :=FieldByName('Capital').AsString;
+  end;
+*)
+
+end;
+
+procedure TFrmCurrencyPosition.tb_CapitalClick(Sender: TObject);
+begin
+if not(Assigned(frmCapital)) then
+ frmCapital:=TfrmCapital.Create(self);
+ 
+frmCapital.ShowModal;
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TFrmCurrencyPosition,
+    Class_FrmCurrencyPosition,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

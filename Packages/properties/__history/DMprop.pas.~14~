@@ -1,0 +1,301 @@
+unit DMprop;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, OracleData, Oracle;
+
+type
+  TDMproperties = class(TDataModule)
+    OraclePackage1: TOraclePackage;
+    DataSrcPropIns: TDataSource;
+    DataSetCredit: TOracleDataSet;
+    DataSrcCredit: TDataSource;
+    ClientAccs: TOracleDataSet;
+    ClientAccsID: TFloatField;
+    ClientAccsCUSTID: TFloatField;
+    ClientAccsACCNO: TWideStringField;
+    ClientAccsCLIENTNAME: TWideStringField;
+    ClientAccsVAL_ACC: TIntegerField;
+    ClientaccsDatSrc: TDataSource;
+    Filals: TOracleDataSet;
+    FilalsID: TFloatField;
+    FilalsNAME: TWideStringField;
+    FilalsDatSrc: TDataSource;
+    DataSetPropIns: TOracleDataSet;
+    OracleDataSet1: TOracleDataSet;
+    DataSource1: TDataSource;
+    OraclePackage2: TOraclePackage;
+    DataSetCreditNUMBEROFCREDIT: TWideStringField;
+    DataSetCreditID: TFloatField;
+    DataSrcProp_Kredit: TDataSource;
+    DSet_Prop_KreditNUMBEROFCREDIT: TWideStringField;
+    DataSrc_tay: TDataSource;
+    dataset_taypcal: TOracleDataSet;
+    dataset_taypcalID: TFloatField;
+    dataset_taypcalTYPICAL: TWideStringField;
+    DSet_Prop_KreditPROPID: TFloatField;
+    acc_zones: TOracleDataSet;
+    acc_zonesZONEID: TFloatField;
+    acc_zonesDESCRIPTION: TWideStringField;
+    acc_zonesDatSrc: TDataSource;
+    acc_zone_infoDatSrc: TDataSource;
+    acc_zone_info: TOracleDataSet;
+    acc_zone_infoZONEID: TFloatField;
+    acc_zone_infoACCGROUP: TFloatField;
+    CreditAccs: TOracleDataSet;
+    CreditAccsDatSrc: TDataSource;
+    DataSrcProp_take: TDataSource;
+    DataSetProp_take: TOracleDataSet;
+    DSet_Prop_Kredit: TOracleDataSet;
+    DataSetProp_takeAMOUNT: TFloatField;
+    DataSetProp_takeNUMBEROFCREDIT: TWideStringField;
+    DataSetProp_takeTRDATE: TDateTimeField;
+    DataSetProp_takeID: TFloatField;
+    ReportDataSet: TOracleDataSet;
+    DataSetProp_takeMAINDEBT: TFloatField;
+    DataSetProp_takeINTDEBT: TFloatField;
+    DataSetproperties_payments: TOracleDataSet;
+    DataSrcproperties_payments: TDataSource;
+    OracleDataSet1TEK_DAT: TDateTimeField;
+    DataSetproperties_paymentsPROP_COUNT: TFloatField;
+    DataSetproperties_paymentsDESCRIPTION: TWideStringField;
+    DataSetproperties_paymentsDAT: TDateTimeField;
+    DataSetproperties_paymentsSELL_VALUE: TFloatField;
+    DataSetproperties_paymentsID: TFloatField;
+    DataSetProp_takesumrest: TFloatField;
+    DataSetTake: TOracleDataSet;
+    DataSrcTake: TDataSource;
+    CashSymbols: TOracleDataSet;
+    CashSymbolsData: TDataSource;
+    DistrictsDataSet: TOracleDataSet;
+    DistrictsDataSrc: TDataSource;
+    VillagesDataSet: TOracleDataSet;
+    VillagesDataSrc: TDataSource;
+    rezrveSource: TDataSource;
+    rezerveDataSet: TOracleDataSet;
+    rezerveDataSetID: TFloatField;
+    rezerveDataSetCODE: TWideStringField;
+    rezerveDataSetPERCENT: TFloatField;
+    rezerveDataSetDESCRIPTION: TWideStringField;
+    rezerveDataSetD: TWideStringField;
+    LinksSrc: TDataSource;
+    LinksDSet: TOracleDataSet;
+    EhtiyatDSet: TOracleDataSet;
+    LinksDSetBRACHID: TFloatField;
+    LinksDSetACCID: TFloatField;
+    LinksDSetaccno: TWideStringField;
+    EhtiyatDSetID: TFloatField;
+    EhtiyatDSetCUSTID: TFloatField;
+    EhtiyatDSetACCNO: TWideStringField;
+    EhtiyatDSetCLIENTNAME: TWideStringField;
+    EhtiyatDSetVAL_ACC: TIntegerField;
+    ElaveDataSet: TOracleDataSet;
+    ElaveDataSource: TDataSource;
+    ElaveDataSetID: TFloatField;
+    ElaveDataSetCUSTID: TFloatField;
+    ElaveDataSetACCNO: TWideStringField;
+    ElaveDataSetCLIENTNAME: TWideStringField;
+    ElaveDataSetVAL_ACC: TIntegerField;
+    InfoDataSet: TOracleDataSet;
+    FloatField1: TFloatField;
+    FloatField2: TFloatField;
+    StringField1: TWideStringField;
+    StringField2: TWideStringField;
+    IntegerField1: TIntegerField;
+    InfoSource: TDataSource;
+    GDataSet: TOracleDataSet;
+    GDataSource: TDataSource;
+    GDataSetGELIR: TFloatField;
+    GDataSetXERC: TFloatField;
+    GDataSetNAME: TWideStringField;
+    GDataSetacc: TWideStringField;
+    XDataSet: TOracleDataSet;
+    FloatField3: TFloatField;
+    FloatField4: TFloatField;
+    StringField3: TWideStringField;
+    StringField4: TWideStringField;
+    XDataSource: TDataSource;
+    DistrictsDataSetID: TFloatField;
+    DistrictsDataSetNAME: TWideStringField;
+    DistrictsDataSetNAME_ENG: TWideStringField;
+    ReportDataSetSIRA: TFloatField;
+    Info: TOracleDataSet;
+    InfoSrc: TDataSource;
+    ReportDataSetNAME: TWideStringField;
+    ReportDataSetVALUE: TFloatField;
+    ReportDataSetF_NAME: TWideStringField;
+    ReportDataSetRAYON: TWideStringField;
+    ReportDataSetCONTRACTNUM: TWideStringField;
+    ReportDataSetBDATE: TDateTimeField;
+    ReportDataSetSATISHDEYERI: TFloatField;
+    ReportDataSetCLACCNO: TWideStringField;
+    ReportDataSetEHACCNO: TWideStringField;
+    ReportDataSetPREVIOUSNAME: TWideStringField;
+    ReportDataSetUSEPERSONNAME: TWideStringField;
+    ReportDataSetCONSTRUCTDATE: TDateTimeField;
+    DataSetPropInsID: TFloatField;
+    DataSetPropInsFILIALID: TFloatField;
+    DataSetPropInsREGIONID: TFloatField;
+    DataSetPropInsVILLAGEID: TFloatField;
+    DataSetPropInsNAME: TWideStringField;
+    DataSetPropInsVALUE: TFloatField;
+    DataSetPropInsGENERALAREA: TFloatField;
+    DataSetPropInsLIVINGAREA: TFloatField;
+    DataSetPropInsBUILDINGSOILAREA: TFloatField;
+    DataSetPropInsSOILAREA: TFloatField;
+    DataSetPropInsAKTNUM: TWideStringField;
+    DataSetPropInsAKTDATE: TDateTimeField;
+    DataSetPropInsCONSTRUCTDATE: TDateTimeField;
+    DataSetPropInsUSEPERSONNAME: TWideStringField;
+    DataSetPropInsBUYCONTRACTDATE: TDateTimeField;
+    DataSetPropInsENDCONTACTDATE: TDateTimeField;
+    DataSetPropInsRESERVEID: TFloatField;
+    DataSetPropInsDESCRIPTION: TWideStringField;
+    DataSetPropInsCONTRACTNUM: TWideStringField;
+    DataSetPropInsBDATE: TDateTimeField;
+    DataSetPropInsPROP_COUNT: TFloatField;
+    DataSetPropInsACCNO: TFloatField;
+    DataSetPropInsCLIENTACCID: TFloatField;
+    DataSetPropInsBRANCHID: TFloatField;
+    DataSetPropInsTIPID: TFloatField;
+    DataSetPropInsTYPE: TFloatField;
+    DataSetPropInsPREVIOUSNAME: TWideStringField;
+    DataSetPropInsRESERVEACCID: TFloatField;
+    DataSetPropInsSATISHDEYERI: TFloatField;
+    DataSetPropInsDIGERHE: TFloatField;
+    DataSetPropInsSTATUS: TFloatField;
+    DataSetPropInsFILIAL: TWideStringField;
+    DataSetPropInsRAYON: TWideStringField;
+    ReportDataSetGENERALAREA: TFloatField;
+    ReportDataSetLIVINGAREA: TFloatField;
+    procedure DataSetPropInsApplyRecord(Sender: TOracleDataSet;
+      Action: Char; var Applied: Boolean; var NewRowId: String);
+    procedure DataSetPropInsAfterPost(DataSet: TDataSet);
+    procedure DataModuleCreate(Sender: TObject);
+    procedure DataModuleDestroy(Sender: TObject);
+    procedure DataSetPropInsCalcFields(DataSet: TDataSet);
+    procedure DataSetproperties_paymentsCalcFields(DataSet: TDataSet);
+    procedure DataSetProp_takeCalcFields(DataSet: TDataSet);
+    procedure ReportDataSetCalcFields(DataSet: TDataSet);
+
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  DMproperties: TDMproperties;
+
+implementation
+ uses sboapiDataModuleImpl;
+{$R *.DFM}
+
+procedure TDMproperties.DataSetPropInsApplyRecord(Sender: TOracleDataSet;
+  Action: Char; var Applied: Boolean; var NewRowId: String);
+{var
+ p_TIPID,p_id,p_clientaccid,p_accno,p_BRANCHID:integer;
+ p_DESCRIPTION,p_name,p_CONTRACTNUM:string;
+ p_bdate : TDateTime;
+ p_value:real;  }
+begin
+ {  // Applied := True;
+  with (Sender as TOracleDataSet) do  begin
+  //p_value:=FieldbyName('v').Asfloat;
+ // p_prop_count:=FieldbyName('prop_count').Asinteger;
+  p_DESCRIPTION:=FieldbyName('DESCRIPTION').Asstring;
+  p_name:= FieldbyName('name').asstring;
+  p_CONTRACTNUM:= FieldbyName('CONTRACTNUM').asstring;
+  p_bdate:=FieldbyName('bdate').AsDateTime ;
+  p_id:=FieldbyName('id').Asinteger;
+ // p_clientaccid:=FieldbyName('clientaccid').Asinteger;
+  p_accno:=FieldbyName('accno').Asinteger;
+  p_BRANCHID:=FieldbyName('BRANCHID').Asinteger;
+  p_TIPID:=FieldbyName('TIPID').Asinteger;
+  end;
+  {  with OraclePackage1 do
+    //Applied := true;
+      case Action of
+       'I': begin
+       CallProcedure('insert_prop',[p_value,p_name,p_DESCRIPTION,p_bdate,p_CONTRACTNUM,p_accno,p_BRANCHID,p_TIPID]);
+        Applied := true;
+        end;
+       'U':  begin
+        CallProcedure('edit_prop',[p_id,p_value,p_name,p_DESCRIPTION,p_bdate,p_CONTRACTNUM,p_accno,p_BRANCHID,p_TIPID]);
+        Applied := true;
+         end ;
+   else  Applied := false
+end;  }
+  end;
+procedure TDMproperties.DataSetPropInsAfterPost(DataSet: TDataSet);
+begin
+//DataSetPropIns.refresh 
+end;
+
+procedure TDMproperties.DataModuleCreate(Sender: TObject);
+begin
+ with  DataSetPropIns do
+  begin
+    SetVariable('OrderField','id');
+     SQL[5]:='';
+     SQL[5]:=' and a.status=0' ;
+    Open;
+  end;
+Filals.open  ;
+DistrictsDataSet.open;
+VillagesDataSet.Open;
+rezerveDataSet.Open;
+ClientAccs.open;
+CreditAccs.Open;
+InfoDataSet.Open;
+info.Open;
+end;
+
+procedure TDMproperties.DataModuleDestroy(Sender: TObject);
+begin
+DataSetPropIns.close;
+Filals.close ;
+DistrictsDataSet.closeall  ;
+VillagesDataSet.closeall;
+rezerveDataSet.closeall;
+ClientAccs.closeall;
+CreditAccs.closeall;
+InfoDataSet.closeall;
+DataSetproperties_payments.close;
+DMproperties.GDataSet.close;
+XDataSet.close;
+info.Close;
+end;
+
+procedure TDMproperties.DataSetPropInsCalcFields(DataSet: TDataSet);
+begin
+{DataSetPropIns.FieldByName('d').asFloat :=DataSetPropIns.FieldByName('value').asFloat-
+(DataSetProp_take.FieldByName('MAINDEBT').asFloat+
+ DataSetProp_take.FieldByName('INTDEBT').asFloat) }
+end;
+
+procedure TDMproperties.DataSetproperties_paymentsCalcFields(DataSet: TDataSet);
+begin
+{DataSetPropIns.FieldByName('sum_value').asFloat :=DataSetPropIns.FieldByName('value').asFloat-
+(DataSetProp_take.FieldByName('MAINDEBT').asFloat+
+ DataSetProp_take.FieldByName('INTDEBT').asFloat) }
+end;
+
+procedure TDMproperties.DataSetProp_takeCalcFields(DataSet: TDataSet);
+begin
+DataSetProp_take.FieldByName('sumrest').asFloat :=(DataSetProp_take.FieldByName('MAINDEBT').asFloat+
+ DataSetProp_take.FieldByName('INTDEBT').asFloat)
+ 
+end;
+
+procedure TDMproperties.ReportDataSetCalcFields(DataSet: TDataSet);
+begin
+ReportDataSet.FieldByName('d').asFloat :=
+(ReportDataSet.FieldByName('MAINDEBT').asFloat+
+ ReportDataSet.FieldByName('INTDEBT').asFloat) - ReportDataSet.FieldByName('sell_value').asFloat
+
+end;
+
+end.

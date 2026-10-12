@@ -1,0 +1,322 @@
+object ExpireAddForm: TExpireAddForm
+  Left = 283
+  Top = 168
+  ActiveControl = ExpiredAmountEdit
+  BorderIcons = [biSystemMenu]
+  Caption = 'ExpireAddForm'
+  ClientHeight = 248
+  ClientWidth = 389
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poOwnerFormCenter
+  OnClose = FormClose
+  OnKeyPress = FormKeyPress
+  PixelsPerInch = 96
+  TextHeight = 13
+  object GroupBox5: TGroupBox
+    Left = 0
+    Top = 0
+    Width = 389
+    Height = 55
+    Align = alTop
+    Caption = #1071#1089#1072#1089' '#1073#1086#1088#1078
+    TabOrder = 0
+    object Panel4: TPanel
+      Left = 2
+      Top = 15
+      Width = 245
+      Height = 38
+      Align = alLeft
+      BevelInner = bvRaised
+      BevelOuter = bvLowered
+      TabOrder = 0
+      object StaticText2: TStaticText
+        Left = 2
+        Top = 2
+        Width = 241
+        Height = 17
+        Align = alTop
+        Alignment = taCenter
+        Caption = #1065#1077#1089#1072#1073#1099#1085' '#8470
+        Color = clNavy
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWhite
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ParentColor = False
+        ParentFont = False
+        TabOrder = 0
+      end
+      object DBEditEh3: TDBEditEh
+        Left = 0
+        Top = 17
+        Width = 243
+        Height = 21
+        TabStop = False
+        Alignment = taLeftJustify
+        Color = clInfoBk
+        DataField = 'ACC_NO'
+        DataSource = ExpireDataModule.DSLoanRest
+        EditButtons = <>
+        TabOrder = 1
+        Visible = True
+      end
+    end
+    object Panel5: TPanel
+      Left = 247
+      Top = 15
+      Width = 140
+      Height = 38
+      Align = alLeft
+      BevelInner = bvRaised
+      BevelOuter = bvLowered
+      TabOrder = 1
+      object StaticText3: TStaticText
+        Left = 2
+        Top = 2
+        Width = 136
+        Height = 17
+        Align = alTop
+        Alignment = taCenter
+        Caption = #1043#1072#1083#1099#1075
+        Color = clNavy
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWhite
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ParentColor = False
+        ParentFont = False
+        TabOrder = 0
+      end
+      object DBEditEh4: TDBEditEh
+        Left = 0
+        Top = 17
+        Width = 138
+        Height = 21
+        TabStop = False
+        Alignment = taRightJustify
+        Color = clSilver
+        DataField = 'REST'
+        DataSource = ExpireDataModule.DSLoanRest
+        EditButtons = <>
+        TabOrder = 1
+        Visible = True
+      end
+    end
+  end
+  object Panel1: TPanel
+    Left = 0
+    Top = 110
+    Width = 389
+    Height = 103
+    Align = alTop
+    BevelInner = bvLowered
+    TabOrder = 1
+    object Label1: TLabel
+      Left = 5
+      Top = 4
+      Width = 101
+      Height = 13
+      Caption = #1069#1077#1078#1080#1082#1076#1080#1088#1080#1083#1084#1080#1096' '#1084#1103#1073#1083#1103#1100' :'
+    end
+    object ExpiredAmountEdit: TCMCurrencyEdit
+      Left = 4
+      Top = 20
+      Width = 161
+      Height = 21
+      TabOrder = 0
+      Text = '0'
+    end
+    object GroupBox2: TGroupBox
+      Left = 2
+      Top = 45
+      Width = 385
+      Height = 56
+      Align = alBottom
+      Caption = #1045#1097#1090#1080#1081#1081#1072#1090
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 1
+      object GroupBox4: TGroupBox
+        Left = 2
+        Top = 15
+        Width = 381
+        Height = 39
+        Align = alClient
+        Caption = #1069#1077#1078'. '#1041'. '#1094#1079#1088#1103' '#1045#1097#1090#1080#1081#1081#1072#1090
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 0
+        object DBLookupComboboxEh2: TDBLookupComboboxEh
+          Left = 1
+          Top = 15
+          Width = 174
+          Height = 21
+          DropDownBox.Sizable = True
+          EditButtons = <>
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          KeyField = 'ID'
+          ListField = 'FullDesc'
+          ListSource = ExpireDataModule.DataSrcSReserves
+          ParentFont = False
+          TabOrder = 0
+          Visible = True
+        end
+      end
+    end
+  end
+  object GroupBox1: TGroupBox
+    Left = 0
+    Top = 55
+    Width = 389
+    Height = 55
+    Align = alTop
+    Caption = #1069#1077#1078#1080#1082#1076#1080#1088#1080#1083#1084#1080#1096' '#1073#1086#1088#1078
+    TabOrder = 2
+    object Panel2: TPanel
+      Left = 2
+      Top = 15
+      Width = 245
+      Height = 38
+      Align = alLeft
+      BevelInner = bvRaised
+      BevelOuter = bvLowered
+      TabOrder = 0
+      object StaticText1: TStaticText
+        Left = 2
+        Top = 2
+        Width = 241
+        Height = 17
+        Align = alTop
+        Alignment = taCenter
+        Caption = #1065#1077#1089#1072#1073#1099#1085' '#8470
+        Color = clNavy
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWhite
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ParentColor = False
+        ParentFont = False
+        TabOrder = 0
+      end
+      object DBEditEh1: TDBEditEh
+        Left = 0
+        Top = 17
+        Width = 243
+        Height = 21
+        TabStop = False
+        Alignment = taLeftJustify
+        Color = clInfoBk
+        DataField = 'ACC_NO'
+        DataSource = ExpireDataModule.DSDueRest
+        EditButtons = <>
+        TabOrder = 1
+        Visible = True
+      end
+    end
+    object Panel3: TPanel
+      Left = 247
+      Top = 15
+      Width = 140
+      Height = 38
+      Align = alLeft
+      BevelInner = bvRaised
+      BevelOuter = bvLowered
+      TabOrder = 1
+      object StaticText4: TStaticText
+        Left = 2
+        Top = 2
+        Width = 136
+        Height = 17
+        Align = alTop
+        Alignment = taCenter
+        Caption = #1043#1072#1083#1099#1075
+        Color = clNavy
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWhite
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ParentColor = False
+        ParentFont = False
+        TabOrder = 0
+      end
+      object DBEditEh2: TDBEditEh
+        Left = 0
+        Top = 17
+        Width = 138
+        Height = 21
+        TabStop = False
+        Alignment = taRightJustify
+        Color = clSilver
+        DataField = 'DUEREST'
+        DataSource = ExpireDataModule.DSDueRest
+        EditButtons = <>
+        TabOrder = 1
+        Visible = True
+      end
+    end
+  end
+  object Button1: TButton
+    Left = 230
+    Top = 217
+    Width = 75
+    Height = 25
+    Action = ActionCommit
+    TabOrder = 3
+  end
+  object Button2: TButton
+    Left = 310
+    Top = 217
+    Width = 75
+    Height = 25
+    Action = ActionClose
+    TabOrder = 4
+  end
+  object CheckBoxUseTransactions: TCheckBox
+    Left = 8
+    Top = 224
+    Width = 169
+    Height = 17
+    Caption = #1071#1084#1103#1083#1080#1081#1081#1072#1090#1083#1072#1088' '#1072#1087#1072#1088#1099#1083#1089#1099#1085
+    Checked = True
+    Enabled = False
+    State = cbChecked
+    TabOrder = 5
+    Visible = False
+  end
+  object ActionList1: TActionList
+    Left = 312
+    Top = 120
+    object ActionCommit: TAction
+      Caption = '&'#1043#1103#1073#1091#1083
+      OnExecute = ActionCommitExecute
+      OnUpdate = ActionCommitUpdate
+    end
+    object ActionClose: TAction
+      Caption = '&'#1048#1084#1090#1080#1085#1072
+      OnExecute = ActionCloseExecute
+    end
+  end
+end

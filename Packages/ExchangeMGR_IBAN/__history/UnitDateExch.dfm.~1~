@@ -1,0 +1,963 @@
+object DataModExch: TDataModExch
+  OldCreateOrder = False
+  Left = 71
+  Top = 253
+  Height = 563
+  Width = 1020
+  object ODSExchOffice: TOracleDataSet
+    SQL.Strings = (
+      'select * from ex_office')
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 25
+    Top = 17
+    object ODSExchOfficeID: TFloatField
+      FieldName = 'ID'
+    end
+    object ODSExchOfficeEX_NO: TFloatField
+      FieldName = 'EX_NO'
+      Required = True
+    end
+    object ODSExchOfficeEX_NAME: TWideStringField
+      FieldName = 'EX_NAME'
+      Size = 50
+    end
+    object ODSExchOfficeEX_ADDRESS: TWideStringField
+      FieldName = 'EX_ADDRESS'
+      Size = 50
+    end
+    object ODSExchOfficeEX_WORKER_NAME: TWideStringField
+      FieldName = 'EX_WORKER_NAME'
+      Size = 60
+    end
+    object ODSExchOfficeEX_CHECK_NO: TWideStringField
+      FieldName = 'EX_CHECK_NO'
+      Size = 30
+    end
+    object ODSExchOfficeUSR_ID: TFloatField
+      FieldName = 'USR_ID'
+    end
+  end
+  object DSExchOffice: TDataSource
+    DataSet = ODSExchOffice
+    Left = 472
+    Top = 57
+  end
+  object OPExchMgr: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'EXCH_MGR'
+    Left = 472
+    Top = 785
+  end
+  object ODSExchAcc: TOracleDataSet
+    SQL.Strings = (
+      'select  rowid,a.*'
+      ' from ex_accounts a'
+      ''
+      'where a.ex_id = :ex_id')
+    Variables.Data = {
+      0300000001000000060000003A45585F49440400000008000000000000000000
+      F03F00000000}
+    Cursor = crSQLWait
+    Master = ODSExchOffice
+    MasterFields = 'EX_NO'
+    DetailFields = 'EX_ID'
+    Session = sboapiDataModule.SBSession
+    Left = 105
+    Top = 135
+    object ODSExchAccID: TFloatField
+      FieldName = 'ID'
+    end
+    object ODSExchAccEX_ID: TFloatField
+      FieldName = 'EX_ID'
+    end
+    object ODSExchAccPURCHASE_ACC_NO: TWideStringField
+      FieldName = 'PURCHASE_ACC_NO'
+    end
+    object ODSExchAccSELLING_ACC_NO: TWideStringField
+      FieldName = 'SELLING_ACC_NO'
+    end
+    object ODSExchAccPROFIT_ACC_NO: TWideStringField
+      FieldName = 'PROFIT_ACC_NO'
+      Size = 22
+    end
+    object ODSExchAccHARM_ACC_NO: TWideStringField
+      FieldName = 'HARM_ACC_NO'
+      Size = 22
+    end
+    object ODSExchAccVAL_NB_COURSE: TFloatField
+      FieldKind = fkLookup
+      FieldName = 'VAL_NB_COURSE'
+      LookupDataSet = ODSExchRate
+      LookupKeyFields = 'VAL_ID'
+      LookupResultField = 'VAL_NB_COURSE'
+      KeyFields = 'VAL_ID'
+      Lookup = True
+    end
+    object ODSExchAccval_purchase_course: TFloatField
+      FieldKind = fkLookup
+      FieldName = 'VAL_PURCHASE_COURSE'
+      LookupDataSet = ODSExchRate
+      LookupKeyFields = 'VAL_ID'
+      LookupResultField = 'VAL_PURCHASE_COURSE'
+      KeyFields = 'VAL_ID'
+      Lookup = True
+    end
+    object ODSExchAccVAL_SELLING_COURSE: TFloatField
+      FieldKind = fkLookup
+      FieldName = 'VAL_SELLING_COURSE'
+      LookupDataSet = ODSExchRate
+      LookupKeyFields = 'VAL_ID'
+      LookupResultField = 'VAL_SELLING_COURSE'
+      KeyFields = 'VAL_ID'
+      Lookup = True
+    end
+    object ODSExchAccVAL_ID: TFloatField
+      FieldName = 'VAL_ID'
+    end
+    object ODSExchAccVAL_NAME: TWideStringField
+      FieldName = 'VAL_NAME'
+      Size = 10
+    end
+    object ODSExchAccVAL_NAME1: TWideStringField
+      FieldKind = fkLookup
+      FieldName = 'VAL_NAME1'
+      LookupDataSet = ODSExchRate
+      LookupKeyFields = 'VAL_ID'
+      LookupResultField = 'VAL_NAME'
+      KeyFields = 'VAL_ID'
+      Size = 30
+      Lookup = True
+    end
+  end
+  object DSExchAcc: TDataSource
+    DataSet = ODSExchAcc
+    Left = 344
+    Top = 73
+  end
+  object ODSExchRate: TOracleDataSet
+    SQL.Strings = (
+      'select r.rowid, r.* from ex_rates r'
+      ''
+      'where '
+      '         ex_id = :ex_id'
+      'and'
+      '         dat   =:dat'
+      'order by '
+      '         val_id')
+    Variables.Data = {
+      0300000002000000060000003A45585F49440400000008000000000000000000
+      F03F00000000040000003A4441540C0000000000000000000000}
+    Cursor = crSQLWait
+    Master = ODSExchOffice
+    MasterFields = 'EX_NO'
+    DetailFields = 'EX_ID'
+    Session = sboapiDataModule.SBSession
+    Left = 24
+    Top = 73
+    object ODSExchRateVAL_ID: TFloatField
+      FieldName = 'VAL_ID'
+      Required = True
+    end
+    object ODSExchRateVAL_NAME: TWideStringField
+      FieldName = 'VAL_NAME'
+      Size = 5
+    end
+    object ODSExchRateVAL_FULL_NAME: TWideStringField
+      FieldName = 'VAL_FULL_NAME'
+    end
+    object ODSExchRateVAL_PURCHASE_COURSE: TFloatField
+      FieldName = 'VAL_PURCHASE_COURSE'
+    end
+    object ODSExchRateVAL_SELLING_COURSE: TFloatField
+      FieldName = 'VAL_SELLING_COURSE'
+      DisplayFormat = '#.0000'
+    end
+    object ODSExchRateVAL_NB_COURSE: TFloatField
+      FieldName = 'VAL_NB_COURSE'
+      DisplayFormat = '#.0000'
+    end
+    object ODSExchRateEX_ID: TFloatField
+      FieldName = 'EX_ID'
+      Required = True
+    end
+    object ODSExchRateDAT: TDateTimeField
+      FieldName = 'DAT'
+      Required = True
+    end
+    object ODSExchRateUSR_ID: TFloatField
+      FieldName = 'USR_ID'
+    end
+    object ODSExchRateFIRST_OSTAT: TFloatField
+      FieldName = 'FIRST_OSTAT'
+      DisplayFormat = '#.00'
+    end
+    object ODSExchRateCURRENT_OSTAT: TFloatField
+      FieldName = 'CURRENT_OSTAT'
+      DisplayFormat = '#.00'
+    end
+    object ODSExchRatePURCHASE_TURN: TFloatField
+      FieldName = 'PURCHASE_TURN'
+      DisplayFormat = '#.00'
+    end
+    object ODSExchRateSELLING_TURN: TFloatField
+      FieldName = 'SELLING_TURN'
+      DisplayFormat = '#.00'
+    end
+  end
+  object ds: TDataSource
+    DataSet = ODSExchRate
+    Left = 592
+    Top = 109
+  end
+  object DSExchProvarch: TDataSource
+    DataSet = ODSExchProvarch
+    Left = 536
+    Top = 160
+  end
+  object DSAcc_main_debt: TDataSource
+    DataSet = ODSAcc_main_debt
+    Left = 448
+    Top = 196
+  end
+  object ODSAcc_main_debt: TOracleDataSet
+    SQL.Strings = (
+      'select '
+      '       id,'
+      '       acc_no'
+      'from '
+      '        account   '
+      'where '
+      '       bal_cn1 =:balance')
+    Variables.Data = {
+      0300000001000000080000003A42414C414E43450300000004000000EB030000
+      00000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 212
+    Top = 193
+  end
+  object ODSExchProvarch: TOracleDataSet
+    SQL.Strings = (
+      'SELECT '
+      '      rownum,'
+      '      p.*,'
+      
+        '      decode(p.status,'#39'1'#39', '#39'алыш'#39', '#39'2'#39','#39'сатыш'#39', '#39'3'#39', '#39'мцбадиля'#39')' +
+        ' as status_str'
+      ''
+      'FROM '
+      '       ex_provarch p'
+      ''
+      'WHERE'
+      '       p.ex_id = :ex_id'
+      ''
+      ''
+      'AND'
+      '       p.dat=:dat'
+      ''
+      'AND'
+      '       p.status not in (4,5)'
+      ''
+      ''
+      'ORDER BY :Title')
+    Variables.Data = {
+      0300000003000000060000003A5449544C450100000004000000646174000000
+      0000040000003A4441540C00000007000000786A0B1C01010100000000060000
+      003A45585F49440400000008000000000000000000F03F00000000}
+    QBEDefinition.QBEFieldDefs = {
+      040000002100000006000000524F574E554D0100000000000300000044415401
+      000000000006000000535441545553010000000000090000004F5045525F4E41
+      4D4501000000000002000000494401000000000009000000435553545F4E414D
+      450100000000000A000000435553545F4C4E414D450100000000000B00000044
+      45424954414D4F554E54010000000000070000004C414D4F554E540100000000
+      00090000004F505F434F555253450100000000000A0000004645455F414D4F55
+      4E540100000000000500000055535249440100000000000D000000435553545F
+      50415353504F525401000000000009000000455843485F4E414D450100000000
+      000600000056414C5F49440100000000000500000045585F4944010000000000
+      0B000000435553545F46415448455201000000000009000000435553545F4441
+      54450100000000000C000000435553545F434F4E4649524D0100000000001200
+      0000435553545F474956494E475F4D454D4245520100000000000D0000005641
+      4C5F4E425F434F55525345010000000000070000004F505F54494D4501000000
+      00000800000056414C5F4E414D450100000000001000000056414C5F4348414E
+      4745445F4E414D450100000000000E00000056414C5F4348414E4745445F4944
+      0100000000001200000056414C5F4348414E4745445F434F5552534501000000
+      00000C000000435553545F434F554E54525901000000000007000000434F554E
+      5452590100000000000900000043485F53544154555301000000000008000000
+      415F434F55525345010000000000060000005553525F49440100000000000B00
+      00005452414E535F434C4F53450100000000000A0000005354415455535F5354
+      52010000000000}
+    Cursor = crSQLWait
+    Master = ODSExchOffice
+    MasterFields = 'ex_no'
+    DetailFields = 'ex_id'
+    Session = sboapiDataModule.SBSession
+    BeforeInsert = ODSExchProvarchBeforeInsert
+    AfterInsert = ODSExchProvarchAfterInsert
+    Left = 108
+    Top = 193
+  end
+  object OPTrans: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'EXCH_MGR'
+    ParameterMode = pmNamed
+    Left = 552
+    Top = 777
+  end
+  object ODSReport: TOracleDataSet
+    SQL.Strings = (
+      'Select '
+      ''
+      '     rownum,ex.*,'
+      '      p.*'
+      ''
+      'From '
+      '      ex_office ex,ex_provarch p'
+      'Where '
+      '        ex.ex_no=p.ex_id '
+      '   and'
+      '        p.id=:p_id')
+    Variables.Data = {
+      0300000001000000050000003A505F494403000000040000005E010000000000
+      00}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 24
+    Top = 137
+  end
+  object TableAddFile: TTable
+    AutoRefresh = True
+    Exclusive = True
+    TableType = ttParadox
+    Left = 176
+    Top = 17
+  end
+  object DSRateInsert: TDataSource
+    DataSet = ODSRateInsert
+    Left = 532
+    Top = 212
+  end
+  object ODSRateInsert: TOracleDataSet
+    SQL.Strings = (
+      'select r.rowid, r.* from ex_rates r'
+      ''
+      'where '
+      '        ex_id = :ex_id'
+      'and   '
+      
+        '        dat=(select max(dat) from ex_rates where dat<:dat and ex' +
+        '_id = :ex_id)'
+      'order by '
+      '        val_id')
+    Variables.Data = {
+      0300000002000000060000003A45585F49440400000008000000000000000000
+      F03F00000000040000003A4441540C00000007000000786A0B18010101000000
+      00}
+    Cursor = crSQLWait
+    Master = ODSExchOffice
+    MasterFields = 'EX_NO'
+    DetailFields = 'EX_ID'
+    Session = sboapiDataModule.SBSession
+    Left = 104
+    Top = 73
+    object ODSRateInsertVAL_ID: TFloatField
+      FieldName = 'VAL_ID'
+      Required = True
+    end
+    object ODSRateInsertVAL_NAME: TWideStringField
+      FieldName = 'VAL_NAME'
+      Size = 5
+    end
+    object ODSRateInsertVAL_FULL_NAME: TWideStringField
+      FieldName = 'VAL_FULL_NAME'
+    end
+    object ODSRateInsertVAL_PURCHASE_COURSE: TFloatField
+      FieldName = 'VAL_PURCHASE_COURSE'
+      DisplayFormat = '#.0000'
+    end
+    object ODSRateInsertVAL_SELLING_COURSE: TFloatField
+      FieldName = 'VAL_SELLING_COURSE'
+      DisplayFormat = '#.0000'
+    end
+    object ODSRateInsertVAL_NB_COURSE: TFloatField
+      FieldName = 'VAL_NB_COURSE'
+      DisplayFormat = '#.0000'
+    end
+    object ODSRateInsertEX_ID: TFloatField
+      FieldName = 'EX_ID'
+      Required = True
+    end
+    object ODSRateInsertDAT: TDateTimeField
+      FieldName = 'DAT'
+      Required = True
+    end
+    object ODSRateInsertUSR_ID: TFloatField
+      FieldName = 'USR_ID'
+    end
+    object ODSRateInsertFIRST_OSTAT: TFloatField
+      FieldName = 'FIRST_OSTAT'
+      DisplayFormat = '#.00'
+    end
+    object ODSRateInsertCURRENT_OSTAT: TFloatField
+      FieldName = 'CURRENT_OSTAT'
+      DisplayFormat = '#.00'
+    end
+    object ODSRateInsertPURCHASE_TURN: TFloatField
+      FieldName = 'PURCHASE_TURN'
+      DisplayFormat = '#.00'
+    end
+    object ODSRateInsertSELLING_TURN: TFloatField
+      FieldName = 'SELLING_TURN'
+      DisplayFormat = '#.00'
+    end
+  end
+  object ODSExchRateOther: TOracleDataSet
+    SQL.Strings = (
+      'select r.rowid, r.* from ex_rates r'
+      ''
+      'where '
+      '         ex_id = :ex_id'
+      'and'
+      '         dat   =:dat'
+      'order by '
+      '         val_id')
+    Variables.Data = {
+      0300000002000000060000003A45585F49440400000008000000000000000000
+      F03F00000000040000003A4441540C0000000000000000000000}
+    Cursor = crSQLWait
+    Master = ODSExchOffice
+    MasterFields = 'EX_NO'
+    DetailFields = 'EX_ID'
+    Session = sboapiDataModule.SBSession
+    Left = 212
+    Top = 135
+  end
+  object DSExchRateOther: TDataSource
+    DataSet = ODSExchRateOther
+    Left = 675
+    Top = 168
+  end
+  object ODSTraffics: TOracleDataSet
+    SQL.Strings = (
+      
+        ' select p.*,decode(p.status,'#39'1'#39', '#39'алыш'#39', '#39'2'#39','#39'сатыш'#39', '#39'3'#39', '#39'мцба' +
+        'диля'#39') as status_str from ex_provarch p where p.id is not null  ' +
+        'and p.dat between '#39'24-Nov-2006'#39' and '#39'28-Nov-2006'#39' ')
+    QBEDefinition.QBEFieldDefs = {
+      0400000020000000030000004441540100000000000600000053544154555301
+      0000000000090000004F5045525F4E414D450100000000000200000049440100
+      0000000009000000435553545F4E414D450100000000000A000000435553545F
+      4C4E414D450100000000000B0000004445424954414D4F554E54010000000000
+      070000004C414D4F554E54010000000000090000004F505F434F555253450100
+      000000000A0000004645455F414D4F554E540100000000000500000055535249
+      440100000000000D000000435553545F50415353504F52540100000000000900
+      0000455843485F4E414D450100000000000600000056414C5F49440100000000
+      000500000045585F49440100000000000B000000435553545F46415448455201
+      000000000009000000435553545F444154450100000000000C00000043555354
+      5F434F4E4649524D01000000000012000000435553545F474956494E475F4D45
+      4D4245520100000000000D00000056414C5F4E425F434F555253450100000000
+      00070000004F505F54494D450100000000000800000056414C5F4E414D450100
+      000000001000000056414C5F4348414E4745445F4E414D450100000000000E00
+      000056414C5F4348414E4745445F49440100000000001200000056414C5F4348
+      414E4745445F434F555253450100000000000C000000435553545F434F554E54
+      525901000000000007000000434F554E5452590100000000000900000043485F
+      53544154555301000000000008000000415F434F555253450100000000000600
+      00005553525F49440100000000000B0000005452414E535F434C4F5345010000
+      0000000A0000005354415455535F535452010000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 104
+    Top = 17
+    object ODSTrafficsSTATUS_STR: TWideStringField
+      DisplayLabel = 'Статус'
+      FieldName = 'STATUS_STR'
+      Size = 8
+    end
+    object ODSTrafficsDAT: TDateTimeField
+      DisplayLabel = 'тарих'
+      FieldName = 'DAT'
+    end
+    object ODSTrafficsVAL_NAME: TWideStringField
+      DisplayLabel = 'валйута'
+      FieldName = 'VAL_NAME'
+      Size = 10
+    end
+    object ODSTrafficsDEBITAMOUNT: TFloatField
+      DisplayLabel = 'Мябляж'
+      FieldName = 'DEBITAMOUNT'
+    end
+    object ODSTrafficsVAL_CHANGED_NAME: TWideStringField
+      DisplayLabel = 'валйута'
+      FieldName = 'VAL_CHANGED_NAME'
+      Size = 10
+    end
+    object ODSTrafficsLAMOUNT: TFloatField
+      DisplayLabel = 'Мябляж манатла'
+      FieldName = 'LAMOUNT'
+    end
+    object ODSTrafficsFEE_AMOUNT: TFloatField
+      DisplayLabel = 'Жялир'
+      FieldName = 'FEE_AMOUNT'
+    end
+    object ODSTrafficsOP_COURSE: TFloatField
+      DisplayLabel = 'Курс'
+      FieldName = 'OP_COURSE'
+    end
+    object ODSTrafficsOPER_NAME: TWideStringField
+      DisplayLabel = 'Ямялиййатын тяйинаты'
+      FieldName = 'OPER_NAME'
+      Size = 90
+    end
+  end
+  object DSTraffics: TDataSource
+    DataSet = ODSTraffics
+    Left = 435
+    Top = 121
+  end
+  object DSAddFile: TDataSource
+    DataSet = TableAddFile
+    Left = 516
+    Top = 107
+  end
+  object sb_transaction: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'EXCH_TRANS'
+    Left = 376
+    Top = 689
+  end
+  object ODSExchProvarchTrans: TOracleDataSet
+    SQL.Strings = (
+      'SELECT '
+      '      p.*'
+      ''
+      'FROM '
+      '       ex_provarch p'
+      ''
+      'WHERE'
+      '      id=:v_id'
+      ''
+      'and'
+      '       p.dat=:dat'
+      'AND'
+      '       p.status <>3'
+      'AND'
+      '       p.trans_close=0'
+      ''
+      'ORDER BY :Title')
+    Variables.Data = {
+      0300000003000000060000003A5449544C450100000004000000646174000000
+      0000040000003A4441540C00000007000000786A0B1C01010100000000050000
+      003A565F4944030000000000000000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 208
+    Top = 73
+  end
+  object DSExchProvarchTrans: TDataSource
+    DataSet = ODSExchProvarchTrans
+    Left = 683
+    Top = 228
+  end
+  object ODSCust_Name: TOracleDataSet
+    SQL.Strings = (
+      
+        'select distinct cust_name from ex_constants where cust_name is n' +
+        'ot null')
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 128
+    Top = 249
+  end
+  object ODSCust_LName: TOracleDataSet
+    SQL.Strings = (
+      
+        'select distinct cust_lname from ex_constants where cust_lname is' +
+        ' not null')
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 32
+    Top = 249
+  end
+  object ODSCust_Father: TOracleDataSet
+    SQL.Strings = (
+      
+        'select distinct cust_father from ex_constants where cust_father ' +
+        'is not null')
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 160
+    Top = 377
+  end
+  object ODSCust_Confirm: TOracleDataSet
+    SQL.Strings = (
+      
+        'select distinct cust_confirm from ex_constants where cust_confir' +
+        'm is not null')
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 218
+    Top = 249
+  end
+  object ODSCust_Country: TOracleDataSet
+    SQL.Strings = (
+      
+        'select distinct cust_country from ex_constants where cust_countr' +
+        'y is not null')
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 256
+    Top = 377
+  end
+  object ODSGiving_Member: TOracleDataSet
+    SQL.Strings = (
+      
+        'select distinct cust_giving_member from ex_constants where cust_' +
+        'giving_member is not null')
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 48
+    Top = 377
+  end
+  object DSCust_LName: TDataSource
+    DataSet = ODSCust_LName
+    Left = 352
+    Top = 196
+  end
+  object DSCust_Confirm: TDataSource
+    DataSet = ODSCust_Confirm
+    Left = 538
+    Top = 361
+  end
+  object DSCust_Father: TDataSource
+    DataSet = ODSCust_Father
+    Left = 816
+    Top = 289
+  end
+  object DSCust_Name: TDataSource
+    DataSet = ODSCust_Name
+    Left = 688
+    Top = 289
+  end
+  object DSGiving_Member: TDataSource
+    DataSet = ODSGiving_Member
+    Left = 400
+    Top = 265
+  end
+  object DSCust_Country: TDataSource
+    DataSet = ODSCust_Country
+    Left = 680
+    Top = 345
+  end
+  object OPAdmin: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'EX_ADM'
+    Left = 152
+    Top = 689
+  end
+  object ODSUserList: TOracleDataSet
+    SQL.Strings = (
+      
+        'select username,user_id from dba_users where default_tablespace=' +
+        #39'SMARTBANK'#39' order by username')
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 24
+    Top = 313
+  end
+  object DSUserList: TDataSource
+    DataSet = ODSUserList
+    Left = 544
+    Top = 289
+  end
+  object DSRateTurn: TDataSource
+    DataSet = ODSRateTurn
+    Left = 351
+    Top = 137
+  end
+  object ODSRateTurn: TOracleDataSet
+    SQL.Strings = (
+      'select * from ex_rates where dat=:dat '
+      '   and ex_id=:ex_id order by val_name')
+    Variables.Data = {
+      0300000002000000060000003A45585F49440400000000000000000000000400
+      00003A4441540C0000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      040000000D0000000600000056414C5F49440100000000000800000056414C5F
+      4E414D450100000000000D00000056414C5F46554C4C5F4E414D450100000000
+      001300000056414C5F50555243484153455F434F555253450100000000001200
+      000056414C5F53454C4C494E475F434F555253450100000000000D0000005641
+      4C5F4E425F434F555253450100000000000500000045585F4944010000000000
+      03000000444154010000000000060000005553525F49440100000000000B0000
+      0046495253545F4F535441540100000000000D00000043555252454E545F4F53
+      5441540100000000000D00000050555243484153455F5455524E010000000000
+      0C00000053454C4C494E475F5455524E010000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 24
+    Top = 193
+    object ODSRateTurnDAT: TDateTimeField
+      DisplayLabel = 'тарих'
+      FieldName = 'DAT'
+      Required = True
+    end
+    object ODSRateTurnVAL_NAME: TWideStringField
+      DisplayLabel = 'Валйута'
+      FieldName = 'VAL_NAME'
+      Size = 5
+    end
+    object ODSRateTurnVAL_PURCHASE_COURSE: TFloatField
+      DisplayLabel = 'Алыш курсу'
+      FieldName = 'VAL_PURCHASE_COURSE'
+    end
+    object ODSRateTurnVAL_SELLING_COURSE: TFloatField
+      DisplayLabel = 'Сатыш курсу'
+      FieldName = 'VAL_SELLING_COURSE'
+    end
+    object ODSRateTurnVAL_NB_COURSE: TFloatField
+      DisplayLabel = 'М.Б курсу'
+      FieldName = 'VAL_NB_COURSE'
+    end
+  end
+  object ODSAcc_main_cred: TOracleDataSet
+    SQL.Strings = (
+      'select '
+      '       id,'
+      '       acc_no'
+      'from '
+      '        account   '
+      'where '
+      '       bal_cn1 =:balance'
+      'and'
+      '       val_acc=:val_id')
+    Variables.Data = {
+      0300000002000000080000003A42414C414E43450300000004000000F5030000
+      00000000070000003A56414C5F4944040000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      0400000002000000020000004944010000000000060000004143435F4E4F0100
+      00000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 232
+    Top = 313
+  end
+  object DSAcc_main_cred: TDataSource
+    DataSet = ODSAcc_main_cred
+    Left = 393
+    Top = 338
+  end
+  object ODSAcc_child_debt: TOracleDataSet
+    SQL.Strings = (
+      'select '
+      '       id,'
+      '       acc_no'
+      'from '
+      '        account   '
+      'where '
+      '       bal_cn1 =:balance')
+    Variables.Data = {
+      0300000001000000080000003A42414C414E434503000000040000000F1A0000
+      00000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 120
+    Top = 313
+  end
+  object DSAcc_child_debt: TDataSource
+    DataSet = ODSAcc_child_debt
+    Left = 824
+    Top = 161
+  end
+  object ODSAcc_child_cred: TOracleDataSet
+    SQL.Strings = (
+      'select '
+      '       id,'
+      '       acc_no'
+      'from '
+      '        account   '
+      'where '
+      '       bal_cn1 =:balance')
+    Variables.Data = {
+      0300000001000000080000003A42414C414E43450300000004000000DF210000
+      00000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 48
+    Top = 521
+  end
+  object DSAcc_child_cred: TDataSource
+    DataSet = ODSAcc_child_cred
+    Left = 816
+    Top = 225
+  end
+  object ODSSumTrans: TOracleDataSet
+    SQL.Strings = (
+      'select '
+      '        sum(fee_amount) as fee_amount'
+      'from '
+      '        ex_provarch'
+      'where '
+      '        ex_id=:ex_id'
+      'and'
+      '        dat=(select max(dat) from ex_provarch)'
+      'and'
+      '        status in(1,2,3)'
+      ''
+      '')
+    Variables.Data = {0300000001000000060000003A45585F4944040000000000000000000000}
+    Cursor = crSQLWait
+    Master = ODSExchProvarch
+    MasterFields = 'ex_id'
+    Session = sboapiDataModule.SBSession
+    Left = 144
+    Top = 457
+  end
+  object DSSumTrans: TDataSource
+    DataSet = ODSSumTrans
+    Left = 820
+    Top = 105
+  end
+  object ODSUsers: TOracleDataSet
+    SQL.Strings = (
+      
+        'select id,username from USERS where username not in ('#39'EXCHANGEMG' +
+        'R'#39','#39'SMART'#39') ORDER BY ID')
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 24
+    Top = 449
+    object ODSUsersID: TFloatField
+      FieldName = 'ID'
+    end
+    object ODSUsersUSERNAME: TWideStringField
+      FieldName = 'USERNAME'
+    end
+  end
+  object DSUsers: TDataSource
+    DataSet = ODSUsers
+    Left = 544
+    Top = 425
+  end
+  object ODsAccount: TOracleDataSet
+    SQL.Strings = (
+      'select acc_no from account order by acc_no')
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 232
+    Top = 457
+  end
+  object DSAccount: TDataSource
+    DataSet = ODsAccount
+    Left = 816
+    Top = 353
+  end
+  object ODSExp_Provarch: TOracleDataSet
+    SQL.Strings = (
+      'select r.rowid, r.* from exp_provarch r')
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 232
+    Top = 521
+  end
+  object DSExp_Provarch: TDataSource
+    DataSet = ODSExp_Provarch
+    Left = 696
+    Top = 426
+  end
+  object SBA_ACA: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'SB_ACA'
+    Cursor = crSQLWait
+    Left = 272
+    Top = 681
+  end
+  object Kurs: TOracleDataSet
+    SQL.Strings = (
+      'select a.val_name,o.* from operkurs o,avalute a'
+      'where o.val_kod=a.valute  and o.dat=:datdate  and o.val_kod>0'
+      'order by o.VAL_KOD')
+    Variables.Data = {
+      0300000001000000080000003A444154444154450C0000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      04000000050000000700000056414C5F4B4F44010000000000050000004F5354
+      4154010000000000030000004441540100000000000500000053484946520100
+      000000000800000056414C5F4E414D45010000000000}
+    Cursor = crSQLWait
+    QueryAllRecords = False
+    Session = sboapiDataModule.SBSession
+    Left = 40
+    Top = 577
+  end
+  object OperKURS: TDataSource
+    DataSet = Kurs
+    Left = 824
+    Top = 425
+  end
+  object ODSFilial: TOracleDataSet
+    SQL.Strings = (
+      'select * from filial')
+    QBEDefinition.QBEFieldDefs = {
+      0400000003000000020000004944010000000000040000004E414D4501000000
+      00000A0000004B4F445F46494C49414C010000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 136
+    Top = 515
+  end
+  object DS_Filial: TDataSource
+    DataSet = ODSFilial
+    Left = 680
+    Top = 105
+  end
+  object DSExchRate: TDataSource
+    DataSet = ODSExchRate
+    Left = 376
+    Top = 464
+  end
+  object ODSDel_ExProvarch: TOracleDataSet
+    SQL.Strings = (
+      
+        'select p.*,decode(p.status,'#39'1'#39', '#39'алыш'#39', '#39'2'#39','#39'сатыш'#39') as status_s' +
+        'tr from ex_provarch_delete p where p.dat between '#39'24-Nov-2006'#39' a' +
+        'nd '#39'28-Nov-2006'#39' '
+      ''
+      ''
+      ''
+      '')
+    QBEDefinition.QBEFieldDefs = {
+      0400000024000000030000004441540100000000000600000053544154555301
+      0000000000090000004F5045525F4E414D450100000000000200000049440100
+      0000000009000000435553545F4E414D450100000000000A000000435553545F
+      4C4E414D450100000000000B0000004445424954414D4F554E54010000000000
+      070000004C414D4F554E54010000000000090000004F505F434F555253450100
+      000000000A0000004645455F414D4F554E540100000000000500000055535249
+      440100000000000D000000435553545F50415353504F52540100000000000900
+      0000455843485F4E414D450100000000000600000056414C5F49440100000000
+      000500000045585F49440100000000000B000000435553545F46415448455201
+      000000000009000000435553545F444154450100000000000C00000043555354
+      5F434F4E4649524D01000000000012000000435553545F474956494E475F4D45
+      4D4245520100000000000D00000056414C5F4E425F434F555253450100000000
+      00070000004F505F54494D450100000000000800000056414C5F4E414D450100
+      000000001000000056414C5F4348414E4745445F4E414D450100000000000E00
+      000056414C5F4348414E4745445F49440100000000001200000056414C5F4348
+      414E4745445F434F555253450100000000000C000000435553545F434F554E54
+      525901000000000007000000434F554E5452590100000000000900000043485F
+      53544154555301000000000008000000415F434F555253450100000000000600
+      00005553525F49440100000000000B0000005452414E535F434C4F5345010000
+      0000000B00000053455353494F4E4E414D450100000000000800000044454C5F
+      54494D450100000000000900000044454C5F55535249440100000000000C0000
+      0044454C5F555345524E414D450100000000000A0000005354415455535F5354
+      52010000000000}
+    Cursor = crSQLWait
+    QueryAllRecords = False
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 56
+    Top = 760
+  end
+  object DS_DelExProvarch: TDataSource
+    DataSet = ODSDel_ExProvarch
+    Left = 384
+    Top = 476
+  end
+end

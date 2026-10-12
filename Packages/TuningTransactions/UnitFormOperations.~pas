@@ -1,0 +1,214 @@
+
+unit UnitFormOperations;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, ExtCtrls, Mask, DBCtrls ,Db, DBViewComboBox, ActnList;
+
+type
+  TFormOperations = class(TForm)
+    GroupBox1: TGroupBox;
+    Panel1: TPanel;
+    Panel2: TPanel;
+    OperationName: TDBEdit;
+    Panel3: TPanel;
+    Panel4: TPanel;
+    Assignment: TDBEdit;
+    Panel5: TPanel;
+    Panel6: TPanel;
+    ComAssignment: TDBEdit;
+    Panel7: TPanel;
+    Panel8: TPanel;
+    ButtonCommit: TButton;
+    ButtonCancel: TButton;
+    CBCheckUser: TComboBox;
+    ActionList1: TActionList;
+    ActionCommit: TAction;
+    ActionCancel: TAction;
+    EDebt: TEdit;
+    ECredit: TEdit;
+    EAdditionalDebt: TEdit;
+    EAdditionalCredit: TEdit;
+    DBLookupDebt: TDBLookupComboBox;
+    DBLookupCredit: TDBLookupComboBox;
+    DBLookupAdditionalDebt: TDBLookupComboBox;
+    DBLookupAdditionalCredit: TDBLookupComboBox;
+    procedure FormKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormActivate(Sender: TObject);
+    procedure ActionCommitExecute(Sender: TObject);
+    procedure ActionCancelExecute(Sender: TObject);
+    procedure ActionCommitUpdate(Sender: TObject);
+    procedure EDebtChange(Sender: TObject);
+    procedure EDebtEnter(Sender: TObject);
+    procedure EDebtKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure EDebtExit(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    SearchField: String;
+    DBLookup: TDBLookupComboBox;
+    CurrentEdit: TEdit;
+    procedure SafelyCancel;
+    procedure SaveOperations;
+    procedure SetDetails;
+    procedure SetSelectedText(Edit: TEdit; const S: String);
+  end;
+
+var
+  FormOperations: TFormOperations;
+
+implementation
+
+uses DataModuleImpl, TuningTransactionImpl;
+
+{$R *.DFM}
+
+procedure TFormOperations.SetSelectedText(Edit: TEdit; const S: String);
+var
+  LastLen       : Integer;
+begin
+  with Edit do
+  begin
+    LastLen := Length(Text);
+    if Focused then
+     begin
+      Text := S;
+      SelStart := LastLen;
+      SelLength := Length(S)-LastLen;
+     end;
+    Color := clWhite;
+  end;
+end;
+
+procedure TFormOperations.SafelyCancel;
+begin
+  with TuningDataModule ,ODSSettings do
+    if State in [dsInsert, dsEdit] then
+      Cancel;
+end;
+
+procedure TFormOperations.SaveOperations;
+begin
+ with TuningDataModule ,ODSSettings do
+  if State in [dsInsert, dsEdit] then
+    Post;
+end;
+
+procedure TFormOperations.SetDetails;
+begin
+ with TuningDataModule ,ODSSettings do
+  if State in [dsInsert, dsEdit] then
+   FieldByName('UserID').AsInteger :=CBCheckUser.ItemIndex;
+end;
+
+procedure TFormOperations.FormKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+ if (Key = VK_ESCAPE) then
+    Close;
+end;
+
+procedure TFormOperations.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+ SafelyCancel;
+end;
+
+procedure TFormOperations.FormActivate(Sender: TObject);
+begin
+ (Sender as TFormOperations).ActiveControl :=OperationName;
+ with TuningTransaction do
+  case OperationMode of
+    omInsert :
+              CBCheckUser.ItemIndex :=0;
+    omUpdate :
+        if TuningDataModule.ODSSettings.FieldByName('UserID').AsInteger = 0 then
+          CBCheckUser.itemindex :=0
+        else
+          CBCheckUser.itemindex :=1;
+  end;
+end;
+
+procedure TFormOperations.ActionCommitExecute(Sender: TObject);
+begin
+ SetDetails;
+ SaveOperations;
+ TuningTransaction.SafelyRefresh;
+ Close;
+end;
+
+procedure TFormOperations.ActionCancelExecute(Sender: TObject);
+begin
+ SafelyCancel;
+ Close;
+end;
+
+procedure TFormOperations.ActionCommitUpdate(Sender: TObject);
+begin
+ with (Sender as TAction) do
+  Enabled :=Trim(OperationName.Text)<>'';
+end;
+
+procedure TFormOperations.EDebtChange(Sender: TObject);
+begin
+ with TEdit(Sender) do
+  begin
+   if not Focused then Exit;
+   SearchField :=Copy(Name,2,length(Name));
+   if Trim(Text) = '' then
+    begin
+     DBLookup.DataSource.DataSet.FieldByName(SearchField).Clear;
+     Color := clWhite;
+    end
+   else
+    begin
+     if DBLookup.ListSource.DataSet.Locate('acc_no', Text, [loCaseInsensitive, loPartialKey]) then
+       Color := clWhite
+     else
+      Color := clRed;
+    end;
+  end;
+end;
+
+procedure TFormOperations.EDebtEnter(Sender: TObject);
+var
+   ComponentName: String;
+begin
+ with (Sender as TEdit) do
+   ComponentName :='DBLookup' + Copy(Name,2,length(Name));
+   
+   CurrentEdit :=TEdit(Sender);
+   DBLookup :=TDBLookupComboBox(FindComponent(ComponentName));
+
+end;
+
+procedure TFormOperations.EDebtKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+ with Sender as TComponent do
+  if (Key = VK_DELETE) or (Key = VK_BACK) then
+    Tag := 1
+  else
+    Tag := 0;
+end;
+
+procedure TFormOperations.EDebtExit(Sender: TObject);
+begin
+ (Sender as TEdit).Text :='';
+end;
+
+procedure TFormOperations.FormShow(Sender: TObject);
+begin
+with TuningDataModule do
+ if not(ODSDebtAccount.Active) then
+    ODSDebtAccount.Open;
+end;
+
+end.

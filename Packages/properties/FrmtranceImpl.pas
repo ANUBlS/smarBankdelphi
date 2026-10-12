@@ -1,0 +1,157 @@
+﻿unit FrmtranceImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, ExtCtrls, Mask, DBCtrls, ComCtrls, ToolWin, Grids, DBGridEh,
+  ImgList,  CMExcelExport, ActnList;
+
+type
+  TFrmTrance = class(TForm)
+    GroupBox1: TGroupBox;
+    Panel1: TPanel;
+    DBEdit1: TDBEdit;
+    DBGridEh1: TDBGridEh;
+    ImageList1: TImageList;
+    CoolBar2: TCoolBar;
+    ToolBar2: TToolBar;
+    ToolButton5: TToolButton;
+    ToolButton6: TToolButton;
+    ToolButton7: TToolButton;
+    ActionList1: TActionList;
+    ActnAdd: TAction;
+    ActnDel: TAction;
+    ActnExport: TAction;
+    ToolButton8: TToolButton;
+    ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
+    ToolButton3: TToolButton;
+    ExcelExport: TCMExcelExport;
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+    procedure ToolButton1Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormShow(Sender: TObject);
+    procedure ActnAddExecute(Sender: TObject);
+    procedure ActnDelExecute(Sender: TObject);
+    procedure ActnDelUpdate(Sender: TObject);
+    procedure ActnExportExecute(Sender: TObject);
+    procedure ToolButton8Click(Sender: TObject);
+   
+   
+  private
+    { Private declarations }
+  public
+    RefreshContracts :Boolean;
+    { Public declarations }
+  end;
+
+var
+  FrmTrance: TFrmTrance;
+
+implementation
+uses DMprop, FrmTranchesAddImpl,sboapiDataModuleImpl,SBTranslateProc;
+{$R *.DFM}
+
+procedure TFrmTrance.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+  Resize := false;
+end;
+
+procedure TFrmTrance.ToolButton1Click(Sender: TObject);
+begin
+    with DMproperties,DataSetPropIns do
+     begin
+     open;
+   end;
+   if FrmTranchesAdd.ShowModal = mrOk then
+   begin
+      RefreshContracts := True;
+      DMproperties.DataSetProp_take.Refresh
+   end;
+//FrmTranchesAdd.showmodal
+end;
+
+procedure TFrmTrance.FormCreate(Sender: TObject);
+begin
+FrmTranchesAdd:=TFrmTranchesAdd.create(Self);
+SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TFrmTrance.FormDestroy(Sender: TObject);
+begin
+FrmTranchesAdd.free;
+DMproperties.DataSetProp_take.close
+end;
+
+procedure TFrmTrance.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+   if Ord(Key) = VK_ESCAPE then Close;
+end;
+
+procedure TFrmTrance.FormShow(Sender: TObject);
+var
+propid:integer;
+name:string;
+begin
+propid:=DMproperties.DataSetPropIns.FieldByname('id').asinteger;
+name:= DMproperties.DataSetPropIns.FieldByname('name').asstring;
+Caption:= name+' adlı əmlakın alınması';
+with DMproperties,DataSetProp_take do
+begin
+  close ;
+   SetVariable('propid',propid);
+   open   ;
+ refresh
+ end;
+end;
+
+procedure TFrmTrance.ActnAddExecute(Sender: TObject);
+begin
+   if FrmTranchesAdd.ShowModal = mrOk then
+   begin
+      RefreshContracts := True;
+      DMproperties.DataSetProp_take.Refresh  ;
+     // DMproperties.DataSetPropIns.refresh
+   end;
+end;
+
+
+procedure TFrmTrance.ActnDelExecute(Sender: TObject);
+begin
+ if MessageDlg('Silinməsinə əminsinizmi?',
+             mtConfirmation, [mbYes, mbNo], 0) = mrNo
+    then Exit;
+
+    with DMproperties,OraclePackage2,DataSetProp_take do begin
+         CallProcedure('DeleteTranche',['P_Prop_Takeid',FieldByName('ID').AsInteger]);
+         Refresh;
+    end;
+end;
+
+procedure TFrmTrance.ActnDelUpdate(Sender: TObject);
+begin
+  with (Sender as TAction) do
+        Enabled := (DMproperties.DataSetProp_take.RecordCount > 0)
+end;
+
+procedure TFrmTrance.ActnExportExecute(Sender: TObject);
+begin
+with ExcelExport do
+   begin
+      Connect;
+      ExportDataset(DMproperties.DataSetProp_take,'Траншлар',True);
+      Disconnect;
+   end 
+end;
+
+procedure TFrmTrance.ToolButton8Click(Sender: TObject);
+begin
+close
+end;
+
+end.

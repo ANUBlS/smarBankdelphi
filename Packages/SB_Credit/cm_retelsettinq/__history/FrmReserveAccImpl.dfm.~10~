@@ -1,0 +1,152 @@
+object FrmReserveAcc: TFrmReserveAcc
+  Left = 0
+  Top = 0
+  Caption = 'Ehtiyyat hesablar'#305'n'#305'n sazlan'#305'lmas'#305
+  ClientHeight = 646
+  ClientWidth = 709
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poDesktopCenter
+  OnCanResize = FormCanResize
+  PixelsPerInch = 96
+  TextHeight = 13
+  object GroupBox1: TGroupBox
+    Left = 0
+    Top = 0
+    Width = 709
+    Height = 348
+    Align = alTop
+    Caption = 'Filiallar'
+    TabOrder = 0
+    object DBGrid1: TDBGrid
+      Left = 2
+      Top = 15
+      Width = 705
+      Height = 331
+      Align = alClient
+      DataSource = DmRt.DataSource2
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit, dgTitleClick, dgTitleHotTrack]
+      ParentFont = False
+      TabOrder = 0
+      TitleFont.Charset = DEFAULT_CHARSET
+      TitleFont.Color = clWindowText
+      TitleFont.Height = -11
+      TitleFont.Name = 'Tahoma'
+      TitleFont.Style = []
+      Columns = <
+        item
+          Expanded = False
+          FieldName = 'fil_name'
+          Title.Caption = 'Filial'#305'n ad'#305
+          Width = 557
+          Visible = True
+        end>
+    end
+    object DBGridEh1: TDBGridEh
+      Left = 80
+      Top = 208
+      Width = 617
+      Height = 120
+      DataGrouping.GroupLevels = <>
+      DataSource = DmRt.DataSource3
+      Flat = False
+      FooterColor = clWindow
+      FooterFont.Charset = DEFAULT_CHARSET
+      FooterFont.Color = clWindowText
+      FooterFont.Height = -11
+      FooterFont.Name = 'Tahoma'
+      FooterFont.Style = []
+      RowDetailPanel.Color = clBtnFace
+      TabOrder = 1
+      TitleFont.Charset = DEFAULT_CHARSET
+      TitleFont.Color = clWindowText
+      TitleFont.Height = -11
+      TitleFont.Name = 'Tahoma'
+      TitleFont.Style = []
+      Columns = <
+        item
+          EditButtons = <>
+          FieldName = 'RESERVENAME'
+          Footers = <>
+          Width = 130
+        end
+        item
+          EditButtons = <>
+          FieldName = 'esashes'
+          Footers = <>
+        end
+        item
+          EditButtons = <>
+          FieldName = 'faishes'
+          Footers = <>
+        end>
+      object RowDetailData: TRowDetailPanelControlEh
+      end
+    end
+  end
+  object GroupBox2: TGroupBox
+    Left = 0
+    Top = 348
+    Width = 709
+    Height = 257
+    Align = alTop
+    Caption = 'Filiallar '#252'zr'#601' ehtiyyat hesablar'#305
+    TabOrder = 1
+    object DBGrid2: TDBGrid
+      Left = 2
+      Top = 15
+      Width = 705
+      Height = 240
+      Align = alClient
+      DataSource = DmRt.DataSource3
+      TabOrder = 0
+      TitleFont.Charset = DEFAULT_CHARSET
+      TitleFont.Color = clWindowText
+      TitleFont.Height = -11
+      TitleFont.Name = 'Tahoma'
+      TitleFont.Style = []
+      Columns = <
+        item
+          Expanded = False
+          FieldName = 'RESERVENAME'
+          ReadOnly = True
+          Title.Caption = 'Ehtiyyat '
+          Width = 218
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'esashes'
+          Title.Caption = #399'sas '#252'zr'#601' ehtiyyat hesab'#305
+          Width = 218
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'faishes'
+          Title.Caption = 'Faiz '#252'zr'#601' ehtiyat hesab'#305
+          Width = 238
+          Visible = True
+        end>
+    end
+  end
+  object Button1: TButton
+    Left = 608
+    Top = 613
+    Width = 75
+    Height = 25
+    Caption = 'Ba'#287'la'
+    TabOrder = 2
+    OnClick = Button1Click
+  end
+end

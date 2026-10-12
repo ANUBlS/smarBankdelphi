@@ -1,0 +1,390 @@
+object frmDepSett: TfrmDepSett
+  Left = 484
+  Top = 115
+  Width = 365
+  Height = 466
+  BorderIcons = [biSystemMenu]
+  Caption = 'frmDepSett'
+  Color = clBtnFace
+  Font.Charset = RUSSIAN_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poScreenCenter
+  OnCanResize = FormCanResize
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  OnKeyPress = FormKeyPress
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object BitBtn1: TBitBtn
+    Left = 272
+    Top = 400
+    Width = 75
+    Height = 26
+    Caption = 'Баьла'
+    TabOrder = 0
+    Kind = bkClose
+  end
+  object PageControl1: TPageControl
+    Left = 0
+    Top = 0
+    Width = 357
+    Height = 397
+    ActivePage = TabSheet3
+    Align = alTop
+    TabOrder = 1
+    object TabSheet1: TTabSheet
+      Caption = 'Мянбя'
+      object DBGridEh1: TDBGridEh
+        Left = 0
+        Top = 0
+        Width = 349
+        Height = 184
+        Align = alTop
+        DataSource = DSourceds
+        FooterColor = clWindow
+        FooterFont.Charset = RUSSIAN_CHARSET
+        FooterFont.Color = clWindowText
+        FooterFont.Height = -11
+        FooterFont.Name = 'Azl Sans Serif'
+        FooterFont.Style = []
+        TabOrder = 0
+        TitleFont.Charset = RUSSIAN_CHARSET
+        TitleFont.Color = clWindowText
+        TitleFont.Height = -11
+        TitleFont.Name = 'Azl Sans Serif'
+        TitleFont.Style = []
+        OnKeyDown = DBGridEh1KeyDown
+        Columns = <
+          item
+            EditButtons = <>
+            FieldName = 'NAME'
+            Footers = <>
+            Title.Color = clNavy
+            Title.Font.Charset = RUSSIAN_CHARSET
+            Title.Font.Color = clWhite
+            Title.Font.Height = -11
+            Title.Font.Name = 'Azl Sans Serif'
+            Title.Font.Style = []
+            Width = 189
+          end>
+      end
+      object GroupBox1: TGroupBox
+        Left = 0
+        Top = 184
+        Width = 349
+        Height = 185
+        Align = alClient
+        Caption = 'Баланс щесабы'
+        TabOrder = 1
+        object DBGridEh2: TDBGridEh
+          Left = 2
+          Top = 15
+          Width = 345
+          Height = 168
+          Align = alClient
+          DataSource = DSource_Bds
+          FooterColor = clWindow
+          FooterFont.Charset = RUSSIAN_CHARSET
+          FooterFont.Color = clWindowText
+          FooterFont.Height = -11
+          FooterFont.Name = 'Azl Sans Serif'
+          FooterFont.Style = []
+          TabOrder = 0
+          TitleFont.Charset = RUSSIAN_CHARSET
+          TitleFont.Color = clWindowText
+          TitleFont.Height = -11
+          TitleFont.Name = 'Azl Sans Serif'
+          TitleFont.Style = []
+          OnKeyDown = DBGridEh1KeyDown
+          OnKeyPress = DBGridEh2KeyPress
+          Columns = <
+            item
+              EditButtons = <>
+              FieldName = 'BAL_CN'
+              Footers = <>
+              Title.Color = clNavy
+              Title.Font.Charset = RUSSIAN_CHARSET
+              Title.Font.Color = clWhite
+              Title.Font.Height = -11
+              Title.Font.Name = 'Azl Sans Serif'
+              Title.Font.Style = []
+              Width = 189
+            end>
+        end
+      end
+    end
+    object TabSheet3: TTabSheet
+      Caption = 'Тип'
+      ImageIndex = 2
+      object DBGridEh5: TDBGridEh
+        Left = 0
+        Top = 0
+        Width = 349
+        Height = 184
+        Align = alTop
+        DataSource = DTypeds
+        FooterColor = clWindow
+        FooterFont.Charset = RUSSIAN_CHARSET
+        FooterFont.Color = clWindowText
+        FooterFont.Height = -11
+        FooterFont.Name = 'Azl Sans Serif'
+        FooterFont.Style = []
+        TabOrder = 0
+        TitleFont.Charset = RUSSIAN_CHARSET
+        TitleFont.Color = clWindowText
+        TitleFont.Height = -11
+        TitleFont.Name = 'Azl Sans Serif'
+        TitleFont.Style = []
+        OnKeyDown = DBGridEh1KeyDown
+        Columns = <
+          item
+            EditButtons = <>
+            FieldName = 'NAME'
+            Footers = <>
+            Title.Color = clNavy
+            Title.Font.Charset = RUSSIAN_CHARSET
+            Title.Font.Color = clWhite
+            Title.Font.Height = -11
+            Title.Font.Name = 'Azl Sans Serif'
+            Title.Font.Style = []
+            Width = 189
+          end>
+      end
+      object GroupBox3: TGroupBox
+        Left = 0
+        Top = 184
+        Width = 349
+        Height = 185
+        Align = alClient
+        Caption = 'Баланс щесабы'
+        TabOrder = 1
+        object DBGridEh6: TDBGridEh
+          Left = 2
+          Top = 15
+          Width = 345
+          Height = 168
+          Align = alClient
+          DataSource = DType_bds
+          FooterColor = clWindow
+          FooterFont.Charset = RUSSIAN_CHARSET
+          FooterFont.Color = clWindowText
+          FooterFont.Height = -11
+          FooterFont.Name = 'Azl Sans Serif'
+          FooterFont.Style = []
+          TabOrder = 0
+          TitleFont.Charset = RUSSIAN_CHARSET
+          TitleFont.Color = clWindowText
+          TitleFont.Height = -11
+          TitleFont.Name = 'Azl Sans Serif'
+          TitleFont.Style = []
+          OnKeyDown = DBGridEh1KeyDown
+          Columns = <
+            item
+              EditButtons = <>
+              FieldName = 'BAL_CN'
+              Footers = <>
+              Title.Color = clNavy
+              Title.Font.Charset = RUSSIAN_CHARSET
+              Title.Font.Color = clWhite
+              Title.Font.Height = -11
+              Title.Font.Name = 'Azl Sans Serif'
+              Title.Font.Style = []
+              Width = 189
+            end>
+        end
+      end
+    end
+  end
+  object DSource: TOracleDataSet
+    SQL.Strings = (
+      'SELECT  rowid,id, name'
+      '  FROM uaod_source  ')
+    QBEDefinition.QBEFieldDefs = {
+      0400000002000000020000004944010000000000040000004E414D4501000000
+      0000}
+    Session = sboapiDataModule.SBSession
+    AfterPost = DSourceAfterPost
+    Left = 20
+    Top = 56
+    object DSourceID: TFloatField
+      FieldName = 'ID'
+    end
+    object DSourceNAME: TStringField
+      DisplayLabel = 'Тяйинаты'
+      FieldName = 'NAME'
+      Required = True
+      Size = 80
+    end
+  end
+  object DSource_B: TOracleDataSet
+    SQL.Strings = (
+      'SELECT rowid,id, sourceid, bal_cn'
+      '  FROM uaod_source_bal '
+      ''
+      'where sourceid = :sourceid')
+    Variables.Data = {
+      0300000001000000090000003A534F5552434549440400000000000000000000
+      00}
+    QBEDefinition.QBEFieldDefs = {
+      040000000300000002000000494401000000000008000000534F555243454944
+      0100000000000600000042414C5F434E010000000000}
+    Master = DSource
+    MasterFields = 'ID'
+    DetailFields = 'SOURCEID'
+    Session = sboapiDataModule.SBSession
+    AfterPost = DSourceAfterPost
+    Left = 20
+    Top = 88
+    object DSource_BID: TFloatField
+      FieldName = 'ID'
+    end
+    object DSource_BSOURCEID: TFloatField
+      FieldName = 'SOURCEID'
+    end
+    object DSource_BBAL_CN: TFloatField
+      DisplayLabel = 'Баланс'
+      FieldName = 'BAL_CN'
+      Required = True
+    end
+  end
+  object DPerson: TOracleDataSet
+    SQL.Strings = (
+      'SELECT rowid, id,  name'
+      '  FROM uaod_person  ')
+    QBEDefinition.QBEFieldDefs = {
+      0400000002000000020000004944010000000000040000004E414D4501000000
+      0000}
+    Session = sboapiDataModule.SBSession
+    AfterPost = DSourceAfterPost
+    Left = 88
+    Top = 57
+    object DPersonNAME: TStringField
+      DisplayLabel = 'Тяйинаты'
+      FieldName = 'NAME'
+      Required = True
+      Size = 50
+    end
+    object DPersonID: TFloatField
+      FieldName = 'ID'
+    end
+  end
+  object DPerson_b: TOracleDataSet
+    SQL.Strings = (
+      'SELECT  rowid,id,  personid,  bal_cn'
+      '  FROM uaod_person_bal  '
+      ''
+      'where personid = :personid')
+    Variables.Data = {
+      0300000001000000090000003A504552534F4E49440400000000000000000000
+      00}
+    QBEDefinition.QBEFieldDefs = {
+      040000000300000002000000494401000000000008000000504552534F4E4944
+      0100000000000600000042414C5F434E010000000000}
+    Master = DPerson
+    MasterFields = 'ID'
+    DetailFields = 'PERSONID'
+    Session = sboapiDataModule.SBSession
+    AfterPost = DSourceAfterPost
+    Left = 88
+    Top = 89
+    object DPerson_bID: TFloatField
+      FieldName = 'ID'
+    end
+    object DPerson_bPERSONID: TFloatField
+      FieldName = 'PERSONID'
+      Required = True
+    end
+    object DPerson_bBAL_CN: TFloatField
+      DisplayLabel = 'Баланс'
+      FieldName = 'BAL_CN'
+      Required = True
+    end
+  end
+  object DType: TOracleDataSet
+    SQL.Strings = (
+      'SELECT  rowid,id,  name'
+      '  FROM uaod_type  ')
+    QBEDefinition.QBEFieldDefs = {
+      0400000002000000020000004944010000000000040000004E414D4501000000
+      0000}
+    Session = sboapiDataModule.SBSession
+    AfterPost = DSourceAfterPost
+    Left = 164
+    Top = 56
+    object DTypeID: TFloatField
+      FieldName = 'ID'
+    end
+    object DTypeNAME: TStringField
+      DisplayLabel = 'Тяйинаты'
+      FieldName = 'NAME'
+      Required = True
+      Size = 80
+    end
+  end
+  object DType_b: TOracleDataSet
+    SQL.Strings = (
+      'SELECT rowid, id,  typeid,  bal_cn'
+      '  FROM uaod_type_bal  '
+      ''
+      'where typeid = :typeid')
+    Variables.Data = {0300000001000000070000003A545950454944040000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      0400000003000000020000004944010000000000060000005459504549440100
+      000000000600000042414C5F434E010000000000}
+    Master = DType
+    MasterFields = 'ID'
+    DetailFields = 'TYPEID'
+    Session = sboapiDataModule.SBSession
+    AfterPost = DSourceAfterPost
+    Left = 168
+    Top = 88
+    object DType_bID: TFloatField
+      FieldName = 'ID'
+    end
+    object DType_bTYPEID: TFloatField
+      FieldName = 'TYPEID'
+      Required = True
+    end
+    object DType_bBAL_CN: TFloatField
+      DisplayLabel = 'Баланс'
+      FieldName = 'BAL_CN'
+      Required = True
+    end
+  end
+  object DSourceds: TDataSource
+    DataSet = DSource
+    Left = 52
+    Top = 56
+  end
+  object DSource_Bds: TDataSource
+    DataSet = DSource_B
+    Left = 52
+    Top = 88
+  end
+  object DPersonds: TDataSource
+    DataSet = DPerson
+    Left = 122
+    Top = 59
+  end
+  object DPerson_bds: TDataSource
+    DataSet = DPerson_b
+    Left = 123
+    Top = 88
+  end
+  object DTypeds: TDataSource
+    DataSet = DType
+    Left = 212
+    Top = 56
+  end
+  object DType_bds: TDataSource
+    DataSet = DType_b
+    Left = 210
+    Top = 88
+  end
+end

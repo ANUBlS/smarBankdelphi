@@ -1,0 +1,728 @@
+unit fmMedBlankImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActiveX, AxCtrls, MEDBlank_TLB, StdVcl, StdCtrls, DBViewComboBox, Db,
+  OracleData, HintBox, Buttons, ExtCtrls, ComCtrls, Mask, DBCtrls, SBPlgAx50_TLB,
+  PlgModalContainer;
+
+const
+   WM_ModalResult = WM_USER+139;
+   fmCaption = 'Tibbi sigorta anket formasi: (%s)';
+
+type
+  TfmMedBlank = class(
+             TActiveForm,
+             IfmMedBlank,
+             IUIObject,
+             IParamInput,
+             ISBPlgAc50BufferForm)
+    lbDBCBCustName: TLabel;
+    Panel1: TPanel;
+    BitBtn1: TBitBtn;
+    BitBtn2: TBitBtn;
+    hbErrMsg: THintBox;
+    btSuggestion: TBitBtn;
+    btApply: TBitBtn;
+    GroupBox1: TGroupBox;
+    Label1: TLabel;
+    DBEdit1: TDBEdit;
+    Label2: TLabel;
+    DBEdit2: TDBEdit;
+    DBEdit3: TDBEdit;
+    Label3: TLabel;
+    Label4: TLabel;
+    DBEdit4: TDBEdit;
+    Label5: TLabel;
+    DBEdit5: TDBEdit;
+    Label6: TLabel;
+    DBEdit6: TDBEdit;
+    Label7: TLabel;
+    DBEdit7: TDBEdit;
+    Label8: TLabel;
+    DBEdit8: TDBEdit;
+    Label9: TLabel;
+    edBeginDate: TDateTimePicker;
+    edEndDate: TDateTimePicker;
+    Label10: TLabel;
+    Label11: TLabel;
+    gbChecks: TGroupBox;
+    Label12: TLabel;
+    Label13: TLabel;
+    Label14: TLabel;
+    Label15: TLabel;
+    Label16: TLabel;
+    Label17: TLabel;
+    Label18: TLabel;
+    Label19: TLabel;
+    Label20: TLabel;
+    Label21: TLabel;
+    Label22: TLabel;
+    Label23: TLabel;
+    Label24: TLabel;
+    chbINPATSERVa: TCheckBox;
+    chbINPATSERVb: TCheckBox;
+    chbINPATSERVc: TCheckBox;
+    chbOUTPATSERVa: TCheckBox;
+    chbOUTPATSERVb: TCheckBox;
+    chbOUTPATSERVc: TCheckBox;
+    chbEMERAIDa: TCheckBox;
+    chbEMERAIDb: TCheckBox;
+    chbEMERAIDc: TCheckBox;
+    chbPRESCDRUGSa: TCheckBox;
+    chbPRESCDRUGSb: TCheckBox;
+    chbPRESCDRUGSc: TCheckBox;
+    chbDENTSERVa: TCheckBox;
+    chbDENTSERVb: TCheckBox;
+    chbDENTSERVc: TCheckBox;
+    chbPROPHYSERVa: TCheckBox;
+    chbPROPHYSERVb: TCheckBox;
+    chbPROPHYSERVc: TCheckBox;
+    chbPROPHYINSa: TCheckBox;
+    chbPROPHYINSb: TCheckBox;
+    chbPROPHYINSc: TCheckBox;
+    chbSANATORIUMa: TCheckBox;
+    chbSANATORIUMb: TCheckBox;
+    chbSANATORIUMc: TCheckBox;
+    chbCHILDBIRTHa: TCheckBox;
+    chbCHILDBIRTHb: TCheckBox;
+    chbCHILDBIRTHc: TCheckBox;
+    chbPRIVATEDRSERVa: TCheckBox;
+    chbPRIVATEDRSERVb: TCheckBox;
+    chbPRIVATEDRSERVc: TCheckBox;
+    chbMEDICALEVACa: TCheckBox;
+    chbMEDICALEVACb: TCheckBox;
+    chbMEDICALEVACc: TCheckBox;
+    chbPROSTINSa: TCheckBox;
+    chbPROSTINSb: TCheckBox;
+    chbPROSTINSc: TCheckBox;
+    chbCHEMORADIOTHERAPYa: TCheckBox;
+    chbCHEMORADIOTHERAPYb: TCheckBox;
+    chbCHEMORADIOTHERAPYc: TCheckBox;
+    btEmployes: TBitBtn;
+    DBLookupComboBox1: TDBLookupComboBox;
+    DBLookupComboBox2: TDBLookupComboBox;
+    pmcSuggestion: TPlgModalContainer;
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure BitBtn1Click(Sender: TObject);
+    procedure BitBtn2Click(Sender: TObject);
+    procedure btEmployesClick(Sender: TObject);
+    procedure btApplyClick(Sender: TObject);
+    procedure DBEdit1KeyPress(Sender: TObject; var Key: Char);
+    procedure gbChecksDblClick(Sender: TObject);
+    procedure btSuggestionClick(Sender: TObject);
+  private
+    { Private declarations }
+    id : Integer;
+    IsSaved : Boolean;
+    FParams: TStrings;
+    FOwnerHandle : Integer;
+    FEvents: IfmMedBlankEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+    function  SaveData():Boolean;
+    procedure setChecksByName(chbname : String; value : integer);
+    procedure setChecks;
+    function  getChecksByName(fieldname : String):Integer;
+    procedure getChecks;
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+    {IParamInput}
+    function  Get_Params(const Name: WideString): OleVariant; safecall;
+    procedure Set_Params(const Name: WideString; Value: OleVariant); safecall;
+    property Params[const Name: WideString]: OleVariant read Get_Params write Set_Params;
+    function  Get_Owner:Integer; safecall;
+    procedure Set_Owner(val : Integer);  safecall;    
+    {IInstance}
+    function InstanceInitialize: HResult; safecall;
+    function IUIObject.Initialize = InstanceInitialize;
+    function Cleanup: HResult; safecall;
+    {IUIObject}
+//    function  Get_Icon: OLE_HANDLE; safecall;
+    function UIObjectActivate: HResult; safecall;
+    function IUIObject.Activate = UIObjectActivate;
+    function QueryDeactivate: HResult; safecall;
+    function UIObjectDeactivate: HResult; safecall;
+    function IUIObject.Deactivate = UIObjectDeactivate;
+    function SaveState: HResult; safecall;
+    function  Get_Height : Integer; safecall;
+    function  Get_Width  : Integer; safecall;    
+  public
+    { Public declarations }
+    procedure Initialize; override;
+  end;
+
+var
+  fmMedBlank : TfmMedBlank;
+
+implementation
+
+uses ComObj, ComServ, sboapiDataModuleImpl, UEmploees, UDataMod;
+
+{$R *.DFM}
+
+{ TfmMedBlank }
+
+procedure TfmMedBlank.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_fmMedBlankPage); }
+end;
+
+procedure TfmMedBlank.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as IfmMedBlankEvents;
+end;
+
+procedure TfmMedBlank.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TfmMedBlank.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TfmMedBlank.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TfmMedBlank.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TfmMedBlank.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TfmMedBlank.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TfmMedBlank.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TfmMedBlank.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TfmMedBlank.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TfmMedBlank.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TfmMedBlank.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TfmMedBlank.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TfmMedBlank.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TfmMedBlank.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TfmMedBlank.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TfmMedBlank.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TfmMedBlank.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TfmMedBlank.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TfmMedBlank.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TfmMedBlank._Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TfmMedBlank.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TfmMedBlank.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TfmMedBlank.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TfmMedBlank.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TfmMedBlank.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TfmMedBlank.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TfmMedBlank.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TfmMedBlank.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TfmMedBlank.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TfmMedBlank.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TfmMedBlank.Set_AxBorderStyle(Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TfmMedBlank.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TfmMedBlank.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TfmMedBlank.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TfmMedBlank.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TfmMedBlank.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TfmMedBlank.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TfmMedBlank.Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TfmMedBlank.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TfmMedBlank.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TfmMedBlank.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TfmMedBlank.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TfmMedBlank.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TfmMedBlank.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+function  TfmMedBlank.Get_Owner:Integer;
+begin
+  Result := handle;
+end;
+
+procedure TfmMedBlank.Set_Owner(val : Integer);
+begin
+  if val > 0 then
+     FOwnerHandle := val;
+end;
+
+
+function  TfmMedBlank.Get_Params(const Name: WideString): OleVariant;
+begin
+  Result := FParams.Values[Name];
+end;
+
+procedure TfmMedBlank.Set_Params(const Name: WideString; Value: OleVariant);
+begin
+  FParams.Values[Name] := Value;
+end;
+
+function TfmMedBlank.InstanceInitialize: HResult;
+begin
+  Result := S_OK;
+end;
+
+function TfmMedBlank.Cleanup: HResult;
+begin
+  Result := S_OK;
+end;
+
+function TfmMedBlank.UIObjectActivate: HResult;
+begin
+    if Get_Params('Mod') = 'Insert' then begin
+       id := -1;
+       edBeginDate.DateTime := Now;
+       edEndDate.DateTime := Now;
+       Caption := format(fmCaption, ['Yeni anket']);
+       with MedBDataMod, ODSMedical do begin
+         SetVariable('ID', id);
+         Open;
+         Insert;
+         FieldByName('KLI_ID').asFloat := StrToInt(Get_Params('KLI_ID'));
+       end;
+    end;
+    if Get_Params('Mod') = 'Edit' then begin
+       id := StrToInt(Get_Params('ID'));
+       with MedBDataMod, ODSMedical do begin
+         SetVariable('ID', id);
+         Open;
+         edBeginDate.DateTime := FieldByName('begindate').AsDateTime;
+         edEndDate.DateTime := FieldByName('enddate').AsDateTime;
+         setChecks;
+         Edit;
+       end;
+       Caption := format(fmCaption, ['Redakte']);
+       btSuggestion.Enabled := True;
+       btEmployes.Enabled := True;
+
+    end;
+  Result := S_OK;
+end;
+
+function TfmMedBlank.QueryDeactivate: HResult;
+begin
+  Result := S_OK;
+end;
+
+function TfmMedBlank.UIObjectDeactivate: HResult;
+begin
+  Result := S_OK;
+end;
+
+function TfmMedBlank.SaveState: HResult;
+begin
+  Result := S_OK;
+end;
+
+function  TfmMedBlank.Get_Height : Integer;
+begin
+  Result := Height;
+end;
+
+function  TfmMedBlank.Get_Width  : Integer;
+begin
+  Result := Width;
+end;
+
+
+procedure TfmMedBlank.ActiveFormCreate(Sender: TObject);
+begin
+  fmMedBlank := Self;
+  FParams := TStringList.Create;
+  isSaved := False;
+
+  MedBDataMod :=  TMedBDataMod.Create(Self)
+
+end;
+
+function TfmMedBlank.SaveData():Boolean;
+begin
+  result := True;
+  try
+  with MedBDataMod, ODSMedical do begin
+    FieldByName('begindate').AsDateTime := edBeginDate.DateTime;
+    FieldByName('enddate').AsDateTime := edEndDate.DateTime;
+    getChecks();
+    Post;
+    RefreshRecord;
+    if Get_Params('Mod') = 'Insert' then
+     OPCOMMON.CallIntegerFunction('newinsurance', [9,
+                                                  FieldByName('ID').asFloat,
+                                                  FieldByName('begindate').AsDateTime,
+                                                  FieldByName('enddate').AsDateTime,
+                                                  FieldByName('kli_id').AsFloat]);
+    if Get_Params('Mod') = 'Edit' then
+     OPCOMMON.CallBooleanFunction('setblankdata', [9,
+                                                  FieldByName('ID').asFloat,
+                                                  FieldByName('begindate').AsDateTime,
+                                                  FieldByName('enddate').AsDateTime,
+                                                  FieldByName('kli_id').AsFloat]);
+
+  end;
+  except
+   on E:Exception do begin
+    hbErrMsg.ShowMessage(E.Message);
+    Result := false;
+   end;
+  end;
+end;
+
+procedure TfmMedBlank.BitBtn1Click(Sender: TObject);
+begin
+  if SaveData() or IsSaved then
+   PostMessage(FOwnerHandle, WM_ModalResult, mrOk, 0);
+end;
+
+procedure TfmMedBlank.BitBtn2Click(Sender: TObject);
+begin
+  PostMessage(FOwnerHandle, WM_ModalResult, mrCancel, 0);
+end;
+
+procedure TfmMedBlank.btEmployesClick(Sender: TObject);
+begin
+  with MedBDataMod, ODSEmployees do
+  try
+    SetVariable('MED_ID', ODSMedicalID.Value);
+    Open;
+    ODSOccupation.open;
+    fmEmploees := TfmEmploees.Create(Self);
+    fmEmploees.ShowModal;
+  finally
+    Close;
+    ODSOccupation.Close;
+    fmEmploees.Free
+  end;
+end;
+
+procedure TfmMedBlank.btApplyClick(Sender: TObject);
+begin
+  if SaveData() then btApply.Enabled := False;
+  btSuggestion.Enabled := True;
+  btEmployes.Enabled := True;
+end;
+
+procedure TfmMedBlank.DBEdit1KeyPress(Sender: TObject; var Key: Char);
+begin
+  if Key = #13 then
+     begin
+       FindNextControl(ActiveControl,true,true,false).SetFocus;
+       Key := #0
+     end
+  else
+     btApply.Enabled := True;
+end;
+
+procedure TfmMedBlank.setChecks;
+var
+   i : Integer;
+begin
+  with MedBDataMod, ODSMedical do
+  for i:=0 to FieldCount-1 do
+    if Fields[i].Tag = 777 then
+      setChecksByName(Fields[i].FieldName, Fields[i].AsInteger);
+end;
+
+function TfmMedBlank.getChecksByName(fieldname : String):Integer;
+var
+   res : Integer;
+begin
+  res := 0;
+  with MedBDataMod, ODSMedical, gbChecks do begin
+   if TCheckBox(FindChildControl('chb'+fieldname+'a')).Checked then
+      res := res + TCheckBox(FindChildControl('chb'+fieldname+'a')).Tag;
+   if TCheckBox(FindChildControl('chb'+fieldname+'b')).Checked then
+      res := res + TCheckBox(FindChildControl('chb'+fieldname+'b')).Tag;
+   if TCheckBox(FindChildControl('chb'+fieldname+'c')).Checked then
+      res := res + TCheckBox(FindChildControl('chb'+fieldname+'c')).Tag;
+  end;
+  result := res;
+end;
+
+procedure TfmMedBlank.getChecks;
+var
+   i : Integer;
+begin
+  with MedBDataMod, ODSMedical do
+  for i:=0 to FieldCount-1 do
+    if Fields[i].Tag = 777 then
+      Fields[i].AsInteger := getChecksByName(Fields[i].FieldName);
+end;
+
+procedure TfmMedBlank.setChecksByName(chbname : String; value : integer);
+begin
+   with gbChecks do
+   case value of
+     7 : begin
+           TCheckBox(FindChildControl('chb'+chbname+'a')).Checked := true;
+           TCheckBox(FindChildControl('chb'+chbname+'b')).Checked := true;
+           TCheckBox(FindChildControl('chb'+chbname+'c')).Checked := true;
+         end;
+     6 : begin
+           TCheckBox(FindChildControl('chb'+chbname+'a')).Checked := true;
+           TCheckBox(FindChildControl('chb'+chbname+'b')).Checked := true;
+         end;
+     5 : begin
+           TCheckBox(FindChildControl('chb'+chbname+'a')).Checked := true;
+           TCheckBox(FindChildControl('chb'+chbname+'c')).Checked := true;
+         end;
+     3 : begin
+           TCheckBox(FindChildControl('chb'+chbname+'b')).Checked := true;
+           TCheckBox(FindChildControl('chb'+chbname+'c')).Checked := true;
+         end;
+     4 : TCheckBox(FindChildControl('chb'+chbname+'a')).Checked := true;
+     2 : TCheckBox(FindChildControl('chb'+chbname+'b')).Checked := true;
+     1 : TCheckBox(FindChildControl('chb'+chbname+'c')).Checked := true;
+   end;
+
+end;
+
+procedure TfmMedBlank.gbChecksDblClick(Sender: TObject);
+begin
+   with gbChecks do
+     TCheckBox(FindChildControl('chbINPATSERVa')).Checked := true;
+end;
+
+procedure TfmMedBlank.btSuggestionClick(Sender: TObject);
+var
+   params : TStringList;
+begin
+   params := TStringList.Create;
+   with MedBDataMod do begin
+     params.Values['MED_ID'] := IntToStr(ODSMedicalID.Value);
+     params.Values['KLI_ID'] := IntToStr(ODSCustsID.Value);
+   end;
+   with pmcSuggestion do begin
+     ShowModal(StringToGuid('{8488AAD4-B4AC-42D2-B3F4-53A042977147}'),params )
+   end;
+   params.Free;
+
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TfmMedBlank,
+    Class_fmMedBlank,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

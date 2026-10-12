@@ -1,0 +1,428 @@
+object CustomerDataModule: TCustomerDataModule
+  OldCreateOrder = False
+  Height = 480
+  Width = 696
+  object Customers: TDataSource
+    DataSet = ActiveCustomerList
+    Left = 16
+    Top = 8
+  end
+  object RelationData: TOracleDataSet
+    SQL.Strings = (
+      'select * from PRINAD')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000400000049004400010000000000080000004E0041004D00
+      4500010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 408
+    Top = 8
+    object RelationDataID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object RelationDataNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 90
+    end
+  end
+  object Relation: TDataSource
+    DataSet = RelationData
+    Left = 304
+    Top = 8
+  end
+  object ClientGroupData: TOracleDataSet
+    SQL.Strings = (
+      'select * from QRP_KLIE')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000400000049004400010000000000080000004E0041004D00
+      4500010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 408
+    Top = 56
+    object ClientGroupDataID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object ClientGroupDataNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 90
+    end
+  end
+  object ClientGroup: TDataSource
+    DataSet = ClientGroupData
+    Left = 304
+    Top = 56
+  end
+  object EstateTypeData: TOracleDataSet
+    SQL.Strings = (
+      'SELECT * FROM VID_SOB')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000040000000400000049004400010000000000080000004E0041004D00
+      4500010000000000060000004E0045005700010000000000080000004B004F00
+      44005500010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 408
+    Top = 104
+    object EstateTypeDataID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object EstateTypeDataNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 120
+    end
+  end
+  object EstateType: TDataSource
+    DataSet = EstateTypeData
+    Left = 304
+    Top = 104
+  end
+  object OrganizationTypeData: TOracleDataSet
+    SQL.Strings = (
+      'SELECT * FROM ORG_PRAV')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000400000049004400010000000000080000004E0041004D00
+      4500010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 408
+    Top = 152
+    object OrganizationTypeDataID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object OrganizationTypeDataNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 60
+    end
+  end
+  object OrganizationType: TDataSource
+    DataSet = OrganizationTypeData
+    Left = 304
+    Top = 152
+  end
+  object ActionAreaData: TOracleDataSet
+    SQL.Strings = (
+      'SELECT * FROM SFERADEY')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000400000049004400010000000000080000004E0041004D00
+      4500010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 408
+    Top = 200
+    object ActionAreaDataID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object ActionAreaDataNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 90
+    end
+  end
+  object ActionArea: TDataSource
+    DataSet = ActionAreaData
+    Left = 304
+    Top = 200
+  end
+  object BranchData: TOracleDataSet
+    SQL.Strings = (
+      'SELECT * FROM OTRASLI')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000400000049004400010000000000080000004E0041004D00
+      4500010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 408
+    Top = 248
+    object BranchDataID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object BranchDataNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 90
+    end
+  end
+  object Branch: TDataSource
+    DataSet = BranchData
+    Left = 304
+    Top = 248
+  end
+  object CurrencyData: TOracleDataSet
+    SQL.Strings = (
+      'select * from AVALUTE')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000170000000C000000560041004C005500540045000100000000001000
+      0000560041004C005F004E0041004D0045000100000000001200000056004100
+      4C0055005F004E0041004D00450001000000000014000000560041004C005500
+      5F00530048004F00520054000100000000000C0000005500530054004F005200
+      47000100000000000C00000055005300540050004F004B000100000000001000
+      0000560041004C0055005F00470045004E000100000000000E00000056004100
+      4C0055005F0041005A000100000000000A0000005500530049004E0047000100
+      0000000014000000560041004C0055005F004F00540048004500520001000000
+      000014000000560041004C0055005F0049004E00540045005200010000000000
+      12000000560041004C0055005F00420041004C00410001000000000012000000
+      50005200490053005400410056004B0041000100000000000E00000043004F00
+      55004E00540052005900010000000000100000005500530054005F0050004F00
+      4B0031000100000000000E0000004F00460046004900430041004C0001000000
+      00000A0000004C0049004D00490054000100000000000A000000440045004200
+      450054000100000000000C0000004B0052004500440049005400010000000000
+      0C0000004600350035003000310050000100000000000C000000460035003500
+      3000310056000100000000000C00000053004400450042004500540001000000
+      00000E0000005300430052004500440049005400010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 184
+    Top = 8
+    object CurrencyDataVALUTE: TIntegerField
+      FieldName = 'VALUTE'
+      Required = True
+    end
+    object CurrencyDataVAL_NAME: TWideStringField
+      FieldName = 'VAL_NAME'
+      Size = 10
+    end
+    object CurrencyDataVALU_NAME: TWideStringField
+      FieldName = 'VALU_NAME'
+      Size = 25
+    end
+    object CurrencyDataVALU_SHORT: TWideStringField
+      FieldName = 'VALU_SHORT'
+      Size = 10
+    end
+    object CurrencyDataDEBET: TFloatField
+      FieldName = 'DEBET'
+    end
+    object CurrencyDataKREDIT: TFloatField
+      FieldName = 'KREDIT'
+    end
+    object CurrencyDataUSTORG: TFloatField
+      FieldName = 'USTORG'
+    end
+    object CurrencyDataUSTPOK: TFloatField
+      FieldName = 'USTPOK'
+    end
+    object CurrencyDataVALU_GEN: TWideStringField
+      FieldName = 'VALU_GEN'
+      Size = 10
+    end
+    object CurrencyDataVALU_AZ: TWideStringField
+      FieldName = 'VALU_AZ'
+      Size = 25
+    end
+    object CurrencyDataUSING: TIntegerField
+      FieldName = 'USING'
+    end
+    object CurrencyDataVALU_OTHER: TWideStringField
+      FieldName = 'VALU_OTHER'
+      Size = 25
+    end
+    object CurrencyDataVALU_INTER: TWideStringField
+      FieldName = 'VALU_INTER'
+      Size = 3
+    end
+    object CurrencyDataVALU_BALA: TWideStringField
+      FieldName = 'VALU_BALA'
+      Size = 25
+    end
+    object CurrencyDataPRISTAVKA: TFloatField
+      FieldName = 'PRISTAVKA'
+    end
+    object CurrencyDataCOUNTRY: TWideStringField
+      FieldName = 'COUNTRY'
+    end
+    object CurrencyDataUST_POK1: TFloatField
+      FieldName = 'UST_POK1'
+    end
+    object CurrencyDataF5501P: TFloatField
+      FieldName = 'F5501P'
+    end
+    object CurrencyDataF5501V: TFloatField
+      FieldName = 'F5501V'
+    end
+    object CurrencyDataSDEBET: TFloatField
+      FieldName = 'SDEBET'
+    end
+    object CurrencyDataSCREDIT: TFloatField
+      FieldName = 'SCREDIT'
+    end
+    object CurrencyDataOFFICAL: TWideStringField
+      FieldName = 'OFFICAL'
+      Size = 5
+    end
+    object CurrencyDataLIMIT: TFloatField
+      FieldName = 'LIMIT'
+    end
+  end
+  object TaxAreaData: TOracleDataSet
+    SQL.Strings = (
+      'SELECT * FROM NALOG')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000400000049004400010000000000080000004E0041004D00
+      4500010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 408
+    Top = 304
+    object TaxAreaDataID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object TaxAreaDataNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 90
+    end
+  end
+  object TaxArea: TDataSource
+    DataSet = TaxAreaData
+    Left = 304
+    Top = 304
+  end
+  object ActiveCustomerList: TOracleDataSet
+    SQL.Strings = (
+      'SELECT customers.rowID, '
+      '       id, op_id, open_dat, close_dat, nerezident,'
+      '       prinad_kod, name, short_name, group_klie, vid_sob,'
+      '       org_sob, sfera_dey, otrasl, nalog_kod, kod_okpro,'
+      
+        '       inn, dat_nal, dat_ustav, bik, lower(replace(name, '#39'i'#39', (s' +
+        'elect name2 from unicode_translate where col_num=14))) as name1,'
+      
+        '      decode(nvl(customers.cust_type,0), 0, '#39'huquqi'#39', 1, '#39'fiziki' +
+        #39', 2, '#39'f.s.'#39') tip'
+      'FROM customers'
+      'where CLOSE_DAT IS NULL'
+      'order by :Title')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000C0000003A005400490054004C0045000100000003000000
+      49440000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000001500000004000000490044000100000000000A0000004F0050005F00
+      49004400010000000000100000004F00500045004E005F004400410054000100
+      000000001200000043004C004F00530045005F00440041005400010000000000
+      140000004E004500520045005A004900440045004E0054000100000000001400
+      00005000520049004E00410044005F004B004F00440001000000000008000000
+      4E0041004D00450001000000000014000000530048004F00520054005F004E00
+      41004D00450001000000000014000000470052004F00550050005F004B004C00
+      490045000100000000000E0000005600490044005F0053004F00420001000000
+      00000E0000004F00520047005F0053004F004200010000000000120000005300
+      46004500520041005F004400450059000100000000000C0000004F0054005200
+      410053004C00010000000000120000004E0041004C004F0047005F004B004F00
+      4400010000000000120000004B004F0044005F004F004B00500052004F000100
+      000000000600000049004E004E000100000000000E0000004400410054005F00
+      4E0041004C00010000000000120000004400410054005F005500530054004100
+      560001000000000006000000420049004B000100000000000600000054004900
+      50000100000000000A0000004E0041004D0045003100010000000000}
+    OnApplyRecord = ActiveCustomerListApplyRecord
+    Session = sboapiDataModule.SBSession
+    OnCalcFields = ActiveCustomerListCalcFields
+    Left = 96
+    Top = 8
+    object ActiveCustomerListID: TIntegerField
+      FieldName = 'ID'
+    end
+    object ActiveCustomerListOP_ID: TFloatField
+      FieldName = 'OP_ID'
+    end
+    object ActiveCustomerListOPEN_DAT: TDateTimeField
+      FieldName = 'OPEN_DAT'
+    end
+    object ActiveCustomerListCLOSE_DAT: TDateTimeField
+      FieldName = 'CLOSE_DAT'
+    end
+    object ActiveCustomerListNEREZIDENT: TFloatField
+      FieldName = 'NEREZIDENT'
+    end
+    object ActiveCustomerListPRINAD_KOD: TFloatField
+      FieldName = 'PRINAD_KOD'
+    end
+    object ActiveCustomerListNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 90
+    end
+    object ActiveCustomerListSHORT_NAME: TWideStringField
+      FieldName = 'SHORT_NAME'
+      Size = 90
+    end
+    object ActiveCustomerListGROUP_KLIE: TFloatField
+      FieldName = 'GROUP_KLIE'
+    end
+    object ActiveCustomerListVID_SOB: TFloatField
+      FieldName = 'VID_SOB'
+    end
+    object ActiveCustomerListORG_SOB: TFloatField
+      FieldName = 'ORG_SOB'
+    end
+    object ActiveCustomerListSFERA_DEY: TFloatField
+      FieldName = 'SFERA_DEY'
+    end
+    object ActiveCustomerListOTRASL: TFloatField
+      FieldName = 'OTRASL'
+    end
+    object ActiveCustomerListNALOG_KOD: TFloatField
+      FieldName = 'NALOG_KOD'
+    end
+    object ActiveCustomerListKOD_OKPRO: TWideStringField
+      FieldName = 'KOD_OKPRO'
+      Size = 10
+    end
+    object ActiveCustomerListINN: TWideStringField
+      FieldName = 'INN'
+    end
+    object ActiveCustomerListDAT_NAL: TDateTimeField
+      FieldName = 'DAT_NAL'
+    end
+    object ActiveCustomerListDAT_USTAV: TDateTimeField
+      FieldName = 'DAT_USTAV'
+    end
+    object ActiveCustomerListBIK: TFloatField
+      FieldName = 'BIK'
+    end
+    object ActiveCustomerListTIP: TWideStringField
+      FieldName = 'TIP'
+      Size = 6
+    end
+    object ActiveCustomerListNAME1: TWideStringField
+      FieldName = 'NAME1'
+      Size = 90
+    end
+  end
+  object OPCust: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'SBREF'
+    Left = 16
+    Top = 64
+  end
+  object FilialsData: TOracleDataSet
+    SQL.Strings = (
+      'select *'
+      'from FILIAL')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000030000000400000049004400010000000000080000004E0041004D00
+      4500010000000000140000004B004F0044005F00460049004C00490041004C00
+      010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 408
+    Top = 352
+  end
+  object Filials: TDataSource
+    DataSet = FilialsData
+    Left = 304
+    Top = 352
+  end
+end

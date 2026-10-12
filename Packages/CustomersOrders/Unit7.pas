@@ -1,0 +1,28 @@
+unit Unit7;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, CheckLst;
+
+type
+  TCHECK_arest = class(TForm)
+    CheckListBox1: TCheckListBox;
+    Button1: TButton;
+    CheckBox1: TCheckBox;
+    CheckBox2: TCheckBox;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  CHECK_arest: TCHECK_arest;
+
+implementation
+
+{$R *.DFM}
+
+end.

@@ -1,0 +1,1030 @@
+﻿unit cc_BuyersImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, NLSDialogs,
+  ActiveX, AxCtrls, cc_BuyersPr_TLB, StdVcl, ComCtrls, ExtCtrls, ToolWin,
+  ImgList, StdCtrls, Db,Grids, DBGridEh, Menus, Mask, DBCtrls, DBGrids,
+  NLSLocalizer;
+
+type
+  Tcc_Buyers = class(TActiveForm, Icc_Buyers)
+    ImageList: TImageList;
+    GroupBoxMain: TGroupBox;
+    PanelFind: TPanel;
+    ToolBarMain: TToolBar;
+    ToolButtonA: TToolButton;
+    ToolBtnAdd: TToolButton;
+    ToolButtonB: TToolButton;
+    ToolBtnEdit: TToolButton;
+    ToolButtonC: TToolButton;
+    ToolBtnDelete: TToolButton;
+    ToolButtonD: TToolButton;
+    ToolButtonE: TToolButton;
+    BtnRefresh: TToolButton;
+    ToolButtonK: TToolButton;
+    ToolBtnFind: TToolButton;
+    GroupBox1: TGroupBox;
+    GroupBox2: TGroupBox;
+    GroupBox3: TGroupBox;
+    DBGrid1: TDBGrid;
+    PopupMenuMain: TPopupMenu;
+    N2: TMenuItem;
+    N5: TMenuItem;
+    N7: TMenuItem;
+    N6: TMenuItem;
+    N4: TMenuItem;
+    N1: TMenuItem;
+    N3: TMenuItem;
+    ToolButton1: TToolButton;
+    DBGrid2: TDBGrid;
+    DBGrid3: TDBGrid;
+    Popupcontract: TPopupMenu;
+    N8: TMenuItem;
+    buyerid: TDBEdit;
+    N9: TMenuItem;
+    N10: TMenuItem;
+    procedure ToolBtnFindClick(Sender: TObject);
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure ToolBtnAddClick(Sender: TObject);
+    procedure ToolBtnEditClick(Sender: TObject);
+    procedure ToolBtnDeleteClick(Sender: TObject);
+    procedure DBGridBuyersDblClick(Sender: TObject);
+    procedure BtnRefreshClick(Sender: TObject);
+    procedure N1Click(Sender: TObject);
+    procedure N1DrawItem(Sender: TObject; ACanvas: TCanvas; ARect: TRect;
+      Selected: Boolean);
+    procedure DBGridEh1ApplyFilter(Sender: TObject);
+    procedure DBGridEh2TitleClick(Column: TColumnEh);
+    procedure DBGrid1TitleClick(Column: TColumn);
+    procedure N6Click(Sender: TObject);
+    procedure N7Click(Sender: TObject);
+    procedure DBGrid2TitleClick(Column: TColumn);
+    procedure N3Click(Sender: TObject);
+    procedure N4DrawItem(Sender: TObject; ACanvas: TCanvas; ARect: TRect;
+      Selected: Boolean);
+    procedure N2Click(Sender: TObject);
+    procedure N3DrawItem(Sender: TObject; ACanvas: TCanvas; ARect: TRect;
+      Selected: Boolean);
+    procedure DBGrid1DblClick(Sender: TObject);
+    procedure ToolButton1Click(Sender: TObject);
+    procedure passnumberChange(Sender: TObject);
+    procedure EditpassseriyaChange(Sender: TObject);
+    procedure EditpasportChange(Sender: TObject);
+    procedure EditbirthChange(Sender: TObject);
+    procedure EditSexChange(Sender: TObject);
+    procedure EditWorkplaceChange(Sender: TObject);
+    procedure EditnameExit(Sender: TObject);
+    procedure EditpassseriyaExit(Sender: TObject);
+    procedure EditDateExit(Sender: TObject);
+    procedure EditpasportExit(Sender: TObject);
+    procedure EditbirthExit(Sender: TObject);
+    procedure EditSexExit(Sender: TObject);
+    procedure EditadressExit(Sender: TObject);
+    procedure EditworkplaceExit(Sender: TObject);
+    procedure EditwageExit(Sender: TObject);
+    procedure EditnameChange(Sender: TObject);
+    procedure EditwageChange(Sender: TObject);
+    procedure EditphoneChange(Sender: TObject);
+    procedure N8Click(Sender: TObject);
+    procedure N9Click(Sender: TObject);
+    procedure N10Click(Sender: TObject);
+  private
+    { Private declarations }
+    FEvents: Icc_BuyersEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+  public
+    { Public declarations }
+    procedure Initialize; override;
+  end;
+
+implementation
+
+uses ComObj, ComServ,UnitData, UnitAddBuyers, UnitUpdBuyers, UnitAccBuyers,
+  CC_FormInterval_Unit, CC_AccTransact_Unit, CC_AccState_Unit,
+  CC_AccTransaction_Unit, CC_AccInForm_Unit, CC_AccOutForm_Unit,
+  CC_Settings_Unit, CC_Repairing_Unit, Contractimpl, DatModConstimpl
+  ;
+
+{$R *.DFM}
+
+{ Tcc_Buyers }
+
+
+procedure Tcc_Buyers.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+
+end;
+
+procedure Tcc_Buyers.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as Icc_BuyersEvents;
+end;
+
+procedure Tcc_Buyers.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function Tcc_Buyers.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function Tcc_Buyers.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function Tcc_Buyers.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function Tcc_Buyers.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function Tcc_Buyers.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function Tcc_Buyers.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function Tcc_Buyers.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function Tcc_Buyers.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function Tcc_Buyers.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function Tcc_Buyers.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function Tcc_Buyers.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function Tcc_Buyers.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function Tcc_Buyers.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function Tcc_Buyers.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function Tcc_Buyers.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function Tcc_Buyers.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function Tcc_Buyers.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function Tcc_Buyers.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure Tcc_Buyers._Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure Tcc_Buyers.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure Tcc_Buyers.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure Tcc_Buyers.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure Tcc_Buyers.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure Tcc_Buyers.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure Tcc_Buyers.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure Tcc_Buyers.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure Tcc_Buyers.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure Tcc_Buyers.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure Tcc_Buyers.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure Tcc_Buyers.Set_AxBorderStyle(Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure Tcc_Buyers.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure Tcc_Buyers.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure Tcc_Buyers.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure Tcc_Buyers.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure Tcc_Buyers.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure Tcc_Buyers.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure Tcc_Buyers.Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure Tcc_Buyers.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure Tcc_Buyers.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure Tcc_Buyers.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure Tcc_Buyers.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure Tcc_Buyers.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure Tcc_Buyers.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+procedure Tcc_Buyers.ToolBtnFindClick(Sender: TObject);
+begin
+DataMod_Buyers.Country.Open;
+FormAddBuyers:= TFormAddBuyers.Create(Self);
+FormAddBuyers.AddUpd.Text:='3';
+FormAddBuyers.ShowModal;
+{if EditSearch.Visible=false then
+    EditSearch.Visible:=true
+    else
+    EditSearch.Visible:=false;}
+end;
+
+procedure Tcc_Buyers.ActiveFormCreate(Sender: TObject);
+begin
+  DataMod_Buyers :=TDataMod_Buyers.Create(Self);
+  BtnRefresh.Click;
+end;
+
+procedure MenuShrift(Sender: TObject; ACanvas: TCanvas;
+  ARect: TRect; Selected: Boolean);
+var
+  LineBottom: Integer;
+  SText: String;
+  Bar: TRect;
+begin
+  with ACanvas, Sender as TMenuItem do
+  begin
+    with Font do
+    begin
+      Name := 'Tahoma';
+      Charset := Default_CHARSET;
+      if Default then
+        Style := [fsBold];
+    end;
+    if Caption = '-' then
+    begin
+      Pen.Color := clBlack;
+      LineBottom := (ARect.Top + (ARect.Bottom - ARect.Top) div 2)-1;
+      MoveTo(ARect.Left, LineBottom);
+      LineTo(ARect.Right, LineBottom);
+      inc(LineBottom);
+      Pen.Color := clWhite;
+      MoveTo(ARect.Left, LineBottom);
+      LineTo(ARect.Right, LineBottom);
+    end
+    else
+    begin
+      if Selected then
+      begin
+        Brush.Color := clNavy;
+        if Enabled then
+          Font.Color := clWhite
+        else
+          Font.Color := clSilver;
+      end
+      else
+      begin
+        Brush.Color := clBtnFace;
+        if Enabled then
+          Font.Color := clBlack
+        else
+          Font.Color := clGrayText;
+      end;
+      Bar := ARect;
+
+      FillRect(Bar);
+      TextOut(ARect.Left+2, ARect.Top+1, Caption);
+    end;
+    SText :=ShortCutToText(ShortCut);
+    TextOut(ARect.Right-TextWidth(SText)-2, ARect.Top+1, SText);
+    if ImageIndex <> -1 then
+      with GetParentMenu do
+        if Assigned(Images) then
+        begin
+          if Checked then
+          begin
+            Bar.Left := ARect.Left + 1;
+            Bar.Right := Bar.Left + 16;
+            Bar.Top := ARect.Top + 1;
+            Bar.Bottom := Bar.Top + 16;
+
+            ACanvas.Brush.Color := clBtnShadow;
+            ACanvas.FrameRect(Bar);
+
+            Inc(Bar.Left, 2);
+            Inc(Bar.Right, 2);
+            Inc(Bar.Top, 2);
+            Inc(Bar.Bottom, 2);
+
+            ACanvas.Brush.Color := clBtnHighlight;
+            ACanvas.FrameRect(Bar);
+
+            Dec(Bar.Left, 1);
+            Dec(Bar.Right, 1);
+            Dec(Bar.Top, 1);
+            Dec(Bar.Bottom, 1);
+
+            if Selected then
+              ACanvas.Brush.Color := clBtnFace
+            else
+              ACanvas.Brush.Color := clBtnHighlight;
+            ACanvas.FillRect(Bar);
+          end;
+
+          Images.Draw(ACanvas, ARect.Left, ARect.Top, ImageIndex, Enabled);
+        end;
+  end;
+end;
+
+procedure Tcc_Buyers.ToolBtnAddClick(Sender: TObject);
+begin
+
+DataMod_Buyers.Country.Open;
+FormAddBuyers:= TFormAddBuyers.Create(Self);
+FormAddBuyers.AddUpd.Text:='1';
+FormAddBuyers.ShowModal;
+//FormAddBuyers.EditBirthState.KeyValue:=203;
+
+end;
+
+procedure Tcc_Buyers.ToolBtnEditClick(Sender: TObject);
+begin
+
+DataMod_Buyers.Country.Open;
+FormAddBuyers:= TFormAddBuyers.Create(Self);
+FormAddBuyers.AddUpd.Text:='2';
+FormAddBuyers.ShowModal;
+{FormUpdBuyers:= TFormUpdBuyers.Create(Self);
+FormUpdBuyers.ShowModal;}
+end;
+
+procedure Tcc_Buyers.ToolBtnDeleteClick(Sender: TObject);
+const
+table_name='cc_Buyers';
+var
+v_id :integer;
+v_name :string;
+begin
+with DataMod_Buyers do begin
+v_id:=ODSBuyers.FieldByName('Id').AsInteger;
+v_name :=ODSBuyers.Fieldbyname('byr_name').asstring;
+ if  MessageDlg(Format('%s адлы алыжы силинсин?',[v_name]),mtConfirmation,mbYesNoCancel,0)=mrYes then
+           CC_GENERAL.CallProcedure('del_fromTable',[table_name,v_id]);
+           ODSBuyers.Close;
+           ODSBuyers.Open;
+  end;{if}
+ end;{with}
+
+
+procedure Tcc_Buyers.DBGridBuyersDblClick(Sender: TObject);
+begin
+FormUpdBuyers:= TFormUpdBuyers.Create(Self);
+FormUpdBuyers.ShowModal;
+end;
+
+procedure Tcc_Buyers.BtnRefreshClick(Sender: TObject);
+begin
+  with DataMod_Buyers do begin
+   ODSBuyers.Sql[5]:='';
+   ODSBuyers.close;
+   ODSBuyers.Open;
+   AccNO.Close;
+   Accno.open;
+   CC_Flat.Close;
+   CC_Flat.open;
+  end;
+end;
+
+
+
+procedure Tcc_Buyers.N1Click(Sender: TObject);
+begin
+with DataMod_Buyers.Accno do
+ if IsEmpty then
+    begin
+     ShowMessage('Щеч бир щесаб гейд олунмайыб!');
+     Exit;
+    end
+  else begin
+  try
+   CC_AccInForm :=TCC_AccInForm.Create(self);
+   CC_AccInForm.CC_InForm.Close;
+   CC_AccInForm.CC_InForm.SQL[15]:='debt>0';
+   CC_AccInForm.CC_InForm.Open;
+   CC_AccInForm.Showmodal;
+  finally
+   CC_AccInForm.Release;
+  end;
+ end;
+end;
+
+procedure Tcc_Buyers.N1DrawItem(Sender: TObject; ACanvas: TCanvas;
+  ARect: TRect; Selected: Boolean);
+begin
+MenuShrift(Sender, ACanvas, ARect, Selected);
+
+end;
+
+procedure Tcc_Buyers.DBGridEh1ApplyFilter(Sender: TObject);
+begin
+With DataMod_Buyers.Accno do begin
+SQL.Clear;
+SQL.Add('Select * from accno where ownid='''+buyerid.Text+''')');
+Open;
+end;
+    end;
+procedure Tcc_Buyers.DBGridEh2TitleClick(Column: TColumnEh);
+
+var
+   TitleName :string;
+begin
+ TitleName :=Column.FieldName;
+  with DataMod_Buyers.Accno do
+   begin
+    SetVariable('Title',TitleName);
+    Refresh;
+   end;  end;
+
+
+
+procedure Tcc_Buyers.DBGrid1TitleClick(Column: TColumn);
+var
+  TitleName :string;
+begin
+  TitleName :=Column.FieldName;
+  with DataMod_Buyers.ODSBuyers do
+   begin
+    SetVariable('Title',TitleName);
+    Refresh;
+   end;
+end;
+
+procedure Tcc_Buyers.N6Click(Sender: TObject);
+var
+  AStartDate, AEndDate: TDateTime;
+begin
+  if not Assigned(FormAccTransaction) then
+   FormAccTransaction :=TFormAccTransaction.Create(Self);
+  if not Assigned(FormInterval) then
+   FormInterval :=TFormInterval.Create(Self);
+  with DataMod_Buyers.Accno do
+   if IsEmpty then begin
+    ShowMessage('Щеч бир щесаб гейд олунмайыб!');
+    Exit;
+   end
+   else begin
+    DataMod_Buyers.Sysdat.Open;
+    with FormInterval do begin
+     StartDateEdit.DateTime :=DataMod_Buyers.Sysdat.FieldByName('tek_dat').AsDateTime;
+     EndDateEdit.DateTime :=StartDateEdit.DateTime;
+     if ShowModal = mrOK then begin
+      AStartDate :=StartDateEdit.DateTime;
+      AEndDate :=EndDateEdit.DateTime;
+      with FormAccTransaction do begin
+       OpenDataControls(AStartDate, AEndDate);
+       ShowModal;
+      end;
+     end;
+    end;
+   end;
+end;
+
+procedure Tcc_Buyers.N7Click(Sender: TObject);
+begin
+  with DataMod_Buyers.Accno do
+   if IsEmpty then
+    begin
+     ShowMessage('Щеч бир щесаб гейд олунмайыб!');
+     Exit;
+    end
+   else begin
+    if not Assigned(FormAccState) then
+     FormAccState :=TFormAccState.Create(Self);
+    FormAccState.ShowModal;
+  end;
+end;
+
+procedure Tcc_Buyers.DBGrid2TitleClick(Column: TColumn);
+
+var
+   TitleName :string;
+
+begin
+ TitleName :=Column.FieldName;
+ with DataMod_Buyers.Accno do
+ begin
+  Screen.Cursor :=crSQLWait;
+  SetVariable('Title',TitleName);
+  Refresh;
+  Screen.Cursor :=crDefault;
+ end;
+end;
+
+procedure Tcc_Buyers.N3Click(Sender: TObject);
+begin
+ with DataMod_Buyers.Accno do
+ if IsEmpty then
+    begin
+     ShowMessage('Щеч бир щесаб гейд олунмайыб!');
+     Exit;
+    end
+  else begin
+ //try
+ CC_AccInForm :=TCC_AccInForm.Create(self);
+ CC_AccInForm.CC_InForm.Close;
+ CC_AccInForm.CC_InForm.SQL[15]:='credit>0';
+ CC_AccInForm.CC_InForm.Open;
+ CC_AccInForm.Showmodal;
+  //finally
+//  CC_AccOutForm.Release;
+
+ //end;
+end;
+ end;
+procedure Tcc_Buyers.N4DrawItem(Sender: TObject; ACanvas: TCanvas;
+  ARect: TRect; Selected: Boolean);
+begin
+MenuShrift(Sender, ACanvas, ARect, Selected);
+
+end;
+
+procedure Tcc_Buyers.N2Click(Sender: TObject);
+begin
+  try
+   if not Assigned(FormAccBuyers) then
+    FormAccBuyers :=TFormAccBuyers.Create(self);
+   FormAccBuyers.Showmodal;
+  finally
+   FormAccBuyers.Release;
+  end;
+end;
+
+procedure Tcc_Buyers.N3DrawItem(Sender: TObject; ACanvas: TCanvas;
+  ARect: TRect; Selected: Boolean);
+begin
+MenuShrift(Sender, ACanvas, ARect, Selected);
+
+end;
+
+procedure Tcc_Buyers.DBGrid1DblClick(Sender: TObject);
+begin
+  ToolBtnEdit.Click;
+end;
+
+procedure Tcc_Buyers.ToolButton1Click(Sender: TObject);
+begin
+  if not Assigned(CC_FormRepairing) then CC_FormRepairing:=  TCC_FormRepairing.Create(Self);
+  CC_FormRepairing.ShowModal;
+end;
+
+procedure Tcc_Buyers.passnumberChange(Sender: TObject);
+begin
+{if Editname.Text<>'' then
+   DataMod_Buyers.ODSBuyers.Locate
+   ('byr_name',Editname.Text,[loCaseInsensitive, loPartialKey]);
+     DBGrid1.Options:=[dgRowSelect,dgAlwaysShowEditor,dgTitles,dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs,dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit, dgMultiSelect];
+ With DataMod_Buyers.Accno do begin
+close;
+SQL.Clear;
+SQL.Add('Select * from accno where ownid='''+buyerid.Text+'''');
+Open; }
+
+{with DataMod_Buyers.CC_Flat do begin
+Close;
+   SQL.clear;
+Sql.add('Select * from cc_buyer_flats where buyer='''+buyerid.text+''' ');
+Open;
+
+end;
+  end; }   END;
+procedure Tcc_Buyers.EditpassseriyaChange(Sender: TObject);
+begin
+{if Editpassseriya.Text<>'' then
+   DataMod_Buyers.ODSBuyers.Locate
+   ('passport',Editpassseriya.Text,[loCaseInsensitive, loPartialKey]);
+     DBGrid1.Options:=[dgRowSelect,dgAlwaysShowEditor,dgTitles,dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs,dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit, dgMultiSelect];
+ With DataMod_Buyers.Accno do begin
+close;
+SQL.Clear;
+SQL.Add('Select * from accno where ownid='''+buyerid.Text+'''');
+Open;
+
+with DataMod_Buyers.CC_Flat do begin
+Close;
+   SQL.clear;
+Sql.add('Select * from cc_buyer_flats where buyer='''+buyerid.text+''' ');
+Open;
+
+end;
+         END;}
+         end;
+procedure Tcc_Buyers.EditpasportChange(Sender: TObject);
+begin
+{if Editpasport.Text<>'' then
+   DataMod_Buyers.ODSBuyers.Locate
+   ('passp_number',Editpasport.Text,[loCaseInsensitive, loPartialKey]);
+     DBGrid1.Options:=[dgRowSelect,dgAlwaysShowEditor,dgTitles,dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs,dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit, dgMultiSelect];
+ With DataMod_Buyers.Accno do begin
+close;
+SQL.Clear;
+SQL.Add('Select * from accno where ownid='''+buyerid.Text+'''');
+Open;
+
+with DataMod_Buyers.CC_Flat do begin
+Close;
+   SQL.clear;
+Sql.add('Select * from cc_buyer_flats where buyer='''+buyerid.text+''' ');
+Open;
+end;
+         end;}
+           end;
+procedure Tcc_Buyers.EditbirthChange(Sender: TObject);
+begin
+{if Editbirth.Text<>'' then
+   DataMod_Buyers.ODSBuyers.Locate
+   ('birthdate',Editbirth.Text,[loCaseInsensitive, loPartialKey]);
+     DBGrid1.Options:=[dgRowSelect,dgAlwaysShowEditor,dgTitles,dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs,dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit, dgMultiSelect];
+With DataMod_Buyers.Accno do begin
+close;
+SQL.Clear;
+SQL.Add('Select * from accno where ownid='''+buyerid.Text+'''');
+Open;
+
+with DataMod_Buyers.CC_Flat do begin
+Close;
+   SQL.clear;
+Sql.add('Select * from cc_buyer_flats where buyer='''+buyerid.text+''' ');
+Open;
+end;
+         end;}
+         end;
+procedure Tcc_Buyers.EditSexChange(Sender: TObject);
+begin
+{if Editsex.Text<>'' then
+   DataMod_Buyers.ODSBuyers.Locate
+   ('sex_status',Editsex.Text,[loCaseInsensitive, loPartialKey]);
+     DBGrid1.Options:=[dgRowSelect,dgAlwaysShowEditor,dgTitles,dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs,dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit, dgMultiSelect];
+With DataMod_Buyers.Accno do begin
+close;
+SQL.Clear;
+SQL.Add('Select * from accno where ownid='''+buyerid.Text+'''');
+Open;
+
+with DataMod_Buyers.CC_Flat do begin
+Close;
+   SQL.clear;
+Sql.add('Select * from cc_buyer_flats where buyer='''+buyerid.text+''' ');
+Open;
+end;
+         end;}
+         end;
+procedure Tcc_Buyers.EditWorkplaceChange(Sender: TObject);
+begin
+{if EditWorkplace.Text<>'' then
+   DataMod_Buyers.ODSBuyers.Locate
+   ('workplace',EditWorkplace.Text,[loCaseInsensitive, loPartialKey]);
+     DBGrid1.Options:=[dgRowSelect,dgAlwaysShowEditor,dgTitles,dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs,dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit, dgMultiSelect];
+With DataMod_Buyers.Accno do begin
+close;
+SQL.Clear;
+SQL.Add('Select * from accno where ownid='''+buyerid.Text+'''');
+Open;
+
+with DataMod_Buyers.CC_Flat do begin
+Close;
+   SQL.clear;
+Sql.add('Select * from cc_buyer_flats where buyer='''+buyerid.text+''' ');
+Open;
+end;
+         end;
+ }
+         end;
+procedure Tcc_Buyers.EditnameExit(Sender: TObject);
+begin
+(Sender as Tedit).Text :='';
+end;
+
+procedure Tcc_Buyers.EditpassseriyaExit(Sender: TObject);
+begin
+(Sender as Tedit).Text :='';
+end;
+
+procedure Tcc_Buyers.EditDateExit(Sender: TObject);
+begin
+(Sender as Tedit).Text :='';
+end;
+
+procedure Tcc_Buyers.EditpasportExit(Sender: TObject);
+begin
+(Sender as Tedit).Text :='';
+end;
+
+procedure Tcc_Buyers.EditbirthExit(Sender: TObject);
+begin
+(Sender as Tedit).Text :='';
+end;
+
+procedure Tcc_Buyers.EditSexExit(Sender: TObject);
+begin
+(Sender as Tedit).Text :='';
+end;
+
+procedure Tcc_Buyers.EditadressExit(Sender: TObject);
+begin
+(Sender as Tedit).Text :='';
+end;
+
+procedure Tcc_Buyers.EditworkplaceExit(Sender: TObject);
+begin
+(Sender as Tedit).Text :='';
+end;
+
+procedure Tcc_Buyers.EditwageExit(Sender: TObject);
+begin
+(Sender as Tedit).Text :='';
+end;
+
+procedure Tcc_Buyers.EditnameChange(Sender: TObject);
+begin
+{if Editname.Text<>'' then
+   DataMod_Buyers.ODSBuyers.Locate
+   ('byr_name',editname.Text,[loCaseInsensitive, loPartialKey]);
+     DBGrid1.Options:=[dgRowSelect,dgAlwaysShowEditor,dgTitles,dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs,dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit, dgMultiSelect];
+ With DataMod_Buyers.Accno do begin
+close;
+SQL.Clear;
+SQL.Add('Select * from accno where ownid='''+buyerid.Text+'''');
+Open;
+
+with DataMod_Buyers.CC_Flat do begin
+Close;
+   SQL.clear;
+Sql.add('Select * from cc_flat where buyer='''+buyerid.text+''' ');
+Open;
+
+end;
+  end;     }
+   end;
+procedure Tcc_Buyers.EditwageChange(Sender: TObject);
+begin
+{if Editwage.Text<>'' then
+   DataMod_Buyers.ODSBuyers.Locate
+   ('wage',Editwage.Text,[loCaseInsensitive, loPartialKey]);
+     DBGrid1.Options:=[dgRowSelect,dgAlwaysShowEditor,dgTitles,dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs,dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit, dgMultiSelect];
+With DataMod_Buyers.Accno do begin
+close;
+SQL.Clear;
+SQL.Add('Select * from accno where ownid='''+buyerid.Text+'''');
+Open;
+
+with DataMod_Buyers.CC_Flat do begin
+Close;
+   SQL.clear;
+Sql.add('Select * from cc_buyer_flats where buyer='''+buyerid.text+''' ');
+Open;
+end;
+
+end; }
+         end;
+procedure Tcc_Buyers.EditphoneChange(Sender: TObject);
+begin
+{if Editphone.Text<>'' then
+   DataMod_Buyers.ODSBuyers.Locate
+   ('phone',Editphone.Text,[loCaseInsensitive, loPartialKey]);
+     DBGrid1.Options:=[dgRowSelect,dgAlwaysShowEditor,dgTitles,dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs,dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit, dgMultiSelect];
+With DataMod_Buyers.Accno do begin
+close;
+SQL.Clear;
+SQL.Add('Select * from accno where ownid='''+buyerid.Text+'''');
+Open;
+
+end;}
+
+end;
+
+procedure Tcc_Buyers.N8Click(Sender: TObject);
+begin
+DatModConstr :=TDatModConstr.Create(Self);
+FrmContract :=TFrmContract.Create(Self);
+ with DatModConstr,FrmContract do
+   begin
+      with CreditPurpose do begin
+           if Active then CloseAll;
+           SetVariable('CRDID',0);
+           Open;
+           FieldByname('INTERESTRATE').AsFloat := 0;
+           Insert;
+      end;
+      BranchCBEh.KeyValue := 0;
+      DBLookupComboboxEh5.KeyValue := 0;
+      DTPOpenDate.Date := Date;
+      DTPCloseDate.Date:=IncMonth(Date,180);
+      //DBEdit6.DataSource.DataSet.FieldByName('INTERESTRATE').AsFloat:=0;
+      DBEdit7.DataSource.DataSet.FieldByName('INITIALAMOUNT').AsFloat:=0;
+        
+      ShowModal;
+   end;
+
+end;
+
+procedure Tcc_Buyers.N9Click(Sender: TObject);
+begin
+DataMod_Buyers.Country.Open;
+FormAddBuyers:= TFormAddBuyers.Create(Self);
+FormAddBuyers.AddUpd.Text:='1';
+FormAddBuyers.ShowModal;
+end;
+
+procedure Tcc_Buyers.N10Click(Sender: TObject);
+begin
+DataMod_Buyers.Country.Open;
+FormAddBuyers:= TFormAddBuyers.Create(Self);
+FormAddBuyers.AddUpd.Text:='2';
+FormAddBuyers.ShowModal;
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    Tcc_Buyers,
+    Class_cc_Buyers,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.
+

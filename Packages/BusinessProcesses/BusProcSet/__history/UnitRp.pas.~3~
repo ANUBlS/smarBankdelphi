@@ -1,0 +1,63 @@
+unit UnitRp;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, Grids,DB, DBGrids, ExtCtrls;
+
+type
+  TFrmReport = class(TForm)
+    GridAccount1: TDBGrid;
+    Panel1: TPanel;
+    Edit1: TEdit;
+    Edit2: TEdit;
+    procedure GridAccount1DblClick(Sender: TObject);
+    procedure Edit1Change(Sender: TObject);
+    procedure Edit2Change(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    v_id :integer;
+    { Public declarations }
+  end;
+
+var
+  FrmReport: TFrmReport;
+
+implementation
+  uses  BusinessProcessSetupImpl, DMBusProcSetimpl;
+{$R *.dfm}
+
+procedure TFrmReport.Edit1Change(Sender: TObject);
+begin
+  if Edit1.Text <> '' then
+ // begin
+    DMBusProcSet.ODS_Report.SQL[2] := ' where id like (''%' +
+      Edit1.Text + '%'')'
+ // ShowMessage(OracleDataSet9.SQL.Text);
+ // end
+  else
+    DMBusProcSet.ODS_Report.SQL[2] := '';
+   DMBusProcSet.ODS_Report.Refresh;
+end;
+
+procedure TFrmReport.Edit2Change(Sender: TObject);
+begin
+   if Edit2.Text <> '' then
+     DMBusProcSet.ODS_Report.SQL[3] := ' where name like (''%' +
+      Edit2.Text + '%'')'
+   else
+    DMBusProcSet.ODS_Report.SQL[3] := '';
+     DMBusProcSet.ODS_Report.Refresh;
+
+
+end;
+
+procedure TFrmReport.GridAccount1DblClick(Sender: TObject);
+begin
+  v_id := DMBusProcSet.ODS_Reportid.AsInteger;
+  FrmReport.Close;
+end;
+
+end.

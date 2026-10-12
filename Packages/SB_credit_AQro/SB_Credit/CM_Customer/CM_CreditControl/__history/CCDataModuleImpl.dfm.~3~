@@ -1,0 +1,184 @@
+object CCDataMod: TCCDataMod
+  OldCreateOrder = False
+  Height = 480
+  Width = 696
+  object CM_CREDIT: TOraclePackage
+    PackageName = 'CM_CREDIT'
+    ParameterMode = pmNamed
+    Cursor = crHourGlass
+    Left = 32
+    Top = 24
+  end
+  object Accounts: TOracleDataSet
+    SQL.Strings = (
+      'SELECT p.boorowerid,'
+      '       b.name,'
+      '       a.creditid, '
+      '       a.booroweraccid, '
+      '       a.loanaccid, '
+      '       a.dueloanaccid,'
+      '       a.interestaccid, '
+      '       a.dueinterestaccid, '
+      '       a.primaryreserveaccid,'
+      '       a.secondaryreserveaccid,'
+      '       cm_common.AccountNumber_Get(loanaccid) as LoanAccno,'
+      
+        '       cm_common.AccountNumber_Get(booroweraccid) as BoorowerAcc' +
+        'no,'
+      
+        '       cm_common.AccountNumber_Get(interestaccid) as InterestAcc' +
+        'no,'
+      
+        '       cm_common.AccountNumber_Get(dueloanaccid) as DueloanAccno' +
+        ','
+      
+        '       cm_common.AccountNumber_Get(primaryreserveaccid) as Prima' +
+        'ryresAccno,'
+      
+        '       cm_common.AccountNumber_Get(dueinterestaccid) as Dueinter' +
+        'estAccno,'
+      
+        '       cm_common.AccountNumber_Get(secondaryreserveaccid) as Sec' +
+        'ondaryresAccno,'
+      '       cm_common.AccountRest_Get(booroweraccid) as BoorowerRest,'
+      '      cm_common.AccountRest_Get(loanaccid) as LoanRest,'
+      '      cm_common.AccountRest_Get(interestaccid) as interestRest,'
+      '      cm_common.AccountRest_Get(dueloanaccid) as dueloanRest,'
+      
+        '      cm_common.AccountRest_Get(primaryreserveaccid) as primaryr' +
+        'esRest,'
+      
+        '      cm_common.AccountRest_Get(dueinterestaccid) as dueinterest' +
+        'Rest,'
+      
+        '      cm_common.AccountRest_Get(secondaryreserveaccid) as second' +
+        'aryresRest'
+      '  FROM cm_accounts a,'
+      '       cm_boorowerinfo b,'
+      '       cm_portfolio p'
+      'where a.creditid = :CrdID'
+      'and  b.creditid  = :CrdID'
+      'and p.id = :Crdid')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000C0000003A00430052004400490044000300000000000000
+      00000000}
+    QBEDefinition.QBEFieldDefs = {
+      05000000180000001400000042004F004F0052004F0057004500520049004400
+      010000000000080000004E0041004D0045000100000000001000000043005200
+      4500440049005400490044000100000000001A00000042004F004F0052004F00
+      57004500520041004300430049004400010000000000120000004C004F004100
+      4E0041004300430049004400010000000000180000004400550045004C004F00
+      41004E00410043004300490044000100000000001A00000049004E0054004500
+      5200450053005400410043004300490044000100000000002000000044005500
+      450049004E005400450052004500530054004100430043004900440001000000
+      0000260000005000520049004D00410052005900520045005300450052005600
+      4500410043004300490044000100000000002A0000005300450043004F004E00
+      4400410052005900520045005300450052005600450041004300430049004400
+      010000000000120000004C004F0041004E004100430043004E004F0001000000
+      00001A00000042004F004F0052004F005700450052004100430043004E004F00
+      0100000000001A00000049004E00540045005200450053005400410043004300
+      4E004F00010000000000180000004400550045004C004F0041004E0041004300
+      43004E004F000100000000001E0000005000520049004D004100520059005200
+      450053004100430043004E004F00010000000000200000004400550045004900
+      4E005400450052004500530054004100430043004E004F000100000000002200
+      00005300450043004F004E004400410052005900520045005300410043004300
+      4E004F000100000000001800000042004F004F0052004F005700450052005200
+      450053005400010000000000100000004C004F0041004E005200450053005400
+      0100000000001800000049004E00540045005200450053005400520045005300
+      5400010000000000160000004400550045004C004F0041004E00520045005300
+      54000100000000001C0000005000520049004D00410052005900520045005300
+      52004500530054000100000000001E00000044005500450049004E0054004500
+      5200450053005400520045005300540001000000000020000000530045004300
+      4F004E0044004100520059005200450053005200450053005400010000000000}
+    Left = 120
+    Top = 24
+    object AccountsCREDITID: TFloatField
+      FieldName = 'CREDITID'
+      Required = True
+    end
+    object AccountsBOOROWERACCID: TFloatField
+      FieldName = 'BOOROWERACCID'
+    end
+    object AccountsLOANACCID: TFloatField
+      FieldName = 'LOANACCID'
+    end
+    object AccountsDUELOANACCID: TFloatField
+      FieldName = 'DUELOANACCID'
+    end
+    object AccountsINTERESTACCID: TFloatField
+      FieldName = 'INTERESTACCID'
+    end
+    object AccountsDUEINTERESTACCID: TFloatField
+      FieldName = 'DUEINTERESTACCID'
+    end
+    object AccountsPRIMARYRESERVEACCID: TFloatField
+      FieldName = 'PRIMARYRESERVEACCID'
+    end
+    object AccountsSECONDARYRESERVEACCID: TFloatField
+      FieldName = 'SECONDARYRESERVEACCID'
+    end
+    object AccountsLOANACCNO: TWideStringField
+      FieldName = 'LOANACCNO'
+      Size = 4000
+    end
+    object AccountsBOOROWERACCNO: TWideStringField
+      FieldName = 'BOOROWERACCNO'
+      Size = 4000
+    end
+    object AccountsINTERESTACCNO: TWideStringField
+      FieldName = 'INTERESTACCNO'
+      Size = 4000
+    end
+    object AccountsDUELOANACCNO: TWideStringField
+      FieldName = 'DUELOANACCNO'
+      Size = 4000
+    end
+    object AccountsPRIMARYRESACCNO: TWideStringField
+      FieldName = 'PRIMARYRESACCNO'
+      Size = 4000
+    end
+    object AccountsDUEINTERESTACCNO: TWideStringField
+      FieldName = 'DUEINTERESTACCNO'
+      Size = 4000
+    end
+    object AccountsSECONDARYRESACCNO: TWideStringField
+      FieldName = 'SECONDARYRESACCNO'
+      Size = 4000
+    end
+    object AccountsBOOROWERREST: TFloatField
+      FieldName = 'BOOROWERREST'
+    end
+    object AccountsLOANREST: TFloatField
+      FieldName = 'LOANREST'
+    end
+    object AccountsINTERESTREST: TFloatField
+      FieldName = 'INTERESTREST'
+    end
+    object AccountsDUELOANREST: TFloatField
+      FieldName = 'DUELOANREST'
+    end
+    object AccountsPRIMARYRESREST: TFloatField
+      FieldName = 'PRIMARYRESREST'
+    end
+    object AccountsDUEINTERESTREST: TFloatField
+      FieldName = 'DUEINTERESTREST'
+    end
+    object AccountsSECONDARYRESREST: TFloatField
+      FieldName = 'SECONDARYRESREST'
+    end
+    object AccountsNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 64
+    end
+    object AccountsBOOROWERID: TFloatField
+      FieldName = 'BOOROWERID'
+      Required = True
+    end
+  end
+  object AccountsDatSrc: TDataSource
+    DataSet = Accounts
+    Left = 32
+    Top = 88
+  end
+end

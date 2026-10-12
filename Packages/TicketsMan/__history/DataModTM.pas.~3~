@@ -1,0 +1,181 @@
+unit DataModTM;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, Oracle, OracleData;
+
+const
+  GridColors: array[1..5]of TColor=(clRed,clTeal,clGreen,clBlue,clPurple);
+
+type
+  TDataModuleTicketMan = class(TDataModule)
+    ODSTickets: TOracleDataSet;
+    Tickets: TDataSource;
+    ODSArchive: TOracleDataSet;
+    Archive: TDataSource;
+    ODSArchiveSTATUS: TFloatField;
+    ODSArchiveID: TFloatField;
+    ODSArchivePDATE: TDateTimeField;
+    ODSArchivePNUM: TFloatField;
+    ODSArchiveDBANKFILIAL: TFloatField;
+    ODSArchiveDBANKCODE: TStringField;
+    ODSArchiveDBANKNAME: TStringField;
+    ODSArchiveDBANKINN: TStringField;
+    ODSArchiveDBANKSWIFT: TStringField;
+    ODSArchiveDBANKKACC: TStringField;
+    ODSArchiveDACC_NO: TStringField;
+    ODSArchiveDACCNAME: TStringField;
+    ODSArchiveDACCINN: TStringField;
+    ODSArchiveKBANKFILIAL: TFloatField;
+    ODSArchiveKBANKCODE: TStringField;
+    ODSArchiveKBANKNAME: TStringField;
+    ODSArchiveKBANKINN: TStringField;
+    ODSArchiveKBANKSWIFT: TStringField;
+    ODSArchiveKBANKKACC: TStringField;
+    ODSArchiveKBANKSUBKACC: TStringField;
+    ODSArchiveKACC_NO: TStringField;
+    ODSArchiveKACCNAME: TStringField;
+    ODSArchiveKACCINN: TStringField;
+    ODSArchiveAMMOUNT: TFloatField;
+    ODSArchiveDESCRIPTION: TStringField;
+    ODSArchiveINFORMATION: TStringField;
+    ODSArchiveTUSER: TStringField;
+    TM_MANAGE: TOraclePackage;
+    ODSAccount: TOracleDataSet;
+    Account: TDataSource;
+    ODSBankM: TOracleDataSet;
+    ODSBankMID: TFloatField;
+    BankM: TDataSource;
+    ODSBankMINN: TStringField;
+    ODSBankMSWIFT: TStringField;
+    ODSBankMBANKCODE: TStringField;
+    ODSBankMKRNO: TFloatField;
+    ODSBankMSUBKRNO: TStringField;
+    ODSAllTickets: TOracleDataSet;
+    AllTickets: TDataSource;
+    ODSAllTicketsID: TFloatField;
+    ODSAllTicketsPDATE: TDateTimeField;
+    ODSAllTicketsPNUM: TFloatField;
+    ODSAllTicketsDBANKFILIAL: TFloatField;
+    ODSAllTicketsDACC_NO: TStringField;
+    ODSAllTicketsDACCNAME: TStringField;
+    ODSAllTicketsDACCINN: TStringField;
+    ODSAllTicketsKBANKFILIAL: TFloatField;
+    ODSAllTicketsKACC_NO: TStringField;
+    ODSAllTicketsKACCNAME: TStringField;
+    ODSAllTicketsKACCINN: TStringField;
+    ODSAllTicketsAMMOUNT: TFloatField;
+    ODSAllTicketsDESCRIPTION: TStringField;
+    ODSAllTicketsINFORMATION: TStringField;
+    ODSAllTicketsUSERID: TFloatField;
+    ODSAllTicketsSTATUS: TFloatField;
+    ODSBankMBNAME: TStringField;
+    ODSforPrint: TOracleDataSet;
+    ODSSettings: TOracleDataSet;
+    ODSSettingsID: TFloatField;
+    ODSSettingsREPORTNAME: TStringField;
+    ODSSettingsLBLABEL: TStringField;
+    ODSSettingsLBTITLE: TStringField;
+    ODSSettingsLBDESCR: TStringField;
+    ODSSettingsLBBNUMB: TStringField;
+    Settings: TDataSource;
+    ODSforPrintSTATUS: TFloatField;
+    ODSforPrintID: TFloatField;
+    ODSforPrintPDATE: TDateTimeField;
+    ODSforPrintPNUM: TFloatField;
+    ODSforPrintDBANKFILIAL: TFloatField;
+    ODSforPrintDBANKCODE: TStringField;
+    ODSforPrintDBANKNAME: TStringField;
+    ODSforPrintDBANKINN: TStringField;
+    ODSforPrintDBANKSWIFT: TStringField;
+    ODSforPrintDBANKKACC: TStringField;
+    ODSforPrintDACC_NO: TStringField;
+    ODSforPrintDACCNAME: TStringField;
+    ODSforPrintDACCINN: TStringField;
+    ODSforPrintKBANKFILIAL: TFloatField;
+    ODSforPrintKBANKCODE: TStringField;
+    ODSforPrintKBANKNAME: TStringField;
+    ODSforPrintKBANKINN: TStringField;
+    ODSforPrintKBANKSWIFT: TStringField;
+    ODSforPrintKBANKKACC: TStringField;
+    ODSforPrintKBANKSUBKACC: TStringField;
+    ODSforPrintKACC_NO: TStringField;
+    ODSforPrintKACCNAME: TStringField;
+    ODSforPrintKACCINN: TStringField;
+    ODSforPrintAMMOUNT: TFloatField;
+    ODSforPrintDESCRIPTION: TStringField;
+    ODSforPrintINFORMATION: TStringField;
+    ODSforPrintUSERID: TFloatField;
+    ODSforPrintTUSER: TStringField;
+    ODSSettingsFORMATDAT: TStringField;
+    ODSStatuses: TOracleDataSet;
+    Statuses: TDataSource;
+    ODSStatusesID: TFloatField;
+    ODSStatusesPRIVNAME: TStringField;
+    ODSStatusesPRIVDESC: TStringField;
+    ODSPaymentDecree: TOracleDataSet;
+    ODSAccountID: TFloatField;
+    ODSAccountNAME: TStringField;
+    ODSAccountACC_NO: TStringField;
+    ODSAccountINN: TStringField;
+    ChangeStat: TDataSource;
+    ODSTicketsID: TFloatField;
+    ODSTicketsPDATE: TDateTimeField;
+    ODSTicketsPNUM: TFloatField;
+    ODSTicketsDBANKFILIAL: TFloatField;
+    ODSTicketsDBANKCODE: TWideStringField;
+    ODSTicketsDBANKNAME: TWideStringField;
+    ODSTicketsDBANKINN: TWideStringField;
+    ODSTicketsDBANKSWIFT: TWideStringField;
+    ODSTicketsDBANKKACC: TWideStringField;
+    ODSTicketsDACC_NO: TWideStringField;
+    ODSTicketsDACCNAME: TWideStringField;
+    ODSTicketsDACCINN: TWideStringField;
+    ODSTicketsKBANKFILIAL: TFloatField;
+    ODSTicketsKBANKCODE: TWideStringField;
+    ODSTicketsKBANKNAME: TWideStringField;
+    ODSTicketsKBANKINN: TWideStringField;
+    ODSTicketsKBANKSWIFT: TWideStringField;
+    ODSTicketsKBANKKACC: TWideStringField;
+    ODSTicketsKBANKSUBKACC: TWideStringField;
+    ODSTicketsKACC_NO: TWideStringField;
+    ODSTicketsKACCNAME: TWideStringField;
+    ODSTicketsKACCINN: TWideStringField;
+    ODSTicketsAMMOUNT: TFloatField;
+    ODSTicketsDESCRIPTION: TWideStringField;
+    ODSTicketsINFORMATION: TWideStringField;
+    ODSTicketsUSERID: TFloatField;
+    ODSTicketsSTATUS: TFloatField;
+    ODSTicketsTICKTYPE: TFloatField;
+    ODSTicketsTUSER: TWideStringField;
+    procedure DataModuleCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  DataModuleTicketMan: TDataModuleTicketMan;
+
+implementation
+
+uses sboapiDataModuleImpl;
+
+{$R *.DFM}
+
+procedure TDataModuleTicketMan.DataModuleCreate(Sender: TObject);
+var
+  i: Integer;
+begin
+  for i:=0 to ComponentCount-1 do begin
+    if ((Components[i].Tag=0) and (Components[i] is TOracleDataSet)) then begin
+      (Components[i] as TOracleDataSet).Open;
+      (Components[i] as TOracleDataSet).First;
+    end;
+  end;
+end;
+
+end.

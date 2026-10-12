@@ -1,0 +1,1109 @@
+object AccountForm: TAccountForm
+  Left = 229
+  Top = 61
+  Width = 1453
+  Height = 647
+  Caption = 'Account'
+  Color = clBtnFace
+  Font.Charset = RUSSIAN_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  OnCreate = ActiveFormCreate
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 1453
+    Height = 45
+    Align = alTop
+    BevelInner = bvLowered
+    TabOrder = 0
+    object ToolBar1: TToolBar
+      Left = 2
+      Top = 2
+      Width = 1449
+      Height = 41
+      Align = alClient
+      ButtonHeight = 36
+      ButtonWidth = 80
+      Caption = 'ToolBar1'
+      DrawingStyle = dsGradient
+      EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
+      Images = ImageList
+      ShowCaptions = True
+      TabOrder = 0
+      object ToolButton2: TToolButton
+        Left = 0
+        Top = 0
+        Action = ActionRefresh
+        DropdownMenu = PopupMenu
+        Style = tbsDropDown
+      end
+      object ToolButton4: TToolButton
+        Left = 93
+        Top = 0
+        Action = ActionInsert
+      end
+      object ToolButton3: TToolButton
+        Left = 173
+        Top = 0
+        Action = ActionEdit
+        ImageIndex = 2
+      end
+      object ToolButton6: TToolButton
+        Left = 253
+        Top = 0
+        Action = ActionCloseAcc
+        ImageIndex = 3
+      end
+      object ButtonFilter: TToolButton
+        Left = 333
+        Top = 0
+        Action = ActionShowFilter
+        ImageIndex = 4
+        Style = tbsCheck
+      end
+      object ToolButton1: TToolButton
+        Left = 413
+        Top = 0
+        Action = ActionSearch
+        Down = True
+        ImageIndex = 5
+        Style = tbsCheck
+      end
+    end
+  end
+  object Panel2: TPanel
+    Left = 0
+    Top = 45
+    Width = 1453
+    Height = 602
+    Align = alClient
+    BevelOuter = bvNone
+    TabOrder = 1
+    object PanelSettings: TGroupBox
+      Left = 0
+      Top = 0
+      Width = 180
+      Height = 602
+      Align = alLeft
+      Caption = 'Se'#231'm'#601'l'#601'r'
+      TabOrder = 0
+      Visible = False
+      object Panel11: TPanel
+        Left = 2
+        Top = 15
+        Width = 176
+        Height = 21
+        Align = alTop
+        BevelInner = bvLowered
+        TabOrder = 0
+        object SpeedButton1: TSpeedButton
+          Left = 156
+          Top = 1
+          Width = 19
+          Height = 19
+          Caption = 'X'
+          Flat = True
+          OnClick = SpeedButton1Click
+        end
+      end
+      object GBAccountStatus: TRadioGroup
+        Left = 2
+        Top = 36
+        Width = 176
+        Height = 95
+        Align = alTop
+        Caption = 'Hesab'#305'n statusu'
+        ItemIndex = 1
+        Items.Strings = (
+          'B'#252't'#252'n hesablar'
+          'A'#231#305'q hesablar'
+          'Ba'#287'l'#305' hesablar')
+        TabOrder = 1
+        OnClick = GBAccountStatusClick
+      end
+      object GroupBox1: TGroupBox
+        Left = 2
+        Top = 296
+        Width = 176
+        Height = 55
+        Align = alTop
+        Caption = 'Hesab n'#246'v'#252
+        TabOrder = 2
+        object DBLookupTipacc: TDBLookupComboBox
+          Left = 8
+          Top = 20
+          Width = 163
+          Height = 21
+          Enabled = False
+          KeyField = 'SYMBOL'
+          ListField = 'NAME'
+          ListSource = AccDataModule.AccFlagsData
+          TabOrder = 0
+          OnClick = GBAccountStatusClick
+        end
+        object CbAccType: TCheckBox
+          Left = 148
+          Top = 0
+          Width = 14
+          Height = 17
+          TabOrder = 1
+          OnClick = CbAccTypeClick
+        end
+      end
+      object GroupBox3: TGroupBox
+        Left = 2
+        Top = 131
+        Width = 176
+        Height = 55
+        Align = alTop
+        Caption = 'Filial'
+        TabOrder = 3
+        object DBLookupBranch: TDBLookupComboBox
+          Left = 8
+          Top = 20
+          Width = 163
+          Height = 21
+          Enabled = False
+          KeyField = 'ID'
+          ListField = 'NAME'
+          ListSource = AccDataModule.BranchesData
+          TabOrder = 0
+          OnClick = GBAccountStatusClick
+        end
+        object CBFilial: TCheckBox
+          Left = 148
+          Top = 0
+          Width = 14
+          Height = 17
+          TabOrder = 1
+          OnClick = CBFilialClick
+        end
+      end
+      object GroupBox4: TGroupBox
+        Left = 2
+        Top = 186
+        Width = 176
+        Height = 55
+        Align = alTop
+        Caption = 'Valyuta'
+        TabOrder = 4
+        object DBLookupCurrency: TDBLookupComboBox
+          Left = 8
+          Top = 20
+          Width = 163
+          Height = 21
+          Enabled = False
+          KeyField = 'VALUTE'
+          ListField = 'VALU_NAME'
+          ListSource = AccDataModule.CurrencyData
+          TabOrder = 0
+          OnClick = GBAccountStatusClick
+        end
+        object CBValyuta: TCheckBox
+          Left = 148
+          Top = 0
+          Width = 14
+          Height = 17
+          TabOrder = 1
+          OnClick = CBValyutaClick
+        end
+      end
+      object GroupBox5: TGroupBox
+        Left = 2
+        Top = 241
+        Width = 176
+        Height = 55
+        Align = alTop
+        Caption = #304'stifad'#601#231'i'
+        TabOrder = 5
+        object DBLookupOperator: TDBLookupComboBox
+          Left = 8
+          Top = 20
+          Width = 163
+          Height = 21
+          Enabled = False
+          KeyField = 'ID'
+          ListField = 'NAME'
+          ListSource = AccDataModule.UsersData
+          TabOrder = 0
+          OnClick = GBAccountStatusClick
+        end
+        object CBUser: TCheckBox
+          Left = 148
+          Top = 0
+          Width = 14
+          Height = 17
+          TabOrder = 1
+          OnClick = CBUserClick
+        end
+      end
+      object GroupBox6: TGroupBox
+        Left = 2
+        Top = 351
+        Width = 176
+        Height = 55
+        Align = alTop
+        Caption = 'Balans hesab'#305
+        TabOrder = 6
+        object DBLookupBalance: TDBLookupComboBox
+          Left = 8
+          Top = 20
+          Width = 163
+          Height = 21
+          Enabled = False
+          KeyField = 'BAL_CN'
+          ListField = 'BAL_CN'
+          ListSource = AccDataModule.BalAccData
+          TabOrder = 0
+          OnClick = GBAccountStatusClick
+        end
+        object CBBal_Cn: TCheckBox
+          Left = 148
+          Top = -3
+          Width = 14
+          Height = 17
+          TabOrder = 1
+          OnClick = CBBal_CnClick
+        end
+      end
+      object Panel6: TPanel
+        Left = 2
+        Top = 579
+        Width = 176
+        Height = 21
+        Align = alBottom
+        BevelInner = bvLowered
+        TabOrder = 7
+        object Label5: TLabel
+          Left = 7
+          Top = 4
+          Width = 139
+          Height = 13
+          Caption = 'Filteri ilkin v'#601'ziyy'#601'tin'#601' qaytar'
+        end
+        object SpeedButton2: TSpeedButton
+          Left = 156
+          Top = 1
+          Width = 19
+          Height = 19
+          Flat = True
+          Glyph.Data = {
+            36050000424D3605000000000000360400002800000010000000100000000100
+            0800000000000001000000000000000000000001000000000000000000000000
+            80000080000000808000800000008000800080800000C0C0C000C0DCC000F0CA
+            A600000000000000000000000000000000000000000000000000000000000000
+            0000000000000000000000000000000000000000000000000000000000000000
+            0000000000000000000000000000000000000000000000000000000000000000
+            0000000000000000000000000000000000000000000000000000000000000000
+            0000000000000000000000000000000000000000000000000000000000000000
+            0000000000000000000000000000000000000000000000000000000000000000
+            0000000000000000000000000000000000000000000000000000000000000000
+            0000000000000000000000000000000000000000000000000000000000000000
+            0000000000000000000000000000000000000000000000000000000000000000
+            0000000000000000000000000000000000000000000000000000000000000000
+            0000000000000000000000000000000000000000000000000000000000000000
+            0000000000000000000000000000000000000000000000000000000000000000
+            0000000000000000000000000000000000000000000000000000000000000000
+            0000000000000000000000000000000000000000000000000000000000000000
+            0000000000000000000000000000000000000000000000000000000000000000
+            0000000000000000000000000000000000000000000000000000000000000000
+            0000000000000000000000000000000000000000000000000000000000000000
+            0000000000000000000000000000000000000000000000000000000000000000
+            0000000000000000000000000000000000000000000000000000000000000000
+            0000000000000000000000000000000000000000000000000000000000000000
+            0000000000000000000000000000000000000000000000000000000000000000
+            0000000000000000000000000000000000000000000000000000000000000000
+            0000000000000000000000000000000000000000000000000000000000000000
+            0000000000000000000000000000000000000000000000000000000000000000
+            0000000000000000000000000000000000000000000000000000000000000000
+            0000000000000000000000000000000000000000000000000000000000000000
+            0000000000000000000000000000000000000000000000000000000000000000
+            0000000000000000000000000000000000000000000000000000000000000000
+            0000000000000000000000000000000000000000000000000000000000000000
+            000000000000000000000000000000000000F0FBFF00A4A0A000808080000000
+            FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00FFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF804F8FFFFFFFFFFFFFFFFFFFFFFF804
+            04F8FFFFFFFFFFFFFFFFFFFFFFFF0404F8FFFFFFFFFFFFFFFFFFFFFFFFF804F8
+            FFFFFFFFFFFFFFFFFFFFFFFFFF0404FFFFFFFFFFFFFFFFFFFFFFFFFFFF0404FF
+            FFFF0404040404FFFFFFFFFFFF0404F8FFFFFFF8040404FFFFFFFFFFFFF80404
+            F8FFF804040404FFFFFFFFFFFFFF04040404040404F804FFFFFFFFFFFFFFFFF8
+            040404F8FFFF04FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF}
+          OnClick = SpeedButton2Click
+        end
+      end
+      object GroupBox7: TGroupBox
+        Left = 2
+        Top = 406
+        Width = 176
+        Height = 55
+        Align = alTop
+        Caption = 'Hesabat simvolu'
+        TabOrder = 8
+        object ChBoxSimOtcet: TCheckBox
+          Left = 148
+          Top = 0
+          Width = 14
+          Height = 17
+          TabOrder = 0
+          OnClick = ChBoxSimOtcetClick
+        end
+        object DBLookupCBoxSimOtcet: TDBLookupComboBox
+          Left = 9
+          Top = 23
+          Width = 163
+          Height = 21
+          Enabled = False
+          KeyField = 'KOD'
+          ListField = 'NAME'
+          ListSource = AccDataModule.ReportSymbolData
+          TabOrder = 1
+          OnClick = GBAccountStatusClick
+        end
+      end
+      object GroupBox8: TGroupBox
+        Left = 2
+        Top = 461
+        Width = 176
+        Height = 55
+        Align = alTop
+        Caption = 'M'#252#351't'#601'ri '#304'D-si'
+        TabOrder = 9
+        object CheckBoxCust: TCheckBox
+          Left = 148
+          Top = 1
+          Width = 14
+          Height = 17
+          TabOrder = 0
+          OnClick = CheckBoxCustClick
+        end
+        object EditCust: TEdit
+          Left = 8
+          Top = 23
+          Width = 163
+          Height = 21
+          Enabled = False
+          TabOrder = 1
+          Text = '-1'
+          OnChange = EditCustChange
+        end
+      end
+    end
+    object GroupBox2: TGroupBox
+      Left = 180
+      Top = 0
+      Width = 1273
+      Height = 602
+      Align = alClient
+      Caption = 'Hesablar'
+      TabOrder = 1
+      object GridAccount: TDBGrid
+        Left = 2
+        Top = 15
+        Width = 1269
+        Height = 504
+        Align = alClient
+        Color = clBtnFace
+        DataSource = AccDataModule.AccountData
+        DrawingStyle = gdsGradient
+        FixedColor = clActiveCaption
+        GradientEndColor = clNavy
+        Options = [dgTitles, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit, dgTitleClick]
+        PopupMenu = PopupMenuMain
+        TabOrder = 0
+        TitleFont.Charset = RUSSIAN_CHARSET
+        TitleFont.Color = clWindowText
+        TitleFont.Height = -11
+        TitleFont.Name = 'Tahoma'
+        TitleFont.Style = []
+        OnDblClick = ActionEditExecute
+        OnTitleClick = GridAccountTitleClick
+        Columns = <
+          item
+            Color = clSilver
+            Expanded = False
+            FieldName = 'ACC_NO'
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clNavy
+            Font.Height = -11
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = []
+            Title.Caption = 'Hesab #'
+            Title.Color = clNavy
+            Title.Font.Charset = RUSSIAN_CHARSET
+            Title.Font.Color = clWhite
+            Title.Font.Height = -11
+            Title.Font.Name = 'Tahoma'
+            Title.Font.Style = []
+            Width = 190
+            Visible = True
+          end
+          item
+            Color = clWindow
+            Expanded = False
+            FieldName = 'BAL_CN1'
+            Title.Alignment = taRightJustify
+            Title.Caption = 'Balans#'
+            Title.Color = clNavy
+            Title.Font.Charset = RUSSIAN_CHARSET
+            Title.Font.Color = clWhite
+            Title.Font.Height = -11
+            Title.Font.Name = 'Tahoma'
+            Title.Font.Style = []
+            Width = 44
+            Visible = True
+          end
+          item
+            Alignment = taCenter
+            Color = clSilver
+            Expanded = False
+            FieldName = 'CURRENCYNAME'
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clNavy
+            Font.Height = -11
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = []
+            Title.Alignment = taCenter
+            Title.Caption = '$'
+            Title.Color = clNavy
+            Title.Font.Charset = RUSSIAN_CHARSET
+            Title.Font.Color = clWhite
+            Title.Font.Height = -11
+            Title.Font.Name = 'Tahoma'
+            Title.Font.Style = []
+            Width = 30
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'KLI_ID'
+            Title.Caption = 'M'#252#351't'#601'ri kodu'
+            Title.Color = clNavy
+            Title.Font.Charset = RUSSIAN_CHARSET
+            Title.Font.Color = clWhite
+            Title.Font.Height = -11
+            Title.Font.Name = 'Tahoma'
+            Title.Font.Style = []
+            Width = 48
+            Visible = True
+          end
+          item
+            Color = clWindow
+            Expanded = False
+            FieldName = 'NAME'
+            Title.Caption = 'Hesab'#305'n ad'#305
+            Title.Color = clNavy
+            Title.Font.Charset = RUSSIAN_CHARSET
+            Title.Font.Color = clWhite
+            Title.Font.Height = -11
+            Title.Font.Name = 'Tahoma'
+            Title.Font.Style = []
+            Width = 250
+            Visible = True
+          end
+          item
+            Color = clWindow
+            Expanded = False
+            FieldName = 'OPEN_DAT'
+            Title.Caption = 'A'#231#305'lma tarixi'
+            Title.Color = clNavy
+            Title.Font.Charset = RUSSIAN_CHARSET
+            Title.Font.Color = clWhite
+            Title.Font.Height = -11
+            Title.Font.Name = 'Tahoma'
+            Title.Font.Style = []
+            Width = 62
+            Visible = True
+          end
+          item
+            Color = clWindow
+            Expanded = False
+            FieldName = 'CLOSE_DAT'
+            Title.Caption = 'Ba'#287'lanma tarixi'
+            Title.Color = clNavy
+            Title.Font.Charset = RUSSIAN_CHARSET
+            Title.Font.Color = clWhite
+            Title.Font.Height = -11
+            Title.Font.Name = 'Tahoma'
+            Title.Font.Style = []
+            Width = 62
+            Visible = True
+          end
+          item
+            Color = clWindow
+            Expanded = False
+            FieldName = 'SIM_OTCET'
+            Title.Caption = 'Hesabat simvolu'
+            Title.Color = clNavy
+            Title.Font.Charset = RUSSIAN_CHARSET
+            Title.Font.Color = clWhite
+            Title.Font.Height = -11
+            Title.Font.Name = 'Tahoma'
+            Title.Font.Style = []
+            Width = 40
+            Visible = True
+          end
+          item
+            Color = clWindow
+            Expanded = False
+            FieldName = 'BAL_CN2'
+            Title.Caption = 'Kohne Balans/H'
+            Title.Font.Charset = RUSSIAN_CHARSET
+            Title.Font.Color = clWhite
+            Title.Font.Height = -11
+            Title.Font.Name = 'Tahoma'
+            Title.Font.Style = []
+            Width = 50
+            Visible = True
+          end
+          item
+            Color = clWindow
+            Expanded = False
+            FieldName = 'USERINSERT'
+            Title.Caption = 'Daxil ed'#601'n'
+            Title.Font.Charset = RUSSIAN_CHARSET
+            Title.Font.Color = clWhite
+            Title.Font.Height = -11
+            Title.Font.Name = 'Tahoma'
+            Title.Font.Style = []
+            Width = 100
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'OLD_ACC_NO'
+            Title.Caption = 'Hesab # ('#601'vv'#601'lki)'
+            Title.Font.Charset = RUSSIAN_CHARSET
+            Title.Font.Color = clWhite
+            Title.Font.Height = -11
+            Title.Font.Name = 'Tahoma'
+            Title.Font.Style = []
+            Width = 190
+            Visible = True
+          end>
+      end
+      object Panel3: TPanel
+        Left = 2
+        Top = 574
+        Width = 1269
+        Height = 26
+        Align = alBottom
+        BevelInner = bvLowered
+        BevelOuter = bvNone
+        TabOrder = 1
+        object Panel4: TPanel
+          Left = 369
+          Top = 1
+          Width = 422
+          Height = 24
+          Align = alLeft
+          BevelInner = bvLowered
+          TabOrder = 0
+          object Label1: TLabel
+            Left = 6
+            Top = 5
+            Width = 51
+            Height = 13
+            Caption = 'Plan. Qal'#305'q'
+          end
+          object Label2: TLabel
+            Left = 211
+            Top = 5
+            Width = 76
+            Height = 13
+            Caption = 'Plan. Ekvivalent'
+          end
+          object DBEdit1: TDBEdit
+            Left = 69
+            Top = 1
+            Width = 121
+            Height = 22
+            Color = clSilver
+            DataField = 'OSTAT'
+            DataSource = AccDataModule.DataLazyrest
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = [fsBold]
+            ParentFont = False
+            TabOrder = 0
+          end
+          object DBEdit2: TDBEdit
+            Left = 294
+            Top = 1
+            Width = 127
+            Height = 22
+            Color = clSilver
+            DataField = 'POK_OSTAT'
+            DataSource = AccDataModule.DataLazyrest
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = [fsBold]
+            ParentFont = False
+            TabOrder = 1
+          end
+        end
+        object Panel5: TPanel
+          Left = 1
+          Top = 1
+          Width = 368
+          Height = 24
+          Align = alLeft
+          BevelInner = bvLowered
+          TabOrder = 1
+          DesignSize = (
+            368
+            24)
+          object Label3: TLabel
+            Left = 6
+            Top = 5
+            Width = 24
+            Height = 13
+            Caption = 'Qal'#305'q'
+          end
+          object Label4: TLabel
+            Left = 184
+            Top = 5
+            Width = 49
+            Height = 13
+            Caption = 'Ekvivalent'
+          end
+          object DBEdit3: TDBEdit
+            Left = 44
+            Top = 1
+            Width = 121
+            Height = 22
+            Color = clSilver
+            DataField = 'OSTAT'
+            DataSource = AccDataModule.DataTenostat
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = [fsBold]
+            ParentFont = False
+            TabOrder = 0
+          end
+          object DBEdit4: TDBEdit
+            Left = 240
+            Top = 1
+            Width = 127
+            Height = 22
+            Anchors = [akTop, akRight]
+            Color = clSilver
+            DataField = 'POK_OSTAT'
+            DataSource = AccDataModule.DataTenostat
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = [fsBold]
+            ParentFont = False
+            TabOrder = 1
+          end
+        end
+      end
+      object PanelSearch: TPanel
+        Left = 2
+        Top = 519
+        Width = 1269
+        Height = 55
+        Align = alBottom
+        BevelInner = bvLowered
+        BevelOuter = bvNone
+        TabOrder = 2
+        object ScrollBox1: TScrollBox
+          Left = 1
+          Top = 4
+          Width = 1090
+          Height = 49
+          TabOrder = 0
+          object EditOLD_ACC_NO: TEdit
+            Left = 891
+            Top = 0
+            Width = 192
+            Height = 21
+            TabOrder = 0
+            OnExit = EditACC_NO_SEARCHExit
+            OnKeyPress = EditACC_NO_SEARCHKeyPress
+          end
+          object EditSIM_OTCET: TEdit
+            Left = 696
+            Top = 1
+            Width = 39
+            Height = 21
+            TabOrder = 1
+            OnExit = EditACC_NO_SEARCHExit
+            OnKeyPress = EditACC_NO_SEARCHKeyPress
+          end
+          object EditBal_cn2: TEdit
+            Left = 735
+            Top = 0
+            Width = 54
+            Height = 21
+            TabOrder = 2
+            OnExit = EditBal_cn2Exit
+            OnKeyPress = EditBal_cn2KeyPress
+          end
+          object EditUSERINSERT: TEdit
+            Left = 789
+            Top = 0
+            Width = 100
+            Height = 21
+            MaxLength = 28
+            TabOrder = 3
+            OnExit = EditACC_NO_SEARCHExit
+            OnKeyPress = EditACC_NO_SEARCHKeyPress
+          end
+          object EditClose_dat: TEdit
+            Left = 632
+            Top = 1
+            Width = 64
+            Height = 21
+            TabOrder = 4
+            OnExit = EditACC_NO_SEARCHExit
+            OnKeyPress = EditACC_NO_SEARCHKeyPress
+          end
+          object EditOpen_dat: TEdit
+            Left = 568
+            Top = 1
+            Width = 64
+            Height = 21
+            TabOrder = 5
+            OnExit = EditACC_NO_SEARCHExit
+            OnKeyPress = EditACC_NO_SEARCHKeyPress
+          end
+          object EditName: TEdit
+            Left = 317
+            Top = 1
+            Width = 251
+            Height = 21
+            CharCase = ecLowerCase
+            TabOrder = 6
+            OnExit = EditACC_NO_SEARCHExit
+            OnKeyPress = EditNameKeyPress
+          end
+          object EditKLI_ID: TEdit
+            Left = 269
+            Top = 1
+            Width = 48
+            Height = 21
+            TabOrder = 7
+            OnExit = EditACC_NO_SEARCHExit
+            OnKeyPress = EditACC_NO_SEARCHKeyPress
+          end
+          object EditACC_NO_SEARCH: TEdit
+            Left = 1
+            Top = 1
+            Width = 190
+            Height = 21
+            MaxLength = 40
+            TabOrder = 8
+            OnExit = EditACC_NO_SEARCHExit
+            OnKeyPress = EditACC_NO_SEARCHKeyPress
+          end
+          object EditBal_cn1: TEdit
+            Left = 192
+            Top = 1
+            Width = 46
+            Height = 21
+            TabOrder = 9
+            OnExit = EditACC_NO_SEARCHExit
+            OnKeyPress = EditACC_NO_SEARCHKeyPress
+          end
+          object EditVal_acc: TEdit
+            Left = 239
+            Top = 1
+            Width = 30
+            Height = 21
+            TabOrder = 10
+            OnExit = EditACC_NO_SEARCHExit
+            OnKeyPress = EditACC_NO_SEARCHKeyPress
+          end
+        end
+      end
+      object Memo1: TMemo
+        Left = 592
+        Top = 276
+        Width = 185
+        Height = 89
+        Lines.Strings = (
+          'Memo1')
+        TabOrder = 3
+        Visible = False
+      end
+      object EditNAME1: TEdit
+        Left = 933
+        Top = 495
+        Width = 121
+        Height = 21
+        TabOrder = 4
+        Text = 'EditNAME1'
+        Visible = False
+      end
+    end
+  end
+  object ImageList: TImageList
+    Left = 441
+    Top = 186
+    Bitmap = {
+      494C010106000800080010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      0000000000003600000028000000400000002000000001001000000000000010
+      000000000000000000000000000000000000000000000000000000000000750D
+      3C5F000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000D115B011DD7B0000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000000000000000000000000000F719
+      5B0ED809960D0000000000000000000000000000000000000000000000000000
+      00000000000000000000F311FE01DE01B10D0000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000000000000000000000000000F819
+      5B12D90DD70D0000000000000000000000000000000000000000000000000000
+      0000000000000000B3055C0EDE01DE0114160000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000000000000000000000000000181E
+      7C1AF911D8110000000000000000000000000000000000000000000000000000
+      00000000BE73D501FE3ADE36190A982E00000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000000000000000000000000000181E
+      9C1A1A12F8110000000000000000000000000000000000000000000000000000
+      00000000F601DE3E1F4BDE36992E000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000000000000000000000000000391E
+      BC223A16F9150000000000000000000000000000000000008835462DEB418835
+      4F4E1563F9013F535B1ABB2E0000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000003922
+      DC265A1A19160000000000000000000000000000BC7788355973BE7F7C7F7B7F
+      4E566631B842FB01BC2A00000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000005A22
+      FD2A5B1E3A1A0000000000000000000000000000F5620000DE7FBD7F7B7F5A7B
+      1777387BCA3D796F000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000000000000000000000009B36FC3E
+      FD2E9B221916BB3A00000000000000000000386700000000DE7FBD7F7B7F5A7B
+      F67616779066EB3D000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000BE6F7E571D33
+      FD321D331A163A1ABE6F00000000000000008731BD7FBD7FBD7F9C7F9C7F9B7F
+      597BF576F4764D5A000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000000000000000DF773A161D331E37
+      1D371D371A161A163A1ADF77000000000000A8359C7F9C7F9C7F7B7F7B7F387B
+      D4723777D4726F5E000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000005D4F5E473E3B3E37
+      1E371E37BC225B1A3B1ABC26000000000000C9397A7F7A7F5A7B7B7F387B0000
+      7B7F597BD3726E5A000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000000000000000000000000000FD427E475E435E4F9E5F
+      7E5F7D5F7D577B1E5B1E5C1A1D4700000000B2565A7F387B387B597B597BBD7F
+      7A7F387BB1726F52000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000DC3200000000BE6B9D6B9D6B
+      1C3F1C3F7C673B53DA36DA465A679B2600000000915E177BF576D37237771777
+      F576D3729156BD77000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000FC32DC263B0A5B0A5B0A5B0E
+      5B0E5B0E5B0E5B0E5B125B0E7B1ABB2A00000000904E915E16771677F572F472
+      D2728F6A9B730000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000000000000000000000009E635E4F1E3FFD2EFD2EFD2E
+      3E3B3E3BFD2EFD2EFD2E1E3F5E4F9E6300000000000000001663B256B25AB356
+      7A6F000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000FF7BD7193401
+      9701350119261C530000000000000000DF7B000000000000000000002E0D2E0D
+      0D05ED04ED04ED0400000000000000000000710E172F37370000000000000000
+      00000000000000000000000000000000000000004258435C435C435C425C425C
+      425C425C425C425C425C425C42584258000000000000BE7397015B025C025B02
+      7C067C069C12BD161A12D9110000BB365B16000000000000000000002E0DDA36
+      77127712F50DED0400000000000000000000383789011E33FF261B0F383B0000
+      000000000000000000000000000000000000435CA574A574846C846C84748474
+      84748474847484744360646C64746474435C0000BE7334017C025C025B025C02
+      7C0A9C0EBD16BD1AFE229C1E1A1ABC227B1A000000000000000000002E0DDA36
+      78127812150EED040000000000000000000000005E4B7F573F3BFF32F9067A4B
+      0000000000000000000000000000000000006360A574A57422542254A574A574
+      A574A5748574857422502254847484744360000097017C025B025C029C0A3B0A
+      191ABC327F4F3E371E2B1E2F3E375E3B9C1E000000000000000000002E0DFA36
+      980E7812150EED040000000000000000000000005D4BDF6F9F1A5F02DB06DB06
+      3833000000000000000000000000000000006364C57043580000DE7F4358A570
+      C574C57484684258000000004358846C6360FF7B5B025C025C027C069709B711
+      9E6B1C4FD90DFD3A1E2F3E335E3B5F3BBC1E000000000000000000002E0DFA36
+      9812980E350EED040000000000000000000000003A2B0000FF013F02DB0EDB06
+      DC0A5833000000000000000000000000000064648464435800000000AD69435C
+      C574C574435895720000DE7F435CA5706364D7195C027C069D0EB80900000000
+      00000000BC2A7F4B3E375E3B7F437F43DD2270112E0D2E0D2E0D2E0DED04D92E
+      B80EB80E350EED04ED04ED04ED04ED04ED04000000005B3B7E019E013F025F02
+      DB06DB0659330000000000000000000000008468067506754360957600000000
+      4360436000000000AE6D4360E574E574646455011A067C0A9C12B81100000000
+      DF73F9117E53DF6BBF5B9F4F7F437F47DD269111760E760E760E760E760ED92E
+      D90EB90E350E350E760E760E760E760E5009000000000000FF1D7E011F023F02
+      DB0EDB06DC0A5A3300000000000000000000846826752675C56C436000000000
+      AE6DAE6D000000006360E5700675067584685505000000000000000000000000
+      00000000000000007E5FFD3E1D337E4F1E33B2153A0F3A0F3A0F1A0F1A0F1A0F
+      F90EF90ED90ED90EB90EB80EB80E981270090000000000000000DB267E019E01
+      3F025F02DB06DB067A3300000000000000004A7147794779277927794364F071
+      00000000AE71436426752675267526754A6DD811DC32391A7A323D5700000000
+      00000000000000000000000000000000FE26D2155B0B5B0F3A0F3A0F1A0F1A0F
+      1A0FF90EF90ED90ED90ED90EB80EB80E710900000000000000000000FF1D7E01
+      1F023F02DB0EDB06FC0A7A330000000000006B71EC798A79477947796468AE71
+      00000000F0716468277926798979CC796B7177015C027C061D2F7E4BBF637E4F
+      1A12DF77000000009C1E7F439F475F3BFD22F315BD27DD27BD27BD279D2B3A0F
+      3A0F3A0F190FF90E5C2B5C2B3C2B3B2BB30D000000000000000000000000FB26
+      7E019E013F025F02DB06DB067B33000000006B710E7A0E7AED794B7100000000
+      73765276000000004B71AC75ED79ED796B7197017C067C0EBC16BD1A5E3F9B26
+      0000000000000000BC1E9F4B9F4BBF5B1E33F311F311F311F311F311F3117C37
+      3A0F3A0FD80E9109910991099109910991090000000000000000000000000000
+      DF197E011F023F02DB0EFC06F01D7B3300008B750E7A0E7A4B71527600000000
+      4B714B7100000000F87A4B710D7A0D7A6B7198057C0A9C0EBD1ADD1AFD3A1A12
+      3D53BF6F7C1E9C1E9F479F47BF57DF6B000000000000000000000000B30D9D37
+      7B0F7B0FF90EB30D000000000000000000000000000000000000000000000000
+      0000FC2E7E019E013B02AF25DE7F512E9C438C750E7A4B75DE7F0000F87E4B75
+      2E7A2E7A4B75537A000000004B75AC798B75B8057C0E9C12BD1ADD1E3E379F57
+      1D3BBC263E337F439F479F47DF6F3E37000000000000000000000000B30D9D3B
+      7B0F7B0FF90EB30D000000000000000000000000000000000000000000000000
+      00000000DF197F01B025DE7F512E5103770B8C75ED796B75000000004B75CD79
+      2E7A2E7A0E7A4B75DE7F00004B75ED798C75B8093A0EF815BC22FD221E2B1E2F
+      3E375E3B7F3F7F3F9F53DF6FDD1EFF77000000000000000000000000B30DBD37
+      9B0F9B0F3A0FB30D000000000000000000000000000000000000000000000000
+      000000000000194F00003232D707D60398138C794F7A4F7A6B794B794F7A4F7A
+      2F7A2F7A2F7A2F7A6B796B792E7A2E7A8C75D8099B360000F9119B221E2F1E2F
+      3E335E375F3F9F4FDF6B3E37FF770000000000000000000000000000B30DBE37
+      7A0B7A0B3A0BB30D000000000000000000000000000000000000000000000000
+      0000000000000000323A3B0BDB0BD707FF778C794F7A4F7A0E7ACD794F7A4F7A
+      4F7A4F7A4F7A4F7A0E7AEE792F7A2F7A6C75DF7700000000000000005E57BC32
+      7C16FD2EBD1AFE320000000000000000000000000000000000000000F3117716
+      781A781A7716F311000000000000000000000000000000000000000000000000
+      000000000000000000003D1F7C1BFF77000000008C798C798C798C798C798C79
+      8C798C798C798C798C798C798C798C790000424D3E000000000000003E000000
+      2800000040000000200000000100010000000000000100000000000000000000
+      000000000000000000000000FFFFFF00FCFFFFF800000000FC3FFFF000000000
+      FC3FFFE000000000FC3FFF8100000000FC3FFF8300000000FC3FE00700000000
+      FC3F800F00000000FC3FA01F00000000F81F601F00000000F00F001F00000000
+      E007001F00000000E007021F00000000C003001F00000000B001801F00000000
+      8001803F000000008001E0FF00000000F01EF81F1FFF8001C004F81F03FF0000
+      8000F81F81FF00008000F81F80FF10180000F81FA07F181007800000C03F0660
+      06000000E01F06607FE00000F00F018007FE0000F807018000600000FC030660
+      01E00000FE0106600001F81FFF0008180001F81FFF8018080001F81FFFD00000
+      2003F81FFFE00000781FF81FFFF1800100000000000000000000000000000000
+      000000000000}
+  end
+  object ActionList: TActionList
+    Images = ImageList
+    Left = 492
+    Top = 189
+    object ActionRefresh: TAction
+      Category = 'Extra'
+      Caption = '       Yenil'#601'        '
+      ImageIndex = 0
+      ShortCut = 116
+      OnExecute = ActionRefreshExecute
+    end
+    object ActionInsert: TAction
+      Category = 'Event'
+      Caption = 'Yeni hesab'
+      ImageIndex = 1
+      ShortCut = 45
+      OnExecute = ActionInsertExecute
+    end
+    object ActionEdit: TAction
+      Category = 'Event'
+      Caption = 'Redakt'#601
+      ImageIndex = 5
+      ShortCut = 16453
+      OnExecute = ActionEditExecute
+    end
+    object ActionCloseAcc: TAction
+      Category = 'Event'
+      Caption = 'Ba'#287'lamaq'
+      ImageIndex = 2
+      ShortCut = 16430
+      OnExecute = ActionCloseAccExecute
+    end
+    object ActionShowFilter: TAction
+      Category = 'Filter'
+      Caption = 'Filter paneli'
+      ImageIndex = 6
+      ShortCut = 16454
+      OnExecute = ActionShowFilterExecute
+    end
+    object ActionSpeedSearch: TAction
+      Category = 'Search'
+      Caption = 'ActionSpeedSearch'
+      OnExecute = ActionSpeedSearchExecute
+    end
+    object ActionSearch: TAction
+      Category = 'Search'
+      Caption = 'Axtar'#305#351' paneli'
+      ImageIndex = 10
+      ShortCut = 16467
+      OnExecute = ActionSearchExecute
+    end
+    object ActionFilter: TAction
+      Category = 'Filter'
+      Caption = 'ActionFilter'
+      OnExecute = ActionFilterExecute
+    end
+    object ActionFullRefresh: TAction
+      Category = 'Extra'
+      Caption = 'Tam yenil'#601'm'#601'k'
+      ImageIndex = 11
+      ShortCut = 117
+      OnExecute = ActionFullRefreshExecute
+    end
+    object ActionAccTrans: TAction
+      Category = 'Extra'
+      Caption = 'Hesab'#305'n s'#601'n'#601'dl'#601'ri'
+      OnExecute = ActionAccTransExecute
+    end
+  end
+  object PopupMenu: TPopupMenu
+    Images = ImageList
+    Left = 356
+    Top = 293
+    object N1: TMenuItem
+      Action = ActionFullRefresh
+    end
+  end
+  object PopupMenuMain: TPopupMenu
+    Images = ImageList
+    OwnerDraw = True
+    Left = 316
+    Top = 179
+    object N2: TMenuItem
+      Action = ActionInsert
+    end
+    object N3: TMenuItem
+      Action = ActionEdit
+      Caption = 'Redakt'#601' etm'#601'k                   '
+      Default = True
+    end
+    object N4: TMenuItem
+      Action = ActionCloseAcc
+    end
+    object N5: TMenuItem
+      Caption = '-'
+    end
+    object N7: TMenuItem
+      Caption = 'Hesab'#305'n qal'#305'qlar'#305
+      ShortCut = 32884
+      OnClick = N7Click
+    end
+    object N6: TMenuItem
+      Action = ActionAccTrans
+      ShortCut = 16500
+    end
+  end
+end

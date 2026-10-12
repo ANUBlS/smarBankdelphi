@@ -1,0 +1,267 @@
+﻿unit UntChecking;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ExtCtrls, StdCtrls, ImgList, ComCtrls, ToolWin, Grids, Db, OracleData,
+  DBGrids,SBTransaction, Mask, DBCtrls;
+
+type
+  TFrmChecking = class(TForm)
+    Panel1: TPanel;
+    ImageList1: TImageList;
+    ODSChecking: TOracleDataSet;
+    DataSrcChecking: TDataSource;
+    Panel2: TPanel;
+    GroupBox1: TGroupBox;
+    CmbBoxDates: TComboBox;
+    ToolBar1: TToolBar;
+    TBRefresh: TToolButton;
+    ToolButton1: TToolButton;
+    TBCreate: TToolButton;
+    ToolButton4: TToolButton;
+    TBClose: TToolButton;
+    GroupBox2: TGroupBox;
+    Edit1: TEdit;
+    DBGrid1: TDBGrid;
+    ODSCheckingSHORTNAME: TWideStringField;
+    ODSCheckingCURRENCY: TFloatField;
+    ODSCheckingRATE: TFloatField;
+    ODSCheckingACTIVES: TFloatField;
+    ODSCheckingPOK_ACTIVES: TFloatField;
+    ODSCheckingPASSIVES: TFloatField;
+    ODSCheckingPOK_PASSIVES: TFloatField;
+    ODSCheckingLIMIT: TFloatField;
+    ODSCheckingCalcLimit: TFloatField;
+    ODSCheckingStatus: TWideStringField;
+    Label1: TLabel;
+    ODSCheckingAvialableActive: TFloatField;
+    ODSCheckingAvialablePassive: TFloatField;
+    StaticText1: TStaticText;
+    GroupBox3: TGroupBox;
+    DBEdit1: TDBEdit;
+    DBEdit2: TDBEdit;
+    ToolButton2: TToolButton;
+    procedure FormShow(Sender: TObject);
+    procedure TBCloseClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure TBCreateClick(Sender: TObject);
+    procedure ODSCheckingCalcFields(DataSet: TDataSet);
+    procedure TBRefreshClick(Sender: TObject);
+    procedure Edit1KeyPress(Sender: TObject; var Key: Char);
+    procedure ODSCheckingBeforePost(DataSet: TDataSet);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure ODSCheckingBeforeInsert(DataSet: TDataSet);
+    procedure ODSCheckingAfterPost(DataSet: TDataSet);
+    procedure CmbBoxDatesChange(Sender: TObject);
+  private
+    BankSDVValue :Extended;
+    IsPosted  :Boolean;
+    procedure Calculated(FieldTag :Byte;FieldValue :Extended);
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmChecking: TFrmChecking;
+
+implementation
+
+uses CurrencyPositionImpl,UntMore,sboapiDataModuleImpl, UntCPReport,
+  DataModCurrPositin, SBTranslateProc;
+
+{$R *.DFM}
+
+procedure TFrmChecking.FormShow(Sender: TObject);
+begin
+    with CmbBoxDates do
+    begin
+      Style :=csDropDown;
+      Items.Clear;
+      Items :=FrmCurrencyPosition.CmbBoxDate.Items;
+      Items.Delete(0);
+      ItemIndex :=0;
+      Style :=csDropDownList;
+    end;       
+end;
+
+procedure TFrmChecking.Calculated(FieldTag :Byte;FieldValue :Extended);
+begin
+   with   ODSChecking  do
+   begin
+ { if  (FieldTag in [2,4]) and  (FieldValue=0)  then
+   begin
+     CancelUpdates;
+     Exit;
+   end;}
+     Edit;
+      Case FieldTag  of
+        0 :begin
+             FieldByName('POK_PASSIVES').AsFloat :=FieldByName('PASSIVES').AsFloat*FieldValue;
+             FieldByName('POK_ACTIVES').AsFloat  :=FieldByName('ACTIVES').AsFloat*FieldValue;
+           end;
+        1 :FieldByName('POK_ACTIVES').AsFloat :=FieldByName('Rate').AsFloat*FieldValue;
+        3 :FieldByName('POK_PASSIVES').AsFloat :=FieldByName('Rate').AsFloat*FieldValue;
+        2 :FieldByname('ACTIVES').AsFloat :=FieldValue/FieldByName('Rate').AsFloat;
+        4 :FieldByname('PASSIVES').AsFloat :=FieldValue/FieldByName('Rate').AsFloat;
+      end;
+    // Post; 
+   end;
+end;
+procedure TFrmChecking.TBCloseClick(Sender: TObject);
+begin
+   Close
+end;
+procedure TFrmChecking.FormCreate(Sender: TObject);
+var
+    TableName :String;
+    QueryString : WideString;
+begin
+   TableName   :=' CPSUM_'+FrmCurrencyPosition.sb_GetUserName;
+   QueryString :='Select  TblChecking.*,TblChecking.RowID From '+TableName+' TblChecking';
+   FrmCurrencyPosition.InputQueryToDataSet(ODSChecking,QueryString);
+   IsPosted :=False;
+   try
+     FrmTuning.OracleDataSet1.Open;
+     BankSDVValue :=FrmTuning.OracleDataSet1.FieldByName('SVM').AsFloat;
+   finally
+     FrmTuning.OracleDataSet1.Close;
+   end;
+  SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TFrmChecking.TBCreateClick(Sender: TObject);
+const
+    ProcedureName ='DataChecking';
+var
+    V :TDateTime;
+begin
+   V :=Trunc(FrmCurrencyPosition.Dates[CmbBoxDates.ItemIndex]);
+    with  CPDataMod.OPackage  do
+     CallProcedure(ProcedureName,[V]);
+   with  ODSChecking  do
+   begin
+     if  Active  then Close;
+     Open;
+     ODSCheckingAfterPost(ODSChecking);
+   end;
+end;
+
+procedure TFrmChecking.ODSCheckingCalcFields(DataSet: TDataSet);
+var
+  CurrencyLimit : Real;
+  TempLimit : Real;
+  Actives ,Passives ,AvialableActives ,AvialablePassives : Real;
+  ACapital ,Rate: Real;
+  CalculatedLimit : Real;
+begin
+  with   ODSChecking,DBGrid1  do
+  begin
+   CurrencyLimit := FieldByName('LIMIT').AsFloat;
+   try
+    FieldByName('CalcLimit').AsString :=FormatFloat('#0.00',FrmTuning.CalcLimit(FieldByName('POK_ACTIVES').AsFloat,FieldByName('POK_PASSIVES').AsFloat,StrToFloat(Edit1.TEXT)));
+   if  ABS(FieldByName('CalcLimit').AsFloat) < ABS(CurrencyLimit) then
+   begin
+     FieldByName('Status').AsString  :='NORMA';
+   end else
+   begin
+     FieldByName('Status').AsString  :='CЯРИМЯ !';
+     Beep;
+   end;
+  except
+     ShowMessage('Please Enter A Valid Capital !');
+     Abort;
+     Close;
+  end;
+  end;
+  with DataSet do
+  begin
+    Rate := FieldByName('Rate').AsFloat;
+    Actives := FieldByName('POK_ACTIVES').AsFloat;
+    Passives := FieldByName('POK_PASSIVES').AsFloat;
+    ACapital := StrToFloat(Edit1.TEXT);
+
+    CalculatedLimit := FrmTuning.CalcLimit(Actives
+      ,Passives
+      ,ACapital
+      );
+    TempLimit := CurrencyLimit; //-  CalculatedLimit;
+    AvialableActives := abs((TempLimit * ACapital / 100) - Passives)/rate;
+    TempLimit := CurrencyLimit ;//+  CalculatedLimit;
+    AvialablePassives := abs(Actives - (TempLimit * ACapital / 100))/rate;
+    FieldByName('AvialableActive').AsFloat := AvialableActives;//FloatToStr((AvialableActives - Actives)/Rate);
+    FieldByName('AvialablePassive').AsFloat := AvialablePassives;
+  end;
+end;
+
+procedure TFrmChecking.TBRefreshClick(Sender: TObject);
+begin
+   with ODSChecking do
+   if  Active  then
+   begin
+      Refresh;
+   end else
+   TBCreate.Click;
+end;
+
+procedure TFrmChecking.Edit1KeyPress(Sender: TObject; var Key: Char);
+begin
+   if  Key=#13  then
+   TBCreate.Click;
+end;
+
+procedure TFrmChecking.ODSCheckingBeforePost(DataSet: TDataSet);
+begin
+     with  DBGrid1  do
+      Calculated(SelectedField.Tag,SelectedField.AsFloat);
+end;
+
+procedure TFrmChecking.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+   ODSChecking.CancelUpdates;
+end;
+
+procedure TFrmChecking.ODSCheckingBeforeInsert(DataSet: TDataSet);
+begin
+   Abort;
+end;
+
+procedure TFrmChecking.ODSCheckingAfterPost(DataSet: TDataSet);
+var
+   MaxLimit :Extended;
+begin
+    MaxLimit :=0;
+    with  ODSChecking  do
+    begin
+      First;
+      while not EOF  do
+      begin
+        MaxLimit :=MaxLimit + FieldByName('CalcLimit').AsFloat;
+        Next
+      end;
+      if  MaxLimit>=20  then
+      with   Label1  do
+      begin
+        Caption :='Cərimə !';
+        Font.Color :=clRed;
+      end else
+       with   Label1  do
+      begin
+        Caption :='Normal';
+        Font.Color :=clGreen;
+      end;
+   end;
+end;
+
+procedure TFrmChecking.CmbBoxDatesChange(Sender: TObject);
+var
+   CapitalDate: Variant;
+begin
+  CapitalDate :=Integer(Trunc(FrmCurrencyPosition.Dates[CmbBoxDates.ItemIndex]));
+  Edit1.Text:=FrmCurrencyPosition.GetCapital(CapitalDate); 
+end;
+
+end.

@@ -1,0 +1,119 @@
+object DataMod: TDataMod
+  OldCreateOrder = False
+  Left = 128
+  Top = 144
+  Height = 480
+  Width = 696
+  object OrDSAccount: TOracleDataSet
+    SQL.Strings = (
+      'select * from ACCOUNT'
+      'where Close_DAT is NULL')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = False
+    Active = False
+    Left = 48
+    Top = 48
+  end
+  object OrDSACT_TYPES: TOracleDataSet
+    SQL.Strings = (
+      'select * from ACT_TYPES')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = False
+    Active = False
+    Left = 48
+    Top = 108
+  end
+  object OrDSACT_ACCOUNTS: TOracleDataSet
+    SQL.Strings = (
+      'select * from ACT_ACCOUNTS')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = False
+    Active = False
+    Left = 48
+    Top = 168
+  end
+  object DSAccount: TDataSource
+    DataSet = OrDSAccount
+    Left = 104
+    Top = 48
+  end
+  object DSACT_TYPES: TDataSource
+    DataSet = OrDSACT_TYPES
+    Left = 96
+    Top = 104
+  end
+  object DSACT_ACCOUNTS: TDataSource
+    DataSet = OrDSACT_ACCOUNTS
+    Left = 104
+    Top = 168
+  end
+end

@@ -1,0 +1,200 @@
+unit VilibleFieldsListImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, NLSDialogs,
+  NLSLocalizer, StdCtrls, CheckLst, ExtCtrls, Db, OracleData, Oracle,
+  Buttons, ActnList;
+
+type
+  TVFListForm = class(TForm)
+    Localizer: TNLSLocalizer;
+    VFListBox: TCheckListBox;
+    Panel1: TPanel;
+    Panel2: TPanel;
+    DataSrcList: TOracleDataSet;
+    spUP: TSpeedButton;
+    spDown: TSpeedButton;
+    ActionsLst: TActionList;
+    MoveUp: TAction;
+    MoveDown: TAction;
+    DataSrcListSEQNO: TFloatField;
+    DataSrcListFIELDNAME: TStringField;
+    DataSrcListFROZEN: TFloatField;
+    DataSrcListUSERID: TFloatField;
+    DataSrcListVISIBLE: TFloatField;
+    DataSrcListID: TFloatField;
+    DataSrcListFIELDDESC: TStringField;
+    GroupBox1: TGroupBox;
+    EditFrozenColCnt: TEdit;
+    BtnSaveClose: TButton;
+    BtnCancelClose: TButton;
+    SetupPackage: TOraclePackage;
+    procedure FormShow(Sender: TObject);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure MoveUpExecute(Sender: TObject);
+    procedure MoveDownExecute(Sender: TObject);
+    procedure BtnCancelCloseClick(Sender: TObject);
+    procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
+    procedure BtnSaveCloseClick(Sender: TObject);
+  private
+    FFieldList : TList;
+    SaveAndClose : Boolean;
+    { Private declarations }
+  public
+    procedure BulidVFList;
+    procedure SaveVFList;
+    { Public declarations }
+  end;
+
+var
+  VFListForm: TVFListForm;
+
+implementation
+
+{$R *.DFM}
+
+uses
+  sboapiDataModuleImpl, crCommonDecls;
+
+
+procedure TVFListForm.BulidVFList;
+var
+  IsFieldVisible : Boolean;
+  FrozenFieldsCount : Integer;
+  FieldDesc : String;
+  I : Integer;
+  ID : Integer;
+begin
+  FrozenFieldsCount := 0;
+  with DataSrcList , VFListBox do
+  begin
+    Open;
+    First;
+    while not EOF do
+    begin
+      FieldDesc := FieldByName('FIELDDESC').AsString;
+      IsFieldVisible := FieldByName('VISIBLE').AsInteger = 0;
+      FrozenFieldsCount := FrozenFieldsCount + FieldByName('FROZEN').AsInteger;
+      ID := FieldByName('ID').AsInteger;
+      I := Items.Add(FieldDesc);
+      Checked[I] := IsFieldVisible;
+      FFieldList.Add(Pointer(ID));
+      Next;
+    end;
+  end;
+  EditFrozenColCnt.Text := IntToStr(FrozenFieldsCount)
+end;
+
+procedure TVFListForm.SaveVFList;
+var
+  I : Integer;
+  ID : Integer;
+  ColVisible , Frozen : Integer;
+  FreezeCount : Integer;
+begin
+  FreezeCount := StrToInt(EditFrozenColCnt.Text);
+  with SetupPackage, VFListBox do
+  for I := 0 to Items.Count - 1 do
+  begin
+    ID := Integer(FFieldList[I]);
+    ColVisible := Integer(not Checked[I]);
+    Frozen := Integer(I < FreezeCount);
+    CallProcedure('SetVFList',[
+      'p_ID',ID,
+      'p_SeqNo',I,
+      'p_Visible',ColVisible,
+      'p_Frozen',Frozen
+    ]);
+  end;  
+end;
+
+procedure TVFListForm.FormShow(Sender: TObject);
+begin
+  BulidVFList
+end;
+
+procedure TVFListForm.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+  if ORD(KEY) = VK_ESCAPE then
+    BtnCancelClose.Click;
+end;
+
+procedure TVFListForm.FormCreate(Sender: TObject);
+begin
+  FFieldList := TList.Create;
+end;
+
+procedure TVFListForm.FormDestroy(Sender: TObject);
+begin
+  FFieldList.Free;
+end;
+
+procedure TVFListForm.MoveUpExecute(Sender: TObject);
+var
+  IDX : Integer;
+begin
+  IDX := VFListBox.ItemIndex;
+  with VFListBox,Items do
+  if  IDX > 0  then
+  begin
+    Move(IDX,IDX - 1);
+    FFieldList.Exchange(IDX,IDX - 1);
+    if IDX >= 1 then
+    ItemIndex := IDX - 1;
+  end;
+end;
+
+procedure TVFListForm.MoveDownExecute(Sender: TObject);
+var
+  IDX : Integer;
+begin
+  IDX := VFListBox.ItemIndex;
+  with VFListBox,Items do
+  if  (IDX <> - 1) and (IDX < Items.Count - 1) then
+  begin
+    Move(IDX,IDX + 1);
+    FFieldList.Exchange(IDX, IDX + 1);
+    if IDX <= Items.Count - 1 then
+    ItemIndex := IDX + 1;
+  end;
+end;
+
+procedure TVFListForm.BtnCancelCloseClick(Sender: TObject);
+begin
+  SaveAndClose := False;
+  Close;
+end;
+
+procedure TVFListForm.FormCloseQuery(Sender: TObject;
+  var CanClose: Boolean);
+resourcestring
+  SSureWantExit = 'ƒ€йишликл€р йадда галмайажаг. яминсиниз?';
+  STakeEffectAfterRestart = 'Ѕцтцн д€йишликл€р програм нювб€ти д€ф€ йцкл€ндикд€ гцвв€й€ мин€ж€к .';
+begin
+
+  CanClose := SaveAndClose
+     or (MessageDlg(SSureWantExit
+      ,mtConfirmation
+      ,[mbYes,mbNo]
+      ,0) = mrYes);
+      
+  if SaveAndClose then
+  MessageDlg(STakeEffectAfterRestart,
+    mtInformation,
+    [mbOK],
+    0);
+
+end;
+
+procedure TVFListForm.BtnSaveCloseClick(Sender: TObject);
+begin
+  SaveVFList;
+  SaveAndClose := True;
+  Close;
+end;
+
+end.

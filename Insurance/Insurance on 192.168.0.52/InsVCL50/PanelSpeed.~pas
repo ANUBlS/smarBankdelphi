@@ -1,0 +1,93 @@
+unit PanelSpeed;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ExtCtrls, Buttons;
+
+
+
+type
+  TPanelSpeed = class(TPanel)
+  private
+    { Private declarations }
+    Button : TSpeedButton;
+    FCaption : String;
+    FGlyph: TBitmap;
+    procedure SetCaption(value : String);
+    procedure ButtonClick(Sender: TObject);
+  protected
+    { Protected declarations }
+   function  GetGlyph: TBitmap;
+   procedure SetGlyph(Value: TBitmap);
+  public
+    PluginGuid : TGuid;
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+    procedure Resize; override;
+  published
+    property Caption : String read FCaption write  SetCaption ;
+    property Glyph: TBitmap read GetGlyph write SetGlyph;
+    { Published declarations }
+  end;
+
+procedure Register;
+
+implementation
+
+procedure Register;
+begin
+  RegisterComponents('Smart', [TPanelSpeed]);
+end;
+
+function TPanelSpeed.GetGlyph: TBitmap;
+begin
+  Result := FGlyph;
+end;
+
+procedure TPanelSpeed.SetGlyph(Value: TBitmap);
+begin
+  Button.Glyph := Value;
+  FGlyph := Value;
+//  Invalidate;
+end;
+
+procedure TPanelSpeed.SetCaption(value : String);
+begin
+  if FCaption = value then exit;
+  Button.Caption := value;
+end;
+
+constructor TPanelSpeed.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  Self.BevelInner := bvRaised;
+  Self.BevelOuter := bvLowered;
+  Self.Width := 81;
+  Self.Height := 25;
+  Button := TSpeedButton.Create(Self);
+  Button.Parent := Self;
+  Button.OnClick := ButtonClick;
+end;
+
+destructor TPanelSpeed.Destroy;
+begin
+  inherited Destroy;
+end;
+
+procedure TPanelSpeed.ButtonClick(Sender: TObject);
+begin
+  if Assigned(OnClick) then
+        OnClick(Self);
+end;
+
+procedure TPanelSpeed.Resize;
+begin
+ Button.Height := Self.Height -2;
+// Button.Left := Self.Left +1;
+ Button.Width := Self.Width -2;
+ Button.Flat := True;
+end;
+
+end.

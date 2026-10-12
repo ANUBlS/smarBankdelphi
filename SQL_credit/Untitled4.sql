@@ -1,0 +1,17 @@
+select ac.acc_no,a.ostat,a.pok_ostat,a.datdate,a.obr_d,a.obr_k,a.pok_obr_d,a.pok_obr_k,
+  b.ostat as YesterdayOstat,b.pok_ostat as YeserdayPokOstat,
+  a.pok_ostat-(b.pok_ostat-a.pok_obr_d+a.pok_obr_k) as Delta
+from archost a,archost  b,account ac
+ where
+ a.datdate= --(select tek_dat from sysdat)
+
+                    ' 27-jan-2006 '  --change this date for last day
+
+  and
+ b.datdate= --(select max(dat) from operkurs where dat<  (select tek_dat from sysdat))
+
+                    ' 26-jan-2006 '  --change this date fro pred day
+
+and a.acc_id=b.acc_id
+and a.acc_id=ac.id 
+and  a.pok_ostat<>b.pok_ostat-a.pok_obr_d+a.pok_obr_k

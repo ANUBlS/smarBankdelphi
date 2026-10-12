@@ -1,0 +1,167 @@
+﻿unit accserch;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs,ActnList,OracleData,XDBGrids, Grids, StdCtrls;
+
+type
+  TFormAccounts_PaymetOreder = class(TForm)
+    GroupBox1: TGroupBox;
+    Button1: TButton;
+    EditACC_NO_SEARCH: TEdit;
+    EditACC_NO: TEdit;
+    EditName: TEdit;
+    XDBGridAccounts_paymetOrder: TXDBGrid;
+    procedure Button1Click(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormShow(Sender: TObject);
+    procedure EditACC_NO_SEARCHKeyPress(Sender: TObject; var Key: Char);
+    procedure EditACC_NOKeyPress(Sender: TObject; var Key: Char);
+    procedure EditNameKeyPress(Sender: TObject; var Key: Char);
+    procedure XDBGridAccounts_paymetOrderDblClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+            v_AccNo: String;
+    DebOrKred: Boolean;
+  end;
+
+var
+  FormAccounts_PaymetOreder: TFormAccounts_PaymetOreder;
+
+implementation
+
+uses Payment_DataModul, UnitPayment_order, Form_AccountsImpl;
+
+{$R *.dfm}
+
+
+procedure ActionSpeedSearchExecute(
+  Sender: TObject);
+var
+  SearchField : string;
+  SearchOptions : TSearchRecordOptions;
+begin
+  SearchOptions := [srIgnoreCase ,srPartialMatch ];
+
+  with Sender as TEdit  do
+  begin
+    SearchField := copy(Name,5,length(Name));
+    //ShowMessage(SearchField);
+    with  TOracleDataSet(FormAccounts_PaymetOreder.XDBGridAccounts_paymetOrder.DataSource.DataSet) do
+    if  not SearchRecord(
+                  SearchField
+                 ,Text
+                 ,SearchOptions + [srFromCurrent , srForward ]
+                 ) then
+  {  if MessageDlg(
+              'Axtarış sona çatdı.'+#13+'Əvvəldən başlansın?'
+             ,mtInformation
+             ,[mbNo , mbYes]
+             ,0
+             ) = mrYes  then   }
+    if not SearchRecord(
+                 SearchField
+                ,Text
+                ,SearchOptions + [ srFromBeginning ]
+                )  then
+    MessageDlg('Yazı tapılmayıb!',mtInformation,[mbOK],0);
+ end;
+
+end;
+
+
+procedure TFormAccounts_PaymetOreder.Button1Click(Sender: TObject);
+begin
+v_AccNo:=PaymentOrderDataMod.ODSAccounts_PyaOrder.FieldByName('ACC_NO').AsString;
+  FormAccounts_PaymetOreder.Close;
+end;
+
+procedure TFormAccounts_PaymetOreder.EditACC_NOKeyPress(Sender: TObject; var Key: Char);
+begin
+if key=#13  then ActionSpeedSearchExecute(EditACC_NO);
+end;
+
+procedure TFormAccounts_PaymetOreder.EditACC_NO_SEARCHKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+if key=#13  then ActionSpeedSearchExecute(EditACC_NO_SEARCH);
+end;
+
+procedure TFormAccounts_PaymetOreder.EditNameKeyPress(Sender: TObject; var Key: Char);
+begin
+if key=#13  then ActionSpeedSearchExecute(EditName);
+end;
+
+procedure TFormAccounts_PaymetOreder.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+EditACC_NO_SEARCH.Clear;
+EditACC_NO.Clear;
+EditName.Clear;
+
+
+ with PaymentOrderDataMod.ODSAccounts_PyaOrder do
+  begin
+   Close;
+    SQL.Clear;
+    SQL.Text :='Select AC.*,C.Inn From Account AC,Customers C Where AC.kli_ID =C.ID and AC.acc_no= '+''''+v_AccNo+'''';
+   Open;
+   Payment_order.EDAName.Text :=FieldByName('NAME').AsString;
+   Payment_order.EDAInn.Text :=FieldByName('INN').AsString;
+  end;
+
+
+
+end;
+
+procedure TFormAccounts_PaymetOreder.FormKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+if (key=VK_INSERT) then
+begin
+v_AccNo:=PaymentorderDataMod.ODSAccounts_PyaOrder.FieldByName('ACC_NO').AsString;
+FormAccounts_PaymetOreder.Close;
+end;
+//then VK_RETURN showmessage('salam');
+     //
+
+end;
+
+procedure TFormAccounts_PaymetOreder.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+if key=#27 then FormAccounts_PaymetOreder.Close;
+end;
+
+procedure TFormAccounts_PaymetOreder.FormShow(Sender: TObject);
+begin
+ PaymentorderDataMod.ODSAccounts_PyaOrder.Open;
+  if DebOrKred = True then
+  begin
+ //  if strtoint(TransactionEditForm.DebitCurrencyIDEdit.Text)=0 then v_valute:=0 else v_valute:=1;
+ //   TransactionDataModule.ODS_Account.SetVariable('VALUTE',v_valute);
+  end
+  else
+begin
+  // if strtoint(TransactionEditForm.CreditCurrencyIDEdit.Text)=0 then v_valute:=0 else v_valute:=1;
+  //  TransactionDataModule.ODS_Account.SetVariable('VALUTE',v_valute);
+  end;
+
+  if v_AccNO <> '' then
+  PaymentorderDataMod.ODSAccounts_PyaOrder.Locate('ACC_NO', v_AccNO, []);
+  EditACC_NO_SEARCH.SetFocus;
+end;
+
+procedure TFormAccounts_PaymetOreder.XDBGridAccounts_paymetOrderDblClick(
+  Sender: TObject);
+begin
+v_AccNo:=PaymentOrderDataMod.ODSAccounts_PyaOrder.FieldByName('ACC_NO').AsString;
+  FormAccounts_PaymetOreder.Close;
+
+end;
+
+end.

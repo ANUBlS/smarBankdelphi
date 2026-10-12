@@ -1,0 +1,78 @@
+unit MainUnit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, DBGridEhGrouping, GridsEh, DBGridEh, StdCtrls, ExtCtrls, DB,
+  OracleData, Grids, DBGrids, DBCtrls;
+
+type
+  TMainForm = class(TForm)
+    Panel1: TPanel;
+    Panel2: TPanel;
+    Panel3: TPanel;
+    Button1: TButton;
+    OracleDataSet1: TOracleDataSet;
+    DataSource1: TDataSource;
+    DBGrid1: TDBGrid;
+    OracleDataSet1ID: TFloatField;
+    OracleDataSet1CREDITID: TFloatField;
+    OracleDataSet1USNAME: TWideStringField;
+    OracleDataSet1DAT: TDateTimeField;
+    DBMemo1: TDBMemo;
+    OracleDataSet1RID: TFloatField;
+    OracleDataSet1TEXT: TWideStringField;
+    procedure Button1Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  MainForm: TMainForm;
+   creditid: integer;
+   procedure InitPlugin(s:string);export;
+
+implementation
+   uses  sboapiDataModuleImpl,CommonDecls, AddUnit;
+
+
+
+procedure InitPlugin(s:string);export;
+begin
+   MainForm.ShowModal;
+end;
+exports
+     InitPlugin;
+
+
+procedure TMainForm.Button1Click(Sender: TObject);
+begin
+   if not Assigned(Form4) then
+   Form4:=TForm4.create(self);
+
+   Form4.ShowModal;
+end;
+
+procedure TMainForm.FormShow(Sender: TObject);
+begin
+creditid:=CommonDBGrid.DataSource.DataSet.FieldByName(sID).AsInteger;
+
+with OracleDataSet1 do
+   begin
+    close;
+      SetVariable('v_crid',creditid);
+    open;
+
+   end;
+end;
+
+initialization
+
+ MainForm := TMainForm.Create(Application);
+{$R *.dfm}
+
+end.

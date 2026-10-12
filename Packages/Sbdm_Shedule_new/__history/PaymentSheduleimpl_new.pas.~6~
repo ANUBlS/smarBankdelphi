@@ -1,0 +1,61 @@
+unit PaymentSheduleimpl_new;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, CMCurrencyEdit, ComCtrls, ExtCtrls;
+
+type
+  TPaymentShedule_new = class(TForm)
+    Button1: TButton;
+    Button2: TButton;
+    GroupBox1: TGroupBox;
+    GroupBox2: TGroupBox;
+    DateTimePicker1: TDateTimePicker;
+    Panel1: TPanel;
+    GroupBox3: TGroupBox;
+    CMCurrencyEdit1: TCMCurrencyEdit;
+    GroupBox4: TGroupBox;
+    Edit1: TEdit;
+    procedure Button1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  PaymentShedule_new: TPaymentShedule_new;
+
+implementation
+
+{$R *.dfm}
+   uses CommonDeclsImpl_new,ScheduleDataModuleImpl_new,SheduleImpl_new,SBTranslateProc,sboapiDataModuleimpl;
+procedure TPaymentShedule_new.Button1Click(Sender: TObject);
+var depid,period  :integer;
+    tarix  :TDateTime;
+    amount,per :CURRENCY;
+begin
+  depid:=Get_SelectedContID;
+  tarix:=DateTimePicker1.datetime;
+  amount:=CMCurrencyEdit1.Value;
+  period:=StrToInt(Edit1.text);
+  per:=StrToCurr(form1.DBEdit2.text);
+  with ScheduleDataModule_new,SBCM_PAYMENT_SCHEDULE1 do
+  begin
+    CallProcedure('sbcmperiod',[
+                  'deposid'    , depid,
+                  'PaymentDate', tarix,
+                  'per_amount' , amount,
+                  'period'     , period,
+                  'perc'    , per
+                  ]);
+
+
+    OracleDataSet2.Refresh;
+  end;
+
+end;
+
+end.

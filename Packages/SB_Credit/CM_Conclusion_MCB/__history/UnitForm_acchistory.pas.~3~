@@ -1,0 +1,190 @@
+unit UnitForm_acchistory;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, DBGridEhGrouping, DB, OracleData, ComCtrls, StdCtrls, GridsEh,
+  DBGridEh, ExtCtrls, Grids, DBGrids, Mask, DBCtrlsEh, CMExcelExport;
+
+type
+  TForm_acchistory = class(TForm)
+    Panel2: TPanel;
+    PageControl1: TPageControl;
+    TabSheet1: TTabSheet;
+    TabSheet2: TTabSheet;
+    TabSheet3: TTabSheet;
+    Panel3: TPanel;
+    Label1: TLabel;
+    Label2: TLabel;
+    Button1: TButton;
+    Button2: TButton;
+    StartDateEdit: TDateTimePicker;
+    EndDateEdit: TDateTimePicker;
+    Panel4: TPanel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Button3: TButton;
+    Button4: TButton;
+    DateTimePicker2: TDateTimePicker;
+    DateTimePicker3: TDateTimePicker;
+    Panel1: TPanel;
+    Label5: TLabel;
+    Label6: TLabel;
+    Button5: TButton;
+    Button6: TButton;
+    DateTimePicker4: TDateTimePicker;
+    DateTimePicker5: TDateTimePicker;
+    sysdat: TOracleDataSet;
+    sysdatTEK_DAT: TDateTimeField;
+    ods_archost: TOracleDataSet;
+    ods_bebttrans: TOracleDataSet;
+    ods_credtrans: TOracleDataSet;
+    dsrc_archost: TDataSource;
+    dsrc_debttrans: TDataSource;
+    dsrc_credtrans: TDataSource;
+    DBGrid1: TDBGrid;
+    DBGrid2: TDBGrid;
+    DBGrid3: TDBGrid;
+    DBEditEh1: TDBEditEh;
+    DBEditEh2: TDBEditEh;
+    MisExcelExport: TCMExcelExport;
+    ods_bebttransID: TFloatField;
+    ods_bebttransDAT: TDateTimeField;
+    ods_bebttransACC_NO: TWideStringField;
+    ods_bebttransACC_NO_1: TWideStringField;
+    ods_bebttransAMMOUNT: TFloatField;
+    ods_bebttransAMMOUNT_C: TFloatField;
+    ods_bebttransLAMMOUNT: TFloatField;
+    ods_bebttransNAME: TWideStringField;
+    ods_credtransID: TFloatField;
+    ods_credtransDAT: TDateTimeField;
+    ods_credtransACC_NO: TWideStringField;
+    ods_credtransACC_NO_1: TWideStringField;
+    ods_credtransAMMOUNT: TFloatField;
+    ods_credtransAMMOUNT_C: TFloatField;
+    ods_credtransLAMMOUNT: TFloatField;
+    ods_credtransNAME: TWideStringField;
+    DBEditEh3: TDBEditEh;
+    ods_archostACC_NO: TWideStringField;
+    ods_archostACC_ID: TFloatField;
+    ods_archostDATDATE: TDateTimeField;
+    ods_archostOSTAT: TFloatField;
+    ods_archostPOK_OSTAT: TFloatField;
+    ods_archostOBR_D: TFloatField;
+    ods_archostPOK_OBR_D: TFloatField;
+    ods_archostPOK_OBR_K: TFloatField;
+    procedure FormCreate(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure Button3Click(Sender: TObject);
+    procedure Button5Click(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+    procedure Button4Click(Sender: TObject);
+    procedure Button6Click(Sender: TObject);
+    procedure FormClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form_acchistory: TForm_acchistory;
+
+implementation
+ uses sboapiDataModuleImpl,ConclusionMainUnitImpl;
+{$R *.dfm}
+
+procedure TForm_acchistory.Button1Click(Sender: TObject);
+begin
+with ods_archost do
+begin
+close;
+     SetVariable('accid',v_accid);
+     SetVariable('dat1',trunc(StartDateEdit.DateTime));
+     SetVariable('dat2',trunc(EndDateEdit.DateTime));
+open;
+end;
+end;
+
+procedure TForm_acchistory.Button2Click(Sender: TObject);
+begin
+ with MisExcelExport do
+  begin
+     Connect;
+     ExportDataset(ods_archost,'Qaliq',true,false);
+     Disconnect;
+
+  end;
+end;
+
+procedure TForm_acchistory.Button3Click(Sender: TObject);
+begin
+with ods_bebttrans do
+begin
+close;
+     SetVariable('accid',v_accid);
+     SetVariable('dat1',trunc(DateTimePicker2.DateTime));
+     SetVariable('dat2',trunc(DateTimePicker3.DateTime));
+open;
+end;
+end;
+
+procedure TForm_acchistory.Button4Click(Sender: TObject);
+begin
+ with MisExcelExport do
+  begin
+     Connect;
+     ExportDataset(ods_bebttrans,'Debt',true,false);
+     Disconnect;
+
+  end;
+end;
+
+procedure TForm_acchistory.Button5Click(Sender: TObject);
+begin
+with ods_credtrans do
+begin
+close;
+     SetVariable('accid',v_accid);
+     SetVariable('dat1',trunc(DateTimePicker4.DateTime));
+     SetVariable('dat2',trunc(DateTimePicker5.DateTime));
+open;
+end;
+end;
+
+procedure TForm_acchistory.Button6Click(Sender: TObject);
+begin
+ with MisExcelExport do
+  begin
+     Connect;
+     ExportDataset(ods_credtrans,'Kredit',true,false);
+     Disconnect;
+
+  end;
+end;
+
+procedure TForm_acchistory.FormClick(Sender: TObject);
+begin
+ods_archost.Close;
+ods_bebttrans.Close;
+ods_credtrans.Close;
+end;
+
+procedure TForm_acchistory.FormCreate(Sender: TObject);
+begin
+sysdat.Open;
+end;
+
+procedure TForm_acchistory.FormShow(Sender: TObject);
+begin
+StartDateEdit.DateTime:=sysdatTEK_DAT.AsDateTime;
+EndDateEdit.DateTime:=sysdatTEK_DAT.AsDateTime;
+DateTimePicker2.DateTime:=sysdatTEK_DAT.AsDateTime;
+DateTimePicker3.DateTime:=sysdatTEK_DAT.AsDateTime;
+DateTimePicker4.DateTime:=sysdatTEK_DAT.AsDateTime;
+DateTimePicker5.DateTime:=sysdatTEK_DAT.AsDateTime;
+end;
+
+end.

@@ -1,0 +1,652 @@
+object DataModAE: TDataModAE
+  OldCreateOrder = False
+  Height = 575
+  Width = 802
+  object ExpiresData: TOracleDataSet
+    SQL.Strings = (
+      'SELECT * FROM CM_AUTO_EXPIRES'
+      '--ORDER BY :ORDFLD')
+    Optimize = False
+    Cursor = crSQLWait
+    Session = CMDataModule.CMSession
+    Left = 19
+    Top = 8
+    object ExpiresDataID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object ExpiresDataDATEOFCONCLUSION: TDateTimeField
+      FieldName = 'DATEOFCONCLUSION'
+      Required = True
+    end
+    object ExpiresDataDUEDATEFIRSTCONTRACT: TDateTimeField
+      FieldName = 'DUEDATEFIRSTCONTRACT'
+      Required = True
+    end
+    object ExpiresDataDUEDATELASTCONTRACT: TDateTimeField
+      FieldName = 'DUEDATELASTCONTRACT'
+    end
+    object ExpiresDataNUMBEROFCREDIT: TWideStringField
+      DisplayLabel = #8470
+      FieldName = 'NUMBEROFCREDIT'
+      Size = 32
+    end
+    object ExpiresDataCONTRACTACCNO: TWideStringField
+      DisplayLabel = #1065#1077#1089#1072#1073' '#8470'-'#1089#1080
+      FieldName = 'CONTRACTACCNO'
+      Size = 4000
+    end
+    object ExpiresDataVAL_NAME: TWideStringField
+      DisplayLabel = '$'
+      FieldName = 'VAL_NAME'
+      Size = 10
+    end
+    object ExpiresDataNAME: TWideStringField
+      DisplayLabel = #1041#1086#1088#1078#1072#1083#1072#1085
+      FieldName = 'NAME'
+      Size = 64
+    end
+    object ExpiresDataDUEMAINAMT: TFloatField
+      DisplayLabel = #1057#1089#1091#1076#1072#1076#1072#1085
+      FieldName = 'DUEMAINAMT'
+      Required = True
+      DisplayFormat = '#,#0.00'
+    end
+    object ExpiresDataDUEINTAMT: TFloatField
+      DisplayLabel = #1065#1077#1089'. '#1092#1072#1080#1079#1076#1103#1085
+      FieldName = 'DUEINTAMT'
+      Required = True
+      DisplayFormat = '#,#0.00'
+    end
+    object ExpiresDataDAYSMAIN: TFloatField
+      DisplayLabel = #1071'.'#1041'. '#1101#1077#1078#1080#1082#1076#1080#1081#1080' '#1101#1094#1085#1083#1103#1088#1080#1085' '#1089#1072#1081#1099
+      FieldName = 'DAYSMAIN'
+    end
+    object ExpiresDataDAYSINT: TFloatField
+      DisplayLabel = #1060'.'#1041'. '#1101#1077#1078#1080#1082#1076#1080#1081#1080' '#1101#1094#1085#1083#1103#1088#1080#1085' '#1089#1072#1081#1099
+      FieldName = 'DAYSINT'
+    end
+  end
+  object DSExpiresData: TDataSource
+    DataSet = ExpiresData
+    Left = 24
+    Top = 64
+  end
+  object CM_AUTO_EXPIRE: TOraclePackage
+    Session = CMDataModule.CMSession
+    PackageName = 'CM_AUTO_EXPIRE'
+    Cursor = crHourGlass
+    Left = 104
+    Top = 8
+  end
+  object DSPayments: TDataSource
+    DataSet = Payments
+    Left = 184
+    Top = 64
+  end
+  object Payments: TOracleDataSet
+    SQL.Strings = (
+      
+        'SELECT id, creditid, paydate, payedamt, payedintamt, payeddueamt' +
+        ','
+      '       payeddueintamt, payedpenaltyamt'
+      '  FROM cm_payments'
+      'WHERE CreditID=:CrdID'
+      'ORDER BY PayDate')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000C0000003A00430052004400490044000300000000000000
+      00000000}
+    Cursor = crSQLWait
+    Session = CMDataModule.CMSession
+    Left = 184
+    Top = 8
+    object PaymentsID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object PaymentsCREDITID: TFloatField
+      FieldName = 'CREDITID'
+      Required = True
+    end
+    object PaymentsPAYDATE: TDateTimeField
+      DisplayLabel = #1070'. '#1058#1072#1088#1080#1093#1080
+      FieldName = 'PAYDATE'
+      Required = True
+    end
+    object PaymentsPAYEDAMT: TFloatField
+      DisplayLabel = #1071#1089#1072#1089' '#1041#1086#1088#1078'-'#1076#1072#1085
+      FieldName = 'PAYEDAMT'
+      Required = True
+      DisplayFormat = '#,#0.00'
+    end
+    object PaymentsPAYEDINTAMT: TFloatField
+      DisplayLabel = #1071'.'#1041'. '#1092#1072#1080#1079' - '#1076#1103#1085
+      FieldName = 'PAYEDINTAMT'
+      Required = True
+      DisplayFormat = '#,#0.00'
+    end
+    object PaymentsPAYEDDUEAMT: TFloatField
+      DisplayLabel = #1069#1077#1078#1080#1082'. '#1041#1086#1088#1078'-'#1076#1072#1085
+      FieldName = 'PAYEDDUEAMT'
+      Required = True
+      DisplayFormat = '#,#0.00'
+    end
+    object PaymentsPAYEDDUEINTAMT: TFloatField
+      DisplayLabel = #1069'.'#1041'. '#1092#1072#1080#1079'-'#1076#1103#1085
+      FieldName = 'PAYEDDUEINTAMT'
+      Required = True
+      DisplayFormat = '#,#0.00'
+    end
+    object PaymentsPAYEDPENALTYAMT: TFloatField
+      FieldName = 'PAYEDPENALTYAMT'
+      Required = True
+      DisplayFormat = '#,#0.00'
+    end
+  end
+  object Schedule: TOracleDataSet
+    SQL.Strings = (
+      'SELECT id, creditid, paymentdate, principal, interest'
+      '  FROM cm_payment_schedule'
+      ' WHERE CreditID=:CrdID'
+      'ORDER BY PaymentDate')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000C0000003A00430052004400490044000300000000000000
+      00000000}
+    Cursor = crSQLWait
+    Session = CMDataModule.CMSession
+    OnCalcFields = ScheduleCalcFields
+    Left = 251
+    Top = 8
+    object ScheduleID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object ScheduleCREDITID: TFloatField
+      FieldName = 'CREDITID'
+      Required = True
+    end
+    object SchedulePAYMENTDATE: TDateTimeField
+      DisplayLabel = #1058#1072#1088#1080#1093
+      FieldName = 'PAYMENTDATE'
+      Required = True
+    end
+    object SchedulePRINCIPAL: TFloatField
+      DisplayLabel = #1071#1089#1072#1089' '#1041#1086#1088#1078'-'#1076#1072#1085
+      FieldName = 'PRINCIPAL'
+      Required = True
+      DisplayFormat = '#,#0.00'
+    end
+    object ScheduleINTEREST: TFloatField
+      DisplayLabel = #1065'. '#1060#1072#1080#1079' - '#1076#1103#1085
+      FieldName = 'INTEREST'
+      Required = True
+      DisplayFormat = '#,#0.00'
+    end
+    object ScheduleTotal: TFloatField
+      DisplayLabel = #1046#1103#1084#1080
+      FieldKind = fkCalculated
+      FieldName = 'Total'
+      DisplayFormat = '#,#0.00'
+      Calculated = True
+    end
+  end
+  object DSSchedule: TDataSource
+    DataSet = Schedule
+    Left = 256
+    Top = 64
+  end
+  object PaymentData: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      'p.id,b.name, '
+      'p.numberofcredit,'
+      'cm_common.AccountNumber_Get(a.contractaccid) as acc_number,'
+      'ps.paymentdate,'
+      'ps.principal,'
+      
+        'cm_ak_reports.get_pay(ps.creditid,ps.paymentdate) as paymentamou' +
+        'nt,'
+      
+        'cm_ak_reports.get_payint(ps.creditid,ps.paymentdate) as PAYEDINT' +
+        'AMT,'
+      
+        'cm_ak_reports.get_monthpayment(ps.creditid,ps.paymentdate) as mo' +
+        'unthpay '
+      'FROM '
+      'cm_boorowerinfo b,'
+      'cm_active_credits p,'
+      'cm_payment_schedule ps,'
+      'cm_accounts a'
+      'where'
+      'b.creditid=p.id '
+      'and p.id=ps.creditid '
+      'and p.id=a.creditid'
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      'order by ps.paymentdate')
+    Optimize = False
+    Cursor = crSQLWait
+    Session = CMDataModule.CMSession
+    Left = 24
+    Top = 190
+    object PaymentDataID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object PaymentDataNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 64
+    end
+    object PaymentDataNUMBEROFCREDIT: TWideStringField
+      FieldName = 'NUMBEROFCREDIT'
+      Size = 32
+    end
+    object PaymentDataACC_NUMBER: TWideStringField
+      FieldName = 'ACC_NUMBER'
+      Size = 4000
+    end
+    object PaymentDataPAYMENTDATE: TDateTimeField
+      FieldName = 'PAYMENTDATE'
+      Required = True
+    end
+    object PaymentDataPRINCIPAL: TFloatField
+      FieldName = 'PRINCIPAL'
+      Required = True
+    end
+    object PaymentDataPAYMENTAMOUNT: TFloatField
+      FieldName = 'PAYMENTAMOUNT'
+    end
+    object PaymentDataPAYEDINTAMT: TFloatField
+      FieldName = 'PAYEDINTAMT'
+    end
+    object PaymentDataMOUNTHPAY: TFloatField
+      FieldName = 'MOUNTHPAY'
+    end
+  end
+  object PayDataS: TDataSource
+    DataSet = PaymentData
+    Left = 24
+    Top = 240
+  end
+  object Customers: TOracleDataSet
+    SQL.Strings = (
+      'SELECT id,  name'
+      '  FROM CM_SB_CUSTOMERS'
+      'ORDER BY NAME')
+    Optimize = False
+    Cursor = crSQLWait
+    Session = CMDataModule.CMSession
+    Left = 544
+    Top = 392
+  end
+  object DSCustomers: TDataSource
+    DataSet = Customers
+    Left = 544
+    Top = 448
+  end
+  object BoorDSet: TOracleDataSet
+    SQL.Strings = (
+      'select name from cm_boorowerinfo group by name order by name '
+      ''
+      '')
+    Optimize = False
+    Cursor = crSQLWait
+    Session = CMDataModule.CMSession
+    Left = 88
+    Top = 192
+    object BoorDSetNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 64
+    end
+  end
+  object BoorDSource: TDataSource
+    DataSet = BoorDSet
+    Left = 88
+    Top = 240
+  end
+  object AvalDSet: TOracleDataSet
+    SQL.Strings = (
+      'SELECT valute,valu_name'
+      '  FROM sb_avalute'
+      ''
+      '')
+    Optimize = False
+    Cursor = crSQLWait
+    Session = CMDataModule.CMSession
+    Left = 160
+    Top = 192
+    object AvalDSetVALUTE: TIntegerField
+      FieldName = 'VALUTE'
+      Required = True
+    end
+    object AvalDSetVALU_NAME: TWideStringField
+      FieldName = 'VALU_NAME'
+      Size = 25
+    end
+  end
+  object AvalDSource: TDataSource
+    DataSet = AvalDSet
+    Left = 160
+    Top = 240
+  end
+  object FilialDSet: TOracleDataSet
+    SQL.Strings = (
+      'SELECT *'
+      '  FROM sb_filial'
+      '')
+    Optimize = False
+    Cursor = crSQLWait
+    Session = CMDataModule.CMSession
+    Left = 224
+    Top = 192
+    object FilialDSetID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object FilialDSetNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 90
+    end
+  end
+  object FilialDSource: TDataSource
+    DataSet = FilialDSet
+    Left = 225
+    Top = 240
+  end
+  object PortDSet: TOracleDataSet
+    SQL.Strings = (
+      'SELECT numberofcredit'
+      '  FROM cm_active_credits'
+      'group by numberofcredit'
+      'order by numberofcredit'
+      '')
+    Optimize = False
+    Cursor = crSQLWait
+    Session = CMDataModule.CMSession
+    Left = 296
+    Top = 192
+    object PortDSetNUMBEROFCREDIT: TWideStringField
+      FieldName = 'NUMBEROFCREDIT'
+      Size = 32
+    end
+  end
+  object PortDSource: TDataSource
+    DataSet = PortDSet
+    Left = 296
+    Top = 248
+  end
+  object DSPReserves: TDataSource
+    DataSet = PReserves
+    Left = 376
+    Top = 248
+  end
+  object PReserves: TOracleDataSet
+    SQL.Strings = (
+      'SELECT id, percent, description'
+      '  FROM cm_reserves'
+      'ORDER BY percent')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000300000004000000490044000100000000000E000000500045005200
+      430045004E005400010000000000160000004400450053004300520049005000
+      540049004F004E00010000000000}
+    Cursor = crSQLWait
+    Session = CMDataModule.CMSession
+    Left = 376
+    Top = 192
+    object PReservesID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object PReservesPERCENT: TFloatField
+      FieldName = 'PERCENT'
+      Required = True
+    end
+    object PReservesDESCRIPTION: TWideStringField
+      FieldName = 'DESCRIPTION'
+      Size = 64
+    end
+  end
+  object DateDSet: TOracleDataSet
+    SQL.Strings = (
+      'SELECT tek_dat FROM sb_sysdat')
+    Optimize = False
+    Cursor = crSQLWait
+    Session = CMDataModule.CMSession
+    Left = 24
+    Top = 312
+    object DateDSetTEK_DAT: TDateTimeField
+      FieldName = 'TEK_DAT'
+      Required = True
+    end
+  end
+  object DateDSource: TDataSource
+    DataSet = DateDSet
+    Left = 24
+    Top = 376
+  end
+  object Persons: TOracleDataSet
+    SQL.Strings = (
+      'SELECT id,  descripion'
+      '  FROM cm_persons')
+    Optimize = False
+    Cursor = crSQLWait
+    Session = CMDataModule.CMSession
+    Left = 448
+    Top = 192
+    object PersonsID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object PersonsDESCRIPION: TWideStringField
+      FieldName = 'DESCRIPION'
+      Size = 64
+    end
+  end
+  object DSPersons: TDataSource
+    DataSet = Persons
+    Left = 448
+    Top = 248
+  end
+  object DSPledges: TDataSource
+    DataSet = Pledges
+    Left = 520
+    Top = 248
+  end
+  object Pledges: TOracleDataSet
+    SQL.Strings = (
+      'SELECT id,  description'
+      '  FROM cm_pledges')
+    Optimize = False
+    Cursor = crSQLWait
+    Session = CMDataModule.CMSession
+    Left = 517
+    Top = 192
+    object PledgesID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object PledgesDESCRIPTION: TWideStringField
+      FieldName = 'DESCRIPTION'
+      Size = 64
+    end
+  end
+  object SReserves: TOracleDataSet
+    SQL.Strings = (
+      'SELECT id, percent, description'
+      '  FROM cm_reserves'
+      'ORDER BY percent')
+    Optimize = False
+    Cursor = crSQLWait
+    Session = CMDataModule.CMSession
+    Left = 104
+    Top = 312
+    object SReservesID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object SReservesPERCENT: TFloatField
+      FieldName = 'PERCENT'
+      Required = True
+    end
+    object SReservesDESCRIPTION: TWideStringField
+      FieldName = 'DESCRIPTION'
+      Required = True
+      Size = 64
+    end
+    object SReservesFULLDESC: TWideStringField
+      FieldKind = fkCalculated
+      FieldName = 'FULLDESC'
+      Size = 255
+      Calculated = True
+    end
+  end
+  object DSSReserves: TDataSource
+    DataSet = SReserves
+    Left = 104
+    Top = 376
+  end
+  object Categories: TOracleDataSet
+    SQL.Strings = (
+      'SELECT id, description'
+      '  FROM cm_categories')
+    Optimize = False
+    Cursor = crSQLWait
+    Session = CMDataModule.CMSession
+    Left = 184
+    Top = 312
+    object CategoriesID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object CategoriesDESCRIPTION: TWideStringField
+      FieldName = 'DESCRIPTION'
+      Size = 128
+    end
+  end
+  object DSCategories: TDataSource
+    DataSet = Categories
+    Left = 184
+    Top = 376
+  end
+  object UserGroups: TOracleDataSet
+    SQL.Strings = (
+      'SELECT id, description'
+      '  FROM cm_usergroups'
+      'order by description')
+    Optimize = False
+    Cursor = crSQLWait
+    Session = CMDataModule.CMSession
+    Left = 272
+    Top = 312
+    object UserGroupsID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object UserGroupsDESCRIPTION: TWideStringField
+      FieldName = 'DESCRIPTION'
+      Size = 255
+    end
+  end
+  object DSUserGroups: TDataSource
+    DataSet = UserGroups
+    Left = 272
+    Top = 376
+  end
+  object DSCreditTypes: TDataSource
+    DataSet = CreditTypes
+    Left = 424
+    Top = 376
+  end
+  object CreditTypes: TOracleDataSet
+    SQL.Strings = (
+      'SELECT id,  description'
+      '  FROM cm_credittypes')
+    Optimize = False
+    Cursor = crSQLWait
+    Session = CMDataModule.CMSession
+    Left = 408
+    Top = 312
+    object CreditTypesID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object CreditTypesDESCRIPTION: TWideStringField
+      FieldName = 'DESCRIPTION'
+      Size = 128
+    end
+  end
+  object AccDSource: TDataSource
+    DataSet = AccDSet
+    Left = 488
+    Top = 376
+  end
+  object AccDSet: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      'cm_common.AccountNumber_Get(a.contractaccid) as acc_number'
+      'FROM '
+      'cm_boorowerinfo b,'
+      'cm_accounts a'
+      'where'
+      'b.creditid=a.creditid'
+      'order by cm_common.AccountNumber_Get(a.contractaccid)')
+    Optimize = False
+    Cursor = crSQLWait
+    Session = CMDataModule.CMSession
+    Left = 478
+    Top = 312
+    object AccDSetACC_NUMBER: TWideStringField
+      FieldName = 'ACC_NUMBER'
+      Size = 4000
+    end
+  end
+  object MusIdDSource: TDataSource
+    DataSet = MusIdDSet
+    Left = 348
+    Top = 376
+  end
+  object MusIdDSet: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      'boorowerid'
+      'FROM '
+      'cm_active_credits'
+      'group by boorowerid'
+      'order by boorowerid')
+    Optimize = False
+    Cursor = crSQLWait
+    Session = CMDataModule.CMSession
+    Left = 342
+    Top = 312
+    object MusIdDSetBOOROWERID: TFloatField
+      FieldName = 'BOOROWERID'
+      Required = True
+    end
+  end
+end

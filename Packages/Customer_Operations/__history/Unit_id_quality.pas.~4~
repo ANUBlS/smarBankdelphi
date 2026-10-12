@@ -1,0 +1,147 @@
+﻿unit Unit_id_quality;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, XFSCtrls, Grids, DBGrids, ExtCtrls, XDBGrids,customers_operation_impl;
+
+type
+  TFormid_quality = class(TForm)
+    XFPanel2: TXFPanel;
+    DBGrid1: TDBGrid;
+    XFButton3: TXFButton;
+    XFPanel1: TXFPanel;
+    XFButton1: TXFButton;
+    XFButton2: TXFButton;
+    XDBGrid1: TXDBGrid;
+    procedure XFButton1Click(Sender: TObject);
+    procedure XFButton3Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure XDBGrid1MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure XFButton2Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Formid_quality: TFormid_quality;
+
+implementation
+ uses sboapiDataModuleImpl,CO_datamod_impl, Unit_description, UnitCustProps;
+{$R *.dfm}
+
+procedure TFormid_quality.FormShow(Sender: TObject);
+ var
+ id:integer;
+begin
+ id:= CO_DataMod.customers.FieldByName('quality_id').AsInteger ;
+ CO_DataMod.ods_custID_quality.Locate('id',id, []);
+
+
+end;
+
+procedure TFormid_quality.XDBGrid1MouseMove(Sender: TObject; Shift: TShiftState;
+  X, Y: Integer);
+begin
+CO_DataMod.Ods_cust_id_qualityCount.close ;
+CO_DataMod.Ods_cust_id_qualityCount.open ;
+end;
+
+procedure TFormid_quality.XFButton1Click(Sender: TObject);
+var
+ id_quality:integer;
+ id_qualityCust:integer;
+ v_id_quality:integer;
+begin
+  id_quality:=CO_DataMod.ods_custID_quality.FieldByName('id').AsInteger;
+  id_qualityCust:=CO_DataMod.customers.FieldByName('id').AsInteger;
+  v_id_quality:=CO_DataMod.ods_custID_quality.FieldByName('id').AsInteger;
+  CO_DataMod.ods_cust_ID_quality1.First;
+  with CO_DataMod do
+  begin
+
+  Ods_cust_id_qualityCount.Close;
+  Ods_cust_id_qualityCount.SetVariable('custid',id_qualityCust);
+  Ods_cust_id_qualityCount.SetVariable('id_quality',id_quality);
+  Ods_cust_id_qualityCount.Open;
+  if Ods_cust_id_qualityCount.FieldByName('checked').AsInteger=0 then
+  begin
+  ShowMessage('Təsnifat keyfiyyətinin növünü daxil edin  !');
+  exit
+  end;
+  end;
+
+
+
+
+  CO_DataMod.SBOP.CallProcedure('upd_custid_quality',
+     ['v_idquality',id_quality ]);
+
+
+   CO_DataMod.SBOP.CallProcedure('update_customers',
+     ['v_idcust',    id_qualityCust,
+      'v_id_quality',v_id_quality ]);
+
+   if not CO_DataMod.Customers.FieldByName('quality_id').isNull
+         and (CO_DataMod.CustomersID.AsInteger=id_qualityCust)then
+      begin
+   FrmCustProps.id_quality_DBLookupComboboxEh.KeyValue :=  v_id_quality;
+
+      end  ;
+
+    // XFButton3.Enabled:=true;
+          //  CO_Main.CustomerGB.;//N19Click(Sender);
+     //-----------PCustServiceForm. CustSearch1.Click;
+  //  Formid_quality.Close ;
+
+
+end;
+
+procedure TFormid_quality.XFButton2Click(Sender: TObject);
+begin
+Formid_quality.Close;
+end;
+
+procedure TFormid_quality.XFButton3Click(Sender: TObject);
+var
+ id_quality:integer;
+ id_qualityCust:integer;
+ v_id_quality:integer;
+begin
+
+
+{  id_quality:=CO_DataMod.ods_custID_quality.FieldByName('id').AsInteger;
+  id_qualityCust:=CO_DataMod.customers.FieldByName('id').AsInteger;
+  v_id_quality:=CO_DataMod.ods_custID_quality.FieldByName('id').AsInteger;
+  CO_DataMod.ods_cust_ID_quality1.First;
+  with CO_DataMod do
+  begin
+
+  Ods_cust_id_qualityCount.Close;
+  Ods_cust_id_qualityCount.SetVariable('custid',id_qualityCust);
+  Ods_cust_id_qualityCount.SetVariable('id_quality',id_quality);
+  Ods_cust_id_qualityCount.Open;
+  if Ods_cust_id_qualityCount.FieldByName('checked').AsInteger=0 then
+  begin
+  ShowMessage('Təsnifat keyfiyyətinin növünü daxil edin  !');
+  exit
+  end;
+  end;      }
+  {if CO_DataMod.Ods_cust_id_qualityCount.FieldByName('checked').AsInteger=0 then
+  begin
+  ShowMessage('sasssTəsnifat keyfiyyətinin növünü daxil edin  !');
+  exit
+  end;     }
+Form_description:=TForm_description.create(self);
+
+Form_description.Memo1.Text:=CO_DataMod.Ods_cust_id_quality1DESCRIPTION.AsString;
+
+
+Form_description.ShowModal;
+end;
+
+end.

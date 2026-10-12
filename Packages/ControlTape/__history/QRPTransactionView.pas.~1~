@@ -1,0 +1,51 @@
+unit QRPTransactionView;
+
+interface
+
+uses Windows, SysUtils, Messages, Classes, Graphics, Controls,
+  StdCtrls, ExtCtrls, Forms, Quickrpt, QRCtrls;
+
+type
+  TQTransactionView = class(TQuickRep)
+    QRGroup1: TQRGroup;
+    QRBand1: TQRBand;
+    QRDBText1: TQRDBText;
+    QRDBText2: TQRDBText;
+    QRDBText3: TQRDBText;
+    QRDBText4: TQRDBText;
+    QRBand2: TQRBand;
+    QRExpr1: TQRExpr;
+    QRBand3: TQRBand;
+    QRExpr2: TQRExpr;
+    QRExpr3: TQRExpr;
+    QRExpr4: TQRExpr;
+    QRLabel1: TQRLabel;
+    QRExpr5: TQRExpr;
+    QRDBText5: TQRDBText;
+    QRDBText6: TQRDBText;
+    QRDBText7: TQRDBText;
+    QRShape1: TQRShape;
+    procedure QRGroup1AfterPrint(Sender: TQRCustomBand;
+      BandPrinted: Boolean);
+  private
+
+  public
+
+  end;
+
+var
+  QTransactionView: TQTransactionView;
+
+implementation
+
+uses untdatamod;
+
+{$R *.DFM}
+
+procedure TQTransactionView.QRGroup1AfterPrint(Sender: TQRCustomBand;
+  BandPrinted: Boolean);
+begin
+ QRExpr3.Reset;
+end;
+
+end.

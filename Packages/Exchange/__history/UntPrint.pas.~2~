@@ -1,0 +1,90 @@
+unit UntPrint;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, Buttons, ExtCtrls, ExcelExporter;
+
+type
+  TFrmPrint = class(TForm)
+    Panel1: TPanel;
+    GroupBox1: TGroupBox;
+    RBTotal: TRadioButton;
+    RBExpand: TRadioButton;
+    BPrint: TBitBtn;
+    BCancel: TBitBtn;
+    ExcelExporter: TExcelExporter;
+    BitBtn1: TBitBtn;
+    procedure BPrintClick(Sender: TObject);
+    procedure BCancelClick(Sender: TObject);
+    procedure FormKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure RBTotalClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmPrint: TFrmPrint;
+
+implementation
+
+uses ExcangeDataModule, UntExchangeRep, QRepExchangeView;
+
+{$R *.DFM}
+
+procedure TFrmPrint.BPrintClick(Sender: TObject);
+begin
+ if RBTotal.Checked then
+  begin
+   with ExchangeDataMod do
+    begin
+     if TotalExchangeReport.Active=true then
+      TotalExchangeReport.Active:=false;
+     TotalExchangeReport.Active:=true;
+
+    if (Sender as TBitBtn).Tag = 1 then
+     ExchangeRep.Preview
+    else
+     ExcelExporter.Report;
+   end;
+  end
+ else
+  with ExchangeDataMod do
+   begin
+    if (Sender as TBitBtn).Tag = 1 then
+     QRExchangeView.Preview
+    else
+     ExcelExporter.Report;
+   end;
+end;
+
+procedure TFrmPrint.BCancelClick(Sender: TObject);
+begin
+  Close;
+end;
+
+procedure TFrmPrint.FormCreate(Sender: TObject);
+begin
+ SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TFrmPrint.FormKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+ if (Key =VK_ESCAPE) then Close;
+end;
+
+procedure TFrmPrint.RBTotalClick(Sender: TObject);
+begin
+ if (Sender as TRadioButton).Tag = 1 then
+  ExcelExporter.ExportSource :=ExchangeDataMod.DataExcel
+ else
+  ExcelExporter.ExportSource :=ExchangeDataMod.ExchangeData;
+end;
+
+end.

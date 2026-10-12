@@ -1,0 +1,148 @@
+unit EmanatCRDT;
+
+interface
+
+uses SysUtils, Classes, HTTPApp,dbxjson, Oracle, DB, OracleData, xmldom,  IniFiles,
+  XMLIntf, msxmldom, XMLDoc;
+
+type
+  TWebModule1 = class(TWebModule)
+    OracleSession1: TOracleSession;
+    OracleQuery1: TOracleQuery;
+    procedure WebModule1DefaultHandlerAction(Sender: TObject;
+      Request: TWebRequest; Response: TWebResponse; var Handled: Boolean);
+    procedure WebModule1creditlistAction(Sender: TObject; Request: TWebRequest;
+      Response: TWebResponse; var Handled: Boolean);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  WebModuleClass: TComponentClass = TWebModule1;
+
+implementation
+
+{%CLASSGROUP 'Vcl.Controls.TControl'}
+
+{$R *.dfm}
+
+
+
+procedure TWebModule1.WebModule1creditlistAction(Sender: TObject;
+  Request: TWebRequest; Response: TWebResponse; var Handled: Boolean);
+var a,b,c:integer;
+ val :string;
+
+   JSonObject:TJSonObject;
+   JSonValue,JsonValue1:TJSonValue;
+   JsonArray: TJSONArray;
+   ArrayElement: TJSonValue;
+   FoundValue: TJSonValue;
+   st:string;
+   Contract: string;
+   credamount:real;
+   ins_date:String;
+   MyText: TStringlist;
+   RootNode, xmlNode: IXMLNode;
+   uname,upass,dbname:string;
+    ini: TIniFile;
+
+
+  begin
+   MyText:= TStringlist.create;
+
+   try
+
+   ini := TIniFile.Create('D:\Smart-bank\webservices\conn.ini');
+
+
+     dbname:= ini.ReadString('Smart', 'DataBase', 'default value');;
+     uname:=  ini.ReadString('Smart', 'Username', 'default value');;
+     upass:=  ini.ReadString('Smart', 'Password', 'default value');;
+
+   {XMLDoc.LoadFromFile('D:\webcon.xml');
+    XMLDoc.Active := True;
+    RootNode := XMLDoc.DocumentElement;
+             dbname:= RootNode.ChildNodes['Smart'].ChildNodes['dbname'].Text;
+             uname:=  RootNode.ChildNodes['Smart'].ChildNodes['dbuser'].Text;
+             upass:=  RootNode.ChildNodes['Smart'].ChildNodes['dbpass'].Text;   }
+
+
+        //   OracleSession1.Connected:=false;
+
+
+   st:=Request.Content;
+
+JsonValue:=JSonObject.ParseJSONValue(st);
+
+ JsonValue1:=(JsonValue as TJSONObject).Get('Date').JSONValue;
+
+ins_date:=JsonValue1.Value;
+
+JsonValue:=(JsonValue as TJSONObject).Get('CreditInfo').JSONValue;
+JsonArray := JsonValue as TJSONArray;
+
+              OracleSession1.LogonDatabase:=dbname;
+              OracleSession1.LogonUsername:=uname;
+              OracleSession1.LogonPassword:=upass;
+              OracleSession1.Connected:=true;
+
+  if (JSONValue is TJSONArray) then
+    begin
+           //val:='1';
+     for a:=0 to (JSONValue as TJSONArray).Size-1  do
+         begin
+          Contract :=Contract+'->'+ins_date+'**'+((JSONValue as TJSONArray).get(a) as TJSonObject).Get('ContractNumber').JSONValue.Value+
+
+          '='+((JSONValue as TJSONArray).get(a) as TJSonObject).Get('amount').JSONValue.Value;
+
+
+
+
+            //OracleQuery1.Close;
+            OracleQuery1.SetVariable('dat',ins_date);
+            OracleQuery1.SetVariable('a1',((JSONValue as TJSONArray).get(a) as TJSonObject).Get('ContractNumber').JSONValue.Value);
+            OracleQuery1.SetVariable('a2',((JSONValue as TJSONArray).get(a) as TJSonObject).Get('amount').JSONValue.Value);
+
+            OracleQuery1.Execute;
+            OracleSession1.Commit;
+
+        end;
+
+
+
+
+      end;
+
+  
+
+ Response.ContentType := 'application/json';
+ Response.Content:= '{"code":200,"message":"SUCCESS" }';//Contract;
+
+  OracleSession1.Connected:=false;
+
+   except
+
+ Response.ContentType := 'application/json';
+ Response.Content:= '{"code":4001,"message":"Connection to db is incorrect will processes manually " }';
+ MkDir('D:\Smart-bank\webservices\log\'+ins_date)  ;
+ MyText.Add(st);
+ MyText.SaveToFile('D:\Smart-bank\webservices\log\'+ins_date+'\log.txt');
+   end;
+
+
+end;
+
+procedure TWebModule1.WebModule1DefaultHandlerAction(Sender: TObject;
+  Request: TWebRequest; Response: TWebResponse; var Handled: Boolean);
+begin
+  Response.Content :=
+    '<html>' +
+    '<head><title>Web Server Application</title></head>' +
+    '<body>Web Server Application</body>' +
+    '</html>';
+end;
+
+end.

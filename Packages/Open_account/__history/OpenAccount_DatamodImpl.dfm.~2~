@@ -1,0 +1,99 @@
+object OpenAccount_DataModule: TOpenAccount_DataModule
+  OldCreateOrder = False
+  Height = 359
+  Width = 564
+  object ODS_bal_spr_parts: TOracleDataSet
+    SQL.Strings = (
+      
+        'select part, partname, part||'#39#39'||partname as SEARCH from bal_spr' +
+        '_parts  where part is not null'
+      ''
+      ''
+      'order by part')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000030000000800000050004100520054000100000000000C0000005300
+      450041005200430048000100000000001000000050004100520054004E004100
+      4D004500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 40
+    Top = 8
+    object ODS_bal_spr_partsPART: TIntegerField
+      FieldName = 'PART'
+    end
+    object ODS_bal_spr_partsPARTNAME: TWideStringField
+      FieldName = 'PARTNAME'
+      Size = 3200
+    end
+    object ODS_bal_spr_partsSEARCH: TWideStringField
+      FieldName = 'SEARCH'
+      Size = 3240
+    end
+  end
+  object DSRC_bal_spr_parts: TDataSource
+    DataSet = ODS_bal_spr_parts
+    Left = 40
+    Top = 64
+  end
+  object DSRC_bal_spr_groups: TDataSource
+    DataSet = ODS_bal_spr_groups
+    Left = 168
+    Top = 64
+  end
+  object DSRC_bal_spr1: TDataSource
+    DataSet = ODS_Bal_spr1
+    Left = 280
+    Top = 64
+  end
+  object ODS_bal_spr_groups: TOracleDataSet
+    SQL.Strings = (
+      
+        'select grp,grpname,grp||'#39#39'|| grpname as SEARCH from bal_spr_grou' +
+        'ps where grp is not null'
+      ''
+      '--and accgroup=:ddd'
+      ''
+      ''
+      ''
+      'order by grp')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      0500000003000000060000004700520050000100000000000E00000047005200
+      50004E0041004D0045000100000000000C000000530045004100520043004800
+      010000000000}
+    Session = sboapiDataModule.SBSession
+    AfterScroll = ODS_bal_spr_groupsAfterScroll
+    Left = 168
+    Top = 8
+    object ODS_bal_spr_groupsGRP: TIntegerField
+      FieldName = 'GRP'
+    end
+    object ODS_bal_spr_groupsGRPNAME: TWideStringField
+      FieldName = 'GRPNAME'
+      Size = 2000
+    end
+    object ODS_bal_spr_groupsSEARCH: TWideStringField
+      FieldName = 'SEARCH'
+      Size = 2040
+    end
+  end
+  object ODS_Bal_spr1: TOracleDataSet
+    SQL.Strings = (
+      'select bal_cn,balname from bal_spr1 where length (bal_cn)>3  '
+      'order by bal_cn')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000C000000420041004C005F0043004E000100000000000E00
+      0000420041004C004E0041004D004500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 280
+    Top = 8
+    object ODS_Bal_spr1BAL_CN: TFloatField
+      FieldName = 'BAL_CN'
+    end
+    object ODS_Bal_spr1BALNAME: TWideStringField
+      FieldName = 'BALNAME'
+      Size = 4000
+    end
+  end
+end

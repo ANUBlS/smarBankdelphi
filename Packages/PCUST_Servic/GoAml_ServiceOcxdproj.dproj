@@ -1,0 +1,153 @@
+﻿	<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+		<PropertyGroup>
+			<ProjectGuid>{FD51EB27-B1CE-45E8-916A-398FAB1D7857}</ProjectGuid>
+			<MainSource>GoAml_ServiceOcxdproj.dpr</MainSource>
+			<ProjectVersion>12.3</ProjectVersion>
+			<Base>True</Base>
+			<Config Condition="'$(Config)'==''">Debug</Config>
+			<Platform>Win32</Platform>
+			<AppType>Library</AppType>
+			<FrameworkType>None</FrameworkType>
+			<DCC_DCCCompiler>DCC32</DCC_DCCCompiler>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Config)'=='Base' or '$(Base)'!=''">
+			<Base>true</Base>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Config)'=='Debug' or '$(Cfg_1)'!=''">
+			<Cfg_1>true</Cfg_1>
+			<CfgParent>Base</CfgParent>
+			<Base>true</Base>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Config)'=='Release' or '$(Cfg_2)'!=''">
+			<Cfg_2>true</Cfg_2>
+			<CfgParent>Base</CfgParent>
+			<Base>true</Base>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Base)'!=''">
+			<DCC_UsePackage>Vcl;Vclx;Vcldb;dclbde;SBCommon50;sbplg50;sboapi50;doa41dXE;SBCMVcl50;ehlib150;DclEhLib150;cu_common;sbdm_common;VCLXFiles150;QR5RunDXE;SbTranslate;dclofficexp;cm_retil</DCC_UsePackage>
+			<UsePackages>true</UsePackages>
+			<DCC_DcuOutput>.\$(Config)\$(Platform)</DCC_DcuOutput>
+			<DCC_E>false</DCC_E>
+			<DCC_ImageBase>00400000</DCC_ImageBase>
+			<DCC_UnitAlias>WinTypes=Windows;WinProcs=Windows;DbiTypes=BDE;DbiProcs=BDE;$(DCC_UnitAlias)</DCC_UnitAlias>
+			<DCC_ExeOutput>.\$(Config)\$(Platform)</DCC_ExeOutput>
+			<DCC_S>false</DCC_S>
+			<GenDll>true</GenDll>
+			<DCC_N>false</DCC_N>
+			<DCC_F>false</DCC_F>
+			<DCC_K>false</DCC_K>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Cfg_1)'!=''">
+			<DCC_ExeOutput>D:\Smart-Bank\Bin\</DCC_ExeOutput>
+			<DCC_Define>DEBUG;$(DCC_Define)</DCC_Define>
+			<DCC_Optimize>false</DCC_Optimize>
+			<DCC_GenerateStackFrames>true</DCC_GenerateStackFrames>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Cfg_2)'!=''">
+			<DCC_LocalDebugSymbols>false</DCC_LocalDebugSymbols>
+			<DCC_Define>RELEASE;$(DCC_Define)</DCC_Define>
+			<DCC_SymbolReferenceInfo>0</DCC_SymbolReferenceInfo>
+			<DCC_DebugInformation>false</DCC_DebugInformation>
+		</PropertyGroup>
+		<ItemGroup>
+			<DelphiCompile Include="GoAml_ServiceOcxdproj.dpr">
+				<MainSource>MainSource</MainSource>
+			</DelphiCompile>
+			<DCCReference Include="GoAml_ServiceProject_TLB.pas"/>
+			<DCCReference Include="GoAml_serviceImpl.pas">
+				<Form>GoAml_ServiceForm</Form>
+				<DesignClass>TActiveForm</DesignClass>
+				<CoClasses>GoAml_Service</CoClasses>
+			</DCCReference>
+			<DCCReference Include="DatUnit.pas">
+				<Form>DM_goAml</Form>
+				<DesignClass>TDataModule</DesignClass>
+			</DCCReference>
+			<DCCReference Include="ForumEditUnit.pas">
+				<Form>FormEdit</Form>
+			</DCCReference>
+			<DCCReference Include="UnitFiziki.pas">
+				<Form>repF</Form>
+			</DCCReference>
+			<DCCReference Include="UnitHuquqi.pas">
+				<Form>repH</Form>
+			</DCCReference>
+			<DCCReference Include="UnitMXX.pas">
+				<Form>FormMMX</Form>
+			</DCCReference>
+			<RidlCompile Include="GoAml_ServiceProject.ridl"/>
+			<BuildConfiguration Include="Release">
+				<Key>Cfg_2</Key>
+				<CfgParent>Base</CfgParent>
+			</BuildConfiguration>
+			<BuildConfiguration Include="Base">
+				<Key>Base</Key>
+			</BuildConfiguration>
+			<BuildConfiguration Include="Debug">
+				<Key>Cfg_1</Key>
+				<CfgParent>Base</CfgParent>
+			</BuildConfiguration>
+		</ItemGroup>
+		<Import Condition="Exists('$(BDS)\Bin\CodeGear.Delphi.Targets')" Project="$(BDS)\Bin\CodeGear.Delphi.Targets"/>
+		<Import Condition="Exists('$(APPDATA)\Embarcadero\$(BDSAPPDATABASEDIR)\$(PRODUCTVERSION)\UserTools.proj')" Project="$(APPDATA)\Embarcadero\$(BDSAPPDATABASEDIR)\$(PRODUCTVERSION)\UserTools.proj"/>
+		<ProjectExtensions>
+			<Borland.Personality>Delphi.Personality.12</Borland.Personality>
+			<Borland.ProjectType/>
+			<BorlandProject>
+				<Delphi.Personality>
+					<VersionInfo>
+						<VersionInfo Name="IncludeVerInfo">False</VersionInfo>
+						<VersionInfo Name="AutoIncBuild">False</VersionInfo>
+						<VersionInfo Name="MajorVer">1</VersionInfo>
+						<VersionInfo Name="MinorVer">0</VersionInfo>
+						<VersionInfo Name="Release">0</VersionInfo>
+						<VersionInfo Name="Build">0</VersionInfo>
+						<VersionInfo Name="Debug">False</VersionInfo>
+						<VersionInfo Name="PreRelease">False</VersionInfo>
+						<VersionInfo Name="Special">False</VersionInfo>
+						<VersionInfo Name="Private">False</VersionInfo>
+						<VersionInfo Name="DLL">True</VersionInfo>
+						<VersionInfo Name="Locale">1068</VersionInfo>
+						<VersionInfo Name="CodePage">1254</VersionInfo>
+					</VersionInfo>
+					<VersionInfoKeys>
+						<VersionInfoKeys Name="CompanyName"/>
+						<VersionInfoKeys Name="FileDescription"/>
+						<VersionInfoKeys Name="FileVersion">1.0.0.0</VersionInfoKeys>
+						<VersionInfoKeys Name="InternalName"/>
+						<VersionInfoKeys Name="LegalCopyright"/>
+						<VersionInfoKeys Name="LegalTrademarks"/>
+						<VersionInfoKeys Name="OriginalFilename"/>
+						<VersionInfoKeys Name="ProductName"/>
+						<VersionInfoKeys Name="ProductVersion">1.0.0.0</VersionInfoKeys>
+						<VersionInfoKeys Name="Comments"/>
+						<VersionInfoKeys Name="OleSelfRegister">1</VersionInfoKeys>
+					</VersionInfoKeys>
+					<Source>
+						<Source Name="MainSource">GoAml_ServiceOcxdproj.dpr</Source>
+					</Source>
+					<Excluded_Packages>
+						<Excluded_Packages Name="D:\Smart-Bank\Bin\SBTranslate.bpl">(untitled)</Excluded_Packages>
+						<Excluded_Packages Name="D:\Smart-Bank\Bin\SBDM_Common.bpl">(untitled)</Excluded_Packages>
+						<Excluded_Packages Name="D:\Smart-Bank\Bin\CU_COMMON.bpl">Credits Managment Common Declarations, Functions Classes</Excluded_Packages>
+						<Excluded_Packages Name="C:\Documents and Settings\Samir1\Desktop\EmekHaqqi_rov\SalaryTranslate.bpl">File C:\Documents and Settings\Samir1\Desktop\EmekHaqqi_rov\SalaryTranslate.bpl not found</Excluded_Packages>
+						<Excluded_Packages Name="$(BDSBIN)\dclIntraweb_110_150.bpl">File c:\program files\embarcadero\rad studio\8.0\bin\dclIntraweb_110_150.bpl not found</Excluded_Packages>
+						<Excluded_Packages Name="$(BDSBIN)\dclIndyProtocols150.bpl">Indy 10 Protocols Design Time</Excluded_Packages>
+						<Excluded_Packages Name="D:\Smart-Bank\Bin\FieldSearch.bpl">File D:\Smart-Bank\Bin\FieldSearch.bpl not found</Excluded_Packages>
+						<Excluded_Packages Name="$(BDSBIN)\dcloffice2k150.bpl">Microsoft Office 2000 Sample Automation Server Wrapper Components</Excluded_Packages>
+					</Excluded_Packages>
+					<Parameters>
+						<Parameters Name="RunParams">/LocalIniSourceLocation=winini:\Smart-Bank\Bin\SBLocalDeposit.ini /SystemIniSourceLocation=winini:\Smart-Bank\Bin\SmartBank.ini</Parameters>
+						<Parameters Name="HostApplication">D:\Smart-Bank\Bin\SmartBank.exe</Parameters>
+					</Parameters>
+				</Delphi.Personality>
+				<ActiveXProjectInfo>
+					<version>1</version>
+				</ActiveXProjectInfo>
+				<Platforms>
+					<Platform value="Win32">True</Platform>
+				</Platforms>
+			</BorlandProject>
+			<ProjectFileVersion>12</ProjectFileVersion>
+		</ProjectExtensions>
+	</Project>

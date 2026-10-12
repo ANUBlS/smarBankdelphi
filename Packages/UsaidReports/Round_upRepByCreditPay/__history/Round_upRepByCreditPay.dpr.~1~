@@ -1,0 +1,26 @@
+library Round_upRepByCreditPay;
+
+uses
+  ComServ,
+  Round_upRepByCreditPay_TLB in 'Round_upRepByCreditPay_TLB.pas',
+  frmRepByCreditPayImpl in 'frmRepByCreditPayImpl.pas' {frmRepByCreditPay: TActiveForm} {frmRepByCreditPay: CoClass},
+  dmRepByCreditPayImpl in 'dmRepByCreditPayImpl.pas' {dmRepByCreditPay: TDataModule},
+  frmDetail1Impl in 'frmDetail1Impl.pas' {frmDetail1},
+  frmDetail2Impl in 'frmDetail2Impl.pas' {frmDetail2},
+  frmPaymentAndPlanImpl in 'frmPaymentAndPlanImpl.pas' {frmPaymentAndPlan},
+  frmTelAddressImpl in 'frmTelAddressImpl.pas' {frmTelAddress};
+
+{$E ocx}
+
+exports
+  DllGetClassObject,
+  DllCanUnloadNow,
+  DllRegisterServer,
+  DllUnregisterServer;
+
+{$R *.TLB}
+
+{$R *.RES}
+
+begin
+end.

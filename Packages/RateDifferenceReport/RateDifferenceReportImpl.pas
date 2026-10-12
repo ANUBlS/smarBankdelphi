@@ -1,0 +1,726 @@
+﻿unit RateDifferenceReportImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActiveX, AxCtrls, RateDifferenceReport_TLB, StdVcl, ImgList, ToolWin,
+  ComCtrls, ExtCtrls, Buttons, StdCtrls, Grids, DBGrids, ActnList, Menus,Oracle,OracleData,Db;
+
+type
+  TRateDifferenceReportX = class(TActiveForm, IRateDifferenceReportX)
+    Panel1: TPanel;
+    ImageList: TImageList;
+    Panel2: TPanel;
+    ToolBar1: TToolBar;
+    ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
+    Panel3: TPanel;
+    Panel4: TPanel;
+    SpeedButton1: TSpeedButton;
+    PageControl1: TPageControl;
+    TabSheet1: TTabSheet;
+    GroupBox1: TGroupBox;
+    Label1: TLabel;
+    Label2: TLabel;
+    BeginDate: TDateTimePicker;
+    EndDate: TDateTimePicker;
+    Panel5: TPanel;
+    TransactionViewer: TDBGrid;
+    ToolButton3: TToolButton;
+    ToolButton4: TToolButton;
+    ToolButton5: TToolButton;
+    ActionList: TActionList;
+    PopupMenu: TPopupMenu;
+    ActionRefresh: TAction;
+    ActionReport: TAction;
+    ActionSearch: TAction;
+    N1: TMenuItem;
+    N2: TMenuItem;
+    N3: TMenuItem;
+    N4: TMenuItem;
+    N5: TMenuItem;
+    GroupBox3: TGroupBox;
+    CBCurrency: TComboBox;
+    GroupBox4: TGroupBox;
+    CBFilials: TComboBox;
+    GroupBox5: TGroupBox;
+    CBOperator: TComboBox;
+    PanelSearch: TPanel;
+    Panel6: TPanel;
+    EDAT: TEdit;
+    StaticText1: TStaticText;
+    Panel7: TPanel;
+    StaticText2: TStaticText;
+    EDEBETACCOUNT: TEdit;
+    Panel8: TPanel;
+    StaticText3: TStaticText;
+    ECREDITACCOUNT: TEdit;
+    Panel9: TPanel;
+    ELAMMOUNT: TEdit;
+    StaticText4: TStaticText;
+    ToolButton6: TToolButton;
+    procedure ActionRefreshExecute(Sender: TObject);
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure ToolButton5Click(Sender: TObject);
+    procedure TransactionViewerTitleClick(Column: TColumn);
+    procedure N1DrawItem(Sender: TObject; ACanvas: TCanvas; ARect: TRect;
+      Selected: Boolean);
+    procedure EDATChange(Sender: TObject);
+    procedure ActionSearchExecute(Sender: TObject);
+    procedure EDATExit(Sender: TObject);
+    procedure ActionReportUpdate(Sender: TObject);
+    procedure ActionReportExecute(Sender: TObject);
+  private
+    { Private declarations }
+    FEvents: IRateDifferenceReportXEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+  public
+    { Public declarations }
+    RateArray : array of integer;
+    FilialArray : array of integer;
+    OperatorArray : array of integer;
+    procedure CheckDataModule;
+    procedure SetDate;
+    procedure FillCurrency;
+    procedure FillFilial;
+    procedure FillOperator;
+    procedure MouseWheelHandler(var Message: TMessage); override;
+    procedure Initialize; override;
+  end;
+
+implementation
+
+uses ComObj, ComServ, ReportDataModule, UnitMainReport,sboapiDataModuleImpl, SBTranslateProc;
+
+
+{$R *.DFM}
+
+{ TRateDifferenceReportX }
+
+procedure TRateDifferenceReportX.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_RateDifferenceReportXPage); }
+end;
+
+procedure TRateDifferenceReportX.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as IRateDifferenceReportXEvents;
+end;
+
+procedure TRateDifferenceReportX.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TRateDifferenceReportX.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TRateDifferenceReportX.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TRateDifferenceReportX.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TRateDifferenceReportX.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TRateDifferenceReportX.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TRateDifferenceReportX.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TRateDifferenceReportX.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TRateDifferenceReportX.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TRateDifferenceReportX.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TRateDifferenceReportX.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TRateDifferenceReportX.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TRateDifferenceReportX.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TRateDifferenceReportX.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TRateDifferenceReportX.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TRateDifferenceReportX.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TRateDifferenceReportX.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TRateDifferenceReportX.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TRateDifferenceReportX.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TRateDifferenceReportX._Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TRateDifferenceReportX.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TRateDifferenceReportX.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TRateDifferenceReportX.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TRateDifferenceReportX.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TRateDifferenceReportX.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TRateDifferenceReportX.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TRateDifferenceReportX.KeyPressEvent(Sender: TObject;
+  var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TRateDifferenceReportX.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TRateDifferenceReportX.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TRateDifferenceReportX.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TRateDifferenceReportX.Set_AxBorderStyle(
+  Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TRateDifferenceReportX.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TRateDifferenceReportX.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TRateDifferenceReportX.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TRateDifferenceReportX.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TRateDifferenceReportX.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TRateDifferenceReportX.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TRateDifferenceReportX.Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TRateDifferenceReportX.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TRateDifferenceReportX.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TRateDifferenceReportX.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TRateDifferenceReportX.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TRateDifferenceReportX.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TRateDifferenceReportX.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+//*********************************************** { MAIN  } **********************************************************************
+
+procedure TRateDifferenceReportX.CheckDataModule;
+begin
+ if not Assigned(MainDataModule) then
+  MainDataModule :=TMainDataModule.Create(Self);
+end;
+
+procedure TRateDifferenceReportX.SetDate;
+begin
+ with MainDataModule.OraclePackage do
+  BeginDate.DateTime :=CallDateFunction('Get_Date',[]);
+  EndDate.DateTime :=BeginDate.DateTime;
+end;
+
+procedure TRateDifferenceReportX.MouseWheelHandler(var Message: TMessage);
+begin
+  Inherited;
+ if TransactionViewer.Focused then
+  with TCMMouseWheel(Message), TransactionViewer.DataSource.DataSet do
+    if WheelDelta < 0 then
+      Next
+    else
+      Prior;
+   TransactionViewer.Repaint;
+
+end;
+
+procedure TRateDifferenceReportX.FillCurrency;
+var
+    RateIndex :Integer;
+begin
+  RateIndex:=0;
+   with   CBCurrency.Items  do
+   begin
+     Clear;
+     Add('Bütün valyutalar')
+   end;
+  with  MainDataModule.Currency do
+  begin
+    Open;
+    SetLength(RateArray,RecordCount);
+    First;
+    while  not EOF  do
+    begin
+      RateArray[RateIndex] :=FieldByName('Valute').AsInteger;
+      CBCurrency.Items.Add(FieldByName('Valu_Name').AsString);
+      Inc(RateIndex);
+      Next;
+    end;
+  end;
+end;
+
+procedure TRateDifferenceReportX.FillFilial;
+var
+   RateIndex :Integer;
+begin
+  RateIndex:=0;
+   with   CBFilials.Items  do
+   begin
+     Clear;
+     Add('Bütün filiallar')
+   end;
+  with  MainDataModule.Filials do
+  begin
+    Open;
+    SetLength(FilialArray,RecordCount);
+    First;
+    while  not EOF  do
+    begin
+      FilialArray[RateIndex] :=FieldByName('ID').AsInteger;
+      CBFilials.Items.Add(FieldByName('name').AsString);
+      Inc(RateIndex);
+      Next;
+    end;
+  end;
+end;
+
+procedure TRateDifferenceReportX.FillOperator;
+var
+   RateIndex :Integer;
+begin
+  RateIndex:=0;
+   with   CBOperator.Items  do
+   begin
+     Clear;
+     Add('Bütün operatorlar')
+   end;
+  with  MainDataModule.Operators do
+  begin
+    Open;
+    SetLength(OperatorArray,RecordCount);
+    First;
+    while  not EOF  do
+    begin
+      OperatorArray[RateIndex] :=FieldByName('ID').AsInteger;
+      CBOperator.Items.Add(FieldByName('name').AsString);
+      Inc(RateIndex);
+      Next;
+    end;
+  end;
+end;
+
+procedure TRateDifferenceReportX.ActionRefreshExecute(Sender: TObject);
+var
+   SqlStr : WideString;
+   CurrencyFilter : String;
+   FilialFilter  :  String;
+   OperatorFilter : String;
+begin
+ if TransactionViewer.CanFocus then
+  TransactionViewer.SetFocus;
+
+ if CBCurrency.ItemIndex = 0 then
+   CurrencyFilter :=''
+ else
+   CurrencyFilter :=
+                   ' and (Transactions.val_acc = ' + IntToStr(RateArray[CBCurrency.ItemIndex-1]) +
+                   ' or Transactions.currencyID_c = ' + IntToStr(RateArray[CBCurrency.ItemIndex-1])+') ';
+
+ if CBFilials.ItemIndex = 0 then
+   FilialFilter :=''
+ else
+   FilialFilter :=' and (Debet.filial = ' + IntToStr(FilialArray[CBFilials.ItemIndex-1]) +
+                  ' or Credit.filial = ' + IntToStr(FilialArray[CBFilials.ItemIndex-1]) + ') ';
+
+ if CBOperator.ItemIndex = 0 then
+   OperatorFilter :=''
+ else
+   OperatorFilter :=' and (Transactions.op_id = ' + IntToStr(OperatorArray[CBOperator.ItemIndex-1]) + ') ';
+
+ SqlStr :=
+       'Select Transactions.*,Debet.acc_no DebetAccount,DebetCurrency.val_name DCurrency, '+
+               'Credit.acc_no CreditAccount,CreditCurrency.val_name CCurrency '+
+       'From '+
+           'Provarch Transactions,Account Debet,Account Credit,Avalute DebetCurrency,Avalute CreditCurrency '+
+       'Where '+
+           '(Transactions.debt = Debet.ID) and (Transactions.kredit = Credit.ID) and '+
+           '(Transactions.ammount = 0 or transactions.ammount_c = 0) and '+
+           '(Transactions.val_acc=DebetCurrency.valute) and  '+
+           '(Transactions.currencyid_c=CreditCurrency.valute) and '+
+           '(Transactions.dat between :BeginDate and :EndDate) ' + CurrencyFilter + FilialFilter + OperatorFilter +
+       'Order by ' +
+            ':Title ';
+
+ with TransactionViewer, TOracleDataSet(DataSource.DataSet), SQL do
+  begin
+    Clear;
+    Add(SqlStr);
+    Close;
+     SetVariable('BeginDate',BeginDate.DateTime);
+     SetVariable('EndDate',EndDate.DateTime);
+    Open;
+  end;
+
+end;
+
+procedure TRateDifferenceReportX.ActiveFormCreate(Sender: TObject);
+begin
+ CheckDataModule;
+ QReport :=TQReport.Create(Self);
+ FillCurrency;
+ FillOperator;
+ FillFilial;
+ SetDate;
+ CBCurrency.ItemIndex :=0;
+ CBFilials.ItemIndex :=0;
+ CBOperator.ItemIndex :=0;
+
+SBTranslateProc.TranslateAllComponents(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TRateDifferenceReportX.ToolButton5Click(Sender: TObject);
+begin
+ PanelSearch.Enabled := not PanelSearch.Enabled;
+end;
+
+procedure TRateDifferenceReportX.TransactionViewerTitleClick(
+  Column: TColumn);
+var
+   TitleName :string;
+   DataSet :TOracleDataSet;
+begin
+
+  DataSet :=TOracleDataSet(TransactionViewer.DataSource.DataSet);
+
+  if (DataSet.IsEmpty) or (Column.FieldName = 'RecordNo') then Exit;
+  Screen.Cursor := crHourGlass;
+
+  TitleName :=Column.FieldName;
+
+   try
+     with DataSet do
+      begin
+       SetVariable('Title',TitleName);
+       Refresh;
+      end;
+   finally
+    Screen.Cursor := crDefault;
+   end;
+end;
+procedure TRateDifferenceReportX.N1DrawItem(Sender: TObject;
+  ACanvas: TCanvas; ARect: TRect; Selected: Boolean);
+var
+  LineBottom: Integer;
+  SText: String;
+  Bar: TRect;
+begin
+  with ACanvas, Sender as TMenuItem do
+  begin
+    with ACanvas.Font do
+    begin
+      Charset := DEFAULT_CHARSET;
+      Name := 'Azl Sans Serif';
+      if Default then
+        Style := [fsBold];
+    end;
+    if Caption = '-' then
+    begin
+      Pen.Color := clBlack;
+      LineBottom := (ARect.Top + (ARect.Bottom - ARect.Top) div 2)-1;
+      MoveTo(ARect.Left, LineBottom);
+      LineTo(ARect.Right, LineBottom);
+      inc(LineBottom);
+      Pen.Color := clWhite;
+      MoveTo(ARect.Left, LineBottom);
+      LineTo(ARect.Right, LineBottom);
+    end
+    else
+    begin
+      if Selected then
+      begin
+        Brush.Color := clNavy;
+        if Enabled then
+          Font.Color := clWhite
+        else
+          Font.Color := clSilver;
+      end
+      else
+      begin
+        Brush.Color := clBtnFace;
+        if Enabled then
+          Font.Color := clBlack
+        else
+          Font.Color := clGrayText;
+      end;
+      Bar := ARect;
+      Inc(Bar.Left, 22);
+      FillRect(Bar);
+      TextOut(ARect.Left+{17}22, ARect.Top+1, Caption);
+    end;
+    // draw shortcut
+    SText := ShortCutToText(ShortCut);
+    TextOut(ARect.Right-TextWidth(SText)-7, ARect.Top+1, SText);
+    if ImageIndex <> -1 then
+      with GetParentMenu do
+        if Assigned(Images) then
+        begin
+          if Checked then
+          begin
+            Bar.Left := ARect.Left + 1;
+            Bar.Right := Bar.Left + 16;
+            Bar.Top := ARect.Top + 1;
+            Bar.Bottom := Bar.Top + 16;
+
+            ACanvas.Brush.Color := clBtnShadow;
+            ACanvas.FrameRect(Bar);
+
+            Inc(Bar.Left, 2);
+            Inc(Bar.Right, 2);
+            Inc(Bar.Top, 2);
+            Inc(Bar.Bottom, 2);
+
+            ACanvas.Brush.Color := clBtnHighlight;
+            ACanvas.FrameRect(Bar);
+
+            Dec(Bar.Left, 1);
+            Dec(Bar.Right, 1);
+            Dec(Bar.Top, 1);
+            Dec(Bar.Bottom, 1);
+
+            if Selected then
+              ACanvas.Brush.Color := clBtnFace
+            else
+              ACanvas.Brush.Color := clBtnHighlight;
+            ACanvas.FillRect(Bar);
+          end;
+
+          Images.Draw(ACanvas, ARect.Left, ARect.Top, ImageIndex, Enabled);
+        end;
+  end;
+end;
+
+procedure TRateDifferenceReportX.EDATChange(Sender: TObject);
+var
+  FName :string;
+begin
+  FName :=copy((Sender as TEdit).Name,2,Length((Sender as TEdit).Name));
+  TransactionViewer.DataSource.DataSet.Locate(FName,(Sender as TEdit).Text,[loCaseInsensitive,loPartialKey]);
+end;
+
+ procedure TRateDifferenceReportX.ActionSearchExecute(Sender: TObject);
+begin
+ PanelSearch.Visible := not PanelSearch.Visible;
+end;
+
+procedure TRateDifferenceReportX.EDATExit(Sender: TObject);
+begin
+  with Sender as TEdit do
+    Text := '';
+end;
+
+procedure TRateDifferenceReportX.ActionReportUpdate(Sender: TObject);
+begin
+ (Sender as TAction).Enabled :=
+                               not TransactionViewer.DataSource.DataSet.IsEmpty; 
+end;
+
+procedure TRateDifferenceReportX.ActionReportExecute(Sender: TObject);
+begin
+ QReport.Preview;
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TRateDifferenceReportX,
+    Class_RateDifferenceReportX,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

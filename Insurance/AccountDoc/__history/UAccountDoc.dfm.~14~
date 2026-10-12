@@ -1,0 +1,490 @@
+object AccountDoc: TAccountDoc
+  Left = 194
+  Top = 109
+  Width = 751
+  Height = 480
+  Color = clBtnFace
+  Font.Charset = RUSSIAN_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  OldCreateOrder = False
+  OnCreate = ActiveFormCreate
+  PixelsPerInch = 96
+  TextHeight = 14
+  object Panel3: TPanel
+    Left = 0
+    Top = 452
+    Width = 751
+    Height = 28
+    Align = alBottom
+    BevelOuter = bvNone
+    TabOrder = 0
+    DesignSize = (
+      751
+      28)
+    object SpeedButton1: TSpeedButton
+      Left = 5
+      Top = 3
+      Width = 70
+      Height = 22
+      Caption = 'To ->'
+      Glyph.Data = {
+        36040000424D3604000000000000360000002800000010000000100000000100
+        2000000000000004000000000000000000000000000000000000FF00FF00FF00
+        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF000080
+        0000008000000080000000800000008000000080000000800000008000000080
+        00000080000000800000008000000080000000800000FF00FF00FF00FF000080
+        0000008000000080000000800000008000000080000000800000008000000080
+        00000080000000800000008000000080000000800000FF00FF00FF00FF000080
+        0000FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF000080000000800000FF00FF00FF00FF000080
+        0000FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF000080000000800000FF00FF00FF00FF000080
+        0000FFFFFF000080000000800000008000000080000000800000008000000080
+        00000080000000800000008000000080000000800000FF00FF00FF00FF000080
+        0000FFFFFF000080000000800000008000000080000000800000FFFFFF000080
+        00000080000000800000FFFFFF000080000000800000FF00FF00FF00FF000080
+        0000FFFFFF00FFFFFF00008000000080000000800000FFFFFF00008000000080
+        00000080000000800000FFFFFF000080000000800000FF00FF00FF00FF000080
+        0000FFFFFF00FFFFFF00FFFFFF0000800000FFFFFF0000800000008000000080
+        0000FFFFFF00FFFFFF00FFFFFF000080000000800000FF00FF00FF00FF000080
+        0000FFFFFF00FFFFFF00FFFFFF00FFFFFF000080000000800000008000000080
+        0000FFFFFF00FFFFFF00FFFFFF000080000000800000FF00FF00FF00FF000080
+        0000FFFFFF00FFFFFF00FFFFFF00008000000080000000800000008000000080
+        000000800000FFFFFF00FFFFFF000080000000800000FF00FF00FF00FF000080
+        0000FFFFFF00FFFFFF00008000000080000000800000FFFFFF00008000000080
+        00000080000000800000FFFFFF000080000000800000FF00FF00FF00FF000080
+        0000FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF000080000000800000FF00FF00FF00FF000080
+        0000FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF000080000000800000FF00FF00FF00FF000080
+        0000008000000080000000800000008000000080000000800000008000000080
+        00000080000000800000008000000080000000800000FF00FF00FF00FF00FF00
+        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00}
+      Layout = blGlyphRight
+      OnClick = SpeedButton1Click
+    end
+    object OkButton: TButton
+      Left = 636
+      Top = 1
+      Width = 81
+      Height = 24
+      Anchors = [akRight, akBottom]
+      Caption = '&Ok'
+      Default = True
+      ModalResult = 1
+      TabOrder = 0
+      OnClick = OkButtonClick
+    end
+  end
+  object PageControlTrans: TPageControl
+    Left = 0
+    Top = 0
+    Width = 751
+    Height = 452
+    ActivePage = TabSheet1
+    Align = alClient
+    MultiLine = True
+    TabOrder = 1
+    TabPosition = tpBottom
+    object TabSheet1: TTabSheet
+      Caption = 'Debet'
+      object Panel1: TPanel
+        Left = 0
+        Top = 400
+        Width = 743
+        Height = 25
+        Align = alBottom
+        Alignment = taLeftJustify
+        Caption = #1046#1103#1084#1080':'
+        TabOrder = 0
+        object Label1: TLabel
+          Left = 60
+          Top = 5
+          Width = 61
+          Height = 14
+          Caption = #1044#1077#1073#1080#1090' '#1094#1079#1088#1103':'
+        end
+        object Label2: TLabel
+          Left = 388
+          Top = 5
+          Width = 64
+          Height = 14
+          Caption = #1045#1082#1074#1080#1074#1072#1083#1077#1085#1090':'
+        end
+        object Bevel1: TBevel
+          Left = 362
+          Top = 3
+          Width = 3
+          Height = 19
+        end
+        object DebitAmountEdit: TCurrencyEdit
+          Left = 138
+          Top = 1
+          Width = 190
+          Height = 22
+          ReadOnly = True
+          TabOrder = 0
+          Text = '0'
+        end
+        object DebitLAmountEdit: TCurrencyEdit
+          Left = 474
+          Top = 1
+          Width = 199
+          Height = 22
+          ReadOnly = True
+          TabOrder = 1
+          Text = '0'
+        end
+      end
+      object Panel2: TPanel
+        Left = 0
+        Top = 375
+        Width = 743
+        Height = 25
+        Align = alBottom
+        BevelOuter = bvNone
+        TabOrder = 1
+        DesignSize = (
+          743
+          25)
+        object DBEdit1: TDBEdit
+          Left = 1
+          Top = 1
+          Width = 741
+          Height = 22
+          Anchors = [akLeft, akTop, akRight]
+          DataField = 'DESTINATION'
+          TabOrder = 0
+        end
+      end
+      object DebitTransactionsGrid: TDBGrid
+        Left = 0
+        Top = 0
+        Width = 743
+        Height = 375
+        Align = alClient
+        DrawingStyle = gdsGradient
+        Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit]
+        TabOrder = 2
+        TitleFont.Charset = RUSSIAN_CHARSET
+        TitleFont.Color = clWindowText
+        TitleFont.Height = -11
+        TitleFont.Name = 'Azl Sans Serif'
+        TitleFont.Style = []
+        Columns = <
+          item
+            Color = clSilver
+            Expanded = False
+            FieldName = 'ID'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clNavy
+            Font.Height = -11
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = []
+            Title.Caption = '#'
+            Title.Color = clNavy
+            Title.Font.Charset = DEFAULT_CHARSET
+            Title.Font.Color = clWindowText
+            Title.Font.Height = -11
+            Title.Font.Name = 'Azl Sans Serif'
+            Title.Font.Style = []
+            Width = 55
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'OPERATIONDATE'
+            Title.Caption = #1058#1072#1088#1080#1093
+            Title.Color = clNavy
+            Title.Font.Charset = DEFAULT_CHARSET
+            Title.Font.Color = clWindowText
+            Title.Font.Height = -11
+            Title.Font.Name = 'Azl Sans Serif'
+            Title.Font.Style = []
+            Width = 71
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'DebitAccNo'
+            Title.Caption = #1044#1077#1073#1080#1090
+            Title.Color = clNavy
+            Title.Font.Charset = DEFAULT_CHARSET
+            Title.Font.Color = clWindowText
+            Title.Font.Height = -11
+            Title.Font.Name = 'Azl Sans Serif'
+            Title.Font.Style = []
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'CREDITACCNO'
+            Title.Caption = #1050#1088#1077#1076#1080#1090
+            Title.Color = clNavy
+            Title.Font.Charset = DEFAULT_CHARSET
+            Title.Font.Color = clWindowText
+            Title.Font.Height = -11
+            Title.Font.Name = 'Azl Sans Serif'
+            Title.Font.Style = []
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'DEBITAMOUNT'
+            Title.Caption = #1044'.'#1052#1103#1073#1083#1103#1075
+            Title.Color = clNavy
+            Title.Font.Charset = DEFAULT_CHARSET
+            Title.Font.Color = clWindowText
+            Title.Font.Height = -11
+            Title.Font.Name = 'Azl Sans Serif'
+            Title.Font.Style = []
+            Width = 103
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'CREDITAMOUNT'
+            Title.Caption = #1050'.'#1052#1103#1073#1083#1103#1075
+            Title.Color = clNavy
+            Title.Font.Charset = DEFAULT_CHARSET
+            Title.Font.Color = clWindowText
+            Title.Font.Height = -11
+            Title.Font.Name = 'Azl Sans Serif'
+            Title.Font.Style = []
+            Width = 93
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'LAMOUNT'
+            Title.Caption = #1045#1082#1074#1080#1074#1072#1083#1077#1085#1090
+            Title.Color = clNavy
+            Title.Font.Charset = DEFAULT_CHARSET
+            Title.Font.Color = clWindowText
+            Title.Font.Height = -11
+            Title.Font.Name = 'Azl Sans Serif'
+            Title.Font.Style = []
+            Width = 100
+            Visible = True
+          end>
+      end
+      object Memo1: TMemo
+        Left = 60
+        Top = 48
+        Width = 373
+        Height = 209
+        Lines.Strings = (
+          'Memo1')
+        TabOrder = 3
+      end
+    end
+    object TabSheet2: TTabSheet
+      Caption = 'Kredit'
+      ImageIndex = 1
+      object Panel5: TPanel
+        Left = 0
+        Top = 400
+        Width = 743
+        Height = 25
+        Align = alBottom
+        Alignment = taLeftJustify
+        Caption = #1046#1103#1084#1080':'
+        TabOrder = 0
+        object Label3: TLabel
+          Left = 60
+          Top = 5
+          Width = 66
+          Height = 14
+          Caption = #1050#1088#1077#1076#1080#1090' '#1094#1079#1088#1103':'
+        end
+        object Label4: TLabel
+          Left = 388
+          Top = 5
+          Width = 64
+          Height = 14
+          Caption = #1045#1082#1074#1080#1074#1072#1083#1077#1085#1090':'
+        end
+        object Bevel2: TBevel
+          Left = 362
+          Top = 3
+          Width = 3
+          Height = 19
+        end
+        object CreditAmountEdit: TCurrencyEdit
+          Left = 138
+          Top = 1
+          Width = 190
+          Height = 22
+          ReadOnly = True
+          TabOrder = 0
+          Text = '0'
+        end
+        object CreditLAmountEdit: TCurrencyEdit
+          Left = 474
+          Top = 1
+          Width = 199
+          Height = 22
+          ReadOnly = True
+          TabOrder = 1
+          Text = '0'
+        end
+      end
+      object Panel4: TPanel
+        Left = 0
+        Top = 375
+        Width = 743
+        Height = 25
+        Align = alBottom
+        BevelOuter = bvNone
+        TabOrder = 1
+        DesignSize = (
+          743
+          25)
+        object DBEdit2: TDBEdit
+          Left = 1
+          Top = 1
+          Width = 741
+          Height = 22
+          Anchors = [akLeft, akTop, akRight]
+          DataField = 'DESTINATION'
+          TabOrder = 0
+        end
+      end
+      object DBGrid1: TDBGrid
+        Left = 0
+        Top = 0
+        Width = 743
+        Height = 375
+        Align = alClient
+        DrawingStyle = gdsGradient
+        Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit]
+        TabOrder = 2
+        TitleFont.Charset = RUSSIAN_CHARSET
+        TitleFont.Color = clWindowText
+        TitleFont.Height = -11
+        TitleFont.Name = 'Azl Sans Serif'
+        TitleFont.Style = []
+        Columns = <
+          item
+            Color = clSilver
+            Expanded = False
+            FieldName = 'ID'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clNavy
+            Font.Height = -11
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = []
+            Title.Caption = '#'
+            Title.Color = clNavy
+            Title.Font.Charset = DEFAULT_CHARSET
+            Title.Font.Color = clWindowText
+            Title.Font.Height = -11
+            Title.Font.Name = 'Azl Sans Serif'
+            Title.Font.Style = []
+            Width = 55
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'OPERATIONDATE'
+            Title.Caption = #1058#1072#1088#1080#1093
+            Title.Color = clNavy
+            Title.Font.Charset = DEFAULT_CHARSET
+            Title.Font.Color = clWindowText
+            Title.Font.Height = -11
+            Title.Font.Name = 'Azl Sans Serif'
+            Title.Font.Style = []
+            Width = 71
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'DEBITACCNO'
+            Title.Caption = #1044#1077#1073#1080#1090
+            Title.Color = clNavy
+            Title.Font.Charset = DEFAULT_CHARSET
+            Title.Font.Color = clWindowText
+            Title.Font.Height = -11
+            Title.Font.Name = 'Azl Sans Serif'
+            Title.Font.Style = []
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'CreditAccNo'
+            Title.Caption = #1050#1088#1077#1076#1080#1090
+            Title.Color = clNavy
+            Title.Font.Charset = DEFAULT_CHARSET
+            Title.Font.Color = clWindowText
+            Title.Font.Height = -11
+            Title.Font.Name = 'Azl Sans Serif'
+            Title.Font.Style = []
+            Width = 124
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'DEBITAMOUNT'
+            Title.Caption = #1044'.'#1052#1103#1073#1083#1103#1075
+            Title.Color = clNavy
+            Title.Font.Charset = DEFAULT_CHARSET
+            Title.Font.Color = clWindowText
+            Title.Font.Height = -11
+            Title.Font.Name = 'Azl Sans Serif'
+            Title.Font.Style = []
+            Width = 103
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'CREDITAMOUNT'
+            Title.Caption = #1050'.'#1052#1103#1073#1083#1103#1075
+            Title.Color = clNavy
+            Title.Font.Charset = DEFAULT_CHARSET
+            Title.Font.Color = clWindowText
+            Title.Font.Height = -11
+            Title.Font.Name = 'Azl Sans Serif'
+            Title.Font.Style = []
+            Width = 93
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'LAMOUNT'
+            Title.Caption = #1045#1082#1074#1080#1074#1072#1083#1077#1085#1090
+            Title.Color = clNavy
+            Title.Font.Charset = DEFAULT_CHARSET
+            Title.Font.Color = clWindowText
+            Title.Font.Height = -11
+            Title.Font.Name = 'Azl Sans Serif'
+            Title.Font.Style = []
+            Width = 100
+            Visible = True
+          end>
+      end
+    end
+  end
+  object AccTrExport: TExcelExporter
+    ExportList.Strings = (
+      'OPERATIONDATE'
+      'DEBITACCNO'
+      'CREDITACCNO'
+      'DEBITAMOUNT'
+      'CREDITAMOUNT'
+      'LAMOUNT'
+      'DESTINATION')
+    ShowTitles = True
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'MS Sans Serif'
+    Font.Style = []
+    Left = 644
+    Top = 230
+  end
+end

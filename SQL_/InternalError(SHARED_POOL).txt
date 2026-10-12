@@ -1,0 +1,9 @@
+-- SYS ile buraxmaq lazimdir
+
+delete from syn$ where name='BANKINFO';
+
+COMMIT;
+
+ALTER SYSTEM FLUSH SHARED_POOL;
+
+create  public synonym BANKINFO for smart.BANKINFO;

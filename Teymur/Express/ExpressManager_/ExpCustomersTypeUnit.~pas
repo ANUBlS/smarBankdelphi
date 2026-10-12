@@ -1,0 +1,63 @@
+unit ExpCustomersTypeUnit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, DBCtrls, ExtCtrls;
+
+type
+  TExpCustomersType = class(TForm)
+    Panel1: TPanel;
+    DBLookupComboBox1: TDBLookupComboBox;
+    Image1: TImage;
+    procedure DBLookupComboBox1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  ExpCustomersType: TExpCustomersType;
+
+implementation
+uses ExpDataModuleUnit, ExpUnitImpl;
+{$R *.DFM}
+
+procedure TExpCustomersType.DBLookupComboBox1Click(Sender: TObject);
+resourcestring
+             rsExpCaption='(…ени)';
+begin
+  ExpDataModule.SB_ACA.CallProcedure('CheckAdvancedObjectAccess',['EXPRESS_ADD']);
+  with  ExpFormAdd,ExpDataModule do
+  begin
+    Panel5.Enabled    :=true;
+    Panel1.Enabled    :=true;
+    Timer1.Enabled    :=true;
+    GroupBox7.Enabled :=true;
+    GroupBox8.Enabled :=true;
+    GroupBox9.Enabled :=true;
+    GroupBox10.Enabled:=true;
+    GroupBox18.Enabled:=false;
+    Edit1.ReadOnly    :=false;
+    id:=ExpBatchsDataSet.fieldbyname('id').AsInteger;
+    Clear;
+    NLSLocalizer1.Caption:=ExpTypeDataSet.fieldbyname('name').AsString+rsExpCaption;
+    Width:=612;
+    Button1.Enabled:=True;
+    ComboBox1.ItemIndex:=0;
+    Edit5.Text:='AZE';
+    DBLookupComboBox2.KeyValue:=FilialDataSet.fieldbyname('id').AsInteger;
+    DBLookupComboBox3.KeyValue:=0;
+    DBLookupComboBox4.KeyValue:=-1;
+    DateTimePicker3.Date:=trunc(StrToDateTime(SysdateDataSet.fieldbyname('dat').AsString));
+    DateTimePicker4.Date:=trunc(StrToDateTime(SysdateDataSet.fieldbyname('dat').AsString));
+    DateTimePicker4.Time:=Time;
+    DateEdit.Value:=null;
+    DateEdit1.Value:=null;
+    ShowModal;
+  end;
+end;
+
+end.

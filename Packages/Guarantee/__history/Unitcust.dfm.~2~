@@ -1,0 +1,189 @@
+object FormCUT: TFormCUT
+  Left = 0
+  Top = 0
+  ClientHeight = 408
+  ClientWidth = 654
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 654
+    Height = 211
+    Align = alTop
+    TabOrder = 0
+    ExplicitLeft = -48
+    ExplicitWidth = 681
+    object Panel5: TPanel
+      Left = 1
+      Top = 181
+      Width = 652
+      Height = 29
+      Align = alBottom
+      BevelInner = bvLowered
+      TabOrder = 0
+      ExplicitLeft = 24
+      ExplicitTop = 234
+      ExplicitWidth = 764
+      object CBSearch: TComboBox
+        Left = 5
+        Top = 4
+        Width = 145
+        Height = 21
+        Style = csDropDownList
+        TabOrder = 0
+      end
+      object EditSearch: TEdit
+        Left = 156
+        Top = 4
+        Width = 269
+        Height = 21
+        TabOrder = 1
+        OnChange = EditSearchChange
+      end
+    end
+    object DBGrid1: TDBGrid
+      Left = 1
+      Top = 1
+      Width = 652
+      Height = 180
+      Align = alClient
+      DataSource = DS_CUSTOMERS
+      DrawingStyle = gdsGradient
+      Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit, dgTitleClick, dgTitleHotTrack]
+      TabOrder = 1
+      TitleFont.Charset = DEFAULT_CHARSET
+      TitleFont.Color = clWindowText
+      TitleFont.Height = -11
+      TitleFont.Name = 'Tahoma'
+      TitleFont.Style = []
+      Columns = <
+        item
+          Expanded = False
+          FieldName = 'ID'
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'NAME'
+          Title.Caption = 'MKT Ad'#305
+          Width = 300
+          Visible = True
+        end>
+    end
+  end
+  object Panel3: TPanel
+    Left = 0
+    Top = 367
+    Width = 654
+    Height = 41
+    Align = alBottom
+    TabOrder = 1
+    ExplicitLeft = 32
+    ExplicitTop = 336
+    ExplicitWidth = 185
+  end
+  object Panel4: TPanel
+    Left = 0
+    Top = 211
+    Width = 654
+    Height = 156
+    Align = alClient
+    TabOrder = 2
+    ExplicitLeft = 72
+    ExplicitTop = 217
+    object DBGrid2: TDBGrid
+      Left = 1
+      Top = 1
+      Width = 652
+      Height = 154
+      Align = alClient
+      DataSource = DS_Satici
+      TabOrder = 0
+      TitleFont.Charset = DEFAULT_CHARSET
+      TitleFont.Color = clWindowText
+      TitleFont.Height = -11
+      TitleFont.Name = 'Tahoma'
+      TitleFont.Style = []
+    end
+  end
+  object ODS_CUSTOMERS: TOracleDataSet
+    SQL.Strings = (
+      
+        'SELECT id ,name from customers where  close_dat is  null and cus' +
+        't_type in(0)'
+      ''
+      ''
+      ''
+      ''
+      ''
+      'order by id'
+      ''
+      ''
+      ''
+      ''
+      '')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000400000049004400010000000000080000004E0041004D00
+      4500010000000000}
+    Session = sboapiDataModule.SBSession
+    FilterOptions = [foCaseInsensitive, foNoPartialCompare]
+    Left = 496
+    Top = 40
+    object ODS_CUSTOMERSID: TIntegerField
+      FieldName = 'ID'
+    end
+    object ODS_CUSTOMERSNAME: TWideStringField
+      DisplayLabel = 'Name'
+      FieldName = 'NAME'
+      Size = 250
+    end
+  end
+  object DS_CUSTOMERS: TDataSource
+    DataSet = ODS_CUSTOMERS
+    Left = 488
+    Top = 96
+  end
+  object Ods_satici: TOracleDataSet
+    SQL.Strings = (
+      
+        'select custid, custid2,   soname,name,lastname,passpin,passer||'#39 +
+        ' '#39'||paspnum'
+      
+        'from customers_relations r,custinfo i where r.custid2=i.idcust a' +
+        'nd r.custid=:custid'
+      '')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000E0000003A00430055005300540049004400030000000000
+      000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      05000000070000000C0000004300550053005400490044000100000000000E00
+      000043005500530054004900440032000100000000000C00000053004F004E00
+      41004D004500010000000000080000004E0041004D0045000100000000001000
+      00004C004100530054004E0041004D0045000100000000000E00000050004100
+      53005300500049004E0001000000000026000000500041005300530045005200
+      7C007C00270027007C007C0050004100530050004E0055004D00010000000000}
+    Master = ODS_CUSTOMERS
+    MasterFields = 'id'
+    DetailFields = 'custid'
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 440
+    Top = 224
+  end
+  object DS_Satici: TDataSource
+    DataSet = Ods_satici
+    Left = 440
+    Top = 280
+  end
+end

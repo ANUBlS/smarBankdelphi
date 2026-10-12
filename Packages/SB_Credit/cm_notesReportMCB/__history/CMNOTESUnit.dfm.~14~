@@ -1,0 +1,287 @@
+object FormNotes: TFormNotes
+  Left = 0
+  Top = 0
+  ClientHeight = 333
+  ClientWidth = 910
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poMainFormCenter
+  OnClose = FormClose
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 910
+    Height = 79
+    Align = alTop
+    BevelInner = bvLowered
+    BevelOuter = bvSpace
+    TabOrder = 0
+    object Label1: TLabel
+      Left = 8
+      Top = 16
+      Width = 36
+      Height = 13
+      Caption = 'Qeyd1:'
+    end
+    object Label2: TLabel
+      Left = 390
+      Top = 16
+      Width = 36
+      Height = 13
+      Caption = 'Qeyd2:'
+    end
+    object Label3: TLabel
+      Left = 8
+      Top = 48
+      Width = 36
+      Height = 13
+      Caption = 'Qeyd4:'
+    end
+    object Label4: TLabel
+      Left = 666
+      Top = 16
+      Width = 36
+      Height = 13
+      Caption = 'Qeyd3:'
+    end
+    object Label5: TLabel
+      Left = 390
+      Top = 48
+      Width = 36
+      Height = 13
+      Caption = 'Qeyd5:'
+    end
+    object Label6: TLabel
+      Left = 665
+      Top = 48
+      Width = 36
+      Height = 13
+      Caption = 'Qeyd6:'
+    end
+    object Edit1: TEdit
+      Left = 46
+      Top = 16
+      Width = 336
+      Height = 21
+      TabOrder = 0
+    end
+    object Edit2: TEdit
+      Left = 432
+      Top = 16
+      Width = 227
+      Height = 21
+      TabOrder = 1
+    end
+    object Edit3: TEdit
+      Left = 705
+      Top = 16
+      Width = 174
+      Height = 21
+      TabOrder = 2
+    end
+    object Edit4: TEdit
+      Left = 46
+      Top = 47
+      Width = 336
+      Height = 21
+      TabOrder = 3
+    end
+    object Edit5: TEdit
+      Left = 432
+      Top = 47
+      Width = 227
+      Height = 21
+      TabOrder = 4
+    end
+    object Edit6: TEdit
+      Left = 705
+      Top = 47
+      Width = 174
+      Height = 21
+      TabOrder = 5
+    end
+  end
+  object Panel2: TPanel
+    Left = 0
+    Top = 292
+    Width = 910
+    Height = 41
+    Align = alBottom
+    BevelInner = bvLowered
+    BevelOuter = bvSpace
+    TabOrder = 1
+    object Button1: TButton
+      Left = 680
+      Top = 6
+      Width = 75
+      Height = 25
+      Caption = 'Q'#601'bul'
+      TabOrder = 0
+      OnClick = Button1Click
+    end
+    object Button2: TButton
+      Left = 830
+      Top = 6
+      Width = 75
+      Height = 25
+      Caption = 'Ba'#287'la'
+      TabOrder = 1
+      OnClick = Button2Click
+    end
+    object Button3: TButton
+      Left = 755
+      Top = 6
+      Width = 75
+      Height = 25
+      Caption = 'Sil'
+      TabOrder = 2
+      OnClick = Button3Click
+    end
+  end
+  object Panel3: TPanel
+    Left = 0
+    Top = 79
+    Width = 910
+    Height = 213
+    Align = alClient
+    BevelInner = bvLowered
+    BevelOuter = bvSpace
+    TabOrder = 2
+    object XDBGrid1: TXDBGrid
+      Left = 2
+      Top = 2
+      Width = 906
+      Height = 209
+      Align = alClient
+      DataSource = DataSource1
+      GridStyle.VisualStyle = vsXPStyle
+      Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit, dgExtendedSelect, dgInternalSelect, dgRowResize, dgRowScroll, dgHotButtons, dgTitleButtons, dgTitleHeaders, dgTitleWidthOff, dgMarkerAutoAlign, dgMarkerAutoToggle]
+      TabOrder = 0
+      OnCellDblClick = XDBGrid1CellDblClick
+      Columns = <
+        item
+          Expanded = False
+          FieldName = 'CREDITID'
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'PAR1'
+          Visible = True
+          Width = 157
+        end
+        item
+          Expanded = False
+          FieldName = 'PAR2'
+          Visible = True
+          Width = 156
+        end
+        item
+          Expanded = False
+          FieldName = 'PAR3'
+          Visible = True
+          Width = 162
+        end
+        item
+          Expanded = False
+          FieldName = 'PAR4'
+          Visible = True
+          Width = 120
+        end
+        item
+          Expanded = False
+          FieldName = 'PAR5'
+          Visible = True
+          Width = 100
+        end
+        item
+          Expanded = False
+          FieldName = 'PAR6'
+          Visible = True
+          Width = 100
+        end>
+    end
+  end
+  object OracleDataSet1: TOracleDataSet
+    SQL.Strings = (
+      'select*from  cm_notes where creditid=:v_id')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000A0000003A0056005F004900440003000000000000000000
+      0000}
+    QBEDefinition.QBEFieldDefs = {
+      0500000009000000040000004900440001000000000010000000430052004500
+      4400490054004900440001000000000008000000500041005200310001000000
+      0000080000005000410052003200010000000000080000005000410052003300
+      0100000000000800000050004100520034000100000000000800000050004100
+      5200350001000000000008000000500041005200360001000000000008000000
+      5000410052003700010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 416
+    Top = 184
+    object OracleDataSet1ID: TFloatField
+      FieldName = 'ID'
+    end
+    object OracleDataSet1CREDITID: TFloatField
+      FieldName = 'CREDITID'
+    end
+    object OracleDataSet1PAR1: TWideStringField
+      FieldName = 'PAR1'
+      Size = 200
+    end
+    object OracleDataSet1PAR2: TWideStringField
+      FieldName = 'PAR2'
+      Size = 200
+    end
+    object OracleDataSet1PAR3: TWideStringField
+      FieldName = 'PAR3'
+      Size = 200
+    end
+    object OracleDataSet1PAR4: TWideStringField
+      FieldName = 'PAR4'
+      Size = 200
+    end
+    object OracleDataSet1PAR5: TWideStringField
+      FieldName = 'PAR5'
+      Size = 200
+    end
+    object OracleDataSet1PAR6: TWideStringField
+      FieldName = 'PAR6'
+      Size = 200
+    end
+    object OracleDataSet1PAR7: TWideStringField
+      FieldName = 'PAR7'
+      Size = 200
+    end
+  end
+  object DataSource1: TDataSource
+    DataSet = OracleDataSet1
+    Left = 504
+    Top = 152
+  end
+  object OracleDataSet2: TOracleDataSet
+    SQL.Strings = (
+      'select id from cm_portfolio')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {05000000010000000400000049004400010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 232
+    Top = 136
+  end
+  object OraclePackage1: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'cm_credit'
+    ParameterMode = pmNamed
+    Left = 328
+    Top = 144
+  end
+end

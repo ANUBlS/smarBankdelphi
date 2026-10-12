@@ -1,0 +1,225 @@
+object frmReportType: TfrmReportType
+  Left = 338
+  Top = 292
+  BorderIcons = [biSystemMenu]
+  ClientHeight = 124
+  ClientWidth = 167
+  Color = clBtnFace
+  Font.Charset = RUSSIAN_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poScreenCenter
+  OnCanResize = FormCanResize
+  OnKeyPress = FormKeyPress
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object RGReport: TRadioGroup
+    Left = 0
+    Top = 0
+    Width = 167
+    Height = 97
+    Align = alTop
+    Caption = 'Se'#231'im'
+    ItemIndex = 0
+    Items.Strings = (
+      'Hesabat'
+      'Word hesabat'
+      'Exel')
+    TabOrder = 0
+    ExplicitWidth = 172
+  end
+  object BitBtn1: TBitBtn
+    Left = 91
+    Top = 99
+    Width = 75
+    Height = 25
+    Caption = #304'mtina'
+    DoubleBuffered = True
+    Kind = bkCancel
+    NumGlyphs = 2
+    ParentDoubleBuffered = False
+    TabOrder = 1
+    OnClick = BitBtn1Click
+  end
+  object BitBtn2: TBitBtn
+    Left = 10
+    Top = 99
+    Width = 75
+    Height = 25
+    Caption = 'Q'#601'bul'
+    DoubleBuffered = True
+    Kind = bkOK
+    NumGlyphs = 2
+    ParentDoubleBuffered = False
+    TabOrder = 2
+    OnClick = BitBtn2Click
+  end
+  object ExcelExport: TCMExcelExport
+    StyleColumnWidth = cwDefault
+    ColumnWidth = 0
+    FontTitles.Charset = RUSSIAN_CHARSET
+    FontTitles.Color = clWindowText
+    FontTitles.Height = -11
+    FontTitles.Name = 'Azl Sans Serif'
+    FontTitles.Style = []
+    OrientationTitles = 0
+    FontData.Charset = RUSSIAN_CHARSET
+    FontData.Color = clWindowText
+    FontData.Height = -11
+    FontData.Name = 'Azl Sans Serif'
+    FontData.Style = []
+    FontSummary.Charset = DEFAULT_CHARSET
+    FontSummary.Color = clWindowText
+    FontSummary.Height = -11
+    FontSummary.Name = 'MS Sans Serif'
+    FontSummary.Style = []
+    SummarySelection = ssNone
+    SummaryCalculation = scSUM
+    Left = 165
+    Top = 330
+  end
+  object DataSet11: TOracleDataSet
+    SQL.Strings = (
+      
+        'select   rownum as id ,paymentdate,nvl(principal,0)+nvl(interest' +
+        ',0)as pament, principal,interest,rest from cm_payment_schedule  ' +
+        'where creditid=:v_creditid')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000160000003A0056005F004300520045004400490054004900
+      4400030000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      0500000006000000040000004900440001000000000016000000500041005900
+      4D0045004E005400440041005400450001000000000012000000500052004900
+      4E0043004900500041004C000100000000001000000049004E00540045005200
+      4500530054000100000000000800000052004500530054000100000000000C00
+      0000500041004D0045004E005400010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 48
+    Top = 40
+    object DataSet11ID: TFloatField
+      FieldName = 'ID'
+    end
+    object DataSet11PAYMENTDATE: TDateTimeField
+      FieldName = 'PAYMENTDATE'
+    end
+    object DataSet11PAMENT: TFloatField
+      FieldName = 'PAMENT'
+    end
+    object DataSet11PRINCIPAL: TFloatField
+      FieldName = 'PRINCIPAL'
+    end
+    object DataSet11INTEREST: TFloatField
+      FieldName = 'INTEREST'
+    end
+    object DataSet11REST: TFloatField
+      FieldName = 'REST'
+    end
+  end
+  object OracleDataSet2: TOracleDataSet
+    SQL.Strings = (
+      
+        'select krno,inn ,az_name from bankinfo_t where kod_fil in(select' +
+        ' branchid from cm_portfolio where id=:v_creditid)')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000160000003A0056005F004300520045004400490054004900
+      4400030000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      0500000003000000080000004B0052004E004F00010000000000060000004900
+      4E004E000100000000000E00000041005A005F004E0041004D00450001000000
+      0000}
+    Session = sboapiDataModule.SBSession
+    Left = 96
+    Top = 8
+    object OracleDataSet2KRNO: TWideStringField
+      FieldName = 'KRNO'
+      Size = 448
+    end
+    object OracleDataSet2INN: TWideStringField
+      FieldName = 'INN'
+      Size = 240
+    end
+    object OracleDataSet2AZ_NAME: TWideStringField
+      FieldName = 'AZ_NAME'
+      Size = 1280
+    end
+  end
+  object OracleDataSet3: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      ' p.numberofcredit,'
+      
+        '  bi.NAME,i.address,i.passer||i.paspnum||i.paspplace pass ,i.pas' +
+        'spin,'
+      
+        '  dateofconclusion,creditlineamount,annualyinterestrate,periodco' +
+        'ntracts  '
+      '  '
+      'FROM'
+      
+        '  CM_BOOROWERINFO bi, cm_accounts a,cm_active_credits  p,custinf' +
+        'o i ,customers c'
+      ''
+      'WHERE'
+      'bi.creditid=p.id and p.boorowerid=i.idcust  '
+      'and c.id=i.idcust'
+      'and bi.CreditID=:v_creditid'
+      'and a.creditid =:v_creditid')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000160000003A0056005F004300520045004400490054004900
+      4400030000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      05000000090000001C0000004E0055004D004200450052004F00460043005200
+      4500440049005400010000000000080000004E0041004D004500010000000000
+      0E00000041004400440052004500530053000100000000000E00000050004100
+      53005300500049004E000100000000002000000044004100540045004F004600
+      43004F004E0043004C005500530049004F004E00010000000000200000004300
+      520045004400490054004C0049004E00450041004D004F0055004E0054000100
+      000000002600000041004E004E00550041004C00590049004E00540045005200
+      45005300540052004100540045000100000000001E0000005000450052004900
+      4F00440043004F004E0054005200410043005400530001000000000008000000
+      5000410053005300010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 112
+    Top = 48
+    object OracleDataSet3NUMBEROFCREDIT: TWideStringField
+      FieldName = 'NUMBEROFCREDIT'
+      Size = 32
+    end
+    object OracleDataSet3NAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 150
+    end
+    object OracleDataSet3ADDRESS: TWideStringField
+      FieldName = 'ADDRESS'
+      Size = 250
+    end
+    object OracleDataSet3PASS: TWideStringField
+      FieldName = 'PASS'
+      Size = 300
+    end
+    object OracleDataSet3PASSPIN: TWideStringField
+      FieldName = 'PASSPIN'
+      Size = 30
+    end
+    object OracleDataSet3DATEOFCONCLUSION: TDateTimeField
+      FieldName = 'DATEOFCONCLUSION'
+    end
+    object OracleDataSet3CREDITLINEAMOUNT: TFloatField
+      FieldName = 'CREDITLINEAMOUNT'
+    end
+    object OracleDataSet3ANNUALYINTERESTRATE: TFloatField
+      FieldName = 'ANNUALYINTERESTRATE'
+    end
+    object OracleDataSet3PERIODCONTRACTS: TFloatField
+      FieldName = 'PERIODCONTRACTS'
+    end
+  end
+end

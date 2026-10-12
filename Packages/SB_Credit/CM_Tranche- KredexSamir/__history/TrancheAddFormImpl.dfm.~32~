@@ -1,0 +1,327 @@
+object TrchAddForm: TTrchAddForm
+  Left = 611
+  Top = 329
+  AutoSize = True
+  BorderIcons = [biSystemMenu]
+  ClientHeight = 228
+  ClientWidth = 538
+  Color = clBtnFace
+  Font.Charset = RUSSIAN_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poOwnerFormCenter
+  OnActivate = FormActivate
+  OnKeyPress = FormKeyPress
+  PixelsPerInch = 96
+  TextHeight = 13
+  object GroupBox2: TGroupBox
+    Left = 0
+    Top = 0
+    Width = 538
+    Height = 91
+    Align = alTop
+    Caption = 'Tran'#351
+    TabOrder = 0
+    object Label1: TLabel
+      Left = 328
+      Top = 18
+      Width = 71
+      Height = 13
+      Caption = 'Verilm'#601' tarixi : '
+    end
+    object Label3: TLabel
+      Left = 4
+      Top = 19
+      Width = 43
+      Height = 13
+      Caption = #214'ht'#601'lik : '
+    end
+    object TrancheDatePckr: TDateTimePicker
+      Left = 403
+      Top = 14
+      Width = 131
+      Height = 21
+      Date = 38195.537546400500000000
+      Time = 38195.537546400500000000
+      Enabled = False
+      TabOrder = 0
+    end
+    object Panel4: TPanel
+      Left = 3
+      Top = 46
+      Width = 532
+      Height = 44
+      TabOrder = 1
+      object Label2: TLabel
+        Left = 387
+        Top = 22
+        Width = 44
+        Height = 13
+        Caption = 'M'#601'bl'#601#287' : '
+      end
+      object StaticText3: TStaticText
+        Left = 1
+        Top = 1
+        Width = 530
+        Height = 17
+        Align = alTop
+        Alignment = taCenter
+        Caption = 'Cari hesab'
+        Color = clNavy
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindow
+        Font.Height = -12
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ParentColor = False
+        ParentFont = False
+        TabOrder = 0
+      end
+      object AccountListCB: TDBLookupComboboxEh
+        Left = 1
+        Top = 18
+        Width = 355
+        Height = 21
+        TabStop = False
+        DropDownBox.Sizable = True
+        EditButtons = <>
+        KeyField = 'ACCID'
+        ListField = 'ACCOUNTNUMBER'
+        ListSource = TrancheDataModule.DataSrcTrancheAccounts
+        TabOrder = 1
+        Visible = True
+      end
+      object TrancheSumEdit: TCMCurrencyEdit
+        Left = 433
+        Top = 19
+        Width = 98
+        Height = 21
+        TabOrder = 2
+        Text = '0'
+        OnChange = TrancheSumEditChange
+        OnKeyPress = TrancheSumEditKeyPress
+      end
+    end
+    object DBEdit1: TDBEdit
+      Left = 47
+      Top = 16
+      Width = 163
+      Height = 21
+      TabStop = False
+      Color = clInfoBk
+      DataField = 'OBLIGATION'
+      DataSource = TrancheDataModule.DataSrcCreditInfo
+      ReadOnly = True
+      TabOrder = 2
+    end
+  end
+  object Panel2: TPanel
+    Left = 0
+    Top = 91
+    Width = 538
+    Height = 101
+    Align = alTop
+    TabOrder = 1
+    object Panel1: TPanel
+      Left = 3
+      Top = 4
+      Width = 532
+      Height = 69
+      TabOrder = 0
+      object Label4: TLabel
+        Left = 387
+        Top = 23
+        Width = 131
+        Height = 13
+        Caption = 'Ma'#287'azaya veril'#601'c'#601'k m'#601'bl'#601#287
+      end
+      object StaticText1: TStaticText
+        Left = 1
+        Top = 1
+        Width = 530
+        Height = 17
+        Align = alTop
+        Alignment = taCenter
+        Caption = 'M'#252'xbir, kassa , Kart  hesab '#305', Ma'#287'aza hesab'#305
+        Color = clNavy
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindow
+        Font.Height = -12
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ParentColor = False
+        ParentFont = False
+        TabOrder = 0
+      end
+      object DBLookupComboboxEh1: TDBLookupComboboxEh
+        Left = 0
+        Top = 19
+        Width = 327
+        Height = 21
+        TabStop = False
+        DropDownBox.Sizable = True
+        EditButtons = <>
+        KeyField = 'ACCID'
+        ListField = 'ACCOUNTNUMBER'
+        ListSource = TrancheDataModule.DataSource1
+        TabOrder = 1
+        Visible = True
+        OnCloseUp = DBLookupComboboxEh1CloseUp
+        OnEnter = DBLookupComboboxEh1Enter
+      end
+      object Edit1: TEdit
+        Left = 1
+        Top = 45
+        Width = 376
+        Height = 21
+        Enabled = False
+        TabOrder = 2
+      end
+      object CMCurrencyComm: TCMCurrencyEdit
+        Left = 410
+        Top = 45
+        Width = 97
+        Height = 21
+        TabOrder = 3
+        Text = '0'
+        OnKeyPress = TrancheSumEditKeyPress
+      end
+    end
+    object CBPrcessTransactions: TCheckBox
+      Left = 6
+      Top = 77
+      Width = 182
+      Height = 18
+      Caption = #399'm'#601'liyyat apar'#305'ls'#305'n'
+      Checked = True
+      State = cbChecked
+      TabOrder = 1
+      OnClick = CBPrcessTransactionsClick
+    end
+    object Button1: TButton
+      Left = 194
+      Top = 75
+      Width = 47
+      Height = 22
+      Caption = 'Axtaris'
+      Enabled = False
+      TabOrder = 2
+      OnClick = Button1Click
+    end
+    object EditSearch: TEdit
+      Left = 244
+      Top = 76
+      Width = 292
+      Height = 21
+      Enabled = False
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 3
+      OnKeyPress = EditSearchKeyPress
+    end
+  end
+  object Panel3: TPanel
+    Left = 0
+    Top = 192
+    Width = 538
+    Height = 36
+    Align = alTop
+    TabOrder = 2
+    object ButtonCommit: TButton
+      Left = 375
+      Top = 7
+      Width = 81
+      Height = 26
+      Action = ActnProcessTranche
+      Caption = 'Q'#601'bul'
+      TabOrder = 0
+    end
+    object ButtonCancel: TButton
+      Left = 455
+      Top = 7
+      Width = 81
+      Height = 26
+      Action = ActnCancelTranche
+      Caption = #304'mtina'
+      TabOrder = 1
+    end
+  end
+  object ActionsList: TActionList
+    Left = 353
+    Top = 128
+    object ActnProcessTranche: TAction
+      Caption = '&'#1043#1103#1073#1091#1083
+      OnExecute = ActnProcessTrancheExecute
+      OnUpdate = ActnProcessTrancheUpdate
+    end
+    object ActnCancelTranche: TAction
+      Caption = #1048'&'#1084#1090#1080#1085#1072
+      OnExecute = ActnCancelTrancheExecute
+    end
+  end
+  object ods_partner: TOracleDataSet
+    SQL.Strings = (
+      
+        'select p.id from  cm_usergroups p, account a where p.acc_no=a.ac' +
+        'c_no and  p.id=:v_id'
+      '')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000A0000003A0056005F004900440003000000000000000000
+      0000}
+    QBEDefinition.QBEFieldDefs = {05000000010000000400000049004400010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 272
+    Top = 8
+    object ods_partnerID: TFloatField
+      FieldName = 'ID'
+    end
+  end
+  object ods_partid: TOracleDataSet
+    SQL.Strings = (
+      
+        'select*from  cm_partnerperiods where partner_id=:v_parID and :pe' +
+        'r_id BETWEEN beg_period and end_period')
+    Optimize = False
+    Variables.Data = {
+      0400000002000000100000003A0056005F005000410052004900440003000000
+      00000000000000000E0000003A005000450052005F0049004400050000000000
+      000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      05000000060000001400000050004100520054004E00450052005F0049004400
+      010000000000140000004200450047005F0050004500520049004F0044000100
+      000000001400000045004E0044005F0050004500520049004F00440001000000
+      00000E000000500045005200430045004E0054000100000000000C0000004100
+      4D004F0055004E0054000100000000001800000043004100530048005F005000
+      45005200430045004E005400010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 368
+    Top = 8
+    object ods_partidPARTNER_ID: TFloatField
+      FieldName = 'PARTNER_ID'
+    end
+    object ods_partidBEG_PERIOD: TFloatField
+      FieldName = 'BEG_PERIOD'
+    end
+    object ods_partidEND_PERIOD: TFloatField
+      FieldName = 'END_PERIOD'
+    end
+    object ods_partidPERCENT: TFloatField
+      FieldName = 'PERCENT'
+    end
+    object ods_partidAMOUNT: TFloatField
+      FieldName = 'AMOUNT'
+    end
+    object ods_partidCASH_PERCENT: TFloatField
+      FieldName = 'CASH_PERCENT'
+    end
+  end
+end

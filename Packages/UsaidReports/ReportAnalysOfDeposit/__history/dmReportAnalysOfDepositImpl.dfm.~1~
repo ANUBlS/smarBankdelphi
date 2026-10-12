@@ -1,0 +1,1182 @@
+object dmReportAnalysOfDeposit: TdmReportAnalysOfDeposit
+  OldCreateOrder = False
+  OnCreate = DataModuleCreate
+  OnDestroy = DataModuleDestroy
+  Left = 176
+  Top = 160
+  Height = 480
+  Width = 696
+  object FilialMD: TOracleDataSet
+    SQL.Strings = (
+      'select id,name from filial'
+      'order by id')
+    QBEDefinition.QBEFieldDefs = {
+      0400000002000000020000004944010000000000040000004E414D4501000000
+      0000}
+    Session = sboapiDataModule.SBSession
+    Left = 32
+    Top = 24
+    object FilialMDID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object FilialMDNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 90
+    end
+  end
+  object SourceMD: TOracleDataSet
+    SQL.Strings = (
+      'SELECT a.id, a.name'
+      '  FROM uaod_source a'
+      '  order by id')
+    QBEDefinition.QBEFieldDefs = {
+      0400000002000000020000004944010000000000040000004E414D4501000000
+      0000}
+    Session = sboapiDataModule.SBSession
+    Left = 32
+    Top = 72
+    object SourceMDID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object SourceMDNAME: TWideStringField
+      FieldName = 'NAME'
+      Required = True
+      Size = 80
+    end
+  end
+  object PersonMD: TOracleDataSet
+    SQL.Strings = (
+      'SELECT a.id, a.name'
+      '  FROM uaod_person a'
+      '  order by id')
+    QBEDefinition.QBEFieldDefs = {
+      0400000002000000020000004944010000000000040000004E414D4501000000
+      0000}
+    Session = sboapiDataModule.SBSession
+    Left = 32
+    Top = 120
+    object PersonMDID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object PersonMDNAME: TWideStringField
+      FieldName = 'NAME'
+      Required = True
+      Size = 50
+    end
+  end
+  object TypeMD: TOracleDataSet
+    SQL.Strings = (
+      'SELECT a.id, a.name'
+      '  FROM uaod_type a'
+      '  order by id')
+    QBEDefinition.QBEFieldDefs = {
+      0400000002000000020000004944010000000000040000004E414D4501000000
+      0000}
+    Session = sboapiDataModule.SBSession
+    Left = 32
+    Top = 168
+    object TypeMDID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object TypeMDNAME: TWideStringField
+      FieldName = 'NAME'
+      Required = True
+      Size = 80
+    end
+  end
+  object ValuteMD: TOracleDataSet
+    SQL.Strings = (
+      'select valute,valu_name as val_name from avalute'
+      'order by valute')
+    QBEDefinition.QBEFieldDefs = {
+      04000000020000000600000056414C5554450100000000000800000056414C5F
+      4E414D45010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 32
+    Top = 216
+    object ValuteMDVALUTE: TIntegerField
+      FieldName = 'VALUTE'
+      Required = True
+    end
+    object ValuteMDVAL_NAME: TWideStringField
+      FieldName = 'VAL_NAME'
+      Size = 25
+    end
+  end
+  object CalcStatusMD: TOracleDataSet
+    SQL.Strings = (
+      'select 1 as ID,'#39'Щесабланан'#39' as name  from dual'
+      'union'
+      'select 0 as ID,'#39'Щесабланмайан'#39' as name from dual')
+    QBEDefinition.QBEFieldDefs = {
+      0400000002000000020000004944010000000000040000004E414D4501000000
+      0000}
+    Session = sboapiDataModule.SBSession
+    Left = 32
+    Top = 272
+    object CalcStatusMDID: TFloatField
+      FieldName = 'ID'
+    end
+    object CalcStatusMDNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 13
+    end
+  end
+  object FilialMDds: TDataSource
+    DataSet = FilialMD
+    Left = 96
+    Top = 24
+  end
+  object SourceMDds: TDataSource
+    DataSet = SourceMD
+    Left = 96
+    Top = 71
+  end
+  object PersonMDds: TDataSource
+    DataSet = PersonMD
+    Left = 96
+    Top = 120
+  end
+  object TypeMDds: TDataSource
+    DataSet = TypeMD
+    Left = 96
+    Top = 168
+  end
+  object ValuteMDds: TDataSource
+    DataSet = ValuteMD
+    Left = 96
+    Top = 216
+  end
+  object CalcStatusMDds: TDataSource
+    DataSet = CalcStatusMD
+    Left = 107
+    Top = 272
+  end
+  object FilialMDR: TOracleDataSet
+    SQL.Strings = (
+      'select '
+      '    f.name as sector,f.id as sectorid,'
+      '    d.*'
+      'from '
+      '   filial f,'
+      '(select'
+      '   sum(DpCount) as DpCount,'
+      '   round(sum(DpCount)/(:GenCount),4)*100 as CeofCount,'
+      '   sum(initialamount) as initialamount,'
+      '   sum(FACTICALDEBT) as FACTICALDEBT,'
+      
+        '   round(sum(FACTICALDEBT)/:GenFACTICALDEBT,4)*100 as CeofFACTIC' +
+        'ALDEBT,'
+      '   sum(FACTICALINTERESTDEBT) as FACTICALINTERESTDEBT,'
+      
+        '   round(sum(FACTICALINTERESTDEBT)/:GenFACTICALINTDEBT,4)*100 as' +
+        ' CeofFACTICALINTERESTDEBT,'
+      '   round(sum(RoundInt/:GenFACTICALDEBT),4) as RoundInt,'
+      '   branchid '
+      '   '
+      'from ('
+      'select '
+      '  count(p.id) as DpCount,'
+      '  --round(count(p.id)/(:GenCount),4)*100 as CeofCount,'
+      '  round(sum(p.amount*o.ostat),4) as initialamount,'
+      '  round(sum(h.FACTICALDEBT*o.ostat),4) as FACTICALDEBT,'
+      
+        '  --round(sum(h.FACTICALDEBT*o.ostat)/:GenFACTICALDEBT,4)*100 as' +
+        ' CeofFACTICALDEBT,'
+      
+        '  round(sum(h.FACTICALINTERESTDEBT*o.ostat),4) as FACTICALINTERE' +
+        'STDEBT,'
+      
+        '  --round(sum(h.FACTICALINTERESTDEBT*o.ostat)/:GenFACTICALINTDEB' +
+        'T,4)*100 as CeofFACTICALINTERESTDEBT,'
+      
+        '  round(sum(h.FACTICALDEBT*o.ostat*intr.interest)/*:GenFACTICALD' +
+        'EBT*/,4)*100 as RoundInt,'
+      '  p.branchid'
+      'from sbcm_contracts p,'
+      '     sbcm_contract_history h,'
+      #9' sbcm_interests intr,'
+      #9' operkurs o ,sbcm_accounts ac'
+      'where type# in (3,4)'
+      
+        'and p.id = h.id# and h.hdate = :dat and h.FACTICALDEBT <>0 and a' +
+        'c.id#=p.id '
+      'and p.id = intr.id# and p.currency = o.val_kod'
+      'and o.dat = :dat'
+      ''
+      'group by p.branchid  '
+      'union all'
+      'select '
+      '  count(ac.id) as DpCount,'
+      '  --round(count(p.id)/(:GenCount),4)*100 as CeofCount,'
+      '  round(sum(abs(ar.pok_ostat)),4) as initialamount,'
+      '  round(sum(abs(ar.pok_ostat)),4) as FACTICALDEBT,'
+      
+        '  --round(sum(h.FACTICALDEBT*o.ostat)/:GenFACTICALDEBT,4)*100 as' +
+        ' CeofFACTICALDEBT,'
+      '  0 as FACTICALINTERESTDEBT,'
+      
+        '  --round(sum(h.FACTICALINTERESTDEBT*o.ostat)/:GenFACTICALINTDEB' +
+        'T,4)*100 as CeofFACTICALINTERESTDEBT,'
+      '  0 as RoundInt,'
+      '  ac.filial as branchid'
+      'from account ac,'
+      '     archost ar'
+      'where '
+      '    ac.id = ar.acc_id and ar.datdate = :dat and ar.ostat<>0'
+      ''
+      'group by ac.filial)'
+      ''
+      'group by branchid) d'
+      ''
+      'where f.id = d.branchid'
+      'order by :OrderField'
+      '')
+    Variables.Data = {
+      0300000005000000090000003A47454E434F554E540300000000000000000000
+      00100000003A47454E464143544943414C444542540400000000000000000000
+      00130000003A47454E464143544943414C494E54444542540400000000000000
+      00000000040000003A4441540C00000000000000000000000B0000003A4F5244
+      45524649454C44010000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      040000000A00000006000000534543544F52010000000000070000004450434F
+      554E540100000000000900000043454F46434F554E540100000000000D000000
+      494E495449414C414D4F554E540100000000000C000000464143544943414C44
+      4542540100000000001000000043454F46464143544943414C44454254010000
+      00000014000000464143544943414C494E544552455354444542540100000000
+      001800000043454F46464143544943414C494E54455245535444454254010000
+      00000008000000524F554E44494E54010000000000080000004252414E434849
+      44010000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 176
+    Top = 24
+    object FilialMDRSECTOR: TWideStringField
+      DisplayLabel = 'Сектор'
+      FieldName = 'SECTOR'
+      Size = 90
+    end
+    object FilialMDRDPCOUNT: TFloatField
+      DisplayLabel = 'Сай'
+      FieldName = 'DPCOUNT'
+    end
+    object FilialMDRCEOFCOUNT: TFloatField
+      DisplayLabel = 'Порт.%'
+      FieldName = 'CEOFCOUNT'
+    end
+    object FilialMDRINITIALAMOUNT: TFloatField
+      DisplayLabel = 'Илкин мябляь'
+      FieldName = 'INITIALAMOUNT'
+      DisplayFormat = '#,##0.00'
+    end
+    object FilialMDRFACTICALDEBT: TFloatField
+      DisplayLabel = 'Галыг мябляь'
+      FieldName = 'FACTICALDEBT'
+      DisplayFormat = '#,##0.00'
+    end
+    object FilialMDRCEOFFACTICALDEBT: TFloatField
+      DisplayLabel = 'Порт.%'
+      FieldName = 'CEOFFACTICALDEBT'
+    end
+    object FilialMDRFACTICALINTERESTDEBT: TFloatField
+      DisplayLabel = 'Фаиз мябляь'
+      FieldName = 'FACTICALINTERESTDEBT'
+      DisplayFormat = '#,##0.00'
+    end
+    object FilialMDRCEOFFACTICALINTERESTDEBT: TFloatField
+      DisplayLabel = 'Порт.%'
+      FieldName = 'CEOFFACTICALINTERESTDEBT'
+    end
+    object FilialMDRROUNDINT: TFloatField
+      DisplayLabel = 'ОЧФД(%)'
+      FieldName = 'ROUNDINT'
+      DisplayFormat = '#,##0.00'
+    end
+    object FilialMDRBRANCHID: TFloatField
+      FieldName = 'BRANCHID'
+      Visible = False
+    end
+  end
+  object ValuteMDR: TOracleDataSet
+    SQL.Strings = (
+      'select '
+      '    f.valu_name as sector,f.valute as sectorid,'
+      '    d.*'
+      'from '
+      '   avalute f,'
+      '(select'
+      '   sum(DpCount) as DpCount,'
+      '   round(sum(DpCount)/(:GenCount),4)*100 as CeofCount,'
+      '   sum(initialamount) as initialamount,'
+      '   sum(FACTICALDEBT) as FACTICALDEBT,'
+      
+        '   round(sum(FACTICALDEBT)/:GenFACTICALDEBT,4)*100 as CeofFACTIC' +
+        'ALDEBT,'
+      '   sum(FACTICALINTERESTDEBT) as FACTICALINTERESTDEBT,'
+      
+        '   round(sum(FACTICALINTERESTDEBT)/:GenFACTICALINTDEBT,4)*100 as' +
+        ' CeofFACTICALINTERESTDEBT,'
+      '   round(sum(RoundInt/:GenFACTICALDEBT),4) as RoundInt,'
+      '   currency '
+      '   '
+      'from ('
+      'select '
+      '  count(p.id) as DpCount,'
+      '  --round(count(p.id)/(:GenCount),4)*100 as CeofCount,'
+      '  round(sum(p.amount*o.ostat),4) as initialamount,'
+      '  round(sum(h.FACTICALDEBT*o.ostat),4) as FACTICALDEBT,'
+      
+        '  --round(sum(h.FACTICALDEBT*o.ostat)/:GenFACTICALDEBT,4)*100 as' +
+        ' CeofFACTICALDEBT,'
+      
+        '  round(sum(h.FACTICALINTERESTDEBT*o.ostat),4) as FACTICALINTERE' +
+        'STDEBT,'
+      
+        '  --round(sum(h.FACTICALINTERESTDEBT*o.ostat)/:GenFACTICALINTDEB' +
+        'T,4)*100 as CeofFACTICALINTERESTDEBT,'
+      
+        '  round(sum(h.FACTICALDEBT*o.ostat*intr.interest)/*:GenFACTICALD' +
+        'EBT*/,4)*100 as RoundInt,'
+      '  p.currency'
+      'from sbcm_contracts p,'
+      '     sbcm_contract_history h,'
+      #9' sbcm_interests intr,'
+      #9' operkurs o ,sbcm_accounts ac'
+      'where type# in (3,4)'
+      
+        'and p.id = h.id# and h.hdate = :dat and h.FACTICALDEBT <>0 and p' +
+        '.id=ac.id#'
+      'and p.id = intr.id# and p.currency = o.val_kod'
+      'and o.dat = :dat'
+      ''
+      'group by p.currency'
+      'union all'
+      'select '
+      '  count(ac.id) as DpCount,'
+      '  --round(count(p.id)/(:GenCount),4)*100 as CeofCount,'
+      '  round(sum(abs(ar.pok_ostat)),4) as initialamount,'
+      '  round(sum(abs(ar.pok_ostat)),4) as FACTICALDEBT,'
+      
+        '  --round(sum(h.FACTICALDEBT*o.ostat)/:GenFACTICALDEBT,4)*100 as' +
+        ' CeofFACTICALDEBT,'
+      '  0 as FACTICALINTERESTDEBT,'
+      
+        '  --round(sum(h.FACTICALINTERESTDEBT*o.ostat)/:GenFACTICALINTDEB' +
+        'T,4)*100 as CeofFACTICALINTERESTDEBT,'
+      '  0 as RoundInt,'
+      '  ac.val_acc as currency'
+      'from account ac,'
+      '     archost ar'
+      'where '
+      '    ac.id = ar.acc_id and ar.datdate = :dat and ar.ostat<>0'
+      ''
+      'group by ac.val_acc)'
+      ''
+      'group by currency) d'
+      ''
+      'where f.valute = d.currency'
+      'order by :OrderField')
+    Variables.Data = {
+      0300000005000000090000003A47454E434F554E540300000000000000000000
+      00100000003A47454E464143544943414C444542540400000000000000000000
+      00130000003A47454E464143544943414C494E54444542540400000000000000
+      00000000040000003A4441540C00000000000000000000000B0000003A4F5244
+      45524649454C44010000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      040000000A00000006000000534543544F52010000000000070000004450434F
+      554E540100000000000900000043454F46434F554E540100000000000D000000
+      494E495449414C414D4F554E540100000000000C000000464143544943414C44
+      4542540100000000001000000043454F46464143544943414C44454254010000
+      00000014000000464143544943414C494E544552455354444542540100000000
+      001800000043454F46464143544943414C494E54455245535444454254010000
+      00000008000000524F554E44494E540100000000000800000043555252454E43
+      59010000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 176
+    Top = 72
+    object ValuteMDRSECTOR: TWideStringField
+      DisplayLabel = 'Сектор'
+      FieldName = 'SECTOR'
+      Size = 25
+    end
+    object ValuteMDRDPCOUNT: TFloatField
+      DisplayLabel = 'Сай'
+      FieldName = 'DPCOUNT'
+    end
+    object ValuteMDRCEOFCOUNT: TFloatField
+      DisplayLabel = 'Порт.%'
+      FieldName = 'CEOFCOUNT'
+    end
+    object ValuteMDRINITIALAMOUNT: TFloatField
+      DisplayLabel = 'Илкин мябляь'
+      FieldName = 'INITIALAMOUNT'
+      DisplayFormat = '#,##0.00'
+    end
+    object ValuteMDRFACTICALDEBT: TFloatField
+      DisplayLabel = 'Галыг мябляь'
+      FieldName = 'FACTICALDEBT'
+      DisplayFormat = '#,##0.00'
+    end
+    object ValuteMDRCEOFFACTICALDEBT: TFloatField
+      DisplayLabel = 'Порт.%'
+      FieldName = 'CEOFFACTICALDEBT'
+    end
+    object ValuteMDRFACTICALINTERESTDEBT: TFloatField
+      DisplayLabel = 'Фаиз мябляь'
+      FieldName = 'FACTICALINTERESTDEBT'
+      DisplayFormat = '#,##0.00'
+    end
+    object ValuteMDRCEOFFACTICALINTERESTDEBT: TFloatField
+      DisplayLabel = 'Порт.%'
+      FieldName = 'CEOFFACTICALINTERESTDEBT'
+    end
+    object ValuteMDRROUNDINT: TFloatField
+      DisplayLabel = 'ОЧФД(%)'
+      FieldName = 'ROUNDINT'
+      DisplayFormat = '#,##0.00'
+    end
+    object ValuteMDRCURRENCY: TFloatField
+      FieldName = 'CURRENCY'
+    end
+  end
+  object PeriodMDR: TOracleDataSet
+    SQL.Strings = (
+      'select '
+      '    f.description as sector,f.id as sectorid,'
+      '    d.*'
+      'from '
+      '   dep_standart_period f,'
+      '(select'
+      '   sum(DpCount) as DpCount,'
+      '   round(sum(DpCount)/(:GenCount),4)*100 as CeofCount,'
+      '   sum(initialamount) as initialamount,'
+      '   sum(FACTICALDEBT) as FACTICALDEBT,'
+      
+        '   round(sum(FACTICALDEBT)/:GenFACTICALDEBT,4)*100 as CeofFACTIC' +
+        'ALDEBT,'
+      '   sum(FACTICALINTERESTDEBT) as FACTICALINTERESTDEBT,'
+      
+        '   round(sum(FACTICALINTERESTDEBT)/:GenFACTICALINTDEBT,4)*100 as' +
+        ' CeofFACTICALINTERESTDEBT,'
+      '   round(sum(RoundInt/:GenFACTICALDEBT),4) as RoundInt,'
+      '   period '
+      '   '
+      'from ('
+      'select '
+      '  count(p.id) as DpCount,'
+      '  --round(count(p.id)/(:GenCount),4)*100 as CeofCount,'
+      '  round(sum(p.amount*o.ostat),4) as initialamount,'
+      '  round(sum(h.FACTICALDEBT*o.ostat),4) as FACTICALDEBT,'
+      
+        '  --round(sum(h.FACTICALDEBT*o.ostat)/:GenFACTICALDEBT,4)*100 as' +
+        ' CeofFACTICALDEBT,'
+      
+        '  round(sum(h.FACTICALINTERESTDEBT*o.ostat),4) as FACTICALINTERE' +
+        'STDEBT,'
+      
+        '  --round(sum(h.FACTICALINTERESTDEBT*o.ostat)/:GenFACTICALINTDEB' +
+        'T,4)*100 as CeofFACTICALINTERESTDEBT,'
+      
+        '  round(sum(h.FACTICALDEBT*o.ostat*intr.interest)/*:GenFACTICALD' +
+        'EBT*/,4)*100 as RoundInt,'
+      '  usaid_report.get_Dep_St_per(p.id) as period'
+      'from sbcm_contracts p,'
+      '     sbcm_contract_history h,'
+      #9' sbcm_interests intr,'
+      #9' operkurs o ,sbcm_accounts ac'
+      'where type# in (3,4)'
+      
+        'and p.id = h.id# and h.hdate = :dat and h.FACTICALDEBT <>0 and p' +
+        '.id=ac.id#'
+      'and p.id = intr.id# and p.currency = o.val_kod'
+      'and o.dat = :dat'
+      ''
+      'group by usaid_report.get_Dep_St_per(p.id)'
+      'union all'
+      'select '
+      '  count(ac.id) as DpCount,'
+      '  --round(count(p.id)/(:GenCount),4)*100 as CeofCount,'
+      '  round(sum(abs(ar.pok_ostat)),4) as initialamount,'
+      '  round(sum(abs(ar.pok_ostat)),4) as FACTICALDEBT,'
+      
+        '  --round(sum(h.FACTICALDEBT*o.ostat)/:GenFACTICALDEBT,4)*100 as' +
+        ' CeofFACTICALDEBT,'
+      '  0 as FACTICALINTERESTDEBT,'
+      
+        '  --round(sum(h.FACTICALINTERESTDEBT*o.ostat)/:GenFACTICALINTDEB' +
+        'T,4)*100 as CeofFACTICALINTERESTDEBT,'
+      '  0 as RoundInt,'
+      '  1 /* It is a period for balance*/ as period'
+      'from account ac,'
+      '     archost ar'
+      'where '
+      '    ac.id = ar.acc_id and ar.datdate = :dat and ar.ostat<>0 '
+      ''
+      '/*group by ac.period*/)'
+      ''
+      'group by period order by period) d'
+      ''
+      'where f.id = d.period'
+      'order by :OrderField')
+    Variables.Data = {
+      0300000005000000090000003A47454E434F554E540300000000000000000000
+      00100000003A47454E464143544943414C444542540400000000000000000000
+      00130000003A47454E464143544943414C494E54444542540400000000000000
+      00000000040000003A4441540C00000000000000000000000B0000003A4F5244
+      45524649454C44010000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      040000000A00000006000000534543544F52010000000000070000004450434F
+      554E540100000000000900000043454F46434F554E540100000000000D000000
+      494E495449414C414D4F554E540100000000000C000000464143544943414C44
+      4542540100000000001000000043454F46464143544943414C44454254010000
+      00000014000000464143544943414C494E544552455354444542540100000000
+      001800000043454F46464143544943414C494E54455245535444454254010000
+      00000008000000524F554E44494E5401000000000006000000504552494F4401
+      0000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 177
+    Top = 120
+    object PeriodMDRSECTOR: TWideStringField
+      DisplayLabel = 'Сектор'
+      FieldName = 'SECTOR'
+      Size = 11
+    end
+    object PeriodMDRDPCOUNT: TFloatField
+      DisplayLabel = 'Сай'
+      FieldName = 'DPCOUNT'
+    end
+    object PeriodMDRCEOFCOUNT: TFloatField
+      DisplayLabel = 'Порт.%'
+      FieldName = 'CEOFCOUNT'
+    end
+    object PeriodMDRINITIALAMOUNT: TFloatField
+      DisplayLabel = 'Илкин мябляь'
+      FieldName = 'INITIALAMOUNT'
+      DisplayFormat = '#,##0.00'
+    end
+    object PeriodMDRFACTICALDEBT: TFloatField
+      DisplayLabel = 'Галыг мябляь'
+      FieldName = 'FACTICALDEBT'
+      DisplayFormat = '#,##0.00'
+    end
+    object PeriodMDRCEOFFACTICALDEBT: TFloatField
+      DisplayLabel = 'Порт.%'
+      FieldName = 'CEOFFACTICALDEBT'
+    end
+    object PeriodMDRFACTICALINTERESTDEBT: TFloatField
+      DisplayLabel = 'Фаиз мябляь'
+      FieldName = 'FACTICALINTERESTDEBT'
+      DisplayFormat = '#,##0.00'
+    end
+    object PeriodMDRCEOFFACTICALINTERESTDEBT: TFloatField
+      DisplayLabel = 'Порт.%'
+      FieldName = 'CEOFFACTICALINTERESTDEBT'
+    end
+    object PeriodMDRROUNDINT: TFloatField
+      DisplayLabel = 'ОЧФД(%)'
+      FieldName = 'ROUNDINT'
+      DisplayFormat = '#,##0.00'
+    end
+    object PeriodMDRPERIOD: TFloatField
+      FieldName = 'PERIOD'
+    end
+  end
+  object AnnualIntMDR: TOracleDataSet
+    SQL.Strings = (
+      'select '
+      '    f.sector as sector,f.id as sectorid,'
+      '    d.*'
+      'from '
+      '   (select 1 as ID,'#39'=0'#39' as sector,0 as bper, 0 as eper from dual'
+      'union'
+      
+        'select 2 as ID,'#39'<0<=4'#39' as sector,0.01 as bper, 4 as eper from du' +
+        'al'
+      'union'
+      
+        'select 3 as ID,'#39'<4<=8'#39' as sector ,4.01 as bper, 8 as eper from d' +
+        'ual'
+      'union'
+      
+        'select 4 as ID,'#39'<8<=12'#39' as sector,8.01 as bper, 12 as eper from ' +
+        'dual'
+      'union'
+      
+        'select 5 as ID,'#39'<12<=18'#39' as sector,12.01 as bper, 18 as eper fro' +
+        'm dual'
+      'union'
+      
+        'select 6 as ID,'#39'>18'#39' as sector,18.01 as bper, 500 as eper from d' +
+        'ual) f,'
+      ''
+      ''
+      '(select'
+      '   sum(DpCount) as DpCount,'
+      '   round(sum(DpCount)/(:GenCount),4)*100 as CeofCount,'
+      '   sum(initialamount) as initialamount,'
+      '   sum(FACTICALDEBT) as FACTICALDEBT,'
+      
+        '   round(sum(FACTICALDEBT)/:GenFACTICALDEBT,4)*100 as CeofFACTIC' +
+        'ALDEBT,'
+      '   sum(FACTICALINTERESTDEBT) as FACTICALINTERESTDEBT,'
+      
+        '   round(sum(FACTICALINTERESTDEBT)/:GenFACTICALINTDEBT,4)*100 as' +
+        ' CeofFACTICALINTERESTDEBT,'
+      '   round(sum(RoundInt/:GenFACTICALDEBT),4) as RoundInt,'
+      '   secID  '
+      '   '
+      'from ('
+      'select * from (select '
+      '  count(p.id) as DpCount,'
+      '  --round(count(p.id)/(:GenCount),4)*100 as CeofCount,'
+      '  sum(round((p.amount*o.ostat),4)) as initialamount,'
+      '  sum(round((h.FACTICALDEBT*o.ostat),4)) as FACTICALDEBT,'
+      
+        '  --round(sum(h.FACTICALDEBT*o.ostat)/:GenFACTICALDEBT,4)*100 as' +
+        ' CeofFACTICALDEBT,'
+      
+        '  sum(round((h.FACTICALINTERESTDEBT*o.ostat),4)) as FACTICALINTE' +
+        'RESTDEBT,'
+      
+        '  --round(sum(h.FACTICALINTERESTDEBT*o.ostat)/:GenFACTICALINTDEB' +
+        'T,4)*100 as CeofFACTICALINTERESTDEBT,'
+      
+        '  sum(round((h.FACTICALDEBT*o.ostat*intr.interest)/*:GenFACTICAL' +
+        'DEBT*/,4)*100) as RoundInt,'
+      '   case '
+      '              when intr.INTEREST  = 0 then 1'
+      
+        '              when intr.INTEREST > 0 and intr.INTEREST < =4 then' +
+        '  2'
+      
+        '              when intr.INTEREST > 4 and intr.INTEREST < =8 then' +
+        '  3'
+      
+        '              when intr.INTEREST > 8  and intr.INTEREST < =12 th' +
+        'en 4'
+      
+        '              when intr.INTEREST > 12  and intr.INTEREST < =18 t' +
+        'hen 5'
+      '              when intr.INTEREST > 18 then 6'
+      '              end as secID'
+      'from sbcm_contracts p,'
+      '     sbcm_contract_history h,'
+      #9' sbcm_interests intr,'
+      #9' operkurs o ,sbcm_accounts ac'
+      'where type# in (3,4)'
+      
+        'and p.id = h.id# and h.hdate = :dat and h.FACTICALDEBT <>0 and p' +
+        '.id=ac.id#'
+      'and p.id = intr.id# and p.currency = o.val_kod'
+      'and o.dat = :dat'
+      ''
+      'group by intr.INTEREST order by intr.INTEREST )'
+      'union all'
+      'select * from (select '
+      '  count(ac.id) as DpCount,'
+      '  --round(count(p.id)/(:GenCount),4)*100 as CeofCount,'
+      '  round(sum(abs(ar.pok_ostat)),4) as initialamount,'
+      '  round(sum(abs(ar.pok_ostat)),4) as FACTICALDEBT,'
+      
+        '  --round(sum(h.FACTICALDEBT*o.ostat)/:GenFACTICALDEBT,4)*100 as' +
+        ' CeofFACTICALDEBT,'
+      '  0 as FACTICALINTERESTDEBT,'
+      
+        '  --round(sum(h.FACTICALINTERESTDEBT*o.ostat)/:GenFACTICALINTDEB' +
+        'T,4)*100 as CeofFACTICALINTERESTDEBT,'
+      '  0 as RoundInt,'
+      '  1 /* It is a period for balance*/ as secID'
+      'from account ac,'
+      '     archost ar'
+      'where '
+      '    ac.id = ar.acc_id and ar.datdate = :dat and ar.ostat<>0'
+      ''
+      '/*group by ac.period*/))'
+      ''
+      'group by secID) d'
+      ''
+      'where f.id = d.secID '
+      'order by :OrderField'
+      ''
+      ''
+      '')
+    Variables.Data = {
+      0300000005000000090000003A47454E434F554E540300000000000000000000
+      00100000003A47454E464143544943414C444542540400000000000000000000
+      00130000003A47454E464143544943414C494E54444542540400000000000000
+      00000000040000003A4441540C00000000000000000000000B0000003A4F5244
+      45524649454C44010000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      040000000A00000006000000534543544F52010000000000070000004450434F
+      554E540100000000000900000043454F46434F554E540100000000000D000000
+      494E495449414C414D4F554E540100000000000C000000464143544943414C44
+      4542540100000000001000000043454F46464143544943414C44454254010000
+      00000014000000464143544943414C494E544552455354444542540100000000
+      001800000043454F46464143544943414C494E54455245535444454254010000
+      00000008000000524F554E44494E5401000000000008000000534543544F5249
+      44010000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 176
+    Top = 168
+    object AnnualIntMDRSECTOR: TWideStringField
+      DisplayLabel = 'Сектор'
+      FieldName = 'SECTOR'
+      Size = 7
+    end
+    object AnnualIntMDRDPCOUNT: TFloatField
+      DisplayLabel = 'Сай'
+      FieldName = 'DPCOUNT'
+    end
+    object AnnualIntMDRCEOFCOUNT: TFloatField
+      DisplayLabel = 'Порт.%'
+      FieldName = 'CEOFCOUNT'
+    end
+    object AnnualIntMDRINITIALAMOUNT: TFloatField
+      DisplayLabel = 'Илкин мябляь'
+      FieldName = 'INITIALAMOUNT'
+      DisplayFormat = '#,##0.00'
+    end
+    object AnnualIntMDRFACTICALDEBT: TFloatField
+      DisplayLabel = 'Галыг мябляь'
+      FieldName = 'FACTICALDEBT'
+      DisplayFormat = '#,##0.00'
+    end
+    object AnnualIntMDRCEOFFACTICALDEBT: TFloatField
+      DisplayLabel = 'Порт.%'
+      FieldName = 'CEOFFACTICALDEBT'
+    end
+    object AnnualIntMDRFACTICALINTERESTDEBT: TFloatField
+      DisplayLabel = 'Фаиз мябляь'
+      FieldName = 'FACTICALINTERESTDEBT'
+      DisplayFormat = '#,##0.00'
+    end
+    object AnnualIntMDRCEOFFACTICALINTERESTDEBT: TFloatField
+      DisplayLabel = 'Порт.%'
+      FieldName = 'CEOFFACTICALINTERESTDEBT'
+    end
+    object AnnualIntMDRROUNDINT: TFloatField
+      DisplayLabel = 'ОЧФД(%)'
+      FieldName = 'ROUNDINT'
+      DisplayFormat = '#,##0.00'
+    end
+    object AnnualIntMDRSECTORID: TFloatField
+      FieldName = 'SECTORID'
+    end
+  end
+  object DepTypeMDR: TOracleDataSet
+    SQL.Strings = (
+      'select '
+      '    f.TYPE as sector,f.id as sectorid,'
+      '    d.*'
+      'from '
+      
+        '  (select id,TYPE from sbcm_deposit_types union select 9999 as I' +
+        'D ,'#39'Жари щесаблар'#39' from  dual) f,'
+      '(select'
+      '   sum(DpCount) as DpCount,'
+      '   round(sum(DpCount)/(:GenCount),4)*100 as CeofCount,'
+      '   sum(initialamount) as initialamount,'
+      '   sum(FACTICALDEBT) as FACTICALDEBT,'
+      
+        '   round(sum(FACTICALDEBT)/:GenFACTICALDEBT,4)*100 as CeofFACTIC' +
+        'ALDEBT,'
+      '   sum(FACTICALINTERESTDEBT) as FACTICALINTERESTDEBT,'
+      
+        '   round(sum(FACTICALINTERESTDEBT)/:GenFACTICALINTDEBT,4)*100 as' +
+        ' CeofFACTICALINTERESTDEBT,'
+      '   round(sum(RoundInt/:GenFACTICALDEBT),4) as RoundInt,'
+      '   contracttype '
+      '   '
+      'from ('
+      'select '
+      '  count(p.id) as DpCount,'
+      '  --round(count(p.id)/(:GenCount),4)*100 as CeofCount,'
+      '  round(sum(p.amount*o.ostat),4) as initialamount,'
+      '  round(sum(h.FACTICALDEBT*o.ostat),4) as FACTICALDEBT,'
+      
+        '  --round(sum(h.FACTICALDEBT*o.ostat)/:GenFACTICALDEBT,4)*100 as' +
+        ' CeofFACTICALDEBT,'
+      
+        '  round(sum(h.FACTICALINTERESTDEBT*o.ostat),4) as FACTICALINTERE' +
+        'STDEBT,'
+      
+        '  --round(sum(h.FACTICALINTERESTDEBT*o.ostat)/:GenFACTICALINTDEB' +
+        'T,4)*100 as CeofFACTICALINTERESTDEBT,'
+      
+        '  round(sum(h.FACTICALDEBT*o.ostat*intr.interest)/*:GenFACTICALD' +
+        'EBT*/,4)*100 as RoundInt,'
+      '  p.contracttype'
+      'from sbcm_contracts p,'
+      '     sbcm_contract_history h,'
+      #9' sbcm_interests intr,'
+      #9' operkurs o ,sbcm_accounts ac'
+      'where type# in (3,4)'
+      
+        'and p.id = h.id# and h.hdate = :dat and h.FACTICALDEBT <>0 and p' +
+        '.id=ac.id#'
+      'and p.id = intr.id# and p.currency = o.val_kod'
+      'and o.dat = :dat'
+      ''
+      'group by p.contracttype'
+      'union all'
+      'select '
+      '  count(ac.id) as DpCount,'
+      '  --round(count(p.id)/(:GenCount),4)*100 as CeofCount,'
+      '  round(sum(abs(ar.pok_ostat)),4) as initialamount,'
+      '  round(sum(abs(ar.pok_ostat)),4) as FACTICALDEBT,'
+      
+        '  --round(sum(h.FACTICALDEBT*o.ostat)/:GenFACTICALDEBT,4)*100 as' +
+        ' CeofFACTICALDEBT,'
+      '  0 as FACTICALINTERESTDEBT,'
+      
+        '  --round(sum(h.FACTICALINTERESTDEBT*o.ostat)/:GenFACTICALINTDEB' +
+        'T,4)*100 as CeofFACTICALINTERESTDEBT,'
+      '  0 as RoundInt,'
+      '  9999 as contracttype'
+      'from account ac,'
+      '     archost ar'
+      'where '
+      '    ac.id = ar.acc_id and ar.datdate = :dat and ar.ostat<>0'
+      ''
+      '/*group by ac.val_acc*/)'
+      ''
+      'group by contracttype) d'
+      ''
+      'where f.ID = d.contracttype'
+      'order by :OrderField'
+      '')
+    Variables.Data = {
+      0300000005000000090000003A47454E434F554E540300000000000000000000
+      00100000003A47454E464143544943414C444542540400000000000000000000
+      00130000003A47454E464143544943414C494E54444542540400000000000000
+      00000000040000003A4441540C00000000000000000000000B0000003A4F5244
+      45524649454C44010000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      040000000A00000006000000534543544F52010000000000070000004450434F
+      554E540100000000000900000043454F46434F554E540100000000000D000000
+      494E495449414C414D4F554E540100000000000C000000464143544943414C44
+      4542540100000000001000000043454F46464143544943414C44454254010000
+      00000014000000464143544943414C494E544552455354444542540100000000
+      001800000043454F46464143544943414C494E54455245535444454254010000
+      00000008000000524F554E44494E540100000000000C000000434F4E54524143
+      5454595045010000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 176
+    Top = 224
+    object DepTypeMDRSECTOR: TWideStringField
+      DisplayLabel = 'Сектор'
+      FieldName = 'SECTOR'
+      Required = True
+      Size = 256
+    end
+    object DepTypeMDRDPCOUNT: TFloatField
+      DisplayLabel = 'Сай'
+      FieldName = 'DPCOUNT'
+    end
+    object DepTypeMDRCEOFCOUNT: TFloatField
+      DisplayLabel = 'Порт.%'
+      FieldName = 'CEOFCOUNT'
+    end
+    object DepTypeMDRINITIALAMOUNT: TFloatField
+      DisplayLabel = 'Илкин мябляь'
+      FieldName = 'INITIALAMOUNT'
+      DisplayFormat = '#,##0.00'
+    end
+    object DepTypeMDRFACTICALDEBT: TFloatField
+      DisplayLabel = 'Галыг мябляь'
+      FieldName = 'FACTICALDEBT'
+      DisplayFormat = '#,##0.00'
+    end
+    object DepTypeMDRCEOFFACTICALDEBT: TFloatField
+      DisplayLabel = 'Порт.%'
+      FieldName = 'CEOFFACTICALDEBT'
+    end
+    object DepTypeMDRFACTICALINTERESTDEBT: TFloatField
+      DisplayLabel = 'Фаиз мябляь'
+      FieldName = 'FACTICALINTERESTDEBT'
+      DisplayFormat = '#,##0.00'
+    end
+    object DepTypeMDRCEOFFACTICALINTERESTDEBT: TFloatField
+      DisplayLabel = 'Порт.%'
+      FieldName = 'CEOFFACTICALINTERESTDEBT'
+    end
+    object DepTypeMDRROUNDINT: TFloatField
+      DisplayLabel = 'ОЧФД(%)'
+      FieldName = 'ROUNDINT'
+      DisplayFormat = '#,##0.00'
+    end
+    object DepTypeMDRCONTRACTTYPE: TFloatField
+      FieldName = 'CONTRACTTYPE'
+    end
+  end
+  object FilialMDRds: TDataSource
+    DataSet = FilialMDR
+    Left = 255
+    Top = 24
+  end
+  object ValuteMDRds: TDataSource
+    DataSet = ValuteMDR
+    Left = 255
+    Top = 72
+  end
+  object PeriodMDRds: TDataSource
+    DataSet = PeriodMDR
+    Left = 255
+    Top = 122
+  end
+  object AnnualIntMDRds: TDataSource
+    DataSet = AnnualIntMDR
+    Left = 263
+    Top = 168
+  end
+  object DepTypeMDRds: TDataSource
+    DataSet = DepTypeMDR
+    Left = 263
+    Top = 224
+  end
+  object Queries: TOracleDataSet
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 176
+    Top = 272
+  end
+  object sysdat: TOracleDataSet
+    SQL.Strings = (
+      'select tek_dat from sysdat')
+    Session = sboapiDataModule.SBSession
+    Left = 456
+    Top = 8
+  end
+  object DetailMDR: TOracleDataSet
+    SQL.Strings = (
+      'select * from (select'
+      '   p.contractno,'
+      '   cust.name,'
+      
+        '   /*USAID_REPORT.get_balaccnobyid(acc.contractaccid)*/ac.bal_cn' +
+        '1 as bal_cn,'
+      '   USAID_REPORT.get_accnobyid(acc.contractaccid) as DepAccNO,'
+      '   USAID_REPORT.get_accnobyid(acc.Interestaccid) as IntAccNO,'
+      '   av.val_name,'
+      '   p.opendate,'
+      '   p.closedate,'
+      '   usaid_report.get_ProlongDat(p.id) as newdate,'
+      '   intr.interest,oint.overdueinterest,'
+      '   p.amount,'
+      '   round(p.amount*o.ostat,2) as Eamount,'
+      '   h.facticaldebt,'
+      '   round(h.facticaldebt*o.ostat,2) as Efacticaldebt,'
+      '   h.facticalinterestdebt,'
+      
+        '   round(h.facticalinterestdebt*o.ostat,2) as Efacticalinterestd' +
+        'ebt,dtype.type as deptype,'
+      '   f.name as filial,'
+      '   per.name as person,'
+      '   USAID_REPORT.get_SourceNameForBal(ac.bal_cn1) as SourceName,'
+      '   USAID_REPORT.get_TypeNameForBal(ac.bal_cn1) as TypeName'
+      'from'
+      '  sbcm_contracts p,'
+      '  sbcm_contract_accounts acc,'
+      '  customers cust,'
+      '  avalute av,'
+      '  --sbcm_prolongations pr,'
+      '  sbcm_interests intr,sbcm_overdueinterests oint,'
+      '  operkurs o,'
+      '  sbcm_contract_history h,'
+      '  filial f,'
+      '  sbcm_persons per,sbcm_deposit_types dtype,sbcm_accounts ac'
+      'where'
+      '   p.id = acc.id# and p.type# in (3,4) and'
+      '   p.customerid = cust.id and p.contracttype = dtype.id and'
+      '   p.currency = av.valute and'
+      '   p.personaltype = per.id and'
+      '   --p.id = pr.id# and'
+      '   p.id = intr.id# and oint.id# = p.id and'
+      '   p.currency = o.val_kod and'
+      '   o.dat = :dat and'
+      '   p.id = h.id# and'
+      '   h.hdate = :dat and h.facticaldebt<>0 and '
+      '   p.branchid = f.id and p.id=ac.id#'
+      ' '
+      ''
+      'union all '
+      ''
+      'select'
+      '   '#39'Щесаблар'#39' as contractno,'
+      '   cust.name,'
+      '   ac.bal_cn1 as bal_cn,'
+      '   ac.acc_no as DepAccNO,'
+      '   null as IntAccNO,'
+      '   av.val_name,'
+      '   ac.open_dat as open_date,'
+      '   null as closedate,'
+      '   null as newdate,'
+      '   0 as interest,0 as overdueinterest,'
+      '   abs(ar.ostat) as amount,'
+      '   abs(ar.pok_ostat) as Eamount,'
+      '   abs(ar.ostat),'
+      '   abs(ar.pok_ostat) as Efacticaldebt,'
+      '   0 as facticalinterestdebt,'
+      '   0 as Efacticalinterestdebt,'#39'Жари щесаблар'#39' as deptype,'
+      '   f.name as filial,'
+      '   usaid_report.get_personNameForBal(ac.bal_cn1) as person,'
+      '   USAID_REPORT.get_SourceNameForBal(ac.bal_cn1) as SourceName,'
+      '   USAID_REPORT.get_TypeNameForBal(ac.bal_cn1) as TypeName'
+      'from'
+      '  account ac,'
+      '  customers cust,'
+      '  avalute av,'
+      '  operkurs o,'
+      '  archost ar,'
+      '  filial f '
+      'where '
+      '   ac.kli_id = cust.id and'
+      '   ac.val_acc = av.valute and'
+      '   ac.val_acc = o.val_kod and o.dat = :dat and'
+      '   ac.id = ar.acc_id and'
+      '   ar.datdate = :dat and ar.ostat<>0 and'
+      '   ac.filial = f.id'
+      ' '
+      '   '
+      '   '
+      ')'
+      'order by :OrderField'
+      ''
+      ''
+      ''
+      '')
+    Variables.Data = {
+      0300000002000000040000003A4441540C00000000000000000000000B000000
+      3A4F524445524649454C44010000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      04000000160000000A000000434F4E54524143544E4F01000000000004000000
+      4E414D450100000000000600000042414C5F434E010000000000080000004445
+      504143434E4F01000000000008000000494E544143434E4F0100000000000800
+      000056414C5F4E414D45010000000000080000004F50454E4441544501000000
+      000009000000434C4F534544415445010000000000070000004E455744415445
+      01000000000008000000494E54455245535401000000000006000000414D4F55
+      4E540100000000000700000045414D4F554E540100000000000C000000464143
+      544943414C444542540100000000000D00000045464143544943414C44454254
+      01000000000014000000464143544943414C494E544552455354444542540100
+      000000001500000045464143544943414C494E54455245535444454254010000
+      0000000600000046494C49414C01000000000006000000504552534F4E010000
+      0000000A000000534F555243454E414D4501000000000008000000545950454E
+      414D450100000000000F0000004F564552445545494E54455245535401000000
+      00000700000044455054595045010000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 32
+    Top = 328
+    object DetailMDRCONTRACTNO: TWideStringField
+      DisplayLabel = 'Мцгавиля №'
+      FieldName = 'CONTRACTNO'
+      Size = 64
+    end
+    object DetailMDRNAME: TWideStringField
+      DisplayLabel = 'Мцштяринин ады'
+      FieldName = 'NAME'
+      Size = 90
+    end
+    object DetailMDRBAL_CN: TFloatField
+      DisplayLabel = 'Баланс №'
+      FieldName = 'BAL_CN'
+    end
+    object DetailMDRDEPACCNO: TWideStringField
+      DisplayLabel = 'Щесаб №'
+      FieldName = 'DEPACCNO'
+      Size = 4000
+    end
+    object DetailMDRINTACCNO: TWideStringField
+      DisplayLabel = '% Щесаб №'
+      FieldName = 'INTACCNO'
+      Size = 4000
+    end
+    object DetailMDRVAL_NAME: TWideStringField
+      DisplayLabel = '$'
+      FieldName = 'VAL_NAME'
+      Size = 10
+    end
+    object DetailMDROPENDATE: TDateTimeField
+      DisplayLabel = 'Ачылма тарихи'
+      FieldName = 'OPENDATE'
+    end
+    object DetailMDRCLOSEDATE: TDateTimeField
+      DisplayLabel = 'Баьланма тарихи'
+      FieldName = 'CLOSEDATE'
+    end
+    object DetailMDRNEWDATE: TDateTimeField
+      DisplayLabel = 'Узадылма тарихи'
+      FieldName = 'NEWDATE'
+    end
+    object DetailMDRINTEREST: TFloatField
+      DisplayLabel = 'Иллик %'
+      FieldName = 'INTEREST'
+    end
+    object DetailMDROVERDUEINTEREST: TFloatField
+      DisplayLabel = 'МЯ %'
+      FieldName = 'OVERDUEINTEREST'
+    end
+    object DetailMDRAMOUNT: TFloatField
+      DisplayLabel = 'Илкин мяб.'
+      FieldName = 'AMOUNT'
+    end
+    object DetailMDREAMOUNT: TFloatField
+      DisplayLabel = 'Екв'
+      FieldName = 'EAMOUNT'
+    end
+    object DetailMDRFACTICALDEBT: TFloatField
+      DisplayLabel = 'Жари мяб.'
+      FieldName = 'FACTICALDEBT'
+    end
+    object DetailMDREFACTICALDEBT: TFloatField
+      DisplayLabel = 'Екв'
+      FieldName = 'EFACTICALDEBT'
+    end
+    object DetailMDRFACTICALINTERESTDEBT: TFloatField
+      DisplayLabel = 'Щесаб.%'
+      FieldName = 'FACTICALINTERESTDEBT'
+    end
+    object DetailMDREFACTICALINTERESTDEBT: TFloatField
+      DisplayLabel = 'Екв'
+      FieldName = 'EFACTICALINTERESTDEBT'
+    end
+    object DetailMDRFILIAL: TWideStringField
+      DisplayLabel = 'Филиал'
+      FieldName = 'FILIAL'
+      Size = 90
+    end
+    object DetailMDRPERSON: TWideStringField
+      DisplayLabel = 'Шяхс'
+      FieldName = 'PERSON'
+      Size = 4000
+    end
+    object DetailMDRSOURCENAME: TWideStringField
+      DisplayLabel = 'Мянбя'
+      FieldName = 'SOURCENAME'
+      Size = 4000
+    end
+    object DetailMDRTYPENAME: TWideStringField
+      DisplayLabel = 'Нюв'
+      FieldName = 'TYPENAME'
+      Size = 4000
+    end
+    object DetailMDRDEPTYPE: TWideStringField
+      DisplayLabel = 'Депозитин типи :'
+      FieldName = 'DEPTYPE'
+      Size = 256
+    end
+  end
+  object DetailMDRds: TDataSource
+    DataSet = DetailMDR
+    Left = 99
+    Top = 328
+  end
+end

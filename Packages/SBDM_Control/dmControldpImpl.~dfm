@@ -1,0 +1,34 @@
+object dmControldp: TdmControldp
+  OldCreateOrder = False
+  Left = 196
+  Top = 127
+  Height = 480
+  Width = 696
+  object filials: TOracleDataSet
+    SQL.Strings = (
+      'select id,name from filial')
+    QBEDefinition.QBEFieldDefs = {
+      0400000002000000020000004944010000000000040000004E414D4501000000
+      0000}
+    Session = sboapiDataModule.SBSession
+    Left = 32
+    Top = 8
+    object filialsID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object filialsNAME: TStringField
+      FieldName = 'NAME'
+      Size = 90
+    end
+  end
+  object OraclePackage1: TOraclePackage
+    Left = 96
+    Top = 16
+  end
+  object filialsds: TDataSource
+    DataSet = filials
+    Left = 176
+    Top = 24
+  end
+end

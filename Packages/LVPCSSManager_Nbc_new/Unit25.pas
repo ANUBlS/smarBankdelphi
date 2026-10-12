@@ -1,0 +1,45 @@
+unit Unit25;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ExtCtrls, QuickRpt, Data_Unit, QRCtrls, datnamount;
+
+type
+  Trepform = class(TForm)
+    QuickRep1: TQuickRep;
+    QRBand1: TQRBand;
+    QRBand3: TQRBand;
+    QRShape1: TQRShape;
+    QRDBText1: TQRDBText;
+    QRDBText2: TQRDBText;
+    QRDBText4: TQRDBText;
+    QRShape3: TQRShape;
+    QRLabel7: TQRLabel;
+    QRLabel1: TQRLabel;
+    QRLabel3: TQRLabel;
+    QRLabel2: TQRLabel;
+    QRLabel4: TQRLabel;
+    QRLabel5: TQRLabel;
+    QRDBText5: TQRDBText;
+    QRDBText6: TQRDBText;
+    QRDBText7: TQRDBText;
+    QRLabel9: TQRLabel;
+    QRLabel10: TQRLabel;
+    QRLabel8: TQRLabel;
+    s: TQRDBText;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  repform: Trepform;
+
+implementation
+
+{$R *.dfm}
+
+end.

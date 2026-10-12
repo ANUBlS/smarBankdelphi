@@ -1,0 +1,535 @@
+object TuningDataModule: TTuningDataModule
+  OldCreateOrder = False
+  OnCreate = DataModuleCreate
+  Left = 263
+  Top = 124
+  Height = 480
+  Width = 696
+  object ODSSettings: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      '    commision_trans.Rowid'
+      '   ,id'
+      '   ,name'
+      '   ,debt'
+      
+        '   ,sb_complex_transactions.getaccountnumber(debt) as DebitAccou' +
+        'nt'
+      
+        '   ,sb_complex_transactions.GetAccountCurrency(debt) as DebitCur' +
+        'rency'
+      '   ,credit'
+      
+        '   ,sb_complex_transactions.getaccountnumber(credit) as CreditAc' +
+        'count'
+      
+        '   ,sb_complex_transactions.GetAccountCurrency(credit) as Credit' +
+        'Currency'
+      '   ,additionalDebt'
+      '   ,additionalCredit'
+      
+        '   ,sb_complex_transactions.getaccountnumber(additionalDebt) as ' +
+        'ADebt'
+      
+        '   ,sb_complex_transactions.GetAccountCurrency(additionalDebt) a' +
+        's ADebitCurrency'
+      
+        '   ,sb_complex_transactions.getaccountnumber(additionalCredit) a' +
+        's ACredit'
+      
+        '   ,sb_complex_transactions.GetAccountCurrency(additionalCredit)' +
+        ' as ACreditCurrency'
+      '   ,assignment'
+      '   ,commisionassignment'
+      '   ,UserID   '
+      'from'
+      '    commision_trans'
+      'where'
+      '   UserID = 0 or'
+      '    UserID = (SBLogin.UserID)'
+      'order by'
+      '    commision_trans.ID'
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ' '
+      ' '
+      ' ')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    OnApplyRecord = ODSSettingsApplyRecord
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = False
+    Active = False
+    Left = 48
+    Top = 32
+    object ODSSettingsID: TFloatField
+      FieldName = 'ID'
+    end
+    object ODSSettingsNAME: TStringField
+      FieldName = 'NAME'
+      Size = 150
+    end
+    object ODSSettingsDEBT: TFloatField
+      FieldName = 'DEBT'
+    end
+    object ODSSettingsDEBITACCOUNT: TStringField
+      FieldName = 'DEBITACCOUNT'
+      Size = 4000
+    end
+    object ODSSettingsDEBITCURRENCY: TStringField
+      FieldName = 'DEBITCURRENCY'
+      Size = 4000
+    end
+    object ODSSettingsCREDIT: TFloatField
+      FieldName = 'CREDIT'
+    end
+    object ODSSettingsCREDITACCOUNT: TStringField
+      FieldName = 'CREDITACCOUNT'
+      Size = 4000
+    end
+    object ODSSettingsCREDITCURRENCY: TStringField
+      FieldName = 'CREDITCURRENCY'
+      Size = 4000
+    end
+    object ODSSettingsADDITIONALDEBT: TFloatField
+      FieldName = 'ADDITIONALDEBT'
+    end
+    object ODSSettingsADDITIONALCREDIT: TFloatField
+      FieldName = 'ADDITIONALCREDIT'
+    end
+    object ODSSettingsADEBT: TStringField
+      FieldName = 'ADEBT'
+      Size = 4000
+    end
+    object ODSSettingsACREDIT: TStringField
+      FieldName = 'ACREDIT'
+      Size = 4000
+    end
+    object ODSSettingsASSIGNMENT: TStringField
+      FieldName = 'ASSIGNMENT'
+      Size = 300
+    end
+    object ODSSettingsCOMMISIONASSIGNMENT: TStringField
+      FieldName = 'COMMISIONASSIGNMENT'
+      Size = 300
+    end
+    object ODSSettingsADEBITCURRENCY: TStringField
+      FieldName = 'ADEBITCURRENCY'
+      Size = 4000
+    end
+    object ODSSettingsACREDITCURRENCY: TStringField
+      FieldName = 'ACREDITCURRENCY'
+      Size = 4000
+    end
+    object ODSSettingsUSERID: TFloatField
+      FieldName = 'USERID'
+    end
+  end
+  object DSSettings: TDataSource
+    DataSet = ODSSettings
+    OnDataChange = DSSettingsDataChange
+    Left = 152
+    Top = 32
+  end
+  object ODSCustomerGroups: TOracleDataSet
+    SQL.Strings = (
+      'Select '
+      '   q.rowID'
+      '  ,q.*'
+      'From'
+      '  qrp_klie q'
+      'Order by ID')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = False
+    Active = False
+    AfterPost = ODSCustomerGroupsAfterPost
+    Left = 48
+    Top = 112
+    object ODSCustomerGroupsID: TFloatField
+      FieldName = 'ID'
+    end
+    object ODSCustomerGroupsNAME: TStringField
+      FieldName = 'NAME'
+      Size = 90
+    end
+  end
+  object DSCustomerGroups: TDataSource
+    DataSet = ODSCustomerGroups
+    Left = 152
+    Top = 112
+  end
+  object ODSDebtAccount: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      '     * '
+      'from'
+      '  Account'
+      'where '
+      '   close_dat is null'
+      'Order by'
+      '     acc_no    ')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = False
+    Active = False
+    AfterScroll = ODSDebtAccountAfterScroll
+    Left = 296
+    Top = 272
+  end
+  object DSDebtAccount: TDataSource
+    DataSet = ODSDebtAccount
+    Left = 182
+    Top = 264
+  end
+  object ODSCreditAccount: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      '     * '
+      'from'
+      '  Account'
+      'where '
+      '   close_dat is null'
+      'Order by'
+      '     acc_no')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = False
+    Active = False
+    AfterScroll = ODSDebtAccountAfterScroll
+    Left = 400
+    Top = 320
+  end
+  object DSCreditAccount: TDataSource
+    DataSet = ODSCreditAccount
+    Left = 70
+    Top = 320
+  end
+  object DSCurrency: TDataSource
+    Left = 328
+    Top = 16
+  end
+  object OPMainSettings: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    Debug = False
+    PackageName = 'sb_complex_transactions'
+    ParameterMode = pmPositional
+    Cursor = crDefault
+    Optimize = True
+    Left = 288
+    Top = 88
+  end
+  object ODSTariffScale: TOracleDataSet
+    SQL.Strings = (
+      'Select'
+      '   T.RowID'
+      '    ,T.*'
+      'From'
+      '   TariffScale T'
+      'Where'
+      '   T.groupid = :groupid and'
+      '      T.commisionID =:commisionID ')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    Variables.Data = {
+      0300000002000000080000003A47524F55504944030000000000000000000000
+      0C0000003A434F4D4D4953494F4E4944030000000000000000000000}
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    Master = ODSCustomerGroups
+    MasterFields = 'ID'
+    DetailFields = 'GROUPID'
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    OnTranslateMessage = ODSTariffScaleTranslateMessage
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = False
+    Active = False
+    BeforePost = ODSTariffScaleBeforePost
+    Left = 280
+    Top = 152
+    object ODSTariffScaleID: TFloatField
+      FieldName = 'ID'
+    end
+    object ODSTariffScaleGROUPID: TFloatField
+      FieldName = 'GROUPID'
+      Required = True
+    end
+    object ODSTariffScalePERCENT: TFloatField
+      FieldName = 'PERCENT'
+      DisplayFormat = '#,##.00'
+    end
+    object ODSTariffScaleAMMOUNT: TFloatField
+      FieldName = 'AMMOUNT'
+      DisplayFormat = '#,##.00'
+    end
+    object ODSTariffScaleMINVALUE: TFloatField
+      FieldName = 'MINVALUE'
+      DisplayFormat = '#,##.00'
+    end
+    object ODSTariffScaleMAXVALUE: TFloatField
+      FieldName = 'MAXVALUE'
+      DisplayFormat = '#,##.00'
+    end
+    object ODSTariffScaleCOMMISIONID: TFloatField
+      FieldName = 'COMMISIONID'
+    end
+  end
+  object DSTariffScale: TDataSource
+    DataSet = ODSTariffScale
+    Left = 352
+    Top = 144
+  end
+  object ODSAddDebtAccount: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      '     * '
+      'from'
+      '  Account'
+      'where '
+      '   close_dat is null'
+      'Order by'
+      '     acc_no    ')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = False
+    Active = False
+    AfterScroll = ODSDebtAccountAfterScroll
+    Left = 400
+    Top = 262
+  end
+  object DSAddDebtAccount: TDataSource
+    DataSet = ODSAddDebtAccount
+    Left = 72
+    Top = 264
+  end
+  object ODSAddCreditAccount: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      '     * '
+      'from'
+      '  Account'
+      'where '
+      '   close_dat is null'
+      'Order by'
+      '     acc_no')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = False
+    Active = False
+    AfterScroll = ODSDebtAccountAfterScroll
+    Left = 288
+    Top = 320
+  end
+  object DSAddCreditAccount: TDataSource
+    DataSet = ODSAddCreditAccount
+    Left = 184
+    Top = 320
+  end
+  object ODSCurrency: TOracleDataSet
+    SQL.Strings = (
+      'Select '
+      '   *'
+      ' from'
+      '     Avalute')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = False
+    Active = False
+    Left = 264
+    Top = 16
+  end
+end

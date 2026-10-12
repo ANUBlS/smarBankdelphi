@@ -1,0 +1,456 @@
+unit DailyImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ExtCtrls, StdCtrls, CheckLst, Evanescence, Db, OracleData, ComCtrls,
+  Buttons,  Oracle, CMExcelExport;
+
+type
+  TFrmDaily = class(TForm)
+    Panel1: TPanel;
+    Panel2: TPanel;
+    Label1: TLabel;
+    DateTimePicker1: TDateTimePicker;
+    FilialDataSet: TOracleDataSet;
+    FilialDataSetID: TFloatField;
+    FilialDataSetNAME: TWideStringField;
+    srcFilial: TDataSource;
+    GroupBox1: TGroupBox;
+    LookFilGrp: TEvanescence;
+    CheckBox2: TCheckBox;
+    GroupBox2: TGroupBox;
+    LookVAlGrp: TEvanescence;
+    CheckBox1: TCheckBox;
+    OracleDataSet1: TOracleDataSet;
+    DataSource1: TDataSource;
+    sysdate: TOracleDataSet;
+    SpeedButton2: TSpeedButton;
+    SpeedButton1: TSpeedButton;
+    Main: TOracleDataSet;
+    OraclePackage1: TOraclePackage;
+    MainNAME: TWideStringField;
+    MainBORCALAN: TWideStringField;
+    MainACC_NO: TWideStringField;
+    MainNUMBEROFCREDIT: TWideStringField;
+    MainVAL_NAME: TWideStringField;
+    MainPAY: TWideStringField;
+    MainPAYEK: TFloatField;
+    MainREATE: TWideStringField;
+    MainGUNVER_FAIZ: TWideStringField;
+    MainREST: TFloatField;
+    MainGUNS_QALIQEK: TFloatField;
+    MainPURPOSEOFCREDIT: TWideStringField;
+    MainKRED_MEB: TWideStringField;
+    MainKRED_MEB_EK: TFloatField;
+    MainC: TFloatField;
+    Rest: TOracleDataSet;
+    MainMONTH: TFloatField;
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+    procedure CheckBox2Click(Sender: TObject);
+    procedure CheckBox1Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure SpeedButton2Click(Sender: TObject);
+    procedure SpeedButton1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmDaily: TFrmDaily;
+  Exl, Sheet: Variant;
+ procedure InitPlugin(s:string);export;
+implementation
+uses CommonDecls,systemstate,CMOracleApiDataModuleImpl,ComObj;
+{$R *.DFM}
+procedure InitPlugin(s:string);export;
+begin
+   FrmDaily.ShowModal;
+end;
+exports
+     InitPlugin;
+
+
+procedure TFrmDaily.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+Resize:=false
+end;
+
+procedure TFrmDaily.CheckBox2Click(Sender: TObject);
+begin
+if CheckBox2.Checked=true then
+LookFilGrp.CheckAll
+else
+LookFilGrp.UncheckAll
+end;
+
+procedure TFrmDaily.CheckBox1Click(Sender: TObject);
+begin
+if CheckBox1.Checked=true then
+LookVAlGrp.CheckAll
+else
+LookVAlGrp.UncheckAll
+end;
+
+procedure TFrmDaily.FormCreate(Sender: TObject);
+var
+i:integer;
+begin
+sysdate.open;
+FilialDataSet.open;
+OracleDataSet1.open;
+DateTimePicker1.DateTime:=sysdate.fieldbyname('tek_dat').asdatetime;
+  for i := 0 to ComponentCount - 1 do
+    if Components[i].Tag = 3112 then begin
+      (Components[i] as TEvanescence).Open;
+      (Components[i] as TEvanescence).CheckAll;
+    end;
+end;
+
+procedure TFrmDaily.SpeedButton2Click(Sender: TObject);
+begin
+close
+end;
+
+procedure TFrmDaily.SpeedButton1Click(Sender: TObject);
+var
+ RestsStr,chpayStr: String;
+ ADDITIONALPARAMS,FilterStr,CheckStr:String;
+ sysdat :Tdatetime;
+
+const
+number_format='#,##0.00';
+number_format_r='#,##0.00%';
+n='yyy';
+d=2;
+f=3;
+
+
+procedure CreateSheet;
+begin
+  try
+   Exl := CreateOleObject('Excel.Application');
+   Exl.WorkBooks.add;
+   Sheet := Exl.Application.Worksheets.Item[1];
+  except
+  end;
+end;
+ procedure DestroySheet;
+begin
+  try
+   Finalize(Sheet);
+   Finalize(Exl);
+  except
+
+  end;
+end;
+procedure ShowSheet;
+begin
+  try
+     Exl.Visible := True;
+  except
+     DestroySheet;
+   end;
+  end;
+var
+s,l,cell, r,i , j , k ,m ,w :Integer;
+tt,dat,dd :tdatetime;
+ t_val :integer;
+bash: string;
+begin
+  sysdat:=integer(trunc(DateTimePicker1.DateTime));
+  //ShowMessage(datetostr(sysdat-1));exit;
+if (LookFilGrp.GetCheckedKeyList.Count<>LookFilGrp.Items.Count) then
+  ADDITIONALPARAMS := ADDITIONALPARAMS + ' and p.branchid in('
+                   +LookFilGrp.GetCheckedKeyList.CommaText+')'
+                   +#13#10;
+
+  if (LookVAlGrp.GetCheckedKeyList.Count<>LookVAlGrp.Items.Count) then
+  ADDITIONALPARAMS := ADDITIONALPARAMS + ' and p.currency in('
+                   +LookVAlGrp.GetCheckedKeyList.CommaText+')'
+                   +#13#10;
+ with Main  do
+   begin
+         if Active then CloseAll;
+           SetVariable('sysdat',sysdat);
+
+              if ADDITIONALPARAMS <> '' then
+            SQL[17] := ADDITIONALPARAMS
+            else
+            SQL[17] :='';
+         open;
+  end;
+ with Rest  do
+   begin
+         if Active then CloseAll;
+           SetVariable('dat',sysdat);
+
+              if ADDITIONALPARAMS <> '' then
+            SQL[10] := ADDITIONALPARAMS
+            else
+            SQL[10] :='';
+         open;
+  end;
+
+          CreateSheet;
+ try
+  
+     Sheet.Range['A1:A60000'].ColumnWidth:=10;
+     Sheet.Range['B1:B60000'].ColumnWidth:=15;
+     Sheet.Range['C1:C60000'].ColumnWidth:=19;
+     Sheet.Range['D1:D60000'].ColumnWidth:=19;
+     Sheet.Range['E1:E60000'].ColumnWidth:=20;
+     Sheet.Range['F1:F60000'].ColumnWidth:=19;
+     Sheet.Range['G1:G60000'].ColumnWidth:=35;
+     Sheet.Range['P1:P60000'].ColumnWidth:=35;
+
+ /////////////////////////////////////////////////////////////////////////// /
+ Sheet.Cells[2,5]:='"Turan-Bank" ASC nin '+ datetostr( sysdat)+
+          '-ин€ кредит €м€лиййатлары бар€д€ м€лумат';
+   Sheet.Cells[2,5].Font.Name:='Azl Sans Serif';
+   Sheet.Cells[2,5].Font.Bold :=true;
+   Sheet.Cells[2,5].Font.Color:=clBlue;
+   Sheet.Cells[2,5].Font.size :=22;
+/////////////////////////////////////////////////////////////////////////////
+       k:=7 ; i:=0;
+          sheet.Cells[i+3,15]:=' ћанатla';
+          Sheet.Cells[i+3,15].Font.Name:='Azl Sans Serif';
+          Sheet.Cells[i+3,15].Font.Bold :=true;
+          Sheet.Cells[i+3,15].Font.Color:=clred;
+
+          Sheet.Cells[i+4,15]:=' ћанат';
+          Sheet.Cells[i+4,15].Font.Name:='Azl Sans Serif';
+          Sheet.Cells[i+4,15].Font.Bold :=true;
+          Sheet.Cells[i+4,15].Font.Color:=clred;
+
+          Sheet.Cells[i+5,15]:=' USD';
+          Sheet.Cells[i+5,15].Font.Name:='Azl Sans Serif';
+          Sheet.Cells[i+5,15].Font.Bold :=true;
+          Sheet.Cells[i+5,15].Font.Color:=clred;
+
+          Sheet.Cells[i+6,15]:=' EUR';
+          Sheet.Cells[i+6,15].Font.Name:='Azl Sans Serif';
+          Sheet.Cells[i+6,15].Font.Bold :=true;
+          Sheet.Cells[i+6,15].Font.Color:=clred;
+ ///////////////////////////////////====================//////////////////
+          sheet.Cells[i+3,16]:=Rest.FieldByName('rest').asfloat;
+          Sheet.Cells[i+3,16].Font.Name:='Azl Sans Serif';
+          Sheet.Cells[i+3,16].Font.Bold :=true;
+          Sheet.Cells[i+3,16].Font.Color:=clred;
+
+          Sheet.Cells[i+4,16]:=Rest.FieldByName('AZN').asfloat;
+          Sheet.Cells[i+4,16].Font.Name:='Azl Sans Serif';
+          Sheet.Cells[i+4,16].Font.Bold :=true;
+
+          Sheet.Cells[i+5,16]:=Rest.FieldByName('USD').asfloat;
+          Sheet.Cells[i+5,16].Font.Name:='Azl Sans Serif';
+          Sheet.Cells[i+5,16].Font.Bold :=true;
+
+          Sheet.Cells[i+6,16]:=Rest.FieldByName('eur').asfloat;
+          Sheet.Cells[i+6,16].Font.Name:='Azl Sans Serif';
+          Sheet.Cells[i+6,16].Font.Bold :=true;
+
+
+///////////////////////////////////////////////////////////////////////////
+
+          Sheet.Cells[i+k+1,1]:='—ыра є';
+          Sheet.Cells[i+k+1,1].Font.Name:='Azl Sans Serif';
+          Sheet.Cells[i+k+1,1].Font.Bold :=true;
+          Sheet.Cells[i+k+1,1].Font.Color:=clBlue;
+
+          Sheet.Cells[i+k+1,2].Value:='Borcalanыn ады';
+          Sheet.Cells[i+k+1,2].Font.Name:='Azl Sans Serif';
+          Sheet.Cells[i+k+1,2].Font.Bold :=true;
+          Sheet.Cells[i+k+1,2].Font.Color:=clBlue;
+
+          Sheet.Cells[i+k+1,3].Value:='‘илиалын ады';
+          Sheet.Cells[i+k+1,3].Font.Name:='Azl Sans Serif';
+          Sheet.Cells[i+k+1,3].Font.Bold :=true;
+          Sheet.Cells[i+k+1,3].Font.Color:=clBlue;
+
+          Sheet.Cells[i+k+1,4]:='% —уда щесабынын є';
+          Sheet.Cells[i+k+1,4].Font.Name:='Azl Sans Serif';
+          Sheet.Cells[i+k+1,4].Font.Bold :=true;
+          Sheet.Cells[i+k+1,4].Font.Color:=clBlue;
+
+          Sheet.Cells[i+k+1,5]:='ћцгавил€нин є';
+          Sheet.Cells[i+k+1,5].Font.Name:='Azl Sans Serif';
+          Sheet.Cells[i+k+1,5].Font.Bold :=true;
+          Sheet.Cells[i+k+1,5].Font.Color:=clBlue;
+
+          Sheet.Cells[i+k+1,6]:=' редитин валйутасы ';
+          Sheet.Cells[i+k+1,6].Font.Name:='Azl Sans Serif';
+          Sheet.Cells[i+k+1,6].Font.Bold :=true;
+          Sheet.Cells[i+k+1,6].Font.Color:=clBlue;
+
+          Sheet.Cells[i+k+1,7]:='Ёяё  редитин валйутасында м€бл€ьи';
+          Sheet.Cells[i+k+1,7].Font.Name:='Azl Sans Serif';
+          Sheet.Cells[i+k+1,7].Font.Bold :=true;
+          Sheet.Cells[i+k+1,7].Font.Color:=clRed;
+
+          Sheet.Cells[i+k+1,8]:='Ёяё ћанат екваленитинд€ м€бл€ьи';
+          Sheet.Cells[i+k+1,8].Font.Name:='Azl Sans Serif';
+          Sheet.Cells[i+k+1,8].Font.Bold :=true;
+          Sheet.Cells[i+k+1,8].Font.Color:=clRed;
+
+          Sheet.Cells[i+k+1,9]:='Ёяё »ллик % д€р€ж€си';
+          Sheet.Cells[i+k+1,9].Font.Name:='Azl Sans Serif';
+          Sheet.Cells[i+k+1,9].Font.Bold :=true;
+          Sheet.Cells[i+k+1,9].Font.Color:=clRed;
+
+          Sheet.Cells[i+k+1,10]:='Ёя¬  редитин валйутасында м€бл€ьи';
+          Sheet.Cells[i+k+1,10].Font.Name:='Azl Sans Serif';
+          Sheet.Cells[i+k+1,10].Font.Bold :=true;
+          Sheet.Cells[i+k+1,10].Font.Color:=clGreen;
+
+          Sheet.Cells[i+k+1,11]:='Ёя¬ ћанат екваленитинд€ м€бл€ьи';
+          Sheet.Cells[i+k+1,11].Font.Name:='Azl Sans Serif';
+          Sheet.Cells[i+k+1,11].Font.Bold :=true;
+          Sheet.Cells[i+k+1,11].Font.Color:=clGreen;
+
+         
+          Sheet.Cells[i+k+1,12]:='Ёя¬  редитин мцдд€ти айла';
+          Sheet.Cells[i+k+1,12].Font.Name:='Azl Sans Serif';
+          Sheet.Cells[i+k+1,12].Font.Bold :=true;
+          Sheet.Cells[i+k+1,12].Font.Color:=clGreen;
+
+          Sheet.Cells[i+k+1,13]:='Ёя¬ »ллик % д€р€ж€си';
+          Sheet.Cells[i+k+1,13].Font.Name:='Azl Sans Serif';
+          Sheet.Cells[i+k+1,13].Font.Bold :=true;
+          Sheet.Cells[i+k+1,13].Font.Color:=clGreen;
+
+          
+          Sheet.Cells[i+k+1,14]:='GS  редитин валйутасында м€бл€ьи ';
+          Sheet.Cells[i+k+1,14].Font.Name:='Azl Sans Serif';
+          Sheet.Cells[i+k+1,14].Font.Bold :=true;
+          Sheet.Cells[i+k+1,14].Font.Color:=clBlue;
+
+          Sheet.Cells[i+k+1,15]:='GS ћанат екваленитинд€ м€бл€ьи ';
+          Sheet.Cells[i+k+1,15].Font.Name:='Azl Sans Serif';
+          Sheet.Cells[i+k+1,15].Font.Bold :=true;
+          Sheet.Cells[i+k+1,15].Font.Color:=clBlue;
+
+          Sheet.Cells[i+k+1,16]:='  редит м€щсулунун ады';
+          Sheet.Cells[i+k+1,16].Font.Name:='Azl Sans Serif';
+          Sheet.Cells[i+k+1,16].Font.Bold :=true;
+          Sheet.Cells[i+k+1,16].Font.Color:=clBlue;
+         ShowSheet;
+        r:=0;
+       for i:=1 to main.RecordCount do begin
+         r:=r+1;
+        Sheet.Cells[i+k+1,1].Font.Name:='Azl Sans Serif';
+        Sheet.Cells[i+k+1,1].Font.Bold :=true;
+        Sheet.Cells[i+k+1,1]:=r;
+
+        Sheet.Cells[i+k+1,2].Font.Name:='Azl Sans Serif';
+        Sheet.Cells[i+k+1,2].Font.Bold :=true;
+        Sheet.Cells[i+k+1,2]:=main.FieldByName('borcalan').AsString;
+
+        Sheet.Cells[i+k+1,3].Font.Name:='Azl Sans Serif';
+        Sheet.Cells[i+k+1,3].Font.Bold :=true;
+        Sheet.Cells[i+k+1,3]:=main.FieldByName('name').AsString;
+
+        Sheet.Cells[i+k+1,4].Font.Name:='Azl Sans Serif';
+        Sheet.Cells[i+k+1,4].Font.Bold :=true;
+        Sheet.Cells[i+k+1,4]:=main.FieldByName('acc_no').AsString;
+
+        Sheet.Cells[i+k+1,5].Font.Name:='Azl Sans Serif';
+        Sheet.Cells[i+k+1,5].Font.Bold :=true;
+        Sheet.Cells[i+k+1,5]:=main.FieldByName('numberofcredit').AsString;
+
+        Sheet.Cells[i+k+1,6].Font.Name:='Azl Sans Serif';
+        Sheet.Cells[i+k+1,6].Font.Bold :=true;
+        Sheet.Cells[i+k+1,6]:=main.FieldByName('VAL_NAME').AsString;
+
+        Sheet.Cells[i+k+1,7].Font.Name:='Azl Sans Serif';
+        Sheet.Cells[i+k+1,7].Font.Bold :=true;
+        Sheet.Cells[i+k+1,7]:=main.FieldByName('pay').asfloat;
+
+        Sheet.Cells[i+k+1,8].Font.Name:='Azl Sans Serif';
+        Sheet.Cells[i+k+1,8].Font.Bold :=true;
+        Sheet.Cells[i+k+1,8]:=main.FieldByName('payek').asfloat;
+
+        Sheet.Cells[i+k+1,9].Font.Name:='Azl Sans Serif';
+        Sheet.Cells[i+k+1,9].Font.Bold :=true;
+        Sheet.Cells[i+k+1,9]:=main.FieldByName('reate').AsString;
+
+        Sheet.Cells[i+k+1,10].Font.Name:='Azl Sans Serif';
+        Sheet.Cells[i+k+1,10].Font.Bold :=true;
+        Sheet.Cells[i+k+1,10]:=main.FieldByName('KRED_MEB').asfloat;
+
+        Sheet.Cells[i+k+1,11].Font.Name:='Azl Sans Serif';
+        Sheet.Cells[i+k+1,11].Font.Bold :=true;
+        Sheet.Cells[i+k+1,11]:=main.FieldByName('KRED_MEB_EK').asfloat;
+
+       Sheet.Cells[i+k+1,12].Font.Name:='Azl Sans Serif';
+        Sheet.Cells[i+k+1,12].Font.Bold :=true;
+        Sheet.Cells[i+k+1,12]:=main.FieldByName('month').asinteger;
+
+        Sheet.Cells[i+k+1,13].Font.Name:='Azl Sans Serif';
+        Sheet.Cells[i+k+1,13].Font.Bold :=true;
+        Sheet.Cells[i+k+1,13]:=main.FieldByName('GUNVER_FAIZ').AsString;
+
+         Sheet.Cells[i+k+1,14].Font.Name:='Azl Sans Serif';
+        Sheet.Cells[i+k+1,14].Font.Bold :=true;
+        Sheet.Cells[i+k+1,14]:=main.FieldByName('rest').asfloat;
+
+        Sheet.Cells[i+k+1,15].Font.Name:='Azl Sans Serif';
+        Sheet.Cells[i+k+1,15].Font.Bold :=true;
+        Sheet.Cells[i+k+1,15]:=main.FieldByName('GUNS_QALIQEK').asfloat;
+
+        Sheet.Cells[i+k+1,16].Font.Name:='Azl Sans Serif';
+        Sheet.Cells[i+k+1,16].Font.Bold :=true;
+        Sheet.Cells[i+k+1,16]:=main.FieldByName('PURPOSEOFCREDIT').AsString;
+
+        Exl.Range['B'+Inttostr(i+k+1)+':D'+Inttostr(i+k+1)].Select;
+        Exl.Selection.Interior.ColorIndex := 8;
+
+        main.Next;
+       end;
+        m:=main.RecordCount;
+        Sheet.Cells[i+k+2,15].Font.Name:='Azl Sans Serif';
+        Sheet.Cells[i+k+2,15].Font.Bold :=true;
+        Sheet.Cells[i+k+2,15]:=' редит €м€лиййатлары цзр€ ф€рг';
+        Sheet.Cells[i+k+2,15].Font.Color:=clred;
+
+        Sheet.Cells[i+k+2,16].Font.Name:='Azl Sans Serif';
+        Sheet.Cells[i+k+2,16].Font.Bold :=true;
+        Sheet.Cells[i+k+2,16]:=rest.FieldByName('ferq').AsString;
+        Sheet.Cells[i+k+2,16].Font.Color:=clBlue;
+
+        Sheet.Cells[i+k+3,15].Font.Name:='Azl Sans Serif';
+        Sheet.Cells[i+k+3,15].Font.Bold :=true;
+        Sheet.Cells[i+k+3,15]:='Ёцнцн сонуна галыг';
+        Sheet.Cells[i+k+3,15].Font.Color:=clred;
+
+        Sheet.Cells[i+k+3,16].Font.Name:='Azl Sans Serif';
+        Sheet.Cells[i+k+3,16].Font.Bold :=true;
+        Sheet.Cells[i+k+3,16]:=rest.FieldByName('gununsonuna').AsString;
+        Sheet.Cells[i+k+3,16].Font.Color:=clBlue;
+                   bash:=inttostr(k+1);
+
+     // ShowMessage(inttostr(m)); exit;
+      Exl.Range['A'+bash+':P'+inttostr(m+k+1)].select;
+      Sheet.Range['A'+bash+':P'+inttostr(m+k+1)].Borders.Color:=clBlack;
+
+  finally
+
+   Exl.Range['A1:A1'].Select;
+
+   Screen.Cursor := crDefault;
+   DestroySheet;
+  main.EnableControls;
+  end;
+  main.close;
+
+end;
+
+
+initialization
+ FrmDaily := TFrmDaily.Create(CommonApplication);
+end.

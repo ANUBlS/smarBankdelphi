@@ -1,0 +1,61 @@
+unit ExpireDataModuleImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, NLSDialogs,
+  Db, OracleData, Oracle;
+
+type
+  TExpireDataModule = class(TDataModule)
+    LoanRest: TOracleDataSet;
+    LoanRestREST: TFloatField;
+    LoanRestACC_NO: TStringField;
+    DSLoanRest: TDataSource;
+    DueRest: TOracleDataSet;
+    DueRestDUEREST: TFloatField;
+    DueRestACC_NO: TStringField;
+    DSDueRest: TDataSource;
+    SReserves: TOracleDataSet;
+    DataSrcSReserves: TDataSource;
+    SReservesID: TFloatField;
+    SReservesPERCENT: TFloatField;
+    SReservesDESCRIPTION: TStringField;
+    SReservesFullDesc: TStringField;
+    CreditInfo: TOracleDataSet;
+    DataSrcCreditInfo: TDataSource;
+    CM_EXPIRE: TOraclePackage;
+    ExpireData: TOracleDataSet;
+    DataSrcExpire: TDataSource;
+    ExpireDataID: TFloatField;
+    ExpireDataCREDITID: TFloatField;
+    ExpireDataEXPDATE: TDateTimeField;
+    ExpireDataEXPAMOUNT: TFloatField;
+    procedure PReservesCalcFields(DataSet: TDataSet);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  ExpireDataModule: TExpireDataModule;
+
+implementation
+
+{$R *.DFM}
+
+uses
+  CMOracleAPIDataModuleImpl;
+  
+procedure TExpireDataModule.PReservesCalcFields(DataSet: TDataSet);
+const
+  SFormat = ' [ %d %% ]';
+begin
+  with DataSet do
+  FieldByName('FullDesc').AsString :=
+       FieldByName('Description').AsString +
+       Format(SFormat,[FieldByName('Percent').AsInteger])   
+end;
+
+end.

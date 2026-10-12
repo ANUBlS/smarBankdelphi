@@ -1,0 +1,161 @@
+﻿unit FrmPaymentLossImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ExtCtrls, XFSCtrls, ComCtrls, ToolWin, ImgList, Grids, DBGrids,
+  ActnList, CMExcelExport, StdCtrls;
+
+type
+  TFrmPaymentLoss = class(TForm)
+    XFPanel1: TXFPanel;
+    XFButton1: TXFButton;
+    XFPanel2: TXFPanel;
+    XFGroupBox1: TXFGroupBox;
+    DBGrid1: TDBGrid;
+    XFGroupBox2: TXFGroupBox;
+    DBGrid2: TDBGrid;
+    XFPanel3: TXFPanel;
+    XFButton2: TXFButton;
+    XFButton3: TXFButton;
+    XFButton4: TXFButton;
+    ExcelExport: TCMExcelExport;
+    procedure XFButton1Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure XFButton2Click(Sender: TObject);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormShow(Sender: TObject);
+    procedure XFButton3Click(Sender: TObject);
+    procedure XFButton4Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmPaymentLoss: TFrmPaymentLoss;
+
+implementation
+
+
+     uses DMPaymentLossImpl,sboapiDataModuleimpl,SBTranslateProc,CommanParametrs,
+  FrmAddPaymentLossImpl;
+
+{$R *.dfm}
+   procedure InitPlugin(s:string);export;
+begin
+
+
+   FrmPaymentLoss.ShowModal;
+end;
+exports
+     InitPlugin;
+     procedure TFrmPaymentLoss.FormCreate(Sender: TObject);
+begin
+DMPaymentLoss:=TDMPaymentLoss.Create(self);
+FrmAddPaymentLoss:=TFrmAddPaymentLoss.Create(self);
+end;
+
+procedure TFrmPaymentLoss.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+if ord(key)=vk_escape then close
+
+end;
+
+procedure TFrmPaymentLoss.FormShow(Sender: TObject);
+begin
+if contractstatus=6 then
+begin
+  XFButton2.Enabled:=true;
+  XFButton3.Enabled:=true;
+end
+else
+begin
+  XFButton2.Enabled:=false;
+  XFButton3.Enabled:=false;
+end;
+DMPaymentLoss.DSPaymentLoss.Close;
+DMPaymentLoss.DSPaymentLoss.SetVariable('dpid',plossid);
+DMPaymentLoss.DSPaymentLoss.Open;
+
+DMPaymentLoss.DSPaymentLossReal.Close;
+DMPaymentLoss.DSPaymentLossReal.SetVariable('dpid',plossid);
+DMPaymentLoss.DSPaymentLossReal.Open;
+
+
+end;
+
+procedure TFrmPaymentLoss.XFButton1Click(Sender: TObject);
+begin
+close;
+end;
+
+procedure TFrmPaymentLoss.XFButton2Click(Sender: TObject);
+begin
+
+with DMPaymentLoss,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['ADDPAYMENTLOSS']);
+ end;
+
+ DBGrid2.DataSource.DataSet.Refresh;
+if DBGrid2.DataSource.DataSet.RecordCount=0 then
+begin
+  showmessage('Diqqət! Tanınmış zərər yoxdur');
+
+  exit;
+end;
+FrmAddPaymentLoss.ShowModal;
+end;
+
+procedure TFrmPaymentLoss.XFButton3Click(Sender: TObject);
+begin
+with DMPaymentLoss,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['DELPAYMENTLOSS']);
+ end;
+if DBGrid1.DataSource.DataSet.FieldByName('PAYDATE').AsDateTime<DMPaymentLoss.DSSysdat.FieldByName('tek_dat').AsDateTime then
+begin
+  showmessage('Diqqət! Köhnə tarixdəki ödənişi silmək olmaz!');
+  exit;
+end;
+
+ DMPaymentLoss.DSLossBarderoSay.Close;
+ DMPaymentLoss.DSLossBarderoSay.SetVariable('pdep_id',plossid);
+ DMPaymentLoss.DSLossBarderoSay.open;
+
+ if  DMPaymentLoss.DSLossBarderoSay.FieldByName('say').AsInteger>0 then
+ begin
+ Showmessage('Diqqət! Bu müqavilə üçün zərər barderosu yığıldığı üçün zərəri silmək olmaz!');
+   exit;
+ end;
+
+ if MessageDlg('Seçilmiş ödəniş ləğv olunacaq! Əminsinizmi?',mtConfirmation,
+ mbYesNoCancel, 0) = mrYes then
+ begin
+     if DMPaymentLoss.Pins_common.CallIntegerFunction('cancelclaimreal',[contactid,plossid,DBGrid1.DataSource.DataSet.FieldByName('id').AsInteger])=1 then
+      Showmessage('Ödəniş silindi!');
+     FrmPaymentLoss.DBGrid1.DataSource.DataSet.Refresh;
+ end;
+
+end;
+
+procedure TFrmPaymentLoss.XFButton4Click(Sender: TObject);
+begin
+with DMPaymentLoss,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['EXCELPAYMENTLOSS']);
+ end;
+with ExcelExport do
+   begin
+      Connect;
+      ExportDataset(DBGrid1.DataSource.DataSet,'zərər.',True,True);
+      Disconnect;
+   end
+end;
+
+initialization
+ FrmPaymentLoss:=TFrmPaymentLoss.Create(Application);
+end.

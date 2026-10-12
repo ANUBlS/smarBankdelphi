@@ -1,0 +1,219 @@
+unit RateManagementRecalculate;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ExtCtrls, StdCtrls;
+
+type
+  TFmRecalculate = class(TForm)
+    pnMain: TPanel;
+    pnBottom: TPanel;
+    btCose: TButton;
+    Panel2: TPanel;
+    Panel1: TPanel;
+    lbOper1: TLabel;
+    Label7: TLabel;
+    lbOper2: TLabel;
+    Label8: TLabel;
+    lbOper3: TLabel;
+    Label9: TLabel;
+    lbOper4: TLabel;
+    Label10: TLabel;
+    lbOper5: TLabel;
+    Label11: TLabel;
+    lbOper6: TLabel;
+    Label12: TLabel;
+    Label13: TLabel;
+    Shape1: TShape;
+    stCommit: TStaticText;
+    stLazy: TStaticText;
+    stRateDifferen: TStaticText;
+    stRateDifferenResult: TStaticText;
+    stCommitResult: TStaticText;
+    stLazyResult: TStaticText;
+    Label1: TLabel;
+    Label2: TLabel;
+    stLazyCount: TStaticText;
+    stLazyCountResult: TStaticText;
+    stHead: TStaticText;
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormActivate(Sender: TObject);
+    procedure btCoseClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+   procedure RatesRecalculation;
+  end;
+
+var
+  FmRecalculate: TFmRecalculate;
+
+implementation
+
+uses sboapiDataModuleImpl, RateManagementFormImpl;
+
+{$R *.DFM}
+
+procedure TFmRecalculate.RatesRecalculation;
+var
+ Tim : TTime;
+ RateDifCount,ComCount,LazyCount,Counter,TmpCom,TmpLazy,TmpRate,LazyTr : Integer;
+
+ procedure Success(OperTime: TTIme;IsSucces:Boolean =true;AdvancedString : string = '') ;
+ var
+  Temp: TLabel;
+  Image: TImage;
+  Bit: TBitmap;
+  Comp: TControl;
+
+  function FindLabel(TagValue: Integer) : TLabel;
+   var
+    i: Integer;
+   begin
+    for i:=0 to ComponentCount-1 do
+     if (Components[i].Tag=TagValue) and (Components[i] is TLabel) then
+      begin
+       Result:=TLabel(Components[i]);
+       Exit;
+      end;
+    Result:=nil;
+   end;
+
+ begin
+  Bit:=TBitmap.Create;
+  Temp:=TLabel.Create(self);
+  Image:=TImage.Create(self);
+  Comp:=FindLabel(Counter);
+if Comp<>nil then
+  try
+  with Temp do
+   begin
+    Left:=self.Width-60;
+    Top:=Comp.Top;
+    Caption :=FormatDateTime('nn:ss',OperTime);
+    Parent:=Comp.Parent;
+   if AdvancedString<>EmptyStr then
+     begin
+      Caption:=AdvancedString+Caption;
+      Left:=Left-Canvas.TextWidth(AdvancedString);
+     end;
+   end;
+  with Image do
+   begin
+    Left:=self.Width-30;
+    Top:=Comp.Top-2;
+    if IsSucces then
+    RatemangForm.ImageList1.GetBitmap(1,Bit)
+    else RatemangForm.ImageList1.GetBitmap(2,Bit);
+    Transparent:=True;
+    AutoSize:=True;
+    Picture.Bitmap:=Bit;
+    Parent:=Comp.Parent;
+   end;
+   finally
+    Bit.Free;
+   end;
+  (Comp as TLabel).Font.Style:=(Comp as TLabel).Font.Style-[fsUnderline];
+   Inc(Counter);
+   Comp:=FindLabel(Counter);
+   if Comp<>nil then
+    (Comp as TLabel).Font.Style:=(Comp as TLabel).Font.Style+[fsUnderline];
+   Tim:=Time;
+   TmpCom:=ComCount;
+   TmpLazy:=LazyCount;
+   TmpRate:=RateDifCount;
+   Application.ProcessMessages;
+ end;
+
+
+begin
+
+with RatemangForm.SBRateManagement do
+ try
+  try
+  ComCount:=0;
+  LazyCount:=0;
+  RateDifCount:=0;
+  Screen.Cursor:=crSQLWait;
+  btCose.Enabled:=False;
+  Counter:=101;
+  Tim:=Time;
+
+  CallProcedure('CheckAmmounts', []);
+  Success(Time - Tim);
+
+  LazyTr:=CallIntegerFunction('AddLazyTransactions', []);
+  stLazyCount.Visible:=True;
+  stLazyCountResult.Caption :=IntToStr(LazyTr)+' ';
+  Success(Time - Tim);
+
+
+  CallProcedure('ArchiveTransactions', []);
+  CallProcedure('DeleteOldTransactions', []);
+  Success(Time - Tim);
+
+  CallProcedure('commit_new_rates', []);
+  Success(Time - Tim);
+
+  RateDifCount:=CallIntegerFunction('calc_rate_difference', []);
+  stRateDifferen.Visible:=True;
+  stRateDifferenResult.Caption :=IntToStr(RateDifCount)+' ';
+  Success(Time - Tim);
+
+
+  CallProcedure('Recalculate', []);
+  Success(Time - Tim);
+
+  CallBooleanFunction('AddArchiveTransactions', ['ProvTrCount',ComCount,'LazyTrCount',lazyCount]);
+  Success(Time - Tim);
+
+  ComCount:=GetParameter(0);
+  lazyCount:=GetParameter(1);
+  stHead.Show;
+  stCommit.Show;
+  stCommitResult.Caption:=IntToSTr(ComCount)+' ';
+  stLazy.Show;
+  stLazyResult.Caption:=IntToStr(LazyCount)+' ';
+
+  except
+   on E : Exception do
+    begin
+     Success(Time - Tim,False);
+     raise;
+    end;
+  end;
+ finally
+   Screen.Cursor:=crArrow;
+   btCose.Enabled:=True;
+ end;
+end;
+
+procedure TFmRecalculate.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+if not(btCose.Enabled) then
+ Action:=caNone;
+end;
+
+procedure TFmRecalculate.btCoseClick(Sender: TObject);
+begin
+if
+RateManagementFormImpl.RatemangForm.OracleDataSet3.RecordCount<>0
+then
+                begin
+
+                      RatemangForm.panel7.Visible:= not RatemangForm.panel7.Visible;
+                end;
+
+
+end;
+
+procedure TFmRecalculate.FormActivate(Sender: TObject);
+begin
+ Application.ProcessMessages;
+ RatesRecalculation;
+end;
+
+end.

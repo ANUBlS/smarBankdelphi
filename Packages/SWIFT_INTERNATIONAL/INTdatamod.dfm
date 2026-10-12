@@ -1,0 +1,19 @@
+object DATAMODUL: TDATAMODUL
+  OldCreateOrder = False
+  OnCreate = DataModuleCreate
+  Height = 340
+  Width = 576
+  object dt103: TOracleDataSet
+    SQL.Strings = (
+      'select * from int_swfiles103')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 112
+    Top = 24
+  end
+  object ds103: TDataSource
+    DataSet = dt103
+    Left = 32
+    Top = 24
+  end
+end

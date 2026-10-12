@@ -1,0 +1,197 @@
+unit DModuleInsKorporativ;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, Oracle, OracleData;
+
+type
+  TDModuleKorporativ = class(TDataModule)
+    DSMarks: TDataSource;
+    ODSMarks: TOracleDataSet;
+    ODSMarksID: TFloatField;
+    ODSMarksNAME: TStringField;
+    ODSMarksSTATE_ID: TFloatField;
+    ODSMarksCALCOPTIONS: TIntegerField;
+    ODSAutoColors: TOracleDataSet;
+    ODSBanks: TOracleDataSet;
+    ODSBanksID: TFloatField;
+    ODSBanksNAME: TStringField;
+    ODSCusts: TOracleDataSet;
+    ODSCustsID: TIntegerField;
+    ODSCustsNAME: TStringField;
+    ODSCustsADDRESS: TStringField;
+    pkgMotorKasco: TOraclePackage;
+    OPCOMMON: TOraclePackage;
+    DSCusts: TDataSource;
+    DSBanks: TDataSource;
+    DSAutoColors: TDataSource;
+    ODSModels: TOracleDataSet;
+    ODSModelsID: TFloatField;
+    ODSModelsNAME: TStringField;
+    ODSModelsMARK_ID: TFloatField;
+    ODSModelsCALCOPTIONS: TIntegerField;
+    DSModels: TDataSource;
+    ODSdrAccessPeople: TOracleDataSet;
+    ODSdrAccessPeopleCID: TFloatField;
+    ODSdrAccessPeopleNAME: TStringField;
+    ODSdrAccessPeopleSURNAME: TStringField;
+    ODSdrAccessPeopleFATHERNAME: TStringField;
+    ODSdrAccessPeopleBIRTHDAY: TDateTimeField;
+    ODSdrAccessPeopleDREXPERIENCE: TDateTimeField;
+    ODSdrAccessPeopleSEX: TIntegerField;
+    ODSdrAccessPeopleSexList: TStringField;
+    ODSFranshiz: TOracleDataSet;
+    ODSFranshizFRANSHIZ: TFloatField;
+    ODSFranshizTARIFF: TFloatField;
+    DSFranshiz: TDataSource;
+    ODSReliaseDates: TOracleDataSet;
+    ODSReliaseDatesID: TFloatField;
+    ODSReliaseDatesBEGINDATE: TDateTimeField;
+    ODSReliaseDatesENDDATE: TDateTimeField;
+    ODSReliaseDatesSTATE_ID: TFloatField;
+    DSMonths: TDataSource;
+    ODSMonths: TOracleDataSet;
+    ODSMonthsID: TFloatField;
+    ODSMonthsRELEASE_ID: TFloatField;
+    ODSMonthsCOUNT: TFloatField;
+    DSDrAccessPeople: TDataSource;
+    DSAutoTypes: TDataSource;
+    ODSAutoTypes: TOracleDataSet;
+    ODSAutoTypesID: TFloatField;
+    ODSAutoTypesNAME: TStringField;
+    ODSSex: TOracleDataSet;
+    ODSSexID: TFloatField;
+    ODSSexNAME: TStringField;
+    DSSex: TDataSource;
+    DSClaims: TDataSource;
+    DSClaimSal: TDataSource;
+    ODSClaimSal: TOracleDataSet;
+    ODSClaimSalID: TFloatField;
+    ODSClaimSalEID: TFloatField;
+    ODSClaimSalNAME: TStringField;
+    ODSClaimSalCOST: TFloatField;
+    ODSClaims: TOracleDataSet;
+    ODSClaimsID: TFloatField;
+    ODSClaimsMK_ID: TFloatField;
+    ODSClaimsENAME: TStringField;
+    ODSClaimsCOUNT: TFloatField;
+    ODSClaimsCOST: TFloatField;
+    ODSClaimsSTATE: TStringField;
+    ODSClaimReport: TOracleDataSet;
+    ODSClaimReportID: TFloatField;
+    ODSClaimReportMK_ID: TFloatField;
+    ODSClaimReportENAME: TStringField;
+    ODSClaimReportCOUNT: TFloatField;
+    ODSClaimReportCOST: TFloatField;
+    ODSClaimReportSTATE: TStringField;
+    DSAgent: TDataSource;
+    ODSAgent: TOracleDataSet;
+    ODSAgentSURNAME: TStringField;
+    ODSAgentFNAME: TStringField;
+    ODSAgentFATHERNAME: TStringField;
+    ODSAgentName: TStringField;
+    ODSAgentID: TFloatField;
+    ODSAvalute: TOracleDataSet;
+    ODSAvaluteVALUTE: TIntegerField;
+    ODSAvaluteVAL_NAME: TStringField;
+    ODSAvaluteVALU_NAME: TStringField;
+    ODSAvaluteVALU_SHORT: TStringField;
+    DSAvalute: TDataSource;
+    ODSContracts: TOracleDataSet;
+    ODSContractsID: TFloatField;
+    ODSContractsTYPE_ID: TFloatField;
+    ODSContractsINS_DATE: TDateTimeField;
+    ODSContractsBEGIN_DATE: TDateTimeField;
+    ODSContractsEND_DATE: TDateTimeField;
+    ODSContractsVALUTE_ID: TFloatField;
+    ODSContractsAMMOUNT: TFloatField;
+    ODSContractsCLOSE_PREFIX: TIntegerField;
+    ODSContractsKLI_ID: TFloatField;
+    ODSContractsLOANACC_ID: TFloatField;
+    ODSContractsCURRACC_ID: TFloatField;
+    ODSContractsPOLICY_NUM: TStringField;
+    ODSContractsINSSUMM: TFloatField;
+    ODSContractsFRANSHIZ: TFloatField;
+    ODSContractsTARIFF: TFloatField;
+    ODSContractsSTATE: TIntegerField;
+    ODSContractsAGENT_ID: TFloatField;
+    DSContracts: TDataSource;
+    DSAccessories: TDataSource;
+    ODSAccessories: TOracleDataSet;
+    ODSAccessoriesID: TFloatField;
+    ODSAccessoriesNAME: TStringField;
+    ODSAccessoriesAMMOUNT: TFloatField;
+    ODSAccessoriesCID: TFloatField;
+    DSMotorkasco: TDataSource;
+    ODSMotorkasko: TOracleDataSet;
+    ODSMotorkaskoID: TFloatField;
+    ODSMotorkaskoCID: TFloatField;
+    ODSMotorkaskoINSUREDOUTPUTYEAR: TIntegerField;
+    ODSMotorkaskoINSUREDSTATENUM: TStringField;
+    ODSMotorkaskoUNDERFRAMENUM: TStringField;
+    ODSMotorkaskoINSUREDBANNUM: TStringField;
+    ODSMotorkaskoINSUREDENGINENUM: TStringField;
+    ODSMotorkaskoDRIVEINTENDED: TStringField;
+    ODSMotorkaskoDRIVECOST: TFloatField;
+    ODSMotorkaskoBEGINDATE: TDateTimeField;
+    ODSMotorkaskoENDDATE: TDateTimeField;
+    ODSMotorkaskoTYPEID: TIntegerField;
+    ODSMotorkaskoBEN_ID: TFloatField;
+    ODSMotorkaskoCLOSE_PREFIX: TIntegerField;
+    ODSMotorkaskoBANK_ID: TFloatField;
+    ODSMotorkaskoMONTH_ID: TFloatField;
+    ODSMotorkaskoINSUREDMARK: TStringField;
+    ODSMotorkaskoBENEFICIARY: TStringField;
+    ODSMotorkaskoCLAIM_DATE: TDateTimeField;
+    ODSMotorkaskoCLAIM_NUM: TStringField;
+    ODSMotorkaskoINSUREDTYPE: TStringField;
+    ODSMotorkaskoavtotype: TStringField;
+    ODSMotorkaskoAvtoMarks: TStringField;
+    ODSMotorkaskoAvtoModels: TStringField;
+    ODSMotorkaskoINSUREDMODEL: TStringField;
+    ODSMotorkaskoAvtoColors: TStringField;
+    ODSMotorkaskoINSUREDCOLOR: TStringField;
+    ODSMotorkaskoKORPORATIV_INS_SUM: TFloatField;
+    procedure ODSContractsAfterInsert(DataSet: TDataSet);
+    procedure ODSAccessoriesAfterPost(DataSet: TDataSet);
+    procedure ODSMotorkaskoAfterPost(DataSet: TDataSet);
+    procedure ODSMotorkaskoAfterInsert(DataSet: TDataSet);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  DModuleKorporativ: TDModuleKorporativ;
+
+implementation
+
+  uses  sboapiDataModuleImpl, UInsKorporativKasco;
+
+{$R *.DFM}
+
+procedure TDModuleKorporativ.ODSContractsAfterInsert(DataSet: TDataSet);
+begin
+       DataSet.FieldByName('TYPE_ID').asInteger := 25;
+end;
+
+procedure TDModuleKorporativ.ODSAccessoriesAfterPost(DataSet: TDataSet);
+begin
+      (DataSet as TOracleDataSet).RefreshRecord;
+end;
+
+procedure TDModuleKorporativ.ODSMotorkaskoAfterPost(DataSet: TDataSet);
+begin
+     (DataSet as TOracleDataSet).RefreshRecord;
+end;
+
+procedure TDModuleKorporativ.ODSMotorkaskoAfterInsert(DataSet: TDataSet);
+begin
+     DataSet.FieldByName('TYPEID').asInteger := 25;
+     DataSet.FieldByName('CID').asInteger := frmInsKorporativKasco.CID;
+end;
+
+end.

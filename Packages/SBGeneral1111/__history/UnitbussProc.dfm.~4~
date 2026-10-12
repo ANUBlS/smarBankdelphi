@@ -1,0 +1,214 @@
+object FormBussProc: TFormBussProc
+  Left = 0
+  Top = 0
+  Caption = 'Biznes prosses'
+  ClientHeight = 385
+  ClientWidth = 789
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Panel_BsProc: TPanel
+    Left = 0
+    Top = 0
+    Width = 789
+    Height = 385
+    Align = alClient
+    Caption = 'panel bs procc and search'
+    TabOrder = 0
+    ExplicitLeft = -245
+    ExplicitTop = -142
+    ExplicitWidth = 780
+    ExplicitHeight = 396
+    object XFPanel1: TXFPanel
+      Left = 1
+      Top = 356
+      Width = 787
+      Height = 28
+      Align = alBottom
+      BevelKind = bkFlat
+      TabOrder = 0
+      ExplicitTop = 367
+      ExplicitWidth = 778
+      object Edit2: TEdit
+        Left = 2
+        Top = 1
+        Width = 70
+        Height = 21
+        TabOrder = 0
+      end
+      object Edit3: TEdit
+        Left = 72
+        Top = 1
+        Width = 698
+        Height = 21
+        TabOrder = 1
+      end
+    end
+    object MainGrid1: TDBGridEh
+      Left = 1
+      Top = 1
+      Width = 787
+      Height = 355
+      Align = alClient
+      DataGrouping.GroupLevels = <>
+      DataSource = DS_BusProc
+      Flat = False
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      FooterColor = clWindow
+      FooterFont.Charset = RUSSIAN_CHARSET
+      FooterFont.Color = clWindowText
+      FooterFont.Height = -11
+      FooterFont.Name = 'Azl Sans Serif'
+      FooterFont.Style = []
+      Options = [dgTitles, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit, dgMultiSelect]
+      OptionsEh = [dghHighlightFocus, dghClearSelection, dghAutoSortMarking, dghDblClickOptimizeColWidth, dghColumnResize, dghColumnMove]
+      ParentFont = False
+      RowDetailPanel.Color = clBtnFace
+      TabOrder = 1
+      TitleFont.Charset = RUSSIAN_CHARSET
+      TitleFont.Color = clWindowText
+      TitleFont.Height = -11
+      TitleFont.Name = 'Azl Sans Serif'
+      TitleFont.Style = []
+      OnDblClick = MainGrid1DblClick
+      Columns = <
+        item
+          Color = clSilver
+          EditButtons = <>
+          FieldName = 'ID'
+          Footers = <>
+          Title.Alignment = taCenter
+          Title.Color = clNavy
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Title.TitleButton = True
+          Width = 53
+        end
+        item
+          EditButtons = <>
+          FieldName = 'NAME'
+          Footers = <>
+          Title.Color = clNavy
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Title.TitleButton = True
+          Width = 910
+        end>
+      object RowDetailData: TRowDetailPanelControlEh
+      end
+    end
+  end
+  object ODS_BusProc: TOracleDataSet
+    SQL.Strings = (
+      'select *from sb_business_processes where  formnum is not null'
+      'and( cust_type :custtype      '
+      'and '
+      
+        '(pg_pcustservice.find_vergul_ids(cust_ids,:ids)=1) or (cust_ids ' +
+        'is null and cust_type is null ) )'
+      ''
+      'order by :sira')
+    Optimize = False
+    Variables.Data = {
+      04000000030000000A0000003A00530049005200410001000000030000006964
+      0000000000120000003A00430055005300540054005900500045000100000008
+      0000006973206E756C6C0000000000080000003A004900440053000300000000
+      00000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000F0000000400000049004400010000000000080000004E0041004D00
+      450001000000000014000000410043004300420041004C0043004E005F004100
+      01000000000012000000410043004300530059004D0042005F00410001000000
+      00001200000041004300430043005500520052005F0041000100000000001400
+      0000410043004300420041004C0043004E005F00420001000000000012000000
+      410043004300530059004D0042005F0042000100000000001200000041004300
+      430043005500520052005F004200010000000000140000004100430043004200
+      41004C0043004E005F0043000100000000001200000041004300430053005900
+      4D0042005F004300010000000000120000004100430043004300550052005200
+      5F0043000100000000000E00000046004F0052004D004E0055004D0001000000
+      00000E00000043004C0041005300530049004400010000000000120000004300
+      5500530054005F00540059005000450001000000000010000000430055005300
+      54005F00490044005300010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 584
+    Top = 62
+    object ODS_BusProcID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object ODS_BusProcNAME: TWideStringField
+      FieldName = 'NAME'
+      Required = True
+      Size = 600
+    end
+    object ODS_BusProcACCBALCN_A: TWideStringField
+      FieldName = 'ACCBALCN_A'
+      Size = 400
+    end
+    object ODS_BusProcACCSYMB_A: TWideStringField
+      FieldName = 'ACCSYMB_A'
+      Size = 80
+    end
+    object ODS_BusProcACCCURR_A: TWideStringField
+      FieldName = 'ACCCURR_A'
+      Size = 80
+    end
+    object ODS_BusProcACCBALCN_B: TWideStringField
+      FieldName = 'ACCBALCN_B'
+      Size = 400
+    end
+    object ODS_BusProcACCSYMB_B: TWideStringField
+      FieldName = 'ACCSYMB_B'
+      Size = 80
+    end
+    object ODS_BusProcACCCURR_B: TWideStringField
+      FieldName = 'ACCCURR_B'
+      Size = 80
+    end
+    object ODS_BusProcACCBALCN_C: TWideStringField
+      FieldName = 'ACCBALCN_C'
+      Size = 400
+    end
+    object ODS_BusProcACCSYMB_C: TWideStringField
+      FieldName = 'ACCSYMB_C'
+      Size = 80
+    end
+    object ODS_BusProcACCCURR_C: TWideStringField
+      FieldName = 'ACCCURR_C'
+      Size = 80
+    end
+    object ODS_BusProcFORMNUM: TIntegerField
+      FieldName = 'FORMNUM'
+    end
+    object ODS_BusProcCLASSID: TIntegerField
+      FieldName = 'CLASSID'
+    end
+    object ODS_BusProcCUST_TYPE: TIntegerField
+      FieldName = 'CUST_TYPE'
+    end
+    object ODS_BusProcCUST_IDS: TWideStringField
+      FieldName = 'CUST_IDS'
+      Size = 100
+    end
+  end
+  object DS_BusProc: TDataSource
+    DataSet = ODS_BusProc
+    Left = 590
+    Top = 138
+  end
+end

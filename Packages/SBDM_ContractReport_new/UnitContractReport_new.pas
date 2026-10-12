@@ -1,0 +1,117 @@
+unit UnitContractReport_new;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, Buttons, Db, OracleData;
+
+type
+  TfrmContractReport_new = class(TForm)
+    Label1: TLabel;
+    ODSDepozitMoney: TOracleDataSet;
+    ODSDepozitWithDraw: TOracleDataSet;
+    GroupBox1: TGroupBox;
+    RadioButton1: TRadioButton;
+    RadioButton2: TRadioButton;
+    BitBtn1: TBitBtn;
+    BitBtn2: TBitBtn;
+    ODSContarcts: TOracleDataSet;
+    procedure BitBtn1Click(Sender: TObject);
+    procedure BitBtn2Click(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure FormCanResize(Sender: TObject; var NewWidth, NewHeight: Integer;
+      var Resize: Boolean);
+    procedure FormCreate(Sender: TObject);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+  private
+    { Private declarations }
+  public
+     FContractID:Longint;
+    RefreshAfterClose :Boolean;
+  end;
+
+var
+  frmContractReport_new: TfrmContractReport_new;
+
+  procedure exportproc(S :String);export;
+
+implementation
+
+uses sboapiDataModuleImpl, UnitDepozitMoneyReport_new,
+  UnitWithDrawReoprt_new,CommonDeclsImpl_new,SBTranslateProc;
+{$R *.DFM}
+
+
+procedure exportproc(S :String);export;
+begin
+   frmContractReport_new.ShowModal;
+end;
+
+exports
+   exportproc;
+
+procedure TfrmContractReport_new.BitBtn1Click(Sender: TObject);
+
+var ContractID:Integer;
+begin
+ContractID:= Get_SelectedContID;
+      with ODSContarcts do
+       begin
+          if Active then CloseAll;
+          SetVariable('CONTID',ContractID);
+          Open;
+       end;
+if RadioButton1.Checked=True then
+begin
+     with ODSDepozitMoney do
+       begin
+          if Active then CloseAll;
+          SetVariable('CONTID',ContractID);
+          Open;
+       end;
+frmDepozitMoneyReport_new :=TfrmDepozitMoneyReport_new.Create(Self);
+frmDepozitMoneyReport_new.QRPDepozitMoney.Preview;
+end
+else
+begin
+     with ODSDepozitWithDraw do
+       begin
+          if Active then CloseAll;
+          SetVariable('CONTID',ContractID);
+          Open;
+       end;
+frmWithDrawReoprt_new :=TfrmWithDrawReoprt_new.Create(Self);
+frmWithDrawReoprt_new.QRPWithDraw.Preview;
+end;
+end;
+
+procedure TfrmContractReport_new.BitBtn2Click(Sender: TObject);
+begin
+close;
+end;
+
+procedure TfrmContractReport_new.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+   Resize := False;
+end;
+
+procedure TfrmContractReport_new.FormCreate(Sender: TObject);
+begin
+SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TfrmContractReport_new.FormDestroy(Sender: TObject);
+begin
+ODSDepozitMoney.close;
+ODSDepozitWithDraw.close;
+end;
+
+procedure TfrmContractReport_new.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+  if ord(Key) = VK_ESCAPE then close;
+end;
+    initialization
+      frmContractReport_new := TfrmContractReport_new.Create(CommonApplication);
+end.

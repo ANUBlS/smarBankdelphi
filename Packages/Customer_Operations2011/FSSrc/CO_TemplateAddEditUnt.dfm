@@ -1,0 +1,144 @@
+object CO_TemplAddEditForm: TCO_TemplAddEditForm
+  Left = 261
+  Top = 317
+  Width = 362
+  Height = 170
+  Caption = 'CO_TemplAddEditForm'
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'MS Sans Serif'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poMainFormCenter
+  PixelsPerInch = 96
+  TextHeight = 13
+  object SBOpenDlg: TSpeedButton
+    Left = 320
+    Top = 72
+    Width = 23
+    Height = 22
+    Caption = '...'
+    OnClick = SBOpenDlgClick
+  end
+  object Label1: TLabel
+    Left = 8
+    Top = 8
+    Width = 68
+    Height = 13
+    Caption = 'Ўаблонун ады :'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    ParentFont = False
+  end
+  object Label2: TLabel
+    Left = 8
+    Top = 56
+    Width = 60
+    Height = 13
+    Caption = 'Ўаблон файлы :'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    ParentFont = False
+  end
+  object DBEdit1: TDBEdit
+    Left = 8
+    Top = 24
+    Width = 305
+    Height = 21
+    Color = clWhite
+    DataField = 'NAME'
+    DataSource = CO_DataMod.DSTemplates
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 0
+  end
+  object DBEdit2: TDBEdit
+    Left = 8
+    Top = 72
+    Width = 305
+    Height = 21
+    Color = clWhite
+    DataField = 'PATH'
+    DataSource = CO_DataMod.DSTemplates
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 1
+  end
+  object Button1: TButton
+    Left = 192
+    Top = 104
+    Width = 75
+    Height = 25
+    Action = ActnAccept
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    ModalResult = 1
+    ParentFont = False
+    TabOrder = 2
+  end
+  object Button2: TButton
+    Left = 272
+    Top = 104
+    Width = 75
+    Height = 25
+    Action = ActnReject
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    ModalResult = 2
+    ParentFont = False
+    TabOrder = 3
+  end
+  object DBEdit3: TDBEdit
+    Left = 8
+    Top = 104
+    Width = 65
+    Height = 21
+    DataField = 'CUSTTYPE'
+    DataSource = CO_DataMod.DSTemplates
+    TabOrder = 4
+    Visible = False
+  end
+  object NLSLocalizer1: TNLSLocalizer
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    Left = 96
+    Top = 104
+  end
+  object ActionList1: TActionList
+    Left = 136
+    Top = 104
+    object ActnAccept: TAction
+      Caption = '√€бул'
+      OnExecute = ActnAcceptExecute
+    end
+    object ActnReject: TAction
+      Caption = '»мтина'
+      OnExecute = ActnRejectExecute
+    end
+  end
+end

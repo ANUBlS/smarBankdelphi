@@ -1,0 +1,624 @@
+﻿unit MainFormIMPL;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, Buttons, ExtCtrls, Grids, DBGridEh, XDBGrids, DBCtrlsEh,
+  DBCtrls, Mask, DBLookupEh, WordXP, OleServer, ActnList;
+
+type
+  TMainForm = class(TForm)
+    Panel19: TPanel;
+    Panel2: TPanel;
+    R1: TPanel;
+    Label4: TLabel;
+    BranchCBEh: TDBLookupComboboxEh;
+    R2: TPanel;
+    Label8: TLabel;
+    DBLookupComboboxEh14: TDBLookupComboboxEh;
+    R3: TPanel;
+    Label5: TLabel;
+    DBEdit1: TDBEdit;
+    R4: TPanel;
+    Label7: TLabel;
+    DBDateTimeEditEh1: TDBDateTimeEditEh;
+    R5: TPanel;
+    Label9: TLabel;
+    DBDateTimeEditEh2: TDBDateTimeEditEh;
+    R6: TPanel;
+    Label18: TLabel;
+    R7: TPanel;
+    Label20: TLabel;
+    DBNumberEditEh2: TDBNumberEditEh;
+    R8: TPanel;
+    Label22: TLabel;
+    DBNumberEditEh4: TDBNumberEditEh;
+    R9: TPanel;
+    Label10: TLabel;
+    DBNumberEditEh5: TDBNumberEditEh;
+    R10: TPanel;
+    Label11: TLabel;
+    DBLookupComboboxEh12: TDBLookupComboboxEh;
+    R11: TPanel;
+    Label6: TLabel;
+    DBEdit3: TDBEdit;
+    Panel1: TPanel;
+    SpeedButton1: TSpeedButton;
+    SpeedButton2: TSpeedButton;
+    SpeedButton3: TSpeedButton;
+    WordApplication: TWordApplication;
+    WordDocument: TWordDocument;
+    DBEdit2: TDBEdit;
+    Label2: TLabel;
+    DBNumberEditEh1: TDBNumberEditEh;
+    Label1: TLabel;
+    XDBGrid1: TXDBGrid;
+    procedure FormCreate(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure XDBGrid1CellDblClick(Column: TXColumn);
+    procedure SpeedButton3Click(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure Label1Click(Sender: TObject);
+    procedure SpeedButton2Click(Sender: TObject);
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure ActinPrintUpdate(Sender: TObject);
+    procedure DBNumberEditEh1Change(Sender: TObject);
+    procedure DBEdit2Change(Sender: TObject);
+    procedure DBEdit4Change(Sender: TObject);
+    procedure DBDateTimeEditEh2Exit(Sender: TObject);
+    procedure BranchCBEhChange(Sender: TObject);
+    procedure DBNumberEditEh1Click(Sender: TObject);
+    procedure DBEdit2Click(Sender: TObject);
+    procedure DBLookupComboboxEh14Change(Sender: TObject);
+  private
+   procedure exportreport(CreditID:integer);
+   function CalcFullIntpayment:Real;
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  MainForm: TMainForm;
+  cradd,TemplID :integer;
+ rt: string  ;
+   procedure InitPlugin(s:string ;custid :string);export;
+implementation
+
+{$R *.dfm}
+uses sbsystem,RtDmImpl,retelcommon,Rtl_AzeriAbo_Impl, reportImpl;
+procedure InitPlugin(s:string;custid :string);export;
+begin
+   rt:=custid;
+   MainForm.ShowModal;
+end;
+exports
+     InitPlugin;
+
+procedure TMainForm.ActinPrintUpdate(Sender: TObject);
+begin
+  (Sender as TAction).Enabled := Active and (RtDataModule.PersonLink.Modified)
+end;
+
+procedure TMainForm.BranchCBEhChange(Sender: TObject);
+begin
+with RtDataModule do begin
+PersonLink.FieldByName('numberofcredit').asstring:=
+     OracleDataSet2.FieldByName('num').asstring+inttostr(Branches.FieldByName('id').AsInteger);
+end;
+end;
+procedure TMainForm.DBDateTimeEditEh2Exit(Sender: TObject);
+begin
+ with RtDataModule.PersonLink do
+      DBNumberEditEh1.Value
+          := RtDataModule.cm_common.CallIntegerFunction('GetPeriod',
+          [FieldByname('DATEOFCONCLUSION').AsDateTime,
+             DBDateTimeEditEh2.Value ]);
+
+end;
+
+procedure TMainForm.DBEdit2Change(Sender: TObject);
+begin
+if DBEdit2.Text<>''then
+begin
+with RtDataModule,perodcurr do
+ begin
+ if Active then  close;
+ SetVariable('mehsulid',XDBGrid1.DataSource.DataSet.FieldByName('id').AsInteger);
+ SetVariable('valute',DBLookupComboboxEh14.KeyValue);
+ open;
+ end;
+// ShowMessage(inttostr(DBLookupComboboxEh14.KeyValue));
+with RtDataModule,Percent do
+ begin
+ if Active then  close;
+ SetVariable('period',DBNumberEditEh1.Value);
+ SetVariable('retcurid',RtDataModule.perodcurr.FieldByName('id').AsInteger);
+ SetVariable('meb',strtofloat(DBEdit2.Text));
+ open;
+ DBNumberEditEh2.Text:=FieldByName('faiz').asstring;
+ DBNumberEditEh4.Text:=FieldByName('gecfaiz').asstring;
+ DBNumberEditEh5.Text:=FieldByName('penya').asstring;
+ end;
+end;
+end;
+
+procedure TMainForm.DBEdit2Click(Sender: TObject);
+begin
+if DBEdit2.Text='0' then
+   DBEdit2.Text:='';
+end;
+
+procedure TMainForm.DBEdit4Change(Sender: TObject);
+begin
+// if DBEdit4.text<>null then
+  ShowMessage(RtDataModule.PersonLink.FieldByName('PeriodContracts').asstring);
+with   RtDataModule,OracleDataSet1 do begin
+ if Active  then  close;
+  SetVariable('dat',PersonLink.FieldByName('DATEOFCONCLUSION').AsDateTime);
+  SetVariable('mon',PersonLink.FieldByName('PeriodContracts').AsInteger)  ;
+  open;
+   PersonLink.FieldByName('DUEDATEFIRSTCONTRACT').AsDateTime
+ := FieldByName('end').AsDateTime;
+end;
+end;
+
+procedure TMainForm.DBLookupComboboxEh14Change(Sender: TObject);
+begin
+DBNumberEditEh1.Value:=0;
+//DBEdit2.Text:='';
+end;
+
+procedure TMainForm.DBNumberEditEh1Change(Sender: TObject);
+begin
+ if DBNumberEditEh1.text<>null then
+with   RtDataModule,OracleDataSet1 do begin
+ if Active  then  close;
+  SetVariable('dat',PersonLink.FieldByName('DATEOFCONCLUSION').AsDateTime);
+  SetVariable('mon',DBNumberEditEh1.Value)  ;
+  open;
+   PersonLink.FieldByName('DUEDATEFIRSTCONTRACT').AsDateTime
+ := FieldByName('end').AsDateTime;
+// DBEdit2.Text:='';
+end;
+
+{ with RtDataModule,Percent do
+ begin
+ if Active then  close;
+
+ SetVariable('mehsetid',XDBGrid1.DataSource.DataSet.FieldByName('id').AsInteger);
+ SetVariable('meb',strtofloat(DBNumberEditEh1.Text));
+ open;
+ DBNumberEditEh2.Text:=FieldByName('faiz').asstring;
+ DBNumberEditEh4.Text:=FieldByName('gecfaiz').asstring;
+ DBNumberEditEh5.Text:=FieldByName('penya').asstring;
+ end;}
+end;
+
+
+procedure TMainForm.DBNumberEditEh1Click(Sender: TObject);
+begin
+if DBNumberEditEh1.Value=0 then
+DBNumberEditEh1.CLEAR;
+
+end;
+
+procedure TMainForm.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  with RtDataModule.PersonLink , SavedCredit do
+  begin
+     ins:=0;
+     boorowerid:=0;
+     RtDataModule.PersonLink.SQL[3]:='';
+     RtDataModule.PersonLink .close;
+  //   RtDataModule.PersonLink.open;
+  end;
+  width:=232;
+Panel1.Visible:=false;
+ Caption:='Smart';
+panel19.Visible:=true;
+DBEdit1.Text:='';
+if Panel1.Visible=true then
+  Panel1.Visible:=false;
+
+end;
+
+procedure TMainForm.FormCreate(Sender: TObject);
+begin
+
+RtDataModule:=TRtDataModule.Create(self);
+FormReport:=TFormReport.Create(self);
+end;
+
+procedure TMainForm.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+if ord(key)=27 then
+ MainForm.Close
+end;
+
+procedure TMainForm.FormShow(Sender: TObject);
+begin
+width:=232;
+RtDataModule.PersonLink.open  ;
+end;
+
+procedure TMainForm.Label1Click(Sender: TObject);
+begin
+close
+end;
+
+procedure SaveCredit;
+begin
+  with RtDataModule.PersonLink , SavedCredit do
+  begin
+   Currency := FieldByName('Currency').AsInteger;
+   CreditLineAmount := FieldByName('CREDITLINEAMOUNT').AsFloat;
+   AnnualyInterestRate := FieldByName('AnnualyInterestRate').AsFloat;
+   AnnualyOverdueRate := FieldByName('AnnualyOverdueRate').AsFloat;
+   AnnualyPenaltyRate := FieldByName('AnnualyPenaltyRate').AsFloat;
+    DateOfConclusion := Int(FieldByName('DateOfConclusion').AsDateTime);
+    DueDateFirstContract := Int(FieldByName('DueDateFirstContract').AsDateTime);
+    NumberOfCredit := FieldByName('NumberOfCredit').AsString;
+    PurposeOfCredit := FieldByName('PurposeOfCredit').AsString;
+    BranchID := FieldByName('BranchID').AsInteger;
+    pldgid_t:=FieldByName('PLEDGEID_P').Asinteger;
+    boorowerid:=strtoint(rt);
+    ins:=1;
+
+  end;
+end;
+function TMainForm.CalcFullIntpayment:Real;
+begin
+   result := 0;
+   with RtDataModule,ScheduleData do
+   begin
+      First;
+      while not EOF do
+      begin
+       result := result+ FieldByName('INTEREST').AsFloat;
+       Next;
+      end;
+   end;
+end;
+ procedure TMainForm.exportreport(CreditID:integer);
+var factint :real;
+  s :string[5];
+
+begin
+
+     with RtDataModule do
+  begin
+    with ScheduleData do
+    begin
+      ClearVariables;
+      SetVariable('CreditID',CreditID);
+      Open
+    end;
+    with BoorowerInfo do
+    begin
+      ClearVariables;
+      SetVariable('CreditID',CreditID);
+      Open
+    end;
+    with CreditInfo do
+    begin
+      ClearVariables;
+      SetVariable('ID',CreditID);
+      Open
+    end;
+
+     BankInfo.open;
+     HeadOfficeID.open;
+
+          if FilialInfo.Active then FilialInfo.CloseAll;
+          FilialInfo.SetVariable('brid',CreditInfo.FieldByName('BranchID').AsInteger);
+          FilialInfo.Open;
+
+         FormReport.QRLabel11.Caption := FilialInfo.fieldByName('name').asstring;
+
+         if FilialInfo.FieldByName('ID').AsInteger = HeadOfficeID.FieldbyName('minid').AsInteger then
+           FormReport.QRLabel10.caption := 'Müştəri xidmətləri departamentinin direktoru______________________________'
+         else
+           FormReport.QRLabel10.caption := 'Filial direktoru'
+
+     end;
+
+    with RtDataModule,CreditInfo do  begin
+          factint := (CalcFullIntpayment/FieldByName('CREDITLINEAMOUNT').AsFloat)*100;
+           s := FloatToStr(FieldByName('ANNUALYINTERESTRATE').AsFloat);
+   end;
+
+    with FormReport do
+    begin
+         ANNUALYINTERESTRATE.Caption := s+'%';
+         FullIntPayment.Caption := FloatToStr(CalcFullIntpayment);
+         s := Floattostr(factint);
+         Facticalintforrest.Caption :=  s+'%';
+         QrpfrmRep.Preview;
+    end;
+
+end;
+procedure TMainForm.SpeedButton1Click(Sender: TObject);
+  resourcestring  FilenotFound = 'Fayıl tapılmadı';
+  var
+    girov,ammount :real;
+    girovv, yazidat, valname,yaz: string;
+    dat :integer;
+         Template,Templatebool,
+         FTemplatePath,Itemindex,
+         OBookmarkCount, What, oBookMarkName: Olevariant;
+         IbookmarkCount: Integer;
+         tFieldName:String;
+         SaveChanges,
+         OriginalFormat,
+         RouteDocument: OleVariant;
+begin
+  cradd:=1 ;
+  RtDataModule.PersonLink.FieldByName('AnnualyInterestRate').AsFloat:=DBNumberEditEh2.Value;
+  DBNumberEditEh2.SetFocus;
+SaveCredit;
+   if DBLookupComboboxEh14.KeyValue=null then
+   begin
+   ShowMessage('Valyutanı seçin!');
+    exit;
+   end;
+    if DBEdit2.Text='0' then
+   begin
+   ShowMessage('Kreditin məbləğini daxil edin! ');
+    exit;
+   end;
+      if DBNumberEditEh2.Text='0' then
+   begin
+   ShowMessage('Kreditin faiz dərəcəsini daxil edin ! ');
+    exit;
+   end;
+     with RtDataModule.Customers do begin
+       if Active then open;
+       SetVariable('id',rt);
+       open;
+       if FieldByName('cust_type').AsInteger=4 then
+        begin
+           ShowMessage('   Nominal müştəriyə kredit vermək olmaz  ! ');
+           exit;
+        end;
+
+     end;
+RtDataModule.PersonLink.Post;
+RtDataModule.PersonLink.Session.Commit;
+//  exportreport(Result) ;
+/////////////////////////////////////////// word \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+  if MessageDlg('     Əməliyyat uğrla yerinə yetrildi   '+#13+
+       'Kredit müqaviləsini çap etmək istəyirsinizmi ?',
+       mtConfirmation,
+       [mbYes,mbNo],
+       0) = mrYes
+     then
+     begin
+     with RtDataModule do begin
+     TemplatesDataSet.close;
+     TemplatesDataSet.SetVariable('mehid',XDBGrid1.DataSource.DataSet.FieldByName('id').AsInteger);
+     TemplatesDataSet.open;
+
+
+     ReplaceDataSet.open;
+
+     if BookmarksDataSet.Active then BookmarksDataSet.close;
+     BookmarksDataSet.SetVariable('templid',TemplID);
+     BookmarksDataSet.Open;
+
+     if yazi.Active then yazi.close;
+     yazi.SetVariable('id', Result);
+     yazi.open;
+     ammount :=yazi.FieldByName('CREDITLINEAMOUNT').asfloat;
+     dat:=yazi.FieldByName('per').asinteger;
+     girov:=yazi.FieldByName('pledgeprice').asfloat;
+
+     valname:=yazi.FieldByName('VALU_NAME').asstring;
+     yaz:=CurrencyToHR_Azeri(ammount,0,[0],valname);
+     yazidat:=CurrencyToHR_Azeri(dat,0,[0],'ай');
+     girovv:=CurrencyToHR_Azeri(girov,0,[0],'man');
+
+     if CreditInfoDataSet.Active then CreditInfoDataSet.close;
+     CreditInfoDataSet.SetVariable('crid', Result);
+     CreditInfoDataSet.SetVariable('man', yaz);
+     CreditInfoDataSet.SetVariable('dat', yazidat);
+     CreditInfoDataSet.SetVariable('gir', girovv);
+     CreditInfoDataSet.Open;
+     end;
+
+     What := OleVariant(wdGoToBookmark);
+     FTemplatePath :=RtDataModule.TemplatesDataSet.FieldByName('Path').AsString;
+     TemplID :=RtDataModule.TemplatesDataSet.FieldByName('ID').AsInteger;
+
+     Template := EmptyParam;
+     TemplateBooL:=False;
+     Itemindex:=1;
+
+     Wordapplication.Connect;
+
+     Wordapplication.Visible := True;
+     WordApplication.Documents.Application.Caption := RtDataModule.TemplatesDataSet.FieldByName('name').AsString;
+
+     WordApplication.Options.CheckSpellingAsYouType := False;
+     WordApplication.Options.CheckGrammarAsYouType := False;
+
+     if FileExists(FTemplatePath) then
+     begin
+
+     WordApplication.Documents.Open(FTemplatePath,Template,TemplateBooL,Template,
+     Template,Template,Template,Template,Template,Template,
+     Template,Template,Template,Template,Template);
+
+     end else
+     begin
+
+        SaveChanges := WdDoNotSaveChanges;
+        OriginalFormat := UnAssigned;
+        RouteDocument := UnAssigned;
+        WordApplication.Quit(SaveChanges, OriginalFormat, RouteDocument);
+        WordApplication.Disconnect;
+        ShowMessage(FilenotFound);
+
+     end;
+
+     WordDocument.ConnectTo(WordApplication.Documents.Item(Itemindex));
+     WordDocument.Application.Get_ActiveWindow.Caption:=Caption;
+
+     try
+
+       with RtDataModule, ReplaceDataSet, WordDocument do
+
+
+       For IbookmarkCount := 1 to Bookmarks.Count do
+       begin
+
+         OBookmarkCount := IbookmarkCount ;
+         oBookMarkName := Bookmarks.Item(OBookmarkCount).Get_Name;
+         WordApplication.Selection.GoTo_(What, EmptyParam, EmptyParam, oBookMarkName);
+         ReplaceDataSet.Close;
+         SetVariable('tid', TemplID);
+         SetVariable('bname', oBookMarkName);
+         ReplaceDataSet.Open;
+         tFieldName := FIeldByName('FIELDNAME').AsString;
+         WordApplication.Selection.InsertAfter(CreditInfoDataSet.FieldByName(tFieldName).AsString);
+
+       end;
+
+     WordDocument.Disconnect;
+     Wordapplication.Disconnect;
+
+     except
+       SaveChanges := WdDoNotSaveChanges;
+        OriginalFormat := UnAssigned;
+        RouteDocument := UnAssigned;
+        WordApplication.Quit(SaveChanges, OriginalFormat, RouteDocument);
+        WordApplication.Disconnect;
+       ShowMessage('Bukmarklar daxil edilmeyib ');
+     end;
+
+ end;
+
+/////////////////////////////////////////// Odeme plani \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+ if RtDataModule.PersonLinkAUTOSCEDULE.AsInteger=1 then
+  if MessageDlg('   Ödəmə planını  çap etmək istəyirsinizmi ?',
+       mtConfirmation,
+       [mbYes,mbNo],
+       0) = mrYes
+     then
+     exportreport(Result) ;
+   close;
+end;
+
+procedure TMainForm.SpeedButton2Click(Sender: TObject);
+begin
+  with RtDataModule.PersonLink , SavedCredit do
+  begin
+     ins:=0;
+     boorowerid:=0;
+     RtDataModule.PersonLink .close;
+  //   RtDataModule.PersonLink.open;
+  end;
+ close ;
+end;
+
+procedure TMainForm.SpeedButton3Click(Sender: TObject);
+begin
+width:=232;
+Panel1.Visible:=false;
+ Caption:='Smart';
+panel19.Visible:=true;
+with  RtDataModule  do begin
+PersonLink.SQL[3]:='';
+PersonLink.Refresh;
+end;
+end;
+
+procedure TMainForm.XDBGrid1CellDblClick(Column: TXColumn);
+var
+i: Word;s :integer;
+begin
+width:=433;
+Panel1.Visible:=true;
+
+panel19.Visible:=false;
+ Caption:= XDBGrid1.DataSource.DataSet.FieldByName('name').asstring;
+s:=XDBGrid1.DataSource.DataSet.FieldByName('id').AsInteger;
+with RtDataModule do begin
+if PersonLink.active then PersonLink.close;
+PersonLink.SQL[3]:='where id='+inttostr(s) ;
+   PersonLink.Open;
+   with PersonLink do
+ begin
+ if FieldByName('f1').AsInteger=0 then
+  DBNumberEditEh2.Enabled:=false
+  else
+   DBNumberEditEh2.Enabled:=true ;
+
+ if FieldByName('f2').AsInteger=0 then
+  DBNumberEditEh4.Enabled:=false
+  else
+   DBNumberEditEh4.Enabled:=true;
+
+ if FieldByName('f3').AsInteger=0 then
+  DBNumberEditEh5.Enabled:=false
+  else
+   DBNumberEditEh5.Enabled:=true
+
+end;
+   PersonLink.Edit;
+    PersonLink.FieldByName('DATEOFCONCLUSION').AsDateTime := Get_CurrentDate;
+    PersonLink.FieldByName('DUEDATEFIRSTCONTRACT').AsDateTime := Get_CurrentDate;
+
+     if Branches.RecordCount=1 then
+      PersonLink.FieldByName('BRANCHID').AsInteger :=Branches.FieldByName('id').AsInteger
+        else
+      PersonLink.FieldByName('BRANCHID').AsInteger := Get_BranchID;
+      PersonLink.FieldByName('numberofcredit').asstring:='';
+      if PersonLink.FieldByName('AUTOCONTRACTNO').AsInteger=1 then
+      begin
+       OracleDataSet2.Close;
+       OracleDataSet2.open;
+       PersonLink.FieldByName('numberofcredit').asstring:=
+       OracleDataSet2.FieldByName('num').asstring+inttostr(Branches.FieldByName('id').AsInteger);
+      end;
+    comp.Close  ;
+    comp.SetVariable('mehid',s) ;
+    comp.open;
+    DBNumberEditEh1.Value:=0;
+   PersonLink.FieldByName('CREDITLINEAMOUNT').AsFloat:=0;
+end;
+      for i :=0 to ComponentCount- 1 do begin
+   if (Components[i].ClassType = Tpanel) then
+  begin
+   if (Components[i] as Tpanel).Tag=2 then
+   begin
+   (Components[i] as Tpanel).Align:=alnone;
+   (Components[i] as Tpanel).Visible:=false;
+
+   end;
+  end;
+      end;
+   for i :=0 to ComponentCount- 1 do begin
+   if (Components[i].ClassType = Tpanel) then
+  begin
+   if (Components[i] as Tpanel).Tag=2 then
+   begin
+   (Components[i] as Tpanel).Visible:=true;
+    (Components[i] as Tpanel).Align:=altop;
+    RtDataModule.comp.Close  ;
+    RtDataModule.comp.sql[3]:='and name ='+''''+ (Components[i] as Tpanel).Name+'''';
+    RtDataModule.comp.open;
+      if  RtDataModule.comp.RecordCount>0 then
+
+      (Components[i] as Tpanel).Visible:= RtDataModule.comp.FieldByName('status').AsBoolean;
+
+   end;
+   end;
+   end;
+
+ end;
+initialization
+ MainForm := TMainForm.Create(Application);
+end.

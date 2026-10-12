@@ -1,0 +1,251 @@
+unit TransactionsViewerDataModuleUnit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, OracleData, Oracle;
+
+type
+  TTransDataModule = class(TDataModule)
+    BankInfo: TOracleDataSet;
+    Transactions_OLD: TOracleDataSet;
+    Transactions_OLDDAT: TDateTimeField;
+    Transactions_OLDDBAL_CN: TFloatField;
+    Transactions_OLDDEBITOR: TWideStringField;
+    Transactions_OLDVAL_ACC: TWideStringField;
+    Transactions_OLDDNAME: TWideStringField;
+    Transactions_OLDKBAL_CN: TFloatField;
+    Transactions_OLDKREDITOR: TWideStringField;
+    Transactions_OLDCURRENCYID_C: TWideStringField;
+    Transactions_OLDKNAME: TWideStringField;
+    Transactions_OLDAMMOUNT: TFloatField;
+    Transactions_OLDAMMOUNT_C: TFloatField;
+    Transactions_OLDLAMMOUNT: TFloatField;
+    Transactions_OLDNAME: TWideStringField;
+    DataSrcTransactions: TDataSource;
+    SYSDAT: TOracleDataSet;
+    Curr: TOracleDataSet;
+    DataCurrency: TDataSource;
+    DFilial: TOracleDataSet;
+    DataDFilials: TDataSource;
+    Users: TOracleDataSet;
+    DataUsers: TDataSource;
+    Transactions_OLDDCURRENCY: TFloatField;
+    Transactions_OLDKCURRENCY: TIntegerField;
+    Transactions_OLDOPERATOR: TFloatField;
+    Transactions_OLDDEBETFILIAL: TIntegerField;
+    Transactions_OLDCREDITFILIAL: TIntegerField;
+    OpType: TOracleDataSet;
+    DataOpertaionTypes: TDataSource;
+    Transactions_OLDOPERATIONTYPE: TFloatField;
+    OperationTypes: TOracleQuery;
+    Currency: TOracleQuery;
+    CFilial: TOracleDataSet;
+    DataCFilial: TDataSource;
+    Transactions_OLDDEBT: TFloatField;
+    Transactions_OLDKREDIT: TFloatField;
+    Transactions_OLDUSERNAME: TWideStringField;
+    SumTrans: TOracleDataSet;
+    DataSumTrans: TDataSource;
+    BankInfoKOD_B: TFloatField;
+    BankInfoBANK: TWideStringField;
+    BankInfoAZ_NAME: TWideStringField;
+    BankInfoINN: TWideStringField;
+    BankInfoSEHER: TWideStringField;
+    BankInfoADRESS: TWideStringField;
+    BankInfoSEDR: TWideStringField;
+    BankInfoBUHALTR: TWideStringField;
+    BankInfoTEL: TWideStringField;
+    BankInfoFAX: TWideStringField;
+    BankInfoSWIFT: TWideStringField;
+    BankInfoTELEX: TWideStringField;
+    BankInfoEMAIL: TWideStringField;
+    BankInfoPOST_IN: TWideStringField;
+    BankInfoKOD_FIL: TIntegerField;
+    BankInfoFILIAL: TWideStringField;
+    BankInfoADRES_FIL: TWideStringField;
+    BankInfoTEL_FIL: TWideStringField;
+    BankInfoFAX_FIL: TWideStringField;
+    BankInfoSWIFT_FIL: TWideStringField;
+    BankInfoTELEX_FIL: TWideStringField;
+    BankInfoPOSTIN_FIL: TWideStringField;
+    BankInfoSEHER_FIL: TWideStringField;
+    BankInfoINN_FIL: TWideStringField;
+    BankInfoSEDRFIL: TWideStringField;
+    BankInfoBUHAL_FIL: TWideStringField;
+    BankInfoKOD_BFIL: TFloatField;
+    BankInfoNB: TIntegerField;
+    BankInfoLOGO: TBlobField;
+    BankInfoLINK: TWideStringField;
+    BankInfoSDV: TFloatField;
+    BankInfoSVM: TFloatField;
+    BankInfoBF: TFloatField;
+    BankInfoMANAGERTITLE: TWideStringField;
+    BankInfoACCOUNTANTTITLE: TWideStringField;
+    BankInfoSVM_CURRENCYID: TFloatField;
+    BankInfoCAPITAL: TFloatField;
+    BankInfoKRNO: TWideStringField;
+    BankInfoKRNO_FIL: TWideStringField;
+    BankInfoVAL_MOV: TWideStringField;
+    Transactions_OLDID: TFloatField;
+    Transactions_OLDDEB_KLI_ID: TFloatField;
+    Transactions_OLDKRED_KLI_ID: TFloatField;
+    Transactions_OLDCOMMITTER: TWideStringField;
+    Transactions_OLDCNTR_NAME: TWideStringField;
+    Transactions_OLDRATE_D: TFloatField;
+    Transactions_OLDRATE_C: TFloatField;
+    Transactions_OLDBDG_CODE: TWideStringField;
+    Transactions_OLDSTATUS: TFloatField;
+    old_Transactions: TOracleDataSet;
+    old_TransactionsDBAL_CN: TFloatField;
+    old_TransactionsKBAL_CN: TFloatField;
+    old_TransactionsDAT: TDateTimeField;
+    old_TransactionsID: TFloatField;
+    old_TransactionsNAME: TWideStringField;
+    old_TransactionsUSERNAME: TWideStringField;
+    old_TransactionsCOMMITTER: TWideStringField;
+    old_TransactionsVAL_ACC: TWideStringField;
+    old_TransactionsDCURRENCY: TFloatField;
+    old_TransactionsCURRENCYID_C: TWideStringField;
+    old_TransactionsKCURRENCY: TIntegerField;
+    old_TransactionsAMMOUNT: TFloatField;
+    old_TransactionsCNTR_NAME: TWideStringField;
+    old_TransactionsAMMOUNT_C: TFloatField;
+    old_TransactionsLAMMOUNT: TFloatField;
+    old_TransactionsOPERATOR: TFloatField;
+    old_TransactionsOPERATIONTYPE: TFloatField;
+    old_TransactionsDEB_KLI_ID: TFloatField;
+    old_TransactionsDEBITOR: TWideStringField;
+    old_TransactionsDEBETFILIAL: TIntegerField;
+    old_TransactionsDNAME: TWideStringField;
+    old_TransactionsKRED_KLI_ID: TFloatField;
+    old_TransactionsKREDITOR: TWideStringField;
+    old_TransactionsCREDITFILIAL: TIntegerField;
+    old_TransactionsKNAME: TWideStringField;
+    old_TransactionsDEBT: TFloatField;
+    old_TransactionsKREDIT: TFloatField;
+    TransactionsSUM: TOracleDataSet;
+    old_TransactionsRATE_c: TFloatField;
+    old_TransactionsRATE_D: TFloatField;
+    old_TransactionsBDG_CODE: TWideStringField;
+    old_TransactionsStatus: TFloatField;
+    Transactions: TOracleDataSet;
+    DateTimeField1: TDateTimeField;
+    FloatField1: TFloatField;
+    FloatField2: TFloatField;
+    WideStringField1: TWideStringField;
+    WideStringField2: TWideStringField;
+    WideStringField3: TWideStringField;
+    FloatField3: TFloatField;
+    FloatField4: TFloatField;
+    WideStringField4: TWideStringField;
+    WideStringField5: TWideStringField;
+    WideStringField6: TWideStringField;
+    FloatField5: TFloatField;
+    FloatField6: TFloatField;
+    FloatField7: TFloatField;
+    WideStringField7: TWideStringField;
+    FloatField8: TFloatField;
+    IntegerField1: TIntegerField;
+    FloatField9: TFloatField;
+    IntegerField2: TIntegerField;
+    IntegerField3: TIntegerField;
+    FloatField10: TFloatField;
+    FloatField11: TFloatField;
+    FloatField12: TFloatField;
+    WideStringField8: TWideStringField;
+    WideStringField9: TWideStringField;
+    WideStringField10: TWideStringField;
+    FloatField13: TFloatField;
+    FloatField14: TFloatField;
+    FloatField15: TFloatField;
+    WideStringField11: TWideStringField;
+    FloatField16: TFloatField;
+    OracleDataSet1: TOracleDataSet;
+    TransactionsDEBT_NN: TWideStringField;
+    TransactionsKRED_NN: TWideStringField;
+    Transactions_ins: TOracleDataSet;
+    DateTimeField2: TDateTimeField;
+    FloatField17: TFloatField;
+    FloatField18: TFloatField;
+    WideStringField12: TWideStringField;
+    WideStringField13: TWideStringField;
+    WideStringField14: TWideStringField;
+    FloatField19: TFloatField;
+    FloatField20: TFloatField;
+    WideStringField15: TWideStringField;
+    WideStringField16: TWideStringField;
+    WideStringField17: TWideStringField;
+    FloatField21: TFloatField;
+    FloatField22: TFloatField;
+    FloatField23: TFloatField;
+    WideStringField18: TWideStringField;
+    FloatField24: TFloatField;
+    IntegerField4: TIntegerField;
+    FloatField25: TFloatField;
+    IntegerField5: TIntegerField;
+    IntegerField6: TIntegerField;
+    FloatField26: TFloatField;
+    FloatField27: TFloatField;
+    FloatField28: TFloatField;
+    WideStringField19: TWideStringField;
+    WideStringField20: TWideStringField;
+    WideStringField21: TWideStringField;
+    FloatField29: TFloatField;
+    FloatField30: TFloatField;
+    FloatField31: TFloatField;
+    WideStringField22: TWideStringField;
+    FloatField32: TFloatField;
+    WideStringField23: TWideStringField;
+    WideStringField24: TWideStringField;
+    WideStringField25: TWideStringField;
+    WideStringField26: TWideStringField;
+    INS_DATSRC: TDataSource;
+    finfo: TOracleDataSet;
+    procedure OperationTypesThreadRecord(Sender: TOracleQuery);
+    procedure CurrencyThreadRecord(Sender: TOracleQuery);
+    procedure OperationTypesThreadFinished(Sender: TOracleQuery);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  TransDataModule: TTransDataModule;
+
+implementation
+
+{$R *.DFM}
+
+uses
+  sboapiDataModuleImpl, TransactionsViewerImpl;
+procedure TTransDataModule.OperationTypesThreadRecord(Sender: TOracleQuery);
+begin
+ with FrmTransactionsViewer, CBOperationTypes, Items do
+  begin
+   Add(Sender.Field('name'));
+   Checked[Count-1]:=True;
+   TStringList(Pointer(CBOperationTypes.Tag)^).Add(Sender.Field('ID'));
+  end;
+end;
+
+procedure TTransDataModule.CurrencyThreadRecord(Sender: TOracleQuery);
+begin
+ with FrmTransactionsViewer, CLBCurrency, Items do
+  begin
+   Add(Sender.Field('valu_name'));
+   Checked[Count-1]:=True;
+   TStringList(Pointer(CLBCurrency.Tag)^).Add(Sender.Field('valute'));
+  end;
+end;
+
+procedure TTransDataModule.OperationTypesThreadFinished(
+  Sender: TOracleQuery);
+begin
+ with FrmTransactionsViewer do
+  ActionFilterExecute(Sender);
+end;
+
+end.

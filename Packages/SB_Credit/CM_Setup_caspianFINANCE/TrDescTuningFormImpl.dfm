@@ -1,0 +1,176 @@
+object TrDescTuningForm: TTrDescTuningForm
+  Left = 199
+  Top = 106
+  BorderIcons = [biSystemMenu]
+  ClientHeight = 273
+  ClientWidth = 490
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poMainFormCenter
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  PixelsPerInch = 96
+  TextHeight = 13
+  object GroupBox1: TGroupBox
+    Left = 0
+    Top = 0
+    Width = 490
+    Height = 193
+    Align = alTop
+    TabOrder = 0
+    object DBGrid1: TDBGrid
+      Left = 2
+      Top = 15
+      Width = 486
+      Height = 148
+      TabStop = False
+      Align = alClient
+      Ctl3D = False
+      DataSource = DataSrcTrDescData
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      Options = [dgTitles, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit]
+      ParentCtl3D = False
+      ParentFont = False
+      ReadOnly = True
+      TabOrder = 0
+      TitleFont.Charset = DEFAULT_CHARSET
+      TitleFont.Color = clWindow
+      TitleFont.Height = -11
+      TitleFont.Name = 'Azl Sans Serif'
+      TitleFont.Style = []
+      Columns = <
+        item
+          Expanded = False
+          FieldName = 'DESCRIPTION'
+          Title.Caption = #399'm'#601'liyyat'#305'n n'#246'v'#252' .'
+          Title.Color = clNavy
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clBlack
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 440
+          Visible = True
+        end>
+    end
+    object Panel1: TPanel
+      Left = 2
+      Top = 163
+      Width = 486
+      Height = 28
+      Align = alBottom
+      BevelInner = bvLowered
+      TabOrder = 1
+      object Button2: TButton
+        Left = 429
+        Top = 4
+        Width = 53
+        Height = 21
+        Action = SaveChanges
+        TabOrder = 0
+      end
+      object DBEdit1: TDBEdit
+        Left = 2
+        Top = 3
+        Width = 421
+        Height = 21
+        DataField = 'TRDESCRIPTION'
+        DataSource = DataSrcTrDescData
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 1
+      end
+    end
+  end
+  object GroupBox2: TGroupBox
+    Left = 0
+    Top = 193
+    Width = 490
+    Height = 49
+    Align = alTop
+    TabOrder = 1
+    object ListBox1: TListBox
+      Left = 2
+      Top = 15
+      Width = 486
+      Height = 32
+      TabStop = False
+      Align = alClient
+      Color = clScrollBar
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clNavy
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = [fsBold]
+      ItemHeight = 13
+      Items.Strings = (
+        '%N ---- >   '#1052#1094#1075#1072#1074#1080#1083#1103#1085#1080#1085' '#1085#1102#1084#1088#1103#1089#1080
+        '%D ---- >   '#1071#1084#1103#1083#1080#1081#1081#1072#1090#1099#1085' '#1090#1072#1088#1080#1093#1080)
+      ParentFont = False
+      TabOrder = 0
+      OnDblClick = ListBox1DblClick
+    end
+  end
+  object Button1: TButton
+    Left = 399
+    Top = 248
+    Width = 86
+    Height = 25
+    Caption = '&'#1041#1072#1100#1083#1072
+    ModalResult = 1
+    TabOrder = 2
+  end
+  object TrDescData: TOracleDataSet
+    SQL.Strings = (
+      'SELECT RowID,iname, description, trdescription'
+      '  FROM cm_trdescriptions')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000030000000A00000049004E0041004D00450001000000000016000000
+      4400450053004300520049005000540049004F004E000100000000001A000000
+      540052004400450053004300520049005000540049004F004E00010000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 344
+    Top = 48
+    object TrDescDataINAME: TWideStringField
+      FieldName = 'INAME'
+      Required = True
+      Size = 32
+    end
+    object TrDescDataDESCRIPTION: TWideStringField
+      FieldName = 'DESCRIPTION'
+      Size = 255
+    end
+    object TrDescDataTRDESCRIPTION: TWideStringField
+      FieldName = 'TRDESCRIPTION'
+      Size = 255
+    end
+  end
+  object DataSrcTrDescData: TDataSource
+    DataSet = TrDescData
+    Left = 344
+    Top = 104
+  end
+  object ActionList1: TActionList
+    Left = 264
+    Top = 216
+    object SaveChanges: TAction
+      Caption = '&'#1044#1103#1081#1080#1096
+      OnExecute = SaveChangesExecute
+    end
+  end
+end

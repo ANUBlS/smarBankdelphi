@@ -1,0 +1,105 @@
+unit UnitCalcWares;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, NLSDialogs,
+  StdCtrls, ComCtrls, Buttons, NLSLocalizer, ExtCtrls;
+
+type
+  TFormCalcWares = class(TForm)
+    GroupBoxB: TGroupBox;
+    DTP_CalcDate: TDateTimePicker;
+    SBtnCalc: TSpeedButton;
+    NLSLocalizer: TNLSLocalizer;
+    RGroupSt: TRadioGroup;
+    GroupBoxLastDate: TGroupBox;
+    DTP_LastDate: TDateTimePicker;
+    procedure SBtnCalcClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormCalcWares: TFormCalcWares;
+
+ implementation
+
+uses UnitData, UnitShowTrans,MainResourceImpl;
+
+{$R *.DFM}
+
+
+
+procedure TFormCalcWares.SBtnCalcClick(Sender: TObject);
+var
+calc_date :TDateTime;
+parinteger,v_first_price,v_cred,v_debt:integer;
+v_trans_name,v_wares_name:String;
+begin
+if (DTP_LastDate.Date-DTP_CalcDate.Date)<=0 then
+begin
+try
+Screen.Cursor:=crSQLWait;
+
+
+     calc_date:=Integer(Trunc(DTP_CalcDate.DateTime));
+    // showmessage(floattostr(v_groups_id));
+ with DataModWares do begin
+  Case RGroupSt.ItemIndex of
+1: begin
+       SB_MAIN_RESOURCE.CallProcedure('Calculate_Wares',[calc_date]);
+        {if MessageDlg(' юдянишини  '+#13+'    эцнцн сянядляриня эюндярим?',mtConfirmation,mbYesNoCancel,0)=mrYes then
+           begin
+              with DataModWares.SB_MAIN_RESOURCE do
+               begin
+                CallProcedure('new_wares_trans_acc',[v_groups_id,parInteger,parInteger]);
+                v_debt:=GetParameter(1);
+                v_cred:=GetParameter(2);
+                            v_trans_name:=v_wares_name+' йени вясаитинин алынмасы';
+                CallProcedure('new_wares_transaction',
+                                [v_groups_id  ,
+                                v_first_price ,
+                                v_cred        ,
+                                v_debt        ,
+                                v_trans_name  ]
+                                );
+               end; {with end}
+                             //    FormShowTrans:=TFormShowTrans.Create(self);
+                              //   FormShowTrans.ShowModal;
+       //  end  {if end}
+     //  else
+      //   ShowMessage('Верэи цзря илин яввялиня галыг дяйяр галыг дяйярдян < вя йа = олмалыдыр!');
+end; {1 end}
+
+0: begin
+       SB_MAIN_RESOURCE.CallProcedure('Calculate_Wares_For_Day',[calc_date]);
+   end;
+end;
+      ODSWares.Refresh;
+        end;
+        ShowMessage('Щесаблама тамамланды');
+                         Close;
+
+ finally
+ Screen.Cursor:=crDefault;
+ end;
+
+end
+else
+ShowMessage('Kicik tarixe hesablamaq olmaz!');
+
+
+end;
+
+procedure TFormCalcWares.FormCreate(Sender: TObject);
+begin
+DTP_LastDate.Date:=DataModWares.SB_MAIN_RESOURCE.CallDateFunction('last_calc_date',[]);
+DTP_CalcDate.Date:=DataModWares.SB_MAIN_RESOURCE.CallDateFunction('get_date',[]);
+end;
+
+end.

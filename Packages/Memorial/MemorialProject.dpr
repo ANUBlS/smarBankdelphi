@@ -1,0 +1,32 @@
+library MemorialProject;
+
+uses
+  ComServ,
+  MemorialProject_TLB in 'MemorialProject_TLB.pas',
+  MemorialImpl in 'MemorialImpl.pas' {Memorial: TActiveForm} {Memorial: CoClass},
+  UntDataModMemorial in 'UntDataModMemorial.pas' {DataModMemorial: TDataModule},
+  UnFilter in 'UnFilter.pas' {FormFilter},
+  UntReport11 in 'UntReport11.pas' {MemorialRpt11: TQuickRep},
+  UntReport22 in 'UntReport22.pas' {MemorialRpt22: TQuickRep},
+  UntReport3 in 'UntReport3.pas' {MemorialRpt3: TQuickRep},
+  UntReport4 in 'UntReport4.pas' {MemorialRpt4: TQuickRep},
+  UntRefernces in 'UntRefernces.pas' {FrmReference},
+  UntReport5 in 'UntReport5.pas' {MemorialRpt44: TQuickRep},
+  UntReport33 in 'UntReport33.pas' {MemorialRpt33: TQuickRep},
+  UntReport1 in 'UntReport1.pas' {MemorialRpt1: TQuickRep},
+  UntReport2 in 'UntReport2.pas' {MemorialRpt2: TQuickRep};
+
+{$E ocx}
+
+exports
+  DllGetClassObject,
+  DllCanUnloadNow,
+  DllRegisterServer,
+  DllUnregisterServer;
+
+{$R *.TLB}
+
+{$R *.RES}
+
+begin
+end.

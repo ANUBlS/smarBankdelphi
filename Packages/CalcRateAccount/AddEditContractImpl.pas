@@ -1,0 +1,118 @@
+unit AddEditContractImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, ExtCtrls, NLSLocalizer, Mask, DBCtrlsEh, DBLookupEh, ComCtrls,CRACommon,
+  CMDBSearchEdit, Buttons, DBGridEh;
+
+type
+  TFormAddEditContract = class(TForm)
+    Panel1: TPanel;
+    Panel2: TPanel;
+    Panel3: TPanel;
+    GroupBox1: TGroupBox;
+    DBLookupComboboxEh1: TDBLookupComboboxEh;
+    Panel4: TPanel;
+    StaticText1: TStaticText;
+    DBLookupComboboxEh2: TDBLookupComboboxEh;
+    CMSearchEdit1: TCMSearchEdit;
+    Panel5: TPanel;
+    StaticText2: TStaticText;
+    DBLookupComboboxEh3: TDBLookupComboboxEh;
+    CMSearchEdit2: TCMSearchEdit;
+    Panel6: TPanel;
+    Label1: TLabel;
+    Label2: TLabel;
+    Panel7: TPanel;
+    StaticText3: TStaticText;
+    DBEditEh2: TDBEditEh;
+    Panel8: TPanel;
+    StaticText4: TStaticText;
+    Panel9: TPanel;
+    StaticText5: TStaticText;
+    DBEditEh3: TDBEditEh;
+    Panel10: TPanel;
+    StaticText6: TStaticText;
+    DBLookupComboboxEh4: TDBLookupComboboxEh;
+    Panel11: TPanel;
+    StaticText7: TStaticText;
+    DBLookupComboboxEh5: TDBLookupComboboxEh;
+    DBLookupComboboxEh6: TDBLookupComboboxEh;
+    BitBtn1: TBitBtn;
+    BitBtn2: TBitBtn;
+    DBDateTimeEditEh1: TDBDateTimeEditEh;
+    DBDateTimeEditEh2: TDBDateTimeEditEh;
+    procedure BitBtn1Click(Sender: TObject);
+    procedure BitBtn2Click(Sender: TObject);
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure DBLookupComboboxEh3Change(Sender: TObject);
+    procedure DBLookupComboboxEh2Change(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormAddEditContract: TFormAddEditContract;
+
+implementation
+
+{$R *.DFM}
+uses CRADatModImpl,sbtranslateproc,sboapiDataModuleimpl;
+
+
+
+procedure TFormAddEditContract.BitBtn1Click(Sender: TObject);
+begin
+//  try
+   with CRADatMod,Purpose do
+        Post;
+        ModalResult:=MrOk;
+
+  CRADatMod.Contracts.Refresh;
+end;
+
+procedure TFormAddEditContract.BitBtn2Click(Sender: TObject);
+begin
+   with CRADatMod,Purpose do
+        Cancel ;
+   ModalResult:=MrCancel;    
+
+end;
+
+procedure TFormAddEditContract.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+  Resize := False;
+end;
+
+procedure TFormAddEditContract.FormKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+ if ord(Key) = VK_ESCAPE then Close;
+end;
+
+procedure TFormAddEditContract.DBLookupComboboxEh3Change(Sender: TObject);
+begin
+    CMSearchEdit2.Text :=(Sender as TDBLookupComboBoxEh).ListSource.DataSet.FieldByName('Acc_No').AsString;
+end;
+
+procedure TFormAddEditContract.DBLookupComboboxEh2Change(Sender: TObject);
+begin
+   CMSearchEdit1.Text :=(Sender as TDBLookupComboBoxEh).ListSource.DataSet.FieldByName('Acc_No').AsString;
+end;
+
+procedure TFormAddEditContract.FormCreate(Sender: TObject);
+begin
+   CMSearchEdit1.Text:='';
+   CMSearchEdit2.Text:='';
+   SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+end.

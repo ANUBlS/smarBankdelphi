@@ -1,0 +1,338 @@
+object FrmOldCourses: TFrmOldCourses
+  Left = 265
+  Top = 126
+  Width = 1071
+  Height = 375
+  Caption = 'Old Courses'
+  Color = clBtnFace
+  Font.Charset = RUSSIAN_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  OnCreate = ActiveFormCreate
+  OnDestroy = ActiveFormDestroy
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 1071
+    Height = 375
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
+    Align = alClient
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -12
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 0
+    object DBGrid1: TDBGrid
+      Left = 1
+      Top = 1
+      Width = 1069
+      Height = 313
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
+      Align = alClient
+      DataSource = DSCourses
+      DrawingStyle = gdsGradient
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit, dgTitleClick]
+      ParentFont = False
+      TabOrder = 0
+      TitleFont.Charset = RUSSIAN_CHARSET
+      TitleFont.Color = clWindowText
+      TitleFont.Height = -12
+      TitleFont.Name = 'Azl Sans Serif'
+      TitleFont.Style = []
+      OnTitleClick = DBGrid1TitleClick
+      Columns = <
+        item
+          Expanded = False
+          FieldName = 'DAT'
+          Title.Caption = #1058#1072#1088#1080#1093
+          Title.Color = clNavy
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -13
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 80
+          Visible = True
+        end
+        item
+          Alignment = taCenter
+          Color = clSilver
+          Expanded = False
+          FieldName = 'VAL_NAME'
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clNavy
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          Title.Alignment = taCenter
+          Title.Caption = '$'
+          Title.Color = clNavy
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -13
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 30
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'VAL_KOD'
+          Title.Caption = #1042#1072#1083#1081#1091#1090#1072#1085#1099#1085' '#1082#1086#1076#1091
+          Title.Color = clNavy
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -13
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'OSTAT'
+          Title.Caption = #1056#1103#1089#1084#1080' '#1084#1103#1079#1103#1085#1085#1103
+          Title.Color = clNavy
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -13
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 100
+          Visible = True
+        end>
+    end
+    object Panel2: TPanel
+      Left = 1
+      Top = 314
+      Width = 1069
+      Height = 60
+      Margins.Left = 4
+      Margins.Top = 4
+      Margins.Right = 4
+      Margins.Bottom = 4
+      Align = alBottom
+      TabOrder = 1
+      object GroupBox1: TGroupBox
+        Left = 1
+        Top = 2
+        Width = 309
+        Height = 52
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
+        Caption = #1057#1094#1088#1103#1090#1083#1080' '#1072#1093#1090#1072#1088#1099#1096
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -12
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 0
+        object EOstat: TEdit
+          Left = 217
+          Top = 19
+          Width = 63
+          Height = 22
+          Margins.Left = 4
+          Margins.Top = 4
+          Margins.Right = 4
+          Margins.Bottom = 4
+          TabOrder = 0
+          OnChange = EOstatChange
+        end
+        object EDat: TEdit
+          Left = 9
+          Top = 19
+          Width = 63
+          Height = 22
+          Margins.Left = 4
+          Margins.Top = 4
+          Margins.Right = 4
+          Margins.Bottom = 4
+          TabOrder = 1
+          OnChange = EDatChange
+        end
+        object EVal_kod: TEdit
+          Left = 148
+          Top = 19
+          Width = 63
+          Height = 22
+          Margins.Left = 4
+          Margins.Top = 4
+          Margins.Right = 4
+          Margins.Bottom = 4
+          TabOrder = 2
+          OnChange = EVal_kodChange
+        end
+        object EVal_name: TEdit
+          Left = 78
+          Top = 19
+          Width = 63
+          Height = 22
+          Margins.Left = 4
+          Margins.Top = 4
+          Margins.Right = 4
+          Margins.Bottom = 4
+          TabOrder = 3
+          OnChange = EVal_nameChange
+        end
+      end
+      object GroupBox3: TGroupBox
+        Left = 314
+        Top = 2
+        Width = 223
+        Height = 50
+        Margins.Left = 4
+        Margins.Top = 4
+        Margins.Right = 4
+        Margins.Bottom = 4
+        Caption = 'Filtrasiya'
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -12
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 1
+        object DTP_END: TDateTimePicker
+          Left = 111
+          Top = 16
+          Width = 103
+          Height = 22
+          Margins.Left = 4
+          Margins.Top = 4
+          Margins.Right = 4
+          Margins.Bottom = 4
+          Date = 37557.427055300900000000
+          Time = 37557.427055300900000000
+          TabOrder = 0
+          OnChange = DTP_ENDChange
+        end
+        object DTP_BEG: TDateTimePicker
+          Left = 4
+          Top = 16
+          Width = 103
+          Height = 22
+          Margins.Left = 4
+          Margins.Top = 4
+          Margins.Right = 4
+          Margins.Bottom = 4
+          Date = 37557.427055300900000000
+          Time = 37557.427055300900000000
+          TabOrder = 1
+          OnChange = DTP_BEGChange
+        end
+      end
+    end
+  end
+  object ODSCourses: TOracleDataSet
+    SQL.Strings = (
+      'Select '
+      '    O.val_kod,'
+      '    O.ostat,'
+      '    O.dat,'
+      '    A.val_name '
+      'From '
+      '   Operkurs O,'
+      '   Avalute A'
+      'Where O.val_kod=A.valute and o.dat between :beg_dat and :end_dat'
+      'Order by :Title_Order')
+    Optimize = False
+    Variables.Data = {
+      0400000003000000180000003A005400490054004C0045005F004F0052004400
+      45005200010000000800000056616C5F6B6F640000000000100000003A004200
+      450047005F004400410054000C0000000000000000000000100000003A004500
+      4E0044005F004400410054000C0000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      05000000040000000E000000560041004C005F004B004F004400010000000000
+      0A0000004F005300540041005400010000000000060000004400410054000100
+      0000000010000000560041004C005F004E0041004D004500010000000000}
+    Session = sboapiDataModule.SBSession
+    BeforeOpen = ODSCoursesBeforeOpen
+    Left = 424
+    Top = 64
+    object ODSCoursesVAL_KOD: TIntegerField
+      FieldName = 'VAL_KOD'
+      Required = True
+    end
+    object ODSCoursesOSTAT: TFloatField
+      FieldName = 'OSTAT'
+      DisplayFormat = '#,##.00'
+    end
+    object ODSCoursesDAT: TDateTimeField
+      FieldName = 'DAT'
+      Required = True
+    end
+    object ODSCoursesVAL_NAME: TWideStringField
+      FieldName = 'VAL_NAME'
+      Size = 10
+    end
+  end
+  object DSCourses: TDataSource
+    DataSet = ODSCourses
+    Left = 392
+    Top = 64
+  end
+  object ODSFiltr: TOracleDataSet
+    SQL.Strings = (
+      'Select'
+      '    O.val_kod,'
+      '    O.ostat,'
+      '    O.dat,'
+      '    A.val_name '
+      'From '
+      '   Operkurs O,'
+      '   Avalute A'
+      'Where O.val_kod=A.valute and O.dat=:VDate'
+      'Order by O.ostat'
+      ' ')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000C0000003A00560044004100540045000C00000000000000
+      00000000}
+    Session = sboapiDataModule.SBSession
+    Left = 520
+    Top = 128
+  end
+  object DSFiltr: TDataSource
+    DataSet = ODSFiltr
+    Left = 608
+    Top = 136
+  end
+  object ODSValute: TOracleDataSet
+    SQL.Strings = (
+      'Select '
+      '     *'
+      'From'
+      '   Avalute ')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 648
+    Top = 136
+  end
+  object OraclePackage: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'SBOP'
+    Left = 296
+    Top = 72
+  end
+end

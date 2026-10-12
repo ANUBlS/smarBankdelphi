@@ -1,0 +1,400 @@
+object GurDm: TGurDm
+  OldCreateOrder = False
+  OnCreate = DataModuleCreate
+  OnDestroy = DataModuleDestroy
+  Left = 280
+  Top = 190
+  Height = 480
+  Width = 870
+  object MainDSrc: TDataSource
+    DataSet = MainDSet
+    Left = 32
+    Top = 64
+  end
+  object Pledges: TOracleDataSet
+    SQL.Strings = (
+      'SELECT id,  description'
+      '  FROM cm_pledges')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      04000000020000000200000049440100000000000B0000004445534352495054
+      494F4E010000000000}
+    Cursor = crHourGlass
+    Session = CMDataModule.CMSession
+    Left = 112
+    Top = 72
+  end
+  object DataSrcPledges: TDataSource
+    DataSet = Pledges
+    Left = 120
+    Top = 8
+  end
+  object pledgsortsDatSrc: TDataSource
+    DataSet = pledgsorts
+    Left = 216
+    Top = 72
+  end
+  object pledgsorts: TOracleDataSet
+    SQL.Strings = (
+      'SELECT id, name'
+      '  FROM cm_pledgsorts')
+    Optimize = False
+    Session = CMDataModule.CMSession
+    Left = 216
+    Top = 8
+    object pledgsortsID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object pledgsortsNAME: TStringField
+      FieldName = 'NAME'
+      Required = True
+      Size = 80
+    end
+  end
+  object Guarante: TOraclePackage
+    Session = CMDataModule.CMSession
+    PackageName = 'CM_Credit'
+    Left = 496
+    Top = 24
+  end
+  object CompanyDSet: TOracleDataSet
+    SQL.Strings = (
+      'select * from CM_GUARCOMPANY')
+    Optimize = False
+    Session = CMDataModule.CMSession
+    Left = 328
+    Top = 16
+  end
+  object CompanySrc: TDataSource
+    DataSet = CompanyDSet
+    Left = 328
+    Top = 72
+  end
+  object OracleQuery1: TOracleQuery
+    Session = CMDataModule.CMSession
+    Optimize = False
+    Left = 496
+    Top = 88
+  end
+  object maxid: TOracleDataSet
+    SQL.Strings = (
+      'select max(id) as mid from CM_GUARCOMPANY')
+    Optimize = False
+    Session = CMDataModule.CMSession
+    Left = 416
+    Top = 16
+    object maxidMID: TFloatField
+      FieldName = 'MID'
+    end
+  end
+  object BaliSrc: TDataSource
+    DataSet = BAliDSet
+    Left = 40
+    Top = 136
+  end
+  object BAliDSet: TOracleDataSet
+    SQL.Strings = (
+      'select g.rowid, g.* from cm_guarantor g'
+      'where creditid=:creditid'
+      'order by cardid')
+    Optimize = False
+    Variables.Data = {
+      0300000001000000090000003A43524544495449440300000000000000000000
+      00}
+    Session = CMDataModule.CMSession
+    AfterOpen = BAliDSetAfterOpen
+    Left = 39
+    Top = 195
+    object BAliDSetCREDITID: TFloatField
+      FieldName = 'CREDITID'
+      Required = True
+    end
+    object BAliDSetCARDID: TFloatField
+      FieldName = 'CARDID'
+    end
+    object BAliDSetGUARANTORNAME: TStringField
+      FieldName = 'GUARANTORNAME'
+      Size = 64
+    end
+    object BAliDSetGUARANTORID: TStringField
+      FieldName = 'GUARANTORID'
+      Size = 64
+    end
+    object BAliDSetGUARANTORSALARY: TStringField
+      FieldName = 'GUARANTORSALARY'
+      Size = 80
+    end
+    object BAliDSetZAMINWORK1: TStringField
+      FieldName = 'ZAMINWORK1'
+      Size = 80
+    end
+    object BAliDSetZAMINADRES1: TStringField
+      FieldName = 'ZAMINADRES1'
+      Size = 80
+    end
+    object BAliDSetZAMINTEL1: TStringField
+      FieldName = 'ZAMINTEL1'
+      Size = 80
+    end
+    object BAliDSetZMPASPYER1: TStringField
+      FieldName = 'ZMPASPYER1'
+      Size = 80
+    end
+    object BAliDSetZMPASPDAT1: TDateTimeField
+      FieldName = 'ZMPASPDAT1'
+    end
+    object BAliDSetZMTELMOB1: TStringField
+      FieldName = 'ZMTELMOB1'
+      Size = 15
+    end
+  end
+  object Credit: TOracleDataSet
+    SQL.Strings = (
+      '   SELECT max(id) '
+      '    as creditid'
+      '     FROM cm_active_credits')
+    Optimize = False
+    Session = CMDataModule.CMSession
+    Left = 600
+    Top = 16
+    object CreditCREDITID: TFloatField
+      FieldName = 'CREDITID'
+    end
+  end
+  object InsSrc: TDataSource
+    DataSet = OracleDataSet1
+    Left = 107
+    Top = 136
+  end
+  object MainDSet: TOracleDataSet
+    SQL.Strings = (
+      'select g.rowid, g.* from cm_guarantee g'
+      'where creditid=:creditid'
+      'order by cardid')
+    Optimize = False
+    Variables.Data = {
+      0300000001000000090000003A43524544495449440300000000000000000000
+      00}
+    QBEDefinition.QBEFieldDefs = {
+      040000002300000008000000435245444954494401000000000008000000504C
+      4544474549440100000000000A000000504C454447454E414D45010000000000
+      0A000000484F4C4445524E414D450100000000000D000000484F4C4445524144
+      445245535301000000000010000000414E59494E464F544F44495354494E4701
+      00000000000A00000052454749535452594E4F0100000000000E000000524547
+      49535452594147454E43590100000000000C0000005245474953545259444154
+      450100000000000B000000504C45444745494E5553450100000000000E000000
+      504C45444745494E535552414E540100000000000F000000494E535552414E43
+      454147454E43590100000000000F000000494E535552414E4345414D4F554E54
+      0100000000000D000000494E535552414E434544415445010000000000130000
+      00504C454447455052494345544F5250415148410100000000000F000000504C
+      45444745505249434545564B560100000000000E000000494E535552414E4345
+      52494748540100000000000B000000494E535552414E43454944010000000000
+      0A000000504C4544474549445F500100000000000600000047514E414D450100
+      00000000090000004751504153504E554D010000000000090000004751504153
+      505945520100000000000A000000475150415350444154450100000000000800
+      0000475141445245535301000000000007000000524559535445520100000000
+      000700000053455259414D4801000000000005000000475154454C0100000000
+      000B000000504C4544474550524943450100000000000A000000504C45444753
+      4F52545301000000000007000000434F4D50414E590100000000000A00000043
+      4F4D50414E594441540100000000000D000000434F4D50414E59455850455254
+      01000000000006000000434152444944010000000000120000004F5554434F4C
+      4C41544552414C41434349440100000000000A00000044454341535441545553
+      010000000000}
+    Session = CMDataModule.CMSession
+    AfterOpen = MainDSetAfterOpen
+    AfterScroll = MainDSetAfterScroll
+    OnCalcFields = MainDSetCalcFields
+    Left = 40
+    Top = 8
+    object MainDSetCREDITID: TFloatField
+      FieldName = 'CREDITID'
+      Required = True
+    end
+    object MainDSetPLEDGEID: TFloatField
+      DisplayLabel = 'Ёировун типи'
+      FieldName = 'PLEDGEID'
+      Required = True
+    end
+    object MainDSetPLEDGENAME: TStringField
+      DisplayLabel = 'Ёировун ады'
+      FieldName = 'PLEDGENAME'
+      Size = 128
+    end
+    object MainDSetHOLDERNAME: TStringField
+      FieldName = 'HOLDERNAME'
+      Size = 128
+    end
+    object MainDSetHOLDERADDRESS: TStringField
+      FieldName = 'HOLDERADDRESS'
+      Size = 128
+    end
+    object MainDSetANYINFOTODISTING: TStringField
+      FieldName = 'ANYINFOTODISTING'
+      Size = 128
+    end
+    object MainDSetREGISTRYNO: TStringField
+      FieldName = 'REGISTRYNO'
+      Size = 32
+    end
+    object MainDSetREGISTRYAGENCY: TStringField
+      FieldName = 'REGISTRYAGENCY'
+      Size = 64
+    end
+    object MainDSetREGISTRYDATE: TDateTimeField
+      FieldName = 'REGISTRYDATE'
+    end
+    object MainDSetPLEDGEINUSE: TFloatField
+      FieldName = 'PLEDGEINUSE'
+    end
+    object MainDSetPLEDGEINSURANT: TFloatField
+      FieldName = 'PLEDGEINSURANT'
+    end
+    object MainDSetINSURANCEAGENCY: TFloatField
+      FieldName = 'INSURANCEAGENCY'
+    end
+    object MainDSetINSURANCEAMOUNT: TFloatField
+      FieldName = 'INSURANCEAMOUNT'
+    end
+    object MainDSetINSURANCEDATE: TDateTimeField
+      FieldName = 'INSURANCEDATE'
+    end
+    object MainDSetPLEDGEPRICETORPAQHA: TFloatField
+      FieldName = 'PLEDGEPRICETORPAQHA'
+    end
+    object MainDSetPLEDGEPRICEEVKV: TFloatField
+      FieldName = 'PLEDGEPRICEEVKV'
+    end
+    object MainDSetINSURANCERIGHT: TFloatField
+      FieldName = 'INSURANCERIGHT'
+    end
+    object MainDSetINSURANCEID: TStringField
+      FieldName = 'INSURANCEID'
+      Size = 22
+    end
+    object MainDSetPLEDGEID_P: TFloatField
+      FieldName = 'PLEDGEID_P'
+    end
+    object MainDSetGQNAME: TStringField
+      FieldName = 'GQNAME'
+      Size = 60
+    end
+    object MainDSetGQPASPNUM: TStringField
+      FieldName = 'GQPASPNUM'
+      Size = 13
+    end
+    object MainDSetGQPASPYER: TStringField
+      FieldName = 'GQPASPYER'
+      Size = 50
+    end
+    object MainDSetGQPASPDATE: TDateTimeField
+      FieldName = 'GQPASPDATE'
+    end
+    object MainDSetGQADRESS: TStringField
+      FieldName = 'GQADRESS'
+      Size = 120
+    end
+    object MainDSetREYSTER: TStringField
+      FieldName = 'REYSTER'
+      Size = 128
+    end
+    object MainDSetSERYAMH: TStringField
+      FieldName = 'SERYAMH'
+    end
+    object MainDSetGQTEL: TStringField
+      FieldName = 'GQTEL'
+      Size = 15
+    end
+    object MainDSetPLEDGEPRICE: TFloatField
+      DisplayLabel = 'Ёировун базар д€й€ри'
+      FieldName = 'PLEDGEPRICE'
+    end
+    object MainDSetPLEDGSORTS: TFloatField
+      FieldName = 'PLEDGSORTS'
+    end
+    object MainDSetCOMPANY: TFloatField
+      FieldName = 'COMPANY'
+    end
+    object MainDSetCOMPANYDAT: TDateTimeField
+      FieldName = 'COMPANYDAT'
+    end
+    object MainDSetCOMPANYEXPERT: TStringField
+      FieldName = 'COMPANYEXPERT'
+      Size = 120
+    end
+    object MainDSetCARDID: TFloatField
+      FieldName = 'CARDID'
+    end
+    object MainDSetOUTCOLLATERALACCID: TFloatField
+      FieldName = 'OUTCOLLATERALACCID'
+    end
+    object MainDSetDECASTATUS: TFloatField
+      FieldName = 'DECASTATUS'
+    end
+  end
+  object OracleDataSet1: TOracleDataSet
+    SQL.Strings = (
+      'SELECT id, name, sid'
+      '  FROM cm_insuranceagency ')
+    Optimize = False
+    Session = CMDataModule.CMSession
+    Left = 112
+    Top = 200
+  end
+  object DataSrcOUTCollatralAccs: TDataSource
+    DataSet = OUTCollatralAccs
+    Left = 228
+    Top = 136
+  end
+  object OUTCollatralAccs: TOracleDataSet
+    SQL.Strings = (
+      'SELECT   ac.id AS id, ac.kli_id AS custid, ac.acc_no AS accno,'
+      '         ac.NAME AS clientname, ac.val_acc'
+      '    FROM SBOUT_ACCOUNT ac'
+      '   WHERE'
+      '  (ac.bal_cn1 IN (SELECT accountnumber'
+      '                           FROM cm_aginfo'
+      '                          WHERE groupid = (SELECT g.id'
+      
+        '                                             FROM cm_accountgrou' +
+        'ps g'
+      
+        '                                            WHERE g.iname = '#39'Col' +
+        'lateralAccs'#39'))'
+      '         )'
+      ''
+      
+        'and  ac.kli_id in( select BOOROWERID from cm_active_credits wher' +
+        'e id=:creditid)'
+      'and ac.bal_cn1 =:balcin'
+      'ORDER BY accno,kli_id'
+      ''
+      '')
+    Variables.Data = {
+      0300000002000000090000003A43524544495449440300000000000000000000
+      00070000003A42414C43494E030000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      0400000005000000020000004944010000000000060000004355535449440100
+      00000000050000004143434E4F0100000000000A000000434C49454E544E414D
+      450100000000000700000056414C5F414343010000000000}
+    Cursor = crHourGlass
+    Master = Pledges
+    MasterFields = 'OUTBAL_CIN'
+    DetailFields = 'BALCIN'
+    Session = CMDataModule.CMSession
+    Left = 244
+    Top = 208
+  end
+  object DSetPLd: TOracleDataSet
+    SQL.Strings = (
+      'select * from cm_guarantee g'
+      'where creditid=:creditid '
+      'and pledgeid=:plid')
+    Variables.Data = {
+      0300000002000000090000003A43524544495449440300000000000000000000
+      00050000003A504C4944030000000000000000000000}
+    Session = CMDataModule.CMSession
+    Left = 424
+    Top = 200
+  end
+end

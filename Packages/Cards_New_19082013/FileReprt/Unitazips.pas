@@ -1,0 +1,452 @@
+﻿unit Unitazips;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ComCtrls, SearchEdit, SearchCombo, DBCtrls,
+  CMHintDBLookupComboBox, Mask, DBCtrlsEh, DBLookupEh,db;
+
+type
+  Tazips = class(TForm)
+    GroupBox1: TGroupBox;
+    GroupBox2: TGroupBox;
+    GroupBox3: TGroupBox;
+    Button1: TButton;
+    GroupBox4: TGroupBox;
+    Label1: TLabel;
+    Label2: TLabel;
+    referens: TEdit;
+    Label3: TLabel;
+    mf23b: TEdit;
+    Label4: TLabel;
+    val: TEdit;
+    Label5: TLabel;
+    DateTimePicker1: TDateTimePicker;
+    Label6: TLabel;
+    Label7: TLabel;
+    Edit1: TEdit;
+    GroupBox5: TGroupBox;
+    Edit2: TEdit;
+    Label8: TLabel;
+    Label9: TLabel;
+    Edit3: TEdit;
+    Label10: TLabel;
+    Edit4: TEdit;
+    Label11: TLabel;
+    Label12: TLabel;
+    Label13: TLabel;
+    Button2: TButton;
+    Button3: TButton;
+    reciverbic: TSearchEdit;
+    SearchCombo2: TComboBox;
+    OF70_RichEdit: TRichEdit;
+    OF72_RichEdit: TRichEdit;
+    Label14: TLabel;
+    amount: TEdit;
+    SearchEdit1: TDBLookupComboBox;
+    Edit5: TEdit;
+    Memo1: TMemo;
+    Memo2: TMemo;
+    procedure FormCreate(Sender: TObject);
+    procedure DBLookupComboBox1Enter(Sender: TObject);
+    procedure DBLookupComboBox2Enter(Sender: TObject);
+    procedure SearchCombo1Enter(Sender: TObject);
+    procedure SearchCombo2DragDrop(Sender, Source: TObject; X, Y: Integer);
+    procedure reciverbicChange(Sender: TObject);
+    procedure SearchCombo5Change(Sender: TObject);
+    procedure SearchCombo2Change(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure Button3Click(Sender: TObject);
+    procedure OF70_RichEditChange(Sender: TObject);
+    procedure OF70_RichEditKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure OF70_RichEditKeyPress(Sender: TObject; var Key: Char);
+    procedure OF72_RichEditKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure OF72_RichEditKeyPress(Sender: TObject; var Key: Char);
+    procedure OF72_RichEditChange(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  azips: Tazips;
+  isEmpty,CanClose: boolean;
+
+implementation
+
+uses Filereportform, Unitdatamod, Unittemplate, Unitazips2;
+
+{$R *.dfm}
+
+procedure Tazips.SearchCombo2Change(Sender: TObject);
+begin
+DataModbpl.banks.Locate('name',SearchCombo2.Text,[loCaseInsensitive,loPartialKey]);
+
+reciverbic.Text:=DataModbpl.banks.FieldByName('bankcode').AsString;
+end;
+
+procedure Tazips.Button1Click(Sender: TObject);
+var
+k,ids:integer;
+begin
+
+//showmessage(edit5.Text);
+
+
+
+         if Edit5.Text='N' then
+     begin
+      DataModbpl.referans.Close;
+      DataModbpl.referans.Open;
+      with DataModbpl.referans do
+      begin
+      SetVariable('FORMATS','MT103');
+      SetVariable('CURRENSY','AZN');
+      end;
+      DataModbpl.referans.Refresh;
+      DataModbpl.referans.Close;
+      DataModbpl.referans.Open;
+
+          referens.text:=DataModbpl.referansrefe.asstring ;
+             k:=0;
+             ids:=0;
+                      end else
+                      begin
+                       k:=1;
+                       ids:=azips2.DBGrid1.DataSource.DataSet.FieldByName('id').AsInteger;
+                      end;
+
+                      DataModbpl.gonderen.Close;
+              DataModbpl.gonderen.SetVariable('fid',DataModbpl.acount.FieldByName('filial').AsInteger);
+              DataModbpl.gonderen.Open;
+
+
+
+                 DataModbpl.alanm.Close;
+                 DataModbpl.alanm.SetVariable('kid',DataModbpl.acount.FieldByName('kli_id').AsInteger);
+                 DataModbpl.alanm.Open;
+              Memo1.Lines[0]:= DataModbpl.alanm.FieldByName('d').AsString;
+              Memo1.Lines[1]:= DataModbpl.alanm.FieldByName('inn').AsString;
+              Memo1.Lines[2]:= DataModbpl.gonderen.FieldByName('kod_b').AsString+'/'
+              +DataModbpl.gonderen.FieldByName('inn').AsString;
+              Memo1.Lines[3]:= DataModbpl.gonderen.FieldByName('krno').AsString;
+
+                           Memo2.Lines[0]:= edit3.Text;
+              Memo2.Lines[1]:= Edit4.Text;
+              Memo2.Lines[2]:= DataModbpl.banks.FieldByName('bankcode').AsString+'/'
+              +DataModbpl.banks.FieldByName('inn').AsString;
+              Memo2.Lines[3]:= DataModbpl.banks.FieldByName('subkrno').AsString;
+
+
+
+
+
+
+      DataModbpl.pack.CallProcedure('savetransaction',[ DateTimePicker1.DateTime,
+                                              referens.Text,
+                                              SearchEdit1.Text,
+                                              reciverbic.Text,
+                                              SearchCombo2.Text,
+                                              edit2.Text,
+                                              edit3.Text,
+                                              Edit4.Text,
+                                              OF70_RichEdit.Text,
+                                              OF72_RichEdit.Text,
+                                              strtofloat(amount.Text),
+                                              k,
+                                              ids,
+                                              memo1.Text,
+                                              memo2.Text]);
+
+
+
+
+
+      //DataModbpl.referans.Close;
+     // DataModbpl.referans.Open;
+     // with DataModbpl.referans do
+     // begin
+     // SetVariable('FORMATS','MT103');
+     // SetVariable('CURRENSY','AZN');
+     // end;
+     // DataModbpl.referans.Refresh;
+     // DataModbpl.referans.Close;
+      //DataModbpl.referans.Open;
+     //
+          //referens.text:=DataModbpl.referansrefe.asstring ;
+        //ShowMessage(Azips2.DBGrid1.DataSource.DataSet.FieldByName('id').AsString);
+    //  DataModbpl.pack.CallProcedure('edittransaction',[
+                                 //    Azips2.DBGrid1.DataSource.DataSet.FieldByName('id').AsInteger
+                                 //             ]);
+
+
+            //redakte
+
+
+    Azips2.DBGrid1.DataSource.DataSet.Refresh;
+ShowMessage('Koçürmə yadda saxlanıldı!');
+
+end;
+
+procedure Tazips.Button2Click(Sender: TObject);
+begin
+template:=Ttemplate.Create(nil);
+template.ShowModal;
+end;
+
+procedure Tazips.Button3Click(Sender: TObject);
+begin
+
+
+DataModbpl.pack.CallProcedure('savetemplate',[DateTimePicker1.DateTime,
+                                              referens.Text,
+                                              SearchEdit1.Text,
+                                              reciverbic.Text,
+                                              SearchCombo2.Text,
+                                              edit2.Text,
+                                              edit3.Text,
+                                              Edit4.Text,
+                                              OF70_RichEdit.Text,
+                                              OF72_RichEdit.Text
+                                              ]);
+ShowMessage('Şablon yadda saxlanıldı!');
+end;
+
+procedure Tazips.DBLookupComboBox1Enter(Sender: TObject);
+begin
+//DBLookupComboBox2.Text:=DataModbpl.banks.FieldByName('name').AsString;
+end;
+
+procedure Tazips.DBLookupComboBox2Enter(Sender: TObject);
+begin
+//DBLookupComboBox1.Text:=DataModbpl.banks.FieldByName('bankcode').AsString;
+end;
+
+procedure Tazips.FormActivate(Sender: TObject);
+begin
+//ShowMessage(x);
+DataModbpl.acount.Close;
+DataModbpl.acount.SetVariable('VX',x);
+DataModbpl.acount.Open;
+SearchEdit1.ListSource:=nil;
+SearchEdit1.ListSource:=DataModbpl.acountsource;
+//ShowMessage(DataModbpl.acount.FieldByName('acc_no').AsString);
+
+end;
+
+procedure Tazips.FormCreate(Sender: TObject);
+var
+i:integer;
+begin
+//DataModbpl:=TDataModbpl.Create(nil);
+DataModbpl.acount.Close;
+DataModbpl.acount.SetVariable('VX',x);
+DataModbpl.acount.Open;
+DataModbpl.banks.Open;
+DataModbpl.banks.First;
+for i := 1 to DataModbpl.banks.RecordCount do
+begin
+  SearchCombo2.Items[i]:=DataModbpl.banks.FieldByName('name').AsString;
+  DataModbpl.banks.Next;
+end;
+ DataModbpl.banks.First;
+DateTimePicker1.DateTime:=date;
+
+end;
+
+
+procedure Tazips.FormShow(Sender: TObject);
+begin
+DataModbpl.acount.Close;
+DataModbpl.acount.SetVariable('VX',strtoint(x));
+DataModbpl.acount.Open;
+end;
+
+function GetRichEditLine2(RE : TRichEdit) : string;
+ var
+   A : array [0..5] of String;
+   s, s_temp : String;
+   i : Byte;
+   R :integer;
+   l_first :integer;
+
+ begin
+   l_first := length(re.Text);
+   SendMessage(re.Handle, EM_GETSEL, Longint(@R), 0);
+   s:='';
+   for i:=0 to re.Lines.Count do
+   if trim(re.Lines[i])<>'' then
+   begin
+      case  i of
+      	0: begin s_temp:=re.Lines[i];  if pos('/BNF/',s_temp)>0 then begin delete(s_temp,1,5);  r:=r-5;  end; s :=s +s_temp; end;
+         1: begin s_temp:=re.Lines[i];  if pos('//',s_temp)>0 then begin delete(s_temp,1,2);  r:=r-2;  end; s :=s +s_temp; end;
+         2: begin s_temp:=re.Lines[i];  if pos('//',s_temp)>0 then begin delete(s_temp,1,2);  r:=r-2;  end; s :=s +s_temp; end;
+         3: begin s_temp:=re.Lines[i];  if pos('//',s_temp)>0 then begin delete(s_temp,1,2);  r:=r-2;  end; s :=s +s_temp; end;
+         4: begin s_temp:=re.Lines[i];  if pos('//',s_temp)>0 then begin delete(s_temp,1,2);  r:=r-2;  end; s :=s +s_temp; end;
+         5: begin s_temp:=re.Lines[i];  if pos('//',s_temp)>0 then begin delete(s_temp,1,2);  r:=r-2;  end; s :=s +s_temp; end;
+      end;
+   end;
+
+   for i :=0 to 5 do
+   begin
+      case  i of
+      	0: if copy(s ,1, 30)<>''   then begin s_temp:='/BNF/'+copy(s ,1, 30); A[i] :=s_temp; r:=r+5;   end;
+         1: if copy(s ,31, 33)<>''  then begin s_temp:='//'+copy(s ,31, 33);   A[i] :=s_temp; r:=r+2;   end;
+         2: if copy(s ,64, 33)<>''  then begin s_temp:='//'+copy(s ,64, 33);   A[i] :=s_temp; r:=r+2;   end;
+         3: if copy(s ,97, 33)<>''  then begin s_temp:='//'+copy(s ,97, 33);   A[i] :=s_temp; r:=r+2;   end;
+         4: if copy(s ,130, 33)<>'' then begin s_temp:='//'+copy(s ,130, 33);  A[i] :=s_temp; r:=r+2;   end;
+         5: if copy(s ,163, 27)<>'' then begin s_temp:='//'+copy(s ,163, 27);  A[i] :=s_temp; r:=r+2;   end;
+      end;
+
+   end;
+
+   re.Clear;
+   for i :=0 to 5 do
+   if A[i] <> '' then
+   re.Lines.Add(A[i]);
+
+
+   if (r in [37])  and (l_first>length(re.Text)) then begin R:=r-2; end;
+   if (r in [74])  and (l_first>length(re.Text)) then begin R:=r-2; end;
+   if (r in [111]) and (l_first>length(re.Text)) then begin R:=r-2; end;
+   if (r in [148]) and (l_first>length(re.Text)) then begin R:=r-2; end;
+   if (r in [185]) and (l_first>length(re.Text)) then begin R:=r-2; end;
+
+   if (r in [36..38])   and (l_first<=length(re.Text)) then  R:=40;
+   if (r in [73..75])   and (l_first<=length(re.Text)) then  R:=77;
+   if (r in [110..112]) and (l_first<=length(re.Text)) then  R:=114;
+   if (r in [147..149]) and (l_first<=length(re.Text)) then  R:=151;
+   if (r in [184..186]) and (l_first<=length(re.Text)) then  R:=188;
+
+   if (l_first>length(re.Text)) and (length(re.Text) in [35..38])   and not(r in [35..38])   then  R:=r+2;
+   if (l_first>length(re.Text)) and (length(re.Text) in [72..75])   and not(r in [72..75])   then  R:=r+2;
+   if (l_first>length(re.Text)) and (length(re.Text) in [109..112]) and not(r in [109..112]) then  R:=r+2;
+   if (l_first>length(re.Text)) and (length(re.Text) in [146..149]) and not(r in [146..149]) then  R:=r+2;
+   if (l_first>length(re.Text)) and (length(re.Text) in [183..186]) and not(r in [183..186]) then  R:=r+2;
+
+   SendMessage(RE.Handle, EM_SETSEL,R, R);
+ end;
+
+
+procedure Tazips.OF70_RichEditChange(Sender: TObject);
+begin
+GetRichEditLine2(OF72_RichEdit);
+end;
+
+procedure Tazips.OF70_RichEditKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+  var r: Longint;
+begin
+ SendMessage(OF72_RichEdit.Handle, EM_GETSEL, Longint(@R), 0);
+
+   if (r in [0..4]) and (key in [vk_delete])  then begin key:=0;  end;
+   if (r in [1..5]) and (key in [vk_back])  then begin key:=0;  end;
+   if (r in [35,72,109,146,183]) and (key in [vk_delete])  then begin key:=0;  end;
+   if (r in [36..38,73..75,110..112,147..149,184..186]) and (key in [vk_delete, vk_back])  then begin key:=0;  end;
+   if (r in [39,76,113,150,187]) and (key in [ vk_back])  then begin key:=0;  end;
+
+   if  length(trim((Sender as TRichEdit).Text))=0 then isEmpty:=true else isEmpty :=false;
+   if  (length(trim((Sender as TRichEdit).Text))>216) and not(key  in [vk_delete, vk_back]) then key:=0;
+
+end;
+
+procedure Tazips.OF70_RichEditKeyPress(Sender: TObject; var Key: Char);
+  var r : Longint;
+begin
+     if key=#13 then key:=#0;
+     SendMessage(OF72_RichEdit.Handle, EM_GETSEL, Longint(@R), 0);
+     if (r in [1..5])  then begin key:=#0;  end;
+
+     if (r in [35..38,72..75,109..112,146..149,183..186])and
+     ((OF72_RichEdit.Text[r-1]='/')or(OF72_RichEdit.Text[r+1]='/')) then key:=#0;
+
+end;
+ function GetRichEditLine(RE : TRichEdit) : string;
+ var
+   A : array [0..5] of String;
+   s: String;
+   i : Byte;
+   k : integer;
+   R :integer;
+   l_first :integer;
+ begin
+   l_first := length(re.Text);
+   SendMessage(re.Handle, EM_GETSEL, Longint(@R), 0);
+   s:='';
+   for i:=0 to re.Lines.Count do
+   if trim(re.Lines[i])<>'' then
+   s :=s +re.Lines[i];
+
+   k :=1;
+   for i :=0 to 3 do
+   begin
+      if copy(s ,k, 35)<>'' then A[i]:= copy(s ,k, 35);
+      k :=k + 35;
+   end;
+
+   re.Clear;
+   for i :=0 to 3 do
+   if A[i] <> '' then
+   re.Lines.Add(A[i]);
+
+
+
+   if (r=35)  and (l_first>=length(re.Text)) then  R:=r+2
+   else
+   if (((r-((r div 35)-1)*2) mod 35)=0) and (r<>0) and (l_first>=length(re.Text)) then R:=r+(r div 35)*2;
+   SendMessage(RE.Handle, EM_SETSEL,R, R);
+
+ end;
+
+
+procedure Tazips.OF72_RichEditChange(Sender: TObject);
+begin
+GetRichEditLine(OF70_RichEdit);
+end;
+
+procedure Tazips.OF72_RichEditKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if  (length(trim((Sender as TRichEdit).Text))>147) and not(key  in [vk_delete, vk_back]) then key:=0;
+end;
+
+procedure Tazips.OF72_RichEditKeyPress(Sender: TObject; var Key: Char);
+begin
+if key=#13 then key:=#0;
+end;
+
+procedure Tazips.reciverbicChange(Sender: TObject);
+begin
+if reciverbic.Text<>'' then
+                      begin
+DataModbpl.banks.Locate('bankcode',strtoint(reciverbic.Text),[loCaseInsensitive,loPartialKey]);
+SearchCombo2.Text:=DataModbpl.banks.FieldByName('name').AsString;
+end else
+SearchCombo2.Text:='';
+end;
+
+procedure Tazips.SearchCombo1Enter(Sender: TObject);
+begin
+SearchCombo2.Text:=DataModbpl.banks.FieldByName('name').AsString;
+end;
+
+procedure Tazips.SearchCombo5Change(Sender: TObject);
+begin
+DataModbpl.banks.Locate('name',SearchCombo2.Text,[loCaseInsensitive,loPartialKey]);
+
+reciverbic.Text:=DataModbpl.banks.FieldByName('bankcode').AsString;
+end;
+
+procedure Tazips.SearchCombo2DragDrop(Sender, Source: TObject; X, Y: Integer);
+begin
+reciverbic.Text:=DataModbpl.banks.FieldByName('bankcode').AsString;
+end;
+
+end.

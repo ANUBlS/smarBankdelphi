@@ -1,0 +1,85 @@
+unit DmBlackImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, OracleData, Oracle;
+
+type
+  TDmBlack = class(TDataModule)
+    MainDSet: TOracleDataSet;
+    MainDSrc: TDataSource;
+    Contry: TOracleDataSet;
+    CITIES: TOracleDataSet;
+    ContrySrc: TDataSource;
+    CITIESSrc: TDataSource;
+    MainDSetID: TFloatField;
+    MainDSetNAME: TStringField;
+    MainDSetLASTNAME: TStringField;
+    MainDSetMIDDLENAME: TStringField;
+    MainDSetDOC_TYPE: TIntegerField;
+    MainDSetDOC_SERIE: TStringField;
+    MainDSetDOC_NUM: TStringField;
+    MainDSetCITIZENSHIP: TIntegerField;
+    MainDSetADRS_STATE: TIntegerField;
+    MainDSetADRS_CITY: TIntegerField;
+    MainDSetADDRESS: TStringField;
+    MainDSetDOC_DATE: TDateTimeField;
+    MainDSetDOC_ORGAN: TStringField;
+    MainDSetGENDER: TIntegerField;
+    MainDSetDOC_PIN: TStringField;
+    OraclePackage1: TOraclePackage;
+    Doctype: TOracleDataSet;
+    DtypeDataSrc: TDataSource;
+    Sex: TOracleDataSet;
+    SexSrc: TDataSource;
+    Sysdat: TOracleDataSet;
+    SysDSrc: TDataSource;
+    MainDSetDOCTIP: TStringField;
+    MainDSetCONTRIES: TStringField;
+    MainDSetCITIES: TStringField;
+    DataSource1: TDataSource;
+    OracleDataSet1: TOracleDataSet;
+    OracleDataSet1ID: TFloatField;
+    OracleDataSet1CONTID: TFloatField;
+    OracleDataSet1CNTR_CODE: TIntegerField;
+    OracleDataSet1count_name: TStringField;
+    procedure DataModuleCreate(Sender: TObject);
+    procedure DataModuleDestroy(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  DmBlack: TDmBlack;
+  x:integer;
+implementation
+ uses sboapiDataModuleImpl;
+{$R *.DFM}
+
+procedure TDmBlack.DataModuleCreate(Sender: TObject);
+begin
+MainDSet.open;
+Contry.open;
+CITIES.open;
+Doctype.Open;
+sex.open;
+Sysdat.open;
+oracledataset1.open;
+end;
+
+procedure TDmBlack.DataModuleDestroy(Sender: TObject);
+begin
+Contry.close;
+CITIES.close;
+MainDSet.close;
+Doctype.close;
+sex.close;
+Sysdat.Close;
+oracledataset1.Close;
+end;
+
+end.

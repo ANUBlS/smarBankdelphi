@@ -1,0 +1,99 @@
+object WorldChekData: TWorldChekData
+  OldCreateOrder = False
+  Height = 333
+  Width = 684
+  object ods_lazytrans: TOracleDataSet
+    SQL.Strings = (
+      'select id,dat,ammount,k1,nvl(parentid,0) parentid,'
+      '(select acc_no from account where id=debt)as debt,'
+      
+        '(select acc_no from account where id=kredit)as kredit,name from ' +
+        'lazytransaction where k1 in(1,3)'
+      'and dat between :v_dat1 and :v_dat2')
+    Optimize = False
+    Variables.Data = {
+      04000000020000000E0000003A0056005F0044004100540031000C0000000000
+      0000000000000E0000003A0056005F0044004100540032000C00000000000000
+      00000000}
+    QBEDefinition.QBEFieldDefs = {
+      0500000008000000040000004900440001000000000006000000440041005400
+      0100000000000E00000041004D004D004F0055004E0054000100000000000800
+      000044004500420054000100000000000C0000004B0052004500440049005400
+      010000000000080000004E0041004D004500010000000000040000004B003100
+      0100000000001000000050004100520045004E00540049004400010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 64
+    Top = 32
+    object ods_lazytransID: TFloatField
+      FieldName = 'ID'
+    end
+    object ods_lazytransDAT: TDateTimeField
+      FieldName = 'DAT'
+    end
+    object ods_lazytransAMMOUNT: TFloatField
+      FieldName = 'AMMOUNT'
+    end
+    object ods_lazytransK1: TWideStringField
+      FieldName = 'K1'
+    end
+    object ods_lazytransDEBT: TWideStringField
+      FieldName = 'DEBT'
+      Size = 28
+    end
+    object ods_lazytransKREDIT: TWideStringField
+      FieldName = 'KREDIT'
+      Size = 28
+    end
+    object ods_lazytransNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 1000
+    end
+    object ods_lazytransPARENTID: TFloatField
+      FieldName = 'PARENTID'
+    end
+  end
+  object ods_cust: TOracleDataSet
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 176
+    Top = 32
+  end
+  object OracleDataSet3: TOracleDataSet
+    Optimize = False
+    Left = 280
+    Top = 40
+  end
+  object Dsrc_lazytrans: TDataSource
+    DataSet = ods_lazytrans
+    Left = 64
+    Top = 104
+  end
+  object dsrc_cust: TDataSource
+    Left = 160
+    Top = 104
+  end
+  object DataSource3: TDataSource
+    Left = 280
+    Top = 104
+  end
+  object ods_sysdat: TOracleDataSet
+    SQL.Strings = (
+      'select tek_dat from sysdat')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000010000000E000000540045004B005F00440041005400010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 440
+    Top = 40
+    object ods_sysdatTEK_DAT: TDateTimeField
+      FieldName = 'TEK_DAT'
+    end
+  end
+  object OracleQuery1: TOracleQuery
+    Session = sboapiDataModule.SBSession
+    Optimize = False
+    Left = 552
+    Top = 64
+  end
+end

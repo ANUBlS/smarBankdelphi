@@ -1,0 +1,37 @@
+unit DMProvisionsImpl;
+
+interface
+
+uses
+  SysUtils, Classes, DB, OracleData;
+
+type
+  TDMProvisions = class(TDataModule)
+    DSRPolisNo1: TDataSource;
+    DSRPolisNo2: TDataSource;
+    DSPolisNo1: TOracleDataSet;
+    DSPolisNo2: TOracleDataSet;
+    DSPolisNo1ID: TFloatField;
+    DSPolisNo1TYPE_ID: TFloatField;
+    DSPolisNo1POLICY_NUM: TWideStringField;
+    DSPolisNo2ID: TFloatField;
+    DSPolisNo2TYPE_ID: TFloatField;
+    DSPolisNo2POLICY_NUM: TWideStringField;
+    DSContracts: TOracleDataSet;
+    OracleDataSet2: TOracleDataSet;
+    DSRContracts: TDataSource;
+    DataSource2: TDataSource;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  DMProvisions: TDMProvisions;
+
+implementation
+
+{$R *.dfm}
+      uses sboapiDataModuleImpl,CommanParametrs;
+end.

@@ -1,0 +1,29 @@
+unit Datamodules;
+
+interface
+
+uses
+  SysUtils, Classes,sboapiDataModuleImpl, DB, OracleData,
+   Windows, Messages,   Graphics, Controls, Forms, Dialogs,
+   Oracle;
+
+type
+  TDataModule5 = class(TDataModule)
+    Paymentdata: TOracleDataSet;
+    Payment_source: TDataSource;
+    OracleDataSet1: TOracleDataSet;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  DataModule5: TDataModule5;
+
+implementation
+
+
+{$R *.dfm}
+
+end.

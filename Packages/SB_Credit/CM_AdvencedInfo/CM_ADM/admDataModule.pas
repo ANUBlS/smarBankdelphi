@@ -1,0 +1,144 @@
+unit admDataModule;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, OracleData, Oracle;
+
+type
+  TadmDM = class(TDataModule)
+    PluginsDataSet: TOracleDataSet;
+    PluginsDataSrc: TDataSource;
+    CM_ADMIN: TOraclePackage;
+    PluginsDataSetID: TFloatField;
+    PluginsDataSetPLUGINNAME: TWideStringField;
+    PluginsDataSetPARAMNAME: TWideStringField;
+    PluginsDataSetDESCRIPTION: TWideStringField;
+    CredUsersDataSet: TOracleDataSet;
+    CredUsersDataSrc: TDataSource;
+    CredUsersDataSetID: TFloatField;
+    CredUsersDataSetSYSTEMID: TFloatField;
+    CredUsersDataSetNAME: TWideStringField;
+    SmartUsersDataSet: TOracleDataSet;
+    SmartUsersDataSrc: TDataSource;
+    SmartUsersDataSetID: TFloatField;
+    SmartUsersDataSetNAME: TWideStringField;
+    LAZIM: TOracleDataSet;
+    LAZIMDESCRIPTION: TWideStringField;
+    LAZIMPLUGINNAME: TWideStringField;
+    LAZIMPARAMNAME: TWideStringField;
+    LAZIMGRANTHAV: TFloatField;
+    UserGrantsDataSrc: TDataSource;
+    OtherGrantsDataSet: TOracleDataSet;
+    OtherGrantsDataSrc: TDataSource;
+    UserGrantsDataSet: TOracleDataSet;
+    UserGrantsDataSetID: TFloatField;
+    UserGrantsDataSetDESCRIPTION: TWideStringField;
+    OtherGrantsDataSetID: TFloatField;
+    OtherGrantsDataSetDESCRIPTION: TWideStringField;
+    GroupsDataSet: TOracleDataSet;
+    GroupsDataSrc: TDataSource;
+    GroupsDataSetID: TFloatField;
+    GroupsDataSetNAME: TWideStringField;
+    GroupsDataSetGROUPTYPE: TWideStringField;
+    GroupManagerDataSet: TOracleDataSet;
+    GroupManagerDataSrc: TDataSource;
+    UserInGroupDataSet: TOracleDataSet;
+    UserInGroupDataSrc: TDataSource;
+    UserInGroupDataSetUSERTYPE: TWideStringField;
+    UserInGroupDataSetGROUPNAME: TWideStringField;
+    UserInGroupDataSetGROUPTYPE: TWideStringField;
+    UserInGroupDataSetGROUPDESC: TWideStringField;
+    GroupsDataSetDESCRIPTION: TWideStringField;
+    GroupTypeDataSet: TOracleDataSet;
+    GroupTypeDataSrc: TDataSource;
+    GroupTypeDataSetID: TFloatField;
+    GroupTypeDataSetNAME: TWideStringField;
+    GroupUsersDataSet: TOracleDataSet;
+    GroupUsersDataSrc: TDataSource;
+    GroupUsersDataSetNAME: TWideStringField;
+    GroupUsersDataSetDESCRIPTION: TWideStringField;
+    GroupUsersDataSetGROUPID: TFloatField;
+    UserInGroupDataSetUSERID: TFloatField;
+    GrMasterUsers: TOracleDataSet;
+    GrMasterUsersNAME: TWideStringField;
+    GrMasterUsersGROUPID: TFloatField;
+    GrSlaveUsers: TOracleDataSet;
+    GrNeutralUsers: TOracleDataSet;
+    GrSlaveUsersNAME: TWideStringField;
+    GrSlaveUsersGROUPID: TFloatField;
+    GrNeutralUsersGROUPID: TFloatField;
+    CredUsersDataSetCREATEDATE: TDateTimeField;
+    CredUsersDataSetDESCRIPTION: TWideStringField;
+    CredUsersDataSetFULLNAME: TWideStringField;
+    CredUsersDataSetFILIAL: TWideStringField;
+    PluginsDataSetTYPEID: TFloatField;
+    CredUsersDataSetTYPEID: TFloatField;
+    PluginsDataSetNAME: TWideStringField;
+    PluginTypesDataSet: TOracleDataSet;
+    PluginTypesDataSetID: TFloatField;
+    PluginTypesDataSetNAME: TWideStringField;
+    PluginTypesDataSrc: TDataSource;
+    UserTypeDataSet: TOracleDataSet;
+    UserTypeDataSrc: TDataSource;
+    UserTypeDataSetTYPEID: TFloatField;
+    UserTypeDataSetNAME: TWideStringField;
+    AdditionSrcGr: TDataSource;
+    AdditionSrcGRDSet: TOracleDataSet;
+    AdditionDSet: TOracleDataSet;
+    AdditionSrc: TDataSource;
+    GrNeutralUsersNAME: TWideStringField;
+    sysdat: TOracleDataSet;
+    sysdatTEK_DAT: TDateTimeField;
+    sysdatPRED_DAT: TDateTimeField;
+    sysdatARC_DAY: TDateTimeField;
+    sysdatCLOSE: TIntegerField;
+    OracleDataSet1: TOracleDataSet;
+    DataSource1: TDataSource;
+    OracleDataSet1ID: TFloatField;
+    OracleDataSet1NAME: TWideStringField;
+    OracleDataSet2: TOracleDataSet;
+    OracleDataSet2USER1: TWideStringField;
+    OracleDataSet2OLDPARAM: TWideStringField;
+    OracleDataSet2NEWPARAM: TWideStringField;
+    OracleDataSet2POLYA: TWideStringField;
+    OracleDataSet2SYSDAT: TDateTimeField;
+    OracleDataSet2NUM: TWideStringField;
+    OracleDataSet2MUQDAT: TDateTimeField;
+    OracleDataSet2HDATE: TDateTimeField;
+    procedure DataModuleCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    procedure RefreshDataSet(DataSet: TDataSet);
+  end;
+
+var
+  admDM: TadmDM;
+
+implementation
+
+{$R *.DFM}
+
+uses sboapiDataModuleImpl;
+
+procedure TadmDM.RefreshDataSet;
+begin          
+  DataSet.Close;
+  DataSet.Open;
+
+end;
+
+procedure TadmDM.DataModuleCreate(Sender: TObject);
+var
+i: integer;
+begin
+  for i:= 0 to ComponentCount-1 do
+    if (Components[i].Tag = 1) then begin
+      //(Components[i] as TOracleDataSet).Session := CMDataModule.CMSession;
+      (Components[i] as TOracleDataSet).Open;
+    end;
+end;
+
+end.

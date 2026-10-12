@@ -1,0 +1,251 @@
+unit AftoInfiIpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, Mask, DBCtrlsEh, DB, OracleData, ExtCtrls, DBGridEh,
+  DBLookupEh, DBGridEhGrouping, GridsEh,CommonDecls;
+
+type
+  TAfForm = class(TForm)
+    ods_avto_qizl: TOracleDataSet;
+    ods_avto_qizlGUR_TYPE: TFloatField;
+    ods_avto_qizlPAR1: TWideStringField;
+    ods_avto_qizlPAR2: TWideStringField;
+    ods_avto_qizlPAR3: TWideStringField;
+    ods_avto_qizlPAR4: TWideStringField;
+    ods_avto_qizlPAR5: TWideStringField;
+    ods_avto_qizlPAR6: TWideStringField;
+    ods_avto_qizlPAR7: TWideStringField;
+    ods_avto_qizlPAR8: TWideStringField;
+    ods_avto_qizlPAR9: TWideStringField;
+    ods_avto_qizlPAR10: TWideStringField;
+    ods_avto_qizlPAR11: TWideStringField;
+    ods_avto_qizlPAR12: TWideStringField;
+    Panel1: TPanel;
+    Label10: TLabel;
+    DBEditEh1: TDBEditEh;
+    DBEditEh3: TDBEditEh;
+    Label8: TLabel;
+    DBEditEh5: TDBEditEh;
+    Label6: TLabel;
+    Label3: TLabel;
+    DBEditEh7: TDBEditEh;
+    Label5: TLabel;
+    Label7: TLabel;
+    DBEditEh6: TDBEditEh;
+    DBEditEh8: TDBEditEh;
+    Label4: TLabel;
+    Label2: TLabel;
+    DBEditEh10: TDBEditEh;
+    DBEditEh4: TDBEditEh;
+    Label1: TLabel;
+    Label9: TLabel;
+    Panel2: TPanel;
+    Button1: TButton;
+    Panel3: TPanel;
+    DBLookupComboboxEh1: TDBLookupComboboxEh;
+    Ods_goldstandart: TOracleDataSet;
+    DataSource1: TDataSource;
+    Label11: TLabel;
+    Edit1: TEdit;
+    Ods_goldstandartID: TFloatField;
+    Ods_goldstandartSTANDART: TFloatField;
+    Ods_goldstandartDESCRIPTION: TWideStringField;
+    Ods_goldstandartPRICE: TFloatField;
+    Ods_goldstandartPERCENT: TFloatField;
+    Edit2: TEdit;
+    Label12: TLabel;
+    Memo1: TMemo;
+    Label13: TLabel;
+    Edit3: TEdit;
+    ods_gold: TOracleDataSet;
+    dsrc_gold: TDataSource;
+    DBGridEh1: TDBGridEh;
+    Label14: TLabel;
+    Label15: TLabel;
+    Button2: TButton;
+    procedure Button1Click(Sender: TObject);
+    procedure FormClear(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure DBLookupComboboxEh1CloseUp(Sender: TObject; Accept: Boolean);
+    procedure DBEditEh10Change(Sender: TObject);
+    procedure DBEditEh5Change(Sender: TObject);
+    procedure DBEditEh5KeyPress(Sender: TObject; var Key: Char);
+    procedure Edit1KeyPress(Sender: TObject; var Key: Char);
+    procedure DBEditEh7KeyPress(Sender: TObject; var Key: Char);
+    procedure DBEditEh10KeyPress(Sender: TObject; var Key: Char);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure DBEditEh4KeyPress(Sender: TObject; var Key: Char);
+    procedure FormCreate(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  AfForm: TAfForm;
+
+implementation
+
+{$R *.dfm}
+   uses DmImpl,sboapiDataModuleImpl;
+
+  procedure TAfForm.FormClear(Sender: TObject);
+begin
+   DBEditEh1.Clear;
+   DBLookupComboboxEh1.Value:=-1;
+   edit1.Clear;
+   Edit2.Clear;
+   DBEditEh6.Clear;
+   DBEditEh3.Clear;
+   DBEditEh8.Clear;
+   DBEditEh4.Clear;
+   DBEditEh5.Clear;
+   DBEditEh10.Clear;
+   DBEditEh7.Clear;
+   Memo1.Clear;
+   Edit3.Clear;
+   DBEditEh10.Value:=0;
+   DBEditEh5.Enabled:=false;
+   DBEditEh10.Enabled:=false;
+end;
+
+procedure TAfForm.Button1Click(Sender: TObject);
+var
+count: integer;
+begin
+  showmessage(GurDm.MainDSet.FieldByName('cardid').AsString);
+if GurDm.MainDSet.FieldByName('cardid').AsInteger=0 then
+    count:=1
+    else
+    count:=GurDm.MainDSet.FieldByName('cardid').AsInteger ;
+
+GurDm.Guarante.CallProcedure('Guarantee_AddGold' ,
+                              [Get_SelectedCrdID,
+                               count,
+                               DBEditEh1.Text,
+                               DBLookupComboboxEh1.Value,
+                               edit1.Text,
+                               Edit2.Text,
+                               DBEditEh6.Text,
+                               DBEditEh3.Text,
+                               DBEditEh8.Text,
+                               DBEditEh4.Text,
+                               DBEditEh5.Text,
+                               DBEditEh10.Text,
+                               DBEditEh7.Text,
+                               Memo1.Text,
+                               Edit3.Text]);
+              ods_gold.Refresh;
+              FormClear(Sender);
+
+end;
+
+procedure TAfForm.Button2Click(Sender: TObject);
+begin
+AfForm.Close;
+end;
+
+procedure TAfForm.DBEditEh10Change(Sender: TObject);
+begin
+if (DBEditEh5.text<>'')and(DBEditEh10.text<>'') then
+  begin
+DBEditEh7.Text:=DBEditEh5.Value-DBEditEh10.Value;
+DBEditEh3.Text:=DBEditEh7.Value*edit2.text;
+DBEditEh8.Text:=inttostr( round((DBEditEh3.Value*edit1.text)/100+((DBEditEh3.Value*edit1.text)/100*0.44)));
+if DBEditEh7.Value<0 then
+   DBEditEh7.Color:=clred
+   else
+   DBEditEh7.Color:=clGray;
+end;
+end;
+
+procedure TAfForm.DBEditEh10KeyPress(Sender: TObject; var Key: Char);
+begin
+if not (key in['0'..'9',decimalseparator,#8]) then key:=#0;
+end;
+
+procedure TAfForm.DBEditEh4KeyPress(Sender: TObject; var Key: Char);
+begin
+if not (key in['0'..'9',decimalseparator,#8]) then key:=#0;
+end;
+
+procedure TAfForm.DBEditEh5Change(Sender: TObject);
+begin
+
+ DBEditEh7.Clear;
+
+if ( DBEditEh10.text<>'') and (DBEditEh5.text<>'')  then
+begin
+DBEditEh7.Text:=DBEditEh5.Value-DBEditEh10.Value;
+DBEditEh3.Text:=DBEditEh7.Value*edit2.text;
+DBEditEh8.Text:=inttostr( round((DBEditEh3.Value*edit1.text)/100+((DBEditEh3.Value*edit1.text)/100*0.44)));
+if DBEditEh7.Value<0 then
+   DBEditEh7.Color:=clred
+   else
+   DBEditEh7.Color:=clGray;
+end;
+end;
+
+procedure TAfForm.DBEditEh5KeyPress(Sender: TObject; var Key: Char);
+
+begin
+if not (key in['0'..'9',decimalseparator,#8]) then key:=#0;
+end;
+
+procedure TAfForm.DBEditEh7KeyPress(Sender: TObject; var Key: Char);
+begin
+if not (key in['0'..'9',decimalseparator,#8]) then key:=#0;
+end;
+
+procedure TAfForm.DBLookupComboboxEh1CloseUp(Sender: TObject; Accept: Boolean);
+begin
+  DBEditEh5.Enabled:=true;
+  DBEditEh10.Enabled:=true;
+  Edit1.Text:=Ods_goldstandartPERCENT.AsString;
+  Edit2.Text:=Ods_goldstandartPRICE.AsString;
+
+  if DBEditEh7.Text<>'' then
+  begin
+  DBEditEh3.Text:=DBEditEh7.Value*edit2.text;
+  DBEditEh8.Text:=inttostr( round((DBEditEh3.Value*edit1.text)/100+((DBEditEh3.Value*edit1.text)/100*0.44)));
+  end;
+end;
+
+procedure TAfForm.Edit1KeyPress(Sender: TObject; var Key: Char);
+begin
+if not (key in['0'..'9',decimalseparator,#8]) then key:=#0;
+end;
+
+procedure TAfForm.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+   FormClear(Sender);
+end;
+
+procedure TAfForm.FormCreate(Sender: TObject);
+begin
+DBEditEh7.Color:=clGray;
+DBEditEh3.Color:=clGray;
+DBEditEh8.Color:=clGray;
+end;
+
+procedure TAfForm.FormShow(Sender: TObject);
+begin
+ DBEditEh5.Enabled:=false;
+  DBEditEh10.Enabled:=false;
+
+ods_gold.Close;
+ods_gold.SetVariable('v_crid',Get_SelectedCrdID);
+ods_gold.SetVariable('v_cardid',GurDm.MainDSet.FieldByName('cardid').AsInteger);
+ods_gold.Open;
+
+ods_avto_qizl.Close;
+ods_avto_qizl.SetVariable('v_gur_type',GurDm.pledgsortsGUR_TYPE.AsInteger );
+ods_avto_qizl.Open;
+end;
+
+end.

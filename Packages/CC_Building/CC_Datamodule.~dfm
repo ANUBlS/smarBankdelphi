@@ -1,0 +1,121 @@
+object CC_DataMod: TCC_DataMod
+  OldCreateOrder = False
+  OnCreate = DataModuleCreate
+  Left = 378
+  Top = 149
+  Height = 480
+  Width = 696
+  object CC_OP: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'cc_general'
+    Left = 32
+    Top = 24
+  end
+  object CC_Company: TOracleDataSet
+    Tag = 1
+    SQL.Strings = (
+      'select * from cc_companies order by :title')
+    Variables.Data = {
+      0300000001000000060000003A5449544C450100000003000000696400000000
+      00}
+    QBEDefinition.QBEFieldDefs = {
+      040000000200000002000000494401000000000009000000434F4D505F4E414D
+      45010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 96
+    Top = 24
+    object CC_CompanyID: TIntegerField
+      FieldName = 'ID'
+    end
+    object CC_CompanyCOMP_NAME: TStringField
+      FieldName = 'COMP_NAME'
+      Size = 50
+    end
+  end
+  object CC_Com_Data: TDataSource
+    DataSet = CC_Company
+    Left = 176
+    Top = 24
+  end
+  object CC_build_Data: TDataSource
+    DataSet = CC_building
+    Left = 336
+    Top = 24
+  end
+  object CC_Flat: TOracleDataSet
+    SQL.Strings = (
+      
+        'select  distinct id, bld_id, flatnumber, entrance, ffloor, rooms' +
+        ', area, price1,'
+      
+        '       pricegen, buyer, userid, byr_name, buyer_status  from cc_' +
+        'flat order by id')
+    Session = sboapiDataModule.SBSession
+    Left = 32
+    Top = 96
+  end
+  object CC_Flat_Data: TDataSource
+    DataSet = CC_Flat
+    Left = 112
+    Top = 96
+  end
+  object CC_Buyer_Flat: TOracleDataSet
+    SQL.Strings = (
+      
+        'select id, code, bld_id, flatnumber, entrance, ffloor, rooms, ar' +
+        'ea, price1,'
+      
+        '       pricegen, buyer, userid,CC_general.get_buyername(buyer) a' +
+        's Buyer_status from cc_flats'
+      'where Bld_ID = :Bld_ID'
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      'order by :title')
+    Variables.Data = {
+      0300000002000000060000003A5449544C450100000003000000696400000000
+      00070000003A424C445F4944030000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      040000000D00000002000000494401000000000006000000424C445F49440100
+      000000000A000000464C41544E554D42455201000000000008000000454E5452
+      414E43450100000000000600000046464C4F4F5201000000000005000000524F
+      4F4D530100000000000400000041524541010000000000060000005052494345
+      3101000000000008000000505249434547454E01000000000005000000425559
+      4552010000000000060000005553455249440100000000000C00000042555945
+      525F53544154555301000000000004000000434F4445010000000000}
+    Master = CC_building
+    MasterFields = 'ID'
+    DetailFields = 'BLD_ID'
+    Session = sboapiDataModule.SBSession
+    Filtered = True
+    Left = 208
+    Top = 120
+  end
+  object CC_Buyer_FlatData: TDataSource
+    DataSet = CC_Buyer_Flat
+    Left = 296
+    Top = 88
+  end
+  object CC_building: TOracleDataSet
+    SQL.Strings = (
+      'select * from cc_buildings'
+      'where'
+      'comp_id=:comp_id'
+      'order by  :title')
+    Variables.Data = {
+      0300000002000000080000003A434F4D505F4944030000000000000000000000
+      060000003A5449544C45010000000300000069640000000000}
+    Master = CC_Company
+    MasterFields = 'id'
+    DetailFields = 'COMP_ID'
+    Session = sboapiDataModule.SBSession
+    Left = 256
+    Top = 24
+  end
+end

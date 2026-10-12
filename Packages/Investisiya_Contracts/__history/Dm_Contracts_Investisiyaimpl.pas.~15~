@@ -1,0 +1,107 @@
+unit Dm_Contracts_Investisiyaimpl;
+
+interface
+
+uses
+  SysUtils, Classes, DB, OracleData, Oracle;
+
+type
+  TDm_Contracts_Investisiya = class(TDataModule)
+    Dsinvest_type: TOracleDataSet;
+    Dsrinvest_type: TDataSource;
+    Dsinvest_typeID: TFloatField;
+    Dsinvest_typeNAME: TWideStringField;
+    ODSAvalute: TOracleDataSet;
+    ODSAvaluteVALUTE: TIntegerField;
+    ODSAvaluteVAL_NAME: TWideStringField;
+    ODSAvaluteVALU_NAME: TWideStringField;
+    ODSAvaluteVALU_SHORT: TWideStringField;
+    DSAvalute: TDataSource;
+    Dscust: TOracleDataSet;
+    Dsrcust: TDataSource;
+    DsSysdat: TOracleDataSet;
+    DsSysdatTEK_DAT: TDateTimeField;
+    DsSysdatPRED_DAT: TDateTimeField;
+    DsSysdatARC_DAY: TDateTimeField;
+    DsSysdatCLOSE: TIntegerField;
+    DscustID: TIntegerField;
+    DscustNAME: TWideStringField;
+    Dsr_invest_time: TDataSource;
+    Ds_invest_time: TOracleDataSet;
+    Ds_invest_timeID: TFloatField;
+    Ds_invest_timeNAME: TWideStringField;
+    Ds_invest_contracts: TOracleDataSet;
+    Dsr_invest_contracts: TDataSource;
+    Ds_invest_contractsID: TFloatField;
+    Ds_invest_contractsINVEST_TYPE_ID: TFloatField;
+    Ds_invest_contractsBEGIN_DATE: TDateTimeField;
+    Ds_invest_contractsEND_DATE: TDateTimeField;
+    Ds_invest_contractsAMMOUNT: TFloatField;
+    Ds_invest_contractsKLI_ID: TFloatField;
+    Ds_invest_contractsCONTRACT_NAME: TWideStringField;
+    Ds_invest_contractsINVEST_TIME: TIntegerField;
+    Ds_invest_contractsVALUTE_ID: TFloatField;
+    Ds_invest_contractsSTATUS: TIntegerField;
+    Ds_invest_contractsPERCENT: TIntegerField;
+    Ds_invest_contractsCLOSE_PREFIX: TIntegerField;
+    Ds_invest_contractsFILIAL: TIntegerField;
+    Ds_invest_contractsMAIN_ACC_ID: TFloatField;
+    Ds_invest_contractsPER_ACC_ID: TFloatField;
+    Ds_invest_contractsPER_AMMOUNT: TFloatField;
+    DSFilial: TOracleDataSet;
+    DSFilialID: TFloatField;
+    DSFilialNAME: TWideStringField;
+    DSFilialKOD_FILIAL: TWideStringField;
+    DSRFilial: TDataSource;
+    Ds_Main_Account: TOracleDataSet;
+    Ds_Main_AccountID: TFloatField;
+    Ds_Main_AccountKLI_ID: TFloatField;
+    Ds_Main_AccountACC_NO: TWideStringField;
+    Ds_Main_AccountNAME: TWideStringField;
+    Dsr_Main_Account: TDataSource;
+    Ds_per_account: TOracleDataSet;
+    FloatField1: TFloatField;
+    FloatField2: TFloatField;
+    WideStringField1: TWideStringField;
+    WideStringField2: TWideStringField;
+    Dsr_per_account: TDataSource;
+    ds_ostat: TOracleDataSet;
+    Ds_per_accountBAL_CN1: TFloatField;
+    Ds_Main_AccountBAL_CN1: TFloatField;
+    Dsr_cur_account: TDataSource;
+    Ds_cur_account: TOracleDataSet;
+    FloatField3: TFloatField;
+    FloatField4: TFloatField;
+    WideStringField3: TWideStringField;
+    WideStringField4: TWideStringField;
+    FloatField5: TFloatField;
+    procedure DataModuleCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Dm_Contracts_Investisiya: TDm_Contracts_Investisiya;
+
+implementation
+
+{$R *.dfm}
+uses  CommanParametrs,sboapiDataModuleImpl;
+
+procedure TDm_Contracts_Investisiya.DataModuleCreate(Sender: TObject);
+begin
+Dsinvest_type.Open;
+Dscust.Open;
+Ds_invest_contracts.Open;
+ODSAvalute.Open;
+DsSysdat.Open;
+Ds_invest_time.Open;
+DSFilial.Open;
+Ds_Main_Account.Open;
+Ds_per_account.Open;
+Ds_cur_account.Open;
+end;
+
+end.

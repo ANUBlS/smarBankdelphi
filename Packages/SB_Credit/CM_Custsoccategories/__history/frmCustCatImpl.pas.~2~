@@ -1,0 +1,73 @@
+unit frmCustCatImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  NLSLocalizer, Db, OracleData, DBCtrls, ExtCtrls, Grids, DBGridEh;
+
+type
+  TFrmCustcat = class(TForm)
+    DBGridEh1: TDBGridEh;
+    Panel1: TPanel;
+    DBNavigator1: TDBNavigator;
+    CustCatDataSet: TOracleDataSet;
+    DatSrcCusCat: TDataSource;
+    CustCatDataSetID: TFloatField;
+    CustCatDataSetNAME: TWideStringField;
+    CustCatDataSetKOD: TWideStringField;
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+    procedure FormShow(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmCustcat: TFrmCustcat;
+
+  procedure InitPlugin(S:String);export;
+
+implementation
+
+{$R *.DFM}
+
+uses CMOracleAPIDataModuleImpl,CommonDecls;
+
+
+procedure InitPlugin(S:String);export;
+begin
+   FrmCustcat.ShowModal
+end;
+
+exports
+  InitPlugin;
+
+procedure TFrmCustcat.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+   if ord(Key) = VK_ESCAPE then close
+end;
+
+procedure TFrmCustcat.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+   Resize := False
+end;
+
+procedure TFrmCustcat.FormShow(Sender: TObject);
+begin
+   CustCatDataSet.Open;
+end;
+
+procedure TFrmCustcat.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  CustCatDataSet.CloseAll;
+end;
+
+initialization
+    FrmCustcat := TFrmCustcat.Create(CommonApplication)
+end.

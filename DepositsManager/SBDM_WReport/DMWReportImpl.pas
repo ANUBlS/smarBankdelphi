@@ -1,0 +1,74 @@
+unit DMWReportImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, OracleData;
+
+type
+  TDMWReport = class(TDataModule)
+    TemplatesDataSet: TOracleDataSet;
+    TemplatesDataSetID: TFloatField;
+    TemplatesDataSetPATH: TStringField;
+    TemplatesDataSetNAME: TStringField;
+    TemplatesDataSrc: TDataSource;
+    DepositInfoDataSet: TOracleDataSet;
+    DepositInfoDataSrc: TDataSource;
+    BookmarksDataSet: TOracleDataSet;
+    BookmarksDataSrc: TDataSource;
+    FieldsDataSet: TOracleDataSet;
+    FieldsDataSetID: TFloatField;
+    FieldsDataSetFIELDNAME: TStringField;
+    FieldsDataSetDESCRIPTION: TStringField;
+    FieldsDataSrc: TDataSource;
+    ReplaceDataSet: TOracleDataSet;
+    DepositInfoDataSetID: TFloatField;
+    DepositInfoDataSetCUSTOMERID: TFloatField;
+    DepositInfoDataSetNAME: TStringField;
+    DepositInfoDataSetOPENDATE: TDateTimeField;
+    DepositInfoDataSetCLOSEDATE: TDateTimeField;
+    DepositInfoDataSetAMOUNT: TFloatField;
+    DepositInfoDataSetCONTRACTNO: TStringField;
+    DepositInfoDataSetINTEREST: TFloatField;
+    DepositInfoDataSetOVERDUEINTEREST: TFloatField;
+    DepositInfoDataSetPERSONALTYPE: TStringField;
+    DepositInfoDataSetSHORT_NAME: TStringField;
+    DepositInfoDataSetCONTRACT_PERIOD: TFloatField;
+    DepositInfoDataSetCITY: TStringField;
+    DepositInfoDataSetPHONE_W: TStringField;
+    DepositInfoDataSetPHONE_H: TStringField;
+    DepositInfoDataSetPHONE_M: TStringField;
+    DepositInfoDataSetPASSPORT: TStringField;
+    DepositInfoDataSetPASPDATE: TDateTimeField;
+    DepositInfoDataSetCONTRACTACCID: TStringField;
+    DepositInfoDataSetSONAME: TStringField;
+    DepositInfoDataSetCINF_NAME: TStringField;
+    DepositInfoDataSetLASTNAME: TStringField;
+    procedure DataModuleCreate(Sender: TObject);
+    procedure DataModuleDestroy(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  DMWReport: TDMWReport;
+
+implementation
+
+{$R *.DFM}
+uses sboapiDatamoduleImpl;
+
+procedure TDMWReport.DataModuleCreate(Sender: TObject);
+begin
+   TemplatesDataSet.Open
+end;
+
+procedure TDMWReport.DataModuleDestroy(Sender: TObject);
+begin
+   TemplatesDataSet.CloseAll
+end;
+
+end.

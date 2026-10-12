@@ -1,0 +1,22 @@
+library MainResponsibilityProj;
+
+uses
+  ComServ,
+  MainResponsibilityProj_TLB in 'MainResponsibilityProj_TLB.pas',
+  MainResponsibilityImpl in 'MainResponsibilityImpl.pas' {MainResponsibility: TActiveForm} {MainResponsibility: CoClass},
+  DMMainResponsibilityImpl in 'DMMainResponsibilityImpl.pas' {DMMainResponsibility: TDataModule};
+
+{$E ocx}
+
+exports
+  DllGetClassObject,
+  DllCanUnloadNow,
+  DllRegisterServer,
+  DllUnregisterServer;
+
+{$R *.TLB}
+
+{$R *.RES}
+
+begin
+end.

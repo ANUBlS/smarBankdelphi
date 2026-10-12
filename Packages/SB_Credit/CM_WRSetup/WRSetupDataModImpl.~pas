@@ -1,0 +1,131 @@
+unit WRSetupDataModImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, 
+  Db, OracleData, Oracle, Dialogs;
+
+
+
+type
+  TWRSetupDataMod = class(TDataModule)
+    WRTemplatesDataSet: TOracleDataSet;
+    WRTemplatesDataSrc: TDataSource;
+    CM_WR_TOOLS: TOraclePackage;
+    WRBookmarksDataSet: TOracleDataSet;
+    WRBookmarksDataSrc: TDataSource;
+    WRFieldsDataSet: TOracleDataSet;
+    WRFieldsDataSrc: TDataSource;
+    OpenDlg: TOpenDialog;
+    WRTemplatesDataSetID: TFloatField;
+    WRTemplatesDataSetNAME: TStringField;
+    WRTemplatesDataSetPATH: TStringField;
+    WRBookmarksDataSetID: TFloatField;
+    WRBookmarksDataSetTEMPLATEID: TFloatField;
+    WRBookmarksDataSetFIELDID: TFloatField;
+    WRBookmarksDataSetBOOKMARKNAME: TStringField;
+    OracleDataSetTamplates: TOracleDataSet;
+    DataSourceTamplates: TDataSource;
+    OracleDataSetTamplatesID: TFloatField;
+    OracleDataSetTamplatesNAME: TStringField;
+    OracleDataSetTamplatesPATH: TStringField;
+    FilialDataSet: TOracleDataSet;
+    FilialSrc: TDataSource;
+    FilialDataSetNAME: TStringField;
+    FilialDataSetC_NAME: TStringField;
+    FilialDataSetDRNAME: TStringField;
+    FilialDataSetDRSONAME: TStringField;
+    FilialDataSetDRLASTNAME: TStringField;
+    FilialDataSetDRFULLNAME: TStringField;
+    FilialDataSetNNAME: TStringField;
+    FilialDataSetNSONAME: TStringField;
+    FilialDataSetNDRLASTNAME: TStringField;
+    FilialDataSetNFULLNAME: TStringField;
+    procedure WRBookmarksDataSetApplyRecord(Sender: TOracleDataSet;
+      Action: Char; var Applied: Boolean; var NewRowId: String);
+    procedure WRTemplatesDataSetApplyRecord(Sender: TOracleDataSet;
+      Action: Char; var Applied: Boolean; var NewRowId: String);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  WRSetupDataMod: TWRSetupDataMod;
+
+implementation
+
+{$R *.DFM}
+
+uses
+  CMOracleAPIDataModuleImpl;
+
+
+
+procedure TWRSetupDataMod.WRBookmarksDataSetApplyRecord(
+  Sender: TOracleDataSet; Action: Char; var Applied: Boolean;
+  var NewRowId: String);
+var  id, stemplid,sfieldid:integer; sbookmarkname:string;
+begin
+   with Sender do
+      begin
+         stemplid:=FieldByName('Templateid').Asinteger;
+         sfieldid:=FieldByName('Fieldid').Asinteger;
+         Sbookmarkname:=FieldByName('Bookmarkname').Asstring;
+         id:=FieldByName('id').Asinteger;
+      end;
+
+   Case  Action of
+
+   'I':  CM_WR_TOOLS.CallProcedure('AddBookmark',[
+            stemplid,
+            sfieldid,
+            sbookmarkname]);
+
+   'D':  CM_WR_TOOLS.CallProcedure('DeleteBookmark',[id]);
+
+   'U':  CM_WR_TOOLS.CallProcedure('updateBookmark',[
+            id,
+            sbookmarkname,
+            stemplid,
+            sfieldid]);
+        end;
+        Applied:=true;
+end;
+
+
+procedure TWRSetupDataMod.WRTemplatesDataSetApplyRecord(
+  Sender: TOracleDataSet; Action: Char; var Applied: Boolean;
+  var NewRowId: String);
+var
+  SName , SPath : String;templid:integer;
+begin
+
+    with Sender do
+        begin
+          SName := FieldByName('NAME').AsString;
+          SPath := FieldByName('PATH').AsString;
+          templid:=FieldByName('ID').AsInteger;
+        end;
+  case Action of
+
+  'I' : CM_WR_TOOLS.CallProcedure('AddTemplate',[
+           SName ,
+           SPath
+         ]);
+
+  'D' : CM_WR_TOOLS.CallProcedure('DeleteTemplate',[templid]);
+
+  'U' : CM_WR_TOOLS.CallProcedure('UpdateTemplates',[
+            templid,
+            sname,
+             spath
+           ]);
+   end;
+ Applied:=true;
+
+end;
+
+end.

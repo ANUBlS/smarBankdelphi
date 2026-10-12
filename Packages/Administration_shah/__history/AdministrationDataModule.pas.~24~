@@ -1,0 +1,271 @@
+unit AdministrationDataModule;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, OracleData, Oracle;
+
+const
+ Sm_Own ='SMART';
+
+type
+  TObjRef = ^TObject;
+
+  TAdministrationData = class(TDataModule)
+    ModulesData: TOracleDataSet;
+    Modules: TDataSource;
+    UsersData: TOracleDataSet;
+    Users: TDataSource;
+    pcADM: TOraclePackage;
+    UsModulesData: TOracleDataSet;
+    UsModules: TDataSource;
+    UsTablesData: TOracleDataSet;
+    UsTables: TDataSource;
+    ModulesDataID: TFloatField;
+    UsModulesDataMODACC: TFloatField;
+    UsTablesDataMOD_INSERT: TIntegerField;
+    UsTablesDataMOD_DELETE: TIntegerField;
+    UsTablesDataMOD_UPDATE: TIntegerField;
+    UsTablesDataCAN_INSERT: TFloatField;
+    UsTablesDataCAN_DELETE: TFloatField;
+    UsTablesDataCAN_UPDATE: TFloatField;
+    UsTablesDataSelect: TFloatField;
+    pcAca: TOraclePackage;
+    Classesdata: TOracleDataSet;
+    Classes: TDataSource;
+    Modeditdata: TOracleDataSet;
+    Modedit: TDataSource;
+    ClassesdataID: TFloatField;
+    ModeditdataACC: TFloatField;
+    GroupsData: TOracleDataSet;
+    Groups: TDataSource;
+    GroupsDataID: TFloatField;
+    GroupsDataCREATEDATE: TDateTimeField;
+    GroupUsersData: TOracleDataSet;
+    GroupUsers: TDataSource;
+    GroupUsersDataUSERID: TFloatField;
+    GroupUsersDataGROUPID: TFloatField;
+    GroupUsersDataTYPE: TIntegerField;
+    UsersDataUSER: TFloatField;
+    UsersDataCTIME: TDateTimeField;
+    UsersDataCLASSID: TFloatField;
+    DependencesData: TOracleDataSet;
+    SubmissionData: TOracleDataSet;
+    Dependences: TDataSource;
+    Submission: TDataSource;
+    ModulesDataCAN_INSERT: TIntegerField;
+    ModulesDataCAN_DELETE: TIntegerField;
+    ModulesDataCAN_UPDATE: TIntegerField;
+    FilialData: TOracleDataSet;
+    Filial: TDataSource;
+    UsersDataFILIALID: TFloatField;
+    UsersDataIS_ADM: TFloatField;
+    ObjectsData: TOracleDataSet;
+    Objects: TDataSource;
+    ModPrivsData: TOracleDataSet;
+    ModPrivs: TDataSource;
+    UsTablesDataADVANCED_GRANTS: TIntegerField;
+    ModAdvancedGrants: TDataSource;
+    ModAdvancedGrantsData: TOracleDataSet;
+    ModAdvancedGrantsDataID: TFloatField;
+    ModAdvancedGrantsDataADVANCEDGRANTID: TFloatField;
+    ModAdvancedGrantsDataUSERGRANTED: TFloatField;
+    UsTablesDataID: TFloatField;
+    UsModulesDataID: TFloatField;
+    GroupsDataADVTYPE: TFloatField;
+    GroupTypesData: TOracleDataSet;
+    GroupTypes: TDataSource;
+    UserGroupData: TOracleDataSet;
+    UserGroup: TDataSource;
+    UserGroupDataUSERID: TFloatField;
+    UserGroupDataGROUPID: TFloatField;
+    UserGroupDataID: TFloatField;
+    UserGroupDataCREATEDATE: TDateTimeField;
+    DependencesDataSUSER: TFloatField;
+    DependencesDataCTIME: TDateTimeField;
+    DependencesDataID: TFloatField;
+    SubmissionDataMUSER: TFloatField;
+    SubmissionDataCTIME: TDateTimeField;
+    SubmissionDataID: TFloatField;
+    repGroupsData: TOracleDataSet;
+    repGroupsDataGROUPID: TFloatField;
+    repGroupsDataID: TFloatField;
+    repGroupsDataCREATEDATE: TDateTimeField;
+    repGroupManData: TOracleDataSet;
+    repGroupManDataUSERCREATEDATE: TDateTimeField;
+    repGroupManDataGROUPID: TFloatField;
+    repAboutBankData: TOracleDataSet;
+    repAboutBank: TDataSource;
+    repGroupMan: TDataSource;
+    repGroups: TDataSource;
+    repUsersData: TOracleDataSet;
+    UsersUSER: TFloatField;
+    UsersCTIME: TDateTimeField;
+    repUsersGrantsData: TOracleDataSet;
+    repUsersGrantsDataMODID: TFloatField;
+    repUsers: TDataSource;
+    repUsersGrants: TDataSource;
+    UsersDataIS_LOCKED: TFloatField;
+    UsersDataDATATS: TFloatField;
+    BalAcc: TDataSource;
+    ODSBalAcc: TOracleDataSet;
+    ODSQuery: TOracleDataSet;
+    ODSOpTypes: TOracleDataSet;
+    ODSOpTypesID: TFloatField;
+    opTypes: TDataSource;
+    ModAdvancedGrantsDataHAVVALUE: TFloatField;
+    ModAdvancedGrantsDataMAXAVALUE: TFloatField;
+    repAdvGrantData: TOracleDataSet;
+    repAdvGrantDataMODULEID: TFloatField;
+    repAdvGrantDataMAXAVALUE: TFloatField;
+    ClsBalAcc: TDataSource;
+    odsAccFlags: TOracleDataSet;
+    AccFlags: TDataSource;
+    odsAccFlagsACC: TFloatField;
+    odsClsBalAcc: TOracleDataSet;
+    odsClsBalAccBAL_CN: TFloatField;
+    odsClsBalAccACC: TFloatField;
+    odsClsBalAccOPTYPE: TFloatField;
+    ClsModAdvGrant: TDataSource;
+    odsClsModAdvGrant: TOracleDataSet;
+    odsClsModAdvGrantID: TFloatField;
+    odsClsModAdvGrantACC: TFloatField;
+    ModeditdataMODID: TFloatField;
+    ModeditdataCNI: TIntegerField;
+    ModeditdataCNU: TIntegerField;
+    ModeditdataCND: TIntegerField;
+    ModeditdataINS: TIntegerField;
+    ModeditdataUPD: TIntegerField;
+    ModeditdataDEL: TIntegerField;
+    ModeditDataX: TOracleDataSet;
+    ModeditDataXID: TFloatField;
+    ModeditDataXINS: TFloatField;
+    ModeditDataXUPD: TFloatField;
+    ModeditDataXDEL: TFloatField;
+    allqrants: TOracleDataSet;
+    UsersDataNAME: TWideStringField;
+    UsersDataDESCRIPTION: TWideStringField;
+    UsersDataFULLNAME: TWideStringField;
+    ModulesDataTRVDESC: TWideStringField;
+    ModulesDataDESCRIPTION: TWideStringField;
+    ModulesDataNAME: TWideStringField;
+    ClassesdataOBJ: TWideStringField;
+    ClassesdataDESCRIPTION: TWideStringField;
+    ClassesdataCREATEDATE: TDateTimeField;
+    UsTablesDataTRVDESC: TWideStringField;
+    UsTablesDataDESCRIPTION: TWideStringField;
+    UsTablesDataCUR_USER: TWideStringField;
+    UsModulesDataTRVDESC: TWideStringField;
+    UsModulesDataDESCRIPTION: TWideStringField;
+    ModeditdataCLASS: TWideStringField;
+    GroupsDataOBJ: TWideStringField;
+    GroupsDataDESCRIPTION: TWideStringField;
+    GroupsDataTYPE: TWideStringField;
+    GroupsDataDESCR: TWideStringField;
+    UserGroupDataUSERSTATE: TWideStringField;
+    UserGroupDataOBJ: TWideStringField;
+    UserGroupDataDESCRIPTION: TWideStringField;
+    UserGroupDataTYPE: TWideStringField;
+    odsAccFlagsSYMBOL: TWideStringField;
+    odsAccFlagsDESCRIPTION: TWideStringField;
+    GroupUsersDataNAME: TWideStringField;
+    DependencesDataNAME: TWideStringField;
+    DependencesDataOBJ: TWideStringField;
+    DependencesDataTYPE: TWideStringField;
+    SubmissionDataNAME: TWideStringField;
+    SubmissionDataOBJ: TWideStringField;
+    SubmissionDataTYPE: TWideStringField;
+    ObjectsDataOBJECT_NAME: TWideStringField;
+    ObjectsDataOBJECT_TYPE: TWideStringField;
+    ModPrivsDataTABLE_NAME: TWideStringField;
+    ModPrivsDataPRIVILEGE: TWideStringField;
+    ModAdvancedGrantsDataGRANTNAME: TWideStringField;
+    ModAdvancedGrantsDataDESCRIPTION: TWideStringField;
+    ModAdvancedGrantsDataUSERNAME: TWideStringField;
+    ModAdvancedGrantsDataERRORMESSAGE: TWideStringField;
+    repGroupsDataOBJ: TWideStringField;
+    repGroupsDataDESCRIPTION: TWideStringField;
+    repGroupsDataTYPE: TWideStringField;
+    repGroupsDataDESCR: TWideStringField;
+    repUsersDataNAME: TWideStringField;
+    repUsersDataDESCRIPTION: TWideStringField;
+    repUsersDataFULLNAME: TWideStringField;
+    repUsersDataIS_ADM: TWideStringField;
+    repUsersGrantsDataNAME: TWideStringField;
+    repUsersGrantsDataTRVDESC: TWideStringField;
+    repUsersGrantsDataCanuse: TWideStringField;
+    repUsersGrantsDataCaninsert: TWideStringField;
+    repUsersGrantsDataCanDelete: TWideStringField;
+    repUsersGrantsDataCanUpdate: TWideStringField;
+    ODSOpTypesNAME: TWideStringField;
+    repAdvGrantDataMODULENAME: TWideStringField;
+    repAdvGrantDataDESCRIPTION: TWideStringField;
+    repAdvGrantDataHASACCESS: TWideStringField;
+    repAdvGrantDataUSERNAME: TWideStringField;
+    UsersDataPHONE: TWideStringField;
+    ModeditdataTRVDESC: TWideStringField;
+    repGroupManDataNAME: TWideStringField;
+    repGroupManDataUSERTYPE: TWideStringField;
+    odsClsModAdvGrantDESCRIPTION: TWideStringField;
+    clsf: TOracleDataSet;
+    procedure UsTablesDataApplyRecord(Sender: TOracleDataSet; Action: Char;
+      var Applied: Boolean; var NewRowId: String);
+    procedure UsTablesDataAfterScroll(DataSet: TDataSet);
+    procedure ModPrivsDataAfterScroll(DataSet: TDataSet);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+
+procedure CenteringObject(ParentObj,ChildObj :  TObjRef);
+
+var
+  AdministrationData: TAdministrationData;
+
+
+implementation
+
+uses sboapiDataModuleImpl,AdministrationMainForm, AdministrationModEdit;
+
+{$R *.DFM}
+
+procedure TAdministrationData.UsTablesDataApplyRecord(
+  Sender: TOracleDataSet; Action: Char; var Applied: Boolean;
+  var NewRowId: String);
+begin
+ if Action='L' then Applied :=false
+  else Applied :=true;
+end;
+
+procedure TAdministrationData.UsTablesDataAfterScroll(DataSet: TDataSet);
+begin
+with AdministrationForm do
+ begin
+ if not(Assigned(AdministrationForm)) then Exit;
+ cbInsert.Enabled:=IntToBool(DataSet.FieldByName('mod_insert').AsInteger);
+ cbDelete.Enabled:=IntToBool(DataSet.FieldByName('mod_delete').AsInteger);
+ cbUpdate.Enabled:=IntToBool(DataSet.FieldByName('mod_update').AsInteger);
+ sbAdvancedGrants.Visible:=IntToBool(DataSet.FieldByName('advanced_grants').AsInteger);
+ end;
+end;
+
+procedure CenteringObject(ParentObj,ChildObj : TObjRef);
+ begin
+  if (Assigned(ChildObj))and(Assigned(ParentObj)) then
+   with (ChildObj^ as TWinControl) do
+    begin
+      SetBounds((TWinControl(ParentObj^).Width-Width) div 2,(TWinControl(ParentObj^).Height-Height) div 2,width,height);
+      Beep;
+    end;
+  end;
+
+procedure TAdministrationData.ModPrivsDataAfterScroll(DataSet: TDataSet);
+begin
+if Assigned (fmModEdit) then
+fmModEdit.EnableConstrain(ModPrivsData);
+end;
+
+end.

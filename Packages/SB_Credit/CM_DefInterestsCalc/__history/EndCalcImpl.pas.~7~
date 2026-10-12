@@ -1,0 +1,63 @@
+﻿unit EndCalcImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, DBGridEhGrouping, GridsEh, DBGridEh, ComCtrls, ToolWin, ExtCtrls,
+  ImgList;
+
+type
+  TFrmEndCalc = class(TForm)
+    ImageList1: TImageList;
+    Panel4: TPanel;
+    ToolBar1: TToolBar;
+    ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
+    ToolButton3: TToolButton;
+    ToolButton4: TToolButton;
+    ToolButton5: TToolButton;
+    ToolButton6: TToolButton;
+    ToolButton7: TToolButton;
+    DBGridEh1: TDBGridEh;
+    procedure ToolButton7Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure ToolButton1Click(Sender: TObject);
+    procedure ToolButton3Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmEndCalc: TFrmEndCalc;
+
+implementation
+
+uses EndCallAddİmpl,IntCalcDataModImpl;
+
+{$R *.dfm}
+
+procedure TFrmEndCalc.FormCreate(Sender: TObject);
+begin
+EndCallAddform:=TEndCallAddform.Create(self);
+end;
+
+procedure TFrmEndCalc.ToolButton1Click(Sender: TObject);
+begin
+DefineCalcDatMod.OracleDataSet2.Edit;
+EndCallAddform.ShowModal;
+end;
+
+procedure TFrmEndCalc.ToolButton3Click(Sender: TObject);
+begin
+
+end;
+
+procedure TFrmEndCalc.ToolButton7Click(Sender: TObject);
+begin
+close
+end;
+
+end.

@@ -1,0 +1,22 @@
+library PConstructionMain;
+
+uses
+  ComServ,
+  PConstructionMain_TLB in 'PConstructionMain_TLB.pas',
+  UConstructionMain in 'UConstructionMain.pas' {ConstructionMain: TActiveForm} {ConstructionMain: CoClass},
+  USearch in 'USearch.pas' {frmSearch};
+
+{$E ocx}
+
+exports
+  DllGetClassObject,
+  DllCanUnloadNow,
+  DllRegisterServer,
+  DllUnregisterServer;
+
+{$R *.TLB}
+
+{$R *.RES}
+
+begin
+end.

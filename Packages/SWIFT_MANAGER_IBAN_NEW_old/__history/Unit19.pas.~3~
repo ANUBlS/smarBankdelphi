@@ -1,0 +1,194 @@
+unit Unit19;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls,OracleData, Forms, Dialogs,
+  StdCtrls, Grids, DBGrids, ComCtrls, ImgList, SearchEdit;
+
+type
+  Tinarchiv = class(TForm)
+    Gridin: TDBGrid;
+    swImageList2: TImageList;
+    GroupBox1: TGroupBox;
+    DateTimePicker1: TDateTimePicker;
+    DateTimePicker2: TDateTimePicker;
+    Button2: TButton;
+    Button1: TButton;
+    GroupBox2: TGroupBox;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    SearchEdit1: TSearchEdit;
+    SearchEdit2: TSearchEdit;
+    SearchEdit3: TSearchEdit;
+    SearchEdit4: TSearchEdit;
+    procedure Button2Click(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
+    procedure GridinDrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TColumn; State: TGridDrawState);
+    procedure GridinTitleClick(Column: TColumn);
+    procedure Button1Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  inarchiv: Tinarchiv;
+
+
+implementation
+
+uses Unit2, cap, SWIFT_MAINImpl1;
+
+{$R *.DFM}
+
+  const
+  Notcreate =1;
+  Created =2;
+  Commited =5;
+  Problemed =8;
+  Problemed2 =7;
+  new=10;
+  edits=11;
+
+procedure Tinarchiv.Button2Click(Sender: TObject);
+ var
+
+dat11:Tdatetime;
+dat22:Tdatetime;
+
+begin
+
+  SWDataModule.ARXIVIN.close;
+ dat11:=integer(trunc(DateTimePicker1.datetime));
+ dat22:=integer(trunc(DateTimePicker2.datetime));
+ SWDataModule.ARXIVIN.SetVariable('dat1', dat11);
+ SWDataModule.ARXIVIN.SetVariable('dat2' , dat22);
+ SWDataModule.ARXIVIN.open;
+
+//SWDataModule.sw_in_archive.SetVariable(':dat1',DateTimePicker1.DateTime);
+//SWDataModule.sw_in_archive.SetVariable(':dat2',DateTimePicker2.DateTime);
+//SWDataModule.sw_in_archive.close;
+//SWDataModule.sw_in_archive.open;
+end;
+
+procedure Tinarchiv.FormActivate(Sender: TObject);
+
+ var
+
+dat11:Tdatetime;
+dat22:Tdatetime;
+
+begin
+     //OracleDataSet1.Session:=sboapidatamodule.sbsession;
+//
+DateTimePicker1.DateTime:=date;
+DateTimePicker2.DateTime:=date;
+  SWDataModule.ARXIVIN.close;
+ dat11:=integer(trunc(DateTimePicker1.datetime));
+ dat22:=integer(trunc(DateTimePicker2.datetime));
+ SWDataModule.ARXIVIN.SetVariable('dat1', dat11);
+ SWDataModule.ARXIVIN.SetVariable('dat2' , dat22);
+ SWDataModule.ARXIVIN.open;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//SWDataModule.sw_in_archive.SetVariable(':dat1',DateTimePicker1.DateTime);
+//SWDataModule.sw_in_archive.SetVariable(':dat2',DateTimePicker2.DateTime);
+//SWDataModule.sw_in_archive.close;
+//SWDataModule.sw_in_archive.open;
+end;
+
+procedure Tinarchiv.FormCreate(Sender: TObject);
+begin
+SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure Tinarchiv.GridinDrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TColumn;
+  State: TGridDrawState);
+var
+  ImageIndex: Integer;
+
+begin
+//SWDataModule.SB_ACA.CallProcedure('CheckAdvancedObjectAccess', ['SW_OUT_CREATEDVIEW']);
+ ImageIndex := -1;
+  with Sender as TDBGrid do
+  begin
+    if DataSource.DataSet.RecordCount <> 0 then
+    begin
+      case DataSource.DataSet.FieldByName('STATUS').AsInteger of
+      notcreate :
+        ImageIndex := 10;
+      created :
+        ImageIndex := 4;
+      commited :
+        ImageIndex := 5;
+      Problemed:
+        ImageIndex :=16;
+       11:
+       ImageIndex :=42;
+       12:
+        ImageIndex :=43;
+        10:
+        ImageIndex:= 44;
+      else
+      end;
+      if (DataCol = 1) and (ImageIndex <> -1) then
+        swImageList2.Draw(Canvas, Rect.Left, Rect.Top, ImageIndex, True)
+      else
+        DefaultDrawColumnCell(Rect, DataCol, Column, State);
+    end;
+  end;
+    end;
+procedure Tinarchiv.GridinTitleClick(Column: TColumn);
+var
+   TitleName :string;
+   SortPosition: word;
+begin
+ SortPosition :=100;
+ //OrderedTitle :=Column.FieldName; //H.R. 24.06.2008
+ if (gridin.DataSource.DataSet.IsEmpty) or (Column.FieldName = EmptyStr) then Exit;
+ Screen.Cursor :=crHourGlass;
+ TitleName :=Column.FieldName;
+ with TOracleDataSet(Gridin.DataSource.DataSet) do
+  try
+  
+   SortPosition :=SQL.Add('ORDER BY '+ TitleName);
+   Refresh;
+  finally
+   SQL[SortPosition] :=EmptyStr;
+   Screen.Cursor :=crDefault;
+  end;
+end;
+
+
+procedure Tinarchiv.Button1Click(Sender: TObject);
+
+begin
+
+ a:=Gridin.DataSource.DataSet.fieldbyname('all_text').asstring;;
+  printform:= Tprintform.Create(Self);
+   printform.ShowModal;
+end;
+
+end.
+

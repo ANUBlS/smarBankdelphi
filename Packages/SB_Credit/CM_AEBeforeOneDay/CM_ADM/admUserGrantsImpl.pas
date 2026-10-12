@@ -1,0 +1,180 @@
+unit admUserGrantsImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, CheckLst, Evanescence, DBCtrls, ExtCtrls, Grids, DBGrids,
+  Buttons, ActnList, NLSLocalizer;
+
+type
+  TfrmUserGrants = class(TForm)
+    Panel1: TPanel;
+    SpeedButton1: TSpeedButton;
+    SpeedButton2: TSpeedButton;
+    SpeedButton3: TSpeedButton;
+    SpeedButton4: TSpeedButton;
+    btnCommit: TSpeedButton;
+    btnClose: TSpeedButton;
+    Label1: TLabel;
+    Label2: TLabel;
+    lOtherGrants: TEvanescence;
+    lUserGrants: TEvanescence;
+    actsMain: TActionList;
+    actAddUserGrants: TAction;
+    actDelUserGrants: TAction;
+    actCommit: TAction;
+    actRollback: TAction;
+    cbFullControl: TCheckBox;
+    procedure actAddUserGrantsExecute(Sender: TObject);
+    procedure lOtherGrantsClickCheck(Sender: TObject);
+    procedure lOtherGrantsKeyUp(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure lUserGrantsClickCheck(Sender: TObject);
+    procedure lUserGrantsKeyUp(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure actDelUserGrantsExecute(Sender: TObject);
+    procedure SpeedButton3Click(Sender: TObject);
+    procedure SpeedButton4Click(Sender: TObject);
+    procedure actCommitExecute(Sender: TObject);
+    procedure actRollbackExecute(Sender: TObject);
+    procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
+    procedure btnCloseClick(Sender: TObject);
+    procedure FormKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure cbFullControlClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  frmUserGrants: TfrmUserGrants;
+
+implementation
+
+uses admDataModule , sboapiDataModuleImpl,SBTranslateProc;
+
+{$R *.DFM}
+
+procedure TfrmUserGrants.lOtherGrantsClickCheck(Sender: TObject);
+begin
+  actAddUserGrants.Enabled := lOtherGrants.GetCheckedKeyList.Count > 0
+end;
+
+procedure TfrmUserGrants.lUserGrantsClickCheck(Sender: TObject);
+begin
+  actDelUserGrants.Enabled := lUserGrants.GetCheckedKeyList.Count > 0;
+end;
+
+procedure TfrmUserGrants.lOtherGrantsKeyUp(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if Key = VK_SPACE then
+    lOtherGrantsClickCheck(Sender);
+end;
+
+procedure TfrmUserGrants.lUserGrantsKeyUp(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if key = VK_SPACE then
+    lUserGrantsClickCheck(Sender);
+end;
+
+procedure TfrmUserGrants.actAddUserGrantsExecute(Sender: TObject);
+var
+  i: Integer;
+begin
+  with admDM, lOtherGrants do begin
+    for i:=0 to KeyItems.Count-1 do
+      if Checked[i] then begin
+        CM_ADMIN.CallProcedure('addusergrant', [KeyItems[i] ,CredUsersDataSetSYSTEMID.AsInteger]);
+      end;
+    RefreshDataSet(OtherGrantsDataSet);
+    RefreshDataSet(UserGrantsDataSet);
+    lOtherGrants.RefreshList;
+    lUserGrants.RefreshList;
+    lOtherGrantsClickCheck(Sender);
+    lUserGrantsClickCheck(Sender);
+  end;
+end;
+
+procedure TfrmUserGrants.actDelUserGrantsExecute(Sender: TObject);
+var
+  i: Integer;
+begin
+  with admDM, lUserGrants do begin
+    for i:=0 to KeyItems.Count-1 do
+      if Checked[i] then begin
+        CM_ADMIN.CallProcedure('delusergrant', [KeyItems[i] ,CredUsersDataSetSYSTEMID.AsInteger]);
+      end;
+    RefreshDataSet(OtherGrantsDataSet);
+    RefreshDataSet(UserGrantsDataSet);
+    lOtherGrants.RefreshList;
+    lUserGrants.RefreshList;
+    lOtherGrantsClickCheck(Sender);
+    lUserGrantsClickCheck(Sender);
+  end;
+end;
+
+procedure TfrmUserGrants.SpeedButton3Click(Sender: TObject);
+begin
+  lOtherGrants.ToggleAll;
+  lOtherGrantsClickCheck(Sender);
+end;
+
+procedure TfrmUserGrants.SpeedButton4Click(Sender: TObject);
+begin
+  lUserGrants.ToggleAll;
+  lUserGrantsClickCheck(Sender);
+end;
+
+procedure TfrmUserGrants.actCommitExecute(Sender: TObject);
+begin
+  sboapiDataModule.SBSession.Commit;
+end;
+
+procedure TfrmUserGrants.actRollbackExecute(Sender: TObject);
+begin
+  sboapiDataModule.SBSession.Rollback;
+end;
+
+procedure TfrmUserGrants.FormCloseQuery(Sender: TObject;
+  var CanClose: Boolean);
+begin
+  actRollbackExecute(Sender);
+end;
+
+procedure TfrmUserGrants.FormCreate(Sender: TObject);
+begin
+SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TfrmUserGrants.btnCloseClick(Sender: TObject);
+begin
+  Close;
+end;
+
+procedure TfrmUserGrants.FormKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin   
+  if Key = VK_ESCAPE then
+    btnCloseClick(Sender);
+end;
+
+procedure TfrmUserGrants.cbFullControlClick(Sender: TObject);
+begin
+  with admDM do begin
+    if cbFullControl.Checked then
+      CM_ADMIN.CallProcedure('addcontroltype',
+                                   [1, CredUsersDataSetNAME.AsString])
+    else
+      CM_ADMIN.CallProcedure('addcontroltype',
+                                   [0, CredUsersDataSetNAME.AsString]);
+    UserTypeDataSet.Refresh;
+  end;                
+end;
+
+end.

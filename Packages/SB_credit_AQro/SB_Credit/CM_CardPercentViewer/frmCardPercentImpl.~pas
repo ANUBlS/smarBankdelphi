@@ -1,0 +1,148 @@
+unit frmCardPercentImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  NLSLocalizer, ComCtrls, ToolWin, Grids, DBGridEh, ImgList, ActnList;
+
+type
+  TrmCardPercent = class(TForm)
+    NLSLocalizer1: TNLSLocalizer;
+    DBGridEh1: TDBGridEh;
+    ToolBar1: TToolBar;
+    StatusBar1: TStatusBar;
+    ImageList1: TImageList;
+    ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
+    ToolButton3: TToolButton;
+    ToolButton4: TToolButton;
+    ActionList1: TActionList;
+    ToolButton5: TToolButton;
+    ToolButton6: TToolButton;
+    ToolButton7: TToolButton;
+    ActnRests: TAction;
+    ActnCalcedInt: TAction;
+    ActnPayment: TAction;
+    procedure ActnRestsExecute(Sender: TObject);
+    procedure ActnCalcedIntExecute(Sender: TObject);
+    procedure ActnPaymentExecute(Sender: TObject);
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure ToolButton7Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  rmCardPercent: TrmCardPercent;
+  procedure InitPlugin(S:String);export;
+
+implementation
+
+{$R *.DFM}
+uses DMCardPercentImpl,frmTranchRestImpl,
+     frmTranchCalcedIntImpl,frmTranchPaymentImpl,CommonDecls;
+
+
+procedure InitPlugin(S:String);export;
+begin
+  rmCardPercent.ShowModal;
+end;
+
+exports
+   InitPlugin;
+
+procedure TrmCardPercent.ActnRestsExecute(Sender: TObject);
+var TrID :Integer;
+begin
+   with DMCardPercent do
+   begin
+        TrID := Tranches.FieldByName('ID').AsInteger;
+
+        with Tranchrest do
+        begin
+           if Active then close;
+           SetVariable('TRID',TrID);
+           open;
+        end;   
+   end;     
+    frmTranchRest.ShowModal;
+
+end;
+
+procedure TrmCardPercent.ActnCalcedIntExecute(Sender: TObject);
+Var TrID :Integer;
+begin
+   with DMCardPercent do
+   begin
+        TrID := Tranches.FieldByName('ID').AsInteger;
+
+        with TranchcalcedPer do
+        begin
+           if Active then close;
+           SetVariable('TRID',TrID);
+           open;
+        end;
+   end;
+    frmTranchCalcedInt.ShowModal;
+
+end;
+
+procedure TrmCardPercent.ActnPaymentExecute(Sender: TObject);
+Var TrID :Integer;
+begin
+   with DMCardPercent do
+   begin
+        TrID := Tranches.FieldByName('ID').AsInteger;
+
+        with Tranchpayments do
+        begin
+           if Active then close;
+           SetVariable('TRID',TrID);
+           open;
+        end;
+   end;
+    frmTranchPayment.ShowModal;
+end;
+
+procedure TrmCardPercent.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+   Resize := False;
+end;
+
+procedure TrmCardPercent.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+   if Ord(Key) = VK_ESCAPE then close;
+end;
+
+procedure TrmCardPercent.FormCreate(Sender: TObject);
+begin
+    DMCardPercent := TDMCardPercent.Create(Self);
+    frmTranchCalcedInt := TfrmTranchCalcedInt.Create(Self);
+    frmTranchPayment  := TfrmTranchPayment.Create(Self);
+    frmTranchRest := TfrmTranchRest.Create(Self);
+end;
+
+procedure TrmCardPercent.FormDestroy(Sender: TObject);
+begin
+    DMCardPercent.Free;
+    frmTranchCalcedInt.Free;
+    frmTranchPayment.Free;
+    frmTranchRest.Free;
+end;
+
+procedure TrmCardPercent.ToolButton7Click(Sender: TObject);
+begin
+   close
+end;
+
+initialization
+   rmCardPercent := TrmCardPercent.Create(CommonApplication)
+end.

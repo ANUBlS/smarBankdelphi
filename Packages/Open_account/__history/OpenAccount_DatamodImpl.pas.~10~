@@ -1,0 +1,61 @@
+unit OpenAccount_DatamodImpl;
+
+interface
+
+uses
+  SysUtils, Classes, DB, OracleData,Messages,Dialogs;
+
+type
+  TOpenAccount_DataModule = class(TDataModule)
+    ODS_bal_spr_parts: TOracleDataSet;
+    DSRC_bal_spr_parts: TDataSource;
+    DSRC_bal_spr_groups: TDataSource;
+    DSRC_bal_spr1: TDataSource;
+    ODS_bal_spr_groups: TOracleDataSet;
+    ODS_Bal_spr1: TOracleDataSet;
+    ODS_bal_spr_partsPART: TIntegerField;
+    ODS_bal_spr_partsPARTNAME: TWideStringField;
+    ODS_bal_spr_partsSEARCH: TWideStringField;
+    ODS_bal_spr_groupsGRP: TIntegerField;
+    ODS_bal_spr_groupsGRPNAME: TWideStringField;
+    ODS_bal_spr_groupsSEARCH: TWideStringField;
+    ODS_Bal_spr1BAL_CN: TFloatField;
+    ODS_Bal_spr1BALNAME: TWideStringField;
+    ODS_bal_spr_groupsGER1: TWideStringField;
+    ODS_bal_spr_partsPART1: TWideStringField;
+    procedure ODS_bal_spr_partsAfterScroll(DataSet: TDataSet);
+    procedure ODS_bal_spr_groupsAfterScroll(DataSet: TDataSet);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  OpenAccount_DataModule: TOpenAccount_DataModule;
+
+implementation
+ uses
+ sboapiDataModuleImpl, OpenAccount;
+{$R *.dfm}
+
+procedure TOpenAccount_DataModule.ODS_bal_spr_groupsAfterScroll(
+  DataSet: TDataSet);
+begin
+ODS_bal_spr1.Close;
+ODS_bal_spr1.SQL[2] :=  'and nvl(upper((bal_cn||'' ''|| balname)),0) like upper (''' +
+ODS_bal_spr_groups.FieldByName('grp').AsString + '%'')';
+ODS_bal_spr1.Open;
+//OpenAccountForm.Memo1.Text:=ODS_bal_spr1.SQL.Text;
+end;
+
+procedure TOpenAccount_DataModule.ODS_bal_spr_partsAfterScroll(
+  DataSet: TDataSet);
+begin
+ODS_bal_spr_groups.Close;
+ODS_bal_spr_groups.SQL[2] :=  'and nvl(upper((grp||'' ''|| grpname)),0) like upper (''' +
+ODS_bal_spr_parts.FieldByName('PART').AsString + '%'')';
+ODS_bal_spr_groups.Open;
+
+end;
+end.

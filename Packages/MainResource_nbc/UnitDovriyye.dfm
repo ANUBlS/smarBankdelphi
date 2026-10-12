@@ -1,0 +1,185 @@
+object TurnoverForm: TTurnoverForm
+  Left = 245
+  Top = 191
+  Width = 626
+  Height = 319
+  Caption = 'TurnoverForm'
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'MS Sans Serif'
+  Font.Style = []
+  OldCreateOrder = False
+  PixelsPerInch = 96
+  TextHeight = 13
+  object SpeedButton1: TSpeedButton
+    Left = 407
+    Top = 10
+    Width = 65
+    Height = 22
+    Caption = 'İŞÑÒßĞ'
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    ParentFont = False
+    OnClick = SpeedButton1Click
+  end
+  object GroupBox1: TGroupBox
+    Left = 4
+    Top = 5
+    Width = 209
+    Height = 89
+    Caption = 'Tarix araëûüû'
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 0
+    object Label1: TLabel
+      Left = 6
+      Top = 30
+      Width = 32
+      Height = 13
+      Caption = 'Áàøëàí'
+    end
+    object Label2: TLabel
+      Left = 8
+      Top = 61
+      Width = 19
+      Height = 13
+      Caption = 'Ñîí'
+    end
+    object TimePicer_b: TDateTimePicker
+      Left = 78
+      Top = 56
+      Width = 105
+      Height = 21
+      CalAlignment = dtaLeft
+      Date = 39265.4773672569
+      Time = 39265.4773672569
+      DateFormat = dfShort
+      DateMode = dmComboBox
+      Kind = dtkDate
+      ParseInput = False
+      TabOrder = 0
+    end
+    object TimePicker_s: TDateTimePicker
+      Left = 78
+      Top = 24
+      Width = 105
+      Height = 21
+      CalAlignment = dtaLeft
+      Date = 39265.4775146412
+      Time = 39265.4775146412
+      DateFormat = dfShort
+      DateMode = dmComboBox
+      Kind = dtkDate
+      ParseInput = False
+      TabOrder = 1
+    end
+  end
+  object GroupBox2: TGroupBox
+    Left = 217
+    Top = 5
+    Width = 186
+    Height = 90
+    Caption = 'Ìÿáëÿü'
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 1
+    object Label3: TLabel
+      Left = 7
+      Top = 29
+      Width = 41
+      Height = 13
+      Caption = 'Ìèíèìóì'
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Label4: TLabel
+      Left = 7
+      Top = 61
+      Width = 50
+      Height = 13
+      Caption = 'Ìàêñèìóì'
+    end
+    object Edit_min: TEdit
+      Left = 68
+      Top = 21
+      Width = 105
+      Height = 21
+      TabOrder = 0
+      Text = 'Edit_min'
+    end
+    object Edit_max: TEdit
+      Left = 70
+      Top = 53
+      Width = 104
+      Height = 21
+      TabOrder = 1
+      Text = 'Edit_max'
+    end
+  end
+  object DBGrid1: TDBGrid
+    Left = 0
+    Top = 95
+    Width = 545
+    Height = 154
+    DataSource = DataSource1
+    TabOrder = 2
+    TitleFont.Charset = DEFAULT_CHARSET
+    TitleFont.Color = clWindowText
+    TitleFont.Height = -11
+    TitleFont.Name = 'MS Sans Serif'
+    TitleFont.Style = []
+  end
+  object OracleSession1: TOracleSession
+    LogonUsername = 'SMART'
+    LogonPassword = 'sm'
+    LogonDatabase = 'SB'
+    Connected = True
+    Left = 464
+    Top = 56
+  end
+  object OracleDataSet1: TOracleDataSet
+    SQL.Strings = (
+      
+        'SELECT c.id, c.name,ac.acc_no, ac.name, ar.pok_obr_d, ar.pok_obr' +
+        '_k'
+      '  FROM customers c, ACCOUNT ac, archost ar'
+      ' WHERE c.ID = ac.kli_id'
+      '   AND ac.ID = ar.acc_id'
+      '   AND ar.obr_d = 0'
+      '   AND ar.obr_k = 0'
+      '   AND ar.datdate > '#39'16-jun-2006'#39
+      '   AND ar.datdate < '#39'20-jun-2006'#39
+      '   ')
+    QBEDefinition.QBEFieldDefs = {
+      0400000006000000020000004944010000000000040000004E414D4501000000
+      0000060000004143435F4E4F010000000000060000004E414D455F3101000000
+      000009000000504F4B5F4F42525F4401000000000009000000504F4B5F4F4252
+      5F4B010000000000}
+    Session = OracleSession1
+    Active = True
+    Left = 560
+    Top = 56
+  end
+  object DataSource1: TDataSource
+    DataSet = OracleDataSet1
+    Left = 520
+    Top = 56
+  end
+end

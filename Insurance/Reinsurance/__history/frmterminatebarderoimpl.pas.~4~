@@ -1,0 +1,60 @@
+unit frmterminatebarderoimpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, XFSCtrls, Grids, XDBGrids, ExtCtrls;
+
+type
+  Tfrmterminatebardero = class(TForm)
+    XFPanel1: TXFPanel;
+    XFGroupBox1: TXFGroupBox;
+    XDBGrid1: TXDBGrid;
+    XFButton4: TXFButton;
+    XFButton5: TXFButton;
+    XFButton3: TXFButton;
+    XFPanel2: TXFPanel;
+    XFButton2: TXFButton;
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure XFButton2Click(Sender: TObject);
+    procedure XFButton5Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  frmterminatebardero: Tfrmterminatebardero;
+
+implementation
+
+uses frmaddterminateimpl,DMreinsuranceImpl,CommanParametrs, FrmreinsuranceImpl,sboapiDataModuleImpl;
+
+{$R *.dfm}
+
+procedure Tfrmterminatebardero.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+if ord(key)=vk_escape then  close;
+end;
+
+procedure Tfrmterminatebardero.FormShow(Sender: TObject);
+begin
+DMreinsurance.ds_main_bardero_terminate.close;
+DMreinsurance.ds_main_bardero_terminate.SetVariable('pid',contactid);
+DMreinsurance.ds_main_bardero_terminate.open;
+end;
+
+procedure Tfrmterminatebardero.XFButton2Click(Sender: TObject);
+begin
+close;
+end;
+
+procedure Tfrmterminatebardero.XFButton5Click(Sender: TObject);
+begin
+frmaddterminate.showmodal;
+end;
+
+end.

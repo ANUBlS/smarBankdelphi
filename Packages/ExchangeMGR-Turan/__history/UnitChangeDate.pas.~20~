@@ -1,0 +1,115 @@
+﻿unit UnitChangeDate;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, DBGridEhGrouping, DBCtrls, GridsEh, DBGridEh, ComCtrls, ExtCtrls,
+  StdCtrls, ImgList;
+
+type
+  TFormChangeDate = class(TForm)
+    Panel1: TPanel;
+    Panel2: TPanel;
+    Panel3: TPanel;
+    MonthCalendar1: TMonthCalendar;
+    DBGridEh1: TDBGridEh;
+    Panel4: TPanel;
+    ButtonDatUpdate: TButton;
+    ImageList: TImageList;
+    Button1: TButton;
+    ImageList1: TImageList;
+    Button2: TButton;
+    procedure ButtonDatUpdateClick(Sender: TObject);
+    procedure DBGridEh1DrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TColumnEh; State: TGridDrawState);
+    procedure Button1Click(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormChangeDate: TFormChangeDate;
+
+implementation
+uses UnitDateExch, sboapiDataModuleImpl,SBTranslateProc;
+
+{$R *.dfm}
+
+procedure TFormChangeDate.Button1Click(Sender: TObject);
+var realdate,dat:TDateTime;
+    pstatus:integer;
+    Pcheck:integer;
+begin
+  With DataModExch do
+  begin
+
+    realdate:=ODSSysdatSSDAT.AsDateTime;
+    dat:=integer(trunc(MonthCalendar1.Date));
+    ODSdate.Close;
+    ODSdate.SetVariable('dat',dat);
+    ODSdate.Open;
+    pstatus:=0;
+    Pcheck:=OPExchMgr.CallIntegerFunction('Ex_NextBisnessDayCheck',[realdate]);
+
+    if (Pcheck=1) and (realdate<dat)
+    then
+      ShowMessage('Bir gündə yalnız bir tarix əlavə etmək olar ')
+    else
+    begin
+      if realdate<dat then
+      begin
+        OPExchMgr.CallProcedure('Ex_NextBisnessDayInsert',[dat,pstatus]);
+      end
+      ELSE
+      ShowMessage('Köhnə günə tarixi daxil etmək olmaz!!!');
+    end;
+
+    ODSdate.Refresh;
+  end;
+end;
+
+procedure TFormChangeDate.Button2Click(Sender: TObject);
+begin
+  With DataModExch do
+  begin
+    if DBGridEh1.DataSource.DataSet.FieldByName('status').AsInteger=0
+    then
+     OPExchMgr.CallProcedure('Ex_NextBisnessDayDelete',[DBGridEh1.DataSource.DataSet.FieldByName('id').AsInteger])
+    else
+    ShowMessage('Təsdiq edilmiş tarixi simək olmaz');
+    ODSdate.Refresh;
+  end;
+end;
+
+procedure TFormChangeDate.ButtonDatUpdateClick(Sender: TObject);
+begin
+  With DataModExch do
+  begin
+    IF DBGridEh1.DataSource.DataSet.FieldByName('status').AsInteger=1 THEN exit;
+    OPExchMgr.CallProcedure('Ex_NextBisnessDayUpdate',[DBGridEh1.DataSource.DataSet.FieldByName('id').AsInteger]);
+    ODSdate.Refresh;
+  end;
+end;
+
+procedure TFormChangeDate.DBGridEh1DrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TColumnEh;
+  State: TGridDrawState);
+begin
+  with DBGridEh1,DataModExch do
+  begin
+    if (DataCol=0) then
+    begin
+      case ODSdate.FieldByName('status').AsInteger of
+       0:ImageList.Draw(Canvas,Rect.left+2,Rect.top,0,true);
+       1:ImageList.Draw(Canvas,Rect.left+2,Rect.top,1,true);
+      end;
+      if ODSdate.RecordCount=0 then DefaultDrawColumnCell(Rect, DataCol, Column, State);
+    end;
+  end;
+
+end;
+end.

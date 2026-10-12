@@ -1,0 +1,1138 @@
+object DatModConstruction: TDatModConstruction
+  OldCreateOrder = False
+  OnCreate = DataModuleCreate
+  OnDestroy = DataModuleDestroy
+  Height = 617
+  Width = 766
+  object pledgetypesDatSrc: TDataSource
+    DataSet = pledgetypes
+    Left = 136
+    Top = 264
+  end
+  object pledgetypes: TOracleDataSet
+    SQL.Strings = (
+      'SELECT id, type'
+      '  FROM sbcm_pledgetypes')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 48
+    Top = 264
+    object pledgetypesID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object pledgetypesTYPE: TStringField
+      FieldName = 'TYPE'
+      Size = 32
+    end
+  end
+  object AccountsDatSrc: TDataSource
+    DataSet = Accounts
+    Left = 144
+    Top = 217
+  end
+  object Accounts_: TOracleDataSet
+    SQL.Strings = (
+      'select id,name,acc_no from account'
+      'where/* bal_cn1 in (SELECT  balcn'
+      '  FROM sbcm_construction_links where parentid =('
+      
+        'select id from sbcm_construction_link where prname = '#39'CreditBal'#39 +
+        ') )'
+      'and */'
+      'ownid = :BID and'
+      ' close_dat is null'
+      '')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000080000003A00420049004400030000000000000000000000}
+    Left = 16
+    Top = 312
+    object Accounts_ID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object Accounts_NAME: TStringField
+      FieldName = 'NAME'
+      Size = 90
+    end
+    object Accounts_ACC_NO: TStringField
+      FieldName = 'ACC_NO'
+      Required = True
+    end
+  end
+  object CustomersDatSur: TDataSource
+    DataSet = Customers
+    Left = 144
+    Top = 168
+  end
+  object Customers: TOracleDataSet
+    SQL.Strings = (
+      
+        'select id ,FIRSTNAME||'#39'  '#39'||LASTNAME||'#39'  '#39'||MIDDLENAME as byr_na' +
+        'me  from cc_buyers')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      0500000002000000040000004900440001000000000010000000420059005200
+      5F004E0041004D004500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 48
+    Top = 168
+    object CustomersID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object CustomersBYR_NAME: TWideStringField
+      FieldName = 'BYR_NAME'
+      Size = 94
+    end
+  end
+  object ValutesDatSrc: TDataSource
+    DataSet = Valutes
+    Left = 136
+    Top = 114
+  end
+  object Valutes: TOracleDataSet
+    SQL.Strings = (
+      'select *from avalute')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 48
+    Top = 115
+  end
+  object FilialsDatSrc: TDataSource
+    DataSet = Filials
+    Left = 136
+    Top = 57
+  end
+  object Filials: TOracleDataSet
+    SQL.Strings = (
+      'select *from filial')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000030000000400000049004400010000000000080000004E0041004D00
+      4500010000000000140000004B004F0044005F00460049004C00490041004C00
+      010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 48
+    Top = 66
+    object FilialsID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object FilialsNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 90
+    end
+  end
+  object CreditsDatSrc: TDataSource
+    DataSet = Credits
+    Left = 136
+    Top = 8
+  end
+  object Credits: TOracleDataSet
+    SQL.Strings = (
+      
+        'select rownum,c.ID, c.ContNum,b.FIRSTNAME||'#39' '#39'||b.lastname||'#39' '#39'|' +
+        '|b.MIDDLENAME as   CustName,c.accid,'
+      
+        '       a.acc_no as accno,c.opendate,c.expdate  as closedate,av.v' +
+        'al_name,c.contamount as creditamount,'
+      
+        '       cm.ID companyid,bl.bld_name, c.flatid, bl.id as  BUILDING' +
+        'ID, f.flatnumber, c.branchid,f.code,'
+      
+        '       c.userid, c.rest, cm.comp_name, f.entrance, f.ffloor, f.a' +
+        'rea'
+      
+        'from cc_contracts c, account a, cc_buyers b,  cc_companies cm, c' +
+        'c_buildings bl, cc_flats f, avalute av'
+      
+        'where  c.accid = a.id and c.buyer = b.id and c.flatid = f.id and' +
+        ' f.bld_id = bl.id and bl.comp_id = cm.id and av.valute = c.contc' +
+        'ur '
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      'order by :title  ')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000C0000003A005400490054004C0045000100000007000000
+      524F574E554D0000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000001700000004000000490044000100000000000E00000043004F004E00
+      54004E0055004D000100000000001000000043005500530054004E0041004D00
+      45000100000000000A0000004100430043004E004F0001000000000010000000
+      4F00500045004E0044004100540045000100000000001200000043004C004F00
+      53004500440041005400450001000000000010000000560041004C005F004E00
+      41004D0045000100000000001800000043005200450044004900540041004D00
+      4F0055004E0054000100000000001200000043004F004D00500041004E005900
+      490044000100000000001000000042004C0044005F004E0041004D0045000100
+      000000000C00000046004C004100540049004400010000000000140000004600
+      4C00410054004E0055004D004200450052000100000000001000000042005200
+      41004E0043004800490044000100000000000C00000055005300450052004900
+      4400010000000000080000005200450053005400010000000000140000004200
+      550049004C00440049004E004700490044000100000000001200000043004F00
+      4D0050005F004E0041004D0045000100000000001000000045004E0054005200
+      41004E00430045000100000000000C000000460046004C004F004F0052000100
+      000000000800000041005200450041000100000000000C00000052004F005700
+      4E0055004D000100000000000A00000041004300430049004400010000000000
+      0800000043004F0044004500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 56
+    Top = 10
+    object CreditsROWNUM: TFloatField
+      FieldName = 'ROWNUM'
+    end
+    object CreditsCONTNUM: TWideStringField
+      FieldName = 'CONTNUM'
+      Size = 10
+    end
+    object CreditsCUSTNAME: TWideStringField
+      FieldName = 'CUSTNAME'
+      Size = 122
+    end
+    object CreditsACCNO: TWideStringField
+      FieldName = 'ACCNO'
+    end
+    object CreditsOPENDATE: TDateTimeField
+      FieldName = 'OPENDATE'
+    end
+    object CreditsCLOSEDATE: TDateTimeField
+      FieldName = 'CLOSEDATE'
+    end
+    object CreditsVAL_NAME: TWideStringField
+      FieldName = 'VAL_NAME'
+      Size = 10
+    end
+    object CreditsBLD_NAME: TWideStringField
+      FieldName = 'BLD_NAME'
+    end
+    object CreditsFLATID: TFloatField
+      FieldName = 'FLATID'
+    end
+    object CreditsBUILDINGID: TFloatField
+      FieldName = 'BUILDINGID'
+    end
+    object CreditsFLATNUMBER: TWideStringField
+      FieldName = 'FLATNUMBER'
+      Size = 10
+    end
+    object CreditsBRANCHID: TFloatField
+      FieldName = 'BRANCHID'
+    end
+    object CreditsUSERID: TFloatField
+      FieldName = 'USERID'
+    end
+    object CreditsREST: TFloatField
+      FieldName = 'REST'
+    end
+    object CreditsCREDITAMOUNT: TFloatField
+      FieldName = 'CREDITAMOUNT'
+    end
+    object CreditsCOMP_NAME: TWideStringField
+      FieldName = 'COMP_NAME'
+      Size = 50
+    end
+    object CreditsENTRANCE: TWideStringField
+      FieldName = 'ENTRANCE'
+      Size = 10
+    end
+    object CreditsFFLOOR: TWideStringField
+      FieldName = 'FFLOOR'
+      Size = 10
+    end
+    object CreditsAREA: TFloatField
+      FieldName = 'AREA'
+    end
+    object CreditsCOMPANYID: TIntegerField
+      FieldName = 'COMPANYID'
+    end
+    object CreditsID: TFloatField
+      FieldName = 'ID'
+    end
+    object CreditsACCID: TFloatField
+      FieldName = 'ACCID'
+    end
+    object CreditsCODE: TWideStringField
+      FieldName = 'CODE'
+    end
+  end
+  object CreditPurpose: TOracleDataSet
+    SQL.Strings = (
+      
+        'SELECT c.rowid,c.contnum, c.buyer, c.accid, c.branchid, c.flatid' +
+        ', c.rest,'
+      
+        '      c.contcur, c.contamount, c.opendate, c.expdate, c.closedat' +
+        'e,f.area,f.price1,'
+      
+        '       c.interestrate, c.initialamount, c.userid, c.dueinterestr' +
+        'ate, c.SQUAREMETRAMOUNT, c.note, c.pricecred'
+      '  FROM cc_contracts c ,cc_flats f'
+      '  where c.flatid=f.id'
+      '  '
+      'and c.id = :CrdID      '
+      '     ')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000C0000003A00430052004400490044000300000000000000
+      00000000}
+    QBEDefinition.QBEFieldDefs = {
+      05000000140000000E00000043004F004E0054004E0055004D00010000000000
+      0A000000420055005900450052000100000000000A0000004100430043004900
+      4400010000000000100000004200520041004E00430048004900440001000000
+      00000C00000046004C0041005400490044000100000000000E00000043004F00
+      4E0054004300550052000100000000001400000043004F004E00540041004D00
+      4F0055004E005400010000000000100000004F00500045004E00440041005400
+      45000100000000000E0000004500580050004400410054004500010000000000
+      1200000043004C004F0053004500440041005400450001000000000018000000
+      49004E0054004500520045005300540052004100540045000100000000001A00
+      000049004E0049005400490041004C0041004D004F0055004E00540001000000
+      00000C0000005500530045005200490044000100000000001E00000044005500
+      450049004E005400450052004500530054005200410054004500010000000000
+      200000005300510055004100520045004D0045005400520041004D004F005500
+      4E00540001000000000008000000410052004500410001000000000008000000
+      52004500530054000100000000000C0000005000520049004300450031000100
+      00000000080000004E004F005400450001000000000012000000500052004900
+      430045004300520045004400010000000000}
+    OnApplyRecord = CreditPurposeApplyRecord
+    Session = sboapiDataModule.SBSession
+    OnCalcFields = CreditPurposeCalcFields
+    Left = 248
+    Top = 24
+    object CreditPurposeCONTNUM: TWideStringField
+      FieldName = 'CONTNUM'
+      Size = 10
+    end
+    object CreditPurposeBUYER: TFloatField
+      FieldName = 'BUYER'
+    end
+    object CreditPurposeACCID: TFloatField
+      FieldName = 'ACCID'
+    end
+    object CreditPurposeBRANCHID: TFloatField
+      FieldName = 'BRANCHID'
+    end
+    object CreditPurposeFLATID: TFloatField
+      FieldName = 'FLATID'
+    end
+    object CreditPurposeCONTCUR: TFloatField
+      FieldName = 'CONTCUR'
+    end
+    object CreditPurposeCONTAMOUNT: TFloatField
+      FieldName = 'CONTAMOUNT'
+    end
+    object CreditPurposeOPENDATE: TDateTimeField
+      FieldName = 'OPENDATE'
+    end
+    object CreditPurposeEXPDATE: TDateTimeField
+      FieldName = 'EXPDATE'
+    end
+    object CreditPurposeCLOSEDATE: TDateTimeField
+      FieldName = 'CLOSEDATE'
+    end
+    object CreditPurposeINTERESTRATE: TFloatField
+      FieldName = 'INTERESTRATE'
+    end
+    object CreditPurposeINITIALAMOUNT: TFloatField
+      FieldName = 'INITIALAMOUNT'
+    end
+    object CreditPurposeUSERID: TFloatField
+      FieldName = 'USERID'
+    end
+    object CreditPurposeDUEINTERESTRATE: TFloatField
+      FieldName = 'DUEINTERESTRATE'
+    end
+    object CreditPurposePeriodContracts: TFloatField
+      FieldKind = fkCalculated
+      FieldName = 'PeriodContracts'
+      Calculated = True
+    end
+    object CreditPurposeSQUAREMETRAMOUNT: TFloatField
+      FieldName = 'SQUAREMETRAMOUNT'
+    end
+    object CreditPurposefullammount: TFloatField
+      FieldKind = fkCalculated
+      FieldName = 'fullammount'
+      Calculated = True
+    end
+    object CreditPurposeAREA: TFloatField
+      FieldName = 'AREA'
+    end
+    object CreditPurposemonthspay: TFloatField
+      FieldKind = fkCalculated
+      FieldName = 'monthspay'
+      Calculated = True
+    end
+    object CreditPurposeREST: TFloatField
+      FieldName = 'REST'
+    end
+    object CreditPurposerestt: TFloatField
+      FieldKind = fkCalculated
+      FieldName = 'restt'
+      Calculated = True
+    end
+    object CreditPurposebuyarea: TFloatField
+      FieldKind = fkCalculated
+      FieldName = 'buyarea'
+      Calculated = True
+    end
+    object CreditPurposePRICE1: TFloatField
+      FieldName = 'PRICE1'
+    end
+    object CreditPurposeNOTE: TFloatField
+      FieldName = 'NOTE'
+    end
+    object CreditPurposePRICECRED: TFloatField
+      FieldName = 'PRICECRED'
+    end
+  end
+  object CreditPurposeDatSrc: TDataSource
+    DataSet = CreditPurpose
+    Left = 344
+    Top = 24
+  end
+  object sbcm_construction: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'CC_GENERAL'
+    ParameterMode = pmNamed
+    Left = 248
+    Top = 72
+  end
+  object Componies: TOracleDataSet
+    SQL.Strings = (
+      'SELECT  id,comp_name'
+      '  FROM cc_companies'
+      'order by comp_name'
+      '')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000200000004000000490044000100000000001200000043004F004D00
+      50005F004E0041004D004500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 248
+    Top = 128
+    object ComponiesID: TIntegerField
+      FieldName = 'ID'
+    end
+    object ComponiesCOMP_NAME: TWideStringField
+      FieldName = 'COMP_NAME'
+      Size = 50
+    end
+  end
+  object ComponiesDatScr: TDataSource
+    DataSet = Componies
+    Left = 336
+    Top = 128
+  end
+  object buildingsDatSrc: TDataSource
+    DataSet = Buildings
+    Left = 336
+    Top = 184
+  end
+  object Buildings: TOracleDataSet
+    SQL.Strings = (
+      'SELECT bld_name'
+      '  FROM cc_buildings'
+      'group by bld_name'
+      'order by bld_name'
+      '')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000010000001000000042004C0044005F004E0041004D00450001000000
+      0000}
+    Session = sboapiDataModule.SBSession
+    Left = 248
+    Top = 184
+    object BuildingsBLD_NAME: TWideStringField
+      FieldName = 'BLD_NAME'
+    end
+  end
+  object FlatsDatSrc: TDataSource
+    DataSet = Flats
+    Left = 336
+    Top = 240
+  end
+  object Flats: TOracleDataSet
+    SQL.Strings = (
+      'SELECT flatnumber'
+      '  FROM cc_flats  --where bld_id = :bld_id'
+      '  group by flatnumber'
+      'order by flatnumber')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000010000001400000046004C00410054004E0055004D00420045005200
+      010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 248
+    Top = 240
+    object FlatsFLATNUMBER: TWideStringField
+      FieldName = 'FLATNUMBER'
+      Size = 10
+    end
+  end
+  object Users: TOracleDataSet
+    SQL.Strings = (
+      'select id,name from user$'
+      'order by name ')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000400000049004400010000000000080000004E0041004D00
+      4500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 256
+    Top = 336
+    object UsersID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object UsersNAME: TWideStringField
+      FieldName = 'NAME'
+      Required = True
+      Size = 30
+    end
+  end
+  object UsersDatSrc: TDataSource
+    DataSet = Users
+    Left = 344
+    Top = 328
+  end
+  object Accounts: TOracleDataSet
+    SQL.Strings = (
+      'select id,name,acc_no from account'
+      'where/* bal_cn1 in (SELECT  balcn'
+      '  FROM sbcm_construction_links where parentid =('
+      
+        'select id from sbcm_construction_link where prname = '#39'CreditBal'#39 +
+        ') )'
+      'and */'
+      'ownid = :BID and'
+      ' close_dat is null'
+      '')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000080000003A00420049004400030000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      05000000030000000400000049004400010000000000080000004E0041004D00
+      45000100000000000C0000004100430043005F004E004F00010000000000}
+    Master = Customers
+    MasterFields = 'id'
+    DetailFields = 'BID'
+    Session = sboapiDataModule.SBSession
+    Left = 40
+    Top = 224
+    object AccountsID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object AccountsNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 90
+    end
+    object AccountsACC_NO: TWideStringField
+      FieldName = 'ACC_NO'
+    end
+  end
+  object BldeditDataSet: TOracleDataSet
+    SQL.Strings = (
+      
+        'select f.id, f.bld_id, f.flatnumber, f.entrance, f.ffloor, f.roo' +
+        'ms, f.area, f.price1,'
+      
+        '       f.pricegen, f.buyer,b.bld_name, f.code from cc_flats f,CC' +
+        '_BUILDINGS b'
+      'where '
+      'b.id=f.bld_id and'
+      'f.id=:id ')
+    Optimize = False
+    Variables.Data = {0400000001000000060000003A0049004400030000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000C00000004000000490044000100000000000C00000042004C004400
+      5F00490044000100000000001400000046004C00410054004E0055004D004200
+      450052000100000000001000000045004E005400520041004E00430045000100
+      000000000C000000460046004C004F004F0052000100000000000A0000005200
+      4F004F004D005300010000000000080000004100520045004100010000000000
+      0C00000050005200490043004500310001000000000010000000500052004900
+      43004500470045004E000100000000000A000000420055005900450052000100
+      000000001000000042004C0044005F004E0041004D0045000100000000000800
+      000043004F0044004500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 200
+    Top = 352
+    object BldeditDataSetID: TFloatField
+      FieldName = 'ID'
+    end
+    object BldeditDataSetBLD_ID: TFloatField
+      FieldName = 'BLD_ID'
+    end
+    object BldeditDataSetFLATNUMBER: TWideStringField
+      FieldName = 'FLATNUMBER'
+      Size = 10
+    end
+    object BldeditDataSetENTRANCE: TWideStringField
+      FieldName = 'ENTRANCE'
+      Size = 10
+    end
+    object BldeditDataSetFFLOOR: TWideStringField
+      FieldName = 'FFLOOR'
+      Size = 10
+    end
+    object BldeditDataSetROOMS: TFloatField
+      FieldName = 'ROOMS'
+    end
+    object BldeditDataSetAREA: TFloatField
+      FieldName = 'AREA'
+    end
+    object BldeditDataSetPRICE1: TFloatField
+      FieldName = 'PRICE1'
+    end
+    object BldeditDataSetPRICEGEN: TFloatField
+      FieldName = 'PRICEGEN'
+    end
+    object BldeditDataSetBUYER: TFloatField
+      FieldName = 'BUYER'
+    end
+    object BldeditDataSetBLD_NAME: TWideStringField
+      FieldName = 'BLD_NAME'
+    end
+    object BldeditDataSetCODE: TWideStringField
+      FieldName = 'CODE'
+    end
+  end
+  object SysDat: TOracleDataSet
+    SQL.Strings = (
+      'select * from sysdat')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000040000000E000000540045004B005F00440041005400010000000000
+      1000000050005200450044005F004400410054000100000000000E0000004100
+      520043005F004400410059000100000000000A00000043004C004F0053004500
+      010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 104
+    Top = 352
+    object SysDatTEK_DAT: TDateTimeField
+      FieldName = 'TEK_DAT'
+      Required = True
+    end
+    object SysDatPRED_DAT: TDateTimeField
+      FieldName = 'PRED_DAT'
+    end
+    object SysDatARC_DAY: TDateTimeField
+      FieldName = 'ARC_DAY'
+    end
+    object SysDatCLOSE: TIntegerField
+      FieldName = 'CLOSE'
+    end
+  end
+  object Templates: TOracleDataSet
+    SQL.Strings = (
+      'SELECT T.RowID , T.*'
+      '  FROM CC_WR_TEMPLATES T where CUSTTYPE=0')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000040000000400000049004400010000000000080000004E0041004D00
+      4500010000000000080000005000410054004800010000000000100000004300
+      5500530054005400590050004500010000000000}
+    Cursor = crSQLWait
+    QueryAllRecords = False
+    Session = sboapiDataModule.SBSession
+    Left = 496
+    Top = 24
+    object TemplatesID: TFloatField
+      FieldName = 'ID'
+    end
+    object TemplatesNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 255
+    end
+    object TemplatesPATH: TWideStringField
+      FieldName = 'PATH'
+      Size = 4000
+    end
+    object TemplatesCUSTTYPE: TIntegerField
+      FieldName = 'CUSTTYPE'
+    end
+  end
+  object DSTemplates: TDataSource
+    DataSet = Templates
+    Left = 490
+    Top = 81
+  end
+  object Bookmarks: TOracleDataSet
+    SQL.Strings = (
+      'SELECT rowid,ID, TEMPLATEID, FIELDID, BOOKMARKNAME'
+      '  FROM CC_WR_BOOKMARKS'
+      'where templateid = :templateid')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000160000003A00540045004D0050004C004100540045004900
+      44000400000008000000000000000000354000000000}
+    QBEDefinition.QBEFieldDefs = {
+      0500000004000000040000004900440001000000000014000000540045004D00
+      50004C00410054004500490044000100000000000E0000004600490045004C00
+      4400490044000100000000001800000042004F004F004B004D00410052004B00
+      4E0041004D004500010000000000}
+    Cursor = crSQLWait
+    Master = Templates
+    MasterFields = 'ID'
+    DetailFields = 'TEMPLATEID'
+    QueryAllRecords = False
+    Session = sboapiDataModule.SBSession
+    Left = 488
+    Top = 136
+    object BookmarksID: TFloatField
+      FieldName = 'ID'
+    end
+    object BookmarksTEMPLATEID: TFloatField
+      FieldName = 'TEMPLATEID'
+    end
+    object BookmarksFIELDID: TFloatField
+      FieldName = 'FIELDID'
+    end
+    object BookmarksBOOKMARKNAME: TWideStringField
+      FieldName = 'BOOKMARKNAME'
+      Size = 255
+    end
+  end
+  object DSBookmarks: TDataSource
+    DataSet = Bookmarks
+    Left = 480
+    Top = 192
+  end
+  object Fields: TOracleDataSet
+    SQL.Strings = (
+      'SELECT ID, FIELDNAME, DESCRIPTION'
+      '  FROM CC_WR_FIELDS'
+      'order by id'
+      '')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      0500000003000000040000004900440001000000000012000000460049004500
+      4C0044004E0041004D0045000100000000001600000044004500530043005200
+      49005000540049004F004E00010000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 480
+    Top = 303
+    object FieldsID: TFloatField
+      FieldName = 'ID'
+    end
+    object FieldsFIELDNAME: TWideStringField
+      FieldName = 'FIELDNAME'
+      Size = 255
+    end
+    object FieldsDESCRIPTION: TWideStringField
+      FieldName = 'DESCRIPTION'
+      Size = 255
+    end
+  end
+  object DSFileds: TDataSource
+    DataSet = Fields
+    Left = 480
+    Top = 248
+  end
+  object cc_bookmarkDataSet: TOracleDataSet
+    SQL.Strings = (
+      'SELECT *'
+      '  FROM CC_BOOKMARK'
+      'where contnum=:ContractID')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000160000003A0043004F004E00540052004100430054004900
+      4400050000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      05000000170000000E00000043004F004E0054004E0055004D00010000000000
+      12000000460049005200530054004E0041004D00450001000000000010000000
+      4C004100530054004E0041004D004500010000000000140000004D0049004400
+      44004C0045004E0041004D0045000100000000000E0000004100440044005200
+      4500530053000100000000001000000050004100530053005000530045005200
+      01000000000010000000500041005300530050004E0055004D00010000000000
+      1200000050004100530053005000440041005400450001000000000012000000
+      5000410053005300500044004500500054000100000000001600000043004F00
+      4D00500041004400440052004500530053000100000000001000000042004C00
+      44005F004E0041004D0045000100000000001000000045004E00540052004100
+      4E00430045000100000000001400000046004C00410054004E0055004D004200
+      450052000100000000000A00000052004F004F004D0053000100000000000800
+      000041005200450041000100000000000C000000500052004900430045003100
+      0100000000001400000043004F004E00540041004D004F0055004E0054000100
+      000000000C000000500041005900440041005900010000000000080000004300
+      4F00440045000100000000000C000000460046004C004F004F00520001000000
+      0000100000004D004F004E005400480050004100590001000000000018000000
+      410059004C00490051004F00440045004D0045004C0049000100000000000C00
+      000050004500520049004F004400010000000000}
+    Cursor = crSQLWait
+    QueryAllRecords = False
+    Session = sboapiDataModule.SBSession
+    Left = 358
+    Top = 79
+  end
+  object cc_bookmark: TDataSource
+    DataSet = cc_bookmarkDataSet
+    Left = 464
+    Top = 376
+  end
+  object ReplaceCustDataSet: TOracleDataSet
+    SQL.Strings = (
+      'SELECT'
+      '   B.TEMPLATEID , B.BOOKMARKNAME , A.FIELDNAME'
+      'FROM'
+      '   CC_WR_BOOKMARKS B'
+      ' , CC_WR_FIELDS A'
+      'WHERE'
+      '     (B.FIELDID = A.ID)'
+      '   AND templateid = :tid'
+      '   AND bookmarkname = :bname')
+    Optimize = False
+    Variables.Data = {
+      0400000002000000080000003A00540049004400030000000000000000000000
+      0C0000003A0042004E0041004D004500050000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000300000014000000540045004D0050004C0041005400450049004400
+      0100000000001800000042004F004F004B004D00410052004B004E0041004D00
+      4500010000000000120000004600490045004C0044004E0041004D0045000100
+      00000000}
+    Cursor = crSQLWait
+    QueryAllRecords = False
+    Session = sboapiDataModule.SBSession
+    Left = 416
+    Top = 151
+  end
+  object Hesabat: TOracleDataSet
+    SQL.Strings = (
+      
+        'select  f.code Menzil_kod,  c.ContNum as Muqavile_nom  ,  cm.com' +
+        'p_name as Layihe, bl.bld_name as Bina,'
+      
+        'f.entrance as Giris, f.ffloor as Mertebe, f.flatnumber as Menzil' +
+        ',   f.area as Sahe, f.price1 as kv_qiy, f.pricegen as Umumi_qiy,'
+      
+        ' c.contamount as Muqvile_deyeri, c.opendate as Achilma_tar, c.ex' +
+        'pdate as Bitme_tar, c.closedate as Baglanma_tar,'
+      
+        '  b.firstname as Soyadi, b.lastname as Adi, b.middlename as Ataa' +
+        'di , cc_general.cemiodenish(c.id,99)+ cc_general.cemiodenish(c.i' +
+        'd,100) as tekrar_ve_ilk_odeme,'
+      
+        '  cc_general.cemiodenish(c.id,92) as Sahe_odenis, cc_general.cem' +
+        'iodenish(c.id,93) as Tertibat, cc_general.cemiodenish(c.id,96) a' +
+        's Cerime'
+      
+        'from cc_contracts c,  cc_buyers b,  cc_companies cm, cc_building' +
+        's bl, cc_flats f'
+      'where c.closedate is null and  c.buyer = b.id'
+      ' and c.flatid = f.id and f.bld_id = bl.id and bl.comp_id = cm.id')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      0500000015000000140000004D0045004E005A0049004C005F004B004F004400
+      010000000000180000004D00550051004100560049004C0045005F004E004F00
+      4D000100000000000C0000004C00410059004900480045000100000000000800
+      0000420049004E0041000100000000000A000000470049005200490053000100
+      000000000E0000004D004500520054004500420045000100000000000C000000
+      4D0045004E005A0049004C000100000000000800000053004100480045000100
+      000000000C0000004B0056005F00510049005900010000000000120000005500
+      4D0055004D0049005F005100490059000100000000001C0000004D0055005100
+      560049004C0045005F0044004500590045005200490001000000000016000000
+      41004300480049004C004D0041005F0054004100520001000000000012000000
+      4200490054004D0045005F005400410052000100000000001800000042004100
+      47004C0041004E004D0041005F005400410052000100000000000C0000005300
+      4F00590041004400490001000000000006000000410044004900010000000000
+      0C00000041005400410041004400490001000000000026000000540045004B00
+      5200410052005F00560045005F0049004C004B005F004F00440045004D004500
+      0100000000001600000053004100480045005F004F00440045004E0049005300
+      0100000000001000000054004500520054004900420041005400010000000000
+      0C00000043004500520049004D004500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 296
+    Top = 400
+    object HesabatMENZIL_KOD: TWideStringField
+      FieldName = 'MENZIL_KOD'
+    end
+    object HesabatMUQAVILE_NOM: TWideStringField
+      FieldName = 'MUQAVILE_NOM'
+      Size = 10
+    end
+    object HesabatLAYIHE: TWideStringField
+      FieldName = 'LAYIHE'
+      Size = 50
+    end
+    object HesabatBINA: TWideStringField
+      FieldName = 'BINA'
+    end
+    object HesabatGIRIS: TWideStringField
+      FieldName = 'GIRIS'
+      Size = 10
+    end
+    object HesabatMERTEBE: TWideStringField
+      FieldName = 'MERTEBE'
+      Size = 10
+    end
+    object HesabatMENZIL: TWideStringField
+      FieldName = 'MENZIL'
+      Size = 10
+    end
+    object HesabatSAHE: TFloatField
+      FieldName = 'SAHE'
+    end
+    object HesabatKV_QIY: TFloatField
+      FieldName = 'KV_QIY'
+    end
+    object HesabatUMUMI_QIY: TFloatField
+      FieldName = 'UMUMI_QIY'
+    end
+    object HesabatMUQVILE_DEYERI: TFloatField
+      FieldName = 'MUQVILE_DEYERI'
+    end
+    object HesabatACHILMA_TAR: TDateTimeField
+      FieldName = 'ACHILMA_TAR'
+    end
+    object HesabatBITME_TAR: TDateTimeField
+      FieldName = 'BITME_TAR'
+    end
+    object HesabatBAGLANMA_TAR: TDateTimeField
+      FieldName = 'BAGLANMA_TAR'
+    end
+    object HesabatSOYADI: TWideStringField
+      FieldName = 'SOYADI'
+      Size = 40
+    end
+    object HesabatADI: TWideStringField
+      FieldName = 'ADI'
+      Size = 40
+    end
+    object HesabatATAADI: TWideStringField
+      FieldName = 'ATAADI'
+      Size = 40
+    end
+    object HesabatTEKRAR_VE_ILK_ODEME: TFloatField
+      FieldName = 'TEKRAR_VE_ILK_ODEME'
+    end
+    object HesabatSAHE_ODENIS: TFloatField
+      FieldName = 'SAHE_ODENIS'
+    end
+    object HesabatTERTIBAT: TFloatField
+      FieldName = 'TERTIBAT'
+    end
+    object HesabatCERIME: TFloatField
+      FieldName = 'CERIME'
+    end
+  end
+  object Description: TOracleDataSet
+    SQL.Strings = (
+      'select a.rowID,a.code,a.name from cc_description a')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000800000043004F0044004500010000000000080000004E00
+      41004D004500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 584
+    Top = 296
+  end
+  object DescriptionDataSet: TDataSource
+    DataSet = Description
+    Left = 560
+    Top = 208
+  end
+  object PaySumDataSet: TOracleDataSet
+    SQL.Strings = (
+      
+        'select p.descode,d.name,sum(p.payamt) as cemi from cc_payments p' +
+        ', cc_description d where p.descode=d.code and id#= :TID'
+      ''
+      'group by DESCode,d.name order by DESCode')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000080000003A00540049004400030000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      05000000030000000E00000044004500530043004F0044004500010000000000
+      080000004E0041004D00450001000000000008000000430045004D0049000100
+      00000000}
+    Session = sboapiDataModule.SBSession
+    Left = 392
+    Top = 328
+    object PaySumDataSetDESCODE: TFloatField
+      FieldName = 'DESCODE'
+    end
+    object PaySumDataSetNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 100
+    end
+    object PaySumDataSetCEMI: TFloatField
+      FieldName = 'CEMI'
+    end
+  end
+  object PaySumDatSrc: TDataSource
+    DataSet = PaySumDataSet
+    Left = 392
+    Top = 384
+  end
+  object OracleDataSet1: TOracleDataSet
+    SQL.Strings = (
+      'select * from cc_note')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000400000049004400010000000000080000004E004F005400
+      4500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 584
+    Top = 344
+  end
+  object DataSource1: TDataSource
+    DataSet = OracleDataSet1
+    Left = 544
+    Top = 384
+  end
+  object cc_sum_cols_payments: TOracleDataSet
+    SQL.Strings = (
+      'select sum (payamt) from cc_payments'
+      'where id#=:SID'
+      ' and descode in (select sum_cols from cc_sum_cols_payments)')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000080000003A00530049004400030000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000100000016000000530055004D00280050004100590041004D005400
+      2900010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 200
+    Top = 408
+    object cc_sum_cols_paymentsSUMPAYAMT: TFloatField
+      FieldName = 'SUM(PAYAMT)'
+    end
+  end
+  object SBOP: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'SBOP'
+    Left = 32
+    Top = 408
+  end
+  object cc_settings: TOracleDataSet
+    SQL.Strings = (
+      'select * from cc_settings')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000050000000C0000004100430043004300550052000100000000001000
+      0000410043004300420041004C0043004E000100000000000E00000041004300
+      4300430055005300540001000000000012000000410043004300420052004100
+      4E00430048000100000000000E000000410043004300530059004D0042000100
+      00000000}
+    Session = sboapiDataModule.SBSession
+    Left = 608
+    Top = 64
+    object cc_settingsACCCUR: TFloatField
+      FieldName = 'ACCCUR'
+    end
+    object cc_settingsACCBALCN: TFloatField
+      FieldName = 'ACCBALCN'
+    end
+    object cc_settingsACCCUST: TFloatField
+      FieldName = 'ACCCUST'
+    end
+    object cc_settingsACCBRANCH: TFloatField
+      FieldName = 'ACCBRANCH'
+    end
+    object cc_settingsACCSYMB: TWideStringField
+      FieldName = 'ACCSYMB'
+    end
+  end
+  object cc_settingsDatSrc: TDataSource
+    DataSet = cc_settings
+    Left = 610
+    Top = 121
+  end
+  object ContRefusal: TOracleDataSet
+    SQL.Strings = (
+      'select * from cc_flats')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000D0000001400000046004C00410054004E0055004D00420045005200
+      01000000000004000000490044000100000000000C00000042004C0044005F00
+      490044000100000000001000000045004E005400520041004E00430045000100
+      000000000C000000460046004C004F004F0052000100000000000A0000005200
+      4F004F004D005300010000000000080000004100520045004100010000000000
+      0C00000050005200490043004500310001000000000010000000500052004900
+      43004500470045004E000100000000000A000000420055005900450052000100
+      000000000C0000005500530045005200490044000100000000000A0000004100
+      43004300490044000100000000000800000043004F0044004500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 632
+    Top = 392
+    object ContRefusalID: TFloatField
+      FieldName = 'ID'
+    end
+    object ContRefusalBLD_ID: TFloatField
+      FieldName = 'BLD_ID'
+    end
+    object ContRefusalFLATNUMBER: TWideStringField
+      FieldName = 'FLATNUMBER'
+      Size = 10
+    end
+    object ContRefusalENTRANCE: TWideStringField
+      FieldName = 'ENTRANCE'
+      Size = 10
+    end
+    object ContRefusalFFLOOR: TWideStringField
+      FieldName = 'FFLOOR'
+      Size = 10
+    end
+    object ContRefusalROOMS: TFloatField
+      FieldName = 'ROOMS'
+    end
+    object ContRefusalAREA: TFloatField
+      FieldName = 'AREA'
+    end
+    object ContRefusalPRICE1: TFloatField
+      FieldName = 'PRICE1'
+    end
+    object ContRefusalPRICEGEN: TFloatField
+      FieldName = 'PRICEGEN'
+    end
+    object ContRefusalBUYER: TFloatField
+      FieldName = 'BUYER'
+    end
+    object ContRefusalUSERID: TFloatField
+      FieldName = 'USERID'
+    end
+    object ContRefusalACCID: TFloatField
+      FieldName = 'ACCID'
+    end
+    object ContRefusalCODE: TWideStringField
+      FieldName = 'CODE'
+    end
+  end
+  object entranceSrc: TDataSource
+    DataSet = entranceDataSet
+    Left = 328
+    Top = 288
+  end
+  object entranceDataSet: TOracleDataSet
+    SQL.Strings = (
+      'SELECT entrance'
+      '  FROM cc_flats  --where bld_id = :bld_id'
+      '  group by entrance'
+      'order by entrance')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000010000001000000045004E005400520041004E004300450001000000
+      0000}
+    Session = sboapiDataModule.SBSession
+    Left = 256
+    Top = 296
+    object entranceDataSetENTRANCE: TWideStringField
+      FieldName = 'ENTRANCE'
+      Size = 10
+    end
+  end
+  object reppay: TOracleDataSet
+    SQL.Strings = (
+      'select * from CC_CUSTPAY')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 24
+    Top = 496
+  end
+end

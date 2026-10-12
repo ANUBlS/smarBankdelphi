@@ -1,0 +1,192 @@
+unit BaliSrcImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, NLSDialogs,
+  StdCtrls, ExtCtrls, Buttons, Db, OracleData;
+
+type
+  TBali = class(TForm)
+    Panel2: TPanel;
+    Label10: TLabel;
+    Edit1: TEdit;
+    Edit2: TEdit;
+    Label1: TLabel;
+    SpeedButton1: TSpeedButton;
+    OracleDataSet1: TOracleDataSet;
+    DataSource1: TDataSource;
+    OracleDataSet2: TOracleDataSet;
+    DataSource2: TDataSource;
+    DataSource3: TDataSource;
+    OracleDataSet3: TOracleDataSet;
+    SpeedButton2: TSpeedButton;
+    OracleDataSet1ROWNUM: TFloatField;
+    OracleDataSet1ID: TFloatField;
+    OracleDataSet1NUMBEROFCREDIT: TWideStringField;
+    OracleDataSet1BOOROWERID: TWideStringField;
+    OracleDataSet1NAME: TWideStringField;
+    OracleDataSet1VAL_NAME: TWideStringField;
+    OracleDataSet1GUARANTORSALARY: TWideStringField;
+    OracleDataSet1GUARANTORNAME: TWideStringField;
+    OracleDataSet1CREDITLINEAMOUNT: TFloatField;
+    OracleDataSet1D: TWideStringField;
+    OracleDataSet2ROWNUM: TFloatField;
+    OracleDataSet2ID: TFloatField;
+    OracleDataSet2NUMBEROFCREDIT: TWideStringField;
+    OracleDataSet2BOOROWERID: TWideStringField;
+    OracleDataSet2NAME: TWideStringField;
+    OracleDataSet2VAL_NAME: TWideStringField;
+    OracleDataSet2GUARANTORSALARY: TWideStringField;
+    OracleDataSet2GUARANTORNAME: TWideStringField;
+    OracleDataSet2CREDITLINEAMOUNT: TFloatField;
+    OracleDataSet2GUARANTORNAME2: TWideStringField;
+    OracleDataSet2GUARANTORSALARY2: TWideStringField;
+    OracleDataSet2DATEOFCONCLUSION: TDateTimeField;
+    OracleDataSet2DUEDATEFIRSTCONTRACT: TDateTimeField;
+    OracleDataSet2PHONENUMBER: TWideStringField;
+    OracleDataSet2SALARY: TWideStringField;
+    OracleDataSet2ZAMINWORK1: TWideStringField;
+    OracleDataSet2ZAMINTEL1: TWideStringField;
+    OracleDataSet3ROWNUM: TFloatField;
+    OracleDataSet3ID: TFloatField;
+    OracleDataSet3GUARANTORID: TWideStringField;
+    OracleDataSet3NUMBEROFCREDIT: TWideStringField;
+    OracleDataSet3BOOROWERID: TWideStringField;
+    OracleDataSet3NAME: TWideStringField;
+    OracleDataSet3VAL_NAME: TWideStringField;
+    OracleDataSet3GUARANTORSALARY: TWideStringField;
+    OracleDataSet3GUARANTORNAME: TWideStringField;
+    OracleDataSet3CREDITLINEAMOUNT: TFloatField;
+    OracleDataSet3GUARANTORNAME2: TWideStringField;
+    OracleDataSet3GUARANTORSALARY2: TWideStringField;
+    OracleDataSet3DATEOFCONCLUSION: TDateTimeField;
+    OracleDataSet3DUEDATEFIRSTCONTRACT: TDateTimeField;
+    OracleDataSet3PHONENUMBER: TWideStringField;
+    OracleDataSet3SALARY: TWideStringField;
+    OracleDataSet3ZAMINWORK1: TWideStringField;
+    OracleDataSet3ZAMINTEL1: TWideStringField;
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure Edit2Exit(Sender: TObject);
+    procedure Edit1Exit(Sender: TObject);
+    procedure SpeedButton2Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Bali: TBali;
+
+implementation
+
+{$R *.DFM}
+
+uses CMOracleApiDataModuleImpl,CommonDecls,systemstate, FrmBaliImpl;
+
+procedure InitPlugin(s:string);export;
+begin
+   Bali.ShowModal;
+end;
+exports
+     InitPlugin;
+
+
+procedure TBali.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+  if ord(Key) = VK_ESCAPE then Close;
+end;
+
+procedure TBali.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+Resize:=false;
+end;
+
+procedure TBali.SpeedButton1Click(Sender: TObject);
+var
+cust,id,all,bid,bcust :string;
+begin
+
+if Edit1.text='' then
+     cust:=''    else  cust:=' and lower(b.name)='+'lower('''+ Edit1.text+''')';
+if Edit2.text='' then
+     id:=''    else  id:= ' and b.boorowerid='+''''+Edit2.text+'''';
+
+if Edit1.text='' then
+     bcust:=''    else  bcust:=' and lower(c.name)='+'lower('''+ Edit1.text+''')';
+if Edit2.text='' then
+     bid:=''     else  bid:= ' and c.guarantorid='+''''+Edit2.text+'''';
+
+ //all:= 'and b.name=
+ with OracleDataSet1 do
+   begin
+   closeall ;
+   sql[6]:= cust+id;
+   open;
+   end;
+   OracleDataSet2.open ;
+ with OracleDataSet3 do
+   begin
+   closeall ;
+   sql[2]:= bcust+bid;
+   open;
+   end;
+
+ if OracleDataSet1.RecordCount>0 then
+  begin
+    FrmBali.GroupBox1.visible:=true;
+    FrmBali.GroupBox2.visible:=true;
+  end;
+ // FrmBali.ShowModal;
+ // end
+ //else showmessage('Бел бир мцштяри йохдур');
+
+if OracleDataSet1.RecordCount+OracleDataSet3.RecordCount=0 then
+  showmessage('Бел бир мцштяри вя йа замин йохдур') else
+  FrmBali.ShowModal;
+end;
+procedure TBali.Edit2Exit(Sender: TObject);
+begin
+   (Sender as TEdit).Text := '';
+end;
+
+procedure TBali.Edit1Exit(Sender: TObject);
+begin
+(Sender as TEdit).Text := '';
+end;
+
+procedure TBali.SpeedButton2Click(Sender: TObject);
+begin
+
+close
+end;
+
+procedure TBali.FormCreate(Sender: TObject);
+begin
+    FrmBali := TFrmBali.Create(Self);
+end;
+
+procedure TBali.FormDestroy(Sender: TObject);
+begin
+OracleDataSet1.close;
+OracleDataSet2.close;
+OracleDataSet3.close;
+end;
+
+procedure TBali.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+edit1.clear;
+edit2.clear;
+end;
+
+initialization
+   Bali := TBali.Create(CommonApplication);
+end.

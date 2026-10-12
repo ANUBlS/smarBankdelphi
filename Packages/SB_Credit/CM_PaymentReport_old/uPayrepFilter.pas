@@ -1,0 +1,244 @@
+unit uPayrepFilter;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, Db, OracleData, Oracle, CMExcelExport, Mask,
+  DBCtrlsEh, DBLookupEh, ExtCtrls, Quickrpt, ComCtrls, CheckLst,
+  Evanescence,SbtranslateProc, DBGridEh, XFSCtrls;
+
+type
+  TfrmPayRepFilter = class(TForm)
+    ODSCredits: TOracleDataSet;
+    CM_REPORTS: TOraclePackage;
+    ODFValute: TOracleDataSet;
+    Valute: TDataSource;
+    ODFBranch: TOracleDataSet;
+    Branch: TDataSource;
+    ODFUsrGroup: TOracleDataSet;
+    UsrGroup: TDataSource;
+    ODFReserves: TOracleDataSet;
+    Reserves: TDataSource;
+    DueReserve: TDataSource;
+    ODFUsers: TOracleDataSet;
+    Users: TDataSource;
+    ODFPersons: TOracleDataSet;
+    Persons: TDataSource;
+    ODFCategories: TOracleDataSet;
+    Categories: TDataSource;
+    ODFCrdTypes: TOracleDataSet;
+    CrdType: TDataSource;
+    ODFPledges: TOracleDataSet;
+    Pledges: TDataSource;
+    ODFCustomers: TOracleDataSet;
+    Customers: TDataSource;
+    ODSPayInfo: TOracleDataSet;
+    ODSCreditsID: TFloatField;
+    Exporter: TCMExcelExport;
+    ODSPayInfoCREDITID: TFloatField;
+    ODSPayInfoGROUPNAME: TWideStringField;
+    ODSPayInfoBOOROWER: TWideStringField;
+    ODSPayInfoCRDNUM: TWideStringField;
+    ODSPayInfoMAINSCHEDULE: TFloatField;
+    ODSPayInfoMAINPAYED: TFloatField;
+    ODSPayInfoINTRSCHEDULE: TFloatField;
+    ODSPayInfoINTRPAYED: TFloatField;
+    ODSPayInfoREST: TFloatField;
+    ODSPayInfoINTREST: TFloatField;
+    XFPanel5: TXFPanel;
+    XFGroupBox12: TXFGroupBox;
+    XFLabel1: TXFLabel;
+    pick1: TDateTimePicker;
+    pick2: TDateTimePicker;
+    XFGroupBox13: TXFGroupBox;
+    dtpfi: TDateTimePicker;
+    XFRadioGroup1: TXFRadioGroup;
+    XFButton1: TXFButton;
+    XFButton2: TXFButton;
+    XFPanel4: TXFPanel;
+    XFGroupBox9: TXFGroupBox;
+    DBLookupComboboxEh1: TDBLookupComboboxEh;
+    XFCheckBox9: TXFCheckBox;
+    XFGroupBox10: TXFGroupBox;
+    DBLookupComboboxEh2: TDBLookupComboboxEh;
+    XFCheckBox10: TXFCheckBox;
+    XFGroupBox11: TXFGroupBox;
+    DBLookupComboboxEh3: TDBLookupComboboxEh;
+    XFCheckBox11: TXFCheckBox;
+    XFPanel3: TXFPanel;
+    XFGroupBox6: TXFGroupBox;
+    DBLookupComboboxEh7: TDBLookupComboboxEh;
+    XFCheckBox6: TXFCheckBox;
+    XFGroupBox7: TXFGroupBox;
+    DBLookupComboboxEh8: TDBLookupComboboxEh;
+    XFCheckBox7: TXFCheckBox;
+    XFGroupBox8: TXFGroupBox;
+    DBLookupComboboxEh9: TDBLookupComboboxEh;
+    XFCheckBox8: TXFCheckBox;
+    XFPanel2: TXFPanel;
+    XFGroupBox3: TXFGroupBox;
+    DBLookupComboboxEh4: TDBLookupComboboxEh;
+    XFCheckBox3: TXFCheckBox;
+    XFGroupBox4: TXFGroupBox;
+    DBLookupComboboxEh5: TDBLookupComboboxEh;
+    XFCheckBox4: TXFCheckBox;
+    XFGroupBox5: TXFGroupBox;
+    DBLookupComboboxEh6: TDBLookupComboboxEh;
+    XFCheckBox5: TXFCheckBox;
+    XFPanel1: TXFPanel;
+    XFGroupBox1: TXFGroupBox;
+    XFCheckBox1: TXFCheckBox;
+    DBLookupComboboxEh10: TDBLookupComboboxEh;
+    XFGroupBox2: TXFGroupBox;
+    DBLookupComboboxEh11: TDBLookupComboboxEh;
+    XFCheckBox2: TXFCheckBox;
+    procedure FormCreate(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure XFButton1Click(Sender: TObject);
+    procedure XFButton2Click(Sender: TObject);
+  private
+    function BuildFilterString:String;
+    procedure GetReport(RepDataSet: TOracleDataSet;procname: String; RepType: Byte;QRep: TQuickRep);
+  public
+    { Public declarations }
+  end;
+
+var
+  frmPayRepFilter: TfrmPayRepFilter; 
+
+procedure InitPlugin(S : String); export;
+
+implementation
+
+{$R *.DFM}
+
+
+uses
+  CommonDecls, SBSystem,SboApiDataModuleImpl;
+
+procedure InitPlugin(S : String); export;
+begin
+
+    frmPayRepFilter.ShowModal;
+end;
+
+exports
+  InitPlugin;
+
+function TfrmPayRepFilter.BuildFilterString;
+
+  procedure ConcatFilter(var S: String; const Prefix : String; Checked : Boolean; KeyValue : Variant);
+  const
+     csFormat = '(%s=%s)';
+  var
+    Temp : String;   
+  begin
+
+    if Checked then
+    begin
+      Temp := Format(csFormat,[Prefix,Keyvalue]);
+      if S = '' then
+        S := Temp
+      else
+        S :=S + 'and ' + Temp;
+    end;
+    
+  end;
+begin
+  Result := '';
+  ConcatFilter(Result,'CURRENCY',XFCheckBox9.Checked,DBLookupComboboxEh1.KeyValue);
+  ConcatFilter(Result,'BRANCHID',XFCheckBox10.Checked,DBLookupComboboxEh2.KeyValue);
+  ConcatFilter(Result,'USRGROUP',XFCheckBox11.Checked,DBLookupComboboxEh3.KeyValue);
+  ConcatFilter(Result,'RESERVEID',XFCheckBox3.Checked,DBLookupComboboxEh4.KeyValue);
+  ConcatFilter(Result,'DUERESERVEID',XFCheckBox4.Checked,DBLookupComboboxEh5.KeyValue);
+  ConcatFilter(Result,'USID',XFCheckBox5.Checked,DBLookupComboboxEh6.KeyValue);
+  ConcatFilter(Result,'PERSONALTYPE',XFCheckBox6.Checked,DBLookupComboboxEh7.KeyValue);
+  ConcatFilter(Result,'CUSTOMERTYPE',XFCheckBox7.Checked,DBLookupComboboxEh8.KeyValue);
+  ConcatFilter(Result,'CREDITTYPE',XFCheckBox8.Checked,DBLookupComboboxEh9.KeyValue);
+  ConcatFilter(Result,'PLEDGEID',XFCheckBox1.Checked,DBLookupComboboxEh10.KeyValue);
+  ConcatFilter(Result,'BOOROWERID',XFCheckBox2.Checked,DBLookupComboboxEh11.KeyValue);
+end;
+
+procedure TfrmPayRepFilter.GetReport;
+var
+  res: String;
+  ADDITIONALPARAMS: String;
+begin
+   with ODSCredits do begin
+    Session.Commit;
+    Close;
+    if (BuildFilterString<>'')or (ADDITIONALPARAMS<>'') then
+      SQL[2] := 'where '+BuildFilterString + ADDITIONALPARAMS
+    else
+      SQL[2] := '';
+   // sql.SaveToFile('c:\aa.txt');
+    Open;
+    while not Eof do begin
+      CM_REPORTS.CallProcedure('insrowpayment',[
+        'p_ID',    ODSCreditsID.AsInteger ,
+        'p_bDate', formatdatetime('dd-mmm-yyyy',pick1.date) ,
+        'p_eDate', formatdatetime('dd-mmm-yyyy',pick2.date) ,
+        'p_intdate',formatdatetime('dd-mmm-yyyy',dtpfi.date)
+      ]);
+      Next;
+    end;
+  end;
+
+  RepDataSet.Close;
+
+  RepDataSet.Open;
+
+  Screen.Cursor := crDefault;
+
+
+    with Exporter do begin
+      Connect;
+      ExportDataset(RepDataSet,'Report',true,false);
+      ShowExcel;
+  end;
+
+end;
+
+procedure TfrmPayRepFilter.XFButton1Click(Sender: TObject);
+begin
+//  Screen.Cursor := crSQLWait;
+  GetReport(ODSPayInfo,'',0,nil);
+//  Screen.Cursor := crDefault;
+end;
+
+procedure TfrmPayRepFilter.XFButton2Click(Sender: TObject);
+begin
+close
+end;
+
+procedure TfrmPayRepFilter.FormCreate(Sender: TObject);
+var
+  a,i: Integer;
+begin
+ for i:=0 to ComponentCount-1 do
+    if (Components[i] is TOracleDataSet) and (Components[i].tag=0) then
+       (Components[i] as TOracleDataSet).Open;
+
+  pick1.DateTime := Get_CurrentDate;
+  pick2.DateTime := Get_CurrentDate;
+  dtpfi.DateTime := Get_CurrentDate;
+  SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TfrmPayRepFilter.FormShow(Sender: TObject);
+var
+  a,i: Integer;
+begin
+
+   for a := 0 to ComponentCount - 1 do
+    if Components[a].Tag = 3112 then begin
+      (Components[a] as TEvanescence).Open;
+      (Components[a] as TEvanescence).CheckAll;
+   end;
+   end;
+
+initialization
+  frmPayRepFilter := TfrmPayRepFilter.Create(CommonApplication);
+
+end.

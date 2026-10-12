@@ -1,0 +1,1360 @@
+﻿unit UMKPolicyImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, LDialogs,
+  ActiveX, AxCtrls, MKPolicy_TLB, StdVcl, SBPlgAx50_TLB, ComCtrls, HintBox,
+  StdCtrls, Buttons, ExtCtrls, DBCtrls, Mask, Db, OracleData,
+  INSWordExporter, Oracle, Grids, DBGrids, olectnrs,  Dialogs,variants, XFSCtrls;
+
+const
+   WM_ModalResult = WM_USER+139;
+   fmCaption = 'Kasko sigortasi policy: (%s)';
+   pDisabled = 6;
+   pMaking = 4;
+type
+  TfmMKPolicy = class(TActiveForm,
+                      IfmMKPolicy,
+                      IUIObject,
+                      IParamInput)
+    ODSPolicy: TOracleDataSet;
+    ODSPolicyID: TFloatField;
+    ODSPolicyTHEFT: TFloatField;
+    ODSPolicyFIRE: TFloatField;
+    ODSPolicyEXPLOSION: TFloatField;
+    ODSPolicyTRAFFICACCIDENT: TFloatField;
+    ODSPolicyIMPACTANYOBJECT: TFloatField;
+    ODSPolicyNATCATASTROPHE: TFloatField;
+    ODSPolicyPOLICYNUM: TWideStringField;
+    DSPolicy: TDataSource;
+    DSAvalute: TDataSource;
+    INSWordExporter: TINSWordExporter;
+    ODSReport: TOracleDataSet;
+    ODSReportNAME: TWideStringField;
+    ODSReportINSUREDTYPE: TWideStringField;
+    ODSReportINSUREDCOLOR: TWideStringField;
+    ODSReportINSUREDOUTPUTYEAR: TIntegerField;
+    ODSReportINSUREDMODEL: TWideStringField;
+    ODSReportINSUREDSTATENUM: TWideStringField;
+    ODSReportUNDERFRAMENUM: TWideStringField;
+    ODSReportINSUREDBANNUM: TWideStringField;
+    ODSReportINSUREDENGINENUM: TWideStringField;
+    ODSReportDRIVEACCESSPIOPLE: TWideStringField;
+    ODSReportBEGINDATE: TWideStringField;
+    ODSReportENDDATE: TWideStringField;
+    ODSReportPOLICYNUM: TWideStringField;
+    OPCOMMON: TOraclePackage;
+    ODSReportLOANACC_ID: TFloatField;
+    ODSReportCURRACC_ID: TFloatField;
+    ODSReportVALUTE: TWideStringField;
+    ODSContracts: TOracleDataSet;
+    ODSContractsID: TFloatField;
+    ODSContractsTYPE_ID: TFloatField;
+    ODSContractsINS_DATE: TDateTimeField;
+    ODSContractsBEGIN_DATE: TDateTimeField;
+    ODSContractsEND_DATE: TDateTimeField;
+    ODSContractsVALUTE_ID: TFloatField;
+    ODSContractsAMMOUNT: TFloatField;
+    ODSContractsCLOSE_PREFIX: TIntegerField;
+    ODSContractsKLI_ID: TFloatField;
+    ODSContractsLOANACC_ID: TFloatField;
+    ODSContractsCURRACC_ID: TFloatField;
+    ODSContractsPOLICY_NUM: TWideStringField;
+    DSContracts: TDataSource;
+    ODSContractsINSSUMM: TFloatField;
+    ODSContractsFRANSHIZ: TFloatField;
+    ODSContractsTARIFF: TFloatField;
+    ODSContractsSTATE: TIntegerField;
+    ODSReportAGENT: TWideStringField;
+    ODSPolicyUNDERTABLE: TBlobField;
+    DSTemplates: TDataSource;
+    ODSTemplates: TOracleDataSet;
+    ODSTemplatesID: TFloatField;
+    ODSTemplatesNAME: TWideStringField;
+    ODSTemplatesTEMPLATE: TBlobField;
+    ODSReportACCESSORIESNAME: TWideStringField;
+    ODSReportINSDATE: TWideStringField;
+    OPMKKASCO: TOraclePackage;
+    ODSPolicyCID: TFloatField;
+    DSCustomers: TDataSource;
+    ODSCustomers: TOracleDataSet;
+    ODSCustomersID: TIntegerField;
+    ODSCustomersINSURED_TYPEID: TIntegerField;
+    ODSMotorkasko: TOracleDataSet;
+    ODSMotorkaskoID: TFloatField;
+    ODSMotorkaskoCID: TFloatField;
+    ODSMotorkaskoINSUREDTYPE: TWideStringField;
+    ODSMotorkaskoINSUREDCOLOR: TWideStringField;
+    ODSMotorkaskoINSUREDOUTPUTYEAR: TIntegerField;
+    ODSMotorkaskoINSUREDSTATENUM: TWideStringField;
+    ODSMotorkaskoUNDERFRAMENUM: TWideStringField;
+    ODSMotorkaskoINSUREDBANNUM: TWideStringField;
+    ODSMotorkaskoINSUREDENGINENUM: TWideStringField;
+    ODSMotorkaskoDRIVEINTENDED: TWideStringField;
+    ODSMotorkaskoDRIVECOST: TFloatField;
+    ODSMotorkaskoBEGINDATE: TDateTimeField;
+    ODSMotorkaskoENDDATE: TDateTimeField;
+    ODSMotorkaskoTYPEID: TIntegerField;
+    ODSMotorkaskoCLOSE_PREFIX: TIntegerField;
+    ODSMotorkaskoBANK_ID: TFloatField;
+    ODSMotorkaskoMONTH_ID: TFloatField;
+    ODSMotorkaskoINSUREDMARK: TWideStringField;
+    ODSMotorkaskoINSUREDMODEL: TWideStringField;
+    ODSMotorkaskoCLAIM_DATE: TDateTimeField;
+    ODSMotorkaskoCLAIM_NUM: TWideStringField;
+    ODSMotorkaskoAREA: TWideStringField;
+    ODSReportBENEFICIARY: TWideStringField;
+    ODSMotorkaskoFRANSHIZ: TFloatField;
+    ODSMotorkaskoTARIFF: TFloatField;
+    ODSMotorkaskoINSSUMM: TFloatField;
+    ODSMotorkaskoAMMOUNT: TFloatField;
+    ODSAvalute: TOracleDataSet;
+    ODSAvaluteVALUTE: TIntegerField;
+    ODSAvaluteVAL_NAME: TWideStringField;
+    ODSAvaluteVALU_NAME: TWideStringField;
+    ODSAvaluteVALU_SHORT: TWideStringField;
+    ODSCustomersNAME: TWideStringField;
+    ODSContractsBENEFICIARY: TWideStringField;
+    ODSReportSEX: TIntegerField;
+    ODSMotorkaskoNUMSEATS: TWideStringField;
+    lbNonUnicode: TListBox;
+    ODSAvtoIntend: TOracleDataSet;
+    ODSAvtoIntendID: TFloatField;
+    ODSAvtoIntendNAME: TWideStringField;
+    ODSReportDRIVEINTENDED: TWideStringField;
+    ODSReportavtointend: TWideStringField;
+    ODSPolicyRISKS: TFloatField;
+    ODSPolicyNAME: TWideStringField;
+    ODSReportTHEFT: TFloatField;
+    ODSReportFIRE: TFloatField;
+    ODSReportEXPLOSION: TFloatField;
+    ODSReportTRAFFICACCIDENT: TFloatField;
+    ODSReportIMPACTANYOBJECT: TFloatField;
+    ODSRisk: TOracleDataSet;
+    ODSRiskID: TFloatField;
+    ODSRiskNAME: TWideStringField;
+    ODSPolicyrisk: TWideStringField;
+    ODSReportNUMSEATS: TWideStringField;
+    ODSReportEXTRAFRANSHIZ: TWideStringField;
+    ODSReportFRANSHIZ: TFloatField;
+    ODSReportAVTOCOST: TFloatField;
+    ODSReportINSSUMM: TFloatField;
+    ODSReportAMMOUNT: TFloatField;
+    ODSReportINSUREDADDRESS: TWideStringField;
+    ODSReportMOBILEPHONE: TWideStringField;
+    ODSReportHOMEPHONE: TWideStringField;
+    ExtraODialog: TOpenDialog;
+    ODSCustTypes: TOracleDataSet;
+    ODSCustTypesID: TFloatField;
+    ODSCustTypesNAME: TWideStringField;
+    ODSOperkurs: TOracleDataSet;
+    ODSOperkursVALUTE_ID: TFloatField;
+    ODSOperkursVALUTE: TIntegerField;
+    ODSOperkursVAL_NAME: TWideStringField;
+    ODSOperkursOSTAT: TFloatField;
+    ODSReportINSCOLOR: TWideStringField;
+    ODSContractsSUGNUM: TWideStringField;
+    ODSReportVAL_NAME: TWideStringField;
+    XFPanel1: TXFPanel;
+    DBLookupComboBox1: TDBLookupComboBox;
+    btApply: TBitBtn;
+    btPrint: TBitBtn;
+    btOk: TBitBtn;
+    btCancel: TBitBtn;
+    BitBtn1: TBitBtn;
+    BitBtn2: TBitBtn;
+    XFGroupBox1: TXFGroupBox;
+    XFGroupBox2: TXFGroupBox;
+    cbDifRisk: TCheckBox;
+    BitBtn4: TBitBtn;
+    BitBtn3: TBitBtn;
+    XFPanel2: TXFPanel;
+    DBEdit7: TDBEdit;
+    XFLabel1: TXFLabel;
+    gbGrid: TXFGroupBox;
+    DBNavigator1: TDBNavigator;
+    DBGrid1: TDBGrid;
+    gbSame: TXFGroupBox;
+    XFLabel2: TXFLabel;
+    XFLabel3: TXFLabel;
+    XFLabel4: TXFLabel;
+    XFLabel5: TXFLabel;
+    XFLabel6: TXFLabel;
+    DBEdit5: TDBEdit;
+    DBEdit4: TDBEdit;
+    DBEdit3: TDBEdit;
+    DBEdit2: TDBEdit;
+    DBEdit1: TDBEdit;
+    hbErrMsg: THintBox;
+    cbRisk: TXFCheckBox;
+    procedure btOkClick(Sender: TObject);
+    procedure btCancelClick(Sender: TObject);
+    procedure DBEdit7KeyPress(Sender: TObject; var Key: Char);
+    procedure btApplyClick(Sender: TObject);
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure btPrintClick(Sender: TObject);
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure BitBtn1Click(Sender: TObject);
+    procedure ODSContractsAfterEdit(DataSet: TDataSet);
+    procedure ODSPolicyAfterEdit(DataSet: TDataSet);
+    procedure ODSPolicyAfterInsert(DataSet: TDataSet);
+    procedure cbRisk1Click(Sender: TObject);
+    procedure cbDifRiskClick(Sender: TObject);
+    procedure BitBtn2Click(Sender: TObject);
+    procedure BitBtn3Click(Sender: TObject);
+    procedure BitBtn4Click(Sender: TObject);
+  private
+    { Private declarations }
+    FParams : TStrings;
+    FOwnerHandle : Integer;
+
+    tid:real;
+    FEvents: IfmMKPolicyEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+    function  SaveData():Boolean;
+    procedure ExportToWord();
+    function  AddTransh():Boolean;
+    procedure DisableControls(ControlName : TCustomControl; disable : boolean = true);
+
+    procedure MakeExtras(wrdDataDoc: Variant);
+    procedure FillRow(Doc : Variant; Row : Integer;
+                 Text0,Text1,Text2,Text3,Text4,Text5 : String);
+    procedure FillRow1(Doc : Variant; Row : Integer;
+                 Text0,Text1,Text2,Text3: String);
+    //function UTFEncoder(str:WideString):WideString;
+
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+////////////////////////////////////////////////////////
+    function  Get_Owner:Integer; safecall;
+    procedure Set_Owner(val : Integer);  safecall;
+    {IParamInput}
+    function  Get_Params(const Name: WideString): OleVariant; safecall;
+    procedure Set_Params(const Name: WideString; Value: OleVariant); safecall;
+    property Params[const Name: WideString]: OleVariant read Get_Params write Set_Params;
+    {IInstance}
+    function InstanceInitialize: HResult; safecall;
+    function IUIObject.Initialize = InstanceInitialize;
+    function Cleanup: HResult; safecall;
+    {IUIObject}
+//    function  Get_Icon: OLE_HANDLE; safecall;
+    function UIObjectActivate: HResult; safecall;
+    function IUIObject.Activate = UIObjectActivate;
+    function QueryDeactivate: HResult; safecall;
+    function UIObjectDeactivate: HResult; safecall;
+    function IUIObject.Deactivate = UIObjectDeactivate;
+    function SaveState: HResult; safecall;
+    function  Get_Height : Integer; safecall;
+    function  Get_Width  : Integer; safecall;    
+  public
+    CID : Integer;
+    StrIntend,StrIntend1,str:String;
+    { Public declarations }
+    procedure Initialize; override;
+  end;
+var
+  fmMKPolicy : TfmMKPolicy;
+implementation
+
+uses ComObj, ComServ, sboapiDataModuleImpl, UUnderTable, UProceses,SBTranslateProc;
+
+{$R *.DFM}
+
+{ TfmMKPolicy }
+
+procedure TfmMKPolicy.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_fmMKPolicyPage); }
+end;
+
+procedure TfmMKPolicy.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as IfmMKPolicyEvents;
+end;
+
+procedure TfmMKPolicy.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TfmMKPolicy.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TfmMKPolicy.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TfmMKPolicy.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TfmMKPolicy.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TfmMKPolicy.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TfmMKPolicy.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TfmMKPolicy.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TfmMKPolicy.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TfmMKPolicy.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TfmMKPolicy.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TfmMKPolicy.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TfmMKPolicy.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TfmMKPolicy.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TfmMKPolicy.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TfmMKPolicy.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TfmMKPolicy.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TfmMKPolicy.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TfmMKPolicy.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TfmMKPolicy._Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TfmMKPolicy.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TfmMKPolicy.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TfmMKPolicy.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TfmMKPolicy.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TfmMKPolicy.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TfmMKPolicy.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TfmMKPolicy.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TfmMKPolicy.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TfmMKPolicy.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TfmMKPolicy.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TfmMKPolicy.Set_AxBorderStyle(Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TfmMKPolicy.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TfmMKPolicy.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TfmMKPolicy.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TfmMKPolicy.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TfmMKPolicy.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TfmMKPolicy.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TfmMKPolicy.Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TfmMKPolicy.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TfmMKPolicy.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TfmMKPolicy.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TfmMKPolicy.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TfmMKPolicy.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TfmMKPolicy.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+function  TfmMKPolicy.Get_Owner:Integer;
+begin
+  Result := handle;
+end;
+
+procedure TfmMKPolicy.Set_Owner(val : Integer);
+begin
+  if val > 0 then
+     FOwnerHandle := val;
+end;
+
+
+function  TfmMKPolicy.Get_Params(const Name: WideString): OleVariant;
+begin
+  Result := FParams.Values[Name];
+end;
+
+procedure TfmMKPolicy.Set_Params(const Name: WideString; Value: OleVariant);
+begin
+  FParams.Values[Name] := Value;
+end;
+
+function TfmMKPolicy.InstanceInitialize: HResult;
+begin
+  Result := S_OK;
+end;
+
+function TfmMKPolicy.Cleanup: HResult;
+begin
+  Result := S_OK;
+end;
+
+procedure TfmMKPolicy.DisableControls(ControlName : TCustomControl; disable : boolean = true);
+
+  procedure DisableControl(CName : TCustomControl);
+  var i : Integer;
+  begin
+    with CName do
+      for i := 0 to ControlCount -1 do begin
+        if (Controls[i] is TCustomControl) then
+          DisableControl(Controls[i] as TCustomControl);
+        Controls[i].Enabled := disable;
+
+      end
+  end;
+
+begin
+
+  if OPCOMMON.CallIntegerFunction('disablepolicies', []) = 0 then
+    Exit;
+
+  DisableControl(ControlName);
+
+  btApply.Enabled := Disable;
+  btOk.Enabled := Disable;
+  btPrint.Enabled := Disable;
+end;
+
+function TfmMKPolicy.UIObjectActivate: HResult;
+begin
+       CID := StrToInt(Get_Params('CID'));
+       ODSTemplates.Open;
+       with ODSContracts do begin
+          SetVariable('CID', CID);
+          Open;
+          ODSCustomers.SetVariable('kli_id',ODSContractsKli_id.AsInteger);
+          ODSCustomers.Open;
+          tid:=FieldByName('TYPE_ID').asInteger;
+          Edit;
+       end;
+       ODSMotorKasko.SetVariable('cid',cid);
+       ODSMotorKasko.Open;
+       ODSPolicy.SetVariable('CID', CID);
+       ODSPolicy.Open;
+       if ODSPolicy.isEmpty then
+       begin     //-----Insert mod
+         ODSPolicy.Insert;
+        { with ODSPolicy do
+         begin
+           Fieldbyname('THEFT').AsFloat := ODSMotorKaskoFRANSHIZ.AsFloat;
+           Fieldbyname('FIRE').AsFloat := ODSMotorKaskoFRANSHIZ.AsFloat;
+           Fieldbyname('EXPLOSION').AsFloat := ODSMotorKaskoFRANSHIZ.AsFloat;
+           Fieldbyname('TRAFFICACCIDENT').AsFloat := ODSMotorKaskoFRANSHIZ.AsFloat;
+           Fieldbyname('IMPACTANYOBJECT').AsFloat := ODSMotorKaskoFRANSHIZ.AsFloat;
+         end;  }
+         Caption := format(fmCaption, ['Yeni policy']);
+       end
+       else begin  //-----Edit mod
+        // btPrint.Enabled := True;
+         ODSPolicy.Edit;
+       //-----------Disable controls -------------
+       with OPCOMMON do
+         if CallIntegerFunction('get_state',[CID]) = pDisabled {is disable?} then
+           DisableControls(XFGroupBox1, false);
+          { with ODSPolicy do
+           begin
+                Fieldbyname('THEFT').AsFloat := ODSMotorKaskoFRANSHIZ.AsFloat;
+                Fieldbyname('FIRE').AsFloat := ODSMotorKaskoFRANSHIZ.AsFloat;
+                Fieldbyname('EXPLOSION').AsFloat := ODSMotorKaskoFRANSHIZ.AsFloat;
+                Fieldbyname('TRAFFICACCIDENT').AsFloat := ODSMotorKaskoFRANSHIZ.AsFloat;
+                Fieldbyname('IMPACTANYOBJECT').AsFloat := ODSMotorKaskoFRANSHIZ.AsFloat;
+           end; }
+         Caption := format(fmCaption, ['Redakte']);
+       end;
+
+  Result := S_OK;
+end;
+
+function TfmMKPolicy.QueryDeactivate: HResult;
+begin
+  Result := S_OK;
+end;
+
+function TfmMKPolicy.UIObjectDeactivate: HResult;
+begin
+  Result := S_OK;
+end;
+
+function TfmMKPolicy.SaveState: HResult;
+begin
+  Result := S_OK;
+end;
+
+function  TfmMKPolicy.Get_Height : Integer;
+begin
+  Result := Height;
+end;
+
+function  TfmMKPolicy.Get_Width  : Integer;
+begin
+  Result := Width;
+end;
+
+function TfmMKPolicy.SaveData():Boolean;
+var
+  res : boolean;
+begin
+
+{  with ODSPolicy do
+  if State in [dsInsert] then begin
+    ODSContracts.FieldByName('POLICY_NUM').AsString :=
+          OPCommon.callStringFunction('generatePolicy_Num',[tid]);
+  end;
+}
+  res := False;
+  try
+    if cbRisk.Checked then
+    with ODSPolicy do
+    if State in [dsEdit, dsInsert] then
+    begin
+      Fieldbyname('THEFT').AsFloat := ODSMotorKaskoFRANSHIZ.AsFloat;
+      Fieldbyname('FIRE').AsFloat := ODSMotorKaskoFRANSHIZ.AsFloat;
+      Fieldbyname('EXPLOSION').AsFloat := ODSMotorKaskoFRANSHIZ.AsFloat;
+      Fieldbyname('TRAFFICACCIDENT').AsFloat := ODSMotorKaskoFRANSHIZ.AsFloat;
+      Fieldbyname('IMPACTANYOBJECT').AsFloat := ODSMotorKaskoFRANSHIZ.AsFloat;
+      Post;
+      RefreshRecord();
+    end;
+
+    with ODSContracts do
+    if State in [dsEdit, dsInsert] then
+    begin
+      Post;
+      RefreshRecord();
+    end;
+    OPCOMMON.CallBooleanFunction('change_state', [CID, pMaking]);
+    res := True;
+  finally
+    btPrint.Enabled := res;
+    btApply.Enabled := not res;
+  end;
+  Result := res;
+
+try
+ if not res then RaiseLastWin32Error;
+except
+ on E: Exception do
+  hbErrMsg.ShowMessage(E.Message);
+end; 
+end;
+
+procedure TfmMKPolicy.btOkClick(Sender: TObject);
+begin
+  if SaveData() then
+    PostMessage(FOwnerHandle, WM_ModalResult, mrOk, 0);
+end;
+
+procedure TfmMKPolicy.btCancelClick(Sender: TObject);
+begin
+    PostMessage(FOwnerHandle, WM_ModalResult, mrCancel, 0);
+end;
+
+procedure TfmMKPolicy.DBEdit7KeyPress(Sender: TObject; var Key: Char);
+begin
+  if Key = #13 then
+     begin
+       FindNextControl(ActiveControl,true,true,false).SetFocus;
+       Key := #0
+     end
+  else btApply.Enabled := True;
+end;
+
+procedure TfmMKPolicy.btApplyClick(Sender: TObject);
+begin
+  SaveData()
+
+end;
+
+procedure TfmMKPolicy.ActiveFormCreate(Sender: TObject);
+begin
+  fmMKPolicy := Self;
+  FParams := TStringList.Create;
+  ODSAvalute.Open;
+  ODSOperkurs.Open;
+  if cbRisk.Checked then btPrint.Enabled:=true;
+   SBTranslateProc.TranslateAllComponents(Self,sboapiDataModule.OrPack_SL);
+
+end;
+
+procedure TfmMKPolicy.ExportToWord();
+const
+    months : array [1..12] of String = ('Yanvar', 'Fevral', 'Mart', 'Aprel', 'May', 'Iyun',
+                                         'Iyul', 'Avgust', 'Sentyabr', 'Oktyabr', 'Noyabr', 'Dekabr');
+var
+  DocFile : TFileName;
+  i,n,j: integer;
+  WordApp:OleVariant;
+  wrdDataDoc,wrdApp,wrdSelection : Variant;
+  FileName,OutputYear,ErrorStr:String;
+begin
+   ThousandSeparator := ' ';
+  // OutputYear:=FormatDateTime('YYYY',now);
+
+   ODSAValute.Locate('valute',ODSContractsValute_ID.Value,[]);
+   ODSContracts.Close;
+   ODSContracts.SetVariable('CID', CID);
+   ODSContracts.Open;
+
+   ODSReport.Close;
+   ODSReport.SetVariable('CID', CID);
+   ODSReport.Open;
+
+   ODSCustTypes.SetVariable('id',ODSCustomersInsured_TypeID.Value);
+   ODSCustTypes.Open;
+
+   if ODSCustTypesName.AsString<>'Individual' then
+   begin
+      ODSContracts.Edit;
+      ODSContractsSugNum.Value:='';
+      ODSContracts.Post;
+   end;
+   ODSOperkurs.Locate('valute_id',1,[]);
+
+   if ODSReportSex.Value=0 then str:='oğlu'
+      else if ODSReportSex.Value=1 then str:='qızı';
+   StrIntend:=ODSReportAvtoIntend.AsString;
+   if Pos(',',StrIntend)>0 then
+      StrIntend:=Copy(StrIntend,0,Pos(',',StrIntend)-1);
+   StrIntend1:=StrIntend;
+   if cbRisk.Checked then
+   begin
+      StrIntend1:=AnsiUpperCase(StrIntend1);
+         if ODSCustTypesName.AsString='Bank' then
+         begin
+            if not (ODSReportExtraFranshiz.isNull) then
+               FileName:=ExtractFilePath(Application.ExeName)+ '\KaskoPolicyEmpty3.doc'
+            else
+               FileName:=ExtractFilePath(Application.ExeName)+ '\KaskoPolicyEmpty1.doc';
+         end;
+         if ODSCustTypesName.AsString='Individual' then
+            FileName:=ExtractFilePath(Application.ExeName)+ '\IKascoPolicy.doc';
+         if ODSCustTypesName.AsString='Korparativ' then
+            FileName:=ExtractFilePath(Application.ExeName)+ '\CMotorKaskoPolicy.doc';
+    end
+    else
+       begin
+         if ODSCustTypesName.AsString='Bank' then
+            FileName:=ExtractFilePath(Application.ExeName)+ '\KaskoPolicyEmpty2.doc';
+         if ODSCustTypesName.AsString='Individual' then
+            FileName:=ExtractFilePath(Application.ExeName)+ '\IKascoPolicy.doc';
+         if ODSCustTypesName.AsString='Korparativ' then
+            FileName:=ExtractFilePath(Application.ExeName)+ '\CMotorKaskoPolicy.doc';
+       end;
+       wrdApp := CreateOleObject('Word.Application');
+       wrdApp.Visible := True;
+       wrdDataDoc := wrdApp.Documents.Open(FileName);
+       wrdSelection:=wrdApp.Selection;
+
+       if not(cbRisk.Checked) then
+       begin
+         ODSPolicy.First;
+         wrdSelection.GoTo(-1,unAssigned,unAssigned,'risk');
+         wrdSelection.Font.Bold:=true;
+         for i:=0 to ODSPolicy.RecordCount-1 do
+         begin
+            //wrdSelection.TypeText(UTFEncoder(IntToStr(i+1)+'. '+ODSPolicyName.AsString+#13#10));
+            wrdSelection.TypeText((IntToStr(i+1)+'. '+ODSPolicyName.AsString+#13#10));
+            ODSPolicy.Next;
+         end;
+       end;
+
+       if not(cbRisk.Checked) then
+       begin
+         ODSPolicy.First;
+         wrdSelection.GoTo(-1,unAssigned,unAssigned,'fransiza');
+         for i:=0 to ODSPolicy.RecordCount-1 do
+         begin
+             //wrdSelection.TypeText(UTFEncoder(ODSPolicyRisks.AsString+#13#10));
+             wrdSelection.TypeText((ODSPolicyRisks.AsString+#13#10));
+             ODSPolicy.Next;
+         end;
+       end;
+
+
+        for i:=0 to ODSReport.FieldCount do
+        begin
+          try
+            wrdSelection.GoTo(-1,unAssigned,unAssigned,lowercase(ODSReport.fields[i].DisplayName));
+           // wrdSelection.TypeText(UTFEncoder(VarToStr( ODSReport.fields[i].AsVariant )));
+            wrdSelection.TypeText((VarToStr( ODSReport.fields[i].AsVariant )));
+          except
+          end;
+        end;
+
+        if ODSCustTypesName.AsString='Korparativ' then
+        begin
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'allinssum');
+           //wrdSelection.TypeText(UTFEncoder(ODSContractsInssumm.AsString));
+           wrdSelection.TypeText((ODSContractsInssumm.AsString));
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'allinscost');
+           //wrdSelection.TypeText(UTFEncoder(ODSContractsAmmount.AsString));
+           wrdSelection.TypeText((ODSContractsAmmount.AsString));
+        end;
+
+        try
+        wrdSelection.GoTo(-1,unAssigned,unAssigned,'address');
+        //wrdSelection.TypeText(UTFEncoder(ODSReportInsuredAddress.Value)+#13#10+'Mob: '+ODSReportMobilePhone.Value+#13#10+'Ev:    '+ODSReportHomePhone.Value);
+        wrdSelection.TypeText((ODSReportInsuredAddress.Value)+#13#10+'Mob: '+ODSReportMobilePhone.Value+#13#10+'Ev:    '+ODSReportHomePhone.Value);
+
+        wrdSelection.GoTo(-1,unAssigned,unAssigned,'drivecost');
+        wrdSelection.TypeText(FloatToStrF(ODSReportAvtoCost.Value, ffCurrency, 10, 0));
+
+        wrdSelection.GoTo(-1,unAssigned,unAssigned,'insurancesum');
+        wrdSelection.TypeText(FloatToStrF(ODSReportInsSumm.Value, ffCurrency, 10, 0));
+
+        wrdSelection.GoTo(-1,unAssigned,unAssigned,'insuranceammount');
+        wrdSelection.TypeText(FloatToStrF(ODSReportAmmount.Value, ffCurrency, 10, 0));
+
+        if ODSCustTypesName.AsString='Individual' then
+        begin
+          {wrdSelection.GoTo(-1,unAssigned,unAssigned,'valaz');
+          wrdSelection.TypeText(UTFEncoder(ODSReportValute.Value));
+          wrdSelection.GoTo(-1,unAssigned,unAssigned,'valeng');
+          wrdSelection.TypeText(UTFEncoder(ODSReportVal_Name.Value));
+          wrdSelection.GoTo(-1,unAssigned,unAssigned,'franshiza');
+          wrdSelection.TypeText(FloatToStrF(ODSReportFranshiz.Value, ffCurrency, 10, 0));
+          wrdSelection.GoTo(-1,unAssigned,unAssigned,'beneficiaryi');
+          wrdSelection.TypeText(UTFEncoder(ODSReportBeneficiary.Value));    }
+
+          wrdSelection.GoTo(-1,unAssigned,unAssigned,'valaz');
+          wrdSelection.TypeText((ODSReportValute.Value));
+          wrdSelection.GoTo(-1,unAssigned,unAssigned,'valeng');
+          wrdSelection.TypeText((ODSReportVal_Name.Value));
+          wrdSelection.GoTo(-1,unAssigned,unAssigned,'franshiza');
+          wrdSelection.TypeText(FloatToStrF(ODSReportFranshiz.Value, ffCurrency, 10, 0));
+          wrdSelection.GoTo(-1,unAssigned,unAssigned,'beneficiaryi');
+          wrdSelection.TypeText((ODSReportBeneficiary.Value));
+        end;
+        except
+        end;
+
+        try
+        wrdSelection.GoTo(-1,unAssigned,unAssigned,'intend');
+        //wrdSelection.TypeText(UTFEncoder(StrIntend));
+        wrdSelection.TypeText((StrIntend));
+        except
+        end;
+        try
+        {wrdSelection.GoTo(-1,unAssigned,unAssigned,'name2');
+        wrdSelection.TypeText(UTFEncoder(AnsiUpperCase(ODSReportName.Value)));
+        wrdSelection.GoTo(-1,unAssigned,unAssigned,'str');
+        wrdSelection.TypeText(UTFEncoder(str));
+        wrdSelection.GoTo(-1,unAssigned,unAssigned,'str1');
+        wrdSelection.TypeText(UTFEncoder(AnsiUpperCase(str)));  }
+
+        wrdSelection.GoTo(-1,unAssigned,unAssigned,'name2');
+        wrdSelection.TypeText((AnsiUpperCase(ODSReportName.Value)));
+        wrdSelection.GoTo(-1,unAssigned,unAssigned,'str');
+        wrdSelection.TypeText((str));
+        wrdSelection.GoTo(-1,unAssigned,unAssigned,'str1');
+        wrdSelection.TypeText((AnsiUpperCase(str)));
+        except
+        end;
+        try
+        {wrdSelection.GoTo(-1,unAssigned,unAssigned,'beneficiary1');
+        wrdSelection.TypeText(UTFEncoder('вя сыьорта етдирян'));
+        wrdSelection.GoTo(-1,unAssigned,unAssigned,'beneficiary2');
+        wrdSelection.TypeText(UTFEncoder(ODSReportBeneficiary.Value)); }
+
+        wrdSelection.GoTo(-1,unAssigned,unAssigned,'beneficiary1');
+        wrdSelection.TypeText(('və sığorta etdirən'));
+        wrdSelection.GoTo(-1,unAssigned,unAssigned,'beneficiary2');
+        wrdSelection.TypeText((ODSReportBeneficiary.Value));
+        except
+        end;
+        try
+        {wrdSelection.GoTo(-1,unAssigned,unAssigned,'date');
+        wrdSelection.TypeText(UTFEncoder(ODSReportBeginDate.AsString));
+        wrdSelection.GoTo(-1,unAssigned,unAssigned,'date1');
+        wrdSelection.TypeText(UTFEncoder(ODSReportInsDate.AsString));
+        wrdSelection.GoTo(-1,unAssigned,unAssigned,'val');
+        wrdSelection.TypeText(UTFEncoder(ODSReportValute.Value));
+        wrdSelection.GoTo(-1,unAssigned,unAssigned,'inscolor');
+        wrdSelection.TypeText(UTFEncoder(AnsiUpperCase(ODSReportInsColor.Value)));  }
+
+        wrdSelection.GoTo(-1,unAssigned,unAssigned,'date');
+        wrdSelection.TypeText((ODSReportBeginDate.AsString));
+        wrdSelection.GoTo(-1,unAssigned,unAssigned,'date1');
+        wrdSelection.TypeText((ODSReportInsDate.AsString));
+        wrdSelection.GoTo(-1,unAssigned,unAssigned,'val');
+        wrdSelection.TypeText((ODSReportValute.Value));
+        wrdSelection.GoTo(-1,unAssigned,unAssigned,'inscolor');
+        wrdSelection.TypeText((AnsiUpperCase(ODSReportInsColor.Value)));
+        except
+        end;
+
+        try
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'undertable');
+           fmUndertable := TfmUndertable.Create(Self);
+           with fmUndertable do
+           begin
+              fmUndertable.Show;
+              OleContainer1.OleObject.Application.Selection.WholeStory;
+              OleContainer1.OleObject.Application.Selection.Copy;
+             try
+              fmUndertable.Free;
+             except
+                ErrorStr:='urra!';
+             end;
+           end;
+           try
+             wrdSelection.Paste;
+           except
+             ErrorStr:='urrra!';
+           end;
+        except
+           ErrorStr:='ura!';
+        end;
+        
+
+
+    if ODSCustTypesName.AsString='Korparativ' then
+    begin
+      FileName:=ExtractFilePath(Application.ExeName)+ '\CMotorKaskoPolicyExra.doc';
+      wrdApp := CreateOleObject('Word.Application');
+      wrdApp.Visible := True;
+      wrdDataDoc := wrdApp.Documents.Open(FileName);
+      wrdSelection:=wrdApp.Selection;
+      wrdSelection.GoTo(-1,unAssigned,unAssigned,'policynum');
+      wrdSelection.Font.Name := 'Times New Roman';
+      wrdSelection.Font.Size :=14;
+      wrdSelection.Font.Bold:=true;
+      //wrdSelection.TypeText(UTFEncoder(ODSContractsPolicy_Num.AsString));
+      wrdSelection.TypeText((ODSContractsPolicy_Num.AsString));
+
+      wrdSelection.GoTo(-1,unAssigned,unAssigned,'insured');
+      wrdSelection.Font.Size :=8;
+      wrdSelection.Font.Bold:=true;
+      //wrdSelection.TypeText(UTFEncoder(AnsiUpperCase(ODSReportName.AsString)));
+      wrdSelection.TypeText((AnsiUpperCase(ODSReportName.AsString)));
+
+      wrdSelection.GoTo(-1,unAssigned,unAssigned,'str');
+      wrdSelection.Font.Size :=8;
+      wrdSelection.Font.Bold:=true;
+      //wrdSelection.TypeText(UTFEncoder(AnsiUpperCase(str)));
+      wrdSelection.TypeText((AnsiUpperCase(str)));
+
+      wrdSelection.GoTo(-1,unAssigned,unAssigned,'date1');
+      wrdSelection.Font.Size :=8;
+      wrdSelection.Font.Bold:=true;
+      //wrdSelection.TypeText(UTFEncoder(ODSReportBeginDate.AsString));
+      wrdSelection.TypeText((ODSReportBeginDate.AsString));
+
+      MakeExtras(wrdDataDoc);
+   end;
+
+
+
+
+end;
+
+function TfmMKPolicy.AddTransh():Boolean;
+begin
+   with TfmProceses.Create(Self) do
+   try
+     Result := ShowModal = mrOk
+   finally
+     Free
+   end
+end;
+
+procedure TfmMKPolicy.btPrintClick(Sender: TObject);
+begin
+  if  LDialogs.MessageDlg('Əməliyyat aparılsın?', LDialogs.mtConfirmation	, [LDialogs.mbYes, LDialogs.mbNo], 0) =mrYes then
+    if SaveData() then
+    if  AddTransh() then begin
+//       if not (ODSPolicy.state in [dsEdit, dsInsert]) then ODSPolicy.Edit;
+       ExportToWord();
+       DisableControls(XFGroupBox1, false);
+    end;
+
+end;
+
+procedure TfmMKPolicy.SpeedButton1Click(Sender: TObject);
+begin
+   ODSContracts.FieldByName('POLICY_NUM').AsString :=
+       OPCommon.callStringFunction('generatePolicy_Num',[tid]);
+   btApply.Enabled := True;
+end;
+
+procedure TfmMKPolicy.BitBtn1Click(Sender: TObject);
+begin
+ with TfmUndertable.Create(Self) do
+ try
+   ShowModal;
+ finally
+   free;
+ end;
+ {fmUndertable := TfmUndertable.Create(Self);
+ fmUndertable.ShowModal;
+ fmUndertable.Free;  }
+
+end;
+
+procedure TfmMKPolicy.ODSContractsAfterEdit(DataSet: TDataSet);
+begin
+  btApply.Enabled := True;
+end;
+
+procedure TfmMKPolicy.ODSPolicyAfterEdit(DataSet: TDataSet);
+begin
+    btApply.Enabled := True;
+end;
+
+procedure TfmMKPolicy.FillRow(Doc: Variant; Row: Integer; Text0, Text1,
+  Text2, Text3, Text4,Text5: String);
+begin
+     Doc.Tables.Item(1).Cell(Row,1).Range.InsertAfter(Text0);
+     Doc.Tables.Item(1).Cell(Row,2).Range.InsertAfter(Text1);
+     Doc.Tables.Item(1).Cell(Row,3).Range.InsertAfter(Text2);
+     Doc.Tables.Item(1).Cell(Row,4).Range.InsertAfter(Text3);
+     Doc.Tables.Item(1).Cell(Row,5).Range.InsertAfter(Text4);
+     Doc.Tables.Item(1).Cell(Row,6).Range.InsertAfter(Text5);
+end;
+
+procedure TfmMKPolicy.MakeExtras(wrdDataDoc: Variant);
+var
+    i,n:integer;
+    str:WideString;
+begin
+    with ODSMotorKasko do
+    begin
+        n:=RecordCount;
+        First;
+        for i:= 1 to n do
+        begin
+            wrdDataDoc.Tables.Item(1).Rows.Add;
+            wrdDataDoc.Tables.Item(1).Rows.Item(i+1).Range.Font.Name := 'Arial AzLat';
+            wrdDataDoc.Tables.Item(1).Rows.Item(i+1).Range.Bold:=false;
+            FillRow(wrdDataDoc, i+1,ODSMotorKaskoInsuredMark.AsString+' '+ODSMotorKaskoInsuredModel.AsString,ODSMotorKaskoInsuredColor.AsString+', '+ODSMotorKaskoInsuredType.AsString+','+IntToStr(ODSMotorKaskoInsuredOutputYear.Value),ODSMotorKaskoInsuredEngineNum.AsString,ODSMotorKaskoInsuredBanNum.AsString,ODSMotorKaskoInsuredStateNum.AsString,ODSMotorKaskoUnderFrameNum.AsString+', '+ODSMotorKaskoNumSeats.AsString);
+
+            wrdDataDoc.Tables.Item(2).Rows.Add;
+            wrdDataDoc.Tables.Item(2).Rows.Item(i+1).Range.Font.Name := 'Arial AzLat';
+            wrdDataDoc.Tables.Item(2).Rows.Item(i+1).Range.Bold:=false;
+            FillRow1(wrdDataDoc,i+1,ODSMotorKaskoFranshiz.AsString+' '+ODSAvaluteVal_Name.Value,ODSMotorKaskoDriveCost.AsString+' '+ODSAvaluteVal_Name.Value,ODSMotorKaskoInssumm.AsString+' '+ODSAvaluteVal_Name.Value,ODSMotorKaskoAmmount.AsString+' '+ODSAvaluteVal_Name.Value);
+            Next;
+        end;
+    end;
+
+end;
+
+procedure TfmMKPolicy.FillRow1(Doc: Variant; Row: Integer; Text0, Text1,Text2,Text3: String);
+begin
+    Doc.Tables.Item(2).Cell(Row,1).Range.InsertAfter(Text0);
+    Doc.Tables.Item(2).Cell(Row,2).Range.InsertAfter(Text1);
+    Doc.Tables.Item(2).Cell(Row,3).Range.InsertAfter(Text2);
+    Doc.Tables.Item(2).Cell(Row,4).Range.InsertAfter(Text3);
+end;
+
+{function TfmMKPolicy.UTFEncoder(str: WideString): WideString;
+var
+   i,j:integer;
+begin
+   for i:=1 to length(str) do
+   begin
+       for j:=0 to lbNonUnicode.Items.Count-1 do
+       begin
+           if str[i]=lbNonUnicode.Items[j] then
+              str[i]:=tlbUnicode.Items[j][1];
+       end;
+   end;
+   result:=str;
+end;  }
+
+
+
+procedure TfmMKPolicy.ODSPolicyAfterInsert(DataSet: TDataSet);
+begin
+     DataSet.Fieldbyname('CID').AsInteger := CID;
+end;
+
+procedure TfmMKPolicy.cbRisk1Click(Sender: TObject);
+begin
+     //gbSame.Visible:=cbRisk.Checked;
+
+
+
+
+
+     if cbRisk.Checked=true then
+     begin
+        gbSame.Visible:=true;
+        cbDifRisk.Checked:=false;
+        btPrint.Enabled:=true;
+     end;
+
+end;
+
+procedure TfmMKPolicy.cbDifRiskClick(Sender: TObject);
+begin
+    gbGrid.Visible:=cbDifRisk.Checked;
+    gbSame.Visible:=not(cbDifRisk.Checked);
+    cbRisk.Checked:=false;
+    btPrint.Enabled:=true;
+end;
+
+procedure TfmMKPolicy.BitBtn2Click(Sender: TObject);
+var
+   strPath: String;
+begin
+     strPath:='D:\Smart-Bank\bin\PolicyExtras';
+     ExtraODialog.InitialDir:=strPath;
+     if ExtraODialog.Execute then
+        ExtraODialog.InitialDir:=strPath;
+end;
+
+procedure TfmMKPolicy.BitBtn3Click(Sender: TObject);
+var
+  DocFile : TFileName;
+  i,n,j: integer;
+  WordApp:OleVariant;
+  wrdDataDoc,wrdApp,wrdSelection : Variant;
+  FileName,str,StrIntend:String;
+begin
+   ODSReport.Close;
+   ODSReport.SetVariable('CID', CID);
+   ODSReport.Open;
+
+   if ODSReportSex.Value=0 then str:='oğlu'
+   else if ODSReportSex.Value=1 then str:='qızı';
+
+   FileName:=ExtractFilePath(Application.ExeName)+ '\ExtraToMkPolicy.doc';
+   wrdApp := CreateOleObject('Word.Application');
+   wrdApp.Visible := True;
+   wrdDataDoc := wrdApp.Documents.Open(FileName);
+   wrdSelection:=wrdApp.Selection;
+
+   try
+      {wrdSelection.GoTo(-1,unAssigned,unAssigned,'policynum');
+      wrdSelection.TypeText(UTFEncoder(ODSReportPolicyNum.Value));
+      wrdSelection.GoTo(-1,unAssigned,unAssigned,'name');
+      wrdSelection.TypeText(UTFEncoder(ODSReportName.Value));
+      wrdSelection.GoTo(-1,unAssigned,unAssigned,'str');
+      wrdSelection.TypeText(UTFEncoder(str));
+      wrdSelection.GoTo(-1,unAssigned,unAssigned,'begindate');
+      wrdSelection.TypeText(ODSReportBeginDate.Value);
+      wrdSelection.GoTo(-1,unAssigned,unAssigned,'enddate');
+      wrdSelection.TypeText(ODSReportEndDate.Value);
+      wrdSelection.GoTo(-1,unAssigned,unAssigned,'name2');
+      wrdSelection.TypeText(UTFEncoder(AnsiUpperCase(ODSReportName.Value)));
+
+      wrdSelection.GoTo(-1,unAssigned,unAssigned,'str1');
+      wrdSelection.TypeText(UTFEncoder(AnsiUpperCase(str)));   }
+
+      wrdSelection.GoTo(-1,unAssigned,unAssigned,'policynum');
+      wrdSelection.TypeText((ODSReportPolicyNum.Value));
+      wrdSelection.GoTo(-1,unAssigned,unAssigned,'name');
+      wrdSelection.TypeText((ODSReportName.Value));
+      wrdSelection.GoTo(-1,unAssigned,unAssigned,'str');
+      wrdSelection.TypeText((str));
+      wrdSelection.GoTo(-1,unAssigned,unAssigned,'begindate');
+      wrdSelection.TypeText(ODSReportBeginDate.Value);
+      wrdSelection.GoTo(-1,unAssigned,unAssigned,'enddate');
+      wrdSelection.TypeText(ODSReportEndDate.Value);
+      wrdSelection.GoTo(-1,unAssigned,unAssigned,'name2');
+      wrdSelection.TypeText((AnsiUpperCase(ODSReportName.Value)));
+
+      wrdSelection.GoTo(-1,unAssigned,unAssigned,'str1');
+      wrdSelection.TypeText((AnsiUpperCase(str)));
+   except
+   end;
+
+end;
+
+procedure TfmMKPolicy.BitBtn4Click(Sender: TObject);
+var
+  DocFile : TFileName;
+  i,n,j,k: integer;
+  WordApp:OleVariant;
+  wrdDataDoc,wrdApp,wrdSelection : Variant;
+  FileName,str,StrIntend:String;
+begin
+
+   ODSReport.Close;
+   ODSReport.SetVariable('CID', CID);
+   ODSReport.Open;
+
+   if ODSReportSex.Value=0 then str:='oğlu'
+   else if ODSReportSex.Value=1 then str:='qızı';
+
+   ODSCustTypes.SetVariable('id',ODSCustomersInsured_TypeID.Value);
+   ODSCustTypes.Open;
+
+   ODSReport.First;
+   for k:=0 to ODSReport.RecordCount-1 do
+   begin
+   FileName:=ExtractFilePath(Application.ExeName)+ '\KaskoInsuranceKart1.doc';
+   wrdApp := CreateOleObject('Word.Application');
+   wrdApp.Visible := True;
+   wrdDataDoc := wrdApp.Documents.Open(FileName);
+   wrdSelection:=wrdApp.Selection;
+
+
+   for i:=0 to ODSReport.FieldCount do
+   begin
+      try
+        wrdSelection.GoTo(-1,unAssigned,unAssigned,lowercase(ODSReport.fields[i].DisplayName));
+        wrdSelection.Font.Bold:=true;
+        //wrdSelection.TypeText(UTFEncoder(VarToStr(ODSReport.fields[i].AsVariant )));
+        wrdSelection.TypeText((VarToStr(ODSReport.fields[i].AsVariant )));
+      except
+      end;
+   end;
+
+   try
+     {wrdSelection.GoTo(-1,unAssigned,unAssigned,lowercase('insured'));
+     wrdSelection.Font.Bold:=true;
+     wrdSelection.TypeText(UTFEncoder(ODSReportName.AsString+' '+str ));
+     wrdSelection.GoTo(-1,unAssigned,unAssigned,lowercase('beneficiaryk'));
+     wrdSelection.Font.Bold:=true;
+     if ODSCustTypesName.AsString<>'Банк' then
+        wrdSelection.TypeText(UTFEncoder(ODSReportBeneficiary.AsString))
+     else
+        wrdSelection.TypeText(UTFEncoder(ODSReportBeneficiary.AsString+' вя сыьорта етдирян'));
+     wrdSelection.GoTo(-1,unAssigned,unAssigned,'insuredmodel1');
+     wrdSelection.Font.Bold:=true;
+     wrdSelection.TypeText(UTFEncoder(ODSReportInsuredmodel.AsString+','+LowerCase(StrIntend) ));
+
+     wrdSelection.GoTo(-1,unAssigned,unAssigned,lowercase('franshiza'));
+     wrdSelection.Font.Bold:=true;
+     wrdSelection.TypeText(UTFEncoder(ODSReportFranshiz.AsString+ODSReportValute.AsString ));
+     wrdSelection.GoTo(-1,unAssigned,unAssigned,lowercase('avtovalue'));
+     wrdSelection.Font.Bold:=true;
+     wrdSelection.TypeText(UTFEncoder(ODSReportAvtoCost.AsString+ODSReportValute.AsString ));
+     wrdSelection.GoTo(-1,unAssigned,unAssigned,lowercase('insumm'));
+     wrdSelection.Font.Bold:=true;
+     wrdSelection.TypeText(UTFEncoder(ODSReportInsSumm.AsString+ODSReportValute.AsString ));  }
+
+     wrdSelection.GoTo(-1,unAssigned,unAssigned,lowercase('insured'));
+     wrdSelection.Font.Bold:=true;
+     wrdSelection.TypeText((ODSReportName.AsString+' '+str ));
+     wrdSelection.GoTo(-1,unAssigned,unAssigned,lowercase('beneficiaryk'));
+     wrdSelection.Font.Bold:=true;
+     if ODSCustTypesName.AsString<>'Bank' then
+        wrdSelection.TypeText((ODSReportBeneficiary.AsString))
+     else
+        wrdSelection.TypeText((ODSReportBeneficiary.AsString+' вя сыьорта етдирян'));
+     wrdSelection.GoTo(-1,unAssigned,unAssigned,'insuredmodel1');
+     wrdSelection.Font.Bold:=true;
+     wrdSelection.TypeText((ODSReportInsuredmodel.AsString+','+LowerCase(StrIntend) ));
+
+     wrdSelection.GoTo(-1,unAssigned,unAssigned,lowercase('franshiza'));
+     wrdSelection.Font.Bold:=true;
+     wrdSelection.TypeText((ODSReportFranshiz.AsString+ODSReportValute.AsString ));
+     wrdSelection.GoTo(-1,unAssigned,unAssigned,lowercase('avtovalue'));
+     wrdSelection.Font.Bold:=true;
+     wrdSelection.TypeText((ODSReportAvtoCost.AsString+ODSReportValute.AsString ));
+     wrdSelection.GoTo(-1,unAssigned,unAssigned,lowercase('insumm'));
+     wrdSelection.Font.Bold:=true;
+     wrdSelection.TypeText((ODSReportInsSumm.AsString+ODSReportValute.AsString ));
+   except
+   end;
+   ODSReport.Next;
+   end;
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TfmMKPolicy,
+    Class_fmMKPolicy,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

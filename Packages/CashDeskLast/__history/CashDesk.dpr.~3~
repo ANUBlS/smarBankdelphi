@@ -1,0 +1,36 @@
+library CashDesk;
+
+uses
+  ComServ,
+  CashDesk_TLB in 'CashDesk_TLB.pas',
+  CashDeskImpl in 'CashDeskImpl.pas' {FrmCashDesk: TActiveForm} {FrmCashDesk: CoClass},
+  CashDataModule in 'CashDataModule.pas' {CashDataMod: TDataModule},
+  CashReportMain in 'CashReportMain.pas' {MainCashReport: TQuickRep},
+  UntCashRpt in 'UntCashRpt.pas' {CashRpt: TQuickRep},
+  UntIOCome in 'UntIOCome.pas' {IOCome: TQuickRep},
+  UntLOICome in 'UntLOICome.pas' {LOICome: TQuickRep},
+  UntOrderRpt in 'UntOrderRpt.pas' {QuickRptOrder: TQuickRep},
+  UntLOrederRpt in 'UntLOrederRpt.pas' {QRTotalReport: TQuickRep},
+  UntChecksRpt in 'UntChecksRpt.pas' {QRptCheks: TQuickRep},
+  UntQRReceiptOrder in 'UntQRReceiptOrder.pas' {QRPTReceiptOrder: TQuickRep},
+  UntFrmInfo in 'UntFrmInfo.pas' {FrmInfo},
+  UntCashSettings in 'UntCashSettings.pas' {FormCashSettings},
+  UntFinalResultReport in 'UntFinalResultReport.pas' {QRResultReport: TQuickRep},
+  UntCashBook in 'UntCashBook.pas' {QRp_CashBook: TQuickRep},
+  PhotoImpl in '..\payment_rep\PhotoImpl.pas' {FormPhoto},
+  CurrencyToHR_Azeri_Impl in 'CurrencyToHR_Azeri_Impl.pas';
+
+{$E ocx}
+
+exports
+  DllGetClassObject,
+  DllCanUnloadNow,
+  DllRegisterServer,
+  DllUnregisterServer;
+
+{$R *.TLB}
+
+{$R *.RES}
+
+begin
+end.

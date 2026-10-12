@@ -1,0 +1,104 @@
+﻿unit AddInvestmentimpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, DBCtrls, ComCtrls, CurrencyEdit, Mask, ExtCtrls, XFSCtrls;
+
+type
+  TAddInvestment = class(TForm)
+    Panel2: TPanel;
+    Edit1: TEdit;
+    DateTimePicker1: TDateTimePicker;
+    XFLabel1: TXFLabel;
+    XFLabel2: TXFLabel;
+    XFLabel3: TXFLabel;
+    Edit2: TEdit;
+    Panel1: TPanel;
+    Button1: TButton;
+    Button2: TButton;
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure Edit2KeyPress(Sender: TObject; var Key: Char);
+    procedure FormShow(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  AddInvestment: TAddInvestment;
+
+implementation
+
+{$R *.dfm}
+uses CommanParametrs,sboapiDataModuleImpl,Dm_invstimpl,FrmMainTransimpl;
+
+procedure TAddInvestment.Button1Click(Sender: TObject);
+begin
+
+if Edit2.Text='' then
+begin
+showmessage('Diqqət! Məbləğ sahesi boşdu') ;
+ exit;
+end;
+if Edit1.text='' then
+begin
+showmessage('Diqqət! Qalıq  sahesi boşdu') ;
+ exit;
+end;
+
+if StrToInt(Edit2.Text)>StrToInt(Edit1.Text) then
+begin
+  ShowMessage('Məbləğ Qaliq-dan böyük ola bilməz!!!!');
+  exit;
+end;
+
+ With Dm_invst  do
+begin
+
+  {DsInvest.open;
+  DsInvest.edit;
+  DsInvest.FieldByName('cid').AsInteger:=contactid;
+  DsInvest.FieldByName('AMMOUNT').AsInteger:=StrToInt(Edit2.Text);
+  DsInvest.FieldByName('ostat').AsInteger:=StrToInt(Edit1.Text);
+  DsInvest.FieldByName('dat').AsDateTime:=DateTimePicker1.DateTime;  }
+  if  pk_ins_investment.CallBooleanFunction('ins_investment_transaction',[contactid,StrToInt(Edit2.Text),DsInvest.FieldByName('id').AsInteger])=true then
+begin
+  ShowMessage('Emeliyyat yerine yetirildi!!!');
+end;
+end;
+     // Dm_invst.DsInvest.Post;
+     // Dm_invst.DsInvest.RefreshRecord;
+      //Maininvestgrid.Refresh;
+      AddInvestment.Close;
+      //Maininvestgrid.Refresh;
+
+end;
+
+procedure TAddInvestment.Edit2KeyPress(Sender: TObject; var Key: Char);
+begin
+if not (Key in ['0'..'9'] )then begin Key:=#0; end;
+end;
+
+procedure TAddInvestment.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+if ord(key)=vk_escape then  close;
+end;
+
+procedure TAddInvestment.FormShow(Sender: TObject);
+begin
+Dm_invst.ds_sum.Close;
+Dm_invst.ds_sum.SetVariable('P_CID',contactid);
+Dm_invst.ds_sum.Open;
+
+DateTimePicker1.DateTime:=Dm_invst.DsSysdat.FieldByName('tek_dat').AsDateTime;
+//Edit1.Enabled:=false;
+Edit1.Text:=IntToStr( (Dm_invst.Dscontracts.FieldByName('ammount').AsInteger)+(Dm_invst.ds_sum.FieldByName('CEM').AsInteger)) ;
+Edit2.Text:='';
+
+end;
+
+end.

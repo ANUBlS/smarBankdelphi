@@ -1,0 +1,124 @@
+﻿unit P_CO_In_Form;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, Mask, DBCtrls, ExtCtrls, Grids, DBGrids;
+
+type
+  TP_CO_TransTypeIncOut = class(TForm)
+    SettingsBrowser: TDBGrid;
+    Panel4: TPanel;
+    Panel5: TPanel;
+    DBEditAssignment: TDBEdit;
+    Panel6: TPanel;
+    DBEditComissionAssignment: TDBEdit;
+    Panel3: TPanel;
+    ButtonRefresh: TButton;
+    ButtonClose: TButton;
+    BtnAdd: TButton;
+    procedure BtnAddClick(Sender: TObject);
+    procedure ButtonCloseClick(Sender: TObject);
+    procedure ButtonRefreshClick(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
+    procedure SettingsBrowserDblClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    procedure WMNCACTIVATE(var message:TWMNCActivate);
+    procedure WMNCPaint(var message: TWMNCPaint);
+  end;
+
+var
+  P_CO_TransTypeIncOut: TP_CO_TransTypeIncOut;
+  IncOut: integer; {1 - incoming, 2 - outgoing}
+  
+implementation
+
+uses P_Datamod_Unit, P_Transaction_Unit, sboapiDataModuleImpl, SBTranslateProc;
+
+{$R *.DFM}
+ 
+procedure TP_CO_TransTypeIncOut.WMNCACTIVATE(var message:TWMNCActivate);
+var
+ S:TWMNCPaint;
+begin
+inherited;
+WMNCPaint(s);
+end;
+
+procedure TP_CO_TransTypeIncOut.WMNCPaint(var message: TWMNCPaint);
+const Capt = 'Standart əməliyyatlar';
+var dc : hDc;
+begin
+inherited;
+Caption:='';
+dc := GetWindowDC(Handle);
+        SetBkMode(dc,Transparent);
+        SetTextColor(dc,clWhite);
+        SelectObject(dc, Font.Handle);
+        TextOut(dc, 23,6,Capt,Length(Capt));
+end;
+
+procedure TP_CO_TransTypeIncOut.BtnAddClick(Sender: TObject);
+begin
+  if not Assigned (P_Transaction) then
+   P_Transaction :=TP_Transaction.Create(Self);
+  with P_Transaction do begin
+   TransTypeIncOutDC :=IncOut;
+   ShowModal;
+  end;
+end;
+
+procedure TP_CO_TransTypeIncOut.ButtonCloseClick(Sender: TObject);
+begin
+  Close;
+end;
+
+procedure TP_CO_TransTypeIncOut.ButtonRefreshClick(Sender: TObject);
+begin
+  P_Datamodule.CO_In.Refresh;
+
+  //P_Datamodule.CO_Out.Refresh;
+end;
+
+procedure TP_CO_TransTypeIncOut.FormActivate(Sender: TObject);
+begin
+  if IncOut = 1 then
+   if P_DataModule.Account.FieldByName('TYPEID').AsInteger=1 then begin
+    P_DataModule.CO_Out.Open;
+    SettingsBrowser.DataSource :=P_DataModule.CO_Out_data;
+   end
+   else begin
+    P_DataModule.CO_In.Open;
+    SettingsBrowser.DataSource :=P_DataModule.CO_In_data;
+   end;
+
+  if IncOut = 2 then
+   if P_DataModule.Account.FieldByName('TYPEID').AsInteger=1 then begin
+    P_DataModule.CO_In.Open;
+    SettingsBrowser.DataSource :=P_DataModule.CO_In_data;
+   end
+   else begin
+    P_DataModule.CO_Out.Open;
+    SettingsBrowser.DataSource :=P_DataModule.CO_Out_data;
+   end;
+
+   DBEditAssignment.DataSource := SettingsBrowser.DataSource;
+   DBEditComissionAssignment.DataSource := SettingsBrowser.DataSource;
+end;
+
+procedure TP_CO_TransTypeIncOut.FormCreate(Sender: TObject);
+begin
+  SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TP_CO_TransTypeIncOut.SettingsBrowserDblClick(Sender: TObject);
+begin
+  BtnAdd.Click;
+end;
+
+end.

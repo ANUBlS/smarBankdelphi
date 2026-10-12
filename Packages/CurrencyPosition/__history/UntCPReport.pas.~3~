@@ -1,0 +1,200 @@
+unit UntCPReport;
+
+interface
+
+uses Windows, SysUtils, Messages, Classes, Graphics, Controls,
+  StdCtrls, ExtCtrls, Forms, Quickrpt, QRCtrls, Db, OracleData ,Dialogs;
+
+type
+  TCPReport = class(TQuickRep)
+    QRSubDetail1: TQRSubDetail;
+    QRLRate19: TQRDBText;
+    QRShape4: TQRShape;
+    QRShape5: TQRShape;
+    TitleBand1: TQRBand;
+    QRLabel1: TQRLabel;
+    QRMemo1: TQRMemo;
+    QRLabel3: TQRLabel;
+    QRChildBand2: TQRChildBand;
+    QRShape9: TQRShape;
+    QRLBank: TQRLabel;
+    QRLManagerName: TQRLabel;
+    QRLTelephon: TQRLabel;
+    QRLabel6: TQRLabel;
+    QRShape10: TQRShape;
+    QRLabel7: TQRLabel;
+    QRShape11: TQRShape;
+    QRShape1: TQRShape;
+    QRShape2: TQRShape;
+    QRShape3: TQRShape;
+    QRShape6: TQRShape;
+    QRShape7: TQRShape;
+    QRShape8: TQRShape;
+    QRShape12: TQRShape;
+    QRShape13: TQRShape;
+    QRLabel2: TQRLabel;
+    QRLabel4: TQRLabel;
+    QRLabel5: TQRLabel;
+    QRLabel8: TQRLabel;
+    QRLabel9: TQRLabel;
+    QRLabel10: TQRLabel;
+    QRLabel11: TQRLabel;
+    QRLabel12: TQRLabel;
+    QRShape14: TQRShape;
+    QRLabel13: TQRLabel;
+    QRShape15: TQRShape;
+    QRLabel14: TQRLabel;
+    QRLabel15: TQRLabel;
+    QRLabel16: TQRLabel;
+    QRShape16: TQRShape;
+    QRLabel17: TQRLabel;
+    QRShape17: TQRShape;
+    QRLabel18: TQRLabel;
+    QRLabel19: TQRLabel;
+    QRShape18: TQRShape;
+    QRShape19: TQRShape;
+    QRLabel20: TQRLabel;
+    QRLabel21: TQRLabel;
+    QRLabel22: TQRLabel;
+    QRLabel23: TQRLabel;
+    QRShape20: TQRShape;
+    PageFooterBand1: TQRBand;
+    QRDBText2: TQRDBText;
+    QRExpr9: TQRExpr;
+    QRShape29: TQRShape;
+    QRShape30: TQRShape;
+    QRShape31: TQRShape;
+    QRShape32: TQRShape;
+    QRShape33: TQRShape;
+    QRShape34: TQRShape;
+    QRShape35: TQRShape;
+    QRShape36: TQRShape;
+    QRShape37: TQRShape;
+    QRShape38: TQRShape;
+    QRShape39: TQRShape;
+    QRShape40: TQRShape;
+    QRLDate: TQRLabel;
+    QRExpr1: TQRExpr;
+    QRExpr2: TQRExpr;
+    QRExpr3: TQRExpr;
+    QRExpr4: TQRExpr;
+    ODSReport: TOracleDataSet;
+    DataSrcReport: TDataSource;
+    QRChildBand3: TQRChildBand;
+    QRLabel24: TQRLabel;
+    QRShape21: TQRShape;
+    QRShape22: TQRShape;
+    QRShape23: TQRShape;
+    QRShape24: TQRShape;
+    QRShape27: TQRShape;
+    QRLQeyd: TQRLabel;
+    QRLabel25: TQRLabel;
+    QRLabel26: TQRLabel;
+    QRLabel27: TQRLabel;
+    QRLabel28: TQRLabel;
+    QRShape28: TQRShape;
+    QRShape25: TQRShape;
+    QRShape26: TQRShape;
+    QRSubDetail2: TQRSubDetail;
+    QRDBText6: TQRDBText;
+    QRDBText7: TQRDBText;
+    QRLlIMIT: TQRLabel;
+    QRLabel29: TQRLabel;
+    QRLabel32: TQRLabel;
+    QRLabel33: TQRLabel;
+    QRLabel34: TQRLabel;
+    QRLabel35: TQRLabel;
+    Limit2: TQRLabel;
+    SShort: TQRLabel;
+    OShort: TQRLabel;
+    SLong: TQRLabel;
+    OLong: TQRLabel;
+    QMLong: TQRLabel;
+    QRLabel37: TQRLabel;
+    QMShort: TQRLabel;
+    ODSReportSHORTNAME: TStringField;
+    ODSReportCURRENCY: TIntegerField;
+    ODSReportRATE: TFloatField;
+    ODSReportACTIVES: TFloatField;
+    ODSReportPOK_ACTIVES: TFloatField;
+    ODSReportPASSIVES: TFloatField;
+    ODSReportPOK_PASSIVES: TFloatField;
+    ODSReportSdvPassiv: TFloatField;
+    ODSReportSdvPokPassiv: TFloatField;
+    QRDBText8: TQRDBText;
+    ODSReportOUTACTIVES: TFloatField;
+    ODSReportOUTPOK_ACTIVES: TFloatField;
+    ODSReportOUTPASSIVES: TFloatField;
+    ODSReportOUTPOK_PASSIVES: TFloatField;
+    QRDBText9: TQRDBText;
+    ODSReportSUMACTIVES: TFloatField;
+    ODSReportSUMPOKACTIVES: TFloatField;
+    ODSReportSUMPASSIVES: TFloatField;
+    ODSReportSUMPOKPASSIVES: TFloatField;
+    QRExpr5: TQRExpr;
+    QRExpr6: TQRExpr;
+    QRExpr7: TQRExpr;
+    QRExpr8: TQRExpr;
+    QRShape41: TQRShape;
+    QRShape42: TQRShape;
+    QRLKapital: TQRLabel;
+    QRLabel31: TQRLabel;
+    SMShort: TQRLabel;
+    QRLabel39: TQRLabel;
+    QRLabel40: TQRLabel;
+    Limit1: TQRLabel;
+    SMLong: TQRLabel;
+    QRLabel36: TQRLabel;
+    QRShape43: TQRShape;
+    QRShape44: TQRShape;
+    procedure QRSubDetail1BeforePrint(Sender: TQRCustomBand;
+      var PrintBand: Boolean);
+    procedure ODSReportCalcFields(DataSet: TDataSet);
+  private
+
+  public
+
+  end;
+
+var
+  CPReport: TCPReport;
+
+implementation
+
+uses CurrencyPositionImpl, DataModCurrPositin, UntMore,sboapiDataModuleImpl;
+
+{$R *.DFM}
+
+procedure TCPReport.QRSubDetail1BeforePrint(Sender: TQRCustomBand;
+  var PrintBand: Boolean);
+begin
+  try
+   QRLlIMIT.Caption :=FormatFloat('0.00',
+                                 FrmTuning.CalcLimit(ODSReport.FieldByName('POK_Actives').Value + ODSReport.FieldByName('OUTPOK_Actives').AsFloat,
+                                 ODSReport.FieldByName('SdvPokPASSIV').Value + ODSReport.FieldByName('OUTPOK_passives').AsFloat,
+                                 StrToFloat(FrmTuning.ECapital.Text)));
+  except
+     on E:EConvertError do
+      QRLLimit.Caption :='Invalid Capital';
+  end;
+end;
+
+procedure TCPReport.ODSReportCalcFields(DataSet: TDataSet);
+begin
+   with   ODSReport  do
+   if  FieldByName('Currency').AsInteger=CPDataMod.BankInfo.FieldByName('svm_currencyID').AsInteger  then //?
+    begin
+       FieldByName('SdvPassiv').AsFloat :=FieldByName('Passives').AsFloat
+       + FrmTuning.OracleDataSet1.FieldByName('SVM').AsFloat;
+       FieldByName('SdvPokPassiv').AsFloat :=FieldByName('Pok_Passives').AsFloat
+       + Round((FrmTuning.OracleDataSet1.FieldByName('SVM').AsFloat)*(FieldByName('Rate').AsFloat));
+    end else
+    begin
+      FieldByName('SdvPassiv').AsFloat :=FieldByName('Passives').AsFloat;
+      FieldByName('SdvPokPassiv').AsFloat :=FieldByName('Pok_Passives').AsFloat;
+    end;
+
+end;
+
+
+end.

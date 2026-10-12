@@ -1,0 +1,17 @@
+grant select on user$ to smart;
+grant select on dba_role_privs to smart;
+grant select on dba_role_privs to smart;
+grant select on v_$session to smart;
+grant select on dba_roles to smart;
+grant select on dba_synonyms to smart;
+grant select on dba_users to smart;
+grant select on dba_sys_privs to smart;
+grant select on dba_tab_privs to smart;
+grant select on dba_objects to smart;
+grant execute on dbms_lock to smart;
+grant execute on dbms_alert to smart;
+grant select on dba_triggers to smart;
+grant select on v_$session to smart;
+grant select on dba_profiles to smart;
+grant select on dba_tables to smart;
+grant select on dba_tab_cols to smart;

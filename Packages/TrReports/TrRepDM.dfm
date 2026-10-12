@@ -1,0 +1,113 @@
+object DataModuleTrRep: TDataModuleTrRep
+  OldCreateOrder = False
+  Height = 228
+  Width = 329
+  object odsRep: TOracleDataSet
+    SQL.Strings = (
+      'select * from all_provs where dat=:p_dat'
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      '')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000C0000003A0050005F004400410054000C00000000000000
+      00000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000E0000000C0000004F00500054005900500045000100000000000400
+      000049004400010000000000080000004F005000450052000100000000001000
+      000043004F004D004D0049005400450052000100000000000E00000044004500
+      4C00450054004500520001000000000006000000440041005400010000000000
+      0E000000410044004400540049004D0045000100000000001400000044004500
+      4C00450054004500540049004D00450001000000000008000000440045004200
+      54000100000000000C0000004B00520045004400490054000100000000000E00
+      000041004D004D004F0055004E005400010000000000100000004C0041004D00
+      4D004F0055004E005400010000000000080000004E0041004D00450001000000
+      0000080000004F00500054005000010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 96
+    Top = 56
+    object odsRepOPTYPE: TFloatField
+      FieldName = 'OPTYPE'
+      Visible = False
+    end
+    object odsRepID: TFloatField
+      DisplayLabel = #8470
+      FieldName = 'ID'
+    end
+    object odsRepOPER: TWideStringField
+      DisplayLabel = 'Daxil ed'#601'n'
+      FieldName = 'OPER'
+      Size = 4000
+    end
+    object odsRepCOMMITER: TWideStringField
+      DisplayLabel = 'T'#601'sdiql'#601'y'#601'n'
+      FieldName = 'COMMITER'
+      Size = 4000
+    end
+    object odsRepDELETER: TWideStringField
+      DisplayLabel = 'L'#601#287'v ed'#601'n'
+      FieldName = 'DELETER'
+      Size = 30
+    end
+    object odsRepDAT: TDateTimeField
+      DisplayLabel = 'Tarix'
+      FieldName = 'DAT'
+    end
+    object odsRepADDTIME: TDateTimeField
+      DisplayLabel = 'Daxil etm'#601' vaxt'#305
+      FieldName = 'ADDTIME'
+    end
+    object odsRepDELETETIME: TDateTimeField
+      DisplayLabel = 'L'#601#287'v etm'#601' vaxt'#305
+      FieldName = 'DELETETIME'
+    end
+    object odsRepDEBT: TWideStringField
+      DisplayLabel = 'Debet'
+      FieldName = 'DEBT'
+      Size = 28
+    end
+    object odsRepKREDIT: TWideStringField
+      DisplayLabel = 'Kredit'
+      FieldName = 'KREDIT'
+      Size = 28
+    end
+    object odsRepAMMOUNT: TFloatField
+      DisplayLabel = 'Debet m'#601'bl'#601#287
+      FieldName = 'AMMOUNT'
+    end
+    object odsRepLAMMOUNT: TFloatField
+      DisplayLabel = 'Kredit m'#601'bl'#601#287
+      FieldName = 'LAMMOUNT'
+    end
+    object odsRepNAME: TWideStringField
+      DisplayLabel = 'T'#601'yinat'#305
+      FieldName = 'NAME'
+      Size = 255
+    end
+    object odsRepOPTP: TWideStringField
+      DisplayLabel = 'N'#246'v'#252
+      FieldName = 'OPTP'
+      Size = 15
+    end
+  end
+  object sysdat: TOracleDataSet
+    SQL.Strings = (
+      'select * from sysdat')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000040000000E000000540045004B005F00440041005400010000000000
+      1000000050005200450044005F004400410054000100000000000E0000004100
+      520043005F004400410059000100000000000A00000043004C004F0053004500
+      010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 96
+    Top = 120
+  end
+end

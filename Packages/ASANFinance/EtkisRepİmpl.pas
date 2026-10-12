@@ -1,0 +1,57 @@
+unit EtkisRep›mpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, QRCtrls, QuickRpt, ExtCtrls;
+
+type
+  TRepEtkisFrm = class(TForm)
+  EtkisRep: TQuickRep;
+    QrBand: TQRBand;
+    QRImage2: TQRImage;
+    QRDBText1: TQRDBText;
+    QRLabel7: TQRLabel;
+    QRLabel1: TQRLabel;
+    pincode: TQRLabel;
+    QRLabel4: TQRLabel;
+    QRLabel3: TQRLabel;
+    QRLabel5: TQRLabel;
+    QRLabel6: TQRLabel;
+    QRDBText2: TQRDBText;
+    QRDBText3: TQRDBText;
+    QRDBText4: TQRDBText;
+    QRDBText5: TQRDBText;
+    QRLabel2: TQRLabel;
+    QRBand2: TQRBand;
+    QRShape6: TQRShape;
+    QRShape1: TQRShape;
+    QRShape3: TQRShape;
+    QRShape5: TQRShape;
+    QRShape11: TQRShape;
+    QRDBText14: TQRDBText;
+    QRDBText15: TQRDBText;
+    QRDBText18: TQRDBText;
+    QRShape2: TQRShape;
+    QRShape4: TQRShape;
+    QRShape9: TQRShape;
+    QRDBText9: TQRDBText;
+    QRDBText6: TQRDBText;
+    QRDBText17: TQRDBText;
+    QRDBText7: TQRDBText;
+    QRLabel8: TQRLabel;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  RepEtkisFrm: TRepEtkisFrm;
+
+implementation
+        uses AsanDmInpl;
+{$R *.dfm}
+
+end.

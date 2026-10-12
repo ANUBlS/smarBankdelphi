@@ -1,0 +1,158 @@
+object WebModules: TWebModules
+  OldCreateOrder = False
+  Actions = <
+    item
+      Default = True
+      Name = 'DefaultHandler'
+      PathInfo = '/'
+      OnAction = WebModule1DefaultHandlerAction
+    end
+    item
+      MethodType = mtPost
+      Name = 'Information'
+      PathInfo = '/ClientCredit'
+      OnAction = WebModule1InformationAction
+    end
+    item
+      MethodType = mtPost
+      Name = 'CredtPayment'
+      PathInfo = '/PayCredit'
+      OnAction = WebModule1CredtPaymentAction
+    end
+    item
+      MethodType = mtPost
+      Name = 'CheckPayment'
+      PathInfo = '/Checking'
+      OnAction = WebModule1CheckPaymentAction
+    end
+    item
+      MethodType = mtPost
+      Name = 'OneclientCredit'
+      PathInfo = '/OneclientCredit'
+      OnAction = WebModulesOneclientCreditAction
+    end
+    item
+      MethodType = mtPost
+      Name = 'ClientCredit-OPT'
+      PathInfo = '/ClientCreditInfo'
+      OnAction = WebModulesClientCreditOPTAction
+    end
+    item
+      Name = 'ClientCreditinfoDetails'
+      PathInfo = '/ClientCreditInfoDetails'
+      OnAction = WebModulesClientCreditinfoDetailsAction
+    end>
+  Height = 289
+  Width = 449
+  object Connection: TOracleSession
+    Preferences.ConvertUTF = cuUTF8ToUTF16
+    Left = 72
+    Top = 144
+  end
+  object Queries: TOracleDataSet
+    SQL.Strings = (
+      
+        'select rownum,c.numberofcredit, a.name,b.birthday,get_accno( d.b' +
+        'ooroweraccid) accno,suBstr(get_accno( d.booroweraccid),8,3) val'
+      
+        ' from customers a, custinfo b,cm_active_credits c ,cm_accounts d' +
+        ' where a.id=:cln and to_char(b.birthday,'#39'YYYYMMDD'#39')=:clbirth'
+      ' and a.id=b.idcust and a.id=c.boorowerid and c.id=d.creditid')
+    Optimize = False
+    Variables.Data = {
+      0400000002000000080000003A0043004C004E00030000000000000000000000
+      100000003A0043004C0042004900520054004800050000000000000000000000}
+    Session = Connection
+    Left = 200
+    Top = 96
+  end
+  object credammo: TOracleDataSet
+    SQL.Strings = (
+      ''
+      'select sum(rest+interestrest)  payment'
+      
+        'from cm_history where creditid=:cid and hdate=(select max(hdate)' +
+        ' from  cm_history where creditid=:cid)')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000080000003A00430049004400030000000000000000000000}
+    Session = Connection
+    Left = 200
+    Top = 160
+  end
+  object Insertquery: TOracleQuery
+    SQL.Strings = (
+      
+        'insert into ws_yigim(account,ammount,currency,customer,rrn,statu' +
+        's,crednumber)values (:v_accno,:v_ammount,:v_curr,:v_cust,:v_rrn,' +
+        '0,:v_cred)')
+    Session = Connection
+    Optimize = False
+    Variables.Data = {
+      0400000006000000100000003A0056005F004100430043004E004F0005000000
+      0000000000000000140000003A0056005F0041004D004D004F0055004E005400
+      0400000000000000000000000E0000003A0056005F0043005500520052000500
+      000000000000000000000E0000003A0056005F00430055005300540005000000
+      00000000000000000C0000003A0056005F00520052004E000500000000000000
+      000000000E0000003A0056005F00430052004500440005000000000000000000
+      0000}
+    Left = 344
+    Top = 96
+  end
+  object PaymentCr: TOracleDataSet
+    SQL.Strings = (
+      
+        'select rownum,c.id,c.numberofcredit, a.name,b.birthday,get_accno' +
+        '( d.booroweraccid) accno,suBstr(get_accno( d.booroweraccid),8,3)' +
+        ' val'
+      
+        ' from customers a, custinfo b,cm_active_credits c ,cm_accounts d' +
+        ' where c.id=:crid'
+      ' and a.id=b.idcust and a.id=c.boorowerid and c.id=d.creditid ')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000A0000003A00430052004900440003000000000000000000
+      0000}
+    Session = Connection
+    Left = 200
+    Top = 48
+  end
+  object searchpay: TOracleDataSet
+    SQL.Strings = (
+      'select * from ws_yigim where rrn=:vrrn')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000A0000003A005600520052004E0005000000000000000000
+      0000}
+    Session = Connection
+    Left = 72
+    Top = 40
+  end
+  object oneclient: TOracleDataSet
+    SQL.Strings = (
+      '')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000080000003A0043004C004E00050000000000000000000000}
+    Session = Connection
+    Left = 256
+    Top = 96
+  end
+  object query2: TOracleDataSet
+    SQL.Strings = (
+      
+        'select rownum,c.numberofcredit, a.name,b.birthday,get_accno( d.b' +
+        'ooroweraccid) accno,suBstr(get_accno( d.booroweraccid),8,3) val'
+      
+        ' from customers a, custinfo b,cm_active_credits c ,cm_accounts d' +
+        ' where a.id=:cln and to_char(b.birthday,'#39'YYYYMMDD'#39')=:clbirth'
+      ' and a.id=b.idcust and a.id=c.boorowerid and c.id=d.creditid')
+    Optimize = False
+    Variables.Data = {
+      0400000002000000080000003A0043004C004E00050000000000000000000000
+      100000003A0043004C0042004900520054004800050000000000000000000000}
+    Session = Connection
+    Left = 136
+    Top = 88
+  end
+end

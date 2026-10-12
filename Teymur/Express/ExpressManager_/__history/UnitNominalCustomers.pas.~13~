@@ -1,0 +1,497 @@
+﻿unit UnitNominalCustomers;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, Mask, DBCtrlsEh, DBCtrls, ExtCtrls, CMHintBox;
+
+type
+  TFormNominalCustomers = class(TForm)
+    Panel4: TPanel;
+    GroupBox2: TGroupBox;
+    Label9: TLabel;
+    Label15: TLabel;
+    Label29: TLabel;
+    Label26: TLabel;
+    Label32: TLabel;
+    Label33: TLabel;
+    Label59: TLabel;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label35: TLabel;
+    Label93: TLabel;
+    Label94: TLabel;
+    Label95: TLabel;
+    Label96: TLabel;
+    Label97: TLabel;
+    DBCBox_DocTYPE: TDBLookupComboBox;
+    issue_country: TDBLookupComboBox;
+    DBCBox_Citizenship: TDBLookupComboBox;
+    CBoxPassPlace: TDBLookupComboBox;
+    Editpasspin: TEdit;
+    EditSerial: TEdit;
+    EditPassport: TEdit;
+    DateEdit: TDBDateTimeEditEh;
+    DateEdit1: TDBDateTimeEditEh;
+    GroupBox1: TGroupBox;
+    Label4: TLabel;
+    Label21: TLabel;
+    Label6: TLabel;
+    Label5: TLabel;
+    Label16: TLabel;
+    Label11: TLabel;
+    Label12: TLabel;
+    Label17: TLabel;
+    Label18: TLabel;
+    Label19: TLabel;
+    Label23: TLabel;
+    Label98: TLabel;
+    Label99: TLabel;
+    Label100: TLabel;
+    BirthPlace: TDBLookupComboBox;
+    EditBirthCity: TDBLookupComboBox;
+    CBoxSex: TDBLookupComboBox;
+    CBoxFamStatus: TDBLookupComboBox;
+    RadioButton1: TRadioButton;
+    RadioButton2: TRadioButton;
+    EditLastName: TEdit;
+    EditName: TEdit;
+    EditSoname: TEdit;
+    DateEdit2: TDBDateTimeEditEh;
+    GroupBox3: TGroupBox;
+    Label31: TLabel;
+    Label34: TLabel;
+    Label36: TLabel;
+    Label37: TLabel;
+    Label38: TLabel;
+    Label104: TLabel;
+    Label105: TLabel;
+    Adrs_City: TDBLookupComboBox;
+    Adrs_State: TDBLookupComboBox;
+    ZipQ: TEdit;
+    AdressEdit: TEdit;
+    GroupBox4: TGroupBox;
+    Label27: TLabel;
+    Label28: TLabel;
+    Label30: TLabel;
+    Label39: TLabel;
+    Label41: TLabel;
+    EditMobil: TEdit;
+    EditPhone: TEdit;
+    EditEmail: TEdit;
+    Panel1: TPanel;
+    Label101: TLabel;
+    Label20: TLabel;
+    Button1: TButton;
+    Button2: TButton;
+    CMHintBox1: TCMHintBox;
+    procedure Button2Click(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure EditpasspinKeyPress(Sender: TObject; var Key: Char);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormShow(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormNominalCustomers: TFormNominalCustomers;
+
+implementation
+
+uses UnitPaymentsCredit, ExpDataModuleUnit;
+
+{$R *.dfm}
+
+procedure TFormNominalCustomers.Button1Click(Sender: TObject);
+var
+  custid       :Variant;
+  doc_type     :integer;
+  passpin      :string;
+  passer       :string;
+  paspnum      :string;
+  doc_country  :Variant;
+  paspplace    :string;
+  paspdate     :variant;
+  passexpire   :variant;
+  citizenship  :integer;
+  lastname     :string;
+  soname       :string;
+  name         :string;
+  sex          :Variant;
+  fam_status   :Variant;
+  bbirthplace  :string;
+  birth_state  :string;
+  birthday     :variant;
+  aadrs_state  :string;
+  city         :string;
+  reg_zip      :string;
+  address      :string;
+  phone_m      :string;
+  phone_h      :string;
+  e_mail       :string;
+  filial       :integer;
+  v_nerezident :integer;
+  v_cust_type  :integer;
+  v_inn        :string;
+  debetid      :Variant;
+begin
+
+   IF  FormPaymentsCredit.CMCurrencyEdit1.Value>=20000  THEN
+   BEGIN
+
+      if (Editpasspin.Text='') then  begin
+                                        CMHintBox1.ShowMessage('Göndərən şəxsin pinkod sahəsi doldurulmayıb ');
+                                        exit
+                                      end;
+
+
+      if (CBoxPassPlace.Text='') then   begin
+                                          CMHintBox1.ShowMessage('Göndərən şəxsin sənədin növü sahəsi seçilməyib');
+                                          exit
+                                        end;
+
+      if (EditSerial.Text='')   then  begin
+                                        CMHintBox1.ShowMessage('Göndərən şəxsin seriya sahəsi doldurulmayıb ');
+                                        exit
+                                      end;
+
+      if (EditPassport.Text='') then  begin
+                                        CMHintBox1.ShowMessage('Göndərən şəxsin nömrə sahəsi doldurulmayıb ');
+                                        exit
+                                      end;
+
+      if (issue_country.Text='')  then  begin
+                                          CMHintBox1.ShowMessage('Göndərən şəxsin verildiyi ölkə sahəsi seçilməyib ');
+                                          exit
+                                        end;
+
+      if (DBCBox_DocTYPE.Text='')  then begin
+                                          CMHintBox1.ShowMessage('Göndərən şəxsin verildiyi yer sahəsi seçilməyib ');
+                                          exit
+                                        end;
+
+      if VarIsNull(DateEdit.Value) then begin
+                                          CMHintBox1.ShowMessage('Göndərən şəxsin verildiyi tarix sahəsi seçilməyib ');
+                                          exit
+                                        end;
+
+
+
+
+     if VarIsNull(DateEdit1.Value) then begin
+                                           CMHintBox1.ShowMessage('Göndərən şəxsin etibarlıq müddəti sahəsi seçilməyib ');
+                                           exit
+                                         end;
+
+     if DBCBox_Citizenship.Text='' then begin
+                                          CMHintBox1.ShowMessage('Göndərən şəxsin vətəndaşlığı sahəsi seçilməyib ');
+                                          exit
+                                        end;
+
+     if (EditLastName.Text='')     then begin
+                                          CMHintBox1.ShowMessage('Göndərən şəxsin soyadı sahəsi doldurulmayıb ');
+                                          exit
+                                        end;
+
+     if (EditName.Text='')      then begin
+                                       CMHintBox1.ShowMessage('Göndərən şəxsin adı sahəsi doldurulmayıb ');
+                                       exit
+                                     end;
+
+     if (EditSoname.Text='')    then begin
+                                       CMHintBox1.ShowMessage('Göndərən şəxsin atasının adı sahəsi doldurulmayıb ');
+                                       exit
+                                     end;
+
+
+     if CBoxSex.Text='' then   begin
+                                 CMHintBox1.ShowMessage('Göndərən şəxsin cinsi sahəsi seçilməyib ');
+                                 exit
+                               end;
+
+
+     if CBoxFamStatus.Text='' then begin
+                                     CMHintBox1.ShowMessage('Göndərən şəxsin ailə vəziyyəti sahəsi seçilməyib ');
+                                     exit
+                                   end;
+
+
+     if BirthPlace.Text='' then begin
+                                  CMHintBox1.ShowMessage('Göndərən şəxsin doğulduğu ölkə sahəsi seçilməyib ');
+                                  exit
+                                end;
+
+     if EditBirthCity.Text='' then begin
+                                     CMHintBox1.ShowMessage('Göndərən şəxsin doğulduğu şəhər sahəsi seçilməyib ');
+                                     exit
+                                   end;
+
+
+     if Adrs_State.Text='' then  begin
+                                   CMHintBox1.ShowMessage('Göndərən şəxsin qeydiyyat ölkəsi sahəsi seçilməyib ');
+                                   exit
+                                 end;
+  END
+  ELSE
+   Begin
+    if (Editpasspin.Text='') then  begin
+                                     CMHintBox1.ShowMessage('Göndərən şəxsin pinkod sahəsi doldurulmayıb ');
+                                     exit
+                                   end;
+
+     if (EditLastName.Text='')     then begin
+                                          CMHintBox1.ShowMessage('Göndərən şəxsin soyadı sahəsi doldurulmayıb ');
+                                          exit
+                                        end;
+
+     if (EditName.Text='')      then begin
+                                       CMHintBox1.ShowMessage('Göndərən şəxsin adı sahəsi doldurulmayıb ');
+                                       exit
+                                     end;
+
+     if (EditSoname.Text='')    then begin
+                                       CMHintBox1.ShowMessage('Göndərən şəxsin atasının adı sahəsi doldurulmayıb ');
+                                       exit
+                                     end;
+   end;
+
+
+  //custid       :=EditCustid.Text;
+  doc_type     :=CBoxPassPlace.KeyValue;
+  passpin      :=Editpasspin.Text;
+  passer       :=EditSerial.Text;
+  paspnum      :=EditPassport.Text;
+  doc_country  :=issue_country.KeyValue;
+  paspplace    :=DBCBox_DocTYPE.Text;
+
+
+  if VarIsNull(DateEdit.Value) then  paspdate:=Null
+                               else  paspdate:=DateEdit.Value;
+
+   if VarIsNull(DateEdit1.Value) then  passexpire:=Null
+                                 else  passexpire:=DateEdit1.Value;
+
+
+
+
+  if VarIsNull(DBCBox_Citizenship.KeyValue) then citizenship:=-1
+                                            else citizenship  :=DBCBox_Citizenship.KeyValue;
+
+
+  lastname     :=EditLastName.Text;
+  soname       :=EditSoname.Text;
+  name         :=EditName.Text;
+  sex          :=CBoxSex.KeyValue;
+  fam_status   :=CBoxFamStatus.KeyValue;
+  bbirthplace  :=birthplace.text;
+  birth_state  :=EditBirthCity.Text;
+
+
+
+  if VarIsNull(DateEdit2.Value) then  birthday:=Null
+                                else  birthday:=DateEdit2.Value;
+
+  aadrs_state  :=adrs_state.Text;
+  city         :=Adrs_City.Text;
+  reg_zip      :=ZipQ.Text;
+  address      :=AdressEdit.Text;
+  phone_m      :=EditMobil.Text;
+  phone_h      :=EditPhone.Text;
+  e_mail       :=EditEmail.Text;
+
+
+
+  if  RadioButton1.Checked  then v_nerezident :=0
+                            else v_nerezident :=1;
+
+
+
+
+
+
+end;
+
+procedure TFormNominalCustomers.Button2Click(Sender: TObject);
+begin
+  FormNominalCustomers.Close;
+end;
+
+procedure TFormNominalCustomers.EditpasspinKeyPress(Sender: TObject;
+  var Key: Char);
+VAR S:string;
+BEGIN
+  S:='';
+  IF Key=#13 THEN
+  begin
+  IF (Sender as TEdit).Text<>'' THEN
+  BEGIN
+    S:=copy((Sender as TEdit).name,5,length((Sender as TEdit).name));
+    S:='('+S+'='+''''+(Sender as TEdit).text+''''+')';
+    S:=S+' ' + 'and (Cust_type=4)';
+  END;
+  WITH ExpDataModule,SearchCustDataSet DO
+    BEGIN
+      Filter:='';
+      Filter:=S;
+      Filtered:=true;
+      IF RecordCount=0 THEN
+      BEGIN
+        ShowMessage('Müştəri tapılmadı');
+        exit;
+      END;
+          IF FieldByName('nerezident').AsInteger=1 THEN RadioButton1.Checked :=true
+                                                   ELSE RadioButton2.Checked :=true;
+
+          Editpasspin.Text            :=FieldByName('passpin').AsString;
+
+          EditLastName.Text:=FieldByName('lastname').AsString;
+          EditName.Text:=FieldByName('cname').AsString;
+          EditSoname.Text  :=FieldByName('soname').AsString;
+
+          CBoxPassPlace.KeyValue      :=FieldByName('doc_type').AsInteger;
+          EditSerial.Text             :=FieldByName('passer').AsString;
+          EditPassport.Text           :=FieldByName('paspnum').AsString;
+          Issue_country.KeyValue      :=FieldByName('doc_country').AsVariant;
+
+
+
+          DBCBox_DocTYPE.KeyValue     :=FieldByName('paspplace').AsString;
+          DateEdit.Value              :=FieldByName('paspdate').AsVariant;
+          DateEdit1.Value             :=FieldByName('passexpire').AsVariant;
+
+
+          DBCBox_Citizenship.KeyValue  :=FieldByName('citizenship').AsInteger;
+
+          CBoxSex.KeyValue             :=FieldByName('sex').AsString;
+          CBoxFamStatus.KeyValue       :=FieldByName('fam_status').AsString;
+          BirthPlace.KeyValue          :=FieldByName('birthplace').AsString;
+          EditBirthCity.KeyValue       :=FieldByName('birth_state').AsString;
+          DateEdit2.Value              :=FieldByName('birthday').AsVariant;
+
+          Adrs_State.KeyValue          :=FieldByName('adrs_state').AsString;
+          Adrs_City.KeyValue           :=FieldByName('city').AsString;
+          ZipQ.Text                    :=FieldByName('reg_zip').AsString;
+          EditMobil.Text               :=FieldByName('phone_m').AsString;
+          EditPhone.Text               :=FieldByName('phone_h').AsString;
+          EditEmail.Text               :=FieldByName('e_mail').AsString;
+          AdressEdit.Text              :=FieldByName('address').AsString;
+
+    END;
+  end;
+END;
+
+procedure TFormNominalCustomers.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+  ExpDataModule.SearchCustDataSet.Filtered:=false;
+end;
+
+procedure TFormNominalCustomers.FormShow(Sender: TObject);
+begin
+  IF  FormPaymentsCredit.FForm=0 then
+  begin
+    RadioButton1.Checked :=true;
+    Editpasspin.Clear;
+    EditLastName.Clear;
+    EditName.Clear;
+    EditSoname.Clear;
+    CBoxPassPlace.KeyValue:=-1;
+    EditSerial.Clear;
+    EditPassport.Clear;
+    Issue_country.KeyValue:=-1;
+    DBCBox_DocTYPE.KeyValue:=-1;
+    DateEdit.Clear;
+    DateEdit1.Clear;
+    DBCBox_Citizenship.KeyValue:=-1;
+    CBoxSex.KeyValue:=-1;
+    CBoxFamStatus.KeyValue:=-1;
+    BirthPlace.KeyValue:=-1;
+    EditBirthCity.KeyValue:=-1;
+    DateEdit2.Clear;
+    Adrs_State.KeyValue:=-1;
+    Adrs_City.KeyValue:=-1;
+    ZipQ.Clear;
+    EditMobil.Clear;
+    EditPhone.Clear;
+    EditEmail.Clear;
+    AdressEdit.Clear;
+  end
+  else
+    begin
+
+
+    {case FieldByName('nerezident').AsInteger of
+    0:RadioButton1.Checked:=true;
+    1:RadioButton2.Checked:=true;
+    end;
+
+
+    AccountDataSet.Close;
+    AccountDataSet.SetVariable('kli_id',ExpBatchsDataSet.FieldByName('kliid').AsInteger);
+    AccountDataSet.SQL[2]:='';
+    AccountDataSet.SQL[2]:='and id='+ExpBatchsDataSet.FieldByName('debetaccid').AsString;
+
+    AccountDataSet.Open;
+
+
+    FilialDataSet.Close;
+    FilialDataSet.SQL[1]:='';
+    FilialDataSet.SQL[1]:='where id='+ExpBatchsDataSet.fieldbyname('filial').AsString;
+    FilialDataSet.Open;
+
+
+
+
+
+    EditPincode.Text            :=FieldByName('passpin').AsString;
+    CBoxPassPlace.KeyValue      :=FieldByName('doc_type').AsInteger;
+    EditSerial.Text             :=FieldByName('passer').AsString;
+    EditPassport.Text           :=FieldByName('paspnum').AsString;
+    issue_country.KeyValue      :=FieldByName('doc_country').AsVariant;
+    DBCBox_DocTYPE.KeyValue     :=FieldByName('paspplace').AsVariant;
+    DateEdit.Value              :=FieldByName('paspdate').AsVariant;
+    DateEdit1.Value             :=FieldByName('passexpire').AsVariant;
+    DBCBox_Citizenship.KeyValue :=FieldByName('citizenship').AsInteger;
+    DBCBox_Citizenship2.KeyValue:=FieldByName('citizenship2').AsInteger;
+    DBCBox_Citizenship3.KeyValue:=FieldByName('citizenship3').AsInteger;
+
+
+
+    EditCustid.Text             :=FieldByName('id').AsString;
+    EditLastName.Text           :=FieldByName('lastname').AsString;
+
+    IF RadioGroup1.ItemIndex=3  THEN EditName.Text:=FieldByName('custname').AsString
+                                ELSE EditName.Text:=FieldByName('name').AsString;
+
+    EditSoname.Text             :=FieldByName('soname').AsString;
+    EditVoin.Text               :=FieldByName('inn').AsString;
+    CBoxSex.KeyValue            :=FieldByName('sex').AsInteger;
+    CBoxFamStatus.KeyValue      :=FieldByName('fam_status').AsInteger;
+    BirthPlace.KeyValue         :=FieldByName('birthplace').AsString;
+    EditBirthCity.KeyValue      :=FieldByName('birth_state').AsString;
+    DateEdit2.Value             :=FieldByName('birthday').AsVariant;
+    Adrs_State.KeyValue         :=FieldByName('adrs_state').AsString;
+    Adrs_City.KeyValue          :=FieldByName('city').AsString;
+    ZipQ.Text                   :=FieldByName('reg_zip').AsString;
+    AdressEdit.Text             :=FieldByName('address').AsString;
+    EditMobil.Text              :=FieldByName('phone_m').AsString;
+    EditPhone.Text              :=FieldByName('phone_h').AsString;
+    EditEmail.Text              :=FieldByName('e_mail').AsString;
+    ValuteName.KeyValue         :=ExpBatchsDataSet.FieldByName('val_cod').AsInteger;
+    CMCurrencyEdit.Value        :=ExpBatchsDataSet.FieldByName('amount').AsFloat;
+    CMCurrencyEditChange(self);
+    //FilialName.KeyValue         :=ExpBatchsDataSet.FieldByName('filial').AsInteger;
+    TransRefEdit.Text           :=ExpBatchsDataSet.FieldByName('trans_ref').AsString;
+    RemitİnfEdit.Text           :=ExpBatchsDataSet.FieldByName('remit_inf').AsString;
+    SenderAccNo.KeyValue        :=AccountDataSet.FieldByName('id').AsInteger;}
+
+  end;
+end;
+
+
+end.

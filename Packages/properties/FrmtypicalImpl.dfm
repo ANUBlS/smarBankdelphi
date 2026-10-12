@@ -1,0 +1,127 @@
+object FrmTypical: TFrmTypical
+  Left = 532
+  Top = 116
+  Anchors = [akLeft]
+  BorderIcons = [biSystemMenu]
+  ClientHeight = 414
+  ClientWidth = 288
+  Color = clBtnFace
+  Font.Charset = RUSSIAN_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poMainFormCenter
+  OnCanResize = FormCanResize
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  OnKeyPress = FormKeyPress
+  PixelsPerInch = 96
+  TextHeight = 14
+  object GroupBox1: TGroupBox
+    Left = 0
+    Top = 0
+    Width = 288
+    Height = 172
+    Align = alTop
+    Caption = #1092#1080#1083#1080#1072#1083
+    TabOrder = 0
+    ExplicitWidth = 285
+    object DBGrid1: TDBGrid
+      Left = 2
+      Top = 16
+      Width = 284
+      Height = 154
+      Align = alClient
+      DataSource = DMproperties.FilalsDatSrc
+      DrawingStyle = gdsClassic
+      FixedColor = clBackground
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 0
+      TitleFont.Charset = DEFAULT_CHARSET
+      TitleFont.Color = clWindowText
+      TitleFont.Height = -11
+      TitleFont.Name = 'MS Sans Serif'
+      TitleFont.Style = []
+      Columns = <
+        item
+          Expanded = False
+          FieldName = 'NAME'
+          Title.Caption = #1060#1080#1083#1080#1072#1083#1099#1085' '#1072#1076#1099
+          Title.Color = clBlue
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = [fsBold]
+          Width = 238
+          Visible = True
+        end>
+    end
+  end
+  object GroupBox2: TGroupBox
+    Left = 0
+    Top = 172
+    Width = 288
+    Height = 242
+    Align = alClient
+    Caption = #1045#1097#1090#1080#1084#1072#1083' '#1086#1083#1091#1085#1072#1085' '#1079#1103#1088#1103#1088'  '#1077#1097#1090#1080#1081#1072#1090#1083#1072#1088' '#1081#1072#1088#1076#1099#1083#1084#1072#1089#1099#1085#1072' '#1072#1081#1099#1088#1084#1072#1083#1072#1088
+    TabOrder = 1
+    ExplicitWidth = 285
+    object DBGrid2: TDBGrid
+      Left = 2
+      Top = 16
+      Width = 284
+      Height = 197
+      Align = alClient
+      DataSource = DMproperties.LinksSrc
+      DrawingStyle = gdsClassic
+      FixedColor = clBackground
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 0
+      TitleFont.Charset = DEFAULT_CHARSET
+      TitleFont.Color = clWindowText
+      TitleFont.Height = -11
+      TitleFont.Name = 'MS Sans Serif'
+      TitleFont.Style = []
+      Columns = <
+        item
+          Expanded = False
+          FieldName = 'accno'
+          Title.Caption = 'Hesab'
+          Title.Color = clBlue
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = [fsBold]
+          Width = 230
+          Visible = True
+        end>
+    end
+    object DBNavigator1: TDBNavigator
+      Left = 2
+      Top = 213
+      Width = 284
+      Height = 27
+      DataSource = DMproperties.LinksSrc
+      VisibleButtons = [nbPrior, nbLast, nbInsert, nbDelete, nbEdit, nbPost, nbCancel, nbRefresh]
+      Align = alBottom
+      Flat = True
+      TabOrder = 1
+      ExplicitWidth = 281
+    end
+  end
+end

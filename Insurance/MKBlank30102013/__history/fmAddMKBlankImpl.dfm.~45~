@@ -1,0 +1,198 @@
+object fmAddMKBlank: TfmAddMKBlank
+  Left = 0
+  Top = 0
+  BorderIcons = [biSystemMenu]
+  BorderStyle = bsSingle
+  ClientHeight = 182
+  ClientWidth = 514
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poDesktopCenter
+  OnKeyPress = FormKeyPress
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object XFPanel1: TXFPanel
+    Left = 0
+    Top = 0
+    Width = 514
+    Height = 182
+    Align = alClient
+    TabOrder = 0
+    object XFButton1: TXFButton
+      Left = 348
+      Top = 146
+      Width = 75
+      Height = 25
+      Caption = 'Q'#601'bul'
+      DoubleBuffered = True
+      ParentDoubleBuffered = False
+      TabOrder = 0
+      OnClick = XFButton1Click
+    end
+    object XFButton2: TXFButton
+      Left = 429
+      Top = 146
+      Width = 75
+      Height = 25
+      Caption = 'Ba'#287'la'
+      DoubleBuffered = True
+      ParentDoubleBuffered = False
+      TabOrder = 1
+      OnClick = XFButton2Click
+    end
+    object XFPanel2: TXFPanel
+      Left = 1
+      Top = 1
+      Width = 512
+      Height = 129
+      Align = alTop
+      BevelInner = bvLowered
+      TabOrder = 2
+      object XFLabel1: TXFLabel
+        Left = 15
+        Top = 16
+        Width = 36
+        Height = 13
+        Caption = 'Markas'#305
+      end
+      object XFLabel2: TXFLabel
+        Left = 15
+        Top = 51
+        Width = 30
+        Height = 13
+        Caption = 'Modeli'
+      end
+      object XFLabel3: TXFLabel
+        Left = 15
+        Top = 81
+        Width = 48
+        Height = 13
+        Caption = 'Burax'#305'l'#305#351' ili'
+      end
+      object XFLabel4: TXFLabel
+        Left = 272
+        Top = 78
+        Width = 83
+        Height = 13
+        Caption = #304'stifad'#601' xarakteri'
+        Visible = False
+      end
+      object XFLabel5: TXFLabel
+        Left = 272
+        Top = 16
+        Width = 16
+        Height = 13
+        Caption = 'Tipi'
+      end
+      object XFLabel6: TXFLabel
+        Left = 272
+        Top = 51
+        Width = 27
+        Height = 13
+        Caption = 'R'#601'ngi'
+      end
+      object DBLookupComboBox1: TDBLookupComboBox
+        Left = 66
+        Top = 8
+        Width = 171
+        Height = 21
+        DataField = 'INSUREDMARK'
+        DataSource = InsMKDataMod.DSMotorkasco
+        KeyField = 'NAME'
+        ListField = 'NAME'
+        ListSource = InsMKDataMod.DSMarks
+        TabOrder = 0
+      end
+      object DBLookupComboBox2: TDBLookupComboBox
+        Left = 66
+        Top = 43
+        Width = 171
+        Height = 21
+        DataField = 'INSUREDMODEL'
+        DataSource = InsMKDataMod.DSMotorkasco
+        KeyField = 'NAME'
+        ListField = 'NAME'
+        ListSource = InsMKDataMod.DSModels
+        TabOrder = 1
+      end
+      object DBLookupComboBox3: TDBLookupComboBox
+        Left = 358
+        Top = 8
+        Width = 145
+        Height = 21
+        DataField = 'INSUREDTYPE'
+        DataSource = InsMKDataMod.DSMotorkasco
+        KeyField = 'NAME'
+        ListField = 'NAME'
+        ListSource = InsMKDataMod.DSAutoTypes
+        TabOrder = 2
+      end
+      object DBLookupComboBox4: TDBLookupComboBox
+        Left = 358
+        Top = 43
+        Width = 145
+        Height = 21
+        DataField = 'INSUREDCOLOR'
+        DataSource = InsMKDataMod.DSMotorkasco
+        KeyField = 'NAME'
+        ListField = 'NAME'
+        ListSource = InsMKDataMod.DSAutoColors
+        TabOrder = 3
+      end
+      object DBEdit1: TDBEdit
+        Left = 358
+        Top = 73
+        Width = 145
+        Height = 21
+        TabOrder = 4
+        Visible = False
+      end
+      object DBLookupComboBox5: TDBLookupComboBox
+        Left = 66
+        Top = 73
+        Width = 171
+        Height = 21
+        DataField = 'INSUREDOUTPUTYEAR'
+        DataSource = InsMKDataMod.DSMotorkasco
+        KeyField = 'NAME'
+        ListField = 'NAME'
+        ListSource = InsMKDataMod.DSRins_production_year
+        TabOrder = 5
+      end
+    end
+  end
+  object DSMarka: TOracleDataSet
+    SQL.Strings = (
+      'SELECT a.rowid,a.id, a.name, a.state_id, a.calcoptions'
+      '  FROM ins_dict_marks a'
+      'where name=:p_name')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000E0000003A0050005F004E0041004D004500050000000000
+      000000000000}
+    Left = 24
+    Top = 128
+  end
+  object DSModel: TOracleDataSet
+    Optimize = False
+    Left = 112
+    Top = 128
+  end
+  object DSTipi: TOracleDataSet
+    Optimize = False
+    Left = 200
+    Top = 128
+  end
+  object DSReng: TOracleDataSet
+    Optimize = False
+    Left = 288
+    Top = 128
+  end
+end

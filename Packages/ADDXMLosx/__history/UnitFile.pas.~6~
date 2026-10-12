@@ -1,0 +1,89 @@
+﻿unit UnitFile;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, Buttons, XFSCtrls, Gauges, ExtCtrls, DB, OracleData;
+
+type
+  TFormFile = class(TForm)
+    XFPanel1: TXFPanel;
+    Gauge_cust: TGauge;
+    XFGroupBox1: TXFGroupBox;
+    SpeedButton1: TSpeedButton;
+    EditFile: TEdit;
+    XFBitBtn2: TXFBitBtn;
+    XFBitBtn1: TXFBitBtn;
+    SaveDlgKredit: TSaveDialog;
+    ods_sysdat: TOracleDataSet;
+    ods_sysdatTEK_DAT: TWideStringField;
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure XFBitBtn1Click(Sender: TObject);
+    procedure WriteString(S: string);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormFile: TFormFile;
+    f: TextFile;
+    UnusableGrops: Set Of Byte;
+    FilePAth: String;
+implementation
+ uses   sboapiDataModuleImpl,ADD_XML;
+
+{$R *.dfm}
+
+procedure TFormFile.WriteString(S: string);
+begin
+
+  AssignFile(f, FilePAth); { Assigns the Filename }
+  Append(f); { Opens the file for editing }
+  Write(f, UTF8Encode(StringReplace(S, #13 + #10, '', [rfReplaceAll])));
+  Closefile(f);
+end;
+procedure TFormFile.SpeedButton1Click(Sender: TObject);
+begin
+  with SaveDlgKredit do
+    if Execute then
+      EditFile.Text:= FileName;
+      AssignFile(f, EditFile.Text);
+      Rewrite(f);
+      Closefile(f);
+
+
+end;
+
+procedure TFormFile.XFBitBtn1Click(Sender: TObject);
+begin
+ if EditFile.Text = '' then
+  begin
+    ShowMessage('      Faylı seçməmisiz!     ');
+    Exit;
+  end;
+  FilePAth := EditFile.Text;
+  AssignFile(f, FilePAth);
+  Rewrite(f);
+  Closefile(f);
+  WriteString('<ADD>');
+
+      WriteString('<REPORT_INFO>');
+
+       WriteString('<BANK_LICENSE_NUMBER>');
+       WriteString('2');
+       WriteString('</BANK_LICENSE_NUMBER>');
+
+       WriteString('<REPORT_DATE>');
+       WriteString(ods_sysdatTEK_DAT.AsString);
+       WriteString('</REPORT_DATE>');
+
+      WriteString('</REPORT_INFO>');
+
+
+      WriteString('</ADD>');
+end;
+
+end.

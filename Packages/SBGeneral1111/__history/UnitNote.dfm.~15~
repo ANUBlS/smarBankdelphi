@@ -1,0 +1,369 @@
+object FormNote: TFormNote
+  Left = 0
+  Top = 0
+  BorderIcons = [biSystemMenu]
+  ClientHeight = 422
+  ClientWidth = 860
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poDesktopCenter
+  OnClose = FormClose
+  OnCreate = FormCreate
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object XFPanel2: TXFPanel
+    Left = 0
+    Top = 381
+    Width = 860
+    Height = 41
+    Align = alBottom
+    BevelInner = bvSpace
+    BevelOuter = bvLowered
+    TabOrder = 0
+    object XFButton3: TXFButton
+      Left = 722
+      Top = 10
+      Width = 75
+      Height = 25
+      Caption = 'Ba'#287'la'
+      DoubleBuffered = True
+      ParentDoubleBuffered = False
+      TabOrder = 0
+      OnClick = XFButton3Click
+    end
+    object New: TXFBitBtn
+      Left = 632
+      Top = 10
+      Width = 84
+      Height = 25
+      Caption = 'Yeni'
+      DoubleBuffered = True
+      ParentDoubleBuffered = False
+      TabOrder = 1
+      OnClick = NewClick
+    end
+    object Add: TXFButton
+      Left = 636
+      Top = 10
+      Width = 75
+      Height = 25
+      Caption = 'Q'#601'bul'
+      DoubleBuffered = True
+      ParentDoubleBuffered = False
+      TabOrder = 2
+      OnClick = AddClick
+    end
+  end
+  object XFPanel3: TXFPanel
+    Left = 0
+    Top = 153
+    Width = 860
+    Height = 228
+    Align = alClient
+    BevelInner = bvSpace
+    BevelOuter = bvLowered
+    Caption = 'XFPanel3'
+    TabOrder = 1
+    object XDBGrid1: TXDBGrid
+      Left = 2
+      Top = 2
+      Width = 856
+      Height = 224
+      Align = alClient
+      DataSource = dsrc_main
+      GridStyle.VisualStyle = vsXPStyle
+      Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit, dgExtendedSelect, dgInternalSelect, dgRowResize, dgRowScroll, dgHotButtons, dgTitleButtons, dgTitleHeaders, dgTitleWidthOff, dgMarkerAutoAlign, dgMarkerAutoToggle]
+      TabOrder = 0
+      OnCellDblClick = XDBGrid1CellDblClick
+      Columns = <
+        item
+          Expanded = False
+          FieldName = 'ID'
+          Visible = True
+          Width = 57
+        end
+        item
+          Expanded = False
+          FieldName = 'CUSTID'
+          Title.Caption = 'M'#252#351't'#601'ri kodu'
+          Visible = True
+          Width = 69
+        end
+        item
+          Expanded = False
+          FieldName = 'CONTRACTID'
+          Title.Caption = 'Contract '#304'd'
+          Visible = True
+          Width = 69
+        end
+        item
+          Expanded = False
+          FieldName = 'NOTETYPE_NAME'
+          Title.Caption = 'Modul n'#246'v'#252
+          Visible = True
+          Width = 87
+        end
+        item
+          Expanded = False
+          FieldName = 'COMMTYPE_NAME'
+          Title.Caption = #399'laq'#601' n'#246'v'#252
+          Visible = True
+          Width = 81
+        end
+        item
+          Expanded = False
+          FieldName = 'STATUS'
+          Title.Caption = 'Status'
+          Visible = True
+          Width = 41
+        end
+        item
+          Expanded = False
+          FieldName = 'USERINSERT'
+          Title.Caption = 'Daxil ed'#601'n'
+          Visible = True
+          Width = 75
+        end
+        item
+          Expanded = False
+          FieldName = 'DAT'
+          Title.Caption = 'Tarix'
+          Visible = True
+          Width = 83
+        end
+        item
+          Expanded = False
+          FieldName = 'TIM'
+          Title.Caption = 'Saat'
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'NOTE'
+          Title.Caption = 'Qeyd'
+          Visible = True
+          Width = 180
+        end>
+    end
+  end
+  object XFPanel1: TXFPanel
+    Left = 0
+    Top = 0
+    Width = 860
+    Height = 153
+    Align = alTop
+    BevelInner = bvSpace
+    BevelOuter = bvLowered
+    TabOrder = 2
+    object XFLabel1: TXFLabel
+      Left = 27
+      Top = 32
+      Width = 59
+      Height = 13
+      Caption = 'Modul n'#246'v'#252':'
+    end
+    object XFLabel2: TXFLabel
+      Left = 24
+      Top = 101
+      Width = 59
+      Height = 13
+      Caption = #399'laq'#601' n'#246'v'#252':'
+    end
+    object XFLabel3: TXFLabel
+      Left = 85
+      Top = 34
+      Width = 9
+      Height = 19
+      Caption = '*'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clRed
+      Font.Height = -16
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+    end
+    object XFLabel4: TXFLabel
+      Left = 85
+      Top = 101
+      Width = 9
+      Height = 19
+      Caption = '*'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clRed
+      Font.Height = -16
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+    end
+    object DBLook_notetypes: TDBLookupComboBox
+      Left = 137
+      Top = 32
+      Width = 145
+      Height = 21
+      KeyField = 'ID'
+      ListField = 'NAME'
+      ListSource = Dsrc_notetypes
+      TabOrder = 0
+    end
+    object DBLook_commtypes: TDBLookupComboBox
+      Left = 137
+      Top = 95
+      Width = 145
+      Height = 21
+      KeyField = 'ID'
+      ListField = 'NAME'
+      ListSource = dsrc_commtypes
+      TabOrder = 1
+    end
+    object MemoNote: TMemo
+      Left = 349
+      Top = 2
+      Width = 509
+      Height = 149
+      Align = alRight
+      TabOrder = 2
+    end
+  end
+  object Ods_notetypes: TOracleDataSet
+    SQL.Strings = (
+      'SELECT *'
+      '  FROM cust_notetypes order by id')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000400000049004400010000000000080000004E0041004D00
+      4500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 760
+    Top = 216
+    object Ods_notetypesID: TFloatField
+      FieldName = 'ID'
+    end
+    object Ods_notetypesNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 50
+    end
+  end
+  object Ods_commtypes: TOracleDataSet
+    SQL.Strings = (
+      'SELECT *'
+      '  FROM commtypes ')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000400000049004400010000000000080000004E0041004D00
+      4500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 680
+    Top = 224
+    object Ods_commtypesID: TFloatField
+      FieldName = 'ID'
+    end
+    object Ods_commtypesNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 50
+    end
+  end
+  object Dsrc_notetypes: TDataSource
+    DataSet = Ods_notetypes
+    Left = 760
+    Top = 272
+  end
+  object dsrc_commtypes: TDataSource
+    DataSet = Ods_commtypes
+    Left = 672
+    Top = 280
+  end
+  object ods_main: TOracleDataSet
+    SQL.Strings = (
+      '   SELECT a.*,'
+      
+        '   (select name from cust_notetypes  where id=a.notetype)as note' +
+        'type_name,'
+      
+        '   (select name from commtypes where id=a.commtype)as commtype_n' +
+        'ame'
+      
+        '  FROM cust_notes a where (custid=:v_id and CONTRACTID=:v_CONTRA' +
+        'CTID )or'
+      
+        '                          (custid=null and CONTRACTID=:v_CONTRAC' +
+        'TID ) or'
+      '                          (custid=:v_id and CONTRACTID=null )'
+      '                       ')
+    Optimize = False
+    Variables.Data = {
+      04000000020000000A0000003A0056005F004900440003000000000000000000
+      00001A0000003A0056005F0043004F004E005400520041004300540049004400
+      030000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000C0000000C0000004300550053005400490044000100000000001000
+      00004E004F005400450054005900500045000100000000001000000043004F00
+      4D004D005400590050004500010000000000080000004E004F00540045000100
+      000000000C000000530054004100540055005300010000000000140000005500
+      53004500520049004E0053004500520054000100000000001400000043004F00
+      4E00540052004100430054004900440001000000000006000000440041005400
+      01000000000006000000540049004D0001000000000004000000490044000100
+      000000001A0000004E004F005400450054005900500045005F004E0041004D00
+      45000100000000001A00000043004F004D004D0054005900500045005F004E00
+      41004D004500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 576
+    Top = 264
+    object ods_mainCUSTID: TFloatField
+      FieldName = 'CUSTID'
+    end
+    object ods_mainNOTE: TWideStringField
+      FieldName = 'NOTE'
+      Size = 4000
+    end
+    object ods_mainSTATUS: TFloatField
+      FieldName = 'STATUS'
+    end
+    object ods_mainUSERINSERT: TWideStringField
+      FieldName = 'USERINSERT'
+      Size = 30
+    end
+    object ods_mainCONTRACTID: TFloatField
+      FieldName = 'CONTRACTID'
+    end
+    object ods_mainDAT: TDateTimeField
+      FieldName = 'DAT'
+    end
+    object ods_mainTIM: TDateTimeField
+      FieldName = 'TIM'
+    end
+    object ods_mainNOTETYPE_NAME: TWideStringField
+      FieldName = 'NOTETYPE_NAME'
+      Size = 50
+    end
+    object ods_mainCOMMTYPE_NAME: TWideStringField
+      FieldName = 'COMMTYPE_NAME'
+      Size = 50
+    end
+    object ods_mainID: TFloatField
+      FieldName = 'ID'
+    end
+    object ods_mainNOTETYPE: TFloatField
+      FieldName = 'NOTETYPE'
+    end
+    object ods_mainCOMMTYPE: TFloatField
+      FieldName = 'COMMTYPE'
+    end
+  end
+  object dsrc_main: TDataSource
+    DataSet = ods_main
+    Left = 512
+    Top = 304
+  end
+  object pgcust_note: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'pgcust_note'
+    Left = 384
+    Top = 248
+  end
+end

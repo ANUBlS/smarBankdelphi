@@ -1,0 +1,436 @@
+object dmfrmRepOfKindPayOfDep: TdmfrmRepOfKindPayOfDep
+  OldCreateOrder = False
+  OnCreate = DataModuleCreate
+  OnDestroy = DataModuleDestroy
+  Left = 181
+  Top = 155
+  Height = 480
+  Width = 696
+  object FilialMDT: TOracleDataSet
+    SQL.Strings = (
+      'select id,name from filial'
+      'order by id')
+    QBEDefinition.QBEFieldDefs = {
+      0400000002000000020000004944010000000000040000004E414D4501000000
+      0000}
+    Session = sboapiDataModule.SBSession
+    Left = 32
+    Top = 24
+    object FilialMDTID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object FilialMDTNAME: TStringField
+      FieldName = 'NAME'
+      Size = 90
+    end
+  end
+  object SourceMDT: TOracleDataSet
+    SQL.Strings = (
+      'SELECT a.id, a.name'
+      '  FROM uaod_source a'
+      '  order by id')
+    QBEDefinition.QBEFieldDefs = {
+      0400000002000000020000004944010000000000040000004E414D4501000000
+      0000}
+    Session = sboapiDataModule.SBSession
+    Left = 32
+    Top = 72
+    object SourceMDTID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object SourceMDTNAME: TStringField
+      FieldName = 'NAME'
+      Required = True
+      Size = 80
+    end
+  end
+  object TypeMDT: TOracleDataSet
+    SQL.Strings = (
+      'SELECT a.id, a.name'
+      '  FROM uaod_type a'
+      '  order by id')
+    QBEDefinition.QBEFieldDefs = {
+      0400000002000000020000004944010000000000040000004E414D4501000000
+      0000}
+    Session = sboapiDataModule.SBSession
+    Left = 32
+    Top = 128
+    object TypeMDTID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object TypeMDTNAME: TStringField
+      FieldName = 'NAME'
+      Required = True
+      Size = 80
+    end
+  end
+  object ValuteMDT: TOracleDataSet
+    SQL.Strings = (
+      'select valute,valu_name as val_name from avalute'
+      'order by valute')
+    QBEDefinition.QBEFieldDefs = {
+      04000000020000000600000056414C5554450100000000000800000056414C5F
+      4E414D45010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 32
+    Top = 176
+    object ValuteMDTVALUTE: TIntegerField
+      FieldName = 'VALUTE'
+      Required = True
+    end
+    object ValuteMDTVAL_NAME: TStringField
+      FieldName = 'VAL_NAME'
+      Size = 25
+    end
+  end
+  object CalcStatusMDT: TOracleDataSet
+    SQL.Strings = (
+      'select 1 as ID,'#39'ŸÂÒ‡·Î‡Ì‡Ì'#39' as name  from dual'
+      'union'
+      'select 0 as ID,'#39'ŸÂÒ‡·Î‡ÌÏ‡È‡Ì'#39' as name from dual')
+    QBEDefinition.QBEFieldDefs = {
+      0400000002000000020000004944010000000000040000004E414D4501000000
+      0000}
+    Session = sboapiDataModule.SBSession
+    Left = 32
+    Top = 232
+    object CalcStatusMDTID: TFloatField
+      FieldName = 'ID'
+    end
+    object CalcStatusMDTNAME: TStringField
+      FieldName = 'NAME'
+      Size = 13
+    end
+  end
+  object FilialMDds: TDataSource
+    DataSet = FilialMDT
+    Left = 96
+    Top = 24
+  end
+  object SourceMDds: TDataSource
+    DataSet = SourceMDT
+    Left = 96
+    Top = 71
+  end
+  object TypeMDds: TDataSource
+    DataSet = TypeMDT
+    Left = 96
+    Top = 128
+  end
+  object ValuteMDds: TDataSource
+    DataSet = ValuteMDT
+    Left = 96
+    Top = 176
+  end
+  object CalcStatusMDds: TDataSource
+    DataSet = CalcStatusMDT
+    Left = 115
+    Top = 232
+  end
+  object Queries: TOracleDataSet
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 420
+    Top = 8
+  end
+  object sysdat: TOracleDataSet
+    SQL.Strings = (
+      'select tek_dat from sysdat')
+    Session = sboapiDataModule.SBSession
+    Left = 456
+    Top = 8
+  end
+  object ODSKindPay: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      '  src.name as sourcename,'
+      '  nvl(geninf.BcountDep,0) as BcountDep,'
+      '  nvl(geninf.beginRest,0) as beginRest,'
+      '  nvl(geninf.roundInt,0) as roundInt,'
+      '  nvl(geninf.beginIntRest,0) as beginIntRest,'
+      '  nvl(geninf.ceofrest,0) as ceofrest,'
+      ''
+      
+        '  usaid_report.Get_RestByPerForDat(src.id,:dat,-10000000,7,:fstr' +
+        ',:fstrB) as g0,'
+      
+        '  usaid_report.Get_IntRestByPerForDat(src.id,:dat,-10000000,7,:f' +
+        'str,:fstrB) as fg0,  '
+      
+        '  usaid_report.Get_CountByPerForDat(src.id,:dat,-10000000,7,:fst' +
+        'r,:fstrB) as countg0,'
+      ''
+      
+        '  usaid_report.Get_RestByPerForDat(src.id,:dat,8,30,:fstr,:fstrB' +
+        ') as g1,'
+      
+        '  usaid_report.Get_IntRestByPerForDat(src.id,:dat,8,30,:fstr,:fs' +
+        'trB) as fg1,  '
+      
+        '  usaid_report.Get_CountByPerForDat(src.id,:dat,8,30,:fstr,:fstr' +
+        'B) as countg1,'
+      ''
+      
+        '  usaid_report.Get_RestByPerForDat(src.id,:dat,31,90,:fstr,:fstr' +
+        'B) as g2,'
+      
+        '  usaid_report.Get_IntRestByPerForDat(src.id,:dat,31,90,:fstr,:f' +
+        'strB) as fg2,  '
+      
+        '  usaid_report.Get_CountByPerForDat(src.id,:dat,31,90,:fstr,:fst' +
+        'rB) as countg2,'
+      ''
+      
+        '  usaid_report.Get_RestByPerForDat(src.id,:dat,91,180,:fstr,:fst' +
+        'rB) as g3,'
+      
+        '  usaid_report.Get_IntRestByPerForDat(src.id,:dat,91,180,:fstr,:' +
+        'fstrB) as fg3,  '
+      
+        '  usaid_report.Get_CountByPerForDat(src.id,:dat,91,180,:fstr,:fs' +
+        'trB) as countg3,'
+      ''
+      
+        '  usaid_report.Get_RestByPerForDat(src.id,:dat,181,360,:fstr,:fs' +
+        'trB) as g4,'
+      
+        '  usaid_report.Get_IntRestByPerForDat(src.id,:dat,181,360,:fstr,' +
+        ':fstrB) as fg4,  '
+      
+        '  usaid_report.Get_CountByPerForDat(src.id,:dat,181,360,:fstr,:f' +
+        'strB) as countg4,'
+      ''
+      
+        '  usaid_report.Get_RestByPerForDat(src.id,:dat,361,720,:fstr,:fs' +
+        'trB) as g5,'
+      
+        '  usaid_report.Get_IntRestByPerForDat(src.id,:dat,361,720,:fstr,' +
+        ':fstrB) as fg5,  '
+      
+        '  usaid_report.Get_CountByPerForDat(src.id,:dat,361,720,:fstr,:f' +
+        'strB) as countg5,'
+      ''
+      
+        '  usaid_report.Get_RestByPerForDat(src.id,:dat,721,7210000,:fstr' +
+        ',:fstrB) as g6,'
+      
+        '  usaid_report.Get_IntRestByPerForDat(src.id,:dat,721,7210000,:f' +
+        'str,:fstrB) as fg6,  '
+      
+        '  usaid_report.Get_CountByPerForDat(src.id,:dat,721,7210000,:fst' +
+        'r,:fstrB) as countg6'
+      ''
+      'from'
+      ''
+      'uaod_source src,'
+      ''
+      '(select '
+      ' sum(BcountDep) as BcountDep,'
+      ' sum(beginRest) as beginRest,'
+      ' round(sum(beginRest)/:genrest,4)*100 as CeofRest,'
+      ' round(sum(roundInt)/:genrest,4)*100 as roundInt,'
+      ' sum(beginIntRest) as beginIntRest,'
+      ' SourceID'
+      ' from '
+      ' (select '
+      '   count(p.id) as BcountDep,'
+      
+        '   sum(round(h.facticaldebt*o.ostat,2)*intr.interest) as roundIn' +
+        't,'
+      '   round(sum(h.facticaldebt*o.ostat),2) as beginRest,'
+      '   round(sum(h.facticalinterestdebt*o.ostat),2) as beginIntRest,'
+      '   src.SourceID'
+      'from '
+      '  sbcm_contracts p,'
+      '  sbcm_contract_history h,'
+      '  operkurs o,sbcm_interests intr,'
+      '  sbcm_accounts ac,uaod_source_bal src'
+      'where'
+      
+        'p.type# in (3,4) and src.bal_cn = ac.bal_cn1 and p.id = intr.id#' +
+        ' and'
+      'p.id = h.id# and h.hdate = :dat and h.facticaldebt <> 0 and'
+      'p.currency = o.val_kod and o.dat = :dat and'
+      'ac.id# = p.id'
+      ''
+      'group by src.SourceID'
+      'union all'
+      'select'
+      '  count(ac.id) as BcountDep,'
+      '  0 as roundInt,'
+      '  sum(abs(ar.pok_ostat)) as beginRest,'
+      '  0 as beginIntRest,'
+      '  src.SourceID'
+      'from account ac ,archost ar,uaod_source_bal src'
+      'where ac.id = ar.acc_id and ac.bal_cn1 = src.bal_cn and'
+      'ar.datdate = :dat and ar.ostat <> 0'
+      ''
+      'group by src.SourceID '
+      ')'
+      'group by SourceID'
+      ') geninf'
+      ''
+      'where '
+      '   src.id = geninf.sourceid(+)'
+      '')
+    Variables.Data = {
+      0300000004000000040000003A4441540C000000000000000000000005000000
+      3A46535452050000000000000000000000060000003A46535452420500000000
+      00000000000000080000003A47454E52455354040000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      040000001B0000000A000000534F555243454E414D4501000000000009000000
+      42434F554E5444455001000000000009000000424547494E5245535401000000
+      000008000000524F554E44494E540100000000000C000000424547494E494E54
+      5245535401000000000002000000473101000000000003000000464731010000
+      00000007000000434F554E544731010000000000020000004732010000000000
+      0300000046473201000000000007000000434F554E5447320100000000000200
+      000047330100000000000300000046473301000000000007000000434F554E54
+      4733010000000000020000004734010000000000030000004647340100000000
+      0007000000434F554E5447340100000000000200000047350100000000000300
+      000046473501000000000007000000434F554E54473501000000000002000000
+      47360100000000000300000046473601000000000007000000434F554E544736
+      0100000000000800000043454F46524553540100000000000200000047300100
+      000000000300000046473001000000000007000000434F554E54473001000000
+      0000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 232
+    Top = 32
+    object ODSKindPaySOURCENAME: TStringField
+      DisplayLabel = 'ÃˇÌ·ˇ'
+      FieldName = 'SOURCENAME'
+      Required = True
+      Size = 80
+    end
+    object ODSKindPayBCOUNTDEP: TFloatField
+      DisplayLabel = '—‡È'
+      FieldName = 'BCOUNTDEP'
+    end
+    object ODSKindPayBEGINREST: TFloatField
+      DisplayLabel = '√‡Î˚„ Ïˇ¸.'
+      FieldName = 'BEGINREST'
+      DisplayFormat = '#,##0.00'
+    end
+    object ODSKindPayCEOFREST: TFloatField
+      DisplayLabel = 'œÓÚ.%'
+      FieldName = 'CEOFREST'
+      DisplayFormat = '#,##0.00'
+    end
+    object ODSKindPayBEGININTREST: TFloatField
+      DisplayLabel = 'ŸÂÒ.%'
+      FieldName = 'BEGININTREST'
+      DisplayFormat = '#,##0.00'
+    end
+    object ODSKindPayROUNDINT: TFloatField
+      DisplayLabel = 'Œ◊‘'
+      FieldName = 'ROUNDINT'
+      DisplayFormat = '#,##0.00'
+    end
+    object ODSKindPayG0: TFloatField
+      DisplayLabel = '0-7/√¡'
+      FieldName = 'G0'
+      DisplayFormat = '#,##0.00'
+    end
+    object ODSKindPayFG0: TFloatField
+      DisplayLabel = '0-7/‘¡'
+      FieldName = 'FG0'
+      DisplayFormat = '#,##0.00'
+    end
+    object ODSKindPayCOUNTG0: TFloatField
+      DisplayLabel = '0-7/—‡È'
+      FieldName = 'COUNTG0'
+    end
+    object ODSKindPayG1: TFloatField
+      DisplayLabel = '0-30/√¡'
+      FieldName = 'G1'
+      DisplayFormat = '#,##0.00'
+    end
+    object ODSKindPayFG1: TFloatField
+      DisplayLabel = '0-30/‘¡'
+      FieldName = 'FG1'
+      DisplayFormat = '#,##0.00'
+    end
+    object ODSKindPayCOUNTG1: TFloatField
+      DisplayLabel = '0-30/—‡È'
+      FieldName = 'COUNTG1'
+    end
+    object ODSKindPayG2: TFloatField
+      DisplayLabel = '30-90/√¡'
+      FieldName = 'G2'
+      DisplayFormat = '#,##0.00'
+    end
+    object ODSKindPayFG2: TFloatField
+      DisplayLabel = '30-90/‘¡'
+      FieldName = 'FG2'
+      DisplayFormat = '#,##0.00'
+    end
+    object ODSKindPayCOUNTG2: TFloatField
+      DisplayLabel = '30-90/—‡È'
+      FieldName = 'COUNTG2'
+    end
+    object ODSKindPayG3: TFloatField
+      DisplayLabel = '90-180/√¡'
+      FieldName = 'G3'
+      DisplayFormat = '#,##0.00'
+    end
+    object ODSKindPayFG3: TFloatField
+      DisplayLabel = '90-180/‘¡'
+      FieldName = 'FG3'
+      DisplayFormat = '#,##0.00'
+    end
+    object ODSKindPayCOUNTG3: TFloatField
+      DisplayLabel = '90-180/—‡È'
+      FieldName = 'COUNTG3'
+    end
+    object ODSKindPayG4: TFloatField
+      DisplayLabel = '180-360/√¡'
+      FieldName = 'G4'
+      DisplayFormat = '#,##0.00'
+    end
+    object ODSKindPayFG4: TFloatField
+      DisplayLabel = '180-360/‘¡'
+      FieldName = 'FG4'
+      DisplayFormat = '#,##0.00'
+    end
+    object ODSKindPayCOUNTG4: TFloatField
+      DisplayLabel = '180-360/—‡È'
+      FieldName = 'COUNTG4'
+    end
+    object ODSKindPayG5: TFloatField
+      DisplayLabel = '360-720/√¡'
+      FieldName = 'G5'
+      DisplayFormat = '#,##0.00'
+    end
+    object ODSKindPayFG5: TFloatField
+      DisplayLabel = '360-720/—‡È'
+      FieldName = 'FG5'
+      DisplayFormat = '#,##0.00'
+    end
+    object ODSKindPayCOUNTG5: TFloatField
+      DisplayLabel = '360-720/—‡È'
+      FieldName = 'COUNTG5'
+    end
+    object ODSKindPayG6: TFloatField
+      DisplayLabel = '>=720/√¡'
+      FieldName = 'G6'
+      DisplayFormat = '#,##0.00'
+    end
+    object ODSKindPayFG6: TFloatField
+      DisplayLabel = '>=720/—‡È'
+      FieldName = 'FG6'
+      DisplayFormat = '#,##0.00'
+    end
+    object ODSKindPayCOUNTG6: TFloatField
+      DisplayLabel = '>=720/—‡È'
+      FieldName = 'COUNTG6'
+    end
+  end
+  object ODSKindPayds: TDataSource
+    DataSet = ODSKindPay
+    Left = 312
+    Top = 32
+  end
+end

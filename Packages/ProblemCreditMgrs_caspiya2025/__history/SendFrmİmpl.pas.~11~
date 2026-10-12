@@ -1,0 +1,83 @@
+﻿unit SendFrmİmpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, DBGridEh, StdCtrls, Buttons, Mask, DBCtrlsEh, DBLookupEh;
+
+type
+  TSendFrm = class(TForm)
+    Label1: TLabel;
+    DBLookupComboboxEh2: TDBLookupComboboxEh;
+    BitBtn1: TBitBtn;
+    BitBtn2: TBitBtn;
+    procedure FormCanResize(Sender: TObject; var NewWidth, NewHeight: Integer;
+      var Resize: Boolean);
+    procedure BitBtn1Click(Sender: TObject);
+  private
+
+    { Private declarations }
+     function ExcuseMeUser(Question : String) : Boolean;
+  public
+    { Public declarations }
+  end;
+
+var
+  SendFrm: TSendFrm;
+
+implementation
+ uses PrCmDMImpl;
+{$R *.dfm}
+ function TSendFrm.ExcuseMeUser(Question : String) : Boolean;
+begin
+  Result :=
+    MessageDlg(
+      Question
+     ,mtConfirmation
+     ,[mbYes,mbNo]
+     ,0
+     ) = mrYes;
+end;
+procedure TSendFrm.BitBtn1Click(Sender: TObject);
+resourcestring
+  rsConfirmForOne = '%s  - № li kredit  %s. Əminsiniz?';
+  rsConfirmForAll = '%d - sayda kredit dosyesi %s. Əminsiniz?';
+  rsCalcPercent   = 'göndəriləcək';
+  var
+  id:integer;
+begin
+ if DBLookupComboboxEh2.text='' then
+   begin
+   ShowMessage('Gondərəcəyiniz yeri seçin!');
+   exit;
+   end;
+      with PrCmDM.IntCache do
+      begin
+      id:=FieldByName('id').AsInteger;
+      if not
+        ExcuseMeUser(
+              Format(rsConfirmForOne,[FieldByName('numberofcredit').AsString,rsCalcPercent])
+              ) then   Exit;
+
+  with PrCmDM.PrPackage do
+  begin
+    CallProcedure('add_folder',[
+    'p_id', FieldByName('id').AsInteger ,
+    'p_qovidsender', FieldByName('qovid').AsInteger,
+    'p_qovidreciver',DBLookupComboboxEh2.KeyValue
+    ]);
+   end;
+     Refresh;
+     Locate('id', id, []);
+    end;
+     SendFrm.Close;
+end;
+
+procedure TSendFrm.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+resize:=false
+end;
+
+end.

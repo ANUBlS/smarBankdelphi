@@ -1,0 +1,204 @@
+object frmControldp: TfrmControldp
+  Left = 295
+  Top = 250
+  Width = 207
+  Height = 147
+  BorderIcons = [biSystemMenu]
+  Caption = 'Control'
+  Color = clBtnFace
+  Font.Charset = RUSSIAN_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poMainFormCenter
+  OnCanResize = FormCanResize
+  OnCreate = FormCreate
+  OnKeyPress = FormKeyPress
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Label1: TLabel
+    Left = 12
+    Top = 47
+    Width = 64
+    Height = 13
+    Caption = 'ўесабат тарихи'
+  end
+  object Label2: TLabel
+    Left = 12
+    Top = 16
+    Width = 20
+    Height = 13
+    Caption = '‘илиал'
+  end
+  object DBLookupComboboxEh1: TDBLookupComboboxEh
+    Left = 57
+    Top = 13
+    Width = 135
+    Height = 21
+    DropDownBox.Sizable = True
+    EditButtons = <>
+    KeyField = 'ID'
+    ListField = 'NAME'
+    ListSource = filialsds
+    TabOrder = 0
+    Visible = True
+  end
+  object DTPDAT: TDateTimePicker
+    Left = 83
+    Top = 45
+    Width = 107
+    Height = 21
+    CalAlignment = dtaLeft
+    Date = 40052.4130139699
+    Time = 40052.4130139699
+    DateFormat = dfShort
+    DateMode = dmComboBox
+    Kind = dtkDate
+    ParseInput = False
+    TabOrder = 1
+  end
+  object BitBtn1: TBitBtn
+    Left = 30
+    Top = 76
+    Width = 75
+    Height = 25
+    Caption = '√€бул'
+    Default = True
+    TabOrder = 2
+    OnClick = BitBtn1Click
+    Glyph.Data = {
+      DE010000424DDE01000000000000760000002800000024000000120000000100
+      0400000000006801000000000000000000001000000000000000000000000000
+      80000080000000808000800000008000800080800000C0C0C000808080000000
+      FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00333333333333
+      3333333333333333333333330000333333333333333333333333F33333333333
+      00003333344333333333333333388F3333333333000033334224333333333333
+      338338F3333333330000333422224333333333333833338F3333333300003342
+      222224333333333383333338F3333333000034222A22224333333338F338F333
+      8F33333300003222A3A2224333333338F3838F338F33333300003A2A333A2224
+      33333338F83338F338F33333000033A33333A222433333338333338F338F3333
+      0000333333333A222433333333333338F338F33300003333333333A222433333
+      333333338F338F33000033333333333A222433333333333338F338F300003333
+      33333333A222433333333333338F338F00003333333333333A22433333333333
+      3338F38F000033333333333333A223333333333333338F830000333333333333
+      333A333333333333333338330000333333333333333333333333333333333333
+      0000}
+    NumGlyphs = 2
+  end
+  object BitBtn2: TBitBtn
+    Left = 115
+    Top = 76
+    Width = 75
+    Height = 25
+    Caption = 'Ѕаьла'
+    TabOrder = 3
+    Kind = bkClose
+  end
+  object filials: TOracleDataSet
+    SQL.Strings = (
+      'select -1 as id,'#39'Ѕцтцн филиаллар'#39' as name from dual'
+      'union'
+      'select id,name from filial'
+      '')
+    QBEDefinition.QBEFieldDefs = {
+      0400000002000000020000004944010000000000040000004E414D4501000000
+      0000}
+    Session = sboapiDataModule.SBSession
+    Left = 32
+    object filialsID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object filialsNAME: TStringField
+      FieldName = 'NAME'
+      Size = 90
+    end
+  end
+  object SBCM_CONTROL: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'SBCM_CONTROL'
+    Cursor = crSQLWait
+    Left = 8
+    Top = 112
+  end
+  object filialsds: TDataSource
+    DataSet = filials
+  end
+  object sysdat: TOracleDataSet
+    SQL.Strings = (
+      'select tek_dat from sysdat')
+    QBEDefinition.QBEFieldDefs = {04000000010000000700000054454B5F444154010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 16
+    Top = 40
+    object sysdatTEK_DAT: TDateTimeField
+      FieldName = 'TEK_DAT'
+      Required = True
+    end
+  end
+  object contExport: TCMExcelExport
+    StyleColumnWidth = cwDefault
+    ColumnWidth = 0
+    FontTitles.Charset = RUSSIAN_CHARSET
+    FontTitles.Color = clWindowText
+    FontTitles.Height = -11
+    FontTitles.Name = 'Arial AzLat'
+    FontTitles.Style = []
+    OrientationTitles = 0
+    FontData.Charset = RUSSIAN_CHARSET
+    FontData.Color = clWindowText
+    FontData.Height = -11
+    FontData.Name = 'Arial AzLat'
+    FontData.Style = []
+    FontSummary.Charset = DEFAULT_CHARSET
+    FontSummary.Color = clWindowText
+    FontSummary.Height = -11
+    FontSummary.Name = 'MS Sans Serif'
+    FontSummary.Style = []
+    SummarySelection = ssNone
+    SummaryCalculation = scSUM
+    Left = 56
+    Top = 40
+  end
+  object ResultControl: TOracleDataSet
+    SQL.Strings = (
+      'SELECT a.contractnum, a.custname, a.drest, a.dintrest, a.filial'
+      '  FROM sbcm_controls a'
+      '  order by filial')
+    QBEDefinition.QBEFieldDefs = {
+      04000000050000000B000000434F4E54524143544E554D010000000000080000
+      00435553544E414D450100000000000500000044524553540100000000000800
+      000044494E54524553540100000000000600000046494C49414C010000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 104
+    Top = 32
+    object ResultControlCONTRACTNUM: TStringField
+      DisplayLabel = 'ћцгавил€ є'
+      FieldName = 'CONTRACTNUM'
+      Size = 90
+    end
+    object ResultControlCUSTNAME: TStringField
+      DisplayLabel = 'ћцшт€ри'
+      FieldName = 'CUSTNAME'
+      Size = 90
+    end
+    object ResultControlDREST: TFloatField
+      DisplayLabel = 'яћ цзр€ ф€рг'
+      FieldName = 'DREST'
+    end
+    object ResultControlDINTREST: TFloatField
+      DisplayLabel = '‘ћ цзр€ ф€рг'
+      FieldName = 'DINTREST'
+    end
+    object ResultControlFILIAL: TStringField
+      DisplayLabel = '‘илиал'
+      FieldName = 'FILIAL'
+      Size = 35
+    end
+  end
+end

@@ -1,0 +1,78 @@
+unit TransactionViewerRptUnit;
+
+interface
+
+uses Windows, SysUtils, Messages, Classes, Graphics, Controls,
+  StdCtrls, ExtCtrls, Forms, Quickrpt, QRCtrls;
+
+type
+  TTransactionsRpt = class(TQuickRep)
+    QRBand1: TQRBand;
+    QRLabel1: TQRLabel;
+    QRLabel2: TQRLabel;
+    QRDBImage1: TQRDBImage;
+    QRLabel3: TQRLabel;
+    QRDBText2: TQRDBText;
+    QRDBText3: TQRDBText;
+    QRChildBand1: TQRChildBand;
+    QRLabel4: TQRLabel;
+    QRLabel5: TQRLabel;
+    QRLabel6: TQRLabel;
+    QRLabel7: TQRLabel;
+    QRLabel8: TQRLabel;
+    QRLabel9: TQRLabel;
+    QRLabel10: TQRLabel;
+    QRLabel11: TQRLabel;
+    DetailBand: TQRBand;
+    QRDBText6: TQRDBText;
+    QRDBText7: TQRDBText;
+    QRDBText8: TQRDBText;
+    QRDBText9: TQRDBText;
+    QRDBText10: TQRDBText;
+    QRDBText11: TQRDBText;
+    QRDBText12: TQRDBText;
+    QRBand3: TQRBand;
+    QRDBText13: TQRDBText;
+    QRDBText14: TQRDBText;
+    QRExpr1: TQRExpr;
+    QRExpr2: TQRExpr;
+    QRExpr3: TQRExpr;
+    QRLabel15: TQRLabel;
+    QRExpr5: TQRExpr;
+    QRChildBand2: TQRChildBand;
+    QRDBText5: TQRDBText;
+    QRSysData1: TQRSysData;
+    QRDBText1: TQRDBText;
+    QRLabel17: TQRLabel;
+    QRDBText15: TQRDBText;
+    QRDBText4: TQRDBText;
+    QRDBText16: TQRDBText;
+    MANAGERTITLE: TQRLabel;
+    ACCOUNTANTTITLE: TQRLabel;
+    procedure QuickRepBeforePrint(Sender: TCustomQuickRep;
+      var PrintReport: Boolean);
+  private
+
+  public
+
+  end;
+
+var
+  TransactionsRpt: TTransactionsRpt;
+
+implementation
+
+uses TransactionsViewerDataModuleUnit,SBTranslateProc,sboapiDataModule;
+
+{$R *.DFM}
+
+procedure TTransactionsRpt.QuickRepBeforePrint(Sender: TCustomQuickRep;
+  var PrintReport: Boolean);
+begin
+TransDataModule.BankInfo.Open;
+SBTranslateProc.TranslateAllCompQuickRep(Self,sboapiDataModule.OrPack_SL);
+MANAGERTITLE.caption :=TransDataModule.BankInfo.fieldbyname('MANAGERTITLE').asstring;
+ACCOUNTANTTITLE.caption :=TransDataModule.BankInfo.fieldbyname('ACCOUNTANTTITLE').asstring;
+end;
+
+end.

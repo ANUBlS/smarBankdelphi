@@ -1,0 +1,471 @@
+﻿unit AccountsForPeriodImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActiveX, AxCtrls, AccountsForPeriod_TLB, StdVcl, ImgList, ExtCtrls,
+  StdCtrls, ComCtrls, ExcelExporter, SearchCombo, Buttons, Grids, DBGrids;
+
+type
+  TAccountsForPeriodForm = class(TActiveForm, IAccountsForPeriodForm)
+    Panel1: TPanel;
+    GroupBox1: TGroupBox;
+    DTPFirstDate: TDateTimePicker;
+    DTPLastDate: TDateTimePicker;
+    AccountsExporter: TExcelExporter;
+    GroupBox2: TGroupBox;
+    BranchesCB: TSearchCombo;
+    AccountsListEdit: TEdit;
+    SBExecute: TSpeedButton;
+    AccountsViewer: TDBGrid;
+    SBExcelExport: TSpeedButton;
+    GroupBox3: TGroupBox;
+    UsersCB: TSearchCombo;
+    Label1: TLabel;
+    simvoledit: TEdit;
+    Label2: TLabel;
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure SBExecuteClick(Sender: TObject);
+    procedure SBExcelExportClick(Sender: TObject);
+    procedure AccountsViewerTitleClick(Column: TColumn);
+  private
+    { Private declarations }
+    FEvents: IAccountsForPeriodFormEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+  public
+    { Public declarations }
+    FAccountsDataSQL : WideString;
+    procedure Initialize; override;
+    procedure MouseWheelHandler(var Message: TMessage); override;
+  end;
+
+implementation
+
+uses ComObj, ComServ, FPAccountsDataModuleImpl,sboapiDataModuleImpl, SBTranslateProc;
+
+{$R *.DFM}
+
+{ TAccountsForPeriodForm }
+
+procedure TAccountsForPeriodForm.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_AccountsForPeriodFormPage); }
+end;
+
+procedure TAccountsForPeriodForm.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as IAccountsForPeriodFormEvents;
+end;
+
+procedure TAccountsForPeriodForm.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TAccountsForPeriodForm.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TAccountsForPeriodForm.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TAccountsForPeriodForm.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TAccountsForPeriodForm.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TAccountsForPeriodForm.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TAccountsForPeriodForm.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TAccountsForPeriodForm.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TAccountsForPeriodForm.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TAccountsForPeriodForm.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TAccountsForPeriodForm.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TAccountsForPeriodForm.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TAccountsForPeriodForm.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TAccountsForPeriodForm.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TAccountsForPeriodForm.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TAccountsForPeriodForm.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TAccountsForPeriodForm.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TAccountsForPeriodForm.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TAccountsForPeriodForm.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TAccountsForPeriodForm._Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TAccountsForPeriodForm.AccountsViewerTitleClick(Column: TColumn);
+var
+   TitleName :string;
+begin
+ if Column.Field.Calculated then Exit;
+ TitleName :=Column.FieldName;
+ with FPADataMod.AccountsData do
+ begin
+  Screen.Cursor :=crSQLWait;
+  SetVariable('Title',TitleName);
+  Refresh;
+  Screen.Cursor :=crDefault;
+ end;
+end;
+
+procedure TAccountsForPeriodForm.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TAccountsForPeriodForm.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TAccountsForPeriodForm.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TAccountsForPeriodForm.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TAccountsForPeriodForm.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TAccountsForPeriodForm.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TAccountsForPeriodForm.KeyPressEvent(Sender: TObject;
+  var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TAccountsForPeriodForm.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TAccountsForPeriodForm.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TAccountsForPeriodForm.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TAccountsForPeriodForm.Set_AxBorderStyle(
+  Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TAccountsForPeriodForm.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TAccountsForPeriodForm.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TAccountsForPeriodForm.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TAccountsForPeriodForm.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TAccountsForPeriodForm.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TAccountsForPeriodForm.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TAccountsForPeriodForm.Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TAccountsForPeriodForm.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TAccountsForPeriodForm.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TAccountsForPeriodForm.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TAccountsForPeriodForm.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TAccountsForPeriodForm.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TAccountsForPeriodForm.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+procedure TAccountsForPeriodForm.MouseWheelHandler(var Message: TMessage);
+begin
+    with  AccountsViewer do
+    if Focused then
+    begin
+    SelectedRows.Clear;
+    with TCMMouseWheel(Message) , DataSource.DataSet do
+    begin
+      if WheelDelta < 0 then
+          Next
+       else
+          Prior;
+    end;
+  end;
+end;
+
+procedure TAccountsForPeriodForm.ActiveFormCreate(Sender: TObject);
+begin
+  FPADataMod := TFPADataMod.Create(Self);
+  with FPADataMod do
+  begin
+    SYSDAT.Open;
+    Branches.Open;
+    DTPFirstDate.DateTime := SYSDAT.FieldByName('TEK_DAT').AsDateTime;
+    DTPLastDate.DateTime := SYSDAT.FieldByName('TEK_DAT').AsDateTime;
+    SYSDAT.CloseAll;
+    FAccountsDataSQL := AccountsData.SQL.CommaText;
+    SysUsers.Open;   
+  end;
+  BranchesCB.ItemIndex := 0;
+  UsersCB.ItemIndex := 0;
+ SBTranslateProc.TranslateAllComponents(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TAccountsForPeriodForm.SBExecuteClick(Sender: TObject);
+
+  procedure BuildAccSelections(BranchID : Integer;AccsList : WideString;UserID : Integer;simvollist:WideString);
+  begin
+    with FPADataMod.AccountsData do
+    begin
+      SQL.CommaText := FAccountsDataSQL;
+      if BranchID = -1 then
+        SQL[16] := '' else
+        SQL[16] := Format(SQL[16] ,[BranchID]);
+      if Trim(AccsList) = '' then
+        SQL[17] := '' else
+        SQL[17] := Format(SQL[17] ,[AccsList]);
+
+      if UserID = -1 then
+        SQL[18] := '' else
+        SQL[18] :=Format(SQL[18] ,[UserID]);
+
+       if Trim(simvolList) = '' then
+        SQL[19] := '' else
+        SQL[19] := Format(SQL[19] ,[''''+simvolList+'''']);
+
+    end;
+  end;
+var
+  FirstDate,LastDate : TDateTime;
+  BranchID : Integer;
+  AccsList : WideString;
+  UserID : Integer;
+  Simvollist:WideString;
+begin
+  FirstDate := Integer(Trunc(DTPFirstDate.DateTime));
+  LastDate := Integer(Trunc(DTPLastDate.DateTime));
+  with BranchesCB do
+  if ItemIndex = 0 then
+    BranchID := -1 else
+    BranchID := DataSource.DataSet.FieldByName('ID').AsInteger;
+
+  with AccountsListEdit do
+    AccsList := Text;
+
+  with simvoledit do
+  simvollist:=text;
+
+  with UsersCB do
+  if ItemIndex = 0 then
+    UserID := -1 else
+    UserID := DataSource.DataSet.FieldByName('ID').AsInteger;
+
+  BuildAccSelections(BranchID ,AccsList,UserID,simvollist);
+  Screen.Cursor := crSQLWait;
+  with FPADataMod.AccountsData do
+  try
+    if Active then CloseAll;
+    SetVariable('FirstDate',FirstDate);
+    SetVariable('LastDate',LastDate);
+   // memo1.text:=sql.Text;
+    Open
+  finally
+    Screen.Cursor := crDefault;
+  end;
+end;
+
+procedure TAccountsForPeriodForm.SBExcelExportClick(Sender: TObject);
+begin
+if (FPADataMod.AccountsData.Active=true) and (FPADataMod.AccountsData.RecordCount>0)
+then
+  AccountsExporter.Report
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TAccountsForPeriodForm,
+    Class_AccountsForPeriodForm,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

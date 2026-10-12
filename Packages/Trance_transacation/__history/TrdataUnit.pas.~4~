@@ -1,0 +1,128 @@
+unit TrdataUnit;
+
+interface
+
+uses
+  SysUtils, Classes, DB, OracleData, Oracle;
+
+    const
+   cs_commit_transaction = 'transaction_commit';
+type
+  TTrData = class(TDataModule)
+    Transactions_lazytr: TOracleDataSet;
+    Transactions_lazytrID: TFloatField;
+    Transactions_lazytrOPERATORID: TFloatField;
+    Transactions_lazytrOPERATIONNO: TWideStringField;
+    Transactions_lazytrTRANSACTIONDATE: TDateTimeField;
+    Transactions_lazytrDEBITID: TFloatField;
+    Transactions_lazytrDEBITACCNO: TWideStringField;
+    Transactions_lazytrDEBITCURRENCYID: TFloatField;
+    Transactions_lazytrDEBITCURRENCYSNAME: TWideStringField;
+    Transactions_lazytrCREDITID: TFloatField;
+    Transactions_lazytrCREDITACCNO: TWideStringField;
+    Transactions_lazytrCREDITCURRENCYSNAME: TWideStringField;
+    Transactions_lazytrDEBITAMOUNT: TFloatField;
+    Transactions_lazytrCREDITAMOUNT: TFloatField;
+    Transactions_lazytrDEBITRATE: TFloatField;
+    Transactions_lazytrCREDITRATE: TFloatField;
+    Transactions_lazytrLAMOUNT: TFloatField;
+    Transactions_lazytrDEBITBANK: TFloatField;
+    Transactions_lazytrCREDITBANK: TFloatField;
+    Transactions_lazytrUSR: TWideStringField;
+    Transactions_lazytrDEBITBRANCH: TIntegerField;
+    Transactions_lazytrCREDITBRANCH: TIntegerField;
+    Transactions_lazytrCYPHERCODE: TIntegerField;
+    Transactions_lazytrOPERATIONCODE: TFloatField;
+    Transactions_lazytrINBALANCECHAR: TWideStringField;
+    Transactions_lazytrOUTBALANCECHAR: TIntegerField;
+    Transactions_lazytrFILIALID: TIntegerField;
+    Transactions_lazytrDEBITBALANCE: TFloatField;
+    Transactions_lazytrNAME: TWideStringField;
+    Transactions_lazytrFLAGS: TFloatField;
+    Transactions_lazytrSTATUS: TFloatField;
+    Transactions_lazytrREJECT_REASON: TWideStringField;
+    Transactions_lazytrPACKAGENUMBER: TIntegerField;
+    Transactions_lazytrCREDITCURRENCYID: TIntegerField;
+    Transactions_lazytrREPORTID: TFloatField;
+    Transactions_lazytrCOUNTRID: TFloatField;
+    Transactions_lazytrUSRCOMMIT: TWideStringField;
+    Transactions_lazytrBDG_CODE: TWideStringField;
+    Transactions_lazytrD_ACCNO: TWideStringField;
+    Transactions_lazytrC_ACCNO: TWideStringField;
+    Transactions_lazytrKREDITBALANCE: TFloatField;
+    Transactions_lazytrD1: TWideStringField;
+    ods_sys: TOracleDataSet;
+    ods_sysTEK_DAT: TDateTimeField;
+    TransactionsData_lazytr: TDataSource;
+    dsrc_sys: TDataSource;
+    Transactions_provarch: TOracleDataSet;
+    TransactionsData_provarch: TDataSource;
+    SBTransaction: TOraclePackage;
+    tranche: TOraclePackage;
+    ods_m10_chek: TOracleDataSet;
+    Transactions_lazytrVID_OP: TIntegerField;
+    webservispkg: TOraclePackage;
+    ods_payout_chek: TOracleDataSet;
+    ods_m10_chekCREDITID: TFloatField;
+    ods_m10_chekPHONE_M: TWideStringField;
+    ods_m10_chekAMMOUNT: TFloatField;
+    ods_m10_chekPASSPIN: TWideStringField;
+    ods_payout_chekPHONE: TWideStringField;
+    ods_payout_chekAMOUNT: TWideStringField;
+    ods_payout_chekEXTERNAL_OPERATION_ID: TWideStringField;
+    ods_payout_chekCR_ID: TWideStringField;
+    ods_payout_chekSTATUS_CODE: TWideStringField;
+    ods_payout_chekSTATUS_DESCRIPTION: TWideStringField;
+    ods_payout_chekOPERATION_ID: TWideStringField;
+    ods_payout_chekEXTERNAL_OPERATION_ID_1: TWideStringField;
+    ods_payout_chekOPERATION_STATUS: TWideStringField;
+    ods_payout_chekEXTERNAL_OPERATION_ID_2: TWideStringField;
+    ods_payout_chekCHECKED_AT: TDateTimeField;
+    ods_payout_chekSTATUS_CODE_S: TWideStringField;
+    ods_payout_chekSTATUS_DESCRIPTION_S: TWideStringField;
+    ods_payout_chekOPERATION_STATUS_S: TWideStringField;
+    procedure DataModuleCreate(Sender: TObject);
+    procedure DataModuleDestroy(Sender: TObject);
+    procedure SBCommit();
+    function CommitTransaction(TransactionID
+  : Longint): Longint;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  TrData: TTrData;
+
+implementation
+  uses sboapiDataModuleImpl;
+{$R *.dfm}
+
+
+function TTrData.CommitTransaction(TransactionID
+  : Longint): Longint;
+begin
+  with TrData,SBTransaction do
+    Result := CallIntegerFunction(cs_commit_transaction,
+      ['TransactionID', TransactionID, 'CommitTemp', True]);
+end;
+
+
+procedure TTrData.SBCommit();
+begin
+      sboapiDataModule.SBSession.Commit;
+end;
+
+procedure TTrData.DataModuleCreate(Sender: TObject);
+begin
+ods_sys.open;
+
+end;
+
+procedure TTrData.DataModuleDestroy(Sender: TObject);
+begin
+ods_sys.Close;
+end;
+
+end.

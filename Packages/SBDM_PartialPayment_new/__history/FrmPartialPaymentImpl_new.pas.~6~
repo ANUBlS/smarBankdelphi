@@ -1,0 +1,93 @@
+unit FrmPartialPaymentImpl_new;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  XFSCtrls, XDBCtrls, StdCtrls, Mask, DBCtrls, ComCtrls, Grids, XDBGrids,
+  ToolWin, ExtCtrls,  Menus, CMExcelExport, ImgList, ActnList,
+  Buttons;
+
+type
+  TFrmPartialPayment_new = class(TForm)
+    ActionList1: TActionList;
+    ActnAdd: TAction;
+    ActnDel: TAction;
+    ActnExprt: TAction;
+    ExcelExport: TCMExcelExport;
+    XDBGrid1: TXDBGrid;
+    XFGroupBox1: TXFGroupBox;
+    DBEdit1: TDBEdit;
+    ImageList1: TImageList;
+    PMShowTr: TPopupMenu;
+    N1: TMenuItem;
+    ToolBar1: TToolBar;
+    ToolButton3: TToolButton;
+    ToolButton4: TToolButton;
+    ToolButton5: TToolButton;
+    ToolButton6: TToolButton;
+    ToolButton7: TToolButton;
+    ToolButton8: TToolButton;
+    ToolButton9: TToolButton;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmPartialPayment_new: TFrmPartialPayment_new;
+      procedure exportproc(S:string); export;
+implementation
+
+{$R *.dfm}
+   uses CommonDeclsImpl,DataModPartialPaymentImpl_new,FrmPaymentAddImpl_new,SBTranslateProc,sboapiDataModuleimpl;
+
+   procedure exportproc(S:string);export;
+var ContID:integer;
+begin
+ ContID := Get_SelectedContID;
+ with DataModPartialPayment_new.Payments do
+ begin
+   Close;
+   SetVariable('CONTRACTID',ContID);
+   Open;
+ end;
+ with DataModPartialPayment_new.DepositInfo do
+ begin
+   Close;
+   SetVariable('CONTRACTID',ContID);
+   Open;
+ end;
+
+ with DataModPartialPayment_new.DebitAccs do
+ begin
+   Close;
+   SetVariable('CONTRACTID',ContID);
+   Open;
+ end;
+ with DataModPartialPayment_new.CreditAccs do
+ begin
+   Close;
+   SetVariable('CONTRACTID',ContID);
+   Open;
+ end;
+
+ with DataModPartialPayment_new.PercentAccs do
+ begin
+   Close;
+   SetVariable('CONTRACTID',ContID);
+   Open;
+ end;
+
+
+ with DataModPartialPayment_new.Sysdat do
+ begin
+   Close;
+   Open;
+ end;
+ FrmPartialPayment_new.ShowModal;
+end;
+exports
+   exportproc;
+end.

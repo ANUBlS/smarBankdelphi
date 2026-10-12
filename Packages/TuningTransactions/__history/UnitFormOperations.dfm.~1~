@@ -1,0 +1,293 @@
+object FormOperations: TFormOperations
+  Left = 335
+  Top = 207
+  ActiveControl = ButtonCommit
+  BorderStyle = bsDialog
+  Caption = 'Operations Form'
+  ClientHeight = 251
+  ClientWidth = 379
+  Color = clBtnFace
+  Font.Charset = RUSSIAN_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poMainFormCenter
+  OnActivate = FormActivate
+  OnClose = FormClose
+  OnKeyDown = FormKeyDown
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object GroupBox1: TGroupBox
+    Left = 0
+    Top = 0
+    Width = 379
+    Height = 251
+    Align = alClient
+    Caption = 'Ямялиййатлар'
+    TabOrder = 0
+    object Panel1: TPanel
+      Left = 2
+      Top = 15
+      Width = 375
+      Height = 25
+      Align = alTop
+      Alignment = taLeftJustify
+      BevelInner = bvLowered
+      Caption = 'Ямялиййатын ады'
+      TabOrder = 0
+      object OperationName: TDBEdit
+        Left = 93
+        Top = 2
+        Width = 280
+        Height = 21
+        Anchors = [akLeft, akTop, akRight]
+        Color = clSilver
+        DataField = 'NAME'
+        DataSource = TuningDataModule.DSSettings
+        TabOrder = 0
+      end
+    end
+    object Panel2: TPanel
+      Left = 2
+      Top = 40
+      Width = 375
+      Height = 25
+      Align = alTop
+      Alignment = taLeftJustify
+      BevelInner = bvLowered
+      Caption = 'Дебет щесаб'
+      TabOrder = 1
+      object EDebt: TEdit
+        Left = 93
+        Top = 2
+        Width = 124
+        Height = 21
+        Anchors = [akLeft, akTop, akRight]
+        TabOrder = 0
+        OnChange = EDebtChange
+        OnEnter = EDebtEnter
+        OnExit = EDebtExit
+        OnKeyDown = EDebtKeyDown
+      end
+      object DBLookupDebt: TDBLookupComboBox
+        Left = 216
+        Top = 2
+        Width = 157
+        Height = 21
+        DataField = 'DEBT'
+        DataSource = TuningDataModule.DSSettings
+        KeyField = 'ID'
+        ListField = 'ACC_NO'
+        ListSource = TuningDataModule.DSDebtAccount
+        TabOrder = 1
+      end
+    end
+    object Panel3: TPanel
+      Left = 2
+      Top = 115
+      Width = 375
+      Height = 25
+      Align = alTop
+      Alignment = taLeftJustify
+      BevelInner = bvLowered
+      Caption = 'Комиссийа Кредит'
+      TabOrder = 4
+      object EAdditionalCredit: TEdit
+        Left = 93
+        Top = 2
+        Width = 124
+        Height = 21
+        Anchors = [akLeft, akTop, akRight]
+        TabOrder = 0
+        OnChange = EDebtChange
+        OnEnter = EDebtEnter
+        OnExit = EDebtExit
+        OnKeyDown = EDebtKeyDown
+      end
+      object DBLookupAdditionalCredit: TDBLookupComboBox
+        Left = 216
+        Top = 2
+        Width = 157
+        Height = 21
+        DataField = 'ADDITIONALCREDIT'
+        DataSource = TuningDataModule.DSSettings
+        KeyField = 'ID'
+        ListField = 'ACC_NO'
+        ListSource = TuningDataModule.DSDebtAccount
+        TabOrder = 1
+      end
+    end
+    object Panel4: TPanel
+      Left = 2
+      Top = 140
+      Width = 375
+      Height = 25
+      Align = alTop
+      Alignment = taLeftJustify
+      BevelInner = bvLowered
+      Caption = 'Ямялиййатын тяйинаты'
+      TabOrder = 5
+      object Assignment: TDBEdit
+        Left = 96
+        Top = 2
+        Width = 277
+        Height = 21
+        Anchors = [akLeft, akTop, akRight]
+        Color = clSilver
+        DataField = 'ASSIGNMENT'
+        DataSource = TuningDataModule.DSSettings
+        TabOrder = 0
+      end
+    end
+    object Panel5: TPanel
+      Left = 2
+      Top = 165
+      Width = 375
+      Height = 25
+      Align = alTop
+      Alignment = taLeftJustify
+      BevelInner = bvLowered
+      Caption = 'Комиссийа ямялиййатын тяйинаты'
+      TabOrder = 6
+      object ComAssignment: TDBEdit
+        Left = 144
+        Top = 2
+        Width = 229
+        Height = 21
+        Anchors = [akLeft, akTop, akRight]
+        Color = clSilver
+        DataField = 'COMMISIONASSIGNMENT'
+        DataSource = TuningDataModule.DSSettings
+        TabOrder = 0
+      end
+    end
+    object Panel6: TPanel
+      Left = 2
+      Top = 190
+      Width = 375
+      Height = 25
+      Align = alTop
+      Alignment = taLeftJustify
+      BevelInner = bvLowered
+      TabOrder = 7
+      object CBCheckUser: TComboBox
+        Left = 1
+        Top = 2
+        Width = 373
+        Height = 21
+        Style = csDropDownList
+        Anchors = [akLeft, akTop, akRight]
+        Color = clSilver
+        ItemHeight = 13
+        TabOrder = 0
+        Items.Strings = (
+          'Сазлама бцтцн истифадячиляр цчцндцр'
+          'Сазлама йалныз жари истифадячи цчцндцр')
+      end
+    end
+    object Panel7: TPanel
+      Left = 2
+      Top = 65
+      Width = 375
+      Height = 25
+      Align = alTop
+      Alignment = taLeftJustify
+      BevelInner = bvLowered
+      Caption = 'Кредит щесаб'
+      TabOrder = 2
+      object ECredit: TEdit
+        Left = 93
+        Top = 2
+        Width = 124
+        Height = 21
+        Anchors = [akLeft, akTop, akRight]
+        TabOrder = 0
+        OnChange = EDebtChange
+        OnEnter = EDebtEnter
+        OnExit = EDebtExit
+        OnKeyDown = EDebtKeyDown
+      end
+      object DBLookupCredit: TDBLookupComboBox
+        Left = 216
+        Top = 2
+        Width = 157
+        Height = 21
+        DataField = 'CREDIT'
+        DataSource = TuningDataModule.DSSettings
+        KeyField = 'ID'
+        ListField = 'ACC_NO'
+        ListSource = TuningDataModule.DSDebtAccount
+        TabOrder = 1
+      end
+    end
+    object Panel8: TPanel
+      Left = 2
+      Top = 90
+      Width = 375
+      Height = 25
+      Align = alTop
+      Alignment = taLeftJustify
+      BevelInner = bvLowered
+      Caption = 'Комиссийа Дебет'
+      TabOrder = 3
+      object EAdditionalDebt: TEdit
+        Left = 93
+        Top = 2
+        Width = 124
+        Height = 21
+        Anchors = [akLeft, akTop, akRight]
+        TabOrder = 0
+        OnChange = EDebtChange
+        OnEnter = EDebtEnter
+        OnExit = EDebtExit
+        OnKeyDown = EDebtKeyDown
+      end
+      object DBLookupAdditionalDebt: TDBLookupComboBox
+        Left = 216
+        Top = 2
+        Width = 157
+        Height = 21
+        DataField = 'ADDITIONALDEBT'
+        DataSource = TuningDataModule.DSSettings
+        KeyField = 'ID'
+        ListField = 'ACC_NO'
+        ListSource = TuningDataModule.DSDebtAccount
+        TabOrder = 1
+      end
+    end
+    object ButtonCommit: TButton
+      Left = 223
+      Top = 220
+      Width = 75
+      Height = 25
+      Action = ActionCommit
+      Default = True
+      TabOrder = 8
+    end
+    object ButtonCancel: TButton
+      Left = 300
+      Top = 220
+      Width = 75
+      Height = 25
+      Action = ActionCancel
+      TabOrder = 9
+    end
+  end
+  object ActionList1: TActionList
+    Left = 88
+    Top = 216
+    object ActionCommit: TAction
+      Caption = 'Гябул'
+      OnExecute = ActionCommitExecute
+      OnUpdate = ActionCommitUpdate
+    end
+    object ActionCancel: TAction
+      Caption = 'Имтина'
+      OnExecute = ActionCancelExecute
+    end
+  end
+end

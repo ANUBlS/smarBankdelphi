@@ -1,0 +1,62 @@
+unit Unitqaime;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, DB, OracleData, Grids, XDBGrids, ExtCtrls, StdCtrls;
+
+type
+  TFormqaime = class(TForm)
+    Panel1: TPanel;
+    XDBGrid1: TXDBGrid;
+    OracleDataSet5: TOracleDataSet;
+    DataSource5: TDataSource;
+    OracleDataSet5KLI_ID: TFloatField;
+    OracleDataSet5BP_ID: TFloatField;
+    OracleDataSet5INV_NUM: TWideStringField;
+    OracleDataSet5INV_DATE: TDateTimeField;
+    OracleDataSet5DEBIT: TFloatField;
+    OracleDataSet5CREDIT: TFloatField;
+    OracleDataSet5TRANS_ID: TFloatField;
+    OracleDataSet5TRANS_DATE: TDateTimeField;
+    OracleDataSet5PAR1: TWideStringField;
+    OracleDataSet5PAR2: TWideStringField;
+    OracleDataSet5PAR3: TWideStringField;
+    OracleDataSet5PAR4: TWideStringField;
+    OracleDataSet5PAR5: TWideStringField;
+    OracleDataSet5PAR6: TWideStringField;
+    OracleDataSet5PAR7: TWideStringField;
+    OracleDataSet5PAR11: TFloatField;
+    OracleDataSet5PAR12: TFloatField;
+    OracleDataSet5PAR8: TWideStringField;
+    OracleDataSet5PAR9: TWideStringField;
+    procedure FormShow(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Formqaime: TFormqaime;
+
+implementation
+
+uses UnitDataModPCustService;
+
+{$R *.dfm}
+
+procedure TFormqaime.FormShow(Sender: TObject);
+begin
+with OracleDataSet5 do
+begin
+     SQL[6]:='' ;
+     Close;
+     SQL[6]:=SQL[6]+ ' and  kli_id ='+DataModPCustService.ODS_CUSTOMERS_PHYS_FS.FieldByName('id').AsString;
+     Open;
+
+end;
+end;
+
+end.

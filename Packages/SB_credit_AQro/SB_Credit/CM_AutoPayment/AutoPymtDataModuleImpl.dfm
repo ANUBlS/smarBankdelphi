@@ -1,0 +1,24 @@
+object AutoPymtDataMod: TAutoPymtDataMod
+  OldCreateOrder = False
+  Height = 480
+  Width = 696
+  object AutoPaymentableLoans: TOracleDataSet
+    SQL.Strings = (
+      'select  ID'
+      'from  CM_ACTIVE_CREDITS'
+      'where AUTOPAYMENT = 1--ON')
+    Optimize = False
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 88
+    Top = 64
+  end
+  object CM_PAYMENT: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'CM_PAYMENT'
+    ParameterMode = pmNamed
+    Cursor = crHourGlass
+    Left = 168
+    Top = 136
+  end
+end

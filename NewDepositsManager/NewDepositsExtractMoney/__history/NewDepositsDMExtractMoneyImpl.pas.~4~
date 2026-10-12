@@ -1,0 +1,57 @@
+unit NewDepositsDMExtractMoneyImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, OracleData, Oracle;
+
+type
+  TNewDepositsDMExtractMoney = class(TDataModule)
+    Payments: TOracleDataSet;
+    PaymentsID: TFloatField;
+    PaymentsHDATE: TDateTimeField;
+    PaymentsFACTICALDEBT: TFloatField;
+    PaymentsINTERESTDEBT: TFloatField;
+    PaymentsTRID: TFloatField;
+    PaymentsINTTRID: TFloatField;
+    PaymentsDatSrc: TDataSource;
+    CreditAccsDatSrc: TDataSource;
+    CreditAccs: TOracleDataSet;
+    CreditAccsID: TFloatField;
+    CreditAccsACC_NO: TWideStringField;
+    CreditAccsNAME: TWideStringField;
+    dm_payment: TOraclePackage;
+    DepositInfo: TOracleDataSet;
+    DepositInfoNAME: TWideStringField;
+    DepositInfoAMOUNT: TFloatField;
+    DepositInfoCURRENCY: TFloatField;
+    DepositInfoCUSTOMERID: TFloatField;
+    DepositInfoFACTICALDEBT: TFloatField;
+    DepositInfoFACTICALINTERESTDEBT: TFloatField;
+    CustAcc: TOracleDataSet;
+    CustAccCLIENTACCID: TFloatField;
+    CustAccCONTRACTACCNO: TWideStringField;
+    CustAccINTERESTACCNO: TWideStringField;
+    DepositInfoDatSrc: TDataSource;
+    CustAccDatSrc: TDataSource;
+    sb_aca: TOraclePackage;
+    PaymentsTRANCHESID: TFloatField;
+    PaymentsDESCRIPTION: TWideStringField;
+    CustAccCLIENTACCNO: TWideStringField;
+    DepositInfoOSTAT: TFloatField;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  NewDepositsDMExtractMoney: TNewDepositsDMExtractMoney;
+
+implementation
+
+{$R *.dfm}
+ uses
+   sboapiDataModuleImpl;
+end.

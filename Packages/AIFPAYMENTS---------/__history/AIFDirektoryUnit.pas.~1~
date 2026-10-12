@@ -1,0 +1,44 @@
+unit AIFDirektoryUnit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, Buttons, ExtCtrls;
+
+type
+  TForm7 = class(TForm)
+    GroupBox1: TGroupBox;
+    Panel6: TPanel;
+    But_in: TSpeedButton;
+    Edit_IN_Dir: TEdit;
+    SpeedButton6: TSpeedButton;
+    SpeedButton1: TSpeedButton;
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure But_inClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form7: TForm7;
+
+implementation
+
+{$R *.dfm}
+
+procedure TForm7.But_inClick(Sender: TObject);
+begin
+  selectdirectory('Select In directory','',dir);
+   if dir <>'' then
+   Edit_IN_Dir.Text:=dir;
+end;
+
+procedure TForm7.SpeedButton1Click(Sender: TObject);
+begin
+  close;
+end;
+
+end.

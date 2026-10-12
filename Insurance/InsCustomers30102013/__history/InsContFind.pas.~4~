@@ -1,0 +1,283 @@
+unit InsContFind;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, Buttons, ExtCtrls, DBCtrls, ComCtrls, OracleData,variants;
+
+type
+  TfmContFind = class(TForm)
+    Panel1: TPanel;
+    Label25: TLabel;
+    btFind: TBitBtn;
+    btCancel: TBitBtn;
+    btNew: TBitBtn;
+    btFilter: TBitBtn;
+    ckbFilter: TCheckBox;
+    Panel2: TPanel;
+    gbMain: TGroupBox;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    Label6: TLabel;
+    Label7: TLabel;
+    Label8: TLabel;
+    dbTYPE_ID: TDBLookupComboBox;
+    dtIns_Date: TDateTimePicker;
+    edPolicy_Num: TEdit;
+    edInsSumm: TEdit;
+    edTariff: TEdit;
+    edAmmount: TEdit;
+    edFranshiz: TEdit;
+    gbState: TGroupBox;
+    Label1: TLabel;
+    Image1: TImage;
+    Image2: TImage;
+    Image3: TImage;
+    Image4: TImage;
+    Image5: TImage;
+    Image6: TImage;
+    Image7: TImage;
+    c0State: TCheckBox;
+    c1State: TCheckBox;
+    c2State: TCheckBox;
+    c3State: TCheckBox;
+    c4State: TCheckBox;
+    c5State: TCheckBox;
+    c6State: TCheckBox;
+    procedure btFindClick(Sender: TObject);
+    procedure btNewClick(Sender: TObject);
+    procedure btFilterClick(Sender: TObject);
+    procedure btCancelClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    function GetConditions(OwnerObj : TCustomControl; out Fields : String):Variant;
+    function GetFilterSring(OwnerObj : TCustomControl) : String;
+    function GetAllObjConditions(out Fields : String ):Variant;
+    function CheckCheckBoxes:Boolean;
+    procedure ClearControlElements(OwnerObj : TCustomControl);
+  end;
+
+var
+  fmContFind: TfmContFind;
+
+implementation
+
+uses InsDataModule;
+
+{$R *.DFM}
+
+function GetFieldName(value : String):String;
+begin
+  if Length(Value) >= 3 then
+  Result := Copy(value, 3, Length(value)-2);
+end;
+
+function TfmContFind.GetConditions(OwnerObj : TCustomControl;  out Fields : String):Variant;
+var i, l :integer;
+    varVal : variant;
+
+
+  procedure addVal(val : variant; VarType : Integer = varInteger);
+  var idx : integer;
+  begin
+
+    if VarIsEmpty( varVal ) then begin
+      varVal := VarArrayCreate([0, 0], varVariant);
+      idx := 0;
+    end
+    else begin
+      VarArrayRedim(varVal, VarArrayHighBound(varVal, VarArrayDimCount(varVal))+1);
+      idx := VarArrayHighBound(varVal, VarArrayDimCount(varVal));
+    end;
+    varVal[idx] := VarAsType(val, VarType);
+  end;
+
+begin
+
+  with OwnerObj do
+  for i:=0 to ControlCount-1 do begin
+    if controls[i] is TEdit then
+      if (controls[i] as TEdit).Text <> '' then begin
+         Fields := Fields+';'+GetFieldName((controls[i] as TEdit).Name);
+         addVal((controls[i] as TEdit).Text, varString);
+      end;
+    if controls[i] is TCheckBox then
+      if (controls[i] as TCheckBox).Checked then begin
+         Fields := Fields+';'+GetFieldName((controls[i] as TCheckBox).Name);
+         addVal((controls[i] as TCheckBox).tag);
+      end;
+    if controls[i] is TDBLookupComboBox then
+      if not varIsNull((controls[i] as TDBLookupComboBox).KeyValue) then begin
+         Fields := Fields+';'+GetFieldName((controls[i] as TDBLookupComboBox).Name);
+         addVal((controls[i] as TDBLookupComboBox).keyValue);
+      end;
+
+    if controls[i] is TDateTimePicker then
+      if Trunc((controls[i] as TDateTimePicker).DateTime) <> 0  then begin
+         Fields := Fields+';'+GetFieldName((controls[i] as TDateTimePicker).Name);
+         l := Trunc((controls[i] as TDateTimePicker).Date);
+         addVal(l , varDate);
+      end;
+  end;
+    Fields := lowercase(copy(Fields, 2, Length(Fields)-1));
+    result := varVal;
+
+end;
+
+function VarArrConcat(V1, V2:Variant):Variant;//First Dimension!!!!
+var
+  V1HighBound, V2HighBound, i : Integer;
+  Res : Variant;
+begin
+
+  if VarIsArray(V1)
+  then Result := V1
+  else
+  begin
+     Result := V2;
+     exit;
+  end;
+  if (not VarIsArray(V2)) then  exit;
+  Res := V1;
+
+  V1HighBound := VarArrayHighBound(V1, VarArrayDimCount(V1));
+  V2HighBound := VarArrayHighBound(V2, VarArrayDimCount(V2));
+
+//  ShowMessage(IntToStr(V1HighBound)+' '+IntToStr(V2HighBound));
+  VarArrayRedim(Res, V1HighBound + V2HighBound+1 );
+
+  for i := 0 to V2HighBound do
+    Res[V1HighBound+i+1] := V2[i];
+  Result := Res;
+end;
+
+function TfmContFind.GetAllObjConditions(out Fields : String ):Variant;
+var tmp: String;
+    Val: variant;
+begin
+  Val := GetConditions(gbState, tmp);
+  Fields := tmp;
+  Val := VarArrConcat(Val, GetConditions(gbMain, tmp));
+  if (tmp <> '') and (Fields <> '')  then  tmp := ';' + tmp;
+  Fields := Fields + tmp;
+  Result := Val;
+end;
+
+function TfmContFind.CheckCheckBoxes:Boolean;
+var i, count : Integer;
+begin
+  count := 0;
+  with gbState do
+    for i:=0 to ControlCount-1 do
+      if controls[i] is TCheckBox then
+         if (controls[i] as TCheckBox).Checked then
+           count := count + 1;
+  result := count > 1;
+end;
+
+procedure TfmContFind.btFindClick(Sender: TObject);
+var Fields: String;
+    Val: variant;
+begin
+  if CheckCheckBoxes then
+    MessageDlg('Axtarish ucun ancaq bir veziyet secile biler.', mtInformation, [mbOk], 0);
+  Val := GetAllObjConditions(Fields);
+  if not VarIsEmpty(Val) then
+  with InsDataMod do begin
+   if not ODSContracts.Locate( Fields, Val, []) then
+      MessageDlg('Âונטכלטר ןאנאלוענכÿנÿ ףיüףם לצרעÿנט עאןûכלאהû !',mtWarning,[mbOk],0)
+  end;
+end;
+
+procedure TfmContFind.ClearControlElements(OwnerObj : TCustomControl);
+var i : Integer;
+begin
+
+  with OwnerObj do
+  for i:=0 to ControlCount-1 do begin
+    if controls[i] is TEdit then
+         (controls[i] as TEdit).Text := '';
+    if controls[i] is TCheckBox then
+         (controls[i] as TCheckBox).Checked := False;
+    if controls[i] is TDBLookupComboBox then
+         (controls[i] as TDBLookupComboBox).KeyValue := null;
+    if controls[i] is TDateTimePicker then
+         (controls[i] as TDateTimePicker).DateTime := StrToDate('30/12/1899');
+
+  end;
+end;
+
+procedure TfmContFind.btNewClick(Sender: TObject);
+begin
+   ClearControlElements(gbState);
+   ClearControlElements(gbMain);
+end;
+
+function TfmContFind.GetFilterSring(OwnerObj : TCustomControl) : String;
+var Fields, str: String;
+    i, p : integer;
+    Val: variant;
+    fieldName, value : String;
+begin
+  Val := GetConditions(OwnerObj, Fields);
+  if not VarIsEmpty(Val) then
+ // Label25.Caption := Fields;
+
+  for i := 0 to VarArrayHighBound(Val, VarArrayDimCount(Val)) do begin
+   case pos(';', Fields) of
+     0 : p := Length(Fields)+1;
+     else p := pos(';', Fields);
+   end;
+
+  // ShowMessage(IntToStr(VarType(Val[i])));
+   case VarType(Val[i]) of
+     varInteger : value := VarToStr(Val[i]);
+     varOleStr  : Value := ''''+Val[i]+'''';
+     varDate    : Value := ''''+DateToStr( Trunc(Val[i]))+'''';
+   end;
+   fieldName := copy(Fields, 1, p-1);
+   if i > 0 then
+       if pos(trim(fieldName), str)>0 then
+           str := str + ' or '
+        else
+          begin
+
+          if pos('or', str)> 0 then
+             str := ' ( '+str+' ) and '
+           else  
+           str := str + ' and ';
+          end;
+
+   str := str + ' ( ' + fieldName +'='+ Value + ' ) ';
+   Fields := Copy(Fields, p+1, length(Fields)-p);
+  end;
+   Result := str;
+end;
+
+procedure TfmContFind.btCancelClick(Sender: TObject);
+begin
+fmContFind.Close;
+end;
+
+procedure TfmContFind.btFilterClick(Sender: TObject);
+var
+  Str1, Str2 : String;
+begin
+ with InsDataMod, ODSContracts do begin
+   Str1 := GetFilterSring(gbState);
+   Str2 :=  GetFilterSring(gbMain);
+   if (trim(Str1) <> '') and (trim(Str2) <> '') then
+        Str1 := '(' + Str1 + ') and ';
+   Str1 := Str1 + Str2;
+
+   Filter :=  Str1;
+   Filtered := (ckbFilter.Checked) and (Filter <> '');
+ end;
+end;
+
+end.

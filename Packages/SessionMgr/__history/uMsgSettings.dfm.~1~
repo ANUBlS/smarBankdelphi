@@ -1,0 +1,137 @@
+object frmMsgSettings: TfrmMsgSettings
+  Left = 303
+  Top = 326
+  Width = 680
+  Height = 335
+  Caption = 'Message Settings'
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'MS Sans Serif'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poScreenCenter
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object DBGrid1: TDBGrid
+    Left = 0
+    Top = 0
+    Width = 671
+    Height = 270
+    Anchors = [akLeft, akTop, akRight, akBottom]
+    DataSource = Messages
+    Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit]
+    TabOrder = 0
+    TitleFont.Charset = DEFAULT_CHARSET
+    TitleFont.Color = clWindowText
+    TitleFont.Height = -11
+    TitleFont.Name = 'MS Sans Serif'
+    TitleFont.Style = []
+  end
+  object Button1: TButton
+    Left = 414
+    Top = 277
+    Width = 75
+    Height = 25
+    Anchors = [akRight, akBottom]
+    Caption = 'Add'
+    TabOrder = 1
+    OnClick = Button1Click
+  end
+  object Button2: TButton
+    Left = 502
+    Top = 277
+    Width = 75
+    Height = 25
+    Anchors = [akRight, akBottom]
+    Caption = 'Edit'
+    TabOrder = 2
+    OnClick = Button2Click
+  end
+  object Button3: TButton
+    Left = 590
+    Top = 277
+    Width = 75
+    Height = 25
+    Anchors = [akRight, akBottom]
+    Caption = 'Delete'
+    TabOrder = 3
+    OnClick = Button3Click
+  end
+  object Messages: TDataSource
+    DataSet = ODSMessages
+    Left = 144
+    Top = 80
+  end
+  object ODSMessages: TOracleDataSet
+    SQL.Strings = (
+      'select o.rowid, o.* from sbmsg_operations o')
+    QBEDefinition.QBEFieldDefs = {
+      0400000004000000020000004944010000000000040000004E414D4501000000
+      0000030000004D53470100000000000600000055534E414D45010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 176
+    Top = 80
+    object ODSMessagesID: TFloatField
+      DisplayLabel = 'Msg Code'
+      DisplayWidth = 12
+      FieldName = 'ID'
+    end
+    object ODSMessagesNAME: TStringField
+      DisplayLabel = 'Name'
+      DisplayWidth = 37
+      FieldName = 'NAME'
+      Size = 100
+    end
+    object ODSMessagesMSG: TStringField
+      DisplayLabel = 'Message'
+      DisplayWidth = 43
+      FieldName = 'MSG'
+      Size = 255
+    end
+    object ODSMessagesUSNAME: TStringField
+      DisplayLabel = 'User Name'
+      DisplayWidth = 21
+      FieldName = 'USNAME'
+      Size = 30
+    end
+  end
+  object Users: TDataSource
+    DataSet = ODSUsers
+    Left = 288
+    Top = 184
+  end
+  object ODSUsers: TOracleDataSet
+    SQL.Strings = (
+      'select * from user$')
+    QBEDefinition.QBEFieldDefs = {
+      0400000003000000020000004944010000000000040000004E414D4501000000
+      0000050000004354494D45010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 328
+    Top = 184
+    object ODSUsersID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object ODSUsersNAME: TStringField
+      FieldName = 'NAME'
+      Required = True
+      Size = 30
+    end
+    object ODSUsersCTIME: TDateTimeField
+      FieldName = 'CTIME'
+      Required = True
+    end
+  end
+  object SB_MSG: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'SB_MSG'
+    Left = 320
+    Top = 120
+  end
+end

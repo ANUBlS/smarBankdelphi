@@ -1,0 +1,31 @@
+object ProgresFrm: TProgresFrm
+  Left = 0
+  Top = 0
+  BorderIcons = [biMinimize, biMaximize]
+  Caption = 'Hesabat al'#305'n'#305'r z'#601'hm'#601't olmasa biraz g'#246'zl'#601'yin ...'
+  ClientHeight = 20
+  ClientWidth = 454
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poMainFormCenter
+  OnCanResize = FormCanResize
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Gauge1: TGauge
+    Left = 0
+    Top = 0
+    Width = 454
+    Height = 21
+    Align = alTop
+    ForeColor = clFuchsia
+    Progress = 0
+    ExplicitLeft = 2
+    ExplicitTop = 120
+    ExplicitWidth = 389
+  end
+end

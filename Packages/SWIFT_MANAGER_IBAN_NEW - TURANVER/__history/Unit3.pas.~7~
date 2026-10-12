@@ -1,0 +1,339 @@
+unit Unit3;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Grids, DBGrids, StdCtrls, Db, OracleData, SearchEdit, Menus, ExtCtrls,
+  DBViewComboBox,ldialogs, ExcelXp, OleServer, CMExcelExport;
+
+type
+  TSazlama = class(TForm)
+    GroupBox1: TGroupBox;
+    RadioButton1: TRadioButton;
+    RadioButton2: TRadioButton;
+    Edit1: TEdit;
+    Button4: TButton;
+    Button5: TButton;
+    Openbic: TOpenDialog;
+    MainMenu1: TMainMenu;
+    N1: TMenuItem;
+    Exit1: TMenuItem;
+    Filials1: TMenuItem;
+    Main1: TMenuItem;
+    dbgridfilial: TOracleDataSet;
+    fil_all: TDataSource;
+    filialoffilial: TOracleDataSet;
+    accountoffilial: TOracleDataSet;
+    fli: TDataSource;
+    ac: TDataSource;
+    OracleDataSet1: TOracleDataSet;
+    DataSource1: TDataSource;
+    Label7: TLabel;
+    Label8: TLabel;
+    Label9: TLabel;
+    OracleDataSet2: TOracleDataSet;
+    OracleDataSet3: TOracleDataSet;
+    OracleDataSet4: TOracleDataSet;
+    DataSource2: TDataSource;
+    DataSource3: TDataSource;
+    DataSource4: TDataSource;
+    Label13: TLabel;
+    OracleDataSet6: TOracleDataSet;
+    DataSource5: TDataSource;
+    CMExcelExport1: TCMExcelExport;
+    ExcelApplication1: TExcelApplication;
+    ExcelWorksheet1: TExcelWorksheet;
+    ExcelWorkbook1: TExcelWorkbook;
+    instcount: TEdit;
+    inst: TLabel;
+    GroupBox2: TGroupBox;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    Label6: TLabel;
+    format: TDBViewComboBox;
+    debet: TDBViewComboBox;
+    kredit: TDBViewComboBox;
+    summ: TDBViewComboBox;
+    destination: TDBViewComboBox;
+    filials: TDBViewComboBox;
+    prow: TDBGrid;
+    Dest_Title: TDBViewComboBox;
+    Label14: TLabel;
+    Add: TButton;
+    edit: TButton;
+    delete: TButton;
+    GroupBox3: TGroupBox;
+    DBViewComboBox1: TDBViewComboBox;
+    DBViewComboBox2: TDBViewComboBox;
+    DBViewComboBox3: TDBViewComboBox;
+    DBViewComboBox4: TDBViewComboBox;
+    DBGrid2: TDBGrid;
+    Button6: TButton;
+    Button7: TButton;
+    Button8: TButton;
+    GroupBox4: TGroupBox;
+    DBGrid1: TDBGrid;
+    acc: TSearchEdit;
+    bic: TSearchEdit;
+    Button1: TButton;
+    Button2: TButton;
+    Button3: TButton;
+    procedure Button4Click(Sender: TObject);
+    procedure Filials1Click(Sender: TObject);
+    procedure Main1Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure formatChange(Sender: TObject);
+    procedure editClick(Sender: TObject);
+    procedure AddClick(Sender: TObject);
+    procedure Button5Click(Sender: TObject);
+    procedure Exit1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Sazlama: TSazlama;
+
+implementation
+
+uses Unit2, SboapiDataModuleImpl, SBTranslateProc;
+
+{$R *.DFM}
+
+procedure TSazlama.Button4Click(Sender: TObject);
+begin
+Openbic.Execute;
+Edit1.Text:=Openbic.FileName;
+end;
+
+procedure TSazlama.Filials1Click(Sender: TObject);
+begin
+//filial.Visible:=TRUE;
+end;
+
+procedure TSazlama.Main1Click(Sender: TObject);
+begin
+//filial.Visible:=false;
+end;
+
+procedure TSazlama.FormCreate(Sender: TObject);
+begin
+  if format.Text='' then begin
+   debet.Visible:=false;
+   kredit.Visible:=False;
+   summ.Visible:=False;
+   destination.Visible:=false;
+   Filials.Visible:=False;
+   dest_title.Visible:=False;
+  end;
+
+  SBTranslateProc.TranslateAllComponents(Self, sboapiDataModule.OrPack_SL);
+end;
+
+procedure TSazlama.formatChange(Sender: TObject);
+begin
+if format.Text<>'' then
+ begin
+ with SWDataModule do
+ begin
+ settings_fields.SetVariable(':FORMATS',format.text);
+ settings_fields2.SetVariable(':FORMATS',format.text);
+ settings_fields3.SetVariable(':FORMATS',format.text);
+ settings_fields4.SetVariable(':FORMATS',format.text);
+ settings_fields5.SetVariable(':FORMATS',format.text);
+
+ settings_fields.close;
+ settings_fields.open;
+ settings_fields2.close;
+ settings_fields2.open;
+ settings_fields3.close;
+ settings_fields3.open;
+ settings_fields4.close;
+ settings_fields4.open;
+ settings_fields5.close;
+ settings_fields5.open;
+  end;
+ debet.Visible:=true;
+ kredit.Visible:=true;
+ summ.Visible:=true;
+ destination.Visible:=true;
+ Filials.Visible:=true;
+ dest_title.Visible:=True;
+ //in_out.Visible:=true;
+
+ end else
+  begin
+ debet.Visible:=false;
+ kredit.Visible:=False;
+ summ.Visible:=False;
+ destination.Visible:=false;
+ Filials.Visible:=False;
+ dest_title.Visible:=True;
+ //in_out.visible:=false;
+ end;
+
+end;
+
+procedure TSazlama.editClick(Sender: TObject);
+var
+id :integer;
+sta :integer;
+begin
+if  Edit.Caption='ялав€ ет' then sta:=1 else sta:=2;
+if sta=2 then
+begin
+Edit.Caption:='ялав€ ет';
+add.visible:=false;
+delete.visible:=false;
+
+//-----------------------------------------------
+ debet.Visible:=true;
+ kredit.Visible:=true;
+ summ.Visible:=true;
+ destination.Visible:=true;
+ Filials.Visible:=true;
+ dest_title.Visible:=True;
+
+//in_out.Visible:=true;
+
+ format.Text:=SWDataModule.prowo.fieldbyname('FORMAT').AsString;
+
+  //in_out.Text:=SWDataModule.prowo.fieldbyname('IN_OUT').AsString;
+ if format.Text<>'' then
+ begin
+ with SWDataModule do
+ begin
+ settings_fields.SetVariable(':FORMATS',format.text);
+ settings_fields2.SetVariable(':FORMATS',format.text);
+ settings_fields3.SetVariable(':FORMATS',format.text);
+ settings_fields4.SetVariable(':FORMATS',format.text);
+ settings_fields5.SetVariable(':FORMATS',format.text);
+
+ settings_fields.close;
+ settings_fields.open;
+ settings_fields2.close;
+ settings_fields2.open;
+ settings_fields3.close;
+ settings_fields3.open;
+ settings_fields4.close;
+ settings_fields4.open;
+ settings_fields5.close;
+ settings_fields5.open;
+  end;
+  end;
+
+ debet.Text:=SWDataModule.prowo.fieldbyname('DEBET').AsString;
+ kredit.Text:=SWDataModule.prowo.fieldbyname('KREDIT').AsString;
+ summ.Text:=SWDataModule.prowo.fieldbyname('SUMM').AsString;
+ destination.Text:=SWDataModule.prowo.fieldbyname('DESTINATION').AsString;
+ Filials.Text:=SWDataModule.prowo.fieldbyname('FILIAL').AsString;
+ dest_title.Text:=SWDataModule.prowo.fieldbyname('DEST_TITLE').AsString;
+//-----------------------------------------------
+end
+ else
+ begin
+  Edit.Caption:='–едакт€ ет';
+  add.visible:=true;
+  delete.visible:=true;
+  //--------------------------------------------------
+     id:= prow.DataSource.DataSet.FieldByName('id').asinteger;
+    SWDataModule.sw_in_insert.CallProcedure ('update_prow',[id,
+
+                                                     debet.text,
+                                                     kredit.text,
+                                                     summ.text,
+                                                     destination.text,
+                                                     format.text,
+                                                     filials.text,
+                                                     dest_title.text     ]);
+
+
+
+    SWDataModule.prowo.Close;
+    SWDataModule.prowo.Open;
+
+
+  //--------------------------------------------------
+  end ;
+end;
+
+procedure TSazlama.AddClick(Sender: TObject);
+begin
+if (format.Text<>'') and (debet.Text<>'') and (kredit.Text<>'') and (summ.Text<>'') and (destination.Text<>'') and (Filials.Text<>'')
+{and (in_out.Text<>'')} then begin
+SWDataModule.sw_in_insert.CallProcedure ('add_prow',[
+                                                     debet.text,
+                                                     kredit.text,
+                                                     summ.text,
+                                                     destination.text,
+                                                     format.text,
+                                                     filials.text     ]);
+
+SWDataModule.prowo.Close;
+SWDataModule.prowo.Open;
+end else ShowMessage('Ѕцтцн ханалары сечин! ');
+
+end;
+
+procedure TSazlama.Button5Click(Sender: TObject);
+const
+    c_info = '%d record is imported!';
+var
+   V,Sheet,Sheets :Variant;
+   cell,row,i,j   :Integer;
+   bic,name,branch,city,adress,dir,file_name:string;
+begin
+ {if Openbic.Execute then begin
+if RadioButton1.Checked then
+begin
+ SWDataModule.sw_in_insert.CallProcedure('convert_fileFI',['C:\swift\bic',
+                                                            'FI.TXT']);
+
+  //ShowMessage(Openbic.InitialDir);
+
+//PROCEDURE convert_fileFI(DIR VARCHAR2, FILE_NAME VARCHAR2)
+end;
+ end;}
+if  RadioButton1.Checked then
+
+begin
+j:=2;
+  if Openbic.Execute then begin
+    V:=ExcelApplication1.Application;
+    ExcelApplication1.Connect;
+    V.Workbooks.Open(Openbic.FileName);
+    Sheet := V.Workbooks[1].Worksheets['FI'];
+    Sheets := V.Sheets;
+    repeat
+    bic:=Sheet.cells[j,3].Text+Sheet.cells[j,4].Text;
+    name:=  Sheet.cells[j,5].Text;
+    branch:=Sheet.cells[j,6].Text;
+    city:=Sheet.cells[j,7].Text;
+    adress:=Sheet.cells[j,11].Text;
+    j:=j+1;
+    SWDataModule.sw_in_insert.CallProcedure ('insert_bic ',[
+                                                     bic,
+                                                     name,
+                                                     branch,
+                                                     city,
+                                                     adress     ]);
+     instcount.Text:=IntToStr(j)+' Institution entered!';
+     Sazlama.Refresh;
+    until Sheet.cells[j,3].Text = '';
+    ShowMessage(inttostr(j)+' Messages imported to base!');
+end;
+   end;
+end;
+procedure TSazlama.Exit1Click(Sender: TObject);
+begin
+Sazlama.Close;
+end;
+
+end.
+

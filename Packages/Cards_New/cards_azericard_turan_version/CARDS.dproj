@@ -1,0 +1,306 @@
+﻿	<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+		<PropertyGroup>
+			<ProjectGuid>{C73BDF5A-F985-49F8-9A9F-5F7DB5502025}</ProjectGuid>
+			<MainSource>CARDS.dpr</MainSource>
+			<Base>True</Base>
+			<Config Condition="'$(Config)'==''">Debug</Config>
+			<Platform>Win32</Platform>
+			<AppType>Library</AppType>
+			<FrameworkType>None</FrameworkType>
+			<DCC_DCCCompiler>DCC32</DCC_DCCCompiler>
+			<ProjectVersion>12.3</ProjectVersion>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Config)'=='Base' or '$(Base)'!=''">
+			<Base>true</Base>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Config)'=='Release' or '$(Cfg_1)'!=''">
+			<Cfg_1>true</Cfg_1>
+			<CfgParent>Base</CfgParent>
+			<Base>true</Base>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Config)'=='Debug' or '$(Cfg_2)'!=''">
+			<Cfg_2>true</Cfg_2>
+			<CfgParent>Base</CfgParent>
+			<Base>true</Base>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Base)'!=''">
+			<DCC_ImageBase>00400000</DCC_ImageBase>
+			<DCC_UsePackage>Vcl;Vcldb;Dclbde;SBCommon50;sbplg50;sboapi50;doa41dXE;EHLIB150;FieldSearch;CMVcl50;SBCmVcl50;SBTranslate;SBExcelExporter</DCC_UsePackage>
+			<DCC_WriteableConstants>true</DCC_WriteableConstants>
+			<DCC_ExeOutput>d:\smart-bank\bin</DCC_ExeOutput>
+			<DCC_Alignment>1</DCC_Alignment>
+			<DCC_UnitAlias>WinTypes=Windows;WinProcs=Windows;DbiTypes=BDE;DbiProcs=BDE;DbiErrs=BDE;WinTypes=Windows;WinProcs=Windows;$(DCC_UnitAlias)</DCC_UnitAlias>
+			<UsePackages>true</UsePackages>
+			<DCC_N>true</DCC_N>
+			<DCC_S>false</DCC_S>
+			<GenDll>true</GenDll>
+			<DCC_K>false</DCC_K>
+			<DCC_SymbolReferenceInfo>1</DCC_SymbolReferenceInfo>
+			<DCC_E>false</DCC_E>
+			<DCC_F>false</DCC_F>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Cfg_1)'!=''">
+			<DCC_LocalDebugSymbols>false</DCC_LocalDebugSymbols>
+			<DCC_Define>RELEASE;$(DCC_Define)</DCC_Define>
+			<DCC_SymbolReferenceInfo>0</DCC_SymbolReferenceInfo>
+			<DCC_DebugInformation>false</DCC_DebugInformation>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Cfg_2)'!=''">
+			<DCC_Define>DEBUG;$(DCC_Define)</DCC_Define>
+			<DCC_Optimize>false</DCC_Optimize>
+			<DCC_GenerateStackFrames>true</DCC_GenerateStackFrames>
+		</PropertyGroup>
+		<ItemGroup>
+			<DelphiCompile Include="CARDS.dpr">
+				<MainSource>MainSource</MainSource>
+			</DelphiCompile>
+			<DCCReference Include="CARDS_TLB.pas"/>
+			<DCCReference Include="MAINFORMImpl1.pas">
+				<Form>MAINFORM</Form>
+				<DesignClass>TActiveForm</DesignClass>
+				<CoClasses>MAINFORM</CoClasses>
+			</DCCReference>
+			<DCCReference Include="Unit18.pas">
+				<Form>DataMod_CARDS</Form>
+				<DesignClass>TDataModule</DesignClass>
+			</DCCReference>
+			<DCCReference Include="balans.pas">
+				<Form>Balance</Form>
+			</DCCReference>
+			<DCCReference Include="customers.pas">
+				<Form>clients</Form>
+			</DCCReference>
+			<DCCReference Include="payment.pas">
+				<Form>Payments</Form>
+			</DCCReference>
+			<DCCReference Include="newcard.pas">
+				<Form>Customer_new</Form>
+			</DCCReference>
+			<DCCReference Include="cfilepas.pas">
+				<Form>cfile</Form>
+			</DCCReference>
+			<DCCReference Include="applicationpas.pas">
+				<Form>Applications</Form>
+			</DCCReference>
+			<DCCReference Include="creditinfopas.pas">
+				<Form>krinfo</Form>
+			</DCCReference>
+			<DCCReference Include="dpforms.pas">
+				<Form>dpinfo</Form>
+			</DCCReference>
+			<DCCReference Include="rezform.pas">
+				<Form>Hesabatlar</Form>
+			</DCCReference>
+			<DCCReference Include="U9.pas">
+				<Form>Form9</Form>
+			</DCCReference>
+			<DCCReference Include="setac.pas">
+				<Form>Form10</Form>
+			</DCCReference>
+			<DCCReference Include="balhs.pas">
+				<Form>Form11</Form>
+			</DCCReference>
+			<DCCReference Include="comp.pas">
+				<Form>Form13</Form>
+			</DCCReference>
+			<DCCReference Include="crdtype.pas">
+				<Form>Form14</Form>
+			</DCCReference>
+			<DCCReference Include="banksettings.pas">
+				<Form>Bank_Settings</Form>
+			</DCCReference>
+			<DCCReference Include="filialaccounts.pas">
+				<Form>Filial_Accounts</Form>
+			</DCCReference>
+			<DCCReference Include="datclose.pas">
+				<Form>dateclose</Form>
+			</DCCReference>
+			<DCCReference Include="domesticbank.pas">
+				<Form>domestic_bank</Form>
+			</DCCReference>
+			<DCCReference Include="atmendpos.pas">
+				<Form>atmpos</Form>
+			</DCCReference>
+			<DCCReference Include="poscomission.pas">
+				<Form>POS_COMMISION</Form>
+			</DCCReference>
+			<DCCReference Include="sms.pas">
+				<Form>smsfile</Form>
+			</DCCReference>
+			<DCCReference Include="Unitintfile.pas">
+				<Form>intfile</Form>
+			</DCCReference>
+			<DCCReference Include="UnitDxxx.pas">
+				<Form>Dxxx</Form>
+			</DCCReference>
+			<DCCReference Include="UnitRvisa.pas">
+				<Form>rvisa</Form>
+			</DCCReference>
+			<DCCReference Include="Unit155.pas">
+				<Form>PROVS</Form>
+			</DCCReference>
+			<DCCReference Include="dilingUnit.pas">
+				<Form>Dilinq_form</Form>
+			</DCCReference>
+			<DCCReference Include="klirinqUnit.pas">
+				<Form>Klirinq_form</Form>
+			</DCCReference>
+			<DCCReference Include="UnitDfile.pas">
+				<Form>Dfile</Form>
+			</DCCReference>
+			<DCCReference Include="Unitclient2.pas">
+				<Form>clients2</Form>
+			</DCCReference>
+			<DCCReference Include="Unitexcel.pas">
+				<Form>EXCELform</Form>
+			</DCCReference>
+			<DCCReference Include="Unitsalary.pas">
+				<Form>Salary</Form>
+			</DCCReference>
+			<DCCReference Include="Unitcardarxiv.pas">
+				<Form>cardarxiv</Form>
+			</DCCReference>
+			<DCCReference Include="closecardunit.pas">
+				<Form>closecards</Form>
+			</DCCReference>
+			<DCCReference Include="opencardunit.pas">
+				<Form>opencards</Form>
+			</DCCReference>
+			<DCCReference Include="cardnumbersource.pas">
+				<Form>CARDNUMBER</Form>
+			</DCCReference>
+			<DCCReference Include="EXCELNEWCARD.pas">
+				<Form>NEWCARDEX</Form>
+			</DCCReference>
+			<DCCReference Include="PROLONGATIONUNIT.pas">
+				<Form>PROLONGATIONXLS</Form>
+			</DCCReference>
+			<DCCReference Include="unitverification.pas">
+				<Form>verification</Form>
+			</DCCReference>
+			<DCCReference Include="accountcloseunit.pas">
+				<Form>accountclose</Form>
+			</DCCReference>
+			<DCCReference Include="limittur.pas">
+				<Form>lim</Form>
+			</DCCReference>
+			<DCCReference Include="PostCommisionOnusImpl.pas">
+				<Form>PostCommisionOnus</Form>
+			</DCCReference>
+			<DCCReference Include="onlinec.pas">
+				<Form>Online</Form>
+			</DCCReference>
+			<DCCReference Include="cardbranch.pas">
+				<Form>card_branch</Form>
+			</DCCReference>
+			<DCCReference Include="card_ufx.pas">
+				<Form>UFXFORM</Form>
+			</DCCReference>
+			<DCCReference Include="arxivufx.pas">
+				<Form>UFX_ARXIV</Form>
+			</DCCReference>
+			<DCCReference Include="paymentsett.pas">
+				<Form>Paymentset</Form>
+			</DCCReference>
+			<DCCReference Include="multiform.pas">
+				<Form>MultiCurrency</Form>
+			</DCCReference>
+			<DCCReference Include="Unit28.pas">
+				<Form>FileReports</Form>
+			</DCCReference>
+			<DCCReference Include="Reportpayment.pas">
+				<Form>Paymentreport</Form>
+			</DCCReference>
+			<DCCReference Include="rbsdofile.pas">
+				<Form>rbsdo</Form>
+			</DCCReference>
+			<DCCReference Include="rbsdostatement.pas">
+				<Form>rbsdostate</Form>
+			</DCCReference>
+			<DCCReference Include="rbsdoreport.pas">
+				<Form>card_state</Form>
+			</DCCReference>
+			<DCCReference Include="UFX71.pas"/>
+			<DCCReference Include="Unit30.pas">
+				<Form>exclfiles</Form>
+			</DCCReference>
+			<DCCReference Include="Cardsdeleted_report.pas">
+				<Form>deletedcard</Form>
+			</DCCReference>
+			<DCCReference Include="newcardeditfrm.pas">
+				<Form>NewCardEditform</Form>
+			</DCCReference>
+			<RidlCompile Include="CARDS.ridl"/>
+			<BuildConfiguration Include="Debug">
+				<Key>Cfg_2</Key>
+				<CfgParent>Base</CfgParent>
+			</BuildConfiguration>
+			<BuildConfiguration Include="Base">
+				<Key>Base</Key>
+			</BuildConfiguration>
+			<BuildConfiguration Include="Release">
+				<Key>Cfg_1</Key>
+				<CfgParent>Base</CfgParent>
+			</BuildConfiguration>
+		</ItemGroup>
+		<Import Condition="Exists('$(BDS)\Bin\CodeGear.Delphi.Targets')" Project="$(BDS)\Bin\CodeGear.Delphi.Targets"/>
+		<Import Condition="Exists('$(APPDATA)\Embarcadero\$(BDSAPPDATABASEDIR)\$(PRODUCTVERSION)\UserTools.proj')" Project="$(APPDATA)\Embarcadero\$(BDSAPPDATABASEDIR)\$(PRODUCTVERSION)\UserTools.proj"/>
+		<ProjectExtensions>
+			<Borland.Personality>Delphi.Personality.12</Borland.Personality>
+			<Borland.ProjectType>VCLApplication</Borland.ProjectType>
+			<BorlandProject>
+				<Delphi.Personality>
+					<Source>
+						<Source Name="MainSource">CARDS.dpr</Source>
+					</Source>
+					<Parameters>
+						<Parameters Name="RunParams">/LocalIniSourceLocation=winini:\Smart-Bank\Bin\SBLocal.ini /SystemIniSourceLocation=winini:\Smart-Bank\Bin\SmartBank.ini</Parameters>
+						<Parameters Name="HostApplication">D:\Smart-Bank\Bin\SmartBank.exe</Parameters>
+					</Parameters>
+					<Language>
+						<Language Name="ProjectLang">$00000409</Language>
+					</Language>
+					<VersionInfo>
+						<VersionInfo Name="IncludeVerInfo">False</VersionInfo>
+						<VersionInfo Name="AutoIncBuild">False</VersionInfo>
+						<VersionInfo Name="MajorVer">1</VersionInfo>
+						<VersionInfo Name="MinorVer">0</VersionInfo>
+						<VersionInfo Name="Release">0</VersionInfo>
+						<VersionInfo Name="Build">0</VersionInfo>
+						<VersionInfo Name="Debug">False</VersionInfo>
+						<VersionInfo Name="PreRelease">False</VersionInfo>
+						<VersionInfo Name="Special">False</VersionInfo>
+						<VersionInfo Name="Private">False</VersionInfo>
+						<VersionInfo Name="DLL">True</VersionInfo>
+						<VersionInfo Name="Locale">1033</VersionInfo>
+						<VersionInfo Name="CodePage">1252</VersionInfo>
+					</VersionInfo>
+					<VersionInfoKeys>
+						<VersionInfoKeys Name="CompanyName"/>
+						<VersionInfoKeys Name="FileDescription"/>
+						<VersionInfoKeys Name="FileVersion">1.0.0.0</VersionInfoKeys>
+						<VersionInfoKeys Name="InternalName"/>
+						<VersionInfoKeys Name="LegalCopyright"/>
+						<VersionInfoKeys Name="LegalTrademarks"/>
+						<VersionInfoKeys Name="OriginalFilename"/>
+						<VersionInfoKeys Name="ProductName"/>
+						<VersionInfoKeys Name="ProductVersion">1.0.0.0</VersionInfoKeys>
+						<VersionInfoKeys Name="Comments"/>
+						<VersionInfoKeys Name="OleSelfRegister">1</VersionInfoKeys>
+					</VersionInfoKeys>
+					<Excluded_Packages>
+						<Excluded_Packages Name="$(BDSBIN)\dcloffice2k150.bpl">Microsoft Office 2000 Sample Automation Server Wrapper Components</Excluded_Packages>
+						<Excluded_Packages Name="$(BDSBIN)\SBDM_Common.bpl">(untitled)</Excluded_Packages>
+						<Excluded_Packages Name="$(BDSBIN)\CU_COMMON.bpl">Credits Managment Common Declarations, Functions Classes</Excluded_Packages>
+					</Excluded_Packages>
+				</Delphi.Personality>
+				<Platforms>
+					<Platform value="Win32">True</Platform>
+				</Platforms>
+				<ActiveXProjectInfo>
+					<version>1</version>
+				</ActiveXProjectInfo>
+			</BorlandProject>
+			<ProjectFileVersion>12</ProjectFileVersion>
+		</ProjectExtensions>
+	</Project>

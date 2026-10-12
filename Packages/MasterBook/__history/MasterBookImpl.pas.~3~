@@ -1,0 +1,451 @@
+unit MasterBookImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActiveX, AxCtrls, MasterBookProj_TLB, StdVcl, StdCtrls, Buttons, ImgList,
+  SBPlgAx50_TLB, Db, OracleData,  Grids, DBGrids, sboapiDataModuleImpl,
+  Gauges, ComCtrls;
+
+type
+  TMasterBook = class(TActiveForm, IMasterBook, IIconExporter)
+    GroupBox1: TGroupBox;
+    BitExport: TBitBtn;
+    ImageList1: TImageList;
+    ProgressBar: TGauge;
+    KreditAccDataSet: TOracleDataSet;
+    ObrDebtDataSet: TOracleDataSet;
+    DataSetSumDebt: TOracleDataSet;
+    DataSetSumKredit: TOracleDataSet;
+    DataSetSumSaldo: TOracleDataSet;
+    DataSetGetBalName: TOracleDataSet;
+    GroupBox2: TGroupBox;
+    DTPMin: TDateTimePicker;
+    DTPMax: TDateTimePicker;
+    Label1: TLabel;
+    Label2: TLabel;
+    KreditAccDataSetBAL_CN_DEBT: TStringField;
+    KreditAccDataSetBAL_CN_KREDIT: TStringField;
+    DataSetGetBalNameBALNAME: TStringField;
+    DataSetGetBalNameBAL_CN: TStringField;
+    ObrDebtDataSetBAL_CN_DEBT: TStringField;
+    ObrDebtDataSetBAL_CN_KREDIT: TStringField;
+    ObrDebtDataSetMONTH: TStringField;
+    ObrDebtDataSetOBR: TFloatField;
+    DataSetSumDebtBAL_DEBT: TStringField;
+    DataSetSumDebtMONTH: TStringField;
+    DataSetSumDebtOBRDEBT: TFloatField;
+    DataSetSumKreditBAL_KREDIT: TStringField;
+    DataSetSumKreditMONTH: TStringField;
+    DataSetSumKreditOBRKREDIT: TFloatField;
+    DataSetSumSaldoBAL_CN: TStringField;
+    DataSetSumSaldoMONTH: TStringField;
+    DataSetSumSaldoACTIVE: TFloatField;
+    DataSetSumSaldoPASSIVE: TFloatField;
+    EdBalance: TEdit;
+    CeckBoxBal: TCheckBox;
+    DataSetGetBalNameACTIVE: TFloatField;
+    DataSetGetBalNamePASSIV: TFloatField;
+    Label3: TLabel;
+    DataSetBranch: TOracleDataSet;
+    CBBranch: TComboBox;
+    procedure BitExportClick(Sender: TObject);
+    procedure ActiveFormCreate(Sender: TObject);
+  private
+    { Private declarations }
+    FEvents: IMasterBookEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+    procedure FillBranch;
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+
+    function Get_Icon: OLE_HANDLE; safecall;
+  public
+    { Public declarations }
+    Branch :array of Integer;
+    procedure Initialize; override;
+  end;
+
+var
+ MasterBook: TMasterBook;
+
+implementation
+
+uses ComObj, ComServ, ApllPackUnit, SBTranslateProc;
+{$R *.DFM}
+
+{ TMasterBook }
+
+procedure TMasterBook.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_MasterBookPage); }
+end;
+
+procedure TMasterBook.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as IMasterBookEvents;
+end;
+
+procedure TMasterBook.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TMasterBook.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TMasterBook.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TMasterBook.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TMasterBook.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TMasterBook.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TMasterBook.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TMasterBook.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TMasterBook.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TMasterBook.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TMasterBook.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TMasterBook.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TMasterBook.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TMasterBook.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TMasterBook.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TMasterBook.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TMasterBook.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TMasterBook.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TMasterBook.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TMasterBook._Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TMasterBook.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TMasterBook.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TMasterBook.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TMasterBook.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TMasterBook.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TMasterBook.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TMasterBook.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TMasterBook.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TMasterBook.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TMasterBook.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TMasterBook.Set_AxBorderStyle(Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TMasterBook.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TMasterBook.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TMasterBook.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TMasterBook.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TMasterBook.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TMasterBook.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TMasterBook.Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TMasterBook.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TMasterBook.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TMasterBook.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TMasterBook.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TMasterBook.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TMasterBook.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+function TMasterBook.Get_Icon: OLE_HANDLE;
+begin
+  ImageList1.GetIcon(0, Icon);
+  Result := Icon.Handle;
+end;
+
+
+procedure TMasterBook.BitExportClick(Sender: TObject);
+var
+  Selection : TRepType;
+  Exc: Exception;
+begin
+ if CeckBoxBal.Checked then
+       begin
+        Selection :=  rtOne;
+        if Trim(EdBalance.Text) = '' then
+            begin
+             MessageDlg('Hesabi daxil edin!', mtConfirmation,  [mbOk], 0);
+             Exit;
+            end;
+       end
+       else Selection :=  rtAll;
+ try
+   SetLastError(0);
+   BitExport.Enabled := False;
+   Screen.Cursor := crHourGlass;
+   ApllPackUnit.ExoprtExcel( DTPMin.date, DTPMax.date, Selection, EdBalance.Text );
+ finally
+   BitExport.Enabled := True;
+   Screen.Cursor :=crDefault;
+   if GetLastError() <> 0 then RaiseLastWin32Error();
+ end;
+end;
+
+procedure TMasterBook.FillBranch;
+var
+  BranchIndex :Integer;
+begin
+  with  DataSetBranch do
+  try
+    Open;
+    SetLength(Branch,RecordCount+1);
+    First;
+    BranchIndex :=0;
+    CBBranch.Items.Clear;
+    CBBranch.Items.Add('ֱצעצם פטכטאככאנ');
+    Branch[BranchIndex] :=-1;
+    while not EOF do
+    begin
+      BranchIndex :=BranchIndex + 1;
+      CBBranch.Items.Add(FieldByName('Name').AsString);
+      Branch[BranchIndex] :=FieldByName('ID').AsInteger;
+      Next;
+    end;
+  finally
+    Close;
+  end;
+end;
+
+procedure TMasterBook.ActiveFormCreate(Sender: TObject);
+var
+  CurrentDate : TDate;
+begin
+  MasterBook := self;
+  FillBranch;
+  CBBranch.ItemIndex :=0;
+  with sboapiDataModule do
+    CurrentDate := SBOperationDay.CallDateFunction('get_date', []);
+  DTPMin.DateTime := CurrentDate;
+  DTPMax.DateTime := CurrentDate;
+  SBTranslateProc.TranslateAllComponents(Self,sboapiDataModule.OrPack_SL);
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TMasterBook,
+    Class_MasterBook,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

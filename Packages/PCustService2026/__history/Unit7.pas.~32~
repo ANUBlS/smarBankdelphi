@@ -1,0 +1,462 @@
+﻿unit Unit7;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ExtCtrls, XFSCtrls, StdCtrls, DB, OracleData, OleServer, ExcelXP,
+  ComCtrls;
+
+type
+  TForm7 = class(TForm)
+    XFPanel1: TXFPanel;
+    XFPanel2: TXFPanel;
+    XFLabel1: TXFLabel;
+    XFLabel2: TXFLabel;
+    XFButton1: TXFButton;
+    XFButton2: TXFButton;
+    odsxx: TOracleDataSet;
+    ExcelApplication1: TExcelApplication;
+    DateTimePicker1: TDateTimePicker;
+    DateTimePicker2: TDateTimePicker;
+    sb_sysdate: TOracleDataSet;
+    sb_sysdateTEK_DAT: TDateTimeField;
+    ods_arch: TOracleDataSet;
+    ods_archOSTAT: TFloatField;
+    odsxxDAT: TDateTimeField;
+    odsxxINV_NUM: TWideStringField;
+    odsxxINV_DATE: TDateTimeField;
+    odsxxDEBIT: TFloatField;
+    odsxxCREDIT: TFloatField;
+    odsxxTRANS_DATE: TDateTimeField;
+    odsxxPAR1: TWideStringField;
+    odsxxPAR3: TWideStringField;
+    odsxxPAR4: TWideStringField;
+    odsxxPAR5: TWideStringField;
+    odsxxPAR6: TWideStringField;
+    odsxxPAR7: TWideStringField;
+    odsxxPAR8: TWideStringField;
+    odsxxPAR9: TWideStringField;
+    odsxxMEBLEG: TFloatField;
+    odsxxPAR13: TFloatField;
+    odsxxPAR14: TFloatField;
+    odsxxPAR15: TFloatField;
+    odsxxDEBT: TFloatField;
+    odsxxAMMOUNT: TFloatField;
+    odsxxODENIS: TFloatField;
+    odsxxRN: TFloatField;
+    odsxxPAR11: TFloatField;
+    Button1: TButton;
+    ods_text: TOracleDataSet;
+    ods_textTEXT: TWideStringField;
+    odsxxYANACAQ: TFloatField;
+    odsxx1: TOracleDataSet;
+    odsxx1PAR11: TFloatField;
+    odsxx1DAT: TDateTimeField;
+    odsxx1INV_NUM: TWideStringField;
+    odsxx1INV_DATE: TDateTimeField;
+    odsxx1DEBIT: TFloatField;
+    odsxx1CREDIT: TFloatField;
+    odsxx1TRANS_DATE: TDateTimeField;
+    odsxx1PAR1: TWideStringField;
+    odsxx1PAR3: TWideStringField;
+    odsxx1PAR4: TWideStringField;
+    odsxx1PAR5: TWideStringField;
+    odsxx1PAR6: TWideStringField;
+    odsxx1PAR7: TWideStringField;
+    odsxx1PAR8: TWideStringField;
+    odsxx1PAR9: TWideStringField;
+    odsxx1MEBLEG: TFloatField;
+    odsxx1PAR13: TFloatField;
+    odsxx1PAR14: TFloatField;
+    odsxx1PAR15: TFloatField;
+    odsxx1DEBT: TFloatField;
+    odsxx1AMMOUNT: TFloatField;
+    odsxx1ODENIS: TFloatField;
+    odsxx1YANACAQ: TFloatField;
+    odsxx1RN: TFloatField;
+    odsxx1BONUS: TFloatField;
+    odsxx1ID: TWideStringField;
+    procedure XFButton1Click(Sender: TObject);
+    procedure XFButton2Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form7: TForm7;
+
+implementation
+
+uses UnitDataModPCustService,sboapiDataModuleImpl;
+
+{$R *.dfm}
+
+procedure TForm7.Button1Click(Sender: TObject);
+var     Sheet, Sheets  :Variant;
+  ay,il,il_s,k,s,ss,st,sc,sd,sf,l :String;
+                            V:Variant;
+  OpenedXlsCnt,b, a,   i,j,w  :Integer;
+ v_BDate    :TDateTime;
+ v_EDate    :TDateTime;
+ row:integer;
+  v1_BDate    :string;
+ v1_EDate     :string;
+begin
+
+   ExcelApplication1.Disconnect;
+  V :=ExcelApplication1.Application;
+  ExcelApplication1.Connect;
+  V.Workbooks.Open(ExtractFilePath(ExtractFilePath(ParamStr(0)))+ 'Papa_transport.xlsx');
+  try
+  for OpenedXlsCnt :=1 to 100 do
+   Sheet := V.Workbooks[OpenedXlsCnt].Worksheets['Sheet1'];
+   //Break;
+  except
+
+
+  end;  //showmessage(DataModPCustService.ODS_CUSTOMERS_PHYS_FSCUST_NAME.AsString);
+
+  sheets :=V.Sheets;
+
+//   Sheet.Item['Sheet1'].Range['A10:CA2000'].Font.Size := 10;
+       a:=0;     i:=0 ;
+    // showmessage(inttostr(DataModPCustService.Ods_closAccountID.AsInteger));
+       v_BDate:=Integer(Trunc(DateTimePicker1.DateTime));
+        v_eDate:=Integer(Trunc(DateTimePicker2.DateTime));
+
+         v1_BDate:=DateToStr(DateTimePicker1.DateTime);
+        v1_eDate:=DateToStr(DateTimePicker2.DateTime);
+       with  odsxx1 do
+       begin
+       close;
+       SetVariable('V_ACCID',DataModPCustService.Ods_closAccountID.AsInteger);
+       SetVariable('begindat',v_BDate);
+       SetVariable('enddat',v_eDate);
+
+         open;
+       end;
+
+       with ods_arch do
+       begin
+         close;
+       SetVariable('v_accid',DataModPCustService.Ods_closAccountID.AsInteger);
+       SetVariable('v_begindat',v_BDate);
+         open;
+       end;
+
+         odsxx1.First;
+
+
+    row:=12;
+    Sheet.cells[6,2]:=' Tarix aralığı  '+ v1_BDate+'  '+v1_eDate ;
+
+   ods_text.Close;
+     ods_text.SetVariable('v_accid',DataModPCustService.Ods_closAccountID.AsInteger) ;
+  ods_text.Open;
+
+   Sheet.cells[2,5]:=odsxx1.FieldByName('id').AsString;
+  Sheet.cells[5,2]:=ods_textTEXT.AsString;
+//'Biz aşağıda imza edənlər "Sifarişçi" Papa Lojistika MMC-nin direktoru Məmmədzadə Z. "İcraçı" fiziki şəxs İsmayılov Elvin Məhərrəm oğlu (531AZN03190CP479) bu aktı tərtib edir ondan ötrü ki, ...... 2021-ci il tarixli ....... saylı Daşıma müqaviləsinə əsasən yükdaşıma xidmətini yerinə yetirmiş və göstərilən dəyərdə yanacaq istifadə etmişdir.' ;
+   for a:=0 to odsxx1.RecordCount-1 do
+   begin
+//   try
+     // Gauge1.Visible:=true;
+     // Gauge1.Progress:=trunc(c*100/ OracleDataS_custSum.RecordCount-1);
+      // c:=c+1;
+
+
+  //   Sheet.Range['C1:B36'].NumberFormat:= number_format ;
+
+
+     Sheet.cells[12+i,1]:=odsxx1.fieldbyname('dat').Asstring;
+     Sheet.cells[12+i,2]:=odsxx1.fieldbyname('par3').asstring;
+     Sheet.cells[12+i,3]:=odsxx1.fieldbyname('inv_num').asstring;
+     Sheet.cells[12+i,4]:=odsxx1.fieldbyname('par8').AsString;
+     Sheet.cells[12+i,5]:=odsxx1.fieldbyname('par6').AsString;
+     Sheet.cells[12+i,6]:=odsxx1.fieldbyname('par5').AsString;
+     Sheet.cells[12+i,7]:=odsxx1.fieldbyname('par11').AsString;
+     Sheet.cells[12+i,8]:=odsxx1.fieldbyname('par13').AsString;
+     Sheet.cells[12+i,9]:=odsxx1.fieldbyname('ammount').AsString;
+     Sheet.cells[12+i,10]:=odsxx1.fieldbyname('odenis').AsString;
+     Sheet.cells[12+i,11]:=odsxx1.fieldbyname('yanacaq').AsString;
+     Sheet.cells[12+i,12]:=odsxx1.fieldbyname('bonus').AsString;
+     i:=i+1;
+    Sheet.Range['A'+IntToStr(row),'L'+IntToStr(row)].Borders.LineStyle :=1;
+     row:=row+1;
+
+        odsxx1.next;
+
+
+
+  //  except
+  // end;
+
+   end;
+
+
+
+    Sheet.cells[row+1,8].Font.Bold:=true;
+    Sheet.cells[row+1,8]:='       Yekun';
+    Sheet.cells[row+1,9].Font.Bold:=true;
+    Sheet.cells[row+1,10].Font.Bold:=true;
+    Sheet.cells[row+1,11].Font.Bold:=true;
+    Sheet.cells[row+1,12].Font.Bold:=true;
+
+    Sheet.cells[row+1,9]:='=SUM(I10:I'+IntToStr(row)+')' ;
+    Sheet.cells[row+1,10]:='=SUM(J10:J'+IntToStr(row)+')' ;
+    Sheet.cells[row+1,11]:='=SUM(K10:K'+IntToStr(row)+')' ;
+    Sheet.cells[row+1,12]:='=SUM(L10:L'+IntToStr(row)+')' ;
+
+    {
+    Sheet.cells[row+2,1].Font.Bold:=true;
+    Sheet.cells[row+2,1]:='G /Ə/ qalıq';
+    Sheet.cells[row+2,2]:=ods_archOSTAT.AsString;
+    Sheet.cells[row+2,2].Font.Bold:=true;
+
+  Sheet.cells[row+3,7].Font.Bold:=true;
+  Sheet.cells[row+3,7]:=' Ödənilməli  ';
+  Sheet.cells[row+3,8].Font.Bold:=true;
+   Sheet.cells[row+3,8]:= '=H'+IntToStr(row+1)+'+B'+inttostr(row+2)+ '-I'+IntToStr(row+1);//+'-J'+IntToStr(row+1);
+            }
+  Sheet.cells[row+7,1].Font.Bold:=true;
+  Sheet.cells[row+7,1]:='"Sifarişçi" Papalogistika MMC-nin direktoru :';
+  Sheet.cells[row+7,1].Font.Bold:=true;
+
+  Sheet.cells[row+8,1].Font.Bold:=true;
+  Sheet.cells[row+8,1].WrapText:=false;
+  Sheet.cells[row+8,1].HorizontalAlignment := xlleft;
+  Sheet.cells[row+8,1]:='VÖEN: 1402579981';
+  Sheet.cells[row+8,1].Font.Bold:=true;
+
+  Sheet.cells[row+9,1].Font.Bold:=true;
+  Sheet.cells[row+9,1].WrapText:=false;
+  Sheet.cells[row+9,1].HorizontalAlignment := xlleft;
+  Sheet.cells[row+9,1]:='Məmmədzadə Z. ___________ ';
+  Sheet.cells[row+9,1].Font.Bold:=true;
+
+
+
+  Sheet.cells[row+7,7].Font.Bold:=true;
+  Sheet.cells[row+7,7].WrapText:=false;
+  Sheet.cells[row+7,7].HorizontalAlignment := xlleft;
+  Sheet.cells[row+7,7]:=' "İcraçı" fiziki şəxs';
+  Sheet.cells[row+7,7].Font.Bold:=true;
+
+  Sheet.cells[row+8,7].Font.Bold:=true;
+  Sheet.cells[row+8,7].WrapText:=false;
+  Sheet.cells[row+8,7].HorizontalAlignment := xlleft;
+  Sheet.cells[row+8,7]:='VÖEN  '+DataModPCustService.ODS_Customers_Phys_FSVOEN.AsString;
+  Sheet.cells[row+8,7].Font.Bold:=true;
+
+  Sheet.cells[row+9,7].Font.Bold:=true;
+  Sheet.cells[row+9,7].WrapText:=false;
+  Sheet.cells[row+9,7].HorizontalAlignment := xlleft;
+  Sheet.cells[row+9,7]:=DataModPCustService.ODS_Customers_Phys_FSPAPA_N.AsString+'.___________';
+  Sheet.cells[row+9,7].Font.Bold:=true;
+
+
+         ExcelApplication1.Visible[0] :=True;
+         ExcelApplication1.Disconnect;
+
+
+
+
+end;
+
+procedure TForm7.FormShow(Sender: TObject);
+begin
+DateTimePicker1.DateTime:=sb_sysdateTEK_DAT.AsDateTime;
+DateTimePicker2.DateTime:=sb_sysdateTEK_DAT.AsDateTime;
+end;
+
+procedure TForm7.XFButton1Click(Sender: TObject);
+var     Sheet, Sheets  :Variant;
+  ay,il,il_s,k,s,ss,st,sc,sd,sf,l :String;
+                            V:Variant;
+  OpenedXlsCnt,b, a,   i,j,w  :Integer;
+ v_BDate    :TDateTime;
+ v_EDate    :TDateTime;
+ row:integer;
+
+begin
+
+   ExcelApplication1.Disconnect;
+  V :=ExcelApplication1.Application;
+  ExcelApplication1.Connect;
+  V.Workbooks.Open(ExtractFilePath(ExtractFilePath(ParamStr(0)))+ 'sahil.xlsx');
+  try
+  for OpenedXlsCnt :=1 to 100 do
+   Sheet := V.Workbooks[OpenedXlsCnt].Worksheets['Sheet1'];
+   //Break;
+  except
+
+
+  end;
+  sheets :=V.Sheets;
+
+
+//   Sheet.Item['Sheet1'].Range['A10:CA2000'].Font.Size := 10;
+       a:=0;     i:=0 ;
+    // showmessage(inttostr(DataModPCustService.Ods_closAccountID.AsInteger));
+       v_BDate:=Integer(Trunc(DateTimePicker1.DateTime));
+        v_eDate:=Integer(Trunc(DateTimePicker2.DateTime));
+       with  odsxx do
+       begin
+       close;
+       SetVariable('V_ACCID',DataModPCustService.Ods_closAccountID.AsInteger);
+       SetVariable('begindat',v_BDate);
+       SetVariable('enddat',v_eDate);
+
+         open;
+       end;
+
+       with ods_arch do
+       begin
+         close;
+       SetVariable('v_accid',DataModPCustService.Ods_closAccountID.AsInteger);
+       SetVariable('v_begindat',v_BDate);
+         open;
+       end;
+     //  Memo1.Text:= odsxx.SQL.Text;
+
+         odsxx.First;
+
+    // showmessage(inttostr( odsxx.RecordCount));
+    row:=10;
+   Sheet.cells[1+j,6]:=DataModPCustService.Ods_closAccount.fieldbyname('name_1').AsString;
+   Sheet.cells[3+j,2]:=odsxx.fieldbyname('par3').AsString;
+   Sheet.cells[4+j,2]:=odsxx.fieldbyname('par4').AsString;
+   for a:=0 to odsxx.RecordCount-1 do
+   begin
+   try
+     // Gauge1.Visible:=true;
+     // Gauge1.Progress:=trunc(c*100/ OracleDataS_custSum.RecordCount-1);
+      // c:=c+1;
+
+
+  //   Sheet.Range['C1:B36'].NumberFormat:= number_format ;
+
+
+     Sheet.cells[10+i,1]:=odsxx.fieldbyname('dat').AsString;
+     Sheet.cells[10+i,2]:=odsxx.fieldbyname('inv_num').AsString;
+     Sheet.cells[10+i,3]:=odsxx.fieldbyname('par6').AsString;
+     Sheet.cells[10+i,4]:=odsxx.fieldbyname('par8').AsString;
+     Sheet.cells[10+i,5]:=odsxx.fieldbyname('par11').AsString;
+     Sheet.cells[10+i,6]:=odsxx.fieldbyname('par5').AsString;
+     Sheet.cells[10+i,7]:=odsxx.fieldbyname('par13').AsString;
+     Sheet.cells[10+i,8]:=odsxx.fieldbyname('ammount').AsString;
+     Sheet.cells[10+i,9]:=odsxx.fieldbyname('odenis').AsString;
+     //Sheet.cells[10+j,10]:=odsxx.fieldbyname('odenis').AsString;
+     i:=i+1;
+    Sheet.Range['A'+IntToStr(row),'I'+IntToStr(row)].Borders.LineStyle :=1;
+     row:=row+1;
+
+        odsxx.next;
+
+
+
+    except
+   end;
+
+   end;
+
+    //Sheet.cells[row].Draw.Border.grid:=true;
+
+    Sheet.cells[row+1,1].Font.Bold:=true;
+    Sheet.cells[row+1,1]:='       CƏMİ';
+    Sheet.cells[row+1,4].Font.Bold:=true;
+    Sheet.cells[row+1,8].Font.Bold:=true;
+    Sheet.cells[row+1,9].Font.Bold:=true;
+   // Sheet.cells[row+1,10].Font.Bold:=true;
+    Sheet.cells[row+1,8]:='=SUM(H10:H'+IntToStr(row)+')' ;
+    Sheet.cells[row+1,9]:='=SUM(I10:I'+IntToStr(row)+')' ;
+    //Sheet.cells[row+1,10]:='=SUM(J10:J'+IntToStr(row)+')' ;
+
+    Sheet.cells[row+2,1].Font.Bold:=true;
+    Sheet.cells[row+2,1]:='G /Ə/ qalıq';
+    Sheet.cells[row+2,2]:=ods_archOSTAT.AsString;
+    Sheet.cells[row+2,2].Font.Bold:=true;
+
+  Sheet.cells[row+3,7].Font.Bold:=true;
+  Sheet.cells[row+3,7]:=' Ödənilməli  ';
+  Sheet.cells[row+3,8].Font.Bold:=true;
+   //  Sheet.cells[row+3,9]:= '=SUM(I10:I'+IntToStr(row-1)+')-SUM(K10:K'+IntToStr(row-1)+')+SUM(M10:M'+IntToStr(row-1)+')';
+  //Sheet.cells[row+3,8]:= '=H'+IntToStr(row+1)+'+B'+inttostr(row+2)+ '-I'+IntToStr(row+1)+'-J'+IntToStr(row+1);
+   Sheet.cells[row+3,8]:= '=H'+IntToStr(row+1)+'+B'+inttostr(row+2)+ '-I'+IntToStr(row+1);//+'-J'+IntToStr(row+1);
+  Sheet.cells[row+7,1].Font.Bold:=true;
+  Sheet.cells[row+7,1]:=' TƏRTİB ETDİ :  ';
+  Sheet.cells[row+7,1].Font.Bold:=true;
+
+  Sheet.cells[row+8,1].Font.Bold:=true;
+  Sheet.cells[row+8,1].WrapText:=false;
+  Sheet.cells[row+8,1].HorizontalAlignment := xlleft;
+  Sheet.cells[row+8,1]:='Şərifli Aygün ___________ ';
+  Sheet.cells[row+8,1].Font.Bold:=true;
+
+   {
+  Sheet.cells[row+7,3].Font.Bold:=true;
+  Sheet.cells[row+7,3]:=' YOXLADI:';
+  Sheet.cells[row+7,3].Font.Bold:=true;
+
+  Sheet.cells[row+8,3].Font.Bold:=true;
+  Sheet.cells[row+8,3].WrapText:=false;
+  Sheet.cells[row+8,3].HorizontalAlignment := xlleft;
+  Sheet.cells[row+8,3]:='Xudaverdiyeva Arzu ___________';
+  Sheet.cells[row+8,3].Font.Bold:=true;
+    }
+
+  Sheet.cells[row+7,7].Font.Bold:=true;
+  Sheet.cells[row+7,7].WrapText:=false;
+  Sheet.cells[row+7,7].HorizontalAlignment := xlleft;
+  Sheet.cells[row+7,7]:=' TƏSDİQLƏDİ:  Baş mühasib';
+  Sheet.cells[row+7,7].Font.Bold:=true;
+
+  Sheet.cells[row+8,7].Font.Bold:=true;
+  Sheet.cells[row+8,7].WrapText:=false;
+  Sheet.cells[row+8,7].HorizontalAlignment := xlleft;
+  Sheet.cells[row+8,7]:='İbrahimova Guzel ___________';
+  Sheet.cells[row+8,7].Font.Bold:=true;
+
+
+{   odsxx1.First;
+   a:=0;j:=0;
+  for a:=0 to odsxx1.RecordCount-1 do
+   begin
+   try
+     // Gauge1.Visible:=true;
+     // Gauge1.Progress:=trunc(c*100/ OracleDataS_custSum.RecordCount-1);
+      // c:=c+1;
+
+
+  //   Sheet.Range['C1:B36'].NumberFormat:= number_format ;
+     Sheet.cells[10+j,10]:=odsxx1.fieldbyname('dat').AsString;
+     Sheet.cells[10+j,11]:=odsxx1.fieldbyname('ammount').AsString;
+
+
+
+        j:=j+1;
+        odsxx1.next;
+
+ except
+
+
+end;     }
+//   end;
+         ExcelApplication1.Visible[0] :=True;
+         ExcelApplication1.Disconnect;
+
+
+
+end;
+
+procedure TForm7.XFButton2Click(Sender: TObject);
+begin
+Form7.Close;
+end;
+
+end.

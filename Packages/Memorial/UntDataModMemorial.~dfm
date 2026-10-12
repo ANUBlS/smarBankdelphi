@@ -1,0 +1,330 @@
+object DataModMemorial: TDataModMemorial
+  OldCreateOrder = False
+  OnCreate = DataModuleCreate
+  OnDestroy = DataModuleDestroy
+  Left = 312
+  Top = 103
+  Height = 479
+  Width = 741
+  object OraclePackage: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'SB_MEMORIAL'
+    Left = 240
+    Top = 16
+  end
+  object DataSrcMain: TDataSource
+    DataSet = ODSMain
+    Left = 24
+    Top = 8
+  end
+  object ODSRate: TOracleDataSet
+    SQL.Strings = (
+      'Select  Valute,Valu_Name from aValute')
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 88
+    Top = 56
+  end
+  object DataSrcRate: TDataSource
+    DataSet = ODSRate
+    Left = 24
+    Top = 56
+  end
+  object BankInfo: TOracleDataSet
+    SQL.Strings = (
+      'Select'
+      ' Bank,INN,logo from BankInfo')
+    Session = sboapiDataModule.SBSession
+    Left = 88
+    Top = 104
+    object BankInfoINN: TStringField
+      FieldName = 'INN'
+      Size = 15
+    end
+    object BankInfoBANK: TStringField
+      FieldName = 'BANK'
+      Size = 80
+    end
+    object BankInfoLOGO: TBlobField
+      FieldName = 'LOGO'
+      BlobType = ftBlob
+    end
+  end
+  object ReferDataSet: TOracleDataSet
+    SQL.Strings = (
+      'Select'
+      '  RowID,Balance From Memorial')
+    Session = sboapiDataModule.SBSession
+    Left = 40
+    Top = 224
+  end
+  object DataSrcRefer: TDataSource
+    DataSet = ReferDataSet
+    Left = 120
+    Top = 224
+  end
+  object UsersList: TOracleDataSet
+    SQL.Strings = (
+      'select '
+      '  ID ,'
+      '  NAME'
+      'from USER$')
+    Session = sboapiDataModule.SBSession
+    Left = 248
+    Top = 168
+    object UsersListID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object UsersListNAME: TStringField
+      FieldName = 'NAME'
+      Size = 32
+    end
+  end
+  object DataSrcUsersList: TDataSource
+    DataSet = UsersList
+    Left = 248
+    Top = 120
+  end
+  object Branches: TOracleDataSet
+    SQL.Strings = (
+      'select * from filial')
+    Session = sboapiDataModule.SBSession
+    Left = 160
+    Top = 88
+    object BranchesID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object BranchesNAME: TStringField
+      FieldName = 'NAME'
+      Size = 90
+    end
+  end
+  object DataSrcBranches: TDataSource
+    DataSet = Branches
+    Left = 160
+    Top = 144
+  end
+  object ODSSelected: TOracleDataSet
+    SQL.Strings = (
+      'select m.rowid,m.* from memorial_rep m')
+    QBEDefinition.QBEFieldDefs = {
+      0400000015000000070000004442414C5F434E010000000000070000004B4241
+      4C5F434E01000000000003000000444154010000000000080000004449464652
+      415445010000000000040000004E414D45010000000000020000004944010000
+      0000000500000053484946520100000000000700000056414C5F414343010000
+      0000000C00000043555252454E435949445F4301000000000007000000414D4D
+      4F554E5401000000000009000000414D4D4F554E545F43010000000000080000
+      004C414D4D4F554E54010000000000050000004F505F49440100000000000700
+      000044454249544F520100000000000700000044454254494E4E010000000000
+      05000000444E414D45010000000000080000004B52454449544F520100000000
+      00070000004B524544494E4E010000000000050000004B4E414D450100000000
+      000400000044454254010000000000060000004B5245444954010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 40
+    Top = 160
+    object ODSSelectedDBAL_CN: TFloatField
+      FieldName = 'DBAL_CN'
+    end
+    object ODSSelectedKBAL_CN: TFloatField
+      FieldName = 'KBAL_CN'
+    end
+    object ODSSelectedDAT: TDateTimeField
+      FieldName = 'DAT'
+    end
+    object ODSSelectedDIFFRATE: TFloatField
+      FieldName = 'DIFFRATE'
+    end
+    object ODSSelectedNAME: TStringField
+      FieldName = 'NAME'
+      Size = 255
+    end
+    object ODSSelectedID: TFloatField
+      FieldName = 'ID'
+    end
+    object ODSSelectedSHIFR: TIntegerField
+      FieldName = 'SHIFR'
+    end
+    object ODSSelectedVAL_ACC: TStringField
+      FieldName = 'VAL_ACC'
+      Size = 4000
+    end
+    object ODSSelectedCURRENCYID_C: TStringField
+      FieldName = 'CURRENCYID_C'
+      Size = 4000
+    end
+    object ODSSelectedAMMOUNT: TFloatField
+      FieldName = 'AMMOUNT'
+    end
+    object ODSSelectedAMMOUNT_C: TFloatField
+      FieldName = 'AMMOUNT_C'
+    end
+    object ODSSelectedLAMMOUNT: TFloatField
+      FieldName = 'LAMMOUNT'
+    end
+    object ODSSelectedOP_ID: TFloatField
+      FieldName = 'OP_ID'
+    end
+    object ODSSelectedDEBITOR: TStringField
+      FieldName = 'DEBITOR'
+      Size = 28
+    end
+    object ODSSelectedDNAME: TStringField
+      FieldName = 'DNAME'
+      Size = 90
+    end
+    object ODSSelectedKREDITOR: TStringField
+      FieldName = 'KREDITOR'
+      Size = 28
+    end
+    object ODSSelectedKNAME: TStringField
+      FieldName = 'KNAME'
+      Size = 90
+    end
+    object ODSSelectedDEBT: TFloatField
+      FieldName = 'DEBT'
+    end
+    object ODSSelectedKREDIT: TFloatField
+      FieldName = 'KREDIT'
+    end
+    object ODSSelectedDEBTINN: TStringField
+      FieldName = 'DEBTINN'
+    end
+    object ODSSelectedKREDINN: TStringField
+      FieldName = 'KREDINN'
+    end
+    object ODSSelectedCurrInNational: TStringField
+      FieldKind = fkCalculated
+      FieldName = 'CurrInNational'
+      Calculated = True
+    end
+    object ODSSelectedDinn: TStringField
+      FieldKind = fkCalculated
+      FieldName = 'Dinn'
+      Calculated = True
+    end
+    object ODSSelectedKinn: TStringField
+      FieldKind = fkCalculated
+      FieldName = 'Kinn'
+      Calculated = True
+    end
+  end
+  object DSSelected: TDataSource
+    DataSet = ODSSelected
+    Left = 208
+    Top = 232
+  end
+  object ODSMain: TOracleDataSet
+    SQL.Strings = (
+      
+        'Select  DBAL_CN,KBAL_CN,DAT,DIFFRATE,NAME,ID,SHIFR,VAL_ACC,CURRE' +
+        'NCYID_C,'
+      
+        #9' AMMOUNT,AMMOUNT_C,LAMMOUNT,OP_ID,DEBITOR,DNAME,KREDITOR,KNAME,' +
+        'DEBT,KREDIT ,debtinn,kredinn'
+      ' from Memorial_smart'
+      ' ')
+    QBEDefinition.QBEFieldDefs = {
+      0400000015000000070000004442414C5F434E010000000000070000004B4241
+      4C5F434E01000000000003000000444154010000000000080000004449464652
+      415445010000000000040000004E414D45010000000000020000004944010000
+      0000000500000053484946520100000000000700000056414C5F414343010000
+      0000000C00000043555252454E435949445F4301000000000007000000414D4D
+      4F554E5401000000000009000000414D4D4F554E545F43010000000000080000
+      004C414D4D4F554E54010000000000050000004F505F49440100000000000700
+      000044454249544F5201000000000005000000444E414D450100000000000800
+      00004B52454449544F52010000000000050000004B4E414D4501000000000004
+      00000044454254010000000000060000004B5245444954010000000000070000
+      0044454254494E4E010000000000070000004B524544494E4E010000000000}
+    Session = sboapiDataModule.SBSession
+    OnCalcFields = ODSMainCalcFields
+    Left = 88
+    Top = 8
+    object ODSMainDBAL_CN: TFloatField
+      FieldName = 'DBAL_CN'
+    end
+    object ODSMainKBAL_CN: TFloatField
+      FieldName = 'KBAL_CN'
+    end
+    object ODSMainDAT: TDateTimeField
+      FieldName = 'DAT'
+    end
+    object ODSMainDIFFRATE: TFloatField
+      FieldName = 'DIFFRATE'
+    end
+    object ODSMainNAME: TStringField
+      FieldName = 'NAME'
+      Size = 255
+    end
+    object ODSMainID: TFloatField
+      FieldName = 'ID'
+    end
+    object ODSMainSHIFR: TIntegerField
+      FieldName = 'SHIFR'
+    end
+    object ODSMainVAL_ACC: TStringField
+      FieldName = 'VAL_ACC'
+      Size = 4000
+    end
+    object ODSMainCURRENCYID_C: TStringField
+      FieldName = 'CURRENCYID_C'
+      Size = 4000
+    end
+    object ODSMainAMMOUNT: TFloatField
+      FieldName = 'AMMOUNT'
+    end
+    object ODSMainAMMOUNT_C: TFloatField
+      FieldName = 'AMMOUNT_C'
+    end
+    object ODSMainLAMMOUNT: TFloatField
+      FieldName = 'LAMMOUNT'
+    end
+    object ODSMainOP_ID: TFloatField
+      FieldName = 'OP_ID'
+    end
+    object ODSMainDEBITOR: TStringField
+      FieldName = 'DEBITOR'
+      Size = 28
+    end
+    object ODSMainDNAME: TStringField
+      FieldName = 'DNAME'
+      Size = 90
+    end
+    object ODSMainKREDITOR: TStringField
+      FieldName = 'KREDITOR'
+      Size = 28
+    end
+    object ODSMainKNAME: TStringField
+      FieldName = 'KNAME'
+      Size = 90
+    end
+    object ODSMainDEBT: TFloatField
+      FieldName = 'DEBT'
+    end
+    object ODSMainKREDIT: TFloatField
+      FieldName = 'KREDIT'
+    end
+    object ODSMainDEBTINN: TStringField
+      FieldName = 'DEBTINN'
+    end
+    object ODSMainKREDINN: TStringField
+      FieldName = 'KREDINN'
+    end
+    object ODSMainCurrInNational: TStringField
+      FieldKind = fkCalculated
+      FieldName = 'CurrInNational'
+      Calculated = True
+    end
+    object ODSMainDinn: TStringField
+      FieldKind = fkCalculated
+      FieldName = 'Dinn'
+      Calculated = True
+    end
+    object ODSMainKinn: TStringField
+      FieldKind = fkCalculated
+      FieldName = 'Kinn'
+      Calculated = True
+    end
+  end
+end

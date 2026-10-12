@@ -1,0 +1,612 @@
+unit AvaluteImpl1;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActiveX, AxCtrls, Avalute_TLB, StdVcl, Db, OracleData, StdCtrls,
+  ExtCtrls, Grids, DBGrids, ToolWin, ComCtrls, DBCtrls, Mask, SBPlgAx50_TLB,
+  ImgList, Oracle, FieldSearchEdit, SearchEdit;
+
+type
+  TAvaluteX = class(TActiveForm, IAvaluteX, IIconExporter)
+    AvaluteDataSet: TOracleDataSet;
+    dsAvalute: TDataSource;
+    ImageList1: TImageList;
+    Accounts: TOracleDataSet;
+    AccountsID: TFloatField;
+    DataAccounts: TDataSource;
+    Panel1: TPanel;
+    DBNavigator1: TDBNavigator;
+    Splitter1: TSplitter;
+    DBGrid1: TDBGrid;
+    Panel2: TPanel;
+    Panel3: TPanel;
+    StaticText1: TStaticText;
+    Panel4: TPanel;
+    StaticText2: TStaticText;
+    DBLookupComboBox4: TDBLookupComboBox;
+    Panel5: TPanel;
+    StaticText3: TStaticText;
+    DBLookupComboBox7: TDBLookupComboBox;
+    Panel6: TPanel;
+    StaticText4: TStaticText;
+    Panel7: TPanel;
+    StaticText5: TStaticText;
+    DBLookupComboBox2: TDBLookupComboBox;
+    Panel8: TPanel;
+    StaticText6: TStaticText;
+    DBLookupComboBox1: TDBLookupComboBox;
+    Panel9: TPanel;
+    StaticText7: TStaticText;
+    Panel10: TPanel;
+    StaticText8: TStaticText;
+    DBLookupComboBox3: TDBLookupComboBox;
+    Panel11: TPanel;
+    StaticText9: TStaticText;
+    DBLookupComboBox6: TDBLookupComboBox;
+    Panel12: TPanel;
+    StaticText10: TStaticText;
+    Panel13: TPanel;
+    StaticText11: TStaticText;
+    DBEdit17: TDBEdit;
+    Panel14: TPanel;
+    StaticText12: TStaticText;
+    DBEdit20: TDBEdit;
+    Panel15: TPanel;
+    StaticText13: TStaticText;
+    DBEdit1: TDBEdit;
+    Panel16: TPanel;
+    StaticText14: TStaticText;
+    DBEdit2: TDBEdit;
+    Panel17: TPanel;
+    StaticText15: TStaticText;
+    DBEdit3: TDBEdit;
+    Panel18: TPanel;
+    StaticText16: TStaticText;
+    DBEdit4: TDBEdit;
+    P_AVALUTE: TOraclePackage;
+    OrDS_Avalute_T: TOracleDataSet;
+    DS_Avalute_T: TDataSource;
+    Panel19: TPanel;
+    DS_ValuteSettings: TDataSource;
+    OrDS_ValuteSettings: TOracleDataSet;
+    DBGridAvalute_T: TDBGrid;
+    BtnOK: TButton;
+    BtnCancel: TButton;
+    GroupBox1: TGroupBox;
+    CBoxKREDIT: TDBLookupComboBox;
+    GroupBox2: TGroupBox;
+    GroupBox3: TGroupBox;
+    Label1: TLabel;
+    Label2: TLabel;
+    CBoxDebet: TDBLookupComboBox;
+    CBoxF5501V: TDBLookupComboBox;
+    CBoxF5501P: TDBLookupComboBox;
+    CBoxSCredit: TDBLookupComboBox;
+    CBoxSDebet: TDBLookupComboBox;
+    BtnRefresh: TButton;
+    AvaluteDataSetVALUTE: TIntegerField;
+    AvaluteDataSetVAL_NAME: TWideStringField;
+    AvaluteDataSetVALU_NAME: TWideStringField;
+    AvaluteDataSetVALU_SHORT: TWideStringField;
+    AvaluteDataSetUSTORG: TFloatField;
+    AvaluteDataSetUSTPOK: TFloatField;
+    AvaluteDataSetVALU_GEN: TWideStringField;
+    AvaluteDataSetVALU_AZ: TWideStringField;
+    AvaluteDataSetUSING: TIntegerField;
+    AvaluteDataSetVALU_OTHER: TWideStringField;
+    AvaluteDataSetVALU_INTER: TWideStringField;
+    AvaluteDataSetVALU_BALA: TWideStringField;
+    AvaluteDataSetPRISTAVKA: TFloatField;
+    AvaluteDataSetCOUNTRY: TWideStringField;
+    AvaluteDataSetUST_POK1: TFloatField;
+    AvaluteDataSetOFFICAL: TWideStringField;
+    AvaluteDataSetLIMIT: TFloatField;
+    AvaluteDataSetDEBET: TFloatField;
+    AvaluteDataSetKREDIT: TFloatField;
+    AvaluteDataSetF5501P: TFloatField;
+    AvaluteDataSetF5501V: TFloatField;
+    AvaluteDataSetSDEBET: TFloatField;
+    AvaluteDataSetSCREDIT: TFloatField;
+    AccountsACC_NO: TWideStringField;
+    SearchEdit1: TSearchEdit;
+    SearchEdit2: TSearchEdit;
+    SearchEdit3: TSearchEdit;
+    SearchEdit4: TSearchEdit;
+    SearchEdit5: TSearchEdit;
+    SearchEdit6: TSearchEdit;
+    procedure AvaluteDataSetAfterPost(DataSet: TDataSet);
+    procedure AvaluteDataSetApplyRecord(Sender: TOracleDataSet;
+      Action: Char; var Applied: Boolean; var NewRowId: String);
+    procedure OrDS_Avalute_TAfterScroll(DataSet: TDataSet);
+    procedure BtnOKClick(Sender: TObject);
+    procedure BtnCancelClick(Sender: TObject);
+    procedure BtnRefreshClick(Sender: TObject);
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure SearchEdit1KeyUp(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure SearchEdit2KeyUp(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure SearchEdit3KeyUp(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure SearchEdit4KeyUp(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure SearchEdit5KeyUp(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure SearchEdit6KeyUp(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+  private
+    { Private declarations }
+    FEvents: IAvaluteXEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+    {IIconExporter}
+    function Get_Icon: OLE_HANDLE; safecall;
+  public
+    { Public declarations }
+    procedure Initialize; override;
+  end;
+
+implementation
+
+uses ComObj, ComServ, sboapiDataModuleImpl, SBCore,SBTranslateProc;
+
+{$R *.DFM}
+
+{ TAvaluteX }
+
+procedure TAvaluteX.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_AvaluteXPage); }
+end;
+
+procedure TAvaluteX.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as IAvaluteXEvents;
+end;
+
+procedure TAvaluteX.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TAvaluteX.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TAvaluteX.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TAvaluteX.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TAvaluteX.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TAvaluteX.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TAvaluteX.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TAvaluteX.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TAvaluteX.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TAvaluteX.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TAvaluteX.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TAvaluteX.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TAvaluteX.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TAvaluteX.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TAvaluteX.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TAvaluteX.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TAvaluteX.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TAvaluteX.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TAvaluteX.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TAvaluteX._Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TAvaluteX.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TAvaluteX.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TAvaluteX.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TAvaluteX.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TAvaluteX.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TAvaluteX.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TAvaluteX.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TAvaluteX.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TAvaluteX.SearchEdit1KeyUp(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+if (SearchEdit1.Text='') or (SearchEdit1.Color=clred) then
+CBoxKREDIT.KeyValue:=0
+else
+begin
+CBoxKREDIT.KeyValue:=Accounts.FieldByName('ID').asInteger;
+end;
+end;
+
+procedure TAvaluteX.SearchEdit2KeyUp(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+if (SearchEdit2.Text='') or (SearchEdit2.Color=clred) then
+CBoxDebet.KeyValue:=0
+else
+begin
+CBoxDebet.KeyValue:=Accounts.FieldByName('ID').asInteger;
+end;
+end;
+
+procedure TAvaluteX.SearchEdit3KeyUp(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+if (SearchEdit3.Text='') or (SearchEdit3.Color=clred) then
+CBoxKREDIT.KeyValue:=0
+else
+begin
+CBoxKREDIT.KeyValue:=Accounts.FieldByName('ID').asInteger;
+end;
+end;
+
+procedure TAvaluteX.SearchEdit4KeyUp(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+if (SearchEdit4.Text='') or (SearchEdit4.Color=clred) then
+CBoxKREDIT.KeyValue:=0
+else
+begin
+CBoxKREDIT.KeyValue:=Accounts.FieldByName('ID').asInteger;
+end;
+end;
+
+procedure TAvaluteX.SearchEdit5KeyUp(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+if (SearchEdit5.Text='') or (SearchEdit5.Color=clred) then
+CBoxSCredit.KeyValue:=0
+else
+begin
+CBoxSCredit.KeyValue:=Accounts.FieldByName('ID').asInteger;
+end;
+
+end;
+
+procedure TAvaluteX.SearchEdit6KeyUp(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+if (SearchEdit6.Text='') or (SearchEdit6.Color=clred) then
+CBoxSDebet.KeyValue:=0
+else
+begin
+CBoxSDebet.KeyValue:=Accounts.FieldByName('ID').asInteger;
+end;
+end;
+
+procedure TAvaluteX.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TAvaluteX.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TAvaluteX.Set_AxBorderStyle(Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TAvaluteX.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TAvaluteX.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TAvaluteX.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TAvaluteX.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TAvaluteX.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TAvaluteX.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TAvaluteX.Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TAvaluteX.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TAvaluteX.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TAvaluteX.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TAvaluteX.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TAvaluteX.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TAvaluteX.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+function TAvaluteX.Get_Icon: OLE_HANDLE;
+begin
+  ImageList1.GetIcon(0, Icon);
+  Result := Icon.Handle;
+end;
+
+procedure TAvaluteX.ActiveFormCreate(Sender: TObject);
+begin
+SBTranslateProc.TranslateAllComponents(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TAvaluteX.AvaluteDataSetAfterPost(DataSet: TDataSet);
+begin
+ AvaluteDataSet.Refresh;
+end;
+
+procedure TAvaluteX.AvaluteDataSetApplyRecord(Sender: TOracleDataSet;
+  Action: Char; var Applied: Boolean; var NewRowId: String);
+begin
+ case Action of
+  'I':
+      begin
+       with P_avalute, Sender do
+        CallProcedure('add_avalute', [
+            'v_VALUTE',FieldByName('VALUTE').AsString
+          , 'v_VAL_NAME',FieldByName('VAL_NAME').AsString
+          , 'v_VALU_NAME',FieldByName('VALU_NAME').AsString
+          , 'v_VALU_SHORT',FieldByName('VALU_SHORT').AsString
+          , 'v_USTORG',FieldByName('USTORG').AsString
+          , 'v_USTPOK',FieldByName('USTPOK').AsString
+          , 'v_VALU_GEN',FieldByName('VALU_GEN').AsString
+          , 'v_VALU_AZ',FieldByName('VALU_AZ').AsString
+          , 'v_USING',FieldByName('USING').AsString
+          , 'v_VALU_OTHER',FieldByName('VALU_OTHER').AsString
+          , 'v_VALU_INTER',FieldByName('VALU_INTER').AsString
+          , 'v_VALU_BALA',FieldByName('VALU_BALA').AsString
+          , 'v_PRISTAVKA',FieldByName('PRISTAVKA').AsString
+          , 'v_COUNTRY',FieldByName('COUNTRY').AsString
+          , 'v_UST_POK1',FieldByName('UST_POK1').AsString
+          , 'v_OFFICAL',FieldByName('OFFICAL').AsString
+          , 'v_LIMIT',FieldByName('LIMIT').AsString
+          , 'v_DEBET',FieldByName('DEBET').AsString
+          , 'v_KREDIT',FieldByName('KREDIT').AsString
+          , 'v_F5501P',FieldByName('F5501P').AsString
+          , 'v_F5501V',FieldByName('F5501V').AsString
+          , 'v_SDEBET',FieldByName('SDEBET').AsString
+          , 'v_SCREDIT',FieldByName('SCREDIT').AsString
+
+        ]);
+        Applied :=True;
+      end;
+    'L','R','C':
+      Applied := True
+ else
+
+  Applied :=False;
+  end;
+end;
+
+procedure TAvaluteX.OrDS_Avalute_TAfterScroll(DataSet: TDataSet);
+begin
+  with OrDS_ValuteSettings do begin
+   Close;
+   SetVariable('Val', OrDS_Avalute_T.FieldByName('Valute').AsInteger);
+   Open;
+  end;
+end;
+
+procedure TAvaluteX.BtnOKClick(Sender: TObject);
+begin
+  try OrDS_Avalute_T.Post; except end;
+     OrDS_ValuteSettings.Edit;
+    OrDS_ValuteSettings.Post;
+end;
+
+procedure TAvaluteX.BtnCancelClick(Sender: TObject);
+begin
+  OrDS_Avalute_T.Cancel;
+  OrDS_ValuteSettings.Cancel;
+end;
+
+procedure TAvaluteX.BtnRefreshClick(Sender: TObject);
+begin
+  OrDS_Avalute_T.Refresh;
+  OrDS_ValuteSettings.Refresh;
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TAvaluteX,
+    Class_AvaluteX,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

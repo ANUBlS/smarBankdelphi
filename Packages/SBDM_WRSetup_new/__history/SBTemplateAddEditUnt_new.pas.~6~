@@ -1,0 +1,51 @@
+﻿unit SBTemplateAddEditUnt_new;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, ActnList,  Buttons, Mask, DBCtrls;
+
+type
+  TSBTemplAddEditForm = class(TForm)
+    Label1: TLabel;
+    DBEdit1: TDBEdit;
+    Label2: TLabel;
+    DBEdit2: TDBEdit;
+    SBOpenDlg: TSpeedButton;
+    ActionList1: TActionList;
+    ActnAccept: TAction;
+    ActnReject: TAction;
+    Button1: TButton;
+    Button2: TButton;
+    procedure ActnAcceptExecute(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  SBTemplAddEditForm: TSBTemplAddEditForm;
+
+implementation
+
+{$R *.dfm}
+  uses SBWRSetupDataModImpl_new,SBTranslateProc,sboapiDataModuleimpl;
+procedure TSBTemplAddEditForm.ActnAcceptExecute(Sender: TObject);
+begin
+      if (DBEdit1.Text<>'') and (DBEdit2.Text<>'')  then
+      begin
+        with SBWRSetupDataMod_new.SBWRTemplatesDSet do
+             Post;
+             ModalResult := mrOk;
+      end  else
+      begin
+        if DBEdit1.Text='' then  ShowMessage('Şablonun adı   daxil  edilməyib');
+        if DBEdit2.Text='' then  ShowMessage('Şablon faylı   daxil  edilməyib');
+        with SBWRSetupDataMod_new.SBWRTemplatesDSet do
+             Cancel;
+      end;
+end;
+
+end.

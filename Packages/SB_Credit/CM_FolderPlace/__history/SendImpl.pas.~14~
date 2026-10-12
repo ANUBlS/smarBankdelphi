@@ -1,0 +1,148 @@
+﻿unit SendImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, DBGridEh, StdCtrls, Buttons, Mask, DBCtrlsEh, DBLookupEh;
+
+type
+  TFrmSend = class(TForm)
+    Label1: TLabel;
+    DBLookupComboboxEh2: TDBLookupComboboxEh;
+    BitBtn1: TBitBtn;
+    BitBtn2: TBitBtn;
+    procedure BitBtn2Click(Sender: TObject);
+    procedure BitBtn1Click(Sender: TObject);
+  private
+    { Private declarations }
+     function ExcuseMeUser(Question : String) : Boolean;
+     procedure PrepareProgress(ProgCnt : Integer; opDesc : String);
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmSend: TFrmSend;
+
+implementation
+
+{$R *.dfm}
+ uses
+ FlReCalculationDataModuleImpl, newProgressimpl, ReCalculationMainForm;
+
+function TFrmSend.ExcuseMeUser(Question : String) : Boolean;
+begin
+  Result :=
+    MessageDlg(
+      Question
+     ,mtConfirmation
+     ,[mbYes,mbNo]
+     ,0
+     ) = mrYes;
+end;
+procedure TFrmSend.PrepareProgress;
+begin
+  with NewProgressForm , ProgressShower do
+  begin
+    Position := 0;
+    Max := ProgCnt;
+    Step := 1;
+    Caption := opDesc;
+  end;
+  NewProgressForm.Show;
+end;
+procedure TFrmSend.BitBtn1Click(Sender: TObject);
+resourcestring
+  rsConfirmForOne = '%s  - № li kredit dosyesi %s. Əminsiniz?';
+  rsConfirmForAll = '%d - sayda kredit dosyesi %s. Əminsiniz?';
+  rsCalcPercent   = 'göndəriləcək';
+  rsAlreadyCalced = '%s - № li kredit üçün hələ hesablanmayıb və ya  təstiq olunub !';
+  rsProgressCaption = '                        Faizlər təstiq olunur . gözləyin.   .....';
+
+
+var
+  I : Integer;
+  SelectedRowsCnt : Integer;
+  CrdID : Integer;
+  CrdNo : String;
+  CrdStatus : Integer;
+
+begin
+  if DBLookupComboboxEh2.text='' then
+   begin
+   ShowMessage('Qovluğu gondərəcəyiniz yeri seçin!');
+   exit;
+   end;
+  with PRMainForm.CalcGrid, DataSource.DataSet do
+  begin
+
+    SelectedRowsCnt := SelectedRows.Count;
+
+    if SelectedRowsCnt > 1 then
+    begin
+
+      if not
+        ExcuseMeUser(
+              Format(rsConfirmForAll,[SelectedRowsCnt,rsCalcPercent])
+              ) then   Exit;
+
+      Self.Update;
+      for I := 0 to SelectedRowsCnt - 1 do
+      begin
+
+        GotoBookmark(Pointer(SelectedRows[I]));
+
+        CrdID := FieldByName('ID').AsInteger;
+
+        CrdStatus := FieldByName('TrProcessed').AsInteger;
+         with PRDataModule.CalculatorPackage do
+
+    CallProcedure('add_folder',[
+    'p_id', CrdID,
+    'p_qovidsender',FieldByName('qovid').AsInteger ,
+    'p_qovidreciver',DBLookupComboboxEh2.KeyValue
+    ]);
+
+       { if CrdStatus in [0,1] then
+          AcceptCalcedIntForOne(CrdID, CrdNo)
+        else
+          LogWarning(Format(rsAlreadyCalced,[CrdNo]));
+        }
+     //   NewProgressForm.ProgressShower.Position := I + 1;
+      end;
+
+    end else
+    begin
+      CrdID := FieldByName('ID').AsInteger;
+      CrdNo := FieldByName('NumberOfCredit').AsString;
+      CrdStatus := FieldByName('TrProcessed').AsInteger;
+         with PRDataModule.CalculatorPackage do
+
+    CallProcedure('add_folder',[
+    'p_id', CrdID,
+    'p_qovidsender',FieldByName('qovid').AsInteger ,
+    'p_qovidreciver',DBLookupComboboxEh2.KeyValue
+    ]);
+      if not
+         ExcuseMeUser(Format(rsConfirmForOne,[CrdNo,rsCalcPercent]))
+         then         Exit;
+
+   {   if CrdStatus in [0,1] then
+        AcceptCalcedIntForOne(CrdID, CrdNo)
+      else
+        LogWarning(Format(rsAlreadyCalced,[CrdNo]));
+        }
+    end;
+
+   end;
+    PRMainForm.CalcGrid.DataSource.DataSet.Refresh;
+   close;
+end;
+
+procedure TFrmSend.BitBtn2Click(Sender: TObject);
+begin
+close
+end;
+
+end.

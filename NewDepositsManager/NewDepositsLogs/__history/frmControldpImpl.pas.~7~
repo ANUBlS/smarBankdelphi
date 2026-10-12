@@ -1,0 +1,110 @@
+unit frmControldpImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, Oracle, OracleData, StdCtrls, Buttons, ComCtrls, Mask, DBCtrlsEh,
+  DBLookupEh, CMExcelExport;
+
+type
+  TfrmControldp = class(TForm)
+    filials: TOracleDataSet;
+    filialsID: TFloatField;
+    SBCM_CONTROL: TOraclePackage;
+    filialsds: TDataSource;
+    DBLookupComboboxEh1: TDBLookupComboboxEh;
+    DTPDAT: TDateTimePicker;
+    BitBtn1: TBitBtn;
+    BitBtn2: TBitBtn;
+    Label1: TLabel;
+    Label2: TLabel;
+    sysdat: TOracleDataSet;
+    sysdatTEK_DAT: TDateTimeField;
+    contExport: TCMExcelExport;
+    ResultControl: TOracleDataSet;
+    filialsNAME: TWideStringField;
+    ResultControlCONTRACTNUM: TWideStringField;
+    ResultControlCUSTNAME: TWideStringField;
+    ResultControlDREST: TFloatField;
+    ResultControlDINTREST: TFloatField;
+    ResultControlFILIAL: TWideStringField;
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormCreate(Sender: TObject);
+    procedure BitBtn1Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  frmControldp: TfrmControldp;
+  procedure exportproc(S:String);export;
+
+implementation
+
+{$R *.DFM}
+uses sboapiDataModuleImpl,CommonDeclsImpl,SBTranslateProc;
+
+procedure exportproc(S:String);export;
+begin
+   frmControldp.ShowModal;
+end;
+
+exports
+   exportproc;
+
+procedure TfrmControldp.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+   Resize :=false
+
+   end;
+
+procedure TfrmControldp.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+  if ord(Key) = VK_ESCAPE then close
+end;
+
+procedure TfrmControldp.FormCreate(Sender: TObject);
+begin
+   sysdat.Open;
+   DTPDAT.DateTime := sysdat.FieldByName('tek_dat').asdateTime;
+   SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TfrmControldp.BitBtn1Click(Sender: TObject);
+var BrID :integer;
+    Dat :TDateTime;
+begin
+   BrID := filials.FieldByName('ID').AsInteger;
+   Dat := integer(trunc(DTPDAT.DateTime));
+   with SBCM_CONTROL do begin
+         CallProcedure('control',[BrID,dat]);
+
+         if ResultControl.Active then close;
+         ResultControl.Open;
+         
+    with contExport do begin
+         Connect;
+         ExportDataset(ResultControl,'Control',true,false);
+         Disconnect;
+    end;
+   end;
+end;
+
+procedure TfrmControldp.FormShow(Sender: TObject);
+begin
+   filials.Open;
+   DBLookupComboboxEh1.KeyValue := filials.FieldByName('ID').asInteger;
+end;
+
+initialization
+
+    frmControldp := TfrmControldp.Create(CommonApplication)
+
+end.

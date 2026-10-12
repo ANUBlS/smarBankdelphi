@@ -1,0 +1,621 @@
+﻿unit InsPaymentPlanImpl;
+               //XFRadioButton2
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, HintBox, Buttons, ExtCtrls, ImgList, StdCtrls, XFSCtrls,
+  CMCurrencyEdit, ComCtrls, ToolWin, CMExcelExport, Grids, DBGrids,db,oracle;
+
+type
+  TfrmPaymentPlan = class(TForm)
+    DBGrid1: TDBGrid;
+    ExcelExport: TCMExcelExport;
+    XFPanel3: TXFPanel;
+    XFSpeedButton1: TXFSpeedButton;
+    XFPanel1: TXFPanel;
+    XFRadioButton1: TXFRadioButton;
+    XFRadioButton2: TXFRadioButton;
+    XFGroupBox1: TXFGroupBox;
+    ToolBar1: TToolBar;
+    ToolButton7: TToolButton;
+    ToolButton1: TToolButton;
+    ToolButton4: TToolButton;
+    ToolButton3: TToolButton;
+    XFGroupBox2: TXFGroupBox;
+    CMCurrencyEdit1: TCMCurrencyEdit;
+    CMCurrencyEdit3: TCMCurrencyEdit;
+    CMCurrencyEdit2: TCMCurrencyEdit;
+    XFCheckBox3: TXFCheckBox;
+    XFCheckBox2: TXFCheckBox;
+    XFCheckBox1: TXFCheckBox;
+    CMCurrencyEdit4: TCMCurrencyEdit;
+    CMCurrencyEdit5: TCMCurrencyEdit;
+    CMCurrencyEdit6: TCMCurrencyEdit;
+    XFButton1: TXFButton;
+    ImageList1: TImageList;
+    Panel1: TPanel;
+    BitBtn1: TBitBtn;
+    BitBtn2: TBitBtn;
+    hbError: THintBox;
+    procedure FormCreate(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure XFSpeedButton1Click(Sender: TObject);
+    procedure ToolButton4Click(Sender: TObject);
+    procedure ToolButton3Click(Sender: TObject);
+    procedure ToolButton1Click(Sender: TObject);
+    procedure ToolButton7Click(Sender: TObject);
+    procedure XFButton1Click(Sender: TObject);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure XFRadioButton1Click(Sender: TObject);
+    procedure XFRadioButton2Click(Sender: TObject);
+    procedure CMCurrencyEdit4Change(Sender: TObject);
+    procedure CMCurrencyEdit1Change(Sender: TObject);
+    procedure CMCurrencyEdit5DblClick(Sender: TObject);
+    procedure DBGrid1DblClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  frmPaymentPlan: TfrmPaymentPlan;
+
+implementation
+
+{$R *.dfm}
+uses  sboapiDataModuleimpl,SBTranslateProc,CommanParametrs,DMPaymentPlanImpl,
+  fmPlanBuilderImpl, fmPlanFormImpl;
+procedure InitPlugin(s:string);export;
+begin
+
+
+   frmPaymentPlan.ShowModal;
+end;
+exports
+     InitPlugin;
+procedure TfrmPaymentPlan.CMCurrencyEdit1Change(Sender: TObject);
+begin
+if CMCurrencyEdit1.Text='' then
+begin
+   CMCurrencyEdit1.Value:=0;
+end;
+
+end;
+
+procedure TfrmPaymentPlan.CMCurrencyEdit4Change(Sender: TObject);
+begin
+if CMCurrencyEdit4.Value>DMPaymentPlan.DSplancontract.FieldByName('AMMOUNT').AsFloat then
+begin
+  Showmessage('Daxil olunan məbləğ sığorta haqqından böyük olmamalıdır!');
+  CMCurrencyEdit4.Value:=DMPaymentPlan.DSplancontract.FieldByName('AMMOUNT').AsFloat;
+  exit;
+end
+else
+begin
+     CMCurrencyEdit1.Value:=((CMCurrencyEdit4.Value)*100)/DMPaymentPlan.DSplancontract.FieldByName('AMMOUNT').AsFloat;
+end;
+
+if (CMCurrencyEdit4.Text='') or (CMCurrencyEdit4.Value=0)then
+begin
+   CMCurrencyEdit4.Value:=0;
+   CMCurrencyEdit1.Value:=0;
+end;
+
+
+   CMCurrencyEdit1.Enabled:=false;
+end;
+
+procedure TfrmPaymentPlan.CMCurrencyEdit5DblClick(Sender: TObject);
+begin
+  fmPlanForm := TfmPlanForm.Create(Self);
+  try
+   with DMPaymentPlan, ODSPayPlan do
+   Edit;
+   fmPlanForm.ShowModal;
+  finally
+   fmPlanForm.Free;
+  end;
+
+end;
+
+procedure TfrmPaymentPlan.DBGrid1DblClick(Sender: TObject);
+begin
+  fmPlanForm := TfmPlanForm.Create(Self);
+  try
+   with DMPaymentPlan, ODSPayPlan do
+   Edit;
+   fmPlanForm.ShowModal;
+  finally
+   fmPlanForm.Free;
+  end;
+
+end;
+
+procedure TfrmPaymentPlan.FormCreate(Sender: TObject);
+begin
+DMPaymentPlan:=TDMPaymentPlan.Create(self);
+SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TfrmPaymentPlan.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+if ord(key)=vk_escape then close;
+
+end;
+
+procedure TfrmPaymentPlan.FormShow(Sender: TObject);
+begin
+
+DMPaymentPlan.ODSPayPlan.Close;
+DMPaymentPlan.ODSPayPlan.SetVariable('insid',contactid);
+DMPaymentPlan.ODSPayPlan.Open;
+
+DMPaymentPlan.DSplancontract.Close;
+DMPaymentPlan.DSplancontract.SetVariable('p_id',contactid);
+DMPaymentPlan.DSplancontract.Open;
+
+DMPaymentPlan.DSPaymentsetting.Close;
+DMPaymentPlan.DSPaymentsetting.SetVariable('pcid',contactid);
+DMPaymentPlan.DSPaymentsetting.Open;
+DMPaymentPlan.DSPaymentsetting.edit;
+
+DMPaymentPlan.DSmesuliyyetShaqqi.Close;
+DMPaymentPlan.DSmesuliyyetShaqqi.SetVariable('pcid',contactid);
+DMPaymentPlan.DSmesuliyyetShaqqi.Open;
+
+
+DMPaymentPlan.DSFerdiqezaShaqqi.Close;
+DMPaymentPlan.DSFerdiqezaShaqqi.SetVariable('pcid',contactid);
+DMPaymentPlan.DSFerdiqezaShaqqi.Open;
+
+DMPaymentPlan.ODSContracts.Close;
+DMPaymentPlan.ODSContracts.SetVariable('cid',contactid);
+DMPaymentPlan.ODSContracts.Open;
+
+showmessage(DMPaymentPlan.DSPaymentsetting.FieldByName('payment_type').AsString);
+showmessage(DMPaymentPlan.DSPaymentsetting.FieldByName('cid').AsString);
+showmessage(DMPaymentPlan.ODSPayPlan.FieldByName('ins_id').AsString);
+
+
+if DMPaymentPlan.ODSPayPlan.RecordCount>0 then
+begin
+  DBGrid1.Enabled:=false;
+end;
+
+
+
+
+ if DMPaymentPlan.DSPaymentsetting.RecordCount=0  then
+ begin
+    XFRadioButton2.Checked:=false;
+    XFRadioButton1.Checked:=false;
+    XFGroupBox1.Enabled:=false;
+CMCurrencyEdit1.Value:=0;
+CMCurrencyEdit2.Value:=0;
+CMCurrencyEdit3.Value:=0;
+CMCurrencyEdit4.Value:=0;
+CMCurrencyEdit5.Value:=0;
+CMCurrencyEdit6.Value:=0;
+CMCurrencyEdit1.Enabled:=false;
+CMCurrencyEdit2.Enabled:=false;
+CMCurrencyEdit3.Enabled:=false;
+CMCurrencyEdit4.Enabled:=false;
+CMCurrencyEdit5.Enabled:=false;
+CMCurrencyEdit6.Enabled:=false;
+CMCurrencyEdit1.Visible:=false;
+CMCurrencyEdit2.Visible:=false;
+CMCurrencyEdit3.Visible:=false;
+CMCurrencyEdit4.Visible:=false;
+CMCurrencyEdit5.Visible:=false;
+CMCurrencyEdit6.Visible:=false;
+XFCheckBox1.Visible:=false;
+XFCheckBox2.Visible:=false;
+XFCheckBox3.Visible:=false;
+
+ end
+ else
+ begin
+ if DMPaymentPlan.DSPaymentsetting.FieldByName('payment_type').AsInteger=1 then
+      begin
+
+    XFRadioButton2.Checked:=false;
+    XFRadioButton2.Visible:=false;
+    XFRadioButton1.Checked:=true;
+
+ CMCurrencyEdit1.Value:=0;
+CMCurrencyEdit2.Value:=0;
+CMCurrencyEdit3.Value:=0;
+CMCurrencyEdit4.Value:=0;
+CMCurrencyEdit5.Value:=0;
+CMCurrencyEdit6.Value:=0;
+
+CMCurrencyEdit1.Enabled:=false;
+CMCurrencyEdit2.Enabled:=false;
+CMCurrencyEdit3.Enabled:=false;
+CMCurrencyEdit4.Enabled:=false;
+CMCurrencyEdit5.Enabled:=false;
+CMCurrencyEdit6.Enabled:=false;
+
+CMCurrencyEdit1.Visible:=false;
+CMCurrencyEdit2.Visible:=false;
+XFCheckBox1.Visible:=false;
+
+if DMPaymentPlan.DSplancontract.FieldByName('CHM').AsInteger=1 then
+begin
+XFCheckBox2.Visible:=false;
+CMCurrencyEdit3.Visible:=false;
+CMCurrencyEdit4.Visible:=false;
+end;
+if DMPaymentPlan.DSplancontract.FieldByName('CHFQ').AsInteger=1 then
+begin
+CMCurrencyEdit5.Visible:=false;
+CMCurrencyEdit6.Visible:=false;
+XFCheckBox3.Visible:=false;
+end;
+
+
+
+      end
+      else
+      begin
+    XFRadioButton1.Checked:=false;
+    XFRadioButton1.Visible:=false;
+    XFRadioButton2.Checked:=true;
+
+    ////////
+    XFRadioButton2.Visible:=true;
+    ///////////
+
+CMCurrencyEdit1.Value:=DMPaymentPlan.DSPaymentsetting.FieldByName('percent').AsFloat;
+CMCurrencyEdit2.Value:=DMPaymentPlan.DSPaymentsetting.FieldByName('percent_f').AsFloat;
+CMCurrencyEdit3.Value:=DMPaymentPlan.DSPaymentsetting.FieldByName('percent_m').AsFloat;
+CMCurrencyEdit4.Value:=DMPaymentPlan.DSPaymentsetting.FieldByName('Ammount').AsFloat;
+CMCurrencyEdit5.Value:=DMPaymentPlan.DSPaymentsetting.FieldByName('Ammount_f').AsFloat;
+CMCurrencyEdit6.Value:=DMPaymentPlan.DSPaymentsetting.FieldByName('Ammount_m').AsFloat;
+
+CMCurrencyEdit1.Enabled:=true;
+CMCurrencyEdit2.Enabled:=false;
+CMCurrencyEdit3.Enabled:=false;
+CMCurrencyEdit4.Enabled:=true;
+CMCurrencyEdit5.Enabled:=false;
+CMCurrencyEdit6.Enabled:=false;
+
+CMCurrencyEdit1.Visible:=true;
+CMCurrencyEdit2.Visible:=true;
+XFCheckBox1.Visible:=true;
+
+if DMPaymentPlan.DSplancontract.FieldByName('CHM').AsInteger=1 then
+begin
+XFCheckBox2.Visible:=true;
+CMCurrencyEdit3.Visible:=true;
+CMCurrencyEdit4.Visible:=true;
+end;
+if DMPaymentPlan.DSplancontract.FieldByName('CHFQ').AsInteger=1 then
+begin
+CMCurrencyEdit5.Visible:=true;
+CMCurrencyEdit6.Visible:=true;
+XFCheckBox3.Visible:=true;
+end;
+
+
+
+      end;
+
+ XFGroupBox1.Enabled:=false;
+
+
+ end;
+//end;
+
+
+if DMPaymentPlan.DSplancontract.FieldByName('state').AsInteger=0 then
+begin
+  XFButton1.Enabled:=true;
+  if DMPaymentPlan.DSPaymentsetting.RecordCount=0  then
+  begin
+  XFGroupBox1.Enabled:=false;
+  end
+  else
+  begin
+  XFGroupBox1.Enabled:=true;
+  end;
+
+  XFPanel1.Enabled:=true;
+end
+else
+begin
+XFButton1.Enabled:=false;
+XFGroupBox1.Enabled:=false;
+XFPanel1.Enabled:=false;
+end;
+
+
+end;
+
+procedure TfrmPaymentPlan.ToolButton1Click(Sender: TObject);
+begin
+
+ with DMPaymentPlan,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['ADDPAYMET_PLAN']);
+ end;
+
+ if contractstatus=1 then
+ begin
+   showmessage('Diqqət! Bu müqavilə bağlanmış müqavilə olduğundan heç bir deyişiklik oluna bilməz.');
+   exit;
+ end;
+   try
+     fmPlanBuilder := TfmPlanBuilder.Create(Self);
+     fmPlanBuilder.ShowModal;
+   finally
+     fmPlanBuilder.Free;
+   end;
+
+end;
+
+procedure TfrmPaymentPlan.ToolButton3Click(Sender: TObject);
+begin
+
+ with DMPaymentPlan,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['DELETEPAYMET_PLAN']);
+ end;
+
+ if contractstatus=1 then
+ begin
+   showmessage('Diqqət! Bu müqavilə bağlanmış müqavilə olduğundan heç bir deyişiklik oluna bilməz.');
+   exit;
+ end;
+ if MessageDlg('Plan ləğv olunacaq!', mtWarning,
+                                     mbYesNoCancel, 0 ) = mrYes then
+ with DMPaymentPlan, OPCOMMON, ODSContracts do
+ try
+  CallProcedure('clearplan', [FieldByName('ID').asInteger]);
+  ODSPayPlan.refresh;
+  DSPaymentsetting.Refresh;
+ except
+  on E:EOracleError do
+      hbError.ShowMessage(IntToStr(E.ErrorCode)+' '+E.Message);
+  end;
+    XFRadioButton1.Visible:=true;
+    XFRadioButton2.Visible:=true;
+end;
+
+procedure TfrmPaymentPlan.ToolButton4Click(Sender: TObject);
+begin
+ if contractstatus=1 then
+ begin
+   showmessage('Diqqət! Bu müqavilə bağlanmış müqavilə olduğundan heç bir deyişiklik oluna bilməz.');
+   exit;
+ end;
+ with DMPaymentPlan, ODSPayPlan do begin
+   Refresh;
+ end;
+end;
+
+procedure TfrmPaymentPlan.ToolButton7Click(Sender: TObject);
+begin
+
+ with DMPaymentPlan,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['ADDPAYMET_PLAN']);
+ end;
+
+ if contractstatus=1 then
+ begin
+   showmessage('Diqqət! Bu müqavilə bağlanmış müqavilə olduğundan heç bir deyişiklik oluna bilməz.');
+   exit;
+ end;
+  fmPlanForm := TfmPlanForm.Create(Self);
+  try
+   with DMPaymentPlan, ODSPayPlan do
+   Insert;
+   fmPlanForm.ShowModal;
+  finally
+   fmPlanForm.Free;
+  end;
+
+end;
+
+procedure TfrmPaymentPlan.XFButton1Click(Sender: TObject);
+
+var
+ppayment_type:integer;
+begin
+
+ with DMPaymentPlan,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['COMMITPAYMENT_PLAN_SETTING']);
+ end;
+
+if (XFRadioButton1.Checked=false)and (XFRadioButton2.Checked=false) then
+begin
+  showmessage('Diqqət! Heç bir plan növü seçilməyib');
+  exit;
+end;
+
+ DMPaymentPlan.DSins_dict_initial_payment.close;
+ DMPaymentPlan.DSins_dict_initial_payment.Open;
+
+if (XFRadioButton2.Checked=true)
+and (CMCurrencyEdit1.Value<DMPaymentPlan.DSins_dict_initial_payment.FieldByName('PERCENT').AsFloat) then
+begin
+  showmessage('Diqqət! İlkin ödəniləcək % sazlamya uyğun sazlanmış %-dən kiçikdir.');
+  exit;
+end;
+
+if (CMCurrencyEdit4.Text='') or (CMCurrencyEdit4.Value=0) then
+begin
+  CMCurrencyEdit4.Value:=0;
+  CMCurrencyEdit1.Value:=0;
+end;
+
+if XFRadioButton1.Checked=true then
+ppayment_type:=1
+else
+ppayment_type:=2;
+
+with DMPaymentPlan do
+begin
+DSPaymentsetting.Edit;
+  DSPaymentsetting.FieldByName('cid').AsFloat:=contactid;
+  DSPaymentsetting.FieldByName('payment_type').AsFloat:=ppayment_type;
+  DSPaymentsetting.FieldByName('percent').AsFloat:=CMCurrencyEdit1.Value;
+  DSPaymentsetting.FieldByName('percent_f').AsFloat:=CMCurrencyEdit2.Value;
+  DSPaymentsetting.FieldByName('percent_m').AsFloat:=CMCurrencyEdit3.Value;
+  DSPaymentsetting.FieldByName('AMMOUNT').AsFloat:=CMCurrencyEdit4.Value;
+  DSPaymentsetting.FieldByName('AMMOUNT_f').AsFloat:=CMCurrencyEdit5.Value;
+  DSPaymentsetting.FieldByName('AMMOUNT_m').AsFloat:=CMCurrencyEdit6.Value;
+  DSPaymentsetting.FieldByName('op_id').AsFloat:=0;
+  DSPaymentsetting.Post;
+  DSPaymentsetting.RefreshRecord;
+   Showmessage('Plan haqqındaki məlumat təsdiqləndi.');
+
+if DMPaymentPlan.DSPaymentsetting.FieldByName('payment_type').AsFloat=1 then
+begin
+XFRadioButton2.Visible:=false;
+end;
+
+if DMPaymentPlan.DSPaymentsetting.FieldByName('payment_type').AsFloat=2 then
+begin
+XFRadioButton1.Visible:=false;
+end;
+
+         if XFRadioButton2.Checked=true then
+
+   XFGroupBox1.Enabled:=true
+   else
+     XFGroupBox1.Enabled:=false;
+
+
+
+
+end;
+
+
+end;
+
+procedure TfrmPaymentPlan.XFRadioButton1Click(Sender: TObject);
+begin
+if XFRadioButton1.Checked=true then
+begin
+ { XFCheckBox1.Checked:=false;
+  XFCheckBox2.Checked:=false;
+  XFCheckBox3.Checked:=false; }
+  //if InsDataMod.DSPaymentsetting.FieldByName('percent').AsFloat=0 then
+//begin
+  CMCurrencyEdit1.Value:=0;
+//end;
+  CMCurrencyEdit2.Value:=0;
+  CMCurrencyEdit3.Value:=0;
+  CMCurrencyEdit5.Value:=0;
+  CMCurrencyEdit6.Value:=0;
+
+  CMCurrencyEdit1.Enabled:=false;
+  CMCurrencyEdit2.Enabled:=false;
+  CMCurrencyEdit3.Enabled:=false;
+  CMCurrencyEdit5.Enabled:=false;
+  CMCurrencyEdit6.Enabled:=false;
+
+  XFCheckBox1.Visible:=false;
+  XFCheckBox2.Visible:=false;
+  XFCheckBox3.Visible:=false;
+
+  CMCurrencyEdit1.Visible:=false;
+  CMCurrencyEdit2.Visible:=false;
+  CMCurrencyEdit3.Visible:=false;
+  CMCurrencyEdit4.Visible:=false;
+  CMCurrencyEdit5.Visible:=false;
+  CMCurrencyEdit6.Visible:=false;
+
+end;
+end;
+
+procedure TfrmPaymentPlan.XFRadioButton2Click(Sender: TObject);
+begin
+
+if XFRadioButton2.Checked=true then
+begin
+  //XFCheckBox1.Visible:=false;
+  //XFCheckBox1.Checked:=true;
+  //if InsDataMod.DSPaymentsetting.FieldByName('percent').AsFloat=0 then
+//begin
+  CMCurrencyEdit1.Value:=0;
+  CMCurrencyEdit4.Value:=0;
+//end;
+  XFCheckBox1.Visible:=true;
+  CMCurrencyEdit1.Enabled:=true;
+  CMCurrencyEdit4.Enabled:=true;
+  CMCurrencyEdit1.Visible:=true;
+  CMCurrencyEdit4.Visible:=true;
+
+if DMPaymentPlan.DSplancontract.FieldByName('type_id').AsInteger=4 then
+begin
+if DMPaymentPlan.DSplancontract.FieldByName('CHM').AsInteger=1 then
+begin
+  XFCheckBox3.Visible:=true;
+  CMCurrencyEdit3.Visible:=true;
+  CMCurrencyEdit3.Value:=100;
+  CMCurrencyEdit6.Visible:=true;
+  CMCurrencyEdit6.Value:=DMPaymentPlan.DSmesuliyyetShaqqi.FieldByName('SIGHAQQIM').AsFloat;
+end
+else
+begin
+  XFCheckBox3.Visible:=false;
+  CMCurrencyEdit3.Visible:=false;
+  CMCurrencyEdit3.Value:=0;
+  CMCurrencyEdit6.Visible:=false;
+  CMCurrencyEdit6.Value:=0;
+end;
+
+if DMPaymentPlan.DSplancontract.FieldByName('CHFQ').AsInteger=1 then
+begin
+  XFCheckBox2.Visible:=true;
+  CMCurrencyEdit2.Visible:=true;
+  CMCurrencyEdit2.Value:=100;
+  CMCurrencyEdit5.Visible:=true;
+  CMCurrencyEdit5.Value:=DMPaymentPlan.DSFerdiqezaShaqqi.FieldByName('SIGHAQQIF').AsFloat;;
+end
+else
+begin
+  XFCheckBox2.Visible:=false;
+  CMCurrencyEdit2.Visible:=false;
+  CMCurrencyEdit2.Value:=0;
+  CMCurrencyEdit5.Visible:=false;
+  CMCurrencyEdit5.Value:=0;
+end;
+
+end;
+
+end;
+
+end;
+
+procedure TfrmPaymentPlan.XFSpeedButton1Click(Sender: TObject);
+begin
+ with DMPaymentPlan,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['EXCELPAYMET_PLAN']);
+ end;
+
+ if DBGrid1.DataSource.DataSet.RecordCount=0 then
+ begin
+ showmessage('Heç bir məlumat yoxdur!');
+ exit;
+ end;
+
+with ExcelExport do
+   begin
+      Connect;
+      ExportDataset(DBGrid1.DataSource.DataSet,'Ödəmə Planı.',True,false);
+      Disconnect;
+   end
+
+end;
+
+initialization
+ frmPaymentPlan:=TfrmPaymentPlan.Create(Application);
+end.

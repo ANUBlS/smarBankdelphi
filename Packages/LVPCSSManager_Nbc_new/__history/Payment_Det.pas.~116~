@@ -1,0 +1,1462 @@
+﻿unit Payment_Det;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ComCtrls, StdCtrls, ExtCtrls, Buttons, DBCtrls, CurrencyEdit, SearchEdit,
+  Mask, DBCtrlsEh, DBViewComboBox,Variants, CMDBSearchEdit;
+
+type
+  TPaymentDetalsForm = class(TForm)
+    AccountGB: TGroupBox;
+    Panel1: TPanel;
+    Panel6: TPanel;
+    GroupBox3: TGroupBox;
+    P13: TPanel;
+    Edit_Referens: TEdit;
+    Panel3: TPanel;
+    GroupBox1: TGroupBox;
+    P18: TPanel;
+    Edit_Client_Name: TEdit;
+    P19: TPanel;
+    Edit_Client_Code: TEdit;
+    P17: TPanel;
+    P20: TPanel;
+    Edit_Client_Voen: TEdit;
+    P14: TPanel;
+    Combo_Valute: TComboBox;
+    P16: TPanel;
+    Edit_TransCode: TEdit;
+    Button4: TButton;
+    GroupBox2: TGroupBox;
+    P7: TPanel;
+    P12: TPanel;
+    Edit_Bik: TEdit;
+    P11: TPanel;
+    Combo_BankName: TComboBox;
+    Edit_Account_Sub: TEdit;
+    P8: TPanel;
+    Edit_BankCode: TEdit;
+    P9: TPanel;
+    Edit_account: TEdit;
+    P10: TPanel;
+    Edit_Voen: TEdit;
+    GroupBox4: TGroupBox;
+    P2: TPanel;
+    Edit_BankCode_Self: TEdit;
+    P3: TPanel;
+    Edit_account_Self: TEdit;
+    P4: TPanel;
+    Edit_Voen_Self: TEdit;
+    P5: TPanel;
+    Edit_account_sub_Self: TEdit;
+    P6: TPanel;
+    Edit_BIK_Self: TEdit;
+    P1: TPanel;
+    Edit_BankName_Self: TEdit;
+    Edit_Client_acc_no: TEdit;
+    GroupBox5: TGroupBox;
+    P15: TPanel;
+    Edit_Amount1: TEdit;
+    SpeedButton1: TSpeedButton;
+    Edit_tey1: TEdit;
+    Edit_tey2: TEdit;
+    Edit_tey3: TEdit;
+    Edit_tey4: TEdit;
+    ButtonFinish: TButton;
+    Button2: TButton;
+    Valute_ID: TListBox;
+    Bank_ID: TListBox;
+    GroupBox6: TGroupBox;
+    Edit_inf1: TEdit;
+    Edit_inf2: TEdit;
+    Edit_inf3: TEdit;
+    Button3: TButton;
+    SpeedButton2: TSpeedButton;
+    Edit_amount: TCurrencyEdit;
+    P21: TPanel;
+    Button1: TButton;
+    Button5: TButton;
+    GroupBox7: TGroupBox;
+    RB_102T: TRadioButton;
+    RB_102: TRadioButton;
+    DBComboBox_Institution: TDBLookupComboBox;
+    DBComboBox_BudgetLevel: TDBLookupComboBox;
+    DBComboBox_Destination: TDBLookupComboBox;
+    SearchBankM: TSearchEdit;
+    MT205: TRadioButton;
+    Edit1: TEdit;
+    RB_104: TRadioButton;
+    MT996: TRadioButton;
+    Rb_104M: TRadioButton;
+    rb995: TRadioButton;
+    rb992: TRadioButton;
+    Rb996: TRadioButton;
+    Edit2: TEdit;
+    ComboBox1: TDBLookupComboBox;
+    Edit3: TEdit;
+    Edit4: TEdit;
+    Edit5: TEdit;
+    Button6: TButton;
+    Edit6: TEdit;
+    GroupBox8: TGroupBox;
+    Memo1: TMemo;
+    Memo2: TMemo;
+    Label1: TLabel;
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure ButtonFinishClick(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+    procedure Combo_BankNameChange(Sender: TObject);
+    procedure Edit_Client_VoenKeyPress(Sender: TObject; var Key: Char);
+    procedure Edit_account_sub_SelfKeyPress(Sender: TObject;
+      var Key: Char);
+    procedure Edit_Amount1KeyPress(Sender: TObject; var Key: Char);
+    procedure Button4Click(Sender: TObject);
+    procedure Edit_tey1Change(Sender: TObject);
+    procedure Edit_tey2Change(Sender: TObject);
+    procedure Edit_tey3Change(Sender: TObject);
+    procedure Edit_inf1Change(Sender: TObject);
+    procedure Edit_inf2Change(Sender: TObject);
+    procedure FormKeyUp(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure Button3Click(Sender: TObject);
+    procedure SpeedButton2Click(Sender: TObject);
+    procedure Edit_BankName_SelfChange(Sender: TObject);
+    procedure GroupBox6Enter(Sender: TObject);
+    procedure SearchBankMExit(Sender: TObject);
+    procedure Edit_ReferensChange(Sender: TObject);
+    procedure Edit_ReferensKeyPress(Sender: TObject; var Key: Char);
+    procedure Button1Click(Sender: TObject);
+    procedure Button5Click(Sender: TObject);
+    procedure Combo_BankNameKeyPress(Sender: TObject; var Key: Char);
+    procedure Edit_amountEnter(Sender: TObject);
+    procedure Edit_amountExit(Sender: TObject);
+    procedure RB_102TClick(Sender: TObject);
+    procedure RB_102Click(Sender: TObject);
+    procedure Edit_Client_NameChange(Sender: TObject);
+    procedure MT205Click(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
+    procedure SearchBankMKeyPress(Sender: TObject; var Key: Char);
+    procedure SearchBankMChange(Sender: TObject);
+    procedure Edit_Client_acc_noExit(Sender: TObject);
+    procedure DBComboBox_InstitutionCloseUp(Sender: TObject);
+    procedure RB_104Click(Sender: TObject);
+    procedure Rb_104MClick(Sender: TObject);
+    procedure rb995Click(Sender: TObject);
+    procedure rb992Click(Sender: TObject);
+    procedure Rb996Click(Sender: TObject);
+    procedure ComboBox1CloseUp(Sender: TObject);
+    procedure Button6Click(Sender: TObject);
+    procedure Edit_inf1Enter(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+  private
+    { Private declarations }
+  public
+     bnf_count : integer;
+    { Public declarations }
+  end;
+
+var
+  PaymentDetalsForm: TPaymentDetalsForm;
+  insert_shablon   : array[1..17] of string;
+  tr:boolean;
+
+implementation
+uses  TransTypeUnit, Data_Unit, Transaction_Unit,sboapiDataModuleImpl,
+  LVPCSSImpl, add_new_shablon,Get_to_shablon_unit;
+
+
+{$R *.DFM}
+{MY PROC and FUNC}
+{CHECK EDITS}
+Function CheckField: Boolean;
+    var i : integer;
+begin
+    if (Trim(PaymentDetalsForm.Edit_Referens.Text) = '')or
+       (PaymentDetalsForm.Edit_Amount.Value=0)or
+       (Trim(PaymentDetalsForm.Edit_TransCode.Text)='')or
+       (PaymentDetalsForm.Combo_BankName.ItemIndex=-1)or
+       (Trim(PaymentDetalsForm.Edit_BankCode.Text)='')or
+       (Trim(PaymentDetalsForm.Edit_account.Text)='')or
+       (Trim(PaymentDetalsForm.Edit_Voen.Text)='')or
+       //(Trim(PaymentDetalsForm.Edit_Account_Sub.Text)='')or
+       (Trim(PaymentDetalsForm.Edit_Bik.Text)='')or
+       (Trim(PaymentDetalsForm.Edit_Client_acc_no.Text)='')or
+       (Trim(PaymentDetalsForm.Edit_Client_Name.Text)='')or
+       (Trim(PaymentDetalsForm.Edit_Client_Voen.Text)='')or
+       (Trim(PaymentDetalsForm.Edit_tey1.Text)='') then
+        begin
+          Result :=  false;
+      if       (PaymentDetalsForm.rb995.Checked= false)  then  begin
+      if  (PaymentDetalsForm.rb992.Checked=true)   then
+             //aaaa
+
+        else
+          MessageDlg('Məlumat Tam deyil !',mtWarning,[mbok],0);exit;
+      end;
+
+        end
+        else
+          Result:=true;
+        with PaymentDetalsForm do
+        for i :=0 to ComponentCount-1 do
+        begin
+           if Components[i].ClassName =  'TEdit' then
+           if ((Components[i] as TEdit).Text<>'') and(
+              (Components[i].Name='Edit_tey1')  or
+              (Components[i].Name='Edit_tey2')  or
+              (Components[i].Name='Edit_tey3')  or
+              (Components[i].Name='Edit_tey4')  or
+              (Components[i].Name='Edit_inf1')  or
+              (Components[i].Name='Edit_inf2')  or
+              (Components[i].Name='Edit_inf3'))  then
+             { if ((Components[i] as TEdit).Text[1] in ['0'..'9','A'..'Z']) then
+                  Result:=true
+              else
+                  begin
+                    Result :=  false;
+                    MessageDlg('Məlumat düzgün deyil !',mtWarning,[mbok],0);
+                    exit;
+                  end;       }
+
+                Case ((Components[i] as TEdit).Text[1])of
+                 '0'..'9':Result:=true;
+                 'A'..'H':Result:=true;
+                 'J'..'Z':Result:=true;
+                 'Ə':Result:=true;
+                 'Ü':Result:=true;
+                 'Ö':Result:=true;
+                 'Ğ':Result:=true;
+                 'Ş':Result:=true;
+                 'Ç':Result:=true;
+                 'İ':Result:=true;
+                 'I':Result:=true;
+                else
+                  begin
+                    Result :=  false;
+                    MessageDlg('Məlumat düzgün deyil !',mtWarning,[mbok],0);
+                    exit;
+                  end;
+                end;
+        end;
+end;
+
+procedure TPaymentDetalsForm.SpeedButton1Click(Sender: TObject);
+   var i: integer;
+begin
+    TransCodeForm.typecode:=0;
+    TransCodeForm.typetext:='';
+    for i:=0 to TransCodeForm.TreeView1.Items.Count-1 do TransCodeForm.TreeView1.Items[i].Expanded:=false;;
+    TransCodeForm.ShowModal;
+end;
+function ChangeDecimal(r: real): String;
+begin
+  result:=StringReplace(formatfloat('##0.00',r),DecimalSeparator,'.',[rfReplaceAll, rfIgnoreCase]);
+end;
+
+procedure TPaymentDetalsForm.ButtonFinishClick(Sender: TObject);
+var Format:string;
+ke:char;
+begin
+if   edit5.Text='editing'  then
+begin
+ButtonFinish.Enabled:=false;
+exit;
+end;
+
+if (Edit_inf1.Text='') and (edit_inf2.Text<>'') then
+begin
+    ShowMessage('Əlavə informasiya boş ola bilməz!!');
+       exit;
+end
+else begin
+
+      if (Edit_inf1.Text='') and (edit_inf3.Text<>'') then
+      begin
+          ShowMessage('Əlavə informasiya boş ola bilməz!!');
+           exit;
+
+      end else
+      begin
+
+
+
+ke:=char(13);
+edit3.Text:='' ;
+Edit_ReferensKeyPress(Edit_Client_Name,ke);
+
+      //ShowMessage (trim(Edit_amount.Text));
+      //ShowMessage (ChangeDecimal(datamod.xs_referansamount.AsFloat));
+      //ShowMessage (trim(Edit_amount.Text));
+
+     if Rb_104M.Checked=true then
+       begin
+         if (trim(Edit_amount.Text)=ChangeDecimal(datamod.xs_referansamount.AsFloat)) then
+
+           //  ShowMessage (floattostr(datamod.xs_referansamount.AsFloat))
+          else
+          begin
+              if (trim(Edit_amount.Text)>floattostr(datamod.xs_referansamount.AsFloat)) then
+               begin
+                 ShowMessage('Daxil edilən məbləğ mandantın məbləğindən fərqlidir!!  ');
+                 edit_amount.Clear;
+                 //ButtonFinish.Enabled:=false;
+               end;
+          end;
+       end;
+
+
+if (mt205.Checked=true) or (rb995.Checked=true) or  (rb992.Checked=true)then
+Edit_Client_acc_no.text:='AZ85TURA36015002260700102944';
+
+
+
+
+
+if rb992.Checked then
+    begin
+
+    LVPCSSForm.GridBatchs.Columns[13].Font.Color:=clred;
+          Format:='MT992';
+
+      DataMod.INS.CallProcedure('xs_995add',[         Edit_Referens.Text ,
+                                                      Edit2.Text,
+                                                      transform.edit8.text,
+                                                      0,
+                                                      Format
+                                                       ,memo1.Text
+                                                      ,memo2.Text,transform.Combo_date.DateTime]);
+                                                      close;
+                                                      TransForm.Close;
+  LVPCSSForm.RefreshDataBatchs;
+    end;
+
+if rb995.Checked then
+    begin
+
+    LVPCSSForm.GridBatchs.Columns[13].Font.Color:=clred;
+          Format:='MT999';
+                         if transform.edit8.text='MESS' then
+
+      DataMod.INS.CallProcedure('xs_995add',[         Edit_Referens.Text ,
+                                                      Edit2.Text,
+                                                      transform.edit8.text,
+                                                      0,
+                                                      'MT999',Edit_BankCode.Text
+                                                      ,Edit2.Text
+                                                      ,memo2.Text
+                                                      ,transform.Combo_date.DateTime
+                                                      ])
+
+                                                      else
+                 DataMod.INS.CallProcedure('xs_995add',[         Edit_Referens.Text ,
+                                                      Edit2.Text,
+                                                      transform.edit8.text,
+                                                      0,
+                                                      'MT999',Edit_BankCode.Text
+                                                      ,memo1.Text
+                                                      ,memo2.Text
+                                                      ,transform.Combo_date.DateTime
+                                                      ]) ;
+
+
+                                                      close;
+                                                      TransForm.Close;
+  LVPCSSForm.RefreshDataBatchs;
+    end;
+
+
+  IF (DataMod.SBOP.CallIntegerFunction('check_IBAN_acc_num',[Edit_Client_acc_no.text])=0 )
+    THEN
+    begin
+    ShowMessage('Hesab ibana  uyğun deyil!!!!!!');
+    exit;
+    end else begin
+
+if (SearchBankM.Text='210005') and (RB_102.Checked=true) then
+   begin
+           showmessage('MT102 Formati ile Bu emeliyyati yigmaq olmaz!!!! ' );
+   end else begin
+Edit_TransCode.Text:='900';
+   MT:=false;
+if mt205.Checked =FALSE then  begin
+    IF mess_edit then
+    begin
+
+    IF length(Edit_Client_acc_no.text)<>28 THEN
+     begin
+     ShowMessage('Hesabın uzunluğu düzgün deyil!!!!!!');
+     exit;
+     end;
+
+    IF DataMod.SBOP.CallIntegerFunction('check_IBAN_acc_num',[Edit_Client_acc_no.text])=0 THEN
+    begin
+    ShowMessage('Hesab ibana  uyğun deyil!!!!!!');
+    exit;
+    end;
+
+
+
+    IF (length(Edit_Client_Voen.text)<>10)  and (Edit_Client_Voen.text<>'/') THEN
+      begin
+           ShowMessage('Voen-nin uzunluğu düzgün deyil!!!!!!');
+           exit;
+         end;
+    if RB_102T.Checked then Format:='MT102T';
+    if RB_102.Checked  then Format:='MT102';
+    if MT205.Checked  then Format:='MT999';  //Format:='MT205';
+    if Rb_104m.Checked  then Format:='MT104M';
+    if Rb996.Checked  then Format:='MT996';
+    if Rb_104.Checked  then Format:='MT104';
+
+
+
+
+    if (checkfield = false)or(DataMod.XS_BENEFICIARY.fieldbyname('status').AsInteger=2) then exit;
+
+
+
+
+    DataMod.INS.Callprocedure('xs_Beneficiary_update',[    DataMod.XS_BENEFICIARY.fieldbyname('ID').AsInteger,
+                                                           strtofloat(Bank_ID.Items[Combo_BankName.itemindex]),
+                                                           Edit_Account_Sub.text,
+                                                           Edit_Client_acc_no.text,
+                                                           edit_client_name.text,
+                                                           edit_client_code.text,
+                                                           Edit_Client_Voen.text,
+                                                           edit_tey1.text+'|'+edit_tey2.text+'|'+edit_tey3.text+'|'+Edit_tey4.Text+'|',
+                                                           strtofloat(Edit_TransCode.text),
+                                                           edit_inf1.text+'|'+edit_inf2.text+'|'+edit_inf3.text+'|',
+                                                           strtofloat(valute_id.items[combo_valute.itemindex]),
+                                                           edit_referens.text,
+                                                           Edit_Amount.value,
+                                                           bnf_count]);
+   sboapiDataModule.SBSession.Commit;
+   DataMod.INS.Callprocedure('xs_BatchAmount_update',[DataMod.XS_BATCHS.fieldbyname('ID').asinteger]);
+   DataMod.INS.Callprocedure('xs_format_update',[DataMod.XS_BATCHS.fieldbyname('ID').asinteger,Format]);
+   DataMod.Ins.callprocedure('xs_beneficiary_ChangeStatus',[DataMod.XS_BENEFICIARY.fieldbyname('ID').ASinteger,0]);
+   DataMod.Ins.callintegerfunction('xs_Batchs_ChangeStatus',[DataMod.XS_BATCHS.fieldbyname('ID').ASinteger,0]);
+   //ButtonFinish.Enabled:=false;
+   DataMod.XS_BENEFICIARY.RefreshRecord;
+   DataMod.XS_BATCHS.RefreshRecord;
+   DataMod.XS_BatchsSum.Refresh;
+
+   end
+   else
+   begin
+    if CheckField = false then exit;
+    IF length(Edit_Client_acc_no.text)<>28 THEN
+     begin
+     ShowMessage('Hesabın uzunluğu düzgün deyil!!!!!!');
+     exit;
+     end;
+
+    IF DataMod.SBOP.CallIntegerFunction('check_IBAN_acc_num',[Edit_Client_acc_no.text])=0
+        THEN begin
+        ShowMessage('Hesab ibana  uyğun deyil!!!!!!');
+       exit;
+              end;
+
+    IF (length(Edit_Client_Voen.text)<>10)  and (Edit_Client_Voen.text<>'/') THEN
+         begin
+           ShowMessage('Voen-nin uzunluğu düzgün deyil!!!!!!');
+           exit;
+         end;
+    Button4.Click;
+   end;
+   close;
+end
+
+
+    ELSE
+
+    BEGIN
+
+
+        if edit1.Text='0' then       //FOR 999 CAP LIMIT
+
+    DataMod.INS.Callprocedure('xs_batchs205',[Edit_Amount.value,Edit_Referens.Text,transform.Combo_date.DateTime ])
+    else
+     begin
+
+     if DataMod.XS_BATCHS.fieldbyname('status').AsInteger=0 then begin
+    DataMod.INS.Callprocedure('xs_batchs205upd',[Edit_Amount.value,DataMod.XS_BATCHS.fieldbyname('ID').ASinteger ]);
+      DataMod.XS_BATCHS.Locate('ID',DataMod.XS_BATCHS.fieldbyname('ID').ASinteger,[])  ;
+     end
+    else
+    showmessage ('Günün sənədlərinə göndərilmiş əməliyyatı redaktə etmək olmaz!!! ')
+
+     end;
+    sboapiDataModule.SBSession.Commit;
+    //ShowMessage(DataMod.XS_BATCHS.fieldbyname('ID').asvariant);
+   //DataMod.INS.Callprocedure('xs_BatchAmount_update',[DataMod.XS_BATCHS.fieldbyname('ID').asinteger]);
+   //DataMod.INS.Callprocedure('xs_format_update',[DataMod.XS_BATCHS.fieldbyname('ID').asinteger,'MT205']);
+   //DataMod.Ins.callprocedure('xs_beneficiary_ChangeStatus',[DataMod.XS_BENEFICIARY.fieldbyname('ID').ASinteger,0]);
+   //DataMod.Ins.callintegerfunction('xs_Batchs_ChangeStatus',[DataMod.XS_BATCHS.fieldbyname('ID').ASinteger,0]);
+   //ButtonFinish.Enabled:=false;
+   DataMod.XS_BENEFICIARY.RefreshRecord;
+   DataMod.XS_BATCHS.RefreshRecord;
+   DataMod.XS_BatchsSum.Refresh;
+    TransForm.Edit_Amount.text:=floattostr(TransForm.Edit_Amount.value+edit_Amount.value);
+         TransForm.radiobutton3.Checked:=false;
+
+   close;
+  TransForm.Close;
+
+  LVPCSSForm.RefreshDataBatchs;
+    END;
+    END;
+    END;
+    end;
+    end;
+
+
+    end;
+
+
+
+
+procedure TPaymentDetalsForm.Button2Click(Sender: TObject);
+begin
+ {  IF mess_edit then
+    begin
+       LVPCSSForm.showdetals;
+       ButtonFinish.Visible:=false;;
+    end
+      else
+         close; }
+
+edit3.Text:='' ;
+//edit5.Text:='';
+//ButtonFinish.Visible:=true;;
+
+end;
+
+procedure TPaymentDetalsForm.ComboBox1CloseUp(Sender: TObject);
+begin
+
+
+
+
+
+    Edit_Client_Name.Text     :=datamod.xs_referansCLIENT_NAME.AsString;
+    Edit_Client_Voen.Text     :=datamod.xs_referansCLIENT_INN.AsString;
+    Edit_Client_Code.Text     :=datamod.xs_referansCLIENT_CODE.AsString;
+    Edit_Client_acc_no.Text   :=datamod.xs_referansCLIENT_acc_no.asstring;
+    TransForm.Edit_ref.Text   :=ComboBox1.Text;
+
+
+
+end;
+
+procedure TPaymentDetalsForm.Combo_BankNameChange(Sender: TObject);
+      var tempStr: String;
+begin
+
+
+      Datamod.DataBankM.Locate('ID',Bank_ID.Items[Combo_BankName.ItemIndex],[]);
+
+      Bank_ID.ItemIndex:= Combo_BankName.ItemIndex;
+
+      Edit_BankCode.Text:=DataMod.DataBankM.fieldbyname('BankCode').AsString;
+
+      Edit_account.Text:=DataMod.DataBankM.fieldbyname('KRNO').AsString;
+
+      Edit_Voen.Text:=DataMod.DataBankM.fieldbyname('INN').AsString;
+
+      Edit_Bik.Text:=DataMod.DataBankM.fieldbyname('SWIFT').AsString;
+
+      tempStr:=DataMod.DataBankM.fieldbyname('KRNO').AsString;
+//      for i:= length(tempStr) to 12 do tempStr:='0'+tempStr;
+//      Edit_Account_Sub.Text:=Copy(tempStr,0,6)+'3'+Copy(tempStr,8,8);
+      Edit_Account_Sub.Text:= DataMod.DataBankM.fieldbyname('SUBKRNO').AsString;
+
+      if mess_edit then
+
+         Button2.Enabled:=true;
+end;
+
+procedure TPaymentDetalsForm.Edit_Client_acc_noExit(Sender: TObject);
+begin
+IF DataMod.SBOP.CallIntegerFunction('check_IBAN_acc_num',[Edit_Client_acc_no.text])=0 THEN
+    begin
+    ShowMessage('Hesab ibana  uyğun deyil!!!!!!');
+    //exit;
+    end;
+
+end;
+
+procedure TPaymentDetalsForm.Edit_Client_NameChange(Sender: TObject);
+begin
+  if mess_edit then
+  begin
+    ButtonFinish.Enabled:=true;
+    Button2.Enabled:=true;
+  end;
+  {Change TabOrder}
+  if Length((sender as TEdit).text)>35 then
+  begin
+    if PaymentDetalsForm.Visible then
+    FindNextControl((sender as tedit),true, false, false).SetFocus;
+  end
+end;
+
+procedure TPaymentDetalsForm.Edit_Client_VoenKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+    key := LVPCSSForm.OnlyNumber(KEY);
+end;
+
+procedure TPaymentDetalsForm.Edit_account_sub_SelfKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+    key := LVPCSSForm.OnlyNumber(KEY);
+end;
+
+procedure TPaymentDetalsForm.Edit_Amount1KeyPress(Sender: TObject;
+  var Key: Char);
+begin
+    key := LVPCSSForm.OnlyNumber(KEY);
+end;
+
+procedure TPaymentDetalsForm.Button4Click(Sender: TObject);
+var ke:char;
+
+begin
+ke:=char(13);
+edit3.Text:='' ;
+if (Edit_inf1.Text='') and (edit_inf2.Text<>'') then
+begin
+    ShowMessage('Əlavə informasiya boş ola bilməz!!');
+       exit;
+end
+else begin
+
+      if (Edit_inf1.Text='') and (edit_inf3.Text<>'') then
+      begin
+          ShowMessage('Əlavə informasiya boş ola bilməz!!');
+           exit;
+
+      end else
+      begin
+       IF (length(Edit_Client_Voen.text)<>10)  and (Edit_Client_Voen.text<>'/') THEN
+      begin
+           ShowMessage('Voen-nin uzunluğu düzgün deyil!!!!!!');
+           exit;
+         end else begin
+
+
+Edit_ReferensKeyPress(Edit_Client_Name,ke);
+
+  IF DataMod.SBOP.CallIntegerFunction('check_IBAN_acc_num',[Edit_Client_acc_no.text])=0 THEN
+    begin
+    ShowMessage('Hesab ibana  uyğun deyil!!!!!!');
+    exit;
+    end else begin
+    if (SearchBankM.Text='210005') and (RB_102.Checked=true) then
+   begin
+           showmessage('MT102 Formati ile Bu emeliyyati yigmaq olmaz!!!! ' );
+   end else begin
+
+    if CheckField = false then exit;
+    bnf_count:=bnf_count+1;
+    DataMod.INS.Callprocedure('xs_beneficiary_insert',[ new_id,
+                                                        strtofloat(Bank_ID.Items[Combo_BankName.itemindex]),
+                                                        Edit_Account_Sub.text,
+                                                        Edit_Client_acc_no.text,
+                                                        edit_client_name.text,
+                                                        edit_client_code.text,
+                                                        Edit_Client_Voen.text,
+                                                        edit_tey1.text+'|'+edit_tey2.text+'|'+edit_tey3.text+'|'+Edit_tey4.text+'|',
+                                                        strtofloat(Edit_TransCode.text),
+                                                        edit_inf1.text+'|'+edit_inf2.text+'|'+edit_inf3.text+'|',
+                                                        strtofloat(valute_id.items[combo_valute.itemindex]),
+                                                        edit_referens.text,
+                                                        Edit_Amount.value,
+                                                        bnf_count]);
+
+    if after_add then
+    begin
+      sboapiDataModule.SBSession.Commit;
+      DataMod.INS.Callprocedure('xs_BatchAmount_update',[DataMod.XS_BATCHS.fieldbyname('ID').asinteger]);
+      DataMod.Ins.callintegerfunction('xs_Batchs_ChangeStatus',[DataMod.XS_BATCHS.fieldbyname('ID').ASinteger,0]);
+      DataMod.XS_BATCHS.RefreshRecord; //LVPCSSForm.RefreshWithPos;
+      DataMod.XS_BENEFICIARY.Refresh;
+    end
+     else
+      begin
+        TransForm.Edit_BNF.Text:='\BNF\'+inttostr(PaymentDetalsForm.bnf_count);
+        TransForm.Edit_Amount.text:=floattostr(TransForm.Edit_Amount.value+edit_Amount.value);
+      end;
+    {CLEAR EDIT}
+    Combo_BankName.ItemIndex:=-1;
+    Edit_BIK.Clear;
+    Edit_BankCode.clear;
+    Edit_account.Clear;
+    Edit_account_sub.Clear;
+    Edit_Voen.Clear;
+    Edit_Amount.Clear;
+    Edit_TransCode.Clear;
+    {NEW REF NUMBER for messages}
+    if Edit_Referens.Text='' then
+    PaymentDetalsForm.Edit_Referens.Text := DataMod.INS.CallStringFunction('GetNewBeneficiaryReference',[]);
+    Edit_Client_Name.Clear;
+    Edit_Client_Code.Text:='/';
+    Edit_Client_acc_no.Clear;
+    Edit_Client_Voen.Clear;
+    Edit_Referens.Clear;
+    Edit_inf1.Clear;
+    Edit_inf2.Clear;
+    Edit_inf3.Clear;
+    Edit_tey1.Clear;
+    Edit_tey2.Clear;
+    Edit_tey3.Clear;
+    Edit_tey4.Clear;
+    if MT then
+    begin
+
+      If RB_102T.Checked then RB_102.Checked:=true;
+
+    end;
+
+
+
+    TransForm.ButtonPost.Enabled:=true;
+    PaymentDetalsForm.ButtonFinish.Enabled:=true ;
+    DataMod.XS_BENEFICIARY.Last;
+    SpeedButton2.Click;
+    Edit_TransCode.Text:='900';
+
+   end;
+end;
+end;
+end;
+
+ if  edit6.Text='MT102T' then begin
+  PaymentDetalsForm.RB_102T.Checked:=true;
+ PaymentDetalsForm.RB_102TClick(PaymentDetalsForm.RB_102T);
+ end;
+
+end;
+end;
+
+procedure TPaymentDetalsForm.Edit_tey1Change(Sender: TObject);
+begin
+    if PaymentDetalsForm.Visible then
+    begin
+      Edit_tey1.Text:=AnsiUpperCase(Edit_tey1.Text);
+      if Length((sender as Tedit).Text)=35 then Edit_tey2.SetFocus;
+    end;
+end;
+
+procedure TPaymentDetalsForm.Edit_tey2Change(Sender: TObject);
+begin
+    if PaymentDetalsForm.Visible then
+    begin
+      Edit_tey1.Text:=AnsiUpperCase(Edit_tey1.Text);
+      if Length((sender as Tedit).Text)=35 then Edit_tey3.SetFocus;
+    end;
+end;
+
+procedure TPaymentDetalsForm.Edit_tey3Change(Sender: TObject);
+begin
+    if PaymentDetalsForm.Visible then
+    if Length((sender as Tedit).Text)=35 then Edit_tey4.SetFocus;
+end;
+
+procedure TPaymentDetalsForm.Edit_inf1Change(Sender: TObject);
+begin
+    if PaymentDetalsForm.Visible then
+    if Length((sender as Tedit).Text)=35 then Edit_inf2.SetFocus;
+end;
+
+procedure TPaymentDetalsForm.Edit_inf1Enter(Sender: TObject);
+begin
+Edit_inf2.Enabled:=true;
+Edit_inf3.Enabled:=true;
+end;
+
+procedure TPaymentDetalsForm.Edit_inf2Change(Sender: TObject);
+begin
+    if PaymentDetalsForm.Visible then
+    if Length((sender as Tedit).Text)=35 then Edit_inf3.SetFocus;
+end;
+
+procedure TPaymentDetalsForm.FormKeyUp(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+   if key = Vk_escape then close;
+end;
+
+procedure TPaymentDetalsForm.FormShow(Sender: TObject);
+begin
+if edit6.Text='MT102T' then
+begin
+ PaymentDetalsForm.RB_102T.Checked:=true;
+ PaymentDetalsForm.RB_102TClick(PaymentDetalsForm.RB_102T);
+ //edit6.Text:='MT102T';
+end;
+end;
+
+procedure TPaymentDetalsForm.FormActivate(Sender: TObject);
+begin
+SpeedButton2.Click;
+Edit_TransCode.Text:='900';
+ GroupBox7.Enabled:=false;
+
+  DataMod.xs_referans.CloseAll;
+  DataMod.xs_referans.ClearVariables;
+
+ if Rb_104M.Checked=true then  begin
+if   mess_edit then
+  edit4.visible:=true
+  else
+ edit4.visible:=false;
+end;
+
+
+
+if RB_102.Checked=true  then
+begin
+   //       ShowMessage('hhh');
+  DataMod.DataBankM.Filter:='';
+   DataMod.DataBankM.Filtered:=false;
+   DataMod.DataBankM.Refresh;
+   { DataMod.DataBankM.CloseAll;
+  DataMod.DataBankM.open;  }
+  end;
+
+
+if   edit5.Text='editing'  then
+ButtonFinish.Visible:=false
+else
+ begin
+
+   ButtonFinish.Visible:=true;
+
+end;
+end;
+
+procedure TPaymentDetalsForm.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+   after_add:=false;
+   mess_edit:=false;
+   MT:=true;
+   Button4.Visible:=true;
+   ButtonFinish.Caption:='SON';
+end;
+
+procedure TPaymentDetalsForm.Button3Click(Sender: TObject);
+begin
+edit3.Text:='' ;
+edit5.Text:=''   ;
+ButtonFinish.Visible:=true;;
+ DataMod.DataBankM.Filtered:=false;
+   DataMod.DataBankM.Refresh;
+ close;
+end;
+
+procedure TPaymentDetalsForm.SpeedButton2Click(Sender: TObject);
+begin
+    {NEW REF NUMBER for messages}
+    Button1.Enabled:=true;
+    PaymentDetalsForm.Edit_Referens.Text:=DataMod.INS.CallStringFunction('GetNewBeneficiaryReference',[]);
+end;
+
+procedure TPaymentDetalsForm.Edit_BankName_SelfChange(Sender: TObject);
+begin  if mess_edit then
+  begin
+    ButtonFinish.Enabled:=true;
+    Button2.Enabled:=true;
+  end;
+  {Change TabOrder}
+  if Length((sender as TEdit).text)=35 then
+  begin
+    if PaymentDetalsForm.Visible then
+    FindNextControl((sender as tedit),true, false, false).SetFocus;
+  end
+
+
+end;
+procedure TPaymentDetalsForm.GroupBox6Enter(Sender: TObject);
+begin
+   if Edit_tey1.Visible then
+      Edit_inf1.SetFocus;
+end;
+
+procedure TPaymentDetalsForm.MT205Click(Sender: TObject);
+begin
+TransForm.edit8.Text:='CREDIT';
+groupbox2.Visible:=false;
+groupbox1.Visible:=false;
+GroupBox5.Visible:=false;
+GroupBox6.Visible:=false;
+button4.Visible:=false;
+GroupBox4.Visible:=true;
+p16.Visible:=false;
+
+p15.Caption:=' Məbləğ:';
+      edit2.visible:=False;
+
+end;
+
+procedure TPaymentDetalsForm.rb992Click(Sender: TObject);
+begin
+TransForm.edit8.Text:='NAUT';
+groupbox2.Visible:=false;
+groupbox1.Visible:=false;
+GroupBox5.Visible:=false;
+GroupBox6.Visible:=false;
+GroupBox4.Visible:=false;
+button4.Visible:=false;
+button1.Visible:=false;
+button5.Visible:=false;
+if rb992.Checked then begin
+p15.Caption:='Əlaqəli Referens';
+edit2.visible:=true;
+
+end;
+p16.Visible:=false;
+
+
+
+
+end;
+
+procedure TPaymentDetalsForm.rb995Click(Sender: TObject);
+begin
+//TransForm.edit8.Text:='NAUT';
+groupbox2.Visible:=true;
+groupbox1.Visible:=false;
+GroupBox5.Visible:=false;
+GroupBox6.Visible:=false;
+GroupBox4.Visible:=false;
+button4.Visible:=false;
+button1.Visible:=false;
+button5.Visible:=false;
+if rb995.Checked then begin
+p15.Caption:='TEXTMESSAGE';
+edit2.visible:=true;
+
+end;
+
+
+
+if TransForm.edit8.Text='PASS' then
+begin
+   GroupBox8.Visible:=true;
+end
+else
+begin
+  GroupBox8.Visible:=false;
+end;
+
+p16.Visible:=false;
+
+end;
+
+procedure TPaymentDetalsForm.SearchBankMChange(Sender: TObject);
+var
+i,j,k :integer;
+begin
+   if (SearchBankM.Color <>clred) and(SearchBankM.Text<>'') then
+   begin
+      Combo_BankName.ItemIndex:= Bank_ID.Items.IndexOf(DataMod.DataBankM.fieldbyname('id').asstring);
+      Combo_BankName.OnChange(self);
+      edit4.visible:=false;
+       DataMod.xs_referans.ClearVariables;
+      DataMod.xs_referans.close;
+      DataMod.xs_referans.SetVariable('Q',strtoint(SearchBankM.Text));
+      DataMod.xs_referans.open;
+   end;
+end;
+
+procedure TPaymentDetalsForm.SearchBankMExit(Sender: TObject);
+begin
+{  insert_shablon[3]:=SearchBankM.Text;}
+  SearchBankM.Clear;
+end;
+
+procedure TPaymentDetalsForm.SearchBankMKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+
+IF  Key=#13 THEN BEGIN
+if (SearchBankM.Text='210005') and (RB_102.Checked=true) then
+   begin
+           showmessage('MT102 Formati ile Bu emeliyyati yigmaq olmaz!!!! ' );
+
+
+   end else begin
+
+  if (SearchBankM.Color <>clred) and(SearchBankM.Text<>'') then
+   begin
+      Combo_BankName.ItemIndex:= Bank_ID.Items.IndexOf(DataMod.DataBankM.fieldbyname('id').asstring);
+      Combo_BankName.OnChange(self);
+
+   end;
+
+   end;
+END;
+
+end;
+
+procedure TPaymentDetalsForm.Edit_ReferensChange(Sender: TObject);
+begin
+  if mess_edit then
+  begin
+    ButtonFinish.Enabled:=true;
+    Button2.Enabled:=true;
+  end;
+end;
+
+procedure TPaymentDetalsForm.Edit_ReferensKeyPress(Sender: TObject;
+  var Key: CHAR);
+begin
+  Case Key of
+  'A'..'H':key:=Key;
+   'J'..'Z':key:=Key;
+   'a'..'h':key:=Key;
+   'j'..'z':key:=Key;
+   'Ə':key:=Key;
+   'Ü':key:=Key;
+   'Ö':key:=Key;
+   'Ğ':key:=Key;
+   'Ş':key:=Key;
+   'Ç':key:=Key;
+   'İ':key:=Key;
+   'I':key:=Key;
+   'ə':key:=Key;
+   'ü':key:=Key;
+   'ö':key:=Key;
+   'ğ':key:=Key;
+   'ş':key:=Key;
+   'ç':key:=Key;
+   'i':key:=Key;
+   'ı':key:='i';
+   '0'..'9':key:=Key;
+   '/','-',':','(',')','.',',','''','+','{','}',' ':key:=Key;
+   //'/':key:=Key;
+   #8 :key:=Key;
+   else key:=#0;
+  End;
+
+
+  Key:=AnsiUpperCase(Key)[1];
+
+
+
+
+
+
+
+end;
+
+procedure TPaymentDetalsForm.Button1Click(Sender: TObject);
+
+begin
+  Button1.Enabled:=false;
+  insert_shablon[1]:=StringReplace(trim(Edit_amount.Text),',','',[rfReplaceAll,rfIgnoreCase]);
+  {insert_shablon[1]:=copy(insert_shablon[1],1,length(insert_shablon[1])-2);}
+  insert_shablon[2]:=Edit_TransCode.Text;
+  insert_shablon[3]:=Combo_BankName.Text;
+  insert_shablon[4]:=Edit_Client_acc_no.Text;
+  insert_shablon[5]:=Edit_Client_Name.Text;
+  insert_shablon[6]:=Edit_Client_Code.Text;
+  insert_shablon[7]:=Edit_Client_Voen.Text;
+  insert_shablon[8]:=Edit_tey1.Text;
+  insert_shablon[9]:=Edit_tey2.Text;
+  insert_shablon[10]:=Edit_tey3.Text;
+  insert_shablon[11]:=Edit_tey4.Text;
+  insert_shablon[12]:=Edit_inf1.Text;
+  insert_shablon[13]:=Edit_inf2.Text;
+  insert_shablon[14]:=Edit_inf3.Text;
+  insert_shablon[15]:=Edit_Referens.Text;
+  insert_shablon[16]:=Edit_BankCode.Text;
+  insert_shablon[17]:=trim(Transaction_Unit.TransForm.Edit_clientName.Text);
+  DataMod.INS.Callprocedure('xs_Beneficiary_shablon_insert',[         insert_shablon[1],
+                                                                      insert_shablon[2],
+                                                                      insert_shablon[3],
+                                                                      insert_shablon[4],
+                                                                      insert_shablon[5],
+                                                                      insert_shablon[6],
+                                                                      insert_shablon[7],
+                                                                      insert_shablon[8],
+                                                                      insert_shablon[9],
+                                                                      insert_shablon[10],
+                                                                      insert_shablon[11],
+                                                                      insert_shablon[12],
+                                                                      insert_shablon[13],
+                                                                      insert_shablon[14],
+                                                                      insert_shablon[15],
+                                                                      insert_shablon[16],
+                                                                      insert_shablon[17]
+                                                             ]);
+   MessageDlg('Melumat yadda saxlanildi!',mtInformation,[mbok],0);
+end;
+
+procedure TPaymentDetalsForm.Button5Click(Sender: TObject);
+begin
+ if not Assigned(Form_get_to_shablon) then Form_get_to_shablon:=TForm_get_to_shablon.Create(self);
+  DataMod.ODS_shablon.close;
+  DataMod.ODS_shablon.open;
+  Form_get_to_shablon.ShowModal;
+end;
+
+procedure TPaymentDetalsForm.Button6Click(Sender: TObject);
+var n :String;
+begin
+
+if DataMod.DataBankM.Locate('bankcode' ,SearchBankM.Text,[]) then
+
+n:= DataMod.DataBankM.FieldByName('id').AsVariant;
+ Combo_BankName.ItemIndex:= Bank_ID.Items.IndexOf(n);
+      Combo_BankName.OnChange(self);
+
+end;
+
+procedure TPaymentDetalsForm.Combo_BankNameKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  key:=#0;
+end;
+
+procedure TPaymentDetalsForm.DBComboBox_InstitutionCloseUp(Sender: TObject);
+begin
+Edit_Client_acc_no.Text:=DBComboBox_Institution.KeyValue;
+end;
+
+procedure TPaymentDetalsForm.Edit_amountEnter(Sender: TObject);
+begin
+   if Edit_amount.Text='0' then
+      Edit_amount.Clear;
+end;
+
+procedure TPaymentDetalsForm.Edit_amountExit(Sender: TObject);
+begin
+   if Edit_amount.Text='' then
+      Edit_amount.Text:='0'
+end;
+
+procedure TPaymentDetalsForm.RB_102TClick(Sender: TObject);
+begin
+   if RB_102T.Checked then
+   begin
+   TransForm.edit8.Text:='TREZ';
+   if DataMod.DataBankInfo.FieldByName('SWIFT').AsString='ACJTAZ22' then
+      begin
+
+      //ff
+      end else begin
+
+      p15.Caption:=' Məbləğ:';
+      edit2.visible:=False;
+
+      Button1.Visible:=False;
+      Button5.Visible:=False;
+
+      groupbox2.Visible:=True;
+      groupbox1.Visible:=true;
+      GroupBox5.Visible:=True;
+      GroupBox6.Visible:=true;
+      GroupBox4.Visible:=true;
+       p16.Visible:=False;
+
+
+      DBComboBox_Institution.Visible:=true;
+      DBComboBox_BudgetLevel.Visible:=true;
+      DBComboBox_Destination.Visible:=true;
+      DataMod.ODS_Institution.Open;
+      DataMod.ODS_BudgetLevel.Open;
+      DataMod.ODS_Destination.Open;
+
+      DBComboBox_Institution.KeyValue:=null;
+      DBComboBox_BudgetLevel.KeyValue:=null;
+      DBComboBox_Destination.KeyValue:=null;
+
+      Edit_tey1.Clear;
+      Edit_tey2.Clear;
+      Edit_tey3.Clear;
+      Edit_tey4.Clear;
+
+      Edit_Client_Name.Clear;
+      Edit_Client_Code.Clear;
+      Edit_Client_Voen.Clear;
+      Edit_Client_acc_no.Clear;
+
+
+      Edit_Client_Name.Enabled:=false;
+      Edit_Client_Code.Enabled:=false;
+      Edit_Client_Voen.Enabled:=False;
+      Edit_Client_acc_no.Enabled:=false;
+
+{      DBComboBox_InstitutionClick(self);
+      DBComboBox_BudgetLevelClick(Self);
+      DBComboBox_DestinationClick(Self);}
+
+      Datamod.DataBankM.Filter:='BANKCODE=210005';
+      DataMod.DataBankM.Filtered:=true;
+      SearchBankM.Text:='210005';
+      SearchBankMChange(Self);
+      Combo_BankNameChange(Self);
+
+
+
+      SearchBankM.Enabled:=false;
+      Combo_BankName.Enabled:=false;
+       if ((DataMod.XS_BATCHS.FieldByName('status').AsInteger>0)
+           and (DataMod.XS_BENEFICIARY.FieldByName('status').AsInteger>0))
+           then begin
+                  DBComboBox_Institution.Visible:=true;
+                  DBComboBox_BudgetLevel.Visible:=true;
+                  DBComboBox_Destination.Visible:=true;
+                end;  
+   end;
+   end;
+end;
+
+procedure TPaymentDetalsForm.RB_104Click(Sender: TObject);
+begin
+Button1.Visible:=True;
+      Button5.Visible:=True;
+
+      p15.Caption:=' Məbləğ:';
+      edit2.visible:=False;
+
+      p15.Caption:=' Məbləğ:';
+      edit2.visible:=False;
+
+      groupbox2.Visible:=True;
+      groupbox1.Visible:=true;
+      GroupBox5.Visible:=True;
+      GroupBox6.Visible:=true;
+      GroupBox4.Visible:=true;
+       p16.Visible:=False;
+
+      DBComboBox_Institution.Visible:=false;
+      DBComboBox_BudgetLevel.Visible:=false;
+      DBComboBox_Destination.Visible:=false;
+      DataMod.ODS_Institution.Close;
+      DataMod.ODS_BudgetLevel.Close;
+      DataMod.ODS_Destination.Close;
+
+      Edit_Client_Name.Enabled:=true;
+      Edit_Client_Code.Enabled:=true;
+      Edit_Client_Voen.Enabled:=true;
+      Edit_Client_acc_no.Enabled:=true;
+
+      Edit_tey1.Clear;
+      Edit_tey2.Clear;
+      Edit_tey3.Clear;
+      Edit_tey4.Clear;
+
+      Edit_Client_Name.Clear;
+      Edit_Client_Code.Clear;
+      Edit_Client_Voen.Clear;
+      Edit_Client_acc_no.Clear;
+      Edit_Client_Code.Text:='/';
+
+      Combo_BankName.ItemIndex:=-1;
+      SearchBankM.Clear;
+      Edit_BankCode.Clear;
+      Edit_account.Clear;
+      Edit_Voen.Clear;
+      Edit_Account_Sub.Clear;
+      Edit_Bik.Clear;
+
+
+      DataMod.DataBankM.Filtered:=false;
+      Datamod.DataBankM.Filter:='';
+      DataMod.DataBankM.Refresh;
+
+
+      SearchBankM.Enabled:=true;
+      Combo_BankName.Enabled:=true;
+end;
+
+procedure TPaymentDetalsForm.Rb_104MClick(Sender: TObject);
+ var
+ i,j :integer;
+begin
+
+      Button1.Visible:=True;
+      Button5.Visible:=True;
+
+      groupbox2.Visible:=True;
+      groupbox1.Visible:=true;
+      GroupBox5.Visible:=True;
+      GroupBox6.Visible:=true;
+      GroupBox4.Visible:=true;
+      p16.Visible:=true;
+      p16.Caption:='Əlaqəli Referens';
+
+      p15.Caption:=' Məbləğ:';
+      edit2.visible:=False;
+
+      DBComboBox_Institution.Visible:=false;
+      DBComboBox_BudgetLevel.Visible:=false;
+      DBComboBox_Destination.Visible:=false;
+      DataMod.ODS_Institution.Close;
+      DataMod.ODS_BudgetLevel.Close;
+      DataMod.ODS_Destination.Close;
+
+      Edit_Client_Name.Enabled:=true;
+      Edit_Client_Code.Enabled:=true;
+      Edit_Client_Voen.Enabled:=true;
+      Edit_Client_acc_no.Enabled:=true;
+
+      Edit_tey1.Clear;
+      Edit_tey2.Clear;
+      Edit_tey3.Clear;
+      Edit_tey4.Clear;
+
+      Edit_Client_Name.Clear;
+      Edit_Client_Code.Clear;
+      Edit_Client_Voen.Clear;
+      Edit_Client_acc_no.Clear;
+      Edit_Client_Code.Text:='/';
+
+      Combo_BankName.ItemIndex:=-1;
+      SearchBankM.Clear;
+      Edit_BankCode.Clear;
+      Edit_account.Clear;
+      Edit_Voen.Clear;
+      Edit_Account_Sub.Clear;
+      Edit_Bik.Clear;
+
+
+      DataMod.DataBankM.Filtered:=false;
+      Datamod.DataBankM.Filter:='';
+      DataMod.DataBankM.Refresh;
+
+
+      SearchBankM.Enabled:=true;
+      Combo_BankName.Enabled:=true;
+      ComboBox1.Visible:=true;
+
+end;
+
+procedure TPaymentDetalsForm.Rb996Click(Sender: TObject);
+begin
+Button1.Visible:=True;
+      Button5.Visible:=True;
+
+      p15.Caption:=' Məbləğ:';
+      edit2.visible:=False;
+
+      p15.Caption:=' Məbləğ:';
+      edit2.visible:=False;
+
+      groupbox2.Visible:=True;
+      groupbox1.Visible:=true;
+      GroupBox5.Visible:=True;
+      GroupBox6.Visible:=true;
+      GroupBox4.Visible:=true;
+       p16.Visible:=False;
+
+      DBComboBox_Institution.Visible:=false;
+      DBComboBox_BudgetLevel.Visible:=false;
+      DBComboBox_Destination.Visible:=false;
+      DataMod.ODS_Institution.Close;
+      DataMod.ODS_BudgetLevel.Close;
+      DataMod.ODS_Destination.Close;
+
+      Edit_Client_Name.Enabled:=true;
+      Edit_Client_Code.Enabled:=true;
+      Edit_Client_Voen.Enabled:=true;
+      Edit_Client_acc_no.Enabled:=true;
+
+      Edit_tey1.Clear;
+      Edit_tey2.Clear;
+      Edit_tey3.Clear;
+      Edit_tey4.Clear;
+
+      Edit_Client_Name.Clear;
+      Edit_Client_Code.Clear;
+      Edit_Client_Voen.Clear;
+      Edit_Client_acc_no.Clear;
+      Edit_Client_Code.Text:='/';
+
+      Combo_BankName.ItemIndex:=-1;
+      SearchBankM.Clear;
+      Edit_BankCode.Clear;
+      Edit_account.Clear;
+      Edit_Voen.Clear;
+      Edit_Account_Sub.Clear;
+      Edit_Bik.Clear;
+
+
+      DataMod.DataBankM.Filtered:=false;
+      Datamod.DataBankM.Filter:='';
+      DataMod.DataBankM.Refresh;
+
+
+      SearchBankM.Enabled:=true;
+      Combo_BankName.Enabled:=true;
+end;
+
+procedure TPaymentDetalsForm.RB_102Click(Sender: TObject);
+begin
+   if RB_102.Checked then
+   begin
+  TransForm.edit8.Text:='CREDIT';
+      Button1.Visible:=True;
+      Button5.Visible:=True;
+
+      groupbox2.Visible:=True;
+      groupbox1.Visible:=true;
+      GroupBox5.Visible:=True;
+      GroupBox6.Visible:=true;
+      GroupBox4.Visible:=true;
+      p16.Visible:=False;
+
+      DBComboBox_Institution.Visible:=false;
+      DBComboBox_BudgetLevel.Visible:=false;
+      DBComboBox_Destination.Visible:=false;
+      DataMod.ODS_Institution.Close;
+      DataMod.ODS_BudgetLevel.Close;
+      DataMod.ODS_Destination.Close;
+
+      Edit_Client_Name.Enabled:=true;
+      Edit_Client_Code.Enabled:=true;
+      Edit_Client_Voen.Enabled:=true;
+      Edit_Client_acc_no.Enabled:=true;
+
+      Edit_tey1.Clear;
+      Edit_tey2.Clear;
+      Edit_tey3.Clear;
+      Edit_tey4.Clear;
+
+      Edit_Client_Name.Clear;
+      Edit_Client_Code.Clear;
+      Edit_Client_Voen.Clear;
+      Edit_Client_acc_no.Clear;
+      Edit_Client_Code.Text:='/';
+
+      Combo_BankName.ItemIndex:=-1;
+      SearchBankM.Clear;
+      Edit_BankCode.Clear;
+      Edit_account.Clear;
+      Edit_Voen.Clear;
+      Edit_Account_Sub.Clear;
+      Edit_Bik.Clear;
+
+
+      DataMod.DataBankM.Filtered:=false;
+      Datamod.DataBankM.Filter:='';
+      DataMod.DataBankM.Refresh;
+
+      p15.Caption:=' Məbləğ:';
+      edit2.visible:=False;
+
+
+
+      SearchBankM.Enabled:=true;
+      Combo_BankName.Enabled:=true;
+   end;
+end;
+
+end.

@@ -1,0 +1,110 @@
+unit BookmarkAddEditunt;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, Mask, DBCtrls, NLSLocalizer, ActnList, DBCtrlsEh, DBLookupEh;
+
+
+  type
+  TBookmarkAddEditForm = class(TForm)
+    ActionList1: TActionList;
+    DBEdit3: TDBEdit;
+    Button1: TButton;
+    Button2: TButton;
+    ActnAccept: TAction;
+    ActnReject: TAction;
+    Label1: TLabel;
+    Label4: TLabel;
+    DBLookupComboboxEh1: TDBLookupComboboxEh;
+    procedure ActnAcceptExecute(Sender: TObject);
+    procedure ActnRejectExecute(Sender: TObject);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    private
+    { Private declarations }
+   public
+    { Public declarations }
+   end;
+   var
+   BookmarkAddEditForm: TBookmarkAddEditForm;
+
+   implementation
+
+   uses WRSetupDataModImpl,WRBookmarksTuning;
+   {$R *.DFM}
+
+   procedure TBookmarkAddEditForm.ActnAcceptExecute(Sender: TObject);
+
+   resourcestring
+     BookmarkNameEmptyMsg='Ѕукмаркын ады  даxил eдилм€йиб';
+     descriptionNameEmptyMsg='“€йинаты  даxил eдилм€йиб';
+   begin
+
+     if  (DBLookupComboboxEh1.Text<>'') and (DBEdit3.Text<>'') then
+     begin
+       with WRSetupDataMod.WRBookmarksDataSet do
+            Post;
+            ModalResult := mrOk;
+     end else
+     begin
+       if DBLookupComboboxEh1.Text='' then Showmessage('“€йинаты  даxил eдилм€йиб');
+       if DBEdit3.Text='' then Showmessage('Ѕукмаркын ады  даxил eдилм€йиб');
+       with WRSetupDataMod.WRBookmarksDataSet do
+            Cancel;
+    end;
+
+   end;
+
+   procedure TBookmarkAddEditForm.ActnRejectExecute(Sender: TObject);
+   begin
+
+     with WRSetupDataMod.WRBookmarksDataSet do
+        Cancel;
+    ModalResult := mrCancel;
+
+   end;
+
+   procedure TBookmarkAddEditForm.FormKeyPress(Sender: TObject; var Key: Char);
+   begin
+
+     if ORD(Key) = VK_ESCAPE then
+     ActnRejectExecute(nil);
+
+   end;
+
+   procedure TBookmarkAddEditForm.FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+   begin
+     Resize:=false;
+   end;
+
+   procedure TBookmarkAddEditForm.FormCreate(Sender: TObject);
+   begin
+
+     with  WRSetupDataMod do
+     begin
+       WRBookmarksDataSet.Open;
+       WRFieldsDataSet.Open;
+     end;
+
+   end;
+
+   procedure TBookmarkAddEditForm.FormDestroy(Sender: TObject);
+   begin
+     with  WRSetupDataMod do
+       begin
+         WRBookmarksDataSet.CloseAll;
+         WRFieldsDataSet.CloseAll;
+       end;
+   end;
+
+
+
+
+
+end.

@@ -1,0 +1,146 @@
+unit SmSBankImpl;
+
+interface
+
+uses Oracle, OracleData, ActiveX;
+
+function sendSMS(const username: string; const userhash: string; const message_: string; const numberlist: string; const date: string): string;
+procedure sendSMSByTemplate(const templateID: integer; const numberlist: string;
+                              const param1: string; const param2: string; const param3: string; const param4: string; const param5: string;
+                               const param6: string; const param7: string; const param8: string; const param9: string; const param10: string
+                            );
+
+implementation
+
+uses SMSMailBanking1, sysutils, Windows, SMS1, SboapiDataModuleImpl, Classes;
+
+type
+  TransRec = record
+    templateid: integer;
+    numberlist: string;
+
+    param1: string;
+    param2: string;
+    param3: string;
+    param4: string;
+    param5: string;
+    param6: string;
+    param7: string;
+    param8: string;
+    param9: string;
+    param10: string;
+  end;
+
+var
+  GlobalPack : TOraclePackage;
+  globalData : TransRec;
+
+function sendSMS(const username: string; const userhash: string; const message_: string; const numberlist: string; const date: string): string;
+var
+  s: SMS;
+  str: string;
+  value: string;
+begin
+  s := GetSMS;
+  str :=  s.sendSMS(username,userhash,message_,numberlist,date);
+  result := str;
+end;
+
+function sendSMSFunc(trans: Pointer): Integer;
+//function sendSMSFunc: Integer;
+var
+  username, genMD5, message_, dateTime, error: string;
+  str: string;
+  s: SMSMailBanking;
+  OutPutList: TStringList;
+  status : String;
+begin
+  //"smsbanking" package
+  //template_id IN NUMBER, phonenum_list IN varchar2, usrname OUT varchar2, genMD5 OUT varchar2, message OUT varchar2, dateTime OUT varchar2,
+  // param1 .. param10
+
+  GlobalPack.CallProcedure('generateTemplate',
+                            [globalData.templateid, globalData.numberlist, //IN
+                             username, genMD5, message_, dateTime, error,//OUT
+                             globalData.param1, globalData.param2, globalData.param3, globalData.param4, globalData.param5, //PARAMS
+                             globalData.param6, globalData.param7, globalData.param8, globalData.param9, globalData.param10 //PARAMS
+                            ]
+                          );
+
+  username := GlobalPack.GetParameter(2);
+  genMD5 := GlobalPack.GetParameter(3);
+  message_ := GlobalPack.GetParameter(4);
+  dateTime := GlobalPack.GetParameter(5);
+  error := GlobalPack.GetParameter(6);
+
+  if(error <> '') then //is not nil
+  begin
+{
+   PROCEDURE writeSMSLog( send_date varchar2,
+                          temp_id number,
+                          message varchar2,
+                          phonenum_list varchar2,
+                          status varchar2,
+                          sms_code varchar2
+                        )
+}
+    GlobalPack.CallProcedure('writeSMSLog',
+                              [ dateTime, globalData.templateid, message_, globalData.numberlist, error, nil ]
+                            );
+    result := -1;
+    EndThread(0);
+  end;
+
+  CoInitialize(nil);
+  try
+    str := sendSMS(username, genMD5, message_, globalData.numberlist, dateTime);
+    //str := sendSMS('xbank', 'qwert1234', 'poiuytr', '9946863723', '2012-02-28T15:00:00'); \
+
+    OutPutList := TStringList.Create;
+    OutPutList.Delimiter := ':';
+    OutPutList.DelimitedText := str;
+    if(OutPutList[0] = '000') then status := OutPutList[1];
+    //Split(':', 'word:doc,txt,docx', OutPutList);
+    GlobalPack.CallProcedure('writeSMSLog',
+                              [ dateTime, globalData.templateid, message_, globalData.numberlist, str, status ]
+                            );
+  finally
+    CoUninitialize;
+  end;
+
+  result := 0;
+  EndThread(0);
+end;
+
+procedure sendSMSByTemplate(const templateID: integer; const numberlist: string;
+                              const param1: string; const param2: string; const param3: string; const param4: string; const param5: string;
+                               const param6: string; const param7: string; const param8: string; const param9: string; const param10: string
+                            );
+var
+  ThreadDone: Boolean;
+  ThreadId: LongWord;
+  ThreadHandle: Integer;
+begin
+  GlobalPack := TOraclePackage.Create(nil);
+  GlobalPack.Session := sboapiDataModule.SBSession;
+  GlobalPack.PackageName := 'SMSBanking';
+  GlobalPack.ParameterMode := pmPositional;
+
+  globalData.templateid := templateid;
+  globalData.numberlist := numberlist;
+
+  globalData.param1 := param1;
+  globalData.param2 := param2;
+  globalData.param3 := param3;
+  globalData.param4 := param4;
+  globalData.param5 := param5;
+  globalData.param6 := param6;
+  globalData.param7 := param7;
+  globalData.param8 := param8;
+  globalData.param9 := param9;
+  globalData.param10 := param10;
+  ThreadHandle := BeginThread(nil, 0, @sendSMSFunc, @globalData, 0, ThreadId);
+  CloseHandle(ThreadHandle);
+end;
+
+end.

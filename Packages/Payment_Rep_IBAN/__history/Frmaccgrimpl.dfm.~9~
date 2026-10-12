@@ -1,0 +1,124 @@
+object PaymentACC: TPaymentACC
+  Left = 331
+  Top = 92
+  AutoSize = True
+  BorderIcons = [biSystemMenu]
+  ClientHeight = 290
+  ClientWidth = 275
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  PixelsPerInch = 96
+  TextHeight = 13
+  object GroupBox2: TGroupBox
+    Left = 0
+    Top = 0
+    Width = 275
+    Height = 290
+    Align = alClient
+    TabOrder = 0
+    object Panel1: TPanel
+      Left = 2
+      Top = 258
+      Width = 271
+      Height = 30
+      Align = alBottom
+      TabOrder = 0
+      object SpeedButton1: TSpeedButton
+        Left = 226
+        Top = 2
+        Width = 43
+        Height = 30
+        Cursor = crHandPoint
+        Caption = #1041#1072#1100#1083#1072
+        Flat = True
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+        OnClick = SpeedButton1Click
+      end
+      object DBNavigator1: TDBNavigator
+        Left = 2
+        Top = 3
+        Width = 222
+        Height = 27
+        Cursor = crHandPoint
+        DataSource = DataSrcAccNo
+        VisibleButtons = [nbPrior, nbNext, nbInsert, nbDelete, nbPost, nbRefresh]
+        Flat = True
+        TabOrder = 0
+      end
+    end
+    object DBGridEh1: TDBGridEh
+      Left = 2
+      Top = 15
+      Width = 271
+      Height = 243
+      Align = alClient
+      DataSource = DataSrcAccNo
+      Flat = True
+      FooterColor = clWindow
+      FooterFont.Charset = DEFAULT_CHARSET
+      FooterFont.Color = clWindowText
+      FooterFont.Height = -11
+      FooterFont.Name = 'Tahoma'
+      FooterFont.Style = []
+      TabOrder = 1
+      TitleFont.Charset = DEFAULT_CHARSET
+      TitleFont.Color = clWindowText
+      TitleFont.Height = -11
+      TitleFont.Name = 'Tahoma'
+      TitleFont.Style = []
+      Columns = <
+        item
+          EditButtons = <>
+          FieldName = 'ACC'
+          Footers = <>
+          Title.Caption = 'Balans hesab'#305' '#8470
+          Title.Color = clNavy
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 194
+        end>
+    end
+  end
+  object NLSLocalizer1: TNLSLocalizer
+    Caption = #1065#1077#1089#1072#1073' '#1075#1091#1088#1091#1087#1083#1072#1088#1099#1085#1099#1085' '#1089#1072#1079#1083#1072#1085#1084#1072#1089#1099
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    Left = 50
+    Top = 317
+  end
+  object DataSetAccNo: TOracleDataSet
+    SQL.Strings = (
+      'select a.rowid, a.* from payment_re_accs a')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {050000000100000006000000410043004300010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 144
+    Top = 78
+    object DataSetAccNoACC: TFloatField
+      FieldName = 'ACC'
+    end
+  end
+  object DataSrcAccNo: TDataSource
+    DataSet = DataSetAccNo
+    Left = 104
+    Top = 78
+  end
+end

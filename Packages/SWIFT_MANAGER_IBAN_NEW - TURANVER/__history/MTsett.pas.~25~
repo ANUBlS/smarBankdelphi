@@ -1,0 +1,411 @@
+﻿unit MTsett;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Menus, Grids, DBGrids, StdCtrls, DBCtrls, ExtCtrls, ComCtrls, Unit2,
+  SearchCombo, SearchEdit;
+
+type
+  TAzpSettings = class(TForm)
+    PageControl1: TPageControl;
+    TabSheet1: TTabSheet;
+    TabSheet2: TTabSheet;
+    Panel2: TPanel;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    DBLookupComboBox1: TDBLookupComboBox;
+    DBLookupComboBox2: TDBLookupComboBox;
+    DBLookupComboBox3: TDBLookupComboBox;
+    DBLookupComboBox4: TDBLookupComboBox;
+    BTnsave: TButton;
+    DBGrid1: TDBGrid;
+    BTNadd: TButton;
+    PopupMenu1: TPopupMenu;
+    S1: TMenuItem;
+    Button1: TButton;
+    DBGrid2: TDBGrid;
+    Panel1: TPanel;
+    Btsave: TButton;
+    Btadd: TButton;
+    Btclose: TButton;
+    Edit1: TEdit;
+    Label5: TLabel;
+    Label6: TLabel;
+    DBLookupComboBox5: TDBLookupComboBox;
+    DBLookupComboBox6: TDBLookupComboBox;
+    Label7: TLabel;
+    Label8: TLabel;
+    ComboBox3: TComboBox;
+    Label9: TLabel;
+    Label10: TLabel;
+    Label11: TLabel;
+    DBLookupComboBox7: TDBLookupComboBox;
+    DBLookupComboBox8: TDBLookupComboBox;
+    Edit2: TEdit;
+    PopupMenu2: TPopupMenu;
+    S2: TMenuItem;
+    Label12: TLabel;
+    Label13: TLabel;
+    Edit3: TEdit;
+    DBLookupComboBox9: TDBLookupComboBox;
+    TabSheet3: TTabSheet;
+    DBGrid3: TDBGrid;
+    Panel3: TPanel;
+    procedure FormShow(Sender: TObject);
+    procedure BTNaddClick(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure BTnsaveClick(Sender: TObject);
+    procedure S1Click(Sender: TObject);
+    procedure BtaddClick(Sender: TObject);
+    procedure BtcloseClick(Sender: TObject);
+    procedure BtsaveClick(Sender: TObject);
+    procedure Edit1KeyPress(Sender: TObject; var Key: Char);
+    procedure Edit2KeyPress(Sender: TObject; var Key: Char);
+    procedure S2Click(Sender: TObject);
+    procedure DBLookupComboBox6CloseUp(Sender: TObject);
+    procedure ComboBox1Enter(Sender: TObject);
+    procedure ComboBox1CloseUp(Sender: TObject);
+    procedure Edit3KeyPress(Sender: TObject; var Key: Char);
+    procedure DBLookupComboBox9CloseUp(Sender: TObject);
+    procedure DBLookupComboBox4CloseUp(Sender: TObject);
+    procedure DBLookupComboBox3CloseUp(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  AzpSettings: TAzpSettings;
+
+implementation
+
+{$R *.dfm}
+
+procedure TAzpSettings.BtaddClick(Sender: TObject);
+begin
+panel1.Visible:=true;
+DBGrid2.Height:=193;
+btadd.Visible:=false;
+
+end;
+
+procedure TAzpSettings.BtcloseClick(Sender: TObject);
+begin
+DBGrid2.Height:=337;
+btadd.Visible:=true;
+panel1.Visible:=false;
+end;
+
+procedure TAzpSettings.BTNaddClick(Sender: TObject);
+begin
+panel2.Visible:=true;
+
+
+DBGrid1.Height:= 259;
+panel2.height:=148;
+btnadd.Visible:=false;
+button1.Visible:=true;
+end;
+
+procedure TAzpSettings.BTnsaveClick(Sender: TObject);
+begin
+ try
+ begin
+SwDataModule.sw_in_insert.CallProcedure('azpsettings',[DBLookupComboBox1.KeyValue,
+                                                       DBLookupComboBox2.KeyValue,
+                                                       DBLookupComboBox3.KeyValue,
+                                                       DBLookupComboBox4.KeyValue
+                                                        ]);
+DBGrid1.DataSource.DataSet.Refresh;
+DBLookupComboBox1.KeyValue:='';
+DBLookupComboBox2.KeyValue:='';
+DBLookupComboBox3.KeyValue:='';
+DBLookupComboBox4.KeyValue:='';
+showmessage('Hesablar Əlavə edildi.');
+    end;
+
+   except
+on e:Exception do
+    ShowMessage(e.Message);
+
+end;
+
+
+end;
+
+procedure TAzpSettings.BtsaveClick(Sender: TObject);
+begin
+try
+ begin
+SwDataModule.sw_in_insert.CallProcedure('Azp205',[     ComboBox3.ItemIndex ,
+                                                       DBLookupComboBox7.KeyValue,
+                                                       DBLookupComboBox8.KeyValue,
+                                                       DBLookupComboBox6.KeyValue,
+                                                       DBLookupComboBox5.KeyValue,
+                                                       Edit3.Text,
+                                                       DBLookupComboBox9.Text
+                                                        ]);
+DBGrid2.DataSource.DataSet.Refresh;
+DBLookupComboBox1.KeyValue:='';
+DBLookupComboBox2.KeyValue:='';
+DBLookupComboBox3.KeyValue:='';
+DBLookupComboBox4.KeyValue:='';
+DBLookupComboBox5.KeyValue:='';
+DBLookupComboBox6.KeyValue:='';
+DBLookupComboBox7.KeyValue:='';
+DBLookupComboBox8.KeyValue:='';
+DBLookupComboBox9.KeyValue:='';
+combobox3.Text:='';
+Edit1.Text:='';
+Edit2.Text:='';
+Edit3.Text:='';
+DBLookupComboBox9.KeyValue:='';
+showmessage('Hesablar Əlavə edildi.');
+    end;
+
+   except
+on e:Exception do
+    ShowMessage(e.Message);
+
+end;
+
+
+end;
+
+procedure TAzpSettings.Button1Click(Sender: TObject);
+begin
+panel2.Visible:=false;
+DBGrid1.Height:= 342;
+btnadd.Visible:=true;
+button1.Visible:=false;
+
+end;
+
+procedure TAzpSettings.ComboBox1CloseUp(Sender: TObject);
+var j: integer;
+begin
+
+
+end;
+
+procedure TAzpSettings.ComboBox1Enter(Sender: TObject);
+var j:integer;
+begin
+
+
+end;
+
+procedure TAzpSettings.DBLookupComboBox3CloseUp(Sender: TObject);
+begin
+with SWDataModule do  begin
+
+     mbacc.CloseAll;
+     comm_acc.CloseAll;
+
+     if DBLookupComboBox4.Text='AZN' then
+     BEGIN
+     mbacc.SetVariable('bal1',1052) ;
+   //  mbacc.SetVariable('fil',DBLookupComboBox3.KeyValue);
+     comm_acc.SetVariable('BAL2',6404);
+     comm_acc.SetVariable('fil',DBLookupComboBox3.KeyValue);
+     comm_acc.SetVariable('val',DBLookupComboBox4.KeyValue);
+
+     END
+     else
+     BEGIN
+     mbacc.SetVariable('bal1',1062);
+ //    mbacc.SetVariable('fil',DBLookupComboBox3.KeyValue);
+     comm_acc.SetVariable('BAL2',6414);
+     comm_acc.SetVariable('fil',DBLookupComboBox3.KeyValue);
+     comm_acc.SetVariable('val',DBLookupComboBox4.KeyValue);
+     END;
+
+
+       mbacc.OPEN;
+       comm_acc.OPEN;
+
+ end;
+
+end;
+
+procedure TAzpSettings.DBLookupComboBox4CloseUp(Sender: TObject);
+begin
+if DBLookupComboBox3.Text='' then
+begin
+   ShowMessage('Ilk öncə Filial seçilməlidir ');
+   DBLookupComboBox4.KeyValue:=-1;
+   exit;
+end;
+
+with SWDataModule do  begin
+
+     mbacc.CloseAll;
+     comm_acc.CloseAll;
+
+     if DBLookupComboBox4.Text='AZN' then
+     BEGIN
+     mbacc.SetVariable('bal1',1052) ;
+     //mbacc.SetVariable('fil',DBLookupComboBox3.KeyValue);
+     comm_acc.SetVariable('BAL2',6404);
+     comm_acc.SetVariable('fil',DBLookupComboBox3.KeyValue);
+     comm_acc.SetVariable('val',DBLookupComboBox4.KeyValue);
+
+     END
+     else
+     BEGIN
+     mbacc.SetVariable('bal1',1062);
+   //  mbacc.SetVariable('fil',DBLookupComboBox3.KeyValue);
+     comm_acc.SetVariable('BAL2',6414);
+     comm_acc.SetVariable('fil',DBLookupComboBox3.KeyValue);
+     comm_acc.SetVariable('val',DBLookupComboBox4.KeyValue);
+     END;
+
+
+       mbacc.OPEN;
+       comm_acc.OPEN;
+
+ end;
+end;
+
+procedure TAzpSettings.DBLookupComboBox6CloseUp(Sender: TObject);
+var j:integer;
+begin
+
+
+  with SWDataModule do  begin
+
+
+
+
+all_banks.close;
+all_banks.setvariable('valute',DBLookupComboBox6.Text);
+all_banks.open;
+all_banks.First;
+for j := 1 to all_banks.RecordCount do
+begin
+
+ //ombobox1.Items.Add(all_banks.FieldByName('name').AsString);
+  all_banks.Next;
+end;
+
+    end;
+end;
+
+procedure TAzpSettings.DBLookupComboBox9CloseUp(Sender: TObject);
+begin
+{SWDataModule.All_Banks.Filter:='';
+SWDataModule.All_Banks.Filtered:=false;}
+edit3.Text:=SWDataModule.All_Banks.FieldByName('bankcode').AsString;
+end;
+
+procedure TAzpSettings.Edit1KeyPress(Sender: TObject; var Key: Char);
+begin
+if DBLookupComboBox6.Text='' then
+begin
+ShowMessage('Birinci Valyuta Secilməlidir!!');
+edit1.Clear;
+end else
+begin
+IF  Key=#13 THEN
+        BEGIN
+            with SWDataModule do
+              begin
+                Main_acc.Close;
+                Main_acc.SetVariable('valcode',DBLookupComboBox6.KeyValue);
+                Main_acc.SetVariable('bal1',strtoint(edit1.Text));
+                Main_acc.Open;
+              end;
+        END;
+end;
+end;
+
+procedure TAzpSettings.Edit2KeyPress(Sender: TObject; var Key: Char);
+begin
+if DBLookupComboBox6.text='' then
+begin
+ShowMessage('Birinci Valyuta Secilməlidir!!');
+edit2.Clear;
+end else
+begin
+
+
+IF  Key=#13 THEN
+        BEGIN
+            with SWDataModule do
+              begin
+                alter_acc.Close;
+                alter_acc.SetVariable('valcode',DBLookupComboBox6.KeyValue);
+                alter_acc.SetVariable('bal2',strtoint(edit2.Text));
+                alter_acc.Open;
+              end;
+        END;
+end;
+end;
+
+procedure TAzpSettings.Edit3KeyPress(Sender: TObject; var Key: Char);
+begin
+if key=#13 then
+begin
+with SWDataModule.All_Banks do begin
+  Filter := 'bankcode = '+edit3.Text;
+  Filtered:=true;
+end;
+end;
+
+end;
+
+procedure TAzpSettings.FormShow(Sender: TObject);
+var j:integer;
+begin
+with SWDataModule
+ do begin
+ b_proc.CloseAll;
+azpsettings.CloseAll;
+AzpFilial.CloseAll;
+azpval.CloseAll;
+comm_acc.CloseAll;
+mbacc.CloseAll;
+Azpsett.CloseAll;
+All_Banks.CloseAll;
+azpsettings.open;
+AzpFilial.open;
+azpval.open;
+//comm_acc.open;
+//mbacc.open;
+Azpsett.open;
+All_Banks.Open;
+b_proc.open;
+end;
+end;
+
+procedure TAzpSettings.S1Click(Sender: TObject);
+begin
+
+if Dialogs.MessageDlg('Silinsin',
+    mtConfirmation, [mbYes, mbNo], 0, mbYes) = mrYes then
+ begin
+     SWDataModule.sw_in_insert.CallProcedure('azpsettings_del',[DBGrid1.DataSource.DataSet.FieldByName('id').AsInteger]);
+     ShowMessage('Secilmis hesab silindi.');
+ end;
+ DBGrid1.DataSource.DataSet.Refresh;
+
+end;
+
+procedure TAzpSettings.S2Click(Sender: TObject);
+begin
+if Dialogs.MessageDlg('Silinsin',
+    mtConfirmation, [mbYes, mbNo], 0, mbYes) = mrYes then
+ begin
+     SWDataModule.sw_in_insert.CallProcedure('Azp205_del',[DBGrid2.DataSource.DataSet.FieldByName('id').AsInteger]);
+     ShowMessage('Secilmis hesab silindi.');
+ end;
+ DBGrid2.DataSource.DataSet.Refresh;
+
+end;
+
+end.

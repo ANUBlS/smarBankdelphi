@@ -1,0 +1,99 @@
+﻿unit ControlFormImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+   Buttons, CMExcelExport, StdCtrls, Mask, DBCtrlsEh,
+  DBLookupEh, ComCtrls, DBCtrls;
+
+type
+  TFormControl = class(TForm)
+    CMExcelExport: TCMExcelExport;
+    BitBtn1: TBitBtn;
+    BitBtn2: TBitBtn;
+    DateTimePicker1: TDateTimePicker;
+    Label1: TLabel;
+    Label2: TLabel;
+    DBLookupComboBox1: TDBLookupComboBox;
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure BitBtn1Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormControl: TFormControl;
+
+implementation
+
+{$R *.DFM}
+uses commondecls,ControlDatModImpl,sbsystem;
+
+procedure InitPlugin(s:string);export;
+begin
+  FormControl.ShowModal;
+end;
+
+exports
+InitPlugin;
+procedure TFormControl.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+ Resize :=false;
+end;
+
+procedure TFormControl.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+   if ord(key) = VK_ESCAPE then close;
+end;
+
+procedure TFormControl.BitBtn1Click(Sender: TObject);
+var BranchID :integer;
+    ContDate :TDateTime;
+begin
+  BranchID:= DBLookupComboBox1.KeyValue;
+  ContDate:= DateTimePicker1.DateTime;
+  with ControlDatMod,CM_CONTROL,ResultsDatSet do
+  begin
+    Session.Commit;
+    Cursor := crSQLWait;
+    callprocedure('control',[BranchID,ContDate]);
+
+    if Active then CloseAll;
+       Open;
+    with  CMExcelExport do
+    begin
+       Connect;
+       ExportDataset(ResultsDatSet,'Nəticələr',true);
+       Disconnect;
+    end;
+    Cursor := crDefault;
+
+  end;
+end;
+
+
+
+procedure TFormControl.FormCreate(Sender: TObject);
+begin
+  DateTimePicker1.DateTime:=Get_CurrentDate;
+  ControlDatMod := TControlDatMod.Create(self);
+  ControlDatMod.Branchs.Open;
+  DBLookupCombobox1.KeyValue:=ControlDatMod.Branchs.FieldByname('ID').asinteger;
+end;
+
+procedure TFormControl.FormDestroy(Sender: TObject);
+begin
+ ControlDatMod.free;
+end;
+
+initialization
+  FormControl := TFormControl.Create(CommonApplication);
+end.

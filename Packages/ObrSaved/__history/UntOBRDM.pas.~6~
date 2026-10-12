@@ -1,0 +1,57 @@
+unit UntOBRDM;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, OracleData, Oracle;
+
+type
+  TDataModMain = class(TDataModule)
+    ODSLocate: TOracleDataSet;
+    DataSrcLocate: TDataSource;
+    OpackMain: TOraclePackage;
+    ODSSysKod: TOracleDataSet;
+    DataSrcSysKod: TDataSource;
+    ODSSum: TOracleDataSet;
+    DataSrcSum: TDataSource;
+    DataSrcValute: TDataSource;
+    ODSValute: TOracleDataSet;
+    ODSLocateOBR_D: TFloatField;
+    ODSLocateOBR_K: TFloatField;
+    ODSLocatePOK_OBR_D: TFloatField;
+    ODSLocatePOK_OBR_K: TFloatField;
+    ODSLocateS_ACT: TFloatField;
+    ODSLocateS_PAS: TFloatField;
+    ODSLocateP_ACT: TFloatField;
+    ODSLocateP_PAS: TFloatField;
+    ODSLocateLASTDATE: TDateTimeField;
+    ODSLocateBAL_CN: TFloatField;
+    BranchesData: TOracleDataSet;
+    ODSLocateBALNAME: TWideStringField;
+    ODSLocateVAL_NAME: TWideStringField;
+    ODSLocateTIPACC: TWideStringField;
+    ODSLocateACC_NO: TWideStringField;
+    lenghtvalue: TOracleDataSet;
+    ODSLocateACC_NO2: TWideStringField;
+  private
+
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  DataModMain: TDataModMain;
+
+implementation
+
+{$R *.DFM}
+
+uses sboapiDataModuleImpl, ActXObrImplUnt;
+
+const
+      cLastOprDate='GetLastOprDay';
+      cGetUserName='GetUserName';
+
+end.

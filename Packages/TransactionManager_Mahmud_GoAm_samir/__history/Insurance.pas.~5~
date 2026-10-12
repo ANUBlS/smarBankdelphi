@@ -1,0 +1,149 @@
+﻿unit Insurance;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Grids, XDBGrids, ExtCtrls, XFSCtrls, DB, OracleData, StdCtrls,
+  ComCtrls, Oracle;
+  const
+  tsDelayed       = 1;
+  tsRejected      = 3;
+ resourcestring
+   cs_CommitInformation = 'Ümumi əməliyyatlar: %d'+#13+'Getmiş əməliyyatlar: %d'+#13+'Getmemiş əməliyyatlar: %d';
+
+
+type
+  TForminsurance = class(TForm)
+    XFPanel1: TXFPanel;
+    XFPanel2: TXFPanel;
+    XDBGrid1: TXDBGrid;
+    ods_schedule: TOracleDataSet;
+    Dsrc_schedule: TDataSource;
+    TransDate: TDateTimePicker;
+    XFLabel1: TXFLabel;
+    XFButton1: TXFButton;
+    XFButton2: TXFButton;
+    ods_dat: TOracleDataSet;
+    ods_datDAT: TDateTimeField;
+    OracleDataSet1: TOracleDataSet;
+    OracleDataSet1ID: TFloatField;
+    OracleDataSet1ACC_NO: TWideStringField;
+    ods_scheduleCREDITID: TFloatField;
+    ods_scheduleMUQ: TWideStringField;
+    ods_schedulePAYMENTDATE: TDateTimeField;
+    ods_scheduleINSURANCE: TFloatField;
+    ods_scheduleINSURANCE_ACCNO: TWideStringField;
+    OracleDataSet1ACC: TWideStringField;
+    cm_schedule: TOraclePackage;
+    procedure XFButton1Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure XFButton2Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Forminsurance: TForminsurance;
+
+implementation
+  uses sboapiDataModuleImpl, TransactionDataModuleUnit;
+{$R *.dfm}
+
+procedure TForminsurance.FormCreate(Sender: TObject);
+begin
+ods_dat.Open;
+end;
+
+procedure TForminsurance.FormShow(Sender: TObject);
+begin
+TransDate.DateTime:=ods_dat.FieldByName('dat').AsDateTime;
+
+end;
+
+procedure TForminsurance.XFButton1Click(Sender: TObject);
+begin
+with ods_schedule do
+begin
+  close;
+   SetVariable('v_dat',Int(TransDate.DateTime));
+  open;
+
+end;
+with ods_schedule do
+begin
+  edit;
+  post;
+
+end;
+end;
+
+procedure TForminsurance.XFButton2Click(Sender: TObject);
+var
+   i: Integer;
+   ID: Longint;
+   f,WillRefresh: Boolean;
+   Status, CommitedCount, ErrorCount: Word;
+   LastErrorMessage: String;
+    trid:integer;
+begin
+
+ CommitedCount :=0;
+ ErrorCount :=0;
+ WillRefresh :=False;
+ with TransactionDataModule, XDBGrid1, SelectedRows, DataSource.DataSet do
+  if MessageDlg('Əməliyyatlar Aparılsın ?', mtConfirmation, [mbYes, mbCancel], 0) = mrYes then
+  begin
+   DisableControls;
+   try
+    Application.ProcessMessages;
+    if Count = 0 then CurrentRowSelected :=True;
+    for i :=0 to Count -1 do
+    try
+     GotoBookmark(TBookmark(Items[i]));
+     Status :=FieldByname('Status').AsInteger;
+     if Status in [tsDelayed, tsRejected] then
+     begin
+      ID := FieldByName('ID').AsInteger;
+     trid:=cm_schedule.CallProcedure('Tr_Add',[
+                                              ods_scheduleCREDITID.AsInteger,
+                                              ods_scheduleMUQ.AsString
+
+                                              ]);
+
+      //***
+     //SmSBankImpl.sendSMSByTemplate( 101, '994505314301',
+       //                            'N12', '236.20','nnn','','','','','','','');
+      //***
+
+     end;
+     except
+     on E: Exception do
+      begin
+       LastErrorMessage :=E.Message;
+       Inc(ErrorCount);
+       Continue;
+      end;
+    end;
+   finally
+    if ErrorCount > 0 then
+     if ErrorCount = 1 then
+      MessageDlg(LastErrorMessage, mtConfirmation, [mbOk], 0)
+     else
+      MessageDlg(Format(cs_CommitInformation, [CommitedCount + ErrorCount, CommitedCount, ErrorCount]), mtConfirmation, [mbOk], 0);
+
+    EnableControls;
+
+
+
+
+   end;
+  end;
+
+
+end;
+
+end.

@@ -1,0 +1,614 @@
+object frmTransactionViewer: TfrmTransactionViewer
+  Left = 172
+  Top = 188
+  Width = 675
+  Height = 377
+  BorderIcons = [biSystemMenu]
+  Color = clBtnFace
+  Font.Charset = RUSSIAN_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poScreenCenter
+  OnCanResize = FormCanResize
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  OnKeyPress = FormKeyPress
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object GroupBox1: TGroupBox
+    Left = 0
+    Top = 30
+    Width = 667
+    Height = 125
+    Align = alTop
+    TabOrder = 0
+    object HeaderControl1: THeaderControl
+      Left = 2
+      Top = 15
+      Width = 663
+      Height = 17
+      DragReorder = False
+      Sections = <
+        item
+          ImageIndex = -1
+          Text = 'ƒ≈Ѕ≈“'
+          Width = 327
+        end
+        item
+          ImageIndex = -1
+          Text = ' –≈ƒ»“'
+          Width = 360
+        end>
+      Style = hsFlat
+    end
+    object Panel1: TPanel
+      Left = 2
+      Top = 32
+      Width = 326
+      Height = 92
+      BevelInner = bvLowered
+      TabOrder = 0
+      object PanelDebit: TPanel
+        Left = 2
+        Top = 68
+        Width = 322
+        Height = 22
+        Align = alTop
+        BevelOuter = bvLowered
+        TabOrder = 2
+        object PanelDebitRest: TPanel
+          Left = 1
+          Top = 1
+          Width = 320
+          Height = 20
+          Align = alClient
+          BevelOuter = bvNone
+          TabOrder = 0
+          object Label1: TLabel
+            Left = 4
+            Top = 3
+            Width = 27
+            Height = 13
+            Caption = '√алыг:'
+          end
+          object Label2: TLabel
+            Left = 146
+            Top = 3
+            Width = 53
+            Height = 13
+            Caption = '≈квивалент:'
+          end
+          object LblDebitOstat: TLabel
+            Left = 34
+            Top = 3
+            Width = 64
+            Height = 13
+            Caption = 'LblDebitOstat'
+          end
+          object LblDebitpokOstat: TLabel
+            Left = 201
+            Top = 3
+            Width = 32
+            Height = 13
+            Caption = 'Label8'
+          end
+        end
+      end
+      object Panel4: TPanel
+        Left = 2
+        Top = 46
+        Width = 322
+        Height = 22
+        Align = alTop
+        BevelInner = bvLowered
+        TabOrder = 3
+        object DBLookupComboboxEh7: TDBLookupComboboxEh
+          Left = 2
+          Top = 1
+          Width = 320
+          Height = 21
+          EditButtons = <>
+          KeyField = 'ID'
+          ListField = 'NAME'
+          ListSource = dmTransactionViewer.AccDebitDatSrc
+          TabOrder = 0
+          Visible = True
+        end
+      end
+      object Panel5: TPanel
+        Left = 2
+        Top = 24
+        Width = 322
+        Height = 22
+        Align = alTop
+        BevelInner = bvLowered
+        TabOrder = 1
+        object DBEditEh8: TDBEditEh
+          Left = 2
+          Top = 1
+          Width = 156
+          Height = 21
+          DataField = 'ACC_NO'
+          DataSource = dmTransactionViewer.AccDebitDatSrc
+          EditButtons = <>
+          TabOrder = 0
+          Visible = True
+        end
+        object DBLookupComboboxEh5: TDBLookupComboboxEh
+          Left = 158
+          Top = 1
+          Width = 164
+          Height = 21
+          EditButtons = <>
+          KeyField = 'ID'
+          ListField = 'ACC_NO'
+          ListSource = dmTransactionViewer.AccDebitDatSrc
+          TabOrder = 1
+          Visible = True
+        end
+      end
+      object Panel6: TPanel
+        Left = 2
+        Top = 2
+        Width = 322
+        Height = 22
+        Align = alTop
+        BevelInner = bvLowered
+        TabOrder = 0
+        object DBEditEh4: TDBEditEh
+          Left = 0
+          Top = 0
+          Width = 59
+          Height = 21
+          DataField = 'VAL_ACC'
+          DataSource = dmTransactionViewer.TransactionDatSrc
+          EditButtons = <>
+          TabOrder = 0
+          Visible = True
+        end
+        object DBLookupComboboxEh3: TDBLookupComboboxEh
+          Left = 60
+          Top = 0
+          Width = 156
+          Height = 21
+          EditButtons = <>
+          KeyField = 'VALUTE'
+          ListField = 'VALU_NAME'
+          ListSource = dmTransactionViewer.AvaluteDebitDatSrc
+          TabOrder = 1
+          Visible = True
+        end
+        object DBEditEh5: TDBEditEh
+          Left = 214
+          Top = 0
+          Width = 105
+          Height = 21
+          DataField = 'RATE_D'
+          DataSource = dmTransactionViewer.TransactionDatSrc
+          EditButtons = <>
+          TabOrder = 2
+          Visible = True
+        end
+      end
+    end
+    object Panel2: TPanel
+      Left = 328
+      Top = 32
+      Width = 326
+      Height = 92
+      BevelInner = bvLowered
+      TabOrder = 1
+      object PanelCredit: TPanel
+        Left = 2
+        Top = 68
+        Width = 322
+        Height = 22
+        Align = alTop
+        BevelOuter = bvLowered
+        TabOrder = 2
+        object PanelCreditRest: TPanel
+          Left = 1
+          Top = 1
+          Width = 320
+          Height = 20
+          Align = alClient
+          BevelOuter = bvNone
+          TabOrder = 0
+          object Label3: TLabel
+            Left = 4
+            Top = 3
+            Width = 27
+            Height = 13
+            Caption = '√алыг:'
+          end
+          object Label4: TLabel
+            Left = 146
+            Top = 3
+            Width = 53
+            Height = 13
+            Caption = '≈квивалент:'
+          end
+          object LblCreditpokOstat: TLabel
+            Left = 201
+            Top = 3
+            Width = 32
+            Height = 13
+            Caption = 'Label8'
+          end
+          object LblCreditOstat: TLabel
+            Left = 33
+            Top = 4
+            Width = 32
+            Height = 13
+            Caption = 'Label8'
+          end
+        end
+      end
+      object Panel8: TPanel
+        Left = 2
+        Top = 46
+        Width = 322
+        Height = 22
+        Align = alTop
+        BevelInner = bvLowered
+        TabOrder = 3
+        object DBLookupComboboxEh8: TDBLookupComboboxEh
+          Left = 2
+          Top = 1
+          Width = 320
+          Height = 21
+          EditButtons = <>
+          KeyField = 'ID'
+          ListField = 'NAME'
+          ListSource = dmTransactionViewer.AccCreditDatSrc
+          TabOrder = 0
+          Visible = True
+        end
+      end
+      object Panel9: TPanel
+        Left = 2
+        Top = 24
+        Width = 322
+        Height = 22
+        Align = alTop
+        BevelInner = bvLowered
+        TabOrder = 1
+        object DBEditEh9: TDBEditEh
+          Left = 2
+          Top = 1
+          Width = 156
+          Height = 21
+          DataField = 'ACC_NO'
+          DataSource = dmTransactionViewer.AccCreditDatSrc
+          EditButtons = <>
+          TabOrder = 0
+          Visible = True
+        end
+        object DBLookupComboboxEh6: TDBLookupComboboxEh
+          Left = 158
+          Top = 1
+          Width = 164
+          Height = 21
+          EditButtons = <>
+          KeyField = 'ID'
+          ListField = 'ACC_NO'
+          ListSource = dmTransactionViewer.AccCreditDatSrc
+          TabOrder = 1
+          Visible = True
+        end
+      end
+      object Panel10: TPanel
+        Left = 2
+        Top = 2
+        Width = 322
+        Height = 22
+        Align = alTop
+        BevelInner = bvLowered
+        TabOrder = 0
+        object DBEditEh6: TDBEditEh
+          Left = 0
+          Top = 0
+          Width = 59
+          Height = 21
+          DataField = 'CURRENCYID_C'
+          DataSource = dmTransactionViewer.TransactionDatSrc
+          EditButtons = <>
+          TabOrder = 0
+          Visible = True
+        end
+        object DBLookupComboboxEh4: TDBLookupComboboxEh
+          Left = 60
+          Top = 0
+          Width = 156
+          Height = 21
+          EditButtons = <>
+          KeyField = 'VALUTE'
+          ListField = 'VALU_NAME'
+          ListSource = dmTransactionViewer.AvaluteCreditDatSrc
+          TabOrder = 1
+          Visible = True
+        end
+        object DBEditEh7: TDBEditEh
+          Left = 214
+          Top = 0
+          Width = 105
+          Height = 21
+          DataField = 'RATE_C'
+          DataSource = dmTransactionViewer.TransactionDatSrc
+          EditButtons = <>
+          TabOrder = 2
+          Visible = True
+        end
+      end
+    end
+  end
+  object GroupBox4: TGroupBox
+    Left = 0
+    Top = 0
+    Width = 667
+    Height = 30
+    Align = alTop
+    TabOrder = 1
+    object Label5: TLabel
+      Left = 8
+      Top = 9
+      Width = 77
+      Height = 13
+      Caption = 'ям€лиййатын тарихи'
+    end
+    object Label6: TLabel
+      Left = 216
+      Top = 9
+      Width = 67
+      Height = 13
+      Caption = 'ям€лиййатын є'
+    end
+    object Label7: TLabel
+      Left = 383
+      Top = 9
+      Width = 61
+      Height = 13
+      Caption = 'ям€лиййат типи'
+    end
+    object DBEditEh2: TDBEditEh
+      Left = 288
+      Top = 6
+      Width = 83
+      Height = 21
+      DataField = 'NO_PROV'
+      DataSource = dmTransactionViewer.TransactionDatSrc
+      EditButtons = <>
+      TabOrder = 0
+      Visible = True
+    end
+    object DBEditEh3: TDBEditEh
+      Left = 446
+      Top = 7
+      Width = 57
+      Height = 21
+      DataField = 'VID_OP'
+      DataSource = dmTransactionViewer.TransactionDatSrc
+      EditButtons = <>
+      TabOrder = 1
+      Visible = True
+    end
+    object DBLookupComboboxEh2: TDBLookupComboboxEh
+      Left = 505
+      Top = 7
+      Width = 150
+      Height = 21
+      EditButtons = <>
+      KeyField = 'ID'
+      ListField = 'NAME'
+      ListSource = dmTransactionViewer.operationsDatSrc
+      TabOrder = 2
+      Visible = True
+    end
+    object DBDateTimeEditEh1: TDBDateTimeEditEh
+      Left = 91
+      Top = 6
+      Width = 121
+      Height = 21
+      DataField = 'DAT'
+      DataSource = dmTransactionViewer.TransactionDatSrc
+      EditButtons = <>
+      Kind = dtkDateEh
+      TabOrder = 3
+      Visible = True
+    end
+  end
+  object GroupBox2: TGroupBox
+    Left = 0
+    Top = 155
+    Width = 667
+    Height = 64
+    Align = alTop
+    Caption = 'ћ€бл€ьл€р'
+    TabOrder = 2
+    object Panel11: TPanel
+      Left = 2
+      Top = 15
+      Width = 326
+      Height = 23
+      Alignment = taLeftJustify
+      BevelInner = bvLowered
+      Caption = ' ƒебет м€бл€ь'
+      TabOrder = 0
+      object DBEditEh10: TDBEditEh
+        Left = 97
+        Top = 2
+        Width = 229
+        Height = 21
+        DataField = 'AMMOUNT'
+        DataSource = dmTransactionViewer.TransactionDatSrc
+        EditButtons = <>
+        TabOrder = 0
+        Visible = True
+      end
+    end
+    object Panel12: TPanel
+      Left = 328
+      Top = 15
+      Width = 326
+      Height = 23
+      Alignment = taLeftJustify
+      BevelInner = bvLowered
+      Caption = '  редит м€бл€ь'
+      TabOrder = 1
+      object DBEditEh11: TDBEditEh
+        Left = 97
+        Top = 2
+        Width = 229
+        Height = 21
+        DataField = 'AMMOUNT_C'
+        DataSource = dmTransactionViewer.TransactionDatSrc
+        EditButtons = <>
+        TabOrder = 0
+        Visible = True
+      end
+    end
+    object Panel13: TPanel
+      Left = 2
+      Top = 38
+      Width = 652
+      Height = 23
+      Alignment = taLeftJustify
+      BevelInner = bvLowered
+      Caption = ' ћилли валйутада еквивалент'
+      TabOrder = 2
+      object DBEditEh12: TDBEditEh
+        Left = 221
+        Top = 2
+        Width = 229
+        Height = 21
+        DataField = 'LAMMOUNT'
+        DataSource = dmTransactionViewer.TransactionDatSrc
+        EditButtons = <>
+        TabOrder = 0
+        Visible = True
+      end
+    end
+  end
+  object GroupBox3: TGroupBox
+    Left = 0
+    Top = 219
+    Width = 667
+    Height = 64
+    Align = alTop
+    Caption = 'ћ€луматлар'
+    TabOrder = 3
+    object Panel14: TPanel
+      Left = 2
+      Top = 38
+      Width = 663
+      Height = 23
+      Align = alTop
+      Alignment = taLeftJustify
+      BevelInner = bvLowered
+      Caption = '  онвертасийа т€йинаты'
+      TabOrder = 1
+      object DBEditEh14: TDBEditEh
+        Left = 118
+        Top = 2
+        Width = 74
+        Height = 21
+        DataField = 'KASSA_Z'
+        DataSource = dmTransactionViewer.TransactionDatSrc
+        EditButtons = <>
+        TabOrder = 0
+        Visible = True
+      end
+      object DBLookupComboboxEh1: TDBLookupComboboxEh
+        Left = 192
+        Top = 2
+        Width = 460
+        Height = 21
+        EditButtons = <>
+        KeyField = 'ID'
+        ListField = 'FULLPATH'
+        ListSource = dmTransactionViewer.ConvertationSymbolsData
+        TabOrder = 1
+        Visible = True
+      end
+    end
+    object Panel15: TPanel
+      Left = 2
+      Top = 15
+      Width = 663
+      Height = 23
+      Align = alTop
+      Alignment = taLeftJustify
+      BevelInner = bvLowered
+      Caption = '  асса символу'
+      TabOrder = 0
+      object DBEditEh13: TDBEditEh
+        Left = 118
+        Top = 2
+        Width = 74
+        Height = 21
+        DataField = 'KASSA_B'
+        DataSource = dmTransactionViewer.TransactionDatSrc
+        EditButtons = <>
+        TabOrder = 0
+        Visible = True
+      end
+      object DBLookupComboboxEh9: TDBLookupComboboxEh
+        Left = 192
+        Top = 2
+        Width = 460
+        Height = 21
+        EditButtons = <>
+        KeyField = 'SYMBOL'
+        ListField = 'NAME'
+        ListSource = dmTransactionViewer.CashSymbolsData
+        TabOrder = 1
+        Visible = True
+      end
+    end
+  end
+  object Panel16: TPanel
+    Left = 0
+    Top = 282
+    Width = 657
+    Height = 23
+    Alignment = taLeftJustify
+    BevelInner = bvLowered
+    Caption = ' ям€лиййатын т€йинаты'
+    TabOrder = 4
+    object DBEditEh1: TDBEditEh
+      Left = 120
+      Top = 1
+      Width = 532
+      Height = 21
+      DataField = 'NAME'
+      DataSource = dmTransactionViewer.TransactionDatSrc
+      EditButtons = <>
+      TabOrder = 0
+      Visible = True
+    end
+  end
+  object BitBtnOk: TBitBtn
+    Left = 581
+    Top = 317
+    Width = 75
+    Height = 25
+    Caption = 'Ѕаьла'
+    TabOrder = 5
+    OnClick = BitBtnOkClick
+  end
+  object Localizer: TNLSLocalizer
+    Caption = 'ям€лиййат'
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    Left = 8
+    Top = 312
+  end
+end

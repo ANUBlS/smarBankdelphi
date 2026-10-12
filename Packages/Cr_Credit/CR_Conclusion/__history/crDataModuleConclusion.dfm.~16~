@@ -1,0 +1,2396 @@
+object CRDataModuleConcl: TCRDataModuleConcl
+  OldCreateOrder = False
+  OnCreate = DataModuleCreate
+  OnDestroy = DataModuleDestroy
+  Height = 881
+  Width = 938
+  object DataSrcCreditProps: TDataSource
+    DataSet = CreditProps
+    Left = 32
+    Top = 2
+  end
+  object DataSrcLoanAccs: TDataSource
+    DataSet = LoanAccs
+    Left = 32
+    Top = 106
+  end
+  object LoanAccs: TOracleDataSet
+    SQL.Strings = (
+      'SELECT   ac.id AS id, ac.kli_id AS custid, ac.acc_no AS accno,'
+      '         ac.NAME AS clientname, ac.val_acc'
+      '    FROM account ac'
+      '   WHERE'
+      '   val_acc =:val_acc  AND close_dat is null and '
+      ''
+      '   (ac.bal_cn1 IN (SELECT accountnumber'
+      '                           FROM cr_aginfo'
+      '                          WHERE groupid = (SELECT g.id'
+      
+        '                                             FROM cr_accountgrou' +
+        'ps g'
+      
+        '                                            WHERE g.iname = '#39'Loa' +
+        'nAccs'#39'))'
+      '         )'
+      'ORDER BY accno,kli_id'
+      ''
+      ' '
+      ' ')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000100000003A00560041004C005F0041004300430003000000
+      0000000000000000}
+    Cursor = crHourGlass
+    Master = CurrencysData
+    MasterFields = 'CurrID'
+    DetailFields = 'VAL_ACC'
+    Session = sboapiDataModule.SBSession
+    Left = 32
+    Top = 162
+    object LoanAccsID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object LoanAccsCUSTID: TFloatField
+      FieldName = 'CUSTID'
+    end
+    object LoanAccsACCNO: TWideStringField
+      FieldName = 'ACCNO'
+      Size = 28
+    end
+    object LoanAccsCLIENTNAME: TWideStringField
+      FieldName = 'CLIENTNAME'
+      Size = 90
+    end
+    object LoanAccsVAL_ACC: TIntegerField
+      FieldName = 'VAL_ACC'
+    end
+  end
+  object DataSrcDueLoanAccs: TDataSource
+    DataSet = DueLoanAccs
+    Left = 480
+    Top = 106
+  end
+  object DueLoanAccs: TOracleDataSet
+    SQL.Strings = (
+      'SELECT   ac.id AS id, ac.kli_id AS custid, ac.acc_no AS accno,'
+      '         ac.NAME AS clientname, ac.val_acc'
+      '    FROM account ac'
+      '   WHERE '
+      'val_acc = :val_acc AND  close_dat is null and '
+      ''
+      '(ac.bal_cn1 IN (SELECT accountnumber'
+      '                           FROM cr_aginfo'
+      '                          WHERE groupid = (SELECT g.id'
+      
+        '                                             FROM cr_accountgrou' +
+        'ps g'
+      
+        '                                            WHERE g.iname = '#39'Due' +
+        'LoanAccs'#39'))'
+      '         )'
+      'ORDER BY accno,kli_id'
+      ''
+      '')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000100000003A00560041004C005F0041004300430003000000
+      0000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000500000004000000490044000100000000000C000000430055005300
+      5400490044000100000000000A0000004100430043004E004F00010000000000
+      1400000043004C00490045004E0054004E0041004D0045000100000000000E00
+      0000560041004C005F00410043004300010000000000}
+    Cursor = crHourGlass
+    Master = CurrencysData
+    MasterFields = 'CurrID'
+    DetailFields = 'VAL_ACC'
+    Session = sboapiDataModule.SBSession
+    Left = 478
+    Top = 162
+    object DueLoanAccsID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object DueLoanAccsCUSTID: TFloatField
+      FieldName = 'CUSTID'
+    end
+    object DueLoanAccsACCNO: TWideStringField
+      FieldName = 'ACCNO'
+      Size = 448
+    end
+    object DueLoanAccsCLIENTNAME: TWideStringField
+      FieldName = 'CLIENTNAME'
+      Size = 1440
+    end
+    object DueLoanAccsVAL_ACC: TIntegerField
+      FieldName = 'VAL_ACC'
+    end
+  end
+  object DataSrcPReserveAccs: TDataSource
+    DataSet = PReserveAccs
+    Left = 241
+    Top = 106
+  end
+  object PReserveAccs: TOracleDataSet
+    SQL.Strings = (
+      'SELECT   ac.id AS id, ac.kli_id AS custid, ac.acc_no AS accno,'
+      '         ac.NAME AS clientname, ac.val_acc'
+      '    FROM account ac'
+      '   WHERE val_acc = 0 and'
+      '      ac.kli_id=:kli_id and close_dat is null '
+      ''
+      '     AND (ac.bal_cn1 IN (SELECT accountnumber'
+      '                           FROM cr_aginfo'
+      '                          WHERE groupid = (SELECT g.id'
+      
+        '                                             FROM cr_accountgrou' +
+        'ps g'
+      
+        '                                            WHERE g.iname = '#39'PRe' +
+        'serveAccs'#39'))'
+      '         )'
+      'ORDER BY accno,kli_id'
+      ''
+      '')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000E0000003A004B004C0049005F0049004400030000000000
+      000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000500000004000000490044000100000000000C000000430055005300
+      5400490044000100000000000A0000004100430043004E004F00010000000000
+      1400000043004C00490045004E0054004E0041004D0045000100000000000E00
+      0000560041004C005F00410043004300010000000000}
+    Cursor = crHourGlass
+    Session = sboapiDataModule.SBSession
+    Left = 233
+    Top = 162
+    object PReserveAccsID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object PReserveAccsCUSTID: TFloatField
+      FieldName = 'CUSTID'
+    end
+    object PReserveAccsACCNO: TWideStringField
+      FieldName = 'ACCNO'
+      Size = 448
+    end
+    object PReserveAccsCLIENTNAME: TWideStringField
+      FieldName = 'CLIENTNAME'
+      Size = 1440
+    end
+    object PReserveAccsVAL_ACC: TIntegerField
+      FieldName = 'VAL_ACC'
+    end
+  end
+  object DataSrcSReserveAccs: TDataSource
+    DataSet = SReserveAccs
+    Left = 360
+    Top = 106
+  end
+  object SReserveAccs: TOracleDataSet
+    SQL.Strings = (
+      'SELECT   ac.id AS id, ac.kli_id AS custid, ac.acc_no AS accno,'
+      '         ac.NAME AS clientname, ac.val_acc'
+      '    FROM account ac'
+      '   WHERE val_acc = 0 and close_dat is null '
+      '     AND (ac.bal_cn1 IN (SELECT accountnumber'
+      '                           FROM cr_aginfo'
+      '                          WHERE groupid = (SELECT g.id'
+      
+        '                                             FROM cr_accountgrou' +
+        'ps g'
+      
+        '                                            WHERE g.iname = '#39'SRe' +
+        'serveAccs'#39'))'
+      '         )'
+      'ORDER BY accno,kli_id'
+      ''
+      '')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000500000004000000490044000100000000000C000000430055005300
+      5400490044000100000000000A0000004100430043004E004F00010000000000
+      1400000043004C00490045004E0054004E0041004D0045000100000000000E00
+      0000560041004C005F00410043004300010000000000}
+    Cursor = crHourGlass
+    Session = sboapiDataModule.SBSession
+    Left = 352
+    Top = 162
+    object SReserveAccsID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object SReserveAccsCUSTID: TFloatField
+      FieldName = 'CUSTID'
+    end
+    object SReserveAccsACCNO: TWideStringField
+      FieldName = 'ACCNO'
+      Size = 448
+    end
+    object SReserveAccsCLIENTNAME: TWideStringField
+      FieldName = 'CLIENTNAME'
+      Size = 1440
+    end
+    object SReserveAccsVAL_ACC: TIntegerField
+      FieldName = 'VAL_ACC'
+    end
+  end
+  object DataSrcCurrencys: TDataSource
+    DataSet = CurrencysData
+    Left = 242
+    Top = 2
+  end
+  object CurrencysData: TOracleDataSet
+    SQL.Strings = (
+      'select '
+      '    valute as CurrID ,'
+      '    Valu_Name as CurrName,VAL_NAME'
+      '  from'
+      '    smart.avalute_t')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000030000000C0000004300550052005200490044000100000000001000
+      000043005500520052004E0041004D0045000100000000001000000056004100
+      4C005F004E0041004D004500010000000000}
+    Cursor = crHourGlass
+    Session = sboapiDataModule.SBSession
+    Left = 240
+    Top = 50
+    object CurrencysDataCURRID: TIntegerField
+      FieldName = 'CURRID'
+      Required = True
+    end
+    object CurrencysDataCURRNAME: TWideStringField
+      FieldName = 'CURRNAME'
+      Size = 25
+    end
+    object CurrencysDataVAL_NAME: TWideStringField
+      FieldName = 'VAL_NAME'
+      Size = 10
+    end
+  end
+  object DataSrcReserves: TDataSource
+    DataSet = Reserves
+    Left = 103
+    Top = 330
+  end
+  object Reserves: TOracleDataSet
+    SQL.Strings = (
+      'select '
+      '    ID,'
+      '    Percent ,'
+      '    Description'
+      '  from'
+      '    CR_RESERVES')
+    Optimize = False
+    Cursor = crHourGlass
+    Session = sboapiDataModule.SBSession
+    OnCalcFields = ReservesCalcFields
+    Left = 103
+    Top = 385
+    object ReservesID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object ReservesPERCENT: TFloatField
+      FieldName = 'PERCENT'
+      Required = True
+    end
+    object ReservesDESCRIPTION: TWideStringField
+      FieldName = 'DESCRIPTION'
+      Required = True
+      Size = 64
+    end
+    object ReservesFullDesc: TWideStringField
+      FieldKind = fkCalculated
+      FieldName = 'FullDesc'
+      Size = 255
+      Calculated = True
+    end
+  end
+  object DataSrcCustomer: TDataSource
+    DataSet = Customer
+    Left = 341
+    Top = 3
+  end
+  object Customer: TOracleDataSet
+    SQL.Strings = (
+      'select '
+      'ID,'
+      'Name'
+      'from CUSTOMERS'
+      'where cust_type=0')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000400000049004400010000000000080000004E0041004D00
+      4500010000000000}
+    Cursor = crHourGlass
+    Session = sboapiDataModule.SBSession
+    Left = 341
+    Top = 51
+    object CustomerID: TIntegerField
+      FieldName = 'ID'
+      Required = True
+    end
+    object CustomerNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 90
+    end
+  end
+  object DataSrcClientCategories: TDataSource
+    DataSet = ClientCategories
+    Left = 364
+    Top = 218
+  end
+  object ClientCategories: TOracleDataSet
+    SQL.Strings = (
+      'SELECT id, person, description,code,act_id,kodu'
+      '  FROM cr_categories'
+      ' where'
+      'act_id=:act_id and'
+      '  act_id is not null'
+      '--order by act_id,id')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000E0000003A004100430054005F0049004400030000000000
+      000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000600000004000000490044000100000000000C000000500045005200
+      53004F004E000100000000001600000044004500530043005200490050005400
+      49004F004E000100000000000800000043004F00440045000100000000000C00
+      00004100430054005F0049004400010000000000080000004B004F0044005500
+      010000000000}
+    Cursor = crHourGlass
+    Session = sboapiDataModule.SBSession
+    Left = 364
+    Top = 274
+    object ClientCategoriesID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object ClientCategoriesPERSON: TFloatField
+      FieldName = 'PERSON'
+      Required = True
+    end
+    object ClientCategoriesDESCRIPTION: TWideStringField
+      FieldName = 'DESCRIPTION'
+      Size = 128
+    end
+    object ClientCategoriesCODE: TWideStringField
+      FieldName = 'CODE'
+      Size = 12
+    end
+    object ClientCategoriesACT_ID: TFloatField
+      FieldName = 'ACT_ID'
+    end
+    object ClientCategoriesKODU: TWideStringField
+      FieldName = 'KODU'
+      Size = 12
+    end
+  end
+  object DataSrcCreditTypes: TDataSource
+    DataSet = CreditTypes
+    Left = 252
+    Top = 218
+  end
+  object CreditTypes: TOracleDataSet
+    SQL.Strings = (
+      'SELECT id, renewablestatus, itype, iclass, description'
+      '  FROM cr_credittypes')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000500000004000000490044000100000000001E000000520045004E00
+      45005700410042004C0045005300540041005400550053000100000000000A00
+      0000490054005900500045000100000000000C000000490043004C0041005300
+      5300010000000000160000004400450053004300520049005000540049004F00
+      4E00010000000000}
+    Cursor = crHourGlass
+    Session = sboapiDataModule.SBSession
+    Left = 244
+    Top = 274
+  end
+  object CreditProps: TOracleDataSet
+    SQL.Strings = (
+      'SELECT p.ROWID,p.currency, p.boorowerid, p.creditlineamount,'
+      
+        '       p.annualyinterestrate, p.annualyoverduerate, p.annualypen' +
+        'altyrate,p.payintday, p.payperiod,'
+      
+        '       p.dateofconclusion, p.duedatefirstcontract, p.numberofcre' +
+        'dit,'
+      
+        '       p.purposeofcredit, p.customertype, p.credittype, p.person' +
+        'altype,'
+      
+        '       p.autopayment, p.autoexpire, p.usrgroup, p.branchid,p.ann' +
+        'ualbankrate,p.newfinanceamount, '
+      '       p.numberofbankcredit,p.CREDITACT,p.KOMISION,'
+      '       p.GUR_ID,p.GURINFO,p.GURLETTER,a.penaccid,'
+      '       p.intcalcmethod,p.activities, p.activities_type,'
+      '       p.pledgsorts,p.aim_id,p.EXPERTID,'
+      '       a.booroweraccid,'
+      
+        '       a.loanaccid, a.dueloanaccid, a.interestaccid, a.dueintere' +
+        'staccid,'
+      
+        '       a.primaryreserveaccid, a.secondaryreserveaccid, a.outcoll' +
+        'ateralaccid,'
+      
+        '       a.outguaranteeaccid, a.OutInterestAccid,a.crdlineoblaccid' +
+        ',a.outloanaccid,'
+      
+        '       a.primarypurreserveaccid,a.secondarypurreserveaccid,s.res' +
+        'erveid, s.pledgeprice, '
+      
+        '       s.pledgepricetorpaq, s.pledgepriceev,g.pledgeid, s.dueres' +
+        'erveid,'
+      '       g.pledgepriceevkv, '
+      '       g.pledgepricetorpaqha,'
+      '       g.PLEDGENAME , g.PLEDGEID_P,'
+      '       g.HOLDERNAME , '
+      '       g.HOLDERADDRESS , '
+      '       g.ANYINFOTODISTING , '
+      '       g.REGISTRYNO ,'
+      '       g.REGISTRYAGENCY , g.INSURANCERIGHT,'
+      '       g.REGISTRYDATE , '
+      '       g.PLEDGEINUSE , '
+      '       g.PLEDGEINSURANT , '
+      '       g.INSURANCEAGENCY ,'
+      '       g.INSURANCEAMOUNT , '
+      '       g.INSURANCEDATE , '
+      '       b.BOOROWERID as boorid, '
+      '       b.NAME , '
+      '       b.COUNTRYCODE , '
+      '       b.BANKRUPTEYSTATUS , '
+      '       b.PHONENUMBER , '
+      '       b.ADDRESS , '
+      '       b.FIRSTOWNERID ,'
+      '       b.FIRSTOWNERNAME , '
+      '       b.SECONDOWNERID , '
+      '       b.SECONDOWNERNAME , '
+      '       b.THIRDOWNERID , '
+      '       b.THIRDOWNERNAME ,'
+      '       b.salary,'
+      '       b.guarantorname, '
+      '       b.guarantorid, '
+      '       b.guarantorsalary,'
+      '       b.guarantorname2, '
+      '       b.guarantorid2, '
+      '       b.guarantorsalary2,'
+      #9'b.guarantorname3, '
+      '       b.guarantorid3, '
+      '       b.guarantorsalary3,'
+      
+        #9'b.PINCODE,b.zaminwork1,b.zaminadres1,b.zamintel1,b.zaminwork2,b' +
+        '.zaminadres2,b.zamintel2'
+      
+        '    , b.zmpaspyer1, b.zmpaspdat1, b.zmtelmob1,b.zmpaspyer2, b.zm' +
+        'paspdat2, b.zmtelmob2'
+      
+        '  , g.gqname, g.gqpaspnum, g.gqpaspyer, g.gqpaspdate,g.gqadress,' +
+        ' g.seryamh, g.reyster,g.GQTEL'
+      '  FROM cr_active_credits p, '
+      '       cr_accounts a, '
+      '       cr_curr_state s, '
+      '       cr_guarantee g,'
+      '       cr_boorowerinfo b'
+      ' WHERE p.id = :creditid'
+      '   AND a.creditid = :creditid'
+      '   AND s.creditid = :creditid'
+      '   AND g.creditid = :creditid'
+      '   and b.creditid=:creditid'
+      ''
+      ' '
+      ' '
+      ' ')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000120000003A00430052004500440049005400490044000300
+      0000040000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000007100000010000000430055005200520045004E004300590001000000
+      00001400000042004F004F0052004F0057004500520049004400010000000000
+      200000004300520045004400490054004C0049004E00450041004D004F005500
+      4E0054000100000000002600000041004E004E00550041004C00590049004E00
+      5400450052004500530054005200410054004500010000000000240000004100
+      4E004E00550041004C0059004F00560045005200440055004500520041005400
+      45000100000000002400000041004E004E00550041004C005900500045004E00
+      41004C0054005900520041005400450001000000000020000000440041005400
+      45004F00460043004F004E0043004C005500530049004F004E00010000000000
+      2800000044005500450044004100540045004600490052005300540043004F00
+      4E00540052004100430054000100000000001C0000004E0055004D0042004500
+      52004F0046004300520045004400490054000100000000001E00000050005500
+      520050004F00530045004F004600430052004500440049005400010000000000
+      1800000043005500530054004F004D0045005200540059005000450001000000
+      0000140000004300520045004400490054005400590050004500010000000000
+      1800000050004500520053004F004E0041004C00540059005000450001000000
+      0000160000004100550054004F005000410059004D0045004E00540001000000
+      0000140000004100550054004F00450058005000490052004500010000000000
+      10000000550053005200470052004F0055005000010000000000100000004200
+      520041004E0043004800490044000100000000001C00000041004E004E005500
+      41004C00420041004E004B005200410054004500010000000000200000004E00
+      45005700460049004E0041004E004300450041004D004F0055004E0054000100
+      00000000240000004E0055004D004200450052004F004600420041004E004B00
+      4300520045004400490054000100000000001A00000049004E00540043004100
+      4C0043004D004500540048004F0044000100000000001400000050004C004500
+      4400470053004F005200540053000100000000001A00000042004F004F005200
+      4F0057004500520041004300430049004400010000000000120000004C004F00
+      41004E0041004300430049004400010000000000180000004400550045004C00
+      4F0041004E00410043004300490044000100000000001A00000049004E005400
+      4500520045005300540041004300430049004400010000000000200000004400
+      5500450049004E00540045005200450053005400410043004300490044000100
+      00000000260000005000520049004D0041005200590052004500530045005200
+      56004500410043004300490044000100000000002A0000005300450043004F00
+      4E00440041005200590052004500530045005200560045004100430043004900
+      4400010000000000240000004F005500540043004F004C004C00410054004500
+      520041004C0041004300430049004400010000000000220000004F0055005400
+      470055004100520041004E005400450045004100430043004900440001000000
+      0000200000004F005500540049004E0054004500520045005300540041004300
+      4300490044000100000000001E0000004300520044004C0049004E0045004F00
+      42004C0041004300430049004400010000000000180000004F00550054004C00
+      4F0041004E00410043004300490044000100000000002C000000500052004900
+      4D00410052005900500055005200520045005300450052005600450041004300
+      430049004400010000000000300000005300450043004F004E00440041005200
+      5900500055005200520045005300450052005600450041004300430049004400
+      0100000000001200000052004500530045005200560045004900440001000000
+      00001600000050004C0045004400470045005000520049004300450001000000
+      00002200000050004C0045004400470045005000520049004300450054004F00
+      52005000410051000100000000001A00000050004C0045004400470045005000
+      5200490043004500450056000100000000001000000050004C00450044004700
+      4500490044000100000000001800000044005500450052004500530045005200
+      56004500490044000100000000001E00000050004C0045004400470045005000
+      5200490043004500450056004B0056000100000000002600000050004C004500
+      4400470045005000520049004300450054004F00520050004100510048004100
+      0100000000001400000050004C0045004400470045004E0041004D0045000100
+      000000001400000048004F004C004400450052004E0041004D00450001000000
+      00001A00000048004F004C004400450052004100440044005200450053005300
+      0100000000002000000041004E00590049004E0046004F0054004F0044004900
+      5300540049004E00470001000000000014000000520045004700490053005400
+      520059004E004F000100000000001C0000005200450047004900530054005200
+      59004100470045004E0043005900010000000000180000005200450047004900
+      530054005200590044004100540045000100000000001600000050004C004500
+      44004700450049004E005500530045000100000000001C00000050004C004500
+      44004700450049004E0053005500520041004E0054000100000000001E000000
+      49004E0053005500520041004E00430045004100470045004E00430059000100
+      000000001E00000049004E0053005500520041004E004300450041004D004F00
+      55004E0054000100000000001A00000049004E0053005500520041004E004300
+      450044004100540045000100000000000C00000042004F004F00520049004400
+      010000000000080000004E0041004D0045000100000000001600000043004F00
+      55004E0054005200590043004F00440045000100000000002000000042004100
+      4E004B0052005500500054004500590053005400410054005500530001000000
+      000016000000500048004F004E0045004E0055004D0042004500520001000000
+      00000E0000004100440044005200450053005300010000000000180000004600
+      49005200530054004F0057004E0045005200490044000100000000001C000000
+      460049005200530054004F0057004E00450052004E0041004D00450001000000
+      00001A0000005300450043004F004E0044004F0057004E004500520049004400
+      0100000000001E0000005300450043004F004E0044004F0057004E0045005200
+      4E0041004D00450001000000000018000000540048004900520044004F005700
+      4E0045005200490044000100000000001C000000540048004900520044004F00
+      57004E00450052004E0041004D0045000100000000000C000000530041004C00
+      4100520059000100000000001A000000470055004100520041004E0054004F00
+      52004E0041004D00450001000000000016000000470055004100520041004E00
+      54004F005200490044000100000000001E000000470055004100520041004E00
+      54004F005200530041004C004100520059000100000000001C00000047005500
+      4100520041004E0054004F0052004E0041004D00450032000100000000001800
+      0000470055004100520041004E0054004F005200490044003200010000000000
+      20000000470055004100520041004E0054004F005200530041004C0041005200
+      590032000100000000001C000000470055004100520041004E0054004F005200
+      4E0041004D004500330001000000000018000000470055004100520041004E00
+      54004F0052004900440033000100000000002000000047005500410052004100
+      4E0054004F005200530041004C0041005200590033000100000000000E000000
+      500049004E0043004F0044004500010000000000140000005A0041004D004900
+      4E0057004F0052004B003100010000000000160000005A0041004D0049004E00
+      410044005200450053003100010000000000120000005A0041004D0049004E00
+      540045004C003100010000000000140000005A0041004D0049004E0057004F00
+      52004B003200010000000000160000005A0041004D0049004E00410044005200
+      450053003200010000000000120000005A0041004D0049004E00540045004C00
+      3200010000000000140000004100430054004900560049005400490045005300
+      0100000000001200000043005200450044004900540041004300540001000000
+      00001E00000041004300540049005600490054004900450053005F0054005900
+      500045000100000000000C000000410049004D005F0049004400010000000000
+      1C00000049004E0053005500520041004E004300450052004900470048005400
+      0100000000001400000050004C004500440047004500490044005F0050000100
+      0000000010000000450058005000450052005400490044000100000000001200
+      000050004100590050004500520049004F004400010000000000120000005000
+      4100590049004E005400440041005900010000000000140000005A004D005000
+      4100530050005900450052003100010000000000140000005A004D0050004100
+      530050004400410054003100010000000000120000005A004D00540045004C00
+      4D004F0042003100010000000000140000005A004D0050004100530050005900
+      450052003200010000000000140000005A004D00500041005300500044004100
+      54003200010000000000120000005A004D00540045004C004D004F0042003200
+      0100000000000C000000470051004E0041004D00450001000000000012000000
+      4700510050004100530050004E0055004D000100000000001200000047005100
+      5000410053005000590045005200010000000000140000004700510050004100
+      5300500044004100540045000100000000001000000047005100410044005200
+      4500530053000100000000000E000000530045005200590041004D0048000100
+      000000000A00000047005100540045004C000100000000000E00000052004500
+      590053005400450052000100000000000C0000004700550052005F0049004400
+      0100000000000E00000047005500520049004E0046004F000100000000001200
+      00004700550052004C0045005400540045005200010000000000100000004B00
+      4F004D004900530049004F004E0001000000000010000000500045004E004100
+      4300430049004400010000000000}
+    Cursor = crHourGlass
+    LockingMode = lmNone
+    OnApplyRecord = CreditPropsApplyRecord
+    CommitOnPost = False
+    Session = sboapiDataModule.SBSession
+    OnCalcFields = CreditPropsCalcFields
+    Left = 32
+    Top = 50
+    object CreditPropsCURRENCY: TFloatField
+      DisplayLabel = #1042#1072#1083#1081#1091#1090#1072
+      FieldName = 'CURRENCY'
+      Required = True
+      OnChange = CreditPropsCURRENCYChange
+    end
+    object CreditPropsBOOROWERID: TFloatField
+      DisplayLabel = 'Borcalan'
+      FieldName = 'BOOROWERID'
+      Required = True
+    end
+    object CreditPropsCREDITLINEAMOUNT: TFloatField
+      DisplayLabel = 'Kreditin m'#601'bl'#601#287'i'
+      FieldName = 'CREDITLINEAMOUNT'
+      Required = True
+    end
+    object CreditPropsANNUALYINTERESTRATE: TFloatField
+      DisplayLabel = #1050#1086#1090#1080#1088#1086#1074#1082#1072' '#1076#1103#1088#1103#1078#1103#1089#1080
+      FieldName = 'ANNUALYINTERESTRATE'
+      Required = True
+    end
+    object CreditPropsANNUALYOVERDUERATE: TFloatField
+      DisplayLabel = #1069#1077#1078#1080#1082#1084#1080#1096' '#1073#1086#1088#1078' '#1092#1072#1080#1079#1080' (%)'
+      FieldName = 'ANNUALYOVERDUERATE'
+      Required = True
+    end
+    object CreditPropsANNUALYPENALTYRATE: TFloatField
+      DisplayLabel = #1046#1103#1088#1080#1084#1103' '#1092#1072#1080#1079#1080' (%)'
+      FieldName = 'ANNUALYPENALTYRATE'
+      Required = True
+    end
+    object CreditPropsDATEOFCONCLUSION: TDateTimeField
+      DisplayLabel = 'Tarix'
+      FieldName = 'DATEOFCONCLUSION'
+      Required = True
+    end
+    object CreditPropsDUEDATEFIRSTCONTRACT: TDateTimeField
+      FieldName = 'DUEDATEFIRSTCONTRACT'
+      Required = True
+    end
+    object CreditPropsNUMBEROFCREDIT: TWideStringField
+      DisplayLabel = 'M'#252'qavil'#601'nin '#8470
+      FieldName = 'NUMBEROFCREDIT'
+      Size = 32
+    end
+    object CreditPropsPURPOSEOFCREDIT: TWideStringField
+      FieldName = 'PURPOSEOFCREDIT'
+      Size = 128
+    end
+    object CreditPropsCREDITTYPE: TFloatField
+      DisplayLabel = 'Z'#601'man'#601'tin tipi'
+      FieldName = 'CREDITTYPE'
+      Required = True
+    end
+    object CreditPropsPERSONALTYPE: TFloatField
+      DisplayLabel = 'Borcalan'#305'n kateqorias'#305
+      FieldName = 'PERSONALTYPE'
+      Required = True
+    end
+    object CreditPropsAUTOEXPIRE: TFloatField
+      DisplayLabel = #1069#1077#1078#1080#1082#1076#1080#1088#1084#1103' '#1072#1087#1072#1088#1099#1083#1099#1088
+      FieldName = 'AUTOEXPIRE'
+      Required = True
+    end
+    object CreditPropsAUTOPAYMENT: TFloatField
+      DisplayLabel = #1070#1076#1103#1084#1103' '#1072#1087#1072#1088#1099#1083#1099#1088
+      FieldName = 'AUTOPAYMENT'
+      Required = True
+    end
+    object CreditPropsUSRGROUP: TFloatField
+      DisplayLabel = #1048#1089#1090#1080#1092#1072#1076#1103#1095#1080' '#1101#1088#1091#1087#1091
+      FieldName = 'USRGROUP'
+    end
+    object CreditPropsBRANCHID: TFloatField
+      FieldName = 'BRANCHID'
+      Required = True
+    end
+    object CreditPropsNEWFINANCEAMOUNT: TFloatField
+      FieldName = 'NEWFINANCEAMOUNT'
+    end
+    object CreditPropsANNUALBANKRATE: TFloatField
+      FieldName = 'ANNUALBANKRATE'
+    end
+    object CreditPropsNUMBEROFBANKCREDIT: TWideStringField
+      DisplayLabel = #1052#1094#1075#1072#1074#1080#1083#1103#1085#1080#1085' '#8470
+      FieldName = 'NUMBEROFBANKCREDIT'
+      Size = 32
+    end
+    object CreditPropsINTCALCMETHOD: TFloatField
+      DisplayLabel = #1065#1077#1089#1072#1073#1083#1072#1084#1072' '#1072#1087#1072#1088#1099#1083#1099#1088
+      FieldName = 'INTCALCMETHOD'
+    end
+    object CreditPropsBOOROWERACCID: TFloatField
+      FieldName = 'BOOROWERACCID'
+    end
+    object CreditPropsLOANACCID: TFloatField
+      DisplayLabel = #1057#1089#1091#1076#1072' '#1097#1077#1089#1072#1073#1099
+      FieldName = 'LOANACCID'
+    end
+    object CreditPropsDUELOANACCID: TFloatField
+      FieldName = 'DUELOANACCID'
+    end
+    object CreditPropsINTERESTACCID: TFloatField
+      DisplayLabel = 'Faiz hesab'#305
+      FieldName = 'INTERESTACCID'
+    end
+    object CreditPropsDUEINTERESTACCID: TFloatField
+      FieldName = 'DUEINTERESTACCID'
+    end
+    object CreditPropsPRIMARYRESERVEACCID: TFloatField
+      DisplayLabel = #1040#1076#1080' '#1077#1097#1090#1080#1081#1072#1090' '#1097#1077#1089#1072#1073#1099
+      FieldName = 'PRIMARYRESERVEACCID'
+    end
+    object CreditPropsOUTCOLLATERALACCID: TFloatField
+      FieldName = 'OUTCOLLATERALACCID'
+    end
+    object CreditPropsSECONDARYRESERVEACCID: TFloatField
+      FieldName = 'SECONDARYRESERVEACCID'
+    end
+    object CreditPropsOUTGUARANTEEACCID: TFloatField
+      DisplayLabel = 'BK '#214'ht'#601'lik hesab'#305
+      FieldName = 'OUTGUARANTEEACCID'
+    end
+    object CreditPropsOUTINTERESTACCID: TFloatField
+      FieldName = 'OUTINTERESTACCID'
+    end
+    object CreditPropsCRDLINEOBLACCID: TFloatField
+      FieldName = 'CRDLINEOBLACCID'
+    end
+    object CreditPropsOUTLOANACCID: TFloatField
+      FieldName = 'OUTLOANACCID'
+    end
+    object CreditPropsPRIMARYPURRESERVEACCID: TFloatField
+      DisplayLabel = #1052#1077#1075#1089#1103#1076#1083#1080' '#1077#1097#1090#1080#1081#1072#1090' '#1097#1077#1089#1072#1073#1099
+      FieldName = 'PRIMARYPURRESERVEACCID'
+    end
+    object CreditPropsSECONDARYPURRESERVEACCID: TFloatField
+      FieldName = 'SECONDARYPURRESERVEACCID'
+    end
+    object CreditPropsRESERVEID: TFloatField
+      DisplayLabel = #1050#1088#1077#1076#1080#1090#1080#1085' '#1058#1103#1089#1085#1080#1092#1072#1090#1099
+      FieldName = 'RESERVEID'
+      Required = True
+    end
+    object CreditPropsPLEDGEPRICE: TFloatField
+      DisplayLabel = #1069#1080#1088#1086#1074#1091#1085' '#1073#1072#1079#1072#1088' '#1076#1103#1081#1103#1088#1080
+      FieldName = 'PLEDGEPRICE'
+      Required = True
+    end
+    object CreditPropsPLEDGEPRICETORPAQ: TFloatField
+      DisplayLabel = #1069#1080#1088#1086#1074': (Torpaq, Ha)'
+      FieldName = 'PLEDGEPRICETORPAQ'
+    end
+    object CreditPropsPLEDGEID: TFloatField
+      DisplayLabel = #1069#1080#1088#1086#1074'un tipi'
+      FieldName = 'PLEDGEID'
+      Required = True
+    end
+    object CreditPropsDUERESERVEID: TFloatField
+      FieldName = 'DUERESERVEID'
+    end
+    object CreditPropsPLEDGEPRICEEVKV: TFloatField
+      DisplayLabel = #1069#1080#1088#1086#1074' (Ev kv.m)'
+      FieldName = 'PLEDGEPRICEEVKV'
+    end
+    object CreditPropsPLEDGEPRICETORPAQHA: TFloatField
+      DisplayLabel = #1069#1080#1088#1086#1074': (Torpaq, Ha)'
+      FieldName = 'PLEDGEPRICETORPAQHA'
+    end
+    object CreditPropsPLEDGENAME: TWideStringField
+      DisplayLabel = #1069#1080#1088#1086#1074#1091#1085' '#1072#1076#1099' : '
+      FieldName = 'PLEDGENAME'
+      Size = 128
+    end
+    object CreditPropsHOLDERNAME: TWideStringField
+      FieldName = 'HOLDERNAME'
+      Size = 128
+    end
+    object CreditPropsHOLDERADDRESS: TWideStringField
+      FieldName = 'HOLDERADDRESS'
+      Size = 128
+    end
+    object CreditPropsANYINFOTODISTING: TWideStringField
+      DisplayLabel = #1069#1080#1088#1086#1074#1091' '#1092#1103#1075#1083#1103#1085#1076#1080#1088#1103#1085' '#1080#1089#1090#1103#1085#1080#1083#1103#1085' '#1084#1103#1083#1091#1084#1072#1090' : '
+      FieldName = 'ANYINFOTODISTING'
+      Size = 128
+    end
+    object CreditPropsREGISTRYAGENCY: TWideStringField
+      FieldName = 'REGISTRYAGENCY'
+      Size = 64
+    end
+    object CreditPropsREGISTRYDATE: TDateTimeField
+      FieldName = 'REGISTRYDATE'
+    end
+    object CreditPropsPLEDGEINUSE: TFloatField
+      FieldName = 'PLEDGEINUSE'
+    end
+    object CreditPropsPLEDGEINSURANT: TFloatField
+      FieldName = 'PLEDGEINSURANT'
+    end
+    object CreditPropsINSURANCEAMOUNT: TFloatField
+      FieldName = 'INSURANCEAMOUNT'
+    end
+    object CreditPropsINSURANCEDATE: TDateTimeField
+      FieldName = 'INSURANCEDATE'
+    end
+    object CreditPropsNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 64
+    end
+    object CreditPropsCOUNTRYCODE: TWideStringField
+      FieldName = 'COUNTRYCODE'
+      Size = 8
+    end
+    object CreditPropsBANKRUPTEYSTATUS: TFloatField
+      FieldName = 'BANKRUPTEYSTATUS'
+    end
+    object CreditPropsADDRESS: TWideStringField
+      DisplayLabel = 'Adress  :'
+      FieldName = 'ADDRESS'
+      Size = 128
+    end
+    object CreditPropsFIRSTOWNERNAME: TWideStringField
+      FieldName = 'FIRSTOWNERNAME'
+      Size = 64
+    end
+    object CreditPropsSECONDOWNERNAME: TWideStringField
+      FieldName = 'SECONDOWNERNAME'
+      Size = 64
+    end
+    object CreditPropsTHIRDOWNERNAME: TWideStringField
+      FieldName = 'THIRDOWNERNAME'
+      Size = 64
+    end
+    object CreditPropsGUARANTORNAME: TWideStringField
+      DisplayLabel = '1.'#1047#1072#1084#1080#1085#1080#1085' '#1072#1076#1099' '
+      FieldName = 'GUARANTORNAME'
+      Size = 64
+    end
+    object CreditPropsGUARANTORID: TWideStringField
+      DisplayLabel = '1. '#1047#1072#1084#1080#1085' '#1048#1044' '#1089#1080
+      FieldName = 'GUARANTORID'
+    end
+    object CreditPropsGUARANTORNAME2: TWideStringField
+      FieldName = 'GUARANTORNAME2'
+      Size = 64
+    end
+    object CreditPropsGUARANTORID2: TWideStringField
+      FieldName = 'GUARANTORID2'
+    end
+    object CreditPropsGUARANTORSALARY2: TWideStringField
+      FieldName = 'GUARANTORSALARY2'
+      Size = 64
+    end
+    object CreditPropsGUARANTORNAME3: TWideStringField
+      DisplayLabel = '2.'#1047#1072#1084#1080#1085#1080#1085' '#1072#1076#1099' '
+      FieldName = 'GUARANTORNAME3'
+      Size = 64
+    end
+    object CreditPropsGUARANTORID3: TWideStringField
+      DisplayLabel = '2. '#1047#1072#1084#1080#1085#1080#1085' '#1048#1044' '#1089#1080
+      FieldName = 'GUARANTORID3'
+    end
+    object CreditPropsGUARANTORSALARY3: TWideStringField
+      DisplayLabel = '2.'#1047#1072#1084#1080#1085' '#1071'.'#1065
+      FieldName = 'GUARANTORSALARY3'
+      Size = 64
+    end
+    object CreditPropsGUARANTORSALARY: TWideStringField
+      DisplayLabel = '1.'#1047#1072#1084#1080#1085' '#1071'.'#1065
+      FieldName = 'GUARANTORSALARY'
+      Size = 64
+    end
+    object CreditPropsPeriodContracts: TIntegerField
+      FieldKind = fkCalculated
+      FieldName = 'PeriodContracts'
+      Calculated = True
+    end
+    object CreditPropsPLEDGEPRICEEV: TFloatField
+      DisplayLabel = #1069#1080#1088#1086#1074' (Ev kv.m)'
+      FieldName = 'PLEDGEPRICEEV'
+    end
+    object CreditPropsPLEDGSORTS: TFloatField
+      DisplayLabel = #1063#1077#1096#1080#1076#1080' '
+      FieldName = 'PLEDGSORTS'
+    end
+    object CreditPropsBOORID: TWideStringField
+      DisplayLabel = #1052#1094#1096#1090#1103#1088#1080#1085#1080#1085' '#1048#1044' - '#1089#1080
+      FieldName = 'BOORID'
+      Size = 32
+    end
+    object CreditPropsPHONENUMBER: TWideStringField
+      DisplayLabel = #1058#1077#1083' '#8470
+      FieldName = 'PHONENUMBER'
+      Size = 255
+    end
+    object CreditPropsSALARY: TWideStringField
+      DisplayLabel = #399'm'#601'k haqq'#305
+      FieldName = 'SALARY'
+      Size = 64
+    end
+    object CreditPropsFIRSTOWNERID: TWideStringField
+      FieldName = 'FIRSTOWNERID'
+      Size = 12
+    end
+    object CreditPropsSECONDOWNERID: TWideStringField
+      FieldName = 'SECONDOWNERID'
+      Size = 12
+    end
+    object CreditPropsTHIRDOWNERID: TWideStringField
+      FieldName = 'THIRDOWNERID'
+      Size = 12
+    end
+    object CreditPropsINSURANCEAGENCY: TFloatField
+      DisplayLabel = #1057#1099#1100#1086#1088#1090#1072' '#1077#1076#1103#1085' '#1096#1080#1088#1082#1103#1090
+      FieldName = 'INSURANCEAGENCY'
+    end
+    object CreditPropsPINCODE: TWideStringField
+      DisplayLabel = #1055#1080#1085#1050#1086#1076
+      FieldName = 'PINCODE'
+      Size = 7
+    end
+    object CreditPropsZAMINWORK1: TWideStringField
+      FieldName = 'ZAMINWORK1'
+      Size = 80
+    end
+    object CreditPropsZAMINADRES1: TWideStringField
+      FieldName = 'ZAMINADRES1'
+      Size = 80
+    end
+    object CreditPropsZAMINTEL1: TWideStringField
+      FieldName = 'ZAMINTEL1'
+      Size = 30
+    end
+    object CreditPropsZAMINWORK2: TWideStringField
+      FieldName = 'ZAMINWORK2'
+      Size = 80
+    end
+    object CreditPropsZAMINADRES2: TWideStringField
+      FieldName = 'ZAMINADRES2'
+      Size = 80
+    end
+    object CreditPropsZAMINTEL2: TWideStringField
+      FieldName = 'ZAMINTEL2'
+      Size = 30
+    end
+    object CreditPropsCREDITACT: TFloatField
+      DisplayLabel = #1041#1086#1088#1078#1072#1083#1072#1085#1099#1085' '#1089#1077#1082#1090#1086#1088#1091
+      FieldName = 'CREDITACT'
+    end
+    object CreditPropsACTIVITIES: TFloatField
+      DisplayLabel = #1041#1086#1088#1078#1072#1083#1072#1085#1099#1085' '#1092#1103#1072#1083#1080#1081#1081#1103#1090'i'
+      FieldName = 'ACTIVITIES'
+    end
+    object CreditPropsACTIVITIES_TYPE: TFloatField
+      FieldName = 'ACTIVITIES_TYPE'
+    end
+    object CreditPropsCUSTOMERTYPE: TFloatField
+      DisplayLabel = #1041#1086#1088#1078#1072#1083#1072#1085#1099#1085' '#1092#1103#1072#1083#1080#1081#1081#1103#1090' '#1085#1102#1074#1094
+      FieldName = 'CUSTOMERTYPE'
+      Required = True
+    end
+    object CreditPropsAIM_ID: TFloatField
+      DisplayLabel = #1050#1088#1077#1076#1080#1090#1080#1085' '#1074#1077#1088#1080#1083#1084#1103'  '#1084#1103#1075#1089#1103#1076#1080
+      FieldName = 'AIM_ID'
+    end
+    object CreditPropsINSURANCERIGHT: TFloatField
+      FieldName = 'INSURANCERIGHT'
+    end
+    object CreditPropsPLEDGEID_P: TFloatField
+      DisplayLabel = #1069#1088#1086#1074#1091#1085' '#1090#1103#1084#1080#1085#1072#1090#1083#1099#1100#1099
+      FieldName = 'PLEDGEID_P'
+    end
+    object CreditPropsEXPERTID: TFloatField
+      DisplayLabel = #1050'. '#1078#1103#1083#1073' '#1077#1076#1103#1085' '#1084#1094#1090#1103#1093#1103#1089#1089#1080#1089#1080#1085' '#1072#1076#1099
+      FieldName = 'EXPERTID'
+    end
+    object CreditPropsPAYPERIOD: TFloatField
+      FieldName = 'PAYPERIOD'
+    end
+    object CreditPropsPAYINTDAY: TFloatField
+      FieldName = 'PAYINTDAY'
+    end
+    object CreditPropsZMPASPYER1: TWideStringField
+      FieldName = 'ZMPASPYER1'
+      Size = 80
+    end
+    object CreditPropsZMPASPDAT1: TDateTimeField
+      FieldName = 'ZMPASPDAT1'
+    end
+    object CreditPropsZMTELMOB1: TWideStringField
+      FieldName = 'ZMTELMOB1'
+      Size = 15
+    end
+    object CreditPropsZMPASPYER2: TWideStringField
+      FieldName = 'ZMPASPYER2'
+      Size = 80
+    end
+    object CreditPropsZMPASPDAT2: TDateTimeField
+      FieldName = 'ZMPASPDAT2'
+    end
+    object CreditPropsZMTELMOB2: TWideStringField
+      FieldName = 'ZMTELMOB2'
+      Size = 15
+    end
+    object CreditPropsGQNAME: TWideStringField
+      FieldName = 'GQNAME'
+      Size = 60
+    end
+    object CreditPropsGQPASPNUM: TWideStringField
+      FieldName = 'GQPASPNUM'
+      Size = 13
+    end
+    object CreditPropsGQPASPYER: TWideStringField
+      FieldName = 'GQPASPYER'
+      Size = 50
+    end
+    object CreditPropsGQPASPDATE: TDateTimeField
+      FieldName = 'GQPASPDATE'
+    end
+    object CreditPropsGQADRESS: TWideStringField
+      FieldName = 'GQADRESS'
+      Size = 120
+    end
+    object CreditPropsSERYAMH: TWideStringField
+      FieldName = 'SERYAMH'
+    end
+    object CreditPropsGQTEL: TWideStringField
+      FieldName = 'GQTEL'
+      Size = 15
+    end
+    object CreditPropsREGISTRYNO: TWideStringField
+      FieldName = 'REGISTRYNO'
+      Size = 32
+    end
+    object CreditPropsREYSTER: TWideStringField
+      FieldName = 'REYSTER'
+      Size = 128
+    end
+    object CreditPropsGUR_ID: TFloatField
+      FieldName = 'GUR_ID'
+    end
+    object CreditPropsGURINFO: TWideStringField
+      FieldName = 'GURINFO'
+      Size = 200
+    end
+    object CreditPropsGURLETTER: TWideStringField
+      FieldName = 'GURLETTER'
+      Size = 200
+    end
+    object CreditPropsKOMISION: TFloatField
+      FieldName = 'KOMISION'
+    end
+    object CreditPropsPENACCID: TFloatField
+      FieldName = 'PENACCID'
+    end
+  end
+  object AutoPayment: TOracleDataSet
+    SQL.Strings = (
+      'SELECT id, description'
+      '  FROM cr_automation')
+    Optimize = False
+    Cursor = crHourGlass
+    Session = sboapiDataModule.SBSession
+    Left = 224
+    Top = 378
+  end
+  object DataSrcAutoPayment: TDataSource
+    DataSet = AutoPayment
+    Left = 224
+    Top = 330
+  end
+  object AutoExpire: TOracleDataSet
+    SQL.Strings = (
+      'SELECT id, description'
+      '  FROM cr_automation')
+    Optimize = False
+    Cursor = crHourGlass
+    Session = sboapiDataModule.SBSession
+    Left = 584
+    Top = 266
+  end
+  object DataSrcAutoExpire: TDataSource
+    DataSet = AutoExpire
+    Left = 592
+    Top = 218
+  end
+  object DataSrcDueInterests: TDataSource
+    DataSet = DueInterests
+    Left = 132
+    Top = 106
+  end
+  object DueInterests: TOracleDataSet
+    SQL.Strings = (
+      'SELECT   ac.id AS id, ac.kli_id AS custid, ac.acc_no AS accno,'
+      '         ac.NAME AS clientname, ac.val_acc'
+      '    FROM account ac'
+      '   WHERE '
+      'val_acc = :val_acc AND  close_dat is null and '
+      ''
+      '(ac.bal_cn1 IN (SELECT accountnumber'
+      '                           FROM cr_aginfo'
+      '                          WHERE groupid = (SELECT g.id'
+      
+        '                                             FROM cr_accountgrou' +
+        'ps g'
+      
+        '                                            WHERE g.iname = '#39'Int' +
+        'erestAccs'#39'))'
+      '         )'
+      'ORDER BY accno,kli_id'
+      ''
+      '')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000100000003A00560041004C005F0041004300430003000000
+      0000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000500000004000000490044000100000000000C000000430055005300
+      5400490044000100000000000A0000004100430043004E004F00010000000000
+      1400000043004C00490045004E0054004E0041004D0045000100000000000E00
+      0000560041004C005F00410043004300010000000000}
+    Cursor = crHourGlass
+    Master = CurrencysData
+    MasterFields = 'CurrID'
+    DetailFields = 'VAL_ACC'
+    Session = sboapiDataModule.SBSession
+    Left = 124
+    Top = 162
+    object DueInterestsID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object DueInterestsCUSTID: TFloatField
+      FieldName = 'CUSTID'
+    end
+    object DueInterestsACCNO: TWideStringField
+      FieldName = 'ACCNO'
+      Size = 448
+    end
+    object DueInterestsCLIENTNAME: TWideStringField
+      FieldName = 'CLIENTNAME'
+      Size = 1440
+    end
+    object DueInterestsVAL_ACC: TIntegerField
+      FieldName = 'VAL_ACC'
+    end
+  end
+  object Branches: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      'ID ,Name'
+      'from FILIAL')
+    Optimize = False
+    Cursor = crHourGlass
+    Session = sboapiDataModule.SBSession
+    Left = 344
+    Top = 379
+    object BranchesID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object BranchesNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 90
+    end
+  end
+  object DataSrcBranches: TDataSource
+    DataSet = Branches
+    Left = 344
+    Top = 330
+  end
+  object PersonTypes: TOracleDataSet
+    SQL.Strings = (
+      'select '
+      '  ID,'
+      '  DESCRIPION'
+      'from'
+      '  Cr_PERSONS'
+      ''
+      'order by id')
+    Optimize = False
+    Cursor = crHourGlass
+    Session = sboapiDataModule.SBSession
+    Left = 480
+    Top = 266
+  end
+  object DataSrcPersonTypes: TDataSource
+    DataSet = PersonTypes
+    Left = 480
+    Top = 218
+  end
+  object UsrGroups: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      '  id,'
+      'description'
+      'from'
+      '  Cr_USERGROUPS')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      0500000002000000040000004900440001000000000016000000440045005300
+      4300520049005000540049004F004E00010000000000}
+    Cursor = crHourGlass
+    Session = sboapiDataModule.SBSession
+    Left = 456
+    Top = 378
+    object UsrGroupsID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object UsrGroupsDESCRIPTION: TWideStringField
+      FieldName = 'DESCRIPTION'
+      Size = 64
+    end
+  end
+  object DataSrcUsrGroups: TDataSource
+    DataSet = UsrGroups
+    Left = 456
+    Top = 330
+  end
+  object DataSrcPledges: TDataSource
+    DataSet = Pledges
+    Left = 448
+    Top = 2
+  end
+  object Pledges: TOracleDataSet
+    SQL.Strings = (
+      'SELECT id,  description'
+      '  FROM cr_pledges')
+    Optimize = False
+    Cursor = crHourGlass
+    Session = sboapiDataModule.SBSession
+    Left = 448
+    Top = 50
+  end
+  object IUPackage: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'CR_CREDIT'
+    ParameterMode = pmNamed
+    Left = 664
+    Top = 280
+  end
+  object DataSrcOUTOUTObligationAccs: TDataSource
+    DataSet = OUTObligationAccs
+    Left = 316
+    Top = 434
+  end
+  object OUTObligationAccs: TOracleDataSet
+    SQL.Strings = (
+      'SELECT   ac.id AS id, ac.kli_id AS custid, ac.acc_no AS accno,'
+      '         ac.NAME AS clientname, ac.val_acc'
+      '    FROM OUT_ACCOUNT ac '
+      '   WHERE ac.kli_id=:kli_id and'
+      '  (ac.bal_cn1 IN (SELECT accountnumber'
+      '                           FROM cr_aginfo'
+      '                          WHERE groupid = (SELECT g.id'
+      
+        '                                             FROM cr_accountgrou' +
+        'ps g'
+      
+        '                                            WHERE g.iname = '#39'Obl' +
+        'igationAccs'#39'))'
+      '         )'
+      'ORDER BY accno,kli_id'
+      ''
+      '')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000E0000003A004B004C0049005F0049004400030000000000
+      000000000000}
+    Cursor = crHourGlass
+    Session = sboapiDataModule.SBSession
+    Left = 324
+    Top = 490
+  end
+  object DataSrcOUTCollatralAccs: TDataSource
+    DataSet = OUTCollatralAccs
+    Left = 108
+    Top = 442
+  end
+  object OUTCollatralAccs: TOracleDataSet
+    SQL.Strings = (
+      'SELECT   ac.id AS id, ac.kli_id AS custid, ac.acc_no AS accno,'
+      '         ac.NAME AS clientname, ac.val_acc'
+      '    FROM OUT_ACCOUNT ac'
+      '   WHERE'
+      '  (ac.bal_cn1 IN (SELECT accountnumber'
+      '                           FROM cr_aginfo'
+      '                          WHERE groupid = (SELECT g.id'
+      
+        '                                             FROM cr_accountgrou' +
+        'ps g'
+      
+        '                                            WHERE g.iname = '#39'Col' +
+        'lateralAccs'#39'))'
+      '         )'
+      'ORDER BY accno,kli_id'
+      ''
+      '')
+    Optimize = False
+    Cursor = crHourGlass
+    Session = sboapiDataModule.SBSession
+    Left = 100
+    Top = 490
+  end
+  object CustAccs: TOracleDataSet
+    SQL.Strings = (
+      'SELECT   ac.id AS id, ac.kli_id AS custid, ac.acc_no AS accno,'
+      '         ac.NAME AS clientname, ac.val_acc'
+      '    FROM account ac where ac.kli_id=:kli_id'
+      '   and close_dat is null and '
+      ''
+      '  (ac.bal_cn1 IN (SELECT accountnumber'
+      '                           FROM cr_aginfo'
+      '                          WHERE groupid = (SELECT g.id'
+      
+        '                                             FROM cr_accountgrou' +
+        'ps g'
+      
+        '                                            WHERE g.iname = '#39'Cli' +
+        'entAccs'#39'))'
+      '         )'
+      'ORDER BY accno,kli_id'
+      '')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000E0000003A004B004C0049005F0049004400030000000000
+      000000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 24
+    Top = 274
+    object CustAccsID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object CustAccsCUSTID: TFloatField
+      FieldName = 'CUSTID'
+      Required = True
+    end
+    object CustAccsACCNO: TWideStringField
+      FieldName = 'ACCNO'
+      Required = True
+      Size = 28
+    end
+    object CustAccsCLIENTNAME: TWideStringField
+      FieldName = 'CLIENTNAME'
+      Size = 90
+    end
+    object CustAccsVAL_ACC: TIntegerField
+      FieldName = 'VAL_ACC'
+      Required = True
+    end
+  end
+  object DataSrcCustAccs: TDataSource
+    DataSet = CustAccs
+    Left = 32
+    Top = 218
+  end
+  object PercentAccounts: TOracleDataSet
+    SQL.Strings = (
+      'SELECT   ac.id AS id, ac.kli_id AS custid, ac.acc_no AS accno,'
+      '         ac.NAME AS clientname, ac.val_acc'
+      '    FROM sba_account ac'
+      '   WHERE'
+      '   val_acc =:val_acc  AND  close_dat is null and '
+      '(ac.bal_cn1 IN (SELECT accountnumber'
+      '                           FROM cr_aginfo'
+      '                          WHERE groupid = (SELECT g.id'
+      
+        '                                             FROM cr_accountgrou' +
+        'ps g'
+      
+        '                                            WHERE g.iname = '#39'Int' +
+        'erestAccs'#39'))'
+      '         )'
+      'ORDER BY accno,kli_id'
+      ''
+      ' ')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000100000003A00560041004C005F0041004300430003000000
+      0000000000000000}
+    Master = CurrencysData
+    MasterFields = 'CurrID'
+    DetailFields = 'VAL_ACC'
+    Session = sboapiDataModule.SBSession
+    Left = 552
+    Top = 50
+  end
+  object DataSrcPercentAccounts: TDataSource
+    DataSet = PercentAccounts
+    Left = 552
+    Top = 2
+  end
+  object DataSrcDueReserves: TDataSource
+    DataSet = DueReserves
+    Left = 143
+    Top = 2
+  end
+  object DueReserves: TOracleDataSet
+    SQL.Strings = (
+      'select '
+      '    ID,'
+      '    Percent ,'
+      '    Description'
+      '  from'
+      '    CR_RESERVES')
+    Optimize = False
+    Cursor = crHourGlass
+    Session = sboapiDataModule.SBSession
+    OnCalcFields = DueReservesCalcFields
+    Left = 133
+    Top = 50
+    object DueReservesID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object DueReservesPERCENT: TFloatField
+      FieldName = 'PERCENT'
+      Required = True
+    end
+    object DueReservesDESCRIPTION: TWideStringField
+      FieldName = 'DESCRIPTION'
+      Required = True
+      Size = 64
+    end
+    object DueReservesFullDesc: TWideStringField
+      FieldKind = fkCalculated
+      FieldName = 'FullDesc'
+      Size = 255
+      Calculated = True
+    end
+  end
+  object OUTInterestAccs: TOracleDataSet
+    SQL.Strings = (
+      'SELECT   ac.id AS id, ac.kli_id AS custid, ac.acc_no AS accno,'
+      '         ac.NAME AS clientname, ac.val_acc'
+      '    FROM OUT_ACCOUNT ac'
+      '   WHERE'
+      '  (ac.bal_cn1 IN (SELECT accountnumber'
+      '                           FROM cr_aginfo'
+      '                          WHERE groupid = (SELECT g.id'
+      
+        '                                             FROM cr_accountgrou' +
+        'ps g'
+      
+        '                                            WHERE g.iname = '#39'Out' +
+        'InterestAccs'#39'))'
+      '         )'
+      'ORDER BY accno,kli_id'
+      ''
+      '')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 456
+    Top = 490
+    object OUTInterestAccsID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object OUTInterestAccsCUSTID: TFloatField
+      FieldName = 'CUSTID'
+    end
+    object OUTInterestAccsACCNO: TWideStringField
+      FieldName = 'ACCNO'
+    end
+    object OUTInterestAccsCLIENTNAME: TWideStringField
+      FieldName = 'CLIENTNAME'
+      Size = 90
+    end
+    object OUTInterestAccsVAL_ACC: TIntegerField
+      FieldName = 'VAL_ACC'
+    end
+  end
+  object DataSrcOUTInterestAccs: TDataSource
+    DataSet = OUTInterestAccs
+    Left = 464
+    Top = 442
+  end
+  object CrdLineoblAccs: TOracleDataSet
+    SQL.Strings = (
+      'SELECT   ac.id AS id, ac.kli_id AS custid, ac.acc_no AS accno,'
+      '         ac.NAME AS clientname, ac.val_acc'
+      '    FROM ACCOUNT ac'
+      '   WHERE close_dat is null and '
+      ''
+      '  (ac.bal_cn1 IN (SELECT accountnumber'
+      '                           FROM cr_aginfo'
+      '                          WHERE groupid = (SELECT g.id'
+      
+        '                                             FROM cr_accountgrou' +
+        'ps g'
+      
+        '                                            WHERE g.iname = '#39'Crd' +
+        'LineOblAccs'#39'))'
+      '         )'
+      'ORDER BY accno,kli_id'
+      ''
+      '')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 128
+    Top = 274
+  end
+  object CrdLineoblAccsDataSrc: TDataSource
+    DataSet = CrdLineoblAccs
+    Left = 144
+    Top = 218
+  end
+  object CR_COMMON: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'CR_COMMON'
+    Left = 656
+    Top = 187
+  end
+  object CR_decls: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'CR_decls'
+    Left = 656
+    Top = 122
+  end
+  object OutLoanAccsDatSrc: TDataSource
+    DataSet = OutLoanAccs
+    Left = 136
+    Top = 551
+  end
+  object OutLoanAccs: TOracleDataSet
+    SQL.Strings = (
+      'SELECT   ac.id AS id, ac.kli_id AS custid, ac.acc_no AS accno,'
+      '         ac.NAME AS clientname, ac.val_acc'
+      '    FROM OUT_ACCOUNT ac'
+      '   WHERE'
+      '  (ac.bal_cn1 IN (SELECT accountnumber'
+      '                           FROM cr_aginfo'
+      '                          WHERE groupid = (SELECT g.id'
+      
+        '                                             FROM cr_accountgrou' +
+        'ps g'
+      
+        '                                            WHERE g.iname = '#39'Out' +
+        'LoanAccs'#39'))'
+      '         )'
+      'ORDER BY accno,kli_id'
+      ''
+      '')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 128
+    Top = 602
+    object OutLoanAccsID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object OutLoanAccsCUSTID: TFloatField
+      FieldName = 'CUSTID'
+      Required = True
+    end
+    object OutLoanAccsACCNO: TWideStringField
+      FieldName = 'ACCNO'
+      Required = True
+    end
+    object OutLoanAccsCLIENTNAME: TWideStringField
+      FieldName = 'CLIENTNAME'
+      Size = 90
+    end
+    object OutLoanAccsVAL_ACC: TIntegerField
+      FieldName = 'VAL_ACC'
+      Required = True
+    end
+  end
+  object BalcnLoan: TOracleDataSet
+    SQL.Strings = (
+      'select bal_cn,'
+      '       balname ,'
+      '       bal_cn||'#39' - '#39'||balname as FullName from smart.bal_spr1'
+      'where bal_cn in (SELECT accountnumber'
+      '                           FROM cr_aginfo'
+      '                          WHERE groupid = (SELECT g.id'
+      
+        '                                             FROM cr_accountgrou' +
+        'ps g'
+      
+        '                                            WHERE g.iname = '#39'Loa' +
+        'nAccs'#39'))'
+      '')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 232
+    Top = 602
+    object BalcnLoanBAL_CN: TFloatField
+      FieldName = 'BAL_CN'
+      Required = True
+    end
+    object BalcnLoanBALNAME: TWideStringField
+      FieldName = 'BALNAME'
+      Size = 181
+    end
+    object BalcnLoanFULLNAME: TWideStringField
+      FieldName = 'FULLNAME'
+      Size = 224
+    end
+  end
+  object BalcnLoanDatSrc: TDataSource
+    DataSet = BalcnLoan
+    Left = 240
+    Top = 554
+  end
+  object CalcIntMethod: TOracleDataSet
+    SQL.Strings = (
+      'SELECT id,  description'
+      '  FROM cr_intcalcmethod')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 416
+    Top = 602
+    object CalcIntMethodID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object CalcIntMethodDESCRIPTION: TWideStringField
+      FieldName = 'DESCRIPTION'
+      Required = True
+      Size = 32
+    end
+  end
+  object DatSrcCalcIntMethod: TDataSource
+    DataSet = CalcIntMethod
+    Left = 416
+    Top = 554
+  end
+  object DataSrcContrys: TDataSource
+    DataSet = Countrys
+    Left = 31
+    Top = 548
+  end
+  object Countrys: TOracleDataSet
+    SQL.Strings = (
+      'SELECT code, name'
+      '  FROM cr_countrys')
+    Optimize = False
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 24
+    Top = 603
+  end
+  object pledgsorts: TOracleDataSet
+    SQL.Strings = (
+      'SELECT id, name'
+      '  FROM cr_pledgsorts')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 648
+    Top = 50
+    object pledgsortsID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object pledgsortsNAME: TWideStringField
+      FieldName = 'NAME'
+      Required = True
+      Size = 80
+    end
+  end
+  object pledgsortsDatSrc: TDataSource
+    DataSet = pledgsorts
+    Left = 656
+    Top = 2
+  end
+  object InsSorts: TOracleDataSet
+    SQL.Strings = (
+      'select id,name from cr_insuranceagency')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000400000049004400010000000000080000004E0041004D00
+      4500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 581
+    Top = 492
+    object InsSortsID: TIntegerField
+      FieldName = 'ID'
+      Required = True
+    end
+    object InsSortsNAME: TWideStringField
+      FieldName = 'NAME'
+      Required = True
+      Size = 90
+    end
+  end
+  object InsSortsDatSrc: TDataSource
+    DataSet = InsSorts
+    Left = 589
+    Top = 439
+  end
+  object DataSrcActivities: TDataSource
+    DataSet = DataSetActivities
+    Left = 576
+    Top = 322
+  end
+  object DataSetActivities: TOracleDataSet
+    SQL.Strings = (
+      'select id,description,bank_kod, act_id, newid'
+      '  from smart.cr_activities  '
+      'where '
+      ' act_id=:act_id'
+      'order by description'
+      '')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000E0000003A004100430054005F0049004400030000000000
+      000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      0500000005000000040000004900440001000000000016000000440045005300
+      4300520049005000540049004F004E0001000000000010000000420041004E00
+      4B005F004B004F0044000100000000000C0000004100430054005F0049004400
+      0100000000000A0000004E004500570049004400010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 584
+    Top = 380
+    object DataSetActivitiesID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object DataSetActivitiesDESCRIPTION: TWideStringField
+      FieldName = 'DESCRIPTION'
+      Size = 64
+    end
+    object DataSetActivitiesBANK_KOD: TWideStringField
+      FieldName = 'BANK_KOD'
+      Size = 12
+    end
+    object DataSetActivitiesACT_ID: TFloatField
+      FieldName = 'ACT_ID'
+    end
+    object DataSetActivitiesNEWID: TFloatField
+      FieldName = 'NEWID'
+    end
+  end
+  object creditcatData: TOracleDataSet
+    SQL.Strings = (
+      'SELECT  a.id, a.name, a.kod,a.vid_sob'
+      '  FROM smart.cr_creditcat a'
+      'where '
+      'vid_sob=:vid_sob'
+      'order by vid_sob,id')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000100000003A005600490044005F0053004F00420003000000
+      0000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      05000000040000000400000049004400010000000000080000004E0041004D00
+      4500010000000000060000004B004F0044000100000000000E00000056004900
+      44005F0053004F004200010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 201
+    Top = 495
+    object creditcatDataID: TFloatField
+      FieldName = 'ID'
+    end
+    object creditcatDataNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 64
+    end
+    object creditcatDataKOD: TWideStringField
+      FieldName = 'KOD'
+      Size = 4
+    end
+    object creditcatDataVID_SOB: TFloatField
+      FieldName = 'VID_SOB'
+    end
+  end
+  object creditcat: TDataSource
+    DataSet = creditcatData
+    Left = 206
+    Top = 439
+  end
+  object EstateTypeData: TOracleDataSet
+    SQL.Strings = (
+      'SELECT a.id ,a.name,a.kodu  FROM smart.cr_vid_sob a'
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      'order by id'
+      ''
+      ''
+      ''
+      ''
+      '')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000030000000400000049004400010000000000080000004E0041004D00
+      4500010000000000080000004B004F0044005500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 324
+    Top = 607
+    object EstateTypeDataID: TFloatField
+      FieldName = 'ID'
+    end
+    object EstateTypeDataNAME: TWideStringField
+      FieldName = 'NAME'
+      Required = True
+      Size = 150
+    end
+    object EstateTypeDataKODU: TWideStringField
+      FieldName = 'KODU'
+      Size = 4
+    end
+  end
+  object EstateType: TDataSource
+    DataSet = EstateTypeData
+    Left = 325
+    Top = 554
+  end
+  object DataSrcActivities_type: TDataSource
+    Left = 546
+    Top = 546
+  end
+  object TOracleDataSet
+    SQL.Strings = (
+      'SELECT * FROM cr_categories '
+      'where act_id=:act_id'
+      'and act_id is not null'
+      'order by id'
+      ' '
+      ''
+      ''
+      '/*SELECT *'
+      '  FROM creditsmgr.cm_activities_type  '
+      'where act_type_id =:act_type_id*/'
+      ' '
+      '--order by act_id'
+      '')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000E0000003A004100430054005F0049004400030000000000
+      000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      05000000050000000C0000004100430054005F00490044000100000000000400
+      0000490044000100000000000C00000050004500520053004F004E0001000000
+      00000800000043004F0044004500010000000000160000004400450053004300
+      520049005000540049004F004E00010000000000}
+    Master = DataSetActivities
+    Session = sboapiDataModule.SBSession
+    Left = 544
+    Top = 594
+    object ID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object CODE: TWideStringField
+      FieldName = 'CODE'
+      Size = 12
+    end
+    object DESCRIPTION: TWideStringField
+      FieldName = 'DESCRIPTION'
+      Size = 128
+    end
+    object ACT_ID: TFloatField
+      FieldName = 'ACT_ID'
+    end
+  end
+  object Aim_Set: TOracleDataSet
+    SQL.Strings = (
+      'select id, name '
+      '  from smart.cr_aim_cred  '
+      ''
+      ''
+      'order by id')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000400000049004400010000000000080000004E0041004D00
+      4500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 16
+    Top = 492
+  end
+  object AIM_Src: TDataSource
+    DataSet = Aim_Set
+    Left = 16
+    Top = 441
+  end
+  object PldDataSrc: TDataSource
+    DataSet = PldDataSet
+    Left = 16
+    Top = 330
+  end
+  object PldDataSet: TOracleDataSet
+    SQL.Strings = (
+      'SELECT a.id, a.typecode, a.description'
+      '  FROM cr_pledges_t a'
+      'order by id')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      0500000003000000040000004900440001000000000010000000540059005000
+      450043004F004400450001000000000016000000440045005300430052004900
+      5000540049004F004E00010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 16
+    Top = 383
+  end
+  object custSrc: TDataSource
+    DataSet = custe
+    Left = 120
+    Top = 658
+  end
+  object SexDataSet: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      '  2 as id,'
+      '  '#39'Qad'#1099'n'#39' as name'
+      'from dual'
+      'union'
+      'select '
+      '  1 as id,'
+      '  '#39#1050#1080#1096#1080#39' as name'
+      'from dual'
+      '')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000400000049004400010000000000080000004E0041004D00
+      4500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 648
+    Top = 601
+  end
+  object custe: TOracleDataSet
+    SQL.Strings = (
+      'select '
+      'c.ID,'
+      'i.sex'
+      'from SBA_CUSTOMERS c ,smart.custinfo i'
+      'where i.IDCUST=c.id')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      0500000002000000040000004900440001000000000006000000530045005800
+      010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 120
+    Top = 714
+    object custeID: TIntegerField
+      FieldName = 'ID'
+      Required = True
+    end
+    object custeSEX: TIntegerField
+      FieldName = 'SEX'
+    end
+    object custesex_cust: TWideStringField
+      FieldKind = fkLookup
+      FieldName = 'sex_cust'
+      LookupDataSet = SexDataSet
+      LookupKeyFields = 'ID'
+      LookupResultField = 'NAME'
+      KeyFields = 'SEX'
+      Lookup = True
+    end
+  end
+  object PrinadDataSet: TOracleDataSet
+    SQL.Strings = (
+      'select '
+      'c.ID,'
+      'p.name'
+      'from SBA_CUSTOMERS c ,smart.prinad p'
+      'where c.PRINAD_KOD=p.id')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 560
+    Top = 714
+  end
+  object PrinadSrc: TDataSource
+    DataSet = PrinadDataSet
+    Left = 560
+    Top = 658
+  end
+  object ExpertSrc: TDataSource
+    DataSet = ExpertSet
+    Left = 592
+    Top = 106
+  end
+  object ExpertSet: TOracleDataSet
+    SQL.Strings = (
+      'select * from cr_expert  where FILIALID is null'
+      ''
+      'union'
+      
+        'select * from cr_expert  where FILIALID in (select id from filia' +
+        'l)'
+      '')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000400000004000000490044000100000000000800000043004F004400
+      4500010000000000080000004E0041004D004500010000000000100000004600
+      49004C00490041004C0049004400010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 592
+    Top = 162
+  end
+  object OracleDataSet: TOracleDataSet
+    SQL.Strings = (
+      'SELECT id, name, return_dat'
+      '  FROM cr_returntrance '
+      'order by id')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000030000000400000049004400010000000000080000004E0041004D00
+      450001000000000014000000520045005400550052004E005F00440041005400
+      010000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 296
+    Top = 706
+  end
+  object DataSourc: TDataSource
+    DataSet = OracleDataSet
+    Left = 296
+    Top = 658
+  end
+  object PayIntSet: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      '  1 as id,'
+      '  '#39'Biri'#39' as name'
+      'from dual'
+      'union'
+      'select '
+      '  2 as id,'
+      '  '#39'Ikisi'#39' as name'
+      'from dual'
+      'union'
+      'select'
+      '  3 as id,'
+      '  '#39#1062#1095#1094#39' as name'
+      'from dual'
+      'union'
+      'select '
+      ' 4 as id,'
+      '  '#39#1044#1102#1088#1076#1094#39' as name'
+      'from dual'
+      'union'
+      'select'
+      '  5 as id,'
+      '  '#39'Be'#1096#1080#39' as name'
+      'from dual'
+      'union'
+      'select '
+      '  6 as id,'
+      '  '#39#1040#1083#1090#1099#1089#1099#39' as name'
+      'from dual'
+      'union'
+      'select'
+      '  7 as id,'
+      '  '#39#1049#1077#1076#1076#1089#1080#39' as name'
+      'from dual'
+      'union'
+      'select '
+      ' 8 as id,'
+      '  '#39#1057#1103#1082#1082#1080#1079#1080#39' as name'
+      'from dual'
+      'union'
+      'select'
+      '  9 as id,'
+      '  '#39#1044#1086#1075#1075#1091#1079#1091#39' as name'
+      'from dual'
+      'union'
+      'select '
+      '  10 as id,'
+      '  '#39#1054#1085#1091#39' as name'
+      'from dual'
+      'union'
+      'select'
+      '  11 as id,'
+      '  '#39#1054#1085#1073#1080#1088#1080#39' as name'
+      'from dual'
+      'union'
+      'select '
+      ' 12 as id,'
+      '  '#39#1054#1085#1080#1082#1080#1089#1080#39' as name'
+      'from dual'
+      'union'
+      'select'
+      '  13 as id,'
+      '  '#39#1054#1085#1094#1095#1094#39' as name'
+      'from dual'
+      'union'
+      'select '
+      '  14 as id,'
+      '  '#39#1054#1085#1076#1102#1088#1076#1094#39' as name'
+      'from dual'
+      'union'
+      'select'
+      '  15 as id,'
+      '  '#39#1054#1085#1073#1091#1096#1080#39' as name'
+      'from dual'
+      'union'
+      'select '
+      ' 16 as id,'
+      '  '#39#1054#1085#1072#1083#1090#1099#1089#1099#39' as name'
+      'from dual'
+      'union'
+      'select'
+      '  17 as id,'
+      '  '#39#1054#1085#1081#1077#1076#1076#1080#1089#1080#39' as name'
+      'from dual'
+      'union'
+      'select '
+      '  18 as id,'
+      '  '#39#1054#1085#1089#1103#1082#1082#1080#1079#1080#39' as name'
+      'from dual'
+      'union'
+      'select'
+      '  19 as id,'
+      '  '#39#1054#1085#1076#1086#1075#1075#1091#1079#1091#39' as name'
+      'from dual'
+      'union'
+      'select '
+      ' 20 as id,'
+      '  '#39#1048#1081#1088#1080#1084#1080#1089#1080#39' as name'
+      'from dual'
+      'union'
+      'select'
+      '  21 as id,'
+      '  '#39#1048#1081#1088#1080#1084#1073#1080#1088#1080#39' as name'
+      'from dual'
+      'union'
+      'select '
+      '  22 as id,'
+      '  '#39#1048#1081#1088#1080#1084#1080#1082#1080#1089#1080#39' as name'
+      'from dual'
+      'union'
+      'select'
+      '  23 as id,'
+      '  '#39#1048#1081#1088#1080#1084#1094#1095#1094#39' as name'
+      'from dual'
+      'union'
+      'select '
+      ' 24 as id,'
+      '  '#39#1048#1081#1088#1080#1084#1076#1102#1088#1076#1081#39' as name'
+      'from dual'
+      'union'
+      'select'
+      '  25 as id,'
+      '  '#39#1048#1081#1088#1080#1084#1073#1077#1096#1080#39' as name'
+      'from dual'
+      'union'
+      'select '
+      '  26 as id,'
+      '  '#39#1048#1081#1088#1080#1084#1072#1083#1090#1099#1089#1099#39' as name'
+      'from dual'
+      'union'
+      'select'
+      '  27 as id,'
+      '  '#39#1048#1081#1088#1080#1084#1081#1077#1076#1076#1080#1089#1080#39' as name'
+      'from dual'
+      'union'
+      'select '
+      ' 28 as id,'
+      '  '#39#1048#1081#1088#1080#1084#1089#1103#1082#1082#1080#1079#1080#39' as name'
+      'from dual'
+      'union'
+      'select'
+      '  29 as id,'
+      '  '#39#1048#1081#1088#1080#1084#1076#1086#1075#1075#1091#1079#1091#39' as name'
+      'from dual'
+      'union'
+      'select '
+      '  30 as id,'
+      '  '#39#1054#1090#1091#1079#1091#39' as name'
+      'from dual'
+      'union'
+      'select'
+      '  31 as id,'
+      '  '#39#1054#1090#1091#1079#1073#1080#1088#1080#39' as name'
+      'from dual'
+      '')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 368
+    Top = 706
+  end
+  object PayIntSrc: TDataSource
+    DataSet = PayIntSet
+    Left = 368
+    Top = 658
+  end
+  object DataSrcSeynbol: TDataSource
+    DataSet = DataSenbol
+    Left = 24
+    Top = 658
+  end
+  object DataSenbol: TOracleDataSet
+    SQL.Strings = (
+      'Select ID,kod,KOD||'#39'- '#39'||NAME AS NAM  from smart.report_symbol'
+      '')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000030000000400000049004400010000000000060000004E0041004D00
+      010000000000060000004B004F004400010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 24
+    Top = 714
+    object DataSenbolID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object DataSenbolNAM: TWideStringField
+      FieldName = 'NAM'
+      Size = 298
+    end
+    object DataSenbolKOD: TFloatField
+      FieldName = 'KOD'
+    end
+  end
+  object DataSrcInterests: TDataSource
+    DataSet = Interests
+    Left = 204
+    Top = 658
+  end
+  object Interests: TOracleDataSet
+    SQL.Strings = (
+      'SELECT   ac.id AS id, ac.kli_id AS custid, ac.acc_no AS accno,'
+      '         ac.NAME AS clientname, ac.val_acc'
+      '    FROM sba_account ac'
+      '   WHERE ac.kli_id=:kli_id  and'
+      'val_acc = :val_acc AND  close_dat is null and '
+      ''
+      '(ac.bal_cn1 IN (SELECT accountnumber'
+      '                           FROM cr_aginfo'
+      '                          WHERE groupid = (SELECT g.id'
+      
+        '                                             FROM cr_accountgrou' +
+        'ps g'
+      
+        '                                            WHERE g.iname = '#39'Int' +
+        'erestAccs'#39'))'
+      '         )'
+      'ORDER BY accno,kli_id'
+      ''
+      '')
+    Optimize = False
+    Variables.Data = {
+      0400000002000000100000003A00560041004C005F0041004300430003000000
+      00000000000000000E0000003A004B004C0049005F0049004400030000000000
+      000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000500000004000000490044000100000000000C000000430055005300
+      5400490044000100000000000A0000004100430043004E004F00010000000000
+      1400000043004C00490045004E0054004E0041004D0045000100000000000E00
+      0000560041004C005F00410043004300010000000000}
+    Cursor = crHourGlass
+    MasterFields = 'CurrID'
+    DetailFields = 'VAL_ACC'
+    Session = sboapiDataModule.SBSession
+    Left = 204
+    Top = 714
+    object InterestsID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object InterestsCUSTID: TFloatField
+      FieldName = 'CUSTID'
+    end
+    object InterestsACCNO: TWideStringField
+      FieldName = 'ACCNO'
+      Size = 28
+    end
+    object InterestsCLIENTNAME: TWideStringField
+      FieldName = 'CLIENTNAME'
+      Size = 250
+    end
+    object InterestsVAL_ACC: TIntegerField
+      FieldName = 'VAL_ACC'
+    end
+  end
+  object GUR_name: TOracleDataSet
+    SQL.Strings = (
+      'SELECT id, name'
+      '  FROM cr_guarantyorgname'
+      '')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000400000049004400010000000000080000004E0041004D00
+      4500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 448
+    Top = 714
+    object GUR_nameID: TFloatField
+      FieldName = 'ID'
+    end
+    object GUR_nameNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 50
+    end
+  end
+  object DataSourceGUR_name: TDataSource
+    DataSet = GUR_name
+    Left = 464
+    Top = 658
+  end
+  object SexDataSource: TDataSource
+    DataSet = SexDataSet
+    Left = 648
+    Top = 533
+  end
+  object PenSet: TOracleDataSet
+    SQL.Strings = (
+      'SELECT   ac.id AS id, ac.kli_id AS custid, ac.acc_no AS accno,'
+      '         ac.NAME AS clientname, ac.val_acc'
+      '    FROM account ac'
+      '   WHERE  close_dat is null and val_acc = :val_acc AND'
+      ''
+      '      (ac.bal_cn1 IN (SELECT accountnumber'
+      '                           FROM cr_aginfo'
+      '                          WHERE groupid = (SELECT g.id'
+      
+        '                                             FROM cr_accountgrou' +
+        'ps g'
+      
+        '                                            WHERE g.iname = '#39'Pen' +
+        'accAccs'#39'))'
+      '         )'
+      'ORDER BY accno,kli_id'
+      ''
+      '')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000100000003A00560041004C005F0041004300430003000000
+      0000000000000000}
+    Cursor = crHourGlass
+    Session = sboapiDataModule.SBSession
+    Left = 641
+    Top = 672
+  end
+  object PenSource: TDataSource
+    DataSet = PenSet
+    Left = 640
+    Top = 720
+  end
+  object loc: TOracleDataSet
+    SQL.Strings = (
+      'select * from cr_accounts where creditid=:creditid')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000120000003A00430052004500440049005400490044000300
+      00000000000000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 728
+    Top = 32
+  end
+end

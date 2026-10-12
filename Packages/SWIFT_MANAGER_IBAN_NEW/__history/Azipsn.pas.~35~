@@ -1,0 +1,668 @@
+﻿unit Azipsn;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ComCtrls, SearchEdit, DBCtrls, Unit2, DB, OracleData,
+  ExtCtrls, Grids, DBGrids, IdBaseComponent, IdCoder, IdCoder3to4, IdCoder00E,
+  IdCoderXXE, IdCoderMIME, IdCoderUUE;
+
+type
+  Tsettings = class(TForm)
+    RadioButton1: TRadioButton;
+    RadioButton2: TRadioButton;
+    DBGrid1: TDBGrid;
+    tsd: TButton;
+    RadioButton3: TRadioButton;
+    RadioButton4: TRadioButton;
+    RadioButton5: TRadioButton;
+    RadioButton6: TRadioButton;
+    RadioButton7: TRadioButton;
+    RadioButton8: TRadioButton;
+    RadioButton9: TRadioButton;
+    RadioButton10: TRadioButton;
+    RadioButton11: TRadioButton;
+    RadioButton12: TRadioButton;
+    Panel1: TPanel;
+    Edit1: TEdit;
+    RadioButton13: TRadioButton;
+    RadioButton14: TRadioButton;
+    RadioButton15: TRadioButton;
+    RadioButton16: TRadioButton;
+    RadioButton17: TRadioButton;
+    RadioButton18: TRadioButton;
+    RadioGroup1: TRadioGroup;
+    CheckBox1: TCheckBox;
+    Edit2: TEdit;
+    Edit3: TEdit;
+    Label1: TLabel;
+    Button1: TButton;
+    procedure tsdClick(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
+    procedure RadioButton2Click(Sender: TObject);
+    procedure RadioButton1Click(Sender: TObject);
+    procedure RadioButton3Click(Sender: TObject);
+    procedure RadioButton12Click(Sender: TObject);
+    procedure RadioButton4Click(Sender: TObject);
+    procedure RadioButton5Click(Sender: TObject);
+    procedure RadioButton6Click(Sender: TObject);
+    procedure RadioButton7Click(Sender: TObject);
+    procedure RadioButton8Click(Sender: TObject);
+    procedure RadioButton9Click(Sender: TObject);
+    procedure RadioButton10Click(Sender: TObject);
+    procedure RadioButton11Click(Sender: TObject);
+    procedure RadioButton13Click(Sender: TObject);
+    procedure RadioButton14Click(Sender: TObject);
+    procedure RadioButton15Click(Sender: TObject);
+    procedure RadioButton16Click(Sender: TObject);
+    procedure RadioButton17Click(Sender: TObject);
+    procedure RadioButton18Click(Sender: TObject);
+     procedure clicker(Sender: TObject);
+    procedure CheckBox1Click(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure RadioGroup1Click(Sender: TObject);
+
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  settings: Tsettings;
+  isEmpty,CanClose: boolean;
+  code:String;
+
+implementation
+
+{$R *.dfm}
+
+function Sezar(Key:Integer; S:String; Decode:Boolean):String;
+var
+  i:Integer;
+  st:String;
+begin
+  st:=S;
+  if Decode then Key:=-Key;
+  for i:=1 to Length(S) do
+    st[i]:=Chr((Ord(S[i])+Key));
+  Result:=st;
+end;
+
+
+
+
+procedure Tsettings.tsdClick(Sender: TObject);
+  {
+var
+  i,Key:Integer;
+begin
+{  Key:=13;
+  for i:=0 to Memo1.Lines.Count-1 do
+    Memo1.Lines[i]:=Sezar(Key,Memo1.Lines[i],False);
+
+    memo2.Text:=IdEncoderXXE1.Encode(Memo1.Text); }
+
+    var
+   i: Integer;
+   IDs: WideString;
+   Status, TrCount: Word;
+begin
+ IDs :='';
+ TrCount :=0;
+ with dbgrid1, SelectedRows, DataSource.DataSet do
+  if Count = 0 then
+   begin
+    Inc(TrCount);
+    IDs := FieldByName('ID').AsString;
+   end
+  else
+  begin
+   DisableControls;
+   try
+    for i :=0 to Count -1 do
+    begin
+     GotoBookmark(TBookmark(Items[i]));
+
+     if (FieldByName('status').asinteger=2)and
+        (FieldByName('MT').asstring='MT103')
+      or (FieldByName('MT').asstring='MT102')
+      or (FieldByName('MT').asstring='MT205')
+      or (FieldByName('MT').asstring='MT900')
+      or (FieldByName('MT').asstring='MT910')
+          then
+       begin
+      Inc(TrCount);
+     IDs :=IDs + ',' + FieldByName('ID').AsString;
+     end;
+    end;
+   System.Delete(IDs, 1, 1);
+   finally
+    EnableControls;
+   end;
+  end;
+      {
+SWDataModule.sw_radioname.CloseAll;
+SWDataModule.sw_radioname.SetVariable('mt',RadioGroup1.Items[RadioGroup1.ItemIndex]);
+SWDataModule.sw_radioname.open;
+if edit3.Text='' then
+edit3.Text:=  SWDataModule.sw_radioname.FieldByName('DESCRIPTION').AsString;
+
+with SWDataModule.updswin do begin
+close;
+ SetVariable('kod',SWDataModule.sw_radioname.FieldByName('id').AsInteger);
+ SetVariable('vid',DBGrid1.DataSource.DataSet.FieldByName('id').AsInteger);
+
+ Execute ;
+ Session.Commit;
+
+end;     }
+
+  if MessageDlg(Format('%d sayda əməliyyatlar günün sənədlərinə əlavə edilsin ?', [TrCount]), mtConfirmation, [mbYes, mbCancel], 0) = mrYes
+  then
+ begin
+ //showmessage(IDS);
+  with SWDataModule.SW_IN_FORAddIn do
+     begin
+     Close;
+     SetVariable('IDs',IDS);
+     Open;
+     for i:=0 to recordcount-1 do begin
+
+   SwDataModule.sw_in_insert.CallProcedure('add_in_transactions2',[fieldbyName('id').asinteger,
+                                                                  fieldbyName('bic').AsString,
+                                                                  fieldbyName('ACOUNT').AsString,
+                                                                  fieldbyName('valu').AsFloat,
+                                                                  edit3.Text,
+                                                                  fieldbyName('description2').asstring,
+                                                                  fieldbyName('TAX').asstring]);
+
+                                   next;
+                                  end;
+     end;
+ end;
+
+
+
+  close;
+
+end;
+procedure Tsettings.Button1Click(Sender: TObject);
+begin
+
+SWDataModule.sw_radioname.CloseAll;
+SWDataModule.sw_radioname.SetVariable('mt',RadioGroup1.Items[RadioGroup1.ItemIndex]);
+SWDataModule.sw_radioname.open;
+
+edit3.Text:=SWDataModule.sw_radioname.FieldByName('description').AsString;
+end;
+
+procedure Tsettings.Button2Click(Sender: TObject);
+var
+  i,Key:Integer;
+begin
+{memo2.Text:=IdDecoderXXE1.DecodeString(Memo1.Text);
+//showmessage('l');
+  Key:=13;
+for i:=0 to Memo2.Lines.Count-1 do
+   Memo2.Lines[i]:=Sezar(Key,Memo2.Lines[i],True);  }
+
+end;
+
+procedure Tsettings.CheckBox1Click(Sender: TObject);
+var value,index: integer;
+rbname :string;
+begin
+
+index := radiogroup1.ItemIndex;
+value := Integer(radiogroup1.Items.Objects[index]);
+showmessage(inttostr(index));
+
+//edit2.Text:= RadioGroup1.Items[RadioGroup1.ItemIndex]
+
+SWDataModule.sw_radioname.CloseAll;
+SWDataModule.sw_radioname.SetVariable('mt',RadioGroup1.Items[RadioGroup1.ItemIndex]);
+SWDataModule.sw_radioname.open;
+
+end;
+
+procedure Tsettings.clicker(Sender: TObject);
+
+var i:integer;
+begin
+
+
+end;
+
+
+
+procedure Tsettings.FormActivate(Sender: TObject);
+var
+  btnTest: TRadioButton;
+  i,j : integer;
+  var
+Rb:array  of TRadioButton;
+begin
+
+SWDataModule.Intesdiq.Open;
+SWDataModule.swnames.CloseAll;
+SWDataModule.swnames.SetVariable('val',SWDataModule.Intesdiq.FieldByName('valute').AsString);
+SWDataModule.swnames.SetVariable('type',SWDataModule.Intesdiq.FieldByName('mt').AsString);
+SWDataModule.swnames.open;
+
+SetLength(rb,SWDataModule.swnames.RecordCount);
+
+    // ShowMessage(inttostr(SWDataModule.swnames.RecordCount));
+SWDataModule.swnames.First;
+
+
+
+   for i :=1 to SWDataModule.swnames.RecordCount do
+       begin
+        RadioGroup1.Items.Add(SWDataModule.swnames.FieldByName('mtname').AsString);
+        SWDataModule.swnames.Next;
+        end;
+                        ///Sabuhi.M        13-07-2017
+btnTest := TRadioButton.Create(Self);
+with btnTest do
+begin
+  Name := 'radiobutto'+inttostr(i);
+  Parent := Self;
+  Left := 8;
+  Top := 70+btntest.Top+i*23;
+  Width := 161;
+  Height := 17;
+  Caption :=SWDataModule.swnames.FieldByName('mtname').AsString;
+ // Default := True;
+  ParentFont := False;
+  TabOrder := 0;
+  Tag:=i;
+
+end;
+//end;
+
+
+
+
+
+              {
+RadioButton1.Caption:=SWDataModule.sw_settings.FieldByName('rdname1').AsString;
+RadioButton2.Caption:=SWDataModule.sw_settings.FieldByName('rdname2').AsString;
+     }
+
+
+ { if DBGrid1.DataSource.DataSet.FieldByName('VALUTE').AsString<>'AZN' then
+
+  begin
+   RadioButton13.Visible:=false;
+   RadioButton14.Visible:=false;
+   RadioButton15.Visible:=false;
+
+   RadioButton16.Visible:=true;
+   RadioButton17.Visible:=true;
+   RadioButton18.Visible:=true;
+
+   end
+   else
+   begin
+   RadioButton13.Visible:=true;
+   RadioButton14.Visible:=true;
+   RadioButton15.Visible:=true;
+
+   RadioButton16.Visible:=false;
+   RadioButton17.Visible:=false;
+   RadioButton18.Visible:=false;
+  end;                              }
+                        //turan da aciq olur
+
+
+
+ edit1.Text:= SWDataModule.Intesdiq.FieldByName('MT').AsString ;
+ if edit1.Text='MT205' then  begin
+   RadioButton3.Visible:=false;
+   RadioButton4.Visible:=false;
+   RadioButton5.Visible:=false;
+   RadioButton6.Visible:=false;
+   RadioButton7.Visible:=false;
+   RadioButton8.Visible:=false;
+   RadioButton9.Visible:=false;
+   RadioButton10.Visible:=false;
+   RadioButton11.Visible:=false;
+   RadioButton12.Visible:=false;
+
+ end;
+
+  if edit1.Text='MT900' then  begin
+   RadioButton1.Visible:=false;
+   RadioButton2.Visible:=false;
+   RadioButton9.Visible:=false;
+   RadioButton10.Visible:=false;
+   RadioButton11.Visible:=false;
+   RadioButton12.Visible:=false;
+    end;
+
+  if edit1.Text='MT910' then  begin
+   RadioButton1.Visible:=false;
+   RadioButton2.Visible:=false;
+   RadioButton3.Visible:=false;
+   RadioButton4.Visible:=false;
+   RadioButton5.Visible:=false;
+   RadioButton6.Visible:=false;
+   RadioButton7.Visible:=false;
+   RadioButton8.Visible:=false;
+   end;
+
+
+
+
+
+end;
+
+procedure Tsettings.RadioButton10Click(Sender: TObject);
+begin
+code:='10';
+tsd.Visible:=true;
+
+with SWDataModule.updswin do begin
+close;
+ SetVariable('kod',code);
+ SetVariable('vid',DBGrid1.DataSource.DataSet.FieldByName('id').AsInteger);
+
+ Execute ;
+ Session.Commit;
+
+end;
+
+end;
+
+procedure Tsettings.RadioButton11Click(Sender: TObject);
+begin
+code:='11';
+tsd.Visible:=true;
+
+with SWDataModule.updswin do begin
+close;
+ SetVariable('kod',code);
+ SetVariable('vid',DBGrid1.DataSource.DataSet.FieldByName('id').AsInteger);
+
+ Execute ;
+ Session.Commit;
+
+end;
+
+end;
+
+procedure Tsettings.RadioButton12Click(Sender: TObject);
+begin
+code:='12';
+tsd.Visible:=true;
+
+with SWDataModule.updswin do begin
+close;
+ SetVariable('kod',code);
+ SetVariable('vid',DBGrid1.DataSource.DataSet.FieldByName('id').AsInteger);
+
+ Execute ;
+ Session.Commit;
+
+end;
+
+end;
+
+procedure Tsettings.RadioButton13Click(Sender: TObject);
+begin
+code:='10';
+tsd.Visible:=true;
+
+with SWDataModule.updswin do begin
+close;
+ SetVariable('kod',code);
+ SetVariable('vid',DBGrid1.DataSource.DataSet.FieldByName('id').AsInteger);
+
+ Execute ;
+ Session.Commit;
+
+end;
+
+end;
+
+procedure Tsettings.RadioButton14Click(Sender: TObject);
+begin
+code:='11';
+tsd.Visible:=true;
+
+with SWDataModule.updswin do begin
+close;
+ SetVariable('kod',code);
+ SetVariable('vid',DBGrid1.DataSource.DataSet.FieldByName('id').AsInteger);
+
+ Execute ;
+ Session.Commit;
+
+end;
+end;
+
+procedure Tsettings.RadioButton15Click(Sender: TObject);
+begin
+code:='12';
+tsd.Visible:=true;
+
+with SWDataModule.updswin do begin
+close;
+ SetVariable('kod',code);
+ SetVariable('vid',DBGrid1.DataSource.DataSet.FieldByName('id').AsInteger);
+
+ Execute ;
+ Session.Commit;
+
+end;
+end;
+
+procedure Tsettings.RadioButton16Click(Sender: TObject);
+begin
+code:='13';
+tsd.Visible:=true;
+
+with SWDataModule.updswin do begin
+close;
+ SetVariable('kod',code);
+ SetVariable('vid',DBGrid1.DataSource.DataSet.FieldByName('id').AsInteger);
+
+ Execute ;
+ Session.Commit;
+
+end;
+end;
+
+procedure Tsettings.RadioButton17Click(Sender: TObject);
+begin
+code:='14';
+tsd.Visible:=true;
+
+with SWDataModule.updswin do begin
+close;
+ SetVariable('kod',code);
+ SetVariable('vid',DBGrid1.DataSource.DataSet.FieldByName('id').AsInteger);
+
+ Execute ;
+ Session.Commit;
+
+end;
+end;
+
+procedure Tsettings.RadioButton18Click(Sender: TObject);
+begin
+code:='15';
+tsd.Visible:=true;
+
+with SWDataModule.updswin do begin
+close;
+ SetVariable('kod',code);
+ SetVariable('vid',DBGrid1.DataSource.DataSet.FieldByName('id').AsInteger);
+
+ Execute ;
+ Session.Commit;
+
+end;
+end;
+
+procedure Tsettings.RadioButton1Click(Sender: TObject);
+begin
+code:='2';
+tsd.Visible:=true;
+
+with SWDataModule.updswin do begin
+close;
+ SetVariable('kod',code);
+ SetVariable('vid',DBGrid1.DataSource.DataSet.FieldByName('id').AsInteger);
+
+ Execute ;
+ Session.Commit;
+
+end;
+end;
+
+procedure Tsettings.RadioButton2Click(Sender: TObject);
+begin
+code:='1';
+tsd.Visible:=true;
+
+with SWDataModule.updswin do begin
+close;
+ SetVariable('kod',code);
+ SetVariable('vid',DBGrid1.DataSource.DataSet.FieldByName('id').AsInteger);
+
+ Execute ;
+ Session.Commit;
+
+end;
+
+end;
+
+procedure Tsettings.RadioButton3Click(Sender: TObject);
+begin
+code:='3';
+tsd.Visible:=true;
+
+with SWDataModule.updswin do begin
+close;
+ SetVariable('kod',code);
+ SetVariable('vid',DBGrid1.DataSource.DataSet.FieldByName('id').AsInteger);
+
+ Execute ;
+ Session.Commit;
+
+end;
+
+end;
+
+procedure Tsettings.RadioButton4Click(Sender: TObject);
+begin
+code:='4';
+tsd.Visible:=true;
+
+with SWDataModule.updswin do begin
+close;
+ SetVariable('kod',code);
+ SetVariable('vid',DBGrid1.DataSource.DataSet.FieldByName('id').AsInteger);
+
+ Execute ;
+ Session.Commit;
+
+end;
+
+end;
+
+procedure Tsettings.RadioButton5Click(Sender: TObject);
+begin
+code:='5';
+tsd.Visible:=true;
+
+with SWDataModule.updswin do begin
+close;
+ SetVariable('kod',code);
+ SetVariable('vid',DBGrid1.DataSource.DataSet.FieldByName('id').AsInteger);
+
+ Execute ;
+ Session.Commit;
+
+end;
+
+end;
+
+procedure Tsettings.RadioButton6Click(Sender: TObject);
+begin
+code:='6';
+tsd.Visible:=true;
+
+with SWDataModule.updswin do begin
+close;
+ SetVariable('kod',code);
+ SetVariable('vid',DBGrid1.DataSource.DataSet.FieldByName('id').AsInteger);
+
+ Execute ;
+ Session.Commit;
+
+end;
+
+end;
+
+procedure Tsettings.RadioButton7Click(Sender: TObject);
+begin
+code:='7';
+tsd.Visible:=true;
+
+with SWDataModule.updswin do begin
+close;
+ SetVariable('kod',code);
+ SetVariable('vid',DBGrid1.DataSource.DataSet.FieldByName('id').AsInteger);
+
+ Execute ;
+ Session.Commit;
+
+end;
+
+end;
+
+procedure Tsettings.RadioButton8Click(Sender: TObject);
+begin
+code:='8';
+tsd.Visible:=true;
+
+with SWDataModule.updswin do begin
+close;
+ SetVariable('kod',code);
+ SetVariable('vid',DBGrid1.DataSource.DataSet.FieldByName('id').AsInteger);
+
+ Execute ;
+ Session.Commit;
+
+end;
+
+end;
+
+procedure Tsettings.RadioButton9Click(Sender: TObject);
+begin
+code:='9';
+tsd.Visible:=true;
+
+with SWDataModule.updswin do begin
+close;
+ SetVariable('kod',code);
+ SetVariable('vid',DBGrid1.DataSource.DataSet.FieldByName('id').AsInteger);
+
+ Execute ;
+ Session.Commit;
+
+end;
+
+end;
+
+procedure Tsettings.RadioGroup1Click(Sender: TObject);
+begin
+button1.Click;
+end;
+
+end.

@@ -1,0 +1,35 @@
+unit TransacationManager;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, Buttons, XFSCtrls, ExtCtrls;
+
+type
+  TFormTransacationManager = class(TForm)
+    XFPanel1: TXFPanel;
+    XFBitBtn1: TXFBitBtn;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormTransacationManager: TFormTransacationManager;
+  procedure InitPlugin(s:string);export;
+implementation
+uses   CommonDecls ;
+{$R *.dfm}
+ procedure InitPlugin(s:string);export;
+begin
+   FormTransacationManager.ShowModal;
+end;
+exports
+     InitPlugin;
+
+initialization
+ FormTransacationManager := FormTransacationManager.Create(CommonApplication);
+
+end.

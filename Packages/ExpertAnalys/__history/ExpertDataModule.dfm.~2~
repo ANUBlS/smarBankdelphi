@@ -1,0 +1,847 @@
+object ExpertDataModul: TExpertDataModul
+  OldCreateOrder = False
+  Height = 480
+  Width = 696
+  object Operations: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      '  op.rowID,op.*'
+      'from'
+      '  operations op'
+      'where'
+      '  schemaid = :schemaid'
+      'order by'
+      '  id'
+      ' ')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000120000003A0053004300480045004D004100490044000400
+      0000080000000000000000003F4000000000}
+    QBEDefinition.QBEFieldDefs = {
+      0500000003000000040000004900440001000000000010000000530043004800
+      45004D00410049004400010000000000120000004F0050004500520041005400
+      49004F004E00010000000000}
+    Master = Schemas
+    MasterFields = 'ID'
+    DetailFields = 'SCHEMAID'
+    Session = sboapiDataModule.SBSession
+    Active = True
+    AfterPost = SchemasAfterPost
+    Left = 25
+    Top = 88
+    object OperationsID: TFloatField
+      FieldName = 'ID'
+    end
+    object OperationsOPERATION: TWideStringField
+      FieldName = 'OPERATION'
+      Size = 100
+    end
+    object OperationsSCHEMAID: TFloatField
+      FieldName = 'SCHEMAID'
+      Required = True
+    end
+  end
+  object OperationsData: TDataSource
+    DataSet = Operations
+    Left = 98
+    Top = 88
+  end
+  object Operations_balance: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      '   opb.rowid,opb.*'
+      '  ---,decode(typeid,1,'#39'A'#39',2,'#39'P'#39',3,'#39'A-P'#39','#39'Unknown'#39') as type'
+      'from'
+      '  operation_balances opb'
+      ''
+      'where'
+      '  opb.operationid = :operationid'
+      'order by'
+      '   opb.balance'
+      '  ,opb.accno'
+      '  ,opb.accgroup'
+      '  ,opb.class'
+      ' '
+      ' ')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000180000003A004F005000450052004100540049004F004E00
+      49004400040000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      05000000070000000400000049004400010000000000160000004F0050004500
+      52004100540049004F004E00490044000100000000000A000000410043004300
+      4E004F000100000000000E000000420041004C0041004E004300450001000000
+      000010000000410043004300470052004F00550050000100000000000A000000
+      43004C004100530053000100000000000C000000540049005000410043004300
+      010000000000}
+    Master = Operations
+    MasterFields = 'ID'
+    DetailFields = 'OPERATIONID'
+    Session = sboapiDataModule.SBSession
+    Active = True
+    AfterPost = SchemasAfterPost
+    Left = 24
+    Top = 160
+    object Operations_balanceID: TFloatField
+      FieldName = 'ID'
+    end
+    object Operations_balanceOPERATIONID: TFloatField
+      FieldName = 'OPERATIONID'
+      Required = True
+    end
+    object Operations_balanceACCNO: TWideStringField
+      FieldName = 'ACCNO'
+    end
+    object Operations_balanceBALANCE: TFloatField
+      FieldName = 'BALANCE'
+    end
+    object Operations_balanceACCGROUP: TFloatField
+      FieldName = 'ACCGROUP'
+    end
+    object Operations_balanceCLASS: TFloatField
+      FieldName = 'CLASS'
+    end
+    object Operations_balanceTIPACC: TWideStringField
+      FieldName = 'TIPACC'
+      Size = 5
+    end
+  end
+  object BalancesData: TDataSource
+    DataSet = Operations_balance
+    Left = 99
+    Top = 160
+  end
+  object Currency: TOracleDataSet
+    SQL.Strings = (
+      'Select Valute,Valu_Name from avalute')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000C000000560041004C005500540045000100000000001200
+      0000560041004C0055005F004E0041004D004500010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 357
+    Top = 296
+  end
+  object Report: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      '  distinct'
+      '   op.schemaID'
+      '  ,opb.operationid'
+      '  ,bs.bal_cn'
+      '  ,decode(typeid,1,'#39'A'#39',2,'#39'P'#39',3,'#39'A-P'#39','#39'Unknown'#39') as type'
+      '  ,ar.acc_id'
+      '  ,ar.ostat as LastRest'
+      '  ,ar.pok_ostat as LastLRest'
+      '  ,ac.acc_no'
+      '  ,ac.val_acc'
+      '  ,ac.name '
+      '  ,av.val_name'
+      '  ,op.operation'
+      'from'
+      '    archost ar'
+      '   ,operation_balances opb'
+      '   ,account ac'
+      '   ,operations op'
+      '   ,avalute av'
+      '   ,bal_spr1 bs'
+      'where'
+      '  ar.acc_id =  ac.id'
+      
+        '   and ((ac.acc_no = opb.accno) or (bs.bal_cn = opb.balance) or ' +
+        '(bs.accgroup = opb.accgroup) or (bs.part = opb.class))'
+      '   and ac.bal_cn1 = bs.bal_cn'
+      '   and op.id = opb.operationID'
+      '   and ac.val_acc = av.valute'
+      '   and ac.close_dat is null'
+      '   and (Sb_expertanalyse.checktipacc(opb.tipacc,ac.tipacc)=1)'
+      '   --line 29 + Branch Filter. Modified by TNariman '#39'2-aug-2004'#39
+      '   and ar.datdate =:OperationDate'
+      ''
+      'order by'
+      '  opb.operationid ,bs.bal_cn,ac.acc_no'
+      ''
+      ' '
+      ''
+      ''
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' ')
+    Optimize = False
+    Variables.Data = {
+      04000000010000001C0000003A004F005000450052004100540049004F004E00
+      44004100540045000C0000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000C0000001000000053004300480045004D0041004900440001000000
+      0000160000004F005000450052004100540049004F004E004900440001000000
+      00000C000000420041004C005F0043004E000100000000000800000054005900
+      500045000100000000000C0000004100430043005F0049004400010000000000
+      100000004C004100530054005200450053005400010000000000120000004C00
+      4100530054004C0052004500530054000100000000000C000000410043004300
+      5F004E004F000100000000000E000000560041004C005F004100430043000100
+      00000000080000004E0041004D00450001000000000010000000560041004C00
+      5F004E0041004D004500010000000000120000004F0050004500520041005400
+      49004F004E00010000000000}
+    Session = sboapiDataModule.SBSession
+    OnCalcFields = ReportCalcFields
+    Left = 48
+    Top = 296
+    object ReportOPERATIONID: TFloatField
+      FieldName = 'OPERATIONID'
+      Required = True
+    end
+    object ReportBAL_CN: TFloatField
+      FieldName = 'BAL_CN'
+      Required = True
+    end
+    object ReportTYPE: TWideStringField
+      FieldName = 'TYPE'
+      Size = 7
+    end
+    object ReportACC_ID: TFloatField
+      FieldName = 'ACC_ID'
+    end
+    object ReportACC_NO: TWideStringField
+      FieldName = 'ACC_NO'
+      Size = 28
+    end
+    object ReportVAL_ACC: TIntegerField
+      FieldName = 'VAL_ACC'
+    end
+    object ReportNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 90
+    end
+    object ReportVAL_NAME: TWideStringField
+      FieldName = 'VAL_NAME'
+      Size = 10
+    end
+    object ReportOPERATION: TWideStringField
+      FieldName = 'OPERATION'
+      Size = 100
+    end
+    object ReportSCHEMAID: TFloatField
+      FieldName = 'SCHEMAID'
+      Required = True
+    end
+    object ReportDecimalOstat: TFloatField
+      FieldKind = fkCalculated
+      FieldName = 'DecimalOstat'
+      Calculated = True
+    end
+    object ReportDecimalPokOstat: TFloatField
+      FieldKind = fkCalculated
+      FieldName = 'DecimalPokOstat'
+      Calculated = True
+    end
+    object ReportLASTREST: TFloatField
+      FieldName = 'LASTREST'
+      DisplayFormat = '#,##0.00'
+    end
+    object ReportLASTLREST: TFloatField
+      FieldName = 'LASTLREST'
+      DisplayFormat = '#,##0.00'
+    end
+  end
+  object Sysdat: TOracleDataSet
+    SQL.Strings = (
+      'select tek_dat from Sysdat')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000010000000E000000540045004B005F00440041005400010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 427
+    Top = 296
+  end
+  object TrafficsData: TDataSource
+    DataSet = Traffics
+    Left = 384
+    Top = 24
+  end
+  object Traffics: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      '  LastRemainder.bal_cn,'
+      '  LastRemainder.type,'
+      '  LastRemainder.acc_no,'
+      '  LastRemainder.val_acc,'
+      '  LastRemainder.name,'
+      '  LastRemainder.val_name,'
+      '  BeginRemainder.BeginRest,'
+      '  BeginRemainder.BeginLRest,'
+      '  TurnOvers.DebtTurnOver,'
+      '  TurnOvers.DebtPokTurnOver,'
+      '  TurnOvers.CreditTurnOver,'
+      '  TurnOvers.CreditPokTurnOver,'
+      '  LastRemainder.LastRest,'
+      '  LastRemainder.LastLRest'
+      'from'
+      ''
+      '(select'
+      '  distinct'
+      '   opb.operationid'
+      '  ,ar.acc_id'
+      '  ,op.operation'
+      '  ,bs.bal_cn'
+      '  ,ac.acc_no'
+      '  ,ac.val_acc'
+      '  ,av.val_name'
+      
+        '  ,decode(Sign(ar.ostat),-1,'#39'A'#39',1,'#39'P'#39',0,Decode(bs.typeid,1,'#39'A'#39',2' +
+        ','#39'P'#39')) as type'
+      '  ,abs(ar.ostat) as BeginRest'
+      '  ,abs(ar.pok_ostat) as BeginLRest'
+      '  ,ac.name, opb.tipacc as btipacc, ac.tipacc as atipacc'
+      'from'
+      '    archost ar'
+      '   ,operation_balances opb'
+      '   ,account ac'
+      '   ,operations op'
+      '   ,avalute av'
+      '   ,bal_spr1 bs'
+      'where'
+      '  ar.acc_id =  ac.id'
+      
+        '   and ((ac.acc_no = opb.accno) or (bs.bal_cn = opb.balance) or ' +
+        '(bs.accgroup = opb.accgroup) or (bs.part = opb.class))'
+      '   and ac.bal_cn1 = bs.bal_cn'
+      '   and op.id = opb.operationID'
+      '   and ac.val_acc = av.valute'
+      '   and ac.close_dat is null'
+      '   and (op.ID =:operationID or opb.ID =:BalanceID)'
+      '   --line 45 + Branch Filter. Modified by TNariman '#39'18-feb-2005'#39
+      '   --and (Sb_expertanalyse.checktipacc(opb.tipacc,ac.tipacc)=1)'
+      '   and ar.datdate =:BeginPeriod'
+      ') BeginRemainder,'
+      ''
+      '(select'
+      '  distinct'
+      '   ar.acc_id'
+      '  ,Sum(ar.obr_d) as DebtTurnOver'
+      '  ,Sum(ar.pok_obr_d) as DebtPokTurnOver'
+      '  ,Sum(ar.obr_k) as CreditTurnOver'
+      '  ,Sum(ar.pok_obr_k) as CreditPokTurnOver'
+      'from'
+      '    archost ar'
+      '   ,operation_balances opb'
+      '   ,account ac'
+      '   ,operations op'
+      '   ,avalute av'
+      '   ,bal_spr1 bs'
+      'where'
+      '  ar.acc_id =  ac.id'
+      
+        '   and ((ac.acc_no = opb.accno) or (bs.bal_cn = opb.balance) or ' +
+        '(bs.accgroup = opb.accgroup) or (bs.part = opb.class))'
+      '   and ac.bal_cn1 = bs.bal_cn'
+      '   and op.id = opb.operationID'
+      '   and ac.val_acc = av.valute'
+      '   and ac.close_dat is null'
+      '   and (op.ID =:operationID or opb.ID =:BalanceID)'
+      '   --line 72 + Branch Filter. Modified by TNariman '#39'18-feb-2005'#39
+      '   --and (Sb_expertanalyse.checktipacc(opb.tipacc,ac.tipacc)=1)'
+      '   and ar.datdate between :BeginDate and :LastDate'
+      'group by'
+      '   ar.acc_id'
+      ') TurnOvers,'
+      ''
+      '(select'
+      '  distinct'
+      '   opb.operationid'
+      '  ,ar.acc_id'
+      '  ,op.operation'
+      '  ,bs.bal_cn'
+      '  ,ac.acc_no'
+      '  ,ac.val_acc'
+      '  ,av.val_name'
+      
+        '  ,decode(Sign(ar.ostat),-1,'#39'A'#39',1,'#39'P'#39',0,Decode(bs.typeid,1,'#39'A'#39',2' +
+        ','#39'P'#39')) as type'
+      '  ,abs(ar.ostat) as LastRest'
+      '  ,abs(ar.pok_ostat) as LastLRest'
+      '  ,ac.name, opb.tipacc as btipacc, ac.tipacc as atipacc'
+      'from'
+      '    archost ar'
+      '   ,operation_balances opb'
+      '   ,account ac'
+      '   ,operations op'
+      '   ,avalute av'
+      '   ,bal_spr1 bs'
+      'where'
+      '  ar.acc_id =  ac.id'
+      
+        '   and ((ac.acc_no = opb.accno) or (bs.bal_cn = opb.balance) or ' +
+        '(bs.accgroup = opb.accgroup) or (bs.part = opb.class))'
+      '   and ac.bal_cn1 = bs.bal_cn'
+      '   and op.id = opb.operationID'
+      '   and ac.val_acc = av.valute'
+      '   and ac.close_dat is null'
+      '   and (op.ID =:operationID or opb.ID =:BalanceID)'
+      
+        '   --line 107 + Branch Filter. Modified by TNariman '#39'18-feb-2005' +
+        #39
+      '   --and (Sb_expertanalyse.checktipacc(opb.tipacc,ac.tipacc)=1)'
+      '   and ar.datdate =:LastDate'
+      ') LastRemainder'
+      ''
+      'where'
+      '  BeginRemainder.Acc_ID (+) = LastRemainder.Acc_ID'
+      '  and'
+      '  LastRemainder.Acc_ID = TurnOvers.Acc_ID'
+      '  and'
+      
+        '  (Sb_expertanalyse.checktipacc(LastRemainder.btipacc, LastRemai' +
+        'nder.atipacc)=1)'
+      'order by'
+      '  LastRemainder.acc_no'
+      ''
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' ')
+    Optimize = False
+    Variables.Data = {
+      0400000005000000180000003A004F005000450052004100540049004F004E00
+      49004400030000000000000000000000140000003A00420041004C0041004E00
+      4300450049004400030000000000000000000000180000003A00420045004700
+      49004E0050004500520049004F0044000C000000000000000000000014000000
+      3A0042004500470049004E0044004100540045000C0000000000000000000000
+      120000003A004C0041005300540044004100540045000C000000000000000000
+      0000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000E0000000C000000420041004C005F0043004E000100000000000800
+      000054005900500045000100000000000C0000004100430043005F004E004F00
+      0100000000000E000000560041004C005F004100430043000100000000000800
+      00004E0041004D00450001000000000010000000560041004C005F004E004100
+      4D0045000100000000001200000042004500470049004E005200450053005400
+      0100000000001400000042004500470049004E004C0052004500530054000100
+      000000001800000044004500420054005400550052004E004F00560045005200
+      0100000000001E000000440045004200540050004F004B005400550052004E00
+      4F005600450052000100000000001C0000004300520045004400490054005400
+      550052004E004F00560045005200010000000000220000004300520045004400
+      4900540050004F004B005400550052004E004F00560045005200010000000000
+      100000004C004100530054005200450053005400010000000000120000004C00
+      4100530054004C005200450053005400010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 312
+    Top = 24
+    object TrafficsRecordNo: TIntegerField
+      Tag = 1
+      DisplayLabel = #1057#1099#1088#1072' '#8470
+      FieldKind = fkCalculated
+      FieldName = 'RecordNo'
+      OnGetText = TrafficsRecordNoGetText
+      Calculated = True
+    end
+    object TrafficsBAL_CN: TFloatField
+      DisplayLabel = #1041#1072#1083#1072#1085#1089' '#1097#1077#1089#1072#1073#1099
+      FieldName = 'BAL_CN'
+    end
+    object TrafficsTYPE: TWideStringField
+      FieldName = 'TYPE'
+      Size = 1
+    end
+    object TrafficsACC_NO: TWideStringField
+      FieldName = 'ACC_NO'
+      Size = 28
+    end
+    object TrafficsNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 90
+    end
+    object TrafficsVAL_ACC: TIntegerField
+      DisplayLabel = #1042#1072#1083#1081#1091#1090#1072' '#1082#1086#1076#1091
+      FieldName = 'VAL_ACC'
+    end
+    object TrafficsVAL_NAME: TWideStringField
+      FieldName = 'VAL_NAME'
+      Size = 10
+    end
+    object TrafficsBEGINREST: TFloatField
+      DisplayLabel = #1048#1083#1082#1080#1085' '#1075#1072#1083#1099#1075
+      FieldName = 'BEGINREST'
+      DisplayFormat = '#,##0.00'
+    end
+    object TrafficsBEGINLREST: TFloatField
+      DisplayLabel = #1048#1083#1082#1080#1085' '#1075#1072#1083#1099#1075' ('#1040#1079')'
+      FieldName = 'BEGINLREST'
+      DisplayFormat = '#,##0.00'
+    end
+    object TrafficsDEBTTURNOVER: TFloatField
+      DisplayLabel = #1044#1077#1073#1077#1090' '#1076#1102#1074#1088#1080#1081#1081#1103
+      FieldName = 'DEBTTURNOVER'
+      DisplayFormat = '#,##0.00'
+    end
+    object TrafficsDEBTPOKTURNOVER: TFloatField
+      DisplayLabel = #1044#1077#1073#1077#1090' '#1076#1102#1074#1088#1080#1081#1081#1103' ('#1040#1079')'
+      FieldName = 'DEBTPOKTURNOVER'
+      DisplayFormat = '#,##0.00'
+    end
+    object TrafficsCREDITTURNOVER: TFloatField
+      DisplayLabel = #1050#1088#1077#1076#1080#1090' '#1076#1102#1074#1088#1080#1081#1081#1103
+      FieldName = 'CREDITTURNOVER'
+      DisplayFormat = '#,##0.00'
+    end
+    object TrafficsCREDITPOKTURNOVER: TFloatField
+      DisplayLabel = #1050#1088#1077#1076#1080#1090' '#1076#1102#1074#1088#1080#1081#1081#1103' ('#1040#1079')'
+      FieldName = 'CREDITPOKTURNOVER'
+      DisplayFormat = '#,##0.00'
+    end
+    object TrafficsLASTREST: TFloatField
+      DisplayLabel = #1057#1086#1085' '#1075#1072#1083#1099#1075
+      FieldName = 'LASTREST'
+      DisplayFormat = '#,##0.00'
+    end
+    object TrafficsLASTLREST: TFloatField
+      DisplayLabel = #1057#1086#1085' '#1075#1072#1083#1099#1075' ('#1040#1079')'
+      FieldName = 'LASTLREST'
+      DisplayFormat = '#,##0.00'
+    end
+  end
+  object Accounts: TOracleDataSet
+    SQL.Strings = (
+      'Select '
+      '   acc_no '
+      'from '
+      '   Account '
+      'where '
+      '   close_dat is null'
+      ''
+      'order by'
+      '   acc_no')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {05000000010000000C0000004100430043005F004E004F00010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 427
+    Top = 354
+  end
+  object Balances: TOracleDataSet
+    SQL.Strings = (
+      'Select'
+      '   bal_cn'
+      '  ,accgroup'
+      '  ,part'
+      'from'
+      '   bal_spr1'
+      'order by bal_cn')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000030000000C000000420041004C005F0043004E000100000000001000
+      0000410043004300470052004F00550050000100000000000800000050004100
+      52005400010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 360
+    Top = 355
+  end
+  object Schemas: TOracleDataSet
+    SQL.Strings = (
+      'Select '
+      '   op.RowID'
+      '  ,op.*'
+      'from '
+      '   operation_schema op')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000200000004000000490044000100000000000C000000530043004800
+      45004D004100010000000000}
+    Session = sboapiDataModule.SBSession
+    AfterPost = SchemasAfterPost
+    Left = 24
+    Top = 16
+    object SchemasID: TFloatField
+      FieldName = 'ID'
+    end
+    object SchemasSCHEMA: TWideStringField
+      FieldName = 'SCHEMA'
+      Size = 100
+    end
+  end
+  object SchemasData: TDataSource
+    DataSet = Schemas
+    Left = 96
+    Top = 16
+  end
+  object TotalTraffics: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      '  ac.bal_cn1'
+      ' ,decode(bs.typeid,1,'#39'A'#39',2,'#39'P'#39',3,'#39'A-P'#39','#39'Unknown'#39')  as type'
+      ' ,abs(sum(ar.ostat)) as ostat'
+      ' ,abs(sum(ar.pok_ostat)) as pok_ostat'
+      ' ,sum(ar.obr_d) as DebtTurnOver'
+      ' ,sum(ar.pok_obr_d) as DebtPokTurnOver'
+      ' ,sum(ar.obr_k) as CreditTurnOver'
+      ' ,sum(ar.pok_obr_k) as CreditPokTurnOver'
+      ' ,max(bs.balname) as balname'
+      'from'
+      '  archost ar'
+      ' ,account ac'
+      ' ,bal_spr1 bs'
+      ' ,operations op'
+      ' ,operation_balances opb'
+      'where'
+      '  ar.acc_id = ac.ID'
+      '   and ac.bal_cn1 = bs.bal_cn'
+      
+        '   and ((ac.acc_no = opb.accno) or (bs.bal_cn = opb.balance) or ' +
+        '(bs.accgroup = opb.accgroup) or (bs.part = opb.class))'
+      '   and op.ID = operationID'
+      
+        '   and ((op.ID =:operationID or opb.ID =:BalanceID or op.schemaI' +
+        'D =:schemaID))'
+      '   and ar.datdate=:operationDate'
+      '   and ac.val_acc=%d'
+      '   and abs(ar.ostat)>=%f'
+      '   --line 26 + Branch Filter. Modified by TNariman '#39'2-aug-2004'#39
+      '   and (Sb_expertanalyse.checktipacc(opb.tipacc,ac.tipacc)=1)'
+      'group by'
+      '  ac.bal_cn1'
+      ' ,decode(bs.typeid,1,'#39'A'#39',2,'#39'P'#39',3,'#39'A-P'#39','#39'Unknown'#39') '
+      'order by'
+      '  ac.bal_cn1'
+      ''
+      ''
+      ''
+      ' '
+      ' '
+      ' '
+      ' '
+      ''
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' ')
+    Optimize = False
+    Variables.Data = {
+      0400000004000000180000003A004F005000450052004100540049004F004E00
+      49004400030000000000000000000000140000003A00420041004C0041004E00
+      43004500490044000300000000000000000000001C0000003A004F0050004500
+      52004100540049004F004E0044004100540045000C0000000000000000000000
+      120000003A0053004300480045004D0041004900440003000000000000000000
+      0000}
+    Session = sboapiDataModule.SBSession
+    Left = 314
+    Top = 104
+    object TotalTrafficsBAL_CN1: TFloatField
+      FieldName = 'BAL_CN1'
+    end
+    object TotalTrafficsOSTAT: TFloatField
+      FieldName = 'OSTAT'
+      DisplayFormat = '#,##.00'
+    end
+    object TotalTrafficsPOK_OSTAT: TFloatField
+      FieldName = 'POK_OSTAT'
+      DisplayFormat = '#,##.00'
+    end
+    object TotalTrafficsBALNAME: TWideStringField
+      FieldName = 'BALNAME'
+    end
+    object TotalTrafficsRecordN: TIntegerField
+      FieldKind = fkCalculated
+      FieldName = 'RecordN'
+      OnGetText = TotalTrafficsRecordNGetText
+      Calculated = True
+    end
+    object TotalTrafficsTYPE: TWideStringField
+      FieldName = 'TYPE'
+    end
+    object TotalTrafficsDEBTTURNOVER: TFloatField
+      FieldName = 'DEBTTURNOVER'
+      DisplayFormat = '#,##.00'
+    end
+    object TotalTrafficsDEBTPOKTURNOVER: TFloatField
+      FieldName = 'DEBTPOKTURNOVER'
+      DisplayFormat = '#,##.00'
+    end
+    object TotalTrafficsCREDITTURNOVER: TFloatField
+      FieldName = 'CREDITTURNOVER'
+      DisplayFormat = '#,##.00'
+    end
+    object TotalTrafficsCREDITPOKTURNOVER: TFloatField
+      FieldName = 'CREDITPOKTURNOVER'
+      DisplayFormat = '#,##.00'
+    end
+  end
+  object TotalTrafficsData: TDataSource
+    DataSet = TotalTraffics
+    Left = 387
+    Top = 89
+  end
+  object SchemaTraffics: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      '  op.id'
+      ' ,abs(sum(ar.ostat)) as ostat'
+      ' ,abs(sum(ar.pok_ostat)) as pok_ostat'
+      ' ,sum(ar.obr_d) as DebtTurnOver'
+      ' ,sum(ar.pok_obr_d) as DebtPokTurnOver'
+      ' ,sum(ar.obr_k) as CreditTurnOver'
+      ' ,sum(ar.pok_obr_k) as CreditPokTurnOver'
+      ' ,max(op.operation) as operation'
+      'from'
+      '  archost ar'
+      ' ,account ac'
+      ' ,bal_spr1 bs'
+      ' ,operations op'
+      ' ,operation_balances opb'
+      'where'
+      '  ar.acc_id = ac.ID'
+      '   and ac.bal_cn1 = bs.bal_cn'
+      
+        '   and ((ac.acc_no = opb.accno) or (bs.bal_cn = opb.balance) or ' +
+        '(bs.accgroup = opb.accgroup) or (bs.part = opb.class))'
+      '   and op.ID = operationID'
+      '   and op.schemaID =:schemaID'
+      '   and ar.datdate =:operationDate'
+      '   and ac.val_acc=%d'
+      '   and abs(ar.ostat)>=%f'
+      '   --line 25 + Branch Filter. Modified by TNariman '#39'2-aug-2004'#39
+      '   and (Sb_expertanalyse.checktipacc(opb.tipacc,ac.tipacc)=1)'
+      ''
+      'group by'
+      '  op.id'
+      ''
+      'order by'
+      '  op.id'
+      ''
+      ''
+      ''
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' ')
+    Optimize = False
+    Variables.Data = {
+      0400000002000000120000003A0053004300480045004D004100490044000300
+      000000000000000000001C0000003A004F005000450052004100540049004F00
+      4E0044004100540045000C0000000000000000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 317
+    Top = 168
+    object SchemaTrafficsID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object SchemaTrafficsOSTAT: TFloatField
+      FieldName = 'OSTAT'
+      DisplayFormat = '#,##.00'
+    end
+    object SchemaTrafficsPOK_OSTAT: TFloatField
+      FieldName = 'POK_OSTAT'
+      DisplayFormat = '#,##.00'
+    end
+    object SchemaTrafficsOPERATION: TWideStringField
+      FieldName = 'OPERATION'
+    end
+    object SchemaTrafficsDEBTTURNOVER: TFloatField
+      FieldName = 'DEBTTURNOVER'
+      DisplayFormat = '#,##.00'
+    end
+    object SchemaTrafficsDEBTPOKTURNOVER: TFloatField
+      FieldName = 'DEBTPOKTURNOVER'
+      DisplayFormat = '#,##.00'
+    end
+    object SchemaTrafficsCREDITTURNOVER: TFloatField
+      FieldName = 'CREDITTURNOVER'
+      DisplayFormat = '#,##.00'
+    end
+    object SchemaTrafficsCREDITPOKTURNOVER: TFloatField
+      FieldName = 'CREDITPOKTURNOVER'
+      DisplayFormat = '#,##.00'
+    end
+  end
+  object SchemaTrafficsData: TDataSource
+    DataSet = SchemaTraffics
+    Left = 389
+    Top = 168
+  end
+  object DataBranch: TDataSource
+    DataSet = Branch
+    Left = 413
+    Top = 235
+  end
+  object Branch: TOracleDataSet
+    SQL.Strings = (
+      'select -1 as ID, '#39#1041#1094#1090#1094#1085' '#1092#1080#1083#1080#1072#1083#1083#1072#1088#39' as name  from dual'
+      'Union'
+      'select ID, name  from filial '
+      'order by ID')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000400000049004400010000000000080000004E0041004D00
+      4500010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 357
+    Top = 232
+  end
+  object PeriodData: TOracleDataSet
+    SQL.Strings = (
+      'select '
+      '  Max(dat) as BeginPeriod'
+      'from '
+      '  Operkurs'
+      'where '
+      '  dat<:BeginDate')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000140000003A0042004500470049004E004400410054004500
+      0C0000000000000000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 208
+    Top = 256
+  end
+  object AccFlags: TOracleDataSet
+    SQL.Strings = (
+      'SELECT '
+      '   symbol,'
+      '   name,'
+      '   description'
+      'FROM '
+      '   account_flags')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000030000000C000000530059004D0042004F004C000100000000000800
+      00004E0041004D00450001000000000016000000440045005300430052004900
+      5000540049004F004E00010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 216
+    Top = 312
+  end
+end

@@ -1,0 +1,119 @@
+﻿unit FormBalCnImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Grids, XDBGrids, StdCtrls, SearchEdit,OracleData;
+
+type
+  TFormBal_CN12 = class(TForm)
+    XDBGridBal_spr1: TXDBGrid;
+    GroupBox1: TGroupBox;
+    ButtonOK: TButton;
+    EditBal_CN: TEdit;
+    procedure ButtonOKClick(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure EditBal_CNKeyPress(Sender: TObject; var Key: Char);
+    procedure ActionSpeedSearchExecute(Sender: TObject);
+    procedure XDBGridBal_spr1DblClick(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    V_balCn: String;
+    DebOrKred: Boolean;
+  end;
+
+var
+  FormBal_CN12: TFormBal_CN12;
+
+implementation
+
+uses Transaction_DataModuleUnit, Transaction_PropertiesImpl;
+
+{$R *.dfm}
+
+procedure TFormBal_CN12.ActionSpeedSearchExecute(
+  Sender: TObject);
+var
+  SearchField : string;
+  SearchOptions : TSearchRecordOptions;
+begin
+  SearchOptions := [srIgnoreCase ,srPartialMatch ];
+
+  with Sender as TEdit  do
+  begin
+    SearchField := copy(Name,5,length(Name));
+    with  TOracleDataSet(XDBGridBal_spr1.DataSource.DataSet) do
+    if  not SearchRecord(
+                  SearchField
+                 ,Text
+                 ,SearchOptions + [srFromCurrent , srForward ]
+                 ) then
+    if MessageDlg(
+              'Axtarış sona çatdı.'+#13+'Əvvəldən başlansın?'
+             ,mtInformation
+             ,[mbNo , mbYes]
+             ,0
+             ) = mrYes  then
+    if not SearchRecord(
+                 SearchField
+                ,Text
+                ,SearchOptions + [ srFromBeginning ]
+                )  then
+    MessageDlg('Yazı tapılmayıb!',mtInformation,[mbOK],0);
+ end;
+
+end;
+procedure TFormBal_CN12.ButtonOKClick(Sender: TObject);
+begin
+V_balCn:=XDBGridBal_spr1.DataSource.DataSet.FieldByName('BAL_CN').AsString;
+     FormBal_CN12.Close;
+end;
+
+procedure TFormBal_CN12.EditBal_CNKeyPress(Sender: TObject; var Key: Char);
+begin
+if not (key in ['0'..'9',#8,#13]) then key:=#0;
+if key=#13  then
+      ActionSpeedSearchExecute(Sender);
+end;
+
+procedure TFormBal_CN12.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+EditBal_CN.Clear;
+end;
+
+procedure TFormBal_CN12.FormKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+if (key=VK_INSERT) then
+ begin
+ V_balCn:=   XDBGridBal_spr1.DataSource.DataSet.FieldByName('BAL_CN').AsString;
+FormBal_CN12.Close;
+end;
+end;
+
+procedure TFormBal_CN12.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+if key=#27 then FormBal_cn12.Close;
+end;
+
+procedure TFormBal_CN12.FormShow(Sender: TObject);
+var
+v_Valute:Integer;
+begin
+  if V_balCn <> '' then XDBGridBal_spr1.DataSource.DataSet.Locate('BAL_CN', V_balCn, []);
+ EditBal_CN.SetFocus;
+end;
+
+procedure TFormBal_CN12.XDBGridBal_spr1DblClick(Sender: TObject);
+begin
+V_balCn:=XDBGridBal_spr1.DataSource.DataSet.FieldByName('BAL_CN').AsString;
+  FormBal_CN12.Close;
+end;
+
+end.

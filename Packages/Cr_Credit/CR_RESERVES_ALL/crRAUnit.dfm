@@ -1,0 +1,28 @@
+object RAForm: TRAForm
+  Left = 398
+  Top = 263
+  BorderIcons = [biSystemMenu]
+  Caption = 'RAForm'
+  ClientHeight = 51
+  ClientWidth = 403
+  Color = clBtnFace
+  Font.Charset = RUSSIAN_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poScreenCenter
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  PixelsPerInch = 96
+  TextHeight = 13
+  object SpeedButton1: TSpeedButton
+    Left = 96
+    Top = 7
+    Width = 242
+    Height = 36
+    Caption = 'Yenid'#601'n qiym'#601'tl'#601'ndirm'#601'k'
+    OnClick = SpeedButton1Click
+  end
+end

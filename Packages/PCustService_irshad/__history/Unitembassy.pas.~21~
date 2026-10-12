@@ -1,0 +1,117 @@
+﻿unit Unitembassy;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Grids, XDBGrids, ExtCtrls, XFSCtrls, DB, OracleData, StdCtrls;
+
+type
+  TForm_embassy = class(TForm)
+    XDBGrid1: TXDBGrid;
+    ods_embassy: TOracleDataSet;
+    XFPanel1: TXFPanel;
+    dsrc_embassy: TDataSource;
+    ods_embassyID: TFloatField;
+    ods_embassyAZ_NAME: TWideStringField;
+    ods_embassyENG_NAME: TWideStringField;
+    XFButton1: TXFButton;
+    XFButton2: TXFButton;
+    ods_embassytrans_info: TOracleDataSet;
+    ods_bankinf: TOracleDataSet;
+    ods_bankinfBANK: TWideStringField;
+    ods_bankinfINN: TWideStringField;
+    ods_embassytrans_infoAMMOUNT: TFloatField;
+    ods_embassytrans_infoACC_NO: TWideStringField;
+    ods_embassytrans_infoTEYINAT: TWideStringField;
+    ods_embassytrans_infoKASS: TWideStringField;
+    ods_embassytrans_infoAMMOUNT_YAZ: TWideStringField;
+    sysdat: TOracleDataSet;
+    ods_embassytrans_infoOSTAT: TFloatField;
+    ods_embassytrans_infoVAL_NAME: TWideStringField;
+    ods_bankinfSEDRFIL: TWideStringField;
+    ods_embassytrans_infoOSTAT_YAZ: TWideStringField;
+    ods_bankinfASSISTANT: TWideStringField;
+    XDBGrid2: TXDBGrid;
+    ods_cust_acc: TOracleDataSet;
+    dsrc_cust_acc: TDataSource;
+    ods_cust_accOSTAT: TFloatField;
+    ods_cust_accACC_NO: TWideStringField;
+    ods_cust_accVAL_NAME: TWideStringField;
+    ods_cust_accCUSTNAME: TWideStringField;
+    ods_cust_accSEX: TWideStringField;
+    sysdatDAT: TWideStringField;
+    sysdatTEK_DAT: TDateTimeField;
+    procedure XFButton2Click(Sender: TObject);
+    procedure XFButton1Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form_embassy: TForm_embassy;
+
+implementation
+uses sboapiDataModuleImpl,PCustServiceFormImpl1, UnitDataModPCustService,
+  UntQRReceiptSefr, UnitEmbasyTrans;
+{$R *.dfm}
+
+procedure TForm_embassy.FormCreate(Sender: TObject);
+begin
+QRPTReceiptSefr:=TQRPTReceiptSefr.Create(self);
+end;
+
+procedure TForm_embassy.FormShow(Sender: TObject);
+begin
+//showmessage(tacc);
+ sysdat.Close;
+ sysdat.open;
+with Form_embassy,ods_cust_acc   do
+begin
+close;
+ SetVariable('dat',sysdatTEK_DAT.AsDateTime);
+ SetVariable('CUSTID',tacc);
+open;
+
+end;
+
+end;
+
+procedure TForm_embassy.XFButton1Click(Sender: TObject);
+begin
+
+
+ if (ods_cust_accOSTAT.asinteger<0)or(ods_cust_acc.RecordCount=0)  then
+
+  begin
+  showmessage('Müştəri hesabı seçilməyib  !');
+  exit;
+  end;
+
+   if (ods_cust_accOSTAT.AsInteger<0)  then
+
+  begin
+  showmessage('Seçilmiş hesabın qalğı yoxdu  !');
+  exit;
+  end;
+
+     Form_embasTrans:=TForm_embasTrans.Create(self);
+     Form_embasTrans.ods_embstrans.Close;
+     Form_embasTrans.ods_embstrans.SetVariable('custid',tacc);
+     Form_embasTrans.ods_embstrans.Open;
+      Form_embasTrans.ShowModal;
+
+
+end;
+
+procedure TForm_embassy.XFButton2Click(Sender: TObject);
+begin
+Form_embassy.Close;
+
+end;
+
+end.

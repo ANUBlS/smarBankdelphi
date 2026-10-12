@@ -1,0 +1,32 @@
+unit ChangePasswordImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, ExtCtrls, NLSLocalizer, CMHintBox;
+
+type
+  TChangePassForm = class(TForm)
+    NLSLocalizer1: TNLSLocalizer;
+    Panel1: TPanel;
+    EdNewPass: TEdit;
+    EdNewretPass: TEdit;
+    Button1: TButton;
+    Label1: TLabel;
+    Label2: TLabel;
+    CMHintBox1: TCMHintBox;
+  private
+    { Private declarations }
+  public
+    FNewPassword :String;
+  end;
+
+var
+  ChangePassForm: TChangePassForm;
+
+implementation
+
+{$R *.DFM}
+
+end.

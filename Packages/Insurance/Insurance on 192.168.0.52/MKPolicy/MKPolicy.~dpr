@@ -1,0 +1,21 @@
+library MKPolicy;
+
+uses
+  ComServ,
+  MKPolicy_TLB in 'MKPolicy_TLB.pas',
+  UMKPolicyImpl in 'UMKPolicyImpl.pas' {fmMKPolicy: TActiveForm} {fmMKPolicy: CoClass};
+
+{$E ocx}
+
+exports
+  DllGetClassObject,
+  DllCanUnloadNow,
+  DllRegisterServer,
+  DllUnregisterServer;
+
+{$R *.TLB}
+
+{$R *.RES}
+
+begin
+end.

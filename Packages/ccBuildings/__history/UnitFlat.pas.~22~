@@ -1,0 +1,118 @@
+﻿unit UnitFlat;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls;
+
+type
+  TFormFlat = class(TForm)
+    GroupBox1: TGroupBox;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    Label6: TLabel;
+    Label7: TLabel;
+    Label8: TLabel;
+    EditNo: TEdit;
+    EditFloor: TEdit;
+    EditRoom: TEdit;
+    EditArea: TEdit;
+    EditPrice1: TEdit;
+    EditPriceGen: TEdit;
+    EditEntrance: TEdit;
+    EditCode: TEdit;
+    GroupBox2: TGroupBox;
+    Editid: TEdit;
+    Button1: TButton;
+    Button2: TButton;
+    procedure Button1Click(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+    procedure EditPrice1KeyPress(Sender: TObject; var Key: Char);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    AddUpd :integer;
+  end;
+
+var
+  FormFlat: TFormFlat;
+
+implementation
+
+uses UnitDataModccBuildings;
+
+{$R *.DFM}
+
+procedure TFormFlat.Button1Click(Sender: TObject);
+var
+  p_ID, p_BldID, p_FlatCode, p_FlatNum, p_Entrance, p_Floor,
+  p_Rooms, p_Area, p_Price1, p_PriceGen, p_Buyer :string;
+begin
+  if EditNo.Text ='' then ShowMessage('Mənzilin N-si sahəsi boşdur!');
+  if EditNo.Text <>'' then
+   with DataModccBuildings do begin
+    p_BldID :=CC_Building.FieldByName('ID').AsString;
+    p_FlatCode :=EditCode.Text;
+    p_FlatNum :=EditNo.Text;
+    p_Entrance :=EditEntrance.Text;
+    p_Floor :=EditFloor.Text;
+    p_Rooms :=EditRoom.Text;
+    p_Area :=EditArea.Text;
+    p_Price1 :=EditPrice1.Text;
+    p_PriceGen :=EditPriceGen.Text;
+    p_Buyer :='';
+    if AddUpd =1 then begin
+     CC_OP.CallProcedure('add_Flats',
+      [p_BldID, p_FlatCode, p_FlatNum, p_Entrance, p_Floor,
+       p_Rooms, p_Area, p_Price1, p_PriceGen, p_Buyer]);
+    end;
+    if AddUpd =2 then begin
+     p_ID :=CC_Buyer_Flat.FieldByName('ID').AsString;
+     CC_OP.CallProcedure('upd_Flats',
+      [p_ID, p_BldID, p_FlatCode, p_FlatNum, p_Entrance, p_Floor,
+       p_Rooms, p_Area, p_Price1, p_PriceGen, p_Buyer]);
+    end;
+   CC_Buyer_Flat.Close;
+   CC_Buyer_Flat.Open;
+   EditCode.Text:='';
+   Editno.Text :='';
+   EditEntrance.Text :='';
+   EditFloor.Text :='';
+   EditRoom.Text :='';
+   EditArea.Text :='';
+   EditPrice1.Text :='';
+   EditPricegen.Text :='';
+   EditCode.SetFocus;
+  end;
+  if AddUpd =2 then Close;
+end;
+
+procedure TFormFlat.Button2Click(Sender: TObject);
+begin
+  Close;
+end;
+
+procedure TFormFlat.EditPrice1KeyPress(Sender: TObject; var Key: Char);
+var
+  PriceGeneral :real;
+begin
+  if ORD(Key) =VK_RETURN then begin
+   if Sender is TWinControl then
+    with Sender as TWinControl do
+     case Tag of
+      1 : SelectNext(Sender as TWinControl ,True ,True);
+    end;
+  Key := #0;
+
+  PriceGeneral :=(StrToFloat(EditArea.Text) * StrToFloat(EditPrice1.Text));
+  EditPriceGen.Text :=FloatToStr(PriceGeneral);
+end;
+
+end;
+
+end.

@@ -1,0 +1,159 @@
+﻿unit TrancheAddFormImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+   StdCtrls, ActnList, Mask, DBCtrlsEh, DBLookupEh, ExtCtrls,
+  CMCurrencyEdit, ComCtrls, DBCtrls, DBGridEh;
+
+type
+  TTrchAddForm = class(TForm)
+    GroupBox2: TGroupBox;
+    Label1: TLabel;
+    Label2: TLabel;
+    TrancheDatePckr: TDateTimePicker;
+    TrancheSumEdit: TCMCurrencyEdit;
+    CBPrcessTransactions: TCheckBox;
+    Panel4: TPanel;
+    StaticText3: TStaticText;
+    AccountListCB: TDBLookupComboboxEh;
+    ActionsList: TActionList;
+    ActnProcessTranche: TAction;
+    ActnCancelTranche: TAction;
+    ButtonCommit: TButton;
+    ButtonCancel: TButton;
+    Label3: TLabel;
+    DBEdit1: TDBEdit;
+    Panel1: TPanel;
+    StaticText1: TStaticText;
+    DBLookupComboboxEh1: TDBLookupComboboxEh;
+    procedure ActnProcessTrancheExecute(Sender: TObject);
+    procedure ActnProcessTrancheUpdate(Sender: TObject);
+    procedure ActnCancelTrancheExecute(Sender: TObject);
+    procedure TrancheSumEditKeyPress(Sender: TObject; var Key: Char);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormActivate(Sender: TObject);
+    procedure DBLookupComboboxEh1Enter(Sender: TObject);
+    procedure CBPrcessTransactionsClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  TrchAddForm: TTrchAddForm;
+
+implementation
+
+uses TranceDataModuleImpl, CommonDecls;
+
+{$R *.DFM}
+
+procedure TTrchAddForm.ActnProcessTrancheExecute(Sender: TObject);
+resourcestring
+  rsTransactionsWillProcessed = 'Kredit tranşı ...';
+var
+  CrdID : Integer;
+  TrchDate : TDateTime;
+  Mix_acc,CustAccID : Integer;
+  TrchAmount : Real;
+  TrProcess : Boolean;
+  CommitTranche : Boolean;
+begin
+  CrdID := Get_SelectedCrdID;
+  TrchDate := Integer(Trunc(TrancheDatePckr.DateTime));
+  CustAccID := AccountListCB.ListSource.DataSet.FieldByName('ACCID').AsInteger;
+  Mix_acc := DBLookupComboboxEh1.ListSource.DataSet.FieldByName('ACCID').AsInteger;
+  TrchAmount := TrancheSumEdit.Value;
+  TrProcess := CBPrcessTransactions.Checked;
+
+  with TrancheDataModule do
+  CM_TRANCHE.CallProcedure('Tranche_Add',[
+     'p_CreditID' ,CrdID ,
+     'p_TrchDate' ,TrchDate ,
+     'p_CustAccID' ,CustAccID ,
+     'p_TrchAmount' ,TrchAmount ,
+     'p_ProcessTransactions' ,TrProcess ,
+     'p_micacca',Mix_acc
+  ]);
+
+  try
+
+    CommitTranche := TrDelayed_Show(Self,rsTransactionsWillProcessed);
+
+    Update;
+
+    with TrancheDataModule do
+    CM_TRANCHE.CallProcedure('CommitTranche',[
+       'DoCommit' , CommitTranche
+    ]);
+
+    if CommitTranche then
+    Self.ModalResult := mrOk;
+    Self.Update;
+    
+  except
+
+    with TrancheDataModule do
+    CM_TRANCHE.CallProcedure('CommitTranche',[
+       'DoCommit' , False
+    ]);
+
+    raise;
+
+  end;
+
+end;
+
+procedure TTrchAddForm.ActnProcessTrancheUpdate(Sender: TObject);
+begin
+  (Sender as TAction).Enabled := TrancheSumEdit.Value > 0;
+end;
+
+procedure TTrchAddForm.CBPrcessTransactionsClick(Sender: TObject);
+begin
+
+DBLookupComboboxEh1.Enabled:=true;
+TrancheDataModule.DataSource1.DataSet.Close;
+TrancheDataModule.DataSource1.DataSet.Open;
+DBLookupComboboxEh1.KeyField:= 'ACCID' ;
+
+end;
+
+procedure TTrchAddForm.DBLookupComboboxEh1Enter(Sender: TObject);
+begin
+DBLookupComboboxEh1.KeyField:= 'ACCID' ;
+end;
+
+procedure TTrchAddForm.ActnCancelTrancheExecute(Sender: TObject);
+begin
+  Close;
+end;
+
+procedure TTrchAddForm.TrancheSumEditKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if ORD(KEY) = VK_RETURN then
+  begin
+    SelectNext(TrancheSumEdit,True,True);
+    Key := #0;
+  end;
+end;
+
+procedure TTrchAddForm.FormActivate(Sender: TObject);
+begin
+CBPrcessTransactions.Checked:=False;
+DBLookupComboboxEh1.KeyField:='';
+DBLookupComboboxEh1.Enabled:=False;
+TrancheDataModule.DataSource1.DataSet.Refresh;
+end;
+
+procedure TTrchAddForm.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+  if ORD(Key) = VK_ESCAPE then
+    ButtonCancel.Click;
+end;
+
+end.

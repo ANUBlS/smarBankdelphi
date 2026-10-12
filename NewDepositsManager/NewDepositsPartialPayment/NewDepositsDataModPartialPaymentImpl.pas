@@ -1,0 +1,49 @@
+unit NewDepositsDataModPartialPaymentImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, OracleData,Oracle;
+
+type
+  TNewDepositsDataModPartialPayment = class(TDataModule)
+    Payments: TOracleDataSet;
+    PaymentsDatSrc: TDataSource;
+    DepositInfo: TOracleDataSet;
+    DepositInfoSrc: TDataSource;
+    DepositInfoNAME: Twidestringfield;
+    DepositInfoAMOUNT: TFloatField;
+    DepositInfoCURRENCY: TFloatField;
+    DepositInfoCUSTOMERID: TFloatField;
+    Sysdat: TOracleDataSet;
+    SysdatDatSrc: TDataSource;
+    SysdatTEK_DAT: TDateTimeField;
+    sbcm_payment: TOraclePackage;
+    DebitAccs: TOracleDataSet;
+    DebitAccsDatSrc: TDataSource;
+    CreditAccs: TOracleDataSet;
+    CreditAccsDatSrc: TDataSource;
+    PaymentsID: TFloatField;
+    PaymentsHDATE: TDateTimeField;
+    PaymentsTOTAL: TFloatField;
+    PaymentsRESERVE: TFloatField;
+    PaymentsDESCRIPTION: Twidestringfield;
+    PercentAccs: TOracleDataSet;
+    PercentAccsDatSrc: TDataSource;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  NewDepositsDataModPartialPayment: TNewDepositsDataModPartialPayment;
+
+implementation
+uses sboapiDataModuleImpl;
+
+
+{$R *.DFM}
+
+end.

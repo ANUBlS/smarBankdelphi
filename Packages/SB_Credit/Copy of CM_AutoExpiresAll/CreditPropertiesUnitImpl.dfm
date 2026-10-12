@@ -1,0 +1,337 @@
+object FrmCreditProperties: TFrmCreditProperties
+  Left = 256
+  Top = 200
+  Width = 484
+  Height = 412
+  BorderIcons = [biSystemMenu]
+  Color = clBtnFace
+  Font.Charset = RUSSIAN_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poScreenCenter
+  OnCanResize = FormCanResize
+  OnKeyPress = FormKeyPress
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object PCCreditProperties: TPageControl
+    Left = 0
+    Top = 0
+    Width = 476
+    Height = 348
+    ActivePage = TabSheet1
+    Align = alTop
+    TabOrder = 0
+    object TabSheet1: TTabSheet
+      Caption = 'ёд€нишл€р'
+      object DBGridEh1: TDBGridEh
+        Left = 0
+        Top = 0
+        Width = 468
+        Height = 320
+        Align = alClient
+        DataSource = DatModAex.DatSrcPayments
+        Flat = True
+        FooterColor = clWindow
+        FooterFont.Charset = RUSSIAN_CHARSET
+        FooterFont.Color = clWindowText
+        FooterFont.Height = -11
+        FooterFont.Name = 'Azl Sans Serif'
+        FooterFont.Style = []
+        Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit]
+        TabOrder = 0
+        TitleFont.Charset = RUSSIAN_CHARSET
+        TitleFont.Color = clWindowText
+        TitleFont.Height = -11
+        TitleFont.Name = 'Azl Sans Serif'
+        TitleFont.Style = []
+        VertScrollBar.VisibleMode = sbNeverShowEh
+        Columns = <
+          item
+            EditButtons = <>
+            FieldName = 'PAYDATE'
+            Footers = <>
+            Title.Color = clNavy
+            Title.Font.Charset = RUSSIAN_CHARSET
+            Title.Font.Color = clWhite
+            Title.Font.Height = -11
+            Title.Font.Name = 'Azl Sans Serif'
+            Title.Font.Style = []
+          end
+          item
+            EditButtons = <>
+            FieldName = 'PAYEDAMT'
+            Footers = <>
+            Title.Color = clNavy
+            Title.Font.Charset = RUSSIAN_CHARSET
+            Title.Font.Color = clWhite
+            Title.Font.Height = -11
+            Title.Font.Name = 'Azl Sans Serif'
+            Title.Font.Style = []
+            Width = 110
+          end
+          item
+            EditButtons = <>
+            FieldName = 'PAYEDINTAMT'
+            Footers = <>
+            Title.Color = clNavy
+            Title.Font.Charset = RUSSIAN_CHARSET
+            Title.Font.Color = clWhite
+            Title.Font.Height = -11
+            Title.Font.Name = 'Azl Sans Serif'
+            Title.Font.Style = []
+            Width = 107
+          end
+          item
+            EditButtons = <>
+            FieldName = 'PAYEDDUEAMT'
+            Footers = <>
+            Title.Caption = 'Ёеж . ясас борждан '
+            Title.Color = clNavy
+            Title.Font.Charset = RUSSIAN_CHARSET
+            Title.Font.Color = clWhite
+            Title.Font.Height = -11
+            Title.Font.Name = 'Azl Sans Serif'
+            Title.Font.Style = []
+            Width = 105
+          end
+          item
+            EditButtons = <>
+            FieldName = 'PAYEDDUEINTAMT'
+            Footers = <>
+            Title.Caption = 'Ёеж .‘аиз цзр€ борждан '
+            Title.Color = clNavy
+            Title.Font.Charset = RUSSIAN_CHARSET
+            Title.Font.Color = clWhite
+            Title.Font.Height = -11
+            Title.Font.Name = 'Azl Sans Serif'
+            Title.Font.Style = []
+            Width = 116
+          end
+          item
+            EditButtons = <>
+            FieldName = 'PAYEDPENALTYAMT'
+            Footers = <>
+            Title.Color = clNavy
+            Title.Font.Charset = RUSSIAN_CHARSET
+            Title.Font.Color = clWhite
+            Title.Font.Height = -11
+            Title.Font.Name = 'Azl Sans Serif'
+            Title.Font.Style = []
+            Width = 97
+          end>
+      end
+    end
+    object TabSheet2: TTabSheet
+      Caption = 'ёд€м€ графики'
+      ImageIndex = 1
+      object DBGridEh2: TDBGridEh
+        Left = 0
+        Top = 0
+        Width = 468
+        Height = 320
+        Align = alClient
+        DataSource = DatModAex.DatSrcSchedule
+        Flat = True
+        FooterColor = clWindow
+        FooterFont.Charset = RUSSIAN_CHARSET
+        FooterFont.Color = clWindowText
+        FooterFont.Height = -11
+        FooterFont.Name = 'Azl Sans Serif'
+        FooterFont.Style = []
+        Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit]
+        TabOrder = 0
+        TitleFont.Charset = RUSSIAN_CHARSET
+        TitleFont.Color = clWindowText
+        TitleFont.Height = -11
+        TitleFont.Name = 'Azl Sans Serif'
+        TitleFont.Style = []
+        VertScrollBar.VisibleMode = sbNeverShowEh
+        Columns = <
+          item
+            EditButtons = <>
+            FieldName = 'PAYMENTDATE'
+            Footers = <>
+            Title.Color = clNavy
+            Title.Font.Charset = RUSSIAN_CHARSET
+            Title.Font.Color = clWhite
+            Title.Font.Height = -11
+            Title.Font.Name = 'Azl Sans Serif'
+            Title.Font.Style = []
+          end
+          item
+            EditButtons = <>
+            FieldName = 'PRINCIPAL'
+            Footers = <>
+            Title.Color = clNavy
+            Title.Font.Charset = RUSSIAN_CHARSET
+            Title.Font.Color = clWhite
+            Title.Font.Height = -11
+            Title.Font.Name = 'Azl Sans Serif'
+            Title.Font.Style = []
+            Width = 108
+          end
+          item
+            EditButtons = <>
+            FieldName = 'INTEREST'
+            Footers = <>
+            Title.Color = clNavy
+            Title.Font.Charset = RUSSIAN_CHARSET
+            Title.Font.Color = clWhite
+            Title.Font.Height = -11
+            Title.Font.Name = 'Azl Sans Serif'
+            Title.Font.Style = []
+            Width = 137
+          end>
+      end
+    end
+    object TabSheet3: TTabSheet
+      Caption = '“раншлар'
+      ImageIndex = 2
+      object DBGridEh3: TDBGridEh
+        Left = 0
+        Top = 0
+        Width = 468
+        Height = 320
+        Align = alClient
+        DataSource = DatModAex.DatSrcTranches
+        Flat = True
+        FooterColor = clWindow
+        FooterFont.Charset = RUSSIAN_CHARSET
+        FooterFont.Color = clWindowText
+        FooterFont.Height = -11
+        FooterFont.Name = 'Azl Sans Serif'
+        FooterFont.Style = []
+        Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit]
+        TabOrder = 0
+        TitleFont.Charset = RUSSIAN_CHARSET
+        TitleFont.Color = clWindowText
+        TitleFont.Height = -11
+        TitleFont.Name = 'Azl Sans Serif'
+        TitleFont.Style = []
+        VertScrollBar.VisibleMode = sbNeverShowEh
+        Columns = <
+          item
+            EditButtons = <>
+            FieldName = 'TRANCHEDATE'
+            Footers = <>
+            Title.Color = clNavy
+            Title.Font.Charset = RUSSIAN_CHARSET
+            Title.Font.Color = clWhite
+            Title.Font.Height = -11
+            Title.Font.Name = 'Azl Sans Serif'
+            Title.Font.Style = []
+          end
+          item
+            EditButtons = <>
+            FieldName = 'TRANCHEAMOUNT'
+            Footers = <>
+            Title.Color = clNavy
+            Title.Font.Charset = RUSSIAN_CHARSET
+            Title.Font.Color = clWhite
+            Title.Font.Height = -11
+            Title.Font.Name = 'Azl Sans Serif'
+            Title.Font.Style = []
+            Width = 169
+          end>
+      end
+    end
+    object TabSheet4: TTabSheet
+      Caption = 'ўесабланмыш фаизл€р'
+      ImageIndex = 3
+      object DBGridEh4: TDBGridEh
+        Left = 0
+        Top = 0
+        Width = 468
+        Height = 320
+        Align = alClient
+        DataSource = DatModAex.DatSrcInterests
+        Flat = True
+        FooterColor = clWindow
+        FooterFont.Charset = RUSSIAN_CHARSET
+        FooterFont.Color = clWindowText
+        FooterFont.Height = -11
+        FooterFont.Name = 'Azl Sans Serif'
+        FooterFont.Style = []
+        Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit]
+        TabOrder = 0
+        TitleFont.Charset = RUSSIAN_CHARSET
+        TitleFont.Color = clWindowText
+        TitleFont.Height = -11
+        TitleFont.Name = 'Azl Sans Serif'
+        TitleFont.Style = []
+        VertScrollBar.VisibleMode = sbNeverShowEh
+        Columns = <
+          item
+            EditButtons = <>
+            FieldName = 'HDATE'
+            Footers = <>
+            Title.Color = clNavy
+            Title.Font.Charset = RUSSIAN_CHARSET
+            Title.Font.Color = clWhite
+            Title.Font.Height = -11
+            Title.Font.Name = 'Azl Sans Serif'
+            Title.Font.Style = []
+          end
+          item
+            EditButtons = <>
+            FieldName = 'INTEREST'
+            Footers = <>
+            Title.Color = clNavy
+            Title.Font.Charset = RUSSIAN_CHARSET
+            Title.Font.Color = clWhite
+            Title.Font.Height = -11
+            Title.Font.Name = 'Azl Sans Serif'
+            Title.Font.Style = []
+            Width = 67
+          end
+          item
+            EditButtons = <>
+            FieldName = 'DUEINTEREST'
+            Footers = <>
+            Title.Color = clNavy
+            Title.Font.Charset = RUSSIAN_CHARSET
+            Title.Font.Color = clWhite
+            Title.Font.Height = -11
+            Title.Font.Name = 'Azl Sans Serif'
+            Title.Font.Style = []
+            Width = 110
+          end
+          item
+            EditButtons = <>
+            FieldName = 'PENALTYINTEREST'
+            Footers = <>
+            Title.Color = clNavy
+            Title.Font.Charset = RUSSIAN_CHARSET
+            Title.Font.Color = clWhite
+            Title.Font.Height = -11
+            Title.Font.Name = 'Azl Sans Serif'
+            Title.Font.Style = []
+            Width = 126
+          end>
+      end
+    end
+  end
+  object BitBtn1: TBitBtn
+    Left = 384
+    Top = 354
+    Width = 75
+    Height = 25
+    Caption = 'Ѕаьла'
+    TabOrder = 1
+    Kind = bkClose
+  end
+  object NLSCreditProperties: TNLSLocalizer
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = [fsBold]
+    Left = 8
+    Top = 352
+  end
+end

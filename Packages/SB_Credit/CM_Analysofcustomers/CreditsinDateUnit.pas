@@ -1,0 +1,45 @@
+unit CreditsinDateUnit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Grids, DBGridEh, StdCtrls, CustanalysUnit, DBGridEhGrouping, GridsEh;
+
+type
+  TCreditinDateForm = class(TForm)
+    DBGridEh1: TDBGridEh;
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  CreditinDateForm: TCreditinDateForm;
+
+implementation
+   uses CustAnalysDataModuleImpl,sboapiDataModuleImpl,SBTranslateProc;
+{$R *.DFM}
+
+procedure TCreditinDateForm.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+   Resize := False;
+end;
+
+procedure TCreditinDateForm.FormCreate(Sender: TObject);
+begin
+SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TCreditinDateForm.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+   if Ord(Key) = VK_ESCAPE then Close;
+end;
+
+end.

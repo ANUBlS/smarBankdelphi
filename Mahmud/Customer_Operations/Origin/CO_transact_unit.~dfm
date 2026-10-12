@@ -1,0 +1,625 @@
+object CO_Transact: TCO_Transact
+  Left = 192
+  Top = 107
+  Width = 666
+  Height = 392
+  Caption = 'CO_Transact'
+  Color = clBtnFace
+  Font.Charset = RUSSIAN_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  OldCreateOrder = False
+  PixelsPerInch = 96
+  TextHeight = 13
+  object GroupBox1: TGroupBox
+    Left = 0
+    Top = 30
+    Width = 658
+    Height = 125
+    Align = alTop
+    TabOrder = 0
+    object HeaderControl1: THeaderControl
+      Left = 2
+      Top = 15
+      Width = 654
+      Height = 17
+      DragReorder = False
+      Sections = <
+        item
+          ImageIndex = -1
+          Text = 'ƒ≈Ѕ≈“'
+          Width = 327
+        end
+        item
+          ImageIndex = -1
+          Text = ' –≈ƒ»“'
+          Width = 360
+        end>
+      Style = hsFlat
+    end
+    object Panel1: TPanel
+      Left = 2
+      Top = 32
+      Width = 326
+      Height = 92
+      BevelInner = bvLowered
+      TabOrder = 0
+      object PanelDebit: TPanel
+        Left = 2
+        Top = 68
+        Width = 322
+        Height = 22
+        Align = alTop
+        BevelOuter = bvLowered
+        TabOrder = 2
+        object PanelDebitRest: TPanel
+          Left = 1
+          Top = 1
+          Width = 320
+          Height = 20
+          Align = alClient
+          BevelOuter = bvNone
+          TabOrder = 0
+          object Label1: TLabel
+            Left = 4
+            Top = 3
+            Width = 27
+            Height = 13
+            Caption = '√алыг:'
+          end
+          object DBText1: TDBText
+            Left = 35
+            Top = 3
+            Width = 109
+            Height = 17
+            DataField = 'BALANCE'
+          end
+          object Label2: TLabel
+            Left = 146
+            Top = 3
+            Width = 53
+            Height = 13
+            Caption = '≈квивалент:'
+          end
+          object DBText2: TDBText
+            Left = 204
+            Top = 3
+            Width = 115
+            Height = 17
+            DataField = 'LBALANCE'
+          end
+        end
+      end
+      object Panel4: TPanel
+        Left = 2
+        Top = 46
+        Width = 322
+        Height = 22
+        Align = alTop
+        BevelInner = bvLowered
+        TabOrder = 3
+        object DebitAccNameCB: TDBLookupComboBox
+          Left = 1
+          Top = 1
+          Width = 320
+          Height = 21
+          Color = clSilver
+          DataField = 'DEBITID'
+          KeyField = 'ID'
+          ListField = 'NAME'
+          TabOrder = 0
+          TabStop = False
+          OnDropDown = DebitAccNameCBDropDown
+        end
+      end
+      object Panel5: TPanel
+        Left = 2
+        Top = 24
+        Width = 322
+        Height = 22
+        Align = alTop
+        BevelInner = bvLowered
+        TabOrder = 1
+        object DebitAccNoLookUp: TDBLookupComboBox
+          Left = 157
+          Top = 1
+          Width = 164
+          Height = 21
+          Color = clSilver
+          DataField = 'DEBITID'
+          KeyField = 'ID'
+          ListField = 'ACC_NO'
+          TabOrder = 1
+          TabStop = False
+          OnDropDown = DebitAccNoLookUpDropDown
+        end
+        object DebtAccSearchEdit: TSearchEdit
+          Left = 1
+          Top = 1
+          Width = 156
+          Height = 21
+          TabOrder = 0
+          OnChange = DebtAccSearchEditChange
+          OnEnter = DebtAccSearchEditEnter
+          SearchField = 'acc_no'
+        end
+      end
+      object Panel6: TPanel
+        Left = 2
+        Top = 2
+        Width = 322
+        Height = 22
+        Align = alTop
+        BevelInner = bvLowered
+        TabOrder = 0
+        object DebitCurrencyIDEdit: TDBEdit
+          Left = 1
+          Top = 0
+          Width = 59
+          Height = 21
+          DataField = 'DEBITCURRENCYID'
+          TabOrder = 0
+          OnExit = DebitCurrencyIDEditExit
+        end
+        object DebitCurrencyRate: TDBEdit
+          Left = 216
+          Top = 0
+          Width = 105
+          Height = 21
+          TabStop = False
+          Color = clSilver
+          DataField = 'DEBITRATE'
+          TabOrder = 1
+          OnChange = DebitCurrencyRateChange
+        end
+        object DebitCurrencyLookUp: TDBLookupComboBox
+          Left = 60
+          Top = 0
+          Width = 156
+          Height = 21
+          Color = clSilver
+          DataField = 'DEBITCURRENCYID'
+          KeyField = 'ID'
+          ListField = 'NAME'
+          TabOrder = 2
+          TabStop = False
+          OnCloseUp = DebitCurrencyLookUpCloseUp
+        end
+      end
+    end
+    object Panel2: TPanel
+      Left = 328
+      Top = 32
+      Width = 326
+      Height = 92
+      BevelInner = bvLowered
+      TabOrder = 1
+      object PanelCredit: TPanel
+        Left = 2
+        Top = 68
+        Width = 322
+        Height = 22
+        Align = alTop
+        BevelOuter = bvLowered
+        TabOrder = 2
+        object PanelCreditRest: TPanel
+          Left = 1
+          Top = 1
+          Width = 320
+          Height = 20
+          Align = alClient
+          BevelOuter = bvNone
+          TabOrder = 0
+          object Label3: TLabel
+            Left = 4
+            Top = 3
+            Width = 27
+            Height = 13
+            Caption = '√алыг:'
+          end
+          object DBText3: TDBText
+            Left = 35
+            Top = 3
+            Width = 109
+            Height = 17
+            DataField = 'BALANCE'
+          end
+          object Label4: TLabel
+            Left = 146
+            Top = 3
+            Width = 53
+            Height = 13
+            Caption = '≈квивалент:'
+          end
+          object DBText4: TDBText
+            Left = 204
+            Top = 3
+            Width = 115
+            Height = 17
+            DataField = 'LBALANCE'
+          end
+        end
+      end
+      object Panel8: TPanel
+        Left = 2
+        Top = 46
+        Width = 322
+        Height = 22
+        Align = alTop
+        BevelInner = bvLowered
+        TabOrder = 3
+        object DBLookupComboBox3: TDBLookupComboBox
+          Left = 1
+          Top = 1
+          Width = 320
+          Height = 21
+          Color = clSilver
+          DataField = 'CREDITID'
+          KeyField = 'ID'
+          ListField = 'NAME'
+          TabOrder = 0
+          TabStop = False
+        end
+      end
+      object Panel9: TPanel
+        Left = 2
+        Top = 24
+        Width = 322
+        Height = 22
+        Align = alTop
+        BevelInner = bvLowered
+        TabOrder = 1
+        object CreditAccNoLookUp: TDBLookupComboBox
+          Left = 157
+          Top = 1
+          Width = 164
+          Height = 21
+          Color = clSilver
+          DataField = 'CREDITID'
+          KeyField = 'ID'
+          ListField = 'ACC_NO'
+          TabOrder = 1
+          TabStop = False
+        end
+        object CreditAccSearchEdit: TSearchEdit
+          Left = 1
+          Top = 1
+          Width = 156
+          Height = 21
+          TabOrder = 0
+          SearchField = 'acc_no'
+        end
+      end
+      object Panel10: TPanel
+        Left = 2
+        Top = 2
+        Width = 322
+        Height = 22
+        Align = alTop
+        BevelInner = bvLowered
+        TabOrder = 0
+        object CreditCurrencyIDEdit: TDBEdit
+          Left = 1
+          Top = 0
+          Width = 59
+          Height = 21
+          DataField = 'CREDITCURRENCYID'
+          TabOrder = 0
+        end
+        object CreditCurrencyRate: TDBEdit
+          Left = 216
+          Top = 0
+          Width = 105
+          Height = 21
+          TabStop = False
+          Color = clSilver
+          DataField = 'CREDITRATE'
+          TabOrder = 1
+        end
+        object CreditCurrencyLookUp: TDBLookupComboBox
+          Left = 60
+          Top = 0
+          Width = 156
+          Height = 21
+          Color = clSilver
+          DataField = 'CREDITCURRENCYID'
+          KeyField = 'ID'
+          ListField = 'NAME'
+          TabOrder = 2
+          TabStop = False
+        end
+      end
+    end
+  end
+  object GroupBox2: TGroupBox
+    Left = 0
+    Top = 155
+    Width = 658
+    Height = 64
+    Align = alTop
+    Caption = 'ћ€бл€ьл€р'
+    TabOrder = 1
+    object Panel11: TPanel
+      Left = 2
+      Top = 15
+      Width = 326
+      Height = 23
+      Alignment = taLeftJustify
+      BevelInner = bvLowered
+      Caption = ' ƒебет м€бл€ь'
+      TabOrder = 0
+      object CurrencyEditDebit: TCurrencyEdit
+        Tag = 1
+        Left = 96
+        Top = 1
+        Width = 229
+        Height = 21
+        TabOrder = 0
+        Text = '0'
+      end
+    end
+    object Panel12: TPanel
+      Left = 328
+      Top = 15
+      Width = 326
+      Height = 23
+      Alignment = taLeftJustify
+      BevelInner = bvLowered
+      Caption = '  редит м€бл€ь'
+      TabOrder = 1
+      object CurrencyEditCredit: TCurrencyEdit
+        Tag = 2
+        Left = 96
+        Top = 1
+        Width = 229
+        Height = 21
+        TabOrder = 0
+        Text = '0'
+      end
+    end
+    object Panel13: TPanel
+      Left = 2
+      Top = 38
+      Width = 652
+      Height = 23
+      Alignment = taLeftJustify
+      BevelInner = bvLowered
+      Caption = ' ћилли валйутада еквивалент'
+      TabOrder = 2
+      object CurrencyEditLammount: TCurrencyEdit
+        Tag = 3
+        Left = 211
+        Top = 1
+        Width = 229
+        Height = 21
+        TabStop = False
+        TabOrder = 0
+        Text = '0'
+      end
+    end
+  end
+  object GroupBox3: TGroupBox
+    Left = 0
+    Top = 219
+    Width = 658
+    Height = 64
+    Align = alTop
+    Caption = 'ћ€луматлар'
+    TabOrder = 2
+    object Panel14: TPanel
+      Left = 2
+      Top = 38
+      Width = 654
+      Height = 23
+      Align = alTop
+      Alignment = taLeftJustify
+      BevelInner = bvLowered
+      Caption = '  онвертасийа т€йинаты'
+      TabOrder = 1
+      object ConvertationSymbolIDBEdit: TDBEdit
+        Left = 118
+        Top = 1
+        Width = 74
+        Height = 21
+        DataField = 'OUTBALANCECHAR'
+        TabOrder = 0
+      end
+      object ConvertationSymbolLookUp: TDBLookupComboBox
+        Left = 192
+        Top = 1
+        Width = 460
+        Height = 21
+        Color = clSilver
+        DataField = 'OUTBALANCECHAR'
+        KeyField = 'ID'
+        ListField = 'FULLPATH'
+        TabOrder = 1
+        TabStop = False
+      end
+    end
+    object Panel15: TPanel
+      Left = 2
+      Top = 15
+      Width = 654
+      Height = 23
+      Align = alTop
+      Alignment = taLeftJustify
+      BevelInner = bvLowered
+      Caption = '  асса символу'
+      TabOrder = 0
+      object CashSymbolLookUp: TDBLookupComboBox
+        Left = 192
+        Top = 1
+        Width = 460
+        Height = 21
+        Color = clSilver
+        DataField = 'INBALANCECHAR'
+        KeyField = 'SYMBOL'
+        ListField = 'NAME'
+        TabOrder = 1
+        TabStop = False
+      end
+      object CashSymbolDBEdit: TDBEdit
+        Left = 118
+        Top = 1
+        Width = 74
+        Height = 21
+        DataField = 'INBALANCECHAR'
+        TabOrder = 0
+      end
+    end
+  end
+  object Panel16: TPanel
+    Left = 0
+    Top = 282
+    Width = 657
+    Height = 23
+    Alignment = taLeftJustify
+    BevelInner = bvLowered
+    Caption = ' ям€лиййатын т€йинаты'
+    TabOrder = 3
+    object TrDestNoEdit: TEdit
+      Left = 120
+      Top = 1
+      Width = 74
+      Height = 21
+      TabOrder = 0
+    end
+    object ComboBox1: TComboBox
+      Left = 194
+      Top = 1
+      Width = 462
+      Height = 21
+      TabStop = False
+      ItemHeight = 13
+      TabOrder = 1
+    end
+    object DBEditDestination: TDBEdit
+      Left = 194
+      Top = 1
+      Width = 443
+      Height = 21
+      DataField = 'NAME'
+      TabOrder = 2
+    end
+  end
+  object GroupBox4: TGroupBox
+    Left = 0
+    Top = 0
+    Width = 658
+    Height = 30
+    Align = alTop
+    TabOrder = 4
+    object Label5: TLabel
+      Left = 8
+      Top = 9
+      Width = 77
+      Height = 13
+      Caption = 'ям€лиййатын тарихи'
+    end
+    object Label6: TLabel
+      Left = 216
+      Top = 9
+      Width = 67
+      Height = 13
+      Caption = 'ям€лиййатын є'
+    end
+    object Label7: TLabel
+      Left = 383
+      Top = 9
+      Width = 61
+      Height = 13
+      Caption = 'ям€лиййат типи'
+    end
+    object TransDate: TDateTimePicker
+      Left = 96
+      Top = 7
+      Width = 105
+      Height = 21
+      CalAlignment = dtaLeft
+      Date = 38125.6610020023
+      Time = 38125.6610020023
+      DateFormat = dfShort
+      DateMode = dmComboBox
+      Kind = dtkDate
+      ParseInput = False
+      TabOrder = 0
+    end
+    object OperationTypeLookUp: TDBLookupComboBox
+      Left = 504
+      Top = 7
+      Width = 151
+      Height = 21
+      Color = clSilver
+      DataField = 'OPERATIONCODE'
+      KeyField = 'ID'
+      ListField = 'NAME'
+      TabOrder = 2
+      TabStop = False
+    end
+    object DBEditOperationNo: TDBEdit
+      Left = 287
+      Top = 7
+      Width = 78
+      Height = 21
+      DataField = 'OPERATIONNO'
+      TabOrder = 1
+    end
+    object DBEdit4: TDBEdit
+      Left = 447
+      Top = 7
+      Width = 57
+      Height = 21
+      DataField = 'OPERATIONCODE'
+      TabOrder = 3
+    end
+  end
+  object Panel17: TPanel
+    Left = 0
+    Top = 330
+    Width = 658
+    Height = 35
+    Align = alBottom
+    BevelOuter = bvNone
+    TabOrder = 5
+    object ButtonApply: TButton
+      Left = 421
+      Top = 4
+      Width = 75
+      Height = 25
+      Action = ActionInsert
+      TabOrder = 0
+    end
+    object ButtonCancel: TButton
+      Left = 501
+      Top = 4
+      Width = 75
+      Height = 25
+      Action = ActionCancel
+      TabOrder = 1
+    end
+    object ButtonClose: TButton
+      Left = 581
+      Top = 4
+      Width = 75
+      Height = 25
+      Action = ActionExit
+      TabOrder = 2
+    end
+  end
+  object ActionList1: TActionList
+    Left = 560
+    Top = 38
+    object ActionInsert: TAction
+      Caption = '&√€бул'
+    end
+    object ActionCancel: TAction
+      Caption = '&»мтина'
+    end
+    object ActionExit: TAction
+      Caption = '„ыхыш'
+    end
+  end
+end

@@ -1,0 +1,180 @@
+unit DmBlackImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, OracleData, Oracle, ExcelXP, OleServer;
+
+type
+  TDmBlack = class(TDataModule)
+    MainDSet: TOracleDataSet;
+    MainDSrc: TDataSource;
+    Contry: TOracleDataSet;
+    CITIES: TOracleDataSet;
+    ContrySrc: TDataSource;
+    CITIESSrc: TDataSource;
+    OraclePackage1: TOraclePackage;
+    Doctype: TOracleDataSet;
+    DtypeDataSrc: TDataSource;
+    Sex: TOracleDataSet;
+    SexSrc: TDataSource;
+    Sysdat: TOracleDataSet;
+    SysDSrc: TDataSource;
+    DataSource1: TDataSource;
+    OracleDataSet1: TOracleDataSet;
+    OracleDataSet1ID: TFloatField;
+    OracleDataSet1CONTID: TFloatField;
+    OracleDataSet1CNTR_CODE: TIntegerField;
+    OracleDataSet1count_name: TWideStringField;
+    ExcelWorkbook1: TExcelWorkbook;
+    ExcelApplication1: TExcelApplication;
+    OracleDataSet2: TOracleDataSet;
+    DataSource2: TDataSource;
+    OracleDataSet3: TOracleDataSet;
+    OraclePackage2: TOraclePackage;
+    dsrc_blecxml: TDataSource;
+    ods_blecxml: TOracleDataSet;
+    dsrc__blecnamexml: TDataSource;
+    ods_blecnamexml: TOracleDataSet;
+    dsrc__blecpaspxml: TDataSource;
+    ods_blecpaspxml: TOracleDataSet;
+    ods_blecxmlID: TFloatField;
+    ods_blecxmlTYPE_CUST: TFloatField;
+    ods_blecxmlVERSIONNUM: TFloatField;
+    ods_blecxmlFIRST_NAME: TWideStringField;
+    ods_blecxmlSECOND_NAME: TWideStringField;
+    ods_blecxmlTHIRD_NAME: TWideStringField;
+    ods_blecxmlFOURTH_NAME: TWideStringField;
+    ods_blecxmlUN_LIST_TYPE: TWideStringField;
+    ods_blecxmlREFERENCE_NUMBER: TWideStringField;
+    ods_blecxmlLISTED_ON: TWideStringField;
+    ods_blecxmlNAME_ORIGINAL_SCRIPT: TWideStringField;
+    ods_blecxmlCOMMENTS1: TWideMemoField;
+    ods_blecxmlNATIONALITY_VALUE: TWideStringField;
+    ods_blecxmlTYPE_OF_DATE: TWideStringField;
+    ods_blecxmlYEAR: TWideStringField;
+    ods_blecxmlCOUNTRY: TWideStringField;
+    ods_blecpaspxmlDATAID: TFloatField;
+    ods_blecpaspxmlCITY: TWideStringField;
+    ods_blecpaspxmlSTATE_PROVINCE: TWideStringField;
+    ods_blecpaspxmlCOUNTRY: TWideStringField;
+    ods_blecxmlDATAID: TWideStringField;
+    ods_blecxmlXML_TYPE: TIntegerField;
+    ods_blecnamexmlID: TFloatField;
+    ods_blecnamexmlDATAID: TWideStringField;
+    ods_blecnamexmlNAME: TWideStringField;
+    ods_blecnamexmlNAME1: TWideStringField;
+    dsrc_search: TDataSource;
+    ods_search: TOracleDataSet;
+    ods_searchDATAID: TWideStringField;
+    ods_searchNAM: TWideStringField;
+    ods_searchNAM1: TWideStringField;
+    ods_truncate: TOracleDataSet;
+    OracleDataSet2ID: TFloatField;
+    OracleDataSet2NAME: TWideStringField;
+    OracleDataSet2LASTNAME: TWideStringField;
+    OracleDataSet2MIDDLENAME: TWideStringField;
+    OracleDataSet2DOC_TYPE: TIntegerField;
+    OracleDataSet2DOC_SERIE: TWideStringField;
+    OracleDataSet2DOC_NUM: TWideStringField;
+    OracleDataSet2CITIZENSHIP: TWideStringField;
+    OracleDataSet2ADRS_STATE: TWideStringField;
+    OracleDataSet2ADRS_CITY: TWideStringField;
+    OracleDataSet2ADDRESS: TWideStringField;
+    OracleDataSet2DOC_DATE: TDateTimeField;
+    OracleDataSet2DOC_ORGAN: TWideStringField;
+    OracleDataSet2GENDER: TIntegerField;
+    OracleDataSet2DOC_PIN: TWideStringField;
+    OracleDataSet2SERIA: TWideStringField;
+    OracleDataSet2PASPORT: TWideStringField;
+    OracleDataSet2BIRTHDATE: TDateTimeField;
+    OracleDataSet2BLACK_TYPE: TFloatField;
+    MainDSetID: TFloatField;
+    MainDSetNAME: TWideStringField;
+    MainDSetLASTNAME: TWideStringField;
+    MainDSetMIDDLENAME: TWideStringField;
+    MainDSetDOC_TYPE: TIntegerField;
+    MainDSetDOC_SERIE: TWideStringField;
+    MainDSetDOC_NUM: TWideStringField;
+    MainDSetCITIZENSHIP: TWideStringField;
+    MainDSetADRS_STATE: TWideStringField;
+    MainDSetADRS_CITY: TWideStringField;
+    MainDSetADDRESS: TWideStringField;
+    MainDSetDOC_DATE: TDateTimeField;
+    MainDSetDOC_ORGAN: TWideStringField;
+    MainDSetGENDER: TIntegerField;
+    MainDSetDOC_PIN: TWideStringField;
+    MainDSetSERIA: TWideStringField;
+    MainDSetPASPORT: TWideStringField;
+    MainDSetBIRTHDATE: TDateTimeField;
+    MainDSetBLACK_TYPE: TFloatField;
+    MainDSetDOCTIP: TWideStringField;
+    MainDSetFULLNAME: TWideStringField;
+    SB_ACA: TOraclePackage;
+    MainDSetV_NAME: TWideStringField;
+    MainDSetV_LASTNAME: TWideStringField;
+    MainDSetV_MIDDLENAME: TWideStringField;
+    procedure DataModuleCreate(Sender: TObject);
+    procedure DataModuleDestroy(Sender: TObject);
+    procedure ods_blecxmlAfterScroll(DataSet: TDataSet);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  DmBlack: TDmBlack;
+  x:integer;
+implementation
+ uses sboapiDataModuleImpl;
+{$R *.DFM}
+
+procedure TDmBlack.DataModuleCreate(Sender: TObject);
+begin
+MainDSet.open;
+Contry.open;
+//CITIES.open;
+Doctype.Open;
+sex.open;
+Sysdat.open;
+oracledataset1.open;
+ods_blecxml.Open;
+//oracledataset2.open;
+end;
+
+procedure TDmBlack.DataModuleDestroy(Sender: TObject);
+begin
+Contry.close;
+CITIES.close;
+MainDSet.close;
+Doctype.close;
+sex.close;
+Sysdat.Close;
+oracledataset1.Close;
+
+ods_blecxml.Close;
+//oracledataset2.close;
+end;
+
+procedure TDmBlack.ods_blecxmlAfterScroll(DataSet: TDataSet);
+begin
+{with DmBlack do
+begin
+ods_blecnamexml.close;
+ods_blecnamexml.SetVariable(':v_dataid',ods_blecxmlDATAID.AsVariant);
+ods_blecnamexml.open;
+end;  }
+
+ with ods_blecnamexml do
+  begin
+    SetVariable('v_dataid', ods_blecxmlDATAID.AsVariant);
+    if not Active then
+      Open
+    else
+      Refresh;
+  end;
+end;
+
+end.

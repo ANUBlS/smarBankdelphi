@@ -1,0 +1,1507 @@
+object dmReportAnalysOfPortfel: TdmReportAnalysOfPortfel
+  OldCreateOrder = False
+  OnCreate = DataModuleCreate
+  OnDestroy = DataModuleDestroy
+  Left = 107
+  Top = 108
+  Height = 504
+  Width = 696
+  object sysdat: TOracleDataSet
+    SQL.Strings = (
+      'select tek_dat from sysdat')
+    Session = sboapiDataModule.SBSession
+    Left = 456
+    Top = 8
+  end
+  object filials: TOracleDataSet
+    SQL.Strings = (
+      'select id,name from filial'
+      'order by id')
+    QBEDefinition.QBEFieldDefs = {
+      0400000002000000020000004944010000000000040000004E414D4501000000
+      0000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 16
+    Top = 16
+  end
+  object CreditTypes: TOracleDataSet
+    SQL.Strings = (
+      'select id,description from cm_credittypes'
+      'order by id')
+    Session = sboapiDataModule.SBSession
+    Left = 96
+    Top = 16
+  end
+  object valutes: TOracleDataSet
+    SQL.Strings = (
+      'select valute,valu_name from avalute')
+    Session = sboapiDataModule.SBSession
+    Left = 192
+    Top = 16
+  end
+  object valutesds: TDataSource
+    DataSet = valutes
+    Left = 192
+    Top = 72
+  end
+  object CreditTypesds: TDataSource
+    DataSet = CreditTypes
+    Left = 96
+    Top = 72
+  end
+  object filialsds: TDataSource
+    DataSet = filials
+    Left = 16
+    Top = 72
+  end
+  object CategoriesSumds: TDataSource
+    DataSet = CategoriesSum
+    Left = 32
+    Top = 184
+  end
+  object CategoriesSum: TOracleDataSet
+    SQL.Strings = (
+      'select '
+      '   cat.description as sector,'
+      
+        '   d.*,usaid_report.GetProgForR3(1,cat.id,:ffilter,0) as proqnoz' +
+        ',round(usaid_report.GetProgForR3(1,cat.id,:ffilter,0)/decode(d.i' +
+        'nitialamount,0,1,d.initialamount),4)*100 as delta'
+      'from '
+      '  cm_categories cat,'
+      ''
+      '(select'
+      '   count(p.id) as CrdCount,'
+      '   round(count(p.id)/(:GenCount),4)*100 as CeofCount,'
+      
+        '   round(sum(h.rest*o.ostat+h.duerest*o.ostat),4) as initialamou' +
+        'nt,'
+      
+        '   round(sum(h.rest*o.ostat+h.duerest*o.ostat)/:GenInitAmt,4)*10' +
+        '0 as CeofInitAmt,'
+      
+        '   --usaid_report.GetProgForR3(1,p_DepID in integer,fstr in varc' +
+        'har2,b integer default 0) as proqnoz,'
+      '   --0 as delta,'
+      '   p.customertype'
+      'from'
+      '   cm_portfolio p,'
+      '   operkurs o,cm_history h'
+      'where'
+      '   p.currency = o.val_kod and'
+      
+        '   o.dat = :dat and p.id = h.creditid and h.hdate=:dat and h.res' +
+        't+h.duerest>0'
+      '   '
+      'group by p.customertype) d'
+      ''
+      'where d.customertype = cat.id'
+      'order by :OrderField')
+    Variables.Data = {
+      0300000005000000090000003A47454E434F554E540300000000000000000000
+      000B0000003A47454E494E4954414D5404000000000000000000000004000000
+      3A4441540C00000000000000000000000B0000003A4F524445524649454C4401
+      0000000000000000000000080000003A4646494C544552050000000000000000
+      000000}
+    QBEDefinition.QBEFieldDefs = {
+      040000000800000006000000534543544F520100000000000800000043524443
+      4F554E540100000000000900000043454F46434F554E540100000000000D0000
+      00494E495449414C414D4F554E540100000000000B00000043454F46494E4954
+      414D540100000000000700000050524F514E4F5A010000000000050000004445
+      4C54410100000000000C000000435553544F4D455254595045010000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    OnCalcFields = CategoriesSumCalcFields
+    Left = 32
+    Top = 128
+    object CategoriesSumSECTOR: TWideStringField
+      DisplayLabel = 'Сектор'
+      FieldName = 'SECTOR'
+      Size = 128
+    end
+    object CategoriesSumCRDCOUNT: TFloatField
+      DisplayLabel = 'Кредитин сайы'
+      FieldName = 'CRDCOUNT'
+    end
+    object CategoriesSumCEOFCOUNT: TFloatField
+      DisplayLabel = 'Порт%'
+      FieldName = 'CEOFCOUNT'
+    end
+    object CategoriesSumINITIALAMOUNT: TFloatField
+      DisplayLabel = 'Кредит.мябл.'
+      FieldName = 'INITIALAMOUNT'
+      DisplayFormat = '#,##0.00'
+    end
+    object CategoriesSumCEOFINITAMT: TFloatField
+      DisplayLabel = 'Порт%'
+      FieldName = 'CEOFINITAMT'
+      DisplayFormat = '#,##0.00'
+    end
+    object CategoriesSumPROQNOZ: TFloatField
+      DisplayLabel = 'Прогноз'
+      FieldName = 'PROQNOZ'
+      DisplayFormat = '#,##0.00'
+    end
+    object CategoriesSumDELTA: TFloatField
+      DisplayLabel = 'Прогнозун ижрасы'
+      FieldName = 'DELTA'
+      DisplayFormat = '#,##0.00'
+    end
+    object CategoriesSumCUSTOMERTYPE: TFloatField
+      FieldName = 'CUSTOMERTYPE'
+      Required = True
+      Visible = False
+    end
+    object CategoriesSumceofCEOFCOUNT: TWideStringField
+      DisplayLabel = 'Порт%'
+      FieldKind = fkCalculated
+      FieldName = 'ceofCEOFCOUNT'
+      Visible = False
+      Calculated = True
+    end
+    object CategoriesSumceofCEOFINITAMT: TWideStringField
+      DisplayLabel = 'Порт%'
+      FieldKind = fkCalculated
+      FieldName = 'ceofCEOFINITAMT'
+      Visible = False
+      Calculated = True
+    end
+    object CategoriesSumceofdelta: TWideStringField
+      DisplayLabel = 'Прогнозун ижрасы'
+      FieldKind = fkCalculated
+      FieldName = 'ceofdelta'
+      Visible = False
+      Size = 50
+      Calculated = True
+    end
+  end
+  object PersonsSum: TOracleDataSet
+    SQL.Strings = (
+      'select '
+      '   cat.DESCRIPION as sector,'
+      
+        '   d.*,usaid_report.GetProgForR3(2,cat.id,:ffilter,0) as proqnoz' +
+        ',round(usaid_report.GetProgForR3(2,cat.id,:ffilter,0)/decode(d.i' +
+        'nitialamount,0,1,d.initialamount),4)*100 as delta'
+      'from '
+      '  cm_persons cat,'
+      ''
+      '(select'
+      '   count(p.id) as CrdCount,'
+      '   round(count(p.id)/(:GenCount),4)*100 as CeofCount,'
+      
+        '   round(sum(h.rest*o.ostat+h.duerest*o.ostat),4) as initialamou' +
+        'nt,'
+      
+        '   round(sum(h.rest*o.ostat+h.duerest*o.ostat)/:GenInitAmt,4)*10' +
+        '0 as CeofInitAmt,'
+      '   0 as proqnoz,'
+      '   0 as delta,'
+      '   p.personaltype'
+      'from'
+      '   cm_portfolio p,'
+      '   operkurs o,cm_history h'
+      'where'
+      '   p.currency = o.val_kod and'
+      
+        '   o.dat = :dat and p.id = h.creditid and h.hdate = :dat and h.r' +
+        'est+h.duerest>0'
+      '    '
+      'group by p.personaltype) d'
+      ''
+      'where d.personaltype = cat.id'
+      'order by :OrderField'
+      '   ')
+    Variables.Data = {
+      0300000005000000090000003A47454E434F554E540300000000000000000000
+      000B0000003A47454E494E4954414D5404000000000000000000000004000000
+      3A4441540C00000000000000000000000B0000003A4F524445524649454C4401
+      0000000000000000000000080000003A4646494C544552050000000000000000
+      000000}
+    QBEDefinition.QBEFieldDefs = {
+      040000000800000006000000534543544F520100000000000800000043524443
+      4F554E540100000000000900000043454F46434F554E540100000000000D0000
+      00494E495449414C414D4F554E540100000000000B00000043454F46494E4954
+      414D540100000000000700000050524F514E4F5A010000000000050000004445
+      4C54410100000000000C000000504552534F4E414C54595045010000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    OnCalcFields = CategoriesSumCalcFields
+    Left = 128
+    Top = 128
+    object PersonsSumSECTOR: TWideStringField
+      DisplayLabel = 'Сектор'
+      FieldName = 'SECTOR'
+      Size = 64
+    end
+    object PersonsSumCRDCOUNT: TFloatField
+      DisplayLabel = 'Кредитин сайы'
+      FieldName = 'CRDCOUNT'
+    end
+    object PersonsSumCEOFCOUNT: TFloatField
+      DisplayLabel = 'Порт%'
+      FieldName = 'CEOFCOUNT'
+    end
+    object PersonsSumINITIALAMOUNT: TFloatField
+      DisplayLabel = 'Кредит.мябл.'
+      FieldName = 'INITIALAMOUNT'
+      DisplayFormat = '#,##0.00'
+    end
+    object PersonsSumCEOFINITAMT: TFloatField
+      DisplayLabel = 'Порт%'
+      FieldName = 'CEOFINITAMT'
+      DisplayFormat = '#,##0.00'
+    end
+    object PersonsSumPROQNOZ: TFloatField
+      DisplayLabel = 'Прогноз'
+      FieldName = 'PROQNOZ'
+      DisplayFormat = '#,##0.00'
+    end
+    object PersonsSumDELTA: TFloatField
+      DisplayLabel = 'Прогнозун ижрасы'
+      FieldName = 'DELTA'
+      DisplayFormat = '#,##0.00'
+    end
+    object PersonsSumPERSONALTYPE: TFloatField
+      FieldName = 'PERSONALTYPE'
+      Required = True
+      Visible = False
+    end
+    object PersonsSumceofCEOFCOUNT: TWideStringField
+      DisplayLabel = 'Порт%'
+      FieldKind = fkCalculated
+      FieldName = 'ceofCEOFCOUNT'
+      Visible = False
+      Calculated = True
+    end
+    object PersonsSumceofCEOFINITAMT: TWideStringField
+      DisplayLabel = 'Порт%'
+      FieldKind = fkCalculated
+      FieldName = 'ceofCEOFINITAMT'
+      Visible = False
+      Calculated = True
+    end
+    object PersonsSumceofdelta: TWideStringField
+      DisplayLabel = 'Прогнозун ижрасы'
+      FieldKind = fkCalculated
+      FieldName = 'ceofdelta'
+      Visible = False
+      Size = 200
+      Calculated = True
+    end
+  end
+  object PersonsSumds: TDataSource
+    DataSet = PersonsSum
+    Left = 120
+    Top = 184
+  end
+  object PledgsPledgsSumds: TDataSource
+    DataSet = PledgsSum
+    Left = 216
+    Top = 184
+  end
+  object PledgsSum: TOracleDataSet
+    SQL.Strings = (
+      'select '
+      '   pl.DESCRIPTION as sector,'
+      
+        '   d.*,usaid_report.GetProgForR3(3,pl.id,:ffilter,0) as proqnoz,' +
+        'round(usaid_report.GetProgForR3(3,pl.id,:ffilter,0)/decode(d.ini' +
+        'tialamount,0,1,d.initialamount),4)*100 as delta'
+      'from '
+      '  cm_pledges pl ,'
+      ''
+      '(select'
+      '   count(p.id) as CrdCount,'
+      '   round(count(p.id)/(:GenCount),4)*100 as CeofCount,'
+      
+        '   round(sum(h.rest*o.ostat+h.duerest*o.ostat),4) as initialamou' +
+        'nt,'
+      
+        '   round(sum(h.rest*o.ostat+h.duerest*o.ostat)/:GenInitAmt,4)*10' +
+        '0 as CeofInitAmt,'
+      '   0 as proqnoz,'
+      '   0 as delta,'
+      '   gr.pledgeid '
+      'from'
+      '   cm_portfolio p,'
+      '   operkurs o,'
+      '   cm_guarantee gr, cm_history h'
+      'where'
+      '   p.currency = o.val_kod and'
+      
+        '   o.dat = :dat and  p.id = gr.creditid and p.id = h.creditid an' +
+        'd h.hdate=:dat and h.rest+h.duerest>0'
+      ''
+      '   '
+      'group by gr.pledgeid) d'
+      ''
+      'where d.pledgeid = pl.id'
+      'order by :OrderField'
+      '   ')
+    Variables.Data = {
+      0300000005000000090000003A47454E434F554E540300000000000000000000
+      000B0000003A47454E494E4954414D5404000000000000000000000004000000
+      3A4441540C00000000000000000000000B0000003A4F524445524649454C4401
+      0000000000000000000000080000003A4646494C544552050000000000000000
+      000000}
+    QBEDefinition.QBEFieldDefs = {
+      040000000800000006000000534543544F520100000000000800000043524443
+      4F554E540100000000000900000043454F46434F554E540100000000000D0000
+      00494E495449414C414D4F554E540100000000000B00000043454F46494E4954
+      414D540100000000000700000050524F514E4F5A010000000000050000004445
+      4C544101000000000008000000504C454447454944010000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    OnCalcFields = CategoriesSumCalcFields
+    Left = 208
+    Top = 128
+    object PledgsSumSECTOR: TWideStringField
+      DisplayLabel = 'Сектор'
+      FieldName = 'SECTOR'
+      Size = 64
+    end
+    object PledgsSumCRDCOUNT: TFloatField
+      DisplayLabel = 'Кредитин сайы'
+      FieldName = 'CRDCOUNT'
+    end
+    object PledgsSumCEOFCOUNT: TFloatField
+      DisplayLabel = 'Порт%'
+      FieldName = 'CEOFCOUNT'
+    end
+    object PledgsSumINITIALAMOUNT: TFloatField
+      DisplayLabel = 'Кредит.мябл.'
+      FieldName = 'INITIALAMOUNT'
+      DisplayFormat = '#,##0.00'
+    end
+    object PledgsSumCEOFINITAMT: TFloatField
+      DisplayLabel = 'Порт%'
+      FieldName = 'CEOFINITAMT'
+      DisplayFormat = '#,##0.00'
+    end
+    object PledgsSumPROQNOZ: TFloatField
+      DisplayLabel = 'Прогноз'
+      FieldName = 'PROQNOZ'
+      DisplayFormat = '#,##0.00'
+    end
+    object PledgsSumDELTA: TFloatField
+      DisplayLabel = 'Прогнозун ижрасы'
+      FieldName = 'DELTA'
+      DisplayFormat = '#,##0.00'
+    end
+    object PledgsSumPLEDGEID: TFloatField
+      FieldName = 'PLEDGEID'
+      Required = True
+      Visible = False
+    end
+    object PledgsSumceofCEOFINITAMT: TWideStringField
+      DisplayLabel = 'Порт%'
+      FieldKind = fkCalculated
+      FieldName = 'ceofCEOFINITAMT'
+      Visible = False
+      Calculated = True
+    end
+    object PledgsSumceofCEOFCOUNT: TWideStringField
+      DisplayLabel = 'Порт%'
+      FieldKind = fkCalculated
+      FieldName = 'ceofCEOFCOUNT'
+      Visible = False
+      Calculated = True
+    end
+    object PledgsSumceofdelta: TWideStringField
+      DisplayLabel = 'Прогнозун ижрасы'
+      FieldKind = fkCalculated
+      FieldName = 'ceofdelta'
+      Visible = False
+      Calculated = True
+    end
+  end
+  object ValutesSumds: TDataSource
+    DataSet = ValutesSum
+    Left = 264
+    Top = 80
+  end
+  object ValutesSum: TOracleDataSet
+    SQL.Strings = (
+      'select '
+      '   cat.valu_name as sector,'
+      
+        '   d.*,usaid_report.GetProgForR3(4,cat.valute,:ffilter,0) as pro' +
+        'qnoz,round(usaid_report.GetProgForR3(4,cat.valute,:ffilter,0)/de' +
+        'code(d.initialamount,0,1,d.initialamount),4)*100 as delta'
+      'from '
+      '  avalute cat,'
+      ''
+      '(select'
+      '   count(p.id) as CrdCount,'
+      '   round(count(p.id)/(:GenCount),4)*100 as CeofCount,'
+      
+        '   round(sum(h.rest*o.ostat+h.duerest*o.ostat),4) as initialamou' +
+        'nt,'
+      
+        '   round(sum(h.rest*o.ostat+h.duerest*o.ostat)/:GenInitAmt,4)*10' +
+        '0 as CeofInitAmt,'
+      '  -- 0 as proqnoz,'
+      '  -- 0 as delta,'
+      '   p.currency'
+      'from'
+      '   cm_portfolio p,'
+      '   operkurs o,cm_history h'
+      'where'
+      '   p.currency = o.val_kod and'
+      
+        '   o.dat = :dat and p.id = h.creditid  and h.hdate=:dat and h.re' +
+        'st+h.duerest>0'
+      '   '
+      'group by p.currency) d'
+      ''
+      'where d.currency = cat.valute'
+      'order by :OrderField'
+      '   '
+      '')
+    Variables.Data = {
+      0300000005000000090000003A47454E434F554E540300000000000000000000
+      000B0000003A47454E494E4954414D5404000000000000000000000004000000
+      3A4441540C00000000000000000000000B0000003A4F524445524649454C4401
+      0000000000000000000000080000003A4646494C544552050000000000000000
+      000000}
+    QBEDefinition.QBEFieldDefs = {
+      040000000800000006000000534543544F520100000000000800000043524443
+      4F554E540100000000000900000043454F46434F554E540100000000000D0000
+      00494E495449414C414D4F554E540100000000000B00000043454F46494E4954
+      414D540100000000000700000050524F514E4F5A010000000000050000004445
+      4C54410100000000000800000043555252454E4359010000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    OnCalcFields = CategoriesSumCalcFields
+    Left = 264
+    Top = 16
+    object ValutesSumSECTOR: TWideStringField
+      DisplayLabel = 'Сектор'
+      FieldName = 'SECTOR'
+      Size = 25
+    end
+    object ValutesSumCRDCOUNT: TFloatField
+      DisplayLabel = 'Кредитин сайы'
+      FieldName = 'CRDCOUNT'
+    end
+    object ValutesSumCEOFCOUNT: TFloatField
+      DisplayLabel = 'Порт%'
+      FieldName = 'CEOFCOUNT'
+    end
+    object ValutesSumINITIALAMOUNT: TFloatField
+      DisplayLabel = 'Кредит.мябл.'
+      FieldName = 'INITIALAMOUNT'
+      DisplayFormat = '#,##0.00'
+    end
+    object ValutesSumCEOFINITAMT: TFloatField
+      DisplayLabel = 'Порт%'
+      FieldName = 'CEOFINITAMT'
+      DisplayFormat = '#,##0.00'
+    end
+    object ValutesSumPROQNOZ: TFloatField
+      DisplayLabel = 'Прогноз'
+      FieldName = 'PROQNOZ'
+      DisplayFormat = '#,##0.00'
+    end
+    object ValutesSumDELTA: TFloatField
+      DisplayLabel = 'Прогнозун ижрасы'
+      FieldName = 'DELTA'
+      DisplayFormat = '#,##0.00'
+    end
+    object ValutesSumCURRENCY: TFloatField
+      FieldName = 'CURRENCY'
+      Required = True
+      Visible = False
+    end
+    object ValutesSumceofCEOFCOUNT: TWideStringField
+      DisplayLabel = 'Порт%'
+      FieldKind = fkCalculated
+      FieldName = 'ceofCEOFCOUNT'
+      Visible = False
+      Calculated = True
+    end
+    object ValutesSumceofCEOFINITAMT: TWideStringField
+      DisplayLabel = 'Порт%'
+      FieldKind = fkCalculated
+      FieldName = 'ceofCEOFINITAMT'
+      Visible = False
+      Calculated = True
+    end
+    object ValutesSumceofdelta: TWideStringField
+      DisplayLabel = 'Прогнозун ижрасы'
+      FieldKind = fkCalculated
+      FieldName = 'ceofdelta'
+      Visible = False
+      Calculated = True
+    end
+  end
+  object RegionsSum: TOracleDataSet
+    SQL.Strings = (
+      'select '
+      '   ar.name as sector,'
+      
+        '   d.*,usaid_report.GetProgForR3(5,ar.id,:ffilter,0) as proqnoz,' +
+        'round(usaid_report.GetProgForR3(5,ar.id,:ffilter,0)/decode(d.ini' +
+        'tialamount,0,1,d.initialamount),4)*100 as delta'
+      'from '
+      '  agro_region ar ,'
+      ''
+      '(select'
+      '   count(p.id) as CrdCount,'
+      '   round(count(p.id)/(:GenCount),4)*100 as CeofCount,'
+      
+        '   round(sum(h.rest*o.ostat+h.duerest*o.ostat),4) as initialamou' +
+        'nt,'
+      
+        '   round(sum(h.rest*o.ostat+h.duerest*o.ostat)/:GenInitAmt,4)*10' +
+        '0 as CeofInitAmt,'
+      '   --0 as proqnoz,'
+      '   --0 as delta,'
+      '   agv.depend_id '
+      'from'
+      '   cm_portfolio p,'
+      '   operkurs o,'
+      '   cm_business_plan bp,'
+      '   agro_village agv,cm_history h'
+      '   '
+      'where'
+      '   p.currency = o.val_kod and'
+      
+        '   o.dat = :dat and  p.id = bp.creditid and bp.villageid = agv.i' +
+        'd and p.id = h.creditid  and h.hdate=:dat and h.rest+h.duerest>0'
+      '   '
+      'group by agv.depend_id) d'
+      ''
+      'where d.depend_id = ar.id'
+      'order by :OrderField'
+      '   '
+      '')
+    Variables.Data = {
+      0300000005000000090000003A47454E434F554E540300000000000000000000
+      000B0000003A47454E494E4954414D5404000000000000000000000004000000
+      3A4441540C00000000000000000000000B0000003A4F524445524649454C4401
+      0000000000000000000000080000003A4646494C544552050000000000000000
+      000000}
+    QBEDefinition.QBEFieldDefs = {
+      040000000800000006000000534543544F520100000000000800000043524443
+      4F554E540100000000000900000043454F46434F554E540100000000000D0000
+      00494E495449414C414D4F554E540100000000000B00000043454F46494E4954
+      414D540100000000000700000050524F514E4F5A010000000000050000004445
+      4C544101000000000009000000444550454E445F4944010000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    OnCalcFields = CategoriesSumCalcFields
+    Left = 344
+    Top = 16
+    object RegionsSumSECTOR: TWideStringField
+      DisplayLabel = 'Сектор'
+      FieldName = 'SECTOR'
+      Size = 128
+    end
+    object RegionsSumCRDCOUNT: TFloatField
+      DisplayLabel = 'Кредитин сайы'
+      FieldName = 'CRDCOUNT'
+    end
+    object RegionsSumCEOFCOUNT: TFloatField
+      DisplayLabel = 'Порт%'
+      FieldName = 'CEOFCOUNT'
+    end
+    object RegionsSumINITIALAMOUNT: TFloatField
+      DisplayLabel = 'Кредит.мябл.'
+      FieldName = 'INITIALAMOUNT'
+      DisplayFormat = '#,##0.00'
+    end
+    object RegionsSumCEOFINITAMT: TFloatField
+      FieldName = 'CEOFINITAMT'
+      DisplayFormat = '#,##0.00'
+    end
+    object RegionsSumPROQNOZ: TFloatField
+      DisplayLabel = 'Прогноз'
+      FieldName = 'PROQNOZ'
+      DisplayFormat = '#,##0.00'
+    end
+    object RegionsSumDELTA: TFloatField
+      DisplayLabel = 'Прогнозун ижрасы'
+      FieldName = 'DELTA'
+      DisplayFormat = '#,##0.00'
+    end
+    object RegionsSumDEPEND_ID: TFloatField
+      FieldName = 'DEPEND_ID'
+      Visible = False
+    end
+    object RegionsSumceofCEOFINITAMT: TWideStringField
+      DisplayLabel = 'Порт%'
+      FieldKind = fkCalculated
+      FieldName = 'ceofCEOFINITAMT'
+      Visible = False
+      Calculated = True
+    end
+    object RegionsSumceofCEOFCOUNT: TWideStringField
+      DisplayLabel = 'Порт%'
+      FieldKind = fkCalculated
+      FieldName = 'ceofCEOFCOUNT'
+      Visible = False
+      Calculated = True
+    end
+    object RegionsSumceofdelta: TWideStringField
+      DisplayLabel = 'Прогнозун ижрасы'
+      FieldKind = fkCalculated
+      FieldName = 'ceofdelta'
+      Visible = False
+      Calculated = True
+    end
+  end
+  object RegionsSumds: TDataSource
+    DataSet = RegionsSum
+    Left = 344
+    Top = 80
+  end
+  object CountriesSumds: TDataSource
+    DataSet = CountriesSum
+    Left = 312
+    Top = 184
+  end
+  object CountriesSum: TOracleDataSet
+    SQL.Strings = (
+      'select '
+      '   c.name as sector,'
+      
+        '   d.*,usaid_report.GetProgForR3(1,c.id,:ffilter,0) as proqnoz,u' +
+        'said_report.GetProgForR3(1,c.id,:ffilter,0)/decode(d.initialamou' +
+        'nt,0,1,d.initialamount) as delta'
+      'from '
+      '  cm_countrys c ,'
+      ''
+      '(select'
+      '   count(p.id) as CrdCount,'
+      '   round(count(p.id)/(:GenCount),4)*100 as CeofCount,'
+      
+        '   round(sum(h.rest*o.ostat+h.duerest*o.ostat),4) as initialamou' +
+        'nt,'
+      
+        '   round(sum(h.rest*o.ostat+h.duerest*o.ostat)/:GenInitAmt,4)*10' +
+        '0 as CeofInitAmt,'
+      '   0 as proqnoz,'
+      '   0 as delta,'
+      '   b.countrycode '
+      'from'
+      '   cm_portfolio p,'
+      '   operkurs o,'
+      '   cm_boorowerinfo b, cm_history h'
+      '   '
+      'where'
+      '   p.currency = o.val_kod and'
+      
+        '   o.dat = :dat and  p.id = b.creditid  and p.id = h.creditid an' +
+        'd h.hdate=:dat and h.rest+h.duerest>0'
+      '      '
+      'group by b.countrycode ) d'
+      ''
+      'where d.countrycode = c.code'
+      'order by :OrderField'
+      '')
+    Variables.Data = {
+      0300000005000000090000003A47454E434F554E540300000000000000000000
+      000B0000003A47454E494E4954414D5404000000000000000000000004000000
+      3A4441540C00000000000000000000000B0000003A4F524445524649454C4401
+      0000000000000000000000080000003A4646494C544552050000000000000000
+      000000}
+    QBEDefinition.QBEFieldDefs = {
+      040000000800000006000000534543544F520100000000000800000043524443
+      4F554E540100000000000900000043454F46434F554E540100000000000D0000
+      00494E495449414C414D4F554E540100000000000B00000043454F46494E4954
+      414D540100000000000700000050524F514E4F5A010000000000050000004445
+      4C54410100000000000B000000434F554E545259434F4445010000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    OnCalcFields = CategoriesSumCalcFields
+    Left = 280
+    Top = 128
+    object CountriesSumSECTOR: TWideStringField
+      DisplayLabel = 'Сектор'
+      FieldName = 'SECTOR'
+      Required = True
+      Size = 255
+    end
+    object CountriesSumCRDCOUNT: TFloatField
+      DisplayLabel = 'Кредитин сайы'
+      FieldName = 'CRDCOUNT'
+    end
+    object CountriesSumCEOFCOUNT: TFloatField
+      DisplayLabel = 'Порт%'
+      FieldName = 'CEOFCOUNT'
+    end
+    object CountriesSumINITIALAMOUNT: TFloatField
+      DisplayLabel = 'Кредит.мябл.'
+      FieldName = 'INITIALAMOUNT'
+      DisplayFormat = '#,##0.00'
+    end
+    object CountriesSumCEOFINITAMT: TFloatField
+      DisplayLabel = 'Порт%'
+      FieldName = 'CEOFINITAMT'
+      DisplayFormat = '#,##0.00'
+    end
+    object CountriesSumPROQNOZ: TFloatField
+      DisplayLabel = 'Прогноз'
+      FieldName = 'PROQNOZ'
+      DisplayFormat = '#,##0.00'
+    end
+    object CountriesSumDELTA: TFloatField
+      DisplayLabel = 'Прогнозун ижрасы'
+      FieldName = 'DELTA'
+      DisplayFormat = '#,##0.00'
+    end
+    object CountriesSumCOUNTRYCODE: TWideStringField
+      FieldName = 'COUNTRYCODE'
+      Visible = False
+      Size = 8
+    end
+    object CountriesSumceofCEOFCOUNT: TWideStringField
+      DisplayLabel = 'Порт%'
+      FieldKind = fkCalculated
+      FieldName = 'ceofCEOFCOUNT'
+      Visible = False
+      Calculated = True
+    end
+    object CountriesSumceofCEOFINITAMT: TWideStringField
+      DisplayLabel = 'Порт%'
+      FieldKind = fkCalculated
+      FieldName = 'ceofCEOFINITAMT'
+      Visible = False
+      Calculated = True
+    end
+  end
+  object CalcMethodsSum: TOracleDataSet
+    SQL.Strings = (
+      'select '
+      '   c.description as sector,'
+      '   d.*'
+      'from '
+      '  cm_intcalcmethod c ,'
+      ''
+      '(select'
+      '   count(p.id) as CrdCount,'
+      '   round(count(p.id)/(:GenCount),4)*100 as CeofCount,'
+      
+        '   round(sum(h.rest*o.ostat+h.duerest*o.ostat),4) as initialamou' +
+        'nt,'
+      
+        '   round(sum(h.rest*o.ostat+h.duerest*o.ostat)/:GenInitAmt,4)*10' +
+        '0 as CeofInitAmt,'
+      '   0 as proqnoz,'
+      '   0 as delta,'
+      '   p.INTCALCMETHOD'
+      'from'
+      '   cm_portfolio p,'
+      '   operkurs o,cm_history h'
+      '      '
+      'where'
+      '   p.currency = o.val_kod and'
+      
+        '   o.dat = :dat and p.id = h.creditid and h.hdate=:dat and h.res' +
+        't+h.duerest>0'
+      '         '
+      'group by p.INTCALCMETHOD ) d'
+      ''
+      'where d.INTCALCMETHOD = c.id'
+      'order by :OrderField'
+      '   '
+      '')
+    Variables.Data = {
+      0300000004000000090000003A47454E434F554E540300000000000000000000
+      000B0000003A47454E494E4954414D5404000000000000000000000004000000
+      3A4441540C00000000000000000000000B0000003A4F524445524649454C4401
+      0000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      040000000800000006000000534543544F520100000000000800000043524443
+      4F554E540100000000000900000043454F46434F554E540100000000000D0000
+      00494E495449414C414D4F554E540100000000000B00000043454F46494E4954
+      414D540100000000000700000050524F514E4F5A010000000000050000004445
+      4C54410100000000000D000000494E5443414C434D4554484F44010000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    OnCalcFields = CategoriesSumCalcFields
+    Left = 384
+    Top = 128
+    object CalcMethodsSumSECTOR: TWideStringField
+      DisplayLabel = 'Сектор'
+      FieldName = 'SECTOR'
+      Required = True
+      Size = 32
+    end
+    object CalcMethodsSumCRDCOUNT: TFloatField
+      DisplayLabel = 'Кредитин сайы'
+      FieldName = 'CRDCOUNT'
+    end
+    object CalcMethodsSumCEOFCOUNT: TFloatField
+      DisplayLabel = 'Порт%'
+      FieldName = 'CEOFCOUNT'
+    end
+    object CalcMethodsSumINITIALAMOUNT: TFloatField
+      DisplayLabel = 'Кредит.мябл.'
+      FieldName = 'INITIALAMOUNT'
+      DisplayFormat = '#,##0.00'
+    end
+    object CalcMethodsSumCEOFINITAMT: TFloatField
+      DisplayLabel = 'Порт%'
+      FieldName = 'CEOFINITAMT'
+      DisplayFormat = '#,##0.00'
+    end
+    object CalcMethodsSumPROQNOZ: TFloatField
+      DisplayLabel = 'Прогноз%'
+      FieldName = 'PROQNOZ'
+      DisplayFormat = '#,##0.00'
+    end
+    object CalcMethodsSumDELTA: TFloatField
+      DisplayLabel = '%дяйишиклийи'
+      FieldName = 'DELTA'
+      DisplayFormat = '#,##0.00'
+    end
+    object CalcMethodsSumINTCALCMETHOD: TFloatField
+      FieldName = 'INTCALCMETHOD'
+      Visible = False
+    end
+    object CalcMethodsSumceofCEOFINITAMT: TWideStringField
+      DisplayLabel = 'Порт%'
+      FieldKind = fkCalculated
+      FieldName = 'ceofCEOFINITAMT'
+      Visible = False
+      Calculated = True
+    end
+    object CalcMethodsSumceofCEOFCOUNT: TWideStringField
+      DisplayLabel = 'Порт%'
+      FieldKind = fkCalculated
+      FieldName = 'ceofCEOFCOUNT'
+      Visible = False
+      Calculated = True
+    end
+  end
+  object CalcMethodsSumDs: TDataSource
+    DataSet = CalcMethodsSum
+    Left = 408
+    Top = 184
+  end
+  object ReservesSumds: TDataSource
+    DataSet = ReservesSum
+    Left = 40
+    Top = 296
+  end
+  object ReservesSum: TOracleDataSet
+    SQL.Strings = (
+      'select '
+      '   c.percent||'#39'%'#39'||'#39'-'#39'||c.description as sector,'
+      
+        '   d.*,usaid_report.GetProgForR3(6,c.id,:ffilter,0) as proqnoz,r' +
+        'ound(usaid_report.GetProgForR3(6,c.id,:ffilter,0)/decode(d.initi' +
+        'alamount,0,1,d.initialamount),4)*100 as delta'
+      'from '
+      '  cm_reserves c ,'
+      ''
+      '(select'
+      '   count(p.id) as CrdCount,'
+      '   round(count(p.id)/(:GenCount),4)*100 as CeofCount,'
+      
+        '   round(sum(cs.rest*o.ostat+cs.duerest*o.ostat),4) as initialam' +
+        'ount,'
+      
+        '   round(sum(cs.rest*o.ostat+cs.duerest*o.ostat)/:GenInitAmt,4)*' +
+        '100 as CeofInitAmt,'
+      '   --0 as proqnoz,'
+      '   --0 as delta,'
+      '   cs.reserveid'
+      'from'
+      '   cm_portfolio p,'
+      '   operkurs o,'
+      '   cm_history cs'
+      '      '
+      'where'
+      '   p.currency = o.val_kod and'
+      
+        '   o.dat = :dat and p.id = cs.creditid and cs.hdate = :dat  and ' +
+        'cs.rest+cs.duerest>0'
+      '         '
+      'group by cs.reserveid ) d'
+      ''
+      'where d.reserveid = c.id '
+      'order by :OrderField'
+      '   '
+      '')
+    Variables.Data = {
+      0300000005000000090000003A47454E434F554E540300000000000000000000
+      000B0000003A47454E494E4954414D5404000000000000000000000004000000
+      3A4441540C00000000000000000000000B0000003A4F524445524649454C4401
+      0000000000000000000000080000003A4646494C544552050000000000000000
+      000000}
+    QBEDefinition.QBEFieldDefs = {
+      040000000800000006000000534543544F520100000000000800000043524443
+      4F554E540100000000000900000043454F46434F554E540100000000000D0000
+      00494E495449414C414D4F554E540100000000000B00000043454F46494E4954
+      414D540100000000000700000050524F514E4F5A010000000000050000004445
+      4C544101000000000009000000524553455256454944010000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    OnCalcFields = CategoriesSumCalcFields
+    Left = 40
+    Top = 240
+    object ReservesSumSECTOR: TWideStringField
+      DisplayLabel = 'Сектор'
+      FieldName = 'SECTOR'
+      Required = True
+      Size = 64
+    end
+    object ReservesSumCRDCOUNT: TFloatField
+      DisplayLabel = 'Кредитин сайы'
+      FieldName = 'CRDCOUNT'
+    end
+    object ReservesSumCEOFCOUNT: TFloatField
+      DisplayLabel = 'Порт%'
+      FieldName = 'CEOFCOUNT'
+    end
+    object ReservesSumINITIALAMOUNT: TFloatField
+      DisplayLabel = 'Кредит.мябл.'
+      FieldName = 'INITIALAMOUNT'
+      DisplayFormat = '#,##0.00'
+    end
+    object ReservesSumCEOFINITAMT: TFloatField
+      DisplayLabel = 'Порт%'
+      FieldName = 'CEOFINITAMT'
+      DisplayFormat = '#,##0.00'
+    end
+    object ReservesSumPROQNOZ: TFloatField
+      DisplayLabel = 'Прогноз'
+      FieldName = 'PROQNOZ'
+      DisplayFormat = '#,##0.00'
+    end
+    object ReservesSumDELTA: TFloatField
+      DisplayLabel = 'Прогнозун ижрасы'
+      FieldName = 'DELTA'
+      DisplayFormat = '#,##0.00'
+    end
+    object ReservesSumRESERVEID: TFloatField
+      FieldName = 'RESERVEID'
+      Required = True
+      Visible = False
+    end
+    object ReservesSumceofCEOFCOUNT: TWideStringField
+      DisplayLabel = 'Порт%'
+      FieldKind = fkCalculated
+      FieldName = 'ceofCEOFCOUNT'
+      Visible = False
+      Calculated = True
+    end
+    object ReservesSumceofCEOFINITAMT: TWideStringField
+      DisplayLabel = 'Порт%'
+      FieldKind = fkCalculated
+      FieldName = 'ceofCEOFINITAMT'
+      Visible = False
+      Calculated = True
+    end
+    object ReservesSumceofdelta: TWideStringField
+      DisplayLabel = 'Прогнозун ижрасы'
+      FieldKind = fkCalculated
+      FieldName = 'ceofdelta'
+      Visible = False
+      Calculated = True
+    end
+  end
+  object Queries: TOracleDataSet
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 24
+    Top = 352
+  end
+  object AnnualIntSum: TOracleDataSet
+    SQL.Strings = (
+      'select '
+      'd.CrdCount,'
+      'd.CeofCount,'
+      'd.initialamount,'
+      'd.CeofInitAmt,'
+      '--d.proqnoz,'
+      '--d.delta,'
+      
+        'sectors.sector,sectors.bper,sectors.eper,usaid_report.GetProgFor' +
+        'R3(7,sectors.id,:ffilter,0) as proqnoz,round(usaid_report.GetPro' +
+        'gForR3(7,sectors.id,:ffilter,0)/decode(d.initialamount,0,1,d.ini' +
+        'tialamount),4)*100 as delta'
+      'from'
+      ''
+      '(select 1 as ID,'#39'<=12'#39' as sector,0 as bper, 12 as eper from dual'
+      'union'
+      
+        'select 2 as ID,'#39'<12<=18'#39' as sector,13 as bper, 18 as eper from d' +
+        'ual'
+      'union'
+      
+        'select 3 as ID,'#39'<18<=24'#39' as sector ,19 as bper, 24 as eper from ' +
+        'dual'
+      'union'
+      
+        'select 4 as ID,'#39'<24<=30'#39' as sector,25 as bper, 30 as eper from d' +
+        'ual'
+      'union'
+      
+        'select 5 as ID,'#39'>30'#39' as sector,31 as bper, 500 as eper from dual' +
+        ') sectors,'
+      ''
+      '(select '
+      ' count(CrdCount) as CrdCount,'
+      ' round(count(CrdCount)/(:GenCount),4)*100 as CeofCount,'
+      ' round(sum(initialamount),4) as initialamount,'
+      ' round(sum(CeofInitAmt)/:GenInitAmt,4)*100 as CeofInitAmt,'
+      ' 0 as proqnoz,'
+      ' 0 as delta,'
+      ' sectorID from '
+      '  ('
+      'select'
+      '   p.id as CrdCount,'
+      '   round(h.rest*o.ostat+h.duerest*o.ostat,4) as initialamount,'
+      '   round((h.rest*o.ostat+h.duerest*o.ostat),4) as CeofInitAmt,'
+      '   case '
+      '              when p.ANNUALYINTERESTRATE < =12 then 1'
+      
+        '              when p.ANNUALYINTERESTRATE > 12 and p.ANNUALYINTER' +
+        'ESTRATE < =18 then  2'
+      
+        '              when p.ANNUALYINTERESTRATE > 18 and p.ANNUALYINTER' +
+        'ESTRATE < =24 then  3'
+      
+        '              when p.ANNUALYINTERESTRATE > 24  and p.ANNUALYINTE' +
+        'RESTRATE < =30 then 4'
+      '              when p.ANNUALYINTERESTRATE > 30 then 5'
+      '              end as sectorID'
+      'from'
+      '   cm_portfolio p,'
+      '   operkurs o,cm_history h'
+      'where'
+      '   p.currency = o.val_kod and'
+      
+        '   o.dat = :dat and p.id = h.creditid and h.hdate=:dat and h.res' +
+        't+h.duerest>0'
+      '   '
+      ')'
+      'group by sectorID order by sectorID) d'
+      ''
+      'where d.sectorID = sectors.id'
+      'order by :OrderField'
+      '')
+    Variables.Data = {
+      0300000005000000090000003A47454E434F554E540300000000000000000000
+      000B0000003A47454E494E4954414D5404000000000000000000000004000000
+      3A4441540C00000000000000000000000B0000003A4F524445524649454C4401
+      0000000000000000000000080000003A4646494C544552050000000000000000
+      000000}
+    QBEDefinition.QBEFieldDefs = {
+      040000000900000008000000435244434F554E54010000000000090000004345
+      4F46434F554E540100000000000D000000494E495449414C414D4F554E540100
+      000000000B00000043454F46494E4954414D540100000000000700000050524F
+      514E4F5A0100000000000500000044454C544101000000000006000000534543
+      544F520100000000000400000042504552010000000000040000004550455201
+      0000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    OnCalcFields = CategoriesSumCalcFields
+    Left = 144
+    Top = 240
+    object AnnualIntSumSECTOR: TWideStringField
+      DisplayLabel = 'Сектор'
+      FieldName = 'SECTOR'
+      Size = 7
+    end
+    object AnnualIntSumCRDCOUNT: TFloatField
+      DisplayLabel = 'Кредитин сайы'
+      FieldName = 'CRDCOUNT'
+    end
+    object AnnualIntSumCEOFCOUNT: TFloatField
+      DisplayLabel = 'Порт%'
+      FieldName = 'CEOFCOUNT'
+      DisplayFormat = '#,##0.00'
+    end
+    object AnnualIntSumINITIALAMOUNT: TFloatField
+      DisplayLabel = 'Кредит.мябл.'
+      FieldName = 'INITIALAMOUNT'
+      DisplayFormat = '#,##0.00'
+    end
+    object AnnualIntSumCEOFINITAMT: TFloatField
+      DisplayLabel = 'Порт%'
+      FieldName = 'CEOFINITAMT'
+      DisplayFormat = '#,##0.00'
+    end
+    object AnnualIntSumPROQNOZ: TFloatField
+      DisplayLabel = 'Прогноз'
+      FieldName = 'PROQNOZ'
+      DisplayFormat = '#,##0.00'
+    end
+    object AnnualIntSumDELTA: TFloatField
+      DisplayLabel = 'Прогнозун ижрасы'
+      FieldName = 'DELTA'
+      DisplayFormat = '#,##0.00'
+    end
+    object AnnualIntSumceofCEOFCOUNT: TWideStringField
+      DisplayLabel = 'Порт%'
+      FieldKind = fkCalculated
+      FieldName = 'ceofCEOFCOUNT'
+      Calculated = True
+    end
+    object AnnualIntSumceofCEOFINITAMT: TWideStringField
+      DisplayLabel = 'Порт%'
+      FieldKind = fkCalculated
+      FieldName = 'ceofCEOFINITAMT'
+      Calculated = True
+    end
+    object AnnualIntSumBPER: TFloatField
+      FieldName = 'BPER'
+      Visible = False
+    end
+    object AnnualIntSumEPER: TFloatField
+      FieldName = 'EPER'
+      Visible = False
+    end
+    object AnnualIntSumceofdelta: TWideStringField
+      DisplayLabel = 'Прогнозун ижрасы'
+      FieldKind = fkCalculated
+      FieldName = 'ceofdelta'
+      Visible = False
+      Calculated = True
+    end
+  end
+  object AnnualIntSumds: TDataSource
+    DataSet = AnnualIntSum
+    Left = 144
+    Top = 296
+  end
+  object PeriodsSum: TOracleDataSet
+    SQL.Strings = (
+      'select '
+      'd.CrdCount,'
+      'd.CeofCount,'
+      'd.initialamount,'
+      'd.CeofInitAmt,'
+      '--d.proqnoz,'
+      '--d.delta,'
+      
+        'sectors.sector,sectors.bper,sectors.eper,usaid_report.GetProgFor' +
+        'R3(8,sectors.id,:ffilter,0) as proqnoz,round(usaid_report.GetPro' +
+        'gForR3(8,sectors.id,:ffilter,0)/decode(d.initialamount,0,1,d.ini' +
+        'tialamount),4)*100  as delta'
+      'from'
+      ''
+      '(select 1 as ID,'#39'<=30'#39' as sector,0 as bper ,30 as eper from dual'
+      'union'
+      
+        'select 2 as ID,'#39'30<=90'#39' as sector,31 as bper ,90 as eper from du' +
+        'al'
+      'union'
+      
+        'select 3 as ID,'#39'90<=180'#39' as sector,91 as bper ,180 as eper from ' +
+        'dual'
+      'union'
+      
+        'select 4 as ID,'#39'180<=360'#39' as sector,181 as bper ,360 as eper fro' +
+        'm dual'
+      'union'
+      
+        'select 5 as ID,'#39'360<=720'#39' as sector,361 as bper ,720 as eper fro' +
+        'm dual'
+      'union'
+      
+        'select 6 as ID,'#39'720<=1080'#39' as sector,721 as bper ,1080 as eper f' +
+        'rom dual'
+      'union'
+      
+        'select 7 as ID,'#39'1080<'#39' as sector,1081 as bper ,108100 as eper fr' +
+        'om dual) sectors,'
+      ''
+      '(select '
+      ' count(CrdCount) as CrdCount,'
+      ' round(count(CrdCount)/(:GenCount),4)*100 as CeofCount,'
+      ' round(sum(initialamount),4) as initialamount,'
+      ' round(sum(CeofInitAmt)/:GenInitAmt,4)*100 as CeofInitAmt,'
+      ' 0 as proqnoz,'
+      ' 0 as delta,'
+      ' sectorID from '
+      '  ('
+      'select'
+      '   p.id as CrdCount,'
+      '   round(h.rest*o.ostat+h.duerest*o.ostat,4) as initialamount,'
+      '   round((h.rest*o.ostat+h.duerest*o.ostat),4) as CeofInitAmt,'
+      '   case '
+      
+        '              when creditsmgr.cm_utils.BankDaysBetween(p.DATEOFC' +
+        'ONCLUSION,p.DUEDATEFIRSTCONTRACT)<=30 then 1'
+      
+        '              when creditsmgr.cm_utils.BankDaysBetween(p.DATEOFC' +
+        'ONCLUSION,p.DUEDATEFIRSTCONTRACT) > 30 and creditsmgr.cm_utils.B' +
+        'ankDaysBetween(p.DATEOFCONCLUSION,p.DUEDATEFIRSTCONTRACT) < =90 ' +
+        'then  2'
+      
+        '              when creditsmgr.cm_utils.BankDaysBetween(p.DATEOFC' +
+        'ONCLUSION,p.DUEDATEFIRSTCONTRACT) > 90 and creditsmgr.cm_utils.B' +
+        'ankDaysBetween(p.DATEOFCONCLUSION,p.DUEDATEFIRSTCONTRACT) < =180' +
+        ' then  3'
+      
+        '              when creditsmgr.cm_utils.BankDaysBetween(p.DATEOFC' +
+        'ONCLUSION,p.DUEDATEFIRSTCONTRACT) > 180  and creditsmgr.cm_utils' +
+        '.BankDaysBetween(p.DATEOFCONCLUSION,p.DUEDATEFIRSTCONTRACT) < =3' +
+        '60 then 4'
+      
+        '              when creditsmgr.cm_utils.BankDaysBetween(p.DATEOFC' +
+        'ONCLUSION,p.DUEDATEFIRSTCONTRACT) > 360 and creditsmgr.cm_utils.' +
+        'BankDaysBetween(p.DATEOFCONCLUSION,p.DUEDATEFIRSTCONTRACT)<=720 ' +
+        'then 5'
+      
+        '              when creditsmgr.cm_utils.BankDaysBetween(p.DATEOFC' +
+        'ONCLUSION,p.DUEDATEFIRSTCONTRACT) >720 and creditsmgr.cm_utils.B' +
+        'ankDaysBetween(p.DATEOFCONCLUSION,p.DUEDATEFIRSTCONTRACT) <= 108' +
+        '0 then 6'
+      
+        '              when creditsmgr.cm_utils.BankDaysBetween(p.DATEOFC' +
+        'ONCLUSION,p.DUEDATEFIRSTCONTRACT) >1080 then 7'
+      '              end as sectorID'
+      'from'
+      '   cm_portfolio p,'
+      '   operkurs o,cm_history h'
+      'where'
+      '   p.currency = o.val_kod and'
+      
+        '   o.dat = :dat and p.id = h.creditid and h.hdate= :dat and h.re' +
+        'st+h.duerest>0'
+      '   '
+      ')'
+      'group by sectorID order by sectorID) d'
+      ''
+      'where d.sectorID = sectors.id'
+      'order by :OrderField'
+      '')
+    Variables.Data = {
+      0300000005000000090000003A47454E434F554E540300000000000000000000
+      000B0000003A47454E494E4954414D5404000000000000000000000004000000
+      3A4441540C00000000000000000000000B0000003A4F524445524649454C4401
+      0000000000000000000000080000003A4646494C544552050000000000000000
+      000000}
+    QBEDefinition.QBEFieldDefs = {
+      040000000900000008000000435244434F554E54010000000000090000004345
+      4F46434F554E540100000000000D000000494E495449414C414D4F554E540100
+      000000000B00000043454F46494E4954414D540100000000000700000050524F
+      514E4F5A0100000000000500000044454C544101000000000006000000534543
+      544F520100000000000400000042504552010000000000040000004550455201
+      0000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    OnCalcFields = CategoriesSumCalcFields
+    Left = 232
+    Top = 240
+    object PeriodsSumSECTOR: TWideStringField
+      DisplayLabel = 'Сектор'
+      FieldName = 'SECTOR'
+      Size = 9
+    end
+    object PeriodsSumCRDCOUNT: TFloatField
+      DisplayLabel = 'Кредитин сайы'
+      FieldName = 'CRDCOUNT'
+    end
+    object PeriodsSumCEOFCOUNT: TFloatField
+      DisplayLabel = 'Порт%'
+      FieldName = 'CEOFCOUNT'
+      DisplayFormat = '#,##0.00'
+    end
+    object PeriodsSumINITIALAMOUNT: TFloatField
+      DisplayLabel = 'Кредит.мябл.'
+      FieldName = 'INITIALAMOUNT'
+      DisplayFormat = '#,##0.00'
+    end
+    object PeriodsSumCEOFINITAMT: TFloatField
+      DisplayLabel = 'Порт%'
+      FieldName = 'CEOFINITAMT'
+      DisplayFormat = '#,##0.00'
+    end
+    object PeriodsSumPROQNOZ: TFloatField
+      DisplayLabel = 'Прогноз'
+      FieldName = 'PROQNOZ'
+      DisplayFormat = '#,##0.00'
+    end
+    object PeriodsSumDELTA: TFloatField
+      DisplayLabel = 'Прогнозун ижрасы'
+      FieldName = 'DELTA'
+      DisplayFormat = '#,##0.00'
+    end
+    object PeriodsSumceofCEOFCOUNT: TWideStringField
+      DisplayLabel = 'Порт%'
+      FieldKind = fkCalculated
+      FieldName = 'ceofCEOFCOUNT'
+      Calculated = True
+    end
+    object PeriodsSumceofCEOFINITAMT: TWideStringField
+      DisplayLabel = 'Порт%'
+      FieldKind = fkCalculated
+      FieldName = 'ceofCEOFINITAMT'
+      Calculated = True
+    end
+    object PeriodsSumBPER: TFloatField
+      FieldName = 'BPER'
+      Visible = False
+    end
+    object PeriodsSumEPER: TFloatField
+      FieldName = 'EPER'
+      Visible = False
+    end
+    object PeriodsSumceofdelta: TWideStringField
+      DisplayLabel = 'Прогнозун ижрасы'
+      FieldKind = fkCalculated
+      FieldName = 'ceofdelta'
+      Visible = False
+      Calculated = True
+    end
+  end
+  object PeriodsSumds: TDataSource
+    DataSet = PeriodsSum
+    Left = 232
+    Top = 296
+  end
+  object ODSDetailds: TDataSource
+    DataSet = ODSDetail
+    Left = 301
+    Top = 304
+  end
+  object ODSDetail: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      '   f.name as filialname,'
+      '   crdtype.description,'
+      '   av.val_name as valu_name,'
+      '   p.numberofcredit,'
+      '   ac.acc_no,'
+      '   b.name as custname,'
+      '   p.creditlineamount,'
+      '   p.ANNUALYINTERESTRATE,'
+      '   r.percent,'
+      '   round(h.rest*o.ostat,2)+round(h.duerest*o.ostat,2) as rest,'
+      
+        '   round(h.interestrest*o.ostat,2)+round(h.dueinterestrest*o.ost' +
+        'at,2) as interestrest,'
+      '   p.DATEOFCONCLUSION,'
+      '   p.DUEDATEFIRSTCONTRACT'
+      'from'
+      '   cm_portfolio p,'
+      '   filial_t f,'
+      '   avalute av,'
+      '   cm_loanaccounts ac,'
+      '   cm_boorowerinfo b,'
+      '   cm_history h,'
+      '   operkurs o,'
+      '   cm_credittypes crdtype,'
+      '   cm_reserves r'
+      'where '
+      '  p.branchid = f.id and'
+      '  p.currency = av.valute and'
+      '  p.id = ac.creditid and'
+      '  p.id = b.creditid and'
+      '  p.id = h.creditid and'
+      '  h.hdate = :dat and (h.rest + h.duerest)>0 and '
+      '  o.val_kod = p.currency and'
+      '  o.dat = :dat and'
+      '  p.credittype = crdtype.id and'
+      '  h.reserveid = r.id '
+      '  '
+      '  '
+      '  '
+      '  '
+      '  '
+      '  '
+      '  '
+      '  '
+      '  '
+      '  '
+      '  '
+      '  '
+      '  '
+      '  '
+      '  '
+      '  '
+      '  '
+      'order by :OrderField')
+    Variables.Data = {
+      0300000002000000040000003A4441540C00000000000000000000000B000000
+      3A4F524445524649454C44010000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      040000000D0000000A00000046494C49414C4E414D450100000000000B000000
+      4445534352495054494F4E0100000000000900000056414C555F4E414D450100
+      000000000E0000004E554D4245524F4643524544495401000000000006000000
+      4143435F4E4F01000000000008000000435553544E414D450100000000001000
+      00004352454449544C494E45414D4F554E5401000000000013000000414E4E55
+      414C59494E544552455354524154450100000000000700000050455243454E54
+      01000000000004000000524553540100000000000C000000494E544552455354
+      5245535401000000000010000000444154454F46434F4E434C5553494F4E0100
+      0000000014000000445545444154454649525354434F4E545241435401000000
+      0000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 304
+    Top = 240
+    object ODSDetailFILIALNAME: TWideStringField
+      DisplayLabel = 'Филиал'
+      FieldName = 'FILIALNAME'
+      Size = 90
+    end
+    object ODSDetailDESCRIPTION: TWideStringField
+      DisplayLabel = 'Кредитин типи'
+      FieldName = 'DESCRIPTION'
+      Size = 128
+    end
+    object ODSDetailVALU_NAME: TWideStringField
+      DisplayLabel = 'Валйута'
+      FieldName = 'VALU_NAME'
+      Size = 25
+    end
+    object ODSDetailNUMBEROFCREDIT: TWideStringField
+      DisplayLabel = 'Мцгав.№'
+      FieldName = 'NUMBEROFCREDIT'
+      Required = True
+      Size = 32
+    end
+    object ODSDetailACC_NO: TWideStringField
+      DisplayLabel = 'Щесаб.№'
+      FieldName = 'ACC_NO'
+    end
+    object ODSDetailCUSTNAME: TWideStringField
+      DisplayLabel = 'Мцштяринин ады'
+      FieldName = 'CUSTNAME'
+      Size = 64
+    end
+    object ODSDetailCREDITLINEAMOUNT: TFloatField
+      DisplayLabel = 'Кредит.мяб.'
+      FieldName = 'CREDITLINEAMOUNT'
+      Required = True
+    end
+    object ODSDetailANNUALYINTERESTRATE: TFloatField
+      DisplayLabel = 'Кредит.%'
+      FieldName = 'ANNUALYINTERESTRATE'
+      Required = True
+    end
+    object ODSDetailPERCENT: TFloatField
+      DisplayLabel = 'Ещт.%'
+      FieldName = 'PERCENT'
+      Required = True
+    end
+    object ODSDetailREST: TFloatField
+      DisplayLabel = 'ЯБ'
+      FieldName = 'REST'
+    end
+    object ODSDetailINTERESTREST: TFloatField
+      DisplayLabel = 'ФБ'
+      FieldName = 'INTERESTREST'
+    end
+    object ODSDetailDATEOFCONCLUSION: TDateTimeField
+      DisplayLabel = 'Вер.тарихи'
+      FieldName = 'DATEOFCONCLUSION'
+      Required = True
+    end
+    object ODSDetailDUEDATEFIRSTCONTRACT: TDateTimeField
+      DisplayLabel = 'Баьл.тарихи'
+      FieldName = 'DUEDATEFIRSTCONTRACT'
+      Required = True
+    end
+  end
+end

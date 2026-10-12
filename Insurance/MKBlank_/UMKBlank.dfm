@@ -1,0 +1,1333 @@
+object fmMKBlank: TfmMKBlank
+  Left = 267
+  Top = 144
+  Width = 623
+  Height = 520
+  ActiveControl = DBCBCustName
+  Caption = 'fmMKBlank'
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  OldCreateOrder = False
+  OnCreate = ActiveFormCreate
+  OnDestroy = ActiveFormDestroy
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Panel1: TPanel
+    Left = 0
+    Top = 448
+    Width = 615
+    Height = 38
+    Align = alBottom
+    BevelInner = bvRaised
+    BevelOuter = bvLowered
+    TabOrder = 1
+    object btOk: TBitBtn
+      Left = 456
+      Top = 8
+      Width = 73
+      Height = 25
+      Caption = 'OK'
+      TabOrder = 0
+      OnClick = btOkClick
+      Glyph.Data = {
+        DE010000424DDE01000000000000760000002800000024000000120000000100
+        0400000000006801000000000000000000001000000000000000000000000000
+        80000080000000808000800000008000800080800000C0C0C000808080000000
+        FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00333333333333
+        3333333333333333333333330000333333333333333333333333F33333333333
+        00003333344333333333333333388F3333333333000033334224333333333333
+        338338F3333333330000333422224333333333333833338F3333333300003342
+        222224333333333383333338F3333333000034222A22224333333338F338F333
+        8F33333300003222A3A2224333333338F3838F338F33333300003A2A333A2224
+        33333338F83338F338F33333000033A33333A222433333338333338F338F3333
+        0000333333333A222433333333333338F338F33300003333333333A222433333
+        333333338F338F33000033333333333A222433333333333338F338F300003333
+        33333333A222433333333333338F338F00003333333333333A22433333333333
+        3338F38F000033333333333333A223333333333333338F830000333333333333
+        333A333333333333333338330000333333333333333333333333333333333333
+        0000}
+      NumGlyphs = 2
+    end
+    object BitBtn2: TBitBtn
+      Left = 534
+      Top = 8
+      Width = 75
+      Height = 25
+      Cancel = True
+      Caption = 'Cancel'
+      TabOrder = 1
+      OnClick = BitBtn2Click
+      Glyph.Data = {
+        DE010000424DDE01000000000000760000002800000024000000120000000100
+        0400000000006801000000000000000000001000000000000000000000000000
+        80000080000000808000800000008000800080800000C0C0C000808080000000
+        FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00333333333333
+        333333333333333333333333000033338833333333333333333F333333333333
+        0000333911833333983333333388F333333F3333000033391118333911833333
+        38F38F333F88F33300003339111183911118333338F338F3F8338F3300003333
+        911118111118333338F3338F833338F3000033333911111111833333338F3338
+        3333F8330000333333911111183333333338F333333F83330000333333311111
+        8333333333338F3333383333000033333339111183333333333338F333833333
+        00003333339111118333333333333833338F3333000033333911181118333333
+        33338333338F333300003333911183911183333333383338F338F33300003333
+        9118333911183333338F33838F338F33000033333913333391113333338FF833
+        38F338F300003333333333333919333333388333338FFF830000333333333333
+        3333333333333333333888330000333333333333333333333333333333333333
+        0000}
+      NumGlyphs = 2
+    end
+    object hbErrMsg: THintBox
+      Left = 3
+      Top = 3
+      Width = 270
+      Height = 32
+      AutoSize = True
+      BevelOuter = bvNone
+      Caption = 'hbErrMsg'
+      TabOrder = 2
+      Visible = False
+      HintStyle = hsError
+      Timeout = 4000
+      BeepOnMessage = False
+    end
+    object btSuggestion: TBitBtn
+      Left = 374
+      Top = 8
+      Width = 79
+      Height = 25
+      Caption = 'Тяклифнамя'
+      Enabled = False
+      TabOrder = 3
+      OnClick = btSuggestionClick
+      Glyph.Data = {
+        42010000424D4201000000000000760000002800000011000000110000000100
+        040000000000CC00000000000000000000001000000000000000000000000000
+        8000008000000080800080000000800080008080000080808000C0C0C0000000
+        FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00888888888888
+        8888800000008888888888888888800000008888888888888888800000008800
+        0000000000088000000088888228448118888000000088188228448118888000
+        0000888882284481188880000000881882284481188880000000888882284481
+        1888800000008818888844811888800000008888888844811888800000008818
+        8888448888888000000088888888448888888000000088188888888888888000
+        0000888888888888888880000000888888888888888880000000888888888888
+        888880000000}
+    end
+    object btApply: TBitBtn
+      Left = 280
+      Top = 8
+      Width = 89
+      Height = 25
+      Caption = 'Йаддаша йаз'
+      Enabled = False
+      ModalResult = 8
+      TabOrder = 4
+      OnClick = btApplyClick
+      Glyph.Data = {
+        F2010000424DF201000000000000760000002800000024000000130000000100
+        0400000000007C01000000000000000000001000000000000000000000000000
+        80000080000000808000800000008000800080800000C0C0C000808080000000
+        FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00333334433333
+        3333333333388F3333333333000033334224333333333333338338F333333333
+        0000333422224333333333333833338F33333333000033422222243333333333
+        83333338F3333333000034222A22224333333338F33F33338F33333300003222
+        A2A2224333333338F383F3338F33333300003A2A222A222433333338F8333F33
+        38F33333000034A22222A22243333338833333F3338F333300004222A2222A22
+        2433338F338F333F3338F3330000222A3A2224A22243338F3838F338F3338F33
+        0000A2A333A2224A2224338F83338F338F3338F300003A33333A2224A2224338
+        333338F338F3338F000033333333A2224A2243333333338F338F338F00003333
+        33333A2224A2233333333338F338F83300003333333333A2224A333333333333
+        8F338F33000033333333333A222433333333333338F338F30000333333333333
+        A224333333333333338F38F300003333333333333A223333333333333338F8F3
+        000033333333333333A3333333333333333383330000}
+      NumGlyphs = 2
+    end
+  end
+  object Panel2: TPanel
+    Left = 0
+    Top = 0
+    Width = 615
+    Height = 448
+    Align = alClient
+    BevelInner = bvRaised
+    BevelOuter = bvNone
+    BorderStyle = bsSingle
+    TabOrder = 0
+    object lbDBCBCustName: TLabel
+      Left = 8
+      Top = 8
+      Width = 96
+      Height = 13
+      Caption = 'Сыьорта етдирянин ады:'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Label1: TLabel
+      Left = 8
+      Top = 56
+      Width = 68
+      Height = 13
+      Caption = 'Файдаэютцрян '
+    end
+    object lbBank: TLabel
+      Left = 272
+      Top = 56
+      Width = 25
+      Height = 13
+      Caption = 'Bank'
+      Enabled = False
+    end
+    object Label4: TLabel
+      Left = 8
+      Top = 32
+      Width = 31
+      Height = 13
+      Caption = 'Аэент:'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+    end
+    object GroupBox3: TGroupBox
+      Left = 1
+      Top = 104
+      Width = 608
+      Height = 113
+      Caption = 'Сыьорталанан обйект (автомобил) барядя мялумат'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 5
+      object lbInsType: TLabel
+        Left = 208
+        Top = 16
+        Width = 27
+        Height = 13
+        Caption = '* Нюв'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ParentFont = False
+      end
+      object lbInsModel: TLabel
+        Left = 8
+        Top = 40
+        Width = 37
+        Height = 13
+        Caption = '* Марка'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ParentFont = False
+      end
+      object lbInsBanNum: TLabel
+        Left = 208
+        Top = 40
+        Width = 47
+        Height = 13
+        Caption = '* Бан Н-си'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ParentFont = False
+      end
+      object lbInsColor: TLabel
+        Left = 208
+        Top = 64
+        Width = 33
+        Height = 13
+        Caption = '* Рянэ'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ParentFont = False
+      end
+      object lbInsStateNum: TLabel
+        Left = 417
+        Top = 16
+        Width = 70
+        Height = 13
+        Caption = 'Дювлят нюмряси'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ParentFont = False
+      end
+      object lbInsEngineNum: TLabel
+        Left = 416
+        Top = 40
+        Width = 69
+        Height = 13
+        Caption = '* Мцщяррик Н-си'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ParentFont = False
+      end
+      object lbInsOutputYear: TLabel
+        Left = 8
+        Top = 16
+        Width = 54
+        Height = 13
+        Caption = '* Бурахылыш или'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ParentFont = False
+      end
+      object lbUnderframeNum: TLabel
+        Left = 416
+        Top = 64
+        Width = 53
+        Height = 13
+        Caption = '* Шасси Н-си'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ParentFont = False
+      end
+      object Label2: TLabel
+        Left = 8
+        Top = 64
+        Width = 36
+        Height = 13
+        Caption = '* Модел'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ParentFont = False
+      end
+      object lbDrIntend: TLabel
+        Left = 8
+        Top = 88
+        Width = 176
+        Height = 13
+        Caption = 'Автомобилдян истифадя мягсяди '
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object DBInsMarks: TDBLookupComboBox
+        Left = 80
+        Top = 40
+        Width = 121
+        Height = 21
+        DataField = 'INSUREDMARK'
+        DataSource = InsMKDataMod.DSMotorkasco
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        KeyField = 'NAME'
+        ListField = 'NAME'
+        ListSource = InsMKDataMod.DSMarks
+        ParentFont = False
+        TabOrder = 0
+        OnClick = edDBCBCustNameChange
+        OnKeyPress = edDBCBCustNameKeyPress
+      end
+      object edInsOutputYear: TDBComboBox
+        Left = 80
+        Top = 16
+        Width = 121
+        Height = 21
+        DataField = 'INSUREDOUTPUTYEAR'
+        DataSource = InsMKDataMod.DSMotorkasco
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ItemHeight = 13
+        Items.Strings = (
+          '1976'
+          '1977'
+          '1978'
+          '1979'
+          '1980'
+          '1981'
+          '1982'
+          '1983'
+          '1984'
+          '1985'
+          '1986'
+          '1987'
+          '1988'
+          '1989'
+          '1990'
+          '1991'
+          '1992'
+          '1993'
+          '1994'
+          '1995'
+          '1996'
+          '1997'
+          '1998'
+          '1999'
+          '2000'
+          '2001'
+          '2002'
+          '2003'
+          '2004'
+          '2005'
+          '2006'
+          '2007'
+          '2008'
+          '2009'
+          '2010'
+          '2011'
+          '2012'
+          '2013'
+          '2014'
+          '2015'
+          '2016'
+          '2017'
+          '2018'
+          '2019'
+          '2020')
+        ParentFont = False
+        TabOrder = 1
+        OnChange = edDBCBCustNameChange
+        OnExit = edDBCBCustNameChange
+      end
+      object edInsType: TDBEdit
+        Left = 288
+        Top = 16
+        Width = 121
+        Height = 21
+        DataField = 'INSUREDTYPE'
+        DataSource = InsMKDataMod.DSMotorkasco
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 2
+        OnKeyPress = edDBCBCustNameKeyPress
+      end
+      object edInsBanNum: TDBEdit
+        Left = 288
+        Top = 40
+        Width = 121
+        Height = 21
+        DataField = 'INSUREDBANNUM'
+        DataSource = InsMKDataMod.DSMotorkasco
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 3
+        OnKeyPress = edDBCBCustNameKeyPress
+      end
+      object edInsColor: TDBEdit
+        Left = 288
+        Top = 64
+        Width = 121
+        Height = 21
+        DataField = 'INSUREDCOLOR'
+        DataSource = InsMKDataMod.DSMotorkasco
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 4
+        OnKeyPress = edDBCBCustNameKeyPress
+      end
+      object edInsStateNum: TDBEdit
+        Left = 496
+        Top = 16
+        Width = 105
+        Height = 21
+        DataField = 'INSUREDSTATENUM'
+        DataSource = InsMKDataMod.DSMotorkasco
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 5
+        OnKeyPress = edDBCBCustNameKeyPress
+      end
+      object edInsEngineNum: TDBEdit
+        Left = 496
+        Top = 40
+        Width = 105
+        Height = 21
+        DataField = 'INSUREDENGINENUM'
+        DataSource = InsMKDataMod.DSMotorkasco
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 6
+        OnKeyPress = edDBCBCustNameKeyPress
+      end
+      object edUnderframeNum: TDBEdit
+        Left = 496
+        Top = 64
+        Width = 105
+        Height = 21
+        DataField = 'UNDERFRAMENUM'
+        DataSource = InsMKDataMod.DSMotorkasco
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 7
+        OnKeyPress = edDBCBCustNameKeyPress
+      end
+      object edDrIntend: TDBComboBox
+        Left = 184
+        Top = 88
+        Width = 225
+        Height = 21
+        DataField = 'DRIVEINTENDED'
+        DataSource = InsMKDataMod.DSMotorkasco
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ItemHeight = 13
+        Items.Strings = (
+          'Такси'
+          'Ижтимаи няглиййат'
+          'Шяхси')
+        ParentFont = False
+        TabOrder = 8
+        OnChange = edDBCBCustNameChange
+        OnKeyPress = edDBCBCustNameKeyPress
+      end
+      object DBInsModels: TDBLookupComboBox
+        Left = 80
+        Top = 64
+        Width = 121
+        Height = 21
+        DataField = 'INSUREDMODEL'
+        DataSource = InsMKDataMod.DSMotorkasco
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        KeyField = 'NAME'
+        ListField = 'NAME'
+        ListSource = InsMKDataMod.DSModels
+        ParentFont = False
+        TabOrder = 9
+        OnClick = edDBCBCustNameChange
+        OnKeyPress = edDBCBCustNameKeyPress
+      end
+    end
+    object lbDrAccessPeople1: TGroupBox
+      Left = 1
+      Top = 219
+      Width = 608
+      Height = 127
+      Caption = 'Сыьорталанмыш автомобили идаря етмяк щцгугуна малик олан шяхсляр'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 6
+      object Panel3: TPanel
+        Left = 31
+        Top = 15
+        Width = 575
+        Height = 110
+        Align = alClient
+        BevelOuter = bvNone
+        TabOrder = 0
+        object gdDrAccessPeople: TDBGrid
+          Left = 0
+          Top = 0
+          Width = 575
+          Height = 110
+          Align = alClient
+          DataSource = InsMKDataMod.DSDrAccessPeople
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 0
+          TitleFont.Charset = DEFAULT_CHARSET
+          TitleFont.Color = clWindowText
+          TitleFont.Height = -11
+          TitleFont.Name = 'Azl Sans Serif'
+          TitleFont.Style = [fsBold]
+          Columns = <
+            item
+              Expanded = False
+              FieldName = 'SURNAME'
+              Title.Caption = 'Сойады'
+              Title.Color = clNavy
+              Title.Font.Charset = DEFAULT_CHARSET
+              Title.Font.Color = clWhite
+              Title.Font.Height = -11
+              Title.Font.Name = 'Azl Sans Serif'
+              Title.Font.Style = []
+              Width = 113
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'NAME'
+              Title.Caption = 'Ады'
+              Title.Color = clNavy
+              Title.Font.Charset = DEFAULT_CHARSET
+              Title.Font.Color = clWhite
+              Title.Font.Height = -11
+              Title.Font.Name = 'Azl Sans Serif'
+              Title.Font.Style = []
+              Width = 70
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'FATHERNAME'
+              Title.Caption = 'Атасынын ады'
+              Title.Color = clNavy
+              Title.Font.Charset = DEFAULT_CHARSET
+              Title.Font.Color = clWhite
+              Title.Font.Height = -11
+              Title.Font.Name = 'Azl Sans Serif'
+              Title.Font.Style = []
+              Width = 95
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'BIRTHDAY'
+              Title.Caption = 'Доьум тарихи'
+              Title.Color = clNavy
+              Title.Font.Charset = DEFAULT_CHARSET
+              Title.Font.Color = clWhite
+              Title.Font.Height = -11
+              Title.Font.Name = 'Azl Sans Serif'
+              Title.Font.Style = []
+              Width = 68
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'DREXPERIENCE'
+              Title.Caption = 'Сцрцжцлцк тяжрцбяси '
+              Title.Color = clNavy
+              Title.Font.Charset = DEFAULT_CHARSET
+              Title.Font.Color = clWhite
+              Title.Font.Height = -11
+              Title.Font.Name = 'Azl Sans Serif'
+              Title.Font.Style = []
+              Width = 105
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'SexList'
+              Title.Caption = 'Жинси'
+              Title.Color = clNavy
+              Title.Font.Charset = DEFAULT_CHARSET
+              Title.Font.Color = clWhite
+              Title.Font.Height = -11
+              Title.Font.Name = 'Azl Sans Serif'
+              Title.Font.Style = []
+              Width = 50
+              Visible = True
+            end>
+        end
+      end
+      object Panel4: TPanel
+        Left = 2
+        Top = 15
+        Width = 29
+        Height = 110
+        Align = alLeft
+        BevelOuter = bvNone
+        TabOrder = 1
+        object SpeedButton2: TSpeedButton
+          Left = 3
+          Top = 2
+          Width = 23
+          Height = 19
+          Hint = 'Yeni'
+          Flat = True
+          Glyph.Data = {
+            36040000424D3604000000000000360000002800000010000000100000000100
+            2000000000000004000000000000000000000000000000000000FF00FF00FF00
+            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+            FF00FF00FF00FF00FF00FF00FF00FF00FF00000000000000000000000000FF00
+            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+            FF00FF00FF00FF00FF00FF00FF00FF00FF0000000000FF00000000000000FF00
+            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+            FF00FF00FF00FF00FF00FF00FF00FF00FF0000000000FF00000000000000FF00
+            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+            FF00FF00FF0000000000000000000000000000000000FF000000000000000000
+            00000000000000000000FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+            FF00FF00FF0000000000FF000000FF000000FF000000FF000000FF000000FF00
+            0000FF00000000000000FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+            FF00FF00FF0000000000000000000000000000000000FF000000000000000000
+            00000000000000000000FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+            FF00FF00FF00FF00FF00FF00FF00FF00FF0000000000FF00000000000000FF00
+            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+            FF00FF00FF00FF00FF00FF00FF00FF00FF0000000000FF00000000000000FF00
+            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+            FF00FF00FF00FF00FF00FF00FF00FF00FF00000000000000000000000000FF00
+            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00}
+          ParentShowHint = False
+          ShowHint = True
+          OnClick = SpeedButton2Click
+        end
+        object SpeedButton3: TSpeedButton
+          Left = 3
+          Top = 22
+          Width = 23
+          Height = 19
+          Hint = 'Redakte'
+          Flat = True
+          Glyph.Data = {
+            42010000424D4201000000000000760000002800000011000000110000000100
+            040000000000CC00000000000000000000001000000010000000000000000000
+            BF0000BF000000BFBF00BF000000BF00BF00BFBF0000C0C0C000808080000000
+            FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00777777777777
+            7777700000007777777777777777700000007777777774F77777700000007777
+            7777444F77777000000077777774444F777770000000700000444F44F7777000
+            000070FFF444F0744F777000000070F8884FF0774F777000000070FFFFFFF077
+            74F77000000070F88888F077774F7000000070FFFFFFF0777774F000000070F8
+            8777F07777774000000070FFFF00007777777000000070F88707077777777000
+            000070FFFF007777777770000000700000077777777770000000777777777777
+            777770000000}
+          ParentShowHint = False
+          ShowHint = True
+          OnClick = SpeedButton3Click
+        end
+        object SpeedButton4: TSpeedButton
+          Left = 3
+          Top = 43
+          Width = 23
+          Height = 19
+          Hint = 'Legv'
+          Flat = True
+          Glyph.Data = {
+            36040000424D3604000000000000360000002800000010000000100000000100
+            2000000000000004000000000000000000000000000000000000FF00FF00FF00
+            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+            FF00FF00FF00FF00FF00FF00FF00FF00FF0000000000FFFFFF00FF00FF00FF00
+            FF00FF00FF00FF00FF0000000000FFFFFF00FF00FF00FF00FF00FF00FF00FF00
+            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+            FF00FF00FF00000000000000000000000000FFFFFF00FF00FF00FF00FF00FF00
+            FF00FF00FF00FF00FF00FF00FF0000000000FFFFFF00FF00FF00FF00FF00FF00
+            FF00FF00FF00000000000000000000000000FFFFFF00FF00FF00FF00FF00FF00
+            FF00FF00FF00FF00FF0000000000FFFFFF00FF00FF00FF00FF00FF00FF00FF00
+            FF00FF00FF00FF00FF00000000000000000000000000FFFFFF00FF00FF00FF00
+            FF00FF00FF000000000000000000FFFFFF00FF00FF00FF00FF00FF00FF00FF00
+            FF00FF00FF00FF00FF00FF00FF00000000000000000000000000FFFFFF00FF00
+            FF000000000000000000FFFFFF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+            FF00FF00FF00FF00FF00FF00FF00FF00FF000000000000000000000000000000
+            000000000000FFFFFF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF0000000000000000000000
+            0000FFFFFF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+            FF00FF00FF00FF00FF00FF00FF00FF00FF000000000000000000000000000000
+            000000000000FFFFFF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+            FF00FF00FF00FF00FF00FF00FF00000000000000000000000000FFFFFF00FF00
+            FF0000000000FFFFFF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+            FF00FF00FF0000000000000000000000000000000000FFFFFF00FF00FF00FF00
+            FF00FF00FF000000000000000000FFFFFF00FF00FF00FF00FF00FF00FF00FF00
+            FF0000000000000000000000000000000000FFFFFF00FF00FF00FF00FF00FF00
+            FF00FF00FF00FF00FF000000000000000000FFFFFF00FF00FF00FF00FF00FF00
+            FF000000000000000000FFFFFF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+            FF00FF00FF00FF00FF00FF00FF000000000000000000FFFFFF00FF00FF00FF00
+            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00}
+          ParentShowHint = False
+          ShowHint = True
+          OnClick = SpeedButton4Click
+        end
+        object SpeedButton5: TSpeedButton
+          Left = 3
+          Top = 64
+          Width = 23
+          Height = 19
+          Hint = 'Yenilemek'
+          Flat = True
+          Glyph.Data = {
+            36040000424D3604000000000000360000002800000010000000100000000100
+            2000000000000004000000000000000000000000000000000000FF00FF00FF00
+            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+            FF00FF00FF008400000084848400FF00FF00FF00FF00FF00FF00FF00FF00FF00
+            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+            FF008484840084000000FF00FF00FF00FF00FF00FF00FF00FF00FF00FF008400
+            000084000000840000008400000084000000FF00FF00FF00FF00FF00FF00FF00
+            FF0084000000FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+            FF0084000000840000008400000084000000FF00FF00FF00FF00FF00FF00FF00
+            FF0084000000FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+            FF00FF00FF00840000008400000084000000FF00FF00FF00FF00FF00FF00FF00
+            FF0084000000FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+            FF0084000000FF00FF008400000084000000FF00FF00FF00FF00FF00FF00FF00
+            FF008484840084000000FF00FF00FF00FF00FF00FF00FF00FF00840000008400
+            0000FF00FF00FF00FF00FF00FF0084000000FF00FF00FF00FF00FF00FF00FF00
+            FF00FF00FF008484840084000000840000008400000084000000FF00FF00FF00
+            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00}
+          ParentShowHint = False
+          ShowHint = True
+          OnClick = SpeedButton5Click
+        end
+        object SpeedButton6: TSpeedButton
+          Left = 3
+          Top = 85
+          Width = 23
+          Height = 19
+          Hint = 'Yadda saxla'
+          Flat = True
+          Glyph.Data = {
+            F6000000424DF600000000000000760000002800000010000000100000000100
+            0400000000008000000000000000000000001000000000000000000000000000
+            80000080000000808000800000008000800080800000C0C0C000808080000000
+            FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00777777777777
+            7777770000000000000770330000007703077033000000770307703300000077
+            0307703300000000030770333333333333077033000000003307703077777777
+            0307703077777777030770307777777703077030777777770307703077777777
+            0007703077777777070770000000000000077777777777777777}
+          ParentShowHint = False
+          ShowHint = True
+          OnClick = SpeedButton6Click
+        end
+      end
+    end
+    object GroupBox5: TGroupBox
+      Left = 1
+      Top = 346
+      Width = 608
+      Height = 41
+      Caption = 'Сыьорта мцддяти:'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 7
+      object lbBeginDate: TLabel
+        Left = 8
+        Top = 16
+        Width = 73
+        Height = 13
+        Caption = 'Башланма тарихи:'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ParentFont = False
+      end
+      object lbEndDate: TLabel
+        Left = 382
+        Top = 16
+        Width = 53
+        Height = 13
+        Caption = 'Битмя тарихи:'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ParentFont = False
+      end
+      object Label3: TLabel
+        Left = 232
+        Top = 16
+        Width = 12
+        Height = 13
+        Caption = 'Ай'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ParentFont = False
+      end
+      object SpeedButton1: TSpeedButton
+        Left = 256
+        Top = 16
+        Width = 23
+        Height = 22
+        Flat = True
+        Glyph.Data = {
+          36050000424D3605000000000000360400002800000010000000100000000100
+          0800000000000001000000000000000000000001000000000000000000000000
+          80000080000000808000800000008000800080800000C0C0C000C0DCC000F0CA
+          A600000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          000000000000000000000000000000000000F0FBFF00A4A0A000808080000000
+          FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00FFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF804F8FFFFFFFFFFFFFFFFFFFFFFF804
+          04F8FFFFFFFFFFFFFFFFFFFFFFFF0404F8FFFFFFFFFFFFFFFFFFFFFFFFF804F8
+          FFFFFFFFFFFFFFFFFFFFFFFFFF0404FFFFFFFFFFFFFFFFFFFFFFFFFFFF0404FF
+          FFFF0404040404FFFFFFFFFFFF0404F8FFFFFFF8040404FFFFFFFFFFFFF80404
+          F8FFF804040404FFFFFFFFFFFFFF04040404040404F804FFFFFFFFFFFFFFFFF8
+          040404F8FFFF04FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF}
+        OnClick = SpeedButton1Click
+      end
+      object edBeginDate: TDateTimePicker
+        Left = 104
+        Top = 16
+        Width = 122
+        Height = 21
+        CalAlignment = dtaLeft
+        Date = 39026.6719352199
+        Time = 39026.6719352199
+        DateFormat = dfShort
+        DateMode = dmComboBox
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        Kind = dtkDate
+        ParseInput = False
+        ParentFont = False
+        TabOrder = 0
+        OnChange = edBeginDateChange
+        OnKeyPress = edDBCBCustNameKeyPress
+      end
+      object edEndDate: TDateTimePicker
+        Left = 445
+        Top = 16
+        Width = 122
+        Height = 21
+        CalAlignment = dtaLeft
+        Date = 39026.6724766667
+        Time = 39026.6724766667
+        Color = clMenu
+        DateFormat = dfShort
+        DateMode = dmComboBox
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        Kind = dtkDate
+        ParseInput = False
+        ParentFont = False
+        TabOrder = 2
+        OnKeyPress = edDBCBCustNameKeyPress
+      end
+      object DBMonths: TDBLookupComboBox
+        Left = 280
+        Top = 16
+        Width = 97
+        Height = 21
+        DataField = 'MONTH_ID'
+        DataSource = InsMKDataMod.DSMotorkasco
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        KeyField = 'ID'
+        ListField = 'COUNT'
+        ListSource = InsMKDataMod.DSMonths
+        ParentFont = False
+        TabOrder = 1
+        OnClick = DBMonthsClick
+        OnKeyPress = DBMonthsKeyPress
+      end
+    end
+    object DBCBCustName: TDBLookupComboBox
+      Left = 120
+      Top = 8
+      Width = 433
+      Height = 21
+      DataField = 'KLI_ID'
+      DataSource = InsMKDataMod.DSContracts
+      KeyField = 'ID'
+      ListField = 'NAME'
+      ListSource = InsMKDataMod.DSCusts
+      TabOrder = 0
+      OnClick = edDBCBCustNameChange
+      OnKeyPress = edDBCBCustNameKeyPress
+    end
+    object DBBanks: TDBLookupComboBox
+      Left = 299
+      Top = 56
+      Width = 302
+      Height = 21
+      DataField = 'BENEFICIARY'
+      DataSource = InsMKDataMod.DSMotorkasco
+      Enabled = False
+      KeyField = 'NAME'
+      ListField = 'NAME'
+      ListSource = InsMKDataMod.DSBanks
+      TabOrder = 3
+      OnClick = DBBanksClick
+      OnKeyPress = DBBanksKeyPress
+    end
+    object dbBeneficiary: TDBEdit
+      Left = 120
+      Top = 80
+      Width = 481
+      Height = 21
+      DataField = 'BENEFICIARY'
+      DataSource = InsMKDataMod.DSMotorkasco
+      TabOrder = 4
+      OnExit = edDBCBCustNameChange
+    end
+    object cbBenType: TDBLookupComboBox
+      Left = 120
+      Top = 56
+      Width = 145
+      Height = 21
+      DataField = 'BEN_ID'
+      DataSource = InsMKDataMod.DSMotorkasco
+      KeyField = 'ID'
+      ListField = 'NAME'
+      ListSource = InsMKDataMod.DSBenType
+      TabOrder = 2
+      OnClick = cbBenTypeChange
+      OnKeyPress = cbBenTypeKeyPress
+    end
+    object GroupBox1: TGroupBox
+      Left = 1
+      Top = 387
+      Width = 608
+      Height = 56
+      Caption = 'Мябляьляр Барядя Мялумат:'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 8
+      object Label15: TLabel
+        Left = 8
+        Top = 12
+        Width = 42
+        Height = 13
+        Caption = 'Валйутасы'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ParentFont = False
+      end
+      object lbDriveCost: TLabel
+        Left = 92
+        Top = 12
+        Width = 85
+        Height = 13
+        Caption = 'Автомобилин дяйяри'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ParentFont = False
+      end
+      object lbInsSumm: TLabel
+        Left = 207
+        Top = 12
+        Width = 72
+        Height = 13
+        Caption = 'Сыьорта мябляьи'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ParentFont = False
+      end
+      object lbFranshiz: TLabel
+        Left = 340
+        Top = 12
+        Width = 39
+        Height = 13
+        Caption = 'Франшиза'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ParentFont = False
+      end
+      object lbTariff: TLabel
+        Left = 424
+        Top = 12
+        Width = 21
+        Height = 13
+        Caption = 'Тариф'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ParentFont = False
+      end
+      object Label10: TLabel
+        Left = 500
+        Top = 12
+        Width = 62
+        Height = 13
+        Caption = 'Сыьорта щаггы'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ParentFont = False
+      end
+      object SpeedButton7: TSpeedButton
+        Left = 482
+        Top = 27
+        Width = 19
+        Height = 22
+        Hint = 'Hesabla'
+        Flat = True
+        Glyph.Data = {
+          76010000424D7601000000000000760000002800000020000000100000000100
+          04000000000000010000120B0000120B00001000000000000000000000000000
+          800000800000008080008000000080008000808000007F7F7F00BFBFBF000000
+          FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00337000000000
+          73333337777777773F333308888888880333337F3F3F3FFF7F33330808089998
+          0333337F737377737F333308888888880333337F3F3F3F3F7F33330808080808
+          0333337F737373737F333308888888880333337F3F3F3F3F7F33330808080808
+          0333337F737373737F333308888888880333337F3F3F3F3F7F33330808080808
+          0333337F737373737F333308888888880333337F3FFFFFFF7F33330800000008
+          0333337F7777777F7F333308000E0E080333337F7FFFFF7F7F33330800000008
+          0333337F777777737F333308888888880333337F333333337F33330888888888
+          03333373FFFFFFFF733333700000000073333337777777773333}
+        NumGlyphs = 2
+        OnClick = SpeedButton7Click
+      end
+      object dbAvalute: TDBLookupComboBox
+        Left = 8
+        Top = 28
+        Width = 81
+        Height = 21
+        DataField = 'VALUTE_ID'
+        DataSource = InsMKDataMod.DSContracts
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        KeyField = 'VALUTE'
+        ListField = 'VALU_NAME'
+        ListSource = InsMKDataMod.DSAvalute
+        ParentFont = False
+        TabOrder = 0
+        OnClick = edDBCBCustNameChange
+        OnKeyPress = edDBCBCustNameKeyPress
+      end
+      object edDriveCost: TDBEdit
+        Left = 92
+        Top = 28
+        Width = 113
+        Height = 21
+        DataField = 'DRIVECOST'
+        DataSource = InsMKDataMod.DSMotorkasco
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 1
+        OnKeyPress = edDBCBCustNameKeyPress
+      end
+      object edInsSumm: TDBEdit
+        Left = 208
+        Top = 28
+        Width = 129
+        Height = 21
+        DataField = 'INSSUMM'
+        DataSource = InsMKDataMod.DSContracts
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 2
+        OnKeyPress = edDBCBCustNameKeyPress
+      end
+      object edFranshiz: TDBComboBox
+        Left = 340
+        Top = 28
+        Width = 81
+        Height = 21
+        DataField = 'FRANSHIZ'
+        DataSource = InsMKDataMod.DSContracts
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ItemHeight = 13
+        ParentFont = False
+        TabOrder = 3
+        OnChange = edFranshizChange
+      end
+      object edTariff: TDBEdit
+        Left = 424
+        Top = 28
+        Width = 57
+        Height = 21
+        DataField = 'TARIFF'
+        DataSource = InsMKDataMod.DSContracts
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 4
+      end
+      object edAmmount: TDBEdit
+        Left = 500
+        Top = 28
+        Width = 105
+        Height = 21
+        DataField = 'AMMOUNT'
+        DataSource = InsMKDataMod.DSContracts
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 5
+        OnKeyPress = edDBCBCustNameKeyPress
+      end
+    end
+    object DBAgents: TDBLookupComboBox
+      Left = 120
+      Top = 32
+      Width = 433
+      Height = 21
+      DataField = 'AGENT_ID'
+      DataSource = InsMKDataMod.DSContracts
+      KeyField = 'ID'
+      ListField = 'NAME'
+      ListSource = InsMKDataMod.DSAgent
+      TabOrder = 1
+      OnClick = edDBCBCustNameChange
+      OnKeyPress = edDBCBCustNameKeyPress
+    end
+  end
+  object pmcSuggestion: TPlgModalContainer
+    Left = 563
+    Top = 226
+  end
+end

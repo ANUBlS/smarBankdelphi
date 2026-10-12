@@ -1,0 +1,211 @@
+﻿unit FindFilterSortImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+   ComCtrls, StdCtrls, Mask, DBCtrlsEh, DBLookupEh, ExtCtrls,
+  Buttons, Oracle, OracleData, DB, DBGridEh;
+
+
+type
+
+  ESearchError = class(Exception); 
+
+  TFFSForm = class(TForm)
+    PageControl1: TPageControl;
+    TabSheet1: TTabSheet;
+    BitBtn2: TBitBtn;
+    GroupBox1: TGroupBox;
+    Label1: TLabel;
+    Label2: TLabel;
+    CBSearchWhere: TDBLookupComboboxEh;
+    CmbBoxFindWhat: TComboBox;
+    BitBtnFindNext: TBitBtn;
+    Edit1: TEdit;
+    procedure BitBtnFindNextClick(Sender: TObject);
+    procedure CmbBoxFindWhatKeyPress(Sender: TObject; var Key: Char);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+    procedure FormShow(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    function FindNextRecord(DataSet : TDataSet;FieldName : String;Value : String) : Boolean;
+    procedure FindRecord;
+    { Public declarations }
+  end;
+
+var
+  FFSForm: TFFSForm;
+
+procedure InitPlugin(S : String);export;
+
+implementation
+
+
+{$R *.DFM}
+
+uses
+  CommonDecls, SFDataModuleImpl;
+
+function TFFSForm.FindNextRecord(DataSet : TDataSet;FieldName : String;Value : String) : Boolean;
+
+resourcestring
+  rsRecordRecachedEOF = 'Axtarış cərgənin sonuna çatıb .';
+  rsContinueFromTop   = 'Əvvəldən axtarmaqla davam etmək istəyirsiniz?';
+  rsRecordNotFound    = 'Yazı Tapılmadı.';
+
+var
+  SearchOptions : TSearchRecordOptions;
+
+begin
+  SearchOptions := [srIgnoreCase ,srPartialMatch];
+  with  (DataSet as TOracleDataSet) do
+  begin
+
+    Result := SearchRecord(
+                FieldName,
+                Value,
+                SearchOptions + [srFromCurrent, srForward]
+    );
+    if not Result then
+
+    if MessageDlg(
+              rsRecordRecachedEOF + #10#13 + rsContinueFromTop
+             ,mtInformation
+             ,[mbNo , mbYes]
+             ,0
+             ) = mrYes  then
+    begin
+
+      Result := SearchRecord(
+                  FieldName,
+                  Value,
+                  SearchOptions + [srFromBeginning]
+      );
+
+      if not Result then
+      MessageDlg(rsRecordNotFound,mtInformation,[mbOk],0);
+
+    end;
+  end;
+end;
+
+procedure TFFSForm.FindRecord;
+resourcestring
+  rsNothingToSearch = 'Axtarılmalı olanı daxil edin!';
+
+var
+  FieldToSearch : String;
+  SearchValue   : String;
+begin
+Edit1.Text:=CmbBoxFindWhat.Text;;
+ with Edit1 do
+      begin
+          Text := StringReplace(Text, 'i', '`', [rfReplaceAll]);
+          Text := StringReplace(Text, 'I', '`', [rfReplaceAll]);
+          Text := StringReplace(Text, 'İ', '`', [rfReplaceAll]);
+          Text := StringReplace(Text, 'I', '`', [rfReplaceAll]);
+          Text := StringReplace(Text, 'ı', '`', [rfReplaceAll]);
+      end;
+  SearchValue :=Edit1.Text{ CmbBoxFindWhat.Text};
+ //  ShowMessage(SearchValue);
+  if SearchValue = '' then
+  if not Visible then
+  begin
+    Show;
+    CmbBoxFindWhat.SetFocus;
+    CmbBoxFindWhat.SelectAll;
+    Exit
+  end
+  else
+    raise ESearchError.Create(rsNothingToSearch);
+
+  CommonDBGrid.SelectedRows.Clear; //!!!
+  FieldToSearch := CBSearchWhere.KeyValue;
+  if FieldToSearch='NAME' then
+  FieldToSearch:='INAME'    ;
+    if FieldToSearch='NUMBEROFCREDIT' then
+  FieldToSearch:='INUMBEROFCREDIT'    ;
+
+  if
+  FindNextRecord(
+      CommonDBGrid.DataSource.DataSet,
+      FieldToSearch,
+      SearchValue
+  ) then
+  with CmbBoxFindWhat.Items do
+  if IndexOf(SearchValue) = -1 then
+  Add(SearchValue);
+
+end;
+
+procedure TFFSForm.BitBtnFindNextClick(Sender: TObject);
+begin
+  FindRecord
+end;
+
+procedure TFFSForm.CmbBoxFindWhatKeyPress(Sender: TObject; var Key: Char);
+begin
+  if Ord(Key) = VK_RETURN then
+  begin
+    BitBtnFindNext.Click;
+    Key := #0;
+  end;
+end;
+
+procedure TFFSForm.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+  if Ord(Key) = VK_ESCAPE then
+  Close;
+
+end;
+
+procedure TFFSForm.FormShow(Sender: TObject);
+begin
+//SearchWhere.KeyValue:='NAME';
+end;
+
+procedure TFFSForm.FormCreate(Sender: TObject);
+begin
+  SFDataModule := TSFDataModule.Create(Self);
+end;
+
+procedure TFFSForm.FormDestroy(Sender: TObject);
+begin
+  SFDataModule.Free;
+end;
+
+procedure InitPlugin(S : String);export;
+const
+  SFindFirst = 'FindFirst';
+  SFindNext = 'FindNext';
+begin
+  if S = SFindFirst then
+  begin
+   FFSForm.Show;
+   FFSForm.CmbBoxFindWhat.SetFocus;
+   FFSForm.CmbBoxFindWhat.SelectAll
+  end 
+  else
+    if S = SFindNext then
+     FFSForm.FindRecord
+end;
+
+exports
+  InitPlugin;
+   
+procedure TFFSForm.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+  Resize := False;
+end;
+
+initialization
+   FFSForm := TFFSForm.Create(CommonApplication);
+
+end.

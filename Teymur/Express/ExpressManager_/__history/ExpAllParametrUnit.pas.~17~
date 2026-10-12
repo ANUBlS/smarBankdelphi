@@ -1,0 +1,160 @@
+﻿unit ExpAllParametrUnit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Grids, XDBGrids, ExtCtrls, ComCtrls, ToolWin, ImgList, StdActns,
+  ActnList, DB, OracleData, DBGridEh;
+
+type
+  TExpAllParametr = class(TForm)
+    Panel1: TPanel;
+    Panel2: TPanel;
+    Panel3: TPanel;
+    ImageList1: TImageList;
+    ToolBar1: TToolBar;
+    ToolButton1: TToolButton;
+    ActionList1: TActionList;
+    ActnAdd: TAction;
+    ActnEdit: TAction;
+    ActnDel: TAction;
+    ToolButton2: TToolButton;
+    ToolButton3: TToolButton;
+    ToolButton4: TToolButton;
+    ToolButton5: TToolButton;
+    ExpTypeDataSet: TOracleDataSet;
+    ExpTypeDataSetID: TIntegerField;
+    ExpTypeDataSetNAME: TWideStringField;
+    ExpTypeDataSetGROUPS: TIntegerField;
+    ExpTypeDataSource: TDataSource;
+    ExpTypeAccountsDataSource: TDataSource;
+    ExpSettingsDataSet: TOracleDataSet;
+    ExpSettingsDataSetID: TFloatField;
+    ExpSettingsDataSetTYPEID: TFloatField;
+    ExpSettingsDataSetNAME: TWideStringField;
+    ExpSettingsDataSetDESCRIPTION: TWideStringField;
+    ExpSettingsDataSource: TDataSource;
+    FilialDataSet: TOracleDataSet;
+    FilialDataSource: TDataSource;
+    DBGridEh1: TDBGridEh;
+    DBGridEh2: TDBGridEh;
+    DBGridEh3: TDBGridEh;
+    ExpTypeAccountsDataSet: TOracleDataSet;
+    procedure ActnAddExecute(Sender: TObject);
+    procedure ActnEditExecute(Sender: TObject);
+    procedure ActnDelExecute(Sender: TObject);
+    procedure XDBGrid2KeyPress(Sender: TObject; var Key: Char);
+    procedure ToolButton5Click(Sender: TObject);
+    procedure ToolButton4Click(Sender: TObject);
+    procedure ExpSettingsDataSetAfterPost(DataSet: TDataSet);
+    procedure ExpTypeDataSetAfterPost(DataSet: TDataSet);
+    procedure FormShow(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    var F:boolean;
+  end;
+
+var
+  ExpAllParametr: TExpAllParametr;
+
+implementation
+uses ExpDataModuleUnit, ExpAccTypeUnit,sboapiDataModuleImpl;
+{$R *.dfm}
+
+procedure TExpAllParametr.ActnAddExecute(Sender: TObject);
+begin
+  F:=False;
+  ExpTypeAccountsDataSet.Insert;
+  ExpAccType.ShowModal;
+ { begin
+    Caption := 'Yeni';
+    ShowModal;
+  end;}
+
+    ExpTypeAccountsDataSet.Refresh;
+
+end;
+
+procedure TExpAllParametr.ActnDelExecute(Sender: TObject);
+begin
+   if ExpTypeAccountsDataSet.RecordCount=0 then exit;
+
+
+
+   if   MessageDlg('Silinməsinə  əminsiniz?'
+              ,mtConfirmation
+              ,[mbYes,mbNo],0
+              )<>mrYes then Exit;
+
+   with ExpTypeAccountsDataSet do
+   begin
+      Delete;
+      Refresh;
+   end;
+end;
+
+procedure TExpAllParametr.ActnEditExecute(Sender: TObject);
+begin
+  F:=true;
+  ExpTypeAccountsDataSet.Edit;
+
+    with ExpAccType do
+    begin
+       Caption := 'Redaktə';
+       ShowModal;
+    end;
+
+  ExpTypeAccountsDataSet.Refresh;
+end;
+
+procedure TExpAllParametr.ExpSettingsDataSetAfterPost(DataSet: TDataSet);
+begin
+   ExpSettingsDataSet.Refresh;
+end;
+
+procedure TExpAllParametr.ExpTypeDataSetAfterPost(DataSet: TDataSet);
+begin
+  ExpTypeDataSet.Refresh;
+end;
+
+procedure TExpAllParametr.FormShow(Sender: TObject);
+begin
+  IF not (FilialDataSet.Active)            then   FilialDataSet.Open;
+  IF not(ExpTypeDataSet.Active)            then   ExpTypeDataSet.Open;
+  IF not(ExpSettingsDataSet.Active)        then   ExpSettingsDataSet.Open;
+  IF not(ExpAccType.DebetDataSet.Active)   then   ExpAccType.DebetDataSet.Open;
+  IF not(ExpAccType.KredetDataSet.Active)  then   ExpAccType.KredetDataSet.Open;
+  IF not(ExpTypeAccountsDataSet.Active)    then   ExpTypeAccountsDataSet.Open;
+  IF not(ExpAccType.ValyutaDataSet.Active) then   ExpAccType.ValyutaDataSet.Open;
+
+end;
+
+procedure TExpAllParametr.ToolButton4Click(Sender: TObject);
+begin
+  ExpTypeDataSet.Refresh;
+  ExpSettingsDataSet.Refresh;
+  ExpTypeAccountsDataSet.Refresh;
+end;
+
+procedure TExpAllParametr.ToolButton5Click(Sender: TObject);
+begin
+  Close;
+end;
+
+procedure TExpAllParametr.XDBGrid2KeyPress(Sender: TObject; var Key: Char);
+begin
+
+  if Ord(Key) = VK_DELETE then
+  begin
+     if   MessageDlg('Silinməsinə  əminsiniz?'
+              ,mtConfirmation
+              ,[mbYes,mbNo],0
+              )<>mrYes then Exit;
+    ExpDataModule.ExpSettingsDataSet.Delete;
+  end;
+end;
+
+end.

@@ -1,0 +1,67 @@
+unit FPTurnOversDataModImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, OracleData;
+
+type
+  TTurnOversDataMod = class(TDataModule)
+    CurrencyData: TOracleDataSet;
+    BranchData: TOracleDataSet;
+    DataSrcCurrency: TDataSource;
+    DataSrcBranch: TDataSource;
+    TurnOversData: TOracleDataSet;
+    DataSrcTurnOvers: TDataSource;
+    SYSDAT: TOracleDataSet;
+    TurnOversDataACCNO: TStringField;
+    TurnOversDataCURRENCYID: TIntegerField;
+    TurnOversDataBRANCHID: TIntegerField;
+    TurnOversDataBALANCENO: TFloatField;
+    TurnOversDataBEGINACTIVE: TFloatField;
+    TurnOversDataBEGINPASSIVE: TFloatField;
+    TurnOversDataDTURNOVER: TFloatField;
+    TurnOversDataCTURNOVER: TFloatField;
+    TurnOversDataENDACTIVE: TFloatField;
+    TurnOversDataENDPASSIVE: TFloatField;
+    CurrencyDataCURRENCYID: TIntegerField;
+    CurrencyDataCURRLNAME: TStringField;
+    BranchDataBRANCHID: TFloatField;
+    BranchDataBRANCHNAME: TStringField;
+    SYSDATTEK_DAT: TDateTimeField;
+    PeriodPrefixData: TOracleDataSet;
+    PeriodPrefixDataPERIODPREFIX: TDateTimeField;
+    TurnOversDataACCOUNTID: TFloatField;
+    BankInfo: TOracleDataSet;
+    BankInfoBANK: TStringField;
+    BankInfoINN: TStringField;
+    BankInfoLOGO: TBlobField;
+    BankInfoMANAGERTITLE: TStringField;
+    BankInfoACCOUNTANTTITLE: TStringField;
+    BankInfoMANAGER: TStringField;
+    BankInfoACCOUNTANT: TStringField;
+    TurnOversDataACC_NAME: TStringField;
+    TurnOversDataLBEGINACTIVE: TFloatField;
+    TurnOversDataLBEGINPASSIVE: TFloatField;
+    TurnOversDataLDTURNOVER: TFloatField;
+    TurnOversDataLCTURNOVER: TFloatField;
+    TurnOversDataLENDACTIVE: TFloatField;
+    TurnOversDataLENDPASSIVE: TFloatField;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  TurnOversDataMod: TTurnOversDataMod;
+
+implementation
+
+{$R *.DFM}
+
+uses
+  sboapiDataModuleImpl;
+
+end.

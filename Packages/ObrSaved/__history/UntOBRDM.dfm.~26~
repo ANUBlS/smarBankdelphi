@@ -1,0 +1,235 @@
+object DataModMain: TDataModMain
+  OldCreateOrder = False
+  Height = 387
+  Width = 503
+  object ODSLocate: TOracleDataSet
+    SQL.Strings = (
+      '/*Select   *    from  Turn_Smart*/'
+      ''
+      ''
+      'begin'
+      'pkg_report.get_turnover'
+      '('
+      '   p_reportdate=>:p_reportdate,'
+      '      p_currencyid=>:p_currencyid,'
+      '      p_balance=>:p_balance,'
+      '      p_balancelist=>:p_balancelist,'
+      '      p_branch=>:p_branch,'
+      '      p_reportfilter=>:p_reportfilter,'
+      '      p_reportoutput=>:p_reportoutput,'
+      '      p_result=>:p_result);'
+      ''
+      'end;'
+      ''
+      ' ')
+    Optimize = False
+    Variables.Data = {
+      04000000080000001A0000003A0050005F005200450050004F00520054004400
+      4100540045000C00000000000000000000001A0000003A0050005F0043005500
+      5200520045004E00430059004900440003000000000000000000000014000000
+      3A0050005F00420041004C0041004E0043004500030000000000000000000000
+      1C0000003A0050005F00420041004C0041004E00430045004C00490053005400
+      050000000000000000000000120000003A0050005F004200520041004E004300
+      48000300000000000000000000001E0000003A0050005F005200450050004F00
+      52005400460049004C005400450052000300000000000000000000001E000000
+      3A0050005F005200450050004F00520054004F00550054005000550054000300
+      00000000000000000000120000003A0050005F0052004500530055004C005400
+      740000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000E0000000C0000004100430043005F004E004F000100000000000E00
+      0000420041004C004E0041004D00450001000000000010000000560041004C00
+      5F004E0041004D0045000100000000000A0000004F00420052005F0044000100
+      000000000A0000004F00420052005F004B000100000000001200000050004F00
+      4B005F004F00420052005F0044000100000000001200000050004F004B005F00
+      4F00420052005F004B000100000000000A00000053005F004100430054000100
+      000000000A00000053005F005000410053000100000000000A00000050005F00
+      4100430054000100000000000A00000050005F00500041005300010000000000
+      100000004C0041005300540044004100540045000100000000000C0000004200
+      41004C005F0043004E000100000000000C000000540049005000410043004300
+      010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 349
+    Top = 64
+    object ODSLocateACC_NO: TWideStringField
+      DisplayLabel = 'Hesab '#8470
+      FieldName = 'ACC_NO'
+      Size = 28
+    end
+    object ODSLocateBALNAME: TWideStringField
+      DisplayLabel = 'Hesab'#305'n ad'#305
+      FieldName = 'BALNAME'
+      Size = 150
+    end
+    object ODSLocateVAL_NAME: TWideStringField
+      DisplayLabel = 'Valyuta'
+      FieldName = 'VAL_NAME'
+      Size = 10
+    end
+    object ODSLocateOBR_D: TFloatField
+      DisplayLabel = 'Debet d'#246'vriyy'#601
+      FieldName = 'OBR_D'
+    end
+    object ODSLocateOBR_K: TFloatField
+      DisplayLabel = 'Kredit d'#246'vriyy'#601
+      FieldName = 'OBR_K'
+    end
+    object ODSLocatePOK_OBR_D: TFloatField
+      DisplayLabel = 'Debet d'#246'vriyy'#601' Ekv'
+      FieldName = 'POK_OBR_D'
+    end
+    object ODSLocatePOK_OBR_K: TFloatField
+      DisplayLabel = 'Kredit d'#246'vriyy'#601' Ekv'
+      FieldName = 'POK_OBR_K'
+    end
+    object ODSLocateS_ACT: TFloatField
+      DisplayLabel = 'Qal'#305'q aktiv'
+      FieldName = 'S_ACT'
+    end
+    object ODSLocateS_PAS: TFloatField
+      DisplayLabel = 'Qal'#305'q passiv'
+      FieldName = 'S_PAS'
+    end
+    object ODSLocateP_ACT: TFloatField
+      DisplayLabel = 'Qal'#305'q aktiv ekv'
+      FieldName = 'P_ACT'
+    end
+    object ODSLocateP_PAS: TFloatField
+      DisplayLabel = 'Qal'#305'q passiv ekv'
+      FieldName = 'P_PAS'
+    end
+    object ODSLocateLASTDATE: TDateTimeField
+      DisplayLabel = 'Tarix'
+      FieldName = 'LASTDATE'
+    end
+    object ODSLocateBAL_CN: TFloatField
+      DisplayLabel = 'Balans Hesab'#305'n'#305'n '#8470
+      FieldName = 'BAL_CN'
+    end
+  end
+  object DataSrcLocate: TDataSource
+    DataSet = ODSLocate
+    Left = 19
+    Top = 8
+  end
+  object OpackMain: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'SB_MTOUTVIEW'
+    Left = 248
+    Top = 8
+  end
+  object ODSSysKod: TOracleDataSet
+    SQL.Strings = (
+      'select  valu_name ,valute from avalute')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000200000012000000560041004C0055005F004E0041004D0045000100
+      000000000C000000560041004C00550054004500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 101
+    Top = 62
+    object ODSSysKodVALU_NAME: TWideStringField
+      FieldName = 'VALU_NAME'
+      Size = 400
+    end
+    object ODSSysKodVALUTE: TIntegerField
+      FieldName = 'VALUTE'
+      Required = True
+    end
+  end
+  object DataSrcSysKod: TDataSource
+    DataSet = ODSSysKod
+    Left = 19
+    Top = 62
+  end
+  object ODSSum: TOracleDataSet
+    SQL.Strings = (
+      
+        'SELECT  Sum(s_act),Sum(p_act),Sum(s_pas),Sum(p_pas),Sum(Obr_k),S' +
+        'um(Obr_d),Sum(pok_Obr_k),Sum(pok_Obr_d)  from  Turn_Smart')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 82
+    Top = 156
+  end
+  object DataSrcSum: TDataSource
+    DataSet = ODSSum
+    Left = 18
+    Top = 116
+  end
+  object DataSrcValute: TDataSource
+    DataSet = ODSValute
+    Left = 18
+    Top = 185
+  end
+  object ODSValute: TOracleDataSet
+    SQL.Strings = (
+      'Select '
+      '   Currency.Val_Name as Name'
+      '  ,Rate.Ostat as DefaultRate'
+      '  From AValute Currency,Operkurs Rate'
+      '  Where   (Currency.Valute=Rate.Val_Kod)'
+      '         And (Rate.Dat=:ADate)')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000C0000003A00410044004100540045000C00000000000000
+      00000000}
+    Session = sboapiDataModule.SBSession
+    Left = 76
+    Top = 202
+  end
+  object BranchesData: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      '  ID ,'
+      '  Name'
+      'from'
+      '  Filial'
+      ''
+      '  '
+      ' ')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000400000049004400010000000000080000004E0041004D00
+      4500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 104
+    Top = 120
+    object BranchesDataID: TFloatField
+      FieldName = 'ID'
+    end
+    object BranchesDataNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 360
+    end
+  end
+  object Valyuta: TOracleDataSet
+    SQL.Strings = (
+      'select  valu_name ,valute from avalute where valu_name =:vv')
+    Optimize = False
+    Variables.Data = {0400000001000000060000003A0056005600050000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000200000012000000560041004C0055005F004E0041004D0045000100
+      000000000C000000560041004C00550054004500010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 368
+    Top = 248
+  end
+  object filial: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      '  ID ,'
+      '  Name'
+      'from'
+      '  Filial'
+      ''
+      '  where Name=:name')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000A0000003A004E0041004D00450005000000000000000000
+      0000}
+    Session = sboapiDataModule.SBSession
+    Left = 368
+    Top = 192
+  end
+end

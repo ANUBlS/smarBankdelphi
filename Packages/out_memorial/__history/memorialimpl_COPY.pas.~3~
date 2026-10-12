@@ -1,0 +1,965 @@
+﻿unit memorialimpl_COPY;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActiveX, AxCtrls, out_memorial_TLB, StdVcl, ComCtrls, ExtCtrls, ToolWin,
+  SearchCombo, Buttons, StdCtrls, Grids, Oracledata,Db,DBGrids, Mask, DBCtrls,
+  ExcelExporter, Menus, ImgList;
+
+type
+  Tmemorial_project = class(TActiveForm, IActiveFormX)
+    DBGrid1: TDBGrid;
+    FilterPanel: TGroupBox;
+    GroupBox1: TGroupBox;
+    Label4: TLabel;
+    Label5: TLabel;
+    DTPBegin: TDateTimePicker;
+    DTPEnd: TDateTimePicker;
+    GroupBox2: TGroupBox;
+    CmbBoxRate: TComboBox;
+    GroupBox4: TGroupBox;
+    Label1: TLabel;
+    Label2: TLabel;
+    CmbBoxForm: TComboBox;
+    ComboBoxPrintMode: TComboBox;
+    GroupBox6: TGroupBox;
+    CBCount: TCheckBox;
+    RGBlanck: TRadioGroup;
+    GroupBox7: TGroupBox;
+    CheckBoxDifference: TCheckBox;
+    BitBtnRun: TBitBtn;
+    CBReport: TCheckBox;
+    BtnReport: TButton;
+    CBUseBalance: TCheckBox;
+    GroupBox8: TGroupBox;
+    BranchesSC: TSearchCombo;
+    ToolBar1: TToolBar;
+    RGTransMode: TRadioGroup;
+    Panel3: TPanel;
+    SearchCombo1: TSearchCombo;
+    GroupBox3: TGroupBox;
+    Label6: TLabel;
+    CurrencyID_C: TEdit;
+    KREDITOR: TEdit;
+    DEBITOR: TEdit;
+    VAL_ACC: TEdit;
+    CmbBoxOrder: TComboBox;
+    AMMOUNT_C: TEdit;
+    AMMOUNT: TEdit;
+    BtnRefer: TButton;
+    GroupBox5: TGroupBox;
+    DBEditSetting: TDBEdit;
+    ImageList1: TImageList;
+    PopupMenu1: TPopupMenu;
+    miPrintSelected: TMenuItem;
+    N1: TMenuItem;
+    miExcelExport: TMenuItem;
+    TransactionsExporter: TExcelExporter;
+    Label3: TLabel;
+    ProgressBar1: TProgressBar;
+    ordercount: TCheckBox;
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure CmbBoxRateChange(Sender: TObject);
+    procedure BitBtnRunClick(Sender: TObject);
+    procedure VAL_ACCChange(Sender: TObject);
+    procedure CmbBoxOrderChange(Sender: TObject);
+    procedure ActiveFormDestroy(Sender: TObject);
+    procedure CBCountClick(Sender: TObject);
+    procedure VAL_ACCKeyPress(Sender: TObject; var Key: Char);
+    procedure BtnReportClick(Sender: TObject);
+    procedure BtnReferClick(Sender: TObject);
+    procedure miExcelExportClick(Sender: TObject);
+    procedure miPrintSelectedClick(Sender: TObject);
+    procedure SelectAll1Click(Sender: TObject);
+        procedure SearchCombo1Change(Sender: TObject);
+    procedure DEBITORChange(Sender: TObject);
+    procedure CurrencyID_CChange(Sender: TObject);
+    procedure KREDITORChange(Sender: TObject);
+    procedure AMMOUNTChange(Sender: TObject);
+    procedure AMMOUNT_CChange(Sender: TObject);
+    procedure DEBITORKeyPress(Sender: TObject; var Key: Char);
+    procedure CurrencyID_CKeyPress(Sender: TObject; var Key: Char);
+    procedure KREDITORKeyPress(Sender: TObject; var Key: Char);
+    procedure AMMOUNTKeyPress(Sender: TObject; var Key: Char);
+    procedure AMMOUNT_CKeyPress(Sender: TObject; var Key: Char);
+    procedure ordercountClick(Sender: TObject);
+  private
+    { Private declarations }
+    FEvents: IActiveFormXEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+  public
+    { Public declarations }
+     procedure sb_Memorial(begDate,endDate:TDateTime;valute:Integer;BalType:Byte;BalOrAcc:Byte;Balance:string;RateDiff:Byte;KredDebt:Integer;UseBalance:Integer;TransactionMode :Integer;MultyCurrency :Integer=0;FilialMode : Integer=-1);
+    procedure FillCmbBoxRate;
+    procedure OpenOracleDataSet(OrderString:string);
+    procedure InitalizeRpt(Index,PrintOrShow :Byte);
+    procedure Initialize; override;
+    procedure GetBankInfo(var BankName,BankInn:String);
+    procedure Selections;
+    function  GetRate(ID:Byte):Real;
+    function  GetBankDate:TDateTime;
+
+  end;
+var
+    Memorial_project :TMemorial_project;
+
+
+
+implementation
+
+uses ComObj, ComServ, memorial_datamod, UnitReport2, unitreport1,
+  UnitReport4, UnitReport3, unitreferen, unitfilter, sboapiDataModuleImpl, SBTranslateProc;
+
+{$R *.DFM}
+
+{ TActiveFormX }
+var
+    Rate :array[0..10] of Integer;
+    RateIndex :Integer;
+    OrderBy :String[64];
+
+procedure Tmemorial_project.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_ActiveFormXPage); }
+end;
+
+procedure Tmemorial_project.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as IActiveFormXEvents;
+end;
+
+procedure Tmemorial_project.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function Tmemorial_project.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function Tmemorial_project.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function Tmemorial_project.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function Tmemorial_project.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function Tmemorial_project.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function Tmemorial_project.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function Tmemorial_project.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function Tmemorial_project.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function Tmemorial_project.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function Tmemorial_project.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function Tmemorial_project.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function Tmemorial_project.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function Tmemorial_project.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function Tmemorial_project.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function Tmemorial_project.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function Tmemorial_project.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function Tmemorial_project.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function Tmemorial_project.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure Tmemorial_project._Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure Tmemorial_project.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure Tmemorial_project.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure Tmemorial_project.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure Tmemorial_project.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure Tmemorial_project.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure Tmemorial_project.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure Tmemorial_project.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure Tmemorial_project.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure Tmemorial_project.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure Tmemorial_project.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure Tmemorial_project.Set_AxBorderStyle(Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure Tmemorial_project.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure Tmemorial_project.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure Tmemorial_project.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure Tmemorial_project.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure Tmemorial_project.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure Tmemorial_project.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure Tmemorial_project.Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure Tmemorial_project.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure Tmemorial_project.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure Tmemorial_project.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure Tmemorial_project.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure Tmemorial_project.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure Tmemorial_project.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+procedure TMemorial_project.sb_Memorial;
+const  cMemorial='MEMORIAL';
+begin
+
+  if BranchesSC.ItemIndex >0 then
+    FilialMode := BranchesSC.DataSource.DataSet.FieldByName('ID').AsInteger
+  else
+    FilialMode := -1;
+
+   with memorial_datamodule.OraclePackage do
+    CallProcedure(cMemorial,[begDate,endDate,Valute,BalType,BalOrAcc,Balance,RateDiff,KredDebt,UseBalance,MultyCurrency,TransactionMode,FilialMode]);
+end;
+function TMemorial_project.GetRate(ID:Byte):Real;
+const
+      cGetRate='GetRate';
+var
+      aRate:Real;
+begin
+   with memorial_datamodule.OraclePackage do
+      aRate :=CallFloatFunction(cGetRate,[ID]);
+      GetRate :=aRate
+end;
+procedure TMemorial_project.GetBankInfo(var BankName,BankInn:String);
+const  cGetBankInfo='GetBankInfo';
+begin
+try
+  with  memorial_datamodule.OraclePackage do begin
+    CallProcedure(cGetBankInfo,['','']);
+    BankName:=GetParameter(0);
+    BankInn :=GetParameter(1);
+  end;
+  except
+    ShowMessage('No Actual Parametr"s');
+  end;
+end;
+procedure TMemorial_project.Selections;
+begin
+
+end;
+procedure TMemorial_project.InitalizeRpt;
+var
+    BankName,BankInn :String;
+begin
+   GetBankInfo(BankName,BankInn);
+
+  if   CBCount.Checked  then
+  begin
+
+  if  RGBlanck.ItemIndex=0 then
+     if  PrintOrShow=0 then
+          //if True then
+
+      with Memorial_Rpt2 do
+        Preview else
+      with Memorial_Rpt2 do
+        Print
+
+
+   else
+
+   if  PrintOrShow=0 then
+
+      with Memorial_Rpt1 do  begin
+      if ordercount.Checked=false then
+
+        QRExpr1.Enabled:=false
+        else
+        QRExpr1.Enabled:=true;
+        Preview ;
+        end else
+
+      with Memorial_Rpt1 do
+        Print
+  end
+
+
+  else
+  Case   Index of
+   0:
+   begin
+     Memorial_Rpt4.QRLBank.Caption :=BankName;
+     Memorial_Rpt4.QRLVoin.Caption :=BankInn;
+     Memorial_Rpt4.QRLDate1.Caption:=FormatDateTime('dd-mm-yyyy',DTPBegin.DateTime);
+     Memorial_Rpt4.QRLDate2.Caption:=FormatDateTime('dd-mm-yyyy',DTPEnd.DateTime);
+     Memorial_Rpt4.QRLDate2.Enabled:=(DTPBegin.Date<>DTPEnd.Date);
+     if  CmbBoxForm.ItemIndex<>3 then
+       Memorial_Rpt4.CurrencyLongName.Caption :=CmbBoxRate.Text
+      else
+       Memorial_Rpt4.CurrencyLongName.Caption :='Multi valyuta əməliyyatları ';
+
+     if  PrintOrShow=0 then
+      with Memorial_Rpt4 do
+        Preview else
+      with Memorial_Rpt4 do
+        Print;
+   end;
+  1:
+   begin
+     Memorial_Rpt3.QRLBank.Caption :=BankName;
+     Memorial_Rpt3.QRLVoin.Caption :=BankInn;
+     Memorial_Rpt3.QRLDate1.Caption:=FormatDateTime('dd-mm-yyyy',DTPBegin.DateTime);
+     Memorial_Rpt3.QRLDate2.Caption:=FormatDateTime('dd-mm-yyyy',DTPEnd.DateTime);
+     Memorial_Rpt3.QRLDate2.Enabled:=(DTPBegin.Date<>DTPEnd.Date);
+     if  CmbBoxForm.ItemIndex<>3 then
+       Memorial_Rpt3.CurrencyLongName.Caption :=CmbBoxRate.Text
+      else
+       Memorial_Rpt3.CurrencyLongName.Caption :='Multi valyuta əməliyyatlar ';
+
+       Memorial_Rpt3.QRLabel4.Enabled := CmbBoxForm.ItemIndex=3;
+       Memorial_Rpt3.QRDBText8.Enabled := CmbBoxForm.ItemIndex=3;
+       Memorial_Rpt3.QRShape3.Enabled := CmbBoxForm.ItemIndex=3;
+
+      try
+       with memorial_datamodule do
+         IF (Copy(ODSMainVAL_ACC.ASString,1,2) ='AZ') and (Copy(ODSMainCURRENCYID_C.ASString,1,2) ='AZ') then
+           Memorial_Rpt3.QRLXV.Caption:='Manatla'
+         else
+          Memorial_Rpt3.QRLXV.Caption:='Xarici valyutada';
+      except
+        on E: Exception do
+          Memorial_Rpt3.QRLXV.Caption:='Xarici valyutada';
+      end;
+
+     if  PrintOrShow=0 then
+      with Memorial_Rpt3 do
+        Preview  else
+      with Memorial_Rpt3 do
+        Print;
+   end;
+   end;//case
+end;
+function  TMemorial_project.GetBankDate:TDateTime;
+const
+    cBankDay='getBankDay';
+begin
+  with memorial_datamodule.OraclePackage do
+  Result :=CallDateFunction(cBankDay,[]);
+end;
+procedure TMemorial_project.OpenOracleDataSet;
+const
+     cGetUserName='GetUserName';
+var
+     TableName:string;
+begin
+  with  memorial_datamodule.ODSMain do
+    if  Active  then Close;
+
+  with  memorial_datamodule.OraclePackage do begin
+    TableName :='Memorial_'+CallStringFunction(cGetUserName,[]);
+  end;
+  with  memorial_datamodule.ODSMain.SQL do begin
+    Clear;
+    Add('Select  *  From  '+TableName);
+    Add(OrderString);
+  end;
+
+  with  memorial_datamodule.ODSMain do  Open;
+  with  memorial_datamodule.ODSMain do  Refresh;
+end;
+procedure Tmemorial_project.ordercountClick(Sender: TObject);
+begin
+memorial_rpt1.QRExpr1.Invalidate;
+end;
+
+procedure TMemorial_project.FillCmbBoxRate;
+begin
+  RateIndex :=0;
+  Rate[RateIndex]:=-1;
+  RateIndex:=1;
+  CmbBoxRate.Items.Clear;
+  CmbBoxRate.Items.Add('Bütün valyutalar');
+  with  memorial_DataModule.ODSRate do begin
+   Open;
+   First;
+   while not EOF do begin
+     Rate[rateIndex] :=FieldByName('Valute').AsInteger;
+     CmbBoxRate.Items.Add(FieldByName('Valu_Name').AsString);
+     Inc(RateIndex);
+     Next
+   end;
+   Close;
+  end;
+end;
+procedure Tmemorial_project.ActiveFormCreate(Sender: TObject);
+begin
+  memorial_project :=Self;
+  memorial_DataModule :=Tmemorial_DataModule.Create(Self);
+  SearchCombo1.itemindex :=0;
+  DTPBegin.DateTime :=GetBankDate;
+  DTPEnd.DateTime   :=GetBankDate;
+  FormReference :=TFormReference.Create(Self);
+  Filter := TFilter.Create(Self);
+  Memorial_Rpt1:=TMemorial_Rpt1.Create(Self);
+  Memorial_Rpt2 :=TMemorial_Rpt2.Create(Self);
+  Memorial_Rpt3 :=TMemorial_Rpt3.Create(Self);
+  Memorial_Rpt4 :=TMemorial_Rpt4.Create(Self);
+  FillCmbBoxRate;
+  CmbBoxRate.ItemIndex :=0;
+  CmbBoxRate.Style :=csDropDownList;
+  RateIndex :=CmbBoxRate.ItemIndex;
+  CmbBoxOrder.ItemIndex :=0;
+  ComboBoxPrintMode.ItemIndex :=0;
+  CmbBoxForm.ItemIndex :=0;
+ {sb_Memorial(Trunc(DTPBegin.DateTime),Trunc(DTPEnd.DateTime),-1,1,0,'',1,-1,Word
+ (CBUseBalance.Checked),RGTransMode.ItemIndex,-1);
+  OrderBy :=' Order By ID'; }
+ { OpenOracleDataSet(OrderBy);} //  Modified By TKenan
+  BranchesSC.ItemIndex := 0;
+SBTranslateProc.TranslateAllComponents(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure Tmemorial_project.CmbBoxRateChange(Sender: TObject);
+begin
+RateIndex :=CmbBoxRate.ItemIndex;
+end;
+
+procedure Tmemorial_project.BitBtnRunClick(Sender: TObject);
+var
+    DebtKred :Integer;
+    //DefaultValue:string;
+    BalanceType:1..4;
+begin
+ try
+    DebtKred :=0;
+    ProgressBar1.StepBy(10);
+  case CmbBoxForm.ItemIndex of
+    0:
+      begin  //Butun Emelyattlar.
+        Screen.Cursor :=crSQLWait;
+        sb_Memorial(Trunc(DTPBegin.DateTime),Trunc(DTPEnd.DateTime),Rate[RateIndex],1,0,'',Word(CheckBoxDifference.Checked),-1,Word(CBUseBalance.Checked),RGTransMode.ItemIndex);
+        ProgressBar1.StepBy(30);
+        OpenOracleDataSet(OrderBy);
+        ProgressBar1.StepBy(20);
+        Screen.Cursor :=crDefault;
+
+      end;
+    1:
+      begin
+         with  Filter do
+         if  ShowModal<>mrOk then
+          Abort;
+         Screen.Cursor :=crSQLWait;
+         with  Filter do begin
+         if  (CBDebt.Checked) then
+           DebtKred :=0;
+         if  (CBKred.Checked) then
+           DebtKred :=1;
+         if  (CBDebt.Checked) and (CBKred.Checked) then
+           DebtKred :=2;
+         if ((not(CBDebt.Checked))and(not(CBKred.Checked))) then
+           DebtKred :=-1;
+         end;
+         if   Filter.ComboBoxPlan.Enabled then
+         BalanceType:=Filter.ComboBoxPlan.ItemIndex+1 else
+         BalanceType :=1;
+         sb_Memorial(Trunc(DTPBegin.DateTime),Trunc(DTPEnd.DateTime),Rate[RateIndex],BalanceType,Word(Filter.CheckBoxBalance.Checked),Filter.EditBalList.Text,Word(CheckBoxDifference.Checked),DebtKred,Word(CBUseBalance.Checked),RGTransMode.ItemIndex);
+         ProgressBar1.StepBy(30);
+         OpenOracleDataSet(OrderBy);
+         ProgressBar1.StepBy(20);
+         Screen.Cursor :=crDefault;
+      end;
+    2:;{begin
+        IDs :='';
+        with DataMod.ODSMain do
+        for   Idx :=0 to  DBGrid1.SelectedRows.Count-1 do
+        begin
+           GotoBookmark(Pointer(DBGrid1.SelectedRows.Items[Idx]));
+           if  IDs = '' then
+            IDs :=FieldByName('ID').AsString
+           else
+            IDs :=IDs+','+FieldByName('ID').AsString;
+        end;
+        //ShowMessage(IDs);
+        Screen.Cursor :=crSQLWait;
+        try
+          if IDs<>''  then
+            IDs :='Where (ID in ('+IDs+'))';
+          OpenOracleDataSet(IDs+OrderBy);
+          ProgressBar1.StepBy(50);
+         finally
+           Screen.Cursor :=crDefault;
+         end
+      end;}
+    3:begin
+        Screen.Cursor :=crSQLWait;
+        sb_Memorial(Trunc(DTPBegin.DateTime),Trunc(DTPEnd.DateTime),Rate[RateIndex],1,0,'',Word(CheckBoxDifference.Checked),-1,Word(CBUseBalance.Checked),RGTransMode.ItemIndex,1);
+        ProgressBar1.StepBy(30);
+        OpenOracleDataSet(OrderBy);
+        ProgressBar1.StepBy(20);
+        Screen.Cursor :=crDefault;
+      end;
+  end;//Case
+  //ShowMessage(IntToStr(Word((Rate[RateIndex]<>0)and(CmbBoxForm.ItemIndex=3))));
+  if   CBReport.Checked   then
+    InitalizeRpt(Word((Rate[RateIndex]<>0)),ComboBoxPrintMode.ItemIndex);//(Rate[RateIndex]<>-1)and(CmbBoxForm.ItemIndex=3)
+
+  ProgressBar1.StepBy(40);
+  ProgressBar1.Position:=0;
+//  OpenOracleDataSet(oRDERbY);
+  except
+    ProgressBar1.Position :=0;
+    Screen.Cursor :=crDefault;
+    Raise;
+   end;
+end;
+procedure Tmemorial_project.VAL_ACCChange(Sender: TObject);
+
+var  tempSTR:string;
+begin
+  tempSTR :=(Sender as  TEdit).Name;
+  with  memorial_DataModule.ODSMain do
+   if not  Locate(tempSTR,(Sender as TEdit).Text,[loPartialKey]) then
+     Beep;
+end;
+
+
+procedure Tmemorial_project.CmbBoxOrderChange(Sender: TObject);
+
+const
+    cOrderBy=' ORDER BY';
+var
+    OrderStr :String[40];
+begin
+   Case CmbBoxOrder.ItemIndex of
+    0:OrderStr:='';
+    1:OrderStr:=cOrderBy+' VAL_ACC,CURRENCYID_C';
+    2:OrderStr:=cOrderBy+' DBAL_CN';
+    3:OrderStr:=cOrderBy+' DEBITOR';
+    4:OrderStr:=cOrderBy+' KBAL_CN';
+    5:OrderStr:=cOrderBy+' KREDITOR';
+    6:OrderStr:=cOrderBy+' AMMOUNT';
+    7:OrderStr:=cOrderBy+' LAMMOUNT';
+   end;
+   Cursor :=crSQLWait;
+   OpenOracleDataSet(OrderStr);
+   OrderBy :=OrderStr;
+   Cursor :=crDefault;
+end;
+
+
+procedure Tmemorial_project.ActiveFormDestroy(Sender: TObject);
+begin
+ Memorial_project.Release;
+end;
+
+procedure Tmemorial_project.CBCountClick(Sender: TObject);
+begin
+ RGBlanck.Enabled :=CBCount.Checked;
+  ordercount.Checked:=true;
+end;
+
+procedure Tmemorial_project.VAL_ACCKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if  Key=#13  then
+    VAL_ACCChange(Sender);
+end;
+
+procedure TMemorial_project.SelectAll1Click(Sender: TObject);
+begin
+   with  DBGrid1,SelectedRows,DataSource.DataSet do
+   begin
+    DisableControls;
+    try
+      First;
+      while  not Eof  do
+      begin
+        CurrentRowSelected :=True;
+        Next
+      end;
+     finally
+       EnableControls;
+     end
+   end;
+end;
+
+procedure Tmemorial_project.BtnReportClick(Sender: TObject);
+begin
+begin
+  InitalizeRpt(Word((Rate[RateIndex]<>0)),ComboBoxPrintMode.ItemIndex);
+end;
+
+end;
+
+procedure Tmemorial_project.BtnReferClick(Sender: TObject);
+begin
+FormReference.ShowModal;
+end;
+
+procedure Tmemorial_project.miExcelExportClick(Sender: TObject);
+begin
+TransactionsExporter.Report;
+end;
+
+procedure Tmemorial_project.miPrintSelectedClick(Sender: TObject);
+var
+  IDs : WideString;
+  IDX : Integer;
+  RCount : Integer;
+  SavePlace : TBookmark;
+begin
+    IDs :='';
+    RCount := DBGrid1.SelectedRows.Count - 1;
+    SavePlace := memorial_DataModule.ODSMain.GetBookmark;
+    with memorial_DataModule.ODSMain do
+    for   Idx :=0 to  RCount do
+    begin
+       GotoBookmark(Pointer(DBGrid1.SelectedRows.Items[Idx]));
+       if  IDs = '' then
+        IDs :=FieldByName('ID').AsString
+       else
+        IDs :=IDs+','+FieldByName('ID').AsString;
+    end;
+    Screen.Cursor :=crSQLWait;
+    try
+      if IDs<>''  then
+        IDs :='Where (ID in ('+IDs+'))';
+      OpenOracleDataSet(IDs+OrderBy);
+      ProgressBar1.StepBy(50);
+      Screen.Cursor :=crDefault;
+      InitalizeRpt(Word((Rate[RateIndex]<>0)),ComboBoxPrintMode.ItemIndex);
+     finally
+       ProgressBar1.Position := 0;
+       Screen.Cursor :=crDefault;
+       OpenOracleDataSet(oRDERbY);
+       memorial_DataModule.ODSMain.GotoBookmark(saveplace);
+       memorial_DataModule.ODSMain.FreeBookmark(SavePlace);
+     end;
+end;
+
+
+procedure Tmemorial_project.SearchCombo1Change(Sender: TObject);
+
+begin
+  with Sender as TSearchCombo , DataSource.DataSet do
+  if ItemIndex > 0 then
+  begin
+    DBGrid1.DataSource.DataSet.Filter := 'OP_ID = '+FieldByName('ID').AsString;
+    DBGrid1.DataSource.DataSet.Filtered :=TRUE;
+  end
+  else
+  DBGrid1.DataSource.DataSet.Filtered := FALSE  
+
+end;
+
+procedure Tmemorial_project.DEBITORChange(Sender: TObject);
+
+
+var  tempSTR:string;
+begin
+  tempSTR :=(Sender as  TEdit).Name;
+  with  memorial_DataModule.ODSMain do
+   if not  Locate(tempSTR,(Sender as TEdit).Text,[loPartialKey]) then
+     Beep;
+end;
+
+
+
+procedure Tmemorial_project.CurrencyID_CChange(Sender: TObject);
+
+var  tempSTR:string;
+begin
+  tempSTR :=(Sender as  TEdit).Name;
+  with  memorial_DataModule.ODSMain do
+   if not  Locate(tempSTR,(Sender as TEdit).Text,[loPartialKey]) then
+     Beep;
+end;
+
+
+procedure Tmemorial_project.KREDITORChange(Sender: TObject);
+
+var  tempSTR:string;
+begin
+  tempSTR :=(Sender as  TEdit).Name;
+  with  memorial_DataModule.ODSMain do
+   if not  Locate(tempSTR,(Sender as TEdit).Text,[loPartialKey]) then
+     Beep;
+end;
+
+
+procedure Tmemorial_project.AMMOUNTChange(Sender: TObject);
+
+var  tempSTR:string;
+begin
+  tempSTR :=(Sender as  TEdit).Name;
+  with  memorial_DataModule.ODSMain do
+   if not  Locate(tempSTR,(Sender as TEdit).Text,[loPartialKey]) then
+     Beep;
+end;
+
+
+procedure Tmemorial_project.AMMOUNT_CChange(Sender: TObject);
+
+var  tempSTR:string;
+begin
+  tempSTR :=(Sender as  TEdit).Name;
+  with  memorial_DataModule.ODSMain do
+   if not  Locate(tempSTR,(Sender as TEdit).Text,[loPartialKey]) then
+     Beep;
+end;
+
+
+procedure Tmemorial_project.DEBITORKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if  Key=#13  then
+    VAL_ACCChange(Sender);
+
+end;
+
+procedure Tmemorial_project.CurrencyID_CKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if  Key=#13  then
+    VAL_ACCChange(Sender);
+
+end;
+
+procedure Tmemorial_project.KREDITORKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if  Key=#13  then
+    VAL_ACCChange(Sender);
+
+end;
+
+procedure Tmemorial_project.AMMOUNTKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if  Key=#13  then
+    VAL_ACCChange(Sender);
+
+end;
+
+procedure Tmemorial_project.AMMOUNT_CKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if  Key=#13  then
+    VAL_ACCChange(Sender);
+
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    Tmemorial_project,
+    Class_memorial_project,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

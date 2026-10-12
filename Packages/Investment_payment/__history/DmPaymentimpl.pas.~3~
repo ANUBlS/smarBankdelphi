@@ -1,0 +1,36 @@
+unit DmPaymentimpl;
+
+interface
+
+uses
+  SysUtils, Classes, DB, OracleData;
+
+type
+  TDmPayment = class(TDataModule)
+    DsSysdat: TOracleDataSet;
+    DsSysdatTEK_DAT: TDateTimeField;
+    DsRcontracts: TDataSource;
+    Dscontracts: TOracleDataSet;
+    DscontractsID: TFloatField;
+    DscontractsAMMOUNT: TFloatField;
+    DscontractsMUSTERI: TWideStringField;
+    DscontractsCONTRACT_NAME: TWideStringField;
+    DscontractsSTATUS: TIntegerField;
+    DscontractsMAIN_ACC_ID: TWideStringField;
+    DscontractsPER_ACC_ID: TWideStringField;
+    DscontractsESAS_QALIQ: TFloatField;
+    DscontractsFAIZ_QALIQ: TFloatField;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  DmPayment: TDmPayment;
+
+implementation
+
+{$R *.dfm}
+uses  CommanParametrs,sboapiDataModuleImpl;
+end.

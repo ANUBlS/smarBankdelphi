@@ -1,0 +1,2797 @@
+object frmCapital: TfrmCapital
+  Left = 230
+  Top = 126
+  Caption = 'Capital'
+  ClientHeight = 573
+  ClientWidth = 795
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poScreenCenter
+  OnActivate = FormShow
+  OnCreate = FormCreate
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 14
+  object GroupBox1: TGroupBox
+    Left = 0
+    Top = 0
+    Width = 795
+    Height = 51
+    Align = alTop
+    Caption = #1050#1072#1087#1080#1090#1072#1083' '#1085#1102#1074#1094#1085#1094#1085' '#1089#1077#1095#1080#1083#1084#1103#1089#1080
+    TabOrder = 0
+    object cb_Main: TComboBox
+      Left = 9
+      Top = 20
+      Width = 182
+      Height = 22
+      Style = csDropDownList
+      DropDownCount = 4
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 0
+      OnChange = cb_MainChange
+      Items.Strings = (
+        'I d'#601'r'#601'c'#601'li kapital'
+        'II d'#601'r'#601'c'#601'li kapital'
+        'Aktivl'#601'rin hesablanmas'#305
+        'M'#601'cmu kapital'#305'n hesablanmas'#305
+        'Ad'#305' ehtiyatlar'
+        'M'#601'cmu kapitaldan tutulmalar'
+        'Qiym'#601'tli metallar')
+    end
+  end
+  object GroupBox2: TGroupBox
+    Left = 0
+    Top = 51
+    Width = 795
+    Height = 522
+    Align = alClient
+    Caption = #1050#1072#1087#1080#1090#1072#1083#1099#1085' '#1085#1102#1074#1094
+    TabOrder = 1
+    object pc_Main: TPageControl
+      Left = 2
+      Top = 16
+      Width = 791
+      Height = 504
+      ActivePage = tbs_firstkapital
+      Align = alClient
+      MultiLine = True
+      TabOrder = 0
+      OnChange = cb_MainChange
+      object tbs_firstkapital: TTabSheet
+        Caption = 'Capital'
+        TabVisible = False
+        OnShow = tbs_firstkapitalShow
+        object Panel2: TPanel
+          Left = 0
+          Top = 59
+          Width = 783
+          Height = 435
+          Align = alClient
+          BevelInner = bvRaised
+          BevelOuter = bvLowered
+          TabOrder = 0
+          object ts_optype: TTabSet
+            Left = 2
+            Top = 411
+            Width = 779
+            Height = 22
+            Align = alBottom
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = []
+            Tabs.Strings = (
+              '  +  '
+              '  -  ')
+            TabIndex = 0
+            OnChange = ts_optypeChange
+          end
+          object dbg_balacc: TDBGrid
+            Left = 2
+            Top = 2
+            Width = 779
+            Height = 409
+            Align = alClient
+            DataSource = Capital
+            DrawingStyle = gdsGradient
+            FixedColor = clNavy
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            Options = [dgTitles, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit]
+            ParentFont = False
+            TabOrder = 1
+            TitleFont.Charset = DEFAULT_CHARSET
+            TitleFont.Color = clWhite
+            TitleFont.Height = -11
+            TitleFont.Name = 'Azl Sans Serif'
+            TitleFont.Style = []
+            OnKeyDown = dbg_balaccKeyDown
+            OnTitleClick = dbg_balaccTitleClick
+            Columns = <
+              item
+                Expanded = False
+                FieldName = 'BAL'
+                Title.Font.Charset = DEFAULT_CHARSET
+                Title.Font.Color = clNavy
+                Title.Font.Height = -11
+                Title.Font.Name = 'Tahoma'
+                Title.Font.Style = []
+                Width = 84
+                Visible = True
+              end
+              item
+                Expanded = False
+                FieldName = 'ACC_NO'
+                Title.Font.Charset = DEFAULT_CHARSET
+                Title.Font.Color = clNavy
+                Title.Font.Height = -11
+                Title.Font.Name = 'Tahoma'
+                Title.Font.Style = []
+                Width = 190
+                Visible = True
+              end>
+          end
+        end
+        object GroupBox3: TGroupBox
+          Left = 0
+          Top = 0
+          Width = 783
+          Height = 59
+          Align = alTop
+          Caption = 'I '#1076#1103#1088#1103#1078#1103#1083#1080' '#1082#1072#1087#1080#1090#1072#1083
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -12
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          ParentFont = False
+          TabOrder = 1
+          DesignSize = (
+            783
+            59)
+          object Label1: TLabel
+            Left = 17
+            Top = 17
+            Width = 90
+            Height = 15
+            Caption = #1041#1072#1083#1072#1085#1089' '#1097#1077#1089#1072#1073#1099
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = []
+            ParentFont = False
+          end
+          object Label2: TLabel
+            Left = 112
+            Top = 17
+            Width = 38
+            Height = 15
+            Caption = #1065#1077#1089#1072#1073
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = []
+            ParentFont = False
+          end
+          object BitBtn1: TBitBtn
+            Left = 583
+            Top = 30
+            Width = 91
+            Height = 26
+            Anchors = [akTop, akRight]
+            Caption = #1071#1083#1072#1074#1103
+            Default = True
+            DoubleBuffered = True
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            Glyph.Data = {
+              DE010000424DDE01000000000000760000002800000024000000120000000100
+              0400000000006801000000000000000000001000000000000000000000000000
+              80000080000000808000800000008000800080800000C0C0C000808080000000
+              FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00333333333333
+              3333333333333333333333330000333333333333333333333333F33333333333
+              00003333344333333333333333388F3333333333000033334224333333333333
+              338338F3333333330000333422224333333333333833338F3333333300003342
+              222224333333333383333338F3333333000034222A22224333333338F338F333
+              8F33333300003222A3A2224333333338F3838F338F33333300003A2A333A2224
+              33333338F83338F338F33333000033A33333A222433333338333338F338F3333
+              0000333333333A222433333333333338F338F33300003333333333A222433333
+              333333338F338F33000033333333333A222433333333333338F338F300003333
+              33333333A222433333333333338F338F00003333333333333A22433333333333
+              3338F38F000033333333333333A223333333333333338F830000333333333333
+              333A333333333333333338330000333333333333333333333333333333333333
+              0000}
+            NumGlyphs = 2
+            ParentDoubleBuffered = False
+            ParentFont = False
+            TabOrder = 3
+            TabStop = False
+            OnClick = BitBtn1Click
+          end
+          object BitBtn2: TBitBtn
+            Left = 677
+            Top = 30
+            Width = 98
+            Height = 26
+            Anchors = [akTop, akRight]
+            Cancel = True
+            Caption = #1051#1103#1100#1074' '#1077#1090#1084#1103#1082
+            DoubleBuffered = True
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            Glyph.Data = {
+              DE010000424DDE01000000000000760000002800000024000000120000000100
+              0400000000006801000000000000000000001000000000000000000000000000
+              80000080000000808000800000008000800080800000C0C0C000808080000000
+              FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00333333333333
+              333333333333333333333333000033338833333333333333333F333333333333
+              0000333911833333983333333388F333333F3333000033391118333911833333
+              38F38F333F88F33300003339111183911118333338F338F3F8338F3300003333
+              911118111118333338F3338F833338F3000033333911111111833333338F3338
+              3333F8330000333333911111183333333338F333333F83330000333333311111
+              8333333333338F3333383333000033333339111183333333333338F333833333
+              00003333339111118333333333333833338F3333000033333911181118333333
+              33338333338F333300003333911183911183333333383338F338F33300003333
+              9118333911183333338F33838F338F33000033333913333391113333338FF833
+              38F338F300003333333333333919333333388333338FFF830000333333333333
+              3333333333333333333888330000333333333333333333333333333333333333
+              0000}
+            NumGlyphs = 2
+            ParentDoubleBuffered = False
+            ParentFont = False
+            TabOrder = 4
+            TabStop = False
+            OnClick = BitBtn2Click
+          end
+          object ed_bal: TEdit
+            Left = 17
+            Top = 34
+            Width = 75
+            Height = 23
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = []
+            ParentFont = False
+            TabOrder = 0
+            OnEnter = ed_balEnter
+            OnKeyPress = ed_balKeyPress
+          end
+          object se_ACC_NO: TSearchEdit
+            Left = 100
+            Top = 34
+            Width = 205
+            Height = 23
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = []
+            MaxLength = 28
+            ParentFont = False
+            TabOrder = 1
+            OnChange = se_ACC_NOChange
+            OnEnter = se_ACC_NOEnter
+            DataSource = Account
+            SearchField = 'ACC_NO'
+          end
+          object dbw_acc_no: TDBViewComboBox
+            Left = 311
+            Top = 34
+            Width = 248
+            Height = 19
+            Style = csOwnerDrawFixed
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = []
+            ItemHeight = 13
+            ParentFont = False
+            TabOrder = 2
+            OnChange = dbw_acc_noChange
+            ListSource = Account
+            ListFields = 'ACC_NO'
+            FieldInterval = 5
+            DropDownOnEnter = False
+            FirstAfterOpen = True
+          end
+        end
+      end
+      object tbs_seckapital: TTabSheet
+        Caption = 'tbs_seckapital'
+        ImageIndex = 1
+        TabVisible = False
+        OnShow = tbs_seckapitalShow
+        object GroupBox6: TGroupBox
+          Left = 0
+          Top = 0
+          Width = 783
+          Height = 63
+          Align = alTop
+          Caption = 'II '#1076#1103#1088#1103#1078#1103#1083#1080' '#1082#1072#1087#1080#1090#1072#1083
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -12
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = [fsBold]
+          ParentFont = False
+          TabOrder = 0
+          DesignSize = (
+            783
+            63)
+          object Label11: TLabel
+            Left = 17
+            Top = 17
+            Width = 90
+            Height = 15
+            Caption = #1041#1072#1083#1072#1085#1089' '#1097#1077#1089#1072#1073#1099
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = []
+            ParentFont = False
+          end
+          object Label12: TLabel
+            Left = 112
+            Top = 17
+            Width = 38
+            Height = 15
+            Caption = #1065#1077#1089#1072#1073
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = []
+            ParentFont = False
+          end
+          object BitBtn6: TBitBtn
+            Left = 593
+            Top = 32
+            Width = 91
+            Height = 27
+            Anchors = [akTop, akRight]
+            Caption = #1071#1083#1072#1074#1103
+            Default = True
+            DoubleBuffered = True
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = []
+            Glyph.Data = {
+              DE010000424DDE01000000000000760000002800000024000000120000000100
+              0400000000006801000000000000000000001000000000000000000000000000
+              80000080000000808000800000008000800080800000C0C0C000808080000000
+              FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00333333333333
+              3333333333333333333333330000333333333333333333333333F33333333333
+              00003333344333333333333333388F3333333333000033334224333333333333
+              338338F3333333330000333422224333333333333833338F3333333300003342
+              222224333333333383333338F3333333000034222A22224333333338F338F333
+              8F33333300003222A3A2224333333338F3838F338F33333300003A2A333A2224
+              33333338F83338F338F33333000033A33333A222433333338333338F338F3333
+              0000333333333A222433333333333338F338F33300003333333333A222433333
+              333333338F338F33000033333333333A222433333333333338F338F300003333
+              33333333A222433333333333338F338F00003333333333333A22433333333333
+              3338F38F000033333333333333A223333333333333338F830000333333333333
+              333A333333333333333338330000333333333333333333333333333333333333
+              0000}
+            NumGlyphs = 2
+            ParentDoubleBuffered = False
+            ParentFont = False
+            TabOrder = 3
+            TabStop = False
+            OnClick = BitBtn6Click
+          end
+          object BitBtn7: TBitBtn
+            Left = 686
+            Top = 32
+            Width = 94
+            Height = 27
+            Anchors = [akTop, akRight]
+            Cancel = True
+            Caption = #1051#1103#1100#1074' '#1077#1090#1084#1103#1082
+            DoubleBuffered = True
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = []
+            Glyph.Data = {
+              DE010000424DDE01000000000000760000002800000024000000120000000100
+              0400000000006801000000000000000000001000000000000000000000000000
+              80000080000000808000800000008000800080800000C0C0C000808080000000
+              FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00333333333333
+              333333333333333333333333000033338833333333333333333F333333333333
+              0000333911833333983333333388F333333F3333000033391118333911833333
+              38F38F333F88F33300003339111183911118333338F338F3F8338F3300003333
+              911118111118333338F3338F833338F3000033333911111111833333338F3338
+              3333F8330000333333911111183333333338F333333F83330000333333311111
+              8333333333338F3333383333000033333339111183333333333338F333833333
+              00003333339111118333333333333833338F3333000033333911181118333333
+              33338333338F333300003333911183911183333333383338F338F33300003333
+              9118333911183333338F33838F338F33000033333913333391113333338FF833
+              38F338F300003333333333333919333333388333338FFF830000333333333333
+              3333333333333333333888330000333333333333333333333333333333333333
+              0000}
+            NumGlyphs = 2
+            ParentDoubleBuffered = False
+            ParentFont = False
+            TabOrder = 4
+            TabStop = False
+            OnClick = BitBtn2Click
+          end
+          object ed_balsecond: TEdit
+            Left = 17
+            Top = 34
+            Width = 75
+            Height = 23
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = []
+            ParentFont = False
+            TabOrder = 0
+            OnEnter = ed_balsecondEnter
+            OnKeyPress = ed_balKeyPress
+          end
+          object se_acc_nosecond: TSearchEdit
+            Left = 103
+            Top = 34
+            Width = 205
+            Height = 23
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = []
+            ParentFont = False
+            TabOrder = 1
+            OnChange = se_acc_nosecondChange
+            OnEnter = se_acc_nosecondEnter
+            DataSource = Account
+            SearchField = 'ACC_NO'
+          end
+          object DBViewComboBox2: TDBViewComboBox
+            Left = 316
+            Top = 34
+            Width = 215
+            Height = 19
+            Style = csOwnerDrawFixed
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = []
+            ItemHeight = 13
+            ParentFont = False
+            TabOrder = 2
+            OnChange = DBViewComboBox2Change
+            ListSource = Account
+            ListFields = 'ACC_NO'
+            FieldInterval = 5
+            DropDownOnEnter = False
+            FirstAfterOpen = True
+          end
+        end
+        object Panel3: TPanel
+          Left = 0
+          Top = 63
+          Width = 783
+          Height = 431
+          Align = alClient
+          BevelInner = bvRaised
+          BevelOuter = bvLowered
+          TabOrder = 1
+          object ts_active: TTabSet
+            Left = 2
+            Top = 407
+            Width = 779
+            Height = 22
+            Align = alBottom
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = []
+            Tabs.Strings = (
+              '  +  '
+              '  -  ')
+            TabIndex = 0
+            OnChange = ts_activeChange
+          end
+          object DBGrid2: TDBGrid
+            Left = 2
+            Top = 2
+            Width = 779
+            Height = 405
+            Align = alClient
+            DataSource = Capital
+            DrawingStyle = gdsGradient
+            FixedColor = clNavy
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = []
+            Options = [dgTitles, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit]
+            ParentFont = False
+            TabOrder = 1
+            TitleFont.Charset = DEFAULT_CHARSET
+            TitleFont.Color = clWhite
+            TitleFont.Height = -11
+            TitleFont.Name = 'Azl Sans Serif'
+            TitleFont.Style = []
+            OnKeyDown = dbg_balaccKeyDown
+            OnTitleClick = dbg_balaccTitleClick
+            Columns = <
+              item
+                Expanded = False
+                FieldName = 'BAL'
+                Title.Font.Charset = DEFAULT_CHARSET
+                Title.Font.Color = clNavy
+                Title.Font.Height = -11
+                Title.Font.Name = 'Tahoma'
+                Title.Font.Style = []
+                Width = 84
+                Visible = True
+              end
+              item
+                Expanded = False
+                FieldName = 'ACC_NO'
+                Title.Font.Charset = DEFAULT_CHARSET
+                Title.Font.Color = clNavy
+                Title.Font.Height = -11
+                Title.Font.Name = 'Tahoma'
+                Title.Font.Style = []
+                Width = 190
+                Visible = True
+              end>
+          end
+        end
+      end
+      object tbs_risk: TTabSheet
+        Caption = 'tbs_risk'
+        ImageIndex = 2
+        TabVisible = False
+        OnShow = tbs_riskShow
+        object GroupBox5: TGroupBox
+          Left = 0
+          Top = 0
+          Width = 783
+          Height = 494
+          Align = alClient
+          Caption = #1040#1082#1090#1080#1074#1083#1103#1088#1080#1085' '#1097#1077#1089#1072#1073#1083#1072#1085#1084#1072#1089#1099
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -12
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = [fsBold]
+          ParentFont = False
+          TabOrder = 0
+          object PageControl1: TPageControl
+            Left = 2
+            Top = 17
+            Width = 779
+            Height = 475
+            ActivePage = TabSheet2
+            Align = alClient
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = []
+            ParentFont = False
+            TabOrder = 0
+            object TabSheet1: TTabSheet
+              Caption = #1041#1072#1083#1072#1085#1089
+              object GroupBox7: TGroupBox
+                Left = 0
+                Top = 0
+                Width = 771
+                Height = 60
+                Align = alTop
+                Caption = #1041#1072#1083#1072#1085#1089
+                TabOrder = 0
+                DesignSize = (
+                  771
+                  60)
+                object Label10: TLabel
+                  Left = 503
+                  Top = 17
+                  Width = 43
+                  Height = 15
+                  Caption = #1060#1072#1080#1079' %'
+                  Font.Charset = DEFAULT_CHARSET
+                  Font.Color = clWindowText
+                  Font.Height = -12
+                  Font.Name = 'Azl Sans Serif'
+                  Font.Style = []
+                  ParentFont = False
+                end
+                object Label8: TLabel
+                  Left = 3
+                  Top = 17
+                  Width = 90
+                  Height = 15
+                  Caption = #1041#1072#1083#1072#1085#1089' '#1097#1077#1089#1072#1073#1099
+                  Font.Charset = DEFAULT_CHARSET
+                  Font.Color = clWindowText
+                  Font.Height = -12
+                  Font.Name = 'Azl Sans Serif'
+                  Font.Style = []
+                  ParentFont = False
+                end
+                object Label9: TLabel
+                  Left = 95
+                  Top = 17
+                  Width = 38
+                  Height = 15
+                  Caption = #1065#1077#1089#1072#1073
+                  Font.Charset = DEFAULT_CHARSET
+                  Font.Color = clWindowText
+                  Font.Height = -12
+                  Font.Name = 'Azl Sans Serif'
+                  Font.Style = []
+                  ParentFont = False
+                end
+                object ed_percent: TEdit
+                  Left = 499
+                  Top = 34
+                  Width = 61
+                  Height = 23
+                  Font.Charset = DEFAULT_CHARSET
+                  Font.Color = clWindowText
+                  Font.Height = -12
+                  Font.Name = 'Azl Sans Serif'
+                  Font.Style = []
+                  ParentFont = False
+                  TabOrder = 0
+                  OnKeyPress = ed_balKeyPress
+                end
+                object DBViewComboBox1: TDBViewComboBox
+                  Left = 286
+                  Top = 34
+                  Width = 210
+                  Height = 19
+                  Style = csOwnerDrawFixed
+                  Font.Charset = DEFAULT_CHARSET
+                  Font.Color = clWindowText
+                  Font.Height = -12
+                  Font.Name = 'Azl Sans Serif'
+                  Font.Style = []
+                  ItemHeight = 13
+                  ParentFont = False
+                  TabOrder = 1
+                  OnChange = DBViewComboBox1Change
+                  ListSource = Account
+                  ListFields = 'ACC_NO'
+                  FieldInterval = 5
+                  DropDownOnEnter = False
+                  FirstAfterOpen = True
+                end
+                object se_acc_noActive: TSearchEdit
+                  Left = 79
+                  Top = 34
+                  Width = 205
+                  Height = 23
+                  Font.Charset = DEFAULT_CHARSET
+                  Font.Color = clWindowText
+                  Font.Height = -12
+                  Font.Name = 'Azl Sans Serif'
+                  Font.Style = []
+                  MaxLength = 28
+                  ParentFont = False
+                  TabOrder = 2
+                  OnChange = se_ACC_NOChange
+                  OnEnter = se_acc_noActiveEnter
+                  DataSource = Account
+                  SearchField = 'ACC_NO'
+                end
+                object ed_balActive: TEdit
+                  Left = 3
+                  Top = 34
+                  Width = 74
+                  Height = 23
+                  Font.Charset = DEFAULT_CHARSET
+                  Font.Color = clWindowText
+                  Font.Height = -12
+                  Font.Name = 'Azl Sans Serif'
+                  Font.Style = []
+                  ParentFont = False
+                  TabOrder = 3
+                  OnEnter = ed_balActiveEnter
+                  OnKeyPress = ed_balKeyPress
+                end
+                object BitBtn4: TBitBtn
+                  Left = 589
+                  Top = 30
+                  Width = 86
+                  Height = 27
+                  Anchors = [akTop, akRight]
+                  Caption = #1071#1083#1072#1074#1103
+                  Default = True
+                  DoubleBuffered = True
+                  Font.Charset = DEFAULT_CHARSET
+                  Font.Color = clWindowText
+                  Font.Height = -12
+                  Font.Name = 'Azl Sans Serif'
+                  Font.Style = []
+                  Glyph.Data = {
+                    DE010000424DDE01000000000000760000002800000024000000120000000100
+                    0400000000006801000000000000000000001000000000000000000000000000
+                    80000080000000808000800000008000800080800000C0C0C000808080000000
+                    FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00333333333333
+                    3333333333333333333333330000333333333333333333333333F33333333333
+                    00003333344333333333333333388F3333333333000033334224333333333333
+                    338338F3333333330000333422224333333333333833338F3333333300003342
+                    222224333333333383333338F3333333000034222A22224333333338F338F333
+                    8F33333300003222A3A2224333333338F3838F338F33333300003A2A333A2224
+                    33333338F83338F338F33333000033A33333A222433333338333338F338F3333
+                    0000333333333A222433333333333338F338F33300003333333333A222433333
+                    333333338F338F33000033333333333A222433333333333338F338F300003333
+                    33333333A222433333333333338F338F00003333333333333A22433333333333
+                    3338F38F000033333333333333A223333333333333338F830000333333333333
+                    333A333333333333333338330000333333333333333333333333333333333333
+                    0000}
+                  NumGlyphs = 2
+                  ParentDoubleBuffered = False
+                  ParentFont = False
+                  TabOrder = 4
+                  TabStop = False
+                  OnClick = BitBtn4Click
+                end
+                object BitBtn5: TBitBtn
+                  Left = 675
+                  Top = 30
+                  Width = 91
+                  Height = 27
+                  Anchors = [akTop, akRight]
+                  Cancel = True
+                  Caption = #1051#1103#1100#1074' '#1077#1090#1084#1103#1082
+                  DoubleBuffered = True
+                  Font.Charset = DEFAULT_CHARSET
+                  Font.Color = clWindowText
+                  Font.Height = -12
+                  Font.Name = 'Azl Sans Serif'
+                  Font.Style = []
+                  Glyph.Data = {
+                    DE010000424DDE01000000000000760000002800000024000000120000000100
+                    0400000000006801000000000000000000001000000000000000000000000000
+                    80000080000000808000800000008000800080800000C0C0C000808080000000
+                    FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00333333333333
+                    333333333333333333333333000033338833333333333333333F333333333333
+                    0000333911833333983333333388F333333F3333000033391118333911833333
+                    38F38F333F88F33300003339111183911118333338F338F3F8338F3300003333
+                    911118111118333338F3338F833338F3000033333911111111833333338F3338
+                    3333F8330000333333911111183333333338F333333F83330000333333311111
+                    8333333333338F3333383333000033333339111183333333333338F333833333
+                    00003333339111118333333333333833338F3333000033333911181118333333
+                    33338333338F333300003333911183911183333333383338F338F33300003333
+                    9118333911183333338F33838F338F33000033333913333391113333338FF833
+                    38F338F300003333333333333919333333388333338FFF830000333333333333
+                    3333333333333333333888330000333333333333333333333333333333333333
+                    0000}
+                  NumGlyphs = 2
+                  ParentDoubleBuffered = False
+                  ParentFont = False
+                  TabOrder = 5
+                  TabStop = False
+                  OnClick = BitBtn2Click
+                end
+              end
+              object Panel1: TPanel
+                Left = 0
+                Top = 60
+                Width = 771
+                Height = 385
+                Align = alClient
+                BevelInner = bvRaised
+                BevelOuter = bvLowered
+                TabOrder = 1
+                object ts_risk: TTabSet
+                  Left = 2
+                  Top = 360
+                  Width = 767
+                  Height = 23
+                  Align = alBottom
+                  Font.Charset = DEFAULT_CHARSET
+                  Font.Color = clWindowText
+                  Font.Height = -12
+                  Font.Name = 'Azl Sans Serif'
+                  Font.Style = []
+                  Tabs.Strings = (
+                    '  +  '
+                    '  -  ')
+                  TabIndex = 0
+                  OnChange = ts_riskChange
+                end
+                object DBGrid1: TDBGrid
+                  Left = 2
+                  Top = 2
+                  Width = 767
+                  Height = 358
+                  Align = alClient
+                  DataSource = Capital
+                  DrawingStyle = gdsGradient
+                  FixedColor = clNavy
+                  Font.Charset = DEFAULT_CHARSET
+                  Font.Color = clWindowText
+                  Font.Height = -12
+                  Font.Name = 'Azl Sans Serif'
+                  Font.Style = []
+                  Options = [dgTitles, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit]
+                  ParentFont = False
+                  TabOrder = 1
+                  TitleFont.Charset = DEFAULT_CHARSET
+                  TitleFont.Color = clWhite
+                  TitleFont.Height = -11
+                  TitleFont.Name = 'Azl Sans Serif'
+                  TitleFont.Style = []
+                  OnKeyDown = dbg_balaccKeyDown
+                  OnTitleClick = dbg_balaccTitleClick
+                  Columns = <
+                    item
+                      Expanded = False
+                      FieldName = 'BAL'
+                      Title.Font.Charset = DEFAULT_CHARSET
+                      Title.Font.Color = clNavy
+                      Title.Font.Height = -11
+                      Title.Font.Name = 'Tahoma'
+                      Title.Font.Style = []
+                      Width = 79
+                      Visible = True
+                    end
+                    item
+                      Expanded = False
+                      FieldName = 'ACC_NO'
+                      Title.Font.Charset = DEFAULT_CHARSET
+                      Title.Font.Color = clNavy
+                      Title.Font.Height = -11
+                      Title.Font.Name = 'Tahoma'
+                      Title.Font.Style = []
+                      Width = 190
+                      Visible = True
+                    end
+                    item
+                      Expanded = False
+                      FieldName = 'PERCENT'
+                      Title.Font.Charset = DEFAULT_CHARSET
+                      Title.Font.Color = clNavy
+                      Title.Font.Height = -11
+                      Title.Font.Name = 'Tahoma'
+                      Title.Font.Style = []
+                      Width = 100
+                      Visible = True
+                    end>
+                end
+              end
+            end
+            object TabSheet2: TTabSheet
+              Caption = #1041#1072#1083#1072#1085#1089#1076#1072#1085' '#1082#1103#1085#1072#1088
+              ImageIndex = 1
+              object GroupBox8: TGroupBox
+                Left = 0
+                Top = 0
+                Width = 771
+                Height = 67
+                Align = alTop
+                Caption = #1041#1072#1083#1072#1085#1089#1076#1072#1085' '#1082#1103#1085#1072#1088
+                TabOrder = 0
+                DesignSize = (
+                  771
+                  67)
+                object Label14: TLabel
+                  Left = 3
+                  Top = 17
+                  Width = 90
+                  Height = 15
+                  Caption = #1041#1072#1083#1072#1085#1089' '#1097#1077#1089#1072#1073#1099
+                  Font.Charset = DEFAULT_CHARSET
+                  Font.Color = clWindowText
+                  Font.Height = -12
+                  Font.Name = 'Azl Sans Serif'
+                  Font.Style = []
+                  ParentFont = False
+                end
+                object Label15: TLabel
+                  Left = 89
+                  Top = 17
+                  Width = 38
+                  Height = 15
+                  Caption = #1065#1077#1089#1072#1073
+                  Font.Charset = DEFAULT_CHARSET
+                  Font.Color = clWindowText
+                  Font.Height = -12
+                  Font.Name = 'Azl Sans Serif'
+                  Font.Style = []
+                  ParentFont = False
+                end
+                object Label13: TLabel
+                  Left = 500
+                  Top = 17
+                  Width = 43
+                  Height = 15
+                  Caption = #1060#1072#1080#1079' %'
+                  Font.Charset = DEFAULT_CHARSET
+                  Font.Color = clWindowText
+                  Font.Height = -12
+                  Font.Name = 'Azl Sans Serif'
+                  Font.Style = []
+                  ParentFont = False
+                end
+                object SpeedButton2: TSpeedButton
+                  Left = 561
+                  Top = 28
+                  Width = 28
+                  Height = 25
+                  Hint = 'Connect'
+                  Flat = True
+                  Glyph.Data = {
+                    F6000000424DF600000000000000760000002800000010000000100000000100
+                    0400000000008000000000000000000000001000000000000000000000000000
+                    80000080000000808000800000008000800080800000C0C0C000808080000000
+                    FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00FF7770777777
+                    77FFFF777807777777FFFF777700777777FFFF77770B077777FFFF770000B077
+                    77FFFF770BBBBB0777FFFF7770FB000077FFFF7770BBB07777FFFF00000BFB07
+                    77FFFF0FBBBFBBB077FFFF70FBFB000007FFFF70BFBFB07777FFFF770BFBFB07
+                    77FFFF770FFFFFF077FFFF7770FBFFBF07FFFF777000000000FF}
+                  ParentShowHint = False
+                  ShowHint = True
+                  OnClick = SpeedButton2Click
+                end
+                object ed_outpercent: TEdit
+                  Left = 496
+                  Top = 34
+                  Width = 61
+                  Height = 23
+                  Color = clMenu
+                  Enabled = False
+                  Font.Charset = DEFAULT_CHARSET
+                  Font.Color = clWindowText
+                  Font.Height = -12
+                  Font.Name = 'Azl Sans Serif'
+                  Font.Style = []
+                  ParentFont = False
+                  TabOrder = 0
+                  OnKeyPress = ed_balKeyPress
+                end
+                object dbv_outacc: TDBViewComboBox
+                  Left = 285
+                  Top = 34
+                  Width = 210
+                  Height = 19
+                  Style = csOwnerDrawFixed
+                  Color = clMenu
+                  Enabled = False
+                  Font.Charset = DEFAULT_CHARSET
+                  Font.Color = clWindowText
+                  Font.Height = -12
+                  Font.Name = 'Azl Sans Serif'
+                  Font.Style = []
+                  ItemHeight = 13
+                  ParentFont = False
+                  TabOrder = 1
+                  OnChange = dbv_outaccChange
+                  ListSource = account_out
+                  ListFields = 'ACC_NO'
+                  FieldInterval = 5
+                  DropDownOnEnter = False
+                  FirstAfterOpen = True
+                end
+                object se_outacc: TSearchEdit
+                  Left = 78
+                  Top = 34
+                  Width = 205
+                  Height = 23
+                  Color = clMenu
+                  Enabled = False
+                  Font.Charset = DEFAULT_CHARSET
+                  Font.Color = clWindowText
+                  Font.Height = -12
+                  Font.Name = 'Azl Sans Serif'
+                  Font.Style = []
+                  ParentFont = False
+                  TabOrder = 2
+                  OnChange = se_outaccChange
+                  OnEnter = se_outaccEnter
+                  DataSource = account_out
+                  SearchField = 'ACC_NO'
+                end
+                object ed_outbal: TEdit
+                  Left = 3
+                  Top = 34
+                  Width = 74
+                  Height = 23
+                  Color = clMenu
+                  Enabled = False
+                  Font.Charset = DEFAULT_CHARSET
+                  Font.Color = clWindowText
+                  Font.Height = -12
+                  Font.Name = 'Azl Sans Serif'
+                  Font.Style = []
+                  ParentFont = False
+                  TabOrder = 3
+                  OnEnter = ed_outbalEnter
+                  OnKeyPress = ed_outbalKeyPress
+                end
+                object BitBtn8: TBitBtn
+                  Left = 590
+                  Top = 31
+                  Width = 86
+                  Height = 27
+                  Anchors = [akTop, akRight]
+                  Caption = #1071#1083#1072#1074#1103
+                  Default = True
+                  DoubleBuffered = True
+                  Font.Charset = DEFAULT_CHARSET
+                  Font.Color = clWindowText
+                  Font.Height = -12
+                  Font.Name = 'Azl Sans Serif'
+                  Font.Style = []
+                  Glyph.Data = {
+                    DE010000424DDE01000000000000760000002800000024000000120000000100
+                    0400000000006801000000000000000000001000000000000000000000000000
+                    80000080000000808000800000008000800080800000C0C0C000808080000000
+                    FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00333333333333
+                    3333333333333333333333330000333333333333333333333333F33333333333
+                    00003333344333333333333333388F3333333333000033334224333333333333
+                    338338F3333333330000333422224333333333333833338F3333333300003342
+                    222224333333333383333338F3333333000034222A22224333333338F338F333
+                    8F33333300003222A3A2224333333338F3838F338F33333300003A2A333A2224
+                    33333338F83338F338F33333000033A33333A222433333338333338F338F3333
+                    0000333333333A222433333333333338F338F33300003333333333A222433333
+                    333333338F338F33000033333333333A222433333333333338F338F300003333
+                    33333333A222433333333333338F338F00003333333333333A22433333333333
+                    3338F38F000033333333333333A223333333333333338F830000333333333333
+                    333A333333333333333338330000333333333333333333333333333333333333
+                    0000}
+                  NumGlyphs = 2
+                  ParentDoubleBuffered = False
+                  ParentFont = False
+                  TabOrder = 4
+                  TabStop = False
+                  OnClick = BitBtn8Click
+                end
+                object BitBtn9: TBitBtn
+                  Left = 678
+                  Top = 31
+                  Width = 90
+                  Height = 27
+                  Anchors = [akTop, akRight]
+                  Cancel = True
+                  Caption = #1051#1103#1100#1074' '#1077#1090#1084#1103#1082
+                  DoubleBuffered = True
+                  Font.Charset = DEFAULT_CHARSET
+                  Font.Color = clWindowText
+                  Font.Height = -12
+                  Font.Name = 'Azl Sans Serif'
+                  Font.Style = []
+                  Glyph.Data = {
+                    DE010000424DDE01000000000000760000002800000024000000120000000100
+                    0400000000006801000000000000000000001000000000000000000000000000
+                    80000080000000808000800000008000800080800000C0C0C000808080000000
+                    FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00333333333333
+                    333333333333333333333333000033338833333333333333333F333333333333
+                    0000333911833333983333333388F333333F3333000033391118333911833333
+                    38F38F333F88F33300003339111183911118333338F338F3F8338F3300003333
+                    911118111118333338F3338F833338F3000033333911111111833333338F3338
+                    3333F8330000333333911111183333333338F333333F83330000333333311111
+                    8333333333338F3333383333000033333339111183333333333338F333833333
+                    00003333339111118333333333333833338F3333000033333911181118333333
+                    33338333338F333300003333911183911183333333383338F338F33300003333
+                    9118333911183333338F33838F338F33000033333913333391113333338FF833
+                    38F338F300003333333333333919333333388333338FFF830000333333333333
+                    3333333333333333333888330000333333333333333333333333333333333333
+                    0000}
+                  NumGlyphs = 2
+                  ParentDoubleBuffered = False
+                  ParentFont = False
+                  TabOrder = 5
+                  TabStop = False
+                  OnClick = BitBtn9Click
+                end
+              end
+              object Panel4: TPanel
+                Left = 0
+                Top = 67
+                Width = 771
+                Height = 378
+                Align = alClient
+                BevelInner = bvRaised
+                BevelOuter = bvLowered
+                TabOrder = 1
+                object ts_riskout: TTabSet
+                  Left = 2
+                  Top = 353
+                  Width = 767
+                  Height = 23
+                  Align = alBottom
+                  Font.Charset = DEFAULT_CHARSET
+                  Font.Color = clWindowText
+                  Font.Height = -12
+                  Font.Name = 'Azl Sans Serif'
+                  Font.Style = []
+                  Tabs.Strings = (
+                    '  +  '
+                    '  -  ')
+                  TabIndex = 0
+                  OnChange = ts_riskoutChange
+                end
+                object DBGrid3: TDBGrid
+                  Left = 2
+                  Top = 2
+                  Width = 767
+                  Height = 351
+                  Align = alClient
+                  Color = clMenu
+                  DataSource = capital_out
+                  DrawingStyle = gdsGradient
+                  FixedColor = clNavy
+                  Font.Charset = DEFAULT_CHARSET
+                  Font.Color = clWindowText
+                  Font.Height = -12
+                  Font.Name = 'Azl Sans Serif'
+                  Font.Style = []
+                  Options = [dgTitles, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit]
+                  ParentFont = False
+                  TabOrder = 1
+                  TitleFont.Charset = DEFAULT_CHARSET
+                  TitleFont.Color = clWhite
+                  TitleFont.Height = -11
+                  TitleFont.Name = 'Azl Sans Serif'
+                  TitleFont.Style = []
+                  OnKeyDown = DBGrid3KeyDown
+                  OnTitleClick = DBGrid3TitleClick
+                  Columns = <
+                    item
+                      Expanded = False
+                      FieldName = 'BAL'
+                      Title.Caption = 'Balans'
+                      Title.Font.Charset = DEFAULT_CHARSET
+                      Title.Font.Color = clNavy
+                      Title.Font.Height = -11
+                      Title.Font.Name = 'Tahoma'
+                      Title.Font.Style = []
+                      Width = 79
+                      Visible = True
+                    end
+                    item
+                      Expanded = False
+                      FieldName = 'ACC_NO'
+                      Title.Caption = 'Hesab'
+                      Title.Font.Charset = DEFAULT_CHARSET
+                      Title.Font.Color = clNavy
+                      Title.Font.Height = -11
+                      Title.Font.Name = 'Tahoma'
+                      Title.Font.Style = []
+                      Width = 162
+                      Visible = True
+                    end
+                    item
+                      Expanded = False
+                      FieldName = 'PERCENT'
+                      Title.Caption = 'Faiz'
+                      Title.Font.Charset = DEFAULT_CHARSET
+                      Title.Font.Color = clNavy
+                      Title.Font.Height = -11
+                      Title.Font.Name = 'Tahoma'
+                      Title.Font.Style = []
+                      Width = 100
+                      Visible = True
+                    end>
+                end
+              end
+            end
+          end
+        end
+      end
+      object tbs_capital: TTabSheet
+        Caption = 'tbs_capital'
+        ImageIndex = 3
+        TabVisible = False
+        OnShow = tbs_capitalShow
+        object GroupBox4: TGroupBox
+          Left = 0
+          Top = 0
+          Width = 783
+          Height = 494
+          Align = alClient
+          Caption = #1050#1072#1087#1080#1090#1072#1083#1099#1085' '#1097#1077#1089#1072#1073#1083#1072#1085#1084#1072#1089#1099
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -12
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = [fsBold]
+          ParentFont = False
+          TabOrder = 0
+          object Label3: TLabel
+            Left = 9
+            Top = 112
+            Width = 140
+            Height = 15
+            Caption = 'I '#1076#1103#1088#1103#1078#1103#1083#1080' '#1082#1072#1087#1080#1090#1072#1083' ( X ):'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = []
+            ParentFont = False
+          end
+          object Label4: TLabel
+            Left = 9
+            Top = 138
+            Width = 146
+            Height = 15
+            Caption = 'II '#1076#1103#1088#1103#1078#1103#1083#1080' '#1082#1072#1087#1080#1090#1072#1083' ( Y ) :'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = []
+            ParentFont = False
+          end
+          object Label5: TLabel
+            Left = 9
+            Top = 164
+            Width = 184
+            Height = 15
+            Caption = #1040#1082#1090#1080#1074#1083#1103#1088#1080#1085' '#1097#1077#1089#1072#1073#1083#1072#1085#1084#1072#1089#1099' ( Z ):'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = []
+            ParentFont = False
+          end
+          object Label6: TLabel
+            Left = 9
+            Top = 216
+            Width = 201
+            Height = 15
+            Caption = #1052#1103#1078#1084#1091' '#1082#1072#1087#1080#1090#1072#1083#1099#1085' '#1097#1077#1089#1072#1073#1083#1072#1085#1084#1072#1089#1099' :'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = []
+            ParentFont = False
+          end
+          object Label7: TLabel
+            Left = 9
+            Top = 60
+            Width = 51
+            Height = 15
+            Caption = #1060#1086#1088#1084#1091#1083#1072
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = []
+            ParentFont = False
+          end
+          object Shape1: TShape
+            Left = 9
+            Top = 207
+            Width = 157
+            Height = 1
+            Brush.Color = clBackground
+          end
+          object SpeedButton1: TSpeedButton
+            Left = 143
+            Top = 78
+            Width = 25
+            Height = 23
+            Flat = True
+            Glyph.Data = {
+              F6000000424DF600000000000000760000002800000010000000100000000100
+              0400000000008000000000000000000000001000000000000000000000000000
+              8000008000000080800080000000800080008080000080808000C0C0C0000000
+              FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00FFFFFFFFFFFF
+              FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0FFFFFFFFFFFFFF000FFF
+              FFFFFFFFFF0F0FFFFFFFFFFFF00F00FFFFFFFFFF00FFF0FFFFFFFFFFFFFFF00F
+              FFFFFFFFFFFFFF0FFFFFFFFFFFFFFF00FFFFFFFFFFFFFFF0FFFFFFFFFFFFFFF0
+              FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF}
+            OnClick = SpeedButton1Click
+          end
+          object Label16: TLabel
+            Left = 10
+            Top = 190
+            Width = 130
+            Height = 15
+            Caption = #1040#1076#1080' '#1077#1097#1090#1080#1081#1081#1072#1090#1083#1072#1088' ( '#1044' ) :'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = []
+            ParentFont = False
+          end
+          object Label18: TLabel
+            Left = 9
+            Top = 243
+            Width = 182
+            Height = 15
+            Caption = #1052#1103#1078#1084#1091' '#1082#1072#1087#1080#1090#1072#1083#1076#1072#1085' '#1090#1091#1090#1091#1083#1084#1072#1083#1072#1088' :'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = []
+            ParentFont = False
+          end
+          object Label19: TLabel
+            Left = 8
+            Top = 272
+            Width = 202
+            Height = 15
+            Caption = #1052#1103#1078#1084#1091' '#1082#1072#1087#1080#1090#1072#1083#1099#1085' '#1094#1084#1091#1084#1080' '#1097#1077#1089#1072#1073#1099' :'
+          end
+          object Label21: TLabel
+            Left = 9
+            Top = 296
+            Width = 207
+            Height = 15
+            Caption = #1040#1082#1090#1080#1074' '#1075#1080#1081#1084#1103#1090#1083#1080' '#1084#1077#1090#1072#1083#1083#1072#1088#1099#1085' '#1078#1103#1084#1080': '
+          end
+          object Label24: TLabel
+            Left = 9
+            Top = 324
+            Width = 218
+            Height = 15
+            Caption = #1055#1072#1089#1089#1080#1074' '#1075#1080#1081#1084#1103#1090#1083#1080' '#1084#1077#1090#1072#1083#1083#1072#1088#1099#1085' '#1078#1103#1084#1080': '
+          end
+          object BitBtn3: TBitBtn
+            Left = 3
+            Top = 351
+            Width = 425
+            Height = 26
+            Caption = #1065#1077#1089#1072#1073#1083#1072
+            DoubleBuffered = True
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = []
+            Glyph.Data = {
+              42010000424D4201000000000000760000002800000011000000110000000100
+              040000000000CC00000000000000000000001000000000000000000000000000
+              8000008000000080800080000000800080008080000080808000C0C0C0000000
+              FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00888888888888
+              8888800000008888888888888888800000008888888888888888800000008800
+              0000000000088000000088888228448118888000000088188228448118888000
+              0000888882284481188880000000881882284481188880000000888882284481
+              1888800000008818888844811888800000008888888844811888800000008818
+              8888448888888000000088888888448888888000000088188888888888888000
+              0000888888888888888880000000888888888888888880000000888888888888
+              888880000000}
+            ParentDoubleBuffered = False
+            ParentFont = False
+            TabOrder = 0
+            OnClick = BitBtn3Click
+          end
+          object m_firstcap: TMemo
+            Left = 220
+            Top = 109
+            Width = 208
+            Height = 25
+            BorderStyle = bsNone
+            Color = clBtnFace
+            ReadOnly = True
+            TabOrder = 1
+            WantReturns = False
+            WordWrap = False
+          end
+          object m_seccap: TMemo
+            Left = 220
+            Top = 135
+            Width = 208
+            Height = 25
+            BorderStyle = bsNone
+            Color = clBtnFace
+            ReadOnly = True
+            TabOrder = 2
+            WantReturns = False
+            WordWrap = False
+          end
+          object m_actcap: TMemo
+            Left = 220
+            Top = 161
+            Width = 208
+            Height = 25
+            BorderStyle = bsNone
+            Color = clBtnFace
+            ReadOnly = True
+            TabOrder = 3
+            WantReturns = False
+            WordWrap = False
+          end
+          object m_cap: TMemo
+            Left = 220
+            Top = 213
+            Width = 208
+            Height = 25
+            BorderStyle = bsNone
+            Color = clBtnFace
+            ReadOnly = True
+            TabOrder = 4
+            WantReturns = False
+            WordWrap = False
+          end
+          object dp_capdate: TDateTimePicker
+            Left = 9
+            Top = 29
+            Width = 130
+            Height = 23
+            Date = 0.763499166700058000
+            Time = 0.763499166700058000
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = []
+            ParentFont = False
+            TabOrder = 5
+          end
+          object DBEdit1: TDBEdit
+            Left = 9
+            Top = 78
+            Width = 130
+            Height = 23
+            DataField = 'FORMULA'
+            DataSource = Capital
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = [fsBold]
+            ParentFont = False
+            TabOrder = 6
+          end
+          object m_adieh: TMemo
+            Left = 220
+            Top = 187
+            Width = 208
+            Height = 25
+            BorderStyle = bsNone
+            Color = clBtnFace
+            Lines.Strings = (
+              '')
+            TabOrder = 7
+          end
+          object m_capeh: TMemo
+            Left = 220
+            Top = 239
+            Width = 208
+            Height = 25
+            BorderStyle = bsNone
+            Color = clBtnFace
+            Lines.Strings = (
+              '')
+            TabOrder = 8
+          end
+          object m_capumh: TMemo
+            Left = 220
+            Top = 266
+            Width = 208
+            Height = 25
+            BorderStyle = bsNone
+            Color = clBtnFace
+            Lines.Strings = (
+              '')
+            TabOrder = 9
+          end
+          object m_activm: TMemo
+            Left = 220
+            Top = 293
+            Width = 208
+            Height = 25
+            BorderStyle = bsNone
+            Color = clBtnFace
+            Lines.Strings = (
+              '')
+            TabOrder = 10
+          end
+          object m_passivm: TMemo
+            Left = 220
+            Top = 320
+            Width = 208
+            Height = 25
+            BorderStyle = bsNone
+            Color = clBtnFace
+            Lines.Strings = (
+              '')
+            TabOrder = 11
+          end
+        end
+      end
+      object tbs_adieht: TTabSheet
+        ImageIndex = 4
+        ParentShowHint = False
+        ShowHint = False
+        TabVisible = False
+        OnShow = tbs_adiehtShow
+        object GroupBox9: TGroupBox
+          Left = 0
+          Top = 0
+          Width = 783
+          Height = 61
+          Align = alTop
+          Caption = #1040#1076#1080' '#1077#1097#1090#1080#1081#1081#1072#1090#1083#1072#1088
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -12
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = [fsBold]
+          ParentFont = False
+          TabOrder = 0
+          object Label20: TLabel
+            Left = 12
+            Top = 17
+            Width = 75
+            Height = 15
+            Caption = '           '#1041#1072#1083#1072#1085#1089
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = []
+            ParentFont = False
+          end
+          object ED_baleh: TEdit
+            Left = 9
+            Top = 34
+            Width = 130
+            Height = 23
+            TabOrder = 0
+            OnEnter = ED_balehEnter
+            OnKeyPress = ed_balKeyPress
+          end
+          object DBViewComboBox3: TDBViewComboBox
+            Left = 145
+            Top = 34
+            Width = 156
+            Height = 23
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = []
+            ParentFont = False
+            TabOrder = 1
+            Text = 'DBViewComboBox3 - AdiEhtiyyat { Bal_CN }'
+            OnChange = DBViewComboBox3Change
+            ListSource = AdiEhtiyyat
+            ListFields = 'Bal_CN'
+            FieldInterval = 5
+            DropDownOnEnter = False
+          end
+          object BitBtn10: TBitBtn
+            Left = 555
+            Top = 32
+            Width = 95
+            Height = 27
+            Caption = #1045#1083#1072#1074#1103
+            DoubleBuffered = True
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = []
+            Glyph.Data = {
+              BE060000424DBE06000000000000360400002800000024000000120000000100
+              0800000000008802000000000000000000000001000000000000000000000000
+              80000080000000808000800000008000800080800000C0C0C000C0DCC000F0CA
+              A600000000000000000000000000000000000000000000000000000000000000
+              0000000000000000000000000000000000000000000000000000000000000000
+              0000000000000000000000000000000000000000000000000000000000000000
+              0000000000000000000000000000000000000000000000000000000000000000
+              0000000000000000000000000000000000000000000000000000000000000000
+              0000000000000000000000000000000000000000000000000000000000000000
+              0000000000000000000000000000000000000000000000000000000000000000
+              0000000000000000000000000000000000000000000000000000000000000000
+              0000000000000000000000000000000000000000000000000000000000000000
+              0000000000000000000000000000000000000000000000000000000000000000
+              0000000000000000000000000000000000000000000000000000000000000000
+              0000000000000000000000000000000000000000000000000000000000000000
+              0000000000000000000000000000000000000000000000000000000000000000
+              0000000000000000000000000000000000000000000000000000000000000000
+              0000000000000000000000000000000000000000000000000000000000000000
+              0000000000000000000000000000000000000000000000000000000000000000
+              0000000000000000000000000000000000000000000000000000000000000000
+              0000000000000000000000000000000000000000000000000000000000000000
+              0000000000000000000000000000000000000000000000000000000000000000
+              0000000000000000000000000000000000000000000000000000000000000000
+              0000000000000000000000000000000000000000000000000000000000000000
+              0000000000000000000000000000000000000000000000000000000000000000
+              0000000000000000000000000000000000000000000000000000000000000000
+              0000000000000000000000000000000000000000000000000000000000000000
+              0000000000000000000000000000000000000000000000000000000000000000
+              0000000000000000000000000000000000000000000000000000000000000000
+              0000000000000000000000000000000000000000000000000000000000000000
+              0000000000000000000000000000000000000000000000000000000000000000
+              0000000000000000000000000000000000000000000000000000000000000000
+              000000000000000000000000000000000000F0FBFF00A4A0A000808080000000
+              FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00030303030303
+              0303030303030303030303030303030303030303030303030303030303030303
+              03030303030303030303030303030303030303030303FF030303030303030303
+              03030303030303040403030303030303030303030303030303F8F8FF03030303
+              03030303030303030303040202040303030303030303030303030303F80303F8
+              FF030303030303030303030303040202020204030303030303030303030303F8
+              03030303F8FF0303030303030303030304020202020202040303030303030303
+              0303F8030303030303F8FF030303030303030304020202FA0202020204030303
+              0303030303F8FF0303F8FF030303F8FF03030303030303020202FA03FA020202
+              040303030303030303F8FF03F803F8FF0303F8FF03030303030303FA02FA0303
+              03FA0202020403030303030303F8FFF8030303F8FF0303F8FF03030303030303
+              FA0303030303FA0202020403030303030303F80303030303F8FF0303F8FF0303
+              0303030303030303030303FA0202020403030303030303030303030303F8FF03
+              03F8FF03030303030303030303030303FA020202040303030303030303030303
+              0303F8FF0303F8FF03030303030303030303030303FA02020204030303030303
+              03030303030303F8FF0303F8FF03030303030303030303030303FA0202020403
+              030303030303030303030303F8FF0303F8FF03030303030303030303030303FA
+              0202040303030303030303030303030303F8FF03F8FF03030303030303030303
+              03030303FA0202030303030303030303030303030303F8FFF803030303030303
+              030303030303030303FA0303030303030303030303030303030303F803030303
+              0303030303030303030303030303030303030303030303030303030303030303
+              0303}
+            NumGlyphs = 2
+            ParentDoubleBuffered = False
+            ParentFont = False
+            TabOrder = 2
+            OnClick = BitBtn10Click
+          end
+          object BitBtn11: TBitBtn
+            Left = 655
+            Top = 32
+            Width = 104
+            Height = 27
+            Caption = #1051#1103#1101#1074' '#1077#1090#1084#1103#1082
+            DoubleBuffered = True
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = []
+            Glyph.Data = {
+              66010000424D6601000000000000760000002800000014000000140000000100
+              040000000000F000000000000000000000001000000010000000000000000000
+              BF0000BF000000BFBF00BF000000BF00BF00BFBF0000C0C0C000808080000000
+              FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00777888877777
+              8877777700007770888777778887777700007911088877910888777700007911
+              0088879100888777000079111008891110087777000079911108911111007777
+              0000779111101111110777770000777911111111077777770000777991111111
+              8777777700007777991111108877777700007777791111108887777700007777
+              7911111088877777000077777911111108887777000077779111991100888777
+              0000777911108991100888770000777911187799110088870000777111187779
+              1110888700007771110777779111087700007779997777777991777700007777
+              77777777779977770000}
+            ParentDoubleBuffered = False
+            ParentFont = False
+            TabOrder = 3
+            OnClick = BitBtn11Click
+          end
+        end
+        object DBGrid4: TDBGrid
+          Left = 0
+          Top = 61
+          Width = 783
+          Height = 411
+          Align = alClient
+          DataSource = Capital
+          DrawingStyle = gdsGradient
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -12
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = []
+          Options = [dgTitles, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit]
+          ParentFont = False
+          TabOrder = 1
+          TitleFont.Charset = DEFAULT_CHARSET
+          TitleFont.Color = clWindowText
+          TitleFont.Height = -11
+          TitleFont.Name = 'Azl Sans Serif'
+          TitleFont.Style = []
+          OnKeyDown = dbg_balaccKeyDown
+          OnTitleClick = dbg_balaccTitleClick
+          Columns = <
+            item
+              Expanded = False
+              FieldName = 'BAL'
+              Visible = True
+            end>
+        end
+        object ts_adi: TTabSet
+          Left = 0
+          Top = 472
+          Width = 783
+          Height = 22
+          Align = alBottom
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -12
+          Font.Name = 'MS Sans Serif'
+          Font.Style = []
+          ParentShowHint = False
+          ShowHint = False
+          Tabs.Strings = (
+            '  +  '
+            '  -  ')
+          TabIndex = 0
+          OnChange = ts_adiChange
+        end
+      end
+      object tbs_capeh: TTabSheet
+        ImageIndex = 5
+        ParentShowHint = False
+        ShowHint = False
+        TabVisible = False
+        OnShow = tbs_capehShow
+        object PageControl2: TPageControl
+          Left = 0
+          Top = 79
+          Width = 783
+          Height = 393
+          Align = alClient
+          TabOrder = 0
+        end
+        object GroupBox10: TGroupBox
+          Left = 0
+          Top = 0
+          Width = 783
+          Height = 79
+          Align = alTop
+          Caption = #1052#1103#1078#1084#1091' '#1082#1072#1087#1080#1090#1072#1083#1076#1072#1085' '#1090#1091#1090#1091#1083#1084#1072#1083#1072#1088
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -12
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = [fsBold]
+          ParentFont = False
+          TabOrder = 1
+          object Label17: TLabel
+            Left = 19
+            Top = 18
+            Width = 75
+            Height = 15
+            Caption = '           '#1041#1072#1083#1072#1085#1089
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = []
+            ParentFont = False
+          end
+          object ed_capeh: TEdit
+            Left = 16
+            Top = 37
+            Width = 130
+            Height = 23
+            TabOrder = 0
+            OnEnter = ed_capehEnter
+            OnKeyPress = ed_capehKeyPress
+          end
+          object DBViewComboBox4: TDBViewComboBox
+            Left = 186
+            Top = 37
+            Width = 156
+            Height = 23
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = []
+            ParentFont = False
+            TabOrder = 1
+            Text = 'DBViewComboBox4 - AdiEhtiyyat { Bal_CN }'
+            OnChange = DBViewComboBox4Change
+            ListSource = AdiEhtiyyat
+            ListFields = 'Bal_CN'
+            FieldInterval = 5
+            DropDownOnEnter = False
+          end
+          object BitBtn12: TBitBtn
+            Left = 548
+            Top = 26
+            Width = 98
+            Height = 29
+            Caption = #1071#1083#1072#1074#1103
+            DoubleBuffered = True
+            Glyph.Data = {
+              BE060000424DBE06000000000000360400002800000024000000120000000100
+              0800000000008802000000000000000000000001000000000000000000000000
+              80000080000000808000800000008000800080800000C0C0C000C0DCC000F0CA
+              A600000000000000000000000000000000000000000000000000000000000000
+              0000000000000000000000000000000000000000000000000000000000000000
+              0000000000000000000000000000000000000000000000000000000000000000
+              0000000000000000000000000000000000000000000000000000000000000000
+              0000000000000000000000000000000000000000000000000000000000000000
+              0000000000000000000000000000000000000000000000000000000000000000
+              0000000000000000000000000000000000000000000000000000000000000000
+              0000000000000000000000000000000000000000000000000000000000000000
+              0000000000000000000000000000000000000000000000000000000000000000
+              0000000000000000000000000000000000000000000000000000000000000000
+              0000000000000000000000000000000000000000000000000000000000000000
+              0000000000000000000000000000000000000000000000000000000000000000
+              0000000000000000000000000000000000000000000000000000000000000000
+              0000000000000000000000000000000000000000000000000000000000000000
+              0000000000000000000000000000000000000000000000000000000000000000
+              0000000000000000000000000000000000000000000000000000000000000000
+              0000000000000000000000000000000000000000000000000000000000000000
+              0000000000000000000000000000000000000000000000000000000000000000
+              0000000000000000000000000000000000000000000000000000000000000000
+              0000000000000000000000000000000000000000000000000000000000000000
+              0000000000000000000000000000000000000000000000000000000000000000
+              0000000000000000000000000000000000000000000000000000000000000000
+              0000000000000000000000000000000000000000000000000000000000000000
+              0000000000000000000000000000000000000000000000000000000000000000
+              0000000000000000000000000000000000000000000000000000000000000000
+              0000000000000000000000000000000000000000000000000000000000000000
+              0000000000000000000000000000000000000000000000000000000000000000
+              0000000000000000000000000000000000000000000000000000000000000000
+              0000000000000000000000000000000000000000000000000000000000000000
+              000000000000000000000000000000000000F0FBFF00A4A0A000808080000000
+              FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00030303030303
+              0303030303030303030303030303030303030303030303030303030303030303
+              03030303030303030303030303030303030303030303FF030303030303030303
+              03030303030303040403030303030303030303030303030303F8F8FF03030303
+              03030303030303030303040202040303030303030303030303030303F80303F8
+              FF030303030303030303030303040202020204030303030303030303030303F8
+              03030303F8FF0303030303030303030304020202020202040303030303030303
+              0303F8030303030303F8FF030303030303030304020202FA0202020204030303
+              0303030303F8FF0303F8FF030303F8FF03030303030303020202FA03FA020202
+              040303030303030303F8FF03F803F8FF0303F8FF03030303030303FA02FA0303
+              03FA0202020403030303030303F8FFF8030303F8FF0303F8FF03030303030303
+              FA0303030303FA0202020403030303030303F80303030303F8FF0303F8FF0303
+              0303030303030303030303FA0202020403030303030303030303030303F8FF03
+              03F8FF03030303030303030303030303FA020202040303030303030303030303
+              0303F8FF0303F8FF03030303030303030303030303FA02020204030303030303
+              03030303030303F8FF0303F8FF03030303030303030303030303FA0202020403
+              030303030303030303030303F8FF0303F8FF03030303030303030303030303FA
+              0202040303030303030303030303030303F8FF03F8FF03030303030303030303
+              03030303FA0202030303030303030303030303030303F8FFF803030303030303
+              030303030303030303FA0303030303030303030303030303030303F803030303
+              0303030303030303030303030303030303030303030303030303030303030303
+              0303}
+            NumGlyphs = 2
+            ParentDoubleBuffered = False
+            TabOrder = 2
+            OnClick = BitBtn12Click
+          end
+          object BitBtn13: TBitBtn
+            Left = 668
+            Top = 26
+            Width = 101
+            Height = 29
+            Caption = #1051#1103#1101#1074' '#1077#1090#1084#1103#1082
+            DoubleBuffered = True
+            Glyph.Data = {
+              66010000424D6601000000000000760000002800000014000000140000000100
+              040000000000F000000000000000000000001000000010000000000000000000
+              BF0000BF000000BFBF00BF000000BF00BF00BFBF0000C0C0C000808080000000
+              FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00777888877777
+              8877777700007770888777778887777700007911088877910888777700007911
+              0088879100888777000079111008891110087777000079911108911111007777
+              0000779111101111110777770000777911111111077777770000777991111111
+              8777777700007777991111108877777700007777791111108887777700007777
+              7911111088877777000077777911111108887777000077779111991100888777
+              0000777911108991100888770000777911187799110088870000777111187779
+              1110888700007771110777779111087700007779997777777991777700007777
+              77777777779977770000}
+            ParentDoubleBuffered = False
+            TabOrder = 3
+            OnClick = BitBtn13Click
+          end
+        end
+        object DBGrid5: TDBGrid
+          Left = 0
+          Top = 79
+          Width = 783
+          Height = 393
+          Align = alClient
+          DataSource = Capital
+          DrawingStyle = gdsGradient
+          Options = [dgTitles, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit]
+          TabOrder = 2
+          TitleFont.Charset = DEFAULT_CHARSET
+          TitleFont.Color = clWindowText
+          TitleFont.Height = -11
+          TitleFont.Name = 'Azl Sans Serif'
+          TitleFont.Style = []
+          OnKeyDown = dbg_balaccKeyDown
+          OnTitleClick = dbg_balaccTitleClick
+          Columns = <
+            item
+              Expanded = False
+              FieldName = 'BAL'
+              Visible = True
+            end>
+        end
+        object ts_capeh: TTabSet
+          Left = 0
+          Top = 472
+          Width = 783
+          Height = 22
+          Align = alBottom
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -12
+          Font.Name = 'MS Sans Serif'
+          Font.Style = []
+          Tabs.Strings = (
+            ' + '
+            '  - ')
+          TabIndex = 0
+          OnChange = ts_capehChange
+        end
+      end
+      object tbs_qiymetal: TTabSheet
+        Caption = 'tbs_qiymetal'
+        ImageIndex = 6
+        TabVisible = False
+        object GroupBox11: TGroupBox
+          Left = 0
+          Top = 0
+          Width = 783
+          Height = 494
+          Align = alClient
+          Caption = #1043#1080#1081#1084#1103#1090#1083#1080' '#1084#1077#1090#1072#1083#1083#1072#1088
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -12
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = [fsBold]
+          ParentFont = False
+          TabOrder = 0
+          object PageControl3: TPageControl
+            Left = 2
+            Top = 17
+            Width = 779
+            Height = 475
+            ActivePage = TabSheet4
+            Align = alClient
+            TabOrder = 0
+            object TabSheet3: TTabSheet
+              Caption = #1040#1082#1090#1080#1074
+              object GroupBox12: TGroupBox
+                Left = 0
+                Top = 0
+                Width = 771
+                Height = 62
+                Align = alTop
+                Caption = #1040#1082#1090#1080#1074#1083#1103#1088
+                TabOrder = 0
+                object Label22: TLabel
+                  Left = 16
+                  Top = 18
+                  Width = 123
+                  Height = 15
+                  Caption = '             '#1041#1072#1083#1072#1085#1089'              '
+                  Font.Charset = DEFAULT_CHARSET
+                  Font.Color = clWindowText
+                  Font.Height = -12
+                  Font.Name = 'Azl Sans Serif'
+                  Font.Style = []
+                  ParentFont = False
+                end
+                object Ametal: TEdit
+                  Left = 10
+                  Top = 34
+                  Width = 131
+                  Height = 23
+                  TabOrder = 0
+                  OnEnter = AmetalEnter
+                  OnKeyPress = AmetalKeyPress
+                end
+                object DBViewComboBox5: TDBViewComboBox
+                  Left = 145
+                  Top = 34
+                  Width = 157
+                  Height = 23
+                  TabOrder = 1
+                  Text = 'DBViewComboBox5 - DataSource1 { Bal_cn }'
+                  OnChange = DBViewComboBox5Change
+                  ListSource = DataSource1
+                  ListFields = 'Bal_cn'
+                  FieldInterval = 5
+                  DropDownOnEnter = False
+                end
+                object BitBtn14: TBitBtn
+                  Left = 542
+                  Top = 34
+                  Width = 98
+                  Height = 23
+                  Caption = #1071#1083#1072#1074#1103
+                  DoubleBuffered = True
+                  Glyph.Data = {
+                    BE060000424DBE06000000000000360400002800000024000000120000000100
+                    0800000000008802000000000000000000000001000000000000000000000000
+                    80000080000000808000800000008000800080800000C0C0C000C0DCC000F0CA
+                    A600000000000000000000000000000000000000000000000000000000000000
+                    0000000000000000000000000000000000000000000000000000000000000000
+                    0000000000000000000000000000000000000000000000000000000000000000
+                    0000000000000000000000000000000000000000000000000000000000000000
+                    0000000000000000000000000000000000000000000000000000000000000000
+                    0000000000000000000000000000000000000000000000000000000000000000
+                    0000000000000000000000000000000000000000000000000000000000000000
+                    0000000000000000000000000000000000000000000000000000000000000000
+                    0000000000000000000000000000000000000000000000000000000000000000
+                    0000000000000000000000000000000000000000000000000000000000000000
+                    0000000000000000000000000000000000000000000000000000000000000000
+                    0000000000000000000000000000000000000000000000000000000000000000
+                    0000000000000000000000000000000000000000000000000000000000000000
+                    0000000000000000000000000000000000000000000000000000000000000000
+                    0000000000000000000000000000000000000000000000000000000000000000
+                    0000000000000000000000000000000000000000000000000000000000000000
+                    0000000000000000000000000000000000000000000000000000000000000000
+                    0000000000000000000000000000000000000000000000000000000000000000
+                    0000000000000000000000000000000000000000000000000000000000000000
+                    0000000000000000000000000000000000000000000000000000000000000000
+                    0000000000000000000000000000000000000000000000000000000000000000
+                    0000000000000000000000000000000000000000000000000000000000000000
+                    0000000000000000000000000000000000000000000000000000000000000000
+                    0000000000000000000000000000000000000000000000000000000000000000
+                    0000000000000000000000000000000000000000000000000000000000000000
+                    0000000000000000000000000000000000000000000000000000000000000000
+                    0000000000000000000000000000000000000000000000000000000000000000
+                    0000000000000000000000000000000000000000000000000000000000000000
+                    0000000000000000000000000000000000000000000000000000000000000000
+                    000000000000000000000000000000000000F0FBFF00A4A0A000808080000000
+                    FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00030303030303
+                    0303030303030303030303030303030303030303030303030303030303030303
+                    03030303030303030303030303030303030303030303FF030303030303030303
+                    03030303030303040403030303030303030303030303030303F8F8FF03030303
+                    03030303030303030303040202040303030303030303030303030303F80303F8
+                    FF030303030303030303030303040202020204030303030303030303030303F8
+                    03030303F8FF0303030303030303030304020202020202040303030303030303
+                    0303F8030303030303F8FF030303030303030304020202FA0202020204030303
+                    0303030303F8FF0303F8FF030303F8FF03030303030303020202FA03FA020202
+                    040303030303030303F8FF03F803F8FF0303F8FF03030303030303FA02FA0303
+                    03FA0202020403030303030303F8FFF8030303F8FF0303F8FF03030303030303
+                    FA0303030303FA0202020403030303030303F80303030303F8FF0303F8FF0303
+                    0303030303030303030303FA0202020403030303030303030303030303F8FF03
+                    03F8FF03030303030303030303030303FA020202040303030303030303030303
+                    0303F8FF0303F8FF03030303030303030303030303FA02020204030303030303
+                    03030303030303F8FF0303F8FF03030303030303030303030303FA0202020403
+                    030303030303030303030303F8FF0303F8FF03030303030303030303030303FA
+                    0202040303030303030303030303030303F8FF03F8FF03030303030303030303
+                    03030303FA0202030303030303030303030303030303F8FFF803030303030303
+                    030303030303030303FA0303030303030303030303030303030303F803030303
+                    0303030303030303030303030303030303030303030303030303030303030303
+                    0303}
+                  NumGlyphs = 2
+                  ParentDoubleBuffered = False
+                  TabOrder = 2
+                  OnClick = BitBtn14Click
+                end
+                object BitBtn15: TBitBtn
+                  Left = 644
+                  Top = 34
+                  Width = 98
+                  Height = 23
+                  Caption = #1051#1103#1101#1074' '#1077#1090#1084#1103#1082
+                  DoubleBuffered = True
+                  Glyph.Data = {
+                    36050000424D3605000000000000360400002800000010000000100000000100
+                    08000000000000010000CE0E0000D80E00000001000000000000000000008080
+                    8000000080000080800000800000808000008000000080008000408080004040
+                    0000FF80000080400000FF00400000408000FFFFFF00C0C0C0000000FF0000FF
+                    FF0000FF0000FFFF0000FF000000FF00FF0080FFFF0080FF0000FFFF8000FF80
+                    80008000FF004080FF00C0DCC000F0CAA6000008000000000800000808000804
+                    00000800080008080800130E0800040314001008100010101000151414001311
+                    1F002525210018133F004E0C11004D1D0F00681C1000561D21006B1C21004A3B
+                    36005655560077141800741324008F0E2200940F30008818230084292300893C
+                    400011097E004C4B75005A6B6300666666005A73630065706D00736D6D007373
+                    73007878730073737B0077777B00945D670096706D007B7B7B00837B8100947B
+                    73009C7B730084847B008484840084848C0090878700948C8E00948C94008C94
+                    9400949494009C9494009C9C940094949C009C949C009C9C9C00A80F2300AD18
+                    2900A9083100A5143500AF102B00AD0C3900BC072B00C10D3600AD1E2900A82C
+                    2700AD183900A9293100BE1B2900BD183100C01F3100B2154200A9213900B121
+                    3D00B5214200AB2C3900A9294200A92F4600BB1B4000B5294200BD293900B929
+                    4600C7184200CC253E00C1254A00CF254E00AC3F3200AB3F4200AE354A00AD4A
+                    4200C1383D00C6314A00CE314A00BD394A00AD3D4F00BD355200AD475000BD42
+                    5200C8395100C1425A00CC3F5E00B3524200B5525300B54E5E00B85C5B00C654
+                    5000D95F5100F6624600B2606A00C15A6B00CC586500CC5D6F00B7848300DD7C
+                    6E00E89889000C08B5000D0DE1001010EF000000F7000808F7000D0DFC001B1B
+                    ED003A3AE2002222FB003939FF006E6ECD005656FF007777FF009494A5009C9C
+                    A500A59CA500A5A5A500ADA5A5009494AD00A5A5AD00ADA5AD00A5A7B500A0A0
+                    C6009B9BDB008C8CFF009494FF009C9CFF00A5A5FF00B5A5A500BDA5A500B5AD
+                    A500BDADA500ADADAD00B5ADAD00B5B5AD00B1ADB500C6A7AA00C9B1AE00D6B1
+                    A900EDB0A900FFAFA200FFB5AD00FFBDAD00B5B5B500BDB5B500BDBDB500ADAD
+                    BD00B9B5BD00B3B3DB00B1B1FF00C1B9B900BDBDC600CBBBBA00E5BBB700C6C6
+                    C600DABDC600C1C1D600BDBDFF00D6C6C600DEC6C600CEC6CE00D6C6CE00DEC6
+                    CE00CECECE00D6CECE00D6D6CE00D2CED600D6D6D600DECECE00DECED600DED6
+                    D600D6D6DE00DED6DE00F4C8BE00F0CFCB00FFD6C600E7CED600E7D6D600F1D3
+                    D600FFD6CE00DEDEDE00E7DED600E7E7D600EBD6DE00E7DEDE00FFD6D600FFDE
+                    D600D2D2EF00C6C6FF00CECEFF00D6D6FF00DEDEE700DEDEFF00E7DEE700E7E7
+                    E700E7E7FF00EFDEDE00EFE7E700EFE7EF00F7E7E700FFDEDE00FFE7DE00FFE7
+                    E700EFEFEF00EFEFFF00F7EFEF00F7EFF700FFEFE700FFEFEF000F0F01010F0F
+                    0F0F0F0F0F0F0F0F0F0F0F100202010F0F0F0F0F10010F0F0F0F0F1002020201
+                    0F0F0F100202010F0F0F0F1002020202010F1002020202010F0F0F0F10020202
+                    02010202020202010F0F0F0F0F100202020202020202010F0F0F0F0F0F0F1002
+                    0202020202010F0F0F0F0F0F0F0F0F0202020202010F0F0F0F0F0F0F0F0F0F10
+                    02020202010F0F0F0F0F0F0F0F0F100202020202010F0F0F0F0F0F0F0F100202
+                    0201020202010F0F0F0F0F0F10020202010F10020202010F0F0F0F0F10020201
+                    0F0F0F10020202010F0F0F0F0F10020F0F0F0F0F100202020F0F0F0F0F0F0F0F
+                    0F0F0F0F0F1002100F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F}
+                  ParentDoubleBuffered = False
+                  TabOrder = 3
+                  OnClick = BitBtn15Click
+                end
+              end
+              object Panel5: TPanel
+                Left = 0
+                Top = 62
+                Width = 771
+                Height = 383
+                Align = alClient
+                Caption = 'Panel5'
+                TabOrder = 1
+                object DBGrid6: TDBGrid
+                  Left = 1
+                  Top = 1
+                  Width = 769
+                  Height = 381
+                  Align = alClient
+                  DataSource = DataSource2
+                  DrawingStyle = gdsGradient
+                  TabOrder = 0
+                  TitleFont.Charset = DEFAULT_CHARSET
+                  TitleFont.Color = clWindowText
+                  TitleFont.Height = -12
+                  TitleFont.Name = 'Azl Sans Serif'
+                  TitleFont.Style = [fsBold]
+                  OnKeyDown = DBGrid6KeyDown
+                  Columns = <
+                    item
+                      Expanded = False
+                      FieldName = 'BAL'
+                      Title.Caption = #1041#1072#1083#1072#1085#1089
+                      Title.Font.Charset = DEFAULT_CHARSET
+                      Title.Font.Color = clWindowText
+                      Title.Font.Height = -12
+                      Title.Font.Name = 'Tahoma'
+                      Title.Font.Style = [fsBold]
+                      Visible = True
+                    end>
+                end
+              end
+            end
+            object TabSheet4: TTabSheet
+              Caption = #1055#1072#1089#1089#1080#1074
+              ImageIndex = 1
+              object GroupBox13: TGroupBox
+                Left = 0
+                Top = 0
+                Width = 771
+                Height = 61
+                Align = alTop
+                Caption = #1055#1072#1089#1089#1080#1074#1083#1103#1088
+                TabOrder = 0
+                object Label23: TLabel
+                  Left = 15
+                  Top = 19
+                  Width = 123
+                  Height = 15
+                  Caption = '             '#1041#1072#1083#1072#1085#1089'              '
+                  Font.Charset = DEFAULT_CHARSET
+                  Font.Color = clWindowText
+                  Font.Height = -12
+                  Font.Name = 'Azl Sans Serif'
+                  Font.Style = []
+                  ParentFont = False
+                end
+                object PMetal: TEdit
+                  Left = 10
+                  Top = 35
+                  Width = 131
+                  Height = 23
+                  TabOrder = 0
+                  OnEnter = PMetalEnter
+                  OnKeyPress = PMetalKeyPress
+                end
+                object DBViewComboBox6: TDBViewComboBox
+                  Left = 145
+                  Top = 35
+                  Width = 157
+                  Height = 23
+                  TabOrder = 1
+                  Text = 'DBViewComboBox6 - DataSource1 { Bal_cn }'
+                  OnChange = DBViewComboBox6Change
+                  ListSource = DataSource1
+                  ListFields = 'Bal_cn'
+                  FieldInterval = 5
+                  DropDownOnEnter = False
+                end
+                object BitBtn16: TBitBtn
+                  Left = 542
+                  Top = 34
+                  Width = 98
+                  Height = 23
+                  Caption = #1071#1083#1072#1074#1103
+                  DoubleBuffered = True
+                  Glyph.Data = {
+                    BE060000424DBE06000000000000360400002800000024000000120000000100
+                    0800000000008802000000000000000000000001000000000000000000000000
+                    80000080000000808000800000008000800080800000C0C0C000C0DCC000F0CA
+                    A600000000000000000000000000000000000000000000000000000000000000
+                    0000000000000000000000000000000000000000000000000000000000000000
+                    0000000000000000000000000000000000000000000000000000000000000000
+                    0000000000000000000000000000000000000000000000000000000000000000
+                    0000000000000000000000000000000000000000000000000000000000000000
+                    0000000000000000000000000000000000000000000000000000000000000000
+                    0000000000000000000000000000000000000000000000000000000000000000
+                    0000000000000000000000000000000000000000000000000000000000000000
+                    0000000000000000000000000000000000000000000000000000000000000000
+                    0000000000000000000000000000000000000000000000000000000000000000
+                    0000000000000000000000000000000000000000000000000000000000000000
+                    0000000000000000000000000000000000000000000000000000000000000000
+                    0000000000000000000000000000000000000000000000000000000000000000
+                    0000000000000000000000000000000000000000000000000000000000000000
+                    0000000000000000000000000000000000000000000000000000000000000000
+                    0000000000000000000000000000000000000000000000000000000000000000
+                    0000000000000000000000000000000000000000000000000000000000000000
+                    0000000000000000000000000000000000000000000000000000000000000000
+                    0000000000000000000000000000000000000000000000000000000000000000
+                    0000000000000000000000000000000000000000000000000000000000000000
+                    0000000000000000000000000000000000000000000000000000000000000000
+                    0000000000000000000000000000000000000000000000000000000000000000
+                    0000000000000000000000000000000000000000000000000000000000000000
+                    0000000000000000000000000000000000000000000000000000000000000000
+                    0000000000000000000000000000000000000000000000000000000000000000
+                    0000000000000000000000000000000000000000000000000000000000000000
+                    0000000000000000000000000000000000000000000000000000000000000000
+                    0000000000000000000000000000000000000000000000000000000000000000
+                    0000000000000000000000000000000000000000000000000000000000000000
+                    000000000000000000000000000000000000F0FBFF00A4A0A000808080000000
+                    FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00030303030303
+                    0303030303030303030303030303030303030303030303030303030303030303
+                    03030303030303030303030303030303030303030303FF030303030303030303
+                    03030303030303040403030303030303030303030303030303F8F8FF03030303
+                    03030303030303030303040202040303030303030303030303030303F80303F8
+                    FF030303030303030303030303040202020204030303030303030303030303F8
+                    03030303F8FF0303030303030303030304020202020202040303030303030303
+                    0303F8030303030303F8FF030303030303030304020202FA0202020204030303
+                    0303030303F8FF0303F8FF030303F8FF03030303030303020202FA03FA020202
+                    040303030303030303F8FF03F803F8FF0303F8FF03030303030303FA02FA0303
+                    03FA0202020403030303030303F8FFF8030303F8FF0303F8FF03030303030303
+                    FA0303030303FA0202020403030303030303F80303030303F8FF0303F8FF0303
+                    0303030303030303030303FA0202020403030303030303030303030303F8FF03
+                    03F8FF03030303030303030303030303FA020202040303030303030303030303
+                    0303F8FF0303F8FF03030303030303030303030303FA02020204030303030303
+                    03030303030303F8FF0303F8FF03030303030303030303030303FA0202020403
+                    030303030303030303030303F8FF0303F8FF03030303030303030303030303FA
+                    0202040303030303030303030303030303F8FF03F8FF03030303030303030303
+                    03030303FA0202030303030303030303030303030303F8FFF803030303030303
+                    030303030303030303FA0303030303030303030303030303030303F803030303
+                    0303030303030303030303030303030303030303030303030303030303030303
+                    0303}
+                  NumGlyphs = 2
+                  ParentDoubleBuffered = False
+                  TabOrder = 2
+                  OnClick = BitBtn16Click
+                end
+                object BitBtn17: TBitBtn
+                  Left = 644
+                  Top = 34
+                  Width = 98
+                  Height = 23
+                  Caption = #1051#1103#1101#1074' '#1077#1090#1084#1103#1082
+                  DoubleBuffered = True
+                  Glyph.Data = {
+                    36050000424D3605000000000000360400002800000010000000100000000100
+                    08000000000000010000CE0E0000D80E00000001000000000000000000008080
+                    8000000080000080800000800000808000008000000080008000408080004040
+                    0000FF80000080400000FF00400000408000FFFFFF00C0C0C0000000FF0000FF
+                    FF0000FF0000FFFF0000FF000000FF00FF0080FFFF0080FF0000FFFF8000FF80
+                    80008000FF004080FF00C0DCC000F0CAA6000008000000000800000808000804
+                    00000800080008080800130E0800040314001008100010101000151414001311
+                    1F002525210018133F004E0C11004D1D0F00681C1000561D21006B1C21004A3B
+                    36005655560077141800741324008F0E2200940F30008818230084292300893C
+                    400011097E004C4B75005A6B6300666666005A73630065706D00736D6D007373
+                    73007878730073737B0077777B00945D670096706D007B7B7B00837B8100947B
+                    73009C7B730084847B008484840084848C0090878700948C8E00948C94008C94
+                    9400949494009C9494009C9C940094949C009C949C009C9C9C00A80F2300AD18
+                    2900A9083100A5143500AF102B00AD0C3900BC072B00C10D3600AD1E2900A82C
+                    2700AD183900A9293100BE1B2900BD183100C01F3100B2154200A9213900B121
+                    3D00B5214200AB2C3900A9294200A92F4600BB1B4000B5294200BD293900B929
+                    4600C7184200CC253E00C1254A00CF254E00AC3F3200AB3F4200AE354A00AD4A
+                    4200C1383D00C6314A00CE314A00BD394A00AD3D4F00BD355200AD475000BD42
+                    5200C8395100C1425A00CC3F5E00B3524200B5525300B54E5E00B85C5B00C654
+                    5000D95F5100F6624600B2606A00C15A6B00CC586500CC5D6F00B7848300DD7C
+                    6E00E89889000C08B5000D0DE1001010EF000000F7000808F7000D0DFC001B1B
+                    ED003A3AE2002222FB003939FF006E6ECD005656FF007777FF009494A5009C9C
+                    A500A59CA500A5A5A500ADA5A5009494AD00A5A5AD00ADA5AD00A5A7B500A0A0
+                    C6009B9BDB008C8CFF009494FF009C9CFF00A5A5FF00B5A5A500BDA5A500B5AD
+                    A500BDADA500ADADAD00B5ADAD00B5B5AD00B1ADB500C6A7AA00C9B1AE00D6B1
+                    A900EDB0A900FFAFA200FFB5AD00FFBDAD00B5B5B500BDB5B500BDBDB500ADAD
+                    BD00B9B5BD00B3B3DB00B1B1FF00C1B9B900BDBDC600CBBBBA00E5BBB700C6C6
+                    C600DABDC600C1C1D600BDBDFF00D6C6C600DEC6C600CEC6CE00D6C6CE00DEC6
+                    CE00CECECE00D6CECE00D6D6CE00D2CED600D6D6D600DECECE00DECED600DED6
+                    D600D6D6DE00DED6DE00F4C8BE00F0CFCB00FFD6C600E7CED600E7D6D600F1D3
+                    D600FFD6CE00DEDEDE00E7DED600E7E7D600EBD6DE00E7DEDE00FFD6D600FFDE
+                    D600D2D2EF00C6C6FF00CECEFF00D6D6FF00DEDEE700DEDEFF00E7DEE700E7E7
+                    E700E7E7FF00EFDEDE00EFE7E700EFE7EF00F7E7E700FFDEDE00FFE7DE00FFE7
+                    E700EFEFEF00EFEFFF00F7EFEF00F7EFF700FFEFE700FFEFEF000F0F01010F0F
+                    0F0F0F0F0F0F0F0F0F0F0F100202010F0F0F0F0F10010F0F0F0F0F1002020201
+                    0F0F0F100202010F0F0F0F1002020202010F1002020202010F0F0F0F10020202
+                    02010202020202010F0F0F0F0F100202020202020202010F0F0F0F0F0F0F1002
+                    0202020202010F0F0F0F0F0F0F0F0F0202020202010F0F0F0F0F0F0F0F0F0F10
+                    02020202010F0F0F0F0F0F0F0F0F100202020202010F0F0F0F0F0F0F0F100202
+                    0201020202010F0F0F0F0F0F10020202010F10020202010F0F0F0F0F10020201
+                    0F0F0F10020202010F0F0F0F0F10020F0F0F0F0F100202020F0F0F0F0F0F0F0F
+                    0F0F0F0F0F1002100F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F}
+                  ParentDoubleBuffered = False
+                  TabOrder = 3
+                  OnClick = BitBtn17Click
+                end
+              end
+              object Panel7: TPanel
+                Left = 0
+                Top = 61
+                Width = 771
+                Height = 384
+                Align = alClient
+                Caption = 'Panel7'
+                TabOrder = 1
+                object DBGrid7: TDBGrid
+                  Left = 1
+                  Top = 1
+                  Width = 769
+                  Height = 382
+                  Align = alClient
+                  DataSource = DataSource3
+                  DrawingStyle = gdsGradient
+                  TabOrder = 0
+                  TitleFont.Charset = DEFAULT_CHARSET
+                  TitleFont.Color = clWindowText
+                  TitleFont.Height = -12
+                  TitleFont.Name = 'Azl Sans Serif'
+                  TitleFont.Style = [fsBold]
+                  Columns = <
+                    item
+                      Expanded = False
+                      FieldName = 'BAL'
+                      Title.Caption = #1041#1072#1083#1072#1085#1089
+                      Visible = True
+                    end>
+                end
+              end
+            end
+          end
+        end
+      end
+    end
+  end
+  object Capital: TDataSource
+    DataSet = ds_capital
+    Left = 511
+    Top = 11
+  end
+  object ds_capital: TOracleDataSet
+    SQL.Strings = (
+      
+        'SELECT cap.rowid,cap.id, cap.type, cap.bal, cap.acc,ac.acc_no, c' +
+        'ap.sum, cap.percent, cap.formula, cap.op_type,cap.bal_type'
+      '  FROM capital cap,account ac'
+      '  where cap.acc=ac.id (+)'
+      ' order by id')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000A000000040000004900440001000000000008000000540059005000
+      450001000000000006000000420041004C000100000000000600000041004300
+      43000100000000000C0000004100430043005F004E004F000100000000000600
+      0000530055004D000100000000000E000000500045005200430045004E005400
+      0100000000000E00000046004F0052004D0055004C0041000100000000000E00
+      00004F0050005F00540059005000450001000000000010000000420041004C00
+      5F005400590050004500010000000000}
+    QueryAllRecords = False
+    Session = sboapiDataModule.SBSession
+    Filter = '(TYPE='#39'I'#39') and (OP_TYPE=1)'
+    Filtered = True
+    Left = 542
+    Top = 11
+    object ds_capitalID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object ds_capitalTYPE: TWideStringField
+      FieldName = 'TYPE'
+      Required = True
+      Size = 5
+    end
+    object ds_capitalBAL: TFloatField
+      DisplayLabel = #1041#1072#1083#1072#1085#1089
+      FieldName = 'BAL'
+    end
+    object ds_capitalACC: TFloatField
+      DisplayLabel = #1065#1077#1089#1072#1073
+      FieldName = 'ACC'
+    end
+    object ds_capitalACC_NO: TWideStringField
+      DisplayLabel = #1065#1077#1089#1072#1073
+      FieldName = 'ACC_NO'
+      Size = 28
+    end
+    object ds_capitalSUM: TFloatField
+      FieldName = 'SUM'
+    end
+    object ds_capitalPERCENT: TFloatField
+      DisplayLabel = #1060#1072#1080#1079
+      FieldName = 'PERCENT'
+    end
+    object ds_capitalFORMULA: TWideStringField
+      FieldName = 'FORMULA'
+      Size = 255
+    end
+    object ds_capitalOP_TYPE: TIntegerField
+      FieldName = 'OP_TYPE'
+    end
+    object ds_capitalBAL_TYPE: TIntegerField
+      FieldName = 'BAL_TYPE'
+    end
+  end
+  object ds_account: TOracleDataSet
+    SQL.Strings = (
+      'select * from account'
+      'order by acc_no')
+    Optimize = False
+    QueryAllRecords = False
+    Session = sboapiDataModule.SBSession
+    Left = 481
+    Top = 11
+    object ds_accountID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object ds_accountKLI_ID: TFloatField
+      FieldName = 'KLI_ID'
+      Required = True
+    end
+    object ds_accountOP_ID: TFloatField
+      FieldName = 'OP_ID'
+    end
+    object ds_accountACC_NO: TWideStringField
+      FieldName = 'ACC_NO'
+      Required = True
+      Size = 28
+    end
+    object ds_accountVAL_ACC: TIntegerField
+      FieldName = 'VAL_ACC'
+      Required = True
+    end
+    object ds_accountNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 90
+    end
+    object ds_accountOPEN_DAT: TDateTimeField
+      FieldName = 'OPEN_DAT'
+      Required = True
+    end
+    object ds_accountCLOSE_DAT: TDateTimeField
+      FieldName = 'CLOSE_DAT'
+    end
+    object ds_accountBAL_CN1: TFloatField
+      FieldName = 'BAL_CN1'
+      Required = True
+    end
+    object ds_accountBAL_CN2: TFloatField
+      FieldName = 'BAL_CN2'
+    end
+    object ds_accountBAL_CN3: TFloatField
+      FieldName = 'BAL_CN3'
+    end
+    object ds_accountBAL_CN4: TFloatField
+      FieldName = 'BAL_CN4'
+    end
+    object ds_accountFILIAL: TIntegerField
+      FieldName = 'FILIAL'
+    end
+  end
+  object Account: TDataSource
+    DataSet = ds_account
+    Left = 451
+    Top = 12
+  end
+  object PK_CAPITAL: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'SB_CAPITAL'
+    Left = 573
+    Top = 12
+  end
+  object ds_account_out: TOracleDataSet
+    SQL.Strings = (
+      'SELECT *  FROM CAPITAL_ACC_OUT'
+      'order by acc_no')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 404
+    Top = 12
+    object ds_account_outID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object ds_account_outKLI_ID: TFloatField
+      FieldName = 'KLI_ID'
+      Required = True
+    end
+    object ds_account_outOP_ID: TFloatField
+      FieldName = 'OP_ID'
+    end
+    object ds_account_outACC_NO: TWideStringField
+      FieldName = 'ACC_NO'
+      Required = True
+      Size = 28
+    end
+    object ds_account_outVAL_ACC: TIntegerField
+      FieldName = 'VAL_ACC'
+      Required = True
+    end
+    object ds_account_outNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 90
+    end
+    object ds_account_outOPEN_DAT: TDateTimeField
+      FieldName = 'OPEN_DAT'
+      Required = True
+    end
+    object ds_account_outCLOSE_DAT: TDateTimeField
+      FieldName = 'CLOSE_DAT'
+    end
+    object ds_account_outBAL_CN1: TFloatField
+      FieldName = 'BAL_CN1'
+      Required = True
+    end
+    object ds_account_outBAL_CN2: TFloatField
+      FieldName = 'BAL_CN2'
+    end
+    object ds_account_outBAL_CN3: TFloatField
+      FieldName = 'BAL_CN3'
+    end
+    object ds_account_outBAL_CN4: TFloatField
+      FieldName = 'BAL_CN4'
+    end
+  end
+  object account_out: TDataSource
+    DataSet = ds_account_out
+    Left = 375
+    Top = 12
+  end
+  object ds_capital_out: TOracleDataSet
+    SQL.Strings = (
+      
+        'SELECT cap.rowid,cap.id, cap.type, cap.bal, cap.acc,ac.acc_no, c' +
+        'ap.sum, cap.percent, cap.formula, cap.op_type,cap.bal_type'
+      '  FROM capital cap,CAPITAL_ACC_OUT ac'
+      '  where cap.acc=ac.id (+)'
+      ' order by id')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Filtered = True
+    Left = 344
+    Top = 12
+    object ds_capital_outID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object ds_capital_outTYPE: TWideStringField
+      FieldName = 'TYPE'
+      Required = True
+      Size = 5
+    end
+    object ds_capital_outBAL: TFloatField
+      FieldName = 'BAL'
+    end
+    object ds_capital_outACC: TFloatField
+      FieldName = 'ACC'
+    end
+    object ds_capital_outACC_NO: TWideStringField
+      FieldName = 'ACC_NO'
+      Size = 28
+    end
+    object ds_capital_outSUM: TFloatField
+      FieldName = 'SUM'
+    end
+    object ds_capital_outPERCENT: TFloatField
+      FieldName = 'PERCENT'
+    end
+    object ds_capital_outFORMULA: TWideStringField
+      FieldName = 'FORMULA'
+      Size = 255
+    end
+    object ds_capital_outOP_TYPE: TIntegerField
+      FieldName = 'OP_TYPE'
+    end
+    object ds_capital_outBAL_TYPE: TIntegerField
+      FieldName = 'BAL_TYPE'
+    end
+  end
+  object capital_out: TDataSource
+    DataSet = ds_capital_out
+    Left = 311
+    Top = 12
+  end
+  object ds_AdiEhtiyyat: TOracleDataSet
+    SQL.Strings = (
+      
+        'select * from  Bal_SPR1 where ( Bal_CN like '#39'%91'#39') and (length(B' +
+        'al_cn)=4)'
+      'order by Bal_CN'
+      '')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000120000000C000000420041004C005F0043004E000100000000000C00
+      0000540059005000450049004400010000000000200000004100440044004900
+      540049004F004E0041004C005400590050004500490044000100000000001000
+      0000410043004300470052004F00550050000100000000001000000041004300
+      430043004C004100530053000100000000000A000000530041004C0044004F00
+      0100000000000800000050004100520054000100000000000E00000042004100
+      4C004E0041004D0045000100000000001800000043004C004F00530045004200
+      41004C0041004E00430045000100000000001C00000052004100540045004400
+      4900460046004500520045004E00430045000100000000002000000043005500
+      5200520045004E004300590050004F0053004900540049004F004E0001000000
+      000018000000430041005300480049004E0043004F004D0049004E0047000100
+      0000000012000000460052004F004D005400520041004E005300010000000000
+      1800000049004E005400450052005F00560041004C0055005400450001000000
+      00001200000043005500530054005F0054005900500045000100000000001000
+      00005200450053004900440045004E0054000100000000001400000047004F00
+      5600450052004E004D0045004E00540001000000000008000000530059004D00
+      4200010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 633
+    Top = 12
+  end
+  object AdiEhtiyyat: TDataSource
+    DataSet = ds_AdiEhtiyyat
+    Left = 603
+    Top = 12
+  end
+  object DataSource1: TDataSource
+    DataSet = OracleDataSet1
+    Left = 665
+    Top = 12
+  end
+  object OracleDataSet1: TOracleDataSet
+    SQL.Strings = (
+      'select * from bal_spr1'
+      'order by bal_cn')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000120000000C000000420041004C005F0043004E000100000000000C00
+      0000540059005000450049004400010000000000200000004100440044004900
+      540049004F004E0041004C005400590050004500490044000100000000001000
+      0000410043004300470052004F00550050000100000000001000000041004300
+      430043004C004100530053000100000000000A000000530041004C0044004F00
+      0100000000000800000050004100520054000100000000000E00000042004100
+      4C004E0041004D0045000100000000001800000043004C004F00530045004200
+      41004C0041004E00430045000100000000001C00000052004100540045004400
+      4900460046004500520045004E00430045000100000000002000000043005500
+      5200520045004E004300590050004F0053004900540049004F004E0001000000
+      000018000000430041005300480049004E0043004F004D0049004E0047000100
+      0000000012000000460052004F004D005400520041004E005300010000000000
+      1800000049004E005400450052005F00560041004C0055005400450001000000
+      00001200000043005500530054005F0054005900500045000100000000001000
+      00005200450053004900440045004E0054000100000000001400000047004F00
+      5600450052004E004D0045004E00540001000000000008000000530059004D00
+      4200010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 696
+    Top = 14
+  end
+  object OracleDataSet2: TOracleDataSet
+    SQL.Strings = (
+      'select  *  from capital   where OP_TYPE=3 and BAL_TYPE=1'
+      'order by bal'
+      ' ')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      0500000009000000040000004900440001000000000008000000540059005000
+      450001000000000006000000420041004C000100000000000600000041004300
+      430001000000000006000000530055004D000100000000000E00000050004500
+      5200430045004E0054000100000000000E00000046004F0052004D0055004C00
+      41000100000000000E0000004F0050005F005400590050004500010000000000
+      10000000420041004C005F005400590050004500010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 216
+    Top = 11
+  end
+  object DataSource2: TDataSource
+    DataSet = OracleDataSet2
+    Left = 184
+    Top = 11
+  end
+  object DataSource3: TDataSource
+    DataSet = OracleDataSet3
+    Left = 248
+    Top = 8
+  end
+  object OracleDataSet3: TOracleDataSet
+    SQL.Strings = (
+      'select  *  from capital   where OP_TYPE=4 and BAL_TYPE=1'
+      'order by bal')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      0500000009000000040000004900440001000000000008000000540059005000
+      450001000000000006000000420041004C000100000000000600000041004300
+      430001000000000006000000530055004D000100000000000E00000050004500
+      5200430045004E0054000100000000000E00000046004F0052004D0055004C00
+      41000100000000000E0000004F0050005F005400590050004500010000000000
+      10000000420041004C005F005400590050004500010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 280
+    Top = 9
+  end
+  object OracleDataSet4: TOracleDataSet
+    SQL.Strings = (
+      'select * from capital')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      0500000009000000040000004900440001000000000008000000540059005000
+      450001000000000006000000420041004C000100000000000600000041004300
+      430001000000000006000000530055004D000100000000000E00000050004500
+      5200430045004E0054000100000000000E00000046004F0052004D0055004C00
+      41000100000000000E0000004F0050005F005400590050004500010000000000
+      10000000420041004C005F005400590050004500010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 192
+    Top = 40
+    object OracleDataSet4ID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object OracleDataSet4TYPE: TWideStringField
+      FieldName = 'TYPE'
+      Required = True
+      Size = 5
+    end
+    object OracleDataSet4BAL: TFloatField
+      FieldName = 'BAL'
+    end
+    object OracleDataSet4ACC: TFloatField
+      FieldName = 'ACC'
+    end
+    object OracleDataSet4SUM: TFloatField
+      FieldName = 'SUM'
+    end
+    object OracleDataSet4PERCENT: TFloatField
+      FieldName = 'PERCENT'
+    end
+    object OracleDataSet4FORMULA: TWideStringField
+      FieldName = 'FORMULA'
+      Size = 255
+    end
+    object OracleDataSet4OP_TYPE: TIntegerField
+      FieldName = 'OP_TYPE'
+    end
+    object OracleDataSet4BAL_TYPE: TIntegerField
+      FieldName = 'BAL_TYPE'
+    end
+  end
+end

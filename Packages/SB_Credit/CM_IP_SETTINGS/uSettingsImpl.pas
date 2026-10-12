@@ -1,0 +1,77 @@
+unit uSettingsImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, OracleData, StdCtrls, DBCtrls, Grids, DBGrids, ExtCtrls;
+
+type
+  TfrmSettings = class(TForm)
+    ODSSettings: TOracleDataSet;
+    ODSSets: TOracleDataSet;
+    DBComboBox1: TDBLookupComboBox;
+    Settingsd: TDataSource;
+    Sets: TDataSource;
+    DBGrid1: TDBGrid;
+    Label1: TLabel;
+    DBNavigator1: TDBNavigator;
+    procedure FormCreate(Sender: TObject);
+    procedure DBComboBox1Change(Sender: TObject);
+    procedure ODSSetsAfterPost(DataSet: TDataSet);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  frmSettings: TfrmSettings;
+      
+procedure InitPlugin(S : String); export;
+
+implementation
+
+uses cmoracleapidatamoduleimpl;
+
+procedure InitPlugin(S : String); export;
+begin
+
+    frmSettings.ShowModal;
+end;
+
+exports
+  InitPlugin;
+
+{$R *.DFM}
+
+procedure TfrmSettings.FormCreate(Sender: TObject);
+begin
+  ODSSettings.Close;
+  ODSSettings.Open;
+end;
+
+procedure TfrmSettings.DBComboBox1Change(Sender: TObject);
+begin
+  with ODSSets do begin
+    close;
+    SQL.Text := ODSSettings.fieldbyname('QUERY').AsString;
+    open;
+    FieldByName('ID').Required := False;
+    FieldByName('ID').Visible := False;
+    DBGrid1.Columns[0].Title.Caption := 'Àäû';
+    DBGrid1.Columns[0].Width := DBGrid1.Width-35;
+  end;
+end;
+
+
+
+procedure TfrmSettings.ODSSetsAfterPost(DataSet: TDataSet);
+begin
+  DataSet.Refresh;
+end;
+
+initialization
+  frmSettings := TfrmSettings.Create(Application);
+
+end.

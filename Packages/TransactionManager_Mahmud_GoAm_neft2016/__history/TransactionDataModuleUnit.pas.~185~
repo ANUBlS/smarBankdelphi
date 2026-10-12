@@ -1,0 +1,818 @@
+﻿unit TransactionDataModuleUnit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, OracleData, Oracle, Variants;
+
+type
+  TTransaction = record
+    TransactionID: Integer;
+    TransactionDate: TDateTime;
+    TransactionNo: String;
+    DebitID: Longint;
+    CreditID: Longint;
+    DebitAmount: Currency;
+    CreditAmount: Currency;
+    LAmount: Currency;
+    DebitRate: real;
+    CreditRate: real;
+    CashSymbol: String; // Word;
+    ConvertationSymbol: Word;
+    OperationCode: Variant;
+    Flags: Word;
+    TransactionName: String;
+    ReportID: Integer;
+    CountrID: Variant;
+    bdg_code:string;
+    p_INSTYPE, P_simcorpid,p_isin_ticer,p_file_name,p_business_trans_code,p_booking_typ :variant;
+
+  end;
+
+const
+  cs_generateid = 'GenerateID';
+  cs_add_transaction = 'transaction_add';
+  cs_del_transaction = 'transaction_delete';
+  cs_commit_transaction = 'transaction_commit';
+  cs_reject_transaction = 'transaction_reject';
+  cs_commission_execute = 'SetTransactions';
+  cs_commit_delayed_transactions = 'transactions_delayed_commit';
+
+type
+  TTransactionDataModule = class(TDataModule)
+    Sysdat: TOracleDataSet;
+    TransactionsData: TDataSource;
+    DataSysdat: TDataSource;
+    DebitCurrency: TDataSource;
+    DebitCurrencyData: TOracleDataSet;
+    DebitCurrencyDataID: TIntegerField;
+    DebitCurrencyDataRATE: TFloatField;
+    CreditCurrency: TDataSource;
+    CreditCurrencyData: TOracleDataSet;
+    CreditCurrencyDataID: TIntegerField;
+    CreditCurrencyDataRATE: TFloatField;
+    DebitAccs: TDataSource;
+    DebitAccData: TOracleDataSet;
+    DebitAccDataID: TFloatField;
+    DebitAccDataVAL_ACC: TIntegerField;
+    DebitAccDataISCACHEACCOUNT: TFloatField;
+    CreditAccData: TOracleDataSet;
+    CreditAccs: TDataSource;
+    ConvertationSymbols: TOracleDataSet;
+    ConvertationSymbolsData: TDataSource;
+    CashSymbols: TOracleDataSet;
+    CashSymbolsData: TDataSource;
+    CreditAccDataID: TFloatField;
+    CreditAccDataVAL_ACC: TIntegerField;
+    CreditAccDataISCACHEACCOUNT: TFloatField;
+    Currency: TOracleDataSet;
+    OperationTypes: TOracleDataSet;
+    OperationTypesData: TDataSource;
+    Transactions: TOracleDataSet;
+    TransactionsID: TFloatField;
+    TransactionsOPERATORID: TFloatField;
+    TransactionsTRANSACTIONDATE: TDateTimeField;
+    TransactionsDEBITID: TFloatField;
+    TransactionsDEBITCURRENCYID: TFloatField;
+    TransactionsCREDITID: TFloatField;
+    TransactionsDEBITAMOUNT: TFloatField;
+    TransactionsCREDITAMOUNT: TFloatField;
+    TransactionsLAMOUNT: TFloatField;
+    TransactionsDEBITBANK: TFloatField;
+    TransactionsCREDITBANK: TFloatField;
+    DebitBranch: TOracleDataSet;
+    DebitBranchData: TDataSource;
+    CreditBranch: TOracleDataSet;
+    CreditBranchData: TDataSource;
+    UsersData: TDataSource;
+    Users: TOracleDataSet;
+    Operations: TOracleQuery;
+    Valute: TOracleQuery;
+    SBTransaction: TOraclePackage;
+    Commission: TOracleDataSet;
+    CommissionData: TDataSource;
+    CommissionID: TFloatField;
+    CommissionDEBT: TFloatField;
+    CommissionDEBITCURRENCYID: TFloatField;
+    CommissionCREDIT: TFloatField;
+    CommissionCREDITCURRENCYID: TFloatField;
+    CommissionADDITIONALDEBT: TFloatField;
+    CommissionADDDEBITCURRENCYID: TFloatField;
+    CommissionADDCREDITCURRENCYID: TFloatField;
+    CommissionUSERID: TFloatField;
+    SBComplexTrans: TOraclePackage;
+    Destinations: TOracleDataSet;
+    DestinationsData: TDataSource;
+    DebitAccRestData: TOracleDataSet;
+    DebitAccDataBALANCE: TCurrencyField;
+    DebitAccDataLBALANCE: TCurrencyField;
+    CreditAccRestData: TOracleDataSet;
+    CreditAccDataBALANCE: TCurrencyField;
+    CreditAccDataLBALANCE: TCurrencyField;
+    TransactionsCYPHERCODE: TIntegerField;
+    TransactionsOPERATIONCODE: TFloatField;
+    TransactionsOUTBALANCECHAR: TIntegerField;
+    TransactionsFILIALID: TIntegerField;
+    TransactionsDEBITBALANCE: TFloatField;
+    TransactionsFLAGS: TFloatField;
+    TransactionsSTATUS: TFloatField;
+    TransactionsPACKAGENUMBER: TIntegerField;
+    TransactionsCREDITCURRENCYID: TIntegerField;
+    TransactionsREPORTID: TFloatField;
+    ReportDesc: TOracleDataSet;
+    ReportDescsData: TDataSource;
+    TransactionsCOUNTRID: TFloatField;
+    Country: TOracleDataSet;
+    CountryData: TDataSource;
+    SB_ACA: TOraclePackage;
+    TransactionsDEBITBRANCH: TIntegerField;
+    TransactionsCREDITBRANCH: TIntegerField;
+    BProcData: TOracleDataSet;
+    BProc: TDataSource;
+    BPTransData: TOracleDataSet;
+    BPTrans: TDataSource;
+    PACKBPROC: TOraclePackage;
+    BProcDataID: TFloatField;
+    BProcDataNAME: TWideStringField;
+    DebitCurrencyDataSNAME: TWideStringField;
+    DebitCurrencyDataNAME: TWideStringField;
+    CreditCurrencyDataSNAME: TWideStringField;
+    CreditCurrencyDataNAME: TWideStringField;
+    TransactionsOPERATIONNO: TWideStringField;
+    TransactionsDEBITACCNO: TWideStringField;
+    TransactionsDEBITCURRENCYSNAME: TWideStringField;
+    TransactionsCREDITACCNO: TWideStringField;
+    TransactionsCREDITCURRENCYSNAME: TWideStringField;
+    TransactionsUSR: TWideStringField;
+    TransactionsINBALANCECHAR: TWideStringField;
+    TransactionsNAME: TWideStringField;
+    TransactionsREJECT_REASON: TWideStringField;
+    TransactionsUSRCOMMIT: TWideStringField;
+    DebitAccDataACC_NO: TWideStringField;
+    DebitAccDataNAME: TWideStringField;
+    CreditAccDataACC_NO: TWideStringField;
+    CreditAccDataNAME: TWideStringField;
+    CommissionNAME: TWideStringField;
+    CommissionDEBITACCOUNT: TWideStringField;
+    CommissionDEBITCURRENCY: TWideStringField;
+    CommissionCREDITACCOUNT: TWideStringField;
+    CommissionCREDITCURRENCY: TWideStringField;
+    CommissionADEBITACCOUNT: TWideStringField;
+    CommissionADEBITCURRENCY: TWideStringField;
+    CommissionADDITIONALCREDIT: TFloatField;
+    CommissionACREDITACCOUNT: TWideStringField;
+    CommissionACREDITCURRENCY: TWideStringField;
+    CommissionASSIGNMENT: TWideStringField;
+    CommissionCOMMISIONASSIGNMENT: TWideStringField;
+    ODS_StatusT: TOracleDataSet;
+    ODS_VidOPTrDel: TOracleDataSet;
+    ODS_Settings: TOracleDataSet;
+    ODS_SettingsVALUE: TWideStringField;
+    DEBT_BAL_SPR1: TOracleDataSet;
+    DEB_BAL_SPR1: TDataSource;
+    ODS_Account: TOracleDataSet;
+    ODS_AccountID: TFloatField;
+    ODS_AccountACC_NO: TWideStringField;
+    ODS_AccountACC_NO_SEARCH: TWideStringField;
+    ODS_AccountVAL_ACC: TIntegerField;
+    ODS_AccountNAME: TWideStringField;
+    ODS_AccountISCACHEACCOUNT: TFloatField;
+    DEBT_BAL_SPR1BAL_CN: TFloatField;
+    DEBT_BAL_SPR1BALNAME: TWideStringField;
+    DS_Account: TDataSource;
+    DebitAccDataOSTAT: TFloatField;
+    DebitAccDataPOK_OSTAT: TFloatField;
+    CreditAccDataOSTAT: TFloatField;
+    CreditAccDataPOK_OSTAT: TFloatField;
+    DebitAccDataBAL_CN: TFloatField;
+    CreditAccDataBAL_CN: TFloatField;
+    TransactionsDEBITRATE: TFloatField;
+    TransactionsCREDITRATE: TFloatField;
+    KREDT_BAL_SPR1: TOracleDataSet;
+    FloatField1: TFloatField;
+    WideStringField1: TWideStringField;
+    KRED_BAL_SPR1: TDataSource;
+    DebitAccDataFROMTRANS: TFloatField;
+    CreditAccDataFROMTRANS: TFloatField;
+    ODS_MMX_CUSTOMERS: TOracleDataSet;
+    OP_MMX: TOraclePackage;
+    DebitAccDataKLI_ID: TFloatField;
+    CreditAccDataKLI_ID: TFloatField;
+    ODS_MMX_TRANSMODE: TOracleDataSet;
+    DS_MMX_TRANSMODE: TDataSource;
+    ODS_MMX_TRANSMODEID: TIntegerField;
+    ODS_MMX_TRANSMODENAME: TIntegerField;
+    ODS_MMX_TRANSMODEDESCRIPTION: TWideStringField;
+    ODS_TransInfo: TOracleDataSet;
+    ODS_TransInfoID: TFloatField;
+    ODS_TransInfoTRANSMODE_CODE: TIntegerField;
+    ODS_TransInfoTRANSMODE_COMMENT: TWideStringField;
+    ODS_TransInfoTRANSID: TFloatField;
+    ODS_DebtCustomer: TOracleDataSet;
+    DS_DebtCustomer: TDataSource;
+    NonCustBalCnC: TOracleDataSet;
+    NonCustBalCnD: TOracleDataSet;
+    DS_CredCustomer: TDataSource;
+    ODS_CredCustomer: TOracleDataSet;
+    ODS_DebtCustomerID: TIntegerField;
+    ODS_DebtCustomerNAME: TWideStringField;
+    ODS_CredCustomerID: TIntegerField;
+    ODS_CredCustomerNAME: TWideStringField;
+    ODS_TransInfoDCUSTID: TFloatField;
+    ODS_TransInfoCCUSTID: TFloatField;
+    ODS_AccountKLI_ID: TFloatField;
+    PG_PCustService: TOraclePackage;
+    Ods_budce: TOracleDataSet;
+    Dsrc_budce: TDataSource;
+    Ods_budceID: TFloatField;
+    Ods_budceCODE: TWideStringField;
+    Ods_budceNAME: TWideStringField;
+    SBTransaction1: TOraclePackage;
+    Ods_budce_copy: TOracleDataSet;
+    dsrc_budce_copy: TDataSource;
+    Insert_OracleQuery: TOracleQuery;
+    Ods_budce_copyID: TFloatField;
+    Ods_budce_copyBC_ACCID: TFloatField;
+    Ods_budce_copyCODE: TWideStringField;
+    Ods_budce_copyAMMOUNT: TFloatField;
+    Ods_budce_copyNAME: TWideStringField;
+    Ods_budce_copyUSERNAME: TWideStringField;
+    Delete_OracleQuery: TOracleQuery;
+    Ods_budce_subdivision: TOracleDataSet;
+    Dsrc_budce_subdivision: TDataSource;
+    Ods_budce_subdivisionCODE: TWideStringField;
+    Ods_budce_subdivisionNAME: TWideStringField;
+    TransactionsBDG_CODE: TWideStringField;
+    Ods_budce_copy_cum: TOracleDataSet;
+    Ods_budce_copy_cumAMMOUNT: TFloatField;
+    DebitAccDataCUST_ID: TIntegerField;
+    DebitAccDataCUST_NAME: TWideStringField;
+    CreditAccDataCUST_ID: TIntegerField;
+    CreditAccDataCUST_NAME: TWideStringField;
+    TransactionsD_ACCNO: TWideStringField;
+    TransactionsC_ACCNO: TWideStringField;
+    TransactionsKREDITBALANCE: TFloatField;
+    OraclePackage1: TOraclePackage;
+    DebitAccDataCUSTNAME: TWideStringField;
+    DebitAccDataLASTNAME: TWideStringField;
+    DebitAccDataSONAME: TWideStringField;
+    CreditAccDataCUSTNAME: TWideStringField;
+    CreditAccDataLASTNAME: TWideStringField;
+    CreditAccDataSONAME: TWideStringField;
+    DebitAccDataCITIZENSHIP: TFloatField;
+    DebitAccDataCNTR_NAME: TWideStringField;
+    CreditAccDataCITIZENSHIP: TFloatField;
+    CreditAccDataCNTR_NAME: TWideStringField;
+    ODS_CredCustomerCITIZENSHIP: TFloatField;
+    ODS_CredCustomerCNTR_NAME: TWideStringField;
+    ODS_DebtCustomerCITIZENSHIP: TFloatField;
+    ODS_DebtCustomerCNTR_NAME: TWideStringField;
+    ODS_DebtCustomerCUSTNAME: TWideStringField;
+    ODS_DebtCustomerLASTNAME: TWideStringField;
+    ODS_DebtCustomerSONAME: TWideStringField;
+    ODS_CredCustomerCUSTNAME: TWideStringField;
+    ODS_CredCustomerLASTNAME: TWideStringField;
+    ODS_CredCustomerSONAME: TWideStringField;
+    DS_DbtCustNom: TOracleDataSet;
+    DS_DbtCustNomACC_NO: TWideStringField;
+    DS_DbtCustNomKLI_ID: TFloatField;
+    DS_CreCustNom: TOracleDataSet;
+    DS_CreCustNomID: TFloatField;
+    DS_CreCustNomACC_NO: TWideStringField;
+    DS_CreCustNomKLI_ID: TFloatField;
+    DS_DbtCustNomID: TFloatField;
+    DS_DbtCustNomCITIZENSHIP: TFloatField;
+    DS_DbtCustNomCNTR_NAME: TWideStringField;
+    DS_CreCustNomCITIZENSHIP: TFloatField;
+    DS_CreCustNomCNTR_NAME: TWideStringField;
+    Ods_mmx_reportcode: TOracleDataSet;
+    Dsrc_mmx_reportcode: TDataSource;
+    Ods_mmx_reportcodeID: TIntegerField;
+    Ods_mmx_reportcodeNAME: TWideStringField;
+    Ods_mmx_reportcodeDESCRIPTION: TWideStringField;
+    ODS_TransInfoREPORT_CODE: TWideStringField;
+    TransactionsINSTYPE: TWideStringField;
+    TransactionsSIMCORPID: TWideStringField;
+    TransactionsISIN_TICER: TWideStringField;
+    TransactionsFILE_NAME: TWideStringField;
+    TransactionsBOOKING_TYP: TWideStringField;
+    OraclePackage: TOraclePackage;
+    qur_business_trans: TOracleQuery;
+    TransactionsBUSINESS_TRANS_CODE: TWideStringField;
+    TransactionsBUSSNESKOD: TFloatField;
+    procedure TransactionsApplyRecord(Sender: TOracleDataSet; Action: Char;
+      var Applied: Boolean; var NewRowId: String);
+    procedure DebitCurrencyDataAfterScroll(DataSet: TDataSet);
+    procedure DebitAccDataAfterScroll(DataSet: TDataSet);
+    procedure CreditCurrencyDataAfterScroll(DataSet: TDataSet);
+    procedure CreditAccDataAfterScroll(DataSet: TDataSet);
+    procedure OperationsThreadRecord(Sender: TOracleQuery);
+    procedure ValuteThreadRecord(Sender: TOracleQuery);
+    procedure DebitAccRestDataAfterScroll(DataSet: TDataSet);
+    procedure CreditAccRestDataAfterScroll(DataSet: TDataSet);
+    procedure SetNonCustBal;
+    procedure DataModuleCreate(Sender: TObject);
+    procedure DataModuleDestroy(Sender: TObject);
+    procedure qur_business_transThreadRecord(Sender: TOracleQuery);
+
+  private
+    { Private declarations }
+
+  public
+    { Public declarations }
+    function AddTransaction(Transaction: TTransaction): Longint;
+
+    procedure DeleteTransaction(TransactionID: Longint);
+    function CommitTransactions(TransactionIDs: WideString): Longint;
+    function CommitTransaction(TransactionID: Longint): Longint;
+    function RejectTransaction(TransactionID: Longint;
+      const RejectReason: String): Longint;
+
+    procedure FullRefresh;
+    procedure SetCommission(CommissionID, DebitID, CreditID: Longint;
+      DebitAmmount, CreditAmmount: Currency; TransDate: TDateTime;
+      ParentID: Integer);
+    procedure ShowInfo;
+    function AddTransactioncop(Transaction: TTransaction) : Longint;
+    function GenerateID: Longint;
+    procedure SBCommit();
+  end;
+
+var
+  TransactionDataModule: TTransactionDataModule;
+    NonCustMustBe: Boolean;
+implementation
+
+uses sboapiDataModuleImpl, TransactionPropertiesImpl,
+  TransactionManagerImpl;
+
+{$R *.DFM}
+
+procedure TTransactionDataModule.TransactionsApplyRecord(Sender: TOracleDataSet;
+  Action: Char; var Applied: Boolean; var NewRowId: String);
+var
+  Transaction: TTransaction;
+  // TID: longint;
+  procedure BuildTransaction;
+  begin
+    with Sender, Transaction do
+    begin
+      TransactionDate := FieldByName('TransactionDate').AsDateTime;
+      TransactionNo := FieldByName('OperationNo').AsString;
+      DebitID := FieldByName('DebitID').AsInteger;
+      CreditID := FieldByName('CreditID').AsInteger;
+      DebitAmount := FieldByName('DebitAmount').AsCurrency;
+      CreditAmount := FieldByName('CreditAmount').AsCurrency;
+      LAmount := FieldByName('LAmount').AsCurrency;
+      DebitRate := FieldByName('DebitRate').AsFloat;
+      CreditRate := FieldByName('CreditRate').AsFloat;
+      CashSymbol := FieldByName('InbalanceChar').AsString; // .AsInteger;
+      ConvertationSymbol := FieldByName('OutbalanceChar').AsInteger;
+      OperationCode := FieldByName('OperationCode').Value;
+      ReportID := FieldByName('ReportID').Value;
+      CountrID := FieldByName('CountrID').Value;
+      Flags := 0; // tsDelayed Maybe will changed
+      TransactionName := FieldByName('Name').AsString;
+      bdg_code:= FieldByName('bdg_code').AsString;
+      P_simcorpid:=TransactionEditForm.edit_simcropid.text;
+      p_INSTYPE:=TransactionEditForm.Edit_isntype.text;
+      //  if not (FieldByName('isin_ticer').IsNull)  then
+      p_isin_ticer:=TransactionEditForm.Edit_isinticer.text;//FieldByName('isin_ticer').AsString
+     // else
+     //p_isin_ticer:=null;
+
+    if not (FieldByName('file_name').IsNull)  then
+   p_file_name:=FieldByName('file_name').AsString
+   else
+    p_file_name:=null;
+
+   if not (FieldByName('business_trans_code').IsNull)  then
+   p_business_trans_code:=FieldByName('business_trans_code').AsString
+   else
+    p_business_trans_code:=null;
+
+   if not (FieldByName('booking_typ').IsNull)  then
+   p_booking_typ:=FieldByName('booking_typ').AsString
+   else
+    p_booking_typ:=null;
+
+
+
+
+
+
+
+      with FieldByName('ID') do
+        if IsNull then
+          TransactionID := -1
+        else
+          TransactionID := AsInteger;
+    end;
+  end;
+
+begin
+  // ShowDOAInfo(sboapiDataModule.SBSession);
+  case Action of
+    'I':
+      begin
+        Sender.FieldByName('ID').AsInteger := GenerateID;
+        BuildTransaction;
+        AddTransaction(Transaction);
+        SetCommission(Commission.FieldByName('ID').AsInteger,
+          Transaction.DebitID, Transaction.CreditID, Transaction.DebitAmount,
+          Transaction.CreditAmount, Transaction.TransactionDate,
+          Transaction.TransactionID);
+        // NewRowId :=SBTransaction.CallStringFunction('GetRowID',['TID', TID]);
+        // ShowMessage('Insert'+NewRowId);
+        Applied := True;
+      end;
+
+    'U':
+      begin
+        BuildTransaction;
+        DeleteTransaction(Sender.FieldByName('ID').AsInteger);
+        AddTransaction(Transaction);
+
+
+        Applied := True;
+      end;
+
+    'L', 'R', 'C':
+      Applied := True;
+  else
+    Applied := False;
+
+  end;
+
+end;
+
+procedure TTransactionDataModule.DebitCurrencyDataAfterScroll
+  (DataSet: TDataSet);
+begin
+  if not Assigned(TransactionEditForm) then
+    Exit;
+  with TransactionEditForm, DebitAccData do
+  begin
+  EditDebtBal_CN.Text:='';
+EditDebtAccNo.Text:='';
+TransactionDataModule.DebitAccData.Close;
+    // Filtered :=False;
+    // Filter :='val_acc='+DataSet.FieldByName('ID').AsString;     { ГЛЮК }
+    // Filtered :=True;
+    DebitCurrencyID := DataSet.FieldByName('ID').AsInteger;
+    Transactions.FieldByName('DebitRate').AsFloat :=
+      DataSet.FieldByName('Rate').AsFloat;
+  if TransDate.Date <> Sysdat.FieldByName('tek_dat').AsDateTime then
+   Transactions.FieldByName('DebitRate').AsFloat :=0; {H.R. 10.06.2014}
+    //DebtAccSearchEdit.Text := ''; // FieldByName('acc_no').AsString;
+    ClearAmmounts;
+  end;
+end;
+
+procedure TTransactionDataModule.DataModuleCreate(Sender: TObject);
+begin
+Ods_budce_subdivision.Open;
+Ods_budce.open;
+end;
+
+procedure TTransactionDataModule.DataModuleDestroy(Sender: TObject);
+begin
+Ods_budce_subdivision.Close;
+Ods_budce.Close;
+end;
+
+procedure TTransactionDataModule.DebitAccDataAfterScroll(DataSet: TDataSet);
+begin
+ { if not Assigned(TransactionEditForm) then
+    Exit;
+  with TransactionEditForm, DataSet do
+  begin
+    Transactions.FieldByName('DebitID').AsInteger := FieldByName('ID')
+      .AsInteger;
+    if not DebtAccSearchEdit.Focused then
+      DebtAccSearchEdit.Text := FieldByName('acc_no').AsString;
+  end;          }
+ // SetNonCustBal;
+
+end;
+
+procedure TTransactionDataModule.SetNonCustBal;
+begin
+NonCustBalCnC.Close;
+NonCustBalCnC.SetVariable('v_balcn',CreditAccData.FieldByName('BAL_CN').AsString);
+NonCustBalCnC.Open;
+
+NonCustBalCnD.Close;
+NonCustBalCnD.SetVariable('v_balcn',DebitAccData.FieldByName('BAL_CN').AsString);
+NonCustBalCnD.Open;
+
+   if (DebitAccData.FieldByName('IsCacheAccount').AsInteger = 1)
+        and
+       (NonCustBalCnC.RecordCount>0)
+    then
+    begin
+     TransactionEditForm.Edit_DCustID.Enabled:=True;
+     TransactionEditForm.Edit_DCustID.Color:=clWindow;
+     NonCustMustBe:=True;
+    end
+    else
+    if (CreditAccData.FieldByName('IsCacheAccount').AsInteger = 1)
+        and
+        (NonCustBalCnD.RecordCount>0)
+    then
+    begin
+     TransactionEditForm.Edit_DCustID.Enabled:=True;
+     TransactionEditForm.Edit_DCustID.Color:=clWindow;
+     NonCustMustBe:=True;
+    end
+    else
+    begin
+       TransactionEditForm.Edit_DCustID.Enabled:=False;
+       TransactionEditForm.Edit_DCustID.Color:=clSilver;
+       NonCustMustBe:=False;
+    end;
+
+end;
+procedure TTransactionDataModule.CreditCurrencyDataAfterScroll
+  (DataSet: TDataSet);
+begin
+  if not Assigned(TransactionEditForm) then
+    Exit;
+  with TransactionEditForm, CreditAccData do
+  begin
+  EditCredAccNo.Text:='';
+  EditKredBal_CN.Text:='';
+  TransactionDataModule.CreditAccData.Close;
+    // Filtered :=False;
+    // Filter :='val_acc='+DataSet.FieldByName('ID').AsString;      { ГЛЮК }
+    // Filtered :=True;
+    CreditCurrencyID := DataSet.FieldByName('ID').AsInteger;
+    Transactions.FieldByName('CreditRate').AsFloat :=
+      DataSet.FieldByName('Rate').AsFloat;
+  if TransDate.Date <> Sysdat.FieldByName('tek_dat').AsDateTime then
+   Transactions.FieldByName('CreditRate').AsFloat :=0; {H.R. 10.06.2014}
+    //CreditAccSearchEdit.Text := ''; // FieldByName('acc_no').AsString;
+    ClearAmmounts;
+  end;
+end;
+
+procedure TTransactionDataModule.CreditAccDataAfterScroll(DataSet: TDataSet);
+begin
+{  if not Assigned(TransactionEditForm) then
+    Exit;
+  with TransactionEditForm, DataSet do
+  begin
+    Transactions.FieldByName('CreditID').AsInteger := FieldByName('ID')
+      .AsInteger;
+    if not CreditAccSearchEdit.Focused then
+      CreditAccSearchEdit.Text := FieldByName('acc_no').AsString;
+  end; }
+    //SetNonCustBal;
+end;
+
+procedure TTransactionDataModule.ValuteThreadRecord(Sender: TOracleQuery);
+begin
+  with TransactionManagerForm, CLBCurrency, Items do
+  begin
+    Add(Sender.Field('valu_name'));
+    Checked[Count - 1] := True;
+    TStringList(Pointer(CLBCurrency.Tag)^).Add(Sender.Field('valute'));
+  end;
+end;
+
+procedure TTransactionDataModule.OperationsThreadRecord(Sender: TOracleQuery);
+begin
+  with TransactionManagerForm, CLBOperationTypes, Items do
+  begin
+    Add(Sender.Field('name'));
+    Checked[Count - 1] := True;
+    TStringList(Pointer(CLBOperationTypes.Tag)^).Add(Sender.Field('ID'));
+  end;
+end;
+
+procedure TTransactionDataModule.qur_business_transThreadRecord(
+  Sender: TOracleQuery);
+begin
+ with TransactionManagerForm, CLBBussnes, Items do
+  begin
+    Add(Sender.Field('name'));
+    Checked[Count - 1] := True;
+    TStringList(Pointer(CLBBussnes.Tag)^).Add(Sender.Field('id'));
+  end;
+end;
+
+procedure TTransactionDataModule.DebitAccRestDataAfterScroll(DataSet: TDataSet);
+begin
+  with DataSet do // Modified by TNariman at 30.03.2005
+  begin
+    DebitAccData.FieldByName('BALANCE').AsCurrency := FieldByName('OSTAT')
+      .AsCurrency;
+    DebitAccData.FieldByName('LBALANCE').AsCurrency := FieldByName('POK_OSTAT')
+      .AsCurrency;
+  end;
+end;
+
+procedure TTransactionDataModule.CreditAccRestDataAfterScroll
+  (DataSet: TDataSet);
+begin
+  with DataSet do // Modified by TNariman at 30.03.2005
+  begin
+    CreditAccData.FieldByName('BALANCE').AsCurrency := FieldByName('OSTAT')
+      .AsCurrency;
+    CreditAccData.FieldByName('LBALANCE').AsCurrency := FieldByName('POK_OSTAT')
+      .AsCurrency;
+  end;
+end;
+
+// ---------------------------------------------------------------------------------------------------------------------
+
+procedure TTransactionDataModule.SBCommit();
+begin
+      sboapiDataModule.SBSession.Commit;
+end;
+function TTransactionDataModule.AddTransactioncop(Transaction: TTransaction): Longint;
+var
+  ATransactionID: Variant;
+begin
+  with Transaction, SBTransaction do
+  begin
+    if TransactionID = -1 then
+      ATransactionID := Null
+    else
+      ATransactionID := TransactionID;
+      //showmessage('ddd');
+      Result := CallIntegerFunction(cs_add_transaction,
+      ['TransactionDate', TransactionDate, 'DebitID', DebitID, 'CreditID',
+      CreditID, 'DebitAmount', DebitAmount, 'CreditAmount', CreditAmount,
+      'LAmount', LAmount, 'DebitRate', DebitRate, 'CreditRate', CreditRate,
+      'TrName', TransactionName, 'Flags', Flags, 'InBalanceChar', CashSymbol,
+      'OutBalanceChar', ConvertationSymbol, 'TransactionID', ATransactionID,
+      'OperationType', OperationCode, 'TransactionNo', TransactionNo,
+      'pReportID', Reportid, 'pCountrID', CountrID,'p_bdgcode',bdg_code, 'p_simcorpid',p_simcorpid,
+       'p_instype',p_INSTYPE,'p_isin_ticer',p_isin_ticer,'p_file_name',p_file_name,
+       'p_business_trans_code',p_business_trans_code,'p_booking_typ',p_booking_typ]);
+
+    end;
+end;
+
+function TTransactionDataModule.AddTransaction(Transaction
+  : TTransaction): Longint;
+var
+  ATransactionID: Variant;
+begin
+  with Transaction, SBTransaction do
+  begin
+    if TransactionID = -1 then
+      ATransactionID := Null
+    else
+      ATransactionID := TransactionID;
+
+      Result := CallIntegerFunction(cs_add_transaction,
+      ['TransactionDate', TransactionDate, 'DebitID', DebitID, 'CreditID',
+      CreditID, 'DebitAmount', DebitAmount, 'CreditAmount', CreditAmount,
+      'LAmount', LAmount, 'DebitRate', DebitRate, 'CreditRate', CreditRate,
+      'TrName', TransactionName, 'Flags', Flags, 'InBalanceChar', CashSymbol,
+      'OutBalanceChar', ConvertationSymbol, 'TransactionID', ATransactionID,
+      'OperationType', OperationCode, 'TransactionNo', TransactionNo,
+      'pReportID', Reportid, 'pCountrID', CountrID,'p_bdgcode',bdg_code, 'p_simcorpid',p_simcorpid,
+       'p_instype',p_INSTYPE,'p_isin_ticer',p_isin_ticer,'p_file_name',p_file_name,
+       'p_business_trans_code',p_business_trans_code,'p_booking_typ',p_booking_typ]) ;
+
+  with TransactionEditForm ,Transaction do
+    begin
+    if CheckBox1.Checked then
+   begin
+    TransactionDataModule.OraclePackage.CallProcedure('business_proc_add_trans',[DebitID,CreditID,TransactionID,DebitAmount,1,TransactionDate]);
+   end;
+ if CheckBox2.Checked then
+   begin
+   debitid  := TransactionDataModule.DebitAccData.FieldByName('ID').AsInteger;
+      TransactionDataModule.OraclePackage.CallProcedure('business_proc_add_trans',[debitid,CreditID,TransactionID,DebitAmount,2,TransactionDate]);
+
+
+    end;
+    end;
+  end;
+   //////-----------------------------//////////////////////////
+  {  TransactionEditForm.Edit_DCustId.Text:=TransactionDataModule.DebitAccData.FieldByName('cust_id').AsString;
+if trim(TransactionEditForm.Edit_DCustID.Text)<>'' then
+    with TransactionDataModule.ODS_DebtCustomer do begin
+
+     Close;
+     SetVariable('v_CustID',TransactionEditForm.Edit_DCustID.Text);
+     Open;
+    end;
+    TransactionEditForm.Edit_CCustId.Text:=TransactionDataModule.CreditAccData.FieldByName('cust_id').AsString;
+ if trim(TransactionEditForm.Edit_CCustID.Text)<>'' then
+    with  TransactionDataModule.ODS_CredCustomer do begin
+     Close;
+     SetVariable('v_CustID',TransactionEditForm.Edit_CCustID.Text);
+     Open;
+     end;  samir}
+ ////////////////////---------------------------------//////////////////////
+   //showmessage(TransactionEditForm.DBLC_MMX_reportcode.KeyValue);
+{  OP_MMX.CallProcedure('ins_mmx_transinfo',[TransactionEditForm.DBLC_MMX_reportcode.KeyValue
+                                           ,TransactionEditForm.DBLC_MMX_Transmode.Keyvalue
+                                           , Result
+                                           ,TransactionEditForm.DBEditOperationNo.text
+                                           ,'49-'+TransactionEditForm.DBEditOperationNo.text
+                                           ,ODS_DebtCustomer.FieldByName('id').AsInteger
+                                           ,ODS_CredCustomerID.AsInteger
+                                           ,DebitAccDataCITIZENSHIP.AsInteger
+                                           ,CreditAccDataCITIZENSHIP.AsInteger
+                                           , DS_DbtCustNomKli_id.asinteger
+                                           , DS_CreCustNomKli_id.asinteger
+                                           , ODS_DebtCustomerCITIZENSHIP.AsInteger
+                                           , ODS_CredCustomerCITIZENSHIP.AsInteger
+                                             ]);
+      }
+end;
+
+
+procedure TTransactionDataModule.DeleteTransaction(TransactionID: Longint);
+begin
+// OP_MMX.CallProcedure('delete_mmx_transinfo',[TransactionID]);
+  with SBTransaction do
+    CallProcedure(cs_del_transaction, ['TransactionID', TransactionID]);
+end;
+
+function TTransactionDataModule.CommitTransactions(TransactionIDs
+  : WideString): Longint;
+begin
+  with SBTransaction do
+    Result := CallIntegerFunction(cs_commit_delayed_transactions,
+      ['OverloadIDsStr', TransactionIDs, 'CommitTemp', True]);
+end;
+
+function TTransactionDataModule.CommitTransaction(TransactionID
+  : Longint): Longint;
+begin
+  with SBTransaction do
+    Result := CallIntegerFunction(cs_commit_transaction,
+      ['TransactionID', TransactionID, 'CommitTemp', True]);
+
+end;
+
+function TTransactionDataModule.GenerateID: Longint;
+begin
+  with SBTransaction do
+    Result := CallIntegerFunction(cs_generateid, []);
+end;
+
+function TTransactionDataModule.RejectTransaction(TransactionID: Longint;
+  const RejectReason: String): Longint;
+begin
+  with SBTransaction do
+    Result := CallIntegerFunction(cs_reject_transaction,
+      ['TransactionID', TransactionID, 'RejectReason', RejectReason]);
+end;
+
+procedure TTransactionDataModule.SetCommission(CommissionID, DebitID,
+  CreditID: Longint; DebitAmmount, CreditAmmount: Currency;
+  TransDate: TDateTime; ParentID: Integer);
+
+  function IsCommission: Boolean;
+  begin
+    with TransactionManagerForm do
+      Result := OperationMode = omCommission;
+  end;
+
+begin
+  if IsCommission then
+    with SBComplexTrans do
+      CallProcedure(cs_commission_execute, ['CommisionID', CommissionID,
+        'DebitID', DebitID, 'CreditID', CreditID, 'DebitAmmount', DebitAmmount,
+        'CreditAmmount', CreditAmmount, 'TransDate', TransDate, 'v_ParentID',
+        ParentID]);
+end;
+
+procedure TTransactionDataModule.ShowInfo;
+begin
+  ShowDOAInfo(sboapiDataModule.SBSession);
+end;
+
+procedure TTransactionDataModule.FullRefresh;
+const
+  c_err_message = ' Table or View in Dataset "%s" does not exist! ';
+var
+  i: Word; // Modified by TNariman at 28.04.2005
+begin
+  for i := 0 to ComponentCount - 1 do
+    if (Components[i] is TOracleDataSet) then
+      try
+        (Components[i] as TOracleDataSet).Close;
+        (Components[i] as TOracleDataSet).Open;
+      except
+        raise Exception.Create(Format(c_err_message,
+          [(Components[i] as TDataSet).Name]));
+      end;
+end;
+
+end.
+
+{ --------------------------------------- COMMENTS
+
+  436, 451, 461
+
+}

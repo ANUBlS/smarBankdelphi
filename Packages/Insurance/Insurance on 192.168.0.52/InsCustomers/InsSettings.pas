@@ -1,0 +1,122 @@
+unit InsSettings;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, Buttons, ComCtrls, DBViewComboBox, Mask, DBCtrls, ExtCtrls, DB,
+  Grids, DBGrids;
+
+type
+  TfmSettings = class(TForm)
+    PageControl1: TPageControl;
+    TabSheet1: TTabSheet;
+    Panel1: TPanel;
+    BitBtn1: TBitBtn;
+    BitBtn2: TBitBtn;
+    Panel2: TPanel;
+    Panel3: TPanel;
+    Splitter1: TSplitter;
+    DBGrid1: TDBGrid;
+    DBGrid2: TDBGrid;
+    DBNavigator1: TDBNavigator;
+    DBNavigator2: TDBNavigator;
+    TabSheet2: TTabSheet;
+    GroupBox1: TGroupBox;
+    GroupBox2: TGroupBox;
+    GroupBox3: TGroupBox;
+    DBGrid5: TDBGrid;
+    DBNavigator5: TDBNavigator;
+    DBNavigator3: TDBNavigator;
+    DBGrid3: TDBGrid;
+    DBNavigator7: TDBNavigator;
+    DBGrid7: TDBGrid;
+    DBNavigator4: TDBNavigator;
+    DBGrid4: TDBGrid;
+    DBNavigator6: TDBNavigator;
+    DBGrid6: TDBGrid;
+    DBNavigator8: TDBNavigator;
+    DBGrid8: TDBGrid;
+    TabSheet3: TTabSheet;
+    GroupBox4: TGroupBox;
+    CheckBox1: TCheckBox;
+    GroupBox5: TGroupBox;
+    GridPSettings: TDBGrid;
+    DBNavigator9: TDBNavigator;
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure TabSheet3Show(Sender: TObject);
+    procedure CheckBox1Click(Sender: TObject);
+    procedure CheckBox1KeyPress(Sender: TObject; var Key: Char);
+    procedure CheckBox1KeyUp(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure FormCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  fmSettings: TfmSettings;
+
+implementation
+
+uses InsDataModule;
+
+{$R *.DFM}
+
+procedure TfmSettings.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+  with InsDataMod do begin
+    if (ModalResult = mrOk) then begin
+     if (ODSAcc_types.State = dsEdit) then ODSAcc_types.Post;
+     if (ODSBal_cn.State = dsEdit) then ODSBal_cn.Post;
+     if (ODSTarifStates.State = dsEdit) then ODSTarifStates.Post;
+     if (ODSRelDates.State = dsEdit) then ODSRelDates.Post;
+     if (ODSMonths.State = dsEdit) then ODSMonths.Post;
+     if (ODSTariffs.State = dsEdit) then ODSTariffs.Post;     
+     if (ODSTariffs.State = dsEdit) then ODSTariffs.Post;
+     if (ODSBankm.State = dsEdit) then ODSBankm.Post;
+    end;
+   ODSAcc_types.Close;
+   ODSBal_cn.Close;
+   ODSBankm.Close;
+   ODSStates.Close;
+   ODSTarifStates.Close;
+   ODSRelDates.Close;
+   ODSMonths.Close;
+   ODSFranshiza.Close;
+   ODSTariffs.Close;
+  end;
+end;
+
+procedure TfmSettings.TabSheet3Show(Sender: TObject);
+begin
+ with InsDataMod do
+  CheckBox1.Checked := OPCOMMON.CallIntegerFunction('disablepolicies', []);
+end;
+
+procedure TfmSettings.CheckBox1Click(Sender: TObject);
+begin
+ with InsDataMod do
+  OPCOMMON.CallIntegerFunction('disablepolicies', [Integer(CheckBox1.Checked)]);
+end;
+
+procedure TfmSettings.CheckBox1KeyPress(Sender: TObject; var Key: Char);
+begin
+  CheckBox1Click(Sender);
+end;
+
+procedure TfmSettings.CheckBox1KeyUp(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  CheckBox1Click(Sender);
+end;
+
+procedure TfmSettings.FormCreate(Sender: TObject);
+begin
+     GridPSettings.DataSource:=InsDataMod.DSPolicyNums;
+end;
+
+end.

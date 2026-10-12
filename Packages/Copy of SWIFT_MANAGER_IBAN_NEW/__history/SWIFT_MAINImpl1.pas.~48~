@@ -1,0 +1,3841 @@
+﻿unit SWIFT_MAINImpl1;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActiveX, AxCtrls,unit2, SWIFT_MANAGER_TLB, StdVcl, Grids, DBGrids, Db,
+  OracleData,SboapiDataModuleImpl, ComCtrls, ImgList, ToolWin, StdCtrls,
+  DBCtrls, DBViewComboBox, ActnList, ExtCtrls, Menus, FileCtrl, jpeg;
+
+  const
+  Notcreate =1;
+  Created =2;
+  Commited =5;
+  Problemed =8;
+  Problemed2 =7;
+  new=10;
+  edits=11;
+  var
+  forma:integer;
+  a,b:string;
+    OutFilePath,struktur:string;
+type
+  TSWIFT_MAIN = class(TActiveForm, ISWIFT_MAIN)
+    PageControl1: TPageControl;
+    TabSheet1: TTabSheet;
+    TabSheet2: TTabSheet;
+    swImageList1: TImageList;
+    StatusBar1: TStatusBar;
+    ActionList1: TActionList;
+    Yeni: TAction;
+    CreateFayl: TAction;
+    ToolBar2: TToolBar;
+    ToolButton3: TToolButton;
+    ToolButton4: TToolButton;
+    ToolButton5: TToolButton;
+    ToolButton6: TToolButton;
+    Panel1: TPanel;
+    ToolBar1: TToolBar;
+    ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
+    ToolButton9: TToolButton;
+    ToolButton10: TToolButton;
+    ToolButton11: TToolButton;
+    Panel2: TPanel;
+    Delete: TAction;
+    commit: TAction;
+    swPopupMenu1: TPopupMenu;
+    N1: TMenuItem;
+    N2: TMenuItem;
+    N3: TMenuItem;
+    ToolButton12: TToolButton;
+    AddTrans: TAction;
+    CreateFile: TToolButton;
+    Edit_out: TAction;
+    Redakteet1: TMenuItem;
+    Refresh: TAction;
+    Comboitemsins: TAction;
+    sw_out_FileListBox: TFileListBox;
+    Archive: TToolButton;
+    onebox: TGroupBox;
+    six1: TImage;
+    grid_out: TDBGrid;
+    twobox: TGroupBox;
+    six: TImage;
+    ac: TImage;
+    GRIDOUT2: TDBGrid;
+    threebox: TGroupBox;
+    ac2: TImage;
+    six2: TImage;
+    gridout3: TDBGrid;
+    ac1: TImage;
+    Panel3: TPanel;
+    openday: TToolButton;
+    Gridin: TDBGrid;
+    RichEdit1: TRichEdit;
+    comit: TToolButton;
+    print: TToolButton;
+    Memo1: TMemo;
+    RichEdit2: TRichEdit;
+    AddInTrans: TAction;
+    back: TButton;
+    geri: TAction;
+    out_delete: TAction;
+    Memo2: TMemo;
+    createfile2: TAction;
+    addtrans2: TAction;
+    editing: TAction;
+    cesking: TToolButton;
+    cheskaccount: TAction;
+    undifinet_trans: TAction;
+    ToolButton7: TToolButton;
+    arxiv: TToolButton;
+    konvert: TAction;
+    konvert2: TAction;
+    ToolButton8: TToolButton;
+    konvert3: TAction;
+    Memo3: TMemo;
+    ToolButton13: TToolButton;
+    commiting: TAction;
+    PopupMenu1: TPopupMenu;
+    MenuItem1: TMenuItem;
+    MenuItem4: TMenuItem;
+    PopupMenu2: TPopupMenu;
+    MenuItem6: TMenuItem;
+    MenuItem7: TMenuItem;
+    MenuItem8: TMenuItem;
+    Edit1: TEdit;
+    Capet1: TMenuItem;
+    CapEt2: TMenuItem;
+    ToolButton14: TToolButton;
+    AddINTransNew: TAction;
+    procedure ToolButton1Click(Sender: TObject);
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure DBGrid1DrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TColumn; State: TGridDrawState);
+    procedure YeniExecute(Sender: TObject);
+    
+    procedure CreateFaylExecute(Sender: TObject);
+    procedure grid_outDrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TColumn; State: TGridDrawState);
+    procedure ToolButton10Click(Sender: TObject);
+    procedure N3Click(Sender: TObject);
+    procedure ToolButton9Click(Sender: TObject);
+    procedure ToolButton12Click(Sender: TObject);
+    procedure ToolButton13Click(Sender: TObject);
+    procedure grid_outDblClick(Sender: TObject);
+    procedure ToolButton11Click(Sender: TObject);
+    procedure CreateFileClick(Sender: TObject);
+    procedure Edit_outExecute(Sender: TObject);
+    procedure ToolButton2Click(Sender: TObject);
+    procedure Redakteet1Click(Sender: TObject);
+    procedure RefreshExecute(Sender: TObject);
+    procedure DateTimePicker4KeyPress(Sender: TObject; var Key: Char);
+    procedure DateTimePicker3KeyPress(Sender: TObject; var Key: Char);
+    procedure AddTransExecute(Sender: TObject);
+    procedure N2Click(Sender: TObject);
+    procedure NewMtExecute(Sender: TObject);
+    procedure ComboitemsinsExecute(Sender: TObject);
+    procedure ToolButton4Click(Sender: TObject);
+    procedure ToolButton3Click(Sender: TObject);
+    procedure ac1Click(Sender: TObject);
+    procedure acClick(Sender: TObject);
+    procedure ac2Click(Sender: TObject);
+    procedure six2Click(Sender: TObject);
+    procedure six1Click(Sender: TObject);
+    procedure sixClick(Sender: TObject);
+    procedure ArchiveClick(Sender: TObject);
+    procedure comitClick(Sender: TObject);
+    procedure printClick(Sender: TObject);
+    procedure AddInTransExecute(Sender: TObject);
+    procedure ToolButton5Click(Sender: TObject);
+    procedure ToolButton6Click(Sender: TObject);
+    procedure opendayClick(Sender: TObject);
+    procedure GRIDOUT2DrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TColumn; State: TGridDrawState);
+    procedure gridout3DrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TColumn; State: TGridDrawState);
+    procedure GridinDrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TColumn; State: TGridDrawState);
+    procedure GridinTitleClick(Column: TColumn);
+    procedure grid_outTitleClick(Column: TColumn);
+    procedure GRIDOUT2TitleClick(Column: TColumn);
+    procedure gridout3TitleClick(Column: TColumn);
+    procedure DeleteExecute(Sender: TObject);
+    procedure backClick(Sender: TObject);
+    procedure geriExecute(Sender: TObject);
+    procedure out_deleteExecute(Sender: TObject);
+    procedure createfile2Execute(Sender: TObject);
+    procedure addtrans2Execute(Sender: TObject);
+    procedure editingExecute(Sender: TObject);
+    procedure cheskaccountExecute(Sender: TObject);
+    procedure ceskingClick(Sender: TObject);
+    procedure undifinet_transExecute(Sender: TObject);
+    procedure ToolButton7Click(Sender: TObject);
+    procedure arxivClick(Sender: TObject);
+    procedure konvertExecute(Sender: TObject);
+    procedure konvert2Execute(Sender: TObject);
+    procedure ToolButton8Click(Sender: TObject);
+    procedure konvert3Execute(Sender: TObject);
+    procedure ActiveFormDeactivate(Sender: TObject);
+    procedure ActiveFormActivate(Sender: TObject);
+    procedure commitingExecute(Sender: TObject);
+    procedure Capet1Click(Sender: TObject);
+    procedure N1Click(Sender: TObject);
+    procedure MenuItem6Click(Sender: TObject);
+    procedure MenuItem7Click(Sender: TObject);
+    procedure MenuItem8Click(Sender: TObject);
+    procedure CapEt2Click(Sender: TObject);
+    procedure MenuItem1Click(Sender: TObject);
+    procedure MenuItem4Click(Sender: TObject);
+    procedure GRIDOUT2DblClick(Sender: TObject);
+    procedure gridout3DblClick(Sender: TObject);
+    procedure ToolButton14Click(Sender: TObject);
+    procedure AddINTransNewExecute(Sender: TObject);
+ 
+  private
+    { Private declarations }
+    FEvents: ISWIFT_MAINEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+  public
+    { Public declarations }
+    procedure Initialize; override;
+  end;
+
+implementation
+
+uses ComObj, ComServ, OUT_MT, Unit3, cap, Unit4, createmess, ceskin, Unit19,
+  editmt103, formmt103, qrp1, Unit7, Unit8, yoxp, archivout, ediTMT103Show,SBTranslateProc;
+
+{$R *.DFM}
+
+{ TSWIFT_MAIN }
+
+procedure TSWIFT_MAIN.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_SWIFT_MAINPage); }
+end;
+
+procedure TSWIFT_MAIN.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as ISWIFT_MAINEvents;
+end;
+
+procedure TSWIFT_MAIN.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TSWIFT_MAIN.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TSWIFT_MAIN.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TSWIFT_MAIN.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TSWIFT_MAIN.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TSWIFT_MAIN.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TSWIFT_MAIN.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TSWIFT_MAIN.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TSWIFT_MAIN.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TSWIFT_MAIN.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TSWIFT_MAIN.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TSWIFT_MAIN.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TSWIFT_MAIN.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TSWIFT_MAIN.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TSWIFT_MAIN.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TSWIFT_MAIN.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TSWIFT_MAIN.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TSWIFT_MAIN.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TSWIFT_MAIN.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TSWIFT_MAIN._Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TSWIFT_MAIN.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TSWIFT_MAIN.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TSWIFT_MAIN.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TSWIFT_MAIN.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TSWIFT_MAIN.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TSWIFT_MAIN.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TSWIFT_MAIN.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TSWIFT_MAIN.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TSWIFT_MAIN.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TSWIFT_MAIN.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TSWIFT_MAIN.Set_AxBorderStyle(Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TSWIFT_MAIN.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TSWIFT_MAIN.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TSWIFT_MAIN.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TSWIFT_MAIN.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TSWIFT_MAIN.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TSWIFT_MAIN.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TSWIFT_MAIN.Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TSWIFT_MAIN.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TSWIFT_MAIN.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TSWIFT_MAIN.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TSWIFT_MAIN.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TSWIFT_MAIN.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+
+
+
+
+procedure TSWIFT_MAIN.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+procedure TSWIFT_MAIN.ToolButton1Click(Sender: TObject);
+begin
+SWDataModule.SB_ACA.CallProcedure('CheckAdvancedObjectAccess', ['SW_OUT_NEW']);
+//     form5:=Tform5.Create(Self);
+  //   form5.showmodal;
+   OUT_FORM:= TOUT_FORM.Create(Self);
+   OUT_FORM.ShowModal;
+   forma:=new;
+
+end;
+
+procedure TSWIFT_MAIN.ActiveFormCreate(Sender: TObject);
+begin
+SBTranslateProc.TranslateAllComponents(Self,sboapiDataModule.OrPack_SL);
+archive_out:=tarchive_out.create(self);
+Form12:=TForm12.Create(self);
+Form7:=TForm7.create(self);
+Form8:=TForm8.create(self);
+MT103Show:=TMT103Show.Create(self);
+struktur:='PRT';
+
+swDataModule:= TswDatamodule.Create(Self);
+//OutFilePath:=SWDataModule.settingsPATH.asstring;
+
+//sw_out_FileListBox.Update;
+//SWDataModule.sw_in.Close;
+//SWDataModule.sw_in.Open;
+
+{TRY
+SWDataModule.SB_ACA.CallProcedure('CheckAdvancedObjectAccess', ['SW_OUT_CREATEDVIEW']);
+EXCEPT
+grid_out.Visible:=FALSE;
+END;
+
+TRY
+SWDataModule.SB_ACA.CallProcedure('CheckAdvancedObjectAccess', ['SW_OUT_COMITEDVIEW']);
+EXCEPT
+GRIDOUT2.Visible:=False;
+end;
+
+TRY
+SWDataModule.SB_ACA.CallProcedure('CheckAdvancedObjectAccess', ['SW_OUT_FILECREATEVIEW']);
+EXCEPT
+gridout3.Visible:=False;
+end;  }
+
+{IF onebox.Visible=TRUE THEN onebox.Top:=84;
+IF ONEBOX.Visible=FALSE AND twobox.Visible=TRUE THEN twobox.Top:=84;
+IF ONEBOX.Visible=FALSE AND twobox.Visible=FALSE AND threebox.Visible=TRUE THEN threebox.TOP:=84;
+IF onebox.Visible=TRUE AND   twobox.Visible=FALSE    AND threebox.Visible=TRUE THEN   threebox.TOP:=281;}
+
+ //ShowMessage('1');
+ //ShowMessage('2');
+
+//swDataModule.MT.Active:=true;
+//SWDataModule.Sysdate.Close;
+//SWDataModule.Sysdate.Open;
+//DateTimePicker3.Date:=SWDataModule.SysdateTEK_DAT.asdatetime;;
+//DateTimePicker4.Date:=SWDataModule.SysdateTEK_DAT.asdatetime;
+//ShowMessage(SWDataModule.Sysdate.fieldbyname('TEK_DAT').asstring);
+//ShowMessage(DateTimeToStr(SWDataModule.Sysdate.fieldbyname('TEK_DAT').asdatetime));
+{with SWDataModule.sw_out do begin
+ SetVariable('bdat',DateTimePicker3.Date);
+ SetVariable('edat',DateTimePicker4.Date);
+end;  }
+//ShowMessage('3');
+
+//SWDataModule.sw_out_2.Open;
+
+end;
+
+procedure TSWIFT_MAIN.DBGrid1DrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TColumn;
+  State: TGridDrawState);
+begin
+//with (Sender as TDBGrid) do
+ // begin
+
+  // if DataCol=0 then
+   //if DataModule2.OracleDataSet1.FieldByName('sw_mt').AsString='MT100'  then
+  // swImageList1.Draw(Canvas, Rect.Left, Rect.Top, 5, True) else
+  // swImageList1.Draw(Canvas, Rect.Left, Rect.Top, 4, True);
+  //end;
+end;
+
+procedure TSWIFT_MAIN.YeniExecute(Sender: TObject);
+begin
+ OUT_FORM:=Tout_form.create(self);
+ OUT_FORM.ShowModal;
+end;
+
+
+
+procedure TSWIFT_MAIN.CreateFaylExecute(Sender: TObject);
+var
+ sum,kesr:real;
+i:integer;
+output:TextFile;
+FileName,Swmessage,dir,edit_ref,BeginMessage,Endmesage,valu:String;
+
+begin
+   GRIDOUT2.SetFocus;
+   GRIDOUT2.SelectedRows.CurrentRowSelected:=Grid_out.DataSource.DataSet.RecordCount<>0;
+   if GRIDOUT2.DataSource.DataSet.FieldByName('status').asinteger=5 then
+  begin
+  edit_ref:=GRIDOUT2.DataSource.DataSet.FieldByName('id').asstring;
+  for i:=1 to (8-length(edit_ref)) do begin
+  edit_ref:='0'+edit_ref;
+  end;
+  valu:=GRIDOUT2.DataSource.DataSet.FieldByName('MF32A_CURR').asstring;
+  if valu='AZN' then valu:='AZM';
+  if not DirectoryExists(SWDataModule.sw_settings.fieldbyname('path_out').asstring) then
+  MkDir(SWDataModule.sw_settings.fieldbyname('path_out').asstring);
+  dir:=SWDataModule.sw_settings.fieldbyname('path_out').asstring+'\'+FormatDateTime('ddmmyy',date)+'\';
+  if not DirectoryExists(dir) then
+  MkDir(dir);
+   //bke:=copy(GRIDOUT2.DataSource.DataSet.FieldByName('SENDERBIC').asstring,0,6);
+   FileName:=dir+'sw'+edit_ref+'.fin';
+   AssignFile(output,FileName);
+   Rewrite(output);
+
+   BeginMessage:='{1:F01';
+   Swmessage:=GRIDOUT2.DataSource.DataSet.FieldByName('SENDERBIC').asstring+
+
+   'AXXX1234123456}{2:I'+copy(GRIDOUT2.DataSource.DataSet.FieldByName('MESSAGETYPE').asstring,3,3)+
+    copy(GRIDOUT2.DataSource.DataSet.FieldByName('RECEIVERBIC').asstring,0,8)+'X'+copy(GRIDOUT2.DataSource.DataSet.FieldByName('RECEIVERBIC').asstring,9,3)+'N}{3:{'+
+    copy(GRIDOUT2.DataSource.DataSet.FieldByName('MESSAGETYPE').asstring,3,3)+ ':'+ valu
+    +'}}{4:';
+    BeginMessage:= BeginMessage+Swmessage;
+   Writeln(output,BeginMessage);
+//--------------body file------------------
+
+// referense write
+     Swmessage:=GRIDOUT2.DataSource.DataSet.fieldbyname('MF20').AsString;;
+     Swmessage:=Swmessage+GRIDOUT2.DataSource.DataSet.fieldbyname('MF20_REFERENCE').AsString;
+     Writeln(output,swmessage);
+
+//mf23 write
+     Swmessage:=GRIDOUT2.DataSource.DataSet.fieldbyname('M23B').AsString;
+     Swmessage:=Swmessage+GRIDOUT2.DataSource.DataSet.fieldbyname('MF23B').AsString;
+     Writeln(output,swmessage);
+
+//mf26t write
+     if GRIDOUT2.DataSource.DataSet.fieldbyname('M26T').AsString<>'' then
+        begin
+          Swmessage:=GRIDOUT2.DataSource.DataSet.fieldbyname('M26T').AsString;
+          Swmessage:=Swmessage+GRIDOUT2.DataSource.DataSet.fieldbyname('MF26T').AsString;
+          Writeln(output,swmessage);
+        end;
+
+//mf32a
+      sum:= GRIDOUT2.DataSource.DataSet.fieldbyname('MF32A_AMOUNT').AsFloat;
+      kesr:=frac(sum);
+
+      Swmessage:= GRIDOUT2.DataSource.DataSet.fieldbyname('M32A').AsString;
+      Swmessage:=Swmessage+FormatDateTime('ddmmyy',GRIDOUT2.DataSource.DataSet.fieldbyname('MF32A_DATE').AsDateTime);
+      Swmessage:=Swmessage+GRIDOUT2.DataSource.DataSet.fieldbyname('MF32A_CURR').AsString;
+      Swmessage:=Swmessage+GRIDOUT2.DataSource.DataSet.fieldbyname('MF32A_AMOUNT').AsString;
+      if kesr=0 then Swmessage:=Swmessage+',' else Swmessage:=StringReplace(Swmessage, '.', ',',
+                          [rfReplaceAll, rfIgnoreCase]);
+      Writeln(output,swmessage);
+
+//mf36
+    if GRIDOUT2.DataSource.DataSet.fieldbyname('M36').AsString<>'' then
+       begin
+       Swmessage:= GRIDOUT2.DataSource.DataSet.fieldbyname('M36').AsString;
+       Swmessage:=Swmessage+GRIDOUT2.DataSource.DataSet.fieldbyname('MF36').AsString;
+       Writeln(output,swmessage);
+       end;
+
+//mf50
+    if GRIDOUT2.DataSource.DataSet.fieldbyname('M50').AsString<>'' then
+       begin
+       Swmessage:= GRIDOUT2.DataSource.DataSet.fieldbyname('M50').AsString;
+       if GRIDOUT2.DataSource.DataSet.fieldbyname('MF50_ACCOUNT').AsString<>'' then
+       begin
+       Swmessage:=Swmessage+'/'+GRIDOUT2.DataSource.DataSet.fieldbyname('MF50_ACCOUNT').AsString;
+       Writeln(output,swmessage);
+       end;
+       if GRIDOUT2.DataSource.DataSet.fieldbyname('MF50_BIC').AsString<>'' then
+       begin
+       Swmessage:= GRIDOUT2.DataSource.DataSet.fieldbyname('MF50_BIC').AsString;
+       Writeln(output,swmessage);
+       end;
+       if GRIDOUT2.DataSource.DataSet.fieldbyname('MF50_NAME$ADRESS').AsString<>'' then
+       begin
+       Swmessage:= GRIDOUT2.DataSource.DataSet.fieldbyname('MF50_NAME$ADRESS').AsString;
+       Writeln(output,swmessage);
+       end;
+       end;
+
+//mf52
+    if GRIDOUT2.DataSource.DataSet.fieldbyname('M52').AsString<>'' then
+       begin
+       Swmessage:=GRIDOUT2.DataSource.DataSet.fieldbyname('M52').AsString;
+       Swmessage:=Swmessage+'/'+GRIDOUT2.DataSource.DataSet.fieldbyname('MF52_ACCOUNT').AsString;
+       Writeln(output,swmessage);
+       Swmessage:= GRIDOUT2.DataSource.DataSet.fieldbyname('MF52_BIC').AsString;
+       Writeln(output,swmessage);
+       Swmessage:= GRIDOUT2.DataSource.DataSet.fieldbyname('MF52_NAME$ADRESS').AsString;
+       Writeln(output,swmessage);
+       end;
+
+//mf53
+    if GRIDOUT2.DataSource.DataSet.fieldbyname('M53').AsString<>'' then
+       begin
+       Swmessage:=GRIDOUT2.DataSource.DataSet.fieldbyname('M53').AsString;
+       Swmessage:=Swmessage+'/'+GRIDOUT2.DataSource.DataSet.fieldbyname('MF53_ACCOUNT').AsString;
+       Writeln(output,swmessage);
+       Swmessage:= GRIDOUT2.DataSource.DataSet.fieldbyname('MF53_BIC').AsString;
+       Writeln(output,swmessage);
+       Swmessage:= GRIDOUT2.DataSource.DataSet.fieldbyname('MF53_NAME$LOCATION').AsString;
+       Writeln(output,swmessage);
+       end;
+
+//mf54
+    if GRIDOUT2.DataSource.DataSet.fieldbyname('M54').AsString<>'' then
+       begin
+       Swmessage:=GRIDOUT2.DataSource.DataSet.fieldbyname('M54').AsString;
+       Swmessage:=Swmessage+'/'+GRIDOUT2.DataSource.DataSet.fieldbyname('MF54_ACCOUNT').AsString;
+       Writeln(output,swmessage);
+       Swmessage:= GRIDOUT2.DataSource.DataSet.fieldbyname('MF54_BIC').AsString;
+       Writeln(output,swmessage);
+       Swmessage:= GRIDOUT2.DataSource.DataSet.fieldbyname('MF54_NAME$LOCATION').AsString;
+       Writeln(output,swmessage);
+       end;
+
+//mf55
+    if GRIDOUT2.DataSource.DataSet.fieldbyname('M55').AsString<>'' then
+       begin
+       Swmessage:=GRIDOUT2.DataSource.DataSet.fieldbyname('M55').AsString;
+       Swmessage:=Swmessage+'/'+GRIDOUT2.DataSource.DataSet.fieldbyname('MF55_ACCOUNT').AsString;
+       Writeln(output,swmessage);
+       Swmessage:= GRIDOUT2.DataSource.DataSet.fieldbyname('MF55_BIC').AsString;
+       Writeln(output,swmessage);
+       Swmessage:= GRIDOUT2.DataSource.DataSet.fieldbyname('MF55_NAME$LOCATION').AsString;
+       Writeln(output,swmessage);
+       end;
+
+//mf56
+    if GRIDOUT2.DataSource.DataSet.fieldbyname('M56').AsString<>'' then
+       begin
+       Swmessage:=GRIDOUT2.DataSource.DataSet.fieldbyname('M56').AsString;
+       Swmessage:=Swmessage+'/'+GRIDOUT2.DataSource.DataSet.fieldbyname('MF56_ACCOUNT').AsString;
+       Writeln(output,swmessage);
+       Swmessage:= GRIDOUT2.DataSource.DataSet.fieldbyname('MF56_BIC').AsString;
+       Writeln(output,swmessage);
+       Swmessage:= GRIDOUT2.DataSource.DataSet.fieldbyname('MF56_NAME$LOCATION').AsString;
+       Writeln(output,swmessage);
+       end;
+
+//mf57
+    if GRIDOUT2.DataSource.DataSet.fieldbyname('M57').AsString<>'' then
+       begin
+       Swmessage:=GRIDOUT2.DataSource.DataSet.fieldbyname('M57').AsString;
+       Swmessage:=Swmessage+'/'+GRIDOUT2.DataSource.DataSet.fieldbyname('MF57_ACCOUNT').AsString;
+       Writeln(output,swmessage);
+       Swmessage:= GRIDOUT2.DataSource.DataSet.fieldbyname('MF57_BIC').AsString;
+       Writeln(output,swmessage);
+       Swmessage:= GRIDOUT2.DataSource.DataSet.fieldbyname('MF57_NAME$LOCATION').AsString;
+       Writeln(output,swmessage);
+       end;
+
+//mf59
+       Swmessage:=GRIDOUT2.DataSource.DataSet.fieldbyname('M59').AsString;
+       Swmessage:=Swmessage+'/'+GRIDOUT2.DataSource.DataSet.fieldbyname('MF59_ACCOUNT').AsString;
+       Writeln(output,swmessage);
+       Swmessage:= GRIDOUT2.DataSource.DataSet.fieldbyname('MF59_NAME$ADRESS').AsString;
+       Writeln(output,swmessage);
+
+//mf70
+    if GRIDOUT2.DataSource.DataSet.fieldbyname('M70').AsString<>'' then
+       begin
+       Swmessage:=GRIDOUT2.DataSource.DataSet.fieldbyname('M70').AsString;
+       Swmessage:=Swmessage+GRIDOUT2.DataSource.DataSet.fieldbyname('MF70').AsString;
+       Writeln(output,swmessage);
+       end;
+//mf71a
+    if GRIDOUT2.DataSource.DataSet.fieldbyname('M71A').AsString<>'' then
+       begin
+       Swmessage:=GRIDOUT2.DataSource.DataSet.fieldbyname('M71A').AsString;
+       Swmessage:=Swmessage+GRIDOUT2.DataSource.DataSet.fieldbyname('MF71A').AsString;
+       Writeln(output,swmessage);
+       end;
+//mf71f
+    if  GRIDOUT2.DataSource.DataSet.fieldbyname('M71F').AsString<>'' then
+        begin
+        Swmessage:=GRIDOUT2.DataSource.DataSet.fieldbyname('M71F').AsString;
+        Swmessage:=Swmessage+GRIDOUT2.DataSource.DataSet.fieldbyname('MF71G_CHILD').AsString;
+        Writeln(output,swmessage);
+        end;
+//mf71g
+    if  GRIDOUT2.DataSource.DataSet.fieldbyname('M71G').AsString<>'' then
+        begin
+        Swmessage:=GRIDOUT2.DataSource.DataSet.fieldbyname('M71G').AsString;
+        Swmessage:=Swmessage+GRIDOUT2.DataSource.DataSet.fieldbyname('MF71G_CHILD').AsString;
+        Writeln(output,swmessage);
+        end;
+//mf72
+        if  GRIDOUT2.DataSource.DataSet.fieldbyname('M72').AsString<>'' then
+        begin
+        Swmessage:=GRIDOUT2.DataSource.DataSet.fieldbyname('M72').AsString;
+        Swmessage:=Swmessage+ GRIDOUT2.DataSource.DataSet.fieldbyname('MF72').AsString;
+        Writeln(output,swmessage);
+        end;
+//mf77b
+        if  GRIDOUT2.DataSource.DataSet.fieldbyname('M77B').AsString<>'' then
+        begin
+        Swmessage:=GRIDOUT2.DataSource.DataSet.fieldbyname('M77B').AsString;
+        Swmessage:=Swmessage+ GRIDOUT2.DataSource.DataSet.fieldbyname('MF77B').AsString;
+        Writeln(output,swmessage);
+        end;
+
+
+
+
+
+
+//------------end body file----------------
+   Endmesage:='-}';
+   Writeln(output,Endmesage);
+   CloseFile(output);
+   SwDataModule.sw_in_insert.CallProcedure('sw_out_CreateFile',[GRIDOUT2.DataSource.DataSet.FieldByName('id').asinteger]);
+   GRIDOUT2.DataSource.DataSet.Refresh;
+
+SWDataModule.sw_out_2.Open;
+SWDataModule.sw_out_2.Refresh;
+SWDataModule.sw_out3.Open;
+SWDataModule.sw_out3.Refresh;
+   ShowMessage(FileName+' adli fayl yaradildi!');
+ end else ShowMessage('Seçilmiş əməliyyata fayl yaradila bilmez!!!')
+end;
+
+
+
+
+
+
+
+procedure TSWIFT_MAIN.grid_outDrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TColumn;
+  State: TGridDrawState);
+var
+  ImageIndex: Integer;
+
+begin
+//SWDataModule.SB_ACA.CallProcedure('CheckAdvancedObjectAccess', ['SW_OUT_CREATEDVIEW']);
+ ImageIndex := -1;
+  with Sender as TDBGrid do
+  begin
+    if DataSource.DataSet.RecordCount <> 0 then
+    begin
+      case DataSource.DataSet.FieldByName('STATUS').AsInteger of
+      notcreate :
+        ImageIndex := 10;
+      created :
+        ImageIndex := 4;
+      commited :
+        ImageIndex := 5;
+      Problemed:
+        ImageIndex :=16;
+      Problemed2:
+        ImageIndex :=16;
+      15:
+        ImageIndex :=7;
+
+      else
+      end;
+      if (DataCol = 1) and (ImageIndex <> -1) then
+        swImageList1.Draw(Canvas, Rect.Left, Rect.Top, ImageIndex, True)
+      else
+        DefaultDrawColumnCell(Rect, DataCol, Column, State);
+    end;
+
+    //if (DataSource.DataSet.FieldByName('id').asinteger<>722) and (DataCol  =2)  then
+
+     //(
+    //Column.Font.Color:=clred
+         // else
+          //Column.Font.Color:=clblack ;
+        //DefaultDrawColumnCell(Rect, DataCol, Column, State);
+    //DefaultDrawColumnCell
+
+
+  end;
+end;
+
+procedure TSWIFT_MAIN.ToolButton10Click(Sender: TObject);
+begin
+Refresh.Execute;
+end;
+
+procedure TSWIFT_MAIN.N3Click(Sender: TObject);
+ var i,j : integer;
+begin
+
+
+if GRIDOUT2.DataSource.DataSet.RecordCount>0 then begin
+edit1.Text:='2';
+ToolButton8.Click;
+end;
+end;
+
+procedure TSWIFT_MAIN.ToolButton9Click(Sender: TObject);
+begin
+if SWDataModule.sw_out.RecordCount>0 then
+begin
+SWDataModule.SB_ACA.CallProcedure('CheckAdvancedObjectAccess', ['SW_OUT_DELETE']);
+out_delete.Execute;
+
+end else Memo2.Text:='Əməliyyat silinmədi!'
+end;
+
+
+
+{/*var i,j : integer;
+WaitNextConfirm, WillRefresh: Boolean;
+begin
+
+SWDataModule.SB_ACA.CallProcedure('CheckAdvancedObjectAccess', ['SW_OUT_DELETE']);
+if Grid_out.DataSource.DataSet.RecordCount<>0 then
+begin
+   Grid_out.SetFocus;
+   Grid_out.SelectedRows.CurrentRowSelected:=Grid_out.DataSource.DataSet.RecordCount<>0;
+   for i:=0 to Grid_out.SelectedRows.Count-1 do
+   begin
+      Grid_out.DataSource.DataSet.GotoBookmark(pointer(Grid_out.SelectedRows.items[i]));
+
+
+
+      case MessageDlg(format('Emeliyyat silinsinmi #%d ?',[Grid_out.DataSource.DataSet.fieldbyname('id').asinteger]), mtConfirmation,[mbyes,mbno,mbcancel,mball], 0) of
+           mryes :begin
+                    SwDataModule.sw_in_insert.CallProcedure('Sw_out_Delete',[Grid_out.DataSource.DataSet.FieldByName('ID').asinteger]);
+                    Grid_out.DataSource.DataSet.Refresh;
+                    Grid_out.SelectedRows.Clear;
+                  end;
+           mrno  : exit;
+           mrcancel : Break;
+           mrall : begin
+                   case MessageDlg(IntToStr(Grid_out.SelectedRows.Count)+' sayda emeliyyat silinsinmi ?', mtConfirmation,[mbyes,mbno], 0) of
+                   mryes: begin
+                             for j:=0 to Grid_out.SelectedRows.Count-1 do
+                             begin
+                                Grid_out.DataSource.DataSet.GotoBookmark(pointer(Grid_out.SelectedRows.items[j]));
+                                SwDataModule.sw_in_insert.CallProcedure('Sw_out_Delete',[Grid_out.DataSource.DataSet.FieldByName('ID').asinteger]);
+                             end;
+                          Grid_out.DataSource.DataSet.Refresh;
+                          Grid_out.SelectedRows.Clear;
+                          break;
+                          end;
+                   mrno : exit;
+                   end;
+                   end;
+      end;
+   end;
+end else ShowMessage('Hec bir format yoxdur!');
+end;*/}
+
+procedure TSWIFT_MAIN.ToolButton12Click(Sender: TObject);
+begin
+SWDataModule.SB_ACA.CallProcedure('CheckAdvancedObjectAccess', ['SW_SETTINGS']);
+   sazlama:= Tsazlama.Create(Self);
+   sazlama.ShowModal;
+end;
+
+procedure TSWIFT_MAIN.ToolButton13Click(Sender: TObject);
+begin
+
+SWDataModule.SB_ACA.CallProcedure('CheckAdvancedObjectAccess', ['SW_OUT_COMMITS']);
+//SWDataModule.SB_ACA.CallProcedure('CheckAdvancedObjectAccess', ['SW_OUT_COMMIT']);
+if Gridout2.DataSource.DataSet.RecordCount<>0 then
+begin
+
+commiting.Execute;
+end
+else ShowMessage(' Heç bir format yoxdur!');
+SWDataModule.sw_out.Open;
+SWDataModule.sw_out.Refresh;
+SWDataModule.sw_out_2.Open;
+SWDataModule.sw_out_2.Refresh;
+SWDataModule.SW_OUT3.Open;
+SWDataModule.SW_OUT3.Refresh;
+end;
+
+procedure TSWIFT_MAIN.grid_outDblClick(Sender: TObject);
+var
+i,k,l,m:integer;
+
+begin
+//PopupMenu2.MenuItem8.Click;
+
+MenuItem8.Click;
+end;
+
+procedure TSWIFT_MAIN.ToolButton11Click(Sender: TObject);
+begin
+SWDataModule.SB_ACA.CallProcedure('CheckAdvancedObjectAccess', ['SW_OUT_COMMIT']);
+if Grid_out.DataSource.DataSet.RecordCount<>0 then
+AddTrans2.Execute else ShowMessage('Heç bir format yoxdur!');
+SWDataModule.sw_out.Open;
+SWDataModule.sw_out.Refresh;
+SWDataModule.sw_out_2.Open;
+SWDataModule.sw_out_2.Refresh;
+SWDataModule.SW_OUT3.Open;
+SWDataModule.SW_OUT3.Refresh;
+end;
+
+procedure TSWIFT_MAIN.CreateFileClick(Sender: TObject);
+begin
+SWDataModule.SB_ACA.CallProcedure('CheckAdvancedObjectAccess', ['SW_OUT_CREATEFILE']);
+if GRIDOUT3.DataSource.DataSet.RecordCount<>0 then
+CreateFile2.Execute else ShowMessage('Heç bir format yoxdur!')
+end;
+
+procedure TSWIFT_MAIN.Edit_outExecute(Sender: TObject);
+var
+i,k,l,m:integer;
+
+begin
+   if SWDataModule.sw_out.RecordCount>0 then
+    begin
+
+   OUT_FORM:= Tout_form.Create(Self);
+
+     with OUT_FORM do begin
+
+   fin.Style:=csDropDown;
+   FIN.Text:=grid_out.DataSource.DataSet.fieldbyname('MESSAGETYPE').asstring;
+   fin.Enabled:=False;
+   sendertype.Text:=grid_out.DataSource.DataSet.fieldbyname('SENDERTYPE').asstring;
+   reciverbic.Text:=grid_out.DataSource.DataSet.fieldbyname('RECEIVERBIC').asstring;
+
+    //fin.Style:=csDropDownList;
+    //--------------------- Text show
+     //MF50.AutoSize:=True;
+OUT_FORM.Caption:=FIN.Text;
+    swDataModule.OracleDataSet2.Active:=True;
+    swDataModule.mt_select.Active:=True;
+
+
+if  FIN.Text<>'' then FIN.color:=clWindow;
+
+
+    //InvisibleAllPanels ;
+    MainPanel.Visible:=True;
+
+    //VisibleMain;
+   //ViewPanel.Execute;
+   swDataModule.mt_select.SQL[2]:= ' and '+ fin.Text +' is not null'+' order by sw_field';
+
+for i := 0 to OUT_FORM.ComponentCount - 1  do begin // Uygun panelleri visible eleyir :
+
+  if (OUT_FORM.Components[i].ClassType = TPanel) then
+  begin
+  k:=k+1;
+  with   swdatamodule.mt_select do begin
+  setvariable('Panelname', OUT_FORM.Components[i].name);
+
+   close;
+   open;
+   if swdatamodule.mt_select.RecordCount>0  then
+
+   (OUT_FORM.Components[i] as TPanel).Visible :=True;
+   //else  (OUT_FORM.Components[i] as TPanel).visible :=False;
+
+     end;
+   end; //--end with
+   end; //--end for
+  // InsertComboBoxItems;
+   //showmessage(inttostr(k));
+
+
+
+
+    //-------------------- end text show -----------------------------
+
+    //------------------ Text child show ---------------------
+
+          if fin.Text='MT103'
+          then
+            begin
+
+            MF20_edit.Text:= grid_out.DataSource.DataSet.fieldbyname('MF20_REFERENCE').asstring;
+            MF23b_edit.Text:=grid_out.DataSource.DataSet.fieldbyname('MF23B').asstring;
+            MF26T_edit.Text:= grid_out.DataSource.DataSet.fieldbyname('MF26T').asstring;
+            mf32_date.DateTime:= grid_out.DataSource.DataSet.fieldbyname('MF32A_DATE').AsDateTime;
+            mf32a_val.Text:=grid_out.DataSource.DataSet.fieldbyname('MF32A_CURR').asstring;
+            Edit11_mf32a.Text:=grid_out.DataSource.DataSet.fieldbyname('MF32A_AMOUNT').asstring;
+            //MF36_edit.Text:=grid_out.DataSource.DataSet.fieldbyname('MF36').asstring;
+            //MF36_edit2.Text:=grid_out.DataSource.DataSet.fieldbyname('MF36').asstring;
+
+    //---------------------------MF50----------------------------------------------//
+               if grid_out.DataSource.DataSet.fieldbyname('M50').asstring=':50A:'
+               then
+                  begin
+
+                     MF50A.Visible:=True;
+                     Edit1_MF50.Text:= grid_out.DataSource.DataSet.fieldbyname('MF50_ACCOUNT').asstring;
+                     Edit2_MF50.Text:=grid_out.DataSource.DataSet.fieldbyname('MF50_BIC').asstring;
+                     Memo1_MF50.Text:=grid_out.DataSource.DataSet.fieldbyname('MF50_NAME$ADRESS').asstring;
+                     CMF50.ItemIndex:=1;
+                  end;
+
+               if grid_out.DataSource.DataSet.fieldbyname('M50').asstring=':50F:'
+               then
+                  begin
+
+                     MF50F.Visible:=True;
+                     Edit4_MF50.Text:= grid_out.DataSource.DataSet.fieldbyname('MF50_ACCOUNT').asstring;
+                     Memo3_MF50.Text:=grid_out.DataSource.DataSet.fieldbyname('MF50_NAME$ADRESS').asstring ;
+                  end;
+
+               if grid_out.DataSource.DataSet.fieldbyname('M50').asstring=':50K:'
+               then
+                  begin
+
+                     MF50K.Visible:=True;
+                     Edit3_MF50.Text:= grid_out.DataSource.DataSet.fieldbyname('MF50_ACCOUNT').asstring;
+                     Memo2_MF50.Text:=grid_out.DataSource.DataSet.fieldbyname('MF50_NAME$ADRESS').asstring;
+                  end;
+
+
+     //---------------------------MF52----------------------------------------------//
+
+               if grid_out.DataSource.DataSet.fieldbyname('M52').asstring=':52A:'
+               then
+                  begin
+
+                     MF52A.Visible:=TRUE;
+                     Edit1_MF52.Text:=grid_out.DataSource.DataSet.fieldbyname('MF52_ACCOUNT').asstring;
+                     Edit2_MF52.Text:=grid_out.DataSource.DataSet.fieldbyname('MF52_BIC').asstring;
+                     Memo1_MF52.Text:=grid_out.DataSource.DataSet.fieldbyname('MF52_NAME$ADRESS').asstring;
+                  end;
+
+                if grid_out.DataSource.DataSet.fieldbyname('M52').asstring=':52D:'
+               then
+                  begin
+
+                     MF52D.Visible:=TRUE;
+                     Edit3_MF52.Text:=grid_out.DataSource.DataSet.fieldbyname('MF52_ACCOUNT').asstring;
+                     Memo2_MF52.Text:=grid_out.DataSource.DataSet.fieldbyname('MF52_NAME$ADRESS').asstring;
+                  end;
+       //---------------------------MF53----------------------------------------------//
+
+
+
+
+
+               if grid_out.DataSource.DataSet.fieldbyname('M53').asstring=':53A:'
+               then
+                  begin
+
+                     MF53A.Visible:=True;
+                     Edit1_MF53.Text:= grid_out.DataSource.DataSet.fieldbyname('MF53_ACCOUNT').asstring;
+                     Edit2_MF53.Text:=grid_out.DataSource.DataSet.fieldbyname('MF53_BIC').asstring;
+                     Memo1_MF53.Text:=grid_out.DataSource.DataSet.fieldbyname('MF53_NAME$LOCATION').asstring ;
+                  end;
+
+               if grid_out.DataSource.DataSet.fieldbyname('M53').asstring=':53B:'
+               then
+                  begin
+
+                     MF53B.Visible:=True;
+                     Edit3_MF53.Text:= grid_out.DataSource.DataSet.fieldbyname('MF53_ACCOUNT').asstring;
+                     Edit4_MF53.Text:=grid_out.DataSource.DataSet.fieldbyname('MF53_BIC').asstring ;
+                  end;
+
+               if grid_out.DataSource.DataSet.fieldbyname('M53').asstring=':53D:'
+               then
+                  begin
+
+                     MF53D.Visible:=True;
+                     Edit5_MF53.Text:= grid_out.DataSource.DataSet.fieldbyname('MF53_ACCOUNT').asstring;
+                     Memo2_MF53.Text:=grid_out.DataSource.DataSet.fieldbyname('MF53_NAME$LOCATION').asstring;
+                  end;
+
+
+         //---------------------------MF54----------------------------------------------//
+               if grid_out.DataSource.DataSet.fieldbyname('M54').asstring=':54A:'
+               then
+                  begin
+
+                     MF54A.Visible:=True;
+                     Edit1_MF54.Text:= grid_out.DataSource.DataSet.fieldbyname('MF54_ACCOUNT').asstring;
+                     Edit2_MF54.Text:=grid_out.DataSource.DataSet.fieldbyname('MF54_BIC').asstring;
+                     Memo1_MF54.Text:=grid_out.DataSource.DataSet.fieldbyname('MF54_NAME$LOCATION').asstring ;
+                  end;
+
+               if grid_out.DataSource.DataSet.fieldbyname('M54').asstring=':54B:'
+               then
+                  begin
+
+                     MF54B.Visible:=True;
+                     Edit4_MF54.Text:= grid_out.DataSource.DataSet.fieldbyname('MF54_ACCOUNT').asstring;
+                     Edit5_MF54.Text:=grid_out.DataSource.DataSet.fieldbyname('MF54_BIC').asstring ;
+                  end;
+
+               if grid_out.DataSource.DataSet.fieldbyname('M54').asstring=':54D:'
+               then
+                  begin
+
+                     MF54D.Visible:=True;
+                     Edit6_MF54.Text:= grid_out.DataSource.DataSet.fieldbyname('MF54_ACCOUNT').asstring;
+                     Memo2_MF54.Text:=grid_out.DataSource.DataSet.fieldbyname('MF54_NAME$LOCATION').asstring ;
+                  end;
+
+         //---------------------------MF55----------------------------------------------//
+
+
+               if grid_out.DataSource.DataSet.fieldbyname('M55').asstring=':55A:'
+               then
+                  begin
+
+                     MF55A.Visible:=True;
+                     Edit1_MF55.Text:= grid_out.DataSource.DataSet.fieldbyname('MF55_ACCOUNT').asstring;
+                     Edit2_MF55.Text:=grid_out.DataSource.DataSet.fieldbyname('MF55_BIC').asstring;
+                     Memo1_MF55.Text:=grid_out.DataSource.DataSet.fieldbyname('MF55_NAME$LOCATION').asstring ;
+                  end;
+
+               if grid_out.DataSource.DataSet.fieldbyname('M55').asstring=':55B:'
+               then
+                  begin
+
+                     MF55B.Visible:=True;
+                     Edit3_MF55.Text:= grid_out.DataSource.DataSet.fieldbyname('MF55_ACCOUNT').asstring;
+                     Edit4_MF55.Text:=grid_out.DataSource.DataSet.fieldbyname('MF55_BIC').asstring ;
+                  end;
+
+               if grid_out.DataSource.DataSet.fieldbyname('M55').asstring=':55D:'
+               then
+                  begin
+
+                     MF55D.Visible:=True;
+                     Edit5_MF55.Text:= grid_out.DataSource.DataSet.fieldbyname('MF55_ACCOUNT').asstring;
+                     Memo2_MF55.Text:=grid_out.DataSource.DataSet.fieldbyname('MF55_NAME$LOCATION').asstring ;
+                  end;
+
+    //---------------------------MF56----------------------------------------------//
+
+
+               if grid_out.DataSource.DataSet.fieldbyname('M56').asstring=':56A:'
+               then
+                  begin
+
+                     MF56A.Visible:=True;
+                     Edit1_MF56.Text:= grid_out.DataSource.DataSet.fieldbyname('MF56_ACCOUNT').asstring;
+                     Edit2_MF56.Text:=grid_out.DataSource.DataSet.fieldbyname('MF56_BIC').asstring;
+                     Memo1_MF56.Text:=grid_out.DataSource.DataSet.fieldbyname('MF56_NAME$LOCATION').asstring;
+                  end;
+
+               if grid_out.DataSource.DataSet.fieldbyname('M56').asstring=':56C:'
+               then
+                  begin
+
+                     MF56C.Visible:=True;
+                     Edit3_MF56.Text:= grid_out.DataSource.DataSet.fieldbyname('MF56_ACCOUNT').asstring;
+
+                  end;
+
+               if grid_out.DataSource.DataSet.fieldbyname('M56').asstring=':56D:'
+               then
+                  begin
+
+                     MF56D.Visible:=True;
+                     Edit4_MF56.Text:= grid_out.DataSource.DataSet.fieldbyname('MF56_ACCOUNT').asstring;
+                     Memo2_MF56.Text:=grid_out.DataSource.DataSet.fieldbyname('MF56_NAME$LOCATION').asstring ;
+                  end;
+
+       //---------------------------MF57----------------------------------------------//
+
+
+               if grid_out.DataSource.DataSet.fieldbyname('M57').asstring=':57A:'
+               then
+                  begin
+
+                     MF57A.Visible:=True;
+                     Edit1_MF57.Text:= grid_out.DataSource.DataSet.fieldbyname('MF57_ACCOUNT').asstring;
+                     Edit2_MF57.Text:=grid_out.DataSource.DataSet.fieldbyname('MF57_BIC').asstring;
+                     Memo1_MF57.Text:=grid_out.DataSource.DataSet.fieldbyname('MF57_NAME$LOCATION').asstring ;
+                  end;
+
+
+
+                if grid_out.DataSource.DataSet.fieldbyname('M57').asstring=':57B:'
+                then
+                  begin
+
+                     MF57B.Visible:=True;
+                     Edit3_MF57.Text:= grid_out.DataSource.DataSet.fieldbyname('MF57_ACCOUNT').asstring;
+                     Edit4_MF57.Text:=grid_out.DataSource.DataSet.fieldbyname('MF57_BIC').asstring ;
+                  end;
+
+               if grid_out.DataSource.DataSet.fieldbyname('M57').asstring=':57C:'
+               then
+                  begin
+
+                     MF57C.Visible:=True;
+                     Edit5_MF57.Text:= grid_out.DataSource.DataSet.fieldbyname('MF57_ACCOUNT').asstring;
+
+                  end;
+
+               if grid_out.DataSource.DataSet.fieldbyname('M57').asstring=':57D:'
+               then
+                  begin
+
+                     MF57D.Visible:=True;
+                     Edit6_MF57.Text:= grid_out.DataSource.DataSet.fieldbyname('MF57_ACCOUNT').asstring;
+                     Memo2_MF57.Text:=grid_out.DataSource.DataSet.fieldbyname('MF57_NAME$LOCATION').asstring;
+                   end;
+
+      //---------------------------MF59----------------------------------------------//
+
+
+         if grid_out.DataSource.DataSet.fieldbyname('M59').asstring=':59A:'
+                then
+                  begin
+
+                     MF59A.Visible:=True;
+                     Edit2_MF59.Text:= grid_out.DataSource.DataSet.fieldbyname('MF59_ACCOUNT').asstring;
+                     Edit3_MF59.Text:=grid_out.DataSource.DataSet.fieldbyname('MF59_NAME$ADRESS').asstring ;
+                  end;
+
+               if grid_out.DataSource.DataSet.fieldbyname('M57').asstring=':59:'
+               then
+                  begin
+
+                     MF59.Visible:=True;
+                     Edit1_MF59.Text:= grid_out.DataSource.DataSet.fieldbyname('MF59_ACCOUNT').asstring;
+                     Memo1_MF59.Text:= grid_out.DataSource.DataSet.fieldbyname('MF59_NAME$ADRESS').asstring;
+                  end;
+
+                MF70_memo.Text:=grid_out.DataSource.DataSet.fieldbyname('MF59_NAME$ADRESS').asstring;
+
+
+            end;
+
+    //-------------------end Text child show-----------------
+
+   ShowModal;
+
+                       end;
+    end else ShowMessage('Seçilmiş tarix araliğina informasiya yoxdu');
+end;
+
+procedure TSWIFT_MAIN.ToolButton2Click(Sender: TObject);
+begin
+//grid_out.DataSource.DataSet.FieldByName('MF32A_CURR').AsString);
+SWDataModule.SB_ACA.CallProcedure('CheckAdvancedObjectAccess', ['SW_OUT_EDIT']);
+if Grid_out.DataSource.DataSet.RecordCount<>0 then
+begin
+if (grid_out.DataSource.DataSet.FieldByName('MESSAGETYPE').AsString='MT103') and (grid_out.DataSource.DataSet.FieldByName('FINCOPY').AsString<>'AZN')  then
+begin
+MT103:=TMT103.Create(Self);
+MT103.ShowModal;
+end
+else
+if (grid_out.DataSource.DataSet.FieldByName('MESSAGETYPE').AsString='MT103') and (grid_out.DataSource.DataSet.FieldByName('FINCOPY').AsString='AZN') then
+begin
+MT103AZN:=TMT103AZN.Create(Self);
+MT103AZN.ShowModal;
+end;
+
+//editing.Execute;
+//forma:= edits;
+end ;
+//else ShowMessage('Hec bir format secilmeyib!');
+//Comboitemsins.Execute;
+
+end;
+
+procedure TSWIFT_MAIN.Redakteet1Click(Sender: TObject);
+begin
+if GRIDOUT2.DataSource.DataSet.RecordCount>0 then
+begin
+ //if (GRIDOUT2.DataSource.DataSet.FieldByName('MESSAGETYPE').AsString='MT103') and
+ if (GRIDOUT2.DataSource.DataSet.FieldByName('FINCOPY').AsString='AZN')
+     then
+     Form7.ShowModal
+   else
+   MT103Show.ShowModal
+end;
+
+//------
+end;
+
+procedure TSWIFT_MAIN.RefreshExecute(Sender: TObject);
+begin
+{with SWDataModule.sw_out do begin
+ SetVariable('bdat',(DateTimePicker3.Date-1));
+ SetVariable('edat',DateTimePicker4.Date);
+end;}
+SWDataModule.sw_out.Open;
+SWDataModule.sw_out.Refresh;
+SWDataModule.sw_out_2.Open;
+SWDataModule.sw_out_2.Refresh;
+SWDataModule.sw_out3.Open;
+SWDataModule.sw_out3.Refresh;
+end;
+
+procedure TSWIFT_MAIN.DateTimePicker4KeyPress(Sender: TObject;
+  var Key: Char);
+begin
+if key=#13 then Refresh.Execute;
+end;
+
+procedure TSWIFT_MAIN.DateTimePicker3KeyPress(Sender: TObject;
+  var Key: Char);
+begin
+if key=#13 then Refresh.Execute;
+end;
+
+procedure TSWIFT_MAIN.AddTransExecute(Sender: TObject);
+ var i,j,ids : integer;
+ formats,debet,kredit,summa,destination,vbic:string;
+begin
+   Grid_out.SetFocus;
+   Grid_out.SelectedRows.CurrentRowSelected:=Grid_out.DataSource.DataSet.RecordCount<>0;
+   if Grid_out.DataSource.DataSet.FieldByName('status').asinteger=2 then
+begin
+   for i:=0 to Grid_out.SelectedRows.Count-1 do
+   begin
+      Grid_out.DataSource.DataSet.GotoBookmark(pointer(Grid_out.SelectedRows.items[i]));
+      case MessageDlg(Format('Əməliyyatlar günün  sənədlərinə əlavə edilsin ?',[Grid_out.DataSource.DataSet.fieldbyname('id').asinteger]), mtConfirmation,[mbyes,mbno,mbcancel,mball], 0) of
+           mryes :begin
+
+                    Grid_out.DataSource.DataSet.Refresh;
+                    Grid_out.SelectedRows.Clear;
+                  end;
+           mrno  : exit;
+           mrcancel : Break;
+           mrall : begin
+                   case MessageDlg(IntToStr(Grid_out.SelectedRows.Count)+' Sayta əmaəliyyat əlavə edildi', mtConfirmation,[mbyes,mbno], 0) of
+                   mryes: begin
+                             for j:=0 to Grid_out.SelectedRows.Count-1 do
+                             begin
+                                Grid_out.DataSource.DataSet.GotoBookmark(pointer(Grid_out.SelectedRows.items[j]));
+                                           formats:=Grid_out.DataSource.DataSet.FieldByName('MESSAGETYPE').asstring;
+                                           with SWDataModule.setprow do
+                                           SetVariable('Q',formats);
+                                                   SWDataModule.setprow.Close;
+                                                   SWDataModule.setprow.Open;
+                                            kredit:=SWDataModule.setprowKREDIT.AsString;
+           debet:=SWDataModule.setprowDEBET.AsString;
+           summa:=SWDataModule.setprowSUMM.AsString;
+           destination:=SWDataModule.setprowDESTINATION.AsString;
+           ids:= Grid_out.DataSource.DataSet.FieldByName('id').Asinteger;
+                     with SWDataModule.transac do
+           SetVariable(':IDS1',ids);
+           SWDataModule.transac.SQL[0]:=('select a.'+kredit+' as kredit, a.'+debet+' as debet, a.'+summa+' as summa, a.'+destination+ ' as destination, id '+' from sw_out_new a where id=:ids1 ');
+           SWDataModule.transac.Close;
+           SWDataModule.transac.Open;
+
+
+                                SwDataModule.sw_in_insert.CallProcedure('add_transaction',[ SWDataModule.transac.fieldbyname('ID').asinteger,
+                                                                                          SWDataModule.transac.fieldbyname('debet').asstring,
+                                                                                          SWDataModule.transac.fieldbyname('kredit').asstring,
+                                                                                          SWDataModule.transac.fieldbyname('summa').asstring,
+                                                                                          Grid_out.DataSource.DataSet.FieldByName('MF32A_DATE').AsDateTime,
+                                                                                          SWDataModule.transac.fieldbyname('DESTINATION').asstring,
+                                                                                          vbic]);
+                             end;
+                          sboapiDataModule.SBSession.Commit();
+                          Grid_out.DataSource.DataSet.Refresh;
+                          GRIDOUT2.DataSource.DataSet.Refresh;
+                          GRIDOUT3.DataSource.DataSet.Refresh;
+                          Grid_out.SelectedRows.Clear;
+                          break;
+                          end;
+                   mrno : exit;
+                   end;
+                   end;
+      end;
+   end;
+end else ShowMessage('sənəd artıq günün sənədlərinə əlavə edilib');
+
+end;
+
+
+procedure TSWIFT_MAIN.N2Click(Sender: TObject);
+begin
+//ToolButton11.click;
+  openday.Click;
+//AddTrans.Execute;
+end;
+
+procedure TSWIFT_MAIN.NewMtExecute(Sender: TObject);
+var
+i,k:integer;
+
+begin
+//MF50.AutoSize:=True;
+OUT_FORM.Caption:=OUT_FORM.FIN.Text;
+    swDataModule.OracleDataSet2.Active:=True;
+    swDataModule.mt_select.Active:=True;
+
+
+if  OUT_FORM.FIN.Text<>'' then OUT_FORM.FIN.color:=clWindow;
+
+
+    //InvisibleAllPanels ;
+    OUT_FORM.MainPanel.Visible:=True;
+
+    //VisibleMain;
+   //ViewPanel.Execute;
+   swDataModule.mt_select.SQL[2]:= ' and '+ OUT_FORM.fin.Text +' is not null'+' order by sw_field';
+
+for i := 0 to OUT_FORM.ComponentCount - 1  do begin // Uygun panelleri visible eleyir :
+
+  if (OUT_FORM.Components[i].ClassType = TPanel) then
+  begin
+  k:=k+1;
+  with   swdatamodule.mt_select do begin
+  setvariable('Panelname', OUT_FORM.Components[i].name);
+
+   close;
+   open;
+   if swdatamodule.mt_select.RecordCount>0  then
+
+   (OUT_FORM.Components[i] as TPanel).Visible :=True;
+   //else  (OUT_FORM.Components[i] as TPanel).visible :=False;
+
+     end;
+   end; //--end with
+   end; //--end for
+  // InsertComboBoxItems;
+   //showmessage(inttostr(k));
+
+end; //--end procedure
+
+
+
+
+procedure TSWIFT_MAIN.ComboitemsinsExecute(Sender: TObject);
+var
+i,j:integer;
+
+begin
+
+For i:=0 to OUT_FORM.ComponentCount-1 do begin // for 1
+  If OUT_FORM.Components[i].ClassType=TComboBox then  begin
+WITH swDataModule.ComboItems do begin
+      setvariable('Comboname', OUT_FORM.Components[i].name);
+      close;
+      open;
+
+//if 1
+      for j:=1 to swDataModule.ComboItems.RecordCount+1 do begin // for 2
+      if (OUT_FORM.Components[i] as TComboBox).ItemIndex<>0 then begin
+              if j=1 then begin
+             (OUT_FORM.Components[i] as TComboBox).items.add('');
+
+
+             end else begin
+             if (OUT_FORM.Components[i] as TComboBox).Items[j+2]='' then begin
+             (OUT_FORM.Components[i] as TComboBox).items.add(swDataModule.ComboItemsCATEGORY.asstring);
+             swDataModule.ComboItems.Next;
+                end;
+              end;
+               end;
+    end; //end for 2
+   end; //end if 1
+  end; //end for 1
+ end;
+end;
+
+procedure TSWIFT_MAIN.ToolButton4Click(Sender: TObject);
+var
+fileformat:integer;  //0 prt   1 fin
+v_currDir: String;
+begin
+v_currDir:=GetCurrentDir;
+SWDataModule.settings.open;
+OutFilePath:=SWDataModule.settingsPATH.asstring;
+
+case  SWDataModule.settingsINN_FILETYPE.AsInteger of
+0: struktur:='PRT';
+1: struktur:='FIN';
+end;
+sw_out_FileListBox.ApplyFilePath(OutFilePath);
+sw_out_FileListBox.Update;
+
+if struktur='PRT' then
+  sw_out_FileListBox.Mask:=('*.prt');
+if struktur='FIN' then
+  sw_out_FileListBox.Mask:=('*.fin');
+
+fileformat:=SWDataModule.sw_settings.FieldByName('INN_FILETYPE').asInteger;
+ if fileformat=0 then
+ konvert.Execute;
+ if fileformat=1 then
+ konvert3.Execute;
+ cheskaccount.execute;
+ sw_out_FileListBox.ApplyFilePath(v_currDir);
+end;
+
+procedure TSWIFT_MAIN.ToolButton3Click(Sender: TObject);
+
+begin
+//sw_out_FileListBox.Update;
+SWDataModule.sw_in.Close;
+SWDataModule.sw_in.Open;
+end;
+
+procedure TSWIFT_MAIN.ac1Click(Sender: TObject);
+begin
+ac1.Visible:=False;
+six1.visible:=true;
+onebox.Align:=alClient;
+grid_out.Height:=550;
+
+twobox.Visible:=False;
+
+threebox.Visible:=False;
+end;
+
+procedure TSWIFT_MAIN.acClick(Sender: TObject);
+begin
+ac.Visible:=False;
+six.visible:=true;
+twobox.Align:=alClient;
+GRIDOUT2.Height:=550;
+onebox.Visible:=False;
+threebox.Visible:=False;
+end;
+
+procedure TSWIFT_MAIN.ac2Click(Sender: TObject);
+begin
+ac2.Visible:=False;
+six2.visible:=true;
+threebox.Align:=alClient;
+GRIDOUT3.Height:=550;
+onebox.Visible:=false;
+twobox.Visible:=false;
+end;
+
+procedure TSWIFT_MAIN.six2Click(Sender: TObject);
+begin
+ac2.Visible:=true;
+six2.visible:=false;
+threebox.Align:=alNone;
+threebox.Height:=203;
+threebox.Top:=480;
+onebox.visible:=true;
+twobox.visible:=true;
+grid_out.Height:=152;
+end;
+
+procedure TSWIFT_MAIN.six1Click(Sender: TObject);
+begin
+ac1.Visible:=true;
+six1.visible:=false;
+onebox.Align:=alNone;
+onebox.Left:=0;
+onebox.Top:=84;
+onebox.Width:=1265;
+onebox.Height:=203;
+grid_out.Height:=146;
+twobox.Visible:=true;
+threebox.Visible:=true;
+end;
+
+procedure TSWIFT_MAIN.sixClick(Sender: TObject);
+begin
+ac.Visible:=true;
+six.visible:=false;
+twobox.Align:=alNone;
+twobox.Top:=281;
+twobox.Height:=203;
+onebox.Visible:=TRUE;
+threebox.visible:=true;
+end;
+
+procedure TSWIFT_MAIN.ArchiveClick(Sender: TObject);
+begin
+SWDataModule.SB_ACA.CallProcedure('CheckAdvancedObjectAccess', ['SW_ARCHIVE']);
+SwDataModule.sw_in_insert.CallProcedure ('new_dat',[]);
+ShowMessage('Məlumatlar arxivə göndərildi!')
+end;
+
+procedure TSWIFT_MAIN.comitClick(Sender: TObject);
+begin
+//comit.Enabled:=false;
+SWDataModule.SB_ACA.CallProcedure('CheckAdvancedObjectAccess', ['SW_IN_COMMIT']);
+//ShowMessage(trim(copy(sw_out_FileListBox.FileName,13,100)));
+SWDataModule.sw_in.Open;
+//RichEdit1.text:=SWDataModule.sw_in.fieldbyname('all_text').asstring;
+
+AddInTransNew.Execute;
+SWDataModule.sw_in.close;
+SWDataModule.sw_in.open;
+//comit.Enabled:=TRUE;
+end;
+
+procedure TSWIFT_MAIN.printClick(Sender: TObject);
+begin
+
+SWDataModule.SB_ACA.CallProcedure('CheckAdvancedObjectAccess', ['SW_IN_PRINT']);
+a:=Gridin.DataSource.DataSet.fieldbyname('all_text').asstring;
+  printform:= Tprintform.Create(Self);
+   printform.ShowModal;
+   //Gridin.DataSource.DataSet.Close;
+   //Gridin.DataSource.DataSet.Open;
+
+
+end;
+
+procedure TSWIFT_MAIN.AddInTransExecute(Sender: TObject);
+var
+id,i:integer;
+hdebet:string;
+hkredit:string;
+tramount:real;
+trdescription,trdescription2:string;
+inn:string;
+begin
+    Gridin.SetFocus;
+    if Gridin.DataSource.DataSet.RecordCount<>0 then
+    begin
+         case MessageDlg('Əməliyyatlar günün sənədlarinə əlavə edilsin?', mtConfirmation,[mbyes,mbno,mbcancel], 0) of
+           mryes :begin
+           Gridin.DataSource.DataSet.First;
+      for i:=0 to Gridin.DataSource.DataSet.RecordCount-1 do
+
+        begin
+   //Grid_out.SelectedRows.CurrentRowSelected:=Grid_out.DataSource.DataSet.RecordCount<>0;
+   if (Gridin.DataSource.DataSet.FieldByName('status').asinteger=11)
+       and (Gridin.DataSource.DataSet.FieldByName('MT').asstring='MT103')
+    then
+      begin
+   id:=Gridin.DataSource.DataSet.fieldbyName('id').asinteger;
+   hdebet:=Gridin.DataSource.DataSet.fieldbyName('bic').AsString;
+   hkredit:=Gridin.DataSource.DataSet.fieldbyName('ACOUNT').AsString;
+   tramount:=Gridin.DataSource.DataSet.fieldbyName('valu').AsFloat;
+   trdescription:=Gridin.DataSource.DataSet.fieldbyName('description').asstring;
+   trdescription2:=Gridin.DataSource.DataSet.fieldbyName('description2').asstring;
+   inn:=Gridin.DataSource.DataSet.fieldbyName('TAX').asstring;
+
+                      // ShowMessage(hdebet+' '+hkredit+' '+floattostr(tramount));
+   SwDataModule.sw_in_insert.CallProcedure('add_in_transactions',[       id,
+                                                                         hdebet,
+                                                                         hkredit,
+                                                                         tramount,
+                                                                         trdescription,
+                                                                         trdescription2,
+                                                                         inn]);
+
+    end;
+             Gridin.DataSource.DataSet.Next;
+              end;
+
+              end;
+
+              end;
+              end ;
+              sboapiDataModule.SBSession.Commit;
+end;
+
+procedure TSWIFT_MAIN.ToolButton5Click(Sender: TObject);
+begin
+ SWDataModule.SB_ACA.CallProcedure('CheckAdvancedObjectAccess', ['SW_IN_EDIT']);
+  if Gridin.DataSource.DataSet.FieldByName('status').AsInteger=8 then
+  begin
+  IN_edit:= TIN_edit.Create(Self);
+   IN_edit.ShowModal;
+  end;
+      { WITH IN_edit DO
+   Begin
+   //gridin.DataSource.DataSet.Close;
+   //gridin.DataSource.DataSet.Open;
+   //ShowMessage(gridin.DataSource.DataSet.fieldbyname('ACOUNT').asstring);
+   acas.Text:= gridin.DataSource.DataSet.fieldbyname('ACOUNT').asstring;
+   End; }
+
+
+end;
+
+procedure TSWIFT_MAIN.ToolButton6Click(Sender: TObject);
+begin
+SWDataModule.SB_ACA.CallProcedure('CheckAdvancedObjectAccess', ['SW_IN_DELETE']);
+
+Delete.Execute;
+
+
+end;
+
+procedure TSWIFT_MAIN.opendayClick(Sender: TObject);
+begin
+SWDataModule.SB_ACA.CallProcedure('CheckAdvancedObjectAccess', ['SW_OUT_OPENARCHIVE']);
+back.Click;
+end;
+
+procedure TSWIFT_MAIN.GRIDOUT2DrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TColumn;
+  State: TGridDrawState);
+var
+  ImageIndex: Integer;
+
+begin
+//SWDataModule.SB_ACA.CallProcedure('CheckAdvancedObjectAccess', ['SW_OUT_COMITEDVIEW']);
+ ImageIndex := -1;
+  with Sender as TDBGrid do
+  begin
+    if DataSource.DataSet.RecordCount <> 0 then
+    begin
+      case DataSource.DataSet.FieldByName('STATUS').AsInteger of
+      notcreate :
+        ImageIndex := 10;
+      created :
+        ImageIndex := 4;
+      commited :
+        ImageIndex := 5;
+      Problemed:
+        ImageIndex :=16;
+      Problemed2:
+        ImageIndex :=16;
+      else
+      end;
+      if (DataCol = 1) and (ImageIndex <> -1) then
+        swImageList1.Draw(Canvas, Rect.Left, Rect.Top, ImageIndex, True)
+      else
+        DefaultDrawColumnCell(Rect, DataCol, Column, State);
+    end;
+  end;
+end;
+
+procedure TSWIFT_MAIN.gridout3DrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TColumn;
+  State: TGridDrawState);
+var
+  ImageIndex: Integer;
+
+begin
+//SWDataModule.SB_ACA.CallProcedure('CheckAdvancedObjectAccess', ['SW_OUT_FILECREATEVIEW']);
+ ImageIndex := -1;
+  with Sender as TDBGrid do
+  begin
+    if DataSource.DataSet.RecordCount <> 0 then
+    begin
+      case DataSource.DataSet.FieldByName('STATUS').AsInteger of
+      notcreate :
+        ImageIndex := 25;
+      created :
+        ImageIndex := 4;
+      commited :
+        ImageIndex := 5;
+      Problemed:
+        ImageIndex :=16;
+      Problemed2:
+       // ImageIndex :=16;
+      else
+      end;
+      if (DataCol = 1) and (ImageIndex <> -1) then
+        swImageList1.Draw(Canvas, Rect.Left, Rect.Top, ImageIndex, True)
+      else
+        DefaultDrawColumnCell(Rect, DataCol, Column, State);
+    end;
+  end;
+end;
+
+procedure TSWIFT_MAIN.GridinDrawColumnCell(Sender: TObject;
+const Rect: TRect; DataCol: Integer; Column: TColumn;
+  State: TGridDrawState);
+var
+  ImageIndex: Integer;
+
+begin
+//SWDataModule.SB_ACA.CallProcedure('CheckAdvancedObjectAccess', ['SW_OUT_CREATEDVIEW']);
+ ImageIndex := -1;
+  with Sender as TDBGrid do
+  begin
+    if DataSource.DataSet.RecordCount <> 0 then
+    begin
+      case DataSource.DataSet.FieldByName('STATUS').AsInteger of
+      notcreate :
+        ImageIndex := 10;
+      created :
+        ImageIndex := 4;
+      commited :
+        ImageIndex := 5;
+      Problemed:
+        ImageIndex :=16;
+       11:
+       ImageIndex :=42;
+       12:
+        ImageIndex :=43;
+      else
+      end;
+      if (DataCol = 1) and (ImageIndex <> -1) then
+        swImageList1.Draw(Canvas, Rect.Left, Rect.Top, ImageIndex, True)
+      else
+        DefaultDrawColumnCell(Rect, DataCol, Column, State);
+    end;
+  end;
+end;
+
+procedure TSWIFT_MAIN.GridinTitleClick(Column: TColumn);
+var
+   TitleName :string;
+   SortPosition: word;
+begin
+ SortPosition :=100;
+ //OrderedTitle :=Column.FieldName; //H.R. 24.06.2008
+ if (gridin.DataSource.DataSet.IsEmpty) or (Column.FieldName = EmptyStr) then Exit;
+ Screen.Cursor :=crHourGlass;
+ TitleName :=Column.FieldName;
+ with TOracleDataSet(Gridin.DataSource.DataSet) do
+  try
+
+   SortPosition :=SQL.Add('ORDER BY s.'+ TitleName);
+   Refresh;
+  finally
+   SQL[SortPosition] :=EmptyStr;
+   Screen.Cursor :=crDefault;
+  end;
+end;
+
+procedure TSWIFT_MAIN.grid_outTitleClick(Column: TColumn);
+var
+   TitleName :string;
+   SortPosition: word;
+begin
+ SortPosition :=100;
+ //OrderedTitle :=Column.FieldName; //H.R. 24.06.2008
+ if (grid_out.DataSource.DataSet.IsEmpty) or (Column.FieldName = EmptyStr) then Exit;
+ Screen.Cursor :=crHourGlass;
+ TitleName :=Column.FieldName;
+ with TOracleDataSet(grid_out.DataSource.DataSet) do
+  try
+
+   SortPosition :=SQL.Add('ORDER BY '+ TitleName);
+   Refresh;
+  finally
+   SQL[SortPosition] :=EmptyStr;
+   Screen.Cursor :=crDefault;
+  end;
+end;
+procedure TSWIFT_MAIN.GRIDOUT2TitleClick(Column: TColumn);
+var
+   TitleName :string;
+   SortPosition: word;
+begin
+ SortPosition :=100;
+ //OrderedTitle :=Column.FieldName; //H.R. 24.06.2008
+ if (gridout2.DataSource.DataSet.IsEmpty) or (Column.FieldName = EmptyStr) then Exit;
+ Screen.Cursor :=crHourGlass;
+ TitleName :=Column.FieldName;
+ with TOracleDataSet(gridout2.DataSource.DataSet) do
+  try
+
+   SortPosition :=SQL.Add('ORDER BY '+ TitleName);
+   Refresh;
+  finally
+   SQL[SortPosition] :=EmptyStr;
+   Screen.Cursor :=crDefault;
+  end;
+end;
+
+procedure TSWIFT_MAIN.gridout3TitleClick(Column: TColumn);
+var
+   TitleName :string;
+   SortPosition: word;
+begin
+ SortPosition :=100;
+ //OrderedTitle :=Column.FieldName; //H.R. 24.06.2008
+ if (gridout3.DataSource.DataSet.IsEmpty) or (Column.FieldName = EmptyStr) then Exit;
+ Screen.Cursor :=crHourGlass;
+ TitleName :=Column.FieldName;
+ with TOracleDataSet(gridout3.DataSource.DataSet) do
+  try
+
+   SortPosition :=SQL.Add('ORDER BY '+ TitleName);
+   Refresh;
+  finally
+   SQL[SortPosition] :=EmptyStr;
+   Screen.Cursor :=crDefault;
+  end;
+end;
+
+
+
+procedure TSWIFT_MAIN.DeleteExecute(Sender: TObject);
+var
+   Index :Integer;
+   WaitNextConfirm, WillRefresh: Boolean;
+   TransactionID :Integer;
+begin
+
+
+  WaitNextConfirm :=True;
+  WillRefresh :=False;
+  if Gridin.CanFocus then
+  Gridin.SetFocus;
+
+  //Focus;
+  with  Gridin, SelectedRows, DataSource.DataSet, SWDataModule do
+  try
+    if Count = 0 then CurrentRowSelected := True;
+    for  Index :=0 to  Count - 1 do
+    begin
+      GotoBookmark(Pointer(Items[Index]));
+      TransactionID :=FieldbyName('ID').AsInteger;
+
+      if  WaitNextConfirm  then
+      case MessageDlg(
+        Format('Əməliyyatlar #%d silinsinmi?',[TransactionID])
+       ,mtConfirmation
+       ,[mbYes, mbNo ,mbCancel ,mbYesToAll]
+       ,0
+       )   of
+        mrNo       : Continue;
+        mrCancel   : Break;
+        mrYesToAll :
+          if MessageDlg(Format('%d  sayda əməliyyat silinsinmi ?', [Count - Index]), mtConfirmation, [mbYes, mbCancel], 0) = mrYes then
+           WaitNextConfirm :=False
+          else
+           Continue;
+      end;
+      Application.ProcessMessages;
+      //DeleteTransaction(TransactionID);
+      SWDataModule.sw_in_insert.CallProcedure('sw_in_delete',[TransactionID]);
+      WillRefresh :=True;
+
+
+    end;
+  finally
+   if WillRefresh then
+   SWDataModule.sw_in.refresh;
+    //ActionRefreshExecute(Sender);
+  end;
+  sboapiDataModule.SBSession.Commit;
+end;
+procedure TSWIFT_MAIN.backClick(Sender: TObject);
+begin
+if SWDataModule.sw_out_2.RecordCount>0 then
+begin
+SWDataModule.SB_ACA.CallProcedure('CheckAdvancedObjectAccess', ['SW_BACK']);
+geri.Execute;
+end else Memo2.Text:='Əməliyyatlar qaytarılmadı!';
+end;
+
+procedure TSWIFT_MAIN.geriExecute(Sender: TObject);
+var
+   Index :Integer;
+   WaitNextConfirm, WillRefresh: Boolean;
+   TransactionID :Integer;
+begin
+
+
+  WaitNextConfirm :=True;
+  WillRefresh :=False;
+  if GRIDOUT2.CanFocus then
+  GRIDOUT2.SetFocus;
+
+  //Focus;
+  with  GRIDOUT2, SelectedRows, DataSource.DataSet, SWDataModule do
+  try
+    if Count = 0 then CurrentRowSelected := True;
+    for  Index :=0 to  Count - 1 do
+    begin
+      GotoBookmark(Pointer(Items[Index]));
+      TransactionID :=FieldbyName('ID').AsInteger;
+
+      if  WaitNextConfirm  then
+      case MessageDlg(
+        Format('Əməliyyat  #%d qaytarılsın?',[TransactionID])
+       ,mtConfirmation
+       ,[mbYes, mbNo ,mbCancel ,mbYesToAll]
+       ,0
+       )   of
+        mrNo       : Continue;
+        mrCancel   : Break;
+        mrYesToAll :
+          if MessageDlg(Format('%d  sayda əməliyyat qaytarılsın ?', [Count - Index]), mtConfirmation, [mbYes, mbCancel], 0) = mrYes then
+           WaitNextConfirm :=False
+          else
+           Continue;
+      end;
+      Application.ProcessMessages;
+      //DeleteTransaction(TransactionID);
+      SWDataModule.sw_in_insert.CallProcedure('sw_out_back',[TransactionID]);
+      WillRefresh :=True;
+
+
+    end;
+  finally
+   if WillRefresh then
+   SWDataModule.sw_out_2.refresh;
+   SWDataModule.sw_out.Refresh;
+    //ActionRefreshExecute(Sender);
+
+  end;
+  sboapiDataModule.SBSession.Commit;
+  if SWDataModule.sw_out_2.RecordCount>0 then
+  Memo2.Text:=IntToStr(index)+' sayda əməliyyat qaytarıldı!' else
+          Memo2.Text:='Bütün əməliyyat qaytarılıb!'
+end;
+
+procedure TSWIFT_MAIN.out_deleteExecute(Sender: TObject);
+var
+   Index :Integer;
+   WaitNextConfirm, WillRefresh: Boolean;
+   TransactionID :Integer;
+begin
+
+
+  WaitNextConfirm :=True;
+  WillRefresh :=False;
+  if Grid_out.CanFocus then
+  Grid_out.SetFocus;
+
+  //Focus;
+  with  Grid_out, SelectedRows, DataSource.DataSet, SWDataModule do
+  try
+    if Count = 0 then CurrentRowSelected := True;
+    for  Index :=0 to  Count - 1 do
+    begin
+      GotoBookmark(Pointer(Items[Index]));
+      TransactionID :=FieldbyName('ID').AsInteger;
+
+      if  WaitNextConfirm  then
+      case MessageDlg(
+        Format('Əməliyyat #%d silinsinmi ?',[TransactionID])
+       ,mtConfirmation
+       ,[mbYes, mbNo ,mbCancel ,mbYesToAll]
+       ,0
+       )   of
+        mrNo       : Continue;
+        mrCancel   : Break;
+        mrYesToAll :
+          if MessageDlg(Format('%d  sayda əməliyyat silinsinmi ?', [Count - Index]), mtConfirmation, [mbYes, mbCancel], 0) = mrYes then
+           WaitNextConfirm :=False
+          else
+           Continue;
+      end;
+      Application.ProcessMessages;
+      //DeleteTransaction(TransactionID);
+      SWDataModule.sw_in_insert.CallProcedure('sw_out_delete',[TransactionID]);
+      WillRefresh :=True;
+
+
+    end;
+  finally
+   if WillRefresh then
+   SWDataModule.sw_out.refresh;
+    //ActionRefreshExecute(Sender);
+  end;
+  sboapiDataModule.SBSession.Commit;
+    if SWDataModule.sw_out.RecordCount>0 then
+  Memo2.Text:=IntToStr(index)+' sayda əməliyyat silindi!' else
+          Memo2.Text:='Bütün əməliyyatlar silinib!'
+end;
+
+procedure TSWIFT_MAIN.createfile2Execute(Sender: TObject);
+var
+   sum,kesr:real;
+   i,testiq:integer;
+   output:TextFile;
+   FileName,Swmessage,dir,edit_ref,BeginMessage,Endmesage,valu,info:String;
+   Index :Integer;
+   WaitNextConfirm, WillRefresh: Boolean;
+   TransactionID :Integer;
+   v_DataSet1: TDataSet;
+begin
+
+
+  WaitNextConfirm :=True;
+  WillRefresh :=False;
+  if Gridout3.CanFocus then
+  Gridout3.SetFocus;
+
+  //Focus;
+  with  Gridout3, SelectedRows, DataSource.DataSet, SWDataModule do
+  try
+    if Count = 0 then CurrentRowSelected := True;
+    for  Index :=0 to  Count - 1 do
+    begin
+      GotoBookmark(Pointer(Items[Index]));
+      TransactionID :=FieldbyName('ID').AsInteger;
+
+      if  WaitNextConfirm  then
+      case MessageDlg(
+        Format('Fayl #%d yaradılsın?',[TransactionID])
+       ,mtConfirmation
+       ,[mbYes, mbNo ,mbCancel ,mbYesToAll]
+       ,0
+       )   of
+        mrNo       : Continue;
+        mrCancel   : Break;
+        mrYesToAll :
+          if MessageDlg(Format('%d  sayda köçürməyə fayl yaradılsın ?', [Count - Index]), mtConfirmation, [mbYes, mbCancel], 0) = mrYes then
+           WaitNextConfirm :=False
+          else
+           Continue;
+      end;
+      Application.ProcessMessages;
+      testiq:=SwDataModule.sw_in_insert.CallIntegerFunction('sw_out_fileafter',[GRIDOUT3.DataSource.DataSet.FieldByName('id').asinteger,GRIDOUT2.DataSource.DataSet.FieldByName('MF32A_DATE').asdatetime]);
+      //------------------------------------------------------------------------------------create file
+ if testiq=6 then
+
+ begin
+ v_dataset1:=GRIDOUT3.DataSource.DataSet;
+ with  v_dataset1 do
+begin
+
+   if (v_dataset1.FieldByName('status').asinteger=1) {or (FieldByName('status').asinteger=7)} then
+  begin
+  edit_ref:=FieldByName('id').asstring;
+  for i:=1 to (8-length(edit_ref)) do begin
+  edit_ref:='0'+edit_ref;
+  end;
+  valu:=FieldByName('MF32A_CURR').asstring;
+  if valu='AZN' then valu:='AZM';
+  if not DirectoryExists(SWDataModule.sw_settings.fieldbyname('path_out').asstring) then
+  MkDir(SWDataModule.sw_settings.fieldbyname('path_out').asstring);
+  dir:=SWDataModule.sw_settings.fieldbyname('path_out').asstring+'\';
+  if not DirectoryExists(dir) then
+  MkDir(dir);
+   //bke:=copy(GRIDOUT2.DataSource.DataSet.FieldByName('SENDERBIC').asstring,0,6);
+   FileName:=dir+'sw'+edit_ref+'.fin';
+   AssignFile(output,FileName);
+   Rewrite(output);
+
+   BeginMessage:='{1:F01';
+   Swmessage:=copy(FieldByName('SENDERBIC').asstring,0,8);
+   Swmessage:=Swmessage+'AXXX'+copy(FieldByName('SENDERBIC').asstring,9,3)+
+   '1234123456}{2:I'+copy(FieldByName('MESSAGETYPE').asstring,3,3)+
+    copy(FieldByName('RECEIVERBIC').asstring,0,8)+'X'+copy(FieldByName('RECEIVERBIC').asstring,9,3)+'N}{3:{'+
+    copy(FieldByName('MESSAGETYPE').asstring,3,3)+ ':'+ valu+'}}{4:';
+    BeginMessage:= BeginMessage+Swmessage;
+   Writeln(output,BeginMessage);
+//--------------body file------------------
+
+// referense write
+     Swmessage:=fieldbyname('MF20').AsString;;
+     Swmessage:=Swmessage+fieldbyname('MF20_REFERENCE').AsString;
+     Writeln(output,swmessage);
+
+//mf23 write
+     Swmessage:=fieldbyname('M23B').AsString;
+     Swmessage:=Swmessage+fieldbyname('MF23B').AsString;
+     Writeln(output,swmessage);
+
+//mf26t write
+     if fieldbyname('M26T').AsString<>'' then
+        begin
+          Swmessage:=fieldbyname('M26T').AsString;
+          Swmessage:=Swmessage+fieldbyname('MF26T').AsString;
+          Writeln(output,swmessage);
+        end;
+
+//mf32a
+      sum:= fieldbyname('MF32A_AMOUNT').AsFloat;
+      kesr:=frac(sum);
+
+      Swmessage:=fieldbyname('M32A').AsString;
+      Swmessage:=Swmessage+FormatDateTime('yymmdd',fieldbyname('MF32A_DATE').AsDateTime);
+      Swmessage:=Swmessage+fieldbyname('MF32A_CURR').AsString;
+      Swmessage:=Swmessage+fieldbyname('MF32A_AMOUNT').AsString;
+      if kesr=0 then Swmessage:=Swmessage+',' else Swmessage:=StringReplace(Swmessage, '.', ',',
+                          [rfReplaceAll, rfIgnoreCase]);
+      Writeln(output,swmessage);
+
+//mf36
+    if fieldbyname('M36').AsString<>'' then
+       begin
+       Swmessage:= fieldbyname('M36').AsString;
+       Swmessage:=Swmessage+fieldbyname('MF36').AsString;
+       Writeln(output,swmessage);
+       end;
+
+//mf50
+    if fieldbyname('M50').AsString<>'' then
+       begin
+
+       Swmessage:= fieldbyname('M50').AsString;
+       if trim(fieldbyname('MF50_ACCOUNT').AsString)<>'' then
+       begin
+       Swmessage:=Swmessage+'/'+fieldbyname('MF50_ACCOUNT').AsString;
+       Writeln(output,swmessage);
+       end;
+       if trim(fieldbyname('MF50_BIC').AsString)<>'' then
+       begin
+       Swmessage:= fieldbyname('MF50_BIC').AsString;
+       Writeln(output,swmessage);
+       end
+       else
+
+       if trim(fieldbyname('FINCOPY').AsString)<>'AZN'
+       then
+       begin
+                if trim(fieldbyname('MF50_NAME$ADRESS').AsString)<>'' then
+                begin
+                Swmessage:= fieldbyname('MF50_NAME$ADRESS').AsString;
+
+                 SWDataModule.Chk_AccNo.Close;
+                 SWDataModule.Chk_AccNo.SetVariable('acc_no',fieldbyname('MF50_ACCOUNT').AsString);
+                 SWDataModule.Chk_AccNo.Open;
+                if SWDataModule.Chk_AccNoCUST_TYPE.asInteger=1 then
+                Swmessage:=copy(Swmessage,0,pos(#13,Swmessage)-1)
+                +#13+#10+
+                copy(Swmessage,pos(#13,Swmessage)+2,length(Swmessage)-pos(#13,Swmessage))
+                else
+                Swmessage:=copy(Swmessage,0,pos(#13,Swmessage)-1)
+                +#13+#10+'TAXID '
+                +copy(Swmessage,pos(#13,Swmessage)+2,length(Swmessage)-pos(#13,Swmessage));
+
+                Writeln(output,swmessage);
+                end;
+
+       end
+        else
+          begin
+                if trim(fieldbyname('MF50_NAME$ADRESS').AsString)<>'' then
+                begin
+                Swmessage:= fieldbyname('MF50_NAME$ADRESS').AsString;
+                Writeln(output,swmessage);
+                end;
+          end;
+
+       end;
+
+//mf52
+    if trim(fieldbyname('M52').AsString)<>'' then
+       begin
+       Swmessage:=fieldbyname('M52').AsString;
+       Write(output,swmessage);
+
+       if trim(fieldbyname('MF52_ACCOUNT').AsString)<>'' then
+       begin
+       Swmessage:='/'+fieldbyname('MF52_ACCOUNT').AsString;
+       Writeln(output,swmessage);
+       end;
+
+       if trim(fieldbyname('MF52_BIC').AsString)<>'' then
+       begin
+       Swmessage:= fieldbyname('MF52_BIC').AsString;
+       Writeln(output,swmessage);
+       end;
+       end;
+
+//mf53
+    if trim(fieldbyname('M53').AsString)<>'' then
+       begin
+       Swmessage:=fieldbyname('M53').AsString;
+       Write(output,swmessage);
+       
+       if trim(fieldbyname('MF53_ACCOUNT').AsString)<>'' then
+       begin
+       Swmessage:='/'+fieldbyname('MF53_ACCOUNT').AsString;
+       Writeln(output,swmessage);
+       end;
+       if trim(fieldbyname('MF53_BIC').AsString)<>'' then
+       begin
+       Swmessage:= fieldbyname('MF53_BIC').AsString;
+       Writeln(output,swmessage);
+       end
+       else
+       if  trim(fieldbyname('MF53_NAME$LOCATION').AsString)<>'' then
+       begin
+       Swmessage:= fieldbyname('MF53_NAME$LOCATION').AsString;
+       Writeln(output,swmessage);
+       end;
+
+       end;
+//mf54
+    if trim(fieldbyname('M54').AsString)<>'' then
+       begin
+       Swmessage:=fieldbyname('M54').AsString;
+       Write(output,swmessage);
+
+       if trim(fieldbyname('MF54_ACCOUNT').AsString)<>'' then
+       begin
+       Swmessage:='/'+fieldbyname('MF54_ACCOUNT').AsString;
+       Writeln(output,swmessage);
+       end;
+       if trim(fieldbyname('MF54_BIC').AsString)<>'' then
+       begin
+       Swmessage:= fieldbyname('MF54_BIC').AsString;
+       Writeln(output,swmessage);
+       end
+       else
+       if trim(fieldbyname('MF54_NAME$LOCATION').AsString)<>'' then
+       begin
+       Swmessage:= fieldbyname('MF54_NAME$LOCATION').AsString;
+       Writeln(output,swmessage);
+       end;
+       
+       end;
+
+//mf55
+    if trim(fieldbyname('M55').AsString)<>'' then
+       begin
+       Swmessage:=fieldbyname('M55').AsString;
+       Write(output,swmessage);
+
+       if trim(fieldbyname('MF55_ACCOUNT').AsString)<>'' then
+       begin
+       Swmessage:='/'+fieldbyname('MF55_ACCOUNT').AsString;
+       Writeln(output,swmessage);
+       end;
+       if trim(fieldbyname('MF55_BIC').AsString)<>'' then
+       begin
+       Swmessage:= fieldbyname('MF55_BIC').AsString;
+       Writeln(output,swmessage);
+       end
+       else
+       if trim(fieldbyname('MF55_NAME$LOCATION').AsString)<>'' then
+       begin
+       Swmessage:= fieldbyname('MF55_NAME$LOCATION').AsString;
+       Writeln(output,swmessage);
+       end;
+       
+       end;
+
+//mf56
+    if trim(fieldbyname('M56').AsString)<>'' then
+       begin
+       Swmessage:=fieldbyname('M56').AsString;
+       Write(output,swmessage);
+
+       if trim(fieldbyname('MF56_ACCOUNT').AsString)<>'' then
+       begin
+       Swmessage:='/'+fieldbyname('MF56_ACCOUNT').AsString;
+       Writeln(output,swmessage);
+       end;
+       if trim(fieldbyname('MF56_BIC').AsString)<>'' then
+       begin
+       Swmessage:= fieldbyname('MF56_BIC').AsString;
+       Writeln(output,swmessage);
+       end
+       else
+       if trim(fieldbyname('MF56_NAME$LOCATION').AsString)<>'' then
+       begin
+       Swmessage:= fieldbyname('MF56_NAME$LOCATION').AsString;
+       Writeln(output,swmessage);
+       end;
+       
+       end;
+
+//mf57
+    if trim(fieldbyname('M57').AsString)<>'' then
+       begin
+       Swmessage:=fieldbyname('M57').AsString;
+       Write(output,swmessage);
+
+       if  fieldbyname('MF57_ACCOUNT').AsString<>'' then
+       begin
+       Swmessage:='/'+fieldbyname('MF57_ACCOUNT').AsString;
+       Writeln(output,swmessage);
+       end;
+       if trim(fieldbyname('MF57_BIC').AsString)<>'' then
+       begin
+       Swmessage:= fieldbyname('MF57_BIC').AsString;
+       Writeln(output,swmessage);
+       end
+       else
+       if trim(fieldbyname('MF57_NAME$LOCATION').AsString)<>'' then
+       begin
+       Swmessage:= fieldbyname('MF57_NAME$LOCATION').AsString;
+       Writeln(output,swmessage);
+       end;
+       end;
+
+//mf59
+
+       if trim(fieldbyname('M59').AsString)<>'' then
+       begin
+       Swmessage:=fieldbyname('M59').AsString;
+       Write(output,swmessage);
+
+       if trim(fieldbyname('MF59_ACCOUNT').AsString)<>'' then
+       begin
+       Swmessage:='/'+fieldbyname('MF59_ACCOUNT').AsString;
+       Writeln(output,swmessage);
+       end;
+       
+       if trim(fieldbyname('MF59_bic').AsString)<>'' then
+       begin
+       Swmessage:= fieldbyname('MF59_bic').AsString;
+       Writeln(output,swmessage);
+       end
+       else
+       if trim(fieldbyname('MF59_NAME$ADRESS').AsString)<>'' then
+       begin
+       Swmessage:= fieldbyname('MF59_NAME$ADRESS').AsString;
+       Writeln(output,swmessage);
+       end;
+       
+       end;
+//mf70
+    if trim(fieldbyname('M70').AsString)<>'' then
+       begin
+       Swmessage:=fieldbyname('M70').AsString;
+       IF fieldbyname('MF32A_CURR').AsString<>'AZN' then
+       Swmessage:=Swmessage+copy(fieldbyname('MF70').AsString,9,length (fieldbyname('MF70').AsString)) //ExpressBank
+       else
+       Swmessage:=Swmessage+fieldbyname('MF70').AsString;
+       Writeln(output,swmessage);
+       end;
+//mf71a
+    if trim(fieldbyname('M71A').AsString)<>'' then
+       begin
+       Swmessage:=fieldbyname('M71A').AsString;
+       Swmessage:=Swmessage+fieldbyname('MF71A').AsString;
+       Writeln(output,swmessage);
+       end;
+//mf71f
+    if  trim(fieldbyname('M71F').AsString)<>'' then
+        begin
+        Swmessage:=fieldbyname('M71F').AsString;
+        Swmessage:=Swmessage+fieldbyname('MF71G_CHILD').AsString;
+        Writeln(output,swmessage);
+        end;
+//mf71g
+    if  trim(fieldbyname('M71G').AsString)<>'' then
+        begin
+        Swmessage:=fieldbyname('M71G').AsString;
+        Swmessage:=Swmessage+fieldbyname('MF71G_CHILD').AsString;
+        Writeln(output,swmessage);
+        end;
+//mf72
+        if trim(fieldbyname('M72').AsString)<>'' then
+        begin
+        Swmessage:=fieldbyname('M72').AsString;
+        Swmessage:=Swmessage+ fieldbyname('MF72').AsString;
+        Writeln(output,swmessage);
+        end;
+//mf77b
+        if trim(fieldbyname('M77B').AsString)<>'' then
+        begin
+        Swmessage:=fieldbyname('M77B').AsString;
+        Swmessage:=Swmessage+ fieldbyname('MF77B').AsString;
+        Writeln(output,swmessage);
+        end;
+
+//------------end body file----------------
+   Endmesage:='-}';
+   Write(output,Endmesage);
+   CloseFile(output);
+   info:='Fayl yaradılıb!';
+   SwDataModule.sw_in_insert.CallProcedure('sw_out_CreateFile',[FieldByName('id').asinteger,info,1]);
+end;  //with dataset1 do
+  end;
+ end
+ else
+ begin
+ info:='Təsdiq olunmamış əməliyyat var!';
+ SwDataModule.sw_in_insert.CallProcedure('sw_out_CreateFile',[GRIDOUT2.DataSource.DataSet.FieldByName('id').asinteger,info,0]);
+ end;
+      //--------------------------------------------end create file
+
+
+      //DeleteTransaction(TransactionID);
+     // SWDataModule.sw_in_insert.CallProcedure('sw_in_delete',[TransactionID]);
+      WillRefresh :=True;
+
+
+    end;
+  finally
+   if WillRefresh then
+   begin
+ SWDataModule.sw_out_2.Open;
+ SWDataModule.sw_out_2.Refresh;
+ SWDataModule.sw_out3.Open;
+ SWDataModule.sw_out3.Refresh;
+
+   end;
+    //ActionRefreshExecute(Sender);
+  end;
+  sboapiDataModule.SBSession.Commit;
+end;
+
+procedure TSWIFT_MAIN.addtrans2Execute(Sender: TObject);
+var
+
+   i,j,ids : integer;
+   formats,debet,kredit,summa,destination,vbic,dest_title:string;
+   output:TextFile;
+   FileName,Swmessage,dir,edit_ref,BeginMessage,Endmesage,valu:String;
+   Index :Integer;
+   WaitNextConfirm, WillRefresh: Boolean;
+   TransactionID :Integer;
+begin
+  WaitNextConfirm :=True;
+  WillRefresh :=False;
+  if Grid_out.CanFocus then
+  Grid_out.SetFocus;
+
+  //Focus;
+  with  Grid_out, SelectedRows, DataSource.DataSet, SWDataModule do
+  try
+    if Count = 0 then CurrentRowSelected := True;
+    for  Index :=0 to  Count - 1 do
+    begin
+      GotoBookmark(Pointer(Items[Index]));
+      TransactionID :=FieldbyName('ID').AsInteger;
+
+      if  WaitNextConfirm  then
+      case MessageDlg(
+        Format('Əməliyyat günün sənədlərinə əlavə edilsin?',[TransactionID])
+       ,mtConfirmation
+       ,[mbYes, mbNo ,mbCancel ,mbYesToAll]
+       ,0
+       )   of
+        mrNo       : Continue;
+        mrCancel   : Break;
+        mrYesToAll :
+          if MessageDlg(Format('%d sayda eməliyyat gunn sənədlərinə əlavə edilsin?', [Count - Index]), mtConfirmation, [mbYes, mbCancel], 0) = mrYes then
+           WaitNextConfirm :=False
+          else
+           Continue;
+      end;
+      Application.ProcessMessages;
+      //------------------------------------------------------------------------------------create prows
+
+          formats:=Grid_out.DataSource.DataSet.FieldByName('MESSAGETYPE').asstring;
+           with SWDataModule.setprow do
+           SetVariable('Q',formats);
+           SWDataModule.setprow.Close;
+           SWDataModule.setprow.Open;
+           kredit:=SWDataModule.setprowKREDIT.AsString;
+           if trim(kredit)='RECEIVERBIC' then vbic:='BIC';
+
+           debet:=SWDataModule.setprowDEBET.AsString;
+           summa:=SWDataModule.setprowSUMM.AsString;
+           destination:=SWDataModule.setprowDESTINATION.AsString;
+           dest_title:=SWDataModule.setprowDEST_TITLE.asString;
+           ids:= Grid_out.DataSource.DataSet.FieldByName('id').Asinteger;
+           with SWDataModule.transac do
+           SetVariable(':IDS1',ids);
+           SWDataModule.transac.SQL[0]:=('select a.'+kredit+' as kredit, a.'+debet+' as debet, a.'+summa+' as summa, '
+           +'SUBSTR(a.'+dest_title
+           +',0,decode(instr(a.'+dest_title+',chr(10))-1,-1,100,instr(a.'+dest_title+',chr(10))-1))||'' - ''||TRANSLATE(a.'
+           +destination+',CHR(10),'' '')'
+           +' as destination, id '+' from sw_out_new a where a.id=:ids1 ');
+
+           {
+           select a.RECEIVERBIC as kredit, a.MF50_ACCOUNT as debet, a.MF32A_AMOUNT as summa,
+                SUBSTR(a.
+                MF59_NAME$ADRESS
+                ,0,decode(instr(a.
+                MF59_NAME$ADRESS
+                ,chr(10))-1,-1,100,instr(a.
+                MF59_NAME$ADRESS
+                ,chr(10))-1))||' - '||TRANSLATE(a.
+                MF70
+                ,CHR(10),' ') as destination,id  from
+                 sw_out_new a where a.id=
+           }
+
+             Memo1.Text:=SWDataModule.transac.SQL.Text;
+           SWDataModule.transac.Close;
+           SWDataModule.transac.Open;
+
+
+                   SwDataModule.sw_in_insert.CallProcedure('add_transaction',[           SWDataModule.transac.fieldbyname('ID').asinteger,
+                                                                                          SWDataModule.transac.fieldbyname('debet').asstring,
+                                                                                          SWDataModule.transac.fieldbyname('kredit').asstring,
+                                                                                          SWDataModule.transac.fieldbyname('summa').AsFloat,
+                                                                                          Grid_out.DataSource.DataSet.FieldByName('MF32A_DATE').AsDateTime,
+                                                                                          SWDataModule.transac.fieldbyname('DESTINATION').asstring,
+                                                                                          vbic,
+                                                                                          Grid_out.DataSource.DataSet.fieldbyname('tax').asstring]);
+
+      //--------------------------------------------end create prows
+
+
+      //DeleteTransaction(TransactionID);
+     // SWDataModule.sw_in_insert.CallProcedure('sw_in_delete',[TransactionID]);
+      WillRefresh :=True;
+
+
+    end;
+  finally
+   if WillRefresh then
+   begin
+                          Grid_out.DataSource.DataSet.Refresh;
+                          GRIDOUT2.DataSource.DataSet.Refresh;
+                          GRIDOUT3.DataSource.DataSet.Refresh;
+
+   end;
+    //ActionRefreshExecute(Sender);
+  end;
+  sboapiDataModule.SBSession.Commit;
+end;
+
+
+procedure TSWIFT_MAIN.editingExecute(Sender: TObject);
+begin
+form5:= Tform5.Create(Self);
+form5.showmodal;
+
+     with form5 do begin
+     //ShowMessage(grid_out.DataSource.DataSet.fieldbyname('MESSAGETYPE').asstring);
+   //fin.Style:=csDropDown;
+   FIN2.Text:=grid_out.DataSource.DataSet.fieldbyname('MESSAGETYPE').asstring;
+   //fin.Enabled:=False;
+   sendertype.Text:=grid_out.DataSource.DataSet.fieldbyname('SENDERTYPE').asstring;
+   reciverbic.Text:=grid_out.DataSource.DataSet.fieldbyname('RECEIVERBIC').asstring
+   end;
+end;
+
+procedure TSWIFT_MAIN.cheskaccountExecute(Sender: TObject);
+var
+id,i:integer;
+hdebet:string;
+hkredit:string;
+tramount:real;
+trdescription,trdescription2:string;
+inn:string;
+begin
+    Gridin.SetFocus;
+    if Gridin.DataSource.DataSet.RecordCount<>0 then
+    begin
+
+           Gridin.DataSource.DataSet.First;
+      for i:=0 to Gridin.DataSource.DataSet.RecordCount-1 do
+
+        begin
+   //Grid_out.SelectedRows.CurrentRowSelected:=Grid_out.DataSource.DataSet.RecordCount<>0;
+   if (Gridin.DataSource.DataSet.FieldByName('status').asinteger=2)and (Gridin.DataSource.DataSet.FieldByName('MT').asstring='MT103') then
+
+   begin
+   id:=Gridin.DataSource.DataSet.fieldbyName('id').asinteger;
+   //hdebet:=Gridin.DataSource.DataSet.fieldbyName('bic').AsString;
+   hkredit:=Gridin.DataSource.DataSet.fieldbyName('ACOUNT').AsString;
+   //tramount:=Gridin.DataSource.DataSet.fieldbyName('valu').AsFloat;
+   //trdescription:=Gridin.DataSource.DataSet.fieldbyName('description').asstring;
+   //trdescription2:=Gridin.DataSource.DataSet.fieldbyName('description2').asstring;
+   //inn:=Gridin.DataSource.DataSet.fieldbyName('TAX').asstring;
+
+                      // ShowMessage(hdebet+' '+hkredit+' '+floattostr(tramount));
+                    SwDataModule.sw_in_insert.CallProcedure('check_account',[        id,
+
+                                                                                          hkredit
+                                                                                        ]);
+
+    end;
+             Gridin.DataSource.DataSet.Next;
+              end;
+
+              end;
+              sboapiDataModule.SBSession.Commit;
+              end;
+
+
+//end;
+
+procedure TSWIFT_MAIN.ceskingClick(Sender: TObject);
+begin
+
+SWDataModule.SB_ACA.CallProcedure('CheckAdvancedObjectAccess', ['SW_IN_CHECK']);
+  ceskform:= Tceskform.Create(Self);
+   ceskform.ShowModal;
+end;
+
+procedure TSWIFT_MAIN.undifinet_transExecute(Sender: TObject);
+begin
+
+
+if gridin.DataSource.DataSet.FieldByName('status').asinteger=8 then
+begin
+                  with gridin.DataSource.DataSet do
+begin
+gridin.DataSource.DataSet.Edit;
+gridin.DataSource.DataSet.FieldByName('status').AsInteger:=12;
+gridin.DataSource.DataSet.FieldByName('info').asstring:='Teyin edilməmiş atılıb!';
+post;
+SWDataModule.sw_in_insert.CallProcedure('undifined_transactions',[SWDataModule.sw_in.FieldByName('id').AsInteger]);
+end;
+gridin.DataSource.DataSet.NEXT;
+
+end
+else
+ShowMessage('Тяйин олунмамыша атыла билмяз!')
+end;
+
+procedure TSWIFT_MAIN.ToolButton7Click(Sender: TObject);
+begin
+     SWDataModule.SB_ACA.CallProcedure('CheckAdvancedObjectAccess', ['SW_IN_UNDEF']);
+      case MessageDlg(Format('Əməliyyat təyin olunmamış atılsın?  ',['']), mtConfirmation,[mbyes,mbno], 0) of
+           mryes :begin
+undifinet_trans.Execute;
+end;
+   mrno:exit;
+end;
+end;
+
+procedure TSWIFT_MAIN.arxivClick(Sender: TObject);
+begin
+  inarchiv:= Tinarchiv.Create(Self);
+
+   inarchiv.ShowModal;
+   SWDataModule.ARXIVIN.Active:=true;
+
+   end;
+
+procedure TSWIFT_MAIN.konvertExecute(Sender: TObject);
+var
+i,j,status,shifr,k,m,struktur,t:integer;
+swstring,acount,referens,valu,valyuta,describ,describ2,mt,all,bic,dat,tax,kod,kor,bank_voin,v_out1,v_out2,v_out3,v_out4:string;
+dirold,dirnew,dir,country:string;
+
+begin  //1
+//--  struktur  o FIN   1 PRT
+struktur:=1;
+
+SWDataModule.SB_ACA.CallProcedure('CheckAdvancedObjectAccess', ['SW_KONVERT']);
+shifr:=3;
+status:=2;
+  for i:=0 to sw_out_FileListBox.Items.count-1
+   do
+  begin  //2
+
+
+  //ShowMessage(sw_out_FileListBox.Items.strings[4]) ;
+  RichEdit1.Lines.LoadFromFile(sw_out_FileListBox.Items[i]);
+    //RichEdit2.Lines.LoadFromFile(sw_out_FileListBox.Items[i]);
+  //ShowMessage(RichEdit1.Text);
+  //all:=RichEdit1.Text;
+  //----------------------------------------------------------------------------
+   m:=0;
+   //k:=0;
+    for j:=1 to RichEdit1.Lines.Count do
+  begin  //3
+        m:=m+1;
+      swstring:=trim(RichEdit1.Lines[j]);
+      //ShowMessage(sw_out_FileListBox.filename);
+  //------------Begin PRT file-------------------------------------
+      RichEdit2.Lines.Add(RichEdit1.Lines[j]);
+            if  trim(copy(swstring,28,16))='Message Trailer' then
+         begin
+        // ShowMessage(IntToStr(Length(RichEdit2.Lines.Text)));
+        //  all:=copy(StringReplace(RichEdit2.Lines.Text,'-','_',[rfReplaceAll, rfIgnoreCase]),1,1022);
+
+         all:=copy(RichEdit2.Lines.Text,1,1000);
+         v_out1:=copy(RichEdit2.Lines.Text,1001,1000);
+         v_out2:=copy(RichEdit2.Lines.Text,2002,1000);
+         v_out3:=copy(RichEdit2.Lines.Text,3003,1000);
+         v_out4:=copy(RichEdit2.Lines.Text,4004,1000);
+
+         // all:='';
+         //  for t := 1 to 1001 do
+         //    all:=all+'a';
+         // ShowMessage(inttostr(Length(all)));
+         // ShowMessage(all);
+        for k:=1 to 100 do
+         begin
+         RichEdit2.Lines[k]:='1';
+         end;
+         richedit2.Lines.Clear;
+         m:=0;
+        end;
+
+  if trim(copy(swstring,1,12))='Swift Output'  then
+  begin
+  mt:= 'MT'+trim(copy(swstring,37,3));
+  //ShowMessage(trim(copy(swstring,37,3)));
+  end;
+
+ if trim(copy(swstring,1,8))='Sender' then
+  begin
+  //ShowMessage(trim(copy(swstring,1,8)));
+  bic:= trim(copy(swstring,11,14));
+  //ShowMessage('test '+bic);
+  end;
+
+     if trim(copy(swstring,1,3))='20:' then
+   begin
+   swstring:=trim(RichEdit1.Lines[j+1]);
+   swstring:=trim(copy(swstring,1,100));
+   referens:=swstring;
+   //ShowMessage(referens);
+   end;
+       if trim(copy(swstring,1,4))='32A:'  then
+       begin
+       dat:=trim(copy((trim(RichEdit1.Lines[j+1])),18,14));
+       valyuta:=trim(copy((trim(RichEdit1.Lines[j+2])),18,3));
+       valu:= trim(copy((trim(RichEdit1.Lines[j+3])),18,100));
+       //ShowMessage(valu);
+       end;
+     //---------  olke kodu
+
+    if trim(copy(swstring,1,4))='52A:' then
+       country:=(copy((trim(RichEdit1.Lines[j+1])),5,2));
+
+   if trim(copy(swstring,1,3))='59:' then
+   begin
+   swstring:=trim(RichEdit1.Lines[j+1]);
+   swstring:=trim(copy(swstring,2,100));
+   acount:=swstring;
+
+   describ2:=trim(copy((trim(RichEdit1.Lines[j+2])),1,100))+' '+trim(RichEdit1.Lines[j+3]);
+
+   if pos('/',trim(RichEdit1.Lines[j+3]))<>0 then
+   swstring:=copy(trim(RichEdit1.Lines[j+3]),1,pos('/',trim(RichEdit1.Lines[j+3]))-1)
+   else
+   swstring:=copy(trim(RichEdit1.Lines[j+3]),1, length(trim(RichEdit1.Lines[j+3])) );
+
+   tax:=swstring;
+
+   swstring:=trim(copy((trim(RichEdit1.Lines[j+4])),1,pos('/',trim(RichEdit1.Lines[j+4]))-1 ));
+   kod:=swstring;
+   swstring:=trim(copy((trim(RichEdit1.Lines[j+4])),pos('/',trim(RichEdit1.Lines[j+4]))+1,10));
+   bank_voin:=swstring;
+   swstring:=trim(copy((trim(RichEdit1.Lines[j+5])),1,13));
+   kor:=swstring;
+   end;
+
+   if (trim(copy(swstring,1,4)) ='50K:') or (trim(copy(swstring,1,4)) ='50A:') or (trim(copy(swstring,1,4)) ='50B:') or (trim(copy(swstring,1,4)) ='50F:') or (trim(copy(swstring,1,4)) ='50C:') or (trim(copy(swstring,1,4)) ='50D:') then
+       begin
+       describ:= trim(copy((trim(RichEdit1.Lines[j+2])),1,100));
+       //ShowMessage(describ);
+       end;
+
+       if  trim(copy(swstring,28,16))='Message Trailer' then
+         begin
+
+         //all:=RichEdit2.Text;
+         //RichEdit2.Clear;
+         //k:=j-1;
+  if not DirectoryExists(SWDataModule.sw_settings.fieldbyname('path_out').asstring) then
+  MkDir(SWDataModule.sw_settings.fieldbyname('path').asstring);
+  dir:=SWDataModule.sw_settings.fieldbyname('path').asstring+'\'+FormatDateTime('ddmmyy',date)+'\';
+  if not DirectoryExists(dir) then
+  MkDir(dir);
+  dirnew:=dir+trim(copy(sw_out_FileListBox.Items[i],1,100));
+  dirold:=SWDataModule.sw_settings.fieldbyname('path').asstring+'\'+trim(copy(sw_out_FileListBox.Items[i],1,100));
+  //ShowMessage('old  '+dirold);
+  //ShowMessage('new  '+dirnew);
+
+
+  movefile(pchar(dirold),pchar(dirnew));
+   //---------end prtfile---------------------------------------
+     // all:='';
+   //---------------------------------end FIN file-----------------------
+     if mt='MT103' then begin
+
+    // if valyuta='AZN' then country:='AZ';
+
+     if country='' then
+     begin
+    SwDataModule.sw_in_insert.CallProcedure( 'insert_in',[  acount,
+                                                           referens,
+                                                           valu,
+                                                           bic,
+                                                           valyuta,
+                                                           describ,
+                                                           describ2,
+                                                           status,
+                                                           shifr,
+                                                           mt,
+                                                           all,
+                                                           tax,
+                                                           kod,
+                                                           bank_voin,
+                                                           kor,
+                                                           v_out1,
+                                                           v_out2,
+                                                           v_out3,
+                                                           v_out4 ]);
+                                                           richedit2.Lines.Clear;
+     end;
+      if country<>'' then
+
+      begin
+              SwDataModule.sw_in_insert.CallProcedure( 'insert_in',[  acount,
+                                                           referens,
+                                                           valu,
+                                                           bic,
+                                                           valyuta,
+                                                           describ,
+                                                           describ2,
+                                                           status,
+                                                           shifr,
+                                                           mt,
+                                                           ansistring(all),
+                                                           tax,
+                                                           kod,
+                                                           bank_voin,
+                                                           kor,
+                                                           v_out1,
+                                                           v_out2,
+                                                           v_out3,
+                                                           v_out4,
+                                                           country ]);
+           richedit2.Lines.Clear;
+      end;
+
+
+        end else
+              begin
+                SwDataModule.sw_in_insert.CallProcedure( 'insert_in_other',[
+                                                           referens,
+                                                           bic,
+                                                           status,
+                                                           shifr,
+                                                           mt,
+                                                           all,
+                                                           v_out1,
+                                                           v_out2,
+                                                           v_out3,
+                                                           v_out4]);
+            richedit2.Lines.Clear;
+         //                                                                  end;
+
+            end;
+
+         end;
+
+
+
+  end; //3
+    //--------------------------------------------------------------------------- send one file
+
+     //while trim(copy(swstring,28,16))='Message Trailer' do
+       //                                                                   begin
+
+
+
+        RichEdit1.Clear;
+    //-----------------------------------------------
+
+
+
+
+
+  end; //2
+
+//sw_out_FileListBox.refresh;
+//sw_out_FileListBox.Repaint;
+ SWDataModule.sw_in.close;
+SWDataModule.sw_in.open;
+//SWDataModule.sw_in.Refresh;
+cheskaccount.execute;
+SWDataModule.sw_in.close;
+SWDataModule.sw_in.open;
+end; //1
+
+procedure TSWIFT_MAIN.konvert2Execute(Sender: TObject);
+var
+i,j,z,status,shifr,k,m,struktur:integer;
+swstring,fli,acount,referens,valu,valyuta,describ,describ2,mt,all,bic,dat,tax,kod,kor,bank_voin:string;
+dirold,dirnew,dir:string;
+ fl:textfile;
+
+begin  //1
+//--  struktur  o FIN   1 PRT
+struktur:=0;
+
+SWDataModule.SB_ACA.CallProcedure('CheckAdvancedObjectAccess', ['SW_KONVERT']);
+shifr:=3;
+status:=2;
+  for i:=0 to sw_out_FileListBox.Items.count-1
+   do
+  begin  //2
+    //RichEdit1.Lines.Clear;
+
+    //ShowMessage(sw_out_FileListBox.Items[i]);
+     //RichEdit1.Lines.Clear;
+  //ShowMessage(sw_out_FileListBox.Items.strings[4]) ;
+  reset(fl,sw_out_FileListBox
+  .Items[i]);
+  z:=0;
+  while not eof(fl)  do
+  begin
+  z:=z+1;
+  Readln(fl,fli);
+  //ShowMessage('1');
+   RichEdit1.Lines[z]:=fli;
+
+  end;
+   CloseFile(fl);
+
+  //RichEdit1.lines.Text :=fli;
+
+  //RichEdit1.Lines.LoadFromFile(sw_out_FileListBox.Items[i]);
+    //RichEdit2.Lines.LoadFromFile(sw_out_FileListBox.Items[i]);
+  //ShowMessage(RichEdit1.Text);
+  //all:=RichEdit1.Text;
+  //----------------------------------------------------------------------------
+   m:=0;
+   //k:=0;
+    for j:=0 to RichEdit1.Lines.Count do
+  begin  //3
+
+
+
+       m:=m+1;
+
+     swstring:=trim(RichEdit1.Lines[j]);
+
+
+     //ShowMessage(sw_out_FileListBox.filename);
+  //------------Begin PRT file-------------------------------------
+
+     RichEdit2.Lines.Add(RichEdit1.Lines[j]);
+            if  trim(copy(swstring,1,5))='-}{5:' then
+         begin
+
+          //all:=fli;
+         all:=RichEdit2.Lines.Text;
+                 {  for k:=1 to 100 do
+         begin
+         RichEdit2.Lines[k]:='1';
+         end;     }
+        // richedit2.Lines.Clear;
+         m:=0;
+         end;
+        // ShowMessage(trim(copy(swstring,1,3)));
+  if trim(copy(swstring,1,3))='{1:'  then      //------DUZELIB
+  begin
+
+  mt:= 'MT'+trim(copy(swstring,85,3));
+  //ShowMessage('MT'+trim(copy(swstring,85,3)));
+  end;
+
+
+
+  if trim(copy(swstring,1,3))='{1:'  then       //-----duzelib
+  begin
+  //ShowMessage(trim(copy(swstring,1,8)));
+  bic:= trim(copy(swstring,7,8));
+  BIC:=BIC+trim(copy(swstring,16,3));
+
+  //ShowMessage(bic);
+  end;
+
+     if trim(copy(swstring,1,4))=':20:' then  //---------DUZELIB
+   begin
+   swstring:=trim(copy(RichEdit1.Lines[j],5,20));
+   //swstring:=trim(copy(swstring,1,100));
+   referens:=swstring;
+   //ShowMessage(referens);
+   end;
+       if trim(copy(swstring,1,5))=':32A:'  then     //-------DUZELIB
+       begin
+       dat:=trim(copy((trim(RichEdit1.Lines[j])),6,6));
+       valyuta:=trim(copy((trim(RichEdit1.Lines[j])),12,3));
+       valu:= trim(copy((trim(RichEdit1.Lines[j])),15,100));
+       //ShowMessage(VALU);
+       end;
+
+
+   if trim(copy(swstring,1,4))=':59:' then    //----------DUZELIB
+   begin
+   swstring:=trim(RichEdit1.Lines[j]);
+   swstring:=trim(copy(swstring,6,100));
+   acount:=swstring;
+   describ2:=trim(copy((trim(RichEdit1.Lines[j+1])),1,100));
+   swstring:=trim(RichEdit1.Lines[j+2]);
+   if pos(swstring,'/')<>0 then
+   tax:=copy(swstring,0,pos(swstring,'/'))
+   else
+   tax:=swstring;
+
+   swstring:=trim(copy((trim(RichEdit1.Lines[j+3])),1,6));
+   kod:=swstring;
+   swstring:=trim(copy((trim(RichEdit1.Lines[j+3])),8,13));
+   kor:=swstring;
+   swstring:=trim(copy((trim(RichEdit1.Lines[j+3])),22,10));
+   bank_voin:=swstring;
+   //ShowMessage(KOD+'/'+KOR+'/'+BANK_VOIN);
+   end;
+
+       if (trim(copy(swstring,1,5)) =':50K:') or (trim(copy(swstring,1,5)) =':50A:') or (trim(copy(swstring,1,5)) =':50B:') or (trim(copy(swstring,1,5)) =':50F:') or (trim(copy(swstring,1,5)) =':50C:') or (trim(copy(swstring,1,5)) =':50D:') then
+       begin
+       describ:= trim(copy((trim(RichEdit1.Lines[j+1])),1,100));
+       end;
+
+       if  trim(copy(swstring,1,5))= '-}{5:' then
+         begin
+
+         //all:=RichEdit2.Text;
+         //RichEdit2.Clear;
+         //k:=j-1;
+
+
+  if not DirectoryExists(SWDataModule.sw_settings.fieldbyname('path_out').asstring) then
+  MkDir(SWDataModule.sw_settings.fieldbyname('path').asstring);
+dir:=SWDataModule.sw_settings.fieldbyname('path').asstring+'\'+FormatDateTime('ddmmyy',date)+'\';
+  if not DirectoryExists(dir) then
+MkDir(dir);
+dirnew:=dir+trim(copy(sw_out_FileListBox.Items[i],1,100));
+dirold:=SWDataModule.sw_settings.fieldbyname('path').asstring+'\'+trim(copy(sw_out_FileListBox.Items[i],1,100));
+  //ShowMessage('old  '+dirold);
+  //ShowMessage('new  '+dirnew);
+
+
+movefile(pchar(dirold),pchar(dirnew));
+//   //---------end prtfile---------------------------------------
+
+   //---------------------------------end FIN file-----------------------
+
+    //ShowMessage(mt);
+
+     if mt='MT103' then begin
+    SwDataModule.sw_in_insert.CallProcedure( 'insert_in',[  acount,
+                                                           referens,
+                                                           valu,
+                                                           bic,
+                                                           valyuta,
+                                                           describ,
+                                                           describ2,
+                                                           status,
+                                                           shifr,
+                                                           mt,
+                                                           all,
+                                                           tax,
+                                                           kod,
+                                                           bank_voin,
+                                                           kor]);
+                                                           richedit2.Lines.Clear;
+
+        end else
+              begin
+            SwDataModule.sw_in_insert.CallProcedure( 'insert_in_other',[
+                                                           referens,
+                                                           bic,
+                                                           status,
+                                                           shifr,
+                                                           mt,
+                                                           all]);
+                                                           richedit2.Lines.Clear;
+         //                                                                  end;
+
+            end;
+
+         end;
+
+
+
+  end; //3
+    //--------------------------------------------------------------------------- send one file
+
+     //while trim(copy(swstring,28,16))='Message Trailer' do
+       //                                                                   begin
+
+
+
+        RichEdit1.Clear;
+    //-----------------------------------------------
+
+
+
+   //CloseFile(fl);
+
+  end; //2
+
+sw_out_FileListBox.refresh;
+sw_out_FileListBox.Repaint;
+ SWDataModule.sw_in.close;
+SWDataModule.sw_in.open;
+SWDataModule.sw_in.Refresh;
+cheskaccount.execute;
+SWDataModule.sw_in.close;
+SWDataModule.sw_in.open;
+
+sw_out_FileListBox.Refresh;
+
+
+end; //1
+
+
+procedure TSWIFT_MAIN.ToolButton8Click(Sender: TObject);
+var
+c:integer;
+v_DataSet: TDataset;
+v_mf20,v_mf23,v_mf32,v_mf50,v_mf52,v_mf53,v_mf54,v_mf55,v_mf56,v_mf57,v_mf59,v_mf70,v_mf71,v_mf72,v_mf77: WideString;
+v_MF50_NAMEADRESS: WideString;
+begin
+
+c:=StrToInt(Edit1.Text);
+case c of
+1:v_DataSet:=Grid_out.DataSource.DataSet;
+2:v_DataSet:=Gridout2.DataSource.DataSet;
+3:v_DataSet:=Gridout3.DataSource.DataSet;
+end;
+
+with v_DataSet do
+begin
+
+v_mf20:=fieldbyname('MF20').asstring+' '+fieldbyname('MF20_REFERENCE').asstring;
+v_mf23:=#13+#13+ fieldbyname('M23B').asstring+' '+fieldbyname('mf23b').asstring;
+v_mf32:=#13+#13+ fieldbyname('M32A').asstring+' '+fieldbyname('MF32A_DATE').asstring+' '
+        +v_DataSet.fieldbyname('MF32A_CURR').asstring+v_DataSet.fieldbyname('MF32A_AMOUNT').asstring;
+ //----------------M50 begin------------------------
+if fieldbyname('M50').asstring=':50A:'
+        then
+        v_mf50:=#13+#13+ fieldbyname('M50').asstring+' /'+fieldbyname('MF50_ACCOUNT').asstring
+        +#13+fieldbyname('MF50_BIC').asstring+#13+fieldbyname('MF50_NAME$ADRESS').asstring
+        else
+if (fieldbyname('M50').asstring=':50K:') and (fieldbyname('FINCOPY').asstring<>'AZN')
+        then
+        begin
+       v_MF50_NAMEADRESS:=fieldbyname('MF50_NAME$ADRESS').asstring;
+       v_MF50_NAMEADRESS:=copy(v_MF50_NAMEADRESS,0,pos(#13,v_MF50_NAMEADRESS)-1)
+       +#13+'TAXID '
+       +copy(v_MF50_NAMEADRESS,pos(#13,v_MF50_NAMEADRESS)+2,length(v_MF50_NAMEADRESS)-pos(#13,v_MF50_NAMEADRESS));
+
+v_mf50:=#13+#13+ fieldbyname('M50').asstring+' /'+fieldbyname('MF50_ACCOUNT').asstring+#13+v_MF50_NAMEADRESS;
+        end
+        else
+v_mf50:=#13+#13+ fieldbyname('M50').asstring+' /'+fieldbyname('MF50_ACCOUNT').asstring+#13+fieldbyname('MF50_NAME$ADRESS').asstring;
+
+ //----------------M52 begin------------------------
+if fieldbyname('M52').asstring=':52A:'
+        then
+v_mf52:=#13+#13+fieldbyname('M52').AsString+' /'+fieldbyname('MF52_ACCOUNT').AsString
+        +#13+ fieldbyname('MF52_BIC').AsString+#13+ fieldbyname('MF52_NAME$ADRESS').AsString
+        else
+if fieldbyname('M52').asstring=':52D:'
+        then
+v_mf52:=#13+#13+fieldbyname('M52').AsString+' /'+fieldbyname('MF52_ACCOUNT').AsString
+        +#13+ fieldbyname('MF52_NAME$ADRESS').AsString
+        else v_mf52:='';
+ //----------------M53 begin------------------------
+if fieldbyname('FINCOPY').AsString='AZN'
+then
+ v_mf53:=''
+ else
+ v_mf53:=#13+#13+ fieldbyname('M53').AsString+' /'+fieldbyname('MF53_ACCOUNT').AsString;
+// +#13+fieldbyname('MF53_NAME$LOCATION').AsString;
+  //----------------M54 begin------------------------
+  if fieldbyname('M54').AsString=':54A:' then
+   v_mf54:=#13+#13+ fieldbyname('M54').AsString+' /'+fieldbyname('MF54_ACCOUNT').AsString
+           +#13+ fieldbyname('MF54_BIC').AsString+#13+ fieldbyname('MF54_NAME$LOCATION').AsString
+   else
+  if ((fieldbyname('M54').AsString=':54B:') or (fieldbyname('M54').AsString=':54D:')) then
+    v_mf54:=#13+#13+ fieldbyname('M54').AsString+' /'+fieldbyname('MF54_ACCOUNT').AsString
+            +#13 + fieldbyname('MF54_NAME$LOCATION').AsString
+  else v_mf54:='';
+   //----------------M55 begin------------------------
+   if fieldbyname('M55').AsString=':55A:' then
+   v_mf55:=#13+#13+fieldbyname('M55').AsString+ ' /'+fieldbyname('MF55_ACCOUNT').AsString
+          +#13+ fieldbyname('MF55_BIC').AsString+#13+ fieldbyname('MF55_NAME$LOCATION').AsString
+   else
+   if ((fieldbyname('M55').AsString=':55B:') or (fieldbyname('M55').AsString=':55D:')) then
+       v_mf55:=#13+#13+ fieldbyname('M55').AsString+' /'+fieldbyname('MF55_ACCOUNT').AsString
+            +#13 + fieldbyname('MF55_NAME$LOCATION').AsString
+   else v_mf55:='';
+    //----------------M56 begin------------------------
+    if fieldbyname('M56').AsString=':56A:' then
+    v_mf56:=#13+#13+fieldbyname('M56').AsString+' /'+fieldbyname('MF56_ACCOUNT').AsString
+           +#13+ fieldbyname('MF56_BIC').AsString+#13+ fieldbyname('MF56_NAME$LOCATION').AsString
+    else
+    if fieldbyname('M56').AsString=':56C:' then
+     v_mf56:=#13+#13+fieldbyname('M56').AsString+' /'+fieldbyname('MF56_ACCOUNT').AsString
+    else
+    if fieldbyname('M56').AsString=':56D:' then
+      v_mf56:=#13+#13+fieldbyname('M56').AsString+' /'+fieldbyname('MF56_ACCOUNT').AsString
+             +#13+fieldbyname('MF56_NAME$LOCATION').AsString
+      else v_mf56:='';
+     //----------------M57 begin------------------------
+     if fieldbyname('M57').AsString=':57A:' then
+        v_mf57:=#13+#13+fieldbyname('M57').AsString+' /'+fieldbyname('MF57_ACCOUNT').AsString
+           +#13+ fieldbyname('MF57_BIC').AsString+#13+ fieldbyname('MF57_NAME$LOCATION').AsString
+     else
+     if fieldbyname('M57').AsString=':57B:' then
+        v_mf57:=#13+#13+fieldbyname('M57').AsString+' /'+fieldbyname('MF57_ACCOUNT').AsString
+           +#13+fieldbyname('MF57_NAME$LOCATION').AsString
+     else
+     if fieldbyname('M57').AsString=':57C:' then
+        v_mf57:=#13+#13+fieldbyname('M57').AsString+' /'+fieldbyname('MF57_ACCOUNT').AsString
+     else
+     if fieldbyname('M57').AsString=':57D:' then
+        v_mf57:=#13+#13+fieldbyname('M57').AsString+' /'+fieldbyname('MF57_ACCOUNT').AsString
+        +#13+fieldbyname('MF57_NAME$LOCATION').AsString
+     else v_mf57:='';
+      //----------------M59 begin------------------------
+  v_mf59:=#13+#13+ fieldbyname('M59').asstring+' /'+fieldbyname('MF59_ACCOUNT').asstring
++#13+fieldbyname('MF59_NAME$ADRESS').asstring;
+
+if fieldbyname('M70').asstring=':70:' then
+v_mf70:=#13+#13+ fieldbyname('M70').asstring+' '+fieldbyname('MF70').asstring
+else  v_mf70:='';
+
+v_mf71:=#13+#13+ fieldbyname('M71A').asstring+' '+fieldbyname('MF71A').asstring;
+
+if fieldbyname('M72').asstring=':72:' then
+v_mf72:=#13+#13+ fieldbyname('M72').asstring+' '+fieldbyname('MF72').asstring
+else
+v_mf72:='';
+if fieldbyname('M77B').asstring=':77B:' then
+v_mf77:=#13+#13+ fieldbyname('M77B').asstring+' '+fieldbyname('MF77B').asstring
+else
+v_mf77:='';
+
+end;
+
+a:= v_mf20 + v_mf23 + v_mf32 + v_mf50 + v_mf52 + v_mf53 + v_mf54 + v_mf55 +
+ v_mf56 + v_mf57 + v_mf59 + v_mf70 + v_mf71 + v_mf72 + v_mf77;
+
+
+{if c=2 then begin
+a:= Gridout2.DataSource.DataSet.fieldbyname('MF20').asstring+' '+
+Gridout2.DataSource.DataSet.fieldbyname('MF20_REFERENCE').asstring+#13+#13
++Gridout2.DataSource.DataSet.fieldbyname('M23B').asstring+' '+Gridout2.DataSource.DataSet.fieldbyname('mf23b').asstring
++#13+#13+Gridout2.DataSource.DataSet.fieldbyname('M32A').asstring+' '+Gridout2.DataSource.DataSet.fieldbyname('MF32A_DATE').asstring+' '+Gridout2.DataSource.DataSet.fieldbyname('MF32A_CURR').asstring+Gridout2.DataSource.DataSet.fieldbyname('MF32A_AMOUNT').asstring
++#13+#13+Gridout2.DataSource.DataSet.fieldbyname('M50').asstring+' '+Gridout2.DataSource.DataSet.fieldbyname('MF50_ACCOUNT').asstring
++#13+Gridout2.DataSource.DataSet.fieldbyname('MF50_NAME$ADRESS').asstring
++#13+#13+Gridout2.DataSource.DataSet.fieldbyname('M59').asstring+' '+Gridout2.DataSource.DataSet.fieldbyname('MF59_ACCOUNT').asstring
++#13+Gridout2.DataSource.DataSet.fieldbyname('MF59_NAME$ADRESS').asstring
++#13+#13+Gridout2.DataSource.DataSet.fieldbyname('M70').asstring+' '+Gridout2.DataSource.DataSet.fieldbyname('MF70').asstring
++#13+Gridout2.DataSource.DataSet.fieldbyname('M72').asstring+' '+Gridout2.DataSource.DataSet.fieldbyname('MF72').asstring;
+end;
+
+if c=3 then begin
+a:= Gridout3.DataSource.DataSet.fieldbyname('MF20').asstring+' '+
+Gridout3.DataSource.DataSet.fieldbyname('MF20_REFERENCE').asstring+#13+#13
++Gridout3.DataSource.DataSet.fieldbyname('M23B').asstring+' '+Gridout3.DataSource.DataSet.fieldbyname('mf23b').asstring
++#13+#13+Gridout3.DataSource.DataSet.fieldbyname('M32A').asstring+' '+Gridout3.DataSource.DataSet.fieldbyname('MF32A_DATE').asstring+' '+Gridout3.DataSource.DataSet.fieldbyname('MF32A_CURR').asstring+Gridout3.DataSource.DataSet.fieldbyname('MF32A_AMOUNT').asstring
++#13+#13+Gridout3.DataSource.DataSet.fieldbyname('M50').asstring+' '+Gridout3.DataSource.DataSet.fieldbyname('MF50_ACCOUNT').asstring
++#13+Gridout3.DataSource.DataSet.fieldbyname('MF50_NAME$ADRESS').asstring
++#13+#13+Gridout3.DataSource.DataSet.fieldbyname('M59').asstring+' '+Gridout3.DataSource.DataSet.fieldbyname('MF59_ACCOUNT').asstring
++#13+Gridout3.DataSource.DataSet.fieldbyname('MF59_NAME$ADRESS').asstring
++#13+#13+Gridout3.DataSource.DataSet.fieldbyname('M70').asstring+' '+Gridout3.DataSource.DataSet.fieldbyname('MF70').asstring
++#13+Gridout3.DataSource.DataSet.fieldbyname('M72').asstring+' '+Gridout3.DataSource.DataSet.fieldbyname('MF72').asstring;
+end;  }
+
+
+//printform:=Tprintform.create(self);
+//printform.showmodal;
+ if not assigned(QuickReport1) then
+ QuickReport1:=TQuickReport1.Create(application);
+ QuickReport1.qrrichtext1.lines.Text:=a;
+ //\ShowMessage(a);
+ QuickReport1.Preview;
+end;
+
+procedure TSWIFT_MAIN.konvert3Execute(Sender: TObject);
+var
+i,j,z,status,shifr,k,m,struktur,num,num1,num2:integer;
+swstring,fli,acount,referens,valu,valyuta,describ,describ2,mt,all,bic,dat,tax,kod,kor,bank_voin:string;
+dirold,dirnew,dir:string;
+ fl:textfile;
+
+begin  //1
+//--  struktur  o FIN   1 PRT
+struktur:=0;
+
+SWDataModule.SB_ACA.CallProcedure('CheckAdvancedObjectAccess', ['SW_KONVERT']);
+shifr:=3;
+status:=2;
+  for i:=0 to sw_out_FileListBox.Items.count-1
+   do
+  begin//2
+   reset(fl,sw_out_FileListBox.Items[i]);
+  z:=0;
+  while not eof(fl)  do
+  begin //3
+  z:=z+1;
+  Readln(fl,fli);
+
+ // bazaya atmaq
+        m:=m+1;
+      swstring:=trim(fli);
+
+  //------------Begin FIN file-------------------------------------
+
+     if trim(copy(swstring,1,5))<>'-}{5:' then
+     memo3.Lines[z]:=swstring;
+     if trim(copy(swstring,1,5))='-}{5:' then
+     all:=Memo3.text;
+
+  if trim(copy(swstring,1,3))='{1:'  then      //------DUZELIB
+  begin
+   mt:= 'MT'+trim(copy(swstring,SWDataModule.settingsINN_MT_READLINE.asInteger,3));
+  end;
+
+  if trim(copy(swstring,1,3))='{1:'  then       //-----duzelib
+  begin
+  bic:= trim(copy(swstring,7,8));
+  BIC:=BIC+trim(copy(swstring,16,3));
+  end;
+
+     if trim(copy(swstring,1,4))=':20:' then  //---------DUZELIB
+   begin
+   referens:=trim(copy(swstring,5,20));
+   //swstring:=trim(copy(swstring,1,100));
+   //referens:=swstring;
+   //ShowMessage(referens);
+   end;
+
+       if trim(copy(swstring,1,5))=':32A:'  then     //-------DUZELIB
+       begin
+       dat:=trim(copy((trim(swstring)),6,6));
+       valyuta:=trim(copy((trim(swstring)),12,3));
+       valu:= trim(copy((trim(swstring)),15,100));
+       //ShowMessage(VALU);
+       end;
+
+   if trim(copy(swstring,1,4))=':59:' then    //----------DUZELIB
+   begin
+   num:=z;
+   //swstring:=trim(RichEdit1.Lines[j]);
+   //swstring:=trim(copy(swstring,6,100));
+   acount:=trim(copy(swstring,6,100));
+   end;
+   
+   if z=num+1 then
+   begin
+   describ2:=trim(copy((swstring),1,100));
+   end;
+   if z=num+2 then
+   begin
+         if pos('/',trim(swstring))<>0
+         then
+         tax:=copy(trim(swstring),0,pos('/',trim(swstring))-1)
+         else
+         tax:=trim(swstring);
+   end;
+
+   if z=num+3 then
+   begin
+   kod:=trim(copy((swstring),1,6));
+   bank_voin:=trim(copy((swstring),8,10));
+   end;
+   if z=num+4 then
+    kor:=trim(copy((swstring),0,13));
+
+       if (trim(copy(swstring,1,5)) =':50K:') or (trim(copy(swstring,1,5)) =':50A:') or (trim(copy(swstring,1,5)) =':50B:') or (trim(copy(swstring,1,5)) =':50F:') or (trim(copy(swstring,1,5)) =':50C:') or (trim(copy(swstring,1,5)) =':50D:') then
+       begin
+       num2:=z;
+       //describ:= trim(copy((trim(RichEdit1.Lines[j+1])),1,100));
+       end;
+       if z=num2+1 then
+       begin
+       describ:= trim(copy((swstring),1,100));
+       end;
+
+      if  trim(copy(swstring,1,5))= '-}{5:' then
+         begin
+         //all:=RichEdit2.Text;
+         //RichEdit2.Clear;
+         //k:=j-1;
+          end;
+ //bazaya atmaqin sonu
+  end;
+   CloseFile(fl);
+
+    if not DirectoryExists(SWDataModule.sw_settings.fieldbyname('path_out').asstring) then
+  MkDir(SWDataModule.sw_settings.fieldbyname('path').asstring);
+dir:=SWDataModule.sw_settings.fieldbyname('path').asstring+'\'+FormatDateTime('ddmmyy',date)+'\';
+  if not DirectoryExists(dir) then
+MkDir(dir);
+dirnew:=dir+trim(copy(sw_out_FileListBox.Items[i],1,100));
+dirold:=SWDataModule.sw_settings.fieldbyname('path').asstring+'\'+trim(copy(sw_out_FileListBox.Items[i],1,100));
+
+movefile(pchar(dirold),pchar(dirnew));
+//   //---------end prtfile---------------------------------------
+
+   //---------------------------------end FIN file-----------------------
+
+    //ShowMessage(mt);
+     // all:=Memo3.Text;
+      //ShowMessage(all);
+
+
+     if mt='MT103' then begin
+    SwDataModule.sw_in_insert.CallProcedure( 'insert_in',[  acount,
+                                                           referens,
+                                                           valu,
+                                                           bic,
+                                                           valyuta,
+                                                           describ,
+                                                           describ2,
+                                                           status,
+                                                           shifr,
+                                                           mt,
+                                                           all,
+                                                           tax,
+                                                           kod,
+                                                           bank_voin,
+                                                           kor]);
+                                                           richedit2.Lines.Clear;
+
+        end else
+              begin
+            SwDataModule.sw_in_insert.CallProcedure( 'insert_in_other',[
+                                                           referens,
+                                                           bic,
+                                                           status,
+                                                           shifr,
+                                                           mt,
+                                                           all]);
+                                                           richedit2.Lines.Clear;
+         //     end;
+            end;
+  end; //2
+  //end1
+
+  sw_out_FileListBox.refresh;
+sw_out_FileListBox.Repaint;
+ SWDataModule.sw_in.close;
+SWDataModule.sw_in.open;
+SWDataModule.sw_in.Refresh;
+cheskaccount.execute;
+SWDataModule.sw_in.close;
+SWDataModule.sw_in.open;
+
+sw_out_FileListBox.Refresh;
+end;//1
+
+procedure TSWIFT_MAIN.ActiveFormDeactivate(Sender: TObject);
+var
+i:integer;
+begin
+ for i := 0 to swdatamodule.ComponentCount - 1  do begin // Uygun panelleri visible eleyir :
+
+  if (swdatamodule.Components[i].ClassType = TDataSet) then
+  //begin
+   (swdatamodule.Components[i] as TDataSet).close;
+ // end;
+end;
+end;
+procedure TSWIFT_MAIN.ActiveFormActivate(Sender: TObject);
+begin
+SWDataModule.settings.open;
+OutFilePath:=SWDataModule.settingsPATH.asstring;
+struktur:='PRT';
+//sw_out_FileListBox.Update;
+//sw_out_FileListBox.ApplyFilePath(OutFilePath);
+
+if struktur='PRT' then
+sw_out_FileListBox.Mask:=('*.prt');
+if struktur='FIN' then
+sw_out_FileListBox.Mask:=('*.fin');
+end;
+
+procedure TSWIFT_MAIN.commitingExecute(Sender: TObject);
+var
+   Index :Integer;
+   WaitNextConfirm, WillRefresh: Boolean;
+   TransactionID :Integer;
+begin
+
+
+  WaitNextConfirm :=True;
+  WillRefresh :=False;
+  if GRIDOUT2.CanFocus then
+  GRIDOUT2.SetFocus;
+
+  //Focus;
+  with  GRIDOUT2, SelectedRows, DataSource.DataSet, SWDataModule do
+  try
+    if Count = 0 then CurrentRowSelected := True;
+    for  Index :=0 to  Count - 1 do
+    begin
+      GotoBookmark(Pointer(Items[Index]));
+      TransactionID :=FieldbyName('ID').AsInteger;
+
+      if  WaitNextConfirm  then
+      case MessageDlg(
+        Format('Əməliyyat  #%d təsdiq edilsin?',[TransactionID])
+       ,mtConfirmation
+       ,[mbYes, mbNo ,mbCancel ]
+       ,0
+       )   of
+        mrNo       : Continue;
+        mrCancel   : Break;
+       // mrYesToAll : Continue;
+        //  if MessageDlg(Format('%d  сайда ямялиййат тясдиг едилсин?', [Count - Index]), mtConfirmation, [mbYes, mbCancel], 0) = mrYes then
+           //WaitNextConfirm :=False
+         // else
+         //  Continue;
+      end;
+      Application.ProcessMessages;
+      //DeleteTransaction(TransactionID);
+      form12.showmodal;
+      if form12.Edit2.text='0'then exit else
+      if Form12.Edit2.Text='1' then
+      SWDataModule.sw_in_insert.CallProcedure('sw_out_commit',[TransactionID]);
+      WillRefresh :=True;
+
+
+    end;
+  finally
+   if WillRefresh then
+   SWDataModule.sw_out_2.refresh;
+   SWDataModule.sw_out.Refresh;
+    //ActionRefreshExecute(Sender);
+
+  end;
+  sboapiDataModule.SBSession.Commit;
+  if SWDataModule.sw_out_2.RecordCount>0 then
+  //Memo2.Text:=IntToStr(index)+' сайда ямялиййат гайтарылды!' else
+         // Memo2.Text:='Бцтцн ямялиййат гайтарылыб!'
+end;
+
+procedure TSWIFT_MAIN.Capet1Click(Sender: TObject);
+begin
+if grid_out.DataSource.DataSet.RecordCount>0 then begin
+
+edit1.Text:='1';
+ToolButton8.Click;
+end;
+
+end;
+
+procedure TSWIFT_MAIN.N1Click(Sender: TObject);
+begin
+ToolButton13.Click;
+end;
+
+procedure TSWIFT_MAIN.MenuItem6Click(Sender: TObject);
+begin
+  ToolButton11.Click;
+end;
+
+procedure TSWIFT_MAIN.MenuItem7Click(Sender: TObject);
+begin
+ToolButton9.Click;
+end;
+
+procedure TSWIFT_MAIN.MenuItem8Click(Sender: TObject);
+begin
+ToolButton2.Click;
+end;
+
+procedure TSWIFT_MAIN.CapEt2Click(Sender: TObject);
+begin
+if GRIDOUT3.DataSource.DataSet.RecordCount>0 then begin
+edit1.Text:='3';
+ToolButton8.Click;
+end;
+end;
+
+procedure TSWIFT_MAIN.MenuItem1Click(Sender: TObject);
+begin
+createfile.click;
+end;
+
+procedure TSWIFT_MAIN.MenuItem4Click(Sender: TObject);
+begin
+
+ if GRIDOUT3.DataSource.DataSet.RecordCount>0 then
+begin
+if (GRIDOUT3.DataSource.DataSet.FieldByName('MESSAGETYPE').AsString='MT103') and (GRIDOUT3.DataSource.DataSet.FieldByName('FINCOPY').AsString='AZN') then
+ Form8.ShowModal else ShowMessage('Valyutasi');
+end;
+end;
+
+procedure TSWIFT_MAIN.GRIDOUT2DblClick(Sender: TObject);
+begin
+Redakteet1.Click;
+end;
+
+procedure TSWIFT_MAIN.gridout3DblClick(Sender: TObject);
+begin
+MenuItem4.Click;
+end;
+
+procedure TSWIFT_MAIN.ToolButton14Click(Sender: TObject);
+begin
+archive_out.ShowModal;
+end;
+
+procedure TSWIFT_MAIN.AddINTransNewExecute(Sender: TObject);
+var
+   i: Integer;
+   IDs: WideString;
+   Status, TrCount: Word;
+begin
+ IDs :='';
+ TrCount :=0;
+ with GridIn, SelectedRows, DataSource.DataSet do
+  if Count = 0 then
+   begin
+    Inc(TrCount);
+    IDs := FieldByName('ID').AsString;
+   end
+  else
+  begin
+   DisableControls;
+   try
+    for i :=0 to Count -1 do
+    begin
+     GotoBookmark(TBookmark(Items[i]));
+
+     if (FieldByName('status').asinteger=11)
+      and (FieldByName('MT').asstring='MT103') then
+       begin
+      Inc(TrCount);
+     IDs :=IDs + ',' + FieldByName('ID').AsString;
+     end;
+    end;
+   System.Delete(IDs, 1, 1);
+   finally
+    EnableControls;
+   end;
+  end;
+  if MessageDlg(Format('%d sayda əməliyyat(lar) günün sənədlərinə əlavə edilsin ?', [TrCount]), mtConfirmation, [mbYes, mbCancel], 0) = mrYes
+  then
+ begin
+ //showmessage(IDS);
+  with SWDataModule.SW_IN_FORAddIn do
+     begin
+     Close;
+     SetVariable('IDs',IDS);
+     Open;
+     for i:=0 to recordcount-1 do begin
+
+   SwDataModule.sw_in_insert.CallProcedure('add_in_transactions',[fieldbyName('id').asinteger,
+                                                                  fieldbyName('bic').AsString,
+                                                                  fieldbyName('ACOUNT').AsString,
+                                                                  fieldbyName('valu').AsFloat,
+                                                                  fieldbyName('description').asstring,
+                                                                  fieldbyName('description2').asstring,
+                                                                  fieldbyName('TAX').asstring]);
+
+                                   next;
+                                  end;
+     end;
+ end;
+
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TSWIFT_MAIN,
+    Class_SWIFT_MAIN,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.
+
+
+
+

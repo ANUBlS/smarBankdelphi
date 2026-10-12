@@ -1,0 +1,115 @@
+﻿unit frmaddloss_BarderoImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ExtCtrls, XFSCtrls, StdCtrls, Mask, DBCtrls;
+
+type
+  Tfrmaddloss_Bardero = class(TForm)
+    XFPanel1: TXFPanel;
+    XFPanel2: TXFPanel;
+    XFButton1: TXFButton;
+    XFButton2: TXFButton;
+    DBEdit1: TDBEdit;
+    XFLabel1: TXFLabel;
+    DBLookupComboBox1: TDBLookupComboBox;
+    XFLabel2: TXFLabel;
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure XFButton2Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure XFButton1Click(Sender: TObject);
+    procedure DBEdit1KeyPress(Sender: TObject; var Key: Char);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  frmaddloss_Bardero: Tfrmaddloss_Bardero;
+
+implementation
+
+{$R *.dfm}
+uses DMreinsuranceImpl,CommanParametrs, FrmreinsuranceImpl,sboapiDataModuleImpl,
+  frmlossbarderoImpl;
+
+procedure Tfrmaddloss_Bardero.DBEdit1KeyPress(Sender: TObject; var Key: Char);
+begin
+  if not (Key in ['A'..'Z','a'..'z','0'..'9',#8] )then begin Key:=#0; end;
+end;
+
+procedure Tfrmaddloss_Bardero.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+if ord(key)=vk_escape then close
+
+end;
+
+procedure Tfrmaddloss_Bardero.FormShow(Sender: TObject);
+begin
+
+  DMreinsurance.DSCustReins.Close;
+  DMreinsurance.DSCustReins.SetVariable('pcid',contactid);
+  DMreinsurance.DSCustReins.open;
+
+if opetion='ins' then
+begin
+  DMreinsurance.DSins_loss_bardero.Close;
+  DMreinsurance.DSins_loss_bardero.SetVariable('pid',-1);
+  DMreinsurance.DSins_loss_bardero.open;
+end;
+
+end;
+
+procedure Tfrmaddloss_Bardero.XFButton1Click(Sender: TObject);
+begin
+if DBEdit1.Text='' then
+begin
+  showmessage('Zərər Bardero № Sahəsi boşdur.');
+  exit;
+end;
+if DBLookupComboBox1.KeyValue=null then
+begin
+  showmessage ('Təkrarsığortaçının adı Sahəsi boşdur.');
+  exit;
+end;
+
+
+if opetion='ins' then
+begin
+//bordero_say :=DBEdit1.Text;
+DMreinsurance.DS_Bardero__loss_sayi.Close;
+DMreinsurance.DS_Bardero__loss_sayi.SetVariable('p_dep_id',commandepid);
+DMreinsurance.DS_Bardero__loss_sayi.SetVariable('p_bardero_no',DBEdit1.Text);
+DMreinsurance.DS_Bardero__loss_sayi.open;
+
+if DMreinsurance.DS_Bardero__loss_sayi.FieldByName('say').AsInteger>0 then
+begin
+  showmessage('Diqqət!Bu zərər ucun eyni adda Bardero №-si yığıla bilməz.');
+  exit;
+  end;
+
+with DMreinsurance do
+begin
+      DSins_loss_bardero.Edit;
+      DSins_loss_bardero.post;
+
+
+  {DMreinsurance.DSins_loss_bardero.Close;
+  DMreinsurance.DSins_loss_bardero.SetVariable('pid',-1);
+  DMreinsurance.DSins_loss_bardero.open;  }
+  end;
+end;
+      frmaddloss_Bardero.Close;
+      frmlossbardero.XDBGrid1.DataSource.DataSet.Refresh;
+
+end;
+
+procedure Tfrmaddloss_Bardero.XFButton2Click(Sender: TObject);
+begin
+close
+end;
+
+end.

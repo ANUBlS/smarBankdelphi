@@ -1,0 +1,104 @@
+unit DMMainCargoimpl;
+
+interface
+
+uses
+  SysUtils, Classes,DB, OracleData,sboapiDataModuleimpl;
+
+type
+  TDMMainCargo = class(TDataModule)
+    DSRSex_type: TDataSource;
+    DSRins_agents: TDataSource;
+    DSins_agents: TOracleDataSet;
+    DSins_agentsID: TFloatField;
+    DSins_agentsNAME: TWideStringField;
+    DSRcutomers: TDataSource;
+    DScutomers: TOracleDataSet;
+    DScutomersID: TIntegerField;
+    DScutomersNAME: TWideStringField;
+    DSRIns_cust: TDataSource;
+    DSIns_cust: TOracleDataSet;
+    DSIns_custID: TIntegerField;
+    DSIns_custNAME1: TWideStringField;
+    DSSex_type: TOracleDataSet;
+    DSSex_typeID: TFloatField;
+    DSSex_typeNAME: TWideStringField;
+    DSins_insurances: TOracleDataSet;
+    DSins_insurancesID: TIntegerField;
+    DSins_insurancesNAME: TWideStringField;
+    DSins_insurancesMAINFORMNAME: TWideStringField;
+    DSins_insurancesMAINFORMGUID: TWideStringField;
+    DSins_insurancesCHANGEGUID: TWideStringField;
+    DSins_insurancesSUGGESTIONGUID: TWideStringField;
+    DSins_insurancesPOLICYGUID: TWideStringField;
+    DSins_insurancesLOAN_BAL_CN: TFloatField;
+    DSins_insurancesCURR_BAL_CN: TFloatField;
+    DSins_insurancesPREFIX: TWideStringField;
+    DSins_insurancesPROFIT_ACC_ID: TFloatField;
+    DSRins_insurances: TDataSource;
+    DSSysdat: TOracleDataSet;
+    DSSysdatTEK_DAT: TDateTimeField;
+    DSSysdatPRED_DAT: TDateTimeField;
+    DSSysdatARC_DAY: TDateTimeField;
+    DSSysdatCLOSE: TIntegerField;
+    DSRContract: TDataSource;
+    DSContract: TOracleDataSet;
+    DSContractIDC: TFloatField;
+    DSContractS_NOVU: TWideStringField;
+    DSContractVALYUTA: TWideStringField;
+    DSContractPOLIS: TWideStringField;
+    DSContractCLOSE_PREFIX: TIntegerField;
+    DSContractCUSTNAME: TWideStringField;
+    DSContractCUSTGROUP: TWideStringField;
+    DSContractCUSTGROUP_ID: TIntegerField;
+    DSContractAGENT: TWideStringField;
+    DSContractAMMOUNT: TFloatField;
+    DSContractINSSUMM: TFloatField;
+    DSContractTARIFF: TFloatField;
+    DSContractFRANSHIZ: TFloatField;
+    DSContractINS_DATE: TDateTimeField;
+    DSContractBEGIN_DATE: TDateTimeField;
+    DSContractEND_DATE: TDateTimeField;
+    DSContractSTATE: TIntegerField;
+    DSContractTYPE_ID: TFloatField;
+    DSContractMAINFORMGUID: TWideStringField;
+    DSContractCHANGEGUID: TWideStringField;
+    DSContractLOANACC_ID: TFloatField;
+    DSContractCURRACC_ID: TFloatField;
+    DSContractAGENT_ID: TFloatField;
+    DSContractKLI_ID: TFloatField;
+    DSContractSUGGESTIONGUID: TWideStringField;
+    DSContractPOLICYGUID: TWideStringField;
+    DSContractTABLENAME: TWideStringField;
+    DSContractID: TFloatField;
+    DSContractMARKA: TWideStringField;
+    DSContractMODEL: TWideStringField;
+    DSContractDOVLET_N: TWideStringField;
+    DSContractRENGI: TWideStringField;
+    DSContractBURAXLIS_ILI: TFloatField;
+    DSContractMUHERRIK_N: TWideStringField;
+    DSContractSASSI_N: TWideStringField;
+    DSContractBAN_N: TWideStringField;
+    DSContractRENG: TFloatField;
+    DSContractMODEL_ID: TFloatField;
+    DSContractMARKA_ID: TFloatField;
+    procedure DataModuleCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  DMMainCargo: TDMMainCargo;
+
+implementation
+
+{$R *.dfm}
+
+procedure TDMMainCargo.DataModuleCreate(Sender: TObject);
+begin
+DSSysdat.Open;
+end;
+
+end.

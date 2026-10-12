@@ -1,0 +1,154 @@
+unit UnitData;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, OracleData, Oracle;
+
+type
+  TDataMod_Buyers = class(TDataModule)
+    DSBuyers: TDataSource;
+    ODSBuyers: TOracleDataSet;
+    CC_GENERAL: TOraclePackage;
+    BalAcc: TOracleDataSet;
+    BalAccBAL_CN: TStringField;
+    BalAccBALNAME: TStringField;
+    BalAccData: TDataSource;
+    Currency: TOracleDataSet;
+    CurrencyVALUTE: TFloatField;
+    CurrencyVALU_NAME: TStringField;
+    CurrencyData: TDataSource;
+    Account: TOracleDataSet;
+    AccountID: TFloatField;
+    AccountKLI_ID: TFloatField;
+    AccountOP_ID: TFloatField;
+    AccountACC_NO: TStringField;
+    AccountVAL_ACC: TIntegerField;
+    AccountNAME: TStringField;
+    AccountOPEN_DAT: TDateTimeField;
+    AccountCLOSE_DAT: TDateTimeField;
+    AccountSTATUS: TFloatField;
+    AccountBAL_CN1: TFloatField;
+    AccountBAL_CN2: TFloatField;
+    AccountBAL_CN3: TFloatField;
+    AccountBAL_CN4: TFloatField;
+    AccountFILIAL: TIntegerField;
+    AccountSIM_OTCET: TFloatField;
+    AccountTIPACC: TStringField;
+    AccountLIMIT: TFloatField;
+    AccountOLD_ACC_NO: TStringField;
+    AccountPAIR_ACC: TFloatField;
+    AccountINSIDER: TStringField;
+    AccountData: TDataSource;
+    Avalute: TOracleDataSet;
+    Avalutedata: TDataSource;
+    AvaluteVALUTE: TIntegerField;
+    AvaluteVAL_NAME: TStringField;
+    AvaluteVALU_NAME: TStringField;
+    AvaluteVALU_SHORT: TStringField;
+    AvaluteUSTORG: TFloatField;
+    AvaluteUSTPOK: TFloatField;
+    AvaluteVALU_GEN: TStringField;
+    AvaluteVALU_AZ: TStringField;
+    AvaluteUSING: TIntegerField;
+    AvaluteVALU_OTHER: TStringField;
+    AvaluteVALU_INTER: TStringField;
+    AvaluteVALU_BALA: TStringField;
+    AvalutePRISTAVKA: TFloatField;
+    AvaluteCOUNTRY: TStringField;
+    AvaluteUST_POK1: TFloatField;
+    AvaluteOFFICAL: TStringField;
+    AvaluteLIMIT: TFloatField;
+    AvaluteDEBET: TFloatField;
+    AvaluteKREDIT: TFloatField;
+    AvaluteF5501P: TFloatField;
+    AvaluteF5501V: TFloatField;
+    AvaluteSDEBET: TFloatField;
+    AvaluteSCREDIT: TFloatField;
+    Customers: TOracleDataSet;
+    CustomersData: TDataSource;
+    Bal_Spr1: TOracleDataSet;
+    Bal_Spr1Data: TDataSource;
+    Cust: TOracleDataSet;
+    Custdata: TDataSource;
+    Branches: TOracleDataSet;
+    BranchesID: TFloatField;
+    BranchesNAME: TStringField;
+    BranchesData: TDataSource;
+    Branch: TOracleDataSet;
+    Branchdata: TDataSource;
+    CC_Settingsdata: TDataSource;
+    Accno: TOracleDataSet;
+    Accnodata: TDataSource;
+    Sysdat: TOracleDataSet;
+    Archost: TOracleDataSet;
+    Trdestination: TOracleDataSet;
+    Trdestinationdata: TDataSource;
+    Country: TOracleDataSet;
+    OPackage: TOraclePackage;
+    OSCT: TOraclePackage;
+    countrydata: TDataSource;
+    CC_Flat: TOracleDataSet;
+    CC_Flatdata: TDataSource;
+    CC_Buyer_Flat: TOracleDataSet;
+    CC_Buyer_FlatData: TDataSource;
+    cities: TOracleDataSet;
+    ctiesdata: TDataSource;
+    ad_country: TOracleDataSet;
+    ad_countrydata: TDataSource;
+    ad_cities: TOracleDataSet;
+    ad_citites: TDataSource;
+    countries: TOracleDataSet;
+    countriesdata: TDataSource;
+    cc_countries: TOracleDataSet;
+    OracleDataSet1: TOracleDataSet;
+    paspdept: TOracleDataSet;
+    PaspdeptData: TDataSource;
+    SBOP: TOraclePackage;
+    OracleDataSet2: TOracleDataSet;
+    cc_settings: TOracleDataSet;
+    ODSBuyersID: TFloatField;
+    ODSBuyersFIRSTNAME: TStringField;
+    ODSBuyersLASTNAME: TStringField;
+    ODSBuyersMIDDLENAME: TStringField;
+    ODSBuyersPASSPSER: TStringField;
+    ODSBuyersPASSPNUM: TStringField;
+    ODSBuyersPASSPPIN: TStringField;
+    ODSBuyersPASSPDATE: TDateTimeField;
+    ODSBuyersPASSPDEPT: TStringField;
+    ODSBuyersGENDER: TIntegerField;
+    ODSBuyersBIRTHDATE: TDateTimeField;
+    ODSBuyersBIRTHSTATE: TIntegerField;
+    ODSBuyersBIRTHCITY: TIntegerField;
+    ODSBuyersFAMSTATUS: TIntegerField;
+    ODSBuyersSTATE: TIntegerField;
+    ODSBuyersCITY: TIntegerField;
+    ODSBuyersADDRESS: TStringField;
+    ODSBuyersWORKPLACE: TStringField;
+    ODSBuyersWAGE: TFloatField;
+    ODSBuyersPHONE: TStringField;
+    ODSBuyersPHONEMOB: TStringField;
+    ODSBuyersEMAIL: TStringField;
+    ODSBuyersREGDATE: TDateTimeField;
+    ODSBuyersUSERID: TFloatField;
+    ODSBuyersCINSI: TStringField;
+    ODSBuyersCNTR_NAME: TStringField;
+    ODSBuyersCITY_NAME: TStringField;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  DataMod_Buyers: TDataMod_Buyers;
+
+implementation
+
+uses sboapiDataModuleImpl, cc_BuyersImpl;
+{$R *.DFM}
+
+
+
+end.

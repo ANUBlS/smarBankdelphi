@@ -1,0 +1,1277 @@
+﻿unit Frmreinsoperationimpl;
+                     //DMreinsurance
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ExtCtrls, XFSCtrls, StdCtrls, Grids, DBGrids, CMExcelExport, Menus,
+  XDBGrids, ImgList, ComCtrls, DBCtrls,
+
+  shellapi,ActiveX, AxCtrls, StdVcl, DBGridEhGrouping, GridsEh,
+  DBGridEh, DB,OracleData,ToolWin, ActnList, Oracle, PlgModalContainer;
+
+       //DBCtrls
+
+
+type
+  TFrmreinsoperation = class(TForm)
+    XFPanel1: TXFPanel;
+    XFButton2: TXFButton;
+    ExcelExport: TCMExcelExport;
+    ImageList2: TImageList;
+    PageControl1: TPageControl;
+    TabSheet1: TTabSheet;
+    TabSheet2: TTabSheet;
+    XFPanel5: TXFPanel;
+    XFPanel2: TXFPanel;
+    XFPanel3: TXFPanel;
+    XFButton1: TXFButton;
+    XFButton3: TXFButton;
+    XFButton4: TXFButton;
+    XFButton5: TXFButton;
+    XFButton6: TXFButton;
+    XFButton7: TXFButton;
+    XDBGrid1: TXDBGrid;
+    XFGroupBox1: TXFGroupBox;
+    XFPanel6: TXFPanel;
+    XFPanel7: TXFPanel;
+    XFPanel8: TXFPanel;
+    XFButton11: TXFButton;
+    XFButton12: TXFButton;
+    XFButton13: TXFButton;
+    XFButton14: TXFButton;
+    XFButton15: TXFButton;
+    XFButton16: TXFButton;
+    XDBGrid3: TXDBGrid;
+    XFGroupBox2: TXFGroupBox;
+    XFPanel9: TXFPanel;
+    XFButton17: TXFButton;
+    XFButton18: TXFButton;
+    XFButton19: TXFButton;
+    XDBGrid4: TXDBGrid;
+    TabSheet3: TTabSheet;
+    XFPanel10: TXFPanel;
+    XFPanel11: TXFPanel;
+    XFPanel12: TXFPanel;
+    XFButton20: TXFButton;
+    XFButton21: TXFButton;
+    XFButton22: TXFButton;
+    XFButton23: TXFButton;
+    XFButton24: TXFButton;
+    XFButton25: TXFButton;
+    XDBGrid5: TXDBGrid;
+    XFGroupBox3: TXFGroupBox;
+    XFPanel13: TXFPanel;
+    XFButton26: TXFButton;
+    XFButton27: TXFButton;
+    XFButton28: TXFButton;
+    XDBGrid6: TXDBGrid;
+    TabSheet4: TTabSheet;
+    XFPanel14: TXFPanel;
+    XFPanel15: TXFPanel;
+    XFPanel16: TXFPanel;
+    XFButton29: TXFButton;
+    XFButton30: TXFButton;
+    XFButton31: TXFButton;
+    XFButton32: TXFButton;
+    XFButton33: TXFButton;
+    XFButton34: TXFButton;
+    XDBGrid7: TXDBGrid;
+    XFGroupBox4: TXFGroupBox;
+    XFPanel17: TXFPanel;
+    XFButton35: TXFButton;
+    XFButton36: TXFButton;
+    XFButton37: TXFButton;
+    XDBGrid8: TXDBGrid;
+    XFGroupBox5: TXFGroupBox;
+    XFPanel18: TXFPanel;
+    XFPanel4: TXFPanel;
+    XFButton10: TXFButton;
+    XFButton8: TXFButton;
+    XFButton9: TXFButton;
+    XDBGrid2: TXDBGrid;
+    XFGroupBox8: TXFGroupBox;
+    XFCheckBox8: TXFCheckBox;
+    XFButton38: TXFButton;
+    DBLookupComboBox1: TDBLookupComboBox;
+    XFPanel19: TXFPanel;
+    EditBARDERO_NO: TEdit;
+    EditSIGORTA_HAQQI: TEdit;
+    EditCUST_NAME: TEdit;
+    XFPanel20: TXFPanel;
+    XFPanel21: TXFPanel;
+    XFPanel22: TXFPanel;
+    Edit1BARDERO_NO: TEdit;
+    Edit2SIGORTA_HAQQI: TEdit;
+    Edit3CUST_NAME: TEdit;
+    Edit4BARDERO_NO: TEdit;
+    Edit5SIGORTA_HAQQI: TEdit;
+    Edit6CUST_NAME: TEdit;
+    Edit7BARDERO_NO: TEdit;
+    Edit8SIGORTA_HAQQI: TEdit;
+    Edit9CUST_NAME: TEdit;
+    XFButton39: TXFButton;
+    Memo1: TMemo;
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure XFButton2Click(Sender: TObject);
+    procedure XFButton6Click(Sender: TObject);
+    procedure XDBGrid1DrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TXColumn; State: TGridDrawState);
+    procedure XFButton7Click(Sender: TObject);
+    procedure XFButton1Click(Sender: TObject);
+    procedure XFButton5Click(Sender: TObject);
+    procedure XFButton3Click(Sender: TObject);
+    procedure XFButton4Click(Sender: TObject);
+    procedure XFButton9Click(Sender: TObject);
+    procedure XFButton8Click(Sender: TObject);
+    procedure XFButton10Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure XFButton25Click(Sender: TObject);
+    procedure XFButton16Click(Sender: TObject);
+    procedure XFButton15Click(Sender: TObject);
+    procedure XFButton19Click(Sender: TObject);
+    procedure XFButton24Click(Sender: TObject);
+    procedure XFButton28Click(Sender: TObject);
+    procedure XFButton18Click(Sender: TObject);
+    procedure XFButton11Click(Sender: TObject);
+    procedure XFButton14Click(Sender: TObject);
+    procedure XFButton12Click(Sender: TObject);
+    procedure XFButton27Click(Sender: TObject);
+    procedure XFButton13Click(Sender: TObject);
+    procedure XFButton22Click(Sender: TObject);
+    procedure XFButton20Click(Sender: TObject);
+    procedure XFButton23Click(Sender: TObject);
+    procedure XFButton21Click(Sender: TObject);
+    procedure XFButton34Click(Sender: TObject);
+    procedure XFButton33Click(Sender: TObject);
+    procedure XFButton37Click(Sender: TObject);
+    procedure XFButton36Click(Sender: TObject);
+    procedure XFButton29Click(Sender: TObject);
+    procedure XFButton32Click(Sender: TObject);
+    procedure XFButton31Click(Sender: TObject);
+    procedure XFButton30Click(Sender: TObject);
+    procedure XFButton38Click(Sender: TObject);
+    procedure ActionSpeedSearchExecute(Sender: TObject);
+    procedure ActionSpeedSearchExecuteLoss(Sender: TObject);
+    procedure ActionSpeedSearchExecuteter(Sender: TObject);
+    procedure ActionSpeedSearchExecutesub(Sender: TObject);
+
+    procedure EditBARDERO_NOExit(Sender: TObject);
+    procedure EditBARDERO_NOKeyPress(Sender: TObject; var Key: Char);
+    procedure Edit1BARDERO_NOExit(Sender: TObject);
+    procedure Edit1BARDERO_NOKeyPress(Sender: TObject; var Key: Char);
+    procedure EditBARDERO_NO1KeyPress(Sender: TObject; var Key: Char);
+    procedure Edit4BARDERO_NOKeyPress(Sender: TObject; var Key: Char);
+    procedure Edit7BARDERO_NOKeyPress(Sender: TObject; var Key: Char);
+    procedure XFButton39Click(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    op,sqlSH:String;
+    procedure ActionFilterExecute(Sender: TObject);
+
+  end;
+
+var
+  FilterStr1:String;
+  Frmreinsoperation: TFrmreinsoperation;
+
+implementation
+
+{$R *.dfm}
+uses DMreinsuranceImpl, AddaccountImpl, FrmreinsuranceImpl,FrmAddCustImpl,CommanParametrs;
+procedure TFrmreinsoperation.Edit1BARDERO_NOExit(Sender: TObject);
+begin
+TEdit(Sender).Text :=EmptyStr;
+end;
+
+procedure TFrmreinsoperation.Edit1BARDERO_NOKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+ if Key = #13  then
+  begin
+   ActionSpeedSearchExecute(Sender);
+  end;
+
+end;
+
+procedure TFrmreinsoperation.EditBARDERO_NO1KeyPress(Sender: TObject; var Key: Char);
+begin
+ if Key = #13  then
+  begin
+   ActionSpeedSearchExecuteLoss(Sender);
+  end;
+end;
+
+procedure TFrmreinsoperation.Edit4BARDERO_NOKeyPress(Sender: TObject; var Key: Char);
+begin
+ if Key = #13  then
+  begin
+   ActionSpeedSearchExecuteter(Sender);
+  end;
+end;
+
+procedure TFrmreinsoperation.Edit7BARDERO_NOKeyPress(Sender: TObject; var Key: Char);
+begin
+     if Key = #13  then
+  begin
+   ActionSpeedSearchExecutesub(Sender);
+  end;
+
+end;
+
+procedure TFrmreinsoperation.ActionSpeedSearchExecutesub(
+  Sender: TObject);
+var
+  SearchField : string;
+  SearchOptions : TSearchRecordOptions;
+begin
+  SearchOptions := [srIgnoreCase ,srPartialMatch ];
+
+  with Sender as TEdit  do
+  begin
+    SearchField := copy(Name,6,length(Name));
+    with  TOracleDataSet(XDBGrid7.DataSource.DataSet) do
+    if  not SearchRecord(
+                  SearchField
+                 ,Text
+                 ,SearchOptions + [srFromCurrent , srForward ]
+                 ) then
+    if MessageDlg(
+              'Axtarış sona çatdı.'+#13+'Əvvəldən başlansın?'
+             ,mtInformation
+             ,[mbNo , mbYes]
+             ,0
+             ) = mrYes  then
+    if not SearchRecord(
+                 SearchField
+                ,Text
+                ,SearchOptions + [ srFromBeginning ]
+                )  then
+    MessageDlg('Yazı tapılmayıb!',mtInformation,[mbOK],0);
+ end;
+end;
+
+
+procedure TFrmreinsoperation.EditBARDERO_NOExit(Sender: TObject);
+begin
+TEdit(Sender).Text :=EmptyStr;
+end;
+
+procedure TFrmreinsoperation.EditBARDERO_NOKeyPress(Sender: TObject; var Key: Char);
+begin
+ if Key = #13  then
+  begin
+   ActionSpeedSearchExecute(Sender);
+  end;
+
+end;
+
+procedure TFrmreinsoperation.ActionSpeedSearchExecuteter(
+  Sender: TObject);
+var
+  SearchField : string;
+  SearchOptions : TSearchRecordOptions;
+begin
+  SearchOptions := [srIgnoreCase ,srPartialMatch ];
+
+  with Sender as TEdit  do
+  begin
+    SearchField := copy(Name,6,length(Name));
+    with  TOracleDataSet(XDBGrid5.DataSource.DataSet) do
+    if  not SearchRecord(
+                  SearchField
+                 ,Text
+                 ,SearchOptions + [srFromCurrent , srForward ]
+                 ) then
+    if MessageDlg(
+              'Axtarış sona çatdı.'+#13+'Əvvəldən başlansın?'
+             ,mtInformation
+             ,[mbNo , mbYes]
+             ,0
+             ) = mrYes  then
+    if not SearchRecord(
+                 SearchField
+                ,Text
+                ,SearchOptions + [ srFromBeginning ]
+                )  then
+    MessageDlg('Yazı tapılmayıb!',mtInformation,[mbOK],0);
+ end;
+end;
+
+
+
+procedure TFrmreinsoperation.ActionSpeedSearchExecuteLoss(
+  Sender: TObject);
+var
+  SearchField : string;
+  SearchOptions : TSearchRecordOptions;
+begin
+  SearchOptions := [srIgnoreCase ,srPartialMatch ];
+
+  with Sender as TEdit  do
+  begin
+    SearchField := copy(Name,6,length(Name));
+    with  TOracleDataSet(XDBGrid3.DataSource.DataSet) do
+    if  not SearchRecord(
+                  SearchField
+                 ,Text
+                 ,SearchOptions + [srFromCurrent , srForward ]
+                 ) then
+    if MessageDlg(
+              'Axtarış sona çatdı.'+#13+'Əvvəldən başlansın?'
+             ,mtInformation
+             ,[mbNo , mbYes]
+             ,0
+             ) = mrYes  then
+    if not SearchRecord(
+                 SearchField
+                ,Text
+                ,SearchOptions + [ srFromBeginning ]
+                )  then
+    MessageDlg('Yazı tapılmayıb!',mtInformation,[mbOK],0);
+ end;
+end;
+
+
+procedure TFrmreinsoperation.ActionSpeedSearchExecute(
+  Sender: TObject);
+var
+  SearchField : string;
+  SearchOptions : TSearchRecordOptions;
+begin
+  SearchOptions := [srIgnoreCase ,srPartialMatch ];
+
+  with Sender as TEdit  do
+  begin
+    SearchField := copy(Name,5,length(Name));
+    with  TOracleDataSet(XDBGrid1.DataSource.DataSet) do
+    if  not SearchRecord(
+                  SearchField
+                 ,Text
+                 ,SearchOptions + [srFromCurrent , srForward ]
+                 ) then
+    if MessageDlg(
+              'Axtarış sona çatdı.'+#13+'Əvvəldən başlansın?'
+             ,mtInformation
+             ,[mbNo , mbYes]
+             ,0
+             ) = mrYes  then
+    if not SearchRecord(
+                 SearchField
+                ,Text
+                ,SearchOptions + [ srFromBeginning ]
+                )  then
+    MessageDlg('Yazı tapılmayıb!',mtInformation,[mbOK],0);
+ end;
+end;
+
+
+
+
+
+procedure TFrmreinsoperation.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+//DMreinsurance.DSFullbardero.close;
+//DMreinsurance.DSFullbardero_loss.close;
+//DMreinsurance.DSFullBardero_terminated.close;
+//DMreinsurance.DSFullbardero_sub.close;
+end;
+
+procedure TFrmreinsoperation.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+if ord(key)=vk_escape then
+close;
+end;
+
+procedure TFrmreinsoperation.FormShow(Sender: TObject);
+
+begin
+
+XDBGrid1.DataSource.DataSet.Refresh;
+//sqlSH:=DMreinsurance.ds_reins_info.sql.text;
+DBLookupComboBox1.KeyValue:='';
+//showmessage(Bordero_type);
+
+DMreinsurance.DSFullbardero.Open;
+//DMreinsurance.DSFullbardero_loss.Open;
+//DMreinsurance.DSFullBardero_terminated.Open;
+//DMreinsurance.DSFullbardero_sub.Open;
+
+
+
+if Bordero_type='S_haqqi' then
+     begin
+  PageControl1.ActivePageIndex:=0;
+  TabSheet1.TabVisible:=true;
+  TabSheet2.TabVisible:=false;
+  TabSheet3.TabVisible:=false;
+  TabSheet4.TabVisible:=false;
+
+     end
+else
+if Bordero_type='Zerer' then
+      begin
+    PageControl1.ActivePageIndex:=1;
+    TabSheet2.TabVisible:=true;
+    TabSheet1.TabVisible:=false;
+    TabSheet3.TabVisible:=false;
+    TabSheet4.TabVisible:=false;
+      end
+   else
+
+   if Bordero_type='xitam' then
+      begin
+    PageControl1.ActivePageIndex:=2;
+    TabSheet2.TabVisible:=false;
+    TabSheet1.TabVisible:=false;
+    TabSheet3.TabVisible:=true;
+    TabSheet4.TabVisible:=false;
+      end;
+
+   if Bordero_type='sub' then
+      begin
+    PageControl1.ActivePageIndex:=3;
+    TabSheet2.TabVisible:=false;
+    TabSheet1.TabVisible:=false;
+    TabSheet3.TabVisible:=false;
+    TabSheet4.TabVisible:=true;
+      end;
+      //ShowMessage('salam');
+   { ActionFilterExecute(Sender);
+   ;  }
+
+end;
+
+procedure TFrmreinsoperation.XDBGrid1DrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TXColumn; State: TGridDrawState);
+var
+  ImageIndex: Integer;
+begin
+ with Sender as TXDBGrid do
+  begin
+    if DataSource.DataSet.RecordCount <> 0 then
+    begin
+      ImageIndex := DataSource.DataSet.FieldByName('status').AsInteger;
+      if (DataCol = 1) and (ImageIndex <> -1) then begin
+        Canvas.brush.Style := bsSolid;
+        Canvas.FillRect(Rect);
+        ImageList2.Draw(Canvas, Rect.Left, Rect.Top, ImageIndex, True); end
+      else
+     // DefaultDrawColumnCell(Rect, DataCol, Column, State);
+    end;
+  end;
+end;
+
+procedure TFrmreinsoperation.XFButton10Click(Sender: TObject);
+begin
+{Frmreinsurance.op:='update';
+FrmAddCust.ShowModal; }
+  XFGroupBox5.Visible :=not XFGroupBox5.Visible;
+end;
+
+procedure TFrmreinsoperation.XFButton11Click(Sender: TObject);
+var
+a:string;
+begin
+with DMreinsurance,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['COMMITBARDERO_LOSS']);
+ end;
+if XDBGrid3.DataSource.DataSet.FieldByName('status').AsInteger<>0 then
+begin
+  showmessage('Diqqət! Yalnız redaktə statusunda olan bardero təsdiqlənə bilər!');
+  exit;
+end;
+
+if XDBGrid3.DataSource.DataSet.FieldByName('status').AsInteger=0 then
+    begin
+a:=XDBGrid3.DataSource.DataSet.FieldByName('BARDERO_NO').AsString;
+DMreinsurance.P_ins_reins.CallProcedure('upd_loss_reins_status_commit',[XDBGrid3.DataSource.DataSet.FieldByName('BARDERO_NO').AsString]);
+//DMreinsurance.DSFullbardero.RefreshRecord;
+
+XDBGrid3.DataSource.DataSet.Refresh;
+DMreinsurance.DSFullbardero.Locate('bardero_no',a,[]);
+
+    end;
+end;
+
+procedure TFrmreinsoperation.XFButton12Click(Sender: TObject);
+var
+a:string;
+begin
+with DMreinsurance,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['TANINMABARDERO_LOSS']);
+ end;
+a:=XDBGrid3.DataSource.DataSet.FieldByName('BARDERO_NO').AsString;
+if XDBGrid3.DataSource.DataSet.FieldByName('status').AsInteger<>1 then
+begin
+  showmessage('Diqqət! Yalnız təsdiq statusunda olan bardero tanına bilər!');
+  exit;
+end;
+
+
+DMreinsurance.DSMusteriDep_BH.Close;
+DMreinsurance.DSMusteriDep_BH.Open;
+
+if DMreinsurance.DSMusteriDep_BH.FieldByName('say').AsInteger=0 then
+begin
+ showmessage('Diqqət! Müştəri TS öhtəlik Balans hesabı sazlanmayıb!');
+  exit;
+end;
+
+
+DMreinsurance.DSMusteriDep_H.Close;
+DMreinsurance.DSMusteriDep_H.SetVariable('pbardero_no',XDBGrid3.DataSource.DataSet.FieldByName('BARDERO_NO').AsString);
+DMreinsurance.DSMusteriDep_H.Open;
+
+if DMreinsurance.DSMusteriDep_H.FieldByName('say').AsInteger=0 then
+begin
+ showmessage('Diqqət!Seçimiş bardero Müştərisinin  "Müştəri TS debitor" Balans hesabına uyğun hesabı sistemdə mövcud deyil!');
+  exit;
+end;
+
+if DMreinsurance.DSMusteriDep_H.FieldByName('say').AsInteger>1 then
+begin
+ showmessage('Diqqət!Seçimiş bardero Müştərisinin  "Müştəri TS debitor" Balans hesabına uyğun sistemdə çox sayda hesabı mövcuddur!');
+  exit;
+end;
+
+
+
+if XDBGrid3.DataSource.DataSet.FieldByName('status').AsInteger=1 then
+    begin
+
+DMreinsurance.P_ins_reins.CallProcedure('reins_lossbardero_taninma',[XDBGrid3.DataSource.DataSet.FieldByName('BARDERO_NO').AsString]);
+
+    end;
+XDBGrid3.DataSource.DataSet.Refresh;
+XDBGrid3.DataSource.DataSet.Locate('bardero_no',a,[]);
+
+end;
+
+procedure TFrmreinsoperation.XFButton13Click(Sender: TObject);
+begin
+with DMreinsurance,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['PAYMENTBARDERO_LOSS']);
+ end;
+op:='Z';
+if XDBGrid3.DataSource.DataSet.FieldByName('status').AsInteger<>2 then
+begin
+  showmessage('Diqqət! Yalnız tanınma statusunda olan bardero ödənilə bilər!');
+  exit;
+end;
+   Addaccount.ShowModal;
+
+end;
+
+procedure TFrmreinsoperation.XFButton14Click(Sender: TObject);
+
+var
+a:string;
+begin
+with DMreinsurance,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['BACKBARDERO_LOSS']);
+ end;
+a:=XDBGrid3.DataSource.DataSet.FieldByName('BARDERO_NO').AsString;
+DMreinsurance.P_ins_reins.CallProcedure('upd_loss_reins_status_back',[XDBGrid3.DataSource.DataSet.FieldByName('BARDERO_NO').AsString,XDBGrid3.DataSource.DataSet.FieldByName('status').asinteger]);
+XDBGrid3.DataSource.DataSet.Refresh;
+DMreinsurance.DSFullbardero.Locate('bardero_no',a,[]);
+end;
+
+procedure TFrmreinsoperation.XFButton15Click(Sender: TObject);
+begin
+with DMreinsurance,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['EXCELBARDERO_LOSS']);
+ end;
+with ExcelExport do
+   begin
+      Connect;
+      ExportDataset(XDBGrid3.DataSource.DataSet,'Zerer Barderolar.',True,false);
+      Disconnect;
+   end
+end;
+
+procedure TFrmreinsoperation.XFButton16Click(Sender: TObject);
+begin
+XDBGrid3.DataSource.DataSet.Refresh;
+end;
+
+procedure TFrmreinsoperation.XFButton18Click(Sender: TObject);
+begin
+with DMreinsurance,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['DELETBARDERO_LOSS']);
+ end;
+if
+XDBGrid4.DataSource.DataSet.RecordCount=0
+then
+begin
+showmessage('Məlumat Yoxdu');
+exit;
+end;
+if  XDBGrid4.DataSource.DataSet.FieldByName('STATUS').AsFloat <>0
+then
+begin
+  showmessage('Diqqət!Yalniz redaktə rejimində olan bardero məlumatin silmək olar! ');
+  exit;
+end;
+
+if MessageDlg('Seçilmiş Təkrarsığortaçının ləğv olunmasına əminsinizmi?!',mtConfirmation,
+ mbYesNoCancel, 0) = mrYes then
+       begin
+  XDBGrid4.DataSource.DataSet.Delete;
+
+   Frmreinsoperation.XDBGrid4.DataSource.DataSet.Refresh;
+end;
+
+
+end;
+
+procedure TFrmreinsoperation.XFButton19Click(Sender: TObject);
+begin
+with DMreinsurance,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['EXCELBARDERO_LOSS']);
+ end;
+with ExcelExport do
+   begin
+      Connect;
+      ExportDataset(XDBGrid4.DataSource.DataSet,'Barderolar.',True,false);
+      Disconnect;
+   end
+end;
+
+procedure TFrmreinsoperation.XFButton1Click(Sender: TObject);
+var
+a:string;
+begin
+with DMreinsurance,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['COMMITBARDERO_PREMIYA']);
+ end;
+if XDBGrid1.DataSource.DataSet.FieldByName('status').AsInteger<>0 then
+begin
+  showmessage('Diqqət! Yalnız redaktə statusunda olan bardero təsdiqlənə bilər!');
+  exit;
+end;
+
+if XDBGrid1.DataSource.DataSet.FieldByName('status').AsInteger=0 then
+    begin
+a:=XDBGrid1.DataSource.DataSet.FieldByName('BARDERO_NO').AsString;
+DMreinsurance.ins_common.CallProcedure('upd_reins_status_commit',[XDBGrid1.DataSource.DataSet.FieldByName('BARDERO_NO').AsString]);
+//DMreinsurance.DSFullbardero.RefreshRecord;
+
+XDBGrid1.DataSource.DataSet.Refresh;
+DMreinsurance.DSFullbardero.Locate('bardero_no',a,[]);
+//Locate('FIELD1;FIELD2;FIELD3',VarArrayOf([Value1,Value2,Value3]),[]);
+
+    end;
+end;
+
+procedure TFrmreinsoperation.XFButton20Click(Sender: TObject);
+var
+a:string;
+begin
+with DMreinsurance,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['COMMITBARDERO_TERMINATE']);
+ end;
+if XDBGrid5.DataSource.DataSet.FieldByName('status').AsInteger<>0 then
+begin
+  showmessage('Diqqət! Yalnız redaktə statusunda olan bardero təsdiqlənə bilər!');
+  exit;
+end;
+
+if XDBGrid5.DataSource.DataSet.FieldByName('status').AsInteger=0 then
+    begin
+
+
+a:=XDBGrid5.DataSource.DataSet.FieldByName('BARDERO_NO').AsString;
+DMreinsurance.P_ins_reins.CallProcedure('upd_ter_reins_status_commit',[XDBGrid5.DataSource.DataSet.FieldByName('BARDERO_NO').AsString]);
+//DMreinsurance.DSFullbardero.RefreshRecord;
+
+XDBGrid5.DataSource.DataSet.Refresh;
+XDBGrid5.DataSource.DataSet.Locate('bardero_no',a,[]);
+
+    end;
+end;
+
+procedure TFrmreinsoperation.XFButton21Click(Sender: TObject);
+var
+a:string;
+begin
+with DMreinsurance,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['TANINMABARDERO_TERMINATE']);
+ end;
+a:=XDBGrid5.DataSource.DataSet.FieldByName('BARDERO_NO').AsString;
+if XDBGrid5.DataSource.DataSet.FieldByName('status').AsInteger<>1 then
+begin
+  showmessage('Diqqət! Yalnız təsdiq statusunda olan bardero tanına bilər!');
+  exit;
+end;
+
+
+
+
+DMreinsurance.DSMusteriDep_BH.Close;
+DMreinsurance.DSMusteriDep_BH.Open;
+
+if DMreinsurance.DSMusteriDep_BH.FieldByName('say').AsInteger=0 then
+begin
+ showmessage('Diqqət! Müştəri TS öhtəlik Balans hesabı sazlanmayıb!');
+  exit;
+end;
+
+
+DMreinsurance.DSterminated.Close;
+DMreinsurance.DSterminated.SetVariable('pbardero_no',XDBGrid5.DataSource.DataSet.FieldByName('BARDERO_NO').AsString);
+DMreinsurance.DSterminated.Open;
+
+if DMreinsurance.DSterminated.FieldByName('say').AsInteger=0 then
+begin
+ showmessage('Diqqət!Seçimiş bardero Müştərisinin  "Müştəri TS debitor" Balans hesabına uyğun hesabı sistemdə mövcud deyil!');
+  exit;
+end;
+
+if DMreinsurance.DSterminated.FieldByName('say').AsInteger>1 then
+begin
+ showmessage('Diqqət!Seçimiş bardero Müştərisinin  "Müştəri TS debitor" Balans hesabına uyğun sistemdə çox sayda hesabı mövcuddur!');
+  exit;
+end;
+
+
+
+
+
+
+if XDBGrid5.DataSource.DataSet.FieldByName('status').AsInteger=1 then
+    begin
+
+DMreinsurance.P_ins_reins.CallProcedure('reins_terbardero_taninma',[XDBGrid5.DataSource.DataSet.FieldByName('BARDERO_NO').AsString]);
+
+    end;
+XDBGrid5.DataSource.DataSet.Refresh;
+XDBGrid5.DataSource.DataSet.Locate('bardero_no',a,[]);
+
+
+
+end;
+
+procedure TFrmreinsoperation.XFButton22Click(Sender: TObject);
+begin
+with DMreinsurance,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['PAYMENTBARDERO_TERMINATE']);
+ end;
+op:='X';
+if XDBGrid5.DataSource.DataSet.FieldByName('status').AsInteger<>2 then
+begin
+  showmessage('Diqqət! Yalnız tanınma statusunda olan bardero ödənilə bilər!');
+  exit;
+end;
+   Addaccount.ShowModal;
+end;
+
+procedure TFrmreinsoperation.XFButton23Click(Sender: TObject);
+var
+a:string;
+begin
+with DMreinsurance,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['BACKBARDERO_TERMINATE']);
+ end;
+a:=XDBGrid5.DataSource.DataSet.FieldByName('BARDERO_NO').AsString;
+DMreinsurance.P_ins_reins.CallProcedure('upd_ter_reins_status_back',[XDBGrid5.DataSource.DataSet.FieldByName('BARDERO_NO').AsString,XDBGrid5.DataSource.DataSet.FieldByName('status').asinteger]);
+XDBGrid5.DataSource.DataSet.Refresh;
+XDBGrid5.DataSource.DataSet.Locate('bardero_no',a,[]);
+
+end;
+
+procedure TFrmreinsoperation.XFButton24Click(Sender: TObject);
+begin
+with DMreinsurance,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['EXCELBARDERO_TERMINATE']);
+ end;
+with ExcelExport do
+   begin
+      Connect;
+      ExportDataset(XDBGrid5.DataSource.DataSet,'Xitam Barderolar.',True,false);
+      Disconnect;
+   end
+end;
+
+procedure TFrmreinsoperation.XFButton25Click(Sender: TObject);
+begin
+XDBGrid5.DataSource.DataSet.Refresh;
+end;
+
+procedure TFrmreinsoperation.XFButton27Click(Sender: TObject);
+begin
+with DMreinsurance,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['DELETBARDERO_TERMINATE']);
+ end;
+if
+XDBGrid6.DataSource.DataSet.RecordCount=0
+then
+begin
+showmessage('Məlumat Yoxdu');
+exit;
+end;
+if  XDBGrid6.DataSource.DataSet.FieldByName('STATUS').AsFloat <>0
+then
+begin
+  showmessage('Diqqət!Yalniz redaktə rejimində olan bardero məlumatin silmək olar! ');
+  exit;
+end;
+
+if MessageDlg('Seçilmiş Təkrarsığortaçının ləğv olunmasına əminsinizmi?!',mtConfirmation,
+ mbYesNoCancel, 0) = mrYes then
+ begin
+    XDBGrid6.DataSource.DataSet.Delete;
+   Frmreinsoperation.XDBGrid6.DataSource.DataSet.Refresh;
+end;
+
+end;
+
+procedure TFrmreinsoperation.XFButton28Click(Sender: TObject);
+begin
+with DMreinsurance,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['EXCELBARDERO_TERMINATE']);
+ end;
+with ExcelExport do
+   begin
+      Connect;
+      ExportDataset(XDBGrid6.DataSource.DataSet,'Barderolar.',True,false);
+      Disconnect;
+   end
+end;
+
+procedure TFrmreinsoperation.XFButton29Click(Sender: TObject);
+var
+a:string;
+begin
+{with DMreinsurance,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['COMMITBARDERO_TERMINATE']);
+ end;}
+if XDBGrid7.DataSource.DataSet.FieldByName('status').AsInteger<>0 then
+begin
+  showmessage('Diqqət! Yalnız redaktə statusunda olan bardero təsdiqlənə bilər!');
+  exit;
+end;
+
+if XDBGrid7.DataSource.DataSet.FieldByName('status').AsInteger=0 then
+    begin
+
+
+a:=XDBGrid7.DataSource.DataSet.FieldByName('BARDERO_NO').AsString;
+DMreinsurance.P_ins_reins.CallProcedure('upd_sub_reins_status_commit',[XDBGrid7.DataSource.DataSet.FieldByName('BARDERO_NO').AsString]);
+//DMreinsurance.DSFullbardero.RefreshRecord;
+
+XDBGrid7.DataSource.DataSet.Refresh;
+XDBGrid7.DataSource.DataSet.Locate('bardero_no',a,[]);
+
+    end;
+end;
+
+procedure TFrmreinsoperation.XFButton2Click(Sender: TObject);
+begin
+close;
+end;
+
+procedure TFrmreinsoperation.XFButton30Click(Sender: TObject);
+
+var
+a:string;
+begin
+{with DMreinsurance,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['TANINMABARDERO_TERMINATE']);
+ end;}
+a:=XDBGrid7.DataSource.DataSet.FieldByName('BARDERO_NO').AsString;
+if XDBGrid7.DataSource.DataSet.FieldByName('status').AsInteger<>1 then
+begin
+  showmessage('Diqqət! Yalnız təsdiq statusunda olan bardero tanına bilər!');
+  exit;
+end;
+
+
+
+
+
+DMreinsurance.DSMustero_BH.Close;
+DMreinsurance.DSMustero_BH.Open;
+
+if DMreinsurance.DSMustero_BH.FieldByName('say').AsInteger=0 then
+begin
+ showmessage('Diqqət! Müştəri TS öhtəlik Balans hesabı sazlanmayıb!');
+  exit;
+end;
+
+DMreinsurance.dssub_custH.Close;
+DMreinsurance.dssub_custH.SetVariable('pbardero_no',XDBGrid7.DataSource.DataSet.FieldByName('BARDERO_NO').AsString);
+DMreinsurance.dssub_custH.Open;
+
+if DMreinsurance.dssub_custH.FieldByName('say').AsInteger=0 then
+begin
+ showmessage('Diqqət!Seçimiş bardero Müştərisinin  "Müştəri TS öhtəlik" Balans hesabına uyğun hesabı sistemdə mövcud deyil!');
+  exit;
+end;
+if DMreinsurance.dssub_custH.FieldByName('say').AsInteger>1 then
+begin
+ showmessage('Diqqət!Seçimiş bardero Müştərisinin  "Müştəri TS öhtəlik" Balans hesabına uyğun sistemdə çox sayda hesabı mövcuddur!');
+  exit;
+end;
+
+ if XDBGrid7.DataSource.DataSet.FieldByName('status').AsInteger=1 then
+    begin
+
+DMreinsurance.P_ins_reins.CallProcedure('reins_subbardero_taninma',[XDBGrid7.DataSource.DataSet.FieldByName('BARDERO_NO').AsString]);
+
+    end;
+XDBGrid7.DataSource.DataSet.Refresh;
+XDBGrid7.DataSource.DataSet.Locate('bardero_no',a,[]);
+
+
+end;
+
+procedure TFrmreinsoperation.XFButton31Click(Sender: TObject);
+begin
+{with DMreinsurance,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['PAYMENTBARDERO_TERMINATE']);
+ end;}
+op:='Sub';
+if XDBGrid7.DataSource.DataSet.FieldByName('status').AsInteger<>2 then
+begin
+  showmessage('Diqqət! Yalnız tanınma statusunda olan bardero ödənilə bilər!');
+  exit;
+end;
+   Addaccount.ShowModal;
+end;
+
+procedure TFrmreinsoperation.XFButton32Click(Sender: TObject);
+var
+a:string;
+begin
+{with DMreinsurance,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['BACKBARDERO_TERMINATE']);
+ end; }
+a:=XDBGrid7.DataSource.DataSet.FieldByName('BARDERO_NO').AsString;
+DMreinsurance.P_ins_reins.CallProcedure('upd_sub_reins_status_back',[XDBGrid7.DataSource.DataSet.FieldByName('BARDERO_NO').AsString,XDBGrid7.DataSource.DataSet.FieldByName('status').asinteger]);
+XDBGrid7.DataSource.DataSet.Refresh;
+XDBGrid7.DataSource.DataSet.Locate('bardero_no',a,[]);
+end;
+
+procedure TFrmreinsoperation.XFButton33Click(Sender: TObject);
+begin
+{with DMreinsurance,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['EXCELBARDERO_TERMINATE']);
+ end;}
+with ExcelExport do
+   begin
+      Connect;
+      ExportDataset(XDBGrid7.DataSource.DataSet,'Subraqasiya Barderolar.',True,false);
+      Disconnect;
+   end
+end;
+
+procedure TFrmreinsoperation.XFButton34Click(Sender: TObject);
+begin
+XDBGrid7.DataSource.DataSet.Refresh;
+end;
+
+procedure TFrmreinsoperation.XFButton36Click(Sender: TObject);
+begin
+{with DMreinsurance,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['DELETBARDERO_TERMINATE']);
+ end;     }
+if
+XDBGrid8.DataSource.DataSet.RecordCount=0   then
+begin
+showmessage('Məlumat Yoxdu');
+exit;
+end;
+if  XDBGrid8.DataSource.DataSet.FieldByName('STATUS').AsFloat <>0
+then
+begin
+  showmessage('Diqqət!Yalniz redaktə rejimində olan bardero məlumatin silmək olar! ');
+  exit;
+end;
+
+if MessageDlg('Seçilmiş Təkrarsığortaçının ləğv olunmasına əminsinizmi?!',mtConfirmation,
+ mbYesNoCancel, 0) = mrYes then
+ begin
+    XDBGrid8.DataSource.DataSet.Delete;
+   Frmreinsoperation.XDBGrid8.DataSource.DataSet.Refresh;
+end;
+end;
+
+procedure TFrmreinsoperation.XFButton37Click(Sender: TObject);
+begin
+{with DMreinsurance,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['EXCELBARDERO_TERMINATE']);
+ end;  }
+with ExcelExport do
+   begin
+      Connect;
+      ExportDataset(XDBGrid8.DataSource.DataSet,'Barderolar.',True,false);
+      Disconnect;
+   end
+end;
+
+procedure TFrmreinsoperation.XFButton38Click(Sender: TObject);
+begin
+
+  ActionFilterExecute(Sender);
+
+{if XFCheckBox8.Checked=true then
+begin
+DMreinsurance.ds_reins_info.SQL.Clear;
+DMreinsurance.ds_reins_info.SQL.Text:=sqlSH+' and ii.id='+floattostr(DBLookupComboBox1.KeyValue);
+
+end;
+   }
+end;
+
+procedure TFrmreinsoperation.XFButton39Click(Sender: TObject);
+begin
+XDBGrid1.Refresh;
+end;
+
+procedure TFrmreinsoperation.XFButton3Click(Sender: TObject);
+var
+a:string;
+begin
+with DMreinsurance,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['TANINMABARDERO_PREMIYA']);
+ end;
+a:=XDBGrid1.DataSource.DataSet.FieldByName('BARDERO_NO').AsString;
+if XDBGrid1.DataSource.DataSet.FieldByName('status').AsInteger<>1 then
+begin
+  showmessage('Diqqət! Yalnız təsdiq statusunda olan bardero tanına bilər!');
+  exit;
+end;
+
+
+DMreinsurance.DSMustero_BH.Close;
+DMreinsurance.DSMustero_BH.Open;
+
+if DMreinsurance.DSMustero_BH.FieldByName('say').AsInteger=0 then
+begin
+ showmessage('Diqqət! Müştəri TS öhtəlik Balans hesabı sazlanmayıb!');
+  exit;
+end;
+
+
+DMreinsurance.DSMusteriohtek_h.Close;
+DMreinsurance.DSMusteriohtek_h.SetVariable('pbardero_no',XDBGrid1.DataSource.DataSet.FieldByName('BARDERO_NO').AsString);
+DMreinsurance.DSMusteriohtek_h.Open;
+
+if DMreinsurance.DSMusteriohtek_h.FieldByName('say').AsInteger=0 then
+begin
+ showmessage('Diqqət!Seçimiş bardero Müştərisinin  "Müştəri TS öhtəlik" Balans hesabına uyğun hesabı sistemdə mövcud deyil!');
+  exit;
+end;
+
+if DMreinsurance.DSMusteriohtek_h.FieldByName('say').AsInteger>1 then
+begin
+ showmessage('Diqqət!Seçimiş bardero Müştərisinin  "Müştəri TS öhtəlik" Balans hesabına uyğun sistemdə çox sayda hesabı mövcuddur!');
+  exit;
+end;
+
+
+
+if XDBGrid1.DataSource.DataSet.FieldByName('status').AsInteger=1 then
+    begin
+           //showmessage('Salam');
+
+DMreinsurance.P_ins_reins.CallProcedure('reins_bardero_taninma',[XDBGrid1.DataSource.DataSet.FieldByName('BARDERO_NO').AsString]);
+           //showmessage('Salam1');
+    end;
+XDBGrid1.DataSource.DataSet.Refresh;
+DMreinsurance.DSFullbardero.Locate('bardero_no',a,[]);
+//Addaccount.ShowModal;
+
+
+end;
+
+procedure TFrmreinsoperation.XFButton4Click(Sender: TObject);
+begin
+with DMreinsurance,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['PAYMENTBARDERO_PREMIYA']);
+ end;
+if XDBGrid1.DataSource.DataSet.FieldByName('status').AsInteger<>2 then
+begin
+  showmessage('Diqqət! Yalnız tanınma statusunda olan bardero ödənilə bilər!');
+  exit;
+end;
+        op:='S';
+   Addaccount.ShowModal;
+
+
+end;
+
+procedure TFrmreinsoperation.XFButton5Click(Sender: TObject);
+var
+a:string;
+begin
+with DMreinsurance,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['BACKBARDERO_PREMIYA']);
+ end;
+a:=XDBGrid1.DataSource.DataSet.FieldByName('BARDERO_NO').AsString;
+
+DMreinsurance.ins_common.CallProcedure('upd_reins_status_back',[XDBGrid1.DataSource.DataSet.FieldByName('BARDERO_NO').AsString,XDBGrid1.DataSource.DataSet.FieldByName('status').asinteger]);
+//DMreinsurance.DSFullbardero.RefreshRecord;
+XDBGrid1.DataSource.DataSet.Refresh;
+DMreinsurance.DSFullbardero.Locate('bardero_no',a,[]);
+
+end;
+
+procedure TFrmreinsoperation.XFButton6Click(Sender: TObject);
+begin
+with DMreinsurance,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['EXCELBARDERO_PREMIYA']);
+ end;
+with ExcelExport do
+   begin
+      Connect;
+      ExportDataset(XDBGrid1.DataSource.DataSet,'Barderolar.',True,false);
+      Disconnect;
+   end
+end;
+
+procedure TFrmreinsoperation.XFButton7Click(Sender: TObject);
+begin
+if XFGroupBox5.Visible=true then
+begin
+XFGroupBox5.Visible:=false;
+end
+else
+begin
+XFGroupBox5.Visible:=true
+end;
+
+
+end;
+
+procedure TFrmreinsoperation.XFButton8Click(Sender: TObject);
+begin
+with DMreinsurance,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['DELETBARDERO_PREMIYA']);
+ end;
+if
+XDBGrid2.DataSource.DataSet.RecordCount=0
+then
+begin
+showmessage('Məlumat Yoxdu');
+exit;
+end;
+
+if  XDBGrid2.DataSource.DataSet.FieldByName('STATUS').AsFloat <>0
+then
+begin
+  showmessage('Diqqət!Yalniz redaktə rejimində olan bardero məlumatin silmək olar! ');
+  exit;
+end;
+
+if MessageDlg('Seçilmiş Təkrarsığortaçının ləğv olunmasına əminsinizmi?!',mtConfirmation,
+ mbYesNoCancel, 0) = mrYes then
+ begin
+With DMreinsurance,ins_common do
+begin
+  CallProcedure('del_reins',[XDBGrid2.DataSource.DataSet.FieldByName('id').AsInteger]);
+end;
+   XDBGrid2.DataSource.DataSet.Refresh;
+   XDBGrid1.DataSource.DataSet.Refresh ;
+end;
+end;
+
+procedure TFrmreinsoperation.XFButton9Click(Sender: TObject);
+begin
+with DMreinsurance,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['EXCELBARDERO_PREMIYA']);
+ end;
+with ExcelExport do
+   begin
+      Connect;
+      ExportDataset(XDBGrid2.DataSource.DataSet,'Barderolar.',True,false);
+      Disconnect;
+   end
+end;
+
+procedure TFrmreinsoperation.ActionFilterExecute(Sender: TObject);
+
+   function  CheckFiltered(IsChecked: Boolean; const FilterStr: String; Args: array of const): String;
+   begin
+    Result :='';
+    if  IsChecked  then
+     Result :=Format(FilterStr, Args);
+
+   end;
+      const
+   BooleanPrefix = ' AND ';
+   p_instypeFilter= '(ii.id=%d)';
+
+
+var
+   p_instype: String;
+
+
+   FilterStr: String;
+begin
+ FilterStr :='';
+
+ p_instype:=CheckFiltered(
+              XFCheckBox8.Checked
+             ,p_instypeFilter
+             ,[DBLookupComboBox1.ListSource.DataSet.FieldByName('id').asinteger]
+              );
+
+
+                if  XFCheckBox8.Checked
+  then
+  if  FilterStr=''  then
+    FilterStr :=p_instype
+  else
+    FilterStr :=FilterStr + BooleanPrefix + p_instype;
+
+
+    FilterStr:=' and '+ FilterStr;
+
+        FilterStr:=FilterStr1+FilterStr;
+        //showmessage(FilterStr);
+
+
+  DMreinsurance.ds_reins_info.sql.Clear;
+ DMreinsurance.ds_reins_info.sql.Text:=FilterStr;
+  memo1.Text:=DMreinsurance.ds_reins_info.sql.Text;
+  DMreinsurance.ds_reins_info.close;
+   DMreinsurance.ds_reins_info.Open;
+
+   end;
+
+
+end.

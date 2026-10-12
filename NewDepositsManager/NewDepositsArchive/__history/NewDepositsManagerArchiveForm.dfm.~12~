@@ -1,0 +1,2069 @@
+object NewDepositsManagerArchiveFormImpl: TNewDepositsManagerArchiveFormImpl
+  Left = 0
+  Top = 0
+  Width = 1206
+  Height = 762
+  Caption = 'NewDepositsManagerArchiveFormImpl'
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  OnCreate = ActiveFormCreate
+  OnDestroy = ActiveFormDestroy
+  PixelsPerInch = 96
+  TextHeight = 13
+  object ToolBar: TToolBar
+    Left = 0
+    Top = 0
+    Width = 1206
+    Height = 42
+    ButtonHeight = 36
+    ButtonWidth = 92
+    Caption = 'ToolBar'
+    Color = clScrollBar
+    DrawingStyle = dsGradient
+    EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clBlack
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    Images = ImageList
+    ParentColor = False
+    ParentFont = False
+    ShowCaptions = True
+    TabOrder = 0
+    object ToolButton1: TToolButton
+      Left = 0
+      Top = 0
+      Caption = '   Yeni Kontrakt    '
+      ImageIndex = 31
+      Visible = False
+    end
+    object ToolButton2: TToolButton
+      Left = 92
+      Top = 0
+      Width = 8
+      Caption = 'ToolButton2'
+      ImageIndex = 1
+      Style = tbsSeparator
+    end
+    object ToolButton3: TToolButton
+      Left = 100
+      Top = 0
+      Caption = 'Redakt'#601
+      ImageIndex = 34
+      Visible = False
+    end
+    object ToolButton4: TToolButton
+      Left = 192
+      Top = 0
+      Width = 8
+      Caption = 'ToolButton4'
+      ImageIndex = 2
+      Style = tbsSeparator
+    end
+    object ToolButton7: TToolButton
+      Left = 200
+      Top = 0
+      Caption = 'Yenil'#601'm'#601'k'
+      ImageIndex = 39
+    end
+    object ToolButton8: TToolButton
+      Left = 292
+      Top = 0
+      Width = 8
+      Caption = 'ToolButton8'
+      ImageIndex = 4
+      Style = tbsSeparator
+    end
+    object ToolButton14: TToolButton
+      Left = 300
+      Top = 0
+      Caption = #399'm'#601'liyyatlar'
+      DropdownMenu = ActionArcName
+      ImageIndex = 33
+      Style = tbsDropDown
+    end
+    object ToolButton6: TToolButton
+      Left = 405
+      Top = 0
+      Width = 8
+      Caption = 'ToolButton6'
+      ImageIndex = 3
+      Style = tbsSeparator
+    end
+    object ToolButton9: TToolButton
+      Left = 413
+      Top = 0
+      Caption = 'Sazlamalar'
+      ImageIndex = 29
+      Style = tbsDropDown
+      Visible = False
+    end
+    object ToolButton10: TToolButton
+      Left = 518
+      Top = 0
+      Width = 8
+      Caption = 'ToolButton10'
+      ImageIndex = 5
+      Style = tbsSeparator
+    end
+    object ToolButton5: TToolButton
+      Left = 526
+      Top = 0
+      Caption = 'Hesabatlar'
+      ImageIndex = 30
+      Style = tbsDropDown
+      Visible = False
+    end
+    object ToolButton11: TToolButton
+      Left = 631
+      Top = 0
+      Width = 8
+      Caption = 'ToolButton11'
+      ImageIndex = 7
+      Style = tbsSeparator
+    end
+    object TBFilteration: TToolButton
+      Left = 639
+      Top = 0
+      Caption = 'Filter'
+      ImageIndex = 40
+      Style = tbsCheck
+      OnClick = TBFilterationClick
+    end
+  end
+  object Panel1: TPanel
+    Left = 0
+    Top = 42
+    Width = 1206
+    Height = 720
+    Align = alClient
+    TabOrder = 1
+    object FilterPanel: TPanel
+      Left = 1
+      Top = 1
+      Width = 201
+      Height = 718
+      Align = alLeft
+      TabOrder = 0
+      Visible = False
+      object Panel2: TPanel
+        Left = 1
+        Top = 1
+        Width = 199
+        Height = 19
+        Align = alTop
+        BevelInner = bvRaised
+        BevelOuter = bvLowered
+        Color = clActiveCaption
+        TabOrder = 0
+        object SpeedButton1: TSpeedButton
+          Left = 182
+          Top = 2
+          Width = 14
+          Height = 15
+          Caption = 'X'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -12
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
+      end
+      object GroupBox1: TGroupBox
+        Left = 1
+        Top = 20
+        Width = 199
+        Height = 68
+        Align = alTop
+        Caption = 'Valyutalar'
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 1
+        object CBCurrency: TCheckBox
+          Left = 5
+          Top = 45
+          Width = 183
+          Height = 19
+          Caption = 'T'#601'tbiq et'
+          TabOrder = 0
+          OnClick = CBCurrencyClick
+        end
+        object DBLookupComboboxEh1: TDBLookupComboboxEh
+          Left = 6
+          Top = 18
+          Width = 188
+          Height = 21
+          DropDownBox.Sizable = True
+          EditButtons = <>
+          KeyField = 'VALUTE'
+          ListField = 'VALU_NAME'
+          ListSource = NewDepositDataModule.ValutesDatSrc
+          TabOrder = 1
+          Visible = True
+          OnChange = DBLookupComboboxEh1Change
+        end
+      end
+      object GroupBox2: TGroupBox
+        Left = 1
+        Top = 224
+        Width = 199
+        Height = 68
+        Align = alTop
+        Caption = 'M'#252#351't'#601'ril'#601'rin kateq'
+        TabOrder = 2
+        object CBpersons: TCheckBox
+          Left = 5
+          Top = 44
+          Width = 183
+          Height = 18
+          Caption = 'T'#601'tbiq et'
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 0
+          OnClick = CBCurrencyClick
+        end
+        object DBLookupComboboxEh4: TDBLookupComboboxEh
+          Left = 3
+          Top = 17
+          Width = 188
+          Height = 21
+          DropDownBox.Sizable = True
+          EditButtons = <>
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          KeyField = 'ID'
+          ListField = 'CATEGORY'
+          ListSource = NewDepositDataModule.dm_categoriesDatSrc
+          ParentFont = False
+          TabOrder = 1
+          Visible = True
+          OnChange = DBLookupComboboxEh1Change
+        end
+      end
+      object GroupBox3: TGroupBox
+        Left = 1
+        Top = 292
+        Width = 199
+        Height = 68
+        Align = alTop
+        Caption = 'M'#252#351't'#601'ril'#601'rin m'#601'nsubiyy'#601'ti'
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 3
+        object CBClientType: TCheckBox
+          Left = 3
+          Top = 43
+          Width = 183
+          Height = 19
+          Caption = 'T'#601'tbiq et'
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 0
+          OnClick = CBCurrencyClick
+        end
+        object DBLookupComboboxEh5: TDBLookupComboboxEh
+          Left = 3
+          Top = 16
+          Width = 188
+          Height = 21
+          DropDownBox.Sizable = True
+          EditButtons = <>
+          KeyField = 'ID'
+          ListField = 'NAME'
+          ListSource = NewDepositDataModule.dm_personsDatSrc
+          TabOrder = 1
+          Visible = True
+          OnChange = DBLookupComboboxEh1Change
+        end
+      end
+      object GroupBox4: TGroupBox
+        Left = 1
+        Top = 88
+        Width = 199
+        Height = 68
+        Align = alTop
+        Caption = 'Filiallar'
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 4
+        object CBFilial: TCheckBox
+          Left = 5
+          Top = 44
+          Width = 183
+          Height = 18
+          Caption = 'T'#601'tbiq et'
+          TabOrder = 0
+          OnClick = CBCurrencyClick
+        end
+        object DBLookupComboboxEh2: TDBLookupComboboxEh
+          Left = 3
+          Top = 17
+          Width = 188
+          Height = 21
+          DropDownBox.Sizable = True
+          EditButtons = <>
+          KeyField = 'ID'
+          ListField = 'NAME'
+          ListSource = NewDepositDataModule.FilialsDatSrc
+          TabOrder = 1
+          Visible = True
+          OnChange = DBLookupComboboxEh1Change
+        end
+      end
+      object GroupBox5: TGroupBox
+        Left = 1
+        Top = 156
+        Width = 199
+        Height = 68
+        Align = alTop
+        Caption = 'Depozit n'#246'vl'#601'ri'
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 5
+        object CBContractType: TCheckBox
+          Left = 5
+          Top = 44
+          Width = 183
+          Height = 18
+          Caption = 'T'#601'tbiq et'
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 0
+          OnClick = CBCurrencyClick
+        end
+        object DBLookupComboboxEh3: TDBLookupComboboxEh
+          Left = 5
+          Top = 17
+          Width = 188
+          Height = 21
+          DropDownBox.Sizable = True
+          EditButtons = <>
+          KeyField = 'ID'
+          ListField = 'TYPE'
+          ListSource = NewDepositDataModule.dm_typesDatSrc
+          TabOrder = 1
+          Visible = True
+          OnChange = DBLookupComboboxEh1Change
+        end
+      end
+      object GroupBox9: TGroupBox
+        Left = 1
+        Top = 360
+        Width = 199
+        Height = 68
+        Align = alTop
+        Caption = 'Statusu'
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 6
+        object LCBStatus: TComboBox
+          Left = 3
+          Top = 16
+          Width = 191
+          Height = 21
+          TabOrder = 0
+          OnChange = DBLookupComboboxEh1Change
+          Items.Strings = (
+            'Hesablanan'
+            'Hesablanmas'#305' dayand'#305'r'#305'lan')
+        end
+        object CBStatus: TCheckBox
+          Left = 6
+          Top = 43
+          Width = 133
+          Height = 18
+          Caption = 'T'#601'tbiq et'
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 1
+          OnClick = CBCurrencyClick
+        end
+      end
+      object GroupBox7: TGroupBox
+        Left = 1
+        Top = 428
+        Width = 199
+        Height = 67
+        Align = alTop
+        Caption = 'A'#231#305'lma tarixin'#601' g'#246'r'#601
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 7
+        object Label1: TLabel
+          Left = 97
+          Top = 17
+          Width = 6
+          Height = 19
+          Caption = '-'
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -17
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = []
+          ParentFont = False
+        end
+        object DTPOpenDate: TDateTimePicker
+          Left = 6
+          Top = 17
+          Width = 92
+          Height = 21
+          Date = 39334.662889895800000000
+          Time = 39334.662889895800000000
+          TabOrder = 0
+          OnChange = DTPOpenDateChange
+        end
+        object DTPCloseDate: TDateTimePicker
+          Left = 104
+          Top = 16
+          Width = 92
+          Height = 21
+          Date = 39334.662889895800000000
+          Time = 39334.662889895800000000
+          TabOrder = 1
+          OnChange = DTPCloseDateChange
+        end
+        object CBOpendat: TCheckBox
+          Left = 6
+          Top = 43
+          Width = 105
+          Height = 18
+          Caption = 'T'#601'tbiq et'
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 2
+          OnClick = CBCurrencyClick
+        end
+      end
+      object GroupBox6: TGroupBox
+        Left = 1
+        Top = 495
+        Width = 199
+        Height = 39
+        Align = alTop
+        TabOrder = 8
+        object BitBtnexp: TBitBtn
+          Left = 6
+          Top = 10
+          Width = 81
+          Height = 24
+          Caption = #304'xrac et'
+          DoubleBuffered = True
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          Glyph.Data = {
+            36040000424D3604000000000000360000002800000010000000100000000100
+            2000000000000004000000000000000000000000000000000000FF00FF00FF00
+            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF000080
+            0000008000000080000000800000008000000080000000800000008000000080
+            00000080000000800000008000000080000000800000FF00FF00FF00FF000080
+            0000008000000080000000800000008000000080000000800000008000000080
+            00000080000000800000008000000080000000800000FF00FF00FF00FF000080
+            0000FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF000080000000800000FF00FF00FF00FF000080
+            0000FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF000080000000800000FF00FF00FF00FF000080
+            0000FFFFFF000080000000800000008000000080000000800000008000000080
+            00000080000000800000008000000080000000800000FF00FF00FF00FF000080
+            0000FFFFFF000080000000800000008000000080000000800000FFFFFF000080
+            00000080000000800000FFFFFF000080000000800000FF00FF00FF00FF000080
+            0000FFFFFF00FFFFFF00008000000080000000800000FFFFFF00008000000080
+            00000080000000800000FFFFFF000080000000800000FF00FF00FF00FF000080
+            0000FFFFFF00FFFFFF00FFFFFF0000800000FFFFFF0000800000008000000080
+            0000FFFFFF00FFFFFF00FFFFFF000080000000800000FF00FF00FF00FF000080
+            0000FFFFFF00FFFFFF00FFFFFF00FFFFFF000080000000800000008000000080
+            0000FFFFFF00FFFFFF00FFFFFF000080000000800000FF00FF00FF00FF000080
+            0000FFFFFF00FFFFFF00FFFFFF00008000000080000000800000008000000080
+            000000800000FFFFFF00FFFFFF000080000000800000FF00FF00FF00FF000080
+            0000FFFFFF00FFFFFF00008000000080000000800000FFFFFF00008000000080
+            00000080000000800000FFFFFF000080000000800000FF00FF00FF00FF000080
+            0000FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF000080000000800000FF00FF00FF00FF000080
+            0000FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF000080000000800000FF00FF00FF00FF000080
+            0000008000000080000000800000008000000080000000800000008000000080
+            00000080000000800000008000000080000000800000FF00FF00FF00FF00FF00
+            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00}
+          ParentDoubleBuffered = False
+          ParentFont = False
+          TabOrder = 0
+          OnClick = BitBtnexpClick
+        end
+      end
+    end
+    object Panel3: TPanel
+      Left = 202
+      Top = 1
+      Width = 1003
+      Height = 718
+      Align = alClient
+      TabOrder = 1
+      object SearchPanel: TGroupBox
+        Left = 1
+        Top = 656
+        Width = 1001
+        Height = 61
+        Align = alBottom
+        Caption = 'Axtar'#305#351' Paneli'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clNavy
+        Font.Height = -12
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentFont = False
+        TabOrder = 0
+        Visible = False
+        object Panel4: TPanel
+          Left = 116
+          Top = 16
+          Width = 148
+          Height = 43
+          Align = alLeft
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clNavy
+          Font.Height = -12
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 0
+          object StaticText1: TStaticText
+            Left = 1
+            Top = 1
+            Width = 146
+            Height = 18
+            Align = alTop
+            AutoSize = False
+            Caption = ' M'#252'qavil'#601'nin '#8470
+            Color = clSilver
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clNavy
+            Font.Height = -12
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentColor = False
+            ParentFont = False
+            TabOrder = 0
+          end
+          object EditContractNo: TEdit
+            Left = 2
+            Top = 17
+            Width = 143
+            Height = 22
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clNavy
+            Font.Height = -12
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+            TabOrder = 1
+          end
+        end
+        object Panel7: TPanel
+          Left = 2
+          Top = 16
+          Width = 114
+          Height = 43
+          Align = alLeft
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clNavy
+          Font.Height = -12
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 1
+          object StaticText2: TStaticText
+            Left = 1
+            Top = 1
+            Width = 112
+            Height = 18
+            Align = alTop
+            AutoSize = False
+            Caption = ' Depozitin '#304'D-si'
+            Color = clSilver
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clNavy
+            Font.Height = -12
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentColor = False
+            ParentFont = False
+            TabOrder = 0
+          end
+          object EditID: TEdit
+            Left = 3
+            Top = 17
+            Width = 108
+            Height = 22
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clNavy
+            Font.Height = -12
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+            TabOrder = 1
+            OnKeyPress = EditIDKeyPress
+          end
+        end
+        object Panel8: TPanel
+          Left = 264
+          Top = 16
+          Width = 114
+          Height = 43
+          Align = alLeft
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clNavy
+          Font.Height = -12
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 2
+          object StaticText3: TStaticText
+            Left = 1
+            Top = 1
+            Width = 112
+            Height = 18
+            Align = alTop
+            AutoSize = False
+            Caption = 'M'#252#351't'#601'rinin '#304'D-si'
+            Color = clSilver
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clNavy
+            Font.Height = -12
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentColor = False
+            ParentFont = False
+            TabOrder = 0
+          end
+          object EditCustomerid: TEdit
+            Left = 1
+            Top = 17
+            Width = 110
+            Height = 22
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clNavy
+            Font.Height = -12
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+            TabOrder = 1
+          end
+        end
+        object Panel10: TPanel
+          Left = 623
+          Top = 16
+          Width = 148
+          Height = 43
+          Align = alLeft
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clNavy
+          Font.Height = -12
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 3
+          object StaticText5: TStaticText
+            Left = 1
+            Top = 1
+            Width = 146
+            Height = 16
+            Align = alTop
+            AutoSize = False
+            Caption = ' Car'#305' M'#601'bl'#601#287
+            Color = clSilver
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clNavy
+            Font.Height = -12
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentColor = False
+            ParentFont = False
+            TabOrder = 0
+          end
+          object EditFacticalDebt: TEdit
+            Left = 1
+            Top = 17
+            Width = 146
+            Height = 22
+            Align = alTop
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clNavy
+            Font.Height = -12
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+            TabOrder = 1
+          end
+        end
+        object Panel11: TPanel
+          Left = 378
+          Top = 16
+          Width = 245
+          Height = 43
+          Align = alLeft
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clNavy
+          Font.Height = -12
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 4
+          object StaticText6: TStaticText
+            Left = 1
+            Top = 1
+            Width = 243
+            Height = 18
+            Align = alTop
+            AutoSize = False
+            Caption = 'M'#252#351't'#601'rinin Ad'#305
+            Color = clSilver
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clNavy
+            Font.Height = -12
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentColor = False
+            ParentFont = False
+            TabOrder = 0
+          end
+          object EditCustomerName: TEdit
+            Left = 1
+            Top = 17
+            Width = 241
+            Height = 22
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clNavy
+            Font.Height = -12
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+            TabOrder = 1
+          end
+        end
+        object Panel6: TPanel
+          Left = 771
+          Top = 16
+          Width = 147
+          Height = 43
+          Align = alLeft
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clNavy
+          Font.Height = -12
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 5
+          object StaticText7: TStaticText
+            Left = 1
+            Top = 1
+            Width = 145
+            Height = 18
+            Align = alTop
+            AutoSize = False
+            Caption = 'Cari Faiz M'#601'bl'#601#287'i'
+            Color = clSilver
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clNavy
+            Font.Height = -12
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentColor = False
+            ParentFont = False
+            TabOrder = 0
+          end
+          object EditFACTICALINTERESTDEBT: TEdit
+            Left = 1
+            Top = 17
+            Width = 143
+            Height = 22
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clNavy
+            Font.Height = -12
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+            TabOrder = 1
+          end
+        end
+        object Panel9: TPanel
+          Left = 1065
+          Top = 16
+          Width = 147
+          Height = 43
+          Align = alLeft
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clNavy
+          Font.Height = -12
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 6
+          object StaticText4: TStaticText
+            Left = 1
+            Top = 1
+            Width = 145
+            Height = 18
+            Align = alTop
+            AutoSize = False
+            Caption = 'C'#601'lb Ed'#601'nin '#304'D-si'
+            Color = clSilver
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clNavy
+            Font.Height = -12
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentColor = False
+            ParentFont = False
+            TabOrder = 0
+          end
+          object EditAgentid: TEdit
+            Left = 1
+            Top = 17
+            Width = 144
+            Height = 22
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clNavy
+            Font.Height = -12
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+            TabOrder = 1
+          end
+        end
+        object Panel12: TPanel
+          Left = 918
+          Top = 16
+          Width = 147
+          Height = 43
+          Align = alLeft
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clNavy
+          Font.Height = -12
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 7
+          object StaticText8: TStaticText
+            Left = 1
+            Top = 1
+            Width = 145
+            Height = 18
+            Align = alTop
+            AutoSize = False
+            Caption = 'Cari Hesab'#305'n Qal'#305#287#305
+            Color = clSilver
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clNavy
+            Font.Height = -12
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentColor = False
+            ParentFont = False
+            TabOrder = 0
+          end
+          object EditOstat: TEdit
+            Left = 1
+            Top = 17
+            Width = 144
+            Height = 22
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clNavy
+            Font.Height = -12
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+            TabOrder = 1
+          end
+        end
+      end
+      object MainGrid: TXDBGrid
+        Left = 1
+        Top = 1
+        Width = 1001
+        Height = 655
+        Align = alClient
+        DataSource = NewDepositDataModule.DMArchiveDataSrc
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        Gradient.EndColor = clActiveCaption
+        Gradient.HotColor = clActiveCaption
+        Gradient.StartColor = clActiveCaption
+        GridStyle.VisualStyle = vsXPStyle
+        MultiSelectOptions = [msNone]
+        Options = [dgTitles, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit, dgExtendedSelect, dgInternalSelect, dgRowResize, dgRowScroll, dgHotButtons, dgTitleButtons, dgTitleHeaders, dgTitleWidthOff, dgMarkerAutoToggle]
+        ParentFont = False
+        PopupMenu = ArcPopupMenu
+        ScrollBars = ssHorizontal
+        ScrollProp.ParentStyle = False
+        ScrollProp.Style = ssRegular
+        ScrollProp.WinXPMode = True
+        TabOrder = 1
+        TitleFont.Charset = RUSSIAN_CHARSET
+        TitleFont.Color = clWhite
+        TitleFont.Height = -11
+        TitleFont.Name = 'Tahoma'
+        TitleFont.Style = []
+        Columns = <
+          item
+            Expanded = False
+            FieldName = 'ID'
+            Title.Alignment = taCenter
+            Title.Caption = 'DepozitinID-si'
+            Visible = True
+            Width = 80
+          end
+          item
+            Color = clSilver
+            Expanded = False
+            FieldName = 'CONTRACTNO'
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ReadOnly = True
+            Title.Alignment = taCenter
+            Title.Color = clActiveCaption
+            Visible = True
+            Width = 120
+          end
+          item
+            Expanded = False
+            FieldName = 'CUSTOMERID'
+            Title.Alignment = taCenter
+            Title.Caption = 'M'#252#351't'#601'rinin'#304'D-si'
+            Visible = True
+            Width = 80
+          end
+          item
+            Color = clSilver
+            Expanded = False
+            FieldName = 'CUSTOMERNAME'
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ReadOnly = True
+            Title.Alignment = taCenter
+            Visible = True
+            Width = 200
+          end
+          item
+            Expanded = False
+            FieldName = 'OPENDATE'
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ReadOnly = True
+            Title.Alignment = taCenter
+            Title.Color = clActiveCaption
+            Visible = True
+            Width = 80
+          end
+          item
+            Expanded = False
+            FieldName = 'CLOSEDATE'
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ReadOnly = True
+            Title.Alignment = taCenter
+            Title.Color = clActiveCaption
+            Visible = True
+            Width = 80
+          end
+          item
+            Expanded = False
+            FieldName = 'PROLONGATIONDATE'
+            Title.Alignment = taCenter
+            Visible = True
+            Width = 80
+          end
+          item
+            Expanded = False
+            FieldName = 'STOPCALCDATE'
+            Title.Alignment = taCenter
+            Visible = True
+            Width = 100
+          end
+          item
+            Color = clGray
+            Expanded = False
+            FieldName = 'VAL_NAME'
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ReadOnly = True
+            Title.Alignment = taCenter
+            Title.Color = clActiveCaption
+            Visible = True
+            Width = 30
+          end
+          item
+            Expanded = False
+            FieldName = 'AMOUNT'
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ReadOnly = True
+            Title.Alignment = taCenter
+            Title.Color = clActiveCaption
+            Visible = True
+            Width = 110
+          end
+          item
+            Color = clSilver
+            Expanded = False
+            FieldName = 'INTEREST'
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            Title.Alignment = taCenter
+            Title.Caption = 'Faiz'
+            Title.Color = clActiveCaption
+            Visible = True
+            Width = 60
+          end
+          item
+            Expanded = False
+            FieldName = 'FACTICALDEBT'
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ListOptions = [loAutoComplete, loAutoDropDown, loAutoCloseEditor, loSelectNextValue, loAllowClearValue, loShowToday, loShowTodayCircle, loShowWeekNumbers, loAutoTodayClose, loShowLookupListTitles, loAllowChangeOrder, loAllowColumnResize, loAllowColumnMoving, loExpandFirstColumn, loFirstColumnExpanded]
+            LookupKeyField = 'TOTAL'
+            LookupListFields = 'total;hdate;total;reserve'
+            LookupListTitles = 'Yatr'#305'mlar;Tarix;M'#601'bl'#601#287';Faiz'
+            LookupListWidths = '90;56;90;60'
+            PickOptions = [poListItemsOnly, poFormatListOnly]
+            Title.Alignment = taCenter
+            Title.Caption = '  Cari  M'#601'bl'#601#287
+            Title.Color = clActiveCaption
+            Visible = True
+            Width = 110
+          end
+          item
+            Expanded = False
+            FieldName = 'FACTICALINTERESTDEBT'
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ReadOnly = True
+            Title.Alignment = taCenter
+            Title.Caption = 'Cari M'#601'bl'#601#287'  '#252'zr'#601' %'
+            Title.Color = clActiveCaption
+            Visible = True
+            Width = 103
+          end
+          item
+            Expanded = False
+            FieldName = 'OSTAT'
+            Title.Caption = 'Cari Hesab'#305'n qal'#305#287#305
+            Visible = True
+            Width = 103
+          end
+          item
+            Expanded = False
+            FieldName = 'AGENTID'
+            Title.Caption = 'C'#601'lb ed'#601'nin ID-si'
+            Visible = True
+            Width = 90
+          end
+          item
+            Expanded = False
+            FieldName = 'FILIAL'
+            Title.Alignment = taCenter
+            Title.Caption = 'Filial'
+            Visible = True
+            Width = 140
+          end>
+      end
+    end
+  end
+  object ImageList: TImageList
+    Left = 280
+    Top = 304
+    Bitmap = {
+      494C010129009000900010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      000000000000360000002800000040000000B000000001001000000000000058
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      D31D9A2E00000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000000000000000000000000000D41D
+      3E47DB3E00000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000000000000000000000000000F61D
+      3E431C4F00000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000000000000000000000000000F61D
+      3E437D5F00000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000000000000000000000000000F61D
+      1E43BE7300000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000000000000000000000000000000000000000D31D5F47
+      3E471D43BB320000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000D31D5F4B3E47
+      3D43FD3E1D439A2E000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000000000000000B31D5F533E433E47
+      1D43FC3ADB361C47592600000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000000000000000000000000000B3197F5B1E3F3E471D43
+      FD3EDC3ABB329A2E1C4B38220000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000B3199F635E539F5F9F637E5B
+      3D4FFC42BA329A2A59261C53171A000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000000000000000000000009F5F3E471E3F3E473E471D43
+      FC3ADC36BB329A2E7A2A5926381E172200000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000BF633E479F5BBF6BDF73DF73
+      BF6FBE6FBE6B9E6B5D57DB3E381E172200000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000BF67B505F711381A59227A26
+      BB2E9B2A7A26591E3716F60DB401172200000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000161E79361B535C5F7D677D67
+      7D677D677D677D671B53BA42372AF52100000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000000000000000000000000000FF7FFF7FBB15DB19FF7F
+      FF7FFF7FFF7FFF7FFF7FFF7FFF7F000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000071017101
+      50012E012E012E010000000000000000000000000000FF7FBA15BB15DB19FF7F
+      FF7FFF7FFF7FFF7FFF7FFF7FFF7F00000000000033013301AC7E330133013301
+      33013301330133013301AC7EAB7A8B7A000000000000000000000000E519682A
+      882A2722A4110000000000000000000000000000000000007101710171015001
+      2E012E012E012E012E012E0100000000000000000000FF7F9A15BA15DB19FB19
+      FC1D1C1E3D225D22FF7FFF7FFF7F0000000000005301530153017401190E9D0E
+      FF12FF129D0E180E74055301AB7A8B7A00000000000000000205A82EA82E882A
+      882A682648264822A40D0000000000000000000000007101710171012F012E01
+      2E012E012E012E012E012E012E0100000000000000007A119A11BA15BB15DB19
+      FB1D1C1E3C223D225D22FF7FFF7F0000000000005405FF225405DE16DE0EDE0E
+      DF12DF12DE0EDE0EFF1A950974058B7A000000000000020502050205A82E882A
+      27224722482627222722840D00000000000000007101710171012E012E01D84E
+      DE7B9C6BD21D2E012E012E012E012E0100000000000079119A119A15BA15DB19
+      FB19FC1D1C1E1C223C223D22FF7F0000000000007505DE1EFE22BD12DE1EF811
+      75057505F811BC1ABD16FE229509750500000000000000000205020543056305
+      630563056305071E071E071E840D000000007101710171017101D31500007C6B
+      142A973E0000BE732E012E012E012E0100000000000079117A119A11BA15BB15
+      FF7FFF7FFF7FFF7F1C1E1C22FF7F0000000000009509DD269C1ADD2A95099509
+      6A768A7A950995099C22BD1E391A950900000000000000000000020500000000
+      0000430542054205071AE71DA5110000000071017101710171010000B1192E01
+      2E012E012E01DF7BF9522E012E012E012E0100000000FF7FFF7F9A119A15BA15
+      BA15FF7FFF7FFF7FFF7F1C1E1C1E000000000000B60DFD32DC2ADC2AFD36B60D
+      B60D49726A76B60D181ABC269B26B60D00000000000000000000000000000000
+      00000000220522052205E719C71900000000710171017101983ABE772E012E01
+      2E012E012E012E0100002E012E012E012E0100000000FF7FFF7FFF7FFF7FBA15
+      BA15FF7FFF7FFF7FFF7FFF7FFF7F000000000000D70DD70DD70DD70DD70DD70D
+      D70D276E076E2872D70DDC32DC32D70D00000000000000000000000000000000
+      00000000000022052205E719C715640900007101710171017C63B8422E012E01
+      2E012E012E012E0100002E012E012E012E0100000000FF7FFF7FFF7FFF7FFF7F
+      FF7FFF7FFF7FFF7FFF7FFF7FFF7F000000000000F811FD36DC36F811076E286E
+      276EF811F811F811F811F811F811F8110000000000004309840D000000000000
+      00000000000022052205C719C715850D0000710171017101710171012F012E01
+      2E012E012E012E0100002E012E012E012E01000000003909FF7FFF7FFF7FFF7F
+      FF7F9A119A119A11FF7FFF7FFF7F0000000000001916DC32DD3A7B221916E669
+      E669191619163E43FD3AFD3A1E3F1916000000000205A515882A68264826C515
+      00000000000022052205C715A615640D00007101710171017101710171015001
+      2E014F052E011A53DE772E012E012E0171010000000039093909FF7FFF7FFF7F
+      FF7F7A117A119A119A119A11FF7F0000000000003A1A9C2AFD3AFD3A3A1A3A1A
+      C465C5693A1A3A1A3E43DD3A1E3F3A1A000000000205C51568266826061E0000
+      00000000000022054309C715A615640900007101710171017101710171017101
+      7C6BDF7B3B5B000050012E012E017101710100000000380938093909590D590D
+      590D790D790D79117A117A117A110000000000003B1A5B1E5F471E3F1E3FBC2A
+      5B1A5B1ABC2A3E431E3F5F473E435B1A000000000205C515682648264822061A
+      840D000022054309C715A615861100000000710171017101710171017101F415
+      00000000BD6F710171012E0171017101000000000000FF7F380938093909390D
+      590D590D590D590D590D790DFF7F000000000000A4655C1E7C227F473F435F43
+      5F475F475F433F435F475C1E7F4B5C1E000000000205E5196309272227222722
+      071EE71DE719C719C715A6156409000000000000710171017101710171017101
+      5C5F0000710171017101710171017101000000000000FF7FFF7F380938093909
+      3909390D590D590D590D590DFF7F000000000000A465A3617C1E7C22FE323F43
+      7F477F473F43FE327C227C1E7C1E7C1E000000000205220542054205E615071E
+      071EE719C719C715A61564090000000000000000710171017101710171017101
+      71017101710171017101710171010000000000000000FF7FFF7FFF7FFF7FFF7F
+      38093909390939093909FF7FFF7F000000000000A465A36183617D1E7D227D22
+      7D227D227D227D227D1E83617D227D2200000000000000000000630563056305
+      A40DC615A611840D640900000000000000000000000071017101710171017101
+      71017101710171017101710100000000000000000000FF7FFF7FFF7FFF7FFF7F
+      FF7FFF7F38093809FF7FFF7FFF7F000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000006305
+      6305630500000000000000000000000000000000000000000000710171017101
+      7101710171017101710100000000000000000000000000000000097326772577
+      047703770277E176A06A00000000000000000000000000000000561656163616
+      35123512150E150A150A000000000000000000000000000000000000C620E52C
+      6114000000000000000000000000000000000000000000000000000001002400
+      680468042400010000000000000000000000000000000000497B287B457F447F
+      437F437F227FA276E2656072000000000000000000000000771A571A570E570A
+      570A570A570A360A150E150A00000000000000000000FC4EFC4EFC4EAB4D8A49
+      8A49884DB94EFC4EFC4EFC4EFC4E0000000000000000000000006804CE083211
+      9515B715951531116804000000000000000000004F774C7B487F467F457F457F
+      447F437F437FA365C3586169606EA06A00000000D94297227716570AD20DD20D
+      D20D570A570AD20DD20DD20D140AB105000000000000FC4E9F5F9F5F7356ED55
+      CB51A059C05D9F5F9F5F9F5FFC4E000000000000000001008B0411119715D915
+      FB191C1A3E1A5E1ED81DCD0801000000000000006D7B6A7F677F477F467F457F
+      457F447F037FE454E360C16461696072000000009822771A570ADE77DE73DE73
+      D20D570ABE6FBE6FBE6FD20D350A150A000000000000FC4E9F5F5E5BF856CA55
+      057F406AC069C0615E5B9F5FFC4E00000000000000008B0431119615B815B815
+      B715D8191C1A5F1E5F1EF91DAB0800000000937B6D7F697F687F677F477F467F
+      457F457F046A0459E364C264C164E169A06AB82A9826570A570ADE77DE77DE73
+      D20D570ABE73BE73BE6FD20D570A150E140A000000001C4F9F63FB4EFB4E9256
+      C061447FC176C069E0619F631C4F0000000000006800EF0C741196117411F00C
+      AE08CE0832111B1E5F1E5F1E951947000000907F6C7F697F697F687F677F477F
+      467F457F255904610365E264C16401656172B8267816570A570ADF77DE77DE77
+      D20DD20DDE73BE73BE73D20D570A360A150A000000001C539F637E5F9F639F63
+      1663C061447F047BC069E0651D53955600000000AC04521575117515EF0CAD04
+      00000000AE0432115E1E7F1E1A22AD080000917F6B7F6A7F697F697F687F677F
+      477F6672255924690365E364C264C164426ED932570A570A570ADF7BDF77DE77
+      F946F946DE73DE73BE73D20DD20D570A150E000000001D539F631B531B531B53
+      1B53B456C061B37F047BC069EF39075100000000CE08941D95155315AE040000
+      000000000000CF08FA1D5E225D26EF0C0000927F6B7F6B7F6A7F697F697F697F
+      6C7F2C72686525690469E364E264C164436EDA36570A570ABE6FFF7BDF7BDF77
+      DE77DE77DE77DE73DE73BD6BF409570A3512000000003D579F639F639F639F63
+      9F639E633763C061B27FD656AD31EF3900000000CE08B521D71D7419AC040000
+      000046000000AE04321174157419CE080000B37F8C7F6B7F6B7F6A7F8C7F6F77
+      5136513A2C62CB6D88690469E264C164646EFA36570A570AFA36FF7BFF7BDF7B
+      DF77DF77DE77DE77DE731A4F570A570A3512000000003D579F633B573B573B57
+      1B571B531B53D55631429C6B313E826D826D0000CE08B521F725D621CD0C0000
+      0000EF0CAB08000000000000000000000000B47F8D7F8C7F8E7F907BF34E5526
+      77227722341E33260C56EA6D686924696472FA36570A570A570AFA36FF7BFF7B
+      FF7BDF7BDF77DE771A4F570A570A570A3616000000005E579F679F679F679F67
+      9E677E5F3D5B3D5BF956313E4A760872826D0000AE049421182A182AB521CC0C
+      23007219D721AB0800000000000000000000B57F907FB17F335F752E7626B926
+      B922991E981E571A351613160C46296A8F42DA2E981A570A570A570AFA36FF7B
+      FF7BFF7BDF7B3A4F570A570A570A570E5616000000005E5B9F673C5B3C573C57
+      3C57FA52FA4EFA4EFA4EB65A4E62A56900000000527B3011372E592E592E182A
+      D625F7297C2E182ACC0C0000000000000000DB7FB777B63E552AB82AB92AB926
+      B922991E981A981A781657121512903A9326FA36FA36570A570A570A570AFA36
+      FF7BFF7B3B53570A570A570A570A571A561A000000005E5B9F679F67BF67BF67
+      9E673C5B7E639E67BE6B9E675D57BE7BBE7700000000AE04721D58327A367A32
+      7B329B329C329C32392EAD0800000000000000003853F846D92ED92AB92AB926
+      B922981E981A781678167812942AB23600000000DA32B926570A570A570A570A
+      FA365C53570A570A570A570A7716771A0000000000007E5BBF673C5B3C5B3C5B
+      3C5B1B57BF67BF67BF675E5B5D5700000000000000000000AE087219372E9A3A
+      BB3ABB3ABC36BC3AF729CE0800000000000000003A4F5A571A47D92AB926B922
+      9922981E981A78167812B52ED23E932E00000000BE6FFA36B926570A570A570A
+      570A570A570A570A570A771A9722B73A0000000000007E5FBF67BF67BF67BF67
+      9E677D5FBF67BF677E5B5D570000000000000000000000000000527BEF0C1011
+      B4213732DB3E172AEF0C000000000000000000000000DA32394F3A4FF936B926
+      991E981E981AB72AF53ED43A570A00000000000000000000DA32FA36981A570A
+      570A570A570A781698269822000000000000000000007E5FBF67BF67BF67BF67
+      9E677D5FBF677E5F5D5700000000000000000000000000000000000000000000
+      0000F52D172EEF0C000000000000000000000000000000000000F93A384F384F
+      384F174F1647F542B72600000000000000000000000000000000D92ADA32FA36
+      FA36DA36D92EB92A98220000000000000000000000007F5F7F5F7F5F7F5F7F5F
+      7F5F7F5F7F5F5D57000000000000000000000000000000000000000000000000
+      0000EF0CEF0C000000000000000000000000000000000000DE7BDE7B5A6B734E
+      EF3D733A7B33FF2FFF33004C004C0048FF370000000000000000000000000000
+      0000000000000000000000600060006000000000000000000000000000000000
+      00000000000000000000000000000000000000000000000000000707E706E706
+      E606C606C602E602E502000000000000000021047D6FE81C2104DE7BBD779C73
+      DE4FFF2BFF2BFF2F004C004C317E004CFF330000000000000000000000000000
+      000000000000000000600060426000600060863A863A863A863A863A863A863A
+      5A365A365A365A365A368361836183618361000000000000080B070B06072603
+      2603260326030603C602C502000000000000210408217C6FE81C2104BD779C73
+      DE4FFF2BFF2B00500050107E00540054FF2F0000000000000000000000000000
+      000000000000006000602160DE7F21600060863A214B214B214B214B214B863A
+      5A369D3E9D3EBD425A368361207A207A836100000C23080F070B260326032603
+      26032603260326032603E602C50244020000DE7B420808215B6BE81C42089C73
+      DE4FFF2B00540054EF7D005C005CFF2BFF2F0000000000000000000000000000
+      000000000060006000600060006000600060863A024B024B024B024B024B863A
+      5A367C3E7C3E7C3E5A36A365E075E075A3650000290F280B2603260326032603
+      260344024402260326032603E602C5020000DE7BBD77630C08213A67E71C630C
+      DE4F00580054CE7900600060FF23FF2BFF2F0000000000000000000000000000
+      000000600060006000600060006000600000A53E214F214F214F214F214FA53E
+      5B36BD42BD42BD425A36A369207A407AA3692913291326032603260326032603
+      FF7FFF7F44022603260326032603C602C502DE7BBD779C73630C08211963C718
+      422800588C7900680064FF1FFF23FF3FDE530000000000000000000000000000
+      006000600060006000600060006000000000C53E415341534153414F4153C53E
+      5B36BD42BD42BD425B36C3690B7F0B7FC46D2913270726032603260326032603
+      FF7FFF7F440226032603260326030603E602DE7BBD779C739C738410E71C6C61
+      00442975006C0068FF17FF4BDE7BDE7BBD770000000000000000000000000000
+      006000600060006000600060000000000000C54261536153415361534153C542
+      5B36BD42BD42BD425B3602760276027602764A17260326032603260344024402
+      FF7FFF7F440244024402440226032603C602FF7FBD779C739C737B6F84100058
+      317E0054633CFF47DE7BDE7BDE7BDE7BBD77000000008C318C318C318C318C31
+      006000600060006000600000000000000000C44261536153615361536153C542
+      5B3ADD42DD42DD425B3600000000000000004B1B260326032603FF7FFF7FFF7F
+      FF7FFF7FFF7FFF7FFF7F440226032603C606FF7FFF7FFF7FFF7FFF7F8410CE4D
+      2160CD69841021042104210421042104BD7700008C318C318C318C318C318C31
+      635400600060006000000000000000000000E44261536157615361576153E442
+      5B3ADD46DD46DE465B3A00000000000000004B1B260326032603FF7FFF7FFF7F
+      FF7FFF7FFF7FFF7FFF7F260326032603E606FF7FFF7FFF7FFF7F8410B556C618
+      C618E71CF75E186339673967734EA514630C8C318C318C318C318C318C318C31
+      8C318C310000000000000000000000000000E44661576157625761576157E446
+      5B3ADE46DD46DD465B3A00000000000000004B1B260326032603260326032603
+      FF7FFF7F440226032603260326032603E706FF7FFF7FFF7F8410D65AE71C9C73
+      E71CE71C1863F75E3967AD357B6FB556A5148C318C318C318C318C318C318C31
+      8C318C310000000000000000000000000000E44681578257825781578157E446
+      5B3A3E573E533E575B3A00000000000000004A17280B26032603260326032603
+      FF7FFF7F4402260326032603260306070707FF7FFF7F8410186329257B6F5A6B
+      F75E082139673967C6180000AD359C73E71C8C318C318C3100008C318C318C31
+      8C318C3100000000000000000000000000000447825781578257815781570447
+      BE42BE42BE42BE42BE4200000000000000004B1B4B1B26032603260326032603
+      FF7FFF7F26032603260326032603070BE70A0000841039676B2D39675A6BF75E
+      D65A2925596BAD350000FF7F0821292529258C318C310000000000008C318C31
+      8C318C310000000000000000000000000000044B825B825B825B825B825B044B
+      2A3D9F3EBE42BE42BE42000000000000000000004B1749132603260326032603
+      260326032603260326032603070B080B00000000BD778C31F75E18633967D65A
+      D65A2925D65A7B6FE61C0000396729254A2900000000000000008C318C318C31
+      8C318C310000000000000000000000000000044B825B825B825B825B825B034B
+      1939443D403D413D413D00000000000000000000913B4B1B4913260326032603
+      26032603260326032603280B080FEB1A0000E71C4A294A29B556B556B556B556
+      B5564A298C31F75E9C73420800001863B5560000000000008C318C318C318C31
+      8C3100000000000000000000000000000000034BFE7BF26FF26FF26FFE7B034B
+      FE34F9342539403D413D00000000000000000000000000004B174B1B280B2603
+      26032603260327072913290F000000000000B556B556B556B556B556B556B556
+      B556B5564A294A294A294A290000FF7FB5560000000000008C318C318C318C31
+      0000000000000000000000000000000000004553455345534553455345534553
+      DC34DE34F534403D413D000000000000000000000000000000004A174B174B1B
+      4B1B4B1B4A172913290F00000000000000000000000000000000000000000000
+      0000000000000000000000000000000000001000100010001000100010001000
+      1000100010001000100010001000100010000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000001042000000000000000000000000
+      0000000000000000000000000000000000001863FF7FFF7FFF7FFF7FFF7FFF7F
+      FF7FFF7FFF7FFF7FFF7FFF7FFF7FFF7F10000000000000000000000000000000
+      000000000000000000000000000000000000000000000821524A420800000000
+      000000000000000000000008211C00080000104200000000FF7FFF7F00000000
+      000000000000000010421042FF7F000000001863FF7FFF7F0000FF7FFF7F0000
+      0000FF7FFF7F0000FF7F0000FF7FFF7F10000000000000001042186300000000
+      00000000000000000000000000000000000000000000AD350000000042080000
+      00000000000000000008423C63484230000C10420000FF7FFF7F0040FF7F0000
+      0000000010421042000000000000FF7F00001863FF7FFF7F0000FF7FFF7F0000
+      0000FF7FFF7F0000FF7FFF7FFF7FFF7F10000000104200000000104218630000
+      00000000000000000000000000000000000000000000630C00000000AD350000
+      0000000000000004423CA56021304240422810420000FF7F007C007C007C0000
+      0000000010420000000000000000FF7F00001863FF7FFF7FFF7FFF7FFF7FFF7F
+      FF7FFF7FFF7FFF7FFF7FFF7FFF7FFF7F100000001042000000000000FF7F0000
+      0000000000000000000000000000000000000000000000002104E71C0000AD35
+      0000000000084238E768296D21486338000C104200000000FF7F004000000000
+      000000001042FF7FFF7FFF7FFF7F00000000186310001F00100210021F001002
+      10021F00100210021F0010021002FF7F10000000104218630000186318631042
+      00000000000000000000000000000000000000000000000000000000E71C0000
+      AD310000011CA658296D42446334210C00001042000000000000000000000000
+      00000000104200000000FF7FFF7F00000000186310001F00100210021F001002
+      10021F00100210021F0010021002FF7F1000000000001042FF7FFF7F18631863
+      104200000000000000000000000000000000000000000000000021040000C618
+      00006941E054A6582238632C0000000000000000000000000000000000000000
+      000000001042000000000000FF7F00000000186310001F001F001F001F001F00
+      1F001F001F001F001F001F001F00FF7F100000000000000000000000FF7F1863
+      1863104200000000000000000000000000000000000000004208292500000000
+      E5348079037E0059201000000000000000000000000010420000104210420000
+      104210420000000000000000FF7F00000000186310001F00100210021F00FF7F
+      FF7F1F00100210021F0010021002FF7F1000000000000000000000000000FF7F
+      18631863104200000000000000000000000000000000210429259452AD35CE35
+      0345217E267F037E205500080000000000000000000000001042000000001042
+      000000000000000018630000000000000000186310001F001002FF7F1F00FF7F
+      10021F0010021002FF7F10021002FF7F10000000000000000000000000000000
+      FF7F1863186310420000000000000000000000002104524A39675A6B94521042
+      3246A040427E267F037E2059000400000000000000000000000000000000FF7F
+      1F001F00E07F1F0000000000FF7F00000000186310001F001F001F001F001F00
+      1F001F001F001F001F001F001F00FF7F10000000000000000000000000000000
+      0000FF7F1863186318631863000000000000000029253967EF3D524A39677B6F
+      944E0000C040427E267F037E205520080000000000000000000000000000FF7F
+      E07FE07FE07FE07F00000000FF7F00000000186310001F0010021002FF7F1002
+      10021F00100210021F0010021002FF7F10000000000000000000000000000000
+      00000000FF7F1863000010421863000000002104C618630C000008219C730000
+      AD3500000000C044427E267FE27D00550004000000000000000000000000FF7F
+      1F001F001F001F0000000000FF7F00000000186310001F0010021002FF7F1002
+      10021F00100210021F0010021002FF7F10000000000000000000000000000000
+      00000000FF7F00000000000010420000000000000000000084101042FF7FBD77
+      0821000000000000C044847E447E816D0004000000000000000000000000FF7F
+      FF7FFF7FFF7FFF7FFF7F0000FF7F00000000186310001F001F001F001F001F00
+      1F001F001F001F001F001F001F00FF7F10000000000000000000000000000000
+      00000000104218630000000000000000000000000000C618734E9C73BD77524A
+      4208000000000000000001458265C03400000000000000000000000000000000
+      FF7FFF7FFF7FFF7FFF7FFF7FFF7F000000001863100010001000100010001000
+      1000100010001000100010001000FF7F10000000000000000000000000000000
+      000000000000104210421042000000000000000000008410CE391042EF3DC618
+      000000000000000000000004000C000000000000000000000000000000000000
+      000000000000000000000000000000000000FF7F000000000000000000000000
+      0000000000000000000000000000000010000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000186318630000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000004200000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000FF7FE07F0042000000000000000000000000000000000000
+      000000000000FF7F186300001863000000000000000000000000000000000000
+      000000000000000000000000000000000000000000000042E07F004200000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000FF7FE07F0042000000000000000000000000000000000000
+      000000000000FF7F186300000000186318630000000000000000000000000000
+      000000000000000000000000000000000000000000000000FF7F004200000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000FF7FE07F0042000000000000000000000000000000000000
+      00000000FF7FFF7F10420000FF7F186300000000000000000000000000001042
+      FF7F000018630000000000000000000000000000000000000042004200000000
+      000000000000000000001F000000000000000000000000000000000000001042
+      0000000000000000FF7FE07F0042000000000000000000000000000000000000
+      00000000FF7FFF7F10420000FF7F000000000040004000000000FF7F1042FF7F
+      1042FF7F0000186300000000000000000000000000000000FF7F004200000000
+      1042000010421F001F0010421042104200000000000000000000186310421042
+      0000104200000000FF7FE07F0042000000000000000000000000000000000000
+      00000000FF7F104210420000FF7F00000000004000400000FF7F1042FF7F1042
+      18631863FF7F000018630000000000000000000000000000004200420000FF7F
+      E07FFF7FFF7F004200420042FF7F000000000000000018631042186310421042
+      0000104200000000FF7FE07F0042000000000000FF7F0000FF7F0000FF7F0000
+      00000000FF7FFF7F1042FF7FFF7F00000000004000400000FF7FFF7F1042FF7F
+      186310021863FF7F00001863000000000000000000000042E07F00420000FF7F
+      FF7FFF7F00421863186300421863104200000000104218631042186310421042
+      0000104200000000FF7FE07FE07F000000000000FF7F0000FF7F000010420000
+      000000001042FF7FFF7FFF7FFF7F00000000004000400000FF7FFF7F18630000
+      0000000000001863FF7F0000186300000000000000000000FF7F00420000FF7F
+      E07FFF7F0042004218630042FF7F104200000000104218631042186310421042
+      000010420000E07FE07FFF7FFF7FE07F00000000FF7F0000FF7F000010420000
+      FF7F00000000000000000000000000000000004000400000FF7FFF7FFF7FFF7F
+      FF7FFF7FFF7F00001042FF7F00001863000000000000FF7FE07FE07F0042FF7F
+      FF7FFF7FFF7F00420042FF7FFF7F000000000000104218631042186310421042
+      0000104200000000004200420042000000000000FF7F0000FF7F000010420000
+      00020000000000000000000000000000000000400040000010421042FF7FFF7F
+      FF7F104210421042FF7F10421863104200000000FF7FE07F10421042E07F0042
+      FF7F1F00FF7FE07FFF7F1F00E07F104200000000104218631042186310421042
+      0000104200000000000000000000000000000000FF7F0000FF7F000010420000
+      0002000000000000000000000000000000000040004000000000000010421042
+      104200001042FF7F104218631042000000000042E07FE07FE07FE07FE07FE07F
+      00001F00FF7FFF7F1F001F00E07F00000000000010421863104218631042FF7F
+      00001042000000000000FF7F0042000000000000FF7FFF7FFF7F000010420000
+      FF7F000000000000000000000000000000000000000000000000000000000000
+      0000000000001042000010420000000000000042E07FE07F1042FF7FE07FE07F
+      0000FF7FFF7FFF7FFF7FFF7FFF7F104200000000104218631042100218631863
+      1863FF7F000000000000FF7F00420000000000001042FF7F1042104210420000
+      007C000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000FF7FE07F10421042E07F0042
+      10421042104210421042104200001042000000001042FF7F1863FF7F1002FF7F
+      10420000000000000000FF7F0042000000000000104210421042FF7F1042FF7F
+      007C000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000000000000000000000000000FF7FFF7FFF7F00420000
+      00000000000000000000000000000000000000001042FF7F1863FF7F10420000
+      00000000000000000000FF7FE07F0000000000001042FF7F1042007CFF7FFF7F
+      007C000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000001042000000000000
+      00000000000000000042E07FFF7F004200000000000010421042104210421042
+      1042000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000FF7FFF7F00020002000200020000
+      0000FF7FFF7FFF7FFF7FFF7FFF7FFF7FFF7F596B596B596B596B1042596B596B
+      596B596B596B596B596B596B596B596B596B596B596B596B596B1042596B596B
+      596B596B596B596B596B596B596B596B596BF75EE003E003E003E003E003E003
+      E003E003E003E003E003E003E003E003007CFF7FFF7FFF7F0002000200020002
+      00000000FF7FFF7FFF7FFF7FFF7FFF7FFF7F596B596B596BFF031042596B0000
+      596B596B0000596B0000596B596B0000596B596B596B596BFF031042596B0000
+      596B596B0000596B0000596B596B0000596BF75EF75EE003E003E003E003E003
+      E003E003E003E003E003E003E003007C0000FF7FFF7FFF7F0002000200020002
+      000200020002000000000000FF7FFF7FFF7F596B596BFF031002596BFF7F0000
+      596B596B596B596B0000FF7F596B596B596B596B596BFF031002596BFF7F0000
+      596B596B596B596B0000FF7F596B596B596BF75EF75EE0030000E001E003E003
+      E003E003E003E003E003E003007CE0030000FF7FFF7F00020002000200020002
+      000200020002FF7F000200000000FF7FFF7F596BFF031002E003000000001002
+      1042596B0000596B0000596BFF7F596B596B596BFF031002E003000000001002
+      1042596B0000596B0000596BFF7F596B596BF75EF75EE003E0030000E001E003
+      E003E003E003E003E003007CE003E0030000FF7F0002000200020002FF7FFF7F
+      FF7F000200020002FF7F00020000FF7FFF7FFF031002E003E003E003E003E003
+      FF031042596B596B596B00000000596B596BFF031002E003E003E003E003E003
+      FF031042596B596B596B00000000596B596BF75EF75EE0030000E001E001E001
+      E001E001E001E003007CE003E003E0030000FF7F000200020002FF7FFF7FFF7F
+      FF7F000200020002FF7F00020000FF7FFF7F596BFF03E003E003E003E003E003
+      E003FF031042596B596B596B596B596B596B596BFF03E003E003E003E003E003
+      E003FF031042596B596B596B596B596B596BF75EF75EE0030000E001E001E001
+      E001E001E001007CE003E003E003E0030000FF7FFF7FFF7FFF7FFF7FFF7FFF7F
+      FF7F000200020002FF7F00000000FF7FFF7F00001002FF03E003E0031002E003
+      1002E003FF031042596B0000596B0000596B00001002FF03E003E0031002E003
+      1002E003FF031042596B0000596B0000596BF75EF75EE003E003000000000000
+      00000000007CE001F75EE003E003E0030000FF7FFF7FFF7FFF7FFF7F00020002
+      000200020002000200020000FF7FFF7FFF7F0000E003596BFF03E00310021002
+      E003E003E003FF0310420000596B0000596B0000E003596BFF03E00310021002
+      E003E003E003FF0310420000596B0000596BF75EF75EE003E003E003E003E003
+      E003007C0000E001E001E003E003E0030000FF7FFF7FFF7FFF7F0002FF7F0002
+      00020002000200000000FF7FFF7FFF7FFF7F596B000010021002FF03E0031002
+      1002E003E003E003FF031042596B596B596B596B000010021002FF03E0031002
+      1002E003E003E003FF031042596B596B596BF75EF75EE003E003E003E003E001
+      007CE001E001E001E001E003E003E0030000FF7FFF7FFF7F0002FF7F00020002
+      000200000000FF7FFF7F000000000000FF7F596B596B00001002596BFF03E003
+      E003E0031002E0031002FF031042596B596B596B596B00001002596BFF03E003
+      E003E0031002E0031002FF031042596B596BF75EF75EE003E003E0030000007C
+      E001E001E001E001E003E003E003E0030000FF7FFF7FFF7FFF7FFF7F00020000
+      0000FF7FFF7FFF7F0002000200020000FF7F596B596B596B00001002596BFF03
+      E003E003E0031002FF031042596B596B596B596B596B596B00001002596BFF03
+      E003E003E0031002FF031042596B596B596BF75EF75EE003E003E003007CE001
+      E001E003E003E003E003E003E003E0030000FF7FFF7FFF7FFF7FFF7F00020000
+      0000FF7FFF7F00020002000200020000FF7F596BE07FE07F596B00001002596B
+      FF0310021002FF03100200001042596B596B596BE07FE07F596B00001002596B
+      FF0310021002FF03100200001042596B596BF75EF75EE003E003007CE0030000
+      E001E001E001E001E001E001E003E0030000FF7FFF7FFF7F0002000200020002
+      00020002000200020002000200000000FF7F0000E07FE07F0000596B00001002
+      1002FF03FF03100210020000596B596B596B0000E07FE07F0000596B00001002
+      1002FF03FF03100210020000596B596B596BF75EF75EE003007CE003E003E003
+      EF3D00000000000000000000E003E0030000FF7FFF7FFF7FFF7FFF7F00020002
+      0002000200020002000200000000FF7FFF7F596BE07FE07F596B596B596B0000
+      1002596B100210020000596B596B596B596B596BE07FE07F596B596B596B0000
+      1002596B100210020000596B596B596B596BF75EF75E007CFF7FFF7FFF7FFF7F
+      FF7FFF7FFF7F0000E001FF7FFF7FE0030000FF7FFF7FFF7FFF7FFF7FFF7FFF7F
+      FF7F00020002000200000000FF7FFF7FFF7F596B596B596B0000596B0000596B
+      0000E00310020000596B596B596B596B596B596B596B596B0000596B0000596B
+      0000E00310020000596B596B596B596B596BF75E007CFF7FFF7FFF7FFF7FFF7F
+      FF7FFF7FFF7FFF7F0000E001FF7FE0030000FF7FFF7FFF7FFF7FFF7FFF7FFF7F
+      FF7FFF7F00020002000200000000FF7FFF7F596B596B596B0000596B0000596B
+      596B00000000596B596B596B596B596B596B596B596B596B0000596B0000596B
+      596B00000000596B596B596B596B596B596B007C000000000000000000000000
+      000000000000000000000000000000000000000000000000000000009D73B956
+      574A3742574AD95A5C6BBE73BE77000000000000000000001042000000001042
+      0000104200000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000000000000000000000000000000000000000D631FF73
+      FF7F3D57BE77FF7FFF7FFA5A9E6B3C5F3742000000000000186310420000FF7F
+      104218630000000010421042000000000000000000000000FF7FFF7FFF7FFF7F
+      FF7FFF7FFF7FFF7FFF7FFF7F0000000000000000000000000000E07FFF7FE07F
+      FF7FE07FFF7FE07FFF7FE07FFF7FE07F000000000000000000000000F635BF6B
+      FF7BFC4E7D67DF73B24500746F45FF7FDA5A104200001042FF7F186318631863
+      FF7F10421863FF7FFF7FFF7F00001042000000001042FF7FFF7FFF7FFF7FFF7F
+      FF7FFF7FFF7FFF7FFF7FFF7F0000000000000000000000000000E07FFF7FE07F
+      FF7FE07FFF7FE07FFF7FE07FFF7FE07F000000000000000000000000F635DF6F
+      FF7B1C531D577F5F78420074EB40FF73DA5600001042FF7F1042000018631863
+      1863FF7F10421863FF7FFF7FFF7FFF7F000000001042FF7FFF7FFF7FFF7FFF7F
+      FF7FFF7FFF7FFF7FFF7FFF7F0000000000000000000000000000E07FFF7FE07F
+      FF7FE07FFF7FE07FFF7FE07FFF7FE07F00000000000000009B6BB13AB3297329
+      CF18373AF735B431383A5932DC4A1D53BA4E0000186318630000186318631863
+      18631863FF7F1042186318631863FF7F000000001042FF7FFF7FFF7FFF7FFF7F
+      FF7FFF7FFF7FFF7FFF7FFF7F0000000000000000000000000000E07FFF7FE07F
+      FF7FE07FFF7FE07FFF7FE07FFF7FE07F0000385BB0329653F963F867D42D3C5F
+      DA5A3C53DF73DF77BF739F6B9F673742794A00000000FF7F1863FF7F18631863
+      18631863186300401042186318630000000000001042FF7FFF7FFF7FFF7FFF7F
+      FF7FFF7FFF7FFF7FFF7FFF7F0000000000000000000000000000E07FFF7FE07F
+      FF7FE07FFF7FE07FFF7FE07FFF7FE07F00005347D75FD85FF863B657D329DF77
+      7D6FFB4E9F6FBE77DF7BFF7FFF7FFF7FFA5E0000FF7F0000FF7F1863FF7F1863
+      18631863186300401042104218630000000000001042FF7FFF7FFF7FFF7FFF7F
+      FF7FFF7FFF7FFF7FFF7FFF7F0000000000000000000000000000E07FFF7FE07F
+      FF7FE07FFF7FE07FFF7FE07FFF7FE07F00008E2A96573347744F96577147F435
+      31218F0C121DD6295B3E583EFC523D5B98520000FF7FFF7F00001863FF7FFF7F
+      00000040186318631863FF7F10420000000000001042FF7FFF7FFF7FFF7FFF7F
+      FF7FFF7FFF7FFF7FFF7FFF7F0000000000001040104010401040104010401040
+      1040186310421863FF7FE07FFF7FE07F0000B13A544B5347544B534BFA6B313F
+      F65BB34FB65F90427146544E9D73DF7B00000000FF7FFF7FFF7F000000000040
+      004010421863186318631863FF7F0000000000001042FF7FFF7FFF7FFF7FFF7F
+      FF7FFF7FFF7FFF7FFF7FFF7F0000000000001040FF7FFF7FFF7FFF7FFF7FFF7F
+      10400002100010001042E07FFF7FE07F0000BD73AF2EAF329553F9671243F867
+      944F3247F13AD03A7B6FDE7B000000000000FF7FFF7F1863FF7FFF7F0000007C
+      1042FF7F18631863186318631863FF7F000000001042FF7FFF7FFF7FFF7FFF7F
+      FF7FFF7FFF7FFF7FFF7FFF7F000000000000104010400040FF7FFF7FFF7FFF7F
+      104000021000E0030002E07FFF7FE07F00000000E80D754FB75BD75FCF32F867
+      9553F13A113F8F2E00000000000000000000FF7F1F00FF7FFF7FFF7FFF7F0000
+      FF7FFF7FFF7FFF7F186318631863FF7F000000001042FF7FFF7FFF7FFF7FFF7F
+      FF7FFF7FFF7FFF7FFF7FFF7F0000000000001040FF7F1040FF7F10401040FF7F
+      10401F001F0010000002E07FFF7FE07F00000000FF7F123F96578E2AD75FD75B
+      D75BD75B3243BC7300000000000000000000FF7F1F001F001F00FF7FFF7FFF7F
+      0000FF7FFF7F1863FF7F186318630000000000001042FF7FFF7FFF7FFF7F0000
+      1863FF7FFF7FFF7FFF7FFF7F0000000000001040FF7F104010401040FF7FFF7F
+      1040E00300021F001000E07FFF7FE07F000000000000BC6FF13A8E2AB65B954F
+      8E2A95576C22000000000000000000000000FF7F1F001F001F00FF7F1863FF7F
+      FF7F0000FF7FFF7FFF7FFF7F00000000000000001042FF7FFF7FFF7FFF7F1863
+      0000FF7FFF7FFF7FFF7F18630000000000001040FF7FFF7F104010401040FF7F
+      10401042E0030002FF7FE07FFF7FE07F00000000000000003757AF32744F9553
+      744F3243154F000000000000000000000000FF7FFF7F1F001F00FF7F00001042
+      FF7FFF7F0000FF7FFF7F186300000000000000001042FF7FFF7FFF7F0000FF7F
+      1863FF7FFF7FFF7F186300000000000000001040FF7FFF7F104010401040FF7F
+      1040E07FFF7FE07FFF7F1042FF7F104200000000000000000000B13679636D26
+      F13A6D2600000000000000000000000000000000000000000000FF7FFF7FFF7F
+      FF7F0000FF7F00000000000000000000000000001042FF7F1042104210420000
+      1042104210421042000000000000000000001040104010401040104010401040
+      1040E07FFF7FE07FFF7F10421042000000000000000000000000000000000000
+      9A674E2A00000000000000000000000000000000000000000000000000000000
+      00000000FF7FFF7F000000000000000000000000104210421042000010421042
+      1042104200000000000000000000000000000000000000000000E07FFF7FE07F
+      FF7FE07FFF7FE07FFF7F10420000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000010421042104210420000
+      0000000000001042000000000000000000000000000000000000000000000000
+      000000008C310821000000000000000000000000000000000000000054535453
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000001042104210420000
+      0000000000001042104200000000000000000000000000000000000000000000
+      0000E71C082108210000000000000000000000000000000054535453B967BA6B
+      5453DE7700000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000007C005C0000000010421042
+      0000007C005C0000104210421042000000000000000000000000000000008410
+      E71C00000821082100000000000000000000000000005453975FFC73975FFC73
+      DA67545310420000000000000000000000000000000000000000E07FFF7FFF7F
+      FF7FE07FE07FE07F000000000000000000000000007C005C005C000000001042
+      007C005C005C000000001042000000000000000000000000000008218C310821
+      B5560000082110421042082100000000000000005453B75FFC73965B324B775F
+      FC73DA671042C276AC7F00000000000000000000000000001042E07FFF7FFF7F
+      FF7FE07FE07FE07FFF7F00000000000000000000007C005C005C005C0000007C
+      005C005C005C005C000000000000000000000000000000008410AD35B5560000
+      00000000B556AD35082110428C31000000005453D75FFC73965B324B9863324B
+      975BFC731042636E8472667F000000000000000000000000E07FFF7FE07FE07F
+      E07FFF7FFF7FFF7FE07F000000000000000000000000005C005C005C005C005C
+      005C005C005C005C0000000000000000000000000000E71CBD77000000000000
+      0000000000000000BD776B2D10428C3100005453FC737557324BB863FD77FD77
+      324B975B1042EA76676E0D6B545300000000000000000000E07F0000E07FE07F
+      E07FFF7FFF7FFF7FE07F000000000000000000000000007C007C005C005C005C
+      005C005C005C00000000000000000000000000006B2D0000000000000000BD56
+      1F00BD5600000000000000006B2D1042082154539557324BFA6BFE7BFE7BFD77
+      FE73324B1042F97FEA766F73DA6B334F0000000000000000E07F000000000000
+      000000000000000000000000000000000000000000000000007C007C005C005C
+      005C005C00001042000000000000000000000821BD770000000000000000BD56
+      1F00BD560000000000000000BD77082110425453324BFA6BFD77D142124BFF7F
+      FF7F1042D67FFF7FF97F6F73B967DA6B534F00000000000010421042E07FE07F
+      E003FF0300000000000000000000000000000000000000000000007C005C005C
+      005C005C0000104210420000000000000000B556000000000000000000000000
+      FF3D000000000000000000000000AD351042324BFA6BFA6BFC73D967FC73FF7F
+      1042AF7FF67FFC7F00006F73FC73B96754530000000000000000000000000000
+      00000000FF030000000000000000000000000000000000000000007C005C005C
+      005C005C0000104210420000000000000000F75E000000000000000000000000
+      1F00BD5600000000000000000000EF3D10420000324B324BFB67FC73FF7F1042
+      867F8C7FB17FD67FF97F6F73BA6BFC7354530000000000000000000000000000
+      000000000000FF03E0030000000000000000000000000000007C005C005C007C
+      007C005C005C000010421042104200000000F75E0000000000000000BD56BD56
+      BD351F00FF5E0000000000000000EF3D8C31000000000000324B324B1042207F
+      427F697F6B7F8C7FB27FFE7B324BBA6B334F0000000000000000000000000000
+      000000000000E003FF03000000000000000000000000007C005C005C005C1042
+      007C007C005C000000001042104200000000CE3900000000000000001F001F00
+      BD771F001F0000000000000000004A2984100000000000000000B37F667F447F
+      207F407F8A7FFB7FFE7BBB67FE7B324B534F0000000000000000000000000000
+      00000000000000000000000000000000000000000000007C005C005C005C0000
+      0000007C007C005C0000000010421042000084103967000000000000DD18BD77
+      FF5E1F00DD18000000000000B556000000000000000000000000000000008F7F
+      457F6C77FB7F000000000000324B324B00000000000000000000000000000000
+      00000000000000000000000000000000000000000000005C005C005C005C0000
+      00000000007C005C005C0000104210420000000084107B6F00000000BD77FF3D
+      FF3DFF3DBD7700000000F75E0000000000000000000000000000000000000000
+      0000FF7F324BDC6FFE7B334F0000000000000000000000000000000000000000
+      00000000000000000000000000000000000000000000007C007C007C00000000
+      000000000000007C007C005C000000000000000000008410B556BD7700000000
+      000000000000BD77B55684100000000000000000000000000000000000000000
+      000000000000324B324B00000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000007C007C00000000000000000000000000000821CE39F75E
+      F75EF75ECE390821000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000010420000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000010420000
+      1042000000000000000000000000000000000000000000000000000000000000
+      00001863186310420000000000000000000000000000000000000000FF7FFF7F
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000001042186310421042
+      1863104200000000000000000000000000000000000000000000000000001863
+      10421863186310420000000000000000000000000000000000001042FF7FFF7F
+      FF7FFF7F00000000000000000000000000000000000000000000000000001042
+      0000000000000000000000000000000000000000104218631042FF7FFF7F1042
+      1042186318631042000000000000000000000000000000000000186310421863
+      1863104218631042000000000000000000000000000000000000FF7F17001700
+      FF7FFF7FFF7FFF7F000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000018631042FF7F10421863
+      FF7F104200001863186310420000000000000000000000000000186318631042
+      1863186318631042000000000000000000000000000000001042FF7FFF7FFF7F
+      1700FF7FFF7FFF7FFF7FFF7F0000000000000000104200000000000000001042
+      00000000000000000000E07FE07F0000000000000000FF7F10421863FF7FFF7F
+      FF7F104218631042000018630000000000000000000000000000104218631863
+      104218631863104200000000000000000000000000000000FF7FFF7FFF7F1042
+      FF7F104200001863186318630000186318630000104218630000000000000000
+      000000000000E07FE07FE07F000000000000000000001863FF7FFF7FFF7F1042
+      1863000018631042186310420000000000000000000000000000186310421863
+      186310421863104200000000000000000000000000001042FF7FFF7F1042FF7F
+      FF7FFF7FE07F1700FF7FFF7F0000000000000000000000001863000000000000
+      104210420000E07FE07F000000000000000000000000FF7FFF7F10421863FF7F
+      FF7F186310420000186310420000000000000000000000000000186318631042
+      18631863186310420000000000000000000000000000FF7FFF7FFF7F1042FF7F
+      FF7F1700FF7FFF7F1F0010420000000000000000000000001042FF7F00001042
+      E07FE07FE07FE07F000000000000000000000000000010421863FF7FFF7FFF7F
+      1042186310421863104200000000000000000000000000000000104218631863
+      10421863186310420000000000000000000000001042FF7FFF7F1042FF7FFF7F
+      1700FF7FFF7FFF7FFF7F1F0000000000000000000000000000000000FF7FE07F
+      E07FE07FE07F00000000000000000000000000000000FF7FFF7FFF7F10420000
+      1863000010421863104218630000000000000000000000000000186310421863
+      1863FF7F18631042000000000000000000000000FF7FFF7FFF7F1042FF7FFF7F
+      1700FF7F1700FF7FFF7F17001F000000000000000000000000000000FF7F1042
+      10420000E07F00000000000000000000000000000000FF7F1042000018630000
+      007C18631863000010421863000000000000000000000000000018631863FF7F
+      FF03FF0318631042000000000000000000001042FF7F0000FF7FFF7FFF7F1700
+      FF7FFF7FFF7FFF7F00000000FF7F1F000000000000000000000000001042FF7F
+      1042E07F000000000000000000000000000000000000000018630000007CE07F
+      007C1863186318631863000000000000000000000000000000001863FF03FF03
+      FF03FF031863104200000000000000000000FF7FFF7FFF7F00000000FF7FFF7F
+      FF7F1700FF7F0000000000000000FF7F17000000000000000000000000000000
+      000000000000000000000000000000000000000000001042007CE07F007C1042
+      18631042186318631863104200000000000000000000000000001863FF03FF03
+      10421863FF7F10420000000000000000000000001042FF7FFF7FFF7F00000000
+      FF7FFF7FFF7F0000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000000000000000007C104218631863
+      FF7F186318631042000000000000000000000000000000000000186310421863
+      FF7F186318631042000000000000000000000000000000001042FF7FFF7FFF7F
+      FF7FFF7F00000000000000000000000000000000000000000000000000000000
+      0000000018630000000000000000000000000000000000000000000000001042
+      FF7F0000000000000000000000000000000000000000000000001863FF7F1863
+      186310420000000000000000000000000000000000000000000000001042FF7F
+      FF7FFF7F00000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      FF7FE07FE07F00000000000000000000000000000000000000001042FF7F1042
+      0000000000000000000000000000000000000000000000000000000000000000
+      1042000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      FF7F104210420000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000001700FF7F000000000000000000000000000000000000000000000000
+      00000000000000000000000000000000FF7F0000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000170017001700FF7F000000000000000000000000000000000000FF7F0000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      1700170017001700FF7F0000000000000000000000000000000000000000FF7F
+      0000000000000000000000000000FF7F00000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000001700
+      17001700FF7F17001700FF7F000000000000000000000000000000000000FF7F
+      000000000000000000000000FF7F000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      1F000000000000000000000000000000000000000000FF7FFF7FFF7F17001700
+      1700FF7F0000000017001700FF7F000000000000000000000000000000000000
+      FF7F00000000000000000000FF7F000000000000000000001000104200000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      1F000000000000000000000000000000000000000000FF7F1042104210421700
+      FF7FFF7F0000000000001700FF7F000000000000000000000000000000000000
+      0000FF7F000000000000FF7F0000000000000000000010421000000000000000
+      0000000010001000100010001000000000000000000000000000000000000000
+      1F000000000000000000000000000000000000000000FF7FFF7FFF7FFF7FFF7F
+      FF7FFF7F00000000000000001700FF7F00000000000000000000000000000000
+      0000000000000000FF7F00000000000000000000000010000000000000000000
+      00000000000010001000100010000000000000000000000000001F001F001F00
+      1F001F001F001F000000000000000000000000000000FF7F1042104210421042
+      1042FF7F000000000000000000001700FF7F0000000000000000000000000000
+      000000000000FF7F000000000000000000000000000010000000000000000000
+      0000000000000000100010001000000000000000000000000000000000000000
+      1F000000000000000000000000000000000000000000FF7FFF7FFF7FFF7FFF7F
+      FF7FFF7F00000000000000000000000017000000000000000000000000000000
+      0000000000000000FF7F00000000000000000000000010000000000000000000
+      0000000000001000000010001000000000000000000000000000000000000000
+      1F000000000000000000000000000000000000000000FF7F1042104200000000
+      0000FF7F00000000000000000000000000000000000000000000000000000000
+      0000FF7F00000000FF7F00000000000000000000000010421000000000000000
+      0000100010000000000000001000000000000000000000000000000000000000
+      1F000000000000000000000000000000000000000000FF7FFF7FFF7FFF7F0000
+      0000000000000000000000000000000000000000000000000000000000000000
+      FF7F00000000000000000000FF7F000000000000000000001042100010001000
+      1000000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000000000000000000000000000FF7F1042104200000000
+      000000000000000000000000000000000000000000000000000000000000FF7F
+      0000000000000000000000000000FF7F00000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000000000000000000000000000FF7FFF7FFF7FFF7F0000
+      0000000000000000000000000000000000000000000000000000FF7F00000000
+      00000000000000000000000000000000FF7F0000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000424D3E000000000000003E000000
+      2800000040000000B00000000100010000000000800500000000000000000000
+      000000000000000000000000FFFFFF00FFFF000000000000FE3F000000000000
+      FC3F000000000000FC3F000000000000FC3F000000000000FC3F000000000000
+      F81F000000000000F00F000000000000E007000000000000C003000000000000
+      8001000000000000000100000000000000010000000000000001000000000000
+      00010000000000000001000000000000C003FFFFFFFFF81FC0038001F83FE007
+      C0038001E00FC003C0038001C0078001C0038001E0030441C0038001F7030800
+      C0038001FF830010C0038001FFC10010C0038001CFC10010C003800181C10000
+      C003800183C10020C003800180830181C003800180038081C003800180078003
+      C0038001F00FC007C003FFFFFC7FF00FF00FF00FF8FFF81FE007E007C003E007
+      80018001C003C00380018001C003C00300000000C003800100000000C0018181
+      00000000C00183C100000000C001830100000000C000811F00000000C000800F
+      00000000C001800700000000C000C00780018001C003E00780018001C007F00F
+      C003E007C00FFF1FF00FF00FC01FFF3FE000FFF1FFFFF00F0000FFE00000E007
+      0000FFC0000080010000FF80000080010000FF01000000000000FE0300000000
+      0000FE07000000000000C00F000F00000000801F000F00000000007F000F0000
+      0000007F000F00000000107F000F00000000387F000F80010000F07F000F8001
+      0000E0FF000FE0070000E1FF000FF00FFFFF0000FFFF83F000670000FFFF83E0
+      00030000E3FF99C0001D0000B1FF98800005000099FFE4000003000081FFF201
+      00010000C0FFE10780010000F87FC007C0030000FC3F8003E0030000FE078000
+      FC030000FF030000FC030000FF930280FC030000FF9BC0C0FC030000FF8FC0E0
+      FC030000FFC7C1F0FE037FFEFFFFFFFFFFFFFFFFFFC7FFFFE7FFFFC1FFC3FFFF
+      C3FFFFC1FF80FD7FE3F7FFC1DF81101FE397F8C1D783000FE001E04185830007
+      E001804181830003C001804101830001E0018041007F0000C0018063007F0001
+      8001807F007F188300018061007FFFD700018061007FFFFF800580E1007FFFFF
+      C3FF83E1807FFFFFFFFFEFE1C07FFFFF00000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000000000000000F803E07FE003F000F800C0078003F000
+      F80000018003F000F80000008003F000E00000018003F000000080018003F000
+      000080038003F000000000038003000000010003800300000007000180030000
+      801F000180030000801F000380030000C03F000380070000E03F0007800F0001
+      F07F800F801F0003FE7FFC1F807FF007FFFFC3DFFF9FF9FFFFFFC3CFFF1FE07F
+      C00F8103FC9FC03FC00F8007F087800FC00F8007E3830007C00FC00FCFE10003
+      C007C03FBC780001C007E01F3C780000C01FF00F7EFC0010F317F00F7E7C8000
+      FF87E003783CE000FFC7C003783CF000FF87C3013839FC39FFFFC3819833FF07
+      FFFFC7C7C7C7FFCFFFFFFFE7F01FFFFFFFBFFBFFFFFFFAFFFE0FF8FFFEFFE03F
+      F80FF03FFC7F800FF00FF00FDE73C003F00FE0038C63C003F00FE0008647C003
+      F00FC007E00FC003F00FC007E01FC003F00F8007F81FC003F00F8003F83FC003
+      F00F0019F83FC003F00F001CFBFFC007F00F803FFBFFE01FF01FE03FFDBFFC3F
+      F07FF87FFFFFFE1FF1FFFE7FFFFFFE1FFFFFFFFFFFFFFFFFFFFFFF9FFFFCFFFF
+      FFFFFF0FF3FFFFFFFFFFFE0FE1F9FFFFFC7F8007E1F3FFFFFC7F8023F0E3E7FF
+      FC7F8033F847CF83E00F8039FC0FDFC3E00F803CFE1FDFE3E00F803EFC0FDFD3
+      FC7F873FF84FCF3BFC7F803FE0E3E0FFFC7F857FC1F1FFFFFFFF80FFC7F8FFFF
+      FFFF81FFFFFFFFFFFFFFFFFFFFFFFFFF00000000000000000000000000000000
+      000000000000}
+  end
+  object ActionArcName: TPopupMenu
+    Images = ImageList
+    OwnerDraw = True
+    Left = 321
+    Top = 224
+    object MenuItem1: TMenuItem
+      Caption = 'Yatr'#305'm'
+    end
+    object MenuItem2: TMenuItem
+      Caption = #399'man'#601'tin  '#246'd'#601'nilm'#601'si ...'
+    end
+    object MenuItem3: TMenuItem
+      Caption = #399'man'#601'tin qism'#601'n '#246'd'#601'nilm'#601'si...'
+      Visible = False
+    end
+    object MenuItem4: TMenuItem
+      Caption = 'Kapitalla'#351'd'#305'rma ...'
+      Visible = False
+    end
+    object MenuItem5: TMenuItem
+      Caption = #399'man'#601'tin vaxts'#305'z  '#246'd'#601'nilm'#601'si  ...'
+      Visible = False
+    end
+    object MenuItem6: TMenuItem
+      Caption = 'Faizl'#601'rin  hesablanmas'#305'  ...'
+      Visible = False
+    end
+    object MenuItem7: TMenuItem
+      Caption = 'Prolonqasiya'
+      Visible = False
+    end
+    object MenuItem8: TMenuItem
+      Caption = #214'd'#601'm'#601' plan'#305
+    end
+  end
+  object EExport: TCMExcelExport
+    StyleColumnWidth = cwDefault
+    ColumnWidth = 0
+    FontTitles.Charset = RUSSIAN_CHARSET
+    FontTitles.Color = clWindowText
+    FontTitles.Height = -11
+    FontTitles.Name = 'Azl Sans Serif'
+    FontTitles.Style = []
+    OrientationTitles = 0
+    FontData.Charset = RUSSIAN_CHARSET
+    FontData.Color = clWindowText
+    FontData.Height = -11
+    FontData.Name = 'Azl Sans Serif'
+    FontData.Style = []
+    FontSummary.Charset = DEFAULT_CHARSET
+    FontSummary.Color = clWindowText
+    FontSummary.Height = -11
+    FontSummary.Name = 'MS Sans Serif'
+    FontSummary.Style = []
+    SummarySelection = ssNone
+    SummaryCalculation = scSUM
+    Left = 459
+    Top = 307
+  end
+  object ArcPopupMenu: TPopupMenu
+    Images = ImageList
+    OwnerDraw = True
+    Left = 376
+    Top = 288
+    object miContract: TMenuItem
+      Caption = 'M'#252'qavil'#601
+      ImageIndex = 14
+      Visible = False
+      object N16: TMenuItem
+        Caption = 'Yeni  ...'
+        ImageIndex = 0
+        ShortCut = 16462
+      end
+      object N14: TMenuItem
+        Caption = #214'd'#601'm'#601' plan'#305
+        Visible = False
+      end
+      object N17: TMenuItem
+        Caption = 'Redakt'#601' ...'
+        ImageIndex = 1
+        ShortCut = 16453
+      end
+      object N18: TMenuItem
+        Caption = 'Baglamaq  ...'
+        ImageIndex = 2
+        ShortCut = 119
+      end
+      object N19: TMenuItem
+        Caption = 'Hesablaman'#305' Dayand'#305'rmaq / Davam etdirm'#601'k ...'
+        ImageIndex = 7
+      end
+      object N20: TMenuItem
+        Caption = 'Yatr'#305'mlar'#305'n v'#601' y'#305#287#305'mlar'#305'n '#231'ap'#305'  ...'
+      end
+      object N21: TMenuItem
+        Caption = 'M'#252'qavil'#601' '#231'ap'#305
+      end
+    end
+    object N22: TMenuItem
+      Caption = #399'm'#601'liyyatlar'
+      ImageIndex = 23
+      Visible = False
+      object N23: TMenuItem
+        Caption = 'Yat'#305'r'#305'm ...'
+        ImageIndex = 16
+        ShortCut = 16452
+      end
+      object N25: TMenuItem
+        Caption = #399'man'#601'tin '#246'd'#601'nilm'#601'si ...'
+        ImageIndex = 17
+        ShortCut = 16461
+      end
+      object N24: TMenuItem
+        Caption = 'Kapitalla'#351'd'#305'rma ...'
+        ImageIndex = 11
+        ShortCut = 16468
+      end
+      object N26: TMenuItem
+        Caption = #399'man'#601'tin vaxts'#305'z  '#246'd'#601'nilm'#601'si  ...'
+        ImageIndex = 18
+        ShortCut = 16469
+        Visible = False
+      end
+      object N27: TMenuItem
+        Caption = 'Faizl'#601'rin hesablanmas'#305'  ...'
+        ImageIndex = 4
+        ShortCut = 16464
+      end
+      object N8: TMenuItem
+        Caption = 'Prolonqasiya'
+        ImageIndex = 25
+      end
+    end
+    object N28: TMenuItem
+      Caption = 'Yenil'#601'm'#601'k'
+      ImageIndex = 3
+    end
+    object N10: TMenuItem
+      Caption = 'Filter Paneli '
+      ShortCut = 16454
+    end
+    object N35: TMenuItem
+      Caption = 'Axtar'#305#351' Paneli'
+      ImageIndex = 8
+      ShortCut = 49235
+      OnClick = N35Click
+    end
+    object AccountLook: TMenuItem
+      Caption = 'Hesablara bax'#305#351
+    end
+  end
+end

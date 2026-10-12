@@ -1,0 +1,675 @@
+object AccDataModule: TAccDataModule
+  OldCreateOrder = False
+  Left = 192
+  Top = 107
+  Height = 542
+  Width = 776
+  object Branches: TOracleDataSet
+    Tag = 1
+    SQL.Strings = (
+      'select -1 as ID, '#39'Ѕцтцн филиаллар'#39' as name from Dual'
+      'Union All'
+      'select ID, name from filial '
+      'order by ID')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = False
+    Active = False
+    Left = 293
+    Top = 45
+    object BranchesID: TFloatField
+      FieldName = 'ID'
+    end
+    object BranchesNAME: TStringField
+      FieldName = 'NAME'
+      Size = 90
+    end
+  end
+  object BranchesData: TDataSource
+    DataSet = Branches
+    Left = 296
+    Top = 101
+  end
+  object Users: TOracleDataSet
+    Tag = 1
+    SQL.Strings = (
+      'select -1 as ID, '#39'Ѕцтцн истифад€чил€р'#39' as Name from Dual'
+      'Union All'
+      'select * from '
+      '('
+      'select ID, Name from user$'
+      'Order by name'
+      ')')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = False
+    Active = False
+    Left = 208
+    Top = 44
+    object UsersID: TFloatField
+      FieldName = 'ID'
+    end
+    object UsersNAME: TStringField
+      FieldName = 'NAME'
+      Size = 30
+    end
+  end
+  object UsersData: TDataSource
+    DataSet = Users
+    Left = 208
+    Top = 100
+  end
+  object Currency: TOracleDataSet
+    Tag = 1
+    SQL.Strings = (
+      'select -1 as Valute, '#39'Ѕцтцн валйуталар'#39' as Valu_Name from Dual'
+      'Union All'
+      'select Valute, Valu_Name from Avalute'
+      'Order by valute')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = False
+    Active = False
+    Left = 360
+    Top = 45
+    object CurrencyVALUTE: TFloatField
+      FieldName = 'VALUTE'
+    end
+    object CurrencyVALU_NAME: TStringField
+      FieldName = 'VALU_NAME'
+      Size = 25
+    end
+  end
+  object CurrencyData: TDataSource
+    DataSet = Currency
+    Left = 360
+    Top = 101
+  end
+  object AccFlags: TOracleDataSet
+    Tag = 1
+    SQL.Strings = (
+      'select '#39' '#39' as symbol, '#39'Ѕцтцн символлар'#39' as Name from Dual'
+      'Union All'
+      'SELECT symbol, symbol||'#39'     '#39'||description as name'
+      '  FROM account_flags')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = False
+    Active = False
+    Left = 432
+    Top = 47
+    object AccFlagsSYMBOL: TStringField
+      FieldName = 'SYMBOL'
+      Size = 1
+    end
+    object AccFlagsNAME: TStringField
+      FieldName = 'NAME'
+      Size = 70
+    end
+  end
+  object AccFlagsData: TDataSource
+    DataSet = AccFlags
+    Left = 432
+    Top = 101
+  end
+  object BalAcc: TOracleDataSet
+    Tag = 1
+    SQL.Strings = (
+      
+        'select '#39'Ѕцтцн баланс щесаблары'#39' as Bal_cn,'#39'Ѕцтцн баланс щесаблар' +
+        'ы'#39' as BalName from dual'
+      'Union All'
+      'select * from '
+      '('
+      'select to_char(bal_cn), BalName from bal_spr1'
+      'order by bal_cn'
+      ')')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = False
+    Active = False
+    Left = 504
+    Top = 49
+    object BalAccBAL_CN: TStringField
+      FieldName = 'BAL_CN'
+      Size = 40
+    end
+    object BalAccBALNAME: TStringField
+      FieldName = 'BALNAME'
+      Size = 181
+    end
+  end
+  object BalAccData: TDataSource
+    DataSet = BalAcc
+    Left = 512
+    Top = 101
+  end
+  object Account: TOracleDataSet
+    Tag = 1
+    SQL.Strings = (
+      'SELECT   '
+      
+        '   ACCOUNT.RowID, ID, kli_id, op_id, acc_no, val_acc, NAME, open' +
+        '_dat, close_dat,'
+      
+        '   DECODE (close_dat, NULL, 1, 2) AS status, bal_cn1, bal_cn2, b' +
+        'al_cn3,'
+      
+        '   bal_cn4, filial, sim_otcet, tipacc, LIMIT, old_acc_no, pair_a' +
+        'cc,'
+      '   insider'
+      'FROM ACCOUNT'
+      'ORDER BY '
+      '   :title')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    Variables.Data = {
+      0300000001000000060000003A5449544C4501000000070000006163635F6E6F
+      0000000000}
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = False
+    CountAllRecords = False
+    RefreshOptions = []
+    OnApplyRecord = AccountApplyRecord
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = False
+    Active = False
+    Left = 64
+    Top = 56
+    object AccountID: TFloatField
+      FieldName = 'ID'
+    end
+    object AccountKLI_ID: TFloatField
+      FieldName = 'KLI_ID'
+      Required = True
+    end
+    object AccountOP_ID: TFloatField
+      FieldName = 'OP_ID'
+    end
+    object AccountACC_NO: TStringField
+      DisplayLabel = 'ўесаб є'
+      FieldName = 'ACC_NO'
+      Required = True
+    end
+    object AccountVAL_ACC: TIntegerField
+      DisplayLabel = '$'
+      FieldName = 'VAL_ACC'
+      Required = True
+    end
+    object AccountNAME: TStringField
+      DisplayLabel = 'ўесабын ады'
+      FieldName = 'NAME'
+      Size = 90
+    end
+    object AccountOPEN_DAT: TDateTimeField
+      DisplayLabel = 'јчылма тарихи'
+      FieldName = 'OPEN_DAT'
+      Required = True
+    end
+    object AccountCLOSE_DAT: TDateTimeField
+      DisplayLabel = 'Ѕаьланма тарихи'
+      FieldName = 'CLOSE_DAT'
+    end
+    object AccountSTATUS: TFloatField
+      FieldName = 'STATUS'
+    end
+    object AccountBAL_CN1: TFloatField
+      DisplayLabel = 'Ѕаланс є'
+      FieldName = 'BAL_CN1'
+      Required = True
+    end
+    object AccountBAL_CN2: TFloatField
+      FieldName = 'BAL_CN2'
+    end
+    object AccountBAL_CN3: TFloatField
+      FieldName = 'BAL_CN3'
+    end
+    object AccountBAL_CN4: TFloatField
+      FieldName = 'BAL_CN4'
+    end
+    object AccountFILIAL: TIntegerField
+      FieldName = 'FILIAL'
+    end
+    object AccountSIM_OTCET: TFloatField
+      FieldName = 'SIM_OTCET'
+    end
+    object AccountTIPACC: TStringField
+      FieldName = 'TIPACC'
+    end
+    object AccountLIMIT: TFloatField
+      FieldName = 'LIMIT'
+    end
+    object AccountOLD_ACC_NO: TStringField
+      FieldName = 'OLD_ACC_NO'
+    end
+    object AccountPAIR_ACC: TFloatField
+      FieldName = 'PAIR_ACC'
+    end
+    object AccountINSIDER: TStringField
+      FieldName = 'INSIDER'
+      Size = 1
+    end
+  end
+  object AccountData: TDataSource
+    DataSet = Account
+    Left = 64
+    Top = 112
+  end
+  object Tenostat: TOracleDataSet
+    SQL.Strings = (
+      'select '
+      '  acc_id, ostat, pok_ostat '
+      'from '
+      '  tenostat '
+      'where acc_id=:acc_id')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    Variables.Data = {0300000001000000070000003A4143435F4944030000000000000000000000}
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    Master = Account
+    MasterFields = 'id'
+    DetailFields = 'acc_id'
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = False
+    Active = True
+    Left = 48
+    Top = 304
+    object TenostatOSTAT: TFloatField
+      FieldName = 'OSTAT'
+      DisplayFormat = '#,##0.00'
+    end
+    object TenostatPOK_OSTAT: TFloatField
+      FieldName = 'POK_OSTAT'
+      DisplayFormat = '#,##0.00'
+    end
+    object TenostatACC_ID: TFloatField
+      FieldName = 'ACC_ID'
+      Required = True
+    end
+  end
+  object DataTenostat: TDataSource
+    DataSet = Tenostat
+    Left = 48
+    Top = 360
+  end
+  object Lazyrest: TOracleDataSet
+    SQL.Strings = (
+      'select '
+      '  acc_id, ostat, pok_ostat '
+      'from '
+      '  lazyrest '
+      'where acc_id=:acc_id')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    Variables.Data = {0300000001000000070000003A4143435F4944030000000000000000000000}
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    Master = Account
+    MasterFields = 'ID'
+    DetailFields = 'acc_id'
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = False
+    Active = True
+    Left = 144
+    Top = 304
+    object LazyrestACC_ID: TFloatField
+      FieldName = 'ACC_ID'
+      Required = True
+    end
+    object LazyrestOSTAT: TFloatField
+      FieldName = 'OSTAT'
+      DisplayFormat = '#,##0.00'
+    end
+    object LazyrestPOK_OSTAT: TFloatField
+      FieldName = 'POK_OSTAT'
+      DisplayFormat = '#,##0.00'
+    end
+  end
+  object DataLazyrest: TDataSource
+    DataSet = Lazyrest
+    Left = 144
+    Top = 360
+  end
+  object SBOP: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    Debug = False
+    PackageName = 'SBOP'
+    ParameterMode = pmNamed
+    Cursor = crDefault
+    Optimize = True
+    Left = 488
+    Top = 240
+  end
+  object ReportSymbol: TOracleDataSet
+    Tag = 1
+    SQL.Strings = (
+      'select * from REPORT_SYMBOL')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = False
+    Active = False
+    Left = 496
+    Top = 328
+  end
+  object ReportSymbolData: TDataSource
+    DataSet = ReportSymbol
+    Left = 496
+    Top = 376
+  end
+  object CustomersData: TDataSource
+    DataSet = Customers
+    Left = 140
+    Top = 111
+  end
+  object Customers: TOracleDataSet
+    SQL.Strings = (
+      'select * from CUSTOMERS'
+      'where close_dat is null'
+      'order by ID')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = False
+    Active = False
+    AfterScroll = CustomersAfterScroll
+    Left = 140
+    Top = 58
+  end
+  object PairAccount: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      '  ID,'
+      '  acc_no,'
+      '  DECODE (close_dat, NULL, 1, 2) AS status'
+      'from'
+      '  Account'
+      'order by acc_no'
+      ' ')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = False
+    Active = False
+    BeforeOpen = PairAccountBeforeOpen
+    Left = 432
+    Top = 168
+  end
+  object PairAccountData: TDataSource
+    DataSet = PairAccount
+    Left = 432
+    Top = 216
+  end
+  object Sysdat: TOracleDataSet
+    Tag = 1
+    SQL.Strings = (
+      'Select tek_dat from sysdat')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = False
+    Active = False
+    Left = 384
+    Top = 304
+  end
+  object SBUTIL: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    Debug = False
+    PackageName = 'SBUTIL'
+    ParameterMode = pmNamed
+    Cursor = crDefault
+    Optimize = True
+    Left = 488
+    Top = 288
+  end
+end

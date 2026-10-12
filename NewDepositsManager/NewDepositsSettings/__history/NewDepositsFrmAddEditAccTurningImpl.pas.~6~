@@ -1,0 +1,86 @@
+unit NewDepositsFrmAddEditAccTurningImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, Mask, DBCtrlsEh, DBLookupEh, DBCtrls, DBGridEh, XFSCtrls, Buttons,
+  ExtCtrls;
+
+type
+  TNewDepositsFrmAddEditAccTurning = class(TForm)
+    XFPanel1: TXFPanel;
+    XFPanel2: TXFPanel;
+    XFPanel3: TXFPanel;
+    XFPanel4: TXFPanel;
+    XFPanel5: TXFPanel;
+    XFPanel6: TXFPanel;
+    XFStaticText1: TXFStaticText;
+    XFPanel7: TXFPanel;
+    XFPanel8: TXFPanel;
+    XFStaticText2: TXFStaticText;
+    XFPanel9: TXFPanel;
+    XFPanel10: TXFPanel;
+    XFStaticText3: TXFStaticText;
+    XFPanel11: TXFPanel;
+    EditAccno: TEdit;
+    XFButton: TXFSpeedButton;
+    XFButton1: TXFButton;
+    XFButton2: TXFButton;
+    DBCustType: TDBLookupComboBox;
+    DBAccountGroup: TDBLookupComboBox;
+    procedure FormCanResize(Sender: TObject; var NewWidth, NewHeight: Integer;
+      var Resize: Boolean);
+    procedure FormCreate(Sender: TObject);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure XFButton1Click(Sender: TObject);
+    procedure XFButton2Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  NewDepositsFrmAddEditAccTurning: TNewDepositsFrmAddEditAccTurning;
+
+implementation
+
+{$R *.dfm}
+     uses NewDepositsFrmAccountTurningImpl,SBTranslateProc,sboapiDataModuleimpl,
+  NewDepositsFormAccNameImpl;
+procedure TNewDepositsFrmAddEditAccTurning.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+   Resize := False;
+end;
+
+procedure TNewDepositsFrmAddEditAccTurning.FormCreate(Sender: TObject);
+begin
+  NewDepositsFormAccName:=TNewDepositsFormAccName.Create(Self);
+  SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TNewDepositsFrmAddEditAccTurning.FormKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+ if Ord(Key) = VK_ESCAPE then Close;
+end;
+
+procedure TNewDepositsFrmAddEditAccTurning.XFButton1Click(Sender: TObject);
+begin
+ with NewDepositsFrmAccountTurning do begin
+        settings.FieldByName('CurrencyID').AsInteger := valute.FieldByName('Valute').AsInteger;
+        settings.Post;
+    end;
+   Close;
+end;
+
+procedure TNewDepositsFrmAddEditAccTurning.XFButton2Click(Sender: TObject);
+begin
+  with NewDepositsFrmAccountTurning,settings do
+        Cancel;
+   Close;
+end;
+
+end.

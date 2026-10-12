@@ -1,0 +1,151 @@
+unit adm_classesGrants;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, LDialogs,
+  StdCtrls, CheckLst, Evanescence, ExtCtrls, Buttons;
+
+type
+  TfrmClassGrants = class(TForm)
+    GroupBox1: TGroupBox;
+    evAdvGrants: TEvanescence;
+    GroupBox2: TGroupBox;
+    cbIns: TCheckBox;
+    cbUpd: TCheckBox;
+    cbDel: TCheckBox;
+    Panel1: TPanel;
+    Button1: TButton;
+    Button2: TButton;
+    addBtn: TBitBtn;
+    edBtn: TBitBtn;
+    delBtn: TBitBtn;
+    procedure Button1Click(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+    procedure addBtnClick(Sender: TObject);
+    procedure edBtnClick(Sender: TObject);
+    procedure delBtnClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+  private
+    procedure RefreshCheckBox;
+  public
+    { Public declarations }
+  end;
+
+var
+  frmClassGrants: TfrmClassGrants;
+
+implementation
+
+uses AdministrationDataModule, adm_AdvGrantAddEditForm;
+
+{$R *.DFM}
+
+procedure TfrmClassGrants.Button1Click(Sender: TObject);
+begin
+  Close;
+end;
+
+procedure TfrmClassGrants.Button2Click(Sender: TObject);
+var
+  i: Integer;
+begin
+  with AdministrationData do begin
+    pcADM.CallProcedure('updclassgrant', [ClassesdataID.AsVariant,
+                                          ModeditdataCLASS.AsVariant,
+                                          Integer(cbIns.Checked),
+                                          Integer(cbUpd.Checked),
+                                          Integer(cbDel.Checked)
+                                          ]);        
+    pcADM.CallProcedure('delclassadvgrant',[Classesdata.FieldByName('obj').AsString]);
+    for i:=0 to evAdvGrants.Items.Count-1 do
+      if evAdvGrants.Checked[i] then begin
+        odsClsModAdvGrant.Locate('description', evAdvGrants.Items[i],[]);
+        pcADM.CallProcedure('addclassadvgrant',[Classesdata.FieldByName('obj').AsVariant,
+                                                odsClsModAdvGrantID.AsVariant]);         
+      end;
+  end;
+end;
+
+procedure TfrmClassGrants.RefreshCheckBox;
+var
+  i: Integer;
+begin
+  with AdministrationData, odsClsModAdvGrant, frmClassGrants do begin
+    evAdvGrants.Close;
+    odsClsModAdvGrant.Close;
+    ClearVariables;
+    SetVariable('mid', ModeditdataMODID.AsString);
+    SetVariable('classname', Classesdata.FieldByName('obj').AsString);
+    evAdvGrants.Open;
+
+    for i := 0 to evAdvGrants.Items.Count-1 do begin
+      Locate('description', evAdvGrants.Items[i],[]);
+      evAdvGrants.Checked[i] := odsClsModAdvGrantACC.AsInteger=1;
+    end;
+
+    cbIns.Enabled := ModeditdataCNI.AsInteger = 1;
+    cbUpd.Enabled := ModeditdataCNU.AsInteger = 1;
+    cbDel.Enabled := ModeditdataCND.AsInteger = 1;
+
+    cbIns.Checked := ModeditdataINS.AsInteger = 1;
+    cbUpd.Checked := ModeditdataUPD.AsInteger = 1;
+    cbDel.Checked := ModeditdataDEL.AsInteger = 1;
+
+  end;
+end;
+
+procedure TfrmClassGrants.addBtnClick(Sender: TObject);
+begin
+  with frmAddEditAdvGrants, AdministrationData do begin
+    NewRecord := True;  
+    edGrantName.Enabled := True;
+    edGrantName.Text := '';
+    edErrorMessage.Text := '';
+    edDescription.Text := '';
+    CheckBox1.Checked := False;
+    CurrencyEdit1.Value := 0;
+    frmAddEditAdvGrants.ShowModal;
+    ModAdvancedGrantsData.Close;
+    ModAdvancedGrantsData.Open;
+    RefreshCheckBox;
+  end;
+end;
+
+procedure TfrmClassGrants.edBtnClick(Sender: TObject);
+begin
+  with frmAddEditAdvGrants, AdministrationData do begin
+    NewRecord := False;
+    edGrantName.Enabled := False;
+    ModAdvancedGrantsData.Locate('Description',evAdvGrants.Items[evAdvGrants.ItemIndex],[]);
+    edGrantName.Text := ModAdvancedGrantsDataGRANTNAME.Value;
+    edErrorMessage.Text := ModAdvancedGrantsDataERRORMESSAGE.Value;
+    edDescription.Text := ModAdvancedGrantsDataDESCRIPTION.Value;  
+    CheckBox1.Checked := ModAdvancedGrantsDataHAVVALUE.AsInteger=1;
+    CurrencyEdit1.Value := ModAdvancedGrantsDataMAXAVALUE.Value;
+    frmAddEditAdvGrants.ShowModal;   
+    ModAdvancedGrantsData.Close;
+    ModAdvancedGrantsData.Open;
+    RefreshCheckBox;
+  end;
+end;
+
+procedure TfrmClassGrants.FormCreate(Sender: TObject);
+begin
+  frmAddEditAdvGrants := TfrmAddEditAdvGrants.Create(Self);
+end;
+
+procedure TfrmClassGrants.delBtnClick(Sender: TObject);
+begin
+  with AdministrationData do begin
+    ModAdvancedGrantsData.Locate('Description',evAdvGrants.Items[evAdvGrants.ItemIndex],[]);
+    if messagedlg('ўцгуг л€ьв олунажаг. яминсиниз?', mtWarning, [mbyes, mbno], 0)= idyes then
+      pcADM.CallProcedure('deladvancedgrant', [ModAdvancedGrantsDataID.Value]);
+    ModAdvancedGrantsData.Close;
+    ModAdvancedGrantsData.Open;
+    RefreshCheckBox;
+  end;
+end;
+
+
+end.

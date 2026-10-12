@@ -1,0 +1,239 @@
+object FormOperationShow1: TFormOperationShow1
+  Left = 0
+  Top = 0
+  BorderIcons = [biSystemMenu]
+  Caption = #399'm'#601'liyyatlara Bax'
+  ClientHeight = 268
+  ClientWidth = 753
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poDesktopCenter
+  OnCanResize = FormCanResize
+  OnCreate = FormCreate
+  OnKeyPress = FormKeyPress
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object XFPanel1: TXFPanel
+    Left = 0
+    Top = 227
+    Width = 753
+    Height = 41
+    Align = alBottom
+    BevelInner = bvLowered
+    BevelKind = bkFlat
+    BevelOuter = bvLowered
+    TabOrder = 0
+    object XFBitBtn1: TXFBitBtn
+      Left = 570
+      Top = 7
+      Width = 75
+      Height = 25
+      Caption = 'Ba'#287'la'
+      DoubleBuffered = True
+      ParentDoubleBuffered = False
+      TabOrder = 0
+      OnClick = XFBitBtn1Click
+    end
+  end
+  object XFPanel2: TXFPanel
+    Left = 0
+    Top = 143
+    Width = 753
+    Height = 84
+    Align = alBottom
+    BevelInner = bvLowered
+    BevelKind = bkFlat
+    BevelOuter = bvLowered
+    TabOrder = 1
+    object XFLabel2: TXFLabel
+      Left = 58
+      Top = 54
+      Width = 38
+      Height = 13
+      Caption = 'T'#601'yinat'#305
+    end
+    object XFLabel9: TXFLabel
+      Left = 192
+      Top = 23
+      Width = 49
+      Height = 13
+      Caption = 'Ekvivalent'
+    end
+    object XFLabel10: TXFLabel
+      Left = 406
+      Top = 23
+      Width = 31
+      Height = 13
+      Caption = 'Status'
+    end
+    object Edit2: TEdit
+      Left = 115
+      Top = 51
+      Width = 598
+      Height = 21
+      ReadOnly = True
+      TabOrder = 0
+    end
+    object Edit9: TEdit
+      Left = 257
+      Top = 20
+      Width = 113
+      Height = 21
+      ReadOnly = True
+      TabOrder = 1
+    end
+    object Edit10: TEdit
+      Left = 457
+      Top = 20
+      Width = 58
+      Height = 21
+      ReadOnly = True
+      TabOrder = 2
+    end
+  end
+  object XFPanel4: TXFPanel
+    Left = 376
+    Top = 47
+    Width = 377
+    Height = 96
+    Align = alRight
+    BevelInner = bvLowered
+    BevelKind = bkFlat
+    BevelOuter = bvLowered
+    TabOrder = 2
+    object XFLabel6: TXFLabel
+      Left = 5
+      Top = 19
+      Width = 67
+      Height = 13
+      Caption = 'Kredit valyuta'
+    end
+    object XFLabel5: TXFLabel
+      Left = 119
+      Top = 19
+      Width = 60
+      Height = 13
+      Caption = 'Kredit hesab'
+    end
+    object XFLabel8: TXFLabel
+      Left = 5
+      Top = 58
+      Width = 65
+      Height = 13
+      Caption = 'Kredit m'#601'bl'#601#287
+    end
+    object Edit6: TEdit
+      Left = 75
+      Top = 17
+      Width = 42
+      Height = 21
+      ReadOnly = True
+      TabOrder = 0
+    end
+    object Edit5: TEdit
+      Left = 181
+      Top = 17
+      Width = 190
+      Height = 21
+      ReadOnly = True
+      TabOrder = 1
+    end
+    object Edit8: TEdit
+      Left = 130
+      Top = 54
+      Width = 125
+      Height = 21
+      ReadOnly = True
+      TabOrder = 2
+    end
+  end
+  object XFPanel3: TXFPanel
+    Left = 0
+    Top = 47
+    Width = 371
+    Height = 96
+    Align = alLeft
+    BevelInner = bvLowered
+    BevelKind = bkFlat
+    BevelOuter = bvLowered
+    TabOrder = 3
+    object XFLabel3: TXFLabel
+      Left = 117
+      Top = 19
+      Width = 55
+      Height = 13
+      Caption = 'Debt hesab'
+    end
+    object XFLabel4: TXFLabel
+      Left = 6
+      Top = 19
+      Width = 62
+      Height = 13
+      Caption = 'Debt valyuta'
+    end
+    object XFLabel7: TXFLabel
+      Left = 6
+      Top = 58
+      Width = 60
+      Height = 13
+      Caption = 'Debt m'#601'bl'#601#287
+    end
+    object Edit3: TEdit
+      Left = 174
+      Top = 17
+      Width = 190
+      Height = 21
+      ReadOnly = True
+      TabOrder = 0
+    end
+    object Edit4: TEdit
+      Left = 71
+      Top = 17
+      Width = 42
+      Height = 21
+      ReadOnly = True
+      TabOrder = 1
+    end
+    object Edit7: TEdit
+      Left = 125
+      Top = 54
+      Width = 125
+      Height = 21
+      ReadOnly = True
+      TabOrder = 2
+    end
+  end
+  object XFPanel5: TXFPanel
+    Left = 0
+    Top = 0
+    Width = 753
+    Height = 47
+    Align = alTop
+    BevelInner = bvLowered
+    BevelKind = bkFlat
+    BevelOuter = bvLowered
+    TabOrder = 4
+    object XFLabel1: TXFLabel
+      Left = 258
+      Top = 15
+      Width = 70
+      Height = 13
+      Caption = #399'm'#601'liyyat'#305'n ID'
+    end
+    object Edit1: TEdit
+      Left = 349
+      Top = 12
+      Width = 87
+      Height = 21
+      ReadOnly = True
+      TabOrder = 0
+    end
+  end
+end

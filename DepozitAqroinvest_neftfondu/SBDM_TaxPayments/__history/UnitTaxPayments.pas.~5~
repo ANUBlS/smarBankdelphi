@@ -1,0 +1,119 @@
+unit UnitTaxPayments;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ExtCtrls, DB, OracleData, ImgList, CMExcelExport, Grids, XDBGrids,
+  ComCtrls, ToolWin;
+
+type
+  TFormTaxPayments = class(TForm)
+    Panel1: TPanel;
+    CoolBar1: TCoolBar;
+    ToolBar1: TToolBar;
+    ToolButton1: TToolButton;
+    XDBGrid1: TXDBGrid;
+    ExcelExport: TCMExcelExport;
+    ImageList1: TImageList;
+    DSTaxPayment: TDataSource;
+    ODSTaxPayment: TOracleDataSet;
+    ODSTaxPaymentID: TFloatField;
+    ODSTaxPaymentCUSTOMERID: TFloatField;
+    ODSTaxPaymentTAXAMOUNT: TFloatField;
+    ODSTaxPaymentTAXPAYAMOUNT: TFloatField;
+    ToolButton2: TToolButton;
+    ToolButton3: TToolButton;
+    ToolButton4: TToolButton;
+    ToolButton5: TToolButton;
+    ToolButton6: TToolButton;
+    ToolButton7: TToolButton;
+    ToolButton8: TToolButton;
+    ODSCustomers: TOracleDataSet;
+    ODSCustomersID: TIntegerField;
+    ODSCustomersOP_ID: TFloatField;
+    ODSCustomersOPEN_DAT: TDateTimeField;
+    ODSCustomersCLOSE_DAT: TDateTimeField;
+    ODSCustomersNEREZIDENT: TFloatField;
+    ODSCustomersPRINAD_KOD: TFloatField;
+    ODSCustomersNAME: TWideStringField;
+    ODSCustomersSHORT_NAME: TWideStringField;
+    ODSCustomersGROUP_KLIE: TFloatField;
+    ODSCustomersVID_SOB: TFloatField;
+    ODSCustomersORG_SOB: TFloatField;
+    ODSCustomersSFERA_DEY: TFloatField;
+    ODSCustomersOTRASL: TFloatField;
+    ODSCustomersNALOG_KOD: TFloatField;
+    ODSCustomersKOD_OKPRO: TWideStringField;
+    ODSCustomersINN: TWideStringField;
+    ODSCustomersDAT_NAL: TDateTimeField;
+    ODSCustomersDAT_USTAV: TDateTimeField;
+    ODSCustomersBIK: TWideStringField;
+    ODSCustomersOTV_LICO: TWideStringField;
+    ODSCustomersOTV_PASSPORT: TWideStringField;
+    ODSCustomersOTV_ISSUED: TWideStringField;
+    ODSCustomersOTV_ISDATE: TDateTimeField;
+    ODSCustomersOLD_INN: TFloatField;
+    ODSCustomersCUST_TYPE: TIntegerField;
+    ODSCustomersCATEGORY: TFloatField;
+    ODSCustomersINCORPORATION_NUMBER: TWideStringField;
+    ODSCustomersTPH_CONTACT_TYPE: TWideStringField;
+    ODSCustomersTPH_COMMUNICATION_TYPE: TWideStringField;
+    ODSCustomersTPH_NUMBER: TWideStringField;
+    ODSCustomersADDRESS_TYPE: TWideStringField;
+    ODSCustomersADDRESS: TWideStringField;
+    ODSCustomersCITY: TWideStringField;
+    ODSCustomersCOUNTRY_CODE: TWideStringField;
+    ODSCustomersDIRECTOR_ID: TFloatField;
+    ODSCustomersEMAIL: TWideStringField;
+    ODSCustomersURL: TWideStringField;
+    ODSCustomersINCORPORATION_STATE: TWideStringField;
+    ODSCustomersINCORPORATION_CNTR: TWideStringField;
+    ODSCustomersTPH_EXTENSION: TWideStringField;
+    ODSCustomersTPH_ZIP: TWideStringField;
+    ODSCustomersTPH_COUNTRY_PREFIX: TWideStringField;
+    ODSCustomersTPH_STATE: TWideStringField;
+    ODSCustomersRISK_CATEG: TFloatField;
+    ODSCustomersCUST_JUR: TIntegerField;
+    ODSCustomersCUST_PHYS: TIntegerField;
+    ODSCustomersCUST_FS: TIntegerField;
+    ODSCustomersRISKDESCID: TFloatField;
+    ODSCustomersSAMELYDATE: TDateTimeField;
+    ODSCustomersQUALITY_ID: TFloatField;
+    ODSCustomersCOMPANI: TFloatField;
+    ODSTaxPaymentCustName: TWideStringField;
+    ODSFields: TOracleDataSet;
+    procedure ToolButton2Click(Sender: TObject);
+    procedure ToolButton3Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormTaxPayments: TFormTaxPayments;
+
+implementation
+uses sboapiDataModuleImpl, UnitSearch;
+{$R *.dfm}
+
+procedure TFormTaxPayments.ToolButton2Click(Sender: TObject);
+begin
+  if ODSTaxPayment.RecordCount = 0 then exit;
+  FormSearch.DbGr := XDBGrid1;
+  FormSearch.ShowModal;
+end;
+
+procedure TFormTaxPayments.ToolButton3Click(Sender: TObject);
+begin
+  if ODSTaxPayment.RecordCount=0 then exit;
+  with ExcelExport do
+  begin
+    Connect;
+    ExportDataset(ODSTaxPayment,'Vergi',true,true);
+    Disconnect;
+  end;
+end;
+
+end.

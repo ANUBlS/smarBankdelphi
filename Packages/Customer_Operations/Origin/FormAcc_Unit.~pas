@@ -1,0 +1,243 @@
+unit FormAcc_Unit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, NLSDialogs,
+  NLSLocalizer, StdCtrls, Mask, DBCtrls, ComCtrls, Db, OracleData,
+  SearchEdit;
+
+type
+  TOperationMode = (omInsert, omEdit, omDelete);
+type
+  TFormAccount = class(TForm)
+    NLSLocalizer1: TNLSLocalizer;
+    Currency: TOracleDataSet;
+    CurrencyData: TDataSource;
+    BalAcc: TOracleDataSet;
+    BalAccBAL_CN: TStringField;
+    BalAccBALNAME: TStringField;
+    BalAccData: TDataSource;
+    Customers: TOracleDataSet;
+    CustomersData: TDataSource;
+    BranchesData: TDataSource;
+    Branches: TOracleDataSet;
+    BranchesID: TFloatField;
+    BranchesNAME: TStringField;
+    ButtonCommit: TButton;
+    ButtonCancel: TButton;
+    buyerid: TEdit;
+    AccountGB: TGroupBox;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    Label6: TLabel;
+    Label13: TLabel;
+    Label14: TLabel;
+    Label15: TLabel;
+    Label12: TLabel;
+    DBText1: TDBText;
+    DBLookupCurr: TDBLookupComboBox;
+    DBLookupCust: TDBLookupComboBox;
+    DTPOpenDate: TDateTimePicker;
+    DBLookupComboBox4: TDBLookupComboBox;
+    DBLookupBalance1: TDBLookupComboBox;
+    EditBall: TEdit;
+    EditCust: TEdit;
+    EditFil: TEdit;
+    EditValute: TEdit;
+    DBEditLimit: TEdit;
+    DBEdit1: TDBEdit;
+    DBEdit2: TDBEdit;
+    DBEdit3: TDBEdit;
+    EditAccName: TEdit;
+    DBEdit5: TDBEdit;
+    symboledit_: TEdit;
+    NLSLocalizer2: TNLSLocalizer;
+    DayStartStateGB: TGroupBox;
+    Label8: TLabel;
+    Label9: TLabel;
+    dbedit6: TEdit;
+    dbedit7: TEdit;
+    EditAcc: TEdit;
+    NLSLocalizer3: TNLSLocalizer;
+    CurrencyVALUTE: TFloatField;
+    CurrencyVALU_NAME: TStringField;
+    procedure ButtonCancelClick(Sender: TObject);
+    procedure EditValuteChange(Sender: TObject);
+    procedure EditValuteKeyPress(Sender: TObject; var Key: Char);
+    procedure DBLookupCurrClick(Sender: TObject);
+    procedure EditBallChange(Sender: TObject);
+    procedure EditBallKeyPress(Sender: TObject; var Key: Char);
+    procedure DBLookupBalance1Click(Sender: TObject);
+    procedure DBLookupCustClick(Sender: TObject);
+    procedure EditCustChange(Sender: TObject);
+    procedure EditFilChange(Sender: TObject);
+    procedure DBLookupComboBox4Click(Sender: TObject);
+    procedure ButtonCommitClick(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
+//    procedure DBLookupBalance1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+      OperationMode: TOperationMode;
+  end;
+
+var
+  FormAccount: TFormAccount;
+
+implementation
+ uses sboapiDataModuleImpl, CO_datamod_impl, CO_AccFlags;
+{$R *.DFM}
+
+procedure TFormAccount.ButtonCancelClick(Sender: TObject);
+begin
+close;
+end;
+
+procedure TFormAccount.EditValuteChange(Sender: TObject);
+begin
+ if  (Sender as TEdit).Text <>''  then
+    DBLookupCurr.KeyValue := StrToInt((Sender as TEdit).Text)
+    else DBLookupCurr.KeyValue :=null;
+
+end;
+
+procedure TFormAccount.EditValuteKeyPress(Sender: TObject; var Key: Char);
+begin
+ if ORD(Key) = VK_RETURN then
+  begin
+  if Sender is TWinControl then
+  with Sender as TWinControl do
+  case Tag of
+    1 : SelectNext(Sender as TWinControl ,True ,True);
+    end;
+    Key := #0;
+  end;
+if not (Key in['0'..'9','.',#8]) then Key :=#0;
+
+end;
+
+procedure TFormAccount.DBLookupCurrClick(Sender: TObject);
+begin
+   EditValute.Text := IntToStr(DBLookupCurr.ListSource.DataSet.FieldByName('VALUTE').AsInTeger);
+
+end;
+
+
+procedure TFormAccount.EditBallChange(Sender: TObject);
+begin
+   if  (Sender as TEdit).Text <>''  then
+   DBLookupBalance1.KeyValue := StrToInt((Sender as TEdit).Text)
+   else DBLookupBalance1.KeyValue := null;
+end;
+
+procedure TFormAccount.EditBallKeyPress(Sender: TObject; var Key: Char);
+begin
+if ORD(Key) = VK_RETURN then
+  begin
+  if Sender is TWinControl then
+  with Sender as TWinControl do
+  case Tag of
+    1 : SelectNext(Sender as TWinControl ,True ,True);
+    end;
+    Key := #0;
+  end;
+
+
+end;
+
+procedure TFormAccount.DBLookupBalance1Click(Sender: TObject);
+begin
+  EditBall.Text := IntToStr(DBLookupBalance1.ListSource.DataSet.FieldByName('BAL_CN').AsInTeger);
+
+end;
+
+procedure TFormAccount.DBLookupCustClick(Sender: TObject);
+begin
+  EditCust.Text := IntToStr(DBLookupCust.ListSource.DataSet.FieldByName('ID').AsInTeger);
+
+end;
+
+procedure TFormAccount.EditCustChange(Sender: TObject);
+begin
+   if (EditCust.Text<>'') then begin
+   DBLookupCust.KeyValue := StrToInt((Sender as TEdit).Text);
+//    EditAccName.Text := DBLookupCust.ListSource.DataSet.FIeldByName('Name').AsString;
+ end else begin
+   EditAccName.Text :='';
+   DBLookupCust.KeyValue := null;
+   end;
+
+end;
+
+procedure TFormAccount.EditFilChange(Sender: TObject);
+begin
+ if  (Sender as TEdit).Text <>''  then 
+   DBLookupComboBox4.KeyValue := StrToInt((Sender as TEdit).Text)
+   else DBLookupComboBox4.KeyValue:=null;
+
+end;
+
+procedure TFormAccount.DBLookupComboBox4Click(Sender: TObject);
+begin
+ EditFil.Text := IntToStr(DBLookupComboBox4.ListSource.DataSet.FieldByName('ID').AsInTeger);
+
+end;
+
+procedure TFormAccount.ButtonCommitClick(Sender: TObject);
+var
+  DDate :TDateTime;
+begin
+  DDate :=Trunc(DTPOpenDate.DateTime);
+  if EditAcc.text ='' then begin
+   Showmessage('ўесабын адыны дахил един!');
+  end;
+  if EditAcc.text <>'' then begin
+   begin
+   CO_DataMod.OPackage.CallIntegerFunction('open_Account',[
+                                                        Editacc.text,
+                                                        Editvalute.text,
+                                                        Editball.text,
+                                                        Editcust.text,
+                                                        Ddate,
+                                                        0,
+                                                         0,
+                                                         EditFil.text,
+                                                        0,
+                                                        EditAccName.text,
+                                                        Buyerid.text]);
+                                                        CO_DataMod.Account.Close;
+                                                        CO_DataMod.Account.Open;
+                                                        Close;
+    end;
+   end;
+end;
+
+procedure TFormAccount.FormActivate(Sender: TObject);
+begin
+EditAcc.SetFocus;
+Dbedit1.Text :='';
+Dbedit2.Text :='';
+Dbedit3.Text :='';
+Dbedit5.Text :='';
+CO_DataMod.Sysdat.Open;
+CO_DataMod.AccSettings.Open;
+DTPOpenDate.Date :=CO_DataMod.Sysdat.fieldbyname('tek_dat').asdatetime;
+Editvalute.text := CO_DataMod.AccSettings.fieldbyname('val_code').asstring;
+dbedit1.text := CO_DataMod.AccSettings.fieldbyname('val_name').asstring;
+Editball.text := CO_DataMod.AccSettings.fieldbyname('bal_cn1').asstring;
+dbedit2.text := CO_DataMod.AccSettings.fieldbyname('bal_name').asstring;
+editcust.text := CO_DataMod.AccSettings.fieldbyname('cust_id').asstring;
+dbedit3.text := CO_DataMod.AccSettings.fieldbyname('cust_name').asstring;
+//DTPOpenDate.date :=Datamod_Buyers.CC_Settings.fieldbyname('open_date').asdatetime);
+DBEditLimit.text :=CO_DataMod.AccSettings.fieldbyname('limit').asstring;
+Editfil.text :=CO_DataMod.AccSettings.fieldbyname('branch_id').asstring;
+dbedit5.text :=CO_DataMod.AccSettings.fieldbyname('branch_name').asstring;
+EditAccName.text :=CO_DataMod.Customers.fieldbyname('name').asstring;
+end;
+
+end.

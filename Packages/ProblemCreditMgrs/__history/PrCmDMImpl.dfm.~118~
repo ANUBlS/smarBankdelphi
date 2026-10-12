@@ -1,0 +1,2075 @@
+object PrCmDM: TPrCmDM
+  OldCreateOrder = False
+  OnCreate = DataModuleCreate
+  OnDestroy = DataModuleDestroy
+  Height = 540
+  Width = 824
+  object IntCache1: TOracleDataSet
+    SQL.Strings = (
+      'SELECT p.id,p.boorowerid,p.numberofcredit,val_name,b.name,'
+      
+        '       rest,duerest,interestrest,p.creditlineamount,h.penaltyres' +
+        't,'
+      '       p.dateofconclusion,p.duedatefirstcontract,p.qovid,'
+      
+        '       cr.description crtype,b.phonenumber,p.annualyinterestrate' +
+        ',p.annualyoverduerate,p.annualypenaltyrate,'
+      
+        '       dueinterestrest,p.purposeofcredit,cm_utils.Get_MainPlanPa' +
+        'yment(p.id) odenilmeli,'
+      
+        '       cm_utils.Get_MainPlanPayment(p.id)+ duerest + interestres' +
+        't + dueinterestrest+h.penaltyrest fullrest,'
+      
+        '       dueday,q.name qovluq,f.name filial,m.name mehsul,a.name m' +
+        'eqed,e.name expert,r.description ehtiyyat,py.maxpaydate,'
+      '       case when dueday =1 then 0'
+      
+        '        when py.maxpaydate=sbop.GET_DATE then 1  end as status, ' +
+        '       '
+      
+        '  b.pincode,b.boorowerid pasnum,b.address,cm_deca.GET_CUSTDATEOF' +
+        'BIRTH(p.boorowerid) dogum_tarixi,cm_deca.GET_CUSTPLACEOFBIRTH(p.' +
+        'boorowerid) dogum_yeri'
+      'FROM cm_active_credits p,'
+      '     cm_credittypes cr,'
+      '     cm_curr_state h,'
+      '     cm_boorowerinfo b,'
+      '     cm_qovluq q,'
+      '     filial_t f,'
+      '     avalute_t v,'
+      '     cm_mehsul m ,'
+      '     cm_aim_cred a,'
+      '     cm_expert e,'
+      '     cm_reserve_types r,'
+      
+        '     (select creditid ,max(paydate) maxpaydate from cm_payments ' +
+        'group by creditid) py'
+      '     '
+      'WHERE     p.id = h.creditid'
+      '      AND p.id = b.creditid'
+      '      AND p.id = py.creditid(+)'
+      '      AND p.qovid = q.id'
+      '      AND p.mehsulid=m.id'
+      '      AND h.reserveid=r.id'
+      '      AND p.aim_id=a.id'
+      '      AND p.expertid=e.id'
+      
+        '      AND h.rest + h.duerest + h.interestrest + h.interestrest >' +
+        ' 0'
+      '      AND h.dueday>0'
+      '      AND p.branchid = f.id'
+      '      AND p.currency = v.valute'
+      '      AND p.credittype = cr.id'
+      '     AND ((q.usname=user) or decode(user,'#39'SMART'#39',0,1)=0)'
+      '  '
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      'order by :title'
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      '  ')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000C0000003A005400490054004C0045000100000007000000
+      4455454441590000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000002400000004000000490044000100000000001C0000004E0055004D00
+      4200450052004F00460043005200450044004900540001000000000008000000
+      52004500530054000100000000001800000049004E0054004500520045005300
+      540052004500530054000100000000000E000000440055004500520045005300
+      54000100000000001E00000044005500450049004E0054004500520045005300
+      5400520045005300540001000000000010000000560041004C005F004E004100
+      4D004500010000000000080000004E0041004D0045000100000000000C000000
+      4400550045004400410059000100000000000C00000051004F0056004C005500
+      51000100000000000C000000460049004C00490041004C000100000000001000
+      0000460055004C004C0052004500530054000100000000002000000043005200
+      45004400490054004C0049004E00450041004D004F0055004E00540001000000
+      00002000000044004100540045004F00460043004F004E0043004C0055005300
+      49004F004E000100000000002800000044005500450044004100540045004600
+      490052005300540043004F004E00540052004100430054000100000000000C00
+      000043005200540059005000450001000000000016000000500048004F004E00
+      45004E0055004D004200450052000100000000001400000042004F004F005200
+      4F00570045005200490044000100000000002600000041004E004E0055004100
+      4C00590049004E00540045005200450053005400520041005400450001000000
+      00002400000041004E004E00550041004C0059004F0056004500520044005500
+      450052004100540045000100000000002400000041004E004E00550041004C00
+      5900500045004E0041004C005400590052004100540045000100000000001E00
+      000050005500520050004F00530045004F004600430052004500440049005400
+      0100000000000C0000004D0045004800530055004C000100000000000A000000
+      4D0045005100450044000100000000000C000000450058005000450052005400
+      0100000000001000000045004800540049005900590041005400010000000000
+      16000000500045004E0041004C00540059005200450053005400010000000000
+      0A00000051004F005600490044000100000000000E000000500049004E004300
+      4F00440045000100000000000C0000005000410053004E0055004D0001000000
+      00000E0000004100440044005200450053005300010000000000180000004400
+      4F00470055004D005F0054004100520049005800490001000000000014000000
+      44004F00470055004D005F005900450052004900010000000000140000004F00
+      440045004E0049004C004D0045004C0049000100000000000C00000053005400
+      4100540055005300010000000000140000004D00410058005000410059004400
+      410054004500010000000000}
+    Cursor = crSQLWait
+    QueryAllRecords = False
+    Session = sboapiDataModule.SBSession
+    Left = 24
+    Top = 24
+    object IntCache1ID: TFloatField
+      DisplayLabel = 'Kreditid'
+      FieldName = 'ID'
+      Required = True
+    end
+    object pep: TFloatField
+      DisplayLabel = 'M'#252#351't'#601'ri id'
+      FieldName = 'BOOROWERID'
+    end
+    object IntCache1NAME: TWideStringField
+      DisplayLabel = 'M'#252#351't'#601'ri'
+      FieldName = 'NAME'
+      Size = 150
+    end
+    object IntCache1REST: TFloatField
+      DisplayLabel = #399'.B.Qal'#305'q'
+      FieldName = 'REST'
+    end
+    object IntCache1ODENILMELI: TFloatField
+      DisplayLabel = #214'd'#601'nilm'#601'li '#399'.B'
+      FieldName = 'ODENILMELI'
+    end
+    object IntCache1INTERESTREST: TFloatField
+      DisplayLabel = 'F.B qal'#305'q'
+      FieldName = 'INTERESTREST'
+    end
+    object IntCache1PENALTYREST: TFloatField
+      DisplayLabel = 'Penya'
+      FieldName = 'PENALTYREST'
+    end
+    object IntCache1FULLREST: TFloatField
+      DisplayLabel = 'C'#601'mi'
+      FieldName = 'FULLREST'
+    end
+    object IntCache1MAXPAYDATE: TDateTimeField
+      DisplayLabel = 'Son '#246'd'#305'ni'#351' tarixi'
+      FieldName = 'MAXPAYDATE'
+    end
+    object IntCache1DUEDAY: TFloatField
+      DisplayLabel = 'Gecikm'#601' g'#252'n'#252
+      FieldName = 'DUEDAY'
+    end
+    object IntCache1FILIAL: TWideStringField
+      DisplayLabel = 'Filial'
+      FieldName = 'FILIAL'
+      Size = 90
+    end
+    object IntCache1PHONENUMBER: TWideStringField
+      DisplayLabel = 'Tel'
+      FieldName = 'PHONENUMBER'
+      Size = 500
+    end
+    object IntCache1NUMBEROFCREDIT: TWideStringField
+      DisplayLabel = 'M'#252'qavil'#601' No'
+      FieldName = 'NUMBEROFCREDIT'
+      Size = 32
+    end
+    object IntCache1VAL_NAME: TWideStringField
+      DisplayLabel = 'val'
+      FieldName = 'VAL_NAME'
+      Size = 10
+    end
+    object IntCache1DATEOFCONCLUSION: TDateTimeField
+      DisplayLabel = 'Verilm'#601' tarixi'
+      FieldName = 'DATEOFCONCLUSION'
+    end
+    object IntCache1DUEDATEFIRSTCONTRACT: TDateTimeField
+      DisplayLabel = 'Bitm'#601' tarixi'
+      FieldName = 'DUEDATEFIRSTCONTRACT'
+    end
+    object IntCache1CREDITLINEAMOUNT: TFloatField
+      DisplayLabel = 'Kreditin m'#601'bl'#601#287'i'
+      FieldName = 'CREDITLINEAMOUNT'
+    end
+    object IntCache1CRTYPE: TWideStringField
+      DisplayLabel = 'Kreditin tipi'
+      FieldName = 'CRTYPE'
+      Size = 128
+    end
+    object s: TWideStringField
+      DisplayLabel = 'Status'
+      FieldName = 'QOVLUQ'
+      Size = 120
+    end
+    object IntCache1ANNUALYINTERESTRATE: TFloatField
+      DisplayLabel = 'Faiz'
+      FieldName = 'ANNUALYINTERESTRATE'
+    end
+    object IntCache1ANNUALYPENALTYRATE: TFloatField
+      DisplayLabel = 'Penya Faizi'
+      FieldName = 'ANNUALYPENALTYRATE'
+    end
+    object IntCache1PURPOSEOFCREDIT: TWideStringField
+      DisplayLabel = 'Teyinnat'#305
+      FieldName = 'PURPOSEOFCREDIT'
+      Size = 300
+    end
+    object IntCache1MEHSUL: TWideStringField
+      DisplayLabel = 'Mehsul'
+      FieldName = 'MEHSUL'
+      Size = 400
+    end
+    object IntCache1MEQED: TWideStringField
+      DisplayLabel = 'Verilm'#601' m'#601'qs'#601'di'
+      FieldName = 'MEQED'
+      Size = 100
+    end
+    object IntCache1EXPERT: TWideStringField
+      DisplayLabel = 'M'#252't'#601'x'#601'sis'
+      FieldName = 'EXPERT'
+      Size = 80
+    end
+    object IntCache1EHTIYYAT: TWideStringField
+      FieldName = 'EHTIYYAT'
+      Size = 64
+    end
+    object IntCache1DUEINTERESTREST: TFloatField
+      FieldName = 'DUEINTERESTREST'
+    end
+    object IntCache1QOVID: TFloatField
+      FieldName = 'QOVID'
+    end
+    object IntCache1PINCODE: TWideStringField
+      FieldName = 'PINCODE'
+      Size = 50
+    end
+    object IntCache1PASNUM: TWideStringField
+      FieldName = 'PASNUM'
+      Size = 32
+    end
+    object IntCache1ADDRESS: TWideStringField
+      FieldName = 'ADDRESS'
+      Size = 300
+    end
+    object IntCache1DOGUM_TARIXI: TDateTimeField
+      FieldName = 'DOGUM_TARIXI'
+    end
+    object IntCache1ANNUALYOVERDUERATE: TFloatField
+      FieldName = 'ANNUALYOVERDUERATE'
+    end
+    object IntCache1DOGUM_YERI: TWideStringField
+      FieldName = 'DOGUM_YERI'
+      Size = 4000
+    end
+    object IntCache1STATUS: TFloatField
+      FieldName = 'STATUS'
+    end
+    object IntCache1DUEREST: TFloatField
+      DisplayLabel = 'G.'#399'.B.Qal'#305'q'
+      FieldName = 'DUEREST'
+    end
+  end
+  object DataSrcIntCache: TDataSource
+    DataSet = IntCache
+    Left = 40
+    Top = 112
+  end
+  object QovluqDSet: TOracleDataSet
+    SQL.Strings = (
+      'select * from cm_qovluq q'
+      ''
+      'where q.id in(select qrupid from cm_qovluq_in where userid=uid)'
+      'order by q.num')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 160
+    Top = 32
+  end
+  object QovluqSrc: TDataSource
+    DataSet = QovluqDSet
+    Left = 160
+    Top = 112
+  end
+  object DataSource4: TDataSource
+    DataSet = OracleDataSet4
+    Left = 288
+    Top = 120
+  end
+  object OracleDataSet4: TOracleDataSet
+    SQL.Strings = (
+      
+        'SELECT rownum,a.rowid, a.* FROM cm_folderplace_info a where cred' +
+        'itid=:creditid'
+      'order by a.dat desc')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000120000003A00430052004500440049005400490044000300
+      00000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      0500000008000000040000004900440001000000000010000000430052004500
+      4400490054004900440001000000000006000000440041005400010000000000
+      04000000550053000100000000000800000049004E0046004F00010000000000
+      0C00000052004F0057004E0055004D0001000000000004000000410041000100
+      000000000A00000049004E0046004F003100010000000000}
+    Master = IntCache
+    MasterFields = 'ID'
+    DetailFields = 'CREDITID'
+    Session = sboapiDataModule.SBSession
+    Left = 288
+    Top = 40
+  end
+  object DSSchedule: TDataSource
+    DataSet = Schedule
+    Left = 384
+    Top = 128
+  end
+  object Schedule: TOracleDataSet
+    SQL.Strings = (
+      'SELECT rownum sira, id, creditid, paymentdate, rest,'
+      '    principal, '
+      '    interest,'
+      '    principal+interest as sm'
+      '  FROM cm_payment_schedule'
+      ' WHERE CreditID=:CrdID'
+      'order  by paymentdate')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000C0000003A00430052004400490044000300000000000000
+      00000000}
+    QBEDefinition.QBEFieldDefs = {
+      0500000008000000040000004900440001000000000010000000430052004500
+      44004900540049004400010000000000160000005000410059004D0045004E00
+      54004400410054004500010000000000120000005000520049004E0043004900
+      500041004C000100000000001000000049004E00540045005200450053005400
+      0100000000000400000053004D00010000000000080000005300490052004100
+      010000000000080000005200450053005400010000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 376
+    Top = 32
+    object ScheduleID: TFloatField
+      FieldName = 'ID'
+      Required = True
+      Visible = False
+    end
+    object ScheduleCREDITID: TFloatField
+      FieldName = 'CREDITID'
+      Required = True
+      Visible = False
+    end
+    object SchedulePAYMENTDATE: TDateTimeField
+      DisplayLabel = #1058#1072#1088#1080#1093
+      FieldName = 'PAYMENTDATE'
+      Required = True
+    end
+    object SchedulePRINCIPAL: TFloatField
+      DisplayLabel = #1071#1089#1072#1089' '#1041#1086#1088#1078'-'#1076#1072#1085
+      FieldName = 'PRINCIPAL'
+      Required = True
+      DisplayFormat = '#,#0.00'
+    end
+    object ScheduleINTEREST: TFloatField
+      DisplayLabel = #1065'. '#1060#1072#1080#1079' - '#1076#1103#1085
+      FieldName = 'INTEREST'
+      Required = True
+      DisplayFormat = '#,#0.00'
+    end
+    object ScheduleSM: TFloatField
+      FieldName = 'SM'
+    end
+    object ScheduleSIRA: TFloatField
+      FieldName = 'SIRA'
+    end
+    object ScheduleREST: TFloatField
+      FieldName = 'REST'
+    end
+  end
+  object DSPayments: TDataSource
+    DataSet = Payments
+    Left = 448
+    Top = 120
+  end
+  object Payments: TOracleDataSet
+    SQL.Strings = (
+      'SELECT rownum sira,  id ,'
+      '        creditid ,'
+      '        paydate , '
+      '        payedamt , '
+      '        payedintamt,'
+      '        payeddueamt,'
+      '       payeddueintamt, '
+      '       payedpenaltyamt,'
+      '    payedamt + '
+      '        payedintamt+'
+      '        payeddueamt+'
+      '       payeddueintamt+ '
+      '       payedpenaltyamt as sm'
+      ''
+      '  FROM cm_payments '
+      'WHERE (CreditID=:CrdID)'
+      'order by paydate desc')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000C0000003A00430052004400490044000500000000000000
+      00000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000A000000080000005300490052004100010000000000040000004900
+      4400010000000000100000004300520045004400490054004900440001000000
+      00000E0000005000410059004400410054004500010000000000100000005000
+      410059004500440041004D005400010000000000160000005000410059004500
+      440049004E00540041004D005400010000000000160000005000410059004500
+      440044005500450041004D0054000100000000001C0000005000410059004500
+      440044005500450049004E00540041004D0054000100000000001E0000005000
+      4100590045004400500045004E0041004C005400590041004D00540001000000
+      00000400000053004D00010000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 448
+    Top = 40
+    object PaymentsSIRA: TFloatField
+      FieldName = 'SIRA'
+    end
+    object PaymentsID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object PaymentsCREDITID: TFloatField
+      FieldName = 'CREDITID'
+      Required = True
+    end
+    object PaymentsPAYDATE: TDateTimeField
+      FieldName = 'PAYDATE'
+      Required = True
+    end
+    object PaymentsPAYEDAMT: TFloatField
+      FieldName = 'PAYEDAMT'
+      Required = True
+    end
+    object PaymentsPAYEDINTAMT: TFloatField
+      FieldName = 'PAYEDINTAMT'
+      Required = True
+    end
+    object PaymentsPAYEDDUEAMT: TFloatField
+      FieldName = 'PAYEDDUEAMT'
+      Required = True
+    end
+    object PaymentsPAYEDDUEINTAMT: TFloatField
+      FieldName = 'PAYEDDUEINTAMT'
+      Required = True
+    end
+    object PaymentsPAYEDPENALTYAMT: TFloatField
+      FieldName = 'PAYEDPENALTYAMT'
+      Required = True
+    end
+    object PaymentsSM: TFloatField
+      FieldName = 'SM'
+    end
+  end
+  object OracleDataSet1: TOracleDataSet
+    SQL.Strings = (
+      'select * from cm_qovluq'
+      ''
+      'where '
+      '---(usname=user) or decode(user,'#39'SMART'#39',0,1)=0'
+      ''
+      '--and '
+      'status=1'
+      'order by id'
+      '/*'
+      'select '
+      'userid id,'
+      'q.username||'#39'-'#39'||q.qrupname name'
+      'from cm_qovluq a,cm_qovluq_in q'
+      ''
+      'where status=0 and a.id=q.qrupid'
+      ''
+      'union all'
+      ''
+      'select id,name from cm_qovluq'
+      ''
+      'where status=1'
+      ''
+      'order by id*/'
+      '')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 528
+    Top = 40
+  end
+  object DataSource1: TDataSource
+    DataSet = OracleDataSet1
+    Left = 528
+    Top = 120
+  end
+  object PrPackage: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'cm_folder'
+    ParameterMode = pmNamed
+    Cursor = crHourGlass
+    Left = 632
+    Top = 32
+  end
+  object PaymentReport: TOracleDataSet
+    SQL.Strings = (
+      
+        'select p.id, p.numberofcredit,b.name custname, s.paydate,s.payed' +
+        'amt,s.payedintamt,s.payeddueamt,s.payeddueintamt,'
+      's.payedpenaltyamt,s.dueday ,q.name, s.BONUS_USER  from'
+      'cm_portfolio p,'
+      'cm_payments s,'
+      'cm_qovluq q,'
+      'cm_boorowerinfo b'
+      'where '
+      'p.id=s.creditid '
+      'And p.id=b.creditid'
+      'And s.qovid=q.id '
+      ''
+      'And s.paydate between :bdat and :edat'
+      
+        ' --AND (( instr(q.usname,user )>0) or decode(user,cm_folder.Get_' +
+        'user_grant(user),0,1)=0)'
+      
+        '  AND uid in( select userid from cm_qovluq_in where qrupid=s.qov' +
+        'id )'
+      'order by p.id')
+    Optimize = False
+    Variables.Data = {
+      04000000020000000A0000003A0042004400410054000C000000000000000000
+      00000A0000003A0045004400410054000C0000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000C00000004000000490044000100000000001C0000004E0055004D00
+      4200450052004F0046004300520045004400490054000100000000000E000000
+      5000410059004400410054004500010000000000100000005000410059004500
+      440041004D005400010000000000160000005000410059004500440049004E00
+      540041004D005400010000000000160000005000410059004500440044005500
+      450041004D0054000100000000001C0000005000410059004500440044005500
+      450049004E00540041004D0054000100000000001E0000005000410059004500
+      4400500045004E0041004C005400590041004D0054000100000000000C000000
+      440055004500440041005900010000000000080000004E0041004D0045000100
+      000000001000000043005500530054004E0041004D0045000100000000001400
+      000042004F004E00550053005F005500530045005200010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 48
+    Top = 200
+    object PaymentReportID: TFloatField
+      DisplayLabel = 'Kredit id'
+      FieldName = 'ID'
+      Required = True
+    end
+    object PaymentReportNUMBEROFCREDIT: TWideStringField
+      DisplayLabel = 'M'#252'qavile No'
+      FieldName = 'NUMBEROFCREDIT'
+      Size = 32
+    end
+    object PaymentReportCUSTNAME: TWideStringField
+      DisplayLabel = 'M'#252#351't'#601'ri'
+      FieldName = 'CUSTNAME'
+      Size = 150
+    end
+    object PaymentReportPAYDATE: TDateTimeField
+      DisplayLabel = #214'd'#601'ni'#351' tarixi'
+      FieldName = 'PAYDATE'
+    end
+    object PaymentReportPAYEDAMT: TFloatField
+      DisplayLabel = #399'sasdan'
+      FieldName = 'PAYEDAMT'
+    end
+    object PaymentReportPAYEDINTAMT: TFloatField
+      DisplayLabel = 'Faizd'#601'n'
+      FieldName = 'PAYEDINTAMT'
+    end
+    object PaymentReportPAYEDDUEAMT: TFloatField
+      DisplayLabel = 'G.'#399'sasdan'
+      FieldName = 'PAYEDDUEAMT'
+    end
+    object PaymentReportPAYEDDUEINTAMT: TFloatField
+      DisplayLabel = 'G.Faizd'#601'n'
+      FieldName = 'PAYEDDUEINTAMT'
+    end
+    object PaymentReportPAYEDPENALTYAMT: TFloatField
+      DisplayLabel = 'Penyadan'
+      FieldName = 'PAYEDPENALTYAMT'
+    end
+    object PaymentReportDUEDAY: TFloatField
+      DisplayLabel = 'Gecikm'#601' g'#252'n'#252
+      FieldName = 'DUEDAY'
+    end
+    object PaymentReportNAME: TWideStringField
+      DisplayLabel = 'Pr Status'
+      FieldName = 'NAME'
+      Size = 120
+    end
+    object PaymentReportBONUS_USER: TWideStringField
+      DisplayLabel = 'Bonus Veril'#601'c'#601'k '#304'stifad'#601#231'i'
+      FieldName = 'BONUS_USER'
+      Size = 32
+    end
+  end
+  object ReportDSrc: TDataSource
+    DataSet = PaymentReport
+    Left = 48
+    Top = 264
+  end
+  object ZaminDSet: TOracleDataSet
+    SQL.Strings = (
+      'select * from cm_guarantor where creditid=:CrdID'
+      ''
+      'order by cardid')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000C0000003A00430052004400490044000300000000000000
+      00000000}
+    QBEDefinition.QBEFieldDefs = {
+      0500000014000000100000004300520045004400490054004900440001000000
+      00000C0000004300410052004400490044000100000000001A00000047005500
+      4100520041004E0054004F0052004E0041004D00450001000000000016000000
+      470055004100520041004E0054004F005200490044000100000000001E000000
+      470055004100520041004E0054004F005200530041004C004100520059000100
+      00000000140000005A0041004D0049004E0057004F0052004B00310001000000
+      0000160000005A0041004D0049004E0041004400520045005300310001000000
+      0000120000005A0041004D0049004E00540045004C0031000100000000001400
+      00005A004D005000410053005000590045005200310001000000000014000000
+      5A004D0050004100530050004400410054003100010000000000120000005A00
+      4D00540045004C004D004F00420031000100000000000E000000500049004E00
+      43004F00440045000100000000001800000050004500520053004F004E004100
+      4C00540059005000450001000000000006000000440041005400010000000000
+      14000000430055004E0054005200590043004F00440045000100000000001600
+      000044004100540045004F004600420049005200540048000100000000000C00
+      0000430055004E00540052005900010000000000080000004300490054005900
+      0100000000000C00000043005500530054004900440001000000000012000000
+      460041004300540041004400520045005300010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 192
+    Top = 200
+    object ZaminDSetCREDITID: TFloatField
+      FieldName = 'CREDITID'
+    end
+    object ZaminDSetCARDID: TFloatField
+      FieldName = 'CARDID'
+    end
+    object ZaminDSetGUARANTORNAME: TWideStringField
+      FieldName = 'GUARANTORNAME'
+      Size = 200
+    end
+    object ZaminDSetGUARANTORID: TWideStringField
+      FieldName = 'GUARANTORID'
+      Size = 200
+    end
+    object ZaminDSetGUARANTORSALARY: TWideStringField
+      FieldName = 'GUARANTORSALARY'
+      Size = 200
+    end
+    object ZaminDSetZAMINWORK1: TWideStringField
+      FieldName = 'ZAMINWORK1'
+      Size = 200
+    end
+    object ZaminDSetZAMINADRES1: TWideStringField
+      FieldName = 'ZAMINADRES1'
+      Size = 200
+    end
+    object ZaminDSetZAMINTEL1: TWideStringField
+      FieldName = 'ZAMINTEL1'
+      Size = 200
+    end
+    object ZaminDSetZMPASPYER1: TWideStringField
+      FieldName = 'ZMPASPYER1'
+      Size = 200
+    end
+    object ZaminDSetZMPASPDAT1: TDateTimeField
+      FieldName = 'ZMPASPDAT1'
+    end
+    object ZaminDSetZMTELMOB1: TWideStringField
+      FieldName = 'ZMTELMOB1'
+      Size = 15
+    end
+    object ZaminDSetPINCODE: TWideStringField
+      FieldName = 'PINCODE'
+      Size = 7
+    end
+    object ZaminDSetPERSONALTYPE: TFloatField
+      FieldName = 'PERSONALTYPE'
+    end
+    object ZaminDSetCUNTRYCODE: TWideStringField
+      FieldName = 'CUNTRYCODE'
+      Size = 3
+    end
+    object ZaminDSetDATEOFBIRTH: TDateTimeField
+      FieldName = 'DATEOFBIRTH'
+    end
+    object ZaminDSetCUNTRY: TWideStringField
+      FieldName = 'CUNTRY'
+      Size = 30
+    end
+    object ZaminDSetCITY: TWideStringField
+      FieldName = 'CITY'
+      Size = 30
+    end
+    object ZaminDSetFACTADRES: TWideStringField
+      FieldName = 'FACTADRES'
+      Size = 500
+    end
+  end
+  object ZaminDSrc: TDataSource
+    DataSet = ZaminDSet
+    Left = 192
+    Top = 264
+  end
+  object IntCache: TOracleDataSet
+    SQL.Strings = (
+      'SELECT p.id,p.boorowerid,p.numberofcredit,val_name,b.name,'
+      
+        '       rest,duerest,interestrest,p.creditlineamount,h.penaltyres' +
+        't,(select g.gqtelmob from cm_guarantee g WHERE CreditID=p.id)gqt' +
+        'elmob,'
+      '       p.dateofconclusion,p.duedatefirstcontract,p.qovid,'
+      
+        '       cr.description crtype,b.phonenumber,p.annualyinterestrate' +
+        ',p.annualyoverduerate,p.annualypenaltyrate,'
+      
+        '       dueinterestrest,p.purposeofcredit,cm_utils.Get_MainPlanPa' +
+        'yment(p.id) odenilmeli,'
+      
+        '       cm_utils.Get_MainPlanPayment(p.id)+ duerest + interestres' +
+        't + dueinterestrest+h.penaltyrest fullrest,'
+      
+        '       dueday,q.name qovluq,f.name filial,m.name mehsul,a.name m' +
+        'eqed,e.name expert,r.description ehtiyyat,py.maxpaydate,'
+      '       case when dueday =1 then 0'
+      
+        '        when py.maxpaydate=sbop.GET_DATE then 1  end as status, ' +
+        '       '
+      
+        '  b.pincode,b.boorowerid pasnum,b.address,i.birthday dogum_tarix' +
+        'i,i.birthplace dogum_yeri,i.work_place,i.work_post,'
+      
+        'case when nvl(p.duedatelastcontract,p.duedatefirstcontract)<sbop' +
+        '.get_date '
+      'then '#39'Vaxt'#305' bitib '#39' else '#39' - '#39' end as creditend,p.bonus_user'
+      'FROM cm_active_credits p,'
+      '     cm_credittypes cr,'
+      '     cm_curr_state h,'
+      '     cm_boorowerinfo b,'
+      '     cm_qovluq q,'
+      '     filial_t f,'
+      '     avalute_t v,'
+      '     cm_mehsul m ,'
+      '     cm_aim_cred a,'
+      '     cm_expert e,'
+      '     cm_reserve_types r,custinfo i,'
+      
+        '     (select creditid ,max(paydate) maxpaydate from cm_payments ' +
+        'group by creditid) py'
+      '     '
+      'WHERE     p.id = h.creditid'
+      '      AND p.id = b.creditid'
+      '      AND p.id = py.creditid(+)'
+      '      AND p.qovid = q.id'
+      '      AND p.mehsulid=m.id'
+      '      AND h.reserveid=r.id'
+      '      AND p.aim_id=a.id'
+      '      AND p.boorowerid=i.idcust'
+      '      AND p.expertid=e.id'
+      
+        '      AND h.rest + h.duerest + h.interestrest + h.interestrest >' +
+        ' 0'
+      '      AND h.dueday>0'
+      '      AND p.branchid = f.id'
+      '      AND p.currency = v.valute'
+      '      AND p.credittype = cr.id'
+      
+        '      --AND p.id in (select creditid from cm_qovluq_user where u' +
+        'serid=uid)'
+      
+        '      --AND p.qovid in( select qrupid from cm_qovluq_in where us' +
+        'erid=uid)'
+      
+        '      AND uid in( select userid from cm_qovluq_in where qrupid=p' +
+        '.qovid )'
+      
+        '     --AND (( instr(q.usname,user )>0) or decode(user,cm_folder.' +
+        'Get_user_grant(user),0,1)=0)'
+      '  '
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      'order by :title'
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      '')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000C0000003A005400490054004C0045000100000003000000
+      49440000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000002900000004000000490044000100000000001400000042004F004F00
+      52004F00570045005200490044000100000000001C0000004E0055004D004200
+      450052004F004600430052004500440049005400010000000000100000005600
+      41004C005F004E0041004D004500010000000000080000004E0041004D004500
+      0100000000000800000052004500530054000100000000000E00000044005500
+      450052004500530054000100000000001800000049004E005400450052004500
+      5300540052004500530054000100000000002000000043005200450044004900
+      54004C0049004E00450041004D004F0055004E00540001000000000016000000
+      500045004E0041004C0054005900520045005300540001000000000020000000
+      44004100540045004F00460043004F004E0043004C005500530049004F004E00
+      0100000000002800000044005500450044004100540045004600490052005300
+      540043004F004E00540052004100430054000100000000000A00000051004F00
+      5600490044000100000000000C00000043005200540059005000450001000000
+      000016000000500048004F004E0045004E0055004D0042004500520001000000
+      00002600000041004E004E00550041004C00590049004E005400450052004500
+      5300540052004100540045000100000000002400000041004E004E0055004100
+      4C0059004F005600450052004400550045005200410054004500010000000000
+      2400000041004E004E00550041004C005900500045004E0041004C0054005900
+      52004100540045000100000000001E00000044005500450049004E0054004500
+      520045005300540052004500530054000100000000001E000000500055005200
+      50004F00530045004F0046004300520045004400490054000100000000001400
+      00004F00440045004E0049004C004D0045004C00490001000000000010000000
+      460055004C004C0052004500530054000100000000000C000000440055004500
+      4400410059000100000000000C00000051004F0056004C005500510001000000
+      00000C000000460049004C00490041004C000100000000000C0000004D004500
+      4800530055004C000100000000000A0000004D00450051004500440001000000
+      00000C0000004500580050004500520054000100000000001000000045004800
+      540049005900590041005400010000000000140000004D004100580050004100
+      590044004100540045000100000000000C000000530054004100540055005300
+      0100000000000E000000500049004E0043004F00440045000100000000000C00
+      00005000410053004E0055004D000100000000000E0000004100440044005200
+      4500530053000100000000001800000044004F00470055004D005F0054004100
+      52004900580049000100000000001400000044004F00470055004D005F005900
+      4500520049000100000000001400000057004F0052004B005F0050004C004100
+      430045000100000000001200000057004F0052004B005F0050004F0053005400
+      0100000000001200000043005200450044004900540045004E00440001000000
+      00001400000042004F004E00550053005F005500530045005200010000000000
+      1000000047005100540045004C004D004F004200010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 96
+    Top = 24
+    object IntCacheCREDITLINEAMOUNT: TFloatField
+      DisplayLabel = 'Kreditin m'#601'bl'#601#287#305
+      FieldName = 'CREDITLINEAMOUNT'
+    end
+    object IntCacheBOOROWERID: TFloatField
+      DisplayLabel = 'M'#252#351't'#601'ri '#304'D'
+      FieldName = 'BOOROWERID'
+    end
+    object IntCacheNAME: TWideStringField
+      DisplayLabel = 'M'#252#351't'#601'rinin ad'#305
+      FieldName = 'NAME'
+      Size = 150
+    end
+    object IntCacheGQTELMOB: TWideStringField
+      FieldName = 'GQTELMOB'
+      Size = 60
+    end
+    object IntCacheREST: TFloatField
+      DisplayLabel = #399'.B. Qal'#305'q'
+      FieldName = 'REST'
+    end
+    object IntCacheODENILMELI: TFloatField
+      DisplayLabel = #214'd'#601'nilm'#601'li '#399'.B.'
+      FieldName = 'ODENILMELI'
+    end
+    object IntCacheINTERESTREST: TFloatField
+      DisplayLabel = 'F.B. Qal'#305'q'
+      FieldName = 'INTERESTREST'
+    end
+    object IntCachePENALTYREST: TFloatField
+      DisplayLabel = 'C'#601'rim'#601
+      FieldName = 'PENALTYREST'
+    end
+    object IntCacheFULLREST: TFloatField
+      DisplayLabel = 'Umumi m'#601'bl'#601#287
+      FieldName = 'FULLREST'
+    end
+    object IntCacheMAXPAYDATE: TDateTimeField
+      DisplayLabel = 'Son '#246'd'#601'ni'#351' tarixi'
+      FieldName = 'MAXPAYDATE'
+      Visible = False
+    end
+    object IntCacheDUEDAY: TFloatField
+      DisplayLabel = 'Gecikm'#601' g'#252'nl'#601'rin say'#305
+      FieldName = 'DUEDAY'
+    end
+    object IntCacheEXPERT: TWideStringField
+      DisplayLabel = 'M'#252't'#601'x'#601'ssis'
+      FieldName = 'EXPERT'
+      Size = 80
+    end
+    object IntCacheDATEOFCONCLUSION: TDateTimeField
+      DisplayLabel = 'A'#231#305'lma tarixi'
+      FieldName = 'DATEOFCONCLUSION'
+    end
+    object IntCacheDUEDATEFIRSTCONTRACT: TDateTimeField
+      DisplayLabel = 'Ba'#287'lanma tarixi'
+      FieldName = 'DUEDATEFIRSTCONTRACT'
+    end
+    object IntCacheCREDITEND: TWideStringField
+      DisplayLabel = 'Vaxt'#305' bitmi'#351' m'#252'qavil'#601'l'#601'r'
+      FieldName = 'CREDITEND'
+      Size = 13
+    end
+    object IntCacheFILIAL: TWideStringField
+      DisplayLabel = 'Filial'
+      FieldName = 'FILIAL'
+      Size = 90
+    end
+    object IntCacheNUMBEROFCREDIT: TWideStringField
+      DisplayLabel = 'M'#252'qavil'#601' No'
+      FieldName = 'NUMBEROFCREDIT'
+      Size = 32
+    end
+    object IntCacheID: TFloatField
+      DisplayLabel = 'KreditID'
+      FieldName = 'ID'
+      Required = True
+    end
+    object IntCacheQOVLUQ: TWideStringField
+      DisplayLabel = 'Status'
+      FieldName = 'QOVLUQ'
+      Size = 120
+    end
+    object IntCachePHONENUMBER: TWideStringField
+      DisplayLabel = 'Telefon'
+      FieldName = 'PHONENUMBER'
+      Size = 500
+    end
+    object IntCacheANNUALYINTERESTRATE: TFloatField
+      DisplayLabel = #399'.B.Faizi'
+      FieldName = 'ANNUALYINTERESTRATE'
+    end
+    object IntCacheVAL_NAME: TWideStringField
+      DisplayLabel = 'Valyuta'
+      FieldName = 'VAL_NAME'
+      Size = 10
+    end
+    object IntCacheDUEREST: TFloatField
+      DisplayLabel = 'G. B. Qal'#305'q'
+      FieldName = 'DUEREST'
+    end
+    object IntCacheQOVID: TFloatField
+      FieldName = 'QOVID'
+    end
+    object IntCacheCRTYPE: TWideStringField
+      DisplayLabel = 'Kreditin tipi'
+      FieldName = 'CRTYPE'
+      Size = 128
+    end
+    object IntCacheANNUALYOVERDUERATE: TFloatField
+      DisplayLabel = 'G.'#399'.B. faizi'
+      FieldName = 'ANNUALYOVERDUERATE'
+    end
+    object IntCacheANNUALYPENALTYRATE: TFloatField
+      DisplayLabel = 'C'#601'rim'#601' Faizi'
+      FieldName = 'ANNUALYPENALTYRATE'
+    end
+    object IntCacheDUEINTERESTREST: TFloatField
+      DisplayLabel = 'G.F.B.Qal'#305'q'
+      FieldName = 'DUEINTERESTREST'
+    end
+    object IntCachePURPOSEOFCREDIT: TWideStringField
+      DisplayLabel = 'Kreditin verilm'#601' m'#601'qs'#601'di'
+      FieldName = 'PURPOSEOFCREDIT'
+      Size = 300
+    end
+    object IntCacheSTATUS: TFloatField
+      FieldName = 'STATUS'
+      Visible = False
+    end
+    object IntCacheMEHSUL: TWideStringField
+      DisplayLabel = 'M'#601'hsul'
+      FieldName = 'MEHSUL'
+      Size = 400
+    end
+    object IntCacheMEQED: TWideStringField
+      FieldName = 'MEQED'
+      Size = 100
+    end
+    object IntCacheEHTIYYAT: TWideStringField
+      DisplayLabel = 'Ehtiyyat'
+      FieldName = 'EHTIYYAT'
+      Visible = False
+      Size = 64
+    end
+    object IntCachePINCODE: TWideStringField
+      DisplayLabel = 'Pinkod'
+      FieldName = 'PINCODE'
+      Visible = False
+      Size = 50
+    end
+    object IntCachePASNUM: TWideStringField
+      DisplayLabel = 'V'#601'siq'#601'nin No'
+      FieldName = 'PASNUM'
+      Visible = False
+      Size = 32
+    end
+    object IntCacheADDRESS: TWideStringField
+      DisplayLabel = #220'nvan'
+      FieldName = 'ADDRESS'
+      Visible = False
+      Size = 300
+    end
+    object IntCacheDOGUM_TARIXI: TDateTimeField
+      DisplayLabel = 'Do'#287'um tarixi'
+      FieldName = 'DOGUM_TARIXI'
+      Visible = False
+    end
+    object IntCacheDOGUM_YERI: TWideStringField
+      DisplayLabel = 'Do'#287'um yeri'
+      FieldName = 'DOGUM_YERI'
+      Visible = False
+      Size = 100
+    end
+    object IntCacheWORK_PLACE: TWideStringField
+      DisplayLabel = #304#351' yeri'
+      FieldName = 'WORK_PLACE'
+      Size = 200
+    end
+    object IntCacheWORK_POST: TWideStringField
+      DisplayLabel = 'V'#601'zif'#601'si'
+      FieldName = 'WORK_POST'
+      Size = 200
+    end
+    object IntCacheBONUS_USER: TWideStringField
+      DisplayLabel = 'Bonus Verilecek User'
+      FieldName = 'BONUS_USER'
+      Size = 50
+    end
+  end
+  object GirovDSet: TOracleDataSet
+    SQL.Strings = (
+      
+        'select g.creditid,g.pledgename,g.anyinfotodisting,g.registryno,g' +
+        '.registryagency,REYSTER,'
+      
+        'g.gqname,g.gqpaspnum,g.gqpaspyer,g.gqpaspdate,g.gqadress,g.pledg' +
+        'eprice,g.gqtelhome,g.gqtelmob from cm_guarantee g'
+      'WHERE (CreditID=:CrdID)'
+      '')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000C0000003A00430052004400490044000500000000000000
+      00000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000E000000100000004300520045004400490054004900440001000000
+      00001400000050004C0045004400470045004E0041004D004500010000000000
+      2000000041004E00590049004E0046004F0054004F0044004900530054004900
+      4E00470001000000000014000000520045004700490053005400520059004E00
+      4F000100000000001C0000005200450047004900530054005200590041004700
+      45004E00430059000100000000000C000000470051004E0041004D0045000100
+      00000000120000004700510050004100530050004E0055004D00010000000000
+      1200000047005100500041005300500059004500520001000000000010000000
+      470051004100440052004500530053000100000000001600000050004C004500
+      4400470045005000520049004300450001000000000012000000470051005400
+      45004C0048004F004D0045000100000000001000000047005100540045004C00
+      4D004F0042000100000000001400000047005100500041005300500044004100
+      540045000100000000000E000000520045005900530054004500520001000000
+      0000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 280
+    Top = 192
+    object GirovDSetCREDITID: TFloatField
+      FieldName = 'CREDITID'
+    end
+    object GirovDSetPLEDGENAME: TWideStringField
+      FieldName = 'PLEDGENAME'
+      Size = 700
+    end
+    object GirovDSetANYINFOTODISTING: TWideStringField
+      FieldName = 'ANYINFOTODISTING'
+      Size = 500
+    end
+    object GirovDSetREGISTRYNO: TWideStringField
+      FieldName = 'REGISTRYNO'
+      Size = 128
+    end
+    object GirovDSetREGISTRYAGENCY: TWideStringField
+      FieldName = 'REGISTRYAGENCY'
+      Size = 150
+    end
+    object GirovDSetGQNAME: TWideStringField
+      FieldName = 'GQNAME'
+      Size = 80
+    end
+    object GirovDSetGQPASPNUM: TWideStringField
+      FieldName = 'GQPASPNUM'
+      Size = 25
+    end
+    object GirovDSetGQPASPYER: TWideStringField
+      FieldName = 'GQPASPYER'
+      Size = 150
+    end
+    object GirovDSetGQPASPDATE: TDateTimeField
+      FieldName = 'GQPASPDATE'
+    end
+    object GirovDSetGQADRESS: TWideStringField
+      FieldName = 'GQADRESS'
+      Size = 200
+    end
+    object GirovDSetPLEDGEPRICE: TFloatField
+      FieldName = 'PLEDGEPRICE'
+    end
+    object GirovDSetGQTELHOME: TWideStringField
+      FieldName = 'GQTELHOME'
+      Size = 60
+    end
+    object GirovDSetGQTELMOB: TWideStringField
+      FieldName = 'GQTELMOB'
+      Size = 60
+    end
+    object GirovDSetREYSTER: TWideStringField
+      FieldName = 'REYSTER'
+      Size = 512
+    end
+  end
+  object GirovDSrc: TDataSource
+    DataSet = GirovDSet
+    Left = 280
+    Top = 272
+  end
+  object FilialSrc: TDataSource
+    DataSet = FilialDSet
+    Left = 368
+    Top = 280
+  end
+  object FilialDSet: TOracleDataSet
+    SQL.Strings = (
+      'select * from sb_filial')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000040000000400000049004400010000000000080000004E0041004D00
+      4500010000000000140000004B004F0044005F00460049004C00490041004C00
+      0100000000001400000043004F004D00500041004E0059005F00490044000100
+      00000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 368
+    Top = 200
+    object FilialDSetID: TFloatField
+      FieldName = 'ID'
+    end
+    object FilialDSetNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 90
+    end
+    object FilialDSetKOD_FILIAL: TWideStringField
+      FieldName = 'KOD_FILIAL'
+      Size = 6
+    end
+  end
+  object ReportDelays: TOracleDataSet
+    SQL.Strings = (
+      'select '
+      'g.filial,'
+      'g.tipi,'
+      'umumi_portfel "'#220'mumi portfel",'
+      'gecikmede_qaliq "Gecikmede olan portfel",'
+      'kredit_sayi "Gecikmede olan  kredit say'#305'",'
+      'umumi_par "'#220'mumi par",'
+      'par_ferq "'#214'ten ayla muqaisede art'#305#351'",'
+      'gecikmede_qaliq_30plus "Gecikmede olan portfel 30+",'
+      'kredit_sayi_30plus "Gecikmede olan  say 30+",'
+      'umumi_par_30_plus  "30+ Par",'
+      'par_ferq_30plus   "'#214'ten ayla muqaise art'#305#351' 30+",'
+      'gec_qaliq_1_30 "Meble'#287' gecikme g'#252'n'#252' 1-30",'
+      'gec_qaliq_31_180 "Meble'#287' gecikme g'#252'n'#252' 31-180",'
+      'gec_qaliq_181_365 "Meble'#287' gecikme g'#252'n'#252' 181-365",'
+      'gecikmede_qaliq_365_plus "Meble'#287' gecikme g'#252'n'#252' 365+",'
+      'k_say_1_30 "Kredit say'#305' gecikme  1-30",'
+      'k_say_31_180 "Kredit say'#305' gecikme  31-180",'
+      'k_say_181_365  "Kredit say'#305' gecikme  181-365",'
+      'k_say_365_plus  "Kredit say'#305' gecikme  365+",'
+      'par_1_30 "Par gecikme g'#252'n'#252' 1-30",'
+      'par_31_180 "Par gecikme g'#252'n'#252' 31-181",'
+      'par_181_365 "Par gecikme g'#252'n'#252' 181-365",'
+      'par_365_plus "Par gecikme g'#252'n'#252' 365+"'
+      ''
+      ' from gecikme_hesabat1 g full outer join  ('
+      ''
+      'select '
+      'nvl(ad,'#39'Total'#39') Filiallar,'
+      'nvl(tipi,'#39'Total'#39') Tipi,'
+      'umumi_portfel ,'
+      'gecikmede_qaliq ,'
+      'kredit_sayi,'
+      'umumi_par||'#39'%'#39' umumi_par,'
+      'umumi_par-umumi_par_evvel||'#39'%'#39' par_ferq,'
+      'gecikmede_qaliq_30plus ,'
+      'kredit_sayi_30plus ,'
+      'umumi_par_30_plus||'#39'%'#39' umumi_par_30_plus ,'
+      
+        'umumi_par_30_plus-umumi_par_30_plus_evvel||'#39'%'#39'   par_ferq_30plus' +
+        ','
+      'gec_qaliq_1_30 ,'
+      'gec_qaliq_31_180 ,'
+      'gec_qaliq_181_365 ,'
+      'gecikmede_qaliq_365_plus,'
+      'k_say_1_30 ,'
+      'k_say_31_180 ,'
+      'k_say_181_365  ,'
+      'k_say_365_plus  ,'
+      'par_1_30 ,'
+      'par_31_180 ,'
+      'par_181_365 ,'
+      'par_365_plus '
+      ''
+      'from('
+      ''
+      'select '
+      ''
+      ' case when e.id in (153,157,158,162) then '#39'Ba'#351' ofis'#39' '
+      
+        '      when e.id in (156,161,168) then '#39'Best Qazax'#39' else e.name e' +
+        'nd  ad,'
+      ' --e.name ad,'
+      'nvl(  d.description , '#39'Girovsuz'#39') Tipi,'
+      ''
+      
+        'sum(case when h.hdate=:dat1 then h.rest+h.duerest end) umumi_por' +
+        'tfel,'
+      
+        'sum(case when h.hdate=:dat1 and nvl(h.dueday,0)<>0 then h.rest+h' +
+        '.duerest  end) gecikmede_qaliq,'
+      
+        'count(case when h.hdate=:dat1 and nvl(h.dueday,0)<>0 then p.id e' +
+        'nd   ) kredit_sayi,'
+      ''
+      
+        'nvl(round(sum(case when h.hdate=:dat1 and  nvl(h.dueday,0)<>0 th' +
+        'en h.rest+h.duerest  end)/'
+      
+        ' sum(case when h.hdate=:dat1 then h.rest+h.duerest end) *100,2),' +
+        '0) Umumi_Par,'
+      '  '
+      
+        ' nvl(round(sum(case when h.hdate=(select max(hdate) from cm_hist' +
+        'ory where hdate<=ADD_MONTHS(LAST_DAY(:dat1),-1)) and  nvl(h.dued' +
+        'ay,0)<>0 then h.rest+h.duerest  end)/'
+      
+        ' sum(case when h.hdate=(select max(hdate) from cm_history where ' +
+        'hdate<=ADD_MONTHS(LAST_DAY(:dat1),-1)) then h.rest+h.duerest end' +
+        ') *100,2),0) Umumi_Par_evvel,'
+      ' '
+      
+        'sum(case when h.hdate=:dat1 and nvl(h.dueday,0)>30 then h.rest+h' +
+        '.duerest  end) gecikmede_qaliq_30plus,'
+      ''
+      
+        'count(case when h.hdate=:dat1 and nvl(h.dueday,0)>30 then p.id e' +
+        'nd  ) kredit_sayi_30plus,'
+      ''
+      
+        'nvl(round(sum(case when h.hdate=:dat1 and  nvl(h.dueday,0)>30 th' +
+        'en h.rest+h.duerest  end)/'
+      
+        ' sum(case when h.hdate=:dat1 then h.rest+h.duerest end) *100,2),' +
+        '0) Umumi_Par_30_plus,'
+      ' '
+      
+        ' nvl(round(sum(case when h.hdate=(select max(hdate) from cm_hist' +
+        'ory where hdate<=ADD_MONTHS(LAST_DAY(:dat1),-1)) and  nvl(h.dued' +
+        'ay,0)>30 then h.rest+h.duerest  end)/'
+      
+        ' sum(case when h.hdate=(select max(hdate) from cm_history where ' +
+        'hdate<=ADD_MONTHS(LAST_DAY(:dat1),-1)) then h.rest+h.duerest end' +
+        ') *100,2),0) Umumi_Par_30_plus_evvel,'
+      ' '
+      
+        'sum(case when h.hdate=:dat1 and nvl(h.dueday,0) between 1 and 30' +
+        '  then h.rest+h.duerest  end) gec_qaliq_1_30,'
+      
+        'sum(case when h.hdate=:dat1 and nvl(h.dueday,0)between 31 and 18' +
+        '0 then h.rest+h.duerest  end) gec_qaliq_31_180,'
+      
+        'sum(case when h.hdate=:dat1 and nvl(h.dueday,0)between 181 and 3' +
+        '65 then h.rest+h.duerest  end) gec_qaliq_181_365,'
+      
+        'sum(case when h.hdate=:dat1 and nvl(h.dueday,0)>365 then h.rest+' +
+        'h.duerest  end) gecikmede_qaliq_365_plus,'
+      
+        'count(case when h.hdate=:dat1 and nvl(h.dueday,0) between 1 and ' +
+        '30  then p.id  end) k_say_1_30,'
+      
+        'count(case when h.hdate=:dat1 and nvl(h.dueday,0)between 31 and ' +
+        '180 then p.id  end) k_say_31_180,'
+      
+        'count(case when h.hdate=:dat1 and nvl(h.dueday,0)between 181 and' +
+        ' 365 then p.id  end)  k_say_181_365,'
+      
+        'count(case when h.hdate=:dat1 and nvl(h.dueday,0)>365 then p.id ' +
+        ' end)  k_say_365_plus,'
+      
+        'nvl(round(sum(case when h.hdate=:dat1 and nvl(h.dueday,0) betwee' +
+        'n 1 and 30  then h.rest+h.duerest  end)/sum(case when h.hdate=:d' +
+        'at1  then h.rest+h.duerest  end)*100,2),0)||'#39'%'#39' Par_1_30,'
+      
+        'nvl(round(sum(case when h.hdate=:dat1 and nvl(h.dueday,0)between' +
+        ' 31 and 180 then h.rest+h.duerest  end)/sum(case when h.hdate=:d' +
+        'at1  then h.rest+h.duerest  end)*100,2),0)||'#39'%'#39' Par_31_180,'
+      
+        'nvl(round(sum(case when h.hdate=:dat1 and nvl(h.dueday,0)between' +
+        ' 181 and 365 then h.rest+h.duerest  end)/sum(case when h.hdate=:' +
+        'dat1  then h.rest+h.duerest  end)*100,2),0)||'#39'%'#39' Par_181_365,'
+      
+        'nvl(round(sum(case when h.hdate=:dat1 and nvl(h.dueday,0)>365 th' +
+        'en h.rest+h.duerest  end)/sum(case when h.hdate=:dat1  then h.re' +
+        'st+h.duerest  end)*100,2),0)||'#39'%'#39' Par_365_plus'
+      ''
+      ' from   '
+      ' ( select * from'
+      
+        '  (select row_number() over (partition by creditid  order by cre' +
+        'ditid  )rn, c.*  '
+      '   from cm_guarantee_credit c ) '
+      '  where rn=1) g,'
+      '  cm_portfolio p,'
+      ' cm_expert e,'
+      ' cm_pledges d,'
+      ' cm_history h'
+      ' where g.creditid(+)=p.id '
+      ' and e.id(+)=p.expertid '
+      ' and d.id(+)=g.pledgeid'
+      'and p.id=h.creditid'
+      
+        ' and   h.hdate IN (:dat1,(select max(hdate) from cm_history wher' +
+        'e hdate<=ADD_MONTHS(LAST_DAY(:dat1),-1)))'
+      ' and nvl(h.rest,0)+nvl(h.duerest,0)<>0'
+      ' group by ROLLUP('
+      'case when e.id in (153,157,158,162) then '#39'Ba'#351' ofis'#39' '
+      
+        '      when e.id in (156,161,168) then '#39'Best Qazax'#39' else e.name e' +
+        'nd,'
+      '--e.name,'
+      
+        ' nvl(  d.description , '#39'Girovsuz'#39')) ) where nvl(umumi_portfel,0)' +
+        '<>0'
+      ' )  b on g.filial=b.Filiallar and g.tipi=b.Tipi order by idd')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000A0000003A0044004100540031000C000000000000000000
+      0000}
+    QBEDefinition.QBEFieldDefs = {
+      05000000170000000C000000460049004C00490041004C000100000000000800
+      000054004900500049000100000000001A000000DC006D0075006D0069002000
+      70006F0072007400660065006C000100000000002C0000004700650063006900
+      6B006D0065006400650020006F006C0061006E00200070006F00720074006600
+      65006C000100000000003600000047006500630069006B006D00650064006500
+      20006F006C0061006E00200020006B0072006500640069007400200073006100
+      7900310101000000000012000000DC006D0075006D0069002000700061007200
+      01000000000032000000D600740065006E002000610079006C00610020006D00
+      75007100610069007300650064006500200061007200740031015F0101000000
+      00003400000047006500630069006B006D0065006400650020006F006C006100
+      6E00200070006F0072007400660065006C002000330030002B00010000000000
+      2E00000047006500630069006B006D0065006400650020006F006C0061006E00
+      200020007300610079002000330030002B000100000000000E00000033003000
+      2B00200050006100720001000000000036000000D600740065006E0020006100
+      79006C00610020006D0075007100610069007300650020006100720074003101
+      5F012000330030002B00010000000000300000004D00650062006C0065001F01
+      200067006500630069006B006D00650020006700FC006E00FC00200031002D00
+      33003000010000000000340000004D00650062006C0065001F01200067006500
+      630069006B006D00650020006700FC006E00FC002000330031002D0031003800
+      3000010000000000360000004D00650062006C0065001F012000670065006300
+      69006B006D00650020006700FC006E00FC0020003100380031002D0033003600
+      3500010000000000300000004D00650062006C0065001F012000670065006300
+      69006B006D00650020006700FC006E00FC0020003300360035002B0001000000
+      0000320000004B00720065006400690074002000730061007900310120006700
+      6500630069006B006D0065002000200031002D00330030000100000000003600
+      00004B0072006500640069007400200073006100790031012000670065006300
+      69006B006D00650020002000330031002D003100380030000100000000003800
+      00004B0072006500640069007400200073006100790031012000670065006300
+      69006B006D006500200020003100380031002D00330036003500010000000000
+      320000004B007200650064006900740020007300610079003101200067006500
+      630069006B006D006500200020003300360035002B000100000000002A000000
+      500061007200200067006500630069006B006D00650020006700FC006E00FC00
+      200031002D00330030000100000000002E000000500061007200200067006500
+      630069006B006D00650020006700FC006E00FC002000330031002D0031003800
+      310001000000000030000000500061007200200067006500630069006B006D00
+      650020006700FC006E00FC0020003100380031002D0033003600350001000000
+      00002A000000500061007200200067006500630069006B006D00650020006700
+      FC006E00FC0020003300360035002B00010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 688
+    Top = 96
+  end
+  object ReportInterval: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      ' p.id ,'
+      'case when  c.sex=1 then '#39'ki'#351'i'#39' '
+      '     when  c.sex=2 then '#39'qad'#305'n'#39' else null end cinsi,'
+      ' p.initialamount*nvl(p.annualbankrate,0)/100 komision,'
+      ' a.description,'
+      '  h.penaltyrest,'
+      ' -- h.dueday,'
+      '  case when   nvl(h.dueday,0) between 1 and 30 then  '#39'1-30 gun'#39
+      
+        '       when  nvl(h.dueday,0) between 31 and 180 then '#39'31-180 gun' +
+        #39
+      
+        '       when  nvl(h.dueday,0) between 181 and 365 then  '#39'181-365 ' +
+        'gun'#39
+      
+        '       when  nvl(h.dueday,0) >365 then   '#39'365 g'#252'nden '#231'ox'#39'  end g' +
+        'ecikme,'
+      '       '
+      
+        '   (select     case when   nvl(t.dueday,0) between 1 and 30 then' +
+        '  '#39'1-30 gun'#39
+      
+        '            when   nvl(t.dueday,0) between 31 and 180 then '#39'31-1' +
+        '80 gun'#39
+      
+        '            when   nvl(t.dueday,0) between 181 and 365 then  '#39'18' +
+        '1-365 gun'#39
+      
+        '            when   nvl(t.dueday,0) >365 then   '#39'365 g'#252'nden '#231'ox'#39' ' +
+        'end oten_ayda_gecikme '
+      
+        ' from cm_history t where t.creditid=h.creditid and  t.hdate  =AD' +
+        'D_MONTHS(:dat1,-1)-pg_calendar.alti_bazar(ADD_MONTHS(:dat1,-1)) ' +
+        ') oten_ayda_gecikme, '
+      
+        '    (select     case when   nvl(t.dueday,0) between 1 and 30 the' +
+        'n  '#39'1-30 gun'#39
+      
+        '            when   nvl(t.dueday,0) between 31 and 180 then '#39'31-1' +
+        '80 gun'#39
+      
+        '            when   nvl(t.dueday,0) between 181 and 365 then  '#39'18' +
+        '1-365 gun'#39
+      
+        '            when   nvl(t.dueday,0) >365 then   '#39'365 g'#252'nden '#231'ox'#39' ' +
+        'end oten_ayda_gecikme  '
+      
+        ' from cm_history t where t.creditid=h.creditid and   t.hdate =AD' +
+        'D_MONTHS(:dat1,1)-pg_calendar.alti_bazar(ADD_MONTHS(:dat1,1)) ) ' +
+        '  novbeti_ayda_gecikme,                '
+      
+        '     case when p.dateofconclusion > ADD_MONTHS(:dat1,-1) then 1 ' +
+        'else 0 end yeni_kredit,'
+      
+        '     case when p.dateofconclusion > ADD_MONTHS(:dat1,-1) then p.' +
+        'initialamount end yeni_kreditin_meblegi,'
+      '     case when p.initialamount<=1000 then '#39'1000 manatadek'#39
+      
+        '           when p.initialamount>1000 then '#39'1000 manatdan '#231'ox'#39' en' +
+        'd mebleg_qruplari'
+      ' from cm_portfolio p,custinfo c,cm_activities a,cm_history h '
+      '  where p.boorowerid=c.idcust'
+      '  and a.id=p.activities'
+      '  and h.creditid=p.id'
+      '  and h.hdate =:dat1-pg_calendar.alti_bazar(:dat1)'
+      '  and p.closedate is null')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000A0000003A0044004100540031000C000000000000000000
+      0000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000B00000004000000490044000100000000000A000000430049004E00
+      53004900010000000000100000004B004F004D004900530049004F004E000100
+      00000000160000004400450053004300520049005000540049004F004E000100
+      0000000016000000500045004E0041004C005400590052004500530054000100
+      000000000E00000047004500430049004B004D00450001000000000022000000
+      4F00540045004E005F0041005900440041005F0047004500430049004B004D00
+      4500010000000000280000004E004F00560042004500540049005F0041005900
+      440041005F0047004500430049004B004D004500010000000000160000005900
+      45004E0049005F004B00520045004400490054000100000000002A0000005900
+      45004E0049005F004B005200450044004900540049004E005F004D0045004200
+      4C004500470049000100000000001E0000004D00450042004C00450047005F00
+      51005200550050004C00410052004900010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 691
+    Top = 152
+  end
+  object ODSDueDay: TOracleDataSet
+    SQL.Strings = (
+      'select * from portfel_in_out2'
+      'order by dat,status')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000D000000080000004E0041004D004500010000000000060000004400
+      410054000100000000002000000047004500430049004B004D0045005F003100
+      5F00330030005F00470055004E000100000000001E000000430045004D004900
+      5F00510041004C00490051005F0031005F003300300001000000000022000000
+      47004500430049004B004D0045005F00330031005F00390030005F0047005500
+      4E0001000000000020000000430045004D0049005F00510041004C0049005100
+      5F00330031005F00390030000100000000002400000047004500430049004B00
+      4D0045005F00390031005F003100380030005F00470055004E00010000000000
+      22000000430045004D0049005F00510041004C00490051005F00390031005F00
+      3100380030000100000000002600000047004500430049004B004D0045005F00
+      3100380031005F003300360035005F00470055004E0001000000000024000000
+      430045004D0049005F00510041004C00490051005F003100380031005F003300
+      360035000100000000002800000047004500430049004B004D0045005F003300
+      360035005F0050004C00550053005F00470055004E0001000000000026000000
+      430045004D0049005F00510041004C00490051005F003300360035005F005000
+      4C00550053000100000000000C00000053005400410054005500530001000000
+      0000}
+    Session = sboapiDataModule.SBSession
+    Left = 560
+    Top = 240
+  end
+  object ODSDueDay7: TOracleDataSet
+    SQL.Strings = (
+      'select * from portfel_in_out7'
+      'order by tarix,status')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000D00000004000000410044000100000000000A000000540041005200
+      490058000100000000001200000044004100540032005F0031005F0033003000
+      0100000000001E00000044004100540032005F0031005F00330030005F005100
+      41004C00490051000100000000001400000044004100540032005F0033003100
+      5F00390030000100000000002000000044004100540032005F00330031005F00
+      390030005F00510041004C004900510001000000000016000000440041005400
+      32005F00390031005F0031003800300001000000000022000000440041005400
+      32005F00390031005F003100380030005F00510041004C004900510001000000
+      00001800000044004100540032005F003100380031005F003300360035000100
+      000000002400000044004100540032005F003100380031005F00330036003500
+      5F00510041004C00490051000100000000001A00000044004100540032005F00
+      3300360035005F0050004C005500530001000000000026000000440041005400
+      32005F003300360035005F0050004C00550053005F00510041004C0049005100
+      0100000000000C000000530054004100540055005300010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 672
+    Top = 240
+  end
+  object ODSDueDay6: TOracleDataSet
+    SQL.Strings = (
+      ' select '
+      ' ad ,'
+      ' sum(dat2_1_30) say_1_30,'
+      ' sum(dat2_1_30_qaliq) Qaliq_1_30,'
+      ' sum(dat2_31_90) say_31_90,'
+      ' sum(dat2_31_90_qaliq)  Qaliq_31_90,'
+      ' sum(dat2_91_180) say_91_180, '
+      ' sum(dat2_91_180_qaliq) qaliq_91_180,'
+      ' sum(dat2_181_365) say_181_365,'
+      ' sum(dat2_181_365_qaliq) qaliq_181_365,'
+      ' sum(dat2_365_plus) say_365_plus,'
+      ' sum(dat2_365_plus_qaliq) Qaliq_365_plus'
+      ' from portfel_in_out7'
+      ' group by AD,status'
+      ' order by status')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000B000000040000004100440001000000000010000000530041005900
+      5F0031005F003300300001000000000014000000510041004C00490051005F00
+      31005F0033003000010000000000120000005300410059005F00330031005F00
+      3900300001000000000016000000510041004C00490051005F00330031005F00
+      39003000010000000000140000005300410059005F00390031005F0031003800
+      300001000000000018000000510041004C00490051005F00390031005F003100
+      38003000010000000000160000005300410059005F003100380031005F003300
+      360035000100000000001A000000510041004C00490051005F00310038003100
+      5F00330036003500010000000000180000005300410059005F00330036003500
+      5F0050004C00550053000100000000001C000000510041004C00490051005F00
+      3300360035005F0050004C0055005300010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 672
+    Top = 304
+  end
+  object AdminGroups: TOracleDataSet
+    SQL.Strings = (
+      'select * from cm_qovluq '
+      'order by status'
+      '')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000040000000400000049004400010000000000080000004E0041004D00
+      45000100000000000C000000550053004E0041004D0045000100000000000C00
+      0000530054004100540055005300010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 51
+    Top = 342
+    object AdminGroupsID: TFloatField
+      FieldName = 'ID'
+    end
+    object AdminGroupsNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 600
+    end
+    object AdminGroupsUSNAME: TWideStringField
+      FieldName = 'USNAME'
+      Size = 500
+    end
+    object AdminGroupsSTATUS: TFloatField
+      FieldName = 'STATUS'
+    end
+  end
+  object DSAdminGroups: TDataSource
+    DataSet = AdminGroups
+    Left = 48
+    Top = 390
+  end
+  object CourtAdmin: TOracleDataSet
+    SQL.Strings = (
+      'select id,NAME from user$'
+      'where SB_ACA.checkmodaccess_int('#39'PROBLEMCREDITMGRS'#39',name)=1'
+      'order by name')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000400000049004400010000000000080000004E0041004D00
+      4500010000000000}
+    DetailFields = 'id'
+    Session = sboapiDataModule.SBSession
+    Left = 226
+    Top = 342
+  end
+  object DSCourtAdmin: TDataSource
+    DataSet = CourtAdmin
+    Left = 225
+    Top = 389
+  end
+  object DSKredit: TDataSource
+    DataSet = ODSKredit
+    Left = 616
+    Top = 416
+  end
+  object ODSKredit: TOracleDataSet
+    SQL.Strings = (
+      'SELECT p.id,p.boorowerid,p.numberofcredit,val_name,b.name,'
+      
+        '       rest,duerest,interestrest,p.creditlineamount,h.penaltyres' +
+        't,'
+      '       p.dateofconclusion,p.duedatefirstcontract,p.qovid,'
+      
+        '       cr.description crtype,b.phonenumber,p.annualyinterestrate' +
+        ',p.annualyoverduerate,p.annualypenaltyrate,'
+      
+        '       dueinterestrest,p.purposeofcredit,cm_utils.Get_MainPlanPa' +
+        'yment(p.id) odenilmeli,'
+      
+        '       cm_utils.Get_MainPlanPayment(p.id)+ duerest + interestres' +
+        't + dueinterestrest+h.penaltyrest fullrest,'
+      
+        '       dueday,q.name qovluq,f.name filial,m.name mehsul,a.name m' +
+        'eqed,e.name expert,r.description ehtiyyat,py.maxpaydate,'
+      '       case when dueday =1 then 0'
+      
+        '        when py.maxpaydate=sbop.GET_DATE then 1  end as status, ' +
+        '       '
+      
+        '  b.pincode,b.boorowerid pasnum,b.address,i.birthday dogum_tarix' +
+        'i,i.birthplace dogum_yeri,i.work_place,i.work_post,'
+      
+        'case when nvl(p.duedatelastcontract,p.duedatefirstcontract)<sbop' +
+        '.get_date '
+      'then '#39'Vaxt'#305' bitib '#39' else '#39' - '#39' end as creditend'
+      'FROM cm_active_credits p,'
+      '     cm_credittypes cr,'
+      '     cm_curr_state h,'
+      '     cm_boorowerinfo b,'
+      '     cm_qovluq q,'
+      '     filial_t f,'
+      '     avalute_t v,'
+      '     cm_mehsul m ,'
+      '     cm_aim_cred a,'
+      '     cm_expert e,'
+      '     cm_reserve_types r,custinfo i,'
+      
+        '     (select creditid ,max(paydate) maxpaydate from cm_payments ' +
+        'group by creditid) py'
+      '     '
+      'WHERE     p.id = h.creditid'
+      '      AND p.id = b.creditid'
+      '      AND p.id = py.creditid(+)'
+      '      AND p.qovid = q.id'
+      '      AND p.mehsulid=m.id'
+      '      AND h.reserveid=r.id'
+      '      AND p.aim_id=a.id'
+      '      AND p.boorowerid=i.idcust'
+      '      AND p.expertid=e.id'
+      
+        '      AND h.rest + h.duerest + h.interestrest + h.interestrest >' +
+        ' 0'
+      '      AND h.dueday>0'
+      '      AND p.branchid = f.id'
+      '      AND p.currency = v.valute'
+      '      AND p.credittype = cr.id'
+      '      AND p.qovid =:pqovid'
+      ''
+      '      '
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      'order by :title'
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      '')
+    Optimize = False
+    Variables.Data = {
+      04000000020000000E0000003A00500051004F00560049004400030000000000
+      0000000000000C0000003A005400490054004C00450001000000000000000000
+      0000}
+    QBEDefinition.QBEFieldDefs = {
+      050000002700000004000000490044000100000000001400000042004F004F00
+      52004F00570045005200490044000100000000001C0000004E0055004D004200
+      450052004F004600430052004500440049005400010000000000100000005600
+      41004C005F004E0041004D004500010000000000080000004E0041004D004500
+      0100000000000800000052004500530054000100000000000E00000044005500
+      450052004500530054000100000000001800000049004E005400450052004500
+      5300540052004500530054000100000000002000000043005200450044004900
+      54004C0049004E00450041004D004F0055004E00540001000000000016000000
+      500045004E0041004C0054005900520045005300540001000000000020000000
+      44004100540045004F00460043004F004E0043004C005500530049004F004E00
+      0100000000002800000044005500450044004100540045004600490052005300
+      540043004F004E00540052004100430054000100000000000A00000051004F00
+      5600490044000100000000000C00000043005200540059005000450001000000
+      000016000000500048004F004E0045004E0055004D0042004500520001000000
+      00002600000041004E004E00550041004C00590049004E005400450052004500
+      5300540052004100540045000100000000002400000041004E004E0055004100
+      4C0059004F005600450052004400550045005200410054004500010000000000
+      2400000041004E004E00550041004C005900500045004E0041004C0054005900
+      52004100540045000100000000001E00000044005500450049004E0054004500
+      520045005300540052004500530054000100000000001E000000500055005200
+      50004F00530045004F0046004300520045004400490054000100000000001400
+      00004F00440045004E0049004C004D0045004C00490001000000000010000000
+      460055004C004C0052004500530054000100000000000C000000440055004500
+      4400410059000100000000000C00000051004F0056004C005500510001000000
+      00000C000000460049004C00490041004C000100000000000C0000004D004500
+      4800530055004C000100000000000A0000004D00450051004500440001000000
+      00000C0000004500580050004500520054000100000000001000000045004800
+      540049005900590041005400010000000000140000004D004100580050004100
+      590044004100540045000100000000000C000000530054004100540055005300
+      0100000000000E000000500049004E0043004F00440045000100000000000C00
+      00005000410053004E0055004D000100000000000E0000004100440044005200
+      4500530053000100000000001800000044004F00470055004D005F0054004100
+      52004900580049000100000000001400000044004F00470055004D005F005900
+      4500520049000100000000001400000057004F0052004B005F0050004C004100
+      430045000100000000001200000057004F0052004B005F0050004F0053005400
+      0100000000001200000043005200450044004900540045004E00440001000000
+      0000}
+    Session = sboapiDataModule.SBSession
+    Left = 616
+    Top = 352
+    object FloatField1: TFloatField
+      DisplayLabel = 'Kreditin m'#601'bl'#601#287#305
+      FieldName = 'CREDITLINEAMOUNT'
+    end
+    object FloatField2: TFloatField
+      DisplayLabel = 'M'#252#351't'#601'ri '#304'D'
+      FieldName = 'BOOROWERID'
+    end
+    object WideStringField1: TWideStringField
+      DisplayLabel = 'M'#252#351't'#601'rinin ad'#305
+      FieldName = 'NAME'
+      Size = 150
+    end
+    object FloatField3: TFloatField
+      DisplayLabel = #399'.B. Qal'#305'q'
+      FieldName = 'REST'
+    end
+    object FloatField4: TFloatField
+      DisplayLabel = #214'd'#601'nilm'#601'li '#399'.B.'
+      FieldName = 'ODENILMELI'
+    end
+    object FloatField5: TFloatField
+      DisplayLabel = 'F.B. Qal'#305'q'
+      FieldName = 'INTERESTREST'
+    end
+    object FloatField6: TFloatField
+      DisplayLabel = 'C'#601'rim'#601
+      FieldName = 'PENALTYREST'
+    end
+    object FloatField7: TFloatField
+      DisplayLabel = 'Umumi m'#601'bl'#601#287
+      FieldName = 'FULLREST'
+    end
+    object DateTimeField1: TDateTimeField
+      DisplayLabel = 'Son '#246'd'#601'ni'#351' tarixi'
+      FieldName = 'MAXPAYDATE'
+      Visible = False
+    end
+    object FloatField8: TFloatField
+      DisplayLabel = 'Gecikm'#601' g'#252'nl'#601'rin say'#305
+      FieldName = 'DUEDAY'
+    end
+    object WideStringField2: TWideStringField
+      DisplayLabel = 'M'#252't'#601'x'#601'ssis'
+      FieldName = 'EXPERT'
+      Size = 80
+    end
+    object DateTimeField2: TDateTimeField
+      DisplayLabel = 'A'#231#305'lma tarixi'
+      FieldName = 'DATEOFCONCLUSION'
+    end
+    object DateTimeField3: TDateTimeField
+      DisplayLabel = 'Ba'#287'lanma tarixi'
+      FieldName = 'DUEDATEFIRSTCONTRACT'
+    end
+    object WideStringField3: TWideStringField
+      DisplayLabel = 'Vaxt'#305' bitmi'#351' m'#252'qavil'#601'l'#601'r'
+      FieldName = 'CREDITEND'
+      Size = 13
+    end
+    object WideStringField4: TWideStringField
+      DisplayLabel = 'Filial'
+      FieldName = 'FILIAL'
+      Size = 90
+    end
+    object WideStringField5: TWideStringField
+      DisplayLabel = 'M'#252'qavil'#601' No'
+      FieldName = 'NUMBEROFCREDIT'
+      Size = 32
+    end
+    object FloatField9: TFloatField
+      DisplayLabel = 'KreditID'
+      FieldName = 'ID'
+      Required = True
+    end
+    object WideStringField6: TWideStringField
+      DisplayLabel = 'Status'
+      FieldName = 'QOVLUQ'
+      Size = 120
+    end
+    object WideStringField7: TWideStringField
+      DisplayLabel = 'Telefon'
+      FieldName = 'PHONENUMBER'
+      Size = 500
+    end
+    object FloatField10: TFloatField
+      DisplayLabel = #399'.B.Faizi'
+      FieldName = 'ANNUALYINTERESTRATE'
+    end
+    object WideStringField8: TWideStringField
+      DisplayLabel = 'Valyuta'
+      FieldName = 'VAL_NAME'
+      Size = 10
+    end
+    object FloatField11: TFloatField
+      DisplayLabel = 'G. B. Qal'#305'q'
+      FieldName = 'DUEREST'
+    end
+    object FloatField12: TFloatField
+      FieldName = 'QOVID'
+    end
+    object WideStringField9: TWideStringField
+      DisplayLabel = 'Kreditin tipi'
+      FieldName = 'CRTYPE'
+      Size = 128
+    end
+    object FloatField13: TFloatField
+      DisplayLabel = 'G.'#399'.B. faizi'
+      FieldName = 'ANNUALYOVERDUERATE'
+    end
+    object FloatField14: TFloatField
+      DisplayLabel = 'C'#601'rim'#601' Faizi'
+      FieldName = 'ANNUALYPENALTYRATE'
+    end
+    object FloatField15: TFloatField
+      DisplayLabel = 'G.F.B.Qal'#305'q'
+      FieldName = 'DUEINTERESTREST'
+    end
+    object WideStringField10: TWideStringField
+      DisplayLabel = 'Kreditin verilm'#601' m'#601'qs'#601'di'
+      FieldName = 'PURPOSEOFCREDIT'
+      Size = 300
+    end
+    object FloatField16: TFloatField
+      FieldName = 'STATUS'
+      Visible = False
+    end
+    object WideStringField11: TWideStringField
+      DisplayLabel = 'M'#601'hsul'
+      FieldName = 'MEHSUL'
+      Size = 400
+    end
+    object WideStringField12: TWideStringField
+      FieldName = 'MEQED'
+      Size = 100
+    end
+    object WideStringField13: TWideStringField
+      DisplayLabel = 'Ehtiyyat'
+      FieldName = 'EHTIYYAT'
+      Visible = False
+      Size = 64
+    end
+    object WideStringField14: TWideStringField
+      DisplayLabel = 'Pinkod'
+      FieldName = 'PINCODE'
+      Visible = False
+      Size = 28
+    end
+    object WideStringField15: TWideStringField
+      DisplayLabel = 'V'#601'siq'#601'nin No'
+      FieldName = 'PASNUM'
+      Visible = False
+      Size = 32
+    end
+    object WideStringField16: TWideStringField
+      DisplayLabel = #220'nvan'
+      FieldName = 'ADDRESS'
+      Visible = False
+      Size = 300
+    end
+    object DateTimeField4: TDateTimeField
+      DisplayLabel = 'Do'#287'um tarixi'
+      FieldName = 'DOGUM_TARIXI'
+      Visible = False
+    end
+    object WideStringField17: TWideStringField
+      DisplayLabel = 'Do'#287'um yeri'
+      FieldName = 'DOGUM_YERI'
+      Visible = False
+      Size = 100
+    end
+    object WideStringField18: TWideStringField
+      DisplayLabel = #304#351' yeri'
+      FieldName = 'WORK_PLACE'
+      Size = 200
+    end
+    object WideStringField19: TWideStringField
+      DisplayLabel = 'V'#601'zif'#601'si'
+      FieldName = 'WORK_POST'
+      Size = 120
+    end
+  end
+  object OPSbAca: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'SB_ACA'
+    Left = 704
+    Top = 384
+  end
+  object AdminIn: TOracleDataSet
+    SQL.Strings = (
+      
+        'select cta.*,case when cta.bons_status=0 then '#39'Verilm'#601'y'#601'c'#601'k'#39' els' +
+        'e '#39'Veril'#601'c'#601'k'#39' end as bons_name from cm_qovluq_in cta'
+      'where cta.userid=:userid'
+      'order by qrupname'
+      ''
+      ''
+      ''
+      '')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000E0000003A00550053004500520049004400030000000400
+      00002D01000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      05000000060000000C0000005500530045005200490044000100000000001000
+      000055005300450052004E0041004D0045000100000000000C00000051005200
+      55005000490044000100000000001000000051005200550050004E0041004D00
+      45000100000000001600000042004F004E0053005F0053005400410054005500
+      53000100000000001200000042004F004E0053005F004E0041004D0045000100
+      00000000}
+    Master = CourtAdmin
+    MasterFields = 'id'
+    DetailFields = 'userid'
+    Session = sboapiDataModule.SBSession
+    Left = 139
+    Top = 341
+  end
+  object DSAdminIn: TDataSource
+    DataSet = AdminIn
+    Left = 136
+    Top = 389
+  end
+  object CheckBonsDSet: TOracleDataSet
+    SQL.Strings = (
+      
+        'select cta.*,case when cta.bons_status=0 then '#39'Verilm'#601'y'#601'c'#601'k'#39' els' +
+        'e '#39'Veril'#601'c'#601'k'#39' end as bons_name from cm_qovluq_in cta'
+      'where cta.userid=:userid and cta.bons_status>0 '
+      'order by qrupname'
+      ''
+      ''
+      ''
+      '')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000E0000003A00550053004500520049004400030000000000
+      000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      05000000060000000C0000005500530045005200490044000100000000001000
+      000055005300450052004E0041004D0045000100000000000C00000051005200
+      55005000490044000100000000001000000051005200550050004E0041004D00
+      45000100000000001600000042004F004E0053005F0053005400410054005500
+      53000100000000001200000042004F004E0053005F004E0041004D0045000100
+      00000000}
+    Session = sboapiDataModule.SBSession
+    Left = 323
+    Top = 341
+  end
+  object OracleDataSet2: TOracleDataSet
+    SQL.Strings = (
+      
+        'select distinct userid,username from smart.cm_qovluq_in where bo' +
+        'ns_status=1')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000C0000005500530045005200490044000100000000001000
+      000055005300450052004E0041004D004500010000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 440
+    Top = 216
+    object OracleDataSet2USERID: TFloatField
+      FieldName = 'USERID'
+    end
+    object OracleDataSet2USERNAME: TWideStringField
+      FieldName = 'USERNAME'
+      Size = 30
+    end
+  end
+  object DataSource2: TDataSource
+    DataSet = OracleDataSet2
+    Left = 440
+    Top = 296
+  end
+  object BonsFilterSet: TOracleDataSet
+    SQL.Strings = (
+      
+        'select distinct userid,username from smart.cm_qovluq_in where bo' +
+        'ns_status=1'
+      'and  userid=uid'
+      ''
+      '')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000C0000005500530045005200490044000100000000001000
+      000055005300450052004E0041004D004500010000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 432
+    Top = 368
+    object FloatField17: TFloatField
+      FieldName = 'USERID'
+    end
+    object WideStringField20: TWideStringField
+      FieldName = 'USERNAME'
+      Size = 30
+    end
+  end
+end

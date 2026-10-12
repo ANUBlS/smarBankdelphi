@@ -1,0 +1,407 @@
+object PercentSetting: TPercentSetting
+  Left = 261
+  Top = 147
+  Width = 396
+  Height = 464
+  BorderIcons = [biSystemMenu]
+  Color = clBtnFace
+  Font.Charset = RUSSIAN_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poScreenCenter
+  OnCanResize = FormCanResize
+  OnKeyPress = FormKeyPress
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 388
+    Height = 404
+    Align = alTop
+    BevelInner = bvRaised
+    BevelOuter = bvLowered
+    TabOrder = 0
+    object GroupBox1: TGroupBox
+      Left = 2
+      Top = 274
+      Width = 384
+      Height = 128
+      Align = alClient
+      Caption = 'Депозитин мябляьи'
+      TabOrder = 0
+      object GridSetting: TDBGrid
+        Left = 2
+        Top = 15
+        Width = 380
+        Height = 111
+        Align = alClient
+        DataSource = PerSettingDatSrc
+        TabOrder = 0
+        TitleFont.Charset = RUSSIAN_CHARSET
+        TitleFont.Color = clWindowText
+        TitleFont.Height = -11
+        TitleFont.Name = 'Azl Sans Serif'
+        TitleFont.Style = []
+        OnKeyDown = GridSettingKeyDown
+        OnKeyPress = GridSettingKeyPress
+        Columns = <
+          item
+            Expanded = False
+            FieldName = 'FIRSTAMOUNT'
+            Title.Color = clNavy
+            Title.Font.Charset = RUSSIAN_CHARSET
+            Title.Font.Color = clWhite
+            Title.Font.Height = -11
+            Title.Font.Name = 'Azl Sans Serif'
+            Title.Font.Style = []
+            Width = 90
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'LASTAMOUNT'
+            Title.Color = clNavy
+            Title.Font.Charset = RUSSIAN_CHARSET
+            Title.Font.Color = clWhite
+            Title.Font.Height = -11
+            Title.Font.Name = 'Azl Sans Serif'
+            Title.Font.Style = []
+            Width = 90
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'INTERESTRATE'
+            Title.Color = clNavy
+            Title.Font.Charset = RUSSIAN_CHARSET
+            Title.Font.Color = clWhite
+            Title.Font.Height = -11
+            Title.Font.Name = 'Azl Sans Serif'
+            Title.Font.Style = []
+            Width = 79
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'DUEINTRATE'
+            Title.Caption = 'Вахт. сонракы %'
+            Title.Color = clNavy
+            Title.Font.Charset = RUSSIAN_CHARSET
+            Title.Font.Color = clWhite
+            Title.Font.Height = -11
+            Title.Font.Name = 'Azl Sans Serif'
+            Title.Font.Style = []
+            Width = 79
+            Visible = True
+          end>
+      end
+    end
+    object GroupBox2: TGroupBox
+      Left = 2
+      Top = 142
+      Width = 384
+      Height = 132
+      Align = alTop
+      Caption = 'Валйута'
+      TabOrder = 1
+      object DBGrid2: TDBGrid
+        Left = 2
+        Top = 15
+        Width = 380
+        Height = 115
+        Align = alClient
+        DataSource = ValutesDatSrc
+        Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit]
+        TabOrder = 0
+        TitleFont.Charset = RUSSIAN_CHARSET
+        TitleFont.Color = clWindowText
+        TitleFont.Height = -11
+        TitleFont.Name = 'Azl Sans Serif'
+        TitleFont.Style = []
+        Columns = <
+          item
+            Expanded = False
+            FieldName = 'VAL_NAME'
+            Title.Color = clNavy
+            Title.Font.Charset = RUSSIAN_CHARSET
+            Title.Font.Color = clWhite
+            Title.Font.Height = -11
+            Title.Font.Name = 'Azl Sans Serif'
+            Title.Font.Style = []
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'VALU_NAME'
+            Title.Color = clNavy
+            Title.Font.Charset = RUSSIAN_CHARSET
+            Title.Font.Color = clWhite
+            Title.Font.Height = -11
+            Title.Font.Name = 'Azl Sans Serif'
+            Title.Font.Style = []
+            Width = 282
+            Visible = True
+          end>
+      end
+    end
+    object GroupBox3: TGroupBox
+      Left = 2
+      Top = 2
+      Width = 384
+      Height = 140
+      Align = alTop
+      Caption = 'Депозитин типи'
+      TabOrder = 2
+      object DBGrid3: TDBGrid
+        Left = 2
+        Top = 15
+        Width = 380
+        Height = 123
+        Align = alClient
+        DataSource = DepositTypesDatSrc
+        Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit]
+        TabOrder = 0
+        TitleFont.Charset = RUSSIAN_CHARSET
+        TitleFont.Color = clWindowText
+        TitleFont.Height = -11
+        TitleFont.Name = 'Azl Sans Serif'
+        TitleFont.Style = []
+        Columns = <
+          item
+            Expanded = False
+            FieldName = 'TYPE'
+            Title.Color = clNavy
+            Title.Font.Charset = RUSSIAN_CHARSET
+            Title.Font.Color = clWhite
+            Title.Font.Height = -11
+            Title.Font.Name = 'Azl Sans Serif'
+            Title.Font.Style = []
+            Width = 346
+            Visible = True
+          end>
+      end
+    end
+  end
+  object BitBtn1: TBitBtn
+    Left = 304
+    Top = 409
+    Width = 75
+    Height = 25
+    Caption = 'Баьла'
+    ModalResult = 2
+    TabOrder = 1
+    Glyph.Data = {
+      DE010000424DDE01000000000000760000002800000024000000120000000100
+      0400000000006801000000000000000000001000000000000000000000000000
+      80000080000000808000800000008000800080800000C0C0C000808080000000
+      FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00388888888877
+      F7F787F8888888888333333F00004444400888FFF444448888888888F333FF8F
+      000033334D5007FFF4333388888888883338888F0000333345D50FFFF4333333
+      338F888F3338F33F000033334D5D0FFFF43333333388788F3338F33F00003333
+      45D50FEFE4333333338F878F3338F33F000033334D5D0FFFF43333333388788F
+      3338F33F0000333345D50FEFE4333333338F878F3338F33F000033334D5D0FFF
+      F43333333388788F3338F33F0000333345D50FEFE4333333338F878F3338F33F
+      000033334D5D0EFEF43333333388788F3338F33F0000333345D50FEFE4333333
+      338F878F3338F33F000033334D5D0EFEF43333333388788F3338F33F00003333
+      4444444444333333338F8F8FFFF8F33F00003333333333333333333333888888
+      8888333F00003333330000003333333333333FFFFFF3333F00003333330AAAA0
+      333333333333888888F3333F00003333330000003333333333338FFFF8F3333F
+      0000}
+    NumGlyphs = 2
+  end
+  object DepositTypes: TOracleDataSet
+    SQL.Strings = (
+      'SELECT id, type'
+      '  FROM sbcm_deposit_types')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = False
+    Active = False
+    Left = 8
+    Top = 408
+    object DepositTypesID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object DepositTypesTYPE: TStringField
+      DisplayLabel = 'Типи'
+      FieldName = 'TYPE'
+      Required = True
+      Size = 256
+    end
+  end
+  object DepositTypesDatSrc: TDataSource
+    DataSet = DepositTypes
+    OnDataChange = DepositTypesDatSrcDataChange
+    Left = 40
+    Top = 408
+  end
+  object Valutes: TOracleDataSet
+    SQL.Strings = (
+      'select valute,val_name,valu_name from avalute')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = False
+    Active = False
+    Left = 80
+    Top = 408
+    object ValutesVAL_NAME: TStringField
+      DisplayLabel = '$'
+      FieldName = 'VAL_NAME'
+      Size = 10
+    end
+    object ValutesVALU_NAME: TStringField
+      DisplayLabel = 'Ады'
+      FieldName = 'VALU_NAME'
+      Size = 25
+    end
+    object ValutesVALUTE: TIntegerField
+      FieldName = 'VALUTE'
+      Required = True
+    end
+  end
+  object ValutesDatSrc: TDataSource
+    DataSet = Valutes
+    OnDataChange = DepositTypesDatSrcDataChange
+    Left = 112
+    Top = 408
+  end
+  object DepositPerSetting: TOracleDataSet
+    SQL.Strings = (
+      
+        'SELECT rowid,id, depositid, currencyid, interestrate,dueintrate,' +
+        'firstamount, lastamount'
+      '  FROM sbcm_depositpersetting'
+      'where DepositID = :DepID'
+      'and   CurrencyID = :CurrID')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    Variables.Data = {
+      0300000002000000060000003A44455049440300000000000000000000000700
+      00003A435552524944030000000000000000000000}
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = False
+    Active = False
+    AfterPost = DepositPerSettingAfterPost
+    Left = 144
+    Top = 408
+    object DepositPerSettingID: TFloatField
+      FieldName = 'ID'
+      Visible = False
+    end
+    object DepositPerSettingDEPOSITID: TFloatField
+      FieldName = 'DEPOSITID'
+      Required = True
+    end
+    object DepositPerSettingCURRENCYID: TFloatField
+      FieldName = 'CURRENCYID'
+      Required = True
+    end
+    object DepositPerSettingINTERESTRATE: TFloatField
+      DisplayLabel = '%'
+      FieldName = 'INTERESTRATE'
+      Required = True
+    end
+    object DepositPerSettingDUEINTRATE: TFloatField
+      DisplayLabel = 'Вахтындан сонракы %'
+      FieldName = 'DUEINTRATE'
+      Required = True
+    end
+    object DepositPerSettingFIRSTAMOUNT: TFloatField
+      DisplayLabel = 'Башланьыж Мяб.'
+      FieldName = 'FIRSTAMOUNT'
+      Required = True
+    end
+    object DepositPerSettingLASTAMOUNT: TFloatField
+      DisplayLabel = 'Сон Мяб.'
+      FieldName = 'LASTAMOUNT'
+      Required = True
+    end
+  end
+  object PerSettingDatSrc: TDataSource
+    DataSet = DepositPerSetting
+    Left = 176
+    Top = 408
+  end
+  object NLSLocalizer1: TNLSLocalizer
+    Caption = 'Фаизлярин сазланмасы'
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    Left = 208
+    Top = 408
+  end
+end

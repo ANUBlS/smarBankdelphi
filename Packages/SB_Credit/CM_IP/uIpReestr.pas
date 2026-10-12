@@ -1,0 +1,66 @@
+unit uIpReestr;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, OracleData, StdCtrls, CheckLst, Evanescence;
+
+type
+  TfrmReestr = class(TForm)
+    ActiveCrd: TDataSource;
+    ODSActiveCrd: TOracleDataSet;
+    evActive: TEvanescence;
+    Label1: TLabel;
+    Button1: TButton;
+    Button2: TButton;
+    procedure FormCreate(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  frmReestr: TfrmReestr;
+
+implementation
+   uses
+  CommonDecls, SystemState,CMOracleApiDataModuleImpl, uIPYMReportImpl,
+  CurrencyToHR_Azeri_Impl, uIPReestrReportImpl;
+{$R *.DFM}
+
+procedure TfrmReestr.FormCreate(Sender: TObject);
+begin
+  evActive.close;
+  evActive.Open;
+end;
+
+procedure TfrmReestr.Button1Click(Sender: TObject);
+var
+  CmText: String;
+begin
+  try
+    if not assigned(qrpReestrInfo) then
+      qrpReestrInfo := TqrpReestrInfo.Create(Self);
+  except
+    on E: Exception do
+      LogError(E.Message);
+  end;
+  CmText := evActive.GetCheckedKeyList.CommaText;
+  with qrpReestrInfo,ODSReestrInfo do begin
+    Close;
+    SQL[1] := 'where creditid in ('+cmtext+')';
+    Open;
+    Preview;
+  end;
+end;
+
+procedure TfrmReestr.Button2Click(Sender: TObject);
+begin
+  Close;
+end;
+
+end.

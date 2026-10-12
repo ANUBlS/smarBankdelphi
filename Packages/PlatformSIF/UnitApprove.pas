@@ -1,0 +1,100 @@
+unit UnitApprove;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, IdBaseComponent, IdComponent, IdTCPConnection, IdTCPClient,
+  IdHTTP,IdURI;
+
+type
+  TApproveForm = class(TForm)
+    Edit1: TEdit;
+    Edit2: TEdit;
+    Edit3: TEdit;
+    Edit4: TEdit;
+    Edit5: TEdit;
+    Label1: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    Label6: TLabel;
+    Button1: TButton;
+    IdHTTP1: TIdHTTP;
+    Edit6: TEdit;
+    Memo1: TMemo;
+    procedure Button1Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  ApproveForm: TApproveForm;
+  applicantid :string;
+
+implementation
+
+uses Datamoduls, MainForm;
+
+{$R *.dfm}
+
+procedure TApproveForm.Button1Click(Sender: TObject);
+var er,headerkey,endpars,pages,cnts,respcont:Ansistring;
+RequestBody: TStream;
+ReqJson: TStringStream;
+RespJson: String;
+urls:string;
+
+begin
+
+try
+
+begin
+
+
+Datamod.OracleDataSet1.Close;
+DataMod.OracleDataSet1.open;
+  memo1.Text:='{"amount":'+edit1.Text+', "duration":'+edit2.Text+',"interestRate":'+edit3.Text+',"commission":'+edit4.Text+',"gracePeriod":'+edit5.Text+'}';
+
+  urls:= datamod.OracleDataSet1.FieldByName('ipadress').AsVariant;
+  headerkey:= datamod.OracleDataSet1.FieldByName('headerkey').AsString;
+ endpars:= datamod.OracleDataSet1.FieldByName('endpointapp').AsString+'/'+edit6.Text+'/'+datamod.OracleDataSet1.FieldByName('endpointapprove').AsString;
+
+ //ShowMessage('http://10.153.0.32'+endpars );
+     with IdHTTP1 do begin
+
+     Request.CustomHeaders.Clear ;
+   Request.CustomHeaders.AddValue('key',headerkey  );
+
+
+   Request.ContentType := 'application/json';
+   ReqJson := TStringStream.Create('{"amount":'+edit1.Text+', "duration":'+edit2.Text+',"interestRate":'+edit3.Text+',"commission":'+edit4.Text+',"gracePeriod":'+edit5.Text+'}', TEncoding.UTF8);
+   respcont:= PUT({'http://10.153.0.32'}urls+endpars, ReqJson);
+
+
+
+      datamod.insqueryapprove.close;
+    datamod.insqueryapprove.closeAll;
+    datamod.insqueryapprove.SetVariable('clb',respcont);
+   datamod.insqueryapprove.open;
+
+        memo1.Text:= respcont;
+    RequestBody.Free;
+    close;
+  end;
+end;
+except
+ on E:EIdHTTPProtocolException do
+     ShowMessage( E.ErrorMessage+'**'+inttostr(E.ErrorCode)+'**'+E.Message);
+end;
+end;
+
+procedure TApproveForm.FormCreate(Sender: TObject);
+begin
+  TIdHTTP.Create(nil);
+end;
+
+end.

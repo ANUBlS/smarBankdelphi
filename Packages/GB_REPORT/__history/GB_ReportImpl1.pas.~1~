@@ -1,0 +1,672 @@
+unit GB_ReportImpl1;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, LDialogs,
+  ActiveX, AxCtrls, GB_ReportProj1_TLB, StdVcl, StdCtrls, Db, Grids,
+  DBGrids, OracleData, Oracle, ComCtrls, sboapiDataModuleImpl, ExtCtrls,
+  OleServer, Excel97, DBCtrls, ToolWin, ImgList, Buttons;
+
+const
+  LCID : DWORD = LOCALE_SYSTEM_DEFAULT;
+  ExcelNotInstalledMsg = 'Excel not installed';
+
+type
+  EExcelNotInstalled = class(Exception);
+
+  TGB_Report = class(TActiveForm, IGB_Report)
+    DBGrid1: TDBGrid;
+    ExcelApplication1: TExcelApplication;
+    ImageList1: TImageList;
+    CoolBar1: TCoolBar;
+    ToolBar1: TToolBar;
+    ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
+    ToolButton3: TToolButton;
+    Panel1: TPanel;
+    Panel2: TPanel;
+    SpeedButton1: TSpeedButton;
+    PageControl1: TPageControl;
+    TabSheet1: TTabSheet;
+    GB_Tarix: TGroupBox;
+    DTP_GB_BEGIN: TDateTimePicker;
+    DTP_GB_END: TDateTimePicker;
+    GroupBox1: TGroupBox;
+    GB_Dil: TGroupBox;
+    RB_AZE: TRadioButton;
+    RB_Q_AZE: TRadioButton;
+    ToolButton4: TToolButton;
+    ToolButton5: TToolButton;
+    ToolButton6: TToolButton;
+    ToolButton7: TToolButton;
+    ToolButton8: TToolButton;
+    DBLookupComboBox1: TDBLookupComboBox;
+    Button1: TButton;
+    procedure Unicode(fi :integer);
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure RB_AZEClick(Sender: TObject);
+    procedure RB_Q_AZEClick(Sender: TObject);
+    procedure ToExcel ;
+    procedure ToolButton1Click(Sender: TObject);
+    procedure ToolButton2Click(Sender: TObject);
+    procedure ToolButton3Click(Sender: TObject);
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure ToolButton7Click(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+  private
+    { Private declarations }
+    FEvents: IGB_ReportEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+  public
+    { Public declarations }
+
+    procedure Initialize; override;
+  end;
+var
+   GB_Report                    : TGB_Report;
+implementation
+
+uses ComObj, ComServ, GB_Setting, GB_Datamod;
+var
+   Begin_Date                   : String;
+   End_Date                     : String;
+   language                     : integer;
+
+{$R *.DFM}
+
+{ TGB_Report }
+
+procedure TGB_Report.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_GB_ReportPage); }
+end;
+
+procedure TGB_Report.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as IGB_ReportEvents;
+end;
+
+procedure TGB_Report.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TGB_Report.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TGB_Report.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TGB_Report.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TGB_Report.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TGB_Report.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TGB_Report.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TGB_Report.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TGB_Report.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TGB_Report.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TGB_Report.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TGB_Report.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TGB_Report.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TGB_Report.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TGB_Report.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TGB_Report.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TGB_Report.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TGB_Report.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TGB_Report.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TGB_Report._Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TGB_Report.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TGB_Report.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TGB_Report.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TGB_Report.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TGB_Report.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TGB_Report.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TGB_Report.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TGB_Report.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TGB_Report.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TGB_Report.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TGB_Report.Set_AxBorderStyle(Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TGB_Report.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TGB_Report.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TGB_Report.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TGB_Report.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TGB_Report.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TGB_Report.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TGB_Report.Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TGB_Report.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TGB_Report.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TGB_Report.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TGB_Report.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TGB_Report.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TGB_Report.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+procedure TGB_Report.Unicode(fi : integer);
+var
+   count       : integer;
+begin
+   DataMod_GBReport.OracleDataSet_unicode.Open;
+   for count:=1 to DataMod_GBReport.OracleDataSet_unicode.RecordCount do
+   begin
+   {***********************-----------------------------************************}
+      if 'TForm'= DataMod_GBReport.OracleDataSet_unicode.Fields[8].AsString then
+      begin
+         TForm(FindComponent(DataMod_GBReport.OracleDataSet_unicode.Fields[7].AsString)).Caption:=DataMod_GBReport.OracleDataSet_unicode.Fields[fi].AsString;
+         TForm(FindComponent(DataMod_GBReport.OracleDataSet_unicode.Fields[7].AsString)).font.name:=DataMod_GBReport.OracleDataSet_unicode.Fields[fi+1].AsString;
+      end;
+      if 'TGroupBox'= DataMod_GBReport.OracleDataSet_unicode.Fields[8].AsString then
+      begin
+         TGroupBox(FindComponent(DataMod_GBReport.OracleDataSet_unicode.Fields[7].AsString)).Caption:=DataMod_GBReport.OracleDataSet_unicode.Fields[fi].AsString;
+         TGroupBox(FindComponent(DataMod_GBReport.OracleDataSet_unicode.Fields[7].AsString)).font.name:=DataMod_GBReport.OracleDataSet_unicode.Fields[fi+1].AsString;
+      end;
+      if 'TLabel'= DataMod_GBReport.OracleDataSet_unicode.Fields[8].AsString then
+      begin
+         TLabel(FindComponent(DataMod_GBReport.OracleDataSet_unicode.Fields[7].AsString)).Caption:=DataMod_GBReport.OracleDataSet_unicode.Fields[fi].AsString;
+         TLabel(FindComponent(DataMod_GBReport.OracleDataSet_unicode.Fields[7].AsString)).font.name:=DataMod_GBReport.OracleDataSet_unicode.Fields[fi+1].AsString;
+      end;
+      if 'TRadioButton'= DataMod_GBReport.OracleDataSet_unicode.Fields[8].AsString then
+      begin
+         TRadioButton(FindComponent(DataMod_GBReport.OracleDataSet_unicode.Fields[7].AsString)).Caption:=DataMod_GBReport.OracleDataSet_unicode.Fields[fi].AsString;
+         TRadioButton(FindComponent(DataMod_GBReport.OracleDataSet_unicode.Fields[7].AsString)).font.name:=DataMod_GBReport.OracleDataSet_unicode.Fields[fi+1].AsString;
+      end;
+      if 'TButton'= DataMod_GBReport.OracleDataSet_unicode.Fields[8].AsString then
+      begin
+         TButton(FindComponent(DataMod_GBReport.OracleDataSet_unicode.Fields[7].AsString)).Caption:=DataMod_GBReport.OracleDataSet_unicode.Fields[fi].AsString;
+         TButton(FindComponent(DataMod_GBReport.OracleDataSet_unicode.Fields[7].AsString)).font.name:=DataMod_GBReport.OracleDataSet_unicode.Fields[fi+1].AsString;
+      end;
+      if 'TTabSheet'= DataMod_GBReport.OracleDataSet_unicode.Fields[8].AsString then
+      begin
+         TTabSheet(FindComponent(DataMod_GBReport.OracleDataSet_unicode.Fields[7].AsString)).Caption:=DataMod_GBReport.OracleDataSet_unicode.Fields[fi].AsString;
+         TTabSheet(FindComponent(DataMod_GBReport.OracleDataSet_unicode.Fields[7].AsString)).font.name:=DataMod_GBReport.OracleDataSet_unicode.Fields[fi+1].AsString;
+      end;
+      if 'TToolButton'= DataMod_GBReport.OracleDataSet_unicode.Fields[8].AsString then
+      begin
+         TToolButton(FindComponent(DataMod_GBReport.OracleDataSet_unicode.Fields[7].AsString)).Caption:=DataMod_GBReport.OracleDataSet_unicode.Fields[fi].AsString;
+         {TToolButton(FindComponent(DataMod_GBReport.OracleDataSet_unicode.Fields[7].AsString)).font.name:=DataMod_GBReport.OracleDataSet_unicode.Fields[fi+1].AsString;}
+      end;
+      if 'TToolBar'= DataMod_GBReport.OracleDataSet_unicode.Fields[8].AsString then
+      begin
+         ShowMessage('xereb1');
+ {        TToolBar(FindComponent(DataMod_GBReport.OracleDataSet_unicode.Fields[7].AsString)).Caption:=DataMod_GBReport.OracleDataSet_unicode.Fields[fi].AsString;}
+         TToolBar(FindComponent(DataMod_GBReport.OracleDataSet_unicode.Fields[7].AsString)).font.name:=DataMod_GBReport.OracleDataSet_unicode.Fields[fi+1].AsString;
+         TToolBar(FindComponent(DataMod_GBReport.OracleDataSet_unicode.Fields[7].AsString)).font.Charset:=0;
+         ShowMessage('xereb2');
+      end;
+      if 'TDBGrid'= DataMod_GBReport.OracleDataSet_unicode.Fields[8].AsString then
+      begin
+         TDBGrid(FindComponent(DataMod_GBReport.OracleDataSet_unicode.Fields[7].AsString)).Font.Name:=DataMod_GBReport.OracleDataSet_unicode.Fields[fi+1].AsString;
+         if DataMod_GBReport.OracleDataSet_unicode.Fields[9].AsString='1' then
+         begin
+            TDBGrid(FindComponent(DataMod_GBReport.OracleDataSet_unicode.Fields[7].AsString)).Columns.Items[0].Title.Caption:=DataMod_GBReport.OracleDataSet_unicode.Fields[fi].AsString;
+            TDBGrid(FindComponent(DataMod_GBReport.OracleDataSet_unicode.Fields[7].AsString)).Columns.Items[0].Title.Font.Name:=DataMod_GBReport.OracleDataSet_unicode.Fields[fi+1].AsString;
+         end;
+         if DataMod_GBReport.OracleDataSet_unicode.Fields[9].AsString='2' then
+         begin
+         TDBGrid(FindComponent(DataMod_GBReport.OracleDataSet_unicode.Fields[7].AsString)).Columns.Items[1].Title.Caption:=DataMod_GBReport.OracleDataSet_unicode.Fields[fi].AsString;
+         TDBGrid(FindComponent(DataMod_GBReport.OracleDataSet_unicode.Fields[7].AsString)).Columns.Items[1].Title.Font.Name:=DataMod_GBReport.OracleDataSet_unicode.Fields[fi+1].AsString;
+         end;
+         if DataMod_GBReport.OracleDataSet_unicode.Fields[9].AsString='3' then
+         begin
+         TDBGrid(FindComponent(DataMod_GBReport.OracleDataSet_unicode.Fields[7].AsString)).Columns.Items[2].Title.Caption:=DataMod_GBReport.OracleDataSet_unicode.Fields[fi].AsString;
+         TDBGrid(FindComponent(DataMod_GBReport.OracleDataSet_unicode.Fields[7].AsString)).Columns.Items[2].Title.Font.Name:=DataMod_GBReport.OracleDataSet_unicode.Fields[fi+1].AsString;
+         end;
+      end;
+
+   {***********************-----------------------------************************}
+      DataMod_GBReport.OracleDataSet_unicode.Next;
+   end;
+   DataMod_GBReport.OracleDataSet_unicode.Close;
+   DataMod_GBReport.OracleDataSet_Setting.Open;
+   DataMod_GBReport.OracleDataSet_Setting.Edit;
+   DataMod_GBReport.OracleDataSet_Setting.Fields[0].AsInteger:=language;
+   DataMod_GBReport.OracleDataSet_Setting.Post;
+   DataMod_GBReport.OracleDataSet_Setting.Close;
+
+end;
+
+
+
+procedure TGB_Report.ActiveFormCreate(Sender: TObject);
+begin
+   DataMod_GBReport:=TDataMod_GBReport.Create(self);
+{   Application.CreateForm(TDataMod_GBReport, DataMod_GBReport);}
+   Application.CreateForm(TFormSettingsGBReport, FormSettingsGBReport);
+   DataMod_GBReport.OracleDataSet_DATE.Open;
+   DataMod_GBReport.OracleDataSet_SQL.Open;
+   DTP_GB_BEGIN.Date:=DataMod_GBReport.OracleDataSet_DATE.Fields[0].AsDateTime-6;
+   DTP_GB_END.date:=DataMod_GBReport.OracleDataSet_DATE.Fields[0].AsDateTime;
+   DataMod_GBReport.OracleDataSet_DATE.Close;
+   {****************************}
+   DataMod_GBReport.OracleDataSet_Setting.Open;
+   if DataMod_GBReport.OracleDataSet_Setting.Fields[0].AsInteger=0 then
+   begin
+      RB_AZE.Checked:=true;
+   end else
+   begin
+      RB_Q_AZE.Checked:=true;
+   end;
+   DataMod_GBReport.OracleDataSet_Setting.Close;
+   {****************************}
+
+end;
+
+procedure TGB_Report.ToExcel;
+const
+ StartRow = 1;
+var
+  Mas ,V :Variant;
+  r,c,i,j  :Integer;
+  XLWB : ExcelWorkbook;
+  XLWS : ExcelWorkSheet;
+begin
+   if DBLookupComboBox1.Text<>'' then
+   begin
+      Screen.Cursor:=crSQLWait;
+     //----------------------------prepare--------------------------------
+      try
+         R := DataMod_GBReport.DataSource_GB.DataSet.RecordCount+1;
+         C := DataMod_GBReport.DataSource_GB.DataSet.FieldCount;
+
+         Mas := VarArrayCreate([0,(R - 1),0,(C-1)],varVariant);
+         VarArrayLock(Mas);
+         I := 0;
+
+         with  DataMod_GBReport.DataSource_GB.DataSet do
+            try
+               DisableControls;
+               First;
+               for J := 0  to C - 1 do
+                  Mas[I,J] := Fields[J].DisplayLabel;
+                  INC(I);
+                  while not DataMod_GBReport.DataSource_GB.DataSet.Eof do
+                  begin
+                     for J := 0 to C - 1 do
+                        Mas[I,J] := Fields[J].AsVariant;
+                        INC(I);
+                        Next;
+                     end;
+            finally
+            EnableControls
+        end;
+
+//------------------------------Working with Excel---------------------
+
+    V :=ExcelApplication1.Application;
+
+    try
+      ExcelApplication1.Connect;
+    except
+      raise EExcelNotInstalled.Create(ExcelNotInstalledMsg);
+    end;
+
+
+     //---------------Новый создать-->>---------
+      ExcelApplication1.Workbooks.Add(Emptyparam,LCID);
+      ExcelApplication1.SheetsinNewWorkBook[LCID];
+      ExcelApplication1.Sheets.Add(
+                           ExcelApplication1.Sheets[1],     //Before
+                           EmptyParam,                  //After
+                           EmptyParam,                  //Count
+                           EmptyParam,                  //Type
+                           LCID                         //lcid
+                           );
+      //-------------<<--Новый создать-----------
+
+
+    //---------------Открыть существующий--->>--------
+    //  V.Workbooks.Open(ExtractFilePath(ExtractFilePath(ParamStr(0)))+ 'Test.xls');
+    //-------------<<--Открыть существующий-----------
+
+      XLWB:=ExcelApplication1.ActiveWorkbook as ExcelWorkbook;
+      XLWS := ExcelApplication1.Sheets[1] as ExcelWorkSheet;
+      XLWS.Activate(LCID);
+     with XLWS.Range['A'+IntToStr(StartRow),XLWS.Cells.Item[R+StartRow-1,C]] do
+     begin
+      //AutoFormat(1, 0, true, 0, 0, 0, 1);
+          Borders.LineStyle:=Abs(xlContinuous);;
+          Font.Name :='Azl Sans Serif'; //'LitNusx';
+          Font.Size := 8;
+          Font.Color :=clBlack;
+         // EntireColumn.Autofit;
+          ColumnWidth:=15;
+        end;
+      with XLWS do
+       Range['A'+IntToStr(StartRow),XLWS.Cells.Item[R+StartRow-1,C]].Value:=Mas;
+       XLWS.Range['A'+IntToStr(StartRow),'CA'+IntToStr(StartRow)].Font.Bold := True;
+       XLWS.Range['A'+IntToStr(StartRow),'CA'+IntToStr(StartRow)].Font.Name := 'Azl Sans Serif';
+       XLWS.Cells.Range_['A'+IntToStr(StartRow),XLWS.Cells.Item[R+StartRow-1,C]].NumberFormat :='@';
+       ExcelApplication1.Visible[LCID] := True;
+
+       finally
+          VarArrayUnlock(Mas);
+          ExcelApplication1.Disconnect;
+       end;
+
+
+       Screen.Cursor:=crDefault;
+    end
+end;
+
+
+procedure TGB_Report.RB_AZEClick(Sender: TObject);
+begin
+   language:=0;
+   Unicode(0);
+end;
+
+procedure TGB_Report.RB_Q_AZEClick(Sender: TObject);
+begin
+   language:=1;
+   Unicode(2);
+end;
+
+procedure TGB_Report.ToolButton1Click(Sender: TObject);
+begin
+   if DBLookupComboBox1.Text='' then
+   begin
+      ShowMessage('Щяр щансы бир ямялиййат сечин');
+   end else
+   begin
+      Screen.Cursor:=crSQLWait;
+      Begin_Date:=FormatDateTime('dd.MM.yyyy',DTP_GB_BEGIN.Date);
+      End_Date:=FormatDateTime('dd.MM.yyyy',DTP_GB_END.Date);
+
+      DataMod_GBReport.OracleDataSet_GB.SetVariable('BEGDATE',Begin_Date);
+      DataMod_GBReport.OracleDataSet_GB.SetVariable('ENDDATE',End_Date);
+
+      DataMod_GBReport.OracleDataSet_GB.Close;
+      with DataMod_GBReport.OracleDataSet_GB.SQL do
+      begin
+         Clear;
+         Add(DBLookupComboBox1.KeyValue);
+      end;
+      DataMod_GBReport.OracleDataSet_GB.Open;
+      Screen.Cursor:=crDefault;
+   End;     
+end;
+
+procedure TGB_Report.ToolButton2Click(Sender: TObject);
+begin
+   ToolButton1Click(Sender);
+   ToExcel;
+end;
+
+procedure TGB_Report.ToolButton3Click(Sender: TObject);
+begin
+   FormSettingsGBReport.ShowModal;
+end;
+
+procedure TGB_Report.SpeedButton1Click(Sender: TObject);
+begin
+   Panel1.Visible:=False;
+   ToolButton7.Down:=false;
+end;
+
+procedure TGB_Report.ToolButton7Click(Sender: TObject);
+begin
+    ToolButton7.Down := not Panel1.Visible;
+    Panel1.Visible := not Panel1.Visible;
+end;
+
+procedure TGB_Report.Button1Click(Sender: TObject);
+var
+   Componentin_Sayi : integer;
+begin
+{  for Componentin_Sayi:=0 to  ComponentCount-1 do
+  if (Components[Componentin_Sayi] is TDBGridColumns) then
+   DataMod_GBReport.OP_GB_Report.CallProcedure('Unicode_change',[(Components[Componentin_Sayi] as TDBGRIDColumn).Caption,
+                                                           'Azl Sans Serif',
+                                                           8,
+                                                           204,
+                                                           (Components[Componentin_Sayi] as TDBGRIDColumn).caption,
+                                                           'LitNusx',
+                                                           8,
+                                                           0,
+                                                           (Components[Componentin_Sayi] as TDBGRIDColumn).tag,
+                                                           (Components[Componentin_Sayi] as TDBGRIDColumn).Name,
+                                                           'TDBGRIDColumn',
+                                                           'TDBGrid',
+                                                           'TDBGRIDColumn'
+
+                                                                ]);
+
+}
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TGB_Report,
+    Class_GB_Report,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

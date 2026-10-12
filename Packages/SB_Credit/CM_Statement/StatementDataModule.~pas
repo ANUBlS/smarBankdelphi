@@ -1,0 +1,133 @@
+unit StatementDataModule;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, OracleData, Oracle;
+
+type
+  TStatementDataMod = class(TDataModule)
+    CreditsInfo: TOracleDataSet;
+    DSCreditsInfo: TDataSource;
+    DSTranches: TDataSource;
+    Tranches: TOracleDataSet;
+    DSPayments: TDataSource;
+    Payments: TOracleDataSet;
+    DSSchedule: TDataSource;
+    Schedule: TOracleDataSet;
+    DSUserGroups: TDataSource;
+    UserGroups: TOracleDataSet;
+    CreditsInfoCREDITLINEAMOUNT: TFloatField;
+    CreditsInfoANNUALYINTERESTRATE: TFloatField;
+    CreditsInfoANNUALYOVERDUERATE: TFloatField;
+    CreditsInfoDATEOFCONCLUSION: TDateTimeField;
+    CreditsInfoDUEDATEFIRSTCONTRACT: TDateTimeField;
+    CreditsInfoDUEDATELASTCONTRACT: TDateTimeField;
+    CreditsInfoPURPOSEOFCREDIT: TStringField;
+    CreditsInfoUSRGROUP: TFloatField;
+    CreditsInfoCUSTOMERTYPE: TFloatField;
+    CreditsInfoCREDITTYPE: TFloatField;
+    CreditsInfoNAME: TStringField;
+    DSCreditTypes: TDataSource;
+    CreditTypes: TOracleDataSet;
+    DSCategories: TDataSource;
+    Categories: TOracleDataSet;
+    RestsInPeriod: TOracleDataSet;
+    DSPeriod: TDataSource;
+    IntrInPeriod: TOracleDataSet;
+    RestsInPeriodREST: TFloatField;
+    RestsInPeriodINTERESTREST: TFloatField;
+    RestsInPeriodDUEREST: TFloatField;
+    RestsInPeriodDUEINTERESTREST: TFloatField;
+    IntrInPeriodINTEREST: TFloatField;
+    IntrInPeriodDUEINTEREST: TFloatField;
+    RestsInPeriodHDATE: TDateTimeField;
+    IntrInPeriodHDATE: TDateTimeField;
+    ScheduleID: TFloatField;
+    ScheduleCREDITID: TFloatField;
+    SchedulePAYMENTDATE: TDateTimeField;
+    SchedulePRINCIPAL: TFloatField;
+    ScheduleINTEREST: TFloatField;
+    InterestsDataSource: TDataSource;
+    ReportDataSet: TOracleDataSet;
+    ReportDataSource: TDataSource;
+    RatesDataSet: TOracleDataSet;
+    RatesDataSource: TDataSource;
+    AboutBank: TOracleDataSet;
+    RatesDataSetRATE: TFloatField;
+    ReportDataSetCONTRACTACCID: TFloatField;
+    ReportDataSetBOOROWERID: TFloatField;
+    ReportDataSetCURRENCY: TFloatField;
+    ReportDataSetDATEOFCONCLUSION: TDateTimeField;
+    ReportDataSetNAME: TStringField;
+    ReportDataSetCLIENTACCNO: TStringField;
+    ReportDataSetCONTRACTACCCNO: TStringField;
+    ReportDataSetINTERESTACCCNO: TStringField;
+    ReportDataSetDUELOANACCNO: TStringField;
+    ReportDataSetDUEINTERESTACCNO: TStringField;
+    ReportDataSetLOANACCACCNO: TStringField;
+    PaymentsID: TFloatField;
+    PaymentsCREDITID: TFloatField;
+    PaymentsPAYDATE: TDateTimeField;
+    PaymentsPAYEDAMT: TFloatField;
+    PaymentsPAYEDINTAMT: TFloatField;
+    PaymentsPAYEDDUEAMT: TFloatField;
+    PaymentsPAYEDDUEINTAMT: TFloatField;
+    PaymentsPAYEDPENALTYAMT: TFloatField;
+    ReportDataSetVAL_NAME: TStringField;
+    ProlongationDataSet: TOracleDataSet;
+    ProlongationDataSetPROLONGDATE: TDateTimeField;
+    ProlongationDataSetNEWCLOSEDATE: TDateTimeField;
+    ProlongationDataSource: TDataSource;
+    TranchesID: TFloatField;
+    TranchesCREDITID: TFloatField;
+    TranchesTRANCHEDATE: TDateTimeField;
+    TranchesTRANCHEAMOUNT: TFloatField;
+    DefIntDatSet: TOracleDataSet;
+    CM_AK_REPORTS: TOraclePackage;
+    ScheduleSM: TFloatField;
+    PaymentsSM: TFloatField;
+    ReportDataSetINN: TStringField;
+    cust: TOracleDataSet;
+    ScheduleSIRA: TFloatField;
+    PaymentsSIRA: TFloatField;
+    DataSource: TDataSource;
+    DataSet: TOracleDataSet;
+    DataSetUSER1: TStringField;
+    DataSetHDATE: TDateTimeField;
+    DataSetSYSDAT: TDateTimeField;
+    DataSetOLDPARAM: TStringField;
+    DataSetNEWPARAM: TStringField;
+    DataSetPOLYA: TStringField;
+    DataSetROWNUM: TFloatField;
+    procedure DataModuleCreate(Sender: TObject);
+    procedure DataModuleDestroy(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  StatementDataMod : TStatementDataMod;
+
+implementation
+
+{$R *.DFM}
+
+uses
+  CMOracleAPIDataModuleImpl;
+
+
+procedure TStatementDataMod.DataModuleCreate(Sender: TObject);
+begin
+   AboutBank.Open;
+end;
+
+procedure TStatementDataMod.DataModuleDestroy(Sender: TObject);
+begin
+   AboutBank.CloseAll;
+end;
+
+end.

@@ -1,0 +1,455 @@
+unit ImportServiceImpl1;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActiveX, AxCtrls, ImportService_TLB, StdVcl, Grids, DBGrids, Oracle,
+  OleServer, Excel97, Db, OracleData, StdCtrls, Buttons, ExtCtrls,
+  ComCtrls, ToolWin, ImgList, CMExcelExport;
+
+type
+  TFormImportService = class(TActiveForm, IFormImportService)
+    DSXLS_OperationTypes: TDataSource;
+    OrDSXLS_OperationTypes: TOracleDataSet;
+    DSXLS_SalaryMessages: TDataSource;
+    ExcelApplication1: TExcelApplication;
+    OrDSXLS_SalaryMessages: TOracleDataSet;
+    OrPackXLS_PROCESSES: TOraclePackage;
+    OpenDialog: TOpenDialog;
+    DBGrid1: TDBGrid;
+    DBGrid2: TDBGrid;
+    ControlBar1: TControlBar;
+    ToolBar1: TToolBar;
+    BtnImport: TToolButton;
+    ToolButton2: TToolButton;
+    BtnEmpty: TToolButton;
+    ToolButton4: TToolButton;
+    BtnProcess: TToolButton;
+    ToolButton6: TToolButton;
+    Panel1: TPanel;
+    EditFilePath: TEdit;
+    ImageList: TImageList;
+    BtnHelp: TToolButton;
+    ToolButton3: TToolButton;
+    OrDSXLS_Example_File: TOracleDataSet;
+    ExcelExporter: TCMExcelExport;
+    OrDSXLS_Example_FileDEBIT: TStringField;
+    OrDSXLS_Example_FileCREDIT: TStringField;
+    OrDSXLS_Example_FileAMOUNT: TStringField;
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure BtnImportClick(Sender: TObject);
+    procedure BtnEmptyClick(Sender: TObject);
+    procedure BtnProcessClick(Sender: TObject);
+    procedure BtnHelpClick(Sender: TObject);
+    procedure EditFilePathKeyUp(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+  private
+    { Private declarations }
+    FEvents: IFormImportServiceEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+  public
+    { Public declarations }
+    procedure Initialize; override;
+  end;
+
+implementation
+
+uses ComObj, ComServ;
+
+{$R *.DFM}
+
+{ TFormImportService }
+
+procedure TFormImportService.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_FormImportServicePage); }
+end;
+
+procedure TFormImportService.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as IFormImportServiceEvents;
+end;
+
+procedure TFormImportService.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TFormImportService.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TFormImportService.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TFormImportService.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TFormImportService.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TFormImportService.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TFormImportService.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TFormImportService.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TFormImportService.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TFormImportService.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TFormImportService.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TFormImportService.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TFormImportService.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TFormImportService.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TFormImportService.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TFormImportService.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TFormImportService.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TFormImportService.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TFormImportService.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TFormImportService._Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TFormImportService.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TFormImportService.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TFormImportService.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TFormImportService.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TFormImportService.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TFormImportService.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TFormImportService.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TFormImportService.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TFormImportService.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TFormImportService.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TFormImportService.Set_AxBorderStyle(
+  Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TFormImportService.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TFormImportService.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TFormImportService.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TFormImportService.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TFormImportService.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TFormImportService.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TFormImportService.Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TFormImportService.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TFormImportService.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TFormImportService.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TFormImportService.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TFormImportService.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TFormImportService.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+procedure TFormImportService.ActiveFormCreate(Sender: TObject);
+begin
+  OrDSXLS_OperationTypes.Open;
+  OrDSXLS_SalaryMessages.Open;
+end;
+
+
+procedure TFormImportService.BtnImportClick(Sender: TObject);
+const
+  c_info = '%d yazi idxal olundu!';
+var
+   V,Sheet,Sheets  :Variant;
+   cell,i,j    :Integer;
+begin
+  if OpenDialog.Execute then begin
+   EditFilePath.Text :=OpenDialog.FileName;
+   OrDSXLS_SalaryMessages.Open;
+   V:=ExcelApplication1.Application;
+   ExcelApplication1.Connect;
+   V.Workbooks.Open(OpenDialog.FileName);
+   Sheet := V.Workbooks[1].Worksheets['MESSAGES'];
+   Sheets := V.Sheets;
+
+   OrDSXLS_SalaryMessages.First;
+   j:=5;
+
+   repeat
+    cell :=1;
+    OrDSXLS_SalaryMessages.Insert ;
+    for i:=0  to OrDSXLS_SalaryMessages.FieldCount-1 do
+     begin
+      Application.ProcessMessages;
+      OrDSXLS_SalaryMessages.Fields[i].AsString :=Sheet.cells[j,cell];
+      cell:=cell+1;
+     end;
+    OrDSXLS_SalaryMessages.Post;
+    OrDSXLS_SalaryMessages.Next;
+    j:=j+1;
+   until (Sheet.cells[j,1].Text = '') and (Sheet.cells[j,2].Text = '') and (Sheet.cells[j,3].Text = '');
+
+  V :=null;
+  Application.ProcessMessages;
+  ExcelApplication1.Quit;
+  ExcelApplication1.Disconnect;
+  Application.ProcessMessages;
+  OrDSXLS_SalaryMessages.Refresh;
+  ShowMessage(Format(c_info, [j-5]));
+  end; {if OpenDialog.Execute}
+
+end;
+
+procedure TFormImportService.BtnEmptyClick(Sender: TObject);
+begin
+  if MessageDlg('Cedvelin temizlenmesini isteyirsinizmi?',mtConfirmation, [mbYes, mbNo], 0) = mrYes then
+  begin
+   OrPackXLS_PROCESSES.CallProcedure('EmptyXLS_SalaryMessages',[]);
+   OrDSXLS_SalaryMessages.Refresh;
+  end; {if MessageDlg}
+
+end;
+
+procedure TFormImportService.BtnProcessClick(Sender: TObject);
+begin
+  OrPackXLS_PROCESSES.CallProcedure('GetTransaction',
+   [OrDSXLS_OperationTypes.FieldByName('Debit').AsString,
+    OrDSXLS_OperationTypes.FieldByName('Credit').AsString,
+    OrDSXLS_OperationTypes.FieldByName('Purpose').AsString]);
+  OrDSXLS_SalaryMessages.Refresh;
+  if OrDSXLS_SalaryMessages.RecordCount>0 then
+   ShowMessage('Bezi emeliyyatlar yerine yetirilmedi');
+
+end;
+
+procedure TFormImportService.BtnHelpClick(Sender: TObject);
+begin
+  OrDSXLS_Example_File.Open;
+  with ExcelExporter do
+   begin
+    if not Connected then Connect;
+     ExportDataset(OrDSXLS_Example_File,'MESSAGES',True);
+     Disconnect;
+   end;
+end;
+
+procedure TFormImportService.EditFilePathKeyUp(Sender: TObject;
+  var Key: Word; Shift: TShiftState);
+begin
+  if Key = vk_F1 then BtnHelp.Click; 
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TFormImportService,
+    Class_FormImportService,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

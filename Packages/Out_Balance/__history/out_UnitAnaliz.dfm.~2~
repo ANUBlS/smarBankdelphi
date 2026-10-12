@@ -1,0 +1,749 @@
+object FrmAnaliz: TFrmAnaliz
+  Left = 189
+  Top = 110
+  Caption = 'Analiz'
+  ClientHeight = 444
+  ClientWidth = 692
+  Color = clBtnFace
+  Font.Charset = RUSSIAN_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poScreenCenter
+  OnCreate = FormCreate
+  OnKeyPress = FormKeyPress
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object GroupBox2: TGroupBox
+    Left = 0
+    Top = 0
+    Width = 692
+    Height = 444
+    Align = alClient
+    Caption = 'Balans'#1099#1085' Analizi'
+    TabOrder = 0
+    object Splitter1: TSplitter
+      Left = 2
+      Top = 286
+      Width = 688
+      Height = 2
+      Cursor = crVSplit
+      Align = alBottom
+      Color = clBlack
+      ParentColor = False
+    end
+    object Splitter2: TSplitter
+      Left = 2
+      Top = 137
+      Width = 688
+      Height = 2
+      Cursor = crVSplit
+      Align = alBottom
+      Color = clBlack
+      ParentColor = False
+    end
+    object DBGridBalance: TDBGrid
+      Left = 2
+      Top = 48
+      Width = 688
+      Height = 63
+      Align = alClient
+      Color = clScrollBar
+      DataSource = DataSrcBalance
+      DrawingStyle = gdsGradient
+      FixedColor = clScrollBar
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+      PopupMenu = ExportPopupMenu
+      TabOrder = 0
+      TitleFont.Charset = DEFAULT_CHARSET
+      TitleFont.Color = clWindowText
+      TitleFont.Height = -11
+      TitleFont.Name = 'MS Sans Serif'
+      TitleFont.Style = []
+      Columns = <
+        item
+          Color = clSilver
+          Expanded = False
+          FieldName = 'BAL_CN'
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clNavy
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          Title.Alignment = taCenter
+          Width = 67
+          Visible = True
+        end
+        item
+          Color = clInactiveBorder
+          Expanded = False
+          FieldName = 'FIRSTACTIVE'
+          Title.Alignment = taCenter
+          Width = 97
+          Visible = True
+        end
+        item
+          Color = clInactiveBorder
+          Expanded = False
+          FieldName = 'FIRSTPASSIVE'
+          Title.Alignment = taCenter
+          Width = 98
+          Visible = True
+        end
+        item
+          Color = clActiveBorder
+          Expanded = False
+          FieldName = 'DTURNOVER'
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clNavy
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          Title.Alignment = taCenter
+          Width = 96
+          Visible = True
+        end
+        item
+          Color = clActiveBorder
+          Expanded = False
+          FieldName = 'KTURNOVER'
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clNavy
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          Title.Alignment = taCenter
+          Width = 101
+          Visible = True
+        end
+        item
+          Color = clMenu
+          Expanded = False
+          FieldName = 'LASTACTIVE'
+          Title.Alignment = taCenter
+          Width = 97
+          Visible = True
+        end
+        item
+          Color = clMenu
+          Expanded = False
+          FieldName = 'LASTPASSIVE'
+          Title.Alignment = taCenter
+          Width = 102
+          Visible = True
+        end>
+    end
+    object Panel2: TPanel
+      Left = 2
+      Top = 15
+      Width = 688
+      Height = 33
+      Align = alTop
+      TabOrder = 1
+      object Label2: TLabel
+        Left = 362
+        Top = 7
+        Width = 73
+        Height = 17
+        Alignment = taCenter
+        AutoSize = False
+        Caption = #1044#1102#1074#1088#1094#1085' '#1089#1086#1085#1091':'
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+      end
+      object Label1: TLabel
+        Left = 153
+        Top = 8
+        Width = 88
+        Height = 16
+        Alignment = taCenter
+        AutoSize = False
+        Caption = #1044#1102#1074#1088#1094#1085' '#1103#1074#1074#1103#1083#1080':'
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+      end
+      object BitBtn1: TBitBtn
+        Left = 598
+        Top = 4
+        Width = 75
+        Height = 25
+        Caption = '&'#1063#1099#1093#1099#1096
+        DoubleBuffered = True
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        Kind = bkClose
+        NumGlyphs = 2
+        ParentDoubleBuffered = False
+        ParentFont = False
+        TabOrder = 0
+      end
+      object DBNavigator: TDBNavigator
+        Left = 6
+        Top = 3
+        Width = 132
+        Height = 27
+        DataSource = DataSrcBalance
+        VisibleButtons = [nbFirst, nbPrior, nbNext, nbLast]
+        Flat = True
+        TabOrder = 1
+      end
+      object StaticText1: TStaticText
+        Left = 264
+        Top = 8
+        Width = 59
+        Height = 17
+        Caption = 'StaticText1'
+        TabOrder = 2
+      end
+      object StaticText2: TStaticText
+        Left = 456
+        Top = 8
+        Width = 59
+        Height = 17
+        Caption = 'StaticText2'
+        TabOrder = 3
+      end
+    end
+    object Panel3: TPanel
+      Left = 2
+      Top = 111
+      Width = 688
+      Height = 26
+      Align = alBottom
+      TabOrder = 2
+      object Label4: TLabel
+        Left = 16
+        Top = 8
+        Width = 35
+        Height = 13
+        Caption = #1046#1103#1084#1080' :'
+      end
+      object DBEdit2: TDBEdit
+        Left = 80
+        Top = 2
+        Width = 100
+        Height = 21
+        Color = clActiveBorder
+        DataField = 'SUM(FA)'
+        DataSource = DataSrcSum
+        TabOrder = 0
+      end
+      object DBEdit3: TDBEdit
+        Left = 179
+        Top = 2
+        Width = 100
+        Height = 21
+        Color = clActiveBorder
+        DataField = 'SUM(FP)'
+        DataSource = DataSrcSum
+        TabOrder = 1
+      end
+      object DBEdit9: TDBEdit
+        Left = 279
+        Top = 2
+        Width = 100
+        Height = 21
+        Color = clActiveBorder
+        DataField = 'SUM(D)'
+        DataSource = DataSrcSum
+        TabOrder = 2
+      end
+      object DBEdit10: TDBEdit
+        Left = 378
+        Top = 2
+        Width = 100
+        Height = 21
+        Color = clActiveBorder
+        DataField = 'SUM(K)'
+        DataSource = DataSrcSum
+        TabOrder = 3
+      end
+      object DBEdit11: TDBEdit
+        Left = 478
+        Top = 2
+        Width = 100
+        Height = 21
+        Color = clActiveBorder
+        DataField = 'SUM(LA)'
+        DataSource = DataSrcSum
+        TabOrder = 4
+      end
+      object DBEdit12: TDBEdit
+        Left = 578
+        Top = 2
+        Width = 100
+        Height = 21
+        Color = clActiveBorder
+        DataField = 'SUM(LP)'
+        DataSource = DataSrcSum
+        TabOrder = 5
+      end
+    end
+    object DBGrid2: TDBGrid
+      Left = 2
+      Top = 139
+      Width = 688
+      Height = 147
+      Align = alBottom
+      Color = clScrollBar
+      DataSource = DataSrcAcc
+      DrawingStyle = gdsGradient
+      TabOrder = 3
+      TitleFont.Charset = RUSSIAN_CHARSET
+      TitleFont.Color = clWindowText
+      TitleFont.Height = -11
+      TitleFont.Name = 'Tahoma'
+      TitleFont.Style = []
+      Columns = <
+        item
+          Color = clSilver
+          Expanded = False
+          FieldName = 'ACCOUNTANT'
+          Title.Alignment = taCenter
+          Title.Caption = 'Hesab.N.'
+          Width = 102
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'NAME'
+          Title.Caption = #1040#1076#1099
+          Width = 170
+          Visible = True
+        end
+        item
+          Color = clMenu
+          Expanded = False
+          FieldName = 'SUM(CURRDATE.FACTIVE)'
+          Title.Alignment = taCenter
+          Title.Caption = 'I.Q. Aktiv'
+          Width = 90
+          Visible = True
+        end
+        item
+          Color = clMenu
+          Expanded = False
+          FieldName = 'SUM(CURRDATE.FPASSIVE)'
+          Title.Alignment = taCenter
+          Title.Caption = 'I.Q. Passiv'
+          Width = 96
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'SUM(DTURN)'
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clNavy
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          Title.Alignment = taCenter
+          Title.Caption = 'D'#1102#1074'.'#1044#1077#1073#1077#1090
+          Width = 92
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'SUM(KTURN)'
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clNavy
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          Title.Alignment = taCenter
+          Title.Caption = 'D'#1102#1074'.'#1050#1088#1077#1076#1080#1090
+          Width = 88
+          Visible = True
+        end
+        item
+          Color = clMenu
+          Expanded = False
+          FieldName = 'SUM(CURRDATE.LACTIVE)'
+          Title.Alignment = taCenter
+          Title.Caption = 'S.Q. Aktiv'
+          Width = 99
+          Visible = True
+        end
+        item
+          Color = clMenu
+          Expanded = False
+          FieldName = 'SUM(CURRDATE.LPASSIVE)'
+          Title.Alignment = taCenter
+          Title.Caption = 'S.Q. Passiv'
+          Width = 100
+          Visible = True
+        end>
+    end
+    object DBGrid1: TDBGrid
+      Left = 2
+      Top = 288
+      Width = 688
+      Height = 122
+      Align = alBottom
+      Color = clScrollBar
+      DataSource = DataSrcTurnOver
+      DrawingStyle = gdsGradient
+      TabOrder = 4
+      TitleFont.Charset = RUSSIAN_CHARSET
+      TitleFont.Color = clWindowText
+      TitleFont.Height = -11
+      TitleFont.Name = 'Tahoma'
+      TitleFont.Style = []
+      Columns = <
+        item
+          Color = clMenu
+          Expanded = False
+          FieldName = 'DCURRENCY'
+          Title.Alignment = taCenter
+          Title.Caption = 'D.Val'
+          Width = 31
+          Visible = True
+        end
+        item
+          Color = clSilver
+          Expanded = False
+          FieldName = 'DEBITOR'
+          Title.Alignment = taCenter
+          Title.Caption = 'Deb'#1077't'
+          Width = 83
+          Visible = True
+        end
+        item
+          Color = clMenu
+          Expanded = False
+          FieldName = 'CCURRENCY'
+          Title.Alignment = taCenter
+          Title.Caption = 'K.Val'
+          Width = 42
+          Visible = True
+        end
+        item
+          Color = clSilver
+          Expanded = False
+          FieldName = 'KREDITOR'
+          Title.Alignment = taCenter
+          Title.Caption = 'Kredit'
+          Width = 90
+          Visible = True
+        end
+        item
+          Color = cl3DLight
+          Expanded = False
+          FieldName = 'AMMOUNT'
+          Title.Alignment = taCenter
+          Title.Caption = #1052#1103#1073#1083#1103#1100
+          Width = 105
+          Visible = True
+        end
+        item
+          Color = cl3DLight
+          Expanded = False
+          FieldName = 'LAMMOUNT'
+          Title.Alignment = taCenter
+          Title.Caption = #1052#1103#1073#1083#1103#1100' '#1084#1072#1085'.'
+          Width = 114
+          Visible = True
+        end
+        item
+          Color = clSilver
+          Expanded = False
+          FieldName = 'DAT'
+          Title.Alignment = taCenter
+          Title.Caption = #1071#1084#1103#1083#1080#1081#1081#1072#1090' '#1058#1072#1088#1080#1093#1080
+          Width = 184
+          Visible = True
+        end>
+    end
+    object Panel1: TPanel
+      Left = 2
+      Top = 410
+      Width = 688
+      Height = 32
+      Align = alBottom
+      TabOrder = 5
+      object DBEdit1: TDBEdit
+        Left = 4
+        Top = 6
+        Width = 673
+        Height = 21
+        DataField = 'NAME'
+        DataSource = DataSrcTurnOver
+        TabOrder = 0
+      end
+    end
+  end
+  object DataSrcAcc: TDataSource
+    DataSet = ODSAcc
+    Left = 16
+    Top = 64
+  end
+  object ODSAcc: TOracleDataSet
+    SQL.Strings = (
+      'begin'
+      
+        '  out_sb_balancefilids.OpenCursor(:ACursor,:AStrParam1,:AStrPara' +
+        'm2);'
+      'end;'
+      ' '
+      ' '
+      ' '
+      ' '
+      '')
+    Optimize = False
+    Variables.Data = {
+      0400000003000000100000003A00410043005500520053004F00520074000000
+      0000000000000000160000003A00410053005400520050004100520041004D00
+      31000A0000000000000000000000160000003A00410053005400520050004100
+      520041004D0032000A0000000000000000000000}
+    Session = sboapiDataModule.SBSession
+    AfterScroll = ODSAccAfterScroll
+    Left = 48
+    Top = 64
+    object ODSAccSUMCURRDATEFACTIVE: TFloatField
+      FieldName = 'SUM(CURRDATE.FACTIVE)'
+      DisplayFormat = '#,##0.00'
+    end
+    object ODSAccSUMCURRDATEFPASSIVE: TFloatField
+      FieldName = 'SUM(CURRDATE.FPASSIVE)'
+      DisplayFormat = '#,##0.00'
+    end
+    object ODSAccSUMDTURN: TFloatField
+      FieldName = 'SUM(DTURN)'
+      DisplayFormat = '#,##0.00'
+    end
+    object ODSAccSUMKTURN: TFloatField
+      FieldName = 'SUM(KTURN)'
+      DisplayFormat = '#,##0.00'
+    end
+    object ODSAccSUMCURRDATELACTIVE: TFloatField
+      FieldName = 'SUM(CURRDATE.LACTIVE)'
+      DisplayFormat = '#,##0.00'
+    end
+    object ODSAccSUMCURRDATELPASSIVE: TFloatField
+      FieldName = 'SUM(CURRDATE.LPASSIVE)'
+      DisplayFormat = '#,##0.00'
+    end
+    object ODSAccACCOUNTANT: TWideStringField
+      FieldName = 'ACCOUNTANT'
+    end
+    object ODSAccNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 90
+    end
+  end
+  object DataSrcTurnOver: TDataSource
+    DataSet = ODSTurnOver
+    Left = 16
+    Top = 96
+  end
+  object ODSTurnOver: TOracleDataSet
+    SQL.Strings = (
+      'begin'
+      
+        '  out_sb_balancefilids.OpenCursor(:ACursor,:AStrParam1,:AStrPara' +
+        'm2);'
+      'end;')
+    Optimize = False
+    Variables.Data = {
+      0400000003000000100000003A00410043005500520053004F00520074000000
+      0000000000000000160000003A00410053005400520050004100520041004D00
+      31000A0000000000000000000000160000003A00410053005400520050004100
+      520041004D0032000A0000000000000000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 48
+    Top = 104
+    object ODSTurnOverDEBITOR: TWideStringField
+      FieldName = 'DEBITOR'
+    end
+    object ODSTurnOverKREDITOR: TWideStringField
+      FieldName = 'KREDITOR'
+    end
+    object ODSTurnOverDCURRENCY: TFloatField
+      FieldName = 'DCURRENCY'
+    end
+    object ODSTurnOverCCURRENCY: TIntegerField
+      FieldName = 'CCURRENCY'
+    end
+    object ODSTurnOverAMMOUNT: TFloatField
+      FieldName = 'AMMOUNT'
+      currency = True
+    end
+    object ODSTurnOverLAMMOUNT: TFloatField
+      FieldName = 'LAMMOUNT'
+      currency = True
+    end
+    object ODSTurnOverDAT: TDateTimeField
+      FieldName = 'DAT'
+    end
+    object ODSTurnOverNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 255
+    end
+  end
+  object ODSSum: TOracleDataSet
+    SQL.Strings = (
+      'begin'
+      
+        '  out_SB_BALANCEFilIDS.OpenCursor(:ACursor,:AStrParam1,:AStrPara' +
+        'm2);'
+      'end;')
+    Optimize = False
+    Variables.Data = {
+      0400000003000000100000003A00410043005500520053004F00520074000000
+      0000000000000000160000003A00410053005400520050004100520041004D00
+      31000A0000000000000000000000160000003A00410053005400520050004100
+      520041004D0032000A0000000000000000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 48
+    Top = 152
+    object ODSSumSUMFA: TFloatField
+      FieldName = 'SUM(FA)'
+      DisplayFormat = '#,##0.00'
+    end
+    object ODSSumSUMFP: TFloatField
+      FieldName = 'SUM(FP)'
+      DisplayFormat = '#,##0.00'
+    end
+    object ODSSumSUMLA: TFloatField
+      FieldName = 'SUM(LA)'
+      DisplayFormat = '#,##0.00'
+    end
+    object ODSSumSUMLP: TFloatField
+      FieldName = 'SUM(LP)'
+      DisplayFormat = '#,##0.00'
+    end
+    object ODSSumSUMD: TFloatField
+      FieldName = 'SUM(D)'
+      DisplayFormat = '#,##0.00'
+    end
+    object ODSSumSUMK: TFloatField
+      FieldName = 'SUM(K)'
+      DisplayFormat = '#,##0.00'
+    end
+  end
+  object DataSrcSum: TDataSource
+    DataSet = ODSSum
+    Left = 16
+    Top = 152
+  end
+  object DataSrcBalance: TDataSource
+    DataSet = ODSBalance
+    Left = 16
+    Top = 184
+  end
+  object ODSBalance: TOracleDataSet
+    SQL.Strings = (
+      'begin'
+      
+        '  out_SB_BALANCEFilIDs.OpenCursor(:ACursor,:AStrParam1,:AStrPara' +
+        'm2);'
+      'end;'
+      '')
+    Optimize = False
+    Variables.Data = {
+      0400000003000000100000003A00410043005500520053004F00520074000000
+      0000000000000000160000003A00410053005400520050004100520041004D00
+      31000A0000000000000000000000160000003A00410053005400520050004100
+      520041004D0032000A0000000000000000000000}
+    Session = sboapiDataModule.SBSession
+    AfterScroll = ODSBalanceAfterScroll
+    Left = 48
+    Top = 184
+    object ODSBalanceFDATE: TWideStringField
+      FieldName = 'FDATE'
+      Size = 1
+    end
+    object ODSBalanceFIRSTACTIVE: TFloatField
+      DisplayLabel = 'I.Q Aktiv'
+      FieldName = 'FIRSTACTIVE'
+      DisplayFormat = '#,##0.00'
+    end
+    object ODSBalanceFIRSTPASSIVE: TFloatField
+      DisplayLabel = 'I.Q. Passiv'
+      FieldName = 'FIRSTPASSIVE'
+      DisplayFormat = '#,##0.00'
+    end
+    object ODSBalanceLDATE: TWideStringField
+      FieldName = 'LDATE'
+      Size = 1
+    end
+    object ODSBalanceLASTACTIVE: TFloatField
+      DisplayLabel = 'S.Q. Activ'
+      FieldName = 'LASTACTIVE'
+      DisplayFormat = '#,##0.00'
+    end
+    object ODSBalanceLASTPASSIVE: TFloatField
+      DisplayLabel = 'S.Q. Passiv'
+      FieldName = 'LASTPASSIVE'
+      DisplayFormat = '#,##0.00'
+    end
+    object ODSBalanceDTURNOVER: TFloatField
+      DisplayLabel = 'Debet Uz. Dovr'
+      FieldName = 'DTURNOVER'
+      DisplayFormat = '#,##0.00'
+    end
+    object ODSBalanceKTURNOVER: TFloatField
+      DisplayLabel = 'Kredit Uz. Dovr'
+      FieldName = 'KTURNOVER'
+      DisplayFormat = '#,##0.00'
+    end
+    object ODSBalanceBAL_CN: TFloatField
+      DisplayLabel = 'Bal. H'
+      FieldName = 'BAL_CN'
+      Required = True
+    end
+    object ODSBalanceBALNAME: TWideStringField
+      FieldName = 'BALNAME'
+      Size = 181
+    end
+  end
+  object BalanceExporter: TExcelExporter
+    ExportSource = DataSrcBalance
+    ExportList.Strings = (
+      'BAL_CN'
+      'FIRSTACTIVE'
+      'FIRSTPASSIVE'
+      'DTURNOVER'
+      'KTURNOVER'
+      'LASTACTIVE'
+      'LASTPASSIVE'
+      'BALNAME')
+    SheetName = 'Balance'
+    ShowTitles = True
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    Left = 368
+    Top = 104
+  end
+  object ExportPopupMenu: TPopupMenu
+    Left = 216
+    Top = 128
+    object miExporttoExcel: TMenuItem
+      Caption = 'Export to Excel'
+      OnClick = miExporttoExcelClick
+    end
+  end
+end

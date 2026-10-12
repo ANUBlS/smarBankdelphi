@@ -1,0 +1,203 @@
+unit Operationtypeunit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, Mask, DBCtrlsEh, DBLookupEh, Grids, DBGrids, ComCtrls, ToolWin,
+  ExtCtrls, CMExcelExport, ImgList, Db, OracleData;
+
+type
+  Toperationtype = class(TForm)
+    OracleDataSet2: TOracleDataSet;
+    DataSource1: TDataSource;
+    ImageList1: TImageList;
+    CMExcelExport1: TCMExcelExport;
+    Panel3: TPanel;
+    CoolBar1: TCoolBar;
+    ToolBar1: TToolBar;
+    ToolButton1: TToolButton;
+    ToolButton10: TToolButton;
+    ToolButton11: TToolButton;
+    ToolButton20: TToolButton;
+    ToolButton14: TToolButton;
+    ToolButton15: TToolButton;
+    ToolButton17: TToolButton;
+    ToolButton3: TToolButton;
+    ToolButton6: TToolButton;
+    ToolButton2: TToolButton;
+    ToolButton4: TToolButton;
+    ToolButton5: TToolButton;
+    ToolButton7: TToolButton;
+    RadioButton1: TRadioButton;
+    RadioButton2: TRadioButton;
+    Panel1: TPanel;
+    Panel2: TPanel;
+    GroupBox1: TGroupBox;
+    Label1: TLabel;
+    Label2: TLabel;
+    DateTimePicker1: TDateTimePicker;
+    DateTimePicker2: TDateTimePicker;
+    CheckBox1: TCheckBox;
+    CheckBox2: TCheckBox;
+    DBGrid1: TDBGrid;
+    GroupBox2: TGroupBox;
+    CheckBox3: TCheckBox;
+    DataSource2: TDataSource;
+    OracleDataSet1: TOracleDataSet;
+    DBLookupComboboxEh1: TComboBox;
+    procedure CheckBox1Click(Sender: TObject);
+    procedure CheckBox2Click(Sender: TObject);
+    procedure ToolButton1Click(Sender: TObject);
+    procedure ToolButton14Click(Sender: TObject);
+    procedure ToolButton6Click(Sender: TObject);
+    procedure CheckBox3Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  operationtype: Toperationtype;
+
+implementation
+
+{$R *.DFM}
+
+procedure Toperationtype.CheckBox1Click(Sender: TObject);
+begin
+if CheckBox1.Checked then
+DateTimePicker1.Enabled:=true else DateTimePicker1.Enabled:=False;
+end;
+
+procedure Toperationtype.CheckBox2Click(Sender: TObject);
+begin
+if CheckBox2.Checked then
+DateTimePicker2.Enabled:=true else DateTimePicker2.Enabled:=False;
+end;
+
+procedure Toperationtype.ToolButton1Click(Sender: TObject);
+var
+a:integer;
+
+begin
+
+if CheckBox3.Checked then
+begin
+if DBLookupComboboxEh1.Text='NEW' then a:=1;
+if DBLookupComboboxEh1.Text='Suppl.Card' then a:=2;
+if DBLookupComboboxEh1.Text='Prolongation' then a:=3;
+if DBLookupComboboxEh1.Text='Replace Card' then a:=4;
+if DBLookupComboboxEh1.Text='PIN Clear' then a:=12;
+if DBLookupComboboxEh1.Text='Card Status' then a:=6;
+if DBLookupComboboxEh1.Text='RBS Change' then a:=11;
+if DBLookupComboboxEh1.Text='Contract Close' then a:=7;
+if DBLookupComboboxEh1.Text='CardName Change' then a:=35;
+if DBLookupComboboxEh1.Text='Credit Limit' then a:=5;
+if DBLookupComboboxEh1.Text='Security Word Change' then a:=13;
+end;
+
+if (CheckBox1.Checked) and  (CheckBox2.Checked)   then
+begin
+if CheckBox3.Checked then
+begin
+   OracleDataSet1.close;
+ OracleDataSet1.SQL[99]:=' ';
+ OracleDataSet1.SQL[99]:='where ( messtype= '+inttostr(a)+') ';
+
+//OracleDataSet1.close;
+ OracleDataSet1.SQL[100]:=' ';
+ OracleDataSet1.SQL[100]:='and ( TRANDATE between '+''''+Formatdatetime('dd-mmm-yyyy',datetimepicker1.datetime)+''''+' and '+''''+FormatDateTime('dd-mmm-yyyy',datetimepicker2.datetime)+''''+')';
+end else
+begin
+ OracleDataSet1.close;
+ OracleDataSet1.SQL[99]:=' ';
+ OracleDataSet1.SQL[100]:=' ';
+ OracleDataSet1.SQL[100]:='where TRANDATE between '+''''+Formatdatetime('dd-mmm-yyyy',datetimepicker1.datetime)+''''+' and '+''''+FormatDateTime('dd-mmm-yyyy',datetimepicker2.datetime)+'''';
+ // ShowMessage('where expiry between '+''''+datetostr(datetimepicker1.datetime)+''''+' and '+''''+datetostr(datetimepicker2.datetime)+'''');
+ end;
+ OracleDataSet1.open;
+ end
+    else
+
+if CheckBox1.Checked then
+begin
+if CheckBox3.Checked then
+begin
+
+  OracleDataSet1.close;
+
+ OracleDataSet1.SQL[99]:=' ';
+ OracleDataSet1.SQL[99]:='where ( messtype= '+inttostr(a)+') ';
+
+ //OracleDataSet1.close;
+ OracleDataSet1.SQL[100]:=' ';
+ OracleDataSet1.SQL[100]:='and ( TRANDATE >= '+''''+Formatdatetime('dd-mmm-yyyy',datetimepicker1.datetime)+''''+') ';
+
+end else
+begin
+ OracleDataSet1.close;
+ OracleDataSet1.SQL[99]:=' ';
+ OracleDataSet1.SQL[100]:=' ';
+ OracleDataSet1.SQL[100]:='where TRANDATE >= '+''''+Formatdatetime('dd-mmm-yyyy',datetimepicker1.datetime)+'''';
+ end;
+ OracleDataSet1.open;
+
+end
+   else
+if  CheckBox2.Checked  then
+begin
+if CheckBox3.Checked then
+begin
+  OracleDataSet1.close;
+ OracleDataSet1.SQL[99]:=' ';
+ OracleDataSet1.SQL[99]:='where messtype= '+inttostr(a)+' ';
+    OracleDataSet1.close;
+ OracleDataSet1.SQL[100]:=' ';
+ OracleDataSet1.SQL[100]:='and TRANDATE <= '+''''+Formatdatetime('dd-mmm-yyyy',datetimepicker2.datetime)+'''';
+
+end else
+begin
+  OracleDataSet1.close;
+  OracleDataSet1.SQL[99]:=' ';
+ OracleDataSet1.SQL[100]:=' ';
+ OracleDataSet1.SQL[100]:='where TRANDATE <= '+''''+Formatdatetime('dd-mmm-yyyy',datetimepicker2.datetime)+'''';
+ end;
+ OracleDataSet1.open;
+end
+else
+
+begin
+ ShowMessage('tarixlerin en azi biri secilmelidir!');
+end;
+
+end;
+
+procedure Toperationtype.ToolButton14Click(Sender: TObject);
+begin
+OracleDataSet1.close;
+end;
+
+procedure Toperationtype.ToolButton6Click(Sender: TObject);
+begin
+  if not CMExcelExport1.Connected then CMExcelExport1.Connect;
+  CMExcelExport1.ExportDataset(dbgrid1.datasource.dataset,'Optype',true,true);
+  CMExcelExport1.Disconnect;
+end;
+
+procedure Toperationtype.CheckBox3Click(Sender: TObject);
+begin
+//OracleDataSet2.open;
+if CheckBox3.Checked then
+DBLookupComboboxEh1.Enabled:=true else DBLookupComboboxEh1.Enabled:=False;
+end;
+
+procedure Toperationtype.FormShow(Sender: TObject);
+begin
+DateTimePicker1.DateTime:=date;
+DateTimePicker2.DateTime:=date;
+end;
+
+end.

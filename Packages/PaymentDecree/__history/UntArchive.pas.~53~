@@ -1,0 +1,426 @@
+﻿unit UntArchive;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ToolWin, ComCtrls, Grids, DBGrids, ExtCtrls, StdCtrls, ImgList, Mask,
+  DBCtrls, Menus,Oracledata,Oracle;
+
+type
+  TFrmArchive = class(TForm)
+    Panel1: TPanel;
+    DBArchiveGrid: TDBGrid;
+    ToolBar1: TToolBar;
+    Panel2: TPanel;
+    ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
+    ToolButton4: TToolButton;
+    ToolButton5: TToolButton;
+    ToolButton6: TToolButton;
+    ToolButton7: TToolButton;
+    ToolButton8: TToolButton;
+    Assignment: TDBEdit;
+    ImageList: TImageList;
+    ToolButton9: TToolButton;
+    RBOnce: TRadioButton;
+    RBCopy: TRadioButton;
+    ToolButton10: TToolButton;
+    ToolButton3: TToolButton;
+    PopupMenu: TPopupMenu;
+    N1: TMenuItem;
+    N2: TMenuItem;
+    N3: TMenuItem;
+    N4: TMenuItem;
+    N5: TMenuItem;
+    N6: TMenuItem;
+    N7: TMenuItem;
+    N8: TMenuItem;
+    GroupBox1: TGroupBox;
+    EditPNUM: TEdit;
+    EditDACC_NO: TEdit;
+    EditKACC_NO: TEdit;
+    EditAMMOUNT: TEdit;
+    EditKACCNAME: TEdit;
+    EditKBNAME: TEdit;
+    procedure ToolButton1Click(Sender: TObject);
+    procedure ToolButton2Click(Sender: TObject);
+    procedure ToolButton6Click(Sender: TObject);
+    procedure ToolButton8Click(Sender: TObject);
+    procedure FormKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure DBArchiveGridTitleClick(Column: TColumn);
+    procedure MouseWheelHandler(var Message: TMessage); override;
+    procedure Button1Click(Sender: TObject);
+    procedure N7Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure ActionSpeedSearchExecute(Sender: TObject);
+    procedure EditPNUMKeyPress(Sender: TObject; var Key: Char);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmArchive: TFrmArchive;
+
+implementation
+
+uses PaymentDataModul, PaymentDecreeImpl,CurrencyToHR_Azeri_Impl,
+  UntMainReport, UntSecondReport, sboapiDataModuleImpl, SBTranslateProc;
+
+{$R *.DFM}
+
+procedure TFrmArchive.ToolButton1Click(Sender: TObject);
+var
+   deleteID: Integer;
+   PaymentNumber: String;
+   RecordNo: Integer;
+begin
+ PaymentNumber :=PaymentDataMod.ODSArchive.FieldByName('PNUM').AsString;
+ if MessageDlg(Format('Do you want to delete payment №%s?',[PaymentNumber]),mtConfirmation,mbYesNoCancel,0)=mrYes then
+ with PaymentDataMod.ODSArchive,PaymentDataMod.OPPayment do
+  begin
+   RecordNo :=RecNo;
+   deleteID :=FieldByName('ID').AsInteger;
+   CallProcedure('delete_payment',[deleteID]);
+   Refresh;
+   RecNo :=RecordNo;
+  end;
+end;
+
+procedure TFrmArchive.MouseWheelHandler(var Message: TMessage);
+begin
+ Inherited;
+ if DBArchiveGrid.Focused then
+  with TCMMouseWheel(Message), DBArchiveGrid.DataSource.DataSet do
+    if WheelDelta < 0 then
+      Next
+    else
+      Prior;
+  // DBArchiveGrid.Repaint;
+end;
+
+procedure TFrmArchive.ToolButton2Click(Sender: TObject);
+begin
+Activ:=1;
+ with PaymentDecree,PaymentDataMod.ODSArchive do
+  if IsEmpty then
+    begin
+     ShowMessage('There are not data!');
+     Exit;
+    end
+  else
+   begin
+
+     DBName.Text:=    FieldByName('DBNAME').AsString  ;
+   DBCod.Text:=   FieldByName('dbcod').AsString   ;
+   dbinn.Text:=   FieldByName('DBinn').AsString  ;
+   DBCorAcc.Text:=   FieldByName('DBCorAcc').AsString   ;
+   DBSwift.Text:=   FieldByName('DBSwift').AsString    ;
+
+
+    CBDANum.text :=FieldByName('DACC_NO').AsString;
+    EditDebtAccNo.Text :=FieldByName('DACC_NO').AsString;
+    EDAName.text :=FieldByName('DACCNAME').AsString;
+    EDAInn.text :=FieldByName('DACCINN').AsString;
+
+    CBKBName.text :=FieldByName('KBNAME').AsString;
+    EKBCod.text :=FieldByName('KBCOD').AsString;
+    EKBInn.text :=FieldByName('KBINN').AsString;
+    EKBCorAcc.text :=FieldByName('KBCORACC').AsString;
+    EKBSwift.text :=FieldByName('KBSWIFT').AsString;
+
+    EKANum.text :=FieldByName('KACC_NO').AsString;
+    EKAName.text :=FieldByName('KACCNAME').AsString;
+    EKAInn.text :=FieldByName('KACCINN').AsString;
+
+    EAmmount.text :=FieldByName('AMMOUNT').AsString;
+    EAmmountW.text :=WithCoin(EAmmount.text);
+   // EAmmountW.text :=CurrencyToHR_Azeri(FieldByName('AMMOUNT').AsInteger,0,[0]);
+    EAssignment.Text :=FieldByName('ASSIGNMENT').AsString;
+    EExtra.text :=FieldByName('EXTRA').AsString;
+    EPNum.text :=FieldByName('PNUM').AsString;
+    DTPayment.DateTime :=FieldByName('PDATE').AsDateTime;
+    Edit1.Text:=FieldByName('budgetclass').AsString;
+    edit4.Text:= FieldByName('budgetlevel').AsString;
+   end;
+ Close;
+end;
+
+procedure TFrmArchive.ToolButton6Click(Sender: TObject);
+begin
+  PaymentDecree.isUpdate :=true;
+  with PaymentDataMod.ODSArchive,PaymentDecree do
+  if IsEmpty then
+    begin
+     ShowMessage('There are not data!');
+     Exit;
+    end
+  else
+   begin
+     {if PaymentDataMod.ODSbank.FieldByName('swift').AsString='REVAAZ22' then
+     begin
+       PaymentDataMod.ODSTransferaccount.Close;
+       PaymentDataMod.ODSTransferaccount.Filtered:=false;
+       PaymentDataMod.ODSTransferaccount.Filter:=PaymentDataMod.ODSArchive.FieldByName('dacc_no').AsString ;
+       PaymentDataMod.ODSTransferaccount.Filtered:=true;
+       PaymentDataMod.ODSTransferaccount.Open;
+     end
+     else
+     begin  }
+       PaymentDataMod.Ods_Acc_Vall.Close;
+       PaymentDataMod.Ods_Acc_Vall.SetVariable('acc_no',PaymentDataMod.ODSArchive.FieldByName('dacc_no').AsString );
+       PaymentDataMod.Ods_Acc_Vall.Open;
+
+
+
+  // ShowMessage(PaymentDataMod.ODSArchive.FieldByName('dacc_no').AsString);
+   
+  // ShowMessage(IntToStr(PaymentDataMod.Ods_Acc_Vall.RecordCount));
+
+
+   {if PaymentDataMod.Ods_Acc_Vall.RecordCount=1 then
+   begin
+     PaymentDecree.DBLookupComboBox1.Visible:=false;
+      // ShowMessage('hesab bazada var');          
+   end else  begin
+   //  ShowMessage('hesab bazada netu'); 
+   PaymentDecree.DBLookupComboBox1.Visible:=true;
+   PaymentDecree.DBLookupComboBox1.KeyValue:=FieldByName('val_name').AsString;
+
+        end;    }
+
+
+   DBName.Text:=    FieldByName('DBNAME').AsString  ;
+   DBCod.Text:=   FieldByName('dbcod').AsString   ;
+   dbinn.Text:=   FieldByName('DBinn').AsString  ;
+   DBCorAcc.Text:=   FieldByName('DBCorAcc').AsString   ;
+   DBSwift.Text:=   FieldByName('DBSwift').AsString    ;
+
+
+    EditDebtAccNo.Text:=FieldByName('DACC_NO').AsString;
+    CBDANum.text :=FieldByName('DACC_NO').AsString;
+    EDAName.text :=FieldByName('DACCNAME').AsString;
+    EDAInn.text :=FieldByName('DACCINN').AsString;
+
+    CBKBName.text :=FieldByName('KBNAME').AsString;
+    EKBCod.text :=FieldByName('KBCOD').AsString;
+    EKBInn.text :=FieldByName('KBINN').AsString;
+    EKBCorAcc.text :=FieldByName('KBCORACC').AsString;
+    EKBSwift.text :=FieldByName('KBSWIFT').AsString;
+
+    EKANum.text :=FieldByName('KACC_NO').AsString;
+    EKAName.text :=FieldByName('KACCNAME').AsString;
+    EKAInn.text :=FieldByName('KACCINN').AsString;
+
+    EAmmount.text :=FieldByName('AMMOUNT').AsString;
+    EAmmountW.text :=WithCoin(EAmmount.text);
+    //EAmmountW.text :=CurrencyToHR_Azeri(Trunc(FieldByName('AMMOUNT').AsFloat),0,[0]);
+    EAssignment.Text :=FieldByName('ASSIGNMENT').AsString;
+    EExtra.text :=FieldByName('EXTRA').AsString;
+    EPNum.text :=FieldByName('PNUM').AsString;
+    DTPayment.DateTime :=FieldByName('PDATE').AsDateTime;
+    edit1.text:= FieldByName('budgetclass').Asstring;
+    edit4.text:= FieldByName('budgetlevel').Asstring;
+
+   end;
+ Close;
+end;
+
+procedure TFrmArchive.ToolButton8Click(Sender: TObject);
+var
+   ID :String;
+   DateTime :TDateTime;
+   i,a:integer;
+   s:string;
+begin
+Activ:=1;
+ ID :=PaymentDataMod.ODSArchive.FieldByName('ID').AsString;
+ //ShowMessage(PaymentDataMod.ODSArchive.FieldByName('daccinn').AsString);
+ if RBCopy.Checked then
+  begin
+   try
+    with QRMainReport do
+     begin
+       //ShowMessage(PaymentDataMod.ODSArchive.FieldByName('DACCNAME').AsString);
+      DateTime :=PaymentDataMod.ODSArchive.FieldByName('PDATE').AsDateTime;
+      QRDate1.caption :=PaymentDecree.ExtractMonth(DateTime,' ');
+      QRDate2.caption :=PaymentDecree.ExtractMonth(DateTime,' ');
+      QRNum1.Caption :='Ödəniş tapşırığı№  '+PaymentDataMod.ODSArchive.FieldByName('PNum').AsString;
+      QRNum2.Caption :='Ödəniş tapşırığı№  '+PaymentDataMod.ODSArchive.FieldByName('PNum').AsString;
+
+      QRAmmount1.caption :=FormatCurr('#,##.00',StrToCurr(PaymentDataMod.ODSArchive.FieldByName('Ammount').AsString));
+      QRAmmount2.caption :=FormatCurr('#,##.00',StrToCurr(PaymentDataMod.ODSArchive.FieldByName('Ammount').AsString));
+
+      QRAmmountW1.caption := PaymentDecree.WithCoin(PaymentDataMod.ODSArchive.FieldByName('Ammount').AsString);
+      QRAmmountW2.caption :=PaymentDecree.WithCoin(PaymentDataMod.ODSArchive.FieldByName('Ammount').AsString);
+
+       if  PaymentDataMod.ODS_Acc_symbol.Active then
+  PaymentDataMod.ODS_Acc_symbol.close;
+  PaymentDataMod.ODS_Acc_symbol.SetVariable(':acc_no',PaymentDataMod.ODSArchive.FieldByName('DACC_NO').AsString);
+  PaymentDataMod.ODS_Acc_symbol.open;
+ if  PaymentDataMod.ODS_Acc_symbol.FieldByName('old_acc_no').asinteger=1  then
+ begin
+QRDBACC_NO.Caption:= PaymentDataMod.ODS_Acc_symbol.FieldByName('old').AsString;
+QRDBACC_NO1.Caption:= PaymentDataMod.ODS_Acc_symbol.FieldByName('old').AsString;
+  end
+  else
+   begin
+      i:=pos('_', PaymentDataMod.ODSArchive.FieldByName('DACC_NO').AsString);
+      a:=Length( PaymentDataMod.ODSArchive.FieldByName('DACC_NO').AsString);
+      s:= PaymentDataMod.ODSArchive.FieldByName('DACC_NO').AsString;
+      delete(s,i,a);
+      QRDBACC_NO.Caption:= s;
+      QRDBACC_NO1.Caption:= s;
+
+   end;
+      PaymentDataMod.ODSArchive.Filter:=' ID= '+ID;
+      PaymentDataMod.ODSArchive.Filtered :=true;
+
+      Preview;
+     end;
+   finally
+     PaymentDataMod.ODSArchive.Filtered :=false;
+   end;
+  end
+ else
+  begin
+   try
+    with QRCommonReport do
+     begin
+      DateTime :=PaymentDataMod.ODSArchive.FieldByName('PDATE').AsDateTime;
+      QRDate.caption :=PaymentDecree.ExtractMonth(DateTime,' ');
+      QRNum.Caption :='Ödəniş tapşırığı №  '+PaymentDataMod.ODSArchive.FieldByName('PNum').AsString;
+      QRAmmount.caption :=FormatCurr('#,##.00',StrToCurr(PaymentDataMod.ODSArchive.FieldByName('Ammount').AsString));
+      QRAmmountW.caption := PaymentDecree.WithCoin(PaymentDataMod.ODSArchive.FieldByName('Ammount').AsString);
+  if  PaymentDataMod.ODS_Acc_symbol.Active then
+  PaymentDataMod.ODS_Acc_symbol.close;
+  //---showmessage(PaymentDataMod.ODSArchive.FieldByName('DACC_NO').AsString);
+  PaymentDataMod.ODS_Acc_symbol.SetVariable(':acc_no',PaymentDataMod.ODSArchive.FieldByName('DACC_NO').AsString);
+  PaymentDataMod.ODS_Acc_symbol.open;
+ if PaymentDataMod.ODS_Acc_symbol.FieldByName('old_acc_no').asinteger=1  then
+
+ QRDBACC_NO.Caption:= PaymentDataMod.ODS_Acc_symbol.FieldByName('old').AsString
+
+   else
+   begin
+      i:=pos('_', PaymentDataMod.ODSArchive.FieldByName('DACC_NO').AsString);
+      a:=Length( PaymentDataMod.ODSArchive.FieldByName('DACC_NO').AsString);
+      s:= PaymentDataMod.ODSArchive.FieldByName('DACC_NO').AsString;
+      delete(s,i,a);
+      QRDBACC_NO.Caption:= s;
+
+   end;
+      PaymentDataMod.ODSArchive.Filter:=' ID= '+ID;
+      PaymentDataMod.ODSArchive.Filtered :=true;
+
+      Preview;
+     end;
+   finally
+    PaymentDataMod.ODSArchive.Filtered :=false;
+   end;
+  end;
+ DBArchiveGrid.DataSource.DataSet.Locate('ID',ID,[]);
+end;
+
+procedure TFrmArchive.FormCreate(Sender: TObject);
+begin
+  SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TFrmArchive.FormKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if (key = VK_ESCAPE) then Close;
+end;
+
+procedure TFrmArchive.DBArchiveGridTitleClick(Column: TColumn);
+var
+   TitleName :string;
+begin
+ TitleName :=Column.FieldName;
+  with PaymentDataMod.ODSArchive do
+   begin
+    SetVariable('Title',TitleName);
+    Refresh;
+   end;
+end;
+
+procedure TFrmArchive.EditPNUMKeyPress(Sender: TObject; var Key: Char);
+begin
+  if Key = #13 then
+  begin
+      ActionSpeedSearchExecute(Sender);
+  end;
+end;
+
+procedure TFrmArchive.ActionSpeedSearchExecute(
+  Sender: TObject);
+var
+  SearchField : string;
+  SearchOptions : TSearchRecordOptions;
+begin
+  SearchOptions := [srIgnoreCase ,srPartialMatch ];
+
+  with Sender as TEdit  do
+  begin
+    SearchField := copy(Name,5,length(Name));
+    with  TOracleDataSet(DBArchiveGrid.DataSource.DataSet) do
+    if  not SearchRecord(
+                  SearchField
+                 ,Text
+                 ,SearchOptions + [srFromCurrent , srForward ]
+                 ) then
+    if MessageDlg(
+              'Axtarış sona çatdı.'+#13+'Əvvəldən başlansın?'
+             ,mtInformation
+             ,[mbNo , mbYes]
+             ,0
+             ) = mrYes  then
+    if not SearchRecord(
+                 SearchField
+                ,Text
+                ,SearchOptions + [ srFromBeginning ]
+                )  then
+    MessageDlg('Yazı tapılmayıb!',mtInformation,[mbOK],0);
+ end;
+
+end;
+
+procedure TFrmArchive.Button1Click(Sender: TObject);
+var
+   ID :String;
+   DateTime :TDateTime;
+begin
+ ID :=PaymentDataMod.ODSArchive.FieldByName('ID').AsString;
+ try
+  with QRCommonReport,PaymentDataMod.ODSArchive do
+   begin
+    DateTime :=FieldByName('PDATE').AsDateTime;
+    QRDate.caption :=PaymentDecree.ExtractMonth(DateTime,' ');
+    QRNum.Caption :='Ödəniş tapşırığı №'+FieldByName('PNum').AsString;
+
+    QRAmmount.caption :=FormatCurr('#,##.00',StrToCurr(FieldByName('Ammount').AsString));
+    QRAmmountW.caption := PaymentDecree.WithCoin(FieldByName('Ammount').AsString);
+
+    Filter:=' ID= '+ID;
+    Filtered :=true;
+
+    Preview;
+   end;
+ finally
+   PaymentDataMod.ODSArchive.Filtered :=false;
+ end;
+end;
+
+procedure TFrmArchive.N7Click(Sender: TObject);
+begin
+ if TMenuItem(Sender).Tag =0 then
+  DBArchiveGrid.DataSource.DataSet.First
+ else
+  DBArchiveGrid.DataSource.DataSet.Last;
+end;
+
+end.

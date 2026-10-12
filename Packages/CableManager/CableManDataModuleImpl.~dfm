@@ -1,0 +1,293 @@
+object DataModCable: TDataModCable
+  OldCreateOrder = False
+  OnCreate = DataModuleCreate
+  Left = 273
+  Top = 120
+  Height = 359
+  Width = 879
+  object odsAbonents: TOracleDataSet
+    Tag = 1
+    SQL.Strings = (
+      
+        'select a.id, a.name, to_date(a.reg_time) reg_time, d.name doc_ty' +
+        'pe, a.doc_num, a.address,'
+      
+        '       a.phone, a.phone_wk, decode(a.access_roof,0,'#39'VAR'#39',1,'#39'YOX'#39 +
+        ') access_roof,  decode(a.signalling,0,'#39'VAR'#39',1,'#39'YOX'#39')signalling, ' +
+        'a.receiver_num,'
+      
+        '       a.eng_time, e.name engineer, a.done_time,  decode(vat,0,'#39 +
+        'HЯ'#39',1,'#39'YOX'#39')vat, s.name status,'
+      
+        '       a.doc_type doc_id, a.eng_id, s.id stat_id, phone_mob, dec' +
+        'ode(a.foreigner,0,'#39'VAR'#39',1,'#39'YOX'#39')foreigner'
+      '  from bb_abonents a, bb_engineers e, doc_types d, bb_statuses s'
+      
+        ' where ((a.doc_type = d.id) and (a.eng_id = e.id)) and s.id=stat' +
+        'us'
+      ''
+      ' '
+      ' '
+      ' '
+      ' ')
+    QBEDefinition.QBEFieldDefs = {
+      0400000013000000020000004944010000000000040000004E414D4501000000
+      0000080000005245475F54494D4501000000000008000000444F435F54595045
+      01000000000007000000444F435F4E554D010000000000070000004144445245
+      53530100000000000500000050484F4E450100000000000800000050484F4E45
+      5F574B0100000000000B0000004143434553535F524F4F460100000000000A00
+      00005349474E414C4C494E470100000000000C00000052454345495645525F4E
+      554D01000000000008000000454E475F54494D4501000000000008000000454E
+      47494E45455201000000000009000000444F4E455F54494D4501000000000003
+      0000005641540100000000000600000053544154555301000000000006000000
+      444F435F494401000000000006000000454E475F494401000000000007000000
+      535441545F4944010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 24
+    Top = 16
+  end
+  object dsAbonents: TDataSource
+    DataSet = odsAbonents
+    Left = 24
+    Top = 72
+  end
+  object CABLE: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'CABLE_MANAGER'
+    Left = 608
+    Top = 24
+  end
+  object odsEngineers: TOracleDataSet
+    Tag = 2
+    SQL.Strings = (
+      'select * from bb_engineers'
+      ''
+      'order by 2')
+    QBEDefinition.QBEFieldDefs = {
+      0400000002000000020000004944010000000000040000004E414D4501000000
+      0000}
+    Session = sboapiDataModule.SBSession
+    Left = 133
+    Top = 184
+  end
+  object odsStatuses: TOracleDataSet
+    Tag = 2
+    SQL.Strings = (
+      'select * from bb_statuses'
+      ''
+      'order by 2')
+    QBEDefinition.QBEFieldDefs = {
+      0400000002000000020000004944010000000000040000004E414D4501000000
+      0000}
+    Session = sboapiDataModule.SBSession
+    Left = 88
+    Top = 184
+  end
+  object odsDocTypes: TOracleDataSet
+    Tag = 2
+    SQL.Strings = (
+      'select * from doc_types'
+      'order by 2')
+    QBEDefinition.QBEFieldDefs = {
+      0400000002000000020000004944010000000000040000004E414D4501000000
+      0000}
+    Session = sboapiDataModule.SBSession
+    Left = 44
+    Top = 184
+  end
+  object dsDocTypes: TDataSource
+    DataSet = odsDocTypes
+    Left = 44
+    Top = 224
+  end
+  object dsStatuses: TDataSource
+    DataSet = odsStatuses
+    Left = 88
+    Top = 224
+  end
+  object dsEngineers: TDataSource
+    DataSet = odsEngineers
+    Left = 133
+    Top = 224
+  end
+  object odsContacts: TOracleDataSet
+    Tag = 1
+    SQL.Strings = (
+      
+        'select c.id, contract_num, card_num, sign_date, abn_id, inst_dat' +
+        'e,'
+      
+        '       decode (inst_place, 0, '#39'Балкон'#39', 1, '#39'Дам'#39', '#39'Диэяр'#39') instp' +
+        'lace, serie,'
+      
+        '       works_num, c.receiver_num, cable_length, amount, amount_e' +
+        'qv, curr_code,'
+      
+        '       discount, c.eng_id, pack_num, a.name abonent, e.name engi' +
+        'neer,'
+      
+        '       p.name packname, inst_place, acc_id, rest, round(rest,2) ' +
+        'rest_r,'
+      
+        '       lastcalcdate, decode(calcag,0,'#39'Щя'#39',1,'#39'Йох'#39' )calcags, calc' +
+        'ag, acc_no, discount_desc,'
+      '       c.usname, c.updusname, c.upddate, exp_date, p.symb'
+      
+        '  from bb_contracts c, bb_abonents a, bb_engineers e, bb_package' +
+        's p, account t'
+      
+        ' where a.id = c.abn_id and c.eng_id = e.id and pack_num = p.id a' +
+        'nd t.id=c.acc_id and abn_id = :abn_id'
+      ' '
+      ' ')
+    Variables.Data = {0300000001000000070000003A41424E5F4944030000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      04000000200000000200000049440100000000000C0000005245434549564552
+      5F4E554D01000000000008000000454E47494E45455201000000000006000000
+      454E475F49440100000000000C000000434F4E54524143545F4E554D01000000
+      000008000000434152445F4E554D010000000000090000005349474E5F444154
+      450100000000000600000041424E5F494401000000000009000000494E53545F
+      4441544501000000000009000000494E5354504C414345010000000000050000
+      00534552494501000000000009000000574F524B535F4E554D0100000000000C
+      0000004341424C455F4C454E47544801000000000006000000414D4F554E5401
+      00000000000A000000414D4F554E545F45515601000000000009000000435552
+      525F434F444501000000000008000000444953434F554E540100000000000800
+      00005041434B5F4E554D0100000000000700000041424F4E454E540100000000
+      00080000005041434B4E414D450100000000000A000000494E53545F504C4143
+      45010000000000060000004143435F4944010000000000040000005245535401
+      000000000006000000524553545F520100000000000C0000004C41535443414C
+      43444154450100000000000600000043414C4341470100000000000700000043
+      414C43414753010000000000060000004143435F4E4F0100000000000D000000
+      444953434F554E545F444553430100000000000600000055534E414D45010000
+      0000000900000055504455534E414D4501000000000007000000555044444154
+      45010000000000}
+    Master = odsAbonents
+    MasterFields = 'id'
+    DetailFields = 'abn_id'
+    Session = sboapiDataModule.SBSession
+    Left = 80
+    Top = 16
+  end
+  object dsContacts: TDataSource
+    DataSet = odsContacts
+    Left = 80
+    Top = 72
+  end
+  object odsServs: TOracleDataSet
+    SQL.Strings = (
+      
+        'select s.id, contract_id, reg_time, srv_id, s.amount, s.amount_e' +
+        'qv, s.curr_code,'
+      
+        '       status, done_time, c.name servicename, s.usname, s.updusn' +
+        'ame, s.upddate, paymethod, s.frm_contrct'
+      '  from bb_abn_services s, bb_services c, bb_contracts r'
+      
+        ' where s.srv_id = c.id and contract_id = r.id and contract_id = ' +
+        ':contract_id')
+    Variables.Data = {
+      03000000010000000C0000003A434F4E54524143545F49440300000000000000
+      00000000}
+    QBEDefinition.QBEFieldDefs = {
+      040000000D00000002000000494401000000000006000000414D4F554E540100
+      000000000A000000414D4F554E545F4551560100000000000900000043555252
+      5F434F44450100000000000B000000434F4E54524143545F4944010000000000
+      080000005245475F54494D45010000000000060000005352565F494401000000
+      00000600000053544154555301000000000009000000444F4E455F54494D4501
+      00000000000B000000534552564943454E414D45010000000000060000005553
+      4E414D450100000000000900000055504455534E414D45010000000000070000
+      0055504444415445010000000000}
+    Master = odsContacts
+    MasterFields = 'id'
+    DetailFields = 'contract_id'
+    Session = sboapiDataModule.SBSession
+    Left = 144
+    Top = 16
+  end
+  object dsServs: TDataSource
+    DataSet = odsServs
+    Left = 144
+    Top = 72
+  end
+  object odsValutes: TOracleDataSet
+    Tag = 2
+    SQL.Strings = (
+      'select valute id, val_name name from avalute'
+      'order by 2')
+    QBEDefinition.QBEFieldDefs = {
+      0400000002000000020000004944010000000000040000004E414D4501000000
+      0000}
+    Session = sboapiDataModule.SBSession
+    Left = 424
+    Top = 120
+  end
+  object dsValutes: TDataSource
+    DataSet = odsValutes
+    Left = 424
+    Top = 176
+  end
+  object odsPacks: TOracleDataSet
+    Tag = 2
+    SQL.Strings = (
+      'select id, name, inst_price, price, deposit from bb_packages'
+      'order by 2')
+    QBEDefinition.QBEFieldDefs = {
+      0400000002000000020000004944010000000000040000004E414D4501000000
+      0000}
+    Session = sboapiDataModule.SBSession
+    Left = 376
+    Top = 120
+  end
+  object dsPacks: TDataSource
+    DataSet = odsPacks
+    Left = 376
+    Top = 176
+  end
+  object odsServices: TOracleDataSet
+    Tag = 2
+    SQL.Strings = (
+      'select id, name, price from bb_services'
+      'order by 2')
+    QBEDefinition.QBEFieldDefs = {
+      0400000002000000020000004944010000000000040000004E414D4501000000
+      0000}
+    Session = sboapiDataModule.SBSession
+    Left = 320
+    Top = 120
+  end
+  object dsServices: TDataSource
+    DataSet = odsServices
+    Left = 320
+    Top = 176
+  end
+  object odsAccs: TOracleDataSet
+    Tag = 2
+    SQL.Strings = (
+      'select id, acc_no name from account where close_dat is null'
+      'order by 2')
+    QBEDefinition.QBEFieldDefs = {
+      0400000002000000020000004944010000000000040000004E414D4501000000
+      0000}
+    Session = sboapiDataModule.SBSession
+    Left = 264
+    Top = 120
+  end
+  object dsAccs: TDataSource
+    DataSet = odsAccs
+    Left = 264
+    Top = 176
+  end
+  object OrDS_fullContracts: TOracleDataSet
+    Tag = 2
+    SQL.Strings = (
+      'select * from bb_contracts')
+    Session = sboapiDataModule.SBSession
+    Left = 256
+    Top = 16
+  end
+  object DS_fullContracts: TDataSource
+    DataSet = OrDS_fullContracts
+    Left = 256
+    Top = 64
+  end
+end

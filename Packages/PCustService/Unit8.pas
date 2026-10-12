@@ -1,0 +1,88 @@
+﻿unit Unit8;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, XFSCtrls, ComCtrls, ExtCtrls, DB, OracleData, DBGridEh,
+  Mask, DBCtrlsEh, DBLookupEh, CMExcelExport;
+
+type
+  TForm8 = class(TForm)
+    XFPanel1: TXFPanel;
+    XFLabel1: TXFLabel;
+    XFLabel2: TXFLabel;
+    DateTimePicker1: TDateTimePicker;
+    DateTimePicker2: TDateTimePicker;
+    XFPanel2: TXFPanel;
+    XFButton1: TXFButton;
+    XFButton2: TXFButton;
+    sb_sysdate: TOracleDataSet;
+    sb_sysdateTEK_DAT: TDateTimeField;
+    ods_tonaj: TOracleDataSet;
+    ods_buspros: TOracleDataSet;
+    DBLookupComboboxEh1: TDBLookupComboboxEh;
+    XFLabel3: TXFLabel;
+    dsrc_buspros: TDataSource;
+    ods_busprosID: TFloatField;
+    ods_busprosNAME: TWideStringField;
+    ods_tonajPAR6: TWideStringField;
+    ods_tonajTRANS_DATE: TDateTimeField;
+    ods_tonajPAR11: TFloatField;
+    CMExcelExport1: TCMExcelExport;
+    procedure FormShow(Sender: TObject);
+    procedure XFButton1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form8: TForm8;
+
+implementation
+ uses UnitDataModPCustService,sboapiDataModuleImpl;
+{$R *.dfm}
+
+procedure TForm8.FormShow(Sender: TObject);
+begin
+DateTimePicker1.DateTime:=sb_sysdateTEK_DAT.AsDateTime;
+DateTimePicker2.DateTime:=sb_sysdateTEK_DAT.AsDateTime;
+end;
+
+procedure TForm8.XFButton1Click(Sender: TObject);
+ var
+ v_BDate    :TDateTime;
+ v_EDate    :TDateTime;
+
+begin
+        v_BDate:=Integer(Trunc(DateTimePicker1.DateTime));
+        v_eDate:=Integer(Trunc(DateTimePicker2.DateTime));
+
+        with ods_tonaj do
+        begin
+         close;
+       SetVariable('v_name',ods_busprosNAME.AsString);
+       SetVariable('begindat',v_BDate);
+       SetVariable('enddat',v_eDate);
+         open;
+        end;
+    if ods_tonaj.RecordCount=0 then
+    begin
+    showmessage('Seçilmiş tarixdə heçbir məlumat mövcud deyil  !');
+    end
+    else
+    begin
+
+      with CMExcelExport1 do
+       begin
+      Connect;
+      ExportDataset(ods_tonaj,'tonaj',True);
+      Disconnect;
+      end;
+    end;
+
+end;
+
+end.

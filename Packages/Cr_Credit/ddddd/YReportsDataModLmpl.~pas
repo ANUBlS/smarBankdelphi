@@ -1,0 +1,158 @@
+unit YReportsDataModLmpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, OracleData, Oracle;
+
+type
+  TYReportsDataMod = class(TDataModule)
+    Branches: TOracleDataSet;
+    CurrencysSrc: TDataSource;
+    BranchesSrc: TDataSource;
+    Currencys: TOracleDataSet;
+    CurrencysVALUTE: TIntegerField;
+    CurrencysVALU_NAME: TStringField;
+    sysdat: TOracleDataSet;
+    sysdatTEK_DAT: TDateTimeField;
+    sysdatPRED_DAT: TDateTimeField;
+    sysdatARC_DAY: TDateTimeField;
+    sysdatCLOSE: TIntegerField;
+    sysdatSrc: TDataSource;
+    Persons: TOracleDataSet;
+    PersonsSrc: TDataSource;
+    Types: TOracleDataSet;
+    FloatField1: TFloatField;
+    StringField1: TStringField;
+    TypesSrc: TDataSource;
+    Categories: TOracleDataSet;
+    CategoriesSrc: TDataSource;
+    Periods: TOracleDataSet;
+    PeriodsSrc: TDataSource;
+    CustNames: TOracleDataSet;
+    CustNamesSrc: TDataSource;
+    Customers: TOracleDataSet;
+    CustomersSrc: TDataSource;
+    RepForms: TOracleDataSet;
+    RepFormsSrc: TDataSource;
+    CreditsDSSrc: TDataSource;
+    CreditsDS: TOracleDataSet;
+    ResultDS: TOracleDataSet;
+    ResultDSODEME_EMSALI: TFloatField;
+    ResultDSCREDITID: TFloatField;
+    ResultDSBOOROWERID: TFloatField;
+    ResultDSCRDNUM: TStringField;
+    ResultDSBOOROWERNAME: TStringField;
+    ResultDSBRANCHID: TFloatField;
+    ResultDSBRANCH: TStringField;
+    ResultDSVILLAGEID: TFloatField;
+    ResultDSDISTRICTID: TFloatField;
+    ResultDSDISTRICT: TStringField;
+    ResultDSVILLAGE: TStringField;
+    ResultDSCREDPERIOD: TStringField;
+    ResultDSDESCRIPION: TStringField;
+    ResultDSSEX: TStringField;
+    ResultDSPURPOSE: TStringField;
+    ResultDSSFERADAY: TStringField;
+    ResultDSPURPOSEOFCREDIT: TStringField;
+    ResultDSPURPOSEID: TFloatField;
+    ResultDSTYPEID: TFloatField;
+    ResultDSTYPEDESC: TStringField;
+    ResultDSCRDCOUNT: TFloatField;
+    ResultDSPAYEDCRDCOUNT: TFloatField;
+    ResultDSDATEOFCONCLUSION: TDateTimeField;
+    ResultDSFIRSTTRCHDATE: TDateTimeField;
+    ResultDSLASTPAYDATE: TDateTimeField;
+    ResultDSPROLONGCNT: TFloatField;
+    ResultDSPROLONGDATE: TDateTimeField;
+    ResultDSCURRENCY: TStringField;
+    ResultDSKURUS: TFloatField;
+    ResultDSINTRATE: TFloatField;
+    ResultDSODRATE: TFloatField;
+    ResultDSKRXET: TFloatField;
+    ResultDSGIVENAMOUNT: TFloatField;
+    ResultDSDATEDEBTMAIN: TFloatField;
+    ResultDSPAYEDMAIN: TFloatField;
+    ResultDSPAYEDMONMAIN: TFloatField;
+    ResultDSDEBTMAIN: TFloatField;
+    ResultDSDEBTOVERMAIN: TFloatField;
+    ResultDSLATEDAY: TFloatField;
+    ResultDSCALCULATEDPERCENT: TFloatField;
+    ResultDSDATEDEBTINT: TFloatField;
+    ResultDSPAYEDINT: TFloatField;
+    ResultDSPAYEDMONINT: TFloatField;
+    ResultDSDEBTINT: TFloatField;
+    ResultDSDEBTOVERINT: TFloatField;
+    ResultDSGECGUNFAIZ: TFloatField;
+    ResultDSLOANACCID: TStringField;
+    ResultDSBOOROWERACCID: TStringField;
+    ResultDSBOOROWERACCREST: TFloatField;
+    ResultDSADDRESS: TStringField;
+    ResultDSPHONENUMBER: TStringField;
+    ResultDSSALARY: TStringField;
+    ResultDSDESCRIPTION: TStringField;
+    ResultDSGIROVREST: TFloatField;
+    ResultDSDUEBYSCHEME: TFloatField;
+    ResultDSCALCSTATUS: TStringField;
+    ResultDSRESERVE: TStringField;
+    ResultDSPRIMARYRESERVEAREST: TFloatField;
+    ResultDSPRIMARYPURRESERVEAREST: TFloatField;
+    ResultDSPRET: TFloatField;
+    ResultDSIDD: TFloatField;
+    ResultDSQATN: TFloatField;
+    ResultDSICRA: TFloatField;
+    ResultDSEXPERT__NAME: TStringField;
+    ResultDSPAYMENTDATE: TDateTimeField;
+    ResultDSPRINCIPAL: TFloatField;
+    ResultDSINTEREST: TFloatField;
+    ResultDSCEM: TFloatField;
+    ResultDSADIYAT: TStringField;
+    procedure DataModuleCreate(Sender: TObject);
+    procedure DataModuleDestroy(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  YReportsDataMod: TYReportsDataMod;
+
+implementation
+  uses sboapiDataModuleImpl;
+{$R *.DFM}
+
+procedure TYReportsDataMod.DataModuleCreate(Sender: TObject);
+begin
+Currencys.open;
+Branches.open;
+sysdat.open;
+Persons.open;
+Types.open;
+Categories.open;
+Periods.open;
+CustNames.open;
+Customers.open;
+RepForms.open;
+CreditsDS.open;
+
+end;
+
+procedure TYReportsDataMod.DataModuleDestroy(Sender: TObject);
+begin
+Currencys.Close;
+Branches.close;
+sysdat.Close;
+Persons.close;
+Types.close;
+Categories.close;
+Periods.close;
+CustNames.close;
+Customers.close;
+RepForms.Close;
+CreditsDS.CloseAll;
+ResultDS.close;
+end;
+
+end.

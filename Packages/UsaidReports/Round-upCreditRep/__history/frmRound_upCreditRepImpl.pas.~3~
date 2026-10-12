@@ -1,0 +1,717 @@
+﻿unit frmRound_upCreditRepImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, NLSDialogs,
+  ActiveX, AxCtrls, Round_upCreditRep_TLB, StdVcl, ExtCtrls, StdCtrls,
+  CheckLst, Evanescence, Mask, DBCtrlsEh, ComCtrls, Buttons, Grids,oracle,oracledata,
+  DBGridEh, CMExcelExport;
+
+type
+  TfrmRound_upCreditRep = class(TActiveForm, IfrmRound_upCreditRep)
+    Panel2: TPanel;
+    Panel3: TPanel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    Label6: TLabel;
+    GroupBox4: TGroupBox;
+    DBGridEh1: TDBGridEh;
+    DBEditEh3: TDBEditEh;
+    DBEditEh4: TDBEditEh;
+    GroupBox6: TGroupBox;
+    Edit1: TEdit;
+    GroupBox7: TGroupBox;
+    Edit2: TEdit;
+    GroupBox8: TGroupBox;
+    edroundint: TEdit;
+    GroupBox9: TGroupBox;
+    edintrest: TEdit;
+    GroupBox10: TGroupBox;
+    edrest: TEdit;
+    GroupBox12: TGroupBox;
+    edcrdamt: TEdit;
+    GroupBox14: TGroupBox;
+    edcrdcnt: TEdit;
+    edThisCnt: TEdit;
+    edThisAmt: TEdit;
+    expODSmain: TCMExcelExport;
+    BitBtn1: TBitBtn;
+    GroupBox1: TGroupBox;
+    GroupBox2: TGroupBox;
+    lvalute: TEvanescence;
+    chvalute: TCheckBox;
+    GroupBox3: TGroupBox;
+    lcredittypes: TEvanescence;
+    chcrdtype: TCheckBox;
+    GroupBox5: TGroupBox;
+    lfilial: TEvanescence;
+    chfilial: TCheckBox;
+    DTPRepdat: TDateTimePicker;
+    Label1: TLabel;
+    OK: TBitBtn;
+    BitBtnexp: TBitBtn;
+    BitBtn2: TBitBtn;
+    BitBtn3: TBitBtn;
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure OKClick(Sender: TObject);
+    procedure ActiveFormDestroy(Sender: TObject);
+    procedure DBGridEh1DblClick(Sender: TObject);
+    procedure DBGridEh1TitleBtnClick(Sender: TObject; ACol: Integer;
+      Column: TColumnEh);
+    procedure chfilialClick(Sender: TObject);
+    procedure chcrdtypeClick(Sender: TObject);
+    procedure chvaluteClick(Sender: TObject);
+    procedure BitBtnexpClick(Sender: TObject);
+    procedure BitBtn1Click(Sender: TObject);
+    procedure BitBtn2Click(Sender: TObject);
+    procedure BitBtn3Click(Sender: TObject);
+  private
+    { Private declarations }
+    FEvents: IfrmRound_upCreditRepEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+  public
+    { Public declarations }
+    procedure Initialize; override;
+  end;
+
+implementation
+
+uses ComObj, ComServ, dmRound_upCreditRepImpl, frmDetailImpl
+,frmusaid_prognozImpl,SBTranslateProc,sboapiDataModule;
+
+{$R *.DFM}
+
+{ TfrmRound_upCreditRep }
+var FilterStr :String;
+    RepDat :TDateTime;
+
+procedure TfrmRound_upCreditRep.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_frmRound_upCreditRepPage); }
+end;
+
+procedure TfrmRound_upCreditRep.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as IfrmRound_upCreditRepEvents;
+end;
+
+procedure TfrmRound_upCreditRep.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TfrmRound_upCreditRep.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TfrmRound_upCreditRep.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TfrmRound_upCreditRep.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TfrmRound_upCreditRep.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TfrmRound_upCreditRep.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TfrmRound_upCreditRep.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TfrmRound_upCreditRep.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TfrmRound_upCreditRep.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TfrmRound_upCreditRep.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TfrmRound_upCreditRep.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TfrmRound_upCreditRep.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TfrmRound_upCreditRep.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TfrmRound_upCreditRep.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TfrmRound_upCreditRep.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TfrmRound_upCreditRep.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TfrmRound_upCreditRep.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TfrmRound_upCreditRep.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TfrmRound_upCreditRep.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TfrmRound_upCreditRep._Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TfrmRound_upCreditRep.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TfrmRound_upCreditRep.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TfrmRound_upCreditRep.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TfrmRound_upCreditRep.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TfrmRound_upCreditRep.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TfrmRound_upCreditRep.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TfrmRound_upCreditRep.KeyPressEvent(Sender: TObject;
+  var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TfrmRound_upCreditRep.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TfrmRound_upCreditRep.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TfrmRound_upCreditRep.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TfrmRound_upCreditRep.Set_AxBorderStyle(
+  Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TfrmRound_upCreditRep.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TfrmRound_upCreditRep.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TfrmRound_upCreditRep.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TfrmRound_upCreditRep.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TfrmRound_upCreditRep.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TfrmRound_upCreditRep.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TfrmRound_upCreditRep.Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TfrmRound_upCreditRep.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TfrmRound_upCreditRep.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TfrmRound_upCreditRep.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TfrmRound_upCreditRep.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TfrmRound_upCreditRep.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TfrmRound_upCreditRep.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+procedure TfrmRound_upCreditRep.ActiveFormCreate(Sender: TObject);
+begin
+   dmRound_upCreditRep := TdmRound_upCreditRep.Create(self);
+   frmDetail := TfrmDetail.Create(self);
+   DTPRepdat.DateTime := dmRound_upCreditRep.sysdat.FieldByName('tek_dat').asDateTime;
+   lfilial.Open;
+   lcredittypes.Open;
+   lvalute.Open;
+   {lfilial.CheckAll;
+   lcredittypes.CheckAll;
+   lvalute.CheckAll;}
+   SBTranslateProc.TranslateAllComponents(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TfrmRound_upCreditRep.OKClick(Sender: TObject);
+
+resourcestring rs_gencount = 'select count(p.id) as cnt from cm_portfolio p where id in (select creditid from cm_history where hdate =:dat and rest+duerest >0)';
+resourcestring rs_geninitialamt = 'select round(sum(p.initialamount*o.ostat),2) as geninitialamount from cm_portfolio p,operkurs o where p.currency = o.val_kod and p.id in (select creditid from cm_history where hdate =:dat and rest+duerest >0)';
+resourcestring rs_genrest = 'select round(sum(rest*o.ostat+duerest*o.ostat),2) as genrest from cm_portfolio p,cm_history h,operkurs o where h.creditid=p.id and p.currency = o.val_kod';
+
+var
+     gencount,geninitialamt,genrest,
+     smrest,smintrest,smroundint ,
+     smThisCnt,smThistramt,a,z:Real;
+     FSt,s_genrest,s_gencount,s_geninitialamt :String;
+
+begin
+
+  RepDat := integer(trunc(DTPRepdat.DateTime));
+  FilterStr := '';
+  FSt := '';
+  gencount := 0;
+  geninitialamt := 0;
+  genrest := 0;
+  smrest := 0;
+  smintrest := 0;
+  smroundint := 0;
+  smThisCnt:=0;
+  smThistramt:=0;
+
+  if lfilial.GetCheckedKeyList.Count = 0 then begin ShowMessage('Ən azı bir filial seçilməlidir!'); Exit; end;
+  if lcredittypes.GetCheckedKeyList.Count = 0 then begin ShowMessage('Ən azı bir kredit tipi seçilməlidir!'); Exit; end;
+  if lvalute.GetCheckedKeyList.Count = 0 then begin ShowMessage('Ən azı bir valyuta seçilməlidir!'); Exit; end;
+
+
+
+ // if (lfilial.GetCheckedKeyList.Count<>lfilial.Items.Count) then begin
+  if  FilterStr <> '' then
+  FilterStr := FilterStr + ' and  p.branchid in ('
+                              +lfilial.GetCheckedKeyList.CommaText +')'
+  else  begin
+    FSt := 'branchid in ('
+                              +lfilial.GetCheckedKeyList.CommaText +')';
+    FilterStr := '  p.branchid in ('
+                              +lfilial.GetCheckedKeyList.CommaText +')';  end;
+ // end;
+
+  if (lcredittypes.GetCheckedKeyList.Count<>lcredittypes.Items.Count) then begin
+  if   FilterStr <> '' then
+  FilterStr := FilterStr + ' and p.credittype in  ('
+                              +lcredittypes.GetCheckedKeyList.CommaText +')' else
+  FilterStr := '  p.credittype in  ('
+                              +lcredittypes.GetCheckedKeyList.CommaText +')';
+
+  end;
+
+  if (lvalute.GetCheckedKeyList.Count<>lvalute.Items.Count) then begin
+  if FilterStr <> '' then
+  FilterStr := FilterStr + ' and p.currency in ('
+                              +lvalute.GetCheckedKeyList.CommaText +')' else
+    FilterStr := '  p.currency in ('
+                              +lvalute.GetCheckedKeyList.CommaText +')';
+  end;
+
+  Screen.Cursor := crSqlWait;
+  //showmessage(FilterStr);
+
+  with dmRound_upCreditRep do begin //1
+
+       s_gencount := rs_gencount;
+       if FilterStr <> '' then s_gencount := s_gencount + ' and  '+FilterStr;
+
+       with Queries do begin //2
+       DeleteVariables;
+       DeclareVariable('dat',otDate);
+       SetVariable('dat',repdat);
+       if Active then CloseAll;
+       sql.Clear;
+       sql.Add(s_gencount);
+       Open;
+       gencount := FieldByName('cnt').AsFloat;
+
+
+       s_geninitialamt := rs_geninitialamt;
+       s_geninitialamt := s_geninitialamt + ' and o.dat = ' + QuotedStr(FormatdateTime('dd-mmm-yyyy',RepDat));
+       if FilterStr <> '' then s_geninitialamt := s_geninitialamt + ' and '+FilterStr;
+
+       CloseAll;
+       DeleteVariables;
+       DeclareVariable('dat',otDate);
+       SetVariable('dat',repdat);
+       sql.Clear;
+       sql.Add(s_geninitialamt);
+       Open;
+       geninitialamt := FieldByName('geninitialamount').AsFloat;
+       
+
+       s_genrest:= rs_genrest + ' and h.hdate = '+QuotedStr(FormatdateTime('dd-mmm-yyyy',RepDat))+' and o.dat = '+QuotedStr(FormatdateTime('dd-mmm-yyyy',RepDat));
+       if FilterStr <> '' then s_genrest := s_genrest + ' and '+FilterStr;
+       CloseAll;
+       DeleteVariables;
+       sql.Clear;
+       sql.Add(s_genrest);
+       Open;
+       genrest := FieldByName('genrest').AsFloat;
+       end; //2
+
+       with ODSmain do
+       begin
+          if Active then CloseAll;
+          SetVariable('dat',RepDat);
+          if gencount = 0 then gencount := 1;
+          SetVariable('GENERALCOUNT',gencount);
+          if geninitialamt = 0 then geninitialamt := 1;
+          SetVariable('GENERALINITIALAMT',geninitialamt);
+          SetVariable('ffilter',FSt);
+          if genrest = 0 then genrest := 1;
+          SetVariable('grest',genrest);
+          SetVariable('OrderField','ID');
+          if FilterStr <> '' then  begin
+          sql[26] := ' and ' + '('+FilterStr+')';
+          sql[35] := ' and  ' + '('+FilterStr+')';
+          sql[43] := ' and  ' + '('+FilterStr+')';
+          sql[54] := ' and ' + '('+FilterStr+')';
+          sql[61] := ' and ' + '('+FilterStr+')'; end
+          else begin
+            sql[26] := '';
+            sql[35] := '';
+            sql[43] := '';
+            sql[54] := '';
+            sql[61] := '';
+          end;
+          //memo1.text := SQL.text;
+          open;
+
+          
+          DisableControls;
+          while not eof do begin   //*
+           smrest := smrest + FieldByName('REST').asFloat;
+           smintrest := smintrest + FieldByName('interestrest').asFloat;
+           smroundint := smroundint + FieldByName('ROUNDINT').asFloat*FieldByName('REST').asFloat;
+          next;
+          end; //*
+          EnableControls;
+
+       end;
+
+       with ThisMonTranched do begin
+            if Active then CloseAll;
+            SetVariable('dat',RepDat);
+            if FilterStr <> '' then  sql[8] := ' and ' + '('+FilterStr+')' else sql[8] := '';
+            open;
+
+          while not eof do begin   //*
+           smThisCnt := smThisCnt + 1{FieldByName('CNT').asFloat};
+           smthisTRAMT := smThistramt + FieldByName('TRAMT').asFloat;
+           //smroundint := smroundint + FieldByName('ROUNDINT').asFloat;
+          next;
+          end; //*
+         edThisAmt.text := FloatToStr(smthisTRAMT);
+         edThisCnt.text := FloatToStr(smThisCnt);
+       end;
+
+  end;   //1
+
+  //edgenrest.text := FloatToStr(genrest);
+  //edgencount.text := FloatToStr(gencount);
+  //edgenintamt.text := FloatToStr(geninitialamt);
+  edcrdcnt.text := FloatToStr(gencount);
+  edcrdamt.text := FloatToStr(geninitialamt);
+  edrest.text := FloatToStr(smrest);
+  edintrest.text := FloatToStr(smintrest);
+  if smrest = 0 then smrest := 1;
+  a:= smroundint/smrest;
+  a := trunc(a) + round((a-trunc(a))*100)/100;
+  edroundint.text := FloatToStr((a))+'%';
+
+  Screen.Cursor := crDefault;
+
+end;
+
+procedure TfrmRound_upCreditRep.ActiveFormDestroy(Sender: TObject);
+begin
+  frmDetail.free;
+  dmRound_upCreditRep.free;
+end;
+
+procedure TfrmRound_upCreditRep.DBGridEh1DblClick(Sender: TObject);
+begin
+   with dmRound_upCreditRep,ODSDetail do begin
+        if Active then CloseAll;
+        SetVariable('dat',RepDat);
+        SetVariable('crdtype',ODSMain.FieldByName('ID').AsInteger);
+        SetVariable('OrderField','numberofcredit');
+        if FilterStr <> '' then  SQL[40] := ' and  ' + FilterStr
+        else SQL[40] := '';
+
+        open;
+   end;
+    with frmDetail do begin
+     MainGriddetail.DataSource := dmRound_upCreditRep.ODSDetailds;
+     DBEditEh1.DataSource := dmRound_upCreditRep.ODSDetailds;
+     DBEditEh2.DataSource := dmRound_upCreditRep.ODSDetailds;
+     DBEditEh3.DataSource := dmRound_upCreditRep.ODSDetailds;
+     DTP.DateTime := RepDat;
+     ShowModal;
+    end;
+end;
+
+procedure TfrmRound_upCreditRep.DBGridEh1TitleBtnClick(Sender: TObject;
+  ACol: Integer; Column: TColumnEh);
+var
+  SortField : String;
+begin
+  if (Sender as TDBGridEh).DataSource.DataSet.active then   begin
+  SortField := Column.FieldName;
+  if (Sender as TDBGridEh).DataSource.DataSet.FieldByName(SortField).Calculated then
+  SortField := copy(Column.FieldName,5,length(Column.FieldName)) ;
+  if Column.Title.SortMarker = smDownEh then
+    SortField := SortField + ' DESC';
+  with Sender as TDBGridEh , TOracleDataSet(DataSource.DataSet) do
+  begin
+   // ClearVariables;
+    Screen.Cursor := crSQLWait;
+    SetVariable('OrderField',SortField);
+    RefResh;
+    Screen.Cursor := crDefault;
+   end;
+    end;
+end;
+
+procedure TfrmRound_upCreditRep.chfilialClick(Sender: TObject);
+begin
+    if chfilial.Checked then lfilial.CheckAll else lfilial.UnCheckAll
+end;
+
+procedure TfrmRound_upCreditRep.chcrdtypeClick(Sender: TObject);
+begin
+   if chcrdtype.Checked then lcredittypes.CheckAll else lcredittypes.UnCheckAll
+end;
+
+procedure TfrmRound_upCreditRep.chvaluteClick(Sender: TObject);
+begin
+if chvalute.Checked then lvalute.CheckAll else lvalute.UnCheckAll
+end;
+
+procedure TfrmRound_upCreditRep.BitBtnexpClick(Sender: TObject);
+begin
+   with expODSmain do begin
+        Connect;
+        ExportDataset(dmRound_upCreditRep.ODSmain,'Main informations',true,false);
+        Disconnect;
+   end;
+end;
+
+procedure TfrmRound_upCreditRep.BitBtn1Click(Sender: TObject);
+begin
+   with dmRound_upCreditRep,ODSDetail30 do begin
+        if Active then CloseAll;
+        SetVariable('dat',RepDat);
+        SetVariable('OrderField','numberofcredit');
+        if FilterStr <> '' then  SQL[40] := ' and  ' + FilterStr
+        else SQL[40] := '';
+
+        open;
+   end;
+    with frmDetail do begin
+     MainGriddetail.DataSource := dmRound_upCreditRep.ODSDetail30ds;
+     DBEditEh1.DataSource := dmRound_upCreditRep.ODSDetail30ds;
+     DBEditEh2.DataSource := dmRound_upCreditRep.ODSDetail30ds;
+     DBEditEh3.DataSource := dmRound_upCreditRep.ODSDetail30ds;
+     DTP.DateTime := RepDat;
+     ShowModal;
+    end;
+
+end;
+
+procedure TfrmRound_upCreditRep.BitBtn2Click(Sender: TObject);
+begin
+   with dmRound_upCreditRep,ODSDetailall do begin
+        if Active then CloseAll;
+        SetVariable('dat',RepDat);
+        SetVariable('OrderField','numberofcredit');
+        if FilterStr <> '' then  SQL[40] := ' and  ' + FilterStr
+        else SQL[40] := '';
+
+        open;
+   end;
+    with frmDetail do begin
+     MainGriddetail.DataSource := dmRound_upCreditRep.ODSDetailallds;
+     DBEditEh1.DataSource := dmRound_upCreditRep.ODSDetailallds;
+     DBEditEh2.DataSource := dmRound_upCreditRep.ODSDetailallds;
+     DBEditEh3.DataSource := dmRound_upCreditRep.ODSDetailallds;
+     DTP.DateTime := RepDat;
+     ShowModal;
+    end;
+
+end;
+
+procedure TfrmRound_upCreditRep.BitBtn3Click(Sender: TObject);
+begin
+   try
+      frmusaid_prognoz := Tfrmusaid_prognoz.create(self);
+      frmusaid_prognoz.ProgSetInt := 1;
+      if frmusaid_prognoz.checkaccess then
+      frmusaid_prognoz.ShowModal;
+   {except
+       on E: Exception do
+       ShowMessage(E.Message)}
+   finally
+      frmusaid_prognoz.Release;
+   end;
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TfrmRound_upCreditRep,
+    Class_frmRound_upCreditRep,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

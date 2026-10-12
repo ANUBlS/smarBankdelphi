@@ -1,0 +1,93 @@
+unit UUnderTable;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, OleCtnrs, StdCtrls, Mask, DBCtrls, HintBox, Buttons, ExtCtrls,db;
+
+type
+  TfmUndertable = class(TForm)
+    Panel1: TPanel;
+    BitBtn1: TBitBtn;
+    BitBtn2: TBitBtn;
+    RadioButton1: TRadioButton;
+    RadioButton2: TRadioButton;
+    hbError: THintBox;
+    DBEdit1: TDBEdit;
+    OleContainer1: TOleContainer;
+    Panel2: TPanel;
+    BitBtn3: TBitBtn;
+    procedure OleContainer1Exit(Sender: TObject);
+    procedure Panel1DblClick(Sender: TObject);
+    procedure BitBtn2Click(Sender: TObject);
+    procedure RadioButton1Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  fmUndertable: TfmUndertable;
+
+implementation
+
+uses DMMKPolicyImpl,
+ ComObj,CommanParametrs,sboapiDataModuleImpl,SBTranslateProc,
+  UProceses;
+
+{$R *.dfm}
+
+procedure TfmUndertable.BitBtn2Click(Sender: TObject);
+begin
+  with DMMKPolicy, ODSTemplates do
+   Cancel;
+end;
+
+procedure TfmUndertable.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+    if OleContainer1.State in [osLoaded] then
+       OleContainer1.Close;
+end;
+
+procedure TfmUndertable.FormCreate(Sender: TObject);
+begin
+   DBEdit1.DataSource := DMMKPolicy.DSTemplates;
+   DBEdit1.DataField := 'NAME';
+   with DMMKPolicy, ODSTemplates do
+    if IsEmpty then RadioButton2.Checked := True
+       else Edit;
+     SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TfmUndertable.FormShow(Sender: TObject);
+begin
+   OpenContainer;
+end;
+
+procedure TfmUndertable.OleContainer1Exit(Sender: TObject);
+begin
+    with OleContainer1 do
+    Close //DoVerb(ovDiscardUndoState);
+end;
+
+procedure TfmUndertable.Panel1DblClick(Sender: TObject);
+begin
+  with DMMKPolicy, ODSTemplates do
+    if State = dsEdit then hbError.ShowMessage('edit') else hbError.ShowMessage('Insert');
+end;
+
+procedure TfmUndertable.RadioButton1Click(Sender: TObject);
+begin
+  with DMMKPolicy, ODSTemplates do begin
+    if State in [dsEdit, dsInsert] then Cancel;
+    ODSTemplates.Edit;
+    FormShow(Sender);
+  end;
+end;
+
+end.

@@ -1,0 +1,665 @@
+﻿unit CustomersImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Grids, DBGrids, ExtCtrls, DB, OracleData, SboapiDataModuleImpl,
+  ComCtrls, ToolWin, StdCtrls, XFSCtrls;
+
+type
+  TFormCustomers = class(TForm)
+    Panel1: TPanel;
+    DBGrid1: TDBGrid;
+    Panel2: TPanel;
+    ODS_CUSTOMERS: TOracleDataSet;
+    DS_CUSTOMERS: TDataSource;
+    CBSearch: TComboBox;
+    EditSearch: TEdit;
+    ODS_CUSTOMERSID: TIntegerField;
+    ODS_CUSTOMERSCUST_NAME: TWideStringField;
+    ODS_CUSTOMERSFIRSTNAME: TWideStringField;
+    ODS_CUSTOMERSPATRONYMIC: TWideStringField;
+    ODS_CUSTOMERSLASTNAME: TWideStringField;
+    XFButton1: TXFButton;
+    XFButton2: TXFButton;
+    ODS_CUSTOMERS_tr: TOracleDataSet;
+    DS_CUSTOMERS_tr: TDataSource;
+    XFButton3: TXFButton;
+    ODS_CUSTOMERS_trID: TIntegerField;
+    ODS_CUSTOMERS_trCUST_NAME: TWideStringField;
+    ODS_CUSTOMERS_trLASTNAME: TWideStringField;
+    ODS_CUSTOMERS_trFIRSTNAME: TWideStringField;
+    ODS_CUSTOMERS_trPATRONYMIC: TWideStringField;
+    ODS_CUSTOMERS_trCUST_TYPE: TFloatField;
+    ODS_CUSTOMERS_trINN: TWideStringField;
+    ODS_CUSTOMERS_trPASSPORT: TWideStringField;
+    ODS_CUSTOMERS_trPASSP_NUMBER: TWideStringField;
+    procedure FormShow(Sender: TObject);
+    procedure FormCanResize(Sender: TObject; var NewWidth, NewHeight: Integer;
+      var Resize: Boolean);
+    procedure ToolButton1Click(Sender: TObject);
+    procedure ToolButton2Click(Sender: TObject);
+    procedure DBGrid1DblClick(Sender: TObject);
+    procedure EditSearchChange(Sender: TObject);
+    procedure XFButton1Click(Sender: TObject);
+    procedure XFButton2Click(Sender: TObject);
+    procedure XFButton3Click(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    vCustId: Integer;
+  end;
+
+var
+  FormCustomers: TFormCustomers;
+
+implementation
+
+uses UnitDataModPCustService, PCustServiceFormImpl1, FormTransaction3Lmpl,
+  UnitTransaction;
+
+{$R *.dfm}
+
+procedure TFormCustomers.DBGrid1DblClick(Sender: TObject);
+var
+v_cust_type_id:integer;
+begin
+if  cust_elaqe_Transaction=1  then
+     begin
+       XFButton1.Click;
+     end;
+
+  if  cust_elaqe_Transaction=2  then
+     begin
+
+       FormTransaction3.Edit8.Text :=inttostr(ODS_CUSTOMERS_tr.FieldByName('id').AsInteger);
+       FormTransaction3.Edit10.Text := ODS_CUSTOMERS_tr.FieldByName('cust_name').AsString;
+
+      with DataModPCustService.ODS_AccNO_B do
+       begin
+        close;
+        sql[11]:='';
+        sql[11]:=sql[11]+ ' and  kli_ID = '+FormTransaction3.Edit8.Text;
+        //SetVariable('CustID',strtoint(FormTransaction3.Edit8.Text));
+        open;
+       end;
+
+     v_cust_type_id := ODS_CUSTOMERS_tr.FieldByName('CUST_TYPE').AsInteger;
+   if v_cust_type_id in [0, 2] then
+      begin
+        FormTransaction3.Edit11.Visible := True;
+        FormTransaction3.Edit11.Text := ODS_CUSTOMERS_tr.FieldByName('inn').AsString;
+        FormTransaction3.Edit7.Visible := False;
+        FormTransaction3.Edit18.Visible := False;
+        FormTransaction3.Label18.Caption := 'Vöen';
+        FormTransaction3.edit12.Visible:=false;
+        FormTransaction3.Label16.Visible:=false;
+      end
+      else
+      begin
+        FormTransaction3.Edit7.Visible := True;
+        FormTransaction3.Edit18.Visible := True;
+      end;
+
+      if v_cust_type_id = 1 then
+      begin
+        FormTransaction3.Edit7.Visible := True;
+        FormTransaction3.Edit18.Visible := True;
+        FormTransaction3.Edit7.Text := ODS_CUSTOMERS_tr.FieldByName('passport').AsString;
+        FormTransaction3.Edit18.Text := ODS_CUSTOMERS_tr.FieldByName('passp_number').AsString;
+        FormTransaction3.Edit11.Visible := False;
+        FormTransaction3.Label18.Caption := 'Pasport seriyasi'  ;
+        FormTransaction3.edit12.Visible:=false  ;
+        FormTransaction3.Label16.Visible:=false
+      end
+      else
+      if v_cust_type_id = 3 then
+      begin
+
+        FormTransaction3.Edit7.Visible := True;
+        FormTransaction3.Edit18.Visible := True;
+        FormTransaction3.Edit7.Text := ODS_CUSTOMERS_tr.FieldByName('passport').AsString;
+        FormTransaction3.Edit18.Text := ODS_CUSTOMERS_tr.FieldByName('passp_number').AsString;
+        FormTransaction3.Edit11.Visible := False;
+        FormTransaction3.Label18.Caption := 'Pasport seriyasi';
+        FormTransaction3.Label16.Visible:=true;
+        FormTransaction3.edit12.Visible:=true;
+        FormTransaction3.Edit12.Text := ODS_CUSTOMERS_tr.FieldByName('inn').AsString;
+      end
+      else
+      FormTransaction3.Edit11.Visible := True;
+    
+    if DataModPCustService.ODS_AccNO_B.RecordCount <= 2 then
+    begin
+      DataModPCustService.ODS_AccNO_B.First;
+      FormTransaction3.DBLookupComboboxEh_B1.KeyValue :=
+      DataModPCustService.ODS_AccNO_B.FieldByName('symb').AsString;
+    end
+    else
+      BEGIN
+      DataModPCustService.ODS_AccNO_B.Last;
+      FormTransaction3.DBLookupComboboxEh_B1.KeyValue := ' ';
+  END;
+
+   with DataModPCustService.ODS_AccNO_B do
+   begin
+    if RecordCount = 2 then
+   FormTransaction3.DBCBoxAccNo_B.KeyValue :=DataModPCustService.ODS_AccNO_B.FieldByName
+        ('acc_no').AsString
+    else
+   FormTransaction3.DBCBoxAccNo_B.KeyValue := ' ';
+    end;
+
+  case ODS_CUSTOMERS_tr.FieldByName('cust_type').AsInteger of
+  0:begin
+    FormTransaction3.RadioBu_jur.Checked:=true;
+    FormTransaction3.RadioBu_phys.Enabled:=false;
+    FormTransaction3.RadioBu_fs.Enabled:=false;
+   end;
+
+  1:begin
+   FormTransaction3.RadioBu_phys.Checked:=true ;
+   FormTransaction3.RadioBu_jur.Enabled:=false;
+   FormTransaction3.RadioBu_fs.Enabled:=false;
+   end;
+  2:begin
+  if  FormTransaction3.RadioBu_fs.Checked=false then
+      FormTransaction3.RadioBu_fs.Checked:=true
+     else
+   FormTransaction3.RadioBu_fs.Checked:=true;
+   FormTransaction3.RadioBu_jur.Enabled:=false;
+   FormTransaction3.RadioBu_phys.Enabled:=false;
+  end;
+  3:begin
+     FormTransaction3.RadioBu_phys.Checked:=false;
+     FormTransaction3.RadioBu_fs.Checked:=false;
+     FormTransaction3.RadioBu_jur.Enabled:=false;
+  end;
+  end;
+  end;
+
+ if cust_elaqe_Transaction=3 then
+ begin
+      FormTransaction4.Edit_id_B.Text :=inttostr(ODS_CUSTOMERS_tr.FieldByName('id').AsInteger);
+      FormTransaction4.Edit_cust_name_B.Text := ODS_CUSTOMERS_tr.FieldByName('cust_name').AsString;
+
+      with DataModPCustService.ODS_AccNO_B do
+      begin
+        close;
+        sql[11]:='';
+        sql[11]:=sql[11]+ ' and  kli_ID = '+FormTransaction4.Edit_id_B.Text;
+        //SetVariable('CustID', strtoint(FormTransaction4.Edit_id_B.Text));
+        open;
+      end;
+      v_cust_type_id := ODS_CUSTOMERS_tr.FieldByName('CUST_TYPE').AsInteger;
+      if v_cust_type_id in [0, 2] then
+      begin
+        FormTransaction4.Edit_inn_B.Visible := True;
+        FormTransaction4.Edit_inn_B.Text := ODS_CUSTOMERS_tr.FieldByName('inn').AsString;
+        FormTransaction4.Edit_pasp_ser_B.Visible := False;
+        FormTransaction4.Edit_pasp_num_B.Visible := False;
+        FormTransaction4.Label_PASPIN_INN_B.Caption := 'Voen';
+        FormTransaction4.Edit_inn_fs_B.Visible:=false;
+        FormTransaction4.Label_acc_noA.Visible:=false;
+      end
+      else
+      begin
+        FormTransaction4.Edit_pasp_ser_B.Visible := True;
+        FormTransaction4.Edit_pasp_num_B.Visible := True;
+      end;
+
+      if v_cust_type_id = 1 then
+      begin
+        FormTransaction4.Edit_pasp_ser_B.Visible := True;
+        FormTransaction4.Edit_pasp_num_B.Visible := True;
+        FormTransaction4.Edit_pasp_ser_B.Text := ODS_CUSTOMERS_tr.FieldByName('passport').AsString;
+        FormTransaction4.Edit_pasp_num_B.Text := ODS_CUSTOMERS_tr.FieldByName('passp_number').AsString;
+        FormTransaction4.Edit_inn_B.Visible := False;
+        FormTransaction4.Label_PASPIN_INN_B.Caption := 'Pasport seriyasi'  ;
+        FormTransaction4.Edit_inn_fs_B.Visible:=false  ;
+        FormTransaction4.Label_acc_noA.Visible:=false
+      end
+      else if v_cust_type_id = 3 then
+      begin
+        FormTransaction4.Edit_pasp_ser_B.Visible := True;
+        FormTransaction4.Edit_pasp_num_B.Visible := True;
+        FormTransaction4.Edit_pasp_ser_B.Text := ODS_CUSTOMERS_tr.FieldByName('passport').AsString;
+        FormTransaction4.Edit_pasp_num_B.Text := ODS_CUSTOMERS_tr.FieldByName('passp_number').AsString;
+        FormTransaction4.Edit_inn_B.Visible := False;
+        FormTransaction4.Label_PASPIN_INN_B.Caption := 'Pasport seriyasi';
+        FormTransaction4.Label_acc_noA.Visible:=true;
+        FormTransaction4.Edit_inn_fs_B.Visible:=true;
+        FormTransaction4.Edit_inn_fs_B.Text :=ODS_CUSTOMERS_tr.FieldByName('inn').AsString;
+
+      end
+      else
+        FormTransaction4.Edit_inn_B.Visible := True;
+    if DataModPCustService.ODS_AccNO_B.RecordCount <= 2 then
+    begin
+
+      DataModPCustService.ODS_AccNO_B.First;
+       FormTransaction4.DBLookupComboboxEh_B1.KeyValue :=
+        DataModPCustService.ODS_AccNO_B.FieldByName('symb').AsString;
+    end
+    else
+      BEGIN DataModPCustService.ODS_AccNO_B.Last;
+      FormTransaction4.DBLookupComboboxEh_B1.KeyValue := ' ';
+  END;
+
+     with DataModPCustService.ODS_AccNO_B do
+  begin
+   if RecordCount = 2 then
+   FormTransaction4.DBCBoxAccNo_B.KeyValue :=DataModPCustService.ODS_AccNO_B.FieldByName
+        ('acc_no').AsString
+    else
+   FormTransaction4.DBCBoxAccNo_B.KeyValue := ' ';
+    end;
+
+  case ODS_CUSTOMERS_tr.FieldByName('cust_type').AsInteger of
+  0:begin
+    FormTransaction4.RadioBu_jur_B.Checked:=true;
+    FormTransaction4.RadioBu_phys_B.Enabled:=false;
+    FormTransaction4.RadioBu_fs_B.Enabled:=false;
+   end;
+
+  1:begin
+   FormTransaction4.RadioBu_phys_B.Checked:=true ;
+   FormTransaction4.RadioBu_jur_B.Enabled:=false;
+   FormTransaction4.RadioBu_fs_B.Enabled:=false;
+   end;
+  2:begin
+  if  FormTransaction4.RadioBu_fs_B.Checked=false then
+     FormTransaction4.RadioBu_fs_B.Checked:=true
+     else
+   FormTransaction4.RadioBu_fs_B.Checked:=true;
+   FormTransaction4.RadioBu_jur_B.Enabled:=false;
+   FormTransaction4.RadioBu_phys_B.Enabled:=false;
+  end;
+  3:begin
+     FormTransaction4.RadioBu_phys_B.Checked:=false;
+     FormTransaction4.RadioBu_fs_B.Checked:=false;
+     FormTransaction4.RadioBu_jur_B.Enabled:=false;
+  end;
+  end;
+  end;
+    if cust_elaqe_Transaction=4 then
+     begin
+      FormTransaction4.Edit_id_C.Text:= inttostr(ODS_CUSTOMERS_tr.FieldByName('id').AsInteger);
+      FormTransaction4.Edit_cust_name_C.Text := ODS_CUSTOMERS_tr.FieldByName('cust_name').AsString;
+      with DataModPCustService.ODS_AccNO_C do
+      begin
+        close;
+         sql[11]:='';
+        sql[11]:=sql[11]+ ' and  kli_ID = '+FormTransaction4.Edit_id_C.Text;
+     //   SetVariable('CustID', strtoint(FormTransaction4.Edit_id_C.Text));
+        open;
+      end;
+      v_cust_type_id := ODS_CUSTOMERS_tr.FieldByName('CUST_TYPE').AsInteger;
+      if v_cust_type_id in [0, 2] then
+      begin
+        FormTransaction4.Edit_inn_C.Visible := True;
+        FormTransaction4.Edit_inn_C.Text := ODS_CUSTOMERS_tr.FieldByName('inn').AsString;
+        FormTransaction4.Edit_pasp_ser_C.Visible := False;
+        FormTransaction4.Edit_pasp_num_C.Visible := False;
+        FormTransaction4.Label_PASPIN_INN_C.Caption := 'Vöen';
+        FormTransaction4.Edit_inn_fs_C.Visible:=false;
+        FormTransaction4.Label_acc_no_C.Visible:=false;
+      end
+      else
+      begin
+        FormTransaction4.Edit_pasp_ser_C.Visible := True;
+        FormTransaction4.Edit_pasp_num_C.Visible := True;
+      end;
+
+      if v_cust_type_id = 1 then
+      begin
+        FormTransaction4.Edit_pasp_ser_C.Visible := True;
+        FormTransaction4.Edit_pasp_num_C.Visible := True;
+        FormTransaction4.Edit_pasp_ser_C.Text := ODS_CUSTOMERS_tr.FieldByName('passport').AsString;
+        FormTransaction4.Edit_pasp_num_C.Text := ODS_CUSTOMERS_tr.FieldByName('passp_number').AsString;
+        FormTransaction4.Edit_inn_C.Visible := False;
+        FormTransaction4.Label_PASPIN_INN_C.Caption := 'Pasport seriyasi'  ;
+        FormTransaction4.Edit_inn_fs_C.Visible:=false  ;
+        FormTransaction4.Label_acc_no_C.Visible:=false
+      end
+      else if v_cust_type_id = 3 then
+      begin
+
+        FormTransaction4.Edit_pasp_ser_C.Visible := True;
+        FormTransaction4.Edit_pasp_num_C.Visible := True;
+        FormTransaction4.Edit_pasp_ser_C.Text := ODS_CUSTOMERS_tr.FieldByName('passport').AsString;
+        FormTransaction4.Edit_pasp_num_C.Text := ODS_CUSTOMERS_tr.FieldByName('passp_number').AsString;
+        FormTransaction4.Edit_inn_C.Visible := False;
+        FormTransaction4.Label_PASPIN_INN_C.Caption := 'Pasport seriyasi';
+        FormTransaction4.Label_acc_no_C.Visible:=true;
+        FormTransaction4.Edit_inn_fs_C.Visible:=true;
+        FormTransaction4.Edit_inn_fs_C.Text := ODS_CUSTOMERS_tr.FieldByName('inn').AsString;
+
+      end
+      else
+        FormTransaction4.Edit_inn_C.Visible := True;
+
+
+    if DataModPCustService.ODS_AccNO_C.RecordCount <= 2 then
+    begin
+      DataModPCustService.ODS_AccNO_C.First;
+      FormTransaction4.DBLookupComboboxEh_C.KeyValue :=
+        DataModPCustService.ODS_AccNO_C.FieldByName('symb').AsString;
+    end
+    else
+      BEGIN DataModPCustService.ODS_AccNO_C.Last;
+    FormTransaction4.DBLookupComboboxEh_C.KeyValue := ' ';
+  END;
+
+     with DataModPCustService.ODS_AccNO_C do
+  begin
+    if RecordCount = 2 then
+   FormTransaction4.DBCBoxAccNo_C.KeyValue :=DataModPCustService.ODS_AccNO_C.FieldByName
+        ('acc_no').AsString
+    else
+   FormTransaction4.DBCBoxAccNo_C.KeyValue := ' ';
+    end;
+
+  case ODS_CUSTOMERS_tr.FieldByName('cust_type').AsInteger of
+  0:begin
+    FormTransaction4.RadioBu_jur_C.Checked:=true;
+    FormTransaction4.RadioBu_phys_C.Enabled:=false;
+    FormTransaction4.RadioBu_fs_C.Enabled:=false;
+   end;
+
+  1:begin
+   FormTransaction4.RadioBu_phys_C.Checked:=true ;
+   FormTransaction4.RadioBu_jur_C.Enabled:=false;
+   FormTransaction4.RadioBu_fs_C.Enabled:=false;
+   end;
+  2:begin
+  if  FormTransaction4.RadioBu_fs_C.Checked=false then
+     FormTransaction4.RadioBu_fs_C.Checked:=true
+     else
+   FormTransaction4.RadioBu_fs_C.Checked:=true;
+   FormTransaction4.RadioBu_jur_C.Enabled:=false;
+   FormTransaction4.RadioBu_phys_C.Enabled:=false;
+  end;
+  3:begin
+     FormTransaction4.RadioBu_phys_C.Checked:=false;
+     FormTransaction4.RadioBu_fs_C.Checked:=false;
+     FormTransaction4.RadioBu_jur_C.Enabled:=false;
+  end;
+   end;
+   end;
+
+
+
+  FormCustomers.Close;
+ end;
+
+
+procedure TFormCustomers.EditSearchChange(Sender: TObject);
+begin
+if cust_elaqe_Transaction=1 then
+begin
+  if Length(EditSearch.Text)<>0 then
+  begin
+  ODS_CUSTOMERS.Close;
+  case CBSearch.ItemIndex of
+  0:ODS_CUSTOMERS.SQL[3]:='and ID like '''+EditSearch.Text+'%''';
+  1:ODS_CUSTOMERS.SQL[3]:='and upper(cust_name) like upper(''%'+EditSearch.Text+'%'')';
+  2:ODS_CUSTOMERS.SQL[3]:='and upper('+ODS_CUSTOMERS.Fields[CBSearch.ItemIndex].FieldName+') like upper(''%'+EditSearch.Text+'%'')';
+  // ShowMessage('and upper('+ODS_CUSTOMERS.Fields[CBSearch.ItemIndex].FieldName+') like upper(''%'+EditSearch.Text+'%'')'); end;
+  3:ODS_CUSTOMERS.SQL[3]:='and upper('+ODS_CUSTOMERS.Fields[CBSearch.ItemIndex].FieldName+') like upper(''%'+EditSearch.Text+'%'')';
+  4:ODS_CUSTOMERS.SQL[3]:='and upper('+ODS_CUSTOMERS.Fields[CBSearch.ItemIndex].FieldName+') like upper(''%'+EditSearch.Text+'%'')';
+  end;
+  ODS_CUSTOMERS.Open;
+  end
+  else
+  begin
+  ODS_CUSTOMERS.Close;
+  ODS_CUSTOMERS.SQL[3]:='';
+  ODS_CUSTOMERS.Open;
+  end;
+  end;
+  if cust_elaqe_Transaction in[2,3,4] then
+begin
+  if Length(EditSearch.Text)<>0 then
+  begin
+  ODS_CUSTOMERS_tr.Close;
+  case CBSearch.ItemIndex of
+  0:ODS_CUSTOMERS_tr.SQL[3]:='and p.ID like (''%'+EditSearch.Text+'%'')';
+  1:ODS_CUSTOMERS_tr.SQL[3]:='and upper(p.cust_name) like upper(''%'+EditSearch.Text+'%'')';
+  2:ODS_CUSTOMERS_tr.SQL[3]:='and upper('+ODS_CUSTOMERS_tr.Fields[CBSearch.ItemIndex].FieldName+') like upper(''%'+EditSearch.Text+'%'')';
+  // ShowMessage('and upper('+ODS_CUSTOMERS.Fields[CBSearch.ItemIndex].FieldName+') like upper(''%'+EditSearch.Text+'%'')'); end;
+  3:ODS_CUSTOMERS_tr.SQL[3]:='and upper('+ODS_CUSTOMERS_tr.Fields[CBSearch.ItemIndex].FieldName+') like upper(''%'+EditSearch.Text+'%'')';
+  4:ODS_CUSTOMERS_tr.SQL[3]:='and upper('+ODS_CUSTOMERS_tr.Fields[CBSearch.ItemIndex].FieldName+') like upper(''%'+EditSearch.Text+'%'')';
+  end;
+  ODS_CUSTOMERS_tr.Open;
+   end
+ else
+  begin
+  ODS_CUSTOMERS_tr.Close;
+  ODS_CUSTOMERS_tr.SQL[3]:='';
+  ODS_CUSTOMERS_tr.Open;
+  end;
+ end;
+end;
+
+procedure TFormCustomers.FormCanResize(Sender: TObject;
+  var NewWidth, NewHeight: Integer; var Resize: Boolean);
+begin
+//  Resize := False;
+end;
+
+procedure TFormCustomers.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+EditSearch.Clear;
+end;
+
+procedure TFormCustomers.FormShow(Sender: TObject);
+var
+bal_cn :string;
+i:integer;
+begin
+  if (cust_elaqe_Transaction=1)  and (DataModPCustService.ODS_Customers_Phys_FSCUST_TYPE.AsInteger=1 )then
+  begin
+  FormCustomers.Caption:='Müştərinin əlaqələndirilməsi';
+  DBGrid1.DataSource:=FormCustomers.DS_CUSTOMERS;
+
+  FormCustomers.ODS_CUSTOMERS.Close;
+  FormCustomers.ODS_CUSTOMERS.SQL[4]:='';
+  FormCustomers.ODS_CUSTOMERS.SQL[4]:=' and cust_type=4';
+  FormCustomers.ODS_CUSTOMERS.Open;
+   CBSearch.Clear;
+for i := 0 to DBGrid1.Columns.Count-1 do
+CBSearch.Items.Add(DBGrid1.Columns[i].Title.Caption);
+
+ CBSearch.ItemIndex:=0;
+
+  if not(ODS_CUSTOMERS.Active = True) then
+    ODS_CUSTOMERS.Open
+  else
+    ODS_CUSTOMERS.Refresh;
+  vCustId := -1;
+  XFButton1.Visible:=true;
+  XFButton3.Visible:=false;
+  //showmessage(ODS_CUSTOMERS.sql.text);
+ // showmessage(inttostr(ODS_CUSTOMERS.RecordCount));
+ end;
+
+if (cust_elaqe_Transaction=1) and (DataModPCustService.ODS_Customers_Phys_FSCUST_TYPE.AsInteger=0 )then
+begin
+
+  FormCustomers.Caption:='Müştərinin əlaqələndirilməsi';
+  DBGrid1.DataSource:=FormCustomers.DS_CUSTOMERS;
+   FormCustomers.ODS_CUSTOMERS.SQL[4]:='';
+  CBSearch.Clear;
+for i := 0 to DBGrid1.Columns.Count-1 do
+CBSearch.Items.Add(DBGrid1.Columns[i].Title.Caption);
+
+ CBSearch.ItemIndex:=0;
+
+  if not(ODS_CUSTOMERS.Active = True) then
+    ODS_CUSTOMERS.Open
+  else
+    ODS_CUSTOMERS.Refresh;
+  vCustId := -1;
+  XFButton1.Visible:=true;
+  XFButton3.Visible:=false;
+
+end;
+
+if cust_elaqe_Transaction =2 then
+begin
+  FormCustomers.Caption:='Müştərinin axtarışı';
+  DBGrid1.DataSource:=FormCustomers.DS_CUSTOMERS_tr;
+if FormTransaction3.Edit2.Text<>'' then
+ begin
+ bal_cn:=FormTransaction3.Edit2.Text ;
+ ODS_CUSTOMERS_tr.Close;
+ ODS_CUSTOMERS_tr.SetVariable('p_valu',
+  ' and id in(select a.kli_id from  account a  where bal_cn1='+bal_cn+' and close_dat is null) ');
+ ODS_CUSTOMERS_Tr.Open;
+ end
+ else
+  begin
+ ODS_CUSTOMERS_tr.Close;
+ ODS_CUSTOMERS_tr.SetVariable('p_valu','');
+ ODS_CUSTOMERS_Tr.Open;
+  end;
+ CBSearch.Clear;
+for i := 0 to DBGrid1.Columns.Count-1 do
+CBSearch.Items.Add(DBGrid1.Columns[i].Title.Caption);
+
+ CBSearch.ItemIndex:=0;
+  if not(ODS_CUSTOMERS_tr.Active = True) then
+    ODS_CUSTOMERS_tr.Open
+  else
+    ODS_CUSTOMERS_tr.Refresh;
+    vCustId := -1;
+  XFButton3.Visible:=true;
+  XFButton1.Visible:=false;
+end;
+
+
+
+if cust_elaqe_Transaction =3 then
+begin
+  FormCustomers.Caption:='Müştərinin axtarışı';
+  DBGrid1.DataSource:=FormCustomers.DS_CUSTOMERS_tr;
+if FormTransaction4.Edit_bal_cn1_B.Text<>'' then
+ begin
+
+ bal_cn:=FormTransaction4.Edit_bal_cn1_B.Text ;
+ ODS_CUSTOMERS_tr.Close;
+ ODS_CUSTOMERS_tr.SetVariable('p_valu',
+  ' and id in(select a.kli_id from  account a  where bal_cn1='+bal_cn+' and close_dat is null) ');
+ ODS_CUSTOMERS_Tr.Open;
+ end
+ else
+  begin
+ ODS_CUSTOMERS_tr.Close;
+ ODS_CUSTOMERS_tr.SetVariable('p_valu','');
+ ODS_CUSTOMERS_Tr.Open;
+  end;
+ CBSearch.Clear;
+for i := 0 to DBGrid1.Columns.Count-1 do
+CBSearch.Items.Add(DBGrid1.Columns[i].Title.Caption);
+
+ CBSearch.ItemIndex:=0;
+  if not(ODS_CUSTOMERS_tr.Active = True) then
+    ODS_CUSTOMERS_tr.Open
+  else
+    ODS_CUSTOMERS_tr.Refresh;
+    vCustId := -1;
+  XFButton3.Visible:=true;
+  XFButton1.Visible:=false;
+end;
+if cust_elaqe_Transaction =4 then
+begin
+  FormCustomers.Caption:='Müştərinin axtarışı';
+  DBGrid1.DataSource:=FormCustomers.DS_CUSTOMERS_tr;
+if FormTransaction4.Edit_bal_cn1_C.Text<>'' then
+ begin
+
+ bal_cn:=FormTransaction4.Edit_bal_cn1_C.Text ;
+ ODS_CUSTOMERS_tr.Close;
+ ODS_CUSTOMERS_tr.SetVariable('p_valu',
+  ' and id in(select a.kli_id from  account a  where bal_cn1='+bal_cn+' and close_dat is null) ');
+ ODS_CUSTOMERS_Tr.Open;
+ end
+ else
+  begin
+ ODS_CUSTOMERS_tr.Close;
+ ODS_CUSTOMERS_tr.SetVariable('p_valu','');
+ ODS_CUSTOMERS_Tr.Open;
+  end;
+ CBSearch.Clear;
+for i := 0 to DBGrid1.Columns.Count-1 do
+CBSearch.Items.Add(DBGrid1.Columns[i].Title.Caption);
+
+ CBSearch.ItemIndex:=0;
+  if not(ODS_CUSTOMERS_tr.Active = True) then
+    ODS_CUSTOMERS_tr.Open
+  else
+    ODS_CUSTOMERS_tr.Refresh;
+    vCustId := -1;
+  XFButton3.Visible:=true;
+  XFButton1.Visible:=false;
+end;
+end;
+
+procedure TFormCustomers.ToolButton1Click(Sender: TObject);
+begin
+  vCustId := ODS_CUSTOMERSID.AsInteger;
+  FormCustomers.Close;
+end;
+
+procedure TFormCustomers.ToolButton2Click(Sender: TObject);
+begin
+  vCustId := -1;
+  FormCustomers.Close;
+end;
+
+procedure TFormCustomers.XFButton1Click(Sender: TObject);
+var
+  custid, custid2: Integer;
+begin
+if cust_bank=1 then
+ begin
+ custid2 := ODS_CUSTOMERS.FieldByName('id').AsInteger;
+ custid:=DataModPCustService.ODS_CUSTOMERS_PHYS_FS.FieldByName('id').AsInteger;
+  DataModPCustService.PG_PCustService.CallProcedure('add_cust_relations',
+  [custid, custid2]);
+  DataModPCustService.ODS_Pozition.Refresh;
+  DataModPCustService.ODS_CUSTOMERS_PHYS_FS.refresh;
+  DataModPCustService.ODS_CUSTOMERS_PHYS_FS.Locate('id', custid, []) ;
+  FormCustomers.Close;
+ end;
+
+ if cust_bank=2 then
+ begin
+ custid2 := ODS_CUSTOMERS.FieldByName('id').AsInteger;
+ custid:=DataModPCustService.ODS_CUSTOMERS_PHYS_FS.FieldByName('id').AsInteger;
+  DataModPCustService.PG_PCustService.CallProcedure('add_bank_stetment',
+  [custid, custid2]);
+  DataModPCustService.ods_ban_stetment.Refresh;
+  DataModPCustService.ODS_CUSTOMERS_PHYS_FS.refresh;
+  DataModPCustService.ODS_CUSTOMERS_PHYS_FS.Locate('id', custid, []) ;
+  FormCustomers.Close;
+ end;
+
+end;
+
+procedure TFormCustomers.XFButton2Click(Sender: TObject);
+begin
+ vCustId := -1;
+  FormCustomers.Close;
+end;
+
+procedure TFormCustomers.XFButton3Click(Sender: TObject);
+begin
+DBGrid1DblClick(Sender);
+end;
+
+end.

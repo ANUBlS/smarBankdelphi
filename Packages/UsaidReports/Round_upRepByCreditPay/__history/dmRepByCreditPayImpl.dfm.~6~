@@ -1,0 +1,2463 @@
+object dmRepByCreditPay: TdmRepByCreditPay
+  OldCreateOrder = False
+  OnCreate = DataModuleCreate
+  OnDestroy = DataModuleDestroy
+  Height = 471
+  Width = 696
+  object sysdat: TOracleDataSet
+    SQL.Strings = (
+      'select tek_dat from sysdat')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 56
+    Top = 24
+  end
+  object filialscpr: TOracleDataSet
+    SQL.Strings = (
+      'select id,name from filial'
+      'order by id')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000400000049004400010000000000080000004E0041004D00
+      4500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 104
+    Top = 24
+  end
+  object CreditTypescpr: TOracleDataSet
+    SQL.Strings = (
+      'select id,description from cm_credittypes'
+      'order by id')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 184
+    Top = 24
+  end
+  object valutescpr: TOracleDataSet
+    SQL.Strings = (
+      'select valute,valu_name from avalute')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 280
+    Top = 24
+  end
+  object filialsds: TDataSource
+    DataSet = filialscpr
+    Left = 104
+    Top = 80
+  end
+  object CreditTypesds: TDataSource
+    DataSet = CreditTypescpr
+    Left = 184
+    Top = 80
+  end
+  object valutesds: TDataSource
+    DataSet = valutescpr
+    Left = 280
+    Top = 80
+  end
+  object ODSmainds: TDataSource
+    DataSet = ODSmaincpr
+    Left = 48
+    Top = 144
+  end
+  object Queriescpr: TOracleDataSet
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 128
+    Top = 144
+  end
+  object ODSmaincpr: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      '   CrdTypes.description,'
+      '   CrdTypes.id,'
+      '   CommoncrditCountAndInitAmt.countcrd as Commoncountcrd,'
+      
+        '   round(CommoncrditCountAndInitAmt.initialamount,2) as Commonin' +
+        'itialamount,'
+      '   nvl(ExpcrditCountAndInitAmt.countcrd,0) as Expcountcrd,'
+      
+        '   nvl(round(ExpcrditCountAndInitAmt.initialamount,2),0) as expi' +
+        'nitialamount,'
+      
+        '   nvl(round(ExpcrditCountAndInitAmt.ceofinitialamt/CommoncrditC' +
+        'ountAndInitAmt.initialamount,4)*100,0) as expceof,round(USAID_RE' +
+        'PORT.get_filialsProg(:dat,CrdTypes.id,:ffilter)/decode(ExpcrditC' +
+        'ountAndInitAmt.initialamount,0,1,ExpcrditCountAndInitAmt.initial' +
+        'amount),2)as prognoz,round(USAID_REPORT.get_filialsProg(:dat,Crd' +
+        'Types.id,:ffilter)/decode(ExpcrditCountAndInitAmt.initialamount,' +
+        '0,1,ExpcrditCountAndInitAmt.initialamount),2)-nvl(round(Expcrdit' +
+        'CountAndInitAmt.ceofinitialamt/CommoncrditCountAndInitAmt.initia' +
+        'lamount,4)*100,0) as executio_prognoz,'
+      
+        '   USAID_REPORT.get_restbyexpiredat(CrdTypes.id,:dat,:bexpinter1' +
+        ',:eexpinter1,:fstr) as G1,USAID_REPORT.Get_CountByExpireDat(CrdT' +
+        'ypes.id,:dat,:bexpinter1,:eexpinter1,:fstr) as cntG1,'
+      
+        '   USAID_REPORT.get_restbyexpiredat(CrdTypes.id,:dat,:bexpinter2' +
+        ',:eexpinter2,:fstr) as G2,USAID_REPORT.Get_CountByExpireDat(CrdT' +
+        'ypes.id,:dat,:bexpinter2,:eexpinter2,:fstr) as cntG2,'
+      
+        '   USAID_REPORT.get_restbyexpiredat(CrdTypes.id,:dat,:bexpinter3' +
+        ',:eexpinter3,:fstr) as G3,USAID_REPORT.Get_CountByExpireDat(CrdT' +
+        'ypes.id,:dat,:bexpinter3,:eexpinter3,:fstr) as cntG3,'
+      
+        '   USAID_REPORT.get_restbyexpiredat(CrdTypes.id,:dat,:bexpinter4' +
+        ',:eexpinter4,:fstr) as G4,USAID_REPORT.Get_CountByExpireDat(CrdT' +
+        'ypes.id,:dat,:bexpinter4,:eexpinter4,:fstr) as cntG4,'
+      
+        '   USAID_REPORT.get_restbyexpiredat(CrdTypes.id,:dat,:bexpinter5' +
+        ',:eexpinter5,:fstr) as G5,USAID_REPORT.Get_CountByExpireDat(CrdT' +
+        'ypes.id,:dat,:bexpinter5,:eexpinter5,:fstr) as cntG5,'
+      
+        '   USAID_REPORT.get_restbyexpiredat(CrdTypes.id,:dat,:bexpinter6' +
+        ',:eexpinter6,:fstr) as G6,USAID_REPORT.Get_CountByExpireDat(CrdT' +
+        'ypes.id,:dat,:bexpinter6,:eexpinter6,:fstr) as cntG6,'
+      
+        '   USAID_REPORT.get_restbyexpiredat(CrdTypes.id,:dat,:bexpinter7' +
+        ',:eexpinter7,:fstr) as G7,USAID_REPORT.Get_CountByExpireDat(CrdT' +
+        'ypes.id,:dat,:bexpinter7,:eexpinter7,:fstr) as cntG7,'
+      
+        '   USAID_REPORT.get_Intrestbyexpiredat(CrdTypes.id,:dat,:bexpint' +
+        'er1,:eexpinter1,:fstr) as FG1,'
+      
+        '   USAID_REPORT.get_Intrestbyexpiredat(CrdTypes.id,:dat,:bexpint' +
+        'er2,:eexpinter2,:fstr) as FG2,'
+      
+        '   USAID_REPORT.get_intrestbyexpiredat(CrdTypes.id,:dat,:bexpint' +
+        'er3,:eexpinter73,:fstr) as FG3,'
+      
+        '   USAID_REPORT.get_intrestbyexpiredat(CrdTypes.id,:dat,:bexpint' +
+        'er4,:eexpinter4,:fstr) as FG4,'
+      
+        '   USAID_REPORT.get_intrestbyexpiredat(CrdTypes.id,:dat,:bexpint' +
+        'er5,:eexpinter5,:fstr) as FG5,'
+      
+        '   USAID_REPORT.get_intrestbyexpiredat(CrdTypes.id,:dat,:bexpint' +
+        'er6,:eexpinter6,:fstr) as FG6,'
+      
+        '   USAID_REPORT.get_intrestbyexpiredat(CrdTypes.id,:dat,:bexpint' +
+        'er7,:eexpinter7,:fstr) as FG7'
+      ''
+      ''
+      'from'
+      '   cm_credittypes CrdTypes,'
+      ''
+      '(select '
+      ' count(p.id) as countcrd,'
+      ' sum(h.rest*o.ostat+h.duerest*o.ostat) as initialamount,'
+      ' p.credittype  from '
+      
+        ' cm_portfolio p ,operkurs o , cm_history h where p.id = h.credit' +
+        'id and h.hdate =:dat  and h.duerest+h.rest>0 and o.val_kod = p.c' +
+        'urrency and o.dat =:dat'
+      ''
+      'group by p.credittype) CommoncrditCountAndInitAmt,'
+      ''
+      '('
+      'select '
+      ' count(p.id) as countcrd,'
+      ' sum(h.rest*o.ostat+h.duerest*o.ostat) as initialamount,'
+      
+        ' sum(h.rest*o.ostat+h.duerest*o.ostat)/:generalinitialamt as ceo' +
+        'finitialamt,'
+      ' p.credittype  from '
+      
+        ' cm_portfolio p ,operkurs o , cm_history h where p.id = h.credit' +
+        'id and h.hdate =:dat and h.duerest+h.rest>0 and o.val_kod = p.cu' +
+        'rrency and o.dat =:dat'
+      'and p.id in (select creditid '
+      'from (select psh.creditid,MIN (psh.paymentdate)'
+      'from   cm_payment_schedule psh ,cm_history cs'
+      
+        'where  psh.rest < cs.rest+cs.duerest and (cs.duerest+cs.rest - p' +
+        'sh.rest >= 2) '
+      'and psh.creditid = cs.creditid and cs.hdate =:dat and '
+      'cs.duerest+cs.rest>0  and psh.paymentdate<=:dat'
+      
+        'group by psh.creditid having creditsmgr.cm_utils.bankdaysbetween' +
+        ' (MIN (psh.paymentdate),:dat)>0))'
+      ''
+      'group by p.credittype'
+      ''
+      '/*union '
+      ' select '
+      '     0 as countcrd,'
+      '     0 as initialamount,'
+      '     0 as ceofinitialamt ,'
+      '     id as credittype'
+      ' from cm_credittypes'
+      ' where id not in (select p.credittype'
+      
+        'from   cm_payment_schedule psh ,cm_history cs,cm_active_credits ' +
+        'p,operkurs o'
+      
+        'where  psh.rest < cs.rest+cs.duerest and (cs.duerest+cs.rest - p' +
+        'sh.rest >= 2) '
+      
+        'and psh.creditid = cs.creditid and cs.hdate =:dat and p.id = cs.' +
+        'creditid '
+      'and p.currency=o.val_kod and o.dat=:dat'
+      'and psh.paymentdate <=:dat'
+      ''
+      'group by p.credittype)*/'
+      ') ExpcrditCountAndInitAmt'
+      ''
+      'where '
+      '   CrdTypes.id = CommoncrditCountAndInitAmt.credittype and'
+      '   CrdTypes.id = ExpcrditCountAndInitAmt.credittype(+)'
+      ''
+      ''
+      'order by :OrderField'
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      '')
+    Optimize = False
+    Variables.Data = {
+      0400000014000000080000003A004400410054000C0000000000000000000000
+      160000003A00420045005800500049004E005400450052003100030000000000
+      000000000000160000003A00450045005800500049004E005400450052003100
+      030000000000000000000000160000003A00420045005800500049004E005400
+      450052003200030000000000000000000000160000003A004500450058005000
+      49004E005400450052003200030000000000000000000000160000003A004200
+      45005800500049004E0054004500520033000300000000000000000000001600
+      00003A00450045005800500049004E0054004500520033000300000000000000
+      00000000160000003A00420045005800500049004E0054004500520034000300
+      00000000000000000000160000003A00450045005800500049004E0054004500
+      52003400030000000000000000000000160000003A0042004500580050004900
+      4E005400450052003500030000000000000000000000160000003A0045004500
+      5800500049004E00540045005200350003000000000000000000000016000000
+      3A00420045005800500049004E00540045005200360003000000000000000000
+      0000160000003A00450045005800500049004E00540045005200360003000000
+      0000000000000000240000003A00470045004E004500520041004C0049004E00
+      49005400490041004C0041004D00540004000000000000000000000016000000
+      3A00420045005800500049004E00540045005200370005000000000000000000
+      0000160000003A00450045005800500049004E00540045005200370005000000
+      0000000000000000180000003A00450045005800500049004E00540045005200
+      37003300050000000000000000000000160000003A004F005200440045005200
+      4600490045004C0044000100000000000000000000000A0000003A0046005300
+      54005200050000000000000000000000100000003A004600460049004C005400
+      45005200050000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000001E0000001C00000043004F004D004D004F004E0043004F0055004E00
+      54004300520044000100000000002600000043004F004D004D004F004E004900
+      4E0049005400490041004C0041004D004F0055004E0054000100000000002000
+      000045005800500049004E0049005400490041004C0041004D004F0055004E00
+      54000100000000000E000000450058005000430045004F004600010000000000
+      0400000047003100010000000000040000004700320001000000000004000000
+      4700330001000000000004000000470034000100000000000400000047003500
+      0100000000000400000047003600010000000000040000004900440001000000
+      00001600000045005800500043004F0055004E00540043005200440001000000
+      0000160000004400450053004300520049005000540049004F004E0001000000
+      0000040000004700370001000000000006000000460047003100010000000000
+      0600000046004700320001000000000006000000460047003300010000000000
+      0600000046004700340001000000000006000000460047003500010000000000
+      0600000046004700360001000000000006000000460047003700010000000000
+      0A00000043004E005400470031000100000000000A00000043004E0054004700
+      32000100000000000A00000043004E005400470033000100000000000A000000
+      43004E005400470034000100000000000A00000043004E005400470035000100
+      000000000A00000043004E005400470036000100000000000A00000043004E00
+      5400470037000100000000000E000000500052004F0047004E004F005A000100
+      000000002000000045005800450043005500540049004F005F00500052004F00
+      47004E004F005A00010000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    OnCalcFields = ODSmaincprCalcFields
+    Left = 48
+    Top = 80
+    object ODSmaincprID: TFloatField
+      FieldName = 'ID'
+      Required = True
+      Visible = False
+    end
+    object ODSmaincprDESCRIPTION: TWideStringField
+      DisplayLabel = #1050#1088#1077#1076#1080#1090#1080#1085' '#1090#1080#1087#1083#1103#1088#1080
+      FieldName = 'DESCRIPTION'
+      Size = 128
+    end
+    object ODSmaincprCOMMONCOUNTCRD: TFloatField
+      DisplayLabel = #1057#1072#1081#1099
+      FieldName = 'COMMONCOUNTCRD'
+    end
+    object ODSmaincprCOMMONINITIALAMOUNT: TFloatField
+      DisplayLabel = #1050#1088#1077#1076#1080#1090'.'#1084#1103#1073#1083'.'
+      FieldName = 'COMMONINITIALAMOUNT'
+      DisplayFormat = '#,##0.00'
+    end
+    object ODSmaincprEXPCOUNTCRD: TFloatField
+      DisplayLabel = #1069'.'#1057#1072#1081#1099
+      FieldName = 'EXPCOUNTCRD'
+    end
+    object ODSmaincprEXPINITIALAMOUNT: TFloatField
+      DisplayLabel = #1069#1077#1078'.'#1082#1088#1077#1076#1080#1090'.'#1084#1103#1073#1083'.'
+      FieldName = 'EXPINITIALAMOUNT'
+      DisplayFormat = '#,##0.00'
+    end
+    object ODSmaincprEXPCEOF: TFloatField
+      DisplayLabel = #1069#1077#1078'.'#1087#1086#1088#1090'%'
+      FieldName = 'EXPCEOF'
+      DisplayFormat = '#,##0.00'
+    end
+    object ODSmaincprG1: TFloatField
+      DisplayLabel = '<=7/'#1071#1041
+      FieldName = 'G1'
+      DisplayFormat = '#,##0.00'
+    end
+    object ODSmaincprFG1: TFloatField
+      DisplayLabel = '<=7/'#1060#1041
+      FieldName = 'FG1'
+      DisplayFormat = '#,##0.00'
+    end
+    object ODSmaincprCNTG1: TFloatField
+      DisplayLabel = #1057#1072#1081#1099
+      FieldName = 'CNTG1'
+    end
+    object ODSmaincprG2: TFloatField
+      DisplayLabel = '>7<=30/'#1071#1041
+      FieldName = 'G2'
+      DisplayFormat = '#,##0.00'
+    end
+    object ODSmaincprFG2: TFloatField
+      DisplayLabel = '>7<=30/'#1060#1041
+      FieldName = 'FG2'
+      DisplayFormat = '#,##0.00'
+    end
+    object ODSmaincprCNTG2: TFloatField
+      DisplayLabel = #1057#1072#1081#1099
+      FieldName = 'CNTG2'
+    end
+    object ODSmaincprG3: TFloatField
+      DisplayLabel = '>30<=60/'#1071#1041
+      FieldName = 'G3'
+      DisplayFormat = '#,##0.00'
+    end
+    object ODSmaincprFG3: TFloatField
+      DisplayLabel = '>30<=60/'#1060#1041
+      FieldName = 'FG3'
+      DisplayFormat = '#,##0.00'
+    end
+    object ODSmaincprCNTG3: TFloatField
+      DisplayLabel = #1057#1072#1081#1099
+      FieldName = 'CNTG3'
+    end
+    object ODSmaincprG4: TFloatField
+      DisplayLabel = '>60<=90/'#1071#1041
+      FieldName = 'G4'
+      DisplayFormat = '#,##0.00'
+    end
+    object ODSmaincprFG4: TFloatField
+      DisplayLabel = '>60<=90/'#1060#1041
+      FieldName = 'FG4'
+      DisplayFormat = '#,##0.00'
+    end
+    object ODSmaincprCNTG4: TFloatField
+      DisplayLabel = #1057#1072#1081#1099
+      FieldName = 'CNTG4'
+    end
+    object ODSmaincprG5: TFloatField
+      DisplayLabel = '>90<=180/'#1071#1041
+      FieldName = 'G5'
+      DisplayFormat = '#,##0.00'
+    end
+    object ODSmaincprFG5: TFloatField
+      DisplayLabel = '>90<=180/'#1060#1041
+      FieldName = 'FG5'
+      DisplayFormat = '#,##0.00'
+    end
+    object ODSmaincprCNTG5: TFloatField
+      DisplayLabel = #1057#1072#1081#1099
+      FieldName = 'CNTG5'
+    end
+    object ODSmaincprG6: TFloatField
+      DisplayLabel = '>180<=360/'#1071#1041
+      FieldName = 'G6'
+      DisplayFormat = '#,##0.00'
+    end
+    object ODSmaincprFG6: TFloatField
+      DisplayLabel = '>180<=360/'#1060#1041
+      FieldName = 'FG6'
+      DisplayFormat = '#,##0.00'
+    end
+    object ODSmaincprCNTG6: TFloatField
+      DisplayLabel = #1057#1072#1081#1099
+      FieldName = 'CNTG6'
+    end
+    object ODSmaincprG7: TFloatField
+      DisplayLabel = '>>360/'#1071#1041
+      FieldName = 'G7'
+      DisplayFormat = '#,##0.00'
+    end
+    object ODSmaincprFG7: TFloatField
+      DisplayLabel = '>>360/'#1060#1041
+      FieldName = 'FG7'
+      DisplayFormat = '#,##0.00'
+    end
+    object ODSmaincprCNTG7: TFloatField
+      DisplayLabel = #1057#1072#1081#1099
+      FieldName = 'CNTG7'
+    end
+    object ODSmaincprceofexp: TWideStringField
+      DisplayLabel = #1069#1077#1078'.'#1087#1086#1088#1090'%'
+      FieldKind = fkCalculated
+      FieldName = 'ceofEXPCEOF'
+      Visible = False
+      Calculated = True
+    end
+    object ODSmaincprPROGNOZ: TFloatField
+      DisplayLabel = #1055#1088#1086#1075#1085#1086#1079
+      FieldName = 'PROGNOZ'
+      DisplayFormat = '#,##0.00'
+    end
+    object ODSmaincprEXECUTIO_PROGNOZ: TFloatField
+      DisplayLabel = #1055#1088#1086#1075#1085#1086#1079#1076#1072#1085' '#1082#1103#1085#1072#1088#1083#1072#1096#1084#1072
+      FieldName = 'EXECUTIO_PROGNOZ'
+      DisplayFormat = '#,##0.00'
+    end
+    object ODSmaincprceofPrognoz: TWideStringField
+      DisplayLabel = #1055#1088#1086#1075#1085#1086#1079
+      FieldKind = fkCalculated
+      FieldName = 'ceofPrognoz'
+      Visible = False
+      Calculated = True
+    end
+    object ODSmaincprceofEXECUTIO_PROGNOZ: TWideStringField
+      DisplayLabel = #1055#1088#1086#1075#1085#1086#1079#1076#1072#1085' '#1082#1103#1085#1072#1088#1083#1072#1096#1084#1072
+      FieldKind = fkCalculated
+      FieldName = 'ceofEXECUTIO_PROGNOZ'
+      Visible = False
+      Calculated = True
+    end
+  end
+  object DuePeriodscpr: TOracleDataSet
+    SQL.Strings = (
+      
+        'select id,name,bper,eper from ( select 1 as id,'#39'<=7'#39' as name, 0 ' +
+        'as bper,7 as eper from dual'
+      'union'
+      'select 2 as id,'#39'>7<=30'#39' as name,8 as bper,30 as eper from dual'
+      'union'
+      'select 3 as id,'#39'>30<=60'#39' as name,31 as bper,60 as eper from dual'
+      'union '
+      'select 4 as id,'#39'>60<=90'#39' as name,61 as bper,90 as eper from dual'
+      'union'
+      
+        'select 5 as id,'#39'>90<=180'#39' as name,91 as bper,180 as eper from du' +
+        'al'
+      'union'
+      
+        'select 6 as id,'#39'>180<=360'#39' as name,181 as bper,360 as eper from ' +
+        'dual'
+      'union'
+      
+        'select 7 as id,'#39'>>360'#39' as name,361 as bper,36000 as eper from du' +
+        'al)'
+      ''
+      '')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000040000000400000049004400010000000000080000004E0041004D00
+      4500010000000000080000004200500045005200010000000000080000004500
+      500045005200010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 360
+    Top = 24
+    object DuePeriodscprID: TFloatField
+      FieldName = 'ID'
+    end
+    object DuePeriodscprNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 9
+    end
+    object DuePeriodscprBPER: TFloatField
+      FieldName = 'BPER'
+    end
+    object DuePeriodscprEPER: TFloatField
+      FieldName = 'EPER'
+    end
+  end
+  object DuePeriodsds: TDataSource
+    DataSet = DuePeriodscpr
+    Left = 360
+    Top = 80
+  end
+  object Summaincpr: TOracleDataSet
+    SQL.Strings = (
+      'select sum(Commoncountcrd) as Commoncountcrd,'
+      '       sum(Commoninitialamount) as Commoninitialamount,'
+      '       sum(Expcountcrd) as Expcountcrd,'
+      '       sum(expinitialamount) as expinitialamount,'
+      
+        '       round(sum(expinitialamount)/sum(Commoninitialamount),4)*1' +
+        '00 as expceof,round(USAID_REPORT.get_allfilialsProg(:dat ,:crdty' +
+        'pestr,:ffilter)/decode(sum(expinitialamount),0,1,sum(expinitiala' +
+        'mount)),2) as prognoz,round(USAID_REPORT.get_allfilialsProg(:dat' +
+        ' ,:crdtypestr,:ffilter)/decode(sum(expinitialamount),0,1,sum(exp' +
+        'initialamount)),2)-nvl(round(sum(expinitialamount)/ sum(Commonin' +
+        'itialamount),2)*100,0) as executio_prognoz,'
+      '       sum(G1) as G1,'
+      '       sum(G2) as G2,'
+      '       sum(G3) as G3,'
+      '       sum(G4) as G4,'
+      '       sum(g5) as G5,'
+      '       sum(G6) as G6,'
+      '       sum(G7) as G7,'
+      '       sum(cntG1) as cntG1,'
+      '       sum(cntG2) as cntG2,'
+      '       sum(cntG3) as cntG3,'
+      '       sum(cntG4) as cntG4,'
+      '       sum(cntG5) as cntG5,'
+      '       sum(cntG6) as cntG6,'
+      '       sum(cntG7) as cntG7,'
+      '       sum(fG1) as fG1,'
+      '       sum(fG2) as fG2,'
+      '       sum(fG3) as fG3,'
+      '       sum(fG4) as fG4,'
+      '       sum(fG5) as fG5,'
+      '       sum(fG6) as fG6,'
+      '       sum(fG7) as fG7  '
+      'from ( select'
+      '   CommoncrditCountAndInitAmt.countcrd as Commoncountcrd,'
+      
+        '   round(CommoncrditCountAndInitAmt.initialamount,2) as Commonin' +
+        'itialamount,'
+      '   nvl(ExpcrditCountAndInitAmt.countcrd,0) as Expcountcrd,'
+      
+        '   nvl(round(ExpcrditCountAndInitAmt.initialamount,2),0) as expi' +
+        'nitialamount,'
+      
+        '   --nvl(round(ExpcrditCountAndInitAmt.ceofinitialamt,2)*100,0) ' +
+        'as expceof,expceof,'
+      
+        '   USAID_REPORT.get_restbyexpiredat(CrdTypes.id,:dat,:bexpinter1' +
+        ',:eexpinter1,:fstr) as G1,USAID_REPORT.Get_CountByExpireDat(CrdT' +
+        'ypes.id,:dat,:bexpinter1,:eexpinter1,:fstr) as cntG1,'
+      
+        '   USAID_REPORT.get_restbyexpiredat(CrdTypes.id,:dat,:bexpinter2' +
+        ',:eexpinter2,:fstr) as G2,USAID_REPORT.Get_CountByExpireDat(CrdT' +
+        'ypes.id,:dat,:bexpinter2,:eexpinter2,:fstr) as cntG2,'
+      
+        '   USAID_REPORT.get_restbyexpiredat(CrdTypes.id,:dat,:bexpinter3' +
+        ',:eexpinter3,:fstr) as G3,USAID_REPORT.Get_CountByExpireDat(CrdT' +
+        'ypes.id,:dat,:bexpinter3,:eexpinter3,:fstr) as cntG3,'
+      
+        '   USAID_REPORT.get_restbyexpiredat(CrdTypes.id,:dat,:bexpinter4' +
+        ',:eexpinter4,:fstr) as G4,USAID_REPORT.Get_CountByExpireDat(CrdT' +
+        'ypes.id,:dat,:bexpinter4,:eexpinter4,:fstr) as cntG4,'
+      
+        '   USAID_REPORT.get_restbyexpiredat(CrdTypes.id,:dat,:bexpinter5' +
+        ',:eexpinter5,:fstr) as G5,USAID_REPORT.Get_CountByExpireDat(CrdT' +
+        'ypes.id,:dat,:bexpinter5,:eexpinter5,:fstr) as cntG5,'
+      
+        '   USAID_REPORT.get_restbyexpiredat(CrdTypes.id,:dat,:bexpinter6' +
+        ',:eexpinter6,:fstr) as G6,USAID_REPORT.Get_CountByExpireDat(CrdT' +
+        'ypes.id,:dat,:bexpinter6,:eexpinter6,:fstr) as cntG6,'
+      
+        '   USAID_REPORT.get_restbyexpiredat(CrdTypes.id,:dat,:bexpinter7' +
+        ',:eexpinter7,:fstr) as G7,USAID_REPORT.Get_CountByExpireDat(CrdT' +
+        'ypes.id,:dat,:bexpinter7,:eexpinter7,:fstr) as cntG7,'
+      
+        '   USAID_REPORT.get_Intrestbyexpiredat(CrdTypes.id,:dat,:bexpint' +
+        'er1,:eexpinter1,:fstr) as FG1,'
+      
+        '   USAID_REPORT.get_Intrestbyexpiredat(CrdTypes.id,:dat,:bexpint' +
+        'er2,:eexpinter2,:fstr) as FG2,'
+      
+        '   USAID_REPORT.get_intrestbyexpiredat(CrdTypes.id,:dat,:bexpint' +
+        'er3,:eexpinter73,:fstr) as FG3,'
+      
+        '   USAID_REPORT.get_intrestbyexpiredat(CrdTypes.id,:dat,:bexpint' +
+        'er4,:eexpinter4,:fstr) as FG4,'
+      
+        '   USAID_REPORT.get_intrestbyexpiredat(CrdTypes.id,:dat,:bexpint' +
+        'er5,:eexpinter5,:fstr) as FG5,'
+      
+        '   USAID_REPORT.get_intrestbyexpiredat(CrdTypes.id,:dat,:bexpint' +
+        'er6,:eexpinter6,:fstr) as FG6,'
+      
+        '   USAID_REPORT.get_intrestbyexpiredat(CrdTypes.id,:dat,:bexpint' +
+        'er7,:eexpinter7,:fstr) as FG7'
+      ''
+      ''
+      'from'
+      '   cm_credittypes CrdTypes,'
+      ''
+      '(select '
+      ' count(p.id) as countcrd,'
+      ' sum(h.rest*o.ostat+h.duerest*o.ostat) as initialamount,'
+      ' p.credittype  from '
+      
+        ' cm_portfolio p ,operkurs o , cm_history h where p.id = h.credit' +
+        'id and h.hdate =:dat  and h.duerest+h.rest>0 and o.val_kod = p.c' +
+        'urrency and o.dat =:dat'
+      ''
+      'group by p.credittype) CommoncrditCountAndInitAmt,'
+      ''
+      '('
+      'select '
+      ' count(p.id) as countcrd,'
+      ' sum(h.rest*o.ostat+h.duerest*o.ostat) as initialamount,'
+      
+        ' --sum(h.rest*o.ostat+h.duerest*o.ostat)/:generalinitialamt as c' +
+        'eofinitialamt,'
+      ' p.credittype  from '
+      
+        ' cm_portfolio p ,operkurs o , cm_history h where p.id = h.credit' +
+        'id and h.hdate =:dat and h.duerest+h.rest>0 and o.val_kod = p.cu' +
+        'rrency and o.dat =:dat'
+      'and p.id in (select creditid '
+      'from (select psh.creditid,MIN (psh.paymentdate)'
+      'from   cm_payment_schedule psh ,cm_history cs'
+      
+        'where  psh.rest < cs.rest+cs.duerest and (cs.duerest+cs.rest - p' +
+        'sh.rest >= 2) '
+      'and psh.creditid = cs.creditid and cs.hdate =:dat and '
+      'cs.duerest+cs.rest>0  and psh.paymentdate<=:dat'
+      
+        'group by psh.creditid having creditsmgr.cm_utils.bankdaysbetween' +
+        ' (MIN (psh.paymentdate),:dat)>0))'
+      ''
+      'group by p.credittype'
+      ''
+      '/*union '
+      ' select '
+      '     0 as countcrd,'
+      '     0 as initialamount,'
+      '     0 as ceofinitialamt ,'
+      '     id as credittype'
+      ' from cm_credittypes'
+      ' where id not in (select p.credittype'
+      
+        'from   cm_payment_schedule psh ,cm_history cs,cm_active_credits ' +
+        'p,operkurs o'
+      
+        'where  psh.rest < cs.rest+cs.duerest and (cs.duerest+cs.rest - p' +
+        'sh.rest >= 2) '
+      
+        'and psh.creditid = cs.creditid and cs.hdate =:dat and p.id = cs.' +
+        'creditid '
+      'and p.currency=o.val_kod and o.dat=:dat'
+      'and psh.paymentdate <=:dat'
+      ''
+      'group by p.credittype)*/'
+      ') ExpcrditCountAndInitAmt'
+      ''
+      'where '
+      '   CrdTypes.id = CommoncrditCountAndInitAmt.credittype and'
+      '   CrdTypes.id = ExpcrditCountAndInitAmt.credittype(+)'
+      ''
+      ''
+      ')'
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      '')
+    Optimize = False
+    Variables.Data = {
+      0400000013000000080000003A004400410054000C0000000000000000000000
+      160000003A00420045005800500049004E005400450052003100030000000000
+      000000000000160000003A00450045005800500049004E005400450052003100
+      0300000000000000000000000A0000003A004600530054005200050000000000
+      000000000000160000003A00420045005800500049004E005400450052003200
+      030000000000000000000000160000003A00450045005800500049004E005400
+      450052003200030000000000000000000000160000003A004200450058005000
+      49004E005400450052003300030000000000000000000000160000003A004500
+      45005800500049004E0054004500520033000300000000000000000000001600
+      00003A00420045005800500049004E0054004500520034000300000000000000
+      00000000160000003A00450045005800500049004E0054004500520034000300
+      00000000000000000000160000003A00420045005800500049004E0054004500
+      52003500030000000000000000000000160000003A0045004500580050004900
+      4E005400450052003500030000000000000000000000160000003A0042004500
+      5800500049004E00540045005200360003000000000000000000000016000000
+      3A00450045005800500049004E00540045005200360003000000000000000000
+      0000160000003A00420045005800500049004E00540045005200370003000000
+      0000000000000000160000003A00450045005800500049004E00540045005200
+      3700030000000000000000000000180000003A00450045005800500049004E00
+      54004500520037003300030000000000000000000000100000003A0046004600
+      49004C00540045005200050000000000000000000000160000003A0043005200
+      44005400590050004500530054005200050000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000001C0000001C00000043004F004D004D004F004E0043004F0055004E00
+      54004300520044000100000000002600000043004F004D004D004F004E004900
+      4E0049005400490041004C0041004D004F0055004E0054000100000000001600
+      000045005800500043004F0055004E0054004300520044000100000000002000
+      000045005800500049004E0049005400490041004C0041004D004F0055004E00
+      54000100000000000E000000450058005000430045004F004600010000000000
+      0400000047003100010000000000040000004700320001000000000004000000
+      4700330001000000000004000000470034000100000000000400000047003500
+      0100000000000400000047003600010000000000040000004700370001000000
+      0000060000004600470031000100000000000600000046004700320001000000
+      0000060000004600470033000100000000000600000046004700340001000000
+      0000060000004600470035000100000000000600000046004700360001000000
+      0000060000004600470037000100000000000A00000043004E00540047003100
+      0100000000000A00000043004E005400470032000100000000000A0000004300
+      4E005400470033000100000000000A00000043004E0054004700340001000000
+      00000A00000043004E005400470035000100000000000A00000043004E005400
+      470036000100000000000A00000043004E005400470037000100000000000E00
+      0000500052004F0047004E004F005A0001000000000020000000450058004500
+      43005500540049004F005F00500052004F0047004E004F005A00010000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    OnCalcFields = SummaincprCalcFields
+    Left = 208
+    Top = 144
+    object SummaincprCOMMONCOUNTCRD: TFloatField
+      DisplayLabel = #1057#1072#1081#1099
+      FieldName = 'COMMONCOUNTCRD'
+    end
+    object SummaincprCOMMONINITIALAMOUNT: TFloatField
+      DisplayLabel = #1050#1088#1077#1076#1080#1090'.'#1084#1103#1073#1083'.'
+      FieldName = 'COMMONINITIALAMOUNT'
+      DisplayFormat = '#,##0.00'
+    end
+    object SummaincprEXPCOUNTCRD: TFloatField
+      DisplayLabel = #1069#1077#1078'. '#1089#1072#1081#1099
+      FieldName = 'EXPCOUNTCRD'
+    end
+    object SummaincprEXPINITIALAMOUNT: TFloatField
+      DisplayLabel = #1069#1077#1078'.'#1082#1088#1077#1076#1080#1090'.'#1084#1103#1073#1083'.'
+      FieldName = 'EXPINITIALAMOUNT'
+      DisplayFormat = '#,##0.00'
+    end
+    object SummaincprEXPCEOF: TFloatField
+      DisplayLabel = #1069#1077#1078'.'#1087#1086#1088#1090'%'
+      FieldName = 'EXPCEOF'
+      DisplayFormat = '#,##0.00'
+    end
+    object SummaincprG1: TFloatField
+      DisplayLabel = '<=7/'#1071#1041
+      FieldName = 'G1'
+      DisplayFormat = '#,##0.00'
+    end
+    object SummaincprFG1: TFloatField
+      DisplayLabel = '<=7/'#1060#1041
+      FieldName = 'FG1'
+      DisplayFormat = '#,##0.00'
+    end
+    object SummaincprG2: TFloatField
+      DisplayLabel = '>7<=30/'#1071#1041
+      FieldName = 'G2'
+      DisplayFormat = '#,##0.00'
+    end
+    object SummaincprFG2: TFloatField
+      DisplayLabel = '>7<=30/'#1060#1041
+      FieldName = 'FG2'
+      DisplayFormat = '#,##0.00'
+    end
+    object SummaincprG3: TFloatField
+      DisplayLabel = '>30<=60/'#1071#1041
+      FieldName = 'G3'
+      DisplayFormat = '#,##0.00'
+    end
+    object SummaincprFG3: TFloatField
+      DisplayLabel = '>30<=60/'#1060#1041
+      FieldName = 'FG3'
+      DisplayFormat = '#,##0.00'
+    end
+    object SummaincprG4: TFloatField
+      DisplayLabel = '>60<=90/'#1071#1041
+      FieldName = 'G4'
+      DisplayFormat = '#,##0.00'
+    end
+    object SummaincprFG4: TFloatField
+      DisplayLabel = '>60<=90/'#1060#1041
+      FieldName = 'FG4'
+      DisplayFormat = '#,##0.00'
+    end
+    object SummaincprG5: TFloatField
+      DisplayLabel = '>90<=180/'#1071#1041
+      FieldName = 'G5'
+      DisplayFormat = '#,##0.00'
+    end
+    object SummaincprFG5: TFloatField
+      DisplayLabel = '>90<=180/'#1060#1041
+      FieldName = 'FG5'
+      DisplayFormat = '#,##0.00'
+    end
+    object SummaincprG6: TFloatField
+      DisplayLabel = '>180<=360/'#1071#1041
+      FieldName = 'G6'
+      DisplayFormat = '#,##0.00'
+    end
+    object SummaincprFG6: TFloatField
+      DisplayLabel = '>180<=360/'#1060#1041
+      FieldName = 'FG6'
+      DisplayFormat = '#,##0.00'
+    end
+    object SummaincprG7: TFloatField
+      DisplayLabel = '>>360/'#1071#1041
+      FieldName = 'G7'
+      DisplayFormat = '#,##0.00'
+    end
+    object SummaincprFG7: TFloatField
+      DisplayLabel = '>>360/'#1060#1041
+      FieldName = 'FG7'
+      DisplayFormat = '#,##0.00'
+    end
+    object SummaincprCNTG1: TFloatField
+      DisplayLabel = #1057#1072#1081#1099
+      FieldName = 'CNTG1'
+    end
+    object SummaincprCNTG2: TFloatField
+      DisplayLabel = #1057#1072#1081#1099
+      FieldName = 'CNTG2'
+    end
+    object SummaincprCNTG3: TFloatField
+      DisplayLabel = #1057#1072#1081#1099
+      FieldName = 'CNTG3'
+    end
+    object SummaincprCNTG4: TFloatField
+      DisplayLabel = #1057#1072#1081#1099
+      FieldName = 'CNTG4'
+    end
+    object SummaincprCNTG5: TFloatField
+      DisplayLabel = #1057#1072#1081#1099
+      FieldName = 'CNTG5'
+    end
+    object SummaincprCNTG6: TFloatField
+      DisplayLabel = #1057#1072#1081#1099
+      FieldName = 'CNTG6'
+    end
+    object SummaincprCNTG7: TFloatField
+      DisplayLabel = #1057#1072#1081#1099
+      FieldName = 'CNTG7'
+    end
+    object SummaincprPROGNOZ: TFloatField
+      DisplayLabel = #1055#1088#1086#1075#1085#1086#1079
+      FieldName = 'PROGNOZ'
+      Visible = False
+    end
+    object SummaincprEXECUTIO_PROGNOZ: TFloatField
+      DisplayLabel = #1055#1088#1086#1075#1085#1086#1079#1076#1072#1085' '#1082#1103#1085#1072#1088#1083#1072#1096#1084#1072
+      FieldName = 'EXECUTIO_PROGNOZ'
+      Visible = False
+    end
+    object SummaincprceofPROGNOZ: TWideStringField
+      DisplayLabel = #1055#1088#1086#1075#1085#1086#1079
+      FieldKind = fkCalculated
+      FieldName = 'ceofPROGNOZ'
+      Calculated = True
+    end
+    object SummaincprceofEXECUTIO_PROGNOZ: TWideStringField
+      DisplayLabel = #1055#1088#1086#1075#1085#1086#1079#1076#1072#1085' '#1082#1103#1085#1072#1088#1083#1072#1096#1084#1072
+      FieldKind = fkCalculated
+      FieldName = 'ceofEXECUTIO_PROGNOZ'
+      Calculated = True
+    end
+  end
+  object Summaincprds: TDataSource
+    DataSet = Summaincpr
+    Left = 288
+    Top = 144
+  end
+  object Paymentsrestds: TDataSource
+    DataSet = Paymentsrest
+    Left = 56
+    Top = 208
+  end
+  object Paymentsrest: TOracleDataSet
+    SQL.Strings = (
+      
+        'select sum(cnt) as cnt ,sum(rest) as rest, sum(interestrest) as ' +
+        'interestrest from (select '
+      '   count(h.Creditid) as cnt,'
+      '   round(sum(hist.rest*o.ostat),2) as rest,'
+      '   round(sum(hist.INTERESTrest*o.ostat),2) as interestrest'
+      'from '
+      '   cm_payment_schedule h, cm_history hist,'
+      '   cm_portfolio p,'
+      '   operkurs o'
+      'where h.paymentdate between :dat and :dat+:n'
+      
+        'and hist.creditid = p.id and hist.hdate = :dat and hist.rest+his' +
+        't.duerest>0 --h.creditid in (select creditid from cm_history whe' +
+        're hdate = :dat and rest+duerest>0)'
+      'and h.creditid = p.id'
+      'and p.currency = o.val_kod'
+      'and o.dat = :dat'
+      ''
+      ''
+      'group by h.creditid)'
+      '   '
+      ''
+      ''
+      '')
+    Optimize = False
+    Variables.Data = {
+      0400000002000000080000003A004400410054000C0000000000000000000000
+      040000003A004E00030000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      05000000030000000600000043004E0054000100000000000800000052004500
+      530054000100000000001800000049004E005400450052004500530054005200
+      450053005400010000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 136
+    Top = 208
+    object PaymentsrestCNT: TFloatField
+      FieldName = 'CNT'
+    end
+    object PaymentsrestREST: TFloatField
+      FieldName = 'REST'
+      DisplayFormat = '#,##0.00'
+    end
+    object PaymentsrestINTERESTREST: TFloatField
+      FieldName = 'INTERESTREST'
+      DisplayFormat = '#,##0.00'
+    end
+  end
+  object LastPayments: TOracleDataSet
+    SQL.Strings = (
+      
+        'select sum(cnt) as cnt ,sum(rest) as rest,sum(interestrest) as i' +
+        'nterestrest from ( select '
+      '   count(psh.Creditid) as cnt,'
+      '   round(sum(h.rest*o.ostat),2) as rest,'
+      '   round(sum(h.interestrest*o.ostat),2) as interestrest'
+      'from '
+      '   cm_history h,'
+      '   cm_portfolio p,'
+      '   operkurs o,'
+      '   '
+      '   ('
+      '   select '
+      '    creditid,'
+      '    sum(PRINCIPAL) as rest,'
+      '    sum(INTEREST) as interestrest,'
+      '    max(paymentdate) as paymentdate'
+      'from cm_payment_schedule                                 '
+      'group by creditid'
+      'order by creditid'
+      '   ) psh'
+      
+        'where psh.creditid = p.id and psh.paymentdate between :dat and :' +
+        'dat+:n'
+      
+        '--and psh.creditid in (select creditid from cm_history where hda' +
+        'te = :dat and rest+duerest>0)'
+      
+        'and p.currency = o.val_kod and p.id= h.creditid and h.hdate = :d' +
+        'at and h.rest+h.duerest>0'
+      'and o.dat = :dat'
+      ''
+      'group by psh.creditid)'
+      '   '
+      ''
+      '')
+    Optimize = False
+    Variables.Data = {
+      0400000002000000080000003A004400410054000C0000000000000000000000
+      040000003A004E00030000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      0500000003000000080000005200450053005400010000000000180000004900
+      4E00540045005200450053005400520045005300540001000000000006000000
+      43004E005400010000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 304
+    Top = 208
+    object LastPaymentsCNT: TFloatField
+      FieldName = 'CNT'
+    end
+    object LastPaymentsREST: TFloatField
+      FieldName = 'REST'
+      DisplayFormat = '#,##0.00'
+    end
+    object LastPaymentsINTERESTREST: TFloatField
+      FieldName = 'INTERESTREST'
+      DisplayFormat = '#,##0.00'
+    end
+  end
+  object LastPaymentsds: TDataSource
+    DataSet = LastPayments
+    Left = 216
+    Top = 208
+  end
+  object DetailInf1ds: TDataSource
+    DataSet = DetailInf1
+    Left = 48
+    Top = 272
+  end
+  object DetailInf1: TOracleDataSet
+    SQL.Strings = (
+      'select p.id,'
+      '      p.numberofcredit,'
+      '      b.name,'
+      '      round(tr.TrAmt*o.ostat,2) as TrAmt,'
+      
+        '      months_between(p.DUEDATEFIRSTCONTRACT,DATEOFCONCLUSION) as' +
+        ' period,'
+      '      round(h.rest*o.ostat+h.duerest*o.ostat,2) as rest,'
+      #9'  p.ANNUALYINTERESTRATE ,'
+      #9'  rt.percent,'
+      #9'  tr.Trdat,'
+      #9'  ThisPay.PAYMENTDATE as ThisMonthsPaydat,'
+      
+        #9'  /*round(ThisPay.PRINCIPAL*o.ostat,2)*/cm_utils.Get_MainPlanPa' +
+        'yment(p.id) as ThisMonthsPRINCIPAL,'
+      
+        #9'  /*round(ThisPay.INTEREST*o.ostat,2)*/cm_utils.Get_IntPlanPaym' +
+        'ent(p.id) as ThisMonthsINTEREST, creditsmgr.cm_utils.Get_creditP' +
+        'enalty(p.id) as ThisMonthsPenalty, '
+      #9'  --round(PlanPay.PRINCIPAL*o.ostat,2) as planPRINCIPAL,'
+      
+        #9'  round(h.INTERESTrest*o.ostat+h.dueINTERESTrest*o.ostat,2) as ' +
+        'planINTEREST,'
+      
+        #9'  round((h.rest*o.ostat+h.duerest*o.ostat+ h.INTERESTrest*o.ost' +
+        'at+h.dueinterestrest*o.ostat+h.penaltyrest*o.ostat),2)  as sumPl' +
+        'anPay,'
+      #9'  expcrdcount.exdatcount,'
+      #9'  round(realpay.payrest*o.ostat,2) as payrest,'
+      #9'  round(realpay.payintrest*o.ostat,2) as payintrest,'
+      #9'  round(realpay.paypen*o.ostat,2) as paypen,'
+      #9'  round(realpay.payrest*o.ostat,2)+'
+      #9'  round(realpay.payintrest*o.ostat,2)+'
+      #9'  round(realpay.paypen*o.ostat,2) as sumrealpay,'
+      #9'  crdtypes.description ,'
+      #9'  av.val_name as valu_name,'
+      '         f.name as filialname'
+      'from '
+      '    cm_portfolio p,'
+      '    cm_boorowerinfo b ,'
+      '    cm_credittypes crdtypes ,'
+      '    avalute av,'
+      '    filial f,'
+      '    '
+      #9'(select '
+      '     creditid,'
+      '     min(TRANCHEDATE) as Trdat,'
+      '     sum(TRANCHEAMOUNT) as TrAmt'
+      '     from cm_tranches'
+      #9' group by creditid) tr,'
+      '    '
+      #9' operkurs o,'
+      '     cm_history h,'
+      '     cm_reserves rt,'
+      '    '
+      #9' (select id as creditid,'
+      '       null as PAYMENTDATE,'
+      '       0 as PRINCIPAL,'
+      '       0 as INTEREST'
+      '      from cm_portfolio'
+      
+        '      where id not in (select creditid from cm_payment_schedule ' +
+        'where PAYMENTDATE between  creditsmgr.cm_utils.get_firstmonth(:d' +
+        'at) and last_day(:dat))'
+      '      union'
+      '     select '
+      '      creditid,'
+      '      max(PAYMENTDATE) as PAYMENTDATE,'
+      '      sum(PRINCIPAL) as PRINCIPAL,'
+      '      sum(INTEREST) as INTEREST'
+      '      from cm_payment_schedule psh'
+      
+        '      where PAYMENTDATE between cm_utils.get_firstmonth(:dat) an' +
+        'd last_day(:dat)'
+      '      group by creditid'
+      '      ) ThisPay,'
+      '      '
+      '      /*(select '
+      '       creditid,'
+      '       sum(PRINCIPAL) as PRINCIPAL,'
+      '       sum(INTEREST) as INTEREST'
+      '       from cm_payment_schedule psh'
+      '       group by creditid'
+      '      ) PlanPay,*/'
+      '      '
+      
+        '      (select psh.creditid, cm_utils.bankdaysbetween (MIN (psh.p' +
+        'aymentdate),'
+      '                                   :dat'
+      '                                  ) AS exdatcount'
+      '      from   cm_payment_schedule psh ,cm_curr_state cs'
+      
+        '      where  psh.rest < cs.rest+cs.duerest and (cs.duerest+cs.re' +
+        'st - psh.rest >= 2) '
+      '     and psh.creditid = cs.creditid'
+      '     and psh.paymentdate <=:dat'
+      
+        '     group by psh.creditid having cm_utils.bankdaysbetween (MIN ' +
+        '(psh.paymentdate),:dat)>0 ) expcrdcount,'
+      ''
+      '(select id as creditid,'
+      '       0 as payrest,'
+      '       0 as payintrest,'
+      '       0 as paypen'
+      'from cm_portfolio'
+      'where id not in (select creditid from cm_payments)'
+      'union'
+      'select creditid,'
+      '       sum(PAYEDAMT+PAYEDDUEAMT) as payrest,'
+      '       sum(PAYEDINTAMT+PAYEDDUEINTAMT) as payintrest,'
+      '       sum(PAYEDPENALTYAMT) as paypen'
+      ' from cm_payments'
+      ' group by creditid) realpay     '
+      '   '
+      '    '
+      'where'
+      '   p.id = b.creditid and'
+      '   p.currency = o.val_kod and'
+      '   o.dat = :dat and'
+      '   p.id = tr.creditid and'
+      '   p.id = h.creditid and'
+      '   h.hdate = :dat and'
+      '   h.reserveid  = rt.id and'
+      '   p.id = ThisPay.creditid and'
+      '  -- p.id = PlanPay.creditid  and'
+      '   p.id = expcrdcount.creditid and'
+      '   p.id = realpay.creditid  and'
+      '   p.credittype = crdtypes.id and'
+      '   p.currency = av.valute and'
+      '   p.branchid = f.id and expcrdcount.exdatcount>0 and'
+      '   p.credittype = :crdtype --and PlanPay.hdate = :dat'
+      '                     '
+      '   order by :OrderField')
+    Optimize = False
+    Variables.Data = {
+      0400000003000000080000003A004400410054000C0000000000000000000000
+      100000003A004300520044005400590050004500030000000000000000000000
+      160000003A004F0052004400450052004600490045004C004400010000000000
+      000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      05000000190000001C0000004E0055004D004200450052004F00460043005200
+      4500440049005400010000000000080000004E0041004D004500010000000000
+      0A0000005400520041004D0054000100000000000C0000005000450052004900
+      4F00440001000000000008000000520045005300540001000000000026000000
+      41004E004E00550041004C00590049004E005400450052004500530054005200
+      4100540045000100000000000E000000500045005200430045004E0054000100
+      000000000A000000540052004400410054000100000000002000000054004800
+      490053004D004F004E0054004800530050004100590044004100540001000000
+      00002600000054004800490053004D004F004E00540048005300500052004900
+      4E0043004900500041004C000100000000002400000054004800490053004D00
+      4F004E0054004800530049004E00540045005200450053005400010000000000
+      1800000050004C0041004E0049004E0054004500520045005300540001000000
+      000014000000530055004D0050004C0041004E00500041005900010000000000
+      140000004500580044004100540043004F0055004E0054000100000000000E00
+      0000500041005900520045005300540001000000000014000000500041005900
+      49004E00540052004500530054000100000000000C0000005000410059005000
+      45004E0001000000000014000000530055004D005200450041004C0050004100
+      5900010000000000160000004400450053004300520049005000540049004F00
+      4E0001000000000012000000560041004C0055005F004E0041004D0045000100
+      0000000014000000460049004C00490041004C004E0041004D00450001000000
+      00002200000054004800490053004D004F004E00540048005300500045004E00
+      41004C005400590001000000000016000000500048004F004E0045004E005500
+      4D004200450052000100000000000E0000004100440044005200450053005300
+      0100000000000400000049004400010000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    OnCalcFields = DetailInf1CalcFields
+    Left = 104
+    Top = 272
+    object DetailInf1ID: TFloatField
+      FieldName = 'ID'
+      Required = True
+      Visible = False
+    end
+    object DetailInf1NUMBEROFCREDIT: TWideStringField
+      DisplayLabel = #1052#1094#1075'.'
+      FieldName = 'NUMBEROFCREDIT'
+      Required = True
+      Size = 32
+    end
+    object DetailInf1NAME: TWideStringField
+      DisplayLabel = #1052#1094'.'#1072#1076#1099
+      FieldName = 'NAME'
+      Size = 64
+    end
+    object DetailInf1TRAMT: TFloatField
+      DisplayLabel = #1042#1077#1088'.'#1084#1103#1073'.'
+      FieldName = 'TRAMT'
+      DisplayFormat = '#,##0.00'
+    end
+    object DetailInf1PERIOD: TFloatField
+      DisplayLabel = #1052#1094#1076'.'
+      FieldName = 'PERIOD'
+    end
+    object DetailInf1REST: TFloatField
+      DisplayLabel = #1070#1076#1103#1084#1103#1083#1080' '#1071#1041
+      FieldName = 'REST'
+      DisplayFormat = '#,##0.00'
+    end
+    object DetailInf1PLANINTEREST: TFloatField
+      DisplayLabel = #1070#1076#1103#1084#1103#1083#1080' '#1060#1041
+      FieldName = 'PLANINTEREST'
+      DisplayFormat = '#,##0.00'
+    end
+    object DetailInf1SUMPLANPAY: TFloatField
+      DisplayLabel = #1046#1103#1084#1080
+      FieldName = 'SUMPLANPAY'
+      DisplayFormat = '#,##0.00'
+    end
+    object DetailInf1THISMONTHSPAYDAT: TDateTimeField
+      DisplayLabel = #1041'.'#1040' '#1102#1076'.'#1090#1072#1088#1080#1093#1080
+      FieldName = 'THISMONTHSPAYDAT'
+    end
+    object DetailInf1THISMONTHSPRINCIPAL: TFloatField
+      DisplayLabel = #1041'.'#1040' '#1102#1076'. '#1071#1041
+      FieldName = 'THISMONTHSPRINCIPAL'
+      DisplayFormat = '#,##0.00'
+    end
+    object DetailInf1THISMONTHSINTEREST: TFloatField
+      DisplayLabel = #1041'.'#1040' '#1102#1076'. '#1060#1041
+      FieldName = 'THISMONTHSINTEREST'
+      DisplayFormat = '#,##0.00'
+    end
+    object DetailInf1THISMONTHSPENALTY: TFloatField
+      DisplayLabel = #1041'.'#1040' '#1102#1076'.  '#1087#1077#1085
+      FieldName = 'THISMONTHSPENALTY'
+      DisplayFormat = '#,##0.00'
+    end
+    object DetailInf1ANNUALYINTERESTRATE: TFloatField
+      DisplayLabel = #1050#1088'.%'
+      FieldName = 'ANNUALYINTERESTRATE'
+      Required = True
+    end
+    object DetailInf1PERCENT: TFloatField
+      DisplayLabel = #1045#1097#1090'.%'
+      FieldName = 'PERCENT'
+      Required = True
+    end
+    object DetailInf1TRDAT: TDateTimeField
+      DisplayLabel = #1042#1077#1088'.'#1090#1072#1088#1080#1093#1080
+      FieldName = 'TRDAT'
+    end
+    object DetailInf1EXDATCOUNT: TFloatField
+      DisplayLabel = #1069'.'#1101#1094#1085
+      FieldName = 'EXDATCOUNT'
+    end
+    object DetailInf1PAYREST: TFloatField
+      DisplayLabel = #1070#1076#1103#1084#1080#1096' '#1071#1041
+      FieldName = 'PAYREST'
+      DisplayFormat = '#,##0.00'
+    end
+    object DetailInf1PAYINTREST: TFloatField
+      DisplayLabel = #1070#1076#1103#1084#1080#1096' '#1060#1041
+      FieldName = 'PAYINTREST'
+      DisplayFormat = '#,##0.00'
+    end
+    object DetailInf1PAYPEN: TFloatField
+      DisplayLabel = #1070#1076#1103#1084#1080#1096' '#1055#1077#1085
+      FieldName = 'PAYPEN'
+      DisplayFormat = '#,##0.00'
+    end
+    object DetailInf1SUMREALPAY: TFloatField
+      DisplayLabel = #1046#1103#1084#1080
+      FieldName = 'SUMREALPAY'
+      DisplayFormat = '#,##0.00'
+    end
+    object DetailInf1DESCRIPTION: TWideStringField
+      DisplayLabel = #1050#1088#1077#1076#1080#1090#1080#1085' '#1090#1080#1087#1080
+      FieldName = 'DESCRIPTION'
+      Size = 128
+    end
+    object DetailInf1VALU_NAME: TWideStringField
+      DisplayLabel = #1042#1072#1083#1081#1091#1090#1072
+      FieldName = 'VALU_NAME'
+      Size = 25
+    end
+    object DetailInf1FILIALNAME: TWideStringField
+      DisplayLabel = #1060#1080#1083#1080#1072#1083
+      FieldName = 'FILIALNAME'
+      Size = 90
+    end
+    object DetailInf1smthismonthpay: TFloatField
+      DisplayLabel = #1046#1103#1084#1080
+      FieldKind = fkCalculated
+      FieldName = 'smthismonthpay'
+      Calculated = True
+    end
+  end
+  object Details2ds: TDataSource
+    DataSet = Detailinf2
+    Left = 184
+    Top = 264
+  end
+  object Detailinf2: TOracleDataSet
+    SQL.Strings = (
+      'select '
+      '     p.numberofcredit,p.id,'
+      '     ac.acc_no,  '
+      '     b.name as custname,'
+      '     round(tr.TrAmt*o.ostat,2) as TrAmt,'
+      '     round((h.rest+h.duerest)*o.ostat,2) as rest,'
+      '     p.ANNUALYINTERESTRATE,'
+      
+        '     r.percent,f.name as filialname,av.valu_name,crdtypes.descri' +
+        'ption,'
+      '     expcrdcount.exdatcount,'
+      '     decode(p.DUEDATELASTCONTRACT,'
+      #9'        null,p.DUEDATEFIRSTCONTRACT,'
+      #9#9#9'p.DUEDATEFIRSTCONTRACT) as close_dat'
+      'from '
+      '   cm_portfolio p,'
+      '   cm_loanaccounts ac,'
+      
+        '   cm_boorowerinfo b,filial f,avalute av,cm_credittypes crdTypes' +
+        ','
+      '   '
+      '   (select '
+      '     creditid,'
+      '     min(TRANCHEDATE) as Trdat,'
+      '     sum(TRANCHEAMOUNT) as TrAmt'
+      '     from cm_tranches'
+      #9' group by creditid) tr,'
+      '     '
+      
+        '     (select psh.creditid,cm_utils.bankdaysbetween (MIN (psh.pay' +
+        'mentdate),'
+      '                                   :dat'
+      '                                  ) AS exdatcount'
+      '      from   cm_payment_schedule psh ,cm_curr_state cs'
+      
+        '      where  psh.rest < cs.rest+cs.duerest and (cs.duerest+cs.re' +
+        'st - psh.rest >= 2) '
+      '     and psh.creditid = cs.creditid'
+      '     and psh.paymentdate <=:dat'
+      '     group by psh.creditid) expcrdcount,'
+      '     '
+      '     operkurs o,'
+      '     cm_history h,'
+      '     cm_reserves r'
+      '          '
+      'where'
+      
+        '   p.id = ac.creditid and p.id = b.creditid and p.id =expcrdcoun' +
+        't.creditid and'
+      '   p.currency = o.val_kod and'
+      '   o.dat =:dat and'
+      '   p.id = tr.creditid and'
+      '   p.id = h.creditid and'
+      '   h.hdate = :dat and'
+      
+        '   h.reserveid = r.id and f.id = p.branchid and av.valute = p.cu' +
+        'rrency and crdtypes.id = p.credittype and'
+      '   p.credittype = :crdtype'
+      '   '
+      '   order by :OrderField'
+      '')
+    Optimize = False
+    Variables.Data = {
+      0400000003000000080000003A004400410054000C0000000000000000000000
+      100000003A004300520044005400590050004500030000000000000000000000
+      160000003A004F0052004400450052004600490045004C004400010000000000
+      000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000D0000001C0000004E0055004D004200450052004F00460043005200
+      45004400490054000100000000000C0000004100430043005F004E004F000100
+      000000001000000043005500530054004E0041004D0045000100000000000A00
+      00005400520041004D0054000100000000000800000052004500530054000100
+      000000002600000041004E004E00550041004C00590049004E00540045005200
+      45005300540052004100540045000100000000000E0000005000450052004300
+      45004E0054000100000000001200000043004C004F00530045005F0044004100
+      5400010000000000140000004500580044004100540043004F0055004E005400
+      01000000000014000000460049004C00490041004C004E0041004D0045000100
+      0000000012000000560041004C0055005F004E0041004D004500010000000000
+      160000004400450053004300520049005000540049004F004E00010000000000
+      0400000049004400010000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 232
+    Top = 264
+    object Detailinf2NUMBEROFCREDIT: TWideStringField
+      DisplayLabel = #1052#1094#1075'.'#8470
+      FieldName = 'NUMBEROFCREDIT'
+      Required = True
+      Size = 32
+    end
+    object Detailinf2ACC_NO: TWideStringField
+      DisplayLabel = #1050#1088#1077#1076#1080#1090' '#1097#1077#1089#1072#1073#1099
+      FieldName = 'ACC_NO'
+    end
+    object Detailinf2CUSTNAME: TWideStringField
+      DisplayLabel = #1052#1094#1096'.'#1072#1076#1099
+      FieldName = 'CUSTNAME'
+      Size = 64
+    end
+    object Detailinf2TRAMT: TFloatField
+      DisplayLabel = #1042#1077#1088'.'#1084#1103#1073'.'
+      FieldName = 'TRAMT'
+    end
+    object Detailinf2REST: TFloatField
+      DisplayLabel = #1043#1072#1083'.'#1084#1103#1073
+      FieldName = 'REST'
+      DisplayFormat = '#,##0.00'
+    end
+    object Detailinf2ANNUALYINTERESTRATE: TFloatField
+      DisplayLabel = #1050#1088'.%'
+      FieldName = 'ANNUALYINTERESTRATE'
+      Required = True
+    end
+    object Detailinf2PERCENT: TFloatField
+      DisplayLabel = #1045#1097#1090'.%'
+      FieldName = 'PERCENT'
+      Required = True
+    end
+    object Detailinf2EXDATCOUNT: TFloatField
+      DisplayLabel = #1069#1077#1078'.'#1101#1094#1085
+      FieldName = 'EXDATCOUNT'
+    end
+    object Detailinf2CLOSE_DAT: TDateTimeField
+      DisplayLabel = #1050#1088'.'#1073#1072#1100#1083#1072#1085#1084#1072' '#1090#1072#1088#1080#1093#1080
+      FieldName = 'CLOSE_DAT'
+    end
+    object Detailinf2FILIALNAME: TWideStringField
+      FieldName = 'FILIALNAME'
+      Size = 90
+    end
+    object Detailinf2VALU_NAME: TWideStringField
+      FieldName = 'VALU_NAME'
+      Size = 25
+    end
+    object Detailinf2DESCRIPTION: TWideStringField
+      FieldName = 'DESCRIPTION'
+      Size = 128
+    end
+    object Detailinf2ID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+  end
+  object Payments: TOracleDataSet
+    SQL.Strings = (
+      'SELECT  a.paydate, a.payedamt+a.payeddueamt as payrest, '
+      '             a.payedintamt+a.payeddueintamt as payintrest, '
+      '             a.payedpenaltyamt,'
+      
+        '             a.payedamt+a.payeddueamt+a.payedintamt+a.payedduein' +
+        'tamt as sm'
+      '  FROM cm_payments a'
+      '  where creditid =:crdID '
+      'order by '
+      'paydate')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000C0000003A00430052004400490044000300000000000000
+      00000000}
+    QBEDefinition.QBEFieldDefs = {
+      05000000050000000E0000005000410059004400410054004500010000000000
+      1E00000050004100590045004400500045004E0041004C005400590041004D00
+      54000100000000000E0000005000410059005200450053005400010000000000
+      1400000050004100590049004E00540052004500530054000100000000000400
+      000053004D00010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 432
+    Top = 152
+    object PaymentsPAYDATE: TDateTimeField
+      DisplayLabel = #1070#1076#1103#1085#1080#1096' '#1090#1072#1088#1080#1093#1080
+      FieldName = 'PAYDATE'
+      Required = True
+    end
+    object PaymentsPAYREST: TFloatField
+      DisplayLabel = #1071#1041
+      FieldName = 'PAYREST'
+    end
+    object PaymentsPAYINTREST: TFloatField
+      DisplayLabel = #1060#1041
+      FieldName = 'PAYINTREST'
+    end
+    object PaymentsPAYEDPENALTYAMT: TFloatField
+      DisplayLabel = #1055#1077#1085
+      FieldName = 'PAYEDPENALTYAMT'
+      Required = True
+    end
+    object PaymentsSM: TFloatField
+      DisplayLabel = #1046#1103#1084#1080
+      FieldName = 'SM'
+    end
+  end
+  object Plans: TOracleDataSet
+    SQL.Strings = (
+      
+        'SELECT a.paymentdate, a.principal, a.interest,a.principal+ a.int' +
+        'erest as sm'
+      '  FROM cm_payment_schedule a'
+      '  where creditid = :crdID'
+      '  order by paymentdate')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000C0000003A00430052004400490044000300000000000000
+      00000000}
+    QBEDefinition.QBEFieldDefs = {
+      0500000004000000160000005000410059004D0045004E005400440041005400
+      4500010000000000120000005000520049004E0043004900500041004C000100
+      000000001000000049004E005400450052004500530054000100000000000400
+      000053004D00010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 432
+    Top = 208
+    object PlansPAYMENTDATE: TDateTimeField
+      DisplayLabel = #1070#1076#1103#1085#1080#1096' '#1090#1072#1088#1080#1093#1080
+      FieldName = 'PAYMENTDATE'
+      Required = True
+    end
+    object PlansPRINCIPAL: TFloatField
+      DisplayLabel = #1071#1041
+      FieldName = 'PRINCIPAL'
+      Required = True
+    end
+    object PlansINTEREST: TFloatField
+      DisplayLabel = #1060#1041
+      FieldName = 'INTEREST'
+      Required = True
+    end
+    object PlansSM: TFloatField
+      DisplayLabel = #1046#1103#1084#1080
+      FieldName = 'SM'
+    end
+  end
+  object Plansds: TDataSource
+    DataSet = Plans
+    Left = 376
+    Top = 208
+  end
+  object Paymentsds: TDataSource
+    DataSet = Payments
+    Left = 376
+    Top = 152
+  end
+  object DetailInffull1: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      '      p.numberofcredit,'
+      '      b.name,'
+      '      round(tr.TrAmt*o.ostat,2) as TrAmt,'
+      
+        '      months_between(p.DUEDATEFIRSTCONTRACT,DATEOFCONCLUSION) as' +
+        ' period,'
+      '      round(h.rest*o.ostat+h.duerest*o.ostat,2) as rest,'
+      #9'  p.ANNUALYINTERESTRATE ,'
+      #9'  rt.percent,'
+      #9'  tr.Trdat,'
+      #9'  ThisPay.PAYMENTDATE as ThisMonthsPaydat,'
+      
+        #9'  /*round(ThisPay.PRINCIPAL*o.ostat,2)*/cm_utils.Get_MainPlanPa' +
+        'yment(p.id) as ThisMonthsPRINCIPAL,'
+      
+        #9'  /*round(ThisPay.INTEREST*o.ostat,2)*/cm_utils.Get_IntPlanPaym' +
+        'ent(p.id) as ThisMonthsINTEREST, creditsmgr.cm_utils.Get_creditP' +
+        'enalty(p.id) as ThisMonthsPenalty, '
+      #9'  --round(PlanPay.PRINCIPAL*o.ostat,2) as planPRINCIPAL,'
+      
+        #9'  round(h.INTERESTrest*o.ostat+h.dueINTERESTrest*o.ostat,2) as ' +
+        'planINTEREST,'
+      
+        #9'  round((h.rest*o.ostat+h.duerest*o.ostat+ h.INTERESTrest*o.ost' +
+        'at+h.dueinterestrest*o.ostat+h.penaltyrest*o.ostat),2)  as sumPl' +
+        'anPay,'
+      #9'  expcrdcount.exdatcount,'
+      #9'  round(realpay.payrest*o.ostat,2) as payrest,'
+      #9'  round(realpay.payintrest*o.ostat,2) as payintrest,'
+      #9'  round(realpay.paypen*o.ostat,2) as paypen,'
+      #9'  round(realpay.payrest*o.ostat,2)+'
+      #9'  round(realpay.payintrest*o.ostat,2)+'
+      #9'  round(realpay.paypen*o.ostat,2) as sumrealpay,'
+      #9'  crdtypes.description ,'
+      #9'  av.val_name as valu_name,'
+      '         f.name as filialname,b.PHONENUMBER,b.address'
+      'from '
+      '    cm_portfolio p,'
+      '    cm_boorowerinfo b ,'
+      '    cm_credittypes crdtypes ,'
+      '    avalute av,'
+      '    filial f,'
+      '    '
+      #9'(select '
+      '     creditid,'
+      '     min(TRANCHEDATE) as Trdat,'
+      '     sum(TRANCHEAMOUNT) as TrAmt'
+      '     from cm_tranches'
+      #9' group by creditid) tr,'
+      '    '
+      #9' operkurs o,'
+      '     cm_history h,'
+      '     cm_reserves rt,'
+      '    '
+      #9' (select id as creditid,'
+      '       null as PAYMENTDATE,'
+      '       0 as PRINCIPAL,'
+      '       0 as INTEREST'
+      '      from cm_portfolio'
+      
+        '      where id not in (select creditid from cm_payment_schedule ' +
+        'where PAYMENTDATE between  creditsmgr.cm_utils.get_firstmonth(:d' +
+        'at) and last_day(:dat))'
+      '      union'
+      '     select '
+      '      creditid,'
+      '      max(PAYMENTDATE) as PAYMENTDATE,'
+      '      sum(PRINCIPAL) as PRINCIPAL,'
+      '      sum(INTEREST) as INTEREST'
+      '      from cm_payment_schedule psh'
+      
+        '      where PAYMENTDATE between cm_utils.get_firstmonth(:dat) an' +
+        'd last_day(:dat)'
+      '      group by creditid'
+      '      ) ThisPay,'
+      '      '
+      '      /*(select '
+      '       creditid,'
+      '       sum(PRINCIPAL) as PRINCIPAL,'
+      '       sum(INTEREST) as INTEREST'
+      '       from cm_payment_schedule psh'
+      '       group by creditid'
+      '      ) PlanPay,*/'
+      '      '
+      
+        '      (select psh.creditid, cm_utils.bankdaysbetween (MIN (psh.p' +
+        'aymentdate),'
+      '                                   :dat'
+      '                                  ) AS exdatcount'
+      '      from   cm_payment_schedule psh ,cm_history cs'
+      
+        '      where  psh.rest < cs.rest+cs.duerest and (cs.duerest+cs.re' +
+        'st - psh.rest >= 2) '
+      
+        '     and psh.creditid = cs.creditid and cs.hdate =:dat and cs.du' +
+        'erest+cs.rest>0'
+      '     and psh.paymentdate <=:dat'
+      
+        '     group by psh.creditid having cm_utils.bankdaysbetween (MIN ' +
+        '(psh.paymentdate),:dat)>0 ) expcrdcount,'
+      ''
+      '(select id as creditid,'
+      '       0 as payrest,'
+      '       0 as payintrest,'
+      '       0 as paypen'
+      'from cm_portfolio'
+      'where id not in (select creditid from cm_payments)'
+      'union'
+      'select creditid,'
+      '       sum(PAYEDAMT+PAYEDDUEAMT) as payrest,'
+      '       sum(PAYEDINTAMT+PAYEDDUEINTAMT) as payintrest,'
+      '       sum(PAYEDPENALTYAMT) as paypen'
+      ' from cm_payments'
+      ' group by creditid) realpay     '
+      '   '
+      '    '
+      'where'
+      '   p.id = b.creditid and'
+      '   p.currency = o.val_kod and'
+      '   o.dat = :dat and'
+      '   p.id = tr.creditid(+) and'
+      '   p.id = h.creditid and'
+      '   h.hdate = :dat and'
+      '   h.reserveid  = rt.id and'
+      '   p.id = ThisPay.creditid and'
+      '  -- p.id = PlanPay.creditid  and'
+      '   p.id = expcrdcount.creditid and'
+      '   p.id = realpay.creditid  and'
+      '   p.credittype = crdtypes.id and expcrdcount.exdatcount>0 and'
+      '   p.currency = av.valute and'
+      '   p.branchid = f.id '
+      '   '
+      '                     '
+      ''
+      '  '
+      ''
+      ''
+      ''
+      'order by :orderfield'
+      '')
+    Optimize = False
+    Variables.Data = {
+      0400000002000000080000003A004400410054000C0000000000000000000000
+      160000003A004F0052004400450052004600490045004C004400010000000000
+      000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      05000000180000001C0000004E0055004D004200450052004F00460043005200
+      4500440049005400010000000000080000004E0041004D004500010000000000
+      0A0000005400520041004D0054000100000000000C0000005000450052004900
+      4F00440001000000000008000000520045005300540001000000000026000000
+      41004E004E00550041004C00590049004E005400450052004500530054005200
+      4100540045000100000000000E000000500045005200430045004E0054000100
+      000000000A000000540052004400410054000100000000002000000054004800
+      490053004D004F004E0054004800530050004100590044004100540001000000
+      00002600000054004800490053004D004F004E00540048005300500052004900
+      4E0043004900500041004C000100000000002400000054004800490053004D00
+      4F004E0054004800530049004E00540045005200450053005400010000000000
+      1800000050004C0041004E0049004E0054004500520045005300540001000000
+      000014000000530055004D0050004C0041004E00500041005900010000000000
+      140000004500580044004100540043004F0055004E0054000100000000000E00
+      0000500041005900520045005300540001000000000014000000500041005900
+      49004E00540052004500530054000100000000000C0000005000410059005000
+      45004E0001000000000014000000530055004D005200450041004C0050004100
+      5900010000000000160000004400450053004300520049005000540049004F00
+      4E0001000000000012000000560041004C0055005F004E0041004D0045000100
+      0000000014000000460049004C00490041004C004E0041004D00450001000000
+      00002200000054004800490053004D004F004E00540048005300500045004E00
+      41004C005400590001000000000016000000500048004F004E0045004E005500
+      4D004200450052000100000000000E0000004100440044005200450053005300
+      010000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 32
+    Top = 328
+    object DetailInffull1NUMBEROFCREDIT: TWideStringField
+      DisplayLabel = #1052#1094#1075'.'
+      FieldName = 'NUMBEROFCREDIT'
+      Required = True
+      Size = 32
+    end
+    object DetailInffull1NAME: TWideStringField
+      DisplayLabel = #1052#1094'.'#1072#1076#1099
+      FieldName = 'NAME'
+      Size = 64
+    end
+    object DetailInffull1TRAMT: TFloatField
+      DisplayLabel = #1042#1077#1088'.'#1084#1103#1073'.'
+      FieldName = 'TRAMT'
+      DisplayFormat = '#,##0.00'
+    end
+    object DetailInffull1PERIOD: TFloatField
+      DisplayLabel = #1052#1094#1076'.'
+      FieldName = 'PERIOD'
+    end
+    object DetailInffull1REST: TFloatField
+      DisplayLabel = #1070#1076#1103#1084#1103#1083#1080' '#1071#1041
+      FieldName = 'REST'
+      DisplayFormat = '#,##0.00'
+    end
+    object DetailInffull1PLANINTEREST: TFloatField
+      DisplayLabel = #1070#1076#1103#1084#1103#1083#1080' '#1060#1041
+      FieldName = 'PLANINTEREST'
+      DisplayFormat = '#,##0.00'
+    end
+    object DetailInffull1SUMPLANPAY: TFloatField
+      DisplayLabel = #1046#1103#1084#1080
+      FieldName = 'SUMPLANPAY'
+      DisplayFormat = '#,##0.00'
+    end
+    object DetailInffull1THISMONTHSPAYDAT: TDateTimeField
+      DisplayLabel = #1041'.'#1040' '#1102#1076'.'#1090#1072#1088#1080#1093#1080
+      FieldName = 'THISMONTHSPAYDAT'
+    end
+    object DetailInffull1THISMONTHSPRINCIPAL: TFloatField
+      DisplayLabel = #1041'.'#1040' '#1102#1076'. '#1071#1041
+      FieldName = 'THISMONTHSPRINCIPAL'
+      DisplayFormat = '#,##0.00'
+    end
+    object DetailInffull1THISMONTHSINTEREST: TFloatField
+      DisplayLabel = #1041'.'#1040' '#1102#1076'. '#1060#1041
+      FieldName = 'THISMONTHSINTEREST'
+      DisplayFormat = '#,##0.00'
+    end
+    object DetailInffull1THISMONTHSPENALTY: TFloatField
+      DisplayLabel = #1041'.'#1040' '#1102#1076'.  '#1087#1077#1085
+      FieldName = 'THISMONTHSPENALTY'
+      DisplayFormat = '#,##0.00'
+    end
+    object DetailInffull1ANNUALYINTERESTRATE: TFloatField
+      DisplayLabel = #1050#1088'.%'
+      FieldName = 'ANNUALYINTERESTRATE'
+      Required = True
+    end
+    object DetailInffull1PERCENT: TFloatField
+      DisplayLabel = #1045#1097#1090'.%'
+      FieldName = 'PERCENT'
+      Required = True
+    end
+    object DetailInffull1TRDAT: TDateTimeField
+      DisplayLabel = #1042#1077#1088'.'#1090#1072#1088#1080#1093#1080
+      FieldName = 'TRDAT'
+    end
+    object DetailInffull1EXDATCOUNT: TFloatField
+      DisplayLabel = #1069'.'#1101#1094#1085
+      FieldName = 'EXDATCOUNT'
+    end
+    object DetailInffull1PAYREST: TFloatField
+      DisplayLabel = #1070#1076#1103#1084#1080#1096' '#1071#1041
+      FieldName = 'PAYREST'
+      DisplayFormat = '#,##0.00'
+    end
+    object DetailInffull1PAYINTREST: TFloatField
+      DisplayLabel = #1070#1076#1103#1084#1080#1096' '#1060#1041
+      FieldName = 'PAYINTREST'
+      DisplayFormat = '#,##0.00'
+    end
+    object DetailInffull1PAYPEN: TFloatField
+      DisplayLabel = #1070#1076#1103#1084#1080#1096' '#1055#1077#1085
+      FieldName = 'PAYPEN'
+      DisplayFormat = '#,##0.00'
+    end
+    object DetailInffull1SUMREALPAY: TFloatField
+      DisplayLabel = #1046#1103#1084#1080
+      FieldName = 'SUMREALPAY'
+      DisplayFormat = '#,##0.00'
+    end
+    object DetailInffull1DESCRIPTION: TWideStringField
+      DisplayLabel = #1050#1088#1077#1076#1080#1090#1080#1085' '#1090#1080#1087#1080
+      FieldName = 'DESCRIPTION'
+      Size = 128
+    end
+    object DetailInffull1VALU_NAME: TWideStringField
+      DisplayLabel = #1042#1072#1083#1081#1091#1090#1072
+      FieldName = 'VALU_NAME'
+      Size = 25
+    end
+    object DetailInffull1FILIALNAME: TWideStringField
+      DisplayLabel = #1060#1080#1083#1080#1072#1083
+      FieldName = 'FILIALNAME'
+      Size = 90
+    end
+    object DetailInffull1PHONENUMBER: TWideStringField
+      DisplayLabel = #1058#1077#1083
+      FieldName = 'PHONENUMBER'
+      Size = 255
+    end
+    object DetailInffull1ADDRESS: TWideStringField
+      DisplayLabel = #1062#1085#1074#1072#1085
+      FieldName = 'ADDRESS'
+      Size = 128
+    end
+  end
+  object DetailInffull1ds: TDataSource
+    DataSet = DetailInffull1
+    Left = 112
+    Top = 328
+  end
+  object Tel: TOracleDataSet
+    SQL.Strings = (
+      'select b.PHONENUMBER,b.address from cm_boorowerinfo b'
+      'where  creditid =:crdid')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000C0000003A00430052004400490044000300000000000000
+      00000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000200000016000000500048004F004E0045004E0055004D0042004500
+      52000100000000000E0000004100440044005200450053005300010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 312
+    Top = 264
+    object TelADDRESS: TWideStringField
+      DisplayLabel = #1062#1085#1074#1072#1085
+      FieldName = 'ADDRESS'
+      Size = 128
+    end
+    object TelPHONENUMBER: TWideStringField
+      DisplayLabel = #1058#1077#1083
+      FieldName = 'PHONENUMBER'
+      Size = 255
+    end
+  end
+  object Telds: TDataSource
+    DataSet = Tel
+    Left = 312
+    Top = 312
+  end
+  object DetailInf30: TOracleDataSet
+    SQL.Strings = (
+      'select p.id,'
+      '      p.numberofcredit,'
+      '      b.name,'
+      '      round(tr.TrAmt*o.ostat,2) as TrAmt,'
+      
+        '      months_between(p.DUEDATEFIRSTCONTRACT,DATEOFCONCLUSION) as' +
+        ' period,'
+      '      round(h.rest*o.ostat+h.duerest*o.ostat,2) as rest,'
+      #9'  p.ANNUALYINTERESTRATE ,'
+      #9'  rt.percent,'
+      #9'  tr.Trdat,'
+      #9'  ThisPay.PAYMENTDATE as ThisMonthsPaydat,'
+      
+        #9'  /*round(ThisPay.PRINCIPAL*o.ostat,2)*/creditsmgr.cm_utils.Get' +
+        '_MainPlanPayment(p.id) as ThisMonthsPRINCIPAL,'
+      
+        #9'  /*round(ThisPay.INTEREST*o.ostat,2)*/creditsmgr.cm_utils.Get_' +
+        'IntPlanPayment(p.id) as ThisMonthsINTEREST, creditsmgr.cm_utils.' +
+        'Get_creditPenalty(p.id) as ThisMonthsPenalty, '
+      #9'  --round(PlanPay.PRINCIPAL*o.ostat,2) as planPRINCIPAL,'
+      
+        #9'  round(h.INTERESTrest*o.ostat+h.dueINTERESTrest*o.ostat,2) as ' +
+        'planINTEREST,'
+      
+        #9'  round((h.rest*o.ostat+h.duerest*o.ostat+ h.INTERESTrest*o.ost' +
+        'at+h.dueinterestrest*o.ostat+h.penaltyrest*o.ostat),2)  as sumPl' +
+        'anPay,'
+      #9'  expcrdcount.exdatcount,'
+      #9'  round(realpay.payrest*o.ostat,2) as payrest,'
+      #9'  round(realpay.payintrest*o.ostat,2) as payintrest,'
+      #9'  round(realpay.paypen*o.ostat,2) as paypen,'
+      #9'  round(realpay.payrest*o.ostat,2)+'
+      #9'  round(realpay.payintrest*o.ostat,2)+'
+      #9'  round(realpay.paypen*o.ostat,2) as sumrealpay,'
+      #9'  crdtypes.description ,'
+      #9'  av.val_name as valu_name,'
+      '         f.name as filialname'
+      'from '
+      '    cm_portfolio p,'
+      '    cm_boorowerinfo b ,'
+      '    cm_credittypes crdtypes ,'
+      '    avalute av,'
+      '    filial f,'
+      '    '
+      #9'(select '
+      '     creditid,'
+      '     min(TRANCHEDATE) as Trdat,'
+      '     sum(TRANCHEAMOUNT) as TrAmt'
+      '     from cm_tranches'
+      #9' group by creditid) tr,'
+      '    '
+      #9' operkurs o,'
+      '     cm_history h,'
+      '     cm_reserves rt,'
+      '    '
+      #9' (select creditid,'
+      '       max(PAYMENTDATE) as PAYMENTDATE/*'
+      '       0 as PRINCIPAL,'
+      '       0 as INTEREST*/'
+      '      from cm_payment_schedule group by creditid '
+      '      having max(PAYMENTDATE)=:dat '
+      '      union'
+      '     select '
+      '      creditid,'
+      '      max(PAYMENTDATE) as PAYMENTDATE/*,'
+      '      sum(PRINCIPAL) as PRINCIPAL,'
+      '      sum(INTEREST) as INTEREST*/'
+      '      from cm_payment_schedule psh'
+      
+        '      where PAYMENTDATE > :dat-- between  cm_utils.get_firstmont' +
+        'h('#39'10-oct-08'#39') and last_day('#39'10-oct-08'#39')'
+      '      group by creditid'
+      '      ) ThisPay,'
+      '      '
+      '      /*(select '
+      '       creditid,'
+      '       sum(PRINCIPAL) as PRINCIPAL,'
+      '       sum(INTEREST) as INTEREST'
+      '       from cm_payment_schedule psh'
+      '       group by creditid'
+      
+        '      ) PlanPay,*/ (select creditid,max(paymentdate)  as payment' +
+        'date from cm_payment_schedule group by creditid) psh30,'
+      '      '
+      
+        '      (select psh.creditid,creditsmgr.cm_utils.bankdaysbetween (' +
+        'MIN (psh.paymentdate),'
+      '                                   :dat'
+      '                                  ) AS exdatcount'
+      '      from   cm_payment_schedule psh ,cm_curr_state cs'
+      
+        '      where  psh.rest < cs.rest+cs.duerest and (cs.duerest+cs.re' +
+        'st - psh.rest >= 2) '
+      '     and psh.creditid = cs.creditid'
+      '     and psh.paymentdate <=:dat'
+      
+        '     group by psh.creditid having cm_utils.bankdaysbetween (MIN ' +
+        '(psh.paymentdate),:dat)>0 ) expcrdcount,'
+      ''
+      '(select id as creditid,'
+      '       0 as payrest,'
+      '       0 as payintrest,'
+      '       0 as paypen'
+      'from cm_portfolio'
+      'where id not in (select creditid from cm_payments)'
+      'union'
+      'select creditid,'
+      '       sum(PAYEDAMT+PAYEDDUEAMT) as payrest,'
+      '       sum(PAYEDINTAMT+PAYEDDUEINTAMT) as payintrest,'
+      '       sum(PAYEDPENALTYAMT) as paypen'
+      ' from cm_payments'
+      ' group by creditid) realpay     '
+      '   '
+      '    '
+      'where'
+      '   p.id = b.creditid and'
+      '   p.currency = o.val_kod and'
+      '   o.dat = :dat and'
+      '   p.id = tr.creditid and'
+      '   p.id = h.creditid and h.rest + h.duerest>0 and'
+      '   h.hdate = :dat and'
+      '   h.reserveid  = rt.id and'
+      '   p.id = ThisPay.creditid and'
+      '  -- p.id = PlanPay.creditid  and'
+      '   p.id = expcrdcount.creditid(+) and'
+      '   p.id = realpay.creditid  and'
+      '   p.credittype = crdtypes.id and'
+      '   p.currency = av.valute and'
+      '   p.branchid = f.id and  --p.numberofcredit='#39'2794'#39' and'
+      
+        '   p.id = psh30.creditid and psh30.paymentdate between :dat and ' +
+        ':dat+:n and ThisPay.PAYMENTDATE between :dat and :dat+:n'
+      '                        '
+      '   order by :OrderField'
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      '')
+    Optimize = False
+    Variables.Data = {
+      0400000003000000080000003A004400410054000C0000000000000000000000
+      160000003A004F0052004400450052004600490045004C004400010000000000
+      000000000000040000003A004E00030000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      05000000190000001C0000004E0055004D004200450052004F00460043005200
+      4500440049005400010000000000080000004E0041004D004500010000000000
+      0A0000005400520041004D0054000100000000000C0000005000450052004900
+      4F00440001000000000008000000520045005300540001000000000026000000
+      41004E004E00550041004C00590049004E005400450052004500530054005200
+      4100540045000100000000000E000000500045005200430045004E0054000100
+      000000000A000000540052004400410054000100000000002000000054004800
+      490053004D004F004E0054004800530050004100590044004100540001000000
+      00002600000054004800490053004D004F004E00540048005300500052004900
+      4E0043004900500041004C000100000000002400000054004800490053004D00
+      4F004E0054004800530049004E00540045005200450053005400010000000000
+      1800000050004C0041004E0049004E0054004500520045005300540001000000
+      000014000000530055004D0050004C0041004E00500041005900010000000000
+      140000004500580044004100540043004F0055004E0054000100000000000E00
+      0000500041005900520045005300540001000000000014000000500041005900
+      49004E00540052004500530054000100000000000C0000005000410059005000
+      45004E0001000000000014000000530055004D005200450041004C0050004100
+      5900010000000000160000004400450053004300520049005000540049004F00
+      4E0001000000000012000000560041004C0055005F004E0041004D0045000100
+      0000000014000000460049004C00490041004C004E0041004D00450001000000
+      00002200000054004800490053004D004F004E00540048005300500045004E00
+      41004C005400590001000000000016000000500048004F004E0045004E005500
+      4D004200450052000100000000000E0000004100440044005200450053005300
+      0100000000000400000049004400010000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 176
+    Top = 328
+    object DetailInf30ID: TFloatField
+      FieldName = 'ID'
+      Required = True
+      Visible = False
+    end
+    object DetailInf30NUMBEROFCREDIT: TWideStringField
+      DisplayLabel = #1052#1094#1075'.'
+      FieldName = 'NUMBEROFCREDIT'
+      Required = True
+      Size = 32
+    end
+    object DetailInf30NAME: TWideStringField
+      DisplayLabel = #1052#1094'.'#1072#1076#1099
+      FieldName = 'NAME'
+      Size = 64
+    end
+    object DetailInf30TRAMT: TFloatField
+      DisplayLabel = #1042#1077#1088'.'#1084#1103#1073'.'
+      FieldName = 'TRAMT'
+      DisplayFormat = '#,##0.00'
+    end
+    object DetailInf30PERIOD: TFloatField
+      DisplayLabel = #1052#1094#1076'.'
+      FieldName = 'PERIOD'
+    end
+    object DetailInf30REST: TFloatField
+      DisplayLabel = #1070#1076#1103#1084#1103#1083#1080' '#1071#1041
+      FieldName = 'REST'
+      DisplayFormat = '#,##0.00'
+    end
+    object DetailInf30PLANINTEREST: TFloatField
+      DisplayLabel = #1070#1076#1103#1084#1103#1083#1080' '#1060#1041
+      FieldName = 'PLANINTEREST'
+      DisplayFormat = '#,##0.00'
+    end
+    object DetailInf30SUMPLANPAY: TFloatField
+      DisplayLabel = #1046#1103#1084#1080
+      FieldName = 'SUMPLANPAY'
+      DisplayFormat = '#,##0.00'
+    end
+    object DetailInf30THISMONTHSPAYDAT: TDateTimeField
+      DisplayLabel = #1041'.'#1040' '#1102#1076'.'#1090#1072#1088#1080#1093#1080
+      FieldName = 'THISMONTHSPAYDAT'
+    end
+    object DetailInf30THISMONTHSPRINCIPAL: TFloatField
+      DisplayLabel = #1041'.'#1040' '#1102#1076'. '#1071#1041
+      FieldName = 'THISMONTHSPRINCIPAL'
+      DisplayFormat = '#,##0.00'
+    end
+    object DetailInf30THISMONTHSINTEREST: TFloatField
+      DisplayLabel = #1041'.'#1040' '#1102#1076'. '#1060#1041
+      FieldName = 'THISMONTHSINTEREST'
+      DisplayFormat = '#,##0.00'
+    end
+    object DetailInf30THISMONTHSPENALTY: TFloatField
+      DisplayLabel = #1041'.'#1040' '#1102#1076'.  '#1087#1077#1085
+      FieldName = 'THISMONTHSPENALTY'
+      DisplayFormat = '#,##0.00'
+    end
+    object DetailInf30ANNUALYINTERESTRATE: TFloatField
+      DisplayLabel = #1050#1088'.%'
+      FieldName = 'ANNUALYINTERESTRATE'
+      Required = True
+    end
+    object DetailInf30PERCENT: TFloatField
+      DisplayLabel = #1045#1097#1090'.%'
+      FieldName = 'PERCENT'
+      Required = True
+    end
+    object DetailInf30TRDAT: TDateTimeField
+      DisplayLabel = #1042#1077#1088'.'#1090#1072#1088#1080#1093#1080
+      FieldName = 'TRDAT'
+    end
+    object DetailInf30EXDATCOUNT: TFloatField
+      DisplayLabel = #1069'.'#1101#1094#1085
+      FieldName = 'EXDATCOUNT'
+    end
+    object DetailInf30PAYREST: TFloatField
+      DisplayLabel = #1070#1076#1103#1084#1080#1096' '#1071#1041
+      FieldName = 'PAYREST'
+      DisplayFormat = '#,##0.00'
+    end
+    object DetailInf30PAYINTREST: TFloatField
+      DisplayLabel = #1070#1076#1103#1084#1080#1096' '#1060#1041
+      FieldName = 'PAYINTREST'
+      DisplayFormat = '#,##0.00'
+    end
+    object DetailInf30PAYPEN: TFloatField
+      DisplayLabel = #1070#1076#1103#1084#1080#1096' '#1055#1077#1085
+      FieldName = 'PAYPEN'
+      DisplayFormat = '#,##0.00'
+    end
+    object DetailInf30SUMREALPAY: TFloatField
+      DisplayLabel = #1046#1103#1084#1080
+      FieldName = 'SUMREALPAY'
+      DisplayFormat = '#,##0.00'
+    end
+    object DetailInf30DESCRIPTION: TWideStringField
+      DisplayLabel = #1050#1088#1077#1076#1080#1090#1080#1085' '#1090#1080#1087#1080
+      FieldName = 'DESCRIPTION'
+      Size = 128
+    end
+    object DetailInf30VALU_NAME: TWideStringField
+      DisplayLabel = #1042#1072#1083#1081#1091#1090#1072
+      FieldName = 'VALU_NAME'
+      Size = 25
+    end
+    object DetailInf30FILIALNAME: TWideStringField
+      DisplayLabel = #1060#1080#1083#1080#1072#1083
+      FieldName = 'FILIALNAME'
+      Size = 90
+    end
+    object DetailInf30smthismonthpay: TFloatField
+      DisplayLabel = #1046#1103#1084#1080
+      FieldKind = fkCalculated
+      FieldName = 'smthismonthpay'
+      Calculated = True
+    end
+  end
+  object DetailInf30ds: TDataSource
+    DataSet = DetailInf30
+    Left = 248
+    Top = 328
+  end
+  object DetailInfAll: TOracleDataSet
+    SQL.Strings = (
+      'select p.id,'
+      '      p.numberofcredit,'
+      '      b.name,'
+      '      round(tr.TrAmt*o.ostat,2) as TrAmt,'
+      
+        '      months_between(p.DUEDATEFIRSTCONTRACT,DATEOFCONCLUSION) as' +
+        ' period,'
+      '      round(h.rest*o.ostat+h.duerest*o.ostat,2) as rest,'
+      #9'  p.ANNUALYINTERESTRATE ,'
+      #9'  rt.percent,'
+      #9'  tr.Trdat,'
+      #9'  ThisPay.PAYMENTDATE as ThisMonthsPaydat,'
+      
+        #9'  /*round(ThisPay.PRINCIPAL*o.ostat,2)*/cm_utils.Get_MainPlanPa' +
+        'yment(p.id) as ThisMonthsPRINCIPAL,'
+      
+        #9'  /*round(ThisPay.INTEREST*o.ostat,2)*/cm_utils.Get_IntPlanPaym' +
+        'ent(p.id) as ThisMonthsINTEREST, cm_utils.Get_creditPenalty(p.id' +
+        ') as ThisMonthsPenalty, '
+      #9'  --round(PlanPay.PRINCIPAL*o.ostat,2) as planPRINCIPAL,'
+      
+        #9'  round(h.INTERESTrest*o.ostat+h.dueINTERESTrest*o.ostat,2) as ' +
+        'planINTEREST,'
+      
+        #9'  round((h.rest*o.ostat+h.duerest*o.ostat+ h.INTERESTrest*o.ost' +
+        'at+h.dueinterestrest*o.ostat+h.penaltyrest*o.ostat),2)  as sumPl' +
+        'anPay,'
+      #9'  expcrdcount.exdatcount,'
+      #9'  round(realpay.payrest*o.ostat,2) as payrest,'
+      #9'  round(realpay.payintrest*o.ostat,2) as payintrest,'
+      #9'  round(realpay.paypen*o.ostat,2) as paypen,'
+      #9'  round(realpay.payrest*o.ostat,2)+'
+      #9'  round(realpay.payintrest*o.ostat,2)+'
+      #9'  round(realpay.paypen*o.ostat,2) as sumrealpay,'
+      #9'  crdtypes.description ,'
+      #9'  av.val_name as valu_name,'
+      '         f.name as filialname'
+      'from '
+      '    cm_portfolio p,'
+      '    cm_boorowerinfo b ,'
+      '    cm_credittypes crdtypes ,'
+      '    avalute av,'
+      '    filial f,'
+      '    '
+      #9'(select '
+      '     creditid,'
+      '     min(TRANCHEDATE) as Trdat,'
+      '     sum(TRANCHEAMOUNT) as TrAmt'
+      '     from cm_tranches'
+      #9' group by creditid) tr,'
+      '    '
+      #9' operkurs o,'
+      '     cm_history h,'
+      '     cm_reserves rt,'
+      '    '
+      #9' (select id as  creditid,'
+      '        null as PAYMENTDATE/*,'
+      '       0 as PRINCIPAL,'
+      '       0 as INTEREST*/'
+      
+        '      from cm_portfolio where id not in (select creditid from cm' +
+        '_payment_schedule where PAYMENTDATE > :dat)'
+      '      --having max(PAYMENTDATE)=:dat '
+      '      union'
+      '     select '
+      '      creditid,'
+      '      min(PAYMENTDATE) as PAYMENTDATE/*,'
+      '      sum(PRINCIPAL) as PRINCIPAL,'
+      '      sum(INTEREST) as INTEREST*/'
+      '      from cm_payment_schedule psh'
+      
+        '      where PAYMENTDATE > :dat /*between cm_utils.get_firstmonth' +
+        '(:dat) and last_day(:dat)*/'
+      '      group by creditid'
+      '      ) ThisPay,'
+      '      '
+      '      /*(select '
+      '       creditid,'
+      '       sum(PRINCIPAL) as PRINCIPAL,'
+      '       sum(INTEREST) as INTEREST'
+      '       from cm_payment_schedule psh'
+      '       group by creditid'
+      '      ) PlanPay,*/ cm_payment_schedule sh,'
+      '      '
+      
+        '      (select psh.creditid, cm_utils.bankdaysbetween (MIN (psh.p' +
+        'aymentdate),'
+      '                                   :dat'
+      '                                  ) AS exdatcount'
+      '      from   cm_payment_schedule psh ,cm_curr_state cs'
+      
+        '      where  psh.rest < cs.rest+cs.duerest and (cs.duerest+cs.re' +
+        'st - psh.rest >= 2) '
+      '     and psh.creditid = cs.creditid'
+      '     and psh.paymentdate <=:dat'
+      
+        '     group by psh.creditid having cm_utils.bankdaysbetween (MIN ' +
+        '(psh.paymentdate),:dat)>0 ) expcrdcount,'
+      ''
+      '(select id as creditid,'
+      '       0 as payrest,'
+      '       0 as payintrest,'
+      '       0 as paypen'
+      'from cm_portfolio'
+      'where id not in (select creditid from cm_payments)'
+      'union'
+      'select creditid,'
+      '       sum(PAYEDAMT+PAYEDDUEAMT) as payrest,'
+      '       sum(PAYEDINTAMT+PAYEDDUEINTAMT) as payintrest,'
+      '       sum(PAYEDPENALTYAMT) as paypen'
+      ' from cm_payments'
+      ' group by creditid) realpay     '
+      '   '
+      '    '
+      'where'
+      '   p.id = b.creditid and'
+      '   p.currency = o.val_kod and'
+      '   o.dat = :dat and'
+      '   p.id = tr.creditid and'
+      '   p.id = h.creditid and h.rest + h.duerest>0 and'
+      '   h.hdate = :dat and'
+      '   h.reserveid  = rt.id and'
+      '   p.id = ThisPay.creditid and'
+      '  -- p.id = PlanPay.creditid  and'
+      '   p.id = expcrdcount.creditid(+) and'
+      '   p.id = realpay.creditid  and'
+      '   p.credittype = crdtypes.id and'
+      '   p.currency = av.valute and'
+      '   p.branchid = f.id and'
+      
+        '   p.id =sh.creditid and sh.paymentdate between :dat and :dat+:n' +
+        '  '
+      '                     '
+      '   order by :OrderField'
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      '')
+    Optimize = False
+    Variables.Data = {
+      0400000003000000080000003A004400410054000C0000000000000000000000
+      160000003A004F0052004400450052004600490045004C004400010000000000
+      000000000000040000003A004E00030000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      05000000190000001C0000004E0055004D004200450052004F00460043005200
+      4500440049005400010000000000080000004E0041004D004500010000000000
+      0A0000005400520041004D0054000100000000000C0000005000450052004900
+      4F00440001000000000008000000520045005300540001000000000026000000
+      41004E004E00550041004C00590049004E005400450052004500530054005200
+      4100540045000100000000000E000000500045005200430045004E0054000100
+      000000000A000000540052004400410054000100000000002000000054004800
+      490053004D004F004E0054004800530050004100590044004100540001000000
+      00002600000054004800490053004D004F004E00540048005300500052004900
+      4E0043004900500041004C000100000000002400000054004800490053004D00
+      4F004E0054004800530049004E00540045005200450053005400010000000000
+      1800000050004C0041004E0049004E0054004500520045005300540001000000
+      000014000000530055004D0050004C0041004E00500041005900010000000000
+      140000004500580044004100540043004F0055004E0054000100000000000E00
+      0000500041005900520045005300540001000000000014000000500041005900
+      49004E00540052004500530054000100000000000C0000005000410059005000
+      45004E0001000000000014000000530055004D005200450041004C0050004100
+      5900010000000000160000004400450053004300520049005000540049004F00
+      4E0001000000000012000000560041004C0055005F004E0041004D0045000100
+      0000000014000000460049004C00490041004C004E0041004D00450001000000
+      00002200000054004800490053004D004F004E00540048005300500045004E00
+      41004C005400590001000000000016000000500048004F004E0045004E005500
+      4D004200450052000100000000000E0000004100440044005200450053005300
+      0100000000000400000049004400010000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 360
+    Top = 272
+    object DetailInfAllID: TFloatField
+      FieldName = 'ID'
+      Required = True
+      Visible = False
+    end
+    object DetailInfAllNUMBEROFCREDIT: TWideStringField
+      DisplayLabel = #1052#1094#1075'.'
+      FieldName = 'NUMBEROFCREDIT'
+      Required = True
+      Size = 32
+    end
+    object DetailInfAllNAME: TWideStringField
+      DisplayLabel = #1052#1094'.'#1072#1076#1099
+      FieldName = 'NAME'
+      Size = 64
+    end
+    object DetailInfAllTRAMT: TFloatField
+      DisplayLabel = #1042#1077#1088'.'#1084#1103#1073'.'
+      FieldName = 'TRAMT'
+      DisplayFormat = '#,##0.00'
+    end
+    object DetailInfAllPERIOD: TFloatField
+      DisplayLabel = #1052#1094#1076'.'
+      FieldName = 'PERIOD'
+    end
+    object DetailInfAllREST: TFloatField
+      DisplayLabel = #1070#1076#1103#1084#1103#1083#1080' '#1071#1041
+      FieldName = 'REST'
+      DisplayFormat = '#,##0.00'
+    end
+    object DetailInfAllPLANINTEREST: TFloatField
+      DisplayLabel = #1070#1076#1103#1084#1103#1083#1080' '#1060#1041
+      FieldName = 'PLANINTEREST'
+      DisplayFormat = '#,##0.00'
+    end
+    object DetailInfAllSUMPLANPAY: TFloatField
+      DisplayLabel = #1046#1103#1084#1080
+      FieldName = 'SUMPLANPAY'
+      DisplayFormat = '#,##0.00'
+    end
+    object DetailInfAllTHISMONTHSPAYDAT: TDateTimeField
+      DisplayLabel = #1041'.'#1040' '#1102#1076'.'#1090#1072#1088#1080#1093#1080
+      FieldName = 'THISMONTHSPAYDAT'
+    end
+    object DetailInfAllTHISMONTHSPRINCIPAL: TFloatField
+      DisplayLabel = #1041'.'#1040' '#1102#1076'. '#1071#1041
+      FieldName = 'THISMONTHSPRINCIPAL'
+      DisplayFormat = '#,##0.00'
+    end
+    object DetailInfAllTHISMONTHSINTEREST: TFloatField
+      DisplayLabel = #1041'.'#1040' '#1102#1076'. '#1060#1041
+      FieldName = 'THISMONTHSINTEREST'
+      DisplayFormat = '#,##0.00'
+    end
+    object DetailInfAllTHISMONTHSPENALTY: TFloatField
+      DisplayLabel = #1041'.'#1040' '#1102#1076'.  '#1087#1077#1085
+      FieldName = 'THISMONTHSPENALTY'
+      DisplayFormat = '#,##0.00'
+    end
+    object DetailInfAllANNUALYINTERESTRATE: TFloatField
+      DisplayLabel = #1050#1088'.%'
+      FieldName = 'ANNUALYINTERESTRATE'
+      Required = True
+    end
+    object DetailInfAllPERCENT: TFloatField
+      DisplayLabel = #1045#1097#1090'.%'
+      FieldName = 'PERCENT'
+      Required = True
+    end
+    object DetailInfAllTRDAT: TDateTimeField
+      DisplayLabel = #1042#1077#1088'.'#1090#1072#1088#1080#1093#1080
+      FieldName = 'TRDAT'
+    end
+    object DetailInfAllEXDATCOUNT: TFloatField
+      DisplayLabel = #1069'.'#1101#1094#1085
+      FieldName = 'EXDATCOUNT'
+    end
+    object DetailInfAllPAYREST: TFloatField
+      DisplayLabel = #1070#1076#1103#1084#1080#1096' '#1071#1041
+      FieldName = 'PAYREST'
+      DisplayFormat = '#,##0.00'
+    end
+    object DetailInfAllPAYINTREST: TFloatField
+      DisplayLabel = #1070#1076#1103#1084#1080#1096' '#1060#1041
+      FieldName = 'PAYINTREST'
+      DisplayFormat = '#,##0.00'
+    end
+    object DetailInfAllPAYPEN: TFloatField
+      DisplayLabel = #1070#1076#1103#1084#1080#1096' '#1055#1077#1085
+      FieldName = 'PAYPEN'
+      DisplayFormat = '#,##0.00'
+    end
+    object DetailInfAllSUMREALPAY: TFloatField
+      DisplayLabel = #1046#1103#1084#1080
+      FieldName = 'SUMREALPAY'
+      DisplayFormat = '#,##0.00'
+    end
+    object DetailInfAllDESCRIPTION: TWideStringField
+      DisplayLabel = #1050#1088#1077#1076#1080#1090#1080#1085' '#1090#1080#1087#1080
+      FieldName = 'DESCRIPTION'
+      Size = 128
+    end
+    object DetailInfAllVALU_NAME: TWideStringField
+      DisplayLabel = #1042#1072#1083#1081#1091#1090#1072
+      FieldName = 'VALU_NAME'
+      Size = 25
+    end
+    object DetailInfAllFILIALNAME: TWideStringField
+      DisplayLabel = #1060#1080#1083#1080#1072#1083
+      FieldName = 'FILIALNAME'
+      Size = 90
+    end
+    object DetailInfAllsmthismonthpay: TFloatField
+      DisplayLabel = #1046#1103#1084#1080
+      FieldKind = fkCalculated
+      FieldName = 'smthismonthpay'
+      Calculated = True
+    end
+  end
+  object DetailInfAllds: TDataSource
+    DataSet = DetailInfAll
+    Left = 424
+    Top = 272
+  end
+end

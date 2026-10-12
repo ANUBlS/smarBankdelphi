@@ -1,0 +1,239 @@
+unit ExpDataModuleUnit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,sboapiDataModuleImpl,
+  Db, OracleData, Oracle, ICECrypt;
+
+type
+  TExpDataModule = class(TDataModule)
+    ExpBatchsDataSource: TDataSource;
+    EXPESSPAC: TOraclePackage;
+    ExpTypeDataSet: TOracleDataSet;
+    ExpTypeDataSource: TDataSource;
+    PasspDataSet: TOracleDataSet;
+    PasspDataSource: TDataSource;
+    ValyutaDataSet: TOracleDataSet;
+    ValyutaDataSource: TDataSource;
+    FilialDataSet: TOracleDataSet;
+    FilialDataSource: TDataSource;
+    AllFilialDataSet: TOracleDataSet;
+    AllFilialDataSource: TDataSource;
+    SysdateDataSet: TOracleDataSet;
+    ExpTypeDataSetID: TIntegerField;
+    ExpTypeDataSetNAME: TStringField;
+    ExpBatchsDataSet: TOracleDataSet;
+    ICECrypt1: TICECrypt;
+    ExpBatchsDataSetID: TFloatField;
+    ExpBatchsDataSetEXPID: TFloatField;
+    ExpBatchsDataSetEXP_ACCNO: TStringField;
+    ExpBatchsDataSetLASTNAME: TStringField;
+    ExpBatchsDataSetFIRSTNAME: TStringField;
+    ExpBatchsDataSetMIDNAME: TStringField;
+    ExpBatchsDataSetUSERID: TIntegerField;
+    ExpBatchsDataSetUSERNAME: TStringField;
+    ExpBatchsDataSetFILIAL: TIntegerField;
+    ExpBatchsDataSetFILIALNAME: TStringField;
+    ExpBatchsDataSetKINDPASSPORT: TIntegerField;
+    ExpBatchsDataSetPASSPER: TStringField;
+    ExpBatchsDataSetPASPNUM: TStringField;
+    ExpBatchsDataSetPASPDATE: TDateTimeField;
+    ExpBatchsDataSetPASPPLACE: TStringField;
+    ExpBatchsDataSetPINCODE: TStringField;
+    ExpBatchsDataSetADRESS: TStringField;
+    ExpBatchsDataSetBLASTNAME: TStringField;
+    ExpBatchsDataSetBFIRSTNAME: TStringField;
+    ExpBatchsDataSetBMIDNAME: TStringField;
+    ExpBatchsDataSetBUSERID: TIntegerField;
+    ExpBatchsDataSetBUSERNAME: TStringField;
+    ExpBatchsDataSetBFILIAL: TIntegerField;
+    ExpBatchsDataSetBFILIALNAME: TStringField;
+    ExpBatchsDataSetBKINDPASSPORT: TIntegerField;
+    ExpBatchsDataSetBPASSPER: TStringField;
+    ExpBatchsDataSetBPASPNUM: TStringField;
+    ExpBatchsDataSetBPASPDATE: TDateTimeField;
+    ExpBatchsDataSetBPASPPLACE: TStringField;
+    ExpBatchsDataSetBPINCODE: TStringField;
+    ExpBatchsDataSetBADRESS: TStringField;
+    ExpBatchsDataSetVLASTNAME: TStringField;
+    ExpBatchsDataSetVFIRSTNAME: TStringField;
+    ExpBatchsDataSetVMIDNAME: TStringField;
+    ExpBatchsDataSetVFILIAL: TIntegerField;
+    ExpBatchsDataSetVFILIALNAME: TStringField;
+    ExpBatchsDataSetVKINDPASSPORT: TIntegerField;
+    ExpBatchsDataSetVPASSPER: TStringField;
+    ExpBatchsDataSetVPASPNUM: TStringField;
+    ExpBatchsDataSetVPASPDATE: TDateTimeField;
+    ExpBatchsDataSetVPASPPLACE: TStringField;
+    ExpBatchsDataSetVPINCODE: TStringField;
+    ExpBatchsDataSetVADRESS: TStringField;
+    ExpBatchsDataSetPFATTORSER: TStringField;
+    ExpBatchsDataSetPFATTORNUM: TStringField;
+    ExpBatchsDataSetPFATTORBDAT: TDateTimeField;
+    ExpBatchsDataSetPFATTOREDAT: TDateTimeField;
+    ExpBatchsDataSetSTATUS: TIntegerField;
+    ExpBatchsDataSetOPTYPE: TIntegerField;
+    ExpBatchsDataSetAMOUNT: TFloatField;
+    ExpBatchsDataSetPARTKEY: TFloatField;
+    ExpBatchsDataSetTRANS_REF: TStringField;
+    ExpBatchsDataSetREMIT_INF: TStringField;
+    ExpBatchsDataSetADD_INF: TStringField;
+    ExpBatchsDataSetSENDDATE: TDateTimeField;
+    ExpBatchsDataSetRECDATE: TDateTimeField;
+    ExpBatchsDataSetSENDDATETIME: TDateTimeField;
+    ExpBatchsDataSetRECDATETIME: TDateTimeField;
+    ExpBatchsDataSetCOMMITUSERID: TIntegerField;
+    ExpBatchsDataSetPASSWORD: TStringField;
+    ExpBatchsDataSetCUSTSEND: TStringField;
+    ExpBatchsDataSetCUSTREC: TStringField;
+    SB_ACA: TOraclePackage;
+    ExpAccDataSet: TOracleDataSet;
+    ExpAccDataSource: TDataSource;
+    AccountDataSet: TOracleDataSet;
+    AccountDataSource: TDataSource;
+    BranchDataSet: TOracleDataSet;
+    BranchDataSource: TDataSource;
+    Repair: TOraclePackage;
+    ExpCashboxAccDataSet: TOracleDataSet;
+    ExpCashboxAccDataSource: TDataSource;
+    ExpTransitAccDataSet: TOracleDataSet;
+    ExpTransitAccDataSource: TDataSource;
+    ExpComissionAccDataSet: TOracleDataSet;
+    ExpComissionAccDataSource: TDataSource;
+    ExpChequeAccDataSet: TOracleDataSet;
+    ExpChequeAccDataSource: TDataSource;
+    BankInfoDataSet: TOracleDataSet;
+    BankInfoDataSource: TDataSource;
+    ExpComissionDataSource: TDataSource;
+    ExpComissionDataSet: TOracleDataSet;
+    ExpComissionDataSetID: TIntegerField;
+    ExpComissionDataSetEXPID: TIntegerField;
+    ExpComissionDataSetPERCENT: TFloatField;
+    ExpComissionDataSetAMOUNT: TFloatField;
+    ExpComissionDataSetMINVALUE: TFloatField;
+    ExpComissionDataSetMAXVALUE: TFloatField;
+    ExpBatchsDataSetVAL_COD: TIntegerField;
+    ExpBatchsDataSetvalname: TStringField;
+    SysdateDataSetDAT: TDateTimeField;
+    ExpBatchsArchiveDataSet: TOracleDataSet;
+    ExpBatchsArchiveDataSource: TDataSource;
+    ExpBatchsArchiveDataSetID: TFloatField;
+    ExpBatchsArchiveDataSetEXPID: TFloatField;
+    ExpBatchsArchiveDataSetEXP_ACCNO: TStringField;
+    ExpBatchsArchiveDataSetLASTNAME: TStringField;
+    ExpBatchsArchiveDataSetFIRSTNAME: TStringField;
+    ExpBatchsArchiveDataSetMIDNAME: TStringField;
+    ExpBatchsArchiveDataSetUSERID: TIntegerField;
+    ExpBatchsArchiveDataSetUSERNAME: TStringField;
+    ExpBatchsArchiveDataSetFILIAL: TIntegerField;
+    ExpBatchsArchiveDataSetFILIALNAME: TStringField;
+    ExpBatchsArchiveDataSetKINDPASSPORT: TIntegerField;
+    ExpBatchsArchiveDataSetPASSPER: TStringField;
+    ExpBatchsArchiveDataSetPASPNUM: TStringField;
+    ExpBatchsArchiveDataSetPASPDATE: TDateTimeField;
+    ExpBatchsArchiveDataSetPASPPLACE: TStringField;
+    ExpBatchsArchiveDataSetPINCODE: TStringField;
+    ExpBatchsArchiveDataSetADRESS: TStringField;
+    ExpBatchsArchiveDataSetBLASTNAME: TStringField;
+    ExpBatchsArchiveDataSetBFIRSTNAME: TStringField;
+    ExpBatchsArchiveDataSetBMIDNAME: TStringField;
+    ExpBatchsArchiveDataSetBUSERID: TIntegerField;
+    ExpBatchsArchiveDataSetBUSERNAME: TStringField;
+    ExpBatchsArchiveDataSetBFILIAL: TIntegerField;
+    ExpBatchsArchiveDataSetBFILIALNAME: TStringField;
+    ExpBatchsArchiveDataSetBKINDPASSPORT: TIntegerField;
+    ExpBatchsArchiveDataSetBPASSPER: TStringField;
+    ExpBatchsArchiveDataSetBPASPNUM: TStringField;
+    ExpBatchsArchiveDataSetBPASPDATE: TDateTimeField;
+    ExpBatchsArchiveDataSetBPASPPLACE: TStringField;
+    ExpBatchsArchiveDataSetBPINCODE: TStringField;
+    ExpBatchsArchiveDataSetBADRESS: TStringField;
+    ExpBatchsArchiveDataSetVLASTNAME: TStringField;
+    ExpBatchsArchiveDataSetVFIRSTNAME: TStringField;
+    ExpBatchsArchiveDataSetVMIDNAME: TStringField;
+    ExpBatchsArchiveDataSetVFILIAL: TIntegerField;
+    ExpBatchsArchiveDataSetVFILIALNAME: TStringField;
+    ExpBatchsArchiveDataSetVKINDPASSPORT: TIntegerField;
+    ExpBatchsArchiveDataSetVPASSPER: TStringField;
+    ExpBatchsArchiveDataSetVPASPNUM: TStringField;
+    ExpBatchsArchiveDataSetVPASPDATE: TDateTimeField;
+    ExpBatchsArchiveDataSetVPASPPLACE: TStringField;
+    ExpBatchsArchiveDataSetVPINCODE: TStringField;
+    ExpBatchsArchiveDataSetVADRESS: TStringField;
+    ExpBatchsArchiveDataSetPFATTORSER: TStringField;
+    ExpBatchsArchiveDataSetPFATTORNUM: TStringField;
+    ExpBatchsArchiveDataSetPFATTORBDAT: TDateTimeField;
+    ExpBatchsArchiveDataSetPFATTOREDAT: TDateTimeField;
+    ExpBatchsArchiveDataSetSTATUS: TIntegerField;
+    ExpBatchsArchiveDataSetOPTYPE: TIntegerField;
+    ExpBatchsArchiveDataSetAMOUNT: TFloatField;
+    ExpBatchsArchiveDataSetVAL_COD: TIntegerField;
+    ExpBatchsArchiveDataSetPARTKEY: TFloatField;
+    ExpBatchsArchiveDataSetTRANS_REF: TStringField;
+    ExpBatchsArchiveDataSetREMIT_INF: TStringField;
+    ExpBatchsArchiveDataSetADD_INF: TStringField;
+    ExpBatchsArchiveDataSetSENDDATE: TDateTimeField;
+    ExpBatchsArchiveDataSetRECDATE: TDateTimeField;
+    ExpBatchsArchiveDataSetSENDDATETIME: TDateTimeField;
+    ExpBatchsArchiveDataSetRECDATETIME: TDateTimeField;
+    ExpBatchsArchiveDataSetCOMMITUSERID: TIntegerField;
+    ExpBatchsArchiveDataSetPASSWORD: TStringField;
+    ExpBatchsArchiveDataSetCUSTSEND: TStringField;
+    ExpBatchsArchiveDataSetCUSTREC: TStringField;
+    ExpBatchsArchiveDataSetCUSTTAK: TStringField;
+    ExpBatchsArchiveDataSetVALNAME: TStringField;
+    ExpBatchsArchiveDataSetVUSERNAME: TStringField;
+    ExpAdminDataSet: TOracleDataSet;
+    ExpAdminDataSource: TDataSource;
+    AdminUserDataSet: TOracleDataSet;
+    AdminUserDataSource: TDataSource;
+    ExpBatchsDataSetCUSTVREC: TStringField;
+    procedure DataModuleCreate(Sender: TObject);
+    procedure ExpBatchsDataSetAfterScroll(DataSet: TDataSet);
+  private
+    { Private declarations }
+  public
+    procedure FullOpen;
+
+  end;
+
+var
+  ExpDataModule: TExpDataModule;
+
+implementation
+
+uses ExpressManagerImpl,
+     ExpUnitImpl;
+
+
+{$R *.DFM}
+
+procedure TExpDataModule.FullOpen;
+const
+   c_err_message = ' Table or View in Dataset "%s" does not exist! ';
+var
+   i: Word;   //Modified by TNariman at 28.04.2005
+begin
+ for i :=0 to ComponentCount- 1 do
+  if (Components[i] is TOracleDataSet) then
+  try
+   (Components[i] as TOracleDataSet).Close;
+   (Components[i] as TOracleDataSet).Open;
+  except
+   raise Exception.Create(Format(c_err_message, [(Components[i] as TDataSet).Name]));
+  end;
+end;
+
+procedure TExpDataModule.DataModuleCreate(Sender: TObject);
+begin
+  FullOpen;
+end;
+
+procedure TExpDataModule.ExpBatchsDataSetAfterScroll(DataSet: TDataSet);
+begin
+// ExpressFrom.ToolButton7.Enabled:=not DataSet.IsEmpty;
+// ExpressFrom.ToolButton7.Enabled:= ExpDataModule.ExpBatchsDataSet.FieldByName('status').AsInteger in [0];
+end;
+
+end.

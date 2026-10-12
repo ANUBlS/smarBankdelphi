@@ -1,0 +1,206 @@
+﻿unit unitverification;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Grids, DBGrids, ComCtrls, ToolWin, ExtCtrls, CMExcelExport, ImgList,
+  StdCtrls, FileCtrl, ActnList, Menus;
+
+type
+  Tverification = class(TForm)
+    PopupMenu2: TPopupMenu;
+    MenuItem1: TMenuItem;
+    ImageList1: TImageList;
+    CMExcelExport1: TCMExcelExport;
+    ActionList1: TActionList;
+    simplefile: TAction;
+    PopupMenu1: TPopupMenu;
+    selectall1: TMenuItem;
+    Panel1: TPanel;
+    Panel3: TPanel;
+    Label1: TLabel;
+    Button1: TButton;
+    DateTimePicker1: TDateTimePicker;
+    Panel5: TPanel;
+    Button2: TButton;
+    Button3: TButton;
+    Button6: TButton;
+    FileListBox1: TFileListBox;
+    DBGrid1: TDBGrid;
+    Panel2: TPanel;
+    Panel4: TPanel;
+    Label2: TLabel;
+    Panel6: TPanel;
+    Button4: TButton;
+    Button5: TButton;
+    Button7: TButton;
+    DBGrid2: TDBGrid;
+    procedure DBGrid1DrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TColumn; State: TGridDrawState);
+    procedure DBGrid2DrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TColumn; State: TGridDrawState);
+    procedure Button2Click(Sender: TObject);
+    procedure Button5Click(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure Button3Click(Sender: TObject);
+    procedure Button4Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  verification: Tverification;
+
+implementation
+
+uses Unit18,SBTranslateProc,sboapiDataModuleImpl;
+
+{$R *.DFM}
+
+procedure Tverification.DBGrid1DrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TColumn;
+  State: TGridDrawState);
+var
+  ImageIndex: Integer;
+
+begin
+
+ ImageIndex := -1;
+  with Sender as TDBGrid do
+  begin
+    if DataSource.DataSet.RecordCount <> 0 then
+    begin
+      case DataSource.DataSet.FieldByName('STATUS').AsInteger of
+
+      1:
+        ImageIndex :=25;
+      2:
+        ImageIndex :=3 ;
+      3:
+        ImageIndex :=26;
+
+      4:
+        ImageIndex:=13;  
+
+      else
+      end;
+      if (DataCol = 1) and (ImageIndex <> -1) then
+        ImageList1.Draw(Canvas, Rect.Left, Rect.Top, ImageIndex, True)
+      else
+        DefaultDrawColumnCell(Rect, DataCol, Column, State);
+    end;
+
+
+
+
+  end;
+end;
+procedure Tverification.DBGrid2DrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TColumn;
+  State: TGridDrawState);
+var
+  ImageIndex: Integer;
+
+begin
+
+ ImageIndex := -1;
+  with Sender as TDBGrid do
+  begin
+    if DataSource.DataSet.RecordCount <> 0 then
+    begin
+      case DataSource.DataSet.FieldByName('STATUS').AsInteger of
+
+      1:
+        ImageIndex :=25;
+      2:
+        ImageIndex :=3 ;
+      3:
+        ImageIndex :=26;
+
+      4:
+        ImageIndex:=13;  
+
+      else
+      end;
+      if (DataCol = 1) and (ImageIndex <> -1) then
+        ImageList1.Draw(Canvas, Rect.Left, Rect.Top, ImageIndex, True)
+      else
+        DefaultDrawColumnCell(Rect, DataCol, Column, State);
+    end;
+
+
+
+
+  end;
+end;
+
+procedure Tverification.Button2Click(Sender: TObject);
+begin
+
+if MessageDlg('Seçilmiş sütunu verifikasiya etmək istəyirsinizmi?',mtInformation,[mbYes,mbNo],0)=mryes then
+DataMod_CARDS.mainpacket.CallProcedure('verifi',[DBGrid1.DataSource.DataSet.fieldbyname('id').asinteger]);
+DBGrid1.DataSource.DataSet.Refresh;
+end;
+
+procedure Tverification.Button5Click(Sender: TObject);
+begin
+if MessageDlg('Seçilmiş sütunu verifikasiya etmək istəyirsinizmi?',mtInformation,[mbYes,mbNo],0)=mryes then
+DataMod_CARDS.mainpacket.CallProcedure('verifi',[DBGrid2.DataSource.DataSet.fieldbyname('id').asinteger]);
+DBGrid2.DataSource.DataSet.Refresh;
+end;
+
+procedure Tverification.FormActivate(Sender: TObject);
+begin
+DataMod_CARDS.urgent2.Open;
+DataMod_CARDS.simple2.Open;
+end;
+
+procedure Tverification.FormCreate(Sender: TObject);
+begin
+SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure Tverification.Button1Click(Sender: TObject);
+begin
+DataMod_CARDS.urgent2.Close;
+DataMod_CARDS.urgent2.SetVariable('dat1',integer(trunc(DateTimePicker1.DateTime)));
+DataMod_CARDS.urgent2.open;
+DataMod_CARDS.simple2.Close;
+DataMod_CARDS.simple2.SetVariable('dat1',integer(trunc(DateTimePicker1.DateTime)));
+DataMod_CARDS.simple2.open;
+end;
+
+procedure Tverification.FormShow(Sender: TObject);
+begin
+DateTimePicker1.DateTime:=date;
+DataMod_CARDS.urgent2.Close;
+DataMod_CARDS.urgent2.SetVariable('dat1',integer(trunc(DateTimePicker1.DateTime)));
+DataMod_CARDS.simple2.Close;
+DataMod_CARDS.simple2.SetVariable('dat1',integer(trunc(DateTimePicker1.DateTime)));
+DataMod_CARDS.urgent2.open;
+DataMod_CARDS.simple2.open;
+Button6.Click;
+Button7.Click;
+end;
+
+procedure Tverification.Button3Click(Sender: TObject);
+begin
+  if not CMExcelExport1.Connected then CMExcelExport1.Connect;
+  CMExcelExport1.ExportDataset(DataMod_CARDS.urgent2,'Verification',true);
+  CMExcelExport1.Disconnect;
+end;
+
+procedure Tverification.Button4Click(Sender: TObject);
+begin
+  if not CMExcelExport1.Connected then CMExcelExport1.Connect;
+  CMExcelExport1.ExportDataset(DataMod_CARDS.simple2,'Verification',true);
+  CMExcelExport1.Disconnect;
+end;
+
+end.

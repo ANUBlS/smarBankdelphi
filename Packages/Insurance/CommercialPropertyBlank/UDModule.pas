@@ -1,0 +1,174 @@
+unit UDModule;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Oracle, Db, OracleData;
+
+type
+  TDModule = class(TDataModule)
+    ODSAgent: TOracleDataSet;
+    AgentSource: TDataSource;
+    DSContracts: TDataSource;
+    ODSContracts: TOracleDataSet;
+    ODSContractsID: TFloatField;
+    ODSContractsTYPE_ID: TFloatField;
+    ODSContractsINS_DATE: TDateTimeField;
+    ODSContractsBEGIN_DATE: TDateTimeField;
+    ODSContractsEND_DATE: TDateTimeField;
+    ODSContractsVALUTE_ID: TFloatField;
+    ODSContractsAMMOUNT: TFloatField;
+    ODSContractsCLOSE_PREFIX: TIntegerField;
+    ODSContractsKLI_ID: TFloatField;
+    ODSContractsLOANACC_ID: TFloatField;
+    ODSContractsCURRACC_ID: TFloatField;
+    ODSContractsPOLICY_NUM: TStringField;
+    ODSContractsINSSUMM: TFloatField;
+    ODSContractsFRANSHIZ: TFloatField;
+    ODSContractsTARIFF: TFloatField;
+    ODSContractsSTATE: TIntegerField;
+    ODSContractsAGENT_ID: TFloatField;
+    ODSContractsPNUM: TFloatField;
+    ODSContractsBEN_ID: TFloatField;
+    ODSContractsBENEFICIARY: TStringField;
+    ODSCProperty: TOracleDataSet;
+    ODSCPropertyID: TFloatField;
+    ODSCPropertyFULLDESCRIPTION: TStringField;
+    ODSCPropertyLOCATIONOBJ: TStringField;
+    ODSCPropertyYEARSINBUSINESS: TStringField;
+    ODSCPropertyBUILDINGUSAGE: TStringField;
+    ODSCPropertyCONSTYEAR: TDateTimeField;
+    ODSCPropertyFLOORSNUM: TIntegerField;
+    ODSCPropertyWALLSM: TStringField;
+    ODSCPropertyCEILINGSM: TStringField;
+    ODSCPropertyROOFM: TStringField;
+    ODSCPropertyAREA: TFloatField;
+    ODSCPropertyAPPLICANTSPACE: TFloatField;
+    ODSCPropertyEARTHQUAKEDETAILS: TStringField;
+    ODSCPropertyFLAMABLE: TStringField;
+    ODSCPropertySURROINDINGDETAILS: TStringField;
+    ODSCPropertySITUETED: TStringField;
+    ODSCPropertyGUARD: TStringField;
+    ODSCPropertyALARM: TStringField;
+    ODSCPropertyLOCKS: TStringField;
+    ODSCPropertySECURITYLOCKS: TStringField;
+    ODSCPropertyBARS: TStringField;
+    ODSCPropertyOTHER: TStringField;
+    ODSCPropertySETTINGS: TStringField;
+    ODSCPropertyREPAIR: TStringField;
+    ODSCPropertyHEATED: TStringField;
+    ODSCPropertyRISKID: TFloatField;
+    ODSCPropertyANNUAL: TFloatField;
+    ODSCPropertyWAGES: TFloatField;
+    ODSCPropertyRENT: TFloatField;
+    ODSCPropertyEMPLOYES: TFloatField;
+    ODSCPropertyEXPIRITY: TDateTimeField;
+    ODSCPropertyLOSSHISTORY: TStringField;
+    ODSCPropertyRENEWAL: TStringField;
+    ODSCPropertyTHIRDPARTY: TStringField;
+    ODSCPropertyOTHERINF: TStringField;
+    ODSCPropertyINDEMINITY: TStringField;
+    ODSCPropertyVALUETYPE: TStringField;
+    ODSCPropertyBUILDINGS: TFloatField;
+    ODSCPropertyCONTENT: TFloatField;
+    ODSCPropertyEQUIPMENT: TFloatField;
+    ODSCPropertyGLASS: TFloatField;
+    ODSCPropertyCASH: TFloatField;
+    ODSCPropertyWAREHOUSE: TFloatField;
+    ODSCPropertySTOCK: TFloatField;
+    ODSCPropertyPRODUCTS: TFloatField;
+    ODSCPropertyWORKINPROGRESS: TFloatField;
+    ODSCPropertyRAWMATERIALS: TFloatField;
+    ODSCPropertyCLOSE_PREFIX: TIntegerField;
+    ODSCPropertyTYPEID: TIntegerField;
+    ODSCPropertyPROFITID: TFloatField;
+    ODSCPropertyAGENTID: TFloatField;
+    ODSCPropertyCID: TFloatField;
+    CPropertySource: TDataSource;
+    CustomersSource: TDataSource;
+    ODSCustomers: TOracleDataSet;
+    ODSCustomersID: TIntegerField;
+    ODSCustomersNAME: TStringField;
+    ODSCustomersADDRESS: TStringField;
+    ODSCustomersCONTACTPERSON: TStringField;
+    ODSCustomersCONTACTPERSONPHONE: TStringField;
+    BeneficiarySource: TDataSource;
+    ODSBeneficiary: TOracleDataSet;
+    ODSBeneficiaryID: TFloatField;
+    ODSBeneficiaryNAME: TStringField;
+    ODSBeneficiaryADDRESS: TStringField;
+    ODSBeneficiaryPHONE: TStringField;
+    ODSBeneficiaryBANKING_DETAILS: TStringField;
+    RiskSource: TDataSource;
+    ODSRisks: TOracleDataSet;
+    ODSRisksID: TFloatField;
+    ODSRisksNAME: TStringField;
+    RiskTypeData: TDataSource;
+    ODSRiskType: TOracleDataSet;
+    ODSRiskTypeID: TFloatField;
+    ODSRiskTypeNAME: TStringField;
+    OPCOMMON: TOraclePackage;
+    DSSex: TDataSource;
+    ODSSex: TOracleDataSet;
+    ODSSexID: TFloatField;
+    ODSSexNAME: TStringField;
+    ODSAvalute: TOracleDataSet;
+    ODSAvaluteVALUTE: TIntegerField;
+    ODSAvaluteVAL_NAME: TStringField;
+    ODSAvaluteVALU_NAME: TStringField;
+    ODSAvaluteVALU_SHORT: TStringField;
+    DSAvalute: TDataSource;
+    ODSBanks: TOracleDataSet;
+    ODSBanksID: TFloatField;
+    ODSBanksNAME: TStringField;
+    DSBanks: TDataSource;
+    ODSReliaseDates: TOracleDataSet;
+    ODSReliaseDatesID: TFloatField;
+    ODSReliaseDatesBEGINDATE: TDateTimeField;
+    ODSReliaseDatesENDDATE: TDateTimeField;
+    ODSReliaseDatesSTATE_ID: TFloatField;
+    ODSMonths: TOracleDataSet;
+    ODSMonthsCOUNT: TFloatField;
+    DSMonths: TDataSource;
+    ODSAgentID: TFloatField;
+    ODSAgentNAME: TStringField;
+    ODSAgentSURNAME: TStringField;
+    ODSAgentFATHERNAME: TStringField;
+    ODSCPropertyFRANSHIZ: TFloatField;
+    ODSCPropertyINSSUMM: TFloatField;
+    ODSCPropertyAMMOUNT: TFloatField;
+    ODSCPropertyMONTH_ID: TFloatField;
+    ODSCPropertyCOST: TFloatField;
+    ODSCPropertyBANK_ID: TFloatField;
+    ODSCPropertyTARIFF: TFloatField;
+    ODSMonthsID: TFloatField;
+    ODSCPropertyINSURED_OBJ: TStringField;
+    procedure ODSContractsAfterInsert(DataSet: TDataSet);
+    procedure ODSCPropertyAfterInsert(DataSet: TDataSet);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  DModule: TDModule;
+
+implementation
+
+uses UCProperty;
+
+{$R *.DFM}
+
+procedure TDModule.ODSContractsAfterInsert(DataSet: TDataSet);
+begin
+      DataSet.FieldByName('TYPE_ID').asInteger := 5;
+end;
+
+procedure TDModule.ODSCPropertyAfterInsert(DataSet: TDataSet);
+begin
+     DataSet.FieldByName('CID').asInteger := CProperty.CID;
+end;
+
+end.

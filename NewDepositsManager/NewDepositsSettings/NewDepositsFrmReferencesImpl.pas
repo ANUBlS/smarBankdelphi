@@ -1,0 +1,171 @@
+unit NewDepositsFrmReferencesImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,OracleData,
+  Db, ComCtrls,Oracle, StdCtrls, Grids, DBGrids, DBCtrls, ExtCtrls, XFSCtrls;
+
+type
+  TNewDepositsFrmReferences = class(TForm)
+    StatusBar: TStatusBar;
+    XFGroupBox1: TXFGroupBox;
+    ValuesComboBox: TComboBox;
+    ValuesEdit: TEdit;
+    XFGroupBox2: TXFGroupBox;
+    TV: TTreeView;
+    BtnApply: TXFButton;
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure TVChange(Sender: TObject; Node: TTreeNode);
+    procedure FormCanResize(Sender: TObject; var NewWidth, NewHeight: Integer;
+      var Resize: Boolean);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure XFButton1Click(Sender: TObject);
+  private
+     procedure TVBuild;
+    procedure TVAddNode(Node :TTreeNode;ID :Integer);
+  public
+       TreeItems :TList;
+  end;
+
+var
+  NewDepositsFrmReferences: TNewDepositsFrmReferences;
+
+implementation
+
+{$R *.dfm}
+    uses NewDepositsDMReferences,SBTranslateProc,sboapiDataModuleimpl;
+
+    procedure TNewDepositsFrmReferences.TVBuild;
+begin
+   TV.Items.Clear;
+   TVAddNode(nil,-1);
+   NewDepositsDataModReferences.ReferLink.Refresh;
+end;
+procedure TNewDepositsFrmReferences.TVChange(Sender: TObject; Node: TTreeNode);
+ procedure  ExpandItems(SourceList :TStrings;const Value :WideString);
+var
+     Index :Integer;
+     Data :WideString;
+  begin
+     SourceList.Clear;
+     Data :=Value;
+     Index :=Pos(';',Data);
+     while  Index <> 0  do
+     begin
+        SourceList.Add(Copy(Data,1,Index-1));
+        Delete(Data,1,Index);
+        Index :=Pos(';',Data);
+     end;
+     SourceList.Add(Data);
+  end;
+var
+  TargetItemID :Integer;
+begin
+  TargetItemID :=Integer(TreeItems.Items[Node.AbsoluteIndex]);
+  with  NewDepositsDataModReferences do
+  with  ReferLink  do
+  begin
+    Locate('ID',TargetItemID,[]);
+    if not FieldByName('Value').IsNull then
+    begin
+      if FieldByName('SourceList').IsNull then
+      begin
+         ValuesComboBox.Enabled :=False;
+         ValuesEdit.Enabled :=True;
+         ValuesEdit.Text :=FieldByName('Value').AsString;
+      end
+      else
+      begin
+        ValuesComboBox.Enabled :=True;
+        ValuesEdit.Enabled :=False;
+        ExpandItems(ValuesComboBox.Items,FieldByName('SourceList').AsString);
+        ValuesComboBox.ItemIndex :=ValuesComboBox.Items.IndexOf(FieldByName('Value').AsString);
+      end;
+    end else
+    begin
+      ValuesComboBox.Enabled :=False;
+      ValuesEdit.Enabled :=False;
+    end;
+  end;
+  BtnApply.Enabled :=ValuesComboBox.Enabled or ValuesEdit.Enabled;
+end;
+
+procedure TNewDepositsFrmReferences.XFButton1Click(Sender: TObject);
+var
+  NewValue :String;
+begin
+   if ValuesComboBox.Enabled then
+     NewValue :=ValuesComboBox.Items.Strings[ValuesComboBox.ItemIndex]
+   else
+     NewValue :=ValuesEdit.Text;
+
+      with NewDepositsDataModReferences do
+      with ReferLink,ReferPackage do
+      begin
+      CallProcedure('UPD_SBCM_REFERENCES',[
+                      FieldByName('ID').Value,
+                      FieldByName('Name').Value,
+                      FieldByName('LName').Value,
+                      FieldByName('ParentID').Value,
+                      NewValue,
+                      FieldByName('SourceList').Value
+                    ]);
+        Refresh;
+      end;
+
+end;
+
+procedure TNewDepositsFrmReferences.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+      Resize := False;
+end;
+
+procedure TNewDepositsFrmReferences.FormCreate(Sender: TObject);
+begin
+   NewDepositsDataModReferences :=TNewDepositsDataModReferences.Create(Self);
+   TreeItems :=TList.Create;
+   SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TNewDepositsFrmReferences.FormDestroy(Sender: TObject);
+begin
+  TreeItems.Free;
+end;
+
+procedure TNewDepositsFrmReferences.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+  if Ord(Key) = VK_ESCAPE then Close;
+end;
+
+procedure TNewDepositsFrmReferences.FormShow(Sender: TObject);
+begin
+   TVBuild;
+   ValuesComboBox.Enabled :=False;
+   ValuesEdit.Enabled :=False;
+end;
+
+procedure TNewDepositsFrmReferences.TVAddNode(Node :TTreeNode;ID :Integer);
+begin
+    with  TOracleDataSet.Create(nil)  do
+    try
+      Session :=NewDepositsDataModReferences.TVSubItems.Session;
+      SQL.Assign(NewDepositsDataModReferences.TVSubItems.SQL);
+      DeclareVariable('ParentID',otInteger);
+      SetVariable('ParentID',ID);
+      Open;
+      First;
+      while  not EOF  do
+      begin
+        TreeItems.Add(Pointer(FieldByName('ID').AsInteger));
+        TVAddNode(TV.Items.AddChild(Node,FieldByName('LName').AsString),FieldByName('ID').AsInteger);
+        Next;
+      end;
+    finally
+      Free;
+    end;
+end;
+end.

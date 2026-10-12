@@ -1,0 +1,40 @@
+unit WorldChekDataUnit;
+
+interface
+
+uses
+  SysUtils, Classes, DB, OracleData, Oracle;
+
+type
+  TWorldChekData = class(TDataModule)
+    ods_lazytrans: TOracleDataSet;
+    ods_cust: TOracleDataSet;
+    OracleDataSet3: TOracleDataSet;
+    Dsrc_lazytrans: TDataSource;
+    dsrc_cust: TDataSource;
+    DataSource3: TDataSource;
+    ods_sysdat: TOracleDataSet;
+    ods_sysdatTEK_DAT: TDateTimeField;
+    ods_lazytransID: TFloatField;
+    ods_lazytransDAT: TDateTimeField;
+    ods_lazytransAMMOUNT: TFloatField;
+    ods_lazytransK1: TWideStringField;
+    ods_lazytransDEBT: TWideStringField;
+    ods_lazytransKREDIT: TWideStringField;
+    ods_lazytransNAME: TWideStringField;
+    OracleQuery1: TOracleQuery;
+    ods_lazytransPARENTID: TFloatField;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  WorldChekData: TWorldChekData;
+
+implementation
+uses sboapiDataModuleImpl;
+{$R *.dfm}
+
+end.

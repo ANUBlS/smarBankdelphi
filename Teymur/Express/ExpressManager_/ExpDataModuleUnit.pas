@@ -1,0 +1,314 @@
+unit ExpDataModuleUnit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,sboapiDataModuleImpl,
+  Db, OracleData, Oracle;
+
+type
+  TExpDataModule = class(TDataModule)
+    ExpBatchsDataSource: TDataSource;
+    EXPESSPAC: TOraclePackage;
+    PasspDataSet: TOracleDataSet;
+    PasspDataSource: TDataSource;
+    ValyutaDataSet: TOracleDataSet;
+    ValyutaDataSource: TDataSource;
+    FilialDataSet: TOracleDataSet;
+    FilialDataSource: TDataSource;
+    AllFilialDataSet: TOracleDataSet;
+    AllFilialDataSource: TDataSource;
+    SysdateDataSet: TOracleDataSet;
+    ExpBatchsDataSet: TOracleDataSet;
+    SB_ACA: TOraclePackage;
+    AccountDataSet: TOracleDataSet;
+    AccountDataSource: TDataSource;
+    Repair: TOraclePackage;
+    BankInfoDataSet: TOracleDataSet;
+    BankInfoDataSource: TDataSource;
+    ExpComissionDataSource: TDataSource;
+    ExpComissionDataSet: TOracleDataSet;
+    ExpComissionDataSetID: TIntegerField;
+    ExpComissionDataSetEXPID: TIntegerField;
+    ExpComissionDataSetPERCENT: TFloatField;
+    ExpComissionDataSetAMOUNT: TFloatField;
+    ExpComissionDataSetMINVALUE: TFloatField;
+    ExpComissionDataSetMAXVALUE: TFloatField;
+    SysdateDataSetDAT: TDateTimeField;
+    ExpBatchsArchiveDataSet: TOracleDataSet;
+    ExpBatchsArchiveDataSource: TDataSource;
+    ExpGroupsDataset: TOracleDataSet;
+    ExpGroupsDatasetID: TIntegerField;
+    ExpGroupsDatasetNAME: TWideStringField;
+    ExpGroupsDatasetGROUPS: TIntegerField;
+    CountriesDataSet: TOracleDataSet;
+    CountriesDataSource: TDataSource;
+    CustCountriesDataSet: TOracleDataSet;
+    CustCountriesDataSource: TDataSource;
+    CitiesDataSet: TOracleDataSet;
+    CitiesDataSource: TDataSource;
+    CitizenShipDataSet: TOracleDataSet;
+    CitizenShipDataSource: TDataSource;
+    CitizenShipDataSet1: TOracleDataSet;
+    CitizenShipDataSource1: TDataSource;
+    CitizenShipDataSet2: TOracleDataSet;
+    CitizenShipDataSource2: TDataSource;
+    AdressCountriesDataSet: TOracleDataSet;
+    AdressCountriesDataSource: TDataSource;
+    AdressCitiiesDataSet: TOracleDataSet;
+    AdressCitiiesDataSource: TDataSource;
+    DocTypesDataSource: TDataSource;
+    DocTypesDataSet: TOracleDataSet;
+    SendDataSource: TDataSource;
+    SendToDataSource: TDataSource;
+    SendToDataSet: TOracleDataSet;
+    TakeDataSet: TOracleDataSet;
+    TakeDataSource: TDataSource;
+    ExpBatchsDataSetID: TFloatField;
+    ExpBatchsDataSetEXPID: TFloatField;
+    ExpBatchsDataSetKLIID: TFloatField;
+    ExpBatchsDataSetSENTNAME: TWideStringField;
+    ExpBatchsDataSetFILIAL: TIntegerField;
+    ExpBatchsDataSetFILIALNAME: TWideStringField;
+    ExpBatchsDataSetDEBETACCID: TFloatField;
+    ExpBatchsDataSetAMOUNT: TFloatField;
+    ExpBatchsDataSetVAL_COD: TIntegerField;
+    ExpBatchsDataSetTRANS_REF: TWideStringField;
+    ExpBatchsDataSetREMIT_INF: TWideStringField;
+    ExpBatchsDataSetUSERID: TIntegerField;
+    ExpBatchsDataSetUSERNAME: TWideStringField;
+    ExpBatchsDataSetSENDDATE: TDateTimeField;
+    ExpBatchsDataSetSENDDATETIME: TDateTimeField;
+    ExpBatchsDataSetCOMMITUSERID: TIntegerField;
+    ExpBatchsDataSetBKLIID: TFloatField;
+    ExpBatchsDataSetSENTTONAME: TWideStringField;
+    ExpBatchsDataSetBFILIAL: TIntegerField;
+    ExpBatchsDataSetBFILIALNAME: TWideStringField;
+    ExpBatchsDataSetKREDITACCID: TFloatField;
+    ExpBatchsDataSetBADD_INF: TWideStringField;
+    ExpBatchsDataSetBUSERID: TIntegerField;
+    ExpBatchsDataSetBUSERNAME: TWideStringField;
+    ExpBatchsDataSetPASSWORD: TWideStringField;
+    ExpBatchsDataSetVKLIID: TFloatField;
+    ExpBatchsDataSetTAKENAME: TWideStringField;
+    ExpBatchsDataSetVFILIAL: TIntegerField;
+    ExpBatchsDataSetVFILIALNAME: TWideStringField;
+    ExpBatchsDataSetVKREDITACCID: TFloatField;
+    ExpBatchsDataSetVADD_INF: TWideStringField;
+    ExpBatchsDataSetVUSERID: TIntegerField;
+    ExpBatchsDataSetPFATTORSER: TWideStringField;
+    ExpBatchsDataSetPFATTORNUM: TWideStringField;
+    ExpBatchsDataSetPFATTORBDAT: TDateTimeField;
+    ExpBatchsDataSetPFATTOREDAT: TDateTimeField;
+    ExpBatchsDataSetRECDATE: TDateTimeField;
+    ExpBatchsDataSetRECDATETIME: TDateTimeField;
+    ExpBatchsDataSetSTATUS: TIntegerField;
+    ExpBatchsDataSetOPTYPE: TIntegerField;
+    FloorDataSet: TOracleDataSet;
+    FloorDataSource: TDataSource;
+    MarriedDataSet: TOracleDataSet;
+    MarriedDataSource: TDataSource;
+    SendDataSet: TOracleDataSet;
+    DocTypesDataSource1: TDataSource;
+    DocTypesDataSet1: TOracleDataSet;
+    CountriesDataSet1: TOracleDataSet;
+    CountriesDataSource1: TDataSource;
+    PasspDataSet1: TOracleDataSet;
+    PasspDataSource1: TDataSource;
+    CitizenShipDataSet4: TOracleDataSet;
+    CitizenShipDataSource4: TDataSource;
+    CitizenShipDataSet5: TOracleDataSet;
+    CitizenShipDataSource5: TDataSource;
+    CitizenShipDataSet6: TOracleDataSet;
+    CitizenShipDataSource6: TDataSource;
+    FloorDataSet1: TOracleDataSet;
+    FloorDataSource1: TDataSource;
+    MarriedDataSett1: TOracleDataSet;
+    MarriedDataSource1: TDataSource;
+    CustCountriesDataSet1: TOracleDataSet;
+    CustCountriesDataSource1: TDataSource;
+    CitiesDataSet1: TOracleDataSet;
+    CitiesDataSource1: TDataSource;
+    AdressCountriesDataSet1: TOracleDataSet;
+    AdressCountriesDataSource1: TDataSource;
+    AdressCitiiesDataSet1: TOracleDataSet;
+    AdressCitiiesDataSource1: TDataSource;
+    ExpBatchsDataSetVALNAME: TWideStringField;
+    AccountDataSet1: TOracleDataSet;
+    AccountDataSource1: TDataSource;
+    AccountDataSet2: TOracleDataSet;
+    AccountDataSource2: TDataSource;
+    AccDataSet: TOracleDataSet;
+    AccDataSource: TDataSource;
+    CustomerDataSet: TOracleDataSet;
+    CustomerDataSource: TDataSource;
+    KredetDataSet: TOracleDataSet;
+    KredetDataSource: TDataSource;
+    ExpSetDataSet: TOracleDataSet;
+    FloatField1: TFloatField;
+    FloatField2: TFloatField;
+    WideStringField1: TWideStringField;
+    WideStringField2: TWideStringField;
+    SearchCustDataSet: TOracleDataSet;
+    ExpTypeDataSet: TOracleDataSet;
+    ExpTypeDataSetID: TIntegerField;
+    ExpTypeDataSetNAME: TWideStringField;
+    ExpTypeDataSetGROUPS: TIntegerField;
+    ExpTypeDataSource: TDataSource;
+    ExpSettingsDataSet: TOracleDataSet;
+    ExpSettingsDataSetID: TFloatField;
+    ExpSettingsDataSetTYPEID: TFloatField;
+    ExpSettingsDataSetNAME: TWideStringField;
+    ExpSettingsDataSetDESCRIPTION: TWideStringField;
+    ExpSettingsDataSource: TDataSource;
+    SearchCustDataSetID: TIntegerField;
+    SearchCustDataSetINN: TWideStringField;
+    SearchCustDataSetNAME: TWideStringField;
+    SearchCustDataSetCUST_TYPE: TIntegerField;
+    SearchCustDataSetPASPNUM: TWideStringField;
+    CountriesDataSet2: TOracleDataSet;
+    CountriesDataSource2: TDataSource;
+    CustCountriesDataSet2: TOracleDataSet;
+    CustCountriesDataSource2: TDataSource;
+    CitiesDataSet2: TOracleDataSet;
+    CitiesDataSource2: TDataSource;
+    CitizenShipDataSource7: TDataSource;
+    CitizenShipDataSet7: TOracleDataSet;
+    DocTypesDataSet2: TOracleDataSet;
+    DocTypesDataSource2: TDataSource;
+    CitizenShipDataSet8: TOracleDataSet;
+    CitizenShipDataSource8: TDataSource;
+    CitizenShipDataSet9: TOracleDataSet;
+    CitizenShipDataSource9: TDataSource;
+    FloorDataSet2: TOracleDataSet;
+    FloorDataSource2: TDataSource;
+    MarriedDataSett2: TOracleDataSet;
+    MarriedDataSource2: TDataSource;
+    AdressCountriesDataSet2: TOracleDataSet;
+    AdressCountriesDataSource2: TDataSource;
+    ExpBatchsDataSetCOMMITUSERNAME: TWideStringField;
+    AdressCitiiesDataSet2: TOracleDataSet;
+    AdressCitiiesDataSource2: TDataSource;
+    PasspDataSet2: TOracleDataSet;
+    PasspDataSource2: TDataSource;
+    ExpBatchsArchiveDataSetID: TFloatField;
+    ExpBatchsArchiveDataSetEXPID: TFloatField;
+    ExpBatchsArchiveDataSetKLIID: TFloatField;
+    ExpBatchsArchiveDataSetSENTNAME: TWideStringField;
+    ExpBatchsArchiveDataSetFILIAL: TIntegerField;
+    ExpBatchsArchiveDataSetFILIALNAME: TWideStringField;
+    ExpBatchsArchiveDataSetDEBETACCID: TFloatField;
+    ExpBatchsArchiveDataSetAMOUNT: TFloatField;
+    ExpBatchsArchiveDataSetVAL_COD: TIntegerField;
+    ExpBatchsArchiveDataSetVALNAME: TWideStringField;
+    ExpBatchsArchiveDataSetTRANS_REF: TWideStringField;
+    ExpBatchsArchiveDataSetREMIT_INF: TWideStringField;
+    ExpBatchsArchiveDataSetUSERID: TIntegerField;
+    ExpBatchsArchiveDataSetUSERNAME: TWideStringField;
+    ExpBatchsArchiveDataSetSENDDATE: TDateTimeField;
+    ExpBatchsArchiveDataSetSENDDATETIME: TDateTimeField;
+    ExpBatchsArchiveDataSetCOMMITUSERID: TIntegerField;
+    ExpBatchsArchiveDataSetCOMMITUSERNAME: TWideStringField;
+    ExpBatchsArchiveDataSetBKLIID: TFloatField;
+    ExpBatchsArchiveDataSetSENTTONAME: TWideStringField;
+    ExpBatchsArchiveDataSetBFILIAL: TIntegerField;
+    ExpBatchsArchiveDataSetBFILIALNAME: TWideStringField;
+    ExpBatchsArchiveDataSetKREDITACCID: TFloatField;
+    ExpBatchsArchiveDataSetBADD_INF: TWideStringField;
+    ExpBatchsArchiveDataSetBUSERID: TIntegerField;
+    ExpBatchsArchiveDataSetBUSERNAME: TWideStringField;
+    ExpBatchsArchiveDataSetPASSWORD: TWideStringField;
+    ExpBatchsArchiveDataSetVKLIID: TFloatField;
+    ExpBatchsArchiveDataSetTAKENAME: TWideStringField;
+    ExpBatchsArchiveDataSetVFILIAL: TIntegerField;
+    ExpBatchsArchiveDataSetVFILIALNAME: TWideStringField;
+    ExpBatchsArchiveDataSetVKREDITACCID: TFloatField;
+    ExpBatchsArchiveDataSetVADD_INF: TWideStringField;
+    ExpBatchsArchiveDataSetVUSERID: TIntegerField;
+    ExpBatchsArchiveDataSetPFATTORSER: TWideStringField;
+    ExpBatchsArchiveDataSetPFATTORNUM: TWideStringField;
+    ExpBatchsArchiveDataSetPFATTORBDAT: TDateTimeField;
+    ExpBatchsArchiveDataSetPFATTOREDAT: TDateTimeField;
+    ExpBatchsArchiveDataSetRECDATE: TDateTimeField;
+    ExpBatchsArchiveDataSetRECDATETIME: TDateTimeField;
+    ExpBatchsArchiveDataSetSTATUS: TIntegerField;
+    ExpBatchsArchiveDataSetOPTYPE: TIntegerField;
+    ExpBatchsDataSetTAKEUSERNAME: TWideStringField;
+    ExpBatchsArchiveDataSetTAKEUSERNAME: TWideStringField;
+    KreditRestDataSet: TOracleDataSet;
+    KreditRestDataSetREST: TFloatField;
+    KreditRestDataSetINTERESTREST: TFloatField;
+    SearchCustDataSetPASSER: TWideStringField;
+    SearchCustDataSetDOC_TYPE: TFloatField;
+    SearchCustDataSetDOC_COUNTRY: TFloatField;
+    SearchCustDataSetPASPPLACE: TWideStringField;
+    SearchCustDataSetPASPDATE: TDateTimeField;
+    SearchCustDataSetPASSEXPIRE: TDateTimeField;
+    SearchCustDataSetCITIZENSHIP: TFloatField;
+    SearchCustDataSetSEX: TIntegerField;
+    SearchCustDataSetFAM_STATUS: TIntegerField;
+    SearchCustDataSetBIRTHPLACE: TWideStringField;
+    SearchCustDataSetBIRTH_STATE: TWideStringField;
+    SearchCustDataSetBIRTHDAY: TDateTimeField;
+    SearchCustDataSetADRS_STATE: TWideStringField;
+    SearchCustDataSetCITY: TWideStringField;
+    SearchCustDataSetREG_ZIP: TWideStringField;
+    SearchCustDataSetPHONE_M: TWideStringField;
+    SearchCustDataSetPHONE_H: TWideStringField;
+    SearchCustDataSetE_MAIL: TWideStringField;
+    SearchCustDataSetADDRESS: TWideStringField;
+    SearchCustDataSetPASSPIN: TWideStringField;
+    SearchCustDataSetLASTNAME: TWideStringField;
+    SearchCustDataSetCNAME: TWideStringField;
+    SearchCustDataSetSONAME: TWideStringField;
+    SearchCustDataSetNEREZIDENT: TFloatField;
+    procedure DataModuleCreate(Sender: TObject);
+    procedure ExpBatchsDataSetAfterScroll(DataSet: TDataSet);
+  private
+    { Private declarations }
+  public
+    procedure FullOpen;
+
+  end;
+
+var
+  ExpDataModule: TExpDataModule;
+
+implementation
+
+uses ExpressManagerImpl,
+     ExpUnitImpl,ExpUnitNewImpl;
+
+
+{$R *.DFM}
+
+procedure TExpDataModule.FullOpen;
+const
+   c_err_message = ' Table or View in Dataset "%s" does not exist! ';
+var
+   i: Word;   //Modified by TNariman at 28.04.2005
+begin
+ for i :=0 to ComponentCount- 1 do
+  if (Components[i] is TOracleDataSet) then
+  try
+    //ShowMessage( (Components[i] as TOracleDataSet).Name);
+   (Components[i] as TOracleDataSet).Close;
+   (Components[i] as TOracleDataSet).Open;
+  except
+   raise Exception.Create(Format(c_err_message, [(Components[i] as TDataSet).Name]));
+  end;
+
+end;
+
+procedure TExpDataModule.DataModuleCreate(Sender: TObject);
+begin
+  FullOpen;
+end;
+
+procedure TExpDataModule.ExpBatchsDataSetAfterScroll(DataSet: TDataSet);
+begin
+// ExpressFrom.ToolButton7.Enabled:=not DataSet.IsEmpty;
+// ExpressFrom.ToolButton7.Enabled:= ExpDataModule.ExpBatchsDataSet.FieldByName('status').AsInteger in [0];
+end;
+
+end.

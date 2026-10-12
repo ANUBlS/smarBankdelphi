@@ -1,0 +1,174 @@
+unit frmCapitalizeImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, NLSDialogs,
+  Db, OracleData, StdCtrls, Mask, DBCtrls, ExtCtrls, ComCtrls, ToolWin,
+  ImgList, Grids, DBGridEh, CMExcelExport, Oracle, NLSLocalizer, ActnList;
+
+type
+  TfrmCapitalize = class(TForm)
+    Capitals: TOracleDataSet;
+    CapitalsDatSrc: TDataSource;
+    GroupBox1: TGroupBox;
+    Panel3: TPanel;
+    DBEdit2: TDBEdit;
+    StaticText2: TStaticText;
+    StatusBar1: TStatusBar;
+    Panel4: TPanel;
+    ToolBar1: TToolBar;
+    ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
+    ToolButton3: TToolButton;
+    ToolButton4: TToolButton;
+    ToolButton5: TToolButton;
+    ToolButton6: TToolButton;
+    ToolButton7: TToolButton;
+    CapitalsID: TFloatField;
+    CapitalsHDATE: TDateTimeField;
+    CapitalsTOTAL: TFloatField;
+    CapitalsTRID: TFloatField;
+    ImageList1: TImageList;
+    DBGridEh1: TDBGridEh;
+    ExcelExp: TCMExcelExport;
+    DepositInfoDatSrc: TDataSource;
+    DepositInfo: TOracleDataSet;
+    DepositInfoCONTRACTNO: TStringField;
+    DepositInfoNAME: TStringField;
+    DepositInfoFACTICALDEBT: TFloatField;
+    DepositInfoFACTICALINTERESTDEBT: TFloatField;
+    DepositInfoCONTRACTACCNO: TStringField;
+    DepositInfoINTERESTACCNO: TStringField;
+    sbcm_payment: TOraclePackage;
+    NLSCapital: TNLSLocalizer;
+    ActionList1: TActionList;
+    ActnAddTr: TAction;
+    ActnDel: TAction;
+    ActnExport: TAction;
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure ToolButton7Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure ActnAddTrExecute(Sender: TObject);
+    procedure ActnDelExecute(Sender: TObject);
+    procedure ActnExportExecute(Sender: TObject);
+    procedure ActnDelUpdate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    CanAfterRefresh :Boolean;
+  end;
+
+var
+  frmCapitalize: TfrmCapitalize;
+  procedure exportproc(S:String);export;
+
+implementation
+
+{$R *.DFM}
+
+uses sboapiDataModuleImpl,CommonDeclsImpl,frmAddCapitalizeImpl;
+
+procedure exportproc(S:String);export;
+var ContractID :Integer;
+begin
+   ContractID := Get_SelectedContID;
+   
+   with frmCapitalize do
+   begin
+
+   with DepositInfo do
+   begin
+      if Active then CloseAll;
+      SetVariable('ContractID',ContractID);
+      Open;
+   end;
+
+   with Capitals do
+   begin
+      if Active then CloseAll;
+      SetVariable('ContractID',ContractID);
+      Open;
+   end;
+
+   NLSCapital.Caption := Get_SelectedContNo+' нюмряли депозитин кариталлашдырылмасы';
+   ShowModal;
+   
+  end;
+
+end;
+
+exports
+   exportproc;
+
+procedure TfrmCapitalize.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+   Resize := False
+end;
+
+procedure TfrmCapitalize.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+   if Ord(Key) = VK_ESCAPE then Close
+end;
+
+procedure TfrmCapitalize.ToolButton7Click(Sender: TObject);
+begin
+   Close;
+end;
+
+procedure TfrmCapitalize.FormCreate(Sender: TObject);
+begin
+   frmAddCapitalize := TfrmAddCapitalize.Create(Self);
+end;
+
+procedure TfrmCapitalize.FormDestroy(Sender: TObject);
+begin
+   frmAddCapitalize.Free;
+end;
+
+procedure TfrmCapitalize.ActnAddTrExecute(Sender: TObject);
+begin
+   if frmAddCapitalize.ShowModal = mrOk then
+   begin
+     CanAfterRefresh := True;
+     Capitals.Refresh;
+   end;
+end;
+
+procedure TfrmCapitalize.ActnDelExecute(Sender: TObject);
+begin
+    if MessageDlg('Силинмясиня яминсинизми?',
+             mtConfirmation, [mbYes, mbNo], 0) = mrNo
+    then Exit;
+
+    with Capitals,sbcm_payment do   begin
+         CallProcedure('DeleteCapitalization',['p_capitalizationID',FieldByName('ID').AsInteger]);
+          Refresh;
+         end;
+
+end;
+
+procedure TfrmCapitalize.ActnExportExecute(Sender: TObject);
+begin
+   with ExcelExp do
+   begin
+      Connect;
+      ExportDataset(Capitals,'кариталлашдырма',true,false);
+      DisConnect;
+   end;
+end;
+
+procedure TfrmCapitalize.ActnDelUpdate(Sender: TObject);
+begin
+   with (Sender as TAction) do
+        Enabled := Capitals.RecordCount > 0
+end;
+
+initialization
+    frmCapitalize := TfrmCapitalize.Create(CommonApplication);
+
+end.

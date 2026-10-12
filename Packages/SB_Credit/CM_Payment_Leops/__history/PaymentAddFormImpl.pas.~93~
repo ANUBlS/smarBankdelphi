@@ -1,0 +1,902 @@
+﻿unit PaymentAddFormImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+   StdCtrls, ExtCtrls, Mask, DBCtrlsEh, DBLookupEh, DBCtrls,
+  CMCurrencyEdit, ActnList,oracle, DBGridEh, ComCtrls,Variants;
+
+type
+  TPaymentAddForm = class(TForm)
+    ActionList1: TActionList;
+    ActnAccept: TAction;
+    ActnClose: TAction;
+    Panel1: TPanel;
+    Panel2: TPanel;
+    GroupBox1: TGroupBox;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    DBLookupComboboxEhCustAcc: TDBLookupComboboxEh;
+    DBEditEh1: TDBEditEh;
+    CMCurrencyEdit2: TCMCurrencyEdit;
+    Panel3: TPanel;
+    Panel4: TPanel;
+    Panel37: TPanel;
+    Button1: TButton;
+    Button2: TButton;
+    Panel5: TPanel;
+    Panel6: TPanel;
+    GroupBox5: TGroupBox;
+    Panel7: TPanel;
+    StaticText2: TStaticText;
+    DBEditEh3: TDBEditEh;
+    Panel8: TPanel;
+    StaticText3: TStaticText;
+    DBEditEh4: TDBEditEh;
+    Panel9: TPanel;
+    StaticText4: TStaticText;
+    CMCurrencyEdit3: TCMCurrencyEdit;
+    Panel24: TPanel;
+    StaticText21: TStaticText;
+    MainAmtEdit: TCMCurrencyEdit;
+    GroupBox2: TGroupBox;
+    Panel10: TPanel;
+    StaticText1: TStaticText;
+    DBEditEh2: TDBEditEh;
+    Panel11: TPanel;
+    StaticText5: TStaticText;
+    DBEditEh5: TDBEditEh;
+    Panel12: TPanel;
+    StaticText6: TStaticText;
+    IntAmtEdit: TCMCurrencyEdit;
+    Panel25: TPanel;
+    StaticText22: TStaticText;
+    CMCurrencyEdit4: TCMCurrencyEdit;
+    GroupBox3: TGroupBox;
+    Panel13: TPanel;
+    StaticText7: TStaticText;
+    DBEditEh6: TDBEditEh;
+    Panel14: TPanel;
+    StaticText8: TStaticText;
+    DBEditEh7: TDBEditEh;
+    Panel15: TPanel;
+    StaticText9: TStaticText;
+    DueAmtEdit: TCMCurrencyEdit;
+    GroupBox4: TGroupBox;
+    Panel16: TPanel;
+    StaticText10: TStaticText;
+    DBEditEh8: TDBEditEh;
+    Panel17: TPanel;
+    StaticText11: TStaticText;
+    DBEditEh9: TDBEditEh;
+    Panel18: TPanel;
+    StaticText12: TStaticText;
+    PenaltyAmtEdit: TCMCurrencyEdit;
+    Panel27: TPanel;
+    StaticText24: TStaticText;
+    CMCurrencyEdit6: TCMCurrencyEdit;
+    GroupBox6: TGroupBox;
+    Panel19: TPanel;
+    StaticText13: TStaticText;
+    DBEditEh10: TDBEditEh;
+    Panel20: TPanel;
+    StaticText14: TStaticText;
+    DBEditEh11: TDBEditEh;
+    Panel21: TPanel;
+    StaticText15: TStaticText;
+    DueIntAmtEdit: TCMCurrencyEdit;
+    Panel26: TPanel;
+    StaticText23: TStaticText;
+    CMCurrencyEdit5: TCMCurrencyEdit;
+    Panel28: TPanel;
+    GroupBox9: TGroupBox;
+    Panel31: TPanel;
+    StaticText28: TStaticText;
+    DBEditEh16: TDBEditEh;
+    Panel32: TPanel;
+    StaticText29: TStaticText;
+    DBEditEh17: TDBEditEh;
+    Panel33: TPanel;
+    StaticText30: TStaticText;
+    CascoPayment: TCMCurrencyEdit;
+    GroupBox8: TGroupBox;
+    Panel29: TPanel;
+    StaticText25: TStaticText;
+    DBEditEh14: TDBEditEh;
+    Panel30: TPanel;
+    StaticText26: TStaticText;
+    DBEditEh15: TDBEditEh;
+    Panel38: TPanel;
+    StaticText27: TStaticText;
+    FirstPayment: TCMCurrencyEdit;
+    GroupBox7: TGroupBox;
+    Panel22: TPanel;
+    StaticText18: TStaticText;
+    DBEditEh12: TDBEditEh;
+    Panel23: TPanel;
+    StaticText19: TStaticText;
+    DBEditEh13: TDBEditEh;
+    Panel39: TPanel;
+    StaticText20: TStaticText;
+    ManPay: TCMCurrencyEdit;
+    GroupBox11: TGroupBox;
+    Panel40: TPanel;
+    StaticText16: TStaticText;
+    DBEditEh20: TDBEditEh;
+    Panel41: TPanel;
+    StaticText17: TStaticText;
+    DBEditEh21: TDBEditEh;
+    Panel42: TPanel;
+    StaticText34: TStaticText;
+    DypPay: TCMCurrencyEdit;
+    GroupBox12: TGroupBox;
+    Panel43: TPanel;
+    StaticText35: TStaticText;
+    DBEditEh22: TDBEditEh;
+    Panel44: TPanel;
+    StaticText36: TStaticText;
+    DBEditEh23: TDBEditEh;
+    Panel45: TPanel;
+    StaticText37: TStaticText;
+    DocComPay: TCMCurrencyEdit;
+    GroupBox10: TGroupBox;
+    Panel34: TPanel;
+    StaticText31: TStaticText;
+    DBEditEh18: TDBEditEh;
+    Panel35: TPanel;
+    StaticText32: TStaticText;
+    DBEditEh19: TDBEditEh;
+    Panel36: TPanel;
+    StaticText33: TStaticText;
+    CommisionPay: TCMCurrencyEdit;
+    GroupBox13: TGroupBox;
+    Panel46: TPanel;
+    StaticText38: TStaticText;
+    DBEditEh24: TDBEditEh;
+    Panel47: TPanel;
+    StaticText39: TStaticText;
+    DBEditEh25: TDBEditEh;
+    Panel48: TPanel;
+    StaticText40: TStaticText;
+    CMCurrencyEdit12: TCMCurrencyEdit;
+    GroupBox14: TGroupBox;
+    Panel49: TPanel;
+    StaticText41: TStaticText;
+    DBEditEh26: TDBEditEh;
+    Panel50: TPanel;
+    StaticText42: TStaticText;
+    DBEditEh27: TDBEditEh;
+    Panel51: TPanel;
+    StaticText43: TStaticText;
+    BkPercentPay: TCMCurrencyEdit;
+    GroupBox15: TGroupBox;
+    Panel52: TPanel;
+    StaticText44: TStaticText;
+    DBEditEh28: TDBEditEh;
+    Panel53: TPanel;
+    StaticText45: TStaticText;
+    DBEditEh29: TDBEditEh;
+    Panel54: TPanel;
+    StaticText46: TStaticText;
+    GpsPay: TCMCurrencyEdit;
+    GroupBox16: TGroupBox;
+    Panel55: TPanel;
+    StaticText47: TStaticText;
+    DBEditEh30: TDBEditEh;
+    Panel56: TPanel;
+    StaticText48: TStaticText;
+    DBEditEh31: TDBEditEh;
+    Panel57: TPanel;
+    StaticText49: TStaticText;
+    RegPay: TCMCurrencyEdit;
+    GroupBox17: TGroupBox;
+    Panel58: TPanel;
+    StaticText50: TStaticText;
+    DBEditEh32: TDBEditEh;
+    Panel59: TPanel;
+    StaticText51: TStaticText;
+    DBEditEh33: TDBEditEh;
+    Panel60: TPanel;
+    StaticText52: TStaticText;
+    BkhPay: TCMCurrencyEdit;
+    Panel61: TPanel;
+    Panel62: TPanel;
+    StaticText53: TStaticText;
+    FullPayAmt: TCMCurrencyEdit;
+    Panel63: TPanel;
+    StaticText54: TStaticText;
+    ExpdateCount: TCMCurrencyEdit;
+    CBFullPay: TCheckBox;
+    ChBchangePlandat: TCheckBox;
+    CBTermination: TCheckBox;
+    GBXitam: TGroupBox;
+    DBLCustomers: TDBLookupComboboxEh;
+    DtpDate: TDateTimePicker;
+    Müştəri: TLabel;
+    Label5: TLabel;
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure ActnAcceptExecute(Sender: TObject);
+    procedure ActnCloseExecute(Sender: TObject);
+    procedure ActnAcceptUpdate(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure DBLookupComboboxEhCustAccKeyValueChanged(Sender: TObject);
+    procedure CBFullPayClick(Sender: TObject);
+    procedure FullPayAmtKeyPress(Sender: TObject; var Key: Char);
+    procedure FormCreate(Sender: TObject);
+    procedure MainAmtEditChange(Sender: TObject);
+    procedure DueAmtEditChange(Sender: TObject);
+    procedure IntAmtEditChange(Sender: TObject);
+    procedure DueIntAmtEditChange(Sender: TObject);
+    procedure PenaltyAmtEditChange(Sender: TObject);
+    procedure FirstPaymentChange(Sender: TObject);
+    procedure CascoPaymentChange(Sender: TObject);
+    procedure CommisionPayChange(Sender: TObject);
+    procedure DocComPayChange(Sender: TObject);
+    procedure DypPayChange(Sender: TObject);
+    procedure BkhPayChange(Sender: TObject);
+    procedure RegPayChange(Sender: TObject);
+    procedure GpsPayChange(Sender: TObject);
+    procedure ManPayChange(Sender: TObject);
+  private
+      procedure GeneratePlanPayment;
+      procedure GenerateFullPayment;
+  public
+   crdid :integer;
+  end;
+
+var
+  PaymentAddForm: TPaymentAddForm;
+ cusb, a :integer;
+
+implementation
+
+uses PaymentDataModuleImpl, CommonDecls, SbSystem,SBTranslateProc,sboapiDataModuleImpl,
+  ReplaceImpl, Cust_combined;
+
+{$R *.DFM}
+
+
+procedure TPaymentAddForm.GeneratePlanPayment;
+begin
+   with PaymentDataModule,cm_utils do
+   begin
+      MainAmtEdit.Value  := CallFloatFunction('Get_MainPlanPayment',[crdid]);
+      IntAmtEdit.Value   := { CallFloatFunction('Get_IntPlanPayment',[crdid])}IntRest.FieldByName('intrest').AsFloat;
+      DueAmtEdit.Value   :=  PaymentDataModule.DueRest.FieldbyName('DUEREST').AsFloat;
+      DueIntAmtEdit.Value:= PaymentDataModule.DueIntRest.FieldbyName('DUEINTERESTREST').AsFloat;
+      FirstPayment.Value:=CallFloatFunction('Get_advancePayment',[crdid]);
+      CascoPayment.Value:=CallFloatFunction('Get_InsuranceePayment',[crdid]);
+      CommisionPay.Value:=CallFloatFunction('Get_CommisyonPayment',[crdid]);
+      DocComPay.Value:=CallFloatFunction('Get_DocComPay',[crdid]);
+      DypPay.Value:=CallFloatFunction('Get_DypPay',[crdid]);
+      BkhPay.Value:=CallFloatFunction('Get_BkhPay',[crdid]);
+      RegPay.Value:=CallFloatFunction('Get_RegPay',[crdid]);
+      GpsPay.Value:=CallFloatFunction('Get_GpsPay',[crdid]);
+      ManPay.Value:=CallFloatFunction('Get_ManPay',[crdid]);
+
+      PenaltyAmtEdit.Value := CallFloatFunction('Get_creditPenalty',[crdid]);
+      BkPercentPay.value:=CallFloatFunction('Get_BkIntPlanPayment',[crdid]);
+
+
+      FullPayAmt.Value := MainAmtEdit.Value+IntAmtEdit.Value+PenaltyAmtEdit.Value+
+      PaymentDataModule.DueRest.FieldbyName('DUEREST').AsFloat+BkPercentPay.value+
+      PaymentDataModule.DueIntRest.FieldbyName('DUEINTERESTREST').AsFloat+
+      FirstPayment.Value+CascoPayment.Value+CommisionPay.Value+DocComPay.Value+DypPay.Value+
+      BkhPay.Value+RegPay.Value+GpsPay.Value+ManPay.Value;
+
+
+
+      CMCurrencyEdit2.Value:=CallFloatFunction('Get_MainPlanPayment',[crdid])+ PaymentDataModule.DueRest.FieldbyName('DUEREST').AsFloat;
+       if LoanRest.FieldByName('qovid').AsInteger=4 then
+        begin
+          CMCurrencyEdit3.Value:= CallFloatFunction('get_qetname',[crdid,1]);
+          CMCurrencyEdit4.Value:= CallFloatFunction('get_qetname',[crdid,2]);
+          CMCurrencyEdit5.Value:= CallFloatFunction('get_qetname',[crdid,3]);
+          CMCurrencyEdit6.Value:= CallFloatFunction('get_qetname',[crdid,1])+
+                                  CallFloatFunction('get_qetname',[crdid,2])+
+                                  CallFloatFunction('get_qetname',[crdid,3]);
+        end;
+ if not (PaymentDataModule.PortfInfo.FieldByName('stopcalcdate').IsNull) then
+   begin
+     IntAmtEdit.value:=0;
+     DueIntAmtEdit.value:=0;
+     BkPercentPay.value:=0;
+   end;
+    with expcrdcnt do
+    begin
+      if active then Close;
+      SetVariable('CrdID',CrdID);
+      SetVariable('dat',Get_CurrentDate);
+      Open;
+    end;
+      ExpdateCount.Text := IntToStr(expcrdcnt.FieldByName('EXDATCOUNT').AsInteger);
+    end;
+
+end;
+
+procedure TPaymentAddForm.GpsPayChange(Sender: TObject);
+begin
+  FullPayAmt.Value := MainAmtEdit.Value+IntAmtEdit.Value+PenaltyAmtEdit.Value+
+         DueAmtEdit.Value+BkPercentPay.value+DueIntAmtEdit.Value+FirstPayment.Value+
+         CascoPayment.Value+CommisionPay.Value+DocComPay.Value+
+         DypPay.Value+BkhPay.Value+RegPay.Value+GpsPay.Value+ManPay.Value;
+end;
+
+procedure TPaymentAddForm.IntAmtEditChange(Sender: TObject);
+begin
+        FullPayAmt.Value := MainAmtEdit.Value+IntAmtEdit.Value+PenaltyAmtEdit.Value+
+         DueAmtEdit.Value+BkPercentPay.value+DueIntAmtEdit.Value
+         +FirstPayment.Value+CascoPayment.Value+CommisionPay.Value+DocComPay.Value+
+         DypPay.Value+BkhPay.Value+RegPay.Value+GpsPay.Value+ManPay.Value;
+end;
+
+procedure TPaymentAddForm.MainAmtEditChange(Sender: TObject);
+begin
+        FullPayAmt.Value := MainAmtEdit.Value+IntAmtEdit.Value+PenaltyAmtEdit.Value+
+         DueAmtEdit.Value+BkPercentPay.value+DueIntAmtEdit.Value
+         +FirstPayment.Value+CascoPayment.Value+CommisionPay.Value+DocComPay.Value+
+         DypPay.Value+BkhPay.Value+RegPay.Value+GpsPay.Value+ManPay.Value;
+
+  CMCurrencyEdit2.Value:=MainAmtEdit.Value+DueAmtEdit.Value;
+end;
+
+procedure TPaymentAddForm.ManPayChange(Sender: TObject);
+begin
+  FullPayAmt.Value := MainAmtEdit.Value+IntAmtEdit.Value+PenaltyAmtEdit.Value+
+         DueAmtEdit.Value+BkPercentPay.value+DueIntAmtEdit.Value+FirstPayment.Value+
+         CascoPayment.Value+CommisionPay.Value+DocComPay.Value+
+         DypPay.Value+BkhPay.Value+RegPay.Value+GpsPay.Value+ManPay.Value;
+end;
+
+procedure TPaymentAddForm.PenaltyAmtEditChange(Sender: TObject);
+begin
+        FullPayAmt.Value := MainAmtEdit.Value+IntAmtEdit.Value+PenaltyAmtEdit.Value+
+         DueAmtEdit.Value+BkPercentPay.value+DueIntAmtEdit.Value
+         +FirstPayment.Value+CascoPayment.Value+CommisionPay.Value+DocComPay.Value+
+         DypPay.Value+BkhPay.Value+RegPay.Value+GpsPay.Value+ManPay.Value;
+end;
+
+procedure TPaymentAddForm.RegPayChange(Sender: TObject);
+begin
+  FullPayAmt.Value := MainAmtEdit.Value+IntAmtEdit.Value+PenaltyAmtEdit.Value+
+         DueAmtEdit.Value+BkPercentPay.value+DueIntAmtEdit.Value+FirstPayment.Value+
+         CascoPayment.Value+CommisionPay.Value+DocComPay.Value+
+         DypPay.Value+BkhPay.Value+RegPay.Value+GpsPay.Value+ManPay.Value;
+end;
+
+procedure TPaymentAddForm.GenerateFullPayment;
+var pen :real;
+begin
+   with PaymentDataModule,cm_utils do
+   begin
+      MainAmtEdit.Text := FloatToStr(LoanRest.FieldByName('REST').AsFloat);
+      IntAmtEdit.Text := FloatToStr(IntRest.FieldByName('INTERESTREST').AsFloat);
+      PenaltyAmtEdit.Text := FloatToStr(CallFloatFunction('Get_creditPenalty',[crdid]));
+      pen := round(MainAmtEdit.Value/100) ;
+
+      FirstPayment.Text:= FloatToStr(AllExpenses.FieldByName('INITIALVALUEOSTAT').AsFloat);
+      CascoPayment.Text:= FloatToStr(AllExpenses.FieldByName('CARINSURANCEOSTAT').AsFloat);
+      CommisionPay.Text:= FloatToStr(AllExpenses.FieldByName('COMCOMMITMENTOSTAT').AsFloat);
+      DocComPay.Text:= FloatToStr(AllExpenses.FieldByName('COMREPORTOSTAT').AsFloat);
+      DypPay.Text:= FloatToStr(AllExpenses.FieldByName('DYPDOCUMENTATIONOSTAT').AsFloat);
+      BkhPay.Text:= FloatToStr(AllExpenses.FieldByName('EXAMENTRYCARDOSTAT').AsFloat);
+      RegPay.Text:= FloatToStr(AllExpenses.FieldByName('REGISTRATOROSTAT').AsFloat);
+      GpsPay.Text:= FloatToStr(AllExpenses.FieldByName('GPSOSTAT').AsFloat);
+      ManPay.Text:= FloatToStr(AllExpenses.FieldByName('COMPINSURANCEOSTAT').AsFloat);
+
+      FullPayAmt.Value := MainAmtEdit.Value+IntAmtEdit.Value+PenaltyAmtEdit.Value+
+      {pen+}DueAmtEdit.Value+DueIntAmtEdit.Value+BkPercentPay.Value+FirstPayment.Value+CascoPayment.Value+
+      CommisionPay.Value+DocComPay.Value+DypPay.Value+BkhPay.Value+RegPay.Value+
+      GpsPay.Value+ManPay.Value;
+   end;
+
+end;
+
+
+
+procedure TPaymentAddForm.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+ // Resize := False;//samir
+
+end;
+
+procedure TPaymentAddForm.FormCreate(Sender: TObject);
+begin
+  // SheduleReplace := TSheduleReplace.Create(Self);
+   Form1:=TForm1.Create(Self);
+   SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TPaymentAddForm.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+  if ORD(Key) = VK_ESCAPE then
+    Close;
+end;
+
+procedure TPaymentAddForm.ActnAcceptExecute(Sender: TObject);
+resourcestring
+  rsTransactionsWillProcessed = 'Kreditin ödənilməsi ...';
+var
+  Date : TDateTime;
+  CustAccID, PenaltyAccID: Integer;
+  faktatm,BkIntAmt, MainAmt, IntAmt, DueAmt, DueIntAmt ,PenaltyAmt,duble,insurance,comission,
+  doccommision,Dyp,Bkh,Reg,Gps,Man: Real;
+  XitamCust:Variant;
+  TrProcess : Boolean;
+  CommitTranche : Boolean;
+  TrXitam:Boolean;
+ f, cem:real;
+begin
+ // CrdID := Get_SelectedCrdID;
+
+  CustAccID := DBLookupComboboxEhCustAcc.ListSource.DataSet.FieldByName('ACCID').AsInteger;
+  PenaltyAccID := PaymentDataModule.cm_utils.CallIntegerFunction('Get_CreditPenaltyAccID',[CrdID]);
+  TrProcess := True;
+  Date := Get_CurrentDate;
+
+  MainAmt := MainAmtEdit.Value;
+  faktatm:=PaymentDataModule.cm_utils.CallFloatFunction('Get_MainPlanPayment',[crdid]);
+  IntAmt  := IntAmtEdit.Value;
+  DueAmt  := DueAmtEdit.Value;
+  DueIntAmt := DueIntAmtEdit.Value;
+  PenaltyAmt := PenaltyAmtEdit.Value;
+  BkIntAmt:=BkPercentPay.value;
+  duble:=FirstPayment.Value;
+  insurance:=CascoPayment.Value;
+  comission:=CommisionPay.Value;
+  doccommision:=DocComPay.Value;
+  Dyp:=DypPay.Value;
+  Bkh:=BkhPay.Value;
+  Reg:=RegPay.Value;
+  Gps:=GpsPay.Value;
+  Man:=ManPay.Value;
+  XitamCust:=DBLCustomers.KeyValue;
+
+  f:=MainAmt+ IntAmt +BkIntAmt+DueIntAmt-0.01;
+ if (PaymentDataModule.PaymentAccounts.FieldByName('rest').AsFloat<f)  and  not CBTermination.Checked then
+  begin
+   ShowMessage(' Ödənişlərin cəmi  cari hesabın qalığından cox ola bilmez !');
+   exit;
+  end;
+   if (PaymentDataModule.PortfInfo.FieldByName('qovid').AsInteger=4)and (FullPayAmt.Value>(CMCurrencyEdit3.Value+CMCurrencyEdit4.Value+CMCurrencyEdit5.Value)) then
+  begin
+   ShowMessage(' Ödənişlərin cəmi  qətnamə  qalığından cox ola bilmez !');
+   exit;
+  end;
+  if CBFullPay.checked and CBTermination.Checked then
+  begin
+    ShowMessage(' Tam ödəniş və Xitam eyni zamanda seçilə bilməz !!!');
+    exit;
+  end;
+  if CBTermination.Checked then
+  if  DBLCustomers.Text='' then
+  begin
+   ShowMessage('Xitam verilən  müqavilədə digər müştəri seçilməyib !');
+   exit;
+  end;
+
+
+
+ {    if MainAmt>faktatm then
+   begin
+         SheduleReplace.Rest.Value:=DBEditEh4.value-MainAmt;
+         SheduleReplace.showmodal;
+   end;
+   if a=1 then
+   exit;    }
+   cusb:=0;
+   with PaymentDataModule do
+   begin
+   if PortfInfo.FieldByName('credittype').AsInteger=1555 then
+   begin
+   if ODS_CUST_COMBİNED.Active then
+    ODS_CUST_COMBİNED.Close;
+    ODS_CUST_COMBİNED.SetVariable('creditid',CrdID);
+    ODS_CUST_COMBİNED.open;
+    Form1.ShowModal;
+    if (cusb=0) and(ODS_CUST_COMBİNED.RecordCount>0) then
+     begin
+     ShowMessage('Birgə borcalanı seçməmisiniz !');
+     exit;
+     end;
+    end;
+    CM_PAYMENT.CallProcedure('PaymentAdd',[
+    'p_CreditID', CrdID,
+    'p_Date', Date,
+    'p_CustAccID', CustAccID,
+    'P_PenaltyAccID',PenaltyAccID,
+    'p_MainDebt', MainAmt,
+    'p_MainInterest', IntAmt,
+    'p_DueDebt', DueAmt,
+    'p_DueInterest', DueIntAmt,
+    'P_PenaltyRest',PenaltyAmt,
+    'p_ProcessTransactions', TrProcess,
+    'p_fullpayment',CBFullPay.checked,
+    'p_changeplandate',ChBchangePlandat.checked,
+    'p_bkint',BkIntAmt,
+    'p_duble',duble,
+    'p_insurance',insurance,
+    'p_comission',comission,
+    'p_doccommision',doccommision,
+    'p_Dyp',Dyp,
+    'p_Bkh',Bkh,
+    'p_Reg',Reg,
+    'p_Gps',Gps,
+    'p_Man',Man,
+    'p_Termination', CBTermination.Checked,
+    'p_XitamCust',XitamCust
+
+     {,
+    'p_cusb',cusb    }
+  ]);
+
+  end;
+
+  try
+
+    CommitTranche := TrDelayed_Show(Self,rsTransactionsWillProcessed);
+
+    Self.Update;
+
+    with PaymentDataModule do
+    CM_PAYMENT.CallProcedure('CommitPayment',[
+       'DoCommit' , CommitTranche
+    ]);
+
+    if CommitTranche then
+    Self.ModalResult := mrOk;
+
+    Self.Update;
+
+  except
+
+    with PaymentDataModule do
+    CM_PAYMENT.CallProcedure('CommitPayment',[
+       'DoCommit' , False
+    ]);
+
+    raise;
+
+  end;
+
+end;
+
+procedure TPaymentAddForm.ActnCloseExecute(Sender: TObject);
+begin
+  Close
+end;
+
+procedure TPaymentAddForm.BkhPayChange(Sender: TObject);
+begin
+  FullPayAmt.Value := MainAmtEdit.Value+IntAmtEdit.Value+PenaltyAmtEdit.Value+
+         DueAmtEdit.Value+BkPercentPay.value+DueIntAmtEdit.Value+FirstPayment.Value+
+         CascoPayment.Value+CommisionPay.Value+DocComPay.Value+
+         DypPay.Value+BkhPay.Value+RegPay.Value+GpsPay.Value+ManPay.Value;
+end;
+
+procedure TPaymentAddForm.ActnAcceptUpdate(Sender: TObject);
+begin
+  (Sender as TAction).Enabled :=
+                      (MainAmtEdit.Value >= 0)   and
+                      (IntAmtEdit.Value >= 0)    and
+                      (DueAmtEdit.Value >= 0)    and
+                      (DueIntAmtEdit.Value >= 0) and
+                      (BkPercentPay.Value>=0) and
+                      (MainAmtEdit.Value +
+                       IntAmtEdit.Value +
+                       DueAmtEdit.Value +
+                       DueIntAmtEdit.Value+
+                       BkPercentPay.Value+
+                       PenaltyAmtEdit.value+
+                       FirstPayment.Value+
+                       CascoPayment.Value+
+                       CommisionPay.Value > 0)
+end;
+
+procedure TPaymentAddForm.FormShow(Sender: TObject);
+begin
+    with PaymentDataModule.Ods_CrMehsul do
+    begin
+    close;
+      SetVariable('v_crid',Get_SelectedCrdID);
+      Open;
+     end;
+     with PaymentDataModule.ods_shedule do
+    begin
+    close;
+      SetVariable('v_crid',Get_SelectedCrdID);
+      Open;
+     end;
+      with PaymentDataModule.AllExpenses do
+    begin
+    close;
+      SetVariable('creditid',Get_SelectedCrdID);
+      Open;
+     end;
+
+  with PaymentDataModule do
+  begin
+    MainAmtEdit.ReadOnly   :=  LoanRest.FieldByName('ACC_NO').IsNull;
+    IntAmtEdit.ReadOnly    :=  IntRest.FieldByName('ACC_NO').IsNull;
+    DueAmtEdit.ReadOnly    :=  DueRest.FieldByName('ACC_NO').IsNull;
+    //DueIntAmtEdit.ReadOnly :=  DueIntRest.FieldByName('ACC_NO').IsNull;
+   //DueIntAmtEdit.ReadOnly :=  IntRest.FieldByName('BKACC_NO').IsNull;
+
+
+      if LoanRest.FieldByName('qovid').AsInteger=4 then
+         PaymentAddForm.Width:=616
+         else
+         PaymentAddForm.Width:=470;
+
+        if {(Ods_CrMehsulCR_TYPE.AsInteger=2)and  }
+        ((ods_sheduleADVANCE.AsFloat<>0) or (ods_sheduleSERVICE.AsFloat<>0)or(ods_sheduleINSURANCE.AsFloat<>0)) then
+        begin
+
+       panel28.Visible:=true
+        end else
+        begin
+        panel28.Visible:=false;
+
+        end;
+
+
+
+    end;
+    /////samir/////
+   { if PaymentDataModule.PortfInfo.FieldByName('credittype').AsInteger<>15 then
+      begin
+     if (PaymentDataModule.PortfInfo.FieldByName('creditlineamount').AsInteger<15000)
+    and (PaymentDataModule.PortfInfo.FieldByName('stopcalcdate').IsNull) then
+    begin
+     MainAmtEdit.Enabled:=false;
+     IntAmtEdit.Enabled:=false;
+     DueAmtEdit.Enabled:=false;
+     DueIntAmtEdit.Enabled:=false;
+     PenaltyAmtEdit.Enabled:=false;
+
+    end
+    else
+    begin
+     MainAmtEdit.Enabled:=true;
+     IntAmtEdit.Enabled:=true;
+     DueAmtEdit.Enabled:=true;
+     DueIntAmtEdit.Enabled:=true;
+     PenaltyAmtEdit.Enabled:=true;
+
+    end;
+
+   if not (PaymentDataModule.PortfInfo.FieldByName('stopcalcdate').IsNull) then
+   begin
+     IntAmtEdit.Enabled:=false;
+     DueIntAmtEdit.Enabled:=false;
+   end;
+
+      end; }     /////samir/////
+  GeneratePlanPayment;
+  CBFullPay.Checked := False;
+  CBTermination.Checked:=False;
+  ChBchangePlandat.Checked := true;
+  DBLCustomers.KeyValue:=Null;
+  GBXitam.Visible:=False;
+end;
+
+procedure TPaymentAddForm.FullPayAmtKeyPress(Sender: TObject; var Key: Char);
+ var
+ cem :real;
+begin
+
+
+if ord(key)=13 then
+ begin    //  ShowMessage('sdsds');
+ if FullPayAmt.Value>DBEditEh1.value then
+begin
+  ShowMessage('Ödəniləcək məbləğ cari hesabın qalığından cox ola bilməz !');
+  exit;
+end;
+
+ cem:=FullPayAmt.Value;
+ if cem<DBEditEh9.value then
+ begin
+ PenaltyAmtEdit.value:=cem  ;
+ cem:=0;
+ end
+  else
+  begin
+  PenaltyAmtEdit.value:= strtofloat(DBEditEh9.text);
+  cem:=cem-DBEditEh9.value;
+  end;
+  if cem< strtofloat(DBEditEh11.text) then
+  begin
+    DueIntAmtEdit.value:=cem;
+    cem:=0;
+  end
+  else
+   begin
+    DueIntAmtEdit.value:=strtofloat(DBEditEh11.text);
+    cem:=cem-strtofloat(DBEditEh11.text);
+   end;
+ if cem<strtofloat(DBEditEh5.text) then
+ begin
+ IntAmtEdit.value:=cem ;
+ cem:=0;
+ end
+  else
+  begin
+   IntAmtEdit.value:=strtofloat(DBEditEh5.text);
+   cem:=cem-strtofloat(DBEditEh5.text);
+   end;
+  if cem<strtofloat(DBEditEh7.text) then
+   begin
+  DueAmtEdit.value:=cem  ;
+  cem:=0;
+   end
+  else
+   begin
+    DueAmtEdit.value:=strtofloat(DBEditEh7.text)  ;
+    cem:=cem-strtofloat(DBEditEh7.text);
+   end;
+
+ //if cem<strtofloat(DBEditEh4.text) then
+ MainAmtEdit.value:=cem
+ // else
+// DBEditEh4.value:=cem;
+end;
+end;
+
+procedure TPaymentAddForm.DBLookupComboboxEhCustAccKeyValueChanged(
+  Sender: TObject);
+var
+  CustomerCanPay : Real;
+  Temp : Real;
+begin
+
+  MainAmtEdit.Value := 0;
+  IntAmtEdit.Value := 0;
+  DueAmtEdit.Value := 0;
+  DueIntAmtEdit.Value := 0;
+
+  with PaymentDataModule do
+  begin
+
+    CustomerCanPay := PaymentAccounts.FieldByName('REST').AsFloat;
+
+    Temp := DueRest.FieldByName('DUEREST').AsFloat;
+    if (Temp > 0) and (CustomerCanPay > 0) then
+    begin
+      if Temp > CustomerCanPay then
+        DueAmtEdit.Value := CustomerCanPay
+      else
+        DueAmtEdit.Value := Temp;
+
+      CustomerCanPay := CustomerCanPay - Temp;
+    end;
+
+    Temp := DueIntRest.FieldByName('DUEINTERESTREST').AsFloat;
+    if (Temp > 0) and (CustomerCanPay > 0) then
+    begin
+      if Temp > CustomerCanPay then
+        DueIntAmtEdit.Value := CustomerCanPay
+      else
+        DueIntAmtEdit.Value := Temp;
+
+      CustomerCanPay := CustomerCanPay - Temp;
+    end;
+
+    Temp := IntRest.FieldByName('INTERESTREST').AsFloat;
+    if (Temp > 0) and (CustomerCanPay > 0) then
+    begin
+      if Temp > CustomerCanPay then
+        IntAmtEdit.Value := CustomerCanPay
+      else
+        IntAmtEdit.Value := Temp;
+
+      CustomerCanPay := CustomerCanPay - Temp;
+    end;
+
+    Temp := LoanRest.FieldByName('REST').AsFloat;
+    if (Temp > 0) and (CustomerCanPay > 0) then begin
+      if Temp > CustomerCanPay then
+        MainAmtEdit.Value := CustomerCanPay
+      else
+        MainAmtEdit.Value := Temp;
+      CustomerCanPay := CustomerCanPay - Temp;
+    end;
+
+    Temp := LoanRest.FieldByName('PENALTYREST').AsFloat;
+    if (Temp > 0) and (CustomerCanPay > 0) then 
+      if Temp > CustomerCanPay then
+        PenaltyAmtEdit.Value := CustomerCanPay
+      else
+        PenaltyAmtEdit.Value := Temp;
+
+  end;
+end;
+
+procedure TPaymentAddForm.DocComPayChange(Sender: TObject);
+begin
+  FullPayAmt.Value := MainAmtEdit.Value+IntAmtEdit.Value+PenaltyAmtEdit.Value+
+         DueAmtEdit.Value+BkPercentPay.value+DueIntAmtEdit.Value+FirstPayment.Value+
+         CascoPayment.Value+CommisionPay.Value+DocComPay.Value+
+         DypPay.Value+BkhPay.Value+RegPay.Value+GpsPay.Value+ManPay.Value;
+end;
+
+procedure TPaymentAddForm.DueAmtEditChange(Sender: TObject);
+begin
+        FullPayAmt.Value := MainAmtEdit.Value+IntAmtEdit.Value+PenaltyAmtEdit.Value+
+         DueAmtEdit.Value+BkPercentPay.value+DueIntAmtEdit.Value
+         +FirstPayment.Value+CascoPayment.Value+CommisionPay.Value+DocComPay.Value+
+         DypPay.Value+BkhPay.Value+RegPay.Value+GpsPay.Value+ManPay.Value;
+  CMCurrencyEdit2.Value:=MainAmtEdit.Value+DueAmtEdit.Value;
+end;
+
+procedure TPaymentAddForm.DueIntAmtEditChange(Sender: TObject);
+begin
+        FullPayAmt.Value := MainAmtEdit.Value+IntAmtEdit.Value+PenaltyAmtEdit.Value+
+         DueAmtEdit.Value+BkPercentPay.value+DueIntAmtEdit.Value
+         +FirstPayment.Value+CascoPayment.Value+CommisionPay.Value+DocComPay.Value+
+         DypPay.Value+BkhPay.Value+RegPay.Value+GpsPay.Value+ManPay.Value;
+end;
+
+
+
+procedure TPaymentAddForm.DypPayChange(Sender: TObject);
+begin
+  FullPayAmt.Value := MainAmtEdit.Value+IntAmtEdit.Value+PenaltyAmtEdit.Value+
+         DueAmtEdit.Value+BkPercentPay.value+DueIntAmtEdit.Value+FirstPayment.Value+
+         CascoPayment.Value+CommisionPay.Value+DocComPay.Value+
+         DypPay.Value+BkhPay.Value+RegPay.Value+GpsPay.Value+ManPay.Value;
+end;
+
+procedure TPaymentAddForm.CBFullPayClick(Sender: TObject);
+begin
+   if  CBTermination.Checked
+   then
+   begin
+     DtpDate.DateTime:=PaymentDataModule.sbop.CallDateFunction('get_date',[]);
+     PaymentDataModule.ODSCustomers.Close;
+     PaymentDataModule.ODSCustomers.Open;
+     GBXitam.Visible:=True;
+     GenerateFullPayment
+   end
+   else
+    begin
+      DBLCustomers.KeyValue:=null;
+      //DtpDate.DateTime:='';
+      GBXitam.Visible:=False;
+      GeneratePlanPayment;
+    end;
+
+end;
+
+procedure TPaymentAddForm.FirstPaymentChange(Sender: TObject);
+begin
+ FullPayAmt.Value := MainAmtEdit.Value+IntAmtEdit.Value+PenaltyAmtEdit.Value+
+         DueAmtEdit.Value+BkPercentPay.value+DueIntAmtEdit.Value+BkPercentPay.Value
+         +FirstPayment.Value+CascoPayment.Value+CommisionPay.Value+DocComPay.Value+
+         DypPay.Value+BkhPay.Value+RegPay.Value+GpsPay.Value+ManPay.Value;
+end;
+
+procedure TPaymentAddForm.CascoPaymentChange(Sender: TObject);
+begin
+ FullPayAmt.Value := MainAmtEdit.Value+IntAmtEdit.Value+PenaltyAmtEdit.Value+
+         DueAmtEdit.Value+BkPercentPay.value+DueIntAmtEdit.Value+FirstPayment.Value+
+         CascoPayment.Value+CommisionPay.Value+DocComPay.Value+
+         DypPay.Value+BkhPay.Value+RegPay.Value+GpsPay.Value+ManPay.Value;
+end;
+
+procedure TPaymentAddForm.CommisionPayChange(Sender: TObject);
+begin
+ FullPayAmt.Value := MainAmtEdit.Value+IntAmtEdit.Value+PenaltyAmtEdit.Value+
+         DueAmtEdit.Value+BkPercentPay.value+DueIntAmtEdit.Value+FirstPayment.Value+
+         CascoPayment.Value+CommisionPay.Value+DocComPay.Value+
+         DypPay.Value+BkhPay.Value+RegPay.Value+GpsPay.Value+ManPay.Value;
+end;
+
+
+
+end.

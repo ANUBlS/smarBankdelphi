@@ -1,0 +1,122 @@
+object Form21: TForm21
+  Left = 0
+  Top = 0
+  Caption = 'Bank haqda m'#601'lumat'
+  ClientHeight = 228
+  ClientWidth = 371
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poMainFormCenter
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Label1: TLabel
+    Left = 1
+    Top = 32
+    Width = 51
+    Height = 13
+    Caption = 'M'#252#351't'#601'ri '#8470
+  end
+  object Label2: TLabel
+    Left = 1
+    Top = 75
+    Width = 15
+    Height = 13
+    Caption = 'Ad'#305
+  end
+  object Label3: TLabel
+    Left = 1
+    Top = 115
+    Width = 32
+    Height = 13
+    Caption = 'Soyad'#305
+  end
+  object Label4: TLabel
+    Left = 1
+    Top = 154
+    Width = 55
+    Height = 13
+    Caption = 'Atas'#305'n'#305'n ad'#305
+  end
+  object XFPanel1: TXFPanel
+    Left = 0
+    Top = 196
+    Width = 371
+    Height = 32
+    Align = alBottom
+    TabOrder = 0
+    object XFBitBtn1: TXFBitBtn
+      Left = 12
+      Top = 4
+      Width = 75
+      Height = 25
+      Caption = #399'lav'#601' Et'
+      DoubleBuffered = True
+      ParentDoubleBuffered = False
+      TabOrder = 0
+    end
+  end
+  object bnknumber: TEdit
+    Left = 1
+    Top = 50
+    Width = 370
+    Height = 21
+    Enabled = False
+    TabOrder = 1
+    Text = 'bnknumber'
+  end
+  object bnkname: TEdit
+    Left = 1
+    Top = 90
+    Width = 370
+    Height = 21
+    Enabled = False
+    TabOrder = 2
+    Text = 'bnkname'
+  end
+  object bnklname: TEdit
+    Left = 1
+    Top = 130
+    Width = 370
+    Height = 21
+    Enabled = False
+    TabOrder = 3
+    Text = 'bnklname'
+  end
+  object bnkfname: TEdit
+    Left = 1
+    Top = 170
+    Width = 370
+    Height = 21
+    Enabled = False
+    TabOrder = 4
+    Text = 'bnkfname'
+  end
+  object ComboBox1: TComboBox
+    Left = 1
+    Top = 8
+    Width = 370
+    Height = 21
+    TabOrder = 5
+    OnChange = ComboBox1Change
+  end
+  object bnkinfo: TOracleDataSet
+    SQL.Strings = (
+      'select * from bankinfo_adif  where kod_b=:inf')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000080000003A0049004E004600030000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      05000000050000000A0000004B004F0044005F00420001000000000004000000
+      43004E00010000000000080000004E0041004D0045000100000000000E000000
+      5300550052004E0041004D0045000100000000000A00000046004E0041004D00
+      4500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 272
+    Top = 64
+  end
+end

@@ -1,0 +1,26 @@
+object newProgressForm: TnewProgressForm
+  Left = 940
+  Top = 446
+  Caption = 
+    '                            Faizl'#601'r hesablan'#305'r..g'#246'zl'#601'yin.   ....' +
+    '.'
+  ClientHeight = 19
+  ClientWidth = 423
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poScreenCenter
+  PixelsPerInch = 96
+  TextHeight = 13
+  object ProgressShower: TProgressBar
+    Left = 312
+    Top = 17
+    Width = 423
+    Height = 17
+    TabOrder = 0
+  end
+end

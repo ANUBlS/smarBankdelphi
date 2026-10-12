@@ -1,0 +1,375 @@
+object fmSettings: TfmSettings
+  Left = 293
+  Top = 160
+  Width = 600
+  Height = 485
+  BorderStyle = bsSizeToolWin
+  Caption = 'Sazlama'
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  OldCreateOrder = False
+  OnClose = FormClose
+  PixelsPerInch = 96
+  TextHeight = 13
+  object PageControl1: TPageControl
+    Left = 0
+    Top = 0
+    Width = 592
+    Height = 428
+    ActivePage = TabSheet2
+    Align = alClient
+    TabOrder = 0
+    object TabSheet2: TTabSheet
+      Caption = 'Тарифляр'
+      ImageIndex = 1
+      object GroupBox1: TGroupBox
+        Left = 0
+        Top = 209
+        Width = 584
+        Height = 191
+        Align = alBottom
+        Caption = 'Тарифляр'
+        TabOrder = 0
+        object DBGrid3: TDBGrid
+          Left = 2
+          Top = 40
+          Width = 580
+          Height = 149
+          Align = alClient
+          DataSource = DSPerRates
+          TabOrder = 0
+          TitleFont.Charset = DEFAULT_CHARSET
+          TitleFont.Color = clWindowText
+          TitleFont.Height = -11
+          TitleFont.Name = 'Azl Sans Serif'
+          TitleFont.Style = []
+          Columns = <
+            item
+              Expanded = False
+              FieldName = 'MONTHCOUNT'
+              Title.Caption = 'Нечя айлыг'
+              Title.Color = clNavy
+              Title.Font.Charset = DEFAULT_CHARSET
+              Title.Font.Color = clWhite
+              Title.Font.Height = -11
+              Title.Font.Name = 'Azl Sans Serif'
+              Title.Font.Style = []
+              Width = 127
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'PERCENT'
+              Title.Alignment = taRightJustify
+              Title.Caption = 'Тариф %'
+              Title.Color = clNavy
+              Title.Font.Charset = DEFAULT_CHARSET
+              Title.Font.Color = clWhite
+              Title.Font.Height = -11
+              Title.Font.Name = 'Azl Sans Serif'
+              Title.Font.Style = []
+              Width = 128
+              Visible = True
+            end>
+        end
+        object DBNavigator4: TDBNavigator
+          Left = 2
+          Top = 15
+          Width = 580
+          Height = 25
+          DataSource = DSPerRates
+          Align = alTop
+          Flat = True
+          TabOrder = 1
+        end
+      end
+      object GroupBox2: TGroupBox
+        Left = 0
+        Top = 0
+        Width = 584
+        Height = 209
+        Align = alClient
+        Caption = 'Шяртляр'
+        TabOrder = 1
+        object DBGrid4: TDBGrid
+          Left = 2
+          Top = 40
+          Width = 580
+          Height = 167
+          Align = alClient
+          DataSource = DSTariffs
+          TabOrder = 0
+          TitleFont.Charset = DEFAULT_CHARSET
+          TitleFont.Color = clWindowText
+          TitleFont.Height = -11
+          TitleFont.Name = 'Azl Sans Serif'
+          TitleFont.Style = []
+          Columns = <
+            item
+              Expanded = False
+              FieldName = 'Banks'
+              Title.Caption = 'Банк'
+              Title.Color = clNavy
+              Title.Font.Charset = DEFAULT_CHARSET
+              Title.Font.Color = clWhite
+              Title.Font.Height = -11
+              Title.Font.Name = 'Azl Sans Serif'
+              Title.Font.Style = []
+              Width = 171
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'States'
+              Title.Caption = 'Истещсалчы юлкя'
+              Title.Color = clNavy
+              Title.Font.Charset = DEFAULT_CHARSET
+              Title.Font.Color = clWhite
+              Title.Font.Height = -11
+              Title.Font.Name = 'Azl Sans Serif'
+              Title.Font.Style = []
+              Width = 123
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'BEGINDATE'
+              Title.Caption = 'Тарихдян'
+              Title.Color = clNavy
+              Title.Font.Charset = DEFAULT_CHARSET
+              Title.Font.Color = clWhite
+              Title.Font.Height = -11
+              Title.Font.Name = 'Azl Sans Serif'
+              Title.Font.Style = []
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'ENDDATE'
+              Title.Caption = 'Тарихядяк'
+              Title.Color = clNavy
+              Title.Font.Charset = DEFAULT_CHARSET
+              Title.Font.Color = clWhite
+              Title.Font.Height = -11
+              Title.Font.Name = 'Azl Sans Serif'
+              Title.Font.Style = []
+              Width = 71
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'FRANSHIZ'
+              Title.Caption = 'Франшиза'
+              Title.Color = clNavy
+              Title.Font.Charset = DEFAULT_CHARSET
+              Title.Font.Color = clWhite
+              Title.Font.Height = -11
+              Title.Font.Name = 'Azl Sans Serif'
+              Title.Font.Style = []
+              Visible = True
+            end>
+        end
+        object DBNavigator3: TDBNavigator
+          Left = 2
+          Top = 15
+          Width = 580
+          Height = 25
+          DataSource = DSTariffs
+          Align = alTop
+          Flat = True
+          TabOrder = 1
+        end
+      end
+    end
+  end
+  object Panel1: TPanel
+    Left = 0
+    Top = 428
+    Width = 592
+    Height = 30
+    Align = alBottom
+    BevelOuter = bvNone
+    TabOrder = 1
+    object BitBtn1: TBitBtn
+      Left = 435
+      Top = 3
+      Width = 75
+      Height = 25
+      Anchors = [akRight, akBottom]
+      TabOrder = 0
+      Kind = bkOK
+    end
+    object BitBtn2: TBitBtn
+      Left = 515
+      Top = 3
+      Width = 75
+      Height = 25
+      Anchors = [akRight, akBottom]
+      TabOrder = 1
+      Kind = bkCancel
+    end
+  end
+  object ODSBankm: TOracleDataSet
+    SQL.Strings = (
+      'select * from bankm'
+      'order by name')
+    QBEDefinition.QBEFieldDefs = {
+      0400000007000000020000004944010000000000040000004B524E4F01000000
+      0000040000004E414D4501000000000003000000494E4E010000000000050000
+      0053574946540100000000000800000042414E4B434F44450100000000000700
+      00005355424B524E4F010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 480
+    Top = 104
+    object ODSBankmID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object ODSBankmKRNO: TFloatField
+      FieldName = 'KRNO'
+    end
+    object ODSBankmNAME: TStringField
+      FieldName = 'NAME'
+      Size = 255
+    end
+    object ODSBankmINN: TStringField
+      FieldName = 'INN'
+      Size = 32
+    end
+    object ODSBankmSWIFT: TStringField
+      FieldName = 'SWIFT'
+      Size = 128
+    end
+    object ODSBankmBANKCODE: TStringField
+      FieldName = 'BANKCODE'
+      Size = 32
+    end
+    object ODSBankmSUBKRNO: TStringField
+      FieldName = 'SUBKRNO'
+      Size = 17
+    end
+  end
+  object DSBankm: TDataSource
+    DataSet = ODSBankm
+    Left = 480
+    Top = 152
+  end
+  object ODSPerRates: TOracleDataSet
+    SQL.Strings = (
+      'select pr.rowid, pr.* from INS_PERCENT_RATES  pr'
+      ''
+      'where tarif_id = :tarif_id')
+    Variables.Data = {
+      0300000001000000090000003A54415249465F49440400000000000000000000
+      00}
+    QBEDefinition.QBEFieldDefs = {
+      04000000030000000800000054415249465F49440100000000000A0000004D4F
+      4E5448434F554E540100000000000700000050455243454E54010000000000}
+    Master = ODSTariffs
+    MasterFields = 'ID'
+    DetailFields = 'TARIF_ID'
+    Session = sboapiDataModule.SBSession
+    Left = 480
+    Top = 224
+    object ODSPerRatesTARIF_ID: TFloatField
+      FieldName = 'TARIF_ID'
+    end
+    object ODSPerRatesMONTHCOUNT: TFloatField
+      FieldName = 'MONTHCOUNT'
+    end
+    object ODSPerRatesPERCENT: TFloatField
+      FieldName = 'PERCENT'
+    end
+  end
+  object DSPerRates: TDataSource
+    DataSet = ODSPerRates
+    Left = 480
+    Top = 272
+  end
+  object DSTariffs: TDataSource
+    DataSet = ODSTariffs
+    Left = 400
+    Top = 272
+  end
+  object ODSTariffs: TOracleDataSet
+    SQL.Strings = (
+      'select it.rowid, it.* from INS_TARIFFS it'
+      'order by bank_id')
+    QBEDefinition.QBEFieldDefs = {
+      04000000060000000200000049440100000000000700000042414E4B5F494401
+      00000000000800000053544154455F494401000000000009000000424547494E
+      4441544501000000000007000000454E44444154450100000000000800000046
+      52414E5348495A010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 400
+    Top = 224
+    object ODSTariffsID: TFloatField
+      FieldName = 'ID'
+    end
+    object ODSTariffsBANK_ID: TFloatField
+      FieldName = 'BANK_ID'
+    end
+    object ODSTariffsSTATE_ID: TFloatField
+      FieldName = 'STATE_ID'
+    end
+    object ODSTariffsBEGINDATE: TDateTimeField
+      FieldName = 'BEGINDATE'
+      EditMask = '!99/99/0000;1;_'
+    end
+    object ODSTariffsENDDATE: TDateTimeField
+      FieldName = 'ENDDATE'
+      EditMask = '!99/99/0000;1;_'
+    end
+    object ODSTariffsFRANSHIZ: TFloatField
+      FieldName = 'FRANSHIZ'
+    end
+    object ODSTariffsStates: TStringField
+      FieldKind = fkLookup
+      FieldName = 'States'
+      LookupDataSet = ODSStates
+      LookupKeyFields = 'ID'
+      LookupResultField = 'NAME'
+      KeyFields = 'STATE_ID'
+      Size = 100
+      Lookup = True
+    end
+    object ODSTariffsBanks: TStringField
+      FieldKind = fkLookup
+      FieldName = 'Banks'
+      LookupDataSet = ODSBankm
+      LookupKeyFields = 'ID'
+      LookupResultField = 'NAME'
+      KeyFields = 'BANK_ID'
+      Size = 100
+      Lookup = True
+    end
+  end
+  object ODSStates: TOracleDataSet
+    SQL.Strings = (
+      'select ids.* from ins_dict_states ids'
+      'order by name')
+    QBEDefinition.QBEFieldDefs = {
+      0400000002000000020000004944010000000000040000004E414D4501000000
+      0000}
+    Session = sboapiDataModule.SBSession
+    Left = 312
+    Top = 224
+    object ODSStatesID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object ODSStatesNAME: TStringField
+      FieldName = 'NAME'
+      Size = 256
+    end
+  end
+  object DSStates: TDataSource
+    DataSet = ODSStates
+    Left = 312
+    Top = 272
+  end
+end

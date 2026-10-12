@@ -1,0 +1,72 @@
+object ProlongDataMod: TProlongDataMod
+  OldCreateOrder = False
+  Height = 480
+  Width = 696
+  object ProlongsData: TOracleDataSet
+    SQL.Strings = (
+      'SELECT id, creditid, prolongdate, newclosedate, oldclosedate'
+      '  FROM cm_prolongations'
+      'WHERE CreditID=:CreditID'
+      'Order By ProlongDate Desc')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000120000003A00430052004500440049005400490044000300
+      00000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      0500000005000000040000004900440001000000000010000000430052004500
+      4400490054004900440001000000000016000000500052004F004C004F004E00
+      47004400410054004500010000000000180000004E004500570043004C004F00
+      530045004400410054004500010000000000180000004F004C00440043004C00
+      4F00530045004400410054004500010000000000}
+    Cursor = crSQLWait
+    Session = CMDataModule.CMSession
+    Left = 48
+    Top = 32
+    object ProlongsDataID: TFloatField
+      FieldName = 'ID'
+    end
+    object ProlongsDataCREDITID: TFloatField
+      FieldName = 'CREDITID'
+    end
+    object ProlongsDataPROLONGDATE: TDateTimeField
+      FieldName = 'PROLONGDATE'
+    end
+    object ProlongsDataNEWCLOSEDATE: TDateTimeField
+      FieldName = 'NEWCLOSEDATE'
+    end
+    object ProlongsDataOLDCLOSEDATE: TDateTimeField
+      FieldName = 'OLDCLOSEDATE'
+    end
+  end
+  object DataSrcProlongsData: TDataSource
+    DataSet = ProlongsData
+    Left = 48
+    Top = 80
+  end
+  object CM_PROLONGATION: TOraclePackage
+    Session = CMDataModule.CMSession
+    PackageName = 'CM_PROLONGATION'
+    Cursor = crHourGlass
+    Left = 208
+    Top = 64
+  end
+  object CreditInfo: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      '  NVL(DUEDATELASTCONTRACT,DUEDATEFIRSTCONTRACT) as DUEDATE'
+      'from'
+      '  CM_ACTIVE_CREDITS'
+      'where ID =:ID  ')
+    Optimize = False
+    Variables.Data = {0400000001000000060000003A0049004400030000000000000000000000}
+    Cursor = crSQLWait
+    Session = CMDataModule.CMSession
+    Left = 72
+    Top = 176
+  end
+  object DSCreditInfo: TDataSource
+    DataSet = CreditInfo
+    Left = 72
+    Top = 224
+  end
+end

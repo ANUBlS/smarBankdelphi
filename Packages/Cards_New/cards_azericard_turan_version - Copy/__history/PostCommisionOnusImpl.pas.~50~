@@ -1,0 +1,381 @@
+﻿unit PostCommisionOnusImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ExtCtrls, ComCtrls, ToolWin, ImgList, CMExcelExport, Grids, DBGrids,
+  Menus;
+
+type
+  TPostCommisionOnus = class(TForm)
+    Panel1: TPanel;
+    Panel2: TPanel;
+    Panel3: TPanel;
+    Panel4: TPanel;
+    ImageList1: TImageList;
+    ToolBar1: TToolBar;
+    ToolButton3: TToolButton;
+    ToolButton1: TToolButton;
+    DBGrid1: TDBGrid;
+    DBGrid2: TDBGrid;
+    PopupMenu1: TPopupMenu;
+    Sil1: TMenuItem;
+    Panel5: TPanel;
+    DateTimePicker1: TDateTimePicker;
+    ToolBar2: TToolBar;
+    ToolButton2: TToolButton;
+    PopupMenu2: TPopupMenu;
+    Sil2: TMenuItem;
+    MainMenu1: TMainMenu;
+    Hamsnse1: TMenuItem;
+    N1: TMenuItem;
+    Hamsnsemk1: TMenuItem;
+    N2: TMenuItem;
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormCreate(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure ToolButton2Click(Sender: TObject);
+    procedure ToolButton3Click(Sender: TObject);
+    procedure ToolButton1Click(Sender: TObject);
+    procedure Sil2Click(Sender: TObject);
+    procedure Sil1Click(Sender: TObject);
+    procedure Hamsnse1Click(Sender: TObject);
+    procedure Hamsnsemk1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  PostCommisionOnus: TPostCommisionOnus;
+
+implementation
+
+{$R *.dfm}
+uses Unit18, setac,SBTranslateProc,sboapiDataModuleImpl;
+
+procedure TPostCommisionOnus.FormCreate(Sender: TObject);
+begin
+SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TPostCommisionOnus.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+if ord(key)=vk_escape then close;
+
+end;
+
+procedure TPostCommisionOnus.FormShow(Sender: TObject);
+begin
+DataMod_CARDS.DScard_m_commision.Close;
+DataMod_CARDS.DScard_m_commision.SetVariable('pdate',DataMod_CARDS.DSSysdat.FieldByName('tek_dat').AsDateTime);
+DataMod_CARDS.DScard_m_commision.open;
+
+
+DataMod_CARDS.DScard_m_commision_commit.Close;
+DataMod_CARDS.DScard_m_commision_commit.SetVariable('pdate',DataMod_CARDS.DSSysdat.FieldByName('tek_dat').AsDateTime);
+DataMod_CARDS.DScard_m_commision_commit.open;
+
+DateTimePicker1.DateTime:=DataMod_CARDS.DSSysdat.FieldByName('tek_dat').AsDateTime;
+end;
+
+procedure TPostCommisionOnus.Hamsnse1Click(Sender: TObject);
+begin
+ with DBGrid1, SelectedRows, DataSource.DataSet do
+  begin
+    DisableControls;
+    try
+      First;
+      while not Eof do
+       begin
+        CurrentRowSelected := True;
+        Next;
+       end;
+    finally
+      EnableControls;
+    end;
+  end;
+
+end;
+
+procedure TPostCommisionOnus.Hamsnsemk1Click(Sender: TObject);
+begin
+     with DBGrid2, SelectedRows, DataSource.DataSet do
+  begin
+    DisableControls;
+    try
+      First;
+      while not Eof do
+       begin
+        CurrentRowSelected := True;
+        Next;
+       end;
+    finally
+      EnableControls;
+    end;
+  end;
+end;
+
+procedure TPostCommisionOnus.Sil1Click(Sender: TObject);
+var
+   Index , countafte, countbefo:Integer;
+   WaitNextConfirm, WillRefresh: Boolean;
+   TID :Integer;
+begin
+
+
+  WaitNextConfirm :=True;
+  WillRefresh :=False;
+  if DBGrid2.CanFocus then
+  DBGrid2.SetFocus;
+
+  //Focus;
+  countbefo:=DBGrid2.DataSource.DataSet.RecordCount;
+  with  DBGrid2, SelectedRows, DataSource.DataSet, DataMod_CARDS do
+  try
+    if Count = 0 then CurrentRowSelected := True;
+
+
+
+    for  Index :=0 to  Count - 1 do
+    begin
+      GotoBookmark(Pointer(Items[Index]));
+      TID :=FieldbyName('ID').AsInteger;
+
+      if  WaitNextConfirm  then
+      {case MessageDlg(
+        Format('Məlumatı silinsin? ',[TID])
+       ,mtConfirmation
+       ,[mbYes, mbNo ,mbCancel ,mbYesToAll]
+       ,0
+       )   of
+        mrNo       : begin Continue;  end;
+        mrCancel   : begin Break; end;
+        mrYesToAll :  }
+          if MessageDlg(Format('%d  sayda  məlumt silisinmi?', [Count - Index]), mtConfirmation, [mbYes, mbCancel], 0) = mrYes then
+           WaitNextConfirm :=False
+          else
+           Continue;
+      //end;
+      Application.ProcessMessages;
+      //------------------------------------------------------------------------------------create prows
+
+                DataMod_CARDS.card_commission_our_pos_onus.CallProcedure('del_card_messages_comm_commit',[TID]) ;
+
+
+      WillRefresh :=True;
+
+
+    end;
+  finally
+   if WillRefresh then
+
+
+   begin
+
+                          DBGrid1.DataSource.DataSet.Refresh;
+                          DBGrid2.DataSource.DataSet.Refresh;
+                          countafte:=DBGrid2.DataSource.DataSet.RecordCount;
+                          countafte:=countbefo-countafte;
+                          ShowMessage(inttostr(countafte)+' sayda seçilmiş məlumatlar silidi!');
+
+
+
+
+   end; //else Excel.Workbooks.close;
+
+  end;
+
+
+end;
+
+procedure TPostCommisionOnus.Sil2Click(Sender: TObject);
+var
+   Index,countafte,countbefo :Integer;
+   WaitNextConfirm, WillRefresh: Boolean;
+   TID :Integer;
+begin
+
+
+  WaitNextConfirm :=True;
+  WillRefresh :=False;
+  if DBGrid1.CanFocus then
+  DBGrid1.SetFocus;
+
+  //Focus;
+  countbefo:=DBGrid1.DataSource.DataSet.RecordCount;
+  with  DBGrid1, SelectedRows, DataSource.DataSet, DataMod_CARDS do
+  try
+    if Count = 0 then CurrentRowSelected := True;
+
+
+
+    for  Index :=0 to  Count - 1 do
+    begin
+      GotoBookmark(Pointer(Items[Index]));
+      TID :=FieldbyName('ID').AsInteger;
+
+      if  WaitNextConfirm  then
+      {case MessageDlg(
+        Format('Məlumatı silinsin? ',[TID])
+       ,mtConfirmation
+       ,[mbYes, mbNo ,mbCancel ,mbYesToAll]
+       ,0
+       )   of
+        mrNo       : begin Continue;  end;
+        mrCancel   : begin Break; end;
+        mrYesToAll :}
+          if MessageDlg(Format('%d  sayda  əməliyyat silinsinmi?', [Count - Index]), mtConfirmation, [mbYes, mbCancel], 0) = mrYes then
+           WaitNextConfirm :=False
+          else
+           Continue;
+      //end;
+      Application.ProcessMessages;
+      //------------------------------------------------------------------------------------create prows
+
+                DataMod_CARDS.card_commission_our_pos_onus.CallProcedure('del_card_messages_c_commision',[TID]) ;
+
+
+      WillRefresh :=True;
+
+
+    end;
+  finally
+   if WillRefresh then
+
+
+   begin
+
+                          DBGrid1.DataSource.DataSet.Refresh;
+                          DBGrid2.DataSource.DataSet.Refresh;
+                          countafte:=DBGrid1.DataSource.DataSet.RecordCount;
+                          countafte:=countbefo-countafte;
+                          ShowMessage(inttostr(countafte)+' sayda seçilmiş məlumatlar silidi!');
+
+
+
+
+   end; //else Excel.Workbooks.close;
+
+  end;
+
+end;
+
+procedure TPostCommisionOnus.ToolButton1Click(Sender: TObject);
+
+var
+
+
+   V,Sheet,Sheets,excel  :Variant;
+   cell,row,l,m    :Integer;
+   i,j,ids : integer;
+   formats,debet,kredit,summa,destination,vbic:string;
+   output:TextFile;
+   FileName,Swmessage,dir,edit_ref,BeginMessage,Endmesage,valu:String;
+   Index :Integer;
+   WaitNextConfirm, WillRefresh: Boolean;
+   TransactionID ,countafte,countBefo:Integer;
+begin
+
+     countBefo:=DBGrid2.DataSource.DataSet.RecordCount;
+
+  WaitNextConfirm :=True;
+  WillRefresh :=False;
+  if DBGrid1.CanFocus then
+  DBGrid1.SetFocus;
+
+  //Focus;
+  with  DBGrid1, SelectedRows, DataSource.DataSet, DataMod_CARDS do
+  try
+    if Count = 0 then CurrentRowSelected := True;
+
+
+
+    for  Index :=0 to  Count - 1 do
+    begin
+      GotoBookmark(Pointer(Items[Index]));
+      TransactionID :=FieldbyName('ID').AsInteger;
+
+      if  WaitNextConfirm  then
+      {case MessageDlg(
+        Format('Əmaliyyat təsdiq edilsin?',[TransactionID])
+       ,mtConfirmation
+       ,[mbYes, mbNo ,mbCancel ,mbYesToAll]
+       ,0
+       )  of
+        mrNo       : begin Continue;  end;
+        mrCancel   : begin Break; end;
+        mrYesToAll :   }
+          if MessageDlg(Format('%d  sayda seçilmiş əməliyyat təsdiq edilsinmi?', [Count - Index]), mtConfirmation, [mbYes, mbCancel], 0) = mrYes then
+           WaitNextConfirm :=False
+          else
+           Continue;
+      //end;
+      Application.ProcessMessages;
+                 //showmessage(inttostr(TransactionID));
+                DataMod_CARDS.card_commission_our_pos_onus.CallProcedure('card_merchand_c_comission',[TransactionID]) ;
+
+      WillRefresh :=True;
+
+
+    end;
+  finally
+   if WillRefresh then
+
+
+   begin
+
+
+
+
+                          DBGrid1.DataSource.DataSet.Refresh;
+                          DBGrid2.DataSource.DataSet.Refresh;
+
+                          countafte:=DBGrid2.DataSource.DataSet.RecordCount;
+                          countafte:=countbefo-countafte;
+                          ShowMessage(inttostr(countafte)+' sayda əməliyyat təsdiqləndi!');
+
+
+
+
+   end; //else Excel.Workbooks.close;
+
+  end;
+
+
+
+ { with DataMod_CARDS,card_commission_our_pos_onus do
+begin
+  CallProcedure('card_merchand_c_comission',[]);
+end;
+ }
+end;
+
+procedure TPostCommisionOnus.ToolButton2Click(Sender: TObject);
+begin
+
+DataMod_CARDS.DScard_m_commision.Close;
+DataMod_CARDS.DScard_m_commision.SetVariable('pdate',DateTimePicker1.DateTime);
+DataMod_CARDS.DScard_m_commision.open;
+
+
+DataMod_CARDS.DScard_m_commision_commit.Close;
+DataMod_CARDS.DScard_m_commision_commit.SetVariable('pdate',DateTimePicker1.DateTime);
+DataMod_CARDS.DScard_m_commision_commit.open;
+end;
+
+procedure TPostCommisionOnus.ToolButton3Click(Sender: TObject);
+begin
+
+with DataMod_CARDS,card_commission_our_pos_onus do
+begin
+  CallProcedure('ins_card_messages_c_commision',[]);
+end;
+DBGrid1.DataSource.DataSet.Refresh;
+DBGrid2.DataSource.DataSet.Refresh;
+
+end;
+
+end.

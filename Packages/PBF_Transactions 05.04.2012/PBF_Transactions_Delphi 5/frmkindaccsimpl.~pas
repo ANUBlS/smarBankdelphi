@@ -1,0 +1,48 @@
+unit frmkindaccsimpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ComCtrls, ExtCtrls, DBCtrls, Grids, DBGrids, Db, OracleData;
+
+type
+  Tfrmkindaccs = class(TForm)
+    OracleDataSet1: TOracleDataSet;
+    DataSource1: TDataSource;
+    StatusBar1: TStatusBar;
+    OracleDataSet1ACC_NO: TStringField;
+    PageControl1: TPageControl;
+    TabSheet1: TTabSheet;
+    TabSheet2: TTabSheet;
+    DBGrid1: TDBGrid;
+    DBNavigator1: TDBNavigator;
+    DBGrid2: TDBGrid;
+    DBNavigator2: TDBNavigator;
+    OracleDataSet2: TOracleDataSet;
+    DataSource2: TDataSource;
+    OracleDataSet2ID: TFloatField;
+    OracleDataSet2NAME: TStringField;
+    OracleDataSet2DESCRIPTION: TStringField;
+    procedure FormCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  frmkindaccs: Tfrmkindaccs;
+
+implementation
+
+{$R *.DFM}
+uses sboapiDataModuleImpl;
+
+procedure Tfrmkindaccs.FormCreate(Sender: TObject);
+begin
+  OracleDataSet1.open;
+  OracleDataSet2.open;
+end;
+
+end.

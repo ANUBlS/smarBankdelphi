@@ -1,0 +1,973 @@
+﻿unit CustInfoFormImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, Mask, DBCtrls, ExtCtrls, ComCtrls, Db, OracleData, ExtDlgs,
+  Buttons, ImgList, ToolWin, Oracle, Jpeg, Variants, Grids, DBGrids;
+
+type
+  TCustomerInfoForm = class(TForm)
+    TabControl: TTabControl;
+    CustInfoData: TOracleDataSet;
+    CustInfo: TDataSource;
+    OpenPictureDlg: TOpenPictureDialog;
+    Panel10: TPanel;
+    ToolBar1: TToolBar;
+    ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
+    ToolButton4: TToolButton;
+    ToolButton6: TToolButton;
+    ToolButton8: TToolButton;
+    ImageList1: TImageList;
+    ScrollBox1: TScrollBox;
+    Panel2: TPanel;
+    Panel3: TPanel;
+    Panel4: TPanel;
+    Panel14: TPanel;
+    Panel15: TPanel;
+    Panel16: TPanel;
+    Panel18: TPanel;
+    Panel20: TPanel;
+    Panel22: TPanel;
+    Panel24: TPanel;
+    BitBtn4: TBitBtn;
+    BitBtn5: TBitBtn;
+    BitBtn2: TBitBtn;
+    BitBtn1: TBitBtn;
+    Panel1: TPanel;
+    ODSCustImages: TOracleDataSet;
+    DSCustImages: TDataSource;
+    ODSCustImagesID: TFloatField;
+    ODSCustImagesPHOTO: TBlobField;
+    ODSCustImagesCUSTSIGN: TBlobField;
+    ODSCustImagesSTAMP: TBlobField;
+    Edit1: TEdit;
+    Edit3: TEdit;
+    Edit9: TEdit;
+    Edit11: TEdit;
+    Edit13: TEdit;
+    Memo1: TMemo;
+    sb_custInfo: TOraclePackage;
+    Panel5: TPanel;
+    Edit15: TEdit;
+    Image1: TImage;
+    Image2: TImage;
+    passdeps: TDataSource;
+    odsPassDeps: TOracleDataSet;
+    CustInfoDataID: TFloatField;
+    CustInfoDataIDCUST: TFloatField;
+    CustInfoDataSONAME: TWideStringField;
+    CustInfoDataNAME: TWideStringField;
+    CustInfoDataLASTNAME: TWideStringField;
+    CustInfoDataBIRTHDAY: TDateTimeField;
+    CustInfoDataBIRTHPLACE: TWideStringField;
+    CustInfoDataPASSER: TWideStringField;
+    CustInfoDataPASPNUM: TWideStringField;
+    CustInfoDataPASPDATE: TDateTimeField;
+    CustInfoDataPASPPLACE: TWideStringField;
+    CustInfoDataCITY: TWideStringField;
+    CustInfoDataADDRESS: TWideStringField;
+    CustInfoDataWORKPLACE: TWideStringField;
+    CustInfoDataPHONE_W: TWideStringField;
+    CustInfoDataPHONE_H: TWideStringField;
+    CustInfoDataPHONE_M: TWideStringField;
+    CustInfoDataE_MAIL: TWideStringField;
+    CustInfoDataURL: TWideStringField;
+    CustInfoDataRECOMENDATION: TWideStringField;
+    CustInfoDataGARANTED: TWideStringField;
+    CustInfoDataOTV_PASSPORT: TWideStringField;
+    CustInfoDataOTV_ISSUED: TWideStringField;
+    CustInfoDataOTV_ISDATE: TWideStringField;
+    CustInfoDataNOTE: TWideStringField;
+    CustInfoDataWORK: TWideStringField;
+    Label1: TLabel;
+    Panel6: TPanel;
+    Image3: TImage;
+    BitBtn6: TBitBtn;
+    BitBtn3: TBitBtn;
+    Fill_Edit: TButton;
+    Panel13: TPanel;
+    Panel23: TPanel;
+    Edit2: TEdit;
+    Panel21: TPanel;
+    Edit4: TEdit;
+    TDEdit4: TDateTimePicker;
+    Panel19: TPanel;
+    Edit6: TEdit;
+    Panel17: TPanel;
+    Edit8: TEdit;
+    Panel26: TPanel;
+    Edit10: TEdit;
+    Panel25: TPanel;
+    Edit12: TEdit;
+    Panel11: TPanel;
+    Edit14: TEdit;
+    GroupBox9: TGroupBox;
+    Label47: TLabel;
+    Label48: TLabel;
+    Label49: TLabel;
+    Label50: TLabel;
+    Label52: TLabel;
+    Label53: TLabel;
+    Label54: TLabel;
+    Label51: TLabel;
+    Label55: TLabel;
+    Label56: TLabel;
+    Label57: TLabel;
+    Label58: TLabel;
+    Label61: TLabel;
+    Label65: TLabel;
+    Label66: TLabel;
+    Label67: TLabel;
+    Label68: TLabel;
+    Label69: TLabel;
+    Address_type: TDBLookupComboBox;
+    CountryByConctType: TDBLookupComboBox;
+    CityByConctType: TDBLookupComboBox;
+    tph_zip: TEdit;
+    tph_state: TEdit;
+    tph_adress: TEdit;
+    tph_contact_type: TDBLookupComboBox;
+    tph_communication_type: TDBLookupComboBox;
+    tph_country_prefix: TDBLookupComboBox;
+    tph_number: TEdit;
+    tph_extension: TEdit;
+    DBEdit_CountryCode: TDBEdit;
+    GroupBox1: TGroupBox;
+    Panel7: TPanel;
+    Edit16: TEdit;
+    Panel8: TPanel;
+    Edit19: TDBLookupComboBox;
+    Panel9: TPanel;
+    Edit18: TEdit;
+    TDEdit18: TDateTimePicker;
+    Panel12: TPanel;
+    Edit17: TEdit;
+    CustInfoDataTEST: TWideStringField;
+    CustInfoDataFAM_STATUS: TIntegerField;
+    CustInfoDataSEX: TIntegerField;
+    CustInfoDataADRS_STATE: TWideStringField;
+    CustInfoDataBIRTH_STATE: TWideStringField;
+    CustInfoDataFAKT_ADRESS: TWideStringField;
+    CustInfoDataCHILD_INFO: TWideStringField;
+    CustInfoDataDOC_TYPE: TFloatField;
+    CustInfoDataPASSPIN: TWideStringField;
+    CustInfoDataCITIZENSHIP: TFloatField;
+    CustInfoDataPASSEXPIRE: TDateTimeField;
+    CustInfoDataREG_ZIP: TWideStringField;
+    CustInfoDataDOC_COUNTRY: TFloatField;
+    CustInfoDataCITIZENSHIP2: TFloatField;
+    CustInfoDataCITIZENSHIP3: TFloatField;
+    CustInfoDataFAKT_COUNTRY: TFloatField;
+    CustInfoDataFAKT_CITY: TFloatField;
+    CustInfoDataFAKT_ZIP: TWideStringField;
+    CustInfoDataWORK_PLACE: TWideStringField;
+    CustInfoDataWORK_POST: TWideStringField;
+    CustInfoDataWORK_ADRESS: TWideStringField;
+    CustInfoDataWORK_PHONE: TWideStringField;
+    CustInfoDataTPH_CONTACT_TYPE: TWideStringField;
+    CustInfoDataTPH_COUNTRY: TFloatField;
+    CustInfoDataTPH_COUNTRY_CODE: TWideStringField;
+    CustInfoDataTPH_CITY: TFloatField;
+    CustInfoDataTPH_STATE: TWideStringField;
+    CustInfoDataTPH_ZIP: TWideStringField;
+    CustInfoDataTPH_COUNTRY_PREFIX: TFloatField;
+    CustInfoDataTPH_ADRESS: TWideStringField;
+    CustInfoDataTPH_COMMUNICATION_TYPE: TWideStringField;
+    CustInfoDataTPH_NUMBER: TWideStringField;
+    CustInfoDataTPH_EXTENSION: TWideStringField;
+    CustInfoDataCONTACT_TYPE: TWideStringField;
+    Panel27: TPanel;
+    CB_SEX: TComboBox;
+    Panel28: TPanel;
+    DBLC_Citizenship: TDBLookupComboBox;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    Label6: TLabel;
+    Label7: TLabel;
+    DBLC_WorkPosts: TDBLookupComboBox;
+    forGoAml: TCheckBox;
+    CustInfoDataCUINFAML: TIntegerField;
+    Label8: TLabel;
+    Label9: TLabel;
+    DBLC_CiCntr: TDBLookupComboBox;
+    DBLC_CiCity: TDBLookupComboBox;
+    Label10: TLabel;
+    Label11: TLabel;
+    Label12: TLabel;
+    Label13: TLabel;
+    Label14: TLabel;
+    DataSource1: TDataSource;
+    TB_Nokia: TToolButton;
+    AccOwner: TCheckBox;
+    procedure CustInfoDataAfterOpen(DataSet: TDataSet);
+    procedure TabControlChange(Sender: TObject);
+    procedure CustInfoDataApplyRecord(Sender: TOracleDataSet; Action: Char;
+      var Applied: Boolean; var NewRowId: String);
+    procedure ToolButton2Click(Sender: TObject);
+    procedure ToolButton4Click(Sender: TObject);
+    procedure ToolButton6Click(Sender: TObject);
+    procedure ToolButton8Click(Sender: TObject);
+    procedure BitBtn1Click(Sender: TObject);
+    procedure BitBtn4Click(Sender: TObject);
+    procedure BitBtn5Click(Sender: TObject);
+    procedure BitBtn6Click(Sender: TObject);
+    procedure BitBtn2Click(Sender: TObject);
+    procedure BitBtn3Click(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormCreate(Sender: TObject);
+    procedure Fill_EditClick(Sender: TObject);
+    procedure FormCanResize(Sender: TObject; var NewWidth, NewHeight: Integer;
+      var Resize: Boolean);
+    procedure TB_NokiaClick(Sender: TObject);
+    procedure refresh_customers_relations;
+  private
+    { Private declarations }
+
+  public
+    { Public declarations }
+    KartOpen: Boolean;
+    procedure ViewCustInfo(CustomerID: Integer);
+  end;
+
+procedure GetPath;
+
+var
+  CustomerInfoForm: TCustomerInfoForm;
+  Path, Path_B: String;
+
+implementation
+
+uses SBCustomer, sboapiDataModuleImpl, UnitFrmZoom, CO_datamod_impl,
+  SBTranslateProc, CustomersImpl;
+
+{$R *.DFM}
+
+procedure GetPath;
+var
+  ImagesPath: String;
+begin
+  ImagesPath := Format('%s\..\Env\Customers', [ExtractFilePath(ParamStr(0))]);
+  Path := Format('%s\temp.jpg', [ImagesPath]);
+  Path_B := Format('%s\blank.jpg', [ImagesPath]);
+end;
+
+procedure TCustomerInfoForm.ViewCustInfo(CustomerID: Integer);
+begin
+  with CustInfoData do
+  Begin
+
+    if RecordCount = 0 then
+      ToolButton2.Click;
+    GetPath;
+    ShowModal;
+  End;
+end;
+
+procedure TCustomerInfoForm.CustInfoDataAfterOpen(DataSet: TDataSet);
+var
+  Index: Integer;
+begin
+
+  CO_DataMod.Customers_relations.Close;
+  CO_DataMod.Customers_relations.SetVariable('v_custid',
+    CO_DataMod.Customers.FieldByName('ID').AsInteger);
+  CO_DataMod.Customers_relations.Open;
+
+  // CustInfoData.FieldByName('IDCust').AsInteger :=
+  // Customers_relations.FieldByName('custid2').AsInteger;
+  // CustInfoData.FieldByName('IDCust').AsInteger := CO_DataMod.Customers.FieldByName('ID').AsInteger;
+  with CO_DataMod.Customers_relations, TabControl do
+  begin
+    Tabs.Clear;
+    First;
+    for Index := 0 to RecordCount - 1 do
+    begin
+      Tabs.Add(CO_DataMod.Customers_relationsWORKPOST_NAME.AsString + ' (ID ' +
+        CO_DataMod.Customers_relations.FieldByName('custid2').AsString + ')');
+      // Format('Kart N-%d', [Index]));
+      Next;
+    end;
+    First;
+  end;
+
+end;
+
+procedure TCustomerInfoForm.TabControlChange(Sender: TObject);
+begin
+  // ShowMessage(IntToStr(CustInfoData.RecNo));
+  ToolButton6.Click; // saving
+  // ShowMessage(IntToStr(CustInfoData.RecNo));
+  CustInfoData.RecNo := (Sender as TTabControl).TabIndex + 1; // jumping
+  // ShowMessage(IntToStr(CustInfoData.RecNo));
+  Fill_Edit.Click; // loading
+  // ShowMessage(IntToStr(CustInfoData.RecNo));
+end;
+
+procedure TCustomerInfoForm.TB_NokiaClick(Sender: TObject);
+Var
+  Index: Integer;
+begin
+  if not assigned(FormCustomers) then
+    FormCustomers := TFormCustomers.Create(Self);
+  FormCustomers.ShowModal;
+
+  if FormCustomers.vCustId <> -1 then
+  begin
+    sb_custInfo.CallProcedure('add_cust_relations',
+      ['v_custid', CO_DataMod.Customers.FieldByName('ID').AsInteger,
+      'v_custid2', FormCustomers.vCustId]);
+    CustInfoData.Refresh;
+    CO_DataMod.Customers_relations.Refresh;
+    with CO_DataMod.Customers_relations, TabControl do
+    begin
+      Tabs.Clear;
+      First;
+      for Index := 0 to RecordCount - 1 do
+      begin
+        Tabs.Add(CO_DataMod.Customers_relationsWORKPOST_NAME.AsString + ' (ID ' +
+          CO_DataMod.Customers_relations.FieldByName('custid2').AsString + ')');
+        // Format('Kart N-%d', [Index]));
+        Next;
+      end;
+      First;
+    end;
+    Fill_Edit.Click;
+  end;
+
+end;
+
+procedure TCustomerInfoForm.CustInfoDataApplyRecord(Sender: TOracleDataSet;
+  Action: Char; var Applied: Boolean; var NewRowId: String);
+var
+  Info: TCustomerInfo;
+begin
+  case Action of
+    'I':
+      begin
+        with Sender, Info do
+        begin
+          SurName := FieldByName('SoName').AsString;
+          Name := FieldByName('Name').AsString;
+          LastName := FieldByName('LastName').AsString;
+          BirthDate := Trunc(FieldByName('BirthDay').AsDateTime);
+          BirthPlace := FieldByName('BirthPlace').AsString;
+          passer := FieldByName('passer').AsString;
+          paspnum := FieldByName('paspnum').AsString;
+          paspdate := FieldByName('paspdate').AsDateTime;
+          paspplace := FieldByName('paspplace').AsString;
+          City := FieldByName('City').AsString;
+          Address := FieldByName('Address').AsString;
+          WorkPlace := FieldByName('WorkPlace').AsString;
+          PhoneWork := FieldByName('Phone_W').AsString;
+          PhoneHome := FieldByName('Phone_H').AsString;
+          PhoneCelular := FieldByName('Phone_M').AsString;
+          Email := FieldByName('E_Mail').AsString;
+          Url := FieldByName('Url').AsString;
+          recomendation := FieldByName('recomendation').AsString;
+          garanted := FieldByName('garanted').AsString;
+          otv_passport := FieldByName('otv_passport').AsString;
+          otv_issued := FieldByName('otv_issued').AsString;
+          otv_isdate := FieldByName('otv_isdate').AsString;
+          note := FieldByName('note').AsString;
+          work := FieldByName('work').AsString;
+          test := FieldByName('test').AsString;
+          fam_status := FieldByName('fam_status').AsInteger;
+          sex := FieldByName('sex').AsInteger;
+          adrs_state := FieldByName('adrs_state').AsString;
+          birth_state := FieldByName('birth_state').AsString;
+          fakt_adress := FieldByName('fakt_adress').AsString;
+          child_info := FieldByName('child_info').AsString;
+          doc_type := FieldByName('doc_type').AsInteger;
+          passpin := FieldByName('passpin').AsString;
+          citizenship := FieldByName('citizenship').AsInteger;
+          passexpire := FieldByName('passexpire').AsDateTime;
+          reg_zip := FieldByName('reg_zip').AsString;
+          doc_country := FieldByName('doc_country').AsInteger;
+          citizenship2 := FieldByName('citizenship2').AsInteger;
+          citizenship3 := FieldByName('citizenship3').AsInteger;
+          fakt_country := FieldByName('fakt_country').AsInteger;
+          fakt_city := FieldByName('fakt_city').AsInteger;
+          fakt_zip := FieldByName('fakt_zip').AsString;
+          work_place := FieldByName('work_place').AsString;
+          work_post := FieldByName('work_post').AsString;
+          work_adress := FieldByName('work_adress').AsString;
+          work_phone := FieldByName('work_phone').AsString;
+          tph_contact_type := FieldByName('tph_contact_type').AsString;
+          tph_country := FieldByName('tph_country').AsInteger;
+          tph_country_code := FieldByName('tph_country_code').AsString;
+          tph_city := FieldByName('tph_city').AsInteger;
+          tph_state := FieldByName('tph_state').AsString;
+          tph_zip := FieldByName('tph_zip').AsString;
+          tph_country_prefix := FieldByName('tph_country_prefix').AsInteger;
+          tph_adress := FieldByName('tph_adress').AsString;
+          tph_communication_type :=
+            FieldByName('tph_communication_type').AsString;
+          tph_number := FieldByName('tph_number').AsString;
+          tph_extension := FieldByName('tph_extension').AsString;
+          contact_type := FieldByName('contact_type').AsString;
+        end;
+        Sb_AddCustomerInfo(Sender.FieldByName('ID').AsInteger, Info);
+        Applied := True;
+      end;
+  end;
+end;
+
+procedure TCustomerInfoForm.refresh_customers_relations;
+Var
+CustIDs: String;
+i: Integer;
+begin
+  with CustomerInfoForm do
+  begin
+    CO_DataMod.Customers_relations.Close;
+    CO_DataMod.Customers_relations.SetVariable('v_custid',
+      CO_DataMod.Customers.FieldByName('ID').AsInteger);
+    CO_DataMod.Customers_relations.Open;
+   CO_DataMod.Customers_relations.First;
+    CustIDs := CO_DataMod.Customers_relations.FieldByName('CUSTID2').AsString;
+
+    if CO_DataMod.Customers_relations.RecordCount <> 0 then
+    begin
+
+      for i := 1 to CO_DataMod.Customers_relations.RecordCount - 1 do
+      begin
+        CO_DataMod.Customers_relations.Next;
+        CustIDs := CustIDs + ',' + CO_DataMod.Customers_relations.FieldByName
+          ('CUSTID2').AsString;
+      end;
+
+      with CustInfoData do
+      begin
+        ClearVariables;
+        Close;
+        SetVariable('customerid', CustIDs);
+        Open;
+      end;
+
+    end;
+  end;
+
+end;
+procedure TCustomerInfoForm.ToolButton2Click(Sender: TObject);
+var
+  index,v_id: Integer;
+begin
+  ToolButton6Click(ToolButton6);
+  v_id := sb_custInfo.CallIntegerFunction('add_custinfo',
+    ['vidcust', CO_DataMod.Customers.FieldByName('ID').AsInteger]);
+ refresh_customers_relations;
+ CustInfoData.Locate('id', v_id, []);
+  { with TabControl,CustInfoData do
+    begin
+    recno:=RecordCount;
+    index:=FieldByName('idcust').AsInteger;
+    TabIndex :=Tabs.Add(Format('ID N-%d', [Index]));
+    end; }
+
+  Fill_Edit.Click;
+end;
+
+procedure TCustomerInfoForm.ToolButton4Click(Sender: TObject);
+var
+  Index: Integer;
+begin
+  // sb_CustInfo.CallProcedure('del_custinfo',['v_id',CustInfoData.FieldByName('ID').AsInteger]);
+  sb_custInfo.CallProcedure('del_cust_relations',
+    ['v_custid', CO_DataMod.CustomersID.AsInteger, 'v_custid2',
+    CustInfoData.FieldByName('IDCUST').AsInteger]);
+  refresh_customers_relations;
+
+  if Customers_relations.RecordCount>0 then
+  begin
+    with Customers_relations, TabControl do
+      begin
+      Tabs.Clear;
+      First;
+      for Index := 0 to RecordCount - 1 do
+        begin
+          Tabs.Add(Customers_relationsWORKPOST_NAME.AsString + ' (ID ' +
+          Customers_relations.FieldByName('custid2').AsString + ')');
+      // Format('Kart N-%d', [Index]));
+          Next;
+        end;
+    First;
+    end;
+  end
+  else
+   CustomerInfoForm.Close;
+ // Fill_Edit.Click;
+end;
+
+procedure TCustomerInfoForm.ToolButton6Click(Sender: TObject);
+var
+  v_CUINFAML,v_accowner: Integer;
+begin
+
+  if trim(Edit1.Text) = '' then
+  begin
+    showmessage('Müştərinin adı daxil edilməlidir!');
+    Exit;
+  end;
+
+  if trim(Edit2.Text) = '' then
+  begin
+    showmessage('Müştərinin soyadı daxil edilməlidir!');
+    Exit;
+  end;
+
+  if trim(Edit3.Text) = '' then
+  begin
+    showmessage('Müştərinin ata adı daxil edilməlidir!');
+    Exit;
+  end;
+
+  if CB_SEX.ItemIndex = -1 then
+  begin
+    showmessage('Müştərinin cinsi daxil edilməlidir!');
+    Exit;
+  end;
+
+  if DBLC_Citizenship.KeyValue = null then
+  begin
+    showmessage('Müştərinin vətəndaşlığı daxil edilməlidir!');
+    Exit;
+  end;
+
+  if Address_type.KeyValue = '' then
+  begin
+    showmessage('Müştərinin əlaqə növünə görə adress tipi daxil edilməlidir!');
+    Exit;
+  end;
+
+  if CountryByConctType.KeyValue = null then
+  begin
+    showmessage('Müştərinin əlaqə növünə görə ölkəsi daxil edilməlidir!');
+    Exit;
+  end;
+
+  if CityByConctType.KeyValue = null then
+  begin
+    showmessage('Müştərinin əlaqə növünə görə şəhəri daxil edilməlidir!');
+    Exit;
+  end;
+
+  if trim(tph_adress.Text) = '' then
+  begin
+    showmessage('Müştərinin əlaqə növünə görə adresi daxil edilməlidir!');
+    Exit;
+  end;
+
+  if tph_contact_type.KeyValue = '' then
+  begin
+    showmessage
+      ('Müştərinin əlaqə növünə görə telefon nömrəsinin tipi daxil edilməlidir!');
+    Exit;
+  end;
+
+  if tph_communication_type.KeyValue = '' then
+  begin
+    showmessage
+      ('Müştərinin rabitə növünə görə telefon nömrəsinin tipi daxil edilməlidir!');
+    Exit;
+  end;
+
+  if trim(tph_number.Text) = '' then
+  begin
+    showmessage
+      ('Müştərinin əlaqə növünə görə telefon nömrəsi daxil edilməlidir!');
+    Exit;
+  end;
+
+  if forGoAml.Checked = True then
+    v_CUINFAML := 1
+  else
+    v_CUINFAML := 0;
+
+   if AccOwner.Checked = True then
+    v_accowner := 1
+  else
+    v_accowner := 0;
+
+  sb_custInfo.CallProcedure('check_work_post',
+    ['v_idcust', CO_DataMod.Customers.FieldByName('ID').AsInteger, 'v_workpost',
+    DBLC_WorkPosts.KeyValue, 'v_cust', CustInfoData.FieldByName('IDCust')
+    .AsInteger,'v_signatory',v_CUINFAML,'v_accowner',v_accowner]);
+
+  if CustInfoData.RecordCount <> 0 then
+  begin
+    Edit4.Text := datetostr(TDEdit4.Date);
+    Edit18.Text := datetostr(TDEdit18.Date);
+    sb_custInfo.CallProcedure('upd_custinfo',
+      ['vid', CustInfoData.FieldByName('ID').AsInteger, 'vidcust',
+      CustInfoData.FieldByName('IDCust').AsInteger, 'vsoname', Edit3.Text,
+      'vname', Edit1.Text, 'vlastname', Edit2.Text, 'vbirthday', Edit4.Text,
+      'vbirthplace', DBLC_CiCntr.KeyValue, 'vpasser', Edit16.Text, 'vpaspnum',
+      Edit17.Text, 'vpaspdate', Edit18.Text, 'vpaspplace', Edit19.Text, 'vcity',
+      DBLC_CiCity.KeyValue, 'vaddress', Edit6.Text, 'vworkplace', Edit8.Text,
+      'vphone_w', Edit12.Text, 'vphone_h', Edit11.Text, 'vphone_m', Edit10.Text,
+      've_mail', Edit13.Text, 'vurl', Edit14.Text, 'vrecomendation', '',
+      'vgaranted', Edit15.Text, 'votv_passport', '', 'votv_issued', '',
+      'votv_isdate', '', 'vnote', Memo1.Text, 'vwork', Edit9.Text, 'vtest', '',
+      'vfam_status', '', 'vsex', CB_SEX.ItemIndex + 1, 'vadrs_state', '',
+      'vbirth_state', '', 'vfakt_adress', '', 'vchild_info', '', 'vdoc_type',
+      '', 'vpasspin', '', 'vcitizenship', DBLC_Citizenship.KeyValue,
+      'vpassexpire', '', 'vreg_zip', '', 'vdoc_country', '', 'vcitizenship2',
+      '', 'vcitizenship3', '', 'vfakt_country', '', 'vfakt_city', '',
+      'vfakt_zip', '', 'vwork_place', '', 'vwork_post', '', 'vwork_adress', '',
+      'vwork_phone', '', 'vtph_contact_type', tph_contact_type.KeyValue,
+      'vtph_country', CountryByConctType.KeyValue, 'vtph_country_code',
+      DBEdit_CountryCode.Text, 'vtph_city', CityByConctType.KeyValue,
+      'vtph_state', tph_state.Text, 'vtph_zip', tph_zip.Text,
+      'vtph_country_prefix', tph_country_prefix.KeyValue, 'vtph_adress',
+      tph_adress.Text, 'vtph_communication_type',
+      tph_communication_type.KeyValue, 'vtph_number', tph_number.Text,
+      'vtph_extension', tph_extension.Text, 'vcontact_type',
+      Address_type.KeyValue, 'vCUINFAML', v_CUINFAML]);
+
+      ODSCustImages.Edit;
+
+    try
+      Image1.Picture.SaveToFile(Path);
+      TBlobField(ODSCustImages.FieldByName('PHOTO')).LoadFromFile(Path);
+      Image2.Picture.SaveToFile(Path);
+      TBlobField(ODSCustImages.FieldByName('CUSTSIGN')).LoadFromFile(Path);
+      Image3.Picture.SaveToFile(Path);
+      TBlobField(ODSCustImages.FieldByName('STAMP')).LoadFromFile(Path);
+    except
+      showmessage('Error during BlobOperation');
+    end;
+
+    CustInfoData.Refresh;
+  end;
+  Close;
+end;
+
+procedure TCustomerInfoForm.ToolButton8Click(Sender: TObject);
+begin
+  CustInfoData.Cancel;
+  Close;
+end;
+
+procedure TCustomerInfoForm.BitBtn1Click(Sender: TObject);
+begin
+  FormZoom := TFormZoom.Create(Self);
+  FormZoom.Height := Image1.Picture.Height;
+  FormZoom.Width := Image1.Picture.Width;
+  FormZoom.Image1.Height := Image1.Picture.Height;
+  FormZoom.Image1.Width := Image1.Picture.Width;
+
+  FormZoom.Image1.Picture := Image1.Picture;
+  FormZoom.ShowModal;
+end;
+
+procedure TCustomerInfoForm.BitBtn2Click(Sender: TObject);
+begin
+  FormZoom := TFormZoom.Create(Self);
+  FormZoom.Height := Image2.Picture.Height;
+  FormZoom.Width := Image2.Picture.Width;
+  FormZoom.Image1.Height := Image2.Picture.Height;
+  FormZoom.Image1.Width := Image2.Picture.Width;
+
+  FormZoom.Image1.Picture := Image2.Picture;
+  FormZoom.ShowModal;
+end;
+
+procedure TCustomerInfoForm.BitBtn3Click(Sender: TObject);
+begin
+  FormZoom := TFormZoom.Create(Self);
+  FormZoom.Height := Image3.Picture.Height;
+  FormZoom.Width := Image3.Picture.Width;
+  FormZoom.Image1.Height := Image3.Picture.Height;
+  FormZoom.Image1.Width := Image3.Picture.Width;
+
+  FormZoom.Image1.Picture := Image3.Picture;
+  FormZoom.ShowModal;
+end;
+
+procedure TCustomerInfoForm.BitBtn4Click(Sender: TObject);
+type
+  TJPEGQualityRange = 1 .. 100;
+var
+  Bmp: TBitmap;
+  Jpg: TJpegImage;
+  ExtS: String[4];
+begin
+  Bmp := TBitmap.Create;
+  Jpg := TJpegImage.Create;
+
+  ODSCustImages.Edit;
+  if OpenPictureDlg.Execute then
+  begin
+    try
+      { --Bmp to Jpeg Conertion -- }
+      ExtS := copy(AnsiUpperCase(ExtractFileExt(OpenPictureDlg.FileName)), 2,
+        MaxLongInt);
+      if ExtS = 'BMP' then
+      begin
+        Bmp.LoadFromFile(OpenPictureDlg.FileName);
+        Jpg.CompressionQuality := 100;
+        Jpg.Assign(Bmp);
+        Jpg.SaveToFile(Path);
+        Image1.Picture.LoadFromFile(Path);
+      end
+      else
+        Image1.Picture.LoadFromFile(OpenPictureDlg.FileName);
+      { --End of Convertion -- }
+    except
+      showmessage('Error during picture loading');
+    end;
+  end;
+end;
+
+procedure TCustomerInfoForm.BitBtn5Click(Sender: TObject);
+type
+  TJPEGQualityRange = 1 .. 100;
+var
+  Bmp: TBitmap;
+  Jpg: TJpegImage;
+  ExtS: String[4];
+begin
+  Bmp := TBitmap.Create;
+  Jpg := TJpegImage.Create;
+
+  ODSCustImages.Edit;
+  if OpenPictureDlg.Execute then
+  begin
+    try
+      { --Bmp to Jpeg Conertion -- }
+      ExtS := copy(AnsiUpperCase(ExtractFileExt(OpenPictureDlg.FileName)), 2,
+        MaxLongInt);
+      if ExtS = 'BMP' then
+      begin
+        Bmp.LoadFromFile(OpenPictureDlg.FileName);
+        Jpg.CompressionQuality := 100;
+        Jpg.Assign(Bmp);
+        Jpg.SaveToFile(Path);
+        Image2.Picture.LoadFromFile(Path);
+      end
+      else
+        Image2.Picture.LoadFromFile(OpenPictureDlg.FileName);
+      { --End of Convertion -- }
+    except
+      showmessage('Error during picture loading');
+    end;
+  end;
+end;
+
+procedure TCustomerInfoForm.BitBtn6Click(Sender: TObject);
+type
+  TJPEGQualityRange = 1 .. 100;
+var
+  Bmp: TBitmap;
+  Jpg: TJpegImage;
+  ExtS: String[4];
+begin
+  Bmp := TBitmap.Create;
+  Jpg := TJpegImage.Create;
+
+  ODSCustImages.Edit;
+  if OpenPictureDlg.Execute then
+  begin
+    try
+      { --Bmp to Jpeg Conertion -- }
+      ExtS := copy(AnsiUpperCase(ExtractFileExt(OpenPictureDlg.FileName)), 2,
+        MaxLongInt);
+      if ExtS = 'BMP' then
+      begin
+        Bmp.LoadFromFile(OpenPictureDlg.FileName);
+        Jpg.CompressionQuality := 100;
+        Jpg.Assign(Bmp);
+        Jpg.SaveToFile(Path);
+        Image3.Picture.LoadFromFile(Path);
+      end
+      else
+        Image3.Picture.LoadFromFile(OpenPictureDlg.FileName);
+      { --End of Convertion -- }
+    except
+      showmessage('Error during picture loading');
+    end;
+  end;
+end;
+
+procedure TCustomerInfoForm.Fill_EditClick(Sender: TObject);
+var
+  F: File of byte;
+begin
+  // CustInfoData.Open;
+  ODSCustImages.Close;
+  ODSCustImages.Open;
+
+  odsPassDeps.Close;
+  odsPassDeps.Open;
+
+  with CO_DataMod.ODS_customers_relations do
+  begin
+    Close;
+    SetVariable('v_custid', CO_DataMod.Customers.FieldByName('ID').AsInteger);
+    SetVariable('v_custid2', CustInfoData.FieldByName('idcust').AsInteger);
+    Open;
+  end;
+
+  forGoAml.Checked := False;
+  case CustInfoData.FieldByName('CUINFAML').AsInteger of
+    1:
+      forGoAml.Checked := True;
+  end;
+
+   AccOwner.Checked := False;
+  case CO_DataMod.ODS_customers_relations.FieldByName
+    ('accowner').AsInteger of
+    1: AccOwner.Checked := True;
+  end;
+
+  Edit1.Text := CustInfoData.FieldByName('name').AsString;
+  Edit2.Text := CustInfoData.FieldByName('lastname').AsString;
+  Edit3.Text := CustInfoData.FieldByName('soname').AsString;
+  Edit4.Text := CustInfoData.FieldByName('BIRTHDAY').AsString;
+  DBLC_CiCntr.KeyValue := CustInfoData.FieldByName('BIRTHPLACE').AsString;
+  Edit6.Text := CustInfoData.FieldByName('Address').AsString;
+  DBLC_CiCity.KeyValue := CustInfoData.FieldByName('City').AsString;
+  Edit8.Text := CustInfoData.FieldByName('WorkPlace').AsString;
+  Edit9.Text := CustInfoData.FieldByName('Work').AsString;
+  Edit10.Text := CustInfoData.FieldByName('Phone_m').AsString;
+  Edit11.Text := CustInfoData.FieldByName('Phone_h').AsString;
+  Edit12.Text := CustInfoData.FieldByName('Phone_w').AsString;
+  Edit13.Text := CustInfoData.FieldByName('e_mail').AsString;
+  Edit14.Text := CustInfoData.FieldByName('url').AsString;
+  Edit15.Text := CustInfoData.FieldByName('Garanted').AsString;
+  Edit16.Text := CustInfoData.FieldByName('PasSer').AsString;
+  Edit17.Text := CustInfoData.FieldByName('PaspNum').AsString;
+  Edit18.Text := CustInfoData.FieldByName('PaspDate').AsString;
+  Edit19.KeyValue := CustInfoData.FieldByName('PaspPlace').AsString;
+  Memo1.Text := CustInfoData.FieldByName('Note').AsString;
+  CB_SEX.ItemIndex := CustInfoData.FieldByName('SEX').AsInteger - 1;
+  DBLC_Citizenship.KeyValue := CustInfoData.FieldByName('citizenship')
+    .AsInteger;
+  DBLC_WorkPosts.KeyValue := CO_DataMod.ODS_customers_relations.FieldByName
+    ('work_post').AsInteger;
+  tph_adress.Text := CustInfoData.FieldByName('tph_adress').AsString;
+  tph_state.Text := CustInfoData.FieldByName('tph_state').AsString;
+  tph_zip.Text := CustInfoData.FieldByName('tph_zip').AsString;
+  tph_number.Text := CustInfoData.FieldByName('tph_number').AsString;
+  tph_extension.Text := CustInfoData.FieldByName('tph_extension').AsString;
+  Address_type.KeyValue := CustInfoData.FieldByName('contact_type').AsString;
+  CountryByConctType.KeyValue := CustInfoData.FieldByName
+    ('tph_country').AsString;
+  CityByConctType.KeyValue := CustInfoData.FieldByName('tph_city').AsString;
+  tph_contact_type.KeyValue := CustInfoData.FieldByName
+    ('tph_contact_type').AsString;
+  tph_communication_type.KeyValue := CustInfoData.FieldByName
+    ('tph_communication_type').AsString;
+  tph_country_prefix.KeyValue := CustInfoData.FieldByName
+    ('tph_country_prefix').AsString;
+  try
+    TDEdit4.Date := strtodate(Edit4.Text);
+    TDEdit18.Date := strtodate(Edit18.Text);
+  except
+    TDEdit4.Date := Date;
+    TDEdit18.Date := Date;
+  end;
+
+  GetPath;
+
+  if (ODSCustImagesPHOTO.IsNull) then
+  begin
+    Image1.Picture.LoadFromFile(Path_B);
+    { --no record - godda empty Image1-- }
+  end
+  else
+  begin
+    ODSCustImagesPHOTO.SaveToFile(Path);
+    AssignFile(F, Path);
+    Reset(F);
+    if FileSize(F) > 0 then
+    begin
+      CloseFile(F);
+      Image1.Picture.LoadFromFile(Path);
+      // Image1.Picture.Graphic.Height := Image1.Picture.Height div ((Image1.Picture.Graphic.Width div Image1.Width) * Image1.Height);
+      // Image1.Picture.Graphic.Width := Image1.Width;
+      { --JPEG Error #41-- }
+    end
+    else
+    begin
+      CloseFile(F);
+      Image1.Picture.LoadFromFile(Path_B);
+    end;
+  end;
+
+  if (ODSCustImagesCUSTSIGN.IsNull) then
+  begin
+    Image2.Picture.LoadFromFile(Path_B);
+    { --no record - godda empty Image1-- }
+  end
+  else
+  begin
+    ODSCustImagesCUSTSIGN.SaveToFile(Path);
+    AssignFile(F, Path);
+    Reset(F);
+    if FileSize(F) > 0 then
+    begin
+      CloseFile(F);
+      Image2.Picture.LoadFromFile(Path);
+      { --JPEG Error #41-- }
+    end
+    else
+    begin
+      CloseFile(F);
+      Image2.Picture.LoadFromFile(Path_B);
+    end;
+  end;
+
+  if (ODSCustImagesSTAMP.IsNull) then
+  begin
+    Image3.Picture.LoadFromFile(Path_B);
+    { --no record - godda empty Image1-- }
+  end
+  else
+  begin
+    ODSCustImagesSTAMP.SaveToFile(Path);
+    AssignFile(F, Path);
+    Reset(F);
+    if FileSize(F) > 0 then
+    begin
+      CloseFile(F);
+      Image3.Picture.LoadFromFile(Path);
+      { --JPEG Error #41-- }
+    end
+    else
+    begin
+      CloseFile(F);
+      Image3.Picture.LoadFromFile(Path_B);
+    end;
+  end;
+end;
+
+procedure TCustomerInfoForm.FormActivate(Sender: TObject);
+begin
+  Fill_Edit.Click;
+end;
+
+procedure TCustomerInfoForm.FormCanResize(Sender: TObject;
+  var NewWidth, NewHeight: Integer; var Resize: Boolean);
+begin
+  Resize := False;
+end;
+
+procedure TCustomerInfoForm.FormCreate(Sender: TObject);
+begin
+  SBTranslateProc.TranslateAllCompForms(Self, sboapiDataModule.OrPack_SL);
+end;
+
+procedure TCustomerInfoForm.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+  if Ord(Key) = VK_ESCAPE then
+    Close;
+end;
+
+end.

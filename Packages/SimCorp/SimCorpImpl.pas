@@ -1,0 +1,864 @@
+﻿unit SimCorpImpl;
+
+{$WARN SYMBOL_PLATFORM OFF}
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActiveX, AxCtrls, SimCorp_TLB, StdVcl, StdCtrls,  Mask,
+  ExtCtrls, ComCtrls, ToolWin, ImgList, DB, OracleData, Grids,
+  DBGrids,  Menus, Oracle;
+
+type
+  TSimCorp = class(TActiveForm, ISimCorp)
+    ImageList1: TImageList;
+    CoolBar1: TCoolBar;
+    ToolBar1: TToolBar;
+    ToolButton3: TToolButton;
+    ToolButton6: TToolButton;
+    ToolButton2: TToolButton;
+    ToolButton8: TToolButton;
+    ToolButton7: TToolButton;
+    ToolButton9: TToolButton;
+    FilterPanel: TPanel;
+    Panel10: TPanel;
+    Panel11: TPanel;
+    RadioGrpCont: TRadioGroup;
+    Panel1: TPanel;
+    ImageList: TImageList;
+    MainGrid: TDBGrid;
+    DataSource1: TDataSource;
+    OracleDataSet1: TOracleDataSet;
+    ToolButton1: TToolButton;
+    PopupMenu1: TPopupMenu;
+    Label1: TLabel;
+    EditDat: TEdit;
+    Label2: TLabel;
+    EditDebit_accno: TEdit;
+    Label3: TLabel;
+    Editcredit_accno: TEdit;
+    Label4: TLabel;
+    Edituniqueno: TEdit;
+    Label5: TLabel;
+    Editsecurityid: TEdit;
+    OraclePackage1: TOraclePackage;
+    Hamsnse1: TMenuItem;
+    procedure ToolButton9Click(Sender: TObject);
+    procedure MainGridDrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TColumn; State: TGridDrawState);
+    procedure ToolButton3Click(Sender: TObject);
+    procedure ActnSearchExecute(Sender: TObject);
+
+    procedure EditDatKeyPress(Sender: TObject; var Key: Char);
+    procedure EditDatExit(Sender: TObject);
+    procedure ToolButton2Click(Sender: TObject);
+    procedure RadioGrpContClick(Sender: TObject);
+    procedure Hamsnse1Click(Sender: TObject);
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure MainGridDblClick(Sender: TObject);
+    procedure ToolButton7Click(Sender: TObject);
+    procedure MainGridCellClick(Column: TColumn);
+    procedure MainGridTitleClick(Column: TColumn);
+  private
+    { Private declarations }
+    FEvents: ISimCorpEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure MouseEnterEvent(Sender: TObject);
+    procedure MouseLeaveEvent(Sender: TObject);
+    procedure PaintEvent(Sender: TObject);
+    function ExcuseMeUser(Question : String) : Boolean;
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AlignDisabled: WordBool; safecall;
+    function Get_AlignWithMargins: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_BorderWidth: Integer; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_DockSite: WordBool; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_ExplicitHeight: Integer; safecall;
+    function Get_ExplicitLeft: Integer; safecall;
+    function Get_ExplicitTop: Integer; safecall;
+    function Get_ExplicitWidth: Integer; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_MouseInClient: WordBool; safecall;
+    function Get_ParentCustomHint: WordBool; safecall;
+    function Get_ParentDoubleBuffered: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PopupMode: TxPopupMode; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_ScreenSnap: WordBool; safecall;
+    function Get_SnapBuffer: Integer; safecall;
+    function Get_UseDockManager: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_AlignWithMargins(Value: WordBool); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_BorderWidth(Value: Integer); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_DockSite(Value: WordBool); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_ParentCustomHint(Value: WordBool); safecall;
+    procedure Set_ParentDoubleBuffered(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PopupMode(Value: TxPopupMode); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_ScreenSnap(Value: WordBool); safecall;
+    procedure Set_SnapBuffer(Value: Integer); safecall;
+    procedure Set_UseDockManager(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+  public
+    { Public declarations }
+    procedure Initialize; override;
+  end;
+ var
+ SimCorp:TSimCorp   ;
+implementation
+
+uses ComObj, ComServ,sboapiDataModuleImpl, EditFormImpl;
+
+{$R *.DFM}
+
+{ TSimCorp }
+
+procedure TSimCorp.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_SimCorpPage); }
+end;
+ procedure TSimCorp.ActiveFormCreate(Sender: TObject);
+begin
+ SimCorp:=Self;
+ EditForm := TEditForm.Create(Self);
+ EditForm.OracleDataSet1.Open ;
+end;
+
+procedure TSimCorp.ActnSearchExecute(Sender: TObject);
+var
+  SearchField : string;
+  SearchOptions : TSearchRecordOptions;
+begin
+  SearchOptions := [srIgnoreCase ,srPartialMatch];
+
+  with Sender as TEdit  do
+  begin
+    SearchField := copy(Name,5,length(Name));
+   { MainGrid.SelectedRows.Clear;
+    with  TOracleDataSet(MainGrid.DataSource.DataSet) do
+    if  not SearchRecord(
+                  SearchField
+                 ,Text
+                 ,SearchOptions + [srFromCurrent , srForward ]
+                 ) then
+    if MessageDlg(
+              'Axtarış sona çatıb.'+#13+'əvvəldən başlamaq istəyirsinizmi?'
+             ,mtInformation
+             ,[mbNo , mbYes]
+             ,0
+             ) = mrYes  then
+    if  not SearchRecord(
+                 SearchField
+                ,Text
+                ,SearchOptions + [ srFromBeginning ]
+                )  then
+    MessageDlg('Yazı tapılmadı!',mtInformation,[mbOK],0);   }
+
+   with OracleDataSet1 do begin
+
+    SQL[2] := (':pSearch');
+
+       SetVariable('pSearch', ' and lower('+SearchField+') = '''+LowerCase(Text)+'''')   ;
+
+
+    if Trim(Text)='' then SetVariable('pSearch', '');
+     Refresh;
+   end;
+  end;
+   end;
+
+
+procedure TSimCorp.EditDatExit(Sender: TObject);
+begin
+(Sender as TEdit).Text := '';
+OracleDataSet1.SetVariable('pSearch', '');
+OracleDataSet1.Refresh;
+end;
+
+procedure TSimCorp.EditDatKeyPress(Sender: TObject; var Key: Char);
+begin
+  if ord(Key) = VK_RETURN
+  then  ActnSearchExecute(Sender)
+end;
+
+procedure TSimCorp.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as ISimCorpEvents;
+  inherited EventSinkChanged(EventSink);
+end;
+
+procedure TSimCorp.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnMouseEnter := MouseEnterEvent;
+  OnMouseLeave := MouseLeaveEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TSimCorp.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TSimCorp.Get_AlignDisabled: WordBool;
+begin
+  Result := AlignDisabled;
+end;
+
+function TSimCorp.Get_AlignWithMargins: WordBool;
+begin
+  Result := AlignWithMargins;
+end;
+
+function TSimCorp.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TSimCorp.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TSimCorp.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TSimCorp.Get_BorderWidth: Integer;
+begin
+  Result := Integer(BorderWidth);
+end;
+
+function TSimCorp.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TSimCorp.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TSimCorp.Get_DockSite: WordBool;
+begin
+  Result := DockSite;
+end;
+
+function TSimCorp.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TSimCorp.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TSimCorp.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TSimCorp.Get_ExplicitHeight: Integer;
+begin
+  Result := ExplicitHeight;
+end;
+
+function TSimCorp.Get_ExplicitLeft: Integer;
+begin
+  Result := ExplicitLeft;
+end;
+
+function TSimCorp.Get_ExplicitTop: Integer;
+begin
+  Result := ExplicitTop;
+end;
+
+function TSimCorp.Get_ExplicitWidth: Integer;
+begin
+  Result := ExplicitWidth;
+end;
+
+function TSimCorp.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TSimCorp.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TSimCorp.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TSimCorp.Get_MouseInClient: WordBool;
+begin
+  Result := MouseInClient;
+end;
+
+function TSimCorp.Get_ParentCustomHint: WordBool;
+begin
+  Result := ParentCustomHint;
+end;
+
+function TSimCorp.Get_ParentDoubleBuffered: WordBool;
+begin
+  Result := ParentDoubleBuffered;
+end;
+
+function TSimCorp.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TSimCorp.Get_PopupMode: TxPopupMode;
+begin
+  Result := Ord(PopupMode);
+end;
+
+function TSimCorp.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TSimCorp.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TSimCorp.Get_ScreenSnap: WordBool;
+begin
+  Result := ScreenSnap;
+end;
+
+function TSimCorp.Get_SnapBuffer: Integer;
+begin
+  Result := SnapBuffer;
+end;
+
+function TSimCorp.Get_UseDockManager: WordBool;
+begin
+  Result := UseDockManager;
+end;
+
+function TSimCorp.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TSimCorp.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TSimCorp.Hamsnse1Click(Sender: TObject);
+begin
+with MainGrid, SelectedRows, DataSource.DataSet do
+  begin
+    DisableControls;
+    try
+      First;
+      while not Eof do
+       begin
+        CurrentRowSelected := True;
+        Next;
+       end;
+    finally
+      EnableControls;
+    end;
+  end;
+end;
+
+procedure TSimCorp.MainGridCellClick(Column: TColumn);
+begin
+MainGrid.Options := MainGrid.Options - [dgRowSelect];
+MainGrid.Options := MainGrid.Options + [dgEditing];
+
+end;
+
+procedure TSimCorp.MainGridDblClick(Sender: TObject);
+begin
+EditForm.CMSearchEditLoacAccs.Text:=OracleDataSet1.FieldByName('debit_accno').AsString;
+EditForm.CMSearchEdit1.Text:=OracleDataSet1.FieldByName('credit_accno').AsString;
+EditForm.CurrencyEdit1.Value:=OracleDataSet1.FieldByName('debit_ammount').AsFloat;
+EditForm.CurrencyEdit2.Value:=OracleDataSet1.FieldByName('credit_ammount').AsFloat;
+EditForm.DateTimePicker1.DateTime:=OracleDataSet1.FieldByName('dat').AsDateTime;
+
+ if OracleDataSet1.FieldByName('typ').AsInteger=0 then
+ EditForm.CurrencyEdit3.Value:=OracleDataSet1.FieldByName('amount_pc').AsFloat
+  else
+ EditForm.CurrencyEdit3.Value:=OracleDataSet1.FieldByName('lammount').AsFloat ;
+ EditForm.Edit1.Text:= OracleDataSet1.FieldByName('description').AsString ;
+  MainGrid.SelectedRows.Clear;
+ MainGrid.Options := MainGrid.Options + [dgRowSelect];
+EditForm.ShowModal ;
+
+end;
+
+procedure TSimCorp.MainGridDrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TColumn; State: TGridDrawState);
+var
+  ImageIndex: Integer;
+begin
+ ImageIndex := -1;
+  with Sender as TDBGrid do
+  begin
+    if DataSource.DataSet.RecordCount <> 0 then
+    begin
+      case DataSource.DataSet.FieldByName('Status').AsInteger of
+      0:
+        ImageIndex := 7;
+      1:
+        ImageIndex := 8;
+      2:
+        ImageIndex := 9;
+      else
+      end;
+      if (DataCol = 1) and (ImageIndex <> -1) then
+        ImageList.Draw(Canvas, Rect.Left, Rect.Top, ImageIndex, True)
+      else
+        DefaultDrawColumnCell(Rect, DataCol, Column, State);
+    end;
+  end;
+
+end;
+
+procedure TSimCorp.MainGridTitleClick(Column: TColumn);
+var
+   TitleName :string;
+   //SortPosition: word;
+begin
+ //SortPosition :=100;
+
+ if (MainGrid.DataSource.DataSet.IsEmpty) or (Column.FieldName = EmptyStr) then Exit;
+ Screen.Cursor :=crHourGlass;
+ TitleName :=Column.FieldName;
+ with TOracleDataSet(MainGrid.DataSource.DataSet) do
+  try
+   SetVariable('Title', TitleName); // H.R. 24.09.2010
+   Refresh;
+  finally
+
+   Screen.Cursor :=crDefault;
+  end;
+
+end;
+
+procedure TSimCorp._Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TSimCorp.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TSimCorp.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TSimCorp.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TSimCorp.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TSimCorp.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TSimCorp.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TSimCorp.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TSimCorp.MouseEnterEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnMouseEnter;
+end;
+
+procedure TSimCorp.MouseLeaveEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnMouseLeave;
+end;
+
+procedure TSimCorp.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TSimCorp.RadioGrpContClick(Sender: TObject);
+begin
+with OracleDataSet1 do begin
+    if RadioGrpCont.ItemIndex=1 then
+    begin
+      Close;
+      SQL[1]:='';
+      SQL[1]:=' and typ=0' ;
+      Open;
+    end;
+    if RadioGrpCont.ItemIndex=2 then
+    begin
+      Close;
+      SQL[1]:='';
+      SQL[1]:=' and typ=1' ;
+      Open;
+    end;
+    if RadioGrpCont.ItemIndex=0 then
+    begin
+      Close;
+      SQL[1]:='';
+      Open;
+    end;
+end;
+end;
+
+procedure TSimCorp.Set_AlignWithMargins(Value: WordBool);
+begin
+  AlignWithMargins := Value;
+end;
+
+procedure TSimCorp.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TSimCorp.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TSimCorp.Set_AxBorderStyle(Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TSimCorp.Set_BorderWidth(Value: Integer);
+begin
+  BorderWidth := TBorderWidth(Value);
+end;
+
+procedure TSimCorp.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TSimCorp.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TSimCorp.Set_DockSite(Value: WordBool);
+begin
+  DockSite := Value;
+end;
+
+procedure TSimCorp.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TSimCorp.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TSimCorp.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TSimCorp.Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TSimCorp.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := string(Value);
+end;
+
+procedure TSimCorp.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TSimCorp.Set_ParentCustomHint(Value: WordBool);
+begin
+  ParentCustomHint := Value;
+end;
+
+procedure TSimCorp.Set_ParentDoubleBuffered(Value: WordBool);
+begin
+  ParentDoubleBuffered := Value;
+end;
+
+procedure TSimCorp.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TSimCorp.Set_PopupMode(Value: TxPopupMode);
+begin
+  PopupMode := TPopupMode(Value);
+end;
+
+procedure TSimCorp.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TSimCorp.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TSimCorp.Set_ScreenSnap(Value: WordBool);
+begin
+  ScreenSnap := Value;
+end;
+
+procedure TSimCorp.Set_SnapBuffer(Value: Integer);
+begin
+  SnapBuffer := Value;
+end;
+
+procedure TSimCorp.Set_UseDockManager(Value: WordBool);
+begin
+  UseDockManager := Value;
+end;
+
+procedure TSimCorp.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+ function TSimCorp.ExcuseMeUser(Question : String) : Boolean;
+begin
+  Result :=
+    MessageDlg(
+      Question
+     ,mtConfirmation
+     ,[mbYes,mbNo]
+     ,0
+     ) = mrYes;
+end;
+procedure TSimCorp.ToolButton2Click(Sender: TObject);
+resourcestring
+  rsConfirmForOne = '%s  - № li əməliyyat %s. Əminsiniz?';
+  rsConfirmForAll = '%d - sayda əməliyyat %s. Əminsiniz?';
+  rsCalcPercent   = 'Günün sənədlərinə göndərləcək';
+var
+ typ,ID,Status, I : Integer;
+  SelectedRowsCnt : Integer;
+begin
+  with MainGrid, DataSource.DataSet do
+  begin
+
+    SelectedRowsCnt := SelectedRows.Count;
+
+    if SelectedRowsCnt > 1 then
+    begin
+
+      if not
+        ExcuseMeUser(
+              Format(rsConfirmForAll,[SelectedRowsCnt,rsCalcPercent])
+              ) then   Exit;
+
+      Self.Update;
+        for I := 0 to SelectedRowsCnt - 1 do
+      begin
+
+        GotoBookmark(Pointer(SelectedRows[I]));
+
+        ID := FieldByName('ID').AsInteger;
+        Status := FieldByName('status').AsInteger;
+        typ:=FieldByName('typ').AsInteger;
+        if Status in[0,2]then
+        begin
+          if typ=1 then
+          OraclePackage1.CallProcedure('Simcop_Faiz',['p_id' ,id])
+          else
+          OraclePackage1.CallProcedure('Simcop_Adi',['p_id' ,id])
+         end;
+      end;
+
+
+  end else
+    begin
+        ID := FieldByName('ID').AsInteger;
+        Status := FieldByName('status').AsInteger;
+        typ:=FieldByName('typ').AsInteger;
+     if not   ExcuseMeUser(Format(rsConfirmForOne,[FieldByName('uniqueno').AsString,rsCalcPercent]))
+               then   Exit;
+if Status in[0,2]then
+        begin
+          if typ=1 then
+          OraclePackage1.CallProcedure('Simcop_Faiz',['p_id' ,id])
+          else
+          OraclePackage1.CallProcedure('Simcop_Adi',['p_id' ,id])
+         end;
+
+    end;
+    Refresh;
+  end;
+
+end;
+
+procedure TSimCorp.ToolButton3Click(Sender: TObject);
+begin
+OracleDataSet1.Refresh
+end;
+
+procedure TSimCorp.ToolButton7Click(Sender: TObject);
+//begin
+//if  OracleDataSet1.FieldByName('status').AsInteger=1 then
+//  begin
+//  ShowMessage('Bu əməliyatı Silmək olmaz !');
+//  exit;
+//  end;
+//  if MessageDlg(
+//       'Əməliyat ləğv olunacaq . Əminsinizmi !',
+//       mtConfirmation,
+//       [mbYes,mbNo],
+//       0) <> mrYes
+//     then   Exit;
+//
+//     OraclePackage1.CallProcedure('delete_arxive',['p_id' ,OracleDataSet1.FieldByName('ID').AsInteger]) ;
+//     OracleDataSet1.Refresh;
+ resourcestring
+  rsConfirmForOne = '%s  - № li əməliyyat %s. Əminsiniz?';
+  rsConfirmForAll = '%d - sayda əməliyyat %s. Əminsiniz?';
+  rsCalcPercent   = 'Silnəcək';
+var
+ typ,ID,Status, I : Integer;
+  SelectedRowsCnt : Integer;
+begin
+  with MainGrid, DataSource.DataSet do
+  begin
+
+    SelectedRowsCnt := SelectedRows.Count;
+
+    if SelectedRowsCnt > 1 then
+    begin
+
+      if not
+        ExcuseMeUser(
+              Format(rsConfirmForAll,[SelectedRowsCnt,rsCalcPercent])
+              ) then   Exit;
+
+      Self.Update;
+        for I := 0 to SelectedRowsCnt - 1 do
+      begin
+
+        GotoBookmark(Pointer(SelectedRows[I]));
+
+        ID := FieldByName('ID').AsInteger;
+        Status := FieldByName('status').AsInteger;
+        typ:=FieldByName('typ').AsInteger;
+        if Status in[0,2]then
+        begin
+OraclePackage1.CallProcedure('delete_arxive',['p_id' ,OracleDataSet1.FieldByName('ID').AsInteger]) ;
+         end;
+      end;
+
+
+  end else
+    begin
+        ID := FieldByName('ID').AsInteger;
+        Status := FieldByName('status').AsInteger;
+        typ:=FieldByName('typ').AsInteger;
+     if not   ExcuseMeUser(Format(rsConfirmForOne,[FieldByName('uniqueno').AsString,rsCalcPercent]))
+               then   Exit;
+if Status in[0,2]then
+        begin
+OraclePackage1.CallProcedure('delete_arxive',['p_id' ,OracleDataSet1.FieldByName('ID').AsInteger]) ;
+         end;
+
+    end;
+    Refresh;
+  end;
+
+end;
+
+procedure TSimCorp.ToolButton9Click(Sender: TObject);
+begin
+  FilterPanel.Visible := not FilterPanel.Visible;
+  ToolButton9.Down := FilterPanel.Visible;
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TSimCorp,
+    Class_SimCorp,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

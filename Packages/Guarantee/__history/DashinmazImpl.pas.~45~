@@ -1,0 +1,514 @@
+﻿unit DashinmazImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, DBGridEh, DBCtrlsEh, StdCtrls, ExtCtrls, Mask, DBLookupEh, Buttons,
+  DBCtrls, HintBox, jpeg,DB, OracleData, CheckLst, CMDBSearchEdit, ComCtrls;
+
+type
+  TFrmDashinmaz = class(TForm)
+    Panel9: TPanel;
+    SpeedButton1: TSpeedButton;
+    SpeedButton10: TSpeedButton;
+    Panel10: TPanel;
+    SpeedButton2: TSpeedButton;
+    SpeedButton3: TSpeedButton;
+    Label24: TLabel;
+    Label25: TLabel;
+    DBLookupComboboxEh1: TDBLookupComboboxEh;
+    Panel11: TPanel;
+    SpeedButton4: TSpeedButton;
+    SpeedButton5: TSpeedButton;
+    Label155: TLabel;
+    Label5: TLabel;
+    DBEditEh8: TDBEditEh;
+    Panel12: TPanel;
+    SpeedButton11: TSpeedButton;
+    SpeedButton12: TSpeedButton;
+    Label29: TLabel;
+    Label28: TLabel;
+    DBNumberEditEh5: TDBNumberEditEh;
+    Panel14: TPanel;
+    SpeedButton13: TSpeedButton;
+    SpeedButton14: TSpeedButton;
+    Label35: TLabel;
+    Panel15: TPanel;
+    SpeedButton15: TSpeedButton;
+    SpeedButton16: TSpeedButton;
+    Label157: TLabel;
+    Label154: TLabel;
+    DBLookupComboboxEh2: TDBLookupComboboxEh;
+    InUse_rg: TRadioGroup;
+    GroupBox1: TGroupBox;
+    DBEditEh2: TDBEditEh;
+    GroupBox2: TGroupBox;
+    DBDateTimeEditEh3: TDBDateTimeEditEh;
+    Label6: TLabel;
+    DBEditEh3: TDBEditEh;
+    Label2: TLabel;
+    DBNumberEditEh1: TDBNumberEditEh;
+    Label3: TLabel;
+    DBNumberEditEh2: TDBNumberEditEh;
+    Label4: TLabel;
+    DBNumberEditEh3: TDBNumberEditEh;
+    Label7: TLabel;
+    DBNumberEditEh4: TDBNumberEditEh;
+    Label9: TLabel;
+    DBNumberEditEh6: TDBNumberEditEh;
+    Label10: TLabel;
+    GroupBox5: TGroupBox;
+    Panel16: TPanel;
+    Label17: TLabel;
+    spcompany: TSpeedButton;
+    DBEdit8: TDBLookupComboboxEh;
+    Panel19: TPanel;
+    SpeedButton33: TSpeedButton;
+    SpeedButton34: TSpeedButton;
+    Label22: TLabel;
+    DBEditEh12: TDBEditEh;
+    Panel20: TPanel;
+    SpeedButton35: TSpeedButton;
+    SpeedButton36: TSpeedButton;
+    Label23: TLabel;
+    DBDateTimeEditEh4: TDBDateTimeEditEh;
+    Label11: TLabel;
+    DBNumberEditEh8: TDBNumberEditEh;
+    Panel1: TPanel;
+    Label12: TLabel;
+    DBNumberEditEh9: TDBNumberEditEh;
+    GroupBox6: TGroupBox;
+    Label116: TLabel;
+    Label152: TLabel;
+    Label117: TLabel;
+    Label118: TLabel;
+    DBEdit13: TDBEdit;
+    DBEdit32: TDBEdit;
+    DBDateTimeEditEh5: TDBDateTimeEditEh;
+    DBLookupComboboxEh26: TDBLookupComboboxEh;
+    Image1: TImage;
+    HintBox1: THintBox;
+    SpeedButton38: TSpeedButton;
+    SpeedButton39: TSpeedButton;
+    CompanySrc: TDataSource;
+    CompanySet: TOracleDataSet;
+    GroupBox3: TGroupBox;
+    CheckListBox1: TCheckListBox;
+    Label13: TLabel;
+    Label16: TLabel;
+    Edit4: TEdit;
+    Edit2: TEdit;
+    Label14: TLabel;
+    Label18: TLabel;
+    Edit5: TEdit;
+    Edit6: TEdit;
+    Label19: TLabel;
+    Label15: TLabel;
+    Edit3: TEdit;
+    Edit1: TEdit;
+    ods_phys: TOracleDataSet;
+    ods_mkt: TOracleDataSet;
+    ods_physFUL_NAME: TWideStringField;
+    ods_physPASPORT: TWideStringField;
+    ods_physPINKO: TWideStringField;
+    ods_mktID: TIntegerField;
+    ods_mktNAME: TWideStringField;
+    ods_mktINN: TWideStringField;
+    ods_physIDCUST: TFloatField;
+    Label20: TLabel;
+    DBLookupComboboxEh3: TDBLookupComboboxEh;
+    Label21: TLabel;
+    DBLookupComboboxEh4: TDBLookupComboboxEh;
+    Label26: TLabel;
+    DBNumberEditEh10: TDBNumberEditEh;
+    DBEditEh1: TDBEditEh;
+    ods_mutex: TOracleDataSet;
+    WideStringField1: TWideStringField;
+    WideStringField2: TWideStringField;
+    WideStringField3: TWideStringField;
+    FloatField1: TFloatField;
+    DBEdit1: TDBEdit;
+    Label27: TLabel;
+    Label31: TLabel;
+    DBLookupComboboxEh5: TDBLookupComboboxEh;
+    DBDateTimeEditEh1: TDBDateTimeEditEh;
+    Label32: TLabel;
+    Edit7: TEdit;
+    Button1: TButton;
+    ODS_borc: TOracleDataSet;
+    ODS_borcIDCUST: TFloatField;
+    ODS_borcFUL_NAME: TWideStringField;
+    ODS_borcPASPORT: TWideStringField;
+    ODS_borcPINKO: TWideStringField;
+    Label34: TLabel;
+    DBEditEh5: TDBEditEh;
+    CompanySetID: TFloatField;
+    CompanySetNAME: TWideStringField;
+    CompanySetADDRES: TWideStringField;
+    DBDateTimeEditEh2: TDBDateTimeEditEh;
+    Label30: TLabel;
+    DBNumberEditEh7: TDBNumberEditEh;
+    Label1: TLabel;
+    Edit8: TEdit;
+    ODS_borc2: TOracleDataSet;
+    Button2: TButton;
+    ODS_borc2IDCUST: TFloatField;
+    ODS_borc2FUL_NAME: TWideStringField;
+    ODS_borc2PASPORT: TWideStringField;
+    ODS_borc2PINKO: TWideStringField;
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormCreate(Sender: TObject);
+    procedure FormCanResize(Sender: TObject; var NewWidth, NewHeight: Integer;
+      var Resize: Boolean);
+    procedure SpeedButton39Click(Sender: TObject);
+    procedure SpeedButton38Click(Sender: TObject);
+     procedure savechg;
+     procedure  CheckFields;
+
+procedure LoadPlugin2(PluginName :String;PluginParam :String;PluginParam2 :String);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure CheckListBox1ClickCheck(Sender: TObject);
+    procedure DBEdit1KeyPress(Sender: TObject; var Key: Char);
+    procedure Button1Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure DBEdit8CloseUp(Sender: TObject; Accept: Boolean);
+    procedure Button2Click(Sender: TObject);
+
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmDashinmaz: TFrmDashinmaz;
+
+implementation
+
+{$R *.dfm}
+ uses DataMGuarantee,sboapiDataModuleImpl, FormGuarpldginfolmpl,GuaranteeMgrImpl,SBTranslateProc,
+  FormGuarAddlmpl, Unitcust,OpenAccountImpl;
+procedure TFrmDashinmaz.CheckListBox1ClickCheck(Sender: TObject);
+begin
+
+case  CheckListBox1.ItemIndex of
+
+0:begin
+   CheckListBox1.Checked[1]:=false;
+  if   CheckListBox1.Checked[0]=true then
+  begin
+   LoadPlugin2('Sb_General.bpl','FormCusNom','') ;
+
+  end;
+  with ods_phys do
+  begin
+  close;
+  SetVariable('v_id',nomid);
+  open;
+  edit4.Text:=IntToStr(nomid);
+  edit5.Text:=ods_physFUL_NAME.AsString;
+  edit6.Text:=ods_physPINKO.AsString;
+  sex_satici:=nomid;
+  mkt_id:=1;
+end;
+end;
+1:begin
+   CheckListBox1.Checked[0]:=false;
+  if   CheckListBox1.Checked[1]=true then
+  begin
+    mkt_id:=2;
+    FormCUT:=TFormCUT.Create(self);
+    FormCUT.ShowModal;
+  end;
+end;
+end;
+end;
+
+procedure TFrmDashinmaz.DBEdit1KeyPress(Sender: TObject; var Key: Char);
+begin
+ if ord(Key) = 13 then
+
+with ods_mutex do
+begin
+ close;
+ SetVariable('v_id',DBEdit1.Text);
+ open;
+end;
+ DBEditEh12.Text:=ods_mutex.FieldByName('ful_name').AsString;
+
+end;
+
+procedure TFrmDashinmaz.DBEdit8CloseUp(Sender: TObject; Accept: Boolean);
+begin
+DBEditEh5.Text:=CompanySet.FieldByName('addres').AsString;
+
+end;
+
+procedure TFrmDashinmaz.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+resize:=False
+end;
+
+
+
+procedure TFrmDashinmaz.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  Edit1.Clear;
+  edit2.Clear;
+  edit3.Clear;
+  edit4.Clear;
+  edit5.Clear;
+  edit6.Clear;
+   edit7.Clear;
+    edit8.Clear;
+  CheckListBox1.Checked[0]:=false;
+  CheckListBox1.Checked[1]:=false;
+
+end;
+
+procedure TFrmDashinmaz.LoadPlugin2(PluginName :String;PluginParam :String;PluginParam2 :String);
+var PluginHandle :THandle;
+    exportproc : procedure(s:String;k:String);
+begin
+   PluginHandle := LoadPackage(ExtractFilePath(Application.ExeName)+PluginName);
+
+   if PluginHandle > 0 then
+   begin
+      @exportproc := GetProcAddress(PluginHandle,'InitPlugin');
+      exportproc(PluginParam,PluginParam2);
+   end;
+end;
+
+
+
+procedure TFrmDashinmaz.FormCreate(Sender: TObject);
+begin
+SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TFrmDashinmaz.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+ if ord(key) = VK_ESCAPE then close;
+end;
+ procedure TFrmDashinmaz.FormShow(Sender: TObject);
+begin
+if form_edit_ins=true then
+ begin
+with ODS_borc do
+begin
+close;
+   SetVariable('v_id',DataMGuarante.DataSetGuaranteeBIRGE_BORCID.AsInteger);
+open;
+with ODS_borc2 do
+begin
+close;
+   SetVariable('v_id',DataMGuarante.DataSetGuaranteeBIRGE_BORCID2.AsInteger);
+open;
+
+ edit7.Text:=ODS_borc2FUL_NAME.AsString;
+ edit8.Text:=ODS_borcFUL_NAME.AsString;
+ birg_borcid2:=DataMGuarante.DataSetGuaranteeBIRGE_BORCID2.AsInteger;
+ birg_borcid:=DataMGuarante.DataSetGuaranteeBIRGE_BORCID.AsInteger;
+ mkt_id:=DataMGuarante.DataSetGuaranteeMKT.AsInteger;
+ satici_id :=DataMGuarante.DataSetGuaranteeSATICI.AsInteger;
+ sex_satici:=DataMGuarante.DataSetGuaranteeSEX_SATICI.AsInteger;
+end;
+
+end;
+end;
+end;
+
+procedure TFrmDashinmaz.Button1Click(Sender: TObject);
+begin
+ LoadPlugin2('Sb_General.bpl','FormCusNom','') ;
+ with ods_borc do
+  begin
+  close;
+  SetVariable('v_id',nomid);
+  open;
+  birg_borcid:=nomid;
+   end;
+
+   edit8.Text:=ODS_borcFUL_NAME.AsString;
+ end;
+
+procedure TFrmDashinmaz.Button2Click(Sender: TObject);
+begin
+begin
+ LoadPlugin2('Sb_General.bpl','FormCusNom','') ;
+ with ods_borc2 do
+  begin
+  close;
+  SetVariable('v_id',nomid);
+  open;
+  birg_borcid2:=nomid;
+   end;
+
+   edit7.Text:=ODS_borc2FUL_NAME.AsString;
+end;
+end;
+
+procedure TFrmDashinmaz.CheckFields;
+
+resourcestring rs_checkfields = '"%s" - sahəsi boşdur!';
+
+procedure ShowMsg(Message :String);
+begin
+   HintBox1.ShowMessage(Message);
+   Abort;
+end;
+
+procedure CheckFieldByName(FieldName :TField);
+begin
+   if FieldName.IsNull then
+      ShowMsg(Format(rs_checkfields,[FieldName.DisplayName]))
+end;
+procedure CheckFieldByNames;
+begin
+with   DataMGuarante do
+begin
+//CheckFieldByName(MainDSetPLEDGEID);
+//CheckFieldByName(MainDSetPLEDGENAME);
+//CheckFieldByName(MainDSetPLEDGEPRICE);
+//CheckFieldByName(MainDSetPLEDGSORTS);
+
+{if (DBLookupComboboxEh1.KeyValue<>1) or(DBLookupComboboxEh1.KeyValue<>66) then
+ CheckFieldByName(MainDSetOUTCOLLATERALACCID);
+  }
+end;
+end;
+begin
+ CheckFieldByNames
+end;
+ procedure TFrmDashinmaz.SaveChg;
+begin
+if CheckListBox1.ItemIndex=0 then
+    satici_id:=-1;
+
+if DataMGuarante.MainDset_dpledgeid.asinteger<>1 then
+ CheckFields;
+    DataMGuarante.Guarante.CallProcedure('Guarantee_Add2',[
+    DataMGuarante.MainDset_did.asinteger,
+    0,
+    DataMGuarante.MainDset_dpledgeid.asinteger,
+    DataMGuarante.MainDset_dpledgename.asstring,
+    DataMGuarante.MainDset_dholdername.asstring,
+    DataMGuarante.MainDset_dholderaddress.asstring,
+    DataMGuarante.MainDset_danyinfotodisting.asstring,
+    DataMGuarante.MainDset_dregistryno.asstring,
+    DataMGuarante.MainDset_dregistryagency.asstring,
+    DataMGuarante.MainDset_dregistrydate.asdatetime,
+    DataMGuarante.MainDset_dpledgeinuse.asinteger,
+    DataMGuarante.MainDset_dpledgeinsurant.asinteger,
+    DataMGuarante.MainDset_dinsuranceagency.asfloat,
+    DataMGuarante.MainDset_dinsuranceamount.asfloat,
+    DataMGuarante.MainDset_dinsurancedate.asdatetime,
+    DataMGuarante.MainDset_dpledgepricetorpaqha.asfloat,
+    DataMGuarante.MainDset_dpledgepriceevkv.asfloat,
+    DataMGuarante.MainDset_dinsuranceright.asfloat,
+    DataMGuarante.MainDset_dinsuranceid.asstring,
+    DataMGuarante.MainDset_dpledgeid_p.asinteger,
+    DataMGuarante.MainDset_dgqname.asstring,
+    DataMGuarante.MainDset_dgqpaspnum .asstring,
+    DataMGuarante.MainDset_dgqpaspyer.asstring,
+    DataMGuarante.MainDset_dgqpaspdate.asdatetime,
+    DataMGuarante.MainDset_dgqadress.asstring,
+    DataMGuarante.MainDset_dreyster.asstring,
+    DataMGuarante.MainDset_dseryamh.asstring,
+    DataMGuarante.MainDset_dgqtel.asstring,
+    DataMGuarante.MainDset_dpledgeprice.asfloat,
+    DataMGuarante.MainDset_dpledgsorts.asinteger,
+    DataMGuarante.MainDset_dcompany.asinteger,
+    DataMGuarante.MainDset_dcompanydat.asdatetime,
+    DataMGuarante.MainDset_dcompanyexpert.asstring,
+    DataMGuarante.MainDset_dCARDID.AsInteger,
+    DataMGuarante.MainDset_dOUTCOLLATERALACCID.AsInteger,
+    DataMGuarante.MainDset_dDECASTATUS.AsInteger,
+    DataMGuarante.MainDset_dGQTELMOB.Asstring,
+    DataMGuarante.MainDset_dGQTELHOME.Asstring,
+    DataMGuarante.MainDset_dGQTELWORK.Asstring,
+    '',
+    DataMGuarante.MainDset_dREZERVEAMMOUNT.asfloat ,
+    DataMGuarante.MainDset_dFAIZ.asfloat,
+    DataMGuarante.MainDset_dGQCITY.asfloat,
+    DataMGuarante.MainDset_dGQVILLAGE.asfloat,
+    DataMGuarante.MainDset_dAFTOBANNO.Asstring ,
+    2,
+    DataMGuarante.MainDset_dGENERALAREA.AsFloat,
+    DataMGuarante.MainDset_dLIVINGAREA.AsFloat,
+    DataMGuarante.MainDset_dSOILAREA.AsFloat,
+    DataMGuarante.MainDset_dADRESS.AsString,
+    DataMGuarante.MainDset_dMENZIL_NO.AsString,
+    DataMGuarante.MainDset_dOTAQ_SAY.AsInteger,
+    DataMGuarante.MainDset_dBINA_MERTEBE.AsInteger,
+    mkt_id,
+    satici_id ,
+    sex_satici,
+    DataMGuarante.MainDset_dMUQ_FERIQLENDIRMEK.AsInteger,
+    DataMGuarante.MainDset_dMULKIYET_NOV.AsInteger ,
+    DataMGuarante.MainDset_dAYLIQ_ODESNIS.AsFloat ,
+    DataMGuarante.MainDset_dCUSTID.AsInteger,
+    DataMGuarante.MainDset_dILK_ODESNIS.AsFloat,
+    DataMGuarante.MainDset_dSEHER.AsInteger,
+    DataMGuarante.MainDset_dALQ_SAT_TARIX.AsDateTime,
+    birg_borcid ,
+    DataMGuarante.MainDset_dcompayny_ammount.AsFloat ,
+    DataMGuarante.MainDset_dGI_QIMETL_UNVAN.AsString,
+    DataMGuarante.MainDset_dCRED_QAYTAR_TARIX.AsDateTime ,
+    birg_borcid2
+    ]);
+
+end;
+
+procedure TFrmDashinmaz.SpeedButton38Click(Sender: TObject);
+var
+  str_field : string;
+  cnt : integer;
+begin
+DataMGuarante.MainDset_dPLEDGEINUSE.asinteger:=FormGuarAdd.InUse_rg.ItemIndex;
+ cnt:= 0;
+
+if  DBEditEh8.text='' then
+  begin
+    cnt:= cnt+1;
+    str_field:=str_field + 'Girovun adı,'
+  end;
+   cnt:= 0;
+ if   DBLookupComboboxEh2.text='' then
+ begin
+
+ cnt:=cnt+1;
+ str_field:=str_field+'Çeşidi,'
+end;
+cnt:= 0;
+if DBNumberEditEh5.text='' then
+begin
+cnt:=cnt+1;
+str_field:=str_field+'Girovun bazar dəyəri,'
+end;
+str_field:= str_field+ ' Seçilməyib! ';
+
+if cnt=0  then
+  begin
+  DBEdit13.SetFocus;
+  SaveChg;
+
+  DataMGuarante.DataSetGuarantee.refresh
+    end
+   else
+   begin
+         HintBox1.ShowMessage('Verilənlər  '+#13' '+str_field)  ;
+   exit;
+   end;
+close
+
+end;
+
+procedure TFrmDashinmaz.SpeedButton39Click(Sender: TObject);
+begin
+close
+end;
+
+end.

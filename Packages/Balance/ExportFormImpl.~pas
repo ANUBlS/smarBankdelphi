@@ -1,0 +1,79 @@
+unit ExportFormImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ExcelExporter, ExtCtrls, StdCtrls, CheckLst;
+
+type
+   TExportedFieldsInfo = (efiName,efiDescription);
+   TExportedFields = array[TExportedFieldsInfo] of String;
+
+const
+   ExportedFieldsCount = 7;
+   FieldsInfo : array [0..ExportedFieldsCount - 1] of TExportedFields = (
+                                                   ('BAL_CN','Щесабын №')
+                                                  ,('FirstActive','И.Г. Актив')
+                                                  ,('FirstPassive','И.Г. Пассив')
+                                                  ,('DTurnOver','Дюврцййя Д.')
+                                                  ,('KTurnOver','Дюврцййя К.')
+                                                  ,('LastActive','С.Г. Актив')
+                                                  ,('LastPassive','С.Г. Актив')
+                                                  );
+
+type
+  TExportForm = class(TForm)
+    BalanceExporter: TExcelExporter;
+    CLBExportList: TCheckListBox;
+    ExpButton: TButton;
+    Panel: TPanel;
+    procedure FormCreate(Sender: TObject);
+    procedure ExpButtonClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  ExportForm: TExportForm;
+
+implementation
+
+uses UnitDataMod;
+
+{$R *.DFM}
+
+procedure TExportForm.FormCreate(Sender: TObject);
+var
+  i : 0..ExportedFieldsCount - 1;
+begin
+  with  CLBExportList.Items  do
+  begin
+    Clear;
+    for i := 0  to  ExportedFieldsCount - 1  do
+    begin
+      Add(FieldsInfo[i][efiDescription]);
+    end;
+  end;
+  for i := 0 to  ExportedFieldsCount - 1  do
+   CLBExportList.Checked[i] := True;
+end;
+
+procedure TExportForm.ExpButtonClick(Sender: TObject);
+var
+   i : 0..ExportedFieldsCount - 1;
+begin
+  with  CLBExportList,BalanceExporter do
+  begin
+    ExportList.Clear;
+    for i := 0 to ExportedFieldsCount - 1 do
+    if  Checked[i]  then
+      ExportList.Add(UpperCase(FieldsInfo[i][efiName]));
+    Report;
+  end;
+
+end;
+
+end.

@@ -1,0 +1,276 @@
+object AddReserve: TAddReserve
+  Left = 0
+  Top = 0
+  Caption = 'AddReserve'
+  ClientHeight = 168
+  ClientWidth = 354
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poOwnerFormCenter
+  OnCanResize = FormCanResize
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Label1: TLabel
+    Left = 8
+    Top = 23
+    Width = 24
+    Height = 18
+    Caption = 'Filial'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -15
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
+  end
+  object Label2: TLabel
+    Left = 8
+    Top = 67
+    Width = 41
+    Height = 18
+    Caption = 'Hesab'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -15
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
+  end
+  object Label3: TLabel
+    Left = 7
+    Top = 111
+    Width = 77
+    Height = 18
+    Caption = 'Xerc Hesab'#305
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -15
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
+  end
+  object Button1: TButton
+    Left = 193
+    Top = 140
+    Width = 75
+    Height = 25
+    Caption = 'Q'#601'bul'
+    TabOrder = 0
+    OnClick = Button1Click
+  end
+  object Button2: TButton
+    Left = 271
+    Top = 140
+    Width = 75
+    Height = 25
+    Caption = 'Ba'#287'la'
+    TabOrder = 1
+    OnClick = Button2Click
+  end
+  object DBLookupComboBox1: TDBLookupComboBox
+    Left = 69
+    Top = 20
+    Width = 280
+    Height = 21
+    KeyField = 'ID'
+    ListField = 'NAME'
+    ListSource = DataSource1
+    TabOrder = 2
+  end
+  object LoanAccs: TDBLookupComboboxEh
+    Tag = 1
+    Left = 69
+    Top = 67
+    Width = 280
+    Height = 22
+    TabStop = False
+    DropDownBox.Sizable = True
+    EditButtons = <>
+    KeyField = 'ID'
+    ListField = 'ACCNO'
+    ListSource = DataSource2
+    TabOrder = 3
+    Visible = True
+  end
+  object DBLookupComboboxEh1: TDBLookupComboboxEh
+    Tag = 1
+    Left = 84
+    Top = 112
+    Width = 262
+    Height = 22
+    TabStop = False
+    DropDownBox.Sizable = True
+    EditButtons = <>
+    KeyField = 'ID'
+    ListField = 'ACC_NO'
+    ListSource = DataSrcIEAccountList
+    TabOrder = 4
+    Visible = True
+  end
+  object DataSource1: TDataSource
+    DataSet = OracleDataSet1
+    Left = 104
+  end
+  object DataSource2: TDataSource
+    DataSet = OracleDataSet2
+    Left = 96
+    Top = 8
+  end
+  object OracleDataSet1: TOracleDataSet
+    SQL.Strings = (
+      'select * from filial')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000030000000400000049004400010000000000080000004E0041004D00
+      4500010000000000140000004B004F0044005F00460049004C00490041004C00
+      010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 168
+  end
+  object OracleDataSet2: TOracleDataSet
+    SQL.Strings = (
+      'SELECT   ac.id AS id, ac.kli_id AS custid, ac.acc_no AS accno,'
+      '         ac.NAME AS clientname, ac.val_acc'
+      '    FROM account ac'
+      
+        '    WHERE val_acc = 0 and close_dat is null and ac.filial=:filia' +
+        'l'
+      '     AND (ac.bal_cn1 IN (SELECT accountnumber'
+      '                           FROM cm_aginfo'
+      '                          WHERE groupid = (SELECT g.id'
+      
+        '                                             FROM cm_accountgrou' +
+        'ps g'
+      
+        '                                            WHERE g.iname = '#39'SRe' +
+        'serveAccs'#39'))'
+      '         )'
+      'ORDER BY accno,kli_id')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000E0000003A00460049004C00490041004C00030000000400
+      00005E00000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000500000004000000490044000100000000000C000000430055005300
+      5400490044000100000000000A0000004100430043004E004F00010000000000
+      1400000043004C00490045004E0054004E0041004D0045000100000000000E00
+      0000560041004C005F00410043004300010000000000}
+    Master = OracleDataSet1
+    MasterFields = 'ID'
+    DetailFields = ':FILIAL'
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 168
+    Top = 40
+  end
+  object OracleDataSet3: TOracleDataSet
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 32
+    Top = 24
+  end
+  object OracleDataSet4: TOracleDataSet
+    SQL.Strings = (
+      
+        'SELECT id,tesid, (select name from filial where id= fil_id) fil,' +
+        ' '
+      
+        '(select acc_no from account  where id= int_res_accid) hes,(selec' +
+        't acc_no from account  where id= fxercacc_id) xerhes'
+      '  FROM cm_reserve_turan_filial where tesid=:tesid')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000C0000003A00540045005300490044000300000004000000
+      0100000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      05000000050000000A0000005400450053004900440001000000000006000000
+      460049004C000100000000000600000048004500530001000000000004000000
+      490044000100000000000C000000580045005200480045005300010000000000}
+    Master = FrmReserve.OracleDataSet1
+    MasterFields = 'id'
+    DetailFields = 'TESID'
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 240
+    Top = 22
+    object OracleDataSet4TESID: TFloatField
+      FieldName = 'TESID'
+    end
+    object OracleDataSet4FIL: TWideStringField
+      FieldName = 'FIL'
+      Size = 360
+    end
+    object OracleDataSet4HES: TWideStringField
+      FieldName = 'HES'
+      Size = 448
+    end
+    object OracleDataSet4ID: TFloatField
+      FieldName = 'ID'
+    end
+    object OracleDataSet4XERHES: TWideStringField
+      FieldName = 'XERHES'
+      Size = 448
+    end
+  end
+  object DataSource3: TDataSource
+    DataSet = OracleDataSet4
+    Left = 296
+    Top = 22
+  end
+  object DataSrcIEAccountList: TDataSource
+    DataSet = IEAccountList
+    Left = 32
+    Top = 88
+  end
+  object IEAccountList: TOracleDataSet
+    SQL.Strings = (
+      'SELECT'
+      '   id,Acc_No,Val_Acc,Name,FILIAL'
+      '  FROM ACCOUNT'
+      ' WHERE (bal_cn1 IN (SELECT accountnumber'
+      '                           FROM smart.cm_aginfo'
+      '                          WHERE groupid = (SELECT g.id'
+      
+        '                                             FROM smart.cm_accou' +
+        'ntgroups g'
+      
+        '                                            WHERE g.iname = '#39'Inc' +
+        'ExpAccounts'#39')))'
+      'and (Close_Dat is Null) and FILIAL in (select id from sb_filial)'
+      'and FILIAL in(select id from filial)'
+      '')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000500000004000000490044000100000000000C000000410043004300
+      5F004E004F000100000000000E000000560041004C005F004100430043000100
+      00000000080000004E0041004D0045000100000000000C000000460049004C00
+      490041004C00010000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 64
+    Top = 88
+    object IEAccountListID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object IEAccountListACC_NO: TWideStringField
+      FieldName = 'ACC_NO'
+      Size = 28
+    end
+    object IEAccountListVAL_ACC: TIntegerField
+      FieldName = 'VAL_ACC'
+    end
+    object IEAccountListNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 90
+    end
+  end
+end

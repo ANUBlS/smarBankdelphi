@@ -1,0 +1,29 @@
+library Balance;
+
+uses
+  ComServ,
+  Balance_TLB in 'Balance_TLB.pas',
+  BalanceImplUnit in 'BalanceImplUnit.pas' {FrmBalance: TActiveForm} {FrmBalance: CoClass},
+  UnitAnaliz in 'UnitAnaliz.pas' {FrmAnaliz},
+  UntBalanceRpt1 in 'UntBalanceRpt1.pas' {BalanceRpt1: TQuickRep},
+  UntBalanceRpt2 in 'UntBalanceRpt2.pas' {BalanceRpt2: TQuickRep},
+  UntBalnceRpt3 in 'UntBalnceRpt3.pas' {BalanceRpt3: TQuickRep},
+  UntBalanceRpt4 in 'UntBalanceRpt4.pas' {BalanceRpt4: TQuickRep},
+  UnitDataMod in 'UnitDataMod.pas' {DataModuleMain: TDataModule},
+  InterBalanceUnit in 'InterBalanceUnit.pas' {InterBalance: TQuickRep},
+  ExportFormImpl in 'ExportFormImpl.pas' {ExportForm};
+
+{$E ocx}
+
+exports
+  DllGetClassObject,
+  DllCanUnloadNow,
+  DllRegisterServer,
+  DllUnregisterServer;
+
+{$R *.TLB}
+
+{$R *.RES}
+
+begin
+end.

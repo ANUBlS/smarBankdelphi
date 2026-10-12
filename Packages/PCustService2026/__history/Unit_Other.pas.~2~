@@ -1,0 +1,59 @@
+unit Unit_Other;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, DB, OracleData, Grids, XDBGrids, ExtCtrls, XFSCtrls, StdCtrls;
+
+type
+  TForm_other = class(TForm)
+    XFPanel2: TXFPanel;
+    XFPanel3: TXFPanel;
+    XDBGrid1: TXDBGrid;
+    OracleDataSet1: TOracleDataSet;
+    OracleDataSet2: TOracleDataSet;
+    DataSource1: TDataSource;
+    DataSource2: TDataSource;
+    OracleDataSet2ID: TFloatField;
+    OracleDataSet2CUSTID: TFloatField;
+    OracleDataSet2NAME: TWideStringField;
+    OracleDataSet2DESCRIPTION: TWideStringField;
+    XFButton1: TXFButton;
+    procedure FormShow(Sender: TObject);
+    procedure XFButton1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form_other: TForm_other;
+
+implementation
+   uses sboapiDataModuleImpl, UnitDataModPCustService;
+{$R *.dfm}
+
+procedure TForm_other.FormShow(Sender: TObject);
+var
+c_custid :integer;
+begin
+
+c_custid:=DataModPCustService.ODS_CUSTOMERS_PHYS_FS.FieldByName('id').AsInteger;
+
+DataModPCustService.PG_PCustService.CallProcedure
+                                                ('cust_other_info_add',
+                                                 [c_custid]);
+                                                 OracleDataSet2.Close;
+                                                 OracleDataSet2.SetVariable('v_id',c_custid);
+                                                 OracleDataSet2.Open
+
+end;
+
+procedure TForm_other.XFButton1Click(Sender: TObject);
+begin
+OracleDataSet2.Post;
+end;
+
+end.

@@ -1,0 +1,92 @@
+object DMImpPayments: TDMImpPayments
+  OldCreateOrder = False
+  Height = 480
+  Width = 696
+  object CM_Common: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'CM_Common'
+    Left = 32
+    Top = 16
+  end
+  object cm_dif_trans: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'cm_agro_pay'
+    ParameterMode = pmNamed
+    Left = 32
+    Top = 64
+  end
+  object OracleDataSet1: TOracleDataSet
+    SQL.Strings = (
+      'select * from cm_agrolaztr where status=1')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000D0000000400000049004400010000000000060000004E0055004D00
+      010000000000080000004300550053005400010000000000080000004D004100
+      49004E000100000000000600000049004E005400010000000000060000005000
+      45004E00010000000000060000004400410054000100000000000C0000004D00
+      410049004E00540052000100000000000A00000049004E005400540052000100
+      000000000A000000500041005900540052000100000000000800000043004100
+      520049000100000000000E0000004100520054004600410049005A0001000000
+      00000C000000530054004100540055005300010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 208
+    Top = 72
+    object OracleDataSet1NUM: TWideStringField
+      FieldName = 'NUM'
+      Size = 15
+    end
+    object OracleDataSet1CUST: TWideStringField
+      FieldName = 'CUST'
+      Size = 100
+    end
+    object OracleDataSet1MAIN: TFloatField
+      FieldName = 'MAIN'
+    end
+    object OracleDataSet1INT: TFloatField
+      FieldName = 'INT'
+    end
+    object OracleDataSet1PEN: TFloatField
+      FieldName = 'PEN'
+    end
+    object OracleDataSet1DAT: TDateTimeField
+      FieldName = 'DAT'
+    end
+  end
+  object OracleDataSet2: TOracleDataSet
+    SQL.Strings = (
+      'delete  cm_agrolaztr where dat in(select tek_dat from sysdat)')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000D0000000400000049004400010000000000060000004E0055004D00
+      010000000000080000004300550053005400010000000000080000004D004100
+      49004E000100000000000600000049004E005400010000000000060000005000
+      45004E00010000000000060000004400410054000100000000000C0000004D00
+      410049004E00540052000100000000000A00000049004E005400540052000100
+      000000000A000000500041005900540052000100000000000800000043004100
+      520049000100000000000E0000004100520054004600410049005A0001000000
+      00000C000000530054004100540055005300010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 320
+    Top = 88
+    object WideStringField1: TWideStringField
+      FieldName = 'NUM'
+      Size = 15
+    end
+    object WideStringField2: TWideStringField
+      FieldName = 'CUST'
+      Size = 100
+    end
+    object FloatField1: TFloatField
+      FieldName = 'MAIN'
+    end
+    object FloatField2: TFloatField
+      FieldName = 'INT'
+    end
+    object FloatField3: TFloatField
+      FieldName = 'PEN'
+    end
+    object DateTimeField1: TDateTimeField
+      FieldName = 'DAT'
+    end
+  end
+end

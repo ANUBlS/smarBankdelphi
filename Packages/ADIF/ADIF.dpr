@@ -1,0 +1,27 @@
+library ADIF;
+
+uses
+  ComServ,
+  ProjectADIF_TLB in 'ProjectADIF_TLB.pas',
+  Unit_FormADIF in 'Unit_FormADIF.pas' {FormADIF: TActiveForm} {FormADIF: CoClass},
+  UnitAdifData in 'UnitAdifData.pas' {Adif_Data: TDataModule},
+  KretitXmlExpImpl in 'KretitXmlExpImpl.pas' {Kredit},
+  UnitAdd_Edit in 'UnitAdd_Edit.pas' {FormCust_File},
+  Unit_interval in 'Unit_interval.pas' {Form_Interval},
+  Unit_accfile in 'Unit_accfile.pas' {FormAcc_file};
+
+{$E ocx}
+
+exports
+  DllGetClassObject,
+  DllCanUnloadNow,
+  DllRegisterServer,
+  DllUnregisterServer,
+  DllInstall;
+
+{$R *.TLB}
+
+{$R *.RES}
+
+begin
+end.

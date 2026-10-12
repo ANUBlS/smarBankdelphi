@@ -1,0 +1,78 @@
+unit dmTransactionViewerImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, OracleData;
+
+type
+  TdmTransactionViewer = class(TDataModule)
+    TransactionData: TOracleDataSet;
+    TransactionDatSrc: TDataSource;
+    AvaluteDebit: TOracleDataSet;
+    AvaluteDebitDatSrc: TDataSource;
+    AvaluteDebitVALUTE: TIntegerField;
+    AvaluteDebitVALU_NAME: TStringField;
+    AvaluteCredit: TOracleDataSet;
+    AvaluteCreditDatSrc: TDataSource;
+    AccDebit: TOracleDataSet;
+    AccDebitDatSrc: TDataSource;
+    AccCredit: TOracleDataSet;
+    AccCreditDatSrc: TDataSource;
+    RestDebitDatSrc: TDataSource;
+    RestCredit: TOracleDataSet;
+    RestCreditDatSrc: TDataSource;
+    AvaluteCreditVALUTE: TIntegerField;
+    AvaluteCreditVALU_NAME: TStringField;
+    RestCreditOSTAT: TFloatField;
+    RestCreditPOK_OSTAT: TFloatField;
+    operations: TOracleDataSet;
+    operationsDatSrc: TDataSource;
+    CashSymbols: TOracleDataSet;
+    CashSymbolsData: TDataSource;
+    ConvertationSymbols: TOracleDataSet;
+    ConvertationSymbolsData: TDataSource;
+    CashSymbolsSYMBOL: TFloatField;
+    CashSymbolsNAME: TStringField;
+    operationsID: TIntegerField;
+    operationsNAME: TStringField;
+    RestCreditACC_ID: TFloatField;
+    AccDebitID: TFloatField;
+    AccDebitACC_NO: TStringField;
+    AccDebitNAME: TStringField;
+    RestDebit: TOracleDataSet;
+    RestDebitACC_ID: TFloatField;
+    RestDebitOSTAT: TFloatField;
+    RestDebitPOK_OSTAT: TFloatField;
+    TransactionDataDAT: TDateTimeField;
+    TransactionDataNO_PROV: TStringField;
+    TransactionDataVID_OP: TIntegerField;
+    TransactionDataVAL_ACC: TFloatField;
+    TransactionDataRATE_D: TFloatField;
+    TransactionDataDEBT: TFloatField;
+    TransactionDataCURRENCYID_C: TIntegerField;
+    TransactionDataRATE_C: TFloatField;
+    TransactionDataKREDIT: TFloatField;
+    TransactionDataAMMOUNT: TFloatField;
+    TransactionDataAMMOUNT_C: TFloatField;
+    TransactionDataLAMMOUNT: TFloatField;
+    TransactionDataKASSA_B: TIntegerField;
+    TransactionDataKASSA_Z: TIntegerField;
+    TransactionDataNAME: TStringField;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  dmTransactionViewer: TdmTransactionViewer;
+
+implementation
+
+{$R *.DFM}
+
+uses sboapiDataModuleImpl;
+
+end.

@@ -1,0 +1,48 @@
+﻿	<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+		<PropertyGroup>
+			<ProjectGuid>{1EA018D5-7CE7-44F7-8292-D16C8B5CBE73}</ProjectGuid>
+		</PropertyGroup>
+		<ItemGroup>
+			<Projects Include="PK_Investisiya.dproj">
+				<Dependencies/>
+			</Projects>
+			<Projects Include="..\Investisiya_Contracts\Investisiya_Contracts.dproj">
+				<Dependencies/>
+			</Projects>
+		</ItemGroup>
+		<ProjectExtensions>
+			<Borland.Personality>Default.Personality.12</Borland.Personality>
+			<Borland.ProjectType/>
+			<BorlandProject>
+				<Default.Personality/>
+			</BorlandProject>
+		</ProjectExtensions>
+		<Target Name="PK_Investisiya">
+			<MSBuild Projects="PK_Investisiya.dproj"/>
+		</Target>
+		<Target Name="PK_Investisiya:Clean">
+			<MSBuild Projects="PK_Investisiya.dproj" Targets="Clean"/>
+		</Target>
+		<Target Name="PK_Investisiya:Make">
+			<MSBuild Projects="PK_Investisiya.dproj" Targets="Make"/>
+		</Target>
+		<Target Name="Investisiya_Contracts">
+			<MSBuild Projects="..\Investisiya_Contracts\Investisiya_Contracts.dproj"/>
+		</Target>
+		<Target Name="Investisiya_Contracts:Clean">
+			<MSBuild Projects="..\Investisiya_Contracts\Investisiya_Contracts.dproj" Targets="Clean"/>
+		</Target>
+		<Target Name="Investisiya_Contracts:Make">
+			<MSBuild Projects="..\Investisiya_Contracts\Investisiya_Contracts.dproj" Targets="Make"/>
+		</Target>
+		<Target Name="Build">
+			<CallTarget Targets="PK_Investisiya;Investisiya_Contracts"/>
+		</Target>
+		<Target Name="Clean">
+			<CallTarget Targets="PK_Investisiya:Clean;Investisiya_Contracts:Clean"/>
+		</Target>
+		<Target Name="Make">
+			<CallTarget Targets="PK_Investisiya:Make;Investisiya_Contracts:Make"/>
+		</Target>
+		<Import Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')" Project="$(BDS)\Bin\CodeGear.Group.Targets"/>
+	</Project>

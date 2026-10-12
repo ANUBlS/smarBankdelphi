@@ -1,0 +1,35 @@
+unit UnitRp;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, Grids,DB, DBGrids;
+
+type
+  TFrmReport = class(TForm)
+    GridAccount1: TDBGrid;
+    Edit1: TEdit;
+    Edit2: TEdit;
+    procedure GridAccount1DblClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    v_id :integer;
+    { Public declarations }
+  end;
+
+var
+  FrmReport: TFrmReport;
+
+implementation
+  uses  BusinessProcessSetupImpl, DMBusProcSetimpl;
+{$R *.dfm}
+
+procedure TFrmReport.GridAccount1DblClick(Sender: TObject);
+begin
+  v_id := DMBusProcSet.ODS_Reportid.AsInteger;
+  FrmReport.Close;
+end;
+
+end.

@@ -1,0 +1,490 @@
+﻿unit FormGuarAddlmpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+   DBCtrls, DBCtrlsEh, ExtCtrls, StdCtrls, DBLookupEh, Mask,
+  Buttons, jpeg, Db, OracleData, Oracle, HintBox, DBGridEh,Variants;
+
+type
+  TFormGuarAdd = class(TForm)
+    CompanySrc: TDataSource;
+    CompanySet: TOracleDataSet;
+    Panel8: TPanel;
+    SpeedButton38: TSpeedButton;
+    SpeedButton39: TSpeedButton;
+    HintBox1: THintBox;
+    GroupBox4: TGroupBox;
+    GroupBox9: TGroupBox;
+    Label13: TLabel;
+    Label14: TLabel;
+    Label26: TLabel;
+    DBEditEh11: TDBEditEh;
+    DBEditEh14: TDBEditEh;
+    DBEditEh15: TDBEditEh;
+    GroupBox10: TGroupBox;
+    Label27: TLabel;
+    Label30: TLabel;
+    Label31: TLabel;
+    DBLookupComboboxEh3: TDBLookupComboboxEh;
+    DBLookupComboboxEh4: TDBLookupComboboxEh;
+    DBEditEh16: TDBEditEh;
+    Panel9: TPanel;
+    SpeedButton1: TSpeedButton;
+    SpeedButton10: TSpeedButton;
+    Label24: TLabel;
+    Label25: TLabel;
+    Label155: TLabel;
+    Label5: TLabel;
+    Label29: TLabel;
+    Label28: TLabel;
+    Label19: TLabel;
+    GroupBox7: TGroupBox;
+    DBLookupComboboxEh6: TDBLookupComboboxEh;
+    Panel2: TPanel;
+    SpeedButton17: TSpeedButton;
+    SpeedButton18: TSpeedButton;
+    Label6: TLabel;
+    DBEditEh3: TDBEditEh;
+    DBLookupComboboxEh1: TDBLookupComboboxEh;
+    DBEditEh8: TDBEditEh;
+    DBNumberEditEh5: TDBNumberEditEh;
+    Panel14: TPanel;
+    SpeedButton13: TSpeedButton;
+    SpeedButton14: TSpeedButton;
+    InUse_rg: TRadioGroup;
+    GroupBox3: TGroupBox;
+    DBEditEh10: TDBEditEh;
+    GroupBox5: TGroupBox;
+    Label21: TLabel;
+    CheckBox1: TCheckBox;
+    Label157: TLabel;
+    Label154: TLabel;
+    DBLookupComboboxEh2: TDBLookupComboboxEh;
+    panel_info: TPanel;
+    SpeedButton11: TSpeedButton;
+    SpeedButton12: TSpeedButton;
+    Label3: TLabel;
+    SpeedButton40: TSpeedButton;
+    Label7: TLabel;
+    DBEditEh1: TDBEditEh;
+    Label1: TLabel;
+    DBEditEh4: TDBEditEh;
+    GroupBox1: TGroupBox;
+    DBEditEh2: TDBEditEh;
+    GroupBox2: TGroupBox;
+    DBDateTimeEditEh3: TDBDateTimeEditEh;
+    Label17: TLabel;
+    DBEditCompany: TDBLookupComboboxEh;
+    Label23: TLabel;
+    DBDateTimeEditEh4: TDBDateTimeEditEh;
+    Label22: TLabel;
+    DBEditEh13: TDBEditEh;
+    Label9: TLabel;
+    DBEditEh5: TDBEditEh;
+    Label41: TLabel;
+    Label10: TLabel;
+    DBEditEh6: TDBEditEh;
+    Label52: TLabel;
+    Label12: TLabel;
+    DBEditEh7: TDBEditEh;
+    Label42: TLabel;
+    Label8: TLabel;
+    DBDateTimeEditEh1: TDBDateTimeEditEh;
+    Label45: TLabel;
+    Button1: TButton;
+    Button2: TButton;
+    Label2: TLabel;
+    DBEditEh9: TDBEditEh;
+    DBNumberEditEh1: TDBNumberEditEh;
+    Button3: TButton;
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormShow(Sender: TObject);
+    procedure SpeedButton39Click(Sender: TObject);
+    procedure DBEdit1KeyPress(Sender: TObject; var Key: Char);
+    procedure DBLookupComboboxEh6KeyValueChanged(Sender: TObject);
+    procedure DBLookupComboboxEh2Change(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+  private
+
+   edNewName: TEdit;
+    procedure edNewNameClick(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+    { Private declarations }
+     procedure main_clear;
+  public
+    { Public declarations }
+  end;
+
+var
+  FormGuarAdd: TFormGuarAdd;
+  guarid:integer;
+implementation
+
+uses DataMGuarantee,sboapiDataModuleImpl, FormGuarpldginfolmpl,AftoInfiIpl,AddGuarFormNImpl,GuaranteeMgrImpl
+,SBTranslateProc, Unit9;
+
+{$R *.DFM}
+
+procedure TFormGuarAdd.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+ resize := false
+end;
+
+procedure TFormGuarAdd.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+main_clear;
+
+ end;
+procedure TFormGuarAdd.FormCreate(Sender: TObject);
+begin
+SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+with DataMGuarante do
+  begin
+   Gura_taypcal.open;
+  //GuaraClientAccs.open;
+  // GuaraCreditAccs.open
+   end ;
+   CompanySet.open;
+end;
+
+procedure TFormGuarAdd.FormDestroy(Sender: TObject);
+begin
+ with DataMGuarante do
+  begin
+   Gura_taypcal.closeall;
+
+end;
+ CompanySet.closeall;
+    end;
+procedure TFormGuarAdd.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+ if ord(key) = VK_ESCAPE then close;
+end;
+
+procedure TFormGuarAdd.FormShow(Sender: TObject);
+begin
+v_clear:=0;
+ with DataMGuarante,DataSetGuarantee do
+ begin
+ open;
+
+//fieldbyname('REGISTRYDATE').AsDateTime:= OracleDataSet1.FieldbyName('TEK_DAT').asDateTime;
+//fieldbyname('GQPASPDATE').AsDateTime:= OracleDataSet1.FieldbyName('TEK_DAT').asDateTime;
+ end;
+  if not assigned(edNewName) then
+     edNewName := TEdit.Create(Self);
+  //   ShowMessage('fdfdf');
+ with edNewName do begin
+
+    OnKeyDown := edNewNameClick;
+    Visible := False;
+  end;
+end;
+
+procedure TFormGuarAdd.main_clear;
+
+begin
+DBLookupComboboxEh1.KeyValue := Null;
+DBLookupComboboxEh2.KeyValue := Null;
+DBLookupComboboxEh3.KeyValue := Null;
+DBLookupComboboxEh4.KeyValue := Null;
+DBLookupComboboxEh6.KeyValue := Null;
+DBEditCompany.KeyValue       := Null;
+
+
+DBEditEh1.Text  := '';
+DBEditEh2.Text  := '';
+DBEditEh3.Text  := '';
+DBEditEh4.Text  := '';
+DBEditEh5.Text  := '';
+DBEditEh6.Text  := '';
+DBEditEh7.Text  := '';
+DBEditEh8.Text  := '';
+DBEditEh9.Text  := '';
+DBEditEh10.Text := '';
+DBEditEh11.Text := '';
+DBEditEh13.Text := '';
+DBEditEh14.Text := '';
+DBEditEh15.Text := '';
+DBEditEh16.Text := '';
+
+
+DBNumberEditEh1.Value := Null;
+DBNumberEditEh5.Value := Null;
+
+DBDateTimeEditEh1.Value := Null;
+DBDateTimeEditEh3.Value := Null;
+DBDateTimeEditEh4.Value := Null;
+
+end;
+
+
+procedure TFormGuarAdd.Button1Click(Sender: TObject);
+begin
+
+    showmessage(DataMGuarante.DataSetGuarantee.FieldByName('pledgename').AsString) ;
+
+    p_pledgename:=(DBEditEh8.Text) ;
+
+
+      DataMGuarante.OraclePackage1.CallIntegerFunction
+        ('edit_Guar',
+        [
+        p_id, p_pledgeprice, p_numberofgur, p_pledgeid, p_pledgename,
+        p_holdername, p_holderaddress, p_anyinfotodisting, p_registryno,
+        p_registryagency, p_registrydate, p_pledgeinsurant, p_insuranceagency,
+        p_insuranceamount, p_insuranceright, p_insurancedate, p_gqname,
+        p_gqpaspnum, p_gqpaspyer, p_gqpaspdate, p_gqcity, p_gqvillage,
+        p_gqadres, p_gqtelmob, p_gqtelhome, p_gqtelwork, p_reyster, p_seryamh,
+        p_pledgsorts, p_company, p_companydat, p_companyexpert, p_brance,
+        p_dat, p_generalarea, p_livingarea, p_buildingsoilarea, p_soilarea,
+        p_adress, p_inforegion, p_infovilg, p_custid
+      ]);
+ end;
+
+procedure TFormGuarAdd.Button2Click(Sender: TObject);
+begin
+
+  if VarIsNull(DBLookupComboboxEh1.KeyValue) then
+  begin
+    ShowMessage('Girovun tipi sahəsini seçin !');
+    DBLookupComboboxEh1.SetFocus;
+    Exit;
+  end
+  else
+    p_pledgeid := DBLookupComboboxEh1.KeyValue;
+
+  if VarIsNull(DBLookupComboboxEh2.KeyValue) then
+  begin
+    ShowMessage('Girovun Çeşidi sahəsini seçin !');
+    DBLookupComboboxEh2.SetFocus;
+    Exit;
+  end
+  else
+    p_pledgsorts := DBLookupComboboxEh2.KeyValue;
+
+  if Trim(DBEditEh8.Text) = '' then
+  begin
+    ShowMessage('Girovun adı sahəsini doldurun !');
+    DBEditEh8.SetFocus;
+    Exit;
+  end
+  else
+    p_pledgename := DBEditEh8.Text;
+
+  if VarIsNull(DBNumberEditEh5.Value) or (DBNumberEditEh5.Value = 0) then
+  begin
+    ShowMessage('Girovun bazar dəyərini doldurun!');
+    DBNumberEditEh5.SetFocus;
+    Exit;
+  end
+  else
+    p_pledgeprice := DBNumberEditEh5.Value;
+
+  if VarIsNull(DBNumberEditEh1.Value) then
+  begin
+    ShowMessage('Girovun likvid dəyəri doldurun !');
+    DBNumberEditEh1.SetFocus;
+    Exit;
+  end
+  else
+    p_likvid := DBNumberEditEh1.Value;
+
+
+  if VarIsNull(DBLookupComboboxEh6.KeyValue) then
+    p_registryagency := ''
+  else
+    p_registryagency := DBLookupComboboxEh6.KeyValue;
+
+  p_reyster     := DBEditEh3.Text;
+  p_holdername  := DBEditEh1.Text;
+  p_seryamh     := DBEditEh4.Text;
+  p_registryno  := DBEditEh2.Text;
+
+  if VarIsNull(DBDateTimeEditEh3.Value) then
+    p_registrydate := Null
+  else
+    p_registrydate := DBDateTimeEditEh3.Value;
+
+  p_anyinfotodisting := DBEditEh10.Text;
+
+  if VarIsNull(DBEditCompany.KeyValue) then
+    p_company := -1
+  else
+    p_company := DBEditCompany.Value;
+
+  if VarIsNull(DBDateTimeEditEh4.Value) then
+    p_companydat := Null
+  else
+    p_companydat := DBDateTimeEditEh4.Value;
+
+  p_companyexpert := DBEditEh13.Text;
+
+  p_gqpaspyer := DBEditEh7.Text;
+  p_gqpaspnum := DBEditEh6.Text;
+
+  if VarIsNull(DBDateTimeEditEh1.Value) then
+    p_gqpaspdate := Null
+  else
+    p_gqpaspdate := DBDateTimeEditEh1.Value;
+
+  p_fin := DBEditEh9.Text;
+
+  if VarIsNull(DBLookupComboboxEh3.Value) then
+    p_gqcity := -1
+  else
+    p_gqcity := DBLookupComboboxEh3.Value;
+
+  if VarIsNull(DBLookupComboboxEh4.Value) then
+    p_gqvillage := -1
+  else
+    p_gqvillage := DBLookupComboboxEh4.Value;
+
+  p_gqadres   := DBEditEh16.Text;
+  p_gqtelmob  := DBEditEh11.Text;
+  p_gqtelhome := DBEditEh14.Text;
+  p_gqtelwork := DBEditEh15.Text;
+
+
+  guarid := DataMGuarante.OraclePackage1.CallIntegerFunction
+    ('add_Guar',
+    [ guarid,
+    p_pledgeprice,      p_likvid,           p_numberofgur,      p_pledgeid,
+    p_pledgename,       p_holdername,       p_holderaddress,    p_anyinfotodisting,
+    p_registryno,       p_registryagency,   p_registrydate,     p_pledgeinsurant,
+    p_insuranceagency,  p_insuranceamount,  p_insuranceright,   p_insurancedate,
+    p_gqname,           p_gqpaspnum,        p_gqpaspyer,        p_gqpaspdate,
+    p_gqcity,           p_gqvillage,        p_gqadres,          p_gqtelmob,
+    p_gqtelhome,        p_gqtelwork,        p_reyster,          p_seryamh,
+    p_pledgsorts,       p_company,          p_companydat,       p_companyexpert,
+    p_brance,           p_dat,              p_generalarea,      p_livingarea,
+    p_buildingsoilarea, p_soilarea,         p_adress,           p_inforegion,
+    p_infovilg,         p_custid
+    ]);
+
+
+if (DataMGuarante.pledgsortsGUR_TYPE.AsInteger=1) then
+begin
+if not assigned(AfForm) then
+ with  TAfForm.Create(self) do
+  try
+ ShowModal;
+  finally
+    Release;
+  end;
+end;
+
+ if (DataMGuarante.pledgsortsGUR_TYPE.AsInteger=2) then
+begin
+if not assigned(FormAfto) then
+ with  TFormAfto.Create(self) do
+  try
+  ShowModal;
+  finally
+    Release;
+  end;
+end;
+
+if (DataMGuarante.pledgsortsGUR_TYPE.AsInteger=3) then
+begin
+if not assigned(FormGuarpldginfo) then
+ with  TFormGuarpldginfo.Create(self) do
+  try
+  ShowModal;
+  finally
+    Release;
+  end;
+end;
+ if guarid > 0 then
+  begin
+    with DataMGuarante.DataSetGuarantee do
+    begin
+      DisableControls;
+      try
+        Close;
+        Open;
+        Locate('ID', guarid, []);
+      finally
+        EnableControls;
+      end;
+    end;
+    ShowMessage('Əməliyyat uğurla tamamlandı!');
+
+  end;
+guarid:=0;
+end;
+
+procedure TFormGuarAdd.DBEdit1KeyPress(Sender: TObject; var Key: Char);
+begin
+ if ORD(Key) = VK_RETURN then
+  begin
+  if Sender is TWinControl then
+  with Sender as TWinControl do
+  case Tag of
+    1 : SelectNext(Sender as TWinControl ,True ,True);
+    end   ;
+     Key := #0;
+      end   ;
+end;
+
+procedure TFormGuarAdd.DBLookupComboboxEh2Change(Sender: TObject);
+begin
+if (DataMGuarante.pledgsortsGUR_TYPE.AsInteger=1)
+   or
+   (DataMGuarante.pledgsortsGUR_TYPE.AsInteger=2)
+   or
+   (DataMGuarante.pledgsortsGUR_TYPE.AsInteger=3)
+then
+begin
+  panel_info.Visible:=true;
+end else
+panel_info.Visible:=false;
+end;
+
+procedure TFormGuarAdd.DBLookupComboboxEh6KeyValueChanged(Sender: TObject);
+begin
+  with (Sender as TDBLookupComboboxEh) do
+  if DataSource.DataSet.Active then
+   UpdateData;
+end;
+
+procedure TFormGuarAdd.edNewNameClick;
+var
+  ProcName: String;
+  i: Integer;
+begin
+  if (Trim((Sender as TEdit).Text)<>'') and (ord(key)=VK_RETURN) then begin
+   // if (Sender as TEdit).Left>200 then
+      ProcName := 'AddComp' ;
+
+     // PgCompany.CallProcedure(ProcName,[(Sender as TEdit).Text]);
+
+      CompanySet.Refresh;
+    (Sender as TEdit).Visible := False;
+    for i:= 0 to ComponentCount-1 do
+      if Components[i] is TSpeedButton then
+        (Components[i] as TSpeedButton).Enabled := True;
+  end;
+  if  (ord(key)=VK_RETURN) then begin
+    (Sender as TEdit).Visible := False;
+    for i:= 0 to ComponentCount-1 do
+      if Components[i] is TSpeedButton then
+        (Components[i] as TSpeedButton).Enabled := True;
+  end;
+end;
+procedure TFormGuarAdd.SpeedButton39Click(Sender: TObject);
+begin
+close;
+end;
+
+end.

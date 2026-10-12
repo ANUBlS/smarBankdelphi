@@ -1,0 +1,208 @@
+unit AccountTransactionsImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ComCtrls, StdCtrls, ExtCtrls, Grids, DBGrids, Mask, DBCtrls, CurrencyEdit,
+  Db, OracleData, ExcelExporter, Buttons;
+
+type
+  TFormAccountTransactions = class(TForm)
+    Panel3: TPanel;
+    OkButton: TButton;
+    PageControlTrans: TPageControl;
+    TabSheet1: TTabSheet;
+    TabSheet2: TTabSheet;
+    Panel1: TPanel;
+    Label1: TLabel;
+    Label2: TLabel;
+    Bevel1: TBevel;
+    DebitAmountEdit: TCurrencyEdit;
+    DebitLAmountEdit: TCurrencyEdit;
+    Panel5: TPanel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Bevel2: TBevel;
+    CreditAmountEdit: TCurrencyEdit;
+    CreditLAmountEdit: TCurrencyEdit;
+    Panel2: TPanel;
+    DBEdit1: TDBEdit;
+    DebitTransactionsGrid: TDBGrid;
+    Panel4: TPanel;
+    DBEdit2: TDBEdit;
+    DBGrid1: TDBGrid;
+    DebetTransactionsData: TOracleDataSet;
+    DebetTransactionsDataID: TFloatField;
+    DebetTransactionsDataDEBITACCID: TFloatField;
+    DebetTransactionsDataOPERATIONDATE: TDateTimeField;
+    DebetTransactionsDataDEBITAMOUNT: TFloatField;
+    DebetTransactionsDataCREDITAMOUNT: TFloatField;
+    DebetTransactionsDataLAMOUNT: TFloatField;
+    DebetTransactionsDataCREDITACCNO: TStringField;
+    DebetTransactionsDataDESTINATION: TStringField;
+    DebetTransactionsDataRowNumber: TIntegerField;
+    DebetTransactionsDataDebitAccNo: TStringField;
+    CreditTransactionsData: TOracleDataSet;
+    CreditTransactionsDataID: TFloatField;
+    IntegerField1: TIntegerField;
+    CreditTransactionsDataCREDITACCID: TFloatField;
+    CreditTransactionsDataOPERATIONDATE: TDateTimeField;
+    CreditTransactionsDataDEBITAMOUNT: TFloatField;
+    CreditTransactionsDataCREDITAMOUNT: TFloatField;
+    CreditTransactionsDataLAMOUNT: TFloatField;
+    CreditTransactionsDataDEBITACCNO: TStringField;
+    CreditTransactionsDataDESTINATION: TStringField;
+    CreditTransactionsDataCreditAccNo: TStringField;
+    CreditTransactions: TDataSource;
+    DebetTransactions: TDataSource;
+    AccTrExport: TExcelExporter;
+    SpeedButton1: TSpeedButton;
+    procedure FormActivate(Sender: TObject);
+    procedure DebetTransactionsDataCalcFields(DataSet: TDataSet);
+    procedure CreditTransactionsDataCalcFields(DataSet: TDataSet);
+    procedure FormKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure DebetTransactionsDataAfterOpen(DataSet: TDataSet);
+    procedure CreditTransactionsDataAfterOpen(DataSet: TDataSet);
+    procedure SpeedButton1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    AccountID: Longint;
+    AccountNumber: String;
+    procedure OpenDataControls(BeginDate, EndDate: TDateTime);
+    procedure FillAmounts(DataSet: TDataSet; AmountField, LAmountField: TField;
+          AmountEdit, LAmountEdit: TCurrencyEdit);
+
+  end;
+
+var
+  FormAccountTransactions: TFormAccountTransactions;
+
+implementation
+
+uses sboapiDataModuleiMPL, AccountDataModuleImpl;
+
+{$R *.DFM}
+
+procedure TFormAccountTransactions.FormActivate(Sender: TObject);
+const
+     cs_message = 'Transactions for account "%s"';
+begin
+ with AccDataModule.Account do
+  AccountNumber :=FieldByName('acc_no').AsString;
+ Caption :=Format(cs_message, [AccountNumber]);
+end;
+
+procedure TFormAccountTransactions.OpenDataControls(BeginDate, EndDate: TDateTime);
+
+ procedure Open_(DataSet: TOracleDataSet);
+ begin
+  with DataSet do
+  begin
+   CloseAll;
+   SetVariable('AccountID', AccountID);
+   SetVariable('StartDate', BeginDate);
+   SetVariable('EndDate', EndDate);
+   Open;
+  end;
+ end;
+
+begin
+ with AccDataModule.Account do
+  AccountID :=FieldByName('ID').AsInteger;
+
+ Open_(DebetTransactionsData);
+ Open_(CreditTransactionsData);
+
+
+
+
+
+end;
+
+procedure TFormAccountTransactions.DebetTransactionsDataCalcFields(
+  DataSet: TDataSet);
+begin
+ with DataSet do
+  FieldByName('DebitAccNo').AsString :=AccDataModule.Account.FieldByName('acc_no').AsString;
+end;
+
+procedure TFormAccountTransactions.CreditTransactionsDataCalcFields(
+  DataSet: TDataSet);
+begin
+ with DataSet do
+  FieldByName('CreditAccNo').AsString :=AccDataModule.Account.FieldByName('acc_no').AsString;
+end;
+
+procedure TFormAccountTransactions.FormKeyDown(Sender: TObject;
+  var Key: Word; Shift: TShiftState);
+begin
+  if Ord(Key) = VK_ESCAPE then
+    Close;
+
+end;
+
+procedure TFormAccountTransactions.FillAmounts(DataSet: TDataSet; AmountField, LAmountField: TField;
+  AmountEdit, LAmountEdit: TCurrencyEdit);
+var
+  Amount: Currency;
+  LAmount: Currency;
+begin
+  Amount := 0.0;
+  LAmount := 0.0;
+  with DataSet do
+  begin
+    DisableControls;
+    try
+      while not Eof do
+      begin
+        Amount := Amount + AmountField.Value;
+        LAmount := LAmount + LAmountField.Value;
+        Next;
+      end;
+    finally
+      EnableControls;
+    end;
+  end;
+  AmountEdit.Value := Amount;
+  LAmountEdit.Value := LAmount;
+end;
+
+procedure TFormAccountTransactions.DebetTransactionsDataAfterOpen(
+  DataSet: TDataSet);
+begin
+  FillAmounts(
+    DataSet,
+    DebetTransactionsDataDEBITAMOUNT,
+    DebetTransactionsDataLAMOUNT,
+    DebitAmountEdit,
+    DebitLAmountEdit);
+end;
+
+procedure TFormAccountTransactions.CreditTransactionsDataAfterOpen(
+  DataSet: TDataSet);
+begin
+  FillAmounts(
+    DataSet,
+    CreditTransactionsDataCreditAMOUNT,
+    CreditTransactionsDataLAMOUNT,
+    CreditAmountEdit,
+    CreditLAmountEdit);
+end;
+
+procedure TFormAccountTransactions.SpeedButton1Click(Sender: TObject);
+begin
+  with  AccTrExport do
+  begin
+   if PageControlTrans.ActivePageIndex = 0 then
+     ExportSource := DebetTransactions
+   else
+     ExportSource := CreditTransactions;
+   Report;
+  end;
+end;
+
+end.

@@ -1,0 +1,387 @@
+﻿unit InsCustomersProperties;
+          //XFCheckBox1
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, Mask, DBCtrls, Buttons, ExtCtrls, ComCtrls, DBViewComboBox, DB,
+  XFSCtrls, OracleData;
+
+type
+  TfmCustomersProperties = class(TForm)
+    Panel1: TPanel;
+    BitBtn1: TBitBtn;
+    BitBtn2: TBitBtn;
+    XFPanel2: TXFPanel;
+    DBEdit10: TDBEdit;
+    DBLookupComboBox1: TDBLookupComboBox;
+    DBInsuredType: TDBLookupComboBox;
+    XFGroupBox1: TXFGroupBox;
+    DBEdit3: TDBEdit;
+    DBEdit2: TDBEdit;
+    DBEdit1: TDBEdit;
+    cbSex: TComboBox;
+    DBLookupComboBox2: TDBLookupComboBox;
+    DBEdit16: TDBEdit;
+    DBEdit9: TDBEdit;
+    DBEdit12: TDBEdit;
+    XFPanel3: TXFPanel;
+    XFGroupBox2: TXFGroupBox;
+    XFGroupBox3: TXFGroupBox;
+    DBEdit7: TDBEdit;
+    DBEdit15: TDBEdit;
+    DBEdit13: TDBEdit;
+    DBEdit4: TDBEdit;
+    DBEdit5: TDBEdit;
+    DBEdit17: TDBEdit;
+    DBEdit8: TDBEdit;
+    DBEdit6: TDBEdit;
+    CBoxDocType1: TDBLookupComboBox;
+    DBEdit18: TDBEdit;
+    DateTimePicker1: TDateTimePicker;
+    XFLabel1: TXFLabel;
+    XFLabel2: TXFLabel;
+    XFLabel3: TXFLabel;
+    XFLabel4: TXFLabel;
+    XFLabel5: TXFLabel;
+    XFLabel6: TXFLabel;
+    XFLabel7: TXFLabel;
+    XFLabel8: TXFLabel;
+    XFLabel9: TXFLabel;
+    XFLabel10: TXFLabel;
+    XFLabel11: TXFLabel;
+    XFLabel12: TXFLabel;
+    XFLabel13: TXFLabel;
+    XFLabel14: TXFLabel;
+    DateTimePicker2: TDateTimePicker;
+    XFLabel15: TXFLabel;
+    XFLabel16: TXFLabel;
+    XFLabel17: TXFLabel;
+    Label1: TLabel;
+    Label2: TLabel;
+    XFLabel18: TXFLabel;
+    XFLabel19: TXFLabel;
+    XFLabel20: TXFLabel;
+    XFLabel21: TXFLabel;
+    XFLabel22: TXFLabel;
+    XFLabel23: TXFLabel;
+    DBEdit19: TDBEdit;
+    DBLookupComboBox3: TDBLookupComboBox;
+    DBLookupComboBox4: TDBLookupComboBox;
+    DScont: TOracleDataSet;
+    DSCiti: TOracleDataSet;
+    DScontID: TFloatField;
+    XFCheckBox1: TXFCheckBox;
+    XFLabel24: TXFLabel;
+    DateTimePicker3: TDateTimePicker;
+    procedure BitBtn2Click(Sender: TObject);
+    procedure BitBtn1Click(Sender: TObject);
+    procedure DBLookupComboBox1KeyPress(Sender: TObject; var Key: Char);
+    procedure FormCreate(Sender: TObject);
+    procedure DTPDateOfBirthChange(Sender: TObject);
+    procedure DBEdit10KeyPress(Sender: TObject; var Key: Char);
+    procedure CBoxDocType1Click(Sender: TObject);
+    procedure CBoxDocType1CloseUp(Sender: TObject);
+    procedure DBLookupComboBox3KeyUp(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure DBLookupComboBox3Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure DBInsuredTypeClick(Sender: TObject);
+    procedure XFCheckBox1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    op: string;
+  end;
+
+var
+  fmCustomersProperties: TfmCustomersProperties;
+
+implementation
+
+uses InsDataModule,sboapiDataModuleimpl,SBTranslateProc, InsCustomersFormImpl,CommanParametrs;
+
+{$R *.DFM}
+
+procedure TfmCustomersProperties.BitBtn2Click(Sender: TObject);
+begin
+  ModalResult := mrCancel
+end;
+
+procedure TfmCustomersProperties.CBoxDocType1Click(Sender: TObject);
+begin
+{if CBoxDocType1.KeyValue=1 then
+begin
+  DBEdit9.Text:='AZE';
+end;
+
+if CBoxDocType1.KeyValue<>1 then
+begin
+  DBEdit9.Text:='';
+end;}
+end;
+
+procedure TfmCustomersProperties.CBoxDocType1CloseUp(Sender: TObject);
+begin
+  //CBoxDocType1.KeyValue := CBoxDocType1.KeyValue;
+  if CBoxDocType1.text =InsDataMod.OdsDoctaypes.FieldByName('name').AsString then
+  begin
+  //showmessage(InsDataMod.OdsDoctaypes.FieldByName('series').AsString);
+    //DBEdit9.Text := InsDataMod.OdsDoctaypes.FieldByName('series').AsString;
+    InsDataMod.ODSInsCustomers.FieldByName('PASSER').AsString:=InsDataMod.OdsDoctaypes.FieldByName('series').AsString;
+  end
+end;
+
+procedure TfmCustomersProperties.BitBtn1Click(Sender: TObject);
+var
+pdate:Tdate;
+begin
+
+  with InsDataMod do begin
+
+       DSCiti.Close;
+       DSCiti.SetVariable('cid',DScont.FieldByName('id').AsInteger);
+       DSCiti.SetVariable('p_name',DBLookupComboBox4.KeyValue);
+       DSCiti.Open;
+
+    if ODSInsCustomers.State in [dsInsert, dsEdit] then
+     ODSInsCustomersSEX.Value := cbSex.ItemIndex;
+     ODSInsCustomersENTER_DATE.Value:=DateTimePicker1.DateTime;
+     ODSInsCustomersDATEOFBIRTH.Value:=DateTimePicker2.DateTime;
+     ODSInsCustomersDRIVER_DAT.Value:=DateTimePicker3.DateTime;
+     ODSInsCustomersSEX.Value:=cbSex.ItemIndex;
+     ODSInsCustomersDRIVER_DAT.Value:=DateTimePicker3.DateTime;
+     ODSInsCustomersSTATE_ID.Value:=DScont.FieldByName('id').AsInteger;
+     ODSInsCustomersCITY_ID.Value:=DSCiti.FieldByName('id').AsInteger;
+     //ODSInsCustomers.FieldByName('ENTER_DATE').AsDateTime:=fmCustomersProperties.DateTimePicker1.DateTime;
+     //pdate:=ODSInsCustomers.FieldByName('ENTER_DATE').AsDateTime;
+     //showmessage(datetostr(pdate));
+    // ODSInsCustomersMS_ID.Value := cbMillitaryStatus.ItemIndex;
+
+  end;
+     //InsDataMod.ODSInsCustomers.RefreshRecord;
+     InsDataMod.ODSInsCustomers.Refresh;
+
+
+ // ModalResult := mrOk  ;
+    ModalResult := mrCancel  ;
+
+end;
+
+procedure TfmCustomersProperties.DBEdit10KeyPress(Sender: TObject;
+  var Key: Char);
+begin
+
+   if Key = #13 then
+     begin
+       FindNextControl(ActiveControl,true,true,false).SetFocus;
+       Key := #0
+     end;
+end;
+
+procedure TfmCustomersProperties.DBInsuredTypeClick(Sender: TObject);
+begin
+if  (DBLookupComboBox1.KeyValue<>0) then
+begin
+{if DBInsuredType.KeyValue=2 then
+begin
+  InsDataMod.DSCustomersIndividual.Close;
+  InsDataMod.DSCustomersIndividual.SetVariable('p_id',DBLookupComboBox1.KeyValue);
+  InsDataMod.DSCustomersIndividual.Open;
+ if InsDataMod.DSCustomersIndividual.FieldByName('CUST_TYPE').AsInteger<>0 then
+ begin
+  InsDataMod.ODSInsCustomers.fieldbyname('NAME').asstring:= InsDataMod.DSCustomersIndividual.FieldByName('AD').AsString;
+  InsDataMod.ODSInsCustomers.fieldbyname('SURNAME').asstring:= InsDataMod.DSCustomersIndividual.FieldByName('SOYAD').AsString;
+  InsDataMod.ODSInsCustomers.fieldbyname('FATHERNAME').asstring:= InsDataMod.DSCustomersIndividual.FieldByName('ATAADI').AsString;
+  InsDataMod.ODSInsCustomers.fieldbyname('PASSER').asstring:= InsDataMod.DSCustomersIndividual.FieldByName('SERIYA').AsString;
+  InsDataMod.ODSInsCustomers.fieldbyname('PASPORTNO').asstring:= InsDataMod.DSCustomersIndividual.FieldByName('SERIYANO').AsString;
+  InsDataMod.ODSInsCustomers.fieldbyname('INN').asstring:= InsDataMod.DSCustomersIndividual.FieldByName('VOIN').AsString;
+  InsDataMod.ODSInsCustomers.fieldbyname('ADDRESS').asstring:= InsDataMod.DSCustomersIndividual.FieldByName('QEYDIYYATUNVANI').AsString;
+  InsDataMod.ODSInsCustomers.fieldbyname('MAILINGADDRESS').asstring:= InsDataMod.DSCustomersIndividual.FieldByName('FAKTIKIUNVAN').AsString;
+  InsDataMod.ODSInsCustomers.fieldbyname('MAIL').asstring:= InsDataMod.DSCustomersIndividual.FieldByName('MAIL').AsString;
+  InsDataMod.ODSInsCustomers.fieldbyname('HOMEPHONE').asstring:= InsDataMod.DSCustomersIndividual.FieldByName('EVTEL').AsString;
+  InsDataMod.ODSInsCustomers.fieldbyname('WORKPHONE').asstring:= InsDataMod.DSCustomersIndividual.FieldByName('ISTEL').AsString;
+  InsDataMod.ODSInsCustomers.fieldbyname('MOBILEPHONE').asstring:= InsDataMod.DSCustomersIndividual.FieldByName('MOBTEL').AsString;
+  //fmCustomersProperties.cbSex.ItemIndex:= InsDataMod.DSCustomersIndividual.FieldByName('CINSI').AsInteger;
+  //fmCustomersProperties.DateTimePicker2.DateTime:= InsDataMod.DSCustomersIndividual.FieldByName('TEVELLUD').AsDateTime;
+  end;
+end; }
+
+end;
+end;
+
+procedure TfmCustomersProperties.DBLookupComboBox1KeyPress(Sender: TObject;
+  var Key: Char);
+begin
+
+ if Key = #13 then
+     begin
+       FindNextControl(ActiveControl,true,true,false).SetFocus;
+       Key := #0
+     end;
+end;
+
+procedure TfmCustomersProperties.DBLookupComboBox3Click(Sender: TObject);
+begin
+       DScont.Close;
+       DScont.SetVariable('p_name', DBLookupComboBox3.Text);
+       DScont.Open;
+
+       InsDataMod.DScities.Close;
+       InsDataMod.DScities.SetVariable('cid', DScont.FieldByName('id').AsInteger);
+       InsDataMod.DScities.Open;
+
+end;
+
+procedure TfmCustomersProperties.DBLookupComboBox3KeyUp(Sender: TObject;
+  var Key: Word; Shift: TShiftState);
+begin
+//with InsDataMod do
+//f ODSInsCustomers.State = dsInsert then begin
+
+
+
+
+
+//end;
+
+end;
+
+procedure TfmCustomersProperties.FormCreate(Sender: TObject);
+begin
+
+  with InsDataMod do
+
+  if ODSInsCustomers.State = dsInsert then
+  begin
+    //showmessage('salam1');
+    //showmessage(InsDataMod.Sysdat.FieldByName('tek_dat').AsString);
+    DateTimePicker1.DateTime:=InsDataMod.Sysdat.FieldByName('tek_dat').AsDateTime;
+    DateTimePicker2.DateTime:=InsDataMod.Sysdat.FieldByName('tek_dat').AsDateTime;
+    ODSInsCustomersENTER_DATE.Value:=InsDataMod.Sysdat.FieldByName('tek_dat').AsDateTime;
+     DateTimePicker3.DateTime:=InsDataMod.Sysdat.FieldByName('tek_dat').AsDateTime;
+      {XFCheckBox1.Enabled:=false;
+       XFCheckBox1.Visible:=true;}
+
+   end;
+
+  with InsDataMod do
+  if ODSInsCustomers.State = dsEdit then begin
+  //showmessage('salam2');
+       DScont.Close;
+       DScont.SetVariable('p_name', DBLookupComboBox3.Text);
+       DScont.Open;
+
+       InsDataMod.DScities.Close;
+       InsDataMod.DScities.SetVariable('cid', DScont.FieldByName('id').AsInteger);
+       InsDataMod.DScities.Open;
+
+       {XFCheckBox1.Enabled:=false;
+       XFCheckBox1.Visible:=false; }
+       DateTimePicker1.DateTime:=ODSInsCustomersENTER_DATE.Value;
+       DateTimePicker2.DateTime:=ODSInsCustomersDATEOFBIRTH.Value;
+       DateTimePicker3.DateTime:=InsDataMod.ODSInsCustomersDRIVER_DAT.Value;
+       cbSex.ItemIndex := ODSInsCustomersSEX.Value;
+     //ODSInsCustomersENTER_DATE.Value:=InsDataMod.Sysdat.FieldByName('tek_dat').AsDateTime;
+   end;
+
+  SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TfmCustomersProperties.FormShow(Sender: TObject);
+begin
+{if op_cust='Insert' then
+begin
+          fmCustomersProperties.XFCheckBox1.Enabled:=false;
+       fmCustomersProperties.XFCheckBox1.Visible:=true;
+       DateTimePicker1.DateTime:=InsDataMod.Sysdat.FieldByName('tek_dat').AsDateTime;
+    DateTimePicker2.DateTime:=InsDataMod.Sysdat.FieldByName('tek_dat').AsDateTime;
+    DateTimePicker3.DateTime:=InsDataMod.Sysdat.FieldByName('tek_dat').AsDateTime;
+    InsDataMod.ODSInsCustomersENTER_DATE.Value:=InsDataMod.Sysdat.FieldByName('tek_dat').AsDateTime;
+    showmessage(datetostr(InsDataMod.Sysdat.FieldByName('tek_dat').AsDateTime));
+end;
+
+if op_cust='Edit' then
+begin
+       fmCustomersProperties.XFCheckBox1.Enabled:=false;
+       fmCustomersProperties.XFCheckBox1.Visible:=false;
+       DateTimePicker1.DateTime:=InsDataMod.ODSInsCustomersENTER_DATE.Value;
+    DateTimePicker2.DateTime:=InsDataMod.ODSInsCustomersDATEOFBIRTH.Value;
+    DateTimePicker3.DateTime:=InsDataMod.ODSInsCustomersDRIVER_DAT.Value;
+    cbSex.ItemIndex := InsDataMod.ODSInsCustomersSEX.Value;
+end; }
+
+if op_cust='Insert' then
+begin
+XFCheckBox1.Visible:=true;
+end;
+
+if op_cust='Edit' then
+begin
+XFCheckBox1.Visible:=false;
+XFCheckBox1.Checked:=false;
+end;
+end;
+
+procedure TfmCustomersProperties.XFCheckBox1Click(Sender: TObject);
+begin
+if  (DBLookupComboBox1.KeyValue<>0) then
+begin
+if XFCheckBox1.Checked=true then
+begin
+     InsDataMod.DSCustomersIndividual.Close;
+  InsDataMod.DSCustomersIndividual.SetVariable('p_id',DBLookupComboBox1.KeyValue);
+  InsDataMod.DSCustomersIndividual.Open;
+ if InsDataMod.DSCustomersIndividual.FieldByName('CUST_TYPE').AsInteger<>0 then
+ begin
+  InsDataMod.ODSInsCustomers.fieldbyname('NAME').asstring:= InsDataMod.DSCustomersIndividual.FieldByName('AD').AsString;
+  InsDataMod.ODSInsCustomers.fieldbyname('SURNAME').asstring:= InsDataMod.DSCustomersIndividual.FieldByName('SOYAD').AsString;
+  InsDataMod.ODSInsCustomers.fieldbyname('FATHERNAME').asstring:= InsDataMod.DSCustomersIndividual.FieldByName('ATAADI').AsString;
+  InsDataMod.ODSInsCustomers.fieldbyname('PASSER').asstring:= InsDataMod.DSCustomersIndividual.FieldByName('SERIYA').AsString;
+  InsDataMod.ODSInsCustomers.fieldbyname('PASPORTNO').asstring:= InsDataMod.DSCustomersIndividual.FieldByName('SERIYANO').AsString;
+  InsDataMod.ODSInsCustomers.fieldbyname('INN').asstring:= InsDataMod.DSCustomersIndividual.FieldByName('VOIN').AsString;
+  InsDataMod.ODSInsCustomers.fieldbyname('ADDRESS').asstring:= InsDataMod.DSCustomersIndividual.FieldByName('QEYDIYYATUNVANI').AsString;
+  InsDataMod.ODSInsCustomers.fieldbyname('MAILINGADDRESS').asstring:= InsDataMod.DSCustomersIndividual.FieldByName('FAKTIKIUNVAN').AsString;
+  InsDataMod.ODSInsCustomers.fieldbyname('MAIL').asstring:= InsDataMod.DSCustomersIndividual.FieldByName('MAIL').AsString;
+  InsDataMod.ODSInsCustomers.fieldbyname('HOMEPHONE').asstring:= InsDataMod.DSCustomersIndividual.FieldByName('EVTEL').AsString;
+  InsDataMod.ODSInsCustomers.fieldbyname('WORKPHONE').asstring:= InsDataMod.DSCustomersIndividual.FieldByName('ISTEL').AsString;
+  InsDataMod.ODSInsCustomers.fieldbyname('MOBILEPHONE').asstring:= InsDataMod.DSCustomersIndividual.FieldByName('MOBTEL').AsString;
+  cbSex.ItemIndex:= InsDataMod.DSCustomersIndividual.FieldByName('CINSI').AsInteger;
+  DateTimePicker2.DateTime:= InsDataMod.DSCustomersIndividual.FieldByName('TEVELLUD').AsDateTime;
+  InsDataMod.ODSInsCustomers.fieldbyname('DOCUMENT_TYPE').AsInteger:= InsDataMod.DSCustomersIndividual.FieldByName('DOC_TYPE').AsInteger;
+
+  end;
+end
+else
+begin
+  InsDataMod.ODSInsCustomers.fieldbyname('NAME').asstring:='';
+  InsDataMod.ODSInsCustomers.fieldbyname('SURNAME').asstring:='';
+  InsDataMod.ODSInsCustomers.fieldbyname('FATHERNAME').asstring:='';
+  InsDataMod.ODSInsCustomers.fieldbyname('PASSER').asstring:='';
+  InsDataMod.ODSInsCustomers.fieldbyname('PASPORTNO').asstring:='';
+  InsDataMod.ODSInsCustomers.fieldbyname('INN').asstring:='';
+  InsDataMod.ODSInsCustomers.fieldbyname('ADDRESS').asstring:='';
+  InsDataMod.ODSInsCustomers.fieldbyname('MAILINGADDRESS').asstring:='';
+  InsDataMod.ODSInsCustomers.fieldbyname('MAIL').asstring:='';
+  InsDataMod.ODSInsCustomers.fieldbyname('HOMEPHONE').asstring:='';
+  InsDataMod.ODSInsCustomers.fieldbyname('WORKPHONE').asstring:='';
+  InsDataMod.ODSInsCustomers.fieldbyname('MOBILEPHONE').asstring:='';
+  cbSex.ItemIndex:=0;
+  DateTimePicker2.DateTime:= InsDataMod.Sysdat.FieldByName('tek_dat').AsDateTime;
+  InsDataMod.ODSInsCustomers.fieldbyname('DOCUMENT_TYPE').AsInteger:=0;
+end;
+
+end;
+end;
+
+procedure TfmCustomersProperties.DTPDateOfBirthChange(Sender: TObject);
+begin
+  with InsDataMod do
+  if ODSInsCustomers.State in [dsInsert, dsEdit] then begin
+     //ODSInsCustomersAGE.Value := Trunc((Now- DTPDateOfBirth.DateTime)/365);
+
+  end;
+end;
+
+end.

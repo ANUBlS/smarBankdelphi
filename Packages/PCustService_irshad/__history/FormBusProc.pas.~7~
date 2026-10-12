@@ -1,0 +1,429 @@
+﻿unit FormBusProc;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, DBGridEhGrouping, GridsEh, DBGridEh, StdCtrls, XFSCtrls,DB, ExtCtrls,Oracle;
+
+type
+  TForm_busnesProc = class(TForm)
+    Panel_BsProc: TPanel;
+    XFPanel1: TXFPanel;
+    Edit2: TEdit;
+    Edit3: TEdit;
+    MainGrid1: TDBGridEh;
+    procedure Edit2Change(Sender: TObject);
+    procedure Edit2Click(Sender: TObject);
+    procedure Edit2KeyPress(Sender: TObject; var Key: Char);
+    procedure Edit3Change(Sender: TObject);
+    procedure Edit3Click(Sender: TObject);
+    procedure Edit3KeyPress(Sender: TObject; var Key: Char);
+    procedure MainGrid1DblClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form_busnesProc: TForm_busnesProc;
+
+implementation
+
+uses UnitDataModPCustService, FormTransaction2Lmpl, FormTransaction3Lmpl,FormTransaction1Lmpl,
+  UnitTransaction, Creditİmpl, DepozLmpl;
+
+{$R *.dfm}
+
+procedure TForm_busnesProc.Edit2Change(Sender: TObject);
+begin
+ With Edit2 do
+    if Text <> '' then
+      DataModPCustService.DS_BusProc.DataSet.Locate('ID', Edit2.Text,
+        [loPartialKey]);
+end;
+
+procedure TForm_busnesProc.Edit2Click(Sender: TObject);
+begin
+Edit3.Text := '';
+end;
+
+procedure TForm_busnesProc.Edit2KeyPress(Sender: TObject; var Key: Char);
+begin
+if (upcase(Key) < '0') or (upcase(Key) > '9') then
+    if (ord(Key) <> 8) then
+      Key := #0;
+end;
+
+procedure TForm_busnesProc.Edit3Change(Sender: TObject);
+begin
+ With Edit3 do
+    if Text <> '' then
+      DataModPCustService.DS_BusProc.DataSet.Locate('Name', Edit3.Text,
+        [loPartialKey, loCaseInsensitive]);
+end;
+
+procedure TForm_busnesProc.Edit3Click(Sender: TObject);
+begin
+edit2.Text := '';
+end;
+
+procedure TForm_busnesProc.Edit3KeyPress(Sender: TObject; var Key: Char);
+begin
+ if (Key) in ['0' .. '9'] then
+    if (ord(Key) <> 8) then
+      Key := #0;
+
+end;
+
+procedure TForm_busnesProc.MainGrid1DblClick(Sender: TObject);
+procedure call_FormTransaction1;
+  begin
+    if not Assigned(FormTransaction1) then
+      FormTransaction1 := TFormTransaction1.Create(self);
+    FormTransaction1.ShowModal;
+  end;
+
+  procedure call_FormTransaction2;
+  var x:integer;
+  begin
+    if not Assigned(FormTransaction2) then
+      FormTransaction2 := TFormTransaction2.Create(self);
+
+    with DataModPCustService.ODS_AccNO_A do
+    begin
+
+       Close;
+      SetVariable('CustID', DataModPCustService.ODS_CUSTOMERS_PHYS_FS.
+        FieldByName('ID').AsInteger);
+      if DataModPCustService.ODS_BusProc.FieldByName('AccBalCn_A')
+        .AsString = '' then
+        SetVariable('BalCn', ' not in (-1)')
+      else
+        SetVariable('BalCn', DataModPCustService.ODS_BusProc.FieldByName
+          ('AccBalCn_A').AsString);
+      SetVariable('vTipAcc', '''%' + DataModPCustService.ODS_BusProc.FieldByName
+        ('AccSymb_A').AsString + '%''');
+      if DataModPCustService.ODS_BusProc.FieldByName('AccCurr_A')
+        .AsString = '' then
+        SetVariable('Currency', ' not in (-1)')
+      else
+        SetVariable('Currency', DataModPCustService.ODS_BusProc.FieldByName
+          ('AccCurr_A').AsString);
+
+     DataModPCustService.BusProcFilter(DataModPCustService.ODS_AccNO_A);
+     open;
+     end;
+      FormTransaction2.ShowModal;
+
+  end;
+
+  procedure call_FormTransaction3;
+  begin
+    if not Assigned(FormTransaction3) then
+      FormTransaction3 := TFormTransaction3.Create(self);
+
+    with DataModPCustService.ODS_AccNO_A do
+    begin
+
+      Close;
+      SetVariable('CustID', DataModPCustService.ODS_CUSTOMERS_PHYS_FS.
+        FieldByName('ID').AsInteger);
+      if DataModPCustService.ODS_BusProc.FieldByName('AccBalCn_A')
+        .AsString = '' then
+        SetVariable('BalCn', ' not in (-1)')
+      else
+        SetVariable('BalCn', DataModPCustService.ODS_BusProc.FieldByName
+          ('AccBalCn_A').AsString);
+      SetVariable('vTipAcc', '''%' + DataModPCustService.ODS_BusProc.FieldByName
+        ('AccSymb_A').AsString + '%''');
+      if DataModPCustService.ODS_BusProc.FieldByName('AccCurr_A')
+        .AsString = '' then
+        SetVariable('Currency', ' not in (-1)')
+      else
+        SetVariable('Currency', DataModPCustService.ODS_BusProc.FieldByName
+          ('AccCurr_A').AsString);
+
+      DataModPCustService.BusProcFilter(DataModPCustService.ODS_AccNO_A);
+      Open;
+
+  //     SHOWMESSAGE(inttostr( DataModPCustService.ODS_AccNO_A.recordcount));
+    end;
+    with DataModPCustService.ODS_AccNO_B do
+    begin
+      Close;
+
+      if DataModPCustService.ODS_BusProc.FieldByName('AccBalCn_B')
+        .AsString = '' then
+        SetVariable('BalCn', ' not in (-1)')
+      else
+        SetVariable('BalCn', DataModPCustService.ODS_BusProc.FieldByName
+          ('AccBalCn_B').AsString);
+      SetVariable('vTipAcc', '''%' + DataModPCustService.ODS_BusProc.FieldByName
+        ('AccSymb_B').AsString + '%''');
+      if DataModPCustService.ODS_BusProc.FieldByName('AccCurr_B')
+        .AsString = '' then
+        SetVariable('Currency', ' not in (-1)')
+      else
+        SetVariable('Currency', DataModPCustService.ODS_BusProc.FieldByName
+          ('AccCurr_B').AsString);
+
+           with DataModPCustService.ODS_BusProc do
+     begin
+    if (FieldByName('AccBalCn_B').AsString<>'')or(FieldByName('AccSymb_B').AsString<>'') or
+       (FieldByName('AccCurr_B').AsString<>'')  then
+      begin
+     DataModPCustService.ODS_AccNO_B.sql[11]:='';
+
+      end
+      else
+     DataModPCustService.ODS_AccNO_B.sql[11]:=DataModPCustService.ODS_AccNO_B.sql[11]+ ' and  kli_ID = ' + '-1';
+
+
+     end;
+
+       Open;
+    end;
+
+    FormTransaction3.ShowModal;
+
+  end;
+
+  procedure call_FormTransaction4;
+  begin
+    if not Assigned(FormTransaction4) then
+      FormTransaction4 := TFormTransaction4.Create(self);
+    with DataModPCustService.ODS_AccNO_A do
+    begin
+      ClearVariables;
+      Close;
+      SetVariable('CustID', DataModPCustService.ODS_CUSTOMERS_PHYS_FS.
+        FieldByName('ID').AsInteger);
+      if DataModPCustService.ODS_BusProc.FieldByName('AccBalCn_A')
+        .AsString = '' then
+        SetVariable('BalCn', ' not in (-1)')
+      else
+        SetVariable('BalCn', DataModPCustService.ODS_BusProc.FieldByName
+          ('AccBalCn_A').AsString);
+      SetVariable('vTipAcc', '''%' + DataModPCustService.ODS_BusProc.FieldByName
+        ('AccSymb_A').AsString + '%''');
+      if DataModPCustService.ODS_BusProc.FieldByName('AccCurr_A')
+        .AsString = '' then
+        SetVariable('Currency', ' not in (-1)')
+      else
+        SetVariable('Currency', DataModPCustService.ODS_BusProc.FieldByName
+          ('AccCurr_A').AsString);
+      DataModPCustService.BusProcFilter(DataModPCustService.ODS_AccNO_A);
+      Open;
+
+      // FormTransaction.EditDescription.Text :=DataModPCustService.ODS_BusProc.FieldByName();
+    end;
+
+    with DataModPCustService.ODS_AccNO_B do
+    begin
+      Close;
+
+       if DataModPCustService.ODS_BusProc.FieldByName('AccBalCn_B')
+        .AsString = '' then
+        SetVariable('BalCn', ' not in (-1)')
+      else
+        SetVariable('BalCn', DataModPCustService.ODS_BusProc.FieldByName
+          ('AccBalCn_B').AsString);
+
+      SetVariable('vTipAcc', '''%' + DataModPCustService.ODS_BusProc.FieldByName
+        ('AccSymb_B').AsString + '%''');
+
+      if DataModPCustService.ODS_BusProc.FieldByName('AccCurr_B')
+        .AsString = '' then
+        SetVariable('Currency', ' not in (-1)')
+      else
+        SetVariable('Currency', DataModPCustService.ODS_BusProc.FieldByName
+          ('AccCurr_B').AsString);
+
+
+
+     with DataModPCustService.ODS_BusProc do
+     begin
+    if (FieldByName('AccBalCn_B').AsString<>'')or(FieldByName('AccSymb_B').AsString<>'') or
+       (FieldByName('AccCurr_B').AsString<>'')  then
+      begin
+     DataModPCustService.ODS_AccNO_B.sql[11]:='';
+      end
+      else
+     DataModPCustService.ODS_AccNO_B.sql[11]:=DataModPCustService.ODS_AccNO_B.sql[11]+ ' and  kli_ID = ' + '-1';
+      end;
+     Open;
+
+    end;
+
+    with DataModPCustService.ODS_AccNO_C do
+    begin
+      Close;
+
+       if DataModPCustService.ODS_BusProc.FieldByName('AccBalCn_C')
+        .AsString = '' then
+        SetVariable('BalCn', ' not in (-1)')
+      else
+        SetVariable('BalCn', DataModPCustService.ODS_BusProc.FieldByName
+        ('AccBalCn_C').AsString);
+
+      SetVariable('vTipAcc', '''%' + DataModPCustService.ODS_BusProc.FieldByName
+        ('AccSymb_C').AsString + '%''');
+      if DataModPCustService.ODS_BusProc.FieldByName('AccCurr_C')
+        .AsString = '' then
+        SetVariable('Currency', ' not in (-1)')
+      else
+        SetVariable('Currency', DataModPCustService.ODS_BusProc.FieldByName
+          ('AccCurr_C').AsString);
+
+    with DataModPCustService.ODS_BusProc do
+     begin
+    if (FieldByName('AccBalCn_C').AsString<>'')or(FieldByName('AccSymb_C').AsString<>'') or
+       (FieldByName('AccCurr_C').AsString<>'')  then
+      begin
+     DataModPCustService.ODS_AccNO_C.sql[11]:='';
+
+      end
+      else
+     DataModPCustService.ODS_AccNO_C.sql[11]:=DataModPCustService.ODS_AccNO_C.sql[11]+ ' and  kli_ID = ' + '-1';
+
+
+     end;
+
+      Open;
+
+    end;
+
+    FormTransaction4.ShowModal;
+
+  end;
+
+begin
+{  if (DataModPCustService.ODS_CUSTOMERS_PHYS_FS.FieldByName('cust_phys').asinteger=1)
+       and
+      (DataModPCustService.ODS_CUSTOMERS_PHYS_FS.FieldByName('cust_fs').AsInteger=1)
+      and
+      (XFRadioGroupCust_type.ItemIndex=3)
+      and
+      (DataModPCustService.ODS_CUSTOMERS_PHYS_FS.FieldByName('cust_phys').AsInteger=1)
+      then
+      begin
+      showmessage('Fiziki şəxs və fiziki sahibkara əməliyyat vermek üun onun tipni dəyişin   !');
+      exit
+      end;  }
+
+
+
+  case DataModPCustService.ODS_BusProcFORMNUM.AsInteger of
+    1:
+      call_FormTransaction1;
+    2:
+    begin
+    if DataModPCustService.ODS_CUSTOMERS_PHYS_FS.FieldByName('cust_type').AsInteger=4 then
+    begin
+      showmessage('Nominala əməliyyat vermek olmaz   !');
+      exit;
+    end;
+
+        if (DataModPCustService.ODS_CUSTOMERS_PHYS_FS.Active) and
+          (DataModPCustService.ODS_CUSTOMERS_PHYS_FS.RecordCount <> 0) then
+          begin
+        call_FormTransaction2
+
+          end
+        else
+        begin
+          ShowMessage('Heç bir məlumat seçilməyib !');
+          exit;
+        end;
+      end;
+    3:
+      begin
+      if DataModPCustService.ODS_CUSTOMERS_PHYS_FS.FieldByName('cust_type').AsInteger=4 then
+      begin
+      showmessage('Nominala əməliyyat vermek olmaz   !');
+      exit;
+      end;
+
+        if (DataModPCustService.ODS_CUSTOMERS_PHYS_FS.Active) and
+          (DataModPCustService.ODS_CUSTOMERS_PHYS_FS.RecordCount <> 0) then
+          begin
+          call_FormTransaction3;
+          end
+        else
+        begin
+          ShowMessage('Heç bir məlumat seçilməyib !');
+          exit;
+        end;
+      end;
+    4:
+     begin
+      if DataModPCustService.ODS_CUSTOMERS_PHYS_FS.FieldByName('cust_type').AsInteger=4 then
+      begin
+      showmessage('Nominala əməliyyat vermek olmaz   !');
+      exit;
+      end;
+
+        if (DataModPCustService.ODS_CUSTOMERS_PHYS_FS.Active) and
+          (DataModPCustService.ODS_CUSTOMERS_PHYS_FS.RecordCount <> 0) then
+         begin
+        call_FormTransaction4  ;
+         end
+        else
+        begin
+          ShowMessage('Heç bir məlumat seçilməyib !');
+          exit;
+        end;
+     end;
+    5:
+      begin
+       if DataModPCustService.ODS_CUSTOMERS_PHYS_FS.FieldByName('cust_type').AsInteger=4 then
+    begin
+      showmessage('Nominala kredit vermek olmaz   !');
+      exit;
+    end;
+
+        if (DataModPCustService.ODS_CUSTOMERS_PHYS_FS.Active) and
+          (DataModPCustService.ODS_CUSTOMERS_PHYS_FS.RecordCount <> 0) then
+        begin
+          if not Assigned(CreditFrm) then
+            CreditFrm := TCreditFrm.Create(self);
+          CreditFrm.ShowModal
+
+        end
+        else
+        begin
+          ShowMessage('Heç bir məlumat seçilməyib !');
+          exit;
+        end;
+
+      end;
+    6:
+      begin
+       if DataModPCustService.ODS_CUSTOMERS_PHYS_FS.FieldByName('cust_type').AsInteger=4 then
+    begin
+      showmessage('Nominala depozit vermek olmaz   !');
+      exit;
+    end;
+        if (DataModPCustService.ODS_CUSTOMERS_PHYS_FS.Active) and
+          (DataModPCustService.ODS_CUSTOMERS_PHYS_FS.RecordCount <> 0) then
+        begin
+          if not Assigned(DepozitFrm) then
+            DepozitFrm := TDepozitFrm.Create(self);
+          DepozitFrm.ShowModal;
+        end
+        else
+        begin
+          ShowMessage('Heç bir məlumat seçilməyib !');
+          exit;
+        end;
+
+      end;
+
+  end;
+
+
+end;
+
+end.

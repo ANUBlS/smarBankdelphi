@@ -1,0 +1,285 @@
+object FormCustomers: TFormCustomers
+  Left = 0
+  Top = 0
+  BorderIcons = [biSystemMenu, biMaximize]
+  ClientHeight = 259
+  ClientWidth = 764
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poDesktopCenter
+  OnCanResize = FormCanResize
+  OnClose = FormClose
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 764
+    Height = 230
+    Align = alClient
+    BevelInner = bvLowered
+    TabOrder = 0
+    object DBGrid1: TDBGrid
+      Left = 2
+      Top = 2
+      Width = 760
+      Height = 226
+      Align = alClient
+      DrawingStyle = gdsGradient
+      Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit, dgTitleClick, dgTitleHotTrack]
+      TabOrder = 0
+      TitleFont.Charset = DEFAULT_CHARSET
+      TitleFont.Color = clWindowText
+      TitleFont.Height = -11
+      TitleFont.Name = 'Tahoma'
+      TitleFont.Style = []
+      OnDblClick = DBGrid1DblClick
+      Columns = <
+        item
+          Expanded = False
+          FieldName = 'ID'
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'CUST_NAME'
+          Title.Caption = 'Tam ad'#305
+          Width = 300
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'LASTNAME'
+          Title.Caption = 'Soyad'#305
+          Width = 150
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'FIRSTNAME'
+          Title.Caption = 'Ad'#305
+          Width = 150
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'PATRONYMIC'
+          Title.Caption = 'Atas'#305'n'#305'n ad'#305
+          Width = 200
+          Visible = True
+        end>
+    end
+  end
+  object Panel2: TPanel
+    Left = 0
+    Top = 230
+    Width = 764
+    Height = 29
+    Align = alBottom
+    BevelInner = bvLowered
+    TabOrder = 1
+    object CBSearch: TComboBox
+      Left = 5
+      Top = 4
+      Width = 145
+      Height = 21
+      Style = csDropDownList
+      TabOrder = 0
+    end
+    object EditSearch: TEdit
+      Left = 156
+      Top = 4
+      Width = 269
+      Height = 21
+      TabOrder = 1
+      OnChange = EditSearchChange
+    end
+    object XFButton1: TXFButton
+      Left = 605
+      Top = 3
+      Width = 79
+      Height = 24
+      Caption = '    Q'#601'bul    '
+      DoubleBuffered = True
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentDoubleBuffered = False
+      ParentFont = False
+      TabOrder = 2
+      Visible = False
+      OnClick = XFButton1Click
+    end
+    object XFButton2: TXFButton
+      Left = 685
+      Top = 2
+      Width = 75
+      Height = 24
+      Caption = 'Imtina'
+      DoubleBuffered = True
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentDoubleBuffered = False
+      ParentFont = False
+      TabOrder = 3
+      OnClick = XFButton2Click
+    end
+    object XFButton3: TXFButton
+      Left = 607
+      Top = 3
+      Width = 75
+      Height = 24
+      Caption = 'Q'#601'bul'
+      DoubleBuffered = True
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentDoubleBuffered = False
+      ParentFont = False
+      TabOrder = 4
+      Visible = False
+      OnClick = XFButton3Click
+    end
+  end
+  object ODS_CUSTOMERS: TOracleDataSet
+    SQL.Strings = (
+      
+        'SELECT id ,cust_name,lastname,firstname,patronymic  from pcust_v' +
+        'iew  where  close_dat is  null and cust_type in(1,2,3,4)'
+      ''
+      ''
+      ''
+      ''
+      ''
+      'order by id'
+      ''
+      ''
+      ''
+      ''
+      '')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000050000000400000049004400010000000000100000004C0041005300
+      54004E0041004D0045000100000000001200000043005500530054005F004E00
+      41004D00450001000000000012000000460049005200530054004E0041004D00
+      45000100000000001400000050004100540052004F004E0059004D0049004300
+      010000000000}
+    Session = sboapiDataModule.SBSession
+    FilterOptions = [foCaseInsensitive, foNoPartialCompare]
+    Left = 328
+    Top = 80
+    object ODS_CUSTOMERSID: TIntegerField
+      FieldName = 'ID'
+    end
+    object ODS_CUSTOMERSCUST_NAME: TWideStringField
+      FieldName = 'CUST_NAME'
+      Size = 360
+    end
+    object ODS_CUSTOMERSLASTNAME: TWideStringField
+      FieldName = 'LASTNAME'
+      Size = 120
+    end
+    object ODS_CUSTOMERSFIRSTNAME: TWideStringField
+      FieldName = 'FIRSTNAME'
+      Size = 120
+    end
+    object ODS_CUSTOMERSPATRONYMIC: TWideStringField
+      FieldName = 'PATRONYMIC'
+      Size = 120
+    end
+  end
+  object DS_CUSTOMERS: TDataSource
+    DataSet = ODS_CUSTOMERS
+    Left = 320
+    Top = 136
+  end
+  object ODS_CUSTOMERS_tr: TOracleDataSet
+    SQL.Strings = (
+      
+        'SELECT p.id ,p.cust_name,p.lastname,p.firstname,p.patronymic,p.c' +
+        'ust_type,p.inn ,p.passport,p.passp_number from pcust_view p '
+      'where close_dat is null '
+      ':p_valu'
+      ''
+      ''
+      ''
+      ''
+      ''
+      'order by id'
+      ''
+      ''
+      ''
+      ''
+      '')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000E0000003A0050005F00560041004C005500010000000000
+      000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      05000000090000000400000049004400010000000000100000004C0041005300
+      54004E0041004D0045000100000000001200000043005500530054005F004E00
+      41004D00450001000000000012000000460049005200530054004E0041004D00
+      45000100000000001400000050004100540052004F004E0059004D0049004300
+      0100000000001200000043005500530054005F00540059005000450001000000
+      00000600000049004E004E000100000000001000000050004100530053005000
+      4F005200540001000000000018000000500041005300530050005F004E005500
+      4D00420045005200010000000000}
+    Session = sboapiDataModule.SBSession
+    FilterOptions = [foCaseInsensitive, foNoPartialCompare]
+    Left = 456
+    Top = 80
+    object ODS_CUSTOMERS_trID: TIntegerField
+      FieldName = 'ID'
+    end
+    object ODS_CUSTOMERS_trCUST_NAME: TWideStringField
+      FieldName = 'CUST_NAME'
+      Size = 360
+    end
+    object ODS_CUSTOMERS_trLASTNAME: TWideStringField
+      FieldName = 'LASTNAME'
+      Size = 120
+    end
+    object ODS_CUSTOMERS_trFIRSTNAME: TWideStringField
+      FieldName = 'FIRSTNAME'
+      Size = 120
+    end
+    object ODS_CUSTOMERS_trPATRONYMIC: TWideStringField
+      FieldName = 'PATRONYMIC'
+      Size = 120
+    end
+    object ODS_CUSTOMERS_trCUST_TYPE: TFloatField
+      FieldName = 'CUST_TYPE'
+    end
+    object ODS_CUSTOMERS_trINN: TWideStringField
+      FieldName = 'INN'
+      Size = 80
+    end
+    object ODS_CUSTOMERS_trPASSPORT: TWideStringField
+      FieldName = 'PASSPORT'
+      Size = 120
+    end
+    object ODS_CUSTOMERS_trPASSP_NUMBER: TWideStringField
+      FieldName = 'PASSP_NUMBER'
+      Size = 120
+    end
+  end
+  object DS_CUSTOMERS_tr: TDataSource
+    DataSet = ODS_CUSTOMERS_tr
+    Left = 456
+    Top = 136
+  end
+end

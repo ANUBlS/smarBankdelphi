@@ -1,0 +1,201 @@
+unit uCustomersIPInfo;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, OracleData, StdCtrls, Mask, DBCtrls, ComCtrls, ExtCtrls;
+
+type
+  TfrmIPINFO = class(TForm)
+    ODSIpInfo: TOracleDataSet;
+    IpInfo: TDataSource;
+    GroupBox1: TGroupBox;
+    Label2: TLabel;
+    DBEdit2: TDBLookupComboBox;
+    Label3: TLabel;
+    DBEdit3: TDBEdit;
+    Label5: TLabel;
+    DBEdit5: TDBLookupComboBox;
+    Label7: TLabel;
+    DBEdit7: TDBLookupComboBox;
+    GroupBox2: TGroupBox;
+    ODSMarriage: TOracleDataSet;
+    Marriage1: TDataSource;
+    Marriage2: TDataSource;
+    ODSInsurance: TOracleDataSet;
+    PassType1: TDataSource;
+    PassType2: TDataSource;
+    ODSPassTypes: TOracleDataSet;
+    Insurances: TDataSource;
+    SocCategory1: TDataSource;
+    ODSSocCategories: TOracleDataSet;
+    SocCategory2: TDataSource;
+    Family: TDataSource;
+    ODSFamily: TOracleDataSet;
+    Label8: TLabel;
+    Label9: TLabel;
+    Label10: TLabel;
+    Label11: TLabel;
+    DBEdit8: TDBLookupComboBox;
+    DBEdit9: TDBEdit;
+    cb_INSCONTRACTDATE: TDateTimePicker;
+    cb_INSCONTRACTPREIOD: TDateTimePicker;
+    Panel1: TPanel;
+    Button1: TButton;
+    Button2: TButton;
+    Label13: TLabel;
+    cb_INSCONTRLASTDATE: TDateTimePicker;
+    Label12: TLabel;
+    DBEdit10: TDBEdit;
+    Label14: TLabel;
+    DBLookupComboBox1: TDBLookupComboBox;
+    Periods: TDataSource;
+    ODSPeriods: TOracleDataSet;
+    ODSIpInfoCUSTID: TFloatField;
+    ODSIpInfoBDATE: TDateTimeField;
+    ODSIpInfoMARRIAGE: TFloatField;
+    ODSIpInfoMONTHLYPROFIT: TFloatField;
+    ODSIpInfoPROFESSION: TStringField;
+    ODSIpInfoPASSTYPE: TFloatField;
+    ODSIpInfoPASSSERIE: TStringField;
+    ODSIpInfoSOCCATEGORY: TFloatField;
+    ODSIpInfoINSURANCECOMP: TFloatField;
+    ODSIpInfoINSPOLICNUM: TStringField;
+    ODSIpInfoINSCONTRACTDATE: TDateTimeField;
+    ODSIpInfoINSCONTRACTPREIOD: TDateTimeField;
+    ODSIpInfoBB_INN: TStringField;
+    ODSIpInfoBB_FAMILYSTATUS: TFloatField;
+    ODSIpInfoPASSNUM: TStringField;
+    ODSIpInfoCARDID: TFloatField;
+    ODSIpInfoUNIQUEINSID: TStringField;
+    ODSIpInfoINSCONTRLASTDATE: TDateTimeField;
+    ODSIpInfoINSPERIODID: TFloatField;
+    ODSIpInfoINSAMOUNT: TFloatField;
+    Label15: TLabel;
+    DBEdit11: TDBEdit;
+    Label6: TLabel;
+    DBEdit6: TDBEdit;
+    DBEdit1: TDBEdit;
+    Label4: TLabel;
+    DBEdit4: TDBEdit;
+    Label1: TLabel;
+    cb_BDATE: TDateTimePicker;
+    Label25: TLabel;
+    Label26: TLabel;
+    DBEdit25: TDBEdit;
+    DBEdit26: TDBLookupComboBox;
+    procedure FormCreate(Sender: TObject);
+    procedure DBEdit3Change(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  frmIPINFO: TfrmIPINFO;
+  CardID: Integer;
+  
+implementation
+
+{$R *.DFM}
+
+uses sboapidatamoduleimpl, CustomerDataModuleImpl, CustomerInfoFormImpl;
+
+procedure TfrmIPINFO.FormCreate(Sender: TObject);
+var
+  i: Integer;
+begin
+  for i:=0 to ComponentCount-1 do
+    if (Components[i] is TOracleDataSet) and (Components[i].Tag=3) then
+      (Components[i] as TOracleDataSet).Open;
+  with ODSIpInfo do begin
+    ClearVariables;
+    Close;
+    SetVariable('custid',CustomerDataModule.ActiveCustomerList.FieldByName('ID').AsVariant);
+    open;
+    if FieldByName('BDATE').AsString='' then begin
+      cb_BDATE.Date := Date;
+
+    end else begin
+      cb_BDATE.Date := FieldByName('BDATE').AsDateTime;
+    end;
+    if FieldByName('INSCONTRACTDATE').AsString='' then
+      cb_INSCONTRACTDATE.Date := Date
+    else
+      cb_INSCONTRACTDATE.Date := FieldByName('INSCONTRACTDATE').AsDateTime;
+
+    if FieldByName('INSCONTRLASTDATE').AsString='' then
+      cb_INSCONTRLASTDATE.Date := Date
+    else
+      cb_INSCONTRLASTDATE.Date := FieldByName('INSCONTRLASTDATE').AsDateTime;
+
+    if FieldByName('INSCONTRACTPREIOD').AsString='' then
+      cb_INSCONTRACTPREIOD.Date := Date
+    else
+      cb_INSCONTRACTPREIOD.Date := FieldByName('INSCONTRACTPREIOD').AsDateTime;
+  end;
+end;
+
+procedure TfrmIPINFO.DBEdit3Change(Sender: TObject);
+var
+  cname: String;
+begin
+  Button1.Enabled := True;
+  if (Sender is TDateTimePicker) then begin
+    cname := (Sender as TComponent).Name;
+    cname := copy(cName,4,length(cname)-3);
+    ODSIpInfo.FieldByName(cname).AsDateTime := (Sender as TDateTimePicker).Date;
+  end;
+end;
+
+procedure TfrmIPINFO.Button1Click(Sender: TObject);
+begin
+  with ODSIpInfo do begin    
+
+    if FieldByName('CUSTID').AsString = '' then
+      FieldByName('CUSTID').AsInteger := CustomerDataModule.ActiveCustomerList.FieldByName('ID').AsInteger;
+    if FieldByName('CARDID').AsString = '' then
+      FieldByName('CARDID').AsInteger := CardID;
+
+    FieldByName('BDATE').AsDateTime := cb_BDATE.Date;
+    FieldByName('INSCONTRACTPREIOD').AsDateTime := cb_INSCONTRACTPREIOD.Date;
+    FieldByName('INSCONTRACTDATE').AsDateTime := cb_INSCONTRACTDATE.Date;
+    FieldByName('INSCONTRLASTDATE').AsDateTime := cb_INSCONTRLASTDATE.Date;
+    Post;
+    (Sender as TControl).Enabled := False;
+    refresh;
+    try Edit; except end;
+  end;
+end;
+
+procedure TfrmIPINFO.FormShow(Sender: TObject);
+begin
+  with ODSIpInfo do begin
+    if FieldByName('BDATE').AsString='' then begin
+      cb_BDATE.Date := Date;
+
+    end else begin
+      cb_BDATE.Date := FieldByName('BDATE').AsDateTime;
+    end;
+    if FieldByName('INSCONTRACTDATE').AsString='' then
+      cb_INSCONTRACTDATE.Date := Date
+    else
+      cb_INSCONTRACTDATE.Date := FieldByName('INSCONTRACTDATE').AsDateTime;
+
+    if FieldByName('INSCONTRLASTDATE').AsString='' then
+      cb_INSCONTRLASTDATE.Date := Date
+    else
+      cb_INSCONTRLASTDATE.Date := FieldByName('INSCONTRLASTDATE').AsDateTime;
+
+    if FieldByName('INSCONTRACTPREIOD').AsString='' then
+      cb_INSCONTRACTPREIOD.Date := Date
+    else
+      cb_INSCONTRACTPREIOD.Date := FieldByName('INSCONTRACTPREIOD').AsDateTime;
+  end;
+end;
+
+end.

@@ -1,0 +1,75 @@
+unit UnitBProc;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Grids, DBGrids, StdCtrls;
+
+type
+  TFormBProc = class(TForm)
+    DBGridBussProc: TDBGrid;
+    BtnOK: TButton;
+    BtnClose: TButton;
+    procedure FormCreate(Sender: TObject);
+    procedure DBGridBussProcDblClick(Sender: TObject);
+    procedure BtnCloseClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormBProc: TFormBProc;
+
+implementation
+
+uses CO_datamod_impl, CO_Transact_Unitp, SBTranslateProc, sboapiDataModuleImpl;
+{$R *.DFM}
+
+procedure TFormBProc.FormCreate(Sender: TObject);
+begin
+  CO_DataMod.ODS_BussProc.Open;
+end;
+
+procedure TFormBProc.DBGridBussProcDblClick(Sender: TObject);
+begin
+  CO_Transactions :=TCO_Transactions.Create(Self);
+  with CO_Transactions, CO_DataMod do begin
+   //Debt := True;
+   DBEditDebtAccNo.Text :='';
+   DBEditDebtAccName.Text :='';
+   CreditAccSearchEdit.Text :='';
+   DBEditCredAccNo.Text :='';
+   DBEditCredAccName.Text :='';
+   CredCurCode.Text :='0';
+   DebtCurCode.Text :=Account.FieldByName('AccValCode').AsString;
+   DebtAccSearchEdit.Text := Account.FieldByName('AccNo').AsString;
+   DBLookupDebtAcc.KeyValue := Account.FieldByName('AccNo').AsString;
+   DBLookupDebtAccClick(Sender);
+  end; {with CO_Transactions, CO_DataMod}
+  if CO_Transactions.ShowModal =IDOK then with CO_Transactions do begin
+   CO_DataMod.OrPack_BussProc.CallProcedure(
+    'execbprocess',[
+     CO_DataMod.ODS_BussProcID.AsVariant,
+     StrToInt(Acc_id.Text),
+     StrToInt(Acc_id_.Text),
+     DebtValue.Value,
+     CreditValue.Value,
+     Ekv.Value,
+     CashSymbolLookUp.KeyValue,
+     ConvertationSymbolLookUp.KeyValue,
+     DBEditTransName.Text,
+     ReportIDLookUp.KeyValue,
+     CountrIDLookUp.KeyValue]);
+   CO_DataMod.OrPack_BussProc.CallProcedure('commitprocs',[]); 
+  end;
+end;
+
+procedure TFormBProc.BtnCloseClick(Sender: TObject);
+begin
+  Close;
+end;
+
+end.

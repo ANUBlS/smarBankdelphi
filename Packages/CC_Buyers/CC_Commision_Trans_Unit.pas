@@ -1,0 +1,143 @@
+unit CC_Commision_Trans_Unit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, NLSDialogs,
+  StdCtrls, SearchEdit, DBCtrls, Mask, ExtCtrls, ActnList, Db, OracleData,
+  Oracle, Buttons, Grids, DBGrids, NLSLocalizer;
+
+type
+
+  TOperationMode = (omInsert ,omUpdate);
+
+
+type
+  TCC_Country_ins = class(TForm)
+    DBGrid1: TDBGrid;
+    Panel1: TPanel;
+    GroupBox1: TGroupBox;
+    EditCountry: TEdit;
+    SpeedButton1: TSpeedButton;
+    SpeedButton2: TSpeedButton;
+    GroupBox2: TGroupBox;
+    Editcities: TEdit;
+    SpeedButton3: TSpeedButton;
+    DBEdit1: TDBEdit;
+    SpeedButton4: TSpeedButton;
+    DBGrid2: TDBGrid;
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure SpeedButton2Click(Sender: TObject);
+    procedure SpeedButton3Click(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
+    procedure DBGrid1CellClick(Column: TColumn);
+    procedure SpeedButton4Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+      OperationMode :TOperationMode;
+
+procedure WMNCACTIVATE(var message:TWMNCActivate);
+procedure WMNCPaint(var message: TWMNCPaint);
+
+
+
+  end;
+
+var
+  CC_Country_ins: TCC_Country_ins;
+
+implementation
+
+{$R *.DFM}
+ uses sboapiDataModuleImpl, UnitData;
+
+procedure TCC_Country_ins.WMNCACTIVATE(var message:TWMNCActivate);
+var
+ S:TWMNCPaint;
+begin
+inherited;
+WMNCPaint(s);
+end;
+
+procedure TCC_Country_ins.WMNCPaint(var message: TWMNCPaint);
+const Capt = 'Юлкяляр';
+var dc : hDc;
+begin
+inherited;
+Caption:='';
+dc := GetWindowDC(Handle);
+        SetBkMode(dc,Transparent);
+        SetTextColor(dc,clWhite);
+        SelectObject(dc, Font.Handle);
+        TextOut(dc, 23,6,Capt,Length(Capt));
+end;
+
+procedure TCC_Country_ins.SpeedButton1Click(Sender: TObject);
+begin
+if Editcountry.Text ='' then
+showmessage('Бош дахил етмяк олмаз!')
+else
+DataMod_Buyers.CC_GENERAL.CallProcedure('add_countries',[Editcountry.Text]);
+DataMod_Buyers.Country.close;
+DataMod_Buyers.Country.Open;
+Editcountry.Text :='' ;
+
+end;
+
+procedure TCC_Country_ins.SpeedButton2Click(Sender: TObject);
+var
+p_id : integer;
+begin
+p_id :=DataMod_Buyers.Country.fieldbyname('id').asinteger;
+DataMod_Buyers.CC_GENERAL.CallProcedure('delete_countries',[p_id]);
+DataMod_Buyers.Country.close;
+DataMod_Buyers.Country.Open;
+
+end;
+
+procedure TCC_Country_ins.SpeedButton3Click(Sender: TObject);
+begin
+if Editcities.Text ='' then
+showmessage('Бош дахил етмяк олмаз!')
+else
+DataMod_Buyers.CC_GENERAL.CallProcedure('add_cities',[Editcities.Text,
+                                                     Strtoint(Dbedit1.text)]);
+DataMod_Buyers.Cities.Close;
+DataMod_Buyers.Cities.Open;
+Editcities.Text :='';
+
+
+end;
+
+procedure TCC_Country_ins.FormActivate(Sender: TObject);
+begin
+DataMod_Buyers.Country.Open;
+
+end;
+
+procedure TCC_Country_ins.DBGrid1CellClick(Column: TColumn);
+begin
+with DataMod_Buyers.cities do begin
+Close;
+   SQL.clear;
+Sql.add('Select * from Cities where country_id='''+dbedit1.text+''' ');
+Open;
+
+end;
+    end;
+procedure TCC_Country_ins.SpeedButton4Click(Sender: TObject);
+
+var
+p_id : integer;
+begin
+p_id :=DataMod_Buyers.Cities.fieldbyname('id').asinteger;
+DataMod_Buyers.CC_GENERAL.CallProcedure('delete_cities',[p_id]);
+DataMod_Buyers.Cities.close;
+DataMod_Buyers.Cities.Open;
+
+
+end;
+
+end.

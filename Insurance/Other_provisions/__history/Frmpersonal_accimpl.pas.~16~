@@ -1,0 +1,126 @@
+unit Frmpersonal_accimpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, XFSCtrls, ExtCtrls, Mask, DBCtrls;
+
+type
+  TFrmpersonal_acc = class(TForm)
+    XFGroupBox3: TXFGroupBox;
+    XFLabel19: TXFLabel;
+    DBLookupComboBox2: TDBLookupComboBox;
+    XFGroupBox2: TXFGroupBox;
+    XFLabel17: TXFLabel;
+    DBEdit9: TDBEdit;
+    DBEdit11: TDBEdit;
+    XFPanel1: TXFPanel;
+    XFButton1: TXFButton;
+    XFButton2: TXFButton;
+    XFCheckBox1: TXFCheckBox;
+    XFCheckBox2: TXFCheckBox;
+    DBEdit1: TDBEdit;
+    DBEdit2: TDBEdit;
+    DBEdit3: TDBEdit;
+    XFLabel1: TXFLabel;
+    XFLabel2: TXFLabel;
+    XFLabel3: TXFLabel;
+    XFLabel4: TXFLabel;
+    XFLabel5: TXFLabel;
+    DBEdit4: TDBEdit;
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure XFButton2Click(Sender: TObject);
+    procedure XFCheckBox2Click(Sender: TObject);
+    procedure XFCheckBox1Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Frmpersonal_acc: TFrmpersonal_acc;
+
+implementation
+
+uses DMProvisionsImpl,CommanParametrs;
+
+{$R *.dfm}
+
+procedure TFrmpersonal_acc.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+if ord(key)=vk_escape then close;
+
+end;
+
+procedure TFrmpersonal_acc.FormShow(Sender: TObject);
+begin
+//showmessage(IntToStr(contactid));
+      //DMProvisions.DSrespon.Refresh;
+
+DMProvisions.DSins_contr_per_acc_motor.close;
+DMProvisions.DSins_contr_per_acc_motor.SetVariable('PCID',contactid);
+DMProvisions.DSins_contr_per_acc_motor.open;
+DMProvisions.DSins_contr_per_acc_motor.RefreshRecord;
+DMProvisions.DSins_contr_per_acc_motor.Edit;
+if DMProvisions.DSins_contr_per_acc_motor.FieldByName('ACCIDENT_POLISNUM').AsString='' then
+begin
+Frmpersonal_acc.XFCheckBox1.Checked:=false ;
+Frmpersonal_acc.XFCheckBox2.Checked:=true;
+   XFGroupBox2.Enabled:=true;
+   XFGroupBox3.Enabled:=false;
+
+
+end;
+if DMProvisions.DSrespon.FieldByName('ACCIDENT_POLISNUM').AsString<>'' then
+begin
+Frmpersonal_acc.XFCheckBox1.Checked:=true ;
+Frmpersonal_acc.XFCheckBox2.Checked:=false;
+
+   XFGroupBox3.Enabled:=true;
+   XFGroupBox2.Enabled:=false;
+end;
+
+
+end;
+
+procedure TFrmpersonal_acc.XFButton2Click(Sender: TObject);
+begin
+close;
+end;
+
+procedure TFrmpersonal_acc.XFCheckBox1Click(Sender: TObject);
+begin
+if XFCheckBox1.Checked=true then
+begin
+  XFCheckBox2.Checked:=false;
+  XFGroupBox3.Enabled:=true;
+  DMProvisions.DSPolisNo1.Refresh;
+  DMProvisions.DSPolisNo2.Refresh;
+end;
+
+if XFCheckBox1.Checked=false then
+begin
+XFGroupBox3.Enabled:=false;
+  XFCheckBox2.Checked:=true;
+end;
+end;
+
+procedure TFrmpersonal_acc.XFCheckBox2Click(Sender: TObject);
+begin
+if XFCheckBox2.Checked=true then
+begin
+XFGroupBox2.Enabled:=true;
+  XFCheckBox1.Checked:=false;
+end;
+
+if XFCheckBox2.Checked=false then
+begin
+XFGroupBox2.Enabled:=false;
+  XFCheckBox1.Checked:=true;
+end;
+end;
+
+end.

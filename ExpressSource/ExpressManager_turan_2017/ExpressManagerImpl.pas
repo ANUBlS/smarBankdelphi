@@ -1,0 +1,2913 @@
+﻿unit ExpressManagerImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, LDialogs,
+  ActiveX, AxCtrls, ExpressManager_TLB, StdVcl, StdCtrls, Menus, ImgList,
+  ComCtrls, ToolWin, ActnList, Grids, DBGrids, ExtCtrls, OracleData,
+  sboapiDataModuleImpl,strutils,
+  XDBGrids, XFSCtrls, Variants, CMExcelExport;
+
+type
+  TExpress = class(TActiveForm, IExpress)
+    PopupMenuOut: TPopupMenu;
+    N1: TMenuItem;
+    N2: TMenuItem;
+    ActionListOUT: TActionList;
+    ActionAddOut: TAction;
+    ActionEditOut: TAction;
+    ActionDeleteOut: TAction;
+    N3: TMenuItem;
+    N4: TMenuItem;
+    ActionCommitOut: TAction;
+    N5: TMenuItem;
+    ActionAdminOut: TAction;
+    ImageList1: TImageList;
+    ActionArchive: TAction;
+    Timer1: TTimer;
+    N6: TMenuItem;
+    N7: TMenuItem;
+    ActionSearchOut: TAction;
+    N8: TMenuItem;
+    PopupMenu2: TPopupMenu;
+    N10: TMenuItem;
+    PopupMenu3: TPopupMenu;
+    N11: TMenuItem;
+    N12: TMenuItem;
+    N13: TMenuItem;
+    N14: TMenuItem;
+    N15: TMenuItem;
+    ImageList2: TImageList;
+    N16: TMenuItem;
+    N17: TMenuItem;
+    N18: TMenuItem;
+    N19: TMenuItem;
+    mumisazlama1: TMenuItem;
+    N20: TMenuItem;
+    MdaxilMxaric1: TMenuItem;
+    ActionReturn: TAction;
+    ImageList4: TImageList;
+    ExpressPageControl: TPageControl;
+    TabSheet1: TTabSheet;
+    TabSheet2: TTabSheet;
+    TabSheet3: TTabSheet;
+    TabSheet4: TTabSheet;
+    Panel2: TPanel;
+    ControlBar1: TControlBar;
+    ToolBar1: TToolBar;
+    ToolButton1: TToolButton;
+    ToolButton3: TToolButton;
+    ToolButton5: TToolButton;
+    ToolButton7: TToolButton;
+    ToolButton17: TToolButton;
+    ToolButton11: TToolButton;
+    ToolButton9: TToolButton;
+    ToolButton16: TToolButton;
+    ToolButton15: TToolButton;
+    XDBGrid1: TXDBGrid;
+    Panel1: TPanel;
+    ActionListIN: TActionList;
+    ActionEditIn: TAction;
+    ActionTakeIn: TAction;
+    ActionRefreshIn: TAction;
+    ActionSearchIn: TAction;
+    ActionRefreshOutArchive: TAction;
+    ActionSearchOutArchive: TAction;
+    XFGroupBox1: TXFGroupBox;
+    Edit1: TEdit;
+    XFGroupBox2: TXFGroupBox;
+    Edit2: TEdit;
+    XDBGrid2: TXDBGrid;
+    XDBGrid3: TXDBGrid;
+    XDBGrid4: TXDBGrid;
+    ToolButton8: TToolButton;
+    ActionLookIn: TAction;
+    ImageList3: TImageList;
+    PopupMenuOutArtchive: TPopupMenu;
+    PopupMenuIn: TPopupMenu;
+    PopupMenuInArtchive: TPopupMenu;
+    Redakt1: TMenuItem;
+    Baxmaq1: TMenuItem;
+    Yenil1: TMenuItem;
+    Axtar1: TMenuItem;
+    Qbul1: TMenuItem;
+    ActionPrintOutArchive: TAction;
+    ActionPrintOutArcive1: TAction;
+    Gndrnap1: TMenuItem;
+    Yenil2: TMenuItem;
+    Axtar2: TMenuItem;
+    MdaxilQbzap1: TMenuItem;
+    ActionPrintIn: TAction;
+    ActionPrintIn1: TAction;
+    Qbulap1: TMenuItem;
+    MdaxilQbzap2: TMenuItem;
+    ActionSearchInArchive: TAction;
+    ActionRefreshInArchive: TAction;
+    ActionPrintInArchive: TAction;
+    ActionPrintInArchive1: TAction;
+    Action1: TAction;
+    Action2: TAction;
+    Yenil3: TMenuItem;
+    Axtar3: TMenuItem;
+    Axtar4: TMenuItem;
+    Qbulap2: TMenuItem;
+    ControlBar2: TControlBar;
+    ToolBar2: TToolBar;
+    ToolButton6: TToolButton;
+    ToolButton12: TToolButton;
+    ToolButton14: TToolButton;
+    ToolButton21: TToolButton;
+    ToolButton13: TToolButton;
+    XFGroupBox3: TXFGroupBox;
+    Edit3: TEdit;
+    XFGroupBox4: TXFGroupBox;
+    Edit4: TEdit;
+    Panel3: TPanel;
+    ControlBar3: TControlBar;
+    ToolBar3: TToolBar;
+    ToolButton10: TToolButton;
+    ToolButton18: TToolButton;
+    XFPanel1: TXFPanel;
+    DTPOutArchiveB: TDateTimePicker;
+    DTPOutArchiveE: TDateTimePicker;
+    Panel4: TPanel;
+    ControlBar4: TControlBar;
+    ToolBar4: TToolBar;
+    ToolButton2: TToolButton;
+    ToolButton4: TToolButton;
+    XFPanel2: TXFPanel;
+    DTPInArchiveB: TDateTimePicker;
+    DTPInArchiveE: TDateTimePicker;
+    ToolButton19: TToolButton;
+    ToolButton20: TToolButton;
+    ToolButton22: TToolButton;
+    ActionLookInArchive: TAction;
+    ActionLookOutArchive: TAction;
+    ToolButton23: TToolButton;
+    ToolButton24: TToolButton;
+    N21: TMenuItem;
+    ActionFilterOut: TAction;
+    FilterOut: TMenuItem;
+    ActionFilterIn: TAction;
+    FilterIn: TMenuItem;
+    ActionFilterInArchive: TAction;
+    ActionFilterOutArchive: TAction;
+    FilterOutArchive: TMenuItem;
+    FilterInArchive: TMenuItem;
+    ActionOutExcel: TAction;
+    OutExcel: TMenuItem;
+    ActionInExcel: TAction;
+    ActionInExcelArchive: TAction;
+    ActionOutExcelArchive: TAction;
+    OutExcelArchive: TMenuItem;
+    InExcel: TMenuItem;
+    InExcelArchive: TMenuItem;
+    CMExcelExport1: TCMExcelExport;
+    GlirHesablarnSazlanmas1: TMenuItem;
+
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure ActionAddOutExecute(Sender: TObject);
+    procedure Timer1Timer(Sender: TObject);
+    procedure ActionCommitOutExecute(Sender: TObject);
+    procedure N6Click(Sender: TObject);
+    procedure DBGrid1DblClick(Sender: TObject);
+    procedure ActionDeleteOutExecute(Sender: TObject);
+    procedure N8Click(Sender: TObject);
+    procedure N11Click(Sender: TObject);
+    procedure N14Click(Sender: TObject);
+    procedure N12Click(Sender: TObject);
+    procedure N15Click(Sender: TObject);
+    procedure ActionArchiveExecute(Sender: TObject);
+    procedure XDBGrid1DblClick(Sender: TObject);
+    procedure N17Click(Sender: TObject);
+    procedure N10Click(Sender: TObject);
+    procedure N18Click(Sender: TObject);
+    procedure N19Click(Sender: TObject);
+    procedure XDBGrid1TitleClick(Column: TXColumn);
+    procedure mumisazlama1Click(Sender: TObject);
+    procedure ToolButton17Click(Sender: TObject);
+    procedure ToolButton16Click(Sender: TObject);
+    procedure N20Click(Sender: TObject);
+    procedure MdaxilMxaric1Click(Sender: TObject);
+    procedure ActionReturnExecute(Sender: TObject);
+    procedure ActionEditOutExecute(Sender: TObject);
+    procedure ToolButton15Click(Sender: TObject);
+    procedure ActionSearchInExecute(Sender: TObject);
+    procedure ActionTakeInExecute(Sender: TObject);
+    procedure ActionEditInExecute(Sender: TObject);
+    procedure ExpressPageControlChange(Sender: TObject);
+    procedure ActionLookInExecute(Sender: TObject);
+    procedure XDBGrid2DblClick(Sender: TObject);
+    procedure XDBGrid3DblClick(Sender: TObject);
+    procedure ActionRefreshInExecute(Sender: TObject);
+    procedure ActionPrintIn1Execute(Sender: TObject);
+    procedure ActionRefreshOutArchiveExecute(Sender: TObject);
+    procedure ActionSearchOutArchiveExecute(Sender: TObject);
+    procedure XDBGrid4DblClick(Sender: TObject);
+    procedure Axtar3Click(Sender: TObject);
+    procedure ActionRefreshInArchiveExecute(Sender: TObject);
+    procedure ActionSearchInArchiveExecute(Sender: TObject);
+    procedure ActionPrintInArchive1Execute(Sender: TObject);
+    procedure ActionPrintOutArcive1Execute(Sender: TObject);
+    procedure ActionPrintInExecute(Sender: TObject);
+    procedure ActionPrintOutArchiveExecute(Sender: TObject);
+    procedure ActionPrintInArchiveExecute(Sender: TObject);
+    procedure XDBGrid3TitleClick(Column: TXColumn);
+    procedure XDBGrid2TitleClick(Column: TXColumn);
+    procedure XDBGrid4TitleClick(Column: TXColumn);
+    procedure ToolButton6Click(Sender: TObject);
+    procedure ActionLookOutArchiveExecute(Sender: TObject);
+    procedure ActionLookInArchiveExecute(Sender: TObject);
+    procedure ToolButton23Click(Sender: TObject);
+    procedure N21Click(Sender: TObject);
+    procedure FilterOutClick(Sender: TObject);
+    procedure InExcelClick(Sender: TObject);
+    procedure FilterOutArchiveClick(Sender: TObject);
+    procedure FilterInArchiveClick(Sender: TObject);
+    procedure FilterInClick(Sender: TObject);
+    procedure OutExcelClick(Sender: TObject);
+    procedure OutExcelArchiveClick(Sender: TObject);
+    procedure InExcelArchiveClick(Sender: TObject);
+    procedure GlirHesablarnSazlanmas1Click(Sender: TObject);
+
+  private
+    { Private declarations }
+    FEvents: IExpressEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage
+      : TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+  public
+    { Public declarations }
+    procedure Initialize; override;
+    procedure Edit;
+    procedure Look;
+    procedure Acceptance;
+    procedure GotoExpress(ID: Longint);
+    procedure ShowInfo(const Info: string);
+
+  end;
+
+var
+  ExpressFrom: TExpress;
+
+implementation
+
+uses ComObj, ComServ, ExpDataModuleUnit, ExpUnitImpl, ExpParameterUnit,
+  OrderPrintUnit, CurrectionUnit, ExpSubUnit, ExpComAccUnit,
+  ExpCustomersTypeUnit, ExpComTransactionUnit, AdminUnit, ExpArchiveUnit,
+  SBTranslateProc, ExpUnitNewImpl, ExpAllParametrUnit, ExpAccTypeUnit,
+  UnitSearchCustName, ExpPasswordUnit, UnitSearchLegalCustName, UnitPayments,
+  UnitPaymentsCredit, AdminAllUnit, UnitNominalCustomers, UnitCreditReport,
+  OrderPrintXUnit, UFX71, ExpBalansUnit, ExpUnitFilter,ExpComingAccountUnit,ExpComingAccUnit;
+
+{$R *.DFM}
+{ TExpress }
+
+procedure TExpress.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+    DefinePropertyPage(Class_ExpressPage); }
+end;
+
+procedure TExpress.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as IExpressEvents;
+end;
+
+procedure TExpress.InExcelArchiveClick(Sender: TObject);
+begin
+  if XDBGrid4.DataSource.DataSet.RecordCount=0 then begin
+                                                       ShowMessage('Heç bir məlumat tapılmadı!...');
+                                                       exit;
+                                                     end;
+
+  with CMExcelExport1 do
+  begin
+    XDBGrid4.DataSource.DataSet.Last;
+    Connect;
+    ExportDataset(XDBGrid4.DataSource.DataSet,'Əməliyyatlar',true,false);
+    Disconnect;
+  end;
+end;
+
+procedure TExpress.InExcelClick(Sender: TObject);
+begin
+  if XDBGrid2.DataSource.DataSet.RecordCount=0 then begin
+                                                       ShowMessage('Heç bir məlumat tapılmadı!...');
+                                                       exit;
+                                                     end;
+
+  with CMExcelExport1 do
+  begin
+    XDBGrid2.DataSource.DataSet.Last;
+    Connect;
+    ExportDataset(XDBGrid2.DataSource.DataSet,'Əməliyyatlar',true,false);
+    Disconnect;
+  end;
+end;
+
+procedure TExpress.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TExpress.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TExpress.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TExpress.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TExpress.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TExpress.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TExpress.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TExpress.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TExpress.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TExpress.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TExpress.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TExpress.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TExpress.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TExpress.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TExpress.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TExpress.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TExpress.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TExpress.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TExpress.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TExpress.GlirHesablarnSazlanmas1Click(Sender: TObject);
+begin
+  with ExpDataModule, ExpBatchsDataSet do
+  begin
+    if UpperCase(Session.LogonUsername) = 'SMART' then
+      ExpComingAccountForm.ShowModal
+    else
+      MessageDlg('Bu bölməyə giriş qadğandır.! Administratora müraciət edin.!',
+        mtWarning, [mbOk], 0);
+  end;
+end;
+
+procedure TExpress._Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TExpress.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then
+    FEvents.OnActivate;
+end;
+
+procedure TExpress.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then
+    FEvents.OnClick;
+end;
+
+procedure TExpress.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then
+    FEvents.OnCreate;
+end;
+
+procedure TExpress.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then
+    FEvents.OnDblClick;
+end;
+
+procedure TExpress.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then
+    FEvents.OnDeactivate;
+end;
+
+procedure TExpress.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then
+    FEvents.OnDestroy;
+end;
+
+procedure TExpress.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then
+    FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TExpress.ExpressPageControlChange(Sender: TObject);
+begin
+  ExpressPageControl.Pages[0].Highlighted :=
+    ExpressPageControl.ActivePageIndex = 0;
+  ExpressPageControl.Pages[1].Highlighted :=
+    ExpressPageControl.ActivePageIndex = 1;
+  ExpressPageControl.Pages[2].Highlighted :=
+    ExpressPageControl.ActivePageIndex = 2;
+  ExpressPageControl.Pages[3].Highlighted :=
+    ExpressPageControl.ActivePageIndex = 3;
+end;
+
+procedure TExpress.FilterInArchiveClick(Sender: TObject);
+begin
+  FormFilter.DBGridFilter:=XDBGrid4;
+  FormFilter.ShowModal;
+end;
+
+procedure TExpress.FilterInClick(Sender: TObject);
+begin
+  FormFilter.DBGridFilter:=XDBGrid2;
+  FormFilter.ShowModal;
+end;
+
+procedure TExpress.FilterOutArchiveClick(Sender: TObject);
+begin
+  FormFilter.DBGridFilter:=XDBGrid3;
+  FormFilter.ShowModal;
+end;
+
+procedure TExpress.FilterOutClick(Sender: TObject);
+begin
+  FormFilter.DBGridFilter:=XDBGrid1;
+  FormFilter.ShowModal;
+end;
+
+procedure TExpress.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then
+    FEvents.OnPaint;
+end;
+
+procedure TExpress.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TExpress.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TExpress.Set_AxBorderStyle(Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TExpress.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TExpress.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TExpress.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TExpress.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TExpress.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TExpress.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TExpress.Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TExpress.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TExpress.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TExpress.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TExpress.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TExpress.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TExpress.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+procedure TExpress.ActiveFormCreate(Sender: TObject);
+begin
+
+  ExpressFrom := self;
+  ExpDataModule := TExpDataModule.Create(self);
+  ExpParameter := TExpParameter.Create(self);
+  FormCurrection := TFormCurrection.Create(self);
+  ExpSubForm := TExpSubForm.Create(self);
+  ExpComAccForm := TExpComAccForm.Create(self);
+  ExpCustomersType := TExpCustomersType.Create(self);
+  ExpComTransactionForm := TExpComTransactionForm.Create(self);
+
+  // ExpArchiveForm          :=TExpArchiveForm.Create(self);
+  AdminForm := TAdminForm.Create(self);
+  AdminAllForm := TAdminAllForm.Create(self);
+
+  ExpFormNew := TExpFormNew.Create(self);
+  ExpAllParametr := TExpAllParametr.Create(self);
+  ExpAccType := TExpAccType.Create(self);
+  ExpPasswordForm := TExpPasswordForm.Create(self);
+  FormSearchLegalCustName := TFormSearchLegalCustName.Create(self);
+  FormPayments := TFormPayments.Create(self);
+  FormNominalCustomers := TFormNominalCustomers.Create(self);
+  FormPaymentsCredit := TFormPaymentsCredit.Create(self);
+  ExpFormDestination := TExpFormDestination.Create(self);
+  CreditReport := TCreditReport.Create(self);
+  FormBalans:=TFormBalans.Create(Self);
+  FormFilter:=TFormFilter.Create(Self);
+  ExpComingAccountForm:=TExpComingAccountForm.Create(Self);
+  FormComingAcc:=TFormComingAcc.Create(Self);
+  Edit1.Text := DateToStr
+    (trunc(StrToDateTime(ExpDataModule.SysdateDataSet.fieldbyname('dat')
+    .AsString)));
+  Edit2.Text := TimeToStr(Time);
+  Edit3.Text := DateToStr
+    (trunc(StrToDateTime(ExpDataModule.SysdateDataSet.fieldbyname('dat')
+    .AsString)));
+  Edit4.Text := TimeToStr(Time);
+  DTPOutArchiveB.DateTime :=
+    trunc(StrToDateTime(ExpDataModule.SysdateDataSet.fieldbyname('dat')
+    .AsString));
+  DTPOutArchiveE.DateTime :=
+    trunc(StrToDateTime(ExpDataModule.SysdateDataSet.fieldbyname('dat')
+    .AsString));
+  DTPInArchiveB.DateTime :=
+    trunc(StrToDateTime(ExpDataModule.SysdateDataSet.fieldbyname('dat')
+    .AsString));
+  DTPInArchiveE.DateTime :=
+    trunc(StrToDateTime(ExpDataModule.SysdateDataSet.fieldbyname('dat')
+    .AsString));
+  ExpressPageControl.ActivePageIndex := 0;
+  ExpressPageControl.Pages[0].Highlighted := true;
+
+  SBTranslateProc.TranslateExchComponents(self, sboapiDataModule.OrPack_SL);
+end;
+
+procedure TExpress.Axtar3Click(Sender: TObject);
+begin
+  FormCurrection.DbGr := XDBGrid4;
+  FormCurrection.ShowModal;
+end;
+
+procedure TExpress.GotoExpress(ID: Longint);
+begin
+  with ExpDataModule.ExpBatchsDataSet do
+    Locate('ID', ID, []);
+end;
+
+procedure TExpress.ActionAddOutExecute(Sender: TObject);
+begin
+  ExpFormNew.FiledBatchs := true;
+  ExpCustomersType.ShowModal;
+end;
+
+procedure TExpress.Timer1Timer(Sender: TObject);
+begin
+  Edit2.Text := TimeToStr(Time);
+  Edit4.Text := TimeToStr(Time);
+end;
+
+procedure TExpress.ToolButton15Click(Sender: TObject);
+begin
+  FormCurrection.DbGr := XDBGrid1;
+  FormCurrection.ShowModal;
+end;
+
+procedure TExpress.ToolButton16Click(Sender: TObject);
+var
+  v_expid: Integer;
+  voptype: Integer;
+begin
+  v_expid := ExpDataModule.ExpBatchsDataSet.fieldbyname('expid').AsInteger;
+  voptype := ExpDataModule.ExpBatchsDataSet.fieldbyname('optype').AsInteger;
+
+  case v_expid of
+    1:
+      begin
+        ExpFormNew.PageControl1.ActivePageIndex := 0;
+        ExpFormNew.FiledBatchs := true;
+        ExpFormNew.FiledIncoming := False;
+        ExpFormNew.FieldBatchsArchive := False;
+        ExpFormNew.FiledIncomingArchive := False;
+        ExpFormNew.FForm := 1;
+        ExpFormNew.Button1.Visible := False;
+        ExpFormNew.ShowModal;
+      end;
+    2:
+      begin
+        if voptype = 4 then
+        begin
+          FormPaymentsCredit.Button1.Visible := False;
+          FormNominalCustomers.Button1.Visible := False;
+          FormPaymentsCredit.FiledBatchs := true;
+          FormPaymentsCredit.FiledIncoming := False;
+          FormPaymentsCredit.FieldBatchsArchive := False;
+          FormPaymentsCredit.FiledIncomingArchive := False;
+          FormPaymentsCredit.FForm := 1;
+          FormPaymentsCredit.ShowModal;
+        end
+        else
+        begin
+          FormPayments.FiledBatchs := true;
+          FormPayments.FiledIncoming := False;
+          FormPayments.FieldBatchsArchive := False;
+          FormPayments.FiledIncomingArchive := False;
+          FormPayments.FForm := 1;
+          FormPayments.Button1.Visible := False;
+          FormPayments.ShowModal;
+        end;
+      end;
+  end;
+end;
+
+procedure TExpress.ToolButton17Click(Sender: TObject);
+begin
+  ExpDataModule.FullOpen;
+end;
+
+procedure TExpress.ToolButton23Click(Sender: TObject);
+begin
+  ExpPasswordForm.EditPassword.Clear;
+  ExpPasswordForm.FMani:=True;
+  ExpPasswordForm.ShowModal;
+end;
+
+procedure TExpress.ToolButton6Click(Sender: TObject);
+begin
+  ExpPasswordForm.EditPassword.Clear;
+  ExpPasswordForm.ShowModal;
+end;
+
+procedure TExpress.N20Click(Sender: TObject);
+begin
+  if not Assigned(AdminAllForm) then
+    AdminAllForm := TAdminAllForm.Create(Application);
+  with ExpDataModule, ExpBatchsDataSet do
+  begin
+    if UpperCase(Session.LogonUsername) = 'SMART' then
+      AdminAllForm.ShowModal
+    else
+      MessageDlg('Bu bölməyə giriş qadğandır.! Administratora müraciət edin',
+        mtWarning, [mbOk], 0);
+  end;
+end;
+
+procedure TExpress.N21Click(Sender: TObject);
+begin
+  with ExpDataModule, ExpBatchsDataSet do
+  begin
+    if UpperCase(Session.LogonUsername) = 'SMART' then
+    begin
+      FormBalans.Caption := 'Balans Hesablar';
+      FormBalans.ShowModal;
+    end
+    else
+      MessageDlg('Bu bölməyə giriş qadğandır.! Administratora müraciət edin.!',
+        mtWarning, [mbOk], 0);
+  end;
+end;
+
+function DateTimeToStrUs(dt: TDatetime): string;
+var
+    us: string;
+begin
+
+    Result := FormatDateTime('hh":"nn":"ss"-" dd.mm.yyyy', dt);
+    //mikrosan
+    dt := Frac(dt);
+    dt := dt * 24*60*60;
+    us := IntToStr(Round(Frac(dt)*1000000))+'*';
+    Result := us+Result + StringOfChar('0', 6-Length(us));
+end;
+
+
+function String2Hex(const Buffer: AnsiString): string;
+begin
+  SetLength(Result, Length(Buffer) * 2);
+  BinToHex(PAnsiChar(Buffer), PChar(Result), Length(Buffer));
+end;
+
+function Hex2String(const Buffer: string): AnsiString;
+begin
+  SetLength(Result, Length(Buffer) div 2);
+  HexToBin(PChar(Buffer), PAnsiChar(Result), Length(Result));
+end;
+
+function Encrypting(key:integer): AnsiString;
+var
+st,s,dt,str:string;
+x,i,k:integer;
+begin
+
+   //ShowMessage(DateTimeToStr(now));
+
+//memo1.Lines.Add(String2Hex('SMARTBANK.EXE'));
+//memo1.Lines.Add(String2Hex(DateTimeToStr(now)));
+
+//memo1.Lines.Add(String2Hex(DateTimeToStr(now)+'SMARTBANK.EXE'+'AZIPS'));
+
+//memo1.Lines.Add(Hex2String(copy(edit1.Text,39,26)));
+    dt:=   DateTimeToStrUs(now);
+
+    k:=strtoint(copy(dt,8,2));
+ st:=String2Hex(dt+'SMARTBANK.EXE'+'XOHKS');
+x:=k;
+//Edit3.Text:='';
+for i:=1 to length(st) do
+//if (st[i]<>' ') and (st[i]<>'.') then
+begin
+s:=chr((ord(st[i])-x) );
+str:=str+s;
+
+end;
+//memo1.Lines.Add(str)  ;
+  //showmessage('--0');
+Result:=  str;
+end ;
+function Decrypt(v_str:String;key:integer)   : AnsiString;
+  var
+st,str,s:string;
+x,i:integer;
+begin
+st:=v_str;
+x:=key;
+
+for i:=1 to length(st) do
+//if (st[i]<>' ') and (st[i]<>'.') then
+begin
+s:=chr((ord(st[i])+x) );
+str:=str+s;
+end;
+
+//showmessage(inttostr(key));
+Result := str;
+end;
+
+
+
+
+
+
+function  ufxcredit(accountid:Integer;v_amount:Double):Double  ;
+var st2,st,st3,st4,st5:string;
+begin
+
+with  ExpDataModule do
+ begin
+
+   get_cr_acc.Close;
+   get_cr_acc.SetVariable('vaccid',accountid);
+   get_cr_acc.Open;
+
+   get_ufx_check.Close;
+   get_ufx_check.SetVariable('vaccid',accountid);
+   get_ufx_check.Open;
+
+  //  ShowMessage(inttostr(get_cr_acc.FieldByName('ncount').AsInteger));
+
+   if get_cr_acc.FieldByName('ncount').AsInteger>0 then
+     begin
+        if get_ufx_check.FieldByName('v_cnt').AsInteger=0 then
+         begin
+          get_creditid.Close;
+          get_creditid.SetVariable('vaccid',accountid);
+          get_creditid.Open;
+
+
+          get_debtamount.Close;
+          get_debtamount.SetVariable('VCREDITID',get_creditid.FieldByName('VCREDITID').AsInteger);
+          get_debtamount.Open;
+
+
+
+          if v_amount<get_debtamount.FieldByName('vdueinterestrest').AsFloat then
+            begin
+            Result:= 0  ;
+
+            end
+            else
+            begin
+            Result:=  v_amount- get_debtamount.FieldByName('vdueinterestrest').AsFloat;
+
+            end;
+
+
+          Insufx.Close;
+          Insufx.SetVariable('VCREDITID',get_creditid.FieldByName('VCREDITID').AsInteger);
+          Insufx.SetVariable('vaccid',accountid);
+          Insufx.SetVariable('VDUEINTERESTREST',get_debtamount.FieldByName('vdueinterestrest').AsFloat);
+          Insufx.SetVariable('V_REST',v_amount- get_debtamount.FieldByName('vdueinterestrest').AsFloat);
+          Insufx.SetVariable('VCODE',Encrypting(get_creditid.FieldByName('VCREDITID').AsInteger));
+          Insufx.ExecSQL;
+          sboapiDataModule.SBSession.Commit();
+         end
+        else
+         begin
+         ufxcode.Close;
+         ufxcode.SetVariable('vaccid',accountid);
+         ufxcode.Open ;
+
+          get_creditid.Close;
+          get_creditid.SetVariable('vaccid',accountid);
+          get_creditid.Open;
+
+
+
+        // ShowMessage( 'eee' )  ;
+
+
+
+    st2:= Decrypt(ufxcode.FieldByName('code').AsAnsiString,strtoint(copy(ufxcode.FieldByName('dat').AsString,12,2)));
+     // showmessage(inttostr(strtoint(copy(ufxcode.FieldByName('dat').AsString,12,2))));
+st:=copy(ReverseString((copy(st2,Length(st2)-length('534D41525442414E4B2E455845584F484B53')+1,Length(st2)))),Pos('584F484B53',ReverseString((copy(st2,Length(st2)-length('534D41525442414E4B2E455845584F484B53')+1,Length(st2)))))+length('584F484B53')+1,length(ReverseString((copy(st2,Length(st2)-length('534D41525442414E4B2E455845584F484B53')+1,Length(st2))))));
+            //   showmessage(st2);
+            //  showmessage(st);
+            //  st3:=hex2string(st2);
+            //  showmessage(st3);
+            //    showmessage(String2hex(st2));
+
+          if ContainsText(st2,ReverseString(st)) then
+      begin
+
+
+
+   st4:=copy(st2,0,Length(st2)-length('534D41525442414E4B2E455845584F484B53') );
+
+   st5:=hex2string(st4);
+  // showmessage(st5);
+   st5:=copy(st5,LastDelimiter('*', st5)+1,2) ;
+
+      {   showmessage(st4);
+        showmessage(st5) ;
+       showmessage(datetostr(now)) ;   }
+
+    if st5=copy(ufxcode.FieldByName('dat').AsString,12,2) then
+     begin
+
+
+         get_restufxcheck.Close;
+         get_restufxcheck.SetVariable('vaccid',accountid);
+         get_restufxcheck.Open ;
+
+         if get_restufxcheck.FieldByName('v_rstamount').AsFloat<0 then
+          begin
+
+          Result:= v_amount-  abs(get_restufxcheck.FieldByName('v_rstamount').AsFloat);
+
+          updufx.Close;
+          updufx.SetVariable('vaccid',accountid);
+          updufx.SetVariable('TRANSAMOUNT',v_amount-  abs(get_restufxcheck.FieldByName('v_rstamount').AsFloat));
+          updufx.ExecSQL;
+          sboapiDataModule.SBSession.Commit();
+
+          if (v_amount-  abs(get_restufxcheck.FieldByName('v_rstamount').AsFloat))<0 then
+            begin
+              Result:=0;
+
+              end
+              else
+              begin
+                Result:= v_amount-  abs(get_restufxcheck.FieldByName('v_rstamount').AsFloat);
+
+              end;
+
+
+          end
+          else
+          begin
+            Result:=v_amount;
+          end;
+
+        end
+          else
+      begin
+      ShowMessage('Kode Standarta uygun deyil');
+      exit;
+      end;
+          //---
+      end
+      else
+      begin
+      ShowMessage('Kode Standarta uygun deyil');
+      exit;
+      end;
+
+
+         end;
+     end
+     else
+     Result:=v_amount;
+ end;
+end;
+
+
+procedure TExpress.ActionCommitOutExecute(Sender: TObject);
+var
+  setir, clock: string;
+  ID, status: Integer;
+  expdate: TDateTime;
+  optype: Integer;
+  v_setid: Integer;
+
+  transamount,v_transamount,v_sendammount:real;
+  vcardtype,resp,RespText,ufxrrn,pcardnumber,valyutaname,descript,cardnumber,cardtype,descp,valyuta:string;
+
+begin
+  with ExpDataModule do
+  begin
+    // SB_ACA.CallProcedure('CheckAdvancedObjectAccess',['EXPRESS_COMMIT']);
+    if XDBGrid1.DataSource.DataSet.RecordCount = 0 then
+      exit;
+
+    status := Repair.CallIntegerFunction('Exp_checkstatus',
+      [ExpBatchsDataSet.fieldbyname('id').AsInteger]);
+    ID := ExpBatchsDataSet.fieldbyname('id').AsInteger;
+    optype := ExpBatchsDataSet.fieldbyname('optype').AsInteger;
+    v_setid := ExpBatchsDataSet.fieldbyname('setid').AsInteger;
+    if status = 1 then
+    begin
+      ExpBatchsDataSet.Refresh;
+      exit;
+    end;
+    // expdate:=trunc(SysdateDataSetDAT.AsDateTime);
+    try
+      if status = 0 then
+        case optype of
+          1:
+            Repair.CallProcedure('Exp_batchs_Transactions', [ID]);
+          2, 3, 5, 6:
+            Repair.CallProcedure('Exp_GPayKomiks_SendTrans', [ID, v_setid]);
+          4:
+            begin
+              { clock:=FormatDateTime('hh',Time);
+                if clock>='17' then begin
+                ShowMessage('Kassa bağlı olduğu üçün siz bu emeliyyatı sabah göndərə bilersiz!..');
+                exit;
+                end; }
+          {  if card.CallIntegerFunction('CardCheck',[ID,4])>0 then
+            begin
+             if card.CallFloatFunction('UfxCheck',[ID])=0 then
+            begin    //ufxsend;
+             card.CallProcedure('Ufx_send',[ID,4,vcardtype,pcardnumber,valyutaname,transamount,descript]) ;
+             v_transamount:=card.GetParameter(5);
+             cardnumber:= card.GetParameter(3);
+             cardtype:=  card.GetParameter(2);
+             descp:= card.GetParameter(6);
+             valyuta:=card.GetParameter(4) ;
+
+              v_sendammount:= ufxcredit(ExpDataModule.cardfindcredit.fieldbyname('crdt').asInteger,v_transamount) ;
+
+              //  resp:='qqwqw#Successfully processed';
+             // ShowMessage('y');
+//             resp:=UFX71.GetUFX7.fundstransfer(cardnumber,cardtype,FormatDateTime('YYYY-MM-DD hh:mm:ss',now),descp,valyuta,floattostr(v_sendammount)) ;
+//
+//
+//             ufxrrn:=copy (resp,0,pos('#',resp));
+//
+//             RespText:= copy (resp,pos('#',resp)+1,length(resp));
+//               // ShowMessage(  resp);
+//                card.callprocedure('UfxResponse',[ID,4,RespText,v_transamount,resp]) ;
+
+               if v_sendammount=0 then
+          begin
+             RespText:=  'Successfully processed' ;
+             ShowMessage('Əməliyyat Karta getmedi mebleg 0 !!!');
+          end else begin
+              resp:=UFX71.GetUFX7.fundstransfer(cardnumber,cardtype,FormatDateTime('YYYY-MM-DD hh:mm:ss',now),descp,valyuta,floattostr(v_sendammount)) ;
+
+
+             ufxrrn:=copy (resp,0,pos('#',resp));
+
+             RespText:= copy (resp,pos('#',resp)+1,length(resp));
+               // ShowMessage(  resp);
+                card.callprocedure('UfxResponse',[id,4,RespText,v_sendammount,resp]) ;
+
+          end;
+
+
+             if UPPERCASE(RespText)=UPPERCASE('Successfully processed')
+             then
+               begin
+                if v_sendammount<>0 then  begin
+                // ShowMessage('Əməliyyat uğurla keçdi!!!') ;
+                 ShowMessage('Əməliyyat uğurla keçdi!!!');
+               Repair.CallProcedure('Exp_Payments_Transactions', [ID]);
+               EXPESSPAC.CallProcedure('Exp_batchs_status', ['v_id', ID]);
+                end
+                else begin
+                      Repair.CallProcedure('Exp_Payments_Transactions', [ID]);
+               EXPESSPAC.CallProcedure('Exp_batchs_status', ['v_id', ID]);
+                end;
+               end
+             else
+               begin
+                 ShowMessage('Əməliyyat keçmədi!!!'+','+'Səhvin adı:'+RespText);
+                 Exit;
+               end;
+            end
+            else
+              begin
+                 Repair.CallProcedure('Exp_Payments_Transactions', [ID]);
+               EXPESSPAC.CallProcedure('Exp_batchs_status', ['v_id', ID]);
+              end;
+          end
+          else
+       begin     }
+
+              Repair.CallProcedure('Exp_Payments_Transactions', [ID]);
+
+
+      // end;
+
+            end;
+        end;
+      EXPESSPAC.CallProcedure('Exp_batchs_status', ['v_id', ID]);
+      sboapiDataModule.SBSession.Commit;
+    Except
+      on E: Exception do
+      begin
+        setir := E.Message;
+        sboapiDataModule.SBSession.Rollback;
+        ShowMessage(setir);
+      end;
+    end;
+    ExpBatchsDataSet.Refresh;
+    ExpBatchsDataSet.Locate('ID', ID, []);
+  end;
+end;
+
+procedure TExpress.N6Click(Sender: TObject);
+begin
+  ExpDataModule.ExpBatchsDataSet.Refresh;
+end;
+
+procedure TExpress.DBGrid1DblClick(Sender: TObject);
+begin
+  ActionEditOut.Execute;
+end;
+
+procedure TExpress.ActionDeleteOutExecute(Sender: TObject);
+begin
+  // ExpDataModule.SB_ACA.CallProcedure('CheckAdvancedObjectAccess',['EXPRESS_DELETE']);
+  with ExpDataModule, ExpBatchsDataSet, EXPESSPAC do
+  begin
+    if RecordCount = 0 then
+      exit;
+    if (fieldbyname('status').AsInteger = 0) then
+      case MessageDlg('Əməliyyatın silinməsinə əminsinizmi?', mtConfirmation,
+        [mbYes, mbNo], 0) of
+        mrYes:
+          CallProcedure('Exp_batchs_delete',
+            ['v_id', ExpDataModule.ExpBatchsDataSet.fieldbyname('id')
+            .AsInteger]);
+        mrNo:
+          exit;
+      end
+    Else
+
+      IF (MessageDlg
+      ('Əməliyyatı ləğv etmək mümkün deyil.Yalniz əməliyyatı geri qaytaradan sonra silə bilersiz!',
+      mtWarning, [mbYes], 0) = mrYes) THEN
+      exit;
+    Refresh;
+  end;
+end;
+
+procedure TExpress.ActionEditInExecute(Sender: TObject);
+var
+  v_expid, v_optype, ID: Integer;
+  v_status: Integer;
+  v_retrunid:Variant;
+begin
+  IF ExpDataModule.ExpIncomingDataSet.RecordCount = 0 THEN
+    exit;
+  ExpFormNew.Button1.Visible := true;
+  v_expid := ExpDataModule.ExpIncomingDataSet.fieldbyname('expid').AsInteger;
+  v_status := ExpDataModule.ExpIncomingDataSet.fieldbyname('status').AsInteger;
+  v_retrunid:=ExpDataModule.ExpIncomingDataSet.fieldbyname('retrunid').AsVariant;
+  if (v_expid = 2) or (v_status = 1) then
+    exit;
+  IF v_retrunid=1 THEN EXIT;
+  if v_status = 0 then
+  begin
+    ExpFormNew.FiledIncoming := true;
+    ExpFormNew.FiledBatchs := False;
+    ExpFormNew.FieldBatchsArchive := False;
+    ExpFormNew.FiledIncomingArchive := False;
+    ExpFormNew.FForm := 3;
+    ExpFormNew.ShowModal;
+  end;
+
+end;
+
+procedure TExpress.ActionEditOutExecute(Sender: TObject);
+var
+  v_expid, v_optype { *,id } : Integer;
+begin
+  // ExpDataModule.SB_ACA.CallProcedure('CheckAdvancedObjectAccess',['EXPRESS_EDIT']);
+  v_expid := ExpDataModule.ExpBatchsDataSet.fieldbyname('expid').AsInteger;
+  if (ExpDataModule.ExpBatchsDataSet.fieldbyname('status').AsInteger = 1) or
+    (ExpDataModule.ExpBatchsDataSet.fieldbyname('status').AsInteger = 3) then
+    exit;
+  case v_expid of
+    1:
+      begin
+        WITH ExpFormNew DO
+        BEGIN
+          PageControl1.ActivePageIndex := 0;
+          FiledBatchs := true;
+          FiledIncoming := False;
+          FieldBatchsArchive := False;
+          FiledIncomingArchive := False;
+          FForm := 1;
+          Button1.Visible := true;
+          ShowModal;
+        END;
+      end;
+    2:
+      begin
+        FormPayments.FForm := 1;
+        v_optype := ExpDataModule.ExpBatchsDataSet.fieldbyname('optype')
+          .AsInteger;
+        if v_optype = 4 then
+        begin
+          FormPaymentsCredit.FForm := 1;
+          FormPaymentsCredit.FiledBatchs := true;
+          ExpFormNew.FiledIncoming := False;
+          ExpFormNew.FieldBatchsArchive := False;
+          ExpFormNew.FiledIncomingArchive := False;
+          FormPaymentsCredit.ShowModal;
+        end
+        else
+          FormPayments.ShowModal;
+      end;
+  end;
+
+end;
+
+procedure TExpress.ActionLookInArchiveExecute(Sender: TObject);
+var
+  v_expid: Integer;
+  voptype: Integer;
+begin
+  IF ExpDataModule.ExpIncomingarchiveDataSet.RecordCount = 0 THEN
+    exit;
+  v_expid := ExpDataModule.ExpIncomingarchiveDataSet.fieldbyname('expid')
+    .AsInteger;
+  voptype := ExpDataModule.ExpIncomingarchiveDataSet.fieldbyname('optype')
+    .AsInteger;
+
+  case v_expid of
+    1:
+      begin
+        ExpFormNew.PageControl1.ActivePageIndex := 1;
+        ExpFormNew.FiledBatchs := False;
+        ExpFormNew.FiledIncoming := False;
+        ExpFormNew.FieldBatchsArchive := False;
+        ExpFormNew.FiledIncomingArchive := true;
+        ExpFormNew.FForm := 1;
+        ExpFormNew.Button1.Visible := False;
+        ExpFormNew.Button3.Visible := False;
+        ExpFormNew.ShowModal;
+      end;
+    2:
+      begin
+        if voptype = 4 then
+        begin
+          FormPaymentsCredit.Button1.Visible := False;
+          FormNominalCustomers.Button1.Visible := False;
+          FormPaymentsCredit.FiledIncoming := False;
+          FormPaymentsCredit.FiledBatchs := False;
+          FormPaymentsCredit.FieldBatchsArchive := False;
+          FormPaymentsCredit.FiledIncomingArchive := true;
+          FormPaymentsCredit.FForm := 1;
+          FormPaymentsCredit.ShowModal;
+        end
+        else
+        begin
+          FormPayments.FiledIncoming := False;
+          FormPayments.FiledBatchs := False;
+          FormPayments.FieldBatchsArchive := False;
+          FormPayments.FiledIncomingArchive := true;
+          FormPayments.FForm := 1;
+          FormPayments.ShowModal;
+        end;
+      end;
+  end;
+
+end;
+
+procedure TExpress.ActionLookInExecute(Sender: TObject);
+var
+  v_expid: Integer;
+  voptype: Integer;
+begin
+  IF ExpDataModule.ExpIncomingDataSet.RecordCount = 0 THEN
+    exit;
+  v_expid := ExpDataModule.ExpIncomingDataSet.fieldbyname('expid').AsInteger;
+  voptype := ExpDataModule.ExpIncomingDataSet.fieldbyname('optype').AsInteger;
+
+  case v_expid of
+    1:
+      begin
+        ExpFormNew.PageControl1.ActivePageIndex := 1;
+        ExpFormNew.FiledIncoming := true;
+        ExpFormNew.FiledBatchs := False;
+        ExpFormNew.FieldBatchsArchive := False;
+        ExpFormNew.FiledIncomingArchive := False;
+        ExpFormNew.FForm := 1;
+        ExpFormNew.Button1.Visible := False;
+        ExpFormNew.Button3.Visible := False;
+        ExpFormNew.ShowModal;
+      end;
+    2:
+      begin
+        if voptype = 4 then
+        begin
+          FormPaymentsCredit.Button1.Visible := False;
+          FormNominalCustomers.Button1.Visible := False;
+          FormPaymentsCredit.FiledIncoming := true;
+          ExpFormNew.FiledBatchs := False;
+          ExpFormNew.FieldBatchsArchive := False;
+          ExpFormNew.FiledIncomingArchive := False;
+          FormPaymentsCredit.FForm := 1;
+          FormPaymentsCredit.ShowModal;
+        end
+        else
+        begin
+          FormPayments.FiledIncoming := true;
+          FormPayments.FiledBatchs := False;
+          FormPayments.FieldBatchsArchive := False;
+          FormPayments.FiledIncomingArchive := False;
+          FormPayments.FForm := 1;
+          FormPayments.ShowModal;
+        end;
+      end;
+  end;
+
+end;
+
+procedure TExpress.ActionLookOutArchiveExecute(Sender: TObject);
+var
+  v_expid: Integer;
+  voptype: Integer;
+begin
+  v_expid := ExpDataModule.ExpBatchsArchiveDataSet.fieldbyname('expid')
+    .AsInteger;
+  voptype := ExpDataModule.ExpBatchsArchiveDataSet.fieldbyname('optype')
+    .AsInteger;
+
+  case v_expid of
+    1:
+      begin
+        ExpFormNew.PageControl1.ActivePageIndex := 0;
+        ExpFormNew.FiledBatchs := False;
+        ExpFormNew.FiledIncoming := False;
+        ExpFormNew.FieldBatchsArchive := true;
+        ExpFormNew.FiledIncomingArchive := False;
+        ExpFormNew.FForm := 1;
+        ExpFormNew.Button1.Visible := False;
+        ExpFormNew.ShowModal;
+      end;
+    2:
+      begin
+        if voptype = 4 then
+        begin
+          FormPaymentsCredit.Button1.Visible := False;
+          FormNominalCustomers.Button1.Visible := False;
+          FormPaymentsCredit.FiledBatchs := False;
+          FormPaymentsCredit.FiledIncoming := False;
+          FormPaymentsCredit.FieldBatchsArchive := true;
+          FormPaymentsCredit.FiledIncomingArchive := False;
+          FormPaymentsCredit.FForm := 1;
+          FormPaymentsCredit.ShowModal;
+        end
+        else
+        begin
+          FormPayments.FiledBatchs := False;
+          FormPayments.FiledIncoming := False;
+          FormPayments.FieldBatchsArchive := true;
+          FormPayments.FiledIncomingArchive := False;
+          FormPayments.FForm := 1;
+          FormPayments.Button1.Visible := False;
+          FormPayments.ShowModal;
+        end;
+      end;
+  end;
+end;
+
+procedure TExpress.ActionPrintIn1Execute(Sender: TObject);
+var
+  optype: Integer;
+  s: string;
+  Vo: string;
+begin
+  ExpFormNew.FiledIncoming := true;
+  ExpFormNew.FiledBatchs := False;
+  ExpFormNew.FieldBatchsArchive := False;
+  ExpFormNew.FiledIncomingArchive := False;
+
+  optype := ExpDataModule.ExpIncomingDataSet.fieldbyname('optype').AsInteger;
+  s := ExpDataModule.ExpIncomingDataSet.fieldbyname('kliid').AsString;
+  CreditReport.QRLabel22.Caption :=
+    ExpDataModule.ExpIncomingDataSetFILIALNAME.AsString;
+  CreditReport.QRLabel45.Caption :=
+    ExpDataModule.ExpIncomingDataSetSENDDATE.AsString;
+  CreditReport.QRLabel46.Caption :=
+    TimeToStr(ExpDataModule.ExpIncomingDataSetSENDDATETIME.AsDateTime);
+  CreditReport.QRLabel35.Caption :=
+    ExpDataModule.ExpIncomingDataSetFILIALNAME.AsString;
+  CreditReport.QRLabel21.Caption :=
+    ExpDataModule.ExpIncomingDataSetSENDDATE.AsString;
+  CreditReport.QRLabel34.Caption :=
+    TimeToStr(ExpDataModule.ExpIncomingDataSetSENDDATETIME.AsDateTime);
+  CreditReport.QRLabel48.Caption := ExpDataModule.BankInfoDataSet.fieldbyname
+    ('inn').AsString;
+  CreditReport.QRLabel50.Caption := ExpDataModule.BankInfoDataSet.fieldbyname
+    ('inn').AsString;
+  CreditReport.QRLabel51.Caption := ExpDataModule.BankInfoDataSet.fieldbyname
+    ('adress').AsString;
+  CreditReport.QRLabel52.Caption := ExpDataModule.BankInfoDataSet.fieldbyname
+    ('adress').AsString;
+
+  IF optype = 4 THEN
+  BEGIN
+    with ExpDataModule do
+    begin
+      SendDataSet.close;
+      SendDataSet.SQL[1] := '';
+      SendDataSet.SQL[1] := 'where id= ' + s;
+      SendDataSet.open;
+      AccDataSet.close;
+      AccDataSet.SetVariable('id', ExpIncomingDataSetKREDITACCID.AsInteger);
+      AccDataSet.open;
+      { Exp_avalute.Close;
+        Exp_avalute.Filtered:=False;
+        Exp_avalute.filter:='valute='+ExpIncomingDataSetVAL_COD.AsString;
+        Exp_avalute.Filtered:=True;
+        Exp_avalute.Open; }
+
+      if SendDataSet.fieldbyname('inn').AsString='' then  Vo:='' else Vo:=',VÖEN'+SendDataSet.fieldbyname('inn').AsString;
+
+      CreditReport.QRLabel2.Caption := ExpIncomingDataSet.fieldbyname
+        ('sentname').AsString + #13#10 + SendDataSet.fieldbyname('passer')
+        .AsString + SendDataSet.fieldbyname('paspnum').AsString + ',' +
+        SendDataSet.fieldbyname('paspdate').AsString + ',' +
+        SendDataSet.fieldbyname('paspplace').AsString+Vo;
+      CreditReport.QRLabel4.Caption := ExpIncomingDataSetSENTTONAME.AsString;
+      CreditReport.QRLabel6.Caption := ExpIncomingDataSetBFILIALNAME.AsString;
+      CreditReport.QRLabel10.Caption := ExpIncomingDataSetAMOUNT.AsString +
+        '.00' + ' ' + ExpIncomingDataSetVALNAME.AsString;
+      CreditReport.QRLabel11.Caption :=
+        AccDataSet.fieldbyname('acc_no').AsString;
+      CreditReport.QRLabel13.Caption :=
+        ExpFormNew.Mani(ExpIncomingDataSetAMOUNT.AsFloat,ExpIncomingDataSetVAL_COD.AsInteger);
+      CreditReport.QRLabel15.Caption := ExpIncomingDataSetREMIT_INF.AsString;
+
+      CreditReport.QRLabel24.Caption := ExpIncomingDataSet.fieldbyname
+        ('sentname').AsString + #13#10 + SendDataSet.fieldbyname('passer')
+        .AsString + SendDataSet.fieldbyname('paspnum').AsString + ',' +
+        SendDataSet.fieldbyname('paspdate').AsString + ',' +
+        SendDataSet.fieldbyname('paspplace').AsString;
+      CreditReport.QRLabel26.Caption := ExpIncomingDataSetSENTTONAME.AsString;
+      CreditReport.QRLabel37.Caption := ExpIncomingDataSetBFILIALNAME.AsString;
+      CreditReport.QRLabel39.Caption := ExpIncomingDataSetAMOUNT.AsString +
+        '.00' + ' ' + ExpIncomingDataSetVALNAME.AsString;
+      CreditReport.QRLabel29.Caption :=
+        AccDataSet.fieldbyname('acc_no').AsString;
+      CreditReport.QRLabel41.Caption :=
+        ExpFormNew.Mani(ExpIncomingDataSetAMOUNT.AsFloat,ExpIncomingDataSetVAL_COD.AsInteger);
+      CreditReport.QRLabel43.Caption := ExpIncomingDataSetREMIT_INF.AsString;
+
+      CreditReport.Preview
+    end;
+  END
+  ELSE
+    exit;
+end;
+
+procedure TExpress.ActionPrintInArchive1Execute(Sender: TObject);
+var
+  optype: Integer;
+  s: string;
+  Vo: string;
+begin
+  ExpFormNew.FiledIncomingArchive := true;
+  ExpFormNew.FiledBatchs := False;
+  ExpFormNew.FiledIncoming := False;
+  ExpFormNew.FieldBatchsArchive := False;
+
+  optype := ExpDataModule.ExpIncomingarchiveDataSet.fieldbyname('optype')
+    .AsInteger;
+  s := ExpDataModule.ExpIncomingDataSet.fieldbyname('kliid').AsString;
+  CreditReport.QRLabel22.Caption := ExpDataModule.ExpIncomingarchiveDataSet.
+    fieldbyname('FILIALNAME').AsString;
+  CreditReport.QRLabel45.Caption := ExpDataModule.ExpIncomingarchiveDataSet.
+    fieldbyname('SENDDATE').AsString;
+  CreditReport.QRLabel46.Caption :=
+    TimeToStr(ExpDataModule.ExpIncomingarchiveDataSet.fieldbyname
+    ('SENDDATETIME').AsDateTime);
+  CreditReport.QRLabel35.Caption := ExpDataModule.ExpIncomingarchiveDataSet.
+    fieldbyname('FILIALNAME').AsString;;
+  CreditReport.QRLabel21.Caption := ExpDataModule.ExpIncomingarchiveDataSet.
+    fieldbyname('SENDDATE').AsString;
+  CreditReport.QRLabel34.Caption :=
+    TimeToStr(ExpDataModule.ExpIncomingarchiveDataSet.fieldbyname
+    ('SENDDATETIME').AsDateTime);
+  CreditReport.QRLabel48.Caption := ExpDataModule.BankInfoDataSet.fieldbyname
+    ('inn').AsString;
+  CreditReport.QRLabel50.Caption := ExpDataModule.BankInfoDataSet.fieldbyname
+    ('inn').AsString;
+  CreditReport.QRLabel51.Caption := ExpDataModule.BankInfoDataSet.fieldbyname
+    ('adress').AsString;
+  CreditReport.QRLabel52.Caption := ExpDataModule.BankInfoDataSet.fieldbyname
+    ('adress').AsString;
+
+  IF optype = 4 THEN
+  BEGIN
+    with ExpDataModule do
+    begin
+      SendDataSet.close;
+      SendDataSet.SQL[1] := '';
+      SendDataSet.SQL[1] := 'where id= ' + s;
+      SendDataSet.open;
+      AccDataSet.close;
+      AccDataSet.SetVariable('id', ExpIncomingarchiveDataSet.fieldbyname
+        ('KREDITACCID').AsInteger);
+      AccDataSet.open;
+      { ValyutaDataSet.Close;
+        ValyutaDataSet.Filtered:=False;
+        ValyutaDataSet.filter:='valute='+ExpIncomingarchiveDataSet.FieldByName('VAL_COD').AsString;
+        ValyutaDataSet.Filtered:=True;
+        ValyutaDataSet.Open; }
+      if SendDataSet.fieldbyname('inn').AsString='' then  Vo:='' else Vo:=',VÖEN'+SendDataSet.fieldbyname('inn').AsString;
+      CreditReport.QRLabel2.Caption := ExpIncomingarchiveDataSet.fieldbyname
+        ('sentname').AsString + #13#10 + SendDataSet.fieldbyname('passer')
+        .AsString + SendDataSet.fieldbyname('paspnum').AsString + ',' +
+        SendDataSet.fieldbyname('paspdate').AsString + ',' +
+        SendDataSet.fieldbyname('paspplace').AsString+Vo;
+      CreditReport.QRLabel4.Caption := ExpIncomingarchiveDataSet.fieldbyname
+        ('SENTTONAME').AsString;
+      CreditReport.QRLabel6.Caption := ExpIncomingarchiveDataSet.fieldbyname
+        ('BFILIALNAME').AsString;
+      CreditReport.QRLabel10.Caption := ExpIncomingarchiveDataSet.fieldbyname
+        ('AMOUNT').AsString + '.00' + ' ' +
+        ExpIncomingarchiveDataSet.fieldbyname('VALNAME').AsString;
+      CreditReport.QRLabel11.Caption :=
+        AccDataSet.fieldbyname('acc_no').AsString;
+      CreditReport.QRLabel13.Caption :=
+        ExpFormNew.Mani(ExpIncomingarchiveDataSet.fieldbyname('AMOUNT')
+        .AsFloat,ExpIncomingarchiveDataSet.FieldByName('val_cod').AsInteger);
+      CreditReport.QRLabel15.Caption := ExpIncomingarchiveDataSet.fieldbyname
+        ('REMIT_INF').AsString;
+
+      CreditReport.QRLabel24.Caption := ExpIncomingarchiveDataSet.fieldbyname
+        ('sentname').AsString + #13#10 + SendDataSet.fieldbyname('passer')
+        .AsString + SendDataSet.fieldbyname('paspnum').AsString + ',' +
+        SendDataSet.fieldbyname('paspdate').AsString + ',' +
+        SendDataSet.fieldbyname('paspplace').AsString;
+      CreditReport.QRLabel26.Caption := ExpIncomingarchiveDataSet.fieldbyname
+        ('SENTTONAME').AsString;
+      CreditReport.QRLabel37.Caption := ExpIncomingarchiveDataSet.fieldbyname
+        ('BFILIALNAME').AsString;
+      CreditReport.QRLabel39.Caption := ExpIncomingarchiveDataSet.fieldbyname
+        ('AMOUNT').AsString + '.00' + ' ' +
+        ExpIncomingarchiveDataSet.fieldbyname('VALNAME').AsString;
+      CreditReport.QRLabel29.Caption :=
+        AccDataSet.fieldbyname('acc_no').AsString;
+      CreditReport.QRLabel41.Caption :=
+        ExpFormNew.Mani(ExpIncomingarchiveDataSet.fieldbyname('AMOUNT')
+        .AsFloat,ExpIncomingarchiveDataSet.FieldByName('val_cod').AsInteger);
+      CreditReport.QRLabel43.Caption := ExpIncomingarchiveDataSet.fieldbyname
+        ('REMIT_INF').AsString;
+
+      CreditReport.Preview
+    end;
+  END
+  ELSE
+    exit;
+end;
+
+procedure TExpress.ActionPrintInArchiveExecute(Sender: TObject);
+Var
+  Skomission: string;
+  s: real;
+begin
+  IF ExpDataModule.ExpIncomingarchiveDataSet.fieldbyname('optype').AsInteger
+    <> 1 THEN
+    exit;
+  Skomission := '';
+  with ExpDataModule, SendDataSet do
+  begin
+    close;
+    SQL[1] := '';
+    SQL[1] := 'where id=' + ExpIncomingarchiveDataSet.fieldbyname
+      ('kliid').AsString;
+    open;
+  end;
+
+  with ExpDataModule, SendToDataSet do
+  begin
+    close;
+    SQL[1] := '';
+    SQL[1] := 'where id=' + ExpIncomingarchiveDataSet.fieldbyname
+      ('bkliid').AsString;
+    open;
+  end;
+
+  ExpFormNew.FiledIncomingArchive := true;
+  ExpFormNew.FiledBatchs := False;
+  ExpFormNew.FiledIncoming := False;
+  ExpFormNew.FieldBatchsArchive := False;
+
+  IF NOT Assigned(QuickReportXOrder) THEN
+    QuickReportXOrder := TQuickReportXOrder.Create(Application);
+  with QuickReportXOrder, ExpDataModule do
+  begin
+    { ------------------------------------------------------------ Elave1 ---------------------------------------------------------------------- }
+    IF VarIsNull(ExpIncomingarchiveDataSetRETRUNID.AsVariant) THEN
+    BEGIN
+      QRLabel25.Caption:='PULUN ALINMASI HAQQINDA BİLDİRİŞ';
+
+      QRFilVoin.Caption := BankInfoDataSet.fieldbyname('inn').AsString;
+      QRFilialName.Caption := ExpIncomingarchiveDataSet.fieldbyname('BFILIALNAME').AsString;
+      QRFilAdress.Caption := BankInfoDataSet.fieldbyname('adress').AsString;
+      QRDate.Caption := ExpIncomingarchiveDataSet.fieldbyname('recdatetime').AsString;
+      QRPassword.Caption := ExpIncomingarchiveDataSet.fieldbyname('PASSWORD').AsString;
+
+      QRSentname.Caption := SendDataSet.fieldbyname('custname').AsString;
+      QRSentname1.Caption := SendToDataSet.fieldbyname('custname').AsString;
+      QRSerial.Caption := SendToDataSet.fieldbyname('passer').AsString +SendToDataSet.fieldbyname('paspnum').AsString;
+      QRPaspdate.Caption := SendToDataSet.fieldbyname('paspdate').AsString;
+      QRPaspplace.Caption := SendToDataSet.fieldbyname('paspplace').AsString;
+      QRPhoneM.Caption := SendToDataSet.fieldbyname('phone_m').AsString + ' ' +SendToDataSet.fieldbyname('phone_h').AsString;
+
+      QRFilialName1.Caption := ExpIncomingarchiveDataSet.fieldbyname('FILIALNAME').AsString;
+      QRAmount.Caption := ExpIncomingarchiveDataSet.fieldbyname('AMOUNT').AsString+ ' ' + ExpIncomingarchiveDataSet.fieldbyname('VALNAME').AsString;
+      s := ExpIncomingarchiveDataSet.fieldbyname('AMOUNT').AsFloat;
+      QRAmount1.Caption := FloatToStr(s) + ExpFormNew.Mani(FloatToStr(s),ExpIncomingarchiveDataSet.FieldByName('val_cod').AsInteger);
+      QRDesciption.Caption := ExpIncomingarchiveDataSet.fieldbyname('REMIT_INF').AsString;
+
+    { ------------------------------------------------------------ Elave2 ----------------------------------------------------------------------- }
+
+      QRLabel7.Caption:='PULUN ALINMASI HAQQINDA BİLDİRİŞ';
+
+      QRFilVoin1.Caption := BankInfoDataSet.fieldbyname('inn').AsString;
+      QRFilialName2.Caption := ExpIncomingarchiveDataSet.fieldbyname('BFILIALNAME').AsString;
+      QRFilAdress1.Caption := BankInfoDataSet.fieldbyname('adress').AsString;
+      QRDate1.Caption := ExpIncomingarchiveDataSet.fieldbyname('recdatetime').AsString;
+      QRPassword1.Caption := ExpIncomingarchiveDataSet.fieldbyname('PASSWORD').AsString;
+
+      Sentname2.Caption := SendDataSet.fieldbyname('custname').AsString;
+      Sentname3.Caption := SendToDataSet.fieldbyname('custname').AsString;
+      QRSerial1.Caption := SendToDataSet.fieldbyname('passer').AsString +SendToDataSet.fieldbyname('paspnum').AsString;
+      QRPaspdate1.Caption := SendToDataSet.fieldbyname('paspdate').AsString;
+      QRPaspplace1.Caption := SendToDataSet.fieldbyname('paspplace').AsString;
+      QRPhoneM1.Caption := SendToDataSet.fieldbyname('phone_m').AsString + ' ' +SendToDataSet.fieldbyname('phone_h').AsString;
+
+      QRFilialName3.Caption := ExpIncomingarchiveDataSet.fieldbyname('FILIALNAME').AsString;
+      QRAmount2.Caption := ExpIncomingarchiveDataSet.fieldbyname('AMOUNT').AsString + ' ' + ExpIncomingarchiveDataSet.fieldbyname('VALNAME').AsString;
+      s := ExpIncomingarchiveDataSet.fieldbyname('AMOUNT').AsFloat;
+      QRAmount3.Caption := FloatToStr(s) + ExpFormNew.Mani(FloatToStr(s),ExpIncomingarchiveDataSet.FieldByName('val_cod').AsInteger);
+      QRDesciption1.Caption := ExpIncomingarchiveDataSet.fieldbyname('REMIT_INF').AsString;
+    END
+     ELSE
+       BEGIN
+         QRLabel25.Caption:='GÖNDƏRİLƏN PULUN GERİ ALINMASI HAQQINDA BİLDİRİŞ';
+
+         QRFilVoin.Caption := BankInfoDataSet.fieldbyname('inn').AsString;
+         QRFilialName.Caption := ExpIncomingarchiveDataSet.fieldbyname('FILIALNAME').AsString;
+         QRFilAdress.Caption := BankInfoDataSet.fieldbyname('adress').AsString;
+         QRDate.Caption := ExpIncomingarchiveDataSet.fieldbyname('recdatetime').AsString;
+         QRPassword.Caption := ExpIncomingarchiveDataSet.fieldbyname('PASSWORD').AsString;
+
+         QRSentname.Caption := SendDataSet.fieldbyname('custname').AsString;
+         QRSentname1.Caption := SendDataSet.fieldbyname('custname').AsString;
+         QRSerial.Caption := SendDataSet.fieldbyname('passer').AsString +
+         SendDataSet.fieldbyname('paspnum').AsString;
+         QRPaspdate.Caption := SendDataSet.fieldbyname('paspdate').AsString;
+         QRPaspplace.Caption := SendDataSet.fieldbyname('paspplace').AsString;
+         QRPhoneM.Caption := SendDataSet.fieldbyname('phone_m').AsString + ' ' +SendDataSet.fieldbyname('phone_h').AsString;
+
+         QRFilialName1.Caption := ExpIncomingarchiveDataSet.fieldbyname('FILIALNAME').AsString;
+         QRAmount.Caption := ExpIncomingarchiveDataSet.FieldByName('amount').AsString+' ' + ExpIncomingarchiveDataSet.fieldbyname('VALNAME').AsString;
+         s := ExpIncomingarchiveDataSet.fieldbyname('AMOUNT').AsFloat;
+         QRAmount1.Caption := FloatToStr(s) + ExpFormNew.Mani(FloatToStr(s),ExpIncomingarchiveDataSet.FieldByName('val_cod').AsInteger);
+         QRDesciption.Caption := ExpIncomingarchiveDataSet.fieldbyname('REMIT_INF').AsString;
+
+    { ------------------------------------------------------------ Elave2 ----------------------------------------------------------------------- }
+         QRLabel7.Caption:='GÖNDƏRİLƏN PULUN GERİ ALINMASI HAQQINDA BİLDİRİŞ';
+
+         QRFilVoin1.Caption := BankInfoDataSet.fieldbyname('inn').AsString;
+         QRFilialName2.Caption := ExpIncomingarchiveDataSet.fieldbyname('FILIALNAME').AsString;
+         QRFilAdress1.Caption := BankInfoDataSet.fieldbyname('adress').AsString;
+         QRDate1.Caption := ExpIncomingarchiveDataSet.fieldbyname('recdatetime').AsString;
+         QRPassword1.Caption := ExpIncomingarchiveDataSet.fieldbyname('PASSWORD').AsString;
+
+         Sentname2.Caption := SendDataSet.fieldbyname('custname').AsString;
+         Sentname3.Caption := SendDataSet.fieldbyname('custname').AsString;
+         QRSerial1.Caption := SendDataSet.fieldbyname('passer').AsString +SendDataSet.fieldbyname('paspnum').AsString;
+         QRPaspdate1.Caption := SendDataSet.fieldbyname('paspdate').AsString;
+         QRPaspplace1.Caption := SendDataSet.fieldbyname('paspplace').AsString;
+         QRPhoneM1.Caption := SendDataSet.fieldbyname('phone_m').AsString + ' ' +SendDataSet.fieldbyname('phone_h').AsString;
+         QRFilialName3.Caption := ExpIncomingarchiveDataSet.fieldbyname('FILIALNAME').AsString;
+
+         QRAmount2.Caption := ExpIncomingarchiveDataSet.fieldbyname('AMOUNT').AsString + ' ' + ExpIncomingarchiveDataSet.fieldbyname('VALNAME').AsString;
+         s := ExpIncomingarchiveDataSet.fieldbyname('AMOUNT').AsFloat;
+         QRAmount3.Caption := FloatToStr(s) + ExpFormNew.Mani(FloatToStr(s),ExpIncomingarchiveDataSet.FieldByName('val_cod').AsInteger);
+         QRDesciption1.Caption := ExpIncomingarchiveDataSet.fieldbyname('REMIT_INF').AsString;
+       END;
+    Preview;
+  end;
+
+end;
+
+procedure TExpress.ActionPrintInExecute(Sender: TObject);
+Var
+  Skomission: string;
+  s: real;
+begin
+  IF ExpDataModule.ExpIncomingDataSet.fieldbyname('optype').AsInteger <> 1 THEN
+    exit;
+  Skomission := '';
+  with ExpDataModule, SendDataSet do
+  begin
+    close;
+    SQL[1] := '';
+    SQL[1] := 'where id=' + ExpIncomingDataSet.fieldbyname('kliid').AsString;
+    open;
+  end;
+
+  with ExpDataModule, SendToDataSet do
+  begin
+    close;
+    SQL[1] := '';
+    SQL[1] := 'where id=' + ExpIncomingDataSet.fieldbyname('bkliid').AsString;
+    open;
+  end;
+
+  ExpFormNew.FiledIncoming := true;
+  ExpFormNew.FiledBatchs := False;
+  ExpFormNew.FieldBatchsArchive := False;
+  ExpFormNew.FiledIncomingArchive := False;
+
+  IF NOT Assigned(QuickReportXOrder) THEN
+    QuickReportXOrder := TQuickReportXOrder.Create(Application);
+  with QuickReportXOrder, ExpDataModule do
+  begin
+    { ------------------------------------------------------------ Elave1 ---------------------------------------------------------------------- }
+    IF VarIsNull(ExpIncomingDataSetRETRUNID.AsVariant) THEN
+    BEGIN
+      QRLabel25.Caption:='PULUN ALINMASI HAQQINDA BİLDİRİŞ';
+
+      QRFilVoin.Caption := BankInfoDataSet.fieldbyname('inn').AsString;
+      QRFilialName.Caption := ExpIncomingDataSetBFILIALNAME.AsString;
+      QRFilAdress.Caption := BankInfoDataSet.fieldbyname('adress').AsString;
+
+      if ExpIncomingDataSetStatus.AsInteger = 0
+      then
+        QRDate.Caption := SysdateDataSet.fieldbyname('dat').AsString
+      else
+        QRDate.Caption := ExpIncomingDataSetRECDATETIME.AsString;
+
+      QRPassword.Caption := ExpIncomingDataSetPASSWORD.AsString;
+      QRSentname.Caption := SendDataSet.fieldbyname('custname').AsString;
+      QRSentname1.Caption := SendToDataSet.fieldbyname('custname').AsString;
+      QRSerial.Caption := SendToDataSet.fieldbyname('passer').AsString +SendToDataSet.fieldbyname('paspnum').AsString;
+      QRPaspdate.Caption := SendToDataSet.fieldbyname('paspdate').AsString;
+      QRPaspplace.Caption := SendToDataSet.fieldbyname('paspplace').AsString;
+      QRPhoneM.Caption := SendToDataSet.fieldbyname('phone_m').AsString + ' ' +SendToDataSet.fieldbyname('phone_h').AsString;
+
+      QRFilialName1.Caption := ExpIncomingDataSetFILIALNAME.AsString;
+      QRAmount.Caption := ExpIncomingDataSetAMOUNT.AsString + ' '+ ExpIncomingDataSetVALNAME.AsString;
+      s := ExpIncomingDataSetAMOUNT.AsFloat;
+      QRAmount1.Caption := FloatToStr(s) + ExpFormNew.Mani(FloatToStr(s),ExpIncomingDataSetVAL_COD.AsInteger);
+      QRDesciption.Caption := ExpIncomingDataSetREMIT_INF.AsString;
+
+    { ------------------------------------------------------------ Elave2 ----------------------------------------------------------------------- }
+      QRLabel7.Caption:='PULUN ALINMASI HAQQINDA BİLDİRİŞ';
+
+      QRFilVoin1.Caption := BankInfoDataSet.fieldbyname('inn').AsString;
+      QRFilialName2.Caption := ExpIncomingDataSet.fieldbyname('BFILIALNAME').AsString;
+      QRFilAdress1.Caption := BankInfoDataSet.fieldbyname('adress').AsString;
+      if ExpIncomingDataSetStatus.AsInteger = 0 then QRDate1.Caption := SysdateDataSet.fieldbyname('dat').AsString
+                                                else QRDate1.Caption := ExpIncomingDataSet.fieldbyname('recdatetime').AsString;
+
+      QRPassword1.Caption  := ExpIncomingDataSetPASSWORD.AsString;
+      Sentname2.Caption    := SendDataSet.fieldbyname('custname').AsString;
+      Sentname3.Caption    := SendToDataSet.fieldbyname('custname').AsString;
+      QRSerial1.Caption    := SendToDataSet.fieldbyname('passer').AsString + SendToDataSet.fieldbyname('paspnum').AsString;
+      QRPaspdate1.Caption  := SendToDataSet.fieldbyname('paspdate').AsString;
+      QRPaspplace1.Caption := SendToDataSet.fieldbyname('paspplace').AsString;
+      QRPhoneM1.Caption := SendToDataSet.fieldbyname('phone_m').AsString + ' ' + SendDataSet.fieldbyname('phone_h').AsString;
+
+      QRFilialName3.Caption := ExpIncomingDataSetFILIALNAME.AsString;
+      QRAmount2.Caption := ExpIncomingDataSetAMOUNT.AsString + ' ' + ExpIncomingDataSetVALNAME.AsString;
+      s := ExpIncomingDataSetAMOUNT.AsFloat;
+      QRAmount3.Caption := FloatToStr(s) + ExpFormNew.Mani(FloatToStr(s),ExpIncomingDataSetVAL_COD.AsInteger);
+      QRDesciption1.Caption := ExpIncomingDataSetREMIT_INF.AsString;
+    END
+    ELSE
+      BEGIN
+{ ------------------------------------------------------------ Elave1 ---------------------------------------------------------------------- }
+        QRLabel25.Caption:='GÖNDƏRİLƏN PULUN GERİ ALINMASI HAQQINDA BİLDİRİŞ';
+
+        QRFilVoin.Caption := BankInfoDataSet.fieldbyname('inn').AsString;
+        QRFilialName.Caption := ExpIncomingDataSetFILIALNAME.AsString;
+        QRFilAdress.Caption := BankInfoDataSet.fieldbyname('adress').AsString;
+
+        if ExpIncomingDataSetStatus.AsInteger = 0
+        then
+          QRDate.Caption := SysdateDataSet.fieldbyname('dat').AsString
+        else
+          QRDate.Caption := ExpIncomingDataSetRECDATETIME.AsString;
+
+        QRPassword.Caption := ExpIncomingDataSetPASSWORD.AsString;
+        QRSentname.Caption := SendDataSet.fieldbyname('custname').AsString;
+        QRSentname1.Caption := SendDataSet.fieldbyname('custname').AsString;
+        QRSerial.Caption := SendDataSet.fieldbyname('passer').AsString +SendDataSet.fieldbyname('paspnum').AsString;
+        QRPaspdate.Caption := SendDataSet.fieldbyname('paspdate').AsString;
+        QRPaspplace.Caption := SendDataSet.fieldbyname('paspplace').AsString;
+        QRPhoneM.Caption := SendDataSet.fieldbyname('phone_m').AsString + ' ' +SendDataSet.fieldbyname('phone_h').AsString;
+
+        QRFilialName1.Caption := ExpIncomingDataSetFILIALNAME.AsString;
+        QRAmount.Caption := ExpIncomingDataSetAMOUNT.AsString + ' '+ ExpIncomingDataSetVALNAME.AsString;
+        s := ExpIncomingDataSetAMOUNT.AsFloat;
+        QRAmount1.Caption := FloatToStr(s) + ExpFormNew.Mani(FloatToStr(s),ExpIncomingDataSetVAL_COD.AsInteger);
+        QRDesciption.Caption := ExpIncomingDataSetREMIT_INF.AsString;
+
+ { ------------------------------------------------------------ Elave2 ---------------------------------------------------------------------- }
+        QRLabel7.Caption:='GÖNDƏRİLƏN PULUN GERİ ALINMASI HAQQINDA BİLDİRİŞ';
+
+        QRFilVoin1.Caption := BankInfoDataSet.fieldbyname('inn').AsString;
+        QRFilialName1.Caption := ExpIncomingDataSetFILIALNAME.AsString;
+        QRFilAdress1.Caption := BankInfoDataSet.fieldbyname('adress').AsString;
+
+        if ExpIncomingDataSetStatus.AsInteger = 0
+        then
+          QRDate1.Caption := SysdateDataSet.fieldbyname('dat').AsString
+        else
+          QRDate1.Caption := ExpIncomingDataSetRECDATETIME.AsString;
+        QRPassword1.Caption := ExpIncomingDataSetPASSWORD.AsString;
+        Sentname2.Caption := SendDataSet.fieldbyname('custname').AsString;
+        Sentname3.Caption := SendDataSet.fieldbyname('custname').AsString;
+        QRSerial1.Caption := SendDataSet.fieldbyname('passer').AsString +SendDataSet.fieldbyname('paspnum').AsString;
+        QRPaspdate1.Caption := SendDataSet.fieldbyname('paspdate').AsString;
+        QRPaspplace1.Caption := SendDataSet.fieldbyname('paspplace').AsString;
+        QRPhoneM1.Caption := SendDataSet.fieldbyname('phone_m').AsString + ' ' +SendDataSet.fieldbyname('phone_h').AsString;
+
+        QRFilialName3.Caption := ExpIncomingDataSetFILIALNAME.AsString;
+        QRAmount2.Caption := ExpIncomingDataSetAMOUNT.AsString + ' '+ ExpIncomingDataSetVALNAME.AsString;
+        s := ExpIncomingDataSetAMOUNT.AsFloat;
+        QRAmount3.Caption := FloatToStr(s) + ExpFormNew.Mani(FloatToStr(s),ExpIncomingDataSetVAL_COD.AsInteger);
+        QRDesciption1.Caption := ExpIncomingDataSetREMIT_INF.AsString;
+      END;
+    Preview;
+  end;
+
+end;
+
+procedure TExpress.ActionPrintOutArchiveExecute(Sender: TObject);
+Var
+  Skomission: string;
+  s: real;
+begin
+  IF ExpDataModule.ExpBatchsArchiveDataSet.fieldbyname('optype').AsInteger
+    <> 1 THEN
+    exit;
+  Skomission := '';
+  with ExpDataModule, SendDataSet do
+  begin
+    close;
+    SQL[1] := '';
+    SQL[1] := 'where id=' + ExpBatchsArchiveDataSet.fieldbyname
+      ('kliid').AsString;
+    open;
+  end;
+
+  with ExpDataModule, SendToDataSet do
+  begin
+    close;
+    SQL[1] := '';
+    SQL[1] := 'where id=' + ExpBatchsArchiveDataSet.fieldbyname
+      ('bkliid').AsString;
+    open;
+  end;
+
+  ExpFormNew.FieldBatchsArchive := true;
+  ExpFormNew.FiledBatchs := False;
+  ExpFormNew.FiledIncoming := False;
+  ExpFormNew.FiledIncomingArchive := False;
+
+  IF NOT Assigned(QReportOrder) THEN
+    QReportOrder := TQReportOrder.Create(Application);
+  with QReportOrder, ExpDataModule do
+  begin
+    { ------------------------------------------------------------ Elave1 ---------------------------------------------------------------------- }
+    QRFilVoin.Caption := BankInfoDataSet.fieldbyname('inn').AsString;
+    QRFilialName.Caption := ExpBatchsArchiveDataSet.fieldbyname
+      ('FILIALNAME').AsString;
+    QRFilAdress.Caption := BankInfoDataSet.fieldbyname('adress').AsString;
+    QRDate.Caption := ExpBatchsArchiveDataSet.fieldbyname
+      ('senddatetime').AsString;
+    QRPassword.Caption := ExpBatchsArchiveDataSet.fieldbyname
+      ('PASSWORD').AsString;
+
+    QRSentname.Caption := SendDataSet.fieldbyname('custname').AsString;
+    QRSentname1.Caption := SendToDataSet.fieldbyname('custname').AsString;
+    QRSerial.Caption := SendDataSet.fieldbyname('passer').AsString +
+      SendDataSet.fieldbyname('paspnum').AsString;
+    QRPaspplace.Caption := SendDataSet.fieldbyname('paspplace').AsString + ' ' +
+      SendDataSet.fieldbyname('paspdate').AsString;
+    QRPhoneM.Caption := SendDataSet.fieldbyname('phone_m').AsString + ' ' +
+      SendDataSet.fieldbyname('phone_h').AsString;
+
+    QRAmount.Caption := ExpBatchsArchiveDataSet.fieldbyname('AMOUNT').AsString +
+      ' ' + ExpBatchsArchiveDataSet.fieldbyname('VALNAME').AsString;
+    Skomission := Repair.CallFloatFunction('Exp_comissionoperation',
+      [ExpBatchsArchiveDataSet.fieldbyname('EXPID').AsInteger,
+      ExpBatchsArchiveDataSet.fieldbyname('AMOUNT').AsFloat,
+      ExpBatchsArchiveDataSet.fieldbyname('filial').AsInteger,ExpBatchsArchiveDataSet.FieldByName('val_cod').AsInteger,ExpBatchsArchiveDataSet.fieldbyname('kliid').AsInteger]);
+    s := ExpBatchsArchiveDataSet.fieldbyname('AMOUNT').AsFloat +
+      StrToFloat(Skomission);
+    QRKomission.Caption := Skomission + ' ' +
+      ExpBatchsArchiveDataSet.fieldbyname('VALNAME').AsString;
+    QRAllAmount.Caption := FloatToStr(s) + ExpFormNew.Mani(FloatToStr(s),ExpBatchsArchiveDataSetVAL_COD.AsInteger);
+    QRDesciption.Caption := ExpBatchsArchiveDataSet.fieldbyname
+      ('REMIT_INF').AsString;
+    { ------------------------------------------------------------ Elave2 ----------------------------------------------------------------------- }
+
+    QRFilVoin1.Caption := QRFilVoin.Caption;
+    QRFilialName1.Caption := QRFilialName.Caption;
+    QRFilAdress1.Caption := QRFilAdress.Caption;
+    QRDate1.Caption := QRDate.Caption;
+    QRPassword1.Caption := QRPassword.Caption;
+
+    QRSentname.Caption := QRSentname.Caption;
+    QRSentname3.Caption := QRSentname1.Caption;
+    QRSerial1.Caption := QRSerial.Caption;
+    QRPaspplace1.Caption := QRPaspplace.Caption;
+    QRPhoneM1.Caption := QRPhoneM.Caption;
+
+    QRAmount1.Caption := QRAmount.Caption;
+    QRKomission1.Caption := QRKomission.Caption;
+    QRAllAmount1.Caption := QRAllAmount.Caption;
+    QRDesciption1.Caption := QRDesciption.Caption;
+
+    Preview;
+  end;
+
+end;
+
+procedure TExpress.ActionPrintOutArcive1Execute(Sender: TObject);
+var
+  optype: Integer;
+  s: string;
+  Vo:string;
+begin
+  ExpFormNew.FieldBatchsArchive := true;
+  ExpFormNew.FiledBatchs := False;
+  ExpFormNew.FiledIncoming := False;
+  ExpFormNew.FiledIncomingArchive := False;
+
+  optype := ExpDataModule.ExpBatchsArchiveDataSet.fieldbyname('optype')
+    .AsInteger;
+  s := ExpDataModule.ExpBatchsArchiveDataSet.fieldbyname('kliid').AsString;
+  CreditReport.QRLabel22.Caption :=
+    ExpDataModule.ExpBatchsArchiveDataSetFILIALNAME.AsString;
+  CreditReport.QRLabel45.Caption :=
+    ExpDataModule.ExpBatchsArchiveDataSetSENDDATE.AsString;
+  CreditReport.QRLabel46.Caption :=
+    TimeToStr(ExpDataModule.ExpBatchsArchiveDataSetSENDDATETIME.AsDateTime);
+  CreditReport.QRLabel35.Caption :=
+    ExpDataModule.ExpBatchsArchiveDataSetFILIALNAME.AsString;
+  CreditReport.QRLabel21.Caption :=
+    ExpDataModule.ExpBatchsArchiveDataSetSENDDATE.AsString;
+  CreditReport.QRLabel34.Caption :=
+    TimeToStr(ExpDataModule.ExpBatchsArchiveDataSetSENDDATETIME.AsDateTime);
+  CreditReport.QRLabel48.Caption := ExpDataModule.BankInfoDataSet.fieldbyname
+    ('inn').AsString;
+  CreditReport.QRLabel50.Caption := ExpDataModule.BankInfoDataSet.fieldbyname
+    ('inn').AsString;
+  CreditReport.QRLabel51.Caption := ExpDataModule.BankInfoDataSet.fieldbyname
+    ('adress').AsString;
+  CreditReport.QRLabel52.Caption := ExpDataModule.BankInfoDataSet.fieldbyname
+    ('adress').AsString;
+
+  IF optype = 4 THEN
+  BEGIN
+    with ExpDataModule do
+    begin
+      SendDataSet.close;
+      SendDataSet.SQL[1] := '';
+      SendDataSet.SQL[1] := 'where id= ' + s;
+      SendDataSet.open;
+      AccDataSet.close;
+      AccDataSet.SetVariable('id',
+        ExpBatchsArchiveDataSetKREDITACCID.AsInteger);
+      AccDataSet.open;
+      { ValyutaDataSet.Close;
+        ValyutaDataSet.Filtered:=False;
+        ValyutaDataSet.filter:='valute='+ExpBatchsArchiveDataSetVAL_COD.AsString;
+        ValyutaDataSet.Filtered:=True;
+        ValyutaDataSet.Open; }
+
+      if SendDataSet.fieldbyname('inn').AsString='' then  Vo:='' else Vo:=',VÖEN'+SendDataSet.fieldbyname('inn').AsString;
+      CreditReport.QRLabel2.Caption := ExpBatchsArchiveDataSet.fieldbyname
+        ('sentname').AsString + #13#10 + SendDataSet.fieldbyname('passer')
+        .AsString + SendDataSet.fieldbyname('paspnum').AsString + ',' +
+        SendDataSet.fieldbyname('paspdate').AsString + ',' +
+        SendDataSet.fieldbyname('paspplace').AsString + Vo;
+      CreditReport.QRLabel4.Caption :=
+        ExpBatchsArchiveDataSetSENTTONAME.AsString;
+      CreditReport.QRLabel6.Caption :=
+        ExpBatchsArchiveDataSetBFILIALNAME.AsString;
+      CreditReport.QRLabel10.Caption := ExpBatchsArchiveDataSetAMOUNT.AsString +
+        '.00' + ' ' + ExpBatchsArchiveDataSetVALNAME.AsString;
+      CreditReport.QRLabel11.Caption :=
+        AccDataSet.fieldbyname('acc_no').AsString;
+      CreditReport.QRLabel13.Caption :=
+        ExpFormNew.Mani(ExpBatchsArchiveDataSetAMOUNT.AsFloat,ExpBatchsArchiveDataSetVAL_COD.AsInteger);
+      CreditReport.QRLabel15.Caption :=
+        ExpBatchsArchiveDataSetREMIT_INF.AsString;
+
+      CreditReport.QRLabel24.Caption := ExpBatchsArchiveDataSet.fieldbyname
+        ('sentname').AsString + #13#10 + SendDataSet.fieldbyname('passer')
+        .AsString + SendDataSet.fieldbyname('paspnum').AsString + ',' +
+        SendDataSet.fieldbyname('paspdate').AsString + ',' +
+        SendDataSet.fieldbyname('paspplace').AsString;
+      CreditReport.QRLabel26.Caption :=
+        ExpBatchsArchiveDataSetSENTTONAME.AsString;
+      CreditReport.QRLabel37.Caption :=
+        ExpBatchsArchiveDataSetBFILIALNAME.AsString;
+      CreditReport.QRLabel39.Caption := ExpBatchsArchiveDataSetAMOUNT.AsString +
+        '.00' + ' ' + ExpBatchsArchiveDataSetVALNAME.AsString;
+      CreditReport.QRLabel29.Caption :=
+        AccDataSet.fieldbyname('acc_no').AsString;
+      CreditReport.QRLabel41.Caption :=
+        ExpFormNew.Mani(ExpBatchsArchiveDataSetAMOUNT.AsFloat,ExpBatchsArchiveDataSetVAL_COD.AsInteger);
+      CreditReport.QRLabel43.Caption :=
+        ExpBatchsArchiveDataSetREMIT_INF.AsString;
+
+      CreditReport.Preview
+    end;
+  END
+  ELSE
+    exit;
+end;
+
+procedure TExpress.ActionRefreshInArchiveExecute(Sender: TObject);
+begin
+  with ExpDataModule, ExpIncomingarchiveDataSet do
+  begin
+    close;
+    SetVariable('bdate', DTPInArchiveB.DateTime);
+    SetVariable('edate', DTPInArchiveE.DateTime);
+    open;
+  end;
+end;
+
+procedure TExpress.ActionRefreshInExecute(Sender: TObject);
+begin
+  ExpDataModule.FullOpen;
+end;
+
+procedure TExpress.ActionRefreshOutArchiveExecute(Sender: TObject);
+begin
+  with ExpDataModule, ExpBatchsArchiveDataSet do
+  begin
+    close;
+    SetVariable('bdate', DTPOutArchiveB.DateTime);
+    SetVariable('edate', DTPOutArchiveE.DateTime);
+    open;
+  end;
+end;
+
+procedure TExpress.ActionReturnExecute(Sender: TObject);
+var
+  setir: string;
+  ID, status: Integer;
+begin
+  with ExpDataModule do
+  begin
+    ID := ExpBatchsDataSet.fieldbyname('id').AsInteger;
+    status := Repair.CallIntegerFunction('Exp_checkstatus', [ID]);
+    if status in [0, 3] then
+      exit;
+    try
+      IF (status = 1) then
+        Repair.CallProcedure('return_trans', [ID]);
+      sboapiDataModule.SBSession.Commit;
+
+    Except
+      on E: Exception do
+      begin
+        setir := E.Message;
+        sboapiDataModule.SBSession.Rollback;
+        ShowMessage(setir);
+      end;
+    end;
+    ExpBatchsDataSet.Refresh;
+    ExpBatchsDataSet.Locate('ID', ID, []);
+  end;
+end;
+
+procedure TExpress.ActionSearchInArchiveExecute(Sender: TObject);
+begin
+  FormCurrection.DbGr := XDBGrid4;
+  FormCurrection.ShowModal;
+end;
+
+procedure TExpress.ActionSearchInExecute(Sender: TObject);
+begin
+  if ExpDataModule.ExpIncomingDataSet.RecordCount = 0 then
+    exit;
+  FormCurrection.DbGr := XDBGrid2;
+  FormCurrection.ShowModal;
+end;
+
+procedure TExpress.ActionSearchOutArchiveExecute(Sender: TObject);
+begin
+  FormCurrection.DbGr := XDBGrid3;
+  FormCurrection.ShowModal;
+end;
+
+PROCEDURE TExpress.ActionTakeInExecute(Sender: TObject);
+VAR
+  ID, status, optype, v_setid: Integer;
+  v_retrunid:Variant;
+  setir, descript: string;
+BEGIN
+  WITH ExpDataModule DO
+  BEGIN
+    IF ExpIncomingDataSet.RecordCount = 0 THEN
+      exit;
+    status := Repair.CallIntegerFunction('Exp_checkstatusIN',
+      [ExpIncomingDataSet.fieldbyname('id').AsInteger]);
+    IF status = 1 THEN
+    BEGIN
+      ExpIncomingDataSet.Refresh;
+      exit;
+    END;
+
+    ID := ExpIncomingDataSet.fieldbyname('id').AsInteger;
+    optype := ExpIncomingDataSet.fieldbyname('optype').AsInteger;
+    v_setid := ExpIncomingDataSet.fieldbyname('setid').AsInteger;
+    v_retrunid:=ExpIncomingDataSet.fieldbyname('retrunid').AsVariant;
+    IF (optype = 1) and (status = 0)  THEN
+    BEGIN
+      TRY
+         IF  VarIsNull(v_retrunid) THEN ExpDataModule.Repair.CallProcedure('ExpTakeTransaction', [ID])
+                                   ELSE ExpDataModule.Repair.CallProcedure('ReturnAmountTransaction', [ID]);
+        sboapiDataModule.SBSession.Commit;
+        ExpIncomingDataSet.Refresh;
+        ExpIncomingDataSet.Locate('ID', ID, []);
+      Except
+        on E: Exception do
+        begin
+          descript := E.Message;
+          sboapiDataModule.SBSession.Rollback;
+          ShowMessage(descript);
+        end;
+      end;
+    END
+    ELSE
+    BEGIN
+      ExpFormNew.FForm := 2;
+      IF (optype = 2) or (optype = 3) or (optype = 5) or (optype = 6) THEN
+      BEGIN
+        TRY
+          Repair.CallProcedure('Exp_GPayKomiks_TakeTrans', [ID, v_setid]);
+          sboapiDataModule.SBSession.Commit;
+        EXCEPT
+          ON E: Exception DO
+          BEGIN
+            setir := E.Message;
+            sboapiDataModule.SBSession.Rollback;
+            ShowMessage(setir);
+          END;
+        END;
+        // ExpIncomingDataSet.Refresh;
+        // ExpIncomingDataSet.Locate('ID',ID,[]);
+      END;
+    END;
+    IF optype = 4 THEN
+    BEGIN
+      // IF ExpIncomingDataSetBFILIAL.AsInteger<>FilialDataSet.FieldByName('id').AsInteger  THEN EXIT
+      // ELSE BEGIN
+      TRY
+        Repair.CallProcedure('Exp_Payments_TakeTransactions', [ID]);
+        sboapiDataModule.SBSession.Commit;
+      EXCEPT
+        ON E: Exception DO
+        BEGIN
+          setir := E.Message;
+          sboapiDataModule.SBSession.Rollback;
+          ShowMessage(setir);
+        END;
+      END;
+
+      // END;
+
+      ExpIncomingDataSet.Refresh;
+      ExpIncomingDataSet.Locate('ID', ID, []);
+    END;
+  END;
+END;
+
+procedure TExpress.N8Click(Sender: TObject);
+Var
+  Skomission: string;
+  s: real;
+begin
+  IF ExpDataModule.ExpBatchsDataSet.fieldbyname('optype').AsInteger <> 1 THEN
+    exit;
+
+  Skomission := '';
+  with ExpDataModule, SendDataSet do
+  begin
+    close;
+    SQL[1] := '';
+    SQL[1] := 'where id=' + ExpBatchsDataSet.fieldbyname('kliid').AsString;
+    open;
+  end;
+
+  with ExpDataModule, SendToDataSet do
+  begin
+    close;
+    SQL[1] := '';
+    SQL[1] := 'where id=' + ExpBatchsDataSet.fieldbyname('bkliid').AsString;
+    open;
+  end;
+
+  ExpFormNew.FiledBatchs := true;
+  ExpFormNew.FiledIncoming := False;
+  ExpFormNew.FieldBatchsArchive := False;
+  ExpFormNew.FiledIncomingArchive := False;
+
+  IF NOT Assigned(QReportOrder) THEN
+    QReportOrder := TQReportOrder.Create(Application);
+  with QReportOrder, ExpDataModule do
+  begin
+    { ------------------------------------------------------------ Elave1 ---------------------------------------------------------------------- }
+    QRFilVoin.Caption := BankInfoDataSet.fieldbyname('inn').AsString;
+    QRFilialName.Caption := ExpBatchsDataSet.fieldbyname('FILIALNAME').AsString;
+    QRFilAdress.Caption := BankInfoDataSet.fieldbyname('adress').AsString;
+    QRDate.Caption := ExpBatchsDataSet.fieldbyname('senddatetime').AsString;
+    QRPassword.Caption := ExpBatchsDataSet.fieldbyname('PASSWORD').AsString;
+
+    QRSentname.Caption := SendDataSet.fieldbyname('custname').AsString;
+    QRSentname1.Caption := SendToDataSet.fieldbyname('custname').AsString;
+    QRSerial.Caption := SendDataSet.fieldbyname('passer').AsString +
+      SendDataSet.fieldbyname('paspnum').AsString;
+    QRPaspplace.Caption := SendDataSet.fieldbyname('paspplace').AsString + ' ' +
+      SendDataSet.fieldbyname('paspdate').AsString;
+    QRPhoneM.Caption := SendDataSet.fieldbyname('phone_m').AsString + ' ' +
+      SendDataSet.fieldbyname('phone_h').AsString;
+
+    QRAmount.Caption := ExpBatchsDataSet.fieldbyname('AMOUNT').AsString + ' ' +
+      ExpBatchsDataSet.fieldbyname('VALNAME').AsString;
+    Skomission := Repair.CallFloatFunction('Exp_comissionoperation',
+      [ExpBatchsDataSet.fieldbyname('EXPID').AsInteger,
+      ExpBatchsDataSet.fieldbyname('AMOUNT').AsFloat,
+      ExpBatchsDataSet.fieldbyname('filial').AsInteger,ExpBatchsDataSet.FieldByName('val_cod').AsInteger,ExpBatchsDataSet.fieldbyname('kliid').AsInteger]);
+    s := ExpBatchsDataSet.fieldbyname('AMOUNT').AsFloat +
+      StrToFloat(Skomission);
+    QRKomission.Caption := Skomission + ' ' + ExpBatchsDataSet.fieldbyname
+      ('VALNAME').AsString;
+    QRAllAmount.Caption := FloatToStr(s) + ' ' + ExpFormNew.Mani(FloatToStr(s),ExpBatchsDataSetVAL_COD.AsInteger);
+    QRDesciption.Caption := ExpBatchsDataSet.fieldbyname('REMIT_INF').AsString;
+
+    { ------------------------------------------------------------ Elave2 ----------------------------------------------------------------------- }
+
+    QRFilVoin1.Caption := QRFilVoin.Caption;
+    QRFilialName1.Caption := QRFilialName.Caption;
+    QRFilAdress1.Caption := QRFilAdress.Caption;
+    QRDate1.Caption := QRDate.Caption;
+    QRPassword1.Caption := QRPassword.Caption;
+
+    QRSentname2.Caption := QRSentname.Caption;
+    QRSentname3.Caption := QRSentname1.Caption;
+    QRSerial1.Caption := QRSerial.Caption;
+    QRPaspplace1.Caption := QRPaspplace.Caption;
+    QRPhoneM1.Caption := QRPhoneM.Caption;
+
+    QRAmount1.Caption := QRAmount.Caption;
+    QRKomission1.Caption := QRKomission.Caption;
+    QRAllAmount1.Caption := QRAllAmount.Caption;
+    QRDesciption1.Caption := QRDesciption.Caption;
+
+    Preview;
+  end;
+
+end;
+
+procedure TExpress.OutExcelArchiveClick(Sender: TObject);
+begin
+  if XDBGrid3.DataSource.DataSet.RecordCount=0 then begin
+                                                       ShowMessage('Heç bir məlumat tapılmadı!...');
+                                                       exit;
+                                                     end;
+
+  with CMExcelExport1 do
+  begin
+    XDBGrid3.DataSource.DataSet.Last;
+    Connect;
+    ExportDataset(XDBGrid3.DataSource.DataSet,'Əməliyyatlar',true,false);
+    Disconnect;
+  end;
+end;
+
+procedure TExpress.OutExcelClick(Sender: TObject);
+begin
+   if XDBGrid1.DataSource.DataSet.RecordCount=0 then begin
+                                                       ShowMessage('Heç bir məlumat tapılmadı!...');
+                                                       exit;
+                                                     end;
+
+  with CMExcelExport1 do
+  begin
+    XDBGrid1.DataSource.DataSet.Last;
+    Connect;
+    ExportDataset(XDBGrid1.DataSource.DataSet,'Əməliyyatlar',true,false);
+    Disconnect;
+  end;
+end;
+
+procedure TExpress.N11Click(Sender: TObject);
+begin
+  with ExpDataModule, ExpBatchsDataSet do
+  begin
+    if UpperCase(Session.LogonUsername) = 'SMART' then
+    begin
+      ExpParameter.Caption := 'Müxbir Hesablar';
+      ExpParameter.ShowModal;
+    end
+    else
+      MessageDlg('Bu bölməyə giriş qadğandır.! Administratora müraciət edin.!',
+        mtWarning, [mbOk], 0);
+  end;
+
+end;
+
+procedure TExpress.N14Click(Sender: TObject);
+begin
+  with ExpDataModule, ExpBatchsDataSet do
+  begin
+    if UpperCase(Session.LogonUsername) = 'SMART' then
+    begin
+      ExpSubForm.Caption := 'Əməliyyat Hesabları';
+      ExpSubForm.ShowModal;
+    end
+    else
+      MessageDlg('Bu bölməyə giriş qadğandır.! Administratora müraciət edin.!',
+        mtWarning, [mbOk], 0);
+  end;
+end;
+
+procedure TExpress.N12Click(Sender: TObject);
+begin
+  with ExpDataModule, ExpBatchsDataSet do
+  begin
+    if UpperCase(Session.LogonUsername) = 'SMART' then
+    begin
+      ExpComAccForm.Caption := '';
+      ExpComAccForm.ShowModal;
+    end
+    else
+      MessageDlg('Bu bölməyə giriş qadğandır.! Administratora müraciət edin.!',
+        mtWarning, [mbOk], 0);
+  end;
+
+end;
+
+procedure TExpress.N15Click(Sender: TObject);
+begin
+  with ExpDataModule, ExpBatchsDataSet do
+  begin
+    if UpperCase(Session.LogonUsername) = 'SMART' then
+      ExpComTransactionForm.ShowModal
+    else
+      MessageDlg('Bu bölməyə giriş qadğandır.! Administratora müraciət edin.!',
+        mtWarning, [mbOk], 0);
+  end;
+end;
+
+procedure TExpress.ActionArchiveExecute(Sender: TObject);
+begin
+  ExpArchiveForm.DateTimePicker1.DateTime :=
+    trunc(ExpDataModule.SysdateDataSet.fieldbyname('dat').AsDateTime);
+  ExpArchiveForm.DateTimePicker2.DateTime :=
+    trunc(ExpDataModule.SysdateDataSet.fieldbyname('dat').AsDateTime);
+  with ExpDataModule, ExpBatchsArchiveDataSet do
+  begin
+    close;
+    SetVariable('bdate', ExpArchiveForm.DateTimePicker1.DateTime);
+    SetVariable('edate', ExpArchiveForm.DateTimePicker2.DateTime);
+    open;
+  end;
+  ExpArchiveForm.ShowModal;
+end;
+
+procedure TExpress.XDBGrid1DblClick(Sender: TObject);
+begin
+  ActionEditOut.Execute;
+end;
+
+procedure TExpress.ShowInfo(const Info: string);
+begin
+  // ActionInfoPanel.Caption := Info;
+end;
+
+procedure TExpress.N17Click(Sender: TObject);
+resourcestring
+  rsExpCaption = '(Qəbul)';
+  // var status:integer;
+begin
+  { with ExpDataModule,ExpFormAdd do
+    begin
+    SB_ACA.CallProcedure('CheckAdvancedObjectAccess',['EXPRESS_COMMITEDIT']);
+    if ExpBatchsDataSet.RecordCount=0 then exit;
+    status:=Repair.CallIntegerFunction('Exp_checkstatus',[ExpBatchsDataSet.fieldbyname('id').AsInteger]);
+    if status =1 then
+    begin
+    FilialDataSet.close;
+    FilialDataSet.SQL.clear;
+    FilialDataSet.SQL.Add('select * from filial_t');
+    FilialDataSet.Open;
+    ExpFormAdd.Caption:=ExpTypeDataSet.fieldbyname('name').AsString + rsExpCaption;
+    Acceptance;
+    Width:=612;
+    ShowModal;
+    end;
+    end; }
+end;
+
+procedure TExpress.Acceptance;
+begin
+  { with ExpDataModule,ExpBatchsDataSet, ExpFormAdd do
+    begin
+    Panel5.Enabled    :=true;
+    Panel1.Enabled    :=false;
+    Timer1.Enabled    :=false;
+    GroupBox7.Enabled :=false;
+    GroupBox8.Enabled :=false;
+    GroupBox9.Enabled :=false;
+    GroupBox10.Enabled:=false;
+    GroupBox18.Enabled:=true;
+    Edit1.ReadOnly    :=true;
+    DateTimePicker3.Date:=trunc(StrToDateTime(SysdateDataSet.fieldbyname('dat').AsString));
+    DateTimePicker4.Time:=Time;
+
+
+    (*--------------------------*Gonderen musteri*--------------------------------------*)
+
+    id                        :=fieldbyname('id').AsInteger;
+    ComboBox1.ItemIndex       :=fieldbyname('KINDPASSPORT').AsInteger;
+    Edit3.Text                :=fieldbyname('PINCODE').asstring ;
+    Edit5.Text                :=fieldbyname('PASSPER').asstring ;
+    Edit6.Text                :=fieldbyname('PASPNUM').asstring ;
+    DBLookupComboBox5.KeyValue:=fieldbyname('PASPPLACE').AsString;
+    DateEdit.Value            :=fieldbyname('PASPDATE').AsVariant;
+    Edit17.Text               :=fieldbyname('ADRESS').AsString;
+    Edit9.Text                :=fieldbyname('LASTNAME').asstring ;
+    Edit11.Text               :=fieldbyname('FIRSTNAME').asstring ;
+    Edit13.Text               :=fieldbyname('MIDNAME').asstring ;
+    DBLookupComboBox2.KeyValue:=fieldbyname('FILIAL').AsInteger;
+    Edit2.Text                :=fieldbyname('TRANS_REF').AsString;
+    DBLookupComboBox3.KeyValue:=fieldbyname('VAL_COD').AsInteger;
+    CMCurrencyEdit1.Value     :=fieldbyname('AMOUNT').AsVariant;
+    Edit15.Text               :=Mani(CMCurrencyEdit1.Value);
+    CMCurrencyEdit2.Value     :=Repair.CallFloatFunction('Exp_comissionoperation',[ExpTypeDataSet.fieldbyname('id').asinteger,CMCurrencyEdit1.Value]);
+    CMCurrencyEdit3.Value     :=CMCurrencyEdit2.Value+CMCurrencyEdit1.Value;
+
+    (*-------------------------------------------Alan musteri------------------------------*)
+
+    ComboBox2.ItemIndex       :=fieldbyname('BKINDPASSPORT').AsInteger;
+    Edit1.Text                :=fieldbyname('REMIT_INF').asstring;
+    DateTimePicker3.Date      :=fieldbynaME('SENDDATE').AsDateTime;
+    DateTimePicker4.Time      :=StrToTime(FormatDateTime('hh:mm:ss',fieldbyname('SENDDATETIME').AsDateTime));
+    Edit4.Text                :=fieldbynaME('BPINCODE').AsString;
+    Edit7.Text                :=fieldbynaME('BPASSPER').AsString;
+    Edit8.Text                :=fieldbynaME('BPASPNUM').AsString;
+    DBLookupComboBox6.KeyValue:=fieldbyname('BPASPPLACE').AsString;
+    DateEdit1.Value           :=fieldbyname('BPASPDATE').AsVariant;
+    Edit16.Text               :=fieldbyname('BADRESS').AsString;
+    Edit10.Text               :=fieldbynaME('BLASTNAME').AsString;
+    Edit12.Text               :=fieldbynaME('BFIRSTNAME').AsString;
+    Edit14.Text               :=fieldbynaME('BMIDNAME').AsString;
+    DBLookupComboBox4.KeyValue:=fieldbyname('BFILIAL').AsInteger;
+    Memo1.Text                :=fieldbyname('ADD_INF').asstring;
+
+    end; }
+
+end;
+
+procedure TExpress.N10Click(Sender: TObject);
+{ resourcestring
+  rsExpCaption='(Рeдактя)';
+  var status:integer; }
+begin
+  { with ExpDataModule,ExpFormAdd do
+    begin
+
+    ExpFormAdd.Caption:=ExpTypeDataSet.fieldbyname('name').AsString + rsExpCaption;
+    status:=Repair.CallIntegerFunction('Exp_checkstatus',[ExpBatchsDataSet.fieldbyname('id').AsInteger]);
+    if ExpBatchsDataSet.RecordCount=0 then exit;
+    if status=0 then
+    begin
+    FilialDataSet.close;
+    FilialDataSet.SQL.clear;
+    FilialDataSet.SQL.Add('select * from filial');
+    FilialDataSet.Open;
+    Edit;
+    Width:=612;
+    ShowModal;
+    end;
+    end; }
+end;
+
+procedure TExpress.Edit;
+begin
+
+  { with ExpDataModule,ExpBatchsDataSet,ExpFormAdd do
+    begin
+    Panel5.Enabled            :=true;
+    Panel1.Enabled            :=true;
+    Timer1.Enabled            :=true;
+    GroupBox7.Enabled         :=true;
+    GroupBox8.Enabled         :=true;
+    GroupBox9.Enabled         :=true;
+    GroupBox10.Enabled        :=true;
+    GroupBox18.Enabled        :=false;
+    Timer1.Enabled            :=false;
+    DateTimePicker3.Date      :=trunc(StrToDateTime(SysdateDataSet.fieldbyname('dat').AsString));
+    DateTimePicker4.Time      :=Time;
+
+
+    (*--------------------------*Gonderen musteri*--------------------------------------*)
+
+    id                        :=fieldbyname('id').AsInteger;
+    ComboBox1.ItemIndex       :=fieldbyname('KINDPASSPORT').AsInteger;
+    Edit3.Text                :=fieldbyname('PINCODE').asstring ;
+    Edit5.Text                :=fieldbyname('PASSPER').asstring ;
+    Edit6.Text                :=fieldbyname('PASPNUM').asstring ;
+    DBLookupComboBox5.KeyValue:=fieldbyname('PASPPLACE').AsString;
+    DateEdit.Value            :=fieldbyname('PASPDATE').AsVariant;
+    Edit17.Text               :=fieldbyname('ADRESS').AsString;
+    Edit9.Text                :=fieldbyname('LASTNAME').asstring ;
+    Edit11.Text               :=fieldbyname('FIRSTNAME').asstring ;
+    Edit13.Text               :=fieldbyname('MIDNAME').asstring ;
+    DBLookupComboBox2.KeyValue:=fieldbyname('FILIAL').AsInteger;
+    Edit2.Text                :=fieldbyname('TRANS_REF').AsString;
+    DBLookupComboBox3.KeyValue:=fieldbyname('VAL_COD').AsInteger;
+    CMCurrencyEdit1.Value     :=fieldbyname('AMOUNT').AsVariant;
+    Edit15.Text               :=Mani(CMCurrencyEdit1.Value);
+    CMCurrencyEdit2.Value     :=Repair.CallFloatFunction('Exp_comissionoperation',[ExpTypeDataSet.fieldbyname('id').asinteger,CMCurrencyEdit1.Value]);
+    CMCurrencyEdit3.Value     :=CMCurrencyEdit2.Value+CMCurrencyEdit1.Value;
+
+    (*-------------------------------------------Alan musteri------------------------------*)
+
+
+    ComboBox2.ItemIndex       :=fieldbyname('BKINDPASSPORT').AsInteger;
+    Edit1.Text                :=fieldbyname('REMIT_INF').asstring;
+    DateTimePicker3.Date      :=fieldbynaME('SENDDATE').AsDateTime;
+    DateTimePicker4.Time      :=StrToTime(FormatDateTime('hh:mm:ss',fieldbyname('SENDDATETIME').AsDateTime));
+    Edit4.Text                :=fieldbynaME('BPINCODE').AsString;
+    Edit7.Text                :=fieldbynaME('BPASSPER').AsString;
+    Edit8.Text                :=fieldbynaME('BPASPNUM').AsString;
+    DBLookupComboBox6.KeyValue:=fieldbyname('BPASPPLACE').AsString;
+    DateEdit1.Value           :=fieldbyname('BPASPDATE').AsVariant;
+    Edit16.Text               :=fieldbyname('BADRESS').AsString;
+    Edit10.Text               :=fieldbynaME('BLASTNAME').AsString;
+    Edit12.Text               :=fieldbynaME('BFIRSTNAME').AsString;
+    Edit14.Text               :=fieldbynaME('BMIDNAME').AsString;
+    DBLookupComboBox4.KeyValue:=fieldbyname('BFILIAL').AsInteger;
+    Memo1.Text                :=fieldbyname('ADD_INF').asstring;
+
+    end; }
+
+end;
+
+procedure TExpress.N18Click(Sender: TObject);
+resourcestring
+  rsExpCaption = '(Бахмаг)';
+
+begin
+  { with ExpDataModule,ExpFormAdd do
+    begin
+    SB_ACA.CallProcedure('CheckAdvancedObjectAccess',['EXPRESS_LOOK']);
+    ExpFormAdd.Caption:=ExpTypeDataSet.fieldbyname('name').AsString + rsExpCaption;
+    if ExpBatchsDataSet.RecordCount=0 then exit;
+    FilialDataSet.close;
+    FilialDataSet.SQL.clear;
+    FilialDataSet.SQL.Add('select * from filial_t');
+    FilialDataSet.Open;
+    Look;
+    Width:=612;
+    ShowModal;
+    end; }
+
+end;
+
+procedure TExpress.Look;
+begin
+  { with ExpDataModule,ExpBatchsDataSet, ExpFormAdd do
+    begin
+    Panel5.Enabled:=false;
+    Timer1.Enabled:=false;
+    DateTimePicker3.Date:=trunc(StrToDateTime(SysdateDataSet.fieldbyname('dat').AsString));
+    DateTimePicker4.Time:=Time;
+
+
+
+
+    (*--------------------------*Gonderen musteri*--------------------------------------*)
+
+    id                        :=fieldbyname('id').AsInteger;
+    ComboBox1.ItemIndex       :=fieldbyname('KINDPASSPORT').AsInteger;
+    Edit3.Text                :=fieldbyname('PINCODE').asstring ;
+    Edit5.Text                :=fieldbyname('PASSPER').asstring ;
+    Edit6.Text                :=fieldbyname('PASPNUM').asstring ;
+    DBLookupComboBox5.KeyValue:=fieldbyname('PASPPLACE').AsString;
+    DateEdit.Value            :=fieldbyname('PASPDATE').AsVariant;
+    Edit17.Text               :=fieldbyname('ADRESS').AsString;
+    Edit9.Text                :=fieldbyname('LASTNAME').asstring ;
+    Edit11.Text               :=fieldbyname('FIRSTNAME').asstring ;
+    Edit13.Text               :=fieldbyname('MIDNAME').asstring ;
+    DBLookupComboBox2.KeyValue:=fieldbyname('FILIAL').AsInteger;
+    Edit2.Text                :=fieldbyname('TRANS_REF').AsString;
+    DBLookupComboBox3.KeyValue:=fieldbyname('VAL_COD').AsInteger;
+    CMCurrencyEdit1.Value     :=fieldbyname('AMOUNT').AsVariant;
+    Edit15.Text               :=Mani(CMCurrencyEdit1.Value);
+    CMCurrencyEdit2.Value     :=Repair.CallFloatFunction('Exp_comissionoperation',[ExpTypeDataSet.fieldbyname('id').asinteger,CMCurrencyEdit1.Value]);
+    CMCurrencyEdit3.Value     :=CMCurrencyEdit2.Value+CMCurrencyEdit1.Value;
+
+    (*-------------------------------------------Alan musteri------------------------------*)
+
+    ComboBox2.ItemIndex       :=fieldbyname('BKINDPASSPORT').AsInteger;
+    Edit1.Text                :=fieldbyname('REMIT_INF').asstring;
+    DateTimePicker3.Date      :=fieldbynaME('SENDDATE').AsDateTime;
+    DateTimePicker4.Time      :=StrToTime(FormatDateTime('hh:mm:ss',fieldbyname('SENDDATETIME').AsDateTime));
+    Edit4.Text                :=fieldbynaME('BPINCODE').AsString;
+    Edit7.Text                :=fieldbynaME('BPASSPER').AsString;
+    Edit8.Text                :=fieldbynaME('BPASPNUM').AsString;
+    DBLookupComboBox6.KeyValue:=fieldbyname('BPASPPLACE').AsString;
+    DateEdit1.Value           :=fieldbyname('BPASPDATE').AsVariant;
+    Edit16.Text               :=fieldbyname('BADRESS').AsString;
+    Edit10.Text               :=fieldbynaME('BLASTNAME').AsString;
+    Edit12.Text               :=fieldbynaME('BFIRSTNAME').AsString;
+    Edit14.Text               :=fieldbynaME('BMIDNAME').AsString;
+    DBLookupComboBox4.KeyValue:=fieldbyname('BFILIAL').AsInteger;
+    Memo1.Text                :=fieldbyname('ADD_INF').asstring;
+
+    end; }
+end;
+
+procedure TExpress.MdaxilMxaric1Click(Sender: TObject);
+var
+  optype: Integer;
+  s: string;
+  Vo:string;
+begin
+  ExpFormNew.FiledBatchs := true;
+  ExpFormNew.FiledIncoming := False;
+  ExpFormNew.FieldBatchsArchive := False;
+  ExpFormNew.FiledIncomingArchive := False;
+
+  optype := ExpDataModule.ExpBatchsDataSet.fieldbyname('optype').AsInteger;
+  s := ExpDataModule.ExpBatchsDataSet.fieldbyname('kliid').AsString;
+  CreditReport.QRLabel22.Caption := ExpDataModule.ExpBatchsDataSetFILIALNAME.AsString;
+  CreditReport.QRLabel45.Caption := ExpDataModule.ExpBatchsDataSetSENDDATE.AsString;
+  CreditReport.QRLabel46.Caption := TimeToStr(ExpDataModule.ExpBatchsDataSetSENDDATETIME.AsDateTime);
+  CreditReport.QRLabel35.Caption := ExpDataModule.ExpBatchsDataSetFILIALNAME.AsString;
+  CreditReport.QRLabel21.Caption := ExpDataModule.ExpBatchsDataSetSENDDATE.AsString;
+  CreditReport.QRLabel34.Caption := TimeToStr(ExpDataModule.ExpBatchsDataSetSENDDATETIME.AsDateTime);
+  CreditReport.QRLabel48.Caption := ExpDataModule.BankInfoDataSet.fieldbyname('inn').AsString;
+  CreditReport.QRLabel50.Caption := ExpDataModule.BankInfoDataSet.fieldbyname('inn').AsString;
+  CreditReport.QRLabel51.Caption := ExpDataModule.BankInfoDataSet.fieldbyname('adress').AsString;
+  CreditReport.QRLabel52.Caption := ExpDataModule.BankInfoDataSet.fieldbyname('adress').AsString;
+
+  IF optype = 4 THEN
+  BEGIN
+    with ExpDataModule do
+    begin
+      SendDataSet.close;
+      SendDataSet.SQL[1] := '';
+      SendDataSet.SQL[1] := 'where id= ' + s;
+      SendDataSet.open;
+      AccDataSet.close;
+      AccDataSet.SetVariable('id', ExpBatchsDataSetKREDITACCID.AsInteger);
+      AccDataSet.open;
+      { Exp_avalute.Close;
+        Exp_avalute.Filtered:=False;
+        Exp_avalute.filter:='valute='+ExpBatchsDataSetVAL_COD.AsString;
+        Exp_avalute.Filtered:=True;
+        Exp_avalute.Open; }
+      if SendDataSet.fieldbyname('inn').AsString='' then  Vo:='' else Vo:=',VÖEN'+SendDataSet.fieldbyname('inn').AsString;
+
+      CreditReport.QRLabel2.Caption := ExpBatchsDataSet.fieldbyname('sentname').AsString + #13#10 + SendDataSet.fieldbyname('passer').AsString +
+        SendDataSet.fieldbyname('paspnum').AsString + ',' +
+        SendDataSet.fieldbyname('paspdate').AsString + ',' +
+        SendDataSet.fieldbyname('paspplace').AsString+Vo;
+      CreditReport.QRLabel4.Caption := ExpBatchsDataSetSENTTONAME.AsString;
+      CreditReport.QRLabel6.Caption := ExpBatchsDataSetBFILIALNAME.AsString;
+      CreditReport.QRLabel10.Caption := ExpBatchsDataSetAMOUNT.AsString + '.00'
+        + ' ' + ExpBatchsDataSetVALNAME.AsString;
+      CreditReport.QRLabel11.Caption :=
+        AccDataSet.fieldbyname('acc_no').AsString;
+      CreditReport.QRLabel13.Caption :=
+        ExpFormNew.Mani(ExpBatchsDataSetAMOUNT.AsFloat,ExpBatchsDataSetVAL_COD.AsInteger);
+      CreditReport.QRLabel15.Caption := ExpBatchsDataSetREMIT_INF.AsString;
+
+      CreditReport.QRLabel24.Caption := ExpBatchsDataSet.fieldbyname('sentname')
+        .AsString + #13#10 + SendDataSet.fieldbyname('passer').AsString +
+        SendDataSet.fieldbyname('paspnum').AsString + ',' +
+        SendDataSet.fieldbyname('paspdate').AsString + ',' +
+        SendDataSet.fieldbyname('paspplace').AsString;
+      CreditReport.QRLabel26.Caption := ExpBatchsDataSetSENTTONAME.AsString;
+      CreditReport.QRLabel37.Caption := ExpBatchsDataSetBFILIALNAME.AsString;
+      CreditReport.QRLabel39.Caption := ExpBatchsDataSetAMOUNT.AsString + '.00'
+        + ' ' + ExpBatchsDataSetVALNAME.AsString;
+      CreditReport.QRLabel29.Caption :=
+        AccDataSet.fieldbyname('acc_no').AsString;
+      CreditReport.QRLabel41.Caption :=
+        ExpFormNew.Mani(ExpBatchsDataSetAMOUNT.AsFloat,ExpBatchsDataSetVAL_COD.AsInteger);
+      CreditReport.QRLabel43.Caption := ExpBatchsDataSetREMIT_INF.AsString;
+
+      CreditReport.Preview
+    end;
+  END
+  ELSE
+    exit;
+end;
+
+procedure TExpress.mumisazlama1Click(Sender: TObject);
+begin
+  with ExpDataModule, ExpBatchsDataSet do
+  begin
+    if UpperCase(Session.LogonUsername) = 'SMART' then
+      ExpAllParametr.ShowModal
+    else
+      MessageDlg('Bu bölməyə giriş qadğandır.! Administratora müraciət edin.!',
+        mtWarning, [mbOk], 0);
+  end;
+
+end;
+
+procedure TExpress.N19Click(Sender: TObject);
+begin
+  if not Assigned(AdminForm) then
+    AdminForm := TAdminForm.Create(Application);
+
+  with ExpDataModule, ExpBatchsDataSet do
+  begin
+    if UpperCase(Session.LogonUsername) = 'SMART' then
+      AdminForm.ShowModal
+    else
+      MessageDlg('Bu bölməyə giriş qadğandır.! Administratora müraciət edin',
+        mtWarning, [mbOk], 0);
+  end;
+  { begin
+    if not Assigned(AdminForm) then
+    AdminForm:=TAdminForm.Create(Application);
+    end; }
+
+end;
+
+procedure TExpress.XDBGrid1TitleClick(Column: TXColumn);
+begin
+  IF Column.FieldName = '' THEN
+    exit;
+  with ExpDataModule, ExpBatchsDataSet do
+  begin
+    close;
+    if Column.Title.MarkerIndex = 2 then
+      SetVariable('title', Column.FieldName + ' ' + 'ASC')
+    else
+      SetVariable('title', Column.FieldName + ' ' + 'DESC');
+    open;
+  end;
+end;
+
+procedure TExpress.XDBGrid2DblClick(Sender: TObject);
+begin
+  ActionEditIn.Execute
+end;
+
+procedure TExpress.XDBGrid2TitleClick(Column: TXColumn);
+begin
+  IF Column.FieldName = '' THEN
+    exit;
+  with ExpDataModule, ExpIncomingDataSet do
+  begin
+    close;
+    if Column.Title.MarkerIndex = 2 then
+      SetVariable('title', Column.FieldName + ' ' + 'ASC')
+    else
+      SetVariable('title', Column.FieldName + ' ' + 'DESC');
+    open;
+  end;
+end;
+
+procedure TExpress.XDBGrid3DblClick(Sender: TObject);
+begin
+  ActionEditOut.Execute
+end;
+
+procedure TExpress.XDBGrid3TitleClick(Column: TXColumn);
+begin
+  IF Column.FieldName = '' THEN
+    exit;
+  with ExpDataModule, ExpBatchsArchiveDataSet do
+  begin
+    close;
+    if Column.Title.MarkerIndex = 2 then
+      SetVariable('title', Column.FieldName + ' ' + 'ASC')
+    else
+      SetVariable('title', Column.FieldName + ' ' + 'DESC');
+    open;
+  end;
+end;
+
+procedure TExpress.XDBGrid4DblClick(Sender: TObject);
+begin
+  // ActionEditIn.Execute;
+end;
+
+procedure TExpress.XDBGrid4TitleClick(Column: TXColumn);
+begin
+  IF Column.FieldName = '' THEN
+    exit;
+  with ExpDataModule, ExpIncomingarchiveDataSet do
+  begin
+    close;
+    if Column.Title.MarkerIndex = 2 then
+      SetVariable('title', Column.FieldName + ' ' + 'ASC')
+    else
+      SetVariable('title', Column.FieldName + ' ' + 'DESC');
+    open;
+  end;
+end;
+
+initialization
+
+TActiveFormFactory.Create(ComServer, TActiveFormControl, TExpress,
+  Class_Express, 1, '', OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+  tmApartment);
+
+end.

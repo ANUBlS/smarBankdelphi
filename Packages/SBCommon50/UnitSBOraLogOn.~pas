@@ -1,0 +1,140 @@
+unit UnitSBOraLogOn;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, Buttons, Oracle, ExtCtrls, HintBox, Registry;
+
+
+type
+  TCheckDataErr = class(Exception);
+
+  TfmOraSBLogOn = class(TForm)
+    GroupBox1: TGroupBox;
+    btOk: TBitBtn;
+    btCancel: TBitBtn;
+    edUserName: TEdit;
+    edPassword: TEdit;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    cbDatabase: TComboBox;
+    hbError: THintBox;
+    procedure btOkClick(Sender: TObject);
+    function  CheckData(value : String):boolean;
+    function  CheckControls():boolean;
+    procedure btCancelClick(Sender: TObject);
+    procedure GetTNSNames;
+    procedure FormCreate(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    LogonUsername : String;
+    LogonPassword : String;
+    LogonDatabase : String;
+    { Public declarations }
+  end;
+
+var
+  fmOraSBLogOn: TfmOraSBLogOn;
+
+implementation
+
+{$R *.DFM}
+
+
+procedure TfmOraSBLogOn.GetTNSNames;
+var
+  i,k: integer;
+  n:Pchar;
+  Mem : TStringList;
+
+    procedure GetTNSFile;
+     const
+       Cval = '\NETWORK\ADMIN\tnsnames.ora';
+    var
+      Reg : TRegistry;
+      Value : String;
+    begin
+      reg := TRegistry.Create;
+      with reg do
+        begin
+          RootKey := HKEY_LOCAL_MACHINE;
+          OpenKey('SOFTWARE\ORACLE\KEY_OraDb10g_home1',False);
+          value := ReadString('ORACLE_HOME');
+          if FileExists(value+cval) then
+          Mem.LoadFromFile(value+cval)// Add(value+cval)
+        else
+          ShowMessage('File Not Exist!');
+        end;
+    end;
+
+begin
+ mem :=  TStringList.Create;
+ GetTNSFile;
+
+  with Mem do
+    begin
+     for i:=0 to  Count-1 do
+        begin
+          n:= PChar(mem[i]);
+          if (n[0] <> '#') and (n[0]<>'') and (n[0]<>' ') then
+           begin
+             k:= Pos('=',mem[i]);
+             cbDatabase.items.add(copy(mem[i],0,k-2));
+           end;
+        end;
+    end;
+
+end;
+
+
+function TfmOraSBLogOn.CheckData(value : String):boolean;
+begin
+  result := value = '';
+end;
+
+
+function TfmOraSBLogOn.CheckControls():boolean;
+begin
+  result := false;
+  try
+   if CheckData( edUserName.Text ) then raise TCheckDataErr.Create('Истифадячини дцзэцн дейил!');
+   if CheckData( edPassword.Text ) then raise TCheckDataErr.Create('Шифряни дцзэцн дейил!');
+   if CheckData( cbDatabase.Text ) then raise TCheckDataErr.Create('Датабасе дцзэцн дейил');
+   result := true;
+  except
+   on E:TCheckDataErr do
+      hbError.ShowMessage(E.Message);
+  end;
+end;
+
+procedure TfmOraSBLogOn.btOkClick(Sender: TObject);
+begin
+  if not CheckControls() then Exit;
+  LogonUsername := edUserName.Text;
+  LogonPassword := edPassword.Text;
+  LogonDatabase := cbDatabase.Text;
+  ModalResult := mrOk;
+end;
+
+procedure TfmOraSBLogOn.btCancelClick(Sender: TObject);
+begin
+  ModalResult := mrCancel;
+end;
+
+procedure TfmOraSBLogOn.FormCreate(Sender: TObject);
+begin
+  GetTNSNames();
+end;
+
+procedure TfmOraSBLogOn.FormShow(Sender: TObject);
+begin
+ edUserName.Text := LogonUsername ;
+ edPassword.Text := LogonPassword ;
+ cbDatabase.Text := LogonDatabase ;
+end;
+
+end.

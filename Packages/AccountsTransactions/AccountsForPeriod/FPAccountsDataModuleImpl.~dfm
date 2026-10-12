@@ -1,0 +1,186 @@
+object FPADataMod: TFPADataMod
+  OldCreateOrder = False
+  Left = 192
+  Top = 107
+  Height = 480
+  Width = 696
+  object DataSrcAccounts: TDataSource
+    DataSet = AccountsData
+    Left = 144
+    Top = 160
+  end
+  object AccountsData: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      
+        '   cs.name as adi,ci.birthday as dogum,ci.passer||ci.paspnum as ' +
+        'sexsiyyetid,decode(cs.nerezident,'#39'0'#39','#39'norezident'#39','#39'1'#39','#39'rezident'#39 +
+        ',cs.nerezident) as rez,ci.phone_m as phone,'
+      
+        '  av.val_name as AccCurrency ,ac.acc_no as AccNo ,ci.address as ' +
+        'adress,'
+      '  ac.name as AccName ,'
+      '  ac.Open_Dat as OpenDate ,'
+      '  ac.Close_Dat as CloseDate ,'
+      '  ac.bal_cn1 as BalanceNo ,'
+      '  cs.inn as TaxID ,'
+      '  sbsec.getusername(ac.OP_ID) as OperatorID'
+      'from'
+      ' account ac ,'
+      ' avalute av ,'
+      ' customers cs,custinfo ci'
+      'where'
+      '  ac.val_acc = av.valute and'
+      '  ac.kli_id = cs.id and ci.idcust=cs.id  and'
+      '  ac.Filial =%d and    /*16*/'
+      '  ac.Bal_cn1 in (%s) and   /*17*/'
+      '  ac.OP_ID = %d and /*18*/'
+      '  ac.Open_Dat between :FirstDate and :LastDate'
+      ''
+      ''
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' ')
+    Variables.Data = {
+      03000000020000000A0000003A4649525354444154450C000000000000000000
+      0000090000003A4C415354444154450C0000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      040000000E0000000300000041444901000000000005000000444F47554D0100
+      000000000B00000053455853495959455449440100000000000300000052455A
+      0100000000000500000050484F4E450100000000000B00000041434343555252
+      454E4359010000000000050000004143434E4F01000000000006000000414452
+      455353010000000000070000004143434E414D45010000000000080000004F50
+      454E4441544501000000000009000000434C4F53454441544501000000000009
+      00000042414C414E43454E4F0100000000000500000054415849440100000000
+      000A0000004F50455241544F524944010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 144
+    Top = 208
+    object AccountsDataADI: TStringField
+      DisplayLabel = 'Adi'
+      DisplayWidth = 80
+      FieldName = 'ADI'
+      Size = 90
+    end
+    object AccountsDataDOGUM: TDateTimeField
+      DisplayLabel = 'Dogum Tarixi'
+      FieldName = 'DOGUM'
+    end
+    object AccountsDataSEXSIYYETID: TStringField
+      DisplayLabel = 'Shexsiyyet vesiqesi ID'
+      DisplayWidth = 25
+      FieldName = 'SEXSIYYETID'
+      Size = 60
+    end
+    object AccountsDataREZ: TStringField
+      DisplayLabel = 'Rezident'
+      DisplayWidth = 25
+      FieldName = 'REZ'
+      Size = 40
+    end
+    object AccountsDataPHONE: TStringField
+      DisplayLabel = 'Telefon'
+      FieldName = 'PHONE'
+      Size = 30
+    end
+    object AccountsDataACCCURRENCY: TStringField
+      DisplayLabel = '$'
+      FieldName = 'ACCCURRENCY'
+      Size = 10
+    end
+    object AccountsDataACCNO: TStringField
+      DisplayLabel = 'Щесабын №'
+      FieldName = 'ACCNO'
+    end
+    object AccountsDataADRESS: TStringField
+      DisplayLabel = 'Adress'
+      FieldName = 'ADRESS'
+      Size = 100
+    end
+    object AccountsDataBALANCENO: TFloatField
+      DisplayLabel = 'Баланс щесабы'
+      FieldName = 'BALANCENO'
+    end
+    object AccountsDataACCNAME: TStringField
+      DisplayLabel = 'Щесабын ады'
+      FieldName = 'ACCNAME'
+      Size = 90
+    end
+    object AccountsDataOPENDATE: TDateTimeField
+      DisplayLabel = 'Ачылма тарихи'
+      FieldName = 'OPENDATE'
+    end
+    object AccountsDataCLOSEDATE: TDateTimeField
+      DisplayLabel = 'Баьланма тарихи'
+      FieldName = 'CLOSEDATE'
+    end
+    object AccountsDataOPERATORID: TStringField
+      DisplayLabel = 'Истифадячи'
+      DisplayWidth = 40
+      FieldName = 'OPERATORID'
+      Size = 4000
+    end
+    object AccountsDataTAXID: TStringField
+      DisplayLabel = 'ВЮЕН'
+      FieldName = 'TAXID'
+      Size = 10
+    end
+  end
+  object Branches: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      ' *'
+      'from filial')
+    Session = sboapiDataModule.SBSession
+    Left = 264
+    Top = 152
+    object BranchesID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object BranchesNAME: TStringField
+      FieldName = 'NAME'
+      Size = 90
+    end
+  end
+  object DataSrcBranches: TDataSource
+    DataSet = Branches
+    Left = 264
+    Top = 200
+  end
+  object SYSDAT: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      '  TEK_DAT'
+      'from  SYSDAT  ')
+    Session = sboapiDataModule.SBSession
+    Left = 192
+    Top = 56
+    object SYSDATTEK_DAT: TDateTimeField
+      FieldName = 'TEK_DAT'
+      Required = True
+    end
+  end
+  object SysUsers: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      '  ID ,'
+      '  NAME'
+      'from'
+      '  USER$  ')
+    Session = sboapiDataModule.SBSession
+    Left = 56
+    Top = 72
+  end
+  object DataSrcSysUsers: TDataSource
+    DataSet = SysUsers
+    Left = 56
+    Top = 128
+  end
+end

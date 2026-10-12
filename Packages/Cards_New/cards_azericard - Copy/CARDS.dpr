@@ -1,0 +1,72 @@
+
+
+library CARDS;
+
+uses
+  ComServ,
+  CARDS_TLB in 'CARDS_TLB.pas',
+  MAINFORMImpl1 in 'MAINFORMImpl1.pas' {MAINFORM: TActiveForm} {MAINFORM: CoClass},
+  Unit18 in 'Unit18.pas' {DataMod_CARDS: TDataModule},
+  balans in 'balans.pas' {Balance},
+  customers in 'customers.pas' {clients},
+  payment in 'payment.pas' {Payments},
+  newcard in 'newcard.pas' {Customer_new},
+  cfilepas in 'cfilepas.pas' {cfile},
+  applicationpas in 'applicationpas.pas' {Applications},
+  creditinfopas in 'creditinfopas.pas' {krinfo},
+  dpforms in 'dpforms.pas' {dpinfo},
+  rezform in 'rezform.pas' {Hesabatlar},
+  U9 in 'U9.pas' {Form9},
+  setac in 'setac.pas' {Form10},
+  balhs in 'balhs.pas' {Form11},
+  comp in 'comp.pas' {Form13},
+  crdtype in 'crdtype.pas' {Form14},
+  banksettings in 'banksettings.pas' {Bank_Settings},
+  filialaccounts in 'filialaccounts.pas' {Filial_Accounts},
+  datclose in 'datclose.pas' {dateclose},
+  domesticbank in 'domesticbank.pas' {domestic_bank},
+  atmendpos in 'atmendpos.pas' {atmpos},
+  poscomission in 'poscomission.pas' {POS_COMMISION},
+  sms in 'sms.pas' {smsfile},
+  Unitintfile in 'Unitintfile.pas' {intfile},
+  UnitDxxx in 'UnitDxxx.pas' {Dxxx},
+  UnitRvisa in 'UnitRvisa.pas' {rvisa},
+  Unit155 in 'Unit155.pas' {PROVS},
+  dilingUnit in 'dilingUnit.pas' {Dilinq_form},
+  klirinqUnit in 'klirinqUnit.pas' {Klirinq_form},
+  UnitDfile in 'UnitDfile.pas' {Dfile},
+  Unitclient2 in 'Unitclient2.pas' {clients2},
+  Unitexcel in 'Unitexcel.pas' {EXCELform},
+  Unitsalary in 'Unitsalary.pas' {Salary},
+  Unitcardarxiv in 'Unitcardarxiv.pas' {cardarxiv},
+  closecardunit in 'closecardunit.pas' {closecards},
+  opencardunit in 'opencardunit.pas' {opencards},
+  cardnumbersource in 'cardnumbersource.pas' {CARDNUMBER},
+  EXCELNEWCARD in 'EXCELNEWCARD.pas' {NEWCARDEX},
+  PROLONGATIONUNIT in 'PROLONGATIONUNIT.pas' {PROLONGATIONXLS},
+  unitverification in 'unitverification.pas' {verification},
+  accountcloseunit in 'accountcloseunit.pas' {accountclose},
+  limittur in 'limittur.pas' {lim},
+  PostCommisionOnusImpl in 'PostCommisionOnusImpl.pas' {PostCommisionOnus},
+  onlinec in 'onlinec.pas' {Online},
+  cardbranch in 'cardbranch.pas' {card_branch},
+  card_ufx in 'card_ufx.pas' {UFXFORM},
+  arxivufx in 'arxivufx.pas' {UFX_ARXIV},
+  paymentsett in 'paymentsett.pas' {Paymentset},
+  multiform in 'multiform.pas' {MultiCurrency},
+  cfile_addi in 'cfile_addi.pas' {Additional_cfile};
+
+{$E ocx}
+
+exports
+  DllGetClassObject,
+  DllCanUnloadNow,
+  DllRegisterServer,
+  DllUnregisterServer;
+
+{$R *.TLB}
+
+{$R *.RES}
+
+begin
+end.

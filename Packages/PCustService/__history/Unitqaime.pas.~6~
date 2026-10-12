@@ -1,0 +1,75 @@
+unit Unitqaime;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, DB, OracleData, Grids, XDBGrids, ExtCtrls, StdCtrls;
+
+type
+  TFormQaime = class(TForm)
+    Panel1: TPanel;
+    XDBGrid1: TXDBGrid;
+    OracleDataSet4: TOracleDataSet;
+    DataSource4: TDataSource;
+    OracleDataSet4INV_NUM: TWideStringField;
+    OracleDataSet4INV_DATE: TDateTimeField;
+    OracleDataSet4TRANS_ID: TFloatField;
+    OracleDataSet4TRANS_DATE: TDateTimeField;
+    OracleDataSet4PAR1: TWideStringField;
+    OracleDataSet4PAR2: TWideStringField;
+    OracleDataSet4PAR3: TWideStringField;
+    OracleDataSet4PAR4: TWideStringField;
+    OracleDataSet4PAR5: TWideStringField;
+    OracleDataSet4PAR6: TWideStringField;
+    OracleDataSet4PAR12: TFloatField;
+    OracleDataSet4TARIF: TWideStringField;
+    OracleDataSet4PAR11: TFloatField;
+    OracleDataSet4PAR13: TFloatField;
+    Button1: TButton;
+    OracleDataSet4PAR7: TWideStringField;
+    OracleDataSet4PAR8: TWideStringField;
+    procedure FormShow(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormQaime: TFormQaime;
+
+implementation
+
+uses UnitDataModPCustService, UnitInvoceRep;
+
+{$R *.dfm}
+
+procedure TFormQaime.Button1Click(Sender: TObject);
+begin
+with QRptInvoceRep do
+begin
+  Preview;
+end;
+end;
+
+procedure TFormQaime.FormCreate(Sender: TObject);
+begin
+QRptInvoceRep:=TQRptInvoceRep.Create(self);
+end;
+
+procedure TFormQaime.FormShow(Sender: TObject);
+begin
+ with DataModPCustService, ODS_CUSTOMERS_PHYS_FS do
+  begin
+
+
+     oracledataset4.Close;
+     oracledataset4.SetVariable('v_kliid', FieldByName('id').AsInteger);
+     oracledataset4.Open;
+  end;
+end;
+
+end.

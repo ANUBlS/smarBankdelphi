@@ -1,0 +1,1 @@
+-+D:\Smart-Bank\Source\Packages\Cr_Credit\CR_DailyReport\DailyImpl.obj -+c:\program files\embarcadero\rad studio\8.0\lib\Win32\release\SysInit.obj 

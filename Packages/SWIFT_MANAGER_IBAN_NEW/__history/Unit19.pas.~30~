@@ -1,0 +1,519 @@
+﻿unit Unit19;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls,OracleData, Forms, Dialogs,
+  StdCtrls, Grids, DBGrids, ComCtrls, ImgList, SearchEdit, qrp1, ExtCtrls,
+  DBCtrls;
+
+type
+  Tinarchiv = class(TForm)
+    DateTimePicker1: TDateTimePicker;
+    DateTimePicker2: TDateTimePicker;
+    Gridin: TDBGrid;
+    Button2: TButton;
+    Button1: TButton;
+    swImageList2: TImageList;
+    Panel1: TPanel;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label5: TLabel;
+    Panel2: TPanel;
+    Label4: TLabel;
+    SearchEdit1: TSearchEdit;
+    SearchEdit2: TSearchEdit;
+    SearchEdit3: TSearchEdit;
+    SearchEdit4: TSearchEdit;
+    SearchEdit5: TSearchEdit;
+    ComboBox1: TComboBox;
+    procedure Button2Click(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
+    procedure GridinDrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TColumn; State: TGridDrawState);
+    procedure GridinTitleClick(Column: TColumn);
+    procedure Button1Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure SearchEdit1Change(Sender: TObject);
+    procedure SearchEdit1KeyPress(Sender: TObject; var Key: Char);
+    procedure SearchEdit2Change(Sender: TObject);
+    procedure SearchEdit2KeyPress(Sender: TObject; var Key: Char);
+    procedure SearchEdit3Change(Sender: TObject);
+    procedure SearchEdit3KeyPress(Sender: TObject; var Key: Char);
+    procedure SearchEdit4Change(Sender: TObject);
+    procedure SearchEdit4KeyPress(Sender: TObject; var Key: Char);
+    procedure SearchEdit5Change(Sender: TObject);
+    procedure SearchEdit5KeyPress(Sender: TObject; var Key: Char);
+    procedure ComboBox1Change(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  inarchiv: Tinarchiv;
+  SearchOptions : TSearchRecordOptions;
+  SearchField : string;
+
+
+implementation
+
+uses Unit2, cap, SWIFT_MAINImpl1,SBTranslateProc,sboapiDataModuleimpl;
+
+{$R *.DFM}
+
+  const
+  Notcreate =1;
+  Created =2;
+  Commited =5;
+  Problemed =8;
+  Problemed2 =7;
+  new=10;
+  edits=11;
+
+procedure Tinarchiv.Button2Click(Sender: TObject);
+ var
+
+dat11:Tdatetime;
+dat22:Tdatetime;
+fil : integer;
+
+begin
+
+  SWDataModule.ARXIVIN.close;
+ dat11:=integer(trunc(DateTimePicker1.datetime));
+ dat22:=integer(trunc(DateTimePicker2.datetime));
+ SWDataModule.ARXIVIN.SetVariable('dat1', dat11);
+ SWDataModule.ARXIVIN.SetVariable('dat2' , dat22);
+
+
+  if swdatamodule.userfil.FieldByName('filialid').AsInteger<>0 then   begin
+     SWDataModule.ARXIVIN.SQL[10]:='and branch  = (SELECT filialid FROM sba_objinf WHERE obj = (SELECT USER FROM DUAL))';
+     SWDataModule.ARXIVIN.open;
+  end  else
+   begin
+
+
+    fil:= SWDataModule.SB_ACA.CallIntegerFunction('checkadvancedobjectaccess_func', ['SW_IN_FIL']) ;
+
+     if fil=1 then begin
+    //showmessage('ddoo');
+    SWDataModule.ARXIVIN.open;
+   // SHOWMESSAGE(SWDataModule.ARXIVIN.SQL.Text);
+           end else  begin
+
+              //ShowMessage('HH');
+              SWDataModule.ARXIVIN.SQL[10]:='and branch  = (SELECT filialid FROM sba_objinf WHERE obj = (SELECT USER FROM DUAL))';
+              SWDataModule.ARXIVIN.open;
+              end;
+  end;
+
+
+                   //SWDataModule.ARXIVIN.open;
+//SWDataModule.sw_in_archive.SetVariable(':dat1',DateTimePicker1.DateTime);
+//SWDataModule.sw_in_archive.SetVariable(':dat2',DateTimePicker2.DateTime);
+//SWDataModule.sw_in_archive.close;
+//SWDataModule.sw_in_archive.open;
+end;
+
+procedure Tinarchiv.ComboBox1Change(Sender: TObject);
+ var
+
+dat11:Tdatetime;
+dat22:Tdatetime;
+begin
+
+  SWDataModule.ARXIVIN.close;
+        if combobox1.ItemIndex=0 then
+         SWDataModule.ARXIVIN.sql[6]:='and mt<>'+  ''' '''
+
+    else
+    SWDataModule.ARXIVIN.sql[6]:='and mt='+ ''''+combobox1.Text+'''';
+
+ SWDataModule.ARXIVIN.open;
+
+
+SWDataModule.ARXIVIN.Refresh;
+end;
+
+procedure Tinarchiv.FormActivate(Sender: TObject);
+
+ var
+
+dat11:Tdatetime;
+dat22:Tdatetime;
+fil :integer;
+
+begin
+     //OracleDataSet1.Session:=sboapidatamodule.sbsession;
+//
+DateTimePicker1.DateTime:=date;
+DateTimePicker2.DateTime:=date;
+  SWDataModule.ARXIVIN.close;
+ dat11:=integer(trunc(DateTimePicker1.datetime));
+ dat22:=integer(trunc(DateTimePicker2.datetime));
+ SWDataModule.ARXIVIN.SetVariable('dat1', dat11);
+ SWDataModule.ARXIVIN.SetVariable('dat2' , dat22);
+  SWDataModule.ARXIVIN.SetVariable('title' , 'id');
+
+
+
+  if swdatamodule.userfil.FieldByName('filialid').AsInteger<>0 then   begin
+     SWDataModule.ARXIVIN.SQL[10]:='and branch  = (SELECT filialid FROM sba_objinf WHERE obj = (SELECT USER FROM DUAL))';
+     SWDataModule.ARXIVIN.open;
+  end  else
+   begin
+    begin
+
+
+    fil:= SWDataModule.SB_ACA.CallIntegerFunction('checkadvancedobjectaccess_func', ['SW_IN_FIL']) ;
+
+     if fil=1 then begin
+    //showmessage('ddoo');
+    SWDataModule.ARXIVIN.open;
+   // SHOWMESSAGE(SWDataModule.ARXIVIN.SQL.Text);
+           end else  begin
+
+              //ShowMessage('HH');
+              SWDataModule.ARXIVIN.SQL[10]:='and branch  = (SELECT filialid FROM sba_objinf WHERE obj = (SELECT USER FROM DUAL))';
+              SWDataModule.ARXIVIN.open;
+              end;
+              end;
+  end;
+
+
+// SWDataModule.ARXIVIN.open;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//SWDataModule.sw_in_archive.SetVariable(':dat1',DateTimePicker1.DateTime);
+//SWDataModule.sw_in_archive.SetVariable(':dat2',DateTimePicker2.DateTime);
+//SWDataModule.sw_in_archive.close;
+//SWDataModule.sw_in_archive.open;
+end;
+
+procedure Tinarchiv.FormCreate(Sender: TObject);
+begin
+SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure Tinarchiv.GridinDrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TColumn;
+  State: TGridDrawState);
+var
+  ImageIndex: Integer;
+
+begin
+//SWDataModule.SB_ACA.CallProcedure('CheckAdvancedObjectAccess', ['SW_OUT_CREATEDVIEW']);
+ ImageIndex := -1;
+  with Sender as TDBGrid do
+  begin
+    if DataSource.DataSet.RecordCount <> 0 then
+    begin
+      case DataSource.DataSet.FieldByName('STATUS').AsInteger of
+      notcreate :
+        ImageIndex := 10;
+      created :
+        ImageIndex := 4;
+      commited :
+        ImageIndex := 5;
+      Problemed:
+        ImageIndex :=16;
+       11:
+       ImageIndex :=42;
+       12:
+        ImageIndex :=43;
+        10:
+        ImageIndex:= 44;
+      else
+      end;
+      if (DataCol = 1) and (ImageIndex <> -1) then
+        swImageList2.Draw(Canvas, Rect.Left, Rect.Top, ImageIndex, True)
+      else
+        DefaultDrawColumnCell(Rect, DataCol, Column, State);
+    end;
+  end;
+    end;
+procedure Tinarchiv.GridinTitleClick(Column: TColumn);
+var
+   TitleName :string;
+   SortPosition: word;
+begin
+ if Column.Field.Calculated then Exit;
+  Screen.Cursor := crSQLWait;
+  TitleName :=Column.FieldName;
+  try
+   with SWDataModule.ARXIVIN do
+    begin
+     SetVariable('Title',TitleName);
+     Refresh;
+     open;
+    end;
+  finally
+   Screen.Cursor := crDefault;
+  end;
+  end;
+
+
+procedure Tinarchiv.SearchEdit1Change(Sender: TObject);
+begin
+{ with SWDataModule.ARXIVIN do begin
+  Filter := 'id = '''+SearchEdit1.Text+('*')+'''';
+end;   }
+
+end;
+
+procedure Tinarchiv.SearchEdit1KeyPress(Sender: TObject; var Key: Char);
+begin
+
+  if Key = #13  then
+ begin
+  SearchOptions := [srIgnoreCase ,srPartialMatch ];
+
+  with Sender as TEdit  do
+  begin
+    SearchField :='ID';
+
+
+    with  TOracleDataSet(SWDataModule.ARXIVIN) do
+    if  not SearchRecord(
+                  SearchField
+                 ,Text
+                 ,SearchOptions + [srFromCurrent , srForward ]
+                 ) then
+
+    if MessageDlg(
+              'Axtarış sona çatdı.'+#13+'Əvvəldən başlansın?'
+             ,mtInformation
+             ,[mbNo , mbYes]
+             ,0
+             ) = mrYes  then
+
+    if not SearchRecord(
+                 SearchField
+                ,Text
+                ,SearchOptions + [ srFromBeginning ]
+                )  then
+    MessageDlg('Yazı tapılmadı!',mtInformation,[mbOK],0);
+  end;
+ end;
+
+
+end;
+
+procedure Tinarchiv.SearchEdit2Change(Sender: TObject);
+begin
+{with SWDataModule.ARXIVIN do begin
+  Filter := 'referance = '''+SearchEdit2.Text+('*')+'''';
+end; }
+
+end;
+
+procedure Tinarchiv.SearchEdit2KeyPress(Sender: TObject; var Key: Char);
+begin
+  if Key = #13  then
+ begin
+  SearchOptions := [srIgnoreCase ,srPartialMatch ];
+
+  with Sender as TEdit  do
+  begin
+    SearchField :='referance';
+
+
+    with  TOracleDataSet(SWDataModule.ARXIVIN) do
+    if  not SearchRecord(
+                  SearchField
+                 ,Text
+                 ,SearchOptions + [srFromCurrent , srForward ]
+                 ) then
+
+    if MessageDlg(
+              'Axtarış sona çatdı.'+#13+'Əvvəldən başlansın?'
+             ,mtInformation
+             ,[mbNo , mbYes]
+             ,0
+             ) = mrYes  then
+
+    if not SearchRecord(
+                 SearchField
+                ,Text
+                ,SearchOptions + [ srFromBeginning ]
+                )  then
+    MessageDlg('Yazı tapılmadı!',mtInformation,[mbOK],0);
+  end;
+ end;
+
+
+end;
+
+procedure Tinarchiv.SearchEdit3Change(Sender: TObject);
+begin
+{with SWDataModule.ARXIVIN do begin
+  Filter := 'acount = '''+SearchEdit3.Text+('*')+'''';
+end; }
+end;
+
+procedure Tinarchiv.SearchEdit3KeyPress(Sender: TObject; var Key: Char);
+begin
+
+  if Key = #13  then
+ begin
+  SearchOptions := [srIgnoreCase ,srPartialMatch ];
+
+  with Sender as TEdit  do
+  begin
+    SearchField :='acount';
+
+
+    with  TOracleDataSet(SWDataModule.ARXIVIN) do
+    if  not SearchRecord(
+                  SearchField
+                 ,Text
+                 ,SearchOptions + [srFromCurrent , srForward ]
+                 ) then
+
+    if MessageDlg(
+              'Axtarış sona çatdı.'+#13+'Əvvəldən başlansın?'
+             ,mtInformation
+             ,[mbNo , mbYes]
+             ,0
+             ) = mrYes  then
+
+    if not SearchRecord(
+                 SearchField
+                ,Text
+                ,SearchOptions + [ srFromBeginning ]
+                )  then
+    MessageDlg('Yazı tapılmadı!',mtInformation,[mbOK],0);
+  end;
+ end;
+
+
+end;
+
+procedure Tinarchiv.SearchEdit4Change(Sender: TObject);
+begin
+{with SWDataModule.ARXIVIN do begin
+  Filter := 'valu = '''+SearchEdit4.Text+('*')+'''';
+end;
+}
+end;
+
+procedure Tinarchiv.SearchEdit4KeyPress(Sender: TObject; var Key: Char);
+begin
+  if Key = #13  then
+ begin
+  SearchOptions := [srIgnoreCase ,srPartialMatch ];
+
+  with Sender as TEdit  do
+  begin
+    SearchField :='valu';
+
+
+    with  TOracleDataSet(SWDataModule.ARXIVIN) do
+    if  not SearchRecord(
+                  SearchField
+                 ,Text
+                 ,SearchOptions + [srFromCurrent , srForward ]
+                 ) then
+
+    if MessageDlg(
+              'Axtarış sona çatdı.'+#13+'Əvvəldən başlansın?'
+             ,mtInformation
+             ,[mbNo , mbYes]
+             ,0
+             ) = mrYes  then
+
+    if not SearchRecord(
+                 SearchField
+                ,Text
+                ,SearchOptions + [ srFromBeginning ]
+                )  then
+    MessageDlg('Yazı tapılmadı!',mtInformation,[mbOK],0);
+  end;
+ end;
+
+
+end;
+
+procedure Tinarchiv.SearchEdit5Change(Sender: TObject);
+begin
+{with SWDataModule.ARXIVIN do begin
+  Filter := 'BIC = '''+SearchEdit5.Text+('*')+'''';
+end; }
+end;
+
+procedure Tinarchiv.SearchEdit5KeyPress(Sender: TObject; var Key: Char);
+begin
+  if Key = #13  then
+ begin
+  SearchOptions := [srIgnoreCase ,srPartialMatch ];
+
+  with Sender as TEdit  do
+  begin
+    SearchField :='BIC';
+
+
+    with  TOracleDataSet(SWDataModule.ARXIVIN) do
+    if  not SearchRecord(
+                  SearchField
+                 ,Text
+                 ,SearchOptions + [srFromCurrent , srForward ]
+                 ) then
+
+    if MessageDlg(
+              'Axtarış sona çatdı.'+#13+'Əvvəldən başlansın?'
+             ,mtInformation
+             ,[mbNo , mbYes]
+             ,0
+             ) = mrYes  then
+
+    if not SearchRecord(
+                 SearchField
+                ,Text
+                ,SearchOptions + [ srFromBeginning ]
+                )  then
+    MessageDlg('Yazı tapılmadı!',mtInformation,[mbOK],0);
+  end;
+ end;
+
+
+
+end;
+
+procedure Tinarchiv.Button1Click(Sender: TObject);
+
+begin
+
+ a:=Gridin.DataSource.DataSet.fieldbyname('all_text2').asstring;
+
+
+ printform:=Tprintform.create(self);
+printform.showmodal;
+
+ //a := Trim(Copy(a, 1, Pos('}{5:', a)));
+{ QuickReport1:=TQuickReport1.Create(application);
+ QuickReport1.QRPRichtext1.lines.Text:=a;
+ QuickReport1.Preview;
+ QuickReport1.CleanupInstance;
+  {printform:= Tprintform.Create(Self);
+   printform.ShowModal;}
+end;
+
+end.
+

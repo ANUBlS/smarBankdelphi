@@ -1,0 +1,175 @@
+unit UMFDataMod;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  PlgModalContainer, Db, Oracle, OracleData,sboapiDataModuleImpl;
+
+type
+  TDModule = class(TDataModule)
+    Ins_MotorFullData: TDataSource;
+    Ins_MotorFull: TOracleDataSet;
+    Ins_MotorFullID: TFloatField;
+    Ins_MotorFullKLI_ID: TFloatField;
+    Ins_MotorFullBANKING_DETAILS: TStringField;
+    Ins_MotorFullINSUREDMODEL: TStringField;
+    Ins_MotorFullINSUREDSTATENUM: TStringField;
+    Ins_MotorFullINSUREDCOLOR: TStringField;
+    Ins_MotorFullINSUREDOUTPUTYEAR: TIntegerField;
+    Ins_MotorFullINSUREDNUMSEATS: TIntegerField;
+    Ins_MotorFullINSUREDENGINENUM: TStringField;
+    Ins_MotorFullINSUREDCHASSISNUM: TStringField;
+    Ins_MotorFullINSUREDACTUALVALUE: TFloatField;
+    Ins_MotorFullTRANSMISSION_TYPE: TStringField;
+    Ins_MotorFullPRESENCE_ALARM: TStringField;
+    Ins_MotorFullMOTOR_USAGE: TStringField;
+    Ins_MotorFullMOTORSTORAGEPLACE: TStringField;
+    Ins_MotorFullEXISTINGDAMAGE: TStringField;
+    Ins_MotorFullINSURANCEGEOGRAPHICALLIMIT: TStringField;
+    Ins_MotorFullBROKER: TFloatField;
+    Ins_MotorFullINSUREDBODY: TStringField;
+    Ins_MotorFullTYPEID: TIntegerField;
+    Ins_MotorFullPROFITID: TFloatField;
+    MoreReportData: TDataSource;
+    More_Report: TOracleDataSet;
+    More_ReportID: TFloatField;
+    More_ReportFULL_ID: TFloatField;
+    More_ReportNAME: TStringField;
+    More_ReportEXPERIENCE: TStringField;
+    More_ReportHISTORY: TStringField;
+    More_ReportAGE: TIntegerField;
+    Accesories: TOracleDataSet;
+    AccesoriesID: TFloatField;
+    AccesoriesTYPE: TStringField;
+    AccesoriesMAKE: TStringField;
+    AccesoriesVALUE: TFloatField;
+    AccesoriesHOWCREATED: TStringField;
+    AccesoriesFULL_ID: TFloatField;
+    AccesoriesData: TDataSource;
+    CustomersData: TDataSource;
+    Customers: TOracleDataSet;
+    CustomersID: TIntegerField;
+    CustomersNAME: TStringField;
+    CustomersADDRESS: TStringField;
+    CustomersMOBILEPHONE: TStringField;
+    CustomersFAX: TStringField;
+    CustomersCONTACTPERSON: TStringField;
+    PINS_FULLMOTOR: TOraclePackage;
+    SuggestionData: TDataSource;
+    Suggestion: TOracleDataSet;
+    SuggestionID: TFloatField;
+    SuggestionMK_ID: TFloatField;
+    SuggestionRISKADDRESS: TStringField;
+    SuggestionINSURANCEAMMOUNT: TFloatField;
+    SuggestionENDDATE: TDateTimeField;
+    SuggestionRSK_ID: TFloatField;
+    SuggestionFRZ_ID: TFloatField;
+    SuggestionCNDT_ID: TFloatField;
+    SuggestionVAL_ID: TFloatField;
+    SuggestionINSURANCESUM: TFloatField;
+    BeneficiarySource: TDataSource;
+    ODSBeneficiary: TOracleDataSet;
+    ODSBeneficiaryID: TFloatField;
+    ODSBeneficiaryNAME: TStringField;
+    ODSBeneficiaryADDRESS: TStringField;
+    ODSBeneficiaryPHONE: TStringField;
+    ODSBeneficiaryBANKING_DETAILS: TStringField;
+    ODSContracts: TOracleDataSet;
+    ODSContractsID: TFloatField;
+    ODSContractsTYPE_ID: TFloatField;
+    ODSContractsINS_DATE: TDateTimeField;
+    ODSContractsBEGIN_DATE: TDateTimeField;
+    ODSContractsEND_DATE: TDateTimeField;
+    ODSContractsVALUTE_ID: TFloatField;
+    ODSContractsAMMOUNT: TFloatField;
+    ODSContractsCLOSE_PREFIX: TIntegerField;
+    ODSContractsKLI_ID: TFloatField;
+    ODSContractsLOANACC_ID: TFloatField;
+    ODSContractsCURRACC_ID: TFloatField;
+    ODSContractsPOLICY_NUM: TStringField;
+    DSContracts: TDataSource;
+    AgentsSource: TDataSource;
+    ODSAgents: TOracleDataSet;
+    ODSAgentsID: TFloatField;
+    ODSAgentsNAME: TStringField;
+    OPCOMMON: TOraclePackage;
+    MoreThanOne: TOracleDataSet;
+    MoreThanOneID: TFloatField;
+    MoreThanOneNAME: TStringField;
+    MoreThanOneSURNAME: TStringField;
+    MoreThanOneFATHERNAME: TStringField;
+    MoreThanOneAGE: TIntegerField;
+    MoreThanOneEXPERIENCE: TStringField;
+    MoreThanOneFULL_ID: TFloatField;
+    MoreThanOneHISTORY: TStringField;
+    MoreThanOneData: TDataSource;
+    Ins_MotorFullINSUREDTYPE: TFloatField;
+    DSAutoTypes: TDataSource;
+    ODSAutoTypes: TOracleDataSet;
+    ODSAutoTypesID: TFloatField;
+    ODSAutoTypesNAME: TStringField;
+    ODSMarks: TOracleDataSet;
+    ODSMarksID: TFloatField;
+    ODSMarksNAME: TStringField;
+    ODSMarksSTATE_ID: TFloatField;
+    ODSMarksCALCOPTIONS: TIntegerField;
+    DSMarks: TDataSource;
+    DSModels: TDataSource;
+    ODSModels: TOracleDataSet;
+    ODSModelsID: TFloatField;
+    ODSModelsNAME: TStringField;
+    ODSModelsMARK_ID: TFloatField;
+    ODSModelsCALCOPTIONS: TIntegerField;
+    Ins_MotorFullINSUREDMARK: TStringField;
+    ODSFranshiz: TOracleDataSet;
+    ODSFranshizFRANSHIZ: TFloatField;
+    ODSFranshizTARIFF: TFloatField;
+    ODSMonths: TOracleDataSet;
+    ODSMonthsID: TFloatField;
+    ODSMonthsRELEASE_ID: TFloatField;
+    ODSMonthsCOUNT: TFloatField;
+    DSFranshiz: TDataSource;
+    DSMonths: TDataSource;
+    ODSReliaseDates: TOracleDataSet;
+    ODSReliaseDatesID: TFloatField;
+    ODSReliaseDatesBEGINDATE: TDateTimeField;
+    ODSReliaseDatesENDDATE: TDateTimeField;
+    ODSReliaseDatesSTATE_ID: TFloatField;
+    ODSAvalute: TOracleDataSet;
+    ODSAvaluteVALUTE: TIntegerField;
+    ODSAvaluteVAL_NAME: TStringField;
+    ODSAvaluteVALU_NAME: TStringField;
+    ODSAvaluteVALU_SHORT: TStringField;
+    DSAvalute: TDataSource;
+    ODSContractsINSSUMM: TFloatField;
+    ODSContractsFRANSHIZ: TFloatField;
+    ODSContractsTARIFF: TFloatField;
+    ODSContractsSTATE: TIntegerField;
+    ODSContractsAGENT_ID: TFloatField;
+    Ins_MotorFullCONTACT_PERSON: TStringField;
+    Ins_MotorFullCLOSE_PREFIX: TIntegerField;
+    Ins_MotorFullMONTH_ID: TFloatField;
+    Ins_MotorFullCID: TFloatField;
+    procedure ODSContractsAfterInsert(DataSet: TDataSet);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  DModule: TDModule;
+
+
+
+implementation
+
+{$R *.DFM}
+
+procedure TDModule.ODSContractsAfterInsert(DataSet: TDataSet);
+begin
+     DataSet.FieldByName('TYPE_ID').asInteger := 4;
+end;
+
+end.

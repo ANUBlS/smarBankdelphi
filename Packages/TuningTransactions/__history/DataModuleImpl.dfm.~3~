@@ -1,0 +1,293 @@
+object TuningDataModule: TTuningDataModule
+  OldCreateOrder = False
+  OnCreate = DataModuleCreate
+  Height = 188
+  Width = 524
+  object ODSSettings: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      '    commision_trans.Rowid'
+      '   ,id'
+      '   ,name'
+      '   ,debt'
+      
+        '   ,sb_complex_transactions.getaccountnumber(debt) as DebitAccou' +
+        'nt'
+      
+        '   ,sb_complex_transactions.GetAccountCurrency(debt) as DebitCur' +
+        'rency'
+      '   ,credit'
+      
+        '   ,sb_complex_transactions.getaccountnumber(credit) as CreditAc' +
+        'count'
+      
+        '   ,sb_complex_transactions.GetAccountCurrency(credit) as Credit' +
+        'Currency'
+      '   ,additionalDebt'
+      '   ,additionalCredit'
+      
+        '   ,sb_complex_transactions.getaccountnumber(additionalDebt) as ' +
+        'ADebt'
+      
+        '   ,sb_complex_transactions.GetAccountCurrency(additionalDebt) a' +
+        's ADebitCurrency'
+      
+        '   ,sb_complex_transactions.getaccountnumber(additionalCredit) a' +
+        's ACredit'
+      
+        '   ,sb_complex_transactions.GetAccountCurrency(additionalCredit)' +
+        ' as ACreditCurrency'
+      '   ,assignment'
+      '   ,commisionassignment'
+      '   ,UserID   '
+      'from'
+      '    commision_trans'
+      'where'
+      '   UserID = 0 or'
+      '    UserID = (SBLogin.UserID)'
+      'order by'
+      '    commision_trans.ID'
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ' '
+      ' '
+      ' ')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000110000000400000049004400010000000000080000004E0041004D00
+      4500010000000000080000004400450042005400010000000000180000004400
+      45004200490054004100430043004F0055004E0054000100000000001A000000
+      44004500420049005400430055005200520045004E0043005900010000000000
+      0C0000004300520045004400490054000100000000001A000000430052004500
+      4400490054004100430043004F0055004E0054000100000000001C0000004300
+      52004500440049005400430055005200520045004E0043005900010000000000
+      1C0000004100440044004900540049004F004E0041004C004400450042005400
+      010000000000200000004100440044004900540049004F004E0041004C004300
+      520045004400490054000100000000000A000000410044004500420054000100
+      000000001C000000410044004500420049005400430055005200520045004E00
+      430059000100000000000E000000410043005200450044004900540001000000
+      00001E0000004100430052004500440049005400430055005200520045004E00
+      4300590001000000000014000000410053005300490047004E004D0045004E00
+      54000100000000002600000043004F004D004D004900530049004F004E004100
+      53005300490047004E004D0045004E0054000100000000000C00000055005300
+      4500520049004400010000000000}
+    OnApplyRecord = ODSSettingsApplyRecord
+    Session = sboapiDataModule.SBSession
+    Left = 32
+    Top = 8
+    object ODSSettingsID: TFloatField
+      FieldName = 'ID'
+    end
+    object ODSSettingsNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 150
+    end
+    object ODSSettingsDEBT: TFloatField
+      FieldName = 'DEBT'
+    end
+    object ODSSettingsDEBITACCOUNT: TWideStringField
+      FieldName = 'DEBITACCOUNT'
+      Size = 4000
+    end
+    object ODSSettingsDEBITCURRENCY: TWideStringField
+      FieldName = 'DEBITCURRENCY'
+      Size = 4000
+    end
+    object ODSSettingsCREDIT: TFloatField
+      FieldName = 'CREDIT'
+    end
+    object ODSSettingsCREDITACCOUNT: TWideStringField
+      FieldName = 'CREDITACCOUNT'
+      Size = 4000
+    end
+    object ODSSettingsCREDITCURRENCY: TWideStringField
+      FieldName = 'CREDITCURRENCY'
+      Size = 4000
+    end
+    object ODSSettingsADDITIONALDEBT: TFloatField
+      FieldName = 'ADDITIONALDEBT'
+    end
+    object ODSSettingsADDITIONALCREDIT: TFloatField
+      FieldName = 'ADDITIONALCREDIT'
+    end
+    object ODSSettingsADEBT: TWideStringField
+      FieldName = 'ADEBT'
+      Size = 4000
+    end
+    object ODSSettingsACREDIT: TWideStringField
+      FieldName = 'ACREDIT'
+      Size = 4000
+    end
+    object ODSSettingsASSIGNMENT: TWideStringField
+      FieldName = 'ASSIGNMENT'
+      Size = 300
+    end
+    object ODSSettingsCOMMISIONASSIGNMENT: TWideStringField
+      FieldName = 'COMMISIONASSIGNMENT'
+      Size = 300
+    end
+    object ODSSettingsADEBITCURRENCY: TWideStringField
+      FieldName = 'ADEBITCURRENCY'
+      Size = 4000
+    end
+    object ODSSettingsACREDITCURRENCY: TWideStringField
+      FieldName = 'ACREDITCURRENCY'
+      Size = 4000
+    end
+    object ODSSettingsUSERID: TFloatField
+      FieldName = 'USERID'
+    end
+  end
+  object DSSettings: TDataSource
+    DataSet = ODSSettings
+    OnDataChange = DSSettingsDataChange
+    Left = 144
+    Top = 8
+  end
+  object ODSCustomerGroups: TOracleDataSet
+    SQL.Strings = (
+      'Select '
+      '   q.rowID'
+      '  ,q.*'
+      'From'
+      '  qrp_klie q'
+      'Order by ID')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    AfterPost = ODSCustomerGroupsAfterPost
+    Left = 32
+    Top = 64
+    object ODSCustomerGroupsID: TFloatField
+      FieldName = 'ID'
+    end
+    object ODSCustomerGroupsNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 90
+    end
+  end
+  object DSCustomerGroups: TDataSource
+    DataSet = ODSCustomerGroups
+    Left = 144
+    Top = 64
+  end
+  object ODSDebtAccount: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      '     * '
+      'from'
+      '  Account'
+      'where '
+      '   close_dat is null'
+      'Order by'
+      '     acc_no    ')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    AfterScroll = ODSDebtAccountAfterScroll
+    Left = 152
+    Top = 120
+  end
+  object DSDebtAccount: TDataSource
+    DataSet = ODSDebtAccount
+    Left = 62
+    Top = 120
+  end
+  object DSCurrency: TDataSource
+    Left = 424
+    Top = 16
+  end
+  object OPMainSettings: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'sb_complex_transactions'
+    Left = 424
+    Top = 120
+  end
+  object ODSTariffScale: TOracleDataSet
+    SQL.Strings = (
+      'Select'
+      '   T.RowID'
+      '    ,T.*'
+      'From'
+      '   TariffScale T'
+      'Where'
+      '   T.groupid = :groupid and'
+      '      T.commisionID =:commisionID ')
+    Optimize = False
+    Variables.Data = {
+      0400000002000000100000003A00470052004F00550050004900440003000000
+      0000000000000000180000003A0043004F004D004D004900530049004F004E00
+      49004400030000000000000000000000}
+    Master = ODSCustomerGroups
+    MasterFields = 'ID'
+    DetailFields = 'GROUPID'
+    OnTranslateMessage = ODSTariffScaleTranslateMessage
+    Session = sboapiDataModule.SBSession
+    BeforePost = ODSTariffScaleBeforePost
+    Left = 352
+    Top = 72
+    object ODSTariffScaleID: TFloatField
+      FieldName = 'ID'
+    end
+    object ODSTariffScaleGROUPID: TFloatField
+      FieldName = 'GROUPID'
+      Required = True
+    end
+    object ODSTariffScalePERCENT: TFloatField
+      FieldName = 'PERCENT'
+      DisplayFormat = '#,##.00'
+    end
+    object ODSTariffScaleAMMOUNT: TFloatField
+      FieldName = 'AMMOUNT'
+      DisplayFormat = '#,##.00'
+    end
+    object ODSTariffScaleMINVALUE: TFloatField
+      FieldName = 'MINVALUE'
+      DisplayFormat = '#,##.00'
+    end
+    object ODSTariffScaleMAXVALUE: TFloatField
+      FieldName = 'MAXVALUE'
+      DisplayFormat = '#,##.00'
+    end
+    object ODSTariffScaleCOMMISIONID: TFloatField
+      FieldName = 'COMMISIONID'
+    end
+  end
+  object DSTariffScale: TDataSource
+    DataSet = ODSTariffScale
+    Left = 424
+    Top = 72
+  end
+  object ODSCurrency: TOracleDataSet
+    SQL.Strings = (
+      'Select '
+      '   *'
+      ' from'
+      '     Avalute')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 352
+    Top = 16
+  end
+end

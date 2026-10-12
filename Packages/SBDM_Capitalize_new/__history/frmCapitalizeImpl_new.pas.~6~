@@ -1,0 +1,61 @@
+unit frmCapitalizeImpl_new;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, OracleData, StdCtrls, Mask, DBCtrls, ExtCtrls, ComCtrls, ToolWin,
+  ImgList, Grids, DBGridEh, CMExcelExport, Oracle,  ActnList;
+
+type
+  TfrmCapitalize_new = class(TForm)
+    ActionList1: TActionList;
+    ActnAddTr: TAction;
+    ActnDel: TAction;
+    ActnExport: TAction;
+    Capitals: TOracleDataSet;
+    CapitalsID: TFloatField;
+    CapitalsHDATE: TDateTimeField;
+    CapitalsTOTAL: TFloatField;
+    CapitalsTRID: TFloatField;
+    DBGridEh1: TDBGridEh;
+    DepositInfo: TOracleDataSet;
+    DepositInfoCONTRACTNO: TWideStringField;
+    DepositInfoNAME: TWideStringField;
+    DepositInfoFACTICALDEBT: TFloatField;
+    DepositInfoFACTICALINTERESTDEBT: TFloatField;
+    DepositInfoCONTRACTACCNO: TWideStringField;
+    DepositInfoINTERESTACCNO: TWideStringField;
+    ExcelExp: TCMExcelExport;
+    GroupBox1: TGroupBox;
+    Panel3: TPanel;
+    DBEdit2: TDBEdit;
+    StaticText2: TStaticText;
+    ImageList1: TImageList;
+    Panel4: TPanel;
+    ToolBar1: TToolBar;
+    ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
+    ToolButton3: TToolButton;
+    ToolButton4: TToolButton;
+    ToolButton5: TToolButton;
+    ToolButton6: TToolButton;
+    ToolButton7: TToolButton;
+    sbcm_payment: TOraclePackage;
+    StatusBar1: TStatusBar;
+    DepositInfoDatSrc: TDataSource;
+    CapitalsDatSrc: TDataSource;
+  private
+    { Private declarations }
+  public
+      CanAfterRefresh :Boolean;
+  end;
+
+var
+  frmCapitalize_new: TfrmCapitalize_new;
+   procedure exportproc(S:String);export;
+implementation
+
+{$R *.dfm}
+   uses sboapiDataModuleImpl,CommonDeclsImpl,frmAddCapitalizeImpl_new,SBTranslateProc;
+end.

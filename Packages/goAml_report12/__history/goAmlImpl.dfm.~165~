@@ -1,0 +1,928 @@
+object goAml: TgoAml
+  Left = 0
+  Top = 0
+  Width = 993
+  Height = 460
+  Caption = 'goAml'
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  OnCreate = ActiveFormCreate
+  PixelsPerInch = 96
+  TextHeight = 13
+  object RE_Errors: TRichEdit
+    Left = 0
+    Top = 326
+    Width = 993
+    Height = 134
+    Align = alBottom
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
+    PopupMenu = PM_RE_Errors
+    ReadOnly = True
+    ScrollBars = ssVertical
+    TabOrder = 0
+  end
+  object PC1: TPageControl
+    Left = 0
+    Top = 0
+    Width = 993
+    Height = 326
+    ActivePage = TabSheet1
+    Align = alClient
+    DoubleBuffered = False
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -12
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
+    MultiLine = True
+    ParentDoubleBuffered = False
+    ParentFont = False
+    TabOrder = 1
+    object TabSheet1: TTabSheet
+      Caption = 'Cari '#601'm'#601'liyyatlar (101-CTR)'
+      object Panel1: TPanel
+        Left = 0
+        Top = 62
+        Width = 985
+        Height = 235
+        Align = alClient
+        BevelInner = bvLowered
+        TabOrder = 0
+        object DBGridTransactions1: TDBGrid
+          Left = 2
+          Top = 50
+          Width = 981
+          Height = 183
+          Align = alBottom
+          DataSource = DMgoAml.DS_Main
+          DrawingStyle = gdsGradient
+          Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit, dgTitleClick, dgTitleHotTrack]
+          TabOrder = 0
+          TitleFont.Charset = DEFAULT_CHARSET
+          TitleFont.Color = clWindowText
+          TitleFont.Height = -12
+          TitleFont.Name = 'Tahoma'
+          TitleFont.Style = [fsBold]
+          Columns = <
+            item
+              Expanded = False
+              FieldName = 'TRANSACTIONNUMBER'
+              Title.Caption = #8470
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'DATE_TRANSACTION'
+              Title.Caption = 'Tarix'
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'ACTION'
+              Title.Caption = 'Status'
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'REPORT_CODE'
+              Title.Caption = 'Hesabat kodu'
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'DEBTCUSTNAME'
+              Title.Caption = 'D. M'#252#351't'#601'rinin ad'#305
+              Width = 180
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'DEBITACCNO'
+              Title.Caption = 'Debet'
+              Width = 190
+              Visible = True
+            end
+            item
+              Alignment = taCenter
+              Expanded = False
+              FieldName = 'DEBITCURRENCYSNAME'
+              Title.Alignment = taCenter
+              Title.Caption = '$'
+              Width = 30
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'CREDCUSTNAME'
+              Title.Caption = 'K. M'#252#351't'#601'rinin ad'#305
+              Width = 180
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'CREDITACCNO'
+              Title.Caption = 'Kredit'
+              Width = 190
+              Visible = True
+            end
+            item
+              Alignment = taCenter
+              Expanded = False
+              FieldName = 'CREDITCURRENCYSNAME'
+              Title.Alignment = taCenter
+              Title.Caption = '$'
+              Width = 30
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'D_FOREIGN_AMOUNT'
+              Title.Caption = 'D. M'#601'bl'#601#287
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'C_FOREIGN_AMOUNT'
+              Title.Caption = 'K. M'#601'bl'#601#287
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'AMOUNT_LOCAL'
+              Title.Caption = 'Ekvivalent'
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'DEBITBALANCE'
+              Title.Caption = 'D. Balance'
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'CREDITBALANCE'
+              Title.Caption = 'K. Balans'
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'TRANSACTION_DESCRIPTION'
+              Title.Caption = 'T'#601'yinat'#305
+              Width = 100
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'TRANSMODE_CODE'
+              Title.Caption = #399'm'#601'liyyat'#305'n n'#246'v'#252
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'KASSANOVU'
+              Visible = True
+            end>
+        end
+        object Panel2: TPanel
+          Left = 2
+          Top = 2
+          Width = 981
+          Height = 48
+          Align = alClient
+          TabOrder = 1
+          object DBGrid2: TDBGrid
+            Left = 1
+            Top = 1
+            Width = 979
+            Height = 46
+            Align = alClient
+            DataSource = DMgoAml.DS_Rep
+            DrawingStyle = gdsGradient
+            Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit, dgTitleClick, dgTitleHotTrack]
+            PopupMenu = PopupMenu1
+            TabOrder = 0
+            TitleFont.Charset = DEFAULT_CHARSET
+            TitleFont.Color = clWindowText
+            TitleFont.Height = -12
+            TitleFont.Name = 'Tahoma'
+            TitleFont.Style = [fsBold]
+            OnDblClick = DBGrid2DblClick
+            Columns = <
+              item
+                Expanded = False
+                FieldName = 'TRANSMODE_CODE'
+                Title.Caption = #399'm'#601'l. n'#246'v'#252
+                Width = 58
+                Visible = True
+              end
+              item
+                Expanded = False
+                FieldName = 'NAME'
+                Title.Caption = 'M'#252#351't'#601'ri'
+                Width = 120
+                Visible = True
+              end
+              item
+                Expanded = False
+                FieldName = 'LAMMOUNT'
+                Title.Caption = 'M'#601'bl'#601#287
+                Visible = True
+              end
+              item
+                Expanded = False
+                FieldName = 'CUSTID'
+                Title.Caption = 'M'#252#351't'#601'rinin '#304'D-si'
+                Visible = True
+              end>
+          end
+        end
+      end
+      object GroupBox1: TGroupBox
+        Left = 0
+        Top = 28
+        Width = 985
+        Height = 34
+        Align = alTop
+        TabOrder = 1
+        object DTP1: TDateTimePicker
+          Left = 4
+          Top = 9
+          Width = 129
+          Height = 22
+          Date = 41054.236583101860000000
+          Time = 41054.236583101860000000
+          TabOrder = 0
+          OnChange = DTP1Change
+        end
+        object DTP2: TDateTimePicker
+          Left = 138
+          Top = 9
+          Width = 129
+          Height = 22
+          Date = 41054.236583101860000000
+          Time = 41054.236583101860000000
+          TabOrder = 1
+          Visible = False
+          OnChange = DTP2Change
+        end
+        object Edit1: TEdit
+          Left = 279
+          Top = 9
+          Width = 121
+          Height = 22
+          TabOrder = 2
+        end
+        object Button1: TButton
+          Left = 406
+          Top = 9
+          Width = 75
+          Height = 22
+          Caption = 'OK'
+          TabOrder = 3
+          OnClick = Button1Click
+        end
+      end
+      object ToolBar1: TToolBar
+        Left = 0
+        Top = 0
+        Width = 985
+        Height = 28
+        ButtonHeight = 21
+        ButtonWidth = 74
+        DrawingStyle = dsGradient
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        GradientEndColor = clSilver
+        ParentFont = False
+        ShowCaptions = True
+        TabOrder = 2
+        object ToolButton1: TToolButton
+          Left = 0
+          Top = 0
+          Caption = 'Yenil'#601
+          ImageIndex = 0
+          OnClick = ToolButton1Click
+        end
+        object ToolButton4: TToolButton
+          Left = 74
+          Top = 0
+          Caption = 'Fayl'#305' haz'#305'rla'
+          ImageIndex = 1
+          OnClick = ToolButton4Click
+        end
+      end
+    end
+    object TabSheet2: TTabSheet
+      Caption = #350#252'bh'#601'li '#601'm'#601'liyyatlar (201-STR)'
+      ImageIndex = 1
+      object ToolBar2: TToolBar
+        Left = 0
+        Top = 0
+        Width = 985
+        Height = 28
+        ButtonHeight = 21
+        ButtonWidth = 74
+        DrawingStyle = dsGradient
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        GradientEndColor = clSilver
+        ParentFont = False
+        ShowCaptions = True
+        TabOrder = 0
+        object ToolButton2: TToolButton
+          Left = 0
+          Top = 0
+          Caption = 'Yenil'#601
+          ImageIndex = 0
+          OnClick = ToolButton2Click
+        end
+        object ToolButton3: TToolButton
+          Left = 74
+          Top = 0
+          Caption = 'Fayl'#305' haz'#305'rla'
+          ImageIndex = 1
+          OnClick = ToolButton3Click
+        end
+      end
+      object GroupBox2: TGroupBox
+        Left = 0
+        Top = 28
+        Width = 985
+        Height = 34
+        Align = alTop
+        TabOrder = 1
+        object DTP4: TDateTimePicker
+          Left = 4
+          Top = 9
+          Width = 129
+          Height = 22
+          Date = 41054.236583101860000000
+          Time = 41054.236583101860000000
+          TabOrder = 0
+          OnChange = DTP4Change
+        end
+        object DTP5: TDateTimePicker
+          Left = 138
+          Top = 9
+          Width = 129
+          Height = 22
+          Date = 41054.236583101860000000
+          Time = 41054.236583101860000000
+          TabOrder = 1
+          Visible = False
+          OnChange = DTP5Change
+        end
+      end
+      object DBGrid4: TDBGrid
+        Left = 0
+        Top = 62
+        Width = 985
+        Height = 48
+        Align = alClient
+        DataSource = DMgoAml_DT.DS_RepDT
+        DrawingStyle = gdsGradient
+        Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit, dgTitleClick, dgTitleHotTrack]
+        PopupMenu = PopupMenu3
+        TabOrder = 2
+        TitleFont.Charset = DEFAULT_CHARSET
+        TitleFont.Color = clWindowText
+        TitleFont.Height = -12
+        TitleFont.Name = 'Tahoma'
+        TitleFont.Style = [fsBold]
+        Columns = <
+          item
+            Expanded = False
+            FieldName = 'TRANSMODE_CODE'
+            Title.Caption = #399'm'#601'l. n'#246'v'#252
+            Width = 58
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'NAME'
+            Title.Caption = 'M'#252#351't'#601'ri'
+            Width = 120
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'LAMMOUNT'
+            Title.Caption = 'M'#601'bl'#601#287
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'CUSTID'
+            Title.Caption = 'M'#252#351't'#601'rinin '#304'D-si'
+            Visible = True
+          end>
+      end
+      object DBGrid5: TDBGrid
+        Left = 0
+        Top = 110
+        Width = 985
+        Height = 187
+        Align = alBottom
+        DataSource = DMgoAml_DT.DS_MainDT
+        DrawingStyle = gdsGradient
+        Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit, dgTitleClick, dgTitleHotTrack]
+        TabOrder = 3
+        TitleFont.Charset = DEFAULT_CHARSET
+        TitleFont.Color = clWindowText
+        TitleFont.Height = -12
+        TitleFont.Name = 'Tahoma'
+        TitleFont.Style = [fsBold]
+        Columns = <
+          item
+            Expanded = False
+            FieldName = 'TRANSACTIONNUMBER'
+            Title.Caption = #8470
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'DATE_TRANSACTION'
+            Title.Caption = 'Tarix'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'ACTION'
+            Title.Caption = 'Status'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'REPORT_CODE'
+            Title.Caption = 'Hesabat kodu'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'DEBTCUSTNAME'
+            Title.Caption = 'D. M'#252#351't'#601'rinin ad'#305
+            Width = 180
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'DEBITACCNO'
+            Title.Caption = 'Debet'
+            Width = 190
+            Visible = True
+          end
+          item
+            Alignment = taCenter
+            Expanded = False
+            FieldName = 'DEBITCURRENCYSNAME'
+            Title.Alignment = taCenter
+            Title.Caption = '$'
+            Width = 30
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'CREDCUSTNAME'
+            Title.Caption = 'K. M'#252#351't'#601'rinin ad'#305
+            Width = 180
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'CREDITACCNO'
+            Title.Caption = 'Kredit'
+            Width = 190
+            Visible = True
+          end
+          item
+            Alignment = taCenter
+            Expanded = False
+            FieldName = 'CREDITCURRENCYSNAME'
+            Title.Alignment = taCenter
+            Title.Caption = '$'
+            Width = 30
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'D_FOREIGN_AMOUNT'
+            Title.Caption = 'D. M'#601'bl'#601#287
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'C_FOREIGN_AMOUNT'
+            Title.Caption = 'K. M'#601'bl'#601#287
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'AMOUNT_LOCAL'
+            Title.Caption = 'Ekvivalent'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'DEBITBALANCE'
+            Title.Caption = 'D. Balance'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'CREDITBALANCE'
+            Title.Caption = 'K. Balans'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'TRANSACTION_DESCRIPTION'
+            Title.Caption = 'T'#601'yinat'#305
+            Width = 100
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'TRANSMODE_CODE'
+            Title.Caption = #399'm'#601'liyyat'#305'n n'#246'v'#252
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'KASSANOVU'
+            Visible = True
+          end>
+      end
+    end
+    object TabSheet3: TTabSheet
+      Caption = 'Qara siyah'#305' '#246'lk'#601'l'#601'ri '#252'zr'#601' '#601'm'#601'liyyatlar (301-BLR)'
+      ImageIndex = 2
+      object ToolBar3: TToolBar
+        Left = 0
+        Top = 0
+        Width = 985
+        Height = 28
+        ButtonHeight = 21
+        ButtonWidth = 74
+        DrawingStyle = dsGradient
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        GradientEndColor = clSilver
+        ParentFont = False
+        ShowCaptions = True
+        TabOrder = 0
+        object ToolButton5: TToolButton
+          Left = 0
+          Top = 0
+          Caption = 'Yenil'#601
+          ImageIndex = 0
+          OnClick = ToolButton5Click
+        end
+        object ToolButton6: TToolButton
+          Left = 74
+          Top = 0
+          Caption = 'Fayl'#305' haz'#305'rla'
+          ImageIndex = 1
+          OnClick = ToolButton6Click
+        end
+      end
+      object GroupBox3: TGroupBox
+        Left = 0
+        Top = 28
+        Width = 985
+        Height = 34
+        Align = alTop
+        TabOrder = 1
+        object DTP3: TDateTimePicker
+          Left = 4
+          Top = 9
+          Width = 129
+          Height = 22
+          Date = 41054.236583101860000000
+          Time = 41054.236583101860000000
+          TabOrder = 0
+          OnChange = DTP1Change
+        end
+        object DateTimePicker4: TDateTimePicker
+          Left = 138
+          Top = 9
+          Width = 129
+          Height = 22
+          Date = 41054.236583101860000000
+          Time = 41054.236583101860000000
+          TabOrder = 1
+          Visible = False
+          OnChange = DTP2Change
+        end
+      end
+      object DBGrid3: TDBGrid
+        Left = 0
+        Top = 62
+        Width = 985
+        Height = 52
+        Align = alClient
+        DataSource = DMgoAml.DS_BlackCntr
+        DrawingStyle = gdsGradient
+        Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit, dgTitleClick, dgTitleHotTrack]
+        PopupMenu = PopupMenu2
+        TabOrder = 2
+        TitleFont.Charset = DEFAULT_CHARSET
+        TitleFont.Color = clWindowText
+        TitleFont.Height = -12
+        TitleFont.Name = 'Tahoma'
+        TitleFont.Style = [fsBold]
+        OnDblClick = DBGrid3DblClick
+        Columns = <
+          item
+            Expanded = False
+            FieldName = 'TRANSMODE_CODE'
+            Title.Caption = #399'm'#601'l. n'#246'v'#252
+            Width = 58
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'ID'
+            Title.Caption = #399'm'#601'liyyat'#305'n '#8470
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'LAMOUNT'
+            Title.Caption = 'M'#601'bl'#601#287
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'CNTR_NAME'
+            Title.Caption = #214'lk'#601
+            Width = 120
+            Visible = True
+          end>
+      end
+      object DBGrid1: TDBGrid
+        Left = 0
+        Top = 114
+        Width = 985
+        Height = 183
+        Align = alBottom
+        DataSource = DMgoAml.DS_MainBlackCntr
+        DrawingStyle = gdsGradient
+        Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit, dgTitleClick, dgTitleHotTrack]
+        TabOrder = 3
+        TitleFont.Charset = DEFAULT_CHARSET
+        TitleFont.Color = clWindowText
+        TitleFont.Height = -12
+        TitleFont.Name = 'Tahoma'
+        TitleFont.Style = [fsBold]
+        Columns = <
+          item
+            Expanded = False
+            FieldName = 'TRANSACTIONNUMBER'
+            Title.Caption = #8470
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'DATE_TRANSACTION'
+            Title.Caption = 'Tarix'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'ACTION'
+            Title.Caption = 'Status'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'REPORT_CODE'
+            Title.Caption = 'Hesabat kodu'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'DEBTCUSTNAME'
+            Title.Caption = 'D. M'#252#351't'#601'rinin ad'#305
+            Width = 180
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'DEBITACCNO'
+            Title.Caption = 'Debet'
+            Width = 190
+            Visible = True
+          end
+          item
+            Alignment = taCenter
+            Expanded = False
+            FieldName = 'DEBITCURRENCYSNAME'
+            Title.Alignment = taCenter
+            Title.Caption = '$'
+            Width = 30
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'CREDCUSTNAME'
+            Title.Caption = 'K. M'#252#351't'#601'rinin ad'#305
+            Width = 180
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'CREDITACCNO'
+            Title.Caption = 'Kredit'
+            Width = 190
+            Visible = True
+          end
+          item
+            Alignment = taCenter
+            Expanded = False
+            FieldName = 'CREDITCURRENCYSNAME'
+            Title.Alignment = taCenter
+            Title.Caption = '$'
+            Width = 30
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'D_FOREIGN_AMOUNT'
+            Title.Caption = 'D. M'#601'bl'#601#287
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'C_FOREIGN_AMOUNT'
+            Title.Caption = 'K. M'#601'bl'#601#287
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'AMOUNT_LOCAL'
+            Title.Caption = 'Ekvivalent'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'DEBITBALANCE'
+            Title.Caption = 'D. Balance'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'CREDITBALANCE'
+            Title.Caption = 'K. Balans'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'TRANSACTION_DESCRIPTION'
+            Title.Caption = 'T'#601'yinat'#305
+            Width = 100
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'TRANSMODE_CODE'
+            Title.Caption = #399'm'#601'liyyat'#305'n n'#246'v'#252
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'KASSANOVU'
+            Visible = True
+          end>
+      end
+    end
+    object TabSheet4: TTabSheet
+      Caption = 'III '#351#601'xsl'#601'r vasit'#601'sil'#601' '#601'm'#601'liyyatlar (801-FMR)'
+      ImageIndex = 3
+      object ToolBar4: TToolBar
+        Left = 0
+        Top = 0
+        Width = 985
+        Height = 28
+        ButtonHeight = 21
+        ButtonWidth = 74
+        DrawingStyle = dsGradient
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        GradientEndColor = clSilver
+        ParentFont = False
+        ShowCaptions = True
+        TabOrder = 0
+        object ToolButton7: TToolButton
+          Left = 0
+          Top = 0
+          Caption = 'Yenil'#601
+          ImageIndex = 0
+        end
+        object ToolButton8: TToolButton
+          Left = 74
+          Top = 0
+          Caption = 'Fayl'#305' haz'#305'rla'
+          ImageIndex = 1
+        end
+      end
+      object GroupBox4: TGroupBox
+        Left = 0
+        Top = 28
+        Width = 985
+        Height = 34
+        Align = alTop
+        TabOrder = 1
+        object DateTimePicker5: TDateTimePicker
+          Left = 4
+          Top = 9
+          Width = 129
+          Height = 22
+          Date = 41054.236583101860000000
+          Time = 41054.236583101860000000
+          TabOrder = 0
+          OnChange = DTP1Change
+        end
+        object DateTimePicker6: TDateTimePicker
+          Left = 138
+          Top = 9
+          Width = 129
+          Height = 22
+          Date = 41054.236583101860000000
+          Time = 41054.236583101860000000
+          TabOrder = 1
+          Visible = False
+          OnChange = DTP2Change
+        end
+      end
+    end
+  end
+  object SaveDlg: TSaveDialog
+    Filter = '*.xml|*.xml'
+    Options = [ofHideReadOnly, ofPathMustExist, ofEnableSizing]
+    Title = '*.xml'
+    Left = 752
+    Top = 40
+  end
+  object PopupMenu1: TPopupMenu
+    Left = 224
+    Top = 192
+    object mliyyatlarabax1: TMenuItem
+      Caption = #399'm'#601'liyyat(lar)a bax'
+      OnClick = mliyyatlarabax1Click
+    end
+    object Faylhazrla1: TMenuItem
+      Caption = 'Fayl'#305' haz'#305'rla'
+      OnClick = Faylhazrla1Click
+    end
+  end
+  object PopupMenu2: TPopupMenu
+    Left = 304
+    Top = 200
+    object mliyyatlarabax2: TMenuItem
+      Caption = #399'm'#601'liyyat(lar)a bax'
+      OnClick = mliyyatlarabax2Click
+    end
+    object Faylhazrla2: TMenuItem
+      Caption = 'Fayl'#305' haz'#305'rla'
+      OnClick = Faylhazrla2Click
+    end
+  end
+  object PM_RE_Errors: TPopupMenu
+    Left = 384
+    Top = 200
+    object mizl1: TMenuItem
+      Caption = 'T'#601'mizl'#601
+      OnClick = mizl1Click
+    end
+  end
+  object PopupMenu3: TPopupMenu
+    Left = 480
+    Top = 184
+    object Emeeee1: TMenuItem
+      Caption = 'Emeeee'
+      OnClick = Emeeee1Click
+    end
+  end
+end

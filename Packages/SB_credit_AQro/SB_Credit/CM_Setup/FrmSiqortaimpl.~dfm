@@ -1,0 +1,115 @@
+object FrmSiqorta: TFrmSiqorta
+  Left = 459
+  Top = 219
+  Width = 354
+  Height = 359
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'MS Sans Serif'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poScreenCenter
+  OnCreate = FormCreate
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 346
+    Height = 325
+    Align = alClient
+    BevelInner = bvLowered
+    TabOrder = 0
+    object DBGrid1: TDBGrid
+      Left = 2
+      Top = 2
+      Width = 342
+      Height = 292
+      Align = alClient
+      DataSource = DataSource1
+      TabOrder = 0
+      TitleFont.Charset = DEFAULT_CHARSET
+      TitleFont.Color = clWindowText
+      TitleFont.Height = -11
+      TitleFont.Name = 'MS Sans Serif'
+      TitleFont.Style = []
+      Columns = <
+        item
+          Expanded = False
+          FieldName = 'SID'
+          Title.Caption = 'ID si'
+          Title.Color = clBtnText
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'MS Sans Serif'
+          Title.Font.Style = []
+          Width = 62
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'NAME'
+          Title.Caption = 'Adû'
+          Title.Color = clWindowText
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = []
+          Width = 259
+          Visible = True
+        end>
+    end
+    object DBNavigator1: TDBNavigator
+      Left = 2
+      Top = 294
+      Width = 342
+      Height = 29
+      DataSource = DataSource1
+      Align = alBottom
+      Flat = True
+      TabOrder = 1
+    end
+  end
+  object OracleDataSet1: TOracleDataSet
+    SQL.Strings = (
+      'SELECT rowid ,a.*'
+      '  FROM cm_insuranceagency a')
+    QBEDefinition.QBEFieldDefs = {
+      0400000003000000020000004944010000000000040000004E414D4501000000
+      000003000000534944010000000000}
+    Session = CMDataModule.CMSession
+    Left = 232
+    Top = 56
+    object OracleDataSet1ID: TIntegerField
+      FieldName = 'ID'
+    end
+    object OracleDataSet1NAME: TStringField
+      FieldName = 'NAME'
+      Required = True
+      Size = 90
+    end
+    object OracleDataSet1SID: TStringField
+      FieldName = 'SID'
+      Size = 22
+    end
+  end
+  object DataSource1: TDataSource
+    DataSet = OracleDataSet1
+    Left = 176
+    Top = 56
+  end
+  object NLSLocalizer1: TNLSLocalizer
+    Caption = 'ׁûüמנעאםûם קורטהט'
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    Left = 120
+    Top = 104
+  end
+end

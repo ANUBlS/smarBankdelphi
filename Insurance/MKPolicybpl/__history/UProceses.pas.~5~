@@ -1,0 +1,43 @@
+unit UProceses;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, XFSCtrls, Buttons;
+
+type
+  TfmProceses = class(TForm)
+    BitBtn1: TBitBtn;
+    BitBtn2: TBitBtn;
+    XFGroupBox1: TXFGroupBox;
+    cbPolNum: TXFCheckBox;
+    cbAccounts: TXFCheckBox;
+    cbTransactions: TXFCheckBox;
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure BitBtn2Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  fmProceses: TfmProceses;
+
+implementation
+
+{$R *.dfm}
+
+procedure TfmProceses.BitBtn2Click(Sender: TObject);
+begin
+close;
+end;
+
+procedure TfmProceses.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+if ord(key)=vk_escape then close;
+
+end;
+
+end.

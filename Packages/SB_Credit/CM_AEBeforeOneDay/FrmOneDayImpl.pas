@@ -1,0 +1,217 @@
+﻿unit FrmOneDayImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Buttons,  Db, CMExcelExport, OracleData, DBCtrls, StdCtrls,
+  ExtCtrls, ComCtrls, Mask, DBCtrlsEh, DBLookupEh, DBGridEh;
+
+type
+  TFrmOneDay = class(TForm)
+    Panel1: TPanel;
+    GroupBox6: TGroupBox;
+    CBaValute: TCheckBox;
+    LCBValutes: TDBLookupComboBox;
+    GroupBox1: TGroupBox;
+    CBFilial: TCheckBox;
+    LCBFilials: TDBLookupComboBox;
+    GroupBox2: TGroupBox;
+    CBPersons: TCheckBox;
+    LCBPersons: TDBLookupComboBox;
+    GroupBox3: TGroupBox;
+    CBCategories: TCheckBox;
+    LCBCategories: TDBLookupComboBox;
+    DatSetValute: TOracleDataSet;
+    DatSetValuteVALUTE: TIntegerField;
+    DatSetValuteVALU_NAME: Twidestringfield;
+    DatSrcValute: TDataSource;
+    DatSrcFilials: TDataSource;
+    DatSetFilials: TOracleDataSet;
+    EExport: TCMExcelExport;
+    DatSetPersons: TOracleDataSet;
+    DatSetPersonsID: TFloatField;
+    DatSetPersonsDESCRIPION: Twidestringfield;
+    DatSrcPersons: TDataSource;
+    Reserves: TOracleDataSet;
+    ReservesID: TFloatField;
+    ReservesPERCENT: TFloatField;
+    ReservesDESCRIPTION: Twidestringfield;
+    ReservesFullDesc: Twidestringfield;
+    DataSrcReserves: TDataSource;
+    OracleDataSet1: TOracleDataSet;
+    OracleDataSet1NUMBEROFCREDIT: Twidestringfield;
+    OracleDataSet1PRINCIPAL: TFloatField;
+    OracleDataSet1INTEREST: TFloatField;
+    OracleDataSet1VAL_NAME: Twidestringfield;
+    SpeedButton1: TSpeedButton;
+    SpeedButton2: TSpeedButton;
+    OracleDataSet1PAYMENTDATE: TDateTimeField;
+    OracleDataSet1NAME: Twidestringfield;
+    DateTimePicker1: TDateTimePicker;
+    Label1: TLabel;
+    DBLookupComboboxEh1: TDBLookupComboboxEh;
+    DateTimePicker2: TDateTimePicker;
+    Label2: TLabel;
+    GroupBox4: TGroupBox;
+    CheckBox1: TCheckBox;
+    DBLookupComboBox1: TDBLookupComboBox;
+    DataSource1: TDataSource;
+    OracleDataSet2: TOracleDataSet;
+    OracleDataSet2ID: TFloatField;
+    OracleDataSet2CODE: TWideStringField;
+    OracleDataSet2NAME: TWideStringField;
+    OracleDataSet2FILIALID: TFloatField;
+    OracleDataSet1EXNAME: TWideStringField;
+    OracleDataSet1PHONENUMBER: TWideStringField;
+    OracleDataSet1EO: TFloatField;
+    OracleDataSet1INTERESTREST: TFloatField;
+    OracleDataSet1PENALTYREST: TFloatField;
+    OracleDataSet1CEM: TFloatField;
+    OracleDataSet1ODCEM: TFloatField;
+    OracleDataSet1PROQ: TFloatField;
+    procedure Panel1CanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+    procedure FormCreate(Sender: TObject);
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+    procedure FormDestroy(Sender: TObject);
+    procedure SpeedButton2Click(Sender: TObject);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure ReservesCalcFields(DataSet: TDataSet);
+    procedure SpeedButton1Click(Sender: TObject);
+  private
+    function BuildFilterString : String;
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmOneDay: TFrmOneDay;
+
+implementation
+
+uses  CommonDecls,sbsystem,  sboApiDataModuleImpl{,Baliimpl};
+{$R *.DFM}
+
+ procedure InitPlugin(s:string);export;
+begin
+   FrmOneDay.ShowModal;
+end;
+exports
+     InitPlugin;
+
+procedure TFrmOneDay.Panel1CanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+Resize:=False;
+end;
+
+procedure TFrmOneDay.FormCreate(Sender: TObject);
+begin
+DatSetValute.open;
+DatSetFilials.Open;
+DatSetPersons.open;
+DateTimePicker1.DateTime:=date;
+DateTimePicker2.DateTime:=date;
+Reserves.open;
+end;
+
+procedure TFrmOneDay.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+Resize:=False;
+end;
+
+procedure TFrmOneDay.FormDestroy(Sender: TObject);
+begin
+DatSetValute.closeall;
+DatSetFilials.closeall;
+DatSetPersons.closeall;
+Reserves.closeall;
+end;
+
+procedure TFrmOneDay.SpeedButton2Click(Sender: TObject);
+begin
+close;
+end;
+
+procedure TFrmOneDay.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+  if ORD(Key) = VK_ESCAPE then
+    Close 
+end;
+
+procedure TFrmOneDay.ReservesCalcFields(DataSet: TDataSet);
+begin
+ReservesFullDesc.AsString := ReservesDESCRIPTION.AsString +' - '+ ReservesPERCENT.AsString+' %';
+end;
+
+function TFrmOneDay.BuildFilterString : String;
+
+  procedure ConcatFilter(var S: String; const Prefix : String; Checked : Boolean; KeyValue : Variant);
+  const
+     csFormat = '(%s=%s)';
+  var
+    Temp : String;
+  begin
+
+    if Checked then
+    begin
+      Temp := Format(csFormat,[Prefix,Keyvalue]);
+      if S = '' then
+        S := Temp
+      else
+        S :=S + 'and ' + Temp;
+    end;
+    
+  end;  // Concat Filter
+
+
+
+
+begin
+
+  Result := '';
+
+
+  ConcatFilter(Result,'p.CURRENCY',CBaValute.Checked,LCBValutes.KeyValue);
+  ConcatFilter(Result,'p.BRANCHID',CBFilial.Checked,LCBFilials.KeyValue);
+  ConcatFilter(Result,'p.PERSONALTYPE',CBPersons.Checked,LCBPersons.KeyValue);
+  ConcatFilter(Result,'h.reserveid',CBCategories.Checked,LCBCategories.KeyValue);
+  ConcatFilter(Result,'p.expertid',CheckBox1.Checked,DBLookupComboBox1.KeyValue);
+ end;
+
+procedure TFrmOneDay.SpeedButton1Click(Sender: TObject);
+var FilterStr:string;
+begin
+
+  if OracleDataSet1.Active then OracleDataSet1.CloseAll;
+  if BuildFilterString <> '' then
+   begin
+     FilterStr := ' and '+BuildFilterString;
+     OracleDataSet1.SQL[9] := FilterStr
+   end
+       else
+          OracleDataSet1.SQL[9] :='';
+
+    OracleDataSet1.SetVariable('dat',trunc(DateTimePicker1.DateTime));
+    OracleDataSet1.SetVariable('dat1',trunc(DateTimePicker2.DateTime));
+OracleDataSet1.open;
+if  OracleDataSet1.RecordCount=0 then
+begin
+ShowMessage('Heç bir ödeniş yoxdur ');
+exit;
+end;
+
+ with EExport do begin
+        Connect;
+        ExportDataset(OracleDataSet1,'CREDITSMGR',true,false);
+        Disconnect;
+    end;
+end;
+
+initialization
+   FrmOneDay := TFrmOneDay.Create(CommonApplication);
+end.

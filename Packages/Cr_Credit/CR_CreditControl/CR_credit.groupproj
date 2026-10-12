@@ -1,0 +1,60 @@
+﻿	<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+		<PropertyGroup>
+			<ProjectGuid>{BFF399F8-7751-4DAD-95A6-2167FA21B452}</ProjectGuid>
+		</PropertyGroup>
+		<ItemGroup>
+			<Projects Include="CR_CreditControl.dproj">
+				<Dependencies/>
+			</Projects>
+			<Projects Include="..\Guaranty\Guarantymgr.dproj">
+				<Dependencies/>
+			</Projects>
+			<Projects Include="..\..\sboapi50\sboapi50.dproj">
+				<Dependencies/>
+			</Projects>
+		</ItemGroup>
+		<ProjectExtensions>
+			<Borland.Personality>Default.Personality.12</Borland.Personality>
+			<Borland.ProjectType/>
+			<BorlandProject>
+				<Default.Personality/>
+			</BorlandProject>
+		</ProjectExtensions>
+		<Target Name="CR_CreditControl">
+			<MSBuild Projects="CR_CreditControl.dproj"/>
+		</Target>
+		<Target Name="CR_CreditControl:Clean">
+			<MSBuild Projects="CR_CreditControl.dproj" Targets="Clean"/>
+		</Target>
+		<Target Name="CR_CreditControl:Make">
+			<MSBuild Projects="CR_CreditControl.dproj" Targets="Make"/>
+		</Target>
+		<Target Name="Guarantymgr">
+			<MSBuild Projects="..\Guaranty\Guarantymgr.dproj"/>
+		</Target>
+		<Target Name="Guarantymgr:Clean">
+			<MSBuild Projects="..\Guaranty\Guarantymgr.dproj" Targets="Clean"/>
+		</Target>
+		<Target Name="Guarantymgr:Make">
+			<MSBuild Projects="..\Guaranty\Guarantymgr.dproj" Targets="Make"/>
+		</Target>
+		<Target Name="sboapi50">
+			<MSBuild Projects="..\..\sboapi50\sboapi50.dproj"/>
+		</Target>
+		<Target Name="sboapi50:Clean">
+			<MSBuild Projects="..\..\sboapi50\sboapi50.dproj" Targets="Clean"/>
+		</Target>
+		<Target Name="sboapi50:Make">
+			<MSBuild Projects="..\..\sboapi50\sboapi50.dproj" Targets="Make"/>
+		</Target>
+		<Target Name="Build">
+			<CallTarget Targets="CR_CreditControl;Guarantymgr;sboapi50"/>
+		</Target>
+		<Target Name="Clean">
+			<CallTarget Targets="CR_CreditControl:Clean;Guarantymgr:Clean;sboapi50:Clean"/>
+		</Target>
+		<Target Name="Make">
+			<CallTarget Targets="CR_CreditControl:Make;Guarantymgr:Make;sboapi50:Make"/>
+		</Target>
+		<Import Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')" Project="$(BDS)\Bin\CodeGear.Group.Targets"/>
+	</Project>

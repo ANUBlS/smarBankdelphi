@@ -1,0 +1,239 @@
+unit UMotorInsPolicy;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ComCtrls, StdCtrls, Mask, DBCtrls, Buttons, ExtCtrls,DB, HintBox,
+  INSWordExporter;
+
+type
+  TFormPolicy = class(TForm)
+    GroupBox3: TGroupBox;
+    Label4: TLabel;
+    ENum: TDBEdit;
+    GroupBox2: TGroupBox;
+    Label2: TLabel;
+    Label11: TLabel;
+    Label14: TLabel;
+    DBEdit8: TDBEdit;
+    DBEdit9: TDBEdit;
+    DBEdit10: TDBEdit;
+    GroupBox1: TGroupBox;
+    Label30: TLabel;
+    Label32: TLabel;
+    Label31: TLabel;
+    Label33: TLabel;
+    Label34: TLabel;
+    Label27: TLabel;
+    ENumberP: TDBEdit;
+    ETotalMedical: TDBEdit;
+    ETotalLimit: TDBEdit;
+    ELimitPer: TDBEdit;
+    EMedicalExpen: TDBEdit;
+    EPremiuumIns: TDBEdit;
+    INSWordExporter1: TINSWordExporter;
+    Label1: TLabel;
+    DBLookupComboBox4: TDBLookupComboBox;
+    Panel1: TPanel;
+    btPrint: TBitBtn;
+    BitBtn2: TBitBtn;
+    BitBtn3: TBitBtn;
+    btApply: TBitBtn;
+    procedure BitBtn3Click(Sender: TObject);
+    procedure DBLookupComboBox1KeyPress(Sender: TObject; var Key: Char);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormCreate(Sender: TObject);
+    procedure BitBtn2Click(Sender: TObject);
+    Procedure SaveData;
+    Procedure LoadData;
+    procedure btPrintClick(Sender: TObject);
+    procedure btApplyClick(Sender: TObject);
+    procedure ENumChange(Sender: TObject);
+  private
+    { Private declarations }
+    procedure AddTransh;
+  public
+    { Public declarations }
+  end;
+
+var
+  FormPolicy: TFormPolicy;
+
+implementation
+
+uses DataUnitFullMotor;
+
+{$R *.DFM}
+
+procedure TFormPolicy.SaveData;
+begin
+   with DataModuleFullMotor do
+   begin
+     Policy.Post;
+     Policy.RefreshRecord();
+     with ODSContracts do
+     if State in [dsEdit, dsInsert] then
+     begin
+        FieldByName('policy_id').asFloat := Policy.FieldByName('id').asFloat;
+        Post;
+     end;
+   end;
+
+end;
+
+Procedure TFormPolicy.LoadData;
+begin
+     with DataModuleFullMotor.Policy do
+     begin
+          ENum.Text:= FieldByName('POLICYNUM').AsString;
+     end;
+end;
+
+procedure TFormPolicy.BitBtn3Click(Sender: TObject);
+begin
+     ModalResult:=mrCancel;
+end;
+
+procedure TFormPolicy.DBLookupComboBox1KeyPress(Sender: TObject;
+  var Key: Char);
+begin
+     if Key = #13 then
+     begin
+        if HiWord(GetKeyState(VK_Shift))<>0 then
+           with Sender as TControl do
+           SelectNext(ActiveControl,False, True)
+        else
+           with Sender as TControl do
+           SelectNext(ActiveControl,True, True);
+        key:=#0;
+     end;
+end;
+
+procedure TFormPolicy.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+     Action:=cafree;
+end;
+
+procedure TFormPolicy.FormCreate(Sender: TObject);
+begin
+    with DataModuleFullMotor do
+    begin
+      ODSContracts.Close;
+      ODSContracts.SetVariable('blankid', Suggestionmk_id.value);
+      ODSContracts.Open;
+    if Policy.State = dsEdit then
+    begin
+       Caption := Caption + '  (redakte)';
+       btPrint.Enabled:=true;
+       btApply.Enabled:=true;
+    end
+    else Caption := Caption + '  (elave etmek)';
+    end;
+    LoadData();
+end;
+
+procedure TFormPolicy.BitBtn2Click(Sender: TObject);
+begin
+         SaveData;
+         with DataModuleFullMotor.Policy do
+         begin
+              if State in [dsInsert, dsEdit] then  Post;
+              RefreshRecord;
+         end;
+         ModalResult := mrOk; 
+end;
+
+procedure TFormPolicy.btPrintClick(Sender: TObject);
+var
+   i:integer;
+begin
+     if  MessageDlg('Emeliyyat aparilsin?', mtConfirmation	, [mbYes, mbNo], 0) = mrYes then
+     AddTransh();
+     with INSWordExporter1,DataModuleFullMotor do
+     begin
+          AValute.Locate('valute',ODSCOntractsValute_ID.Value,[]);
+          Ins_PRep.Locate('ID',Ins_MotorFullID.Value,[]);
+          FileName:=ExtractFilePath(Application.ExeName)+ '\MotorFullPolicys.doc';
+          Open(False);  
+          if not Ins_PRepName.IsNull then
+          SetBookmark('Insured1',Ins_PRepName.value, false, false, False, false, 8, 'Arial AzLat', False);
+          if not SuggestionEndDate.IsNull then
+          begin
+               SetBookmark('Date1',DateToStr(SuggestionEndDate.value), False, False, False, False, 8, 'Arial AzLat', False);
+               SetBookmark('Date2',DateToStr(SuggestionEndDate.value), False, False, False, False, 8, 'Arial AzLat', False);
+          end;
+          SetBookmark('Agent',ODSAgentsName.value, false, false, False, false, 8, 'Arial AzLat', False);
+          SetBookmark('PolicyN',ODSContractsPolicy_Num.value, false, false, False, false, 8, 'Arial AzLat', False);
+          SetBookmark('Beneficiary',ODSBeneficiaryName.value, false, false, False, false, 8, 'Arial AzLat', False);
+          SetBookmark('Insured',Ins_PRepName.value, false, false, False, false, 8, 'Arial AzLat', False);
+          SetBookmark('AInsured',Ins_PRepAddress.value, false, false, False, false, 8, 'Arial AzLat', False);
+          SetBookmark('TInsured',Ins_PRepPhone.value, false, false, False, false, 8, 'Arial AzLat', False);
+          SetBookmark('Geo',Ins_PRepInsuranceGeographicalLimit.value, false, false, False, false, 8, 'Arial AzLat', False);
+          SetBookmark('Model',Ins_PRepInsuredModel.value, false, false, False, false, 8, 'Arial AzLat', False);
+          SetBookmark('Year',InTToStr(Ins_PRepInsuredoutputYear.value), false, false, False, false, 8, 'Arial AzLat', False);
+          SetBookmark('Color',Ins_PRepInsuredColor.value, false, false, False, false, 8, 'Arial AzLat', False);
+          SetBookmark('Type',Ins_PRepInsuredType.value, false, false, False, false, 8, 'Arial AzLat', False);
+          SetBookmark('Capacity',IntToStr(Ins_PRepInsuredNumSeats.value), false, false, False, false, 8, 'Arial AzLat', False);
+          SetBookmark('Engine',Ins_PRepInsuredEngineNum.value, false, false, False, false, 8, 'Arial AzLat', False);
+          SetBookmark('Body',Ins_PRepInsuredBody.value, false, false, False, false, 8, 'Arial AzLat', False);
+          SetBookmark('Plate',Ins_PRepInsuredStateNum.value, false, false, False, false, 8, 'Arial AzLat', False);
+
+          //SetBookmark('Insured',Ins_MotorFullName.value, false, false, False, false, 8, 'Arial AzLat', False);
+
+          if not Franshiz.Fields[1].IsNull then
+          SetBookmark('Deductible',Franshiz.Fields[1].value, false, false, False, false, 8, 'Arial AzLat', False);
+          if not SuggestionInsuranceSum.IsNull then
+          SetBookmark('SumInsured',CurrToStr(SuggestionInsuranceSum.value), false, false, False, false, 8, 'Arial AzLat', False);
+          if not ODSContractsAmmount.IsNull then
+          SetBookmark('InsPrem',CurrToStr(ODSContractsAmmount.value), false, false, False, false, 8, 'Arial AzLat', False);
+          {if not ODSContractsPolicy_num.IsNull then
+          SetBookmark('SValue',ODSContractsPolicy_num.value, false, false, False, false, 8, 'Arial AzLat', False); }
+          if not AValute.Fields[0].IsNull then
+          SetBookmark('Currency',AValute.Fields[0].value, false, false, False, false, 8, 'Arial AzLat', False);
+          MoreThan.First;
+          for i:=0 to MoreThan.RecordCount-1 do
+          begin
+              if MoreThan.Fields[0].IsNull then Continue;
+              SetBookmark('Drivers',MoreThan.Fields[0].value+#13#10, false, false, false, false, 8, 'Arial AzLat', False);
+              MoreThan.Next;
+          end;
+          Show;
+     end;
+end;
+
+procedure TFormPolicy.btApplyClick(Sender: TObject);
+begin
+     SaveData;
+     with DataModuleFullMotor.Policy do
+     begin
+          if State in [dsInsert, dsEdit] then  Post;
+          RefreshRecord;
+     end;
+     btPrint.Enabled:=true;
+     btApply.Enabled:=false;
+     DataModuleFullMotor.Policy.Edit;
+end;
+
+procedure TFormPolicy.ENumChange(Sender: TObject);
+begin
+     btApply.Enabled:=true;
+end;
+
+procedure TFormPolicy.AddTransh;
+begin
+      with DataModuleFullMotor, OPCOMMON do begin
+      Ins_PRep.Locate('ID',Ins_MotorFullID.Value,[]);
+      ODSContracts.Close;
+      ODSContracts.SetVariable('blankid',Ins_MotorFullID.Value);
+      ODSContracts.Open;
+      if CallIntegerFunction('addtransaction', [
+                      ODSContracts.FieldByName('LOANACC_ID').asFloat,
+                      ODSContracts.FieldByName('CURRACC_ID').asFloat,
+                      ODSContracts.FieldByName('AMMOUNT').asFloat]) > 0 then
+      MessageDlg('Emeliyyat kecirildi.', mtInformation, [mbOK], 0);
+      Close;
+    end;
+end;
+
+end.

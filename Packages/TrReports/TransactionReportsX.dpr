@@ -1,0 +1,24 @@
+library TransactionReportsX;
+
+uses
+  ComServ,
+  TransactionReportsX_TLB in 'TransactionReportsX_TLB.pas',
+  TransactionReportsImpl in 'TransactionReportsImpl.pas' {TransactionReports: TActiveForm} {TransactionReports: CoClass},
+  About1 in 'About1.pas' {TransactionReportsAbout},
+  TrRepDM in 'TrRepDM.pas' {DataModuleTrRep: TDataModule};
+
+
+{$E ocx}
+
+exports
+  DllGetClassObject,
+  DllCanUnloadNow,
+  DllRegisterServer,
+  DllUnregisterServer;
+
+{$R *.TLB}
+
+{$R *.RES}
+
+begin
+end.

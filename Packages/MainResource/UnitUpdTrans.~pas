@@ -1,0 +1,79 @@
+unit UnitUpdTrans;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, Buttons;
+
+type
+  TFormUpdTrans = class(TForm)
+    GroupBoxDebtAcc: TGroupBox;
+    CBoxDebtAcc: TComboBox;
+    GroupBoxCredAcc: TGroupBox;
+    CBoxCredAcc: TComboBox;
+    BitBtnOk: TBitBtn;
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormActivate(Sender: TObject);
+    procedure BitBtnOkClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormUpdTrans: TFormUpdTrans;
+
+implementation
+
+uses UnitData;
+
+{$R *.DFM}
+
+procedure TFormUpdTrans.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+ if (ORD(Key) =VK_ESCAPE) then Close;
+end;
+
+procedure TFormUpdTrans.FormActivate(Sender: TObject);
+var
+rec:integer;
+begin
+        DataMod.ODSViewGr.Close;
+        DataMod.ODSViewGr.Open;
+
+          CBoxDebtAcc.Clear;
+          CBoxCredAcc.Clear;
+      for rec := 1 to DataMod.ODSViewGr.RecordCount do
+      begin
+        CBoxDebtAcc.Items.Add(DataMod.ODSViewGr.FieldByName('Acc_No').AsString);
+        CBoxCredAcc.Items.Add(DataMod.ODSViewGr.FieldByName('Acc_No').AsString);
+      DataMod.ODSViewGr.Next;
+      end;
+
+
+            CBoxDebtAcc.Text:= DataMod.ODSCalcWares.FieldByName('DebtAccNo').AsString;
+            CBoxCredAcc.Text:= DataMod.ODSCalcWares.FieldByName('CredAccNo').AsString;
+
+end;
+
+
+procedure TFormUpdTrans.BitBtnOkClick(Sender: TObject);
+begin
+   if  (CBoxCredAcc.Text<>'') and
+   (CBoxDebtAcc.Text<>'') and ( not DataMod.ODSCalcWares.IsEmpty ) 
+   then
+   begin
+
+  DataMod.SB_MAIN_RESOURCE.CallProcedure('update_wares_trans',[
+                                     DataMod.ODSCalcWares.FieldByName('id').AsFloat,
+                                     Trim(CBoxDebtAcc.Text),
+                                     Trim(CBoxCredAcc.Text)]);
+             DataMod.ODSCalcWares.Refresh;
+         close;
+   end
+   else ShowMessage('Бош галан ханалар вар!');
+end;
+
+end.

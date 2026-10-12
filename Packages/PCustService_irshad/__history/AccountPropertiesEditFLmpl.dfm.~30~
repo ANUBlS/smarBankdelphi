@@ -1,0 +1,536 @@
+object AccountPropertiesEditF: TAccountPropertiesEditF
+  Left = 0
+  Top = 0
+  Caption = 'Hesablar'
+  ClientHeight = 578
+  ClientWidth = 1150
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poDesktopCenter
+  OnCreate = FormCreate
+  PixelsPerInch = 96
+  TextHeight = 13
+  object XFPanel1: TXFPanel
+    Left = 0
+    Top = 0
+    Width = 1150
+    Height = 544
+    Align = alClient
+    Caption = 'XFPanel1'
+    TabOrder = 0
+    object Account_grid: TXDBGrid
+      Left = 1
+      Top = 1
+      Width = 1148
+      Height = 362
+      Align = alClient
+      DataSource = DataModPCustService.Dsrc_closAccount
+      GridStyle.VisualStyle = vsXPStyle
+      Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit, dgExtendedSelect, dgInternalSelect, dgRowResize, dgRowScroll, dgHotButtons, dgTitleButtons, dgTitleHeaders, dgTitleWidthOff, dgMarkerAutoAlign, dgMarkerAutoToggle]
+      PopupMenu = PopupMenu1
+      StretchMode = True
+      TabOrder = 0
+      OnDblClick = Account_gridDblClick
+      Columns = <
+        item
+          Expanded = False
+          FieldName = 'KLI_ID'
+          Title.Alignment = taCenter
+          Title.Caption = 'M.Kodu'
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clWindowText
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = [fsBold]
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'BAL_CN1'
+          Title.Alignment = taCenter
+          Title.Caption = 'Balans hesab'#305
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clWindowText
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = [fsBold]
+          Visible = True
+          Width = 83
+        end
+        item
+          Alignment = taRightJustify
+          Expanded = False
+          FieldName = 'ACC_NO'
+          Title.Alignment = taCenter
+          Title.Caption = 'Hesab'
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clWindowText
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = [fsBold]
+          Visible = True
+          Width = 220
+        end
+        item
+          Alignment = taRightJustify
+          Expanded = False
+          FieldName = 'NAME'
+          Title.Alignment = taCenter
+          Title.Caption = 'Hesab'#305'n ad'#305
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clWindowText
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = [fsBold]
+          Visible = True
+          Width = 300
+        end
+        item
+          Alignment = taRightJustify
+          Expanded = False
+          FieldName = 'VAL_NAME'
+          Title.Caption = 'Valyuta'
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clWindowText
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = [fsBold]
+          Visible = True
+          Width = 50
+        end
+        item
+          Alignment = taRightJustify
+          Expanded = False
+          FieldName = 'OPEN_DAT'
+          Title.Alignment = taCenter
+          Title.Caption = 'A'#231#305'lma tarixi'
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clWindowText
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = [fsBold]
+          Visible = True
+          Width = 77
+        end
+        item
+          Expanded = False
+          FieldName = 'BALANCE'
+          Title.Alignment = taCenter
+          Title.Caption = 'Qal'#305'q'
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clWindowText
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = [fsBold]
+          Visible = True
+          Width = 70
+        end
+        item
+          Expanded = False
+          FieldName = 'LBALANCE'
+          Title.Alignment = taCenter
+          Title.Caption = 'Ekviva'#305'ent'
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clWindowText
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = [fsBold]
+          Visible = True
+          Width = 70
+        end
+        item
+          Alignment = taRightJustify
+          Expanded = False
+          FieldName = 'TYPESYMB'
+          Title.Alignment = taCenter
+          Title.Caption = 'Hesab tipi'
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clWindowText
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = [fsBold]
+          Visible = True
+          Width = 62
+        end
+        item
+          Alignment = taRightJustify
+          Expanded = False
+          FieldName = 'TIPACC'
+          Title.Alignment = taCenter
+          Title.Caption = 'Simvollar'
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clWindowText
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = [fsBold]
+          Visible = True
+          Width = 62
+        end>
+    end
+    object XFPanel3: TXFPanel
+      Left = 1
+      Top = 363
+      Width = 1148
+      Height = 35
+      Align = alBottom
+      BevelInner = bvLowered
+      TabOrder = 1
+      object XFLabel1: TXFLabel
+        Left = 8
+        Top = 12
+        Width = 73
+        Height = 13
+        Caption = 'Balans hesb'#305':'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object XFLabel2: TXFLabel
+        Left = 188
+        Top = 12
+        Width = 38
+        Height = 13
+        Caption = 'Hesab:'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object EditBAL_CN1: TEdit
+        Left = 84
+        Top = 8
+        Width = 92
+        Height = 21
+        TabOrder = 0
+        OnKeyPress = EditBAL_CN1KeyPress
+      end
+      object EditAcc_no: TEdit
+        Left = 230
+        Top = 8
+        Width = 224
+        Height = 21
+        TabOrder = 1
+        OnKeyPress = EditAcc_noKeyPress
+      end
+    end
+    object XFPanel4: TXFPanel
+      Left = 1
+      Top = 398
+      Width = 1148
+      Height = 145
+      Align = alBottom
+      TabOrder = 2
+      object XDBGrid1: TXDBGrid
+        Left = 1
+        Top = 1
+        Width = 1146
+        Height = 143
+        Align = alClient
+        DataSource = DataModPCustService.Transdata
+        GridStyle.VisualStyle = vsXPStyle
+        TabOrder = 0
+        Columns = <
+          item
+            Expanded = False
+            FieldName = 'ID'
+            Title.Caption = #8470
+            Title.Font.Charset = DEFAULT_CHARSET
+            Title.Font.Color = clWindowText
+            Title.Font.Height = -11
+            Title.Font.Name = 'Tahoma'
+            Title.Font.Style = [fsBold]
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'STATUS'
+            Images = ImageList
+            Title.Font.Charset = DEFAULT_CHARSET
+            Title.Font.Color = clWindowText
+            Title.Font.Height = -11
+            Title.Font.Name = 'Tahoma'
+            Title.Font.Style = [fsBold]
+            Transparent = True
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'TRANSACTIONDATE'
+            Title.Caption = 'Tarix'
+            Title.Font.Charset = DEFAULT_CHARSET
+            Title.Font.Color = clWindowText
+            Title.Font.Height = -11
+            Title.Font.Name = 'Tahoma'
+            Title.Font.Style = [fsBold]
+            Visible = True
+            Width = 75
+          end
+          item
+            Expanded = False
+            FieldName = 'DEBITACCNO'
+            Title.Caption = 'Debet'
+            Title.Font.Charset = DEFAULT_CHARSET
+            Title.Font.Color = clWindowText
+            Title.Font.Height = -11
+            Title.Font.Name = 'Tahoma'
+            Title.Font.Style = [fsBold]
+            Visible = True
+            Width = 220
+          end
+          item
+            Expanded = False
+            FieldName = 'DEBITCURRENCYSNAME'
+            Title.Caption = '$'
+            Title.Font.Charset = DEFAULT_CHARSET
+            Title.Font.Color = clWindowText
+            Title.Font.Height = -11
+            Title.Font.Name = 'Tahoma'
+            Title.Font.Style = [fsBold]
+            Visible = True
+            Width = 40
+          end
+          item
+            Expanded = False
+            FieldName = 'CREDITACCNO'
+            Title.Caption = 'Kredit'
+            Title.Font.Charset = DEFAULT_CHARSET
+            Title.Font.Color = clWindowText
+            Title.Font.Height = -11
+            Title.Font.Name = 'Tahoma'
+            Title.Font.Style = [fsBold]
+            Visible = True
+            Width = 220
+          end
+          item
+            Expanded = False
+            FieldName = 'CREDITCURRENCYSNAME'
+            Title.Caption = '$'
+            Title.Font.Charset = DEFAULT_CHARSET
+            Title.Font.Color = clWindowText
+            Title.Font.Height = -11
+            Title.Font.Name = 'Tahoma'
+            Title.Font.Style = [fsBold]
+            Visible = True
+            Width = 40
+          end
+          item
+            Expanded = False
+            FieldName = 'DEBITAMOUNT'
+            Title.Caption = 'Debet m'#601'bl'#601#287
+            Title.Font.Charset = DEFAULT_CHARSET
+            Title.Font.Color = clWindowText
+            Title.Font.Height = -11
+            Title.Font.Name = 'Tahoma'
+            Title.Font.Style = [fsBold]
+            Visible = True
+            Width = 88
+          end
+          item
+            Expanded = False
+            FieldName = 'CREDITAMOUNT'
+            Title.Caption = 'Kredit m'#601'bl'#601#287
+            Title.Font.Charset = DEFAULT_CHARSET
+            Title.Font.Color = clWindowText
+            Title.Font.Height = -11
+            Title.Font.Name = 'Tahoma'
+            Title.Font.Style = [fsBold]
+            Visible = True
+            Width = 87
+          end
+          item
+            Expanded = False
+            FieldName = 'LAMOUNT'
+            Title.Caption = 'Ekvivalent'
+            Title.Font.Charset = DEFAULT_CHARSET
+            Title.Font.Color = clWindowText
+            Title.Font.Height = -11
+            Title.Font.Name = 'Tahoma'
+            Title.Font.Style = [fsBold]
+            Visible = True
+            Width = 72
+          end
+          item
+            Expanded = False
+            FieldName = 'NAME'
+            Title.Caption = 'T'#601'yinat'
+            Title.Font.Charset = DEFAULT_CHARSET
+            Title.Font.Color = clWindowText
+            Title.Font.Height = -11
+            Title.Font.Name = 'Tahoma'
+            Title.Font.Style = [fsBold]
+            Visible = True
+            Width = 300
+          end
+          item
+            Expanded = False
+            FieldName = 'NAME'
+            Visible = True
+          end>
+      end
+    end
+  end
+  object XFPanel2: TXFPanel
+    Left = 0
+    Top = 544
+    Width = 1150
+    Height = 34
+    Align = alBottom
+    BevelInner = bvLowered
+    TabOrder = 1
+    object XFBitBtn1: TXFBitBtn
+      Left = 360
+      Top = 6
+      Width = 100
+      Height = 25
+      Caption = 'Redakt'#601
+      DoubleBuffered = True
+      ParentDoubleBuffered = False
+      TabOrder = 0
+      OnClick = XFBitBtn1Click
+    end
+    object XFBitBtn2: TXFBitBtn
+      Left = 466
+      Top = 5
+      Width = 100
+      Height = 25
+      Caption = 'Hesab'#305' ba'#287'lamaq'
+      DoubleBuffered = True
+      ParentDoubleBuffered = False
+      TabOrder = 1
+      OnClick = XFBitBtn2Click
+    end
+    object XFButton1: TXFButton
+      Left = 846
+      Top = 6
+      Width = 75
+      Height = 25
+      Caption = 'Close'
+      DoubleBuffered = True
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentDoubleBuffered = False
+      ParentFont = False
+      TabOrder = 2
+      OnClick = XFButton1Click
+    end
+  end
+  object PopupMenu1: TPopupMenu
+    Left = 312
+    Top = 120
+    object N1: TMenuItem
+      Caption = #399'm'#601'liyyat'
+      object Debit2: TMenuItem
+        Caption = 'Debit'
+        OnClick = Debit2Click
+      end
+      object Kredit2: TMenuItem
+        Caption = 'Kredit'
+        OnClick = Kredit2Click
+      end
+    end
+    object closeAccount: TMenuItem
+      Caption = 'Hesab'#305'n ba'#287'lanmas'#305
+      OnClick = closeAccountClick
+    end
+    object edit1: TMenuItem
+      Caption = 'Redakt'#601
+      OnClick = edit1Click
+    end
+    object ddd1: TMenuItem
+      Caption = 'Biznes prosses'
+      OnClick = ddd1Click
+    end
+  end
+  object ImageList: TImageList
+    Left = 441
+    Top = 168
+    Bitmap = {
+      494C010103000500040010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      0000000000003600000028000000400000001000000001001000000000000008
+      000000000000000000000000000000000000000000008C311042104210421042
+      10421042104210421042104210421042841000000000000000000000FF7FFF7F
+      FF7FFF7FFF7FFF7F000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000008010604EE03DE03DE03DE03DE03D
+      E03DE03DE03DE03DE03DE03D4A2910421042000000000000FF7FFF7F00000000
+      0000000000000000FF7FFF7F0000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000E05EE07FE07FE07FE07FE07FE07F
+      E07FE07FE07FE07FE07FE07FA6770821104200000000FF7F0000000000001000
+      000010000000100000000000FF7F000000000000000000000000000000000000
+      1000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000E05EE07FE07FE07FE07FE07FA656
+      0000A656E07FE07FE07FE07FA677082108210000FF7F00001000100010000000
+      1000000010000000100000000000FF7F00000000000000000000000000001000
+      0002100000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000021E07FE07FE07FE07FE07FA656
+      0000A656E07FE07FE07FE07FA635104200000000FF7F10001000100010001863
+      1863FF7FFF7F1000000010000000FF7F00000000000000000000000010000002
+      0002000200000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000E05EE07FE07FE07FE07FE07F
+      E05EE07FE07FE07FE07FA677082108210000FF7F100010001000100010001000
+      1863FF7F100010001000000000000000FF7F0000000000000000100000020002
+      0002000210000000000000000000000000000000000000000000000000000000
+      00000000000000000000000000000000000000000021E07FE07FE07FE07F2667
+      4629E07FE07FE07FE07FA635104200000000FF7F100010001000100010001F00
+      1863FF7F100010001000000010000000FF7F000000000000000000020002E003
+      E003000200021000000000000000000000000000000000000000000000000000
+      00000000000000000000000000000000000000000000E05EE07FE07FE07FA635
+      0000A677E07FE07FA6770821082100000000FF7F100010001F0010001F001000
+      1863FF7F100010001000100000000000FF7F00000000000000000002E0030000
+      0000E00300020002100000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000000000000021E07FE07FE07F8010
+      0000604EE07FE07FA6351042000000000000FF7F1000100010001F0010001F00
+      1863FF7F100010001000000010000000FF7F0000000000000000E00300000000
+      0000000000020002000200000000000000000000000000000000000000000000
+      000000000000000000000000000000000000000000000000E05EE07FE07F0000
+      0000E03DE07FA67708210821000000000000FF7F100010001F0010001F001863
+      186318631F0010001000100000000000FF7F0000000000000000000000000000
+      00000000E0030002000210000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000021E07FE07F0000
+      0000E03DE07FA63510420000000000000000FF7F10001F0010001F001F001F00
+      1F001000100010001000000010000000FF7F0000000000000000000000000000
+      0000000000000000E00300020002100000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000E05EE07FA656
+      E03DA677A6770821082100000000000000000000FF7F10001F0010001F001F00
+      1863FF7F1F001000100010000000FF7F00000000000000000000000000000000
+      0000000000000000000000020002000200000000000000000000000000000000
+      00000000000000000000000000000000000000000000000000000021E07FE07F
+      E07FE07FA6351042000000000000000000000000FF7F100010001F0010001000
+      1863186310001000100010000000FF7F00000000000000000000000000000000
+      00000000000000000000E0030002000200000000000000000000000000000000
+      00000000000000000000000000000000000000000000000000000000E05EE07F
+      E07FA677082108210000000000000000000000000000FF7F1000100010001F00
+      100010001000100010000000FF7F000000000000000000000000000000000000
+      000000000000000000000000E003000200000000000000000000000000000000
+      000000000000000000000000000000000000000000000000000000000021E07F
+      E07FA6358C31000000000000000000000000000000000000FF7FFF7F10001000
+      1000100010001000FF7FFF7F0000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000000000000000000000000000E03D
+      A6560000000000000000000000000000000000000000000000000000FF7FFF7F
+      FF7FFF7FFF7FFF7F000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000424D3E000000000000003E000000
+      2800000040000000100000000100010000000000800000000000000000000000
+      000000000000000000000000FFFFFF00C000F81FFFFF00000000E007FFFF0000
+      0000C003FEFF000000008001FC7F000000018001F87F000080010000F03F0000
+      80030000F01F0000C0030000F30F0000C0070000F78F0000E0070000FF870000
+      E00F0000FFE10000F00F8001FFF10000F01F8001FFF10000F81FC003FFF90000
+      F83FE007FFFF0000FC7FF81FFFFF000000000000000000000000000000000000
+      000000000000}
+  end
+end

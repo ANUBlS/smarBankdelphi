@@ -1,0 +1,398 @@
+unit BusinessProcessSetupImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActiveX, AxCtrls, BusProcSet_TLB, StdVcl, Db, OracleData, ExtCtrls,
+  DBCtrls, Grids, DBGrids, StdCtrls, Mask;
+
+type
+  TBusinessProcessSetup = class(TActiveForm, IBusinessProcessSetup)
+    OracleDataSet1: TOracleDataSet;
+    OracleDataSet1ID: TFloatField;
+    OracleDataSet1NAME: TStringField;
+    DataSource1: TDataSource;
+    OracleDataSet2: TOracleDataSet;
+    OracleDataSet2ID: TFloatField;
+    OracleDataSet2PARENTID: TFloatField;
+    OracleDataSet2USERID: TFloatField;
+    OracleDataSet2BRANCHID: TFloatField;
+    OracleDataSet2DEBT: TFloatField;
+    OracleDataSet2KREDIT: TFloatField;
+    OracleDataSet2KASSA_B: TIntegerField;
+    OracleDataSet2KASSA_Z: TIntegerField;
+    OracleDataSet2NAME: TStringField;
+    OracleDataSet2REPORTID: TFloatField;
+    OracleDataSet2COUNTRID: TFloatField;
+    OracleDataSet2OPERID: TFloatField;
+    DataSource2: TDataSource;
+    OracleDataSet3: TOracleDataSet;
+    OracleDataSet3ID: TFloatField;
+    OracleDataSet3GROUPID: TFloatField;
+    OracleDataSet3BPCHILDID: TFloatField;
+    OracleDataSet3MINAMT: TFloatField;
+    OracleDataSet3MAXAMT: TFloatField;
+    OracleDataSet3AMTPERCENT: TFloatField;
+    OracleDataSet3AMTVALUE: TFloatField;
+    DataSource3: TDataSource;
+    OracleDataSet2DEBTACC: TStringField;
+    OracleDataSet2KREDACC: TStringField;
+    OracleDataSet2REPORTDESC: TStringField;
+    OracleDataSet2COUNTRY: TStringField;
+    Panel1: TPanel;
+    DBGrid1: TDBGrid;
+    DBNavigator1: TDBNavigator;
+    Panel2: TPanel;
+    DBGrid2: TDBGrid;
+    Panel3: TPanel;
+    DBGrid3: TDBGrid;
+    DBNavigator3: TDBNavigator;
+    DBNavigator2: TDBNavigator;
+    DBLookupComboBox1: TDBLookupComboBox;
+    DBLookupComboBox2: TDBLookupComboBox;
+    OracleDataSet4: TOracleDataSet;
+    DataSource4: TDataSource;
+    DataSource5: TDataSource;
+    DBEdit1: TDBEdit;
+    DBEdit2: TDBEdit;
+    DBEdit3: TDBEdit;
+    OracleDataSet5: TOracleDataSet;
+    DataSource6: TDataSource;
+    OracleDataSet6: TOracleDataSet;
+    DataSource7: TDataSource;
+    DBLookupComboBox3: TDBLookupComboBox;
+    DBLookupComboBox4: TDBLookupComboBox;
+    procedure OracleDataSet2BeforeInsert(DataSet: TDataSet);
+  private
+    { Private declarations }
+    FEvents: IBusinessProcessSetupEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(const Value: IFontDisp); safecall;
+    procedure AboutBox; safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+  public
+    { Public declarations }
+    procedure Initialize; override;
+  end;
+
+implementation
+
+uses ComObj, ComServ, About1, sboapidatamoduleimpl;
+
+{$R *.DFM}
+
+{ TBusinessProcessSetup }
+
+procedure TBusinessProcessSetup.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_BusinessProcessSetupPage); }
+end;
+
+procedure TBusinessProcessSetup.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as IBusinessProcessSetupEvents;
+end;
+
+procedure TBusinessProcessSetup.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TBusinessProcessSetup.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TBusinessProcessSetup.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TBusinessProcessSetup.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TBusinessProcessSetup.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TBusinessProcessSetup.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TBusinessProcessSetup.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TBusinessProcessSetup.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TBusinessProcessSetup.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TBusinessProcessSetup.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TBusinessProcessSetup.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TBusinessProcessSetup.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TBusinessProcessSetup.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TBusinessProcessSetup.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TBusinessProcessSetup.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TBusinessProcessSetup.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TBusinessProcessSetup.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TBusinessProcessSetup.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TBusinessProcessSetup.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TBusinessProcessSetup._Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TBusinessProcessSetup.AboutBox;
+begin
+  ShowBusinessProcessSetupAbout;
+end;
+
+procedure TBusinessProcessSetup.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TBusinessProcessSetup.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TBusinessProcessSetup.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TBusinessProcessSetup.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TBusinessProcessSetup.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TBusinessProcessSetup.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TBusinessProcessSetup.KeyPressEvent(Sender: TObject;
+  var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TBusinessProcessSetup.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TBusinessProcessSetup.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TBusinessProcessSetup.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TBusinessProcessSetup.Set_AxBorderStyle(
+  Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TBusinessProcessSetup.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TBusinessProcessSetup.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TBusinessProcessSetup.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TBusinessProcessSetup.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TBusinessProcessSetup.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TBusinessProcessSetup.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TBusinessProcessSetup.Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TBusinessProcessSetup.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TBusinessProcessSetup.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TBusinessProcessSetup.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TBusinessProcessSetup.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TBusinessProcessSetup.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TBusinessProcessSetup.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+procedure TBusinessProcessSetup.OracleDataSet2BeforeInsert(
+  DataSet: TDataSet);
+begin
+  dataset.fields[0].value:=0;
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TBusinessProcessSetup,
+    Class_BusinessProcessSetup,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

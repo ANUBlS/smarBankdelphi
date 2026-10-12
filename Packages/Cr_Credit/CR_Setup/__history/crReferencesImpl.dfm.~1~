@@ -1,0 +1,149 @@
+object MainReferForm: TMainReferForm
+  Left = 233
+  Top = 189
+  Width = 375
+  Height = 498
+  BorderIcons = [biSystemMenu]
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poMainFormCenter
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  OnKeyPress = FormKeyPress
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 367
+    Height = 37
+    Align = alTop
+    BevelInner = bvLowered
+    TabOrder = 0
+    object CmbBoxValue: TComboBox
+      Left = 5
+      Top = 8
+      Width = 262
+      Height = 21
+      ItemHeight = 13
+      TabOrder = 0
+    end
+    object Button1: TButton
+      Left = 285
+      Top = 6
+      Width = 75
+      Height = 25
+      Action = SaveActn
+      TabOrder = 1
+    end
+  end
+  object StatusBar1: TStatusBar
+    Left = 0
+    Top = 445
+    Width = 367
+    Height = 19
+    Panels = <>
+    SimplePanel = False
+  end
+  object TV: TTreeView
+    Left = 0
+    Top = 37
+    Width = 367
+    Height = 408
+    Align = alClient
+    Indent = 19
+    ReadOnly = True
+    TabOrder = 2
+    OnChange = TVChange
+  end
+  object Refers: TOracleDataSet
+    SQL.Strings = (
+      
+        'SELECT id, parentid, iname, description, integervalue, charvalue' +
+        ','
+      '       availablevalues'
+      '  FROM cr_references'
+      'order by id')
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 248
+    Top = 176
+    object RefersID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object RefersPARENTID: TFloatField
+      FieldName = 'PARENTID'
+      Required = True
+    end
+    object RefersINAME: TStringField
+      FieldName = 'INAME'
+      Required = True
+      Size = 32
+    end
+    object RefersDESCRIPTION: TStringField
+      FieldName = 'DESCRIPTION'
+      Size = 255
+    end
+    object RefersINTEGERVALUE: TFloatField
+      FieldName = 'INTEGERVALUE'
+    end
+    object RefersCHARVALUE: TStringField
+      FieldName = 'CHARVALUE'
+      Size = 8
+    end
+    object RefersAVAILABLEVALUES: TStringField
+      FieldName = 'AVAILABLEVALUES'
+      Size = 64
+    end
+  end
+  object Temp: TOracleDataSet
+    SQL.Strings = (
+      
+        'SELECT id, parentid, iname, description, integervalue, charvalue' +
+        ','
+      '       availablevalues'
+      '  FROM cr_references'
+      'where ParentID=:AParentID'
+      '')
+    Variables.Data = {
+      03000000010000000A0000003A41504152454E54494405000000000000000000
+      0000}
+    Session = sboapiDataModule.SBSession
+    Left = 256
+    Top = 128
+  end
+  object Localizer: TNLSLocalizer
+    Caption = 'ֱאםךûם סוקטלכÿנט'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    Left = 152
+    Top = 208
+  end
+  object SetupPackage: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'CR_SETUP'
+    ParameterMode = pmNamed
+    Cursor = crHourGlass
+    Left = 72
+    Top = 88
+  end
+  object ActionLst: TActionList
+    Left = 120
+    Top = 224
+    object SaveActn: TAction
+      Caption = '&ִÿיטר'
+      OnExecute = SaveActnExecute
+      OnUpdate = SaveActnUpdate
+    end
+  end
+end

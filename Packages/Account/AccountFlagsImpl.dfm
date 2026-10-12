@@ -1,0 +1,63 @@
+object FormAccFlags: TFormAccFlags
+  Left = 362
+  Top = 143
+  BorderStyle = bsDialog
+  Caption = 'Account Flags'
+  ClientHeight = 309
+  ClientWidth = 250
+  Color = clBtnFace
+  Font.Charset = RUSSIAN_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poDesktopCenter
+  OnCreate = FormCreate
+  OnKeyDown = FormKeyDown
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object CLBAccFlags: TCheckListBox
+    Left = 0
+    Top = 0
+    Width = 250
+    Height = 268
+    OnClickCheck = CLBAccFlagsClickCheck
+    Align = alClient
+    Color = clSilver
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clNavy
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ItemHeight = 13
+    ParentFont = False
+    TabOrder = 0
+    OnClick = CLBAccFlagsClick
+    ExplicitWidth = 216
+    ExplicitHeight = 233
+  end
+  object Panel1: TPanel
+    Left = 0
+    Top = 268
+    Width = 250
+    Height = 41
+    Align = alBottom
+    TabOrder = 1
+    ExplicitLeft = 56
+    ExplicitTop = 312
+    ExplicitWidth = 185
+    object ButtonApply: TButton
+      Left = 87
+      Top = 8
+      Width = 75
+      Height = 25
+      Caption = '&OK'
+      ModalResult = 1
+      TabOrder = 0
+      OnClick = ButtonApplyClick
+    end
+  end
+end

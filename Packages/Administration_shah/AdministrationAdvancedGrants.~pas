@@ -1,0 +1,176 @@
+unit AdministrationAdvancedGrants;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, LDialogs,
+  StdCtrls, Buttons, CheckLst, ExtCtrls, Db, OracleData, DBCtrls,
+  SearchCombo;
+
+type
+  TfmAdvancedgrants = class(TForm)
+    Panel1: TPanel;
+    Panel2: TPanel;
+    clbAdvancedMain: TCheckListBox;
+    BitBtn1: TBitBtn;
+    BitBtn2: TBitBtn;
+    Label1: TLabel;
+    lbModLabel: TLabel;
+    addBtn: TBitBtn;
+    edBtn: TBitBtn;
+    delBtn: TBitBtn;
+    procedure FormShow(Sender: TObject);
+    procedure clbAdvancedMainClickCheck(Sender: TObject);
+    procedure BitBtn1Click(Sender: TObject);
+    procedure addBtnClick(Sender: TObject);
+    procedure edBtnClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure delBtnClick(Sender: TObject);
+  private
+    procedure RefreshAdvancedData(ModId: Integer;UsNam: string);
+    procedure RefreshCheckBox;
+    procedure ApplyAdvancedGrants;
+  end;
+
+
+
+var
+  fmAdvancedgrants: TfmAdvancedgrants;
+
+implementation
+
+uses AdministrationDataModule, AdministrationMainForm,
+  adm_AdvGrantAddEditForm;
+
+{$R *.DFM}
+
+procedure TfmAdvancedgrants.RefreshAdvancedData(ModId: Integer;UsNam: string);
+begin
+  with AdministrationData,AdministrationData.ModAdvancedGrantsData do
+  begin
+   if Active then Close;
+   if not(Active) then
+    begin
+      SetVariable('MODID',ModId);
+      SetVariable('UserNam',UsNam);
+      Open;
+    end;
+    lbModLabel.Caption:=UsTablesData.FieldByName('trvdesc').AsString;
+  end;
+end;
+
+procedure TfmAdvancedgrants.RefreshCheckBox;
+begin
+clbAdvancedMain.Items.Clear;
+ with AdministrationData.ModAdvancedGrantsData do
+  try
+   DisableControls;
+   First;
+ with clbAdvancedMain do
+  while not(EOF) do
+   begin
+     Items.Add(FieldByName('DESCRIPTION').AsString);
+     if Items.Count>0 then
+      Checked[Items.Count-1]:=IntToBool(FieldByName('usergranted').AsInteger);
+     Next;
+   end;
+ finally
+  EnableControls;
+ end;
+end;
+
+procedure TfmAdvancedgrants.FormShow(Sender: TObject);
+begin
+
+with Administrationdata.UsTablesData do
+ RefreshAdvancedData (FieldByName('Id').ASInteger,GetActiveUser);
+ RefreshCheckBox;
+end;
+
+procedure TfmAdvancedgrants.ApplyAdvancedGrants;
+var
+i: Integer;
+begin
+with Administrationdata,Administrationdata.ModAdvancedGrantsData do
+ begin
+ First;
+ for i:=0 to RecordCount-1 do
+  begin
+   pcAdm.CallProcedure('UserAdvancedGrants',[IntToBool(FieldByName('usergranted').AsInteger),
+   GetActiveUser,FieldByName('id').AsInteger]);
+   Next;
+  end;
+ end;
+end;
+
+procedure TfmAdvancedgrants.clbAdvancedMainClickCheck(Sender: TObject);
+begin
+ with Administrationdata.ModAdvancedGrantsData do
+  if Active then
+  with (Sender as TCheckListBox) do
+   if Locate('Description',Items[ItemIndex],[]) then
+    begin
+     Edit;
+     FieldByName('usergranted').AsInteger:=BoolToInt(Checked[ItemIndex]);
+     Post;
+    end;
+end;
+
+procedure TfmAdvancedgrants.BitBtn1Click(Sender: TObject);
+begin
+ApplyAdvancedGrants;
+end;
+
+procedure TfmAdvancedgrants.addBtnClick(Sender: TObject);
+begin
+  with frmAddEditAdvGrants, AdministrationData do begin
+    NewRecord := True;  
+    edGrantName.Enabled := True;
+    edGrantName.Text := '';
+    edErrorMessage.Text := '';
+    edDescription.Text := '';
+    CheckBox1.Checked := False;
+    CurrencyEdit1.Value := 0;
+    ShowModal;
+    ModAdvancedGrantsData.Close;
+    ModAdvancedGrantsData.Open;
+    RefreshCheckBox;
+  end;
+end;
+
+procedure TfmAdvancedgrants.edBtnClick(Sender: TObject);
+begin
+  with frmAddEditAdvGrants, AdministrationData do begin
+    NewRecord := False;
+    edGrantName.Enabled := False;
+    ModAdvancedGrantsData.Locate('Description',clbAdvancedMain.Items[clbAdvancedMain.ItemIndex],[]);
+    edGrantName.Text := ModAdvancedGrantsDataGRANTNAME.Value;
+    edErrorMessage.Text := ModAdvancedGrantsDataERRORMESSAGE.Value;
+    edDescription.Text := ModAdvancedGrantsDataDESCRIPTION.Value;  
+    CheckBox1.Checked := ModAdvancedGrantsDataHAVVALUE.AsInteger=1;
+    CurrencyEdit1.Value := ModAdvancedGrantsDataMAXAVALUE.Value;
+    ShowModal;   
+    ModAdvancedGrantsData.Close;
+    ModAdvancedGrantsData.Open;
+    RefreshCheckBox;
+  end;
+end;
+
+procedure TfmAdvancedgrants.FormCreate(Sender: TObject);
+begin
+  frmAddEditAdvGrants := TfrmAddEditAdvGrants.Create(Self);
+end;
+
+procedure TfmAdvancedgrants.delBtnClick(Sender: TObject);
+begin
+  with AdministrationData do begin
+    ModAdvancedGrantsData.Locate('Description',clbAdvancedMain.Items[clbAdvancedMain.ItemIndex],[]);
+    if messagedlg('ўцгуг л€ьв олунажаг. яминсиниз?', mtWarning, [mbyes, mbno], 0)= idyes then
+      pcADM.CallProcedure('deladvancedgrant', [ModAdvancedGrantsDataID.Value]);
+    ModAdvancedGrantsData.Close;
+    ModAdvancedGrantsData.Open;
+    RefreshCheckBox;
+  end;
+end;
+
+end.

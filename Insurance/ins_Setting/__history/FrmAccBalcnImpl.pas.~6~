@@ -1,0 +1,44 @@
+unit FrmAccBalcnImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ExtCtrls, XFSCtrls, StdCtrls, DBCtrls, XDBCtrls, Grids, DBGrids;
+
+type
+  TFrmAccBalcn = class(TForm)
+    XFPanel3: TXFPanel;
+    XFGroupBox1: TXFGroupBox;
+    XFGroupBox2: TXFGroupBox;
+    XFButton2: TXFButton;
+    DBGrid1: TDBGrid;
+    DBGrid2: TDBGrid;
+    XDBNavigator1: TXDBNavigator;
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure XFButton2Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmAccBalcn: TFrmAccBalcn;
+
+implementation
+
+{$R *.dfm}
+
+procedure TFrmAccBalcn.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+if ord(key)=vk_escape then close
+
+end;
+
+procedure TFrmAccBalcn.XFButton2Click(Sender: TObject);
+begin
+close
+end;
+
+end.

@@ -1,0 +1,1158 @@
+unit createmess;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, DBCtrls, ComCtrls, ExtCtrls, DBViewComboBox, SearchEdit, Menus,
+  ActnList, Mask, DBCtrlsEh;
+
+type
+  TForm5 = class(TForm)
+    PageControl1: TPageControl;
+    Header: TTabSheet;
+    GroupBox1: TGroupBox;
+    Label1: TLabel;
+    Label2: TLabel;
+    GroupBox2: TGroupBox;
+    Label7: TLabel;
+    Label8: TLabel;
+    GroupBox3: TGroupBox;
+    GroupBox4: TGroupBox;
+    Label3: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    Label6: TLabel;
+    sendertype: TComboBox;
+    ComboBox2: TComboBox;
+    recivertype: TComboBox;
+    senderlt: TComboBox;
+    monitoring: TComboBox;
+    Application: TComboBox;
+    priority: TComboBox;
+    Edit2: TEdit;
+    Edit3: TEdit;
+    Edit4: TEdit;
+    Edit5: TEdit;
+    TabSheet1: TTabSheet;
+    ScrollBox1: TScrollBox;
+    MainPanel: TPanel;
+    MF20: TPanel;
+    Label9: TLabel;
+    Label10: TLabel;
+    MF23B: TPanel;
+    Label11: TLabel;
+    Label12: TLabel;
+    MF26T: TPanel;
+    Label13: TLabel;
+    Label14: TLabel;
+    MF32A: TPanel;
+    Label15: TLabel;
+    Label16: TLabel;
+    Label17: TLabel;
+    mf32a_val: TDBLookupComboBox;
+    MF33B: TPanel;
+    Label18: TLabel;
+    Label19: TLabel;
+    MF50: TPanel;
+    MF50_main: TPanel;
+    Label20: TLabel;
+    CMF50: TComboBox;
+    MF50K: TPanel;
+    Memo2_MF50: TMemo;
+    Edit3_MF50: TSearchEdit;
+    MF50A: TPanel;
+    Edit2_MF50: TEdit;
+    Memo1_MF50: TMemo;
+    Edit1_MF50: TSearchEdit;
+    MF50F: TPanel;
+    Memo3_MF50: TMemo;
+    Edit4_MF50: TSearchEdit;
+    MF52: TPanel;
+    MF52_main: TPanel;
+    Label21: TLabel;
+    CMF52: TComboBox;
+    MF52A: TPanel;
+    Edit1_MF52: TEdit;
+    Edit2_MF52: TEdit;
+    Memo1_MF52: TMemo;
+    MF52D: TPanel;
+    Edit3_MF52: TEdit;
+    Memo2_MF52: TMemo;
+    MF53: TPanel;
+    MF53_main: TPanel;
+    Label22: TLabel;
+    CMF53: TComboBox;
+    MF53A: TPanel;
+    Edit1_MF53: TEdit;
+    Edit2_MF53: TEdit;
+    Memo1_MF53: TMemo;
+    MF53B: TPanel;
+    Edit3_MF53: TEdit;
+    Edit4_MF53: TEdit;
+    MF53D: TPanel;
+    Edit5_MF53: TEdit;
+    Memo2_MF53: TMemo;
+    MF54: TPanel;
+    MF54_main: TPanel;
+    Label23: TLabel;
+    CMF54: TComboBox;
+    MF54A: TPanel;
+    Edit1_MF54: TEdit;
+    Edit2_MF54: TEdit;
+    Memo1_MF54: TMemo;
+    MF54B: TPanel;
+    Edit4_MF54: TEdit;
+    Edit5_MF54: TEdit;
+    MF54D: TPanel;
+    Edit6_MF54: TEdit;
+    Memo2_MF54: TMemo;
+    MF55: TPanel;
+    MF55_main: TPanel;
+    Label24: TLabel;
+    CMF55: TComboBox;
+    MF55A: TPanel;
+    Edit1_MF55: TEdit;
+    Edit2_MF55: TEdit;
+    Memo1_MF55: TMemo;
+    MF55B: TPanel;
+    Edit3_MF55: TEdit;
+    Edit4_MF55: TEdit;
+    MF55D: TPanel;
+    Edit5_MF55: TEdit;
+    Memo2_MF55: TMemo;
+    MF56: TPanel;
+    MF56_main: TPanel;
+    Label25: TLabel;
+    CMF56: TComboBox;
+    MF56A: TPanel;
+    Edit1_MF56: TEdit;
+    Edit2_MF56: TEdit;
+    Memo1_MF56: TMemo;
+    MF56C: TPanel;
+    Edit3_MF56: TEdit;
+    MF56D: TPanel;
+    Edit4_MF56: TEdit;
+    Memo2_MF56: TMemo;
+    MF57: TPanel;
+    MF57_main: TPanel;
+    Label26: TLabel;
+    CMF57: TComboBox;
+    MF57A: TPanel;
+    Edit1_MF57: TEdit;
+    Edit2_MF57: TEdit;
+    Memo1_MF57: TMemo;
+    MF57B: TPanel;
+    Edit3_MF57: TEdit;
+    Edit4_MF57: TEdit;
+    MF57C: TPanel;
+    Edit5_MF57: TEdit;
+    MF57D: TPanel;
+    Edit6_MF57: TEdit;
+    Memo2_MF57: TMemo;
+    MF70: TPanel;
+    Label27: TLabel;
+    MF71A: TPanel;
+    Label28: TLabel;
+    Label29: TLabel;
+    MF71F: TPanel;
+    MF71F_main: TPanel;
+    CheckBox1: TCheckBox;
+    New_MF71F: TButton;
+    MF71F_1: TPanel;
+    Label30: TLabel;
+    Edit1_MF71F: TEdit;
+    Edit2_MF71F: TEdit;
+    Delete1: TButton;
+    MF71F_2: TPanel;
+    Label31: TLabel;
+    Edit3_MF71F: TEdit;
+    Edit4_MF71F: TEdit;
+    Delete2: TButton;
+    MF71F_3: TPanel;
+    Label32: TLabel;
+    Edit5_MF71F: TEdit;
+    Edit6_MF71F: TEdit;
+    Delete3: TButton;
+    MF72: TPanel;
+    Label34: TLabel;
+    Label37: TLabel;
+    MF77B: TPanel;
+    Label35: TLabel;
+    Label36: TLabel;
+    MF71G: TPanel;
+    Label38: TLabel;
+    Edit1_MF71G: TEdit;
+    Edit2_MF71G: TEdit;
+    MF59_59A: TPanel;
+    MF59_main: TPanel;
+    Label33: TLabel;
+    CMF59: TComboBox;
+    MF59: TPanel;
+    Memo1_MF59: TMemo;
+    Edit1_MF59: TEdit;
+    MF59A: TPanel;
+    Edit2_MF59: TEdit;
+    Edit3_MF59: TEdit;
+    MF36: TPanel;
+    Label39: TLabel;
+    Popmen: TPopupMenu;
+    Createmessage1: TMenuItem;
+    ActionList1: TActionList;
+    fin2: TDBEdit;
+    DBEdit1: TDBEdit;
+    reciverbic: TDBEdit;
+    MF20_edit: TDBEdit;
+    MF23b_edit: TDBEdit;
+    MF26T_edit: TDBEdit;
+    Edit11_mf32a: TDBEdit;
+    MF33_edit: TDBEdit;
+    mf33_edit2: TDBEdit;
+    MF36_edit: TDBEdit;
+    DBDateTimeEditEh1: TDBDateTimeEditEh;
+    Mf70_memo: TDBMemo;
+    mf72_memo: TDBMemo;
+    MF77_memo: TDBMemo;
+    Edit1_MF71A: TDBEdit;
+    procedure FormActivate(Sender: TObject);
+    procedure PageControl1Change(Sender: TObject);
+    procedure CMF50Enter(Sender: TObject);
+    procedure CMF50Change(Sender: TObject);
+    procedure FINChange(Sender: TObject);
+    procedure Memo1_MF50KeyPress(Sender: TObject; var Key: Char);
+    procedure MF72_memoKeyPress(Sender: TObject; var Key: Char);
+    procedure MF77_memoKeyPress(Sender: TObject; var Key: Char);
+    procedure insertExecute(Sender: TObject);
+    procedure Createmessage1Click(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure Mf70_memoKeyPress(Sender: TObject; var Key: Char);
+    procedure FormCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form5: TForm5;
+
+implementation
+
+uses Unit2, OUT_MT,sboapiDataModuleImpl, SBTranslateProc;
+
+{$R *.DFM}
+
+procedure TForm5.FormActivate(Sender: TObject);
+begin
+Form5.Caption:='Swift Out Messages';
+senderlt.Text:=SWDataModule.bankinfo.fieldbyname('SWIFT').asstring+'XXX';
+sendertype.Text:='Institution';
+ComboBox2.Text:= SWDataModule.bankinfo.fieldbyname('SWIFT').asstring+'XXX';
+recivertype.Text:='Institution';
+Application.Text:='FIN';
+priority.Text:='N';
+monitoring.Text:='N';
+//mf32_date.DateTime:=date;
+end;
+
+
+procedure clearcomboitems2;
+var
+i,j:integer;
+
+begin
+//-----------------------------------------
+form5.MF50A.Visible:=False;
+form5.MF50K.Visible:=False;
+form5.MF50F.Visible:=False;
+form5.MF52A.Visible:=False;
+form5.MF52D.Visible:=False;
+form5.MF53A.Visible:=False;
+form5.MF53B.Visible:=False;
+form5.MF53D.Visible:=False;
+form5.MF54A.Visible:=False;
+form5.MF54B.Visible:=False;
+form5.MF54D.Visible:=False;
+form5.MF55A.Visible:=False;
+form5.MF55B.Visible:=False;
+form5.MF55D.Visible:=False;
+form5.MF56A.Visible:=False;
+form5.MF56C.Visible:=False;
+form5.MF56D.Visible:=False;
+form5.MF57A.Visible:=False;
+form5.MF57B.Visible:=False;
+form5.MF57C.Visible:=False;
+form5.MF57D.Visible:=False;
+form5.MF59A.Visible:=False;
+form5.MF59.Visible:=False;
+//-----------------------------------------
+
+
+ WITH swDataModule.ComboItems do begin
+  //SWDataModule.ComboItems.SQL[1]:= 'and '+ form5.fin2.Text +form5.fincopy.Text+' is not null'+' order by sw_field';
+  //ShowMessage(SWDataModule.ComboItems.sql.text);
+ end;
+For i:=0 to form5.ComponentCount-1 do begin // for 1
+if form5.Components[i].Name<>'fincopy' then begin
+  If form5.Components[i].ClassType=TComboBox then  begin
+WITH swDataModule.ComboItems do begin
+      setvariable('Comboname', form5.Components[i].name);
+      close;
+      open;
+              
+//if 1
+      for j:=1 to swDataModule.ComboItems.RecordCount+1 do begin // for 2
+      if (form5.Components[i] as TComboBox).ItemIndex<>0 then begin
+              if j=1 then begin
+             (form5.Components[i] as TComboBox).items.Clear;
+
+
+             end else begin
+             if (form5.Components[i] as TComboBox).Items[j+2]<>'' then begin
+             (form5.Components[i] as TComboBox).items.Clear;
+             swDataModule.ComboItems.Next;
+                end;
+              end;
+               end;
+    end; //end for 2
+   end; //end if 1
+  end; //end for 1
+end;
+ end;
+ end;
+
+
+
+procedure TForm5.PageControl1Change(Sender: TObject);
+var
+mestype:string;
+begin
+if Fin2.text='' then
+ begin
+ PageControl1.ActivePage:=Header;
+ FIN2.Color:=clred;
+  //showmessage('Message type not selected!');
+
+
+
+ end ;
+
+ if reciverbic.Text='' then
+ begin
+   PageControl1.ActivePage:=Header;
+ reciverbic.Color:=clred;
+ end;
+ end;
+
+procedure insertcomboboxitems2;
+var
+i,j:integer;
+
+begin
+ WITH swDataModule.ComboItems do begin
+  //SWDataModule.ComboItems.SQL[1]:= 'and '+ form5.fin2.Text +form5.fincopy.Text+' is not null'+' order by sw_field';
+  //ShowMessage(SWDataModule.ComboItems.sql.text);
+ end;
+For i:=0 to form5.ComponentCount-1 do begin // for 1
+    if form5.Components[i].Name<>'fincopy' then begin
+  If form5.Components[i].ClassType=TComboBox then  begin
+WITH swDataModule.ComboItems do begin
+      setvariable('Comboname', form5.Components[i].name);
+      close;
+      open;
+              
+//if 1
+      for j:=1 to swDataModule.ComboItems.RecordCount+1 do begin // for 2
+      if (form5.Components[i] as TComboBox).ItemIndex<>0 then begin
+              if j=1 then begin
+             (form5.Components[i] as TComboBox).items.add('');
+
+
+             end else begin
+             if (form5.Components[i] as TComboBox).Items[j+2]='' then begin
+             (form5.Components[i] as TComboBox).items.add(swDataModule.ComboItemsCATEGORY.asstring);
+             swDataModule.ComboItems.Next;
+                end;
+              end;
+               end;
+    end; //end for 2
+   end; //end if 1
+  end; //end for 1
+ end;
+ end;
+end;
+
+
+
+procedure TForm5.CMF50Enter(Sender: TObject);
+begin
+
+if (Sender as TComboBox).Items.Count=0 then
+InsertComboBoxItems2;
+
+{if FIN.Text+fincopy.Text='MT103AZN' then
+begin
+//CMF50.Items.Clear;
+CMF50.Items.Add('K-Ordering Customer-Name $ Address');
+end
+else if FIN.Text+fincopy.Text='MT103' then
+begin
+CMF50.Items.Clear;
+end; }
+end;
+
+procedure TForm5.CMF50Change(Sender: TObject);
+var
+name1,selected1:string;
+i,j,k:integer;
+begin
+//SWDataModule.aftercomboselect.SQL[2]:= ' and '+ form5.fin2.Text +form5.fincopy.Text+' is not null'+' order by sw_field';
+ SWDataModule.aftercomboselect.Active:=True;
+ SWDataModule.Comboselect.Active:=true;
+ SWDataModule.aftercomboselect.Refresh;
+ SWDataModule.Comboselect.Refresh;
+  name1:=(sender as TComboBox).name;
+  if (sender as TComboBox).text<>'' then
+  selected1:=(sender as TComboBox).text else selected1:='1';
+
+ with SWDataModule.aftercomboselect do begin
+ SetVariable('name',name1);
+ SetVariable('selected',selected1);
+
+ close;
+ open;
+ end;
+
+
+   for j:=1 to (sender as TComboBox).items.count do begin
+    for i:=0 to form5.ComponentCount-1 do
+   begin
+    if form5.Components[i].ClassType = TPanel then
+    if (form5.Components[i] as TPanel).name=SWDataModule.aftercomboselectSW_FIELD.AsString then
+    begin
+    (form5.Components[i] as TPanel).Visible:=False;
+    end;
+      end;
+       SWDataModule.aftercomboselect.Next;
+      end;
+
+ with SWDataModule.Comboselect do begin
+ SetVariable('name',name1);
+ SetVariable('selected',selected1);
+
+ close;
+ open;
+ end;
+
+
+
+   for k:=0 to form5.ComponentCount-1 do
+   begin
+    if form5.Components[k].ClassType = TPanel then
+    if (form5.Components[k] as TPanel).name=SWDataModule.ComboselectSW_FIELD.AsString then
+    begin
+    (form5.Components[k] as TPanel).Visible:=True;
+
+   end ;
+  end;
+
+    
+
+end;
+
+
+procedure TForm5.FINChange(Sender: TObject);
+var
+mestype:string;
+begin
+clearcomboitems2;
+
+
+
+
+
+ if mestype='MT103' then
+ begin
+
+   MF20.Visible:=TRUE;
+  MF23B.Visible:=true;
+  MF26T.Visible:=TRUE;
+  MF32A.Visible:=TRUE;
+  MF33B.Visible:=TRUE;
+  MF36.Visible:=TRUE;
+  MF50.Visible:=TRUE;
+  MF52.Visible:=TRUE;
+  MF53.Visible:=TRUE;
+  MF54.Visible:=TRUE;
+  MF55.Visible:=TRUE;
+  MF56.Visible:=TRUE;
+  MF57.Visible:=TRUE;
+  MF59_59A.Visible:=TRUE;
+  MF70.Visible:=TRUE;
+  MF71F.Visible:=True;
+  MF71G.Visible:=True;
+  MF72.visible:=true;
+  MF77B.visible:=true;
+
+
+
+  MF77B.visible:=false;
+ MF72.visible:=false;
+ MF71G.Visible:=false;
+ MF71F.Visible:=false;
+ MF70.Visible:=false;
+ MF59_59A.Visible:=false;
+ MF57.Visible:=false;
+ MF56.Visible:=false;
+ MF55.Visible:=false;
+ MF54.Visible:=false;
+ MF53.Visible:=false;
+ MF52.Visible:=false;
+ MF50.Visible:=false;
+ MF36.Visible:=false;
+ MF33B.Visible:=false;
+ MF32A.Visible:=false;
+ MF26T.Visible:=false;
+ MF23B.Visible:=false;
+ MF20.Visible:=false;
+
+  MF20.Visible:=TRUE;
+  MF23B.Visible:=true;
+  MF26T.Visible:=TRUE;
+  MF32A.Visible:=TRUE;
+  MF33B.Visible:=TRUE;
+  MF36.Visible:=TRUE;
+  MF50.Visible:=TRUE;
+  MF52.Visible:=TRUE;
+  MF53.Visible:=TRUE;
+  MF54.Visible:=TRUE;
+  MF55.Visible:=TRUE;
+  MF56.Visible:=TRUE;
+  MF57.Visible:=TRUE;
+  MF59_59A.Visible:=TRUE;
+  MF70.Visible:=TRUE;
+  MF71F.Visible:=True;
+  MF71G.Visible:=True;
+  MF72.visible:=true;
+  MF77B.visible:=true;
+  //MF77T.visible:=true;
+
+
+
+ end else
+ if mestype='MT103AZN' then
+ begin
+
+   MF20.Visible:=TRUE;
+  MF23B.Visible:=true;
+  MF26T.Visible:=TRUE;
+  MF32A.Visible:=TRUE;
+  MF33B.Visible:=TRUE;
+  MF36.Visible:=TRUE;
+  MF50.Visible:=TRUE;
+  MF52.Visible:=TRUE;
+  MF53.Visible:=TRUE;
+  MF54.Visible:=TRUE;
+  MF55.Visible:=TRUE;
+  MF56.Visible:=TRUE;
+  MF57.Visible:=TRUE;
+  MF59_59A.Visible:=TRUE;
+  MF70.Visible:=TRUE;
+  MF71F.Visible:=True;
+  MF71G.Visible:=True;
+  MF72.visible:=true;
+  MF77B.visible:=true;
+
+
+ MF77B.visible:=false;
+ MF72.visible:=false;
+ MF71G.Visible:=false;
+ MF71F.Visible:=false;
+ MF70.Visible:=false;
+ MF59_59A.Visible:=false;
+ MF57.Visible:=false;
+ MF56.Visible:=false;
+ MF55.Visible:=false;
+ MF54.Visible:=false;
+ MF53.Visible:=false;
+ MF52.Visible:=false;
+ MF50.Visible:=false;
+ MF36.Visible:=false;
+ MF33B.Visible:=false;
+ MF32A.Visible:=false;
+ MF26T.Visible:=false;
+ MF23B.Visible:=false;
+ MF20.Visible:=false;
+
+
+
+  MF20.Visible:=TRUE;
+  MF23B.Visible:=true;
+  MF26T.Visible:=false;
+  MF32A.Visible:=TRUE;
+  MF33B.Visible:=false;
+  MF36.Visible:=false;
+  MF50.Visible:=TRUE;
+  MF52.Visible:=false;
+  MF53.Visible:=false;
+  MF54.Visible:=false;
+  MF55.Visible:=false;
+  MF56.Visible:=false;
+  MF57.Visible:=false;
+  MF59_59A.Visible:=TRUE;
+  MF70.Visible:=TRUE;
+  MF71F.Visible:=false;
+  MF71G.Visible:=false;
+  MF72.visible:=true;
+  MF77B.visible:=false;
+ end else
+
+ begin
+
+ end;
+
+  //MainPanel.AutoSize:=true;
+
+
+
+
+
+end;
+
+procedure TForm5.Memo1_MF50KeyPress(Sender: TObject; var Key: Char);
+var
+  i,n,k,CPosY :integer;
+  s:string;
+begin
+  key := UpCase(Key);
+  if (key=#13) or (key=#8) then exit;
+  CPosY:=(Sender as TMemo).CaretPos.y;
+  s:=(Sender as TMemo).text;
+//  if ((s[length(s)]=#13) or (s[length(s)]=#10)) then delete(s,length(s),1);
+  if length(s)>0 then
+  if ((s[length(s)]=#13) or (s[length(s)]=#10)) then delete(s,length(s),1);
+  (Sender as TMemo).text:=s;
+  if Length((Sender as TMemo).Lines[CPosY])>=35 then
+  begin
+    if CPosY<3 then
+    begin
+      if CPosY<(Sender as TMemo).lines.Count-1 then
+      begin
+        n:=0;
+        for i:=0 to (Sender as TMemo).lines.count-1 do
+        begin
+          k:=Length((Sender as TMemo).Lines[i]);
+          n:=n+k;
+          if k<35 then break;
+          n:=n+2;
+        end;
+        (Sender as TMemo).selstart:=n;
+        (Sender as TMemo).sellength:=0;
+      end else
+      begin
+        (Sender as TMemo).lines.Add(key);
+        key:=#0;
+      end;
+    end else
+    key:=#0;
+  end;
+end;
+
+procedure TForm5.MF72_memoKeyPress(Sender: TObject; var Key: Char);
+var
+  i,n,k,CPosY :integer;
+  s:string;
+begin
+  key := UpCase(Key);
+  if (key=#13) or (key=#8) then exit;
+  CPosY:=(Sender as TMemo).CaretPos.y;
+  s:=(Sender as TMemo).text;
+//  if ((s[length(s)]=#13) or (s[length(s)]=#10)) then delete(s,length(s),1);
+  if length(s)>0 then
+  if ((s[length(s)]=#13) or (s[length(s)]=#10)) then delete(s,length(s),1);
+  (Sender as TMemo).text:=s;
+  if Length((Sender as TMemo).Lines[CPosY])>=35 then
+  begin
+    if CPosY<7 then
+    begin
+      if CPosY<(Sender as TMemo).lines.Count-1 then
+      begin
+        n:=0;
+        for i:=0 to (Sender as TMemo).lines.count-1 do
+        begin
+          k:=Length((Sender as TMemo).Lines[i]);
+          n:=n+k;
+          if k<35 then break;
+          n:=n+2;
+        end;
+        (Sender as TMemo).selstart:=n;
+        (Sender as TMemo).sellength:=0;
+      end else
+      begin
+        (Sender as TMemo).lines.Add(key);
+        key:=#0;
+      end;
+    end else
+    key:=#0;
+  end;
+end;
+
+procedure TForm5.MF77_memoKeyPress(Sender: TObject; var Key: Char);
+var
+  i,n,k,CPosY :integer;
+  s:string;
+begin
+  key := UpCase(Key);
+  if (key=#13) or (key=#8) then exit;
+  CPosY:=(Sender as TMemo).CaretPos.y;
+  s:=(Sender as TMemo).text;
+//  if ((s[length(s)]=#13) or (s[length(s)]=#10)) then delete(s,length(s),1);
+  if length(s)>0 then
+  if ((s[length(s)]=#13) or (s[length(s)]=#10)) then delete(s,length(s),1);
+  (Sender as TMemo).text:=s;
+  if Length((Sender as TMemo).Lines[CPosY])>=35 then
+  begin
+    if CPosY<2 then
+    begin
+      if CPosY<(Sender as TMemo).lines.Count-1 then
+      begin
+        n:=0;
+        for i:=0 to (Sender as TMemo).lines.count-1 do
+        begin
+          k:=Length((Sender as TMemo).Lines[i]);
+          n:=n+k;
+          if k<35 then break;
+          n:=n+2;
+        end;
+        (Sender as TMemo).selstart:=n;
+        (Sender as TMemo).sellength:=0;
+      end else
+      begin
+        (Sender as TMemo).lines.Add(key);
+        key:=#0;
+      end;
+    end else
+    key:=#0;
+  end;
+end;
+
+procedure TForm5.insertExecute(Sender: TObject);
+var
+m20,m33,mf331,mf332,m23b,m26t,m32a,m36,m50,m52,m53,m54,m55,m56,v_mf20_reference,
+m57,m59,m70,m71a,m71f,m71g,m72,m77b,mf20,mf23b,mf26t,mf27,mf32a,mf36,V_sendertype,v_senderbic,
+v_senderlt,v_application,v_fincopy,v_messagetype,v_priority,v_monitoring,v_receivertype,v_receiverbic,mf32a_date,mf32a_curr,
+mf32a_amount,mf50_account,mf50_bic,mf50_nameadress,mf52_account,mf52_bic,mf52_nameadress,mf53_account,
+mf53_bic,mf53_namelocation,mf54_account,mf54_bic,mf54_namelocation,mf55_account,mf55_bic,mf55_namelocation,
+mf56_account,mf56_bic,mf56_namelocation,mf57_account,mf57_bic,mf57_namelocation,mf59_account,mf59_nameadress,
+status ,mf70,mf71f_child,mf71g_child,dolmayan,stat1,stat2,stat3,stat4,stat5,stat6,mf71a,mf72,mf77b:string;
+
+begin
+
+
+     if MF23b_edit.Text='' then
+      begin
+       dolmayan:=dolmayan+' MF23,';
+       stat1:='exitfromprosedure';
+      end else  stat1:='nextprosedure';
+          if mf32a_val.Text='' then
+          begin
+          dolmayan:=dolmayan + '  MF32A  Valyuta,';
+          stat2:='exitfromprosedure';
+          end else  stat2:='nextprosedure';
+           if Edit11_mf32a.Text=''  then
+                begin
+                 dolmayan:=dolmayan + '  MF32A  mebleq,' ;
+                 stat3:='exitfromprosedure';
+                 end else  stat3:='nextprosedure';
+             if CMF50.Text=''   then
+               begin
+               dolmayan:=dolmayan + '  MF50,' ;
+               stat4:='exitfromprosedure';
+               end else  stat4:='nextprosedure';
+              if CMF59.Text=''   then
+              begin
+                 dolmayan:=dolmayan + '  MF59,';
+                  stat5:='exitfromprosedure';
+               end else  stat5:='nextprosedure';
+
+              if Edit1_MF71A.Text=''   then
+              begin
+                 dolmayan:=dolmayan + '  MF71A,';
+                  stat6:='exitfromprosedure';
+               end else  stat6:='nextprosedure';
+
+
+
+             if (stat1='nextprosedure') and (stat2='nextprosedure') and (stat3='nextprosedure')
+              and (stat4='nextprosedure') and (stat5='nextprosedure') and (stat6='nextprosedure') then
+
+
+
+
+
+      begin
+      SWDataModule.referans.Close;
+      SWDataModule.referans.Open;
+      with SWDataModule.referans do
+      begin
+      SetVariable('FORMATS',FIN2.text);
+      SetVariable('CURRENSY',mf32a_val.text);
+      end;
+      SWDataModule.referans.Refresh;
+      SWDataModule.referans.Close;
+      SWDataModule.referans.Open;
+MF20_edit.text:=SWDataModule.referansrefe.asstring ;
+mf23b:=MF23b_edit.Text;
+mf26t:=MF26T_edit.Text;
+//mf32a_date:= MF32A_dt.;
+mf32a_curr:= mf32a_val.Text;
+mf32a_amount:=edit11_mf32a.Text;
+if MF33_edit.Text<>'' then
+begin
+mf331:=MF33_edit.Text;
+mf332:=mf33_edit2.Text;
+end;
+if mf36_edit.Text<>'' then
+mf36:=mf36_edit.Text;
+v_mf20_reference:=MF20_edit.Text;
+v_sendertype:=sendertype.Text;
+v_senderbic:=senderlt.Text;
+v_senderlt:=senderlt.Text;
+v_application:= Application.Text;
+//v_fincopy:=fincopy.Text;
+v_messagetype:= fin2.Text;
+v_priority:=priority.Text;
+v_monitoring:=monitoring.Text;
+v_receivertype:=reciverbic.Text;
+v_receiverbic:=reciverbic.text;
+if MF20_edit.Text<>'' then m20:=':20:' else m20:='';
+if MF23b_edit.Text<>'' then m23b:=':23B:' else m23b:='';
+if MF26T_edit.Text<>'' then m26t:=':26T:' else m26t:='';
+if edit11_mf32a.text<>'' then m32a:=':32A:' else m32a:='';
+if MF33_edit.Text<>'' then m33:=':33:' else m33:='';
+if mf36_edit.Text<>'' then m36:=':36:' else m36:='';
+
+if CMF50.ItemIndex=1 then
+ begin
+ m50:=':50A:';
+ mf50_account:=Edit1_MF50.Text;
+ mf50_bic:=Edit2_MF50.Text;
+ mf50_nameadress:=Memo1_MF50.Text;
+ end;
+if CMF50.ItemIndex=2 then
+ begin;
+ m50:=':50F:';
+ mf50_account:=Edit3_MF50.Text;
+ mf50_nameadress:=Memo2_MF50.Text;
+ end;
+if CMF50.ItemIndex=3 then
+ begin
+ m50:=':50K:';
+ mf50_account:=Edit4_MF50.Text;
+ mf50_nameadress:=Memo3_MF50.Text;
+ end;
+if CMF50.ItemIndex=0 then
+ begin
+ m50:='' ;
+ mf50_account:='';
+ mf50_bic:='';
+ mf50_nameadress:='';
+ end;
+if CMF52.ItemIndex=1 then
+ begin
+ m52:=':52A:';
+ mf52_account:=Edit1_MF52.Text;
+ mf52_bic:=Edit2_MF52.Text;
+ mf52_nameadress:=Memo1_MF52.Text;
+
+ end;
+if CMF52.ItemIndex=2 then
+ begin
+ m52:=':52D:';
+ mf52_account:=Edit3_MF52.Text;
+ mf52_nameadress:=Memo2_MF52.Text;
+
+ end;
+if CMF52.ItemIndex=0 then
+ begin
+ m52:= '';
+ mf52_account:='';
+ mf52_bic:='';
+ mf52_nameadress:='';
+  end;
+if CMF53.ItemIndex=1 then
+ begin
+ m53:=':53A:';
+ mf53_account:=Edit1_MF53.Text;
+ mf53_bic:=Edit2_MF53.Text;
+ mf53_namelocation:=Memo1_MF53.Text;
+ end;
+if CMF53.ItemIndex=2 then
+ begin
+ m53:=':53B:';
+ mf53_account:=Edit3_MF53.Text;
+ mf53_namelocation:=Edit4_MF53.Text;
+ end;
+if CMF53.ItemIndex=3 then
+ begin
+ m53:=':53D:';
+ mf53_account:=Edit5_MF53.Text;
+ mf53_namelocation:=Memo2_MF53.Text;
+ end;
+if CMF53.ItemIndex=0 then
+ begin
+ m53:= '';
+ mf53_account:='';
+ mf53_namelocation:='';
+ end;
+if CMF54.ItemIndex=1 then
+ begin
+ m54:=':54A:';
+ mf54_account:=Edit1_MF54.Text;
+ mf54_bic:=Edit2_MF50.Text;
+ mf54_namelocation:=Memo1_MF54.Text;
+ end;
+if CMF54.ItemIndex=2 then
+ begin
+ m54:=':54B:';
+ mf54_account:=Edit4_MF54.Text;
+ mf53_namelocation:=Edit5_MF54.Text;
+ end;
+if CMF54.ItemIndex=3 then
+ begin
+ m54:=':54D:';
+ mf54_account:=Edit6_MF54.Text;
+ mf54_namelocation:=Memo2_MF54.Text;
+ end;
+if CMF54.ItemIndex=0 then
+ begin
+ m54:= '';
+ mf54_account:='';
+ mf54_bic:='';
+ mf54_namelocation:=''
+ end;
+
+if CMF55.ItemIndex=1 then
+ begin
+ m55:=':55A:';
+ mf55_account:=Edit1_MF55.Text;
+ mf55_bic:=Edit2_MF55.Text;
+ mf55_namelocation:=Memo1_MF55.Text;
+ end;
+if CMF55.ItemIndex=2 then
+ begin
+ m55:=':55B:';
+ mf55_account:=Edit3_MF55.Text;
+ mf55_namelocation:=Edit4_MF55.Text;
+ end;
+if CMF55.ItemIndex=3 then
+ begin
+ m55:=':55D:';
+ mf55_account:=Edit5_MF55.Text;
+ mf55_namelocation:=Memo2_MF55.Text;
+ end;
+if CMF55.ItemIndex=0 then
+ begin
+ m55:= '';
+ mf55_account:='';
+ mf55_bic:='';
+ mf55_namelocation:='';
+ end;
+
+if CMF56.ItemIndex=1 then
+ begin
+ m56:=':56A:';
+ mf56_account:=Edit1_MF56.Text;
+ mf56_bic:=Edit2_MF56.Text;
+ mf56_namelocation:=Memo1_MF56.Text;
+ end;
+if CMF56.ItemIndex=2 then
+ begin
+ m56:=':56C:';
+ mf56_account:=Edit3_MF56.Text;
+ end;
+if CMF56.ItemIndex=3 then
+ begin
+ m56:=':56D:';
+ mf56_account:=Edit4_MF56.Text;
+ mf56_namelocation:=Memo2_MF56.Text;
+ end;
+if CMF56.ItemIndex=0 then
+ begin
+ m56:= '';
+ mf56_account:='';
+ mf56_bic:='';
+ mf56_namelocation:='';
+ end;
+
+if CMF57.ItemIndex=1 then
+ begin
+ m57:=':57A:';
+ mf57_account:=Edit1_MF57.Text;
+ mf57_bic:=Edit2_MF57.Text;
+ mf57_namelocation:=Memo1_MF57.Text;
+ end;
+if CMF57.ItemIndex=2 then
+ begin
+ m57:=':57B:';
+ mf57_account:=Edit3_MF57.Text;
+ mf57_namelocation:=Edit4_MF57.Text;
+ end;
+if CMF57.ItemIndex=3 then
+ begin
+ m57:=':57C:';
+ mf57_account:=Edit5_MF57.Text;
+ end;
+if CMF57.ItemIndex=4 then
+ begin
+ m57:=':57D:';
+ mf57_account:=Edit6_MF57.Text;
+ mf57_namelocation:=Memo2_MF57.Text
+ end;
+if CMF57.ItemIndex=0 then
+ begin
+ m57:= '';
+ mf57_account:='';
+ mf57_bic:='';
+ mf57_namelocation:='';
+ end;
+
+if CMF59.ItemIndex=1 then
+ begin
+ m59:=':59:';
+ mf59_account:=Edit1_MF59.Text;
+ mf59_nameadress:=Memo1_MF59.Text;
+ end;
+if CMF59.ItemIndex=2 then
+ begin
+ m59:=':59A:';
+ mf59_account:=Edit2_MF59.Text;
+ mf59_nameadress:=Edit3_MF59.Text;
+ end;
+if CMF59.ItemIndex=0 then
+ begin
+ m59:= '';
+ mf59_account:='';
+ mf59_nameadress:='';
+ end;
+if MF70_memo.Text<>'' then
+begin
+m70:=':70:';
+mf70:=mf70_memo.text;
+end
+else m70:='';
+if Edit1_MF71A.Text<>'' then
+begin
+m71a:=':71A:';
+mf71a:=Edit1_MF71A.Text;
+end
+else m71a:='';
+if (Edit1_MF71F.Text<>'') or (Edit3_MF71F.Text<>'') or (Edit5_MF71F.Text<>'')
+then
+begin
+m71f:=':71F:';
+mf71f_child:=Edit1_MF71F.Text+'|'+Edit2_MF71F.Text;
+end
+ else m71f:='';
+
+if Edit1_MF71G.Text<>'' then
+begin
+m71g:=':71G:';
+mf71g_child:=Edit1_MF71G.Text+'|'+Edit2_MF71G.Text;
+end
+else m71g:='';
+if MF72_memo.Text<>'' then
+ begin
+ m72:=':72:';
+ mf72:=MF72_memo.Text;
+ end
+ else m72:='';
+if MF77_memo.Text<>'' then
+ begin
+ m77b:=':77B:';
+ mf77b:=MF77_memo.Text;
+ end
+ else m77b:='';
+{SWDataModule.sw_in_insert.CallProcedure ('insert_out',[  mf20,v_mf20_reference,mf23b,mf26t,mf27,mf32a,mf36,v_sendertype,v_senderbic,
+                                                         v_senderlt,v_application,v_fincopy,v_messagetype,v_priority,
+                                                         v_monitoring,v_receivertype,v_receiverbic,strtodate(datetostr(mf32_date.Date)),mf32a_curr,
+                                                         mf32a_amount,mf50_account,mf50_bic,mf50_nameadress,
+                                                         mf52_account,mf52_bic,mf52_nameadress,mf53_account,
+                                                         mf53_bic,mf53_namelocation,mf54_account,mf54_bic,
+                                                         mf54_namelocation,mf55_account,mf55_bic,mf55_namelocation,
+                                                         mf56_account,mf56_bic,mf56_namelocation,mf57_account,
+                                                         mf57_bic,mf57_namelocation,mf59_account,mf59_nameadress,
+                                                         status ,mf71f_child,mf71g_child,m20, m23b, m26t, m32a,
+                                                         m36,m50,m52,m53,m54,m55,m56,m57,m59,m70,mf70,m71a,m71f,m71g,m72,
+                                                        m77b,3,mf71a,mf72,mf77b
+                                                             ]);  }
+SWDataModule.sw_out.Open;
+SWDataModule.sw_out.Refresh;
+SWDataModule.sw_out_2.Open;
+SWDataModule.sw_out_2.Refresh;
+SWDataModule.sw_out3.Open;
+SWDataModule.sw_out3.Refresh;
+                   end else   ShowMessage(' '+dolmayan+ ' Ханалар долдурулмайыб!') ;
+
+
+
+
+
+end;
+
+
+procedure TForm5.Createmessage1Click(Sender: TObject);
+begin
+//insert.Execute;
+end;
+
+procedure TForm5.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+ SWDataModule.sw_out.cancel;
+end;
+
+procedure TForm5.FormCreate(Sender: TObject);
+begin
+SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TForm5.Mf70_memoKeyPress(Sender: TObject; var Key: Char);
+var
+  i,n,k,CPosY :integer;
+  s:string;
+begin
+  key := UpCase(Key);
+  if (key=#13) or (key=#8) then exit;
+  CPosY:=(Sender as TMemo).CaretPos.y;
+  s:=(Sender as TMemo).text;
+//  if ((s[length(s)]=#13) or (s[length(s)]=#10)) then delete(s,length(s),1);
+  if length(s)>0 then
+  if ((s[length(s)]=#13) or (s[length(s)]=#10)) then delete(s,length(s),1);
+  (Sender as TMemo).text:=s;
+  if Length((Sender as TMemo).Lines[CPosY])>=35 then
+  begin
+    if CPosY<7 then
+    begin
+      if CPosY<(Sender as TMemo).lines.Count-1 then
+      begin
+        n:=0;
+        for i:=0 to (Sender as TMemo).lines.count-1 do
+        begin
+          k:=Length((Sender as TMemo).Lines[i]);
+          n:=n+k;
+          if k<35 then break;
+          n:=n+2;
+        end;
+        (Sender as TMemo).selstart:=n;
+        (Sender as TMemo).sellength:=0;
+      end else
+      begin
+        (Sender as TMemo).lines.Add(key);
+        key:=#0;
+      end;
+    end else
+    key:=#0;
+  end;
+end;
+
+end.

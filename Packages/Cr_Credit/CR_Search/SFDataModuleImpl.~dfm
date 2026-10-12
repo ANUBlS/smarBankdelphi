@@ -1,0 +1,63 @@
+object SFDataModule: TSFDataModule
+  OldCreateOrder = False
+  OnCreate = DataModuleCreate
+  OnDestroy = DataModuleDestroy
+  Left = 192
+  Top = 107
+  Height = 480
+  Width = 696
+  object EnabledFieldsData: TOracleDataSet
+    SQL.Strings = (
+      'select seqno, fieldname,fielddesc'
+      'from cm_fields_list '
+      'where visible=0'
+      'order by seqno')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = CMDataModule.CMSession
+    DesignActivation = False
+    Active = False
+    Left = 208
+    Top = 184
+    object EnabledFieldsDataSEQNO: TFloatField
+      FieldName = 'SEQNO'
+      Required = True
+    end
+    object EnabledFieldsDataFIELDNAME: TStringField
+      FieldName = 'FIELDNAME'
+      Required = True
+      Size = 64
+    end
+    object EnabledFieldsDataFIELDDESC: TStringField
+      FieldName = 'FIELDDESC'
+      Required = True
+      Size = 128
+    end
+  end
+  object DSEnabledFieldsData: TDataSource
+    DataSet = EnabledFieldsData
+    Left = 208
+    Top = 232
+  end
+end

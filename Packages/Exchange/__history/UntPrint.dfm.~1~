@@ -1,0 +1,101 @@
+object FrmPrint: TFrmPrint
+  Left = 369
+  Top = 240
+  BorderIcons = [biSystemMenu]
+  BorderStyle = bsDialog
+  Caption = 'Report'
+  ClientHeight = 102
+  ClientWidth = 187
+  Color = clBtnFace
+  Font.Charset = RUSSIAN_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poMainFormCenter
+  OnKeyDown = FormKeyDown
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 187
+    Height = 102
+    Align = alClient
+    TabOrder = 0
+    object GroupBox1: TGroupBox
+      Left = 1
+      Top = 1
+      Width = 185
+      Height = 100
+      Align = alClient
+      Caption = 'Чап формасы'
+      TabOrder = 0
+      object RBTotal: TRadioButton
+        Tag = 1
+        Left = 8
+        Top = 22
+        Width = 102
+        Height = 17
+        Caption = ' Йекун щесабат'
+        Checked = True
+        TabOrder = 0
+        TabStop = True
+        OnClick = RBTotalClick
+      end
+      object RBExpand: TRadioButton
+        Tag = 2
+        Left = 8
+        Top = 48
+        Width = 100
+        Height = 17
+        Caption = ' Ардыжыл щесабат'
+        TabOrder = 1
+        OnClick = RBTotalClick
+      end
+      object BPrint: TBitBtn
+        Tag = 1
+        Left = 8
+        Top = 69
+        Width = 54
+        Height = 25
+        Caption = 'Чап'
+        Default = True
+        TabOrder = 2
+        OnClick = BPrintClick
+      end
+      object BCancel: TBitBtn
+        Left = 124
+        Top = 69
+        Width = 54
+        Height = 25
+        Caption = '&Имтина'
+        TabOrder = 3
+        OnClick = BCancelClick
+      end
+      object BitBtn1: TBitBtn
+        Tag = 2
+        Left = 66
+        Top = 69
+        Width = 54
+        Height = 25
+        Caption = '&Excel'
+        TabOrder = 4
+        OnClick = BPrintClick
+      end
+    end
+  end
+  object ExcelExporter: TExcelExporter
+    ExportSource = ExchangeDataMod.DataExcel
+    ShowTitles = True
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    Left = 129
+    Top = 17
+  end
+end

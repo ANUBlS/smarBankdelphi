@@ -1,0 +1,476 @@
+object dmpbf_transaction: Tdmpbf_transaction
+  OldCreateOrder = False
+  OnCreate = DataModuleCreate
+  OnDestroy = DataModuleDestroy
+  Left = 220
+  Top = 172
+  Height = 480
+  Width = 696
+  object TransactionsData: TDataSource
+    DataSet = PBFTransactions
+    Left = 121
+    Top = 25
+  end
+  object PBFTransactions: TOracleDataSet
+    SQL.Strings = (
+      'SELECT'
+      
+        '  po.id as num,po.name as opname,po.fromfilialtofilial as fromfi' +
+        'ltofil,po.paymentno,'
+      '  p.ID,po.username,po.clientaccid,'
+      '  p.dat as TransactionDate,'
+      '  ad.ACC_NO as DebitAccNo,ad.filial as debitfilial,'
+      '  dc.val_name as DebitCurrencySName,'
+      '  ac.ACC_NO as CreditAccNo,ac.filial as creditfilial,'
+      '  cc.val_name as CreditCurrencySName,'
+      '  p.ammount as DebitAmount,'
+      '  p.Ammount_C as CreditAmount,'
+      '  p.LAmmount as LAmount,'
+      '  p.Name,p.VAL_ACC,'
+      '  0 as status'
+      'FROM'
+      '    account ad,'
+      '    account ac,'
+      '    avalute dc,'
+      '    avalute cc,'
+      '    LAZYTRANSACTION p,'
+      '    pbf_operations po,'
+      '    pbf_transactions pt'
+      'where'
+      '    p.dat =:TransactionDate'
+      '    and (ad.ID = p.DEBT)'
+      '    and (ac.ID = p.KREDIT)'
+      '    and (ad.val_acc = p.val_acc)'
+      '    and (ac.val_acc = p.CurrencyID_C)'
+      '    and (dc.VALUTE = p.val_acc)'
+      '    and (cc.VALUTE = p.CurrencyID_C)'
+      '    and ((P.OP_ID<>-1 and'
+      
+        '          not EXISTS(select SUSER from sba_userman where MUSER=u' +
+        'id and (type#=1 or type#=0)))'
+      '          or'
+      
+        '          (P.OP_ID in(select SUSER from sba_userman where MUSER=' +
+        'uid and (type#=1 or type#=0))))'
+      '    and po.id = pt.operid '
+      '    and p.id = pt.TRANSACTIONID '
+      '    and pt.hdate = :TransactionDate'
+      ''
+      'union'
+      ''
+      'SELECT'
+      
+        '  po.id as num,po.name as opname,po.fromfilialtofilial as fromfi' +
+        'ltofil,po.paymentno,'
+      '  p.ID,po.username,po.clientaccid,'
+      '  p.dat as TransactionDate,'
+      '  ad.ACC_NO as DebitAccNo,ad.filial as debitfilial,'
+      '  dc.val_name as DebitCurrencySName,'
+      '  ac.ACC_NO as CreditAccNo,ac.filial as creditfilial,'
+      '  cc.val_name as CreditCurrencySName,'
+      '  p.ammount as DebitAmount,'
+      '  p.Ammount_C as CreditAmount,'
+      '  p.LAmmount as LAmount,'
+      '  p.Name,p.VAL_ACC,'
+      '  1 as status'
+      'FROM'
+      '    account ad,'
+      '    account ac,'
+      '    avalute dc,'
+      '    avalute cc,'
+      '    provarch p,'
+      '    pbf_operations po,'
+      '    pbf_transactions pt'
+      'where'
+      '    p.dat =:TransactionDate'
+      '    and (ad.ID = p.DEBT)'
+      '    and (ac.ID = p.KREDIT)'
+      '    and (ad.val_acc = p.val_acc)'
+      '    and (ac.val_acc = p.CurrencyID_C)'
+      '    and (dc.VALUTE = p.val_acc)'
+      '    and (cc.VALUTE = p.CurrencyID_C)'
+      '    and ((P.OP_ID<>-1 and'
+      
+        '          not EXISTS(select SUSER from sba_userman where MUSER=u' +
+        'id and (type#=1 or type#=0)))'
+      '          or'
+      
+        '          (P.OP_ID in(select SUSER from sba_userman where MUSER=' +
+        'uid and (type#=1 or type#=0))))'
+      '    and po.id = pt.operid '
+      '    and p.id = pt.TRANSACTIONID '
+      '    and pt.hdate = :TransactionDate'
+      ''
+      '--order by :orderfield'
+      '')
+    Variables.Data = {
+      0300000002000000100000003A5452414E53414354494F4E444154450C000000
+      00000000000000000B0000003A4F524445524649454C44010000000000000000
+      000000}
+    QueryAllRecords = False
+    Session = sboapiDataModule.SBSession
+    Left = 32
+    Top = 24
+    object PBFTransactionsID: TFloatField
+      FieldName = 'ID'
+      Visible = False
+    end
+    object PBFTransactionsNUM: TFloatField
+      DisplayLabel = '№'
+      FieldName = 'NUM'
+      Required = True
+    end
+    object PBFTransactionsTRANSACTIONDATE: TDateTimeField
+      DisplayLabel = 'Тарих'
+      FieldName = 'TRANSACTIONDATE'
+    end
+    object PBFTransactionsDEBITACCNO: TStringField
+      DisplayLabel = 'Дебет'
+      FieldName = 'DEBITACCNO'
+    end
+    object PBFTransactionsDEBITCURRENCYSNAME: TStringField
+      DisplayLabel = '$'
+      FieldName = 'DEBITCURRENCYSNAME'
+      Size = 10
+    end
+    object PBFTransactionsCREDITACCNO: TStringField
+      DisplayLabel = 'Кредит'
+      FieldName = 'CREDITACCNO'
+    end
+    object PBFTransactionsCREDITCURRENCYSNAME: TStringField
+      DisplayLabel = '$'
+      FieldName = 'CREDITCURRENCYSNAME'
+      Size = 10
+    end
+    object PBFTransactionsDEBITAMOUNT: TFloatField
+      DisplayLabel = 'Дебет мябляь'
+      FieldName = 'DEBITAMOUNT'
+      DisplayFormat = '#,##0.00'
+    end
+    object PBFTransactionsCREDITAMOUNT: TFloatField
+      DisplayLabel = 'Кредит мябляь'
+      FieldName = 'CREDITAMOUNT'
+      DisplayFormat = '#,##0.00'
+    end
+    object PBFTransactionsLAMOUNT: TFloatField
+      DisplayLabel = 'Еквивалент'
+      FieldName = 'LAMOUNT'
+      DisplayFormat = '#,##0.00'
+    end
+    object PBFTransactionsOPNAME: TStringField
+      DisplayLabel = 'Tipi'
+      FieldName = 'OPNAME'
+      Required = True
+      Size = 40
+    end
+    object PBFTransactionsVAL_ACC: TFloatField
+      FieldName = 'VAL_ACC'
+      Visible = False
+    end
+    object PBFTransactionsDEBITFILIAL: TIntegerField
+      FieldName = 'DEBITFILIAL'
+      Visible = False
+    end
+    object PBFTransactionsCREDITFILIAL: TIntegerField
+      FieldName = 'CREDITFILIAL'
+      Visible = False
+    end
+    object PBFTransactionsFROMFILTOFIL: TStringField
+      DisplayLabel = 'Филиал'
+      FieldName = 'FROMFILTOFIL'
+      Size = 60
+    end
+    object PBFTransactionsUSERNAME: TStringField
+      DisplayLabel = 'Истифадячи'
+      FieldName = 'USERNAME'
+      Size = 50
+    end
+    object PBFTransactionsCLIENTACCID: TFloatField
+      FieldName = 'CLIENTACCID'
+      Visible = False
+    end
+    object PBFTransactionsNAME: TStringField
+      FieldName = 'NAME'
+      Size = 255
+    end
+    object PBFTransactionsSTATUS: TFloatField
+      DisplayLabel = 'Статус'
+      FieldName = 'STATUS'
+    end
+    object PBFTransactionsPAYMENTNO: TStringField
+      DisplayLabel = 'Юдянишин №'
+      FieldName = 'PAYMENTNO'
+      Size = 10
+    end
+  end
+  object PBFOperationsds: TDataSource
+    DataSet = PBFOperations
+    Left = 296
+    Top = 24
+  end
+  object PBFOperations: TOracleDataSet
+    SQL.Strings = (
+      'SELECT a.rowid,a.id, a.name, a.hdate, a.clientaccid, a.amount'
+      '  FROM pbf_operations a'
+      '  where ID = :OID')
+    Variables.Data = {0300000001000000040000003A4F4944030000000000000000000000}
+    OnApplyRecord = PBFOperationsApplyRecord
+    Session = sboapiDataModule.SBSession
+    Left = 208
+    Top = 24
+    object PBFOperationsID: TFloatField
+      FieldName = 'ID'
+    end
+    object PBFOperationsNAME: TStringField
+      FieldName = 'NAME'
+      Size = 40
+    end
+    object PBFOperationsHDATE: TDateTimeField
+      FieldName = 'HDATE'
+    end
+    object PBFOperationsCLIENTACCID: TFloatField
+      FieldName = 'CLIENTACCID'
+    end
+    object PBFOperationsAMOUNT: TFloatField
+      FieldName = 'AMOUNT'
+      Required = True
+    end
+  end
+  object CurrDat: TOracleDataSet
+    SQL.Strings = (
+      'select * from sysdat')
+    Session = sboapiDataModule.SBSession
+    Left = 361
+    Top = 24
+    object CurrDatTEK_DAT: TDateTimeField
+      FieldName = 'TEK_DAT'
+      Required = True
+    end
+    object CurrDatPRED_DAT: TDateTimeField
+      FieldName = 'PRED_DAT'
+    end
+  end
+  object PBFAccs: TOracleDataSet
+    SQL.Strings = (
+      '  select id,acc_no,name from smart.account'
+      '  where close_dat is null '
+      '  and bal_cn1 in (select ACCGROUP from sbcm_acc_zone_info'
+      
+        '  where ZONEID in (select zoneid from sbcm_acc_zones where name ' +
+        '= '#39'Account'#39'))')
+    Session = sboapiDataModule.SBSession
+    Left = 26
+    Top = 82
+  end
+  object PBFAccsds: TDataSource
+    DataSet = PBFAccs
+    Left = 96
+    Top = 81
+  end
+  object PBFTransaction: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'PBF_TRANSACTION'
+    ParameterMode = pmNamed
+    Cursor = crSQLWait
+    Left = 28
+    Top = 144
+  end
+  object PBFValutes: TOracleDataSet
+    SQL.Strings = (
+      'select valute,valu_name from avalute')
+    Session = sboapiDataModule.SBSession
+    Left = 200
+    Top = 80
+    object PBFValutesVALUTE: TIntegerField
+      FieldName = 'VALUTE'
+      Required = True
+    end
+    object PBFValutesVALU_NAME: TStringField
+      FieldName = 'VALU_NAME'
+      Size = 25
+    end
+  end
+  object PBFFilials: TOracleDataSet
+    SQL.Strings = (
+      'select id,name from filial')
+    Session = sboapiDataModule.SBSession
+    Left = 200
+    Top = 136
+    object PBFFilialsID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object PBFFilialsNAME: TStringField
+      FieldName = 'NAME'
+      Size = 90
+    end
+  end
+  object PBFOptypes: TOracleDataSet
+    SQL.Strings = (
+      'select OPERATIONTYPE from pbf_operations'
+      'group by OPERATIONTYPE')
+    Session = sboapiDataModule.SBSession
+    Left = 208
+    Top = 192
+    object PBFOptypesOPERATIONTYPE: TStringField
+      FieldName = 'OPERATIONTYPE'
+      Size = 30
+    end
+  end
+  object pbfusers: TOracleDataSet
+    SQL.Strings = (
+      'select id,name from user$'
+      'order by name')
+    Session = sboapiDataModule.SBSession
+    Left = 208
+    Top = 248
+    object pbfusersID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object pbfusersNAME: TStringField
+      FieldName = 'NAME'
+      Required = True
+      Size = 30
+    end
+  end
+  object PBFValutesds: TDataSource
+    DataSet = PBFValutes
+    Left = 272
+    Top = 80
+  end
+  object PBFFilialsds: TDataSource
+    DataSet = PBFFilials
+    Left = 272
+    Top = 132
+  end
+  object PBFOptypesds: TDataSource
+    DataSet = PBFOptypes
+    Left = 278
+    Top = 189
+  end
+  object pbfusersds: TDataSource
+    DataSet = pbfusers
+    Left = 279
+    Top = 248
+  end
+  object PBFReportDs: TOracleDataSet
+    SQL.Strings = (
+      'select * from '
+      '(select BANK as pe_BANK,'
+      '        KOD_B as pe_KOD_B,'
+      '        INN as pe_inn,'
+      '        KRNO as pe_KRNO,'
+      '        SWIFT as pe_SWIFT,'
+      
+        '        PBF_TRANSACTION.get_accnoByType(:acctype1, a.kod_fil, nu' +
+        'll, '#39'SELF'#39') as pc_accno,'
+      '        PBF_TRANSACTION.get_valByAccID(:clientaccid) as valute'
+      '        from filialinfo a'
+      'where kod_fil = PBF_TRANSACTION.get_filialCode(null,:usr) )a,'
+      ''
+      
+        '(SELECT  a.re_bank, a.re_kod_b, a.re_inn, a.re_krno,a.re_swift, ' +
+        'a.rc_name, a.rc_account, a.rc_inn  FROM  pbf_beneficiars a where' +
+        ' OPERTYPE = '#39'AZERCELL'#39'),'
+      ''
+      ''
+      '(SELECT   a.stamp, a.chiefsign, a.accoutantsign'
+      
+        '  FROM pbf_othersettings a where filialid=PBF_TRANSACTION.get_fi' +
+        'lialCode(null,:usr)) c,'
+      ''
+      '(select paymentno from pbf_operations where id = :opid) d'
+      ''
+      ''
+      ''
+      '')
+    Variables.Data = {
+      03000000040000000C0000003A434C49454E5441434349440300000000000000
+      00000000040000003A555352050000000000000000000000090000003A414343
+      5459504531050000000000000000000000050000003A4F504944030000000000
+      000000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 32
+    Top = 216
+    object PBFReportDsPE_BANK: TStringField
+      FieldName = 'PE_BANK'
+      Size = 80
+    end
+    object PBFReportDsPE_KOD_B: TFloatField
+      FieldName = 'PE_KOD_B'
+    end
+    object PBFReportDsPE_INN: TStringField
+      FieldName = 'PE_INN'
+      Size = 15
+    end
+    object PBFReportDsPE_KRNO: TFloatField
+      FieldName = 'PE_KRNO'
+    end
+    object PBFReportDsPE_SWIFT: TStringField
+      FieldName = 'PE_SWIFT'
+    end
+    object PBFReportDsPC_ACCNO: TStringField
+      FieldName = 'PC_ACCNO'
+      Size = 4000
+    end
+    object PBFReportDsVALUTE: TStringField
+      FieldName = 'VALUTE'
+      Size = 4000
+    end
+    object PBFReportDsRE_BANK: TStringField
+      FieldName = 'RE_BANK'
+      Required = True
+      Size = 80
+    end
+    object PBFReportDsRE_KOD_B: TFloatField
+      FieldName = 'RE_KOD_B'
+    end
+    object PBFReportDsRE_INN: TStringField
+      FieldName = 'RE_INN'
+      Required = True
+      Size = 50
+    end
+    object PBFReportDsRE_KRNO: TStringField
+      FieldName = 'RE_KRNO'
+      Required = True
+      Size = 30
+    end
+    object PBFReportDsRE_SWIFT: TStringField
+      FieldName = 'RE_SWIFT'
+      Required = True
+      Size = 30
+    end
+    object PBFReportDsRC_NAME: TStringField
+      FieldName = 'RC_NAME'
+      Required = True
+      Size = 80
+    end
+    object PBFReportDsRC_ACCOUNT: TStringField
+      FieldName = 'RC_ACCOUNT'
+      Required = True
+      Size = 30
+    end
+    object PBFReportDsRC_INN: TStringField
+      FieldName = 'RC_INN'
+      Required = True
+      Size = 30
+    end
+    object PBFReportDsSTAMP: TBlobField
+      FieldName = 'STAMP'
+      BlobType = ftOraBlob
+    end
+    object PBFReportDsCHIEFSIGN: TBlobField
+      FieldName = 'CHIEFSIGN'
+      BlobType = ftOraBlob
+    end
+    object PBFReportDsACCOUTANTSIGN: TBlobField
+      FieldName = 'ACCOUTANTSIGN'
+      BlobType = ftOraBlob
+    end
+    object PBFReportDsPAYMENTNO: TStringField
+      FieldName = 'PAYMENTNO'
+      Size = 10
+    end
+  end
+end

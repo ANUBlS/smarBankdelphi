@@ -1,0 +1,321 @@
+object Frmpersonal_acc: TFrmpersonal_acc
+  Left = 0
+  Top = 0
+  BorderIcons = [biSystemMenu]
+  BorderStyle = bsSingle
+  Caption = 'F'#601'rdi q'#601'za s'#305#287'orta t'#601'minat'#305
+  ClientHeight = 256
+  ClientWidth = 646
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poDesktopCenter
+  OnKeyPress = FormKeyPress
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object XFGroupBox3: TXFGroupBox
+    Left = 0
+    Top = 144
+    Width = 646
+    Height = 71
+    Align = alBottom
+    Caption = 'F'#601'rdi q'#601'za s'#305#287'. m'#252'qavil'#601'l'#601'ri'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
+    ParentFont = False
+    TabOrder = 0
+    object XFLabel19: TXFLabel
+      Left = 7
+      Top = 13
+      Width = 137
+      Height = 13
+      Caption = 'F'#601'rdi q'#601'za s'#305#287'. m'#252'q. polis '#8470
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+    end
+    object DBLookupComboBox2: TDBLookupComboBox
+      Left = 7
+      Top = 30
+      Width = 165
+      Height = 22
+      DataField = 'ACCIDENT_POLISNUM'
+      DataSource = DMProvisions.DSRins_contr_per_acc_motor
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      KeyField = 'POLICY_NUM'
+      ListField = 'POLICY_NUM'
+      ListSource = DMProvisions.DSRPolisNo1
+      ParentFont = False
+      TabOrder = 0
+    end
+  end
+  object XFGroupBox2: TXFGroupBox
+    Left = 0
+    Top = 0
+    Width = 646
+    Height = 144
+    Align = alClient
+    Caption = 'F'#601'rdi q'#601'za s'#305#287'. m'#601'bl'#601#287'l'#601'ri  v'#601' haqqlar'#305
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
+    ParentFont = False
+    TabOrder = 1
+    object XFLabel17: TXFLabel
+      Left = 439
+      Top = 67
+      Width = 75
+      Height = 14
+      Caption = ' S'#305#287'orta haqq'#305
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+    end
+    object XFLabel1: TXFLabel
+      Left = 7
+      Top = 20
+      Width = 122
+      Height = 14
+      Caption = 'S'#305#287'orta olunanlar'#305'n say'#305
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+    end
+    object XFLabel2: TXFLabel
+      Left = 220
+      Top = 20
+      Width = 168
+      Height = 14
+      Caption = 'Bir s'#305#287'. olunan '#252#231#252'n s'#305#287'.m'#601'bl'#601#287'i'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+    end
+    object XFLabel3: TXFLabel
+      Left = 439
+      Top = 20
+      Width = 147
+      Height = 14
+      Caption = 'Bir hadis'#601' '#252#231#252'n s'#305#287'. m'#601'bl'#601#287'i'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+    end
+    object XFLabel4: TXFLabel
+      Left = 7
+      Top = 67
+      Width = 201
+      Height = 14
+      Caption = 'Bir s'#305#287'. olunan '#252#231#252'n max. tibbi x'#601'rcl'#601'r'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+    end
+    object XFLabel5: TXFLabel
+      Left = 219
+      Top = 67
+      Width = 214
+      Height = 14
+      Caption = 'Bir s'#305#287'. Hadis'#601'si '#252#231#252'n max. tibbi x'#601'rcl'#601'r  '
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+    end
+    object DBEdit9: TDBEdit
+      Left = 218
+      Top = 88
+      Width = 203
+      Height = 22
+      DataField = 'ONEINSEVENT_MAX_MED_EXPENSES'
+      DataSource = DMProvisions.DSRins_contr_per_acc_motor
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 4
+    end
+    object DBEdit11: TDBEdit
+      Left = 439
+      Top = 87
+      Width = 162
+      Height = 22
+      DataField = 'INS_PREMIUM'
+      DataSource = DMProvisions.DSRins_contr_per_acc_motor
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 5
+    end
+    object DBEdit1: TDBEdit
+      Left = 218
+      Top = 37
+      Width = 203
+      Height = 22
+      DataField = 'ONE_ACCIDENT_AMOUNT'
+      DataSource = DMProvisions.DSRins_contr_per_acc_motor
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 1
+    end
+    object DBEdit2: TDBEdit
+      Left = 439
+      Top = 37
+      Width = 162
+      Height = 22
+      DataField = 'ONE_ACCIDENT_EVENT_AMOUNT'
+      DataSource = DMProvisions.DSRins_contr_per_acc_motor
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 2
+    end
+    object DBEdit3: TDBEdit
+      Left = 7
+      Top = 37
+      Width = 199
+      Height = 22
+      DataField = 'PERSONAL_COUNT'
+      DataSource = DMProvisions.DSRins_contr_per_acc_motor
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 0
+    end
+    object DBEdit4: TDBEdit
+      Left = 7
+      Top = 89
+      Width = 199
+      Height = 22
+      DataField = 'ONE_MAX_MED_EXPENSES'
+      DataSource = DMProvisions.DSRins_contr_per_acc_motor
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 3
+    end
+  end
+  object XFPanel1: TXFPanel
+    Left = 0
+    Top = 215
+    Width = 646
+    Height = 41
+    Align = alBottom
+    TabOrder = 2
+    object XFButton1: TXFButton
+      Left = 473
+      Top = 8
+      Width = 75
+      Height = 25
+      Caption = 'Q'#601'bul'
+      DoubleBuffered = True
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentDoubleBuffered = False
+      ParentFont = False
+      TabOrder = 0
+      OnClick = XFButton1Click
+    end
+    object XFButton2: TXFButton
+      Left = 556
+      Top = 8
+      Width = 75
+      Height = 25
+      Caption = 'Ba'#287'la'
+      DoubleBuffered = True
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentDoubleBuffered = False
+      ParentFont = False
+      TabOrder = 1
+      OnClick = XFButton2Click
+    end
+  end
+  object XFCheckBox1: TXFCheckBox
+    Left = 582
+    Top = 143
+    Width = 14
+    Height = 18
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -13
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
+    ParentFont = False
+    TabOrder = 3
+    OnClick = XFCheckBox1Click
+  end
+  object XFCheckBox2: TXFCheckBox
+    Left = 582
+    Top = 0
+    Width = 14
+    Height = 15
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -13
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
+    ParentFont = False
+    TabOrder = 4
+    OnClick = XFCheckBox2Click
+  end
+end

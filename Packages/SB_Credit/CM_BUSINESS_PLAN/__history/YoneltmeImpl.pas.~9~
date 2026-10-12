@@ -1,0 +1,59 @@
+unit YoneltmeImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ExtCtrls, DBCtrls, Grids, DBGrids, DB, OracleData;
+
+type
+  TYoneltmeFrm = class(TForm)
+    DBGrid1: TDBGrid;
+    DBNavigator1: TDBNavigator;
+    OracleDataSet1: TOracleDataSet;
+    DataSource1: TDataSource;
+    OracleDataSet1NAME: TWideStringField;
+    OracleDataSet1WHEREFROM: TWideStringField;
+    OracleDataSet1AMMOUNT: TFloatField;
+    OracleDataSet1CREDITID: TFloatField;
+    OracleDataSet1ID: TFloatField;
+    procedure FormShow(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure OracleDataSet1ApplyRecord(Sender: TOracleDataSet; Action: Char;
+      var Applied: Boolean; var NewRowId: string);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  YoneltmeFrm: TYoneltmeFrm;
+
+implementation
+uses
+sboapiDataModuleImpl,BPMainFormImpl;
+{$R *.dfm}
+
+procedure TYoneltmeFrm.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+YoneltmeFrm.Free
+end;
+
+procedure TYoneltmeFrm.FormShow(Sender: TObject);
+begin
+
+OracleDataSet1.Close ;
+OracleDataSet1.SetVariable('creditid',CrdID) ;
+OracleDataSet1.open ;
+OracleDataSet1CREDITID.AsInteger:=CrdID ;
+
+end;
+
+procedure TYoneltmeFrm.OracleDataSet1ApplyRecord(Sender: TOracleDataSet;
+  Action: Char; var Applied: Boolean; var NewRowId: string);
+begin
+OracleDataSet1CREDITID.AsInteger:=CrdID ;
+end;
+
+end.

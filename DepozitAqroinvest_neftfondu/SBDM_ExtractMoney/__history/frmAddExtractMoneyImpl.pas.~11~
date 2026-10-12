@@ -1,0 +1,172 @@
+﻿unit frmAddExtractMoneyImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, Mask, DBCtrlsEh, DBLookupEh, ExtCtrls, ComCtrls, CMCurrencyEdit,
+  NLSLocalizer, ActnList, DBGridEh;
+
+type
+  TfrmAddExtractMoney = class(TForm)
+    Panel2: TPanel;
+    Button1: TButton;
+    GroupBox5: TGroupBox;
+    Panel4: TPanel;
+    StaticText2: TStaticText;
+    DBEditEh3: TDBEditEh;
+    Panel5: TPanel;
+    StaticText1: TStaticText;
+    DBEditEh4: TDBEditEh;
+    Panel6: TPanel;
+    StaticText4: TStaticText;
+    EdIntDebit: TCMCurrencyEdit;
+    GroupBox1: TGroupBox;
+    Panel3: TPanel;
+    StaticText5: TStaticText;
+    DBEditEh1: TDBEditEh;
+    Panel7: TPanel;
+    StaticText6: TStaticText;
+    DBEditEh2: TDBEditEh;
+    Panel8: TPanel;
+    StaticText7: TStaticText;
+    EdMainDebit: TCMCurrencyEdit;
+    Button2: TButton;
+    ActionList1: TActionList;
+    Actiontr: TAction;
+    GroupBox2: TGroupBox;
+    Panel10: TPanel;
+    StaticText8: TStaticText;
+    Panel12: TPanel;
+    StaticText10: TStaticText;
+    EdSaheDebit: TCMCurrencyEdit;
+    Label1: TLabel;
+    AccountListCB: TDBLookupComboboxEh;
+    CheckBoxTransaction: TCheckBox;
+    DTPOperation: TDBDateTimeEditEh;
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormShow(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+    procedure ActiontrExecute(Sender: TObject);
+    procedure ActiontrUpdate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  frmAddExtractMoney: TfrmAddExtractMoney;
+
+implementation
+
+{$R *.DFM}
+uses DMExtractMoneyImpl,CommonDeclsImpl;
+
+procedure TfrmAddExtractMoney.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+   Resize := False
+end;
+
+procedure TfrmAddExtractMoney.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+   if Ord(Key) = VK_ESCAPE then Close
+end;
+
+procedure TfrmAddExtractMoney.FormShow(Sender: TObject);
+begin
+   DMExtractMoney.DepositInfo.Refresh;
+   DTPOperation.Value := Get_BankDate;
+   EdMainDebit.Value := 0;
+   EdIntDebit.Value := 0;
+   EdSaheDebit.Value:=0;
+end;
+
+procedure TfrmAddExtractMoney.ActiontrExecute(Sender: TObject);
+resourcestring
+  rsTransactionsWillProcessed = 'Qiymətli kağızın ödənilməsi ...';
+Var p_accid :Integer;
+    CommitExtractMoney,CBoxTrans :Boolean;
+
+begin
+
+   if DTPOperation.Value<Get_BankDate
+   then
+      begin
+        ShowMessage('Ödəniş tarixi sistem tarixdən kiçik ola bilməz'); {neft fondu}
+        exit;
+      end;
+
+   if CheckBoxTransaction.Checked then
+   begin
+    if AccountListCB.Text='' then
+    begin
+      ShowMessage('Satış hesabı sazlanmayıb!....');
+      exit;
+    end
+   else
+     p_accid  := AccountListCB.ListSource.DataSet.FieldByName('ID').AsInteger;
+   end;
+
+    if CheckBoxTransaction.Checked then  CBoxTrans:=True
+                                   else  CBoxTrans:=false;
+
+    with DMExtractMoney,sbcm_payment do
+     CallProcedure('WithDrawMoney',['ContractID',Get_SelectedContID,
+                                    'P_AccID',p_accid,
+                                    'HDate',DTPOperation.Value,
+                                    'FacticalDebtWithdraw',EdMainDebit.Value,
+                                    'InterestDebtWithdraw',EdIntDebit.value,
+                                    'SaheDebtWithdraw',EdSaheDebit.Value,
+                                    'UseTransactions',CBoxTrans,
+                                    'showTransaction',True]);
+
+  IF CheckBoxTransaction.Checked Then
+  begin
+    try
+     CommitExtractMoney := TrDelayed_Show(Self,rsTransactionsWillProcessed);
+
+     Update;
+
+     DMExtractMoney.SBCM_PAYMENT.CallProcedure('CommitWithDrawMoney',[
+        'DoCommit',CommitExtractMoney
+     ]);
+
+     if CommitExtractMoney then
+     Self.ModalResult := mrOk;
+     Self.Update;
+    except
+
+
+     DMExtractMoney.SBCM_PAYMENT.CallProcedure('CommitWithDrawMoney',['DoCommit',
+         False
+     ]);
+
+     raise;
+
+    end;
+
+  end
+
+ ELSE begin
+        frmAddExtractMoney.Close;
+        DMExtractMoney.Payments.Refresh;
+      end;
+ end;
+
+procedure TfrmAddExtractMoney.Button2Click(Sender: TObject);
+begin
+   Close
+end;
+
+
+procedure TfrmAddExtractMoney.ActiontrUpdate(Sender: TObject);
+begin
+   with (Sender as TAction) do
+         Enabled := (EdMainDebit.Value + EdIntDebit.Value+EdSaheDebit.Value) > 0
+end;
+
+end.

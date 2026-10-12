@@ -1,0 +1,100 @@
+﻿unit CreateCMAccountsImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Grids, DBGrids,  Buttons, StdCtrls, ExtCtrls, Mask,
+  DBCtrlsEh, DBLookupEh, Oracle, DB, OracleData, ComCtrls;
+
+type
+  TFormCreateCMAccounts = class(TForm)
+    PageControl1: TPageControl;
+    TabSheet1: TTabSheet;
+    TabSheet2: TTabSheet;
+    TabSheet3: TTabSheet;
+    Panel1: TPanel;
+    Panel2: TPanel;
+    Panel4: TPanel;
+    Panel5: TPanel;
+    Panel6: TPanel;
+    Panel7: TPanel;
+    Label1: TLabel;
+    StartDateEdit: TDateTimePicker;
+    Label2: TLabel;
+    EndDateEdit: TDateTimePicker;
+    Button1: TButton;
+    SpeedButton1: TSpeedButton;
+    Label3: TLabel;
+    DateTimePicker1: TDateTimePicker;
+    Label4: TLabel;
+    DateTimePicker2: TDateTimePicker;
+    Button2: TButton;
+    SpeedButton2: TSpeedButton;
+    Label5: TLabel;
+    DateTimePicker3: TDateTimePicker;
+    Label6: TLabel;
+    DateTimePicker4: TDateTimePicker;
+    Button3: TButton;
+    SpeedButton3: TSpeedButton;
+    DBGrid2: TDBGrid;
+    DBGrid3: TDBGrid;
+    AccState: TDataSource;
+    AccStateData: TOracleDataSet;
+    DBGrid1: TDBGrid;
+    AccStateDataACC_ID: TFloatField;
+    AccStateDataOSTAT: TFloatField;
+    AccStateDataPOK_OSTAT: TFloatField;
+    AccStateDataDATDATE: TDateTimeField;
+    AccStateDataOBR_D: TFloatField;
+    AccStateDataOBR_K: TFloatField;
+    AccStateDataPOK_OBR_D: TFloatField;
+    AccStateDataPOK_OBR_K: TFloatField;
+    AccStateDataLASTOPDATE: TDateTimeField;
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+    procedure FormCreate(Sender: TObject);
+    procedure Button3Click(Sender: TObject);
+
+
+  private
+    CustID :Integer;
+    CustName :String;
+  public
+    { Public declarations }
+  end;
+
+var
+  FormCreateCMAccounts: TFormCreateCMAccounts;
+
+implementation
+
+uses DataModuleConclusion,ConclusionMainUnitImpl,LoanBalAccsUnit,
+   SBTranslateProc,sboapiDataModuleImpl,CommonDecls;
+
+{$R *.DFM}
+
+procedure TFormCreateCMAccounts.Button3Click(Sender: TObject);
+begin
+  showmessage(inttostr(ConclusionForm.Hesab_ID));
+AccStateData.Close;
+AccStateData.SetVariable('v_ACCID',ConclusionForm.Hesab_ID);
+AccStateData.SetVariable('dat1',Int(DateTimePicker3.DateTime));
+AccStateData.SetVariable('dat2',Int(DateTimePicker4.DateTime));
+AccStateData.Open;
+end;
+
+procedure TFormCreateCMAccounts.FormCanResize(Sender: TObject;
+  var NewWidth, NewHeight: Integer; var Resize: Boolean);
+begin
+   Resize := False;
+end;
+
+
+
+procedure TFormCreateCMAccounts.FormCreate(Sender: TObject);
+begin
+SBTranslateProc.TranslateAllCompForms(Self, sboapiDataModule.OrPack_SL);
+end;
+
+end.

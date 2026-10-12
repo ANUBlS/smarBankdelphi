@@ -1,0 +1,89 @@
+object P_Ch_Form: TP_Ch_Form
+  Left = 373
+  Top = 265
+  BorderStyle = bsDialog
+  ClientHeight = 113
+  ClientWidth = 140
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'MS Sans Serif'
+  Font.Style = []
+  OldCreateOrder = False
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 140
+    Height = 113
+    Align = alClient
+    TabOrder = 0
+    object Label1: TLabel
+      Left = 56
+      Top = 18
+      Width = 52
+      Height = 13
+      Caption = 'Дебет цзря'
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Label2: TLabel
+      Left = 56
+      Top = 39
+      Width = 50
+      Height = 13
+      Caption = 'Кредит цзря'
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Button1: TButton
+      Left = 32
+      Top = 72
+      Width = 75
+      Height = 25
+      Caption = '&Гябул'
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 0
+      OnClick = Button1Click
+    end
+    object ch_1: TCheckBox
+      Left = 32
+      Top = 16
+      Width = 17
+      Height = 17
+      TabOrder = 1
+    end
+    object ch_2: TCheckBox
+      Left = 33
+      Top = 39
+      Width = 17
+      Height = 17
+      Caption = 'ch_2'
+      TabOrder = 2
+    end
+  end
+  object NLSLocalizer1: TNLSLocalizer
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    Left = 104
+    Top = 40
+  end
+end

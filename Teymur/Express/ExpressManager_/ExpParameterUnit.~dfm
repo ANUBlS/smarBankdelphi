@@ -1,0 +1,224 @@
+object ExpParameter: TExpParameter
+  Left = 502
+  Top = 633
+  BorderStyle = bsDialog
+  ClientHeight = 327
+  ClientWidth = 593
+  Color = clBtnFace
+  Font.Charset = RUSSIAN_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poScreenCenter
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 593
+    Height = 327
+    Align = alClient
+    TabOrder = 0
+    object Label1: TLabel
+      Left = 2
+      Top = 10
+      Width = 23
+      Height = 13
+      Caption = 'Филиал:'
+    end
+    object Label2: TLabel
+      Left = 2
+      Top = 38
+      Width = 38
+      Height = 13
+      Caption = 'Валйута:'
+    end
+    object Label3: TLabel
+      Left = 2
+      Top = 69
+      Width = 34
+      Height = 13
+      Caption = 'Щесаб:'
+    end
+    object SpeedButton1: TSpeedButton
+      Left = 224
+      Top = 64
+      Width = 23
+      Height = 22
+      Caption = 'OK'
+      OnClick = SpeedButton1Click
+    end
+    object SpeedButton2: TSpeedButton
+      Left = 480
+      Top = 63
+      Width = 23
+      Height = 22
+      Caption = 'OK'
+      OnClick = SpeedButton2Click
+    end
+    object Label4: TLabel
+      Left = 253
+      Top = 69
+      Width = 37
+      Height = 13
+      Caption = '(2801)'
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clBlue
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = [fsBold]
+      ParentFont = False
+    end
+    object Label5: TLabel
+      Left = 514
+      Top = 68
+      Width = 37
+      Height = 13
+      Caption = '(4801)'
+      Color = clBtnFace
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clBlue
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = [fsBold]
+      ParentColor = False
+      ParentFont = False
+    end
+    object DBGrid1: TDBGrid
+      Left = 1
+      Top = 89
+      Width = 295
+      Height = 236
+      Color = clSilver
+      DataSource = ExpDataModule.ExpAccDataSource
+      Options = [dgTitles, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit]
+      TabOrder = 0
+      TitleFont.Charset = RUSSIAN_CHARSET
+      TitleFont.Color = clWindowText
+      TitleFont.Height = -11
+      TitleFont.Name = 'Azl Sans Serif'
+      TitleFont.Style = []
+      OnDblClick = DBGrid1DblClick
+      Columns = <
+        item
+          Expanded = False
+          FieldName = 'VAL_NAME'
+          Title.Alignment = taCenter
+          Title.Caption = 'Вал.'
+          Width = 47
+          Visible = True
+        end
+        item
+          Color = clWhite
+          Expanded = False
+          FieldName = 'ACC_NO'
+          Title.Alignment = taCenter
+          Title.Caption = 'Щесаб'
+          Width = 160
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'NAME'
+          Title.Alignment = taCenter
+          Title.Caption = 'Филиал'
+          Visible = True
+        end>
+    end
+    object DBGrid2: TDBGrid
+      Left = 297
+      Top = 89
+      Width = 295
+      Height = 236
+      Color = clSilver
+      DataSource = ExpDataModule.BranchDataSource
+      Options = [dgTitles, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit]
+      TabOrder = 1
+      TitleFont.Charset = RUSSIAN_CHARSET
+      TitleFont.Color = clWindowText
+      TitleFont.Height = -11
+      TitleFont.Name = 'Azl Sans Serif'
+      TitleFont.Style = []
+      OnDblClick = DBGrid2DblClick
+      Columns = <
+        item
+          Expanded = False
+          FieldName = 'VAL_NAME'
+          Title.Alignment = taCenter
+          Title.Caption = 'Вал.'
+          Width = 47
+          Visible = True
+        end
+        item
+          Color = clWhite
+          Expanded = False
+          FieldName = 'ACC_NO'
+          Title.Alignment = taCenter
+          Title.Caption = 'Щесаб'
+          Width = 160
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'NAME'
+          Title.Alignment = taCenter
+          Title.Caption = 'Филиал'
+          Visible = True
+        end>
+    end
+    object SearchEdit1: TSearchEdit
+      Left = 54
+      Top = 65
+      Width = 163
+      Height = 21
+      TabOrder = 2
+      DataSource = ExpDataModule.AccountDataSource
+      SearchField = 'ACC_NO'
+    end
+    object SearchEdit2: TSearchEdit
+      Left = 311
+      Top = 64
+      Width = 163
+      Height = 21
+      TabOrder = 3
+      DataSource = ExpDataModule.AccountDataSource
+      SearchField = 'ACC_NO'
+    end
+    object DBViewComboBox1: TDBViewComboBox
+      Left = 176
+      Top = 8
+      Width = 190
+      Height = 21
+      ItemHeight = 13
+      TabOrder = 4
+      ListSource = ExpDataModule.FilialDataSource
+      ListFields = 'Name'
+      FieldInterval = 5
+      DropDownOnEnter = False
+    end
+    object DBViewComboBox2: TDBViewComboBox
+      Left = 176
+      Top = 35
+      Width = 190
+      Height = 21
+      ItemHeight = 13
+      TabOrder = 5
+      ListSource = ExpDataModule.ValyutaDataSource
+      ListFields = 'Valu_Name'
+      FieldInterval = 5
+      DropDownOnEnter = False
+    end
+  end
+  object NLSLocalizer1: TNLSLocalizer
+    Caption = 'Мцхбир Щесаблар'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    Left = 400
+    Top = 16
+  end
+end

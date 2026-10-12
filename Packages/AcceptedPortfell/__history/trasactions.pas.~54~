@@ -1,0 +1,404 @@
+﻿unit trasactions;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls, DBCtrls,  CMCurrencyEdit, Mask, DBCtrlsEh,
+  DBLookupEh, DBGridEh, CMDBSearchEdit, ComCtrls;
+
+type
+  TTransacfrm = class(TForm)
+    Panel1: TPanel;
+    Label1: TLabel;
+    Button1: TButton;
+    DBLookupComboBox1: TDBLookupComboBox;
+    Label2: TLabel;
+    DBLookupComboBox2: TDBLookupComboBox;
+    Label3: TLabel;
+    Label5: TLabel;
+    Main: TEdit;
+    Perc: TEdit;
+    Label6: TLabel;
+    DBLookupComboBox3: TDBLookupComboBox;
+    Description: TEdit;
+    Memo1: TMemo;
+    Memo2: TMemo;
+    RadioButton1: TRadioButton;
+    RadioButton2: TRadioButton;
+    Memo3: TMemo;
+    RadioButton3: TRadioButton;
+    RadioButton4: TRadioButton;
+    DBLookupComboboxEh1: TDBLookupComboboxEh;
+    Edit1: TEdit;
+    Label4: TLabel;
+    DBLookupComboBox4: TDBLookupComboBox;
+    Label7: TLabel;
+    Memo4: TMemo;
+    Label8: TLabel;
+    service: TEdit;
+    Label9: TLabel;
+    RadioButton5: TRadioButton;
+    Label10: TLabel;
+    DBLookupComboBox5: TDBLookupComboBox;
+    Memo5: TMemo;
+    Label11: TLabel;
+    Label12: TLabel;
+    DateTimePicker1: TDateTimePicker;
+    procedure Button1Click(Sender: TObject);
+    procedure CurrencyEdit1KeyPress(Sender: TObject; var Key: Char);
+    procedure FormCreate(Sender: TObject);
+    procedure MainKeyPress(Sender: TObject; var Key: Char);
+    procedure PercKeyPress(Sender: TObject; var Key: Char);
+    procedure DBLookupComboBox3CloseUp(Sender: TObject);
+    procedure DBLookupComboBox2CloseUp(Sender: TObject);
+    procedure DBLookupComboBox1CloseUp(Sender: TObject);
+    procedure RadioButton1Click(Sender: TObject);
+    procedure RadioButton2Click(Sender: TObject);
+    procedure DBLookupComboBox4CloseUp(Sender: TObject);
+    procedure RadioButton3Click(Sender: TObject);
+    procedure RadioButton4Click(Sender: TObject);
+    procedure DBLookupComboboxEh1CloseUp(Sender: TObject; Accept: Boolean);
+    procedure Edit1KeyPress(Sender: TObject; var Key: Char);
+    procedure CMSearchEdit1Enter(Sender: TObject);
+    procedure DBLookupComboboxEh1Enter(Sender: TObject);
+    procedure RadioButton5Click(Sender: TObject);
+    procedure DBLookupComboBox5CloseUp(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Transacfrm: TTransacfrm;
+
+implementation
+
+uses Datamodunit, mainUnit,SBTranslateProc, SelectionAcc;
+
+{$R *.dfm}
+
+procedure TTransacfrm.Button1Click(Sender: TObject);
+var v_type :integer;
+v_cash :integer;
+begin
+
+
+  if perc.Text='0' then
+    v_type:=2;
+  if main.Text='0' then
+     v_type:=1 ;
+  if (perc.Text<>'0') and (main.Text<>'0') then
+     v_type:=3 ;
+  if (perc.Text='0') and (main.Text='0') then
+      v_type:=4 ;
+
+
+     if RadioButton1.Checked then
+     v_cash:=1
+     else
+     v_cash:=2;
+
+
+DataMod.OraclePackage1.CallProcedure('add_transaction',[DataMod.maincrprt.FieldByName('prtid').Asstring,v_type,DBLookupComboBox2.KeyValue,
+DBLookupComboBox1.KeyValue,main.Text,perc.Text,Description.Text,DBLookupComboBox3.KeyValue,DataMod.mainloanacc.FieldByName('val_acc').AsInteger,
+DBLookupComboboxEh1.KeyValue,memo4.Text,service.Text,DBLookupComboBox5.KeyValue,DateTimePicker1.DateTime]);
+
+ShowMessage('Ödəniş uğurla yaradıldı...');
+datamod.maincrprt.refresh;
+ close;
+
+end;
+
+procedure TTransacfrm.CMSearchEdit1Enter(Sender: TObject);
+begin
+
+ Accselect:=TAccselect.Create(self);
+ Accselect.showmodal;
+end;
+
+procedure TTransacfrm.CurrencyEdit1KeyPress(Sender: TObject; var Key: Char);
+
+  var r : Longint;
+      column,column2,row,row2:integer;
+  keyb :char;
+
+begin
+ Case Key of
+   'A'..'H':key:=#0;
+   'J'..'Z':key:=#0;
+   'a'..'h':key:=#0;
+   'j'..'z':key:=#0;
+   'Ə':key:=#0;
+   'Ü':key:=#0;
+   'Ö':key:=#0;
+   'Ğ':key:=#0;
+   'Ş':key:=#0;
+   'Ç':key:=#0;
+   'İ':key:=#0;
+   'I':key:=#0;
+   'ə':key:=#0;
+   'ü':key:=#0;
+   'ö':key:=#0;
+   'ğ':key:=#0;
+   'ş':key:=#0;
+   'ç':key:=#0;
+   'i':key:=#0;
+   'ı':key:=#0;
+   '0'..'9':key:=Key;
+  '/','-',':','(',')','.',',','''','+','{','}',' ':key:=#0;
+   #8 :key:=#0;
+   else key:=#0;
+ End;
+
+end;
+
+procedure TTransacfrm.DBLookupComboBox1CloseUp(Sender: TObject);
+begin
+memo1.Text:=DataMod.percentacc.FieldByName('name').AsString;
+end;
+
+procedure TTransacfrm.DBLookupComboBox2CloseUp(Sender: TObject);
+begin
+memo2.Text:=DataMod.mainloanacc.FieldByName('name').AsString;
+end;
+
+procedure TTransacfrm.DBLookupComboBox3CloseUp(Sender: TObject);
+begin
+Description.Text:=DBLookupComboBox3.Text ;
+Description.Enabled:=true;
+end;
+
+procedure TTransacfrm.DBLookupComboBox4CloseUp(Sender: TObject);
+begin
+
+
+DataMod.cashorsubkrno.CloseAll;
+DataMod.cashorsubkrno.SetVariable('V_CSB',edit1.Text);
+DataMod.cashorsubkrno.SetVariable('val',DBLookupComboBox4.KeyValue);
+DataMod.cashorsubkrno.open;
+end;
+
+procedure TTransacfrm.DBLookupComboBox5CloseUp(Sender: TObject);
+begin
+memo5.Text:=DataMod.xidmetacc.FieldByName('name').AsString;;
+end;
+
+procedure TTransacfrm.DBLookupComboboxEh1CloseUp(Sender: TObject;
+  Accept: Boolean);
+begin
+memo3.Text:=DataMod.cashorsubkrno.FieldByName('name').AsString;
+end;
+
+procedure TTransacfrm.DBLookupComboboxEh1Enter(Sender: TObject);
+begin
+
+ Accselect:=TAccselect.Create(self);
+
+DataMod.cashorsubkrno.CloseAll;
+DataMod.cashorsubkrno.SetVariable('V_CSB',edit1.Text);
+DataMod.cashorsubkrno.SetVariable('val',DBLookupComboBox4.KeyValue);
+DataMod.cashorsubkrno.open;
+ Accselect.showmodal;
+end;
+
+procedure TTransacfrm.Edit1KeyPress(Sender: TObject; var Key: Char);
+begin
+
+
+
+if (key=#13) then
+       begin
+
+
+
+DataMod.cashorsubkrno.CloseAll;
+DataMod.cashorsubkrno.SetVariable('V_CSB',edit1.Text);
+DataMod.cashorsubkrno.SetVariable('val',DBLookupComboBox4.KeyValue);
+DataMod.cashorsubkrno.open;
+     DBLookupComboboxEh1.SetFocus;
+       end;
+
+
+end;
+
+procedure TTransacfrm.FormCreate(Sender: TObject);
+begin
+
+DataMod.mainloanacc.CloseAll;
+
+DataMod.mainloanacc.SetVariable('V_ID',DataMod.maincrprt.FieldByName('cust_id').AsInteger);
+
+DataMod.mainloanacc.open;
+
+
+DataMod.percentacc.CloseAll;
+
+DataMod.percentacc.SetVariable('V_ID',DataMod.maincrprt.FieldByName('cust_id').AsInteger);
+
+DataMod.percentacc.open;
+
+datamod.Descrpts.Open;
+
+datamod.borrowtype.Open;
+
+datamod.xidmetacc.closeall;
+
+datamod.pay_settings_desc.Open;
+
+DataMod.xidmetacc.SetVariable('V_ID',DataMod.maincrprt.FieldByName('cust_id').AsInteger);
+   datamod.xidmetacc.open;
+
+DateTimePicker1.Date:=datamod.sysdat.FieldByName('tek_dat').AsDateTime;
+
+end;
+
+procedure TTransacfrm.MainKeyPress(Sender: TObject; var Key: Char);
+
+  var r : Longint;
+      column,column2,row,row2:integer;
+  keyb :char;
+
+begin
+ Case Key of
+   'A'..'H':key:=#0;
+   'J'..'Z':key:=#0;
+   'a'..'h':key:=#0;
+   'j'..'z':key:=#0;
+   'Ə':key:=#0;
+   'Ü':key:=#0;
+   'Ö':key:=#0;
+   'Ğ':key:=#0;
+   'Ş':key:=#0;
+   'Ç':key:=#0;
+   'İ':key:=#0;
+   'I':key:=#0;
+   'ə':key:=#0;
+   'ü':key:=#0;
+   'ö':key:=#0;
+   'ğ':key:=#0;
+   'ş':key:=#0;
+   'ç':key:=#0;
+   'i':key:=#0;
+   'ı':key:=#0;
+   '0'..'9':key:=Key;
+   '.'  :key:=Key;
+  '/','-',':','(',')',',','''','+','{','}',' ':key:=#0;
+   #8 :key:=#0;
+   else key:=#0;
+ End;
+
+end;
+
+procedure TTransacfrm.PercKeyPress(Sender: TObject; var Key: Char);
+  var r : Longint;
+      column,column2,row,row2:integer;
+  keyb :char;
+
+begin
+ Case Key of
+   'A'..'H':key:=#0;
+   'J'..'Z':key:=#0;
+   'a'..'h':key:=#0;
+   'j'..'z':key:=#0;
+   'Ə':key:=#0;
+   'Ü':key:=#0;
+   'Ö':key:=#0;
+   'Ğ':key:=#0;
+   'Ş':key:=#0;
+   'Ç':key:=#0;
+   'İ':key:=#0;
+   'I':key:=#0;
+   'ə':key:=#0;
+   'ü':key:=#0;
+   'ö':key:=#0;
+   'ğ':key:=#0;
+   'ş':key:=#0;
+   'ç':key:=#0;
+   'i':key:=#0;
+   'ı':key:=#0;
+   '0'..'9':key:=Key;
+    '.'  :key:=Key;
+  '/','-',':','(',')',',','''','+','{','}',' ':key:=#0;
+   #8 :key:=#0;
+   else key:=#0;
+ End;
+end;
+
+procedure TTransacfrm.RadioButton1Click(Sender: TObject);
+begin
+if RadioButton1.Checked then
+begin
+     edit1.Text:= '1001';{
+DataMod.cashorsubkrno.CloseAll;
+DataMod.cashorsubkrno.SetVariable('V_CSB','1001,1011');
+DataMod.cashorsubkrno.open;       }
+
+DataMod.cashorsubkrno.SQL[8]:='';
+end;
+
+end;
+
+procedure TTransacfrm.RadioButton2Click(Sender: TObject);
+begin
+if RadioButton2.Checked then
+begin
+    edit1.Text:= '2812';{
+DataMod.cashorsubkrno.CloseAll;
+DataMod.cashorsubkrno.SetVariable('V_CSB','2811,2812');
+DataMod.cashorsubkrno.open;         }
+
+
+DataMod.cashorsubkrno.SQL[8]:='';
+end;
+end;
+
+procedure TTransacfrm.RadioButton3Click(Sender: TObject);
+var i:integer;
+begin
+if RadioButton3.Checked then
+begin
+       edit1.Text:= '3801';
+                        {
+DataMod.cashorsubkrno.CloseAll;
+DataMod.cashorsubkrno.SetVariable('V_CSB','382,3801,3803,3805,3806,3807,3808,3809,3811,3813,3815,3816,3817,3818,3819,3821,3822,3831,3841');
+DataMod.cashorsubkrno.open;
+
+                            if datamod.maincrprtCUSTOMER_ID.AsInteger>0  then
+
+                            DataMod.cashorsubkrno.SQL[8]:=' and kli_id=' +  inttostr( datamod.maincrprtCUSTOMER_ID.AsInteger);
+                               }
+
+end;
+
+
+
+
+
+end;
+
+procedure TTransacfrm.RadioButton4Click(Sender: TObject);
+begin
+if RadioButton4.Checked then
+begin
+edit1.Text:= '4501';
+DataMod.cashorsubkrno.SQL[8]:='';
+                  {
+DataMod.cashorsubkrno.CloseAll;
+DataMod.cashorsubkrno.SetVariable('V_CSB','4501,4502,4503,4504,4506,4507,4508,4509,4511,4513,4516,4518,4519');
+DataMod.cashorsubkrno.open;
+                 }
+end;
+end;
+
+procedure TTransacfrm.RadioButton5Click(Sender: TObject);
+begin
+if RadioButton4.Checked then
+begin
+edit1.Text:= '4801';
+DataMod.cashorsubkrno.SQL[8]:='';
+end;
+end;
+
+end.

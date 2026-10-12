@@ -1,0 +1,23 @@
+library Payments;
+
+uses
+  ComServ,
+  Payments_TLB in 'Payments_TLB.pas',
+  PaymentsImpl1 in 'PaymentsImpl1.pas' {PaymentsForm: TActiveForm} {PaymentsForm: CoClass},
+  UnitPaymentsProperties in 'UnitPaymentsProperties.pas' {FormPaymentProperties},
+  Unit1 in 'Unit1.pas' {rep: TQuickRep};
+
+{$E ocx}
+
+exports
+  DllGetClassObject,
+  DllCanUnloadNow,
+  DllRegisterServer,
+  DllUnregisterServer;
+
+{$R *.TLB}
+
+{$R *.RES}
+
+begin
+end.

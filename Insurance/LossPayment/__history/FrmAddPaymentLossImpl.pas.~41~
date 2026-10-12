@@ -1,0 +1,161 @@
+﻿unit FrmAddPaymentLossImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ExtCtrls, XFSCtrls, StdCtrls, CMCurrencyEdit, DBCtrls, Mask, Buttons;
+
+type
+  TFrmAddPaymentLoss = class(TForm)
+    XFPanel1: TXFPanel;
+    XFPanel2: TXFPanel;
+    XFButton1: TXFButton;
+    XFButton2: TXFButton;
+    DBLookupComboBox2: TDBLookupComboBox;
+    XFLabel7: TXFLabel;
+    edDate: TEdit;
+    XFLabel1: TXFLabel;
+    XFPanel7: TXFPanel;
+    XFLabel4: TXFLabel;
+    XFLabel2: TXFLabel;
+    edAmmount: TCMCurrencyEdit;
+    CMCurrencyEdit4: TCMCurrencyEdit;
+    XFSpeedButton1: TXFSpeedButton;
+    DBEdit1: TDBEdit;
+    XFRadioButton1: TXFRadioButton;
+    XFRadioButton2: TXFRadioButton;
+    procedure XFButton2Click(Sender: TObject);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormShow(Sender: TObject);
+    procedure XFButton1Click(Sender: TObject);
+    procedure XFSpeedButton1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmAddPaymentLoss: TFrmAddPaymentLoss;
+
+implementation
+
+{$R *.dfm}
+          uses DMPaymentLossImpl,sboapiDataModuleimpl,SBTranslateProc,CommanParametrs,
+  FrmPaymentLossImpl;
+procedure TFrmAddPaymentLoss.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+if ord(key)=vk_escape then close
+end;
+
+procedure TFrmAddPaymentLoss.FormShow(Sender: TObject);
+begin
+
+DMPaymentLoss.DSqaliq.Close;
+DMPaymentLoss.DSqaliq.SetVariable('dpid',FrmPaymentLoss.DBGrid2.DataSource.DataSet.FieldByName('id').AsInteger);
+DMPaymentLoss.DSqaliq.Open;
+
+DBLookupComboBox2.KeyValue:='';
+DMPaymentLoss.DSpaymentAcc.Open;
+
+edDate.Text:=datetostr(DMPaymentLoss.DSSysdat.FieldByName('tek_dat').AsDateTime);
+//CMCurrencyEdit4.Value:=FrmPaymentLoss.DBGrid2.DataSource.DataSet.FieldByName('mebleg').AsFloat;
+
+CMCurrencyEdit4.Value:=DMPaymentLoss.dsqaliq.FieldByName('qaliq').AsFloat;
+edAmmount.Value:=0;
+end;
+
+procedure TFrmAddPaymentLoss.XFButton1Click(Sender: TObject);
+begin
+if DBLookupComboBox2.Text='' then
+begin
+  Showmessage('Diqqət! Hesab seçilməyib!');
+  exit;
+end;
+
+
+if CMCurrencyEdit4.Value<edAmmount.Value then
+begin
+  Showmessage('Diqqət!!!Sığorta haqqı Sığrta qalığından böyük ola bilməz.');
+  exit;
+end;
+
+   //showmessage(inttostr(contactid));
+   //showmessage(inttostr(plossid));
+   //showmessage(inttostr(edAmmount.Value));
+   //showmessage(inttostr(DBLookupComboBox2.KeyValue));
+
+if  DMPaymentLoss.Pins_common.CallBooleanFunction('addclaimpaymentReal',[contactid,plossid,edAmmount.Value,DBLookupComboBox2.KeyValue])=true then
+showmessage('Zərər ödəndi.');
+
+DMPaymentLoss.ODSClaimDescription.Close;
+DMPaymentLoss.ODSClaimDescription.SetVariable('id',FrmPaymentLoss.DBGrid2.DataSource.DataSet.FieldByName('id').AsInteger);
+DMPaymentLoss.ODSClaimDescription.Open;
+
+DMPaymentLoss.Ds_contracts.Close;
+DMPaymentLoss.Ds_contracts.SetVariable('cid',FrmPaymentLoss.DBGrid2.DataSource.DataSet.FieldByName('cid').AsInteger);
+DMPaymentLoss.Ds_contracts.Open;
+
+   // ShowMessage(DMPaymentLoss.ODSClaimDescription.FieldByName('claim_status').AsString);
+    // ShowMessage(DMPaymentLoss.Ds_contracts.FieldByName('close_prefix').AsString);
+
+if DMPaymentLoss.ODSClaimDescription.FieldByName('claim_status').AsInteger=1 then  begin
+DMPaymentLoss.Ds_contracts.Edit;
+DMPaymentLoss.Ds_contracts.FieldByName('close_prefix').AsInteger:=1;
+DMPaymentLoss.Ds_contracts.post;
+end;
+
+      //ShowMessage(DMPaymentLoss.Ds_contracts.FieldByName('close_prefix').AsString);
+      FrmPaymentLoss.DBGrid1.DataSource.DataSet.Refresh;
+      //DMPaymentLoss.Ds_contracts.Refresh;
+      FrmAddPaymentLoss.Close;
+//
+
+end;
+
+procedure TFrmAddPaymentLoss.XFButton2Click(Sender: TObject);
+begin
+FrmAddPaymentLoss.close ;
+end;
+
+procedure TFrmAddPaymentLoss.XFSpeedButton1Click(Sender: TObject);
+begin
+{//burdan
+var
+CLAIM_STATUS :integer ;
+begin
+if contractstatus=1 then  //CommanParametrs
+ begin
+   showmessage('Diqqət! Bu müqavilə bağlanmış müqavilə olduğundan heç bir deyişiklik oluna bilməz.');
+   exit;
+ end;
+ if XFRadioButton1.Checked=true then
+ begin
+ CLAIM_STATUS:=0;
+ end;
+  if XFRadioButton2.Checked=true then
+ begin
+ CLAIM_STATUS:=1;
+ end;
+     with DMPaymentLoss do
+     begin    //bura}
+          {ODSMOTORKasko.Edit;
+          ODSMOTORKaskoCLAIM_NUM.Value:=OPCommon.CallStringFunction('getClaimNums',[ODSMotorKaskoTypeID.value]);
+          ODSMOTORKaskoACT_NUM.Value:=OPCommon.CallStringFunction('generateInsuredAct',[ODSMotorKaskoTypeID.value]);
+          ODSMOTORKaskoCLAIM_DATE.Value:=dtpClaim.Date;
+          ODSMotorKasko.Post;}
+
+         { //burdan  DBEdit1.Text:=DMPaymentLoss.Pins_common.CallStringFunction('GenerateLossNumber',
+                                       [DMPaymentLoss.oDSClaimDescription.FieldByName('cid').AsInteger,
+                                       DMPaymentLoss.oDSClaimDescription.FieldByName('TYPE').AsInteger,
+                                       DMPaymentLoss.oDSClaimDescription.FieldByName('id').AsInteger,
+                                       CLAIM_STATUS]);
+
+
+
+
+     end;   //bura }
+end;
+
+end.

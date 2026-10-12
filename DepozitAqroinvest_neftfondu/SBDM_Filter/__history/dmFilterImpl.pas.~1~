@@ -1,0 +1,78 @@
+unit dmFilterImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, OracleData;
+
+type
+  TdmFilter = class(TDataModule)
+    Valutes: TOracleDataSet;
+    ValutesVALUTE: TIntegerField;
+    ValutesVALU_NAME: TStringField;
+    Filials: TOracleDataSet;
+    FilialsID: TFloatField;
+    FilialsNAME: TStringField;
+    Categories: TOracleDataSet;
+    CategoriesID: TFloatField;
+    CategoriesCATEGORY: TStringField;
+    DepositTypes: TOracleDataSet;
+    DepositTypesID: TFloatField;
+    DepositTypesTYPE: TStringField;
+    DepositTypesDatSrc: TDataSource;
+    CategoriesDatSrc: TDataSource;
+    FilialsDatSrc: TDataSource;
+    ValutesDatSrc: TDataSource;
+    Customers: TOracleDataSet;
+    CustomersID: TIntegerField;
+    CustomersNAME: TStringField;
+    Persons: TOracleDataSet;
+    PersonsID: TFloatField;
+    PersonsNAME: TStringField;
+    PersonsDatSrc: TDataSource;
+    CustomersDatSrc: TDataSource;
+    users: TOracleDataSet;
+    usersDatSrc: TDataSource;
+    usersID: TFloatField;
+    usersNAME: TStringField;
+    procedure DataModuleCreate(Sender: TObject);
+    procedure DataModuleDestroy(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  dmFilter: TdmFilter;
+
+implementation
+
+{$R *.DFM}
+
+uses sboapiDataModuleImpl;
+
+procedure TdmFilter.DataModuleCreate(Sender: TObject);
+begin
+   Valutes.Open;
+   Filials.Open;
+   Categories.Open;
+   DepositTypes.Open;
+   Customers.Open;
+   Persons.Open;
+   users.Open;
+end;
+
+procedure TdmFilter.DataModuleDestroy(Sender: TObject);
+begin
+   Valutes.CloseAll;
+   Filials.CloseAll;
+   Categories.CloseAll;
+   DepositTypes.CloseAll;
+   Customers.CloseAll;
+   Persons.CloseAll;
+   users.CloseAll;
+end;
+
+end.

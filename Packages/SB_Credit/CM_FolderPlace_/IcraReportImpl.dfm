@@ -1,0 +1,149 @@
+object IcraReportFrm: TIcraReportFrm
+  Left = 0
+  Top = 0
+  Caption = 'IcraReportFrm'
+  ClientHeight = 570
+  ClientWidth = 880
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poDesktopCenter
+  OnCanResize = FormCanResize
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 880
+    Height = 35
+    Align = alTop
+    BevelOuter = bvLowered
+    Color = clGradientActiveCaption
+    ParentBackground = False
+    TabOrder = 0
+    object SpeedButton1: TSpeedButton
+      Left = 16
+      Top = 2
+      Width = 89
+      Height = 31
+      Cursor = crHandPoint
+      Caption = 'ExCell'
+      Flat = True
+      OnClick = SpeedButton1Click
+    end
+  end
+  object XDBGrid1: TXDBGrid
+    Left = 0
+    Top = 35
+    Width = 880
+    Height = 535
+    Align = alClient
+    DataSource = PRDataModule.DataSource15
+    Gradient.Direction = gdHorizontal
+    Gradient.EndColor = clGradientActiveCaption
+    Gradient.HotColor = clNavy
+    GridStyle.VisualStyle = vsXPStyle
+    OptionsEx = [dgBlankRow, dgTotalHeader, dgTotalValues, dgTotalFields, dgTotalColLines, dgTotalHeaderBox, dgTotalValuesBox, dgTotalFieldsBox, dgTotalFooterBox, dgAutoAscendOrder, dgAutoUpdateSequence, dgDelayUpdateSequence, dgAutoUpdateTotals, dgDelayUpdateTotals, dgCalcWholeDataSet, dgDelaySelectedRows, dgTotalValuesSelected, dgSelectedAutoHidden]
+    TabOrder = 1
+    Totals.BoxStyle = cbGray
+    Columns = <
+      item
+        AutoNumber = True
+        Expanded = False
+        Visible = True
+        Width = 26
+      end
+      item
+        Expanded = False
+        FieldName = 'NAME1'
+        Visible = True
+        Width = 116
+      end
+      item
+        Expanded = False
+        FieldName = 'NUMBEROFCREDIT'
+        Visible = True
+        Width = 78
+      end
+      item
+        Expanded = False
+        FieldName = 'NAME'
+        Visible = True
+        Width = 149
+      end
+      item
+        Expanded = False
+        FieldName = 'PAYDATE'
+        Visible = True
+        Width = 67
+      end
+      item
+        Expanded = False
+        FieldName = 'PAYEDAMT'
+        TotalFooter.TotalResult = trCalcValue
+        TotalHeader.TotalResult = trCalcValue
+        Visible = True
+        Width = 62
+      end
+      item
+        Expanded = False
+        FieldName = 'PAYEDDUEAMT'
+        TotalFooter.TotalResult = trCalcValue
+        TotalHeader.TotalResult = trCalcValue
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'PAYEDINTAMT'
+        TotalFooter.TotalResult = trCalcValue
+        TotalHeader.TotalResult = trCalcValue
+        Visible = True
+        Width = 59
+      end
+      item
+        Expanded = False
+        FieldName = 'PAYEDPENALTYAMT'
+        TotalFooter.TotalResult = trCalcValue
+        TotalHeader.TotalResult = trCalcValue
+        Visible = True
+        Width = 76
+      end
+      item
+        Expanded = False
+        FieldName = 'SUMPAY'
+        TotalFooter.TotalResult = trCalcValue
+        TotalHeader.TotalResult = trCalcValue
+        Visible = True
+        Width = 77
+      end>
+  end
+  object ExcelExport: TCMExcelExport
+    ConnectTo = ctNewInstance
+    StyleColumnWidth = cwAutoFit
+    ColumnWidth = 0
+    FontTitles.Charset = DEFAULT_CHARSET
+    FontTitles.Color = clWindowText
+    FontTitles.Height = -11
+    FontTitles.Name = 'Azl Sans Serif'
+    FontTitles.Style = []
+    OrientationTitles = 0
+    FontData.Charset = DEFAULT_CHARSET
+    FontData.Color = clWindowText
+    FontData.Height = -11
+    FontData.Name = 'Azl Sans Serif'
+    FontData.Style = []
+    FontSummary.Charset = DEFAULT_CHARSET
+    FontSummary.Color = clWindowText
+    FontSummary.Height = -11
+    FontSummary.Name = 'MS Sans Serif'
+    FontSummary.Style = []
+    SummarySelection = ssNone
+    SummaryCalculation = scSUM
+    Left = 304
+    Top = 128
+  end
+end

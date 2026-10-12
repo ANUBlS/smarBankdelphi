@@ -1,0 +1,49 @@
+unit DMDayByDayTurnOversImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, OracleData;
+
+type
+  TDataModuleMain = class(TDataModule)
+    BankDate: TOracleDataSet;
+    TurnOvers: TOracleDataSet;
+    TurnOversDATDATE: TDateTimeField;
+    TurnOversBALANCENO: TFloatField;
+    TurnOversVAL_ACC: TIntegerField;
+    TurnOversREST: TFloatField;
+    TurnOversRESTINNATIONAL: TFloatField;
+    TurnOversOBR_D: TFloatField;
+    TurnOversPOK_OBR_D: TFloatField;
+    TurnOversOBR_K: TFloatField;
+    TurnOversPOK_OBR_K: TFloatField;
+    TurnOversID: TStringField;
+    TurnOversACC_NO: TWideStringField;
+    TurnOversVAL_NAME: TWideStringField;
+    procedure TurnOversCalcFields(DataSet: TDataSet);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  DataModuleMain: TDataModuleMain;
+
+implementation
+
+{$R *.DFM}
+
+uses sboapiDataModuleImpl;
+
+procedure TDataModuleMain.TurnOversCalcFields(DataSet: TDataSet);
+begin
+  with DataSet do
+  FieldByName('ID').AsString := FieldByName('Acc_No').AsString +
+                                FieldByName('Val_Name').AsString +
+                                FieldByName('DatDate').AsString ;
+end;
+
+end.

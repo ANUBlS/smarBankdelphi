@@ -1,0 +1,740 @@
+﻿unit DecaMainForm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, Buttons, ComCtrls, ImgList, ActnList, DB,
+  ExtCtrls, Grids, DBGrids, CMExcelExport, XMLDoc, Gauges, XFSCtrls;
+
+type
+  EFieldNotFoud = class(Exception);
+
+  TDecaForm = class(TForm)
+    ActionList1: TActionList;
+    ImageList1: TImageList;
+    StartExport: TAction;
+    Button1: TButton;
+    SpeedButton2: TSpeedButton;
+    ExcelExport: TCMExcelExport;
+    SaveDlg_: TSaveDialog;
+    Panel1: TPanel;
+    Label1: TLabel;
+    Label4: TLabel;
+    GroupBox1: TGroupBox;
+    SpeedButton1: TSpeedButton;
+    BitBtn1: TBitBtn;
+    DTPRepDate: TDateTimePicker;
+    GroupBox2: TGroupBox;
+    Label2: TLabel;
+    Label3: TLabel;
+    DTPBRepDate: TDateTimePicker;
+    DTPERepDate: TDateTimePicker;
+    CheckBox1: TCheckBox;
+    DateTimePicker1: TDateTimePicker;
+    EditDest: TEdit;
+    SBSave: TSpeedButton;
+    SpeedButton3: TSpeedButton;
+    Gauge1: TGauge;
+    SpeedButton4: TSpeedButton;
+    Repdat: TDateTimePicker;
+    Label5: TLabel;
+    Edit1: TEdit;
+    Label6: TLabel;
+    SpeedButton5: TSpeedButton;
+    Memolog: TMemo;
+    CheckBox2: TCheckBox;
+    CheckBox3: TCheckBox;
+    CheckBox4: TCheckBox;
+    SaveDlg: TSaveDialog;
+    RadioGroup1: TRadioGroup;
+    RadioGroup2: TRadioGroup;
+    procedure FormCanResize(Sender: TObject; var NewWidth, NewHeight: Integer;
+      var Resize: Boolean);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure Button1Click(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure CheckBox1Click(Sender: TObject);
+    procedure SpeedButton2Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure SBSaveClick(Sender: TObject);
+    procedure SpeedButton3Click(Sender: TObject);
+    procedure SpeedButton4Click(Sender: TObject);
+    procedure EditDestChange(Sender: TObject);
+    procedure SpeedButton5Click(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+  private
+    procedure ShowDecaForm;
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  DecaForm: TDecaForm;
+  SourceBuffer: PChar;
+  UnusableGrops: Set Of Byte;
+  AbortPressed: Boolean;
+  f: TextFile;
+procedure InitPlugin(S: String); export;
+
+implementation
+
+uses DecaDataModuleImpl, CommonDecls, sbSystem, sboapiDataModuleImpl,
+  SBTranslateProc,
+  BankInfoImpl;
+
+{$R *.DFM}
+
+procedure TDecaForm.FormCanResize(Sender: TObject;
+  var NewWidth, NewHeight: Integer; var Resize: Boolean);
+begin
+  Resize := False;
+end;
+
+procedure TDecaForm.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+edit1.Clear;
+end;
+
+procedure TDecaForm.FormCreate(Sender: TObject);
+begin
+  FrmBankinfo := TFrmBankinfo.Create(self);
+  Repdat.DateTime := date;
+  SBTranslateProc.TranslateAllCompForms(self, sboapiDataModule.OrPack_SL);
+
+end;
+
+procedure TDecaForm.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+  if ORD(Key) = VK_ESCAPE then
+    Close;
+end;
+procedure TDecaForm.SBSaveClick(Sender: TObject);
+
+begin
+  with SaveDlg do
+    if Execute then
+      EditDest.Text := FileName;
+  AssignFile(f, EditDest.Text);
+  Rewrite(f);
+  Closefile(f);
+end;
+
+procedure TDecaForm.ShowDecaForm;
+begin
+  DecaDataModule := TDecaDataModule.Create(self);
+  DTPRepDate.DateTime := Get_CurrentDate;
+  DTPBRepDate.DateTime := Get_CurrentDate;
+  DTPERepDate.DateTime := Get_CurrentDate;
+  DateTimePicker1.DateTime := Get_CurrentDate;
+  ShowModal;
+end;
+
+procedure TDecaForm.Button1Click(Sender: TObject);
+begin
+  Close;
+end;
+
+procedure TDecaForm.FormDestroy(Sender: TObject);
+begin
+  DecaDataModule.Free;
+end;
+
+procedure InitPlugin(S: String); export;
+begin
+  DecaForm.ShowDecaForm;
+end;
+
+exports
+  InitPlugin;
+
+procedure TDecaForm.SpeedButton3Click(Sender: TObject);
+  procedure WriteString(S: string);
+  begin
+
+   AssignFile(f, EditDest.Text); { Assigns the Filename }
+   Append(f); { Opens the file for editing }
+  // s:=StringReplace(s,';','_',[rfReplaceAll]);
+ //  Write(f, UTF8Encode(StringReplace(s,#13+#10,'',[rfReplaceAll])));
+  Write(f, UTF8Encode(S));
+    Closefile(f);
+   //  Memolog.Lines.Add((S));
+  end;
+
+  procedure WriteFileBegin();
+  var
+    d, m, BankID, BankName, ReportingDate: String;
+
+    ABankInfo: TBankInfo;
+    Day, Month, Year: Word;
+  begin
+    DecodeDate(Repdat.DateTime, Year, Month, Day);
+    d := inttostr(Day);
+    m := inttostr(Month);
+    if Length(inttostr(Day)) = 1 then
+      d := '0' + inttostr(Day);
+
+    if Length(inttostr(Month)) = 1 then
+      m := '0' + inttostr(Month);
+
+    ABankInfo := FrmBankinfo.Get_BankInfo;
+    BankID := ABankInfo.BankID;
+    BankName := ABankInfo.BankName;
+
+    ReportingDate := d + '/' + m + '/' + inttostr(Year);
+    WriteString('<?xml version="1.0" encoding="UTF-8" ?> ');
+    WriteString('<CreditInfo>');
+    WriteString('<Header>');
+    WriteString('<BankID>');
+    WriteString(BankID);
+    WriteString('</BankID>');
+    WriteString('<BankName>');
+    WriteString(BankName);
+    WriteString('</BankName>');
+    WriteString('<ReportingDate>');
+    WriteString(ReportingDate);
+    WriteString('</ReportingDate>');
+    WriteString('</Header>');
+    WriteString('<Credits>');
+
+  end;
+  procedure WriteData(Field: WideString; value: WideString);
+
+    procedure GetSpecimenSettings(FieldName: WideString;
+      var TagFirst, TagLast, TagPrefix, TagSuffix: WideString;
+      var FieldGroup: Byte; var CanContainUTF8, ParentGroup: Integer);
+    begin
+      // ShowMessage(FieldName);
+      with DecaDataModule.TagSettings do
+      begin
+        if Locate('FieldName', FieldName, [loCaseInsensitive]) then
+        begin
+          TagFirst := FieldByName('TagFirst').AsString;
+          TagLast := FieldByName('TagLast').AsString;
+          TagPrefix := FieldByName('TagPrefix').AsString;
+          TagSuffix := FieldByName('TagSuffix').AsString;
+          FieldGroup := FieldByName('FieldGroup').AsInteger;
+          CanContainUTF8 := FieldByName('AlphaField').AsInteger;
+          ParentGroup := FieldByName('ParentGroup').AsInteger
+        end
+        else
+          raise EFieldNotFoud.Create('TagSettings Table : Field Not Found!');
+      end;
+    end;
+
+  var
+    S: string;
+    FieldValue: WideString;
+    TagFirst, TagLast, TagPrefix, TagSuffix: WideString;
+    CanContainUTF8: Integer;
+    ParentGroup: Integer;
+    FieldGroup: Byte;
+    AAnsiStr: WideString;
+  begin
+
+    S := '';
+
+    GetSpecimenSettings(Field, TagFirst, TagLast, TagPrefix, TagSuffix,
+      FieldGroup, CanContainUTF8, ParentGroup);
+
+    if (FieldGroup in UnusableGrops) or (ParentGroup in UnusableGrops) then
+    begin
+      if (TagSuffix <> '') and (not(ParentGroup in UnusableGrops)) then
+        WriteString(TagSuffix);
+      // This is not usable group but we must close opened tag of parent group
+
+      Exit; // Do not EXPORT this field group
+    end;
+
+    FieldValue := value { value };
+  //  ShowMessage(FieldValue);
+    if (FieldValue = '') then
+    begin
+      if (TagPrefix <> '') and (not(ParentGroup in UnusableGrops)) and
+        (ParentGroup <> -1) then
+        WriteString(TagPrefix);
+
+      if (TagSuffix <> '') and (not(ParentGroup in UnusableGrops)) and
+        ((ParentGroup <> -1)) then
+        WriteString(TagSuffix);
+
+      if (ParentGroup = -2) then
+        WriteString(TagFirst + TagLast);
+
+      if (FieldGroup <> 0) and (ParentGroup <> 0) and (ParentGroup <> -2) then
+        UnusableGrops := UnusableGrops + [FieldGroup];
+
+      Exit // This Group can not be EXPORTED
+
+    end;
+
+    S := TagPrefix + TagFirst + FieldValue + TagLast + TagSuffix;
+//   Memolog.Lines.Add(s);
+    AAnsiStr := UTF8Encode(S);
+
+    // Writting Data To Stream
+
+    WriteString(AAnsiStr);
+
+  end;
+  procedure WriteRowsPrefix();
+  begin
+    WriteString('<Credit>');
+  end;
+
+  procedure WriteRowsSuffix();
+  begin
+    WriteString('</Credit>');
+  end;
+  procedure WriteFileEnd();
+  begin
+    WriteString('</Credits>');
+    WriteString('</CreditInfo>');
+  end;
+
+var
+ sr, r,S, i, a: integer;
+  StrDate, fvalue, fname: WideString;
+rdat, EDATE, HDATE: TDateTime;
+sert,sert1,sert2 : String ;
+begin
+  //ShowMessage(IntToStr(RadioGroup1.ItemIndex));
+if RadioGroup1.ItemIndex=0 then
+ begin
+   DecaDataModule.DecaData.sql.Text:=DecaDataModule.OracleDataSet5.SQL.Text;
+ end else
+ begin
+   DecaDataModule.DecaData.sql.Text:=DecaDataModule.OracleDataSet4.SQL.Text;
+ end;
+  DecaDataModule.OracleQuery1.Execute;
+   DecaDataModule.OracleQuery1.Session.Commit;
+
+//  if CheckBox1.Checked then
+//   sert :='and b.currency<>0 'else
+//   sert :='';
+//
+//   if CheckBox2.Checked then
+//   sert1 :=' and b.personaltype<>2 'else
+//   sert1 :='';
+//
+//   if CheckBox2.Checked then
+//   sert2 :='and d.rest+d.duerest>0 'else
+//   sert2 :='';
+////     ShowMessage(sert+sert1+sert2);
+  if EditDest.Text = '' then
+  begin
+    ShowMessage('      Faylı seçməmisiz!     ');
+    Exit;
+  end;
+   LogInformation('İxrac Başladı');
+  try
+    UnusableGrops := [];
+    WriteFileBegin();
+    HDATE := DTPRepDate.DateTime;
+    EDATE := DateTimePicker1.DateTime;
+    rdat:=Repdat.DateTime;
+    with DecaDataModule do
+    begin
+      with DecaData do
+      begin
+      if Active=true then
+        close;
+        ClearVariables;
+        SetVariable('HDATE', integer(trunc(HDATE)));
+        SetVariable('EDATE', integer(trunc(EDATE)));
+        SetVariable('RDAT',  integer(trunc(rdat)));
+
+        if CheckBox1.Checked = True then
+          StrDate := 'and DATEOFCONCLUSION between  ''' +
+            FormatDateTime('dd-MMM-yyyy', Trunc(DTPBRepDate.DateTime)) +
+            ''' and ''' + FormatDateTime('dd-mmm-yyyy',
+            Trunc(DTPERepDate.DateTime)) + ''''
+        else
+          StrDate := ' ';
+          DecaData.SQL[83] := StrDate;
+//        ShowMessage(StrDate);
+//        DecaData.SQL[83] := sert;
+//        DecaData.SQL[84] := sert1;
+//        DecaData.SQL[85] := sert2;
+         DecaData.SQL[84] := '';
+        if Edit1.Text<>'' then
+         // bu sen yazdigindi DecaData_clos.SQL[77] := 'and b.numberofcredit='+''''+Edit1.Text+'''';
+
+         DecaData.SQL[84] := 'and b.id in('+Edit1.Text+')';
+
+         DecaData.Open;
+
+         First;
+
+      end;
+     //  ShowMessage(inttostr(DecaData.RecordCount));
+      TagSettings.Open;
+      r:= DecaData.RecordCount;
+      sr:=TagSettings.RecordCount;
+      S := 1;
+
+      for I := 1 to r do
+      begin
+        WriteRowsPrefix();
+        TagSettings.First;
+        for a := 0 to sr - 1 do
+        begin
+          fname := TagSettings.FieldByName('fieldname').AsString;
+        {  OracleDataSet3.Close;
+          OracleDataSet3.SetVariable('fname', fname);
+          OracleDataSet3.Open;
+
+          if OracleDataSet3.RecordCount = 0 then
+             else
+          fvalue := DecaData.FieldByName(fname).AsString;
+           }
+        //   ShowMessage(fname);
+           if (fname='NAME5')or (fname='REGAGSY1')or(fname='ZAMIN') then
+            fvalue := '' else
+            fvalue := DecaData.FieldByName(fname).AsString;
+
+          WriteData(TagSettings.FieldByName('fieldname').AsString, fvalue);
+          TagSettings.next;
+        end;
+        // Application.ProcessMessages;
+
+        WriteRowsSuffix();
+        UnusableGrops := [];
+        Gauge1.Progress := Trunc(S * 100 / r);
+        S := S + 1;
+        DecaData.next;
+      end;
+
+    end;
+    WriteFileEnd();
+     { Closes file F }
+      LogInformation( 'İxrac qurtardı '+inttostr(s-1)+ '- sayda kredit ixrac olundu' );
+
+    MessageDlg('XML file uğurla yaradıldı', mtInformation, [mbOk], 0);
+    Gauge1.Progress :=0;
+    SpeedButton3.Enabled:=false;
+    EditDest.Text:='';
+  finally
+    EFieldNotFoud.Create('File yaradıla bilmədi!');
+
+  end;
+end;
+
+procedure TDecaForm.SpeedButton4Click(Sender: TObject);
+begin
+  FrmBankinfo.ShowModal;
+end;
+
+procedure TDecaForm.SpeedButton5Click(Sender: TObject);
+
+procedure WriteString(S: string);
+  begin
+
+   AssignFile(f, EditDest.Text); { Assigns the Filename }
+   Append(f); { Opens the file for editing }
+   s:=StringReplace(s,';','_',[rfReplaceAll]);
+   Write(f, UTF8Encode(StringReplace(s,#13+#10,'',[rfReplaceAll])));
+//  Write(f, UTF8Encode(S));
+    Closefile(f);
+   //  Memolog.Lines.Add((S));
+  end;
+
+  procedure WriteFileBegin();
+  var
+    d, m, BankID, BankName, ReportingDate: String;
+
+    ABankInfo: TBankInfo;
+    Day, Month, Year: Word;
+  begin
+    DecodeDate(Repdat.DateTime, Year, Month, Day);
+    d := inttostr(Day);
+    m := inttostr(Month);
+    if Length(inttostr(Day)) = 1 then
+      d := '0' + inttostr(Day);
+
+    if Length(inttostr(Month)) = 1 then
+      m := '0' + inttostr(Month);
+
+    ABankInfo := FrmBankinfo.Get_BankInfo;
+    BankID := ABankInfo.BankID;
+    BankName := ABankInfo.BankName;
+
+    ReportingDate := d + '/' + m + '/' + inttostr(Year);
+    WriteString('<?xml version="1.0" encoding="UTF-8" ?> ');
+    WriteString('<CreditInfo>');
+    WriteString('<Header>');
+    WriteString('<BankID>');
+    WriteString(BankID);
+    WriteString('</BankID>');
+    WriteString('<BankName>');
+    WriteString(BankName);
+    WriteString('</BankName>');
+    WriteString('<ReportingDate>');
+    WriteString(ReportingDate);
+    WriteString('</ReportingDate>');
+    WriteString('</Header>');
+    WriteString('<Credits>');
+
+  end;
+  procedure WriteData(Field: WideString; value: WideString);
+
+    procedure GetSpecimenSettings(FieldName: WideString;
+      var TagFirst, TagLast, TagPrefix, TagSuffix: WideString;
+      var FieldGroup: Byte; var CanContainUTF8, ParentGroup: Integer);
+    begin
+      // ShowMessage(FieldName);
+      with DecaDataModule.TagSettings do
+      begin
+        if Locate('FieldName', FieldName, [loCaseInsensitive]) then
+        begin
+          TagFirst := FieldByName('TagFirst').AsString;
+          TagLast := FieldByName('TagLast').AsString;
+          TagPrefix := FieldByName('TagPrefix').AsString;
+          TagSuffix := FieldByName('TagSuffix').AsString;
+          FieldGroup := FieldByName('FieldGroup').AsInteger;
+          CanContainUTF8 := FieldByName('AlphaField').AsInteger;
+          ParentGroup := FieldByName('ParentGroup').AsInteger
+        end
+        else
+          raise EFieldNotFoud.Create('TagSettings Table : Field Not Found!');
+      end;
+    end;
+
+  var
+    S: string;
+    FieldValue: WideString;
+    TagFirst, TagLast, TagPrefix, TagSuffix: WideString;
+    CanContainUTF8: Integer;
+    ParentGroup: Integer;
+    FieldGroup: Byte;
+    AAnsiStr: WideString;
+  begin
+
+    S := '';
+
+    GetSpecimenSettings(Field, TagFirst, TagLast, TagPrefix, TagSuffix,
+      FieldGroup, CanContainUTF8, ParentGroup);
+
+    if (FieldGroup in UnusableGrops) or (ParentGroup in UnusableGrops) then
+    begin
+      if (TagSuffix <> '') and (not(ParentGroup in UnusableGrops)) then
+        WriteString(TagSuffix);
+      // This is not usable group but we must close opened tag of parent group
+
+      Exit; // Do not EXPORT this field group
+    end;
+
+    FieldValue := value { value };
+
+    if (FieldValue = '') then
+    begin
+      if (TagPrefix <> '') and (not(ParentGroup in UnusableGrops)) and
+        (ParentGroup <> -1) then
+        WriteString(TagPrefix);
+
+      if (TagSuffix <> '') and (not(ParentGroup in UnusableGrops)) and
+        ((ParentGroup <> -1)) then
+        WriteString(TagSuffix);
+
+      if (ParentGroup = -2) then
+        WriteString(TagFirst + TagLast);
+
+      if (FieldGroup <> 0) and (ParentGroup <> 0) and (ParentGroup <> -2) then
+        UnusableGrops := UnusableGrops + [FieldGroup];
+
+      Exit // This Group can not be EXPORTED
+
+    end;
+
+    S := TagPrefix + TagFirst + FieldValue + TagLast + TagSuffix;
+
+    AAnsiStr := UTF8Encode(S);
+    // ShowMessage(AAnsiStr);
+    // Writting Data To Stream
+
+    WriteString(AAnsiStr);
+
+  end;
+  procedure WriteRowsPrefix();
+  begin
+    WriteString('<Credit>');
+  end;
+
+  procedure WriteRowsSuffix();
+  begin
+    WriteString('</Credit>');
+  end;
+  procedure WriteFileEnd();
+  begin
+    WriteString('</Credits>');
+    WriteString('</CreditInfo>');
+  end;
+
+var
+ sr, r,S, i, a: integer;
+  StrDate, fvalue, fname: WideString;
+  EDATE, HDATE: TDateTime;
+begin
+  if EditDest.Text = '' then
+  begin
+    ShowMessage('      Faylı seçməmisiz!     ');
+    Exit;
+  end;
+   LogInformation('İxrac Başladı');
+  try
+    UnusableGrops := [];
+    WriteFileBegin();
+    HDATE := DTPRepDate.DateTime;
+    EDATE := DateTimePicker1.DateTime;
+    with DecaDataModule do
+    begin
+      with DecaData_clos do
+      begin
+      if Active=true then
+       close;
+        ClearVariables;
+        SetVariable('HDATE', HDATE);
+        SetVariable('EDATE', EDATE);
+
+        if CheckBox1.Checked = True then
+          StrDate := 'and DATEOFCONCLUSION between  ''' +
+            FormatDateTime('dd-MMM-yyyy', Trunc(DTPBRepDate.DateTime)) +
+            ''' and ''' + FormatDateTime('dd-mmm-yyyy',
+            Trunc(DTPERepDate.DateTime)) + ''''
+        else
+          StrDate := ' ';
+        DecaData_clos.SQL[76] := StrDate;
+        if Edit1.Text<>'' then
+         DecaData_clos.SQL[77] := 'and b.numberofcredit='+''''+Edit1.Text+'''';
+
+        DecaData_clos.Open;
+        First;
+
+      end;
+
+      TagSettings.Open;
+      r:= DecaData_clos.RecordCount;
+      sr:=TagSettings.RecordCount;
+      S := 1;
+
+      for I := 1 to r do
+      begin
+        WriteRowsPrefix();
+        TagSettings.First;
+        for a := 0 to sr - 1 do
+        begin
+          fname := TagSettings.FieldByName('fieldname').AsString;
+        {  OracleDataSet3.Close;
+          OracleDataSet3.SetVariable('fname', fname);
+          OracleDataSet3.Open;
+
+          if OracleDataSet3.RecordCount = 0 then
+             else
+          fvalue := DecaData.FieldByName(fname).AsString;
+           }
+           if (fname='NAME5')or (fname='REGAGSY1')or(fname='ZAMIN')  then
+            fvalue := '' else
+           fvalue := DecaData_clos.FieldByName(fname).AsString;
+
+          WriteData(TagSettings.FieldByName('fieldname').AsString, fvalue);
+          TagSettings.next;
+        end;
+        // Application.ProcessMessages;
+
+        WriteRowsSuffix();
+        UnusableGrops := [];
+        Gauge1.Progress := Trunc(S * 100 / r);
+        S := S + 1;
+        DecaData_clos.next;
+      end;
+
+    end;
+    WriteFileEnd();
+     { Closes file F }
+      LogInformation( 'İxrac qurtardı '+inttostr(s-1)+ '- sayda kredit ixrac olundu' );
+
+    MessageDlg('XML file uğurla yaradıldı', mtInformation, [mbOk], 0);
+    Gauge1.Progress :=0;
+    SpeedButton3.Enabled:=false;
+    EditDest.Text:='';
+  finally
+    EFieldNotFoud.Create('File yaradıla bilmədi!');
+
+  end;
+end;
+
+procedure TDecaForm.CheckBox1Click(Sender: TObject);
+begin
+  if CheckBox1.Checked = True then
+  begin
+    RadioGroup2.Enabled:=true;
+    DTPBRepDate.Enabled := True;
+    DTPERepDate.Enabled := True;
+  end
+  else
+  begin
+    RadioGroup2.ItemIndex:=-1;
+    RadioGroup2.Enabled:=false;
+    DTPBRepDate.Enabled := False;
+    DTPERepDate.Enabled := False;
+  end;
+end;
+
+procedure TDecaForm.EditDestChange(Sender: TObject);
+begin
+SpeedButton3.Enabled:=true
+end;
+
+procedure TDecaForm.SpeedButton2Click(Sender: TObject);
+var
+ rdat,EDATE, HDATE: TDateTime;
+ StrDate: WideString;
+begin
+  HDATE := DTPRepDate.DateTime;
+  EDATE := DateTimePicker1.DateTime;
+  rdat  :=Repdat.DateTime;
+
+    with DecaDataModule.DecaData do
+    begin
+      Close;
+      ClearVariables;
+        SetVariable('HDATE', HDATE);
+        SetVariable('EDATE', EDATE);
+        SetVariable('RDAT', rdat);
+
+        if {CheckBox1.Checked}RadioGroup2.ItemIndex = 0 then
+          StrDate := 'and DATEOFCONCLUSION between  ''' +
+            FormatDateTime('dd-MMM-yyyy', Trunc(DTPBRepDate.DateTime)) +
+            ''' and ''' + FormatDateTime('dd-mmm-yyyy',
+            Trunc(DTPERepDate.DateTime)) + ''''
+        else
+          StrDate := ' ';
+          SQL[80] := StrDate;
+          SQL[81] :='';
+        if Edit1.Text<>'' then
+         SQL[81] := ' and b.numberofcredit in('+Edit1.Text+')';
+
+         Open;
+
+
+
+    if RecordCount=0 then
+    begin
+   ShowMessage('Heç bir məlumat toplanmadı ');
+   exit ;
+    end;
+    end;
+  with ExcelExport do
+  begin
+    Connect;
+    ExportDataset(DecaDataModule.DecaData, 'Deka', True);
+    Disconnect;
+  end;
+end;
+
+initialization
+
+DecaForm := TDecaForm.Create(CommonApplication);
+
+end.

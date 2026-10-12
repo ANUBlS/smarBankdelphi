@@ -1,0 +1,1212 @@
+object AvaluteX: TAvaluteX
+  Left = -4
+  Top = -4
+  Width = 1032
+  Height = 723
+  Caption = 'Valyutalar'
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  OldCreateOrder = False
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 1024
+    Height = 696
+    Align = alClient
+    BevelOuter = bvNone
+    TabOrder = 0
+    object Splitter1: TSplitter
+      Left = 0
+      Top = 176
+      Width = 1024
+      Height = 3
+      Cursor = crVSplit
+      Align = alTop
+      Color = clNavy
+      ParentColor = False
+    end
+    object DBNavigator1: TDBNavigator
+      Left = 0
+      Top = 0
+      Width = 1024
+      Height = 22
+      DataSource = dsAvalute
+      Align = alTop
+      Flat = True
+      TabOrder = 0
+      Visible = False
+    end
+    object DBGrid1: TDBGrid
+      Left = 0
+      Top = 22
+      Width = 1024
+      Height = 154
+      Align = alTop
+      DataSource = dsAvalute
+      TabOrder = 1
+      TitleFont.Charset = DEFAULT_CHARSET
+      TitleFont.Color = clWindowText
+      TitleFont.Height = -11
+      TitleFont.Name = 'Azl Sans Serif'
+      TitleFont.Style = []
+      Visible = False
+      Columns = <
+        item
+          Expanded = False
+          FieldName = 'VALU_NAME'
+          Title.Alignment = taCenter
+          Title.Caption = 'Àäû'
+          Title.Color = clNavy
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = []
+          Width = 143
+          Visible = True
+        end
+        item
+          Alignment = taCenter
+          Color = clSilver
+          Expanded = False
+          FieldName = 'VAL_NAME'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clNavy
+          Font.Height = -11
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = []
+          Title.Alignment = taCenter
+          Title.Caption = '$'
+          Title.Color = clNavy
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = []
+          Width = 30
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'VALUTE'
+          Title.Alignment = taRightJustify
+          Title.Caption = 'Êîä'
+          Title.Color = clNavy
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = []
+          Width = 35
+          Visible = True
+        end
+        item
+          Alignment = taCenter
+          Expanded = False
+          FieldName = 'VALU_SHORT'
+          Title.Alignment = taCenter
+          Title.Caption = 'Ãûñà'
+          Title.Color = clNavy
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = []
+          Width = 49
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'COUNTRY'
+          Title.Alignment = taCenter
+          Title.Caption = 'Þëêÿ'
+          Title.Color = clNavy
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = []
+          Width = 134
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'LIMIT'
+          Title.Alignment = taRightJustify
+          Title.Color = clNavy
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = []
+          Width = 52
+          Visible = True
+        end>
+    end
+    object Panel2: TPanel
+      Left = 0
+      Top = 179
+      Width = 1024
+      Height = 104
+      Align = alTop
+      AutoSize = True
+      TabOrder = 2
+      Visible = False
+      object Panel3: TPanel
+        Left = 217
+        Top = 1
+        Width = 216
+        Height = 102
+        Align = alLeft
+        AutoSize = True
+        TabOrder = 0
+        object StaticText1: TStaticText
+          Left = 1
+          Top = 1
+          Width = 214
+          Height = 17
+          Align = alTop
+          Alignment = taCenter
+          Caption = 'Ýÿëèð-çÿðÿð ùåñàáëàðû'
+          Color = clNavy
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWhite
+          Font.Height = -11
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = []
+          ParentColor = False
+          ParentFont = False
+          TabOrder = 0
+        end
+        object Panel4: TPanel
+          Left = 1
+          Top = 59
+          Width = 214
+          Height = 41
+          Align = alTop
+          BevelInner = bvLowered
+          BevelOuter = bvLowered
+          TabOrder = 1
+          object StaticText2: TStaticText
+            Left = 2
+            Top = 2
+            Width = 210
+            Height = 17
+            Align = alTop
+            Alignment = taCenter
+            Caption = 'Çÿðÿð'
+            Color = clSilver
+            ParentColor = False
+            TabOrder = 0
+          end
+          object DBLookupComboBox4: TDBLookupComboBox
+            Left = 2
+            Top = 20
+            Width = 211
+            Height = 21
+            DataField = 'F5501P'
+            DataSource = dsAvalute
+            KeyField = 'ID'
+            ListField = 'ACC_NO'
+            ListSource = DataAccounts
+            TabOrder = 1
+          end
+        end
+        object Panel5: TPanel
+          Left = 1
+          Top = 18
+          Width = 214
+          Height = 41
+          Align = alTop
+          BevelInner = bvLowered
+          BevelOuter = bvLowered
+          TabOrder = 2
+          object StaticText3: TStaticText
+            Left = 2
+            Top = 2
+            Width = 210
+            Height = 17
+            Align = alTop
+            Alignment = taCenter
+            Caption = 'Ýÿëèð'
+            Color = clSilver
+            ParentColor = False
+            TabOrder = 0
+          end
+          object DBLookupComboBox7: TDBLookupComboBox
+            Left = 2
+            Top = 20
+            Width = 211
+            Height = 21
+            DataField = 'F5501V'
+            DataSource = dsAvalute
+            KeyField = 'ID'
+            ListField = 'ACC_NO'
+            ListSource = DataAccounts
+            TabOrder = 1
+          end
+        end
+      end
+      object Panel6: TPanel
+        Left = 1
+        Top = 1
+        Width = 216
+        Height = 102
+        Align = alLeft
+        TabOrder = 1
+        object StaticText4: TStaticText
+          Left = 1
+          Top = 1
+          Width = 214
+          Height = 17
+          Align = alTop
+          Alignment = taCenter
+          Caption = 'Ìÿçÿííÿ ôÿðãèíèí ùåñàáëàðû'
+          Color = clNavy
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWhite
+          Font.Height = -11
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = []
+          ParentColor = False
+          ParentFont = False
+          TabOrder = 0
+        end
+        object Panel7: TPanel
+          Left = 1
+          Top = 18
+          Width = 214
+          Height = 41
+          Align = alTop
+          BevelInner = bvLowered
+          BevelOuter = bvLowered
+          TabOrder = 1
+          object StaticText5: TStaticText
+            Left = 2
+            Top = 2
+            Width = 210
+            Height = 17
+            Align = alTop
+            Alignment = taCenter
+            Caption = 'Ýÿëèð'
+            Color = clSilver
+            ParentColor = False
+            TabOrder = 0
+          end
+          object DBLookupComboBox2: TDBLookupComboBox
+            Left = 2
+            Top = 20
+            Width = 211
+            Height = 21
+            DataField = 'KREDIT'
+            DataSource = dsAvalute
+            KeyField = 'ID'
+            ListField = 'ACC_NO'
+            ListSource = DataAccounts
+            TabOrder = 1
+          end
+        end
+        object Panel8: TPanel
+          Left = 1
+          Top = 59
+          Width = 214
+          Height = 41
+          Align = alTop
+          BevelInner = bvLowered
+          BevelOuter = bvLowered
+          TabOrder = 2
+          object StaticText6: TStaticText
+            Left = 2
+            Top = 2
+            Width = 210
+            Height = 17
+            Align = alTop
+            Alignment = taCenter
+            Caption = 'Çÿðÿð'
+            Color = clSilver
+            ParentColor = False
+            TabOrder = 0
+          end
+          object DBLookupComboBox1: TDBLookupComboBox
+            Left = 2
+            Top = 20
+            Width = 211
+            Height = 21
+            DataField = 'DEBET'
+            DataSource = dsAvalute
+            KeyField = 'ID'
+            ListField = 'ACC_NO'
+            ListSource = DataAccounts
+            TabOrder = 1
+          end
+        end
+      end
+      object Panel9: TPanel
+        Left = 433
+        Top = 1
+        Width = 216
+        Height = 102
+        Align = alLeft
+        TabOrder = 2
+        object StaticText7: TStaticText
+          Left = 1
+          Top = 1
+          Width = 214
+          Height = 17
+          Align = alTop
+          Alignment = taCenter
+          Caption = 'Êîíâåðòàñèéà ùåñàáû'
+          Color = clNavy
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWhite
+          Font.Height = -11
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = []
+          ParentColor = False
+          ParentFont = False
+          TabOrder = 0
+        end
+        object Panel10: TPanel
+          Left = 1
+          Top = 18
+          Width = 214
+          Height = 41
+          Align = alTop
+          BevelInner = bvLowered
+          BevelOuter = bvLowered
+          TabOrder = 1
+          object StaticText8: TStaticText
+            Left = 2
+            Top = 2
+            Width = 210
+            Height = 17
+            Align = alTop
+            Alignment = taCenter
+            Caption = 'Ýÿëèð'
+            Color = clSilver
+            ParentColor = False
+            TabOrder = 0
+          end
+          object DBLookupComboBox3: TDBLookupComboBox
+            Left = 2
+            Top = 20
+            Width = 211
+            Height = 21
+            DataField = 'SCREDIT'
+            DataSource = dsAvalute
+            KeyField = 'ID'
+            ListField = 'ACC_NO'
+            ListSource = DataAccounts
+            TabOrder = 1
+          end
+        end
+        object Panel11: TPanel
+          Left = 1
+          Top = 59
+          Width = 214
+          Height = 41
+          Align = alTop
+          BevelInner = bvLowered
+          BevelOuter = bvLowered
+          TabOrder = 2
+          object StaticText9: TStaticText
+            Left = 2
+            Top = 2
+            Width = 210
+            Height = 17
+            Align = alTop
+            Alignment = taCenter
+            Caption = 'Çÿðÿð'
+            Color = clSilver
+            ParentColor = False
+            TabOrder = 0
+          end
+          object DBLookupComboBox6: TDBLookupComboBox
+            Left = 2
+            Top = 20
+            Width = 211
+            Height = 21
+            DataField = 'SDEBET'
+            DataSource = dsAvalute
+            KeyField = 'ID'
+            ListField = 'ACC_NO'
+            ListSource = DataAccounts
+            TabOrder = 1
+          end
+        end
+      end
+      object Panel12: TPanel
+        Left = 649
+        Top = 1
+        Width = 290
+        Height = 102
+        Align = alLeft
+        AutoSize = True
+        TabOrder = 3
+        object StaticText10: TStaticText
+          Left = 1
+          Top = 1
+          Width = 288
+          Height = 17
+          Align = alTop
+          Alignment = taCenter
+          Caption = 'Ìÿëóìàò'
+          Color = clNavy
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWhite
+          Font.Height = -11
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = []
+          ParentColor = False
+          ParentFont = False
+          TabOrder = 0
+        end
+        object Panel13: TPanel
+          Left = 1
+          Top = 59
+          Width = 96
+          Height = 41
+          BevelInner = bvLowered
+          BevelOuter = bvLowered
+          TabOrder = 1
+          object StaticText11: TStaticText
+            Left = 2
+            Top = 2
+            Width = 92
+            Height = 17
+            Align = alTop
+            Alignment = taCenter
+            Caption = 'ßlavÿ'
+            Color = clSilver
+            ParentColor = False
+            TabOrder = 0
+          end
+          object DBEdit17: TDBEdit
+            Left = 2
+            Top = 20
+            Width = 93
+            Height = 21
+            DataField = 'PRISTAVKA'
+            DataSource = dsAvalute
+            TabOrder = 1
+          end
+        end
+        object Panel14: TPanel
+          Left = 1
+          Top = 18
+          Width = 96
+          Height = 41
+          BevelInner = bvLowered
+          BevelOuter = bvLowered
+          TabOrder = 2
+          object StaticText12: TStaticText
+            Left = 2
+            Top = 2
+            Width = 92
+            Height = 17
+            Align = alTop
+            Alignment = taCenter
+            Caption = 'Ëèìèò'
+            Color = clSilver
+            ParentColor = False
+            TabOrder = 0
+          end
+          object DBEdit20: TDBEdit
+            Left = 2
+            Top = 20
+            Width = 93
+            Height = 21
+            DataField = 'LIMIT'
+            DataSource = dsAvalute
+            TabOrder = 1
+          end
+        end
+        object Panel15: TPanel
+          Left = 97
+          Top = 18
+          Width = 96
+          Height = 41
+          BevelInner = bvLowered
+          BevelOuter = bvLowered
+          TabOrder = 3
+          object StaticText13: TStaticText
+            Left = 2
+            Top = 2
+            Width = 92
+            Height = 17
+            Align = alTop
+            Alignment = taCenter
+            Caption = 'Óñòïîê'
+            Color = clSilver
+            ParentColor = False
+            TabOrder = 0
+          end
+          object DBEdit1: TDBEdit
+            Left = 1
+            Top = 20
+            Width = 93
+            Height = 21
+            DataField = 'USTPOK'
+            DataSource = dsAvalute
+            TabOrder = 1
+          end
+        end
+        object Panel16: TPanel
+          Left = 98
+          Top = 59
+          Width = 96
+          Height = 41
+          BevelInner = bvLowered
+          BevelOuter = bvLowered
+          TabOrder = 4
+          object StaticText14: TStaticText
+            Left = 2
+            Top = 2
+            Width = 92
+            Height = 17
+            Align = alTop
+            Alignment = taCenter
+            Caption = 'MB Ekvivalenti'
+            Color = clSilver
+            ParentColor = False
+            TabOrder = 0
+          end
+          object DBEdit2: TDBEdit
+            Left = 1
+            Top = 20
+            Width = 93
+            Height = 21
+            DataField = 'OFFICAL'
+            DataSource = dsAvalute
+            TabOrder = 1
+          end
+        end
+        object Panel17: TPanel
+          Left = 193
+          Top = 18
+          Width = 96
+          Height = 41
+          BevelInner = bvLowered
+          BevelOuter = bvLowered
+          TabOrder = 5
+          object StaticText15: TStaticText
+            Left = 2
+            Top = 2
+            Width = 92
+            Height = 17
+            Align = alTop
+            Alignment = taCenter
+            Caption = 'Óñòîðã'
+            Color = clSilver
+            ParentColor = False
+            TabOrder = 0
+          end
+          object DBEdit3: TDBEdit
+            Left = 1
+            Top = 20
+            Width = 93
+            Height = 21
+            DataField = 'USTORG'
+            DataSource = dsAvalute
+            TabOrder = 1
+          end
+        end
+        object Panel18: TPanel
+          Left = 193
+          Top = 59
+          Width = 96
+          Height = 41
+          BevelInner = bvLowered
+          BevelOuter = bvLowered
+          TabOrder = 6
+          object StaticText16: TStaticText
+            Left = 2
+            Top = 2
+            Width = 92
+            Height = 17
+            Align = alTop
+            Alignment = taCenter
+            Caption = 'Using'
+            Color = clSilver
+            ParentColor = False
+            TabOrder = 0
+          end
+          object DBEdit4: TDBEdit
+            Left = 1
+            Top = 20
+            Width = 93
+            Height = 21
+            DataField = 'USING'
+            DataSource = dsAvalute
+            TabOrder = 1
+          end
+        end
+      end
+    end
+    object Panel19: TPanel
+      Left = 0
+      Top = 283
+      Width = 1024
+      Height = 300
+      Align = alTop
+      TabOrder = 3
+      object Label1: TLabel
+        Left = 24
+        Top = 216
+        Width = 43
+        Height = 13
+        Caption = 'GßLIR:'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = [fsBold, fsUnderline]
+        ParentFont = False
+      end
+      object Label2: TLabel
+        Left = 24
+        Top = 248
+        Width = 39
+        Height = 13
+        Caption = 'XßRC:'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = [fsBold, fsUnderline]
+        ParentFont = False
+      end
+      object DBGridAvalute_T: TDBGrid
+        Left = 1
+        Top = 1
+        Width = 1022
+        Height = 180
+        Align = alTop
+        DataSource = DS_Avalute_T
+        TabOrder = 0
+        TitleFont.Charset = DEFAULT_CHARSET
+        TitleFont.Color = clWindowText
+        TitleFont.Height = -11
+        TitleFont.Name = 'Azl Sans Serif'
+        TitleFont.Style = []
+        Columns = <
+          item
+            Expanded = False
+            FieldName = 'VALUTE'
+            Title.Alignment = taCenter
+            Title.Caption = 'Kod'
+            Title.Color = clNavy
+            Title.Font.Charset = DEFAULT_CHARSET
+            Title.Font.Color = clWindow
+            Title.Font.Height = -11
+            Title.Font.Name = 'Azl Sans Serif'
+            Title.Font.Style = []
+            Width = 30
+            Visible = True
+          end
+          item
+            Alignment = taCenter
+            Color = clMenu
+            Expanded = False
+            FieldName = 'VAL_NAME'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clNavy
+            Font.Height = -11
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = []
+            Title.Alignment = taCenter
+            Title.Caption = 'Simvol'
+            Title.Color = clNavy
+            Title.Font.Charset = DEFAULT_CHARSET
+            Title.Font.Color = clWindow
+            Title.Font.Height = -11
+            Title.Font.Name = 'Azl Sans Serif'
+            Title.Font.Style = []
+            Width = 35
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'VALU_NAME'
+            Title.Alignment = taCenter
+            Title.Caption = 'Valyuta'
+            Title.Color = clNavy
+            Title.Font.Charset = DEFAULT_CHARSET
+            Title.Font.Color = clWindow
+            Title.Font.Height = -11
+            Title.Font.Name = 'Azl Sans Serif'
+            Title.Font.Style = []
+            Width = 120
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'VALU_SHORT'
+            Title.Alignment = taCenter
+            Title.Caption = 'Qûsa'
+            Title.Color = clNavy
+            Title.Font.Charset = DEFAULT_CHARSET
+            Title.Font.Color = clWindow
+            Title.Font.Height = -11
+            Title.Font.Name = 'Azl Sans Serif'
+            Title.Font.Style = []
+            Width = 50
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'VALU_BALA'
+            Title.Alignment = taCenter
+            Title.Caption = 'Xûrda hissÿ'
+            Title.Color = clNavy
+            Title.Font.Charset = DEFAULT_CHARSET
+            Title.Font.Color = clWindow
+            Title.Font.Height = -11
+            Title.Font.Name = 'Azl Sans Serif'
+            Title.Font.Style = []
+            Width = 70
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'COUNTRY'
+            Title.Alignment = taCenter
+            Title.Caption = 'Þlkÿ'
+            Title.Color = clNavy
+            Title.Font.Charset = DEFAULT_CHARSET
+            Title.Font.Color = clWindow
+            Title.Font.Height = -11
+            Title.Font.Name = 'Azl Sans Serif'
+            Title.Font.Style = []
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'USING'
+            Title.Caption = 'Dþnÿrlik'
+            Title.Color = clNavy
+            Title.Font.Charset = DEFAULT_CHARSET
+            Title.Font.Color = clWhite
+            Title.Font.Height = -11
+            Title.Font.Name = 'Azl Sans Serif'
+            Title.Font.Style = []
+            Visible = True
+          end>
+      end
+      object BtnOK: TButton
+        Left = 664
+        Top = 192
+        Width = 75
+        Height = 25
+        Caption = 'Yadda saxla'
+        TabOrder = 1
+        OnClick = BtnOKClick
+      end
+      object BtnCancel: TButton
+        Left = 664
+        Top = 216
+        Width = 75
+        Height = 25
+        Caption = 'Imtina'
+        TabOrder = 2
+        OnClick = BtnCancelClick
+      end
+      object GroupBox1: TGroupBox
+        Left = 84
+        Top = 184
+        Width = 185
+        Height = 105
+        Caption = 'Mÿzÿnnÿ fÿrqi hesablarû'
+        TabOrder = 3
+        object CBoxKREDIT: TDBLookupComboBox
+          Left = 16
+          Top = 28
+          Width = 145
+          Height = 21
+          DataField = 'KREDIT'
+          DataSource = DS_ValuteSettings
+          KeyField = 'ID'
+          ListField = 'ACC_NO'
+          ListSource = DataAccounts
+          TabOrder = 0
+        end
+        object CBoxDebet: TDBLookupComboBox
+          Left = 16
+          Top = 60
+          Width = 145
+          Height = 21
+          DataField = 'DEBET'
+          DataSource = DS_ValuteSettings
+          KeyField = 'ID'
+          ListField = 'ACC_NO'
+          ListSource = DataAccounts
+          TabOrder = 1
+        end
+      end
+      object GroupBox2: TGroupBox
+        Left = 272
+        Top = 184
+        Width = 185
+        Height = 105
+        Caption = 'Gÿlir-xÿrc hesablarû'
+        TabOrder = 4
+        object CBoxF5501V: TDBLookupComboBox
+          Left = 16
+          Top = 28
+          Width = 145
+          Height = 21
+          DataField = 'F5501V'
+          DataSource = DS_ValuteSettings
+          KeyField = 'ID'
+          ListField = 'ACC_NO'
+          ListSource = DataAccounts
+          TabOrder = 0
+        end
+        object CBoxF5501P: TDBLookupComboBox
+          Left = 16
+          Top = 60
+          Width = 145
+          Height = 21
+          DataField = 'F5501P'
+          DataSource = DS_ValuteSettings
+          KeyField = 'ID'
+          ListField = 'ACC_NO'
+          ListSource = DataAccounts
+          TabOrder = 1
+        end
+      end
+      object GroupBox3: TGroupBox
+        Left = 464
+        Top = 184
+        Width = 185
+        Height = 105
+        Caption = 'Konvertasiya hesablarû'
+        TabOrder = 5
+        object CBoxSCredit: TDBLookupComboBox
+          Left = 16
+          Top = 28
+          Width = 145
+          Height = 21
+          DataField = 'SCREDIT'
+          DataSource = DS_ValuteSettings
+          KeyField = 'ID'
+          ListField = 'ACC_NO'
+          ListSource = DataAccounts
+          TabOrder = 0
+        end
+        object CBoxSDebet: TDBLookupComboBox
+          Left = 16
+          Top = 60
+          Width = 145
+          Height = 21
+          DataField = 'SDEBET'
+          DataSource = DS_ValuteSettings
+          KeyField = 'ID'
+          ListField = 'ACC_NO'
+          ListSource = DataAccounts
+          TabOrder = 1
+        end
+      end
+      object BtnRefresh: TButton
+        Left = 664
+        Top = 240
+        Width = 75
+        Height = 25
+        Caption = 'Yenilÿmÿk'
+        TabOrder = 6
+        OnClick = BtnRefreshClick
+      end
+    end
+  end
+  object AvaluteDataSet: TOracleDataSet
+    SQL.Strings = (
+      'select a.rowid,a.*  from AVALUTE a'
+      ''
+      '')
+    QBEDefinition.QBEFieldDefs = {
+      04000000170000000600000056414C5554450100000000000800000056414C5F
+      4E414D450100000000000900000056414C555F4E414D450100000000000A0000
+      0056414C555F53484F5254010000000000060000005553544F52470100000000
+      0006000000555354504F4B0100000000000800000056414C555F47454E010000
+      0000000700000056414C555F415A010000000000050000005553494E47010000
+      0000000A00000056414C555F4F544845520100000000000A00000056414C555F
+      494E5445520100000000000900000056414C555F42414C410100000000000900
+      0000505249535441564B4101000000000007000000434F554E54525901000000
+      0000080000005553545F504F4B31010000000000070000004F46464943414C01
+      0000000000050000004C494D4954010000000000050000004445424554010000
+      000000060000004B524544495401000000000006000000463535303150010000
+      0000000600000046353530315601000000000006000000534445424554010000
+      0000000700000053435245444954010000000000}
+    RefreshOptions = [roBeforeEdit, roAfterInsert, roAfterUpdate, roAllFields]
+    OnApplyRecord = AvaluteDataSetApplyRecord
+    Session = sboapiDataModule.SBSession
+    Active = True
+    AfterPost = AvaluteDataSetAfterPost
+    Left = 570
+    Top = 25
+    object AvaluteDataSetVALUTE: TIntegerField
+      FieldName = 'VALUTE'
+      Required = True
+    end
+    object AvaluteDataSetVAL_NAME: TStringField
+      FieldName = 'VAL_NAME'
+      Size = 10
+    end
+    object AvaluteDataSetVALU_NAME: TStringField
+      FieldName = 'VALU_NAME'
+      Size = 25
+    end
+    object AvaluteDataSetVALU_SHORT: TStringField
+      FieldName = 'VALU_SHORT'
+      Size = 10
+    end
+    object AvaluteDataSetDEBET: TFloatField
+      FieldName = 'DEBET'
+    end
+    object AvaluteDataSetKREDIT: TFloatField
+      FieldName = 'KREDIT'
+    end
+    object AvaluteDataSetUSTORG: TFloatField
+      FieldName = 'USTORG'
+    end
+    object AvaluteDataSetUSTPOK: TFloatField
+      FieldName = 'USTPOK'
+    end
+    object AvaluteDataSetVALU_GEN: TStringField
+      FieldName = 'VALU_GEN'
+      Size = 10
+    end
+    object AvaluteDataSetVALU_AZ: TStringField
+      FieldName = 'VALU_AZ'
+      Size = 25
+    end
+    object AvaluteDataSetUSING: TIntegerField
+      FieldName = 'USING'
+    end
+    object AvaluteDataSetVALU_OTHER: TStringField
+      FieldName = 'VALU_OTHER'
+      Size = 25
+    end
+    object AvaluteDataSetVALU_INTER: TStringField
+      FieldName = 'VALU_INTER'
+      Size = 3
+    end
+    object AvaluteDataSetVALU_BALA: TStringField
+      FieldName = 'VALU_BALA'
+      Size = 25
+    end
+    object AvaluteDataSetPRISTAVKA: TFloatField
+      FieldName = 'PRISTAVKA'
+    end
+    object AvaluteDataSetCOUNTRY: TStringField
+      FieldName = 'COUNTRY'
+    end
+    object AvaluteDataSetUST_POK1: TFloatField
+      FieldName = 'UST_POK1'
+    end
+    object AvaluteDataSetF5501P: TFloatField
+      FieldName = 'F5501P'
+    end
+    object AvaluteDataSetF5501V: TFloatField
+      FieldName = 'F5501V'
+    end
+    object AvaluteDataSetSDEBET: TFloatField
+      FieldName = 'SDEBET'
+    end
+    object AvaluteDataSetSCREDIT: TFloatField
+      FieldName = 'SCREDIT'
+    end
+    object AvaluteDataSetOFFICAL: TStringField
+      FieldName = 'OFFICAL'
+      Size = 5
+    end
+    object AvaluteDataSetLIMIT: TFloatField
+      FieldName = 'LIMIT'
+    end
+  end
+  object dsAvalute: TDataSource
+    DataSet = AvaluteDataSet
+    Left = 593
+    Top = 25
+  end
+  object ImageList1: TImageList
+    BkColor = clWhite
+    Masked = False
+    Left = 511
+    Top = 81
+    Bitmap = {
+      494C010101000400040010001000FFFFFF00FF10FFFFFFFFFFFFFFFF424D3600
+      0000000000003600000028000000400000001000000001001000000000000008
+      000000000000000000000000000000000000FF7FFF7FFF7FFF7FFF7FFF7FFF7F
+      0000FF7FFF7FFF7FFF7FFF7FFF7FFF7FFF7F0000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000FF7FFF7FFF7FFF7FFF7FFF7F
+      00000000FF7FFF7F000000000000FF7FFF7F0000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000000000000000000000000000FF7FFF7F000000000000
+      0000007C00000000007C007C007C0000FF7F0000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000007C00000000007C007C007C
+      0000007C007C007C007C007C007C007C00000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000007C007C007C007C007C007C
+      0000E07F007C007CE07FE07FE07F007C00000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000FF7F007C007CFF7FFF7FFF7F
+      0000E07FE07FE07FE07FE07FE07FE07F00000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000FF7FFF7FFF7FFF7FFF7FFF7F
+      00000000E07FE07F000000000000E07F00000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000007CFF7FFF7F007C007C007C
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000007C007C007C007C007C007C
+      007C000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000FF7F0000007C007C007C00000000
+      007C000000000000007C0000FF7F000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000FF7FFF7F00000000000000001000
+      00000000FF7F007C007C0000FF7FFF7F00000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000FF7FFF7FFF7FFF7F000010001000
+      FF7F0000FF7F007C007C0000FF7FFF7FFF7F0000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000FF7FFF7FFF7FFF7F000010001000
+      FF7FFF7FFF7F007C007C0000FF7FFF7FFF7F0000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000FF7FFF7FFF7FFF7FFF7F00001000
+      FF7F000000000000007C0000FF7FFF7FFF7F0000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000FF7FFF7FFF7FFF7FFF7FFF7F0000
+      0000FF7FFF7FFF7F00000000FF7FFF7FFF7F0000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000FF7FFF7FFF7FFF7FFF7FFF7FFF7F
+      FF7FFF7FFF7FFF7FFF7F0000FF7FFF7FFF7F0000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000424D3E000000000000003E000000
+      2800000040000000100000000100010000000000800000000000000000000000
+      000000000000000000000000FFFFFF00FEFF0000000000007E63000000000000
+      3001000000000000000000000000000000000000000000004E00000000000000
+      7E00000000000000300000000000000000000000000000008004000000000000
+      C046000000000000F147000000000000F1C7000000000000F907000000000000
+      FCE7000000000000FFF700000000000000000000000000000000000000000000
+      000000000000}
+  end
+  object Accounts: TOracleDataSet
+    SQL.Strings = (
+      'Select'
+      '  0 as status, '
+      '  0 as ID,'
+      '  '#39'ÉÎÕ'#39' as acc_no'
+      'from'
+      '  Dual     '
+      ''
+      'Union   '
+      ''
+      'Select'
+      '   1 as status, '
+      '   ID,'
+      '   acc_no '
+      'From '
+      '   Account'
+      ''
+      'Order by'
+      '   status,acc_no'
+      '')
+    QBEDefinition.QBEFieldDefs = {
+      0400000003000000060000005354415455530100000000000200000049440100
+      00000000060000004143435F4E4F010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 384
+    Top = 136
+    object AccountsID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object AccountsACC_NO: TStringField
+      FieldName = 'ACC_NO'
+    end
+  end
+  object DataAccounts: TDataSource
+    DataSet = Accounts
+    Left = 416
+    Top = 128
+  end
+  object P_AVALUTE: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'SB_avalute'
+    ParameterMode = pmNamed
+    Left = 592
+    Top = 184
+  end
+  object OrDS_Avalute_T: TOracleDataSet
+    SQL.Strings = (
+      'select a.rowID, a.* from avalute_t a')
+    QBEDefinition.QBEFieldDefs = {
+      04000000110000000600000056414C5554450100000000000800000056414C5F
+      4E414D450100000000000900000056414C555F4E414D450100000000000A0000
+      0056414C555F53484F5254010000000000060000005553544F52470100000000
+      0006000000555354504F4B0100000000000800000056414C555F47454E010000
+      0000000700000056414C555F415A010000000000050000005553494E47010000
+      0000000A00000056414C555F4F544845520100000000000A00000056414C555F
+      494E5445520100000000000900000056414C555F42414C410100000000000900
+      0000505249535441564B4101000000000007000000434F554E54525901000000
+      0000080000005553545F504F4B31010000000000070000004F46464943414C01
+      0000000000050000004C494D4954010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    AfterScroll = OrDS_Avalute_TAfterScroll
+    Left = 48
+    Top = 432
+  end
+  object DS_Avalute_T: TDataSource
+    DataSet = OrDS_Avalute_T
+    Left = 16
+    Top = 432
+  end
+  object DS_ValuteSettings: TDataSource
+    DataSet = OrDS_ValuteSettings
+    Left = 16
+    Top = 545
+  end
+  object OrDS_ValuteSettings: TOracleDataSet
+    SQL.Strings = (
+      'select VS.rowID, VS.* from ValuteSettings VS'
+      'where VS.Valute=:Val')
+    Variables.Data = {0300000001000000040000003A56414C030000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      04000000080000000600000056414C5554450100000000000500000044454245
+      54010000000000060000004B5245444954010000000000060000004635353031
+      5001000000000006000000463535303156010000000000060000005344454245
+      5401000000000007000000534352454449540100000000000800000046494C49
+      414C4944010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 48
+    Top = 544
+  end
+end

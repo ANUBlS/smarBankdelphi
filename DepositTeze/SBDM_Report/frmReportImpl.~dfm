@@ -1,0 +1,546 @@
+object frmReport: TfrmReport
+  Left = 363
+  Top = 224
+  Width = 602
+  Height = 353
+  BorderIcons = [biSystemMenu]
+  Color = clBtnFace
+  Font.Charset = RUSSIAN_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poScreenCenter
+  OnCanResize = FormCanResize
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  OnKeyPress = FormKeyPress
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Panel1: TPanel
+    Left = 0
+    Top = 37
+    Width = 594
+    Height = 62
+    Align = alTop
+    BevelInner = bvRaised
+    BevelOuter = bvLowered
+    TabOrder = 0
+    object GroupBox1: TGroupBox
+      Left = 2
+      Top = 2
+      Width = 194
+      Height = 58
+      Align = alLeft
+      Caption = 'Валйута'
+      TabOrder = 0
+      object CBAvalute: TCheckBox
+        Left = 5
+        Top = 38
+        Width = 97
+        Height = 17
+        Caption = 'Тятбиг ет'
+        TabOrder = 0
+      end
+      object LCBValutes: TDBLookupComboboxEh
+        Left = 5
+        Top = 14
+        Width = 185
+        Height = 21
+        DropDownBox.Sizable = True
+        EditButtons = <>
+        KeyField = 'VALUTE'
+        ListField = 'VALU_NAME'
+        ListSource = dmReport.valutesDatSrc
+        TabOrder = 1
+        Visible = True
+      end
+    end
+    object GroupBox2: TGroupBox
+      Left = 390
+      Top = 2
+      Width = 202
+      Height = 58
+      Align = alClient
+      Caption = 'Депозитин типи'
+      TabOrder = 1
+      object LCBDepositTypes: TDBLookupComboboxEh
+        Left = 5
+        Top = 14
+        Width = 185
+        Height = 21
+        DropDownBox.Sizable = True
+        EditButtons = <>
+        KeyField = 'ID'
+        ListField = 'TYPE'
+        ListSource = dmReport.DepositTypesDatSrc
+        TabOrder = 0
+        Visible = True
+      end
+      object CBDepositTypes: TCheckBox
+        Left = 5
+        Top = 38
+        Width = 97
+        Height = 15
+        Caption = 'Тятбиг ет'
+        TabOrder = 1
+      end
+    end
+    object GroupBox3: TGroupBox
+      Left = 196
+      Top = 2
+      Width = 194
+      Height = 58
+      Align = alLeft
+      Caption = 'Филиал'
+      TabOrder = 2
+      object LCBFilials: TDBLookupComboboxEh
+        Left = 5
+        Top = 14
+        Width = 185
+        Height = 21
+        DropDownBox.Sizable = True
+        EditButtons = <>
+        KeyField = 'ID'
+        ListField = 'NAME'
+        ListSource = dmReport.FilialsDatSrc
+        TabOrder = 0
+        Visible = True
+      end
+      object CBFilial: TCheckBox
+        Left = 6
+        Top = 38
+        Width = 97
+        Height = 17
+        Caption = 'Тятбиг ет'
+        TabOrder = 1
+      end
+    end
+  end
+  object Panel2: TPanel
+    Left = 0
+    Top = 99
+    Width = 594
+    Height = 62
+    Align = alTop
+    BevelInner = bvRaised
+    BevelOuter = bvLowered
+    TabOrder = 1
+    object GroupBox4: TGroupBox
+      Left = 2
+      Top = 2
+      Width = 194
+      Height = 58
+      Align = alLeft
+      Caption = 'Мцштяри'
+      TabOrder = 0
+      object CBCustomer: TCheckBox
+        Left = 5
+        Top = 38
+        Width = 97
+        Height = 17
+        Caption = 'Тятбиг ет'
+        TabOrder = 0
+      end
+      object LCBCustomer: TDBLookupComboboxEh
+        Left = 5
+        Top = 14
+        Width = 185
+        Height = 21
+        DropDownBox.Sizable = True
+        EditButtons = <>
+        KeyField = 'ID#'
+        ListField = 'NAME'
+        ListSource = dmReport.ContractsDataSource
+        TabOrder = 1
+        Visible = True
+      end
+    end
+    object GroupBox5: TGroupBox
+      Left = 390
+      Top = 2
+      Width = 202
+      Height = 58
+      Align = alClient
+      Caption = 'Мцгавилянин  №-си'
+      TabOrder = 1
+      object LCBAccno: TDBLookupComboboxEh
+        Left = 5
+        Top = 14
+        Width = 185
+        Height = 21
+        DropDownBox.Sizable = True
+        EditButtons = <>
+        KeyField = 'ID'
+        ListField = 'CONTRACTNO'
+        ListSource = dmReport.DepsDatSrc
+        TabOrder = 0
+        Visible = True
+      end
+      object CBAccno: TCheckBox
+        Left = 5
+        Top = 38
+        Width = 97
+        Height = 15
+        Caption = 'Тятбиг ет'
+        TabOrder = 1
+      end
+    end
+    object GroupBox6: TGroupBox
+      Left = 196
+      Top = 2
+      Width = 194
+      Height = 58
+      Align = alLeft
+      Caption = 'Мцштяринин коду'
+      TabOrder = 2
+      object LCBCodCust: TDBLookupComboboxEh
+        Left = 5
+        Top = 14
+        Width = 185
+        Height = 21
+        DropDownBox.Sizable = True
+        EditButtons = <>
+        KeyField = 'ID'
+        ListField = 'KOD'
+        ListSource = dmReport.CustomersDatSrc
+        TabOrder = 0
+        Visible = True
+      end
+      object CBCodCust: TCheckBox
+        Left = 6
+        Top = 38
+        Width = 97
+        Height = 17
+        Caption = 'Тятбиг ет'
+        TabOrder = 1
+      end
+    end
+  end
+  object Panel3: TPanel
+    Left = 0
+    Top = 161
+    Width = 594
+    Height = 62
+    Align = alTop
+    BevelInner = bvRaised
+    BevelOuter = bvLowered
+    TabOrder = 2
+    object GroupBox7: TGroupBox
+      Left = 2
+      Top = 2
+      Width = 194
+      Height = 58
+      Align = alLeft
+      Caption = 'Мцштяринин катеэорийасы'
+      TabOrder = 0
+      object CBPersons: TCheckBox
+        Left = 5
+        Top = 38
+        Width = 97
+        Height = 17
+        Caption = 'Тятбиг ет'
+        TabOrder = 0
+      end
+      object LCBPersons: TDBLookupComboboxEh
+        Left = 5
+        Top = 14
+        Width = 185
+        Height = 21
+        DropDownBox.Sizable = True
+        EditButtons = <>
+        KeyField = 'ID'
+        ListField = 'NAME'
+        ListSource = dmReport.personsDatSrc
+        TabOrder = 1
+        Visible = True
+      end
+    end
+    object GroupBox8: TGroupBox
+      Left = 196
+      Top = 2
+      Width = 194
+      Height = 58
+      Align = alLeft
+      Caption = 'Мцштяринин типи'
+      TabOrder = 1
+      object LCBCategories: TDBLookupComboboxEh
+        Left = 5
+        Top = 14
+        Width = 185
+        Height = 21
+        DropDownBox.Sizable = True
+        EditButtons = <>
+        KeyField = 'ID'
+        ListField = 'CATEGORY'
+        ListSource = dmReport.CategoriesDatSrc
+        TabOrder = 0
+        Visible = True
+      end
+      object CBCategories: TCheckBox
+        Left = 5
+        Top = 38
+        Width = 97
+        Height = 15
+        Caption = 'Тятбиг ет'
+        TabOrder = 1
+      end
+    end
+    object GroupBox9: TGroupBox
+      Left = 390
+      Top = 2
+      Width = 202
+      Height = 58
+      Align = alClient
+      Caption = 'Жялб олунмуш  депозитляр'
+      TabOrder = 2
+      object Label1: TLabel
+        Left = 91
+        Top = 15
+        Width = 5
+        Height = 20
+        Caption = '-'
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -16
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ParentFont = False
+      end
+      object CBOpenedDep: TCheckBox
+        Left = 6
+        Top = 38
+        Width = 97
+        Height = 17
+        Caption = 'Тятбиг ет'
+        TabOrder = 0
+      end
+      object DTPOpenDate: TDateTimePicker
+        Left = 5
+        Top = 14
+        Width = 83
+        Height = 21
+        CalAlignment = dtaLeft
+        Date = 39328.5242440625
+        Time = 39328.5242440625
+        DateFormat = dfShort
+        DateMode = dmComboBox
+        Kind = dtkDate
+        ParseInput = False
+        TabOrder = 1
+      end
+      object DTPCloseDate: TDateTimePicker
+        Left = 100
+        Top = 14
+        Width = 83
+        Height = 21
+        CalAlignment = dtaLeft
+        Date = 39328.5242440625
+        Time = 39328.5242440625
+        DateFormat = dfShort
+        DateMode = dmComboBox
+        Kind = dtkDate
+        ParseInput = False
+        TabOrder = 2
+      end
+    end
+  end
+  object Panel4: TPanel
+    Left = 0
+    Top = 223
+    Width = 594
+    Height = 61
+    Align = alTop
+    BevelInner = bvRaised
+    BevelOuter = bvLowered
+    TabOrder = 3
+    object GroupBox11: TGroupBox
+      Left = 2
+      Top = 2
+      Width = 194
+      Height = 57
+      Align = alLeft
+      Caption = 'Депозитляр'
+      TabOrder = 0
+      object CLBTypes: TCheckListBox
+        Left = 2
+        Top = 15
+        Width = 190
+        Height = 40
+        Align = alClient
+        Color = clWhite
+        ItemHeight = 13
+        Items.Strings = (
+          'Актив депозитляр'
+          'Баьлы депозитляр')
+        TabOrder = 0
+      end
+    end
+    object GroupBox12: TGroupBox
+      Left = 196
+      Top = 2
+      Width = 194
+      Height = 57
+      Align = alLeft
+      Caption = 'Статусу'
+      TabOrder = 1
+      object CLBStatus: TCheckListBox
+        Left = 2
+        Top = 15
+        Width = 190
+        Height = 40
+        Align = alClient
+        Color = clWhite
+        ItemHeight = 13
+        Items.Strings = (
+          'Щесабланан'
+          'Щесабланмасы дайандырылан')
+        TabOrder = 0
+      end
+    end
+    object GroupBox10: TGroupBox
+      Left = 390
+      Top = 2
+      Width = 202
+      Height = 57
+      Align = alClient
+      Caption = 'Вахты битмиш  депозитляр'
+      TabOrder = 2
+      object Label2: TLabel
+        Left = 91
+        Top = 15
+        Width = 5
+        Height = 20
+        Caption = '-'
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -16
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ParentFont = False
+      end
+      object CBCloseDep: TCheckBox
+        Left = 6
+        Top = 38
+        Width = 97
+        Height = 17
+        Caption = 'Тятбиг ет'
+        TabOrder = 0
+      end
+      object DTPCls1: TDateTimePicker
+        Left = 5
+        Top = 14
+        Width = 83
+        Height = 21
+        CalAlignment = dtaLeft
+        Date = 39328.5242440625
+        Time = 39328.5242440625
+        DateFormat = dfShort
+        DateMode = dmComboBox
+        Kind = dtkDate
+        ParseInput = False
+        TabOrder = 1
+      end
+      object DTPCls2: TDateTimePicker
+        Left = 100
+        Top = 14
+        Width = 83
+        Height = 21
+        CalAlignment = dtaLeft
+        Date = 39328.5242440625
+        Time = 39328.5242440625
+        DateFormat = dfShort
+        DateMode = dmComboBox
+        Kind = dtkDate
+        ParseInput = False
+        TabOrder = 2
+      end
+    end
+  end
+  object Panel5: TPanel
+    Left = 0
+    Top = 0
+    Width = 594
+    Height = 37
+    Align = alTop
+    BevelInner = bvRaised
+    BevelOuter = bvLowered
+    TabOrder = 4
+    object Label3: TLabel
+      Left = 6
+      Top = 8
+      Width = 23
+      Height = 13
+      Caption = 'Тарих'
+    end
+    object DTPReport: TDateTimePicker
+      Left = 35
+      Top = 5
+      Width = 128
+      Height = 21
+      CalAlignment = dtaLeft
+      Date = 39335.6504484954
+      Time = 39335.6504484954
+      DateFormat = dfShort
+      DateMode = dmComboBox
+      Kind = dtkDate
+      ParseInput = False
+      TabOrder = 0
+    end
+  end
+  object BitBtnOk: TBitBtn
+    Left = 412
+    Top = 291
+    Width = 75
+    Height = 25
+    Caption = 'Гябул'
+    TabOrder = 5
+    OnClick = BitBtnOkClick
+  end
+  object BitBtnCancel: TBitBtn
+    Left = 500
+    Top = 291
+    Width = 75
+    Height = 25
+    Caption = 'Баьла'
+    TabOrder = 6
+    OnClick = BitBtnCancelClick
+  end
+  object Localizer: TNLSLocalizer
+    Caption = 'Мис щесабаты'
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    Left = 8
+    Top = 288
+  end
+  object EExport: TCMExcelExport
+    StyleColumnWidth = cwDefault
+    ColumnWidth = 0
+    FontTitles.Charset = RUSSIAN_CHARSET
+    FontTitles.Color = clWindowText
+    FontTitles.Height = -11
+    FontTitles.Name = 'Azl Sans Serif'
+    FontTitles.Style = []
+    OrientationTitles = 0
+    FontData.Charset = RUSSIAN_CHARSET
+    FontData.Color = clWindowText
+    FontData.Height = -11
+    FontData.Name = 'Azl Sans Serif'
+    FontData.Style = []
+    FontSummary.Charset = DEFAULT_CHARSET
+    FontSummary.Color = clWindowText
+    FontSummary.Height = -11
+    FontSummary.Name = 'MS Sans Serif'
+    FontSummary.Style = []
+    SummarySelection = ssNone
+    SummaryCalculation = scSUM
+    Left = 40
+    Top = 288
+  end
+end

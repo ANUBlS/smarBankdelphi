@@ -1,0 +1,75 @@
+unit frmCardAddEditImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  NLSLocalizer, StdCtrls, Mask, DBCtrlsEh, Buttons, ExtCtrls, CMHintBox,
+  DBLookupEh;
+
+type
+  TfrmCardAddEdit = class(TForm)
+    DBEditEh1: TDBEditEh;
+    DBEditEh2: TDBEditEh;
+    BitBtn1: TBitBtn;
+    BitBtn2: TBitBtn;
+    Label1: TLabel;
+    Label2: TLabel;
+    HBCards: TCMHintBox;
+    LCBCALCMethod: TDBLookupComboboxEh;
+    Label3: TLabel;
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure BitBtn1Click(Sender: TObject);
+    procedure BitBtn2Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  frmCardAddEdit: TfrmCardAddEdit;
+
+implementation
+
+{$R *.DFM}
+
+uses DMCardSettings;
+
+procedure TfrmCardAddEdit.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+   Resize := False
+end;
+
+procedure TfrmCardAddEdit.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+   if Ord(Key) = VK_ESCAPE Then close
+end;
+
+procedure TfrmCardAddEdit.BitBtn1Click(Sender: TObject);
+
+begin
+    with DMCardSeting do
+    begin
+         if cardsortsDESCRIPTION.IsNull then
+         begin
+           HBCards.ShowMessage('јды сащ€си бошдур');
+           Abort;
+         end;
+       cardsorts.Post;
+       Close
+    end;
+
+end;
+
+procedure TfrmCardAddEdit.BitBtn2Click(Sender: TObject);
+begin
+     with DMCardSeting ,cardsorts do
+         Cancel; 
+
+end;
+
+end.

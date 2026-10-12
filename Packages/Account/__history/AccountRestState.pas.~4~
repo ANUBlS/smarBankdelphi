@@ -1,0 +1,112 @@
+unit AccountRestState;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, ExtCtrls, Grids, DBGrids, ComCtrls, ExcelExporter, Db,
+  OracleData, Buttons;
+
+type
+  TFormAccountState = class(TForm)
+    Panel1: TPanel;
+    CloseButton: TButton;
+    AccState: TDataSource;
+    AccStateData: TOracleDataSet;
+    AccStateExporter: TExcelExporter;
+    PageControl1: TPageControl;
+    AccAmountSheet: TTabSheet;
+    DBGridAccState: TDBGrid;
+    AccTurnoverSheet: TTabSheet;
+    DBGrid2: TDBGrid;
+    SpeedButton1: TSpeedButton;
+    TabSheet1: TTabSheet;
+    DBGrid1: TDBGrid;
+    AccStateDataARCHIVEDATE: TDateTimeField;
+    AccStateDataACCID: TFloatField;
+    AccStateDataAMOUNT: TFloatField;
+    AccStateDataLAMOUNT: TFloatField;
+    AccStateDataDEBITTURNOVER: TFloatField;
+    AccStateDataDEBITLTURNOVER: TFloatField;
+    AccStateDataCREDITTURNOVER: TFloatField;
+    AccStateDataCREDITLTURNOVER: TFloatField;
+    procedure FormActivate(Sender: TObject);
+    procedure CloseButtonClick(Sender: TObject);
+    procedure FormKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure FormCreate(Sender: TObject);
+    procedure SpeedButton1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    AccountNumber: String;
+    PriorAccountID, AccountID: Longint;
+  end;
+
+var
+  FormAccountState: TFormAccountState;
+
+implementation
+
+{$R *.DFM}
+
+uses sboapiDataModuleImpl, AccountDataModuleImpl;
+
+procedure TFormAccountState.FormActivate(Sender: TObject);
+const
+     cs_message = 'Rest & TurnOvers for account "%s"';
+begin
+
+ with AccDataModule.Account do
+ begin
+  AccountID :=FieldByName('ID').AsInteger;
+  AccountNumber :=FieldByName('acc_no').AsString;
+ end;
+
+ Caption :=Format(cs_message, [AccountNumber]);
+
+ if AccountID <> PriorAccountID then
+  with AccStateData do
+  begin
+   CloseAll;
+   SetVariable('AccID', AccountID);
+   Open;
+  end;
+
+ PriorAccountID :=AccountID;
+
+end;
+
+procedure TFormAccountState.CloseButtonClick(Sender: TObject);
+begin
+ Close;
+end;
+
+procedure TFormAccountState.FormKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+ if Key = VK_ESCAPE then
+  Close;
+end;
+
+procedure TFormAccountState.FormCreate(Sender: TObject);
+begin
+ PriorAccountID :=-1;
+ SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TFormAccountState.SpeedButton1Click(Sender: TObject);
+begin
+  with AccStateExporter do
+  if
+    ExportSource.DataSet.Active and
+    (ExportSource.DataSet.RecordCount > 0) then
+    begin
+     ExportSource.DataSet.Last;
+     ExportSource.DataSet.First;
+     Report;
+    end;
+end;
+
+end.

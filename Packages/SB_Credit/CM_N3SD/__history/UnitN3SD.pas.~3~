@@ -1,0 +1,227 @@
+unit UnitN3SD;
+               
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
+  NLSLocalizer, ComCtrls, StdCtrls, Mask, DBCtrlsEh, ExtCtrls, Buttons,
+  CMExcelExport, DBLookupEh;
+
+type
+  TFormN3SD = class(TForm)
+    SpeedButton1: TSpeedButton;
+    SpeedButton2: TSpeedButton;
+    Panel1: TPanel;
+    Panel2: TPanel;
+    GroupBox1: TGroupBox;
+    GroupBox4: TGroupBox;
+    DBLookupComboboxEhBr: TDBLookupComboboxEh;
+    CheckBoxBr: TCheckBox;
+    Panel3: TPanel;
+    GroupBox2: TGroupBox;
+    DBLookupComboboxEhReg: TDBLookupComboboxEh;
+    CheckBoxReg: TCheckBox;
+    GroupBox3: TGroupBox;
+    DBLookupComboboxEhCust: TDBLookupComboboxEh;
+    CheckBoxCust: TCheckBox;
+    DBLookupComboboxEhVid: TDBLookupComboboxEh;
+    CheckBoxVid: TCheckBox;
+    GroupBox5: TGroupBox;
+    EndDate: TDateTimePicker;
+    Label1: TLabel;
+    Label2: TLabel;
+    BeginDate: TDateTimePicker;
+    ExcelExport: TCMExcelExport;
+    SpeedButton3: TSpeedButton;
+    ProgressBar: TProgressBar;
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure SpeedButton2Click(Sender: TObject);
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure SpeedButton3Click(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    function BuildFilterString : String;
+  end;
+
+var
+  FormN3SD: TFormN3SD;
+
+implementation
+
+uses CommonDecls,UnitProgress, DatModN3SDImpl,SbSystem;
+
+{$R *.DFM}
+
+
+procedure InitPlugin(s:string);export;  
+begin
+ FormN3SD.ShowModal;
+end;
+
+exports
+ InitPlugin;
+
+function TFormN3SD.BuildFilterString : String;
+
+  procedure ConcatFilter(var S: String; const Prefix : String; Checked : Boolean; KeyValue : Variant);
+  const
+     csFormat = '(%s=%s)';
+  var
+    Temp : String;
+  begin
+
+    if Checked then
+    begin
+      Temp := Format(csFormat,[Prefix,Keyvalue]);
+      if S = '' then
+        S := Temp
+      else
+        S :=S + 'AND ' + Temp;
+    end;
+    
+  end;
+begin
+
+  Result := '';
+  ConcatFilter(Result,'CUSTOMERTYPE',CheckBoxCust.Checked,DBLookupComboboxEhCust.KeyValue);
+  ConcatFilter(Result,'BRANCHID',CheckBoxBr.Checked,DBLookupComboboxEhBr.KeyValue);
+  ConcatFilter(Result,'VILLAGEID',CheckBoxReg.Checked,DBLookupComboboxEhReg.KeyValue);
+  ConcatFilter(Result,'VID_SOB',CheckBoxvid.Checked,DBLookupComboboxEhVid.KeyValue);
+
+end;
+
+procedure TFormN3SD.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+  if Ord(Key) = VK_ESCAPE then
+    ModalResult := mrCancel
+end;
+
+procedure TFormN3SD.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+  Resize := False;
+end;
+
+procedure TFormN3SD.FormCreate(Sender: TObject);
+begin
+
+   BeginDate.DateTime := Get_CurrentDate;
+   EndDate.DateTime := Get_CurrentDate;
+   DatModN3SD := TDatModN3SD.Create(self);
+      with DatModN3SD do
+   begin
+
+     CatDatSet.Open;
+     RegDatSet.Open;
+     FilialDatSet.Open;
+     VidDatSet.Open;
+     Crdinfo.Open;
+     
+    end;
+   FormProgress := TFormProgress.Create(self);
+end;
+
+procedure TFormN3SD.FormDestroy(Sender: TObject);
+begin
+   with DatModN3SD do
+   begin
+
+     N3SDDataSet.CloseAll;
+     CatDatSet.CloseAll;
+     RegDatSet.CloseAll;
+     FilialDatSet.CloseAll;
+     VidDatSet.CloseAll;
+     Crdinfo.CloseAll;
+
+   end;
+   DatModN3SD.Free;
+   FormProgress.Free;
+end;
+
+procedure TFormN3SD.SpeedButton2Click(Sender: TObject);
+begin
+   Close;
+end;
+
+procedure TFormN3SD.SpeedButton1Click(Sender: TObject);
+var bdate,edate :TDateTime;rcount :integer;
+begin
+ ProgressBar.Visible:=true;
+  bdate := BeginDate.DateTime;
+  edate := EndDate.DateTime;
+  with DatModN3SD.Crdinfo do
+  begin
+    Filtered := False;
+    Filter := BuildFilterString;
+    Filtered := True;
+
+      Session.Commit;
+      Rcount := RecordCount;
+
+      with ProgressBar do
+      begin
+     // Visible:=true;
+      Position := 0;
+      Max := Rcount;
+      Step := 1;
+      end;
+
+   //  FormProgress.Show;
+   //  FormProgress.Update;
+     Self.Update;
+     First;
+
+      LogInformation('Ихраж башлады',true);
+    while not EOF do
+    begin
+    //  LogInformation(inttostr(FieldByName('ID').AsInteger),true);
+      DatModN3SD.CM_N3_SD.CallProcedure('pn3_sdf',[
+                                                  'p_creditid',FieldByName('ID').AsInteger,
+                                                  'p_bdate',bdate,
+                                                  'p_edate',edate
+                                                  ]);
+     ProgressBar.Position := RecNo + 1;
+   
+     Next;
+    end;
+   ProgressBar. Visible:=false;
+   LogInformation('Ихраж гуртарды',true);
+  end;
+
+ // FormProgress.Close;
+
+ with DatModN3SD do
+ begin
+   N3SDDataSet.CloseAll;
+   N3SDDataSet.Open;
+
+    with ExcelExport do
+    begin
+       Connect;
+       ExportDataset(N3SDDataSet,'Н3-СД',true);
+       Disconnect;
+    end;                 
+ end;
+
+end;
+
+procedure TFormN3SD.SpeedButton3Click(Sender: TObject);
+begin
+FormProgress := TFormProgress.Create(self);
+FormProgress.ShowModal;
+end;
+
+procedure TFormN3SD.Button1Click(Sender: TObject);
+begin
+ProgressBar.Visible:=true;
+end;
+
+initialization
+FormN3SD := TFormN3SD.Create(CommonApplication);
+end.

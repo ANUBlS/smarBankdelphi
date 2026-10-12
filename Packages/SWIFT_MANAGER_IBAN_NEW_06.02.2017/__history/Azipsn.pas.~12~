@@ -1,0 +1,81 @@
+﻿unit Azipsn;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ComCtrls, SearchEdit, DBCtrls, Unit2, DB, OracleData,
+  ExtCtrls, Grids, DBGrids, IdBaseComponent, IdCoder, IdCoder3to4, IdCoder00E,
+  IdCoderXXE, IdCoderMIME, IdCoderUUE;
+
+type
+  Tsettings = class(TForm)
+    rgrid: TDBGrid;
+    Button1: TButton;
+    Button2: TButton;
+    Panel1: TPanel;
+    Panel2: TPanel;
+    Button3: TButton;
+    Memo1: TMemo;
+    Edit1: TEdit;
+    IdEncoderXXE1: TIdEncoderXXE;
+    IdDecoderXXE1: TIdDecoderXXE;
+    Memo2: TMemo;
+    Memo3: TMemo;
+    procedure Button1Click(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  settings: Tsettings;
+  isEmpty,CanClose: boolean;
+
+implementation
+
+{$R *.dfm}
+
+function Sezar(Key:Integer; S:String; Decode:Boolean):String;
+var
+  i:Integer;
+  st:String;
+begin
+  st:=S;
+  if Decode then Key:=-Key;
+  for i:=1 to Length(S) do
+    st[i]:=Chr((Ord(S[i])+Key));
+  Result:=st;
+end;
+
+
+
+
+procedure Tsettings.Button1Click(Sender: TObject);
+
+var
+  i,Key:Integer;
+begin
+  Key:=13;
+  for i:=0 to Memo1.Lines.Count-1 do
+    Memo1.Lines[i]:=Sezar(Key,Memo1.Lines[i],False);
+
+    memo2.Text:=IdEncoderXXE1.Encode(Memo1.Text);
+end;
+
+procedure Tsettings.Button2Click(Sender: TObject);
+var
+  i,Key:Integer;
+begin
+memo2.Text:=IdDecoderXXE1.DecodeString(Memo1.Text);
+//showmessage('l');
+  Key:=13;
+  for i:=0 to Memo2.Lines.Count-1 do
+   Memo2.Lines[i]:=Sezar(Key,Memo2.Lines[i],True);
+
+end;
+
+end.

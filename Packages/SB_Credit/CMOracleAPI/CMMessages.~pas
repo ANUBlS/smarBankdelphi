@@ -1,0 +1,54 @@
+unit CMMessages;
+
+interface
+
+type
+  TAlertRaiseStatus = (arsRaised, arsTimeout);
+
+const
+  MAXWAIT = 86400000;
+
+ procedure AlrtRegister(Aname :string);
+ procedure AlrtSignal (Aname :string;AMessage :String);
+ procedure WaitAny(out AName: string; out AMessage: string; out Status: Integer; const TimeOut: Integer);
+ procedure WaitOne(const AName: string; out AMessage: string; out Status: Integer; const TimeOut: Integer);
+ procedure Remove(const AName: string);
+ procedure RemoveAll;
+
+ implementation
+
+uses CMOracleAPIDataModuleImpl;
+
+  procedure AlrtRegister(Aname :string);
+  begin
+     with CMDataModule,CMSession.DBMS_Alert do
+           Register(Aname);
+  end;
+
+  procedure AlrtSignal (Aname :string;AMessage :String);
+  begin
+     with CMDataModule,CMSession.DBMS_Alert do
+           Signal(Aname,AMessage);
+  end;
+
+  procedure WaitAny(out AName: string; out AMessage: string; out Status: Integer; const TimeOut: Integer);
+  var AStatus :integer;
+  begin
+     with CMDataModule,CMSession.DBMS_Alert do
+          WaitAny(AName,AMessage,AStatus,MAXWAIT);
+  end;
+
+  procedure WaitOne(const AName: string; out AMessage: string; out Status: Integer; const TimeOut: Integer);
+  var AStatus :integer;
+  begin
+     with CMDataModule,CMSession.DBMS_Alert do
+          WaitOne(AName,AMessage,AStatus,MAXWAIT);
+  end;
+
+  procedure Remove(const AName: string);
+  begin
+     with CMDataModule,CMSession.DBMS_Alert do
+           Remove(AName);
+  end;
+
+end.

@@ -1,0 +1,221 @@
+object AddInvestment: TAddInvestment
+  Left = 0
+  Top = 0
+  BorderIcons = [biSystemMenu]
+  BorderStyle = bsSingle
+  Caption = 'Yeni'
+  ClientHeight = 134
+  ClientWidth = 460
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -12
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poDesktopCenter
+  OnKeyPress = FormKeyPress
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 14
+  object Panel2: TPanel
+    Left = 0
+    Top = 0
+    Width = 460
+    Height = 134
+    Align = alClient
+    TabOrder = 0
+    object Panel1: TPanel
+      Left = 1
+      Top = 103
+      Width = 458
+      Height = 30
+      Align = alBottom
+      TabOrder = 0
+      object Button1: TButton
+        Left = 337
+        Top = 1
+        Width = 60
+        Height = 28
+        Align = alRight
+        Caption = 'OK'
+        TabOrder = 0
+        OnClick = Button1Click
+      end
+      object Button2: TButton
+        Left = 397
+        Top = 1
+        Width = 60
+        Height = 28
+        Align = alRight
+        Caption = 'Cancel'
+        TabOrder = 1
+      end
+    end
+    object GroupBox1: TGroupBox
+      Left = 234
+      Top = 42
+      Width = 110
+      Height = 57
+      TabOrder = 1
+      object Label1: TLabel
+        Left = 2
+        Top = 16
+        Width = 106
+        Height = 14
+        Align = alTop
+        Caption = 'M'#252'qavil'#601' M'#601'bl'#601#287'i'
+        Color = clBlue
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWhite
+        Font.Height = -12
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentColor = False
+        ParentFont = False
+        ExplicitWidth = 88
+      end
+      object Edit2: TEdit
+        Left = 2
+        Top = 30
+        Width = 106
+        Height = 22
+        Enabled = False
+        TabOrder = 0
+        OnKeyPress = Edit2KeyPress
+      end
+    end
+    object GroupBox3: TGroupBox
+      Left = 349
+      Top = 42
+      Width = 110
+      Height = 57
+      TabOrder = 2
+      object Label2: TLabel
+        Left = 2
+        Top = 16
+        Width = 106
+        Height = 14
+        Align = alTop
+        Caption = 'Yat'#305'r'#305'm M'#601'bl'#601#287'i'
+        Color = clBlue
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWhite
+        Font.Height = -12
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentColor = False
+        ParentFont = False
+        ExplicitWidth = 80
+      end
+      object CurrencyEdit1: TCurrencyEdit
+        Left = 2
+        Top = 32
+        Width = 106
+        Height = 22
+        TabOrder = 0
+        Text = '0'
+      end
+    end
+    object GroupBox4: TGroupBox
+      Left = 4
+      Top = 41
+      Width = 225
+      Height = 58
+      TabOrder = 3
+      object Label3: TLabel
+        Left = 2
+        Top = 16
+        Width = 221
+        Height = 14
+        Align = alTop
+        Caption = 'Tarix'
+        Color = clBlue
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWhite
+        Font.Height = -12
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentColor = False
+        ParentFont = False
+        ExplicitWidth = 26
+      end
+      object DateTimePicker1: TDateTimePicker
+        Left = 3
+        Top = 31
+        Width = 219
+        Height = 22
+        Date = 42189.633815821760000000
+        Time = 42189.633815821760000000
+        TabOrder = 0
+      end
+    end
+    object GroupBox2: TGroupBox
+      Left = 4
+      Top = -15
+      Width = 225
+      Height = 60
+      TabOrder = 4
+      object Label4: TLabel
+        Left = 2
+        Top = 16
+        Width = 221
+        Height = 14
+        Align = alTop
+        Caption = 'Yat'#305'r'#305'm Hesab'#305
+        Color = clBlue
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWhite
+        Font.Height = -12
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentColor = False
+        ParentFont = False
+        ExplicitWidth = 76
+      end
+      object Edit3: TEdit
+        Left = 2
+        Top = 33
+        Width = 220
+        Height = 22
+        Enabled = False
+        TabOrder = 0
+      end
+    end
+    object GroupBox5: TGroupBox
+      Left = 234
+      Top = -14
+      Width = 225
+      Height = 60
+      TabOrder = 5
+      object Label5: TLabel
+        Left = 2
+        Top = 16
+        Width = 221
+        Height = 14
+        Align = alTop
+        Caption = 'Kassa v'#601' ya cari Hesab'
+        Color = clBlue
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWhite
+        Font.Height = -12
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentColor = False
+        ParentFont = False
+        ExplicitWidth = 120
+      end
+      object DBLookupComboBox1: TDBLookupComboBox
+        Left = 2
+        Top = 33
+        Width = 220
+        Height = 22
+        KeyField = 'ID'
+        ListField = 'ACC_NO'
+        ListSource = Dm_invst.dsr_kassa
+        TabOrder = 0
+      end
+    end
+  end
+end

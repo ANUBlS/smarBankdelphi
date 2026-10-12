@@ -1,0 +1,1279 @@
+﻿unit fmMedBlankImpl;
+             //see
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActiveX, AxCtrls, MEDBlank_TLB, StdVcl, StdCtrls, DBViewComboBox, Db,
+  OracleData, HintBox, Buttons, ExtCtrls, ComCtrls, Mask, DBCtrls, SBPlgAx50_TLB,
+  PlgModalContainer, XFSCtrls,variants;
+
+const
+   WM_ModalResult = WM_USER+139;
+   fmCaption = 'Tibbi sigorta anket formasi: (%s)';
+
+type
+  TfmMedBlank = class(
+             TActiveForm,
+             IfmMedBlank,
+             IUIObject,
+             IParamInput)
+    pmcSuggestion: TPlgModalContainer;
+    XFPanel1: TXFPanel;
+    hbErrMsg: THintBox;
+    btSuggestion: TBitBtn;
+    btApply: TBitBtn;
+    BitBtn1: TBitBtn;
+    BitBtn2: TBitBtn;
+    XFPanel4: TXFPanel;
+    XFPanel2: TXFPanel;
+    XFLabel26: TXFLabel;
+    DBLookupComboBox2: TDBLookupComboBox;
+    XFPanel3: TXFPanel;
+    GroupBox1: TXFGroupBox;
+    XFLabel14: TXFLabel;
+    XFLabel15: TXFLabel;
+    XFLabel16: TXFLabel;
+    XFLabel17: TXFLabel;
+    XFLabel18: TXFLabel;
+    XFLabel19: TXFLabel;
+    XFLabel20: TXFLabel;
+    XFLabel21: TXFLabel;
+    XFLabel22: TXFLabel;
+    XFLabel23: TXFLabel;
+    XFLabel24: TXFLabel;
+    XFLabel25: TXFLabel;
+    edBeginDate: TDateTimePicker;
+    DBEdit8: TDBEdit;
+    DBEdit6: TDBEdit;
+    DBEdit4: TDBEdit;
+    DBEdit2: TDBEdit;
+    DBEdit1: TDBEdit;
+    btEmployes: TBitBtn;
+    edEndDate: TDateTimePicker;
+    DBLookupComboBox1: TDBLookupComboBox;
+    DBEdit7: TDBEdit;
+    DBEdit5: TDBEdit;
+    DBEdit3: TDBEdit;
+    gbChecks: TXFGroupBox;
+    XFLabel1: TXFLabel;
+    XFLabel2: TXFLabel;
+    XFLabel3: TXFLabel;
+    XFLabel4: TXFLabel;
+    XFLabel5: TXFLabel;
+    XFLabel6: TXFLabel;
+    XFLabel7: TXFLabel;
+    XFLabel8: TXFLabel;
+    XFLabel9: TXFLabel;
+    XFLabel10: TXFLabel;
+    XFLabel11: TXFLabel;
+    XFLabel12: TXFLabel;
+    XFLabel13: TXFLabel;
+    chbINPATSERVa: TCheckBox;
+    chbOUTPATSERVa: TCheckBox;
+    chbEMERAIDa: TCheckBox;
+    chbPRESCDRUGSa: TCheckBox;
+    chbDENTSERVa: TCheckBox;
+    chbPROPHYSERVa: TCheckBox;
+    chbPROPHYINSa: TCheckBox;
+    chbPROPHYINSb: TCheckBox;
+    chbPROPHYSERVb: TCheckBox;
+    chbDENTSERVb: TCheckBox;
+    chbPRESCDRUGSb: TCheckBox;
+    chbEMERAIDb: TCheckBox;
+    chbOUTPATSERVb: TCheckBox;
+    chbINPATSERVb: TCheckBox;
+    chbINPATSERVc: TCheckBox;
+    chbOUTPATSERVc: TCheckBox;
+    chbEMERAIDc: TCheckBox;
+    chbPRESCDRUGSc: TCheckBox;
+    chbDENTSERVc: TCheckBox;
+    chbPROPHYSERVc: TCheckBox;
+    chbPROPHYINSc: TCheckBox;
+    chbSANATORIUMa: TCheckBox;
+    chbCHILDBIRTHa: TCheckBox;
+    chbPRIVATEDRSERVa: TCheckBox;
+    chbMEDICALEVACa: TCheckBox;
+    chbPROSTINSa: TCheckBox;
+    chbCHEMORADIOTHERAPYa: TCheckBox;
+    chbSANATORIUMb: TCheckBox;
+    chbCHILDBIRTHb: TCheckBox;
+    chbPRIVATEDRSERVb: TCheckBox;
+    chbMEDICALEVACb: TCheckBox;
+    chbPROSTINSb: TCheckBox;
+    chbCHEMORADIOTHERAPYb: TCheckBox;
+    chbSANATORIUMc: TCheckBox;
+    chbCHILDBIRTHc: TCheckBox;
+    chbPRIVATEDRSERVc: TCheckBox;
+    chbMEDICALEVACc: TCheckBox;
+    chbPROSTINSc: TCheckBox;
+    chbCHEMORADIOTHERAPYc: TCheckBox;
+    DSContract: TOracleDataSet;
+    DSContractID: TFloatField;
+    DSContractTYPE_ID: TFloatField;
+    DSContractINS_DATE: TDateTimeField;
+    DSContractBEGIN_DATE: TDateTimeField;
+    DSContractEND_DATE: TDateTimeField;
+    DSContractVALUTE_ID: TFloatField;
+    DSContractAMMOUNT: TFloatField;
+    DSContractCLOSE_PREFIX: TIntegerField;
+    DSContractKLI_ID: TFloatField;
+    DSContractLOANACC_ID: TFloatField;
+    DSContractCURRACC_ID: TFloatField;
+    DSContractPOLICY_NUM: TWideStringField;
+    DSContractINSSUMM: TFloatField;
+    DSContractFRANSHIZ: TFloatField;
+    DSContractTARIFF: TFloatField;
+    DSContractSTATE: TIntegerField;
+    DSContractAGENT_ID: TFloatField;
+    DSContractPNUM: TFloatField;
+    DSContractBEN_ID: TFloatField;
+    DSContractBENEFICIARY: TWideStringField;
+    DSContractCONDITIONS: TWideStringField;
+    DSContractSUGNUM: TWideStringField;
+    DSContractBLANK_ID: TFloatField;
+    DBLookupComboBox3: TDBLookupComboBox;
+    XFLabel27: TXFLabel;
+    DSRContract: TDataSource;
+    Button1: TButton;
+    XFLabel28: TXFLabel;
+    DBEdit9: TDBEdit;
+    XFLabel29: TXFLabel;
+    XFLabel31: TXFLabel;
+    DBLookupComboBox4: TDBLookupComboBox;
+    DBEdit10: TDBEdit;
+    DBEdit11: TDBEdit;
+    DBEdit12: TDBEdit;
+    XFLabel34: TXFLabel;
+    XFLabel35: TXFLabel;
+    XFLabel36: TXFLabel;
+    DBEdit13: TDBEdit;
+    XFRadioButton1: TXFRadioButton;
+    XFRadioButton2: TXFRadioButton;
+    XFRadioButton3: TXFRadioButton;
+    XFButton1: TXFButton;
+    DBEdit14: TDBEdit;
+    DBEdit15: TDBEdit;
+    XFLabel30: TXFLabel;
+    XFLabel32: TXFLabel;
+    DBEdit16: TDBEdit;
+    XFLabel33: TXFLabel;
+    DBLookupComboBox5: TDBLookupComboBox;
+    XFLabel37: TXFLabel;
+    XFLabel38: TXFLabel;
+    DBEdit17: TDBEdit;
+    ComboBox1: TComboBox;
+    XFLabel39: TXFLabel;
+    XFLabel40: TXFLabel;
+    edInsDate: TDateTimePicker;
+    DBLookupComboBox6: TDBLookupComboBox;
+    //pmcCallActiveX: TPlgModalContainer;
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure BitBtn1Click(Sender: TObject);
+    procedure BitBtn2Click(Sender: TObject);
+    procedure btEmployesClick(Sender: TObject);
+    procedure btApplyClick(Sender: TObject);
+    procedure DBEdit1KeyPress(Sender: TObject; var Key: Char);
+    procedure gbChecksDblClick(Sender: TObject);
+    procedure btSuggestionClick(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure XFRadioButton1Click(Sender: TObject);
+    procedure XFRadioButton2Click(Sender: TObject);
+    procedure XFRadioButton3Click(Sender: TObject);
+    procedure XFButton1Click(Sender: TObject);
+    procedure DBEdit9KeyPress(Sender: TObject; var Key: Char);
+    procedure edInsDateChange(Sender: TObject);
+    procedure edBeginDateChange(Sender: TObject);
+    procedure edEndDateChange(Sender: TObject);
+  private
+    { Private declarations }
+    id : Integer;
+    CID,m_id: Integer;
+    bid : Integer;
+    IsSaved : Boolean;
+    FParams: TStrings;
+    FOwnerHandle : Integer;
+    FEvents: IfmMedBlankEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+    function  SaveData():Boolean;
+    procedure setChecksByName(chbname : String; value : integer);
+    procedure setChecks;
+    function  getChecksByName(fieldname : String):Integer;
+    procedure getChecks;
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+    {IParamInput}
+    function  Get_Params(const Name: WideString): OleVariant; safecall;
+    procedure Set_Params(const Name: WideString; Value: OleVariant); safecall;
+    property Params[const Name: WideString]: OleVariant read Get_Params write Set_Params;
+    function  Get_Owner:Integer; safecall;
+    procedure Set_Owner(val : Integer);  safecall;    
+    {IInstance}
+    function InstanceInitialize: HResult; safecall;
+    function IUIObject.Initialize = InstanceInitialize;
+    function Cleanup: HResult; safecall;
+    {IUIObject}
+//    function  Get_Icon: OLE_HANDLE; safecall;
+    function UIObjectActivate: HResult; safecall;
+    function IUIObject.Activate = UIObjectActivate;
+    function QueryDeactivate: HResult; safecall;
+    function UIObjectDeactivate: HResult; safecall;
+    function IUIObject.Deactivate = UIObjectDeactivate;
+    function SaveState: HResult; safecall;
+    function  Get_Height : Integer; safecall;
+    function  Get_Width  : Integer; safecall;    
+  public
+    { Public declarations }
+    procedure Initialize; override;
+
+  end;
+
+var
+  fmMedBlank : TfmMedBlank;
+        op_type: string;
+implementation
+
+uses ComObj, ComServ,sboapiDataModuleimpl,SBTranslateProc, UEmploees, UDataMod,CommanParametrs;
+
+{$R *.DFM}
+
+{ TfmMedBlank }
+
+procedure TfmMedBlank.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_fmMedBlankPage); }
+end;
+
+procedure TfmMedBlank.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as IfmMedBlankEvents;
+end;
+
+procedure TfmMedBlank.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TfmMedBlank.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TfmMedBlank.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TfmMedBlank.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TfmMedBlank.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TfmMedBlank.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TfmMedBlank.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TfmMedBlank.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TfmMedBlank.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TfmMedBlank.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TfmMedBlank.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TfmMedBlank.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TfmMedBlank.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TfmMedBlank.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TfmMedBlank.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TfmMedBlank.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TfmMedBlank.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TfmMedBlank.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TfmMedBlank.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TfmMedBlank._Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TfmMedBlank.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TfmMedBlank.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TfmMedBlank.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TfmMedBlank.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TfmMedBlank.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TfmMedBlank.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TfmMedBlank.edBeginDateChange(Sender: TObject);
+begin
+if edInsDate.DateTime>edBeginDate.DateTime then
+begin
+  ShowMessage('Başlanma tarixi yazılma tarixindən kiçik ola bilməz!!!');
+  edBeginDate.DateTime:=MedBDataMod.DSSysdat.FieldByName('TEK_DAT').AsDateTime
+end;
+end;
+
+procedure TfmMedBlank.edEndDateChange(Sender: TObject);
+begin
+if edEndDate.DateTime<MedBDataMod.DSSysdat.FieldByName('TEK_DAT').AsDateTime then
+   begin
+     ShowMessage('Diqqət!!! Bitmə tarixi Smartın cari tarixindən əvvəlki tarix ola bilməz');
+     edEndDate.DateTime:=MedBDataMod.DSSysdat.FieldByName('TEK_DAT').AsDateTime  ;
+   end;
+end;
+
+procedure TfmMedBlank.edInsDateChange(Sender: TObject);
+begin
+if edInsDate.DateTime<MedBDataMod.DsSysdat.FieldByName('TEK_DAT').AsDateTime then
+begin
+  ShowMessage('Yazılma tarixi Smartın cari tarixindən kiçik ola bilməz!!!');
+  edInsDate.DateTime:=MedBDataMod.DSSysdat.FieldByName('TEK_DAT').AsDateTime
+end;
+end;
+
+procedure TfmMedBlank.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TfmMedBlank.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TfmMedBlank.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TfmMedBlank.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TfmMedBlank.Set_AxBorderStyle(Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TfmMedBlank.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TfmMedBlank.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TfmMedBlank.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TfmMedBlank.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TfmMedBlank.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TfmMedBlank.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TfmMedBlank.Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TfmMedBlank.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TfmMedBlank.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TfmMedBlank.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TfmMedBlank.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TfmMedBlank.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TfmMedBlank.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+function  TfmMedBlank.Get_Owner:Integer;
+begin
+  Result := handle;
+end;
+
+procedure TfmMedBlank.Set_Owner(val : Integer);
+begin
+  if val > 0 then
+     FOwnerHandle := val;
+end;
+
+
+function  TfmMedBlank.Get_Params(const Name: WideString): OleVariant;
+begin
+
+  Result := FParams.Values[Name];
+end;
+
+procedure TfmMedBlank.Set_Params(const Name: WideString; Value: OleVariant);
+begin
+
+  FParams.Values[Name] := Value;
+end;
+
+function TfmMedBlank.InstanceInitialize: HResult;
+begin
+  Result := S_OK;
+end;
+
+function TfmMedBlank.Cleanup: HResult;
+begin
+  Result := S_OK;
+end;
+
+function TfmMedBlank.UIObjectActivate: HResult;
+begin
+    if Get_Params('Mod') ='Insert' then
+    begin
+    //showmessage(inttostr(contactid));
+       CID := -1;
+       edBeginDate.DateTime := MedBDataMod.DsSysdat.FieldByName('TEK_DAT').AsDateTime;
+       edInsDate.DateTime := MedBDataMod.DsSysdat.FieldByName('TEK_DAT').AsDateTime;
+       edEndDate.DateTime := MedBDataMod.DsSysdat.FieldByName('TEK_DAT').AsDateTime;
+       Caption := format(fmCaption, ['Yeni anket']);
+
+      with MedBDataMod, DSContract do begin
+       close;
+         SetVariable('CID', CID);
+         Open;
+         Insert;
+         FieldByName('KLI_ID').asFloat := StrToInt(Get_Params('KLI_ID'));
+       end;
+       with MedBDataMod, ODSMedical do begin
+         close;
+         SetVariable('CID', CID);
+         Open;
+         Insert;
+         FieldByName('KLI_ID').asFloat := StrToInt(Get_Params('KLI_ID'));
+
+       end;
+
+
+       with MedBDataMod, DSins_med_suggestion do begin
+         close;
+         SetVariable('pmed_id', -1);
+         Open;
+         Insert;
+         end;
+               DBLookupComboBox2.Enabled:=true;
+
+       DBEdit3.Text:='Ölkədaxili';
+       DBEdit5.Text:='Ölkədaxili';
+       DBEdit7.Text:='Ölkədaxili';
+    end;
+      ///////////////////////////////////////////////////
+
+    if opetion ='See' then begin
+                    CID:=contactid;
+       with MedBDataMod, DSContract do begin
+       //ComboBox1.ItemIndex:=FieldByName('BNF_TYPE').AsInteger;
+         DSContract.close;
+         DSContract.SetVariable('cid',cid);
+         DSContract.Open;
+         DSContract.Edit;
+       end;
+       btApply.Visible:=false;
+       BitBtn1.Visible:=false;
+
+        with MedBDataMod, ODSMedical do
+           begin
+           ODSMedical.close;
+           ODSMedical.SetVariable('CID',CID);
+           ODSMedical.Open;
+         edBeginDate.DateTime := FieldByName('begindate').AsDateTime;
+         edEndDate.DateTime := FieldByName('enddate').AsDateTime;
+         setChecks;
+         ODSMedical.Edit;
+       end;
+              DBLookupComboBox2.Enabled:=false;
+
+      if (p_contractstate=6) or (p_contractstate=7) or(p_contractstate=8)  then
+        begin
+                BitBtn1.Enabled:=false;
+          btApply.Enabled:=false;
+             end
+        else
+        begin
+        BitBtn1.Enabled:=true;
+        btApply.Enabled:=true;
+        XFPanel2.Enabled:=true;
+
+        end;
+         if MedBDataMod.ODSMedical.FieldByName('groupa').AsInteger<>0 then
+         begin
+           XFRadioButton1.Checked:=true;
+         end;
+         if MedBDataMod.ODSMedical.FieldByName('groupb').AsInteger<>0 then
+         begin
+           XFRadioButton2.Checked:=true;
+         end;
+         if MedBDataMod.ODSMedical.FieldByName('groupc').AsInteger<>0 then
+         begin
+           XFRadioButton3.Checked:=true;
+         end;
+
+         with MedBDataMod, DSins_med_suggestion do
+           begin
+           DSins_med_suggestion.close;
+           DSins_med_suggestion.SetVariable('pmed_id',ODSMedical.FieldByName('id').AsInteger);
+           DSins_med_suggestion.Open;
+           DSins_med_suggestion.Edit;
+       end;
+    end;
+
+
+      ///////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+    if Get_Params('Mod') ='Edit' then begin
+    //ShowMessage('salam');
+
+                    CID:=contactid;
+       with MedBDataMod, DSContract do begin
+       //ComboBox1.ItemIndex:=FieldByName('BNF_TYPE').AsInteger;
+         DSContract.close;
+         DSContract.SetVariable('cid',cid);
+         DSContract.Open;
+         DSContract.Edit;
+         edInsDate.DateTime := FieldByName('ins_date').AsDateTime;
+
+       end;
+
+        with MedBDataMod, ODSMedical do
+           begin
+           ODSMedical.close;
+           ODSMedical.SetVariable('CID',CID);
+           ODSMedical.Open;
+         edBeginDate.DateTime := FieldByName('begindate').AsDateTime;
+         edEndDate.DateTime := FieldByName('enddate').AsDateTime;
+         setChecks;
+         ODSMedical.Edit;
+       end;
+              DBLookupComboBox2.Enabled:=false;
+
+      if (p_contractstate=6) or (p_contractstate=7) or(p_contractstate=8)  then
+        begin
+                BitBtn1.Enabled:=false;
+          btApply.Enabled:=false;
+        {if MedBDataMod.DSContract.FieldByName('BEGIN_DATE').AsDateTime > StrToDateTime('27.12.2013') then
+        begin
+
+          BitBtn1.Enabled:=false;
+          btApply.Enabled:=false;
+          XFPanel2.Enabled:=true;
+        end
+        else
+        begin
+          //BitBtn1.Enabled:=false;
+          //btApply.Enabled:=false;
+          XFPanel2.Enabled:=false;
+        end;  }
+        end
+        else
+        begin
+        BitBtn1.Enabled:=true;
+        btApply.Enabled:=true;
+        XFPanel2.Enabled:=true;
+
+        end;
+
+
+
+         if MedBDataMod.ODSMedical.FieldByName('groupa').AsInteger<>0 then
+         begin
+           XFRadioButton1.Checked:=true;
+         end;
+
+
+         if MedBDataMod.ODSMedical.FieldByName('groupb').AsInteger<>0 then
+         begin
+           XFRadioButton2.Checked:=true;
+         end;
+
+
+         if MedBDataMod.ODSMedical.FieldByName('groupc').AsInteger<>0 then
+         begin
+           XFRadioButton3.Checked:=true;
+         end;
+
+
+       with MedBDataMod, DSins_med_suggestion do
+           begin
+           DSins_med_suggestion.close;
+           DSins_med_suggestion.SetVariable('pmed_id',ODSMedical.FieldByName('id').AsInteger);
+           DSins_med_suggestion.Open;
+           DSins_med_suggestion.Edit;
+       end;
+
+       Caption := format(fmCaption, ['Redakte']);
+       btSuggestion.Enabled := True;
+       btEmployes.Enabled := True;
+
+    end;
+  Result := S_OK;
+end;
+
+function TfmMedBlank.QueryDeactivate: HResult;
+begin
+  Result := S_OK;
+end;
+
+function TfmMedBlank.UIObjectDeactivate: HResult;
+begin
+  Result := S_OK;
+end;
+
+procedure TfmMedBlank.XFButton1Click(Sender: TObject);
+begin
+commoncid:=contactid;
+
+ if MedBDataMod.DSContract.FieldByName('type_id').AsInteger=2 then
+ begin
+ with MedBDataMod,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['SEELOSSTIBB']);
+ end;
+ end;
+     {with InsMKDataMod do
+     begin
+          ODSClaims.SetVariable('id',cid);
+          ODSClaimSal.SetVariable('eid',cid);
+     end;
+     frmClaims:=TfrmClaims.Create(self);
+     frmClaims.ShowModal; }
+     loadPlugin('loss.bpl','');
+
+end;
+
+procedure TfmMedBlank.XFRadioButton1Click(Sender: TObject);
+begin
+if XFRadioButton1.Checked=true then
+begin
+  DBEdit2.Text:=DBEdit1.Text;
+  DBEdit8.Text:='A';
+  DBEdit4.Text:=inttostr(0);
+  DBEdit6.Text:=inttostr(0);
+end
+else
+begin
+  DBEdit2.Text:=inttostr(0);
+end;
+end;
+
+procedure TfmMedBlank.XFRadioButton2Click(Sender: TObject);
+begin
+if XFRadioButton2.Checked=true then
+begin
+  DBEdit4.Text:=DBEdit1.Text;
+  DBEdit8.Text:='B';
+  DBEdit2.Text:=inttostr(0);
+  DBEdit6.Text:=inttostr(0);
+end
+else
+begin
+  DBEdit4.Text:=inttostr(0);
+end;
+end;
+
+procedure TfmMedBlank.XFRadioButton3Click(Sender: TObject);
+begin
+if XFRadioButton3.Checked=true then
+begin
+  DBEdit6.Text:=DBEdit1.Text;
+  DBEdit8.Text:='C';
+  DBEdit4.Text:=inttostr(0);
+  DBEdit2.Text:=inttostr(0);
+end
+else
+begin
+  DBEdit6.Text:=inttostr(0);
+end;
+end;
+
+function TfmMedBlank.SaveState: HResult;
+begin
+  Result := S_OK;
+end;
+
+function  TfmMedBlank.Get_Height : Integer;
+begin
+  Result := Height;
+end;
+
+function  TfmMedBlank.Get_Width  : Integer;
+begin
+  Result := Width;
+end;
+
+
+procedure TfmMedBlank.ActiveFormCreate(Sender: TObject);
+begin
+  fmMedBlank := Self;
+  FParams := TStringList.Create;
+  isSaved := False;
+
+  MedBDataMod :=  TMedBDataMod.Create(Self)  ;
+  SBTranslateProc.TranslateAllComponents(Self,sboapiDataModule.OrPack_SL);
+
+
+
+
+end;
+
+function TfmMedBlank.SaveData():Boolean;
+var
+a,c_acc:integer;
+begin
+
+with MedBDataMod,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['EDITCONTRACT_ALLMEDICAL']);
+ end;
+
+
+
+with MedBDataMod,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['SAVECONTRACT_MEDICAL']);
+ end;
+
+ if DBLookupComboBox2.Text=null then
+ begin
+   showmessage('Sığorta etdirən: sahəsi boşdur!');
+   exit;
+ end;
+
+  if DBEdit9.text='' then
+ begin
+   showmessage('Polis №-i sahəsi boşdur!');
+   exit;
+ end;
+
+  if DBLookupComboBox3.Text=null then
+ begin
+   showmessage('Agent sahəsi boşdur!');
+   exit;
+ end;
+
+   if DBLookupComboBox5.Text=null then
+ begin
+   showmessage('Filial sahəsi boşdur!');
+   exit;
+ end;
+
+
+   if DBLookupComboBox6.Text=null then
+ begin
+   showmessage('Bank/Kənar sahəsi boşdur!!');
+   exit;
+ end;
+
+    if DBLookupComboBox4.Text=null then
+ begin
+   showmessage('Müqavilənin valyutası sahəsi boşdur!');
+   exit;
+ end;
+
+  if DBEdit12.text='' then
+ begin
+   showmessage('Ümumi sığorta haqqı sahəsi boşdur!');
+   exit;
+ end;
+
+
+
+    with MedBDataMod, OPCOMMON do
+   begin
+     a:=CallIntegerFunction('get_acc_balanc_hesab',[2]);
+
+     if a=0 then
+     begin
+       showmessage('Diqqət ! Bu müqavilə tipində avtomatik hesabların açılası üçün balans hesabları sazlanmayıb!.');
+       exit;
+     end;
+   end;
+   {
+   if (XFRadioButton1.Checked=false) and (XFRadioButton2.Checked=false) and (XFRadioButton3.Checked=false) then
+   begin
+     Showmessage('Diqqət ! Qrup seçimini edin !');
+     abort;
+   end;
+          }
+  result := True;
+
+  //try
+ if op_type ='Insert' then
+ begin
+   //showmessage('1');
+  with MedBDataMod, DSContract do
+     begin
+          DSContract.RefreshRecord;
+          //DSContract.FieldByName('BNF_TYPE').AsInteger := ComboBox1.ItemIndex;
+          DSContract.FieldByName('kli_id').AsInteger := DBLookupComboBox2.KeyValue;
+          DSContract.FieldByName('ins_date').AsDateTime := edInsDate.DateTime;
+          DSContract.FieldByName('begin_date').AsDateTime := edBeginDate.DateTime;
+          DSContract.FieldByName('end_date').AsDateTime := edEndDate.DateTime;
+          DSContract.FieldByName('policy_num').AsString := DBEdit9.Text;
+          DSContract.FieldByName('valute_id').AsInteger:= DBLookupComboBox4.KeyValue;
+          DSContract.post;
+          DSContract.RefreshRecord;
+          CID:=DSContract.FieldByName('id').AsInteger;
+
+       end;
+
+
+  with MedBDataMod, ODSMedical do begin
+    ODSMedical.RefreshRecord;
+    ODSMedical.FieldByName('begindate').AsDateTime := edBeginDate.DateTime;
+    ODSMedical.FieldByName('enddate').AsDateTime := edEndDate.DateTime;
+    ODSMedical.FieldByName('cid').AsInteger := DSContract.FieldByName('id').AsInteger;
+    getChecks();
+    ODSMedical.Post;
+    ODSMedical.RefreshRecord;
+
+  end;
+
+   with MedBDataMod, DSins_med_suggestion do begin
+    DSins_med_suggestion.RefreshRecord;
+    DSins_med_suggestion.FieldByName('med_id').AsInteger := ODSMedical.FieldByName('id').AsInteger;
+    DSins_med_suggestion.Post;
+    DSins_med_suggestion.RefreshRecord;
+
+  end;
+
+ end;
+
+  if op_type ='Edit' then
+ begin
+    //showmessage('salam');
+
+  with MedBDataMod, DSContract do
+     begin
+
+          //DSContract.RefreshRecord;
+          DSContract.Edit;
+          //FieldByName('BNF_TYPE').AsInteger:= ComboBox1.ItemIndex;
+          FieldByName('kli_id').AsInteger := DBLookupComboBox2.KeyValue;
+          FieldByName('ins_date').AsDateTime := edInsDate.DateTime;
+          FieldByName('begin_date').AsDateTime := edBeginDate.DateTime;
+          FieldByName('end_date').AsDateTime := edEndDate.DateTime;
+                //showmessage(DBEdit9.Text);
+          DSContract.FieldByName('policy_num').AsString:= DBEdit9.Text;
+          //DSContract.FieldByName('valute_id').AsInteger:= DBLookupComboBox4.KeyValue;
+          post;
+          DSContract.RefreshRecord;
+          CID:=DSContract.FieldByName('id').AsInteger;
+
+       end;
+
+
+  with MedBDataMod, ODSMedical do begin
+    //ODSMedical.RefreshRecord;
+    ODSMedical.Edit;
+    FieldByName('begindate').AsDateTime := edBeginDate.DateTime;
+    FieldByName('enddate').AsDateTime := edEndDate.DateTime;
+    FieldByName('cid').AsInteger := DSContract.FieldByName('id').AsInteger;
+    getChecks();
+    ODSMedical.Post;
+    RefreshRecord;
+
+  end;
+
+  with MedBDataMod, DSins_med_suggestion do begin
+     DSins_med_suggestion.Edit;
+    //DSins_med_suggestion.RefreshRecord;
+    DSins_med_suggestion.FieldByName('med_id').AsInteger := ODSMedical.FieldByName('id').AsInteger;
+    DSins_med_suggestion.Post;
+    DSins_med_suggestion.RefreshRecord;
+
+  end;
+
+ end;
+   { if op_type = 'Insert' then
+    begin
+     a:=OPCOMMON.CallIntegerFunction('newinsurance', [2,
+                                                  FieldByName('ID').asFloat,
+                                                  FieldByName('begindate').AsDateTime,
+                                                  FieldByName('enddate').AsDateTime,
+                                                  FieldByName('kli_id').AsFloat]);
+      OPCOMMON.CallProcedure('upd_med',[a,FieldByName('ID').asFloat]);
+     end;
+
+    if op_type = 'Edit' then
+    begin
+     OPCOMMON.CallBooleanFunction('setblankdata', [2,
+                                                  FieldByName('ID').asFloat,
+                                                  FieldByName('begindate').AsDateTime,
+                                                  FieldByName('enddate').AsDateTime,
+                                                  FieldByName('kli_id').AsFloat]);
+     end;
+
+
+    op_type:='Edit';  }
+
+      with MedBDataMod, OPCOMMON do
+   begin
+     c_acc:=CallIntegerFunction('get_acc_id',[CID]);
+     if c_acc=0 then
+       begin
+    CallProcedure('account_open',[CID,DBLookupComboBox5.KeyValue]);
+       end;
+   end;
+
+  {except
+   on E:Exception do begin
+    hbErrMsg.ShowMessage(E.Message);
+    Result := false;
+   end;
+  end;  }
+end;
+
+procedure TfmMedBlank.BitBtn1Click(Sender: TObject);
+begin
+MedBDataMod.DSContract.RefreshRecord;
+MedBDataMod.ODSMedical.RefreshRecord;
+//MedBDataMod.DSContract.Edit;
+//MedBDataMod.ODSMedical.Edit;
+
+  if SaveData() or IsSaved then
+   PostMessage(FOwnerHandle, WM_ModalResult, mrOk, 0);
+end;
+
+procedure TfmMedBlank.BitBtn2Click(Sender: TObject);
+begin
+  PostMessage(FOwnerHandle, WM_ModalResult, mrCancel, 0);
+
+
+end;
+
+procedure TfmMedBlank.btEmployesClick(Sender: TObject);
+begin
+  with MedBDataMod, ODSEmployees do
+  try
+    SetVariable('MED_ID', ODSMedicalID.Value);
+    Open;
+    ODSOccupation.open;
+    fmEmploees := TfmEmploees.Create(Self);
+    fmEmploees.ShowModal;
+  finally
+    Close;
+    ODSOccupation.Close;
+    fmEmploees.Free
+  end;
+end;
+
+procedure TfmMedBlank.btApplyClick(Sender: TObject);
+begin
+  op_type:=Get_Params('Mod');
+
+   if SaveData() then btApply.Enabled := False;
+
+   op_type:='Edit';
+
+  btSuggestion.Enabled := True;
+  btEmployes.Enabled := True;
+end;
+
+procedure TfmMedBlank.DBEdit1KeyPress(Sender: TObject; var Key: Char);
+begin
+  if Key = #13 then
+     begin
+       FindNextControl(ActiveControl,true,true,false).SetFocus;
+       Key := #0
+     end
+  else
+     btApply.Enabled := True;
+end;
+
+procedure TfmMedBlank.DBEdit9KeyPress(Sender: TObject; var Key: Char);
+begin
+if not (Key in ['A'..'Z','a'..'z','0'..'9',#8,'/','-'] )then begin Key:=#0; end;
+end;
+
+procedure TfmMedBlank.setChecks;
+var
+   i : Integer;
+begin
+  with MedBDataMod, ODSMedical do
+  for i:=0 to FieldCount-1 do
+    if Fields[i].Tag = 777 then
+      setChecksByName(Fields[i].FieldName, Fields[i].AsInteger);
+end;
+
+function TfmMedBlank.getChecksByName(fieldname : String):Integer;
+var
+   res : Integer;
+begin
+  res := 0;
+  with MedBDataMod, ODSMedical, gbChecks do begin
+   if TCheckBox(FindChildControl('chb'+fieldname+'a')).Checked then
+      res := res + TCheckBox(FindChildControl('chb'+fieldname+'a')).Tag;
+   if TCheckBox(FindChildControl('chb'+fieldname+'b')).Checked then
+      res := res + TCheckBox(FindChildControl('chb'+fieldname+'b')).Tag;
+   if TCheckBox(FindChildControl('chb'+fieldname+'c')).Checked then
+      res := res + TCheckBox(FindChildControl('chb'+fieldname+'c')).Tag;
+  end;
+  result := res;
+end;
+
+procedure TfmMedBlank.getChecks;
+var
+   i : Integer;
+begin
+  with MedBDataMod, ODSMedical do
+  for i:=0 to FieldCount-1 do
+    if Fields[i].Tag = 777 then
+      Fields[i].AsInteger := getChecksByName(Fields[i].FieldName);
+end;
+
+procedure TfmMedBlank.setChecksByName(chbname : String; value : integer);
+begin
+   with gbChecks do
+   case value of
+     7 : begin
+           TCheckBox(FindChildControl('chb'+chbname+'a')).Checked := true;
+           TCheckBox(FindChildControl('chb'+chbname+'b')).Checked := true;
+           TCheckBox(FindChildControl('chb'+chbname+'c')).Checked := true;
+         end;
+     6 : begin
+           TCheckBox(FindChildControl('chb'+chbname+'a')).Checked := true;
+           TCheckBox(FindChildControl('chb'+chbname+'b')).Checked := true;
+         end;
+     5 : begin
+           TCheckBox(FindChildControl('chb'+chbname+'a')).Checked := true;
+           TCheckBox(FindChildControl('chb'+chbname+'c')).Checked := true;
+         end;
+     3 : begin
+           TCheckBox(FindChildControl('chb'+chbname+'b')).Checked := true;
+           TCheckBox(FindChildControl('chb'+chbname+'c')).Checked := true;
+         end;
+     4 : TCheckBox(FindChildControl('chb'+chbname+'a')).Checked := true;
+     2 : TCheckBox(FindChildControl('chb'+chbname+'b')).Checked := true;
+     1 : TCheckBox(FindChildControl('chb'+chbname+'c')).Checked := true;
+   end;
+
+end;
+
+procedure TfmMedBlank.gbChecksDblClick(Sender: TObject);
+begin
+   with gbChecks do
+     TCheckBox(FindChildControl('chbINPATSERVa')).Checked := true;
+end;
+
+procedure TfmMedBlank.btSuggestionClick(Sender: TObject);
+var
+   params : TStringList;
+begin
+
+with MedBDataMod,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['SUGGESTIONCONTRACT_MEDICAL']);
+ end;
+
+   params := TStringList.Create;
+   with MedBDataMod do begin
+     params.Values['MED_ID'] := IntToStr(ODSMedicalID.Value);
+     params.Values['KLI_ID'] := IntToStr(ODSCustsID.Value);
+   end;
+   with pmcSuggestion do begin
+     ShowModal(StringToGuid('{8488AAD4-B4AC-42D2-B3F4-53A042977147}'),params )
+   end;
+   params.Free;
+
+end;
+
+procedure TfmMedBlank.Button1Click(Sender: TObject);
+begin
+with MedBDataMod,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['SEEBARDERO_PREMIYA']);
+ end;
+loadPlugin('Reinsurance.bpl','');
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TfmMedBlank,
+    Class_fmMedBlank,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

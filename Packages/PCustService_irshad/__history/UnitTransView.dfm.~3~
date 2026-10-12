@@ -1,0 +1,302 @@
+object FormTransView: TFormTransView
+  Left = 353
+  Top = 109
+  Caption = 'FormTransView'
+  ClientHeight = 554
+  ClientWidth = 791
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'MS Sans Serif'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poDesktopCenter
+  OnCreate = FormCreate
+  OnKeyPress = FormKeyPress
+  PixelsPerInch = 96
+  TextHeight = 13
+  object GroupBoxAcc: TGroupBox
+    Left = 0
+    Top = 0
+    Width = 791
+    Height = 217
+    Align = alTop
+    Caption = #1065#1077#1089#1072#1073
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 0
+    object DBGridMainState: TDBGrid
+      Left = 2
+      Top = 15
+      Width = 787
+      Height = 158
+      Align = alClient
+      DataSource = DataModPCustService.DSMainState
+      FixedColor = 9179948
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit, dgTitleClick, dgTitleHotTrack]
+      ParentFont = False
+      ReadOnly = True
+      TabOrder = 0
+      TitleFont.Charset = DEFAULT_CHARSET
+      TitleFont.Color = clWindowText
+      TitleFont.Height = -11
+      TitleFont.Name = 'MS Sans Serif'
+      TitleFont.Style = []
+      Columns = <
+        item
+          Color = clBtnFace
+          Expanded = False
+          FieldName = 'ACCOUNTNUMBER'
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          Title.Caption = 'Hesab n'#246'mresi'
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 180
+          Visible = True
+        end
+        item
+          Color = clInactiveCaption
+          Expanded = False
+          FieldName = 'CURRENCYID'
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          Title.Alignment = taCenter
+          Title.Caption = 'Val.'
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 45
+          Visible = True
+        end
+        item
+          Color = clBtnFace
+          Expanded = False
+          FieldName = 'ACCOUNTNAME'
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          Title.Caption = 'Hesab'#305'n ad'#305
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 556
+          Visible = True
+        end>
+    end
+    object PanelN: TPanel
+      Left = 2
+      Top = 173
+      Width = 787
+      Height = 42
+      Align = alBottom
+      BevelInner = bvRaised
+      BevelOuter = bvLowered
+      TabOrder = 1
+      object LabelTurnFirst: TLabel
+        Left = 5
+        Top = 17
+        Width = 106
+        Height = 13
+        Caption = 'G'#252'n'#252'n '#601'vv'#601'lin'#601' qal'#305'q :'
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+      end
+      object LabelTurnEnd: TLabel
+        Left = 248
+        Top = 17
+        Width = 101
+        Height = 13
+        Caption = 'G'#252'n'#252'n sonuna qal'#305'q :'
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+      end
+      object DBEditTurnBeg: TDBEdit
+        Left = 115
+        Top = 14
+        Width = 121
+        Height = 21
+        Color = clInfoBk
+        DataField = 'PokOstat'
+        DataSource = DataModPCustService.DSMainState
+        TabOrder = 0
+      end
+      object DBEditTurnEnd: TDBEdit
+        Left = 352
+        Top = 14
+        Width = 121
+        Height = 21
+        Color = clInfoBk
+        DataField = 'EndPokOstat'
+        DataSource = DataModPCustService.DSMainState
+        TabOrder = 1
+      end
+    end
+  end
+  object GroupBoxTrans: TGroupBox
+    Left = 0
+    Top = 217
+    Width = 791
+    Height = 337
+    Align = alClient
+    Caption = #1071#1084#1103#1083#1080#1081#1081#1072#1090#1083#1072#1088
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 1
+    object DBGridExtractTrans: TDBGrid
+      Left = 2
+      Top = 15
+      Width = 787
+      Height = 320
+      Align = alClient
+      DataSource = DataModPCustService.DSExtractTrans
+      FixedColor = 9179948
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit, dgTitleClick, dgTitleHotTrack]
+      ParentFont = False
+      ReadOnly = True
+      TabOrder = 0
+      TitleFont.Charset = DEFAULT_CHARSET
+      TitleFont.Color = clWindowText
+      TitleFont.Height = -11
+      TitleFont.Name = 'MS Sans Serif'
+      TitleFont.Style = []
+      Columns = <
+        item
+          Color = clBtnFace
+          Expanded = False
+          FieldName = 'pairaccountname'
+          Title.Caption = 'Qar'#351#305' hesab'
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 180
+          Visible = True
+        end
+        item
+          Alignment = taCenter
+          Color = clInactiveCaption
+          Expanded = False
+          FieldName = 'PairCurrencyId'
+          Title.Alignment = taCenter
+          Title.Caption = 'Val.'
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 45
+          Visible = True
+        end
+        item
+          Color = clBtnFace
+          Expanded = False
+          FieldName = 'Dat'
+          Title.Caption = 'Tarix'
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 84
+          Visible = True
+        end
+        item
+          Color = clBtnFace
+          Expanded = False
+          FieldName = 'debit'
+          Title.Caption = 'Debit'
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 114
+          Visible = True
+        end
+        item
+          Color = clBtnFace
+          Expanded = False
+          FieldName = 'kredit'
+          Title.Caption = 'Kredit'
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 112
+          Visible = True
+        end
+        item
+          Color = clBtnFace
+          Expanded = False
+          FieldName = 'ldebit'
+          Title.Caption = 'Debit.Ekv'
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 117
+          Visible = True
+        end
+        item
+          Color = clBtnFace
+          Expanded = False
+          FieldName = 'lkredit'
+          Title.Caption = 'Kredit.Ekv'
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 124
+          Visible = True
+        end>
+    end
+  end
+end

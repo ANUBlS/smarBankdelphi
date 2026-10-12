@@ -1,0 +1,58 @@
+unit frmsubbarderoimpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, XFSCtrls, Grids, XDBGrids, ExtCtrls;
+
+type
+  Tfrmsubbardero = class(TForm)
+    XFPanel1: TXFPanel;
+    XFGroupBox1: TXFGroupBox;
+    XDBGrid1: TXDBGrid;
+    XFButton4: TXFButton;
+    XFButton5: TXFButton;
+    XFButton3: TXFButton;
+    XFPanel2: TXFPanel;
+    XFButton2: TXFButton;
+    procedure XFButton2Click(Sender: TObject);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure XFButton5Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  frmsubbardero: Tfrmsubbardero;
+
+implementation
+uses frmaddloss_BarderoImpl,DMreinsuranceImpl,CommanParametrs, FrmreinsuranceImpl,sboapiDataModuleImpl,
+  frmaddsub_barderoimpl;
+
+{$R *.dfm}
+
+procedure Tfrmsubbardero.FormCreate(Sender: TObject);
+begin
+frmaddsub_bardero:=Tfrmaddsub_bardero.create(self);
+end;
+
+procedure Tfrmsubbardero.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+if ord(key)=vk_escape then  close;
+end;
+
+procedure Tfrmsubbardero.XFButton2Click(Sender: TObject);
+begin
+close;
+end;
+
+procedure Tfrmsubbardero.XFButton5Click(Sender: TObject);
+begin
+frmaddsub_bardero.showmodal;
+end;
+
+end.

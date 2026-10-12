@@ -1,0 +1,24 @@
+library ReportAnalysOfDeposit;
+
+uses
+  ComServ,
+  ReportAnalysOfDeposit_TLB in 'ReportAnalysOfDeposit_TLB.pas',
+  frmReportAnalysOfDepositImpl in 'frmReportAnalysOfDepositImpl.pas' {frmReportAnalysOfDeposit: TActiveForm} {frmReportAnalysOfDeposit: CoClass},
+  dmReportAnalysOfDepositImpl in 'dmReportAnalysOfDepositImpl.pas' {s: TDataModule},
+  frmDepSettImpl in 'frmDepSettImpl.pas' {frmDepSett},
+  frmDetailInfAnalysOfDepImpl in 'frmDetailInfAnalysOfDepImpl.pas' {frmDetailInfAnalysOfDep};
+
+{$E ocx}
+
+exports
+  DllGetClassObject,
+  DllCanUnloadNow,
+  DllRegisterServer,
+  DllUnregisterServer;
+
+{$R *.TLB}
+
+{$R *.RES}
+
+begin
+end.

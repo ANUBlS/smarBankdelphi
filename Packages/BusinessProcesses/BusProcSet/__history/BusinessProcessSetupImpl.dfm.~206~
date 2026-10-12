@@ -1,0 +1,527 @@
+object BusinessProcessSetup: TBusinessProcessSetup
+  Left = 0
+  Top = 140
+  Width = 1227
+  Height = 724
+  Caption = 'BusinessProcessSetup'
+  Color = clCream
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  OnCreate = ActiveFormCreate
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 1227
+    Height = 305
+    Align = alClient
+    BevelInner = bvRaised
+    BevelOuter = bvLowered
+    TabOrder = 0
+    object Label1: TLabel
+      Left = 32
+      Top = 104
+      Width = 67
+      Height = 13
+      Caption = 'Vid_OP_Name'
+    end
+    object XDBGrid1: TXDBGrid
+      Left = 2
+      Top = 2
+      Width = 1223
+      Height = 276
+      Align = alClient
+      DataSource = DMBusProcSet.DS_SB_BUSINESS_PROCESSES
+      GridStyle.VisualStyle = vsXPStyle
+      TabOrder = 0
+      TitleLinesCount = 2
+      Totals.Color = clNavy
+      OnTitleClick = XDBGrid1TitleClick
+      Columns = <
+        item
+          Expanded = False
+          FieldName = 'ID'
+          Title.Alignment = taCenter
+          Visible = True
+          Width = 61
+        end
+        item
+          Expanded = False
+          FieldName = 'NAME'
+          Title.Alignment = taCenter
+          Title.Caption = #1041#1080#1079#1085#1077#1089' '#1087#1088#1086#1089#1077#1089#1080#1085' '#1072#1076#1099
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clWindowText
+          Title.Font.Height = -11
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = []
+          Visible = True
+          Width = 210
+        end
+        item
+          Expanded = False
+          FieldName = 'ACCBALCN_A'
+          Title.Alignment = taCenter
+          Title.Caption = 'Balans hesablar'#305' (A)'
+          Visible = True
+          Width = 118
+        end
+        item
+          Expanded = False
+          FieldName = 'ACCSYMB_A'
+          Title.Alignment = taCenter
+          Title.Caption = 'Hesab simvollar'#305' (A)'
+          Visible = True
+          Width = 119
+        end
+        item
+          Expanded = False
+          FieldName = 'ACCSYMB_A'
+          Title.Alignment = taCenter
+          Title.Caption = 'Valyuta (A)'
+          Visible = True
+          Width = 102
+        end
+        item
+          Expanded = False
+          FieldName = 'ACCBALCN_B'
+          Title.Alignment = taCenter
+          Title.Caption = 'Balans hesablar'#305' (B)'
+          Visible = True
+          Width = 107
+        end
+        item
+          Expanded = False
+          FieldName = 'ACCSYMB_B'
+          Title.Alignment = taCenter
+          Title.Caption = 'Hesab simvollar'#305' (B)'
+          Visible = True
+          Width = 105
+        end
+        item
+          Expanded = False
+          FieldName = 'ACCCURR_B'
+          Title.Alignment = taCenter
+          Title.Caption = 'Valyuta (B)'
+          Visible = True
+          Width = 93
+        end
+        item
+          Expanded = False
+          FieldName = 'ACCBALCN_C'
+          Title.Alignment = taCenter
+          Title.Caption = 'Balans hesablar'#305' (C)'
+          Visible = True
+          Width = 115
+        end
+        item
+          Expanded = False
+          FieldName = 'ACCSYMB_C'
+          Title.Alignment = taCenter
+          Title.Caption = 'Hesab simvollar'#305' (C)'
+          Visible = True
+          Width = 102
+        end
+        item
+          Expanded = False
+          FieldName = 'ACCCURR_C'
+          Title.Alignment = taCenter
+          Title.Caption = 'Valyuta (C)'
+          Visible = True
+          Width = 81
+        end
+        item
+          DropDownRows = 4
+          Expanded = False
+          FieldName = 'FORMNUM'
+          PickList.Strings = (
+            ''
+            '1'
+            '2'
+            '3'
+            '4'
+            '5'
+            '6')
+          PickOptions = [poDropDownList, poListItemsOnly, poSelectPickText, poAcceptPickList]
+          QuickDraw = False
+          SuppressRTL = True
+          Title.Alignment = taCenter
+          Title.Caption = ' Forma n'#246'mr'#601'si'
+          Title.VAlignment = tvTopJustify
+          Visible = True
+          Width = 62
+        end
+        item
+          Expanded = False
+          FieldName = 'CUST_TYPE'
+          PickList.Strings = (
+            ''
+            '0'
+            '1'
+            '2')
+          Title.Caption = ' M'#252#351't'#601'rinin          tipi'
+          Visible = True
+        end>
+    end
+    object DBNavigator1: TDBNavigator
+      Left = 2
+      Top = 278
+      Width = 1223
+      Height = 25
+      DataSource = DMBusProcSet.DS_SB_BUSINESS_PROCESSES
+      VisibleButtons = [nbInsert, nbDelete, nbEdit, nbPost, nbCancel, nbRefresh]
+      Align = alBottom
+      Flat = True
+      TabOrder = 1
+    end
+  end
+  object Panel2: TPanel
+    Left = 0
+    Top = 305
+    Width = 1227
+    Height = 214
+    Align = alBottom
+    BevelInner = bvRaised
+    BevelOuter = bvLowered
+    Color = clCream
+    ParentBackground = False
+    TabOrder = 1
+    DesignSize = (
+      1227
+      214)
+    object DBLookupComboBox1: TDBLookupComboBox
+      Left = 2
+      Top = 185
+      Width = 210
+      Height = 21
+      Anchors = [akLeft, akBottom]
+      DataField = 'DEBT'
+      KeyField = 'ID'
+      ListField = 'ACC_NO'
+      TabOrder = 0
+    end
+    object DBLookupComboBox2: TDBLookupComboBox
+      Left = 218
+      Top = 185
+      Width = 210
+      Height = 21
+      Anchors = [akLeft, akBottom]
+      DataField = 'KREDIT'
+      KeyField = 'ID'
+      ListField = 'ACC_NO'
+      TabOrder = 1
+    end
+    object DBEdit1: TDBEdit
+      Left = 434
+      Top = 185
+      Width = 70
+      Height = 21
+      Anchors = [akLeft, akBottom]
+      DataField = 'KASSA_B'
+      TabOrder = 2
+    end
+    object DBEdit2: TDBEdit
+      Left = 510
+      Top = 185
+      Width = 139
+      Height = 21
+      Anchors = [akLeft, akBottom]
+      DataField = 'KASSA_Z'
+      TabOrder = 3
+    end
+    object DBEdit3: TDBEdit
+      Left = 655
+      Top = 185
+      Width = 264
+      Height = 21
+      Anchors = [akLeft, akBottom]
+      DataField = 'NAME'
+      TabOrder = 4
+    end
+    object DBLookupComboBox3: TDBLookupComboBox
+      Left = 923
+      Top = 185
+      Width = 85
+      Height = 21
+      Anchors = [akLeft, akBottom]
+      DataField = 'REPORTID'
+      KeyField = 'ID'
+      ListField = 'NAME'
+      TabOrder = 5
+    end
+    object DBLookupComboBox4: TDBLookupComboBox
+      Left = 1014
+      Top = 187
+      Width = 90
+      Height = 21
+      Anchors = [akLeft, akBottom]
+      DataField = 'COUNTRID'
+      KeyField = 'ID'
+      ListField = 'NAME'
+      TabOrder = 6
+    end
+    object XDBGrid3: TXDBGrid
+      Left = 2
+      Top = 2
+      Width = 1223
+      Height = 210
+      Align = alClient
+      DataSource = DMBusProcSet.DS_sb_business_proc_childs
+      GridStyle.VisualStyle = vsXPStyle
+      TabOrder = 7
+      OnCellDblClick = XDBGrid3CellDblClick
+      Columns = <
+        item
+          Expanded = False
+          FieldName = 'OPERID'
+          ReadOnly = True
+          Title.Alignment = taCenter
+          Title.Caption = #1057#1099#1088#1072' '#8470
+          Visible = True
+          Width = 51
+        end
+        item
+          Expanded = False
+          FieldName = 'DEBTACC'
+          ReadOnly = True
+          Title.Caption = '              '#1044#1077#1073#1077#1090' '#1065#1077#1089#1072#1073
+          Visible = True
+          Width = 190
+        end
+        item
+          Expanded = False
+          FieldName = 'KREDACC'
+          ReadOnly = True
+          Title.Caption = '                  '#1050#1088#1077#1076#1080#1090' '#1065#1077#1089#1072#1073
+          Visible = True
+          Width = 190
+        end
+        item
+          Expanded = False
+          FieldName = 'KASSA_B'
+          Title.Alignment = taCenter
+          Title.Caption = #1050#1072#1089#1089#1072' '#1057#1080#1084'.'
+          Visible = True
+          Width = 62
+        end
+        item
+          Expanded = False
+          FieldName = 'NAME'
+          Title.Alignment = taCenter
+          Title.Caption = #1058#1103#1081#1080#1085#1072#1090#1099
+          Visible = True
+          Width = 240
+        end
+        item
+          Expanded = False
+          FieldName = 'KASSA_Z_NAME'
+          ReadOnly = True
+          Title.Alignment = taCenter
+          Title.Caption = #1050#1086#1085#1074'. '#1090#1103#1081'.'
+          Visible = True
+          Width = 127
+        end
+        item
+          Expanded = False
+          FieldName = 'REPORTDESC'
+          Title.Caption = '                 Hesabat t'#601'yinat'#305
+          Visible = True
+          Width = 200
+        end
+        item
+          Expanded = False
+          FieldName = 'VID_OP_NAME'
+          Title.Caption = '           '#399'm'#601'liyyat'#305'n tipi'
+          Visible = True
+          Width = 130
+        end
+        item
+          Expanded = False
+          FieldName = 'CNTR_NAME'
+          Title.Caption = '            '#214'lk'#601'l'#601'r'
+          Visible = True
+          Width = 100
+        end
+        item
+          Expanded = False
+          FieldName = 'DEP_OPERID'
+          Title.Alignment = taCenter
+          Title.Caption = 'As'#305'l'#305' oldu'#287'u '#601'm'#601'liyyat n'#246'mr'#601'si'
+          Visible = True
+          Width = 160
+        end
+        item
+          Expanded = False
+          FieldName = 'DEP_AMT'
+          Title.Alignment = taCenter
+          Title.Caption = 'As'#305'l'#305' oldu'#287'u m'#601'bl'#601#287
+          Visible = True
+          Width = 120
+        end
+        item
+          Expanded = False
+          FieldName = 'RATEPOS'
+          Title.Alignment = taCenter
+          Title.Caption = 'M'#601'z'#601'nn'#601'nin m'#246'vqeyi'
+          Visible = True
+          Width = 120
+        end
+        item
+          Expanded = False
+          FieldName = 'BALCN_4'
+          Title.Alignment = taCenter
+          Title.Caption = '[D>>]..Balans hesab'#305
+          Visible = True
+          Width = 120
+        end
+        item
+          Expanded = False
+          FieldName = 'SYMB_4'
+          Title.Alignment = taCenter
+          Title.Caption = '[D>>]..Hesab simvolu'
+          Visible = True
+          Width = 120
+        end
+        item
+          Expanded = False
+          FieldName = 'CURR_4'
+          Title.Alignment = taCenter
+          Title.Caption = '[D>>]..Valyuta'
+          Visible = True
+          Width = 65
+        end
+        item
+          Expanded = False
+          FieldName = 'BRANCH_4'
+          Title.Alignment = taCenter
+          Title.Caption = '[D>>]..Filial'
+          Visible = True
+          Width = 85
+        end
+        item
+          Expanded = False
+          FieldName = 'VID_OP'
+          Visible = False
+        end>
+    end
+  end
+  object Panel3: TPanel
+    Left = 0
+    Top = 519
+    Width = 1227
+    Height = 205
+    Align = alBottom
+    BevelInner = bvRaised
+    BevelOuter = bvLowered
+    TabOrder = 2
+    object XDBGrid2: TXDBGrid
+      Left = 2
+      Top = 31
+      Width = 1223
+      Height = 147
+      Align = alClient
+      DataSource = DMBusProcSet.DS_SB_BUSINESS_PROC_TARIFS
+      GridStyle.VisualStyle = vsXPStyle
+      TabOrder = 0
+      Columns = <
+        item
+          Expanded = False
+          FieldName = 'MINAMT'
+          Title.Alignment = taCenter
+          Title.Caption = #1052#1080#1085'. '#1084#1103#1073#1083#1103#1100
+          Visible = True
+          Width = 130
+        end
+        item
+          Expanded = False
+          FieldName = 'MAXAMT'
+          Title.Alignment = taCenter
+          Title.Caption = 'M'#1072#1082#1089'. '#1084#1103#1073#1083#1103#1100
+          Visible = True
+          Width = 144
+        end
+        item
+          Expanded = False
+          FieldName = 'AMTPERCENT'
+          Title.Alignment = taCenter
+          Title.Caption = #1060#1072#1080#1079
+          Visible = True
+          Width = 104
+        end
+        item
+          Expanded = False
+          FieldName = 'AMTVALUE'
+          Title.Alignment = taCenter
+          Title.Caption = #1052#1103#1073#1083#1103#1100
+          Visible = True
+          Width = 126
+        end
+        item
+          Expanded = False
+          FieldName = 'MINTIME'
+          Title.Caption = '-Dan'
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'MAXTIME'
+          Title.Caption = '-D'#601'k'
+          Visible = True
+        end>
+    end
+    object DBNavigator3: TDBNavigator
+      Left = 2
+      Top = 178
+      Width = 1223
+      Height = 25
+      DataSource = DMBusProcSet.DS_SB_BUSINESS_PROC_TARIFS
+      VisibleButtons = [nbInsert, nbDelete, nbEdit, nbPost, nbCancel, nbRefresh]
+      Align = alBottom
+      Flat = True
+      TabOrder = 1
+      OnClick = DBNavigator3Click
+    end
+    object Panel4: TPanel
+      Left = 2
+      Top = 2
+      Width = 1223
+      Height = 29
+      Align = alTop
+      TabOrder = 2
+      object Label2: TLabel
+        Left = 9
+        Top = 5
+        Width = 28
+        Height = 13
+        Caption = 'Qrup:'
+      end
+      object DBLookupComboBox5: TDBLookupComboBox
+        Left = 43
+        Top = 4
+        Width = 104
+        Height = 21
+        KeyField = 'ID'
+        ListField = 'NAME'
+        ListSource = DMBusProcSet.ClientGrp
+        TabOrder = 0
+        OnCloseUp = DBLookupComboBox5CloseUp
+      end
+      object DBNavigator2: TDBNavigator
+        Left = 167
+        Top = 5
+        Width = 1044
+        Height = 19
+        DataSource = DMBusProcSet.DS_sb_business_proc_childs
+        VisibleButtons = [nbInsert, nbDelete, nbEdit, nbPost, nbCancel, nbRefresh]
+        Flat = True
+        TabOrder = 1
+        OnClick = DBNavigator2Click
+      end
+    end
+  end
+end

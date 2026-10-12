@@ -1,0 +1,865 @@
+﻿unit RateManagementFormImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActiveX, AxCtrls, RateManagement_TLB, StdVcl, StdCtrls, DBCtrls,
+  ExtCtrls, Grids, DBGrids, Db, OracleData, ActnList, SBPlgAx50_TLB,
+  ImgList, Mask, Oracle, IdBaseComponent, IdComponent, IdTCPConnection,
+    ComCtrls, Buttons,Variants;
+
+type
+  EOperationNotPermited = class(Exception);
+
+  TRateManagementForm = class(TActiveForm, IRateManagementForm, IIconExporter)
+    RatesGB: TGroupBox;
+    Panel2: TPanel;
+    DBNavigator1: TDBNavigator;
+    DataSource1: TDataSource;
+    RatesDataSet: TOracleDataSet;
+    ActionList1: TActionList;
+    RefreshAction: TAction;
+    CommitNewRates: TAction;
+    ChangeRates: TAction;
+    Panel1: TPanel;
+    CommitButton: TButton;
+    RevertButton: TButton;
+    RevertAction: TAction;
+    ImageList1: TImageList;
+    Panel3: TPanel;
+    Label1: TLabel;
+    DBEdit1: TDBEdit;
+    Recalculate: TAction;
+    SBRateManagement: TOraclePackage;
+    RatesDataSetCURRENCYID: TIntegerField;
+    RatesDataSetOSTAT: TFloatField;
+    RatesDataSetNAME: TWideStringField;
+    RatesDataSetDAT: TDateTimeField;
+    RatesDataSetBUY_RATE: TFloatField;
+    RatesDataSetSELL_RATE: TFloatField;
+    SpeedButton1: TSpeedButton;
+    OracleDataSet1: TOracleDataSet;
+    DataSource2: TDataSource;
+    OracleDataSet1VAL_COD: TWideStringField;
+    OracleDataSet1VAL_NAME: TWideStringField;
+    OracleDataSet1OSTAT: TFloatField;
+    GroupBox1: TGroupBox;
+    Panel4: TPanel;
+    DBGrid2: TDBGrid;
+    RatesDataSetVAL_NAME: TWideStringField;
+    OracleDataSet2: TOracleDataSet;
+    GroupBox2: TGroupBox;
+    DBGrid1: TDBGrid;
+    BitBtn1: TBitBtn;
+    OracleQuery1: TOracleQuery;
+    Button1: TButton;
+    Panel5: TPanel;
+    DBGrid3: TDBGrid;
+    dsoperkurs: TOracleDataSet;
+    dsoperkursVAL_NAME: TWideStringField;
+    dsoperkursOSTAT: TFloatField;
+    dsoperkursDAT: TDateTimeField;
+    dsroperkurs: TDataSource;
+    sysdat: TOracleDataSet;
+    sysdatTEK_DAT: TDateTimeField;
+    Fsbsys: TOraclePackage;
+    dsoperkursSELL_RATE: TFloatField;
+    dsoperkursBUY_RATE: TFloatField;
+    Panel6: TPanel;
+    DBNavigator2: TDBNavigator;
+    Button3: TButton;
+    Button2: TButton;
+    DateTimePicker1: TDateTimePicker;
+    Button6: TButton;
+    ExchMgr: TOraclePackage;
+    Panel7: TPanel;
+    OracleDataSet3: TOracleDataSet;
+    DataSource3: TDataSource;
+    Button5: TButton;
+    Timer1: TTimer;
+    OracleDataSet4: TOracleDataSet;
+    OracleDataSet4OPERINSERT: TFloatField;
+    OracleDataSet4OPERUPDATE: TFloatField;
+    OracleDataSet4OPERDELETE: TFloatField;
+    OracleDataSet5: TOracleDataSet;
+    OracleDataSet5SID: TFloatField;
+    OracleDataSet5SERIAL: TFloatField;
+    OracleDataSet5AUDSID: TFloatField;
+    OracleDataSet5USER: TFloatField;
+    OracleDataSet5USERNAME: TWideStringField;
+    OracleDataSet5STATUS: TWideStringField;
+    OracleDataSet5OSUSER: TWideStringField;
+    OracleDataSet5PROCESS: TWideStringField;
+    OracleDataSet5MACHINE: TWideStringField;
+    OracleDataSet5TERMINAL: TWideStringField;
+    OracleDataSet5PROGRAM: TWideStringField;
+    OracleDataSet5LOGON_TIME: TDateTimeField;
+    OracleDataSet5ISCURRENTUSER: TFloatField;
+    SBA_ACA: TOraclePackage;
+    dsoperkursSELL_RATE_END: TFloatField;
+    dsoperkursBUY_RATE_END: TFloatField;
+    RatesDataSetBUY_RATE_END: TFloatField;
+    RatesDataSetSELL_RATE_END: TFloatField;
+    procedure RatesDataSetBeforeDelete(DataSet: TDataSet);
+    procedure RatesDataSetBeforeInsert(DataSet: TDataSet);
+    procedure RefreshActionExecute(Sender: TObject);
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure CommitNewRatesExecute(Sender: TObject);
+    procedure RecalculateExecute(Sender: TObject);
+    procedure BitBtn1Click(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure DateTimePicker1Change(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+    procedure Button3Click(Sender: TObject);
+    procedure Button4Click(Sender: TObject);
+    procedure Button5Click(Sender: TObject);
+    procedure Timer1Timer(Sender: TObject);
+    procedure DBNavigator2Click(Sender: TObject; Button: TNavigateBtn);
+    procedure DBNavigator1Click(Sender: TObject; Button: TNavigateBtn);
+    procedure RatesDataSetAfterPost(DataSet: TDataSet);
+   private
+    { Private declarations }
+    FEvents: IRateManagementFormEvents;
+    FModified: Boolean;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+    {IIconExporter}
+    function Get_Icon: OLE_HANDLE; safecall;
+  public
+    { Public declarations }
+    procedure Initialize; override;
+  end;
+
+var
+ RatemangForm: TRateManagementForm;
+ URL :string;
+ trdelete,trupdate,trinsert :boolean;
+implementation
+
+
+uses ComObj, ComServ, sboapiDataModuleImpl, SBSystem, TemporaryTransactionCommitFormImpl,
+  RateManagementRecalculate,SBTranslateProc, StrUtils,SBSessionMgr;
+
+{$R *.DFM}
+
+{ TRateManagementForm }
+
+procedure TRateManagementForm.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_RateManagementFormPage); }
+end;
+
+procedure TRateManagementForm.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as IRateManagementFormEvents;
+end;
+
+procedure TRateManagementForm.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TRateManagementForm.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TRateManagementForm.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TRateManagementForm.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TRateManagementForm.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TRateManagementForm.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TRateManagementForm.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TRateManagementForm.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TRateManagementForm.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TRateManagementForm.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TRateManagementForm.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TRateManagementForm.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TRateManagementForm.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TRateManagementForm.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TRateManagementForm.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TRateManagementForm.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TRateManagementForm.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TRateManagementForm.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TRateManagementForm.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TRateManagementForm._Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TRateManagementForm.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TRateManagementForm.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TRateManagementForm.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TRateManagementForm.DateTimePicker1Change(Sender: TObject);
+begin
+dsoperkurs.Close;
+dsoperkurs.SetVariable('PDATE',DateTimePicker1.DateTime);
+dsoperkurs.Open;
+DBGrid3.Refresh;
+
+end;
+
+procedure TRateManagementForm.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TRateManagementForm.DBNavigator1Click(Sender: TObject;
+  Button: TNavigateBtn);
+begin
+
+  IF (Button=nbPost) THEN
+  begin
+    if RatesDataSetBUY_RATE_END.AsInteger<RatesDataSetBUY_RATE.AsInteger
+    then
+    begin
+      ShowMessage('Alış məzənnəsi(son.)-Alış məzənnəsi(baş.)-dan kiçik ola bilməz!!!...');
+      RatesDataSetBUY_RATE.AsInteger:=0;
+    end;
+
+    if VarisNull(RatesDataSetBUY_RATE.AsInteger) then
+    begin
+      ShowMessage('Alış məzənnəsi(baş.) boş ola bilməz!!!!...');
+      RatesDataSetBUY_RATE.AsInteger:=0;
+    end;
+
+    if VarisNull(RatesDataSetBUY_RATE_END.AsInteger) then
+    begin
+      ShowMessage('Alış məzənnəsi(son.) boş ola bilməz!!!!...');
+      RatesDataSetBUY_RATE_END.AsInteger:=0;
+    end;
+
+
+    if RatesDataSetSELL_RATE_END.AsInteger<RatesDataSetSELL_RATE.AsInteger
+    then
+    begin
+      ShowMessage('Satış məzənnəsi(son.)-Satış məzənnəsi(baş.)-dan kiçik ola bilməz!!!...');
+      RatesDataSetSELL_RATE.AsInteger:=0;
+    end;
+
+    if VarisNull(RatesDataSetSELL_RATE.AsInteger) then
+    begin
+      ShowMessage('Satış məzənnəsi(baş.) boş ola bilməz!!!!...');
+      RatesDataSetSELL_RATE.AsInteger:=0;
+    end;
+
+    if VarisNull(RatesDataSetSELL_RATE_END.AsInteger) then
+    begin
+      ShowMessage('Satış məzənnəsi(son.) boş ola bilməz!!!!...');
+      RatesDataSetSELL_RATE_END.AsInteger:=0;
+    end;
+ END;
+
+
+
+end;
+
+procedure TRateManagementForm.DBNavigator2Click(Sender: TObject;
+  Button: TNavigateBtn);
+begin
+//if Button=nbpost then Timer1.Enabled:=true;
+
+end;
+
+procedure TRateManagementForm.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TRateManagementForm.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TRateManagementForm.KeyPressEvent(Sender: TObject;
+  var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TRateManagementForm.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TRateManagementForm.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TRateManagementForm.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TRateManagementForm.Set_AxBorderStyle(
+  Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TRateManagementForm.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TRateManagementForm.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TRateManagementForm.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TRateManagementForm.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TRateManagementForm.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TRateManagementForm.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TRateManagementForm.Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TRateManagementForm.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TRateManagementForm.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TRateManagementForm.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TRateManagementForm.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TRateManagementForm.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TRateManagementForm.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+procedure TRateManagementForm.Timer1Timer(Sender: TObject);
+begin
+{ dsoperkurs.Refresh;
+ OracleDataSet4.Refresh;
+
+ if (OracleDataSet4OPERINSERT.asinteger=1) and trinsert then
+ begin
+ showmessage('ins');
+ fsbsys.callprocedure('update_future_rates',[0,0]);
+ trinsert:=false;
+   Timer1.Enabled:=false;
+ end;
+
+
+  if (OracleDataSet4OPERUPDATE.AsInteger=1) and trupdate then
+ begin
+ showmessage('upd');
+ fsbsys.callprocedure('update_future_rates',[0,1]);
+ trupdate:=false;
+   Timer1.Enabled:=false;
+ end;
+
+
+  if (OracleDataSet4OPERDELETE.AsInteger=1) and trdelete then
+ begin
+ showmessage('del');
+ fsbsys.callprocedure('update_future_rates',[0,2]);
+ trdelete:=false;
+   Timer1.Enabled:=false;
+ end;     }
+
+end;
+
+
+procedure TRateManagementForm.RatesDataSetAfterPost(DataSet: TDataSet);
+begin
+   if VarisNull(RatesDataSetBUY_RATE.AsInteger) then
+    begin
+      ShowMessage('Alış məzənnəsi(baş.) boş ola bilməz!!!!...');
+      RatesDataSetBUY_RATE.AsInteger:=0;
+    end;
+
+    if VarisNull(RatesDataSetBUY_RATE_END.AsInteger) then
+    begin
+      ShowMessage('Alış məzənnəsi(son.) boş ola bilməz!!!!...');
+      RatesDataSetBUY_RATE_END.AsInteger:=0;
+    end;
+
+   if VarisNull(RatesDataSetSELL_RATE.AsInteger) then
+    begin
+      ShowMessage('Satış məzənnəsi(baş.) boş ola bilməz!!!!...');
+      RatesDataSetSELL_RATE.AsInteger:=0;
+    end;
+
+    if VarisNull(RatesDataSetSELL_RATE_END.AsInteger) then
+    begin
+      ShowMessage('Satış məzənnəsi(son.) boş ola bilməz!!!!...');
+      RatesDataSetSELL_RATE_END.AsInteger:=0;
+    end;
+
+
+  if RatesDataSetBUY_RATE.AsInteger>RatesDataSetBUY_RATE_END.AsInteger
+  then
+  begin
+    ShowMessage('Alış məzənnəsi(son.)-Alış məzənnəsi(baş.)-dan kiçik ola bilməz!!!...');
+    RatesDataSetBUY_RATE.AsInteger:=0;
+  end;
+
+  if RatesDataSetBUY_RATE.AsInteger>RatesDataSetBUY_RATE_END.AsInteger
+  then
+  begin
+    ShowMessage('Alış məzənnəsi(son.)-Alış məzənnəsi(baş.)-dan kiçik ola bilməz!!!...');
+    RatesDataSetBUY_RATE.AsInteger:=0;
+  end;
+
+end;
+
+procedure TRateManagementForm.RatesDataSetBeforeDelete(
+  DataSet: TDataSet);
+begin
+  raise EOperationNotPermited.Create('Sorry, you can not delete a currency');
+end;
+
+procedure TRateManagementForm.RatesDataSetBeforeInsert(
+  DataSet: TDataSet);
+begin
+  raise EOperationNotPermited.Create('Sorry, you can not insert a currency');
+end;
+
+procedure TRateManagementForm.RefreshActionExecute(Sender: TObject);
+begin
+  if Sb_IsDayOpened then
+    CommitButton.Action := CommitNewRates
+  else
+    CommitButton.Action := ChangeRates;
+  FModified := False;
+end;
+function Parser(Buffer,Start,Finish:string):string;
+var PosStart, PosFinish:Integer;
+begin
+  PosStart:=Pos(Start, Buffer)+ Length(Start);
+  PosFinish:=Posex(Finish, Buffer,PosStart);
+  Result := Copy(Buffer, PosStart, PosFinish - PosStart);
+end;
+procedure TRateManagementForm.ActiveFormCreate(Sender: TObject);
+var
+i:integer;
+sql,s:string;
+begin
+trdelete:=false;
+trupdate:=false;
+trinsert:=false;
+
+  RatemangForm:=self;
+  RatesDataSet.Open;
+  RefreshAction.Execute;
+  dsoperkurs.Open;
+  OracleDataSet4.Open;
+
+ { //ShowMessage('http://cbar.az/currencies/'+FormatDateTime('MM.DD.YYYY',(now))+'.xml');
+url:=IDHttp1.Get('http://cbar.az/currencies/'+FormatDateTime('DD.MM.YYYY',(now))+'.xml' );
+//ShowMessage(url);
+ for I := 0 to RatesDataSet.RecordCount-1 do
+  begin
+  if RatesDataSet.FieldByName('val_name').AsString<>'AZN' then
+  begin
+   s:=Parser(url,'<Valute Code="'+RatesDataSet.FieldByName('val_name').AsString+'">','</Valute>');
+   s:=Parser(s,'<Value>','</Value>');
+   sql:='insert into valute_cek (val_cod,val_name,ostat) values ('+''''+
+   RatesDataSet.FieldByName('val_name').AsString+''''+','+''''+RatesDataSet.FieldByName('name').AsString+''''+
+   ','+s+')';
+  // ShowMessage(sql);
+   OracleDataSet2.SQL.Text:=sql;
+ //  ShowMessage(s+'  '+RatesDataSet.FieldByName('val_name').AsString);
+  OracleDataSet2.close;
+  OracleDataSet2.open;
+   end;
+     RatesDataSet.next;
+  end;
+  GroupBox1.Caption:='Mərkəzi bankın  '+FormatDateTime('MM.ddd.YYYY',(now))+' tarixinə real məzənnələri'  ;
+  OracleDataSet1.Refresh;   }
+  SBTranslateProc.TranslateAllComponents(Self,sboapiDataModule.OrPack_SL);
+end;
+procedure TRateManagementForm.BitBtn1Click(Sender: TObject);
+var
+i:integer;
+sql,s:string;
+ begin
+{  RatesDataSet.First;
+ for I := 0 to RatesDataSet.RecordCount-1 do
+  begin
+  if RatesDataSet.FieldByName('val_name').AsString<>'AZN' then
+  begin
+   s:=Parser(url,'<Valute Code="'+RatesDataSet.FieldByName('val_name').AsString+'">','</Valute>');
+   s:=Parser(s,'<Value>','</Value>');
+   sql:='insert into valute_cek (val_cod,val_name,ostat) values ('+''''+
+   RatesDataSet.FieldByName('val_name').AsString+''''+','+''''+RatesDataSet.FieldByName('name').AsString+''''+
+   ','+s+')';
+  // ShowMessage(sql);
+   OracleDataSet2.SQL.Text:=sql;
+   //ShowMessage(s+'  '+RatesDataSet.FieldByName('val_name').AsString);
+  OracleDataSet2.close;
+  OracleDataSet2.open;
+
+   end;
+ RatesDataSet.next;
+  end;
+  OracleDataSet1.Refresh;
+{if RatesDataSet.FieldByName('dat').AsDateTime<>now then
+ begin
+ ShowMessage('Sistem tarixi real tarixnen eyni olmalıdır !');
+ EXIT;
+ end;   }
+   {
+ OracleQuery1.Execute;
+ OracleQuery1.Session.Commit;
+  RatesDataSet.close;
+  RatesDataSet.Open;  }
+end;
+
+procedure TRateManagementForm.Button1Click(Sender: TObject);
+begin
+Panel5.Visible :=not Panel5.Visible;
+sysdat.Open;
+DateTimePicker1.DateTime:=sysdat.FieldByName('tek_dat').AsDateTime;
+
+
+dsoperkurs.Close;
+dsoperkurs.SetVariable('PDATE',DateTimePicker1.DateTime);                     //DateTimePicker1.DateTime
+dsoperkurs.Open;
+
+
+end;
+
+procedure TRateManagementForm.Button2Click(Sender: TObject);
+begin
+with Fsbsys do
+ begin
+      CallProcedure('add_future_rates',[DateTimePicker1.DateTime]);
+
+ end;
+dsoperkurs.Close;
+dsoperkurs.SetVariable('PDATE',DateTimePicker1.DateTime);                     //DateTimePicker1.DateTime
+dsoperkurs.Open;
+dsoperkurs.RefreshRecord;
+
+
+
+//trinsert:=true;
+//Timer1.Enabled:=true;
+
+
+
+end;
+
+procedure TRateManagementForm.Button3Click(Sender: TObject);
+  var
+  buttonSelected : Integer;
+begin
+
+begin
+  // Show a confirmation dialog
+  buttonSelected := MessageDlg('Bu tarixə olan məzənnələr silinsinmi?',mtError, mbOKCancel, 0);
+
+  // Show the button type selected
+
+  if buttonSelected = mrOK     then
+
+  //if DateTimePicker1.DateTime=sysdat.FieldByName('tek_dat').AsDateTime then
+
+      with Fsbsys do  begin
+      CallProcedure('del_future_rates',[DateTimePicker1.DateTime]);
+      end;
+dsoperkurs.Close;
+dsoperkurs.SetVariable('PDATE',DateTimePicker1.DateTime);                     //DateTimePicker1.DateTime
+dsoperkurs.Open;
+dsoperkurs.RefreshRecord;
+            //     trdelete:=true;
+
+//Timer1.Enabled:=true;
+//showmessage('delete');
+
+end;
+end;
+procedure TRateManagementForm.Button4Click(Sender: TObject);
+var
+  F:integer;
+  dat:Tdatetime;
+  i :integer;
+begin
+  SBA_ACA.CallProcedure('checkadvancedobjectaccess',['EXCH_RATEINSERT']);
+  dat:=integer(trunc(DateTimePicker1.DateTime));
+  IF DBGrid3.DataSource.DataSet.RecordCount=0 THEN exit;
+  F:=ExchMgr.CallIntegerFunction('Ex_CourseRatesOper',[dat]);
+  oracledataset5.close;
+  oracledataset5.open;
+
+  for I :=0 to OracleDataSet5.recordcount-1 do
+  begin
+    Sb_SendMessage(OracleDataSet5.FieldByName('SID').AsString, 'Valyuta məzənnələri təzələndi');
+    OracleDataSet5.next;
+  end;
+  //ShowMessage('Kurslar valyuta dəyişmə moduluna göndərildi!....');
+
+end;
+
+procedure TRateManagementForm.Button5Click(Sender: TObject);
+begin
+     panel7.Visible:= not RatemangForm.panel7.Visible;
+end;
+
+function SearchForText_AndSelect(RichEdit: TRichEdit; SearchText: string): Boolean;
+var
+ s, StartPos, Position, Endpos: Integer;
+begin
+s:=0;
+  StartPos := 0;
+  with RichEdit do
+  begin
+    Endpos := Length(RichEdit.Text);
+    Lines.BeginUpdate;
+    while FindText(SearchText, StartPos, Endpos, [stMatchCase])<>-1 do
+    begin
+      Endpos   := Length(RichEdit.Text) - startpos;
+      Position := FindText(SearchText, StartPos, Endpos, [stMatchCase]);
+      Inc(StartPos, Length(SearchText));
+      SetFocus;
+      SelStart  := Position;
+      SelLength := Length(SearchText);
+      s:=s+1;
+    end;
+    ShowMessage(inttostr(s));
+    Lines.EndUpdate;
+  end;
+end;
+
+procedure TRateManagementForm.CommitNewRatesExecute(Sender: TObject);
+var
+//  TempID: Integer;
+   TrCount : Integer;
+   StartTime : TTime;
+
+begin
+  if MessageDlg('Yeni valyuta məzənnələri qəbul edilsin?', mtConfirmation, [mbYes, mbCancel], 0) = mrYes then
+  begin
+   StartTime:=Time;
+    with SBRateManagement do
+     begin
+       CallProcedure('commit_new_rates', []);
+       TrCount := CallIntegerFunction('calc_rate_difference', []);
+       sboapiDataModule.SBSession.Commit;
+     end;
+    ShowMessage(Format('Əməliyyat yerinə yetirildi.'+#13#10+'Günün sənədlərinə %d əməliyyat daxil oldu'
+    +#13#10+'Əməliyyat vaxtı: %s - %s = %s',[TrCount,TimeToStr(StartTime),TimeToStr(Time),FormatDateTime('nn:ss',Time-StartTime)]));
+    {    with TTemporaryTransactionCommitForm.Create(Self) do
+    try
+      if Execute(TempID, 'Rate difference', False) then
+        MessageDlg(Format('Number of commited transaction: %d', [TransactionsCount]), mtInformation, [mbOk], 0);
+    finally
+      Release;
+    end; }
+
+  end;
+end;
+
+function TRateManagementForm.Get_Icon: OLE_HANDLE;
+begin
+  ImageList1.GetIcon(0, Icon);
+  Result := Icon.Handle;
+end;
+
+procedure TRateManagementForm.RecalculateExecute(Sender: TObject);
+var
+ RecalculateFm: TFmRecalculate;
+begin
+if MessageDlg('Valyuta məzənnələri yenidən hesablansın?', mtConfirmation, [mbYes, mbCancel], 0) = mrYes then
+  begin
+   RecalculateFm:=TFmRecalculate.Create(self);
+  try
+   RecalculateFm.ShowModal;
+  finally
+   RecalculateFm.Release;
+  end;
+ end;
+
+
+
+end;
+
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TRateManagementForm,
+    Class_RateManagementForm,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

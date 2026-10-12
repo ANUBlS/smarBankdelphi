@@ -1,0 +1,533 @@
+unit P_Upd_Cust_Form;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, lDialogs,
+  StdCtrls, DBCtrls, Mask, ComCtrls, ExtCtrls;
+
+type
+  TP_Upd_Cust = class(TForm)
+    PanelMain: TPanel;
+    Label24: TLabel;
+    Label25: TLabel;
+    Label27: TLabel;
+    Button1: TButton;
+    Button2: TButton;
+    DBEdit1: TDBEdit;
+    DBEdit2: TDBEdit;
+    passp_id: TEdit;
+    userid: TEdit;
+    Edit1: TEdit;
+    GroupBox1: TGroupBox;
+    Label17: TLabel;
+    Label23: TLabel;
+    EditMobil: TMaskEdit;
+    Label18: TLabel;
+    Label28: TLabel;
+    EditPhone: TMaskEdit;
+    GroupBox2: TGroupBox;
+    Label7: TLabel;
+    Adrs_City: TDBLookupComboBox;
+    Label19: TLabel;
+    Adrs_State: TDBLookupComboBox;
+    Label20: TLabel;
+    Label10: TLabel;
+    EditAdress: TEdit;
+    GroupBox3: TGroupBox;
+    Label3: TLabel;
+    DTPBirthDate: TDateTimePicker;
+    BirthPlace: TDBLookupComboBox;
+    Label13: TLabel;
+    EditBirthState: TDBLookupComboBox;
+    Label12: TLabel;
+    GroupBox4: TGroupBox;
+    Label5: TLabel;
+    Label9: TLabel;
+    EditSerial: TEdit;
+    EditPassport: TEdit;
+    Label29: TLabel;
+    DTPickerPasp: TDateTimePicker;
+    GroupBox5: TGroupBox;
+    Label1: TLabel;
+    Label21: TLabel;
+    EditByrName: TEdit;
+    Label8: TLabel;
+    ChBox: TCheckBox;
+    Label6: TLabel;
+    CBoxSex: TComboBox;
+    Label4: TLabel;
+    CBoxFamStatus: TComboBox;
+    GroupBox6: TGroupBox;
+    Label11: TLabel;
+    EditEmail: TEdit;
+    Label14: TLabel;
+    dblGroup: TDBLookupComboBox;
+    Label2: TLabel;
+    Label15: TLabel;
+    DBLCBoxVidSob: TDBLookupComboBox;
+    Label16: TLabel;
+    Label22: TLabel;
+    DBLCBoxPrinad: TDBLookupComboBox;
+    procedure FormActivate(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+    procedure EditByrNameKeyPress(Sender: TObject; var Key: Char);
+    procedure BirthPlaceKeyPress(Sender: TObject; var Key: Char);
+    procedure EditBirthStateKeyPress(Sender: TObject; var Key: Char);
+    procedure Adrs_StateKeyPress(Sender: TObject; var Key: Char);
+    procedure DTPBirthDateKeyPress(Sender: TObject; var Key: Char);
+    procedure EditAdressKeyPress(Sender: TObject; var Key: Char);
+    procedure CBoxFamStatusKeyPress(Sender: TObject; var Key: Char);
+    procedure CBoxSexKeyPress(Sender: TObject; var Key: Char);
+    procedure EditSerialKeyPress(Sender: TObject; var Key: Char);
+    procedure EditPassportKeyPress(Sender: TObject; var Key: Char);
+    procedure EditMobilKeyPress(Sender: TObject; var Key: Char);
+    procedure EditPhoneKeyPress(Sender: TObject; var Key: Char);
+    procedure EditEmailKeyPress(Sender: TObject; var Key: Char);
+    procedure Button1KeyPress(Sender: TObject; var Key: Char);
+    procedure Adrs_CityKeyPress(Sender: TObject; var Key: Char);
+    procedure ChBoxClick(Sender: TObject);
+    procedure DBEdit1Change(Sender: TObject);
+    procedure DBEdit2Change(Sender: TObject);
+    procedure EditPassportChange(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    procedure  SelectSettings;
+  end;
+
+var
+  P_Upd_Cust: TP_Upd_Cust;
+
+implementation
+
+uses P_Datamod_Unit;
+
+{$R *.DFM}
+
+procedure TP_Upd_Cust.SelectSettings;
+begin
+  with P_Datamodule.P_Customers do begin
+   EditByrName.Text:=FieldByName('CUST_NAME').AsString;
+   if FieldByName('NEREZIDENT').AsInteger =1 then chbox.Checked :=true else chbox.Checked :=false;
+   BirthPlace.keyvalue :=FieldByName('BIRTHPLACE').AsString;
+   DTPBirthDate.Date:=Int(FieldByName('BIRTHDATE').AsDateTime);
+   EditBirthState.keyvalue :=FieldByName('birth_state').AsString;
+   EditAdress.Text :=FieldByName('ADRESS').AsString;
+   EditEmail.Text:=FieldByName('EMAIL').AsString;
+   EditPassport.Text:=FieldByName('passp_number').AsString;
+   EditSerial.Text:=FieldByName('PASSPORT').AsString;
+   Editmobil.Text:=FieldByName('phone_mob').AsString;
+   Editphone.Text:=FieldByName('PHONE').AsString;
+   CBoxFamStatus.ItemIndex:=FieldByName('FAM_STATUS').AsInteger;
+   CBoxSex.ItemIndex:=FieldByName('SEX').AsInteger-1;
+   EditEmail.Text:=FieldByName('email').AsString;
+   dblGroup.KeyValue := FieldByName('group_klie').AsVariant;
+   adrs_city.KeyValue:=FieldByName('ADRS_CITY').AsString;
+   adrs_state.keyvalue:=FieldByName('ADRS_STATE').AsString;
+   DTPickerPasp.Date :=Int(FieldByName('Passp_date').AsDateTime);
+   DBLCBoxVidSob.KeyValue := FieldByName('Vid_Sob').AsVariant;
+   DBLCBoxPrinad.KeyValue := FieldByName('Prinad').AsVariant;
+  end;
+end;
+
+procedure TP_Upd_Cust.FormActivate(Sender: TObject);
+begin
+  userid.Text :=P_Datamodule.P_Customers.FieldByName('ID').AsString;
+end;
+
+
+procedure TP_Upd_Cust.Button1Click(Sender: TObject);
+var
+  p_cust_name   :string;
+  p_passport   :string;
+  p_birthdate  :TDateTime;
+  p_birthplace :string;
+  p_fam_status :integer;
+  p_adress     :string;
+  p_workplace  :string;
+  p_wage       :real;
+  p_phone      :string;
+  p_email      :string;
+  p_sex        :integer;
+  p_passp_number : string;
+  p_adrs_state : string;
+  p_adrs_city: string;
+  p_birth_state :string;
+  p_phone_mob : string;
+  p_id: string;
+  p_pasp_date:TDateTime;
+  p_nerezident :integer;
+begin
+  if (EditSerial.Text = '') or (EditPassport.Text = '') then begin ShowMessage('Ïàñïîðò ¹  äàõèë åäèí!');  Exit; end;
+  if DBLCBoxVidSob.Text = '' then begin ShowMessage('Ìöëêèééÿò íþâöíö äàõèë åäèí'); Exit; end;
+  if (Trim(EditByrName.Text)<>'') and (CBoxSex.Text <> '') and
+   (Trim(EditAdress.Text)<>'') and (Trim(EditMobil.Text)<>'') and (Trim(EditPhone.Text)<>'') then
+  begin
+    p_cust_name:=EditByrName.Text;
+    p_passport:=(EditPassport.Text);
+    p_birthdate:=Integer(Trunc(DTPBirthDate.DateTime));
+    p_birthplace:=BirthPlace.keyvalue;
+    p_adress:=EditAdress.Text;
+    p_phone:=EditPhone.Text;
+    p_email:=EditEmail.Text;
+    p_passp_number :=EditSerial.text;
+    p_birthplace :=birthplace.keyvalue;
+    p_birth_state :=Editbirthstate.keyvalue;
+    p_pasp_date:=Integer(Trunc(DTPickerPasp.DateTime));
+
+    p_phone_mob :=Editmobil.Text;
+    p_id :=userid.text;
+    p_adrs_state :=adrs_state.Text;
+    p_adrs_city :=adrs_city.Text;
+
+
+    if CBoxFamStatus.Text='evli' then p_fam_status:=1
+     else p_fam_status:=2;
+
+    if CBoxSex.Text='êèøè' then p_sex:=1
+     else p_sex:=2;
+
+    if chbox.Checked = true then p_nerezident :=1
+     else p_nerezident :=0;
+
+          with P_DataModule do begin
+               phys_fs_customers.CallIntegerFunction('upd_p_customes',[ p_id,
+                                                       p_cust_name,
+                                                       p_passp_number,
+                                                       p_birthdate,
+                                                       p_birthplace,
+                                                       p_fam_status,
+                                                       p_adress,
+                                                       p_phone,
+                                                       p_email,
+                                                       p_sex,
+                                                       p_passport,
+                                                       p_adrs_state,
+                                                       p_adrs_city,
+                                                       p_birth_state,
+                                                       p_phone_mob,
+                                                       dblGroup.KeyValue,
+                                                       p_pasp_date,
+                                                       p_nerezident,
+                                                       DBLCBoxVidSob.KeyValue,
+                                                       DBLCBoxPrinad.KeyValue
+                                                       ]);
+    P_DataModule.P_Customers.Close;
+    P_DataModule.P_Customers.Open;
+    Close;
+   end;
+  end
+  else
+  ShowMessage('Mÿlumat tam doldurulmayûb');
+end;
+
+procedure TP_Upd_Cust.FormCreate(Sender: TObject);
+begin
+  SelectSettings;
+end;
+
+procedure TP_Upd_Cust.Button2Click(Sender: TObject);
+begin
+close;
+end;
+
+procedure TP_Upd_Cust.EditByrNameKeyPress(Sender: TObject; var Key: Char);
+begin
+if ORD(Key) = VK_RETURN then
+  begin
+  if Sender is TWinControl then
+  with Sender as TWinControl do
+  case Tag of
+    1 : SelectNext(Sender as TWinControl ,True ,True);
+    end;
+    Key := #0;
+
+end;
+  end;
+procedure TP_Upd_Cust.BirthPlaceKeyPress(Sender: TObject; var Key: Char);
+begin
+if ORD(Key) = VK_RETURN then
+  begin
+  if Sender is TWinControl then
+  with Sender as TWinControl do
+  case Tag of
+    1 : SelectNext(Sender as TWinControl ,True ,True);
+    end;
+    Key := #0;
+if not (key in ['0'..'9','.',#8]) then
+    key :=#0;
+if not (key in ['à'..'ÿ','À'..'ß','A'..'Z','à'..'z']) then
+    key :=#0;
+end;
+  end;
+procedure TP_Upd_Cust.EditBirthStateKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+if ORD(Key) = VK_RETURN then
+  begin
+  if Sender is TWinControl then
+  with Sender as TWinControl do
+  case Tag of
+    1 : SelectNext(Sender as TWinControl ,True ,True);
+    end;
+    Key := #0;
+    if not (key in ['0'..'9','.',#8]) then
+    key :=#0;
+if not (key in ['à'..'ÿ','À'..'ß','A'..'Z','à'..'z']) then
+    key :=#0;
+end;
+end;
+
+procedure TP_Upd_Cust.Adrs_StateKeyPress(Sender: TObject; var Key: Char);
+begin
+if ORD(Key) = VK_RETURN then
+  begin
+  if Sender is TWinControl then
+  with Sender as TWinControl do
+  case Tag of
+    1 : SelectNext(Sender as TWinControl ,True ,True);
+    end;
+    Key := #0;
+    if not (key in ['0'..'9','.',#8]) then
+    key :=#0;
+if not (key in ['à'..'ÿ','À'..'ß','A'..'Z','à'..'z']) then
+    key :=#0;
+end;
+end;
+
+procedure TP_Upd_Cust.DTPBirthDateKeyPress(Sender: TObject; var Key: Char);
+begin
+if ORD(Key) = VK_RETURN then
+  begin
+  if Sender is TWinControl then
+  with Sender as TWinControl do
+  case Tag of
+    1 : SelectNext(Sender as TWinControl ,True ,True);
+    end;
+    Key := #0;
+end;
+end;
+
+procedure TP_Upd_Cust.EditAdressKeyPress(Sender: TObject; var Key: Char);
+begin
+if ORD(Key) = VK_RETURN then
+  begin
+  if Sender is TWinControl then
+  with Sender as TWinControl do
+  case Tag of
+    1 : SelectNext(Sender as TWinControl ,True ,True);
+    end;
+    Key := #0;
+end;
+end;
+
+procedure TP_Upd_Cust.CBoxFamStatusKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+if ORD(Key) = VK_RETURN then
+  begin
+  if Sender is TWinControl then
+  with Sender as TWinControl do
+  case Tag of
+    1 : SelectNext(Sender as TWinControl ,True ,True);
+    end;
+    Key := #0;
+    if not (key in ['0'..'9','.',#8]) then
+    key :=#0;
+if not (key in ['à'..'ÿ','À'..'ß','A'..'Z','à'..'z']) then
+    key :=#0;
+end;
+end;
+
+procedure TP_Upd_Cust.CBoxSexKeyPress(Sender: TObject; var Key: Char);
+begin
+if ORD(Key) = VK_RETURN then
+  begin
+  if Sender is TWinControl then
+  with Sender as TWinControl do
+  case Tag of
+    1 : SelectNext(Sender as TWinControl ,True ,True);
+    end;
+    Key := #0;
+    if not (key in ['0'..'9','.',#8]) then
+    key :=#0;
+if not (key in ['à'..'ÿ','À'..'ß','A'..'Z','à'..'z']) then
+    key :=#0;
+end;
+end;
+
+procedure TP_Upd_Cust.EditSerialKeyPress(Sender: TObject; var Key: Char);
+begin
+if ORD(Key) = VK_RETURN then
+  begin
+  if Sender is TWinControl then
+  with Sender as TWinControl do
+  case Tag of
+    1 : SelectNext(Sender as TWinControl ,True ,True);
+    end;
+    Key := #0;
+end;
+{if not (key in ['à'..'ÿ','À'..'ß','A'..'Z','à'..'z']) then
+    key :=#0;}
+end;
+
+procedure TP_Upd_Cust.EditPassportKeyPress(Sender: TObject; var Key: Char);
+begin
+if ORD(Key) = VK_RETURN then
+  begin
+  if Sender is TWinControl then
+  with Sender as TWinControl do
+  case Tag of
+    1 : SelectNext(Sender as TWinControl ,True ,True);
+    end;
+    Key := #0;
+end;
+{if not (key in ['0'..'9','.',#8]) then
+    key :=#0;}
+end;
+
+procedure TP_Upd_Cust.EditMobilKeyPress(Sender: TObject; var Key: Char);
+begin
+if ORD(Key) = VK_RETURN then
+  begin
+  if Sender is TWinControl then
+  with Sender as TWinControl do
+  case Tag of
+    1 : SelectNext(Sender as TWinControl ,True ,True);
+    end;
+    Key := #0;
+end;
+if not (key in ['0'..'9','.',#8]) then
+    key :=#0;
+end;
+
+procedure TP_Upd_Cust.EditPhoneKeyPress(Sender: TObject; var Key: Char);
+begin
+if ORD(Key) = VK_RETURN then
+  begin
+  if Sender is TWinControl then
+  with Sender as TWinControl do
+  case Tag of
+    1 : SelectNext(Sender as TWinControl ,True ,True);
+    end;
+    Key := #0;
+end;
+if not (key in ['0'..'9','.',#8]) then
+    key :=#0;
+end;
+
+procedure TP_Upd_Cust.EditEmailKeyPress(Sender: TObject; var Key: Char);
+begin
+if ORD(Key) = VK_RETURN then
+  begin
+  if Sender is TWinControl then
+  with Sender as TWinControl do
+  case Tag of
+    1 : SelectNext(Sender as TWinControl ,True ,True);
+    end;
+    Key := #0;
+end;
+end;
+
+procedure TP_Upd_Cust.Button1KeyPress(Sender: TObject; var Key: Char);
+begin
+if ORD(Key) = VK_RETURN then
+  begin
+  if Sender is TWinControl then
+  with Sender as TWinControl do
+  case Tag of
+    1 : SelectNext(Sender as TWinControl ,True ,True);
+    end;
+    Key := #0;
+end;
+end;
+
+procedure TP_Upd_Cust.Adrs_CityKeyPress(Sender: TObject; var Key: Char);
+begin
+if ORD(Key) = VK_RETURN then
+  begin
+  if Sender is TWinControl then
+  with Sender as TWinControl do
+  case Tag of
+    1 : SelectNext(Sender as TWinControl ,True ,True);
+    end;
+    Key := #0;
+if not (key in ['0'..'9','.',#8]) then
+    key :=#0;
+if not (key in ['à'..'ÿ','À'..'ß','A'..'Z','à'..'z']) then
+    key :=#0;
+end;
+end;
+
+procedure TP_Upd_Cust.ChBoxClick(Sender: TObject);
+begin
+  if ChBox.Checked = false then Edit1.Text :='Àçÿðáàéæàí';
+  with  P_DataModule.ad_country do begin
+   Close;
+   SQL.Clear;
+   SQL.Add('Select * from countries where cntr_name<>''' + Edit1.Text + ''' ');
+   Open;
+   Adrs_State.KeyValue :=FieldByName('cntr_name').AsString;
+   EditSerial.Text :=' ';
+  end;
+
+  if ChBox.Checked = true then
+  with  P_DataModule.ad_country do begin
+   Close;
+   SQL.Clear;
+   SQL.Add('Select * from countries  ');
+   Open;
+   //Adrs_City.KeyValue :=FieldByName('cntr_name').AsString;
+   Adrs_State.KeyValue := 'Àçÿðáàéæàí';
+   Adrs_City.KeyValue :='Áàêû';
+   EditSerial.Text :='ÀÇÅ';
+  end;
+end;
+
+
+
+   
+procedure TP_Upd_Cust.DBEdit1Change(Sender: TObject);
+begin
+with P_DataModule.cities do
+  begin
+   Close;
+    SQL.Clear;
+    SQL.Text :='Select c.rowid ,c.* from cities c where country_id= '+''''+dbedit1.Text+'''';
+   Open;
+  EditBirthState.keyvalue :=fieldbyname('city_name').asstring;
+
+
+end;
+   end;
+procedure TP_Upd_Cust.DBEdit2Change(Sender: TObject);
+begin
+with P_DataModule.ad_cities do
+  begin
+   Close;
+    SQL.Clear;
+    SQL.Text :='Select c.rowid ,c.* from cities c where country_id= '+''''+dbedit2.Text+'''';
+   Open;
+  //adrs_state.keyvalue :=fieldbyname('city_name').asstring;
+  Adrs_City.KeyValue := FieldByName('city_name').AsString;
+  end;
+end;
+
+
+procedure TP_Upd_Cust.EditPassportChange(Sender: TObject);
+begin
+with P_DataModule.pasp do begin
+Close;
+SQL.Clear;
+SQL.Add('Select * From customers_physical Where passp_number='''+EditPassport.text+'''');
+Open;
+passp_id.text :=fieldbyname('id').asstring;
+end;
+
+end;
+
+end.

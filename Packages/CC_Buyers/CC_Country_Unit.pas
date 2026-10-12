@@ -1,0 +1,63 @@
+unit CC_Country_Unit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, NLSDialogs,
+  StdCtrls, Buttons, ExtCtrls, NLSLocalizer;
+
+type
+  TCC_Country = class(TForm)
+    Panel1: TPanel;
+    GroupBox1: TGroupBox;
+    EditCountry: TEdit;
+    BitBtn1: TBitBtn;
+    procedure BitBtn1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    procedure WMNCPaint(var message: TWMNCPaint);
+    procedure WMNCACTIVATE(var message:TWMNCActivate);
+  end;
+
+var
+  CC_Country: TCC_Country;
+
+implementation
+
+uses UnitData;
+
+{$R *.DFM}
+
+procedure TCC_Country.WMNCACTIVATE(var message:TWMNCActivate);
+var
+ S:TWMNCPaint;
+begin
+inherited;
+WMNCPaint(s);
+end;
+
+procedure TCC_Country.WMNCPaint(var message: TWMNCPaint);
+const Capt = 'Сярянжамлар';
+var dc : hDc;
+begin
+inherited;
+Caption:='';
+dc := GetWindowDC(Handle);
+        SetBkMode(dc,Transparent);
+        SetTextColor(dc,clWhite);
+        SelectObject(dc, Font.Handle);
+        TextOut(dc, 23,6,Capt,Length(Capt));
+end;
+procedure TCC_Country.BitBtn1Click(Sender: TObject);
+begin
+if Editcountry.Text ='' then
+showmessage('Бош дахил етмяк олмаз!')
+else
+DataMod_Buyers.CC_GENERAL.CallProcedure('add_country',[Editcountry.Text]);
+DataMod_Buyers.Country.close;
+DataMod_Buyers.Country.Open;
+end;
+
+end.

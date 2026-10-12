@@ -1,0 +1,182 @@
+﻿unit UnitExchRep;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls;
+
+type
+  TExchRep = class(TForm)
+    Panel1: TPanel;
+    Button2: TButton;
+    Button1: TButton;
+    Panel2: TPanel;
+    RadioButton1: TRadioButton;
+    Panel3: TPanel;
+    RadioButton2: TRadioButton;
+    procedure FormCreate(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+    procedure RadioButton1Click(Sender: TObject);
+    procedure RadioButton2Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  ExchRep: TExchRep;
+
+implementation
+uses sboapiDataModuleImpl, SBTranslateProc, UnitDateExch, UnitRep,IniFiles,
+  UnitRepX;
+
+{$R *.dfm}
+
+procedure TExchRep.Button1Click(Sender: TObject);
+var
+    p_id : integer;
+    Ini  : TIniFile;
+    BankName :string;
+begin
+   Ini:=TIniFile.Create(ExtractFilePath(paramstr(0))+'Exchange.ini');
+   BankName:=Ini.ReadString('BankName','name','');
+
+   p_id:=DataModExch.ODSExchProvarch.FieldByName('id').AsInteger;
+   with DataModExch.ODSReport do
+   begin
+      Close;
+      SetVariable('p_id',p_id);
+      Open;
+   end;
+
+  if RadioButton1.Checked then
+  begin
+    with DataModExch.ODSReport,FormRepx do
+    begin
+      //LabelBankName.Caption:=BankName;
+      case FieldByName('Status').AsInteger of
+        1:begin
+            //LabelStatus.Caption:='XARİCİ VALYUTANIN ALIŞI';
+          //  LabelDate.Caption:=FormatDateTime('dd-mmm-yyyy',fieldbyname('dat').AsDateTime);
+           // LabelTime.Caption:=FormatDateTime('hh:mm:ss',fieldbyname('op_time').AsDateTime);
+           // LabelCustomer.Caption:=fieldbyname('cust_name').AsString+' '+fieldbyname('cust_lname').AsString+' '+fieldbyname('cust_father').AsString;
+            //LabelPassport.Caption:=fieldbyname('country').AsString+' '+fieldbyname('cust_passport').AsString;
+            //LabelCourse.Caption:=fieldbyname('op_course').AsString;
+            //LabelDifference.Caption:='';
+            QuickRep.Preview;
+          end;
+        2:begin
+          //  LabelStatus.Caption:='XARİCİ VALYUTANIN SATIŞI';
+          //  LabelDate.Caption:=FormatDateTime('dd-mmm-yyyy',DataModExch.ODSExchProvarch.fieldbyname('dat').AsDateTime);
+           // LabelTime.Caption:=FormatDateTime('hh:mm:ss',DataModExch.ODSExchProvarch.fieldbyname('op_time').AsDateTime);
+           // LabelCustomer.Caption:=fieldbyname('cust_name').AsString+' '+fieldbyname('cust_lname').AsString+' '+fieldbyname('cust_father').AsString;
+           // LabelPassport.Caption:=fieldbyname('country').AsString+' '+fieldbyname('cust_passport').AsString;
+            //LabelCourse.Caption:=fieldbyname('op_course').AsString;
+           // LabelDifference.Caption:='';
+            QuickRep.Preview;
+          end;
+      end;
+
+    end;
+  end
+
+  else
+  begin
+  with DataModExch.ODSReport,FormRep do
+   begin
+    //  QRImageCopy.Picture.Bitmap:=QRImage.Picture.Bitmap;
+      LabelBankName.Caption:=BankName;
+      LabelBankNameCopy.Caption:=BankName;
+      case FieldByName('Status').AsInteger of
+        1:
+                begin
+                   LabelStatus.Caption:='XARİCİ VALYUTANIN ALIŞI';
+                   LabelDate.Caption:=FormatDateTime('dd-mmm-yyyy',fieldbyname('dat').AsDateTime);
+                   LabelTime.Caption:=FormatDateTime('hh:mm:ss',fieldbyname('op_time').AsDateTime);
+                   LabelCustomer.Caption:=fieldbyname('cust_name').AsString+' '+fieldbyname('cust_lname').AsString+' '+fieldbyname('cust_father').AsString;
+                   LabelPassport.Caption:=fieldbyname('country').AsString+' '+fieldbyname('cust_passport').AsString;
+                   LabelCourse.Caption:=fieldbyname('op_course').AsString;
+                   LabelDifference.Caption:='';
+
+                   LabelStatusCopy.Caption:='XARİCİ VALYUTANIN ALIŞI';
+                   LabelDateCopy.Caption:=FormatDateTime('dd-mmm-yyyy',fieldbyname('dat').AsDateTime);
+                   LabelTimeCopy.Caption:=FormatDateTime('hh:mm:ss',fieldbyname('op_time').AsDateTime);
+                   LabelCustomerCopy.Caption:=fieldbyname('cust_name').AsString+' '+fieldbyname('cust_lname').AsString+' '+fieldbyname('cust_father').AsString;
+                   LabelPassportCopy.Caption:=fieldbyname('country').AsString+' '+fieldbyname('cust_passport').AsString;
+                   LabelCourseCopy.Caption:=fieldbyname('op_course').AsString;
+                   LabelDifferenceCopy.Caption:='';
+
+                   QuickRep.Preview;
+                end;
+
+        2:
+                begin
+                   LabelStatus.Caption:='XARİCİ VALYUTANIN SATIŞI';
+                   LabelDate.Caption:=FormatDateTime('dd-mmm-yyyy',DataModExch.ODSExchProvarch.fieldbyname('dat').AsDateTime);
+                   LabelTime.Caption:=FormatDateTime('hh:mm:ss',DataModExch.ODSExchProvarch.fieldbyname('op_time').AsDateTime);
+                   LabelCustomer.Caption:=fieldbyname('cust_name').AsString+' '+fieldbyname('cust_lname').AsString+' '+fieldbyname('cust_father').AsString;
+                   LabelPassport.Caption:=fieldbyname('country').AsString+' '+fieldbyname('cust_passport').AsString;
+                   LabelCourse.Caption:=fieldbyname('op_course').AsString;
+                   LabelDifference.Caption:='';
+
+                   LabelStatusCopy.Caption:='XARİCİ VALYUTANIN SATIŞI';
+                   LabelDateCopy.Caption:=FormatDateTime('dd-mmm-yyyy',DataModExch.ODSExchProvarch.fieldbyname('dat').AsDateTime);
+                   LabelTimeCopy.Caption:=FormatDateTime('hh:mm:ss',DataModExch.ODSExchProvarch.fieldbyname('op_time').AsDateTime);
+                   LabelCustomerCopy.Caption:=fieldbyname('cust_name').AsString+' '+fieldbyname('cust_lname').AsString+' '+fieldbyname('cust_father').AsString;
+                   LabelPassportCopy.Caption:=fieldbyname('country').AsString+' '+fieldbyname('cust_passport').AsString;
+                   LabelCourseCopy.Caption:=fieldbyname('op_course').AsString;
+                   LabelDifferenceCopy.Caption:='';
+
+                   QuickRep.Preview;
+                end;
+
+        3:
+                begin
+                   LabelStatus.Caption:='BİR XARİCİ VALYUTANIN DİGƏRİ İLƏ DƏYİŞDİRİLMƏSİ';
+                   LabelDate.Caption:=FormatDateTime('dd-mmm-yyyy',DataModExch.ODSExchProvarch.fieldbyname('dat').AsDateTime);
+                   LabelTime.Caption:=FormatDateTime('hh:mm:ss',DataModExch.ODSExchProvarch.fieldbyname('op_time').AsDateTime);
+                   LabelCustomer.Caption:=fieldbyname('cust_name').AsString+' '+fieldbyname('cust_lname').AsString+' '+fieldbyname('cust_father').AsString;
+                   LabelPassport.Caption:=fieldbyname('country').AsString+' '+fieldbyname('cust_passport').AsString;
+                   LabelCourse.Caption:=formatfloat('#.####',fieldbyname('op_course').AsFloat/fieldbyname('val_changed_course').AsFloat);
+                   LabelDifference.Caption:='fərq';
+
+                   LabelStatusCopy.Caption:='BİR XARİCİ VALYUTANIN DİGƏRİ İLƏ DƏYİŞDİRİLMƏSİ';
+                   LabelDateCopy.Caption:=FormatDateTime('dd-mmm-yyyy',DataModExch.ODSExchProvarch.fieldbyname('dat').AsDateTime);
+                   LabelTimeCopy.Caption:=FormatDateTime('hh:mm:ss',DataModExch.ODSExchProvarch.fieldbyname('op_time').AsDateTime);
+                   LabelCustomerCopy.Caption:=fieldbyname('cust_name').AsString+' '+fieldbyname('cust_lname').AsString+' '+fieldbyname('cust_father').AsString;
+                   LabelPassportCopy.Caption:=fieldbyname('country').AsString+' '+fieldbyname('cust_passport').AsString;
+                   LabelCourseCopy.Caption:=formatfloat('#.####',fieldbyname('op_course').AsFloat/fieldbyname('val_changed_course').AsFloat);
+                   LabelDifferenceCopy.Caption:='fərq';
+
+                   QuickRep.Preview;
+                end;
+        end;
+      end;
+  end;
+end;
+
+
+procedure TExchRep.Button2Click(Sender: TObject);
+begin
+  ExchRep.Close;
+end;
+
+procedure TExchRep.FormCreate(Sender: TObject);
+begin
+  SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TExchRep.RadioButton1Click(Sender: TObject);
+begin
+  RadioButton2.Checked:=False;
+end;
+
+procedure TExchRep.RadioButton2Click(Sender: TObject);
+begin
+  RadioButton1.Checked:=False;
+end;
+
+end.

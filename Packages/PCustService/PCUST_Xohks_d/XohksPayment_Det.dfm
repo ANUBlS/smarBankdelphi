@@ -1,0 +1,994 @@
+object FormPayment_Det: TFormPayment_Det
+  Left = 0
+  Top = 0
+  Caption = 'FormPayment_Det'
+  ClientHeight = 595
+  ClientWidth = 674
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  PixelsPerInch = 96
+  TextHeight = 13
+  object XFGroupBox1: TXFGroupBox
+    Left = 0
+    Top = 0
+    Width = 674
+    Height = 595
+    Align = alClient
+    Caption = 'K'#246#231#252'rm'#601' '#601'm'#601'liyyat'#305'na '#601'lav'#601
+    TabOrder = 0
+    object XFPanel13: TXFPanel
+      Left = 335
+      Top = 15
+      Width = 337
+      Height = 402
+      Align = alClient
+      TabOrder = 0
+      object XFGroupBox3: TXFGroupBox
+        Left = 1
+        Top = 1
+        Width = 335
+        Height = 250
+        Align = alTop
+        Caption = 'Alan Bank'
+        TabOrder = 0
+        object XFPanel7: TXFPanel
+          Left = 2
+          Top = 15
+          Width = 331
+          Height = 33
+          Align = alTop
+          Alignment = taLeftJustify
+          Caption = 'Bank'#305'n kodu:'
+          TabOrder = 0
+          object SearchBankM: TSearchEdit
+            Left = 103
+            Top = 4
+            Width = 224
+            Height = 21
+            MaxLength = 16
+            TabOrder = 0
+            SearchField = 'BANKCODE'
+          end
+        end
+        object XFPanel14: TXFPanel
+          Left = 2
+          Top = 48
+          Width = 331
+          Height = 33
+          Align = alTop
+          Alignment = taLeftJustify
+          Caption = 'Bank'#305'n ad'#305':'
+          TabOrder = 1
+          object Combo_BankName: TComboBox
+            Left = 103
+            Top = 5
+            Width = 225
+            Height = 23
+            Color = clWhite
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = []
+            ParentFont = False
+            TabOrder = 0
+            OnChange = Combo_BankNameChange
+            OnKeyPress = Combo_BankNameKeyPress
+          end
+          object Bank_ID: TListBox
+            Left = 136
+            Top = 8
+            Width = 40
+            Height = 19
+            ItemHeight = 13
+            TabOrder = 1
+            Visible = False
+          end
+        end
+        object XFPanel15: TXFPanel
+          Left = 2
+          Top = 213
+          Width = 331
+          Height = 33
+          Align = alTop
+          Alignment = taLeftJustify
+          Caption = 'S.W.F.'#304'.T Bik:'
+          TabOrder = 2
+          object Edit_Bik: TEdit
+            Left = 103
+            Top = 4
+            Width = 225
+            Height = 24
+            CharCase = ecUpperCase
+            Color = clSilver
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -13
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = []
+            ParentFont = False
+            ReadOnly = True
+            TabOrder = 0
+            OnChange = Edit_BankName_SelfChange
+          end
+        end
+        object XFPanel16: TXFPanel
+          Left = 2
+          Top = 180
+          Width = 331
+          Height = 33
+          Align = alTop
+          Alignment = taLeftJustify
+          Caption = 'M'#252'xbir sub hesab:'
+          TabOrder = 3
+          object Edit_Account_Sub: TEdit
+            Left = 103
+            Top = 6
+            Width = 225
+            Height = 21
+            CharCase = ecUpperCase
+            Color = clSilver
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -13
+            Font.Name = 'Courier'
+            Font.Style = []
+            MaxLength = 13
+            ParentFont = False
+            ReadOnly = True
+            TabOrder = 0
+            OnChange = Edit_BankName_SelfChange
+            OnKeyPress = Edit_account_sub_SelfKeyPress
+          end
+        end
+        object XFPanel17: TXFPanel
+          Left = 2
+          Top = 147
+          Width = 331
+          Height = 33
+          Align = alTop
+          Alignment = taLeftJustify
+          Caption = 'V'#214'EN:'
+          TabOrder = 4
+          object Edit_Voen: TEdit
+            Left = 103
+            Top = 6
+            Width = 225
+            Height = 21
+            CharCase = ecUpperCase
+            Color = clSilver
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -13
+            Font.Name = 'Courier'
+            Font.Style = []
+            ParentFont = False
+            ReadOnly = True
+            TabOrder = 0
+            OnChange = Edit_BankName_SelfChange
+          end
+        end
+        object XFPanel18: TXFPanel
+          Left = 2
+          Top = 114
+          Width = 331
+          Height = 33
+          Align = alTop
+          Alignment = taLeftJustify
+          Caption = 'Bank'#305'n m'#252'x.hes.:'
+          TabOrder = 5
+          object Edit_account: TEdit
+            Left = 103
+            Top = 6
+            Width = 225
+            Height = 21
+            CharCase = ecUpperCase
+            Color = clSilver
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -13
+            Font.Name = 'Courier'
+            Font.Style = []
+            ParentFont = False
+            ReadOnly = True
+            TabOrder = 0
+            OnChange = Edit_BankName_SelfChange
+          end
+        end
+        object XFPanel19: TXFPanel
+          Left = 2
+          Top = 81
+          Width = 331
+          Height = 33
+          Align = alTop
+          Alignment = taLeftJustify
+          Caption = 'Bank'#305'n kodu:'
+          TabOrder = 6
+          object Edit_BankCode: TEdit
+            Left = 103
+            Top = 6
+            Width = 225
+            Height = 21
+            CharCase = ecUpperCase
+            Color = clSilver
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -13
+            Font.Name = 'Courier'
+            Font.Style = []
+            ParentFont = False
+            ReadOnly = True
+            TabOrder = 0
+            OnChange = Edit_BankName_SelfChange
+          end
+        end
+      end
+      object XFGroupBox5: TXFGroupBox
+        Left = 1
+        Top = 251
+        Width = 335
+        Height = 150
+        Align = alTop
+        Caption = 'Alan m'#252#351't'#601'ri'
+        TabOrder = 1
+        object XFPanel21: TXFPanel
+          Left = 2
+          Top = 15
+          Width = 331
+          Height = 33
+          Align = alTop
+          Alignment = taLeftJustify
+          Caption = 'Hesab'#8470':'
+          TabOrder = 0
+          object Edit_Client_acc_no: TEdit
+            Left = 103
+            Top = 2
+            Width = 224
+            Height = 21
+            CharCase = ecUpperCase
+            Color = clWhite
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Courier'
+            Font.Style = []
+            MaxLength = 34
+            ParentFont = False
+            TabOrder = 0
+            OnChange = Edit_BankName_SelfChange
+            OnKeyPress = Edit_Client_acc_noKeyPress
+          end
+          object DBComboBox_Institution: TDBLookupComboBox
+            Left = 103
+            Top = 3
+            Width = 225
+            Height = 21
+            KeyField = 'ID'
+            ListField = 'DESCRIPTION'
+            ListSource = DataModXhoks.DS_Institution
+            TabOrder = 1
+            Visible = False
+          end
+        end
+        object XFPanel22: TXFPanel
+          Left = 2
+          Top = 48
+          Width = 331
+          Height = 33
+          Align = alTop
+          Alignment = taLeftJustify
+          Caption = 'Ad'#305':'
+          TabOrder = 1
+          object Edit_Client_Name: TEdit
+            Left = 103
+            Top = 5
+            Width = 225
+            Height = 21
+            CharCase = ecUpperCase
+            Color = clWhite
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = 8404992
+            Font.Height = -12
+            Font.Name = 'MS Sans Serif'
+            Font.Style = []
+            MaxLength = 35
+            ParentFont = False
+            TabOrder = 0
+            OnChange = Edit_BankName_SelfChange
+            OnKeyPress = Edit_Client_NameKeyPress
+          end
+        end
+        object XFPanel25: TXFPanel
+          Left = 2
+          Top = 81
+          Width = 331
+          Height = 33
+          Align = alTop
+          Alignment = taLeftJustify
+          Caption = 'Kodu:'
+          TabOrder = 2
+          object Edit_Client_Code: TEdit
+            Left = 103
+            Top = 5
+            Width = 225
+            Height = 21
+            CharCase = ecUpperCase
+            Color = clWhite
+            MaxLength = 35
+            TabOrder = 0
+            OnChange = Edit_BankName_SelfChange
+            OnKeyPress = Edit_Client_CodeKeyPress
+          end
+        end
+        object XFPanel26: TXFPanel
+          Left = 2
+          Top = 114
+          Width = 331
+          Height = 33
+          Align = alTop
+          Alignment = taLeftJustify
+          Caption = 'V'#214'EN:'
+          TabOrder = 3
+          object Edit_Client_Voen: TEdit
+            Left = 103
+            Top = 4
+            Width = 225
+            Height = 21
+            CharCase = ecUpperCase
+            Color = clWhite
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = 8404992
+            Font.Height = -12
+            Font.Name = 'MS Sans Serif'
+            Font.Style = []
+            MaxLength = 35
+            ParentFont = False
+            TabOrder = 0
+            OnChange = Edit_BankName_SelfChange
+            OnKeyPress = Edit_Client_VoenKeyPress
+          end
+        end
+      end
+    end
+    object XFPanel12: TXFPanel
+      Left = 2
+      Top = 417
+      Width = 670
+      Height = 135
+      Align = alBottom
+      Caption = 'XFPanel12'
+      TabOrder = 1
+      object XFGroupBox6: TXFGroupBox
+        Left = 1
+        Top = 1
+        Width = 333
+        Height = 133
+        Align = alLeft
+        Caption = #214'd'#601'ni'#351'in t'#601'yinat'#305' v'#601' say'#305
+        TabOrder = 0
+        object Edit_tey1: TEdit
+          Left = 3
+          Top = 17
+          Width = 328
+          Height = 21
+          CharCase = ecUpperCase
+          Color = clWhite
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -13
+          Font.Name = 'Courier'
+          Font.Style = []
+          MaxLength = 35
+          ParentFont = False
+          TabOrder = 0
+        end
+        object Edit_tey2: TEdit
+          Left = 4
+          Top = 44
+          Width = 328
+          Height = 21
+          CharCase = ecUpperCase
+          Color = clWhite
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -13
+          Font.Name = 'Courier'
+          Font.Style = []
+          MaxLength = 35
+          ParentFont = False
+          TabOrder = 1
+        end
+        object DBComboBox_BudgetLevel: TDBLookupComboBox
+          Left = 4
+          Top = 17
+          Width = 327
+          Height = 21
+          KeyField = 'ID'
+          ListField = 'DESCRIPTION'
+          ListSource = DataModXhoks.DS_BudgetLevel
+          TabOrder = 2
+          Visible = False
+        end
+        object DBComboBox_Destination: TDBLookupComboBox
+          Left = 4
+          Top = 45
+          Width = 327
+          Height = 21
+          KeyField = 'ID'
+          ListField = 'DESCRIPTION'
+          ListSource = DataModXhoks.DS_Destination
+          TabOrder = 3
+          Visible = False
+        end
+        object Edit_tey3: TEdit
+          Left = 2
+          Top = 72
+          Width = 327
+          Height = 21
+          CharCase = ecUpperCase
+          Color = clWhite
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -13
+          Font.Name = 'Courier'
+          Font.Style = []
+          MaxLength = 35
+          ParentFont = False
+          TabOrder = 4
+          OnChange = Edit_BankName_SelfChange
+          OnKeyPress = Edit_Client_acc_noKeyPress
+        end
+        object Edit_tey4: TEdit
+          Left = 3
+          Top = 103
+          Width = 327
+          Height = 21
+          CharCase = ecUpperCase
+          Color = clWhite
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -13
+          Font.Name = 'Courier'
+          Font.Style = []
+          MaxLength = 35
+          ParentFont = False
+          TabOrder = 5
+          OnChange = Edit_BankName_SelfChange
+          OnKeyPress = Edit_Client_CodeKeyPress
+        end
+      end
+      object XFGroupBox7: TXFGroupBox
+        Left = 334
+        Top = 1
+        Width = 333
+        Height = 133
+        Align = alLeft
+        Caption = #399'lav'#601' m'#601'lumat'
+        TabOrder = 1
+        object Edit_inf1: TEdit
+          Left = 3
+          Top = 18
+          Width = 327
+          Height = 21
+          CharCase = ecUpperCase
+          Color = clWhite
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -13
+          Font.Name = 'Courier'
+          Font.Style = []
+          MaxLength = 35
+          ParentFont = False
+          TabOrder = 0
+          OnChange = Edit_BankName_SelfChange
+          OnKeyPress = Edit_Client_CodeKeyPress
+        end
+        object Edit_inf2: TEdit
+          Left = 3
+          Top = 50
+          Width = 327
+          Height = 21
+          CharCase = ecUpperCase
+          Color = clWhite
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -13
+          Font.Name = 'Courier'
+          Font.Style = []
+          MaxLength = 35
+          ParentFont = False
+          TabOrder = 1
+          OnChange = Edit_BankName_SelfChange
+          OnKeyPress = Edit_Client_CodeKeyPress
+        end
+        object Edit_inf3: TEdit
+          Left = 2
+          Top = 79
+          Width = 327
+          Height = 21
+          CharCase = ecUpperCase
+          Color = clWhite
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -13
+          Font.Name = 'Courier'
+          Font.Style = []
+          MaxLength = 35
+          ParentFont = False
+          TabOrder = 2
+          OnChange = Edit_BankName_SelfChange
+          OnKeyPress = Edit_Client_CodeKeyPress
+        end
+      end
+    end
+    object XFPanel28: TXFPanel
+      Left = 2
+      Top = 552
+      Width = 670
+      Height = 41
+      Align = alBottom
+      TabOrder = 2
+      object XFGroupBox8: TXFGroupBox
+        Left = 5
+        Top = 2
+        Width = 185
+        Height = 36
+        Caption = #399'm'#601'liyat n'#246'v'#252
+        TabOrder = 0
+        object RB_102: TRadioButton
+          Left = 9
+          Top = 15
+          Width = 78
+          Height = 18
+          Caption = 'MT102'
+          Checked = True
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clBlue
+          Font.Height = -12
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 0
+          TabStop = True
+          OnClick = RB_102Click
+        end
+        object RB_102T: TRadioButton
+          Left = 93
+          Top = 14
+          Width = 78
+          Height = 18
+          Caption = 'MT102 T'
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clRed
+          Font.Height = -12
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 1
+        end
+      end
+      object XFBitBtn4: TXFBitBtn
+        Left = 324
+        Top = 9
+        Width = 109
+        Height = 25
+        Caption = #399'lav'#601' v'#601' n'#246'vb'#601'ti >>'
+        DoubleBuffered = True
+        ParentDoubleBuffered = False
+        TabOrder = 1
+        OnClick = XFBitBtn4Click
+      end
+      object ButtonFinish: TXFBitBtn
+        Left = 434
+        Top = 10
+        Width = 77
+        Height = 25
+        Caption = 'SON'
+        DoubleBuffered = True
+        ParentDoubleBuffered = False
+        TabOrder = 2
+        OnClick = ButtonFinishClick
+      end
+      object XFBitBtn6: TXFBitBtn
+        Left = 588
+        Top = 10
+        Width = 75
+        Height = 25
+        Caption = 'Imtina '
+        DoubleBuffered = True
+        ParentDoubleBuffered = False
+        TabOrder = 3
+        OnClick = XFBitBtn6Click
+      end
+      object XFBitBtn7: TXFBitBtn
+        Left = 512
+        Top = 10
+        Width = 75
+        Height = 25
+        Caption = #199#305'x'#305#351
+        DoubleBuffered = True
+        ParentDoubleBuffered = False
+        TabOrder = 4
+      end
+    end
+    object XFPanel33: TXFPanel
+      Left = 2
+      Top = 15
+      Width = 333
+      Height = 402
+      Align = alLeft
+      Caption = 'XFPanel33'
+      TabOrder = 3
+      object XFGroupBox2: TXFGroupBox
+        Left = 1
+        Top = 1
+        Width = 331
+        Height = 216
+        Align = alTop
+        Caption = #214'd'#601'y'#601'n Bank'
+        TabOrder = 0
+        object XFPanel1: TXFPanel
+          Left = 2
+          Top = 180
+          Width = 327
+          Height = 33
+          Align = alTop
+          Alignment = taLeftJustify
+          Caption = 'S.W.F.'#304'.T Bik:'
+          TabOrder = 0
+          object Edit_BIK_Self: TEdit
+            Left = 99
+            Top = 6
+            Width = 225
+            Height = 21
+            CharCase = ecUpperCase
+            Color = clSilver
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -13
+            Font.Name = 'Courier'
+            Font.Style = []
+            ParentFont = False
+            ReadOnly = True
+            TabOrder = 0
+            OnChange = Edit_BankName_SelfChange
+          end
+        end
+        object XFPanel2: TXFPanel
+          Left = 2
+          Top = 147
+          Width = 327
+          Height = 33
+          Align = alTop
+          Alignment = taLeftJustify
+          Caption = 'M'#252'xbir sub hesab:'
+          TabOrder = 1
+          object Edit_account_sub_Self: TEdit
+            Left = 99
+            Top = 6
+            Width = 225
+            Height = 21
+            CharCase = ecUpperCase
+            Color = clSilver
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -13
+            Font.Name = 'Courier'
+            Font.Style = []
+            ParentFont = False
+            ReadOnly = True
+            TabOrder = 0
+            OnChange = Edit_BankName_SelfChange
+            OnKeyPress = Edit_account_sub_SelfKeyPress
+          end
+        end
+        object XFPanel3: TXFPanel
+          Left = 2
+          Top = 114
+          Width = 327
+          Height = 33
+          Align = alTop
+          Alignment = taLeftJustify
+          Caption = 'V'#214'EN:'
+          TabOrder = 2
+          object Edit_Voen_Self: TEdit
+            Left = 102
+            Top = 6
+            Width = 225
+            Height = 21
+            CharCase = ecUpperCase
+            Color = clSilver
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -13
+            Font.Name = 'Courier'
+            Font.Style = []
+            ParentFont = False
+            ReadOnly = True
+            TabOrder = 0
+            OnChange = Edit_BankName_SelfChange
+          end
+        end
+        object XFPanel4: TXFPanel
+          Left = 2
+          Top = 81
+          Width = 327
+          Height = 33
+          Align = alTop
+          Alignment = taLeftJustify
+          Caption = 'Bank'#305'n m'#252'x.hes.:'
+          TabOrder = 3
+          object Edit_account_Self: TEdit
+            Left = 99
+            Top = 6
+            Width = 225
+            Height = 21
+            CharCase = ecUpperCase
+            Color = clSilver
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -13
+            Font.Name = 'Courier'
+            Font.Style = []
+            ParentFont = False
+            ReadOnly = True
+            TabOrder = 0
+            OnChange = Edit_BankName_SelfChange
+          end
+        end
+        object XFPanel5: TXFPanel
+          Left = 2
+          Top = 48
+          Width = 327
+          Height = 33
+          Align = alTop
+          Alignment = taLeftJustify
+          Caption = 'Bank'#305'n kodu:'
+          TabOrder = 4
+          object Edit_BankCode_Self: TEdit
+            Left = 99
+            Top = 6
+            Width = 225
+            Height = 21
+            CharCase = ecUpperCase
+            Color = clSilver
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -13
+            Font.Name = 'Courier'
+            Font.Style = []
+            ParentFont = False
+            ReadOnly = True
+            TabOrder = 0
+            OnChange = Edit_BankName_SelfChange
+          end
+        end
+        object XFPanel6: TXFPanel
+          Left = 2
+          Top = 15
+          Width = 327
+          Height = 33
+          Align = alTop
+          Alignment = taLeftJustify
+          Caption = 'Bank'#305'n ad'#305':'
+          TabOrder = 5
+          object Edit_BankName_Self: TEdit
+            Left = 99
+            Top = 4
+            Width = 225
+            Height = 24
+            CharCase = ecUpperCase
+            Color = clSilver
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -13
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = []
+            ParentFont = False
+            ReadOnly = True
+            TabOrder = 0
+            OnChange = Edit_BankName_SelfChange
+          end
+        end
+      end
+      object XFGroupBox4: TXFGroupBox
+        Left = 1
+        Top = 217
+        Width = 331
+        Height = 183
+        Align = alTop
+        Caption = #214'd'#601'ni'#351' tap'#351'r'#305#287#305
+        TabOrder = 1
+        object XFPanel8: TXFPanel
+          Left = 2
+          Top = 15
+          Width = 327
+          Height = 33
+          Align = alTop
+          Alignment = taLeftJustify
+          Caption = 'Qeydiyyat '#8470':'
+          TabOrder = 0
+          object SpeedButton2: TSpeedButton
+            Left = 300
+            Top = 2
+            Width = 23
+            Height = 21
+            Caption = '...'
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = [fsBold]
+            ParentFont = False
+            OnClick = SpeedButton2Click
+          end
+          object Edit_Referens: TEdit
+            Left = 99
+            Top = 2
+            Width = 196
+            Height = 21
+            CharCase = ecUpperCase
+            Color = clWhite
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -13
+            Font.Name = 'Courier'
+            Font.Style = []
+            MaxLength = 16
+            ParentFont = False
+            TabOrder = 0
+          end
+        end
+        object XFPanel9: TXFPanel
+          Left = 2
+          Top = 48
+          Width = 327
+          Height = 33
+          Align = alTop
+          Alignment = taLeftJustify
+          Caption = 'Valyuta:'
+          TabOrder = 1
+          object Combo_Valute: TComboBox
+            Left = 99
+            Top = 4
+            Width = 225
+            Height = 23
+            Style = csDropDownList
+            Color = clSilver
+            Enabled = False
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = []
+            ParentFont = False
+            TabOrder = 0
+          end
+          object Valute_ID: TListBox
+            Left = 101
+            Top = 6
+            Width = 38
+            Height = 19
+            ItemHeight = 13
+            TabOrder = 1
+            Visible = False
+          end
+        end
+        object XFPanel11: TXFPanel
+          Left = 2
+          Top = 81
+          Width = 327
+          Height = 33
+          Align = alTop
+          Alignment = taLeftJustify
+          Caption = 'M'#601'bl'#601#287':'
+          TabOrder = 2
+          object Edit_amount: TCurrencyEdit
+            Left = 99
+            Top = 6
+            Width = 225
+            Height = 23
+            Color = clWhite
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = 4194304
+            Font.Height = -12
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = []
+            MaxLength = 15
+            ParentFont = False
+            TabOrder = 0
+            Text = '0'
+            OnChange = Edit_BankName_SelfChange
+            OnEnter = Edit_amountEnter
+            OnExit = Edit_amountExit
+          end
+        end
+        object XFPanel10: TXFPanel
+          Left = 2
+          Top = 114
+          Width = 327
+          Height = 33
+          Align = alTop
+          Alignment = taLeftJustify
+          Caption = #214'd'#601'ni'#351' n'#246'v.kodu:'
+          TabOrder = 3
+          object SpeedButton1: TSpeedButton
+            Left = 302
+            Top = 6
+            Width = 25
+            Height = 21
+            Caption = '...'
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = [fsBold]
+            ParentFont = False
+          end
+          object Edit_TransCode: TEdit
+            Left = 107
+            Top = 6
+            Width = 58
+            Height = 21
+            CharCase = ecUpperCase
+            Color = clSilver
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -13
+            Font.Name = 'Courier'
+            Font.Style = []
+            MaxLength = 3
+            ParentFont = False
+            ReadOnly = True
+            TabOrder = 0
+            OnChange = Edit_BankName_SelfChange
+          end
+        end
+        object XFPanel23: TXFPanel
+          Left = 2
+          Top = 147
+          Width = 327
+          Height = 33
+          Align = alTop
+          Alignment = taLeftJustify
+          TabOrder = 4
+          object XFBitBtn1: TXFBitBtn
+            Left = -16
+            Top = -27
+            Width = 94
+            Height = 25
+            Caption = 'Yadda saxla'
+            DoubleBuffered = True
+            ParentDoubleBuffered = False
+            TabOrder = 0
+          end
+          object XFBitBtn2: TXFBitBtn
+            Left = 27
+            Top = 5
+            Width = 75
+            Height = 25
+            Caption = 'Yadda saxla'
+            DoubleBuffered = True
+            ParentDoubleBuffered = False
+            TabOrder = 1
+          end
+          object XFBitBtn3: TXFBitBtn
+            Left = 176
+            Top = 5
+            Width = 75
+            Height = 25
+            Caption = 'Y'#252'kl'#601
+            DoubleBuffered = True
+            ParentDoubleBuffered = False
+            TabOrder = 2
+          end
+        end
+      end
+    end
+  end
+end

@@ -1,0 +1,396 @@
+unit AccMgrUnit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Buttons, ExtCtrls, StdCtrls, ComCtrls, DBCtrls, Mask, Db, OracleData,
+  Oracle;
+
+type
+  TAccMgrForm = class(TForm)
+    AccountGB: TGroupBox;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    Label6: TLabel;
+    Label13: TLabel;
+    Label14: TLabel;
+    Label15: TLabel;
+    Label12: TLabel;
+    DBText1: TDBText;
+    DBLookupCurr: TDBLookupComboBox;
+    DBLookupCust: TDBLookupComboBox;
+    DTPOpenDate: TDateTimePicker;
+    DBLookupSimotchet: TDBLookupComboBox;
+    DBLookupComboBox4: TDBLookupComboBox;
+    AccountFlagsGB: TGroupBox;
+    Button3: TButton;
+    ButtonCommit: TButton;
+    ButtonCancel: TButton;
+    Customers: TOracleDataSet;
+    BalAcc: TOracleDataSet;
+    Avalute: TOracleDataSet;
+    CustomersDatSrc: TDataSource;
+    BalAccDatSrc: TDataSource;
+    AvaluteDatSrc: TDataSource;
+    BalAccBAL_CN: TFloatField;
+    BalAccBALNAME: TStringField;
+    AvaluteVALUTE: TIntegerField;
+    AvaluteVALU_NAME: TStringField;
+    CustomersID: TIntegerField;
+    CustomersNAME: TStringField;
+    Filials: TOracleDataSet;
+    FilialsDatSrc: TDataSource;
+    FilialsID: TFloatField;
+    FilialsNAME: TStringField;
+    RepSymbols: TOracleDataSet;
+    RepSymbolsDatSrc: TDataSource;
+    DBLookupBalance1: TDBLookupComboBox;
+    EditBall: TEdit;
+    EditAcc: TEdit;
+    EditCust: TEdit;
+    EditFil: TEdit;
+    EditAccName: TEdit;
+    EditValute: TEdit;
+    CC_GENERAL: TOraclePackage;
+    DBEditLimit: TEdit;
+    RepSymbolsID: TFloatField;
+    RepSymbolsNAME: TStringField;
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure EditBallChange(Sender: TObject);
+    procedure DBLookupBalance1Click(Sender: TObject);
+    procedure EditCustChange(Sender: TObject);
+    procedure EditFilChange(Sender: TObject);
+    procedure DBLookupComboBox4Click(Sender: TObject);
+    procedure EditValuteChange(Sender: TObject);
+    procedure DBLookupCurrClick(Sender: TObject);
+    procedure EditBallKeyPress(Sender: TObject; var Key: Char);
+    procedure EditCustKeyPress(Sender: TObject; var Key: Char);
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure DBLookupCurrKeyPress(Sender: TObject; var Key: Char);
+    procedure DBLookupBalance1KeyPress(Sender: TObject; var Key: Char);
+    procedure DBLookupCustKeyPress(Sender: TObject; var Key: Char);
+    procedure DTPOpenDateKeyPress(Sender: TObject; var Key: Char);
+    procedure DBLookupSimotchetKeyPress(Sender: TObject; var Key: Char);
+    procedure DBLookupComboBox4KeyPress(Sender: TObject; var Key: Char);
+    procedure EditAccNameKeyPress(Sender: TObject; var Key: Char);
+    procedure DBEditLimitKeyPress(Sender: TObject; var Key: Char);
+    procedure EditAccKeyPress(Sender: TObject; var Key: Char);
+    procedure ButtonCommitClick(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure DBLookupCustClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  AccMgrForm: TAccMgrForm;
+
+implementation
+
+{$R *.DFM}
+
+uses sboapiDataModuleImpl,ContractAddEditImpl, DatModConstructionImpl;
+procedure TAccMgrForm.FormCreate(Sender: TObject);
+begin
+   BalAcc.open;
+   Avalute.open;
+   Customers.Open;
+   Filials.Open;
+   DatModConstruction.sysdat.open ;
+   DTPOpenDate.DateTime:=DatModConstruction.sysdat.fieldbyname('tek_dat').asdatetime;
+  // PairAccount.Open;
+  // RepSymbols.open;
+end;
+
+procedure TAccMgrForm.FormDestroy(Sender: TObject);
+begin
+   BalAcc.CloseAll;
+   Avalute.CloseAll;
+   Customers.CloseAll;
+   Filials.CloseAll;
+   //PairAccount.CloseAll;
+  // RepSymbols.CloseAll;
+    DatModConstruction.sysdat.CloseAll
+end;
+
+
+procedure TAccMgrForm.EditBallChange(Sender: TObject);
+begin
+   if  (Sender as TEdit).Text <>''  then
+   DBLookupBalance1.KeyValue := StrToInt((Sender as TEdit).Text)
+   else DBLookupBalance1.KeyValue := null;
+end;
+
+procedure TAccMgrForm.DBLookupBalance1Click(Sender: TObject);
+begin
+  EditBall.Text := IntToStr(DBLookupBalance1.ListSource.DataSet.FieldByName('BAL_CN').AsInTeger);
+end;
+
+procedure TAccMgrForm.EditCustChange(Sender: TObject);
+begin
+   if (EditCust.Text<>'') then begin
+   DBLookupCust.KeyValue := StrToInt((Sender as TEdit).Text);
+ end else begin
+   DBLookupCust.KeyValue := null;
+   end;
+end;
+
+procedure TAccMgrForm.EditFilChange(Sender: TObject);
+begin
+  if  (Sender as TEdit).Text <>''  then 
+   DBLookupComboBox4.KeyValue := StrToInt((Sender as TEdit).Text)
+   else DBLookupComboBox4.KeyValue:=null;
+end;
+
+procedure TAccMgrForm.DBLookupComboBox4Click(Sender: TObject);
+begin
+  EditFil.Text := IntToStr(DBLookupComboBox4.ListSource.DataSet.FieldByName('ID').AsInTeger);
+end;
+
+procedure TAccMgrForm.EditValuteChange(Sender: TObject);
+begin
+ if  (Sender as TEdit).Text <>''  then
+    DBLookupCurr.KeyValue := StrToInt((Sender as TEdit).Text)
+    else DBLookupCurr.KeyValue :=null;
+
+end;
+
+procedure TAccMgrForm.DBLookupCurrClick(Sender: TObject);
+begin
+   EditValute.Text := IntToStr(DBLookupCurr.ListSource.DataSet.FieldByName('VALUTE').AsInTeger);
+end;
+
+procedure TAccMgrForm.EditBallKeyPress(Sender: TObject; var Key: Char);
+begin
+ if ORD(Key) = VK_RETURN then
+  begin
+  if Sender is TWinControl then
+  with Sender as TWinControl do
+  case Tag of
+    1 : SelectNext(Sender as TWinControl ,True ,True);
+    end;
+    Key := #0;
+  end;
+if not (Key in['0'..'9','.',#8]) then Key :=#0;
+end;
+
+procedure TAccMgrForm.EditCustKeyPress(Sender: TObject; var Key: Char);
+begin
+ if ORD(Key) = VK_RETURN then
+  begin
+  if Sender is TWinControl then
+  with Sender as TWinControl do
+  case Tag of
+    1 : SelectNext(Sender as TWinControl ,True ,True);
+    end;
+    Key := #0;
+  end;
+if (not (Key in['0'..'9','.',#8])) then Key :=#0;
+
+end;
+
+procedure TAccMgrForm.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+  Resize := False;
+end;
+
+procedure TAccMgrForm.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+  if ord(Key) = VK_ESCAPE then close
+end;
+
+procedure TAccMgrForm.DBLookupCurrKeyPress(Sender: TObject; var Key: Char);
+begin
+ if ORD(Key) = VK_RETURN then
+  begin
+  if Sender is TWinControl then
+  with Sender as TWinControl do
+  case Tag of
+    1 : SelectNext(Sender as TWinControl ,True ,True);
+    end;
+    Key := #0;
+  end;
+
+end;
+
+procedure TAccMgrForm.DBLookupBalance1KeyPress(Sender: TObject;
+  var Key: Char);
+begin
+ if ORD(Key) = VK_RETURN then
+  begin
+  if Sender is TWinControl then
+  with Sender as TWinControl do
+  case Tag of
+    1 : SelectNext(Sender as TWinControl ,True ,True);
+    end;
+    Key := #0;
+  end;
+
+end;
+
+procedure TAccMgrForm.DBLookupCustKeyPress(Sender: TObject; var Key: Char);
+begin
+ if ORD(Key) = VK_RETURN then
+  begin
+  if Sender is TWinControl then
+  with Sender as TWinControl do
+  case Tag of
+    1 : SelectNext(Sender as TWinControl ,True ,True);
+    end;
+    Key := #0;
+  end;
+
+end;
+
+procedure TAccMgrForm.DTPOpenDateKeyPress(Sender: TObject; var Key: Char);
+begin
+ if ORD(Key) = VK_RETURN then
+  begin
+  if Sender is TWinControl then
+  with Sender as TWinControl do
+  case Tag of
+    1 : SelectNext(Sender as TWinControl ,True ,True);
+    end;
+    Key := #0;
+  end;
+
+end;
+
+procedure TAccMgrForm.DBLookupSimotchetKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+ if ORD(Key) = VK_RETURN then
+  begin
+  if Sender is TWinControl then
+  with Sender as TWinControl do
+  case Tag of
+    1 : SelectNext(Sender as TWinControl ,True ,True);
+    end;
+    Key := #0;
+  end;
+
+end;
+
+procedure TAccMgrForm.DBLookupComboBox4KeyPress(Sender: TObject;
+  var Key: Char);
+begin
+ if ORD(Key) = VK_RETURN then
+  begin
+  if Sender is TWinControl then
+  with Sender as TWinControl do
+  case Tag of
+    1 : SelectNext(Sender as TWinControl ,True ,True);
+    end;
+    Key := #0;
+  end;
+
+end;
+
+procedure TAccMgrForm.EditAccNameKeyPress(Sender: TObject; var Key: Char);
+begin
+ if ORD(Key) = VK_RETURN then
+  begin
+  if Sender is TWinControl then
+  with Sender as TWinControl do
+  case Tag of
+    1 : SelectNext(Sender as TWinControl ,True ,True);
+    end;
+    Key := #0;
+  end;
+
+end;
+
+procedure TAccMgrForm.DBEditLimitKeyPress(Sender: TObject; var Key: Char);
+begin
+ if ORD(Key) = VK_RETURN then
+  begin
+  if Sender is TWinControl then
+  with Sender as TWinControl do
+  case Tag of
+    1 : SelectNext(Sender as TWinControl ,True ,True);
+    end;
+    Key := #0;
+  end;
+
+end;
+
+procedure TAccMgrForm.EditAccKeyPress(Sender: TObject; var Key: Char);
+begin
+ if ORD(Key) = VK_RETURN then
+  begin
+  if Sender is TWinControl then
+  with Sender as TWinControl do
+  case Tag of
+    1 : SelectNext(Sender as TWinControl ,True ,True);
+    end;
+    Key := #0;
+  end;
+
+end;
+
+procedure TAccMgrForm.ButtonCommitClick(Sender: TObject);
+var
+    DDate :TDateTime;
+    customerid    :  integer;
+    op_id         :  integer;
+    accno         :  string;
+    currencyid    :  integer;
+    name          :  string;
+    open_dat      :  tdatetime;
+    balcn         :  integer;
+    ownid         :  integer;
+
+begin
+  DDate :=Trunc(DTPOpenDate.DateTime);
+  customerid:=strtoint(EditCust.Text);
+  accno:=EditAcc.Text;
+  currencyid:=strtoint(EditValute.text);
+  name:=EditAccName.Text;
+  open_dat:=Integer(Trunc(DTPOpenDate.date));
+  balcn:=strtoint(EditBall.text);
+  ownid:=AddEditContractForm.DBLookupComboboxEh6.listSource.Dataset.FieldByName('ID').AsInteger;
+
+
+  DatModConstruction.sbcm_construction.CallIntegerFunction('add_account',[
+                                                        'p_CustID',customerid,
+                                                        'p_AccNo', accno,
+                                                        'p_Curr',currencyid,
+                                                        'p_Name', name,
+                                                        'p_OpenDate',open_dat,
+                                                        'p_BalCn', balcn,
+                                                        'p_OwnID', ownid]);
+
+
+
+  with AddEditContractForm do   begin
+      with DatModConstruction,Accounts do begin
+        Close;
+        SetVariable('BID',DBLookupComboboxEh6.ListSource.DataSet.FieldByName('ID').asInteger);
+        Open;
+      end;
+     //  DBLookupComboboxEh2.DataSource.DataSet.FieldByName('LOANACCID').AsInteger := AccID;
+    end;
+  Close;
+end;
+
+procedure TAccMgrForm.FormShow(Sender: TObject);
+begin
+   EditAccName.Text:= AddEditContractForm.DBLookupComboboxEh6.ListSource.DataSet.FieldByName('BYR_NAME').AsString;
+end;
+
+procedure TAccMgrForm.DBLookupCustClick(Sender: TObject);
+begin
+   EditCust.Text := IntToStr(DBLookupCust.ListSource.DataSet.FieldByName('ID').AsInTeger);
+end;
+
+end.

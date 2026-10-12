@@ -1,0 +1,295 @@
+object AccExtraction: TAccExtraction
+  Left = 203
+  Top = 107
+  Width = 696
+  Height = 480
+  Caption = 'AccExtraction'
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'MS Sans Serif'
+  Font.Style = []
+  OldCreateOrder = False
+  OnCreate = ActiveFormCreate
+  PixelsPerInch = 96
+  TextHeight = 13
+  object LogInfo: TLabel
+    Left = 8
+    Top = 240
+    Width = 249
+    Height = 49
+    AutoSize = False
+    Caption = 'LogInfo'
+    Color = clInfoBk
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'MS Sans Serif'
+    Font.Style = [fsBold]
+    ParentColor = False
+    ParentFont = False
+    Visible = False
+    WordWrap = True
+  end
+  object GroupBox1: TGroupBox
+    Left = 8
+    Top = 0
+    Width = 249
+    Height = 233
+    Caption = 'Тарих аралыьыны дахил един'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 0
+    object Label1: TLabel
+      Left = 29
+      Top = 16
+      Width = 66
+      Height = 13
+      Caption = 'Дюврцн яввяли'
+    end
+    object Label2: TLabel
+      Left = 31
+      Top = 56
+      Width = 61
+      Height = 13
+      Caption = 'Дюврцн сону'
+    end
+    object Bevel1: TBevel
+      Left = 29
+      Top = 99
+      Width = 185
+      Height = 2
+      Shape = bsBottomLine
+    end
+    object Label3: TLabel
+      Left = 29
+      Top = 155
+      Width = 78
+      Height = 13
+      Caption = 'Щесабын нюмряси'
+    end
+    object DTPBegin: TDateTimePicker
+      Left = 29
+      Top = 32
+      Width = 186
+      Height = 21
+      CalAlignment = dtaLeft
+      Date = 38236.4628198958
+      Time = 38236.4628198958
+      DateFormat = dfShort
+      DateMode = dmComboBox
+      Kind = dtkDate
+      ParseInput = False
+      TabOrder = 0
+    end
+    object DTPEnd: TDateTimePicker
+      Left = 29
+      Top = 72
+      Width = 186
+      Height = 21
+      CalAlignment = dtaLeft
+      Date = 38236.4628602315
+      Time = 38236.4628602315
+      DateFormat = dfShort
+      DateMode = dmComboBox
+      Kind = dtkDate
+      ParseInput = False
+      TabOrder = 1
+    end
+    object AccEd: TEdit
+      Left = 29
+      Top = 174
+      Width = 185
+      Height = 21
+      TabOrder = 2
+    end
+    object BitBtn1: TBitBtn
+      Left = 29
+      Top = 203
+      Width = 188
+      Height = 25
+      Caption = 'Export to Excel'
+      TabOrder = 3
+      OnClick = BitBtn1Click
+    end
+    object AllBalance: TCheckBox
+      Left = 32
+      Top = 104
+      Width = 121
+      Height = 17
+      Caption = 'Дювриййяси оланлар'
+      Checked = True
+      State = cbChecked
+      TabOrder = 4
+    end
+    object BalCheck: TCheckBox
+      Left = 32
+      Top = 136
+      Width = 137
+      Height = 17
+      Caption = 'Баланс щесабы цзря'
+      TabOrder = 5
+    end
+    object CheckBoxVal: TCheckBox
+      Left = 32
+      Top = 120
+      Width = 97
+      Height = 17
+      Caption = 'Валйутада'
+      TabOrder = 6
+    end
+  end
+  object OraPackVExtraction: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    Debug = False
+    PackageName = 'V_Extraction'
+    ParameterMode = pmPositional
+    Cursor = crDefault
+    Optimize = True
+    Left = 264
+    Top = 72
+  end
+  object OraDataSetMainExell: TOracleDataSet
+    SQL.Strings = (
+      
+        'select sel.acc_no, sel.val_name, TO_Char(sel.dat, '#39'dd/mm/yyyy'#39') ' +
+        'dat, sel.name, '
+      
+        'Round(ABS(decode (sel.Prefix, '#39'D'#39', :ByValD, '#39'K'#39', 0) ),2) AS Debe' +
+        't,  '
+      
+        'Round(ABS(decode (sel.Prefix, '#39'K'#39', :ByValK , '#39'D'#39', 0)),2) AS Kred' +
+        'it, ammount, lammount, ammount_c'
+      'from ('
+      
+        'select acc.acc_no, val.val_name, prov.dat, prov.ammount, prov.la' +
+        'mmount, prov.ammount_c, prov.name, ('#39'D'#39') as Prefix'
+      'from provarch prov, account acc, avalute val'
+      'where prov.debt = :acc_id'
+      'and acc.id = prov.kredit'
+      'and val.valute = acc.val_acc'
+      'and prov.dat >= :BeginDat'
+      'and prov.dat <= :EndDat'
+      'union'
+      
+        'select acc.acc_no, val.val_name, prov.dat,  prov.ammount, prov.l' +
+        'ammount, prov.ammount_c, prov.name , ('#39'K'#39') as Prefix'
+      'from provarch prov, account acc, avalute val'
+      'where prov.kredit = :acc_id'
+      'and acc.id = prov.debt '
+      'and val.valute = prov.val_acc'
+      'and prov.dat >=:BeginDat'
+      'and prov.dat <= :EndDat) sel'
+      'order by sel.dat, sel.prefix, sel.val_name'
+      '')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    Variables.Data = {
+      0300000005000000070000003A4143435F494404000000000000000000000009
+      0000003A424547494E4441540C0000000000000000000000070000003A454E44
+      4441540C0000000000000000000000070000003A425956414C44010000000000
+      000000000000070000003A425956414C4B010000000000000000000000}
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = False
+    Active = False
+    Left = 264
+    Top = 160
+    object OraDataSetMainExellDAT: TStringField
+      DisplayLabel = 'Тарих'
+      FieldName = 'DAT'
+      Size = 10
+    end
+    object OraDataSetMainExellVAL_NAME: TStringField
+      DisplayLabel = 'Вал.'
+      FieldName = 'VAL_NAME'
+      Size = 10
+    end
+    object OraDataSetMainExellACC_NO: TStringField
+      DisplayLabel = 'Гаршы щесаб'
+      FieldName = 'ACC_NO'
+    end
+    object OraDataSetMainExellDEBET: TFloatField
+      DisplayLabel = 'Дебет'
+      FieldName = 'DEBET'
+    end
+    object OraDataSetMainExellKREDIT: TFloatField
+      DisplayLabel = 'Кредит'
+      FieldName = 'KREDIT'
+    end
+    object OraDataSetMainExellNAME: TStringField
+      DisplayLabel = 'Тяйинат'
+      FieldName = 'NAME'
+      Size = 255
+    end
+    object OraDataSetMainExellAMMOUNT: TFloatField
+      FieldName = 'AMMOUNT'
+    end
+    object OraDataSetMainExellLAMMOUNT: TFloatField
+      FieldName = 'LAMMOUNT'
+    end
+    object OraDataSetMainExellAMMOUNT_C: TFloatField
+      FieldName = 'AMMOUNT_C'
+    end
+  end
+  object OraDataSetBalcns: TOracleDataSet
+    SQL.Strings = (
+      'select acc.acc_no from account acc'
+      'where acc.bal_cn1 = :balcn'
+      'order by acc.acc_no')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    Variables.Data = {0300000001000000060000003A42414C434E050000000000000000000000}
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = False
+    Active = False
+    Left = 264
+    Top = 200
+  end
+end

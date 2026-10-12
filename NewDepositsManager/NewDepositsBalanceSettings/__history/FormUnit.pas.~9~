@@ -1,0 +1,85 @@
+unit FormUnit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ExtCtrls, XFSCtrls, DB, OracleData, Grids, XDBGrids, StdCtrls;
+
+type
+  TForm_balace_settings = class(TForm)
+    XFPanel1: TXFPanel;
+    Ods_person: TOracleDataSet;
+    Ods_balance_settings: TOracleDataSet;
+    Dsrc_person: TDataSource;
+    Dsrc_valyuta: TDataSource;
+    Dsrc_balance_settings: TDataSource;
+    Ods_personID: TFloatField;
+    Ods_personNAME: TWideStringField;
+    Ods_balance_settingsNAME: TWideStringField;
+    Ods_balance_settingsSHORT_BALCN: TFloatField;
+    Ods_balance_settingsLONG_BALCN: TFloatField;
+    Ods_balance_settingsNEWSORT_BALCN: TFloatField;
+    Ods_balance_settingsNEWLONGBALCN: TFloatField;
+    XFPanel2: TXFPanel;
+    XFPanel3: TXFPanel;
+    XFGroupBox1: TXFGroupBox;
+    XDBGrid1: TXDBGrid;
+    XFGroupBox2: TXFGroupBox;
+    XDBGrid2: TXDBGrid;
+    XFGroupBox3: TXFGroupBox;
+    XDBGrid3: TXDBGrid;
+    XFPanel4: TXFPanel;
+    ods_valyuta: TOracleDataSet;
+    ods_valyutaID: TFloatField;
+    ods_valyutaNAME: TWideStringField;
+    ods_valyutaCUST_TYPEID: TFloatField;
+    procedure Ods_personAfterScroll(DataSet: TDataSet);
+    procedure ods_valyutaAfterScroll(DataSet: TDataSet);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form_balace_settings: TForm_balace_settings;
+   procedure InitPlugin(s:string);export;
+implementation
+uses sboapiDataModuleimpl;
+
+{$R *.dfm}
+
+   procedure InitPlugin(s:string);export;
+begin
+   Form_balace_settings.ShowModal;
+end;
+exports
+     InitPlugin;
+
+procedure TForm_balace_settings.Ods_personAfterScroll(DataSet: TDataSet);
+begin
+with Ods_valyuta do
+begin
+close;
+ SetVariable('v_cust_typeid',Ods_personID.AsInteger);
+ open;
+end;
+end;
+
+procedure TForm_balace_settings.ods_valyutaAfterScroll(DataSet: TDataSet);
+begin
+with Ods_balance_settings do
+begin
+close;
+ SetVariable(':V_VAL_ID',ods_valyutaID.AsInteger);
+ open;
+end;
+end;
+
+initialization
+ Form_balace_settings := TForm_balace_settings.Create(Application);
+end.
+
+
+end.

@@ -1,0 +1,178 @@
+object TrancheDataModule: TTrancheDataModule
+  OldCreateOrder = False
+  Left = 273
+  Top = 111
+  Height = 480
+  Width = 696
+  object CreditInfo: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      '  ID,'
+      '  Numberofcredit ,'
+      '  CreditLineAmount,'
+      '  Name,'
+      '  VAL_NAME,'
+      '  Currency,'
+      '  BoorowerID,'
+      '  obligation'
+      'from'
+      '  CM_ACTIVE'
+      'where ID=:ID'
+      '')
+    Variables.Data = {0300000001000000030000003A4944030000000000000000000000}
+    Cursor = crSQLWait
+    Session = CMDataModule.CMSession
+    Left = 80
+    Top = 144
+    object CreditInfoID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object CreditInfoNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 64
+    end
+    object CreditInfoVAL_NAME: TWideStringField
+      FieldName = 'VAL_NAME'
+      Size = 10
+    end
+    object CreditInfoCURRENCY: TFloatField
+      FieldName = 'CURRENCY'
+      Required = True
+    end
+    object CreditInfoOBLIGATION: TFloatField
+      FieldName = 'OBLIGATION'
+      Required = True
+      DisplayFormat = '#,##0.00'
+    end
+    object CreditInfoBOOROWERID: TFloatField
+      FieldName = 'BOOROWERID'
+      Required = True
+    end
+    object CreditInfoNUMBEROFCREDIT: TWideStringField
+      FieldName = 'NUMBEROFCREDIT'
+      Size = 32
+    end
+    object CreditInfoCREDITLINEAMOUNT: TFloatField
+      FieldName = 'CREDITLINEAMOUNT'
+      Required = True
+    end
+  end
+  object DataSrcCreditInfo: TDataSource
+    DataSet = CreditInfo
+    Left = 80
+    Top = 80
+  end
+  object TrancheAccounts: TOracleDataSet
+    SQL.Strings = (
+      
+        'SELECT   id AS accid, kli_id, acc_no AS accountnumber, NAME AS a' +
+        'ccountname'
+      '    FROM sb_account'
+      '   WHERE (    kli_id = :kli_id'
+      '          AND bal_cn1 IN (SELECT accountnumber'
+      '                            FROM cm_aginfo'
+      '                           WHERE groupid = (SELECT g.id'
+      
+        '                                              FROM cm_accountgro' +
+        'ups g'
+      
+        '                                             WHERE g.iname = '#39'Cl' +
+        'ientAccs'#39'))'
+      '         )'
+      'UNION ALL'
+      
+        'SELECT   id AS accid, kli_id, acc_no AS accountnumber, NAME AS a' +
+        'ccountname'
+      '    FROM sb_account'
+      '   WHERE ((bal_cn1 IN (SELECT accountnumber'
+      '                         FROM cm_aginfo'
+      '                        WHERE groupid = (SELECT g.id'
+      
+        '                                           FROM cm_accountgroups' +
+        ' g'
+      
+        '                                          WHERE g.iname = '#39'Inter' +
+        'nalBankAccs'#39'))'
+      '          )'
+      '         )'
+      'ORDER BY kli_id, accountnumber'
+      '')
+    Variables.Data = {0300000001000000070000003A4B4C495F4944030000000000000000000000}
+    Cursor = crSQLWait
+    Session = CMDataModule.CMSession
+    Left = 208
+    Top = 144
+  end
+  object DataSrcTrancheAccounts: TDataSource
+    DataSet = TrancheAccounts
+    Left = 208
+    Top = 80
+  end
+  object CustAccount: TOracleDataSet
+    SQL.Strings = (
+      'select '
+      '      BOOROWERACCID '
+      '   from '
+      '      CM_ACCOUNTS'
+      ' where CreditID=:CreditID')
+    Variables.Data = {
+      0300000001000000090000003A43524544495449440300000000000000000000
+      00}
+    Cursor = crSQLWait
+    Session = CMDataModule.CMSession
+    Left = 88
+    Top = 216
+    object CustAccountBOOROWERACCID: TFloatField
+      FieldName = 'BOOROWERACCID'
+    end
+  end
+  object CM_TRANCHE: TOraclePackage
+    Session = CMDataModule.CMSession
+    PackageName = 'CM_TRANCHE'
+    ParameterMode = pmNamed
+    Cursor = crHourGlass
+    Left = 248
+    Top = 264
+  end
+  object TranchesData: TOracleDataSet
+    SQL.Strings = (
+      'SELECT id, creditid, tranchedate, trancheamount'
+      '  FROM cm_tranches'
+      'WHERE CreditID=:CreditID'
+      'ORDER BY tranchedate DESC')
+    Variables.Data = {
+      0300000001000000090000003A43524544495449440300000000000000000000
+      00}
+    Session = CMDataModule.CMSession
+    Left = 352
+    Top = 88
+    object TranchesDataID: TFloatField
+      DisplayLabel = '№'
+      FieldName = 'ID'
+      Required = True
+      Visible = False
+    end
+    object TranchesDataCREDITID: TFloatField
+      FieldName = 'CREDITID'
+      Required = True
+      Visible = False
+    end
+    object TranchesDataTRANCHEDATE: TDateTimeField
+      DisplayLabel = 'Тарих'
+      FieldName = 'TRANCHEDATE'
+      Required = True
+    end
+    object TranchesDataTRANCHEAMOUNT: TFloatField
+      DisplayLabel = 'Мябляь'
+      FieldName = 'TRANCHEAMOUNT'
+      Required = True
+      DisplayFormat = '#,##0.00'
+    end
+  end
+  object DataSrcTranches: TDataSource
+    DataSet = TranchesData
+    Left = 352
+    Top = 144
+  end
+end

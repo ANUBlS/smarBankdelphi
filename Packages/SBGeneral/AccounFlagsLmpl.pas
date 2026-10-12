@@ -1,0 +1,140 @@
+﻿unit AccounFlagsLmpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, CheckLst, Buttons, XFSCtrls, ExtCtrls;
+
+const
+ cs_flagexsist = 'FlagExsist';
+
+type
+  TFormAccounFlags = class(TForm)
+    CListBoxAccFlags: TCheckListBox;
+    Panel1: TPanel;
+    XFBitBtn1: TXFBitBtn;
+    procedure FormCreate(Sender: TObject);
+    procedure XFBitBtn1Click(Sender: TObject);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure CListBoxAccFlagsClickCheck(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+  private
+
+    { Private declarations }
+    function FlagExsist(AccID: Integer; Ch: Char): Boolean;
+  public
+    FlagMap: String;
+    { Public declarations }
+  end;
+ type mas=array[0..99]of integer;
+var
+a1:mas;
+  FormAccounFlags: TFormAccounFlags;
+
+implementation
+
+{$R *.dfm}
+
+uses
+  OpenAccountImpl,SBTranslateProc, sboapiDataModuleImpl, OpenAccdataImpl,
+  Account_edit_Unit;
+function TFormAccounFlags.FlagExsist(AccID: Integer; Ch: Char): Boolean;
+begin
+  with DataAcc.SBUTIL do
+    Result := CallBooleanFunction(cs_flagexsist,
+      ['AccID', AccID, 'FlagChar', Ch]);
+end;
+procedure TFormAccounFlags.CListBoxAccFlagsClickCheck(Sender: TObject);
+var
+i:integer;
+f:boolean;
+begin
+
+f:= DataAcc.SB_ACA.CallBooleanFunction('checkadvancedobjectaccess', ['ACC_SMVOL']);
+// showmessage(BoolToStr(f));
+ if not f then
+ begin
+  for i := 0 to 99 do
+  begin
+
+  if CListBoxAccFlags.ItemIndex=a1[i]  then begin
+                   CListBoxAccFlags.Checked[a1[i]]:=true;
+                   showmessage('Sizin secilmisi goturme huququnuz yoxdur  !');
+                   exit;
+                 end;
+  end;
+
+    end;
+
+end;
+
+
+
+procedure TFormAccounFlags.FormCreate(Sender: TObject);
+var
+  Index: Word;
+begin
+  with DataAcc do
+  begin
+    AccFlags.Refresh;
+    AccFlags.First;
+     while not AccFlags.Eof do
+    begin
+      Index := CListBoxAccFlags.Items.Add(AccFlags.FieldByName('Name')
+        .AsString);
+       if ominsert_edit = false then
+       CListBoxAccFlags.Checked[Index]:=FlagExsist(strtoint(accont_id), AccFlags.FieldByName('Symbol').AsString[1]);
+       AccFlags.Next;
+      SBTranslateProc.TranslateAllCompForms(Self, sboapiDataModule.OrPack_SL);
+    end;
+
+  end;
+end;
+
+procedure TFormAccounFlags.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+  if ord(Key) = 27 then
+    Close;
+end;
+
+procedure TFormAccounFlags.FormShow(Sender: TObject);
+var
+i:integer;
+begin
+for i:=0  to CListBoxAccFlags.Items.Count - 1 do
+  begin
+    if CListBoxAccFlags.Checked[i] then
+ a1[i]:=i;
+  end;
+
+end;
+
+procedure TFormAccounFlags.XFBitBtn1Click(Sender: TObject);
+var
+  Index, IndexCount: Word;
+  Symbol: String;
+begin
+
+//DataAcc.SB_ACA.CallProcedure('checkadvancedobjectaccess', ['ACC_SMVOL']);
+  FlagMap := '';
+  IndexCount := CListBoxAccFlags.Items.Count;
+  for Index := 0 to IndexCount - 1 do
+    if CListBoxAccFlags.Checked[Index] then
+    begin
+      Symbol := CListBoxAccFlags.Items[index];
+      FlagMap := FlagMap + ',' + Symbol[1];
+    end;
+  Delete(FlagMap, 1, 1);
+  if accont_id='' then
+  begin
+
+  OpenAccount.Label_Symbols.Caption := FlagMap;
+  end
+  else
+  Account_edit.Label_Symbols.Caption := FlagMap;
+  Close;
+
+end;
+
+end.

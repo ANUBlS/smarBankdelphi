@@ -1,0 +1,685 @@
+object FrmMainLoss: TFrmMainLoss
+  Left = 0
+  Top = 0
+  BorderIcons = [biSystemMenu]
+  BorderStyle = bsSingle
+  Caption = 'Z'#601'r'#601'rl'#601'r'
+  ClientHeight = 429
+  ClientWidth = 945
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poDesktopCenter
+  OnClose = FormClose
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  OnKeyPress = FormKeyPress
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object XFPanel1: TXFPanel
+    Left = 0
+    Top = 0
+    Width = 945
+    Height = 429
+    Align = alClient
+    TabOrder = 0
+    object XDBGrid1: TXDBGrid
+      Left = 1
+      Top = 73
+      Width = 943
+      Height = 355
+      Align = alClient
+      DataSource = DmLoss.DsRmain
+      GridStyle.VisualStyle = vsXPStyle
+      Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit, dgExtendedSelect, dgInternalSelect, dgRowResize, dgRowScroll, dgHotButtons, dgTitleButtons, dgTitleHeaders, dgTitleWidthOff, dgMarkerAutoAlign, dgMarkerAutoToggle]
+      PopupMenu = MainZerer
+      TabOrder = 0
+      OnDblClick = XFButton3Click
+      Columns = <
+        item
+          Expanded = False
+          FieldName = 'CID'
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'STATUS'
+          Images = ImageList2
+          Transparent = True
+          Visible = False
+          Width = 38
+        end
+        item
+          Expanded = False
+          FieldName = 'CLAIM_NUM'
+          Visible = True
+          Width = 120
+        end
+        item
+          Expanded = False
+          FieldName = 'CLAIM_DATE'
+          Visible = True
+          Width = 130
+        end
+        item
+          Expanded = False
+          FieldName = 'POLICY_NUM'
+          Visible = True
+          Width = 120
+        end
+        item
+          Expanded = False
+          FieldName = 'FINAL_AMOUNT_LOSS'
+          Visible = True
+          Width = 120
+        end
+        item
+          Expanded = False
+          FieldName = 'DETAIL'
+          Visible = True
+          Width = 300
+        end>
+    end
+    object XFPanel5: TXFPanel
+      Left = 1
+      Top = 1
+      Width = 943
+      Height = 72
+      Align = alTop
+      TabOrder = 1
+      object XFButton8: TXFButton
+        Left = 22
+        Top = 9
+        Width = 75
+        Height = 39
+        Caption = 'Status'
+        DoubleBuffered = True
+        ParentDoubleBuffered = False
+        TabOrder = 0
+        OnClick = XFButton8Click
+      end
+      object XFButton7: TXFButton
+        Left = 425
+        Top = 9
+        Width = 75
+        Height = 39
+        Caption = #214'd'#601'm'#601
+        DoubleBuffered = True
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -12
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentDoubleBuffered = False
+        ParentFont = False
+        TabOrder = 1
+        OnClick = XFButton7Click
+      end
+      object XFButton3: TXFButton
+        Left = 103
+        Top = 9
+        Width = 75
+        Height = 39
+        Caption = 'Redakt'#601
+        DoubleBuffered = True
+        ParentDoubleBuffered = False
+        TabOrder = 2
+        OnClick = XFButton3Click
+      end
+      object XFButton4: TXFButton
+        Left = 181
+        Top = 9
+        Width = 75
+        Height = 39
+        Caption = 'Silm'#601'k'
+        DoubleBuffered = True
+        ParentDoubleBuffered = False
+        TabOrder = 3
+        OnClick = XFButton4Click
+      end
+      object XFButton2: TXFButton
+        Left = 507
+        Top = 9
+        Width = 75
+        Height = 39
+        Caption = 'Ba'#287'la'
+        DoubleBuffered = True
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -12
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentDoubleBuffered = False
+        ParentFont = False
+        TabOrder = 4
+        OnClick = XFButton2Click
+      end
+      object XFGroupBox3: TXFGroupBox
+        Left = 676
+        Top = 1
+        Width = 227
+        Height = 51
+        Caption = 'Yeni z'#601'r'#601'r'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -12
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 5
+        object XFButton1: TXFButton
+          Left = 152
+          Top = 10
+          Width = 72
+          Height = 39
+          Caption = 'Yeni z'#601'r'#601'r'
+          DoubleBuffered = True
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -12
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentDoubleBuffered = False
+          ParentFont = False
+          TabOrder = 0
+          OnClick = XFButton1Click
+        end
+        object ComboBox1: TComboBox
+          Left = 3
+          Top = 22
+          Width = 128
+          Height = 22
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -12
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 1
+        end
+      end
+      object XFButton9: TXFButton
+        Left = 262
+        Top = 9
+        Width = 75
+        Height = 39
+        Caption = 'Taninma'
+        DoubleBuffered = True
+        ParentDoubleBuffered = False
+        TabOrder = 6
+        OnClick = XFButton9Click
+      end
+      object XFButton10: TXFButton
+        Left = 344
+        Top = 9
+        Width = 75
+        Height = 39
+        Caption = 'Geri qaytarma'
+        DoubleBuffered = True
+        ParentDoubleBuffered = False
+        TabOrder = 7
+        OnClick = XFButton10Click
+      end
+    end
+  end
+  object XFPanel2: TXFPanel
+    Left = 0
+    Top = 280
+    Width = 972
+    Height = 140
+    TabOrder = 1
+    Visible = False
+    object XFPanel3: TXFPanel
+      Left = 1
+      Top = 1
+      Width = 616
+      Height = 138
+      Align = alLeft
+      TabOrder = 0
+      object XFGroupBox1: TXFGroupBox
+        Left = 181
+        Top = 1
+        Width = 434
+        Height = 136
+        Align = alRight
+        Caption = 'M'#601'rh'#601'l'#601'l'#601'r'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -12
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 0
+        Visible = False
+        object CheckBox7: TCheckBox
+          Left = 340
+          Top = 16
+          Width = 87
+          Height = 17
+          Caption = 'OK verilib'
+          Color = clRed
+          ParentColor = False
+          TabOrder = 0
+        end
+        object CheckBox8: TCheckBox
+          Left = 340
+          Top = 57
+          Width = 87
+          Height = 17
+          Caption = 'T'#601'sdiq'
+          Color = clRed
+          ParentColor = False
+          TabOrder = 1
+          OnClick = CheckBox8Click
+        end
+        object XFButton6: TXFButton
+          Left = 257
+          Top = 101
+          Width = 174
+          Height = 23
+          Caption = 'Se'#231'ilmi'#351' m'#601'rh'#601'l'#601'l'#601'ri t'#601'sdiql'#601
+          DoubleBuffered = True
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          ParentDoubleBuffered = False
+          ParentFont = False
+          TabOrder = 2
+          OnClick = XFButton6Click
+        end
+        object DateTimePicker4: TDateTimePicker
+          Left = 340
+          Top = 76
+          Width = 87
+          Height = 20
+          Date = 41453.582113506940000000
+          Time = 41453.582113506940000000
+          TabOrder = 3
+        end
+        object DateTimePicker8: TDateTimePicker
+          Left = 340
+          Top = 34
+          Width = 87
+          Height = 22
+          Date = 41453.584972118050000000
+          Time = 41453.584972118050000000
+          TabOrder = 4
+        end
+        object XFPanel4: TXFPanel
+          Left = 1
+          Top = 13
+          Width = 338
+          Height = 83
+          TabOrder = 5
+          object DateTimePicker1: TDateTimePicker
+            Left = 5
+            Top = 63
+            Width = 95
+            Height = 20
+            Date = 41453.581272569440000000
+            Time = 41453.581272569440000000
+            TabOrder = 0
+          end
+          object CheckBox2: TCheckBox
+            Left = 5
+            Top = 45
+            Width = 95
+            Height = 17
+            Caption = 'Bank'#305'n cavab'#305
+            Color = clRed
+            ParentColor = False
+            TabOrder = 1
+          end
+          object DateTimePicker5: TDateTimePicker
+            Left = 5
+            Top = 21
+            Width = 95
+            Height = 22
+            Date = 41453.584200451390000000
+            Time = 41453.584200451390000000
+            TabOrder = 2
+          end
+          object CheckBox1: TCheckBox
+            Left = 5
+            Top = 3
+            Width = 95
+            Height = 16
+            Caption = 'Forma 4'
+            Color = clRed
+            ParentColor = False
+            TabOrder = 3
+          end
+          object CheckBox3: TCheckBox
+            Left = 107
+            Top = 3
+            Width = 139
+            Height = 17
+            Caption = 'Qar'#351#305' t'#601'r'#601'f qiym.cavab'
+            Color = clRed
+            ParentColor = False
+            TabOrder = 4
+          end
+          object DateTimePicker6: TDateTimePicker
+            Left = 106
+            Top = 21
+            Width = 139
+            Height = 22
+            Date = 41453.584457615740000000
+            Time = 41453.584457615740000000
+            TabOrder = 5
+          end
+          object CheckBox4: TCheckBox
+            Left = 107
+            Top = 43
+            Width = 139
+            Height = 17
+            Caption = 'Q'#252'sur Akt'#305
+            Color = clRed
+            ParentColor = False
+            TabOrder = 6
+          end
+          object DateTimePicker2: TDateTimePicker
+            Left = 107
+            Top = 61
+            Width = 139
+            Height = 20
+            Date = 41453.581567708330000000
+            Time = 41453.581567708330000000
+            TabOrder = 7
+          end
+          object CheckBox5: TCheckBox
+            Left = 249
+            Top = 3
+            Width = 86
+            Height = 17
+            Caption = 'Yoxlama'
+            Color = clRed
+            ParentColor = False
+            TabOrder = 8
+          end
+          object DateTimePicker7: TDateTimePicker
+            Left = 249
+            Top = 21
+            Width = 86
+            Height = 22
+            Date = 41453.584595231490000000
+            Time = 41453.584595231490000000
+            TabOrder = 9
+          end
+          object CheckBox6: TCheckBox
+            Left = 249
+            Top = 45
+            Width = 86
+            Height = 16
+            Caption = 'M'#252'raci'#601't'
+            Color = clRed
+            ParentColor = False
+            TabOrder = 10
+          end
+          object DateTimePicker3: TDateTimePicker
+            Left = 249
+            Top = 61
+            Width = 86
+            Height = 20
+            Date = 41453.581933738430000000
+            Time = 41453.581933738430000000
+            TabOrder = 11
+          end
+        end
+      end
+      object XFGroupBox2: TXFGroupBox
+        Left = 1
+        Top = 1
+        Width = 180
+        Height = 136
+        Align = alClient
+        Caption = 'Statuslar'
+        Color = clRed
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentColor = False
+        ParentFont = False
+        TabOrder = 1
+        object XFRadioButton1: TXFRadioButton
+          Left = 24
+          Top = 16
+          Width = 113
+          Height = 17
+          Caption = 'Ara'#351'd'#305'r'#305'l'#305'r'
+          Color = clRed
+          ParentColor = False
+          TabOrder = 0
+        end
+        object XFRadioButton2: TXFRadioButton
+          Left = 24
+          Top = 45
+          Width = 113
+          Height = 17
+          Caption = #304'mtina'
+          Color = clRed
+          ParentColor = False
+          TabOrder = 1
+        end
+        object XFButton5: TXFButton
+          Left = 22
+          Top = 96
+          Width = 152
+          Height = 23
+          Caption = 'Se'#231'ilmi'#351' statusu t'#601'sdiql'#601
+          DoubleBuffered = True
+          ParentDoubleBuffered = False
+          TabOrder = 2
+          OnClick = XFButton5Click
+        end
+        object XFRadioButton3: TXFCheckBox
+          Left = 24
+          Top = 73
+          Width = 97
+          Height = 17
+          Caption = 'XFRadioButton3'
+          TabOrder = 3
+          Visible = False
+        end
+      end
+    end
+  end
+  object MainZerer: TPopupMenu
+    Images = ImageList2
+    Left = 368
+    Top = 104
+    object Yeni1: TMenuItem
+      Caption = 'Yeni'
+      ImageIndex = 2
+      OnClick = XFButton1Click
+    end
+    object N2: TMenuItem
+      Caption = '-'
+    end
+    object Redakt1: TMenuItem
+      Caption = 'Redakt'#601
+      ImageIndex = 7
+      OnClick = XFButton3Click
+    end
+    object N1: TMenuItem
+      Caption = '-'
+    end
+    object Silmk1: TMenuItem
+      Caption = 'Silm'#601'k'
+      ImageIndex = 1
+      OnClick = XFButton4Click
+    end
+    object N3: TMenuItem
+      Caption = '-'
+    end
+    object dm1: TMenuItem
+      Caption = #214'd'#601'm'#601' '
+      ImageIndex = 12
+      OnClick = XFButton7Click
+    end
+    object N4: TMenuItem
+      Caption = '-'
+    end
+    object Yenilmk1: TMenuItem
+      Caption = 'Yenil'#601'm'#601'k'
+      OnClick = Yenilmk1Click
+    end
+  end
+  object ImageList2: TImageList
+    Left = 184
+    Top = 208
+    Bitmap = {
+      494C010104001400140010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      0000000000003600000028000000400000002000000001001000000000000010
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000000000000000000000000000000000000000FF7FFF7F
+      FF7FFF7FFF7FFF7F000000000000000000000000000000000000000008218C31
+      1042104210428C310821000000000000000000000000000000000000FF7FFF7F
+      FF7FFF7FFF7FFF7F000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000000000000000FF7FFF7F00000000
+      0000000000000000FF7FFF7F00000000000000000000000084108430844C005C
+      005C005C844C084110428C31841000000000000000000000FF7FFF7F00020002
+      0002000200020002FF7FFF7F0000000000000000000000000000000000001000
+      00000000000000000000000000000000000000000000FF7F0000000000001000
+      000010000000100000000000FF7F00000000000000000010844C007C007C007C
+      007C007C007C007C844C8C4110428410000000000000FF7F0002000200020002
+      000200020002000200020002FF7F000000000000000000000000000010000002
+      1000000000000000000000000000000000000000FF7F00001000100010000000
+      1000000010000000100000000000FF7F000000000010006C007C007C007C007C
+      007C007C007C007C007C006C8C418C3100000000FF7F00020002000200020002
+      0002000200020002000200020002FF7F00000000000000000000100000020002
+      0002100000000000000000000000000000000000FF7F10001000100010001863
+      1863FF7FFF7F1000000010000000FF7F00000000003C007C007C007C007C007C
+      007C007C007C007C007C007C844C104208210000FF7F0002000200020002FF7F
+      FF7FFF7FFF7F0002000200020002FF7F0000000000000000100000020002E003
+      000200021000000000000000000000000000FF7F100010001000100010001000
+      1863FF7F100010001000000000000000FF7F0020007C007C007C007C007C007C
+      007C007C007C007C007C007C007C08418C31FF7F0002000200020002FF7FFF7F
+      00020002FF7FFF7F0002000200020002FF7F00000000000000020002E0030000
+      E00300020002100000000000000000000000FF7F100010001000100010001F00
+      1863FF7F100010001000000010000000FF7F003C007C007C007C007C007C007C
+      007C007C007C007C007C007C007C844C1042FF7F000200020002000200020002
+      00020002FF7FFF7F0002000200020002FF7F0000000000000002E00300000000
+      0000E0030002000210000000000000000000FF7F100010001F0010001F001000
+      1863FF7F100010001000100000000000FF7F005C007C00000000000000000000
+      000000000000000000000000007C005C1042FF7F000200020002000200020002
+      0002FF7FFF7F00020002000200020002FF7F000000000000E003000000000000
+      00000000E003000200021000000000000000FF7F1000100010001F0010001F00
+      1863FF7F100010001000000010000000FF7F005C007C00000000000000000000
+      000000000000000000000000007C005C1042FF7F00020002000200020002FF7F
+      FF7FFF7F000200020002000200020002FF7F0000000000000000000000000000
+      000000000000E00300020002100000000000FF7F100010001F0010001F001863
+      186318631F0010001000100000000000FF7F005C007CEF7DEF7DEF7DEF7DEF7D
+      EF7DEF7DEF7DEF7DEF7DEF7D007C005C8C31FF7F0002000200020002FF7FFF7F
+      00020002000200020002000200020002FF7F0000000000000000000000000000
+      0000000000000000E0030002000210000000FF7F10001F0010001F001F001F00
+      1F001000100010001000000010000000FF7F003C007C007C007C007C007C007C
+      007C007C007C007C007C007C007C844C0821FF7F0002000200020002FF7FFF7F
+      00020002FF7FFF7F0002000200020002FF7F0000000000000000000000000000
+      00000000000000000000E0030002000200000000FF7F10001F0010001F001F00
+      1863FF7F1F001000100010000000FF7F00000020007C007C007C007C007C007C
+      007C007C007C007C007C007C007C843000000000FF7F0002000200020002FF7F
+      FF7FFF7FFF7F0002000200020002FF7F00000000000000000000000000000000
+      000000000000000000000000E003000200000000FF7F100010001F0010001000
+      1863186310001000100010000000FF7F00000000003C007C007C007C007C007C
+      007C007C007C007C007C007C844C841000000000FF7F00020002000200020002
+      0002000200020002000200020002FF7F00000000000000000000000000000000
+      0000000000000000000000000000E003000000000000FF7F1000100010001F00
+      100010001000100010000000FF7F0000000000000010006C007C007C007C007C
+      007C007C007C007C007C006C00100000000000000000FF7F0002000200020002
+      000200020002000200020002FF7F000000000000000000000000000000000000
+      000000000000000000000000000000000000000000000000FF7FFF7F10001000
+      1000100010001000FF7FFF7F000000000000000000000010003C007C007C007C
+      007C007C007C007C003C0010000000000000000000000000FF7FFF7F00020002
+      0002000200020002FF7FFF7F0000000000000000000000000000000000000000
+      00000000000000000000000000000000000000000000000000000000FF7FFF7F
+      FF7FFF7FFF7FFF7F0000000000000000000000000000000000000020003C005C
+      005C005C003C00200000000000000000000000000000000000000000FF7FFF7F
+      FF7FFF7FFF7FFF7F000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000424D3E000000000000003E000000
+      2800000040000000200000000100010000000000000100000000000000000000
+      000000000000000000000000FFFFFF0000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000000000000000F81FF80FF81FFFFFE007E003E007FDFF
+      C003C001C003F8FF800180018001F07F800180008001E03F000000000000E21F
+      000000000000E70F00003FF80000EF8700003FF80000FFC3000000000000FFE1
+      000000000000FFF1800100018001FFF9800180018001FFFDC0038003C003FFFF
+      E007C007E007FFFFF81FF01FF81FFFFF00000000000000000000000000000000
+      000000000000}
+  end
+end

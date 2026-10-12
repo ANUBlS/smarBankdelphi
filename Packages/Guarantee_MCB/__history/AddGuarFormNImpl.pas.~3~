@@ -1,0 +1,89 @@
+unit AddGuarFormNImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ExtCtrls, StdCtrls, Mask, DBCtrlsEh;
+
+type
+  TAddGuarFormAvto = class(TForm)
+    Panel1: TPanel;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    Label6: TLabel;
+    Label7: TLabel;
+    Label8: TLabel;
+    Label9: TLabel;
+    Label10: TLabel;
+    DBEditEh1: TDBEditEh;
+    DBEditEh2: TDBEditEh;
+    DBEditEh3: TDBEditEh;
+    DBEditEh4: TDBEditEh;
+    DBEditEh5: TDBEditEh;
+    DBEditEh7: TDBEditEh;
+    DBEditEh8: TDBEditEh;
+    DBEditEh10: TDBEditEh;
+    DBDateTimeEditEh5: TDBDateTimeEditEh;
+    DBDateTimeEditEh1: TDBDateTimeEditEh;
+    Panel2: TPanel;
+    Button1: TButton;
+    Button2: TButton;
+    procedure Button1Click(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  AddGuarFormAvto: TAddGuarFormAvto;
+
+implementation
+  uses DataMGuarantee,GuaranteeMgrImpl;
+{$R *.dfm}
+
+procedure TAddGuarFormAvto.Button1Click(Sender: TObject);
+begin
+p_avto_q_s_no       := VarToStr(DBEditEh2.Value);
+  p_avto_maka       := VarToStr(DBEditEh1.Value);
+  p_avto_tip        := VarToStr(DBEditEh3.Value);
+  p_avto_no         := VarToStr(DBEditEh4.Value);
+  p_avto_reng       := VarToStr(DBEditEh5.Value);
+  p_avto_muher_no   := VarToStr(DBEditEh8.Value);
+  p_avto_muher_hecm := VarToStr(DBEditEh10.Value);
+  p_avto_ban        := VarToStr(DBEditEh7.Value);
+
+
+  if VarIsNull(DBDateTimeEditEh5.Value) or VarIsEmpty(DBDateTimeEditEh5.Value) then
+    p_avto_il := 0
+  else
+    p_avto_il := VarToDateTime(DBDateTimeEditEh5.Value);
+
+  if VarIsNull(DBDateTimeEditEh1.Value) or VarIsEmpty(DBDateTimeEditEh1.Value) then
+    p_AVTO_REGSTR_DAT := 0
+  else
+    p_AVTO_REGSTR_DAT := VarToDateTime(DBDateTimeEditEh1.Value);
+Close;
+end;
+
+procedure TAddGuarFormAvto.Button2Click(Sender: TObject);
+begin
+DBEditEh1.Clear;
+DBEditEh2.Clear;
+DBEditEh3.Clear;
+DBEditEh4.Clear;
+DBEditEh5.Clear;
+DBEditEh7.Clear;
+DBEditEh8.Clear;
+DBEditEh10.Clear;
+DBDateTimeEditEh5.Clear;
+DBDateTimeEditEh1.Clear;
+close;
+end;
+
+end.

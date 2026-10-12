@@ -1,0 +1,105 @@
+﻿unit AddReserveImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, DBCtrls, DB, OracleData, DBGridEh, Mask, DBCtrlsEh,
+  DBLookupEh;
+
+type
+  TAddReserve = class(TForm)
+    Button1: TButton;
+    Button2: TButton;
+    Label1: TLabel;
+    Label2: TLabel;
+    DBLookupComboBox1: TDBLookupComboBox;
+    DataSource1: TDataSource;
+    DataSource2: TDataSource;
+    OracleDataSet1: TOracleDataSet;
+    OracleDataSet2: TOracleDataSet;
+    OracleDataSet3: TOracleDataSet;
+    OracleDataSet4: TOracleDataSet;
+    DataSource3: TDataSource;
+    OracleDataSet4TESID: TFloatField;
+    OracleDataSet4FIL: TWideStringField;
+    OracleDataSet4HES: TWideStringField;
+    OracleDataSet4ID: TFloatField;
+    LoanAccs: TDBLookupComboboxEh;
+    Label3: TLabel;
+    DBLookupComboboxEh1: TDBLookupComboboxEh;
+    DataSrcIEAccountList: TDataSource;
+    IEAccountList: TOracleDataSet;
+    IEAccountListID: TFloatField;
+    IEAccountListACC_NO: TWideStringField;
+    IEAccountListVAL_ACC: TIntegerField;
+    IEAccountListNAME: TWideStringField;
+    OracleDataSet4XERHES: TWideStringField;
+    procedure FormCanResize(Sender: TObject; var NewWidth, NewHeight: Integer;
+      var Resize: Boolean);
+    procedure Button2Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  AddReserve: TAddReserve;
+
+implementation
+
+{$R *.dfm}
+  uses
+  sboapiDataModuleImpl, ReserveImpl;
+procedure TAddReserve.Button1Click(Sender: TObject);
+var
+sql :string;
+begin
+if DBLookupComboBox1.Text='' then
+ begin
+   ShowMessage('Filial daxil etməmisiz!');
+   exit;
+ end;
+ if LoanAccs.Text='' then
+ begin
+   ShowMessage('Hesabı daxil etməmisiz!');
+   exit;
+ end;
+    if DBLookupComboboxEh1.Text='' then
+ begin
+   ShowMessage('Xerc Hesabı daxil etməmisiz!');
+   exit;
+ end;
+sql:='insert into cm_reserve_turan_filial(tesid, fil_id, int_res_accid,fxercacc_id)values( '+
+inttostr(id)+' , '+inttostr(DBLookupComboBox1.KeyValue)+
+' , '+inttostr(LoanAccs.KeyValue)+','+inttostr(DBLookupComboboxEh1.KeyValue)+')';
+OracleDataSet3.close;
+//ShowMessage(sql);
+OracleDataSet3.SQL.Text:=sql;
+OracleDataSet3.open;
+OracleDataSet3.Session.Commit;
+OracleDataSet4.Refresh;
+close;
+end;
+
+procedure TAddReserve.Button2Click(Sender: TObject);
+begin
+close
+end;
+
+procedure TAddReserve.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+Resize:=false    ;
+end;
+
+procedure TAddReserve.FormShow(Sender: TObject);
+begin
+DBLookupComboBox1.KeyValue:=-1;
+LoanAccs.KeyValue:=-1;
+end;
+
+end.

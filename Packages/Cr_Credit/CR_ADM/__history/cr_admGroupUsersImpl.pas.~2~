@@ -1,0 +1,208 @@
+﻿unit cr_admGroupUsersImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ExtCtrls, Grids, DBGridEh, StdCtrls, Buttons, ActnList, ImgList,
+  NLSLocalizer;
+
+resourcestring
+  rsUserAlreadyExists = 'İstifadəçi artıq qurupdadır.';
+
+type
+  TfrmGroupUsers = class(TForm)
+    Panel1: TPanel;
+    GroupBox1: TGroupBox;
+    DBGridEh1: TDBGridEh;
+    Splitter1: TSplitter;
+    GroupUsersGrid: TStringGrid;
+    Panel2: TPanel;
+    Panel3: TPanel;
+    sbAddMaster: TSpeedButton;
+    sbDelMaster: TSpeedButton;
+    Panel4: TPanel;
+    sbAddSlave: TSpeedButton;
+    sbDelSlave: TSpeedButton;
+    Panel5: TPanel;
+    sbAddNeutral: TSpeedButton;
+    sbDelNeutral: TSpeedButton;
+    actsUserGroups: TActionList;
+    actAddUser: TAction;
+    actDelUser: TAction;
+    imgActs: TImageList;
+    Panel6: TPanel;
+    SpeedButton1: TSpeedButton;
+    btnClose: TSpeedButton;
+    actCommit: TAction;
+    Localizer: TNLSLocalizer;
+    actClose: TAction;
+    procedure FormCreate(Sender: TObject);
+    procedure AddUserClick(Sender: TObject);
+    procedure DelUserClick(Sender: TObject);
+    procedure actCommitExecute(Sender: TObject);
+    procedure Panel3MouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
+    procedure Panel3MouseUp(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
+    procedure FormKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure actCloseExecute(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  frmGroupUsers: TfrmGroupUsers;
+  panelDown: Boolean;
+  
+procedure ReinitializeRows(SG:TStringGrid);
+procedure AddCells(aSG:TStringGrid; aCol: Integer; aStr: String);
+procedure DelCells(aSG:TStringGrid; dCol: Integer);
+function ExistsInGrid(eSG: TStringGrid; eStr: String):Boolean;
+
+implementation
+
+uses cr_admDataModule, cr_admMainFormImpl, crCommonDecls;
+
+{$R *.DFM}
+
+procedure ReinitializeRows;
+var i,z:Integer;
+DelRow : Boolean;
+begin
+  with SG do
+   begin
+    DelRow :=True;
+    for i:=RowCount-1 downto 0 do
+     begin
+       for z:=0 to ColCount-1 do
+         DelRow:=DelRow and (Cells[z,i]=EmptyStr);
+       if DelRow then
+        begin
+        RowCount:=RowCount-1;
+        DelRow:=True;
+        end;
+     end;
+   end;
+end;
+
+procedure AddCells;
+var
+  i: Integer;
+begin
+  with aSG do begin
+    if Cells[aCol, RowCount - 1] <>EmptyStr then begin
+      RowCount := RowCount + 1;
+      Cells[aCol, RowCount - 1] := aStr;
+    end else begin
+      for i:=RowCount - 1 downto 0 do
+        if Cells[aCol, i]<>EmptyStr then break;
+      Cells[aCol, i + 1] := aStr;
+    end;
+  end;
+end;
+
+procedure DelCells;
+var
+  i: Integer;
+begin
+  with aSG do begin
+    RowCount := RowCount +1 ;
+    for i := Row to RowCount - 2 do
+      Cells[dCol, i ] := Cells[dCol, i + 1];
+  end;
+  ReinitializeRows(aSG);
+end;
+
+function ExistsInGrid;
+var
+  i, j: Integer;
+begin
+  with eSG do begin
+    for i:=0 to ColCount-1 do
+      for j:=0 to RowCount-1 do
+        if UpperCase(Cells[i,j]) = UpperCase(eStr) then begin
+          Result := True;
+          Exit;
+        end;
+    Result := False;
+  end;
+end;
+
+procedure TfrmGroupUsers.FormCreate(Sender: TObject);
+//var
+ // i: Integer;
+begin
+  with admDM, GroupUsersGrid do begin
+
+  end;
+end;
+
+procedure TfrmGroupUsers.AddUserClick(Sender: TObject);
+begin
+  with admDM do begin
+    if not ExistsInGrid(GroupUsersGrid, CredUsersDataSetNAME.AsString) then
+      AddCells(  GroupUsersGrid
+               , (Sender as TComponent).Tag
+               , CredUsersDataSetNAME.AsString)
+    else begin
+      LogWarning(rsUserAlreadyExists);
+    end;
+  end;
+  if (Sender is TPanel) then
+    (Sender as TPanel).BevelInner := bvRaised;
+end;
+
+procedure TfrmGroupUsers.DelUserClick(Sender: TObject);
+begin
+  if GroupUsersGrid.Col = (Sender as TSpeedButton).Tag then
+    DelCells(GroupUsersGrid, (Sender as TSpeedButton).Tag);
+end;
+
+procedure TfrmGroupUsers.actCommitExecute(Sender: TObject);
+var
+  i, j: Integer;
+begin
+  with admDM, CR_ADMIN, GroupUsersGrid do begin
+    CallProcedure('grmcleargroup', [GroupsDataSetID.AsVariant]);
+    for i:=0 to ColCount-1 do
+      for j:=0 to RowCount-1 do
+        if Cells[i,j]<>EmptyStr then
+          CallProcedure('grmuseraddingroupbyname', [
+                         Cells[i,j], GroupsDataSetID.AsVariant, i + 1]);
+    Session.Commit;
+    RefreshDataSet(UserInGroupDataSet);
+    RefreshDataSet(GroupUsersDataSet);
+  end;
+end;
+
+procedure TfrmGroupUsers.Panel3MouseDown(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+begin
+  if Button = mbLeft then
+    (Sender as TPanel).BevelInner := bvLowered;
+end;
+
+procedure TfrmGroupUsers.Panel3MouseUp(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+begin
+  if Button = mbLeft then
+    (Sender as TPanel).BevelInner := bvRaised;
+end;
+
+procedure TfrmGroupUsers.FormKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin        
+  if Key = VK_ESCAPE then
+    actCloseExecute(Sender);
+end;
+
+procedure TfrmGroupUsers.actCloseExecute(Sender: TObject);
+begin
+  Close;
+end;
+
+end.

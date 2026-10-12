@@ -1,0 +1,302 @@
+object domestic_bank: Tdomestic_bank
+  Left = 329
+  Top = 491
+  BorderStyle = bsSingle
+  ClientHeight = 469
+  ClientWidth = 943
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'MS Sans Serif'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poScreenCenter
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 943
+    Height = 97
+    Align = alTop
+    BevelOuter = bvNone
+    TabOrder = 0
+    object Label1: TLabel
+      Left = 37
+      Top = 11
+      Width = 44
+      Height = 14
+      Caption = #1041#1072#1085#1082' '#1048#1044
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Label2: TLabel
+      Left = 149
+      Top = 10
+      Width = 61
+      Height = 14
+      Caption = #1041#1072#1085#1082#1099#1085' '#1072#1076#1099
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Label3: TLabel
+      Left = 278
+      Top = 9
+      Width = 43
+      Height = 14
+      Caption = #1042#1072#1083#1081#1091#1090#1072
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Label4: TLabel
+      Left = 401
+      Top = 10
+      Width = 57
+      Height = 14
+      Caption = #1065#1077#1089#1072#1073' (25)'
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Label5: TLabel
+      Left = 575
+      Top = 9
+      Width = 57
+      Height = 14
+      Caption = #1065#1077#1089#1072#1073' (45)'
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Label6: TLabel
+      Left = 775
+      Top = 9
+      Width = 57
+      Height = 14
+      Caption = #1065#1077#1089#1072#1073' (64)'
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Button1: TButton
+      Left = 43
+      Top = 64
+      Width = 86
+      Height = 25
+      Caption = #1049#1072#1076#1076#1072' '#1089#1072#1093#1083#1072
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 0
+      OnClick = Button1Click
+    end
+    object Button2: TButton
+      Left = 157
+      Top = 64
+      Width = 75
+      Height = 25
+      Caption = #1057#1080#1083
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 1
+      OnClick = Button2Click
+    end
+    object Edit1: TEdit
+      Left = 32
+      Top = 26
+      Width = 68
+      Height = 21
+      TabOrder = 2
+    end
+    object Edit2: TEdit
+      Left = 104
+      Top = 26
+      Width = 152
+      Height = 21
+      TabOrder = 3
+    end
+    object DBLookupComboBox1: TDBLookupComboBox
+      Left = 259
+      Top = 26
+      Width = 81
+      Height = 21
+      KeyField = 'VALU_NAME'
+      ListField = 'VAL_NAME'
+      ListSource = DataMod_CARDS.valutasorce
+      TabOrder = 4
+    end
+    object SearchEdit1: TSearchEdit
+      Left = 340
+      Top = 25
+      Width = 187
+      Height = 21
+      TabOrder = 5
+      DataSource = DataMod_CARDS.domesticaccountsource
+      SearchField = 'acc_no'
+    end
+    object SearchEdit2: TSearchEdit
+      Left = 529
+      Top = 25
+      Width = 187
+      Height = 21
+      TabOrder = 6
+      DataSource = DataMod_CARDS.domesticaccountsource
+      SearchField = 'acc_no'
+    end
+    object SearchEdit3: TSearchEdit
+      Left = 719
+      Top = 25
+      Width = 187
+      Height = 21
+      TabOrder = 7
+      DataSource = DataMod_CARDS.domesticaccountsource
+      SearchField = 'acc_no'
+    end
+  end
+  object Panel2: TPanel
+    Left = 0
+    Top = 97
+    Width = 943
+    Height = 372
+    Align = alClient
+    BevelOuter = bvNone
+    TabOrder = 1
+    object DBGrid1: TDBGrid
+      Left = 0
+      Top = 0
+      Width = 943
+      Height = 372
+      Align = alClient
+      DataSource = DataMod_CARDS.domesticsource
+      DrawingStyle = gdsGradient
+      Options = [dgEditing, dgTitles, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgCancelOnExit, dgMultiSelect]
+      ReadOnly = True
+      TabOrder = 0
+      TitleFont.Charset = DEFAULT_CHARSET
+      TitleFont.Color = clWindowText
+      TitleFont.Height = -11
+      TitleFont.Name = 'MS Sans Serif'
+      TitleFont.Style = []
+      OnTitleClick = DBGrid1TitleClick
+      Columns = <
+        item
+          Expanded = False
+          FieldName = 'BANKID'
+          Title.Alignment = taCenter
+          Title.Caption = #1041#1072#1085#1082' '#1048#1044
+          Title.Color = clTeal
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -11
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = []
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'BANKNAME'
+          Title.Alignment = taCenter
+          Title.Caption = #1041#1072#1085#1082#1099#1085' '#1072#1076#1099
+          Title.Color = clTeal
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -11
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = []
+          Width = 176
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'VAL_NAME'
+          Title.Alignment = taCenter
+          Title.Caption = #1042#1072#1083#1081#1091#1090#1072
+          Title.Color = clTeal
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -11
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = []
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'ACC_NO'
+          Title.Alignment = taCenter
+          Title.Caption = #1065#1077#1089#1072#1073' (25)'
+          Title.Color = clTeal
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -11
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = []
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'ACC_NO_1'
+          Title.Alignment = taCenter
+          Title.Caption = #1065#1077#1089#1072#1073' (45)'
+          Title.Color = clTeal
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -11
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = []
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'ACC_NO_2'
+          Title.Alignment = taCenter
+          Title.Caption = #1065#1077#1089#1072#1073' (64)'
+          Title.Color = clTeal
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -11
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = []
+          Visible = True
+        end>
+    end
+  end
+  object NLSLocalizer2: TNLSLocalizer
+    Caption = #1044#1086#1084#1077#1089#1090#1080#1082' '#1073#1072#1085#1082' '#1097#1077#1089#1072#1073#1083#1072#1088#1099#1085#1099#1085' '#1074#1103' '#1094#1084#1091#1084#1080' '#1097#1077#1089#1072#1073#1083#1072#1088#1099#1085' '#1089#1072#1079#1083#1072#1085#1084#1072#1089#1099
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    Left = 744
+    Top = 48
+  end
+end

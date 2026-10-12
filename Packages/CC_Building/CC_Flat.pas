@@ -1,0 +1,226 @@
+unit CC_Flat;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, NLSDialogs,
+  StdCtrls, Buttons, ExtCtrls, NLSLocalizer, Variants;
+
+type
+  TCC_Add_flats = class(TForm)
+    Panel1: TPanel;
+    GroupBox1: TGroupBox;
+    Editno: TEdit;
+    Editfloor: TEdit;
+    Editroom: TEdit;
+    Editarea: TEdit;
+    Editprice1: TEdit;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    Label6: TLabel;
+    Editpricegen: TEdit;
+    Label7: TLabel;
+    GroupBox2: TGroupBox;
+    Editentrance: TEdit;
+    Editid: TEdit;
+    NLSLocalizer1: TNLSLocalizer;
+    Button1: TButton;
+    Button2: TButton;
+    EditCode: TEdit;
+    Label8: TLabel;
+    procedure FormActivate(Sender: TObject);
+    procedure WMNCACTIVATE(var message:TWMNCActivate);
+    procedure WMNCPaint(var message: TWMNCPaint);
+    procedure EditnoKeyPress(Sender: TObject; var Key: Char);
+    procedure EditentranceKeyPress(Sender: TObject; var Key: Char);
+    procedure EditfloorKeyPress(Sender: TObject; var Key: Char);
+    procedure EditroomKeyPress(Sender: TObject; var Key: Char);
+    procedure EditareaKeyPress(Sender: TObject; var Key: Char);
+    procedure Editprice1KeyPress(Sender: TObject; var Key: Char);
+    procedure EditpricegenKeyPress(Sender: TObject; var Key: Char);
+    procedure Button1Click(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+   // procedure EditfloorKeyPress(Sender: TObject; var Key: Char);
+
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  CC_Add_flats: TCC_Add_flats;
+
+implementation
+
+uses CC_Datamodule;
+
+{$R *.DFM}
+
+procedure TCC_Add_flats.WMNCACTIVATE(var message:TWMNCActivate);
+var
+ S:TWMNCPaint;
+begin
+inherited;
+WMNCPaint(s);
+end;
+
+procedure TCC_Add_flats.WMNCPaint(var message: TWMNCPaint);
+const Capt = 'ўесабын ям€лиййатлары';
+var dc : hDc;
+begin
+inherited;
+Caption:='';
+dc := GetWindowDC(Handle);
+        SetBkMode(dc,Transparent);
+        SetTextColor(dc,clWhite);
+        SelectObject(dc, Font.Handle);
+        TextOut(dc, 23,6,Capt,Length(Capt));
+end;
+
+procedure TCC_Add_flats.FormActivate(Sender: TObject);
+begin
+EditCode.SetFocus;
+CC_Add_flats.editid.text:=CC_Datamod.CC_Building.fieldbyname('id').asstring;
+
+end;
+
+procedure TCC_Add_flats.EditnoKeyPress(Sender: TObject; var Key: Char);
+begin
+ if ORD(Key) = VK_RETURN then
+  begin
+  if Sender is TWinControl then
+  with Sender as TWinControl do
+  case Tag of
+    1 : SelectNext(Sender as TWinControl ,True ,True);
+    end;
+    Key := #0;
+end;
+
+     end;
+procedure TCC_Add_flats.EditentranceKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+if ORD(Key) = VK_RETURN then
+  begin
+  if Sender is TWinControl then
+  with Sender as TWinControl do
+  case Tag of
+    1 : SelectNext(Sender as TWinControl ,True ,True);
+    end;
+    Key := #0;
+end;
+     end;
+procedure TCC_Add_flats.EditfloorKeyPress(Sender: TObject; var Key: Char);
+begin
+if ORD(Key) = VK_RETURN then
+  begin
+  if Sender is TWinControl then
+  with Sender as TWinControl do
+  case Tag of
+    1 : SelectNext(Sender as TWinControl ,True ,True);
+    end;
+    Key := #0;
+end;
+     end;
+
+procedure TCC_Add_flats.EditroomKeyPress(Sender: TObject; var Key: Char);
+begin
+if ORD(Key) = VK_RETURN then
+  begin
+  if Sender is TWinControl then
+  with Sender as TWinControl do
+  case Tag of
+    1 : SelectNext(Sender as TWinControl ,True ,True);
+    end;
+    Key := #0;
+end;
+     end;
+
+procedure TCC_Add_flats.EditareaKeyPress(Sender: TObject; var Key: Char);
+begin
+if ORD(Key) = VK_RETURN then
+  begin
+  if Sender is TWinControl then
+  with Sender as TWinControl do
+  case Tag of
+    1 : SelectNext(Sender as TWinControl ,True ,True);
+    end;
+    Key := #0;
+end;
+     end;
+
+procedure TCC_Add_flats.Editprice1KeyPress(Sender: TObject; var Key: Char);
+   var
+ Calc:real;
+ begin
+if ORD(Key) = VK_RETURN then
+  begin
+  if Sender is TWinControl then
+  with Sender as TWinControl do
+  case Tag of
+    1 : SelectNext(Sender as TWinControl ,True ,True);
+    end;
+    Key := #0;
+
+  Calc:=(strtofloat(Editarea.Text)*  strtofloat(Editprice1.text));
+  Editpricegen.Text:=floattostr(Calc);
+end;
+     end;
+
+procedure TCC_Add_flats.EditpricegenKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+if ORD(Key) = VK_RETURN then
+  begin
+  if Sender is TWinControl then
+  with Sender as TWinControl do
+  case Tag of
+    1 : SelectNext(Sender as TWinControl ,True ,True);
+    end;
+    Key := #0;
+end;
+     end;
+
+procedure TCC_Add_flats.Button1Click(Sender: TObject);
+begin
+if Editno.text = '' then
+                                               ShowMessage('ћ€нзилин є дахил етм€к лазымдыр!');
+                                    
+if   Editno.text <> '' then
+CC_datamod.CC_OP.CallProcedure('add_Flats',[strtoint(Editid.text),
+                                                EditCode.text,
+                                                Editno.text,
+                                                strtoint(Editentrance.text),
+                                                strtoint(editfloor.text),
+                                                strtoint(Editroom.text),
+                                                strtoint(Editarea.text),
+                                                strtoint(Editprice1.text),
+                                                strtoint(Editpricegen.text),
+                                                null
+                                               ]);
+                                                CC_DataMod.CC_Buyer_Flat.close;
+                                                CC_DataMod.CC_Buyer_Flat.open;
+
+  EditCode.text:='';
+  Editno.Text :='';
+  EditEntrance.Text :='';
+  EditFloor.text :='';
+  EditRoom.Text :='';
+  EditArea.Text :='';
+  EditPrice1.Text :='';
+  EditPricegen.Text :='';
+  EditCode.Setfocus;
+
+
+end;
+
+procedure TCC_Add_flats.Button2Click(Sender: TObject);
+begin
+close;
+end;
+
+end.

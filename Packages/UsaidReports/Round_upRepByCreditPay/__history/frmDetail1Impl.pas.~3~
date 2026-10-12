@@ -1,0 +1,158 @@
+unit frmDetail1Impl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, NLSDialogs,
+  ComCtrls, StdCtrls, Mask, DBCtrlsEh, ExtCtrls, Grids, DBGridEh,oracle,oracledata,
+  ActnList, Buttons, CMExcelExport;
+
+type
+  TfrmDetail1 = class(TForm)
+    Panel1: TPanel;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    Label6: TLabel;
+    DBEditEh1: TDBEditEh;
+    DBEditEh2: TDBEditEh;
+    DBEditEh3: TDBEditEh;
+    DTP: TDateTimePicker;
+    SearchPanel: TGroupBox;
+    Panel4: TPanel;
+    StaticText1: TStaticText;
+    EditNUMBEROFCREDIT: TEdit;
+    Panel7: TPanel;
+    StaticText2: TStaticText;
+    EditNAME: TEdit;
+    Panel8: TPanel;
+    StaticText3: TStaticText;
+    EditTRAMT: TEdit;
+    DetailInf1Grid: TDBGridEh;
+    ActionList1: TActionList;
+    ActionSearch: TAction;
+    BitBtnexp: TBitBtn;
+    expODSmaincprd: TCMExcelExport;
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure DetailInf1GridTitleBtnClick(Sender: TObject; ACol: Integer;
+      Column: TColumnEh);
+    procedure ActionSearchExecute(Sender: TObject);
+    procedure EditNUMBEROFCREDITKeyPress(Sender: TObject; var Key: Char);
+    procedure EditNUMBEROFCREDITExit(Sender: TObject);
+    procedure BitBtnexpClick(Sender: TObject);
+    procedure DetailInf1GridDblClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  frmDetail1: TfrmDetail1;
+
+implementation
+
+{$R *.DFM}
+
+uses dmRepByCreditPayImpl, frmTelAddressImpl,SBTranslateProc,sboapiDataModuleImpl;
+
+procedure TfrmDetail1.FormCreate(Sender: TObject);
+begin
+SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TfrmDetail1.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+   if Ord(Key) = VK_ESCAPE then close
+end;
+
+procedure TfrmDetail1.DetailInf1GridTitleBtnClick(Sender: TObject; ACol: Integer;
+  Column: TColumnEh);
+var
+  SortField : String;
+begin
+  if (Sender as TDBGridEh).DataSource.DataSet.active then   begin
+  SortField := Column.FieldName;
+    if Column.Title.SortMarker = smDownEh then
+    SortField := SortField + ' DESC';
+  with Sender as TDBGridEh , TOracleDataSet(DataSource.DataSet) do
+  begin
+   // ClearVariables;
+    Screen.Cursor := crSQLWait;
+    SetVariable('OrderField',SortField);
+    RefResh;
+    Screen.Cursor := crDefault;
+   end;
+    end;
+end;
+
+procedure TfrmDetail1.ActionSearchExecute(Sender: TObject);
+var
+  SearchField : string;
+  SearchOptions : TSearchRecordOptions;
+begin
+  SearchOptions := [srIgnoreCase ,srPartialMatch];
+
+  with Sender as TEdit  do
+  begin
+    SearchField := copy(Name,5,length(Name));
+    DetailInf1Grid.SelectedRows.Clear;
+    with  TOracleDataSet(DetailInf1Grid.DataSource.DataSet) do
+    if  not SearchRecord(
+                  SearchField
+                 ,Text
+                 ,SearchOptions + [srFromCurrent , srForward ]
+                 ) then
+    if MessageDlg(
+              'Ахтарыш сона чатыб.'+#13+'яввялдян башламаг истяйирсиниэми?'
+             ,mtInformation
+             ,[mbNo , mbYes]
+             ,0
+             ) = mrYes  then
+    if  not SearchRecord(
+                 SearchField
+                ,Text
+                ,SearchOptions + [ srFromBeginning ]
+                )  then
+    MessageDlg('Йазы тапылмады!',mtInformation,[mbOK],0);
+  end;
+end;
+
+procedure TfrmDetail1.EditNUMBEROFCREDITKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if ord(Key) = VK_RETURN
+  then  ActionSearchExecute(Sender)
+
+end;
+
+procedure TfrmDetail1.EditNUMBEROFCREDITExit(Sender: TObject);
+begin
+  with (Sender as TEdit) do
+       Text := '' 
+end;
+
+procedure TfrmDetail1.BitBtnexpClick(Sender: TObject);
+begin
+   with expODSmaincprd do begin
+        Connect;
+        ExportDataset(DetailInf1Grid.DataSource.DataSet,'Detail informations',true,false);
+        Disconnect;
+   end;
+end;
+
+procedure TfrmDetail1.DetailInf1GridDblClick(Sender: TObject);
+begin
+   with dmRepByCreditPay,Tel do
+   begin
+       if Active then close;
+       SetVariable('crdid',DetailInf1Grid.DataSource.DataSet.FieldByName('ID').AsInteger);
+       open;
+   end;
+   frmTelAddress.ShowModal;
+end;
+
+end.

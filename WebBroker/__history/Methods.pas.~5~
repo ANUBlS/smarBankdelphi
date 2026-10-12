@@ -1,0 +1,311 @@
+unit Methods;
+
+interface
+
+uses System.SysUtils, System.Classes, Web.HTTPApp, Data.FMTBcd, Xml.xmldom,
+  Xml.XMLIntf, Xml.XMLDoc, Data.DB, Data.SqlExpr,system.JSON, Data.DBXOracle;
+
+type
+  TWeb = class(TWebModule)
+    conn: TSQLConnection;
+    queries: TSQLQuery;
+    XMLDoc: TXMLDocument;
+    procedure WebModule1DefaultHandlerAction(Sender: TObject;
+      Request: TWebRequest; Response: TWebResponse; var Handled: Boolean);
+    function conn_salary(): string;
+    function convertingjson (querytext :String):string ;
+    procedure WebotdelAction(Sender: TObject; Request: TWebRequest;
+      Response: TWebResponse; var Handled: Boolean);
+    procedure WebkategrAction(Sender: TObject; Request: TWebRequest;
+      Response: TWebResponse; var Handled: Boolean);
+    procedure WebkpnAction(Sender: TObject; Request: TWebRequest;
+      Response: TWebResponse; var Handled: Boolean);
+    procedure WebprfsAction(Sender: TObject; Request: TWebRequest;
+      Response: TWebResponse; var Handled: Boolean);
+    procedure WebdoljAction(Sender: TObject; Request: TWebRequest;
+      Response: TWebResponse; var Handled: Boolean);
+    procedure WebrazrdAction(Sender: TObject; Request: TWebRequest;
+      Response: TWebResponse; var Handled: Boolean);
+    procedure WebixtisasAction(Sender: TObject; Request: TWebRequest;
+      Response: TWebResponse; var Handled: Boolean);
+    procedure WebbudjetAction(Sender: TObject; Request: TWebRequest;
+      Response: TWebResponse; var Handled: Boolean);
+    procedure WebogranAction(Sender: TObject; Request: TWebRequest;
+      Response: TWebResponse; var Handled: Boolean);
+    procedure WebvidoplAction(Sender: TObject; Request: TWebRequest;
+      Response: TWebResponse; var Handled: Boolean);
+    procedure WebpodrzdAction(Sender: TObject; Request: TWebRequest;
+      Response: TWebResponse; var Handled: Boolean);
+    procedure WebuchzvnAction(Sender: TObject; Request: TWebRequest;
+      Response: TWebResponse; var Handled: Boolean);
+    procedure WebuchstpAction(Sender: TObject; Request: TWebRequest;
+      Response: TWebResponse; var Handled: Boolean);
+    procedure Webn01p04Action(Sender: TObject; Request: TWebRequest;
+      Response: TWebResponse; var Handled: Boolean);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  WebModuleClass: TComponentClass = TWeb;
+
+implementation
+
+{%CLASSGROUP 'Vcl.Controls.TControl'}
+
+{$R *.dfm}
+
+function TWeb.conn_salary(): string;
+var RootNode, xmlNode: IXMLNode;
+i,j,k,tr,sr:Integer;
+ dbname,dbuser,dbpass:String;
+
+begin
+
+{XMLDoc.LoadFromFile('C:\xampp\apache\modules\webservice_connection.xml');
+XMLDoc.Active := True;
+RootNode := XMLDoc.DocumentElement;
+         dbname:= RootNode.ChildNodes['Salary'].ChildNodes['dbname'].Text;
+         dbuser:= RootNode.ChildNodes['Salary'].ChildNodes['dbuser'].Text;
+         dbpass:= RootNode.ChildNodes['Salary'].ChildNodes['dbpass'].Text;
+
+   XMLDoc.Active := False; }
+   conn.Params.Values['User_Name'] := 'salary';
+   conn.Params.Values['Password'] := 'salary';
+   conn.Params.Values['Database'] := 'pdbnbc';
+   conn.DriverName:='Oracle';
+
+   conn.Connected:=true;
+
+   if conn.Connected then
+      result:='connected'
+   else
+      result:='not connected';
+
+
+end;
+
+  function TWeb.convertingjson (querytext :String):string ;
+ Var
+field_name,nameColunm,valueColunm,rt: String;
+I: Integer;
+LJSONObject:TJsonObject;
+
+begin
+
+  conn_salary();
+
+
+        queries.Close;
+         Queries.SQLConnection:=conn;
+      queries.sql.Clear;
+      queries.SQL.Text := querytext;
+      queries.Active := True;
+      queries.First;
+      while (not queries.EOF) do
+      begin
+
+        rt := rt+'{';
+        for I := 0 to queries.FieldDefs.Count-1 do
+        begin
+          nameColunm  := queries.FieldDefs[I].Name;
+          valueColunm := queries.FieldByName(nameColunm).AsString;
+          rt := rt+'"'+nameColunm+'":"'+valueColunm+'",';
+        end;
+        Delete(rt, Length(rt), 1);
+        rt := rt+'},';
+        queries.Next;
+      end;
+      queries.Refresh;
+      Delete(rt, Length(rt), 1);
+      result:=' { "Items":['+rt+']}';
+
+    end;
+
+
+procedure TWeb.WebbudjetAction(Sender: TObject; Request: TWebRequest;
+  Response: TWebResponse; var Handled: Boolean);
+  var st:string;
+begin
+st := ' select Id, Dok from budjet order by id';
+Response.Content :=
+    '<html>' +
+    '<head><title>Web Server Application</title></head>' +
+    '<body>'+convertingjson(st)+'</body>' +
+    '</html>';
+end;
+
+procedure TWeb.WebdoljAction(Sender: TObject; Request: TWebRequest;
+  Response: TWebResponse; var Handled: Boolean);
+  var st:string;
+begin
+st := ' select Id, Dok from dolj order by id';
+Response.Content :=
+    '<html>' +
+    '<head><title>Web Server Application</title></head>' +
+    '<body>'+convertingjson(st)+'</body>' +
+    '</html>';
+end;
+
+procedure TWeb.WebixtisasAction(Sender: TObject; Request: TWebRequest;
+  Response: TWebResponse; var Handled: Boolean);
+  var st:string;
+begin
+st := ' select Id, Dok from ixtisas order by id';
+Response.Content :=
+    '<html>' +
+    '<head><title>Web Server Application</title></head>' +
+    '<body>'+convertingjson(st)+'</body>' +
+    '</html>';
+
+end;
+
+procedure TWeb.WebkategrAction(Sender: TObject; Request: TWebRequest;
+  Response: TWebResponse; var Handled: Boolean);
+ var st:string;
+begin
+st := ' select Id, Dok from kategr order by id';
+Response.Content :=
+    '<html>' +
+    '<head><title>Web Server Application</title></head>' +
+    '<body>'+convertingjson(st)+'</body>' +
+    '</html>';
+end;
+
+procedure TWeb.WebkpnAction(Sender: TObject; Request: TWebRequest;
+  Response: TWebResponse; var Handled: Boolean);
+   var st:string;
+  begin
+      st := ' select Id, Dok from kpn order by id';
+Response.Content :=
+    '<html>' +
+    '<head><title>Web Server Application</title></head>' +
+    '<body>'+convertingjson(st)+'</body>' +
+    '</html>';
+end;
+
+procedure TWeb.WebModule1DefaultHandlerAction(Sender: TObject;
+  Request: TWebRequest; Response: TWebResponse; var Handled: Boolean);
+begin
+  Response.Content :=
+    '<html>' +
+    '<head><title>Web Server Application</title></head>' +
+    '<body>Web Server Application</body>' +
+    '</html>';
+end;
+
+procedure TWeb.Webn01p04Action(Sender: TObject; Request: TWebRequest;
+  Response: TWebResponse; var Handled: Boolean);
+  var st:string;
+begin
+st := ' select Id, Dok from    n01p04 order by id';
+Response.Content :=
+    '<html>' +
+    '<head><title>Web Server Application</title></head>' +
+    '<body>'+convertingjson(st)+'</body>' +
+    '</html>';
+
+end;
+
+procedure TWeb.WebogranAction(Sender: TObject; Request: TWebRequest;
+  Response: TWebResponse; var Handled: Boolean);
+  var st:string;
+begin
+st := ' select Id, Dok from ogran order by id';
+Response.Content :=
+    '<html>' +
+    '<head><title>Web Server Application</title></head>' +
+    '<body>'+convertingjson(st)+'</body>' +
+    '</html>';
+end;
+
+procedure TWeb.WebotdelAction(Sender: TObject; Request: TWebRequest;
+  Response: TWebResponse; var Handled: Boolean);
+  var st:string;
+begin
+st := ' select Id, Dok from otdel order by id';
+Response.Content :=
+    '<html>' +
+    '<head><title>Web Server Application</title></head>' +
+    '<body>'+convertingjson(st)+'</body>' +
+    '</html>';
+
+end;
+
+procedure TWeb.WebpodrzdAction(Sender: TObject; Request: TWebRequest;
+  Response: TWebResponse; var Handled: Boolean);
+  var st:string;
+begin
+st := ' select Id, Dok from podrzd order by id';
+Response.Content :=
+    '<html>' +
+    '<head><title>Web Server Application</title></head>' +
+    '<body>'+convertingjson(st)+'</body>' +
+    '</html>';
+end;
+
+procedure TWeb.WebprfsAction(Sender: TObject; Request: TWebRequest;
+  Response: TWebResponse; var Handled: Boolean);
+
+      var st:string;
+begin
+st := ' select Id, Dok from prfs order by id';
+Response.Content :=
+    '<html>' +
+    '<head><title>Web Server Application</title></head>' +
+    '<body>'+convertingjson(st)+'</body>' +
+    '</html>';
+end;
+
+procedure TWeb.WebrazrdAction(Sender: TObject; Request: TWebRequest;
+  Response: TWebResponse; var Handled: Boolean);
+  var st:string;
+begin
+st := ' select Id, Dok from razrd order by id';
+Response.Content :=
+    '<html>' +
+    '<head><title>Web Server Application</title></head>' +
+    '<body>'+convertingjson(st)+'</body>' +
+    '</html>';
+end;
+
+procedure TWeb.WebuchstpAction(Sender: TObject; Request: TWebRequest;
+  Response: TWebResponse; var Handled: Boolean);
+  var st:string;
+begin
+st := ' select Id, Dok from uchstp order by id';
+Response.Content :=
+    '<html>' +
+    '<head><title>Web Server Application</title></head>' +
+    '<body>'+convertingjson(st)+'</body>' +
+    '</html>';
+end;
+
+procedure TWeb.WebuchzvnAction(Sender: TObject; Request: TWebRequest;
+  Response: TWebResponse; var Handled: Boolean);
+  var st:string;
+begin
+st := ' select Id, Dok from uchzvn order by id';
+Response.Content :=
+    '<html>' +
+    '<head><title>Web Server Application</title></head>' +
+    '<body>'+convertingjson(st)+'</body>' +
+    '</html>';
+end;
+
+procedure TWeb.WebvidoplAction(Sender: TObject; Request: TWebRequest;
+  Response: TWebResponse; var Handled: Boolean);
+  var st:string;
+begin
+st := ' select Id, Dok from vidopl order by id';
+Response.Content :=
+    '<html>' +
+    '<head><title>Web Server Application</title></head>' +
+    '<body>'+convertingjson(st)+'</body>' +
+    '</html>';
+
+end;
+
+end.

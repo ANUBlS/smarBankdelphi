@@ -1,0 +1,562 @@
+﻿unit AccountAddImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Mask, DBCtrls, StdCtrls, ExtCtrls, Buttons, XFSCtrls, ImgList
+
+  ;
+
+type
+  TAccountAddFrm = class(TForm)
+    Panel1: TPanel;
+    Label1: TLabel;
+    Edit1: TEdit;
+    Label2: TLabel;
+    Edit2: TEdit;
+    GroupBox1: TGroupBox;
+    GroupBox2: TGroupBox;
+    DBMemo1: TDBMemo;
+    GroupBox3: TGroupBox;
+    DBMemo2: TDBMemo;
+    GroupBox4: TGroupBox;
+    DBMemo3: TDBMemo;
+    BitBtn1: TBitBtn;
+    BitBtn2: TBitBtn;
+    BitBtn3: TBitBtn;
+    XFGroupBox1: TXFGroupBox;
+    XFPanel1: TXFPanel;
+    XFLabel1: TXFLabel;
+    XFLabel2: TXFLabel;
+    XFLabel3: TXFLabel;
+    XFLabel4: TXFLabel;
+    XFLabel5: TXFLabel;
+    XFLabel7: TXFLabel;
+    XFLabel6: TXFLabel;
+    XFLabel8: TXFLabel;
+    XFLabel9: TXFLabel;
+    XFLabel10: TXFLabel;
+    XFLabel11: TXFLabel;
+    XFLabel12: TXFLabel;
+    A1: TDBEdit;
+    A2: TDBEdit;
+    A3: TDBEdit;
+    A4: TDBEdit;
+    A5: TDBEdit;
+    A6: TDBEdit;
+    A7: TDBEdit;
+    A8: TDBEdit;
+    A9: TDBEdit;
+    A10: TDBEdit;
+    A11: TDBEdit;
+    A12: TDBEdit;
+    XFGroupBox2: TXFGroupBox;
+    XFPanel2: TXFPanel;
+    XFLabel13: TXFLabel;
+    XFLabel14: TXFLabel;
+    XFLabel15: TXFLabel;
+    XFLabel16: TXFLabel;
+    R1: TDBEdit;
+    R2: TDBEdit;
+    R3: TDBEdit;
+    R4: TDBEdit;
+    XFGroupBox3: TXFGroupBox;
+    XFGroupBox4: TXFGroupBox;
+    XFPanel3: TXFPanel;
+    XFPanel4: TXFPanel;
+    XFLabel17: TXFLabel;
+    h1: TDBEdit;
+    XFLabel18: TXFLabel;
+    h2: TDBEdit;
+    y1: TDBEdit;
+    XFLabel19: TXFLabel;
+    ToolBarImages: TImageList;
+    procedure FormCanResize(Sender: TObject; var NewWidth, NewHeight: Integer;
+      var Resize: Boolean);
+    procedure BitBtn3Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure BitBtn2Click(Sender: TObject);
+    procedure DBEdit3Exit(Sender: TObject);
+    procedure A1Exit(Sender: TObject);
+    procedure R1Exit(Sender: TObject);
+    procedure h1Exit(Sender: TObject);
+    procedure A1KeyPress(Sender: TObject; var Key: Char);
+    procedure y1Exit(Sender: TObject);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure BitBtn1Click(Sender: TObject);
+    procedure DBMemo1Change(Sender: TObject);
+    procedure DBMemo1KeyPress(Sender: TObject; var Key: Char);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  AccountAddFrm: TAccountAddFrm;
+   a :integer;
+implementation
+
+uses DmBudcetImpl,MainformImpl;
+
+{$R *.dfm}
+
+procedure TAccountAddFrm.A1Exit(Sender: TObject);
+var   i: Word;
+begin
+//  ShowMessage(inttostr(ComponentCount));
+  with Sender as TDBEdit do
+  begin
+   if r1.DataSource.DataSet.FieldByName('r1').AsFloat>0 then
+  if (name='A1')or(name='A2')or(name='A3') then
+  if r1.DataSource.DataSet.FieldByName('r1').AsFloat<strtofloat(text) then
+  begin
+   ShowMessage('Aylıq məbləğ rüblük məbləğdən cox ola bilməz !');
+   DataSource.DataSet.FieldByName(name).AsFloat:=0;
+   SetFocus;
+   exit;
+  end;
+
+  if r2.DataSource.DataSet.FieldByName('r2').AsFloat>0 then
+  if (name='A4')or(name='A5')or(name='A6') then
+  if r2.DataSource.DataSet.FieldByName('r2').AsFloat<strtofloat(text) then
+  begin
+   ShowMessage('Aylıq məbləğ rüblük məbləğdən cox ola bilməz !');
+   DataSource.DataSet.FieldByName(name).AsFloat:=0;
+   SetFocus;
+   exit;
+  end;
+
+  if r3.DataSource.DataSet.FieldByName('r3').AsFloat>0 then
+  if (name='A7')or(name='A8')or(name='A9') then
+  if r2.DataSource.DataSet.FieldByName('r2').AsFloat<strtofloat(text) then
+  begin
+   ShowMessage('Aylıq məbləğ rüblük məbləğdən cox ola bilməz !');
+   DataSource.DataSet.FieldByName(name).AsFloat:=0;
+   SetFocus;
+   exit;
+  end;
+
+   if r4.DataSource.DataSet.FieldByName('r4').AsFloat>0 then
+  if (name='A10')or(name='A11')or(name='A12') then
+  if r4.DataSource.DataSet.FieldByName('r4').AsFloat<strtofloat(text) then
+  begin
+   ShowMessage('Aylıq məbləğ rüblük məbləğdən cox ola bilməz !');
+   DataSource.DataSet.FieldByName(name).AsFloat:=0;
+   SetFocus;
+   exit;
+  end;
+
+  if DataSource.DataSet.FieldByName(name).IsNull then
+  DataSource.DataSet.FieldByName(name).AsFloat:=0;
+//  ShowMessage(inttostr(AccountAddFrm.ComponentCount));
+ for i :=0 to AccountAddFrm.ComponentCount- 1 do
+ begin
+  if ( AccountAddFrm.Components[i].ClassType = TDBEdit) then
+   begin
+   if ( AccountAddFrm.Components[i] as TDBEdit).Color=clWhite then
+   begin
+     if  (AccountAddFrm.Components[i] as TDBEdit).DataSource.DataSet.FieldByName((AccountAddFrm.Components[i] as TDBEdit).name).IsNull then
+    (AccountAddFrm.Components[i] as TDBEdit).DataSource.DataSet.FieldByName((AccountAddFrm.Components[i] as TDBEdit).name).AsFloat:=strtofloat(text);
+   end;
+   end;
+   end;
+
+  end;
+  if r1.DataSource.DataSet.FieldByName('r1').IsNull then
+  r1.DataSource.DataSet.FieldByName('r1').AsFloat :=strtofloat(a1.Text)+strtofloat(a2.Text)+strtofloat(a3.Text);
+  if   r2.DataSource.DataSet.FieldByName('r2').isnull then
+  r2.DataSource.DataSet.FieldByName('r2').AsFloat :=strtofloat(a4.Text)+strtofloat(a5.Text)+strtofloat(a6.Text);
+  if  r3.DataSource.DataSet.FieldByName('r3').IsNull then
+  r3.DataSource.DataSet.FieldByName('r3').AsFloat :=strtofloat(a7.Text)+strtofloat(a8.Text)+strtofloat(a9.Text);
+  if   r4.DataSource.DataSet.FieldByName('r4').IsNull then
+  r4.DataSource.DataSet.FieldByName('r4').AsFloat :=strtofloat(a10.Text)+strtofloat(a11.Text)+strtofloat(a12.Text);
+  if  h1.DataSource.DataSet.FieldByName('h1').IsNull then
+  h1.DataSource.DataSet.FieldByName('h1').AsFloat :=strtofloat(r1.Text)+strtofloat(r2.Text);
+  if  h2.DataSource.DataSet.FieldByName('h2').IsNull then
+  h2.DataSource.DataSet.FieldByName('h2').AsFloat :=strtofloat(r3.Text)+strtofloat(r4.Text);
+  if y1.DataSource.DataSet.FieldByName('y1').IsNull then
+  y1.DataSource.DataSet.FieldByName('y1').AsFloat :=strtofloat(h1.Text)+strtofloat(h2.Text);
+end;
+
+procedure TAccountAddFrm.A1KeyPress(Sender: TObject; var Key: Char);
+begin
+  if ORD(Key) = VK_RETURN then
+  begin
+  if Sender is TWinControl then
+  with Sender as TWinControl do
+  case Tag of
+    1 : SelectNext(Sender as TWinControl ,True ,True);
+
+  end;
+    Key := #0;
+  end;
+end;
+
+
+procedure TAccountAddFrm.BitBtn1Click(Sender: TObject);
+var
+n,str :string;
+begin
+ try
+ if DmBudcet.OracleDataSet1.FieldByName('BALANS').IsNull then
+ if not DmBudcet.OracleDataSet1.FieldByName('DNTACCOUNT').IsNull then
+ begin
+   ShowMessage('Balans hesaları olmadan iştrak etməyən hesabları sazlamaq olmaz!');
+   exit;
+ end;
+
+  DmBudcet.OracleDataSet3.post;
+  str:=DmBudcet.PackgSubdiv.CallStringFunction('get_control',['p_id',pid,'cust_ids',DBMemo1.Text,'p_status',1])   ;
+if str<>'' then
+begin
+ with DmBudcet.OracleDataSet4 do
+  begin
+   if active then close;
+   SetVariable('id',pid);
+   open;
+   n:=FieldByName('name').AsString;
+  end;
+ ShowMessage('Bu maddəyə ancaq '+n +' balans hesabları sazlana bilər!'+#13+ str+'  Bu balans hesabları düzgün deyil');
+ // DmBudcet.OracleDataSet1.FieldByName('BALANS').AsString:='';
+   DmBudcet.OracleDataSet3.edit;
+   str:='';
+  exit;
+  end;
+ str:=DmBudcet.PackgSubdiv.CallStringFunction('get_control',['p_id',pid,'cust_ids',DBMemo2.Text,'p_status',2])   ;
+if str<>'' then
+begin
+ with DmBudcet.OracleDataSet4 do
+  begin
+   if active then close;
+   SetVariable('id',pid);
+   open;
+   n:=FieldByName('name').AsString;
+  end;
+ ShowMessage('Bu maddəyə ancaq '+n +'  hesablar sazlana bilər!'+#13+str+'  Bu hesablar düzgün deyil və ya maddənin statusuna uyğun deyil!');
+   DmBudcet.OracleDataSet3.edit;
+   str:='';
+  exit;
+  end;
+
+  str:=DmBudcet.PackgSubdiv.CallStringFunction('get_control',['p_id',pid,'cust_ids',DBMemo2.Text,'p_status',3,'p_bal',DBMemo1.Text])   ;
+if str<>'' then
+begin
+ ShowMessage(str+'  Bu hesab vəya hesablar artıq balans hesabı kimi daxil edilib!');
+   DmBudcet.OracleDataSet3.edit;
+   str:='';
+  exit;
+  end;
+
+  str:=DmBudcet.PackgSubdiv.CallStringFunction('get_control',['p_id',pid,'cust_ids',DBMemo3.Text,'p_status',4,'p_bal',DBMemo1.Text])   ;
+if str<>'' then
+begin
+with DmBudcet.OracleDataSet4 do
+  begin
+   if active then close;
+   SetVariable('id',pid);
+   open;
+   n:=FieldByName('name').AsString;
+  end;
+ ShowMessage('Bu maddəyə ancaq '+n +'  hesablar sazlana bilər!'+#13+str+'  Bu hesab yanlışdır vəya balans hesabı kimi daxil edilibməyib !');
+   DmBudcet.OracleDataSet3.edit;
+   str:='';
+  exit;
+  end;
+
+  DmBudcet.PackgSubdiv.CallProcedure('fakt_rest',['p_id',pid,'bal_cns',DBMemo1.Text,'accno',DBMemo2.Text,'daccno',DBMemo3.Text]);
+  DmBudcet.OracleDataSet1.post;
+ except
+    on E: Exception do
+    begin
+    //AccountAddFrm.Edit3.Text:=Copy(E.Message,0,12);
+    //   ShowMessage(E.Message);
+       if Copy(E.Message,0,12)='ORA-20009: y' then
+       ShowMessage('Faktiki məbləğ: '+Copy(E.Message,16,strtoint(Copy(E.Message,13,2)))+#13+
+       'Faktiki məbləğ illik proqnoz məbləğindən çox ola bilməz! !') ;
+       if Copy(E.Message,0,12)='ORA-20009: h' then
+       ShowMessage('Faktiki məbləğ: '+Copy(E.Message,16,strtoint(Copy(E.Message,13,2)))+#13+
+       'Faktiki məbləğ yarım illik proqnoz məbləğindən çox ola bilməz! !') ;
+        if Copy(E.Message,0,12)='ORA-20009: r' then
+       ShowMessage('Faktiki məbləğ: '+Copy(E.Message,16,strtoint(Copy(E.Message,13,2)))+#13+
+       'Faktiki məbləğ rüblük proqnoz məbləğindən çox ola bilməz! !') ;
+        if Copy(E.Message,0,12)='ORA-20009: a' then
+       ShowMessage('Faktiki məbləğ: '+Copy(E.Message,16,strtoint(Copy(E.Message,13,2)))+#13+
+       'Faktiki məbləğ aylıq proqnoz məbləğindən çox ola bilməz! !') ;
+
+       if Copy(E.Message,0,9)<>'ORA-20009' then
+       ShowMessage(E.Message);
+    DmBudcet.OracleDataSet1.Edit;
+    DmBudcet.OracleDataSet3.edit;
+    Abort;
+     raise;
+    end;
+
+
+ end;
+close ;
+end;
+
+procedure TAccountAddFrm.BitBtn2Click(Sender: TObject);
+begin
+close
+end;
+
+procedure TAccountAddFrm.BitBtn3Click(Sender: TObject);
+var
+i :word;
+begin
+a:=1;
+if MessageDlg(' Sazlanmış hesablar ləğv olunacaq! '#13'        Əminsinizmi ?',
+    mtWarning, [mbYes, mbCancel], 0)= mrYes then
+    begin
+    with DmBudcet.OracleDataSet1 do
+     begin
+      FieldByName('BALANS').AsString:='';
+      FieldByName('ACCOUNT').AsString:='';
+      FieldByName('DNTACCOUNT').AsString:='';
+     // post;
+     end;
+for i :=0 to AccountAddFrm.ComponentCount- 1 do
+ begin
+  if ( AccountAddFrm.Components[i].ClassType = TDBEdit) then
+ begin
+    (AccountAddFrm.Components[i] as TDBEdit).DataSource.DataSet.FieldByName((AccountAddFrm.Components[i] as TDBEdit).name).AsVariant:=null;
+   end;
+   end;
+end;
+end;
+
+
+procedure TAccountAddFrm.DBEdit3Exit(Sender: TObject);
+begin
+    with DmBudcet.OracleDataSet1 do
+     begin
+     FieldByName('ILLIK').AsFloat:= FieldByName('YARIMILLIK').AsFloat*12;
+     end;
+end;
+
+procedure TAccountAddFrm.DBMemo1Change(Sender: TObject);
+begin
+{ if DBMemo1.DataSource.DataSet.FieldByName('BALANS').IsNull then
+ DBMemo3.Enabled:=false
+ else
+ DBMemo3.Enabled:=true  }
+end;
+
+procedure TAccountAddFrm.DBMemo1KeyPress(Sender: TObject; var Key: Char);
+begin
+if not (Key in ['0'..'9',#8] )then
+begin
+ Key:=#0;
+end;
+end;
+
+procedure TAccountAddFrm.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+Resize:=false
+end;
+
+procedure TAccountAddFrm.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+  if ORD(Key) = VK_ESCAPE then
+    Close else
+end;
+
+procedure TAccountAddFrm.FormShow(Sender: TObject);
+begin
+a:=0;
+end;
+
+procedure TAccountAddFrm.h1Exit(Sender: TObject);
+var
+d :real;
+begin
+  with Sender as TDBEdit do
+  begin
+   if (name='h1')then
+    begin
+   if DataSource.DataSet.FieldByName('r1').AsFloat>DataSource.DataSet.FieldByName('r2').AsFloat then
+    d:=DataSource.DataSet.FieldByName('r1').AsFloat
+    else
+    d:=DataSource.DataSet.FieldByName('r2').AsFloat ;
+    if DataSource.DataSet.FieldByName('h1').AsFloat<d then
+     begin
+     ShowMessage('Yarım illik məbləğ rüblük məbləğdən az ola bilməz ! ');
+     SetFocus;
+     exit;
+     end;
+    end;
+   if (name='h2')then
+    begin
+   if DataSource.DataSet.FieldByName('r3').AsFloat>DataSource.DataSet.FieldByName('r4').AsFloat then
+    d:=DataSource.DataSet.FieldByName('r3').AsFloat
+    else
+    d:=DataSource.DataSet.FieldByName('r4').AsFloat ;
+    if DataSource.DataSet.FieldByName('h2').AsFloat<d then
+     begin
+     ShowMessage('Yarım illik məbləğ rüblük məbləğdən az ola bilməz ! ');
+     SetFocus;
+     exit;
+     end;
+    end;
+
+  if y1.DataSource.DataSet.FieldByName('y1').AsFloat>0 then
+  if (name='h1')or(name='h2') then
+  if y1.DataSource.DataSet.FieldByName('y1').AsFloat<strtofloat(text) then
+  begin
+   ShowMessage('Yarım illik məbləğ illik məbləğdən cox ola bilməz !');
+   DataSource.DataSet.FieldByName(name).AsFloat:=0;
+   SetFocus;
+   exit;
+  end;
+
+  if DataSource.DataSet.FieldByName(name).IsNull then
+  DataSource.DataSet.FieldByName(name).AsFloat:=0;
+if  h1.DataSource.DataSet.FieldByName('h1').IsNull then
+  h1.DataSource.DataSet.FieldByName('h1').AsFloat:=strtofloat(text);
+  if  h1.DataSource.DataSet.FieldByName('h2').IsNull then
+  h1.DataSource.DataSet.FieldByName('h2').AsFloat:=strtofloat(text);
+  if y1.DataSource.DataSet.FieldByName('y1').IsNull then
+   y1.DataSource.DataSet.FieldByName('y1').AsFloat :=strtofloat(h1.Text)+strtofloat(h2.Text);
+end;
+end;
+
+procedure TAccountAddFrm.R1Exit(Sender: TObject);
+var   i: Word;
+d :Real;
+begin
+//  ShowMessage(inttostr(ComponentCount));
+  with Sender as TDBEdit do
+  begin
+  if (name='R1')then
+    begin
+   if DataSource.DataSet.FieldByName('a1').AsFloat>DataSource.DataSet.FieldByName('a2').AsFloat then
+    d:=DataSource.DataSet.FieldByName('a1').AsFloat
+    else
+    d:=DataSource.DataSet.FieldByName('a2').AsFloat ;
+    if d<DataSource.DataSet.FieldByName('a3').AsFloat then
+     d:=DataSource.DataSet.FieldByName('a3').AsFloat;
+     if DataSource.DataSet.FieldByName('r1').AsFloat<d then
+     begin
+     ShowMessage('Rüblük məbləğ aylıq məbləğdən az ola bilməz ! ');
+     SetFocus;
+     exit;
+     end;
+    end;
+    if (name='R2')then
+    begin
+    if DataSource.DataSet.FieldByName('a4').AsFloat>DataSource.DataSet.FieldByName('a5').AsFloat then
+    d:=DataSource.DataSet.FieldByName('a4').AsFloat
+    else
+    d:=DataSource.DataSet.FieldByName('a5').AsFloat ;
+    if d<DataSource.DataSet.FieldByName('a6').AsFloat then
+     d:=DataSource.DataSet.FieldByName('a6').AsFloat;
+     if DataSource.DataSet.FieldByName('r2').AsFloat<d then
+     begin
+     ShowMessage('Rüblük məbləğ aylıq məbləğdən az ola bilməz ! ');
+     SetFocus;
+     exit;
+     end;
+    end;
+    if (name='R3')then
+    begin
+    if DataSource.DataSet.FieldByName('a7').AsFloat>DataSource.DataSet.FieldByName('a8').AsFloat then
+    d:=DataSource.DataSet.FieldByName('a7').AsFloat
+    else
+    d:=DataSource.DataSet.FieldByName('a8').AsFloat ;
+    if d<DataSource.DataSet.FieldByName('a9').AsFloat then
+     d:=DataSource.DataSet.FieldByName('a9').AsFloat;
+     if DataSource.DataSet.FieldByName('r3').AsFloat<d then
+     begin
+     ShowMessage('Rüblük məbləğ aylıq məbləğdən az ola bilməz ! ');
+     SetFocus;
+     exit;
+     end;
+    end;
+   if (name='R4')then
+    begin
+    if DataSource.DataSet.FieldByName('a10').AsFloat>DataSource.DataSet.FieldByName('a11').AsFloat then
+    d:=DataSource.DataSet.FieldByName('a10').AsFloat
+    else
+    d:=DataSource.DataSet.FieldByName('a11').AsFloat ;
+    if d<DataSource.DataSet.FieldByName('a12').AsFloat then
+     d:=DataSource.DataSet.FieldByName('a12').AsFloat;
+     if DataSource.DataSet.FieldByName('r4').AsFloat<d then
+     begin
+     ShowMessage('Rüblük məbləğ aylıq məbləğdən az ola bilməz ! ');
+     SetFocus;
+     exit;
+     end;
+
+   end;
+  if h1.DataSource.DataSet.FieldByName('h1').AsFloat>0 then
+  if (name='R1')or(name='R2') then
+  if h1.DataSource.DataSet.FieldByName('h1').AsFloat<strtofloat(text) then
+  begin
+   ShowMessage('Rüblük məbləğ yarım illik məbləğdən cox ola bilməz !');
+   DataSource.DataSet.FieldByName(name).AsFloat:=0;
+   SetFocus;
+   exit;
+  end;
+  if h2.DataSource.DataSet.FieldByName('h2').AsFloat>0 then
+  if (name='R3')or(name='R4') then
+  if h1.DataSource.DataSet.FieldByName('h2').AsFloat<strtofloat(text) then
+  begin
+   ShowMessage('Rüblük məbləğ yarım illik məbləğdən cox ola bilməz !');
+   DataSource.DataSet.FieldByName(name).AsFloat:=0;
+   SetFocus;
+   exit;
+  end;
+
+  if DataSource.DataSet.FieldByName(name).IsNull then
+  DataSource.DataSet.FieldByName(name).AsFloat:=0;
+//  ShowMessage(inttostr(AccountAddFrm.ComponentCount));
+ for i :=0 to AccountAddFrm.ComponentCount- 1 do
+ begin
+  if ( AccountAddFrm.Components[i].ClassType = TDBEdit) then
+   begin
+   if ( AccountAddFrm.Components[i] as TDBEdit).Color=clWindow then
+   begin
+     if  (AccountAddFrm.Components[i] as TDBEdit).DataSource.DataSet.FieldByName((AccountAddFrm.Components[i] as TDBEdit).name).IsNull then
+    (AccountAddFrm.Components[i] as TDBEdit).DataSource.DataSet.FieldByName((AccountAddFrm.Components[i] as TDBEdit).name).AsFloat:=strtofloat(text);
+   end;
+   end;
+   end;
+
+  end;
+  if  h1.DataSource.DataSet.FieldByName('h1').IsNull then
+  h1.DataSource.DataSet.FieldByName('h1').AsFloat :=strtofloat(r1.Text)+strtofloat(r2.Text);
+  if  h2.DataSource.DataSet.FieldByName('h2').IsNull then
+  h2.DataSource.DataSet.FieldByName('h2').AsFloat :=strtofloat(r3.Text)+strtofloat(r4.Text);
+  if y1.DataSource.DataSet.FieldByName('y1').IsNull then
+  y1.DataSource.DataSet.FieldByName('y1').AsFloat :=strtofloat(h1.Text)+strtofloat(h2.Text);
+
+end;
+
+procedure TAccountAddFrm.y1Exit(Sender: TObject);
+var
+d :real;
+begin
+  with Sender as TDBEdit do
+  begin
+   if (name='y1')then
+    begin
+   if DataSource.DataSet.FieldByName('h1').AsFloat>DataSource.DataSet.FieldByName('h2').AsFloat then
+    d:=DataSource.DataSet.FieldByName('h1').AsFloat
+    else
+    d:=DataSource.DataSet.FieldByName('h2').AsFloat ;
+    if DataSource.DataSet.FieldByName('y1').AsFloat<d then
+     begin
+     ShowMessage('İllik məbləğ yarım illik  məbləğdən az ola bilməz ! ');
+     SetFocus;
+     exit;
+     end;
+    end;
+  end;
+
+end;
+
+end.

@@ -1,0 +1,87 @@
+object CorrectorDataMod: TCorrectorDataMod
+  OldCreateOrder = False
+  Left = 192
+  Top = 107
+  Height = 480
+  Width = 696
+  object CorrectData: TOracleDataSet
+    SQL.Strings = (
+      '/* Formatted on 2007/03/27 15:25 (Formatter Plus v4.7.0) */'
+      'SELECT s.ROWID, cm_correct.crdnumber_get (creditid) AS num,'
+      
+        '       cm_correct.crdborrname_get (creditid) AS NAME, rest, inte' +
+        'restrest,'
+      
+        '       duerest, dueinterestrest, givenamount, obligation, penalt' +
+        'yrest'
+      '  FROM cm_curr_state s'
+      
+        'where creditid in (select id from cm_portfolio where branchid in' +
+        ' (select id from sb_filial)) '
+      'order by  :orderfield')
+    Variables.Data = {
+      03000000010000000B0000003A4F524445524649454C44010000000000000000
+      000000}
+    Cursor = crHourGlass
+    CachedUpdates = True
+    Session = CMDataModule.CMSession
+    Left = 64
+    Top = 136
+    object CorrectDataNUM: TStringField
+      DisplayLabel = '№'
+      FieldName = 'NUM'
+      Size = 60
+    end
+    object CorrectDataNAME: TStringField
+      DisplayLabel = 'Боржалан'
+      FieldName = 'NAME'
+      Size = 120
+    end
+    object CorrectDataREST: TFloatField
+      DisplayLabel = 'Я.Б Галыг'
+      FieldName = 'REST'
+      Required = True
+      DisplayFormat = '#,#0.00'
+    end
+    object CorrectDataINTERESTREST: TFloatField
+      DisplayLabel = 'Ф.Б. Галыг'
+      FieldName = 'INTERESTREST'
+      Required = True
+      DisplayFormat = '#,#0.00'
+    end
+    object CorrectDataDUEREST: TFloatField
+      DisplayLabel = 'Э.Б. Галыг'
+      FieldName = 'DUEREST'
+      Required = True
+      DisplayFormat = '#,#0.00'
+    end
+    object CorrectDataDUEINTERESTREST: TFloatField
+      DisplayLabel = 'Э.Ф.Б. Галыг'
+      FieldName = 'DUEINTERESTREST'
+      Required = True
+      DisplayFormat = '#,#0.00'
+    end
+    object CorrectDataGIVENAMOUNT: TFloatField
+      DisplayLabel = 'Верилмиш мябляь'
+      FieldName = 'GIVENAMOUNT'
+      Required = True
+      DisplayFormat = '#,#0.00'
+    end
+    object CorrectDataOBLIGATION: TFloatField
+      DisplayLabel = 'Ющтялик'
+      FieldName = 'OBLIGATION'
+      Required = True
+      DisplayFormat = '#,#0.00'
+    end
+    object CorrectDataPENALTYREST: TFloatField
+      DisplayLabel = 'Пенийа'
+      FieldName = 'PENALTYREST'
+      DisplayFormat = '#,#0.00'
+    end
+  end
+  object DSCorrectData: TDataSource
+    DataSet = CorrectData
+    Left = 64
+    Top = 184
+  end
+end

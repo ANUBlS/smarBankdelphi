@@ -1,0 +1,37 @@
+unit UnitForm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs;
+
+type
+  TForm_note = class(TForm)
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form_note: TForm_note;
+
+   procedure InitPlugin(s:string);export;
+implementation
+uses  sboapiDataModuleImpl,CommonDecls;
+
+{$R *.dfm}
+
+procedure InitPlugin(s:string);export;
+begin
+   Form1.ShowModal;
+end;
+exports
+     InitPlugin;
+
+
+
+{$R *.dfm}
+
+end.

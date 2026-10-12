@@ -1,0 +1,374 @@
+object dmusaid_prognoz: Tdmusaid_prognoz
+  OldCreateOrder = False
+  OnDestroy = DataModuleDestroy
+  Left = 248
+  Top = 138
+  Height = 492
+  Width = 662
+  object Branches: TOracleDataSet
+    SQL.Strings = (
+      'select id,name from smart.filial_t'
+      'order by id')
+    QBEDefinition.QBEFieldDefs = {
+      0400000002000000020000004944010000000000040000004E414D4501000000
+      0000}
+    Session = sboapiDataModule.SBSession
+    Left = 32
+    Top = 24
+    object BranchesID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object BranchesNAME: TStringField
+      DisplayLabel = 'Ады'
+      FieldName = 'NAME'
+      Size = 90
+    end
+  end
+  object CreditTypes: TOracleDataSet
+    SQL.Strings = (
+      'select id,description from cm_credittypes'
+      'order by id')
+    QBEDefinition.QBEFieldDefs = {
+      04000000020000000200000049440100000000000B0000004445534352495054
+      494F4E010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 32
+    Top = 72
+    object CreditTypesID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object CreditTypesDESCRIPTION: TStringField
+      DisplayLabel = 'Ады'
+      FieldName = 'DESCRIPTION'
+      Size = 128
+    end
+  end
+  object prog: TOracleDataSet
+    SQL.Strings = (
+      'SELECT rowid, type#, branchid, credittype, prognoz'
+      '  FROM usaid_prognoz '
+      '  where branchid = :brid'
+      '  and credittype = :crdtype'
+      'and type# =:typ')
+    Variables.Data = {
+      0300000003000000080000003A43524454595045030000000000000000000000
+      040000003A545950030000000000000000000000050000003A42524944030000
+      000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      0400000004000000050000005459504523010000000000080000004252414E43
+      4849440100000000000A00000043524544495454595045010000000000070000
+      0050524F474E4F5A010000000000}
+    Session = sboapiDataModule.SBSession
+    AfterPost = progAfterPost
+    Left = 24
+    Top = 128
+    object progTYPE: TFloatField
+      FieldName = 'TYPE#'
+      Required = True
+    end
+    object progBRANCHID: TFloatField
+      FieldName = 'BRANCHID'
+      Required = True
+    end
+    object progCREDITTYPE: TFloatField
+      FieldName = 'CREDITTYPE'
+      Required = True
+    end
+    object progPROGNOZ: TFloatField
+      DisplayLabel = 'Гиймяти'
+      FieldName = 'PROGNOZ'
+      Required = True
+    end
+  end
+  object Branchesds: TDataSource
+    DataSet = Branches
+    OnDataChange = BranchesdsDataChange
+    Left = 104
+    Top = 24
+  end
+  object CreditTypesds: TDataSource
+    DataSet = CreditTypes
+    OnDataChange = CreditTypesdsDataChange
+    Left = 104
+    Top = 72
+  end
+  object progds: TDataSource
+    DataSet = prog
+    Left = 104
+    Top = 120
+  end
+  object usaidreport: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'usaid_report'
+    Left = 464
+    Top = 16
+  end
+  object Fcollection: TOracleDataSet
+    SQL.Strings = (
+      'SELECT ROWID, ID, description'
+      '  FROM usaid_fcollection'
+      '')
+    QBEDefinition.QBEFieldDefs = {
+      04000000020000000200000049440100000000000B0000004445534352495054
+      494F4E010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 176
+    Top = 24
+    object FcollectionID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object FcollectionDESCRIPTION: TStringField
+      DisplayLabel = 'Ады'
+      FieldName = 'DESCRIPTION'
+      Required = True
+      Size = 80
+    end
+  end
+  object Fcollectionds: TDataSource
+    DataSet = Fcollection
+    OnDataChange = FcollectiondsDataChange
+    Left = 240
+    Top = 24
+  end
+  object CatPds: TDataSource
+    DataSet = CatP
+    OnDataChange = CatPdsDataChange
+    Left = 64
+    Top = 176
+  end
+  object PerPds: TDataSource
+    DataSet = PerP
+    OnDataChange = CatPdsDataChange
+    Left = 72
+    Top = 232
+  end
+  object PledgesPds: TDataSource
+    DataSet = PledgesP
+    OnDataChange = CatPdsDataChange
+    Left = 72
+    Top = 288
+  end
+  object valpds: TDataSource
+    DataSet = valp
+    OnDataChange = CatPdsDataChange
+    Left = 72
+    Top = 336
+  end
+  object RegionPds: TDataSource
+    DataSet = RegionP
+    OnDataChange = CatPdsDataChange
+    Left = 168
+    Top = 176
+  end
+  object ResPds: TDataSource
+    DataSet = ResP
+    OnDataChange = CatPdsDataChange
+    Left = 168
+    Top = 232
+  end
+  object AnnIntPds: TDataSource
+    DataSet = AnnIntP
+    OnDataChange = CatPdsDataChange
+    Left = 184
+    Top = 288
+  end
+  object PeriodPds: TDataSource
+    DataSet = PeriodP
+    OnDataChange = CatPdsDataChange
+    Left = 184
+    Top = 344
+  end
+  object CatP: TOracleDataSet
+    SQL.Strings = (
+      'select id,description as sector from creditsmgr.cm_categories'
+      'where id in (select customertype from cm_portfolio)'
+      'order by id')
+    QBEDefinition.QBEFieldDefs = {
+      040000000200000002000000494401000000000006000000534543544F520100
+      00000000}
+    Session = sboapiDataModule.SBSession
+    Left = 16
+    Top = 176
+    object CatPID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object CatPSECTOR: TStringField
+      DisplayLabel = 'Ады'
+      FieldName = 'SECTOR'
+      Size = 128
+    end
+  end
+  object PerP: TOracleDataSet
+    SQL.Strings = (
+      'select id,descripion as sector from creditsmgr.cm_persons')
+    QBEDefinition.QBEFieldDefs = {
+      040000000200000002000000494401000000000006000000534543544F520100
+      00000000}
+    Session = sboapiDataModule.SBSession
+    Left = 16
+    Top = 232
+    object PerPID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object PerPSECTOR: TStringField
+      DisplayLabel = 'Ады'
+      FieldName = 'SECTOR'
+      Size = 64
+    end
+  end
+  object PledgesP: TOracleDataSet
+    SQL.Strings = (
+      'select id,description as sector from creditsmgr.cm_pledges'
+      'order by id')
+    QBEDefinition.QBEFieldDefs = {
+      040000000200000002000000494401000000000006000000534543544F520100
+      00000000}
+    Session = sboapiDataModule.SBSession
+    Left = 16
+    Top = 288
+    object PledgesPID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object PledgesPSECTOR: TStringField
+      DisplayLabel = 'Ады'
+      FieldName = 'SECTOR'
+      Size = 64
+    end
+  end
+  object valp: TOracleDataSet
+    SQL.Strings = (
+      'select valute as id,valu_name as sector from avalute_t')
+    QBEDefinition.QBEFieldDefs = {
+      040000000200000002000000494401000000000006000000534543544F520100
+      00000000}
+    Session = sboapiDataModule.SBSession
+    Left = 16
+    Top = 344
+    object valpID: TIntegerField
+      FieldName = 'ID'
+      Required = True
+    end
+    object valpSECTOR: TStringField
+      DisplayLabel = 'Ады'
+      FieldName = 'SECTOR'
+      Size = 25
+    end
+  end
+  object RegionP: TOracleDataSet
+    SQL.Strings = (
+      'select id,name as sector from creditsmgr.agro_region'
+      'order by id')
+    QBEDefinition.QBEFieldDefs = {
+      040000000200000002000000494401000000000006000000534543544F520100
+      00000000}
+    Session = sboapiDataModule.SBSession
+    Left = 120
+    Top = 176
+    object RegionPID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object RegionPSECTOR: TStringField
+      DisplayLabel = 'Ады'
+      FieldName = 'SECTOR'
+      Size = 128
+    end
+  end
+  object ResP: TOracleDataSet
+    SQL.Strings = (
+      'select id,description as sector from cm_reserves')
+    QBEDefinition.QBEFieldDefs = {
+      040000000200000002000000494401000000000006000000534543544F520100
+      00000000}
+    Session = sboapiDataModule.SBSession
+    Left = 120
+    Top = 232
+    object ResPID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object ResPSECTOR: TStringField
+      DisplayLabel = 'Ады'
+      FieldName = 'SECTOR'
+      Required = True
+      Size = 64
+    end
+  end
+  object AnnIntP: TOracleDataSet
+    SQL.Strings = (
+      'select id,sector from cm_annualints')
+    QBEDefinition.QBEFieldDefs = {
+      040000000200000002000000494401000000000006000000534543544F520100
+      00000000}
+    Session = sboapiDataModule.SBSession
+    Left = 128
+    Top = 288
+    object AnnIntPID: TFloatField
+      FieldName = 'ID'
+    end
+    object AnnIntPSECTOR: TStringField
+      DisplayLabel = 'Ады'
+      FieldName = 'SECTOR'
+      Size = 7
+    end
+  end
+  object PeriodP: TOracleDataSet
+    SQL.Strings = (
+      'select id,sector from cm_crd_periods')
+    QBEDefinition.QBEFieldDefs = {
+      040000000200000002000000494401000000000006000000534543544F520100
+      00000000}
+    Session = sboapiDataModule.SBSession
+    Left = 128
+    Top = 344
+    object PeriodPID: TFloatField
+      FieldName = 'ID'
+    end
+    object PeriodPSECTOR: TStringField
+      DisplayLabel = 'Ады'
+      FieldName = 'SECTOR'
+      Size = 9
+    end
+  end
+  object CollProg: TOracleDataSet
+    SQL.Strings = (
+      'SELECT  rowid,coll_id,  dep_id,  prognoz,BRANCHID'
+      '  FROM usaid_collprog '
+      '  where coll_id = :collid'
+      '  and  dep_id = :depid and BRANCHID =:brid')
+    Variables.Data = {
+      0300000003000000070000003A434F4C4C494403000000000000000000000006
+      0000003A4445504944030000000000000000000000050000003A425249440300
+      00000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      040000000300000007000000434F4C4C5F494401000000000006000000444550
+      5F49440100000000000700000050524F474E4F5A010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 312
+    Top = 24
+    object CollProgCOLL_ID: TFloatField
+      FieldName = 'COLL_ID'
+      Required = True
+    end
+    object CollProgDEP_ID: TFloatField
+      FieldName = 'DEP_ID'
+      Required = True
+    end
+    object CollProgPROGNOZ: TFloatField
+      DisplayLabel = 'Гиймяти'
+      FieldName = 'PROGNOZ'
+      Required = True
+    end
+  end
+  object CollProgds: TDataSource
+    DataSet = CollProg
+    Left = 368
+    Top = 24
+  end
+end

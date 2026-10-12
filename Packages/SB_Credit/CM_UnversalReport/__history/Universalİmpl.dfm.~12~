@@ -1,0 +1,214 @@
+object MainForm: TMainForm
+  Left = 0
+  Top = 0
+  Caption = 'Universal hesabat'
+  ClientHeight = 374
+  ClientWidth = 260
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poOwnerFormCenter
+  OnCanResize = FormCanResize
+  OnCreate = FormCreate
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Label3: TLabel
+    Left = 8
+    Top = 79
+    Width = 25
+    Height = 13
+    Caption = 'Filial'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
+    ParentFont = False
+  end
+  object Label5: TLabel
+    Left = 3
+    Top = 373
+    Width = 3
+    Height = 13
+  end
+  object GroupBox1: TGroupBox
+    Left = 0
+    Top = 0
+    Width = 260
+    Height = 71
+    Align = alTop
+    Caption = 'Tarix aral'#305#287#305
+    TabOrder = 0
+    ExplicitWidth = 261
+    object Label1: TLabel
+      Left = 10
+      Top = 19
+      Width = 69
+      Height = 13
+      Caption = 'Ba'#351'lan'#287#305'c tarix'
+    end
+    object Label2: TLabel
+      Left = 10
+      Top = 47
+      Width = 43
+      Height = 13
+      Caption = 'Son tarix'
+    end
+    object DTPB: TDateTimePicker
+      Left = 116
+      Top = 16
+      Width = 141
+      Height = 21
+      Date = 38258.605396226800000000
+      Time = 38258.605396226800000000
+      TabOrder = 0
+    end
+    object DTPE: TDateTimePicker
+      Left = 116
+      Top = 44
+      Width = 141
+      Height = 21
+      Date = 38258.605396226800000000
+      Time = 38258.605396226800000000
+      TabOrder = 1
+    end
+  end
+  object challBranch: TButton
+    Left = 56
+    Top = 77
+    Width = 72
+    Height = 18
+    Caption = 'Ham'#305's'#305'n'#305' se'#231
+    TabOrder = 1
+    OnClick = challBranchClick
+  end
+  object unchallBranch: TButton
+    Left = 134
+    Top = 77
+    Width = 72
+    Height = 18
+    Caption = 'T'#601'mizl'#601
+    TabOrder = 2
+    OnClick = unchallBranchClick
+  end
+  object LookBranch: TEvanescence
+    Tag = 3112
+    Left = 6
+    Top = 97
+    Width = 251
+    Height = 201
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -12
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ItemHeight = 14
+    ParentFont = False
+    TabOrder = 3
+    DataSource = DmUni.srcBranch
+    ListField = 'NAME'
+    KeyField = 'ID'
+  end
+  object GroupBox2: TGroupBox
+    Left = 0
+    Top = 301
+    Width = 260
+    Height = 45
+    Caption = 'Hesabat n'#246'v'#252
+    TabOrder = 4
+    object DBLookupComboboxEh2: TDBLookupComboboxEh
+      Left = 8
+      Top = 15
+      Width = 246
+      Height = 22
+      DropDownBox.Sizable = True
+      EditButtons = <>
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      KeyField = 'ID'
+      ListField = 'NAME'
+      ListSource = DmUni.DataSource1
+      ParentFont = False
+      TabOrder = 0
+      Visible = True
+    end
+  end
+  object Button1: TButton
+    Left = 106
+    Top = 349
+    Width = 75
+    Height = 25
+    Caption = 'Q'#601'bul'
+    TabOrder = 5
+    OnClick = Button1Click
+  end
+  object Button2: TButton
+    Left = 184
+    Top = 349
+    Width = 75
+    Height = 25
+    Caption = 'Ba'#287'la'
+    TabOrder = 6
+    OnClick = Button2Click
+  end
+  object MisExcelExport: TCMExcelExport
+    StyleColumnWidth = cwDefault
+    ColumnWidth = 0
+    FontTitles.Charset = RUSSIAN_CHARSET
+    FontTitles.Color = clWindowText
+    FontTitles.Height = -11
+    FontTitles.Name = 'Azl Sans Serif'
+    FontTitles.Style = []
+    OrientationTitles = 0
+    FontData.Charset = RUSSIAN_CHARSET
+    FontData.Color = clWindowText
+    FontData.Height = -11
+    FontData.Name = 'Azl Sans Serif'
+    FontData.Style = []
+    FontSummary.Charset = RUSSIAN_CHARSET
+    FontSummary.Color = clWindowText
+    FontSummary.Height = -11
+    FontSummary.Name = 'Azl Sans Serif'
+    FontSummary.Style = []
+    SummarySelection = ssNone
+    SummaryCalculation = scSUM
+    Left = 316
+    Top = 59
+  end
+  object ExcelExport: TCMExcelExport
+    ConnectTo = ctNewInstance
+    StyleColumnWidth = cwAutoFit
+    ColumnWidth = 0
+    FontTitles.Charset = DEFAULT_CHARSET
+    FontTitles.Color = clNavy
+    FontTitles.Height = -13
+    FontTitles.Name = 'Azl Sans Serif'
+    FontTitles.Style = [fsBold]
+    BorderTitles.Weight = bwThin
+    BorderTitles.LineStyle = blLine
+    OrientationTitles = 0
+    FontData.Charset = RUSSIAN_CHARSET
+    FontData.Color = clWindowText
+    FontData.Height = -11
+    FontData.Name = 'Azl Sans Serif'
+    FontData.Style = []
+    FontSummary.Charset = DEFAULT_CHARSET
+    FontSummary.Color = clWindowText
+    FontSummary.Height = -11
+    FontSummary.Name = 'Azl Sans Serif'
+    FontSummary.Style = []
+    SummarySelection = ssNone
+    SummaryCalculation = scSUM
+    Filename = 'kredit_pru1'
+    Left = 152
+    Top = 160
+  end
+end

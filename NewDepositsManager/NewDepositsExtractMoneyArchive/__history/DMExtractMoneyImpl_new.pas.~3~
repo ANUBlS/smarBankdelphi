@@ -1,0 +1,50 @@
+unit DMExtractMoneyImpl_new;
+
+interface
+
+uses
+  SysUtils, Classes, Oracle, DB, OracleData;
+
+type
+  TDMExtractMoney_new = class(TDataModule)
+    Payments: TOracleDataSet;
+    PaymentsID: TFloatField;
+    PaymentsHDATE: TDateTimeField;
+    PaymentsFACTICALDEBT: TFloatField;
+    PaymentsINTERESTDEBT: TFloatField;
+    PaymentsTRID: TFloatField;
+    PaymentsINTTRID: TFloatField;
+    PaymentsDatSrc: TDataSource;
+    CreditAccsDatSrc: TDataSource;
+    CreditAccs: TOracleDataSet;
+    CreditAccsID: TFloatField;
+    CreditAccsACC_NO: TWideStringField;
+    CreditAccsNAME: TWideStringField;
+    sbcm_payment: TOraclePackage;
+    DepositInfo: TOracleDataSet;
+    DepositInfoNAME: TWideStringField;
+    DepositInfoAMOUNT: TFloatField;
+    DepositInfoCURRENCY: TFloatField;
+    DepositInfoCUSTOMERID: TFloatField;
+    DepositInfoFACTICALDEBT: TFloatField;
+    DepositInfoFACTICALINTERESTDEBT: TFloatField;
+    CustAcc: TOracleDataSet;
+    CustAccCLIENTACCID: TFloatField;
+    CustAccCONTRACTACCNO: TWideStringField;
+    CustAccINTERESTACCNO: TWideStringField;
+    DepositInfoDatSrc: TDataSource;
+    CustAccDatSrc: TDataSource;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  DMExtractMoney_new: TDMExtractMoney_new;
+
+implementation
+
+{$R *.dfm}
+
+end.

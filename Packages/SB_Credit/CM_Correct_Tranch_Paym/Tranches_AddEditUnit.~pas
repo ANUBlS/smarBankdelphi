@@ -1,0 +1,45 @@
+unit Tranches_AddEditUnit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  DBCtrlsEh, StdCtrls, Mask, Buttons;
+
+type
+  TTranches_AddEditForm = class(TForm)
+    SpeedButton1: TSpeedButton;
+    SpeedButton2: TSpeedButton;
+    DBEditEh1: TDBEditEh;
+    DBDateTimeEditEh1: TDBDateTimeEditEh;
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure SpeedButton2Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Tranches_AddEditForm: TTranches_AddEditForm;
+
+implementation
+
+{$R *.DFM}
+uses CorrectDatModImpl;
+
+procedure TTranches_AddEditForm.SpeedButton1Click(Sender: TObject);
+begin
+   with CorrectDatMod ,Tranches do
+        Post;
+end;
+
+procedure TTranches_AddEditForm.SpeedButton2Click(Sender: TObject);
+begin
+   with CorrectDatMod ,Tranches do
+        Cancel;
+   with Tranches_AddEditForm do
+        Close;
+end;
+
+end.

@@ -1,0 +1,433 @@
+object DMDepositsManager: TDMDepositsManager
+  OldCreateOrder = False
+  OnCreate = DataModuleCreate
+  OnDestroy = DataModuleDestroy
+  Height = 480
+  Width = 696
+  object DepositsData: TOracleDataSet
+    SQL.Strings = (
+      'select '
+      '       cont.id,'
+      '       cont.contractno,'
+      
+        '       sbcm_stored_programs.Get_ContractAccount(acc.contractacci' +
+        'd) as ContractAccNO,'
+      
+        '       sbcm_stored_programs.Get_ContractAccount(acc.interestacci' +
+        'd) as InterestAccNO,'
+      '       av.val_name,'
+      
+        '       sbcm_stored_programs.Get_ContractAccountName(acc.contract' +
+        'accid) as CustomerName,'
+      
+        '       --sbcm_stored_programs.get_CustomerNameByID(cont.customer' +
+        'id) as CustomerName,'
+      
+        '       --sbcm_stored_programs.get_customername(acc.contractaccid' +
+        ') as CustomerName,'
+      '       cont.opendate,'
+      '       cont.closedate,'
+      '       cont.amount,'
+      '       cont.amount*tmp.ostat as ekamount,'
+      '       intr.interest,         '
+      '       cstate.facticaldebt,'
+      '       cstate.facticaldebt*tmp.ostat as ekfacticaldebt,'
+      '       cstate.facticalinterestdebt,'
+      
+        '       cstate.facticalinterestdebt*tmp.ostat as ekfacticalintere' +
+        'stdebt,'
+      
+        '       sbcm_stored_programs.Get_ClientFacticalDebt(acc.clientacc' +
+        'id) as clientfacticaldebt, '
+      
+        '       sbcm_stored_programs.Get_GiftFacticalDebt(acc.giftaccid) ' +
+        'as giftfacticaldebt,'
+      '       cstate.stopcalculationdate,'
+      
+        '       --SBCM_Stored_Programs.CheckContractState(cont.ID) as  St' +
+        'atus,'
+      '       cont.currency,'
+      '       cont.personaltype,'
+      '       cont.clienttype,'
+      '       cont.branchid,'
+      '      (select name from filial where id=cont.branchid)as Filial,'
+      '       cont.contracttype,'
+      
+        '      (select type from sbcm_deposit_types where id=cont.contrac' +
+        'ttype)as contracttypename,'
+      '       cstate.calculationenabled as status,'
+      
+        '      (select kli_id from account where id=acc.clientaccid) as a' +
+        'ccountid,'
+      '       cont.customerid,'
+      '       cont.sid# as usid'
+      'from sbcm_contracts cont,'
+      '     sbcm_contract_accounts acc,'
+      '     sbcm_interests intr,'
+      '     sbcm_contract_state cstate,'
+      '     avalute av,'
+      '     temprate tmp'
+      'where acc.id# = cont.id and'
+      '      intr.id# = cont.id and'
+      '      cstate.id# = cont.id and'
+      '      cont.currency = av.valute and'
+      '      cont.currency = tmp.val_kod and '
+      '      cont.type# = 3 --Active Deposits'
+      ' order by :OrderField     ')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000160000003A004F0052004400450052004600490045004C00
+      4400010000000300000069640000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000001D00000004000000490044000100000000001400000043004F004E00
+      540052004100430054004E004F000100000000001A00000043004F004E005400
+      52004100430054004100430043004E004F000100000000001A00000049004E00
+      5400450052004500530054004100430043004E004F0001000000000010000000
+      560041004C005F004E0041004D00450001000000000018000000430055005300
+      54004F004D00450052004E0041004D004500010000000000100000004F005000
+      45004E0044004100540045000100000000001200000043004C004F0053004500
+      44004100540045000100000000000C00000041004D004F0055004E0054000100
+      000000001000000045004B0041004D004F0055004E0054000100000000001000
+      000049004E005400450052004500530054000100000000001800000046004100
+      430054004900430041004C0044004500420054000100000000001C0000004500
+      4B0046004100430054004900430041004C004400450042005400010000000000
+      2800000046004100430054004900430041004C0049004E005400450052004500
+      5300540044004500420054000100000000002C00000045004B00460041004300
+      54004900430041004C0049004E00540045005200450053005400440045004200
+      540001000000000026000000530054004F005000430041004C00430055004C00
+      4100540049004F004E0044004100540045000100000000001000000043005500
+      5200520045004E00430059000100000000001800000050004500520053004F00
+      4E0041004C0054005900500045000100000000001400000043004C0049004500
+      4E0054005400590050004500010000000000100000004200520041004E004300
+      4800490044000100000000001800000043004F004E0054005200410043005400
+      54005900500045000100000000000C0000005300540041005400550053000100
+      000000001400000043005500530054004F004D00450052004900440001000000
+      00000800000055005300490044000100000000000C000000460049004C004900
+      41004C000100000000002000000043004F004E00540052004100430054005400
+      5900500045004E0041004D0045000100000000002400000043004C0049004500
+      4E00540046004100430054004900430041004C00440045004200540001000000
+      000020000000470049004600540046004100430054004900430041004C004400
+      450042005400010000000000120000004100430043004F0055004E0054004900
+      4400010000000000}
+    QueryAllRecords = False
+    Session = sboapiDataModule.SBSession
+    Left = 32
+    Top = 16
+    object DepositsDataID: TFloatField
+      FieldName = 'ID'
+      Required = True
+      Visible = False
+    end
+    object DepositsDataCONTRACTNO: TWideStringField
+      DisplayLabel = 'M'#252'qavil'#601'nin '#8470
+      FieldName = 'CONTRACTNO'
+      Size = 64
+    end
+    object DepositsDataCONTRACTACCNO: TWideStringField
+      DisplayLabel = 'Hesab'#305'n '#8470
+      FieldName = 'CONTRACTACCNO'
+      Size = 4000
+    end
+    object DepositsDataVAL_NAME: TWideStringField
+      DisplayLabel = '$'
+      FieldName = 'VAL_NAME'
+      Size = 10
+    end
+    object DepositsDataCUSTOMERNAME: TWideStringField
+      DisplayLabel = 'M'#252#351't'#601'rinin ad'#305
+      FieldName = 'CUSTOMERNAME'
+      Size = 4000
+    end
+    object DepositsDataINTERESTACCNO: TWideStringField
+      DisplayLabel = 'Faiz Hesab'#305'n '#8470
+      FieldName = 'INTERESTACCNO'
+      Size = 4000
+    end
+    object DepositsDataOPENDATE: TDateTimeField
+      DisplayLabel = 'A'#231#305'lma tarixi'
+      FieldName = 'OPENDATE'
+      Required = True
+    end
+    object DepositsDataCLOSEDATE: TDateTimeField
+      DisplayLabel = 'Ba'#287'lanma tarixi'
+      FieldName = 'CLOSEDATE'
+      Required = True
+    end
+    object DepositsDataAMOUNT: TFloatField
+      DisplayLabel = 'M'#601'bl'#601#287
+      FieldName = 'AMOUNT'
+      DisplayFormat = '#,##0.00'
+    end
+    object DepositsDataEKAMOUNT: TFloatField
+      DisplayLabel = 'Ekvivalent'
+      FieldName = 'EKAMOUNT'
+      DisplayFormat = '#,##0.00'
+    end
+    object DepositsDataINTEREST: TFloatField
+      DisplayLabel = #304'llik %'
+      FieldName = 'INTEREST'
+      Required = True
+      DisplayFormat = '#,##0.00'
+    end
+    object DepositsDataFACTICALDEBT: TFloatField
+      DisplayLabel = 'Cari M'#601'bl'#601#287
+      FieldName = 'FACTICALDEBT'
+      DisplayFormat = '#,##0.00'
+    end
+    object DepositsDataEKFACTICALDEBT: TFloatField
+      DisplayLabel = 'Ekvivalent'
+      FieldName = 'EKFACTICALDEBT'
+      DisplayFormat = '#,##0.00'
+    end
+    object DepositsDataFACTICALINTERESTDEBT: TFloatField
+      DisplayLabel = 'Cari M'#601'bl'#601#287' '#252'zr'#601' %'
+      FieldName = 'FACTICALINTERESTDEBT'
+      DisplayFormat = '#,##0.00'
+    end
+    object DepositsDataEKFACTICALINTERESTDEBT: TFloatField
+      DisplayLabel = 'Ekvivalent'
+      FieldName = 'EKFACTICALINTERESTDEBT'
+      DisplayFormat = '#,##0.00'
+    end
+    object DepositsDataCLIENTFACTICALDEBT: TFloatField
+      FieldName = 'CLIENTFACTICALDEBT'
+    end
+    object DepositsDataGIFTFACTICALDEBT: TFloatField
+      FieldName = 'GIFTFACTICALDEBT'
+    end
+    object DepositsDataSTOPCALCULATIONDATE: TDateTimeField
+      DisplayLabel = 'Son Kapital/'#214'd'#601'm'#601' tarixi'
+      FieldName = 'STOPCALCULATIONDATE'
+    end
+    object DepositsDataCURRENCY: TFloatField
+      FieldName = 'CURRENCY'
+      Visible = False
+    end
+    object DepositsDataPERSONALTYPE: TFloatField
+      FieldName = 'PERSONALTYPE'
+      Visible = False
+    end
+    object DepositsDataCLIENTTYPE: TFloatField
+      FieldName = 'CLIENTTYPE'
+      Visible = False
+    end
+    object DepositsDataBRANCHID: TFloatField
+      FieldName = 'BRANCHID'
+      Required = True
+      Visible = False
+    end
+    object DepositsDataCONTRACTTYPE: TIntegerField
+      FieldName = 'CONTRACTTYPE'
+      Visible = False
+    end
+    object DepositsDataSTATUS: TFloatField
+      FieldName = 'STATUS'
+      Required = True
+      Visible = False
+    end
+    object DepositsDataCUSTOMERID: TFloatField
+      DisplayLabel = 'Depozit M'#252#351't'#601'ri id-si'
+      FieldName = 'CUSTOMERID'
+    end
+    object DepositsDataUSID: TFloatField
+      FieldName = 'USID'
+      Visible = False
+    end
+    object DepositsDataCONTRACTTYPENAME: TWideStringField
+      DisplayLabel = 'Depozitin Tipi'
+      FieldName = 'CONTRACTTYPENAME'
+      Size = 500
+    end
+    object DepositsDataFILIAL: TWideStringField
+      FieldName = 'FILIAL'
+      Size = 90
+    end
+    object DepositsDataACCOUNTID: TFloatField
+      DisplayLabel = 'M'#252#351't'#601'ri hesab n'#246'mr'#601'si'
+      FieldName = 'ACCOUNTID'
+    end
+  end
+  object DepositsDataSrc: TDataSource
+    DataSet = DepositsData
+    Left = 120
+    Top = 16
+  end
+  object Valutes: TOracleDataSet
+    SQL.Strings = (
+      'select valute,valu_name '
+      'from avalute')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 32
+    Top = 72
+    object ValutesVALUTE: TIntegerField
+      FieldName = 'VALUTE'
+      Required = True
+    end
+    object ValutesVALU_NAME: TWideStringField
+      FieldName = 'VALU_NAME'
+      Size = 25
+    end
+  end
+  object ValutesDatSrc: TDataSource
+    DataSet = Valutes
+    Left = 120
+    Top = 72
+  end
+  object Filials: TOracleDataSet
+    SQL.Strings = (
+      'select id,name from '
+      'filial'
+      'order by id ')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 32
+    Top = 128
+    object FilialsID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object FilialsNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 90
+    end
+  end
+  object FilialsDatSrc: TDataSource
+    DataSet = Filials
+    Left = 120
+    Top = 128
+  end
+  object DepositTypes: TOracleDataSet
+    SQL.Strings = (
+      'select id,type'
+      'from sbcm_deposit_Types')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 32
+    Top = 184
+    object DepositTypesID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object DepositTypesTYPE: TWideStringField
+      FieldName = 'TYPE'
+      Required = True
+      Size = 256
+    end
+  end
+  object DepositTypesDatSrc: TDataSource
+    DataSet = DepositTypes
+    Left = 120
+    Top = 184
+  end
+  object Categories: TOracleDataSet
+    SQL.Strings = (
+      'select id,Category from sbcm_categories')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 32
+    Top = 240
+    object CategoriesID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object CategoriesCATEGORY: TWideStringField
+      FieldName = 'CATEGORY'
+      Size = 128
+    end
+  end
+  object CategoriesDatSrc: TDataSource
+    DataSet = Categories
+    Left = 120
+    Top = 240
+  end
+  object persons: TOracleDataSet
+    SQL.Strings = (
+      'select id,name from sbcm_persons')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 32
+    Top = 296
+    object personsID: TFloatField
+      FieldName = 'ID'
+    end
+    object personsNAME: TWideStringField
+      FieldName = 'NAME'
+    end
+  end
+  object personsDatSrc: TDataSource
+    DataSet = persons
+    Left = 120
+    Top = 288
+  end
+  object BankDate: TOracleDataSet
+    SQL.Strings = (
+      'select tek_dat from sysdat')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 216
+    Top = 24
+    object BankDateTEK_DAT: TDateTimeField
+      FieldName = 'TEK_DAT'
+      Required = True
+    end
+  end
+  object BankDateDatSrc: TDataSource
+    DataSet = BankDate
+    Left = 296
+    Top = 24
+  end
+  object FilialID: TOracleDataSet
+    SQL.Strings = (
+      'select kod_fil from bankinfo')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 216
+    Top = 88
+    object FilialIDKOD_FIL: TIntegerField
+      FieldName = 'KOD_FIL'
+    end
+  end
+  object FilialIDDatSrc: TDataSource
+    DataSet = FilialID
+    Left = 296
+    Top = 88
+  end
+  object Stored_Programs: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'sbcm_stored_programs'
+    ParameterMode = pmNamed
+    Cursor = crSQLWait
+    Left = 232
+    Top = 160
+  end
+  object users: TOracleDataSet
+    SQL.Strings = (
+      'select id,name from user$'
+      'where id in (select sid# from sbcm_contracts group by sid#)')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 216
+    Top = 216
+    object usersID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object usersNAME: TWideStringField
+      FieldName = 'NAME'
+      Required = True
+      Size = 30
+    end
+  end
+  object usersDatSrc: TDataSource
+    DataSet = users
+    Left = 272
+    Top = 224
+  end
+  object SB_ACA: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'SB_ACA'
+    Left = 232
+    Top = 288
+  end
+end

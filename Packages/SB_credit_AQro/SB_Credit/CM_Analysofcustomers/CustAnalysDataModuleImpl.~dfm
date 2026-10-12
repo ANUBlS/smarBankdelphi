@@ -1,0 +1,1137 @@
+object CustAnalysDataModule: TCustAnalysDataModule
+  OldCreateOrder = False
+  Left = 65518
+  Top = 142
+  Height = 502
+  Width = 901
+  object CustAnalysDataSource: TDataSource
+    DataSet = CustAnalysDataSet
+    Left = 157
+    Top = 16
+  end
+  object CreditAnalysDataSet: TOracleDataSet
+    Tag = 1
+    SQL.Strings = (
+      
+        'SELECT p.boorowerid, p.id creditid, p.branchid, p.currency, p.nu' +
+        'mberofcredit,'
+      
+        '       p.customertype, p.credittype, p.usrgroup, p.usid, p.perso' +
+        'naltype,'
+      '       p.dateofconclusion,p.duedatelastcontract,p.closedate,'
+      
+        '       h.rest, h.interestrest, h.duerest, h.dueinterestrest, v.v' +
+        'al_name,'
+      
+        '       v.valute, cm_common.accountnumber_get (a.contractaccid) A' +
+        'S contractaccno'
+      
+        '  FROM cm_portfolio p, cm_curr_state h, sb_avalute v, cm_account' +
+        's a'
+      ' WHERE (h.creditid = p.id)'
+      '   AND (v.valute = p.currency)'
+      '   AND (p.boorowerid = :boorowerid)'
+      '   AND (a.creditid = p.id)'
+      'ORDER BY :orderfield')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    Variables.Data = {
+      03000000020000000B0000003A424F4F524F5745524944030000000000000000
+      0000000B0000003A4F524445524649454C44010000000000000000000000}
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = True
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crSQLWait
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = CMDataModule.CMSession
+    DesignActivation = False
+    Active = False
+    Left = 40
+    Top = 64
+    object CreditAnalysDataSetBOOROWERID: TFloatField
+      FieldName = 'BOOROWERID'
+      Required = True
+    end
+    object CreditAnalysDataSetCREDITID: TFloatField
+      DisplayLabel = 'Kreditin  № си'
+      FieldName = 'CREDITID'
+      Required = True
+    end
+    object CreditAnalysDataSetBRANCHID: TFloatField
+      FieldName = 'BRANCHID'
+      Required = True
+    end
+    object CreditAnalysDataSetCURRENCY: TFloatField
+      FieldName = 'CURRENCY'
+      Required = True
+    end
+    object CreditAnalysDataSetNUMBEROFCREDIT: TStringField
+      DisplayLabel = '№'
+      FieldName = 'NUMBEROFCREDIT'
+      Size = 32
+    end
+    object CreditAnalysDataSetCUSTOMERTYPE: TFloatField
+      FieldName = 'CUSTOMERTYPE'
+      Required = True
+    end
+    object CreditAnalysDataSetCREDITTYPE: TFloatField
+      FieldName = 'CREDITTYPE'
+      Required = True
+    end
+    object CreditAnalysDataSetUSRGROUP: TFloatField
+      FieldName = 'USRGROUP'
+      Required = True
+    end
+    object CreditAnalysDataSetUSID: TFloatField
+      FieldName = 'USID'
+      Required = True
+    end
+    object CreditAnalysDataSetPERSONALTYPE: TFloatField
+      FieldName = 'PERSONALTYPE'
+      Required = True
+    end
+    object CreditAnalysDataSetREST: TFloatField
+      DisplayLabel = 'Галыг'
+      FieldName = 'REST'
+      Required = True
+      DisplayFormat = '#,#0.00'
+    end
+    object CreditAnalysDataSetINTERESTREST: TFloatField
+      DisplayLabel = 'Фаиз галыг'
+      FieldName = 'INTERESTREST'
+      Required = True
+      DisplayFormat = '#,#0.00'
+    end
+    object CreditAnalysDataSetDUEREST: TFloatField
+      DisplayLabel = 'Gecikmiш  галыг'
+      FieldName = 'DUEREST'
+      Required = True
+      DisplayFormat = '#,#0.00'
+    end
+    object CreditAnalysDataSetDUEINTERESTREST: TFloatField
+      DisplayLabel = 'Gecikmiш  фаиз галыг'
+      FieldName = 'DUEINTERESTREST'
+      Required = True
+      DisplayFormat = '#,#0.00'
+    end
+    object CreditAnalysDataSetVAL_NAME: TStringField
+      DisplayLabel = '$'
+      FieldName = 'VAL_NAME'
+      Size = 10
+    end
+    object CreditAnalysDataSetVALUTE: TIntegerField
+      FieldName = 'VALUTE'
+      Required = True
+    end
+    object CreditAnalysDataSetCONTRACTACCNO: TStringField
+      DisplayLabel = 'ССуда hесабынын №-cи'
+      FieldName = 'CONTRACTACCNO'
+      Size = 4000
+    end
+    object CreditAnalysDataSetDATEOFCONCLUSION: TDateTimeField
+      FieldName = 'DATEOFCONCLUSION'
+      Required = True
+    end
+    object CreditAnalysDataSetCLOSEDATE: TDateTimeField
+      FieldName = 'CLOSEDATE'
+    end
+    object CreditAnalysDataSetDUEDATELASTCONTRACT: TDateTimeField
+      FieldName = 'DUEDATELASTCONTRACT'
+    end
+  end
+  object CreditAnalysDataSource: TDataSource
+    DataSet = CreditAnalysDataSet
+    Left = 157
+    Top = 72
+  end
+  object UsersDataSet: TOracleDataSet
+    SQL.Strings = (
+      'select id, name'
+      'from SB_user$')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crSQLWait
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = CMDataModule.CMSession
+    DesignActivation = False
+    Active = False
+    Left = 32
+    Top = 288
+  end
+  object UsersDataSource: TDataSource
+    DataSet = UsersDataSet
+    Left = 157
+    Top = 280
+  end
+  object FilialDataSet: TOracleDataSet
+    SQL.Strings = (
+      'select id,name'
+      'from sb_filial')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crSQLWait
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = CMDataModule.CMSession
+    DesignActivation = False
+    Active = False
+    Left = 280
+    Top = 19
+  end
+  object FilialDataSource: TDataSource
+    DataSet = FilialDataSet
+    Left = 392
+    Top = 21
+  end
+  object CategoriesDataSet: TOracleDataSet
+    SQL.Strings = (
+      'select id,description'
+      'from cm_categories')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crSQLWait
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = CMDataModule.CMSession
+    DesignActivation = False
+    Active = False
+    Left = 280
+    Top = 75
+  end
+  object CategoriesDataSource: TDataSource
+    DataSet = CategoriesDataSet
+    Left = 400
+    Top = 76
+  end
+  object CurrencysDataSet: TOracleDataSet
+    SQL.Strings = (
+      'select valute,valu_name'
+      'from sb_avalute')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crSQLWait
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = CMDataModule.CMSession
+    DesignActivation = False
+    Active = False
+    Left = 40
+    Top = 128
+  end
+  object CurrencysDataSource: TDataSource
+    DataSet = CurrencysDataSet
+    Left = 159
+    Top = 131
+  end
+  object PersonsDataSet: TOracleDataSet
+    SQL.Strings = (
+      'select id ,descripion'
+      'from cm_persons')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crSQLWait
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = CMDataModule.CMSession
+    DesignActivation = False
+    Active = False
+    Left = 32
+    Top = 200
+  end
+  object PersonsDataSource: TDataSource
+    DataSet = PersonsDataSet
+    Left = 157
+    Top = 197
+  end
+  object UserGroupsDataSet: TOracleDataSet
+    SQL.Strings = (
+      'select id,description'
+      'from cm_usergroups')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crSQLWait
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = CMDataModule.CMSession
+    DesignActivation = False
+    Active = False
+    Left = 288
+    Top = 193
+  end
+  object CreditTypeDataSet: TOracleDataSet
+    SQL.Strings = (
+      'select id,description '
+      'from cm_credittypes')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crSQLWait
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = CMDataModule.CMSession
+    DesignActivation = False
+    Active = False
+    Left = 288
+    Top = 274
+  end
+  object UserGroupsDataSource: TDataSource
+    DataSet = UserGroupsDataSet
+    Left = 408
+    Top = 192
+  end
+  object CreditTypeDataSource: TDataSource
+    DataSet = CreditTypeDataSet
+    Left = 409
+    Top = 270
+  end
+  object CustomersDataSet: TOracleDataSet
+    SQL.Strings = (
+      'select id,name'
+      'from cm_sb_customers'
+      'order by name')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crSQLWait
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = CMDataModule.CMSession
+    DesignActivation = False
+    Active = False
+    Left = 284
+    Top = 131
+  end
+  object CustomersDataSource: TDataSource
+    DataSet = CustomersDataSet
+    Left = 400
+    Top = 135
+  end
+  object CustAnalysDataSet: TOracleDataSet
+    SQL.Strings = (
+      'SELECT DISTINCT c.id boorowerid, c.NAME boorowername'
+      '           FROM cm_sb_customers c'
+      '          WHERE EXISTS ( SELECT p.boorowerid'
+      '                           FROM cm_portfolio p'
+      '                          WHERE p.boorowerid = c.id)'
+      '       --c.ID in (select P.BoorowerID from CM_Portfolio P )    '
+      '       ORDER BY :orderfield')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    Variables.Data = {
+      03000000010000000B0000003A4F524445524649454C44010000000000000000
+      000000}
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crSQLWait
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = CMDataModule.CMSession
+    DesignActivation = False
+    Active = False
+    Left = 40
+    Top = 8
+    object CustAnalysDataSetBOOROWERID: TIntegerField
+      FieldName = 'BOOROWERID'
+      Required = True
+    end
+    object CustAnalysDataSetBOOROWERNAME: TStringField
+      FieldName = 'BOOROWERNAME'
+      Size = 90
+    end
+  end
+  object TrancheDataSource: TDataSource
+    DataSet = TrancheDataSet
+    Left = 155
+    Top = 349
+  end
+  object TrancheDataSet: TOracleDataSet
+    SQL.Strings = (
+      'select T.trancheamount,T.tranchedate'
+      'from cm_tranches T'
+      'where creditid =:CrdID'
+      ''
+      ''
+      ''
+      ''
+      '')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    Variables.Data = {0300000001000000060000003A4352444944030000000000000000000000}
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crSQLWait
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = CMDataModule.CMSession
+    DesignActivation = False
+    Active = False
+    Left = 32
+    Top = 344
+    object TrancheDataSetTRANCHEAMOUNT: TFloatField
+      DisplayLabel = 'Транш'
+      FieldName = 'TRANCHEAMOUNT'
+      Required = True
+      DisplayFormat = '#,#0.00'
+    end
+    object TrancheDataSetTRANCHEDATE: TDateTimeField
+      DisplayLabel = 'Тарих'
+      FieldName = 'TRANCHEDATE'
+      Required = True
+    end
+  end
+  object PaymentsDataSet: TOracleDataSet
+    SQL.Strings = (
+      
+        'SELECT id, creditid, paydate, payedamt, payedintamt, payeddueamt' +
+        ','
+      '       payeddueintamt, payedpenaltyamt'
+      '  FROM cm_payments'
+      'WHERE CreditID=:CrdID'
+      '')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    Variables.Data = {0300000001000000060000003A4352444944030000000000000000000000}
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crSQLWait
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = CMDataModule.CMSession
+    DesignActivation = False
+    Active = False
+    Left = 288
+    Top = 344
+    object PaymentsDataSetID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object PaymentsDataSetCREDITID: TFloatField
+      FieldName = 'CREDITID'
+      Required = True
+    end
+    object PaymentsDataSetPAYDATE: TDateTimeField
+      DisplayLabel = 'Ю. Тарихи'
+      FieldName = 'PAYDATE'
+      Required = True
+    end
+    object PaymentsDataSetPAYEDAMT: TFloatField
+      DisplayLabel = 'Ясас Борж-дан'
+      FieldName = 'PAYEDAMT'
+      Required = True
+      DisplayFormat = '#,#0.00'
+    end
+    object PaymentsDataSetPAYEDINTAMT: TFloatField
+      DisplayLabel = 'Я.Б. фаиз - дян'
+      FieldName = 'PAYEDINTAMT'
+      Required = True
+      DisplayFormat = '#,#0.00'
+    end
+    object PaymentsDataSetPAYEDDUEAMT: TFloatField
+      DisplayLabel = 'Эежик. Борж-дан'
+      FieldName = 'PAYEDDUEAMT'
+      Required = True
+      DisplayFormat = '#,#0.00'
+    end
+    object PaymentsDataSetPAYEDDUEINTAMT: TFloatField
+      DisplayLabel = 'Э.Б. фаиз-дян'
+      FieldName = 'PAYEDDUEINTAMT'
+      Required = True
+      DisplayFormat = '#,#0.00'
+    end
+    object PaymentsDataSetPAYEDPENALTYAMT: TFloatField
+      FieldName = 'PAYEDPENALTYAMT'
+      Required = True
+      DisplayFormat = '#,#0.00'
+    end
+  end
+  object PaymentsDataSource: TDataSource
+    DataSet = PaymentsDataSet
+    Left = 424
+    Top = 344
+  end
+  object CreditsinDateDataSet: TOracleDataSet
+    SQL.Strings = (
+      'SELECT hdate,rest, interestrest,'
+      '       duerest, dueinterestrest'
+      '  FROM cm_history'
+      '  where creditid=:crdid '
+      '    and hdate between :D1 and :D2 '
+      'order by hdate desc'
+      '')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    Variables.Data = {
+      0300000003000000060000003A43524449440300000000000000000000000300
+      00003A44310C0000000000000000000000030000003A44320C00000000000000
+      00000000}
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = CMDataModule.CMSession
+    DesignActivation = False
+    Active = False
+    Left = 526
+    Top = 19
+    object CreditsinDateDataSetHDATE: TDateTimeField
+      DisplayLabel = 'Тарих'
+      FieldName = 'HDATE'
+      Required = True
+    end
+    object CreditsinDateDataSetREST: TFloatField
+      DisplayLabel = ' Галыг'
+      FieldName = 'REST'
+      Required = True
+      DisplayFormat = '#,#0.00'
+    end
+    object CreditsinDateDataSetDUEREST: TFloatField
+      DisplayLabel = 'Gеcикмиш Галыг'
+      FieldName = 'DUEREST'
+      Required = True
+      DisplayFormat = '#,#0.00'
+    end
+    object CreditsinDateDataSetINTERESTREST: TFloatField
+      DisplayLabel = 'Фаиз Галыг'
+      FieldName = 'INTERESTREST'
+      Required = True
+      DisplayFormat = '#,#0.00'
+    end
+    object CreditsinDateDataSetDUEINTERESTREST: TFloatField
+      DisplayLabel = 'Gecikmiш фаиз Галыг'
+      FieldName = 'DUEINTERESTREST'
+      Required = True
+      DisplayFormat = '#,#0.00'
+    end
+  end
+  object CreditsinDateDataSource: TDataSource
+    DataSet = CreditsinDateDataSet
+    Left = 526
+    Top = 75
+  end
+  object ScheduleDataSet: TOracleDataSet
+    SQL.Strings = (
+      'SELECT id, creditid, paymentdate, principal, interest'
+      '  FROM cm_payment_schedule'
+      ' WHERE CreditID=:CrdID'
+      '')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    Variables.Data = {0300000001000000060000003A4352444944030000000000000000000000}
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = CMDataModule.CMSession
+    DesignActivation = False
+    Active = False
+    Left = 528
+    Top = 136
+    object ScheduleDataSetID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object ScheduleDataSetCREDITID: TFloatField
+      FieldName = 'CREDITID'
+      Required = True
+    end
+    object ScheduleDataSetPAYMENTDATE: TDateTimeField
+      DisplayLabel = 'Тарих'
+      FieldName = 'PAYMENTDATE'
+      Required = True
+    end
+    object ScheduleDataSetPRINCIPAL: TFloatField
+      DisplayLabel = 'Ясас Борж-дан'
+      FieldName = 'PRINCIPAL'
+      Required = True
+      DisplayFormat = '#,#0.00'
+    end
+    object ScheduleDataSetINTEREST: TFloatField
+      DisplayLabel = 'Щ. Фаиз - дян'
+      FieldName = 'INTEREST'
+      Required = True
+      DisplayFormat = '#,#0.00'
+    end
+  end
+  object ScheduleDataSource: TDataSource
+    DataSet = ScheduleDataSet
+    Left = 528
+    Top = 200
+  end
+  object ProlongationDataSet: TOracleDataSet
+    SQL.Strings = (
+      'SELECT  prolongdate, newclosedate'
+      '  FROM cm_prolongations'
+      'where creditid =:CrdID'
+      '')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    Variables.Data = {0300000001000000060000003A4352444944030000000000000000000000}
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = CMDataModule.CMSession
+    DesignActivation = False
+    Active = False
+    Left = 536
+    Top = 272
+    object ProlongationDataSetPROLONGDATE: TDateTimeField
+      DisplayLabel = 'Prolanqasiya tarixi'
+      FieldName = 'PROLONGDATE'
+      Required = True
+    end
+    object ProlongationDataSetNEWCLOSEDATE: TDateTimeField
+      DisplayLabel = 'Yeni tarixi'
+      FieldName = 'NEWCLOSEDATE'
+      Required = True
+    end
+  end
+  object ProlongationDataSource: TDataSource
+    DataSet = ProlongationDataSet
+    Left = 544
+    Top = 344
+  end
+  object SumSheDataSet: TOracleDataSet
+    SQL.Strings = (
+      'SELECT  creditid,sum(principal),sum(interest)'
+      '  FROM cm_payment_schedule'
+      ' WHERE CreditID=:CrdID'
+      'group by CreditID'
+      '')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    Variables.Data = {0300000001000000060000003A4352444944030000000000000000000000}
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = CMDataModule.CMSession
+    DesignActivation = False
+    Active = False
+    Left = 632
+    Top = 16
+    object SumSheDataSetCREDITID: TFloatField
+      FieldName = 'CREDITID'
+      Required = True
+    end
+    object SumSheDataSetSUMPRINCIPAL: TFloatField
+      DisplayLabel = 'Ясас Борж-дан'
+      FieldName = 'SUM(PRINCIPAL)'
+      DisplayFormat = '#,#0.00'
+    end
+    object SumSheDataSetSUMINTEREST: TFloatField
+      DisplayLabel = 'Щ. Фаиз - дян'
+      FieldName = 'SUM(INTEREST)'
+      DisplayFormat = '#,#0.00'
+    end
+  end
+  object SumSheDataSource: TDataSource
+    DataSet = SumSheDataSet
+    Left = 632
+    Top = 64
+  end
+  object SumPayDataSet: TOracleDataSet
+    SQL.Strings = (
+      
+        'SELECT creditid,  sum(payedamt), sum(payedintamt), sum(payedduea' +
+        'mt),'
+      '       sum(payeddueintamt), sum(payedpenaltyamt)'
+      '  FROM cm_payments'
+      'WHERE CreditID=:CrdID'
+      'Group by creditid'
+      ''
+      '')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    Variables.Data = {0300000001000000060000003A4352444944030000000000000000000000}
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = CMDataModule.CMSession
+    DesignActivation = False
+    Active = False
+    Left = 640
+    Top = 128
+    object SumPayDataSetCREDITID: TFloatField
+      FieldName = 'CREDITID'
+      Required = True
+    end
+    object SumPayDataSetSUMPAYEDAMT: TFloatField
+      DisplayLabel = 'Ясас Борж-дан'
+      FieldName = 'SUM(PAYEDAMT)'
+      DisplayFormat = '#,#0.00'
+    end
+    object SumPayDataSetSUMPAYEDINTAMT: TFloatField
+      DisplayLabel = 'Я.Б. фаиз - дян'
+      FieldName = 'SUM(PAYEDINTAMT)'
+      DisplayFormat = '#,#0.00'
+    end
+    object SumPayDataSetSUMPAYEDDUEAMT: TFloatField
+      DisplayLabel = 'Эежик. Борж-дан'
+      FieldName = 'SUM(PAYEDDUEAMT)'
+      DisplayFormat = '#,#0.00'
+    end
+    object SumPayDataSetSUMPAYEDDUEINTAMT: TFloatField
+      DisplayLabel = 'Э.Б. фаиз-дян'
+      FieldName = 'SUM(PAYEDDUEINTAMT)'
+      DisplayFormat = '#,#0.00'
+    end
+    object SumPayDataSetSUMPAYEDPENALTYAMT: TFloatField
+      DisplayLabel = 'PAYEDPENALTYAMT'
+      FieldName = 'SUM(PAYEDPENALTYAMT)'
+      DisplayFormat = '#,#0.00'
+    end
+  end
+  object SumPayDataSource: TDataSource
+    DataSet = SumPayDataSet
+    Left = 648
+    Top = 192
+  end
+  object ReportDataSet: TOracleDataSet
+    SQL.Strings = (
+      'select '
+      '      p.numberofcredit,'
+      '      p.dateofconclusion,'
+      '      p.closedate,'
+      '      p.purposeofcredit,'
+      '      p.creditlineamount,'
+      '      p.annualyinterestrate,'
+      '      p.annualyoverduerate,'
+      '      p.annualypenaltyrate,'
+      '      per.descripion,'
+      '      cat.description,'
+      '      crd.description,'
+      '      usrgr.description,'
+      '      val.val_name,'
+      '      plg.pledgename,'
+      '      GET_RESERVES_NAME(h.reserveid) as resrevename,'
+      '      GET_RESERVES_NAME(h.duereserveid) as dueresrevename,'
+      '      h.pledgeprice'
+      'from '
+      '    cm_portfolio p,'
+      '    cm_persons per,'
+      '    cm_categories cat,'
+      '    cm_credittypes crd,'
+      '    cm_usergroups usrgr,'
+      '    sb_avalute val,'
+      '    cm_guarantee plg,'
+      '    cm_curr_state h'
+      'where '
+      '    p.personaltype = per.id and    '
+      '    p.customertype = cat.id and'
+      '    p.credittype = crd.id and'
+      '    p.usrgroup = usrgr.id and'
+      '    p.currency = val.valute and'
+      '    p.id = h.creditid and'
+      '    p.id = plg.creditid and'
+      '    p.id = :CrdID      '
+      '      '
+      '      ')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    Variables.Data = {0300000001000000060000003A4352444944030000000000000000000000}
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crSQLWait
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = CMDataModule.CMSession
+    DesignActivation = False
+    Active = False
+    Left = 632
+    Top = 272
+    object ReportDataSetNUMBEROFCREDIT: TStringField
+      DisplayLabel = '№'
+      FieldName = 'NUMBEROFCREDIT'
+      Size = 32
+    end
+    object ReportDataSetDATEOFCONCLUSION: TDateTimeField
+      DisplayLabel = 'Ачылма тарихи'
+      FieldName = 'DATEOFCONCLUSION'
+      Required = True
+    end
+    object ReportDataSetCLOSEDATE: TDateTimeField
+      DisplayLabel = 'Баьланма тарихи'
+      FieldName = 'CLOSEDATE'
+    end
+    object ReportDataSetPURPOSEOFCREDIT: TStringField
+      DisplayLabel = 'Кредитин мягсяди'
+      FieldName = 'PURPOSEOFCREDIT'
+      Size = 128
+    end
+    object ReportDataSetCREDITLINEAMOUNT: TFloatField
+      DisplayLabel = 'Кредит хяттинин мябляьи'
+      FieldName = 'CREDITLINEAMOUNT'
+      Required = True
+    end
+    object ReportDataSetANNUALYINTERESTRATE: TFloatField
+      DisplayLabel = 'Иллик %-дяряжяси'
+      FieldName = 'ANNUALYINTERESTRATE'
+      Required = True
+    end
+    object ReportDataSetANNUALYOVERDUERATE: TFloatField
+      DisplayLabel = 'Ьежикмиш борж %-дяряжяси'
+      FieldName = 'ANNUALYOVERDUERATE'
+      Required = True
+    end
+    object ReportDataSetANNUALYPENALTYRATE: TFloatField
+      DisplayLabel = 'Жяримя %-и'
+      FieldName = 'ANNUALYPENALTYRATE'
+      Required = True
+    end
+    object ReportDataSetDESCRIPION: TStringField
+      DisplayLabel = 'Катеэорийасы'
+      FieldName = 'DESCRIPION'
+      Size = 64
+    end
+    object ReportDataSetDESCRIPTION: TStringField
+      DisplayLabel = 'Типи'
+      FieldName = 'DESCRIPTION'
+      Size = 128
+    end
+    object ReportDataSetDESCRIPTION_1: TStringField
+      DisplayLabel = 'Кредитин типи'
+      FieldName = 'DESCRIPTION_1'
+      Size = 128
+    end
+    object ReportDataSetDESCRIPTION_2: TStringField
+      DisplayLabel = 'Истифадячи эурупу'
+      FieldName = 'DESCRIPTION_2'
+      Size = 64
+    end
+    object ReportDataSetVAL_NAME: TStringField
+      DisplayLabel = 'Валйута'
+      FieldName = 'VAL_NAME'
+      Size = 10
+    end
+    object ReportDataSetPLEDGENAME: TStringField
+      DisplayLabel = 'Эиров'
+      FieldName = 'PLEDGENAME'
+      Size = 128
+    end
+    object ReportDataSetRESREVENAME: TStringField
+      DisplayLabel = 'Кредитин ади тяснифаты'
+      FieldName = 'RESREVENAME'
+      Size = 4000
+    end
+    object ReportDataSetDUERESREVENAME: TStringField
+      DisplayLabel = 'Кредитин ади  эежикмиш тяснифаты'
+      FieldName = 'DUERESREVENAME'
+      Size = 4000
+    end
+    object ReportDataSetPLEDGEPRICE: TFloatField
+      DisplayLabel = 'Эировун базар дяйяри'
+      FieldName = 'PLEDGEPRICE'
+      Required = True
+    end
+  end
+end

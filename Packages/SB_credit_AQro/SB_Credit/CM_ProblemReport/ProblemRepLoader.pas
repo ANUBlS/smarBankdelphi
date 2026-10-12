@@ -1,0 +1,34 @@
+unit ProblemRepLoader;
+
+interface
+
+
+procedure InitPlugin(S : String);export;
+
+implementation
+
+uses
+  ProblemUnit, CommonDecls,Dialogs;
+
+procedure ShowAgreeReport;
+begin
+  with TProblemForm.Create(CommonApplication) do
+  try
+    ShowModal
+  finally
+    Release
+  end;
+end;
+
+procedure InitPlugin(S : String);export;
+const
+  SAgreeReport='AGREE';
+begin
+  if S = SAgreeReport then
+    ShowAgreeReport;
+end;
+
+exports
+  InitPlugin;
+
+end.

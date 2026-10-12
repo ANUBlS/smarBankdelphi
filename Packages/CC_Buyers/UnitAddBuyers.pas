@@ -1,0 +1,1138 @@
+﻿unit UnitAddBuyers;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, NLSDialogs,
+  ExtCtrls, NLSLocalizer, StdCtrls, ComCtrls, Buttons, Mask, DBCtrls;
+
+type
+  TFormAddBuyers = class(TForm)
+    PanelMain: TPanel;
+    BtnOK: TButton;
+    BtnCancel: TButton;
+    DBEdit1: TDBEdit;
+    DBEdit2: TDBEdit;
+    DBEdit3: TDBEdit;
+    GroupBox1: TGroupBox;
+    Label1: TLabel;
+    Label21: TLabel;
+    Label22: TLabel;
+    EditFirstname: TEdit;
+    EditLastname: TEdit;
+    EditMiddlename: TEdit;
+    Label6: TLabel;
+    CBoxGender: TComboBox;
+    CBoxFamStatus: TComboBox;
+    Label4: TLabel;
+    GroupBox2: TGroupBox;
+    Label8: TLabel;
+    EditWorkPlace: TEdit;
+    Label17: TLabel;
+    Label18: TLabel;
+    EditPhone: TMaskEdit;
+    Editmobil: TMaskEdit;
+    Label9: TLabel;
+    Label14: TLabel;
+    EditWage: TEdit;
+    Label11: TLabel;
+    EditEmail: TEdit;
+    GroupBox3: TGroupBox;
+    Label15: TLabel;
+    Label16: TLabel;
+    EditPasspser: TEdit;
+    EditPasspnum: TEdit;
+    GroupBox4: TGroupBox;
+    Label20: TLabel;
+    EditAdrss: TEdit;
+    GroupBox5: TGroupBox;
+    DTPBirthDate: TDateTimePicker;
+    Label3: TLabel;
+    EditBirthcity: TDBLookupComboBox;
+    EditBirthState: TDBLookupComboBox;
+    Label2: TLabel;
+    Label13: TLabel;
+    Label10: TLabel;
+    EditAdrs_city: TDBLookupComboBox;
+    Label19: TLabel;
+    EditAdrs_state: TDBLookupComboBox;
+    Label7: TLabel;
+    Label12: TLabel;
+    EditPasspdept: TEdit;
+    Label5: TLabel;
+    EditPincode: TEdit;
+    DTPPasspdate: TDateTimePicker;
+    DBLookupPasspdept: TDBLookupComboBox;
+    AddUpd: TEdit;
+    Button3: TButton;
+    CheckBox1: TCheckBox;
+    CheckBox2: TCheckBox;
+    CheckBox3: TCheckBox;
+    CheckBox4: TCheckBox;
+    CheckBox5: TCheckBox;
+    CheckBox6: TCheckBox;
+    CheckBox7: TCheckBox;
+    CheckBox8: TCheckBox;
+    CheckBox9: TCheckBox;
+    CheckFirst: TCheckBox;
+    CheckLast: TCheckBox;
+    CheckMiddle: TCheckBox;
+    CheckAdr: TCheckBox;
+    CheckWork: TCheckBox;
+    Label23: TLabel;
+    Label24: TLabel;
+    Label25: TLabel;
+    Label26: TLabel;
+    Label27: TLabel;
+    Label28: TLabel;
+    EditKod: TEdit;
+    procedure SetCleanUp;
+    procedure SetUpd;
+    procedure FormCreate(Sender: TObject);
+    procedure BtnAddClick(Sender: TObject);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormActivate(Sender: TObject);
+    procedure BitBtn1Click(Sender: TObject);
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure EditAdressKeyPress(Sender: TObject; var Key: Char);
+    procedure CBoxGenderKeyPress(Sender: TObject; var Key: Char);
+    procedure EditPasspserKeyPress(Sender: TObject; var Key: Char);
+    procedure EditFirstnameKeyPress(Sender: TObject; var Key: Char);
+    procedure EditBirthcityKeyPress(Sender: TObject; var Key: Char);
+    procedure EditPasspnumKeyPress(Sender: TObject; var Key: Char);
+    procedure EditAdrs_stateKeyPress(Sender: TObject; var Key: Char);
+    procedure EditAdrssKeyPress(Sender: TObject; var Key: Char);
+    procedure EditWorkPlaceKeyPress(Sender: TObject; var Key: Char);
+    procedure EditWageKeyPress(Sender: TObject; var Key: Char);
+    procedure EditmobilKeyPress(Sender: TObject; var Key: Char);
+    procedure EditPhoneKeyPress(Sender: TObject; var Key: Char);
+    procedure EditEmailKeyPress(Sender: TObject; var Key: Char);
+    procedure BtnOKClick(Sender: TObject);
+    procedure BtnCancelClick(Sender: TObject);
+    procedure BirthPlaceChange(Sender: TObject);
+    procedure DBEdit1Change(Sender: TObject);
+    procedure Edit1Change(Sender: TObject);
+    procedure DBEdit2Change(Sender: TObject);
+    procedure DBEdit3Change(Sender: TObject);
+    procedure Button3Click(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure CheckBox1Click(Sender: TObject);
+    procedure CheckBox2Click(Sender: TObject);
+    procedure CheckBox3Click(Sender: TObject);
+    procedure CheckBox4Click(Sender: TObject);
+    procedure CheckBox5Click(Sender: TObject);
+    procedure CheckBox6Click(Sender: TObject);
+    procedure CheckBox7Click(Sender: TObject);
+    procedure CheckBox8Click(Sender: TObject);
+    procedure CheckBox9Click(Sender: TObject);
+    procedure CBoxFamStatusChange(Sender: TObject);
+    procedure CBoxGenderChange(Sender: TObject);
+    procedure EditAdrs_stateClick(Sender: TObject);
+    procedure EditAdrs_cityClick(Sender: TObject);
+    procedure DTPBirthDateChange(Sender: TObject);
+    procedure EditBirthStateClick(Sender: TObject);
+    procedure EditBirthcityClick(Sender: TObject);
+    procedure DTPPasspdateChange(Sender: TObject);
+    procedure DBLookupPasspdeptClick(Sender: TObject);
+//    procedure DBEdit2Change(Sender: TObject);
+//    procedure EditBirthStateKeyPress(Sender: TObject; var Key: Char);
+  private
+    { Private declarations }
+  public
+//  procedure addbirthplace;
+//  procedure addadress;
+
+    { Public declarations }
+  end;
+
+var
+  FormAddBuyers: TFormAddBuyers;
+  AddUpd     : integer;
+  gender_p     :string;
+  famstatus_p     :string;
+  state_p     :string;
+  city_p      :string;
+  birthdate_p     :string;
+  birthstate_p     :string;
+  birthcity_p     :string;
+  paspdate_p     :string;
+  paspdept_p     :string;
+  loc            :string;
+
+implementation
+
+uses UnitData, CC_Country_Unit, cc_BuyersImpl;
+
+{$R *.DFM}
+procedure TFormAddBuyers.SetCleanUp;
+begin
+DTPBirthDate.date :=DataMod_Buyers.Sysdat.Fieldbyname('tek_dat').asdatetime;
+DTPPasspdate.date :=DataMod_Buyers.Sysdat.Fieldbyname('tek_dat').asdatetime;
+EditKod.Text:='';
+EditFirstname.Text:='';
+EditLastname.Text:='';
+EditMiddlename.Text:='';
+EditPasspser.Text:='';
+EditPasspnum.Text:='';
+EditPincode.Text:='';
+DBLookupPasspdept.KeyValue:=0;
+CBoxGender.ItemIndex:=0;
+EditBirthState.KeyValue:=1;
+EditBirthcity.KeyValue:=1;
+CBoxFamStatus.ItemIndex:=0;
+EditAdrs_state.KeyValue:=1;
+EditAdrs_city.KeyValue:=1;
+EditAdrss.Text:='';
+EditWorkPlace.Text:='';
+EditWage.Text:='0';
+EditPhone.Text:='';
+Editmobil.Text:='';
+EditEmail.Text:='';
+
+end;
+
+
+procedure TFormAddBuyers.SetUpd;
+begin
+EditKod.Text:=DataMod_Buyers.ODSBuyers.FieldByName('ID').asstring;
+DTPBirthDate.date :=DataMod_Buyers.ODSBuyers.Fieldbyname('BIRTHDATE').asdatetime;
+DTPPasspdate.date :=DataMod_Buyers.ODSBuyers.Fieldbyname('PASSPDATE').asdatetime;
+EditFirstname.Text:=DataMod_Buyers.ODSBuyers.FieldByName('FIRSTNAME').asstring;
+EditLastname.Text:=DataMod_Buyers.ODSBuyers.FieldByName('LASTNAME').asstring;
+EditMiddlename.Text:=DataMod_Buyers.ODSBuyers.FieldByName('MIDDLENAME').asstring;;
+EditPasspser.Text:=DataMod_Buyers.ODSBuyers.FieldByName('PASSPSER').asstring;
+EditPasspnum.Text:=DataMod_Buyers.ODSBuyers.FieldByName('PASSPNUM').asstring;
+EditPincode.Text:=DataMod_Buyers.ODSBuyers.FieldByName('PASSPPIN').asstring;
+DBLookupPasspdept.KeyValue:=DataMod_Buyers.ODSBuyers.FieldByName('PASSPDEPT').asinteger;
+CBoxGender.ItemIndex:=DataMod_Buyers.ODSBuyers.FieldByName('GENDER').asinteger-1;
+EditBirthState.KeyValue:=DataMod_Buyers.ODSBuyers.FieldByName('BIRTHSTATE').asinteger;
+EditBirthcity.KeyValue:=DataMod_Buyers.ODSBuyers.FieldByName('BIRTHCITY').asinteger;
+CBoxFamStatus.ItemIndex:=DataMod_Buyers.ODSBuyers.FieldByName('FAMSTATUS').asinteger-1;
+EditAdrs_state.KeyValue:=DataMod_Buyers.ODSBuyers.FieldByName('STATE').asinteger;
+EditAdrs_city.KeyValue:=DataMod_Buyers.ODSBuyers.FieldByName('CITY').asinteger;
+EditAdrss.Text:=DataMod_Buyers.ODSBuyers.FieldByName('ADDRESS').asstring;
+EditWorkPlace.Text:=DataMod_Buyers.ODSBuyers.FieldByName('WORKPLACE').asstring;
+EditWage.Text:=DataMod_Buyers.ODSBuyers.FieldByName('WAGE').asstring;
+EditPhone.Text:=DataMod_Buyers.ODSBuyers.FieldByName('PHONE').asstring;
+Editmobil.Text:=DataMod_Buyers.ODSBuyers.FieldByName('PHONEMOB').asstring;
+EditEmail.Text:=DataMod_Buyers.ODSBuyers.FieldByName('EMAIL').asstring;
+
+end;
+
+
+
+procedure TFormAddBuyers.FormCreate(Sender: TObject);
+begin
+//SetCleanUp;
+//addbirthplace;
+//addadress;
+//editadress.KeyValue :=BirthPlace.keyvalue;
+end;
+              
+procedure TFormAddBuyers.BtnAddClick(Sender: TObject);
+{var
+  p_byr_name   :string;
+  p_passport   :integer;
+  p_birthdate  :TDateTime;
+  p_birthplace :string;
+  p_fam_status :integer;
+  p_adress     :string;
+  p_workplace  :string;
+  p_wage       :real;
+  p_phone      :string;
+  p_email      :string;
+  p_sex        :integer;
+  p_passp_number : string;
+  p_adrs_state : string;
+  p_adrs_city: string;
+  p_birthstate :string;
+  p_phone_mob : string;
+
+begin
+if Trim(EditByrName.Text)<>'' then}
+begin
+{ p_byr_name:=EditByrName.Text;
+ p_passport:=StrtoInt(EditPassport.Text);
+ p_birthdate:=Integer(Trunc(DTPBirthDate.DateTime));
+ p_birthplace:=BirthPlace.Text;
+ p_birthstate :=EditBirthState.text;
+ p_adress:=EditAdress.Text;
+ p_workplace:=EditWorkPlace.Text;
+ p_wage:=StrToFloat(EditWage.Text);
+ p_phone:=EditPhone.Text;
+ p_email:=EditEmail.Text;
+ p_passp_number :=EditSerial.text;
+ p_adrs_state :=adrs_state.text;
+ p_adrs_city :=adrs_city.text;
+ p_birthstate :=EditBirthState.text;
+  p_phone_mob :=Editmobil.Text;
+
+
+
+ if CBoxFamStatus.Text='evli' then
+ p_fam_status:=1
+ else
+ p_fam_status:=2;
+
+ if CBoxSex.Text='гадын' then
+ p_sex:=1
+ else
+ p_sex:=2;
+
+
+          with DataMod_Buyers do begin
+               CC_GENERAL.CallIntegerFunction('add_Buyers',[
+                                                       p_byr_name,
+                                                       p_passp_number,
+                                                       p_birthdate,
+                                                       p_birthplace,
+                                                       p_fam_status,
+                                                       p_adress,
+                                                       p_workplace,
+                                                       p_wage,
+                                                       p_phone,
+                                                       p_email,
+                                                       p_sex,
+                                                       p_passport,
+                                                       p_adrs_state,
+                                                       p_adrs_city,
+                                                       p_birthstate,
+                                                       p_phone_mob
+                                                       ]
+                                                       );
+                 ODSBuyers.Close;
+                 ODSBuyers.Open;
+        end;
+end
+else
+ShowMessage('Бош галан ханалар вар!');  }
+
+
+
+end;
+
+procedure TFormAddBuyers.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+ if (ORD(Key) =VK_ESCAPE) then Close;
+end;
+
+procedure TFormAddBuyers.FormActivate(Sender: TObject);
+begin
+  DataMod_Buyers.Sysdat.Open;
+  DTPBirthDate.date :=DataMod_Buyers.Sysdat.Fieldbyname('tek_dat').asdatetime;
+  DTPPasspdate.date :=DataMod_Buyers.Sysdat.Fieldbyname('tek_dat').asdatetime;
+  DataMod_Buyers.Country.first;
+  if   AddUpd.text='1' then
+    begin
+    Label28.Visible:=false;
+    EditKod.Visible:=False;
+    CheckFirst.Visible:=False;
+    CheckLast.Visible:=False;
+    CheckMiddle.Visible:=False;
+    CheckAdr.Visible:=False;
+    CheckWork.Visible:=False;
+
+    CheckBox1.Visible:=false;
+    CheckBox2.Visible:=false;
+    CheckBox3.Visible:=false;
+    CheckBox4.Visible:=false;
+    CheckBox5.Visible:=false;
+    CheckBox6.Visible:=false;
+    CheckBox7.Visible:=false;
+    CheckBox8.Visible:=false;
+    CheckBox9.Visible:=false;
+    SetCleanUp;
+    DTPBirthDate.Enabled:=true;
+    EditBirthState.Enabled:=true;
+    EditBirthcity.Enabled:=true;
+    DTPPasspdate.Enabled:=true;
+    DBLookupPasspdept.Enabled:=true;
+    EditAdrs_state.Enabled:=true;
+    EditAdrs_city.Enabled:=true;
+    CBoxGender.Enabled:=true;
+    CBoxFamStatus.Enabled:=true;
+    end;
+  if   AddUpd.text='2' then
+    begin
+    CheckFirst.Visible:=False;
+    CheckLast.Visible:=False;
+    CheckMiddle.Visible:=False;
+    CheckAdr.Visible:=False;
+    CheckWork.Visible:=False;
+
+    CheckBox1.Visible:=false;
+    CheckBox2.Visible:=false;
+    CheckBox3.Visible:=false;
+    CheckBox4.Visible:=false;
+    CheckBox5.Visible:=false;
+    CheckBox6.Visible:=false;
+    CheckBox7.Visible:=false;
+    CheckBox8.Visible:=false;
+    CheckBox9.Visible:=false;
+    setupd;
+    DTPBirthDate.Enabled:=true;
+    EditBirthState.Enabled:=true;
+    EditBirthcity.Enabled:=true;
+    DTPPasspdate.Enabled:=true;
+    DBLookupPasspdept.Enabled:=true;
+    EditAdrs_state.Enabled:=true;
+    EditAdrs_city.Enabled:=true;
+    CBoxGender.Enabled:=true;
+    CBoxFamStatus.Enabled:=true;
+    end;
+  if   AddUpd.text='3' then
+    begin
+    EditKod.ReadOnly:=False;
+    CheckFirst.Visible:=True;
+    CheckLast.Visible:=True;
+    CheckMiddle.Visible:=True;
+    CheckAdr.Visible:=True;
+    CheckWork.Visible:=True;
+
+    SetCleanUp;
+    EditWage.Text:='';
+    Label3.Visible:=false;
+    Label2.Visible:=false;
+    Label13.Visible:=false;
+    Label7.Visible:=false;
+    Label12.Visible:=false;
+    Label10.Visible:=false;
+    Label19.Visible:=false;
+    Label4.Visible:=false;
+    Label6.Visible:=false;
+    //CBoxGender.ItemIndex:=2;
+    //EditBirthState.KeyValue:=0;
+    //EditBirthcity.KeyValue:=0;
+    //CBoxFamStatus.ItemIndex:=2;
+    //EditAdrs_state.KeyValue:=0;
+    //EditAdrs_city.KeyValue:=0;
+    //DBLookupPasspdept.KeyValue:=0;
+    DBLookupPasspdept.KeyValue:=2;
+    end;
+
+{
+EditBirthState.KeyValue:=1;
+DBEdit1.Text:='1';
+CBoxFamStatus.ItemIndex:=0;
+CBoxGender.ItemIndex:=0;
+EditBirthcity.KeyValue:=1;
+EditAdrs_state.KeyValue:=2;
+EditAdrs_city.KeyValue:=1;
+EditWage.Text:='0';}
+end;
+
+procedure TFormAddBuyers.BitBtn1Click(Sender: TObject);
+begin
+close;
+end;
+
+procedure TFormAddBuyers.SpeedButton1Click(Sender: TObject);
+begin
+CC_Country :=TCC_Country.Create(Self);
+CC_Country.showmodal;
+end;
+
+procedure TFormAddBuyers.EditAdressKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+
+if ORD(Key) = VK_RETURN then
+  begin
+  if Sender is TWinControl then
+  with Sender as TWinControl do
+  case Tag of
+    1 : SelectNext(Sender as TWinControl ,True ,True);
+    end;
+    Key := #0;
+    end;
+  if not (key in ['0'..'9','.',#8]) then
+    key :=#0;
+if not (key in ['а'..'я','А'..'Я','A'..'Z','а'..'z']) then
+    key :=#0;
+
+
+end;
+
+procedure TFormAddBuyers.CBoxGenderKeyPress(Sender: TObject; var Key: Char);
+begin
+
+if ORD(Key) = VK_RETURN then
+  begin
+  if Sender is TWinControl then
+  with Sender as TWinControl do
+  case Tag of
+    1 : SelectNext(Sender as TWinControl ,True ,True);
+    end;
+    Key := #0;
+    end;
+  if not (key in ['0'..'9','.',#8]) then
+    key :=#0;
+if not (key in ['а'..'я','А'..'Я','A'..'Z','а'..'z']) then
+    key :=#0;
+
+
+end;
+
+procedure TFormAddBuyers.EditPasspserKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+if ORD(Key) = VK_RETURN then
+  begin
+  if Sender is TWinControl then
+  with Sender as TWinControl do
+  case Tag of
+    1 : SelectNext(Sender as TWinControl ,True ,True);
+    end;
+    Key := #0;
+    end;
+     key := UpCase(key);
+
+end;
+
+procedure TFormAddBuyers.EditFirstnameKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+if ORD(Key) = VK_RETURN then
+  begin
+  if Sender is TWinControl then
+  with Sender as TWinControl do
+  case Tag of
+    1 : SelectNext(Sender as TWinControl ,True ,True);
+    end;
+    Key := #0;
+end;
+    end;
+procedure TFormAddBuyers.EditBirthcityKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+if ORD(Key) = VK_RETURN then
+  begin
+  if Sender is TWinControl then
+  with Sender as TWinControl do
+  case Tag of
+    1 : SelectNext(Sender as TWinControl ,True ,True);
+    end;
+    Key := #0;
+    end;
+    if not (key in ['0'..'9','.',#8]) then
+    key :=#0;
+if not (key in ['а'..'я','А'..'Я','A'..'Z','а'..'z']) then
+    key :=#0;
+
+end;
+
+procedure TFormAddBuyers.EditPasspnumKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+if ORD(Key) = VK_RETURN then
+  begin
+  if Sender is TWinControl then
+  with Sender as TWinControl do
+  case Tag of
+    1 : SelectNext(Sender as TWinControl ,True ,True);
+    end;
+    Key := #0;
+    end;
+end;
+
+procedure TFormAddBuyers.EditAdrs_stateKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+if ORD(Key) = VK_RETURN then
+  begin
+  if Sender is TWinControl then
+  with Sender as TWinControl do
+  case Tag of
+    1 : SelectNext(Sender as TWinControl ,True ,True);
+    end;
+    Key := #0;
+    end;
+    if not (key in ['0'..'9','.',#8]) then
+    key :=#0;
+if not (key in ['а'..'я','А'..'Я','A'..'Z','а'..'z']) then
+    key :=#0;
+
+end;
+
+procedure TFormAddBuyers.EditAdrssKeyPress(Sender: TObject; var Key: Char);
+begin
+if ORD(Key) = VK_RETURN then
+  begin
+  if Sender is TWinControl then
+  with Sender as TWinControl do
+  case Tag of
+    1 : SelectNext(Sender as TWinControl ,True ,True);
+    end;
+    Key := #0;
+    end;
+end;
+
+procedure TFormAddBuyers.EditWorkPlaceKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+if ORD(Key) = VK_RETURN then
+  begin
+  if Sender is TWinControl then
+  with Sender as TWinControl do
+  case Tag of
+    1 : SelectNext(Sender as TWinControl ,True ,True);
+    end;
+    Key := #0;
+    end;
+end;
+
+procedure TFormAddBuyers.EditWageKeyPress(Sender: TObject; var Key: Char);
+begin
+ 
+if ORD(Key) = VK_RETURN then
+  begin
+  if Sender is TWinControl then
+  with Sender as TWinControl do
+  case Tag of
+    1 : SelectNext(Sender as TWinControl ,True ,True);
+    end;
+    Key := #0;
+      end;
+      if not (Key in['0'..'9','.',#8]) then Key :=#0;
+end;
+
+procedure TFormAddBuyers.EditmobilKeyPress(Sender: TObject; var Key: Char);
+begin
+
+
+if ORD(Key) = VK_RETURN then
+  begin
+  if Sender is TWinControl then
+  with Sender as TWinControl do
+  case Tag of
+    1 : SelectNext(Sender as TWinControl ,True ,True);
+    end;
+    Key := #0;
+    end;
+    if not (Key in['0'..'9','.',#8]) then Key :=#0;
+end;
+
+procedure TFormAddBuyers.EditPhoneKeyPress(Sender: TObject; var Key: Char);
+begin
+
+if ORD(Key) = VK_RETURN then
+  begin
+  if Sender is TWinControl then
+  with Sender as TWinControl do
+  case Tag of
+    1 : SelectNext(Sender as TWinControl ,True ,True);
+    end;
+    Key := #0;
+    end;
+    if not (Key in['0'..'9','.',#8]) then Key :=#0;
+end;
+
+procedure TFormAddBuyers.EditEmailKeyPress(Sender: TObject; var Key: Char);
+begin
+if ORD(Key) = VK_RETURN then
+  begin
+  if Sender is TWinControl then
+  with Sender as TWinControl do
+  case Tag of
+    1 : SelectNext(Sender as TWinControl ,True ,True);
+    end;
+    Key := #0;
+    end;
+end;
+
+procedure TFormAddBuyers.BtnOKClick(Sender: TObject);
+var
+  p_id         :integer;
+  p_firstname  :string;
+  p_lastname   :string;
+  p_middlename :string;
+  p_passpser   :string;
+  p_passpnum   :string;
+  p_pasppin    :string;
+  p_passpdate  :TDateTime;
+  p_passpdept  :integer;
+  p_gender     :integer;
+  p_birthdate  :TDateTime;
+  p_birthstate :integer;
+  p_birthcity  :integer;
+  p_famstatus  :integer;
+  p_adrs_state :integer;
+  p_adrs_city  :integer;
+  p_adress     :string;
+  p_workplace  :string;
+  p_wage       :real;
+  p_phone      :string;
+  p_phone_mob  :string;
+  p_email      :string;
+  p_first      :string;
+  p_last       :string;
+  p_middle     :string;
+  p_adr        :string;
+  p_work       :string;
+
+begin
+    Label28.Visible:=True;
+    EditKod.Visible:=True;
+ if AddUpd.text='3' then
+    begin
+             if CheckFirst.Checked=true then
+             begin
+             p_first:='%';
+             end else
+             begin
+             p_first:='';
+             end;
+
+             if CheckLast.Checked=true then
+             begin
+             p_last:='%';
+             end else
+             begin
+             p_last:='';
+             end;
+
+             if CheckMiddle.Checked=true then
+             begin
+             p_middle:='%';
+             end else
+             begin
+             p_middle:='';
+             end;
+
+
+             if CheckAdr.Checked=true then
+             begin
+             p_adr:='%';
+             end else
+             begin
+             p_adr:='';
+             end;
+
+             if CheckWork.Checked=true then
+             begin
+             p_work:='%';
+             end else
+             begin
+             p_work:='';
+             end;
+    DataMod_Buyers.ODSBuyers.Close;
+    DataMod_Buyers.ODSBuyers.Sql[5]:='';
+    DataMod_Buyers.ODSBuyers.Sql[5]:=' and nvl(upper(firstname),0) like upper('+''''+p_first+EditFirstname.Text+'%'+''''+')'
+                                    +' and nvl(upper(lastname),0) like upper('+''''+p_last+EditLastname.Text+'%'+''''+')'
+                                    +' and nvl(upper(middlename),0) like upper('+''''+p_middle+EditMiddlename.Text+'%'+''''+')'
+                                    // +' and nvl(city,0) like '+''''+inttostr(EditAdrs_city.keyvalue)+'%'+''''
+                                    // +' and nvl(BIRTHSTATE,0) like '+''''+inttostr(EditBirthState.keyvalue)+'%'+''''
+                                    // +' and nvl(BIRTHCITY,0) like '+''''+inttostr(EditBirthcity.keyvalue)+'%'+''''
+                                    // +' and Passpdate='+''''+formatdatetime('dd-mmm-yyyy', DTPPasspdate.Date)+''''
+                                    // +' and BIRTHDATE='+''''+formatdatetime('dd-mmm-yyyy', DTPBirthDate.Date)+''''
+                                    // +' and nvl(Passpdept,0) like '+''''+inttostr(DBLookupPasspdept.keyvalue)+'%'+''''
+                                    // +' and nvl(gender,0) like '+''''+inttostr(CBoxGender.itemindex+1)+'%'+''''
+                                    // +' and nvl(famstatus,0) like '+''''+inttostr(CBoxFamStatus.itemindex+1)+'%'+''''
+                                    // +' and nvl(state,0) like '+''''+inttostr(EditAdrs_state.keyvalue)+'%'+''''
+                                    +' and nvl(Passpnum,0) like ('+''''+EditPasspnum.Text+'%'+''''+')'
+                                    +' and nvl(PASSPSER,0) like ('+''''+EditPasspser.Text+'%'+''''+')'
+                                    +  gender_p + famstatus_p + state_p + city_p + birthdate_p + birthstate_p
+                                    + birthcity_p + paspdate_p + paspdept_p
+                                    +' and nvl(PASSPPIN,0) like ('+''''+EditPincode.Text+'%'+'''' +')'
+                                    +' and nvl(upper(WorkPlace),0) like upper('+''''+p_work+EditWorkPlace.Text+'%'+''''+')'
+                                    +' and nvl(PHONEMOB,0) like ('+''''+Editmobil.Text+'%'+'''' +')'
+                                    +' and nvl(PHONE,0) like ('+''''+EditPhone.Text+'%'+''''+')'
+                                    +' and nvl(Wage,0) like ('+''''+EditWage.Text+'%'+''''+')'
+                                    +' and nvl(a.ID,0) like ('+''''+EditKod.Text+'%'+''''+')'
+                                    +' and nvl(EMAIL,0) like ('+''''+EditEmail.Text+'%'+''''+')'
+                                    +' and nvl(upper(address),0) like upper('+''''+p_adr+EditAdrss.Text+'%'+''''+')';
+
+
+    DataMod_Buyers.ODSBuyers.Open;
+    Exit;
+    end;
+
+
+ if  (Trim(EditFirstname.Text)<>'') and
+     (Trim(EditLastname.Text)<>'') and
+     (Trim(EditMiddlename.Text)<>'') and
+     (Trim(EditPasspser.Text)<>'') and
+     (Trim(EditPasspnum.Text)<>'')
+     then begin
+    p_id:=DataMod_Buyers.ODSBuyers.fieldbyname('ID').asinteger;
+    p_firstname:=EditFirstname.Text;
+    p_lastname:=EditLastname.Text;
+    p_middlename:=EditMiddlename.Text;
+    p_passpser:=EditPasspser.Text;
+    p_passpnum := EditPasspnum.Text;
+    p_pasppin := EditPincode.Text;
+    p_passpdate := Integer(Trunc(DTPPasspdate.DateTime));
+    p_passpdept :=  DBLookupPasspdept.KeyValue;
+    p_gender := CBoxGender.ItemIndex+1;
+    p_birthdate:=Integer(Trunc(DTPBirthDate.DateTime));
+    p_birthstate :=EditBirthState.KeyValue;
+    p_birthcity:= EditBirthcity.KeyValue;
+    p_famstatus := CBoxFamStatus.ItemIndex+1;
+    p_adrs_state := EditAdrs_state.KeyValue;
+    p_adrs_city := EditAdrs_city.KeyValue;
+    p_adress:=EditAdrss.Text;
+    p_workplace:=EditWorkPlace.Text;
+    p_wage:=StrToFloat(EditWage.Text);
+    p_phone:=EditPhone.Text;
+    p_phone_mob :=Editmobil.Text;
+    p_email:=EditEmail.Text;
+    loc:=EditKod.Text;
+
+
+ if FormAddBuyers.AddUpd.Text='1' then
+    with DataMod_Buyers do
+    begin
+    CC_GENERAL.CallProcedure('add_Buyers',[
+                                           p_firstname,
+                                           p_lastname,
+                                           p_middlename,
+                                           p_passpser,
+                                           p_passpnum,
+                                           p_pasppin,
+                                           p_passpdate,
+                                           p_passpdept,
+                                           p_gender,
+                                           p_birthdate,
+                                           p_birthstate,
+                                           p_birthcity,
+                                           p_famstatus,
+                                           p_adrs_state,
+                                           p_adrs_city ,
+                                           p_adress,
+                                           p_workplace,
+                                           p_wage,
+                                           p_phone,
+                                           p_phone_mob,
+                                           p_email]);
+
+
+    EditFirstname.Setfocus;
+    SetCleanUp;
+    EditAdrs_state.KeyValue:=2;
+    EditAdrs_city.KeyValue:=1;
+    end ;
+
+ if FormAddBuyers.AddUpd.Text='2'   then
+    with DataMod_Buyers do
+    begin
+    CC_GENERAL.CallProcedure('upd_Buyers',[p_id,
+                                           p_firstname,
+                                           p_lastname,
+                                           p_middlename,
+                                           p_passpser,
+                                           p_passpnum,
+                                           p_pasppin,
+                                           p_passpdate,
+                                           p_passpdept,
+                                           p_gender,
+                                           p_birthdate,
+                                           p_birthstate,
+                                           p_birthcity,
+                                           p_famstatus,
+                                           p_adrs_state,
+                                           p_adrs_city ,
+                                           p_adress,
+                                           p_workplace,
+                                           p_wage,
+                                           p_phone,
+                                           p_phone_mob,
+                                           p_email
+                                           ]
+                                           );
+
+
+
+    FormAddBuyers.Close;
+    end;
+    DataMod_Buyers.ODSBuyers.Refresh;
+         if FormAddBuyers.AddUpd.Text='2' then
+            begin
+            DataMod_Buyers.ODSBuyers.Locate('ID',EditKod.Text,[]);
+            end;
+    end
+    else
+    ShowMessage('Məlumat tam doldurulmayıb!');
+end;
+
+procedure TFormAddBuyers.BtnCancelClick(Sender: TObject);
+begin
+
+if AddUpd.Text='2' then
+begin
+DataMod_Buyers.ODSBuyers.Locate('ID',EditKod.Text,[]);
+end;
+  Close;
+end;
+
+procedure TFormAddBuyers.BirthPlaceChange(Sender: TObject);
+begin
+with DataMod_Buyers.country do
+  begin
+   Close;
+    SQL.Clear;
+    SQL.Text :='Select c.rowid ,c.* from countries c where cntr_name= '+''''+EditBirthstate.Text+'''';
+   Open;
+   dbedit1.Text :=FieldByName('id').AsString;
+end;
+    end;
+procedure TFormAddBuyers.DBEdit1Change(Sender: TObject);
+begin
+with DataMod_Buyers.cities do
+  begin
+   Close;
+    SQL.Clear;
+    SQL.Text :='Select c.rowid ,c.* from cities c where country_id= '+''''+dbedit1.Text+''' order by ID';
+   Open;
+ // EditBirthState.keyvalue :=fieldbyname('city_name').asstring;
+  
+
+  end;
+
+end;
+
+procedure TFormAddBuyers.Edit1Change(Sender: TObject);
+begin
+with DataMod_Buyers.cities do
+  begin
+   Close;
+    SQL.Clear;
+    SQL.Text :='Select c.rowid ,c.* from cities c where country_id= '+''''+dbedit1.Text+'''';
+   Open;
+  //EditBirthState.keyvalue :=fieldbyname('city_name').asstring;
+
+end;
+    end;
+procedure TFormAddBuyers.DBEdit2Change(Sender: TObject);
+begin
+with DataMod_Buyers.ad_cities do
+  begin
+   Close;
+    SQL.Clear;
+    SQL.Text :='Select c.rowid ,c.* from cities c where country_id= '+''''+dbedit2.Text+'''';
+   Open;
+ // EditAdrs_state.KeyValue :=fieldbyname('city_name').asstring;
+  end;
+
+end;
+
+procedure TFormAddBuyers.DBEdit3Change(Sender: TObject);
+begin
+with DataMod_Buyers.cc_countries do
+  begin
+   Close;
+    SQL.Clear;
+    SQL.Text :='Select c.rowid ,c.* from countries c where id= '+''''+dbedit3.Text+'''';
+   Open;
+  //EditBirthState.KeyValue :=fieldbyname('CNTR_NAME').asstring;
+
+  end;
+
+end;
+
+
+procedure TFormAddBuyers.Button3Click(Sender: TObject);
+begin
+  FormAddBuyers.Caption:='ozzun';
+end;
+
+procedure TFormAddBuyers.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+if AddUpd.Text='1' then
+begin
+DataMod_Buyers.maxid.Refresh;
+DataMod_Buyers.ODSBuyers.Locate('ID',DataMod_Buyers.maxid.FieldByName('ID').AsString,[]);
+end;
+  Label3.Visible:=true;
+  Label2.Visible:=true;
+  Label13.Visible:=true;
+  Label7.Visible:=true;
+  Label12.Visible:=true;
+  Label10.Visible:=true;
+  Label19.Visible:=true;
+  Label6.Visible:=true;
+  Label4.Visible:=true;
+//////////////////////////////////
+  CheckBox1.Visible:=true;
+  CheckBox2.Visible:=true;
+  CheckBox3.Visible:=true;
+  CheckBox4.Visible:=true;
+  CheckBox5.Visible:=true;
+  CheckBox6.Visible:=true;
+  CheckBox7.Visible:=true;
+  CheckBox8.Visible:=true;
+  CheckBox9.Visible:=true;
+end;
+
+procedure TFormAddBuyers.CheckBox1Click(Sender: TObject);
+begin
+if CheckBox1.Checked=true then
+   begin
+   DTPBirthDate.Enabled:=true;
+   birthdate_p:=' and BIRTHDATE='''+formatdatetime('dd-mmm-yyyy', DTPBirthDate.Date)+''' ';
+   end
+   else
+   begin
+   birthdate_p:='';
+   DTPBirthDate.Enabled:=false;
+   end;
+end;
+
+procedure TFormAddBuyers.CheckBox2Click(Sender: TObject);
+begin
+if CheckBox2.Checked=true then
+   begin
+   EditBirthState.Enabled:=true;
+   birthstate_p:=' and nvl(BIRTHSTATE,0)='''+inttostr(EditBirthState.keyvalue)+''' ';
+   end
+   else
+   begin
+   birthstate_p:='';
+   EditBirthState.Enabled:=false;
+   end;
+end;
+
+procedure TFormAddBuyers.CheckBox3Click(Sender: TObject);
+begin
+if CheckBox3.Checked=true then
+   begin
+   EditBirthcity.Enabled:=true;
+   birthcity_p:=' and nvl(BIRTHCITY,0) like '''+inttostr(EditBirthcity.keyvalue)+''' ';
+   end
+   else
+   begin
+   birthcity_p:='';
+   EditBirthcity.Enabled:=false;
+   end;
+end;
+
+procedure TFormAddBuyers.CheckBox4Click(Sender: TObject);
+begin
+if CheckBox4.Checked=true then
+   begin
+   DTPPasspdate.Enabled:=true;
+   paspdate_p:=' and Passpdate='''+formatdatetime('dd-mmm-yyyy', DTPPasspdate.Date)+''' ';
+   end
+   else
+   begin
+   paspdate_p:='';
+   DTPPasspdate.Enabled:=false;
+   end;
+end;
+
+procedure TFormAddBuyers.CheckBox5Click(Sender: TObject);
+begin
+if CheckBox5.Checked=true then
+   begin
+   DBLookupPasspdept.Enabled:=true;
+   paspdept_p:=' and nvl(Passpdept,0) like '''+inttostr(DBLookupPasspdept.keyvalue)+''' ';
+   end
+   else
+   begin
+   paspdept_p:='';
+   DBLookupPasspdept.Enabled:=false;
+   end;
+end;
+
+procedure TFormAddBuyers.CheckBox6Click(Sender: TObject);
+begin
+if CheckBox6.Checked=true then
+   begin
+   EditAdrs_state.Enabled:=true;
+   state_p:=' and nvl(state,0) like '''+inttostr(EditAdrs_state.keyvalue)+''' ';
+   end
+   else
+   begin
+   state_p:='';
+   EditAdrs_state.Enabled:=false;
+   end;
+end;
+
+procedure TFormAddBuyers.CheckBox7Click(Sender: TObject);
+begin
+if CheckBox7.Checked=true then
+   begin
+   EditAdrs_city.Enabled:=true;
+   city_p:=' and nvl(city,0) like '''+inttostr(EditAdrs_city.keyvalue)+''' ';
+   end
+   else
+   begin
+   city_p:='';
+   EditAdrs_city.Enabled:=false;
+   end;
+end;
+
+procedure TFormAddBuyers.CheckBox8Click(Sender: TObject);
+begin
+if CheckBox8.Checked=true then
+   begin
+   CBoxGender.Enabled:=true;
+   gender_p:=' and nvl(gender,0) like '''+inttostr(CBoxGender.itemindex+1)+''' ';
+   end
+   else
+   begin
+   gender_p:='';
+   CBoxGender.Enabled:=false;
+   end;
+end;
+
+procedure TFormAddBuyers.CheckBox9Click(Sender: TObject);
+begin
+if CheckBox9.Checked=true then
+   begin
+   CBoxFamStatus.Enabled:=true;
+   famstatus_p:=' and nvl(famstatus,0)='''+inttostr(CBoxFamStatus.itemindex+1)+''' ';
+   end
+   else
+   begin
+   famstatus_p:='';
+   CBoxFamStatus.Enabled:=false;
+   end;
+end;
+
+procedure TFormAddBuyers.CBoxFamStatusChange(Sender: TObject);
+begin
+famstatus_p:=' and nvl(famstatus,0)='''+inttostr(CBoxFamStatus.itemindex+1)+''' ';
+end;
+
+procedure TFormAddBuyers.CBoxGenderChange(Sender: TObject);
+begin
+gender_p:=' and nvl(gender,0) like '''+inttostr(CBoxGender.itemindex+1)+''' ';
+end;
+
+procedure TFormAddBuyers.EditAdrs_stateClick(Sender: TObject);
+begin
+state_p:=' and nvl(state,0) like '''+inttostr(EditAdrs_state.keyvalue)+''' ';
+end;
+
+procedure TFormAddBuyers.EditAdrs_cityClick(Sender: TObject);
+begin
+city_p:=' and nvl(city,0) like '''+inttostr(EditAdrs_city.keyvalue)+''' ';
+end;
+
+procedure TFormAddBuyers.DTPBirthDateChange(Sender: TObject);
+begin
+birthdate_p:=' and BIRTHDATE='''+formatdatetime('dd-mmm-yyyy', DTPBirthDate.Date)+''' ';
+end;
+
+procedure TFormAddBuyers.EditBirthStateClick(Sender: TObject);
+begin
+birthstate_p:=' and nvl(BIRTHSTATE,0)='''+inttostr(EditBirthState.keyvalue)+''' ';
+end;
+
+procedure TFormAddBuyers.EditBirthcityClick(Sender: TObject);
+begin
+birthcity_p:=' and nvl(BIRTHCITY,0) like '''+inttostr(EditBirthcity.keyvalue)+''' ';
+end;
+
+procedure TFormAddBuyers.DTPPasspdateChange(Sender: TObject);
+begin
+paspdate_p:=' and Passpdate='''+formatdatetime('dd-mmm-yyyy', DTPPasspdate.Date)+''' ';
+end;
+
+procedure TFormAddBuyers.DBLookupPasspdeptClick(Sender: TObject);
+begin
+paspdept_p:=' and nvl(Passpdept,0) like '''+inttostr(DBLookupPasspdept.keyvalue)+''' ';
+end;
+
+end.

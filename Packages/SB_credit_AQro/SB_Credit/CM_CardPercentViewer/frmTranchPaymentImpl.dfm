@@ -1,0 +1,212 @@
+object frmTranchPayment: TfrmTranchPayment
+  Left = 328
+  Top = 237
+  Width = 383
+  Height = 339
+  BorderIcons = [biSystemMenu]
+  Color = clBtnFace
+  Font.Charset = RUSSIAN_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poScreenCenter
+  OnCanResize = FormCanResize
+  OnKeyPress = FormKeyPress
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 375
+    Height = 277
+    Align = alTop
+    BevelInner = bvRaised
+    BevelOuter = bvLowered
+    TabOrder = 0
+    object DBGridEh1: TDBGridEh
+      Left = 2
+      Top = 2
+      Width = 371
+      Height = 273
+      Align = alClient
+      DataSource = DMCardPercent.TranchpaymentsDatSrc
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      FooterColor = clWindow
+      FooterFont.Charset = RUSSIAN_CHARSET
+      FooterFont.Color = clWindowText
+      FooterFont.Height = -11
+      FooterFont.Name = 'Azl Sans Serif'
+      FooterFont.Style = []
+      Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit]
+      ParentFont = False
+      TabOrder = 0
+      TitleFont.Charset = RUSSIAN_CHARSET
+      TitleFont.Color = clBlack
+      TitleFont.Height = -11
+      TitleFont.Name = 'Azl Sans Serif'
+      TitleFont.Style = []
+      VertScrollBar.VisibleMode = sbNeverShowEh
+      Columns = <
+        item
+          EditButtons = <>
+          FieldName = 'PAYMENTID'
+          Footers = <>
+          Title.Color = clNavy
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = []
+          Width = 73
+        end
+        item
+          EditButtons = <>
+          FieldName = 'PAYMENTDATE'
+          Footers = <>
+          Title.Color = clNavy
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = []
+          Width = 102
+        end
+        item
+          EditButtons = <>
+          FieldName = 'MAINDEBIT'
+          Footers = <>
+          Title.Color = clNavy
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = []
+          Width = 85
+        end
+        item
+          EditButtons = <>
+          FieldName = 'INTDEBIT'
+          Footers = <>
+          Title.Color = clNavy
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = []
+          Width = 83
+        end>
+    end
+  end
+  object BitBtn1: TBitBtn
+    Left = 292
+    Top = 283
+    Width = 75
+    Height = 25
+    Caption = 'Áàüëà'
+    ModalResult = 2
+    TabOrder = 1
+    Glyph.Data = {
+      DE010000424DDE01000000000000760000002800000024000000120000000100
+      0400000000006801000000000000000000001000000000000000000000000000
+      80000080000000808000800000008000800080800000C0C0C000808080000000
+      FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00388888888877
+      F7F787F8888888888333333F00004444400888FFF444448888888888F333FF8F
+      000033334D5007FFF4333388888888883338888F0000333345D50FFFF4333333
+      338F888F3338F33F000033334D5D0FFFF43333333388788F3338F33F00003333
+      45D50FEFE4333333338F878F3338F33F000033334D5D0FFFF43333333388788F
+      3338F33F0000333345D50FEFE4333333338F878F3338F33F000033334D5D0FFF
+      F43333333388788F3338F33F0000333345D50FEFE4333333338F878F3338F33F
+      000033334D5D0EFEF43333333388788F3338F33F0000333345D50FEFE4333333
+      338F878F3338F33F000033334D5D0EFEF43333333388788F3338F33F00003333
+      4444444444333333338F8F8FFFF8F33F00003333333333333333333333888888
+      8888333F00003333330000003333333333333FFFFFF3333F00003333330AAAA0
+      333333333333888888F3333F00003333330000003333333333338FFFF8F3333F
+      0000}
+    NumGlyphs = 2
+  end
+  object BitBtn2: TBitBtn
+    Left = 210
+    Top = 283
+    Width = 75
+    Height = 25
+    Caption = 'Excel'
+    TabOrder = 2
+    OnClick = BitBtn2Click
+    Glyph.Data = {
+      36040000424D3604000000000000360000002800000010000000100000000100
+      2000000000000004000000000000000000000000000000000000FF00FF00FF00
+      FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+      FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF000080
+      0000008000000080000000800000008000000080000000800000008000000080
+      00000080000000800000008000000080000000800000FF00FF00FF00FF000080
+      0000008000000080000000800000008000000080000000800000008000000080
+      00000080000000800000008000000080000000800000FF00FF00FF00FF000080
+      0000FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF000080000000800000FF00FF00FF00FF000080
+      0000FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF000080000000800000FF00FF00FF00FF000080
+      0000FFFFFF000080000000800000008000000080000000800000008000000080
+      00000080000000800000008000000080000000800000FF00FF00FF00FF000080
+      0000FFFFFF000080000000800000008000000080000000800000FFFFFF000080
+      00000080000000800000FFFFFF000080000000800000FF00FF00FF00FF000080
+      0000FFFFFF00FFFFFF00008000000080000000800000FFFFFF00008000000080
+      00000080000000800000FFFFFF000080000000800000FF00FF00FF00FF000080
+      0000FFFFFF00FFFFFF00FFFFFF0000800000FFFFFF0000800000008000000080
+      0000FFFFFF00FFFFFF00FFFFFF000080000000800000FF00FF00FF00FF000080
+      0000FFFFFF00FFFFFF00FFFFFF00FFFFFF000080000000800000008000000080
+      0000FFFFFF00FFFFFF00FFFFFF000080000000800000FF00FF00FF00FF000080
+      0000FFFFFF00FFFFFF00FFFFFF00008000000080000000800000008000000080
+      000000800000FFFFFF00FFFFFF000080000000800000FF00FF00FF00FF000080
+      0000FFFFFF00FFFFFF00008000000080000000800000FFFFFF00008000000080
+      00000080000000800000FFFFFF000080000000800000FF00FF00FF00FF000080
+      0000FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF000080000000800000FF00FF00FF00FF000080
+      0000FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF000080000000800000FF00FF00FF00FF000080
+      0000008000000080000000800000008000000080000000800000008000000080
+      00000080000000800000008000000080000000800000FF00FF00FF00FF00FF00
+      FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+      FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00}
+  end
+  object NLSLocalizer1: TNLSLocalizer
+    Caption = 'Òðàíù öçðÿ þäÿíèøëÿð'
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    Left = 16
+    Top = 128
+  end
+  object CMExcelExport1: TCMExcelExport
+    StyleColumnWidth = cwDefault
+    ColumnWidth = 0
+    FontTitles.Charset = RUSSIAN_CHARSET
+    FontTitles.Color = clWindowText
+    FontTitles.Height = -11
+    FontTitles.Name = 'Azl Sans Serif'
+    FontTitles.Style = []
+    OrientationTitles = 0
+    FontData.Charset = RUSSIAN_CHARSET
+    FontData.Color = clWindowText
+    FontData.Height = -11
+    FontData.Name = 'Azl Sans Serif'
+    FontData.Style = []
+    FontSummary.Charset = DEFAULT_CHARSET
+    FontSummary.Color = clWindowText
+    FontSummary.Height = -11
+    FontSummary.Name = 'MS Sans Serif'
+    FontSummary.Style = []
+    SummarySelection = ssNone
+    SummaryCalculation = scSUM
+    Left = 48
+    Top = 128
+  end
+end

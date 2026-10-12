@@ -1,0 +1,76 @@
+﻿unit TesFrmImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, DBGridEh, StdCtrls, Buttons, DBCtrlsEh, DBLookupEh, Mask, DBCtrls;
+
+type
+  TAddTesFrm = class(TForm)
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    DBEdit1: TDBEdit;
+    DBLookupComboboxEh19: TDBLookupComboboxEh;
+    DBLookupComboboxEh1: TDBLookupComboboxEh;
+    BitBtn1: TBitBtn;
+    BitBtn2: TBitBtn;
+    procedure FormCanResize(Sender: TObject; var NewWidth, NewHeight: Integer;
+      var Resize: Boolean);
+    procedure cxButton2Click(Sender: TObject);
+    procedure BitBtn1Click(Sender: TObject);
+    procedure BitBtn2Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  AddTesFrm: TAddTesFrm;
+
+implementation
+
+{$R *.dfm}
+  uses ResSettingImpl ;
+procedure TAddTesFrm.BitBtn1Click(Sender: TObject);
+begin
+if DBEdit1.Text='' then
+ begin
+   ShowMessage('Ad sahəsi boşdur!');
+   exit ;
+ end;
+ if DBLookupComboboxEh19.Text='' then
+ begin
+   ShowMessage('Ehtiyyat faizlərinin dəyişdirilməsi sahəsi boşdur!');
+   exit ;
+ end;
+  if DBLookupComboboxEh1.Text='' then
+ begin
+   ShowMessage('Ehtiyyatlar üzrə əməliyyatlar sahəsi boşdur!');
+   exit ;
+ end;
+ FrmResSetting.OracleDataSet1.Post;
+  close;
+end;
+
+procedure TAddTesFrm.BitBtn2Click(Sender: TObject);
+begin
+FrmResSetting.OracleDataSet1.Session.Rollback;
+FrmResSetting.OracleDataSet1.refresh;
+close;
+end;
+
+procedure TAddTesFrm.cxButton2Click(Sender: TObject);
+begin
+close;
+end;
+
+procedure TAddTesFrm.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+resize:=false;
+end;
+
+end.

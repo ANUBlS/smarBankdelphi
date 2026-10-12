@@ -1,0 +1,62 @@
+﻿unit UNotes;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, DBCtrls, Buttons, ExtCtrls,DB, XFSCtrls;
+
+type
+  TfrmNotes = class(TForm)
+    DBMemo1: TDBMemo;
+    XFPanel1: TXFPanel;
+    btOk: TBitBtn;
+    BitBtn2: TBitBtn;
+    procedure btOkClick(Sender: TObject);
+    procedure BitBtn2Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  frmNotes: TfrmNotes;
+
+implementation
+
+uses UMKDataMod,sboapiDataModuleimpl,SBTranslateProc,CommanParametrs;
+
+{$R *.DFM}
+
+procedure TfrmNotes.BitBtn2Click(Sender: TObject);
+begin
+close;
+end;
+
+procedure TfrmNotes.btOkClick(Sender: TObject);
+begin
+if contractstatus=1 then  //CommanParametrs
+ begin
+   showmessage('Diqqət! Bu müqavilə bağlanmış müqavilə olduğundan heç bir deyişiklik oluna bilməz.');
+   exit;
+ end;
+      with InsMKDataMod,ODSMotorkasko,OPCOMMON do
+      begin
+      OPCOMMON.CallProcedure('ins_notearxiv',
+               [ODSMotorkasko.FieldByName('CID').AsInteger,ODSMotorkasko.FieldByName('ID').AsInteger,DBMemo1.Text]);
+               if State in [dsEdit,dsInsert] then
+                      Post;
+            //frmNotes.Close;
+      end;
+end;
+
+procedure TfrmNotes.FormCreate(Sender: TObject);
+begin
+SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+
+
+end;
+
+end.

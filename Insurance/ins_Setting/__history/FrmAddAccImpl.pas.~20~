@@ -1,0 +1,84 @@
+﻿unit FrmAddAccImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ExtCtrls, XFSCtrls, StdCtrls, DBCtrls;
+
+type
+  TFrmAddAcc = class(TForm)
+    XFPanel1: TXFPanel;
+    XFPanel2: TXFPanel;
+    XFButton1: TXFButton;
+    XFButton2: TXFButton;
+    DBLookupComboBox1: TDBLookupComboBox;
+    XFLabel1: TXFLabel;
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure XFButton2Click(Sender: TObject);
+    procedure XFButton1Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmAddAcc: TFrmAddAcc;
+
+implementation
+
+{$R *.dfm}
+   uses CommanParametrs,sboapiDataModuleImpl,SBTranslateProc,DMMainImpl,
+  FrmMainImpl;
+
+procedure TFrmAddAcc.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+if ord(key)=vk_escape then close;
+
+end;
+
+procedure TFrmAddAcc.FormShow(Sender: TObject);
+begin
+if opetion='ins' then
+begin
+  DBLookupComboBox1.KeyValue:='';
+end;
+
+if opetion='upd' then
+begin
+  DBLookupComboBox1.KeyValue:=FrmMain.DBGrid3.DataSource.DataSet.FieldByName('ACC_ID').AsInteger;
+end;
+
+end;
+
+procedure TFrmAddAcc.XFButton1Click(Sender: TObject);
+begin
+if DBLookupComboBox1.KeyValue=null then
+begin
+  showmessage('Diqqet! Hesab seçilməyib.');
+  exit;
+end;
+
+if opetion='ins' then
+begin
+    DMMain.DSins_acc_type_id.open;
+  DMMain.DSins_acc_type_id.edit;
+  DMMain.DSins_acc_type_id.FieldByName('acc_id').AsInteger:= DBLookupComboBox1.KeyValue;
+  DMMain.DSins_acc_type_id.FieldByName('type_id').AsInteger:=FrmMain.DBGrid1.DataSource.DataSet.FieldByName('id').AsInteger;
+  DMMain.DSins_acc_type_id.FieldByName('acc_type_id').AsInteger:=FrmMain.DBGrid2.DataSource.DataSet.FieldByName('id').AsInteger;
+  DMMain.DSins_acc_type_id.Post;
+
+end;
+
+  FrmAddAcc.Close;
+  FrmMain.DBGrid3.Refresh;
+end;
+
+procedure TFrmAddAcc.XFButton2Click(Sender: TObject);
+begin
+close
+end;
+
+end.

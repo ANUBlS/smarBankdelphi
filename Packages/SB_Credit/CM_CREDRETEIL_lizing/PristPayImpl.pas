@@ -1,0 +1,59 @@
+unit PristPayImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, CMCurrencyEdit;
+
+type
+  TFristPayFrm = class(TForm)
+    Label1: TLabel;
+    CMCurrencyEdit1: TCMCurrencyEdit;
+    Button1: TButton;
+    procedure FormCanResize(Sender: TObject; var NewWidth, NewHeight: Integer;
+      var Resize: Boolean);
+    procedure Button1Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FristPayFrm: TFristPayFrm;
+
+implementation
+ uses RtDmImpl,MainFormIMPL;
+{$R *.dfm}
+
+procedure TFristPayFrm.Button1Click(Sender: TObject);
+var
+i: Integer;
+begin
+RtDataModule.OracleQuery2.SetVariable('custid',rt);
+   RtDataModule.OracleQuery2.SetVariable('fristpay',CMCurrencyEdit1.Value);
+   RtDataModule.OracleQuery2.Execute;
+   RtDataModule.OracleQuery2.Session.Commit;
+
+  for i := Screen.FormCount - 1 downto 0 do
+  if Screen.Forms[i].Name='FristPayFrm' then
+     Screen.Forms[i].Close;
+
+
+
+end;
+
+procedure TFristPayFrm.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+//Resize:=false
+end;
+
+procedure TFristPayFrm.FormShow(Sender: TObject);
+begin
+CMCurrencyEdit1.Value:=0;
+end;
+
+end.

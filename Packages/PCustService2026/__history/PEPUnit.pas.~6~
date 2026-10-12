@@ -1,0 +1,156 @@
+﻿unit PEPUnit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,  IdHTTP, IdSSLOpenSSL,IdURI,
+  Dialogs, StdCtrls, ExtCtrls,IOUtils,ShlObj,SHDocVw,ShellAPI, OleCtrls;
+
+type
+  TPep_change = class(TForm)
+    Memo1: TMemo;
+    Panel1: TPanel;
+    Label1: TLabel;
+    Label2: TLabel;
+    Edit1: TEdit;
+    Edit2: TEdit;
+    Button1: TButton;
+    Button2: TButton;
+    Button3: TButton;
+    procedure Button2Click(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure Button3Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Pep_change: TPep_change;
+
+implementation
+
+uses UnitDataModPCustService,PCustServiceFormImpl1,Printers;
+
+{$R *.dfm}
+
+
+procedure ShowCustomMessage;
+var
+  F: TForm;
+  L: TLabel;
+begin
+  F := TForm.Create(nil);
+  try
+    F.Caption := 'Xəbərdarlıq';
+    F.Width := 500;
+    F.Height := 80;
+    F.Position := poScreenCenter;
+    F.BorderStyle := bsDialog;
+
+    L := TLabel.Create(F);
+    L.Parent := F;
+    L.Caption := 'Diqqət! Aidiyyatı şöbəyə müraciət edin!';
+    L.Font.Size := 14;         // Böyük şrift
+    L.Font.Color := clRed;     // Qırmızı rəng
+    L.Font.Style := [fsBold];  // Qalın şrift
+    L.AutoSize := True;
+    L.Left := 40;
+    L.Top := 20;
+
+    F.ShowModal;
+  finally
+    F.Free;
+  end;
+end;
+
+
+
+
+procedure TPep_change.Button1Click(Sender: TObject);
+var
+  Http: TIdHTTP;
+  ResponseText,URL: string;
+  name,last_name :string;
+begin
+ Http := TIdHTTP.Create(nil);
+  try
+    try
+
+    name:=DataModPCustService.convertpack.CallstringFunction('CONVERT_INT',[ edit1.Text]);
+        last_name:=DataModPCustService.convertpack.CallstringFunction('CONVERT_INT',[ edit2.Text]) ;
+        URL := 'http://localhost:5000/api/match?' +
+               'name=' + name +
+               '&surname=' +last_name;
+
+        ResponseText := Http.Get(URL);
+
+
+        Memo1.Lines.Add('Response: ' + ResponseText);
+
+
+        if Memo1.Lines.Count>2 then
+  begin
+    ShowCustomMessage;
+   end;
+
+
+    except
+      on E: Exception do
+        ShowMessage('Xəta: ' + E.Message);
+    end;
+  finally
+    Http.Free;
+  end;
+  edit1.Clear;
+  edit2.Clear;
+
+end;
+
+procedure TPep_change.Button2Click(Sender: TObject);
+begin
+  if edit1.Text<>'' then
+   PCustServiceForm.EditFirstName.text:=edit1.Text;
+  if edit2.Text<>'' then
+   PCustServiceForm.EditLastName.text:=edit2.Text;
+
+edit1.Clear;
+edit2.Clear;
+memo1.Clear;
+Pep_change.Close;
+
+end;
+
+
+procedure TPep_change.Button3Click(Sender: TObject);
+var
+   FileName: string;
+begin
+  // Desktop-da fayl
+  FileName := GetEnvironmentVariable('USERPROFILE') + '\Desktop\Hesabat.pdf';
+
+  // Microsoft Print to PDF printerini seçirik
+  Printer.PrinterIndex := Printer.Printers.IndexOf('Microsoft Print to PDF');
+  Printer.BeginDoc;
+  try
+    Printer.Canvas.TextOut(100, 100, 'Ad: ' + Edit1.Text);
+    Printer.Canvas.TextOut(100, 150, 'Soyad: ' + Edit2.Text);
+    Printer.Canvas.TextOut(100, 200, 'Ata adı: ' +'dddd');
+  finally
+    Printer.EndDoc;
+  end;
+
+  // PDF faylını açmaq
+  ShellExecute(0, 'open', PChar(FileName), nil, nil, SW_SHOWNORMAL);
+end;
+
+procedure TPep_change.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+edit1.Clear;
+edit2.Clear;
+memo1.Clear;
+end;
+
+end.

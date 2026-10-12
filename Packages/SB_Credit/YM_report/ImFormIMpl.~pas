@@ -1,0 +1,29 @@
+unit ImFormIMpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs;
+
+type
+  TImForm = class(TForm)
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  ImForm: TImForm;
+
+implementation
+uses CommonDecls,systemstate;
+procedure InitPlugin(s:string);export;
+begin
+   ImForm.ShowModal;
+end;
+exports
+     InitPlugin;
+initialization
+   ImForm := TImForm.Create(CommonApplication);
+end.

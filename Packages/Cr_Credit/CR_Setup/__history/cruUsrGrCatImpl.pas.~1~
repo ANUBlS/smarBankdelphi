@@ -1,0 +1,246 @@
+unit uUsrGrCatImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, NLSDialogs,
+  NLSLocalizer, ComCtrls, StdCtrls, Mask, DBCtrlsEh, ImgList, ToolWin,
+  Grids, DBGridEh, ExtCtrls, DBCtrls, DBGrids;
+
+type
+  TUsrGrMainForm = class(TForm)
+    Localizer: TNLSLocalizer;
+    MainPages: TPageControl;
+    UsrGrSheet: TTabSheet;
+    CategSheet: TTabSheet;
+    CoolBar1: TCoolBar;
+    ToolBar1: TToolBar;
+    ToolImg: TImageList;
+    ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
+    DBGridEh1: TDBGridEh;
+    ToolButton3: TToolButton;
+    ToolButton5: TToolButton;
+    ToolBar2: TToolBar;
+    ToolButton6: TToolButton;
+    ToolButton7: TToolButton;
+    ToolButton8: TToolButton;
+    ToolButton9: TToolButton;
+    ToolButton10: TToolButton;
+    DBGridEh2: TDBGridEh;
+    ToolButton11: TToolButton;
+    ToolButton4: TToolButton;
+    TabSheet1: TTabSheet;
+    CoolBar2: TCoolBar;
+    ToolBar3: TToolBar;
+    ToolButton12: TToolButton;
+    ToolButton13: TToolButton;
+    ToolButton14: TToolButton;
+    ToolButton15: TToolButton;
+    ToolButton16: TToolButton;
+    ToolButton17: TToolButton;
+    DBGridEh3: TDBGridEh;
+    ToolButton18: TToolButton;
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+    procedure FormCreate(Sender: TObject);
+    procedure ToolButton1Click(Sender: TObject);
+    procedure ToolButton2Click(Sender: TObject);
+    procedure ToolButton5Click(Sender: TObject);
+    procedure ToolButton6Click(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure ToolButton8Click(Sender: TObject);
+    procedure ToolButton10Click(Sender: TObject);
+    procedure DBGridEh1DblClick(Sender: TObject);
+    procedure DBGridEh1KeyPress(Sender: TObject; var Key: Char);
+    procedure DBGridEh2KeyPress(Sender: TObject; var Key: Char);
+    procedure DBGridEh2DblClick(Sender: TObject);
+    procedure ToolButton12Click(Sender: TObject);
+    procedure ToolButton14Click(Sender: TObject);
+    procedure ToolButton16Click(Sender: TObject);
+    procedure ToolButton18Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+   Function FAdd :boolean;
+   procedure PAdd(var s :string;var t:boolean);
+    { Public declarations }
+  end;
+
+var
+  UsrGrMainForm: TUsrGrMainForm;
+
+implementation
+
+uses crCommonDecls, uUsrGrAddEditImpl, uUsrGroupDMImpl,UCategories;
+{$R *.DFM}
+
+procedure TUsrGrMainForm.PAdd(var s :string;var t:boolean);
+begin
+  if s = 'add' then t := True
+  else t := False;
+end;
+
+Function TUsrGrMainForm.FAdd;
+var S:String; t: Boolean;
+begin
+  s := 'Add';
+   PAdd(s,t);
+   Result := t;
+end;
+
+procedure TUsrGrMainForm.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+  if Ord(Key) = VK_ESCAPE then
+    ModalResult := mrCancel
+end;
+
+procedure TUsrGrMainForm.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+  Resize := False;
+end;
+
+procedure TUsrGrMainForm.FormCreate(Sender: TObject);
+begin
+  UsrGrDataMod := TUsrGrDataMod.Create(Self);
+  UsrGrAddEditForm := TUsrGrAddEditForm.Create(Self);
+  AddEditCatForm := TAddEditCatForm.Create(Self);
+  MainPages.ActivePageIndex := 0;
+end;
+
+procedure TUsrGrMainForm.ToolButton1Click(Sender: TObject);
+begin
+  with UsrGrDataMod,UserGroupsDataSet do
+       Insert;
+       UsrGrAddEditForm.ShowModal;
+
+end;
+
+procedure TUsrGrMainForm.ToolButton2Click(Sender: TObject);
+begin
+    with UsrGrDataMod, UserGroupsDataSet do
+         Edit;
+         UsrGrAddEditForm.ShowModal;
+
+end;
+
+procedure TUsrGrMainForm.ToolButton5Click(Sender: TObject);
+begin
+  if MessageDlg('Силинмясиня яминсинизми?',
+    mtConfirmation, [mbYes, mbNo], 0) = mrYes then
+    begin
+      with UsrGrDataMod.UserGroupsDataSet do
+      begin
+         Delete;
+         Refresh;
+      end;
+    end;
+end;
+
+procedure TUsrGrMainForm.ToolButton6Click(Sender: TObject);
+begin
+   with UsrGrDataMod,CatDataSet do
+        Insert;
+        AddEditCatForm.ShowModal;
+end;
+
+procedure TUsrGrMainForm.FormDestroy(Sender: TObject);
+begin
+  UsrGrDataMod.Free;
+  UsrGrAddEditForm.Free;
+  AddEditCatForm.Free;
+end;
+
+procedure TUsrGrMainForm.ToolButton8Click(Sender: TObject);
+begin
+   with UsrGrDataMod,CatDataSet do
+        Edit;
+        AddEditCatForm.ShowModal;
+
+end;
+
+procedure TUsrGrMainForm.ToolButton10Click(Sender: TObject);
+begin
+  if MessageDlg('Силинмясиня яминсинизми?',
+    mtConfirmation, [mbYes, mbNo], 0) = mrYes then
+    begin
+      with UsrGrDataMod.CatDataSet do
+      begin
+         Delete;
+         Refresh;
+      end;
+    end;
+
+end;
+
+procedure TUsrGrMainForm.DBGridEh1DblClick(Sender: TObject);
+begin
+{    with UsrGrDataMod, UserGroupsDataSet do
+         Edit;
+         UsrGrAddEditForm.ShowModal; }
+end;
+
+procedure TUsrGrMainForm.DBGridEh1KeyPress(Sender: TObject; var Key: Char);
+begin
+  { if ord(Key) = VK_RETURN then
+   begin
+    with UsrGrDataMod, UserGroupsDataSet do
+         Edit;
+         UsrGrAddEditForm.ShowModal;
+   end;  }
+end;
+
+procedure TUsrGrMainForm.DBGridEh2KeyPress(Sender: TObject; var Key: Char);
+begin
+   if ord(Key) = VK_RETURN then
+   begin
+    with UsrGrDataMod, CatDataSet do
+         Edit;
+         AddEditCatForm.ShowModal;
+   end;
+
+end;
+
+
+
+procedure TUsrGrMainForm.DBGridEh2DblClick(Sender: TObject);
+begin
+    with UsrGrDataMod, CatDataSet do
+         Edit;
+        AddEditCatForm.ShowModal;
+end;         
+
+procedure TUsrGrMainForm.ToolButton12Click(Sender: TObject);
+begin
+  with UsrGrDataMod,OracleDataSet1 do
+       Insert;
+end;
+
+procedure TUsrGrMainForm.ToolButton14Click(Sender: TObject);
+begin
+  with UsrGrDataMod,OracleDataSet1 do
+       edit;
+end;
+
+procedure TUsrGrMainForm.ToolButton16Click(Sender: TObject);
+begin
+ if MessageDlg('Силинмясиня яминсинизми?',
+    mtConfirmation, [mbYes, mbNo], 0) = mrYes then
+    begin
+      with UsrGrDataMod.OracleDataSet1 do
+      begin
+         Delete;
+         Refresh;
+      end;
+    end;
+end;
+
+procedure TUsrGrMainForm.ToolButton18Click(Sender: TObject);
+begin
+  with UsrGrDataMod,OracleDataSet1 do
+       post
+end;
+
+end.

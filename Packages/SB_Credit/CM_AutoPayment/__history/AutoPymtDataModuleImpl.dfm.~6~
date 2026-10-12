@@ -1,0 +1,28 @@
+object AutoPymtDataMod: TAutoPymtDataMod
+  OldCreateOrder = False
+  Height = 480
+  Width = 696
+  object AutoPaymentableLoans: TOracleDataSet
+    SQL.Strings = (
+      
+        'select * from cm_active_credits p,cm_accounts a,provdoc pr where' +
+        '  p.id=a.creditid and a.booroweraccid=pr.kredit and pr.vid_op in' +
+        '(55,60)'
+      'and cm_common.accountrest_get(a.booroweraccid)>0'
+      'and AUTOPAYMENT = 1--ON'
+      'and  dateofgrant+2<sbop.get_date')
+    Optimize = False
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 88
+    Top = 64
+  end
+  object CM_PAYMENT: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'CM_PAYMENT'
+    ParameterMode = pmNamed
+    Cursor = crHourGlass
+    Left = 168
+    Top = 136
+  end
+end

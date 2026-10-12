@@ -1,0 +1,61 @@
+
+library P_Customers;
+
+uses
+  ComServ,
+  P_Customers_TLB in 'P_Customers_TLB.pas',
+  phy_cust_Unit in 'phy_cust_Unit.pas' {P_Customers_Form: TActiveForm} {ActiveFormX: CoClass},
+  P_ch_Unit in 'P_ch_Unit.pas' {P_Ch_Form},
+  P_Datamod_Unit in 'P_Datamod_Unit.pas' {p_DataModule: TDataModule},
+  P_CO_In_Form in 'P_CO_In_Form.pas' {P_CO_TransTypeIncOut},
+  P_CO_Memorial_Unit in 'P_CO_Memorial_Unit.pas' {P_CO_MemorialForm},
+  P_Co_MemorialRep_Unit in 'P_Co_MemorialRep_Unit.pas' {P_Co_MemorialRep: TQuickRep},
+  P_CO_MemorialRep1_Unit in 'P_CO_MemorialRep1_Unit.pas' {P_CO_MemorialRep1: TQuickRep},
+  P_CO_Report_Unit in 'P_CO_Report_Unit.pas' {P_CO_Report: TQuickRep},
+  P_CO_ST_Unit in 'P_CO_ST_Unit.pas' {P_CO_ST},
+  p_CO_Statement_Unit in 'p_CO_Statement_Unit.pas' {P_CO_Statement_Form},
+  P_CO_Account_Unit in 'P_CO_Account_Unit.pas' {P_CO_Account_Form},
+  P_CO_Interval in 'P_CO_Interval.pas' {P_CO_IntervalForm},
+  P_FormRep in 'P_FormRep.pas' {P_RepForm},
+  P_FormReport_Unit in 'P_FormReport_Unit.pas' {P_FormReport},
+  P_FormRepR_unit in 'P_FormRepR_unit.pas' {P_FormRepR},
+  P_FormTransView_Unit in 'P_FormTransView_Unit.pas' {P_FormTransView},
+  P_CO_Cust in 'P_CO_Cust.pas' {P_CO_Cust_Form},
+  P_CO_Cust_Settings in 'P_CO_Cust_Settings.pas' {P_Cust_Settings},
+  CurrencyToHR_Azeri_Impl in 'CurrencyToHR_Azeri_Impl.pas',
+  P_AccSettings_Unit in 'P_AccSettings_Unit.pas' {P_AccSettings},
+  P_AccFlags in 'P_AccFlags.pas' {AccFlags},
+  P_AccState_Unit in 'P_AccState_Unit.pas' {P_AccState},
+  P_Interval in 'P_Interval.pas' {FormInterval},
+  P_AccTransaction_Unit in 'P_AccTransaction_Unit.pas' {FormAccTransaction},
+  P_Transaction_Unit in 'P_Transaction_Unit.pas' {P_Transaction},
+  uAccViewFormImpl in '..\commonforms\uAccViewFormImpl.pas' {frmAccInfo},
+  uTrViewFormImpl in '..\commonforms\uTrViewFormImpl.pas' {frmTrView},
+  P_QREP_ORDER in 'P_QREP_ORDER.pas' {PQRep_ORDER: TQuickRep},
+  P_QREPORT_ORDER in 'P_QREPORT_ORDER.pas' {QuickReportORDER: TQuickRep},
+  Ph_CO_BookmarkSetupUnit in 'Ph_CO_BookmarkSetupUnit.pas' {Ph_CO_BookmarkSetupFrom},
+  Ph_CO_TemplAddEditUnit in 'Ph_CO_TemplAddEditUnit.pas' {Ph_CO_TemplAddEditForm},
+  Ph_CO_BookmarkAddEditUnit in 'Ph_CO_BookmarkAddEditUnit.pas' {Ph_CO_BookmarkAddEditForm},
+  P_CO_frmWReportUnit in 'P_CO_frmWReportUnit.pas' {Ph_CO_frmWReport},
+  FSCustInfoFormImpl in 'FSCustInfoFormImpl.pas' {CustomerInfoForm},
+  p_UnitOrderInfo in 'p_UnitOrderInfo.pas' {FormOrderInfo},
+  addcombobox in 'addcombobox.pas',
+  p_ImzaNumReport in 'p_ImzaNumReport.pas' {P_CO_ImzaNumReport: TQuickRep},
+  Unit_id_quality in 'Unit_id_quality.pas' {Formid_quality},
+  Unit_description in 'Unit_description.pas' {Form_description},
+  Unitinfo in 'Unitinfo.pas' {Form_info};
+
+{$E ocx}
+
+exports
+  DllGetClassObject,
+  DllCanUnloadNow,
+  DllRegisterServer,
+  DllUnregisterServer;
+
+{$R *.TLB}
+{$R *.RES}
+
+begin
+
+end.

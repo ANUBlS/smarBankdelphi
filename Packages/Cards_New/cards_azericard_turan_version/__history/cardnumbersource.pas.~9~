@@ -1,0 +1,929 @@
+﻿unit cardnumbersource;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ComCtrls, StdCtrls, DBCtrls, Mask, DBCtrlsEh, Grids, DBGrids, ToolWin,
+  Menus, CMExcelExport, ImgList,oracledata;
+
+type
+  TCARDNUMBER = class(TForm)
+    PageControl1: TPageControl;
+    TabSheet1: TTabSheet;
+    TabSheet2: TTabSheet;
+    Label10: TLabel;
+    Label11: TLabel;
+    Label12: TLabel;
+    Label13: TLabel;
+    Label14: TLabel;
+    Label15: TLabel;
+    Label16: TLabel;
+    Label17: TLabel;
+    Label18: TLabel;
+    Label19: TLabel;
+    Label21: TLabel;
+    Label22: TLabel;
+    Label23: TLabel;
+    Label24: TLabel;
+    Label25: TLabel;
+    Label26: TLabel;
+    Label27: TLabel;
+    Label29: TLabel;
+    Label30: TLabel;
+    Label31: TLabel;
+    Label32: TLabel;
+    ComboBox10: TComboBox;
+    ComboBox2: TComboBox;
+    Edit16: TEdit;
+    Edit17: TEdit;
+    Edit18: TEdit;
+    Edit19: TEdit;
+    Edit20: TEdit;
+    Edit21: TEdit;
+    Edit22: TEdit;
+    Edit23: TEdit;
+    Edit24: TEdit;
+    Edit25: TEdit;
+    Edit26: TEdit;
+    ComboBox4: TComboBox;
+    Edit27: TEdit;
+    Edit15: TEdit;
+    ComboBox11: TComboBox;
+    ComboBox12: TComboBox;
+    ComboBox1: TComboBox;
+    Edit1: TEdit;
+    Edit2: TEdit;
+    Button1: TButton;
+    Button2: TButton;
+    Edit4: TEdit;
+    Edit6: TEdit;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    DateTimePicker7: TDBDateTimeEditEh;
+    DateTimePicker8: TDBDateTimeEditEh;
+    ImageList1: TImageList;
+    CMExcelExport1: TCMExcelExport;
+    PopupMenu1: TPopupMenu;
+    N11: TMenuItem;
+    N12: TMenuItem;
+    PopupMenu2: TPopupMenu;
+    EXCEL1: TMenuItem;
+    SELECTALL1: TMenuItem;
+    PopupMenu3: TPopupMenu;
+    EXCEL2: TMenuItem;
+    CoolBar1: TCoolBar;
+    ToolBar1: TToolBar;
+    isertbtn: TToolButton;
+    ToolButton1: TToolButton;
+    ToolButton7: TToolButton;
+    ToolButton2: TToolButton;
+    OpenDialog1: TOpenDialog;
+    DBGrid1: TDBGrid;
+    DBGrid2: TDBGrid;
+    DBLookupComboBox1: TDBLookupComboBox;
+    procedure Button1Click(Sender: TObject);
+    procedure TabSheet2Show(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+    procedure Edit1KeyPress(Sender: TObject; var Key: Char);
+    procedure isertbtnClick(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
+    procedure N11Click(Sender: TObject);
+    procedure N12Click(Sender: TObject);
+    procedure ToolButton2Click(Sender: TObject);
+    procedure ToolButton1Click(Sender: TObject);
+    procedure EXCEL1Click(Sender: TObject);
+    procedure EXCEL2Click(Sender: TObject);
+    procedure DBGrid1DrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TColumn; State: TGridDrawState);
+    procedure DBGrid2DrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TColumn; State: TGridDrawState);
+    procedure DBGrid1TitleClick(Column: TColumn);
+    procedure DBGrid2TitleClick(Column: TColumn);
+    procedure TabSheet1Show(Sender: TObject);
+    procedure SELECTALL1Click(Sender: TObject);
+    procedure N11DrawItem(Sender: TObject; ACanvas: TCanvas; ARect: TRect;
+      Selected: Boolean);
+    procedure FormShow(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure DBLookupComboBox1CloseUp(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  CARDNUMBER: TCARDNUMBER;
+
+implementation
+
+uses Unit18, Unitclient2,SBTranslateProc,sboapiDataModuleImpl;
+
+{$R *.DFM}
+
+procedure TCARDNUMBER.Button1Click(Sender: TObject);
+begin
+if (Edit1.Text<>'') and (edit2.Text<>'') then
+begin
+if MessageDlg('Карт нюмрясини дахил етмяк истяйирсинизми?',mtInformation,[mbyes,mbno],0)=mryes then begin
+
+DataMod_CARDS.mainpacket.CallProcedure('CARDNUMBER',[trim(EDIT1.TEXT),
+                                                     EDIT2.TEXT]);
+
+
+
+ DataMod_CARDS.Client2.close;
+ DataMod_CARDS.Client2.SetVariable('refs',edit1.text);
+ DataMod_CARDS.Client2.open;
+
+
+
+ with  DataMod_CARDS.client2_rbs do begin
+ close;
+// SetVariable('refs',edit1.text);
+   DataMod_CARDS.client2_rbs.SetVariable('RBS',DBLookupComboBox1.Text);
+ open;
+  Edit4.Text:=FIELDBYNAME('RBSNUMBER').AsString;
+  Edit6.Text:=FIELDBYNAME('KLI_ID').AsString;
+  ComboBox10.Text:=FIELDBYNAME('TITUL').AsString;
+  ComboBox11.Text:=FIELDBYNAME('TYPES').AsString;
+  ComboBox12.Text:=FIELDBYNAME('CARDSTATUS').AsString;
+  Edit15.Text:=FIELDBYNAME('FNAME').AsString;
+  Edit16.Text:=FIELDBYNAME('LNAME').AsString;
+  Edit17.Text:=FIELDBYNAME('HOMEPHONE').AsString;
+  Edit27.Text:=FIELDBYNAME('WORKPHONE').AsString;
+  Edit18.Text:=FIELDBYNAME('PASSPORT').AsString;
+  DateTimePicker7.Value:=FIELDBYNAME('BIRTHDAY').asvariant;
+  Edit20.Text:=FIELDBYNAME('COUNTRY').AsString;
+  Edit19.Text:=FIELDBYNAME('CITY').AsString;
+  Edit21.Text:=FIELDBYNAME('LANG_CODE').AsString;
+  Edit22.Text:=FIELDBYNAME('ADDRESS').AsString;
+  ComboBox1.Text:=FIELDBYNAME('CARDTYPE').AsString;
+  DateTimePicker8.Value:=FIELDBYNAME('EXPIRY').asvariant;
+  ComboBox4.Text:=FIELDBYNAME('RESIDENT').AsString;
+  Edit26.Text:=FIELDBYNAME('REFERENCE').AsString;
+  Edit25.Text:=FIELDBYNAME('SECURITY').AsString;
+  Edit24.Text:=FIELDBYNAME('CARDNUMBER').AsString;
+  Edit23.Text:=FIELDBYNAME('EMBOSSNAME').AsString;
+  ComboBox2.Text:=FIELDBYNAME('COMPANY').AsString;
+end;
+
+ShowMessage('Карт нюмряси базайа гейд олунду!');
+ end;
+ end;
+end;
+
+procedure TCARDNUMBER.TabSheet2Show(Sender: TObject);
+begin
+
+  Edit1.Text:='';
+  EDIT2.Text:='';
+  Edit4.Text:='';
+  Edit6.Text:='';
+  ComboBox10.Text:='';
+  ComboBox11.Text:='';
+  ComboBox12.Text:='';
+  Edit15.Text:='';
+  Edit16.Text:='';
+  Edit17.Text:='';
+  Edit27.Text:='';
+  Edit18.Text:='';
+  DateTimePicker7.Value:=DATE;//FIELDBYNAME('BIRTHDAY').AsDateTime;
+  Edit20.Text:='';
+  Edit19.Text:='';
+  Edit21.Text:='';
+  Edit22.Text:='';
+  ComboBox1.Text:='';
+  DateTimePicker8.Value:=DATE;
+  ComboBox4.Text:='';
+  Edit26.Text:='';
+  Edit25.Text:='';
+  Edit24.Text:='';
+  Edit23.Text:='';
+  ComboBox2.Text:='';
+end;
+
+procedure TCARDNUMBER.Button2Click(Sender: TObject);
+begin
+  Edit1.Text:='';
+  EDIT2.Text:='';
+  Edit4.Text:='';
+  Edit6.Text:='';
+  ComboBox10.Text:='';
+  ComboBox11.Text:='';
+  ComboBox12.Text:='';
+  Edit15.Text:='';
+  Edit16.Text:='';
+  Edit17.Text:='';
+  Edit27.Text:='';
+  Edit18.Text:='';
+  DateTimePicker7.value:=DATE;//FIELDBYNAME('BIRTHDAY').AsDateTime;
+  Edit20.Text:='';
+  Edit19.Text:='';
+  Edit21.Text:='';
+  Edit22.Text:='';
+  ComboBox1.Text:='';
+  DateTimePicker8.Value:=DATE;
+  ComboBox4.Text:='';
+  Edit26.Text:='';
+  Edit25.Text:='';
+  Edit24.Text:='';
+  Edit23.Text:='';
+  ComboBox2.Text:='';
+end;
+
+procedure TCARDNUMBER.Edit1KeyPress(Sender: TObject; var Key: Char);
+begin
+
+if key=#13 then
+begin
+Edit2.Clear;
+
+
+
+ DataMod_CARDS.Client2.close;
+ DataMod_CARDS.Client2.SetVariable('refs',edit1.text);
+ DataMod_CARDS.Client2.open;
+
+   {
+
+ with  DataMod_CARDS.client2_rbs do begin
+ close;
+// SetVariable('refs',edit1.text);
+   DataMod_CARDS.client2_rbs.SetVariable('RBS',DBLookupComboBox1.Text);
+ open;
+ // Filter := 'REFERENCE = '''+EDIT1.Text+('*')+'''';
+  Edit4.Text:=FIELDBYNAME('RBSNUMBER').AsString;
+  Edit6.Text:=FIELDBYNAME('KLI_ID').AsString;
+  ComboBox10.Text:=FIELDBYNAME('TITUL').AsString;
+  ComboBox11.Text:=FIELDBYNAME('TYPES').AsString;
+  ComboBox12.Text:=FIELDBYNAME('CARDSTATUS').AsString;
+  Edit15.Text:=FIELDBYNAME('FNAME').AsString;
+  Edit16.Text:=FIELDBYNAME('LNAME').AsString;
+  Edit17.Text:=FIELDBYNAME('HOMEPHONE').AsString;
+  Edit27.Text:=FIELDBYNAME('WORKPHONE').AsString;
+  Edit18.Text:=FIELDBYNAME('PASSPORT').AsString;
+  DateTimePicker7.value:=FIELDBYNAME('BIRTHDAY').asvariant;
+  Edit20.Text:=FIELDBYNAME('COUNTRY').AsString;
+  Edit19.Text:=FIELDBYNAME('CITY').AsString;
+  Edit21.Text:=FIELDBYNAME('LANG_CODE').AsString;
+  Edit22.Text:=FIELDBYNAME('ADDRESS').AsString;
+  ComboBox1.Text:=FIELDBYNAME('CARDTYPE').AsString;
+  DateTimePicker8.Value:=FIELDBYNAME('EXPIRY').asvariant;
+  ComboBox4.Text:=FIELDBYNAME('RESIDENT').AsString;
+  Edit26.Text:=FIELDBYNAME('REFERENCE').AsString;
+  Edit25.Text:=FIELDBYNAME('SECURITY').AsString;
+  Edit24.Text:=FIELDBYNAME('CARDNUMBER').AsString;
+  Edit23.Text:=FIELDBYNAME('EMBOSSNAME').AsString;
+  ComboBox2.Text:=FIELDBYNAME('COMPANY').AsString;
+
+  if Edit1.Text='' then
+begin
+   Edit1.Text:='';
+  EDIT2.Text:='';
+  Edit4.Text:='';
+  Edit6.Text:='';
+  ComboBox10.Text:='';
+  ComboBox11.Text:='';
+  ComboBox12.Text:='';
+  Edit15.Text:='';
+  Edit16.Text:='';
+  Edit17.Text:='';
+  Edit27.Text:='';
+  Edit18.Text:='';
+  DateTimePicker7.value:=DATE;//FIELDBYNAME('BIRTHDAY').AsDateTime;
+  Edit20.Text:='';
+  Edit19.Text:='';
+  Edit21.Text:='';
+  Edit22.Text:='';
+  ComboBox1.Text:='';
+  DateTimePicker8.Value:=DATE;
+  ComboBox4.Text:='';
+  Edit26.Text:='';
+  Edit25.Text:='';
+  Edit24.Text:='';
+  Edit23.Text:='';
+  ComboBox2.Text:='';
+end;
+
+
+end;
+
+end;
+
+
+
+
+if Edit1.Text='' then
+begin
+   Edit1.Text:='';
+  EDIT2.Text:='';
+  Edit4.Text:='';
+  Edit6.Text:='';
+  ComboBox10.Text:='';
+  ComboBox11.Text:='';
+  ComboBox12.Text:='';
+  Edit15.Text:='';
+  Edit16.Text:='';
+  Edit17.Text:='';
+  Edit27.Text:='';
+  Edit18.Text:='';
+  DateTimePicker7.value:=DATE;//FIELDBYNAME('BIRTHDAY').AsDateTime;
+  Edit20.Text:='';
+  Edit19.Text:='';
+  Edit21.Text:='';
+  Edit22.Text:='';
+  ComboBox1.Text:='';
+  DateTimePicker8.Value:=DATE;
+  ComboBox4.Text:='';
+  Edit26.Text:='';
+  Edit25.Text:='';
+  Edit24.Text:='';
+  Edit23.Text:='';
+  ComboBox2.Text:='';    }
+end;
+end;
+
+procedure TCARDNUMBER.isertbtnClick(Sender: TObject);
+
+procedure inserbase(filename: string);
+
+var ij  :integer;
+    Qebul_edilen_fayl   : string;
+    fayldaki_setrler    : string;
+    Qebul_edilen_F      : TextFile;
+    Cartin_nomresi,adi_ve_famili,Cartin_nomresi_2,Hesab_nomresi,Referensi               : string;
+    faylin_bashligi,faylin_sonlugu                                                      : string;
+    q_e_f_sonlugu                                                                       : string;
+    q_e_f_bashligi                                                                      : string;
+    adidir,familidir                                                                    : String;
+    duzdurmu            : Boolean;
+    i_ad                : Integer;
+
+
+begin
+Qebul_edilen_fayl:=filename;
+q_e_f_sonlugu:=copy(Qebul_edilen_fayl,(length(Qebul_edilen_fayl)-2),3);
+q_e_f_bashligi:=copy(Qebul_edilen_fayl,1,3);
+   AssignFile(Qebul_edilen_F,Qebul_edilen_fayl);
+   Reset(Qebul_edilen_F);
+
+   while not eof(Qebul_edilen_F) do
+   begin
+      Readln(Qebul_edilen_F,fayldaki_setrler);
+
+      Cartin_nomresi := trim(copy(fayldaki_setrler,34,16));
+      adi_ve_famili := trim(copy(fayldaki_setrler,51,25));
+      Cartin_nomresi_2 := trim(copy(fayldaki_setrler,89,16));
+      Hesab_nomresi := trim(copy(fayldaki_setrler,106,30));
+      Referensi := trim(copy(fayldaki_setrler,1,15));
+
+      DataMod_CARDS.mainpacket.CallProcedure('editcardnumber',[Cartin_nomresi,
+                                                               adi_ve_famili,
+                                                               Cartin_nomresi_2,
+                                                               Hesab_nomresi,
+                                                               Referensi]);
+      IJ:=IJ+1;
+
+
+
+   end;
+
+     //ShowMessage(IntToStr(IJ)+'  Сайда карт нюмряси базайа !' );
+   CloseFile(Qebul_edilen_F);
+   DBGrid1.DataSource.DataSet.Refresh;
+   DBGrid2.DataSource.DataSet.Refresh;
+
+//ShowMessage(filename);
+end;
+
+
+
+begin
+if OpenDialog1.Execute then
+
+ begin
+DataMod_CARDS.mainpacket.CallProcedure('DELETCARDNUM',[]);
+inserbase(OpenDialog1.FileName);
+  end;
+end;
+
+procedure TCARDNUMBER.FormActivate(Sender: TObject);
+begin
+DataMod_CARDS.cardnumber1.Open;
+DataMod_CARDS.cardnumber2.Open;
+end;
+
+procedure TCARDNUMBER.FormCreate(Sender: TObject);
+begin
+SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TCARDNUMBER.N11Click(Sender: TObject);
+begin
+  if not CMExcelExport1.Connected then CMExcelExport1.Connect;
+  CMExcelExport1.ExportDataset(DataMod_CARDS.cardnumber1,'KART NOMRELERI',true);
+  CMExcelExport1.Disconnect;
+end;
+
+procedure TCARDNUMBER.N12Click(Sender: TObject);
+begin
+  if not CMExcelExport1.Connected then CMExcelExport1.Connect;
+  CMExcelExport1.ExportDataset(DataMod_CARDS.cardnumber2,'KART NOMRELERI',true);
+  CMExcelExport1.Disconnect;
+end;
+
+procedure TCARDNUMBER.ToolButton2Click(Sender: TObject);
+var
+
+   
+   Index :Integer;
+   WaitNextConfirm, WillRefresh: Boolean;
+   TransactionID :Integer;
+begin
+
+
+  WaitNextConfirm :=True;
+  WillRefresh :=False;
+  if DBGrid1.CanFocus then
+  DBGrid1.SetFocus;
+
+
+  with  DBGrid1, SelectedRows, DataSource.DataSet, DataMod_CARDS do
+  try
+    if Count = 0 then CurrentRowSelected := True;
+
+
+
+    for  Index :=0 to  Count - 1 do
+    begin
+      GotoBookmark(Pointer(Items[Index]));
+      TransactionID :=FieldbyName('ID').AsInteger;
+
+      if  WaitNextConfirm  then
+      case MessageDlg(
+        Format('Secilmiş sətir silinsin? ',[TransactionID])
+       ,mtConfirmation
+       ,[mbYes, mbNo ,mbCancel ,mbYesToAll]
+       ,0
+       )   of
+        mrNo       : begin Continue;  end;
+        mrCancel   : begin Break; end;
+        mrYesToAll :
+          if MessageDlg(Format('%d  sayda sətir silinsin?', [Count - Index]), mtConfirmation, [mbYes, mbCancel], 0) = mrYes then
+           WaitNextConfirm :=False
+          else
+           Continue;
+      end;
+      Application.ProcessMessages;
+      //------------------------------------------------------------------------------------delete
+
+                DataMod_CARDS.mainpacket.CallProcedure('cardnumdelete',[TransactionID]) ;
+
+      //--------------------------------------------end delete
+
+
+
+      WillRefresh :=True;
+
+
+    end;
+  finally
+   if WillRefresh then
+
+
+   begin
+
+
+                          DBGrid1.DataSource.DataSet.Refresh;
+                          DBGrid2.DataSource.DataSet.Refresh;
+                          ShowMessage('Sətir silindi!');
+
+
+
+
+   end;
+
+  end;
+end;
+
+
+procedure TCARDNUMBER.ToolButton1Click(Sender: TObject);
+var
+
+   
+   Index :Integer;
+   WaitNextConfirm, WillRefresh: Boolean;
+   TransactionID :Integer;
+begin
+
+
+  WaitNextConfirm :=True;
+  WillRefresh :=False;
+  if DBGrid1.CanFocus then
+  DBGrid1.SetFocus;
+
+
+  with  DBGrid1, SelectedRows, DataSource.DataSet, DataMod_CARDS do
+  try
+    if Count = 0 then CurrentRowSelected := True;
+
+
+
+    for  Index :=0 to  Count - 1 do
+    begin
+      GotoBookmark(Pointer(Items[Index]));
+      TransactionID :=FieldbyName('ID').AsInteger;
+
+      if  WaitNextConfirm  then
+      case MessageDlg(
+        Format('Secilmiş kartlar dəyişilsin?? №',[TransactionID])
+       ,mtConfirmation
+       ,[mbYes, mbNo ,mbCancel ,mbYesToAll]
+       ,0
+       )   of
+        mrNo       : begin Continue;  end;
+        mrCancel   : begin Break; end;
+        mrYesToAll :
+          if MessageDlg(Format('%d  sayda kart dəyişilsin?', [Count - Index]), mtConfirmation, [mbYes, mbCancel], 0) = mrYes then
+           WaitNextConfirm :=False
+          else
+           Continue;
+      end;
+      Application.ProcessMessages;
+      //------------------------------------------------------------------------------------delete
+
+                DataMod_CARDS.mainpacket.CallProcedure('cardnumchange',[TransactionID]) ;
+
+      //--------------------------------------------end delete
+
+
+
+      WillRefresh :=True;
+
+
+    end;
+  finally
+   if WillRefresh then
+
+
+   begin
+
+
+                          DBGrid1.DataSource.DataSet.Refresh;
+                          DBGrid2.DataSource.DataSet.Refresh;
+                          ShowMessage('Kart nömrələri dəyişildi!');
+
+
+
+
+   end;
+
+  end;
+end;
+
+
+
+procedure TCARDNUMBER.EXCEL1Click(Sender: TObject);
+begin
+  if not CMExcelExport1.Connected then CMExcelExport1.Connect;
+  CMExcelExport1.ExportDataset(DataMod_CARDS.cardnumber1,'KART NOMRELERI',true);
+  CMExcelExport1.Disconnect;
+end;
+
+procedure TCARDNUMBER.EXCEL2Click(Sender: TObject);
+begin
+  if not CMExcelExport1.Connected then CMExcelExport1.Connect;
+  CMExcelExport1.ExportDataset(DataMod_CARDS.cardnumber2,'KART NOMRELERI',true);
+  CMExcelExport1.Disconnect;
+end;
+
+procedure TCARDNUMBER.DBGrid1DrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TColumn;
+  State: TGridDrawState);
+var
+  ImageIndex: Integer;
+
+begin
+
+ ImageIndex := -1;
+  with Sender as TDBGrid do
+  begin
+    if DataSource.DataSet.RecordCount <> 0 then
+    begin
+      case DataSource.DataSet.FieldByName('STATUS').AsInteger of
+
+      1:
+        ImageIndex :=25;
+      2:
+        ImageIndex :=3 ;
+      3:
+        ImageIndex :=26;
+
+      4:
+        ImageIndex:=13;  
+
+      else
+      end;
+      if (DataCol = 1) and (ImageIndex <> -1) then
+        ImageList1.Draw(Canvas, Rect.Left, Rect.Top, ImageIndex, True)
+      else
+        DefaultDrawColumnCell(Rect, DataCol, Column, State);
+    end;
+
+
+
+
+  end;
+end;
+
+procedure TCARDNUMBER.DBGrid2DrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TColumn;
+  State: TGridDrawState);
+var
+  ImageIndex: Integer;
+
+begin
+
+ ImageIndex := -1;
+  with Sender as TDBGrid do
+  begin
+    if DataSource.DataSet.RecordCount <> 0 then
+    begin
+      case DataSource.DataSet.FieldByName('STATUS').AsInteger of
+
+      1:
+        ImageIndex :=25;
+      2:
+        ImageIndex :=3 ;
+      3:
+        ImageIndex :=26;
+
+      4:
+        ImageIndex:=13;  
+
+      else
+      end;
+      if (DataCol = 1) and (ImageIndex <> -1) then
+        ImageList1.Draw(Canvas, Rect.Left, Rect.Top, ImageIndex, True)
+      else
+        DefaultDrawColumnCell(Rect, DataCol, Column, State);
+    end;
+
+
+
+
+  end;
+end;
+
+procedure TCARDNUMBER.DBGrid1TitleClick(Column: TColumn);
+var
+   TitleName :string;
+   SortPosition: word;
+begin
+ SortPosition :=100;
+ //OrderedTitle :=Column.FieldName; //H.R. 24.06.2008
+ if (DBGrid1.DataSource.DataSet.IsEmpty) or (Column.FieldName = EmptyStr) then Exit;
+ Screen.Cursor :=crHourGlass;
+ TitleName :=Column.FieldName;
+ with TOracleDataSet(DBGrid1.DataSource.DataSet) do
+  try
+  
+   SortPosition :=SQL.Add('ORDER BY '+ TitleName);
+   Refresh;
+  finally
+   SQL[SortPosition] :=EmptyStr;
+   Screen.Cursor :=crDefault;
+  end;
+end;
+
+
+procedure TCARDNUMBER.DBGrid2TitleClick(Column: TColumn);
+var
+   TitleName :string;
+   SortPosition: word;
+begin
+ SortPosition :=100;
+ //OrderedTitle :=Column.FieldName; //H.R. 24.06.2008
+ if (DBGrid2.DataSource.DataSet.IsEmpty) or (Column.FieldName = EmptyStr) then Exit;
+ Screen.Cursor :=crHourGlass;
+ TitleName :=Column.FieldName;
+ with TOracleDataSet(DBGrid2.DataSource.DataSet) do
+  try
+  
+   SortPosition :=SQL.Add('ORDER BY '+ TitleName);
+   Refresh;
+  finally
+   SQL[SortPosition] :=EmptyStr;
+   Screen.Cursor :=crDefault;
+  end;
+end;
+
+
+procedure TCARDNUMBER.DBLookupComboBox1CloseUp(Sender: TObject);
+begin
+
+
+Edit2.Clear;
+
+
+
+ DataMod_CARDS.Client2.close;
+ DataMod_CARDS.Client2.SetVariable('refs',edit1.text);
+ DataMod_CARDS.Client2.open;
+
+
+
+ with  DataMod_CARDS.client2_rbs do begin
+ close;
+// SetVariable('refs',edit1.text);
+   DataMod_CARDS.client2_rbs.SetVariable('RBS',DBLookupComboBox1.Text);
+ open;
+ // Filter := 'REFERENCE = '''+EDIT1.Text+('*')+'''';
+  Edit4.Text:=FIELDBYNAME('RBSNUMBER').AsString;
+  Edit6.Text:=FIELDBYNAME('KLI_ID').AsString;
+  ComboBox10.Text:=FIELDBYNAME('TITUL').AsString;
+  ComboBox11.Text:=FIELDBYNAME('TYPES').AsString;
+  ComboBox12.Text:=FIELDBYNAME('CARDSTATUS').AsString;
+  Edit15.Text:=FIELDBYNAME('FNAME').AsString;
+  Edit16.Text:=FIELDBYNAME('LNAME').AsString;
+  Edit17.Text:=FIELDBYNAME('HOMEPHONE').AsString;
+  Edit27.Text:=FIELDBYNAME('WORKPHONE').AsString;
+  Edit18.Text:=FIELDBYNAME('PASSPORT').AsString;
+  DateTimePicker7.value:=FIELDBYNAME('BIRTHDAY').asvariant;
+  Edit20.Text:=FIELDBYNAME('COUNTRY').AsString;
+  Edit19.Text:=FIELDBYNAME('CITY').AsString;
+  Edit21.Text:=FIELDBYNAME('LANG_CODE').AsString;
+  Edit22.Text:=FIELDBYNAME('ADDRESS').AsString;
+  ComboBox1.Text:=FIELDBYNAME('CARDTYPE').AsString;
+  DateTimePicker8.Value:=FIELDBYNAME('EXPIRY').asvariant;
+  ComboBox4.Text:=FIELDBYNAME('RESIDENT').AsString;
+  Edit26.Text:=FIELDBYNAME('REFERENCE').AsString;
+  Edit25.Text:=FIELDBYNAME('SECURITY').AsString;
+  Edit24.Text:=FIELDBYNAME('CARDNUMBER').AsString;
+  Edit23.Text:=FIELDBYNAME('EMBOSSNAME').AsString;
+  ComboBox2.Text:=FIELDBYNAME('COMPANY').AsString;
+
+  if Edit1.Text='' then
+begin
+   Edit1.Text:='';
+  EDIT2.Text:='';
+  Edit4.Text:='';
+  Edit6.Text:='';
+  ComboBox10.Text:='';
+  ComboBox11.Text:='';
+  ComboBox12.Text:='';
+  Edit15.Text:='';
+  Edit16.Text:='';
+  Edit17.Text:='';
+  Edit27.Text:='';
+  Edit18.Text:='';
+  DateTimePicker7.value:=DATE;//FIELDBYNAME('BIRTHDAY').AsDateTime;
+  Edit20.Text:='';
+  Edit19.Text:='';
+  Edit21.Text:='';
+  Edit22.Text:='';
+  ComboBox1.Text:='';
+  DateTimePicker8.Value:=DATE;
+  ComboBox4.Text:='';
+  Edit26.Text:='';
+  Edit25.Text:='';
+  Edit24.Text:='';
+  Edit23.Text:='';
+  ComboBox2.Text:='';
+end;
+
+
+end;
+
+
+end;
+
+procedure TCARDNUMBER.TabSheet1Show(Sender: TObject);
+begin
+DataMod_CARDS.mainpacket.CallProcedure('DELETCARDNUM',[]);
+//DBGrid1.DataSource.DataSet.Refresh;
+//DBGrid2.DataSource.DataSet.Refresh;
+end;
+
+procedure TCARDNUMBER.SELECTALL1Click(Sender: TObject);
+begin
+ with dbgrid1, SelectedRows, DataSource.DataSet do
+  begin
+    DisableControls;
+    try
+      First;
+      while not Eof do
+       begin
+        CurrentRowSelected := True;
+        Next;
+       end;
+    finally
+      EnableControls;
+    end;
+  end;   
+end;
+
+procedure TCARDNUMBER.N11DrawItem(Sender: TObject; ACanvas: TCanvas;
+  ARect: TRect; Selected: Boolean);
+ var
+  LineBottom: Integer;
+  SText: String;
+  Bar: TRect;
+ begin
+  with ACanvas, Sender as TMenuItem do
+  begin
+    with ACanvas.Font do
+    begin
+      Charset := DEFAULT_CHARSET;
+      Name := 'Azl Sans Serif';
+      if Default then
+        Style := [fsBold];
+    end;
+    if Caption = '-' then
+    begin
+      Pen.Color := clBlack;
+      LineBottom := (ARect.Top + (ARect.Bottom - ARect.Top) div 2)-1;
+      MoveTo(ARect.Left, LineBottom);
+      LineTo(ARect.Right, LineBottom);
+      inc(LineBottom);
+      Pen.Color := clWhite;
+      MoveTo(ARect.Left, LineBottom);
+      LineTo(ARect.Right, LineBottom);
+    end
+    else
+    begin
+      if Selected then
+      begin
+        Brush.Color := clNavy;
+        if Enabled then
+          Font.Color := clWhite
+        else
+          Font.Color := clSilver;
+      end
+      else
+      begin
+        Brush.Color := clBtnFace;
+        if Enabled then
+          Font.Color := clBlack
+        else
+          Font.Color := clGrayText;
+      end;
+      Bar := ARect;
+      Inc(Bar.Left, 22);
+      FillRect(Bar);
+      TextOut(ARect.Left+{17}22, ARect.Top+1, Caption);
+    end;
+    // draw shortcut
+    SText := ShortCutToText(ShortCut);
+    TextOut(ARect.Right-TextWidth(SText)-7, ARect.Top+1, SText);
+    if ImageIndex <> -1 then
+      with GetParentMenu do
+        if Assigned(Images) then
+        begin
+          if Checked then
+          begin
+            Bar.Left := ARect.Left + 1;
+            Bar.Right := Bar.Left + 16;
+            Bar.Top := ARect.Top + 1;
+            Bar.Bottom := Bar.Top + 16;
+
+            ACanvas.Brush.Color := clBtnShadow;
+            ACanvas.FrameRect(Bar);
+
+            Inc(Bar.Left, 2);
+            Inc(Bar.Right, 2);
+            Inc(Bar.Top, 2);
+            Inc(Bar.Bottom, 2);
+
+            ACanvas.Brush.Color := clBtnHighlight;
+            ACanvas.FrameRect(Bar);
+
+            Dec(Bar.Left, 1);
+            Dec(Bar.Right, 1);
+            Dec(Bar.Top, 1);
+            Dec(Bar.Bottom, 1);
+
+            if Selected then
+              ACanvas.Brush.Color := clBtnFace
+            else
+              ACanvas.Brush.Color := clBtnHighlight;
+            ACanvas.FillRect(Bar);
+          end;
+
+          Images.Draw(ACanvas, ARect.Left, ARect.Top, ImageIndex, Enabled);
+        end;
+  end;
+
+end;
+
+
+procedure TCARDNUMBER.FormShow(Sender: TObject);
+begin
+PageControl1.ActivePageIndex:=0;
+end;
+
+end.

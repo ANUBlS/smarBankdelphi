@@ -1,0 +1,227 @@
+object dmins_reinsr_contract: Tdmins_reinsr_contract
+  OldCreateOrder = False
+  OnCreate = DataModuleCreate
+  OnDestroy = DataModuleDestroy
+  Height = 471
+  Width = 665
+  object ds_ins_reinsr_contract: TOracleDataSet
+    SQL.Strings = (
+      'select ii.id,ii.name from ins_insurances ii'
+      'where'
+      ' ii.obeykt_type is not null'
+      'order by id')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000400000049004400010000000000080000004E0041004D00
+      4500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 40
+    Top = 40
+    object ds_ins_reinsr_contractID: TIntegerField
+      FieldName = 'ID'
+    end
+    object ds_ins_reinsr_contractNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 4000
+    end
+  end
+  object dsr_ins_reinsr_contract: TDataSource
+    DataSet = ds_ins_reinsr_contract
+    Left = 40
+    Top = 96
+  end
+  object DSins_dict_companie: TOracleDataSet
+    SQL.Strings = (
+      'SELECT a.rowid,a.id, a.name'
+      '  FROM ins_dict_companie a')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000400000049004400010000000000080000004E0041004D00
+      4500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 160
+    Top = 40
+    object DSins_dict_companieID: TFloatField
+      FieldName = 'ID'
+    end
+    object DSins_dict_companieNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 200
+    end
+  end
+  object DSrins_dict_companie: TDataSource
+    DataSet = DSins_dict_companie
+    Left = 152
+    Top = 104
+  end
+  object dsr_contracts: TDataSource
+    DataSet = ds_contracts
+    Left = 288
+    Top = 96
+  end
+  object ds_contracts: TOracleDataSet
+    SQL.Strings = (
+      'SELECT a.rowid,a.id, a.type_id, a.begin_date, a.end_date,'
+      
+        '        a.ammount,  a.policy_num, a.inssumm, a.franshiz,  a.rein' +
+        's'
+      '  FROM   ins_contracts a'
+      '  where a.id=:PID'
+      ' ')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000080000003A00500049004400040000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000A00000004000000490044000100000000000E000000540059005000
+      45005F00490044000100000000001400000042004500470049004E005F004400
+      4100540045000100000000001000000045004E0044005F004400410054004500
+      0100000000000E00000041004D004D004F0055004E0054000100000000001400
+      000050004F004C004900430059005F004E0055004D000100000000000E000000
+      49004E005300530055004D004D00010000000000100000004600520041004E00
+      5300480049005A000100000000000A0000005200450049004E00530001000000
+      00000C000000460049004C00490041004C00010000000000}
+    Session = sboapiDataModule.SBSession
+    AfterInsert = ds_contractsAfterInsert
+    Left = 288
+    Top = 40
+    object ds_contractsID: TFloatField
+      FieldName = 'ID'
+    end
+    object ds_contractsTYPE_ID: TFloatField
+      FieldName = 'TYPE_ID'
+    end
+    object ds_contractsBEGIN_DATE: TDateTimeField
+      FieldName = 'BEGIN_DATE'
+    end
+    object ds_contractsEND_DATE: TDateTimeField
+      FieldName = 'END_DATE'
+    end
+    object ds_contractsAMMOUNT: TFloatField
+      FieldName = 'AMMOUNT'
+    end
+    object ds_contractsPOLICY_NUM: TWideStringField
+      FieldName = 'POLICY_NUM'
+      Size = 128
+    end
+    object ds_contractsINSSUMM: TFloatField
+      FieldName = 'INSSUMM'
+    end
+    object ds_contractsFRANSHIZ: TFloatField
+      FieldName = 'FRANSHIZ'
+    end
+    object ds_contractsREINS: TFloatField
+      FieldName = 'REINS'
+    end
+    object ds_contractsFILIAL: TFloatField
+      FieldName = 'FILIAL'
+    end
+  end
+  object DSsysdat: TOracleDataSet
+    SQL.Strings = (
+      'select * from sysdat')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000040000000E000000540045004B005F00440041005400010000000000
+      1000000050005200450044005F004400410054000100000000000E0000004100
+      520043005F004400410059000100000000000A00000043004C004F0053004500
+      010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 392
+    Top = 48
+    object DSsysdatTEK_DAT: TDateTimeField
+      FieldName = 'TEK_DAT'
+    end
+    object DSsysdatPRED_DAT: TDateTimeField
+      FieldName = 'PRED_DAT'
+    end
+    object DSsysdatARC_DAY: TDateTimeField
+      FieldName = 'ARC_DAY'
+    end
+    object DSsysdatCLOSE: TIntegerField
+      FieldName = 'CLOSE'
+    end
+  end
+  object dsrins_rein_other_info: TDataSource
+    DataSet = dsins_rein_other_info
+    Left = 552
+    Top = 56
+  end
+  object dsins_rein_other_info: TOracleDataSet
+    SQL.Strings = (
+      'SELECT b.rowid, b.*'
+      '  FROM ins_rein_other_info b'
+      'where b.cid=:PID')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000080000003A00500049004400030000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000B00000004000000490044000100000000000C000000430055005300
+      540049004400010000000000200000005200450049004E0053005F0050004100
+      520054005F004B004F004D00490053000100000000001A000000520045004900
+      4E0053005F0041004D004D004F0055004E005400010000000000260000005200
+      450049004E0053005F0042005200550054004F005F0041004D004D004F005500
+      4E0054000100000000002200000049004E0053005F005F005000520045004400
+      5F0041004D004D004F0055004E0054000100000000000C00000049004E005300
+      5F00490044000100000000001000000049004E0053005F005400590050004500
+      0100000000001600000049004E0053005F0041004D004D004F0055004E005400
+      0100000000001A00000049004E0053005F0050005200450044005F0049004E00
+      46004F0001000000000006000000430049004400010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 552
+    Top = 16
+    object dsins_rein_other_infoID: TFloatField
+      FieldName = 'ID'
+    end
+    object dsins_rein_other_infoCUSTID: TFloatField
+      FieldName = 'CUSTID'
+    end
+    object dsins_rein_other_infoREINS_PART_KOMIS: TFloatField
+      FieldName = 'REINS_PART_KOMIS'
+    end
+    object dsins_rein_other_infoREINS_AMMOUNT: TFloatField
+      FieldName = 'REINS_AMMOUNT'
+    end
+    object dsins_rein_other_infoREINS_BRUTO_AMMOUNT: TFloatField
+      FieldName = 'REINS_BRUTO_AMMOUNT'
+    end
+    object dsins_rein_other_infoINS__PRED_AMMOUNT: TFloatField
+      FieldName = 'INS__PRED_AMMOUNT'
+    end
+    object dsins_rein_other_infoINS_ID: TFloatField
+      FieldName = 'INS_ID'
+    end
+    object dsins_rein_other_infoINS_TYPE: TFloatField
+      FieldName = 'INS_TYPE'
+    end
+    object dsins_rein_other_infoINS_AMMOUNT: TFloatField
+      FieldName = 'INS_AMMOUNT'
+    end
+    object dsins_rein_other_infoINS_PRED_INFO: TWideStringField
+      FieldName = 'INS_PRED_INFO'
+      Size = 200
+    end
+    object dsins_rein_other_infoCID: TFloatField
+      FieldName = 'CID'
+    end
+  end
+  object dsreins: TOracleDataSet
+    SQL.Strings = (
+      'select id , name from customers'
+      'where cust_type=0'
+      'and group_klie=70 '
+      'and close_dat is  NULL'
+      'order by id')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000400000049004400010000000000080000004E0041004D00
+      4500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 480
+    Top = 160
+  end
+  object dsrreins: TDataSource
+    DataSet = dsreins
+    Left = 552
+    Top = 160
+  end
+end

@@ -1,0 +1,210 @@
+unit MainUnitImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ExtCtrls, StdCtrls, Mask, DBCtrlsEh, ComCtrls, CMCurrencyEdit, DBLookupEh, DBGridEh
+  ,Variants;
+
+type
+  TFilterMainForm = class(TForm)
+    Panel1: TPanel;
+    GroupBox1: TGroupBox;
+    GroupBox2: TGroupBox;
+    CheckBox1: TCheckBox;
+    GroupBox3: TGroupBox;
+    Panel2: TPanel;
+    GroupBox4: TGroupBox;
+    CheckBox4: TCheckBox;
+    GroupBox5: TGroupBox;
+    GroupBox6: TGroupBox;
+    Panel5: TPanel;
+    GroupBox7: TGroupBox;
+    CheckBox7: TCheckBox;
+    GroupBox8: TGroupBox;
+    CheckBox9: TCheckBox;
+    GroupBox9: TGroupBox;
+    CheckBox8: TCheckBox;
+    Panel9: TPanel;
+    GroupBox10: TGroupBox;
+    CheckBox10: TCheckBox;
+    Button1: TButton;
+    Button2: TButton;
+    Button3: TButton;
+    GroupBox11: TGroupBox;
+    CheckBox11: TCheckBox;
+    DBLookupComboboxEh1: TDBLookupComboboxEh;
+    DBLookupComboboxEh2: TDBLookupComboboxEh;
+    DBLookupComboboxEh3: TDBLookupComboboxEh;
+    DBLookupComboboxEh4: TDBLookupComboboxEh;
+    DBLookupComboboxEh5: TDBLookupComboboxEh;
+    DBLookupComboboxEh6: TDBLookupComboboxEh;
+    DBLookupComboboxEh7: TDBLookupComboboxEh;
+    DBLookupComboboxEh8: TDBLookupComboboxEh;
+    DBLookupComboboxEh9: TDBLookupComboboxEh;
+    DBLookupComboboxEh10: TDBLookupComboboxEh;
+    DBLookupComboboxEh11: TDBLookupComboboxEh;
+    CheckBox2: TCheckBox;
+    CheckBox3: TCheckBox;
+    CheckBox5: TCheckBox;
+    CheckBox6: TCheckBox;
+    CheckBox12: TCheckBox;
+    GroupBox12: TGroupBox;
+    CheckBox13: TCheckBox;
+    DBLookupComboboxEh12: TDBLookupComboboxEh;
+    GroupBox13: TGroupBox;
+    StartDateEdit: TDateTimePicker;
+    Label1: TLabel;
+    CheckBox14: TCheckBox;
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+    procedure Button3Click(Sender: TObject);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormShow(Sender: TObject);
+  private
+    function BuildFilterString : String;
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FilterMainForm: TFilterMainForm;
+    param:String;
+procedure InitPlugin(S : String); export;
+
+implementation
+
+{$R *.DFM}
+
+
+uses
+  CommonDecls, SbSystem, DataModuleImpl,SBTranslateProc,sboapiDataModuleImpl;
+
+const
+  LoadingFailed : Boolean = False;
+
+function TFilterMainForm.BuildFilterString : String;
+procedure ConcatFilter(var S: String; const Prefix : String; Checked : Boolean; KeyValue : Variant);
+var
+  Temp: string;
+begin
+  if Checked then
+  begin
+
+    if Prefix <> '' then
+      Temp := '(' + Prefix + '=' + VarToStr(KeyValue) + ')'
+    else
+
+      Temp := '(' + VarToStr(KeyValue) + ')';
+
+    if S = '' then
+      S := Temp
+    else
+      S := S + ' and ' + Temp;
+  end;
+end;
+
+
+
+
+begin
+ {param:='  between ''' +
+                  FormatDateTime('dd-MMM-yyyy', Trunc(StartDateEdit.DateTime)) +
+                                 ''' and ''' + FormatDateTime('dd-mmm-yyyy',
+                                  Trunc(EndDateEdit.DateTime)) + '''';
+     }
+  Result := '';
+  ConcatFilter(Result,'CURRENCY',CheckBox1.Checked,DBLookupComboboxEh1.KeyValue);
+  ConcatFilter(Result,'BRANCHID',CheckBox2.Checked,DBLookupComboboxEh2.KeyValue);
+  ConcatFilter(Result,'USRGROUP',CheckBox3.Checked,DBLookupComboboxEh3.KeyValue);
+  ConcatFilter(Result,'RESERVEID',CheckBox4.Checked,DBLookupComboboxEh4.KeyValue);
+  ConcatFilter(Result,'AIM_ID',CheckBox5.Checked,DBLookupComboboxEh5.KeyValue);
+  ConcatFilter(Result,'USID',CheckBox6.Checked,DBLookupComboboxEh6.KeyValue);
+  ConcatFilter(Result,'PERSONALTYPE',CheckBox7.Checked,DBLookupComboboxEh7.KeyValue);
+  ConcatFilter(Result,'CUSTOMERTYPE',CheckBox8.Checked,DBLookupComboboxEh8.KeyValue);
+  ConcatFilter(Result,'CREDITTYPE',CheckBox9.Checked,DBLookupComboboxEh9.KeyValue);
+  ConcatFilter(Result,'PLEDGEID',CheckBox10.Checked,DBLookupComboboxEh10.KeyValue);
+  ConcatFilter(Result,'BOOROWERID',CheckBox11.Checked,DBLookupComboboxEh11.KeyValue);
+  ConcatFilter(Result,'KR_STATUS',CheckBox13.Checked,DBLookupComboboxEh12.KeyValue);
+  ConcatFilter(Result,'dateofconclusion', CheckBox14.Checked,Trunc(StartDateEdit.DateTime));
+  ConcatFilter(Result,'ID',CheckBox12.Checked,'select creditid from cm_payments where paydate=sbop.get_date');
+
+end;
+
+procedure TFilterMainForm.FormCreate(Sender: TObject);
+begin
+  try
+    FilterDataModule := TFilterDataModule.Create(Self);
+  except
+    LoadingFailed := True;
+  end;
+     SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TFilterMainForm.FormDestroy(Sender: TObject);
+begin
+  FilterDataModule.Free
+end;
+
+procedure InitPlugin(S : String); export;
+begin
+  if not LoadingFailed then
+    FilterMainForm.Show;
+end;
+
+exports
+  InitPlugin;
+  
+procedure TFilterMainForm.Button1Click(Sender: TObject);
+begin
+
+
+//BuildFilterString:= 'ID in(select creditid from cm_payments where paydate=sbop.get_date)';
+//ShowMessage(BuildFilterString);
+  with CommonDBGrid ,DataSource.DataSet do
+  begin
+    Filter := BuildFilterString;
+    Filtered := False;
+    Filtered := True;
+    SelectedRows.Clear;
+  end;
+end;
+
+procedure TFilterMainForm.Button2Click(Sender: TObject);
+begin
+  with CommonDBGrid, DataSource.DataSet do
+  begin
+    Filter := '';
+    Filtered := False;
+    SelectedRows.Clear;    
+  end;
+end;
+
+procedure TFilterMainForm.Button3Click(Sender: TObject);
+begin
+  Close;
+end;
+
+procedure TFilterMainForm.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+  if Ord(Key) = VK_ESCAPE then
+  begin
+    Close;
+    Key := #0;
+  end;
+end;
+
+procedure TFilterMainForm.FormShow(Sender: TObject);
+begin
+StartDateEdit.DateTime:=FilterDataModule.sysdatTEK_DAT.AsDateTime;
+
+end;
+
+initialization
+  FilterMainForm := TFilterMainForm.Create(CommonApplication);
+
+end.

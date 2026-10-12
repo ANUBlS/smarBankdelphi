@@ -1,0 +1,88 @@
+unit UEmploees;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, Buttons, ExtCtrls, Grids, DBGrids, Db, OracleData, DBCtrls,
+  OracleNavigator, XFSCtrls;
+
+type
+  TfmEmploees = class(TForm)
+    XFGroupBox1: TXFGroupBox;
+    DBGrid1: TDBGrid;
+    XFPanel1: TXFPanel;
+    OracleNavigator1: TOracleNavigator;
+    BitBtn2: TBitBtn;
+    BitBtn1: TBitBtn;
+    procedure DBGrid1DrawDataCell(Sender: TObject; const Rect: TRect;
+      Field: TField; State: TGridDrawState);
+    procedure BitBtn2Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure BitBtn1Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  fmEmploees: TfmEmploees;
+
+implementation
+
+uses sboapiDataModuleimpl,SBTranslateProc, UDataMod,CommanParametrs;
+
+{$R *.DFM}
+
+procedure TfmEmploees.BitBtn1Click(Sender: TObject);
+begin
+
+//MedBDataMod.ODSEmployees.Post;
+
+end;
+
+procedure TfmEmploees.BitBtn2Click(Sender: TObject);
+begin
+close;
+end;
+
+procedure TfmEmploees.DBGrid1DrawDataCell(Sender: TObject;
+  const Rect: TRect; Field: TField; State: TGridDrawState);
+begin
+{  if (gdFocused in State) then  begin
+    if (Field.Index = 5) then  begin
+      DBLookupComboBox1.Left := Rect.Left + DBGrid1.Left;
+      DBLookupComboBox1.Top := Rect.Top + DBGrid1.top;
+      DBLookupComboBox1.Width := Rect.Right - Rect.Left;
+     { DBLookupCombo1.Height := Rect.Bottom - Rect.Top; }
+{      DBLookupComboBox1.Visible := True;
+    end;
+  end; }
+end;
+
+procedure TfmEmploees.FormCreate(Sender: TObject);
+begin
+
+SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+
+
+end;
+
+procedure TfmEmploees.FormShow(Sender: TObject);
+begin
+//showmessage(MedBDataMod.ODSMedical.FieldByName('id').AsString);
+MedBDataMod.ODSEmployees.Close;
+MedBDataMod.ODSEmployees.SetVariable('med_id',MedBDataMod.ODSMedical.FieldByName('id').AsInteger);
+MedBDataMod.ODSEmployees.Open;
+//showmessage(inttostr(contractstatus));
+//showmessage(inttostr(contactid));
+if contractstatus<>0 then
+begin
+
+end;
+
+end;
+
+end.

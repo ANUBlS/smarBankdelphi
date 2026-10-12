@@ -1,0 +1,275 @@
+object fmAddMKBlank: TfmAddMKBlank
+  Left = 0
+  Top = 0
+  BorderIcons = [biSystemMenu]
+  BorderStyle = bsSingle
+  ClientHeight = 182
+  ClientWidth = 514
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poDesktopCenter
+  OnKeyPress = FormKeyPress
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object XFPanel1: TXFPanel
+    Left = 0
+    Top = 0
+    Width = 514
+    Height = 182
+    Align = alClient
+    TabOrder = 0
+    object XFButton1: TXFButton
+      Left = 348
+      Top = 146
+      Width = 75
+      Height = 25
+      Caption = 'Q'#601'bul'
+      DoubleBuffered = True
+      ParentDoubleBuffered = False
+      TabOrder = 0
+      OnClick = XFButton1Click
+    end
+    object XFButton2: TXFButton
+      Left = 429
+      Top = 146
+      Width = 75
+      Height = 25
+      Caption = 'Ba'#287'la'
+      DoubleBuffered = True
+      ParentDoubleBuffered = False
+      TabOrder = 1
+      OnClick = XFButton2Click
+    end
+    object XFPanel2: TXFPanel
+      Left = 1
+      Top = 1
+      Width = 512
+      Height = 129
+      Align = alTop
+      BevelInner = bvLowered
+      TabOrder = 2
+      object XFLabel1: TXFLabel
+        Left = 15
+        Top = 16
+        Width = 36
+        Height = 13
+        Caption = 'Markas'#305
+      end
+      object XFLabel2: TXFLabel
+        Left = 15
+        Top = 51
+        Width = 30
+        Height = 13
+        Caption = 'Modeli'
+      end
+      object XFLabel3: TXFLabel
+        Left = 15
+        Top = 81
+        Width = 48
+        Height = 13
+        Caption = 'Burax'#305'l'#305#351' ili'
+      end
+      object XFLabel4: TXFLabel
+        Left = 272
+        Top = 78
+        Width = 83
+        Height = 13
+        Caption = #304'stifad'#601' xarakteri'
+        Visible = False
+      end
+      object XFLabel5: TXFLabel
+        Left = 272
+        Top = 16
+        Width = 16
+        Height = 13
+        Caption = 'Tipi'
+      end
+      object XFLabel6: TXFLabel
+        Left = 272
+        Top = 51
+        Width = 27
+        Height = 13
+        Caption = 'R'#601'ngi'
+      end
+      object DBLookupComboBox1: TDBLookupComboBox
+        Left = 66
+        Top = 8
+        Width = 171
+        Height = 21
+        DataField = 'INSUREDMARK'
+        DataSource = InsMKDataMod.DSMotorkasco
+        KeyField = 'NAME'
+        ListField = 'NAME'
+        ListSource = InsMKDataMod.DSMarks
+        TabOrder = 0
+      end
+      object DBLookupComboBox2: TDBLookupComboBox
+        Left = 66
+        Top = 43
+        Width = 171
+        Height = 21
+        DataField = 'INSUREDMODEL'
+        DataSource = InsMKDataMod.DSMotorkasco
+        KeyField = 'NAME'
+        ListField = 'NAME'
+        ListSource = InsMKDataMod.DSModels
+        TabOrder = 1
+      end
+      object DBLookupComboBox3: TDBLookupComboBox
+        Left = 358
+        Top = 8
+        Width = 145
+        Height = 21
+        DataField = 'INSUREDTYPE'
+        DataSource = InsMKDataMod.DSMotorkasco
+        KeyField = 'NAME'
+        ListField = 'NAME'
+        ListSource = InsMKDataMod.DSAutoTypes
+        TabOrder = 2
+      end
+      object DBLookupComboBox4: TDBLookupComboBox
+        Left = 358
+        Top = 43
+        Width = 145
+        Height = 21
+        DataField = 'INSUREDCOLOR'
+        DataSource = InsMKDataMod.DSMotorkasco
+        KeyField = 'NAME'
+        ListField = 'NAME'
+        ListSource = InsMKDataMod.DSAutoColors
+        TabOrder = 3
+      end
+      object DBEdit1: TDBEdit
+        Left = 358
+        Top = 73
+        Width = 145
+        Height = 21
+        TabOrder = 4
+        Visible = False
+      end
+      object DBLookupComboBox5: TDBLookupComboBox
+        Left = 66
+        Top = 73
+        Width = 171
+        Height = 21
+        DataField = 'INSUREDOUTPUTYEAR'
+        DataSource = InsMKDataMod.DSMotorkasco
+        KeyField = 'NAME'
+        ListField = 'NAME'
+        ListSource = InsMKDataMod.DSRins_production_year
+        TabOrder = 5
+      end
+    end
+  end
+  object DSMarka: TOracleDataSet
+    SQL.Strings = (
+      'SELECT a.rowid,a.id, a.name, a.state_id, a.calcoptions'
+      '  FROM ins_dict_marks a'
+      'where name=:p_name')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000E0000003A0050005F004E0041004D004500050000000000
+      000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      05000000040000000400000049004400010000000000080000004E0041004D00
+      450001000000000010000000530054004100540045005F004900440001000000
+      000016000000430041004C0043004F005000540049004F004E00530001000000
+      0000}
+    Session = sboapiDataModule.SBSession
+    Left = 24
+    Top = 128
+    object DSMarkaID: TFloatField
+      FieldName = 'ID'
+    end
+    object DSMarkaNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 1024
+    end
+    object DSMarkaSTATE_ID: TFloatField
+      FieldName = 'STATE_ID'
+    end
+    object DSMarkaCALCOPTIONS: TIntegerField
+      FieldName = 'CALCOPTIONS'
+    end
+  end
+  object DSModel: TOracleDataSet
+    SQL.Strings = (
+      'select * from ins_dict_models'
+      'where name=:p_name')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000E0000003A0050005F004E0041004D004500050000000000
+      000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      05000000040000000400000049004400010000000000080000004E0041004D00
+      45000100000000000E0000004D00410052004B005F0049004400010000000000
+      16000000430041004C0043004F005000540049004F004E005300010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 80
+    Top = 128
+    object DSModelID: TFloatField
+      FieldName = 'ID'
+    end
+    object DSModelNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 1024
+    end
+    object DSModelMARK_ID: TFloatField
+      FieldName = 'MARK_ID'
+    end
+    object DSModelCALCOPTIONS: TIntegerField
+      FieldName = 'CALCOPTIONS'
+    end
+  end
+  object DSTipi: TOracleDataSet
+    SQL.Strings = (
+      'select * from INS_DICT_AUTO_TYPES '
+      'where name=:p_name')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000E0000003A0050005F004E0041004D004500050000000000
+      000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000400000049004400010000000000080000004E0041004D00
+      4500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 120
+    Top = 128
+    object DSTipiID: TFloatField
+      FieldName = 'ID'
+    end
+    object DSTipiNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 128
+    end
+  end
+  object DSReng: TOracleDataSet
+    SQL.Strings = (
+      'select * from ins_dict_auto_colors '
+      'where name=:p_name')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000E0000003A0050005F004E0041004D004500050000000000
+      000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000400000049004400010000000000080000004E0041004D00
+      4500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 176
+    Top = 128
+    object DSRengID: TFloatField
+      FieldName = 'ID'
+    end
+    object DSRengNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 4000
+    end
+  end
+end

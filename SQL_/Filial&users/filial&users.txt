@@ -1,0 +1,7 @@
+select u.quantity,u.op_id, o.OBJ, u.filial,f.NAME, o.FILIALID from
+(
+select count(op_id) quantity,a.op_id,a.filial  
+from account a group by a.op_id,a.filial
+) u , sba_objinf o, filial f
+where u.op_id=o.SYSUSERID 
+and u.filial=f.ID

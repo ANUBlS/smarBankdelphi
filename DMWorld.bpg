@@ -1,0 +1,121 @@
+#------------------------------------------------------------------------------
+VERSION = BWS.01
+#------------------------------------------------------------------------------
+!ifndef ROOT
+ROOT = $(MAKEDIR)\..
+!endif
+#------------------------------------------------------------------------------
+MAKE = $(ROOT)\bin\make.exe -$(MAKEFLAGS) -f$**
+DCC = $(ROOT)\bin\dcc32.exe $**
+BRCC = $(ROOT)\bin\brcc32.exe $**
+#------------------------------------------------------------------------------
+PROJECTS = SBAxCommon50.ocx sboapi50.bpl SBCommon50.bpl sbovcl50.bpl \
+  SBExcelExporter.bpl sbplg50.bpl CMVCL50.bpl DclEhlib50.bpl Ehlib50.bpl \
+  SBDM_Common.bpl SBDM_Contract.bpl SBDM_ApplyMoney.bpl SBDM_ExtractMoney.bpl \
+  SBDM_Capitalize.bpl SBDM_UntimelyEtMoney.bpl SBDM_PercentConverting.bpl \
+  SBDM_Settings.bpl SBDM_ContractReport.bpl SBDM_WRSetup.bpl SBDM_WReport.bpl \
+  SBDM_PercentSettings.bpl SBDM_PeriodReport.bpl SBDM_Prolongation.bpl \
+  SBDM_Filter.bpl SBDM_Report.bpl SBDM_TransactionViewer.bpl \
+  SBDM_ReportofBalance.bpl DepositsManager.ocx DepositsArchive.ocx \
+  SBTranslate.bpl SearchCB.bpl SmartBank.exe
+#------------------------------------------------------------------------------
+default: $(PROJECTS)
+#------------------------------------------------------------------------------
+
+SBAxCommon50.ocx: Packages\SBCommon50\ActiveX\SBAxCommon50.dpr
+  $(DCC)
+
+sboapi50.bpl: Packages\sboapi50\sboapi50.dpk
+  $(DCC)
+
+SBCommon50.bpl: Packages\SBCommon50\SBCommon50.dpk
+  $(DCC)
+
+sbovcl50.bpl: Packages\sbovcl50\sbovcl50.dpk
+  $(DCC)
+
+SBExcelExporter.bpl: Packages\SBExcelExporter\SBExcelExporter.dpk
+  $(DCC)
+
+SmartBank.exe: Programs\SmartBank\SmartBank.dpr
+  $(DCC)
+
+sbplg50.bpl: Packages\sbplg50\sbplg50.dpk
+  $(DCC)
+
+CMVCL50.bpl: Packages\DepositsManager\VCL\CMVCL50.dpk
+  $(DCC)
+
+DclEhlib50.bpl: Packages\DepositsManager\EhLib\DclEhlib50.dpk
+  $(DCC)
+
+Ehlib50.bpl: Packages\DepositsManager\EhLib\Ehlib50.dpk
+  $(DCC)
+
+SBDM_Common.bpl: Packages\DepositsManager\SBDM_COMMON\SBDM_Common.dpk
+  $(DCC)
+
+SBDM_Contract.bpl: Packages\DepositsManager\SBDM_Contract\SBDM_Contract.dpk
+  $(DCC)
+
+DepositsManager.ocx: Packages\DepositsManager\DepositsManager\DepositsManager.dpr
+  $(DCC)
+
+SBDM_ApplyMoney.bpl: Packages\DepositsManager\SBDM_ApplyMoney\SBDM_ApplyMoney.dpk
+  $(DCC)
+
+SBDM_ExtractMoney.bpl: Packages\DepositsManager\SBDM_ExtractMoney\SBDM_ExtractMoney.dpk
+  $(DCC)
+
+SBDM_Capitalize.bpl: Packages\DepositsManager\SBDM_Capitalize\SBDM_Capitalize.dpk
+  $(DCC)
+
+SBDM_UntimelyEtMoney.bpl: Packages\DepositsManager\SBDM_UntimelyEaxtractMoney\SBDM_UntimelyEtMoney.dpk
+  $(DCC)
+
+SBDM_PercentConverting.bpl: Packages\DepositsManager\SBDM_PercentConverting\SBDM_PercentConverting.dpk
+  $(DCC)
+
+SBDM_Settings.bpl: Packages\DepositsManager\SBDM_Settings\SBDM_Settings.dpk
+  $(DCC)
+
+SBDM_ContractReport.bpl: Packages\DepositsManager\SBDM_ContractReport\SBDM_ContractReport.dpk
+  $(DCC)
+
+SBDM_WRSetup.bpl: Packages\DepositsManager\SBDM_WRSetup\SBDM_WRSetup.dpk
+  $(DCC)
+
+SBDM_WReport.bpl: Packages\DepositsManager\SBDM_WReport\SBDM_WReport.dpk
+  $(DCC)
+
+SBDM_PercentSettings.bpl: Packages\DepositsManager\SBDM_PercentSettings\SBDM_PercentSettings.dpk
+  $(DCC)
+
+SBDM_PeriodReport.bpl: Packages\DepositsManager\SBDM_PeriodReport\SBDM_PeriodReport.dpk
+  $(DCC)
+
+SBDM_Prolongation.bpl: Packages\DepositsManager\SBDM_Prolongation\SBDM_Prolongation.dpk
+  $(DCC)
+
+SBDM_Filter.bpl: Packages\DepositsManager\SBDM_Filter\SBDM_Filter.dpk
+  $(DCC)
+
+SBDM_Report.bpl: Packages\DepositsManager\SBDM_Report\SBDM_Report.dpk
+  $(DCC)
+
+SBDM_TransactionViewer.bpl: Packages\DepositsManager\SBDM_TransactionViewer\SBDM_TransactionViewer.dpk
+  $(DCC)
+
+SBTranslate.bpl: Packages\SBTranslate\SBTranslate.dpk
+  $(DCC)
+
+SearchCB.bpl: Packages\SBSearchComboBox\SearchCB.dpk
+  $(DCC)
+
+DepositsArchive.ocx: Packages\DepositsManager\SBDM_DepositsArchive\DepositsArchive.dpr
+  $(DCC)
+
+SBDM_ReportofBalance.bpl: Packages\DepositsManager\SBDM_ReportofBalance\SBDM_ReportofBalance.dpk
+  $(DCC)
+
+

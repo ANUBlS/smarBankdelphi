@@ -1,0 +1,274 @@
+object frmCond: TfrmCond
+  Left = 132
+  Top = 107
+  BorderStyle = bsDialog
+  Caption = 'Insurance conditions'
+  ClientHeight = 434
+  ClientWidth = 690
+  Color = clBtnFace
+  Font.Charset = RUSSIAN_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poDesktopCenter
+  OnCreate = FormCreate
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Label1: TLabel
+    Left = 6
+    Top = 254
+    Width = 168
+    Height = 16
+    Caption = #1052#1094#1075#1072#1074#1080#1083#1103#1085#1080#1085' '#1096#1103#1088#1090#1083#1103#1088#1080' :'
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -13
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
+    ParentFont = False
+  end
+  object GroupBox1: TGroupBox
+    Left = 0
+    Top = 0
+    Width = 690
+    Height = 241
+    Align = alTop
+    Caption = #1062#1084#1091#1084#1080' '#1096#1103#1088#1090#1083#1103#1088
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -13
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
+    ParentFont = False
+    TabOrder = 0
+    object DBGrid1: TDBGrid
+      Left = 2
+      Top = 54
+      Width = 686
+      Height = 185
+      Align = alBottom
+      DrawingStyle = gdsGradient
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit, dgMultiSelect, dgTitleClick, dgTitleHotTrack]
+      ParentFont = False
+      TabOrder = 0
+      TitleFont.Charset = RUSSIAN_CHARSET
+      TitleFont.Color = clWindowText
+      TitleFont.Height = -11
+      TitleFont.Name = 'Azl Sans Serif'
+      TitleFont.Style = [fsBold]
+      Columns = <
+        item
+          Expanded = False
+          FieldName = 'NAME'
+          Title.Caption = #1064#1103#1088#1090#1083#1103#1088
+          Title.Color = clNavy
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clWindowText
+          Title.Font.Height = -11
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = []
+          Width = 644
+          Visible = True
+        end>
+    end
+    object DBNavigator1: TDBNavigator
+      Left = 4
+      Top = 16
+      Width = 280
+      Height = 33
+      DataSource = InsMKDataMod.DSConditions
+      Flat = True
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 1
+    end
+  end
+  object Panel1: TPanel
+    Left = 0
+    Top = 270
+    Width = 690
+    Height = 164
+    Align = alBottom
+    BevelInner = bvRaised
+    BevelOuter = bvLowered
+    TabOrder = 1
+    object memConditions: TMemo
+      Left = 2
+      Top = 2
+      Width = 686
+      Height = 160
+      Align = alClient
+      Color = clInfoBk
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      Lines.Strings = (
+        
+          'S'#305#287'orta etdir'#601'n s'#305#287'orta hadis'#601'sinin ba'#351' verdiyini bildiyi v'#601' bil' +
+          'm'#601'li oldu'#287'u g'#252'n d'#601'rhal s'#305#287'orta'#231#305'ya m'#601'lumat  '
+        'verm'#601'lidir.'
+        
+          'S'#305#287'orta t'#601'minat'#305' s'#305#287'orta haqq'#305'n'#305'n '#246'd'#601'nildiyi g'#252'nd'#601'n etibar'#601'n q'#252'v' +
+          'v'#601'y'#601' minir.'
+        
+          'S'#305#287'orta hadis'#601'si ba'#351' verdiyi zaman n'#601'qliyyat vasit'#601'si '#351#601'had'#601'tnam' +
+          #601'y'#601' '#601'sas'#601'n h'#252'ququ olmayan '#351#601'xs t'#601'r'#601'rfind'#601'n '
+        'edildikd'#601',n'#601'qliyyat vasit'#601'sin'#601
+        'vurulan z'#601'r'#601'r'#601' g'#246'r'#601' s'#305#287'orta'#231#305' he'#231' bir m'#601'suliyy'#601't da'#351#305'm'#305'r.'
+        
+          'S'#305#287'orta hadis'#601'si zaman'#305' s'#252'r'#252'c'#252'n'#252'n etibarnam'#601'si v'#601' s'#252'r'#252'c'#252'l'#252'k v'#601'si' +
+          'q'#601'si olmad'#305'qda n'#601'qliyyat vas'#305't'#601'sin'#601' vurulan z'#601'r'#601'r'#601' '
+        'g'#246'r'#601'  '
+        's'#305#287'orta'#231#305' he'#231' bir '
+        'm'#601'suliyy'#601't da'#351#305'm'#305'r .'
+        
+          'S'#305#287'orta hadis'#601'si zaman'#305' n'#601'qliyyat vasit'#601'si S'#305#287'orta'#231#305'n'#305'n t'#601'qdim e' +
+          'tdiyi avtoservisd'#601' t'#601'mir olunacaq.'#399'g'#601'r s'#305#287'orta '
+        'etdir'#601'n  '
+        'S'#305#287'orta'#231#305'n'#305'n etdir'#601'n '
+        
+          'avtoservisl'#601'rin he'#231' biri il'#601' raz'#305' olmazsa,n'#601'qliyyat vasit'#601'si,'#601'g'#601 +
+          'r m'#601'bl'#601#287'i S'#305#287'orta'#231#305'n'#305'n t'#601'yin etdiyi avtoservisd'#601' '
+        'm'#252#601'yy'#601'n '
+        'olunmaqla S'#305#287'orta etdir'#601'nin '
+        #246'z'#252'n'#252'n se'#231'diyi avtoservisd'#601' t'#601'mir oluna bil'#601'r.')
+      ParentFont = False
+      TabOrder = 0
+    end
+  end
+  object btAdd: TBitBtn
+    Left = 316
+    Top = 243
+    Width = 68
+    Height = 25
+    Caption = #1071#1083#1072#1074#1103
+    DoubleBuffered = True
+    Glyph.Data = {
+      76010000424D7601000000000000760000002800000020000000100000000100
+      04000000000000010000120B0000120B00001000000000000000000000000000
+      800000800000008080008000000080008000808000007F7F7F00BFBFBF000000
+      FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00333333333333
+      33333FF3333333333333447333333333333377FFF33333333333744473333333
+      333337773FF3333333333444447333333333373F773FF3333333334444447333
+      33333373F3773FF3333333744444447333333337F333773FF333333444444444
+      733333373F3333773FF333334444444444733FFF7FFFFFFF77FF999999999999
+      999977777777777733773333CCCCCCCCCC3333337333333F7733333CCCCCCCCC
+      33333337F3333F773333333CCCCCCC3333333337333F7733333333CCCCCC3333
+      333333733F77333333333CCCCC333333333337FF7733333333333CCC33333333
+      33333777333333333333CC333333333333337733333333333333}
+    Layout = blGlyphRight
+    NumGlyphs = 2
+    ParentDoubleBuffered = False
+    TabOrder = 2
+    OnClick = btAddClick
+  end
+  object btOk: TBitBtn
+    Left = 542
+    Top = 243
+    Width = 68
+    Height = 25
+    DoubleBuffered = True
+    Kind = bkOK
+    NumGlyphs = 2
+    ParentDoubleBuffered = False
+    TabOrder = 3
+    OnClick = btOkClick
+  end
+  object BitBtn1: TBitBtn
+    Left = 612
+    Top = 243
+    Width = 68
+    Height = 25
+    DoubleBuffered = True
+    Kind = bkCancel
+    NumGlyphs = 2
+    ParentDoubleBuffered = False
+    TabOrder = 4
+    OnClick = BitBtn1Click
+  end
+  object BitBtn2: TBitBtn
+    Left = 385
+    Top = 243
+    Width = 75
+    Height = 25
+    Caption = #1057#1080#1083
+    DoubleBuffered = True
+    Glyph.Data = {
+      36010000424D3601000000000000760000002800000011000000100000000100
+      040000000000C0000000CE0E0000D80E00001000000000000000000000000000
+      80000080000000808000800000008000800080800000C0C0C000808080000000
+      FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00700000000000
+      0000000000007077777777777777000000007088888877788888000000007077
+      7777777777770000000070888877700778880000000070777777011077770000
+      0000708887709991077800000000707777709999107700000000708888770999
+      030800000000707777777090B0300000000070777777770B0B03000000007000
+      00777770B0B3300000007077707777770BBB3000000077077077777770BBB000
+      0000777070777777770BB00000007777000000000000B0000000}
+    ParentDoubleBuffered = False
+    TabOrder = 5
+    OnClick = BitBtn2Click
+  end
+  object BitBtn3: TBitBtn
+    Left = 464
+    Top = 243
+    Width = 75
+    Height = 25
+    Caption = #1041#1103#1088#1087#1072
+    DoubleBuffered = True
+    Glyph.Data = {
+      36050000424D3605000000000000360400002800000010000000100000000100
+      0800000000000001000000000000000000000001000000000000000000000000
+      80000080000000808000800000008000800080800000C0C0C000C0DCC000F0CA
+      A600000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000F0FBFF00A4A0A000808080000000
+      FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00FFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF804F8FFFFFFFFFFFFFFFFFFFFFFF804
+      04F8FFFFFFFFFFFFFFFFFFFFFFFF0404F8FFFFFFFFFFFFFFFFFFFFFFFFF804F8
+      FFFFFFFFFFFFFFFFFFFFFFFFFF0404FFFFFFFFFFFFFFFFFFFFFFFFFFFF0404FF
+      FFFF0404040404FFFFFFFFFFFF0404F8FFFFFFF8040404FFFFFFFFFFFFF80404
+      F8FFF804040404FFFFFFFFFFFFFF04040404040404F804FFFFFFFFFFFFFFFFF8
+      040404F8FFFF04FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF}
+    ParentDoubleBuffered = False
+    TabOrder = 6
+    OnClick = BitBtn3Click
+  end
+end

@@ -1,0 +1,134 @@
+﻿unit AdminParamaterKredit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Grids, XDBGrids, StdCtrls, XFSCtrls, ExtCtrls;
+
+type
+  TFormSettings = class(TForm)
+    XFPanel1: TXFPanel;
+    XFPanel2: TXFPanel;
+    XFGroupBox1: TXFGroupBox;
+    XDBGrid3: TXDBGrid;
+    XFPanel3: TXFPanel;
+    XFPanel4: TXFPanel;
+    XFGroupBox2: TXFGroupBox;
+    XDBGrid1: TXDBGrid;
+    XFPanel5: TXFPanel;
+    XDBGrid2: TXDBGrid;
+    procedure XDBGrid1DblClick(Sender: TObject);
+    procedure XDBGrid2DblClick(Sender: TObject);
+    procedure XDBGrid1KeyPress(Sender: TObject; var Key: Char);
+    procedure XDBGrid2KeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure XDBGrid2KeyPress(Sender: TObject; var Key: Char);
+    procedure XDBGrid3KeyPress(Sender: TObject; var Key: Char);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormCreate(Sender: TObject);
+
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormSettings: TFormSettings;
+
+implementation
+
+uses PrCmDMImpl, UserQovluqImpl;
+
+{$R *.dfm}
+
+procedure TFormSettings.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  PrCmDM.CourtAdmin.Active:=False;
+  PrCmDM.AdminGroups.Active:=False;
+end;
+
+
+
+procedure TFormSettings.FormCreate(Sender: TObject);
+begin
+FrmUserQovluq := TFrmUserQovluq.Create(Self);
+end;
+
+procedure TFormSettings.XDBGrid1DblClick(Sender: TObject);
+
+begin
+//PrCmDM.CheckBonsDSet.Close;
+//PrCmDM.CheckBonsDSet.SetVariable('userid',PrCmDM.CourtAdmin.FieldByName('id').asinteger);
+//PrCmDM.CheckBonsDSet.open;
+//if PrCmDM.CheckBonsDSet.RecordCount=0 then
+ //begin
+     FrmUserQovluq.CheckBonus.Caption:=PrCmDM.CourtAdmin.FieldByName('NAME').AsString+' bu istfadəçiyə '+
+     PrCmDM.AdminGroups.FieldByName('NAME').AsString +' bu bölmə üzrə bonus veriləcəkmi?' ;
+     FrmUserQovluq.showmodal;
+ {end
+ else
+  begin
+ PrCmDM.PrPackage.CallProcedure('admin_add',['userid_', PrCmDM.CourtAdmin.FieldByName('ID').AsInteger,
+                                  'qrupid_',  PrCmDM.AdminGroups.FieldByName('ID').AsInteger,
+                                  'username_',PrCmDM.CourtAdmin.FieldByName('NAME').AsString,
+                                  'qrupname_',PrCmDM.AdminGroups.FieldByName('NAME').AsString,
+                                  'pstatus_',0
+                                  ]);
+  PrCmDM.AdminIn.Refresh;
+  FrmUserQovluq.Close;
+  end;                }
+
+
+end;
+
+procedure TFormSettings.XDBGrid1KeyPress(Sender: TObject; var Key: Char);
+begin
+  if key=#13 then
+      XDBGrid1DblClick(Sender);
+  if key=#27 then
+  begin
+    Close;
+    key:=#0;
+  end;
+end;
+
+procedure TFormSettings.XDBGrid2DblClick(Sender: TObject);
+begin
+   PrCmDM.PrPackage.CallProcedure('admin_del',['userid_',  PrCmDM.AdminIn.FieldByName('USERID').AsInteger,
+                                               'qrupid_',  PrCmDM.AdminIn.FieldByName('QRUPID').AsInteger,
+                                               'username_',PrCmDM.AdminIn.FieldByName('USERNAME').AsString,
+                                               'qrupname_',PrCmDM.AdminIn.FieldByName('QRUPNAME').AsString]);
+   PrCmDM.AdminIn.Refresh;
+end;
+
+procedure TFormSettings.XDBGrid2KeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if Key=46 then
+   begin
+      XDBGrid2DblClick(Sender);
+      key:=0;
+   end;
+end;
+
+procedure TFormSettings.XDBGrid2KeyPress(Sender: TObject; var Key: Char);
+begin
+   if key=#27 then
+   begin
+      Close;
+      key:=#0;
+   end;
+end;
+
+procedure TFormSettings.XDBGrid3KeyPress(Sender: TObject; var Key: Char);
+begin
+  if key=#27 then
+  begin
+    Close;
+    key:=#0;
+  end;
+end;
+
+end.

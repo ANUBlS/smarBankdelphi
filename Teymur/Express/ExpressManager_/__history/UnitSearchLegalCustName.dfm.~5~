@@ -1,0 +1,125 @@
+object FormSearchLegalCustName: TFormSearchLegalCustName
+  Left = 0
+  Top = 0
+  Caption = 'H'#252'quqi '#351#601'xsin axtar'#305#351#305
+  ClientHeight = 467
+  ClientWidth = 525
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poScreenCenter
+  OnClose = FormClose
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object DBGrid1: TDBGrid
+    Left = 0
+    Top = 0
+    Width = 525
+    Height = 428
+    Align = alClient
+    Color = clWhite
+    DataSource = LegalDataSource
+    DrawingStyle = gdsGradient
+    GradientEndColor = clMedGray
+    Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit, dgTitleClick, dgTitleHotTrack]
+    TabOrder = 0
+    TitleFont.Charset = DEFAULT_CHARSET
+    TitleFont.Color = clWindowText
+    TitleFont.Height = -11
+    TitleFont.Name = 'Tahoma'
+    TitleFont.Style = []
+    Columns = <
+      item
+        Expanded = False
+        FieldName = 'ID'
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'GENERALNAME'
+        Title.Alignment = taCenter
+        Title.Caption = 'Ad'#305
+        Width = 267
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'CUST_TYPE'
+        Title.Alignment = taCenter
+        Title.Caption = 'Tipi'
+        Width = 90
+        Visible = True
+      end>
+  end
+  object Panel1: TPanel
+    Left = 0
+    Top = 428
+    Width = 525
+    Height = 39
+    Align = alBottom
+    TabOrder = 1
+    object EditName: TEdit
+      Left = 106
+      Top = 6
+      Width = 239
+      Height = 21
+      TabOrder = 0
+    end
+    object Edit4: TEdit
+      Left = 346
+      Top = 6
+      Width = 94
+      Height = 21
+      TabOrder = 1
+    end
+    object Button1: TButton
+      Left = 446
+      Top = 6
+      Width = 75
+      Height = 25
+      Caption = 'Q'#601'bul'
+      TabOrder = 2
+    end
+    object EditLastName: TEdit
+      Left = 13
+      Top = 6
+      Width = 93
+      Height = 21
+      TabOrder = 3
+    end
+  end
+  object LegalDataSource: TDataSource
+    DataSet = LegalDataSet
+    Left = 255
+    Top = 83
+  end
+  object LegalDataSet: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      
+        '       c.id, b.doc_type, b.passpin, b.passer, b.paspnum, b.birth' +
+        'place,'
+      '       b.paspplace, b.paspdate, b.passexpire, b.citizenship,'
+      '       b.citizenship2, b.citizenship3,'
+      '       c.inn, b.sex, b.fam_status, b.adrs_state, b.birth_state,'
+      
+        '       b.birthday, b.doc_country, b.city, b.reg_zip, b.address, ' +
+        'b.phone_m,'
+      '       b.phone_h, b.e_mail,c.nerezident,c.cust_type,c.name'
+      'from'
+      '   CUSTINFO b,customers c'
+      'where'
+      '   b.idcust(+)=c.id and'
+      '   c.cust_type=0'
+      '')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 80
+    Top = 80
+  end
+end

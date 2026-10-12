@@ -1,0 +1,136 @@
+unit UnitReport;
+
+interface
+
+uses
+  {Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs;}
+   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ExtCtrls, DBCtrls, Db, OracleData, StdCtrls, Grids, DBGrids, Oracle,
+  Buttons, ComCtrls, XDBGrids, CMExcelExport;
+
+type
+  TFormReport = class(TForm)
+    PageControl1: TPageControl;
+    TabSheet1: TTabSheet;
+    TabSheet2: TTabSheet;
+    Panel1: TPanel;
+    Panel2: TPanel;
+    Panel3: TPanel;
+    Panel4: TPanel;
+    Button1: TButton;
+    Button2: TButton;
+    Dsrc_girov: TDataSource;
+    Dsrc_zamin: TDataSource;
+    ODS_girov: TOracleDataSet;
+    ODS_zamin: TOracleDataSet;
+    ODS_zaminID: TFloatField;
+    ODS_zaminBOOROWERID: TFloatField;
+    ODS_zaminNUMBEROFCREDIT: TWideStringField;
+    ODS_zaminFILIAL: TWideStringField;
+    ODS_zaminCREDITLINEAMOUNT: TFloatField;
+    ODS_zaminSTATUS: TWideStringField;
+    ODS_zaminGUARANTORNAME: TWideStringField;
+    ODS_zaminDATEOFBIRTH: TDateTimeField;
+    ODS_zaminPINCODE: TWideStringField;
+    ODS_zaminCUNTRY: TWideStringField;
+    ODS_zaminCITY: TWideStringField;
+    ODS_zaminGUARANTORID: TWideStringField;
+    ODS_zaminZMPASPYER1: TWideStringField;
+    ODS_zaminZMPASPDAT1: TDateTimeField;
+    ODS_zaminZAMINADRES1: TWideStringField;
+    ODS_zaminFACTADRES: TWideStringField;
+    ODS_zaminZAMINWORK1: TWideStringField;
+    ODS_zaminGUARANTORSALARY: TWideStringField;
+    ODS_zaminZMTELMOB1: TWideStringField;
+    MainGrid: TXDBGrid;
+    ButtonExportza: TBitBtn;
+    CloseBtn: TBitBtn;
+    MisExcelExportzamin: TCMExcelExport;
+    XDBGrid1: TXDBGrid;
+    ODS_girovID: TFloatField;
+    ODS_girovBOOROWERID: TFloatField;
+    ODS_girovNUMBEROFCREDIT: TWideStringField;
+    ODS_girovFILIAL: TWideStringField;
+    ODS_girovCREDITLINEAMOUNT: TFloatField;
+    ODS_girovSTATUS: TWideStringField;
+    ODS_girovPLEDGEID: TWideStringField;
+    ODS_girovPLEDGSORTS: TWideStringField;
+    ODS_girovPLEDGENAME: TWideStringField;
+    ODS_girovHOLDERNAME: TWideStringField;
+    ODS_girovREGISTRYAGENCY: TWideStringField;
+    ODS_girovREGISTRYNO: TWideStringField;
+    ODS_girovREGISTRYDATE: TDateTimeField;
+    ODS_girovPLEDGEPRICE: TFloatField;
+    ODS_girovGQPASPNUM: TWideStringField;
+    ODS_girovGQPASPDATE: TDateTimeField;
+    ODS_girovGQADRESS: TWideStringField;
+    ODS_girovGQTELMOB: TWideStringField;
+    ODS_girovREYSTER: TWideStringField;
+    ODS_girovCOMPANYDAT: TDateTimeField;
+    ODS_girovLIKVID_ACC_NO: TWideStringField;
+    ODS_girovLIKVID_REST: TFloatField;
+    BitBtn1: TBitBtn;
+    BitBtn2: TBitBtn;
+    MisExcelExportGirov: TCMExcelExport;
+    ODS_girovEKLIKVID: TFloatField;
+    procedure CloseBtnClick(Sender: TObject);
+    procedure BitBtn1Click(Sender: TObject);
+    procedure ButtonExportzaClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormReport: TFormReport;
+
+procedure InitPlugin(s:string);export;
+
+
+implementation
+ uses   sboapiDataModuleImpl,CommonDecls, sbSystem,SBTranslateProc ;
+{$R *.dfm}
+    procedure InitPlugin(s:string);export;
+begin
+   FormReport.ShowModal;
+end;
+exports
+     InitPlugin;
+
+
+
+
+
+procedure TFormReport.BitBtn1Click(Sender: TObject);
+begin
+with MisExcelExportGirov do
+  begin
+
+     Connect;
+            ExportDataset(ODS_girov,'GÝROV',true,false);
+     Disconnect;
+end;
+end;
+
+procedure TFormReport.ButtonExportzaClick(Sender: TObject);
+begin
+with MisExcelExportzamin do
+  begin
+     Connect;
+            ExportDataset(ODS_zamin,'ZAMIN',true,false);
+     Disconnect;
+end;
+end;
+
+procedure TFormReport.CloseBtnClick(Sender: TObject);
+begin
+FormReport.Close
+end;
+
+initialization
+ FormReport := TFormReport.Create(Application);
+
+
+end.

@@ -1,0 +1,177 @@
+﻿unit AddUnit2;
+                          //dsexp_sec
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ExtCtrls, StdCtrls, ComCtrls, ImgList, DBCtrls, DB, OracleData, Mask,
+  CurrencyEdit, CMCurrencyEdit;
+
+type
+  TForm2 = class(TForm)
+    Panel1: TPanel;
+    DateTimePicker1: TDateTimePicker;
+    DateTimePicker2: TDateTimePicker;
+    DateTimePicker3: TDateTimePicker;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    Label6: TLabel;
+    Label7: TLabel;
+    Label8: TLabel;
+    Button1: TButton;
+    Button2: TButton;
+    DBLookupComboBox1: TDBLookupComboBox;
+    DBEdit1: TDBEdit;
+    DBEdit2: TDBEdit;
+    DBEdit3: TDBEdit;
+    DBEdit4: TDBEdit;
+
+    procedure Button2Click(Sender: TObject);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure Button1Click(Sender: TObject);
+    procedure DBEdit4KeyPress(Sender: TObject; var Key: Char);
+    procedure FormShow(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+  pid : Integer;
+    { Public declarations }
+  end;
+
+var
+
+  Form2: TForm2;
+  CID:integer;
+
+implementation
+
+{$R *.dfm}
+uses DMSec, Unit1,Commonimpl;
+
+
+
+
+
+procedure TForm2.Button2Click(Sender: TObject);
+begin
+close;
+
+end;
+
+
+procedure TForm2.DBEdit4KeyPress(Sender: TObject; var Key: Char);
+begin
+if not (Key in ['0'..'9',#8,#46] )then begin Key:=#0; end;
+end;
+
+procedure TForm2.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+if ord(key)=vk_escape then  close;
+end;
+
+procedure TForm2.FormCreate(Sender: TObject);
+begin
+Dmexpired_sec:=TDmexpired_sec.create(self);
+end;
+
+
+procedure TForm2.FormShow(Sender: TObject);
+begin
+if operation='insert' then
+begin
+with Dmexpired_sec do
+begin
+dsmain.Close;
+dsmain.SetVariable('pid',-1);
+dsmain.Open;
+DateTimePicker1.DateTime:=Dmexpired_sec.Sysdat.FieldByName('tek_dat').AsDateTime;
+DateTimePicker2.DateTime:=Dmexpired_sec.Sysdat.FieldByName('tek_dat').AsDateTime;
+DateTimePicker3.DateTime:=Dmexpired_sec.Sysdat.FieldByName('tek_dat').AsDateTime;
+DBEdit1.Text:='';
+DBEdit2.Text:='';
+DBEdit3.Text:='';
+DBEdit4.Text:='';
+DBLookupComboBox1.KeyValue:=null;
+end;
+end;
+
+ if operation= 'edit' then
+begin
+with Dmexpired_sec do
+begin
+dsmain.Close;
+dsmain.SetVariable('pid',contactid);
+dsmain.Open;
+DateTimePicker1.DateTime:= dsmain.FieldByName('OBTAIN_DATE').AsDateTime;
+DateTimePicker2.DateTime:= dsmain.FieldByName('RETURN_DATE').AsDateTime;
+DateTimePicker3.DateTime:= dsmain.FieldByName('ERASE_DATE').AsDateTime;
+end;
+
+   end;
+
+end;
+
+ procedure TForm2.Button1Click(Sender: TObject);
+begin
+  if DBEdit1.Text='' then
+ begin
+   showmessage('Qiymətli Kağızın adı sahəsi boşdur!');
+   exit;
+ end;
+   if DBEdit2.Text='' then
+ begin
+   showmessage('Balans hesabi sahəsi boşdur!');
+   exit;
+ end;
+ if DBEdit3.Text='' then
+ begin
+   showmessage('İSİN sahəsi boşdur!');
+   exit;
+ end;
+    if DBLookupComboBox1.Text='' then
+ begin
+   showmessage('Valyuta sahəsi boşdur!');
+   exit;
+ end;
+ if DBEdit4.Text='' then
+ begin
+   showmessage('Nominal məbləğ sahəsi boşdur!');
+   exit;
+ end;
+
+
+   with   Dmexpired_sec,dsexp_sec_ins do
+begin
+{if operation= 'insert' then
+begin  }
+open;
+edit;
+FieldByName('obtain_date').AsDateTime:=DateTimePicker1.DateTime;
+FieldByName('return_date').AsDateTime:=DateTimePicker2.DateTime;
+FieldByName('erase_date').AsDateTime:=DateTimePicker3.DateTime;
+
+
+ { if operation= 'edit' then
+begin
+open;
+edit;
+FieldByName('obtain_date').AsDateTime:=DateTimePicker1.DateTime;
+FieldByName('return_date').AsDateTime:=DateTimePicker2.DateTime;
+FieldByName('erase_date').AsDateTime:=DateTimePicker3.DateTime;
+end;  }
+post;
+RefreshRecord;
+CID := dsmain.FieldByName('id').asInteger;
+commangrid.DataSource.DataSet.Refresh;
+
+end;
+close;
+end;
+
+
+
+end.

@@ -1,0 +1,196 @@
+﻿unit FormTransaction1Lmpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, Buttons, XFSCtrls, CurrencyEdit, ExtCtrls, DBCtrls,
+  DBGridEh, Mask, DBCtrlsEh, DBLookupEh;
+
+type
+  TFormTransaction1 = class(TForm)
+    Panel1: TPanel;
+    Panel2: TPanel;
+    CurrencyEdit1: TCurrencyEdit;
+    CurrencyEdit2: TCurrencyEdit;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    XFBitBtn1: TXFBitBtn;
+    XFBitBtn2: TXFBitBtn;
+    XFBitBtn3: TXFBitBtn;
+    DBLookupCEh_contrsName1: TDBLookupComboBox;
+    Label4: TLabel;
+    DBLookupComboBo_filial: TDBLookupComboBox;
+    Edit_description: TEdit;
+    DBLookupComboboxEh_description: TDBLookupComboboxEh;
+    EditDescription: TEdit;
+    procedure XFBitBtn1Click(Sender: TObject);
+    procedure CurrencyEdit1Change(Sender: TObject);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormShow(Sender: TObject);
+    procedure CurrencyEdit1Click(Sender: TObject);
+    procedure CurrencyEdit2Click(Sender: TObject);
+    procedure CurrencyEdit1KeyPress(Sender: TObject; var Key: Char);
+    procedure CurrencyEdit2KeyPress(Sender: TObject; var Key: Char);
+    procedure XFBitBtn2Click(Sender: TObject);
+    procedure FormCanResize(Sender: TObject; var NewWidth, NewHeight: Integer;
+      var Resize: Boolean);
+    procedure FormCreate(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure Edit_descriptionExit(Sender: TObject);
+    procedure Edit_descriptionKeyPress(Sender: TObject; var Key: Char);
+    procedure DBLookupComboboxEh_descriptionChange(Sender: TObject);
+    // function Get_Kurs(emel_tip_id, d_acc_id,c_acc_id: integer) :Real;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormTransaction1: TFormTransaction1;
+
+implementation
+
+uses UnitDataModPCustService,SBTranslateProc, sboapiDataModuleImpl;
+{$R *.dfm}
+
+procedure TFormTransaction1.CurrencyEdit1Change(Sender: TObject);
+var
+  v_ostat: Real;
+begin
+  with DataModPCustService do
+  begin
+    if CurrencyEdit1.Value > 0 then
+   { begin
+      v_ostat := StrToFloat(PG_PCustService.CallFloatFunction('get_rate',
+        [ODS_BusProc.FieldByname('ID').AsInteger, -1, -1, -1, -1]));
+      XFBitBtn1.Enabled := true;
+    end
+    else   }
+      XFBitBtn1.Enabled := true;
+  end;
+ // CurrencyEdit2.Value := (CurrencyEdit1.Value) * v_ostat;
+end;
+
+procedure TFormTransaction1.CurrencyEdit1Click(Sender: TObject);
+begin
+  CurrencyEdit1.Text := '';
+end;
+
+procedure TFormTransaction1.CurrencyEdit1KeyPress(Sender: TObject;
+  var Key: Char);
+begin
+ { if (upcase(Key) < '0') or (upcase(Key) > '9') then
+  if (ord(Key) <> 8) then
+  Key := #0;   }
+  if (not (Key in ['0'..'9',#46,Chr(8)])) then Key:=#0;
+end;
+
+procedure TFormTransaction1.CurrencyEdit2Click(Sender: TObject);
+begin
+  CurrencyEdit2.Text := '';
+end;
+
+procedure TFormTransaction1.CurrencyEdit2KeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if (upcase(Key) < '0') or (upcase(Key) > '9') then
+    if (ord(Key) <> 8) then
+      Key := #0;
+end;
+
+procedure TFormTransaction1.DBLookupComboboxEh_descriptionChange(Sender: TObject);
+begin
+if not(DBLookupComboboxEh_description.KeyValue = null) then
+    Edit_description.Text := DBLookupComboboxEh_description.KeyValue;
+    EditDescription.Text:=DBLookupComboboxEh_description.text ;
+
+end;
+
+procedure TFormTransaction1.Edit_descriptionExit(Sender: TObject);
+begin
+ if Edit_description.Text <> '' then
+    DBLookupComboboxEh_description.KeyValue := Edit_description.Text;
+///     Edit1.Text :=EditDescription.Text;
+end;
+
+procedure TFormTransaction1.Edit_descriptionKeyPress(Sender: TObject; var Key: Char);
+begin
+if Key = #13 then
+  begin
+    DBLookupComboboxEh_description.KeyValue := Edit_description.Text;
+   // if key=#13 then EditDescription.SetFocus;
+ //    DBLookupComboboxEh1.text :=EditDescription.Text;
+  end;
+end;
+
+procedure TFormTransaction1.FormCanResize(Sender: TObject;
+  var NewWidth, NewHeight: Integer; var Resize: Boolean);
+begin
+  Resize := false;
+end;
+
+procedure TFormTransaction1.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+DBLookupComboBo_filial.KeyValue:=-1;
+XFBitBtn1.Enabled:=false;
+ Edit_description.Clear;
+ DBLookupComboboxEh_description.KeyValue:=-1;
+end;
+
+procedure TFormTransaction1.FormCreate(Sender: TObject);
+begin
+ DataModPCustService.ODS_contrs3.open;
+ SBTranslateProc.TranslateAllCompForms(Self, sboapiDataModule.OrPack_SL);
+end;
+
+procedure TFormTransaction1.FormKeyPress(Sender: TObject; var Key: Char);
+
+begin
+  if ord(Key) = 27 then
+    Close;
+end;
+
+procedure TFormTransaction1.FormShow(Sender: TObject);
+begin
+DBLookupCEh_contrsName1.KeyValue:=1;
+  CurrencyEdit1.Clear;
+  CurrencyEdit2.Clear;
+  EditDescription.Clear;
+end;
+
+procedure TFormTransaction1.XFBitBtn1Click(Sender: TObject);
+var
+  busp_id: integer;
+  v_ammount, v_lammount: Real;
+begin
+  { busp_id := DataModPCustService.ODS_BusProcID.AsInteger;
+    v_ammount := CurrencyEdit1.Value;
+    v_lammount := CurrencyEdit2.Value;
+    DataModPCustService.PG_SAMIR_CUST.CallProcedure('add_transaction1',
+    [busp_id, v_ammount, v_lammount]);
+    FormTransaction1.Close; }
+    if CurrencyEdit1.Value=0.00 then
+    begin
+      showmessage('Məbləğ daxil edilməyib  !');
+      exit;
+    end;
+  DataModPCustService.OPG_BusProc.CallProcedure('ExecBProcess',
+    [DataModPCustService.ODS_BusProcID.AsInteger, 0 { custid } , 0, 0, 0,
+    CurrencyEdit1.Value, CurrencyEdit1.Value, CurrencyEdit2.Value, '0', 0,
+    EditDescription.Text, 0, DBLookupCEh_contrsName1.KeyValue, 0, 0, 0,0,DBLookupComboBo_filial.KeyValue]);
+  // showmessage( floattostr(CurrencyEdit2.Value));
+
+  FormTransaction1.Close;
+
+end;
+
+procedure TFormTransaction1.XFBitBtn2Click(Sender: TObject);
+begin
+  Close;
+end;
+
+end.

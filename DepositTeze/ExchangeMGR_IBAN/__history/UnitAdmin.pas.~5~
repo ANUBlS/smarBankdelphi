@@ -1,0 +1,219 @@
+﻿unit UnitAdmin;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, Buttons, DBCtrls, NLSDialogs;
+
+type
+  TFormAdmin = class(TForm)
+    GrBoxADM: TGroupBox;
+    GrBoxUserList: TGroupBox;
+    DBLC_UserList: TDBLookupComboBox;
+    BtnCreateUser: TBitBtn;
+    ChBoxAdmin: TCheckBox;
+    BtnDropUser: TBitBtn;
+    GroupBox1: TGroupBox;
+    Label1: TLabel;
+    Label2: TLabel;
+    EditUserName: TEdit;
+    EditPassWord: TEdit;
+    BitBtn1: TBitBtn;
+    BitBtn2: TBitBtn;
+    ch_box: TEdit;
+    GroupBox2: TGroupBox;
+    DBLC_User: TDBLookupComboBox;
+    chk_box: TEdit;
+    BitBtn3: TBitBtn;
+    CheckBoxAdmin: TCheckBox;
+    procedure BitBtn1Click(Sender: TObject);
+    procedure BitBtn2Click(Sender: TObject);
+    procedure BitBtn3Click(Sender: TObject);
+    procedure BtnCreateUserClick(Sender: TObject);
+    procedure BtnDropUserClick(Sender: TObject);
+    procedure ChBoxAdminClick(Sender: TObject);
+    procedure CheckBoxAdminClick(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormAdmin: TFormAdmin;
+
+implementation
+
+uses UnitDateExch,Unit_ExchangeMGR;
+
+{$R *.DFM}
+
+procedure TFormAdmin.BitBtn1Click(Sender: TObject);
+var
+UserID,usrname: String;
+begin
+       usrname :=uppercase(DataModExch.OPExchMgr.Session.LogonUsername);
+if DataModExch.OPExchMgr.CallBooleanFunction('Check_UserRole',[usrname]) then begin
+
+if MessageDLG(Pchar('Истифадячи йарадылсын? '),mtConfirmation,[mbYes,mbNo], 0) =mrYes then begin
+ with DataModExch do
+  begin
+   if (Trim(EditPassWord.Text)<>'')and(Trim(EditUserName.Text)<>'') then
+     begin
+      try
+       Screen.Cursor:=crSQLWait;
+            OPAdmin.CallProcedure('create_new_user',[EditUserName.Text,EditPassWord.Text]);
+          DataModExch.ODSUsers.Close;
+          DataModExch.ODSUsers.Open;
+        ShowMessage('Истифадячи йарадылды!!!');
+
+      finally
+        Screen.Cursor:=crDefault;
+      end;
+    end;
+ end;
+
+end;  //ShowMessage(UseriD);
+
+UserID :=DataModExch.OPExchMgr.CallIntegerFunction('ReturnUserId',[Uppercase(EditUserName.Text)]);    //TKenan
+//ShowMessage(UseriD);
+DataModExch.OPExchMgr.CallProcedure('Ins_UserName',[UserID,Uppercase(EditUserName.Text),chk_box.Text]);
+ EditUserName.Text :='';
+        EditPassWord.Text :='';
+end;
+ if DataModExch.OPExchMgr.CallBooleanFunction('Check_UserRole',[usrname])=FALSE then begin
+NLSDialogs.ShowMessage('Эириш щцгугу йохдур!!!');
+         end;   END;
+procedure TFormAdmin.BitBtn2Click(Sender: TObject);
+var
+usrname:String;
+begin
+  usrname :=uppercase(DataModExch.OPExchMgr.Session.LogonUsername);
+if DataModExch.OPExchMgr.CallBooleanFunction('Check_UserRole',[usrname]) then begin
+
+if MessageDLG(Pchar('Истифадячини ляьв едим? '),mtConfirmation,[mbYes,mbNo], 0) =mrYes then begin
+ with DataModExch do
+  begin
+   if EditUserName.Text<>'' then
+     begin
+      try
+       Screen.Cursor:=crSQLWait;
+            OPAdmin.CallProcedure('dropuser',[EditUserName.Text]);
+        ShowMessage('Истифадячи ляьв едилди!!!');
+      finally
+        Screen.Cursor:=crDefault;
+        EditUserName.Text:='';
+      end;
+    end;
+ end;
+end;
+ if DataModExch.OPExchMgr.CallBooleanFunction('Check_UserRole',[usrname])=FALSE then begin
+NLSDialogs.ShowMessage('Эириш щцгугу йохдур!!!');
+         end;
+end;  end;
+
+procedure TFormAdmin.BitBtn3Click(Sender: TObject);
+var
+UserID,usrname :String;
+begin
+  usrname :=uppercase(DataModExch.OPExchMgr.Session.LogonUsername);
+if DataModExch.OPExchMgr.CallBooleanFunction('Check_UserRole',[usrname]) then begin
+
+UserID :=DataModExch.OPExchMgr.CallIntegerFunction('ReturnUserId',[DBLC_User.Text]);    //TKenan
+//ShowMessage(UserID);
+DataModExch.OPExchMgr.CallProcedure('Ins_UserName',[UserID,DBLC_User.Text,chk_box.Text]);
+
+ShowMessage('Истифадячийя администратор щцгугу верилди!');
+end;
+if DataModExch.OPExchMgr.CallBooleanFunction('Check_UserRole',[usrname])=FALSE then begin
+NLSDialogs.ShowMessage('Эириш щцгугу йохдур!!!');
+         end;
+   end;
+
+procedure TFormAdmin.BtnCreateUserClick(Sender: TObject);
+var
+usrname :string;
+    begin
+       usrname :=uppercase(DataModExch.OPExchMgr.Session.LogonUsername);
+
+if DataModExch.OPExchMgr.CallBooleanFunction('Check_UserRole',[usrname]) then begin
+
+DataModExch.OPExchMgr.CallProcedure('Ins_UserName',[DBLC_UserList.Keyvalue,DBLC_UserList.Text,ch_box.Text]);
+
+if MessageDLG(Pchar('Истифадячи йарадылсын? '),mtConfirmation,[mbYes,mbNo], 0) =mrYes then begin
+ with DataModExch do
+  begin
+   if DBLC_UserList.KeyValue<>-1 then
+     begin
+      try
+       Screen.Cursor:=crSQLWait;
+            OPAdmin.CallProcedure('create_user',[DBLC_UserList.Text,ChBoxAdmin.Checked]);
+        ShowMessage('İstifadəçi yaradıldl!!!');
+      finally
+        Screen.Cursor:=crDefault;
+      end;
+    end;
+ end;
+end;    end;
+if DataModExch.OPExchMgr.CallBooleanFunction('Check_UserRole',[usrname])=FALSE then begin
+NLSDialogs.ShowMessage('Giriş hüququ yoxdur!!!');
+         end;
+end;    
+
+procedure TFormAdmin.BtnDropUserClick(Sender: TObject);
+
+var
+usrname :string;
+    begin
+       usrname :=uppercase(DataModExch.OPExchMgr.Session.LogonUsername);
+if DataModExch.OPExchMgr.CallBooleanFunction('Check_UserRole',[usrname])=true then begin
+
+if MessageDLG(Pchar('İstifadəçini ləğv edim? '),mtConfirmation,[mbYes,mbNo], 0) =mrYes then begin
+ with DataModExch do
+  begin
+   if DBLC_UserList.KeyValue<>-1 then
+     begin
+      try
+       Screen.Cursor:=crSQLWait;
+            OPAdmin.CallProcedure('drop_synonym',[DBLC_UserList.Text]);
+        ShowMessage('İstifadəçini ləğv edildi!!!');
+      finally
+        Screen.Cursor:=crDefault;
+      end;
+    end;
+ end;
+end;   end;
+if DataModExch.OPExchMgr.CallBooleanFunction('Check_UserRole',[usrname])=FALSE then begin
+NLSDialogs.ShowMessage('Giriş hüququ yoxdur!!!');
+         end;
+end;     
+
+procedure TFormAdmin.ChBoxAdminClick(Sender: TObject);
+begin
+if ChBoxAdmin.checked=true then ch_box.text :='1';
+if ChBoxAdmin.checked=false then ch_box.text :='0';
+end;
+
+procedure TFormAdmin.CheckBoxAdminClick(Sender: TObject);
+begin
+if CheckBoxAdmin.checked=true then chk_box.text :='1';
+if CheckBoxAdmin.checked=false then chk_box.text :='0';
+
+end;
+
+procedure TFormAdmin.FormActivate(Sender: TObject);
+begin
+DBLC_UserList.KeyValue:=-1;
+DataModExch.ODSUsers.Open;
+DataModExch.ODSUserList.open;
+end;
+
+procedure TFormAdmin.FormCreate(Sender: TObject);
+begin
+SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+end.

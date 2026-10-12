@@ -1,0 +1,51 @@
+unit ProlongDataModuleImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, OracleData, Oracle;
+
+type
+  TProlongDataMod = class(TDataModule)
+    ProlongsData: TOracleDataSet;
+    DataSrcProlongsData: TDataSource;
+    CM_PROLONGATION: TOraclePackage;
+    CreditInfo: TOracleDataSet;
+    DSCreditInfo: TDataSource;
+    ProlongsDataID: TFloatField;
+    ProlongsDataCREDITID: TFloatField;
+    ProlongsDataPROLONGDATE: TDateTimeField;
+    ProlongsDataNEWCLOSEDATE: TDateTimeField;
+    ProlongsDataOLDCLOSEDATE: TDateTimeField;
+    OracleDataSet1: TOracleDataSet;
+    TrancheAccounts: TOracleDataSet;
+    TrancheAccountsACCID: TFloatField;
+    TrancheAccountsKLI_ID: TFloatField;
+    TrancheAccountsACCOUNTNUMBER: TWideStringField;
+    TrancheAccountsACCOUNTNAME: TWideStringField;
+    CustAccount: TOracleDataSet;
+    CustAccountBOOROWERACCID: TFloatField;
+    CM_TRANCHE: TOraclePackage;
+    OracleDataSet2: TOracleDataSet;
+    ProlongsDataNEWTRANCE: TFloatField;
+    ProlongsDataNEWOBLICATION: TFloatField;
+    OracleDataSet3: TOracleDataSet;
+    DataSource1: TDataSource;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  ProlongDataMod: TProlongDataMod;
+
+implementation
+
+{$R *.DFM}
+
+uses
+  sboapiDataModuleImpl;
+
+end.

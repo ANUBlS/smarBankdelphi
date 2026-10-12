@@ -1,0 +1,93 @@
+object NewDepositsDMWRGroups: TNewDepositsDMWRGroups
+  OldCreateOrder = False
+  OnCreate = DataModuleCreate
+  OnDestroy = DataModuleDestroy
+  Height = 340
+  Width = 544
+  object DMtypes: TOracleDataSet
+    Tag = 1
+    SQL.Strings = (
+      'select * from dm_types'
+      'order by id')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      0500000002000000040000004900440001000000000008000000540059005000
+      4500010000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 32
+    Top = 32
+  end
+  object DMtypesDataSrc: TDataSource
+    DataSet = DMtypes
+    Left = 32
+    Top = 96
+  end
+  object DmWrTemplates: TOracleDataSet
+    Tag = 2
+    SQL.Strings = (
+      'SELECT *'
+      '  FROM dm_wr_templates'
+      '')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      0500000003000000080000004E0041004D004500010000000000040000004900
+      4400010000000000080000005000410054004800010000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 152
+    Top = 32
+  end
+  object DmWrTemplatesDataSrc: TDataSource
+    DataSet = DmWrTemplates
+    Left = 152
+    Top = 96
+  end
+  object DmWrGroups: TOracleDataSet
+    Tag = 2
+    SQL.Strings = (
+      'select  *'
+      'from '
+      '   dm_wr_groups'
+      'where '
+      '  tempid=:tempid'
+      '')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000E0000003A00540045004D00500049004400030000000000
+      000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000300000004000000490044000100000000000E000000440054005900
+      50004500490044000100000000000C000000540045004D005000490044000100
+      00000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 272
+    Top = 32
+    object DmWrGroupsID: TFloatField
+      FieldName = 'ID'
+    end
+    object DmWrGroupsDTYPEID: TFloatField
+      FieldName = 'DTYPEID'
+    end
+    object DmWrGroupsTEMPID: TFloatField
+      FieldName = 'TEMPID'
+    end
+    object DmWrGroupsTempName: TStringField
+      FieldKind = fkLookup
+      FieldName = 'TempName'
+      LookupDataSet = DmWrTemplates
+      LookupKeyFields = 'ID'
+      LookupResultField = 'NAME'
+      KeyFields = 'TEMPID'
+      Lookup = True
+    end
+  end
+  object DmWrGroupsDataSrc: TDataSource
+    DataSet = DmWrGroups
+    Left = 272
+    Top = 96
+  end
+end

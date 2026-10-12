@@ -1,0 +1,70 @@
+unit UntBalanceRpt2;
+
+interface
+
+uses Windows, SysUtils, Messages, Classes, Graphics, Controls,
+  StdCtrls, ExtCtrls, Forms, Quickrpt, QRCtrls, QRExport;
+
+type
+  TBalanceRpt2 = class(TQuickRep)
+    TitleBand1: TQRBand;
+    QRLabel3: TQRLabel;
+    QRSubDetail1: TQRSubDetail;
+    QRDBText1: TQRDBText;
+    QRDBText3: TQRDBText;
+    QRDBText4: TQRDBText;
+    QRDBText6: TQRDBText;
+    QRShape5: TQRShape;
+    QRShape6: TQRShape;
+    QRShape7: TQRShape;
+    SummaryBand1: TQRBand;
+    QRLabel10: TQRLabel;
+    QRExpr3: TQRExpr;
+    QRExpr1: TQRExpr;
+    QRLabel1: TQRLabel;
+    QRLabel4: TQRLabel;
+    QRLabel7: TQRLabel;
+    QRLabel11: TQRLabel;
+    QRLabel15: TQRLabel;
+    QRShape1: TQRShape;
+    QRShape2: TQRShape;
+    QRShape3: TQRShape;
+    QRShape4: TQRShape;
+    QRShape8: TQRShape;
+    QRLabel2: TQRLabel;
+    QRLBank: TQRLabel;
+    QRLCode: TQRLabel;
+    QRLValute: TQRLabel;
+    FDate: TQRLabel;
+    LDate: TQRLabel;
+    QRTextFilter1: TQRTextFilter;
+    QRDBText2: TQRDBText;
+    QRLSedr: TQRLabel;
+    QRDBText7: TQRDBText;
+    QRDBText5: TQRDBText;
+    QRDBText8: TQRDBText;
+    QRLBM: TQRLabel;
+    procedure QuickRepBeforePrint(Sender: TCustomQuickRep;
+      var PrintReport: Boolean);
+  private
+
+  public
+
+  end;
+
+var
+  BalanceRpt2: TBalanceRpt2;
+
+implementation
+
+uses UnitDataMod, sboapiDataModuleImpl, SBTranslateProc;
+
+{$R *.DFM}
+
+procedure TBalanceRpt2.QuickRepBeforePrint(Sender: TCustomQuickRep;
+  var PrintReport: Boolean);
+begin
+  SBTranslateProc.TranslateAllCompQuickRep(Self, sboapiDataModule.OrPack_SL);
+end;
+
+end.

@@ -1,0 +1,143 @@
+unit StartReserveMainFormImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, NLSDialogs,
+  NLSLocalizer, ComCtrls, StdCtrls, Mask, DBCtrlsEh, DBLookupEh, Buttons,
+  ImgList;
+
+type
+  TStartReserveForm = class(TForm)
+    Localizer: TNLSLocalizer;
+    SpeedButton1: TSpeedButton;
+    SpeedButton2: TSpeedButton;
+    ImageList1: TImageList;
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure SpeedButton2Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  StartReserveForm: TStartReserveForm;
+
+implementation
+
+uses CommonDecls,StartReserveDatModImpl;
+
+{$R *.DFM}
+
+procedure InitPlugin(S:String); export;
+begin
+   with SRDatMod do
+begin
+
+   with ReservesID do
+   begin
+     CloseAll;
+     SetVariable('CrdID',Get_SelectedCrdID);
+     Open;
+
+   // StartReserveForm.DBLookupCbORID.KeyValue := FieldByName('OLDPRRESID').AsInteger;
+   end;
+
+  with DefDatSet do
+  begin
+     close;
+     setvariable('CrdID',Get_SelectedCrdID);
+     open;
+  end;
+
+  end;
+   StartReserveForm.ShowModal;
+end;
+exports
+InitPlugin;
+
+procedure TStartReserveForm.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+  if Ord(Key) = VK_ESCAPE then
+    ModalResult := mrCancel
+end;
+
+procedure TStartReserveForm.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+  Resize := False;
+end;
+
+procedure TStartReserveForm.SpeedButton1Click(Sender: TObject);
+Resourcestring
+Can_ReReserveInf = 'Ещтийатын йенилянмясиря яминсинизми?';
+DLGF = 'Ещтийатын йенилянмяси(Сечилмиш кредитляр цзря)';
+var
+  CrdID : Integer;
+  CommitTr : Boolean;
+begin
+
+   if MessageDlg(Can_ReReserveInf,
+              mtInformation,
+              [mbYes,mbNo],
+               0) <> mrYes
+               then exit ;
+
+   with CommonDBGrid, DataSource.DataSet do
+   begin
+
+         CrdId :=FieldByName('ID').AsInteger;
+          with SRDatMod do
+          begin
+           CM_RESERVE_REFRESH.CallProcedure('refreshreserve',[
+           'p_CreditID' ,CrdID]);
+
+       end;
+
+       try
+       CommitTr := TrDelayed_Show(Self,DLGF);
+        Update;
+            with SRDatMod do
+           begin
+             CM_RESERVE_REFRESH.CallProcedure('committr',[
+             'DefCommit' , CommitTr,
+             'p_id', CrdId
+             ]);
+         end;
+
+    if CommitTr then
+    Self.ModalResult := mrOk;
+    Self.Update;
+
+    except
+
+    with SRDatMod do
+    CM_RESERVE_REFRESH.CallProcedure('CommitTr',[
+       'DefCommit' , False
+    ]);
+    raise;
+  end;
+ end;
+ end;
+ //end;
+
+
+procedure TStartReserveForm.FormCreate(Sender: TObject);
+begin
+SRDatMod :=TSRDatMod.Create(Self);
+end;
+
+procedure TStartReserveForm.SpeedButton2Click(Sender: TObject);
+begin
+  Close; 
+end;
+
+initialization
+StartReserveForm := TStartReserveForm.Create(CommonApplication);
+
+end.

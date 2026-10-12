@@ -1,0 +1,23 @@
+unit uConverter;
+
+interface
+
+function ConvertCyrToAzeri(str: String):String;
+
+implementation
+
+uses Sysutils;
+
+function ConvertCyrToAzeri;
+const
+  CyrS: array [0..63] of char= ('À','Á','Â','Ã','Ä','Å','Æ','Ç','È','É','Ê','Ë','Ì','Í','Î','Ï','Ð','Ñ','Ò','Ó','Ô','Õ','Ö','×','Ø','Ù','Ú','Û','Ü','Ý','Þ','ß','à','á','â','ã','ä','å','æ','ç','è','é','ê','ë','ì','í','î','ï','ð','ñ','ò','ó','ô','õ','ö','÷','ø','ù','ú','û','ü','ý','þ','ÿ');
+  AzeS: array [0..63] of String= ('A','B','V','Q','D','E','C','Z','I','Y','K','L','M','N','O','P','R','S','T','U','F','X','U','CH','SH','H','J','I','G','G','O','A','a','b','v','q','d','e','c','z','i','y','k','l','m','n','o','p','r','s','t','u','f','x','u','ch','sh','h','j','i','g','g','o','a');
+var
+  i: Integer;
+begin
+  for i:=0 to 63 do
+    Str := StringReplace(str,cyrs[i],azes[i],[rfReplaceAll]);
+  Result := Str;
+end;
+
+end.

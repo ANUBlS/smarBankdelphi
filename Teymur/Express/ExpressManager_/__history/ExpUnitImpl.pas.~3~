@@ -1,0 +1,916 @@
+unit ExpUnitImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants,Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, Mask, DBCtrls, ExtCtrls, ComCtrls, Buttons, NLSLocalizer,
+  CMCurrencyEdit, SearchEdit,CurrencyToHR_Azeri_Impl,CMHintBox,
+  DBCtrlsEh, ToolWin, ImgList;
+
+type
+  TExpFormAdd = class(TForm)
+    Panel5: TPanel;
+    Panel1: TPanel;
+    GroupBox1: TGroupBox;
+    GroupBox3: TGroupBox;
+    Label5: TLabel;
+    Label6: TLabel;
+    Label7: TLabel;
+    GroupBox4: TGroupBox;
+    Label10: TLabel;
+    Label11: TLabel;
+    DBLookupComboBox2: TDBLookupComboBox;
+    Panel2: TPanel;
+    GroupBox8: TGroupBox;
+    Label20: TLabel;
+    Label21: TLabel;
+    Label22: TLabel;
+    GroupBox9: TGroupBox;
+    Label23: TLabel;
+    SpeedButton2: TSpeedButton;
+    Label24: TLabel;
+    DBLookupComboBox4: TDBLookupComboBox;
+    DBEdit18: TDBEdit;
+    GroupBox6: TGroupBox;
+    Panel4: TPanel;
+    Panel3: TPanel;
+    Label27: TLabel;
+    Button1: TButton;
+    Button2: TButton;
+    Edit1: TEdit;
+    GroupBox10: TGroupBox;
+    Memo1: TMemo;
+    NLSLocalizer1: TNLSLocalizer;
+    Edit2: TEdit;
+    Edit9: TEdit;
+    Edit10: TEdit;
+    Edit11: TEdit;
+    Edit12: TEdit;
+    Edit13: TEdit;
+    Edit14: TEdit;
+    GroupBox11: TGroupBox;
+    GroupBox12: TGroupBox;
+    Timer1: TTimer;
+    DateTimePicker3: TDateTimePicker;
+    DateTimePicker4: TDateTimePicker;
+    Panel6: TPanel;
+    GroupBox14: TGroupBox;
+    Label33: TLabel;
+    Label34: TLabel;
+    Label35: TLabel;
+    Edit21: TEdit;
+    Edit22: TEdit;
+    Edit23: TEdit;
+    GroupBox15: TGroupBox;
+    Label36: TLabel;
+    SpeedButton3: TSpeedButton;
+    Label37: TLabel;
+    DBLookupComboBox8: TDBLookupComboBox;
+    DBEdit1: TDBEdit;
+    GroupBox16: TGroupBox;
+    GroupBox17: TGroupBox;
+    Memo2: TMemo;
+    GroupBox2: TGroupBox;
+    Label3: TLabel;
+    Label4: TLabel;
+    Label8: TLabel;
+    Label9: TLabel;
+    Label26: TLabel;
+    Label2: TLabel;
+    DBLookupComboBox5: TDBLookupComboBox;
+    Edit5: TEdit;
+    Edit6: TEdit;
+    Edit17: TEdit;
+    SearchPinkod: TSearchEdit;
+    Edit3: TEdit;
+    ComboBox1: TComboBox;
+    Label39: TLabel;
+    GroupBox7: TGroupBox;
+    Label16: TLabel;
+    Label17: TLabel;
+    Label18: TLabel;
+    Label19: TLabel;
+    Label25: TLabel;
+    Label15: TLabel;
+    Label40: TLabel;
+    DBLookupComboBox6: TDBLookupComboBox;
+    Edit7: TEdit;
+    Edit8: TEdit;
+    Edit16: TEdit;
+    SearchEdit2: TSearchEdit;
+    ComboBox2: TComboBox;
+    GroupBox13: TGroupBox;
+    Label28: TLabel;
+    Label29: TLabel;
+    Label30: TLabel;
+    Label31: TLabel;
+    Label32: TLabel;
+    Label38: TLabel;
+    DBLookupComboBox7: TDBLookupComboBox;
+    Edit18: TEdit;
+    Edit19: TEdit;
+    Edit20: TEdit;
+    SearchEdit1: TSearchEdit;
+    Edit24: TEdit;
+    ComboBox3: TComboBox;
+    Label41: TLabel;
+    GroupBox18: TGroupBox;
+    Edit25: TEdit;
+    Panel7: TPanel;
+    Button3: TButton;
+    Button4: TButton;
+    GroupBox19: TGroupBox;
+    Edit26: TEdit;
+    Label42: TLabel;
+    Edit27: TEdit;
+    Label43: TLabel;
+    Label44: TLabel;
+    Label45: TLabel;
+    CMHintBox1: TCMHintBox;
+    GroupBox5: TGroupBox;
+    Label12: TLabel;
+    Label13: TLabel;
+    Label14: TLabel;
+    DBLookupComboBox3: TDBLookupComboBox;
+    CMCurrencyEdit1: TCMCurrencyEdit;
+    Edit15: TEdit;
+    DateEdit: TDBDateTimeEditEh;
+    DateEdit1: TDBDateTimeEditEh;
+    DateEdit2: TDBDateTimeEditEh;
+    DateEdit3: TDBDateTimeEditEh;
+    DateEdit4: TDBDateTimeEditEh;
+    CMCurrencyEdit2: TCMCurrencyEdit;
+    CMCurrencyEdit3: TCMCurrencyEdit;
+    Label46: TLabel;
+    Label47: TLabel;
+    Edit4: TEdit;
+    DBImage1: TDBImage;
+    DBImage2: TDBImage;
+    ImageList1: TImageList;
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure DBLookupComboBox1Click(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+    procedure CMCurrencyEdit1Change(Sender: TObject);
+    procedure DBLookupComboBox3Click(Sender: TObject);
+    procedure CMCurrencyEdit1KeyPress(Sender: TObject; var Key: Char);
+    procedure Timer1Timer(Sender: TObject);
+    procedure SearchPinkodKeyPress(Sender: TObject; var Key: Char);
+    procedure SearchEdit2KeyPress(Sender: TObject; var Key: Char);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure Button3Click(Sender: TObject);
+    procedure Button4Click(Sender: TObject);
+    procedure ComboBox1Change(Sender: TObject);
+    procedure Edit25KeyPress(Sender: TObject; var Key: Char);
+    procedure ComboBox2Change(Sender: TObject);
+    procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
+    procedure ComboBox3Change(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+
+  private
+    { Private declarations }
+  public
+     procedure Clear;
+     function  Mani(CurrencyEdit:variant):string;
+    { Public declarations }
+  end;
+
+const
+   msDefault =0;
+   msCommit = 1;
+   msReject = 2;
+
+var
+   ExpFormAdd: TExpFormAdd;
+   item:integer;
+   id  :integer;
+implementation
+
+uses ExpressManagerImpl,ExpDataModuleUnit,LDialogs, ExpCustomersTypeUnit,
+ sboapiDataModuleImpl, SBTranslateProc;
+
+{$R *.DFM}
+
+function TExpFormAdd.Mani(CurrencyEdit:variant):string;
+var sr,ET:string;
+    s :integer;
+    st:real;
+
+begin
+  sr:=CurrencyToHR_Azeri(trunc(CurrencyEdit),0,[0]);
+  S:=pos('манат',sr);
+  delete(sr,s,5);
+  st:=round(frac(CurrencyEdit)*100);
+
+  if CurrencyEdit>=1 then begin
+  if st>0 then begin
+  ET:=sr+''+ExpDataModule.ValyutaDataSet.fieldbyname('VALU_NAME').AsString+' '+FloatToStr(st)+' '+ExpDataModule.ValyutaDataSet.fieldbyname('Valu_Bala').AsString
+  end
+  else ET:=sr+''+ExpDataModule.ValyutaDataSet.fieldbyname('VALU_NAME').AsString;  end
+  else ET:=FloatToStr(st)+' '+ExpDataModule.ValyutaDataSet.fieldbyname('Valu_Bala').AsString;
+  mani:=ET;
+
+end;
+
+procedure TExpFormAdd.SpeedButton1Click(Sender: TObject);
+begin
+//  Edit2.Text:=ExpDataModule.EXPESSPAC.CallStringFunction('Getnewexpressreference',[]);
+end;
+
+procedure TExpFormAdd.DBLookupComboBox1Click(Sender: TObject);
+begin
+  ExpFormAdd.Panel5.Visible:=true;
+end;
+
+procedure TExpFormAdd.Button1Click(Sender: TObject);
+var
+  expid        :integer;
+  exp_accno    :string;
+  lastname     :string;
+  firstname    :string;
+  midname      :string;
+  filial       :integer;
+  kindpassport :integer;
+  passper      :string;
+  paspnum      :string;
+  paspdate     :Variant;
+  paspplace    :string;
+  pincode      :string;
+  adress       :string;
+  blastname    :string;
+  bfirstname   :string;
+  bmidname     :string;
+  bfilial      :integer;
+  bkindpassport:integer;
+  bpassper     :string;
+  bpaspnum     :string;
+  bpaspdate    :Variant;
+  bpaspplace   :string;
+  bpincode     :string;
+  badress      :string;
+  vlastname    :string;
+  vfirstname   :string;
+  vmidname     :string;
+  vfilial      :integer;
+  vkindpassport:integer;
+  vpassper     :string;
+  vpaspnum     :string;
+  vpaspdate    :Variant;
+  vpaspplace   :string;
+  vpincode     :string;
+  vadress      :string;
+  vpfattorser  :string;
+  vpfattornum  :string;
+  vpfattorbdat :Variant;
+  vpfattoredat :Variant;
+  status       :byte;
+  optype       :byte;
+  amount       :Real;
+  val_cod      :word;
+  trans_ref    :string;
+  remit_inf    :string;
+  add_inf      :string;
+  senddate     :TDateTime;
+  recdate      :TDateTime;
+  senddatetime :TDatetime;
+  recdatetime  :TDatetime;
+  password     :string;
+  s            :string;
+
+begin
+  if ExpFormAdd.NLSLocalizer1.Caption=ExpDataModule.ExpTypeDataSet.fieldbyname('name').AsString+'(…ени)' then
+  begin
+  if (Edit3.Text='') then  begin
+                              CMHintBox1.ShowMessage('ѕинкод сащ€си долдурулмайыб ');
+                              exit
+                            end;
+
+
+ if (Edit5.Text='') then   begin
+                             CMHintBox1.ShowMessage('—ерийа сащ€си долдурулмайыб ');
+                             exit
+                            end;
+
+ if (Edit6.Text='') then   begin
+                              CMHintBox1.ShowMessage('Ќюмр€ сащ€си долдурулмайыб ');
+                              exit
+                            end;
+
+ if (DBLookupComboBox5.Text='') then   begin
+                                         CMHintBox1.ShowMessage('¬ерилдийи йер сащ€си сечилм€йиб ');
+                                         exit
+                                       end;
+
+ if DateEdit.Value=null         then   begin
+                                         CMHintBox1.ShowMessage('¬ерилдийи тарих сащ€си сечилм€йиб ');
+                                         exit
+                                       end;
+
+ if (Edit17.Text='') then   begin
+                              CMHintBox1.ShowMessage('÷нван сащ€си долдурулмайыб ');
+                              exit
+                            end;
+
+ if (Edit9.Text='') then   begin
+                             CMHintBox1.ShowMessage(' ючцр€нин —ойады сащ€си долдурулмайыб ');
+                             exit
+                            end;
+
+if (Edit11.Text='') then   begin
+                             CMHintBox1.ShowMessage(' ючцр€нин јды сащ€си долдурулмайыб ');
+                             exit
+                            end;
+
+if (Edit13.Text='') then   begin
+                             CMHintBox1.ShowMessage(' ючцр€нин јтасынын ады сащ€си долдурулмайыб ');
+                             exit
+                            end;
+
+if (DBLookupComboBox2.Text='') then   begin
+                                        CMHintBox1.ShowMessage('‘илиал сащ€си сечилм€йиб ');
+                                        exit
+                                      end;
+
+if (DBLookupComboBox3.Text='') then   begin
+                                        CMHintBox1.ShowMessage('¬алйута сащ€си сечилм€йиб ');
+                                        exit
+                                      end;
+
+
+if (CMCurrencyEdit1.Value=0) then   begin
+                                      CMHintBox1.ShowMessage('ћ€бл€ь сащ€си долдурулмайыб ');
+                                      exit
+                                    end;
+
+if (Edit10.Text='') then   begin
+                             CMHintBox1.ShowMessage('јланын —ойады сащ€си долдурулмайыб ');
+                             exit
+                           end;
+
+if (Edit12.Text='') then   begin
+                             CMHintBox1.ShowMessage('јланын јды сащ€си долдурулмайыб ');
+                             exit
+                           end;
+
+if (Edit14.Text='') then   begin
+                             CMHintBox1.ShowMessage('јланын јтасынын ады сащ€си долдурулмайыб ');
+                             exit
+                           end;
+
+
+
+
+
+exp_accno   :='';
+(*------------------------------------------------------------Gonderen Musteri--------------------------------------------------------------*)
+
+expid       :=ExpDataModule.ExpTypeDataSet.fieldbyname('id').asinteger;
+pincode     :=Edit3.Text;
+kindpassport:=ComboBox1.ItemIndex;
+passper     :=Edit5.Text;
+paspnum     :=Edit6.Text;
+paspplace   :=DBLookupComboBox5.Text;
+adress      :=Edit17.Text;
+paspdate    :=DateEdit.value;
+lastname    :=Edit9.Text;
+firstname   :=Edit11.Text;
+midname     :=Edit13.Text;
+filial      :=DBLookupComboBox2.KeyValue;
+
+
+(*------------------------------------------------------------AlanMusteri--------------------------------------------------------------*)
+bpincode     :=Edit4.Text;
+bkindpassport:=ComboBox2.Itemindex;
+bpassper     :=Edit7.Text;
+bpaspnum     :=Edit8.Text;
+if DBLookupComboBox6.KeyValue=null then  bpaspplace:=''
+else bpaspplace:=DBLookupComboBox6.Text;
+badress     :=Edit16.Text;
+blastname   :=Edit10.Text;
+bfirstname  :=Edit12.Text;
+bmidname    :=Edit14.Text;
+bfilial     :=DBLookupComboBox4.KeyValue;
+bpaspdate   :=DateEdit1.Value;
+(*-------------------------------------------------------------------------------------------------------------------------------------------------*)
+status      :=0;
+optype      :=1;
+amount      :=CMCurrencyEdit1.Value;
+val_cod     :=DBLookupComboBox3.KeyValue;
+trans_ref   :=ExpDataModule.EXPESSPAC.CallStringFunction('Getnewexpressreference',[]);
+remit_inf   :=Edit1.Text;
+add_inf     :=Memo1.Text;
+senddate:=integer(trunc(DateTimePicker3.Date));
+senddatetime:=DateTimePicker4.DateTime;
+with ExpDataModule do
+begin
+ // ICECrypt1.CryptType:=cHASH_CRC32;
+ // ICECrypt1.Text:=DateToStr(ExpFormAdd.DateTimePicker3.Date)+' '+TimeToStr(ExpFormAdd.DateTimePicker4.Time);
+ // s:=ICECrypt1.GetCrypted;
+ // ICECrypt1.CryptType:=cHASH_GOST;
+ // ICECrypt1.Text:=s;
+  password:=DateToStr(ExpFormAdd.DateTimePicker3.Date)+' '+TimeToStr(ExpFormAdd.DateTimePicker4.Time);
+end;
+
+
+ExpDataModule.EXPESSPAC.CallProcedure('Exp_batchs_insert',
+                                      ['v_id'           ,0
+                                      ,'v_expid'        ,expid
+                                      ,'v_exp_accno'    ,exp_accno
+                                      ,'v_lastname'     ,lastname
+                                      ,'v_firstname'    ,firstname
+                                      ,'v_midname'      ,midname
+                                      ,'v_filial'       ,filial
+                                      ,'v_kindpassport' ,kindpassport
+                                      ,'v_passper'      ,passper
+                                      ,'v_paspnum'      ,paspnum
+                                      ,'v_paspdate'     ,paspdate
+                                      ,'v_paspplace'    ,paspplace
+                                      ,'v_pincode'      ,pincode
+                                      ,'v_adress'       ,adress
+                                      ,'v_blastname'    ,blastname
+                                      ,'v_bfirstname'   ,bfirstname
+                                      ,'v_bmidname'     ,bmidname
+                                      ,'v_bfilial'      ,bfilial
+                                      ,'v_bkindpassport',bkindpassport
+                                      ,'v_bpassper'     ,bpassper
+                                      ,'v_bpaspnum'     ,bpaspnum
+                                      ,'v_bpaspdate'    ,bpaspdate
+                                      ,'v_bpaspplace'   ,bpaspplace
+                                      ,'v_bpincode'     ,bpincode
+                                      ,'v_badress'      ,badress
+                                      ,'v_status'       ,status
+                                      ,'v_optype'       ,optype
+                                      ,'v_amount'       ,amount
+                                      ,'v_val_cod'      ,val_cod
+                                      ,'v_trans_ref'    ,trans_ref
+                                      ,'v_remit_inf'    ,remit_inf
+                                      ,'v_add_inf'      ,add_inf
+                                      ,'v_senddate'     ,senddate
+                                      ,'v_senddatetime' ,senddatetime 
+                                      ,'v_password'     ,password]) ;
+
+  id:=ExpDataModule.EXPESSPAC.GetParameter(0);
+  ExpDataModule.ExpBatchsDataSet.Refresh;
+  ExpDataModule.ExpBatchsDataSet.Locate('ID',ID,[]);
+  Clear;
+
+end;
+if (ExpFormAdd.NLSLocalizer1.Caption=ExpDataModule.ExpTypeDataSet.fieldbyname('name').AsString+'(–eдакт€)')  then
+begin
+
+  //exp_accno   :='';
+  id          :=ExpDataModule.ExpBatchsDataSet.FieldByName('id').AsInteger;
+  lastname    :=Edit9.Text;
+  firstname   :=Edit11.Text;
+  midname     :=Edit13.Text;
+  filial      :=DBLookupComboBox2.KeyValue;
+  passper     :=Edit5.Text;
+  paspnum     :=Edit6.Text;
+  paspdate    :=DateEdit.Value;
+  paspplace   :=DBLookupComboBox5.Text;
+  pincode     :=Edit3.Text;
+  kindpassport:=ComboBox1.Itemindex;
+  adress      :=Edit17.Text;
+  blastname   :=Edit10.Text;
+  bfirstname  :=Edit12.Text;
+  bmidname    :=Edit14.Text;
+  bfilial     :=DBLookupComboBox4.KeyValue;
+  bpassper    :=Edit7.Text;
+  bpaspnum    :=Edit8.Text;
+  bpaspdate   :=DateEdit1.Value;
+  if DBLookupComboBox6.KeyValue=null then  bpaspplace:=''
+  else bpaspplace:=DBLookupComboBox6.Text;
+  bpincode    :=Edit4.Text;
+  bkindpassport:=ComboBox2.Itemindex;
+  badress     :=Edit16.Text;
+  amount      :=CMCurrencyEdit1.Value;
+  val_cod     :=DBLookupComboBox3.KeyValue;
+  remit_inf   :=Edit1.Text;
+  add_inf     :=Memo1.Text;
+  senddate    :=integer(trunc(DateTimePicker3.Date));
+  senddatetime:=ExpDataModule.SysdateDataSet.fieldbyname('dat').AsDateTime;
+
+with ExpDataModule do
+begin
+  //ICECrypt1.CryptType:=cHASH_CRC32;
+  //ICECrypt1.Text:=DateTimeToStr(senddatetime);
+ // s:=ICECrypt1.GetCrypted;
+  //ICECrypt1.CryptType:=cHASH_GOST;
+ //ICECrypt1.Text:=s;
+  password:=DateTimeToStr(senddatetime);//ICECrypt1.GetCrypted;
+end;
+
+ExpDataModule.EXPESSPAC.CallProcedure('Exp_batchs_update',
+                                      ['v_id'           ,id
+                                      ,'v_lastname'     ,lastname
+                                      ,'v_firstname'    ,firstname
+                                      ,'v_midname'      ,midname
+                                      ,'v_filial'       ,filial
+                                      ,'v_kindpassport' ,kindpassport
+                                      ,'v_passper'      ,passper
+                                      ,'v_paspnum'      ,paspnum
+                                      ,'v_paspdate'     ,paspdate
+                                      ,'v_paspplace'    ,paspplace
+                                      ,'v_pincode'      ,pincode
+                                      ,'v_adress'       ,adress
+                                      ,'v_blastname'    ,blastname
+                                      ,'v_bfirstname'   ,bfirstname
+                                      ,'v_bmidname'     ,bmidname
+                                      ,'v_bfilial'      ,bfilial
+                                      ,'v_bkindpassport',bkindpassport
+                                      ,'v_bpassper'     ,bpassper
+                                      ,'v_bpaspnum'     ,bpaspnum
+                                      ,'v_bpaspdate'    ,bpaspdate
+                                      ,'v_bpaspplace'   ,bpaspplace
+                                      ,'v_bpincode'     ,bpincode
+                                      ,'v_badress'      ,badress
+                                      ,'v_amount'       ,amount
+                                      ,'v_val_cod'      ,val_cod
+                                      ,'v_remit_inf'    ,remit_inf
+                                      ,'v_add_inf'      ,add_inf
+                                      ,'v_senddate'     ,senddate
+                                      ,'v_senddatetime' ,senddatetime
+                                      ,'v_password'     ,password]) ;
+
+
+
+ExpFormAdd.Close;
+ExpDataModule.ExpBatchsDataSet.Refresh;
+ExpDataModule.ExpBatchsDataSet.Locate('ID',ID,[]);
+
+end;
+
+if (ExpFormAdd.NLSLocalizer1.Caption=ExpDataModule.ExpTypeDataSet.fieldbyname('name').AsString+'(√€бул)') then
+begin
+  id :=ExpDataModule.ExpBatchsDataSet.FieldByName('id').AsInteger;
+  if (Edit24.Text='') then
+  begin
+    CMHintBox1.ShowMessage('ѕинкод сащ€си долдурулмайыб ');
+    exit
+  end;
+
+  if (Edit18.Text='') then
+  begin
+    CMHintBox1.ShowMessage('—ерийа сащ€си долдурулмайыб ');
+    exit
+  end;
+
+  if (Edit19.Text='') then
+  begin
+    CMHintBox1.ShowMessage('Ќюмр€ сащ€си долдурулмайыб ');
+    exit
+  end;
+
+  if (DBLookupComboBox7.Text='') then
+  begin
+    CMHintBox1.ShowMessage('¬ерилдийи йер сащ€си сечилм€йиб ');
+    exit
+  end;
+
+  if DateEdit2.Value=null         then   begin
+                                         CMHintBox1.ShowMessage('¬ерилдийи тарих сащ€си сечилм€йиб ');
+                                         exit
+                                       end;
+
+  if (Edit20.Text='') then
+  begin
+    CMHintBox1.ShowMessage('÷нван сащ€си долдурулмайыб ');
+    exit
+  end;
+
+  if (Edit21.Text='') then
+  begin
+    CMHintBox1.ShowMessage(' ючцр€нин —ойады сащ€си долдурулмайыб ');
+    exit
+  end;
+
+  if (Edit22.Text='') then
+  begin
+    CMHintBox1.ShowMessage(' ючцр€нин јды сащ€си долдурулмайыб ');
+    exit
+  end;
+
+  if (Edit23.Text='') then
+  begin
+    CMHintBox1.ShowMessage(' ючцр€нин јтасынын ады сащ€си долдурулмайыб ');
+    exit
+  end;
+
+  if (DBLookupComboBox8.Text='') then
+  begin
+    CMHintBox1.ShowMessage('‘илиал сащ€си сечилм€йиб ');
+    exit
+  end;
+
+
+  id          :=ExpDataModule.ExpBatchsDataSet.FieldByName('id').AsInteger;
+  vlastname   :=Edit10.Text;
+  vfirstname  :=Edit12.Text;
+  vmidname    :=Edit14.Text;
+  vfilial     :=DBLookupComboBox4.KeyValue;
+  vpassper    :=Edit7.Text;
+  vpaspnum    :=Edit8.Text;
+  vpaspdate   :=DateEdit1.Value;
+  vpaspplace  :=DBLookupComboBox7.keyvalue;
+  vpincode    :=Edit4.Text;
+  vadress     :=Edit20.Text;
+  vpfattorser :=edit26.text;
+  vpfattornum :=edit27.text;
+  vpfattorbdat:=DateEdit3.Value;
+  vpfattoredat:=DateEdit4.Value;
+  recdate     :=trunc(DateTimePicker3.DateTime);
+  recdatetime :=DateTimePicker4.DateTime;
+
+  ExpDataModule.EXPESSPAC.CallProcedure('Exp_batchs_recupdate',
+                                        ['v_id'          ,id
+                                        ,'v_vlastname'   ,vlastname
+                                        ,'v_vfirstname'  ,vfirstname
+                                        ,'v_vmidname'    ,vmidname
+                                        ,'v_vfilial'     ,vfilial
+                                        ,'v_vpassper'    ,vpassper
+                                        ,'v_vpaspnum'    ,vpaspnum
+                                        ,'v_vpaspdate'   ,vpaspdate
+                                        ,'v_vpincode'    ,vpincode
+                                        ,'v_vpaspplace'  ,vpaspplace
+                                        ,'v_vadress'     ,vadress
+                                        ,'v_vpfattorser' ,vpfattorser
+                                        ,'v_vpfattornum' ,vpfattornum
+                                        ,'v_vpfattorbdat',vpfattorbdat
+                                        ,'v_vpfattoredat',vpfattoredat
+                                        ,'v_recdate'     ,recdate
+                                        ,'v_recdatetime' ,recdatetime ]) ;
+ExpDataModule.Repair.CallProcedure('Exp_batchs_archivestatus', [id]);
+ExpFormAdd.Close;
+ExpDataModule.ExpBatchsDataSet.Refresh;
+ExpDataModule.ExpBatchsDataSet.Locate('ID',ID,[]);
+//xpressFrom.ToolButton13.Enabled:=true;
+
+end;
+
+
+
+
+end;
+
+
+procedure TExpFormAdd.clear;
+begin
+  Edit1.Clear;
+  Edit2.Clear;
+  Edit3.Clear;
+  Edit4.Clear;
+  Edit5.Clear;
+  Edit6.Clear;
+  Edit7.Clear;
+  Edit8.Clear;
+  Edit9.Clear;
+  Edit10.Clear;
+  Edit11.Clear;
+  Edit12.Clear;
+  Edit13.Clear;
+  Edit14.Clear;
+  Edit15.Clear;
+  Edit17.Clear;
+  Edit16.Clear;
+  Memo1.Clear;
+  ComboBox2.ItemIndex:=-1;
+  DBLookupComboBox5.KeyValue:='';
+  DBLookupComboBox2.KeyValue:=0;
+  DBLookupComboBox3.KeyValue:=0;
+  DBLookupComboBox6.KeyValue:='';
+  DBLookupComboBox4.KeyValue:=-1;
+  CMCurrencyEdit1.Value:=0;
+  CMCurrencyEdit2.Value:=0;
+  CMCurrencyEdit3.Value:=0;
+  SearchEdit2.Clear;
+  SearchPinkod.Clear;
+  ExpDataModule.ExpBatchsDataSet.Refresh;
+
+end;
+
+procedure TExpFormAdd.Button2Click(Sender: TObject);
+begin
+  ExpFormAdd.Close;
+  ExpDataModule.ExpBatchsDataSet.Locate('ID',ID,[]);
+end;
+
+procedure TExpFormAdd.CMCurrencyEdit1Change(Sender: TObject);
+begin
+  if DBLookupComboBox3.Text='' then   begin
+                                        MessageDlg('¬алйута сащ€си сечилм€йиб',mtWarning,[mbok],0);
+                                        exit
+                                      end
+  else begin
+         CMCurrencyEdit2.Value:=ExpDataModule.Repair.CallFloatFunction('Exp_comissionoperation',[ExpDataModule.ExpTypeDataSet.fieldbyname('id').asinteger,CMCurrencyEdit1.Value]);
+         CMCurrencyEdit3.Value:=CMCurrencyEdit1.Value+CMCurrencyEdit2.Value;
+         Edit15.Text:=Mani(CMCurrencyEdit1.Value);
+       end;
+end;
+
+procedure TExpFormAdd.DBLookupComboBox3Click(Sender: TObject);
+begin
+  If CMCurrencyEdit1.Text<>'' then begin
+                                     CMCurrencyEdit1.Value:=0;
+                                     CMCurrencyEdit2.Value:=0;
+                                     CMCurrencyEdit3.Value:=0;
+                                     Edit15.Clear;
+
+                                   end;  
+
+end;
+
+procedure TExpFormAdd.CMCurrencyEdit1KeyPress(Sender: TObject; var Key: Char);
+begin
+    if (CMCurrencyEdit1.Value<>null) and (ord(Key)<>13)  then
+    begin
+      Edit15.Clear;
+      CMCurrencyEdit2.Clear;
+      CMCurrencyEdit3.Clear;
+    end;  
+ end;
+
+procedure TExpFormAdd.Timer1Timer(Sender: TObject);
+begin
+DateTimePicker4.Time:=Time;
+end;
+
+procedure TExpFormAdd.SearchPinkodKeyPress(Sender: TObject; var Key: Char);
+begin
+  if (SearchPinkod.Color <>clred) and(SearchPinkod.Text<>'') then
+   begin
+     Edit3.Text:=SearchPinkod.Text;
+     ComboBox1.ItemIndex:=ExpDataModule.ExpBatchsDataSet.fieldbyname('KINDPASSPORT').AsInteger;
+     Edit5.Text:=ExpDataModule.ExpBatchsDataSet.fieldbyname('passper').asstring;
+     Edit6.Text:=ExpDataModule.ExpBatchsDataSet.fieldbyname('PASPNUM').asstring;
+     DBLookupComboBox5.KeyValue:=ExpDataModule.ExpBatchsDataSet.fieldbyname('PASPPLACE').AsString;
+     DateEdit.Value:=ExpDataModule.ExpBatchsDataSet.fieldbyname('PASPDATE').AsVariant;
+     Edit17.Text:=ExpDataModule.ExpBatchsDataSet.fieldbyname('ADRESS').AsString;
+     Edit9.Text:=ExpDataModule.ExpBatchsDataSet.fieldbyname('LASTNAME').AsString;
+     Edit11.Text:=ExpDataModule.ExpBatchsDataSet.fieldbyname('FIRSTNAME').AsString;
+     Edit13.Text:=ExpDataModule.ExpBatchsDataSet.fieldbyname('MIDNAME').AsString;
+   end
+  else Clear;
+end;
+
+procedure TExpFormAdd.SearchEdit2KeyPress(Sender: TObject; var Key: Char);
+begin
+  if (SearchPinkod.Color <>clred) and(SearchPinkod.Text<>'') then
+   begin
+     Edit4.Text:=SearchEdit2.Text;
+     ComboBox2.ItemIndex:=ExpDataModule.ExpBatchsDataSet.fieldbyname('BKINDPASSPORT').AsInteger;
+     Edit7.Text:=ExpDataModule.ExpBatchsDataSet.fieldbyname('passper').asstring;
+     Edit8.Text:=ExpDataModule.ExpBatchsDataSet.fieldbyname('PASPNUM').asstring;
+     DBLookupComboBox6.KeyValue:=ExpDataModule.ExpBatchsDataSet.fieldbyname('PASPPLACE').AsString;
+     DateEdit1.Value:=ExpDataModule.ExpBatchsDataSet.fieldbyname('PASPDATE').AsVariant;
+     Edit16.Text:=ExpDataModule.ExpBatchsDataSet.fieldbyname('BADRESS').AsString;
+     Edit10.Text:=ExpDataModule.ExpBatchsDataSet.fieldbyname('LASTNAME').AsString;
+     Edit12.Text:=ExpDataModule.ExpBatchsDataSet.fieldbyname('FIRSTNAME').AsString;
+     Edit14.Text:=ExpDataModule.ExpBatchsDataSet.fieldbyname('MIDNAME').AsString;
+  end
+ else Clear;
+end;
+
+procedure TExpFormAdd.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  Timer1.Enabled:=true;
+  Edit25.Clear;
+  SearchPinkod.Clear;
+  SearchEdit2.Clear;
+ 
+  ExpDataModule.ExpBatchsDataSet.Locate('ID',ID,[]);
+
+end;
+
+procedure TExpFormAdd.Button3Click(Sender: TObject);
+begin
+  Edit24.Text:=Edit4.Text;
+  ComboBox3.ItemIndex:=ComboBox2.ItemIndex;
+  Edit18.Text:=Edit7.Text;
+  Edit19.Text:=Edit8.Text;
+  DBLookupComboBox7.KeyValue:=DBLookupComboBox6.KeyValue;
+  DateEdit2.Value:=DateEdit1.Value;
+  Edit20.Text:=Edit16.Text;
+  Edit21.Text:=Edit10.Text;
+  Edit22.Text:=Edit12.Text;
+  Edit23.Text:=Edit14.Text;
+  DBLookupComboBox8.KeyValue:= DBLookupComboBox4.KeyValue;
+  Memo2.Text:=Memo1.Text;
+//  ExpFormAdd.Width:=920;
+end;
+
+procedure TExpFormAdd.Button4Click(Sender: TObject);
+begin
+  ExpFormAdd.Edit25.Clear;
+  ExpFormAdd.Width:=617;
+end;
+
+procedure TExpFormAdd.ComboBox1Change(Sender: TObject);
+begin
+  item:=ComboBox1.Itemindex;
+  Case ComboBox1.Itemindex of
+    0:begin
+        Edit5.Text:='AZE';
+        edit5.ReadOnly:=true;
+        Edit6.MaxLength:=8;
+        Edit6.Clear;
+      end;
+    1:begin
+        Edit5.Text:='AZE';
+        edit5.ReadOnly:=true;
+        Edit6.MaxLength:=8;
+        Edit6.Clear;
+      end;
+    2:begin
+        edit5.ReadOnly:=false;
+        Edit5.Text:='';
+        Edit6.MaxLength:=0;
+        Edit6.Clear;
+      end;
+  end;
+end;
+
+procedure TExpFormAdd.Edit25KeyPress(Sender: TObject; var Key: Char);
+var s,s1:String;
+begin
+  if ord(Key)=13 then
+  begin
+  with ExpDataModule,ExpBatchsDataSet do
+  begin
+    s:=fieldbyname('password').AsString;
+    //ICECrypt1.CryptType:=cHASH_GOST;
+    //ICECrypt1.Text:=Edit25.Text;
+    //s1:=ICECrypt1.GetCrypted;
+    s1:=Edit25.Text;
+  end;
+  if s=s1 then   ExpFormAdd.Width:=920
+  else begin
+         ShowMessage('Ўифр€ дцзэцн дейил!');
+         Edit25.clear;
+       end;
+  end;
+end;
+
+procedure TExpFormAdd.ComboBox2Change(Sender: TObject);
+begin
+  Case ComboBox2.Itemindex of
+    0:begin
+        Edit7.Text:='AZE';
+        edit7.ReadOnly:=true;
+        Edit8.MaxLength:=8;
+        Edit8.Clear;
+      end;
+    1:begin
+        Edit7.Text:='AZE';
+        edit7.ReadOnly:=true;
+        Edit8.MaxLength:=8;
+        Edit8.Clear;
+      end;
+    2:begin
+        edit7.ReadOnly:=false;
+        Edit7.Text:='';
+        Edit8.MaxLength:=0;
+        Edit8.Clear;
+      end;
+  end;
+end;
+
+
+procedure TExpFormAdd.FormCloseQuery(Sender: TObject;
+  var CanClose: Boolean);
+begin
+  ExpDataModule.ExpBatchsDataSet.Locate('ID',ID,[]);
+end;
+
+procedure TExpFormAdd.FormCreate(Sender: TObject);
+begin
+  SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TExpFormAdd.ComboBox3Change(Sender: TObject);
+begin
+  Case ComboBox3.Itemindex of
+    0:begin
+        Edit18.Text:='AZE';
+        edit18.ReadOnly:=true;
+        Edit19.MaxLength:=8;
+        Edit19.Clear;
+      end;
+    1:begin
+        Edit18.Text:='AZE';
+        edit18.ReadOnly:=true;
+        Edit19.MaxLength:=8;
+        Edit19.Clear;
+      end;
+    2:begin
+        edit18.ReadOnly:=false;
+        Edit18.Text:='';
+        Edit19.MaxLength:=0;
+        Edit19.Clear;
+      end;
+  end;
+end;
+
+end.
+
+

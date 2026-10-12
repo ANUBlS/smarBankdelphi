@@ -1,0 +1,97 @@
+﻿unit CUST_COMBİNED_Unit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, Grids, DBGrids, CurrencyEdit, ExtCtrls;
+
+type
+  TFORM_CUST_COMBİNED = class(TForm)
+    Panel1: TPanel;
+    Panel2: TPanel;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Panel3: TPanel;
+    Edit_name: TEdit;
+    Edit_Adress: TEdit;
+    Edit_tel: TEdit;
+    CurrencyEdit_ammount: TCurrencyEdit;
+    DBGrid1: TDBGrid;
+    Button1: TButton;
+    Button2: TButton;
+    procedure Button1Click(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure Button2Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FORM_CUST_COMBİNED: TFORM_CUST_COMBİNED;
+
+implementation
+
+uses DataModuleConclusion,ConclusionMainUnitImpl,CommonDecls;
+
+{$R *.dfm}
+
+procedure TFORM_CUST_COMBİNED.Button1Click(Sender: TObject);
+ var
+ v_creditid:integer;
+ v_name:string;
+ v_cust_adress:string;
+ v_cust_tel:integer;
+ v_ammount:real;
+begin
+ v_creditid:=Get_SelectedCrdID;
+ v_name:=Edit_name.Text;
+ v_cust_adress:=Edit_Adress.Text;
+ v_cust_tel:=strtoint(Edit_tel.Text);
+ v_ammount:=CurrencyEdit_ammount.Value;
+       DataModuleConcl.IUPackage.CallProcedure('ADD_CUST_COMBINED',
+                                               ['c_creditid',v_creditid,
+                                                'c_name',v_name,
+                                                'c_cust_adress',v_cust_adress,
+                                                'c_cust_tel',v_cust_tel,
+                                                'c_ammount',v_ammount  ]);
+
+                                                DataModuleConcl.ODS_CUST_COMBİNED.Refresh;
+                                                 Edit_name.clear;
+                                                 Edit_Adress.clear;
+                                                 Edit_tel.clear;
+                                                 CurrencyEdit_ammount.clear;
+
+end;
+
+procedure TFORM_CUST_COMBİNED.Button2Click(Sender: TObject);
+begin
+FORM_CUST_COMBİNED.close;
+end;
+
+procedure TFORM_CUST_COMBİNED.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+{Edit_name.clear;
+Edit_Adress.clear;
+Edit_tel.clear;
+CurrencyEdit_ammount.clear;  }
+end;
+
+procedure TFORM_CUST_COMBİNED.FormShow(Sender: TObject);
+begin
+with DataModuleConcl,ODS_CUST_COMBİNED do
+begin
+Close;
+SetVariable('creditid',Get_SelectedCrdID);
+open;
+
+end;
+end;
+
+end.

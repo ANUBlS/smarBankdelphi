@@ -1,0 +1,597 @@
+object DataMod: TDataMod
+  OldCreateOrder = False
+  Left = 84
+  Top = 98
+  Height = 555
+  Width = 808
+  object OrDSIncGen: TOracleDataSet
+    SQL.Strings = (
+      'select bal_cn1,balname, Rest, dat'
+      ' from ('
+      '  select bal_cn1,balname,'
+      
+        '  0 - (sum(decode(Rest1, null, 0, Rest1)-decode(Rest2, null, 0, ' +
+        'Rest2))) as Rest,'
+      '  dat'
+      '  from ('
+      '    select'
+      '      a.bal_cn1,'
+      '      b.balname,'
+      '      ('
+      '        select sum(lammount) as rest'
+      '        from provarch'
+      '        where'
+      '          (dat=:SelectDate)'
+      '          and (debt = a.ID)'
+      '          and ('
+      '            kredit in ('
+      '              select ID from Account_Inc'
+      '              where bal_cn1 <> 5501'
+      '            )'
+      '          )'
+      '      ) as Rest1,'
+      '      ('
+      '        select sum(lammount) as rest'
+      '        from provarch'
+      '        where'
+      '          (dat=:SelectDate)'
+      '          and ('
+      '            debt in ('
+      '              select ID from Account_Inc'
+      '              where bal_cn1 <> 5501'
+      '            )'
+      '          )'
+      '          and (kredit = a.ID)'
+      '      ) as Rest2,'
+      '      :SelectDate as dat'
+      '    from'
+      '      Account_Inc a,'
+      '      bal_spr1 b'
+      '    where'
+      '      (a.bal_cn1 between 6000 and 9999)'
+      '      and b.bal_cn=a.bal_cn1'
+      '  )'
+      '  group by dat,bal_cn1,balname'
+      ')'
+      '  where (bal_cn1 < 8000) and (Rest <>0)'
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      '')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    Variables.Data = {
+      03000000010000000B0000003A53454C454354444154450C0000000000000000
+      000000}
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = False
+    Active = False
+    Left = 24
+    Top = 112
+  end
+  object OrDSIncFilial: TOracleDataSet
+    SQL.Strings = (
+      'select bal_cn1,balname, Rest'
+      ' from ('
+      
+        '  select bal_cn1,balname, 0 - (sum(decode(Rest1, null, 0, Rest1)' +
+        '-decode(Rest2, null, 0, Rest2))) as Rest'
+      '  from ('
+      '    select'
+      '      a.bal_cn1,'
+      '      b.balname,'
+      '      ('
+      '        select sum(lammount) as rest'
+      '        from provarch'
+      '        where'
+      '          (dat between :BegDate and :EndDate)'
+      '          and (debt = a.ID)'
+      '          and ('
+      '            kredit in ('
+      '              select ID from Account_Inc'
+      '              where bal_cn1 <> 5501'
+      ''
+      '            )'
+      '          )'
+      '      ) as Rest1,'
+      '      ('
+      '        select sum(lammount) as rest'
+      '        from provarch'
+      '        where'
+      '          (dat between :BegDate and :EndDate)'
+      '          and ('
+      '            debt in ('
+      '              select ID from Account_Inc'
+      '              where bal_cn1 <> 5501'
+      ''
+      '            )'
+      '          )'
+      '          and (kredit = a.ID)'
+      '      ) as Rest2'
+      '    from'
+      '      Account_Inc a,'
+      '      bal_spr1 b'
+      '    where'
+      '      (a.bal_cn1 between 6000 and 9999)'
+      '      and a.Filial = :FilialCode'
+      '      and b.bal_cn=a.bal_cn1'
+      '  )'
+      '  group by bal_cn1,balname'
+      ')'
+      '  where (bal_cn1 < 8000) and (Rest <>0)'
+      ''
+      ''
+      ''
+      ''
+      '')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = False
+    Active = False
+    Left = 120
+    Top = 112
+  end
+  object DSIncExpenses: TDataSource
+    DataSet = OS_IncExpenses
+    Left = 24
+    Top = 240
+  end
+  object OrDSExpGen: TOracleDataSet
+    SQL.Strings = (
+      'select bal_cn1,balname, Rest'
+      ' from ('
+      
+        '  select bal_cn1,balname, 0 + (sum(decode(Rest1, null, 0, Rest1)' +
+        '-decode(Rest2, null, 0, Rest2))) as Rest'
+      '  from ('
+      '    select'
+      '      a.bal_cn1,'
+      '      b.balname,'
+      '      ('
+      '        select sum(lammount) as rest'
+      '        from provarch'
+      '        where'
+      '          (dat between :BegDate and :EndDate)'
+      '          and (debt = a.ID)'
+      '          and ('
+      '            kredit in ('
+      '              select ID from Account_Inc'
+      '              where bal_cn1 <> 5501'
+      '            )'
+      '          )'
+      '      ) as Rest1,'
+      '      ('
+      '        select sum(lammount) as rest'
+      '        from provarch'
+      '        where'
+      '          (dat between :BegDate and :EndDate)'
+      '          and ('
+      '            debt in ('
+      '              select ID from Account_Inc'
+      '              where bal_cn1 <> 5501'
+      '            )'
+      '          )'
+      '          and (kredit = a.ID)'
+      '      ) as Rest2'
+      '    from'
+      '      Account_Inc a,'
+      '      bal_spr1 b'
+      '    where'
+      '      (a.bal_cn1 between 6000 and 9999)'
+      '      and b.bal_cn=a.bal_cn1'
+      '  )'
+      '  group by bal_cn1,balname'
+      ')'
+      '  where (bal_cn1 > 8000) and (Rest <>0)'
+      ''
+      ''
+      ' '
+      ' '
+      '')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = False
+    Active = False
+    Left = 24
+    Top = 168
+  end
+  object OrDSExpFilial: TOracleDataSet
+    SQL.Strings = (
+      'select bal_cn1,balname, Rest'
+      ' from ('
+      
+        '  select bal_cn1,balname, 0 + (sum(decode(Rest1, null, 0, Rest1)' +
+        '-decode(Rest2, null, 0, Rest2))) as Rest'
+      '  from ('
+      '    select'
+      '      a.bal_cn1,'
+      '      b.balname,'
+      '      ('
+      '        select sum(lammount) as rest'
+      '        from provarch'
+      '        where'
+      '          (dat between :BegDate and :EndDate)'
+      '          and (debt = a.ID)'
+      '          and ('
+      '            kredit in ('
+      '              select ID from Account_Inc'
+      '              where bal_cn1 <> 5501'
+      ''
+      '            )'
+      '          )'
+      '      ) as Rest1,'
+      '      ('
+      '        select sum(lammount) as rest'
+      '        from provarch'
+      '        where'
+      '          (dat between :BegDate and :EndDate)'
+      '          and ('
+      '            debt in ('
+      '              select ID from Account_Inc'
+      '              where bal_cn1 <> 5501'
+      '                    '
+      '            )'
+      '          )'
+      '          and (kredit = a.ID)'
+      '      ) as Rest2'
+      '    from'
+      '      Account_Inc a,'
+      '      bal_spr1 b'
+      '    where'
+      '      (a.bal_cn1 between 6000 and 9999)'
+      '      and a.Filial = :FilialCode'
+      '      and b.bal_cn=a.bal_cn1'
+      '  )'
+      '  group by bal_cn1,balname'
+      ')'
+      '  where (bal_cn1 > 8000) and (Rest <>0)'
+      ''
+      ' '
+      ' '
+      ' '
+      '')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = False
+    Active = False
+    Left = 120
+    Top = 176
+  end
+  object OrDSSysDat: TOracleDataSet
+    SQL.Strings = (
+      'select Tek_Dat from SysDat')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = False
+    Active = False
+    Left = 24
+    Top = 6
+    object OrDSSysDatTEK_DAT: TDateTimeField
+      FieldName = 'TEK_DAT'
+      Required = True
+    end
+  end
+  object OrDSFilial: TOracleDataSet
+    SQL.Strings = (
+      'select * from Filial')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = False
+    Active = False
+    Left = 104
+    Top = 6
+    object OrDSFilialID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object OrDSFilialNAME: TStringField
+      FieldName = 'NAME'
+      Size = 90
+    end
+  end
+  object OrDSFilialCode: TOracleDataSet
+    SQL.Strings = (
+      'select ID,NAME from Filial'
+      'where '
+      '          Name =:FilialName')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    Variables.Data = {
+      03000000010000000B0000003A46494C49414C4E414D45050000000000000000
+      000000}
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = False
+    Active = False
+    Left = 176
+    Top = 6
+    object OrDSFilialCodeID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object OrDSFilialCodeNAME: TStringField
+      FieldName = 'NAME'
+      Size = 90
+    end
+  end
+  object OrDSBankInfo: TOracleDataSet
+    SQL.Strings = (
+      'select BANK from BankInfo')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = False
+    Active = False
+    Left = 264
+    Top = 6
+    object OrDSBankInfoBANK: TStringField
+      FieldName = 'BANK'
+      Size = 80
+    end
+  end
+  object OS_IncExpenses: TOracleDataSet
+    SQL.Strings = (
+      'select dat,BAL_CN1, BALNAME, SUM(REST)'
+      ' from Inc_Expenses'
+      'where'
+      ' dat between :BegDate and :EndDate '
+      'group by dat, BAL_CN1, BALNAME'
+      '')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    Variables.Data = {
+      0300000002000000080000003A424547444154450C0000000000000000000000
+      080000003A454E44444154450C0000000000000000000000}
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = False
+    Active = False
+    Left = 304
+    Top = 112
+  end
+  object OS_IncExpBranch: TOracleDataSet
+    SQL.Strings = (
+      'select * from Inc_Expenses'
+      'where'
+      ' (dat between :BegDate and :EndDate)'
+      ' and'
+      ' (Filial =:FilialCode)')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    Variables.Data = {
+      0300000003000000080000003A424547444154450C0000000000000000000000
+      080000003A454E44444154450C00000000000000000000000B0000003A46494C
+      49414C434F4445030000000000000000000000}
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = False
+    Active = False
+    Left = 400
+    Top = 112
+  end
+  object OPack_SL: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    Debug = False
+    PackageName = 'SL_Control'
+    ParameterMode = pmPositional
+    Cursor = crDefault
+    Optimize = True
+    Left = 24
+    Top = 336
+  end
+end

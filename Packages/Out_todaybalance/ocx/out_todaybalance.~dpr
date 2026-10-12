@@ -1,0 +1,26 @@
+library out_todaybalance;
+
+uses
+  ComServ,
+  out_todaybalance_TLB in 'out_todaybalance_TLB.pas',
+  TodayBalanceImpl in 'TodayBalanceImpl.pas' {FrmTodayBalance: TActiveForm} {ActiveFormX: CoClass},
+  UntBalanceRpt1 in 'UntBalanceRpt1.pas' {BalanceRpt1: TQuickRep},
+  UntBalanceRpt2 in 'UntBalanceRpt2.pas' {BalanceRpt2: TQuickRep},
+  UntBalnceRpt3 in 'UntBalnceRpt3.pas' {BalanceRpt3: TQuickRep},
+  TB_DataModuleImpl in 'TB_DataModuleImpl.pas' {out_balancedatamodule: TDataModule},
+  BalanceChecking_Unit in 'BalanceChecking_Unit.pas' {FrmBalanceChecking};
+
+{$E ocx}
+
+exports
+  DllGetClassObject,
+  DllCanUnloadNow,
+  DllRegisterServer,
+  DllUnregisterServer;
+
+{$R *.TLB}
+
+{$R *.RES}
+
+begin
+end.

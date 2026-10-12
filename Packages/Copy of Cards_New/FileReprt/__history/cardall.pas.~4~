@@ -1,0 +1,177 @@
+unit cardall;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Grids, DBGrids, StdCtrls, DBCtrls, ComCtrls, ToolWin, ExtCtrls,
+  ImgList, DB, OracleData;
+
+type
+  TAllcards = class(TForm)
+    ImageList1: TImageList;
+    Panel3: TPanel;
+    CoolBar1: TCoolBar;
+    ToolBar1: TToolBar;
+    isertbtn: TToolButton;
+    ToolButton2: TToolButton;
+    ToolButton4: TToolButton;
+    ToolButton5: TToolButton;
+    ToolButton3: TToolButton;
+    ToolButton6: TToolButton;
+    ToolButton8: TToolButton;
+    ToolButton9: TToolButton;
+    ToolButton1: TToolButton;
+    ToolButton10: TToolButton;
+    ToolButton11: TToolButton;
+    ToolButton12: TToolButton;
+    ToolButton7: TToolButton;
+    ToolButton18: TToolButton;
+    ToolButton19: TToolButton;
+    ToolButton20: TToolButton;
+    ToolButton14: TToolButton;
+    ToolButton15: TToolButton;
+    ToolButton17: TToolButton;
+    ToolButton16: TToolButton;
+    ToolButton13: TToolButton;
+    ToolButton22: TToolButton;
+    ToolButton23: TToolButton;
+    ToolButton24: TToolButton;
+    ToolButton21: TToolButton;
+    ToolButton25: TToolButton;
+    ToolButton26: TToolButton;
+    ToolButton27: TToolButton;
+    Panel5: TPanel;
+    GroupBox1: TGroupBox;
+    Label8: TLabel;
+    Label9: TLabel;
+    DateTimePicker1: TDateTimePicker;
+    DateTimePicker2: TDateTimePicker;
+    CheckBox1: TCheckBox;
+    GroupBox2: TGroupBox;
+    CheckBox2: TCheckBox;
+    DBLookupComboBox1: TDBLookupComboBox;
+    GroupBox3: TGroupBox;
+    CheckBox3: TCheckBox;
+    DBLookupComboBox2: TDBLookupComboBox;
+    GroupBox4: TGroupBox;
+    CheckBox4: TCheckBox;
+    DBLookupComboBox3: TDBLookupComboBox;
+    GroupBox5: TGroupBox;
+    CheckBox5: TCheckBox;
+    DBLookupComboBox4: TDBLookupComboBox;
+    GroupBox6: TGroupBox;
+    CheckBox6: TCheckBox;
+    DBLookupComboBox5: TDBLookupComboBox;
+    Button1: TButton;
+    Panel4: TPanel;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    Label7: TLabel;
+    EditCARDNUMBER: TEdit;
+    EditRBSNUMBER: TEdit;
+    EditFNAME: TEdit;
+    EditLNAME: TEdit;
+    EditCARDHOLDER: TEdit;
+    EditCREDIT_LIM: TEdit;
+    DBGrid1: TDBGrid;
+    Clients: TOracleDataSet;
+    ClientsID: TFloatField;
+    ClientsACCID: TFloatField;
+    ClientsCARDHOLDER: TWideStringField;
+    ClientsFNAME: TWideStringField;
+    ClientsLNAME: TWideStringField;
+    ClientsPASSPORT: TWideStringField;
+    ClientsBIRTHDAY: TWideStringField;
+    ClientsHOMEPHONE: TWideStringField;
+    ClientsWORKPHONE: TWideStringField;
+    ClientsCOUNTRY: TWideStringField;
+    ClientsCITY: TWideStringField;
+    ClientsADDRESS: TWideStringField;
+    ClientsRESIDENT: TWideStringField;
+    ClientsCARDNUMBER: TWideStringField;
+    ClientsRBSNUMBER: TWideStringField;
+    ClientsMAINCARD: TWideStringField;
+    ClientsCURRENCY: TWideStringField;
+    ClientsCARDTYPE: TWideStringField;
+    ClientsCARDSTATUS: TWideStringField;
+    ClientsCREDIT_LIM: TFloatField;
+    ClientsDATEOPEN: TDateTimeField;
+    ClientsEXPIRY: TDateTimeField;
+    ClientsREFERENCE: TWideStringField;
+    ClientsEMBOSSNAME: TWideStringField;
+    ClientsCOMPANY: TWideStringField;
+    ClientsDATECLOSE: TDateTimeField;
+    ClientsSECURITY: TWideStringField;
+    ClientsSEND: TIntegerField;
+    ClientsCREATDATE: TIntegerField;
+    ClientsFILE_NUM: TIntegerField;
+    ClientsMESSTYPE: TIntegerField;
+    ClientsWITHP: TWideStringField;
+    ClientsURG: TWideStringField;
+    ClientsOTHTYPE: TWideStringField;
+    ClientsOTHMEMBER: TWideStringField;
+    ClientsOTHASSCOD: TWideStringField;
+    ClientsOTHIDEN: TWideStringField;
+    ClientsOTHEXPRY: TWideStringField;
+    ClientsFILENAME: TWideStringField;
+    ClientsCON_BALAN: TWideStringField;
+    ClientsBALAN_SIGN: TWideStringField;
+    ClientsCARDREST: TFloatField;
+    ClientsRBSNUMBER2: TWideStringField;
+    ClientsACCID2: TFloatField;
+    ClientsREFINTEGER: TWideStringField;
+    ClientsLANG_CODE: TWideStringField;
+    ClientsFILIAL: TFloatField;
+    ClientsISSUED_BY: TWideStringField;
+    ClientsDOC_SINCE: TWideStringField;
+    ClientsCONTRACT_NUM: TWideStringField;
+    ClientsKREDIT: TIntegerField;
+    ClientsKLI_ID: TFloatField;
+    ClientsOP_ID: TFloatField;
+    ClientsTYPES: TWideStringField;
+    ClientsTITUL: TWideStringField;
+    ClientsSTATUS: TFloatField;
+    ClientsDAT: TDateTimeField;
+    ClientsNMOD_OPID: TFloatField;
+    ClientsCRDAT: TDateTimeField;
+    ClientsRBSCLOSE: TWideStringField;
+    ClientsRBSCLOSEID: TFloatField;
+    ClientsTRANDATE: TDateTimeField;
+    ClientsFIL: TWideStringField;
+    ClientsCREAT: TWideStringField;
+    ClientsMODI: TWideStringField;
+    DataSource1: TDataSource;
+    procedure FormCreate(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Allcards: TAllcards;
+
+implementation
+
+{$R *.dfm}
+uses
+SBTranslateProc,sboapiDataModuleimpl,Filereportform;
+
+procedure TAllcards.FormCreate(Sender: TObject);
+begin
+SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TAllcards.FormShow(Sender: TObject);
+begin
+clients.Close;
+clients.SetVariable('ids',strtoint(x));
+clients.Open;
+end;
+
+end.

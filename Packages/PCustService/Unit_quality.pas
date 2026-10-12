@@ -1,0 +1,130 @@
+unit Unit_quality;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ImgList, StdCtrls, Mask, DBCtrls, ActnList, Grids, DBGrids, ComCtrls,db,
+  ToolWin;
+
+type
+  TQuality = class(TForm)
+    DBGrid1: TDBGrid;
+    ActionList2: TActionList;
+    ActionAddTemplare: TAction;
+    ActionEditTemplate: TAction;
+    ActionDeleteTemplate: TAction;
+    ActionRfreshTemplate: TAction;
+    ActionClose: TAction;
+    OpenDlg: TOpenDialog;
+    ToolBar2: TToolBar;
+    ToolButton8: TToolButton;
+    ToolButton9: TToolButton;
+    DBGrid2: TDBGrid;
+    ActionList1: TActionList;
+    ActnAddBookmark: TAction;
+    ActnDeleteBookmark: TAction;
+    ActnEditBookmark: TAction;
+    ActnNewBookmark: TAction;
+    ActnClose: TAction;
+    ToolBar1: TToolBar;
+    ToolButton15: TToolButton;
+    ToolButton18: TToolButton;
+    ToolButton19: TToolButton;
+    ToolButton20: TToolButton;
+    ToolButton21: TToolButton;
+    ImageList1: TImageList;
+    ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
+    ToolButton3: TToolButton;
+    procedure ToolButton15Click(Sender: TObject);
+    procedure ToolButton21Click(Sender: TObject);
+    procedure ToolButton8Click(Sender: TObject);
+    procedure ToolButton19Click(Sender: TObject);
+    procedure ToolButton1Click(Sender: TObject);
+    procedure ToolButton3Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Quality: TQuality;
+
+implementation
+uses sboapiDataModuleImpl,UnitDataModPCustService;
+{$R *.dfm}
+
+procedure TQuality.ToolButton15Click(Sender: TObject);
+var
+i:integer;
+begin
+
+  with DataModPCustService.Ods_cust_quality do
+    Insert;
+
+    // Refresh;
+  if i = mrOK then
+  begin
+    with DataModPCustService.Ods_cust_quality do
+      Refresh;
+       DataModPCustService.Ods_cust_quality.Post;
+  end;
+end;
+
+procedure TQuality.ToolButton19Click(Sender: TObject);
+resourcestring
+  TempdeleteMsg = 'Silinsin?';
+begin
+
+  if MessageDlg(TempdeleteMsg, mtConfirmation, [mbYes, mbNo], 0) = mrYes then
+  begin
+    with DataModPCustService.Ods_cust_quality do
+      Delete;
+  end;
+
+
+end;
+
+procedure TQuality.ToolButton21Click(Sender: TObject);
+begin
+ DataModPCustService.Ods_cust_quality.Refresh;
+
+end;
+
+procedure TQuality.ToolButton3Click(Sender: TObject);
+begin
+ DataModPCustService.Ods_cust_id_quality.Refresh;
+end;
+
+procedure TQuality.ToolButton8Click(Sender: TObject);
+var
+i:integer;
+begin
+with DataModPCustService.Ods_cust_id_quality do
+    Insert;
+
+    // Refresh;
+  if i = mrOK then
+  begin
+    with DataModPCustService.Ods_cust_id_quality do
+      Refresh;
+       DataModPCustService.Ods_cust_id_quality.Post;
+  end;
+end;
+
+procedure TQuality.ToolButton1Click(Sender: TObject);
+resourcestring
+  TempdeleteMsg = 'Silinsin?';
+begin
+
+  if MessageDlg(TempdeleteMsg, mtConfirmation, [mbYes, mbNo], 0) = mrYes then
+  begin
+    with DataModPCustService.Ods_cust_id_quality do
+      Delete;
+  end;
+
+end;
+
+end.

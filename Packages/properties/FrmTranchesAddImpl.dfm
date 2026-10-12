@@ -1,0 +1,257 @@
+object FrmTranchesAdd: TFrmTranchesAdd
+  Left = 306
+  Top = 270
+  BorderIcons = [biSystemMenu]
+  ClientHeight = 121
+  ClientWidth = 405
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'MS Sans Serif'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poMainFormCenter
+  OnCanResize = FormCanResize
+  OnClose = FormClose
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  OnKeyPress = FormKeyPress
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 405
+    Height = 83
+    Align = alTop
+    Anchors = [akLeft]
+    BevelOuter = bvLowered
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 0
+    object Panel2: TPanel
+      Left = 1
+      Top = 0
+      Width = 200
+      Height = 42
+      BevelOuter = bvLowered
+      TabOrder = 0
+      object StaticText1: TStaticText
+        Left = 1
+        Top = 1
+        Width = 198
+        Height = 18
+        Align = alTop
+        Alignment = taCenter
+        Caption = #1050#1088#1077#1076#1080#1090' '#1084#1094#1075#1072#1074#1080#1083#1103#1089#1080#1085#1080#1085' '#8470
+        Color = clBlack
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindow
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = [fsBold]
+        ParentColor = False
+        ParentFont = False
+        TabOrder = 0
+      end
+      object DBLookupComboboxEh1: TDBLookupComboboxEh
+        Left = 3
+        Top = 20
+        Width = 197
+        Height = 21
+        EditButtons = <>
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        KeyField = 'PROPID'
+        ListField = 'NUMBEROFCREDIT'
+        ListSource = DMproperties.DataSrcProp_Kredit
+        ParentFont = False
+        TabOrder = 1
+        Visible = True
+      end
+    end
+    object Panel3: TPanel
+      Left = 1
+      Top = 41
+      Width = 200
+      Height = 41
+      BevelOuter = bvLowered
+      TabOrder = 1
+      object StaticText2: TStaticText
+        Left = 1
+        Top = 1
+        Width = 198
+        Height = 18
+        Align = alTop
+        Alignment = taCenter
+        Caption = #1065#1077#1089#1072#1073
+        Color = clBlack
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindow
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = [fsBold]
+        ParentColor = False
+        ParentFont = False
+        TabOrder = 0
+      end
+      object DBLookupComboboxEh2: TDBLookupComboboxEh
+        Left = 2
+        Top = 20
+        Width = 197
+        Height = 21
+        DataField = 'CLIENTACCID'
+        DataSource = DMproperties.DataSrcPropIns
+        EditButtons = <>
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        KeyField = 'ID'
+        ListField = 'ACCNO'
+        ListSource = DMproperties.ClientaccsDatSrc
+        ParentFont = False
+        ReadOnly = True
+        TabOrder = 1
+        Visible = True
+      end
+    end
+    object Panel4: TPanel
+      Left = 202
+      Top = 0
+      Width = 200
+      Height = 41
+      BevelOuter = bvLowered
+      TabOrder = 2
+      object StaticText3: TStaticText
+        Left = 1
+        Top = 1
+        Width = 198
+        Height = 18
+        Align = alTop
+        Alignment = taCenter
+        Caption = #1071#1084#1083#1072#1082#1099#1085' '#1073#1072#1079#1072#1088' '#1076#1103#1081#1103#1088#1080
+        Color = clBlack
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindow
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = [fsBold]
+        ParentColor = False
+        ParentFont = False
+        TabOrder = 0
+      end
+      object Edit2: TEdit
+        Left = 173
+        Top = 19
+        Width = 89
+        Height = 22
+        TabOrder = 1
+        Visible = False
+      end
+      object edit1: TEdit
+        Left = 154
+        Top = 20
+        Width = 196
+        Height = 22
+        TabOrder = 2
+        Text = 'edit1'
+        Visible = False
+      end
+      object Edit3: TEdit
+        Left = 2
+        Top = 20
+        Width = 197
+        Height = 21
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 3
+      end
+    end
+    object Panel5: TPanel
+      Left = 203
+      Top = 41
+      Width = 200
+      Height = 41
+      BevelOuter = bvLowered
+      TabOrder = 3
+      object StaticText4: TStaticText
+        Left = 1
+        Top = 1
+        Width = 198
+        Height = 18
+        Align = alTop
+        Alignment = taCenter
+        Caption = #1058#1072#1088#1080#1093
+        Color = clBlack
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindow
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = [fsBold]
+        ParentColor = False
+        ParentFont = False
+        TabOrder = 0
+      end
+      object DateTimePicker1: TDateTimePicker
+        Left = 1
+        Top = 20
+        Width = 198
+        Height = 21
+        Date = 39848.637854814800000000
+        Time = 39848.637854814800000000
+        Enabled = False
+        TabOrder = 1
+      end
+    end
+  end
+  object BitBtn1: TBitBtn
+    Left = 243
+    Top = 86
+    Width = 75
+    Height = 27
+    Caption = #1043#1103#1073#1091#1083' '#1077#1090
+    DoubleBuffered = True
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    ParentDoubleBuffered = False
+    ParentFont = False
+    TabOrder = 1
+    OnClick = BitBtn1Click
+  end
+  object BitBtn2: TBitBtn
+    Left = 324
+    Top = 86
+    Width = 74
+    Height = 27
+    Caption = #1041#1072#1100#1083#1072
+    DoubleBuffered = True
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    ModalResult = 2
+    ParentDoubleBuffered = False
+    ParentFont = False
+    TabOrder = 2
+  end
+end

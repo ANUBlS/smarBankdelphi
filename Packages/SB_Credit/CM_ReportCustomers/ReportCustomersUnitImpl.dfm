@@ -1,0 +1,91 @@
+object Form1: TForm1
+  Left = 318
+  Top = 208
+  Width = 554
+  Height = 225
+  BorderIcons = [biSystemMenu]
+  Caption = 'Form1'
+  Color = clBtnFace
+  Font.Charset = RUSSIAN_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  OnKeyPress = FormKeyPress
+  PixelsPerInch = 96
+  TextHeight = 13
+  object DateTimePicker1: TDateTimePicker
+    Left = 64
+    Top = 8
+    Width = 186
+    Height = 21
+    CalAlignment = dtaLeft
+    Date = 38960.4953759722
+    Time = 38960.4953759722
+    DateFormat = dfShort
+    DateMode = dmComboBox
+    Kind = dtkDate
+    ParseInput = False
+    TabOrder = 0
+  end
+  object DBLookupComboboxEh1: TDBLookupComboboxEh
+    Left = 64
+    Top = 40
+    Width = 185
+    Height = 21
+    EditButtons = <>
+    TabOrder = 1
+    Visible = True
+  end
+  object BitBtn1: TBitBtn
+    Left = 216
+    Top = 152
+    Width = 75
+    Height = 25
+    Caption = 'BitBtn1'
+    TabOrder = 2
+  end
+  object BitBtn2: TBitBtn
+    Left = 304
+    Top = 152
+    Width = 75
+    Height = 25
+    Caption = 'BitBtn2'
+    TabOrder = 3
+  end
+  object NLSLocalizer1: TNLSLocalizer
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    Left = 128
+    Top = 104
+  end
+  object CMExcelExport1: TCMExcelExport
+    StyleColumnWidth = cwDefault
+    ColumnWidth = 0
+    FontTitles.Charset = DEFAULT_CHARSET
+    FontTitles.Color = clWindowText
+    FontTitles.Height = -11
+    FontTitles.Name = 'MS Sans Serif'
+    FontTitles.Style = []
+    OrientationTitles = 0
+    FontData.Charset = DEFAULT_CHARSET
+    FontData.Color = clWindowText
+    FontData.Height = -11
+    FontData.Name = 'MS Sans Serif'
+    FontData.Style = []
+    FontSummary.Charset = DEFAULT_CHARSET
+    FontSummary.Color = clWindowText
+    FontSummary.Height = -11
+    FontSummary.Name = 'MS Sans Serif'
+    FontSummary.Style = []
+    SummarySelection = ssNone
+    SummaryCalculation = scSUM
+    Left = 80
+    Top = 136
+  end
+end

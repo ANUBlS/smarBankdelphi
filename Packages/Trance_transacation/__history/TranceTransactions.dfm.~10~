@@ -1,0 +1,694 @@
+object TranceTransaction: TTranceTransaction
+  Left = 0
+  Top = 0
+  Width = 1214
+  Height = 629
+  Caption = 'TranceTransaction'
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  OnCreate = ActiveFormCreate
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Panel2: TPanel
+    Left = 0
+    Top = 0
+    Width = 1214
+    Height = 629
+    Align = alClient
+    TabOrder = 0
+    object PageControl1: TPageControl
+      Left = 1
+      Top = 1
+      Width = 1212
+      Height = 627
+      ActivePage = TabSheet1
+      Align = alClient
+      TabOrder = 0
+      object TabSheet1: TTabSheet
+        Caption = '  Planla'#351'd'#305'r'#305'lm'#305#351'  '
+        object GridTransactions: TDBGrid
+          Left = 0
+          Top = 46
+          Width = 1204
+          Height = 553
+          Align = alClient
+          Color = clBtnFace
+          DataSource = TrData.TransactionsData_lazytr
+          DrawingStyle = gdsGradient
+          FixedColor = clNavy
+          Options = [dgTitles, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit, dgTitleClick]
+          TabOrder = 0
+          TitleFont.Charset = DEFAULT_CHARSET
+          TitleFont.Color = clWindowText
+          TitleFont.Height = -11
+          TitleFont.Name = 'Tahoma'
+          TitleFont.Style = []
+          OnDrawColumnCell = GridTransactionsDrawColumnCell
+          Columns = <
+            item
+              Color = clSilver
+              Expanded = False
+              FieldName = 'ID'
+              Font.Charset = RUSSIAN_CHARSET
+              Font.Color = clNavy
+              Font.Height = -11
+              Font.Name = 'Azl Sans Serif'
+              Font.Style = []
+              Title.Alignment = taCenter
+              Title.Font.Charset = RUSSIAN_CHARSET
+              Title.Font.Color = clNavy
+              Title.Font.Height = -11
+              Title.Font.Name = 'Tahoma'
+              Title.Font.Style = []
+              Width = 80
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'TRANSACTIONDATE'
+              Font.Charset = RUSSIAN_CHARSET
+              Font.Color = clNavy
+              Font.Height = -11
+              Font.Name = 'Azl Sans Serif'
+              Font.Style = []
+              Title.Alignment = taCenter
+              Title.Caption = 'Tarix'
+              Title.Font.Charset = RUSSIAN_CHARSET
+              Title.Font.Color = clNavy
+              Title.Font.Height = -11
+              Title.Font.Name = 'Tahoma'
+              Title.Font.Style = []
+              Width = 80
+              Visible = True
+            end
+            item
+              Color = clWhite
+              Expanded = False
+              FieldName = 'DEBITACCNO'
+              Title.Alignment = taCenter
+              Title.Font.Charset = RUSSIAN_CHARSET
+              Title.Font.Color = clNavy
+              Title.Font.Height = -11
+              Title.Font.Name = 'Tahoma'
+              Title.Font.Style = []
+              Width = 190
+              Visible = True
+            end
+            item
+              Alignment = taCenter
+              Color = clSilver
+              Expanded = False
+              FieldName = 'DEBITCURRENCYSNAME'
+              Font.Charset = RUSSIAN_CHARSET
+              Font.Color = clNavy
+              Font.Height = -11
+              Font.Name = 'Azl Sans Serif'
+              Font.Style = []
+              Title.Alignment = taCenter
+              Title.Font.Charset = RUSSIAN_CHARSET
+              Title.Font.Color = clNavy
+              Title.Font.Height = -11
+              Title.Font.Name = 'Tahoma'
+              Title.Font.Style = []
+              Width = 30
+              Visible = True
+            end
+            item
+              Color = clWhite
+              Expanded = False
+              FieldName = 'CREDITACCNO'
+              Title.Alignment = taCenter
+              Title.Font.Charset = RUSSIAN_CHARSET
+              Title.Font.Color = clNavy
+              Title.Font.Height = -11
+              Title.Font.Name = 'Tahoma'
+              Title.Font.Style = []
+              Width = 190
+              Visible = True
+            end
+            item
+              Alignment = taCenter
+              Color = clSilver
+              Expanded = False
+              FieldName = 'CREDITCURRENCYSNAME'
+              Font.Charset = RUSSIAN_CHARSET
+              Font.Color = clNavy
+              Font.Height = -11
+              Font.Name = 'Azl Sans Serif'
+              Font.Style = []
+              Title.Alignment = taCenter
+              Title.Font.Charset = RUSSIAN_CHARSET
+              Title.Font.Color = clNavy
+              Title.Font.Height = -11
+              Title.Font.Name = 'Tahoma'
+              Title.Font.Style = []
+              Width = 30
+              Visible = True
+            end
+            item
+              Color = clWhite
+              Expanded = False
+              FieldName = 'DEBITAMOUNT'
+              Title.Alignment = taCenter
+              Title.Caption = 'Debet m'#601'bl'#601#287
+              Title.Font.Charset = RUSSIAN_CHARSET
+              Title.Font.Color = clNavy
+              Title.Font.Height = -11
+              Title.Font.Name = 'Tahoma'
+              Title.Font.Style = []
+              Width = 90
+              Visible = True
+            end
+            item
+              Color = clWhite
+              Expanded = False
+              FieldName = 'CREDITAMOUNT'
+              Title.Alignment = taCenter
+              Title.Caption = 'Kredit m'#601'bl'#601#287
+              Title.Font.Charset = RUSSIAN_CHARSET
+              Title.Font.Color = clNavy
+              Title.Font.Height = -11
+              Title.Font.Name = 'Tahoma'
+              Title.Font.Style = []
+              Width = 90
+              Visible = True
+            end
+            item
+              Color = clWhite
+              Expanded = False
+              FieldName = 'LAMOUNT'
+              Title.Alignment = taCenter
+              Title.Caption = 'Ekvivalent'
+              Title.Font.Charset = RUSSIAN_CHARSET
+              Title.Font.Color = clNavy
+              Title.Font.Height = -11
+              Title.Font.Name = 'Tahoma'
+              Title.Font.Style = []
+              Width = 90
+              Visible = True
+            end
+            item
+              Alignment = taRightJustify
+              Color = clWhite
+              Expanded = False
+              FieldName = 'USR'
+              Title.Alignment = taCenter
+              Title.Caption = 'Daxil ed'#601'n'
+              Title.Font.Charset = RUSSIAN_CHARSET
+              Title.Font.Color = clNavy
+              Title.Font.Height = -11
+              Title.Font.Name = 'Tahoma'
+              Title.Font.Style = []
+              Width = 100
+              Visible = True
+            end
+            item
+              Color = clWhite
+              Expanded = False
+              FieldName = 'NAME'
+              Title.Alignment = taCenter
+              Title.Caption = 'T'#601'yinat'
+              Title.Font.Charset = RUSSIAN_CHARSET
+              Title.Font.Color = clNavy
+              Title.Font.Height = -11
+              Title.Font.Name = 'Tahoma'
+              Title.Font.Style = []
+              Width = 500
+              Visible = True
+            end>
+        end
+        object Panel1: TPanel
+          Left = 0
+          Top = 0
+          Width = 1204
+          Height = 46
+          Align = alTop
+          BevelKind = bkSoft
+          TabOrder = 1
+          object Panel4: TPanel
+            Left = 967
+            Top = 1
+            Width = 116
+            Height = 40
+            Align = alRight
+            BevelInner = bvLowered
+            TabOrder = 0
+            object StaticText3: TStaticText
+              Left = 2
+              Top = 2
+              Width = 112
+              Height = 17
+              Align = alTop
+              Alignment = taCenter
+              Caption = #399'm'#601'liyyat tarixi'
+              Color = clBtnFace
+              ParentColor = False
+              TabOrder = 0
+            end
+            object DTPCurrentDate_laz: TDateTimePicker
+              Left = 2
+              Top = 19
+              Width = 113
+              Height = 21
+              Date = 38117.706753101900000000
+              Time = 38117.706753101900000000
+              Font.Charset = RUSSIAN_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Azl Sans Serif'
+              Font.Style = []
+              ParentFont = False
+              TabOrder = 1
+            end
+          end
+          object Panel3: TPanel
+            Left = 1083
+            Top = 1
+            Width = 116
+            Height = 40
+            Align = alRight
+            BevelInner = bvLowered
+            TabOrder = 1
+            object DBText1: TDBText
+              Left = 2
+              Top = 21
+              Width = 112
+              Height = 17
+              Align = alBottom
+              Alignment = taCenter
+              DataField = 'TEK_DAT'
+              DataSource = TrData.dsrc_sys
+              Font.Charset = RUSSIAN_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Tahoma'
+              Font.Style = [fsBold]
+              ParentFont = False
+              ExplicitLeft = 114
+              ExplicitTop = 23
+            end
+            object StaticText1: TStaticText
+              Left = 2
+              Top = 2
+              Width = 112
+              Height = 17
+              Align = alTop
+              Alignment = taCenter
+              Caption = 'Sistem tarixi'
+              Color = clBtnFace
+              ParentColor = False
+              TabOrder = 0
+            end
+          end
+          object Button1: TButton
+            Left = 12
+            Top = 6
+            Width = 75
+            Height = 32
+            Caption = 'Yenil'#601'm'#601'k'
+            TabOrder = 2
+            OnClick = Button1Click
+          end
+          object Button3: TButton
+            Left = 93
+            Top = 6
+            Width = 75
+            Height = 32
+            Caption = 'T'#601'sdiql'#601'm'#601'k'
+            TabOrder = 3
+            OnClick = Button3Click
+          end
+        end
+      end
+      object TabSheet2: TTabSheet
+        Caption = ' T'#601'sdiq olunmu'#351' '
+        ImageIndex = 1
+        object Panel5: TPanel
+          Left = 0
+          Top = 0
+          Width = 1204
+          Height = 46
+          Align = alTop
+          BevelKind = bkSoft
+          TabOrder = 0
+          object Panel6: TPanel
+            Left = 967
+            Top = 1
+            Width = 116
+            Height = 40
+            Align = alRight
+            BevelInner = bvLowered
+            TabOrder = 0
+            object StaticText2: TStaticText
+              Left = 2
+              Top = 2
+              Width = 112
+              Height = 17
+              Align = alTop
+              Alignment = taCenter
+              Caption = #399'm'#601'liyyat tarixi'
+              Color = clBtnFace
+              ParentColor = False
+              TabOrder = 0
+            end
+            object DTPCurrentDate_pro: TDateTimePicker
+              Left = 2
+              Top = 19
+              Width = 113
+              Height = 21
+              Date = 38117.706753101900000000
+              Time = 38117.706753101900000000
+              Font.Charset = RUSSIAN_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Azl Sans Serif'
+              Font.Style = []
+              ParentFont = False
+              TabOrder = 1
+            end
+          end
+          object Panel7: TPanel
+            Left = 1083
+            Top = 1
+            Width = 116
+            Height = 40
+            Align = alRight
+            BevelInner = bvLowered
+            TabOrder = 1
+            object DBText2: TDBText
+              Left = 2
+              Top = 21
+              Width = 112
+              Height = 17
+              Align = alBottom
+              Alignment = taCenter
+              DataField = 'TEK_DAT'
+              DataSource = TrData.dsrc_sys
+              Font.Charset = RUSSIAN_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Tahoma'
+              Font.Style = [fsBold]
+              ParentFont = False
+              ExplicitLeft = 114
+              ExplicitTop = 23
+            end
+            object StaticText4: TStaticText
+              Left = 2
+              Top = 2
+              Width = 112
+              Height = 17
+              Align = alTop
+              Alignment = taCenter
+              Caption = 'Sistem tarixi'
+              Color = clBtnFace
+              ParentColor = False
+              TabOrder = 0
+            end
+          end
+          object Button2: TButton
+            Left = 12
+            Top = 5
+            Width = 75
+            Height = 32
+            Caption = 'Yenil'#601'm'#601'k'
+            TabOrder = 2
+            OnClick = Button2Click
+          end
+        end
+        object DBGrid1: TDBGrid
+          Left = 0
+          Top = 46
+          Width = 1204
+          Height = 553
+          Align = alClient
+          Color = clBtnFace
+          DataSource = TrData.TransactionsData_provarch
+          DrawingStyle = gdsGradient
+          FixedColor = clNavy
+          Options = [dgTitles, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit, dgMultiSelect, dgTitleClick]
+          TabOrder = 1
+          TitleFont.Charset = DEFAULT_CHARSET
+          TitleFont.Color = clWindowText
+          TitleFont.Height = -11
+          TitleFont.Name = 'Tahoma'
+          TitleFont.Style = []
+          Columns = <
+            item
+              Color = clSilver
+              Expanded = False
+              FieldName = 'ID'
+              Font.Charset = RUSSIAN_CHARSET
+              Font.Color = clNavy
+              Font.Height = -11
+              Font.Name = 'Azl Sans Serif'
+              Font.Style = []
+              Title.Alignment = taCenter
+              Title.Font.Charset = RUSSIAN_CHARSET
+              Title.Font.Color = clNavy
+              Title.Font.Height = -11
+              Title.Font.Name = 'Tahoma'
+              Title.Font.Style = []
+              Width = 80
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'TRANSACTIONDATE'
+              Font.Charset = RUSSIAN_CHARSET
+              Font.Color = clNavy
+              Font.Height = -11
+              Font.Name = 'Azl Sans Serif'
+              Font.Style = []
+              Title.Alignment = taCenter
+              Title.Caption = 'Tarix'
+              Title.Font.Charset = RUSSIAN_CHARSET
+              Title.Font.Color = clNavy
+              Title.Font.Height = -11
+              Title.Font.Name = 'Tahoma'
+              Title.Font.Style = []
+              Width = 80
+              Visible = True
+            end
+            item
+              Color = clWhite
+              Expanded = False
+              FieldName = 'DEBITACCNO'
+              Title.Alignment = taCenter
+              Title.Font.Charset = RUSSIAN_CHARSET
+              Title.Font.Color = clNavy
+              Title.Font.Height = -11
+              Title.Font.Name = 'Tahoma'
+              Title.Font.Style = []
+              Width = 190
+              Visible = True
+            end
+            item
+              Alignment = taCenter
+              Color = clSilver
+              Expanded = False
+              FieldName = 'DEBITCURRENCYSNAME'
+              Font.Charset = RUSSIAN_CHARSET
+              Font.Color = clNavy
+              Font.Height = -11
+              Font.Name = 'Azl Sans Serif'
+              Font.Style = []
+              Title.Alignment = taCenter
+              Title.Font.Charset = RUSSIAN_CHARSET
+              Title.Font.Color = clNavy
+              Title.Font.Height = -11
+              Title.Font.Name = 'Tahoma'
+              Title.Font.Style = []
+              Width = 30
+              Visible = True
+            end
+            item
+              Color = clWhite
+              Expanded = False
+              FieldName = 'CREDITACCNO'
+              Title.Alignment = taCenter
+              Title.Font.Charset = RUSSIAN_CHARSET
+              Title.Font.Color = clNavy
+              Title.Font.Height = -11
+              Title.Font.Name = 'Tahoma'
+              Title.Font.Style = []
+              Width = 190
+              Visible = True
+            end
+            item
+              Alignment = taCenter
+              Color = clSilver
+              Expanded = False
+              FieldName = 'CREDITCURRENCYSNAME'
+              Font.Charset = RUSSIAN_CHARSET
+              Font.Color = clNavy
+              Font.Height = -11
+              Font.Name = 'Azl Sans Serif'
+              Font.Style = []
+              Title.Alignment = taCenter
+              Title.Font.Charset = RUSSIAN_CHARSET
+              Title.Font.Color = clNavy
+              Title.Font.Height = -11
+              Title.Font.Name = 'Tahoma'
+              Title.Font.Style = []
+              Width = 30
+              Visible = True
+            end
+            item
+              Color = clWhite
+              Expanded = False
+              FieldName = 'DEBITAMOUNT'
+              Title.Alignment = taCenter
+              Title.Caption = 'Debet m'#601'bl'#601#287
+              Title.Font.Charset = RUSSIAN_CHARSET
+              Title.Font.Color = clNavy
+              Title.Font.Height = -11
+              Title.Font.Name = 'Tahoma'
+              Title.Font.Style = []
+              Width = 90
+              Visible = True
+            end
+            item
+              Color = clWhite
+              Expanded = False
+              FieldName = 'CREDITAMOUNT'
+              Title.Alignment = taCenter
+              Title.Caption = 'Kredit m'#601'bl'#601#287
+              Title.Font.Charset = RUSSIAN_CHARSET
+              Title.Font.Color = clNavy
+              Title.Font.Height = -11
+              Title.Font.Name = 'Tahoma'
+              Title.Font.Style = []
+              Width = 90
+              Visible = True
+            end
+            item
+              Color = clWhite
+              Expanded = False
+              FieldName = 'LAMOUNT'
+              Title.Alignment = taCenter
+              Title.Caption = 'Ekvivalent'
+              Title.Font.Charset = RUSSIAN_CHARSET
+              Title.Font.Color = clNavy
+              Title.Font.Height = -11
+              Title.Font.Name = 'Tahoma'
+              Title.Font.Style = []
+              Width = 90
+              Visible = True
+            end
+            item
+              Alignment = taRightJustify
+              Color = clWhite
+              Expanded = False
+              FieldName = 'USR'
+              Title.Alignment = taCenter
+              Title.Caption = 'Daxil ed'#601'n'
+              Title.Font.Charset = RUSSIAN_CHARSET
+              Title.Font.Color = clNavy
+              Title.Font.Height = -11
+              Title.Font.Name = 'Tahoma'
+              Title.Font.Style = []
+              Width = 100
+              Visible = True
+            end
+            item
+              Alignment = taRightJustify
+              Color = clWhite
+              Expanded = False
+              FieldName = 'USRCOMMIT'
+              Title.Alignment = taCenter
+              Title.Caption = 'T'#601'sdiq ed'#601'n'
+              Title.Font.Charset = RUSSIAN_CHARSET
+              Title.Font.Color = clNavy
+              Title.Font.Height = -11
+              Title.Font.Name = 'Tahoma'
+              Title.Font.Style = []
+              Width = 100
+              Visible = True
+            end>
+        end
+      end
+      object TabSheet3: TTabSheet
+        Caption = 'Payout n'#601'tic'#601'l'#601'ri'
+        ImageIndex = 2
+        object Panel8: TPanel
+          Left = 0
+          Top = 0
+          Width = 1204
+          Height = 46
+          Align = alTop
+          BevelKind = bkSoft
+          TabOrder = 0
+          object Button4: TButton
+            Left = 32
+            Top = 8
+            Width = 75
+            Height = 25
+            Caption = 'Button4'
+            TabOrder = 0
+            OnClick = Button4Click
+          end
+        end
+        object DBGrid2: TDBGrid
+          Left = 0
+          Top = 46
+          Width = 1204
+          Height = 553
+          Align = alClient
+          Color = clBtnFace
+          DrawingStyle = gdsGradient
+          FixedColor = clNavy
+          Options = [dgTitles, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit, dgMultiSelect, dgTitleClick]
+          TabOrder = 1
+          TitleFont.Charset = DEFAULT_CHARSET
+          TitleFont.Color = clWindowText
+          TitleFont.Height = -11
+          TitleFont.Name = 'Tahoma'
+          TitleFont.Style = []
+          Columns = <
+            item
+              Expanded = False
+              FieldName = 'AMOUNT'
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'PHONE'
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'CR_ID'
+              Width = 80
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'CREATED_AT'
+              Width = 155
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'OPERATION_STATUS_1'
+              Width = 298
+              Visible = True
+            end>
+        end
+      end
+    end
+  end
+  object ActionList1: TActionList
+    Left = 440
+    Top = 256
+    object Action1: TAction
+      Caption = 'Action1'
+      OnExecute = Action1Execute
+    end
+  end
+end

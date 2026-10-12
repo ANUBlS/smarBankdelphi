@@ -1,0 +1,98 @@
+unit dmfrmRepOfKindPayOfDepImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, OracleData;
+
+type
+  TdmfrmRepOfKindPayOfDep = class(TDataModule)
+    FilialMDT: TOracleDataSet;
+    FilialMDTID: TFloatField;
+    FilialMDTNAME: TStringField;
+    SourceMDT: TOracleDataSet;
+    SourceMDTID: TFloatField;
+    SourceMDTNAME: TStringField;
+    TypeMDT: TOracleDataSet;
+    TypeMDTID: TFloatField;
+    TypeMDTNAME: TStringField;
+    ValuteMDT: TOracleDataSet;
+    ValuteMDTVALUTE: TIntegerField;
+    ValuteMDTVAL_NAME: TStringField;
+    CalcStatusMDT: TOracleDataSet;
+    CalcStatusMDTID: TFloatField;
+    CalcStatusMDTNAME: TStringField;
+    FilialMDds: TDataSource;
+    SourceMDds: TDataSource;
+    TypeMDds: TDataSource;
+    ValuteMDds: TDataSource;
+    CalcStatusMDds: TDataSource;
+    Queries: TOracleDataSet;
+    sysdat: TOracleDataSet;
+    ODSKindPay: TOracleDataSet;
+    ODSKindPaySOURCENAME: TStringField;
+    ODSKindPayBCOUNTDEP: TFloatField;
+    ODSKindPayBEGINREST: TFloatField;
+    ODSKindPayROUNDINT: TFloatField;
+    ODSKindPayBEGININTREST: TFloatField;
+    ODSKindPayG1: TFloatField;
+    ODSKindPayFG1: TFloatField;
+    ODSKindPayCOUNTG1: TFloatField;
+    ODSKindPayG2: TFloatField;
+    ODSKindPayFG2: TFloatField;
+    ODSKindPayCOUNTG2: TFloatField;
+    ODSKindPayG3: TFloatField;
+    ODSKindPayFG3: TFloatField;
+    ODSKindPayCOUNTG3: TFloatField;
+    ODSKindPayG4: TFloatField;
+    ODSKindPayFG4: TFloatField;
+    ODSKindPayCOUNTG4: TFloatField;
+    ODSKindPayG5: TFloatField;
+    ODSKindPayFG5: TFloatField;
+    ODSKindPayCOUNTG5: TFloatField;
+    ODSKindPayG6: TFloatField;
+    ODSKindPayFG6: TFloatField;
+    ODSKindPayCOUNTG6: TFloatField;
+    ODSKindPayCEOFREST: TFloatField;
+    ODSKindPayG0: TFloatField;
+    ODSKindPayFG0: TFloatField;
+    ODSKindPayCOUNTG0: TFloatField;
+    ODSKindPayds: TDataSource;
+    procedure DataModuleCreate(Sender: TObject);
+    procedure DataModuleDestroy(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  dmfrmRepOfKindPayOfDep: TdmfrmRepOfKindPayOfDep;
+
+implementation
+
+{$R *.DFM}
+uses sboapiDataModuleImpl;
+
+procedure TdmfrmRepOfKindPayOfDep.DataModuleCreate(Sender: TObject);
+begin
+  FilialMDT.open;
+  SourceMDT.open;
+  TypeMDT.open;
+  ValuteMDT.open;
+  CalcStatusMDT.open;
+  sysdat.open;
+end;
+
+procedure TdmfrmRepOfKindPayOfDep.DataModuleDestroy(Sender: TObject);
+begin
+  FilialMDT.close;
+  SourceMDT.close;
+  TypeMDT.close;
+  ValuteMDT.close;
+  CalcStatusMDT.close;
+  sysdat.close;
+end;
+
+end.

@@ -1,0 +1,226 @@
+object CreditCardDatMod: TCreditCardDatMod
+  OldCreateOrder = False
+  OnCreate = DataModuleCreate
+  OnDestroy = DataModuleDestroy
+  Height = 486
+  Width = 710
+  object CreditCards: TOracleDataSet
+    SQL.Strings = (
+      'select id from cm_active_credits '
+      
+        '                where CM_CARDS.iscreditcards(id)=1 and CM_CARDS.' +
+        'Get_CustOstat(id)<0')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 32
+    Top = 64
+    object CreditCardsID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+  end
+  object CreditCardsDatSrc: TDataSource
+    DataSet = CreditCards
+    Left = 32
+    Top = 112
+  end
+  object Transactions: TOracleDataSet
+    SQL.Strings = (
+      'SELECT'
+      '   A.ACC_NO as DebitAccNo, '
+      '   D.VAL_NAME as DebitCurrency, '
+      '   C.ACC_NO as CreditAccNo, '
+      '   T.Ostat,'
+      '   E.VAL_NAME  as CreditCurrency,'
+      '   B.TRDATE ,'
+      '   B.CANPROCESS , '
+      '   B.INBALANCECHAR , '
+      '   B.FLAGS , '
+      '   B.DEBITAMOUNT , '
+      '   B.CREDITAMOUNT , '
+      '   B.NATAMOUNT ,'
+      '   B.TrDescription'
+      'FROM'
+      '   SB_ACCOUNT A'
+      ' , SB_AVALUTE D'
+      ' , CM_TRANSACTIONS B'
+      ' , SB_ACCOUNT C'
+      ' , SB_AVALUTE E'
+      ' ,SB_TENOSTAT T'
+      'WHERE'
+      '     (B.DEBITACCID = A.ID)'
+      ' AND (D.VALUTE = A.VAL_ACC)'
+      ' AND (B.CREDITACCID = C.ID)'
+      ' AND (C.VAL_ACC = E.VALUTE)'
+      ' and (T.ACC_ID = B.CREDITACCID)'
+      ''
+      ''
+      'union '
+      ''
+      'SELECT'
+      '   A.ACC_NO as DebitAccNo, '
+      '   D.VAL_NAME as DebitCurrency, '
+      '   C.ACC_NO as CreditAccNo, '
+      '   T.Ostat,'
+      '   E.VAL_NAME  as CreditCurrency,'
+      '   B.TRDATE ,'
+      '   B.CANPROCESS , '
+      '   B.INBALANCECHAR , '
+      '   B.FLAGS , '
+      '   B.DEBITAMOUNT , '
+      '   B.CREDITAMOUNT , '
+      '   B.NATAMOUNT ,'
+      '   B.TrDescription'
+      'FROM'
+      '   SBOUT_ACCOUNT A'
+      ' , SB_AVALUTE D'
+      ' , CM_TRANSACTIONS B'
+      ' , SBOUT_ACCOUNT C'
+      ' , SB_AVALUTE E'
+      ' ,smart.out_TENOSTAT T'
+      'WHERE'
+      '     (B.DEBITACCID = A.ID)'
+      ' AND (D.VALUTE = A.VAL_ACC)'
+      ' AND (B.CREDITACCID = C.ID)'
+      ' AND (C.VAL_ACC = E.VALUTE)'
+      ' and (T.ACC_ID = B.CREDITACCID)'
+      ''
+      ''
+      '')
+    Optimize = False
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 144
+    Top = 64
+    object TransactionsDEBITACCNO: TWideStringField
+      FieldName = 'DEBITACCNO'
+      Required = True
+      Size = 28
+    end
+    object TransactionsDEBITCURRENCY: TWideStringField
+      FieldName = 'DEBITCURRENCY'
+      Size = 10
+    end
+    object TransactionsCREDITACCNO: TWideStringField
+      FieldName = 'CREDITACCNO'
+      Required = True
+      Size = 28
+    end
+    object TransactionsOSTAT: TFloatField
+      FieldName = 'OSTAT'
+    end
+    object TransactionsCREDITCURRENCY: TWideStringField
+      FieldName = 'CREDITCURRENCY'
+      Size = 10
+    end
+    object TransactionsTRDATE: TDateTimeField
+      FieldName = 'TRDATE'
+      Required = True
+    end
+    object TransactionsCANPROCESS: TFloatField
+      FieldName = 'CANPROCESS'
+      Required = True
+    end
+    object TransactionsINBALANCECHAR: TFloatField
+      FieldName = 'INBALANCECHAR'
+    end
+    object TransactionsFLAGS: TFloatField
+      FieldName = 'FLAGS'
+      Required = True
+    end
+    object TransactionsDEBITAMOUNT: TFloatField
+      FieldName = 'DEBITAMOUNT'
+    end
+    object TransactionsCREDITAMOUNT: TFloatField
+      FieldName = 'CREDITAMOUNT'
+    end
+    object TransactionsNATAMOUNT: TFloatField
+      FieldName = 'NATAMOUNT'
+    end
+    object TransactionsTRDESCRIPTION: TWideStringField
+      FieldName = 'TRDESCRIPTION'
+      Required = True
+      Size = 255
+    end
+  end
+  object TransactionsDatSrc: TDataSource
+    DataSet = Transactions
+    Left = 144
+    Top = 112
+  end
+  object Controls: TOracleDataSet
+    SQL.Strings = (
+      'select p.numberofcredit,'
+      
+        '       cm_common.accountnumber_get(a.contractaccid) as contractn' +
+        'o,'
+      '       cm_common.accountrest_get(a.booroweraccid) as CustRest,'
+      '       h.rest '
+      'from cm_active_credits p,'
+      '     cm_accounts a,'
+      '     cm_curr_state h'
+      'where p.id = a.creditid'
+      'and   p.id=h.creditid '
+      'and   cm_common.accountrest_get(a.booroweraccid)<0'
+      '            ')
+    Optimize = False
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 248
+    Top = 64
+    object ControlsNUMBEROFCREDIT: TWideStringField
+      DisplayLabel = #1052#1094#1075#1072#1074#1080#1083#1103#1085#1080#1085' '#8470'-'#1089#1080
+      FieldName = 'NUMBEROFCREDIT'
+      Size = 32
+    end
+    object ControlsCONTRACTNO: TWideStringField
+      DisplayLabel = #1065#1077#1089#1072#1073#1099#1085' '#8470'-'#1089#1080
+      FieldName = 'CONTRACTNO'
+      Size = 4000
+    end
+    object ControlsCUSTREST: TFloatField
+      DisplayLabel = #1046#1072#1088#1080' '#1065#1077#1089#1072#1073#1099#1085#1099#1085' '#1075#1072#1083#1099#1100#1099
+      FieldName = 'CUSTREST'
+    end
+    object ControlsREST: TFloatField
+      DisplayLabel = #1071'.'#1041' '#1043#1072#1083#1099#1075
+      FieldName = 'REST'
+      Required = True
+    end
+  end
+  object ControlsDatSrc: TDataSource
+    DataSet = Controls
+    Left = 248
+    Top = 112
+  end
+  object Branches: TOracleDataSet
+    SQL.Strings = (
+      'select -1 as id,'#39#1041#1094#1090#1094#1085' '#1092#1080#1083#1080#1072#1083#1083#1072#1088#39' as name from dual'
+      'union'
+      'select id ,name from sb_filial'
+      'order by id')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 344
+    Top = 64
+    object BranchesID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object BranchesNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 90
+    end
+  end
+  object BranchesDatSrc: TDataSource
+    DataSet = Branches
+    Left = 344
+    Top = 120
+  end
+  object CM_CARDS: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'CM_CARDS'
+    Left = 40
+    Top = 16
+  end
+end

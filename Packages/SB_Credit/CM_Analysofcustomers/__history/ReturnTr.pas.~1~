@@ -1,0 +1,31 @@
+unit ReturnTr;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Grids, DBGrids, CustAnalysDataModuleImpl;
+
+type
+  TFormReturns = class(TForm)
+    DBGrid1: TDBGrid;
+    procedure FormActivate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormReturns: TFormReturns;
+
+implementation
+
+{$R *.dfm}
+
+procedure TFormReturns.FormActivate(Sender: TObject);
+begin
+CustAnalysDataModule.Returntrans.Active:=true;
+end;
+
+end.

@@ -1,0 +1,484 @@
+unit UClaims;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ExtCtrls, StdCtrls, Grids, DBGrids, DBCtrls, Buttons,Db, INSWordExporter,
+  ComCtrls,Word97,ComObj, Mask;
+
+type
+  TfrmClaims = class(TForm)
+    GroupBox1: TGroupBox;
+    DBGrid1: TDBGrid;
+    Panel1: TPanel;
+    BitBtn1: TBitBtn;
+    Report: TBitBtn;
+    WordExporter: TINSWordExporter;
+    DBGrid2: TDBGrid;
+    DBNavigator2: TDBNavigator;
+    DBNavigator1: TDBNavigator;
+    dtpClaim: TDateTimePicker;
+    SpeedButton1: TSpeedButton;
+    BitBtn2: TBitBtn;
+    Label3: TLabel;
+    GroupBox2: TGroupBox;
+    Label1: TLabel;
+    DBEdit1: TDBEdit;
+    DBEdit2: TDBEdit;
+    Label2: TLabel;
+    Label4: TLabel;
+    DBEdit3: TDBEdit;
+    Label5: TLabel;
+    DBEdit4: TDBEdit;
+    Label6: TLabel;
+    DBLookupComboBox1: TDBLookupComboBox;
+    Label7: TLabel;
+    DBEdit5: TDBEdit;
+    Label8: TLabel;
+    Label9: TLabel;
+    DBEdit6: TDBEdit;
+    BitBtn3: TBitBtn;
+    Label10: TLabel;
+    DBLookupComboBox2: TDBLookupComboBox;
+    Label11: TLabel;
+    dtApp: TDateTimePicker;
+    Label12: TLabel;
+    dtLetter: TDateTimePicker;
+    Label13: TLabel;
+    DBEdit7: TDBEdit;
+    Label14: TLabel;
+    Label15: TLabel;
+    Label16: TLabel;
+    DBEdit8: TDBEdit;
+    DBEdit9: TDBEdit;
+    Label17: TLabel;
+    dtAct: TDateTimePicker;
+    procedure BitBtn1Click(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
+    procedure ReportClick(Sender: TObject);
+    procedure DBNavigator2Click(Sender: TObject; Button: TNavigateBtn);
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure BitBtn2Click(Sender: TObject);
+    procedure BitBtn3Click(Sender: TObject);
+  private
+    { Private declarations }
+     s,s1,s2,s3,sum:real;
+
+     procedure CalcSum;
+     procedure FillRow(Item:integer;Doc : Variant; Row : Integer;
+                 Text0,Text1,Text2: String);
+     procedure FillRow1(Doc : Variant; Row : Integer;
+                 Text0,Text1,Text2,Text3,Text4 : String);
+  public
+    { Public declarations }
+  end;
+
+var
+  frmClaims: TfrmClaims;
+
+implementation
+
+uses UMKDataMod;
+
+{$R *.DFM}
+
+procedure TfrmClaims.BitBtn1Click(Sender: TObject);
+begin
+     with InsMKDataMod,ODSMotorKasko do
+     begin
+     ODSMOTORKaskoCLAIM_DATE.Value:=dtpClaim.Date;
+     if State in [dsEdit, dsInsert] then
+     begin
+        Post;
+     end;
+
+     with InsMKDataMod,ODSClaims do
+     begin
+     if State in [dsEdit, dsInsert] then
+     begin
+        Post;
+        RefreshRecord;
+     end;
+     end;
+
+     with InsMKDataMod,ODSClaimSal do
+     begin
+     if State in [dsEdit, dsInsert] then
+     begin
+        Post;
+     end;
+
+     with InsMKDataMod,ODSClaimDescription do
+     begin
+     if State in [dsEdit, dsInsert] then
+     begin
+        ODSClaimDescriptionID.Value:=ODSMotorKaskoID.Value;
+        ODSClaimDescriptionAppDate.Value:=dtApp.Date;
+        ODSClaimDescriptionLetterDate.Value:=dtLetter.Date;
+        ODSClaimDescriptionActDate.Value:=dtAct.Date;
+        Post;
+        RefreshRecord;
+     end;
+     end;
+     end;
+
+     end;
+end;
+
+procedure TfrmClaims.FormActivate(Sender: TObject);
+begin
+    with InsMKDataMod do
+    begin
+         ODSClaims.Close;
+         ODSClaims.SetVariable('id',ODSMotorkaskoId.value);
+         ODSClaims.Open;
+
+         ODSClaimReport.SetVariable('id',ODSMotorkaskoId.value);
+         ODSClaimReport.Open;
+
+         ODSClaimSal.Close;
+         ODSClaimSal.SetVariable('eid',ODSMotorkaskoId.value);
+         ODSClaimSal.Open;
+
+         ODSClaimDescription.Close;
+         ODSClaimDescription.SetVariable('id',ODSMotorkaskoId.value);
+         ODSClaimDescription.Open;
+         if ODSClaimDescription.RecordCount>0 then ODSClaimDescription.Edit;
+    end;
+    dtpClaim.Date:=InsMKDataMod.ODSMotorKaskoCLAIM_DATE.Value;
+    dtLetter.Date:=InsMKDataMod.ODSClaimDescriptionLetterDate.Value;
+    dtApp.Date:=InsMKDataMod.ODSClaimDescriptionAppDate.Value;
+    dtAct.Date:=InsMKDataMod.ODSClaimDescriptionActDate.Value;
+    CalcSum();
+end;
+
+procedure TfrmClaims.ReportClick(Sender: TObject);
+var
+   WordApp:OleVariant;
+   wrdDataDoc,wrdApp,wrdSelection : Variant;
+   i,j,n,m:integer;
+   FileName:String;
+   s,s1,s2:real;
+begin
+     with InsMKDataMod do
+     begin
+          ODSCusts.Open;
+          s:=0; s1:=0; s2:=0;
+          FileName:=ExtractFilePath(Application.ExeName)+ '\Kasko temir xercleri.doc';
+          wrdApp := CreateOleObject('Word.Application');
+          wrdApp.Visible := True;
+          wrdDataDoc := wrdApp.Documents.Open(FileName);
+          wrdSelection:=wrdApp.Selection;
+          m:=ODSClaimReport.RecordCount;
+          n:=ODSClaimSal.RecordCount;
+          wrdSelection.GoTo(-1,unAssigned,unAssigned,'policynum');
+          wrdSelection.Font.Name := 'Arial AzLat';
+          wrdSelection.Font.Size :=8;
+          wrdSelection.TypeText(ODSContractsPolicy_Num.Value);
+          wrdSelection.GoTo(-1,unAssigned,unAssigned,'insured');
+          wrdSelection.Font.Name := 'Arial AzLat';
+          wrdSelection.Font.Size :=8;
+          wrdSelection.TypeText(ODSCustsName.Value);
+          wrdSelection.GoTo(-1,unAssigned,unAssigned,'insured1');
+          wrdSelection.Font.Name := 'Arial AzLat';
+          wrdSelection.Font.Size :=8;
+          wrdSelection.TypeText(ODSCustsName.Value);
+          wrdSelection.GoTo(-1,unAssigned,unAssigned,'mark');
+          wrdSelection.Font.Name := 'Arial AzLat';
+          wrdSelection.Font.Size :=8;
+          wrdSelection.TypeText(ODSMotorKaskoInsuredMark.Value);
+          wrdSelection.GoTo(-1,unAssigned,unAssigned,'statenum');
+          wrdSelection.Font.Name := 'Arial AzLat';
+          wrdSelection.Font.Size :=8;
+          wrdSelection.TypeText(ODSMotorKaskoInsuredStateNum.Value);
+          wrdSelection.GoTo(-1,unAssigned,unAssigned,'date');
+          wrdSelection.TypeText(DateToStr(ODSMotorKaskoCLAIM_DATE.Value));
+
+          wrdSelection.GoTo(-1,unAssigned,unAssigned,'date1');
+          wrdSelection.TypeText(DateToStr(ODSClaimDescriptionActDATE.Value));
+         // SetBookmark('avtoservis',ODSClaimDescriptionAvtoservis.Value,False, False, False, False, 10, 'Arial AzLat', False);
+          wrdSelection.Font.Name := 'Arial AzLat';
+          wrdSelection.Font.Size :=8;
+          wrdSelection.GoTo(-1,unAssigned,unAssigned,'claimnum');
+          wrdSelection.TypeText(ODSMotorKaskoClaim_Num.Value);
+          ODSClaimReport.First;
+          for j:=1 to ODSClaimReport.RecordCount do
+          begin
+            {  if length(ODSClaimsState.Value)<>12 then
+              begin
+                 continue;
+              end;    }
+              s1:=s1+ODSClaimReportCount.value;
+              s2:=s2+ODSClaimReportCost.value;
+              //s3:=s3+ODSClaimsSum.value;
+              wrdDataDoc.Tables.Item(1).Rows.Add;
+              wrdDataDoc.Tables.Item(1).Rows.Item(j+1).Range.Font.Name := 'Arial AzLat';
+              wrdDataDoc.Tables.Item(1).Rows.Item(j+1).Range.Bold:=false;
+              FillRow1(wrdDataDoc, j+1,IntToStr(j),ODSClaimReportEName.Value,FloatToStr(ODSClaimReportCount.value),FloatToStr(ODSClaimReportCost.value),FloatToStr(ODSClaimReportCount.value*ODSClaimReportCost.value));
+
+              if j=m then
+              begin
+                 wrdDataDoc.Tables.Item(1).Rows.Add;
+                 wrdDataDoc.Tables.Item(1).Rows.Item(m+2).Range.Font.Name := 'Arial AzLat';
+                 wrdDataDoc.Tables.Item(1).Cell(m+2,1).Range.Paragraphs.Alignment :=wdAlignParagraphCenter;
+                 wrdDataDoc.Tables.Item(1).Rows.Item(m+2).Range.Bold:=true;
+                 FillRow1(wrdDataDoc,m+2,'','∆€ми :',FloatToStr(s1),FloatToStr(s2),FloatToStr(s1*s2));
+              end;
+              ODSClaimReport.Next;
+         end;
+         ODSClaimSal.First;
+         for i:= 1 to n do
+         begin
+             s:=s+ODSClaimSalCost.value;
+             wrdDataDoc.Tables.Item(2).Rows.Add;
+             wrdDataDoc.Tables.Item(2).Rows.Item(i+1).Range.Font.Name := 'Arial AzLat';
+             wrdDataDoc.Tables.Item(2).Rows.Item(i+1).Range.Bold:=false;
+             FillRow(2,wrdDataDoc, i+1,IntToStr(i),ODSClaimSalName.Value,FloatToStr(ODSClaimSalCost.value));
+             ODSClaimSal.Next;
+         if i=n then
+         begin
+            wrdDataDoc.Tables.Item(2).Rows.Add;
+            wrdDataDoc.Tables.Item(2).Rows.Item(n+2).Range.Font.Name := 'Arial AzLat';
+            wrdDataDoc.Tables.Item(2).Cell(n+2,1).Range.Paragraphs.Alignment :=wdAlignParagraphCenter;
+            wrdDataDoc.Tables.Item(2).Rows.Item(n+2).Range.Bold:=true;
+            FillRow(2,wrdDataDoc,n+2,'', '∆€ми :',FloatToStr(s));
+
+            wrdDataDoc.Tables.Item(2).Rows.Add;
+            wrdDataDoc.Tables.Item(2).Rows.Item(n+3).Range.Font.Name := 'Arial AzLat';
+            wrdDataDoc.Tables.Item(2).Cell(n+3,1).Range.Paragraphs.Alignment :=wdAlignParagraphCenter;
+            wrdDataDoc.Tables.Item(2).Rows.Item(n+3).Range.Bold:=true;
+            sum:=s1*s2+s;
+            FillRow(2,wrdDataDoc,n+3,'', '÷муми йекун :',FloatToStr(sum));
+         end;
+     end;
+   end;
+end;
+
+procedure TfrmClaims.CalcSum;
+var
+    i:byte;
+begin
+    s:=0; s1:=0;s3:=0;
+    with InsMKDataMod do
+    begin
+    if ODSClaims.RecordCount<>0 then
+    begin
+       ODSClaims.Last;
+       for i:=0 to ODSClaims.RecordCount-1 do
+       begin
+           s:=s+ODSClaimsCount.value;
+           s1:=s1+ODSClaimsCost.value;
+           ODSClaims.Prior;
+       end;
+      { ECount.Text:=FloatToStr(s);
+       ECost.Text:=FloatToStr(s1); }
+     end;
+    if ODSClaimSal.RecordCount<>0 then
+    begin
+       ODSClaimSal.Last;
+       for i:=0 to ODSClaimSal.RecordCount-1 do
+       begin
+           s3:=s3+ODSClaimSalCost.value;
+           ODSClaimSal.Prior;
+       end;
+       //ECost1.Text:=FloatToStr(s3);
+    end;
+    end;
+end;
+
+procedure TfrmClaims.DBNavigator2Click(Sender: TObject;
+  Button: TNavigateBtn);
+begin
+
+     // InsMKDataMod.ODSClaimReport.RefreshRecord();
+     with InsMKDataMod do
+     begin
+          ODSClaimReport.Close;
+          ODSClaimReport.SetVariable('id',ODSMotorkaskoId.value);
+          ODSClaimReport.Open;
+     end;
+     CalcSum();
+end;
+
+procedure TfrmClaims.SpeedButton1Click(Sender: TObject);
+begin
+     with InsMKDataMod do
+     begin
+          ODSMOTORKaskoCLAIM_NUM.Value:=OPCommon.CallStringFunction('getClaimNums',[ODSMotorKaskoTypeID.value]);
+          ODSMOTORKaskoACT_NUM.Value:=OPCommon.CallStringFunction('generateInsuredAct',[ODSMotorKaskoTypeID.value]);
+          ODSMOTORKaskoCLAIM_DATE.Value:=dtpClaim.Date;
+          if ODSMotorKasko.State in [dsInsert,dsEdit] then
+             ODSMotorKasko.Post;
+     end;
+end;
+
+procedure TfrmClaims.BitBtn2Click(Sender: TObject);
+var
+   WordApp:OleVariant;
+   wrdDataDoc,wrdApp,wrdSelection : Variant;
+   i,n:integer;
+   FileName:String;
+begin
+      with InsMKDataMod do
+      begin
+           ODSCusts.Open;
+           FileName:=ExtractFilePath(Application.ExeName)+ '\Kasko zerer akti.doc';
+           wrdApp := CreateOleObject('Word.Application');
+           wrdApp.Visible := True;
+           wrdDataDoc := wrdApp.Documents.Open(FileName);
+           wrdSelection:=wrdApp.Selection;
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'insured');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=8;
+           wrdSelection.TypeText(ODSCustsName.Value);
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'insured2');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=8;
+           wrdSelection.TypeText(ODSCustsName.Value);
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'policynum');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=8;
+           wrdSelection.TypeText(ODSContractsPolicy_Num.Value);
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'insured1');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=8;
+           wrdSelection.TypeText(ODSCustsName.Value);
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'mark');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=8;
+           wrdSelection.TypeText(ODSMotorKaskoInsuredMark.Value);
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'statenum');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=8;
+           wrdSelection.TypeText(ODSMotorKaskoInsuredStateNum.Value);
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'date');
+           wrdSelection.TypeText(DateToStr(ODSMotorKaskoCLAIM_DATE.Value));
+
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=8;
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'claimnum');
+           wrdSelection.TypeText(ODSMotorKaskoClaim_Num.Value);
+           n:=ODSClaims.RecordCount;
+           ODSClaims.First;
+           for i:= 1 to n do
+           begin
+               wrdDataDoc.Tables.Item(1).Rows.Add;
+               wrdDataDoc.Tables.Item(1).Rows.Item(i+1).Range.Font.Name := 'Arial AzLat';
+               wrdDataDoc.Tables.Item(1).Rows.Item(i+1).Range.Bold:=false;
+               FillRow(1,wrdDataDoc, i+1,IntToStr(i),ODSClaimsEName.Value,ODSClaimsState.value);
+               ODSClaims.Next;
+           end;
+      end;
+end;
+
+procedure TfrmClaims.FillRow(Item:integer;Doc: Variant; Row: Integer; Text0, Text1,
+  Text2: String);
+begin
+     Doc.Tables.Item(Item).Cell(Row,1).Range.InsertAfter(Text0);
+     Doc.Tables.Item(Item).Cell(Row,2).Range.InsertAfter(Text1);
+     Doc.Tables.Item(Item).Cell(Row,3).Range.InsertAfter(Text2);
+end;
+
+procedure TfrmClaims.FillRow1(Doc: Variant; Row: Integer; Text0, Text1,
+  Text2, Text3, Text4: String);
+begin
+     Doc.Tables.Item(1).Cell(Row,1).Range.InsertAfter(Text0);
+     Doc.Tables.Item(1).Cell(Row,2).Range.InsertAfter(Text1);
+     Doc.Tables.Item(1).Cell(Row,3).Range.InsertAfter(Text2);
+     Doc.Tables.Item(1).Cell(Row,4).Range.InsertAfter(Text3);
+     Doc.Tables.Item(1).Cell(Row,5).Range.InsertAfter(Text4);
+end;
+
+procedure TfrmClaims.BitBtn3Click(Sender: TObject);
+var
+   j,i:integer;
+begin
+    try
+       with WordExporter,InsMKDataMod do
+       begin
+            ODSCusts.Locate('id',ODSContractsKli_id.Value,[]);
+            ODSAValute.Locate('valute',ODSContractsValute_ID.Value,[]);
+            
+            s:=0; s1:=0; s2:=0;
+            ODSClaimReport.First;
+            for j:=1 to ODSClaimReport.RecordCount do
+            begin
+              s1:=s1+ODSClaimReportCount.value;
+              s2:=s2+ODSClaimReportCost.value;
+              ODSClaimReport.Next;
+            end;
+            ODSClaimSal.First;
+            for i:= 1 to ODSClaimSal.RecordCount do
+            begin
+                s:=s+ODSClaimSalCost.value;
+                ODSClaimSal.Next;
+            end;
+
+
+            sum:=s1*s2+s;
+            FileName := ExtractFilePath(Application.ExeName)+'\SigortaAkti.doc';
+            WordExporter.Open(False);
+
+            SetBookmark('insaktdate',DateToStr(now),False, False, False, False, 10, 'Arial AzLat', False);
+            SetBookmark('actnum',ODSMotorKaskoact_num.Value,False, False, False, False, 10, 'Arial AzLat', False);
+            SetBookmark('actnum1',ODSMotorKaskoact_num.Value,False, False, False, False, 10, 'Arial AzLat', False);
+            SetBookmark('claimdate1',DateToStr(ODSMotorKaskoClaim_Date.Value),False, False, False, False, 10, 'Arial AzLat', False);
+            SetBookmark('insured',ODSCustsName.Value,False, False, False, False, 10, 'Arial AzLat', False);
+            SetBookmark('mark',ODSMotorKaskoInsuredMark.Value,False, False, False, False, 10, 'Arial AzLat', False);
+            SetBookmark('statenum',ODSMotorKaskoInsuredStateNum.Value,False, False, False, False, 10, 'Arial AzLat', False);
+            SetBookmark('insured1',ODSCustsName.Value,False, False, False, False, 10, 'Arial AzLat', False);
+            SetBookmark('mark1',ODSMotorKaskoInsuredMark.Value,False, False, False, False, 10, 'Arial AzLat', False);
+            SetBookmark('begindate',DateToStr(ODSContractsBegin_Date.Value),False, False, False, False, 10, 'Arial AzLat', False);
+            SetBookmark('enddate',DateToStr(ODSContractsEnd_Date.Value),False, False, False, False, 10, 'Arial AzLat', False);
+            SetBookmark('inscost',FloatToStr(ODSContractsAmmount.Value)+' '+ODSAValuteVal_Name.Value,False, False, False, False, 10, 'Arial AzLat', False);
+            SetBookmark('inssum',FloatToStr(ODSContractsInsSumm.Value)+' '+ODSAValuteVal_Name.Value,False, False, False, False, 10, 'Arial AzLat', False);
+            SetBookmark('franshiz',FloatToStr(ODSContractsFranshiz.Value)+' '+ODSAValuteVal_Name.Value,False, False, False, False, 10, 'Arial AzLat', False);
+            SetBookmark('mark2',ODSMotorKaskoInsuredMark.Value,False, False, False, False, 10, 'Arial AzLat', False);
+            SetBookmark('statenum1',ODSMotorKaskoInsuredStateNum.Value,False, False, False, False, 10, 'Arial AzLat', False);
+            SetBookmark('insured2',ODSCustsName.Value,False, False, False, False, 10, 'Arial AzLat', False);
+            SetBookmark('claimdate2',DateToStr(ODSMotorKaskoClaim_Date.Value),False, False, False, False, 10, 'Arial AzLat', False);
+            SetBookmark('region',ODSClaimDescriptionRegion.Value,False, False, False, False, 10, 'Arial AzLat', False);
+            SetBookmark('street',ODSClaimDescriptionStreet.Value,False, False, False, False, 10, 'Arial AzLat', False);
+            SetBookmark('detail',ODSClaimDescriptionDetail.Value,False, False, False, False, 10, 'Arial AzLat', False);
+            SetBookmark('person',ODSClaimDescriptionPerson.Value,False, False, False, False, 10, 'Arial AzLat', False);
+            SetBookmark('claimmark',ODSClaimDescriptionMark.Value,False, False, False, False, 10, 'Arial AzLat', False);
+            SetBookmark('claimstatenum',ODSClaimDescriptionStateNum.Value,False, False, False, False, 10, 'Arial AzLat', False);
+            SetBookmark('region1',ODSClaimDescriptionRegion.Value,False, False, False, False, 10, 'Arial AzLat', False);
+            SetBookmark('mark3',ODSMotorKaskoInsuredMark.Value,False, False, False, False, 10, 'Arial AzLat', False);
+            SetBookmark('statenum2',ODSMotorKaskoInsuredStateNum.Value,False, False, False, False, 10, 'Arial AzLat', False);
+            SetBookmark('avtoservis',ODSClaimDescriptionAvtoservis.Value,False, False, False, False, 10, 'Arial AzLat', False);
+            SetBookmark('mark4',ODSMotorKaskoInsuredMark.Value,False, False, False, False, 10, 'Arial AzLat', False);
+            SetBookmark('statenum3',ODSMotorKaskoInsuredStateNum.Value,False, False, False, False, 10, 'Arial AzLat', False);
+           { ShowMessage(FloatToStr(sum-ODSContractsFranshiz.Value));
+            ShowMessage(FloatToStr(sum));
+            ShowMessage(FloatToStr(ODSContractsFranshiz.Value)); }
+            //SetBookmark('claim',????,False, False, False, False, 10, 'Arial AzLat', False);
+            SetBookmark('policynum',ODSContractsPolicy_Num.Value,False, False, False, False, 10, 'Arial AzLat', False);
+            SetBookmark('franshiz1',FloatToStr(ODSContractsFranshiz.Value),False, False, False, False, 10, 'Arial AzLat', False);
+            SetBookmark('payment',FloatToStr(sum-ODSContractsFranshiz.Value),False, False, False, False, 10, 'Arial AzLat', False);
+            SetBookmark('valute',ODSAValuteVal_Name.Value,False, False, False, False, 10, 'Arial AzLat', False);
+            SetBookmark('payment1',FloatToStr(sum-ODSContractsFranshiz.Value)+' '+ODSAValuteVal_Name.Value,False, False, False, False, 10, 'Arial AzLat', False);
+            SetBookmark('beneficiary',ODSContractsBeneficiary.Value,False, False, False, False, 10, 'Arial AzLat', False);
+            SetBookmark('claimdate3',DateToStr(ODSMotorKaskoClaim_Date.Value),False, False, False, False, 10, 'Arial AzLat', False);
+            SetBookmark('claimdate4',DateToStr(ODSMotorKaskoClaim_Date.Value),False, False, False, False, 10, 'Arial AzLat', False);
+            SetBookmark('region2',ODSClaimDescriptionRegion.Value,False, False, False, False, 10, 'Arial AzLat', False);
+            SetBookmark('region3',ODSClaimDescriptionRegion.Value,False, False, False, False, 10, 'Arial AzLat', False);
+            SetBookmark('region4',ODSClaimDescriptionRegion.Value,False, False, False, False, 10, 'Arial AzLat', False);
+            SetBookmark('appdate',DateToStr(ODSClaimDescriptionAppDate.Value),False, False, False, False, 10, 'Arial AzLat', False);
+            SetBookmark('letterdate',DateToStr(ODSClaimDescriptionLetterDate.Value),False, False, False, False, 10, 'Arial AzLat', False);
+            SetBookmark('actdate',DateToStr(ODSClaimDescriptionActDate.Value),False, False, False, False, 10, 'Arial AzLat', False);
+            SetBookmark('letternum',ODSClaimDescriptionLetterNum.Value,False, False, False, False, 10, 'Arial AzLat', False);
+            SetBookmark('cprnum',ODSClaimDescriptionSPRNum.Value,False, False, False, False, 10, 'Arial AzLat', False);
+            SetBookmark('prtnum',ODSClaimDescriptionPrtNum.Value,False, False, False, False, 10, 'Arial AzLat', False);
+            SetBookmark('policynum1',ODSContractsPolicy_Num.Value,False, False, False, False, 10, 'Arial AzLat', False);
+            Show;
+            WordExporter.Close;
+            Close;
+       end;
+    except
+       raise;
+    end;
+end;
+
+end.

@@ -1,0 +1,322 @@
+﻿unit NewDepositsFrmApplyMoneyImpl;
+            //fkCalculated
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
+   Grids, DBGridEh, ComCtrls, ToolWin, ActnList,dialogs,
+  CMExcelExport, ImgList, StdCtrls, Mask, DBCtrls, ExtCtrls, Menus,
+  DBGridEhGrouping, GridsEh, XFSCtrls;
+
+type
+  TNewDepositsFrmApplyMoney = class(TForm)
+    ActionList1: TActionList;
+    ActnAdd: TAction;
+    ActnDel: TAction;
+    ActnExport: TAction;
+    DBGridEh1: TDBGridEh;
+    ExcelExport: TCMExcelExport;
+    ImageList1: TImageList;
+    PMShowTr: TPopupMenu;
+    N1: TMenuItem;
+    StatusBar1: TStatusBar;
+    XFGroupBox1: TXFGroupBox;
+    XFPanel1: TXFPanel;
+    StaticText2: TStaticText;
+    DBEdit2: TDBEdit;
+    ToolBar2: TToolBar;
+    BtnCust: TToolButton;
+    ToolButton8: TToolButton;
+    ToolButton9: TToolButton;
+    ToolButton10: TToolButton;
+    Köçermeler: TToolButton;
+    ToolButton14: TToolButton;
+    ToolButton12: TToolButton;
+    ToolButton1: TToolButton;
+    procedure FormCanResize(Sender: TObject; var NewWidth, NewHeight: Integer;
+      var Resize: Boolean);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure ActnAddExecute(Sender: TObject);
+    procedure ActnDelExecute(Sender: TObject);
+    procedure ActnExportExecute(Sender: TObject);
+    procedure ActnDelUpdate(Sender: TObject);
+    procedure N1Click(Sender: TObject);
+    procedure N1DrawItem(Sender: TObject; ACanvas: TCanvas; ARect: TRect;
+      Selected: Boolean);
+    procedure ToolButton14Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+     CanRefReshDeposit :Boolean;
+  end;
+
+var
+  NewDepositsFrmApplyMoney: TNewDepositsFrmApplyMoney;
+       procedure exportproc(S :String);export;
+implementation
+
+{$R *.dfm}
+   uses NewDepositsDMApplyMoneyImpl,NewDepositsFrmAddMoneyImpl,NewCommonDeclsImpl,SBTranslateProc,sboapiDataModuleimpl;
+
+procedure exportproc(S :String);export;
+var ContractID,
+    CustAccID,CustID:Integer;
+
+begin
+   NewDepositsFrmApplyMoney.Caption := Get_SelectedContNo+'  nömrəli müqavilənin yatırımları';
+   ContractID := Get_SelectedContID;
+   with NewDepositsDMApplyMoney do
+   begin
+       with Tranches do
+       begin
+          close;
+          SetVariable('ContractID',ContractID);
+          Open;
+       end;
+
+       with DepositInfo do
+       begin
+          close;
+          SetVariable('ContractID',ContractID);
+          CustID := FieldByName('CustomerID').AsInteger;
+          Open;
+       end;
+
+       with CustAcc do
+       begin
+          close;
+          SetVariable('ContractID',ContractID);
+          Open;
+          CustAccID := FieldByName('ClientACCID').AsInteger;
+       end;
+
+       with DebitAccs do
+       begin
+        close;
+        if not Active then
+          SetVariable('CustID',CustAccID);
+          Open;
+       // if Locate('ID',CustAccID,[]) then
+     //   NewDepositsFrmAddMoney.AccountListCB.KeyValue := CustAccID;
+       end;
+
+       with ClientAccs do
+       begin
+        close;
+        if not Active then
+          SetVariable('CustID',CustAccID);
+          Open;
+       end;
+
+      NewDepositsFrmApplyMoney.ShowModal;
+   end;
+end;
+
+exports
+  exportproc;
+procedure TNewDepositsFrmApplyMoney.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+   Resize := False;
+end;
+
+procedure TNewDepositsFrmApplyMoney.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+   if CanRefReshDeposit then
+      RefreshWithSavely(True);
+    with NewDepositsDMApplyMoney do
+    begin
+       Tranches.CloseAll;
+      // DebitAccs.CloseAll;
+       DepositInfo.CloseAll;
+       CustAcc.CloseAll;
+    end;
+end;
+
+procedure TNewDepositsFrmApplyMoney.FormCreate(Sender: TObject);
+begin
+   NewDepositsDMApplyMoney := TNewDepositsDMApplyMoney.Create(Self);
+   NewDepositsFrmAddMoney:= TNewDepositsFrmAddMoney.Create(Self);
+   SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TNewDepositsFrmApplyMoney.FormDestroy(Sender: TObject);
+begin
+   NewDepositsFrmAddMoney.Free;
+   NewDepositsDMApplyMoney.Free;
+end;
+
+procedure TNewDepositsFrmApplyMoney.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+if ord(Key) = VK_ESCAPE then close;
+end;
+
+
+
+procedure TNewDepositsFrmApplyMoney.N1Click(Sender: TObject);
+
+var TrID :String;
+begin
+   TrID := IntToStr(NewDepositsDMApplyMoney.Tranches.FieldByname('TrID').AsInteger);
+   LoadPlugin('SBDM_TransactionViewer.bpl',TrID);
+end;
+
+procedure TNewDepositsFrmApplyMoney.N1DrawItem(Sender: TObject; ACanvas: TCanvas;
+  ARect: TRect; Selected: Boolean);
+
+var
+  LineBottom: Integer;
+  SText: String;
+  Bar: TRect;
+begin
+  with ACanvas, Sender as TMenuItem do
+  begin
+    with ACanvas.Font do
+    begin
+      Charset := DEFAULT_CHARSET;
+      Name := 'Azl Sans Serif';
+      if Default then
+        Style := [fsBold];
+    end;
+    if Caption = '-' then
+    begin
+      Pen.Color := clBlack;
+      LineBottom := (ARect.Top + (ARect.Bottom - ARect.Top) div 2)-1;
+      MoveTo(ARect.Left, LineBottom);
+      LineTo(ARect.Right, LineBottom);
+      inc(LineBottom);
+      Pen.Color := clWhite;
+      MoveTo(ARect.Left, LineBottom);
+      LineTo(ARect.Right, LineBottom);
+    end
+    else
+    begin
+      if Selected then
+      begin
+        Brush.Color := clNavy;
+        if Enabled then
+          Font.Color := clWhite
+        else
+          Font.Color := clSilver;
+      end
+      else
+      begin
+        Brush.Color := clBtnFace;
+        if Enabled then
+          Font.Color := clBlack
+        else
+          Font.Color := clGrayText;
+      end;
+      Bar := ARect;
+      Inc(Bar.Left, 22);
+      FillRect(Bar);
+      TextOut(ARect.Left+{17}22, ARect.Top+1, Caption);
+    end;
+    // draw shortcut
+    SText := ShortCutToText(ShortCut);
+    TextOut(ARect.Right-TextWidth(SText)-7, ARect.Top+1, SText);
+    if ImageIndex <> -1 then
+      with GetParentMenu do
+        if Assigned(Images) then
+        begin
+          if Checked then
+          begin
+            Bar.Left := ARect.Left + 1;
+            Bar.Right := Bar.Left + 16;
+            Bar.Top := ARect.Top + 1;
+            Bar.Bottom := Bar.Top + 16;
+
+            ACanvas.Brush.Color := clBtnShadow;
+            ACanvas.FrameRect(Bar);
+
+            Inc(Bar.Left, 2);
+            Inc(Bar.Right, 2);
+            Inc(Bar.Top, 2);
+            Inc(Bar.Bottom, 2);
+
+            ACanvas.Brush.Color := clBtnHighlight;
+            ACanvas.FrameRect(Bar);
+
+            Dec(Bar.Left, 1);
+            Dec(Bar.Right, 1);
+            Dec(Bar.Top, 1);
+            Dec(Bar.Bottom, 1);
+
+            if Selected then
+              ACanvas.Brush.Color := clBtnFace
+            else
+              ACanvas.Brush.Color := clBtnHighlight;
+            ACanvas.FillRect(Bar);
+          end;
+
+          Images.Draw(ACanvas, ARect.Left, ARect.Top, ImageIndex, Enabled);
+        end;
+  end;
+end;
+
+procedure TNewDepositsFrmApplyMoney.ToolButton14Click(Sender: TObject);
+begin
+  Close
+end;
+
+procedure TNewDepositsFrmApplyMoney.ActnAddExecute(Sender: TObject);
+begin
+with NewDepositsDMApplyMoney,sb_aca do
+begin
+      CallProcedure('checkadvancedobjectaccess',['INSERT_DM_TRANSH']);
+
+end;
+   if NewDepositsFrmAddMoney.ShowModal = mrOk then
+   begin
+      CanRefReshDeposit := True;
+      NewDepositsDMApplyMoney.Tranches.Refresh;
+   end;
+
+end;
+procedure TNewDepositsFrmApplyMoney.ActnDelExecute(Sender: TObject);
+begin
+  with NewDepositsDMApplyMoney,sb_aca do
+  begin
+    CallProcedure('checkadvancedobjectaccess',['DELETE_DM_TRANSH']);
+  end;
+
+  if MessageDlg('Silinməsinə əminsinizmi?',
+             mtConfirmation, [mbYes, mbNo], 0) = mrNo
+    then Exit;
+
+  with NewDepositsDMApplyMoney,Tranches,dm_tranches do
+  begin
+    CallProcedure('DeleteDepositMoney',['P_DepMoneyID',FieldByName('ID').AsInteger]);
+    refresh;
+  end;
+
+end;
+
+
+procedure TNewDepositsFrmApplyMoney.ActnExportExecute(Sender: TObject);
+begin
+  with NewDepositsDMApplyMoney,sb_aca do
+begin
+      CallProcedure('checkadvancedobjectaccess',['EXCEL_DM_TRANSH']);
+end;
+   with ExcelExport do
+   begin
+      Connect;
+      ExportDataset(NewDepositsDMApplyMoney.Tranches,'Depozit yatrımları',True,false);
+      Disconnect;
+   end;
+
+end;
+
+procedure TNewDepositsFrmApplyMoney.ActnDelUpdate(Sender: TObject);
+begin
+   with (Sender as TAction) do
+        Enabled := NewDepositsDMApplyMoney.Tranches.RecordCount > 0;
+end;
+initialization
+   NewDepositsFrmApplyMoney := TNewDepositsFrmApplyMoney.Create(CommonApplication);
+end.

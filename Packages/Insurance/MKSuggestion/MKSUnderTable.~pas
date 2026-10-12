@@ -1,0 +1,51 @@
+unit MKSUnderTable;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, Mask, DBCtrls, HintBox, OleCtnrs, Buttons, ExtCtrls;
+
+type
+  TfmUndertable = class(TForm)
+    Panel2: TPanel;
+    BitBtn3: TBitBtn;
+    OleContainer1: TOleContainer;
+    Panel1: TPanel;
+    BitBtn1: TBitBtn;
+    BitBtn2: TBitBtn;
+    RadioButton1: TRadioButton;
+    RadioButton2: TRadioButton;
+    hbError: THintBox;
+    DBEdit1: TDBEdit;
+    procedure BitBtn3Click(Sender: TObject);
+    procedure RadioButton1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  fmUndertable: TfmUndertable;
+
+implementation
+
+{$R *.DFM}
+
+procedure TfmUndertable.BitBtn3Click(Sender: TObject);
+begin
+    with OleContainer1 do
+    DoVerb(ovPrimary);
+end;
+
+procedure TfmUndertable.RadioButton1Click(Sender: TObject);
+begin
+    with fmMKSuggestion, ODSTemplates do begin
+    if State in [dsEdit, dsInsert] then Cancel;
+    ODSTemplates.Edit;
+    FormShow(Sender);
+  end;
+end;
+
+end.

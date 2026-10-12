@@ -1,0 +1,274 @@
+object FrmIEAddEdit: TFrmIEAddEdit
+  Left = 730
+  Top = 192
+  Width = 343
+  Height = 251
+  BorderIcons = []
+  Caption = 'FrmIEAddEdit'
+  Color = clBtnFace
+  Font.Charset = RUSSIAN_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poScreenCenter
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Button1: TButton
+    Left = 103
+    Top = 187
+    Width = 75
+    Height = 25
+    Caption = '√€бул'
+    TabOrder = 0
+    OnClick = Button1Click
+  end
+  object Button2: TButton
+    Left = 183
+    Top = 187
+    Width = 75
+    Height = 25
+    Caption = '»мтина'
+    TabOrder = 1
+    OnClick = Button2Click
+  end
+  object GroupBox1: TGroupBox
+    Left = 0
+    Top = 0
+    Width = 335
+    Height = 182
+    Align = alTop
+    TabOrder = 2
+    object Label1: TLabel
+      Left = 5
+      Top = 14
+      Width = 27
+      Height = 13
+      Caption = '‘илиал'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clNavy
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = [fsBold]
+      ParentFont = False
+    end
+    object Label2: TLabel
+      Left = 5
+      Top = 54
+      Width = 43
+      Height = 13
+      Caption = '¬алйута'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clNavy
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = [fsBold]
+      ParentFont = False
+    end
+    object Label3: TLabel
+      Left = 5
+      Top = 97
+      Width = 53
+      Height = 13
+      Caption = 'ўесаб є'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clNavy
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = [fsBold]
+      ParentFont = False
+    end
+    object Label4: TLabel
+      Left = 7
+      Top = 137
+      Width = 68
+      Height = 13
+      Caption = 'ўесабын ады'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clNavy
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = [fsBold]
+      ParentFont = False
+    end
+    object CBBranch: TDBLookupComboBox
+      Left = 5
+      Top = 30
+      Width = 156
+      Height = 21
+      DataField = 'BRANCHID'
+      DataSource = ActFrom.DataSrcLinkValues
+      KeyField = 'ID'
+      ListField = 'NAME'
+      ListSource = DataSrcBranchList
+      TabOrder = 0
+    end
+    object DBLookupComboBox2: TDBLookupComboBox
+      Left = 5
+      Top = 70
+      Width = 108
+      Height = 21
+      DataField = 'CURRENCYID'
+      DataSource = ActFrom.DataSrcLinkValues
+      KeyField = 'VALUTE'
+      ListField = 'VAL_NAME'
+      ListSource = DataSrcCurrencyList
+      TabOrder = 1
+    end
+    object DBLookupComboboxEh1: TDBLookupComboboxEh
+      Left = 5
+      Top = 113
+      Width = 252
+      Height = 21
+      DataField = 'ACCOUNTID'
+      DataSource = ActFrom.DataSrcLinkValues
+      DropDownBox.Sizable = True
+      EditButtons = <>
+      KeyField = 'ID'
+      ListField = 'ACC_NO'
+      ListSource = DataSrcIEAccountList
+      TabOrder = 2
+      Visible = True
+    end
+    object DBEdit1: TDBEdit
+      Left = 3
+      Top = 152
+      Width = 255
+      Height = 21
+      DataField = 'NAME'
+      DataSource = DataSrcIEAccountList
+      Enabled = False
+      TabOrder = 3
+    end
+  end
+  object Localizer: TNLSLocalizer
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    Left = 144
+    Top = 56
+  end
+  object IEAccountList: TOracleDataSet
+    SQL.Strings = (
+      'SELECT'
+      '   id,Acc_No,Val_Acc,Name,FILIAL'
+      '  FROM smart.cr_sb_all_ACCOUNTS'
+      ' WHERE (bal_cn1 IN (SELECT accountnumber'
+      '                           FROM smart.cr_aginfo'
+      '                          WHERE groupid = (SELECT g.id'
+      
+        '                                             FROM smart.cr_accou' +
+        'ntgroups g'
+      
+        '                                            WHERE g.iname = '#39'Inc' +
+        'ExpAccounts'#39')))'
+      'and (Close_Dat is Null) and FILIAL in (select id from filial)'
+      'and FILIAL=:FILIAL'
+      ''
+      'ORDER BY ACC_NO'
+      ''
+      ''
+      '/*SELECT'
+      '   id,Acc_No,Val_Acc,Name'
+      '  FROM ACCOUNT'
+      ' WHERE (bal_cn1 IN (SELECT accountnumber'
+      '                           FROM smart.cr_aginfo'
+      '                          WHERE groupid = (SELECT g.id'
+      
+        '                                             FROM smart.cr_accou' +
+        'ntgroups g'
+      
+        '                                            WHERE g.iname = '#39'Inc' +
+        'ExpAccounts'#39')))'
+      'and (Close_Dat is Null)'
+      'ORDER BY ACC_NO*/')
+    Variables.Data = {0300000001000000070000003A46494C49414C030000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      0400000005000000020000004944010000000000060000004143435F4E4F0100
+      000000000700000056414C5F414343010000000000040000004E414D45010000
+      0000000600000046494C49414C010000000000}
+    Cursor = crSQLWait
+    Master = BranchList
+    MasterFields = 'id'
+    DetailFields = 'FILIAL'
+    Session = sboapiDataModule.SBSession
+    Left = 56
+    Top = 16
+    object IEAccountListID: TFloatField
+      FieldName = 'ID'
+    end
+    object IEAccountListACC_NO: TWideStringField
+      FieldName = 'ACC_NO'
+    end
+    object IEAccountListVAL_ACC: TIntegerField
+      FieldName = 'VAL_ACC'
+    end
+    object IEAccountListNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 90
+    end
+    object IEAccountListFILIAL: TIntegerField
+      FieldName = 'FILIAL'
+    end
+  end
+  object BranchList: TOracleDataSet
+    SQL.Strings = (
+      'SELECT id, name'
+      '  FROM filial')
+    QBEDefinition.QBEFieldDefs = {
+      0400000002000000020000004944010000000000040000004E414D4501000000
+      0000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 176
+    Top = 16
+    object BranchListID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object BranchListNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 90
+    end
+  end
+  object DataSrcIEAccountList: TDataSource
+    DataSet = IEAccountList
+    Left = 56
+    Top = 48
+  end
+  object DataSrcBranchList: TDataSource
+    DataSet = BranchList
+    Left = 176
+    Top = 56
+  end
+  object CurrencyList: TOracleDataSet
+    SQL.Strings = (
+      'SELECT VAlute,Val_Name'
+      '  FROM AVALUTE')
+    QBEDefinition.QBEFieldDefs = {
+      04000000020000000600000056414C5554450100000000000800000056414C5F
+      4E414D45010000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 112
+    Top = 16
+    object CurrencyListVALUTE: TIntegerField
+      FieldName = 'VALUTE'
+      Required = True
+    end
+    object CurrencyListVAL_NAME: TWideStringField
+      FieldName = 'VAL_NAME'
+      Size = 10
+    end
+  end
+  object DataSrcCurrencyList: TDataSource
+    DataSet = CurrencyList
+    Left = 112
+    Top = 56
+  end
+end

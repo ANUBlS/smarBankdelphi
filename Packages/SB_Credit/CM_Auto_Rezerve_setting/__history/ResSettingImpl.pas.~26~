@@ -1,0 +1,127 @@
+unit ResSettingImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, Buttons, ExtCtrls, ToolWin, ActnMan, ActnCtrls, DBCtrls,
+  XDBCtrls, Grids, XDBGrids, XFSCtrls, DB, OracleData;
+
+type
+  TFrmResSetting = class(TForm)
+    GroupBox1: TGroupBox;
+    GroupBox2: TGroupBox;
+    GroupBox3: TGroupBox;
+    Panel1: TPanel;
+    XDBGrid2: TXDBGrid;
+    XDBGrid3: TXDBGrid;
+    XFButton1: TXFButton;
+    OracleDataSet1: TOracleDataSet;
+    OracleDataSet2: TOracleDataSet;
+    DataSource1: TDataSource;
+    OracleDataSet1ID: TFloatField;
+    OracleDataSet1NAME: TWideStringField;
+    OracleDataSet3: TOracleDataSet;
+    DataSource2: TDataSource;
+    OracleDataSet4: TOracleDataSet;
+    DataSource3: TDataSource;
+    OracleDataSet4ID: TFloatField;
+    OracleDataSet4TES_ID: TFloatField;
+    OracleDataSet4KEF_ID: TFloatField;
+    OracleDataSet4PERCENT: TFloatField;
+    OracleDataSet4TESNAME: TWideStringField;
+    OracleDataSet4BDUEDAY: TFloatField;
+    OracleDataSet4EDUEDAY: TFloatField;
+    Panel2: TPanel;
+    XDBGrid1: TXDBGrid;
+    SpeedButton1: TSpeedButton;
+    SpeedButton2: TSpeedButton;
+    AutoPayment: TOracleDataSet;
+    DataSrcAutoRes: TDataSource;
+    OracleDataSet1RESERVEOPERATION: TFloatField;
+    OracleDataSet1AUTORESERVE: TFloatField;
+    DataSource: TDataSource;
+    OracleDataSet1autore: TWideStringField;
+    OracleDataSet5: TOracleDataSet;
+    OracleDataSet1operation: TWideStringField;
+    procedure XFButton1Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure OracleDataSet1AfterPost(DataSet: TDataSet);
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure SpeedButton2Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmResSetting: TFrmResSetting;
+
+  Procedure InitPlugin(S:String);export;
+implementation
+
+{$R *.DFM}
+
+uses sboapiDataModuleImpl,CommonDecls, TesFrmImpl;
+
+Procedure InitPlugin(S:String);export;
+begin
+  FrmResSetting.ShowModal;
+end;
+
+exports
+   InitPlugin;
+
+
+procedure TFrmResSetting.FormCreate(Sender: TObject);
+begin
+AddTesFrm:=TAddTesFrm.Create(self);
+OracleDataSet2.Open;
+OracleDataSet3.Open;
+OracleDataSet4.Open;
+end;
+
+procedure TFrmResSetting.FormDestroy(Sender: TObject);
+begin
+OracleDataSet2.close;
+OracleDataSet1.close;
+OracleDataSet3.close;
+OracleDataSet4.close;
+end;
+
+procedure TFrmResSetting.FormShow(Sender: TObject);
+begin
+OracleDataSet1.Open;
+end;
+
+procedure TFrmResSetting.OracleDataSet1AfterPost(DataSet: TDataSet);
+begin
+//OracleDataSet3.Refresh;
+//OracleDataSet4.Refresh;
+end;
+
+procedure TFrmResSetting.SpeedButton1Click(Sender: TObject);
+begin
+OracleDataSet1.close;
+OracleDataSet1.open;
+OracleDataSet1.Insert;
+AddTesFrm.ShowModal ;
+end;
+
+procedure TFrmResSetting.SpeedButton2Click(Sender: TObject);
+begin
+OracleDataSet1.edit;
+AddTesFrm.ShowModal;
+end;
+
+procedure TFrmResSetting.XFButton1Click(Sender: TObject);
+begin
+close
+end;
+
+initialization
+   FrmResSetting := TFrmResSetting.Create(CommonApplication);
+end.

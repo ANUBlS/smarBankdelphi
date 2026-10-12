@@ -1,0 +1,337 @@
+#------------------------------------------------------------------------------
+VERSION = BWS.01
+#------------------------------------------------------------------------------
+!ifndef ROOT
+ROOT = $(MAKEDIR)\..
+!endif
+#------------------------------------------------------------------------------
+MAKE = $(ROOT)\bin\make.exe -$(MAKEFLAGS) -f$**
+DCC = $(ROOT)\bin\dcc32.exe $**
+BRCC = $(ROOT)\bin\brcc32.exe $**
+#------------------------------------------------------------------------------
+PROJECTS = SBAxCommon50.dll SBCommon50.bpl SBPlgAx50.ocx sbplg50.bpl \
+  sboapi50.bpl sbovcl50.bpl SBDialogs.bpl SBExcelExporter.bpl SearchCB.bpl \
+  SBCMVcl50.bpl MFTransactions.bpl Transactions.dll RateDifference.dll \
+  sbAxSplash.dll ProfitClosing.dll AccBalanceCheck.dll ObrSaved.ocx Balance.ocx \
+  MemorialProject.ocx SessionMgr.dll SBBackupCreator.ocx DayByDayBalance.ocx \
+  Order.ocx TodayBalance.ocx PaymentDecreeX.ocx TurnOversForPeriod.ocx \
+  BankInfo.ocx AccountsForPeriod.ocx Customers.ocx Customers_Informations.ocx \
+  AboutBanksProj.ocx Avalute.ocx CashSymbols.ocx Exchange.ocx QueryExporter.ocx \
+  RateDifferenceReport.ocx RateManagement.ocx Repair.ocx SaldoEditor.ocx \
+  SBAnalys.bpl Swift_Clearing.ocx TuningTransactions.ocx IncExpensesProj.ocx \
+  TuningAcc_Zones.ocx TuningAccTypes.ocx ExpertAnalys.ocx FieldSearch.bpl \
+  SymbolisticAnalysis.ocx MemorialOrder.ocx SmartBank.exe RepairNew.ocx \
+  CashDesk.ocx RollbackDay.ocx TransactionsViewer.ocx BalanceAnalys.ocx \
+  CallBackTransactions.ocx CreditManager.ocx Administration.ocx \
+  BalanceRefEdit.ocx Extraction.ocx Account.ocx CloseDay.ocx ControlTape.ocx \
+  Translator.ocx SBTranslate.bpl LVPCSSManager.ocx CreditManagerConstructions.ocx \
+  CC_Building_PR.ocx cc_BuyersPr.ocx TransactionManager.ocx Sd.ocx \
+  MainResourcePr.ocx StatementPr.ocx out_TransactionManagerForm.ocx \
+  CableManager.ocx CableContracts.ocx ExchangeMGR.ocx TurnoverFormProj1.ocx \
+  SBCrypto.bpl GB_ReportProj1.ocx P_Customers.ocx customer_operations.ocx \
+  out_memorial.ocx CM_OraLogon.bpl out_account.ocx CountriesP.ocx \
+  CurrencyPosition.ocx P_CustomersFS.ocx Crypt50.bpl OraLogon50.bpl CMVCL50.bpl \
+  Out_control_tape.ocx Out_Statement.ocx customer_order_.ocx Ehlib50.bpl \
+  DclEhlib50.bpl ImportService.ocx OutRepair.ocx out_todaybalance.ocx
+#------------------------------------------------------------------------------
+default: $(PROJECTS)
+#------------------------------------------------------------------------------
+
+sboapi50.bpl: Packages\sboapi50\sboapi50.dpk
+  $(DCC)
+
+sbovcl50.bpl: Packages\sbovcl50\sbovcl50.dpk
+  $(DCC)
+
+Transactions.dll: Packages\Transactions\Transactions.dpr
+  $(DCC)
+
+RateDifference.dll: Packages\RateDifference\RateDifference.dpr
+  $(DCC)
+
+sbAxSplash.dll: Packages\sbAxSplash\sbAxSplash.dpr
+  $(DCC)
+
+SBDialogs.bpl: Packages\SBDialogs\SBDialogs.dpk
+  $(DCC)
+
+ProfitClosing.dll: Packages\ProfitClosing\ProfitClosing.dpr
+  $(DCC)
+
+SBCommon50.bpl: Packages\SBCommon50\SBCommon50.dpk
+  $(DCC)
+
+sbplg50.bpl: Packages\sbplg50\sbplg50.dpk
+  $(DCC)
+
+SBPlgAx50.ocx: Packages\sbplg50\ActiveX\SBPlgAx50.dpr
+  $(DCC)
+
+SBAxCommon50.dll: Packages\SBCommon50\ActiveX\SBAxCommon50.dpr
+  $(DCC)
+
+AccBalanceCheck.dll: Packages\AccBalanceCheck\AccBalanceCheck.dpr
+  $(DCC)
+
+ObrSaved.ocx: Packages\ObrSaved\ObrSaved.dpr
+  $(DCC)
+
+Balance.ocx: Packages\Balance\Balance.dpr
+  $(DCC)
+
+MemorialProject.ocx: Packages\Memorial\MemorialProject.dpr
+  $(DCC)
+
+SmartBank.exe: Programs\SmartBank\SmartBank.dpr
+  $(DCC)
+
+SessionMgr.dll: Packages\SessionMgr\SessionMgr.dpr
+  $(DCC)
+
+SBExcelExporter.bpl: Packages\SBExcelExporter\SBExcelExporter.dpk
+  $(DCC)
+
+DayByDayBalance.ocx: Packages\DBDBalance\DayByDayBalance.dpr
+  $(DCC)
+
+Order.ocx: Packages\Order\Order.dpr
+  $(DCC)
+
+SBBackupCreator.ocx: Packages\SBBackupCreator\SBBackupCreator.dpr
+  $(DCC)
+
+SearchCB.bpl: Packages\SBSearchComboBox\SearchCB.dpk
+  $(DCC)
+
+SBCMVcl50.bpl: Packages\SBCM_ComponentsStorage\SBCMVcl50.dpk
+  $(DCC)
+
+TodayBalance.ocx: Packages\TodayBalance\TodayBalance.dpr
+  $(DCC)
+
+PaymentDecreeX.ocx: Packages\PaymentDecree\PaymentDecreeX.dpr
+  $(DCC)
+
+TurnOversForPeriod.ocx: Packages\TurnOversForPeriod\TurnOversForPeriod.dpr
+  $(DCC)
+
+BankInfo.ocx: Packages\BankInfo\BankInfo.dpr
+  $(DCC)
+
+AccountsForPeriod.ocx: Packages\AccountsForPeriod\AccountsForPeriod.dpr
+  $(DCC)
+
+Customers.ocx: Packages\Customers\Customers.dpr
+  $(DCC)
+
+Customers_Informations.ocx: Packages\CustomersInformations\Customers_Informations.dpr
+  $(DCC)
+
+AboutBanksProj.ocx: Packages\AboutBanks\AboutBanksProj.dpr
+  $(DCC)
+
+Avalute.ocx: Packages\Avalute\Avalute.dpr
+  $(DCC)
+
+CashSymbols.ocx: Packages\CashSymbols\CashSymbols.dpr
+  $(DCC)
+
+Exchange.ocx: Packages\Exchange\Exchange.dpr
+  $(DCC)
+
+MFTransactions.bpl: Packages\MF_Transactions\MFTransactions.dpk
+  $(DCC)
+
+QueryExporter.ocx: Packages\QueryExporter\QueryExporter.dpr
+  $(DCC)
+
+RateDifferenceReport.ocx: Packages\RateDifferenceReport\RateDifferenceReport.dpr
+  $(DCC)
+
+RateManagement.ocx: Packages\RateManagement\RateManagement.dpr
+  $(DCC)
+
+Repair.ocx: Packages\Repair\Repair.dpr
+  $(DCC)
+
+SaldoEditor.ocx: Packages\SaldoEditor\SaldoEditor.dpr
+  $(DCC)
+
+SBAnalys.bpl: Packages\SBAnalys\SBAnalys.dpk
+  $(DCC)
+
+Swift_Clearing.ocx: Packages\Swift_Clearing\Swift_Clearing.dpr
+  $(DCC)
+
+TuningTransactions.ocx: Packages\TuningTransactions\TuningTransactions.dpr
+  $(DCC)
+
+IncExpensesProj.ocx: Packages\IncExpenses\IncExpensesProj.dpr
+  $(DCC)
+
+TuningAcc_Zones.ocx: Packages\TuningAcc_Zones\TuningAcc_Zones.dpr
+  $(DCC)
+
+TuningAccTypes.ocx: Packages\TuningAccTypes\TuningAccTypes.dpr
+  $(DCC)
+
+ExpertAnalys.ocx: Packages\ExpertAnalys\ExpertAnalys.dpr
+  $(DCC)
+
+FieldSearch.bpl: Packages\FieldSearchEdit\FieldSearch.dpk
+  $(DCC)
+
+SymbolisticAnalysis.ocx: Packages\SymbolisticAnalysis\SymbolisticAnalysis.dpr
+  $(DCC)
+
+RepairNew.ocx: Packages\Repair New\RepairNew.dpr
+  $(DCC)
+
+MemorialOrder.ocx: Packages\MemorialOrder\MemorialOrder.dpr
+  $(DCC)
+
+CashDesk.ocx: Packages\CashDeskLast\CashDesk.dpr
+  $(DCC)
+
+RollbackDay.ocx: Packages\RollbackDay\RollbackDay.dpr
+  $(DCC)
+
+TransactionsViewer.ocx: Packages\TransactionsReporter\TransactionsViewer.dpr
+  $(DCC)
+
+BalanceAnalys.ocx: Packages\BalanceAnalys\BalanceAnalys.dpr
+  $(DCC)
+
+CallBackTransactions.ocx: Packages\CallBackTransactions\CallBackTransactions.dpr
+  $(DCC)
+
+CreditManager.ocx: Packages\CreditManager\CreditManager.dpr
+  $(DCC)
+
+Administration.ocx: Packages\Administration\Administration.dpr
+  $(DCC)
+
+Extraction.ocx: Packages\Extraction\Extraction.dpr
+  $(DCC)
+
+BalanceRefEdit.ocx: Packages\BalanceRefEdit\BalanceRefEdit.dpr
+  $(DCC)
+
+Account.ocx: Packages\Account\Account.dpr
+  $(DCC)
+
+CloseDay.ocx: Packages\CloseDay\CloseDay.dpr
+  $(DCC)
+
+ControlTape.ocx: Packages\ControlTape\ControlTape.dpr
+  $(DCC)
+
+Translator.ocx: Packages\Translator\Translator.dpr
+  $(DCC)
+
+SBTranslate.bpl: Packages\SBTranslate\SBTranslate.dpk
+  $(DCC)
+
+LVPCSSManager.ocx: Packages\LVPCSSManager\LVPCSSManager.dpr
+  $(DCC)
+
+CreditManagerConstructions.ocx: Packages\CreditsManagerConstruction\CreditManagerConstructions.dpr
+  $(DCC)
+
+CC_Building_PR.ocx: Packages\CC_Building\CC_Building_PR.dpr
+  $(DCC)
+
+cc_BuyersPr.ocx: Packages\cc_Buyers\cc_BuyersPr.dpr
+  $(DCC)
+
+TransactionManager.ocx: Packages\TransactionManager\TransactionManager.dpr
+  $(DCC)
+
+Sd.ocx: Packages\sd ocx\Sd.dpr
+  $(DCC)
+
+MainResourcePr.ocx: Packages\MainResource\MainResourcePr.dpr
+  $(DCC)
+
+StatementPr.ocx: Packages\StatementElgun\StatementPr.dpr
+  $(DCC)
+
+out_TransactionManagerForm.ocx: Packages\Out_transaction_manager\ocx\out_TransactionManagerForm.dpr
+  $(DCC)
+
+CableManager.ocx: Packages\CableManager\CableManager.dpr
+  $(DCC)
+
+CableContracts.ocx: Packages\CableContracts\CableContracts.dpr
+  $(DCC)
+
+ExchangeMGR.ocx: Packages\ExchangeMGR\ExchangeMGR.dpr
+  $(DCC)
+
+TurnoverFormProj1.ocx: Packages\TurnOver\TurnoverFormProj1.dpr
+  $(DCC)
+
+SBCrypto.bpl: Packages\LVPCSSManager\Crypto\SBCrypto.dpk
+  $(DCC)
+
+GB_ReportProj1.ocx: Packages\GB_REPORT\GB_ReportProj1.dpr
+  $(DCC)
+
+P_Customers.ocx: Packages\Physical_customers\Ocx\P_Customers.dpr
+  $(DCC)
+
+customer_operations.ocx: Packages\Customer_Operations\Ocx\customer_operations.dpr
+  $(DCC)
+
+out_memorial.ocx: Packages\out_memorial\out_memorial.dpr
+  $(DCC)
+
+CM_OraLogon.bpl: Packages\CM_OraLogon\CM_OraLogon.dpk
+  $(DCC)
+
+out_account.ocx: Packages\Out_account\ocx\out_account.dpr
+  $(DCC)
+
+CountriesP.ocx: Packages\CountriesP\CountriesP.dpr
+  $(DCC)
+
+CurrencyPosition.ocx: Packages\CurrencyPosition\CurrencyPosition.dpr
+  $(DCC)
+
+P_CustomersFS.ocx: Packages\P_CustomersFS\Physical_customers\Ocx\P_CustomersFS.dpr
+  $(DCC)
+
+Crypt50.bpl: Packages\ICECrypt\Crypt50.dpk
+  $(DCC)
+
+OraLogon50.bpl: Packages\ICELogon\OraLogon50.dpk
+  $(DCC)
+
+CMVCL50.bpl: Packages\VCL\CMVCL50.dpk
+  $(DCC)
+
+Out_control_tape.ocx: Packages\Out_control_tape\ocx\Out_control_tape.dpr
+  $(DCC)
+
+Out_Statement.ocx: Packages\Out_Statement\Ocx\Out_Statement.dpr
+  $(DCC)
+
+customer_order_.ocx: Packages\Customer's_orders(new)\Ocx\customer_order_.dpr
+  $(DCC)
+
+Ehlib50.bpl: Packages\EhLib\Ehlib50.dpk
+  $(DCC)
+
+DclEhlib50.bpl: Packages\EhLib\DclEhlib50.dpk
+  $(DCC)
+
+ImportService.ocx: Packages\ImportService\ImportService.dpr
+  $(DCC)
+
+OutRepair.ocx: Packages\out_repair\OutRepair.dpr
+  $(DCC)
+
+out_todaybalance.ocx: Packages\Out_todaybalance\ocx\out_todaybalance.dpr
+  $(DCC)
+
+

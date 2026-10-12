@@ -1,0 +1,172 @@
+object TrDescTuningForm: TTrDescTuningForm
+  Left = 390
+  Top = 219
+  BorderIcons = [biSystemMenu]
+  ClientHeight = 280
+  ClientWidth = 490
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poMainFormCenter
+  PixelsPerInch = 96
+  TextHeight = 14
+  object GroupBox1: TGroupBox
+    Left = 0
+    Top = 0
+    Width = 490
+    Height = 208
+    Align = alTop
+    TabOrder = 0
+    object DBGrid1: TDBGrid
+      Left = 2
+      Top = 16
+      Width = 486
+      Height = 160
+      TabStop = False
+      Align = alClient
+      DataSource = DataSrcTrDescData
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      Options = [dgTitles, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit]
+      ParentFont = False
+      ReadOnly = True
+      TabOrder = 0
+      TitleFont.Charset = DEFAULT_CHARSET
+      TitleFont.Color = clWindow
+      TitleFont.Height = -11
+      TitleFont.Name = 'Azl Sans Serif'
+      TitleFont.Style = []
+      Columns = <
+        item
+          Expanded = False
+          FieldName = 'DESCRIPTION'
+          Title.Caption = #223#236#255#235#232#233#233#224#242#251#237' '#237#238#226#246' .'
+          Title.Color = clNavy
+          Width = 440
+          Visible = True
+        end>
+    end
+    object Panel1: TPanel
+      Left = 2
+      Top = 176
+      Width = 486
+      Height = 30
+      Align = alBottom
+      BevelInner = bvLowered
+      TabOrder = 1
+      object Button2: TButton
+        Left = 462
+        Top = 4
+        Width = 57
+        Height = 23
+        Action = SaveChanges
+        TabOrder = 0
+      end
+      object DBEdit1: TDBEdit
+        Left = 2
+        Top = 3
+        Width = 447
+        Height = 22
+        DataField = 'TRDESCRIPTION'
+        DataSource = DataSrcTrDescData
+        TabOrder = 1
+      end
+    end
+  end
+  object GroupBox2: TGroupBox
+    Left = 0
+    Top = 208
+    Width = 490
+    Height = 53
+    Align = alTop
+    TabOrder = 1
+    object ListBox1: TListBox
+      Left = 2
+      Top = 16
+      Width = 486
+      Height = 35
+      TabStop = False
+      Align = alClient
+      Color = clScrollBar
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clNavy
+      Font.Height = -12
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = [fsBold]
+      ItemHeight = 15
+      Items.Strings = (
+        '%N ---- >   '#204#246#227#224#226#232#235#255#237#232#237' '#237#351#236#287#255#241#232
+        '%D ---- >   '#223#236#255#235#232#233#233#224#242#251#237' '#242#224#287#232#245#232)
+      ParentFont = False
+      TabOrder = 0
+      OnDblClick = ListBox1DblClick
+    end
+  end
+  object Button1: TButton
+    Left = 430
+    Top = 267
+    Width = 92
+    Height = 27
+    Caption = '&'#193#224#252#235#224
+    ModalResult = 1
+    TabOrder = 2
+  end
+  object TrDescData: TOracleDataSet
+    SQL.Strings = (
+      'SELECT RowID,iname, description, trdescription'
+      '  FROM cr_trdescriptions')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000030000000A00000049004E0041004D00450001000000000016000000
+      4400450053004300520049005000540049004F004E000100000000001A000000
+      540052004400450053004300520049005000540049004F004E00010000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 344
+    Top = 48
+    object TrDescDataINAME: TStringField
+      FieldName = 'INAME'
+      Required = True
+      Size = 32
+    end
+    object TrDescDataDESCRIPTION: TStringField
+      FieldName = 'DESCRIPTION'
+      Required = True
+      Size = 255
+    end
+    object TrDescDataTRDESCRIPTION: TStringField
+      FieldName = 'TRDESCRIPTION'
+      Size = 255
+    end
+  end
+  object DataSrcTrDescData: TDataSource
+    DataSet = TrDescData
+    Left = 344
+    Top = 80
+  end
+  object ActionList1: TActionList
+    Left = 264
+    Top = 216
+    object SaveChanges: TAction
+      Caption = '&'#196#255#233#232#248
+      OnExecute = SaveChangesExecute
+    end
+  end
+  object Localizer: TNLSLocalizer
+    Caption = #223#236#255#235#232#233#233#224#242#235#224#287#251#237' '#242#255#233#232#237#224#242#235#224#287#251#237#251#237' '#241#224#231#235#224#237#236#224#241#251'.'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    Left = 240
+    Top = 80
+  end
+end

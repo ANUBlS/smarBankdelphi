@@ -1,0 +1,455 @@
+﻿unit UnitForm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, DBGridEh, DBGridEhGrouping, StdCtrls, GridsEh, Mask, DBCtrlsEh,
+  DBLookupEh, ExtCtrls, DB, OracleData, Oracle, Grids, DBGrids;
+
+type
+  TFormNote = class(TForm)
+    Panel1: TPanel;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    Label6: TLabel;
+    Label7: TLabel;
+    Label8: TLabel;
+    Label9: TLabel;
+    Label10: TLabel;
+    Label11: TLabel;
+    Label12: TLabel;
+    Label13: TLabel;
+    Label14: TLabel;
+    Edit1: TEdit;
+    Edit2: TEdit;
+    DBLookupComboboxEh1: TDBLookupComboboxEh;
+    Edit3: TEdit;
+    DBLookupComboboxEh2: TDBLookupComboboxEh;
+    DBLookupComboboxEh3: TDBLookupComboboxEh;
+    Edit4: TEdit;
+    Edit5: TEdit;
+    DBLookupComboboxEh4: TDBLookupComboboxEh;
+    Edit6: TEdit;
+    Edit7: TEdit;
+    Edit8: TEdit;
+    DBLookupComboboxEh6: TDBLookupComboboxEh;
+    Panel3: TPanel;
+    Panel2: TPanel;
+    Button1: TButton;
+    Button2: TButton;
+    Button3: TButton;
+    ods_cel: TOracleDataSet;
+    ods_celID: TFloatField;
+    ods_celNAME: TWideStringField;
+    dsrc_cel: TDataSource;
+    ods_sector: TOracleDataSet;
+    ods_sectorID: TFloatField;
+    ods_sectorNAME: TWideStringField;
+    dsrc_sector: TDataSource;
+    ods_maliye: TOracleDataSet;
+    FloatField1: TFloatField;
+    WideStringField1: TWideStringField;
+    dsrc_maliye: TDataSource;
+    ods_portstatus: TOracleDataSet;
+    FloatField2: TFloatField;
+    WideStringField2: TWideStringField;
+    ods_not: TOracleDataSet;
+    ods_notID: TFloatField;
+    ods_notCREDITID: TFloatField;
+    ods_notPAR1: TWideStringField;
+    ods_notPAR2: TWideStringField;
+    ods_notPAR3: TWideStringField;
+    ods_notPAR4: TWideStringField;
+    ods_notPAR5: TWideStringField;
+    ods_notPAR6: TWideStringField;
+    ods_notPAR7: TWideStringField;
+    ods_notPAR8: TWideStringField;
+    ods_notPAR9: TWideStringField;
+    ods_notPAR10: TWideStringField;
+    ods_notPAR11: TWideStringField;
+    ods_notPAR12: TWideStringField;
+    ods_notPAR13: TWideStringField;
+    ods_notPAR14: TWideStringField;
+    ods_notPAR15: TWideStringField;
+    dsrc_not: TDataSource;
+    dsrc_portstatus: TDataSource;
+    OraclePackage1: TOraclePackage;
+    DBGrid1: TDBGrid;
+    ods_group: TOracleDataSet;
+    dsrc_group: TDataSource;
+    ods_groupID: TFloatField;
+    ods_groupNAME: TWideStringField;
+    DBLookupComboboxEh5: TDBLookupComboboxEh;
+    dsrc_shedule: TDataSource;
+    ods_shedule: TOracleDataSet;
+    ods_sheduleID: TFloatField;
+    ods_sheduleNAME: TWideStringField;
+    Label15: TLabel;
+    Label16: TLabel;
+    Label17: TLabel;
+    Label18: TLabel;
+    Label19: TLabel;
+    Label20: TLabel;
+    Label21: TLabel;
+    Label22: TLabel;
+    Label23: TLabel;
+    Label24: TLabel;
+    Edit12: TEdit;
+    Edit13: TEdit;
+    Edit14: TEdit;
+    Edit15: TEdit;
+    Edit16: TEdit;
+    DBDateTimeEditEh1: TDBDateTimeEditEh;
+    DBDateTimeEditEh2: TDBDateTimeEditEh;
+    ods_notPAR16: TWideStringField;
+    ods_notPAR17: TWideStringField;
+    ods_notPAR18: TWideStringField;
+    ods_notPAR19: TWideStringField;
+    ods_notPAR20: TWideStringField;
+    ods_notPAR21: TWideStringField;
+    ods_notPAR22: TWideStringField;
+    ods_notPAR23: TDateTimeField;
+    ods_notPAR24: TDateTimeField;
+    ods_bussnes: TOracleDataSet;
+    dsrc_bussnes: TDataSource;
+    DBLookupComboboxEh7: TDBLookupComboboxEh;
+    DBLookupComboboxEh8: TDBLookupComboboxEh;
+    ods_newOld: TOracleDataSet;
+    dsrc_newOld: TDataSource;
+    DBLookupComboboxEh9: TDBLookupComboboxEh;
+    ods_hucrat: TOracleDataSet;
+    dsrc_hucrat: TDataSource;
+    ods_notPAR25: TWideStringField;
+    Label25: TLabel;
+    Edit9: TEdit;
+    ods_hucratID: TFloatField;
+    ods_hucratNAME: TWideStringField;
+    Label26: TLabel;
+    Label27: TLabel;
+    edit10: TEdit;
+    edit11: TEdit;
+    ods_notPAR26: TWideStringField;
+    ods_notPAR27: TWideStringField;
+    procedure Button1Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure DBGrid1DblClick(Sender: TObject);
+    procedure Button3Click(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+    procedure Edit9KeyPress(Sender: TObject; var Key: Char);
+    procedure DBLookupComboboxEh4CloseUp(Sender: TObject; Accept: Boolean);
+    procedure Edit10KeyPress(Sender: TObject; var Key: Char);
+    procedure Edit11KeyPress(Sender: TObject; var Key: Char);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormNote: TFormNote;
+
+procedure InitPlugin(s:string);export;
+
+implementation
+uses  sboapiDataModuleImpl,CommonDecls;
+  var
+  creditid: integer;
+  edt:integer;
+{$R *.dfm}
+
+procedure InitPlugin(s:string);export;
+begin
+   FormNote.ShowModal;
+end;
+exports
+     InitPlugin;
+
+
+
+procedure TFormNote.Button1Click(Sender: TObject);
+begin
+if edt=0 then
+ begin
+
+ OraclePackage1.CallProcedure('Addcm_notesMCB',
+     ['v_creditid',creditid,
+      'v_par1' , DBLookupComboboxEh1.Text,
+      'v_par2' , edit1.Text,
+      'v_par3' , edit2.Text,
+      'v_par4' , edit3.Text,
+      'v_par5' , DBLookupComboboxEh3.Text,
+      'v_par6' , edit4.Text,
+      'v_par7' , edit5.Text,
+      'v_par8' , Edit6.Text,
+      'v_par9' ,DBLookupComboboxEh2.Text ,
+      'v_par10',DBLookupComboboxEh4.Text ,
+      'v_par11',DBLookupComboboxEh5.Text ,
+      'v_par12',Edit7.Text ,
+      'v_par13',Edit8.Text ,
+      'v_par14',DBLookupComboboxEh6.Text ,
+      'v_par15',DBLookupComboboxEh8.Text ,
+      'v_par16',DBLookupComboboxEh7.Text ,
+      'v_par17',DBLookupComboboxEh9.Text ,
+      'v_par18',Edit12.Text ,
+      'v_par19',Edit13.Text ,
+      'v_par20',Edit14.Text ,
+      'v_par21',Edit15.Text ,
+      'v_par22',Edit16.Text ,
+      'v_par23',DBDateTimeEditEh1.Value,
+      'v_par24',DBDateTimeEditEh2.Value,
+      'v_par25',Edit9.text,
+      'v_par26',Edit10.text,
+      'v_par27',Edit11.text
+      ])
+end;
+
+if edt=1 then     begin
+
+       OraclePackage1.CallProcedure('UPDcm_notesMCB',
+
+     ['v_id',ods_notID.AsInteger,
+      'v_par1' , DBLookupComboboxEh1.Text,
+      'v_par2' , edit1.Text,
+      'v_par3' , edit2.Text,
+      'v_par4' , edit3.Text,
+      'v_par5' , DBLookupComboboxEh3.Text,
+      'v_par6' , edit4.Text,
+      'v_par7' , edit5.Text,
+      'v_par8' , Edit6.Text,
+      'v_par9' ,DBLookupComboboxEh2.Text ,
+      'v_par10',DBLookupComboboxEh4.Text ,
+      'v_par11',DBLookupComboboxEh5.Text ,
+      'v_par12',Edit7.Text ,
+      'v_par13',Edit8.Text ,
+      'v_par14',DBLookupComboboxEh6.Text ,
+      'v_par15',DBLookupComboboxEh8.Text ,
+      'v_par16',DBLookupComboboxEh7.Text ,
+      'v_par17',DBLookupComboboxEh9.Text ,
+      'v_par18',Edit12.Text ,
+      'v_par19',Edit13.Text ,
+      'v_par20',Edit14.Text ,
+      'v_par21',Edit15.Text ,
+      'v_par22',Edit16.Text ,
+      'v_par23',DBDateTimeEditEh1.Value,
+      'v_par24',DBDateTimeEditEh2.Value ,
+      'v_par25',Edit9.text ,
+      'v_par26',Edit10.text,
+      'v_par27',Edit11.text
+      ]) ;
+end;
+
+
+edit1.Clear;
+edit2.Clear;
+edit3.Clear;
+edit4.Clear;
+edit5.Clear;
+edit6.Clear;
+edit7.Clear;
+edit8.Clear;
+edit9.Clear;
+edit12.Clear;
+edit13.Clear;
+edit14.Clear;
+edit15.Clear;
+edit16.Clear;
+edit10.Clear;
+edit11.Clear;
+DBLookupComboboxEh1.KeyValue:=-1;
+DBLookupComboboxEh2.KeyValue:=-1;
+DBLookupComboboxEh3.KeyValue:=-1;
+DBLookupComboboxEh4.KeyValue:=-1;
+DBLookupComboboxEh5.KeyValue:=-1;
+DBLookupComboboxEh6.KeyValue:=-1;
+DBLookupComboboxEh7.KeyValue:=-1;
+DBLookupComboboxEh8.KeyValue:=-1;
+DBLookupComboboxEh9.KeyValue:=-1;
+DBDateTimeEditEh1.Value:=-1;
+DBDateTimeEditEh2.Value:=-1;
+
+ods_not.Refresh;
+end;
+
+procedure TFormNote.Button2Click(Sender: TObject);
+begin
+FormNote.Close;
+end;
+
+procedure TFormNote.Button3Click(Sender: TObject);
+begin
+
+if MessageDlg('Seçilmiş sətir  silinsin ?', mtCOnfirmation, [mbyes, mbNo], 0) = mrYes then
+
+
+   begin
+OraclePackage1.CallProcedure('delete_notesMCB',
+     ['v_id',ods_notID.AsInteger
+     ]);
+   end;
+
+
+edit1.Clear;
+edit2.Clear;
+edit3.Clear;
+edit4.Clear;
+edit5.Clear;
+edit6.Clear;
+edit7.Clear;
+edit8.Clear;
+edit9.Clear;
+edit12.Clear;
+edit13.Clear;
+edit14.Clear;
+edit15.Clear;
+edit16.Clear;
+edit10.Clear;
+edit11.Clear;
+DBLookupComboboxEh1.KeyValue:=-1;
+DBLookupComboboxEh2.KeyValue:=-1;
+DBLookupComboboxEh3.KeyValue:=-1;
+DBLookupComboboxEh4.KeyValue:=-1;
+DBLookupComboboxEh5.KeyValue:=-1;
+DBLookupComboboxEh6.KeyValue:=-1;
+DBLookupComboboxEh7.KeyValue:=-1;
+DBLookupComboboxEh8.KeyValue:=-1;
+DBLookupComboboxEh9.KeyValue:=-1;
+DBDateTimeEditEh1.Value:=null;
+DBDateTimeEditEh2.Value:=null;
+ods_not.Refresh;
+
+
+end;
+
+procedure TFormNote.DBGrid1DblClick(Sender: TObject);
+begin
+
+DBLookupComboboxEh1.KeyValue:=-1;
+DBLookupComboboxEh2.KeyValue:=-1;
+DBLookupComboboxEh3.KeyValue:=-1;
+DBLookupComboboxEh4.KeyValue:=-1;
+DBLookupComboboxEh5.KeyValue:=-1;
+DBLookupComboboxEh6.KeyValue:=-1;
+DBDateTimeEditEh1.Value:=null;
+DBDateTimeEditEh2.Value:=null;
+DBLookupComboboxEh1.Text:=ods_not.FieldByName('par1').AsString;
+edit1.Text:=ods_not.FieldByName('par2').AsString;
+edit2.Text:=ods_not.FieldByName('par3').AsString;
+edit3.Text:=ods_not.FieldByName('par4').AsString;
+DBLookupComboboxEh3.Text:=ods_not.FieldByName('par5').AsString;
+edit4.Text:=ods_not.FieldByName('par6').AsString;
+edit5.Text:=ods_not.FieldByName('par7').AsString;
+edit6.Text:=ods_not.FieldByName('par8').AsString;
+DBLookupComboboxEh2.Text:=ods_not.FieldByName('par9').AsString;
+DBLookupComboboxEh4.Text:=ods_not.FieldByName('par10').AsString;
+DBLookupComboboxEh5.Text:=ods_not.FieldByName('par11').AsString;
+edit7.Text:=ods_not.FieldByName('par12').AsString;
+edit8.Text:=ods_not.FieldByName('par13').AsString;
+DBLookupComboboxEh6.Text:=ods_not.FieldByName('par14').AsString;
+DBLookupComboboxEh8.Text:=ods_not.FieldByName('par15').AsString;
+DBLookupComboboxEh7.Text:=ods_not.FieldByName('par16').AsString;
+
+ ods_hucrat.SQL[11]:='';
+ ods_hucrat.Close;
+ ods_hucrat.sql[11]:='where id='+inttostr(DBLookupComboboxEh4.Value);
+ ods_hucrat.Open;
+
+DBLookupComboboxEh9.Text:=ods_not.FieldByName('par17').AsString;
+edit12.Text:=ods_not.FieldByName('par18').AsString;
+edit13.Text:=ods_not.FieldByName('par19').AsString;
+edit14.Text:=ods_not.FieldByName('par20').AsString;
+edit15.Text:=ods_not.FieldByName('par21').AsString;
+edit16.Text:=ods_not.FieldByName('par22').AsString;
+DBDateTimeEditEh1.Value:=ods_not.FieldByName('par23').AsVariant;
+DBDateTimeEditEh2.Value:=ods_not.FieldByName('par24').AsVariant;
+edit9.Text:=ods_not.FieldByName('par25').AsString;
+edit10.Text:=ods_not.FieldByName('par26').AsString;
+edit11.Text:=ods_not.FieldByName('par27').AsString;
+edt:=1;
+
+end;
+
+procedure TFormNote.DBLookupComboboxEh4CloseUp(Sender: TObject;
+  Accept: Boolean);
+  var
+  i:integer;
+begin
+ods_hucrat.SQL[11]:='';
+ods_hucrat.Close;
+ods_hucrat.sql[11]:= 'where id='+inttostr(DBLookupComboboxEh4.Value);
+ods_hucrat.Open;
+i:=  DBLookupComboboxEh4.Value;
+
+DBLookupComboboxEh9.Value:=i;
+end;
+
+procedure TFormNote.Edit10KeyPress(Sender: TObject; var Key: Char);
+begin
+if (upcase(Key)<'0')or(Upcase(Key)>'9')  then
+    if  (ord(key)<>8)then
+         key:=#0;
+end;
+
+procedure TFormNote.Edit11KeyPress(Sender: TObject; var Key: Char);
+begin
+if (upcase(Key)<'0')or(Upcase(Key)>'9')  then
+    if  (ord(key)<>8)then
+         key:=#0;
+end;
+
+procedure TFormNote.Edit9KeyPress(Sender: TObject; var Key: Char);
+begin
+if (upcase(Key)<'0')or(Upcase(Key)>'9')  then
+    if  (ord(key)<>8)then
+         key:=#0;
+end;
+
+procedure TFormNote.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+
+edit1.Clear;
+edit2.Clear;
+edit3.Clear;
+edit4.Clear;
+edit5.Clear;
+edit6.Clear;
+edit7.Clear;
+edit8.Clear;
+edit9.Clear;
+edit10.Clear;
+edit11.Clear;
+DBLookupComboboxEh1.KeyValue:=-1;
+DBLookupComboboxEh2.KeyValue:=-1;
+DBLookupComboboxEh3.KeyValue:=-1;
+DBLookupComboboxEh4.KeyValue:=-1;
+DBLookupComboboxEh5.KeyValue:=-1;
+DBLookupComboboxEh6.KeyValue:=-1;
+DBLookupComboboxEh7.KeyValue:=-1;
+DBLookupComboboxEh8.KeyValue:=-1;
+DBLookupComboboxEh9.KeyValue:=-1;
+ods_hucrat.Close;
+ods_hucrat.SQL[10]:='';
+ods_hucrat.Open;
+end;
+
+procedure TFormNote.FormShow(Sender: TObject);
+begin
+creditid:=CommonDBGrid.DataSource.DataSet.FieldByName(sID).AsInteger;
+
+  with ods_not do
+   begin
+    close;
+      SetVariable('v_id',creditid);
+    open;
+    edt:=0;
+   end;
+end;
+
+initialization
+ FormNote := TFormNote.Create(Application);
+
+end.

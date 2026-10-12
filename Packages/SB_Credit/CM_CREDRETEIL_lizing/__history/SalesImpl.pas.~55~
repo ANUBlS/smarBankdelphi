@@ -1,0 +1,244 @@
+﻿unit SalesImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, DBGridEh, Mask, DBCtrlsEh, DBLookupEh, CMCurrencyEdit,
+  Buttons, Grids, XDBGrids, ExtCtrls;
+
+type
+  TSalesFrm = class(TForm)
+    GroupBox1: TGroupBox;
+    GroupBox2: TGroupBox;
+    Label1: TLabel;
+    DBLookupComboboxEh12: TDBLookupComboboxEh;
+    Label2: TLabel;
+    DBLookupComboboxEh1: TDBLookupComboboxEh;
+    Label3: TLabel;
+    Edit1: TEdit;
+    Label4: TLabel;
+    Edit2: TEdit;
+    Label5: TLabel;
+    CMCurrencyEdit1: TCMCurrencyEdit;
+    BitBtn1: TBitBtn;
+    Panel1: TPanel;
+    XDBGrid1: TXDBGrid;
+    BitBtn2: TBitBtn;
+    BitBtn3: TBitBtn;
+    BitBtn4: TBitBtn;
+    procedure FormCanResize(Sender: TObject; var NewWidth, NewHeight: Integer;
+      var Resize: Boolean);
+    procedure FormCreate(Sender: TObject);
+    procedure DBLookupComboboxEh1Change(Sender: TObject);
+    procedure BitBtn1Click(Sender: TObject);
+    procedure BitBtn3Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure BitBtn2Click(Sender: TObject);
+    procedure BitBtn4Click(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  SalesFrm: TSalesFrm;
+
+implementation
+ uses RtDmImpl,MainFormIMPL  , PristPayImpl;
+{$R *.dfm}
+
+procedure TSalesFrm.BitBtn1Click(Sender: TObject);
+var
+sql:string;
+begin
+ if DBLookupComboboxEh12.Text='' then
+ begin
+  ShowMessage('Məhsulun tipini seçin');
+  exit;
+ end;
+
+ if DBLookupComboboxEh1.Text='' then
+ begin
+  ShowMessage('Məhsulun adını seçin');
+  exit;
+ end;
+  if edit2.Text='' then
+ begin
+  ShowMessage('Məhsulun sayını daxil edin');
+  exit;
+ end;
+ if CMCurrencyEdit1.Value=0 then
+ begin
+  ShowMessage('Məbləği daxil edin ');
+  exit;
+ end;
+   RtDataModule.OracleQuery1.SetVariable('custid',rt);
+   RtDataModule.OracleQuery1.SetVariable('mebleg',CMCurrencyEdit1.Value);
+   RtDataModule.OracleQuery1.SetVariable('prname',DBLookupComboboxEh1.Text);
+   RtDataModule.OracleQuery1.SetVariable('price',CMCurrencyEdit1.Value);
+   RtDataModule.OracleQuery1.SetVariable('catid',DBLookupComboboxEh12.KeyValue);
+   RtDataModule.OracleQuery1.SetVariable('prid',DBLookupComboboxEh1.KeyValue);
+   RtDataModule.OracleQuery1.SetVariable('unitid',RtDataModule.ProductSet.FieldByName('unit_id').AsInteger);
+   RtDataModule.OracleQuery1.SetVariable('sayi',Edit2.Text);
+   RtDataModule.OracleQuery1.SetVariable('barcode',RtDataModule.ProductSet.FieldByName('barcode').AsString);
+   RtDataModule.OracleQuery1.SetVariable('code',RtDataModule.ProductSet.FieldByName('code').AsString);
+
+   RtDataModule.OracleQuery1.Execute;
+//   RtDataModule.OracleQuery1.Session.Commit;
+
+   DBLookupComboboxEh1.KeyValue:=-1 ;
+   DBLookupComboboxEh12.KeyValue:=-1 ;
+   edit1.Text:='';
+   edit2.Text:='';
+   CMCurrencyEdit1.Value:=0;
+
+   RtDataModule.SaleSet.Close;
+   RtDataModule.SaleSet.SetVariable('sale_cust',rt);
+   RtDataModule.SaleSet.open;
+   BitBtn4.Enabled:=true;
+end;
+
+procedure TSalesFrm.BitBtn2Click(Sender: TObject);
+var
+Column: TXColumn;
+begin
+   RtDataModule.OracleDataSet3.Close;
+   RtDataModule.OracleDataSet3.SetVariable('custid',rt);
+   RtDataModule.OracleDataSet3.open;
+if RtDataModule.OracleDataSet3.RecordCount=0 then
+  begin
+   ShowMessage('Sifariş yoxdur və ya sifarişlər anbarda təstiqlənməyib!');
+   exit;
+  end;
+
+   RtDataModule.PersonLink.close;
+   RtDataModule.PersonLink.open;
+   MainForm.XDBGrid1.DataSource:=RtDataModule.SrcPersonLink;
+
+  MainForm.XDBGrid1CellDblClick(Column);
+//  SalesFrm.Hide;
+  MainForm.ShowModal;
+//     SalesFrm.close;
+end;
+
+procedure TSalesFrm.BitBtn3Click(Sender: TObject);
+var
+sql:string;
+begin
+RtDataModule.SaleSet.Refresh;
+if RtDataModule.SaleSet.RecordCount>0 then
+ begin
+  if MessageDlg( RtDataModule.SaleSet.FieldByName('productname').AsString +#13+
+       ' adlı produkt sifarişlərdən silinecək əminsinizmi?',
+       mtConfirmation,
+       [mbYes,mbNo],
+       0) = mrYes
+     then
+     begin
+      sql:='delete  stocksmart.sale_log where id='+RtDataModule.SaleSet.FieldByName('id').AsString  ;
+        RtDataModule.OracleQuery3.SQL.Text:=sql;
+        RtDataModule.OracleQuery3.Execute;
+        RtDataModule.OracleQuery3.Session.Commit;
+        RtDataModule.SaleSet.Refresh;
+     end;
+ end;
+end;
+
+procedure TSalesFrm.BitBtn4Click(Sender: TObject);
+begin
+//FristPayFrm := TFristPayFrm(Self);
+RtDataModule.OracleQuery1.Session.Commit;
+//FristPayFrm.ShowModal;
+
+ Self.Enabled := False;
+  try
+    with TFristPayFrm.Create(nil) do
+    begin
+      try
+        if ShowModal = mrOk then
+          // Returned OK. Do something;
+      finally
+        Free;
+      end;
+    end;
+  finally
+    Self.Enabled := True;
+  end;
+   BitBtn4.Enabled:=false;
+   RtDataModule.OracleDataSet3.Refresh
+end;
+
+procedure TSalesFrm.DBLookupComboboxEh1Change(Sender: TObject);
+begin
+edit1.Text:=RtDataModule.ProductSet.FieldByName('UNITNAME').AsString;
+//CMCurrencyEdit1.Value:=RtDataModule.ProductSet.FieldByName('sale_price').AsVariant;
+end;
+
+procedure TSalesFrm.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+resize:=false;
+end;
+
+procedure TSalesFrm.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+if BitBtn4.Enabled=true then
+begin
+//if MessageDlg(
+//       ' adlı produkt sifarişlərdən silinecək əminsinizmi?',
+//       mtConfirmation,
+//       [mbYes,mbNo],
+//       0) = mrYes
+//     then
+//
+//         RtDataModule.OracleQuery1.Session.Rollback
+// else
+// Break;
+//end;
+//   if MessageDlg('Close application ?', mtConfirmation,
+//    [mbYes, mbNo], 0) = mrYes then
+//    Action := caFree
+//  else
+//    Action := caMinimize;
+end;
+
+end;
+
+procedure TSalesFrm.FormCloseQuery(Sender: TObject; var CanClose: Boolean);
+begin
+if BitBtn4.Enabled=true then
+begin
+   if MessageDlg('Sifarişləri təstiq etməmisiz,Sifarişlər silnəcək əminsinizmi ?', mtConfirmation, [mbOk, mbCancel], 0) = mrCancel then
+     CanClose := False
+     else
+     RtDataModule.OracleQuery1.Session.Rollback;
+end;
+end;
+
+procedure TSalesFrm.FormCreate(Sender: TObject);
+begin
+RtDataModule:=TRtDataModule.Create(self);
+MainForm := TMainForm.Create(self);
+RtDataModule.ProductSet.open;
+RtDataModule.ProductTypeSet.open;
+end;
+
+procedure TSalesFrm.FormShow(Sender: TObject);
+begin
+   RtDataModule.SaleSet.Close;
+   RtDataModule.SaleSet.SetVariable('sale_cust',rt);
+   RtDataModule.SaleSet.open;
+
+   RtDataModule.OracleDataSet3.Close;
+   RtDataModule.OracleDataSet3.SetVariable('custid',rt);
+   RtDataModule.OracleDataSet3.open;
+   XDBGrid1.DataSource:=RtDataModule.SaleSrc;
+      if RtDataModule.SaleSet.RecordCount>0 then
+        BitBtn4.Enabled:=false;
+end;
+
+end.

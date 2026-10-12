@@ -1,0 +1,3399 @@
+﻿unit uBriefCaseFilter;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  CMExcelExport, Db, Oracle, OracleData,  StdCtrls, ComCtrls,
+  Mask, DBCtrlsEh, DBLookupEh, ExtCtrls, Math, DBCtrls, Grids, DBGrids,
+  CMCurrencyEdit, DBGridEh, OleServer, ExcelXP, Buttons ,Shlobj;
+         
+resourcestring
+   rsProgressCaption
+                   = '                Hesabat alınır gözləyin.   .....   ';
+   rsReportHeaderCaption
+                   = 'Aqrar Kredit SKT-nin %s vəsaiti hesabına göstərdiyi kredit  xidməti haqqında məlumat';
+   rsForm2Caption  = 'Aqrar Kredit SKT-nin %s vəsaiti hesabına göstərdiyi kredit  xidməti haqqında məlumat';
+   rsForm3Caption  = 'Aqrar Kredit SKT-nin %s vəsaiti hesabına göstərdiyi kredit  xidməti haqqında məlumat';
+   rsForm4Caption  = 'Aqrar Kredit SKT-nin %s vəsaiti hesabına göstərdiyi Bizness Plan haqqında məlumat';
+   rsForm5Caption  = 'Aqrar Kredit SKT-nin %s vəsaiti hesabına göstərdiyi Problemli kreditlər haqqında məlumat';
+   rsForm6Caption  = 'Aqrar Kredit SKT-nin %s vəsaiti hesabına göstərdiyi verilmiş kreditlər haqqında məlumat';
+   rsForm7Caption  = 'Aqrar Kredit SKT-nin %s vəsaiti hesabına göstərdiyi ödənilmiş kreditlər haqqında məlumat';
+   rsForm8Caption  = 'Aqrar Kredit SKT-nin %s vəsaiti hesabına göstərdiyi verilmiş kreditlər haqqında məlumat';
+   rsForm9Caption  = 'Aqrar Kredit SKT-nin %s vəsaiti hesabına göstərdiyi qytarılmalı kreditlər haqqında məlumat';
+   rsForm10Caption = 'Aqrar Kredit SKT-nin %s vəsaiti hesabına göstərdiyi гайтарылмалы кредитляр цчцн эюрцлмцш щаггында mяlumat';
+   rsForm11Caption = 'Aqrar Kredit SKT-nin %s vəsaiti hesabına göstərdiyi kredit  xidməti haqqında məlumat';
+   rsForm12Caption = 'Aqrar Kredit SKT-nin %s vəsaiti hesabına göstərdiyi kredit  xidməti haqqında məlumat';
+   rsForm13Caption = 'Aqrar Kredit SKT-nin %s vəsaiti hesabına göstərdiyi кечирилян мониторингляр щаггында mяlumat';
+   rsForm14Caption = 'Aqrar Kredit SKT-nin %s vəsaiti hesabına göstərdiyi Problemli kraditlər haqqında məlumat';
+   rsForm15Caption = 'Aqrar Kredit SKT-nin %s vəsaiti hesabına göstərdiyi Hüququ tədbirlər haqqında məlumat';
+   rsForm16Caption = 'Aqrar Kredit SKT-nin %s vəsaiti hesabına göstərdiyi кредитлярin vaxtыnыn uzadыlmasы щаггында mяlumat';
+   rsForm17Caption = 'Aqrar Kredit SKT-nin %s vəsaiti hesabına göstərdiyi keçirlən monitorniqlər haqqında məlumat';
+   rsForm18Caption = 'Aqrar Kredit SKT-nin %s vəsaiti hesabına göstərdiyi kreditləşmə haqqında məlumat';
+   rsForm19Caption = 'Aqrar Kredit SKT-nin %s vəsaiti hesabına göstərdiyi kreditlərin ödənilməsi haqqında məlumat';
+   rsForm20Caption = 'Aqrar Kredit SKT-nin %s vəsaiti hesabına göstərdiyi kredit  xidməti haqqında məlumat';
+   rsForm21Caption = 'Aqrar Kredit SKT-nin %s vəsaiti hesabına göstərdiyi kredit  xidməti haqqında məlumat';
+   rsForm22Caption = 'Aqrar Kredit SKT-nin %s vəsaiti hesabına göstərdiyi verilmяli kreditlяr haqqinda mяlumat';
+   rsForm23Caption = 'Aqrar Kredit SKT-nin %s vəsaiti hesabına göstərdiyi kredit  xidməti haqqında məlumat';
+   rsForm26Caption = 'Aqrar Kredit SKT-nin %s lahiyəsində görülmüş tədbirlər haqqında məlumat';
+   rsForm28Caption = 'Yaradılan ehtiyyatlar bardə məlumat';
+   rsForm29Caption = 'Aqrar Kredit SKT-nin Yaponya Hökmətinin  ayırdığı qrant hesabına alınmış və ya icarəyə verilmiş  texnikalardan daxil olmuş vəsaitləri barədə məlumat';
+
+type
+  TfrmBCFilter = class(TForm)
+    Panel1: TPanel;
+    GroupBox1: TGroupBox;
+    CheckBox1: TCheckBox;
+    DBLookupComboboxEh1: TDBLookupComboboxEh;
+    GroupBox2: TGroupBox;
+    DBLookupComboboxEh3: TDBLookupComboboxEh;
+    CheckBox3: TCheckBox;
+    GroupBox3: TGroupBox;
+    DBLookupComboboxEh2: TDBLookupComboboxEh;
+    CheckBox2: TCheckBox;
+    Panel5: TPanel;
+    GroupBox7: TGroupBox;
+    CheckBox7: TCheckBox;
+    DBLookupComboboxEh7: TDBLookupComboboxEh;
+    GroupBox9: TGroupBox;
+    CheckBox8: TCheckBox;
+    DBLookupComboboxEh8: TDBLookupComboboxEh;
+    CreditsDS: TOracleDataSet;
+    CM_AK_REPORTS: TOraclePackage;
+    DSCurrencys: TDataSource;
+    Currencys: TOracleDataSet;
+    DSBranches: TDataSource;
+    Branches: TOracleDataSet;
+    DSUserGroups: TDataSource;
+    UserGroups: TOracleDataSet;
+    DSPersons: TDataSource;
+    Persons: TOracleDataSet;
+    DSCategories: TDataSource;
+    Categories: TOracleDataSet;
+    Panel2: TPanel;
+    GroupBox6: TGroupBox;
+    CheckBox5: TCheckBox;
+    DBLookupComboboxEh4: TDBLookupComboboxEh;
+    Customers: TOracleDataSet;
+    DSCustomers: TDataSource;
+    Panel3: TPanel;
+    RGReportType: TRadioGroup;
+    rgPR: TRadioGroup;
+    GroupBox5: TGroupBox;
+    cbPrintDeep: TComboBox;
+    CheckBox4: TCheckBox;
+    GroupBox8: TGroupBox;
+    CheckBox6: TCheckBox;
+    DBLookupComboboxEh5: TDBLookupComboboxEh;
+    Districts: TOracleDataSet;
+    DSDistricts: TDataSource;
+    DistrictsID: TFloatField;
+    DistrictsIDNAME: TWideStringField;
+    GroupBox10: TGroupBox;
+    CheckBox9: TCheckBox;
+    DBLookupComboboxEh6: TDBLookupComboboxEh;
+    CustNames: TOracleDataSet;
+    DSCustName: TDataSource;
+    UserGroupsID: TFloatField;
+    UserGroupsDESCRIPTION: TWideStringField;
+    Panel4: TPanel;
+    Button1: TButton;
+    btnYeniden: TButton;
+    Button2: TButton;
+    btnAll: TButton;
+    RepForms: TOracleDataSet;
+    DSRepForms: TDataSource;
+    rgKredStatus: TRadioGroup;
+    GroupBox11: TGroupBox;
+    CheckBox10: TCheckBox;
+    cbFormsLook: TDBLookupComboboxEh;
+    Panel6: TPanel;
+    GroupBox4: TGroupBox;
+    Label1: TLabel;
+    Label2: TLabel;
+    BDateP: TDateTimePicker;
+    EDateP: TDateTimePicker;
+    GroupBox12: TGroupBox;
+    GCredBegD: TDateTimePicker;
+    GCredEndD: TDateTimePicker;
+    Label3: TLabel;
+    Label4: TLabel;
+    GroupBox13: TGroupBox;
+    CheckBox11: TCheckBox;
+    DBLookupComboboxEh9: TDBLookupComboboxEh;
+    GroupBox14: TGroupBox;
+    CheckBox12: TCheckBox;
+    DBLookupComboboxEh10: TDBLookupComboboxEh;
+    Periods: TOracleDataSet;
+    Statuses: TOracleDataSet;
+    DSPeriods: TDataSource;
+    DSStatuses: TDataSource;
+    ODSMakeTemp: TOracleDataSet;
+    Panel7: TPanel;
+    GroupBox15: TGroupBox;
+    CheckBox13: TCheckBox;
+    Types: TOracleDataSet;
+    FloatField1: TFloatField;
+    StringField1: TWideStringField;
+    DSTypes: TDataSource;
+    GroupBox16: TGroupBox;
+    CheckBox14: TCheckBox;
+    DBLookupComboboxEh12: TDBLookupComboboxEh;
+    fsm: TCMCurrencyEdit;
+    fsx: TCMCurrencyEdit;
+    Label5: TLabel;
+    GroupBox17: TGroupBox;
+    Label6: TLabel;
+    CheckBox15: TCheckBox;
+    ntmm: TCMCurrencyEdit;
+    ntmx: TCMCurrencyEdit;
+    GroupBox18: TGroupBox;
+    CheckBox16: TCheckBox;
+    DBLookupComboboxEh11: TDBLookupComboboxEh;
+    Short: TOracleDataSet;
+    DSShort: TDataSource;
+    ShortID: TFloatField;
+    ShortSHORT: TWideStringField;
+    ShortDESCRIPTION: TWideStringField;
+    GroupBox19: TGroupBox;
+    CheckBox17: TCheckBox;
+    DBLookupComboboxEh13: TDBLookupComboboxEh;
+    GTypes: TOracleDataSet;
+    DSGType: TDataSource;
+    GTypesID: TFloatField;
+    GTypesNAME: TWideStringField;
+    GroupBox20: TGroupBox;
+    CheckBox18: TCheckBox;
+    DBLookupComboboxEh14: TDBLookupComboboxEh;
+    zonaSrc: TDataSource;
+    ZonaDataSet: TOracleDataSet;
+    ZonaDataSetID: TFloatField;
+    ZonaDataSetNAME: TWideStringField;
+    Kera: TCMExcelExport;
+    Button3: TButton;
+    DataSource1: TDataSource;
+    OracleDataSet1: TOracleDataSet;
+    ExcelApplication1: TExcelApplication;
+    Pambiq: TOracleDataSet;
+    PambiqREGION: TWideStringField;
+    PambiqEKIN_SAHE: TFloatField;
+    PambiqCREDITLINEAMOUNT: TFloatField;
+    PambiqFRIST_TR: TFloatField;
+    PambiqSAY: TFloatField;
+    tutun: TOracleDataSet;
+    WideStringField1: TWideStringField;
+    FloatField2: TFloatField;
+    FloatField3: TFloatField;
+    FloatField4: TFloatField;
+    FloatField5: TFloatField;
+    qardali: TOracleDataSet;
+    WideStringField2: TWideStringField;
+    FloatField6: TFloatField;
+    FloatField7: TFloatField;
+    FloatField8: TFloatField;
+    FloatField9: TFloatField;
+    BitBtn1: TBitBtn;
+    Button4: TButton;
+    main: TOracleDataSet;
+    OracleDataSet3: TOracleDataSet;
+    mainID: TFloatField;
+    mainBOOROWERID: TFloatField;
+    mainNUMBEROFCREDIT: TWideStringField;
+    mainGIVEDATE: TDateTimeField;
+    mainTOTALAMOUNT: TFloatField;
+    mainQET_QALIQ: TFloatField;
+    mainFILAL: TWideStringField;
+    mainRAYON: TWideStringField;
+    mainDATEOFGRANT: TDateTimeField;
+    mainDUEDATEFIRSTCONTRACT: TDateTimeField;
+    mainCREDITLINEAMOUNT: TFloatField;
+    mainODESAS: TFloatField;
+    mainODFAIZ: TFloatField;
+    mainREST: TFloatField;
+    mainINTERESTREST: TFloatField;
+    mainDUEREST: TFloatField;
+    mainDUEINTERESTREST: TFloatField;
+    mainCREDPERIOD: TWideStringField;
+    OracleDataSet3ID: TFloatField;
+    OracleDataSet3NAME: TWideStringField;
+    OracleDataSet3WHEREFROM: TWideStringField;
+    OracleDataSet3AMMOUNT: TFloatField;
+    OracleDataSet3CREDITID: TFloatField;
+    mainCARI: TFloatField;
+    mainAYDA: TFloatField;
+    OracleDataSet3DAT: TDateTimeField;
+    Button5: TButton;
+    OracleDataSet2: TOracleDataSet;
+    OracleDataSet4: TOracleDataSet;
+    Ipoteka: TOracleDataSet;
+    IpotekaID: TFloatField;
+    IpotekaBOOROWERID: TFloatField;
+    IpotekaNUMBEROFCREDIT: TWideStringField;
+    IpotekaNAME: TWideStringField;
+    IpotekaPASNUM: TWideStringField;
+    IpotekaPINCODE: TWideStringField;
+    IpotekaPHONENUMBER: TWideStringField;
+    IpotekaUNVAN: TWideStringField;
+    IpotekaADDRESS: TWideStringField;
+    IpotekaSUDA: TWideStringField;
+    IpotekaFAIZ: TWideStringField;
+    IpotekaCARI: TWideStringField;
+    IpotekaFILIAL: TWideStringField;
+    IpotekaCREDITLINEAMOUNT: TFloatField;
+    IpotekaDATEOFCONCLUSION: TDateTimeField;
+    IpotekaDUEDATEFIRSTCONTRACT: TDateTimeField;
+    IpotekaANNUALYINTERESTRATE: TFloatField;
+    IpotekaQ_ESAS: TFloatField;
+    IpotekaQ_FAIZ: TFloatField;
+    IpotekaANNUALYOVERDUERATE: TFloatField;
+    IpotekaVAXTKECEBORC: TFloatField;
+    IpotekaESASDAN: TFloatField;
+    IpotekaCARIESAS: TFloatField;
+    IpotekaFAIZDEN: TFloatField;
+    IpotekaCARIFAIZ: TFloatField;
+    IpotekaREST: TFloatField;
+    IpotekaINTERESTREST: TFloatField;
+    IpotekaDUEREST: TFloatField;
+    IpotekaPURPOSEOFCREDIT: TWideStringField;
+    IpotekaSTOPCALCDATE: TDateTimeField;
+    CMExcelExport1: TCMExcelExport;
+    EExport: TCMExcelExport;
+    IpotekaGEC_ESAS: TFloatField;
+    IpotekaCARIGEC_ESAS: TFloatField;
+    IpotekaVAXTCAT: TFloatField;
+    ODSCmActCat: TOracleDataSet;
+    DSCmActCat: TDataSource;
+    GroupBox21: TGroupBox;
+    CheckBox19: TCheckBox;
+    DBCatActive: TDBLookupComboboxEh;
+    procedure FormCreate(Sender: TObject);
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+    procedure Button1Click(Sender: TObject);
+    procedure btnYenidenClick(Sender: TObject);
+    procedure CheckBox5Click(Sender: TObject);
+    procedure btnAllClick(Sender: TObject);
+    procedure cbFormsLookChange(Sender: TObject);
+    procedure Button3Click(Sender: TObject);
+    procedure BitBtn1Click(Sender: TObject);
+    procedure Button4Click(Sender: TObject);
+    procedure Button5Click(Sender: TObject);
+  private
+    procedure PrepareProgress(ProgCnt : Integer; opDesc : String);
+    procedure InsertOneRow(PID : Integer; BDate : TDateTime; EDate : TDateTime; incstat : Integer);
+    procedure InsertOneRow2(PID : Integer; BDate : TDateTime; EDate : TDateTime);
+    procedure InsertOneRow3(PID : Integer; BDate : TDateTime; EDate : TDateTime);
+    procedure InsertOneRow4(PID : Integer);                           
+    procedure InsertOneRow5(PID : Integer; BDate : TDateTime; EDate : TDateTime);                           
+    procedure InsertOneRow6(PID : Integer; BDate : TDateTime; EDate : TDateTime);                           
+    procedure InsertOneRow7(PID : Integer; BDate : TDateTime; EDate : TDateTime);
+    procedure InsertOneRow8(PID : Integer; BDate : TDateTime; EDate : TDateTime);
+    procedure InsertOneRow9(PID : Integer; BDate : TDateTime; EDate : TDateTime);
+    procedure InsertOneRow10(PID : Integer; BDate : TDateTime; EDate : TDateTime);
+    procedure InsertOneRow11(PID : Integer; BDate : TDateTime; EDate : TDateTime);
+    procedure InsertOneRow12(PID : Integer; BDate : TDateTime; EDate : TDateTime);   
+    procedure InsertOneRow13(PID : Integer; BDate : TDateTime; EDate : TDateTime);  
+    procedure InsertOneRow14(PID : Integer; BDate : TDateTime; EDate : TDateTime);  
+    procedure InsertOneRow15(PID : Integer; BDate : TDateTime; EDate : TDateTime);  
+    procedure InsertOneRow16(PID : Integer; BDate : TDateTime; EDate : TDateTime);  
+    procedure InsertOneRow17(PID : Integer; BDate : TDateTime; EDate : TDateTime); 
+    procedure InsertOneRow18(PID : Integer; BDate : TDateTime; EDate : TDateTime); 
+    procedure InsertOneRow19(PID : Integer; BDate : TDateTime; EDate : TDateTime); 
+    procedure InsertOneRow20(PID : Integer; BDate : TDateTime; EDate : TDateTime);
+    procedure InsertOneRow21(PID : Integer; BDate : TDateTime; EDate : TDateTime);
+    procedure InsertOneRow22(PID : Integer; BDate : TDateTime; EDate : TDateTime);
+    procedure InsertOneRow23(PID : Integer; BDate : TDateTime; EDate : TDateTime);
+    procedure InsertOneRow24(PID : Integer; BDate : TDateTime; EDate : TDateTime);
+    procedure InsertOneRow25(PID : Integer; BDate : TDateTime; EDate : TDateTime);
+    procedure InsertOneRow26(PID : Integer; BDate : TDateTime; EDate : TDateTime);
+    procedure InsertOneRow27(PID : Integer; BDate : TDateTime; EDate : TDateTime);
+    procedure InsertOneRow28(PID : Integer; BDate : TDateTime; EDate : TDateTime);
+    procedure InsertOneRow29(PID : Integer; BDate : TDateTime; EDate : TDateTime);
+    procedure InsertOneRow30(PID : Integer; BDate : TDateTime; EDate : TDateTime);
+    procedure InsertOneRow31(PID : Integer; BDate : TDateTime; EDate : TDateTime);
+
+    procedure printreport4;
+    procedure printreport5;
+    procedure printreport6;
+    procedure printreport7;
+    procedure printreport8;
+    procedure printreport9;
+    procedure printreport10;
+    procedure printreport11;
+    procedure printreport12;
+    procedure printreport13;
+    procedure printreport14;
+    procedure printreport15;
+    procedure printreport16;
+    procedure printreport17;
+    procedure printreport18;
+    procedure printreport19;
+    procedure printreport20;
+    procedure printreport21;
+    procedure printreport22;
+    procedure printreport23;
+    procedure printreport24;
+    procedure printreport25;
+    procedure printreport26;
+    procedure printreport27;
+    procedure printreport28;
+    procedure printreport29;
+    procedure printreport30;
+    procedure printreport31;
+    procedure printreport32;
+    procedure printreport33;
+  public
+    function BuildFilterString : String;
+    procedure ShowMe;
+  end;
+
+var
+  frmBCFilter: TfrmBCFilter;
+  Counter, PrintDeep : Integer;
+    Exl, Sheet: Variant;
+implementation
+
+{$R *.DFM}
+
+uses sboapiDataModuleImpl, CommonDecls,  QrZonaimpl, QR_ZonaImpl,
+  AKProgressFormImpl, uBCDataModImpl, uQRF1, sbsystem, uGBQRF1, uQRF2,
+  uQRF3, uQRFBP, uQRFProblem, uQRFLYT, uQRFL5YP, uQRFL5YT, uQRFLYPS1,
+  uQRFLYPS2, uQRFMg, uQRF2Full, uQRF2Type, uQRFMonit, uQRFProblemli, uQRFLegalM,
+  uQRFProlongs, uQRFYPays1, uQRFYPays2, uQRFAboutCrediting,
+  uQRFAboutCrediting2, uQRFCreditPaying, uQRFWBM1, uQRFWBM2, uQRFWBA1,
+  uQRFWBA2, uQRFMustRet1, uQRFMustRet2, uQRFPurpose, uQRF3Branch,
+  uQRF3Filial, uQRF3Proj, uQRF3abLegM, uQRFProviz, uQRFGrantYear,
+  uQRFGrantBranch, uQRFGrantContract,
+  RRzonasumImpl,SBTranslateProc,ComObj;
+
+procedure TfrmBCFilter.PrepareProgress;
+begin
+  with AKProgressForm , ProgressShower do
+  begin
+    Position := 0;
+    Max := ProgCnt;
+    Step := 1;
+    Caption := opDesc;
+  end;
+  AKProgressForm.Show;
+end;
+
+procedure TfrmBCFilter.InsertOneRow;
+resourcestring
+  rsCreditNumber = '%d - № li kredit: ';
+begin
+  with CM_AK_REPORTS do
+  try
+    CallProcedure('insinfof1',[
+    'p_ID', pID ,
+    'p_bDate', bDate ,
+    'p_eDate', eDate ,
+    'includeold' , incstat
+    ]);
+  except
+    on E:Exception do
+    LogError(Format(rsCreditNumber,[pid]) + E.Message);
+  end;
+end;
+
+procedure TfrmBCFilter.InsertOneRow2;
+resourcestring
+  rsCreditNumber = '%d - № li kredit : ';
+begin
+  with CM_AK_REPORTS do
+  try
+    CallProcedure('insinfof2',[
+    'p_ID'   , pID ,
+    'p_bDate', bDate ,
+    'p_eDate', eDate
+    ]);
+  except
+    on E:Exception do
+    LogError(Format(rsCreditNumber,[pid]) + E.Message);
+  end;
+end;
+
+procedure TfrmBCFilter.InsertOneRow3;
+resourcestring
+  rsCreditNumber = '%d - № li kredit: ';
+begin
+  with CM_AK_REPORTS do
+  try
+    CallProcedure('insinfof3',[
+    'p_ID', pID ,
+    'p_bDate', bDate ,
+    'p_eDate', eDate
+    ]);
+  except
+    on E:Exception do
+    LogError(Format(rsCreditNumber,[pid]) + E.Message);
+  end;
+end;
+
+procedure TfrmBCFilter.InsertOneRow4;
+resourcestring
+  rsCreditNumber = '%d - № li kredit : ';
+begin
+  with CM_AK_REPORTS do
+  try
+    CallProcedure('insinfobp',[
+    'p_ID', pID
+    ]);
+  except
+    on E:Exception do
+    LogError(Format(rsCreditNumber,[pid]) + E.Message);
+  end;
+end;
+
+procedure TfrmBCFilter.InsertOneRow5;
+resourcestring
+  rsCreditNumber = '%d - № li kredit : ';
+begin
+  with CM_AK_REPORTS do
+  try
+    CallProcedure('insinfotrouble',[
+    'p_ID', pID ,
+    'p_bDate', bDate ,
+    'p_eDate', eDate
+    ]);
+  except
+    on E:Exception do
+    LogError(Format(rsCreditNumber,[pid]) + E.Message);
+  end;
+end;
+
+procedure TfrmBCFilter.InsertOneRow6;
+resourcestring
+  rsCreditNumber = '%d - № li kredit : ';
+begin
+  with CM_AK_REPORTS do
+  try
+    CallProcedure('insinfolastyeartranches',[
+    'p_ID', pID ,
+    'p_bDate', bDate ,
+    'p_eDate', eDate
+    ]);
+  except
+    on E:Exception do
+    LogError(Format(rsCreditNumber,[pid]) + E.Message);
+  end;
+end;
+
+procedure TfrmBCFilter.InsertOneRow7;
+resourcestring
+  rsCreditNumber = '%d - № li kredit : ';
+begin
+  with CM_AK_REPORTS do
+  try
+    CallProcedure('insinfolast5yearpayments',[
+    'p_ID', pID ,
+    'p_bDate', bDate ,
+    'p_eDate', eDate
+    ]);
+  except
+    on E:Exception do
+    LogError(Format(rsCreditNumber,[pid]) + E.Message);
+  end;
+end;
+
+procedure TfrmBCFilter.InsertOneRow8;
+resourcestring
+  rsCreditNumber = '%d - № li kredit : ';
+begin
+  with CM_AK_REPORTS do
+  try
+    CallProcedure('insinfolast5yeartranches',[
+    'p_ID', pID ,
+    'p_bDate', bDate ,
+    'p_eDate', eDate
+    ]);
+  except
+    on E:Exception do
+    LogError(Format(rsCreditNumber,[pid]) + E.Message);
+  end;
+end;
+
+procedure TfrmBCFilter.InsertOneRow9;
+resourcestring
+  rsCreditNumber = '%d - № li kredit : ';
+begin
+  with CM_AK_REPORTS do
+  try
+    CallProcedure('insinfolastyearmpays',[
+    'p_ID', pID ,
+    'p_bDate', bDate ,
+    'p_eDate', eDate
+    ]);
+  except
+    on E:Exception do
+    LogError(Format(rsCreditNumber,[pid]) + E.Message);
+  end;
+end;
+
+procedure TfrmBCFilter.InsertOneRow10;
+resourcestring
+  rsCreditNumber = '%d - № li kredit : ';
+begin
+  with CM_AK_REPORTS do
+  try
+    CallProcedure('insinfomong',[
+    'p_ID', pID ,
+    'p_bDate', bDate ,
+    'p_eDate', eDate
+    ]);
+  except
+    on E:Exception do
+    LogError(Format(rsCreditNumber,[pid]) + E.Message);
+  end;
+end;
+
+procedure TfrmBCFilter.InsertOneRow11;
+resourcestring
+  rsCreditNumber = '%d - № li kredit : ';
+begin
+  with CM_AK_REPORTS do
+  try
+    CallProcedure('insinfof2_full',[
+    'p_ID', pID ,
+    'p_bDate', bDate ,
+    'p_eDate', eDate
+    ]);
+  except
+    on E:Exception do
+    LogError(Format(rsCreditNumber,[pid]) + E.Message);
+  end;
+end;
+
+procedure TfrmBCFilter.InsertOneRow12;
+resourcestring
+  rsCreditNumber = '%d - № li kredit : ';
+begin
+  with CM_AK_REPORTS do
+  try
+    CallProcedure('insinfof2_full',[
+    'p_ID', pID ,
+    'p_bDate', bDate ,
+    'p_eDate', eDate
+    ]);
+  except
+    on E:Exception do
+    LogError(Format(rsCreditNumber,[pid]) + E.Message);
+  end;
+end;
+                                  
+procedure TfrmBCFilter.InsertOneRow13;
+resourcestring
+  rsCreditNumber = '%d - № li kredit : ';
+begin
+  with CM_AK_REPORTS do
+  try
+    CallProcedure('insinfomong',[
+    'p_ID', pID ,
+    'p_bDate', bDate ,
+    'p_eDate', eDate
+    ]);
+  except
+    on E:Exception do
+    LogError(Format(rsCreditNumber,[pid]) + E.Message);
+  end;
+end;
+                   
+procedure TfrmBCFilter.InsertOneRow14;
+resourcestring
+  rsCreditNumber = '%d - № li kredit : ';
+begin
+  with CM_AK_REPORTS do
+  try
+    CallProcedure('insinfoabouttrouble',[
+    'p_ID', pID ,
+    'p_bDate', bDate ,
+    'p_eDate', eDate
+    ]);
+  except
+    on E:Exception do
+    LogError(Format(rsCreditNumber,[pid]) + E.Message);
+  end;
+end;
+
+procedure TfrmBCFilter.InsertOneRow15;
+resourcestring
+  rsCreditNumber = '%d - № li kredit : ';
+begin
+  with CM_AK_REPORTS do
+  try
+    CallProcedure('insinfomeasures',[
+    'p_ID', pID ,
+    'p_bDate', bDate ,
+    'p_eDate', eDate
+    ]);
+  except
+    on E:Exception do
+    LogError(Format(rsCreditNumber,[pid]) + E.Message);
+  end;
+end;
+
+procedure TfrmBCFilter.InsertOneRow16;
+resourcestring
+  rsCreditNumber = '%d - № li kredit : ';
+begin
+  with CM_AK_REPORTS do
+  try
+    CallProcedure('insinfoprolong',[
+    'p_ID', pID ,
+    'p_bDate', bDate ,
+    'p_eDate', eDate
+    ]);
+  except
+    on E:Exception do
+    LogError(Format(rsCreditNumber,[pid]) + E.Message);
+  end;
+end;
+
+procedure TfrmBCFilter.InsertOneRow17;
+resourcestring
+  rsCreditNumber = '%d - № li kredit : ';
+begin
+  with CM_AK_REPORTS do
+  try
+    CallProcedure('insinfolastyearpayments',[
+    'p_ID', pID ,
+    'p_bDate', bDate ,
+    'p_eDate', eDate
+    ]);
+  except
+    on E:Exception do
+    LogError(Format(rsCreditNumber,[pid]) + E.Message);
+  end;
+end;
+
+procedure TfrmBCFilter.InsertOneRow18;
+resourcestring
+  rsCreditNumber = '%d - № li kredit : ';
+begin
+  with CM_AK_REPORTS do
+  try
+    CallProcedure('insinfoaboutcrediting',[
+    'p_ID', pID ,
+    'p_bDate', bDate ,
+    'p_eDate', eDate
+    ]);
+  except
+    on E:Exception do
+    LogError(Format(rsCreditNumber,[pid]) + E.Message);
+  end;
+end;
+
+procedure TfrmBCFilter.InsertOneRow19;
+resourcestring
+  rsCreditNumber = '%d - № li kredit : ';
+begin
+  with CM_AK_REPORTS do
+  try
+    CallProcedure('insinfocreditpaying',[
+    'p_ID', pID ,
+    'p_bDate', bDate ,
+    'p_eDate', eDate
+    ]);
+  except
+    on E:Exception do
+    LogError(Format(rsCreditNumber,[pid]) + E.Message);
+  end;
+end;
+
+procedure TfrmBCFilter.InsertOneRow20;
+resourcestring
+  rsCreditNumber = '%d - № li kredit : ';
+begin
+  with CM_AK_REPORTS do
+  try
+    CallProcedure('insinfoworldbankmain',[
+    'p_ID', pID ,
+    'p_bDate', bDate ,
+    'p_eDate', eDate
+    ]);
+  except
+    on E:Exception do
+    LogError(Format(rsCreditNumber,[pid]) + E.Message);
+  end;
+end;
+
+procedure TfrmBCFilter.InsertOneRow21;
+resourcestring
+  rsCreditNumber = '%d - № li kredit : ';
+begin
+  with CM_AK_REPORTS do
+  try
+    CallProcedure('insinfoworldbankactive',[
+    'p_ID', pID ,
+    'p_bDate', bDate ,
+    'p_eDate', eDate
+    ]);
+  except
+    on E:Exception do
+    LogError(Format(rsCreditNumber,[pid]) + E.Message);
+  end;
+end;
+
+procedure TfrmBCFilter.InsertOneRow22;
+resourcestring
+  rsCreditNumber = '%d - № li kredit : ';
+begin
+  with CM_AK_REPORTS do
+  try
+    CallProcedure('insinfomusttr',[
+    'p_ID', pID ,
+    'p_bDate', bDate ,
+    'p_eDate', eDate
+    ]);
+  except
+    on E:Exception do
+    LogError(Format(rsCreditNumber,[pid]) + E.Message);
+  end;
+end;
+
+procedure TfrmBCFilter.InsertOneRow23;
+resourcestring
+  rsCreditNumber = '%d - № li kredit : ';
+begin
+  with CM_AK_REPORTS do
+  try
+    CallProcedure('insinfof2_full',[
+    'p_ID', pID ,
+    'p_bDate', bDate ,
+    'p_eDate', eDate
+    ]);
+  except
+    on E:Exception do
+    LogError(Format(rsCreditNumber,[pid]) + E.Message);
+  end;
+end;
+
+procedure TfrmBCFilter.InsertOneRow24;
+resourcestring
+  rsCreditNumber = '%d - № li kredit : ';
+begin
+  with CM_AK_REPORTS do
+  try
+    CallProcedure('insinfof3_full',[
+    'p_ID', pID ,
+    'p_bDate', bDate ,
+    'p_eDate', eDate
+    ]);
+  except
+    on E:Exception do
+    LogError(Format(rsCreditNumber,[pid]) + E.Message);
+  end;
+end;
+
+procedure TfrmBCFilter.InsertOneRow25;
+resourcestring
+  rsCreditNumber = '%d - № li kredit : ';
+begin
+  with CM_AK_REPORTS do
+  try
+    CallProcedure('insinfof3_filial',[
+    'p_ID', pID ,
+    'p_bDate', bDate ,
+    'p_eDate', eDate
+    ]);
+  except
+    on E:Exception do
+    LogError(Format(rsCreditNumber,[pid]) + E.Message);
+  end;
+end;
+
+procedure TfrmBCFilter.InsertOneRow26;
+resourcestring
+  rsCreditNumber = '%d - № li kredit : ';
+begin
+  with CM_AK_REPORTS do
+  try
+    CallProcedure('insinfof3_proj',[
+    'p_ID', pID ,
+    'p_bDate', bDate ,
+    'p_eDate', eDate
+    ]);
+  except
+    on E:Exception do
+    LogError(Format(rsCreditNumber,[pid]) + E.Message);
+  end;
+end;
+
+procedure TfrmBCFilter.InsertOneRow27;
+resourcestring
+  rsCreditNumber = '%d - № li kredit: ';
+begin
+  with CM_AK_REPORTS do
+  try
+    CallProcedure('insinfoablegm',[
+    'p_ID', pID ,
+    'p_bDate', bDate ,
+    'p_eDate', eDate
+    ]);
+  except
+    on E:Exception do
+    LogError(Format(rsCreditNumber,[pid]) + E.Message);
+  end;
+end;
+
+procedure TfrmBCFilter.InsertOneRow28;
+resourcestring
+  rsCreditNumber = '%d - № li kredit : ';
+begin
+  with CM_AK_REPORTS do
+  try
+    CallProcedure('insinfoproviz',[
+    'p_ID', pID ,
+    'p_bDate', bDate ,
+    'p_eDate', eDate
+    ]);
+  except
+    on E:Exception do
+    LogError(Format(rsCreditNumber,[pid]) + E.Message);
+  end;
+end;
+
+procedure TfrmBCFilter.InsertOneRow29;
+resourcestring
+  rsCreditNumber = '%d - № li kredit : ';
+begin
+  with CM_AK_REPORTS do
+  try
+    CallProcedure('insinfograntyear',[
+    'p_ID', pID ,
+    'p_bDate', bDate ,
+    'p_eDate', eDate
+    ]);
+  except
+    on E:Exception do
+    LogError(Format(rsCreditNumber,[pid]) + E.Message);
+  end;
+end;
+
+
+procedure TfrmBCFilter.InsertOneRow30;
+resourcestring
+  rsCreditNumber = '%d - № li kredit : ';
+begin
+  with CM_AK_REPORTS do
+  try
+    CallProcedure('insinfograntbranch',[
+    'p_ID', pID ,
+    'p_bDate', bDate ,
+    'p_eDate', eDate
+    ]);
+  except
+    on E:Exception do
+    LogError(Format(rsCreditNumber,[pid]) + E.Message);
+  end;
+end;
+
+
+procedure TfrmBCFilter.InsertOneRow31;
+resourcestring
+  rsCreditNumber = '%d - № li kredit: ';
+begin
+  with CM_AK_REPORTS do
+  try
+    CallProcedure('insinfograntcontract',[
+    'p_ID'   , pID ,
+    'p_bDate', bDate ,
+    'p_eDate', eDate
+    ]);
+  except
+    on E:Exception do
+    LogError(Format(rsCreditNumber,[pid]) + E.Message);
+  end;
+end;
+
+procedure TfrmBCFilter.printreport4;
+var S:String;
+counter:integer;
+begin
+  if not assigned(QRCM_AK_FORM2) then
+  QRCM_AK_FORM2 := TQRCM_AK_FORM2.Create(Self);
+    with DMBC.ResultDSBP do begin
+    if CheckBox6.Checked then
+      SQL[21] := 'where districtid='+DistrictsID.AsString;
+    if not Active then
+      Open
+    else
+      Refresh;
+  end;
+
+  if  RGReportType.ItemIndex = 0 then
+    with Kera do begin
+      Connect;
+      ExportDataset(DMBC.ResultDSBP, 'FBP',True);
+    end
+  else
+    with QRCM_AK_FORM2 do begin
+      S := FOrmat(rsForm4Caption,[UserGroups.FieldByName('DESCRIPTION').AsString]);
+
+      titleLabel.Caption := S;
+
+      for Counter := 0 to QRCM_AK_FORM2.ComponentCount-1 do begin
+        if Components[Counter].Tag > 0 then
+          (Components[Counter] as TControl).Enabled := Components[Counter].Tag <= PrintDeep;
+      end;
+      Preview;
+    end;
+    btnYeniden.Enabled := True;
+end;
+
+procedure TfrmBCFilter.printreport5;
+var S:String;
+counter:integer;
+begin
+  if not assigned(QRCM_AK_FORM3) then
+  QRCM_AK_FORM3 := TQRCM_AK_FORM3.Create(Self);
+    with DMBC.ResultDSTrouble do begin
+    if CheckBox6.Checked then
+      SQL[21] := 'where districtid='+DistrictsID.AsString;
+    if not Active then
+      Open
+    else
+      Refresh;
+  end;
+
+  if  RGReportType.ItemIndex = 0 then
+    with Kera do begin
+      Connect;
+      ExportDataset(DMBC.ResultDSTrouble, 'FTr',True);
+    end
+  else
+    with QRCM_AK_FORM3 do begin
+
+      S := FOrmat(rsForm5Caption,[UserGroups.FieldByName('DESCRIPTION').AsString]);
+
+      titleLabel.Caption := S;
+
+      for Counter := 0 to QRCM_AK_FORM3.ComponentCount-1 do begin
+        if Components[Counter].Tag > 0 then
+          (Components[Counter] as TControl).Enabled := Components[Counter].Tag <= PrintDeep;
+      end;
+      Preview;
+    end;
+    btnYeniden.Enabled := True;
+end;
+
+procedure TfrmBCFilter.printreport6;
+var S:String;
+counter:integer;
+begin
+  if not assigned(QRCM_AK_FORM10) then
+  QRCM_AK_FORM10 := TQRCM_AK_FORM10.Create(Self);
+    with DMBC.ResultDSLYT do begin
+    if CheckBox6.Checked then
+      SQL[21] := 'where districtid='+DistrictsID.AsString;
+    if not Active then
+      Open
+    else
+      Refresh;
+  end;
+
+  if  RGReportType.ItemIndex = 0 then
+    with Kera do begin
+      Connect;
+      ExportDataset(DMBC.ResultDSLYT, 'FLastYear',True);
+    end
+  else
+    with QRCM_AK_FORM10 do begin
+
+      S := FOrmat(rsForm6Caption,[UserGroups.FieldByName('DESCRIPTION').AsString]);
+
+      titleLabel.Caption := S;
+
+      for Counter := 0 to QRCM_AK_FORM10.ComponentCount-1 do begin
+        if Components[Counter].Tag > 0 then
+          (Components[Counter] as TControl).Enabled := Components[Counter].Tag <= PrintDeep;
+      end;
+      Preview;
+    end;
+    btnYeniden.Enabled := True;
+end;
+
+procedure TfrmBCFilter.printreport7;
+var S:String;
+counter:integer;
+begin
+  if not assigned(QRCM_AK_FORM11) then
+  QRCM_AK_FORM11 := TQRCM_AK_FORM11.Create(Self);
+    with DMBC.ResultDSL5YP do begin
+    if CheckBox6.Checked then
+      SQL[21] := 'where districtid='+DistrictsID.AsString;
+    if not Active then
+      Open
+    else
+      Refresh;
+  end;
+
+  if  RGReportType.ItemIndex = 0 then
+    with Kera do begin
+      Connect;
+      ExportDataset(DMBC.ResultDSL5YP, 'FLast5YearP',True);
+    end
+  else
+    with QRCM_AK_FORM11 do begin
+
+      S := FOrmat(rsForm7Caption,[UserGroups.FieldByName('DESCRIPTION').AsString]);
+
+      titleLabel.Caption := S;
+
+      for Counter := 0 to QRCM_AK_FORM11.ComponentCount-1 do begin
+        if Components[Counter].Tag > 0 then
+          (Components[Counter] as TControl).Enabled := Components[Counter].Tag <= PrintDeep;
+      end;
+      Preview;
+    end;
+    btnYeniden.Enabled := True;
+end;
+
+procedure TfrmBCFilter.printreport8;
+var S:String;
+counter:integer;
+begin
+  if not assigned(QRCM_AK_FORM12) then
+  QRCM_AK_FORM12 := TQRCM_AK_FORM12.Create(Self);
+    with DMBC.ResultDSL5YT do begin
+    if CheckBox6.Checked then
+      SQL[21] := 'where districtid='+DistrictsID.AsString;
+    if not Active then
+      Open
+    else
+      Refresh;
+  end;
+
+  if  RGReportType.ItemIndex = 0 then
+    with Kera do begin
+      Connect;
+      ExportDataset(DMBC.ResultDSL5YT, 'FLast5YearT',True);
+    end
+  else
+    with QRCM_AK_FORM12 do begin
+
+      S := FOrmat(rsForm7Caption,[UserGroups.FieldByName('DESCRIPTION').AsString]);
+
+      titleLabel.Caption := S;
+
+      for Counter := 0 to QRCM_AK_FORM12.ComponentCount-1 do begin
+        if Components[Counter].Tag > 0 then
+          (Components[Counter] as TControl).Enabled := Components[Counter].Tag <= PrintDeep;
+      end;
+      Preview;
+    end;
+    btnYeniden.Enabled := True;
+end;
+
+procedure TfrmBCFilter.printreport9;
+const Tmons : array[0..11] of string[16]= ('Yanvar','Fevral','Mart','Aprel','May','Iyun','Iyul','Avqust','Sentyabr','Oktyabr','Noyabr','Dekabr');
+var S:String;
+
+counter:integer;
+dd,mm,yy:word;   //m2:integer;
+//d :TDateTime;
+begin
+  // d := integer(trunc(EDateP.DateTime)); // yen tarix pol
+  if not assigned(QRCM_AK_FORM13) then
+  QRCM_AK_FORM13 := TQRCM_AK_FORM13.Create(Self);
+  if not assigned(QRCM_AK_FORM13_2) then
+  QRCM_AK_FORM13_2 := TQRCM_AK_FORM13_2.Create(Self);
+
+    with DMBC.ResultDSLYPS do begin
+  //  SetVariable('dat',d);   //  yen tarix pol cix
+    if CheckBox6.Checked then
+      SQL[21] := 'where districtid='+DistrictsID.AsString;
+    if not Active then
+      Open
+    else
+      Refresh;
+  end;
+
+  if  RGReportType.ItemIndex = 0 then
+    with Kera do begin
+      Connect;
+      ExportDataset(DMBC.ResultDSLYPS, 'FLast5YearT',True);
+    end
+  else begin
+    with QRCM_AK_FORM13 do begin
+
+      S := FOrmat(rsForm9Caption,[UserGroups.FieldByName('DESCRIPTION').AsString]);
+
+      titleLabel.Caption := S;
+
+      lbbegdate.Caption := FormatDateTime('dd/mm/yyyy',BDateP.DateTime);
+      lbenddate.Caption := FormatDateTime('dd/mm/yyyy',EDateP.DateTime);
+
+      DecodeDate(BDateP.DateTime,yy,mm,dd);   {
+      m2 := mm;
+      lbmon1.Caption := Tmons[m2];
+      inc (m2);
+      if m2=12 then m2 := 0;
+      lbmon2.Caption := Tmons[m2];
+      inc (m2);
+      if m2=12 then m2 := 0;
+      lbmon3.Caption := Tmons[m2];
+      inc (m2);
+      if m2=12 then m2 := 0;
+      lbmon4.Caption := Tmons[m2];
+      inc (m2);
+      if m2=12 then m2 := 0;
+      lbmon5.Caption := Tmons[m2];
+      inc (m2);
+      if m2=12 then m2 := 0;
+      lbmon6.Caption := Tmons[m2];
+      inc (m2);
+      if m2=12 then m2 := 0;
+                           }
+      if CheckBox4.Checked then
+        PrintDeep := 30;
+
+      for Counter := 0 to QRCM_AK_FORM13.ComponentCount-1 do begin
+        if Components[Counter].Tag > 0 then
+          (Components[Counter] as TControl).Enabled := Components[Counter].Tag <= PrintDeep;
+      end;
+      Preview;
+    end;
+    with QRCM_AK_FORM13_2 do begin
+
+      S := FOrmat(rsForm9Caption,[UserGroups.FieldByName('DESCRIPTION').AsString]);
+
+      titleLabel.Caption := S;
+                  
+      lbbegdate.Caption := FormatDateTime('dd/mm/yyyy',BDateP.DateTime);
+      lbenddate.Caption := FormatDateTime('dd/mm/yyyy',EDateP.DateTime);
+                            {
+      lbmon7.Caption := Tmons[m2];
+      inc (m2);
+      if m2=12 then m2 := 0;
+      lbmon8.Caption := Tmons[m2];
+      inc (m2);
+      if m2=12 then m2 := 0;
+      lbmon9.Caption := Tmons[m2];
+      inc (m2);
+      if m2=12 then m2 := 0;
+      lbmon10.Caption := Tmons[m2];
+      inc (m2);
+      if m2=12 then m2 := 0;
+      lbmon11.Caption := Tmons[m2];
+      inc (m2);
+      if m2=12 then m2 := 0;
+      lbmon12.Caption := Tmons[m2]; 
+      inc (m2);
+      if m2=12 then m2 := 0;
+                   }
+      if CheckBox4.Checked then
+        PrintDeep := 30;
+        
+      for Counter := 0 to QRCM_AK_FORM13_2.ComponentCount-1 do begin
+        if Components[Counter].Tag > 0 then
+          (Components[Counter] as TControl).Enabled := Components[Counter].Tag <= PrintDeep;
+      end;
+      Preview;
+    end;
+  end;
+    btnYeniden.Enabled := True;
+end;
+
+procedure TfrmBCFilter.printreport10;
+var S:String;
+counter:integer;
+begin
+  if not assigned(QRCM_AK_FORM16) then
+  QRCM_AK_FORM16 := TQRCM_AK_FORM16.Create(Self);
+    with DMBC.ResultDSMg do begin
+    if CheckBox6.Checked then
+      SQL[21] := 'where districtid='+DistrictsID.AsString;
+    if not Active then
+      Open
+    else
+      Refresh;
+  end;
+
+  if  RGReportType.ItemIndex = 0 then
+    with Kera do begin
+      Connect;
+      ExportDataset(DMBC.ResultDSMg, 'FLast5YearT',True);
+    end
+  else
+    with QRCM_AK_FORM16 do begin
+
+      S := FOrmat(rsForm10Caption,[UserGroups.FieldByName('DESCRIPTION').AsString]);
+
+      titleLabel.Caption := S;
+
+      for Counter := 0 to QRCM_AK_FORM16.ComponentCount-1 do begin
+        if Components[Counter].Tag > 0 then
+          (Components[Counter] as TControl).Enabled := Components[Counter].Tag <= PrintDeep;
+      end;
+      Preview;
+    end;
+    btnYeniden.Enabled := True;
+end;
+
+procedure TfrmBCFilter.printreport11;
+var S:String;
+counter:integer;
+begin
+  if not assigned(QRF2Full) then
+  QRF2Full := TQRF2Full.Create(Self);
+    with DMBC.ResultDS2Full do begin
+    if CheckBox6.Checked then
+      SQL[21] := 'where districtid='+DistrictsID.AsString;
+    if not Active then
+      Open
+    else
+      Refresh;
+  end;
+
+  if  RGReportType.ItemIndex = 0 then
+    with Kera do begin
+      Connect;
+      ExportDataset(DMBC.ResultDS2Full, 'F2',True);
+    end
+  else
+    with QRF2Full do begin
+
+      S := FOrmat(rsForm2Caption,[UserGroups.FieldByName('DESCRIPTION').AsString]);
+
+      titleLabel.Caption := S;
+
+      if CheckBox4.Checked then begin
+        PrintDeep := StrToInt(FloatToStr(Round(power(2,4-cbPrintDeep.ItemIndex))));
+      end else begin
+        PrintDeep := 32;
+      end;
+
+      for Counter := 0 to QRF2Full.ComponentCount-1 do begin
+        if Components[Counter].Tag > 0 then
+          (Components[Counter] as TControl).Enabled := Components[Counter].Tag <= PrintDeep;
+      end;
+      Preview;
+    end;
+    //btnYeniden.Enabled := True;
+end;
+
+procedure TfrmBCFilter.printreport12;
+var S:String;
+begin
+  if not assigned(QRF2Type) then
+  QRF2Type := TQRF2Type.Create(Self);
+    with DMBC.ResultDS2Type do begin
+    if CheckBox6.Checked then
+      SQL[21] := 'where districtid='+DistrictsID.AsString;
+    if not Active then
+      Open
+    else
+      Refresh;
+  end;
+
+  if  RGReportType.ItemIndex = 0 then
+    with Kera do begin
+      Connect;
+      ExportDataset(DMBC.ResultDS2Type, 'F2',True);
+    end
+  else
+    with QRF2Type do begin
+
+      S := FOrmat(rsForm2Caption,[UserGroups.FieldByName('DESCRIPTION').AsString]);
+
+      titleLabel.Caption := S;
+
+      {if CheckBox4.Checked then begin
+        PrintDeep := StrToInt(FloatToStr(Round(power(2,4-cbPrintDeep.ItemIndex))));
+      end else begin
+        PrintDeep := 32;
+      end;
+
+      for Counter := 0 to QRF2Full.ComponentCount-1 do begin
+        if Components[Counter].Tag > 0 then
+          (Components[Counter] as TControl).Enabled := Components[Counter].Tag <= PrintDeep;
+      end;      }
+      Preview;
+    end;
+    //btnYeniden.Enabled := True;
+end;
+
+procedure TfrmBCFilter.printreport13;
+var S:String;
+counter:integer;
+begin
+  if not assigned(QRCM_AK_FORM15) then
+  QRCM_AK_FORM15 := TQRCM_AK_FORM15.Create(Self);
+    with DMBC.ResultDSMg do begin
+    if CheckBox6.Checked then
+      SQL[21] := 'where districtid='+DistrictsID.AsString;
+    if not Active then
+      Open
+    else
+      Refresh;
+  end;
+
+  if  RGReportType.ItemIndex = 0 then
+    with Kera do begin
+      Connect;
+      ExportDataset(DMBC.ResultDSMg, 'FMonitoring',True);
+    end
+  else
+    with QRCM_AK_FORM15 do begin
+
+      S := FOrmat(rsForm10Caption,[UserGroups.FieldByName('DESCRIPTION').AsString]);
+
+      titleLabel.Caption := S;
+
+      for Counter := 0 to QRCM_AK_FORM15.ComponentCount-1 do begin
+        if Components[Counter].Tag > 0 then
+          (Components[Counter] as TControl).Enabled := Components[Counter].Tag <= PrintDeep;
+      end;
+      Preview;
+    end;
+    btnYeniden.Enabled := True;
+end;
+
+procedure TfrmBCFilter.printreport14;
+var S:String;
+begin
+  if not assigned(QRCM_AK_FORM17) then
+  QRCM_AK_FORM17 := TQRCM_AK_FORM17.Create(Self);
+    with DMBC.ResultDS2AboutTruoble do begin
+    if CheckBox6.Checked then
+      SQL[21] := 'where districtid='+DistrictsID.AsString;
+    if not Active then
+      Open
+    else
+      Refresh;
+  end;
+
+  if  RGReportType.ItemIndex = 0 then
+    with Kera do begin
+      Connect;
+      ExportDataset(DMBC.ResultDS2AboutTruoble, 'F2',True);
+    end
+  else
+    with QRCM_AK_FORM17 do begin
+
+      S := FOrmat(rsForm2Caption,[UserGroups.FieldByName('DESCRIPTION').AsString]);
+
+      titleLabel.Caption := S;
+
+      Preview;
+    end;
+end;
+
+procedure TfrmBCFilter.printreport15;
+var S:String;
+begin
+  if not assigned(QRCM_AK_FORM18) then
+  QRCM_AK_FORM18 := TQRCM_AK_FORM18.Create(Self);
+    with DMBC.ResultDSMeasures do begin
+    if CheckBox6.Checked then
+      SQL[21] := 'where districtid='+DistrictsID.AsString;
+    if not Active then
+      Open
+    else
+      Refresh;
+  end;
+
+  if  RGReportType.ItemIndex = 0 then
+    with Kera do begin
+      Connect;
+      ExportDataset(DMBC.ResultDSMeasures, 'F2',True);
+    end
+  else
+    with QRCM_AK_FORM18 do begin
+
+      S := FOrmat(rsForm2Caption,[UserGroups.FieldByName('DESCRIPTION').AsString]);
+
+      titleLabel.Caption := S;
+
+      Preview;
+    end;
+end;
+
+procedure TfrmBCFilter.printreport16;
+var S:String;
+begin
+  if not assigned(QRCM_AK_FORM8) then
+  QRCM_AK_FORM8 := TQRCM_AK_FORM8.Create(Self);
+    with DMBC.ResultDSProlongs do begin
+    if CheckBox6.Checked then
+      SQL[21] := 'where districtid='+DistrictsID.AsString;
+    if not Active then
+      Open
+    else
+      Refresh;
+  end;
+
+  if  RGReportType.ItemIndex = 0 then
+    with Kera do begin
+      Connect;
+      ExportDataset(DMBC.ResultDSProlongs, 'F2',True);
+    end
+  else
+    with QRCM_AK_FORM8 do begin
+
+      S := FOrmat(rsForm16Caption,[UserGroups.FieldByName('DESCRIPTION').AsString]);
+
+      titleLabel.Caption := S;
+
+      Preview;
+    end;
+end;
+
+procedure TfrmBCFilter.printreport17;
+var S:String;
+begin
+  if not assigned(QRCM_AK_FORM9) then
+  QRCM_AK_FORM9 := TQRCM_AK_FORM9.Create(Self);
+  if not assigned(QRCM_AK_FORM9_2) then
+  QRCM_AK_FORM9_2 := TQRCM_AK_FORM9_2.Create(Self);
+    with DMBC.ResultDSYPays do begin
+    if CheckBox6.Checked then
+      SQL[21] := 'where districtid='+DistrictsID.AsString;
+    if not Active then
+      Open
+    else
+      Refresh;
+  end;
+
+  if  RGReportType.ItemIndex = 0 then
+    with Kera do begin
+      Connect;
+      ExportDataset(DMBC.ResultDSYPays, 'FLastYearPay',True);
+    end
+  else begin
+    with QRCM_AK_FORM9 do begin
+
+      S := FOrmat(rsForm9Caption,[UserGroups.FieldByName('DESCRIPTION').AsString]);
+
+      titleLabel.Caption := S;
+
+      Preview;
+    end;
+    with QRCM_AK_FORM9_2 do begin
+
+      S := FOrmat(rsForm9Caption,[UserGroups.FieldByName('DESCRIPTION').AsString]);
+
+      titleLabel.Caption := S;
+      
+      Preview;
+    end;
+  end;
+end;
+
+procedure TfrmBCFilter.printreport18;
+var S:String;
+begin
+    with DMBC.ResultDSAboutCrediting do begin
+    if CheckBox6.Checked then
+      SQL[21] := 'where districtid='+DistrictsID.AsString;
+    if not Active then
+      Open
+    else
+      Refresh;
+  end;
+
+  if  RGReportType.ItemIndex = 0 then
+    with Kera do begin
+      Connect;
+      ExportDataset(DMBC.ResultDSAboutCrediting, 'FCredit',True);
+    end
+  else begin
+    if not assigned(QRCM_AK_FORM6) then
+      QRCM_AK_FORM6 := TQRCM_AK_FORM6.Create(Self);
+    if not assigned(QRCM_AK_FORM6_2) then
+      QRCM_AK_FORM6_2 := TQRCM_AK_FORM6_2.Create(Self);
+    with QRCM_AK_FORM6 do begin
+
+      S := FOrmat(rsForm18Caption,[UserGroups.FieldByName('DESCRIPTION').AsString]);
+
+      titleLabel.Caption := S;
+
+      Preview;
+    end;
+    with QRCM_AK_FORM6_2 do begin
+
+      S := FOrmat(rsForm18Caption,[UserGroups.FieldByName('DESCRIPTION').AsString]);
+
+      titleLabel.Caption := S;
+      
+      Preview;
+    end;
+  end;
+end;
+
+procedure TfrmBCFilter.printreport19;
+var S:String;
+begin
+  if not assigned(QRCM_AK_FORM7) then
+  QRCM_AK_FORM7 := TQRCM_AK_FORM7.Create(Self);
+    with DMBC.ResultDSCreditPaying do begin
+    if CheckBox6.Checked then
+      SQL[21] := 'where districtid='+DistrictsID.AsString;
+    if not Active then
+      Open
+    else
+      Refresh;
+  end;
+
+  if  RGReportType.ItemIndex = 0 then
+    with Kera do begin
+      Connect;
+      ExportDataset(DMBC.ResultDSCreditPaying, 'F2',True);
+    end
+  else
+    with QRCM_AK_FORM7 do begin
+
+      S := FOrmat(rsForm19Caption,[UserGroups.FieldByName('DESCRIPTION').AsString]);
+
+      titleLabel.Caption := S;
+
+      Preview;
+    end;
+end;
+
+procedure TfrmBCFilter.printreport20;
+var
+  S: String;
+begin
+    with DMBC.ResultDSWBMain do begin
+    if CheckBox6.Checked then
+      SQL[21] := 'where districtid='+DistrictsID.AsString;
+    if not Active then
+      Open
+    else
+      Refresh;
+  end;
+
+  if  RGReportType.ItemIndex = 0 then
+    with Kera do begin
+      Connect;
+      ExportDataset(DMBC.ResultDSWBMain, 'FWB',True);
+    end
+  else begin
+    if not assigned(QRCM_AK_FORM4) then
+      QRCM_AK_FORM4 := TQRCM_AK_FORM4.Create(Self);
+    if not assigned(QRCM_AK_FORM4_2) then
+      QRCM_AK_FORM4_2 := TQRCM_AK_FORM4_2.Create(Self);
+                                              
+    S := FOrmat(rsForm20Caption,[UserGroups.FieldByName('DESCRIPTION').AsString]);
+
+    QRCM_AK_FORM4_2.titleLabel.Caption := S;
+    QRCM_AK_FORM4_2.Preview;
+    QRCM_AK_FORM4.titleLabel.Caption := S;
+    QRCM_AK_FORM4.Preview;
+  end;
+end;
+
+procedure TfrmBCFilter.printreport21;
+begin
+    with DMBC.ResultDSWBActive do begin
+    if CheckBox6.Checked then
+      SQL[21] := 'where districtid='+DistrictsID.AsString;
+    if not Active then
+      Open
+    else
+      Refresh;
+  end;
+
+  if  RGReportType.ItemIndex = 0 then
+    with Kera do begin
+      Connect;
+      ExportDataset(DMBC.ResultDSWBActive, 'FWB',True);
+    end
+  else begin
+    if not assigned(QRCM_AK_FORM5) then
+      QRCM_AK_FORM5 := TQRCM_AK_FORM5.Create(Self);
+    if not assigned(QRCM_AK_FORM5_2) then
+      QRCM_AK_FORM5_2 := TQRCM_AK_FORM5_2.Create(Self);
+
+    QRCM_AK_FORM5.Preview;
+    QRCM_AK_FORM5_2.Preview;
+  end;
+end;
+
+procedure TfrmBCFilter.printreport22;
+begin
+    with DMBC.ResultDSMtr do begin
+    if CheckBox6.Checked then
+      SQL[21] := 'where districtid='+DistrictsID.AsString;
+    if not Active then
+      Open
+    else
+      Refresh;
+  end;
+
+  if  RGReportType.ItemIndex = 0 then
+    with Kera do begin
+      Connect;
+      ExportDataset(DMBC.ResultDSMTr, 'FWB',True);
+    end
+  else begin
+    if not assigned(QRCM_AK_FORM14) then
+      QRCM_AK_FORM14 := TQRCM_AK_FORM14.Create(Self);
+    if not assigned(QRCM_AK_FORM14_2) then
+      QRCM_AK_FORM14_2 := TQRCM_AK_FORM14_2.Create(Self);
+
+    QRCM_AK_FORM14.Preview;
+    QRCM_AK_FORM14_2.Preview;
+  end;
+end;
+
+procedure TfrmBCFilter.printreport23;
+var S:String;
+counter:integer;
+begin
+    with DMBC.ResultDSPurposes do begin
+    if CheckBox6.Checked then
+      SQL[21] := 'where districtid='+DistrictsID.AsString;
+    if not Active then
+      Open
+    else
+      Refresh;
+  end;
+
+  if  RGReportType.ItemIndex = 0 then
+    with Kera do begin
+      Connect;
+      ExportDataset(DMBC.ResultDSPurposes, 'FPurposes',True);
+    end
+  else begin
+    if not assigned(QRFPurposeRep) then
+      QRFPurposeRep := TQRFPurposeRep.Create(Self);
+    with QRFPurposeRep do begin
+
+      S := FOrmat(rsForm2Caption,[UserGroups.FieldByName('DESCRIPTION').AsString]);
+
+      titleLabel.Caption := S;
+
+      qrlbr.Enabled := CheckBox2.Checked;
+      qrtbr.Enabled := CheckBox2.Checked;
+
+      if CheckBox4.Checked then begin
+        PrintDeep := StrToInt(FloatToStr(Round(power(2,5-cbPrintDeep.ItemIndex))));
+      end else begin
+        PrintDeep := 64;
+      end;
+
+      for Counter := 0 to QRFPurposeRep.ComponentCount-1 do begin
+        if Components[Counter].Tag > 0 then
+          (Components[Counter] as TControl).Enabled := Components[Counter].Tag <= PrintDeep;
+      end;
+      Preview;
+    end;
+  end;
+    //btnYeniden.Enabled := True;
+end;
+
+procedure TfrmBCFilter.printreport24;
+var S:String;
+counter:integer;
+begin
+    with DMBC.ResultDS3Full do begin
+      if not Active then Open else Refresh;
+    end;
+
+  if  RGReportType.ItemIndex = 0 then
+    with Kera do begin
+      Connect;
+      ExportDataset(DMBC.ResultDS3Full, 'F3Types',True);
+    end
+  else begin
+    if not assigned(QRF3Branch) then
+      QRF3Branch := TQRF3Branch.Create(Self);
+    with QRF3Branch do begin
+
+      S := FOrmat(rsForm2Caption,[UserGroups.FieldByName('DESCRIPTION').AsString]);
+
+      titleLabel.Caption := S;
+
+      qrlBeginDate.Caption := FormatDateTime('dd/mm/yyyy',BDateP.DateTime);
+      qrlEndDate.Caption := FormatDateTime('dd/mm/yyyy',EDateP.DateTime);
+
+      if CheckBox4.Checked then begin
+        PrintDeep := StrToInt(FloatToStr(Round(power(2,5-cbPrintDeep.ItemIndex))));
+      end else begin
+        PrintDeep := 32;
+      end;
+
+      for Counter := 0 to QRF3Branch.ComponentCount-1 do begin
+        if Components[Counter].Tag > 0 then
+          (Components[Counter] as TControl).Enabled := Components[Counter].Tag <= PrintDeep;
+      end;
+      Preview;
+    end;
+  end;
+    //btnYeniden.Enabled := True;
+end;
+
+procedure TfrmBCFilter.printreport25;
+var S:String;
+counter:integer;
+begin
+    with DMBC.ResultDS3Filial do begin
+      if not Active then Open else Refresh;
+    end;
+
+  if  RGReportType.ItemIndex = 0 then
+    with Kera do begin
+      Connect;
+      ExportDataset(DMBC.ResultDS3Filial, 'F3Filial',True);
+    end
+  else begin
+    if not assigned(QRF3Filial) then
+      QRF3Filial := TQRF3Filial.Create(Self);
+    with QRF3Filial do begin
+
+      S := FOrmat(rsForm2Caption,[UserGroups.FieldByName('DESCRIPTION').AsString]);
+
+      titleLabel.Caption := S;
+
+      qrlBeginDate.Caption := FormatDateTime('dd/mm/yyyy',BDateP.DateTime);
+      qrlEndDate.Caption := FormatDateTime('dd/mm/yyyy',EDateP.DateTime);
+
+      if CheckBox4.Checked then begin
+        PrintDeep := StrToInt(FloatToStr(Round(power(2,5-cbPrintDeep.ItemIndex))));
+      end else begin
+        PrintDeep := 32;
+      end;
+
+      for Counter := 0 to QRF3Filial.ComponentCount-1 do begin
+        if Components[Counter].Tag > 0 then
+          (Components[Counter] as TControl).Enabled := Components[Counter].Tag <= PrintDeep;
+      end;
+      Preview;
+    end;
+  end;
+    //btnYeniden.Enabled := True;
+end;
+
+procedure TfrmBCFilter.printreport26;
+var S:String;
+counter:integer;
+begin
+    with DMBC.ResultDS3Proj do begin
+      if not Active then Open else Refresh;
+    end;
+
+  if  RGReportType.ItemIndex = 0 then
+    with Kera do begin
+      Connect;
+      ExportDataset(DMBC.ResultDS3Proj, 'F3Proj',True);
+    end
+  else begin
+    if not assigned(QRF3Proj) then
+      QRF3Proj := TQRF3Proj.Create(Self);
+    with QRF3Proj do begin
+
+      S := FOrmat(rsForm2Caption,[UserGroups.FieldByName('DESCRIPTION').AsString]);
+
+      titleLabel.Caption := S;
+
+      qrlBeginDate.Caption := FormatDateTime('dd/mm/yyyy',BDateP.DateTime);
+      qrlEndDate.Caption := FormatDateTime('dd/mm/yyyy',EDateP.DateTime);
+
+      if CheckBox4.Checked then begin
+        PrintDeep := StrToInt(FloatToStr(Round(power(2,5-cbPrintDeep.ItemIndex))));
+      end else begin
+        PrintDeep := 32;
+      end;
+
+      for Counter := 0 to QRF3Proj.ComponentCount-1 do begin
+        if Components[Counter].Tag > 0 then
+          (Components[Counter] as TControl).Enabled := Components[Counter].Tag <= PrintDeep;
+      end;
+      Preview;
+    end;
+  end;
+    //btnYeniden.Enabled := True;
+end;
+
+procedure TfrmBCFilter.printreport27;
+var S:String;
+counter:integer;
+begin
+    with DMBC.ResultDSabLegM do begin
+      if not Active then Open else Refresh;
+    end;
+
+  if  RGReportType.ItemIndex = 0 then
+    with Kera do begin
+      Connect;
+      ExportDataset(DMBC.ResultDSabLegM, 'F3Proj',True);
+    end
+  else begin
+    if not assigned(QRF3abLegM) then
+      QRF3abLegM := TQRF3abLegM.Create(Self);
+    with QRF3abLegM do begin
+
+      S := FOrmat(rsForm26Caption,[UserGroups.FieldByName('DESCRIPTION').AsString]);
+
+      titleLabel.Caption := S;
+
+      qrlBeginDate.Caption := FormatDateTime('dd/mm/yyyy',BDateP.DateTime);
+      qrlEndDate.Caption := FormatDateTime('dd/mm/yyyy',EDateP.DateTime);
+
+      if CheckBox4.Checked then begin
+        PrintDeep := StrToInt(FloatToStr(Round(power(2,5-cbPrintDeep.ItemIndex))));
+      end else begin
+        PrintDeep := 32;
+      end;
+
+      for Counter := 0 to QRF3abLegM.ComponentCount-1 do begin
+        if Components[Counter].Tag > 0 then
+          (Components[Counter] as TControl).Enabled := Components[Counter].Tag <= PrintDeep;
+      end;
+      Preview;
+    end;
+  end;
+    //btnYeniden.Enabled := True;
+end;
+
+procedure TfrmBCFilter.printreport28;
+var S:String;
+counter:integer;
+begin
+    try
+    with DMBC.ResultDSProviz do begin
+      Close;
+      open;
+    end;
+    except end;
+
+  if  RGReportType.ItemIndex = 0 then
+    with Kera do begin
+      Connect;
+      ExportDataset(DMBC.ResultDSProviz, 'Ehtiyyat',True);
+    end
+  else begin
+    if not assigned(QRFProviz) then
+      QRFProviz := TQRFProviz.Create(Self);
+    with QRFProviz do begin
+
+      S := FOrmat(rsForm28Caption,[UserGroups.FieldByName('DESCRIPTION').AsString]);
+
+      titleLabel.Caption := S;
+
+      qrlBeginDate.Caption := FormatDateTime('dd/mm/yyyy',BDateP.DateTime);
+      qrlEndDate.Caption := FormatDateTime('dd/mm/yyyy',EDateP.DateTime);
+
+      if CheckBox4.Checked then begin
+        PrintDeep := StrToInt(FloatToStr(Round(power(2,5-cbPrintDeep.ItemIndex))));
+      end else begin
+        PrintDeep := 32;
+      end;
+
+      for Counter := 0 to QRFProviz.ComponentCount-1 do begin
+        if Components[Counter].Tag > 0 then
+          (Components[Counter] as TControl).Enabled := Components[Counter].Tag <= PrintDeep;
+      end;
+      Preview;
+    end;
+  end;
+    //btnYeniden.Enabled := True;
+end;
+
+procedure TfrmBCFilter.printreport29;
+var
+counter:integer;
+begin
+    with DMBC.ResultDSGrantYear do begin
+      if not Active then Open else Refresh;
+    end;
+
+  if  RGReportType.ItemIndex = 0 then
+    with Kera do begin
+      Connect;
+      ExportDataset(DMBC.ResultDSGrantYear, 'Grant',True);
+    end
+  else begin
+    if not assigned(QRFGrantYear) then
+      QRFGrantYear := TQRFGrantYear.Create(Self);
+    with QRFGrantYear do begin
+
+      qrlBeginDate.Caption := FormatDateTime('dd/mm/yyyy',BDateP.DateTime);
+      qrlEndDate.Caption := FormatDateTime('dd/mm/yyyy',EDateP.DateTime);
+
+      if CheckBox4.Checked then begin
+        PrintDeep := StrToInt(FloatToStr(Round(power(2,5-cbPrintDeep.ItemIndex))));
+      end else begin
+        PrintDeep := 32;
+      end;
+
+      for Counter := 0 to QRFGrantYear.ComponentCount-1 do begin
+        if Components[Counter].Tag > 0 then
+          (Components[Counter] as TControl).Enabled := Components[Counter].Tag <= PrintDeep;
+      end;
+      Preview;
+    end;
+  end;
+end;
+
+procedure TfrmBCFilter.printreport30;
+var
+counter:integer;
+begin
+    with DMBC.ResultDSGrantBranch do begin
+      if not Active then Open else Refresh;
+    end;
+
+  if  RGReportType.ItemIndex = 0 then
+    with Kera do begin
+      Connect;
+      ExportDataset(DMBC.ResultDSGrantBranch, 'Grant',True);
+    end
+  else begin
+    if not assigned(QRFGrantBranch) then
+      QRFGrantBranch := TQRFGrantBranch.Create(Self);
+    with QRFGrantBranch do begin
+
+      qrlBeginDate.Caption := FormatDateTime('dd/mm/yyyy',BDateP.DateTime);
+      qrlEndDate.Caption := FormatDateTime('dd/mm/yyyy',EDateP.DateTime);
+
+      if CheckBox4.Checked then begin
+        PrintDeep := StrToInt(FloatToStr(Round(power(2,5-cbPrintDeep.ItemIndex))));
+      end else begin
+        PrintDeep := 32;
+      end;
+
+      for Counter := 0 to QRFGrantBranch.ComponentCount-1 do begin
+        if Components[Counter].Tag > 0 then
+          (Components[Counter] as TControl).Enabled := Components[Counter].Tag <= PrintDeep;
+      end;
+      Preview;
+    end;
+  end;
+end;
+
+procedure TfrmBCFilter.printreport31;
+var
+counter:integer;
+begin
+    with DMBC.ResultDSGrantContract do begin
+      if not Active then Open else Refresh;
+    end;
+
+  if  RGReportType.ItemIndex = 0 then
+    with Kera do begin
+      Connect;
+      ExportDataset(DMBC.ResultDSGrantContract, 'Grant',True);
+    end
+  else begin
+    if not assigned(QRFGrantContract) then
+      QRFGrantContract := TQRFGrantContract.Create(Self);
+    with QRFGrantContract do begin
+
+      qrlBeginDate.Caption := FormatDateTime('dd/mm/yyyy',BDateP.DateTime);
+      qrlEndDate.Caption := FormatDateTime('dd/mm/yyyy',EDateP.DateTime);
+
+      if CheckBox4.Checked then begin
+        PrintDeep := StrToInt(FloatToStr(Round(power(2,5-cbPrintDeep.ItemIndex))));
+      end else begin
+        PrintDeep := 32;
+      end;
+
+      for Counter := 0 to QRFGrantContract.ComponentCount-1 do begin
+        if Components[Counter].Tag > 0 then
+          (Components[Counter] as TControl).Enabled := Components[Counter].Tag <= PrintDeep;
+      end;
+      Preview;
+    end;
+  end;
+end;
+
+procedure TfrmBCFilter.printreport32;
+var S:String;
+counter:integer;
+begin
+    with DMBC.ResultDS3Zona do begin
+      if not Active then Open else Refresh;
+    end;
+
+  if  RGReportType.ItemIndex = 0 then
+    with Kera do begin
+      Connect;
+      ExportDataset(DMBC.ResultDS3Zona, 'F3Iktisadi zonz',True);
+    end
+  else begin
+    if not assigned(QRF3Zona) then
+      QRF3Zona := TQRF3Zona.Create(Self);
+    with QRF3Zona do begin
+
+      S := FOrmat(rsForm2Caption,[UserGroups.FieldByName('DESCRIPTION').AsString]);
+
+      titleLabel.Caption := S;
+
+      qrlBeginDate.Caption := FormatDateTime('dd/mm/yyyy',BDateP.DateTime);
+      qrlEndDate.Caption   := FormatDateTime('dd/mm/yyyy',EDateP.DateTime);
+
+      if CheckBox4.Checked then begin
+        PrintDeep := StrToInt(FloatToStr(Round(power(2,5-cbPrintDeep.ItemIndex))));
+      end else begin
+        PrintDeep := 32;
+      end;
+      for Counter := 0 to QRF3Zona.ComponentCount-1 do begin
+        if Components[Counter].Tag > 0 then
+          (Components[Counter] as TControl).Enabled := Components[Counter].Tag <= PrintDeep;
+      end;
+      Preview;
+    end;
+  end;
+    //btnYeniden.Enabled := True;
+end;
+
+procedure TfrmBCFilter.printreport33;
+var S:String;
+counter:integer;
+begin
+    with DMBC.ResultDS3Zona do begin
+      if not Active then Open else Refresh;
+    end;
+
+  if  RGReportType.ItemIndex = 0 then
+    with Kera do begin
+      Connect;
+      ExportDataset(DMBC.ResultDS3Zona, 'F3Iktisadi zonz cem',True);
+    end
+  else begin
+    if not assigned(QRF3Zona) then
+     QRF3Zona := TQRF3Zona.Create(Self);
+    with QRF3Zona do begin
+
+      S := FOrmat(rsForm2Caption,[UserGroups.FieldByName('DESCRIPTION').AsString]);
+
+      titleLabel.Caption := S;
+
+      qrlBeginDate.Caption := FormatDateTime('dd/mm/yyyy',BDateP.DateTime);
+      qrlEndDate.Caption   := FormatDateTime('dd/mm/yyyy',EDateP.DateTime);
+
+      if CheckBox4.Checked then begin
+        PrintDeep := StrToInt(FloatToStr(Round(power(2,5-cbPrintDeep.ItemIndex))));
+      end else begin
+        PrintDeep := 32;
+      end;
+      for Counter := 0 to QRF3Zona.ComponentCount-1 do begin
+        if Components[Counter].Tag > 0 then
+          (Components[Counter] as TControl).Enabled := Components[Counter].Tag <= PrintDeep;
+      end;
+
+        QRF3Zona.qrfTarget.ENABLED:=FALSE;
+    //  QRF3Zona.QRBand2.ENABLED:=FALSE;
+      QRF3Zona.QRBand3.ENABLED:=FALSE;
+      Preview;
+    end;
+  end;
+    //btnYeniden.Enabled := True;
+end;
+function TfrmBCFilter.BuildFilterString : String;
+
+  procedure ConcatFilter(var S: String; const Prefix : String; Checked : Boolean; KeyValue : Variant);
+  const
+     csFormat = '(%s=%s)';
+  var
+    Temp : String;
+  begin
+
+    if Checked then
+    begin
+      Temp := Format(csFormat,[Prefix,Keyvalue]);
+      if S = '' then
+        S := Temp
+      else
+        S :=S + 'AND ' + Temp;
+    end;
+    
+  end;
+begin        
+  Result := 'DATEOFCONCLUSION between '''+FormatDateTime('d-mmm-yyyy', GCredBegD.DateTime)+''' AND '''+FormatDateTime('d-mmm-yyyy', GCredEndD.DateTime)+''' ';
+  ConcatFilter(Result,'CURRENCY',CheckBox1.Checked,DBLookupComboboxEh1.KeyValue);
+  ConcatFilter(Result,'BRANCHID',CheckBox2.Checked,DBLookupComboboxEh2.KeyValue);
+  ConcatFilter(Result,'USRGROUP',CheckBox3.Checked,DBLookupComboboxEh3.KeyValue);
+  ConcatFilter(Result,'PERSONALTYPE',CheckBox7.Checked,DBLookupComboboxEh7.KeyValue);
+  ConcatFilter(Result,'CREDITTYPE',CheckBox8.Checked,DBLookupComboboxEh8.KeyValue);
+  ConcatFilter(Result,'BOOROWERID',CheckBox5.Checked,DBLookupComboboxEh4.KeyValue);
+  ConcatFilter(Result,'BOOROWERID',CheckBox9.Checked,DBLookupComboboxEh6.KeyValue);
+  //LogInformation(Result);
+end;
+
+
+procedure TfrmBCFilter.ShowMe;
+begin
+  Currencys.Open;
+  Branches.Open;
+  Persons.Open;
+  Categories.Open;
+  UserGroups.Open;
+  Customers.Open;
+  CustNames.Open;
+  Districts.Open;
+  RepForms.Open;
+  Periods.Open;
+  Statuses.Open;
+  Types.Open;
+  GTypes.Open;
+  Short.Open;
+  cbFormsLook.KeyValue := 1;
+  ShowModal;
+end;
+
+procedure TfrmBCFilter.Button1Click(Sender: TObject);
+var
+  S          : String;
+  CrdID      : Integer;
+  PrintDeep  : Integer;
+  Counter    : Integer;
+begin
+
+  if CheckBox4.Checked then begin
+    PrintDeep := StrToInt(FloatToStr(Round(power(2,3-cbPrintDeep.ItemIndex))));
+  end else begin
+    PrintDeep := 32;
+  end;
+
+  if  BuildFilterString <>'' then
+    S := 'and '+BuildFilterString;
+  if rgKredStatus.ItemIndex = 0 then
+    S := S + ' and id not in (select creditid from cm_old_credits)';
+  if CheckBox11.Checked then begin
+     S := S + ' AND id in (select creditid from cm_business_plan WHERE purpose = '+ Periods.FieldByName('ID').AsString+') '
+  end;
+  if CheckBox16.Checked then begin
+     S := S + ' AND id in (select creditid from cm_business_plan WHERE source = '+ Short.FieldByName('ID').AsString+') '
+  end;
+  if CheckBox13.Checked then begin
+     S := S + ' AND ANNUALYINTERESTRATE between '+fsm.Text+' AND '+fsx.Text;
+  end;
+  if CheckBox14.Checked then begin
+     S := S + ' AND id in (select creditid from cm_business_plan WHERE type = '+ Types.FieldByName('ID').AsString+') '
+  end;
+  if CheckBox15.Checked then begin
+     S := S + ' AND CREDITLINEAMOUNT between '+floattostr(ntmm.Value)+' AND '+floattostr(ntmx.Value);
+  end;
+  if CheckBox12.Checked then begin
+     S := S + ' AND id in (select creditid from cm_curr_state WHERE decode(stopcalcdate,null,1,0) = '+ Statuses.FieldByName('ID').AsString +') '
+  end;
+  if CheckBox6.Checked then begin
+    S := S+' and  id in (select creditid from cm_business_plan where villageid in'+
+           '(select id from agro_village where depend_id='+DistrictsID.AsString+'))';
+  end;
+  /////  zona  ///////////
+  if CheckBox18.Checked then begin
+    S := S+' and  id in (select creditid from cm_business_plan where villageid in'+
+           '(select id from agro_village where depend_id in( select id from agro_region where zonaid= '+ZonaDataSetID.AsString+')))';
+  end;
+  // showmessage(s);  exit;
+  if CheckBox17.Checked then begin
+    S := S+' and  id in (select creditid from cm_ak_grants where typeid = '+GTypesID.AsString+')';
+  end;
+  if (cbFormsLook.KeyValue = 5) or (cbFormsLook.KeyValue = 27) then S:=S+' and id in (select creditid from cm_legal_measures)';
+
+  if (cbFormsLook.KeyValue = 14 ) and (rgKredStatus.ItemIndex=0) then S:=S+' and id not in (select creditid from cm_old_credits)';
+
+ if CheckBox19.Checked then
+  begin
+    if DBCatActive.KeyValue=1 then  S:=S+'  and tokcatid is null';
+    if DBCatActive.KeyValue=2 then  S:=S+'  and tokcatid=1';
+    if DBCatActive.KeyValue=3 then  S:=S+'  and tokcatid=2';
+    if DBCatActive.KeyValue=-1 then S:=S+'';
+    //CreditsDS.SQL[2]:='';
+    end
+    else
+    begin
+   S:=S+' And credittype<>8 and usrgroup<>13';
+
+  end;
+  CreditsDS.SQL[2] := S;
+
+  //owMessage(CreditsDS.SQL.Text);
+  with CreditsDS  do begin
+     Session.Commit;
+          {
+     if true then begin
+        ODSMakeTemp.CloseAll;
+        ODSMakeTemp.SetVariable('begdat',BDateP.DateTime);
+        ODSMakeTemp.SetVariable('enddat',EDateP.DateTime);
+        ODSMakeTemp.ExecSQL;
+     end;  }
+     if cbFormsLook.KeyValue = 24 then begin
+       DMBC.CM_AK_REP.CallProcedure('ins_agro_values',[EDateP.DateTime, S]);
+       LogInformation('İlkin məlumatlar toplanır');
+     end;
+     if cbFormsLook.KeyValue = 25 then begin
+       DMBC.CM_AK_REP.CallProcedure('ins_agro_bvalues',[EDateP.DateTime, S]);
+       LogInformation('İlkin məlumatlar toplanır');
+     end;
+
+      if cbFormsLook.KeyValue = 32 then begin
+       DMBC.CM_AK_REP.CallProcedure('ins_agro_bvalues',[EDateP.DateTime, S]);
+       LogInformation('İlkin məlumatlar toplanır');
+     end;
+       if cbFormsLook.KeyValue = 33 then begin
+       DMBC.CM_AK_REP.CallProcedure('ins_agro_bvalues',[EDateP.DateTime, S]);
+       LogInformation('İlkin məlumatlar toplanır');
+     end;
+
+     if cbFormsLook.KeyValue = 26 then begin
+       DMBC.CM_AK_REP.CallProcedure('ins_agro_projvalues',[EDateP.DateTime, S]);
+       LogInformation('İlkin məlumatlar toplanır');
+     end;
+     DMBC.CM_AK_REP.CallProcedure('maketemp',[BDateP.DateTime, EDateP.DateTime]);
+       LogInformation('Ixarc başlandı');
+
+     if Active then CloseAll;
+     Open;
+     First;
+
+     PrepareProgress(RecordCount,rsProgressCaption);
+     While not Eof do begin
+       CrdID := FieldByName('ID').AsInteger;
+       case cbFormsLook.KeyValue of
+       1:
+       InsertOneRow(CrdID, Integer(Trunc(BDateP.DateTime)), Integer(Trunc(EDateP.DateTime)), rgKredStatus.ItemIndex);
+       2:
+       InsertOneRow2(CrdID, Integer(Trunc(BDateP.DateTime)), Integer(Trunc(EDateP.DateTime)));
+       3:
+       InsertOneRow3(CrdID, Integer(Trunc(BDateP.DateTime)), Integer(Trunc(EDateP.DateTime)));
+       4:
+       InsertOneRow4(CrdID);                         
+       5:
+       InsertOneRow5(CrdID, Integer(Trunc(BDateP.DateTime)), Integer(Trunc(EDateP.DateTime)));                         
+       6:
+       InsertOneRow6(CrdID, Integer(Trunc(BDateP.DateTime)), Integer(Trunc(EDateP.DateTime)));                         
+       7:
+       InsertOneRow7(CrdID, Integer(Trunc(BDateP.DateTime)), Integer(Trunc(EDateP.DateTime)));                         
+       8:
+       InsertOneRow8(CrdID, Integer(Trunc(BDateP.DateTime)), Integer(Trunc(EDateP.DateTime)));                         
+       9:
+       InsertOneRow9(CrdID, Integer(Trunc(BDateP.DateTime)), Integer(Trunc(EDateP.DateTime)));                         
+       10:
+       InsertOneRow10(CrdID, Integer(Trunc(BDateP.DateTime)), Integer(Trunc(EDateP.DateTime)));                        
+       11:
+       InsertOneRow11(CrdID, Integer(Trunc(BDateP.DateTime)), Integer(Trunc(EDateP.DateTime)));                        
+       12:
+       InsertOneRow12(CrdID, Integer(Trunc(BDateP.DateTime)), Integer(Trunc(EDateP.DateTime)));                        
+       13:
+       InsertOneRow13(CrdID, Integer(Trunc(BDateP.DateTime)), Integer(Trunc(EDateP.DateTime)));                        
+       14:
+       InsertOneRow14(CrdID, Integer(Trunc(BDateP.DateTime)), Integer(Trunc(EDateP.DateTime)));                       
+       15:
+       InsertOneRow15(CrdID, Integer(Trunc(BDateP.DateTime)), Integer(Trunc(EDateP.DateTime)));                       
+       16:
+       InsertOneRow16(CrdID, Integer(Trunc(BDateP.DateTime)), Integer(Trunc(EDateP.DateTime)));                       
+       17:
+       InsertOneRow17(CrdID, Integer(Trunc(BDateP.DateTime)), Integer(Trunc(EDateP.DateTime)));                      
+       18:
+       InsertOneRow18(CrdID, Integer(Trunc(BDateP.DateTime)), Integer(Trunc(EDateP.DateTime)));                      
+       19:
+       InsertOneRow19(CrdID, Integer(Trunc(BDateP.DateTime)), Integer(Trunc(EDateP.DateTime)));                     
+       20:
+       InsertOneRow20(CrdID, Integer(Trunc(BDateP.DateTime)), Integer(Trunc(EDateP.DateTime)));                     
+       21:
+       InsertOneRow21(CrdID, Integer(Trunc(BDateP.DateTime)), Integer(Trunc(EDateP.DateTime)));                     
+       22:
+       InsertOneRow22(CrdID, Integer(Trunc(BDateP.DateTime)), Integer(Trunc(EDateP.DateTime)));
+       23:
+       InsertOneRow23(CrdID, Integer(Trunc(BDateP.DateTime)), Integer(Trunc(EDateP.DateTime)));
+       24:
+       InsertOneRow24(CrdID, Integer(Trunc(BDateP.DateTime)), Integer(Trunc(EDateP.DateTime)));
+       25:
+       InsertOneRow25(CrdID, Integer(Trunc(BDateP.DateTime)), Integer(Trunc(EDateP.DateTime)));
+       26:
+       InsertOneRow26(CrdID, Integer(Trunc(BDateP.DateTime)), Integer(Trunc(EDateP.DateTime)));
+       27:
+       InsertOneRow27(CrdID, Integer(Trunc(BDateP.DateTime)), Integer(Trunc(EDateP.DateTime)));
+       28:
+       InsertOneRow28(CrdID, Integer(Trunc(BDateP.DateTime)), Integer(Trunc(EDateP.DateTime)));
+       29:
+       InsertOneRow29(CrdID, Integer(Trunc(BDateP.DateTime)), Integer(Trunc(EDateP.DateTime)));
+       30:
+       InsertOneRow30(CrdID, Integer(Trunc(BDateP.DateTime)), Integer(Trunc(EDateP.DateTime)));
+       31:
+       InsertOneRow31(CrdID, Integer(Trunc(BDateP.DateTime)), Integer(Trunc(EDateP.DateTime)));
+       32:
+       InsertOneRow25(CrdID, Integer(Trunc(BDateP.DateTime)), Integer(Trunc(EDateP.DateTime)));
+       33:
+       InsertOneRow25(CrdID, Integer(Trunc(BDateP.DateTime)), Integer(Trunc(EDateP.DateTime)));
+       end;
+       AKProgressForm.ProgressShower.Position := RecNo;
+       AKProgressForm.Caption := rsProgressCaption + FormatFloat('<0.0%>', (100*RecNo)/RecordCount);
+       Next;
+       CommonApplication.ProcessMessages;
+     end;
+     AKProgressForm.Close;
+
+  end;
+case cbFormsLook.KeyValue of
+1:begin
+  with DMBC.ResultDS do begin
+    sql.SaveToFile('c:\before.txt');
+    if CheckBox6.Checked then
+      SQL[3] := 'where districtid='+DistrictsID.AsString;
+    sql.SaveToFile('c:\after.txt');
+
+
+    if not Active then
+      Open
+    else
+      Refresh;
+  end;
+      // ShowMessage(IntToStr(DMBC.ResultDS.RecordCount));
+  if  RGReportType.ItemIndex = 0 then
+    with Kera do begin
+      Connect;
+      ExportDataset(DMBC.ResultDS, 'F1',True);
+    end
+  else
+    with QRF1 do begin
+
+      S := '';
+
+      if CheckBox3.Checked then
+        S := UserGroups.FieldByName('DESCRIPTION').AsString
+      else
+        S := 'Юз';
+
+      lbMainTitle.Caption := Format(rsReportHeaderCaption,[S]);
+
+      qrlBeginDate.Caption := FormatDateTime('dd/mm/yyyy',BDateP.DateTime);
+      qrlEndDate.Caption := FormatDateTime('dd/mm/yyyy',EDateP.DateTime);
+
+      for Counter := 0 to QRF1.ComponentCount-1 do begin
+        if Components[Counter].Tag > 0 then
+          (Components[Counter] as TControl).Enabled := Components[Counter].Tag <= PrintDeep;
+      end;
+
+      if RGPR.ItemIndex = 0 then
+      begin
+        QRExpr13.Expression := 'sum(ResultDS.DEBTOVERMAIN)';
+        QRExpr27.Expression := 'sum(ResultDS.DEBTOVERMAIN)';
+        QRExpr41.Expression := 'sum(ResultDS.DEBTOVERMAIN)';
+        QRExpr55.Expression := 'sum(ResultDS.DEBTOVERMAIN)';
+        QRDBText22.DataField := 'DEBTOVERMAIN';
+      end else
+      begin
+        QRExpr13.Expression := 'sum(ResultDS.DUEBYSCHEME)';
+        QRExpr27.Expression := 'sum(ResultDS.DUEBYSCHEME)';
+        QRExpr41.Expression := 'sum(ResultDS.DUEBYSCHEME)';
+        QRExpr55.Expression := 'sum(ResultDS.DUEBYSCHEME)';
+        QRDBText22.DataField := 'DUEBYSCHEME';
+      end;
+      Preview;
+    end;
+    btnYeniden.Enabled := True;
+end;//case 1
+2:begin
+  with DMBC , QRF2 do begin
+    ResultDS2.Close;
+    F2QisaDS.Close;
+    F2OrtaDS.Close;
+    F2UzunDS.Close;
+    ResultDS2.Open;
+    F2QisaDS.Open;
+    F2OrtaDS.Open;
+    F2UzunDS.Open;
+
+    if CheckBox3.Checked then
+      S := Format(rsForm2Caption,[UserGroups.FieldByName('DESCRIPTION').AsString]);
+
+    qrlBeginDate.Caption := FormatDateTime('dd/mm/yyyy',BDateP.DateTime);
+    qrlEndDate.Caption := FormatDateTime('dd/mm/yyyy',EDateP.DateTime);
+
+    titleLabel.Caption := S;
+    Preview;
+  end;
+end;
+3:begin                  
+  if CheckBox4.Checked then begin
+    PrintDeep := StrToInt(FloatToStr(Round(power(2,4-cbPrintDeep.ItemIndex))));
+  end else begin
+    PrintDeep := 32;
+  end;
+
+  with DMBC.ResultDS3 do begin
+    if cbPrintDeep.ItemIndex = 4 then begin
+      SetVariable('f1', 'branch, purposeid');
+    end else begin
+      SetVariable('f1', 'purposeid');
+    end;
+    if not Active then
+      Open
+    else
+      Refresh;
+    //if Active then ShowMessage(FieldByName('CRDNUM').AsString) else ShowMessage('S');
+  end;
+
+  if  RGReportType.ItemIndex = 0 then
+    with Kera do begin
+      Connect;
+      ExportDataset(DMBC.ResultDS3, 'F3',True);
+    end
+  else
+    with QRF3 do begin
+
+      S := '';
+
+      if CheckBox3.Checked then
+      begin
+        S := UserGroups.FieldByName('DESCRIPTION').AsString;
+        S := '(' + S + ')';
+      end;
+
+      titleLabel.Caption := Format(rsForm3Caption,[S]);
+
+      for Counter := 0 to QRF3.ComponentCount-1 do begin
+        if Components[Counter].Tag > 0 then
+          (Components[Counter] as TControl).Enabled := Components[Counter].Tag <= PrintDeep;
+      end;
+
+      Preview;
+    end;
+    btnYeniden.Enabled := True;
+end;//case 3
+ 4: printreport4;
+ 5: printreport5;
+ 6: printreport6;
+ 7: printreport7;
+ 8: printreport8;
+ 9: printreport9;
+10: printreport10;
+11: printreport11;
+12: printreport12;
+13: printreport13;
+14: printreport14;
+15: printreport15;
+16: printreport16;
+17: printreport17;
+18: printreport18;
+19: printreport19;
+20: printreport20;
+21: printreport21;
+22: printreport22;
+23: printreport23;
+24: printreport24;
+25: printreport25;
+26: printreport26;
+27: printreport27;
+28: printreport28;
+29: printreport29;
+30: printreport30;
+31: printreport31;
+32: printreport32;
+33: printreport33;
+end;//case of statement
+end;
+
+procedure TfrmBCFilter.Button3Click(Sender: TObject);
+var
+ V, Sheet, Sheets   :Variant;
+ E_Row1,OpenedXlsCnt:Integer;
+   a,cell, row, i, j    :Integer;
+   dat :string;
+   SR: TSearchRec;
+ function DesktopPath:string;
+var zpath: array [0..MAX_PATH] of char;
+ begin
+ SHGetFolderPath(0, CSIDL_DESKTOP, 0, SHGFP_TYPE_CURRENT, @zpath);
+ result:=   (zpath);
+ end;
+ begin
+ CopyFile(PChar(ExtractFilePath(ExtractFilePath(ParamStr(0)))+ 'Aqrar.xlsx'),PChar(DesktopPath+'\Aqrar.xlsx'),false);
+
+
+
+dat := 'and DATEOFCONCLUSION between '''+FormatDateTime('d-mmm-yyyy', GCredBegD.DateTime)+''' AND '''+FormatDateTime('d-mmm-yyyy', GCredEndD.DateTime)+''' ';
+  ExcelApplication1.Disconnect;
+  V :=ExcelApplication1.Application;
+  ExcelApplication1.Connect;
+  ExcelApplication1.Visible[0] :=True;
+
+  V.Workbooks.Open((DesktopPath)+ '\Aqrar.xlsx');
+   for OpenedXlsCnt :=1 to 100 do
+  try
+   Sheet := V.Workbooks[OpenedXlsCnt].Worksheets['Baza'];
+   Break;
+  except
+  end;
+  Sheets := V.Sheets;
+  Sheets.Item['Baza'].Activate;
+   OracleDataSet1.SQL[19]:=dat;
+   OracleDataSet1.Open;
+   OracleDataSet1.First;
+   a:=0;     j:=1 ;
+  for a:=0 to OracleDataSet1.RecordCount-1 do
+   begin
+     Sheet.cells[1+j,1]:=OracleDataSet1.fieldbyname('ROWNUM').asinteger;
+     Sheet.cells[1+j,2]:=OracleDataSet1.fieldbyname('NAME').AsString;
+     Sheet.cells[1+j,3]:=OracleDataSet1.fieldbyname('REGION').AsString;
+     Sheet.cells[1+j,4]:=OracleDataSet1.fieldbyname('SAHE').AsString;
+     Sheet.cells[1+j,5]:=OracleDataSet1.fieldbyname('PROTNUM').AsString;
+     Sheet.cells[1+j,6]:=OracleDataSet1.fieldbyname('CUST').AsString;
+     Sheet.cells[1+j,7]:=OracleDataSet1.fieldbyname('EKIN_SAHE').AsFloat;
+     Sheet.cells[1+j,8]:=OracleDataSet1.fieldbyname('PERIOD').AsInteger;
+     Sheet.cells[1+j,9]:=OracleDataSet1.fieldbyname('CREDITLINEAMOUNT').AsFloat;
+     Sheet.cells[1+j,10]:=OracleDataSet1.fieldbyname('ANNUALYINTERESTRATE').AsFloat;
+     Sheet.cells[1+j,11]:=OracleDataSet1.fieldbyname('FRIST_TR').AsFloat;
+     Sheet.cells[1+j,12]:=OracleDataSet1.fieldbyname('FRIST_TRDAT').AsDateTime;
+     Sheet.cells[1+j,13]:=OracleDataSet1.fieldbyname('tr1').AsFloat;
+     Sheet.cells[1+j,14]:= '';
+     Sheet.cells[1+j,15]:=OracleDataSet1.fieldbyname('tr2').AsFloat;
+     Sheet.cells[1+j,16]:= '';
+     Sheet.cells[1+j,17]:=OracleDataSet1.fieldbyname('tr3').AsFloat;
+     Sheet.cells[1+j,18]:='';
+     j:=j+1;
+     OracleDataSet1.Next;
+   end;
+
+ for OpenedXlsCnt :=1 to 100 do
+  try
+   Sheet := V.Workbooks[OpenedXlsCnt].Worksheets['Pambig'];
+   Break;
+  except
+  end;
+
+   Sheets := V.Sheets;
+   Sheets.Item['Pambig'].Activate;
+   Pambiq.SQL[20]:=dat;
+   Pambiq.Open;
+   Pambiq.First;
+   a:=0;     j:=7 ;
+   if Pambiq.RecordCount>0 then
+  begin
+  for a:=0 to Pambiq.RecordCount do
+   begin
+     Sheet.cells[1+j,1]:=Pambiq.fieldbyname('REGION').AsString;
+     Sheet.cells[1+j,2]:=Pambiq.fieldbyname('say').AsInteger;
+     Sheet.cells[1+j,3]:=Pambiq.fieldbyname('EKIN_SAHE').AsFloat;
+     Sheet.cells[1+j,4]:=Pambiq.fieldbyname('CREDITLINEAMOUNT').AsFloat/1000;
+     Sheet.cells[1+j,5]:=Pambiq.fieldbyname('SAY').AsInteger;
+     Sheet.cells[1+j,6]:=Pambiq.fieldbyname('FRIST_TR').AsFloat/1000;
+     Sheet.cells[1+j,7]:=0;
+     Sheet.cells[1+j,8]:=0;
+     Sheet.cells[1+j,9]:=Pambiq.fieldbyname('CREDITLINEAMOUNT').AsFloat/1000-Pambiq.fieldbyname('FRIST_TR').AsFloat/1000;
+     j:=j+1;
+     Pambiq.Next;
+   end;
+    Sheet.cells[j,1]:='Cəmi ';
+    Sheet.cells[j,1].Font.Bold :=true;
+    Sheet.cells[j,1].Font.Color:=clBlue;
+
+    Sheet.cells[j,2]:='=SUM(B8:B'+inttostr(j-1)+')';
+    Sheet.cells[j,2].Font.Bold :=true;
+    Sheet.cells[j,3]:='=SUM(C8:C'+inttostr(j-1)+')';
+    Sheet.cells[j,3].Font.Bold :=true;
+    Sheet.cells[j,4]:='=SUM(D8:D'+inttostr(j-1)+')';
+    Sheet.cells[j,4].Font.Bold :=true;
+    Sheet.cells[j,5]:='=SUM(E8:E'+inttostr(j-1)+')';
+    Sheet.cells[j,5].Font.Bold :=true;
+    Sheet.cells[j,6]:='=SUM(F8:F'+inttostr(j-1)+')';
+    Sheet.cells[j,6].Font.Bold :=true;
+    Sheet.cells[j,7]:='=SUM(G8:G'+inttostr(j-1)+')';
+    Sheet.cells[j,7].Font.Bold :=true;
+    Sheet.cells[j,8]:='=SUM(H8:H'+inttostr(j-1)+')';
+    Sheet.cells[j,8].Font.Bold :=true;
+    Sheet.cells[j,9]:='=SUM(I8:I'+inttostr(j-1)+')';
+    Sheet.cells[j,9].Font.Bold :=true;
+
+    Sheet.Range['A8','I'+inttostr(j)].Borders.Color:=clBlack;
+    end;
+  for OpenedXlsCnt :=1 to 100 do
+  try
+   Sheet := V.Workbooks[OpenedXlsCnt].Worksheets['Tutun'];
+   Break;
+  except
+  end;
+
+   Sheets := V.Sheets;
+   Sheets.Item['Tutun'].Activate;
+   tutun.SQL[20]:=dat;
+   tutun.Open;
+   tutun.First;
+   a:=0;     j:=7 ;
+   if tutun.RecordCount>0 then
+   begin
+  for a:=0 to tutun.RecordCount do
+   begin
+     Sheet.cells[1+j,1]:=tutun.fieldbyname('REGION').AsString;
+     Sheet.cells[1+j,2]:=tutun.fieldbyname('say').AsInteger;
+     Sheet.cells[1+j,3]:=tutun.fieldbyname('EKIN_SAHE').AsFloat;
+     Sheet.cells[1+j,4]:=tutun.fieldbyname('CREDITLINEAMOUNT').AsFloat/1000;
+     Sheet.cells[1+j,5]:=tutun.fieldbyname('SAY').AsInteger;
+     Sheet.cells[1+j,6]:=tutun.fieldbyname('FRIST_TR').AsFloat/1000;
+     Sheet.cells[1+j,7]:=0;
+     Sheet.cells[1+j,8]:=0;
+     Sheet.cells[1+j,9]:=tutun.fieldbyname('CREDITLINEAMOUNT').AsFloat/1000-tutun.fieldbyname('FRIST_TR').AsFloat/1000;
+     j:=j+1;
+     tutun.Next;
+   end;
+   Sheet.cells[j,1]:='Cəmi ';
+    Sheet.cells[j,1].Font.Bold :=true;
+    Sheet.cells[j,1].Font.Color:=clBlue;
+
+    Sheet.cells[j,2]:='=SUM(B8:B'+inttostr(j-1)+')';
+    Sheet.cells[j,2].Font.Bold :=true;
+    Sheet.cells[j,3]:='=SUM(C8:C'+inttostr(j-1)+')';
+    Sheet.cells[j,3].Font.Bold :=true;
+    Sheet.cells[j,4]:='=SUM(D8:D'+inttostr(j-1)+')';
+    Sheet.cells[j,4].Font.Bold :=true;
+    Sheet.cells[j,5]:='=SUM(E8:E'+inttostr(j-1)+')';
+    Sheet.cells[j,5].Font.Bold :=true;
+    Sheet.cells[j,6]:='=SUM(F8:F'+inttostr(j-1)+')';
+    Sheet.cells[j,6].Font.Bold :=true;
+    Sheet.cells[j,7]:='=SUM(G8:G'+inttostr(j-1)+')';
+    Sheet.cells[j,7].Font.Bold :=true;
+    Sheet.cells[j,8]:='=SUM(H8:H'+inttostr(j-1)+')';
+    Sheet.cells[j,8].Font.Bold :=true;
+    Sheet.cells[j,9]:='=SUM(I8:I'+inttostr(j-1)+')';
+    Sheet.cells[j,9].Font.Bold :=true;
+
+    Sheet.Range['A8','I'+inttostr(j)].Borders.Color:=clBlack;
+    end;
+   for OpenedXlsCnt :=1 to 100 do
+  try
+   Sheet := V.Workbooks[OpenedXlsCnt].Worksheets['Gargdali'];
+   Break;
+  except
+  end;
+
+   Sheets := V.Sheets;
+   Sheets.Item['Gargdali'].Activate;
+   qardali.SQL[20]:=dat;
+   qardali.Open;
+   qardali.First;
+   a:=0;     j:=7 ;
+   if qardali.RecordCount>0 then
+   begin
+  for a:=0 to qardali.RecordCount do
+   begin
+     Sheet.cells[1+j,1]:=qardali.fieldbyname('REGION').AsString;
+     Sheet.cells[1+j,2]:=qardali.fieldbyname('say').AsInteger;
+     Sheet.cells[1+j,3]:=qardali.fieldbyname('EKIN_SAHE').AsFloat;
+     Sheet.cells[1+j,4]:=qardali.fieldbyname('CREDITLINEAMOUNT').AsFloat/1000;
+     Sheet.cells[1+j,5]:=qardali.fieldbyname('SAY').AsInteger;
+     Sheet.cells[1+j,6]:=qardali.fieldbyname('FRIST_TR').AsFloat/1000;
+     Sheet.cells[1+j,7]:=0;
+     Sheet.cells[1+j,8]:=0;
+     Sheet.cells[1+j,9]:=qardali.fieldbyname('CREDITLINEAMOUNT').AsFloat/1000-qardali.fieldbyname('FRIST_TR').AsFloat/1000;
+     j:=j+1;
+     qardali.Next;
+   end;
+
+  Sheet.cells[j,1]:='Cəmi ';
+    Sheet.cells[j,1].Font.Bold :=true;
+    Sheet.cells[j,1].Font.Color:=clBlue;
+
+    Sheet.cells[j,2]:='=SUM(B8:B'+inttostr(j-1)+')';
+    Sheet.cells[j,2].Font.Bold :=true;
+    Sheet.cells[j,3]:='=SUM(C8:C'+inttostr(j-1)+')';
+    Sheet.cells[j,3].Font.Bold :=true;
+    Sheet.cells[j,4]:='=SUM(D8:D'+inttostr(j-1)+')';
+    Sheet.cells[j,4].Font.Bold :=true;
+    Sheet.cells[j,5]:='=SUM(E8:E'+inttostr(j-1)+')';
+    Sheet.cells[j,5].Font.Bold :=true;
+    Sheet.cells[j,6]:='=SUM(F8:F'+inttostr(j-1)+')';
+    Sheet.cells[j,6].Font.Bold :=true;
+    Sheet.cells[j,7]:='=SUM(G8:G'+inttostr(j-1)+')';
+    Sheet.cells[j,7].Font.Bold :=true;
+    Sheet.cells[j,8]:='=SUM(H8:H'+inttostr(j-1)+')';
+    Sheet.cells[j,8].Font.Bold :=true;
+    Sheet.cells[j,9]:='=SUM(I8:I'+inttostr(j-1)+')';
+    Sheet.cells[j,9].Font.Bold :=true;
+
+
+   Sheet.Range['A8','I'+inttostr(j)].Borders.Color:=clBlack;
+  end;
+       OracleDataSet1.Close;
+       Pambiq.Close;
+       qardali.close;
+       tutun.Close;
+      dat :='' ;
+      ExcelApplication1.Disconnect;
+      OracleDataSet1.Close;
+end;
+
+procedure TfrmBCFilter.Button4Click(Sender: TObject);
+const
+number_format='#,##0.00';
+number_format_r='#,##0.00%';
+n='yyy';
+d=2;
+f=3;
+
+
+procedure CreateSheet;
+begin
+  try
+   Exl := CreateOleObject('Excel.Application');
+   Exl.WorkBooks.add;
+   Sheet := Exl.Application.Worksheets.Item[1];
+  except
+  end;
+end;
+ procedure DestroySheet;
+begin
+  try
+   Finalize(Sheet);
+   Finalize(Exl);
+  except
+
+  end;
+end;
+procedure ShowSheet;
+begin
+  try
+     Exl.Visible := True;
+  except
+     DestroySheet;
+   end;
+  end;
+var
+s,l,cell, r,i ,  j , k ,m ,w :Integer;
+begin
+     CreateSheet;
+ try
+
+     Sheet.Range['A1:A60000'].ColumnWidth:=10;
+     Sheet.Range['B1:B60000'].ColumnWidth:=10;
+     Sheet.Range['C1:C60000'].ColumnWidth:=20;
+     Sheet.Range['D1:D60000'].ColumnWidth:=40;
+     Sheet.Range['E1:E60000'].ColumnWidth:=30;
+     Sheet.Range['F1:F60000'].ColumnWidth:=12;
+     Sheet.Range['G1:G60000'].ColumnWidth:=12;
+     Sheet.Range['P1:P60000'].ColumnWidth:=12;
+     Sheet.Range['L1:L60000'].ColumnWidth:=12;
+     Sheet.Range['I1:I60000'].ColumnWidth:=16;
+     Sheet.Range['J1:J60000'].ColumnWidth:=18;
+     Sheet.Range['H1:H60000'].ColumnWidth:=12;
+     Sheet.Range['K1:K60000'].ColumnWidth:=15;
+     Sheet.Range['O1:O60000'].ColumnWidth:=17;
+     Sheet.Range['M1:M60000'].ColumnWidth:=17;
+     Sheet.Range['W1:W60000'].ColumnWidth:=13;
+     Sheet.Range['Y1:Y60000'].ColumnWidth:=17;
+     // Sheet.Range['M1:M60000'].ColumnWidth:=12;
+ /////////////////////////////////////////////////////////////////////////// /
+   Sheet.Cells[2,4]:='Yönəltmələr barədə hesabat';
+   Sheet.Cells[2,4].Font.Bold :=true;
+   Sheet.Cells[2,4].Font.Color:=clBlack;
+   Sheet.Cells[2,4].Font.size :=20;
+/////////////////////////////////////////////////////////////////////////////
+       k:=2 ; i:=0;
+
+///////////////////////////////////////////////////////////////////////////
+
+          Sheet.Cells[i+k+1,1]:='Kredit id';
+          Sheet.Cells[i+k+1,1].Font.Name:='Azl Sans Serif';
+          Sheet.Cells[i+k+1,1].Font.Bold :=true;
+          Sheet.Cells[i+k+1,1].Font.Color:=clBlack;
+
+
+          Sheet.Cells[i+k+1,2].Value:='Müştəri id';
+          Sheet.Cells[i+k+1,2].Font.Name:='Azl Sans Serif';
+          Sheet.Cells[i+k+1,2].Font.Bold :=true;
+          Sheet.Cells[i+k+1,2].Font.Color:=clBlack;
+          Sheet.Cells[i+k+1,2].WrapText := true;
+
+          Sheet.Cells[i+k+1,3].Value:='Müqavilə N';
+          Sheet.Cells[i+k+1,3].Font.Name:='Azl Sans Serif';
+          Sheet.Cells[i+k+1,3].Font.Bold :=true;
+          Sheet.Cells[i+k+1,3].Font.Color:=clBlack;
+          Sheet.Cells[i+k+1,3].WrapText := true;
+
+          Sheet.Cells[i+k+1,4]:='Müştəri  ';
+          Sheet.Cells[i+k+1,4].Font.Name:='Azl Sans Serif';
+          Sheet.Cells[i+k+1,4].Font.Bold :=true;
+          Sheet.Cells[i+k+1,4].Font.Color:=clBlack;
+          Sheet.Cells[i+k+1,4].WrapText := true;
+
+          Sheet.Cells[i+k+1,5]:='Hardan';
+          Sheet.Cells[i+k+1,5].Font.Name:='Azl Sans Serif';
+          Sheet.Cells[i+k+1,5].Font.Bold :=true;
+          Sheet.Cells[i+k+1,5].Font.Color:=clBlack;
+          Sheet.Cells[i+k+1,5].WrapText := true;
+
+
+          Sheet.Cells[i+k+1,6]:='Məbləğ ';
+          Sheet.Cells[i+k+1,6].Font.Name:='Azl Sans Serif';
+          Sheet.Cells[i+k+1,6].Font.Bold :=true;
+          Sheet.Cells[i+k+1,6].Font.Color:=clBlack;
+          Sheet.Cells[i+k+1,6].WrapText := true;
+
+          Sheet.Cells[i+k+1,7]:='Yönətmə tarixi ';
+          Sheet.Cells[i+k+1,7].Font.Name:='Azl Sans Serif';
+          Sheet.Cells[i+k+1,7].Font.Bold :=true;
+          Sheet.Cells[i+k+1,7].Font.Color:=clBlack;
+          Sheet.Cells[i+k+1,7].WrapText := true;
+
+
+          Sheet.Cells[i+k+1,8]:='Qətnamənin tarixi';
+          Sheet.Cells[i+k+1,8].Font.Name:='Azl Sans Serif';
+          Sheet.Cells[i+k+1,8].Font.Bold :=true;
+          Sheet.Cells[i+k+1,8].Font.Color:=clBlack;
+          Sheet.Cells[i+k+1,8].WrapText := true;
+
+          Sheet.Cells[i+k+1,9]:='Qətnamənin məbləği';
+          Sheet.Cells[i+k+1,9].Font.Name:='Azl Sans Serif';
+          Sheet.Cells[i+k+1,9].Font.Bold :=true;
+          Sheet.Cells[i+k+1,9].Font.Color:=clBlack;
+          Sheet.Cells[i+k+1,9].WrapText := true;
+
+          Sheet.Cells[i+k+1,10]:='Qətnamənin qalıq məbləği';
+          Sheet.Cells[i+k+1,10].Font.Name:='Azl Sans Serif';
+          Sheet.Cells[i+k+1,10].Font.Bold :=true;
+          Sheet.Cells[i+k+1,10].Font.Color:=clBlack;
+          Sheet.Cells[i+k+1,10].WrapText := true;
+
+          Sheet.Cells[i+k+1,11]:='Filial';
+          Sheet.Cells[i+k+1,11].Font.Name:='Azl Sans Serif';
+          Sheet.Cells[i+k+1,11].Font.Bold :=true;
+          Sheet.Cells[i+k+1,11].Font.Color:=clBlack;
+          Sheet.Cells[i+k+1,11].WrapText := true;
+
+          Sheet.Cells[i+k+1,12]:='Rayon';
+          Sheet.Cells[i+k+1,12].Font.Name:='Azl Sans Serif';
+          Sheet.Cells[i+k+1,12].Font.Bold :=true;
+          Sheet.Cells[i+k+1,12].Font.Color:=clBlack;
+          Sheet.Cells[i+k+1,12].WrapText := true;
+
+          Sheet.Cells[i+k+1,13]:='İlk tranş';
+          Sheet.Cells[i+k+1,13].Font.Name:='Azl Sans Serif';
+          Sheet.Cells[i+k+1,13].Font.Bold :=true;
+          Sheet.Cells[i+k+1,13].Font.Color:=clBlack;
+          Sheet.Cells[i+k+1,13].WrapText := true;
+
+          Sheet.Cells[i+k+1,14]:='Son ödəmə';
+          Sheet.Cells[i+k+1,14].Font.Name:='Azl Sans Serif';
+          Sheet.Cells[i+k+1,14].Font.Bold :=true;
+          Sheet.Cells[i+k+1,14].Font.Color:=clBlack;
+          Sheet.Cells[i+k+1,14].WrapText := true;
+
+          Sheet.Cells[i+k+1,15]:='Verilmiş ';
+          Sheet.Cells[i+k+1,15].Font.Name:='Azl Sans Serif';
+          Sheet.Cells[i+k+1,15].Font.Bold :=true;
+          Sheet.Cells[i+k+1,15].Font.Color:=clBlack;
+          Sheet.Cells[i+k+1,15].WrapText := true;
+
+          Sheet.Cells[i+k+1,16]:='Ödənən əsas ';
+          Sheet.Cells[i+k+1,16].Font.Name:='Azl Sans Serif';
+          Sheet.Cells[i+k+1,16].Font.Bold :=true;
+          Sheet.Cells[i+k+1,16].Font.Color:=clBlack;
+          Sheet.Cells[i+k+1,16].WrapText := true;
+
+          Sheet.Cells[i+k+1,17]:=' Ödənən faiz';
+          Sheet.Cells[i+k+1,17].Font.Name:='Azl Sans Serif';
+          Sheet.Cells[i+k+1,17].Font.Bold :=true;
+          Sheet.Cells[i+k+1,17].Font.Color:=clBlack;
+          Sheet.Cells[i+k+1,17].WrapText := true;
+
+          Sheet.Cells[i+k+1,18]:='Cari ';
+          Sheet.Cells[i+k+1,18].Font.Name:='Azl Sans Serif';
+          Sheet.Cells[i+k+1,18].Font.Bold :=true;
+          Sheet.Cells[i+k+1,18].Font.Color:=clBlack;
+          Sheet.Cells[i+k+1,18].WrapText := true;
+
+          Sheet.Cells[i+k+1,19]:='Ayda ';
+          Sheet.Cells[i+k+1,19].Font.Name:='Azl Sans Serif';
+          Sheet.Cells[i+k+1,19].Font.Bold :=true;
+          Sheet.Cells[i+k+1,19].Font.Color:=clBlack;
+          Sheet.Cells[i+k+1,19].WrapText := true;
+
+
+          Sheet.Cells[i+k+1,20]:='Qalıq';
+          Sheet.Cells[i+k+1,20].Font.Name:='Azl Sans Serif';
+          Sheet.Cells[i+k+1,20].Font.Bold :=true;
+          Sheet.Cells[i+k+1,20].Font.Color:=clBlack;
+          Sheet.Cells[i+k+1,20].WrapText := true;
+
+          Sheet.Cells[i+k+1,21]:='Əsas borc';
+          Sheet.Cells[i+k+1,21].Font.Name:='Azl Sans Serif';
+          Sheet.Cells[i+k+1,21].Font.Bold :=true;
+          Sheet.Cells[i+k+1,21].Font.Color:=clBlack;
+          Sheet.Cells[i+k+1,21].WrapText := true;
+
+          Sheet.Cells[i+k+1,22]:='Faiz Qalıq';
+          Sheet.Cells[i+k+1,22].Font.Name:='Azl Sans Serif';
+          Sheet.Cells[i+k+1,22].Font.Bold :=true;
+          Sheet.Cells[i+k+1,22].Font.Color:=clBlack;
+          Sheet.Cells[i+k+1,22].WrapText := true;
+
+          Sheet.Cells[i+k+1,23]:='Gec Qalıq';
+          Sheet.Cells[i+k+1,23].Font.Name:='Azl Sans Serif';
+          Sheet.Cells[i+k+1,23].Font.Bold :=true;
+          Sheet.Cells[i+k+1,23].Font.Color:=clBlack;
+          Sheet.Cells[i+k+1,23].WrapText := true;
+
+          Sheet.Cells[i+k+1,24]:='Gec faiz qal';
+          Sheet.Cells[i+k+1,24].Font.Name:='Azl Sans Serif';
+          Sheet.Cells[i+k+1,24].Font.Bold :=true;
+          Sheet.Cells[i+k+1,24].Font.Color:=clBlack;
+          Sheet.Cells[i+k+1,24].WrapText := true;
+
+          Sheet.Cells[i+k+1,25]:='Lahiyə';
+          Sheet.Cells[i+k+1,25].Font.Name:='Azl Sans Serif';
+          Sheet.Cells[i+k+1,25].Font.Bold :=true;
+          Sheet.Cells[i+k+1,25].Font.Color:=clBlack;
+          Sheet.Cells[i+k+1,25].WrapText := true;
+
+         main.close;
+         main.SetVariable('dat',Integer(Trunc(BDateP.DateTime)));
+         main.open;
+
+  //   ShowMessage(IntToStr(main.RecordCount));
+       for i:=1 to main.RecordCount do begin
+
+        Sheet.Cells[i+k+1,1].Font.Name:='Azl Sans Serif';
+        Sheet.Cells[i+k+1,1].Font.Bold :=true;
+        Sheet.Cells[i+k+1,1]:=mainID.AsInteger;
+
+        Sheet.Cells[i+k+1,2].Font.Name:='Azl Sans Serif';
+        Sheet.Cells[i+k+1,2].Font.Bold :=true;
+        Sheet.Cells[i+k+1,2]:=mainBOOROWERID.AsInteger;
+
+        Sheet.Cells[i+k+1,3].Font.Name:='Azl Sans Serif';
+        Sheet.Cells[i+k+1,3].Font.Bold :=true;
+        Sheet.Cells[i+k+1,3]:=mainNUMBEROFCREDIT.AsString;
+
+        Sheet.Cells[i+k+1,8].Font.Name:='Azl Sans Serif';
+        Sheet.Cells[i+k+1,8].Font.Bold :=true;
+        Sheet.Cells[i+k+1,8]:=mainGIVEDATE.AsDateTime;
+
+        Sheet.Cells[i+k+1,9].Font.Name:='Azl Sans Serif';
+        Sheet.Cells[i+k+1,9].Font.Bold :=true;
+        Sheet.Cells[i+k+1,9]:=mainTOTALAMOUNT.AsFloat;
+
+        Sheet.Cells[i+k+1,10].Font.Name:='Azl Sans Serif';
+        Sheet.Cells[i+k+1,10].Font.Bold :=true;
+        Sheet.Cells[i+k+1,10]:=mainQET_QALIQ.AsFloat;
+
+        Sheet.Cells[i+k+1,11].Font.Name:='Azl Sans Serif';
+        Sheet.Cells[i+k+1,11].Font.Bold :=true;
+        Sheet.Cells[i+k+1,11]:=mainFILAL.AsString;
+
+        Sheet.Cells[i+k+1,12].Font.Name:='Azl Sans Serif';
+        Sheet.Cells[i+k+1,12].Font.Bold :=true;
+        Sheet.Cells[i+k+1,12]:=mainRAYON.AsString;
+
+        Sheet.Cells[i+k+1,13].Font.Name:='Azl Sans Serif';
+        Sheet.Cells[i+k+1,13].Font.Bold :=true;
+        Sheet.Cells[i+k+1,13]:=mainDATEOFGRANT.AsVariant;
+
+
+        Sheet.Cells[i+k+1,14].Font.Name:='Azl Sans Serif';
+        Sheet.Cells[i+k+1,14].Font.Bold :=true;
+        Sheet.Cells[i+k+1,14]:=mainDUEDATEFIRSTCONTRACT.AsVariant;
+
+        Sheet.Cells[i+k+1,15].Font.Name:='Azl Sans Serif';
+        Sheet.Cells[i+k+1,15].Font.Bold :=true;
+        Sheet.Cells[i+k+1,15]:=mainCREDITLINEAMOUNT.AsFloat;
+
+        Sheet.Cells[i+k+1,16].Font.Name:='Azl Sans Serif';
+        Sheet.Cells[i+k+1,16].Font.Bold :=true;
+        Sheet.Cells[i+k+1,16]:=mainODESAS.AsFloat;
+
+        Sheet.Cells[i+k+1,17].Font.Name:='Azl Sans Serif';
+        Sheet.Cells[i+k+1,17].Font.Bold :=true;
+        Sheet.Cells[i+k+1,17]:=mainODFAIZ.AsFloat;
+
+        Sheet.Cells[i+k+1,18].Font.Name:='Azl Sans Serif';
+        Sheet.Cells[i+k+1,18].Font.Bold :=true;
+        Sheet.Cells[i+k+1,18]:=mainCARI.AsFloat;
+
+        Sheet.Cells[i+k+1,19].Font.Name:='Azl Sans Serif';
+        Sheet.Cells[i+k+1,19].Font.Bold :=true;
+        Sheet.Cells[i+k+1,19]:=mainAyda.AsFloat;;
+
+        Sheet.Cells[i+k+1,20].Font.Name:='Azl Sans Serif';
+        Sheet.Cells[i+k+1,20].Font.Bold :=true;
+        Sheet.Cells[i+k+1,20]:=mainREST.AsFloat+mainINTERESTREST.AsFloat+mainDUEINTERESTREST.AsFloat+mainDUEREST.AsFloat;
+
+        Sheet.Cells[i+k+1,21].Font.Name:='Azl Sans Serif';
+        Sheet.Cells[i+k+1,21].Font.Bold :=true;
+        Sheet.Cells[i+k+1,21]:=mainREST.AsFloat;
+
+        Sheet.Cells[i+k+1,22].Font.Name:='Azl Sans Serif';
+        Sheet.Cells[i+k+1,22].Font.Bold :=true;
+        Sheet.Cells[i+k+1,22]:=mainINTERESTREST.AsFloat;
+
+        Sheet.Cells[i+k+1,23].Font.Name:='Azl Sans Serif';
+        Sheet.Cells[i+k+1,23].Font.Bold :=true;
+        Sheet.Cells[i+k+1,23]:=mainDUEREST.AsFloat;
+
+        Sheet.Cells[i+k+1,24].Font.Name:='Azl Sans Serif';
+        Sheet.Cells[i+k+1,24].Font.Bold :=true;
+        Sheet.Cells[i+k+1,24]:=mainDUEINTERESTREST.AsFloat;
+
+        Sheet.Cells[i+k+1,25].Font.Name:='Azl Sans Serif';
+        Sheet.Cells[i+k+1,25].Font.Bold :=true;
+        Sheet.Cells[i+k+1,25]:=mainCREDPERIOD.AsString;;
+
+         OracleDataSet3.Close;
+         OracleDataSet3.SetVariable('creditid',mainID.AsInteger);
+         OracleDataSet3.open;
+         s:=0;
+         for s:=0 to OracleDataSet3.RecordCount-1 do
+          begin
+        Sheet.Cells[i+k+s+1,11].Font.Name:='Azl Sans Serif';
+        Sheet.Cells[i+k+s+1,11].Font.Bold :=true;
+        Sheet.Cells[i+k+s+1,11]:=mainFILAL.AsString;
+
+        Sheet.Cells[i+k+s+1,12].Font.Name:='Azl Sans Serif';
+        Sheet.Cells[i+k+s+1,12].Font.Bold :=true;
+        Sheet.Cells[i+k+s+1,12]:=mainRAYON.AsString;
+
+            Sheet.Cells[i+k+s+1,4].Font.Name:='Azl Sans Serif';
+            Sheet.Cells[i+k+s+1,4].Font.Bold :=true;
+            Sheet.Cells[i+k+s+1,4].Font.Color :=clBlue;
+            Sheet.Cells[i+k+s+1,4]:=OracleDataSet3NAME.AsString;
+
+            Sheet.Cells[i+k+s+1,5].Font.Name:='Azl Sans Serif';
+            Sheet.Cells[i+k+s+1,5].Font.Bold :=true;
+            Sheet.Cells[i+k+s+1,5].Font.Color :=clBlue;
+            Sheet.Cells[i+k+s+1,5]:=OracleDataSet3WHEREFROM.AsString;
+
+            Sheet.Cells[i+k+s+1,6].Font.Name:='Azl Sans Serif';
+            Sheet.Cells[i+k+s+1,6].Font.Bold :=true;
+            Sheet.Cells[i+k+s+1,6].Font.Color :=clBlue;
+            Sheet.Cells[i+k+s+1,6]:=OracleDataSet3AMMOUNT.AsFloat;
+
+            Sheet.Cells[i+k+s+1,7].Font.Name:='Azl Sans Serif';
+            Sheet.Cells[i+k+s+1,7].Font.Bold :=true;
+            Sheet.Cells[i+k+s+1,7].Font.Color :=clBlue;
+            Sheet.Cells[i+k+s+1,7]:=OracleDataSet3DAT.AsVariant;
+         OracleDataSet3.Next;
+          end;
+           k:=k+s-1;
+       { Exl.Range['B'+Inttostr(i+k+1)+':D'+Inttostr(i+k+1)].Select;
+        Exl.Selection.Interior.ColorIndex :=15;   }
+
+        main.Next;
+
+       end;
+           ShowSheet;
+//       bash:=inttostr(k+1);
+           Sheet.Range['A'+inttostr(3)+':Y'+inttostr(m+k+1+main.RecordCount)].Borders.Color:=clBlack;
+          finally
+
+   Exl.Range['A1:A1'].Select;
+
+   Screen.Cursor := crDefault;
+   DestroySheet;
+
+  end;
+end;
+
+procedure TfrmBCFilter.Button5Click(Sender: TObject);
+begin
+if Ipoteka.Active then
+    Ipoteka.close ;
+    Ipoteka.SetVariable('dat',Integer(Trunc(BDateP.DateTime)));
+    Ipoteka.open ;
+    //showmessage(inttostr(Ipoteka.RecordCount));
+     with EExport do begin
+        Connect;
+        ExportDataset(Ipoteka,'İpoteka',true,false);
+        Disconnect;
+    end;
+
+end;
+
+procedure TfrmBCFilter.FormCreate(Sender: TObject);
+function GetMonLastDay(dM, dY: Word): Word;
+begin
+  if (dM in [1,3,5,7,8,10,12]) then
+    Result := 31
+  else if (dM in [4,6,9,11]) then
+    Result := 30
+  else if (dY div 4 = 0) then
+    Result := 29
+  else
+    Result := 28;
+end;
+var dY, dM, dD: Word;
+begin
+  ZonaDataSet.open;
+  ODSCmActCat.Open;
+  DecodeDate(date, dY, dM, dD);
+  if dM-1=0 then begin
+    dM := 12;
+    dY := dY -1;
+  end else begin
+    dM := dM -1;
+  end;
+  BDateP.DateTime := EncodeDate(dY, dM, 1);
+  EDateP.DateTime := EncodeDate(dY, dM, GetMonLastDay(dM,dY));
+  GCredEndD.DateTime := EDateP.DateTime;
+
+  //BDateP.DateTime := Get_CurrentDate;
+  //EDateP.DateTime := Get_CurrentDate;
+
+  AKProgressForm := TAKProgressForm.Create(Self);
+  DMBC := TDMBC.Create(Self);
+  QRF1 := TQRF1.Create(Self);
+  QRF2 := TQRF2.Create(Self);
+  QRF3 := TQRF3.Create(Self);
+  GBQRF1 := TGBQRF1.Create(Self);
+  QRFProviz := TQRFProviz.Create(Self);
+  btnAll.Visible := UpperCase(CreditsDS.Session.LogonUsername)='SMART';
+  SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+
+procedure TfrmBCFilter.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+  Resize := False
+end;
+
+
+procedure TfrmBCFilter.btnYenidenClick(Sender: TObject);
+var
+  S          : String;
+  PrintDeep  : Integer;
+  Counter    : Integer;
+begin                       
+case cbFormsLook.KeyValue of
+1:begin
+  if CheckBox4.Checked then begin
+    PrintDeep := StrToInt(FloatToStr(power(2,3-cbPrintDeep.ItemIndex)));
+  end else begin
+    PrintDeep := 32;
+  end;
+
+  with DMBC.ResultDS do begin
+    if CheckBox6.Checked then
+      SQL[3] := 'where districtid='+DistrictsID.AsString;
+    if not Active then
+      Open
+    else
+      Refresh;
+  end;
+
+  if  RGReportType.ItemIndex = 0 then
+    with Kera do begin
+      Connect;
+      ExportDataset(DMBC.ResultDS, 'F1',True);
+    end
+  else
+    with QRF1 do begin
+
+      S := '';
+
+      if CheckBox3.Checked then
+      begin
+        S := UserGroups.FieldByName('DESCRIPTION').AsString;
+        S := '(' + S + ')';
+      end;
+
+      lbMainTitle.Caption := Format(rsReportHeaderCaption,[S]);
+
+      qrlBeginDate.Caption := FormatDateTime('dd/mm/yyyy',BDateP.DateTime);
+      qrlEndDate.Caption := FormatDateTime('dd/mm/yyyy',EDateP.DateTime);
+
+      for Counter := 0 to QRF1.ComponentCount-1 do begin
+        if Components[Counter].Tag > 0 then
+          (Components[Counter] as TControl).Enabled := Components[Counter].Tag <= PrintDeep;
+      end;
+
+      if RGPR.ItemIndex = 0 then
+      begin
+        QRExpr13.Expression := 'sum(ResultDS.DEBTOVERMAIN)';
+        QRExpr27.Expression := 'sum(ResultDS.DEBTOVERMAIN)';
+        QRExpr41.Expression := 'sum(ResultDS.DEBTOVERMAIN)';
+        QRExpr55.Expression := 'sum(ResultDS.DEBTOVERMAIN)';
+        QRDBText22.DataField := 'DEBTOVERMAIN';
+      end else
+      begin
+        QRExpr13.Expression := 'sum(ResultDS.DUEBYSCHEME)';
+        QRExpr27.Expression := 'sum(ResultDS.DUEBYSCHEME)';
+        QRExpr41.Expression := 'sum(ResultDS.DUEBYSCHEME)';
+        QRExpr55.Expression := 'sum(ResultDS.DUEBYSCHEME)';
+        QRDBText22.DataField := 'DUEBYSCHEME';
+      end;
+      Preview;
+    end;
+end;//case 1
+2:begin
+
+  PrintDeep := 32;
+
+  with DMBC.ResultDS2 do begin
+    if not Active then Open else Refresh;
+  end;
+
+  if  RGReportType.ItemIndex = 0 then
+    with Kera do begin
+      Connect;
+      ExportDataset(DMBC.ResultDS2, 'F2',True);
+    end
+  else
+    with QRF2 do begin
+
+      S := '';
+
+      if CheckBox3.Checked then
+      begin
+        S := UserGroups.FieldByName('DESCRIPTION').AsString;
+        S := '(' + S + ')';
+      end;
+
+{      lbMainTitle.Caption := Format(rsReportHeaderCaption,[S]);
+
+      qrlBeginDate.Caption := FormatDateTime('dd/mm/yyyy',BDateP.DateTime);
+      qrlEndDate.Caption := FormatDateTime('dd/mm/yyyy',EDateP.DateTime);
+}
+      for Counter := 0 to QRF2.ComponentCount-1 do begin
+        if Components[Counter].Tag > 0 then
+          (Components[Counter] as TControl).Enabled := Components[Counter].Tag <= PrintDeep;
+      end;
+      Preview;
+    end;
+end;//case 2
+3:begin
+           
+  if CheckBox4.Checked then begin
+    PrintDeep := StrToInt(FloatToStr(power(2,4-cbPrintDeep.ItemIndex)));
+  end else begin
+    PrintDeep := 32;
+  end;
+
+  with DMBC.ResultDS3 do begin
+    if not Active then Open else Refresh;
+  end;
+
+  if  RGReportType.ItemIndex = 0 then
+    with Kera do begin
+      Connect;
+      ExportDataset(DMBC.ResultDS3, 'F3',True);
+    end
+  else
+    with QRF3 do begin
+
+      S := '';
+
+      if CheckBox3.Checked then
+      begin
+        S := UserGroups.FieldByName('DESCRIPTION').AsString;
+        S := '(' + S + ')';
+      end;
+
+      titleLabel.Caption := Format(rsForm3Caption,[S]);
+
+      for Counter := 0 to QRF3.ComponentCount-1 do begin
+        if Components[Counter].Tag > 0 then
+          (Components[Counter] as TControl).Enabled := Components[Counter].Tag <= PrintDeep;
+      end;
+
+      Preview;
+    end;
+end;
+
+ 4: printreport4;
+ 5: printreport5;
+ 6: printreport6;
+ 7: printreport7;
+ 8: printreport8;
+ 9: printreport9;
+10: printreport10;
+11: printreport11;
+12: printreport12;
+13: printreport13;
+14: printreport14;
+15: printreport15;
+16: printreport16;
+17: printreport17;
+18: printreport18;
+19: printreport19;
+20: printreport20;
+21: printreport21;
+22: printreport22;
+23: printreport23;
+24: printreport24;
+25: printreport25;
+26: printreport26;
+27: printreport27;
+28: printreport28;
+29: printreport29;
+30: printreport30;
+31: printreport31;
+end;//case statement
+end;
+procedure TfrmBCFilter.CheckBox5Click(Sender: TObject);
+begin
+  if not (Sender as TCheckBox).Checked then exit;
+  if lowercase((Sender as TCheckBox).Name) = 'checkbox5' then
+    CheckBox9.Checked := not CheckBox5.Checked;
+  if lowercase((Sender as TCheckBox).Name) = 'checkbox9' then begin
+    CheckBox5.Checked := not CheckBox9.Checked;
+  end;
+end;
+
+
+
+procedure TfrmBCFilter.BitBtn1Click(Sender: TObject);
+function DesktopPath:string;
+var zpath: array [0..MAX_PATH] of char;
+ begin
+ SHGetFolderPath(0, CSIDL_DESKTOP, 0, SHGFP_TYPE_CURRENT, @zpath);
+ result:=   (zpath);
+end;
+
+begin
+ ShowMessage(DesktopPath);
+end;
+
+procedure TfrmBCFilter.btnAllClick(Sender: TObject);
+var
+  tblsquery : String;
+  Counter   : Integer;
+  PrintDeep : Integer;
+begin
+
+  with DMBC , GBQRF1 do begin
+                 
+    lbMainTitle.Caption := Format(rsReportHeaderCaption,[UserGroups.FieldByName('DESCRIPTION').AsString]);
+
+    qrlBeginDate.Caption := FormatDateTime('dd/mm/yyyy',BDateP.DateTime);
+    qrlEndDate.Caption := FormatDateTime('dd/mm/yyyy',EDateP.DateTime);
+
+    tblsquery := CM_AK_REP.CallStringFunction('gettableselect',[UserGroupsID.AsInteger]);
+    //showmessage(tblsquery);
+    ResultGB.Close;
+    ResultGB.SQL[3] := tblsquery;
+    ResultGB.Open;
+
+    if  RGReportType.ItemIndex = 0 then
+      with Kera do begin
+        Connect;
+        ExportDataset(DMBC.ResultGB, 'F1',True);
+      end
+    else begin
+      if CheckBox4.Checked then begin
+        PrintDeep := StrToInt(FloatToStr(power(2,3-cbPrintDeep.ItemIndex)));
+      end else begin
+        PrintDeep := 32;
+      end;
+                      
+      qrlBeginDate.Caption := FormatDateTime('dd/mm/yyyy',BDateP.DateTime);
+      qrlEndDate.Caption := FormatDateTime('dd/mm/yyyy',EDateP.DateTime);
+
+      for Counter := 0 to GBQRF1.ComponentCount-1 do begin
+        if Components[Counter].Tag > 0 then
+          (Components[Counter] as TControl).Enabled := Components[Counter].Tag <= PrintDeep;
+      end;
+
+      Preview;
+    end;//IF
+
+  end;//WITH
+end;
+
+procedure TfrmBCFilter.cbFormsLookChange(Sender: TObject);
+begin
+  if cbFormsLook.KeyValue = 1 then begin
+     //btnYeniden.Visible := True;
+     btnAll.Visible := True;
+  end else begin
+     ///btnYeniden.Visible := False;
+     btnAll.Visible := False;
+  end;
+end;
+
+end.

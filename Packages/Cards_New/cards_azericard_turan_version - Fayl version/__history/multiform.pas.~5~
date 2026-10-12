@@ -1,0 +1,62 @@
+unit multiform;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, DBGridEh, StdCtrls, Mask, DBCtrlsEh, DBLookupEh, DB, OracleData;
+
+type
+  TMultiCurrency = class(TForm)
+    DBLookupComboBox6: TDBLookupComboboxEh;
+    multi1: TCheckBox;
+    multi2: TCheckBox;
+    DBLookupComboboxEh2: TDBLookupComboboxEh;
+    Edit3: TEdit;
+    OracleDataSet1: TOracleDataSet;
+    edit1: TEdit;
+    Edit2: TEdit;
+    Edit4: TEdit;
+    Button2: TButton;
+    procedure DBLookupComboBox6Change(Sender: TObject);
+
+    procedure FormCreate(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  MultiCurrency: TMultiCurrency;
+
+implementation
+
+uses Unit18, Unitclient2,SBTranslateProc,sboapiDataModuleImpl;
+
+{$R *.dfm}
+
+procedure TMultiCurrency.Button1Click(Sender: TObject);
+begin
+            DataMod_CARDS.max.Close;
+            DataMod_CARDS.max.Open;
+
+DataMod_CARDS.mainpacket.CallProcedure('new_multicard',[DataMod_CARDS.max.FieldByName('id').AsInteger,DBLookupComboBox6.Text]);
+close;
+end;
+
+procedure TMultiCurrency.DBLookupComboBox6Change(Sender: TObject);
+begin
+edit1.Text:=DataMod_CARDS.hesab.FieldByName('currencyname').AsString;
+ Unitclient2.multiacc:=DBLookupComboBox6.Text;
+ Unitclient2.multival:= DataMod_CARDS.hesab.FieldByName('currencyname').AsString;
+end;
+
+
+procedure TMultiCurrency.FormCreate(Sender: TObject);
+begin
+        SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+end.

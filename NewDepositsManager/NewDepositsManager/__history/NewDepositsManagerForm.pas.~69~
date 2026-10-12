@@ -1,0 +1,1097 @@
+﻿unit NewDepositsManagerForm;
+
+{$WARN SYMBOL_PLATFORM OFF}
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActiveX, AxCtrls, NewDepositsManager_TLB, StdVcl, ExtCtrls, Grids,Oracle,Oracledata, XDBGrids,
+  StdCtrls, ComCtrls, ToolWin, DBGridEh, Buttons, Mask, DBCtrlsEh, DBLookupEh,
+  CMExcelExport, ActnList, ImgList, Menus;
+
+const   csUnknown   = -9;
+        csCalculated=-10;
+        csDisabled  =-11;
+
+type
+  TNewDepositsManagerImpl = class(TActiveForm, INewDepositsManagerImpl)
+    Panel1: TPanel;
+    FilterPanel: TPanel;
+    Panel2: TPanel;
+    SpeedButton1: TSpeedButton;
+    GroupBox1: TGroupBox;
+    CBCurrency: TCheckBox;
+    DBLookupComboboxEh1: TDBLookupComboboxEh;
+    GroupBox2: TGroupBox;
+    CBpersons: TCheckBox;
+    DBLookupComboboxEh4: TDBLookupComboboxEh;
+    GroupBox3: TGroupBox;
+    CBClientType: TCheckBox;
+    DBLookupComboboxEh5: TDBLookupComboboxEh;
+    GroupBox4: TGroupBox;
+    CBFilial: TCheckBox;
+    DBLookupComboboxEh2: TDBLookupComboboxEh;
+    GroupBox5: TGroupBox;
+    CBContractType: TCheckBox;
+    DBLookupComboboxEh3: TDBLookupComboboxEh;
+    GroupBox9: TGroupBox;
+    LCBStatus: TComboBox;
+    CBStatus: TCheckBox;
+    GroupBox7: TGroupBox;
+    Label1: TLabel;
+    DTPOpenDate: TDateTimePicker;
+    DTPCloseDate: TDateTimePicker;
+    CBOpendat: TCheckBox;
+    GroupBox6: TGroupBox;
+    BitBtnexp: TBitBtn;
+    Panel3: TPanel;
+    SearchPanel: TGroupBox;
+    Panel4: TPanel;
+    StaticText1: TStaticText;
+    EditContractNo: TEdit;
+    Panel7: TPanel;
+    StaticText2: TStaticText;
+    EditID: TEdit;
+    Panel8: TPanel;
+    StaticText3: TStaticText;
+    EditCustomerid: TEdit;
+    Panel10: TPanel;
+    StaticText5: TStaticText;
+    EditFacticalDebt: TEdit;
+    Panel11: TPanel;
+    StaticText6: TStaticText;
+    EditCustomerName: TEdit;
+    MainGrid: TXDBGrid;
+    Panel5: TPanel;
+    ToolBar: TToolBar;
+    ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
+    ToolButton3: TToolButton;
+    ToolButton4: TToolButton;
+    ToolButton7: TToolButton;
+    ToolButton8: TToolButton;
+    ToolButton14: TToolButton;
+    ToolButton6: TToolButton;
+    ToolButton9: TToolButton;
+    ToolButton10: TToolButton;
+    ToolButton5: TToolButton;
+    ToolButton11: TToolButton;
+    TBFilteration: TToolButton;
+    ActionsMenu: TPopupMenu;
+    miDeposit: TMenuItem;
+    miWithdraw: TMenuItem;
+    N15: TMenuItem;
+    miCapitalization: TMenuItem;
+    miUntimelyWithdraw: TMenuItem;
+    N12: TMenuItem;
+    N9: TMenuItem;
+    N36: TMenuItem;
+    LastPopupMenu: TPopupMenu;
+    miContract: TMenuItem;
+    N16: TMenuItem;
+    N14: TMenuItem;
+    N17: TMenuItem;
+    N18: TMenuItem;
+    N19: TMenuItem;
+    N20: TMenuItem;
+    N21: TMenuItem;
+    N22: TMenuItem;
+    N23: TMenuItem;
+    N25: TMenuItem;
+    N24: TMenuItem;
+    N26: TMenuItem;
+    N27: TMenuItem;
+    N8: TMenuItem;
+    N28: TMenuItem;
+    N10: TMenuItem;
+    N35: TMenuItem;
+    ImageList: TImageList;
+    ActionList1: TActionList;
+    ActnSearch: TAction;
+    ActnFilter: TAction;
+    ActnRefresh: TAction;
+    StatusImages: TImageList;
+    EExport: TCMExcelExport;
+    PopupMenuSettings: TPopupMenu;
+    N1: TMenuItem;
+    N2: TMenuItem;
+    N3: TMenuItem;
+    N4: TMenuItem;
+    N5: TMenuItem;
+    N6: TMenuItem;
+    N7: TMenuItem;
+    N11: TMenuItem;
+    RepairMenu: TPopupMenu;
+    N31: TMenuItem;
+    N32: TMenuItem;
+    N33: TMenuItem;
+    AccountLook: TMenuItem;
+    FayllarBukmarklar1: TMenuItem;
+    iplr1: TMenuItem;
+    Kontrol1: TMenuItem;
+    Panel6: TPanel;
+    StaticText7: TStaticText;
+    EditFACTICALINTERESTDEBT: TEdit;
+    Panel9: TPanel;
+    StaticText4: TStaticText;
+    EditAgentid: TEdit;
+    Panel12: TPanel;
+    StaticText8: TStaticText;
+    EditOstat: TEdit;
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure PrepareFilter;
+    procedure ActiveFormDestroy(Sender: TObject);
+    procedure ActnFilterExecute(Sender: TObject);
+    procedure N7Click(Sender: TObject);
+    procedure N16Click(Sender: TObject);
+    procedure N17Click(Sender: TObject);
+    procedure N10Click(Sender: TObject);
+    procedure TBFilterationClick(Sender: TObject);
+    procedure N35Click(Sender: TObject);
+    procedure N28Click(Sender: TObject);
+    procedure AccountLookClick(Sender: TObject);
+    procedure LoadPlugin3(PluginName :String;PluginParam :String;PluginParam2 :String;PluginParam3 :String);
+    procedure N4Click(Sender: TObject);
+    procedure N2Click(Sender: TObject);
+    procedure N3Click(Sender: TObject);
+    procedure N5Click(Sender: TObject);
+    procedure N11Click(Sender: TObject);
+    procedure ToolButton7Click(Sender: TObject);
+    procedure N27Click(Sender: TObject);
+    procedure N23Click(Sender: TObject);
+    procedure N12Click(Sender: TObject);
+    procedure N9Click(Sender: TObject);
+    procedure N36Click(Sender: TObject);
+    procedure N25Click(Sender: TObject);
+    procedure miWithdrawClick(Sender: TObject);
+    procedure ActnSearchExecute(Sender: TObject);
+    procedure ToolButton9MouseActivate(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y, HitTest: Integer;
+      var MouseActivate: TMouseActivate);
+    procedure N21Click(Sender: TObject);
+    procedure N32Click(Sender: TObject);
+    procedure CBCurrencyClick(Sender: TObject);
+    procedure DTPCloseDateChange(Sender: TObject);
+    procedure DBLookupComboboxEh1Change(Sender: TObject);
+    procedure BitBtnexpClick(Sender: TObject);
+    procedure FayllarBukmarklar1Click(Sender: TObject);
+    procedure iplr1Click(Sender: TObject);
+    procedure EditContractNoKeyPress(Sender: TObject; var Key: Char);
+    procedure MainGridDblClick(Sender: TObject);
+    procedure MainGridTitleClick(Column: TXColumn);
+    procedure miUntimelyWithdrawClick(Sender: TObject);
+    procedure N19Click(Sender: TObject);
+    procedure Kontrol1Click(Sender: TObject);
+    procedure N18Click(Sender: TObject);
+  private
+    { Private declarations }
+    FEvents: INewDepositsManagerImplEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure MouseEnterEvent(Sender: TObject);
+    procedure MouseLeaveEvent(Sender: TObject);
+    procedure PaintEvent(Sender: TObject);
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AlignDisabled: WordBool; safecall;
+    function Get_AlignWithMargins: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_BorderWidth: Integer; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_DockSite: WordBool; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_ExplicitHeight: Integer; safecall;
+    function Get_ExplicitLeft: Integer; safecall;
+    function Get_ExplicitTop: Integer; safecall;
+    function Get_ExplicitWidth: Integer; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_MouseInClient: WordBool; safecall;
+    function Get_ParentCustomHint: WordBool; safecall;
+    function Get_ParentDoubleBuffered: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PopupMode: TxPopupMode; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_ScreenSnap: WordBool; safecall;
+    function Get_SnapBuffer: Integer; safecall;
+    function Get_UseDockManager: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_AlignWithMargins(Value: WordBool); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_BorderWidth(Value: Integer); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_DockSite(Value: WordBool); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_ParentCustomHint(Value: WordBool); safecall;
+    procedure Set_ParentDoubleBuffered(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PopupMode(Value: TxPopupMode); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_ScreenSnap(Value: WordBool); safecall;
+    procedure Set_SnapBuffer(Value: Integer); safecall;
+    procedure Set_UseDockManager(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+  public
+    { Public declarations }
+    procedure Initialize; override;
+    function BuildFilterString :String ;
+  end;
+ var
+ depozit_custid,depozit_contractid:string;
+implementation
+
+uses ComObj, ComServ, NewDepositDataModule,NewCommonDeclsImpl,SBTranslateProc,sboapiDataModuleimpl;
+
+{$R *.DFM}
+
+{ TNewDepositsManagerImpl }
+
+procedure TNewDepositsManagerImpl.ActnSearchExecute(Sender: TObject);
+var
+  SearchField : string;
+  SearchOptions : TSearchRecordOptions;
+begin
+  SearchOptions := [srIgnoreCase ,srPartialMatch];
+
+  with Sender as TEdit  do
+  begin
+    SearchField := copy(Name,5,length(Name));
+    MainGrid.SelectedRows.Clear;
+    with  TOracleDataSet(MainGrid.DataSource.DataSet) do
+    if  not SearchRecord(
+                  SearchField
+                 ,Text
+                 ,SearchOptions + [srFromCurrent , srForward ]
+                 ) then
+    if MessageDlg(
+              'Axtarış sona çatıb.'+#13+'əvvəldən başlamaq istəyirsinizmi?'
+             ,mtInformation
+             ,[mbNo , mbYes]
+             ,0
+             ) = mrYes  then
+    if  not SearchRecord(
+                 SearchField
+                ,Text
+                ,SearchOptions + [ srFromBeginning ]
+                )  then
+    MessageDlg('Yazı tapılmadı!',mtInformation,[mbOK],0);
+  end;
+
+end;
+
+procedure TNewDepositsManagerImpl.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_NewDepositsManagerImplPage); }
+end;
+
+procedure TNewDepositsManagerImpl.EditContractNoKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if ord(Key) = VK_RETURN
+  then  ActnSearchExecute(Sender)
+end;
+
+procedure TNewDepositsManagerImpl.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as INewDepositsManagerImplEvents;
+  inherited EventSinkChanged(EventSink);
+end;
+
+procedure TNewDepositsManagerImpl.FayllarBukmarklar1Click(Sender: TObject);
+begin
+  LoadPlugin('NewDepositsWRSetup.bpl','showSBWRBookmarkSetup');
+end;
+
+procedure TNewDepositsManagerImpl.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnMouseEnter := MouseEnterEvent;
+  OnMouseLeave := MouseLeaveEvent;
+  OnPaint := PaintEvent;
+end;
+
+procedure TNewDepositsManagerImpl.iplr1Click(Sender: TObject);
+begin
+  LoadPlugin('NewDepositsWRGroups.bpl','');
+end;
+
+function TNewDepositsManagerImpl.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TNewDepositsManagerImpl.Get_AlignDisabled: WordBool;
+begin
+  Result := AlignDisabled;
+end;
+
+function TNewDepositsManagerImpl.Get_AlignWithMargins: WordBool;
+begin
+  Result := AlignWithMargins;
+end;
+
+function TNewDepositsManagerImpl.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TNewDepositsManagerImpl.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TNewDepositsManagerImpl.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TNewDepositsManagerImpl.Get_BorderWidth: Integer;
+begin
+  Result := Integer(BorderWidth);
+end;
+
+function TNewDepositsManagerImpl.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TNewDepositsManagerImpl.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TNewDepositsManagerImpl.Get_DockSite: WordBool;
+begin
+  Result := DockSite;
+end;
+
+function TNewDepositsManagerImpl.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TNewDepositsManagerImpl.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TNewDepositsManagerImpl.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TNewDepositsManagerImpl.Get_ExplicitHeight: Integer;
+begin
+  Result := ExplicitHeight;
+end;
+
+function TNewDepositsManagerImpl.Get_ExplicitLeft: Integer;
+begin
+  Result := ExplicitLeft;
+end;
+
+function TNewDepositsManagerImpl.Get_ExplicitTop: Integer;
+begin
+  Result := ExplicitTop;
+end;
+
+function TNewDepositsManagerImpl.Get_ExplicitWidth: Integer;
+begin
+  Result := ExplicitWidth;
+end;
+
+function TNewDepositsManagerImpl.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TNewDepositsManagerImpl.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TNewDepositsManagerImpl.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TNewDepositsManagerImpl.Get_MouseInClient: WordBool;
+begin
+  Result := MouseInClient;
+end;
+
+function TNewDepositsManagerImpl.Get_ParentCustomHint: WordBool;
+begin
+  Result := ParentCustomHint;
+end;
+
+function TNewDepositsManagerImpl.Get_ParentDoubleBuffered: WordBool;
+begin
+  Result := ParentDoubleBuffered;
+end;
+
+function TNewDepositsManagerImpl.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TNewDepositsManagerImpl.Get_PopupMode: TxPopupMode;
+begin
+  Result := Ord(PopupMode);
+end;
+
+function TNewDepositsManagerImpl.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TNewDepositsManagerImpl.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TNewDepositsManagerImpl.Get_ScreenSnap: WordBool;
+begin
+  Result := ScreenSnap;
+end;
+
+function TNewDepositsManagerImpl.Get_SnapBuffer: Integer;
+begin
+  Result := SnapBuffer;
+end;
+
+function TNewDepositsManagerImpl.Get_UseDockManager: WordBool;
+begin
+  Result := UseDockManager;
+end;
+
+function TNewDepositsManagerImpl.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TNewDepositsManagerImpl.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+ procedure TNewDepositsManagerImpl.LoadPlugin3(PluginName :String;PluginParam :String;PluginParam2 :String;PluginParam3 :String);
+var PluginHandle :THandle;
+    exportproc : procedure(s:String;k:String;t:string);
+begin
+   PluginHandle := LoadPackage(ExtractFilePath(Application.ExeName)+PluginName);
+
+   if PluginHandle > 0 then
+   begin
+      @exportproc := GetProcAddress(PluginHandle,'InitPlugin');
+      exportproc(PluginParam,PluginParam2,PluginParam3);
+   end;
+end;
+
+
+
+procedure TNewDepositsManagerImpl.MainGridDblClick(Sender: TObject);
+begin
+  NewDepsitDataModule.sb_aca.CallProcedure('checkadvancedobjectaccess',['DM_CONTRACTUPDATE']);
+  LoadPlugin('NewDepositsContract.bpl','EditContract');
+end;
+
+procedure TNewDepositsManagerImpl.MainGridTitleClick(Column: TXColumn);
+var
+  SortField : String;
+begin
+  SortField := Column.FieldName;
+  if Column.Title.MarkerIndex = 2
+  then
+    SortField := SortField + ' DESC'
+  else
+    SortField := SortField + ' ASC';
+
+    with TXDBGrid(Column.Grid),TOracleDataSet(DataSource.DataSet) do
+    begin
+      BeginOrderUpdate;
+      try
+       SetVariable('OrderField',SortField);
+       RefResh;
+     finally
+       EndOrderUpdate;
+      end;
+    end;
+end;
+
+
+procedure TNewDepositsManagerImpl.miUntimelyWithdrawClick(Sender: TObject);
+begin
+  LoadPlugin('NewDepositsUntimelyEtMoney.bpl','');
+end;
+
+procedure TNewDepositsManagerImpl.miWithdrawClick(Sender: TObject);
+begin
+  LoadPlugin('NewDepositsExtractMoney.bpl','');
+end;
+
+procedure TNewDepositsManagerImpl.AccountLookClick(Sender: TObject);
+begin
+ depozit_custid:=NewDepsitDataModule.DmDataSet.FieldByName('CUSTOMERID').Asstring;
+ depozit_contractid :=NewDepsitDataModule.DmDataSet.FieldByName('ID').Asstring;
+ LoadPlugin3('Sb_General.bpl','depozit_stetment',depozit_custid,depozit_contractid)
+end;
+
+procedure TNewDepositsManagerImpl._Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TNewDepositsManagerImpl.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TNewDepositsManagerImpl.BitBtnexpClick(Sender: TObject);
+begin
+  with EExport do
+   begin
+      MainGrid.DataSource.DataSet.Last;
+      Connect;
+      ExportDataset(MainGrid.DataSource.DataSet,'Depozitlər',True,False);
+      Disconnect;
+   end;
+end;
+
+function TNewDepositsManagerImpl.BuildFilterString : String;
+
+  procedure ConcatFilter(var S: String; const Prefix : String; Checked : Boolean; KeyValue : Variant;check :boolean);
+  const
+     csFormat = '(%s=%s)';
+  var
+    Temp,op : String;
+
+  begin
+
+     if check then op := ' and ' else op := ' or ';
+
+    if Checked then
+    begin
+      Temp := Format(csFormat,[Prefix,Keyvalue]);
+      if S = '' then
+        S := Temp
+      else
+        S :=S + op + Temp;
+    end;
+
+  end;
+
+  procedure  ConcatFilter1(var S: String; var Prefix : String);
+  begin
+     if (S <> '') and (Prefix <> '') then S := S+' and '+Prefix;
+     if (S = '') and (Prefix <> '') then S := Prefix;
+  end;
+
+
+var  FStatus,FopenDat1,FopenDat2,FopenDat : String;
+begin
+  Result := '';
+  FStatus := '';
+  FopenDat1 := '';
+  FopenDat2 := '';
+  FopenDat := '';
+
+  ConcatFilter(Result,'CURRENCY',CBCurrency.Checked,DBLookupComboboxEh1.KeyValue,true);
+  ConcatFilter(Result,'branchid',CBFilial.Checked,DBLookupComboboxEh2.KeyValue,true);
+  ConcatFilter(Result,'contracttype',CBContractType.Checked,DBLookupComboboxEh3.KeyValue,true);
+  ConcatFilter(Result,'clienttype',CBpersons.Checked,DBLookupComboboxEh4.KeyValue,true);
+  ConcatFilter(Result,'personaltype',CBClientType.Checked,DBLookupComboboxEh5.KeyValue,true);
+  //ConcatFilter(Result,'usid',CBUsers.Checked,LCBUsers.KeyValue,true);
+
+  if CBStatus.Checked then
+     Case LCBStatus.ItemIndex of
+          0: FStatus := '(status = 1)';
+          1: FStatus := '(Status = 0)';
+     end;
+
+  if CBOpendat.Checked then
+  begin
+     FopenDat1 := ' opendate >=  '''+FormatDateTime('dd/MM/yyyy',DTPOpenDate.Date)+'''';
+     FopenDat2 := ' opendate <=  '''+FormatDateTime('dd/MM/yyyy',DTPCloseDate.Date)+'''';
+     FopenDat := '('+'('+FopenDat1+')'+' and '+'('+FopenDat2+')'+')';
+  end;
+
+
+  ConcatFilter1(Result,FStatus);
+  ConcatFilter1(Result,FopenDat);
+
+end;
+
+
+procedure TNewDepositsManagerImpl.PrepareFilter;
+begin
+   with NewDepsitDataModule do
+   begin
+      DBLookupComboboxEh1.KeyValue := Valutes.fieldByName('Valute').AsInteger;
+      DBLookupComboboxEh2.KeyValue := Filials.fieldByName('id').AsInteger;
+      DBLookupComboboxEh3.KeyValue := dm_types.fieldByName('id').AsInteger;
+      DBLookupComboboxEh4.KeyValue := dm_categories.fieldByName('id').AsInteger;
+      DBLookupComboboxEh5.KeyValue := dm_persons.fieldByName('id').AsInteger;
+      //LCBUsers.KeyValue := users.fieldByName('id').AsInteger;
+      LCBStatus.ItemIndex := 0;
+   end;
+end;
+
+procedure TNewDepositsManagerImpl.ActiveFormCreate(Sender: TObject);
+begin
+   NewDepsitDataModule := TNewDepsitDataModule.Create(Self);
+   PrepareFilter;
+   ApplicationPath := ExtractFilePath(Application.ExeName);
+   CommonApplication := Application;
+   CommonGrid := MainGrid;
+
+   with NewDepsitDataModule do
+   begin
+      Get_FilialID := FilialID.FieldByname('kod_fil').AsInteger;
+      Get_BankDate := BankDate.FieldByname('Tek_Dat').AsDateTime;
+   end;
+
+   DTPOpenDate.DateTime := Get_BankDate ;
+   DTPCloseDate.DateTime := Get_BankDate;
+   SBTranslateProc.TranslateAllComponents(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TNewDepositsManagerImpl.ActiveFormDestroy(Sender: TObject);
+begin
+  NewDepsitDataModule.Free;
+end;
+
+procedure TNewDepositsManagerImpl.ActnFilterExecute(Sender: TObject);
+begin
+   with MainGrid,SelectedRows do
+        Clear;
+   with MainGrid,DataSource.DataSet do
+   begin
+      Cursor := crSqlWait;
+      Filtered := False;
+      Filter := BuildFilterString;
+      Filtered := true;
+      Cursor := crDefault;
+   end;
+end;
+
+
+procedure TNewDepositsManagerImpl.CBCurrencyClick(Sender: TObject);
+begin
+  ActnFilterExecute(sender);
+end;
+
+procedure TNewDepositsManagerImpl.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TNewDepositsManagerImpl.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TNewDepositsManagerImpl.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TNewDepositsManagerImpl.DBLookupComboboxEh1Change(Sender: TObject);
+begin
+  ActnFilterExecute(sender);
+end;
+
+procedure TNewDepositsManagerImpl.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TNewDepositsManagerImpl.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TNewDepositsManagerImpl.DTPCloseDateChange(Sender: TObject);
+begin
+  DBLookupComboboxEh1Change(nil);
+end;
+
+procedure TNewDepositsManagerImpl.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TNewDepositsManagerImpl.Kontrol1Click(Sender: TObject);
+begin
+  LoadPlugin('NewDepositsControl.bpl','');
+end;
+
+procedure TNewDepositsManagerImpl.MouseEnterEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnMouseEnter;
+end;
+
+procedure TNewDepositsManagerImpl.MouseLeaveEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnMouseLeave;
+end;
+
+procedure TNewDepositsManagerImpl.N10Click(Sender: TObject);
+begin
+  LoadPlugin('NewDepositsFilter.bpl','');
+end;
+
+procedure TNewDepositsManagerImpl.N11Click(Sender: TObject);
+begin
+  LoadPlugin('NewDepositsBalanceSettings.bpl','');
+end;
+
+procedure TNewDepositsManagerImpl.N12Click(Sender: TObject);
+begin
+  LoadPlugin('NewDepositsPercentConverting.bpl','');
+end;
+
+procedure TNewDepositsManagerImpl.N16Click(Sender: TObject);
+begin
+  LoadPlugin('NewDepositsContract.bpl','InsertContract');
+end;
+
+procedure TNewDepositsManagerImpl.N17Click(Sender: TObject);
+begin
+  NewDepsitDataModule.sb_aca.CallProcedure('checkadvancedobjectaccess',['DM_CONTRACTUPDATE']);
+  LoadPlugin('NewDepositsContract.bpl','EditContract');
+end;
+
+procedure TNewDepositsManagerImpl.N18Click(Sender: TObject);
+const  CfMsg = 'Müqavilə bağlannır, əminsinizmi?';
+       CfSelMsg = 'Seçilmiş müqavilələr bağlanır, əminsinizmi?';
+
+var Cf :String;
+    i :Integer;
+begin
+  with MainGrid,SelectedRows do
+       if Count > 1 then Cf := CfSelMsg else Cf := CfMsg;
+
+  if MessageDlg(
+        Cf
+       ,mtConfirmation
+       ,[mbYes, mbNo ]
+       ,0
+       )  = mrNo Then exit ;
+
+   with MainGrid,SelectedRows,DataSource.DataSet do
+   begin
+
+      for i := 0 to Count - 1 do
+      begin
+         GotoBookmark(Pointer(Items[i]));
+         NewDepsitDataModule.dm_stored_programs.CallProcedure('CloseDeposit',['ContractID',FieldByName('ID').AsInteger]);
+      end;
+
+      Refresh;
+   end;
+
+end;
+
+procedure TNewDepositsManagerImpl.N19Click(Sender: TObject);
+var
+   CalculationEnabled :Boolean;
+   ConFMsg :string;
+begin
+   with NewDepsitDataModule,dm_stored_programs do
+   CalculationEnabled := CallBooleanFunction('IsCalculationEnabled',['ContractID',get_SelectedContID]);
+   if  CalculationEnabled  then
+     ConFMsg :='Faizlərin hesablanması dayandırılır, əminsinizmi?'
+   else
+    ConFMsg :='Faizlərin hesablanması davam etdirilir, əminsinizmi?';
+   if MessageDlg(ConFMsg,mtConfirmation,[mbYes,mbNo],0)=mrYes then
+    with NewDepsitDataModule,dm_stored_programs do
+    begin
+       if  CalculationEnabled then
+           CallProcedure('DisableCalculation',['ContractID',get_SelectedContID])
+       else
+          CallProcedure('EnableCalculation',['ContractID',get_SelectedContID])
+    end;
+end;
+
+procedure TNewDepositsManagerImpl.N21Click(Sender: TObject);
+begin
+  LoadPlugin('NewDepositsWReport.bpl','');
+end;
+
+procedure TNewDepositsManagerImpl.N23Click(Sender: TObject);
+begin
+  LoadPlugin('NewDepositsApplyMoney.bpl','');
+end;
+
+procedure TNewDepositsManagerImpl.N25Click(Sender: TObject);
+begin
+  LoadPlugin('NewDepositsExtractMoney.bpl','');
+end;
+
+procedure TNewDepositsManagerImpl.N27Click(Sender: TObject);
+begin
+  LoadPlugin('NewDepositsPercentConverting.bpl','');
+end;
+
+procedure TNewDepositsManagerImpl.N28Click(Sender: TObject);
+var
+    SaveID :Integer;
+begin
+   if NewDepsitDataModule.DmDataSet.RecordCount>0 then
+   begin
+     MainGrid.SelectedRows.Clear;
+     with NewDepsitDataModule,DmDataSet do
+     begin
+       SaveID := Get_SelectedContID;
+       Close;
+       Open;
+       Locate('ID',SaveID,[]);
+     end ;
+   end;
+
+end;
+
+procedure TNewDepositsManagerImpl.N2Click(Sender: TObject);
+begin
+  LoadPlugin('NewDepositsSettings.bpl','showcccgroups');
+end;
+
+procedure TNewDepositsManagerImpl.N32Click(Sender: TObject);
+begin
+  LoadPlugin('NewDepositsReport.bpl','');
+end;
+
+procedure TNewDepositsManagerImpl.N35Click(Sender: TObject);
+begin
+  SearchPanel.Visible := not SearchPanel.Visible
+end;
+
+procedure TNewDepositsManagerImpl.N36Click(Sender: TObject);
+begin
+ LoadPlugin('NewDepositsShedule.bpl','');
+end;
+
+procedure TNewDepositsManagerImpl.N3Click(Sender: TObject);
+begin
+  LoadPlugin('NewDepositsSettings.bpl','showcategories');
+end;
+
+procedure TNewDepositsManagerImpl.N4Click(Sender: TObject);
+begin
+  LoadPlugin('NewDepositsSettings.bpl','showdeposittypes');
+end;
+
+procedure TNewDepositsManagerImpl.N5Click(Sender: TObject);
+begin
+  LoadPlugin('NewDepositsSettings.bpl','showaccountturning');
+end;
+
+procedure TNewDepositsManagerImpl.N7Click(Sender: TObject);
+begin
+   LoadPlugin('NewDepositsPercentSettings.bpl','');
+end;
+
+procedure TNewDepositsManagerImpl.N9Click(Sender: TObject);
+begin
+  LoadPlugin('NewDepositsProlongation.bpl','');
+  NewDepsitDataModule.DmDataSet.Refresh;
+end;
+
+procedure TNewDepositsManagerImpl.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TNewDepositsManagerImpl.Set_AlignWithMargins(Value: WordBool);
+begin
+  AlignWithMargins := Value;
+end;
+
+procedure TNewDepositsManagerImpl.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TNewDepositsManagerImpl.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TNewDepositsManagerImpl.Set_AxBorderStyle(Value: TxActiveFormBorderStyle);
+
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TNewDepositsManagerImpl.Set_BorderWidth(Value: Integer);
+begin
+  BorderWidth := TBorderWidth(Value);
+end;
+
+procedure TNewDepositsManagerImpl.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TNewDepositsManagerImpl.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TNewDepositsManagerImpl.Set_DockSite(Value: WordBool);
+begin
+  DockSite := Value;
+end;
+
+procedure TNewDepositsManagerImpl.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TNewDepositsManagerImpl.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TNewDepositsManagerImpl.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TNewDepositsManagerImpl.Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TNewDepositsManagerImpl.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := string(Value);
+end;
+
+procedure TNewDepositsManagerImpl.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TNewDepositsManagerImpl.Set_ParentCustomHint(Value: WordBool);
+begin
+  ParentCustomHint := Value;
+end;
+
+procedure TNewDepositsManagerImpl.Set_ParentDoubleBuffered(Value: WordBool);
+begin
+  ParentDoubleBuffered := Value;
+end;
+
+procedure TNewDepositsManagerImpl.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TNewDepositsManagerImpl.Set_PopupMode(Value: TxPopupMode);
+begin
+  PopupMode := TPopupMode(Value);
+end;
+
+procedure TNewDepositsManagerImpl.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TNewDepositsManagerImpl.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TNewDepositsManagerImpl.Set_ScreenSnap(Value: WordBool);
+begin
+  ScreenSnap := Value;
+end;
+
+procedure TNewDepositsManagerImpl.Set_SnapBuffer(Value: Integer);
+begin
+  SnapBuffer := Value;
+end;
+
+procedure TNewDepositsManagerImpl.Set_UseDockManager(Value: WordBool);
+begin
+  UseDockManager := Value;
+end;
+
+procedure TNewDepositsManagerImpl.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+procedure TNewDepositsManagerImpl.TBFilterationClick(Sender: TObject);
+begin
+  FilterPanel.Visible :=not FilterPanel.Visible;
+  DTPOpenDate.DateTime := Get_BankDate;
+  DTPCloseDate.DateTime := Get_BankDate;
+  TBFilteration.Down :=FilterPanel.Visible;
+end;
+
+procedure TNewDepositsManagerImpl.ToolButton7Click(Sender: TObject);
+begin
+  N28Click(Sender);
+end;
+
+procedure TNewDepositsManagerImpl.ToolButton9MouseActivate(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y, HitTest: Integer;
+  var MouseActivate: TMouseActivate);
+begin
+  NewDepsitDataModule.sb_aca.CallProcedure('checkadvancedobjectaccess',['DM_ADMIN']);
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TNewDepositsManagerImpl,
+    Class_NewDepositsManagerImpl,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

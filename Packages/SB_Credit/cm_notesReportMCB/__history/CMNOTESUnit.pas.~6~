@@ -1,0 +1,104 @@
+unit CMNOTESUnit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ExtCtrls, StdCtrls, Grids, XDBGrids, DB, OracleData, Oracle;
+
+type
+  TFormNotes = class(TForm)
+    Panel1: TPanel;
+    Panel2: TPanel;
+    Panel3: TPanel;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    Label6: TLabel;
+    Edit1: TEdit;
+    Edit2: TEdit;
+    Edit3: TEdit;
+    Edit4: TEdit;
+    Edit5: TEdit;
+    Edit6: TEdit;
+    Button1: TButton;
+    Button2: TButton;
+    XDBGrid1: TXDBGrid;
+    OracleDataSet1: TOracleDataSet;
+    DataSource1: TDataSource;
+    OracleDataSet2: TOracleDataSet;
+    OraclePackage1: TOraclePackage;
+    procedure Button2Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormNotes: TFormNotes;
+  creditid: integer;
+  procedure InitPlugin(s:string);export;
+implementation
+uses  sboapiDataModuleImpl,CommonDecls;
+
+{$R *.dfm}
+
+procedure InitPlugin(s:string);export;
+begin
+   FormNotes.ShowModal;
+end;
+exports
+     InitPlugin;
+
+procedure TFormNotes.Button1Click(Sender: TObject);
+begin
+ OraclePackage1.CallProcedure('Addcm_notes',
+     ['v_creditid',creditid,
+      'v_par1' , edit1.Text,
+      'v_par2' , edit2.Text,
+      'v_par3' , edit3.Text,
+      'v_par4' , edit4.Text,
+      'v_par5' , edit5.Text,
+      'v_par6' , edit6.Text]);
+
+edit1.Clear;
+edit2.Clear;
+edit3.Clear;
+edit4.Clear;
+edit5.Clear;
+edit6.Clear;
+end;
+
+procedure TFormNotes.Button2Click(Sender: TObject);
+begin
+FormNotes.Close;
+end;
+
+procedure TFormNotes.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+edit1.Clear;
+edit2.Clear;
+edit3.Clear;
+edit4.Clear;
+edit5.Clear;
+edit6.Clear;
+end;
+
+procedure TFormNotes.FormShow(Sender: TObject);
+begin
+creditid:=CommonDBGrid.DataSource.DataSet.FieldByName(sID).AsInteger;
+
+
+end;
+
+initialization
+ FormNotes := TFormNotes.Create(Application);
+
+end.
+end.

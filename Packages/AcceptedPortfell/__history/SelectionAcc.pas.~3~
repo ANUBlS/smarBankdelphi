@@ -1,0 +1,86 @@
+﻿unit SelectionAcc;
+
+interface
+
+uses
+ Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Grids, XDBGrids, StdCtrls,OracleData, ActnList;
+
+type
+  TAccselect = class(TForm)
+    GroupBox1: TGroupBox;
+    Button1: TButton;
+    EditACC_NO: TEdit;
+    EditName: TEdit;
+    XDBGrid: TXDBGrid;
+      procedure ActionSpeedSearchExecute(Sender: TObject);
+    procedure EditACC_NOKeyPress(Sender: TObject; var Key: Char);
+    procedure EditNameKeyPress(Sender: TObject; var Key: Char);
+    procedure Button1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Accselect: TAccselect;
+
+implementation
+
+uses Datamodunit, Unitselection, trasactions;
+
+
+
+procedure TAccselect.ActionSpeedSearchExecute(
+  Sender: TObject);
+var
+  SearchField : string;
+  SearchOptions : TSearchRecordOptions;
+begin
+  SearchOptions := [srIgnoreCase ,srPartialMatch ];
+
+  with Sender as TEdit  do
+  begin
+    SearchField := copy(Name,5,length(Name));
+    with  TOracleDataSet(XDBGrid.DataSource.DataSet) do
+    if  not SearchRecord(
+                  SearchField
+                 ,Text
+                 ,SearchOptions + [srFromCurrent , srForward ]
+                 ) then
+  {  if MessageDlg(
+              'Axtarış sona çatdı.'+#13+'Əvvəldən başlansın?'
+             ,mtInformation
+             ,[mbNo , mbYes]
+             ,0
+             ) = mrYes  then   }
+    if not SearchRecord(
+                 SearchField
+                ,Text
+                ,SearchOptions + [ srFromBeginning ]
+                )  then
+    MessageDlg('Yazı tapılmayıb!',mtInformation,[mbOK],0);
+ end;
+
+end;
+{$R *.dfm}
+
+procedure TAccselect.Button1Click(Sender: TObject);
+begin
+Transacfrm.DBLookupComboboxEh1.Text:=DataMod.cashorsubkrno.FieldByName('ACC_NO').AsString ;
+
+Accselect.Close;
+end;
+
+procedure TAccselect.EditACC_NOKeyPress(Sender: TObject; var Key: Char);
+begin
+if key=#13  then ActionSpeedSearchExecute(Sender);
+end;
+
+procedure TAccselect.EditNameKeyPress(Sender: TObject; var Key: Char);
+begin
+if key=#13  then ActionSpeedSearchExecute(Sender);
+end;
+
+end.

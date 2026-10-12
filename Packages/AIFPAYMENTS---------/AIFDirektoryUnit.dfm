@@ -1,0 +1,111 @@
+object FormAIFDirectory: TFormAIFDirectory
+  Left = 0
+  Top = 0
+  AutoSize = True
+  BorderIcons = []
+  ClientHeight = 126
+  ClientWidth = 277
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poScreenCenter
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object GroupBox1: TGroupBox
+    Left = 0
+    Top = 0
+    Width = 277
+    Height = 126
+    Caption = 'Fayl direktoriyas'#305
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = 8404992
+    Font.Height = -12
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
+    ParentFont = False
+    TabOrder = 0
+    DesignSize = (
+      277
+      126)
+    object SpeedButton6: TSpeedButton
+      Left = 63
+      Top = 87
+      Width = 57
+      Height = 23
+      Anchors = [akRight, akBottom]
+      Caption = 'Q'#601'bul'
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clBlack
+      Font.Height = -12
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+      OnClick = SpeedButton6Click
+    end
+    object SpeedButton1: TSpeedButton
+      Left = 162
+      Top = 87
+      Width = 57
+      Height = 23
+      Anchors = [akRight, akBottom]
+      Caption = #304'mtina'
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clBlack
+      Font.Height = -12
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+      OnClick = SpeedButton1Click
+    end
+    object Panel6: TPanel
+      Left = 2
+      Top = 34
+      Width = 273
+      Height = 28
+      Alignment = taLeftJustify
+      BevelOuter = bvNone
+      Caption = 'G'#601'l'#601'nl'#601'r:'
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clBlack
+      Font.Height = -12
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 0
+      object But_in: TSpeedButton
+        Left = 249
+        Top = 4
+        Width = 21
+        Height = 20
+        Caption = '...'
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -12
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ParentFont = False
+        OnClick = But_inClick
+      end
+      object Edit_IN_Dir: TEdit
+        Left = 47
+        Top = 3
+        Width = 196
+        Height = 24
+        Color = clSilver
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -13
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+        ReadOnly = True
+        TabOrder = 0
+      end
+    end
+  end
+end

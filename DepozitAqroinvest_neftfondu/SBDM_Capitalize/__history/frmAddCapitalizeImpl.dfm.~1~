@@ -1,0 +1,316 @@
+object frmAddCapitalize: TfrmAddCapitalize
+  Left = 301
+  Top = 167
+  Width = 308
+  Height = 234
+  BorderIcons = [biSystemMenu]
+  Color = clBtnFace
+  Font.Charset = RUSSIAN_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poScreenCenter
+  OnCanResize = FormCanResize
+  OnKeyPress = FormKeyPress
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Panel2: TPanel
+    Left = 0
+    Top = 0
+    Width = 300
+    Height = 118
+    Align = alTop
+    BevelInner = bvRaised
+    BevelOuter = bvLowered
+    TabOrder = 0
+    object GroupBox5: TGroupBox
+      Left = 2
+      Top = 58
+      Width = 296
+      Height = 56
+      Align = alTop
+      Caption = '‘аиз м€бл€ьи'
+      TabOrder = 0
+      object Panel4: TPanel
+        Left = 2
+        Top = 15
+        Width = 170
+        Height = 39
+        Align = alLeft
+        BevelInner = bvRaised
+        BevelOuter = bvLowered
+        TabOrder = 0
+        object StaticText2: TStaticText
+          Left = 2
+          Top = 2
+          Width = 166
+          Height = 17
+          Align = alTop
+          Alignment = taCenter
+          Caption = 'ўесабын є'
+          Color = clNavy
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWhite
+          Font.Height = -11
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = []
+          ParentColor = False
+          ParentFont = False
+          TabOrder = 0
+        end
+        object DBEditEh3: TDBEditEh
+          Left = 0
+          Top = 17
+          Width = 172
+          Height = 21
+          TabStop = False
+          Alignment = taLeftJustify
+          Color = clInfoBk
+          DataField = 'INTERESTACCNO'
+          DataSource = frmCapitalize.DepositInfoDatSrc
+          EditButtons = <>
+          TabOrder = 1
+          Visible = True
+        end
+      end
+      object Panel5: TPanel
+        Left = 172
+        Top = 15
+        Width = 114
+        Height = 39
+        Align = alLeft
+        BevelInner = bvRaised
+        BevelOuter = bvLowered
+        TabOrder = 1
+        object StaticText1: TStaticText
+          Left = 2
+          Top = 2
+          Width = 110
+          Height = 17
+          Align = alTop
+          Alignment = taCenter
+          Caption = '√алыг'
+          Color = clNavy
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWhite
+          Font.Height = -11
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = []
+          ParentColor = False
+          ParentFont = False
+          TabOrder = 0
+        end
+        object DBEditEh4: TDBEditEh
+          Left = 0
+          Top = 17
+          Width = 113
+          Height = 21
+          TabStop = False
+          Alignment = taRightJustify
+          Color = clSilver
+          DataField = 'FACTICALINTERESTDEBT'
+          DataSource = frmCapitalize.DepositInfoDatSrc
+          EditButtons = <>
+          TabOrder = 1
+          Visible = True
+        end
+      end
+    end
+    object GroupBox1: TGroupBox
+      Left = 2
+      Top = 2
+      Width = 296
+      Height = 56
+      Align = alTop
+      Caption = 'ясас м€бл€ь'
+      TabOrder = 1
+      object Panel3: TPanel
+        Left = 2
+        Top = 15
+        Width = 170
+        Height = 39
+        Align = alLeft
+        BevelInner = bvRaised
+        BevelOuter = bvLowered
+        TabOrder = 0
+        object StaticText5: TStaticText
+          Left = 2
+          Top = 2
+          Width = 166
+          Height = 17
+          Align = alTop
+          Alignment = taCenter
+          Caption = 'ўесабын є'
+          Color = clNavy
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWhite
+          Font.Height = -11
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = []
+          ParentColor = False
+          ParentFont = False
+          TabOrder = 0
+        end
+        object DBEditEh2: TDBEditEh
+          Left = 0
+          Top = 17
+          Width = 172
+          Height = 21
+          TabStop = False
+          Alignment = taLeftJustify
+          Color = clInfoBk
+          DataField = 'CONTRACTACCNO'
+          DataSource = frmCapitalize.DepositInfoDatSrc
+          EditButtons = <>
+          TabOrder = 1
+          Visible = True
+        end
+      end
+      object Panel7: TPanel
+        Left = 172
+        Top = 15
+        Width = 115
+        Height = 39
+        Align = alLeft
+        BevelInner = bvRaised
+        BevelOuter = bvLowered
+        TabOrder = 1
+        object StaticText6: TStaticText
+          Left = 2
+          Top = 2
+          Width = 111
+          Height = 17
+          Align = alTop
+          Alignment = taCenter
+          Caption = '√алыг'
+          Color = clNavy
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWhite
+          Font.Height = -11
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = []
+          ParentColor = False
+          ParentFont = False
+          TabOrder = 0
+        end
+        object DBEditEh5: TDBEditEh
+          Left = 0
+          Top = 17
+          Width = 113
+          Height = 21
+          TabStop = False
+          Alignment = taRightJustify
+          Color = clSilver
+          DataField = 'FACTICALDEBT'
+          DataSource = frmCapitalize.DepositInfoDatSrc
+          EditButtons = <>
+          TabOrder = 1
+          Visible = True
+        end
+      end
+    end
+  end
+  object Panel1: TPanel
+    Left = 0
+    Top = 118
+    Width = 300
+    Height = 45
+    Align = alTop
+    BevelInner = bvRaised
+    BevelOuter = bvLowered
+    TabOrder = 1
+    object Label1: TLabel
+      Left = 181
+      Top = 3
+      Width = 23
+      Height = 13
+      Caption = '“арих'
+      Color = clScrollBar
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clBlack
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentColor = False
+      ParentFont = False
+    end
+    object Label2: TLabel
+      Left = 5
+      Top = 3
+      Width = 35
+      Height = 13
+      Caption = 'ћ€бл€ь'
+      Color = clScrollBar
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clBlack
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentColor = False
+      ParentFont = False
+    end
+    object EdCapital: TCMCurrencyEdit
+      Left = 3
+      Top = 16
+      Width = 172
+      Height = 21
+      TabOrder = 0
+      Text = '0'
+    end
+    object DTPCapital: TDateTimePicker
+      Left = 178
+      Top = 16
+      Width = 112
+      Height = 21
+      CalAlignment = dtaLeft
+      Date = 39321.7780233565
+      Time = 39321.7780233565
+      DateFormat = dfShort
+      DateMode = dmComboBox
+      Enabled = False
+      Kind = dtkDate
+      ParseInput = False
+      TabOrder = 1
+    end
+  end
+  object Button1: TButton
+    Left = 120
+    Top = 170
+    Width = 75
+    Height = 25
+    Action = ActnTrans
+    Caption = '√€бул'
+    TabOrder = 2
+  end
+  object Button2: TButton
+    Left = 208
+    Top = 170
+    Width = 75
+    Height = 25
+    Caption = '»мтина'
+    TabOrder = 3
+    OnClick = Button2Click
+  end
+  object NLSLocalizer1: TNLSLocalizer
+    Caption = 'ƒепозитин кариталлашдырылмасы'
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    Top = 168
+  end
+  object ActionList1: TActionList
+    Left = 32
+    Top = 168
+    object ActnTrans: TAction
+      Caption = 'ActnTrans'
+      OnExecute = ActnTransExecute
+      OnUpdate = ActnTransUpdate
+    end
+  end
+end

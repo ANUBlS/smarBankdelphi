@@ -1,0 +1,89 @@
+unit frminfo;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ExtCtrls, StdCtrls, Bnkinfo, sboapiDataModuleImpl, DB, OracleData;
+
+type
+  TForm23 = class(TForm)
+    ComboBox1: TComboBox;
+    Button1: TButton;
+    Panel1: TPanel;
+    bankaddinfo: TOracleDataSet;
+    procedure Button1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form23: TForm23;
+
+implementation
+
+{$R *.dfm}
+
+procedure TForm23.Button1Click(Sender: TObject);
+begin
+form21:=tform21.create(self);
+
+
+if combobox1.itemindex=0 then
+begin
+ bankaddinfo.close;
+ bankaddinfo.setvariable('addinfo',0);
+ bankaddinfo.open;
+while not bankaddinfo.EOF do
+  begin
+     form21.ComboBox1.Items.Add(bankaddinfo.FieldByName('cn').AsString);
+     bankaddinfo.Next;
+   end;
+end;
+
+if combobox1.itemindex=1 then
+begin
+ bankaddinfo.close;
+ bankaddinfo.setvariable('addinfo',1);
+ bankaddinfo.open;
+while not bankaddinfo.EOF do
+  begin
+     form21.ComboBox1.Items.Add(bankaddinfo.FieldByName('cn').AsString);
+     bankaddinfo.Next;
+   end;
+end;
+
+if combobox1.itemindex=2 then
+begin
+ bankaddinfo.close;
+ bankaddinfo.setvariable('addinfo',2);
+ bankaddinfo.open;
+
+ while not bankaddinfo.EOF do
+  begin
+     form21.ComboBox1.Items.Add(bankaddinfo.FieldByName('cn').AsString);
+     bankaddinfo.Next;
+   end;
+
+
+end;
+
+
+if combobox1.itemindex=3 then
+begin
+ bankaddinfo.close;
+ bankaddinfo.setvariable('addinfo',3);
+ bankaddinfo.open;
+while not bankaddinfo.EOF do
+  begin
+     form21.ComboBox1.Items.Add(bankaddinfo.FieldByName('cn').AsString);
+     bankaddinfo.Next;
+   end;
+end;
+
+form21.ShowModal;
+end;
+
+end.

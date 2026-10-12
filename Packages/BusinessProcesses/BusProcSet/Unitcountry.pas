@@ -1,0 +1,69 @@
+unit Unitcountry;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls, Grids, DBGrids;
+
+type
+  TFrmCountry = class(TForm)
+    GridAccount1: TDBGrid;
+    Panel1: TPanel;
+    Edit1: TEdit;
+    Edit2: TEdit;
+    procedure Edit1Change(Sender: TObject);
+    procedure Edit2Change(Sender: TObject);
+    procedure GridAccount1DblClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    v_countries: integer;
+    { Public declarations }
+  end;
+
+var
+  FrmCountry: TFrmCountry;
+
+implementation
+
+uses DMBusProcSetimpl, BusinessProcessSetupImpl,sbtranslateproc,sboapiDataModuleimpl;
+
+{$R *.dfm}
+
+procedure TFrmCountry.Edit1Change(Sender: TObject);
+begin
+  if Edit1.Text <> '' then
+
+    DMBusProcSet.ODS_countries.SQL[2] := ' where id like (''%' +
+      Edit1.Text + '%'')'
+
+  else
+    DMBusProcSet.ODS_countries.SQL[2] := '';
+  DMBusProcSet.ODS_countries.Refresh;
+end;
+
+procedure TFrmCountry.Edit2Change(Sender: TObject);
+begin
+  if Edit2.Text <> '' then
+    DMBusProcSet.ODS_countries.SQL[3] := ' where cntr_name like (''%' +
+      Edit2.Text + '%'')'
+  else
+    DMBusProcSet.ODS_countries.SQL[3] := '';
+  DMBusProcSet.ODS_countries.Refresh;
+end;
+
+procedure TFrmCountry.FormCreate(Sender: TObject);
+begin
+SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+
+end;
+
+procedure TFrmCountry.GridAccount1DblClick(Sender: TObject);
+begin
+  v_countries := DMBusProcSet.ODS_countriesid.AsInteger;
+  FrmCountry.Close;
+end;
+
+end.

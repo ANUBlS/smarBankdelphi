@@ -1,0 +1,428 @@
+object TurnOversDataMod: TTurnOversDataMod
+  OldCreateOrder = False
+  Height = 480
+  Width = 696
+  object CurrencyData: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      '  valute as CurrencyID ,'
+      '  valu_name as CurrLName '
+      'from'
+      '  avalute')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000200000014000000430055005200520045004E004300590049004400
+      0100000000001200000043005500520052004C004E0041004D00450001000000
+      0000}
+    Session = sboapiDataModule.SBSession
+    Left = 232
+    Top = 72
+    object CurrencyDataCURRENCYID: TIntegerField
+      FieldName = 'CURRENCYID'
+      Required = True
+    end
+    object CurrencyDataCURRLNAME: TWideStringField
+      FieldName = 'CURRLNAME'
+      Size = 25
+    end
+  end
+  object BranchData: TOracleDataSet
+    SQL.Strings = (
+      'select '
+      '  id as BranchID ,'
+      '  name as BranchName'
+      'from filial')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      0500000002000000100000004200520041004E00430048004900440001000000
+      0000140000004200520041004E00430048004E0041004D004500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 264
+    Top = 160
+    object BranchDataBRANCHID: TFloatField
+      FieldName = 'BRANCHID'
+      Required = True
+    end
+    object BranchDataBRANCHNAME: TWideStringField
+      FieldName = 'BRANCHNAME'
+      Size = 90
+    end
+  end
+  object DataSrcCurrency: TDataSource
+    DataSet = CurrencyData
+    Left = 328
+    Top = 72
+  end
+  object DataSrcBranch: TDataSource
+    DataSet = BranchData
+    Left = 344
+    Top = 160
+  end
+  object TurnOversData: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      
+        '  RestForLastPeriod.AccountID,(select prinad_kod from customers ' +
+        'where id=RestForLastPeriod.kliid)as mesubyet,(SELECT acc_kli_id(' +
+        'RestForLastPeriod.AccNo) from dual )as ID ,(SELECT   SUBSTR (Res' +
+        'tForLastPeriod.AccNo, sbop.get_acc_no_sub+1, 30) FROM DUAL)AS ac' +
+        'c_no2 ,'
+      
+        '  RestForLastPeriod.AccNo , RestForLastPeriod.AccName as ACC_NAM' +
+        'E ,'
+      '  RestForLastPeriod.CurrencyID ,'
+      '  RestForLastPeriod.BranchID ,'
+      '  RestForLastPeriod.BalanceNo ,'
+      '  RestForFirstPeriod.Active as BeginActive ,'
+      '  RestForFirstPeriod.Passive as BeginPassive ,'
+      '  RestForFirstPeriod.LActive as LBeginActive ,'
+      '  RestForFirstPeriod.LPassive as LBeginPassive ,'
+      '  TurnOvers.DTurnOver ,'
+      '  TurnOvers.CTurnOver ,'
+      '  TurnOvers.LDTurnOver ,'
+      '  TurnOvers.LCTurnOver ,'
+      '  RestForLastPeriod.Active as EndActive ,'
+      '  RestForLastPeriod.Passive as EndPassive ,'
+      '  RestForLastPeriod.LActive as LEndActive ,'
+      '  RestForLastPeriod.LPassive as LEndPassive'
+      'from'
+      ''
+      '(select'
+      '  ac.kli_id as kliid, ac.ID as AccountID ,'
+      '  ac.acc_no as AccNo ,'
+      '  b.bal_cn  as BalanceNo ,'
+      ''
+      '  sb_mtoutview.active ('
+      '    ar.ostat,'
+      '    b.typeid,'
+      '    b.additionaltypeid'
+      '  ) as Active ,'
+      ''
+      '  sb_mtoutview.passiv ('
+      '     ar.ostat,'
+      '     b.typeid,'
+      '     b.additionaltypeid'
+      '  ) as Passive ,'
+      ''
+      '  sb_mtoutview.active ('
+      '    ar.pok_ostat,'
+      '    b.typeid,'
+      '    b.additionaltypeid'
+      '  ) as LActive ,'
+      ''
+      '  sb_mtoutview.passiv ('
+      '     ar.pok_ostat,   '
+      '     b.typeid,'
+      '     b.additionaltypeid'
+      '  ) as LPassive'
+      ''
+      'from'
+      '  account ac ,'
+      '  archost ar ,'
+      '  bal_spr%d b  /*52*/'
+      'where'
+      '  ar.acc_id = ac.id and'
+      '  ac.bal_cn%d = b.bal_cn and     /*55*/'
+      '  ar.DatDate = :BeginPeriod  and '
+      '  ((ac.Close_Dat is null)or(ac.Close_Dat > :BeginPeriod)) '
+      ') RestForFirstPeriod ,'
+      ''
+      '(select'
+      '  ac.kli_id as kliid,ac.ID as AccountID ,'
+      '  ac.acc_no as AccNo , ac.name as AccName ,'
+      '  ac.val_acc as CurrencyID ,'
+      '  ac.filial as BranchID ,'
+      '  b.bal_cn  as BalanceNo ,'
+      ''
+      '  sb_mtoutview.active ('
+      '    ar.ostat,'
+      '    b.typeid,'
+      '    b.additionaltypeid'
+      '  ) as Active ,'
+      ''
+      '  sb_mtoutview.passiv ('
+      '     ar.ostat,'
+      '     b.typeid,'
+      '     b.additionaltypeid'
+      '  ) as Passive ,'
+      ''
+      '  sb_mtoutview.active ('
+      '    ar.pok_ostat,'
+      '    b.typeid,'
+      '    b.additionaltypeid'
+      '  ) as LActive ,'
+      ''
+      '  sb_mtoutview.passiv ('
+      '     ar.pok_ostat,'
+      '     b.typeid,'
+      '     b.additionaltypeid'
+      '  ) as LPassive'
+      ''
+      'from'
+      '  account ac ,'
+      '  archost ar ,'
+      '  bal_spr%d b  /*94*/'
+      'where'
+      '  ar.acc_id = ac.id and'
+      '  ac.bal_cn%d = b.bal_cn and  /*97*/'
+      '  ar.DatDate = :EndDate  and'
+      ' ((ac.Close_Dat is null)or(ac.Close_Dat > :BeginPeriod)) '
+      ') RestForLastPeriod ,'
+      ''
+      '(select'
+      '  ac.ID as AccountID ,'
+      '  min(ac.acc_no) as AccNo,'
+      '  min(b.bal_cn)  as BalanceNo ,'
+      '  sum(ar.Obr_D) as DTurnOver ,'
+      '  sum(ar.Obr_K) as CTurnOver ,  '
+      '  sum(ar.Pok_Obr_D) as LDTurnOver ,'
+      '  sum(ar.Pok_Obr_K) as LCTurnOver   '
+      ''
+      'from'
+      '  account ac ,'
+      '  archost ar ,'
+      '  bal_spr%d b  /*114*/'
+      'where'
+      '  ar.acc_id = ac.id and'
+      '  ac.bal_cn%d = b.bal_cn and /*117*/'
+      '  ar.DatDate between :BeginDate and :EndDate'
+      'group by'
+      '  ac.ID'
+      ') TurnOvers'
+      ''
+      'where'
+      '  (RestForLastPeriod.BalanceNo in (%s)) and /*124*/'
+      '   RestForLastPeriod.CurrencyID = %d and /*125*/'
+      '   RestForLastPeriod.BranchID = %d and /*126*/'
+      '   RestForLastPeriod.AccNo like %s and /*127*/'
+      '   TurnOvers.AccountID = RestForFirstPeriod.AccountID  (+) and'
+      '   TurnOvers.AccountID = RestForLastPeriod.AccountID (+) '
+      '   '
+      'order by'
+      
+        '  RestForLastPeriod.BalanceNo, acc_no2,RestForLastPeriod.BranchI' +
+        'D ')
+    Optimize = False
+    Variables.Data = {
+      0400000003000000140000003A0042004500470049004E004400410054004500
+      0C0000000000000000000000100000003A0045004E0044004400410054004500
+      0C0000000000000000000000180000003A0042004500470049004E0050004500
+      520049004F0044000C0000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      0500000015000000120000004100430043004F0055004E005400490044000100
+      00000000100000004D0045005300550042005900450054000100000000000400
+      0000490044000100000000000E0000004100430043005F004E004F0032000100
+      000000000A0000004100430043004E004F000100000000001000000041004300
+      43005F004E0041004D0045000100000000001400000043005500520052004500
+      4E004300590049004400010000000000100000004200520041004E0043004800
+      4900440001000000000012000000420041004C0041004E00430045004E004F00
+      0100000000001600000042004500470049004E00410043005400490056004500
+      0100000000001800000042004500470049004E00500041005300530049005600
+      4500010000000000180000004C0042004500470049004E004100430054004900
+      560045000100000000001A0000004C0042004500470049004E00500041005300
+      53004900560045000100000000001200000044005400550052004E004F005600
+      450052000100000000001200000043005400550052004E004F00560045005200
+      010000000000140000004C0044005400550052004E004F005600450052000100
+      00000000140000004C0043005400550052004E004F0056004500520001000000
+      00001200000045004E0044004100430054004900560045000100000000001400
+      000045004E004400500041005300530049005600450001000000000014000000
+      4C0045004E004400410043005400490056004500010000000000160000004C00
+      45004E0044005000410053005300490056004500010000000000}
+    Cursor = crHourGlass
+    Session = sboapiDataModule.SBSession
+    Left = 32
+    Top = 128
+    object TurnOversDataACCNO: TWideStringField
+      DisplayLabel = 'Hesab N:'
+      FieldName = 'ACCNO'
+      Size = 28
+    end
+    object TurnOversDataid: TFloatField
+      DisplayLabel = 'M'#252#351't'#601'ri '#304'D'
+      FieldName = 'id'
+    end
+    object TurnOversDataACCOUNTID: TFloatField
+      DisplayLabel = 'M'#252#351't'#601'ri '#304'D'
+      FieldName = 'ACCOUNTID'
+      Required = True
+      Visible = False
+    end
+    object TurnOversDataMESUBYET: TFloatField
+      FieldName = 'MESUBYET'
+    end
+    object TurnOversDataCURRENCYID: TIntegerField
+      DisplayLabel = 'Valyuta kodu'
+      FieldName = 'CURRENCYID'
+    end
+    object TurnOversDataBALANCENO: TFloatField
+      DisplayLabel = 'Balans hesab'#305
+      FieldName = 'BALANCENO'
+    end
+    object TurnOversDataBEGINACTIVE: TFloatField
+      DisplayLabel = 'D. '#399'. aktiv'
+      FieldName = 'BEGINACTIVE'
+      DisplayFormat = '#,##0.00'
+    end
+    object TurnOversDataLBEGINACTIVE: TFloatField
+      DisplayLabel = 'D. '#399'. aktiv (man)'
+      FieldName = 'LBEGINACTIVE'
+      DisplayFormat = '#,##0.00'
+    end
+    object TurnOversDataBEGINPASSIVE: TFloatField
+      DisplayLabel = 'D. '#399'. passiv'
+      FieldName = 'BEGINPASSIVE'
+      DisplayFormat = '#,##0.00'
+    end
+    object TurnOversDataLBEGINPASSIVE: TFloatField
+      DisplayLabel = 'D. '#399'. passiv (man)'
+      FieldName = 'LBEGINPASSIVE'
+      DisplayFormat = '#,##0.00'
+    end
+    object TurnOversDataDTURNOVER: TFloatField
+      DisplayLabel = 'D. d'#246'vriyy'#601
+      FieldName = 'DTURNOVER'
+      DisplayFormat = '#,##0.00'
+    end
+    object TurnOversDataLDTURNOVER: TFloatField
+      DisplayLabel = 'D. d'#246'vriyy'#601' (man)'
+      FieldName = 'LDTURNOVER'
+      DisplayFormat = '#,##0.00'
+    end
+    object TurnOversDataCTURNOVER: TFloatField
+      DisplayLabel = 'K. d'#246'vriyy'#601
+      FieldName = 'CTURNOVER'
+      DisplayFormat = '#,##0.00'
+    end
+    object TurnOversDataLCTURNOVER: TFloatField
+      DisplayLabel = 'K. d'#246'vriyy'#601' (man)'
+      FieldName = 'LCTURNOVER'
+      DisplayFormat = '#,##0.00'
+    end
+    object TurnOversDataENDACTIVE: TFloatField
+      DisplayLabel = 'D. S. aktiv'
+      FieldName = 'ENDACTIVE'
+      DisplayFormat = '#,##0.00'
+    end
+    object TurnOversDataLENDACTIVE: TFloatField
+      DisplayLabel = 'D. S.. aktiv (man)'
+      FieldName = 'LENDACTIVE'
+      DisplayFormat = '#,##0.00'
+    end
+    object TurnOversDataENDPASSIVE: TFloatField
+      DisplayLabel = 'D. S. passiv'
+      FieldName = 'ENDPASSIVE'
+      DisplayFormat = '#,##0.00'
+    end
+    object TurnOversDataLENDPASSIVE: TFloatField
+      DisplayLabel = 'D. S. passiv (man)'
+      FieldName = 'LENDPASSIVE'
+      DisplayFormat = '#,##0.00'
+    end
+    object TurnOversDataACC_NAME: TWideStringField
+      DisplayLabel = 'Hesab'#305'n ad'#305
+      FieldName = 'ACC_NAME'
+      Size = 100
+    end
+    object TurnOversDataBRANCHID: TIntegerField
+      DisplayLabel = 'Filial kodu'
+      FieldName = 'BRANCHID'
+    end
+  end
+  object DataSrcTurnOvers: TDataSource
+    DataSet = TurnOversData
+    Left = 128
+    Top = 120
+  end
+  object SYSDAT: TOracleDataSet
+    SQL.Strings = (
+      'select tek_dat from sysdat')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 40
+    Top = 64
+    object SYSDATTEK_DAT: TDateTimeField
+      FieldName = 'TEK_DAT'
+      Required = True
+    end
+  end
+  object PeriodPrefixData: TOracleDataSet
+    SQL.Strings = (
+      'select '
+      '  MAX(DAT) as PeriodPrefix'
+      'from '
+      '  Operkurs'
+      'where '
+      '  DAT<:ADATE')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000C0000003A00410044004100540045000C00000000000000
+      00000000}
+    Session = sboapiDataModule.SBSession
+    Left = 40
+    Top = 192
+    object PeriodPrefixDataPERIODPREFIX: TDateTimeField
+      FieldName = 'PERIODPREFIX'
+    end
+  end
+  object BankInfo: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      '  Bank ,'
+      '  INN ,'
+      '  Logo ,'
+      '  ManagerTitle ,'
+      '  AccountantTitle ,'
+      '  Sedr as Manager ,'
+      '  Buhaltr as Accountant'
+      'from BankInfo'
+      ' '
+      ' ')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000700000008000000420041004E004B00010000000000060000004900
+      4E004E00010000000000080000004C004F0047004F0000000000000018000000
+      4D0041004E0041004700450052005400490054004C0045000100000000001E00
+      00004100430043004F0055004E00540041004E0054005400490054004C004500
+      0100000000000E0000004D0041004E0041004700450052000100000000001400
+      00004100430043004F0055004E00540041004E005400010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 40
+    Top = 248
+    object BankInfoBANK: TWideStringField
+      FieldName = 'BANK'
+      Size = 80
+    end
+    object BankInfoINN: TWideStringField
+      FieldName = 'INN'
+      Size = 15
+    end
+    object BankInfoLOGO: TBlobField
+      FieldName = 'LOGO'
+    end
+    object BankInfoMANAGERTITLE: TWideStringField
+      FieldName = 'MANAGERTITLE'
+      Size = 128
+    end
+    object BankInfoACCOUNTANTTITLE: TWideStringField
+      FieldName = 'ACCOUNTANTTITLE'
+      Size = 128
+    end
+    object BankInfoMANAGER: TWideStringField
+      DisplayWidth = 50
+      FieldName = 'MANAGER'
+      Size = 50
+    end
+    object BankInfoACCOUNTANT: TWideStringField
+      FieldName = 'ACCOUNTANT'
+      Size = 50
+    end
+  end
+  object lenght: TOracleDataSet
+    SQL.Strings = (
+      'select * from settings where name = '#39'AccNoSearchPos'#39)
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 256
+    Top = 256
+  end
+end

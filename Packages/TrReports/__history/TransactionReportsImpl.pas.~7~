@@ -1,0 +1,456 @@
+﻿unit TransactionReportsImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActiveX, AxCtrls, TransactionReportsX_TLB, StdVcl,ExcelXP,Variants, CMExcelExport,
+  StdCtrls, ExtCtrls, ComCtrls, OleServer;
+
+type
+  TTransactionReports = class(TActiveForm, ITransactionReports)
+    rgRepType: TRadioGroup;
+    GroupBox1: TGroupBox;
+    dtpRep: TDateTimePicker;
+    Button1: TButton;
+    GroupBox2: TGroupBox;
+    cb0: TCheckBox;
+    cb1: TCheckBox;
+    cb2: TCheckBox;
+    ExcelApplication1: TExcelApplication;
+    Memo1: TMemo;
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+  private
+    { Private declarations }
+    FEvents: ITransactionReportsEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(const Value: IFontDisp); safecall;
+    procedure AboutBox; safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+  public
+    { Public declarations }
+    procedure Initialize; override;
+  end;
+
+implementation
+
+uses ComObj, ComServ, About1, TrRepDM, uQrpTrRep,sboapiDataModuleImpl, SBTranslateProc;
+
+{$R *.DFM}
+
+{ TTransactionReports }
+
+procedure TTransactionReports.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_TransactionReportsPage); }
+end;
+
+procedure TTransactionReports.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as ITransactionReportsEvents;
+end;
+
+procedure TTransactionReports.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TTransactionReports.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TTransactionReports.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TTransactionReports.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TTransactionReports.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TTransactionReports.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TTransactionReports.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TTransactionReports.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TTransactionReports.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TTransactionReports.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TTransactionReports.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TTransactionReports.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TTransactionReports.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TTransactionReports.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TTransactionReports.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TTransactionReports.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TTransactionReports.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TTransactionReports.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TTransactionReports.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TTransactionReports._Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TTransactionReports.AboutBox;
+begin
+  ShowTransactionReportsAbout;
+end;
+
+procedure TTransactionReports.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TTransactionReports.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TTransactionReports.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TTransactionReports.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TTransactionReports.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TTransactionReports.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TTransactionReports.KeyPressEvent(Sender: TObject;
+  var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TTransactionReports.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TTransactionReports.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TTransactionReports.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TTransactionReports.Set_AxBorderStyle(
+  Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TTransactionReports.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TTransactionReports.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TTransactionReports.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TTransactionReports.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TTransactionReports.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TTransactionReports.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TTransactionReports.Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TTransactionReports.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TTransactionReports.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TTransactionReports.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TTransactionReports.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TTransactionReports.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TTransactionReports.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+procedure TTransactionReports.ActiveFormCreate(Sender: TObject);
+begin
+  DataModuleTrRep := TDataModuleTrRep.Create(Self);
+  qrp1 := Tqrp1.Create(Self);
+  dtpRep.Date := DataModuleTrRep.sysdat.fieldbyname('tek_dat').AsDateTime;
+  SBTranslateProc.TranslateAllComponents(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TTransactionReports.Button1Click(Sender: TObject);
+ var
+  i,j,index: Integer;
+  ExcelApp,sheet: Variant;
+const
+  sqlvar = 'select p.* from all_provs p where p.dat=''%s''';
+begin
+  with DataModuleTrRep, odsRep do begin
+    close;
+    odsRep.sql.text := format(sqlvar, [formatdatetime('dd-mmm-yyyy', dtpRep.DateTime)]);
+    Filtered := True;
+    Filter := '(1=1)';
+   if (not cb0.Checked) then Filter := Filter + ' and (optype<>0)';
+   if (not cb1.Checked) then Filter := Filter + ' and (optype<>1)';
+   if (not cb2.Checked) then Filter := Filter + ' and (optype<>2)';
+    showmessage(Filter);
+   // showmessage(odsRep.sql.text);
+   //  memo1.Text:= odsRep.sql.text;
+     exit;
+    open;
+
+   if rgRepType.ItemIndex = 1 then
+      qrp1.preview
+    else begin
+
+ ExcelApp := CreateOleObject('Excel.Application');
+ ExcelApp.Visible := False;
+ ExcelApp.WorkBooks.Add(-4167);
+ ExcelApp.WorkBooks[1].WorkSheets[1].name := 'Export';
+ sheet:=ExcelApp.WorkBooks[1].WorkSheets['Export'];
+ excelapp.WorkBooks[1].WorkSheets[1].Rows[1].Borders.color:=clGray;
+ index:=1;
+
+  sheet.Range['A1:A60000','A1:A60000'].ColumnWidth:=20;
+  sheet.Range['B1:B60000','B1:B60000'].ColumnWidth:=20;
+  sheet.Range['C1:C60000','C1:C60000'].ColumnWidth:=25;
+  sheet.Range['D1:D60000','D1:D60000'].ColumnWidth:=25;
+  sheet.Range['E1:E60000','E1:E60000'].ColumnWidth:=25;
+  sheet.Range['F1:F60000','F1:F60000'].ColumnWidth:=25;
+  sheet.Range['G1:G60000','G1:G60000'].ColumnWidth:=25;
+  sheet.Range['H1:H60000','H1:H60000'].ColumnWidth:=25;
+  sheet.Range['I1:I60000','I1:I60000'].ColumnWidth:=25;
+  sheet.Range['J1:I60000','J1:I60000'].ColumnWidth:=25;
+  sheet.Range['K1:I60000','K1:I60000'].ColumnWidth:=25;
+  sheet.Range['L1:I60000','L1:I60000'].ColumnWidth:=25;
+  sheet.Range['M1:I60000','M1:I60000'].ColumnWidth:=25;
+
+
+  DataModuleTrRep.odsRep.First ;
+
+
+
+      for i:=1 to  DataModuleTrRep.odsRep.RecordCount do
+      begin
+
+Sheet.Cells[1,1].Value:=' № ' ;
+Sheet.Cells[1,2].Value:='Daxil edən';
+Sheet.Cells[1,3].Value:='Təsdiqləyən';
+Sheet.Cells[1,4].Value:='Ləvğ edən';
+Sheet.Cells[1,5].Value:='Tarix';
+Sheet.Cells[1,6].Value:= 'Daxil etmə vaxtı';
+Sheet.Cells[1,7].Value:='Ləğv etmə vaxtı';
+Sheet.Cells[1,8].Value:='Debet';
+Sheet.Cells[1,9].Value:='Kredit';
+Sheet.Cells[1,10].Value:='Debet məbləğ';
+Sheet.Cells[1,11].Value:='Kredit məbləğ';
+Sheet.Cells[1,12].Value:='Təyinatı';
+Sheet.Cells[1,13].Value:='Növü';
+
+  for j:=1 to  DataModuleTrRep.odsRep.RecordCount do
+
+sheet.cells[index+1,1]:=fieldbyname('ID').AsString;
+sheet.cells[index+1,2]:=fieldbyname('OPER').AsString;
+sheet.cells[index+1,3]:=fieldbyname('COMMITER').AsString;
+sheet.cells[index+1,4]:=fieldbyname('DELETER').AsString;;
+sheet.cells[index+1,5]:=fieldbyname('DAT').AsString;
+sheet.cells[index+1,6]:=fieldbyname('ADDTIME').AsString;
+sheet.cells[index+1,7]:=fieldbyname('DELETETIME').AsString;
+sheet.cells[index+1,8]:=fieldbyname('DEBT').AsString;
+sheet.cells[index+1,9]:=fieldbyname('KREDIT').AsString;
+sheet.cells[index+1,10]:=fieldbyname('AMMOUNT').AsString;
+sheet.cells[index+1,11]:=fieldbyname('LAMMOUNT').AsString;
+sheet.cells[index+1,12]:=fieldbyname('NAME').AsString;
+sheet.cells[index+1,13]:=fieldbyname('OPTP').AsString;;
+
+       inc(index);
+       DataModuleTrRep.odsRep.Next;
+
+      end;
+       ExcelApp.Visible := true;
+
+      {ExcelExport.Connect;
+      ExcelExport.ExportDataset(odsRep,'Rep', True);
+      ExcelExport.Disconnect; }
+    end;
+  end;
+
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TTransactionReports,
+    Class_TransactionReports,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

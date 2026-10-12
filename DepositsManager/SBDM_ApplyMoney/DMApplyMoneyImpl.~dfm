@@ -1,0 +1,267 @@
+object DMApplyMoney: TDMApplyMoney
+  OldCreateOrder = False
+  Left = 213
+  Top = 150
+  Height = 480
+  Width = 696
+  object Tranches: TOracleDataSet
+    SQL.Strings = (
+      'SELECT id, hdate, total, trid'
+      '  FROM sbcm_tranches'
+      '  where id# = :ContractID'
+      'order by hdate')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    Variables.Data = {
+      03000000010000000B0000003A434F4E54524143544944030000000000000000
+      000000}
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = False
+    Active = False
+    Left = 32
+    Top = 32
+    object TranchesID: TFloatField
+      FieldName = 'ID'
+      Required = True
+      Visible = False
+    end
+    object TranchesTOTAL: TFloatField
+      DisplayLabel = 'Мябляь'
+      FieldName = 'TOTAL'
+      DisplayFormat = '#,##0.00'
+    end
+    object TranchesHDATE: TDateTimeField
+      DisplayLabel = 'Тарих'
+      FieldName = 'HDATE'
+      Required = True
+    end
+    object TranchesTRID: TFloatField
+      FieldName = 'TRID'
+      Visible = False
+    end
+  end
+  object TranchesDatSrc: TDataSource
+    DataSet = Tranches
+    Left = 120
+    Top = 24
+  end
+  object DebitAccs: TOracleDataSet
+    SQL.Strings = (
+      '/*select id,'
+      '       acc_no,'
+      '       name'
+      'from account '
+      'where close_dat is null'
+      'and kli_id =:KliID'
+      'and  bal_cn1 in ( select accgroup from '
+      
+        'sbcm_acc_zone_info where zoneid = (select zoneid from sbcm_acc_z' +
+        'ones'
+      'where name = '#39'Account'#39'))'
+      'union all*/'
+      'select '
+      '       /*+ FIRST_ROWS_200(account) */'
+      '       id,'
+      '       acc_no,'
+      '       name'
+      'from account '
+      'where close_dat is null'
+      'and  bal_cn1 in ( select accgroup from '
+      
+        'sbcm_acc_zone_info where zoneid = (select zoneid from sbcm_acc_z' +
+        'ones'
+      'where name = '#39'InternalBankAccs'#39'))'
+      'order by acc_no'
+      ''
+      ''
+      '')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crSQLWait
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = False
+    Active = False
+    Left = 32
+    Top = 88
+    object DebitAccsID: TFloatField
+      FieldName = 'ID'
+    end
+    object DebitAccsACC_NO: TStringField
+      FieldName = 'ACC_NO'
+      Size = 4000
+    end
+    object DebitAccsNAME: TStringField
+      FieldName = 'NAME'
+      Size = 4000
+    end
+  end
+  object DebitAccsDatSrc: TDataSource
+    DataSet = DebitAccs
+    Left = 104
+    Top = 88
+  end
+  object sbcm_tranches: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    Debug = False
+    PackageName = 'sbcm_credit_tranches'
+    ParameterMode = pmNamed
+    Cursor = crDefault
+    Optimize = True
+    Left = 32
+    Top = 152
+  end
+  object DepositInfo: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      '     cust.name,'
+      '     intr.interest,'
+      '     cont.amount,'
+      '     cont.currency,'
+      '     cont.customerid'
+      'from customers cust,'
+      '     sbcm_interests intr,'
+      '     sbcm_contracts cont'
+      'where'
+      'cont.id = :ContractID and '
+      'cust.id = cont.customerid'
+      'and intr.id# = :ContractID ')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    Variables.Data = {
+      03000000010000000B0000003A434F4E54524143544944030000000000000000
+      000000}
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = False
+    Active = False
+    Left = 232
+    Top = 24
+    object DepositInfoNAME: TStringField
+      FieldName = 'NAME'
+      Size = 90
+    end
+    object DepositInfoINTEREST: TFloatField
+      FieldName = 'INTEREST'
+      Required = True
+    end
+    object DepositInfoAMOUNT: TFloatField
+      FieldName = 'AMOUNT'
+    end
+    object DepositInfoCURRENCY: TFloatField
+      FieldName = 'CURRENCY'
+    end
+    object DepositInfoCUSTOMERID: TFloatField
+      FieldName = 'CUSTOMERID'
+    end
+  end
+  object DepositInfoDatSrc: TDataSource
+    DataSet = DepositInfo
+    Left = 312
+    Top = 24
+  end
+  object CustAccDatSrc: TDataSource
+    DataSet = CustAcc
+    Left = 320
+    Top = 80
+  end
+  object CustAcc: TOracleDataSet
+    SQL.Strings = (
+      'select clientaccid from sbcm_contract_accounts'
+      'where id# = :Contractid')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    Variables.Data = {
+      03000000010000000B0000003A434F4E54524143544944030000000000000000
+      000000}
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = False
+    Active = False
+    Left = 240
+    Top = 80
+    object CustAccCLIENTACCID: TFloatField
+      FieldName = 'CLIENTACCID'
+    end
+  end
+end

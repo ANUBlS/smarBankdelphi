@@ -1,0 +1,412 @@
+object TurnOvers_Form: TTurnOvers_Form
+  Left = 285
+  Top = 140
+  Width = 696
+  Height = 494
+  ActiveControl = DTPBeginDate
+  Caption = 'TurnOvers_Form'
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  OnCreate = ActiveFormCreate
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 696
+    Height = 494
+    Align = alClient
+    BevelOuter = bvNone
+    Color = clGray
+    TabOrder = 0
+    object Panel2: TPanel
+      Left = 0
+      Top = 0
+      Width = 258
+      Height = 494
+      Align = alLeft
+      Color = clGray
+      TabOrder = 0
+      object GroupBox1: TGroupBox
+        Left = 1
+        Top = 1
+        Width = 256
+        Height = 84
+        Align = alTop
+        Caption = #1058#1072#1088#1080#1093' '#1072#1088#1072#1083#1099#1100#1099
+        Color = clBtnFace
+        ParentColor = False
+        TabOrder = 0
+        object Label1: TLabel
+          Left = 151
+          Top = 26
+          Width = 26
+          Height = 13
+          Caption = '- '#1076#1103#1085
+        end
+        object Label2: TLabel
+          Left = 151
+          Top = 55
+          Width = 26
+          Height = 13
+          Caption = '- '#1076#1103#1082
+        end
+        object DTPBeginDate: TDateTimePicker
+          Left = 12
+          Top = 20
+          Width = 129
+          Height = 21
+          Date = 37902.626475104200000000
+          Time = 37902.626475104200000000
+          TabOrder = 0
+          OnChange = DTPBeginDateChange
+        end
+        object DTPEndDate: TDateTimePicker
+          Left = 12
+          Top = 52
+          Width = 129
+          Height = 21
+          Date = 37902.626483067100000000
+          Time = 37902.626483067100000000
+          TabOrder = 1
+          OnChange = DTPBeginDateChange
+        end
+      end
+      object GroupBox2: TGroupBox
+        Left = 1
+        Top = 85
+        Width = 256
+        Height = 45
+        Align = alTop
+        Caption = #1042#1072#1083#1081#1091#1090#1072
+        Color = clBtnFace
+        ParentColor = False
+        TabOrder = 1
+        object CBCurrency: TSearchCombo
+          Left = 9
+          Top = 16
+          Width = 231
+          Height = 22
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -12
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 0
+          DataSource = TurnOversDataMod.DataSrcCurrency
+          ViewField = 'CurrLName'
+          DefaultString = 'B'#252't'#252'n valyutalar'
+          DefaultStringUse = True
+          DefaultStringColor = clNavy
+        end
+      end
+      object GroupBox3: TGroupBox
+        Left = 1
+        Top = 130
+        Width = 256
+        Height = 148
+        Align = alTop
+        Caption = #1041#1072#1083#1072#1085#1089' '#1097#1077#1089#1072#1073#1083#1072#1088#1099
+        Color = clBtnFace
+        ParentColor = False
+        TabOrder = 2
+        object GroupBox4: TGroupBox
+          Left = 2
+          Top = 15
+          Width = 252
+          Height = 44
+          Align = alTop
+          Caption = #1065#1077#1089#1072#1073' '#1087#1083#1072#1085#1099
+          TabOrder = 0
+          object CBAccountType: TComboBox
+            Left = 8
+            Top = 16
+            Width = 231
+            Height = 22
+            Style = csDropDownList
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+            TabOrder = 0
+            Items.Strings = (
+              'I - hesab plan'#305
+              'II - hesab plan'#305
+              'III - hesab plan'#305
+              'IV - hesab plan'#305)
+          end
+        end
+        object GroupBox5: TGroupBox
+          Left = 2
+          Top = 59
+          Width = 252
+          Height = 87
+          Align = alClient
+          Caption = #1057#1077#1095#1080#1083#1084#1080#1096' '#1073#1072#1083#1072#1085#1089' '#1097#1077#1089#1072#1073#1083#1072#1088#1099' '#1094#1079#1088#1103
+          TabOrder = 1
+          object Label3: TLabel
+            Left = 13
+            Top = 42
+            Width = 133
+            Height = 13
+            Caption = #1065#1077#1089#1072#1073' '#1097#1080#1089#1089#1103#1083#1103#1088#1080#1085#1103' '#1101#1102#1088#1103
+          end
+          object AccountListEdit: TEdit
+            Left = 8
+            Top = 17
+            Width = 231
+            Height = 21
+            TabOrder = 0
+            OnChange = DTPBeginDateChange
+            OnClick = AccountListEditClick
+          end
+          object AccountListEditSH: TEdit
+            Left = 6
+            Top = 58
+            Width = 233
+            Height = 21
+            TabOrder = 1
+            OnClick = AccountListEditSHClick
+          end
+        end
+      end
+      object GroupBox6: TGroupBox
+        Left = 1
+        Top = 278
+        Width = 256
+        Height = 43
+        Align = alTop
+        Caption = #1060#1080#1083#1080#1072#1083
+        Color = clBtnFace
+        ParentColor = False
+        TabOrder = 3
+        object CBBranch: TSearchCombo
+          Left = 9
+          Top = 15
+          Width = 231
+          Height = 22
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -12
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 0
+          DataSource = TurnOversDataMod.DataSrcBranch
+          ViewField = 'BranchName'
+          DefaultString = 'B'#252't'#252'n filiallar'
+          DefaultStringUse = True
+          DefaultStringColor = clNavy
+        end
+      end
+      object RGAmountType: TRadioGroup
+        Left = 1
+        Top = 328
+        Width = 256
+        Height = 58
+        Caption = #1052#1103#1073#1083#1103#1100#1080#1085' '#1092#1086#1088#1084#1072#1089#1099
+        Color = clBtnFace
+        ItemIndex = 0
+        Items.Strings = (
+          #1042#1072#1083#1081#1091#1090#1072#1076#1072
+          #1052#1072#1085#1072#1090' '#1077#1082#1074#1080#1074#1072#1083#1077#1085#1090#1080#1085#1076#1103)
+        ParentColor = False
+        TabOrder = 4
+        OnClick = RGAmountTypeClick
+      end
+      object GroupBox7: TGroupBox
+        Left = 1
+        Top = 321
+        Width = 256
+        Height = 38
+        Align = alTop
+        Color = clBtnFace
+        ParentColor = False
+        TabOrder = 5
+        object CBWithAccNames: TCheckBox
+          Left = 9
+          Top = 13
+          Width = 104
+          Height = 18
+          Caption = #1065#1077#1089#1072#1073' '#1072#1076#1083#1072#1088#1099' '#1080#1083#1103
+          TabOrder = 0
+        end
+      end
+      object Panel3: TPanel
+        Left = 1
+        Top = 359
+        Width = 256
+        Height = 73
+        Align = alTop
+        BevelInner = bvRaised
+        BevelOuter = bvLowered
+        TabOrder = 6
+        object SBExecute: TSpeedButton
+          Left = 151
+          Top = 6
+          Width = 86
+          Height = 53
+          Flat = True
+          Glyph.Data = {
+            36010000424D3601000000000000760000002800000015000000100000000100
+            040000000000C000000000000000000000001000000000000000000000000000
+            80000080000000808000800000008000800080800000C0C0C000808080000000
+            FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00333333333333
+            333333333000333333333333333333333000338FF3FF3333333333333000338C
+            F38CFF33333333333000338CF38CCCFF333333333000338CF38CCCCCFF333333
+            3000338CF38CCCCCCCFF33333000338CF38CCCCCCCCCFF333000338CF38CCCCC
+            CCCC88F33000338CF38CCCCCCC8833333000338CF38CCCCC883333333000338C
+            F38CCC88333333333000338CF38C88333333333330003388F388333333333333
+            3000333333333333333333333000333333333333333333333000}
+          OnClick = SBExecuteClick
+        end
+        object RGReportType: TRadioGroup
+          Left = 2
+          Top = 2
+          Width = 120
+          Height = 69
+          Align = alLeft
+          ItemIndex = 0
+          Items.Strings = (
+            #1065#1077#1089#1072#1073#1072#1090' '
+            'Excel Export')
+          TabOrder = 0
+        end
+      end
+    end
+    object LogMemo: TRichEdit
+      Left = 258
+      Top = 0
+      Width = 438
+      Height = 494
+      Align = alClient
+      Font.Charset = TURKISH_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      Lines.Strings = (
+        'LogMemo')
+      ParentFont = False
+      TabOrder = 1
+      ExplicitLeft = 360
+      ExplicitTop = 176
+      ExplicitWidth = 185
+      ExplicitHeight = 89
+    end
+  end
+  object ImageList1: TImageList
+    Left = 448
+    Top = 64
+    Bitmap = {
+      494C010101000800080010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      0000000000003600000028000000400000001000000001001000000000000008
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000000000000000FF7FFF7FFF7FFF7F
+      FF7FFF7FFF7FFF7FFF7FFF7F0000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000000000000000000000001042FF7FFF7FFF7FFF7FFF7F
+      FF7FFF7FFF7FFF7FFF7FFF7F0000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000000000000000000000001042FF7FFF7FFF7FFF7FFF7F
+      FF7FFF7FFF7FFF7FFF7FFF7F0000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000000000000000000000001042FF7FFF7FFF7FFF7FFF7F
+      FF7FFF7FFF7FFF7FFF7FFF7F0000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000000000000000000000001042FF7FFF7FFF7FFF7FFF7F
+      FF7FFF7FFF7FFF7FFF7FFF7F0000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000000000000000000000001042FF7FFF7FFF7FFF7FFF7F
+      FF7FFF7FFF7FFF7FFF7FFF7F0000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000000000000000000000001042FF7FFF7FFF7FFF7FFF7F
+      FF7FFF7FFF7FFF7FFF7FFF7F0000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000000000000000000000001042FF7FFF7FFF7FFF7FFF7F
+      FF7FFF7FFF7FFF7FFF7FFF7F0000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000000000000000000000001042FF7FFF7FFF7FFF7FFF7F
+      FF7FFF7FFF7FFF7FFF7FFF7F0000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000000000000000000000001042FF7FFF7FFF7FFF7FFF7F
+      FF7FFF7FFF7FFF7FFF7FFF7F0000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000000000000000000000001042FF7FFF7FFF7FFF7F0000
+      1863FF7FFF7FFF7FFF7FFF7F0000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000000000000000000000001042FF7FFF7FFF7FFF7F1863
+      0000FF7FFF7FFF7FFF7F18630000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000000000000000000000001042FF7FFF7FFF7F0000FF7F
+      1863FF7FFF7FFF7F186300000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000000000000000000000001042FF7F1042104210420000
+      1042104210421042000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000104210421042000010421042
+      1042104200000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000424D3E000000000000003E000000
+      2800000040000000100000000100010000000000800000000000000000000000
+      000000000000000000000000FFFFFF00E0030000000000008003000000000000
+      8003000000000000800300000000000080030000000000008003000000000000
+      8003000000000000800300000000000080030000000000008003000000000000
+      800300000000000080030000000000008007000000000000800F000000000000
+      801F000000000000807F00000000000000000000000000000000000000000000
+      000000000000}
+  end
+  object TurnOversExporter: TCMExcelExport
+    ConnectTo = ctNewInstance
+    StyleColumnWidth = cwAutoFit
+    ColumnWidth = 0
+    FontTitles.Charset = DEFAULT_CHARSET
+    FontTitles.Color = clWindowText
+    FontTitles.Height = -11
+    FontTitles.Name = 'Tahoma'
+    FontTitles.Style = []
+    BorderTitles.BackColor = clSilver
+    BorderTitles.BorderColor = clNavy
+    OrientationTitles = 0
+    FontData.Charset = DEFAULT_CHARSET
+    FontData.Color = clWindowText
+    FontData.Height = -11
+    FontData.Name = 'Tahoma'
+    FontData.Style = []
+    FontSummary.Charset = DEFAULT_CHARSET
+    FontSummary.Color = clWindowText
+    FontSummary.Height = -11
+    FontSummary.Name = 'Tahoma'
+    FontSummary.Style = []
+    SummarySelection = ssGiven
+    SummaryCalculation = scSUM
+    Left = 121
+    Top = 260
+  end
+end

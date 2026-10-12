@@ -1,0 +1,253 @@
+unit card_Exchange_file;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Menus, CMExcelExport, ImgList, ComCtrls, Grids, DBGrids, StdCtrls,
+  FileCtrl, ToolWin, Buttons, ExtCtrls;
+
+type
+  Texchange_files = class(TForm)
+    Panel1: TPanel;
+    RefwithSel: TSpeedButton;
+    CoolBar1: TCoolBar;
+    ToolBar1: TToolBar;
+    ToolButton3: TToolButton;
+    isertbtn: TToolButton;
+    ToolButton1: TToolButton;
+    ToolButton7: TToolButton;
+    CTInboxRich: TRichEdit;
+    FileListBox1: TFileListBox;
+    DBGrid1: TDBGrid;
+    Animate1: TAnimate;
+    ImageList1: TImageList;
+    CMExcelExport1: TCMExcelExport;
+    PopupMenu1: TPopupMenu;
+    selectall1: TMenuItem;
+    DBGrid2: TDBGrid;
+    procedure ToolButton3Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure isertbtnClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  exchange_files: Texchange_files;
+
+implementation
+uses  SBTranslateProc,sboapiDataModuleImpl, Unit18;
+{$R *.dfm}
+
+
+function CheckFileExt(fname : string) : boolean;
+    var i, checkFileExtLen: integer;
+        fileExt : String;
+begin
+      checkFileExtLen:=0;
+      fileExt:='';
+      fileExt:= trim(ExtractFileExt(fname));
+      for i:=0 to length(fileext) do
+        begin
+        if fileExt[i] in ['0'..'9','.'] then inc(checkFileExtLen);
+        end;
+      {check for file extention}
+      if checkFileExtLen <> length(fileext) then result:=false else result:=true;
+end;
+
+function DirectoryExists(const Name: string): Boolean;
+var
+  Code: Integer;
+begin
+  Code := GetFileAttributes(PChar(Name));
+  Result := (Code <> -1) and (FILE_ATTRIBUTE_DIRECTORY and Code <> 0);
+end;
+
+procedure Texchange_files.FormCreate(Sender: TObject);
+begin
+SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure Texchange_files.isertbtnClick(Sender: TObject);
+var i,j,rowcount:integer;
+    STmessage,all,names:string;
+    f:textfile;
+    v_dir:string;
+begin
+
+DataMod_CARDS.mainpacket.CallProcedure('delete_exchangefile',[]);
+v_dir:=GetCurrentDir;
+
+   if not DirectoryExists('C:\AZCARD\IN') then MkDir('C:\AZCARD\IN');
+   FileListBox1.Directory:='C:\AZCARD\IN';
+   FileListBox1.Update;
+   if FileListBox1.Items.Count = 0 then exit;
+   {******************* AZERCARD PGP ZIP OPEN ***********************}
+  // Extract_PGP_Zip('C*.0*','C*.1*','C*.2*','C*.3*');
+   {******************* AZERCARD PGP ZIP OPEN ***********************}
+   FileListBox1.Mask:='*.*';
+   FileListBox1.Update;
+
+   Datamod_cards.UMUMI.Active:=false;
+   Datamod_cards.UMUMI.SQL.Clear;
+   Datamod_cards.UMUMI.SQL.Add('select card_exchange_FILES.rowid,card_exchange_FILES.* from card_exchange_FILES');
+   Datamod_cards.UMUMI.Active:=true;
+      for i:=0 to FileListBox1.items.Count-1 do
+   begin
+      Application.ProcessMessages;
+      if (copy(FileListBox1.items[i],0,1) <> 'C')and((copy(FileListBox1.items[i],0,1) <> 'c')) then Continue;
+      Datamod_cards.UMUMI1.Active:=false;
+      Datamod_cards.UMUMI1.SQL.Clear;
+      Datamod_cards.UMUMI1.SQL.Add('select * from card_exchange_FILES where filename = '''+FileListBox1.items[i]+'''');
+      Datamod_cards.UMUMI1.Active:=true;
+      if Datamod_cards.UMUMI1.RecordCount>0 then
+      case MessageDlg('The file "'+FileListBox1.items[i]+'" already exits, do you want replace it!? ',mtConfirmation,[mbyes,mbno],0) of
+           mryes:begin
+                 Datamod_cards.UMUMI1.Active:=false;
+                 Datamod_cards.UMUMI1.SQL.Clear;
+                 Datamod_cards.UMUMI1.SQL.Add('delete from card_exchange_FILES where file_name = '''+FileListBox1.items[i]+'''');
+                 Datamod_cards.UMUMI1.ExecSQL;
+                end;
+           mrno:continue;
+           end;
+     Animate1.Visible:=True;
+     Animate1.Active:=True;
+     Animate1.Play(0,0,1);
+      {LINK TO FILE}
+     AssignFile(F,'C:\AZCARD\IN\'+FileListBox1.Items[i]);
+     Reset(F);
+      rowcount:=0;
+      while not eof(f) do begin rowcount:=rowcount+1;Readln(f);end;
+      STmessage:='';
+      Reset(f);
+      for j:=1 to rowcount-1 do
+      begin
+          Application.ProcessMessages;
+          Readln(F,Stmessage);
+          if j = 1 then Continue;
+        //  if trim(copy(STmessage,19,3)) = 'BAL'  then Continue;
+          Datamod_cards.UMUMI.Append;
+          Datamod_cards.UMUMI.FieldByName('Filename').AsString := FileListBox1.Items[i];
+          names:=FileListBox1.Items[i];
+          Datamod_cards.UMUMI.FieldByName('CONTRACT_NUMBER').AsString := trim(copy(STmessage,0,21)); //--
+          Datamod_cards.UMUMI.FieldByName('DEVICE_NO').AsString := trim(copy(STmessage,22,11));  //--
+          Datamod_cards.UMUMI.FieldByName('DEVICE_NAME').AsString := trim(copy(STmessage,33,33));
+          Datamod_cards.UMUMI.FieldByName('TRANS_DATE').AsString := trim(copy(STmessage,66,17));
+          Datamod_cards.UMUMI.FieldByName('TRANS_AMNT').AsString := trim(copy(STmessage,82,16));
+          Datamod_cards.UMUMI.FieldByName('TRANS_CURR').AsString := trim(copy(STmessage,98,4));
+          Datamod_cards.UMUMI.FieldByName('RATE').AsString := trim(copy(STmessage,101,5));
+          Datamod_cards.UMUMI.FieldByName('RECVD_AMNT').AsString := trim(copy(STmessage,106,21));
+          Datamod_cards.UMUMI.FieldByName('RECVD_CURR').AsString := trim(copy(STmessage,127,4));
+          Datamod_cards.UMUMI.FieldByName('ROUND_AMNT').AsString := trim(copy(STmessage,130,14));
+          Datamod_cards.UMUMI.FieldByName('round_CURR').AsString := trim(copy(STmessage,143,4));
+          Datamod_cards.UMUMI.FieldByName('rrn').AsString := trim(copy(STmessage,147,14));
+          Datamod_cards.UMUMI.FieldByName('status').AsString := '0';
+          Datamod_cards.UMUMI.FieldByName('dat').AsDateTime := now;
+
+           Datamod_cards.UMUMI.Post;
+
+      end;
+      DataMod_CARDS.mainpacket.CallProcedure('exchangearxiv',[FileListBox1.Items[i]]);
+     CloseFile(F);
+
+   end;
+      Animate1.active:=False;
+   Animate1.Visible:=False;
+
+
+
+   Animate1.Stop;
+   MessageDlg('All messages are sent in base!',mtInformation,[mbOK],0);
+    FileListBox1.Directory:=v_dir;
+
+
+end;
+
+procedure Texchange_files.ToolButton3Click(Sender: TObject);
+var i,j,k,h,z,rowcount,selst,selstF,lengthofTA,msgcount :integer;
+    all,all1,STmessage,currency,syssim,fileExt:String;
+    test,transummUSD,amountsummUSD,feeamounsummUSD:real;
+    transummAZM,amountsummAZM,feeamounsummAZM:real;
+    transummEUR,amountsummEUR,feeamounsummEUR:real;
+   // Client : array[1..100] of Tclient;
+    go:boolean;
+    f:textfile;
+    v_dir:string;
+begin
+v_dir:= GetCurrentDir;
+
+try
+   CTInboxRich.Lines.Clear;
+   //CTPanelCount.Caption:='0';
+   if not DirectoryExists('C:\AZCARD\IN') then MkDir('C:\AZCARD\IN');
+   FileListBox1.Directory:='C:\AZCARD\IN';
+   FileListBox1.Update;
+   if FileListBox1.Items.Count = 0 then exit;
+   {******************* AZERCARD PGP ZIP OPEN ***********************}
+   //Extract_PGP_Zip('C*.0*','C*.1*','C*.2*','C*.3*');
+   {******************* AZERCARD PGP ZIP OPEN ***********************}
+   FileListBox1.Mask:='*.*';
+   FileListBox1.Update;
+   test:=122 / 10;
+   if pos('.',floattostr(test))>0 then syssim:='.' else
+   if pos(',',floattostr(test))>0 then syssim:=',';
+   for i:=0 to FileListBox1.items.Count-1 do
+   begin
+      Application.ProcessMessages;
+      msgcount:=0;
+
+      if (copy(FileListBox1.items[i],0,1) <> 'e')and((copy(FileListBox1.items[i],0,1) <> 'E')) then Continue;
+
+       AssignFile(F,'C:\AZCARD\IN\'+FileListBox1.Items[i]);
+      Reset(F);
+      rowcount:=0;
+      while not eof(f) do
+      begin
+        rowcount:=rowcount+1;
+        Readln(F,Stmessage);
+      //  if trim(copy(STmessage,19,3)) <> 'BAL'  then  msgcount:=msgcount+1;
+//
+      end;
+      STmessage:='';
+      Reset(f);
+      ShowMessage(IntToStr(rowcount));
+      {VIEW FILE NAME}
+       CTInboxRich.Lines.Add('FILE NAME                  :< '+FileListBox1.items[i]+' >   '+'Message count: '+inttostr(rowcount));
+       for j:=1 to rowcount do
+      begin
+          Application.ProcessMessages;
+          Readln(F,Stmessage);
+          if  RefwithSel.Down = false then
+      begin
+      //CTPanelCount.Caption:=IntToStr(strtoint(CTPanelCount.Caption)+1);
+
+      {VIEW FILE MESSAGE}
+
+          if j = 1 then Continue;
+      {///////////////////////////***************************************************************}
+         CTInboxRich.Lines.Add('CONTRACT NUMBER          :'+trim(copy(STmessage,0,21)));
+         CTInboxRich.Lines.Add('DEVICE N                 :'+trim(copy(STmessage,22,11)));
+         CTInboxRich.Lines.Add('DEVICE NAME              :'+trim(copy(STmessage,33,33)));
+         CTInboxRich.Lines.Add('TRANSACTION DATETIME     :'+trim(copy(STmessage,66,17)));
+
+          all:='';
+         // ALL:=FloatToStr(StrToFloat(copy(STmessage,269,15)));
+          Insert(syssim,all,length(all)-1);
+          for k:=length(all) to 14 do all:=all+' ';
+
+          CTInboxRich.Lines.Add('---------------------------------------------------------------------------------');
+      end;
+
+      end;
+   end;
+finally
+
+
+end;
+
+end;
+
+end.

@@ -1,0 +1,35 @@
+unit FormUnit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs;
+
+type
+  TFormIns = class(TForm)
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormIns: TFormIns;
+
+ procedure InitPlugin(s:string);export;
+implementation
+uses  sboapiDataModuleImpl,CommonDecls;
+
+{$R *.dfm}
+
+procedure InitPlugin(s:string);export;
+begin
+   FormIns.ShowModal;
+end;
+exports
+     InitPlugin;
+
+{$R *.dfm}
+
+end.

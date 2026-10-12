@@ -1,0 +1,589 @@
+﻿unit Custforms;
+
+interface
+
+uses
+  SysUtils, Classes, HTTPApp,dbxjson, Oracle,
+  xmldom,  IniFiles,   XMLIntf, msxmldom,IOUtils,XMLDoc, DB, OracleData;
+
+type
+  TWebModule1 = class(TWebModule)
+    Connection: TOracleSession;
+    oraquery: TOracleDataSet;
+    PHYS_FS_CUSTOMERS: TOraclePackage;
+    procedure WebModule1DefaultHandlerAction(Sender: TObject;
+      Request: TWebRequest; Response: TWebResponse; var Handled: Boolean);
+    procedure WebModule1WebActionItem1Action(Sender: TObject;
+      Request: TWebRequest; Response: TWebResponse; var Handled: Boolean);
+
+    procedure WebModule1custqaulityAction(Sender: TObject; Request: TWebRequest;
+      Response: TWebResponse; var Handled: Boolean);
+    procedure WebModule1citizenAction(Sender: TObject; Request: TWebRequest;
+      Response: TWebResponse; var Handled: Boolean);
+    procedure WebModule1doctypeAction(Sender: TObject; Request: TWebRequest;
+      Response: TWebResponse; var Handled: Boolean);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  WebModuleClass: TComponentClass = TWebModule1;
+  dbname,dbuser,dbpass,dbport,dbadr,dbdriver:string;
+ duser,dpass,Output,ki:string;
+
+implementation
+
+{$R *.dfm}
+
+
+
+
+procedure TWebModule1.WebModule1citizenAction(Sender: TObject;
+  Request: TWebRequest; Response: TWebResponse; var Handled: Boolean);
+var
+i,j,k,tr,a,sr:Integer;
+st,st2,uname,upass,conffile:string;
+
+   JSonObject,JSonObject2:TJSonObject;
+   JSonValue,JsonValue2:TJSonValue;
+   JsonArray,JsonArray2: TJSONArray;
+   ArrayElement: TJSonValue;
+   FoundValue: TJSonValue;
+ clname,clcreditnumber,claccount,clvalu,clnum,clbirthday:string;
+clpayamount,clcreditamount:real;
+credid,ib,kr,m :integer;
+  resp,resparr:string;
+
+field_name,nameColunm,valueColunm,rt: String;
+
+LJSONObject:TJsonObject;
+
+
+
+  begin
+
+   JsonValue:=JSonObject.ParseJSONValue((TFile.ReadAllText('C:/xampp/apache/modules/conf.json')));
+   //smartbank/webservice /conf
+   JsonArray := JsonValue as TJSONArray;
+   if (JSONValue is TJSONArray) then
+    begin
+     for a:=0 to (JSONValue as TJSONArray).Size-1  do
+         begin
+         dbname:=((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbname').JSONValue.Value;
+         uname  :=((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbuser').JSONValue.Value;
+         upass  := ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbpass').JSONValue.Value;
+         dbadr  := ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbadrs').JSONValue.Value;
+         dbport :=  ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbport').JSONValue.Value;
+         dbdriver  := ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbdriver').JSONValue.Value;
+         end;
+      end;
+
+      connection.Connected:=False;
+      Connection.LogonDatabase:=dbname;
+      Connection.LogonUsername:=uname;
+      Connection.LogonPassword:=upass;
+      Connection.Connected:=true;
+
+
+         if not Connection.Connected then
+         begin
+         Response.Content := '{"ErrorText": "Could not connect to database",'+
+                           ' "ErrorCode": "02" }';
+
+              connection.Connected:=False;
+          exit;
+         end;
+    st:='select ID,CNTR_NAME from countries where lower(CNTR_NAME)<>lower('''+'yox'+''') order by CNTR_NAME';
+    oraquery.Session:=Connection;
+    oraquery.Active:=false;
+      oraquery.sql.Clear;
+      oraquery.SQL.Text := st;
+      oraquery.Active := True;
+      oraquery.First;
+         // jsonitems:=TJSONObject.Create;
+      while (not oraquery.EOF) do
+      begin
+
+        rt := rt+'{';
+        for I := 0 to oraquery.FieldDefs.Count-1 do
+        begin
+          nameColunm  := oraquery.FieldDefs[I].Name;
+          valueColunm := Utf8Encode(oraquery.FieldByName(nameColunm).AsString);
+          rt := rt+'"'+LowerCase(nameColunm)+'":"'+(valueColunm)+'",';
+
+        end;
+        Delete(rt, Length(rt), 1);
+        rt := rt+'},';
+        oraquery.Next;
+      end;
+      oraquery.Refresh;
+      Delete(rt, Length(rt), 1);
+
+      resp:='['+rt+']';
+    connection.Connected:=False;
+   Response.ContentType := 'application/json';
+   Response.Content :=resp;
+
+
+end;
+
+procedure TWebModule1.WebModule1custqaulityAction(Sender: TObject;
+  Request: TWebRequest; Response: TWebResponse; var Handled: Boolean);
+var
+i,j,k,tr,a,sr:Integer;
+st,st2,uname,upass,conffile:string;
+
+   JSonObject,JSonObject2:TJSonObject;
+   JSonValue,JsonValue2:TJSonValue;
+   JsonArray,JsonArray2: TJSONArray;
+   ArrayElement: TJSonValue;
+   FoundValue: TJSonValue;
+ clname,clcreditnumber,claccount,clvalu,clnum,clbirthday:string;
+clpayamount,clcreditamount:real;
+credid,ib,kr,m :integer;
+  resp,resparr:string;
+
+field_name,nameColunm,valueColunm,rt: String;
+
+LJSONObject:TJsonObject;
+
+
+
+  begin
+
+   JsonValue:=JSonObject.ParseJSONValue((TFile.ReadAllText('C:/xampp/apache/modules/conf.json')));
+   //smartbank/webservice /conf
+   JsonArray := JsonValue as TJSONArray;
+   if (JSONValue is TJSONArray) then
+    begin
+     for a:=0 to (JSONValue as TJSONArray).Size-1  do
+         begin
+         dbname:=((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbname').JSONValue.Value;
+         uname  :=((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbuser').JSONValue.Value;
+         upass  := ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbpass').JSONValue.Value;
+         dbadr  := ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbadrs').JSONValue.Value;
+         dbport :=  ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbport').JSONValue.Value;
+         dbdriver  := ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbdriver').JSONValue.Value;
+         end;
+      end;
+
+      connection.Connected:=False;
+      Connection.LogonDatabase:=dbname;
+      Connection.LogonUsername:=uname;
+      Connection.LogonPassword:=upass;
+      Connection.Connected:=true;
+
+
+         if not Connection.Connected then
+         begin
+         Response.Content := '{"ErrorText": "Could not connect to database",'+
+                           ' "ErrorCode": "02" }';
+
+              connection.Connected:=False;
+          exit;
+         end;
+    st:='select A.rowid,A.* from cust_quality A  order by A.id';
+    oraquery.Session:=Connection;
+    oraquery.Active:=false;
+      oraquery.sql.Clear;
+      oraquery.SQL.Text := st;
+      oraquery.Active := True;
+      oraquery.First;
+         // jsonitems:=TJSONObject.Create;
+      while (not oraquery.EOF) do
+      begin
+
+        rt := rt+'{';
+        for I := 0 to oraquery.FieldDefs.Count-1 do
+        begin
+          nameColunm  := oraquery.FieldDefs[I].Name;
+          valueColunm := Utf8Encode(oraquery.FieldByName(nameColunm).AsString);
+          rt := rt+'"'+LowerCase(nameColunm)+'":"'+(valueColunm)+'",';
+
+        end;
+        Delete(rt, Length(rt), 1);
+        rt := rt+'},';
+        oraquery.Next;
+      end;
+      oraquery.Refresh;
+      Delete(rt, Length(rt), 1);
+
+      resp:='['+rt+']';
+    connection.Connected:=False;
+   Response.ContentType := 'application/json';
+   Response.Content :=resp;
+
+
+end;
+
+
+procedure TWebModule1.WebModule1DefaultHandlerAction(Sender: TObject;
+  Request: TWebRequest; Response: TWebResponse; var Handled: Boolean);
+begin
+  Response.Content := '<html><heading/><style> span {  font-size: 100px;}</style><body> <p><span>&#128077</span> Servisler işləyir </p></body></html>';
+end;
+
+procedure TWebModule1.WebModule1doctypeAction(Sender: TObject;
+  Request: TWebRequest; Response: TWebResponse; var Handled: Boolean);
+var
+i,j,k,tr,a,sr:Integer;
+st,st2,uname,upass,conffile:string;
+
+   JSonObject,JSonObject2:TJSonObject;
+   JSonValue,JsonValue2:TJSonValue;
+   JsonArray,JsonArray2: TJSONArray;
+   ArrayElement: TJSonValue;
+   FoundValue: TJSonValue;
+ clname,clcreditnumber,claccount,clvalu,clnum,clbirthday:string;
+clpayamount,clcreditamount:real;
+credid,ib,kr,m :integer;
+  resp,resparr:string;
+
+field_name,nameColunm,valueColunm,rt: String;
+
+LJSONObject:TJsonObject;
+
+
+
+  begin
+
+   JsonValue:=JSonObject.ParseJSONValue((TFile.ReadAllText('C:/xampp/apache/modules/conf.json')));
+   //smartbank/webservice /conf
+   JsonArray := JsonValue as TJSONArray;
+   if (JSONValue is TJSONArray) then
+    begin
+     for a:=0 to (JSONValue as TJSONArray).Size-1  do
+         begin
+         dbname:=((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbname').JSONValue.Value;
+         uname  :=((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbuser').JSONValue.Value;
+         upass  := ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbpass').JSONValue.Value;
+         dbadr  := ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbadrs').JSONValue.Value;
+         dbport :=  ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbport').JSONValue.Value;
+         dbdriver  := ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbdriver').JSONValue.Value;
+         end;
+      end;
+
+      connection.Connected:=False;
+      Connection.LogonDatabase:=dbname;
+      Connection.LogonUsername:=uname;
+      Connection.LogonPassword:=upass;
+      Connection.Connected:=true;
+
+
+         if not Connection.Connected then
+         begin
+         Response.Content := '{"ErrorText": "Could not connect to database",'+
+                           ' "ErrorCode": "02" }';
+
+              connection.Connected:=False;
+          exit;
+         end;
+    st:='SELECT a.id, a.name, a.symbol, a.series, a.pincodforced, a.fordoctypes  FROM doc_types a order by a.symbol    ';
+    oraquery.Session:=Connection;
+    oraquery.Active:=false;
+      oraquery.sql.Clear;
+      oraquery.SQL.Text := st;
+      oraquery.Active := True;
+      oraquery.First;
+         // jsonitems:=TJSONObject.Create;
+      while (not oraquery.EOF) do
+      begin
+
+        rt := rt+'{';
+        for I := 0 to oraquery.FieldDefs.Count-1 do
+        begin
+          nameColunm  := oraquery.FieldDefs[I].Name;
+          valueColunm := Utf8Encode(oraquery.FieldByName(nameColunm).AsString);
+          rt := rt+'"'+LowerCase(nameColunm)+'":"'+(valueColunm)+'",';
+
+        end;
+        Delete(rt, Length(rt), 1);
+        rt := rt+'},';
+        oraquery.Next;
+      end;
+      oraquery.Refresh;
+      Delete(rt, Length(rt), 1);
+
+      resp:='['+rt+']';
+    connection.Connected:=False;
+   Response.ContentType := 'application/json';
+   Response.Content :=resp;
+
+
+end;
+
+procedure TWebModule1.WebModule1WebActionItem1Action(Sender: TObject;
+  Request: TWebRequest; Response: TWebResponse; var Handled: Boolean);
+var
+i,j,k,tr,a,sr:Integer;
+st,st2,uname,upass,conffile:string;
+
+   JSonObject,JSonObject2:TJSonObject;
+   JSonValue,JsonValue2:TJSonValue;
+   JsonArray,JsonArray2: TJSONArray;
+   ArrayElement: TJSonValue;
+   FoundValue: TJSonValue;
+ clname,clcreditnumber,claccount,clvalu,clnum,clbirthday:string;
+clpayamount,clcreditamount:real;
+credid,ib,kr,m :integer;
+  resp,resparr:string;
+
+  p_ID: integer;
+  p_cust_name: string;
+  p_passport: string;
+  p_birthdate: variant;
+  p_birthplace: variant;
+  p_fam_status: integer;
+  p_adress: string;
+  p_faktAdress: string;
+  p_phone: string;
+  p_sendsms:integer;
+  p_email: string;
+  p_sex: integer;
+  p_passp_number: string;
+  p_adrs_state: Variant;
+  p_adrs_city: Variant;
+  p_birthCity:variant;
+  p_phone_mob: string;
+  p_passp_date: variant;
+  p_nerezident: integer;
+  p_PassPlace: string;
+  p_PINCode: string;
+  p_category: integer;
+  p_Citizenship: variant;
+  p_PASSEXPIRE: Variant;
+  p_DocType: Variant;
+  p_Note: WideString;
+  p_reg_zip: string;
+  p_doc_country: Variant;
+  p_citizenship2: integer;
+  p_citizenship3: Variant;
+  p_fakt_country: Variant;
+  p_fakt_city: Variant;
+  p_fakt_zip: String;
+  p_work_place: String;
+  p_work_post: String;
+  p_work_adress: String;
+  p_work_phone: String;
+  p_tph_contact_type: Variant;
+  p_tph_country: Variant;
+  p_tph_country_code: String;
+  p_tph_city: Variant;
+  p_tph_state: String;
+  p_tph_zip: String;
+  p_tph_country_prefix: integer;
+  p_tph_adress: String;
+  p_tph_communication_type: variant;
+  p_tph_number: String;
+  p_tph_extension: String;
+  p_Contact_type: Variant;
+  p_Lastname:String;
+  p_FirstName:String;
+  p_MiddleName:String;
+  p_risk_categ:Variant;
+  p_RISKDESCID:Variant;
+  p_samelydate:Variant;
+  p_work_adrs_spec:String;
+  p_work_city:Integer;
+  p_work_state:String;
+  p_work_zip:String;
+  p_work_cntr:Integer;
+  p_work_phone_spec:String;
+  p_work_phconttype:String;
+  p_work_phoppref:String;
+  p_work_phext:String;
+  p_work_phcode:Integer;
+  p_quality_id:integer;
+  v_custtype:String;
+  p_voen: string;
+  p_dblgroup:integer;
+  p_cust_type: integer ;
+  p_vidsob :integer ;
+  p_prinad:integer ;
+begin
+// try
+   JsonValue:=JSonObject.ParseJSONValue((TFile.ReadAllText('C:/xampp/apache/modules/conf.json')));
+   //smartbank/webservice /conf
+   JsonArray := JsonValue as TJSONArray;
+   if (JSONValue is TJSONArray) then
+    begin
+     for a:=0 to (JSONValue as TJSONArray).Size-1  do
+         begin
+         dbname:=((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbname').JSONValue.Value;
+         uname  :=((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbuser').JSONValue.Value;
+         upass  := ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbpass').JSONValue.Value;
+         dbadr  := ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbadrs').JSONValue.Value;
+         dbport :=  ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbport').JSONValue.Value;
+         dbdriver  := ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbdriver').JSONValue.Value;
+         end;
+      end;
+
+
+
+       st:=Request.Content;
+
+JsonValue2:=JSonObject.ParseJSONValue(st);
+JsonValue2:=(JsonValue2 as TJSONObject).Get('Client').JSONValue;
+JsonArray2 := JsonValue2 as TJSONArray;
+
+
+
+  if (JSONValue2 is TJSONArray) then
+    begin
+           //val:='1';
+     for a:=0 to (JSONValue2 as TJSONArray).Size-1  do
+         begin
+         { clnum:=((JSONValue2 as TJSONArray).get(a) as TJSonObject).Get('ClientNumber').JSONValue.Value;
+          clbirthday:=((JSONValue2 as TJSONArray).get(a) as TJSonObject).Get('ClientBirthday').JSONValue.Value;}
+          p_cust_name :=Utf8Encode(((JSONValue2 as TJSONArray).get(a) as TJSonObject).Get('p_cust_name').JSONValue.Value);
+          p_quality_id:=strtoint(((JSONValue2 as TJSONArray).get(a) as TJSonObject).Get('p_quality_id').JSONValue.Value);// int
+          p_passp_number:=((JSONValue2 as TJSONArray).get(a) as TJSonObject).Get('p_passp_number').JSONValue.Value;
+          p_birthdate:=((JSONValue2 as TJSONArray).get(a) as TJSonObject).Get('p_birthdate').JSONValue.Value;
+          p_birthplace:=((JSONValue2 as TJSONArray).get(a) as TJSonObject).Get('p_birthplace').JSONValue.Value;
+          p_fam_status:=strtoint(((JSONValue2 as TJSONArray).get(a) as TJSonObject).Get('p_fam_status').JSONValue.Value); //int   1 evli 2 subay
+          p_adress:= Utf8Encode(((JSONValue2 as TJSONArray).get(a) as TJSonObject).Get('p_adress').JSONValue.Value);
+          p_faktAdress:=Utf8Encode(((JSONValue2 as TJSONArray).get(a) as TJSonObject).Get('p_faktAdress').JSONValue.Value);
+          p_phone:=((JSONValue2 as TJSONArray).get(a) as TJSonObject).Get('p_phone').JSONValue.Value;
+          p_email:=((JSONValue2 as TJSONArray).get(a) as TJSonObject).Get('p_email').JSONValue.Value;
+          p_sex:=strtoint(((JSONValue2 as TJSONArray).get(a) as TJSonObject).Get('p_sex').JSONValue.Value);//1 kisi 2 qadin
+          p_voen:=((JSONValue2 as TJSONArray).get(a) as TJSonObject).Get('p_voen').JSONValue.Value;
+          p_dblgroup:= strtoint(((JSONValue2 as TJSONArray).get(a) as TJSonObject).Get('dblgroup').JSONValue.Value);
+          p_passp_date:=((JSONValue2 as TJSONArray).get(a) as TJSonObject).Get('p_passp_date').JSONValue.Value;
+          p_nerezident:=strtoint(((JSONValue2 as TJSONArray).get(a) as TJSonObject).Get('p_nerezident').JSONValue.Value); // 1 rezident 0 ne nerez
+          p_VidSob  :=strtoint(((JSONValue2 as TJSONArray).get(a) as TJSonObject).Get('p_VidSob').JSONValue.Value);     //deault 1
+          p_prinad  :=strtoint(((JSONValue2 as TJSONArray).get(a) as TJSonObject).Get('p_prinad').JSONValue.Value);     //deault 0
+          p_PassPlace:=((JSONValue2 as TJSONArray).get(a) as TJSonObject).Get('p_PassPlace').JSONValue.Value;
+          p_PINCode:=((JSONValue2 as TJSONArray).get(a) as TJSonObject).Get('p_PINCode').JSONValue.Value;
+          p_Citizenship:=Utf8Encode(((JSONValue2 as TJSONArray).get(a) as TJSonObject).Get('p_Citizenship').JSONValue.Value);
+          p_PASSEXPIRE:=((JSONValue2 as TJSONArray).get(a) as TJSonObject).Get('p_PASSEXPIRE').JSONValue.Value;
+          p_DocType:=((JSONValue2 as TJSONArray).get(a) as TJSonObject).Get('p_DocType').JSONValue.Value;
+          p_Note:=((JSONValue2 as TJSONArray).get(a) as TJSonObject).Get('p_Note').JSONValue.Value;
+          p_cust_type:=strtoint(((JSONValue2 as TJSONArray).get(a) as TJSonObject).Get('p_cust_type').JSONValue.Value);   //1 fiziki
+          p_category:=strtoint(((JSONValue2 as TJSONArray).get(a) as TJSonObject).Get('p_category').JSONValue.Value);//   default 0
+          p_reg_zip:=((JSONValue2 as TJSONArray).get(a) as TJSonObject).Get('p_reg_zip').JSONValue.Value;
+          p_doc_country:=((JSONValue2 as TJSONArray).get(a) as TJSonObject).Get('p_doc_country').JSONValue.Value;
+          p_citizenship2:=strtoint(((JSONValue2 as TJSONArray).get(a) as TJSonObject).Get('p_citizenship2').JSONValue.Value);  //  default 0
+          p_citizenship3:=strtoint(((JSONValue2 as TJSONArray).get(a) as TJSonObject).Get('p_citizenship3').JSONValue.Value); //  default 0
+          p_fakt_country:=((JSONValue2 as TJSONArray).get(a) as TJSonObject).Get('p_fakt_country').JSONValue.Value;
+          p_fakt_city:=((JSONValue2 as TJSONArray).get(a) as TJSonObject).Get('p_fakt_city').JSONValue.Value;
+          p_fakt_zip:=((JSONValue2 as TJSONArray).get(a) as TJSonObject).Get('p_fakt_zip').JSONValue.Value;
+          p_work_place:=((JSONValue2 as TJSONArray).get(a) as TJSonObject).Get('p_work_place').JSONValue.Value;
+          p_work_post:=((JSONValue2 as TJSONArray).get(a) as TJSonObject).Get('p_work_post').JSONValue.Value;
+          p_work_adress:=((JSONValue2 as TJSONArray).get(a) as TJSonObject).Get('p_work_adress').JSONValue.Value;
+          p_work_phone:=((JSONValue2 as TJSONArray).get(a) as TJSonObject).Get('p_work_phone').JSONValue.Value;
+          p_Contact_type:=((JSONValue2 as TJSONArray).get(a) as TJSonObject).Get('p_Contact_type').JSONValue.Value;
+          p_tph_country:=((JSONValue2 as TJSONArray).get(a) as TJSonObject).Get('p_tph_country').JSONValue.Value;
+          p_tph_country_code:=((JSONValue2 as TJSONArray).get(a) as TJSonObject).Get('p_tph_country_code').JSONValue.Value;
+          p_tph_city:=((JSONValue2 as TJSONArray).get(a) as TJSonObject).Get('p_tph_city').JSONValue.Value;
+          p_tph_state:=((JSONValue2 as TJSONArray).get(a) as TJSonObject).Get('p_tph_state').JSONValue.Value;
+          p_tph_zip:=((JSONValue2 as TJSONArray).get(a) as TJSonObject).Get('p_tph_zip').JSONValue.Value;
+         p_tph_country_prefix:=strtoint(((JSONValue2 as TJSONArray).get(a) as TJSonObject).Get('p_tph_country_prefix').JSONValue.Value);  //default 0
+          p_tph_adress:=((JSONValue2 as TJSONArray).get(a) as TJSonObject).Get('p_tph_adress').JSONValue.Value;
+          p_tph_communication_type:=((JSONValue2 as TJSONArray).get(a) as TJSonObject).Get('p_tph_communication_type').JSONValue.Value;
+          p_tph_number:=((JSONValue2 as TJSONArray).get(a) as TJSonObject).Get('p_tph_number').JSONValue.Value;
+          p_tph_extension:=((JSONValue2 as TJSONArray).get(a) as TJSonObject).Get('p_tph_extension').JSONValue.Value;
+          p_tph_contact_type:=((JSONValue2 as TJSONArray).get(a) as TJSonObject).Get('p_tph_contact_type').JSONValue.Value;
+          p_Lastname:=Utf8Encode(((JSONValue2 as TJSONArray).get(a) as TJSonObject).Get('p_Lastname').JSONValue.Value);
+          p_FirstName:=Utf8Encode(((JSONValue2 as TJSONArray).get(a) as TJSonObject).Get('p_FirstName').JSONValue.Value);
+          p_MiddleName:=Utf8Encode(((JSONValue2 as TJSONArray).get(a) as TJSonObject).Get('p_MiddleName').JSONValue.Value);
+          p_risk_categ:=((JSONValue2 as TJSONArray).get(a) as TJSonObject).Get('p_risk_categ').JSONValue.Value;
+          p_RISKDESCID:=((JSONValue2 as TJSONArray).get(a) as TJSonObject).Get('p_RISKDESCID').JSONValue.Value;
+          p_samelydate:=((JSONValue2 as TJSONArray).get(a) as TJSonObject).Get('p_samelydate').JSONValue.Value;
+
+         p_work_adrs_spec:=((JSONValue2 as TJSONArray).get(a) as TJSonObject).Get('p_work_adrs_spec').JSONValue.Value;
+           p_work_city:=strtoint(((JSONValue2 as TJSONArray).get(a) as TJSonObject).Get('p_work_city').JSONValue.Value);//default null
+        p_work_state:=((JSONValue2 as TJSONArray).get(a) as TJSonObject).Get('p_work_state').JSONValue.Value;
+        p_work_zip:=((JSONValue2 as TJSONArray).get(a) as TJSonObject).Get('p_work_zip').JSONValue.Value;
+          p_work_cntr:=strtoint(((JSONValue2 as TJSONArray).get(a) as TJSonObject).Get('p_work_cntr').JSONValue.Value);  //default null
+           p_work_phone_spec:=((JSONValue2 as TJSONArray).get(a) as TJSonObject).Get('p_work_phone_spec').JSONValue.Value;
+          p_work_phconttype:=((JSONValue2 as TJSONArray).get(a) as TJSonObject).Get('p_work_phconttype').JSONValue.Value;
+          p_work_phoppref:=((JSONValue2 as TJSONArray).get(a) as TJSonObject).Get('p_work_phoppref').JSONValue.Value;
+          p_work_phext:=((JSONValue2 as TJSONArray).get(a) as TJSonObject).Get('p_work_phext').JSONValue.Value;
+          p_work_phcode:=strtoint(((JSONValue2 as TJSONArray).get(a) as TJSonObject).Get('p_work_phcode').JSONValue.Value);//default null }
+          p_sendsms :=strtoint(((JSONValue2 as TJSONArray).get(a) as TJSonObject).Get('p_sendsms').JSONValue.Value); //default 0
+
+
+
+
+        end;
+
+    end;
+   //connection := TFDConnection.Create(nil);
+   // query:=TFDquery.Create(nil);
+
+
+              connection.Connected:=False;
+              Connection.LogonDatabase:=dbname;
+              Connection.LogonUsername:=uname;
+              Connection.LogonPassword:=upass;
+              Connection.Connected:=true;
+
+
+         if not Connection.Connected then
+         begin
+         Response.Content := '{"ErrorText": "Could not connect to database",'+
+                           ' "ErrorCode": "02" }';
+
+              connection.Connected:=False;
+          exit;
+         end;
+
+
+      //    try
+
+   begin
+           {    PaymentCr.Close;
+               PaymentCr.SetVariable('crid',credid);
+               PaymentCr.Open;
+
+    nwdt :=FormatDateTime('YYYYMMDDHHMMSS',now)+clvalu+inttostr(credid) ;
+    Insertquery.Close;
+    Insertquery.SetVariable('v_accno',PaymentCr.FieldByName('accno').AsString);
+    Insertquery.SetVariable('v_ammount',payammount);
+    Insertquery.SetVariable('v_curr',clvalu);
+    Insertquery.SetVariable('v_cust',PaymentCr.FieldByName('name').AsString);
+    Insertquery.SetVariable('v_rrn',nwdt);
+    Insertquery.SetVariable('v_cred',PaymentCr.FieldByName('numberofcredit').AsString);
+    Insertquery.Execute;
+    Connection.Commit;       }
+
+    PHYS_FS_CUSTOMERS.Session:=Connection;
+    p_quality_id:=0;
+     p_ID:=122;                              //    webservispkg.ins_cust_websrv
+        phys_fs_customers.CallProcedure('ins_cust_websrv',
+            [p_cust_name,p_quality_id, p_passp_number, p_birthdate, p_birthplace,
+            p_fam_status, p_adress, p_faktAdress, p_phone, p_email, p_sex,
+            p_passport, p_adrs_state, p_adrs_city, p_birthCity, p_phone_mob,
+            p_voen, p_dblgroup, p_passp_date, p_nerezident,
+            p_vidsob, p_prinad, p_PassPlace,
+            p_PINCode, p_Citizenship, p_PASSEXPIRE, p_DocType, p_Note,
+            p_cust_type, p_category, p_reg_zip, p_doc_country, p_citizenship2,
+            p_citizenship3, p_fakt_country, p_fakt_city, p_fakt_zip,
+            p_work_place, p_work_post, p_work_adress, p_work_phone,
+            p_Contact_type, p_tph_country, p_tph_country_code, p_tph_city,
+            p_tph_state, p_tph_zip, p_tph_country_prefix, p_tph_adress,
+            p_tph_communication_type, p_tph_number, p_tph_extension,
+            p_tph_contact_type,p_Lastname,p_FirstName,p_MiddleName,
+            p_risk_categ,p_RISKDESCID,p_samelydate,p_work_adrs_spec,
+            p_work_city,p_work_state,p_work_zip,p_work_cntr,
+            p_work_phone_spec,p_work_phconttype,p_work_phoppref,
+            p_work_phext,p_work_phcode,p_sendsms]);
+
+    resp:='{"Success": {"Client": '+inttostr(p_ID)+',"ClientName": "'+p_cust_name+'"   }}';
+
+   Response.ContentType := 'application/json';
+   Response.Content :=resp;
+   end;
+ {   except
+   Response.ContentType := 'application/json';
+   connection.Connected:=False;
+   Response.Content :='{"ErrorText": "Could not create payment",'+
+                           ' "ErrorCode": "04" }//';;
+ //   end;
+
+
+end;
+
+end.

@@ -1,0 +1,48 @@
+unit DMApplyMoneyImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, OracleData, Oracle;
+
+type
+  TDMApplyMoney = class(TDataModule)
+    Tranches: TOracleDataSet;
+    TranchesDatSrc: TDataSource;
+    TranchesID: TFloatField;
+    TranchesHDATE: TDateTimeField;
+    TranchesTOTAL: TFloatField;
+    TranchesTRID: TFloatField;
+    DebitAccs: TOracleDataSet;
+    DebitAccsID: TFloatField;
+    DebitAccsACC_NO: Twidestringfield;
+    DebitAccsNAME: Twidestringfield;
+    DebitAccsDatSrc: TDataSource;
+    sbcm_tranches: TOraclePackage;
+    DepositInfo: TOracleDataSet;
+    DepositInfoDatSrc: TDataSource;
+    DepositInfoNAME: Twidestringfield;
+    DepositInfoINTEREST: TFloatField;
+    DepositInfoAMOUNT: TFloatField;
+    DepositInfoCURRENCY: TFloatField;
+    CustAccDatSrc: TDataSource;
+    CustAcc: TOracleDataSet;
+    CustAccCLIENTACCID: TFloatField;
+    DepositInfoCUSTOMERID: TFloatField;
+    TranchesDESCRIPTION: TWideStringField;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  DMApplyMoney: TDMApplyMoney;
+
+implementation
+
+{$R *.DFM}
+uses sboapiDataModuleImpl;
+
+end.

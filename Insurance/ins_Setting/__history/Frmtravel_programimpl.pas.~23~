@@ -1,0 +1,89 @@
+unit Frmtravel_programimpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ComCtrls, Grids, DBGrids, ExtCtrls, DBCtrls;
+
+type
+  TFrmtravel_program = class(TForm)
+    PageControl1: TPageControl;
+    TabSheet1: TTabSheet;
+    TabSheet2: TTabSheet;
+    GroupBox1: TGroupBox;
+    GroupBox2: TGroupBox;
+    GroupBox3: TGroupBox;
+    DBGrid1: TDBGrid;
+    DBGrid2: TDBGrid;
+    DBGrid3: TDBGrid;
+    DBGrid4: TDBGrid;
+    GroupBox4: TGroupBox;
+    DBGrid5: TDBGrid;
+    GroupBox5: TGroupBox;
+    DBGrid6: TDBGrid;
+    DBNavigator1: TDBNavigator;
+    DBNavigator2: TDBNavigator;
+    DBNavigator3: TDBNavigator;
+    DBGrid7: TDBGrid;
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormShow(Sender: TObject);
+    procedure PageControl1Change(Sender: TObject);
+    procedure DBGrid1DrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TColumn; State: TGridDrawState);
+    procedure DBGrid1CellClick(Column: TColumn);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Frmtravel_program: TFrmtravel_program;
+
+implementation
+
+{$R *.dfm}
+     uses DMMainImpl;
+procedure TFrmtravel_program.DBGrid1CellClick(Column: TColumn);
+begin
+  DMMain.DSins_travel_setting.Close;
+DMMain.DSins_travel_setting.SetVariable('p_day_id',DBGrid2.DataSource.DataSet.FieldByName('id').AsInteger);
+DMMain.DSins_travel_setting.SetVariable('p_limit_id',DBGrid3.DataSource.DataSet.FieldByName('id').AsInteger);
+DMMain.DSins_travel_setting.SetVariable('p_program_id',DBGrid1.DataSource.DataSet.FieldByName('id').AsInteger);
+DMMain.DSins_travel_setting.open;
+end;
+
+procedure TFrmtravel_program.DBGrid1DrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TColumn; State: TGridDrawState);
+begin
+  DMMain.DSins_travel_setting.Close;
+DMMain.DSins_travel_setting.SetVariable('p_day_id',DBGrid2.DataSource.DataSet.FieldByName('id').AsInteger);
+DMMain.DSins_travel_setting.SetVariable('p_limit_id',DBGrid3.DataSource.DataSet.FieldByName('id').AsInteger);
+DMMain.DSins_travel_setting.SetVariable('p_program_id',DBGrid1.DataSource.DataSet.FieldByName('id').AsInteger);
+DMMain.DSins_travel_setting.open;
+end;
+
+procedure TFrmtravel_program.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+if ord(key)=vk_escape then close
+
+end;
+
+procedure TFrmtravel_program.FormShow(Sender: TObject);
+begin
+PageControl1.ActivePageIndex:=0;
+end;
+
+procedure TFrmtravel_program.PageControl1Change(Sender: TObject);
+begin
+if PageControl1.ActivePageIndex=0 then
+begin
+  DMMain.DSins_travel_limit1.close;
+  DMMain.DSins_travel_day1.close;
+  DMMain.DSins_travel_limit1.Open;
+  DMMain.DSins_travel_day1.Open;
+end;
+end;
+
+end.

@@ -1,0 +1,150 @@
+object SRDatMod: TSRDatMod
+  OldCreateOrder = False
+  Left = 195
+  Top = 119
+  Height = 480
+  Width = 696
+  object CM_RESERVE_REFRESH: TOraclePackage
+    Session = CMDataModule.CMSession
+    Debug = False
+    PackageName = 'CM_RESERVE_REFRESH'
+    ParameterMode = pmNamed
+    Cursor = crSQLWait
+    Optimize = True
+    Left = 144
+    Top = 128
+  end
+  object Reserves_nameDatSrc: TDataSource
+    DataSet = Reserves_name
+    Left = 136
+    Top = 72
+  end
+  object ReservesIDDatSrc: TDataSource
+    DataSet = ReservesID
+    Left = 136
+    Top = 8
+  end
+  object Reserves_name: TOracleDataSet
+    SQL.Strings = (
+      
+        'SELECT id, code, percent, description||'#39'  '#39'||percent||'#39' %'#39' as de' +
+        'scription'
+      '  FROM cm_reserves')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = CMDataModule.CMSession
+    DesignActivation = False
+    Active = True
+    Left = 32
+    Top = 72
+  end
+  object ReservesID: TOracleDataSet
+    SQL.Strings = (
+      'SELECT oldprresid, newprresid, oldsecresid, newsecresid'
+      '  FROM cm_reservid'
+      'where creditid = :Crdid'
+      '')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    Variables.Data = {0300000001000000060000003A4352444944030000000000000000000000}
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = CMDataModule.CMSession
+    DesignActivation = False
+    Active = False
+    Left = 32
+    Top = 8
+    object ReservesIDOLDPRRESID: TFloatField
+      FieldName = 'OLDPRRESID'
+      Required = True
+    end
+    object ReservesIDNEWPRRESID: TFloatField
+      FieldName = 'NEWPRRESID'
+      Required = True
+    end
+    object ReservesIDOLDSECRESID: TFloatField
+      FieldName = 'OLDSECRESID'
+    end
+    object ReservesIDNEWSECRESID: TFloatField
+      FieldName = 'NEWSECRESID'
+    end
+  end
+  object DefDatSet: TOracleDataSet
+    SQL.Strings = (
+      'SELECT nvl(oldprresid,0) as def'
+      '  FROM cm_reservid'
+      'where creditid = :crdid')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    Variables.Data = {0300000001000000060000003A4352444944030000000000000000000000}
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = CMDataModule.CMSession
+    DesignActivation = False
+    Active = False
+    Left = 32
+    Top = 128
+    object DefDatSetDEF: TFloatField
+      FieldName = 'DEF'
+    end
+  end
+end

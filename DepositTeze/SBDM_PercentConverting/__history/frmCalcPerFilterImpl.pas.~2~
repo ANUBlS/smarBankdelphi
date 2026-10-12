@@ -1,0 +1,167 @@
+unit frmCalcPerFilterImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ExtCtrls, StdCtrls,  Mask, DBCtrlsEh, DBLookupEh;
+
+type
+  TfrmCalcPerFilter = class(TForm)
+    Button1: TButton;
+    Button2: TButton;
+    Button3: TButton;
+    Panel1: TPanel;
+    Panel3: TPanel;
+    GroupBox4: TGroupBox;
+    LCBPersons: TDBLookupComboboxEh;
+    CBPersons: TCheckBox;
+    GroupBox5: TGroupBox;
+    LCBValute: TDBLookupComboboxEh;
+    CBValute: TCheckBox;
+    GroupBox6: TGroupBox;
+    LCBFilial: TDBLookupComboboxEh;
+    CBFilial: TCheckBox;
+    Panel4: TPanel;
+    GroupBox7: TGroupBox;
+    LCBCustomer: TDBLookupComboboxEh;
+    CBCustomer: TCheckBox;
+    GroupBox8: TGroupBox;
+    LCBCategories: TDBLookupComboboxEh;
+    CBCategories: TCheckBox;
+    GroupBox9: TGroupBox;
+    LCBDepositTypes: TDBLookupComboboxEh;
+    CBDepositTypes: TCheckBox;
+    Panel2: TPanel;
+    Image1: TImage;
+    Image2: TImage;
+    Image3: TImage;
+    CheckBox20: TCheckBox;
+    CheckBox21: TCheckBox;
+    CheckBox22: TCheckBox;
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure Button1Click(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+    procedure Button3Click(Sender: TObject);
+  private
+    function BuildFilterString : String;
+  public
+    { Public declarations }
+  end;
+
+var
+  frmCalcPerFilter: TfrmCalcPerFilter;
+
+implementation
+
+{$R *.DFM}
+uses DMPercentConveringImpl,frmPercentConveringImpl;
+
+function TfrmCalcPerFilter.BuildFilterString : String;
+
+  procedure ConcatFilter(var S: String; const Prefix : String; Checked : Boolean; KeyValue : Variant);
+  const
+     csFormat = '(%s=%s)';
+  var
+    Temp : String;   
+  begin
+
+    if Checked then
+    begin
+      Temp := Format(csFormat,[Prefix,Keyvalue]);
+      if S = '' then
+        S := Temp
+      else
+        S :=S + 'and ' + Temp;
+    end;
+    
+  end;  // Concat Filter
+
+  procedure ConcatFilter2(var S: String; const Prefix : String; Checked : Boolean; KeyValue : Variant);
+  const
+     csFormat = '(%s=%s)';
+  var
+    Temp : String;
+  begin
+
+    if Checked then
+    begin
+      Temp := Format(csFormat,[Prefix,Keyvalue]);
+      if S = '' then
+        S := Temp
+      else
+        S :=S + ' or ' + Temp;
+    end;
+
+  end;  // Concat Filter
+
+var
+  Temp : String;
+begin
+
+  Result := '';
+  Temp := '';
+  
+  ConcatFilter(Result,'CURRENCY',CBValute.Checked,LCBValute.KeyValue);
+  ConcatFilter(Result,'BRANCHID',CBFilial.Checked,LCBFilial.KeyValue);
+  ConcatFilter(Result,'PERSONALTYPE',CBPersons.Checked,LCBPersons.KeyValue);
+  ConcatFilter(Result,'CLIENTTYPE',CBCategories.Checked,LCBCategories.KeyValue);
+  ConcatFilter(Result,'ContractType',CBDepositTypes.Checked,LCBDepositTypes.KeyValue);
+  ConcatFilter(Result,'CUSTOMERID',CBCustomer.Checked,LCBCustomer.KeyValue);
+
+  ConcatFilter2(Temp,'STATUS',CheckBox20.Checked,-9);
+  ConcatFilter2(Temp,'STATUS',CheckBox21.Checked,-11);
+  ConcatFilter2(Temp,'STATUS',CheckBox22.Checked,-10);
+
+  if Temp <> '' then
+  if Result <> '' then
+    Result := Result + Format(' and (%s)',[Temp])
+  else
+    Result := Temp;
+
+end;
+
+
+procedure TfrmCalcPerFilter.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+   Resize := False
+end;
+
+procedure TfrmCalcPerFilter.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+   if ord(Key) = VK_ESCAPE then Close;
+end;
+
+procedure TfrmCalcPerFilter.Button1Click(Sender: TObject);
+begin
+  with frmPercentConvering,calcPerGrid,SelectedRows do
+        Clear; 
+   with DMPercentConvering,CalcedDeposits do
+   begin
+      Filtered := False;
+      Filter := BuildFilterString;
+      Filtered := True;
+      close;
+   end;
+
+end;
+
+procedure TfrmCalcPerFilter.Button2Click(Sender: TObject);
+begin
+   with DMPercentConvering,CalcedDeposits do
+   begin
+      Filtered := False;
+      Filter := '';
+   end;
+
+end;
+
+procedure TfrmCalcPerFilter.Button3Click(Sender: TObject);
+begin
+   Close
+end;
+
+end.

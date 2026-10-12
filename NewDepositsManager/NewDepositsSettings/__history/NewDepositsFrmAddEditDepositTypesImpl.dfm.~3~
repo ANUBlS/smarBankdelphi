@@ -1,0 +1,121 @@
+object NewDepositsFrmAddEditDepositTypes: TNewDepositsFrmAddEditDepositTypes
+  Left = 0
+  Top = 0
+  BorderIcons = [biSystemMenu]
+  BorderStyle = bsSingle
+  ClientHeight = 150
+  ClientWidth = 410
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poScreenCenter
+  OnCanResize = FormCanResize
+  OnCreate = FormCreate
+  OnKeyPress = FormKeyPress
+  PixelsPerInch = 96
+  TextHeight = 13
+  object XFPanel1: TXFPanel
+    Left = 0
+    Top = 69
+    Width = 410
+    Height = 37
+    Align = alTop
+    BevelInner = bvRaised
+    BevelKind = bkSoft
+    BevelOuter = bvLowered
+    TabOrder = 0
+    object CheckBox2: TXFCheckBox
+      Left = 13
+      Top = 7
+      Width = 230
+      Height = 16
+      Caption = 'Cari m'#601'bl'#601#287#601' g'#246'r'#601' hesabla '
+      TabOrder = 0
+    end
+  end
+  object XFPanel2: TXFPanel
+    Left = 0
+    Top = 0
+    Width = 410
+    Height = 69
+    Align = alTop
+    BevelInner = bvLowered
+    BevelKind = bkFlat
+    BevelOuter = bvSpace
+    TabOrder = 1
+    object XFLabel1: TXFLabel
+      Left = 8
+      Top = 8
+      Width = 22
+      Height = 13
+      Caption = #1040#1076#1099
+    end
+    object XFLabel2: TXFLabel
+      Left = 8
+      Top = 40
+      Width = 24
+      Height = 13
+      Caption = #1058#1080#1087#1080
+    end
+    object DBEditEh1: TDBEditEh
+      Left = 46
+      Top = 9
+      Width = 358
+      Height = 21
+      DataField = 'TYPE'
+      EditButtons = <>
+      TabOrder = 0
+      Visible = True
+    end
+    object DBLookupComboboxEh2: TDBLookupComboboxEh
+      Left = 46
+      Top = 36
+      Width = 358
+      Height = 21
+      DataField = 'WITHDRAWTYPE'
+      DataSource = NewDepositsFrmDepositTypes.DepositTypesDatSrc
+      DropDownBox.Sizable = True
+      EditButtons = <>
+      KeyField = 'WITHDRTYPE'
+      ListField = 'WITHDRTYPEDESC'
+      ListSource = NewDepositsFrmDepositTypes.AddTypesForcollDatSrc
+      TabOrder = 1
+      Visible = True
+    end
+  end
+  object CheckBox1: TXFCheckBox
+    Left = 15
+    Top = 118
+    Width = 201
+    Height = 17
+    Caption = 'Hesablanm'#305#351' faizl'#601'rin '#601'vv'#601'lc'#601'd'#601'n verm'#601'k'
+    TabOrder = 2
+  end
+  object ButtonOk: TXFButton
+    Left = 249
+    Top = 114
+    Width = 75
+    Height = 25
+    Caption = '&'#1043#1103#1073#1091#1083
+    DoubleBuffered = True
+    ParentDoubleBuffered = False
+    TabOrder = 3
+    OnClick = XFButton1Click
+  end
+  object ButtonCancel: TXFButton
+    Left = 333
+    Top = 114
+    Width = 75
+    Height = 25
+    Caption = '&'#1048#1084#1090#1080#1085#1072
+    DoubleBuffered = True
+    ParentDoubleBuffered = False
+    TabOrder = 4
+    OnClick = XFButton2Click
+  end
+end

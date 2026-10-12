@@ -1,0 +1,98 @@
+object Form29: TForm29
+  Left = 0
+  Top = 0
+  Caption = 'Form29'
+  ClientHeight = 398
+  ClientWidth = 831
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Panel1: TPanel
+    Left = 0
+    Top = 357
+    Width = 831
+    Height = 41
+    Align = alBottom
+    TabOrder = 0
+    ExplicitLeft = 88
+    ExplicitTop = 312
+    ExplicitWidth = 185
+    object Button1: TButton
+      Left = 744
+      Top = 8
+      Width = 75
+      Height = 25
+      Caption = 'T'#601'sdiql'#601
+      TabOrder = 0
+    end
+  end
+  object GridBeneficiary: TDBGrid
+    Left = 0
+    Top = 0
+    Width = 831
+    Height = 357
+    TabStop = False
+    Align = alClient
+    BorderStyle = bsNone
+    Color = clBtnFace
+    DataSource = DataMod.DataSource_auth_check
+    DrawingStyle = gdsClassic
+    FixedColor = 8404992
+    GradientEndColor = clBlack
+    GradientStartColor = clNavy
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    Options = [dgTitles, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit, dgMultiSelect]
+    ParentFont = False
+    TabOrder = 1
+    TitleFont.Charset = RUSSIAN_CHARSET
+    TitleFont.Color = clWindowText
+    TitleFont.Height = -11
+    TitleFont.Name = 'Azl Sans Serif'
+    TitleFont.Style = []
+    Columns = <
+      item
+        Expanded = False
+        FieldName = 'sender'
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -30
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        Title.Caption = 'Gonderen'
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clWindow
+        Title.Font.Height = -11
+        Title.Font.Name = 'Azl Sans Serif'
+        Title.Font.Style = []
+        Width = 120
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'receviver'
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -30
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        Title.Caption = 'Alan'
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clWindow
+        Title.Font.Height = -11
+        Title.Font.Name = 'Azl Sans Serif'
+        Title.Font.Style = []
+        Width = 120
+        Visible = True
+      end>
+  end
+end

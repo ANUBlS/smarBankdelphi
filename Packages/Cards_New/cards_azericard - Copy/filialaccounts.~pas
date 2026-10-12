@@ -1,0 +1,113 @@
+unit filialaccounts;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, SearchEdit, DBCtrls, Grids, DBGrids,  NLSLocalizer,LDialogs,oracledata,
+  ExtCtrls;
+
+type
+  TFilial_Accounts = class(TForm)
+    NLSLocalizer1: TNLSLocalizer;
+    Panel1: TPanel;
+    DBLookupComboBox2: TDBLookupComboBox;
+    Button1: TButton;
+    DBLookupComboBox1: TDBLookupComboBox;
+    Button2: TButton;
+    SearchEdit1: TSearchEdit;
+    SearchEdit4: TSearchEdit;
+    Label3: TLabel;
+    Label4: TLabel;
+    SearchEdit2: TSearchEdit;
+    SearchEdit5: TSearchEdit;
+    SearchEdit3: TSearchEdit;
+    Label5: TLabel;
+    Edit1: TEdit;
+    Label6: TLabel;
+    Label1: TLabel;
+    Label2: TLabel;
+    Panel2: TPanel;
+    DBGrid1: TDBGrid;
+    SearchEdit6: TSearchEdit;
+    Label10: TLabel;
+    SearchEdit7: TSearchEdit;
+    Label11: TLabel;
+    Label9: TLabel;
+    Label7: TLabel;
+    Label8: TLabel;
+    procedure Button1Click(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+    procedure DBGrid1TitleClick(Column: TColumn);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Filial_Accounts: TFilial_Accounts;
+
+implementation
+
+uses Unit18;
+
+{$R *.DFM}
+
+procedure TFilial_Accounts.Button1Click(Sender: TObject);
+begin
+
+
+//if MessageDlg('Йадда сахланылсын?',mtinformation,[mbyes,mbno],0)=mryes then
+DataMod_CARDS.mainpacket.CallProcedure('filialacount',[DBLookupComboBox2.text,
+                                                          DBLookupComboBox1.text,
+                                                          SearchEdit1.text,
+                                                           SearchEdit2.text,
+                                                          SearchEdit3.text,
+                                                          SearchEdit4.text,
+                                                          SearchEdit5.text,
+                                                          edit1.text,
+                                                          SearchEdit6.text,
+                                                          SearchEdit7.text]);
+
+
+DataMod_CARDS.filialaccount.Close;
+DataMod_CARDS.filialaccount.Open;
+end;
+
+procedure TFilial_Accounts.Button2Click(Sender: TObject);
+begin
+if MessageDlg('Сечилмиш сятир силинсин?',mtinformation,[mbyes,mbno],0)=mryes then
+
+//DataMod_CARDS.mainpacket.CallProcedure('deletefilial',[DataMod_CARDS.filialaccount.fieldbyname('id').asinteger]);
+begin
+DataMod_CARDS.filialaccount.Delete;
+DataMod_CARDS.filialaccount.Session.commit;
+DataMod_CARDS.filialaccount.Close;
+DataMod_CARDS.filialaccount.Open;
+end;
+
+end;
+
+procedure TFilial_Accounts.DBGrid1TitleClick(Column: TColumn);
+var
+   TitleName :string;
+   SortPosition: word;
+begin
+ SortPosition :=100;
+ //OrderedTitle :=Column.FieldName; //H.R. 24.06.2008
+ if (DBGrid1.DataSource.DataSet.IsEmpty) or (Column.FieldName = EmptyStr) then Exit;
+ Screen.Cursor :=crHourGlass;
+ TitleName :=Column.FieldName;
+ with TOracleDataSet(DBGrid1.DataSource.DataSet) do
+  try
+  
+   SortPosition :=SQL.Add('ORDER BY '+ TitleName);
+   Refresh;
+  finally
+   SQL[SortPosition] :=EmptyStr;
+   Screen.Cursor :=crDefault;
+  end;
+end;
+
+end.

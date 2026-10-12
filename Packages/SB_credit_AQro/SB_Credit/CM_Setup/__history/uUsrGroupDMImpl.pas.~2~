@@ -1,0 +1,119 @@
+unit uUsrGroupDMImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Oracle, Db, OracleData;
+
+type
+  TUsrGrDataMod = class(TDataModule)
+    UserGroupsDataSet: TOracleDataSet;
+    CM_SETUP: TOraclePackage;
+    UserGroupsDataSrc: TDataSource;
+    CatDataSet: TOracleDataSet;
+    CatDataSource: TDataSource;
+    CatDataSetID: TFloatField;
+    CatDataSetPERSON: TFloatField;
+    CatDataSetCODE: TStringField;
+    CatDataSetDESCRIPTION: TStringField;
+    PersonsDataSet: TOracleDataSet;
+    PersonsDataSource: TDataSource;
+    PersonsDataSetID: TFloatField;
+    PersonsDataSetNAME: TStringField;
+    PersonsDataSetDESCRIPION: TStringField;
+    DataSource1: TDataSource;
+    OracleDataSet1: TOracleDataSet;
+    OracleDataSet1ID: TFloatField;
+    OracleDataSet1NAME: TStringField;
+    OracleDataSet1NEWID: TFloatField;
+    OracleDataSet1CODE: TStringField;
+    OracleDataSet2: TOracleDataSet;
+    DataSource2: TDataSource;
+    procedure DataModuleCreate(Sender: TObject);
+    procedure UserGroupsDataSetApplyRecord(Sender: TOracleDataSet;
+      Action: Char; var Applied: Boolean; var NewRowId: String);
+    procedure CatDataSetApplyRecord(Sender: TOracleDataSet; Action: Char;
+      var Applied: Boolean; var NewRowId: String);
+    procedure DataModuleDestroy(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  UsrGrDataMod: TUsrGrDataMod;
+
+implementation
+
+{$R *.DFM}
+
+uses CMOracleAPIDataModuleImpl;
+
+procedure TUsrGrDataMod.DataModuleCreate(Sender: TObject);
+begin
+  UserGroupsDataSet.Open;
+  CatDataSet.Open;
+  PersonsDataSet.Open;
+  OracleDataSet1.open;
+  OracleDataSet2.open;
+end;
+
+procedure TUsrGrDataMod.UserGroupsDataSetApplyRecord(
+  Sender: TOracleDataSet; Action: Char; var Applied: Boolean;
+  var NewRowId: String);
+var id : integer; description :String;
+begin
+   with Sender do
+   begin
+    id := FieldByName('id').AsInteger;
+    description := FieldByName('description').AsString;
+   end;
+
+ Applied := True;
+ Case Action of
+
+     'I':CM_SETUP.CallProcedure('UsrGroupAdd',[description]);
+     'U':CM_SETUP.CallProcedure('UsrGroupEdit',[id,description]);
+     'D':CM_SETUP.CallProcedure('UsrGroupDelete',[id])
+     else Applied := False;
+
+ end;
+end;
+procedure TUsrGrDataMod.CatDataSetApplyRecord(Sender: TOracleDataSet;
+  Action: Char; var Applied: Boolean; var NewRowId: String);
+var v_id,v_person :integer; v_code,v_description :String;
+begin
+
+   with Sender do
+   begin
+      v_id := FieldByName('id').AsInteger;
+      v_code :=  FieldByName('code').AsString;
+      v_person :=  FieldByName('person').AsInteger;;
+      v_description := FieldByName('description').Asstring;
+   end;
+
+   Applied := True;
+   Case Action of
+    'I':CM_SETUP.CallProcedure('CategoriesAdd',[v_person,
+                                                v_code,
+                                                v_description]);
+    'U':CM_SETUP.CallProcedure('CategoriesEdit',[v_id,
+                                                 v_person,
+                                                 v_code,
+                                                 v_description]);
+    'D':CM_SETUP.CallProcedure('CategoriesDelete',[v_id])                                             
+    else Applied := False;
+  end;
+end;
+
+procedure TUsrGrDataMod.DataModuleDestroy(Sender: TObject);
+begin
+  UserGroupsDataSet.CloseAll;
+  CatDataSet.CloseAll;
+  PersonsDataSet.CloseAll;
+  OracleDataSet2.CloseAll;
+end;
+
+end.

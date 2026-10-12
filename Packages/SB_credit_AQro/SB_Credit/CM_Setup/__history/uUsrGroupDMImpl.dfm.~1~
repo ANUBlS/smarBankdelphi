@@ -1,0 +1,158 @@
+object UsrGrDataMod: TUsrGrDataMod
+  OldCreateOrder = False
+  OnCreate = DataModuleCreate
+  OnDestroy = DataModuleDestroy
+  Left = 326
+  Top = 179
+  Height = 479
+  Width = 741
+  object UserGroupsDataSet: TOracleDataSet
+    SQL.Strings = (
+      'select T.rowid, T.description,t.id,t.bank_kod '
+      '  from cm_usergroups T'
+      ''
+      '')
+    QBEDefinition.QBEFieldDefs = {
+      04000000030000000B0000004445534352495054494F4E010000000000080000
+      0042414E4B5F4B4F44010000000000020000004944010000000000}
+    OnApplyRecord = UserGroupsDataSetApplyRecord
+    Session = CMDataModule.CMSession
+    Left = 40
+    Top = 40
+    object UserGroupsDataSetDESCRIPTION: TWideStringField
+      FieldName = 'DESCRIPTION'
+      Size = 64
+    end
+    object UserGroupsDataSetBANK_KOD: TWideStringField
+      FieldName = 'BANK_KOD'
+      Size = 12
+    end
+    object UserGroupsDataSetID: TFloatField
+      FieldName = 'ID'
+    end
+  end
+  object CM_SETUP: TOraclePackage
+    Session = CMDataModule.CMSession
+    PackageName = 'CM_SETUP'
+    Left = 40
+    Top = 168
+  end
+  object UserGroupsDataSrc: TDataSource
+    DataSet = UserGroupsDataSet
+    Left = 40
+    Top = 104
+  end
+  object CatDataSet: TOracleDataSet
+    SQL.Strings = (
+      'select C.Rowid,c.*'
+      'from cm_Categories C'
+      'order by person')
+    QBEDefinition.QBEFieldDefs = {
+      040000000400000002000000494401000000000006000000504552534F4E0100
+      0000000004000000434F44450100000000000B0000004445534352495054494F
+      4E010000000000}
+    OnApplyRecord = CatDataSetApplyRecord
+    Session = CMDataModule.CMSession
+    Left = 152
+    Top = 40
+    object CatDataSetID: TFloatField
+      FieldName = 'ID'
+    end
+    object CatDataSetPERSON: TFloatField
+      FieldName = 'PERSON'
+      Required = True
+    end
+    object CatDataSetCODE: TWideStringField
+      FieldName = 'CODE'
+      Size = 8
+    end
+    object CatDataSetDESCRIPTION: TWideStringField
+      FieldName = 'DESCRIPTION'
+      Size = 128
+    end
+  end
+  object CatDataSource: TDataSource
+    DataSet = CatDataSet
+    Left = 152
+    Top = 104
+  end
+  object PersonsDataSet: TOracleDataSet
+    SQL.Strings = (
+      'select p.rowid,p.*'
+      'from cm_persons p')
+    QBEDefinition.QBEFieldDefs = {
+      0400000003000000020000004944010000000000040000004E414D4501000000
+      00000A00000044455343524950494F4E010000000000}
+    Session = CMDataModule.CMSession
+    Left = 256
+    Top = 40
+    object PersonsDataSetID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object PersonsDataSetNAME: TWideStringField
+      FieldName = 'NAME'
+      Required = True
+      Size = 32
+    end
+    object PersonsDataSetDESCRIPION: TWideStringField
+      FieldName = 'DESCRIPION'
+      Size = 64
+    end
+  end
+  object PersonsDataSource: TDataSource
+    DataSet = PersonsDataSet
+    Left = 264
+    Top = 104
+  end
+  object DataSource1: TDataSource
+    DataSet = OracleDataSet1
+    Left = 200
+    Top = 216
+  end
+  object OracleDataSet1: TOracleDataSet
+    SQL.Strings = (
+      'SELECT rowid,a.*'
+      '  FROM cm_aim_cred a'
+      'where custtype=:id')
+    Variables.Data = {0300000001000000030000003A4944030000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      0400000004000000020000004944010000000000040000004E414D4501000000
+      0000050000004E4557494401000000000004000000434F4445010000000000}
+    Master = OracleDataSet2
+    MasterFields = 'id'
+    DetailFields = 'id'
+    Session = CMDataModule.CMSession
+    Left = 280
+    Top = 208
+    object OracleDataSet1ID: TFloatField
+      FieldName = 'ID'
+    end
+    object OracleDataSet1NAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 64
+    end
+    object OracleDataSet1NEWID: TFloatField
+      FieldName = 'NEWID'
+    end
+    object OracleDataSet1CODE: TWideStringField
+      FieldName = 'CODE'
+      Size = 30
+    end
+  end
+  object OracleDataSet2: TOracleDataSet
+    SQL.Strings = (
+      'select * from cm_persons')
+    QBEDefinition.QBEFieldDefs = {
+      0400000003000000020000004944010000000000040000004E414D4501000000
+      00000A00000044455343524950494F4E010000000000}
+    Session = CMDataModule.CMSession
+    Left = 96
+    Top = 288
+  end
+  object DataSource2: TDataSource
+    DataSet = OracleDataSet2
+    Left = 176
+    Top = 288
+  end
+end

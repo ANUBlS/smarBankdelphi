@@ -1,0 +1,113 @@
+unit AccountRestState;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, Buttons, ExtCtrls, Grids, DBGrids, ComCtrls, ExcelExporter, Db,
+  OracleData;
+
+type
+  TAccountState = class(TForm)
+    PageControl1: TPageControl;
+    AccAmountSheet: TTabSheet;
+    DBGridAccState: TDBGrid;
+    AccTurnoverSheet: TTabSheet;
+    DBGrid2: TDBGrid;
+    TabSheet1: TTabSheet;
+    DBGrid1: TDBGrid;
+    Panel1: TPanel;
+    SpeedButton1: TSpeedButton;
+    CloseButton: TButton;
+    AccState: TDataSource;
+    AccStateData: TOracleDataSet;
+    AccStateDataACCID: TFloatField;
+    AccStateDataAMOUNT: TFloatField;
+    AccStateDataLAMOUNT: TFloatField;
+    AccStateDataDEBITTURNOVER: TFloatField;
+    AccStateDataDEBITLTURNOVER: TFloatField;
+    AccStateDataCREDITTURNOVER: TFloatField;
+    AccStateDataCREDITLTURNOVER: TFloatField;
+    AccStateDataARCHIVEDATE: TDateTimeField;
+    AccStateExporter: TExcelExporter;
+    procedure FormKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure FormCreate(Sender: TObject);
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
+    procedure CloseButtonClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    AccountNumber: String;
+    PriorAccountID, AccountID: Longint;
+  end;
+
+var
+  AccountState: TAccountState;
+
+implementation
+
+{$R *.DFM}
+
+uses sboapiDataModuleImpl, AccountDataModuleImpl;
+
+procedure TAccountState.FormKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+if Key = VK_ESCAPE then
+  Close;
+end;
+
+procedure TAccountState.FormCreate(Sender: TObject);
+begin
+ PriorAccountID :=-1;
+SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TAccountState.SpeedButton1Click(Sender: TObject);
+begin
+ with AccStateExporter do
+  if
+    ExportSource.DataSet.Active and
+    (ExportSource.DataSet.RecordCount > 0) then
+    begin
+     ExportSource.DataSet.Last;
+     ExportSource.DataSet.First;
+     Report;
+    end;
+end;
+
+procedure TAccountState.FormActivate(Sender: TObject);
+const
+     cs_message = 'Rest & TurnOvers for account "%s"';
+begin
+
+ with Out_accdatamodule.Account do
+ begin
+  AccountID :=FieldByName('ID').AsInteger;
+  AccountNumber :=FieldByName('acc_no').AsString;
+ end;
+
+ Caption :=Format(cs_message, [AccountNumber]);
+
+ if AccountID <> PriorAccountID then
+  with AccStateData do
+  begin
+   CloseAll;
+   SetVariable('AccID', AccountID);
+   Open;
+  end;
+
+ PriorAccountID :=AccountID;
+
+end;
+
+
+procedure TAccountState.CloseButtonClick(Sender: TObject);
+begin
+close;
+end;
+
+end.

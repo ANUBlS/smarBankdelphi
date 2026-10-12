@@ -1,0 +1,742 @@
+object TransactionsDataModule: TTransactionsDataModule
+  OldCreateOrder = False
+  OnCreate = DataModuleCreate
+  Left = 331
+  Top = 103
+  Height = 555
+  Width = 822
+  object Transactions: TDataSource
+    DataSet = TransactionsData
+    OnDataChange = TransactionsDataChange
+    Left = 48
+    Top = 32
+  end
+  object DebitCurrency: TDataSource
+    DataSet = DebitCurrencyData
+    Left = 74
+    Top = 217
+  end
+  object DebitCurrencyData: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      '  currency.valute as ID,'
+      '  currency.val_name as SName,'
+      '  currency.valu_name as Name,'
+      '  rates.OSTAT as Rate'
+      'from'
+      '  avalute currency,'
+      '  TEMPRATE rates'
+      'where'
+      '  rates.VAL_KOD = currency.VALUTE'
+      'order by currency.valute')
+    QBEDefinition.QBEFieldDefs = {
+      040000000400000002000000494401000000000005000000534E414D45010000
+      000000040000004E414D450100000000000400000052415445010000000000}
+    ReadOnly = True
+    Session = sboapiDataModule.SBSession
+    Active = True
+    AfterScroll = DebitCurrencyDataAfterScroll
+    Left = 144
+    Top = 209
+    object DebitCurrencyDataID: TIntegerField
+      FieldName = 'ID'
+      Required = True
+    end
+    object DebitCurrencyDataSNAME: TStringField
+      FieldName = 'SNAME'
+      Size = 10
+    end
+    object DebitCurrencyDataNAME: TStringField
+      FieldName = 'NAME'
+      Size = 25
+    end
+    object DebitCurrencyDataRATE: TFloatField
+      FieldName = 'RATE'
+    end
+  end
+  object CreditCurrency: TDataSource
+    DataSet = CreditCurrencyData
+    Left = 224
+    Top = 193
+  end
+  object CreditCurrencyData: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      '  currency.valute as ID,'
+      '  currency.val_name as SName,'
+      '  currency.valu_name as Name,'
+      '  rates.OSTAT as Rate'
+      'from'
+      '  avalute currency,'
+      '  TEMPRATE rates'
+      'where'
+      '  rates.VAL_KOD = currency.VALUTE'
+      'order by currency.valute')
+    QBEDefinition.QBEFieldDefs = {
+      040000000400000002000000494401000000000005000000534E414D45010000
+      000000040000004E414D450100000000000400000052415445010000000000}
+    ReadOnly = True
+    Session = sboapiDataModule.SBSession
+    Active = True
+    AfterScroll = CreditCurrencyDataAfterScroll
+    Left = 320
+    Top = 185
+    object CreditCurrencyDataID: TIntegerField
+      FieldName = 'ID'
+      Required = True
+    end
+    object CreditCurrencyDataSNAME: TStringField
+      FieldName = 'SNAME'
+      Size = 10
+    end
+    object CreditCurrencyDataNAME: TStringField
+      FieldName = 'NAME'
+      Size = 25
+    end
+    object CreditCurrencyDataRATE: TFloatField
+      FieldName = 'RATE'
+    end
+  end
+  object DebitAccs: TDataSource
+    DataSet = DebitAccData
+    Left = 74
+    Top = 261
+  end
+  object DebitAccData: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      '  a.ID,'
+      '  a.ACC_NO,'
+      '  a.VAL_ACC,'
+      '  a.NAME,'
+      '  t.ostat as Balance,'
+      '  t.pok_ostat as LBalance,'
+      '  b.CashIncoming as IsCacheAccount'
+      'FROM'
+      '  Account a,'
+      '  Tenostat t,'
+      '  Bal_SPR1 b'
+      'where'
+      '  (A.CLOSE_DAT IS NULL)'
+      '  and (a.val_acc = :val_acc)'
+      '  and (t.acc_id = a.ID)'
+      '  and (b.bal_cn = a.bal_cn1)'
+      'ORDER BY ACC_NO'
+      ''
+      ''
+      ' ')
+    Variables.Data = {
+      0300000001000000080000003A56414C5F414343030000000400000000000000
+      00000000}
+    QBEDefinition.QBEFieldDefs = {
+      0400000007000000020000004944010000000000060000004143435F4E4F0100
+      000000000700000056414C5F414343010000000000040000004E414D45010000
+      0000000700000042414C414E4345010000000000080000004C42414C414E4345
+      0100000000000E000000495343414348454143434F554E54010000000000}
+    Master = DebitCurrencyData
+    MasterFields = 'ID'
+    DetailFields = 'VAL_ACC'
+    Session = sboapiDataModule.SBSession
+    Active = True
+    AfterScroll = DebitAccDataAfterScroll
+    Left = 138
+    Top = 253
+  end
+  object CreditAccs: TDataSource
+    DataSet = CreditAccData
+    Left = 226
+    Top = 261
+  end
+  object CreditAccData: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      '  a.ID,'
+      '  a.ACC_NO,'
+      '  a.VAL_ACC,'
+      '  a.NAME,'
+      '  t.ostat as Balance,'
+      '  t.pok_ostat as LBalance,'
+      '  b.CashIncoming as IsCacheAccount'
+      'FROM'
+      '  Account a,'
+      '  Tenostat t,'
+      '  Bal_SPR1 b'
+      'where'
+      '  (A.CLOSE_DAT IS NULL)'
+      '  and (a.val_acc = :val_acc)'
+      '  and (t.acc_id = a.ID)'
+      '  and (b.bal_cn = a.bal_cn1)'
+      'ORDER BY ACC_NO'
+      ''
+      ' ')
+    Variables.Data = {
+      0300000001000000080000003A56414C5F414343030000000400000000000000
+      00000000}
+    QBEDefinition.QBEFieldDefs = {
+      0400000007000000020000004944010000000000060000004143435F4E4F0100
+      000000000700000056414C5F414343010000000000040000004E414D45010000
+      0000000700000042414C414E4345010000000000080000004C42414C414E4345
+      0100000000000E000000495343414348454143434F554E54010000000000}
+    Master = CreditCurrencyData
+    MasterFields = 'ID'
+    DetailFields = 'VAL_ACC'
+    Session = sboapiDataModule.SBSession
+    Active = True
+    AfterScroll = CreditAccDataAfterScroll
+    Left = 258
+    Top = 261
+  end
+  object BankM: TDataSource
+    DataSet = BankMData
+    Left = 316
+    Top = 32
+  end
+  object BankMData: TOracleDataSet
+    SQL.Strings = (
+      'select * from bankm')
+    QBEDefinition.QBEFieldDefs = {
+      0400000007000000020000004944010000000000040000004B524E4F01000000
+      0000040000004E414D4501000000000003000000494E4E010000000000050000
+      0053574946540100000000000800000042414E4B434F44450100000000000700
+      00005355424B524E4F010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 348
+    Top = 32
+  end
+  object TransactionsData: TOracleDataSet
+    SQL.Strings = (
+      'SELECT'
+      '  p.ID,'
+      '  p.DebitID,'
+      '  p.DebitAccNo,'
+      '  p.DebitCurrencyID,'
+      '  p.DebitCurrencySName,'
+      '  p.CreditID,'
+      '  p.CreditAccNo,'
+      '  p.CreditCurrencyID,'
+      '  p.CreditCurrencySName,'
+      '  p.DebitAmount,'
+      '  p.CreditAmount,'
+      '  p.LAmount,'
+      '  p.DebitRate,'
+      '  p.CreditRate,'
+      '  p.DebitBank,'
+      '  p.CreditBank,'
+      '  p.PackageNumber,'
+      '  p.CYPHERCODE,'
+      '  p.OPERATIONCODE,'
+      '  p.INBALANCECHAR,'
+      '  p.OUTBALANCECHAR,'
+      '  p.FilialID,'
+      '  p.DebitBalance,'
+      '  p.Name,'
+      '  p.Status,'
+      '  p.REJECT_REASON,'
+      '  p.TransactionDate'
+      'FROM'
+      ' TRANSACTIONS p'
+      ' WHERE'
+      
+        ' (p.TransactionDate between sysdate AND sysdate) AND ( ((p.Debit' +
+        'CurrencyID = 0) AND (p.CreditCurrencyID = 0))'
+      
+        ' OR ((p.DebitCurrencyID <> 0) AND (p.DebitCurrencyID = p.CreditC' +
+        'urrencyID))'
+      ' OR (p.DebitCurrencyID <> p.CreditCurrencyID)'
+      
+        ' OR ((p.LAmount <> 0) and ((p.DebitAmount = 0) or (p.CreditAmoun' +
+        't = 0)))'
+      ')'
+      ' AND (Status in ( 1 , 2 , 3))'
+      '  ORDER BY p.ID')
+    QBEDefinition.QBEFieldDefs = {
+      040000001B000000020000004944010000000000070000004445424954494401
+      00000000000A00000044454249544143434E4F0100000000000F000000444542
+      495443555252454E435949440100000000001200000044454249544355525245
+      4E4359534E414D45010000000000080000004352454449544944010000000000
+      0B0000004352454449544143434E4F0100000000001000000043524544495443
+      555252454E435949440100000000001300000043524544495443555252454E43
+      59534E414D450100000000000B0000004445424954414D4F554E540100000000
+      000C000000435245444954414D4F554E54010000000000070000004C414D4F55
+      4E54010000000000090000004445424954524154450100000000000A00000043
+      52454449545241544501000000000009000000444542495442414E4B01000000
+      00000A00000043524544495442414E4B0100000000000D0000005041434B4147
+      454E554D4245520100000000000A000000435950484552434F44450100000000
+      000D0000004F5045524154494F4E434F44450100000000000D000000494E4241
+      4C414E4345434841520100000000000E0000004F555442414C414E4345434841
+      520100000000000800000046494C49414C49440100000000000C000000444542
+      495442414C414E4345010000000000040000004E414D45010000000000060000
+      005354415455530100000000000D00000052454A4543545F524541534F4E0100
+      000000000F0000005452414E53414354494F4E44415445010000000000}
+    OnApplyRecord = TransactionsDataApplyRecord
+    Session = sboapiDataModule.SBSession
+    BeforeEdit = TransactionsDataBeforeEdit
+    AfterScroll = TransactionsDataAfterScroll
+    Left = 96
+    Top = 32
+    object TransactionsDataID: TFloatField
+      FieldName = 'ID'
+    end
+    object TransactionsDataDEBITID: TFloatField
+      FieldName = 'DEBITID'
+    end
+    object TransactionsDataDEBITACCNO: TStringField
+      FieldName = 'DEBITACCNO'
+    end
+    object TransactionsDataDEBITCURRENCYID: TFloatField
+      FieldName = 'DEBITCURRENCYID'
+      OnChange = TransactionsDataDEBITCURRENCYIDChange
+    end
+    object TransactionsDataDEBITCURRENCYSNAME: TStringField
+      FieldName = 'DEBITCURRENCYSNAME'
+      Size = 10
+    end
+    object TransactionsDataCREDITID: TFloatField
+      FieldName = 'CREDITID'
+    end
+    object TransactionsDataCREDITACCNO: TStringField
+      FieldName = 'CREDITACCNO'
+    end
+    object TransactionsDataCREDITCURRENCYSNAME: TStringField
+      FieldName = 'CREDITCURRENCYSNAME'
+      Size = 10
+    end
+    object TransactionsDataDEBITAMOUNT: TFloatField
+      FieldName = 'DEBITAMOUNT'
+      currency = True
+    end
+    object TransactionsDataCREDITAMOUNT: TFloatField
+      FieldName = 'CREDITAMOUNT'
+      currency = True
+    end
+    object TransactionsDataLAMOUNT: TFloatField
+      FieldName = 'LAMOUNT'
+      currency = True
+    end
+    object TransactionsDataDEBITRATE: TFloatField
+      FieldName = 'DEBITRATE'
+    end
+    object TransactionsDataCREDITRATE: TFloatField
+      FieldName = 'CREDITRATE'
+    end
+    object TransactionsDataDEBITBANK: TFloatField
+      FieldName = 'DEBITBANK'
+    end
+    object TransactionsDataCREDITBANK: TFloatField
+      FieldName = 'CREDITBANK'
+    end
+    object TransactionsDataNAME: TStringField
+      FieldName = 'NAME'
+      Size = 255
+    end
+    object CurrencyField1: TCurrencyField
+      FieldKind = fkCalculated
+      FieldName = 'CurrencyRate'
+      Calculated = True
+    end
+    object TransactionsDataTransactionDate: TDateTimeField
+      FieldName = 'TransactionDate'
+    end
+    object TransactionsDataCYPHERCODE: TIntegerField
+      FieldName = 'CYPHERCODE'
+    end
+    object TransactionsDataOPERATIONCODE: TIntegerField
+      FieldName = 'OPERATIONCODE'
+    end
+    object TransactionsDataINBALANCECHAR: TIntegerField
+      FieldName = 'INBALANCECHAR'
+    end
+    object TransactionsDataOUTBALANCECHAR: TIntegerField
+      FieldName = 'OUTBALANCECHAR'
+    end
+    object TransactionsDataFILIALID: TIntegerField
+      FieldName = 'FILIALID'
+    end
+    object TransactionsDataDEBITBALANCE: TFloatField
+      FieldName = 'DEBITBALANCE'
+    end
+    object TransactionsDataSTATUS: TFloatField
+      FieldName = 'STATUS'
+    end
+    object TransactionsDataREJECT_REASON: TStringField
+      FieldName = 'REJECT_REASON'
+      Size = 255
+    end
+    object TransactionsDataPACKAGENUMBER: TIntegerField
+      FieldName = 'PACKAGENUMBER'
+    end
+    object TransactionsDataCREDITCURRENCYID: TIntegerField
+      FieldName = 'CREDITCURRENCYID'
+    end
+  end
+  object SBReport: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'SBREP'
+    ParameterMode = pmNamed
+    Left = 200
+    Top = 32
+  end
+  object DebitAccountData: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      '  a.ID,'
+      '  a.ACC_NO as AccountNo,'
+      '  a.Name,'
+      '  t.ostat as Balance,'
+      '  t.POK_OSTAT as LBalance,'
+      '  b.CashIncoming as IsCacheAccount'
+      'from'
+      '  account a,'
+      '  tenostat t,'
+      '  bal_spr1 b'
+      'where'
+      '  (t.acc_id = a.id)'
+      '  and (b.bal_cn = a.bal_cn1)'
+      'order by AccountNo'
+      '')
+    QBEDefinition.QBEFieldDefs = {
+      0400000006000000020000004944010000000000090000004143434F554E544E
+      4F010000000000040000004E414D450100000000000700000042414C414E4345
+      010000000000080000004C42414C414E43450100000000000E00000049534341
+      4348454143434F554E54010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 152
+    Top = 104
+    object DebitAccountDataID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object DebitAccountDataACCOUNTNO: TStringField
+      FieldName = 'ACCOUNTNO'
+    end
+    object DebitAccountDataNAME: TStringField
+      FieldName = 'NAME'
+      Size = 90
+    end
+    object DebitAccountDataBALANCE: TFloatField
+      FieldName = 'BALANCE'
+    end
+    object DebitAccountDataLBALANCE: TFloatField
+      FieldName = 'LBALANCE'
+    end
+    object DebitAccountDataISCACHEACCOUNT: TFloatField
+      FieldName = 'ISCACHEACCOUNT'
+    end
+  end
+  object DebitAccounts: TDataSource
+    DataSet = DebitAccountData
+    Left = 80
+    Top = 104
+  end
+  object CreditAccountData: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      '  a.ID,'
+      '  a.ACC_NO as AccountNo,'
+      '  a.Name,'
+      '  t.ostat as Balance,'
+      '  t.POK_OSTAT as LBalance,'
+      '  b.CashIncoming as IsCacheAccount'
+      'from'
+      '  account a,'
+      '  tenostat t,'
+      '  bal_spr1 b'
+      'where'
+      '  (t.acc_id = a.id)'
+      '  and (b.bal_cn = a.bal_cn1)'
+      'order by AccountNo'
+      ' '
+      ''
+      ' ')
+    QBEDefinition.QBEFieldDefs = {
+      0400000006000000020000004944010000000000090000004143434F554E544E
+      4F010000000000040000004E414D450100000000000700000042414C414E4345
+      010000000000080000004C42414C414E43450100000000000E00000049534341
+      4348454143434F554E54010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 352
+    Top = 104
+    object FloatField1: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object StringField1: TStringField
+      FieldName = 'ACCOUNTNO'
+    end
+    object StringField2: TStringField
+      FieldName = 'NAME'
+      Size = 90
+    end
+    object CreditAccountDataBALANCE: TFloatField
+      FieldName = 'BALANCE'
+    end
+    object CreditAccountDataLBALANCE: TFloatField
+      FieldName = 'LBALANCE'
+    end
+    object CreditAccountDataISCACHEACCOUNT: TFloatField
+      FieldName = 'ISCACHEACCOUNT'
+    end
+  end
+  object CreditAccounts: TDataSource
+    DataSet = CreditAccountData
+    Left = 280
+    Top = 104
+  end
+  object DebitBalanceData: TOracleDataSet
+    SQL.Strings = (
+      'select bal_cn as No, balname as Name'
+      'from bal_spr1'
+      'where bal_cn>=1000'
+      'order by bal_cn')
+    QBEDefinition.QBEFieldDefs = {
+      0400000002000000020000004E4F010000000000040000004E414D4501000000
+      0000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 144
+    Top = 160
+  end
+  object DebitBalance: TDataSource
+    DataSet = DebitBalanceData
+    Left = 80
+    Top = 160
+  end
+  object InBalanceSymbolsData: TOracleDataSet
+    SQL.Strings = (
+      'select * from KASSA_B'
+      'where MedioCrity = :AccountSide'
+      'order by symbol')
+    Variables.Data = {
+      03000000010000000C0000003A4143434F554E54534944450300000004000000
+      0300000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      04000000030000000600000053594D424F4C010000000000040000004E414D45
+      0100000000000A0000004D4544494F4352495459010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 480
+    Top = 224
+  end
+  object InBalanceSymbols: TDataSource
+    DataSet = InBalanceSymbolsData
+    Left = 440
+    Top = 224
+  end
+  object OutbalanceSymbolsData: TOracleDataSet
+    SQL.Strings = (
+      'select * from CONVERT_ASSIGNMENTS'
+      'order by ID')
+    QBEDefinition.QBEFieldDefs = {
+      04000000050000000200000049440100000000000900000053484F52544E414D
+      450100000000000800000046554C4C5041544801000000000005000000455854
+      524101000000000009000000444946464552454E54010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 480
+    Top = 272
+  end
+  object OutbalanceSymbols: TDataSource
+    DataSet = OutbalanceSymbolsData
+    Left = 440
+    Top = 272
+  end
+  object ODSCommisionTrans: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      '    commision_trans.Rowid'
+      '   ,id'
+      '   ,name'
+      '   ,debt'
+      
+        '   ,sb_complex_transactions.getaccountnumber(debt) as DebitAccou' +
+        'nt'
+      
+        '   ,sb_complex_transactions.GetAccountCurrency(debt) as DebitCur' +
+        'rency'
+      '   ,credit'
+      
+        '   ,sb_complex_transactions.getaccountnumber(credit) as CreditAc' +
+        'count'
+      
+        '   ,sb_complex_transactions.GetAccountCurrency(credit) as Credit' +
+        'Currency'
+      '   ,additionalDebt'
+      '   ,additionalCredit'
+      
+        '   ,sb_complex_transactions.getaccountnumber(additionalDebt) as ' +
+        'ADebt'
+      
+        '   ,sb_complex_transactions.GetAccountCurrency(additionalDebt) a' +
+        's ADebitCurrency'
+      
+        '   ,sb_complex_transactions.getaccountnumber(additionalCredit) a' +
+        's ACredit'
+      
+        '   ,sb_complex_transactions.GetAccountCurrency(additionalCredit)' +
+        ' as ACreditCurrency'
+      '   ,assignment'
+      '   ,commisionassignment'
+      '   ,UserID'
+      'from'
+      '    commision_trans'
+      'where'
+      '   UserID = 0 or'
+      '    UserID = (SBLogin.UserID)'
+      'order by'
+      '    commision_trans.ID')
+    QBEDefinition.QBEFieldDefs = {
+      0400000011000000020000004944010000000000040000004E414D4501000000
+      000004000000444542540100000000000C00000044454249544143434F554E54
+      0100000000000D000000444542495443555252454E4359010000000000060000
+      004352454449540100000000000D0000004352454449544143434F554E540100
+      000000000E00000043524544495443555252454E43590100000000000E000000
+      4144444954494F4E414C44454254010000000000100000004144444954494F4E
+      414C4352454449540100000000000500000041444542540100000000000E0000
+      0041444542495443555252454E43590100000000000700000041435245444954
+      0100000000000F0000004143524544495443555252454E43590100000000000A
+      00000041535349474E4D454E5401000000000013000000434F4D4D4953494F4E
+      41535349474E4D454E5401000000000006000000555345524944010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 432
+    Top = 32
+    object ODSCommisionTransID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object ODSCommisionTransNAME: TStringField
+      FieldName = 'NAME'
+      Size = 150
+    end
+    object ODSCommisionTransDEBT: TFloatField
+      FieldName = 'DEBT'
+    end
+    object ODSCommisionTransDEBITACCOUNT: TStringField
+      FieldName = 'DEBITACCOUNT'
+      Size = 4000
+    end
+    object ODSCommisionTransDEBITCURRENCY: TStringField
+      FieldName = 'DEBITCURRENCY'
+      Size = 4000
+    end
+    object ODSCommisionTransCREDIT: TFloatField
+      FieldName = 'CREDIT'
+    end
+    object ODSCommisionTransCREDITACCOUNT: TStringField
+      FieldName = 'CREDITACCOUNT'
+      Size = 4000
+    end
+    object ODSCommisionTransCREDITCURRENCY: TStringField
+      FieldName = 'CREDITCURRENCY'
+      Size = 4000
+    end
+    object ODSCommisionTransADDITIONALDEBT: TFloatField
+      FieldName = 'ADDITIONALDEBT'
+    end
+    object ODSCommisionTransADDITIONALCREDIT: TFloatField
+      FieldName = 'ADDITIONALCREDIT'
+    end
+    object ODSCommisionTransADEBT: TStringField
+      FieldName = 'ADEBT'
+      Size = 4000
+    end
+    object ODSCommisionTransACREDIT: TStringField
+      FieldName = 'ACREDIT'
+      Size = 4000
+    end
+    object ODSCommisionTransASSIGNMENT: TStringField
+      FieldName = 'ASSIGNMENT'
+      Size = 300
+    end
+    object ODSCommisionTransCOMMISIONASSIGNMENT: TStringField
+      FieldName = 'COMMISIONASSIGNMENT'
+      Size = 300
+    end
+  end
+  object DSCommisionTrans: TDataSource
+    DataSet = ODSCommisionTrans
+    Left = 528
+    Top = 32
+  end
+  object OPComplexTrans: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'SB_COMPLEX_TRANSACTIONS'
+    Left = 456
+    Top = 112
+  end
+  object FilialsData: TOracleDataSet
+    SQL.Strings = (
+      'select *'
+      'from FILIAL')
+    QBEDefinition.QBEFieldDefs = {
+      0400000002000000020000004944010000000000040000004E414D4501000000
+      0000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 112
+    Top = 305
+    object FilialsDataID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object FilialsDataNAME: TStringField
+      FieldName = 'NAME'
+      Size = 90
+    end
+  end
+  object Filials: TDataSource
+    DataSet = FilialsData
+    Left = 72
+    Top = 305
+  end
+  object FilialsCData: TOracleDataSet
+    SQL.Strings = (
+      'select *'
+      'from FILIAL')
+    QBEDefinition.QBEFieldDefs = {
+      0400000002000000020000004944010000000000040000004E414D4501000000
+      0000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 112
+    Top = 353
+  end
+  object FilialsC: TDataSource
+    DataSet = FilialsCData
+    Left = 72
+    Top = 353
+  end
+  object UsData: TOracleDataSet
+    SQL.Strings = (
+      'select ID,NAME from'
+      'user$')
+    QBEDefinition.QBEFieldDefs = {
+      0400000002000000020000004944010000000000040000004E414D4501000000
+      0000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 112
+    Top = 401
+    object UsDataID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object UsDataNAME: TStringField
+      FieldName = 'NAME'
+      Size = 32
+    end
+  end
+  object Us: TDataSource
+    DataSet = UsData
+    Left = 72
+    Top = 401
+  end
+  object OraclePackage: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    Left = 408
+    Top = 352
+  end
+end

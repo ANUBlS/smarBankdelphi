@@ -1,0 +1,50 @@
+unit MainTrafficsForm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, Grids, DBGrids, Mask, DBCtrls;
+
+type
+  TMainTraffics = class(TForm)
+    TrafficsViewer: TDBGrid;
+    GroupBox1: TGroupBox;
+    DBEdit1: TDBEdit;
+    procedure FormKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    procedure MouseWheelHandler(var Message: TMessage); override;
+  end;
+
+var
+  MainTraffics: TMainTraffics;
+
+implementation
+
+uses ExpertDataModule;
+
+{$R *.DFM}
+
+procedure TMainTraffics.MouseWheelHandler(var Message: TMessage);
+begin
+ Inherited;
+ if TrafficsViewer.Focused then
+  with TCMMouseWheel(Message), TrafficsViewer.DataSource.DataSet do
+    if WheelDelta < 0 then
+      Next
+    else
+      Prior;
+   TrafficsViewer.Repaint;
+end;
+
+procedure TMainTraffics.FormKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+ if (Key =VK_ESCAPE) then Close;
+end;
+
+end.

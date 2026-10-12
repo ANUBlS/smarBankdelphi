@@ -1,0 +1,678 @@
+﻿unit ReCalculationMainForm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+   ComCtrls, StdCtrls, Grids, DBGridEh, DBSumLst, ToolWin,
+  ExtCtrls, ImgList, DB, ActnList, Oracle, OracleData, CMExcelExport, Menus,
+  DBGridEhGrouping, GridsEh, DBCtrls, Buttons;
+
+type
+
+  ESearchError = class(Exception);
+
+  TPRMainForm = class(TForm)
+    CalcGrid: TDBGridEh;
+    ImageList1: TImageList;
+    Panel1: TPanel;
+    ToolBar1: TToolBar;
+    ActionList1: TActionList;
+    ActnCalculate: TAction;
+    ActnAcceptCalc: TAction;
+    ActnRejectCalc: TAction;
+    Panel2: TPanel;
+    ActnRefresh: TAction;
+    ExcelExport: TCMExcelExport;
+    ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
+    ToolButton3: TToolButton;
+    ToolButton4: TToolButton;
+    ToolButton5: TToolButton;
+    ToolButton6: TToolButton;
+    ToolButton7: TToolButton;
+    ToolButton9: TToolButton;
+    ToolButton10: TToolButton;
+    ActnExport: TAction;
+    EditNumberOfCredit: TEdit;
+    EditNAME: TEdit;
+    ToolButton11: TToolButton;
+    ActnFilter: TAction;
+    ActnCalcAllintrest: TAction;
+    ToolButton13: TToolButton;
+    ToolButton8: TToolButton;
+    ToolButton12: TToolButton;
+    Panel3: TPanel;
+    DBGridEh1: TDBGridEh;
+    DBMemo1: TDBMemo;
+    BitBtn1: TBitBtn;
+    ToolButton14: TToolButton;
+    ToolButton15: TToolButton;
+    PopupMenu1: TPopupMenu;
+    Stop1: TMenuItem;
+    Stop2: TMenuItem;
+    ToolButton16: TToolButton;
+    crabsi1: TMenuItem;
+    ToolButton17: TToolButton;
+    PopupMenu2: TPopupMenu;
+    PK1: TMenuItem;
+    cra1: TMenuItem;
+    sazlama1: TMenuItem;
+    PKAfto1: TMenuItem;
+    PopupMenu3: TPopupMenu;
+    Exceleatyeni1: TMenuItem;
+    ExceleatKhn1: TMenuItem;
+    procedure FormDestroy(Sender: TObject);
+    procedure CalcGridDrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TColumnEh; State: TGridDrawState);
+    procedure FormCreate(Sender: TObject);
+    procedure ActnAcceptCalcExecute(Sender: TObject);
+    procedure CalcGridColumnMoved(Sender: TObject; FromIndex,
+      ToIndex: Integer);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure ActnRefreshExecute(Sender: TObject);
+    procedure ActnAcceptCalcUpdate(Sender: TObject);
+    procedure ActnRejectCalcUpdate(Sender: TObject);
+    procedure CalcGridTitleBtnClick(Sender: TObject; ACol: Integer;
+      Column: TColumnEh);
+    procedure EditNumberOfCreditKeyPress(Sender: TObject; var Key: Char);
+    procedure EditNumberOfCreditExit(Sender: TObject);
+    procedure ActnFilterExecute(Sender: TObject);
+    procedure ActnFilterUpdate(Sender: TObject);
+    procedure ToolButton1Click(Sender: TObject);
+    procedure ToolButton3Click(Sender: TObject);
+    procedure CalcGridDblClick(Sender: TObject);
+    procedure BitBtn1Click(Sender: TObject);
+    procedure ToolButton14Click(Sender: TObject);
+    procedure ToolButton15Click(Sender: TObject);
+    procedure CalcGridMouseUp(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
+    procedure Stop1Click(Sender: TObject);
+    procedure Stop2Click(Sender: TObject);
+    procedure crabsi1Click(Sender: TObject);
+    procedure sazlama1Click(Sender: TObject);
+    procedure cra1Click(Sender: TObject);
+    procedure PK1Click(Sender: TObject);
+    procedure PKAfto1Click(Sender: TObject);
+    procedure ExceleatKhn1Click(Sender: TObject);
+    procedure Exceleatyeni1Click(Sender: TObject);
+
+  private
+    procedure PrepareProgress(ProgCnt : Integer; opDesc : String);
+    procedure ShowInterestCalculator;
+    function ExcuseMeUser(Question : String) : Boolean;
+    procedure SafelyRefresh(Safely : Boolean);
+    function FindNextRecord(DataSet : TDataSet;FieldName : String;Value : String) : Boolean;
+    { Private declarations }
+  public
+   procedure LoadPayment(CrdID :Integer);
+    procedure LoadGirov(CrdID :Integer);
+
+    { Public declarations }
+  end;
+
+var
+  PRMainForm: TPRMainForm;
+  reptype, mehid :integer;
+  QCrdID :integer;
+procedure InitPlugin(S : String); export;
+
+implementation
+
+{$R *.DFM}
+
+uses
+  CommonDecls, ProgressFormImpl, FlReCalculationDataModuleImpl, sbSystem,
+  FlFilterDataModuleImpl, FilterUnitImpl, newProgressimpl, SendImpl,
+  FrmReciverImpl, Controlimpl, InfoImpl, MehtemeImpl, SettingFrmImpl, IcraImpl;
+
+const
+  LoadingFailed : Boolean = True;
+  DataColIndex : Integer = 0;
+
+procedure TPRMainForm.PK1Click(Sender: TObject);
+begin
+ if not Assigned(IcraFrm) then
+    IcraFrm := TIcraFrm.Create(Self);
+    reptype:=0;
+
+       IcraFrm.XDBGrid1.Columns[2].Visible:=false;
+       IcraFrm.XDBGrid1.Columns[3].Title.Caption:='Ə.B Yığım';
+       IcraFrm.XDBGrid1.Columns[4].Title.Caption:='Ə.B Bonus';
+
+       IcraFrm.XDBGrid1.Columns[5].Visible:=true;
+       IcraFrm.XDBGrid1.Columns[6].Visible:=true;
+       IcraFrm.XDBGrid1.Columns[7].Visible:=true;
+
+       IcraFrm.XDBGrid1.Columns[5].Title.Caption:='F.B Yığım';
+       IcraFrm.XDBGrid1.Columns[6].Title.Caption:='F.B Bonus';
+       IcraFrm.XDBGrid1.Columns[7].Title.Caption:='Cəmi Bonus';
+
+       IcraFrm.Width:=666;
+
+    IcraFrm.showmodal;
+end;
+
+procedure TPRMainForm.PKAfto1Click(Sender: TObject);
+begin
+ if not Assigned(IcraFrm) then
+    IcraFrm := TIcraFrm.Create(Self);
+    reptype:=1;
+       IcraFrm.XDBGrid1.Columns[2].Visible:=true;
+       IcraFrm.XDBGrid1.Columns[3].Title.Caption:='Yığım';
+       IcraFrm.XDBGrid1.Columns[4].Title.Caption:='Bonus';
+
+       IcraFrm.XDBGrid1.Columns[5].Visible:=false;
+       IcraFrm.XDBGrid1.Columns[6].Visible:=false;
+       IcraFrm.XDBGrid1.Columns[7].Visible:=false;
+       IcraFrm.Width:=450;
+    IcraFrm.showmodal;
+end;
+
+procedure TPRMainForm.PrepareProgress;
+begin
+  with NewProgressForm , ProgressShower do
+  begin
+    Position := 0;
+    Max := ProgCnt;
+    Step := 1;
+    Caption := opDesc;
+  end;
+  NewProgressForm.Show;
+end;
+
+procedure TPRMainForm.ExceleatKhn1Click(Sender: TObject);
+begin
+if PRDataModule.IntCache_ex.Active then
+ PRDataModule.IntCache_ex.Close;
+ PRDataModule.IntCache_ex.open;
+
+
+  with ExcelExport do
+  begin
+    Connect;
+    ExportDataset(PRDataModule.IntCache_ex,'Dosyeler',True);
+  end;
+end;
+
+procedure TPRMainForm.Exceleatyeni1Click(Sender: TObject);
+begin
+if PRDataModule.IntCache.Active then
+ PRDataModule.IntCache.Close;
+ PRDataModule.IntCache.open;
+
+
+  with ExcelExport do
+  begin
+    Connect;
+    ExportDataset(PRDataModule.IntCache,'Dosyeler',True);
+  end;
+end;
+
+function TPRMainForm.ExcuseMeUser(Question : String) : Boolean;
+begin
+  Result :=
+    MessageDlg(
+      Question
+     ,mtConfirmation
+     ,[mbYes,mbNo]
+     ,0
+     ) = mrYes;
+end;
+
+procedure TPRMainForm.SafelyRefresh(Safely : Boolean);
+var
+  SavePlace : TBookmark;
+begin
+  with CalcGrid, DataSource.DataSet do
+  begin
+    SavePlace := GetBookmark;
+    Refresh;
+    SelectedRows.Clear;
+    if Safely then
+    GotoBookmark(SavePlace);
+  end;
+end;
+
+procedure TPRMainForm.sazlama1Click(Sender: TObject);
+
+var count :integer;
+begin
+   count:=PRDataModule.adm.CallIntegerFunction('getadmaddition',['BONS']);
+
+   if count=0 then
+   begin
+    showmessage('Sizin hüququnuz yoxdur!'+#13+'Əlavə məlumat üçün sistem administratoruna müracət edin.');
+   exit;
+  end;
+
+PRDataModule.OracleDataSet6.Open;
+PRDataModule.OracleDataSet7.Open;
+//PRDataModule.OracleDataSet8.Open;
+SettingFrm.Showmodal;
+end;
+
+procedure TPRMainForm.ShowInterestCalculator;
+resourcestring
+   rsLoadingFailed = 'Yükləmə vaxtı səhv baş vermişdir.......';
+begin
+//  if not LoadingFailed then
+    ShowModal
+//  else
+//    LogError(rsLoadingFailed);
+end;
+
+procedure InitPlugin(S : String); export;
+begin
+  PRMainForm.ShowInterestCalculator;
+end;
+
+exports
+  InitPlugin;
+
+procedure TPRMainForm.FormDestroy(Sender: TObject);
+begin
+  PRDataModule.Free;
+  ProgressForm.Free;
+end;
+
+procedure TPRMainForm.CalcGridDblClick(Sender: TObject);
+begin
+//PRDataModule.OracleDataSet4.Close;
+//PRDataModule.OracleDataSet4.open;
+PRDataModule.OracleDataSet4.insert;
+PRDataModule.OracleDataSet4.FieldByName('creditid').AsInteger:=PRDataModule.IntCache.FieldByName('id').AsInteger;
+FrmInfo.ShowModal;
+end;
+
+procedure TPRMainForm.CalcGridDrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TColumnEh;
+  State: TGridDrawState);
+var
+    ImageIndex :Integer;
+begin
+  with Sender as TDBGridEh do
+  begin
+      if DataSource.DataSet.RecordCount > 0 then
+    begin
+    ImageIndex := DataSource.DataSet.FieldByName('TrProcessed').AsInteger;
+     if   (DataCol = DataColIndex)   then
+      ImageList1.Draw(Canvas, Rect.Left, Rect.Top, ImageIndex, True)
+      else
+      DefaultDrawColumnCell(Rect, DataCol, Column, State);
+    end;
+  end;
+end;
+
+procedure TPRMainForm.CalcGridMouseUp(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Integer);
+begin
+if PRDataModule.IntCache.FieldByName('stop').AsString='' then
+begin
+  Stop1.Visible:=true ;
+  Stop2.Visible:=false
+end
+ else
+ begin
+    Stop1.Visible:=false ;
+    Stop2.Visible:=true
+ end;
+ if PRDataModule.IntCache.FieldByName('TrProcessed').asinteger =4 then
+    crabsi1.Visible:=true else
+     crabsi1.Visible:=False
+end;
+
+procedure TPRMainForm.FormCreate(Sender: TObject);
+begin
+  PRDataModule := TPRDataModule.Create(Self);
+
+//  NewProgressForm := TNewProgressForm.Create(Self);
+ FilterDataModule := TFilterDataModule.Create(Self);
+
+  FilterMainForm := TFilterMainForm.Create(Self);
+  FrmSend:=TFrmSend.Create(self);
+
+  FrmReciver:=TFrmReciver.Create(self);
+
+  FrmControl:=TFrmControl.Create(self);
+
+  FrmInfo:=TFrmInfo.Create(self);
+  MhFrm:=TMhFrm .Create(self);
+
+ FilterMainForm.FFilterGrid := CalcGrid;
+
+ SettingFrm:=TSettingFrm.Create(self);
+  //DTPCalcDate.DateTime := Get_CurrentDate;
+  LoadingFailed := False;
+
+end;
+
+
+procedure TPRMainForm.ActnAcceptCalcExecute(Sender: TObject);
+
+begin
+if PRDataModule.OracleDataSet2.Active then
+ PRDataModule.OracleDataSet2.close;
+ PRDataModule.OracleDataSet2.open;
+ FrmReciver.ShowModal
+end;
+
+ procedure TPRMainForm.CalcGridColumnMoved(Sender: TObject; FromIndex,
+  ToIndex: Integer);
+
+function FindSpecialRowIndex : Integer;
+begin
+  Result := 0;
+  with Sender as TDBGridEh do
+  while (Result < Columns.Count) and (Columns[Result].Tag <> 1) do
+  Inc(Result);
+end;
+
+begin
+ DataColIndex := FindSpecialRowIndex();
+end;
+
+procedure TPRMainForm.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+//  newProgressForm.Close;
+end;
+
+procedure TPRMainForm.ActnRefreshExecute(Sender: TObject);
+begin
+  SafelyRefresh(True);
+end;
+
+procedure TPRMainForm.ActnAcceptCalcUpdate(Sender: TObject);
+begin
+{  with CalcGrid.DataSource.DataSet do
+  (Sender as TAction).Enabled :=
+             Active and (FieldByName('TrProcessed').AsInteger = 1);   }
+end;
+
+procedure TPRMainForm.ActnRejectCalcUpdate(Sender: TObject);
+begin
+{  with CalcGrid.DataSource.DataSet do
+  (Sender as TAction).Enabled :=
+             Active and (FieldByName('TrProcessed').AsInteger in [1,2]);     }
+end;
+
+procedure TPRMainForm.BitBtn1Click(Sender: TObject);
+begin
+  with ExcelExport do
+  begin
+    Connect;
+    ExportDataset(PRDataModule.OracleDataSet4,PRDataModule.IntCacheNAME.AsString,True);
+  end;
+end;
+
+procedure TPRMainForm.CalcGridTitleBtnClick(Sender: TObject; ACol: Integer;
+  Column: TColumnEh);
+var
+  SortField : String;
+begin
+ if ACol <> DataColIndex then
+    SortField := Column.FieldName
+  else
+    SortField := 'TRPROCESSED';
+
+  if Column.Title.SortMarker = smDownEh then
+    SortField := SortField + ' DESC';
+
+  with Sender as TDBGridEh , TOracleDataSet(DataSource.DataSet) do
+  begin
+    ClearVariables;
+    SetVariable('OrderField',SortField);
+    SafelyRefresh(True);
+  end;
+
+end;
+
+procedure TPRMainForm.cra1Click(Sender: TObject);
+begin
+ if not Assigned(IcraFrm) then
+    IcraFrm := TIcraFrm.Create(Self);
+    reptype:=2;
+
+       IcraFrm.XDBGrid1.Columns[2].Visible:=true;
+       IcraFrm.XDBGrid1.Columns[3].Title.Caption:='Yığım';
+       IcraFrm.XDBGrid1.Columns[4].Title.Caption:='Bonus';
+
+       IcraFrm.XDBGrid1.Columns[5].Visible:=false;
+       IcraFrm.XDBGrid1.Columns[6].Visible:=false;
+       IcraFrm.XDBGrid1.Columns[7].Visible:=false;
+       IcraFrm.Width:=450;
+    IcraFrm.showmodal;
+
+end;
+
+procedure TPRMainForm.crabsi1Click(Sender: TObject);
+var count :integer;
+begin
+   count:=PRDataModule.adm.CallIntegerFunction('getadmaddition',['MEH']);
+
+   if count=0 then
+   begin
+    showmessage('Sizin hüququnuz yoxdur!'+#13+'Əlavə məlumat üçün sistem administratoruna müracət edin.');
+    exit;
+  end;
+    mehid:=0;
+  QCrdID := PRDataModule.IntCache.FieldByName('id').AsInteger;
+  with DBGridEh1, DataSource.DataSet do
+  begin
+     MhFrm.DBLookupComboboxEh4.KeyValue:=PRDataModule.IntCache.FieldByName('mehid').AsInteger;
+      MhFrm.showmodal;
+      if mehid=0 then
+       begin
+         ShowMessage('Məhkəməni seçməmisiz!');
+         exit;
+    end;
+end;
+
+with PRDataModule.OracleQuery1 do
+begin
+  sql.Text:='update cm_folderplace set mehid='+inttostr(mehid)+
+  ' where creditid='+ PRDataModule.IntCache.FieldByName('ID').asstring;
+  Execute;
+  Session.Commit;
+  SafelyRefresh(True);
+end;
+end;
+
+function TPRMainForm.FindNextRecord(DataSet : TDataSet;FieldName : String;Value : String) : Boolean;
+
+resourcestring
+  rsRecordRecachedEOF = 'Axtarış cərgənin sonuna çatıb .';
+  rsContinueFromTop   = 'Əvvəldən axtarmaqla davam etmək istəyirsiniz?';
+  rsRecordNotFound    = 'Yazı tapılmadı.';
+
+var
+  SearchOptions : TSearchRecordOptions;
+
+begin
+  SearchOptions := [srIgnoreCase ,srPartialMatch];
+  with  (DataSet as TOracleDataSet) do
+  begin
+
+    Result := SearchRecord(
+                FieldName,
+                Value,
+                SearchOptions + [srFromCurrent, srForward]
+    );
+    if not Result then
+
+    if MessageDlg(
+              rsRecordRecachedEOF + #10#13 + rsContinueFromTop
+             ,mtInformation
+             ,[mbNo , mbYes]
+             ,0
+             ) = mrYes  then
+    begin
+
+      Result := SearchRecord(
+                  FieldName,
+                  Value,
+                  SearchOptions + [srFromBeginning]
+      );
+
+
+      if not Result then
+      MessageDlg(rsRecordNotFound,mtInformation,[mbOk],0);
+
+    end;
+  end;
+end;
+
+procedure TPRMainForm.EditNumberOfCreditKeyPress(Sender: TObject;
+  var Key: Char);
+  
+resourcestring
+  rsNothingToSearch = 'Axtarılmalı olanı daxil edin';
+
+var
+  FieldToSearch : String;
+  SearchValue : String;
+begin
+  if ORD(Key) = VK_RETURN then
+  begin
+
+
+  CalcGrid.SelectedRows.Clear; //!!!
+
+  FieldToSearch := Copy((Sender as TEdit).Name,5,Length((Sender as TEdit).Name));
+  SearchValue := (Sender as TEdit).Text;
+  
+  if SearchValue = '' then
+    raise ESearchError.Create(rsNothingToSearch);
+
+  FindNextRecord(
+      CalcGrid.DataSource.DataSet,
+      FieldToSearch,
+      SearchValue
+  );
+  Key := #0
+  end;
+end;
+
+procedure TPRMainForm.EditNumberOfCreditExit(Sender: TObject);
+begin
+  (Sender as TEdit).Text := '';
+end;
+
+procedure TPRMainForm.ActnFilterExecute(Sender: TObject);
+begin
+FilterMainForm.ShowModal;
+//if not assigned(FilterMainForm) then
+// with  TFilterMainForm.Create(self) do
+//  try
+//  ShowModal;
+//  finally
+//    Release;
+//  end;
+end;
+
+procedure TPRMainForm.ActnFilterUpdate(Sender: TObject);
+begin
+//  (Sender as TAction).Enabled := not LoadingFailed;
+end;
+   procedure TPRMainForm.LoadPayment(CrdID :Integer);
+var ApplicationDir :String;
+    PluginHandle : THANDLE;
+    ExportPayment : procedure( s:integer);
+begin
+    ApplicationDir := ExtractFilePath(CommonApplication.ExeName);
+    PluginHandle := LoadPackage(ApplicationDir+'cm_payment.bpl');
+
+    if PluginHandle >0 then begin
+       @ExportPayment := GetProcAddress(PluginHandle,'ExportPayment');
+       ExportPayment(CrdID);
+    end;
+
+end;
+
+   procedure TPRMainForm.LoadGirov(CrdID :Integer);
+var ApplicationDir :String;
+    PluginHandle : THANDLE;
+    ExportGirov : procedure( s:integer);
+begin
+    ApplicationDir := ExtractFilePath(CommonApplication.ExeName);
+    PluginHandle := LoadPackage(ApplicationDir+'CM_Guarantee.bpl');
+
+    if PluginHandle >0 then begin
+       @ExportGirov := GetProcAddress(PluginHandle,'');
+       ExportGirov(CrdID);
+    end;
+
+end;
+ procedure TPRMainForm.ToolButton14Click(Sender: TObject);
+ var creditid :integer;
+begin
+with PRDataModule.IntCache do
+    creditid := FieldByName('ID').AsInteger;
+LoadPayment (creditid);
+end;
+
+procedure TPRMainForm.ToolButton15Click(Sender: TObject);
+ var creditid :integer;
+begin
+ with PRDataModule.IntCache do
+    creditid := FieldByName('ID').AsInteger;
+LoadGirov (creditid);
+end;
+
+procedure TPRMainForm.ToolButton1Click(Sender: TObject);
+begin
+FrmSend.showmodal;
+end;
+
+
+procedure TPRMainForm.ToolButton3Click(Sender: TObject);
+begin
+if PRDataModule.OracleDataSet3.Active then
+PRDataModule.OracleDataSet3.close;
+ PRDataModule.OracleDataSet3.open;
+ FrmControl.ShowModal
+end;
+
+procedure TPRMainForm.Stop1Click(Sender: TObject);
+var count :integer;
+begin
+   count:=PRDataModule.adm.CallIntegerFunction('getadmaddition',['STOP']);
+
+   if count=0 then
+   begin
+    showmessage('Sizin hüququnuz yoxdur!'+#13+'Əlavə məlumat üçün sistem administratoruna müracət edin.');
+   exit;
+  end;
+with PRDataModule.OracleQuery1 do
+begin
+  sql.Text:='update cm_portfolio set stop='''+'*'''+' where id='+ PRDataModule.IntCache.FieldByName('ID').asstring;
+   Execute;
+   Session.Commit;
+   SafelyRefresh(True);
+end;
+
+end;
+
+procedure TPRMainForm.Stop2Click(Sender: TObject);
+var count :integer;
+begin
+   count:=PRDataModule.adm.CallIntegerFunction('getadmaddition',['STOP']);
+
+   if count=0 then
+   begin
+    showmessage('Sizin hüququnuz yoxdur!'+#13+'Əlavə məlumat üçün sistem administratoruna müracət edin.');
+   exit;
+  end;
+with PRDataModule.OracleQuery1 do
+begin
+  sql.Text:='update cm_portfolio set stop=null where id='+ PRDataModule.IntCache.FieldByName('ID').asstring;
+  Execute;
+  Session.Commit;
+  SafelyRefresh(True);
+end;
+end;
+
+initialization
+  PRMainForm := TPRMainForm.Create(CommonApplication);
+
+end.

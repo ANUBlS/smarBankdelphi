@@ -1,0 +1,181 @@
+﻿unit FrmFilterBlankMainImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ExtCtrls, XFSCtrls, StdCtrls, ComCtrls, DBCtrls, DB, OracleData,
+  Buttons;
+
+type
+  TFrmFilterBlankMain = class(TForm)
+    XFPanel1: TXFPanel;
+    XFButton3: TXFButton;
+    DataSource1: TDataSource;
+    XFPanel2: TXFPanel;
+    XFGroupBox1: TXFGroupBox;
+    XFLabel1: TXFLabel;
+    XFLabel2: TXFLabel;
+    XFBitBtn1: TXFBitBtn;
+    CBSearchWhere: TDBLookupComboBox;
+    CmbBoxFindWhat: TComboBox;
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure XFButton3Click(Sender: TObject);
+    procedure XFBitBtn1Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+  private
+      procedure ActionFilterExecute(Sender: TObject);
+     // procedure ActionSpeedSearchExecute(Sender: TObject);
+    { Private declarations }
+  public
+    { Public declarations }
+    function FindNextRecord(DataSet : TDataSet;FieldName : String;Value : String) : Boolean;
+    procedure FindRecord;
+    var
+
+  end;
+
+var
+  FrmFilterBlankMain: TFrmFilterBlankMain;
+
+implementation
+
+uses BlankMainImpl,sboapiDataModuleimpl, BlankDMImpl;
+
+{$R *.dfm}
+
+procedure TFrmFilterBlankMain.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+if ord(key)=vk_escape then
+             close;
+end;
+
+procedure TFrmFilterBlankMain.FormShow(Sender: TObject);
+begin
+//FrmFilterBlankMain.Edit1.Text;
+ //FrmFilterBlankMain.DBLookupComboBox1.KeyValue:=null;
+
+end;
+
+procedure TFrmFilterBlankMain.ActionFilterExecute(Sender: TObject);
+
+begin
+
+end;
+
+procedure TFrmFilterBlankMain.XFBitBtn1Click(Sender: TObject);
+    var
+  SearchField : string;
+  SearchOptions : TSearchRecordOptions;
+    begin
+    SearchOptions := [srIgnoreCase ,srPartialMatch ];
+
+  with Sender as TEdit  do
+  begin
+    SearchField := copy(Name,5,length(Name));
+    with  TOracleDataSet(BlankDM.DSFullContarct) do
+    if  not SearchRecord(
+                  SearchField
+                 ,CmbBoxFindWhat.Text
+                 ,SearchOptions + [srFromCurrent , srForward ]
+                 ) then
+    if MessageDlg(
+              'Axtarış sona çatdı.'+#13+'Əvvəldən başlansın?'
+             ,mtInformation
+             ,[mbNo , mbYes]
+             ,0
+             ) = mrYes  then
+    if not SearchRecord(
+                 SearchField
+                ,CmbBoxFindWhat.Text
+                ,SearchOptions + [ srFromBeginning ]
+                )  then
+    MessageDlg('Yazı tapılmayıb!',mtInformation,[mbOK],0);
+ end;
+// FindRecord;
+end;
+
+  function TFrmFilterBlankMain.FindNextRecord(DataSet : TDataSet;FieldName : String;Value : String) : Boolean;
+
+resourcestring
+  rsRecordRecachedEOF = 'Axtarış cərgənin sonuna çatıb .';
+  rsContinueFromTop   = 'Əvvəldən axtarmaqla davam etmək istəyirsiniz?';
+  rsRecordNotFound    = 'Yazı Tapılmadı.';
+
+var
+  SearchOptions : TSearchRecordOptions;
+
+begin
+  SearchOptions := [srIgnoreCase ,srPartialMatch];
+  with  (DataSet as TOracleDataSet) do
+  begin
+
+    Result := SearchRecord(
+                FieldName,
+                Value,
+                SearchOptions + [srFromCurrent, srForward]
+    );
+    if not Result then
+
+    if MessageDlg(
+              rsRecordRecachedEOF + #10#13 + rsContinueFromTop
+             ,mtInformation
+             ,[mbNo , mbYes]
+             ,0
+             ) = mrYes  then
+    begin
+
+      Result := SearchRecord(
+                  FieldName,
+                  Value,
+                  SearchOptions + [srFromBeginning]
+      );
+
+      if not Result then
+      MessageDlg(rsRecordNotFound,mtInformation,[mbOk],0);
+
+    end;
+  end;
+end;
+procedure TFrmFilterBlankMain.FindRecord;
+resourcestring
+  rsNothingToSearch = 'Axtarılmalı olanı daxil edin!';
+
+var
+  FieldToSearch : String;
+  SearchValue : String;
+begin
+  SearchValue := CmbBoxFindWhat.Text;
+
+  if SearchValue = '' then
+  if not Visible then
+  begin
+    Show;
+    CmbBoxFindWhat.SetFocus;
+    CmbBoxFindWhat.SelectAll;
+    Exit
+  end
+  else
+    //raise ESearchError.Create(rsNothingToSearch);
+
+  //CommonDBGrid.SelectedRows.Clear; //!!!
+
+  FieldToSearch := CBSearchWhere.KeyValue;
+  if
+  FindNextRecord(
+      BlankDM.DSFullContarct,
+      FieldToSearch,
+      SearchValue
+  ) then
+  with CmbBoxFindWhat.Items do
+  if IndexOf(SearchValue) = -1 then
+  Add(SearchValue);
+
+end;
+
+procedure TFrmFilterBlankMain.XFButton3Click(Sender: TObject);
+begin
+   Close
+end;
+
+end.

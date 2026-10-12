@@ -1,0 +1,17 @@
+select acc_id, arch, prov from
+(select a.acc_id, a.pok_obr_d arch, sum(p.lammount) prov 
+from archost a, provarch p
+where a.acc_id =p.debt
+ and a.datdate='16-may-2007'
+ and p.dat='16-may-2007'
+group by a.acc_id, a.pok_obr_d)
+where arch<>prov
+union all
+select acc_id, arch, prov from
+(select a.acc_id, a.pok_obr_k arch, sum(p.lammount) prov
+from archost a, provarch p
+where a.acc_id =p.kredit
+ and a.datdate='16-may-2007'
+ and p.dat='16-may-2007'
+group by a.acc_id, a.pok_obr_k)
+where arch<>prov

@@ -1,0 +1,58 @@
+unit UnitReport;
+
+interface
+
+uses
+  {Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs;}
+   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ExtCtrls, DBCtrls, Db, OracleData, StdCtrls, Grids, DBGrids, Oracle,
+  Buttons, ComCtrls, XDBGrids;
+
+type
+  TFormReport = class(TForm)
+    PageControl1: TPageControl;
+    TabSheet1: TTabSheet;
+    TabSheet2: TTabSheet;
+    Panel1: TPanel;
+    Panel2: TPanel;
+    Panel3: TPanel;
+    Panel4: TPanel;
+    Button1: TButton;
+    Button2: TButton;
+    XDBGrid1: TXDBGrid;
+    XDBGrid2: TXDBGrid;
+    DataSource1: TDataSource;
+    DataSource2: TDataSource;
+    OracleDataSet1: TOracleDataSet;
+    OracleDataSet2: TOracleDataSet;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormReport: TFormReport;
+
+procedure InitPlugin(s:string);export;
+
+
+implementation
+ uses   sboapiDataModuleImpl,CommonDecls, sbSystem,SBTranslateProc ;
+{$R *.dfm}
+    procedure InitPlugin(s:string);export;
+begin
+   FormReport.ShowModal;
+end;
+exports
+     InitPlugin;
+
+
+
+
+initialization
+ FormReport := TFormReport.Create(Application);
+
+
+end.

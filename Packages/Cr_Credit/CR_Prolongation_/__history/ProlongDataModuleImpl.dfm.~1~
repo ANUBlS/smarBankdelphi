@@ -1,0 +1,76 @@
+object ProlongDataMod: TProlongDataMod
+  OldCreateOrder = False
+  Left = 208
+  Top = 218
+  Height = 480
+  Width = 696
+  object ProlongsData: TOracleDataSet
+    SQL.Strings = (
+      'SELECT id, creditid, prolongdate, newclosedate, oldclosedate'
+      '  FROM cr_prolongations'
+      'WHERE CreditID=:CreditID'
+      'Order By ProlongDate Desc')
+    Variables.Data = {
+      0300000001000000090000003A43524544495449440300000000000000000000
+      00}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 48
+    Top = 32
+    object ProlongsDataID: TFloatField
+      DisplayLabel = '№'
+      FieldName = 'ID'
+      Required = True
+    end
+    object ProlongsDataCREDITID: TFloatField
+      FieldName = 'CREDITID'
+      Required = True
+      Visible = False
+    end
+    object ProlongsDataPROLONGDATE: TDateTimeField
+      DisplayLabel = 'Пролонгасийа тарихи'
+      FieldName = 'PROLONGDATE'
+      Required = True
+    end
+    object ProlongsDataNEWCLOSEDATE: TDateTimeField
+      DisplayLabel = 'Узадылма тарихи'
+      FieldName = 'NEWCLOSEDATE'
+      Required = True
+    end
+    object ProlongsDataOLDCLOSEDATE: TDateTimeField
+      FieldName = 'OLDCLOSEDATE'
+      Required = True
+      Visible = False
+    end
+  end
+  object DataSrcProlongsData: TDataSource
+    DataSet = ProlongsData
+    Left = 48
+    Top = 80
+  end
+  object CR_PROLONGATION: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'CM\R_PROLONGATION'
+    Cursor = crHourGlass
+    Left = 208
+    Top = 64
+  end
+  object CreditInfo: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      '  NVL(DUEDATELASTCONTRACT,DUEDATEFIRSTCONTRACT) as DUEDATE'
+      'from'
+      'CR_ACTIVE_CREDITS'
+      'where ID =:ID  ')
+    Variables.Data = {0300000001000000030000003A4944030000000000000000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 72
+    Top = 176
+  end
+  object DSCreditInfo: TDataSource
+    DataSet = CreditInfo
+    Left = 72
+    Top = 224
+  end
+end

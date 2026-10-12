@@ -1,0 +1,123 @@
+﻿unit FrmMainImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ExtCtrls, XFSCtrls, StdCtrls, Grids, DBGrids, DBCtrls, XDBCtrls;
+
+type
+  TFrmMain = class(TForm)
+    XFGroupBox1: TXFGroupBox;
+    XFGroupBox2: TXFGroupBox;
+    XFGroupBox3: TXFGroupBox;
+    XFPanel1: TXFPanel;
+    XFButton1: TXFButton;
+    DBGrid1: TDBGrid;
+    DBGrid2: TDBGrid;
+    DBGrid3: TDBGrid;
+    XFPanel2: TXFPanel;
+    XFButton2: TXFButton;
+    XFButton3: TXFButton;
+    XFButton4: TXFButton;
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure XFButton1Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure XFButton2Click(Sender: TObject);
+    procedure XFButton3Click(Sender: TObject);
+    procedure XFButton4Click(Sender: TObject);
+    procedure DBGrid1CellClick(Column: TColumn);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmMain: TFrmMain;
+
+implementation
+uses CommanParametrs,sboapiDataModuleImpl,SBTranslateProc,DMMainImpl,
+  FrmAddAccImpl;
+
+{$R *.dfm}
+   procedure InitPlugin(s:string);export;
+begin
+
+   if s='' then
+   begin
+   frmMain.ShowModal;
+   end;
+  { if s='AllLost' then
+   begin
+     FrmAllLoss.showmodal;
+   end;   }
+end;
+exports
+     InitPlugin;
+
+procedure TFrmMain.DBGrid1CellClick(Column: TColumn);
+begin
+DMMain.DSins_acc_type_id.Close;
+DMMain.DSins_acc_type_id.SetVariable('ptype_id',FrmMain.DBGrid1.DataSource.DataSet.FieldByName('id').AsInteger);
+DMMain.DSins_acc_type_id.SetVariable('pacc_type_id',FrmMain.DBGrid2.DataSource.DataSet.FieldByName('id').AsInteger);
+DMMain.DSins_acc_type_id.open;
+
+ if DMMain.DSins_acc_type_id.RecordCount >0  then
+ begin
+   XFButton2.Enabled:=false;
+ end
+ else
+ begin
+XFButton2.Enabled:=true;
+ end;
+
+end;
+
+procedure TFrmMain.FormCreate(Sender: TObject);
+begin
+
+DMMain:=TDMMain.Create(self);
+FrmAddAcc:=TFrmAddAcc.Create(self);
+end;
+
+procedure TFrmMain.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+if ord(key)=vk_escape then close;
+
+end;
+
+procedure TFrmMain.XFButton1Click(Sender: TObject);
+begin
+close;
+end;
+
+procedure TFrmMain.XFButton2Click(Sender: TObject);
+begin
+opetion:='ins';
+FrmAddAcc.ShowModal;
+end;
+
+procedure TFrmMain.XFButton3Click(Sender: TObject);
+begin
+if DBGrid3.DataSource.DataSet.RecordCount=0 then
+begin
+  showmessage('Diqqət! Heç bir məlumat yoxdur!');
+  exit;
+end;
+opetion:='upd';
+FrmAddAcc.ShowModal;
+end;
+
+procedure TFrmMain.XFButton4Click(Sender: TObject);
+begin
+if DBGrid3.DataSource.DataSet.RecordCount=0 then
+begin
+  showmessage('Diqqət! Heç bir məlumat yoxdur!');
+  exit;
+end;
+end;
+
+initialization
+ FrmMain :=TFrmMain.Create(Application);
+end.

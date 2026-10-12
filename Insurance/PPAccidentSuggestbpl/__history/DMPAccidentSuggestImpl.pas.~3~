@@ -1,0 +1,138 @@
+unit DMPAccidentSuggestImpl;
+
+interface
+
+uses
+  SysUtils, Classes, Oracle, DB, OracleData;
+
+type
+  TDMPAccidentSuggest = class(TDataModule)
+    Customers: TOracleDataSet;
+    CustomersID: TIntegerField;
+    CustomersNAME: TWideStringField;
+    CustomersADDRESS: TWideStringField;
+    CustomersMOBILEPHONE: TWideStringField;
+    CustomersFAX: TWideStringField;
+    DsSysdat: TOracleDataSet;
+    DsSysdatTEK_DAT: TDateTimeField;
+    DsSysdatPRED_DAT: TDateTimeField;
+    DsSysdatARC_DAY: TDateTimeField;
+    DsSysdatCLOSE: TIntegerField;
+    FranshizData: TDataSource;
+    Franshiz: TOracleDataSet;
+    FranshizID: TFloatField;
+    FranshizNAME: TWideStringField;
+    RisksData: TDataSource;
+    Risks: TOracleDataSet;
+    RisksID: TFloatField;
+    RisksNAME: TWideStringField;
+    ConditionSource: TDataSource;
+    ODSCondition: TOracleDataSet;
+    ODSConditionID: TFloatField;
+    ODSConditionNAME: TWideStringField;
+    PAccSugestSource: TDataSource;
+    ODSPAccSuggest: TOracleDataSet;
+    ODSPAccSuggestID: TFloatField;
+    ODSPAccSuggestPAID: TFloatField;
+    ODSPAccSuggestCNDT_ID: TFloatField;
+    ODSPAccSuggestINSURANCESUM: TFloatField;
+    ODSPAccSuggestINSURANCETIME: TDateTimeField;
+    ODSPAccSuggestMEDICALCOST: TFloatField;
+    ODSPAccSuggestALL_INSAMMOUNT: TFloatField;
+    ODSPAccSuggestGEO: TWideStringField;
+    ODSPAccSuggestFRZ_ID: TFloatField;
+    DSContracts: TDataSource;
+    ODSContracts: TOracleDataSet;
+    ODSContractsTYPE_ID: TFloatField;
+    ODSContractsBLANK_ID: TFloatField;
+    ODSContractsINS_DATE: TDateTimeField;
+    ODSContractsBEGIN_DATE: TDateTimeField;
+    ODSContractsEND_DATE: TDateTimeField;
+    ODSContractsVALUTE_ID: TFloatField;
+    ODSContractsAMMOUNT: TFloatField;
+    ODSContractsCLOSE_PREFIX: TIntegerField;
+    ODSContractsKLI_ID: TFloatField;
+    ODSContractsLOANACC_ID: TFloatField;
+    ODSContractsCURRACC_ID: TFloatField;
+    ODSContractsPOLICY_NUM: TWideStringField;
+    ODSContractsID: TFloatField;
+    ODSContractsINSSUMM: TFloatField;
+    ODSContractsFRANSHIZ: TFloatField;
+    ODSContractsTARIFF: TFloatField;
+    ODSContractsSTATE: TIntegerField;
+    ODSContractsAGENT_ID: TFloatField;
+    ODSContractsPNUM: TFloatField;
+    ODSContractsBEN_ID: TFloatField;
+    ODSContractsBENEFICIARY: TWideStringField;
+    ODSContractsCONDITIONS: TWideStringField;
+    ODSContractsSUGNUM: TWideStringField;
+    AccidentSource: TDataSource;
+    ODSPAccident: TOracleDataSet;
+    ODSPAccidentID: TFloatField;
+    ODSPAccidentKLI_ID: TFloatField;
+    ODSPAccidentCONTACT_PERSON: TWideStringField;
+    ODSPAccidentBANKING_DETAILS: TWideStringField;
+    ODSPAccidentTOTALEMP_NUMBER: TFloatField;
+    ODSPAccidentAOG: TFloatField;
+    ODSPAccidentAOP: TFloatField;
+    ODSPAccidentSMG: TFloatField;
+    ODSPAccidentSMP: TFloatField;
+    ODSPAccidentBCG: TFloatField;
+    ODSPAccidentBCP: TFloatField;
+    ODSPAccidentDECIRED_AMOUNT: TFloatField;
+    ODSPAccidentAD: TFloatField;
+    ODSPAccidentPD: TFloatField;
+    ODSPAccidentPLU: TFloatField;
+    ODSPAccidentEME: TFloatField;
+    ODSPAccidentHC: TFloatField;
+    ODSPAccidentHS: TFloatField;
+    ODSPAccidentBRB: TFloatField;
+    ODSPAccidentBURN: TFloatField;
+    ODSPAccidentTTD: TFloatField;
+    ODSPAccidentOUTSIDEOFAZE: TWideStringField;
+    ODSPAccidentRENEWAL: TWideStringField;
+    ODSPAccidentTRAVELS: TWideStringField;
+    ODSPAccidentTYPEID: TIntegerField;
+    ODSPAccidentRISKID: TFloatField;
+    ODSPAccidentMAXWEEKS: TIntegerField;
+    ODSPAccidentPROFITID: TFloatField;
+    ODSPAccidentAGENTID: TFloatField;
+    ODSPAccidentCLOSE_PREFIX: TIntegerField;
+    ODSPAccidentAOG1: TFloatField;
+    ODSPAccidentAOP1: TFloatField;
+    ODSPAccidentBCG1: TFloatField;
+    ODSPAccidentBCP1: TFloatField;
+    ODSPAccidentSMG1: TFloatField;
+    ODSPAccidentSMP1: TFloatField;
+    ODSPAccidentCID: TFloatField;
+    ODSPAccidentNOT_COVEREDPERIOD: TDateTimeField;
+    ODSPAccidentNOT_COVEREPERIOD1: TDateTimeField;
+    sb_aca: TOraclePackage;
+    AValuteData: TDataSource;
+    BeneficiarySource: TDataSource;
+    AValute: TOracleDataSet;
+    AValuteVALU_NAME: TWideStringField;
+    AValuteVALUTE: TIntegerField;
+    AValuteVAL_NAME: TWideStringField;
+    AValuteVALU_SHORT: TWideStringField;
+    CustomersData: TDataSource;
+    ODSBeneficiary: TOracleDataSet;
+    ODSBeneficiaryID: TFloatField;
+    ODSBeneficiaryNAME: TWideStringField;
+    ODSBeneficiaryADDRESS: TWideStringField;
+    ODSBeneficiaryPHONE: TWideStringField;
+    ODSBeneficiaryBANKING_DETAILS: TWideStringField;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  DMPAccidentSuggest: TDMPAccidentSuggest;
+
+implementation
+
+{$R *.dfm}
+uses UMKPolicyImpl,CommanParametrs,sboapiDataModuleImpl;
+end.

@@ -1,0 +1,229 @@
+unit DataModuleImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, OracleData, TuningTransactionImpl, Oracle, Stdctrls;
+
+type
+  TTuningDataModule = class(TDataModule)
+    ODSSettings: TOracleDataSet;
+    DSSettings: TDataSource;
+    ODSCustomerGroups: TOracleDataSet;
+    DSCustomerGroups: TDataSource;
+    ODSDebtAccount: TOracleDataSet;
+    DSDebtAccount: TDataSource;
+    DSCurrency: TDataSource;
+    OPMainSettings: TOraclePackage;
+    ODSTariffScale: TOracleDataSet;
+    DSTariffScale: TDataSource;
+    ODSCustomerGroupsID: TFloatField;
+    ODSCustomerGroupsNAME: TWideStringField;
+    ODSSettingsID: TFloatField;
+    ODSSettingsDEBT: TFloatField;
+    ODSSettingsDEBITACCOUNT: TWideStringField;
+    ODSSettingsDEBITCURRENCY: TWideStringField;
+    ODSSettingsCREDIT: TFloatField;
+    ODSSettingsCREDITACCOUNT: TWideStringField;
+    ODSSettingsCREDITCURRENCY: TWideStringField;
+    ODSSettingsADDITIONALDEBT: TFloatField;
+    ODSSettingsADDITIONALCREDIT: TFloatField;
+    ODSSettingsADEBT: TWideStringField;
+    ODSSettingsACREDIT: TWideStringField;
+    ODSSettingsASSIGNMENT: TWideStringField;
+    ODSSettingsCOMMISIONASSIGNMENT: TWideStringField;
+    ODSSettingsADEBITCURRENCY: TWideStringField;
+    ODSSettingsACREDITCURRENCY: TWideStringField;
+    ODSTariffScaleID: TFloatField;
+    ODSTariffScaleGROUPID: TFloatField;
+    ODSTariffScalePERCENT: TFloatField;
+    ODSTariffScaleAMMOUNT: TFloatField;
+    ODSTariffScaleMINVALUE: TFloatField;
+    ODSTariffScaleMAXVALUE: TFloatField;
+    ODSTariffScaleCOMMISIONID: TFloatField;
+    ODSSettingsUSERID: TFloatField;
+    ODSCurrency: TOracleDataSet;
+    ODSSettingsNAME: TWideStringField;
+    Settings: TOracleDataSet;
+    procedure DataModuleCreate(Sender: TObject);
+    procedure ODSSettingsApplyRecord(Sender: TOracleDataSet; Action: Char;
+      var Applied: Boolean; var NewRowId: String);
+    procedure DSSettingsDataChange(Sender: TObject; Field: TField);
+    procedure ODSCustomerGroupsAfterPost(DataSet: TDataSet);
+    procedure ODSTariffScaleTranslateMessage(Sender: TOracleDataSet;
+      ErrorCode: Integer; const ConstraintName: String; Action: Char;
+      var Msg: String);
+    procedure ODSTariffScaleBeforePost(DataSet: TDataSet);
+    procedure ODSDebtAccountAfterScroll(DataSet: TDataSet);
+
+  private
+    { Private declarations }
+  public
+  isCommonSet :boolean;
+  procedure add_commision_trans(Settings :TSettings);
+  procedure update_commision_trans(Settings :TSettings);
+    { Public declarations }
+  end;
+
+var
+  TuningDataModule: TTuningDataModule;
+
+implementation
+
+uses sboapiDataModuleImpl, UnitFormOperations;
+
+{$R *.DFM}
+
+procedure TTuningDataModule.DataModuleCreate(Sender: TObject);
+begin
+ ODSSettings.Open;
+ ODSCustomerGroups.Open;
+ Settings;
+ //ODSDebtAccount.Open;
+ //ODSCreditAccount.Open;
+// ODSCurrency.Open;
+end;
+
+procedure TTuningDataModule.add_commision_trans(Settings :TSettings);
+const
+   csInsert = 'Insert_Commision_Trans';
+begin
+ with OPMainSettings , Settings do
+  begin
+   CallProcedure(csInsert,[
+                           name
+                          ,debt
+                          ,credit
+                          ,additionalDebt
+                          ,additionalCredit
+                          ,assignment
+                          ,commisionassignment
+                          ,isCommonSetting
+                          ]);
+  end;
+
+end;
+
+procedure TTuningDataModule.update_commision_trans(Settings :TSettings);
+const
+   csUpdate = 'update_commision_trans';
+begin
+ with OPMainSettings , Settings do
+  begin
+    CallProcedure(csUpdate,[
+                             ID
+                            ,name
+                            ,debt
+                            ,credit
+                            ,additionalDebt
+                            ,additionalCredit
+                            ,assignment
+                            ,commisionassignment
+                            ,isCommonSetting
+                           ]);
+  end;
+
+end;
+
+procedure TTuningDataModule.ODSSettingsApplyRecord(Sender: TOracleDataSet;
+  Action: Char; var Applied: Boolean; var NewRowId: String);
+var
+  Settings :TSettings;
+
+   procedure PrepareSettings;
+   begin
+    with (Sender as TOracleDataSet),Settings do
+     begin
+      ID := FieldByName('ID').AsInteger;
+      name := FieldByName('name').AsString;
+      debt := FieldByName('debt').AsInteger;
+      credit := FieldByName('credit').AsInteger;
+      additionalDebt :=FieldByName('additionalDebt').AsInteger;
+      additionalCredit :=FieldByName('additionalCredit').AsInteger;
+      assignment :=FieldByName('assignment').AsString;
+      commisionassignment :=FieldByName('commisionassignment').AsString;
+      isCommonSetting :=FieldByName('UserID').AsInteger = 0;
+     end;
+   end;
+begin
+ case Action of
+  'I':
+      begin
+        PrepareSettings;
+        add_commision_trans(Settings);
+        Applied :=true;
+      end;
+  'U':
+      begin
+       PrepareSettings;
+       update_commision_trans(Settings);
+       Applied :=true;
+      end;
+  'L','R','C':
+    Applied := true;
+  else
+    Applied :=false;
+
+ end;
+   //Michael Jackson "Give into me"
+end;
+
+procedure TTuningDataModule.DSSettingsDataChange(Sender: TObject;
+  Field: TField);
+begin
+ if (Sender as TDataSource).DataSet.State = dsBrowse then
+  with (Sender as TDataSource).DataSet, TuningTransaction do
+   begin
+    ActionUpdate.Enabled :=not IsEmpty;
+    ActionDelete.Enabled :=not IsEmpty;
+    ActionSetTariffScale.Enabled :=not IsEmpty;
+   end;
+end;
+
+procedure TTuningDataModule.ODSCustomerGroupsAfterPost(DataSet: TDataSet);
+begin
+ DataSet.Refresh;
+end;
+
+procedure TTuningDataModule.ODSTariffScaleTranslateMessage(
+  Sender: TOracleDataSet; ErrorCode: Integer; const ConstraintName: String;
+  Action: Char; var Msg: String);
+begin
+ if (ConstraintName = 'UK_TARIFFSCALE_MINVALUE') then
+   Msg := 'SMART:Setting with this min value is already exists'
+ else
+ if (ConstraintName = 'UK_TARIFFSCALE_MAXVALUE') then
+   Msg := 'SMART:Setting with this max value is already exists';
+
+   Sender.Cancel;
+
+end;
+
+procedure TTuningDataModule.ODSTariffScaleBeforePost(DataSet: TDataSet);
+begin
+ DataSet.FieldByName('commisionID').AsInteger :=
+   ODSSettings.FieldByName('ID').Value;
+end;
+
+procedure TTuningDataModule.ODSDebtAccountAfterScroll(DataSet: TDataSet);
+var
+   FoundField: String;
+begin
+ if (Assigned(FormOperations)) and (Trim(FormOperations.SearchField)<>'') then
+  with FormOperations, DataSet do
+   begin
+    FoundField :=FieldByName('ACC_NO').AsString;
+    if CurrentEdit.Tag = 0 then
+     SetSelectedText(CurrentEdit, FoundField)
+    else
+     CurrentEdit.Tag :=0;
+
+    if CurrentEdit.Focused then
+     //CurrentEdit.Text :=FoundField;
+     ODSSettings.FieldByName(SearchField).AsInteger :=FieldByName('ID').AsInteger;
+
+   end;
+end;
+
+end.

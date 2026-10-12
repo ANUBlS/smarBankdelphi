@@ -1,0 +1,26 @@
+object DataMod: TDataMod
+  OldCreateOrder = False
+  Height = 233
+  Width = 548
+  object addgroup: TOracleDataSet
+    SQL.Strings = (
+      'select * from groupvesait')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 120
+    Top = 88
+  end
+  object Groupdata: TDataSource
+    DataSet = addgroup
+    Left = 256
+    Top = 88
+  end
+  object AddName: TOracleDataSet
+    SQL.Strings = (
+      'select a.rowid ,a.* from groupvesait a ')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 352
+    Top = 48
+  end
+end

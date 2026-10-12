@@ -1,0 +1,414 @@
+object SbdmScheduleDataModule: TSbdmScheduleDataModule
+  OldCreateOrder = False
+  Height = 540
+  Width = 783
+  object sbdm_customers: TOracleDataSet
+    SQL.Strings = (
+      'select * from customers c ,sbcm_contracts s'
+      'where c.id=s.CUSTOMERID and'
+      '           s.id=:id'
+      ''
+      '     '
+      ''
+      ' ')
+    Optimize = False
+    Variables.Data = {0400000001000000060000003A0049004400030000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000002C00000004000000490044000100000000000A0000004F0050005F00
+      49004400010000000000100000004F00500045004E005F004400410054000100
+      000000001200000043004C004F00530045005F00440041005400010000000000
+      140000004E004500520045005A004900440045004E0054000100000000001400
+      00005000520049004E00410044005F004B004F00440001000000000008000000
+      4E0041004D00450001000000000014000000530048004F00520054005F004E00
+      41004D00450001000000000014000000470052004F00550050005F004B004C00
+      490045000100000000000E0000005600490044005F0053004F00420001000000
+      00000E0000004F00520047005F0053004F004200010000000000120000005300
+      46004500520041005F004400450059000100000000000C0000004F0054005200
+      410053004C00010000000000120000004E0041004C004F0047005F004B004F00
+      4400010000000000120000004B004F0044005F004F004B00500052004F000100
+      000000000600000049004E004E000100000000000E0000004400410054005F00
+      4E0041004C00010000000000120000004400410054005F005500530054004100
+      560001000000000006000000420049004B00010000000000100000004F005400
+      56005F004C00490043004F00010000000000180000004F00540056005F005000
+      41005300530050004F0052005400010000000000140000004F00540056005F00
+      490053005300550045004400010000000000140000004F00540056005F004900
+      530044004100540045000100000000000E0000004F004C0044005F0049004E00
+      4E000100000000001200000043005500530054005F0054005900500045000100
+      0000000008000000490044005F0031000100000000000A000000540059005000
+      45002300010000000000100000004F00500045004E0044004100540045000100
+      000000001200000043004C004F00530045004400410054004500010000000000
+      0C00000041004D004F0055004E0054000100000000001400000043004F004E00
+      540052004100430054004E004F000100000000001800000043004F004E005400
+      520041004300540054005900500045000100000000001400000050004C004500
+      44004700450054005900500045000100000000001A000000520045004C004900
+      4100420049004C00490054005900490044000100000000001400000043004C00
+      490045004E00540054005900500045000100000000001600000050004C004500
+      4400470045005000520049004300450001000000000008000000530049004400
+      2300010000000000280000004F00560045005200440055004500520045004C00
+      49004100420049004C0049005400590049004400010000000000180000005000
+      4500520053004F004E0041004C00540059005000450001000000000010000000
+      430055005200520045004E004300590001000000000010000000420052004100
+      4E0043004800490044000100000000001400000043005500530054004F004D00
+      4500520049004400010000000000260000004600490052005300540049004E00
+      5400450052004500530054005000410059004400410054000100000000001000
+      000050004500520049004F00440049004400010000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 32
+    Top = 16
+    object sbdm_customersID: TIntegerField
+      FieldName = 'ID'
+      Required = True
+    end
+    object sbdm_customersOP_ID: TFloatField
+      FieldName = 'OP_ID'
+    end
+    object sbdm_customersOPEN_DAT: TDateTimeField
+      FieldName = 'OPEN_DAT'
+    end
+    object sbdm_customersCLOSE_DAT: TDateTimeField
+      FieldName = 'CLOSE_DAT'
+    end
+    object sbdm_customersNEREZIDENT: TFloatField
+      FieldName = 'NEREZIDENT'
+    end
+    object sbdm_customersPRINAD_KOD: TFloatField
+      FieldName = 'PRINAD_KOD'
+    end
+    object sbdm_customersNAME: TStringField
+      FieldName = 'NAME'
+      Size = 90
+    end
+    object sbdm_customersSHORT_NAME: TStringField
+      FieldName = 'SHORT_NAME'
+      Size = 50
+    end
+    object sbdm_customersGROUP_KLIE: TFloatField
+      FieldName = 'GROUP_KLIE'
+    end
+    object sbdm_customersVID_SOB: TFloatField
+      FieldName = 'VID_SOB'
+    end
+    object sbdm_customersORG_SOB: TFloatField
+      FieldName = 'ORG_SOB'
+    end
+    object sbdm_customersSFERA_DEY: TFloatField
+      FieldName = 'SFERA_DEY'
+    end
+    object sbdm_customersOTRASL: TFloatField
+      FieldName = 'OTRASL'
+    end
+    object sbdm_customersNALOG_KOD: TFloatField
+      FieldName = 'NALOG_KOD'
+    end
+    object sbdm_customersKOD_OKPRO: TStringField
+      FieldName = 'KOD_OKPRO'
+      Size = 10
+    end
+    object sbdm_customersINN: TStringField
+      FieldName = 'INN'
+    end
+    object sbdm_customersDAT_NAL: TDateTimeField
+      FieldName = 'DAT_NAL'
+    end
+    object sbdm_customersDAT_USTAV: TDateTimeField
+      FieldName = 'DAT_USTAV'
+    end
+    object sbdm_customersBIK: TFloatField
+      FieldName = 'BIK'
+    end
+    object sbdm_customersOTV_LICO: TStringField
+      FieldName = 'OTV_LICO'
+      Size = 40
+    end
+    object sbdm_customersOTV_PASSPORT: TStringField
+      FieldName = 'OTV_PASSPORT'
+    end
+    object sbdm_customersOTV_ISSUED: TStringField
+      FieldName = 'OTV_ISSUED'
+      Size = 40
+    end
+    object sbdm_customersOTV_ISDATE: TDateTimeField
+      FieldName = 'OTV_ISDATE'
+    end
+    object sbdm_customersOLD_INN: TFloatField
+      FieldName = 'OLD_INN'
+    end
+    object sbdm_customersCUST_TYPE: TIntegerField
+      FieldName = 'CUST_TYPE'
+    end
+    object sbdm_customersID_1: TFloatField
+      FieldName = 'ID_1'
+      Required = True
+    end
+    object sbdm_customersTYPE: TFloatField
+      FieldName = 'TYPE#'
+      Required = True
+    end
+    object sbdm_customersOPENDATE: TDateTimeField
+      FieldName = 'OPENDATE'
+      Required = True
+    end
+    object sbdm_customersCLOSEDATE: TDateTimeField
+      FieldName = 'CLOSEDATE'
+      Required = True
+    end
+    object sbdm_customersAMOUNT: TFloatField
+      FieldName = 'AMOUNT'
+    end
+    object sbdm_customersCONTRACTNO: TStringField
+      FieldName = 'CONTRACTNO'
+      Size = 64
+    end
+    object sbdm_customersCONTRACTTYPE: TIntegerField
+      FieldName = 'CONTRACTTYPE'
+    end
+    object sbdm_customersPLEDGETYPE: TFloatField
+      FieldName = 'PLEDGETYPE'
+    end
+    object sbdm_customersRELIABILITYID: TIntegerField
+      FieldName = 'RELIABILITYID'
+    end
+    object sbdm_customersCLIENTTYPE: TFloatField
+      FieldName = 'CLIENTTYPE'
+    end
+    object sbdm_customersPLEDGEPRICE: TFloatField
+      FieldName = 'PLEDGEPRICE'
+    end
+    object sbdm_customersSID: TFloatField
+      FieldName = 'SID#'
+    end
+    object sbdm_customersOVERDUERELIABILITYID: TFloatField
+      FieldName = 'OVERDUERELIABILITYID'
+    end
+    object sbdm_customersPERSONALTYPE: TFloatField
+      FieldName = 'PERSONALTYPE'
+    end
+    object sbdm_customersCURRENCY: TFloatField
+      FieldName = 'CURRENCY'
+    end
+    object sbdm_customersBRANCHID: TFloatField
+      FieldName = 'BRANCHID'
+    end
+    object sbdm_customersCUSTOMERID: TFloatField
+      FieldName = 'CUSTOMERID'
+    end
+    object sbdm_customersFIRSTINTERESTPAYDAT: TDateTimeField
+      FieldName = 'FIRSTINTERESTPAYDAT'
+    end
+    object sbdm_customersPERIODID: TFloatField
+      FieldName = 'PERIODID'
+    end
+  end
+  object sbdm_dscustomers: TDataSource
+    DataSet = sbdm_customers
+    Left = 120
+    Top = 16
+  end
+  object OracleDataSet1: TOracleDataSet
+    SQL.Strings = (
+      'select * from sbcm_interests'
+      'where id#=:id')
+    Optimize = False
+    Variables.Data = {0400000001000000060000003A0049004400030000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      0500000003000000060000004900440023000100000000000A00000048004400
+      4100540045000100000000001000000049004E00540045005200450053005400
+      010000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 216
+    Top = 17
+  end
+  object DataSource1: TDataSource
+    DataSet = OracleDataSet1
+    Left = 296
+    Top = 18
+  end
+  object OracleDataSet2: TOracleDataSet
+    SQL.Strings = (
+      'SELECT Z.RowID,Z.*'
+      '  FROM SBCM_PAYMENT_SCHEDULE Z'
+      'WHERE Z.id#=:Id'
+      'ORDER BY HDATE')
+    Optimize = False
+    Variables.Data = {0400000001000000060000003A0049004400030000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      0500000005000000040000004900440001000000000006000000490044002300
+      0100000000000A00000048004400410054004500010000000000100000004900
+      4E00540045005200450053005400010000000000140000004900500049004E00
+      540045005200450053005400010000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 32
+    Top = 72
+    object OracleDataSet2SeqNo: TIntegerField
+      FieldKind = fkCalculated
+      FieldName = 'SeqNo'
+      OnGetText = OracleDataSet2SeqNoGetText
+      Calculated = True
+    end
+    object OracleDataSet2ID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object OracleDataSet2ID2: TFloatField
+      FieldName = 'ID#'
+      Required = True
+    end
+    object OracleDataSet2HDATE: TDateTimeField
+      FieldName = 'HDATE'
+      Required = True
+    end
+    object OracleDataSet2INTEREST: TFloatField
+      FieldName = 'INTEREST'
+      Required = True
+    end
+    object OracleDataSet2IPINTEREST: TFloatField
+      FieldName = 'IPINTEREST'
+    end
+  end
+  object DataSource2: TDataSource
+    DataSet = OracleDataSet2
+    Left = 112
+    Top = 72
+  end
+  object Sbcm_date: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'SBOP'
+    Left = 24
+    Top = 152
+  end
+  object sbcm_percent_converting: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'sbcm_percent_converting'
+    Left = 128
+    Top = 152
+  end
+  object SBCM_PAYMENT_SCHEDULE1: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'SBCM_PAYMENT_SCHEDULE1'
+    ParameterMode = pmNamed
+    Left = 288
+    Top = 152
+  end
+  object OracleDataSet3: TOracleDataSet
+    SQL.Strings = (
+      'select * from sbcm_contracts s,sbcm_deposit_types d'
+      'where s.CONTRACTTYPE=d.id and'
+      '      d.DATEINTERVAL>0 and'
+      '      s.id=:v_id'
+      '')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000A0000003A0056005F004900440003000000000000000000
+      0000}
+    QBEDefinition.QBEFieldDefs = {
+      050000001800000004000000490044000100000000000A000000540059005000
+      45002300010000000000100000004F00500045004E0044004100540045000100
+      000000001200000043004C004F00530045004400410054004500010000000000
+      0C00000041004D004F0055004E0054000100000000001400000043004F004E00
+      540052004100430054004E004F000100000000001800000043004F004E005400
+      520041004300540054005900500045000100000000001400000050004C004500
+      44004700450054005900500045000100000000001A000000520045004C004900
+      4100420049004C00490054005900490044000100000000001400000043004C00
+      490045004E00540054005900500045000100000000001600000050004C004500
+      4400470045005000520049004300450001000000000008000000530049004400
+      2300010000000000280000004F00560045005200440055004500520045004C00
+      49004100420049004C0049005400590049004400010000000000180000005000
+      4500520053004F004E0041004C00540059005000450001000000000010000000
+      430055005200520045004E004300590001000000000010000000420052004100
+      4E0043004800490044000100000000001400000043005500530054004F004D00
+      4500520049004400010000000000260000004600490052005300540049004E00
+      5400450052004500530054005000410059004400410054000100000000001000
+      000050004500520049004F004400490044000100000000000800000049004400
+      5F0031000100000000000800000054005900500045000100000000001C000000
+      4100440044004900540049004F004E0041004C00540059005000450001000000
+      0000180000005700490054004800440052004100570054005900500045000100
+      0000000018000000440041005400450049004E00540045005200560041004C00
+      010000000000}
+    Cursor = crSQLWait
+    QueryAllRecords = False
+    Session = sboapiDataModule.SBSession
+    Left = 216
+    Top = 72
+    object OracleDataSet3ID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object OracleDataSet3TYPE: TFloatField
+      FieldName = 'TYPE#'
+    end
+    object OracleDataSet3OPENDATE: TDateTimeField
+      FieldName = 'OPENDATE'
+    end
+    object OracleDataSet3CLOSEDATE: TDateTimeField
+      FieldName = 'CLOSEDATE'
+    end
+    object OracleDataSet3AMOUNT: TFloatField
+      FieldName = 'AMOUNT'
+    end
+    object OracleDataSet3CONTRACTNO: TStringField
+      FieldName = 'CONTRACTNO'
+      Size = 64
+    end
+    object OracleDataSet3CONTRACTTYPE: TIntegerField
+      FieldName = 'CONTRACTTYPE'
+    end
+    object OracleDataSet3PLEDGETYPE: TFloatField
+      FieldName = 'PLEDGETYPE'
+    end
+    object OracleDataSet3RELIABILITYID: TIntegerField
+      FieldName = 'RELIABILITYID'
+    end
+    object OracleDataSet3CLIENTTYPE: TFloatField
+      FieldName = 'CLIENTTYPE'
+    end
+    object OracleDataSet3PLEDGEPRICE: TFloatField
+      FieldName = 'PLEDGEPRICE'
+    end
+    object OracleDataSet3SID: TFloatField
+      FieldName = 'SID#'
+    end
+    object OracleDataSet3OVERDUERELIABILITYID: TFloatField
+      FieldName = 'OVERDUERELIABILITYID'
+    end
+    object OracleDataSet3PERSONALTYPE: TFloatField
+      FieldName = 'PERSONALTYPE'
+    end
+    object OracleDataSet3CURRENCY: TFloatField
+      FieldName = 'CURRENCY'
+    end
+    object OracleDataSet3BRANCHID: TFloatField
+      FieldName = 'BRANCHID'
+    end
+    object OracleDataSet3CUSTOMERID: TFloatField
+      FieldName = 'CUSTOMERID'
+    end
+    object OracleDataSet3FIRSTINTERESTPAYDAT: TDateTimeField
+      FieldName = 'FIRSTINTERESTPAYDAT'
+    end
+    object OracleDataSet3PERIODID: TFloatField
+      FieldName = 'PERIODID'
+    end
+    object OracleDataSet3ID_1: TFloatField
+      FieldName = 'ID_1'
+      Required = True
+    end
+    object OracleDataSet3TYPE2: TStringField
+      FieldName = 'TYPE'
+      Size = 256
+    end
+    object OracleDataSet3ADDITIONALTYPE: TStringField
+      FieldName = 'ADDITIONALTYPE'
+      Size = 32
+    end
+    object OracleDataSet3WITHDRAWTYPE: TStringField
+      FieldName = 'WITHDRAWTYPE'
+      Size = 32
+    end
+    object OracleDataSet3DATEINTERVAL: TIntegerField
+      FieldName = 'DATEINTERVAL'
+    end
+  end
+end

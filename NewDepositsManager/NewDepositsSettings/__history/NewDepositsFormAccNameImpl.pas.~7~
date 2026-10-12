@@ -1,0 +1,165 @@
+﻿unit NewDepositsFormAccNameImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, DB, OracleData, ComCtrls, ToolWin, Grids, XDBGrids,
+  ExtCtrls, XFSCtrls, Buttons;
+
+type
+  TNewDepositsFormAccName = class(TForm)
+    XFPanel1: TXFPanel;
+    XDBGrid1: TXDBGrid;
+    XFPanel2: TXFPanel;
+    AccountsDatSrc: TDataSource;
+    Accounts: TOracleDataSet;
+    AccountsACC_NO: TWideStringField;
+    AccountsNAME: TWideStringField;
+    AccountsVAL_ACC: TIntegerField;
+    XFPanel5: TXFPanel;
+    EditName: TEdit;
+    XFPanel6: TXFPanel;
+    EditID: TEdit;
+    XFPanel7: TXFPanel;
+    EditACC_NO: TEdit;
+    AccountsFILIAL: TWideStringField;
+    AccountsID2: TFloatField;
+    AccountsVALNAME: TWideStringField;
+    XFPanel3: TXFPanel;
+    XFBitBtn1: TXFBitBtn;
+    procedure FormShow(Sender: TObject);
+    procedure XFBitBtn1Click(Sender: TObject);
+    procedure ActionSpeedSearchExecute(Sender: TObject);
+    procedure EditIDKeyPress(Sender: TObject; var Key: Char);
+    procedure EditACC_NOKeyPress(Sender: TObject; var Key: Char);
+    procedure EditNameKeyPress(Sender: TObject; var Key: Char);
+    procedure EditIDExit(Sender: TObject);
+    procedure EditACC_NOExit(Sender: TObject);
+    procedure EditNameExit(Sender: TObject);
+    procedure XDBGrid1DblClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  NewDepositsFormAccName: TNewDepositsFormAccName;
+
+implementation
+
+uses NewDepositsFrmAddEditAccTurningImpl;
+
+{$R *.dfm}
+
+procedure TNewDepositsFormAccName.EditACC_NOExit(Sender: TObject);
+begin
+ TEdit(Sender).Text :=EmptyStr;
+end;
+
+procedure TNewDepositsFormAccName.EditACC_NOKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if Key = #13  then
+  begin
+   ActionSpeedSearchExecute(Sender);
+  end;
+end;
+
+procedure TNewDepositsFormAccName.EditIDExit(Sender: TObject);
+begin
+ TEdit(Sender).Text :=EmptyStr;
+end;
+
+procedure TNewDepositsFormAccName.EditIDKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if Key = #13  then
+  begin
+   ActionSpeedSearchExecute(Sender);
+  end;
+end;
+
+procedure TNewDepositsFormAccName.EditNameExit(Sender: TObject);
+begin
+ TEdit(Sender).Text :=EmptyStr;
+end;
+
+procedure TNewDepositsFormAccName.EditNameKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if Key = #13  then
+  begin
+   ActionSpeedSearchExecute(Sender);
+  end;
+end;
+
+procedure TNewDepositsFormAccName.FormShow(Sender: TObject);
+begin
+  Accounts.Close;
+  Accounts.Open;
+end;
+
+procedure TNewDepositsFormAccName.XDBGrid1DblClick(Sender: TObject);
+begin
+NewDepositsFrmAddEditAccTurning.EditAccno.Text:=XDBGrid1.DataSource.DataSet.FieldByName('acc_no').AsString;
+close;
+end;
+
+procedure TNewDepositsFormAccName.XFBitBtn1Click(Sender: TObject);
+begin
+  Close;
+end;
+
+procedure TNewDepositsFormAccName.ActionSpeedSearchExecute(Sender: TObject);
+resourcestring
+  rsRecordRecachedEOF = 'Axtarış cərgənin sonuna çatıb .';
+  rsContinueFromTop   = 'Əvvəldən axtarmaqla davam etmək istəyirsiniz?';
+  rsRecordNotFound    = 'Yazı Tapılmadı.';
+var
+  SearchField, v_name :string;
+  SearchOptions :TSearchRecordOptions;
+  Result :boolean;
+begin
+  SearchOptions := [srIgnoreCase ,srPartialMatch ];
+
+  with Sender as TEdit  do
+  begin
+   v_name:=Name;
+   if UpperCase(Name) = UpperCase('EditAcc_No_Search') then v_name :='EditACC_NO';
+
+   name:=v_Name;
+
+   SearchOptions := [srIgnoreCase ,srPartialMatch ];
+
+   with Sender as TEdit  do
+   begin
+    SearchField := copy(Name,5,length(Name));
+
+    with Accounts do begin
+     if (UpperCase(SearchField) ='ACC_NO') or (UpperCase(SearchField) ='NAME1')
+      or (UpperCase(SearchField) ='OLD_ACC_NO')
+      then
+      begin
+        SQL[17]:=(' and lower('+SearchField+') like '''+LowerCase(Text)+'%''');
+      end
+      else if (UpperCase(SearchField) ='OPEN_DAT') or (UpperCase(SearchField) ='CLOSE_DAT')
+       or (UpperCase(SearchField) ='USERINSERT')
+       then begin
+        SQL[17] := (':pSearch');
+        SetVariable('pSearch', ' and lower('+SearchField+') = '''+LowerCase(Text)+'''');
+       end
+      else begin
+       SQL[17] := (':pSearch');
+       SetVariable('pSearch', ' and lower('+SearchField+') = '+LowerCase(Text));
+      end;
+     if Trim(Text)='' then SetVariable('pSearch', '');
+     Refresh;
+    end;
+   end;
+  end;
+end;
+
+
+end.

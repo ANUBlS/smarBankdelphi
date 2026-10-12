@@ -1,0 +1,557 @@
+unit OrderImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActiveX, AxCtrls, Order_TLB, StdVcl, ComCtrls, ExtCtrls, StdCtrls,
+  Db, OracleData, DBViewComboBox, Mask, DBCtrls, SearchEdit;
+
+type
+  TOrderForm = class(TActiveForm, IOrderForm)
+    PageControl1: TPageControl;
+    TabSheet2: TTabSheet;
+    Panel1: TPanel;
+    GroupBox1: TGroupBox;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label5: TLabel;
+    ContractNumEdit: TEdit;
+    DTPSysdate: TDateTimePicker;
+    CBCurrencys: TDBViewComboBox;
+    STRate: TStaticText;
+    p5: TPanel;
+    RBUserType: TRadioGroup;
+    Panel3: TPanel;
+    Panel5: TPanel;
+    Panel6: TPanel;
+    Label6: TLabel;
+    Label3: TLabel;
+    DBEdit2: TDBEdit;
+    DBEdit3: TDBEdit;
+    p4: TPanel;
+    p43: TPanel;
+    c4: TEdit;
+    p42: TPanel;
+    s4: TEdit;
+    p41: TPanel;
+    PenaltyEdit: TEdit;
+    StaticText1: TStaticText;
+    p3: TPanel;
+    p33: TPanel;
+    c3: TEdit;
+    p32: TPanel;
+    s3: TEdit;
+    p31: TPanel;
+    ReserveDebtEdit: TEdit;
+    StaticText2: TStaticText;
+    p2: TPanel;
+    p23: TPanel;
+    c2: TEdit;
+    p22: TPanel;
+    s2: TEdit;
+    p21: TPanel;
+    InterestDebtEdit: TEdit;
+    StaticText3: TStaticText;
+    p1: TPanel;
+    p13: TPanel;
+    C1: TEdit;
+    p12: TPanel;
+    S1: TEdit;
+    p11: TPanel;
+    FacticalDebtEdit: TEdit;
+    StaticText4: TStaticText;
+    CBF: TCheckBox;
+    CBI: TCheckBox;
+    CBR: TCheckBox;
+    CBP: TCheckBox;
+    Panel23: TPanel;
+    RGDescription: TRadioGroup;
+    RGReserveDescription: TRadioGroup;
+    Panel24: TPanel;
+    Button1: TButton;
+    ContractAccounts: TSearchEdit;
+    ReserveAccounts: TSearchEdit;
+    Edit1: TEdit;
+    Edit2: TEdit;
+    Edit3: TEdit;
+    Label4: TLabel;
+    Label7: TLabel;
+    Label8: TLabel;
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure CBCurrencysChange(Sender: TObject);
+    procedure ContractAccountsKeyPress(Sender: TObject; var Key: Char);
+  private
+    { Private declarations }
+    FEvents: IOrderFormEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+  public
+    { Public declarations }
+    procedure Initialize; override;
+  end;
+
+implementation
+
+uses ComObj, ComServ ,sboapiDataModuleImpl, OrderDataModuleUnit,
+  OrderReportUnit, CurrencyToHR_Azeri_, OrderPropertyPage;
+
+{$R *.DFM}
+
+{ TOrderForm }
+
+procedure TOrderForm.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  DefinePropertyPage(Class_PropertyPage1);
+end;
+
+procedure TOrderForm.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as IOrderFormEvents;
+end;
+
+procedure TOrderForm.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TOrderForm.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TOrderForm.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TOrderForm.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TOrderForm.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TOrderForm.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TOrderForm.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TOrderForm.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TOrderForm.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TOrderForm.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TOrderForm.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TOrderForm.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TOrderForm.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TOrderForm.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TOrderForm.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TOrderForm.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TOrderForm.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TOrderForm.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TOrderForm.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TOrderForm._Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TOrderForm.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TOrderForm.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TOrderForm.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TOrderForm.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TOrderForm.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TOrderForm.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TOrderForm.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TOrderForm.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TOrderForm.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TOrderForm.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TOrderForm.Set_AxBorderStyle(Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TOrderForm.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TOrderForm.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TOrderForm.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TOrderForm.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TOrderForm.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TOrderForm.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TOrderForm.Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TOrderForm.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TOrderForm.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TOrderForm.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TOrderForm.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TOrderForm.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TOrderForm.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+procedure TOrderForm.ActiveFormCreate(Sender: TObject);
+begin
+  DataModOrder := TDataModOrder.Create(Self);
+  OrderRpt := TOrderRpt.Create(Self);
+  ContractAccounts.Text := ContractAccounts.DataSource.DataSet.FieldByName('Acc_No').AsString;
+  ReserveAccounts.Text := ReserveAccounts.DataSource.DataSet.FieldByName('Acc_No').AsString;
+end;
+
+procedure TOrderForm.Button1Click(Sender: TObject);
+  function  ReportDataAsStr : WideString;
+  const
+    N1 = ' є ли щесаблашма щесабындан ';
+    N2 = ' - жи ил тарихин€ кими кредит€ щесабланмыш фаиз€ сил€синиз ';
+    N3 = ' ж€рим€ санксийасына сил€синиз. ';
+  var
+    ResultStr : WideString;
+    CName ,CSName : String;
+    a1,a2,a3,a4 : WideString;
+    ca1,ca2,ca3,ca4 : WideString;
+    MainDebt,Interest,Reserve,Penalty : WideString;
+  begin
+    CName :=  '  ' + CBCurrencys.ListSource.DataSet.FieldByName('Valu_name').AsString + '  ';
+    CSName := '  ' + CBCurrencys.ListSource.DataSet.FieldByName('Valu_Bala').AsString + '  ';
+    ResultStr :='';
+
+    if RBUserType.ItemIndex <> -1 then
+      ResultStr := RBUserType.Items[RBUserType.ItemIndex]+'  ';
+
+    ResultStr := ResultStr + ContractAccounts.DataSource.DataSet.FieldByName('Name').AsString + ' '
+         + ContractAccounts.DataSource.DataSet.FieldByName('Acc_No').AsString + ' ' + N1;
+    MainDebt :='';
+    Interest :='';
+    Reserve :='';
+    Penalty :='';
+    if  CBF.Checked then
+    begin
+
+      if Trim(FacticalDebtEdit.Text) <> '' then
+      begin
+       MainDebt := FacticalDebtEdit.Text ;
+       a1 := ' ('+CurrencyToHR_Azeri(StrToInt(FacticalDebtEdit.Text),0,[]) + ' ' + CName ;
+      end else
+       a1 := ' (';
+
+      if Trim(C1.Text) <> '' then
+      begin
+       MainDebt := MainDebt + S1.Text + C1.Text;
+       ca1 := CurrencyToHR_Azeri(StrToInt(c1.Text),0,[]) + ' ' + CSName + ')';
+      end else
+       ca1 :=')';
+
+      MainDebt := MainDebt + a1 + ca1 + ' ' + RGDescription.Items[RGDescription.ItemIndex] ;
+
+    end;//cbf
+
+    if  CBI.Checked then
+    begin
+
+      if Trim(InterestDebtEdit.Text) <> '' then
+      begin
+       Interest := InterestDebtEdit.Text ;
+       a2 := ' ('+CurrencyToHR_Azeri(StrToInt(InterestDebtEdit.Text),0,[]) + ' ' + CName ;
+      end else
+       a2 := ' (';
+
+      if Trim(C2.Text) <> '' then
+      begin
+       Interest := Interest + S2.Text + C2.Text;
+       ca2 := CurrencyToHR_Azeri(StrToInt(c2.Text),0,[]) + ' ' + CSName + ')';
+      end else
+       ca2 :=') ';
+
+      Interest := Interest + a2 + ca2 + ' ' + FormatDateTime('dd/mm/yyyy',DTPSysdate.Date) + N2;
+
+    end;//cbf
+
+    if  CBP.Checked then
+    begin
+
+      if Trim(PenaltyEdit.Text) <> '' then
+      begin
+       Penalty := PenaltyEdit.Text ;
+       a4 := ' ('+CurrencyToHR_Azeri(StrToInt(PenaltyEdit.Text),0,[]) + ' ' + CName ;
+      end else
+       a4 := ' (';
+
+      if Trim(C4.Text) <> '' then
+      begin
+       Penalty := Penalty + S4.Text + C4.Text;
+       ca4 := CurrencyToHR_Azeri(StrToInt(c4.Text),0,[]) + ' ' + CSName + ')';
+      end else
+       ca4 :=')';
+
+      Penalty := ' в€ ' + Penalty + a4 + ca4 + ' ' + N3;
+
+    end;//cbf
+
+    if  CBR.Checked then
+    begin
+
+      if Trim(ReserveDebtEdit.Text) <> '' then
+      begin
+       Reserve := ReserveDebtEdit.Text ;
+       a3 := ' ('+CurrencyToHR_Azeri(StrToInt(ReserveDebtEdit.Text),0,[]) + ' ' + CName ;
+      end else
+       a3 := ' (';
+
+      if Trim(C3.Text) <> '' then
+      begin
+       Reserve := Reserve + S3.Text + C3.Text;
+       ca3 := CurrencyToHR_Azeri(StrToInt(c3.Text),0,[]) + ' ' + CSName + ')';
+      end else
+       ca3 :=')';
+
+      Reserve := Reserve + a3 + ca3+ ' (' + ReserveAccounts.DataSource.DataSet.FieldByName('Acc_No').AsString
+                + ') '+ RGReserveDescription.Items[RGReserveDescription.ItemIndex] ;
+
+    end;//cbf
+
+
+    ResultStr := ResultStr + MainDebt + ',' + Interest + Reserve  + Penalty ;
+    
+    Result := ResultStr;
+  end;
+begin
+  with OrderRpt do
+  begin
+    QRMemo.Lines.Text :=ReportDataAsStr;
+    QRLContractNum.Caption := ContractNumEdit.Text;
+    Chef.Caption := Edit1.Text;
+    CreditChef.Caption := Edit2.Text;
+    Manager.Caption := Edit3.Text;
+    QRLDate.Caption := FormatDateTime('dd/mm/yyyy',DTPSysdate.Date);
+    Preview
+  end;
+end;
+
+procedure TOrderForm.CBCurrencysChange(Sender: TObject);
+begin
+  ContractAccounts.Text :='';
+  ReserveAccounts.Text :='';
+end;
+
+procedure TOrderForm.ContractAccountsKeyPress(Sender: TObject;
+  var Key: Char);
+var
+  ID : integer;
+begin
+  if Key = #13 then
+  begin
+    ID := (Sender as TSearchEdit).DataSource.DataSet.FieldByName('KLI_ID').AsInteger;
+    ReserveAccounts.DataSource.DataSet.Locate('KLI_ID',ID,[]);
+    ReserveAccounts.Text := ReserveAccounts.DataSource.DataSet.FieldByName('ACC_NO').AsString;
+  end;
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TOrderForm,
+    Class_OrderForm,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

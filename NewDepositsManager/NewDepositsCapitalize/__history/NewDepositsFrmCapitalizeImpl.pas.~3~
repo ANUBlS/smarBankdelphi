@@ -1,0 +1,187 @@
+﻿unit NewDepositsFrmCapitalizeImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, OracleData, StdCtrls, Mask, DBCtrls, ExtCtrls, ComCtrls, ToolWin,
+  ImgList, Grids, DBGridEh, CMExcelExport, Oracle,  ActnList, DBGridEhGrouping,
+  GridsEh;
+
+type
+  TNewDepositsFrmCapitalize = class(TForm)
+    ActionList1: TActionList;
+    ActnAddTr: TAction;
+    ActnDel: TAction;
+    ActnExport: TAction;
+    Capitals: TOracleDataSet;
+    CapitalsID: TFloatField;
+    CapitalsHDATE: TDateTimeField;
+    CapitalsTOTAL: TFloatField;
+    CapitalsTRID: TFloatField;
+    DBGridEh1: TDBGridEh;
+    DepositInfo: TOracleDataSet;
+    DepositInfoCONTRACTNO: TWideStringField;
+    DepositInfoNAME: TWideStringField;
+    DepositInfoFACTICALDEBT: TFloatField;
+    DepositInfoFACTICALINTERESTDEBT: TFloatField;
+    DepositInfoCONTRACTACCNO: TWideStringField;
+    DepositInfoINTERESTACCNO: TWideStringField;
+    ExcelExp: TCMExcelExport;
+    GroupBox1: TGroupBox;
+    Panel3: TPanel;
+    DBEdit2: TDBEdit;
+    StaticText2: TStaticText;
+    ImageList1: TImageList;
+    Panel4: TPanel;
+    ToolBar1: TToolBar;
+    ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
+    ToolButton3: TToolButton;
+    ToolButton4: TToolButton;
+    ToolButton5: TToolButton;
+    ToolButton6: TToolButton;
+    ToolButton7: TToolButton;
+    sbcm_payment: TOraclePackage;
+    StatusBar1: TStatusBar;
+    DepositInfoDatSrc: TDataSource;
+    CapitalsDatSrc: TDataSource;
+    sb_aca: TOraclePackage;
+    procedure FormCanResize(Sender: TObject; var NewWidth, NewHeight: Integer;
+      var Resize: Boolean);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure ToolButton7Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure ActnAddTrExecute(Sender: TObject);
+    procedure ActnDelExecute(Sender: TObject);
+    procedure ActnExportExecute(Sender: TObject);
+    procedure ActnExportUpdate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+      CanAfterRefresh :Boolean;
+  end;
+
+var
+  NewDepositsFrmCapitalize: TNewDepositsFrmCapitalize;
+   procedure exportproc(S:String);export;
+implementation
+
+{$R *.dfm}
+   uses sboapiDataModuleImpl,NewCommonDeclsImpl,NewDepositsFrmAddCapitalizeImpl,SBTranslateProc;
+
+   procedure exportproc(S:String);export;
+var ContractID :Integer;
+begin
+   ContractID := Get_SelectedContID;
+
+   with NewDepositsFrmCapitalize do
+   begin
+
+   with DepositInfo do
+   begin
+      if Active then CloseAll;
+      SetVariable('ContractID',ContractID);
+      Open;
+   end;
+
+   with Capitals do
+   begin
+      if Active then CloseAll;
+      SetVariable('ContractID',ContractID);
+      Open;
+   end;
+
+   Caption := Get_SelectedContNo+' nömrəli depozitin  kapitallaşdırılması';
+   ShowModal;
+
+  end;
+
+end;
+
+exports
+   exportproc;
+
+procedure TNewDepositsFrmCapitalize.ActnAddTrExecute(Sender: TObject);
+begin
+ with NewDepositsFrmCapitalize,sb_aca do
+begin
+      CallProcedure('checkadvancedobjectaccess',['INSERT_SBCM_CAPITALIZATION']);
+end;
+   if NewDepositsFrmAddCapitalize.ShowModal = mrOk then
+   begin
+     CanAfterRefresh := True;
+     Capitals.Refresh;
+   end;
+end;
+
+procedure TNewDepositsFrmCapitalize.ActnDelExecute(Sender: TObject);
+begin
+
+ with NewDepositsFrmCapitalize,sb_aca do
+begin
+      CallProcedure('checkadvancedobjectaccess',['DELETE_SBCM_CAPITALIZATION']);
+end;
+    if MessageDlg('Silinməsinə əminsinizmi?',
+             mtConfirmation, [mbYes, mbNo], 0) = mrNo
+    then Exit;
+
+    with Capitals,sbcm_payment do   begin
+         CallProcedure('DeleteCapitalization',['p_capitalizationID',FieldByName('ID').AsInteger]);
+          Refresh;
+         end;
+end;
+
+procedure TNewDepositsFrmCapitalize.ActnExportExecute(Sender: TObject);
+begin
+
+ with NewDepositsFrmCapitalize,sb_aca do
+begin
+      CallProcedure('checkadvancedobjectaccess',['EXCEL_SBCM_CAPITALIZATION']);
+end;
+
+   with ExcelExp do
+   begin
+      Connect;
+      ExportDataset(Capitals,'Kapitallaşdırma',true,false);
+      DisConnect;
+   end;
+end;
+
+procedure TNewDepositsFrmCapitalize.ActnExportUpdate(Sender: TObject);
+begin
+   with (Sender as TAction) do
+        Enabled := Capitals.RecordCount > 0
+end;
+
+procedure TNewDepositsFrmCapitalize.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+ Resize := False
+end;
+
+procedure TNewDepositsFrmCapitalize.FormCreate(Sender: TObject);
+begin
+   NewDepositsFrmAddCapitalize := TNewDepositsFrmAddCapitalize.Create(Self);
+   SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TNewDepositsFrmCapitalize.FormDestroy(Sender: TObject);
+begin
+  NewDepositsFrmAddCapitalize.Free;
+end;
+
+procedure TNewDepositsFrmCapitalize.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+if Ord(Key) = VK_ESCAPE then Close
+end;
+
+procedure TNewDepositsFrmCapitalize.ToolButton7Click(Sender: TObject);
+begin
+Close;
+end;
+   initialization
+    NewDepositsFrmCapitalize := TNewDepositsFrmCapitalize.Create(CommonApplication);
+
+end.

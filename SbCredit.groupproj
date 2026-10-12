@@ -1,0 +1,60 @@
+﻿	<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+		<PropertyGroup>
+			<ProjectGuid>{787651A6-A6D8-4701-9A5D-AECF4E7DABBC}</ProjectGuid>
+		</PropertyGroup>
+		<ItemGroup>
+			<Projects Include="Packages\sboapi50\sboapi50.dproj">
+				<Dependencies/>
+			</Projects>
+			<Projects Include="Packages\SB_Credit\Sm_creditsmgr\Creditsmgr.dproj">
+				<Dependencies/>
+			</Projects>
+			<Projects Include="Programs\SmartBank\SmartBank.dproj">
+				<Dependencies/>
+			</Projects>
+		</ItemGroup>
+		<ProjectExtensions>
+			<Borland.Personality>Default.Personality.12</Borland.Personality>
+			<Borland.ProjectType/>
+			<BorlandProject>
+				<Default.Personality/>
+			</BorlandProject>
+		</ProjectExtensions>
+		<Target Name="sboapi50">
+			<MSBuild Projects="Packages\sboapi50\sboapi50.dproj"/>
+		</Target>
+		<Target Name="sboapi50:Clean">
+			<MSBuild Projects="Packages\sboapi50\sboapi50.dproj" Targets="Clean"/>
+		</Target>
+		<Target Name="sboapi50:Make">
+			<MSBuild Projects="Packages\sboapi50\sboapi50.dproj" Targets="Make"/>
+		</Target>
+		<Target Name="Creditsmgr">
+			<MSBuild Projects="Packages\SB_Credit\Sm_creditsmgr\Creditsmgr.dproj"/>
+		</Target>
+		<Target Name="Creditsmgr:Clean">
+			<MSBuild Projects="Packages\SB_Credit\Sm_creditsmgr\Creditsmgr.dproj" Targets="Clean"/>
+		</Target>
+		<Target Name="Creditsmgr:Make">
+			<MSBuild Projects="Packages\SB_Credit\Sm_creditsmgr\Creditsmgr.dproj" Targets="Make"/>
+		</Target>
+		<Target Name="SmartBank">
+			<MSBuild Projects="Programs\SmartBank\SmartBank.dproj"/>
+		</Target>
+		<Target Name="SmartBank:Clean">
+			<MSBuild Projects="Programs\SmartBank\SmartBank.dproj" Targets="Clean"/>
+		</Target>
+		<Target Name="SmartBank:Make">
+			<MSBuild Projects="Programs\SmartBank\SmartBank.dproj" Targets="Make"/>
+		</Target>
+		<Target Name="Build">
+			<CallTarget Targets="sboapi50;Creditsmgr;SmartBank"/>
+		</Target>
+		<Target Name="Clean">
+			<CallTarget Targets="sboapi50:Clean;Creditsmgr:Clean;SmartBank:Clean"/>
+		</Target>
+		<Target Name="Make">
+			<CallTarget Targets="sboapi50:Make;Creditsmgr:Make;SmartBank:Make"/>
+		</Target>
+		<Import Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')" Project="$(BDS)\Bin\CodeGear.Group.Targets"/>
+	</Project>

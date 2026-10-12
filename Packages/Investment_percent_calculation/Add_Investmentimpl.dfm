@@ -1,0 +1,33 @@
+object Add_Investment: TAdd_Investment
+  Left = 0
+  Top = 0
+  BorderIcons = [biSystemMenu]
+  BorderStyle = bsSingle
+  Caption = 'Yeni'
+  ClientHeight = 185
+  ClientWidth = 415
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -12
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poDesktopCenter
+  OnKeyPress = FormKeyPress
+  PixelsPerInch = 96
+  TextHeight = 14
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 415
+    Height = 185
+    Align = alClient
+    TabOrder = 0
+    ExplicitLeft = 96
+    ExplicitTop = 24
+    ExplicitWidth = 185
+    ExplicitHeight = 41
+  end
+end

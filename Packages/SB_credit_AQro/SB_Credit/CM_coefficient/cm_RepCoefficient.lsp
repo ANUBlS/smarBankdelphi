@@ -1,0 +1,1 @@
+-+D:\CreditsMgr\Source\Packages\CM_coefficient\coefficientImpl.obj -+c:\program files\borland\delphi5\Lib\SysInit.obj 

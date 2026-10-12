@@ -1,0 +1,377 @@
+﻿unit FrmPropAddImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, db, variants,
+  StdCtrls, Mask, DBCtrlsEh, ExtCtrls, Buttons, DBCtrls, CMDBSearchEdit,
+  DBLookupEh, ComCtrls, HintBox, CMHintBox,  jpeg, DBGridEh;
+
+type
+  TFrmPropAdd = class(TForm)
+    Panel1: TPanel;
+    Panel8: TPanel;
+    Label18: TLabel;
+    Image1: TImage;
+    SpeedButton38: TSpeedButton;
+    SpeedButton39: TSpeedButton;
+    ContractHint: THintBox;
+    Panel2: TPanel;
+    SpeedButton1: TSpeedButton;
+    SpeedButton2: TSpeedButton;
+    Label16: TLabel;
+    Label2: TLabel;
+    DBEditEh13: TDBEditEh;
+    Panel4: TPanel;
+    SpeedButton5: TSpeedButton;
+    SpeedButton6: TSpeedButton;
+    Label29: TLabel;
+    Label28: TLabel;
+    DBNumberEditEh5: TDBNumberEditEh;
+    Panel3: TPanel;
+    SpeedButton3: TSpeedButton;
+    SpeedButton4: TSpeedButton;
+    Label155: TLabel;
+    Label1: TLabel;
+    DBEditEh8: TDBEditEh;
+    Panel18: TPanel;
+    SpeedButton29: TSpeedButton;
+    SpeedButton30: TSpeedButton;
+    Label19: TLabel;
+    Label20: TLabel;
+    DBLookupComboboxEh2: TDBLookupComboboxEh;
+    Panel21: TPanel;
+    SpeedButton31: TSpeedButton;
+    SpeedButton32: TSpeedButton;
+    Label21: TLabel;
+    DBDateTimeEditEh2: TDBDateTimeEditEh;
+    Panel5: TPanel;
+    SpeedButton7: TSpeedButton;
+    SpeedButton8: TSpeedButton;
+    Label3: TLabel;
+    Label26: TLabel;
+    DBLookupComboboxEh3: TDBLookupComboboxEh;
+    Panel6: TPanel;
+    SpeedButton9: TSpeedButton;
+    SpeedButton10: TSpeedButton;
+    Label7: TLabel;
+    Label24: TLabel;
+    DBLookupComboboxEh1: TDBLookupComboboxEh;
+    Panel7: TPanel;
+    SpeedButton11: TSpeedButton;
+    SpeedButton12: TSpeedButton;
+    Label11: TLabel;
+    Label25: TLabel;
+    DBNumberEditEh1: TDBNumberEditEh;
+    Panel12: TPanel;
+    SpeedButton19: TSpeedButton;
+    SpeedButton20: TSpeedButton;
+    Label8: TLabel;
+    Label9: TLabel;
+    DBNumberEditEh2: TDBNumberEditEh;
+    Panel13: TPanel;
+    SpeedButton21: TSpeedButton;
+    SpeedButton22: TSpeedButton;
+    Label10: TLabel;
+    Label12: TLabel;
+    DBNumberEditEh3: TDBNumberEditEh;
+    Panel14: TPanel;
+    SpeedButton23: TSpeedButton;
+    SpeedButton24: TSpeedButton;
+    Label13: TLabel;
+    Label14: TLabel;
+    DBNumberEditEh4: TDBNumberEditEh;
+    GroupBox1: TGroupBox;
+    DBEditEh1: TDBEditEh;
+    GroupBox2: TGroupBox;
+    DBEditEh4: TDBEditEh;
+    DBDateTimeEditEh1: TDBDateTimeEditEh;
+    GroupBox3: TGroupBox;
+    DBEditEh2: TDBEditEh;
+    GroupBox4: TGroupBox;
+    Panel9: TPanel;
+    SpeedButton13: TSpeedButton;
+    SpeedButton14: TSpeedButton;
+    Label4: TLabel;
+    DBDateTimeEditEh3: TDBDateTimeEditEh;
+    Panel10: TPanel;
+    SpeedButton15: TSpeedButton;
+    SpeedButton16: TSpeedButton;
+    Label5: TLabel;
+    Label6: TLabel;
+    DBLookupComboboxEh4: TDBLookupComboboxEh;
+    Panel11: TPanel;
+    SpeedButton17: TSpeedButton;
+    SpeedButton18: TSpeedButton;
+    Label17: TLabel;
+    DBEditEh5: TDBEditEh;
+    DBDateTimeEditEh4: TDBDateTimeEditEh;
+    GroupBox5: TGroupBox;
+    GroupBox6: TGroupBox;
+    CMSearchEditLoacAccs: TCMSearchEdit;
+    DBLookupComboboxEh6: TDBLookupComboboxEh;
+    Label37: TLabel;
+    Label38: TLabel;
+    Label15: TLabel;
+    CMSearchEdit1: TCMSearchEdit;
+    Label22: TLabel;
+    DBLookupComboboxEh5: TDBLookupComboboxEh;
+    Panel15: TPanel;
+    SpeedButton25: TSpeedButton;
+    SpeedButton26: TSpeedButton;
+    Label30: TLabel;
+    Label31: TLabel;
+    DBNumberEditEh6: TDBNumberEditEh;
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure BitBtn1Click(Sender: TObject);
+    procedure DBLookupComboboxEh10KeyPress(Sender: TObject; var Key: Char);
+    procedure DBLookupComboboxEh10KeyValueChanged(Sender: TObject);
+    procedure CMSearchEdit2KeyPress(Sender: TObject; var Key: Char);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormShow(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure SpeedButton38Click(Sender: TObject);
+    procedure SpeedButton39Click(Sender: TObject);
+    procedure CMSearchEditLoacAccsExit(Sender: TObject);
+    procedure CMSearchEdit1Exit(Sender: TObject);
+    procedure DBLookupComboboxEh6KeyValueChanged(Sender: TObject);
+    procedure DBLookupComboboxEh5KeyValueChanged(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmPropAdd: TFrmPropAdd;
+
+implementation
+uses OracleData,DMprop,CommonPropImpl,SBTranslateProc,sboapiDataModuleImpl;
+
+{$R *.DFM}
+
+procedure TFrmPropAdd.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+ resize := false
+end;
+
+procedure TFrmPropAdd.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+   if ord(key) = VK_ESCAPE then close
+end;
+
+procedure TFrmPropAdd.BitBtn1Click(Sender: TObject);
+begin
+{with DMproperties,DataSetPropIns do
+  begin
+     //if active then close;
+   //  open;
+     //insert;
+    // Refresh;
+  end;
+  } close
+end;
+
+
+procedure TFrmPropAdd.DBLookupComboboxEh10KeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if ORD(Key) = VK_RETURN then
+  if Sender is TWinControl then
+  with Sender as TWinControl do
+
+  begin
+  case Tag of
+    1,3 : SelectNext(Sender as TWinControl ,True ,True);
+  //  2 :DBLCBValutes.SetFocus;
+  end;
+   Key := #0;
+  end;
+end;
+
+procedure TFrmPropAdd.DBLookupComboboxEh10KeyValueChanged(Sender: TObject);
+begin
+ with (Sender as TDBLookupComboboxEh) do
+  if DataSource.DataSet.Active then
+   UpdateData;
+end;
+
+procedure TFrmPropAdd.CMSearchEdit2KeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if ORD(Key) = VK_RETURN then
+  if Sender is TWinControl then
+  with Sender as TWinControl do
+
+  begin
+  case Tag of
+    1,3 : SelectNext(Sender as TWinControl ,True ,True);
+  //  2 :DBLCBValutes.SetFocus;
+  end;
+   Key := #0;
+  end;
+end;
+
+procedure TFrmPropAdd.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  with DMproperties.DataSetPropIns do
+//    if State = dsCancel then
+    begin
+      Cancel;
+      CancelUpdates;
+    end;
+//DMproperties.DataSetPropIns.refresh;
+end;
+
+procedure TFrmPropAdd.FormShow(Sender: TObject);
+begin
+ with DMproperties,DataSetPropIns do
+ begin
+ open;
+ OracleDataSet1.open;
+ FieldbyName('bdate').asDateTime:= OracleDataSet1.FieldbyName('TEK_DAT').asDateTime;
+ end;
+end;
+
+
+
+procedure TFrmPropAdd.FormCreate(Sender: TObject);
+begin
+{ with DMproperties do
+  begin
+   dataset_taypcal.open;
+   ClientAccs.open;
+   CreditAccs.open
+   end  }
+SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TFrmPropAdd.FormDestroy(Sender: TObject);
+begin
+ with DMproperties do
+  begin
+   dataset_taypcal.close;
+   ClientAccs.close;
+   CreditAccs.close
+   end
+end;
+
+procedure TFrmPropAdd.SpeedButton38Click(Sender: TObject);
+ var
+  str_field : string;
+  cnt : integer;
+begin
+
+ cnt:= 0;
+
+if DBEditEh13.text='' then
+  begin
+    cnt:= cnt+1;
+    str_field:=str_field + '№,'
+  end;
+if  DBEditEh8.text='' then
+  begin
+    cnt:= cnt+1;
+    str_field:=str_field + 'Adı,'
+  end;
+if  DBNumberEditEh5.text='' then
+  begin
+    cnt:= cnt+1;
+    str_field:=str_field + 'Əmlakı balans dəyəri,,'
+  end;
+
+if  DBLookupComboboxEh3.keyvalue=null then
+  begin
+    cnt:= cnt+1;
+    str_field:= str_field+ 'Rayon,'
+      end;
+
+if  DBLookupComboboxEh2.keyvalue=null then
+  begin
+    cnt:= cnt+1;
+    str_field:= str_field+ 'Filial,'
+      end;
+
+ if  DBLookupComboboxEh3.keyvalue=null then
+  begin
+    cnt:= cnt+1;
+    str_field:= str_field+ 'Şəhər/rayon,'
+      end ;
+
+if  DBLookupComboboxEh1.keyvalue=null then
+  begin
+    cnt:= cnt+1;
+    str_field:= str_field+ 'Qəsəbə/kənt,'
+      end ;
+if  DBLookupComboboxEh4.keyvalue=null then
+  begin
+    cnt:= cnt+1;
+    str_field:= str_field+ 'Ehtiyyat dərəcəsi ,'
+      end ;
+
+ if  DBLookupComboboxEh6.keyvalue=null then
+  begin
+    cnt:= cnt+1;
+    str_field:= str_field+ 'Əmlak hesabı ,'
+      end ;
+str_field:= str_field+ ' Seçilməyib! ';
+
+ if  DBLookupComboboxEh5.keyvalue=null then
+  begin
+    cnt:= cnt+1;
+    str_field:= str_field+ 'Ehtiyyat hesabı ,'
+      end ;
+str_field:= str_field+ ' Seçilməyib! ';
+
+if cnt=0  then
+  begin
+with DMproperties,DataSetPropIns do
+  begin
+   post;
+  close;
+  open;
+  //  RefreshWithSavely(True);
+  end;
+  close;
+   end
+   else
+         ContractHint.ShowMessage('Verilənlər  '+#13' '+str_field)  ;
+
+  end;
+
+procedure TFrmPropAdd.SpeedButton39Click(Sender: TObject);
+begin
+close
+end;
+
+procedure TFrmPropAdd.CMSearchEditLoacAccsExit(Sender: TObject);
+begin
+  with Sender as TCMSearchEdit do
+  Color := ColorSave;
+end;
+
+procedure TFrmPropAdd.CMSearchEdit1Exit(Sender: TObject);
+begin
+  with Sender as TCMSearchEdit do
+  Color := ColorSave;
+end;
+
+procedure TFrmPropAdd.DBLookupComboboxEh6KeyValueChanged(Sender: TObject);
+begin
+  with (Sender as TDBLookupComboboxEh) do
+  if DataSource.DataSet.Active then
+   UpdateData;
+end;
+
+procedure TFrmPropAdd.DBLookupComboboxEh5KeyValueChanged(Sender: TObject);
+begin
+  with (Sender as TDBLookupComboboxEh) do
+  if DataSource.DataSet.Active then
+   UpdateData;
+end;
+
+end.

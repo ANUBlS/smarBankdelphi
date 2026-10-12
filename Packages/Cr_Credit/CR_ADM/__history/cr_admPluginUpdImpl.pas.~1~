@@ -1,0 +1,82 @@
+unit admPluginUpdImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, Buttons, ExtCtrls, cFileListComboBox, NLSLocalizer, DBCtrls;
+
+type
+  TfrmUpdPlugin = class(TForm)
+    Panel1: TPanel;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    btnEdit: TSpeedButton;
+    btnClose: TSpeedButton;
+    cbBPLS: TFileListComboBox;
+    edParamName: TEdit;
+    edDescription: TEdit;
+    Localizer: TNLSLocalizer;
+    Label4: TLabel;
+    cbPluginType: TDBLookupComboBox;
+    procedure FormCreate(Sender: TObject);
+    procedure btnCloseClick(Sender: TObject);
+    procedure btnEditClick(Sender: TObject);
+    procedure FormKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure edDescriptionChange(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  frmUpdPlugin: TfrmUpdPlugin;
+  PluginID : Integer;
+implementation
+
+uses admDataModule;
+
+{$R *.DFM}
+
+procedure TfrmUpdPlugin.FormCreate(Sender: TObject);
+begin
+  cbBPLS.Directory := ExtractFilePath(Application.ExeName);
+  cbBPLS.FillList;
+end;
+
+procedure TfrmUpdPlugin.btnCloseClick(Sender: TObject);
+begin
+  Close;
+end;
+
+procedure TfrmUpdPlugin.btnEditClick(Sender: TObject);
+begin
+  with admDM do begin
+    CR_ADMIN.CallProcedure('updateplugin',
+                            [PluginsDataSetID.AsVariant,
+                             edDescription.Text,
+                             cbPluginType.KeyValue
+                            ]);
+    RefreshDataSet(PluginsDataSet);
+  end;
+  btnCloseClick(Sender);
+end;
+
+procedure TfrmUpdPlugin.FormKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if Key = VK_ESCAPE then
+    btnCloseClick(Sender);
+  if Key = VK_RETURN then
+    btnEditClick(Sender);
+end;
+
+procedure TfrmUpdPlugin.edDescriptionChange(Sender: TObject);
+begin
+  btnEdit.Enabled := edDescription.Text<>'';
+end;
+
+end.

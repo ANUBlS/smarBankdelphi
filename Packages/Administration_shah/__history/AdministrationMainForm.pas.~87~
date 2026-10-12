@@ -1,0 +1,2794 @@
+﻿unit AdministrationMainForm;
+
+interface
+
+
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Forms, Dialogs,
+  ActiveX, AxCtrls, Administration_TLB, StdVcl, ExtCtrls, StdCtrls,
+  ComCtrls, ToolWin, Grids, DBGrids, ImgList,DB, DBCtrls, DBCGrids,
+  ActnList, AdmBarForm, OracleData, HintBox,Buttons,Controls, Mask,
+  SearchCombo, Tabs, Menus,AdministrationModEdit, SBPlgAx50_TLB, CheckLst,
+  CMExcelExport, Evanescence;
+
+const
+crMyDrag1=6;
+crMyDra2=7;
+
+csClasses=0;
+csGroups=1;
+csUsers=2;
+csModules=3;
+csOrders=4;
+
+icoGroup=1;
+icoUser=4;
+icoAdm=11;
+icoLockUser = 13;
+
+_ExpresDel = '''';
+_ExpresBacStart = '(';
+_ExprecBacStop = ')';
+
+csTree: array[0..5] of string =
+ ('Classes','Groups','Users','Modules','Orders','NewClass');
+csExceptTabs = [4,5];
+
+  PRightInd = 0;
+  PLeftInd = 1;
+  PDelInd = 2;
+  PAddInd=3;
+  SpeedButtonWidth =13;
+  SpeedButtonHeight=13;
+  SpeedButtonInterval = 1;
+  SpeedButtonFirstInterval = 3;
+
+type
+  TDataRef= ^TDataSet;
+  TActive = (acModule,acTable);
+  TActiveTab = (atUsers,atGroups,atOrders,atNewClass);
+  THeadState = (hsLeft,hsDel,hsRight,hsAdd,hsUnknown);
+
+ THeaderButton = class(TSpeedButton)
+ private
+  fState : THeadState;
+ public
+
+ 
+  constructor Create(AOwner: TComponent);override;
+  property HeadState :THeadState read fState write fState default hsUnknown;
+ end;
+
+ THeaderButtonMethods = record
+  DelCol :TNotifyEvent;
+  MoveRight :TNotifyEvent;
+  MoveLeft :TNotifyEvent;
+  Add:TNotifyEvent;
+ end;
+
+  TAdministrationForm = class(TActiveForm, IAdministrationForm, IIconExporter)
+    pnlMain: TPanel;
+    ToolBar1: TToolBar;
+    StatusBar1: TStatusBar;
+    tvMain: TTreeView;
+    Splitter1: TSplitter;
+    pnlOptRef: TPanel;
+    pnlCtrlBr: TPanel;
+    pnlGrid: TPanel;
+    grShrcsrMK: TDBGrid;
+    pcMain: TPageControl;
+    tbModules: TTabSheet;
+    tbTables: TTabSheet;
+    tbInfo: TTabSheet;
+    ImLAdm: TImageList;
+    ImLToolBar: TImageList;
+    cgrModules: TDBCtrlGrid;
+    grPan1: TPanel;
+    DBText1: TDBText;
+    grPan2: TPanel;
+    DBText2: TDBText;
+    grPan3: TPanel;
+    cbMod: TDBCheckBox;
+    hcModules: THeaderControl;
+    AdmAct: TActionList;
+    PostModChng: TAction;
+    Panel2: TPanel;
+    grAdvan: TDBGrid;
+    PostTableChng: TAction;
+    ImLGrid: TImageList;
+    Panel1: TPanel;
+    gbRights: TGroupBox;
+    gbSelAll: TGroupBox;
+    sbSelAll: TSpeedButton;
+    sbDeSelAll: TSpeedButton;
+    ACTSelectAll: TAction;
+    ACTDeselAll: TAction;
+    PostChng: TAction;
+    RefreshMd: TAction;
+    tbPost: TToolButton;
+    tbRefresh: TToolButton;
+    ErrorPanel: TPanel;
+    hbErrorBox: THintBox;
+    CBMainChange: TAction;
+    DBRefresh: TAction;
+    ToolButton4: TToolButton;
+    tbAddUser: TToolButton;
+    ToolButton6: TToolButton;
+    tbDropUser: TToolButton;
+    AddUser: TAction;
+    DropUser: TAction;
+    ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
+    ToolButton7: TToolButton;
+    ClassCreate: TAction;
+    ClassDrop: TAction;
+    tbGroup: TTabSheet;
+    pnGroupMan: TPanel;
+    Splitter3: TSplitter;
+    pnQoupSlaveUsers: TPanel;
+    ToolButton8: TToolButton;
+    ToolButton9: TToolButton;
+    ToolButton11: TToolButton;
+    GroupCreate: TAction;
+    GroupDrop: TAction;
+    PostGroupChng: TAction;
+    gbUserInf: TGroupBox;
+    Panel10: TPanel;
+    Panel11: TPanel;
+    Panel12: TPanel;
+    edUsInfName: TEdit;
+    Panel13: TPanel;
+    edUsInfFName: TEdit;
+    Bevel1: TBevel;
+    edUsInfDescr: TEdit;
+    PostUserInfoChng: TAction;
+    StaticText5: TStaticText;
+    StaticText6: TStaticText;
+    Panel14: TPanel;
+    tsDepSub: TTabSet;
+    pcDepSub: TPageControl;
+    tbsDepend: TTabSheet;
+    tbsSubmis: TTabSheet;
+    DBGrid1: TDBGrid;
+    DBGrid2: TDBGrid;
+    ToolButton5: TToolButton;
+    ToolButton3: TToolButton;
+    ToolButton10: TToolButton;
+    ToolButton12: TToolButton;
+    ToolButton13: TToolButton;
+    ppMod: TPopupMenu;
+    mmUpdate: TMenuItem;
+    mmInsert: TMenuItem;
+    N1: TMenuItem;
+    mmDelete: TMenuItem;
+    Label5: TLabel;
+    ModPop: TPopupMenu;
+    miSelAll: TMenuItem;
+    miDeSelAll: TMenuItem;
+    N4: TMenuItem;
+    TabPopup: TPopupMenu;
+    miSelTab: TMenuItem;
+    miUnSelTab: TMenuItem;
+    N5: TMenuItem;
+    miAllSelTab: TMenuItem;
+    miAllUnSelTab: TMenuItem;
+    ToolButton14: TToolButton;
+    ToolButton15: TToolButton;
+    N2: TMenuItem;
+    N3: TMenuItem;
+    sbAdvancedGrants: TSpeedButton;
+    gbUserList: TGroupBox;
+    pnGroupGrid: TPanel;
+    grGroupUs: TDBGrid;
+    gbGroupType: TGroupBox;
+    DBText4: TDBText;
+    Label8: TLabel;
+    ShowUsersTab: TAction;
+    Panel3: TPanel;
+    edUsInfPhone: TMaskEdit;
+    StaticText3: TStaticText;
+    edUsInfCrDat: TEdit;
+    StaticText2: TStaticText;
+    edUsInfClass: TSearchCombo;
+    StaticText1: TStaticText;
+    edUsInfFilial: TSearchCombo;
+    Label6: TLabel;
+    Panel4: TPanel;
+    SpeedButton1: TSpeedButton;
+    cbUpdate: TDBCheckBox;
+    cbDelete: TDBCheckBox;
+    cbInsert: TDBCheckBox;
+    tbsUserGroup: TTabSheet;
+    DBGrid3: TDBGrid;
+    sbShowUsTab: TSpeedButton;
+    tbOrders: TTabSheet;
+    pcOrders: TPageControl;
+    tbQroupsOrder: TTabSheet;
+    tbUsersOrder: TTabSheet;
+    grQrupsOrder: TGroupBox;
+    GroupBox1: TGroupBox;
+    btGroupOrder: TBitBtn;
+    cbGroupsOrder: TCheckListBox;
+    gbUsersOrder: TGroupBox;
+    GroupBox2: TGroupBox;
+    btUsersOrder: TBitBtn;
+    RadioButton3: TRadioButton;
+    rbUsersAll: TRadioButton;
+    cbUsersOrder: TCheckListBox;
+    tbsOrders: TTabSet;
+    ShowGroupsOrder: TAction;
+    ShowUsersOrder: TAction;
+    rbGroupsAll: TRadioButton;
+    RadioButton2: TRadioButton;
+    RefreshOrders: TAction;
+    cbUsersStandOrder: TCheckBox;
+    eduserOrderConst1: TEdit;
+    eduserOrderConst2: TEdit;
+    Bevel2: TBevel;
+    Label7: TLabel;
+    Label9: TLabel;
+    Bevel3: TBevel;
+    Panel9: TPanel;
+    pnQroupPanel: TPanel;
+    Panel7: TPanel;
+    Label3: TLabel;
+    edGroupName: TEdit;
+    Splitter2: TSplitter;
+    Panel15: TPanel;
+    Label4: TLabel;
+    edGroupDescr: TEdit;
+    hcQroupHead: THeaderControl;
+    slGroupGrid: TStringGrid;
+    ActButtonsImages: TImageList;
+    sbLock: TSpeedButton;
+    LockUser: TAction;
+    SpeedButton2: TSpeedButton;
+    SetOptions: TAction;
+    actBalAcc: TAction;
+    ToolButton16: TToolButton;
+    btnUsersAdvGrant: TBitBtn;
+    SpeedButton3: TSpeedButton;
+    Button1: TButton;
+    Button2: TButton;
+    CMExcelqrants: TCMExcelExport;
+    Animate1: TAnimate;
+    SpeedButton4: TSpeedButton;
+    tbNewClass: TTabSheet;
+    PClass: TFlowPanel;
+    ImageList1: TImageList;
+    Panel5: TPanel;
+    Panel6: TPanel;
+    SpeedButton5: TSpeedButton;
+    SpeedButton6: TSpeedButton;
+    RadioGroup1: TRadioGroup;
+    Edit1: TEdit;
+    RadioGroup2: TRadioGroup;
+    Edit2: TEdit;
+    RadioGroup3: TRadioGroup;
+    Edit3: TEdit;
+    RadioGroup4: TRadioGroup;
+    Edit4: TEdit;
+    DBLookupListBox1: TDBLookupListBox;
+    DBLookupListBox2: TDBLookupListBox;
+    DBLookupListBox3: TDBLookupListBox;
+    evAdvGrants: TEvanescence;
+    RadioGroup5: TRadioGroup;
+    cbIns: TCheckBox;
+    cbUpd: TCheckBox;
+    cbDel: TCheckBox;
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure tvMainChange(Sender: TObject; Node: TTreeNode);
+    procedure tvMainCustomDraw(Sender: TCustomTreeView; const ARect: TRect;
+      var DefaultDraw: Boolean);
+    procedure tbModulesResize(Sender: TObject);
+    procedure hcModulesSectionResize(HeaderControl: THeaderControl;
+      Section: THeaderSection);
+    procedure cgrModulesPaintPanel(DBCtrlGrid: TDBCtrlGrid;
+      Index: Integer);
+    procedure PostModChngExecute(Sender: TObject);
+    procedure DBText1Click(Sender: TObject);
+    procedure PostTableChngExecute(Sender: TObject);
+    procedure grAdvanDrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TColumn; State: TGridDrawState);
+    procedure hcModulesSectionClick(HeaderControl: THeaderControl;
+      Section: THeaderSection);
+    procedure sbSelAllClick(Sender: TObject);
+    procedure cbInsertClick(Sender: TObject);
+    procedure cgrModulesKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure grAdvanKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure PostChngExecute(Sender: TObject);
+    procedure cbModClick(Sender: TObject);
+    procedure cbModMouseUp(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
+    procedure RefreshMdExecute(Sender: TObject);
+    procedure hbErrorBoxAfterHide(Sender: TObject);
+    procedure hbErrorBoxAfterShow(Sender: TObject);
+    procedure CBMainChangeExecute(Sender: TObject);
+    procedure DBRefreshExecute(Sender: TObject);
+    procedure grShrcsrMKDblClick(Sender: TObject);
+    procedure grShrcsrMKKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure AddUserExecute(Sender: TObject);
+    procedure DropUserExecute(Sender: TObject);
+    procedure ClassCreateExecute(Sender: TObject);
+    procedure ClassDropExecute(Sender: TObject);
+    procedure grGroupUsKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure GroupCreateExecute(Sender: TObject);
+    procedure GroupDropExecute(Sender: TObject);
+    procedure PostGroupChngExecute(Sender: TObject);
+    procedure PostUserInfoChngExecute(Sender: TObject);
+    procedure tsDepSubChange(Sender: TObject; NewTab: Integer;
+      var AllowChange: Boolean);
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure mmUpdateClick(Sender: TObject);
+    procedure mmInsertClick(Sender: TObject);
+    procedure mmDeleteClick(Sender: TObject);
+    procedure tvMainKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure miSelAllClick(Sender: TObject);
+    procedure miSelTabClick(Sender: TObject);
+    procedure miAllSelTabClick(Sender: TObject);
+    procedure ToolButton14Click(Sender: TObject);
+    procedure N3Click(Sender: TObject);
+    procedure sbAdvancedGrantsClick(Sender: TObject);
+    procedure grAdvanDblClick(Sender: TObject);
+    procedure pnGroupManResize(Sender: TObject);
+    procedure Splitter1Moved(Sender: TObject);
+    procedure ShowUsersTabExecute(Sender: TObject);
+    procedure tsDepSubDrawTab(Sender: TObject; TabCanvas: TCanvas;
+      R: TRect; Index: Integer; Selected: Boolean);
+    procedure tbsOrdersChange(Sender: TObject; NewTab: Integer;
+      var AllowChange: Boolean);
+    procedure ShowGroupsOrderExecute(Sender: TObject);
+    procedure ShowUsersOrderExecute(Sender: TObject);
+    procedure rbGroupsAllClick(Sender: TObject);
+    procedure RefreshOrdersExecute(Sender: TObject);
+    procedure rbUsersAllClick(Sender: TObject);
+    procedure tbUsersOrderShow(Sender: TObject);
+    procedure cbUsersStandOrderClick(Sender: TObject);
+    procedure hcQroupHeadSectionResize(HeaderControl: THeaderControl;
+      Section: THeaderSection);
+    procedure hcQroupHeadResize(Sender: TObject);
+    procedure hcQroupHeadSectionClick(HeaderControl: THeaderControl;
+      Section: THeaderSection);
+    procedure slGroupGridKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure LockUserExecute(Sender: TObject);
+    procedure SetOptionsExecute(Sender: TObject);
+    procedure btnUsersAdvGrantClick(Sender: TObject);
+    procedure SpeedButton3Click(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+    procedure ToolButton16Click(Sender: TObject);
+    procedure SpeedButton4DblClick(Sender: TObject);
+    procedure SpeedButton4Click(Sender: TObject);
+    procedure Button3Click(Sender: TObject);
+    procedure Button4Click(Sender: TObject);
+    procedure DBLookupListBox1Click(Sender: TObject);
+    procedure SpeedButton5Click(Sender: TObject);
+    procedure SpeedButton6Click(Sender: TObject);
+    procedure DBLookupListBox3Click(Sender: TObject);
+    procedure DBLookupListBox2Click(Sender: TObject);
+  private
+    FEvents: IAdministrationFormEvents;
+    procedure EnableOrderData(Value: TActiveTab);
+    procedure PrepareOrderList(DataSet : TOracleDataSet;Field: String;Sender : TCheckListBox;RefreshData : Boolean = False);
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+    function CBChange(SelItem: String):Boolean;
+    function GRChange(SelItem: String):Boolean;
+    procedure RealignHC;
+    procedure SendMsg(Comp: TWinControl);
+  protected
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+    procedure RefreshTb;
+    procedure ExecuteChange(Hand: TBarForm;Data : TDataSet;ProcName:string;Activ: TActive);
+    function  GetNode(NodeList:TTreeNodes;Value: string): TTreeNode;
+    function IAdministrationForm.Get_Color = IAdministrationForm_Get_Color;
+    function IAdministrationForm.Get_Font = IAdministrationForm_Get_Font;
+    procedure IAdministrationForm._Set_Font = IAdministrationForm__Set_Font;
+    procedure IAdministrationForm.Set_Color = IAdministrationForm_Set_Color;
+    procedure IAdministrationForm.Set_Font = IAdministrationForm_Set_Font;
+    function IAdministrationForm_Get_Color:OLE_COLOR; safecall;
+    function IAdministrationForm_Get_Font:IFontDisp ; safecall;
+    procedure IAdministrationForm__Set_Font(var Value: IFontDisp); safecall;
+    procedure IAdministrationForm_Set_Color(Value:OLE_COLOR); safecall;
+    procedure IAdministrationForm_Set_Font(const Value: IFontDisp); safecall;
+    function Get_Icon: OLE_HANDLE; safecall;
+  public
+    procedure Initialize; override;
+    procedure SelAll(Value: Boolean);
+    procedure CreateTreeList(IsCreate: Boolean;Node: string;Data: TDataSet;Field,AdmField: String;ImageId: Integer);
+    procedure RecreateTreeList;
+    procedure VSDDataChange(CBCng: Boolean);
+    procedure ChangeOrder(Data: TOracleDataSet; Field: TField;Dec: Boolean);
+    procedure MoveFromList(FromMove,ToMove: TListBox);
+    procedure RefreshLists(SelIt: string);
+    procedure Moduleedit(var Act : TModAction);
+    procedure LoadUserInfo(SelItem: string);
+    procedure grShrcsrDelete(Dat: TDataSource);
+    procedure CreateHederControlActions(Head: THeaderControl;BtnimageList: TImageList;Methods:THeaderButtonMethods);
+    procedure GridAdd(Sender:TStringGrid;Index: Integer);
+    procedure GridMoveLeft(Sender: TStringGrid;Index: integer);
+    procedure GridMoveRight(Sender: TStringGrid;Index: integer);
+    procedure GridDel(Sender: TStringGrid;Index: integer);
+    procedure HeaderDel(Sender: TObject);
+    procedure HeaderMoveRigth(Sender: TObject);
+    procedure HeaderMoveLeft(Sender: TObject);
+    procedure HeaderAdd(Sender: TObject);
+    procedure ChangeSelectedLockImage(IsLocked : Boolean);
+  end;
+
+function GetActiveUser: string;
+function BoolToInt(Value: Boolean):Integer;
+function IntToBool(const Val: Integer) :Boolean;
+procedure Snd(Comp: TWinControl);
+procedure SelAlll(Dat: TDataSet;Field : String;IsSel: Boolean);
+
+var
+AdministrationForm:  TAdministrationForm;
+FirsCreated: Boolean = True;
+_CGPanWidth: Integer = 30;
+_ResCGMod: Boolean = True;
+_Dec: string = ' desc';
+TempPic: TPicture;
+
+implementation
+
+
+uses ComObj, ComServ, AdministrationDataModule, AdministrationUserAddForm,
+  AdministrationClassEdit, AdministrationUserPassw,
+  AdministrationOwnerSheep, administrationUsersRefresh,
+  AdministrationAdvancedGrants, AdministrationGroupReport,
+  AdministrationUserGranReport, AdministrationUtils,
+  AdministrationProfOptions, AdministrationUserAdvGranReport, COPYCLASS,
+  sboapiDataModuleImpl, SBTranslateProc, finger, adm_classesGrants;
+
+{$R *.DFM}
+
+{ TAdministrationForm }
+
+function IntToBool(const Val: Integer) :Boolean;
+begin
+ Result:=not(Val=0);
+end;
+
+function BoolToInt(Value: Boolean):Integer;
+ begin
+  Result:=Ord(Value);
+ end;
+
+constructor  THeaderButton.Create(AOwner: TComponent);
+begin
+ inherited Create (AOwner);
+  fState:=hsUnknown;
+end;
+
+procedure Snd(Comp: TWinControl);
+begin
+  AdministrationForm.SendMsg(Comp);
+  Application.ProcessMessages;
+end;
+
+function GetActiveUser: string;
+begin
+ Result:= AdministrationForm.tvMain.Selected.Text;
+end;
+
+procedure TAdministrationForm.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_AdministrationFormPage); }
+end;
+
+procedure TAdministrationForm.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as IAdministrationFormEvents;
+end;
+
+procedure TAdministrationForm.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+procedure TAdministrationForm.SendMsg(Comp: TWinControl);
+begin
+ if Assigned(Comp) then
+  SendMessage(Comp.Handle,WM_USER,0,0);
+end;
+
+function TAdministrationForm.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TAdministrationForm.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TAdministrationForm.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TAdministrationForm.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TAdministrationForm.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TAdministrationForm.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TAdministrationForm.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TAdministrationForm.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TAdministrationForm.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TAdministrationForm.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TAdministrationForm.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TAdministrationForm.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TAdministrationForm.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TAdministrationForm.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TAdministrationForm.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TAdministrationForm.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TAdministrationForm.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TAdministrationForm.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TAdministrationForm._Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TAdministrationForm.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TAdministrationForm.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TAdministrationForm.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TAdministrationForm.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TAdministrationForm.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TAdministrationForm.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TAdministrationForm.KeyPressEvent(Sender: TObject;
+  var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TAdministrationForm.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TAdministrationForm.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TAdministrationForm.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TAdministrationForm.Set_AxBorderStyle(
+  Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TAdministrationForm.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TAdministrationForm.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TAdministrationForm.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TAdministrationForm.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TAdministrationForm.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TAdministrationForm.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TAdministrationForm.Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TAdministrationForm.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TAdministrationForm.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TAdministrationForm.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TAdministrationForm.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TAdministrationForm.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TAdministrationForm.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+procedure TAdministrationForm.ActiveFormCreate(Sender: TObject);
+
+procedure CreateActionButtons;
+var
+ Met : THeaderButtonMethods;
+begin
+ with Met do
+  begin
+   DelCol:=HeaderDel;
+   MoveRight:=HeaderMoveRigth;
+   MoveLeft:=HeaderMoveLeft;
+   Add:=HeaderAdd;
+  end;
+ CreateHederControlActions(hcQroupHead,ActButtonsImages,Met);
+end;
+
+begin
+
+AdministrationData:=TAdministrationData.Create(self);
+AdministrationForm:=self;
+_CGPanWidth:=cgrModules.PanelHeight;
+RealignHC;
+rptAdvgrant := TrptAdvgrant(self);
+pnlCtrlBr.Align:=alClient;
+CreateActionButtons;
+pcOrders.ActivePageIndex := 0;
+fingers:=Tfingers.Create(self);
+if FirsCreated then
+  begin
+  CreateTreeList(True,'İstifadəçilər',AdministrationData.Usersdata,'Name','is_adm',icoUser);
+  CreateTreeList(True,'Qruplar',AdministrationData.Groupsdata,'Obj',EmptyStr,icoGroup);
+  FirsCreated:=False;
+ end;
+ SBTranslateProc.TranslateAllComponents(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TAdministrationForm.tvMainChange(Sender: TObject;
+  Node: TTreeNode);
+  begin
+
+ PClass.Visible:=False;
+ pnlGrid.Visible:=(Node.Level=0) and not(Node.Index in csExceptTabs);
+ VSDDataChange(not(pnlGrid.Visible));
+ actBalAcc.Enabled := (node.level<>0) and (node.Parent.index=2);
+ //tvMain.Items.Item[0].ImageIndex:=1;
+ //tvMain.Items.Item[1].ImageIndex:=0;
+ //tvMain.Items.Item[5].ImageIndex:=3;
+ if tvMain.Selected.Index=4 then
+    Panel5.Left:=PClass.Left;
+    Panel5.Height:=PClass.Height-Panel6.Height;
+    Panel5.Width:=PClass.Width;
+    Panel6.Left:=PClass.Left;
+    Panel6.Width:=PClass.Width;
+    evAdvGrants.Width:=DBLookupListBox3.Width;
+    evAdvGrants.Left:=805;
+    evAdvGrants.Top:=97;
+    evAdvGrants.Height:=DBLookupListBox3.Height-43;
+
+
+
+end;
+
+function TAdministrationForm.GetNode(NodeList:TTreeNodes;Value: string): TTreeNode;
+var
+i: Integer;
+begin
+Result:=nil;
+for i:=0 to NodeList.Count-1 do
+ if  NodeList[i].Text=Value then
+  begin
+    Result:=NodeList[i];
+  end;
+
+end;
+
+procedure TAdministrationForm.CreateTreeList(IsCreate: Boolean;Node: string;Data: TDataSet;Field,AdmField: String;ImageId: Integer);
+var
+TempNode,ParentNode: TTreeNode;
+Bk: TBookmark;
+Rec: Integer;
+begin
+if not(AdministrationData.UsersData.Active) then Exit;
+ParentNode:=GetNode(tvMain.Items,Node);
+if IsCreate then
+ with Data,TempNode do
+  begin
+     BK:=GetBookmark;
+     First;
+     while not Eof do
+      begin
+       with tvMain do
+       TempNode:=Items.AddChild(ParentNode,FieldByName(Field).AsString);
+       if (AdmField<>EmptyStr)and (FieldByName('is_adm').AsInteger=1) then
+        begin
+         ImageIndex:=icoAdm;
+         SelectedIndex:=icoAdm;
+        end
+       else
+      if (AdmField<>EmptyStr)and (FieldByName('is_locked').AsInteger=1) then
+        begin
+         ImageIndex:=icoLockUser;
+         SelectedIndex:=icoLockUser;
+        end
+        else
+        begin
+         ImageIndex:=ImageId;
+         SelectedIndex:=ImageId;
+        end;
+       Next;
+      end;
+      if BookmarkValid(BK) then
+      GotoBookmark(BK) else First;
+  end
+else
+ begin
+   ParentNode.DeleteChildren;
+  with Data do
+  try
+   Rec:=RecNo;
+   Refresh;
+   if Rec>RecNo then
+   Last else RecNo:=Rec;
+  finally
+  end;
+
+ end;
+end;
+
+procedure TAdministrationForm.RecreateTreeList;
+begin
+ CreateTreeList(False,'İstifadəçilər',AdministrationData.Usersdata,'Name','is_adm',icoUser);
+ CreateTreeList(True,'İstifadəçilər',AdministrationData.Usersdata,'Name','is_adm',icoUser);
+ CreateTreeList(False,'Qruplar',AdministrationData.Groupsdata,'Obj',EmptyStr,icoGroup);
+ CreateTreeList(True,'Qruplar',AdministrationData.Groupsdata,'Obj',EmptyStr,icoGroup);
+ tvMainChange(tvMain,tvMain.Selected);
+end;
+
+procedure TAdministrationForm.VSDDataChange(CBCng: Boolean);
+begin
+if CBCng then
+CBChange(tvMain.Selected.Text)
+else  GRChange(csTree[tvMain.Selected.Index]);
+end;
+
+procedure TAdministrationForm.tvMainCustomDraw(Sender: TCustomTreeView;
+  const ARect: TRect; var DefaultDraw: Boolean);
+begin
+  { if FirsCreated then
+  begin
+  CreateTreeList(True,'İstifadəçilər',AdministrationData.Usersdata,'Name','is_adm',icoUser);
+  CreateTreeList(True,'Qruplar',AdministrationData.Groupsdata,'Obj',EmptyStr,icoGroup);
+  FirsCreated:=False;
+ end; }
+end;
+
+procedure TAdministrationForm.LoadUserInfo(SelItem: string);
+var
+M: string;
+begin
+with AdministrationData,AdministrationData.UsersData do
+ begin
+  edUsInfClass.Refresh;
+  if not(Active) then Exit;
+  Locate('NAME',SelItem,[]);
+
+   if (ClassesData.Active)and(Classesdata.Locate('id',FieldByName('CLASSID').AsInteger,[])) then
+  edUsInfClass.ItemIndex:=edUsInfClass.Items.IndexOf(Classesdata.FieldByName('obj').AsString)
+  else edUsInfClass.ItemIndex:=0;
+
+  if (FilialData.Active)and not(FieldByName('FILIALID').IsNull)and(FilialData.Locate('id',FieldByName('FILIALID').AsInteger,[])) then
+  edUsInfFilial.ItemIndex:=edUsInfFilial.Items.IndexOf(FilialData.FieldByName('name').AsString)
+  else edUsInfFilial.ItemIndex:=0;
+
+  edUsInfName.Text:=FieldByName('NAME').AsString;
+  edUsInfFName.Text:=FieldByName('FULLNAME').AsString;
+  edUsInfDescr.Text:=FieldByName('Description').AsString;
+  sbLock.Down := IntToBool(FieldByName('is_locked').AsInteger);
+  LockUser.Checked:=sbLock.Down;
+  with edUsInfPhone do
+   begin
+    M:=EditMask;
+    EditMask:=emptystr;
+    Text:=FieldByName('Phone').AsString;
+    EditMask:=M;
+   end;
+  edUsInfCrDat.Text:=FieldByName('CTIME').AsString;
+  UserGroupData.SetVariable('UserID',UsersData.FieldByName('USER#').ASInteger);
+  UserGroupData.Refresh;
+ end;
+end;
+
+procedure TAdministrationForm.PrepareOrderList(DataSet : TOracleDataSet;Field: String;Sender : TCheckListBox;RefreshData : Boolean = False);
+begin
+with DataSet,Sender,Items do
+ begin
+  if not(Active) then Open;
+  if RefreshData then
+   begin
+    Clear;
+    Refresh;
+   end;
+  if (Count=0) and (RecordCount<>0) then
+   begin
+    DisableControls;
+    Filtered:=False;
+    First;
+     while not(EOF) do
+       begin
+        Add(FieldByName(Field).AsString);
+        Checked[Count-1]:=True;
+        Next;
+       end;
+    EnableControls;
+   end;
+ end;
+end;
+
+function TAdministrationForm.CBChange(SelItem: String):Boolean;
+var
+RefTab : ^TTabSheet;
+
+procedure ViewActTab(Tab :TActiveTab);
+
+  procedure ReViewTabs;
+  var
+   i :integer;
+  begin
+  pnlCtrlBr.Visible:=False;
+   with pcMain do
+   begin
+    for i:=0 to PageCount-1 do Pages[i].TabVisible:=Pages[i]=RefTab^;
+    if Assigned(RefTab) then
+    ActivePage:=@RefTab;
+   end;
+  end;
+ 
+begin
+ case Tab of
+  atUsers:
+   begin
+     pcMain.ActivePage:=tbInfo;
+     pcDepSub.ActivePage:=tbsUserGroup;
+     tsDepSub.TabIndex:=0;
+     tbInfo.TabVisible:=True;
+     tbModules.TabVisible:=True;
+     tbTables.TabVisible:=True;
+     tbGroup.TabVisible:=False;
+     tbOrders.TabVisible:=False;
+   end;
+ atGroups:
+  begin
+   RefTab:=@tbGroup;
+   ReViewTabs;
+  end;
+ atNewClass:
+  begin
+    RefTab:=@tbNewClass;
+    ReViewTabs;
+  end;
+ atOrders:
+  begin
+    RefTab:=@tbOrders;
+    ReViewTabs;
+  end;
+ end;
+end;
+
+begin
+with AdministrationData do
+  case tvMain.Selected.Parent.Index of
+  csUsers:
+   begin
+      LoadUserInfo(SelItem);
+    if UsModulesData.Active then
+       UsModulesData.Close;
+    if UsTablesData.Active then
+       UsTablesData.Close;
+    ViewActTab(atUsers);
+   end;
+   csGroups:
+    begin
+     RefreshLists(selitem);
+     ViewActTab(atGroups);
+    end;
+   else
+    begin
+      if tvMain.Selected.Index=4 then
+      begin
+        PClass.Visible:=True;
+        //ViewActTab(atNewClass);
+      end
+        else
+        begin
+     PrepareOrderList(repGroupsData,'OBJ',cbGroupsOrder);
+     ViewActTab(atOrders);
+        end;
+    end;
+  end;
+pnlCtrlBr.Visible:=true;
+Result:=True;
+end;
+
+function TAdministrationForm.GRChange(SelItem: String):Boolean;
+var
+HandCom: TComponent;
+begin
+with AdministrationData do
+begin
+ Result:=False;
+ HandCom:=FindComponent(SelItem);
+
+ if Assigned(HandCom) then
+ begin
+ grShrcsrMK.DataSource:=(HandCom as TDataSource);
+  if HandCom.Name='Modules' then
+ grShrcsrMK.PopupMenu:=ppMod
+ else grShrcsrMK.PopupMenu:=nil;
+ Result:=True;
+ end;
+end;
+end;
+
+procedure TAdministrationForm.RealignHC;
+begin
+ with hcModules.Sections do
+ begin
+  Items[0].Width:=grPan1.Width;
+  Items[1].Width:=grPan2.Width;
+ end;
+end;
+
+procedure TAdministrationForm.tbModulesResize(Sender: TObject);
+begin
+with cgrModules do
+ RowCount:=Height div _CGPanWidth
+end;
+
+procedure TAdministrationForm.hcModulesSectionResize(
+  HeaderControl: THeaderControl; Section: THeaderSection);
+var
+Temp: TComponent;
+begin
+Temp:=FindComponent('grPan'+IntToStr(Section.Index+1));
+ if Assigned(Temp) then
+  begin
+  (Temp as TPanel).Width:=Section.Width;
+  cgrModules.Repaint;
+  end;
+end;
+
+procedure TAdministrationForm.cgrModulesPaintPanel(
+  DBCtrlGrid: TDBCtrlGrid; Index: Integer);
+
+procedure SetColor(Col: TColor);
+begin
+grPan1.Font.Color:=Col;
+grPan2.Font.Color:=Col;
+grPan3.Font.Color:=Col;
+end;
+begin
+  if Index = DBCtrlGrid.PanelIndex then
+  SetColor(clWhite)
+  else SetColor(clBlack);
+end;
+
+procedure TAdministrationForm.PostModChngExecute(Sender: TObject);
+var
+BrForm: TBarForm;
+begin
+  BrForm:=TBarForm.Create(self);
+with AdministrationData,AdministrationData.UsModulesData do
+ begin
+  BrForm.Execute('Module Access','Module access','Process...',
+  10,(RecordCount)*10);
+ pcADM.CallProcedure('lockunlockuser',[tvMain.Selected.Text, True]);
+  ExecuteChange(BrForm,UsModulesData,'ModAcc',acModule);
+  if (cgrModules.CanFocus) then cgrModules.Refresh;
+  if UsTablesData.Active then
+   UsTablesData.Refresh;
+   LoadUserInfo(tvMain.Selected.Text);
+ end;
+end;
+
+function TAdministrationForm.IAdministrationForm_Get_Color: OLE_COLOR;
+begin
+
+end;
+
+function TAdministrationForm.IAdministrationForm_Get_Font :IFontDisp;
+begin
+
+end;
+
+procedure TAdministrationForm.IAdministrationForm__Set_Font(var Value: IFontDisp);
+
+begin
+
+end;
+
+procedure TAdministrationForm.IAdministrationForm_Set_Color(Value: OLE_COLOR);
+begin
+
+end;
+
+procedure TAdministrationForm.IAdministrationForm_Set_Font(const Value: IFontDisp);
+
+begin
+
+end;
+
+procedure TAdministrationForm.DBText1Click(Sender: TObject);
+begin
+with cgrModules do
+if CanFocus and not(Focused)then
+ SetFocus;
+end;
+
+procedure TAdministrationForm.PostTableChngExecute(Sender: TObject);
+var
+BrForm: TBarForm;
+begin
+
+BrForm:=TBarForm.Create(self);
+with AdministrationData,AdministrationData.UsTablesData do
+ begin
+  if (State in [dsEdit,dsInsert]) then Post;
+  BrForm.Execute('Advanced Access','Advanced access','Process...',
+  10,(RecordCount)*10);                      
+ pcADM.CallProcedure('lockunlockuser',[tvMain.Selected.Text, True]);
+  ExecuteChange(BrForm,UsTablesData,'SetAdvancedGrants',acTable);   
+ end;
+end;
+
+procedure TAdministrationForm.PostGroupChngExecute(Sender: TObject);
+
+procedure SendM(Comp: TWinControl);
+begin
+ SendMsg(Comp);
+ Application.ProcessMessages;
+end;
+
+procedure CheckAddusers(Sender: TComponent);
+var
+ i,z: integer;
+begin
+with AdministrationData,GroupsData do
+ if (Sender is TStringGrid) then
+  with (Sender as TStringGrid) do
+  try
+   UsersData.DisableControls;
+   for i:=0 to ColCount-1 do
+    for z:=0 to RowCount-1 do
+      if Cells[i,z] <>EmptyStr then
+       begin
+         UsersData.Locate('NAME',Cells[i,z],[]);
+         if i<>2 then
+          if AdministrationData.pcAca.CallBooleanFunction('isadm',[UsersData.FieldByName('NAME').AsString]) then
+           begin
+            hbErrorBox.ShowMessage(Format('Administrator %s qrupda yalnız neytral istifadəçi ola bilər',[UsersData.FieldByName('NAME').AsString]));
+            Abort;
+          end;
+
+        if not(pcADM.CallBooleanFunction('CheckForAddUseringroup',[UsersData.FieldByName('USER#').AsInteger,FieldByName('id').AsInteger,i+1]))
+         then
+          begin
+           hbErrorBox.ShowMessage(Format('İstifadəçi %s bu qrupa daxil ola bilməz',[UsersData.FieldByName('NAME').AsString]));
+           Abort;
+         end;
+       end;
+  finally
+   UsersData.EnableControls;
+  end;
+end;
+
+var
+BrForm: TBarForm;
+i,z: Integer;
+Recr :Boolean;
+bk: TBookmark;
+
+begin
+
+Recr:=False;
+BrForm:=TBarForm.Create(self);
+ with AdministrationData,AdministrationData.GroupsData do
+  begin
+     if not(UsersData.Active) then Exit;
+     CheckAddusers(slGroupGrid);
+ try
+   UsersData.DisableControls;
+    BrForm.Execute('Group access','Group access','Process...',10,60);
+    Recr:=edGroupName.Text<>FieldByName('obj').AsString;
+    pcADM.CallProcedure('updategroup',[FieldByName('id').AsInteger,edGroupName.Text,edGroupDescr.Text]);
+  SendM(BrForm);
+    
+    pcADM.CallProcedure('backupgroupman',[FieldByName('id').AsInteger]);
+    pcADM.CallProcedure('cleargroupman',[FieldByName('id').AsInteger]);
+  SendM(BrForm);
+
+  with slGroupGrid do
+    for i:=0 to ColCount-1 do
+     begin
+     for z:=0 to RowCount-1 do
+      if Cells[i,z]<>EmptyStr then
+       begin
+        UsersData.Locate('NAME',Cells[i,z],[]);
+        pcADM.CallProcedure('adduseringrup',[UsersData.FieldByName('USER#').AsInteger,i+1,FieldByName('id').AsInteger]);
+       end;
+      SendM(BrForm);
+     end;
+
+  SendM(BrForm);
+   finally
+   UsersData.EnableControls;
+   pcADM.CallProcedure('refreshgroup',[FieldByName('id').AsInteger]);
+   pcADM.CallProcedure('locknewusers',[FieldByName('id').AsInteger]);
+   Bk:=GetBookmark;
+   Refresh;
+   if BookmarkValid(bk) then
+    GotoBookmark(bk);
+   FreeBookmark(bk);
+   if Recr then RecreateTreeList;
+   if Assigned(BrForm) then
+    BrForm.Release;
+   end;
+  end;
+end;
+
+procedure TAdministrationForm.PostUserInfoChngExecute(Sender: TObject);
+var
+varFilDat: string;
+begin
+with AdministrationData,AdministrationData.pcAdm do
+  begin
+   if (edUsInfClass.ItemIndex<>0) and pcAca.CallBooleanFunction('isadm',[tvMain.Selected.text]) then
+    begin
+      hbErrorBox.ShowMessage('Administrator heç bir sinfə aid ola bilməz');
+      Exit;
+    end;
+  with edUsInfFilial do
+    varFilDat:=Filialdata.FieldByName('id').AsString;
+  CallProcedure('insertuserinf',
+   [edUsInfName.Text,edUsInfDescr.Text,edUsInfFName.Text,edUsInfPhone.Text,
+       edUsInfClass.text,varFilDat]);
+ pcADM.CallProcedure('lockunlockuser',[tvMain.Selected.Text, True]);
+ with edUsInfClass do
+  if (ItemIndex<>0)and
+  (Classesdata.FieldByName('id').AsInteger<>Usersdata.FieldByName('classid').AsInteger) then
+    begin
+   // showmessage(tvMain.Selected.text);
+    {  CallProcedure('updateuserbyclass',
+      [Classesdata.FieldByName('id').AsInteger,tvMain.Selected.text]);  }
+      DBRefresh.OnExecute(usModulesData);
+    DBRefresh.OnExecute(usTablesData);
+    end;
+  UsersData.Refresh;
+  
+ end;
+end;
+
+procedure TAdministrationForm.RefreshTb;
+begin
+CBChange(tvMain.Selected.Text);
+end;
+
+procedure TAdministrationForm.grAdvanDrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TColumn;
+  State: TGridDrawState);
+var
+  ImageIndex: Integer;
+begin
+  with (Sender as TDBGrid) do
+  begin
+    if (DataSource.DataSet.RecordCount <> 0)and(DataCol = 0) then
+    begin
+      with DataSource.DataSet do
+      begin
+       if FieldByName('Select').AsInteger=0 then
+        begin
+         if (FieldByName('CAN_INSERT').AsInteger=1)
+         or (FieldByName('CAN_UPDATE').AsInteger=1)
+         or (FieldByName('CAN_DELETE').AsInteger=1) then
+          ImageIndex:=1
+         else
+          ImageIndex:=0;
+        end
+       else ImageIndex := 2;
+      end;
+
+
+     if ImageIndex <> -1 then
+       ImLGrid.Draw(Canvas, Rect.Left, Rect.Top, ImageIndex, True)
+      else
+        DefaultDrawColumnCell(Rect, DataCol, Column, State);
+    end;
+  end;
+end;
+
+
+procedure TAdministrationForm.ExecuteChange(Hand: TBarForm;Data : TDataSet;
+ProcName:string;Activ :TActive );
+var
+Bk: TBookmark;
+macc: Integer;
+GrModified: Boolean;
+RowModified: Boolean;
+begin
+with Data  do
+ begin
+  GrModified:=False;
+  Bk:=GetBookmark;
+  DisableControls;
+  try
+  First;
+  while not(EOF) do
+  begin
+    with AdministrationData,AdministrationData.pcADM do
+      case Activ of
+       acModule:
+        begin
+         RowModified:=CallBooleanFunction(ProcName,[FieldByName('DESCRIPTION').AsString,tvMain.Selected.text,IntToBool(FieldByName('MODACC').AsInteger)]);
+         GrModified:=GrModified or RowModified;
+         macc:=FieldByName('MODACC').AsInteger;
+         if RowModified then
+          begin
+           CallProcedure('SetAdvancedGrants',[FieldByName('DESCRIPTION').AsString,tvMain.Selected.text,macc,macc,macc]);
+           CallProcedure('UserAdvacedGrantsbyModule',[IntToBool(FieldByName('MODACC').AsInteger),tvMain.Selected.text,FieldByName('id').AsInteger]);
+          end;
+        end;
+       acTable: CallProcedure(ProcName,[FieldByName('DESCRIPTION').AsString,tvMain.Selected.text,
+       FieldByName('CAN_INSERT').AsInteger,FieldByName('CAN_DELETE').AsInteger,
+       FieldByName('CAN_UPDATE').AsInteger]);
+      end;
+   Application.ProcessMessages;
+   SendMsg(Hand);
+   Next;
+  end;
+  finally
+  if GrModified then
+   with AdministrationData do
+   begin
+   pcADM.CallProcedure('clearclassforuser',[tvMain.Selected.text]);
+   Usersdata.Refresh;
+   end;
+  RefreshMD.Execute;
+  GotoBookmark(Bk);
+  EnableControls;
+  with Hand do
+   if Assigned(Hand) then
+    begin
+    Hide;
+    Release;
+    end;
+  end;
+ end;
+end;
+
+procedure TAdministrationForm.ChangeOrder(Data: TOracleDataSet; Field: TField;Dec: Boolean);
+var
+tmp:string;
+begin
+//dinamic sorting(dec)
+ with Data do
+  begin
+   tmp:=Sql.Text;
+   if Active then Close;
+   SetLength(tmp,LastDelimiter('by',tmp));
+   tmp:=tmp+' '+Field.FieldName;
+   if dec then tmp:=tmp+_Dec;
+   Sql.Text:=tmp;
+   Open;
+  end;
+end;
+
+procedure TAdministrationForm.hcModulesSectionClick(
+  HeaderControl: THeaderControl; Section: THeaderSection);
+const
+ OrdImage :Integer=1;   //Icon Order
+ DeordImage:Integer=2; //Icon Deck Order
+
+function ResetActSection: Boolean;
+var
+i: Integer;
+begin
+with HeaderControl.Sections do
+for i:=0 to Count-1 do
+ if (Items[i].ImageIndex<>-1)and(Items[i]<>Section) then
+  Items[i].ImageIndex:=-1;
+
+ with Section do
+  begin
+   case ImageIndex of
+    -1: ImageIndex:= OrdImage;
+     1: ImageIndex:=DeordImage;
+     2: ImageIndex:= OrdImage;
+   end;
+    Result:=ImageIndex=DeordImage;
+  end;
+end;
+
+begin
+ with AdministrationData do
+ begin
+  ChangeOrder(UsModulesData,UsModulesData.Fields[Section.Index],ResetActSection);
+ end;
+end;
+
+procedure TAdministrationForm.SelAll(Value: Boolean);
+var
+i: Integer;
+begin
+ with AdministrationData.UsTablesData do
+ begin
+  Edit;
+  for i:=0 to gbRights.ControlCount-1 do
+   if  (gbRights.Controls[i] is TDBCheckBox) then
+    with  (gbRights.Controls[i] as TDBCheckBox) do
+     if Enabled then Field.AsInteger:=BoolToInt(Value);
+  Post;
+  end;
+end;
+
+procedure TAdministrationForm.sbSelAllClick(Sender: TObject);
+begin
+SelAll(Sender=sbSelAll);
+end;
+
+procedure TAdministrationForm.cbInsertClick(Sender: TObject);
+begin
+with grAdvan do
+ if (CanFocus)and not(Focused) then SetFocus;
+end;
+
+procedure TAdministrationForm.cgrModulesKeyDown(Sender: TObject;
+  var Key: Word; Shift: TShiftState);
+begin
+  if key=vk_space then
+   begin
+   with TDBCtrlGrid(Sender).DataSource.DataSet do
+    begin
+     if not(Active) then Exit;
+     Edit;
+     with TDBCtrlGrid(Sender).DataSource.DataSet.FieldByName(cbMod.DataField) do
+      AsInteger:=BoolToInt(not(IntToBool(AsInteger)));
+     end;
+   end;
+end;
+
+procedure TAdministrationForm.grAdvanKeyDown(Sender: TObject;
+  var Key: Word; Shift: TShiftState);
+begin
+if key=vk_Return then
+  if ssCtrl in Shift then sbSelAllClick(sbDeSelAll)
+  else sbSelAllClick(sbSelAll);
+end;
+
+procedure TAdministrationForm.PostChngExecute(Sender: TObject);
+begin
+ if not(pnlCtrlBr.Visible)then Exit;
+ if pcMain.ActivePage=tbGroup then
+    PostGroupChng.Execute
+ else
+ begin
+  {if (pcMain.ActivePage=tbModules)or(pcMain.ActivePage=tbTables) then
+    with AdministrationData.pcAca do
+    if CallBooleanFunction('isAdm',[tvMain.Selected.Text]) then
+      begin
+       hbErrorBox.ShowMessage('Administratorun hüquqlarını dəyişmək mümkün deyil');
+       Exit;
+      end;
+  if pcMain.ActivePage=tbModules then
+   PostModChng.Execute;
+  if pcMain.ActivePage=tbTables then
+    PostTableChng.Execute;}
+  if pcMain.ActivePage=tbInfo then
+    PostUserInfoChng.Execute;
+ end;
+end;
+
+procedure TAdministrationForm.cbModClick(Sender: TObject);
+begin
+if (Sender=cbMod)and(cgrModules.CanFocus)then
+  cgrModules.SetFocus;
+end;
+
+procedure TAdministrationForm.cbModMouseUp(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+begin
+with (Sender as TDBCheckBox),(Sender as TDBCheckBox).Datasource.DataSet do
+begin
+if not(Active)then Exit;
+ Edit;
+ FieldByName(DataField).AsInteger:=BoolToInt(Checked);
+ Post;
+end;
+end;
+
+procedure TAdministrationForm.RefreshMdExecute(Sender: TObject);
+var
+HandCom: TComponent;
+begin
+with AdministrationData do begin
+ if pnlCtrlBr.Visible then
+   begin
+   with pcMain do
+    begin
+    if ActivePage=tbModules then DBRefresh.OnExecute(usModulesData);
+    if ActivePage=tbTables then DBRefresh.OnExecute(usTablesData);
+    if ActivePage=tbInfo then LoadUserInfo(tvMain.Selected.Text);
+    if ActivePage=tbOrders then RefreshOrders.Execute;
+    end;
+   end
+  else
+   begin
+    HandCom:=FindComponent(csTree[tvMain.Selected.Index]);
+     if(Assigned(HandCom))and(HandCom is TDataSource) then
+         DBRefresh.OnExecute((HandCom as TDataSource).DataSet);
+   end;
+ RecreateTreeList; 
+end;
+end;
+
+
+procedure TAdministrationForm.hbErrorBoxAfterHide(Sender: TObject);
+begin
+ErrorPanel.Hide;
+end;
+
+procedure TAdministrationForm.hbErrorBoxAfterShow(Sender: TObject);
+begin
+ErrorPanel.Show;
+end;
+
+procedure TAdministrationForm.CBMainChangeExecute(Sender: TObject);
+begin
+if not(Sender is TPageControl) then Exit;
+if TPageControl(Sender).ActivePage=tbModules then
+  with AdministrationData.UsModulesData do
+   if not(Active) then
+    begin
+     SetVariable('USERNAME',tvMain.Selected.Text);
+     Open;
+    end;
+
+if TPageControl(Sender).ActivePage=tbTables then
+  with AdministrationData.UsTablesData do
+   if not(Active) then
+    begin
+     SetVariable('USERNAME',tvMain.Selected.Text);
+     Open;
+    end;
+end;
+
+procedure TAdministrationForm.DBLookupListBox1Click(Sender: TObject);
+begin
+with AdministrationData do begin
+  AvailableMod.Close;
+  AvailableMod.SetVariable('NAME',DBLookupListBox1.SelectedItem);
+  AvailableMod.Open;
+  GrantedMod.Close;
+  GrantedMod.SetVariable('NAME',DBLookupListBox1.SelectedItem);
+  GrantedMod.Open;
+SpeedButton5.Enabled:=True;
+SpeedButton6.Enabled:=True;
+end;
+end;
+
+procedure TAdministrationForm.DBLookupListBox2Click(Sender: TObject);
+begin
+SpeedButton5.Enabled:=True;
+SpeedButton6.Enabled:=False;
+end;
+
+procedure TAdministrationForm.DBLookupListBox3Click(Sender: TObject);
+var
+i:integer;
+begin
+SpeedButton5.Enabled:=False;
+SpeedButton6.Enabled:=True;
+with AdministrationData, odsClsModAdvGrant  do begin
+
+    evAdvGrants.Close;
+    odsClsModAdvGrant.Close;
+    ClearVariables;
+    SetVariable('mid', GrantedMod.FieldByName('MODID').AsInteger);
+    SetVariable('classname', DBLookupListBox1.SelectedItem);
+    evAdvGrants.Open;
+    ModAdvancedGrantsData.ClearVariables;
+    ModAdvancedGrantsData.Close;
+    ModAdvancedGrantsData.SetVariable('modid', GrantedMod.FieldByName('MODID').AsInteger);
+    ModAdvancedGrantsData.SetVariable('usernam', DBLookupListBox1.SelectedItem);
+    ModAdvancedGrantsData.Open;
+    ModeditDataX.Close;
+    ModeditDataX.ClearVariables;
+    ModeditDataX.SetVariable('clsid',Classesdata.FieldByName('ID').AsInteger);
+    ModeditDataX.SetVariable('modid', GrantedMod.FieldByName('MODID').AsInteger);
+    ModeditDataX.Open;
+
+    for i := 0 to evAdvGrants.Items.Count-1 do begin
+      Locate('description', evAdvGrants.Items[i],[]);
+      evAdvGrants.Checked[i] := odsClsModAdvGrantACC.AsInteger=1;
+    end;
+
+    if ModeditdataCNI.AsInteger = 1 then
+    ShowMessage('as');
+
+    Modeditdata.Close;
+    Modeditdata.SetVariable('CLASSNAME',DBLookupListBox1.SelectedItem);
+    Modeditdata.Open;
+
+    cbIns.Enabled := ModeditdataCNI.AsInteger = 1;
+    cbUpd.Enabled := ModeditdataCNU.AsInteger = 1;
+    cbDel.Enabled := ModeditdataCND.AsInteger = 1;
+
+    cbIns.Checked := ModeditdataXINS.AsInteger = 1;
+    cbUpd.Checked := ModeditdataXUPD.AsInteger = 1;
+    cbDel.Checked := ModeditdataXDEL.AsInteger = 1;
+
+end;
+end;
+
+procedure TAdministrationForm.DBRefreshExecute(Sender: TObject);
+var
+Num: integer;
+begin
+Num:=0;
+if (Sender is TDataSet) then
+with TDataSet(Sender) do
+ begin
+  if Active then
+  begin
+    Num:=RecNo;
+    Close;
+  end;
+  Open;
+  if Num<=RecordCount then
+  RecNo:=Num
+ end;
+end;
+
+procedure TAdministrationForm.grShrcsrMKDblClick(Sender: TObject);
+var
+i: Integer;
+Moded:TfmClassEdit;
+begin
+ with AdministrationData,(Sender as TDBGrid) do
+  begin
+   if DataSource.DataSet.RecordCount=0 then Exit;
+
+   if DataSource=Users then
+      with tvMain,tvMain.Items do
+        for i:=0 to Count-1 do
+         if Items[i].Text=DataSource.Dataset.FieldByName('NAME').AsString then
+          begin
+          Selected:=Items[i];
+          Break;
+          end;
+  if DataSource=Groups then
+       with tvMain,tvMain.Items do
+        for i:=0 to Count-1 do
+         if Items[i].Text=DataSource.Dataset.FieldByName('OBJ').AsString then
+          begin
+          Selected:=Items[i];
+          Break;
+          end;
+   if DataSource=Classes then
+    begin
+     Moded:=TfmClassEdit.Create(self);
+      with Modeditdata do
+       try
+        if Active then CLose;
+         SetVariable('CLASSNAME',Classesdata.FieldByName('obj').AsString);
+         Open;
+         Moded.ShowModal;
+         RefreshMdExecute(self);
+        finally
+         if Assigned(Moded) then
+          Moded.Release;
+        end;
+       end;
+   if DataSource=Modules then
+       mmUpdateClick(self);
+  end;
+end;
+
+procedure TAdministrationForm.grShrcsrDelete(Dat: TDataSource);
+begin
+with AdministrationData do
+  if Dat=Classes then
+   if MessageDlg('Sinif ləğv olunsun?',mtConfirmation,[mbYes,mbNo],0)=mrYes then
+   with Classes.DataSet do
+    begin
+      fmUserSetup.ClassDrop(FieldByName('Obj').AsString);
+      Refresh;
+    end;
+end;
+
+procedure TAdministrationForm.grShrcsrMKKeyDown(Sender: TObject;
+  var Key: Word; Shift: TShiftState);
+begin
+ if (Sender as TDBGrid).DataSource.DataSet.RecordCount=0 then Exit;
+ if key=vk_return then
+   grShrcsrMKDblClick(sender);
+ if Key=vk_delete then
+  grShrcsrDelete((Sender as TDBGrid).DataSource);
+end;
+
+procedure TAdministrationForm.AddUserExecute(Sender: TObject);
+var
+ Setup: TfmUserSetup;
+begin
+ Setup:=TfmUserSetup.Create(self);
+ with Setup do
+  try
+   pcAddUser.ActivePageIndex:=0;
+   if cbFilial.Items.Count>1 then
+   cbFilial.ItemIndex:=0;
+   ShowModal;
+  finally
+   Release;
+   RecreateTreeList;
+  end;
+end;
+
+procedure TAdministrationForm.DropUserExecute(Sender: TObject);
+var
+ Setup: TfmUserSetup;
+begin
+ Setup:=TfmUserSetup.Create(self);
+with Setup do
+ try
+   pcAddUser.ActivePage:=tbsDropUser;
+   Caption:='Drop user';
+   btNext.Caption:='Ləğv etmək';
+   ShowModal;
+  finally
+   Release;
+   RecreateTreeList;
+  end;
+end;
+
+procedure TAdministrationForm.ClassCreateExecute(Sender: TObject);
+var
+ Setup: TfmUserSetup;
+begin
+ Setup:=TfmUserSetup.Create(self);
+with Setup do
+ try
+   pcAddUser.ActivePage:=tbsClassadd;
+   Caption:='Class creating';
+   btNext.Caption:='Yaratmaq';
+   ShowModal;
+  finally
+   Release;
+   AdministrationData.Classesdata.Refresh;
+  end;
+end;
+
+procedure TAdministrationForm.ClassDropExecute(Sender: TObject);
+var
+ Setup: TfmUserSetup;
+begin
+ Setup:=TfmUserSetup.Create(self);
+with Setup do
+ try
+   pcAddUser.ActivePage:=tbsClassdrop;
+   Caption:='Dropping Group';
+   btNext.Caption:='Ləğv etmək';
+   ShowModal;
+  finally
+   Release;
+   AdministrationData.Classesdata.Refresh;
+  end;
+end;
+
+procedure TAdministrationForm.MoveFromList(FromMove,ToMove: TListBox);
+var
+i: Integer;
+begin
+with FromMove do
+ for i:=0 to (Items.Count-1)  do
+   if Selected[i] then  ToMove.Items.Add(Items.Strings[i]);
+end;
+
+procedure TAdministrationForm.grGroupUsKeyDown(Sender: TObject;
+  var Key: Word; Shift: TShiftState);
+begin
+ if key=VK_LEFT then
+ begin
+  GridAdd(slGroupGrid,0);
+ key:=0;
+ end;
+ if key=VK_RIGHT then
+ begin
+ GridAdd(slGroupGrid,1);
+ key:=0;
+ end;
+end;
+
+procedure TAdministrationForm.RefreshLists(SelIt: string);
+begin
+  with AdministrationData,AdministrationData.GroupUsersData do
+  begin
+   ClearGrid(slGroupGrid);
+   GroupsData.Locate('obj',selit,[]);
+   edGroupDescr.Text:=GroupsData.FieldByName('Description').AsString;
+   edGroupName.Text:=GroupsData.FieldByName('Obj').AsString;
+   SetVariable('GROUPID',GroupsData.FieldByName('ID').AsInteger);
+   if not(Active) then Open;
+   Refresh;
+
+   First;
+   while not(eof) do
+    begin
+     AddToCell(slGroupGrid,FieldByName('TYPE').AsInteger-1,FieldByName('NAME').AsString);
+     Next;
+    end;
+  end;
+end;
+
+
+procedure TAdministrationForm.GroupCreateExecute(Sender: TObject);
+var
+ Setup: TfmUserSetup;
+begin
+  if not(AdministrationData.GroupTypesData.Active) then
+    AdministrationData.GroupTypesData.Open;
+ Setup:=TfmUserSetup.Create(self);
+ with Setup do
+ try
+   pcAddUser.ActivePage:=tbsGroupCreate;
+   Caption:='Creating group';
+   btNext.Caption:='Yaratmaq';
+  with dbGroupType,ListSource.DataSet do
+    if Active then
+     KeyValue:=FieldByName(KeyField).AsInteger;
+  ShowModal;
+  finally
+   Release;
+   AdministrationData.GroupsData.Refresh;
+   RecreateTreeList;
+  end;
+end;
+
+
+
+procedure TAdministrationForm.GroupDropExecute(Sender: TObject);
+var
+ Setup: TfmUserSetup;
+begin
+ Setup:=TfmUserSetup.Create(self);
+with Setup do
+ try
+   pcAddUser.ActivePage:=tbsGroupDrop;
+   Caption:='Dropping Group';
+   btNext.Caption:='Ləğv etmək';
+   ShowModal;
+  finally
+   Release;
+   AdministrationData.GroupsData.Refresh;
+   RecreateTreeList;
+  end;
+end;
+
+
+procedure TAdministrationForm.tsDepSubChange(Sender: TObject;
+  NewTab: Integer; var AllowChange: Boolean);
+begin
+  pcDepSub.ActivePageIndex:=NewTab;
+ with Administrationdata,SubmissionData do
+ begin
+  SetVariable('USERID',UsersData.FieldByName('USER#').AsInteger);
+  if not(Active) then Open else Refresh;
+ end;
+
+ with Administrationdata,DependencesData do
+ begin
+  SetVariable('USERID',UsersData.FieldByName('USER#').AsInteger);
+  if not(Active) then Open else Refresh;
+ end;
+end;
+
+procedure TAdministrationForm.SpeedButton1Click(Sender: TObject);
+var
+ PassForm: TfmUserPassw;
+ pswd, noCryptedPsw : String;
+begin
+ PassForm:=TfmUserPassw.Create(self);
+with PassForm do
+ try
+  if Execute then begin
+     //ICECrypt.TExt := Password;
+     //pswd := 's'+icecrypt.getcrypted;
+     //noCryptedPsw :=Password;
+     AdministrationData.pcADM.CallBooleanFunction('user_passw',[tvMain.Selected.Text,Password]);//pswd]);  //,noCryptedPsw       pswd
+  end;
+ finally
+  Release;
+ end;
+end;
+
+procedure TAdministrationForm.Moduleedit(var Act : TModAction);
+var
+ModForm : TfmModEdit;
+Rec: Integer;
+begin
+
+Rec:=1;
+ModForm:=TfmModEdit.Create(self);
+ModForm.tbRights.TabVisible:=Act=maUpdate;
+with AdministrationData.ModulesData,AdministrationData.pcADM do
+ try
+    Rec:=RecNo;
+   if Ord(Act)=2 then
+   begin
+     if MessageDlg('Delete this module?',mtConfirmation,[mbYes,mbNo],0)=mrYes then
+     CallProcedure('deletemodule',[FieldByName('ID').AsInteger]);
+    Exit;
+   end;
+   Act:=ModForm.Execute(Act);
+   with ModForm do
+    case Ord(Act) of
+     1:CallProcedure('addmodule',
+      ['sm',MClassId,MName,MDescription,BoolToInt(MActions[maInsert]),
+      BoolToInt(MActions[maDelete]),BoolToInt(MActions[maUpdate])]);
+     3:
+     begin
+     CallProcedure('updatemodule',
+      [MName,MClassId,MDescription,BoolToInt(MActions[maInsert]),
+      BoolToInt(MActions[maDelete]),BoolToInt(MActions[maUpdate])]);
+     end;
+
+    end;
+ finally
+     if Assigned(ModForm)then ModForm.Release;
+     Refresh;
+     RecNo:=Rec;
+   end;
+end;
+
+procedure TAdministrationForm.mmUpdateClick(Sender: TObject);
+var
+Tmp: TModAction;
+begin
+Tmp:=maUpdate;
+Moduleedit(Tmp);
+end;
+
+procedure TAdministrationForm.mmInsertClick(Sender: TObject);
+var
+Tmp: TModAction;
+begin
+Tmp:=maInsert;
+Moduleedit(Tmp);
+end;
+
+
+procedure TAdministrationForm.mmDeleteClick(Sender: TObject);
+var
+Tmp: TModAction;
+begin
+Tmp:=maDelete;
+Moduleedit(Tmp);
+end;
+
+
+procedure TAdministrationForm.tvMainKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+ if Key=VK_DELETE then
+  begin
+   with tvMain.Selected do
+   begin
+     if Parent.Index=csUsers then
+      if MessageDlg('İstifadəçi ləğv edilsin?',mtConfirmation,[mbYes,mbNo],0)=mrYes then
+       begin
+        fmUserSetup.Dropuser(Text,True);
+        RecreateTreeList;
+        Exit;
+       end;
+
+     if Parent.Index=csGroups then
+      if MessageDlg('Qrup ləğv olunsun?',mtConfirmation,[mbYes,mbNo],0)=mrYes then
+       begin
+        fmUserSetup.GroupDrop(Text);
+        RecreateTreeList;
+        Exit;
+       end;
+    end;
+  end;
+end;
+
+procedure TAdministrationForm.miSelAllClick(Sender: TObject);
+begin
+with AdministrationData do
+   SelAlll(UsModulesData,'MODACC',Sender=miSelAll)
+end;
+
+procedure SelAlll(Dat: TDataSet;Field : String;IsSel: Boolean);
+var
+bk: TBookmark;
+begin
+with Dat do
+ begin
+ if not(Active) then Exit;
+  DisableControls;
+  bk:=GetBookmark;
+  First;
+  while not(EOF) do
+   begin
+    Edit;
+    FieldByName(Field).AsInteger:=BoolToInt(IsSel);
+    Post;
+    Next;
+   end;
+  GoToBookmark(bk);
+  EnableControls;
+  end;
+end;
+
+function TAdministrationForm.Get_Icon: OLE_HANDLE;
+const
+  ImageIndex = 3;
+begin
+  ImLGrid.GetIcon(ImageIndex, Icon);
+  Result := Icon.Handle;
+end;
+
+procedure TAdministrationForm.miSelTabClick(Sender: TObject);
+begin
+SelAll(Sender=miSelTab);
+end;
+
+procedure TAdministrationForm.miAllSelTabClick(Sender: TObject);
+var
+ Bk : TBookmark;
+begin
+ with AdministrationData.UsTablesData do
+  begin
+   DisableControls;
+   Bk:=GetBookmark;
+    First;
+    while not(EOF) do
+     begin
+      SelAll(Sender=miAllSelTab);
+      Next;
+     end;
+   if BookmarkValid(BK) then GotoBookmark(BK);
+   EnableControls;
+  end;
+end;
+
+procedure TAdministrationForm.ToolButton14Click(Sender: TObject);
+var
+ OwnerSheep: TFmOwnerSheep;
+begin
+  OwnerSheep:=TFmOwnerSheep.Create(self);
+ try
+  OwnerSheep.ShowModal;
+ finally
+  if Assigned(OwnerSheep)then
+  OwnerSheep.Release;
+ end;
+end;
+
+procedure TAdministrationForm.N3Click(Sender: TObject);
+var
+UsRefresh: TfmUsersRefresh;
+begin
+ UsRefresh:=TfmUsersRefresh.Create(self);
+ try
+  UsRefresh.ShowModal;
+ finally
+ if Assigned(UsRefresh) then
+  UsRefresh.Release;
+ end;
+end;
+
+procedure TAdministrationForm.sbAdvancedGrantsClick(Sender: TObject);
+begin
+grAdvanDblClick(grAdvan);
+end;
+
+procedure TAdministrationForm.grAdvanDblClick(Sender: TObject);
+var
+  Advancedform: TfmAdvancedgrants;
+begin
+with (Sender as TDBGrid).DataSource.DataSet do
+ if IntToBool(FieldByName('advanced_grants').ASInteger) then
+  begin
+   Advancedform:=TfmAdvancedgrants.Create(self);
+   try
+    Advancedform.ShowModal;
+   finally
+    Advancedform.Destroy;
+   end;
+  end;
+end;
+
+procedure TAdministrationForm.pnGroupManResize(Sender: TObject);
+begin
+//pnQoupMainUsers.Width:= (Sender as TWinControl).Width div 2;
+end;
+
+procedure TAdministrationForm.Splitter1Moved(Sender: TObject);
+begin
+ TControl(Sender).Repaint;
+end;
+
+procedure TAdministrationForm.ShowUsersTabExecute(Sender: TObject);
+begin
+with (Sender as TAction) do
+ begin
+  Checked:=not(Checked);
+  gbUserList.Visible:=Checked;
+  sbShowUsTab.Down:=Checked;
+ end;
+end;
+
+procedure TAdministrationForm.tsDepSubDrawTab(Sender: TObject;
+  TabCanvas: TCanvas; R: TRect; Index: Integer; Selected: Boolean);
+begin
+with (Sender as TTabSet) do
+ begin
+  if Index = TabIndex then
+     TabCanvas.Font.Color:=clWhite
+     else TabCanvas.Font.Color:=Font.Color;
+
+  TabCanvas.TextOut(R.Left,R.Top+2,Tabs[Index]);
+ end;
+end;
+
+procedure SetFilter(Sender: TCheckListBox;DataSet : TOracleDataSet;Field: String);
+var
+i : Integer;
+begin
+with DataSet,Sender,Items do
+ if Sender.Enabled then
+  begin
+   Filter:=EmptyStr;
+   for i:=0 to Count-1 do
+    if not(Checked[i]) then
+      if Filter=EmptyStr then
+       Filter:=_ExpresBacStart+Field+'<>'+_ExpresDel+Items[i]+_ExpresDel+_ExprecBacStop
+      else Filter:=Filter+' and '+_ExpresBacStart+Field+'<>'+_ExpresDel+Items[i]+_ExpresDel+_ExprecBacStop;
+     if Filter<>EmptyStr then
+      Filtered:=True;
+  end
+  else Filtered:=False;
+end;
+
+
+procedure TAdministrationForm.tbsOrdersChange(Sender: TObject;
+  NewTab: Integer; var AllowChange: Boolean);
+begin
+ pcOrders.ActivePageIndex:=NewTab;
+end;
+
+procedure TAdministrationForm.ShowGroupsOrderExecute(Sender: TObject);
+var
+ i:integer;
+ rep : TrptQroup;
+begin
+SetFilter(cbGroupsOrder,AdministrationData.repGroupsData,'OBJ');
+EnableOrderData(atGroups);
+
+ for i:=0 to ComponentCount-1 do
+  if (Components[i] is TrptQroup) then
+   with  (Components[i] As TrptQroup) do
+    begin
+      SetActiveWindow(ParentWindow);
+      Exit;
+     end;
+ rep:=TrptQroup.Create(self);
+ try
+   rep.Preview;
+ finally
+  if Assigned (rep) then
+   rep.Destroy;
+ end;
+end;
+
+procedure TAdministrationForm.ShowUsersOrderExecute(Sender: TObject);
+
+ procedure  SetUsersVariables;
+ begin
+  if not(cbUsersStandOrder.Checked) then
+  with AdministrationData.repUsersGrantsData do
+   begin
+    if eduserOrderConst1.Text=eduserOrderConst2.Text then
+     begin
+      MessageDlg('Hüquqların təyinatı fərqli olmalıdır',mtError,[mbOk],0);
+      Abort;
+     end;
+     if eduserOrderConst1.Text<>EmptyStr then
+      SetVariable('GRANTED',eduserOrderConst1.Text);
+     if eduserOrderConst2.Text<>EmptyStr then
+      SetVariable('NOTGRANTED',eduserOrderConst2.Text);
+    end;
+ end;
+
+VAR
+i:integer;
+rptUsers : TrptUsers;
+begin
+SetUsersVariables;
+SetFilter(cbUsersOrder,AdministrationData.repUsersData,'NAME');
+EnableOrderData(atUsers);
+ for i:=0 to ComponentCount-1 do
+  if (Components[i] is TrptUsers) then
+   with  (Components[i] As TrptUsers) do
+    begin
+      SetActiveWindow(ParentWindow);
+      Exit;
+     end;
+ rptUsers:=TrptUsers.Create(self);
+ rptUsers.Review(cbUsersStandOrder.Checked);
+ TempPic:=TPicture.Create;
+ try
+   TempPic.Assign(rptUsers.UseRightPict.Picture);
+   rptUsers.Preview;
+ finally
+  if Assigned (rptUsers) then
+   rptUsers.Destroy;
+  if Assigned (TempPic) then
+   TempPic.Destroy;
+ end;
+end;
+
+
+procedure TAdministrationForm.EnableOrderData(Value: TActiveTab);
+
+ procedure OpenData(Sender: TdataSet);
+ begin
+  with Sender do if not(Active) then Open else Refresh;
+ end;
+
+begin
+with AdministrationData do
+ begin
+  case Value of
+  atGroups:
+   begin
+    OpenData(repGroupsData);
+    OpenData(repGroupManData);
+   end;
+  atUsers:
+   begin
+    OpenData(repUsersData);
+    OpenData(repUsersGrantsData);
+   end;
+  end;
+   OpenData(repAboutBankData);
+ end;
+end;
+
+procedure TAdministrationForm.rbGroupsAllClick(Sender: TObject);
+begin
+cbGroupsOrder.Enabled:=not(rbGroupsAll.Checked);
+end;
+
+procedure TAdministrationForm.RefreshOrdersExecute(Sender: TObject);
+begin
+with pcOrders,AdministrationData do
+ case ActivePageIndex of
+  0:  PrepareOrderList(repGroupsData,'OBJ',cbGroupsOrder,True);
+  1:  PrepareOrderList(AdministrationData.UsersData,'Name',cbUsersOrder,True);
+ end;
+end;
+
+procedure TAdministrationForm.rbUsersAllClick(Sender: TObject);
+begin
+cbUsersOrder.Enabled:=not(rbUsersAll.Checked);
+end;
+
+procedure TAdministrationForm.tbUsersOrderShow(Sender: TObject);
+begin
+ PrepareOrderList(AdministrationData.UsersData,'Name',cbUsersOrder);
+end;
+
+procedure TAdministrationForm.cbUsersStandOrderClick(Sender: TObject);
+begin
+eduserOrderConst1.Enabled := not((Sender as TCheckBox).Checked);
+eduserOrderConst2.Enabled := not((Sender as TCheckBox).Checked);
+end;
+
+procedure TAdministrationForm.GridMoveLeft(Sender: TStringGrid;Index: integer);
+begin
+with Sender do
+   if (Index>0)and(Col=Index) then
+    CutCellRect(Sender,Index,Row,Index-1);
+end;
+
+procedure TAdministrationForm.GridMoveRight(Sender: TStringGrid;Index: integer);
+begin
+ with Sender do
+   if (Index<ColCount-1) and (Col=Index) then
+    CutCellRect(Sender,Index,Row,Index+1)
+end;
+
+procedure TAdministrationForm.GridDel(Sender: TStringGrid;Index: integer);
+begin
+ with Sender do
+  if Col<>Index then
+   DeleteLast(Sender,Index)
+    else DeleteCellRect(Sender,Index,Row);
+end;
+
+procedure TAdministrationForm.GridAdd(Sender:TStringGrid;Index: Integer);
+begin
+  with Sender,grGroupUs.DataSource.DataSet do
+      begin
+      if (Index<>2) and AdministrationData.pcAca.CallBooleanFunction('isadm',[FieldByName('NAME').AsString]) then
+        begin
+         hbErrorBox.ShowMessage(Format('Administrator %s qrupda neytral istifadəçi olmalıdır',[FieldByName('NAME').AsString]));
+         Exit;
+       end;
+      if GRFind(Sender,FieldByName('NAME').AsString) then
+         hbErrorBox.ShowMessage('İstifadəçi artıq qrupdadır')
+      else
+       AddToCell(Sender,Index,FieldByName('NAME').AsString);
+      end;
+end;
+
+
+
+procedure TAdministrationForm.HeaderMoveRigth(Sender: TObject);
+begin
+ GridMoveRight(slGroupGrid,(Sender as THeaderButton).Tag);
+end;
+
+procedure TAdministrationForm.HeaderMoveLeft(Sender: TObject);
+begin
+ GridMoveLeft(slGroupGrid,(Sender as THeaderButton).Tag);
+end;
+
+procedure TAdministrationForm.HeaderDel(Sender: TObject);
+begin
+ GridDel(slGroupGrid,(Sender as THeaderButton).Tag);
+end;
+
+procedure TAdministrationForm.HeaderAdd(Sender: TObject);
+begin
+ GridAdd(slGroupGrid,(Sender as THeaderButton).Tag);
+end;
+
+
+procedure TAdministrationForm.CreateHederControlActions(Head: THeaderControl;BtnimageList: TImageList;Methods:THeaderButtonMethods);
+  var
+   BtnRect : TRect;
+   BtnBitmap: TBitmap;
+
+
+ procedure CreateHeadButton(BtnParent : TWinControl;Rect: TRect;BtnTag: Integer;Picture :TBitmap;BtnState : THeadState);
+ var
+ TempBtn:  THeaderButton ;
+ begin
+  TempBtn:=  THeaderButton.Create(BtnParent);
+  with BtnParent,TempBtn do
+   begin
+   with Rect do
+   SetBounds(Left,Top,Right-Left,Bottom-Top);
+   Flat:=True;
+   Tag:=BtnTag;
+   if Assigned(Picture) then
+    Glyph:=Picture;
+    HeadState := BtnState;
+    case BtnState of
+     hsDel:
+     begin
+      if Assigned(Methods.DelCol) then
+      OnClick:=Methods.DelCol;
+     end;
+     hsLeft:
+      begin
+      if Assigned(Methods.MoveLeft) then
+       OnClick:=Methods.MoveLeft;
+       Enabled:=(BtnTag<>0);
+      end;
+     hsRight:
+      begin
+      if Assigned(Methods.MoveRight) then
+       OnClick:=Methods.MoveRight;
+       Enabled:=(BtnTag<>Head.Sections.Count-1);
+      end;
+     hsAdd:
+      begin
+      if Assigned(Methods.Add) then
+       OnClick:=Methods.Add;
+      end;
+    end;
+    Parent:=BtnParent;
+   end;
+ end;
+
+ procedure CreateHeadButtons(Index: Integer;ImageList: TImageList);
+
+  function ReturnBitmap(Index: Integer): Boolean;
+   var
+    Bitmap: TBitmap;
+   begin
+    Bitmap:=TBitmap.Create;
+    with ImageList do
+     try
+      GetBitmap(Index,Bitmap);
+      BtnBitmap.Assign(Bitmap);
+      Result:=True;
+     finally
+      Bitmap.Free;
+     end;
+   end;
+
+
+ begin
+  with Head do
+   begin
+      BtnRect:=Rect(Sections[Index].Right-SpeedButtonWidth-SpeedButtonFirstInterval,2,Sections[Index].Right-SpeedButtonFirstInterval,2+SpeedButtonHeight);
+      ReturnBitmap(PRightInd);
+      CreateHeadButton(Head,BtnRect,Index,BtnBitmap,hsRight);
+      ReturnBitmap(PLeftInd);
+      BtnRect.Right:=BtnRect.Left-SpeedButtonInterval;
+      BtnRect.Left:=BtnRect.right-SpeedButtonWidth;
+      CreateHeadButton(Head,BtnRect,Index,BtnBitmap,hsLeft);
+      ReturnBitmap(PDelInd);
+      BtnRect.Right:=BtnRect.Left-SpeedButtonInterval;
+      BtnRect.Left:=BtnRect.right-SpeedButtonWidth;
+      CreateHeadButton(Head,BtnRect,Index,BtnBitmap,hsDel);
+      ReturnBitmap(PAddInd);
+      BtnRect.Right:=BtnRect.Left-SpeedButtonInterval;
+      BtnRect.Left:=BtnRect.right-SpeedButtonWidth;
+      CreateHeadButton(Head,BtnRect,Index,BtnBitmap,hsAdd);
+   end;
+
+ end;
+
+var
+ i: Integer;
+begin
+BtnBitmap:=TBitmap.Create;
+ try
+with Head do
+  for i:=0 to Sections.Count-1 do
+   CreateHeadButtons(i,BTnImageList);
+ finally
+   BtnBitmap.Free;
+ end;
+end;
+
+
+procedure TAdministrationForm.hcQroupHeadSectionResize(
+  HeaderControl: THeaderControl; Section: THeaderSection);
+var
+i,size : Integer;
+begin
+size:=0;
+with HeaderControl do
+ begin
+  for i:=0 to Sections.Count-2 do
+   size:=size+Sections[i].Width;
+
+ if Width-(size+2)>2 then
+  Sections[Sections.Count-1].Width:=Width-(size+2);
+
+
+with slGroupGrid do
+   begin
+    ColWidths[Section.Index]:=Section.Width;
+    ColWidths[ColCount-1]:=Sections[Sections.Count-1].Width-5;
+   end;
+ end;
+
+   with HeaderControl do
+    for i:=0 to ControlCount-1 do
+     begin
+       if (Controls[i] is THeaderButton) then
+        with (Controls[i] as THeaderButton) do
+           case HeadState of
+           hsRight: Left:=Sections[Controls[i].Tag].Right-(SpeedButtonFirstInterval+SpeedButtonWidth);
+           hsLeft:
+           Left:=Sections[Controls[i].Tag].Right-
+           (SpeedButtonFirstInterval+2*SpeedButtonWidth+SpeedButtonInterval);
+           hsDel:
+            Left:=Sections[Controls[i].Tag].Right-
+            (SpeedButtonFirstInterval+3*SpeedButtonWidth+2*SpeedButtonInterval);
+           hsAdd:
+            Left:=Sections[Controls[i].Tag].Right-
+            (SpeedButtonFirstInterval+4*SpeedButtonWidth+3*SpeedButtonInterval);
+           end;
+        Controls[i].Visible:=Sections[Controls[i].Tag].Width> Canvas.TextWidth(Sections[Controls[i].Tag].Text)+3*SpeedButtonWidth
+    end;
+end;
+
+
+procedure TAdministrationForm.hcQroupHeadResize(Sender: TObject);
+begin
+hcQroupHeadSectionResize((Sender as THeaderControl),(Sender as THeaderControl).Sections[0]);
+end;
+
+procedure TAdministrationForm.hcQroupHeadSectionClick(
+  HeaderControl: THeaderControl; Section: THeaderSection);
+begin
+ GridAdd(slGroupGrid,Section.Index);
+end;
+
+procedure TAdministrationForm.slGroupGridKeyDown(Sender: TObject;
+  var Key: Word; Shift: TShiftState);
+begin
+ if Key=VK_DELETE then
+  GridDel(slGroupGrid,slGroupGrid.Col);
+end;
+
+procedure TAdministrationForm.ChangeSelectedLockImage(IsLocked: Boolean);
+begin
+with tvMain.Selected do
+ if IsLocked then
+  begin
+  ImageIndex:=icoLockUser;
+  SelectedIndex:=icoLockUser;
+  end
+ else
+  begin
+   SelectedIndex:=icoUser;
+   ImageIndex:=icoUser;
+  end;
+end;
+
+procedure TAdministrationForm.LockUserExecute(Sender: TObject);
+begin
+with AdministrationData,pcADM,UsersData do
+ if (Sender is TAction) then
+  with (Sender as  Taction) do
+   begin
+    if FieldByName('Is_Adm').AsInteger = 1 then
+     begin
+      hbErrorBox.ShowMessage('Administrator istifadəçini ləğv etmək olmaz');
+      Abort;
+     end;
+    Checked:=not(Checked);
+    CallBooleanFunction('LockUser',[tvMain.Selected.text,Checked]);
+    DBRefresh.OnExecute(UsersData);
+    ChangeSelectedLockImage(Checked);
+   end;
+ end;
+
+procedure TAdministrationForm.SetOptionsExecute(Sender: TObject);
+var
+fmProfiles: TfmProfOptions;
+begin
+ fmProfiles:=TfmProfOptions.Create(self);
+ try
+  fmProfiles.userName := tvMain.Selected.Text;
+  fmProfiles.Execute();
+  fmProfiles.ShowModal;
+ finally
+ if Assigned(fmProfiles) then
+  fmProfiles.Release;
+ end;
+end;
+
+procedure TAdministrationForm.btnUsersAdvGrantClick(Sender: TObject);
+var i: integer;
+begin
+  with AdministrationData, repAdvGrantData, cbUsersOrder, rptAdvgrant do begin
+     {if rbUsersAll.Checked then
+      sql[2] := ''
+    else} begin
+      sql[2] := 'where username in (''1''';
+      for i:=0 to Items.Count-1 do
+        if checked[i] then
+          sql[2] := sql[2] +','''+Items[i]+'''';
+      sql[2] := sql[2] +')';
+    end;
+    close;
+    open;
+    rptAdvgrant:=TrptAdvgrant.Create(self);
+    try                  
+      //showmessage(sql.text);
+      rptAdvgrant.Preview;
+    finally
+      if Assigned (rptAdvgrant) then
+        rptAdvgrant.Destroy;
+    end
+  end;
+end;
+
+procedure TAdministrationForm.SpeedButton3Click(Sender: TObject);
+begin
+
+with AdministrationData,pcADM,UsersData do
+
+   begin
+    if FieldByName('Is_Adm').AsInteger = 1 then
+     begin
+      hbErrorBox.ShowMessage('Administrator istifadəçini ləğv etmək olmaz');
+      Abort;
+     end;
+    
+   // Checked:=not(Checked);
+    CallBooleanFunction('LockUser',[tvMain.Selected.text,{Checked}True]);
+    DBRefresh.OnExecute(UsersData);
+    ChangeSelectedLockImage({Checked}True);
+   end;
+end;
+
+procedure TAdministrationForm.SpeedButton4Click(Sender: TObject);
+begin
+fingers.showmodal;
+end;
+
+procedure TAdministrationForm.SpeedButton4DblClick(Sender: TObject);
+begin
+fingers.showmodal;
+end;
+
+procedure TAdministrationForm.SpeedButton5Click(Sender: TObject);
+begin
+   with AdministrationData do begin
+AdministrationData.pcADM.CallProcedure('updateclassgrants',
+[DBLookupListBox1.KeyValue,DBLookupListBox2.KeyValue,True]);
+pcADM.CallProcedure('updateuserbyclass',[DBLookupListBox1.KeyValue,' ']);
+pcADM.CallProcedure('applyclassgrants',[DBLookupListBox1.SelectedItem]);
+AvailableMod.Refresh;
+GrantedMod.Refresh;
+end;
+end;
+
+procedure TAdministrationForm.SpeedButton6Click(Sender: TObject);
+begin
+ with AdministrationData do begin
+AdministrationData.pcADM.CallProcedure('updateclassgrants',
+[DBLookupListBox1.KeyValue,DBLookupListBox3.KeyValue,False]);
+pcADM.CallProcedure('updateuserbyclass',[DBLookupListBox1.KeyValue,' ']);
+pcADM.CallProcedure('applyclassgrants',[DBLookupListBox1.SelectedItem]);
+AvailableMod.Refresh;
+GrantedMod.Refresh;
+end;
+end;
+
+procedure TAdministrationForm.Button1Click(Sender: TObject);
+var
+i:integer;
+
+begin
+//s:=5;
+AdministrationData.UsersData.open;
+//cbUsersOrder.Checked[5]:=false;
+     if Button1.Caption='UNCHECK ALL' then
+         begin
+     for i:=1 to AdministrationData.UsersData.RecordCount do
+       begin
+        //Add(FieldByName(Field).AsString);
+        cbUsersOrder.Checked[i-1]:=false;
+
+       end;
+       Button1.Caption:='CHECK ALL'
+          end else
+
+         begin
+        for i:=1 to AdministrationData.UsersData.RecordCount do
+       begin
+        //Add(FieldByName(Field).AsString);
+        cbUsersOrder.Checked[i-1]:=true;
+          //s:=5;
+          Button1.Caption:='UNCHECK ALL'
+       end;
+          end;
+end;
+
+procedure TAdministrationForm.Button2Click(Sender: TObject);
+begin
+Animate1.Visible:=true;
+Animate1.Active:=true;
+Animate1.CommonAVI:=aviCopyFiles;
+AdministrationData.allqrants.open;
+CMExcelqrants.connect;
+CMExcelqrants.ExportDataset(AdministrationData.allqrants,'QRANTS',true);
+CMExcelqrants.Disconnect;
+Animate1.Active:=False;
+Animate1.Visible:=false;
+end;
+
+procedure TAdministrationForm.Button3Click(Sender: TObject);
+begin
+         AdministrationData.clsf.Close;
+  AdministrationData.clsf.SetVariable('t','U');
+ AdministrationData.clsf.SetVariable('cls','EMELIYAT');
+AdministrationData.clsf.open;
+  AdministrationData.clsf.Edit;
+end;
+
+procedure TAdministrationForm.Button4Click(Sender: TObject);
+begin
+         AdministrationData.clsf.Close;
+  AdministrationData.clsf.SetVariable('t','U');
+ AdministrationData.clsf.SetVariable('cls','EMELIYAT');
+
+
+AdministrationData.clsf.open;
+  AdministrationData.clsf.Edit;
+
+end;
+
+procedure TAdministrationForm.ToolButton16Click(Sender: TObject);
+begin
+CLSCOPY:=TCLSCOPY.CREATE(SELF);
+CLSCOPY.SHOWMODAL;
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TAdministrationForm,
+    Class_AdministrationForm,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

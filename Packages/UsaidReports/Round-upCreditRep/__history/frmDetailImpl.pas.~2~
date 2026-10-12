@@ -1,0 +1,158 @@
+unit frmDetailImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, NLSDialogs,
+  ExtCtrls, StdCtrls, Grids, DBGridEh, ComCtrls, Mask, DBCtrlsEh,ORACLE,ORACLEDATA,
+  ActnList, Buttons, CMExcelExport;
+
+type
+  TfrmDetail = class(TForm)
+    Panel1: TPanel;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    Label6: TLabel;
+    SearchPanel: TGroupBox;
+    Panel4: TPanel;
+    StaticText1: TStaticText;
+    EditNUMBEROFCREDIT: TEdit;
+    Panel7: TPanel;
+    StaticText2: TStaticText;
+    EditACC_NO: TEdit;
+    Panel8: TPanel;
+    StaticText3: TStaticText;
+    EditCUSTNAME: TEdit;
+    Panel10: TPanel;
+    StaticText5: TStaticText;
+    EditANNUALYINTERESTRATE: TEdit;
+    Panel11: TPanel;
+    StaticText6: TStaticText;
+    EditCREDITLINEAMOUNT: TEdit;
+    MainGriddetail: TDBGridEh;
+    DBEditEh1: TDBEditEh;
+    DBEditEh2: TDBEditEh;
+    DBEditEh3: TDBEditEh;
+    DTP: TDateTimePicker;
+    ActionList1: TActionList;
+    ActnSearch: TAction;
+    BitBtnexp: TBitBtn;
+    expdetails: TCMExcelExport;
+    procedure ActnSearchExecute(Sender: TObject);
+    procedure EditNUMBEROFCREDITKeyPress(Sender: TObject; var Key: Char);
+    procedure EditNUMBEROFCREDITExit(Sender: TObject);
+    procedure MainGriddetailTitleBtnClick(Sender: TObject; ACol: Integer;
+      Column: TColumnEh);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure BitBtnexpClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+  private
+   
+  public
+    { Public declarations }
+  end;
+
+var
+  frmDetail: TfrmDetail;
+
+implementation
+
+{$R *.DFM}
+
+uses dmRound_upCreditRepImpl;
+
+
+
+procedure TfrmDetail.ActnSearchExecute(Sender: TObject);
+var
+  SearchField : string;
+  SearchOptions : TSearchRecordOptions;
+begin
+  SearchOptions := [srIgnoreCase ,srPartialMatch];
+
+  with Sender as TEdit  do
+  begin
+    SearchField := copy(Name,5,length(Name));
+    MainGriddetail.SelectedRows.Clear;
+    with  TOracleDataSet(MainGriddetail.DataSource.DataSet) do
+    if  not SearchRecord(
+                  SearchField
+                 ,Text
+                 ,SearchOptions + [srFromCurrent , srForward ]
+                 ) then
+    if MessageDlg(
+              'Ахтарыш сона чатыб.'+#13+'яввялдян башламаг истяйирсиниэми?'
+             ,mtInformation
+             ,[mbNo , mbYes]
+             ,0
+             ) = mrYes  then
+    if  not SearchRecord(
+                 SearchField
+                ,Text
+                ,SearchOptions + [ srFromBeginning ]
+                )  then
+    MessageDlg('Йазы тапылмады!',mtInformation,[mbOK],0);
+  end;
+
+
+end;
+
+procedure TfrmDetail.EditNUMBEROFCREDITKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if ord(Key) = VK_RETURN
+  then  ActnSearchExecute(Sender)
+
+end;
+
+procedure TfrmDetail.EditNUMBEROFCREDITExit(Sender: TObject);
+begin
+  with (Sender as TEdit) do
+       Text := '' 
+end;
+
+procedure TfrmDetail.MainGriddetailTitleBtnClick(Sender: TObject; ACol: Integer;
+  Column: TColumnEh);
+var
+  SortField : String;
+begin
+  if (Sender as TDBGridEh).DataSource.DataSet.active then   begin
+  SortField := Column.FieldName;
+  if Column.Title.SortMarker = smDownEh then
+    SortField := SortField + ' DESC';
+  with Sender as TDBGridEh , TOracleDataSet(DataSource.DataSet) do
+  begin
+   // ClearVariables;
+    Screen.Cursor := crSQLWait;
+    SetVariable('OrderField',SortField);
+    RefResh;
+    Screen.Cursor := crDefault;
+   end;
+    end;
+
+end;
+
+procedure TfrmDetail.FormCreate(Sender: TObject);
+begin
+SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TfrmDetail.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+   if Ord(Key) = VK_ESCAPE then close
+end;
+
+procedure TfrmDetail.BitBtnexpClick(Sender: TObject);
+begin
+   with expdetails do begin
+        Connect;
+        ExportDataset(MainGriddetail.DataSource.DataSet,'Detail informations',true,false);
+        Disconnect;
+   end;
+
+end;
+
+end.

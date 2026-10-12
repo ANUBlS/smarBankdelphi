@@ -1,0 +1,104 @@
+unit dmPeriodReportImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, OracleData, Oracle;
+
+type
+  TdmPeriodReport = class(TDataModule)
+    valutes: TOracleDataSet;
+    valutesDatSrc: TDataSource;
+    Filials: TOracleDataSet;
+    CustomersDatSrc: TDataSource;
+    Customers: TOracleDataSet;
+    CategoriesDatSrc: TDataSource;
+    Categories: TOracleDataSet;
+    FilialsDatSrc: TDataSource;
+    persons: TOracleDataSet;
+    DepositTypes: TOracleDataSet;
+    personsDatSrc: TDataSource;
+    DepositTypesDatSrc: TDataSource;
+    FilialsID: TFloatField;
+    CustomersID: TIntegerField;
+    DepositTypesID: TFloatField;
+    CategoriesID: TFloatField;
+    personsID: TFloatField;
+    Deps: TOracleDataSet;
+    DepsDatSrc: TDataSource;
+    DepsID: TFloatField;
+    ResultData: TOracleDataSet;
+    sbcm_period_report: TOraclePackage;
+    valutesVALUTE: TIntegerField;
+    valutesVALU_NAME: TWideStringField;
+    DepsCONTRACTNO: TWideStringField;
+    DepsCONTRACTACCNO: TWideStringField;
+    CustomersNAME: TWideStringField;
+    CustomersKOD: TWideStringField;
+    FilialsNAME: TWideStringField;
+    DepositTypesTYPE: TWideStringField;
+    CategoriesCATEGORY: TWideStringField;
+    personsNAME: TWideStringField;
+    ResultDataCONTRACTNO: TWideStringField;
+    ResultDataOPENDATE: TDateTimeField;
+    ResultDataCLOSEDATE: TDateTimeField;
+    ResultDataCONTRACTACCNO: TWideStringField;
+    ResultDataNAME: TWideStringField;
+    ResultDataBALANS: TFloatField;
+    ResultDataVAL_NAME: TWideStringField;
+    ResultDataANNUALINT: TFloatField;
+    ResultDataFREST: TFloatField;
+    ResultDataEFREST: TFloatField;
+    ResultDataFINTERESTREST: TFloatField;
+    ResultDataEFINTERESTREST: TFloatField;
+    ResultDataTRAMT: TFloatField;
+    ResultDataETRAMT: TFloatField;
+    ResultDataPAYAMT: TFloatField;
+    ResultDataEPAYAMT: TFloatField;
+    ResultDataPAYINT: TFloatField;
+    ResultDataEPAYINT: TFloatField;
+    ResultDataSREST: TFloatField;
+    ResultDataESREST: TFloatField;
+    ResultDataSINTERESTREST: TFloatField;
+    ResultDataESINTERESTREST: TFloatField;
+    procedure DataModuleCreate(Sender: TObject);
+    procedure DataModuleDestroy(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  dmPeriodReport: TdmPeriodReport;
+
+implementation
+
+{$R *.DFM}
+USES sboapiDataModuleImpl;
+
+procedure TdmPeriodReport.DataModuleCreate(Sender: TObject);
+begin
+   valutes.Open;
+   Filials.Open;
+   Customers.Open;
+   DepositTypes.Open;
+   Categories.Open;
+   persons.Open;
+   Deps.Open;
+end;
+
+procedure TdmPeriodReport.DataModuleDestroy(Sender: TObject);
+begin
+   valutes.CloseAll;
+   Filials.CloseAll;
+   Customers.CloseAll;
+   DepositTypes.CloseAll;
+   Categories.CloseAll;
+   persons.CloseAll;
+   Deps.CloseAll;
+
+end;
+
+end.

@@ -1,0 +1,970 @@
+﻿unit CO_datamod_impl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Oracle, Db, OracleData, DBTables, Variants;
+
+type
+  TOperationMode = (omInsert, omEdit, omCommission);
+
+type
+  TTransaction = record
+    TransactionID: Integer;
+    TransactionDate: TDateTime;
+    TransactionNo: String;
+    DebitID: Longint;
+    CreditID: Longint;
+    DebitAmount: Currency;
+    CreditAmount: Currency;
+    LAmount: Currency;
+    DebitRate: Currency;
+    CreditRate: Currency;
+    CashSymbol: Word;
+    ConvertationSymbol: Word;
+    OperationCode: Variant;
+    Flags: Word;
+    TransactionName: String;
+  end;
+
+const
+  cs_generateid = 'GenerateID';
+  cs_add_transaction = 'transaction_add';
+  cs_del_transaction = 'transaction_delete';
+  cs_commit_transaction = 'transaction_commit';
+  cs_reject_transaction = 'transaction_reject';
+  cs_commission_execute = 'SetTransactions';
+  cs_commit_delayed_transactions = 'transactions_delayed_commit';
+
+type
+  TCO_DataMod = class(TDataModule)
+    OrganizationType: TDataSource;
+    Accdata: TDataSource;
+    comisdata: TDataSource;
+    Commission: TOracleDataSet;
+    Customers: TOracleDataSet;
+    Custdata: TDataSource;
+    Account: TOracleDataSet;
+    Provarch: TOracleDataSet;
+    ProvarchDAT: TDateTimeField;
+    ProvarchDEBIT: TStringField;
+    ProvarchCREDIT: TStringField;
+    ProvarchAMMOUNT: TFloatField;
+    ProvarchLAMMOUNT: TFloatField;
+    ProvarchAMMOUNT_C: TFloatField;
+    Provdata: TDataSource;
+    archost: TOracleDataSet;
+    avalute: TOracleDataSet;
+    ODSLogo: TOracleDataSet;
+    SB_STATEMENT: TOraclePackage;
+    RatesDataSet: TOracleDataSet;
+    RatesDataSetVAL_KOD: TIntegerField;
+    RatesDataSetDAT: TDateTimeField;
+    RatesDataSetOSTAT: TFloatField;
+    RatesDataSetBegin: TOracleDataSet;
+    IntegerField1: TIntegerField;
+    DateTimeField1: TDateTimeField;
+    FloatField1: TFloatField;
+    ODSNotAccId: TOracleDataSet;
+    ODSFilial: TOracleDataSet;
+    ODSFilialID: TFloatField;
+    DSFilial: TDataSource;
+    ODSUsers: TOracleDataSet;
+    DSUsers: TDataSource;
+    ODSCurrency: TOracleDataSet;
+    DSCurrency: TDataSource;
+    ODSCardState: TOracleDataSet;
+    Sysdat: TOracleDataSet;
+    SysdatTEK_DAT: TDateTimeField;
+    Sysdata: TDataSource;
+    DebetTransactionsData: TOracleDataSet;
+    CreditTransactionsData: TOracleDataSet;
+    IntegerField2: TIntegerField;
+    CreditTransactionsDataCreditAccNo: TStringField;
+    DebetTransactions: TDataSource;
+    CreditTransactions: TDataSource;
+    temprate: TOracleDataSet;
+    Transaction: TOracleDataSet;
+    Transdata: TDataSource;
+    OPackage: TOraclePackage;
+    Bankinfo: TOracleDataSet;
+    Bankinfodata: TDataSource;
+    memorial_date: TOracleDataSet;
+    memorial_date_data: TDataSource;
+    ACC: TOracleDataSet;
+    ACC_Data: TDataSource;
+    avalutedata: TDataSource;
+    ACC_: TOracleDataSet;
+    ACC_data_: TDataSource;
+    Trdestination: TOracleDataSet;
+    Trdestinationdata: TDataSource;
+    ConvertationSymbols: TOracleDataSet;
+    ConvertationSymbolsData: TDataSource;
+    CashSymbols: TOracleDataSet;
+    CashSymbolsData: TDataSource;
+    CO_In: TOracleDataSet;
+    CO_In_data: TDataSource;
+    OSCT: TOraclePackage;
+    TransactionsData: TDataSource;
+    commission_trans_km: TOracleDataSet;
+    commission_trans_data: TDataSource;
+    Transactions: TOracleDataSet;
+    prov: TOracleDataSet;
+    prov_data: TDataSource;
+    OperationTypesData: TDataSource;
+    OperationTypes: TOracleDataSet;
+    ODSValuteName: TOracleDataSet;
+    ODSValuteNameVALUTE: TIntegerField;
+    OPCash: TOraclePackage;
+    ODSTransactionsViewer: TOracleDataSet;
+    DataSrcViewer: TDataSource;
+    BrowseCashInfo: TOracleDataSet;
+    SB_TRANSACTION: TOraclePackage;
+    SBTransaction: TOraclePackage;
+    Buyer: TOracleDataSet;
+    Country: TOracleDataSet;
+    countrydata: TDataSource;
+    cities: TOracleDataSet;
+    ctiesdata: TDataSource;
+    ad_citites: TDataSource;
+    ad_cities: TOracleDataSet;
+    ad_country: TOracleDataSet;
+    ad_countrydata: TDataSource;
+    pasp: TOracleDataSet;
+    DSMainState: TDataSource;
+    ODSExtractTrans: TOracleDataSet;
+    DSExtractTrans: TDataSource;
+    FlagAccount: TOracleDataSet;
+    FlagAccountdata: TDataSource;
+    AccSettings: TOracleDataSet;
+    AccSettingsdata: TDataSource;
+    AccFlags: TOracleDataSet;
+    AccFlagsData: TDataSource;
+    SBUTIL: TOraclePackage;
+    AccFlag: TOracleDataSet;
+    AccountData: TDataSource;
+    Cntries: TOracleDataSet;
+    CntriesData: TDataSource;
+    RepSymbol: TOracleDataSet;
+    RepSymbolID: TFloatField;
+    RepSymbData: TDataSource;
+    RelationData: TOracleDataSet;
+    RelationDataID: TFloatField;
+    Relation: TDataSource;
+    SBOP: TOraclePackage;
+    ClientGroupData: TOracleDataSet;
+    ClientGroupDataID: TFloatField;
+    ClientGroup: TDataSource;
+    EstateTypeData: TOracleDataSet;
+    EstateTypeDataID: TFloatField;
+    EstateType: TDataSource;
+    OrganizationTypeData: TOracleDataSet;
+    OrganizationTypeDataID: TFloatField;
+    ActionAreaData: TOracleDataSet;
+    ActionAreaDataID: TFloatField;
+    ActionArea: TDataSource;
+    TaxAreaData: TOracleDataSet;
+    TaxAreaDataID: TFloatField;
+    TaxArea: TDataSource;
+    BranchData: TOracleDataSet;
+    BranchDataID: TFloatField;
+    Branch: TDataSource;
+    ReportDesc: TOracleDataSet;
+    ReportDescsData: TDataSource;
+    DS_BussProc: TDataSource;
+    ODS_BussProc: TOracleDataSet;
+    ODS_BussProcID: TFloatField;
+    OrPack_BussProc: TOraclePackage;
+    Settings: TOracleDataSet;
+    ODSCASH: TOracleDataSet;
+    DSTemplates: TDataSource;
+    Bookmarks_: TOracleDataSet;
+    DSBookmarks: TDataSource;
+    Templates_: TOracleDataSet;
+    Templates_ID: TFloatField;
+    Templates_CUSTTYPE: TIntegerField;
+    Fields: TOracleDataSet;
+    DSFileds: TDataSource;
+    Bookmarks_ID: TFloatField;
+    Bookmarks_TEMPLATEID: TFloatField;
+    Bookmarks_FIELDID: TFloatField;
+    ReplaceCustDataSet: TOracleDataSet;
+    CustomerInfoDataSet: TOracleDataSet;
+    ODS_VidOPTrDel: TOracleDataSet;
+    CO_Out: TOracleDataSet;
+    CO_Out_Data: TDataSource;
+    dscashinfo: TOracleDataSet;
+    DataSource1: TDataSource;
+    AccSettingsID: TFloatField;
+    AccSettingsACCNUMBER: TWideStringField;
+    AccSettingsVAL_CODE: TWideStringField;
+    AccSettingsVAL_NAME: TWideStringField;
+    AccSettingsBAL_CN1: TWideStringField;
+    AccSettingsBAL_NAME: TWideStringField;
+    AccSettingsCUST_ID: TWideStringField;
+    AccSettingsCUST_NAME: TWideStringField;
+    AccSettingsOPEN_DATE: TWideStringField;
+    AccSettingsTW_ACC_NUMBER: TWideStringField;
+    AccSettingsACC_SYMBOL: TWideStringField;
+    AccSettingsLIMIT: TWideStringField;
+    AccSettingsBRANCH_ID: TWideStringField;
+    AccSettingsBRANCH_NAME: TWideStringField;
+    AccSettingsACC_NAME: TWideStringField;
+    AccSettingsSYMBOL: TWideStringField;
+    AccSettingsOSTAT: TWideStringField;
+    AccSettingsPOK_OSTAT: TWideStringField;
+    CommissionID: TFloatField;
+    CommissionNAME: TWideStringField;
+    CommissionDEBT: TFloatField;
+    CommissionDEBITACCOUNT: TWideStringField;
+    CommissionDEBITCURRENCY: TWideStringField;
+    CommissionDEBITCURRENCYID: TFloatField;
+    CommissionDEBITVALUTE: TWideStringField;
+    CommissionDEBITVALUTENAME: TWideStringField;
+    CommissionCREDIT: TFloatField;
+    CommissionCREDITACCOUNT: TWideStringField;
+    CommissionCREDITCURRENCY: TWideStringField;
+    CommissionCREDITVALUTENAME: TWideStringField;
+    CommissionCREDITCURRENCYID: TFloatField;
+    CommissionCREDITNAME: TWideStringField;
+    CommissionADDITIONALDEBT: TFloatField;
+    CommissionADEBITACCOUNT: TWideStringField;
+    CommissionADEBITCURRENCY: TWideStringField;
+    CommissionADDDEBITCURRENCYID: TFloatField;
+    CommissionADDITIONALCREDIT: TFloatField;
+    CommissionACREDITACCOUNT: TWideStringField;
+    CommissionACREDITCURRENCY: TWideStringField;
+    CommissionADDCREDITCURRENCYID: TFloatField;
+    CommissionASSIGNMENT: TWideStringField;
+    CommissionCOMMISIONASSIGNMENT: TWideStringField;
+    CommissionUSERID: TFloatField;
+    TransactionsID: TFloatField;
+    TransactionsTRANSACTIONDATE: TDateTimeField;
+    TransactionsDEBITID: TFloatField;
+    TransactionsDEBITACCNO: TWideStringField;
+    TransactionsDEBITNAME: TWideStringField;
+    TransactionsNO_PROV: TWideStringField;
+    TransactionsDEBITCURRENCYID: TFloatField;
+    TransactionsDEBITCURRENCYSNAME: TWideStringField;
+    TransactionsCREDITID: TFloatField;
+    TransactionsCREDITACCNO: TWideStringField;
+    TransactionsCREDITNAME: TWideStringField;
+    TransactionsCREDITCURRENCYID: TIntegerField;
+    TransactionsCREDITCURRENCYSNAME: TWideStringField;
+    TransactionsDEBITAMOUNT: TFloatField;
+    TransactionsCREDITAMOUNT: TFloatField;
+    TransactionsLAMOUNT: TFloatField;
+    TransactionsDEBITRATE: TFloatField;
+    TransactionsCREDITRATE: TFloatField;
+    TransactionsDEBITBANK: TFloatField;
+    TransactionsCREDITBANK: TFloatField;
+    TransactionsPACKAGENUMBER: TIntegerField;
+    TransactionsCYPHERCODE: TIntegerField;
+    TransactionsOPERATIONCODE: TIntegerField;
+    TransactionsINBALANCECHAR: TWideStringField;
+    TransactionsOUTBALANCECHAR: TIntegerField;
+    TransactionsFILIALID: TIntegerField;
+    TransactionsDEBITBALANCE: TFloatField;
+    TransactionsNAME: TWideStringField;
+    TransactionsSTATUS: TFloatField;
+    TransactionsREJECT_REASON: TWideStringField;
+    TransactionsREPORTID: TFloatField;
+    TransactionsCOUNTRID: TFloatField;
+    ProvarchNAME: TWideStringField;
+    CO_InID: TFloatField;
+    CO_InNAME: TWideStringField;
+    CO_InDEBT: TFloatField;
+    CO_InDEBITACCOUNT: TWideStringField;
+    CO_InDEBITCURRENCY: TWideStringField;
+    CO_InDEBITCURCODE: TFloatField;
+    CO_InCREDIT: TFloatField;
+    CO_InCREDITACCOUNT: TWideStringField;
+    CO_InCREDITCURRENCY: TWideStringField;
+    CO_InCREDITCURCODE: TFloatField;
+    CO_InADDITIONALDEBT: TFloatField;
+    CO_InADDITIONALCREDIT: TFloatField;
+    CO_InADEBT: TWideStringField;
+    CO_InADEBITCURRENCY: TWideStringField;
+    CO_InACREDIT: TWideStringField;
+    CO_InACREDITCURRENCY: TWideStringField;
+    CO_InASSIGNMENT: TWideStringField;
+    CO_InCOMMISIONASSIGNMENT: TWideStringField;
+    CO_InUSERID: TFloatField;
+    CashSymbolsSYMBOL: TWideStringField;
+    CashSymbolsNAME: TWideStringField;
+    CashSymbolsMEDIOCRITY: TFloatField;
+    dscashinfoID: TFloatField;
+    dscashinfoPERSON_DOC: TWideStringField;
+    dscashinfoISSUEDBY: TWideStringField;
+    dscashinfoSERIA: TWideStringField;
+    dscashinfoDOCNUMBER: TWideStringField;
+    dscashinfoFROMWHEN: TWideStringField;
+    CO_OutID: TFloatField;
+    CO_OutNAME: TWideStringField;
+    CO_OutDEBT: TFloatField;
+    CO_OutDEBITACCOUNT: TWideStringField;
+    CO_OutDEBITCURRENCY: TWideStringField;
+    CO_OutDEBITCURCODE: TFloatField;
+    CO_OutCREDIT: TFloatField;
+    CO_OutCREDITACCOUNT: TWideStringField;
+    CO_OutCREDITCURRENCY: TWideStringField;
+    CO_OutCREDITCURCODE: TFloatField;
+    CO_OutADDITIONALDEBT: TFloatField;
+    CO_OutADDITIONALCREDIT: TFloatField;
+    CO_OutADEBT: TWideStringField;
+    CO_OutADEBITCURRENCY: TWideStringField;
+    CO_OutACREDIT: TWideStringField;
+    CO_OutACREDITCURRENCY: TWideStringField;
+    CO_OutASSIGNMENT: TWideStringField;
+    CO_OutCOMMISIONASSIGNMENT: TWideStringField;
+    CO_OutUSERID: TFloatField;
+    Bookmarks_BOOKMARKNAME: TWideStringField;
+    ACCID: TFloatField;
+    ACCKLI_ID: TFloatField;
+    ACCOP_ID: TFloatField;
+    ACCACC_NO: TWideStringField;
+    ACCVAL_ACC: TIntegerField;
+    ACCNAME: TWideStringField;
+    ACCOPEN_DAT: TDateTimeField;
+    ACCCLOSE_DAT: TDateTimeField;
+    ACCBAL_CN1: TFloatField;
+    ACCBAL_CN2: TFloatField;
+    ACCBAL_CN3: TFloatField;
+    ACCBAL_CN4: TFloatField;
+    ACCFILIAL: TIntegerField;
+    ACCSIM_OTCET: TFloatField;
+    ACCTIPACC: TWideStringField;
+    ACCLIMIT: TFloatField;
+    ACCOLD_ACC_NO: TWideStringField;
+    ACCPAIR_ACC: TFloatField;
+    ACCINSIDER: TWideStringField;
+    ACCSID: TFloatField;
+    ACCTEMPID: TFloatField;
+    ACCOWNID: TFloatField;
+    ACCP_CUSTID: TFloatField;
+    ODSFilialNAME: TWideStringField;
+    ODSValuteNameVALU_NAME: TWideStringField;
+    ODSValuteNameVALU_BALA: TWideStringField;
+    CreditTransactionsDataID: TFloatField;
+    CreditTransactionsDataCREDITACCID: TFloatField;
+    CreditTransactionsDataOPERATIONDATE: TDateTimeField;
+    CreditTransactionsDataDEBITAMOUNT: TFloatField;
+    CreditTransactionsDataCREDITAMOUNT: TFloatField;
+    CreditTransactionsDataLAMOUNT: TFloatField;
+    CreditTransactionsDataDEBITACCNO: TWideStringField;
+    CreditTransactionsDataDESTINATION: TWideStringField;
+    CreditTransactionsDataC_VALUTE: TWideStringField;
+    CreditTransactionsDataDEBTNAME: TWideStringField;
+    DebetTransactionsDataID: TFloatField;
+    DebetTransactionsDataDEBITACCID: TFloatField;
+    DebetTransactionsDataOPERATIONDATE: TDateTimeField;
+    DebetTransactionsDataDEBITAMOUNT: TFloatField;
+    DebetTransactionsDataCREDITAMOUNT: TFloatField;
+    DebetTransactionsDataLAMOUNT: TFloatField;
+    DebetTransactionsDataCREDITACCNO: TWideStringField;
+    DebetTransactionsDataCREDITNAME: TWideStringField;
+    DebetTransactionsDataDESTINATION: TWideStringField;
+    DebetTransactionsDataD_VALUTE: TWideStringField;
+    ODSCurrencyVALUTE: TIntegerField;
+    ODSCurrencyVAL_NAME: TWideStringField;
+    ODSCurrencyVALU_NAME: TWideStringField;
+    ODSCurrencyVALU_SHORT: TWideStringField;
+    ODSCurrencyUSTORG: TFloatField;
+    ODSCurrencyUSTPOK: TFloatField;
+    ODSCurrencyVALU_GEN: TWideStringField;
+    ODSCurrencyVALU_AZ: TWideStringField;
+    ODSCurrencyUSING: TIntegerField;
+    ODSCurrencyVALU_OTHER: TWideStringField;
+    ODSCurrencyVALU_INTER: TWideStringField;
+    ODSCurrencyVALU_BALA: TWideStringField;
+    ODSCurrencyPRISTAVKA: TFloatField;
+    ODSCurrencyCOUNTRY: TWideStringField;
+    ODSCurrencyUST_POK1: TFloatField;
+    ODSCurrencyOFFICAL: TWideStringField;
+    ODSCurrencyLIMIT: TFloatField;
+    ODSCurrencyDEBET: TFloatField;
+    ODSCurrencyKREDIT: TFloatField;
+    ODSCurrencyF5501P: TFloatField;
+    ODSCurrencyF5501V: TFloatField;
+    ODSCurrencySDEBET: TFloatField;
+    ODSCurrencySCREDIT: TFloatField;
+    AccFlagsSYMBOL: TWideStringField;
+    AccFlagsNAME: TWideStringField;
+    ODSTransactionsViewerDAT: TDateTimeField;
+    ODSTransactionsViewerID: TFloatField;
+    ODSTransactionsViewerDEBIT: TWideStringField;
+    ODSTransactionsViewerDEBTID: TFloatField;
+    ODSTransactionsViewerDEBETFILIAL: TIntegerField;
+    ODSTransactionsViewerDNAME: TWideStringField;
+    ODSTransactionsViewerKREDITID: TFloatField;
+    ODSTransactionsViewerDCURRENCY: TFloatField;
+    ODSTransactionsViewerDEBTCURNAME: TWideStringField;
+    ODSTransactionsViewerKREDIT: TWideStringField;
+    ODSTransactionsViewerKLI_ID: TFloatField;
+    ODSTransactionsViewerCREDITFILIAL: TIntegerField;
+    ODSTransactionsViewerKNAME: TWideStringField;
+    ODSTransactionsViewerDEBTCOME: TFloatField;
+    ODSTransactionsViewerCREDITCOME: TFloatField;
+    ODSTransactionsViewerKCURRENCY: TIntegerField;
+    ODSTransactionsViewerCREDITCURNAME: TWideStringField;
+    ODSTransactionsViewerDAMMOUNT: TFloatField;
+    ODSTransactionsViewerKAMMOUNT: TFloatField;
+    ODSTransactionsViewerLAMMOUNT: TFloatField;
+    ODSTransactionsViewerBSYMBOL: TWideStringField;
+    ODSTransactionsViewerNO_PROV: TWideStringField;
+    ODSTransactionsViewerOPERATORID: TFloatField;
+    ODSTransactionsViewerASSIGNMENT: TWideStringField;
+    ACC_ID: TFloatField;
+    ACC_KLI_ID: TFloatField;
+    ACC_OP_ID: TFloatField;
+    ACC_ACC_NO: TWideStringField;
+    ACC_VAL_ACC: TIntegerField;
+    ACC_NAME: TWideStringField;
+    ACC_OPEN_DAT: TDateTimeField;
+    ACC_CLOSE_DAT: TDateTimeField;
+    ACC_BAL_CN1: TFloatField;
+    ACC_BAL_CN2: TFloatField;
+    ACC_BAL_CN3: TFloatField;
+    ACC_BAL_CN4: TFloatField;
+    ACC_FILIAL: TIntegerField;
+    ACC_SIM_OTCET: TFloatField;
+    ACC_TIPACC: TWideStringField;
+    ACC_LIMIT: TFloatField;
+    ACC_OLD_ACC_NO: TWideStringField;
+    ACC_PAIR_ACC: TFloatField;
+    ACC_INSIDER: TWideStringField;
+    ACC_SID: TFloatField;
+    ACC_TEMPID: TFloatField;
+    ACC_OWNID: TFloatField;
+    ACC_P_CUSTID: TFloatField;
+    FlagAccountID: TFloatField;
+    FlagAccountKLI_ID: TFloatField;
+    FlagAccountOP_ID: TFloatField;
+    FlagAccountACC_NO: TWideStringField;
+    FlagAccountVAL_ACC: TIntegerField;
+    FlagAccountNAME: TWideStringField;
+    FlagAccountOPEN_DAT: TDateTimeField;
+    FlagAccountCLOSE_DAT: TDateTimeField;
+    FlagAccountSTATUS: TFloatField;
+    FlagAccountBAL_CN1: TFloatField;
+    FlagAccountBAL_CN2: TFloatField;
+    FlagAccountBAL_CN3: TFloatField;
+    FlagAccountBAL_CN4: TFloatField;
+    FlagAccountFILIAL: TIntegerField;
+    FlagAccountSIM_OTCET: TFloatField;
+    FlagAccountTIPACC: TWideStringField;
+    FlagAccountLIMIT: TFloatField;
+    FlagAccountOLD_ACC_NO: TWideStringField;
+    FlagAccountPAIR_ACC: TFloatField;
+    FlagAccountINSIDER: TWideStringField;
+    RelationDataNAME: TWideStringField;
+    AccFlagID: TFloatField;
+    AccFlagKLI_ID: TFloatField;
+    AccFlagOP_ID: TFloatField;
+    AccFlagACC_NO: TWideStringField;
+    AccFlagVAL_ACC: TIntegerField;
+    AccFlagNAME: TWideStringField;
+    AccFlagOPEN_DAT: TDateTimeField;
+    AccFlagCLOSE_DAT: TDateTimeField;
+    AccFlagSTATUS: TFloatField;
+    AccFlagBAL_CN1: TFloatField;
+    AccFlagBAL_CN2: TFloatField;
+    AccFlagBAL_CN3: TFloatField;
+    AccFlagBAL_CN4: TFloatField;
+    AccFlagFILIAL: TIntegerField;
+    AccFlagSIM_OTCET: TFloatField;
+    AccFlagTIPACC: TWideStringField;
+    AccFlagLIMIT: TFloatField;
+    AccFlagOLD_ACC_NO: TWideStringField;
+    AccFlagPAIR_ACC: TFloatField;
+    AccFlagINSIDER: TWideStringField;
+    RepSymbolNAME: TWideStringField;
+    ClientGroupDataNAME: TWideStringField;
+    EstateTypeDataNAME: TWideStringField;
+    OrganizationTypeDataNAME: TWideStringField;
+    ActionAreaDataNAME: TWideStringField;
+    TaxAreaDataNAME: TWideStringField;
+    BranchDataNAME: TWideStringField;
+    ODS_BussProcNAME: TWideStringField;
+    SettingsCASHBALANCENATIONAL: TFloatField;
+    SettingsCASHBALANCEENGLISH: TFloatField;
+    SettingsDESCRIPTION_AZ: TWideStringField;
+    SettingsDESCRIPTION_ENG: TWideStringField;
+    SettingsSIGNATYRE: TWideStringField;
+    SettingsRESPONSIBLE_PERSON: TWideStringField;
+    SettingsHANDOVER: TWideStringField;
+    SettingsCHIEF: TWideStringField;
+    SettingsOPERATOR: TWideStringField;
+    SettingsCASHIER: TWideStringField;
+    SettingsAMOUNT: TWideStringField;
+    SettingsCHIEF_OUT: TWideStringField;
+    SettingsOPERATOR_OUT: TWideStringField;
+    SettingsCASHIER_OUT: TWideStringField;
+    SettingsACCOUNTANT: TWideStringField;
+    SettingsCONTROLLER: TWideStringField;
+    SettingsCONTROLLER_OUT: TWideStringField;
+    SettingsPHOTO: TBlobField;
+    ODSCASHCASHBALANCENATIONAL: TFloatField;
+    ODSCASHCASHBALANCEENGLISH: TFloatField;
+    ODSCASHDESCRIPTION_AZ: TWideStringField;
+    ODSCASHDESCRIPTION_ENG: TWideStringField;
+    ODSCASHSIGNATYRE: TWideStringField;
+    ODSCASHRESPONSIBLE_PERSON: TWideStringField;
+    ODSCASHHANDOVER: TWideStringField;
+    ODSCASHCHIEF: TWideStringField;
+    ODSCASHOPERATOR: TWideStringField;
+    ODSCASHCASHIER: TWideStringField;
+    ODSCASHAMOUNT: TWideStringField;
+    ODSCASHCHIEF_OUT: TWideStringField;
+    ODSCASHOPERATOR_OUT: TWideStringField;
+    ODSCASHCASHIER_OUT: TWideStringField;
+    ODSCASHACCOUNTANT: TWideStringField;
+    ODSCASHCONTROLLER: TWideStringField;
+    ODSCASHCONTROLLER_OUT: TWideStringField;
+    ODSCASHPHOTO: TBlobField;
+    Templates_NAME: TWideStringField;
+    Templates_PATH: TWideStringField;
+    CustomersID: TIntegerField;
+    CustomersOP_ID: TFloatField;
+    CustomersOPEN_DAT: TDateTimeField;
+    CustomersCLOSE_DAT: TDateTimeField;
+    CustomersNEREZIDENT: TFloatField;
+    CustomersPRINAD_KOD: TFloatField;
+    CustomersNAME: TWideStringField;
+    CustomersSHORT_NAME: TWideStringField;
+    CustomersGROUP_KLIE: TFloatField;
+    CustomersVID_SOB: TFloatField;
+    CustomersORG_SOB: TFloatField;
+    CustomersSFERA_DEY: TFloatField;
+    CustomersOTRASL: TFloatField;
+    CustomersNALOG_KOD: TFloatField;
+    CustomersKOD_OKPRO: TWideStringField;
+    CustomersINN: TWideStringField;
+    CustomersDAT_NAL: TDateTimeField;
+    CustomersDAT_USTAV: TDateTimeField;
+    CustomersCUST_TYPE: TIntegerField;
+    CustomersUSNAM: TWideStringField;
+    ODS_GetExtraction: TOracleDataSet;
+    ODS_GetExtractionSTR: TWideStringField;
+    ODS_ExtractionTrans: TOracleDataSet;
+    WideStringField1: TWideStringField;
+    ODSMainState: TOracleDataSet;
+    ODSMainStateACCOUNTID: TFloatField;
+    ODSMainStateCUSTOMERID: TFloatField;
+    ODSMainStateACCOUNTNUMBER: TWideStringField;
+    ODSMainStateOPERATORID: TFloatField;
+    ODSMainStateCURRENCYID: TIntegerField;
+    ODSMainStateCURRENCYNAME: TWideStringField;
+    ODSMainStateACCOUNTNAME: TWideStringField;
+    ODSMainStateCUSTOMERVOIN: TWideStringField;
+    ODSMainStateBALANCECODE: TFloatField;
+    ODSMainStateOPENDATE: TDateTimeField;
+    ODSMainStateFILIAL: TIntegerField;
+    ODSMainStateLASTOPDATE: TDateTimeField;
+    ODSMainStateOSTAT: TFloatField;
+    ODSMainStatePOKOSTAT: TFloatField;
+    ODSMainStateENDOSTAT: TFloatField;
+    ODSMainStateENDPOKOSTAT: TFloatField;
+    ODSMainStateDATDATE: TDateTimeField;
+    ODSMainStateENDDATE: TDateTimeField;
+    ODSMainStateAP_BEG: TWideStringField;
+    ODSMainStateAP_END: TWideStringField;
+    ODSCashInfo: TOracleDataSet;
+    Transactionsissued_by: TStringField;
+    ODSCashInfoID: TFloatField;
+    ODSCashInfoPERSON_DOC: TWideStringField;
+    ODSCashInfoISSUEDBY: TWideStringField;
+    ODSCashInfoSERIA: TWideStringField;
+    ODSCashInfoDOCNUMBER: TWideStringField;
+    ODSCashInfoFROMWHEN: TWideStringField;
+    SB_ACA: TOraclePackage;
+    TransactionsDEBITBALCN: TFloatField;
+    TransactionsCREDITBALCN: TFloatField;
+    CustomersNAME1: TWideStringField;
+    CustomersINCORPORATION_NUMBER: TWideStringField;
+    CustomersTPH_CONTACT_TYPE: TWideStringField;
+    CustomersTPH_COMMUNICATION_TYPE: TWideStringField;
+    CustomersTPH_NUMBER: TWideStringField;
+    CustomersADDRESS_TYPE: TWideStringField;
+    CustomersADDRESS: TWideStringField;
+    CustomersCITY: TWideStringField;
+    CustomersCOUNTRY_CODE: TWideStringField;
+    CustomersDIRECTOR_ID: TFloatField;
+    CustomersEMAIL: TWideStringField;
+    CustomersURL: TWideStringField;
+    CustomersINCORPORATION_STATE: TWideStringField;
+    CustomersINCORPORATION_CNTR: TWideStringField;
+    CustomersTPH_EXTENSION: TWideStringField;
+    CustomersTPH_ZIP: TWideStringField;
+    CustomersTPH_COUNTRY_PREFIX: TWideStringField;
+    CustomersTPH_STATE: TWideStringField;
+    ds_mmx_communication_type: TOracleDataSet;
+    dsr_mmx_communication_type: TDataSource;
+    ds_tph_contact_type: TOracleDataSet;
+    dsr_tph_contact_type: TDataSource;
+    dsr_mmx_contact_type: TDataSource;
+    ds_mmx_contact_type: TOracleDataSet;
+    ds_tph_country_prefix: TOracleDataSet;
+    dsr_tph_country_prefix: TDataSource;
+    DSCountryByConctType: TOracleDataSet;
+    DSrCountryByConctType: TDataSource;
+    DSCityByConctType: TOracleDataSet;
+    DSrCityByConctType: TDataSource;
+    DS_INCORP_CNTR: TOracleDataSet;
+    DSR_INCORP_CNTR: TDataSource;
+    mmx_communication_type: TOracleDataSet;
+    d_mmx_communication_type: TDataSource;
+    tph_contact_type: TOracleDataSet;
+    d_tph_contact_type: TDataSource;
+    d_mmx_contact_type: TDataSource;
+    mmx_contact_type: TOracleDataSet;
+    tph_country_prefix: TOracleDataSet;
+    d_tph_country_prefix: TDataSource;
+    CountryByConctType: TOracleDataSet;
+    d_CountryByConctType: TDataSource;
+    CityByConctType: TOracleDataSet;
+    d_CityByConctType: TDataSource;
+    ODS_Citizenship: TOracleDataSet;
+    DS_Citizenship: TDataSource;
+    ODS_work_posts: TOracleDataSet;
+    DS_work_posts: TDataSource;
+    ODS_customers_relations: TOracleDataSet;
+    ODS_CiCntr: TOracleDataSet;
+    ODS_CiCity: TOracleDataSet;
+    DS_CiCntr: TDataSource;
+    DS_CiCity: TDataSource;
+    CUST_RISK_CATEG: TOracleDataSet;
+    DS_RISK_CATEG: TDataSource;
+    CustomersRISK_CATEG: TFloatField;
+    CustomersBIK: TWideStringField;
+    cust_risk_desc: TOracleDataSet;
+    DS_cust_risk_desc: TDataSource;
+    cust_risk_descID: TFloatField;
+    cust_risk_descRISK_ID: TFloatField;
+    cust_risk_descNAME: TWideStringField;
+    cust_risk_descDATE_PERIOD: TFloatField;
+    CustomersRISKDESCID: TFloatField;
+    CustomersSAMELYDATE: TDateTimeField;
+    Customers_relations: TOracleDataSet;
+    DS_Customers_relations: TDataSource;
+    sb_custInfo: TOraclePackage;
+    ODS_WorkPosts: TOracleDataSet;
+    Customers_relationsWorkPostName: TWideStringField;
+    ODS_Prinad: TOracleDataSet;
+    Customers_relationsPrinadName: TWideStringField;
+    Customers_relationsCUSTID2: TFloatField;
+    Customers_relationsWORK_POST: TFloatField;
+    Customers_relationsPRINAD: TFloatField;
+    Customers_relationsSIGNATORY: TFloatField;
+    Customers_relationsACCOWNER: TFloatField;
+    Customers_relationsNAME: TWideStringField;
+    Templates: TOracleDataSet;
+    TemplatesID: TFloatField;
+    TemplatesNAME: TWideStringField;
+    TemplatesPATH: TWideStringField;
+    TemplatesCUSTTYPE: TIntegerField;
+    Bookmarks: TOracleDataSet;
+    procedure DataModuleCreate(Sender: TObject);
+    procedure DataModuleDestroy(Sender: TObject);
+    procedure DebetTransactionsDataCalcFields(DataSet: TDataSet);
+    procedure CreditTransactionsDataCalcFields(DataSet: TDataSet);
+    procedure Customers_ApplyRecord(Sender: TOracleDataSet; Action: Char;
+      var Applied: Boolean; var NewRowId: String);
+    procedure AccountAfterScroll(DataSet: TDataSet);
+    procedure OracleDataSet1ApplyRecord(Sender: TOracleDataSet; Action: Char;
+      var Applied: Boolean; var NewRowId: string);
+    procedure CustomersAfterScroll(DataSet: TDataSet);
+    procedure CustomersApplyRecord(Sender: TOracleDataSet; Action: Char;
+      var Applied: Boolean; var NewRowId: string);
+    procedure DSCountryByConctTypeAfterScroll(DataSet: TDataSet);
+    procedure CountryByConctTypeAfterScroll(DataSet: TDataSet);
+    procedure ODS_CiCntrAfterScroll(DataSet: TDataSet);
+    procedure CUST_RISK_CATEGAfterScroll(DataSet: TDataSet);
+  private
+    { Private declarations }
+  public
+    OperationMode: TOperationMode;
+    procedure FullRefresh;
+    procedure SetCommission(CommissionID, DebitID, CreditID: Longint;
+      DebitAmmount, CreditAmmount: Currency; TransDate: TDateTime);
+  end;
+
+var
+  CO_DataMod: TCO_DataMod;
+
+implementation
+
+uses SBCore, SBCustomer, CO_Memorial, sboapiDataModuleImpl,
+  InFormUnit, CO_In_Unit;
+{$R *.DFM}
+
+procedure TCO_DataMod.DataModuleCreate(Sender: TObject);
+begin
+  RatesDataSet.Open;
+  RatesDataSetBegin.Open;
+  Sysdat.Open;
+  ODS_WorkPosts.Open;
+  ODS_Prinad.Open;
+  // RepSymbol.Last;
+  // RepSymbol.First;
+end;
+
+procedure TCO_DataMod.DataModuleDestroy(Sender: TObject);
+begin
+  RatesDataSet.Close;
+  RatesDataSetBegin.Close;
+  CO_DataMod := nil;
+end;
+
+procedure TCO_DataMod.SetCommission(CommissionID, DebitID, CreditID: Longint;
+  DebitAmmount, CreditAmmount: Currency; TransDate: TDateTime);
+
+  function IsCommission: Boolean;
+  begin
+    with CO_TransTypeIncOUT do
+      Result := OperationMode = omCommission;
+  end;
+
+begin
+  if IsCommission then
+    with OSCT do
+      CallProcedure(cs_commission_execute, ['CommisionID', CommissionID,
+        'DebitID', DebitID, 'CreditID', CreditID, 'DebitAmmount', DebitAmmount,
+        'CreditAmmount', CreditAmmount, 'TransDate', TransDate]);
+end;
+
+procedure TCO_DataMod.DebetTransactionsDataCalcFields(DataSet: TDataSet);
+begin
+  with DataSet do
+    FieldByName('DebitAccNo').AsString := CO_DataMod.Account.FieldByName
+      ('accno').AsString;
+end;
+
+procedure TCO_DataMod.DSCountryByConctTypeAfterScroll(DataSet: TDataSet);
+begin
+  with DSCityByConctType do
+  begin
+    SetVariable('CID', DSCountryByConctType.FieldByName('ID').AsInteger);
+
+    if not Active then
+      Open
+    else
+      Refresh;
+  end;
+
+end;
+
+procedure TCO_DataMod.CountryByConctTypeAfterScroll(DataSet: TDataSet);
+begin
+  with CityByConctType do
+  begin
+    SetVariable('CID', CountryByConctType.FieldByName('ID').AsInteger);
+    if not Active then
+      Open
+    else
+      Refresh;
+  end;
+end;
+
+procedure TCO_DataMod.CreditTransactionsDataCalcFields(DataSet: TDataSet);
+begin
+  with DataSet do
+    FieldByName('CreditAccNo').AsString := CO_DataMod.Account.FieldByName
+      ('accno').AsString;
+end;
+
+procedure TCO_DataMod.CustomersAfterScroll(DataSet: TDataSet);
+begin
+  if not(Customers.State = dsInsert) then
+    with CO_DataMod.Account do
+    begin
+      { Filter :='AccKlID = '+CO_DataMod.Customers.FieldByName('ID').AsString;
+        Filtered :=False;
+        Filtered :=True; }
+      SetVariable('CID', Customers.FieldByName('ID').AsInteger);
+      SetVariable('p_AccNO', null);
+      if not Active then
+        Open
+      else
+        Refresh;
+    end;
+end;
+
+procedure TCO_DataMod.CustomersApplyRecord(Sender: TOracleDataSet; Action: Char;
+  var Applied: Boolean; var NewRowId: string);
+var
+  CustomerInfo: TCustomer;
+begin
+  with Sender, CustomerInfo do
+  begin
+    Name := FieldByName('NAME').AsString;
+    ShortName := FieldByName('Short_Name').AsString;
+    OpenDate := FieldByName('OPEN_DAT').AsDateTime;
+    CloseDate := FieldByName('CLOSE_DAT').AsDateTime;
+    RelationID := FieldByName('PRINAD_KOD').AsInteger;
+    GroupID := FieldByName('GROUP_KLIE').AsInteger;
+    EstateType := FieldByName('VID_SOB').AsInteger;
+    OrganizationType := FieldByName('ORG_SOB').AsInteger;
+    ActionArea := FieldByName('SFERA_DEY').AsInteger;
+    BranchID := FieldByName('OTRASL').AsInteger;
+    TaxAreaID := FieldByName('NALOG_KOD').AsInteger;
+    IsResident := FieldByName('NEREZIDENT').AsInteger = 1;
+    TaxIDString := FieldByName('INN').AsString;
+    BankIDString := FieldByName('BIK').AsString;
+    OKPRO := FieldByName('KOD_OKPRO').AsString;
+    // GovOfficer := FieldByName('OTV_LICO').AsString;
+    TaxDepartmentRegDate := FieldByName('DAT_NAL').AsDateTime;
+    CapitalRegDate := FieldByName('DAT_USTAV').AsDateTime;
+    INCORPORATION_NUMBER := FieldByName('INCORPORATION_NUMBER').AsString;
+    tph_contact_type := FieldByName('TPH_CONTACT_TYPE').AsString;
+    TPH_COMMUNICATION_TYPE := FieldByName('TPH_COMMUNICATION_TYPE').AsString;
+    TPH_NUMBER := FieldByName('TPH_NUMBER').AsString;
+    ADDRESS_TYPE := FieldByName('ADDRESS_TYPE').AsString;
+    ADDRESS := FieldByName('ADDRESS').AsString;
+    CITY := FieldByName('CITY').AsString;
+    COUNTRY_CODE := FieldByName('COUNTRY_CODE').AsString;
+    EMAIL := FieldByName('EMAIL').AsString;
+    URL := FieldByName('URL').AsString;
+    INCORPORATION_STATE := FieldByName('INCORPORATION_STATE').AsString;
+    INCORPORATION_CNTR := FieldByName('INCORPORATION_CNTR').AsString;
+    TPH_EXTENSION := FieldByName('TPH_EXTENSION').AsString;
+    TPH_ZIP := FieldByName('TPH_ZIP').AsString;
+    tph_country_prefix := FieldByName('TPH_COUNTRY_PREFIX').AsString;
+    TPH_STATE := FieldByName('TPH_STATE').AsString;
+    RISK_CATEG := FieldByName('RISK_CATEG').AsInteger;
+    riskdescid:=FieldByName('riskdescid').AsInteger;
+    samelydate:=FieldByName('SamelyDate').AsDateTime;
+  end;
+
+  Applied := True;
+
+  case Action of
+    'I':
+      Sb_AddCustomer(CustomerInfo);
+    'U':
+      Sb_EditCustomer(Sender.FieldByName('ID').AsInteger, CustomerInfo);
+  else
+    Applied := False;
+  end;
+end;
+
+procedure TCO_DataMod.Customers_ApplyRecord(Sender: TOracleDataSet;
+  Action: Char; var Applied: Boolean; var NewRowId: String);
+var
+  CustomerInfo: TCustomer;
+begin
+  with Sender, CustomerInfo do
+  begin
+    Name := FieldByName('NAME').AsString;
+    ShortName := FieldByName('Short_Name').AsString;
+    OpenDate := FieldByName('OPEN_DAT').AsDateTime;
+    CloseDate := FieldByName('CLOSE_DAT').AsDateTime;
+    RelationID := FieldByName('PRINAD_KOD').AsInteger;
+    GroupID := FieldByName('GROUP_KLIE').AsInteger;
+    EstateType := FieldByName('VID_SOB').AsInteger;
+    OrganizationType := FieldByName('ORG_SOB').AsInteger;
+    ActionArea := FieldByName('SFERA_DEY').AsInteger;
+    BranchID := FieldByName('OTRASL').AsInteger;
+    TaxAreaID := FieldByName('NALOG_KOD').AsInteger;
+    IsResident := FieldByName('NEREZIDENT').AsInteger = 0;
+    TaxIDString := FieldByName('INN').AsString;
+    BankIDString := FieldByName('BIK').AsString;
+    OKPRO := FieldByName('KOD_OKPRO').AsString;
+    // GovOfficer := FieldByName('OTV_LICO').AsString;
+    TaxDepartmentRegDate := FieldByName('DAT_NAL').AsDateTime;
+    CapitalRegDate := FieldByName('DAT_USTAV').AsDateTime;
+  end;
+
+  Applied := True;
+
+  case Action of
+    'I':
+      Sb_AddCustomer(CustomerInfo);
+    'U':
+      Sb_EditCustomer(Sender.FieldByName('ID').AsInteger, CustomerInfo);
+  else
+    Applied := False;
+  end;
+
+end;
+
+procedure TCO_DataMod.CUST_RISK_CATEGAfterScroll(DataSet: TDataSet);
+begin
+cust_risk_desc.Close;
+cust_risk_desc.SetVariable('v_riskid',CUST_RISK_CATEG.FieldByName('ID').AsInteger);
+cust_risk_desc.Open;
+end;
+
+procedure TCO_DataMod.FullRefresh;
+begin
+  Cntries.Refresh;
+  ReportDesc.Refresh;
+end;
+
+procedure TCO_DataMod.ODS_CiCntrAfterScroll(DataSet: TDataSet);
+begin
+  with ODS_CiCity do
+  begin
+    SetVariable('CID', ODS_CiCntr.FieldByName('ID').AsInteger);
+    if not Active then
+      Open
+    else
+      Refresh;
+  end;
+
+end;
+
+procedure TCO_DataMod.OracleDataSet1ApplyRecord(Sender: TOracleDataSet;
+  Action: Char; var Applied: Boolean; var NewRowId: string);
+var
+  CustomerInfo: TCustomer;
+begin
+  with Sender, CustomerInfo do
+  begin
+    Name := FieldByName('NAME').AsString;
+    ShortName := FieldByName('Short_Name').AsString;
+    OpenDate := FieldByName('OPEN_DAT').AsDateTime;
+    CloseDate := FieldByName('CLOSE_DAT').AsDateTime;
+    RelationID := FieldByName('PRINAD_KOD').AsInteger;
+    GroupID := FieldByName('GROUP_KLIE').AsInteger;
+    EstateType := FieldByName('VID_SOB').AsInteger;
+    OrganizationType := FieldByName('ORG_SOB').AsInteger;
+    ActionArea := FieldByName('SFERA_DEY').AsInteger;
+    BranchID := FieldByName('OTRASL').AsInteger;
+    TaxAreaID := FieldByName('NALOG_KOD').AsInteger;
+    IsResident := FieldByName('NEREZIDENT').AsInteger = 0;
+    TaxIDString := FieldByName('INN').AsString;
+    BankIDString := FieldByName('BIK').AsString;
+    OKPRO := FieldByName('KOD_OKPRO').AsString;
+    // GovOfficer := FieldByName('OTV_LICO').AsString;
+    TaxDepartmentRegDate := FieldByName('DAT_NAL').AsDateTime;
+    CapitalRegDate := FieldByName('DAT_USTAV').AsDateTime;
+  end;
+
+  Applied := True;
+
+  case Action of
+    'I':
+      Sb_AddCustomer(CustomerInfo);
+    'U':
+      Sb_EditCustomer(Sender.FieldByName('ID').AsInteger, CustomerInfo);
+  else
+    Applied := False;
+  end;
+
+end;
+
+procedure TCO_DataMod.AccountAfterScroll(DataSet: TDataSet);
+begin
+  with Transactions do
+  begin
+    SetVariable('p_AccID', Account.FieldByName('ID').AsInteger);
+    if not Active then
+      Open
+    else
+      Refresh;
+  end;
+end;
+
+end.

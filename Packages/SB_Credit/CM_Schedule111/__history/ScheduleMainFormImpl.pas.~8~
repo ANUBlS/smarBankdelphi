@@ -1,0 +1,449 @@
+﻿unit ScheduleMainFormImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+   Grids, DBGrids, ExtCtrls, StdCtrls, Mask, DBCtrls, ToolWin,
+  ComCtrls, ImgList, ActnList, DBGridEh, DBCtrlsEh, CMCurrencyEdit, Buttons, DB,
+  CMExcelExport;
+
+type
+  TScheduleForm = class(TForm)
+    ToolBarImages: TImageList;
+    ScheludeActionList: TActionList;
+    ActionSave: TAction;
+    ActionPrint: TAction;
+    ActionClose: TAction;
+    GroupBox1: TGroupBox;
+    GroupBox2: TGroupBox;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label7: TLabel;
+    DBEdit1: TDBEdit;
+    DBEdit2: TDBEdit;
+    DBEdit3: TDBEdit;
+    DBEdit4: TDBEdit;
+    ToolBar1: TToolBar;
+    ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
+    ToolButton4: TToolButton;
+    ToolButton5: TToolButton;
+    ToolButton6: TToolButton;
+    ToolButton7: TToolButton;
+    ToolButton9: TToolButton;
+    SchduleGrid: TDBGridEh;
+    ToolButton8: TToolButton;
+    ToolBar2: TToolBar;
+    ToolButton10: TToolButton;
+    ToolButton11: TToolButton;
+    ToolButton12: TToolButton;
+    ToolButton13: TToolButton;
+    ToolButton14: TToolButton;
+    ToolButton15: TToolButton;
+    ToolButton16: TToolButton;
+    ToolButton17: TToolButton;
+    ToolButton18: TToolButton;
+    DBEdit5: TDBEdit;
+    ActionAdd: TAction;
+    ActionEdit: TAction;
+    ActionDelete: TAction;
+    ActionRefresh: TAction;
+    ActionAnnuty: TAction;
+    ToolButton3: TToolButton;
+    ToolButton19: TToolButton;
+    ActionChange: TAction;
+    ActionPr: TAction;
+    procedure FormDestroy(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure ActionCloseExecute(Sender: TObject);
+    procedure ActionAddExecute(Sender: TObject);
+    procedure ActionDeleteExecute(Sender: TObject);
+    procedure ActionRefreshExecute(Sender: TObject);
+    procedure ActionSaveExecute(Sender: TObject);
+    procedure ActionSaveUpdate(Sender: TObject);
+    procedure ActionAnnutyExecute(Sender: TObject);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure ActionPrintExecute(Sender: TObject);
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+    procedure SchduleGridKeyPress(Sender: TObject; var Key: Char);
+    procedure ActionChangeExecute(Sender: TObject);
+    procedure ActionPrintUpdate(Sender: TObject);
+    procedure ActionPrExecute(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+  private
+
+  public
+    procedure  ShowPaymentSchedule;
+  end;
+
+var
+  ScheduleForm: TScheduleForm;
+
+implementation
+
+uses ScheduleDataModuleImpl, CommonDecls, SbSystem, SheduleAddUnt,
+  AnnutyPaymentFormImpl,frmReportTypeImpl, ReportImpl,ChangeScheduleImpl,
+   sboapiDataModuleImpl, SBTranslateProc;
+
+{$R *.DFM}
+
+var
+  CreditID : Integer;
+//  AmountAfterPay : Real;
+
+procedure  TScheduleForm.ShowPaymentSchedule;
+
+resourcestring
+  rsScheludeCaption = '%s № li müqavilə üçün ödəmə planı.';
+  
+begin
+
+  ScheduleDataModule := TScheduleDataModule.Create(Self);
+  frmReportType := TfrmReportType.Create(Self);
+  ReportForm := TReportForm.create(self);
+  AddEditForm := TAddEditForm.Create(Self);
+  AnnutyForm := TAnnutyForm.Create(Self);
+  FrmChangeSchedule := TFrmChangeSchedule.Create(Self);
+
+
+  Caption := Format(rsScheludeCaption,[Get_SelectedCrdNo]);
+  CreditID := Get_SelectedCrdID;
+
+  with ScheduleDataModule do
+  begin
+    with ScheduleData do
+    begin
+      ClearVariables;
+      SetVariable('CreditID',CreditID);
+      Open
+    end;
+    with BoorowerInfo do
+    begin
+      ClearVariables;
+      SetVariable('CreditID',CreditID);
+      Open
+    end;
+    with CreditInfo do
+    begin
+      ClearVariables;
+      SetVariable('ID',CreditID);
+      Open
+    end;
+
+     BankInfo.open;
+     HeadOfficeID.open;
+
+          if FilialInfo.Active then FilialInfo.CloseAll;
+          FilialInfo.SetVariable('brid',CreditInfo.FieldByName('BranchID').AsInteger);
+          FilialInfo.Open;
+
+         ReportForm.QRLabel11.Caption := FilialInfo.fieldByName('name').asstring;
+
+         if FilialInfo.FieldByName('ID').AsInteger = HeadOfficeID.FieldbyName('minid').AsInteger then
+           ReportForm.QRLabel10.caption := 'Müştəri xidmətləri departamentinin direktoru______________________________'
+         else
+           ReportForm.QRLabel10.caption := 'Filial direktoru                                                         ______________________________';
+
+  end;
+  
+  ShowModal;
+end;
+
+
+
+procedure TScheduleForm.FormDestroy(Sender: TObject);
+begin
+
+ frmReportType.Free;
+  ReportForm.Free;
+
+  AddEditForm.Free;
+  AnnutyForm.Free;
+  FrmChangeSchedule.Free;
+  ScheduleDataModule.Free;
+
+end;
+
+procedure TScheduleForm.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+  with ScheduleDataModule do
+  begin
+    with ScheduleData.Session do
+    Rollback;
+    ScheduleData.CloseAll;
+    CreditInfo.CloseAll;
+    BoorowerInfo.CloseAll;
+  end;  
+end;
+
+procedure TScheduleForm.FormCreate(Sender: TObject);
+begin
+SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TScheduleForm.ActionCloseExecute(Sender: TObject);
+begin
+  Close;
+end;
+
+
+procedure TScheduleForm.ActionAddExecute(Sender: TObject);
+
+  function PlaneInsert() : Boolean;
+  begin
+    with ScheduleDataModule.ScheduleData do
+    begin
+      Insert;
+      FieldByName('CreditID').AsInteger := CreditID;
+    end;
+    Result := AddEditForm.ShowModal = mrOk;
+  end;
+
+function PlaneEdit() : Boolean;
+  begin
+
+    with ScheduleDataModule.ScheduleData do
+      Edit;
+      Result := AddEditForm.ShowModal = mrOk;
+    end;
+
+ var
+  SavePlace : TBookmark;
+  count :integer;
+begin
+ // with ScheduleDataModule,adm do
+
+
+  if (Sender as TAction).Tag = 1 then
+  begin
+    with ScheduleDataModule.ScheduleData do
+    if PlaneInsert then
+    begin
+      Post;
+      //SavePlace := GetBookmark;
+      ScheduleForm.ActionSaveExecute(Sender);
+      Refresh;
+      {if BookmarkValid(SavePlace) then
+        GotoBookmark(SavePlace);
+      FreeBookmark(SavePlace); }
+    end
+    {else Cancel }
+  end else
+  begin
+    with ScheduleDataModule.ScheduleData do
+    begin
+     count:=ScheduleDataModule.adm.CallIntegerFunction('getadmaddition',['PAYMENTSHE']);
+
+  if count=0 then
+   begin
+    showmessage('Sizin dəyişmək hüququnuz yoxdur!'+#13+'Əlavə məlumat üçün sistem administratoruna müracət edin.');
+    exit;
+   end;
+    if PlaneEdit then
+      begin
+
+      Post;
+      //SavePlace := GetBookmark;
+      ScheduleForm.ActionSaveExecute(Sender);
+      Refresh;
+      {if BookmarkValid(SavePlace) then
+        GotoBookmark(SavePlace);
+      FreeBookmark(SavePlace);}
+    end {else Cancel }
+  end;
+   end;
+end;
+
+procedure TScheduleForm.ActionDeleteExecute(Sender: TObject);
+resourcestring rs_DelshedulePayments = ' Silinməsinə əminsinizmi? ';
+var
+  count,I : Integer;
+begin
+   with ScheduleDataModule,adm do
+  count:=CallIntegerFunction('getadmaddition',['PAYMENTSHE']);
+
+  if count=0 then
+  begin
+ showmessage('Sizin dəyişmək hüququnuz yoxdur!'+#13+'Əlavə məlumat üçün sistem administratoruna müracət edin.');
+ exit;
+  end;
+ if MessageDlg(rs_DelshedulePayments,
+      mtConfirmation, [mbYes, mbNo], 0) = mrNO then  Exit;
+
+  with SchduleGrid do
+  for I := SelectedRows.Count - 1 downto 0 do
+  begin
+    DataSource.DataSet.GotoBookmark(Pointer(SelectedRows[I]));
+    DataSource.DataSet.Delete;
+  end;
+end;
+
+procedure TScheduleForm.ActionRefreshExecute(Sender: TObject);
+begin
+  with ScheduleDataModule.ScheduleData do
+    Refresh;
+end;
+
+procedure TScheduleForm.ActionSaveExecute(Sender: TObject);
+begin
+  with ScheduleDataModule, ScheduleData.Session do
+  begin
+    ApplyUpdates([ScheduleData],True);
+    Commit;
+  end;
+end;
+
+procedure TScheduleForm.ActionSaveUpdate(Sender: TObject);
+begin
+  with ScheduleDataModule.ScheduleData do
+  (Sender as TAction).Enabled := Active and UpdatesPending;
+end;
+
+procedure TScheduleForm.ActionAnnutyExecute(Sender: TObject);
+var
+  Payment : PAnnutyPaymentInfo;
+
+  AnnualyRate : Real;
+  CreditID : Integer;
+  StartDate : TDateTime;
+  SavePoint : TBookmark;
+begin
+
+  with ScheduleDataModule.CreditInfo do
+  begin
+    AnnualyRate :=
+      FieldByName('ANNUALYINTERESTRATE').AsFloat;
+    StartDate := FieldByName('DATEOFCONCLUSION').AsDateTime;
+    CreditID := FieldByName('ID').AsInteger;
+  end;
+
+  with AnnutyForm do
+  begin
+
+    if not AnnutyPayment_Get(Payment)
+     then     Exit;
+
+    with Payment^ do
+    begin
+
+       //
+      with ScheduleDataModule.CM_SCHEDULE do
+      if PaymentType then
+        CallProcedure('InsertAnnutySchedule',[
+        'p_CreditID' , CreditID ,
+        'p_Amount' , Amount ,
+        'p_Rate' , AnnualyRate ,
+        'p_FirstPayDate' , FirstPayDate ,
+        'p_StartDate' , StartDate ,
+        'p_Periods' , NPeriods-dovr ,
+        'p_PeriodRate' , PeriodRate,
+        'p_dovr',dovr       
+        ])
+      else
+        CallProcedure('InsertEqualSchedule',[
+        'p_CreditID' , CreditID ,
+        'p_Amount' , Amount ,
+        'p_Rate' , AnnualyRate ,
+        'p_FirstPayDate' , FirstPayDate ,
+        'p_StartDate' , StartDate ,
+        'p_Periods' , NPeriods-dovr ,
+        'p_PeriodRate' , PeriodRate,
+          'p_dovr',dovr
+        ]);
+
+
+      with ScheduleDataModule.ScheduleData do
+      begin
+        SavePoint := GetBookmark;
+        Refresh;
+        if BookmarkValid(SavePoint) then
+          GotoBookmark(SavePoint);
+        FreeBookmark(SavePoint);
+        Edit;
+        Post;
+      end;
+      
+    end; // with
+  end; // with AnnutyForm
+
+end;
+
+procedure TScheduleForm.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+  if ORD(Key) = VK_ESCAPE then
+    ActionCloseExecute(nil);
+end;
+
+procedure TScheduleForm.ActionPrintExecute(Sender: TObject);
+begin
+   with ScheduleDataModule,ExportData do begin
+   if Active then close;
+   setvariable('Creditid',Get_SelectedCrdID);
+   open;
+   {with ExcelExport do
+   begin
+   connect;
+   ExportDataset(ExportData,'Юдямя планы',true);
+   end;}
+   end;
+end;
+
+procedure TScheduleForm.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+   Resize := False
+end;
+
+procedure TScheduleForm.SchduleGridKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if ord(key) = 1 then
+  with SchduleGrid,SelectedRows,DataSource.DataSet do
+  begin
+    DisableControls;
+    try
+      First;
+      while not Eof do
+      begin
+        CurrentRowSelected := True;
+        Next;
+      end;
+    finally
+      EnableControls;
+    end;
+  end;
+end;
+
+procedure TScheduleForm.ActionChangeExecute(Sender: TObject);
+var
+count :Integer;
+begin
+{ count:=ScheduleDataModule.adm.CallIntegerFunction('getadmaddition',['PAYMENTSHE']);
+
+  if count=0 then
+  begin
+ showmessage('Сизин дяйишмяк щцгугунуз йохдур!'+#13+'Ялавя мялумат цчцн систем администраторуна мцражият един.');
+ exit;
+  end; }
+   FrmChangeSchedule.ShowModal;
+end;
+
+procedure TScheduleForm.ActionPrintUpdate(Sender: TObject);
+begin
+  with ScheduleDataModule,ScheduleData do
+  (Sender as TAction).Enabled := Active and (RecordCount > 0)
+
+end;
+
+procedure TScheduleForm.ActionPrExecute(Sender: TObject);
+begin
+  frmReportType.ShowModal
+end;
+
+
+
+end.

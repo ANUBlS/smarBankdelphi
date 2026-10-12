@@ -1,0 +1,1141 @@
+                         {------------------------------------}
+                         {(c) Smart Systems Technology Ltd.   }
+                         {            2002.                   }
+                         {          Exchange                  }
+                         {          Convertation              }
+                         {                 Nariman Narimanov  }
+                         {------------------------------------}
+
+
+//                         dbf convertation
+//                                         1   satish - haradan
+//                                         2.1 alish - haradan
+//                                         2.2 alish - meqsedli teyinat
+unit UntExchangeImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActiveX, AxCtrls, Exchange_TLB, StdVcl, ExtCtrls, ImgList, ComCtrls,
+  ToolWin, Db, OracleData, Grids, DBGrids, StdCtrls, DBCtrls, Buttons,
+  DBTables ,Quickrpt, QRCtrls, Menus, ActnList, CMExcelExport;
+
+const
+     NationalCurrency ='048';
+type
+  TFrmExchange = class(TActiveForm, IFrmExchange)
+    ImageList1: TImageList;
+    TblExchange: TTable;
+    SaveDlg: TSaveDialog;
+    SaveConvert: TSaveDialog;
+    PopupExchange: TPopupMenu;
+    ActionList1: TActionList;
+    ActionRefresh: TAction;
+    ActionPrint: TAction;
+    ActionFile: TAction;
+    ActionSettings: TAction;
+    N1: TMenuItem;
+    N2: TMenuItem;
+    N3: TMenuItem;
+    N4: TMenuItem;
+    N5: TMenuItem;
+    N6: TMenuItem;
+    N7: TMenuItem;
+    N8: TMenuItem;
+    N9: TMenuItem;
+    ActionFirst: TAction;
+    ActionLast: TAction;
+    PopupConvertation: TPopupMenu;
+    Panel1: TPanel;
+    PageControl: TPageControl;
+    TabSheet1: TTabSheet;
+    Panel2: TPanel;
+    Panel4: TPanel;
+    DBGrid1: TDBGrid;
+    Panel3: TPanel;
+    ToolBar1: TToolBar;
+    ToolButton11: TToolButton;
+    ToolButton6: TToolButton;
+    ToolButton7: TToolButton;
+    ToolButton10: TToolButton;
+    ToolButton8: TToolButton;
+    ToolButton9: TToolButton;
+    Panel5: TPanel;
+    DBGrid2: TDBGrid;
+    Panel6: TPanel;
+    ToolBar2: TToolBar;
+    ToolButton12: TToolButton;
+    ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
+    ToolButton5: TToolButton;
+    ToolButton3: TToolButton;
+    ToolButton4: TToolButton;
+    TabSheetExchange: TTabSheet;
+    ExchangeViewer: TDBGrid;
+    Panel7: TPanel;
+    SpeedButton1: TSpeedButton;
+    GroupBox1: TGroupBox;
+    Label1: TLabel;
+    Label2: TLabel;
+    DateTimePicker1: TDateTimePicker;
+    DateTimePicker2: TDateTimePicker;
+    ToolBar3: TToolBar;
+    ToolButton13: TToolButton;
+    ToolButton14: TToolButton;
+    ToolButton15: TToolButton;
+    ToolButton16: TToolButton;
+    ToolButton17: TToolButton;
+    ToolButton21: TToolButton;
+    ToolButton22: TToolButton;
+    ProgressBar: TProgressBar;
+    Edit1: TEdit;
+    TabSheetConvertation: TTabSheet;
+    ConvertationViewer: TDBGrid;
+    Panel8: TPanel;
+    SpeedButton2: TSpeedButton;
+    GroupBox2: TGroupBox;
+    Label3: TLabel;
+    Label4: TLabel;
+    DTPCBeginDate: TDateTimePicker;
+    DTPCEndDate: TDateTimePicker;
+    ProgBar: TProgressBar;
+    ToolBar4: TToolBar;
+    ToolButton18: TToolButton;
+    ToolButton23: TToolButton;
+    ToolButtonBuy: TToolButton;
+    ToolButton27: TToolButton;
+    ToolButton28: TToolButton;
+    ToolButton19: TToolButton;
+    ToolButton24: TToolButton;
+    EConvert: TEdit;
+    GroupBox3: TGroupBox;
+    RadioButton1: TRadioButton;
+    RadioButton2: TRadioButton;
+    Panel9: TPanel;
+    EAssignment: TEdit;
+    CMExcel: TCMExcelExport;
+    ToolButton20: TToolButton;
+    ToolButton25: TToolButton;
+    ToolButton26: TToolButton;
+    ToolButton29: TToolButton;
+    ToolButton30: TToolButton;
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure ActiveFormDestroy(Sender: TObject);
+    procedure ToolButton6Click(Sender: TObject);
+    procedure ToolButton1Click(Sender: TObject);
+    procedure ToolButton8Click(Sender: TObject);
+    procedure ToolButton3Click(Sender: TObject);
+    procedure ToolButton10Click(Sender: TObject);
+    procedure BitBtn1Click(Sender: TObject);
+    procedure BitBtn2Click(Sender: TObject);
+    procedure ToolButton5Click(Sender: TObject);
+    procedure ToolButton13Click(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure ConvertationViewerTitleClick(Column: TColumn);
+    procedure SpeedButton2Click(Sender: TObject);
+    procedure ToolButton24Click(Sender: TObject);
+    procedure ToolButtonBuyClick(Sender: TObject);
+    procedure RadioButton1Click(Sender: TObject);
+    procedure RadioButton2Click(Sender: TObject);
+    procedure DTPCEndDateChange(Sender: TObject);
+    procedure ExchangeViewerTitleClick(Column: TColumn);
+    procedure ActionRefreshExecute(Sender: TObject);
+    procedure ToolButton18Click(Sender: TObject);
+    procedure ActionPrintExecute(Sender: TObject);
+    procedure ActionFileExecute(Sender: TObject);
+    procedure ActionSettingsExecute(Sender: TObject);
+    procedure ActionFirstExecute(Sender: TObject);
+    procedure ActionLastExecute(Sender: TObject);
+    procedure ActionPrintUpdate(Sender: TObject);
+    procedure PageControlChange(Sender: TObject);
+    procedure ToolButton20Click(Sender: TObject);
+    procedure ToolButton26Click(Sender: TObject);
+    procedure ToolButton30Click(Sender: TObject);
+  private
+    { Private declarations }
+    FEvents: IFrmExchangeEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+  public
+    { Public declarations }
+    i:integer;
+    Rate :array of Integer;
+    str:string;
+    RateIndex :Integer;
+    DefaultReport :TQuickRep;
+    DefaultDataSet :TOracleDataSet;
+    function  getBankDay:TDateTime;
+    procedure MouseWheelHandler(var Message: TMessage); override;
+    procedure Initialize; override;
+    function GetForeignCurrency(curr1, curr2: string): string;
+  end;
+var
+   FrmExchange :TFrmExchange;
+implementation
+
+uses ComObj, ComServ, ExcangeDataModule, UntExchangeRep, AddAccountUnit,
+  AddExchangeUnit, QRepExchangeView, UntPrint, UntTooling, UntQRConvertRep,
+  UntQRDetConvert, sboapiDataModuleImpl, SBTranslateProc;
+ const
+   cGetBankDate='GetBankDay';
+{$R *.DFM}
+
+{ TFrmExchange }
+
+procedure TFrmExchange.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_FrmExchangePage); }
+end;
+
+procedure TFrmExchange.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as IFrmExchangeEvents;
+end;
+
+procedure TFrmExchange.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TFrmExchange.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TFrmExchange.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TFrmExchange.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TFrmExchange.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TFrmExchange.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TFrmExchange.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TFrmExchange.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TFrmExchange.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TFrmExchange.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TFrmExchange.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TFrmExchange.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TFrmExchange.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TFrmExchange.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TFrmExchange.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TFrmExchange.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TFrmExchange.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TFrmExchange.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TFrmExchange.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TFrmExchange._Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TFrmExchange.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TFrmExchange.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TFrmExchange.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TFrmExchange.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TFrmExchange.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TFrmExchange.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TFrmExchange.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TFrmExchange.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TFrmExchange.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TFrmExchange.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TFrmExchange.Set_AxBorderStyle(Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TFrmExchange.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TFrmExchange.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TFrmExchange.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TFrmExchange.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TFrmExchange.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TFrmExchange.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TFrmExchange.Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TFrmExchange.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TFrmExchange.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TFrmExchange.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TFrmExchange.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TFrmExchange.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TFrmExchange.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+//************************************************{ Main }**********************************************************************
+function  TFrmExchange.getBankDay:TDateTime;
+var
+    aResult:TDateTime;
+begin
+  with  ExchangeDataMod.OPacCurrentBankDay do
+    aResult :=CallDateFunction(cGetBankDate,[]);
+    getBankDay :=aResult;
+end;
+
+procedure TFrmExchange.MouseWheelHandler(var Message: TMessage);
+begin
+ Inherited;
+ if (ExchangeViewer.Focused) and not(ExchangeViewer.DataSource.DataSet.IsEmpty) then
+  begin
+   with TCMMouseWheel(Message), ExchangeViewer.DataSource.DataSet do
+    if WheelDelta < 0 then
+      Next
+    else
+      Prior;
+   ExchangeViewer.Repaint;
+  end
+ else
+  begin
+   if (ConvertationViewer.Focused) and not(ConvertationViewer.DataSource.DataSet.IsEmpty) then
+    with TCMMouseWheel(Message), ConvertationViewer.DataSource.DataSet do
+     if WheelDelta< 0 then
+       Next
+     else
+       Prior;
+    ConvertationViewer.Repaint;
+  end;
+end;
+
+procedure TFrmExchange.ActiveFormCreate(Sender: TObject);
+begin
+  FrmExchange :=Self;
+  //*
+  ExchangeDataMod :=TExchangeDataMod.Create(self);
+  ExchangeRep :=TExchangeRep.Create(self);
+  QRExchangeView :=TQRExchangeView.Create(self);
+  QRDetConvert :=TQRDetConvert.Create(self);
+  DefaultReport :=TQuickRep.Create(Self);
+  DefaultReport :=QRDetConvert;
+  DefaultDataSet :=TOracleDataSet(DefaultReport.DataSet);
+  //*
+  FrmAddExchange :=TFrmAddExchange.Create(Self);
+  FrmAddAccount :=TFrmAddAccount.Create(Self);
+  FrmPrint :=TFrmPrint.Create(self);
+  ExchangeDataMod.ViewGrid.Active :=True;
+  ExchangeDataMod.ODSTooling.Open;
+  ExchangeDataMod.Grid2.Active :=True;
+  DateTimePicker1.Date :=getBankDay;
+  DateTimePicker2.Date :=getBankDay;
+  DTPCBeginDate.Date :=getBankDay;
+  DTPCEndDate.Date :=getBankDay;
+  RateIndex :=0;
+   with   FrmAddAccount.Combobox1.Items  do
+     Clear;
+   with  ExchangeDataMod.ForMoney  do
+  begin
+    Open;
+    SetLength(Rate,RecordCount);
+    First;
+    while  not EOF  do
+    begin
+      Rate[RateIndex] :=FieldByName('Valute').AsInteger;
+      FrmAddAccount.combobox1.Items.Add(FieldByName('Valu_Name').AsString);
+      Inc(RateIndex);
+      Next;
+    end;
+  end;
+  ProgBar.Hide;
+  ProgressBar.Hide;
+ SBTranslateProc.TranslateAllComponents(Self,sboapiDataModule.OrPack_SL);
+end;
+
+
+
+
+procedure TFrmExchange.ActiveFormDestroy(Sender: TObject);
+begin
+  if assigned(rate)  then setlength(rate,0);
+end;
+
+
+procedure TFrmExchange.ToolButton6Click(Sender: TObject);
+begin
+ i:=1;
+ FrmAddExchange.Show;
+end;
+
+procedure TFrmExchange.ToolButton1Click(Sender: TObject);
+begin
+ i:=3;
+ FrmAddAccount.Show;
+end;
+
+procedure TFrmExchange.ToolButton8Click(Sender: TObject);
+begin
+ if MessageDlg('Dogrudan da silim?',mtConfirmation,mbYesNoCancel,0)=mrYes then
+  try
+  with ExchangeDataMod do
+   begin
+    OPacExchange.CallProcedure('del_all_excaccount',[ViewGrid.FieldByName('ID').AsInteger]);
+    ViewGrid.Refresh;
+    //OPacExchange.CallProcedure('del_exchanges',[ViewGrid.FieldByName('ID').AsInteger]);
+    Grid2.Refresh;
+   end;
+  except
+    Raise;
+  end;;
+end;
+
+procedure TFrmExchange.ToolButton3Click(Sender: TObject);
+begin
+with ExchangeDataMod do
+ begin
+  OPacExchange.CallProcedure('del_excaccount',[ViewGrid.FieldByName('ID').AsInteger,Grid2.FieldByName('accountID').AsInteger]);
+  Grid2.Refresh;
+ end;
+end;
+
+procedure TFrmExchange.ToolButton10Click(Sender: TObject);
+begin
+ i:=2;
+ FrmAddExchange.Show;
+end;
+
+
+
+procedure TFrmExchange.BitBtn1Click(Sender: TObject);
+var
+   v1,v2:variant;
+begin
+v1:=integer(trunc(DateTimePicker1.DateTime));
+v2:=integer(trunc(DateTimePicker2.DateTime));
+with ExchangeDataMod do
+ begin
+  if  TotalExchangeReport.Active then  TotalExchangeReport.Close;
+   TotalExchangeReport.SetVariable('BeginDate',v1);
+   TotalExchangeReport.SetVariable('EndDate',v2);
+   TotalExchangeReport.Open;
+ end;
+end;
+
+procedure TFrmExchange.BitBtn2Click(Sender: TObject);
+var
+   v1,v2:variant;
+begin
+ v1:=integer(trunc(DateTimePicker1.DateTime));
+ v2:=integer(trunc(DateTimePicker2.DateTime));
+with ExchangeDataMod do
+ begin
+   if  TotalExchangeReport.Active then  TotalExchangeReport.Close;
+   TotalExchangeReport.SetVariable('BeginDate',v1);
+   TotalExchangeReport.SetVariable('EndDate',v2);
+   TotalExchangeReport.Open;
+   ExchangeRep.Preview;
+ end;
+end;
+
+procedure TFrmExchange.ToolButton5Click(Sender: TObject);
+begin
+ i:=4;
+ FrmAddAccount.Show;
+end;
+
+procedure TFrmExchange.ToolButton13Click(Sender: TObject);
+var
+   FirstDate,LastDate:variant;
+begin
+ if ExchangeViewer.CanFocus then
+  ExchangeViewer.SetFocus;
+ Screen.Cursor:=crHourGlass;
+ ProgressBar.Show;
+ ProgressBar.Position :=0;
+ try
+  ProgressBar.StepBy(30);
+  FirstDate:=integer(trunc(DateTimePicker1.DateTime));
+  LastDate:=integer(trunc(DateTimePicker2.DateTime));
+  ProgressBar.StepBy(30);
+ with ExchangeDataMod do
+  begin
+   Exchange.Close;
+   Exchange.SetVariable('BeginDate',FirstDate);
+   Exchange.SetVariable('EndDate',LastDate);
+   ProgressBar.StepBy(40);
+   Exchange.Open;
+  end;
+ finally
+  Screen.Cursor:=crDefault;
+  ProgressBar.Hide;
+ end;
+end;
+
+procedure TFrmExchange.Button1Click(Sender: TObject);
+var
+   FirstDate,LastDate:Variant;
+begin
+ FirstDate:=integer(trunc(DateTimePicker1.DateTime));
+ LastDate:=integer(trunc(DateTimePicker2.DateTime));
+ ExchangeDataMod.Exchange.Close;
+ ExchangeDataMod.Exchange.Open;
+ QRExchangeView.Preview;
+end;
+
+procedure TFrmExchange.SpeedButton1Click(Sender: TObject);
+begin
+ with SaveDlg do
+  if Execute then
+   Edit1.Text :=FileName;
+end;
+
+procedure TFrmExchange.ConvertationViewerTitleClick(Column: TColumn);
+var
+   TitleName :string;
+begin
+ if ConvertationViewer.DataSource.DataSet.IsEmpty then Exit;
+ Screen.Cursor := crHourGlass;
+ TitleName :=Column.FieldName;
+ try
+  with TOracleDataSet(ConvertationViewer.DataSource.DataSet) do
+   begin
+    SetVariable('Title',TitleName);
+    Refresh;
+   end;
+ finally
+  Screen.Cursor := crDefault;
+ end;
+end;
+
+procedure TFrmExchange.SpeedButton2Click(Sender: TObject);
+begin
+ with SaveConvert do
+  if Execute then
+    EConvert.text :=FileName;
+end;
+
+function TFrmExchange.GetForeignCurrency(curr1, curr2: string): string;
+begin
+ if curr1 = NationalCurrency then
+   Result :=curr2
+ else
+   Result :=curr1;
+end;
+
+procedure TFrmExchange.ToolButton24Click(Sender: TObject);
+var
+ path    :string;
+ DBaseName,TblName   :string;
+ lpExistingFileName   :array [0..255] of Char;
+ lpNewFileName   :array [0..255] of Char;
+ BeginDate,EndDate   :variant;
+ FCurrency      : word;   //0-buy , 1-sell
+ Rate           :Real;
+ Debt,Credit,Ammount  :string;
+begin
+ path :=ExtractFilePath(ParamStr(0))+'$MB12212.dbf';
+ StrPCopy(lpExistingFileName, Path);
+ StrPCopy(lpNewFileName, EConvert.text);
+ BeginDate:=integer(trunc(DTPCBeginDate.DateTime));
+ EndDate:=integer(trunc(DTPCEndDate.DateTime));
+
+TRY
+ if  FileExists(EConvert.Text) then
+   if  MessageDlg(
+           Format('Overrite the Existing File ?'+#13+' %s  ',[EConvert.Text])
+           ,mtConfirmation
+           ,MBYESNOCANCEL,0
+        )<>mrYes  then  Exit;
+
+   if not CopyFile(lpExistingFileName,lpNewFileName,False) then
+   begin
+     ShowMessage('File Creation UnSuccesful Terminated!');
+     Exit;
+   end;
+
+   DBaseName :=ExtractFileDir(EConvert.text);
+   TblName :=ExtractFileName(EConvert.text);
+
+ with TblExchange do
+ begin
+  if Active then Close;
+  DatabaseName :=DBaseName;
+  TableName :=TblName;
+  TblExchange.Open;
+  with ExchangeDataMod  do
+   begin
+     if not(ODSConvertation.Active) then
+     ODSConvertation.Open;
+     ODSConvertation.First;
+     ODSBankCode.Open;
+
+    While not ODSConvertation.Eof do
+     begin
+       if ODSConvertation.FieldByName('val_acc').value =0 then
+        begin
+         FCurrency :=1;
+         Rate :=ODSConvertation.FieldByName('Rate_c').Value;
+         Debt :=ODSConvertation.FieldByName('COffical').AsString;
+         Credit :=ODSConvertation.FieldByName('DOffical').AsString;
+         Ammount :=ODSConvertation.FieldByName('Ammount_c').AsString;
+        end
+       else
+        begin
+         FCurrency :=0;
+         Rate :=ODSConvertation.FieldByName('Rate_d').Value;
+         Debt :=ODSConvertation.FieldByName('COffical').AsString;
+         Credit :=ODSConvertation.FieldByName('DOffical').AsString;
+         Ammount :=ODSConvertation.FieldByName('Ammount').AsString;
+        end;
+       Insert;
+        FieldByName('Tip').AsInteger :=2;
+        FieldByName('Operator').AsString :=ODSConvertation.FieldByName('ShortName').AsString;
+        FieldByName('bank_code').AsString :=ODSBankCode.FieldByName('NB').AsString ;
+        FieldByName('Ins1').AsString :=GetForeignCurrency(Debt, Credit);
+        FieldByName('Ins2').AsString :=NationalCurrency;
+        FieldByName('Alq_sat').AsInteger :=FCurrency;
+        FieldByName('Mablag').AsString :=Ammount;
+        FieldByName('Tarix').AsDateTime :=ODSConvertation.FieldByName('Dat').AsDateTime;
+        FieldByName('Kurs').AsFloat :=Rate;
+       Post;
+       if ODSConvertation.FieldByName('val_acc').value <> 0 then
+       begin
+        Insert;
+         FieldByName('Tip').AsInteger :=1;
+         FieldByName('Operator').AsString :=ODSConvertation.FieldByName('Extra').AsString;
+         FieldByName('bank_code').AsString :=ODSBankCode.FieldByName('NB').AsString ;
+         FieldByName('Ins1').AsString :=GetForeignCurrency(Debt, Credit);
+         FieldByName('Ins2').AsString :=NationalCurrency;
+         FieldByName('Alq_sat').AsInteger :=FCurrency;
+         FieldByName('Mablag').AsString :=Ammount;
+         FieldByName('Tarix').AsDateTime :=ODSConvertation.FieldByName('Dat').AsDateTime;
+         FieldByName('Kurs').AsFloat :=Rate;
+        Post;
+       end;
+      ODSConvertation.Next;
+     end;
+    end;
+
+  end;
+ ShowMessage('File Creating was succesful!');
+ ExchangeDataMod.ODSBankCode.Close;
+EXCEPT
+ //ShowMessage('File Creating terminated!');
+ Raise;
+END;
+end;
+
+procedure TFrmExchange.ToolButtonBuyClick(Sender: TObject);
+var
+   BeginDate,EndDate :variant;
+begin
+
+ BeginDate :=integer(trunc(DTPCBeginDate.DateTime));
+ EndDate :=integer(trunc(DTPCEndDate.DateTime));
+
+
+
+ with DefaultDataSet, DefaultReport do
+   begin
+    Close;
+
+     SetVariable('BeginDate', BeginDate);
+     SetVariable('EndDate', EndDate);
+
+     case (Sender as TToolButton).Tag of
+       1 :
+          SetVariable('Status', 'BUY');
+       2 :
+          SetVariable('Status', 'SELL');
+     end;
+    Open;
+
+    Preview;
+   end;    
+end;
+
+procedure TFrmExchange.RadioButton1Click(Sender: TObject);
+begin
+ DefaultReport :=QRConvertRep;
+ DefaultDataSet :=TOracleDataSet(DefaultReport.DataSet);
+end;
+
+procedure TFrmExchange.RadioButton2Click(Sender: TObject);
+begin
+ DefaultReport :=QRDetConvert;
+ DefaultDataSet :=TOracleDataSet(DefaultReport.DataSet);
+end;
+
+procedure TFrmExchange.DTPCEndDateChange(Sender: TObject);
+var
+  FileName :String;
+  Year, Month, Day : Word;
+begin
+ DecodeDate((Sender as TDateTimePicker).DateTime, Year, Month, Day);
+
+ with ExchangeDataMod,OPacExchange do
+  FileName := CallStringFunction('GenerateFileName',[Day]);
+
+ SaveConvert.FileName :=FileName;
+end;
+
+procedure TFrmExchange.ExchangeViewerTitleClick(Column: TColumn);
+var
+   TitleName :string;
+begin
+ if ExchangeViewer.DataSource.DataSet.IsEmpty then Exit;
+ Screen.Cursor := crHourGlass;
+ TitleName :=Column.FieldName;
+ try
+  with TOracleDataSet(ExchangeViewer.DataSource.DataSet) do
+   begin
+    SetVariable('Title',TitleName);
+    Refresh;
+   end;
+ finally
+  Screen.Cursor := crDefault;
+ end;
+end;
+
+procedure TFrmExchange.ActionRefreshExecute(Sender: TObject);
+var
+   FirstDate,LastDate:variant;
+begin
+ if PageControl.ActivePage.Name <>'TabSheetExchange' then Exit;
+
+ if ExchangeViewer.CanFocus then
+  ExchangeViewer.SetFocus;
+ Screen.Cursor:=crHourGlass;
+ ProgressBar.Show;
+ ProgressBar.Position :=0;
+ try
+  ProgressBar.StepBy(30);
+  FirstDate:=integer(trunc(DateTimePicker1.DateTime));
+  LastDate:=integer(trunc(DateTimePicker2.DateTime));
+  ProgressBar.StepBy(30);
+ with ExchangeDataMod do
+  begin
+   Exchange.Close;
+   Exchange.SetVariable('BeginDate',FirstDate);
+   Exchange.SetVariable('EndDate',LastDate);
+   ProgressBar.StepBy(40);
+   Exchange.Open;
+  end;
+ finally
+  Screen.Cursor:=crDefault;
+  ProgressBar.Hide;
+ end;
+end;
+
+procedure TFrmExchange.ToolButton18Click(Sender: TObject);
+var
+   FirstDate,LastDate:variant;
+begin
+ if ConvertationViewer.CanFocus then
+   ConvertationViewer.SetFocus;
+ Screen.Cursor:=crHourGlass;
+ ProgBar.Show;
+ ProgBar.Position :=0;
+ try
+  ProgBar.StepBy(30);
+  FirstDate:=integer(trunc(DTPCBeginDate.DateTime));
+  LastDate:=integer(trunc(DTPCEndDate.DateTime));
+  ProgBar.StepBy(30);
+ with ExchangeDataMod do
+  begin
+   ODSConvertation.Close;
+   ODSConvertation.SetVariable('BeginDate',FirstDate);
+   ODSConvertation.SetVariable('EndDate',LastDate);
+   ProgBar.StepBy(40);
+   ODSConvertation.Open;
+  end;
+ finally
+  Screen.Cursor:=crDefault;
+  ProgBar.Hide;
+ end;
+end; 
+
+procedure TFrmExchange.ActionPrintExecute(Sender: TObject);
+var
+   FirstDate,LastDate:variant;
+begin
+ if PageControl.ActivePage.Name <>'TabSheetExchange' then Exit;
+
+ FirstDate:=integer(trunc(DateTimePicker1.DateTime));
+ LastDate:=integer(trunc(DateTimePicker2.DateTime));
+ with ExchangeDataMod do
+  begin
+   TotalExchangeReport.SetVariable('BeginDate',FirstDate);
+   TotalExchangeReport.SetVariable('EndDate',LastDate);
+   Exchange.SetVariable('BeginDate',FirstDate);
+   Exchange.SetVariable('EndDate',LastDate);
+   FrmPrint.ShowModal;
+  end;     
+end;
+
+procedure TFrmExchange.ActionFileExecute(Sender: TObject);
+var
+   DBaseName,TblName:String;
+   Path  :String;
+   lpExistingFileName :array [0..255] of Char;
+   lpNewFileName :array [0..255] of Char;
+begin
+ if PageControl.ActivePage.Name <>'TabSheetExchange' then Exit;
+
+ Path :=ExtractFilePath(Application.ExeName)+'EXCH122.dbf';
+ StrPCopy(lpExistingFileName,Path);
+ StrPCopy(lpNewFileName,Edit1.Text);
+TRY
+ if  FileExists(Edit1.Text) then
+   if  MessageDlg(
+           Format('Overrite the Existing File ?'+#13+' %s  ',[Edit1.Text])
+           ,mtConfirmation
+           ,MBYESNOCANCEL,0
+        )<>mrYes  then  Exit;
+   //ShowMessage('www.Smart.az');
+   if not CopyFile(lpExistingFileName,lpNewFileName,False) then
+   begin
+     ShowMessage('File Creation UnSuccesful Terminated!');
+     Exit;
+   end;
+   DBaseName :=ExtractFileDir(Edit1.Text);
+   TblName  :=ExtractFileName(Edit1.Text);
+
+with   TblExchange  do
+ Begin
+  if  Active  then  Close;
+  DatabaseName :=DBaseName;
+  TableName :=TblName;
+  TblExchange.Open;
+  if not ExchangeDataMod.Exchange.Active then
+   ExchangeDataMod.Exchange.Open;
+  ExchangeDataMod.Exchange.First;
+  ExchangeDataMod.ODSBankCode.Open;
+  While not(ExchangeDataMod.Exchange.Eof) do
+  begin
+   with ExchangeDataMod do
+   begin
+   Insert;
+   // FieldByName('MANAT1').AsInteger :=Exchange.FieldByName('SellEquivalent').AsInteger;
+
+    FieldByName('WHEN').AsDateTime :=Exchange.FieldByName('Dat').AsDateTime;
+    FieldByName('BANK_CODE').AsString :=ODSBankCode.FieldByName('NB').AsString;
+    FieldByName('VALUTE').AsString :=Exchange.FieldByName('InterCode').AsString;
+    FieldByName('RATE1').AsString :=Exchange.FieldByName('SellRate').AsString;
+    FieldByName('TOTAL1').AsInteger :=Exchange.FieldByName('SellAmmount').AsInteger;
+    FieldByName('MANAT1').ASString :=Exchange.FieldByName('SellEquivalent').AsString;
+    FieldByName('RATE2').AsString :=Exchange.FieldByName('BuyRate').AsString;
+    FieldByName('TOTAL2').AsInteger :=Exchange.FieldByName('BuyAmmount').AsInteger;
+    FieldByName('MANAT2').AsString :=Exchange.FieldByName('BuyEquivalent').AsString;
+   Post;
+   Exchange.Next;
+   end;
+ end;
+ ShowMessage('Creating  file was succesful!');
+ ExchangeDataMod.ODSBankCode.Close;
+ End;
+EXCEPT
+ //ShowMessage('Creating  file Unsuccesful terminated!');
+ Raise;
+END;
+end;
+
+procedure TFrmExchange.ActionSettingsExecute(Sender: TObject);
+begin
+ if PageControl.ActivePage.Name <>'TabSheetExchange' then Exit; 
+ try
+  ExchangeDataMod.ODSTooling.Open;
+  FrmTool :=TFrmTool.Create(self);
+  FrmTool.ShowModal;
+ finally
+  FrmTool.Release;
+  ExchangeDataMod.ODSTooling.Close;
+ end;
+end;
+
+procedure TFrmExchange.ActionFirstExecute(Sender: TObject);
+begin
+  ExchangeViewer.DataSource.DataSet.First
+end;
+
+procedure TFrmExchange.ActionLastExecute(Sender: TObject);
+begin
+  ExchangeViewer.DataSource.DataSet.Last;
+end;
+
+procedure TFrmExchange.ActionPrintUpdate(Sender: TObject);
+begin
+ (Sender as TAction).Enabled :=
+           not ExchangeViewer.DataSource.DataSet.IsEmpty;
+end;
+
+procedure TFrmExchange.PageControlChange(Sender: TObject);
+var
+   i: word;
+begin
+ with TPageControl(Sender) do
+  for i :=0 to PageCount -1 do
+   Pages[i].Highlighted :=(Pages[i] = ActivePage)
+end;
+
+procedure TFrmExchange.ToolButton20Click(Sender: TObject);
+begin
+
+   cmexcel.Connect;
+   Cmexcel.ExportDataset(exchangedatamod.ODSConvertation,'List1',true)  ;
+   cmexcel.Disconnect;
+end;
+
+procedure TFrmExchange.ToolButton26Click(Sender: TObject);
+var
+   BeginDate,EndDate :variant;
+begin
+  with  exchangedatamod.Fullexcel do
+  begin
+  close;
+ BeginDate :=integer(trunc(DTPCBeginDate.DateTime));
+ EndDate :=integer(trunc(DTPCEndDate.DateTime));
+ SetVariable('BeginDate', BeginDate);
+ SetVariable('EndDate', EndDate);
+ SetVariable('Status', 'BUY');
+ open;
+ end;
+
+    cmexcel.Connect;
+    Cmexcel.ExportDataset(exchangedatamod.fullexcel,'List1',true)  ;
+    cmexcel.Disconnect;
+
+
+
+
+end;
+
+procedure TFrmExchange.ToolButton30Click(Sender: TObject);
+var
+   BeginDate,EndDate :variant;
+begin
+ with  exchangedatamod.Fullexcel do
+   begin
+   close;
+   BeginDate :=integer(trunc(DTPCBeginDate.DateTime));
+   EndDate :=integer(trunc(DTPCEndDate.DateTime));
+   SetVariable('BeginDate', BeginDate);
+   SetVariable('EndDate', EndDate);
+   SetVariable('Status', 'SELL');
+   open;
+    end;
+   cmexcel.Connect;
+   Cmexcel.ExportDataset(exchangedatamod.fullexcel,'List1',true)  ;
+   cmexcel.Disconnect;
+
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TFrmExchange,
+    Class_FrmExchange,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.
+

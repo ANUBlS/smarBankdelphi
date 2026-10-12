@@ -1,0 +1,777 @@
+object frmClaims: TfrmClaims
+  Left = 214
+  Top = 94
+  BorderStyle = bsDialog
+  Caption = 'Zererler'
+  ClientHeight = 555
+  ClientWidth = 537
+  Color = clBtnFace
+  Font.Charset = RUSSIAN_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  OldCreateOrder = False
+  OnActivate = FormActivate
+  PixelsPerInch = 96
+  TextHeight = 13
+  object GroupBox1: TGroupBox
+    Left = 0
+    Top = 0
+    Width = 537
+    Height = 265
+    Align = alTop
+    Caption = 'Тямир хяржляри'
+    TabOrder = 0
+    object DBGrid1: TDBGrid
+      Left = 2
+      Top = 46
+      Width = 527
+      Height = 98
+      DataSource = InsMKDataMod.DSClaims
+      TabOrder = 0
+      TitleFont.Charset = RUSSIAN_CHARSET
+      TitleFont.Color = clWindowText
+      TitleFont.Height = -11
+      TitleFont.Name = 'Azl Sans Serif'
+      TitleFont.Style = []
+      Columns = <
+        item
+          Expanded = False
+          FieldName = 'ENAME'
+          Title.Caption = 'Ещтиййат щисся'
+          Title.Color = clNavy
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = []
+          Width = 180
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'COUNT'
+          Title.Caption = 'Мигдары'
+          Title.Color = clNavy
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = []
+          Width = 60
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'COST'
+          Title.Caption = 'Гиймяти'
+          Title.Color = clNavy
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = []
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'STATE'
+          PickList.Strings = (
+            'Тямир  олунур'
+            'Дяйишдирилир')
+          Title.Caption = 'Щиссянин вязиййяти'
+          Title.Color = clNavy
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = []
+          Width = 100
+          Visible = True
+        end>
+    end
+    object DBGrid2: TDBGrid
+      Left = 2
+      Top = 180
+      Width = 527
+      Height = 81
+      DataSource = InsMKDataMod.DSClaimSal
+      TabOrder = 1
+      TitleFont.Charset = RUSSIAN_CHARSET
+      TitleFont.Color = clWindowText
+      TitleFont.Height = -11
+      TitleFont.Name = 'Azl Sans Serif'
+      TitleFont.Style = []
+      Columns = <
+        item
+          Expanded = False
+          FieldName = 'NAME'
+          PickList.Strings = (
+            'Дямирчи'
+            'Рянэсаз'
+            'Чилинэяр'
+            'Пласмасшик'
+            'Електрик')
+          Title.Caption = 'Ямяк щаггы цзря'
+          Title.Color = clNavy
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = []
+          Width = 185
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'COST'
+          Title.Caption = 'Гиймяти'
+          Title.Color = clNavy
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = []
+          Width = 100
+          Visible = True
+        end>
+    end
+    object DBNavigator2: TDBNavigator
+      Left = 5
+      Top = 18
+      Width = 330
+      Height = 25
+      DataSource = InsMKDataMod.DSClaims
+      Flat = True
+      Hints.Strings = (
+        'Биринжи'
+        'Яввялки'
+        'Сонракы'
+        'Ахырынжы'
+        'Ялавя'
+        'Ляьв'
+        'Редактя'
+        'Тясдиг етмяк'
+        'Имтина'
+        'Йенилямяк')
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 2
+      OnClick = DBNavigator2Click
+    end
+    object DBNavigator1: TDBNavigator
+      Left = 5
+      Top = 153
+      Width = 330
+      Height = 25
+      DataSource = InsMKDataMod.DSClaimSal
+      Flat = True
+      Hints.Strings = (
+        'Биринжи'
+        'Яввялки'
+        'Сонракы'
+        'Ахырынжы'
+        'Ялавя'
+        'Ляьв'
+        'Редактя'
+        'Тясдиг етмяк'
+        'Имтина'
+        'Йенилямяк'
+        '')
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 3
+      OnClick = DBNavigator2Click
+    end
+  end
+  object Panel1: TPanel
+    Left = 0
+    Top = 508
+    Width = 537
+    Height = 47
+    Align = alBottom
+    BevelInner = bvRaised
+    BevelOuter = bvLowered
+    TabOrder = 1
+    object SpeedButton1: TSpeedButton
+      Left = 112
+      Top = 18
+      Width = 23
+      Height = 22
+      Glyph.Data = {
+        F6000000424DF600000000000000760000002800000010000000100000000100
+        0400000000008000000000000000000000001000000000000000000000000000
+        80000080000000808000800000008000800080800000C0C0C000808080000000
+        FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00777777777777
+        7777770000000000000770330000007703077033000000770307703300000077
+        0307703300000000030770333333333333077033000000003307703077777777
+        0307703077777777030770307777777703077030777777770307703077777777
+        0007703077777777070770000000000000077777777777777777}
+      OnClick = SpeedButton1Click
+    end
+    object Label3: TLabel
+      Left = 7
+      Top = 2
+      Width = 201
+      Height = 13
+      Caption = 'Сыьорта щадисясинин баш вермя тарихи'
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = [fsBold]
+      ParentFont = False
+    end
+    object BitBtn1: TBitBtn
+      Left = 458
+      Top = 18
+      Width = 75
+      Height = 25
+      TabOrder = 0
+      OnClick = BitBtn1Click
+      Kind = bkOK
+    end
+    object Report: TBitBtn
+      Left = 360
+      Top = 18
+      Width = 94
+      Height = 25
+      Caption = 'Тямир хяржляри'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 1
+      OnClick = ReportClick
+      Glyph.Data = {
+        76010000424D7601000000000000760000002800000020000000100000000100
+        04000000000000010000130B0000130B00001000000000000000000000000000
+        800000800000008080008000000080008000808000007F7F7F00BFBFBF000000
+        FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00300000000000
+        00033FFFFFFFFFFFFFFF0888888888888880777777777777777F088888888888
+        8880777777777777777F0000000000000000FFFFFFFFFFFFFFFF0F8F8F8F8F8F
+        8F80777777777777777F08F8F8F8F8F8F9F0777777777777777F0F8F8F8F8F8F
+        8F807777777777777F7F0000000000000000777777777777777F3330FFFFFFFF
+        03333337F3FFFF3F7F333330F0000F0F03333337F77773737F333330FFFFFFFF
+        03333337F3FF3FFF7F333330F00F000003333337F773777773333330FFFF0FF0
+        33333337F3FF7F3733333330F08F0F0333333337F7737F7333333330FFFF0033
+        33333337FFFF7733333333300000033333333337777773333333}
+      NumGlyphs = 2
+    end
+    object dtpClaim: TDateTimePicker
+      Left = 8
+      Top = 18
+      Width = 105
+      Height = 21
+      CalAlignment = dtaLeft
+      Date = 39221.5737089468
+      Time = 39221.5737089468
+      DateFormat = dfShort
+      DateMode = dmComboBox
+      Kind = dtkDate
+      ParseInput = False
+      TabOrder = 2
+    end
+    object BitBtn2: TBitBtn
+      Left = 275
+      Top = 18
+      Width = 82
+      Height = 25
+      Caption = 'Зяряр акты'
+      TabOrder = 3
+      OnClick = BitBtn2Click
+      Glyph.Data = {
+        76010000424D7601000000000000760000002800000020000000100000000100
+        04000000000000010000130B0000130B00001000000000000000000000000000
+        800000800000008080008000000080008000808000007F7F7F00BFBFBF000000
+        FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00300000000000
+        00033FFFFFFFFFFFFFFF0888888888888880777777777777777F088888888888
+        8880777777777777777F0000000000000000FFFFFFFFFFFFFFFF0F8F8F8F8F8F
+        8F80777777777777777F08F8F8F8F8F8F9F0777777777777777F0F8F8F8F8F8F
+        8F807777777777777F7F0000000000000000777777777777777F3330FFFFFFFF
+        03333337F3FFFF3F7F333330F0000F0F03333337F77773737F333330FFFFFFFF
+        03333337F3FF3FFF7F333330F00F000003333337F773777773333330FFFF0FF0
+        33333337F3FF7F3733333330F08F0F0333333337F7737F7333333330FFFF0033
+        33333337FFFF7733333333300000033333333337777773333333}
+      NumGlyphs = 2
+    end
+    object BitBtn3: TBitBtn
+      Left = 187
+      Top = 18
+      Width = 82
+      Height = 25
+      Caption = 'Сыьорта акты'
+      TabOrder = 4
+      OnClick = BitBtn3Click
+      Glyph.Data = {
+        76010000424D7601000000000000760000002800000020000000100000000100
+        04000000000000010000130B0000130B00001000000000000000000000000000
+        800000800000008080008000000080008000808000007F7F7F00BFBFBF000000
+        FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00300000000000
+        00033FFFFFFFFFFFFFFF0888888888888880777777777777777F088888888888
+        8880777777777777777F0000000000000000FFFFFFFFFFFFFFFF0F8F8F8F8F8F
+        8F80777777777777777F08F8F8F8F8F8F9F0777777777777777F0F8F8F8F8F8F
+        8F807777777777777F7F0000000000000000777777777777777F3330FFFFFFFF
+        03333337F3FFFF3F7F333330F0000F0F03333337F77773737F333330FFFFFFFF
+        03333337F3FF3FFF7F333330F00F000003333337F773777773333330FFFF0FF0
+        33333337F3FF7F3733333330F08F0F0333333337F7737F7333333330FFFF0033
+        33333337FFFF7733333333300000033333333337777773333333}
+      NumGlyphs = 2
+    end
+  end
+  object GroupBox2: TGroupBox
+    Left = 0
+    Top = 265
+    Width = 537
+    Height = 243
+    Align = alClient
+    Caption = 'Щадися щаггында '
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = [fsBold]
+    ParentFont = False
+    TabOrder = 2
+    object Label1: TLabel
+      Left = 8
+      Top = 24
+      Width = 31
+      Height = 13
+      Caption = 'Район'
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Label2: TLabel
+      Left = 176
+      Top = 26
+      Width = 25
+      Height = 13
+      Caption = 'Кцчя'
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Label4: TLabel
+      Left = 8
+      Top = 56
+      Width = 77
+      Height = 13
+      Caption = 'Щадисянин тясвири'
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Label5: TLabel
+      Left = 8
+      Top = 98
+      Width = 34
+      Height = 13
+      Caption = 'Сцрцжц'
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Label6: TLabel
+      Left = 8
+      Top = 80
+      Width = 270
+      Height = 13
+      Caption = 'Щадисядя иштирак едян диэяр автомобил щаггында'
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = [fsBold]
+      ParentFont = False
+    end
+    object Label7: TLabel
+      Left = 336
+      Top = 26
+      Width = 49
+      Height = 13
+      Caption = 'Автосервис'
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Label8: TLabel
+      Left = 296
+      Top = 98
+      Width = 30
+      Height = 13
+      Caption = 'Марка'
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Label9: TLabel
+      Left = 8
+      Top = 122
+      Width = 70
+      Height = 13
+      Caption = 'Дювлят нюмряси'
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Label10: TLabel
+      Left = 296
+      Top = 122
+      Width = 29
+      Height = 13
+      Caption = 'Модел'
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Label11: TLabel
+      Left = 8
+      Top = 148
+      Width = 62
+      Height = 13
+      Caption = 'Яризянин тарихи'
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Label12: TLabel
+      Left = 8
+      Top = 195
+      Width = 72
+      Height = 13
+      Caption = 'Мяктубун тарихи'
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Label13: TLabel
+      Left = 8
+      Top = 220
+      Width = 72
+      Height = 13
+      Caption = 'Мяктубун №-си'
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Label14: TLabel
+      Left = 208
+      Top = 195
+      Width = 60
+      Height = 13
+      Caption = 'Арайышын №-си'
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Label15: TLabel
+      Left = 208
+      Top = 220
+      Width = 75
+      Height = 13
+      Caption = 'Протоколун №-си'
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Label16: TLabel
+      Left = 8
+      Top = 176
+      Width = 115
+      Height = 13
+      Caption = 'РПИ-ня эюндярилмиш: '
+    end
+    object Label17: TLabel
+      Left = 296
+      Top = 148
+      Width = 111
+      Height = 13
+      Caption = 'Щесаблама актынын тарихи'
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+    end
+    object DBEdit1: TDBEdit
+      Left = 48
+      Top = 24
+      Width = 121
+      Height = 21
+      DataField = 'REGION'
+      DataSource = InsMKDataMod.DSClaimDescription
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 0
+    end
+    object DBEdit2: TDBEdit
+      Left = 208
+      Top = 24
+      Width = 121
+      Height = 21
+      DataField = 'STREET'
+      DataSource = InsMKDataMod.DSClaimDescription
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 1
+    end
+    object DBEdit3: TDBEdit
+      Left = 96
+      Top = 52
+      Width = 433
+      Height = 21
+      DataField = 'DETAIL'
+      DataSource = InsMKDataMod.DSClaimDescription
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 2
+    end
+    object DBEdit4: TDBEdit
+      Left = 88
+      Top = 96
+      Width = 193
+      Height = 21
+      DataField = 'PERSON'
+      DataSource = InsMKDataMod.DSClaimDescription
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 3
+    end
+    object DBLookupComboBox1: TDBLookupComboBox
+      Left = 387
+      Top = 96
+      Width = 145
+      Height = 21
+      DataField = 'MARK'
+      DataSource = InsMKDataMod.DSClaimDescription
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      KeyField = 'NAME'
+      ListField = 'NAME'
+      ListSource = InsMKDataMod.DSMarks
+      ParentFont = False
+      TabOrder = 4
+    end
+    object DBEdit5: TDBEdit
+      Left = 408
+      Top = 24
+      Width = 121
+      Height = 21
+      DataField = 'AVTOSERVIS'
+      DataSource = InsMKDataMod.DSClaimDescription
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 5
+    end
+    object DBEdit6: TDBEdit
+      Left = 88
+      Top = 120
+      Width = 193
+      Height = 21
+      DataField = 'STATENUM'
+      DataSource = InsMKDataMod.DSClaimDescription
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 6
+    end
+    object DBLookupComboBox2: TDBLookupComboBox
+      Left = 387
+      Top = 120
+      Width = 145
+      Height = 21
+      DataField = 'MODEL'
+      DataSource = InsMKDataMod.DSClaimDescription
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      KeyField = 'NAME'
+      ListField = 'NAME'
+      ListSource = InsMKDataMod.DSModels
+      ParentFont = False
+      TabOrder = 7
+    end
+    object dtApp: TDateTimePicker
+      Left = 88
+      Top = 144
+      Width = 195
+      Height = 21
+      CalAlignment = dtaLeft
+      Date = 39265.6544590857
+      Time = 39265.6544590857
+      DateFormat = dfShort
+      DateMode = dmComboBox
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      Kind = dtkDate
+      ParseInput = False
+      ParentFont = False
+      TabOrder = 8
+    end
+    object dtLetter: TDateTimePicker
+      Left = 88
+      Top = 192
+      Width = 105
+      Height = 21
+      CalAlignment = dtaLeft
+      Date = 39265.6592907176
+      Time = 39265.6592907176
+      DateFormat = dfShort
+      DateMode = dmComboBox
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      Kind = dtkDate
+      ParseInput = False
+      ParentFont = False
+      TabOrder = 9
+    end
+    object DBEdit7: TDBEdit
+      Left = 88
+      Top = 216
+      Width = 103
+      Height = 21
+      DataField = 'LETTERNUM'
+      DataSource = InsMKDataMod.DSClaimDescription
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 10
+    end
+    object DBEdit8: TDBEdit
+      Left = 296
+      Top = 192
+      Width = 121
+      Height = 21
+      DataField = 'SPRNUM'
+      DataSource = InsMKDataMod.DSClaimDescription
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 11
+    end
+    object DBEdit9: TDBEdit
+      Left = 296
+      Top = 216
+      Width = 121
+      Height = 21
+      DataField = 'PRTNUM'
+      DataSource = InsMKDataMod.DSClaimDescription
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 12
+    end
+    object edAct: TDateTimePicker
+      Left = 416
+      Top = 144
+      Width = 116
+      Height = 21
+      CalAlignment = dtaLeft
+      Date = 39288.768933912
+      Time = 39288.768933912
+      DateFormat = dfShort
+      DateMode = dmComboBox
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      Kind = dtkDate
+      ParseInput = False
+      ParentFont = False
+      TabOrder = 13
+    end
+  end
+  object WordExporter: TINSWordExporter
+    Left = 32
+    Top = 69
+  end
+end

@@ -1,0 +1,93 @@
+object CC_Add_Company: TCC_Add_Company
+  Left = 446
+  Top = 553
+  ActiveControl = EditCompany
+  BorderStyle = bsDialog
+  Caption = 'Ўирк€т'
+  ClientHeight = 126
+  ClientWidth = 318
+  Color = clBtnFace
+  Font.Charset = RUSSIAN_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  FormStyle = fsMDIForm
+  OldCreateOrder = False
+  Position = poScreenCenter
+  OnActivate = FormActivate
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 318
+    Height = 126
+    Align = alClient
+    TabOrder = 0
+    object GroupBox1: TGroupBox
+      Left = 1
+      Top = 1
+      Width = 316
+      Height = 63
+      Align = alTop
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 0
+      object Label1: TLabel
+        Left = 16
+        Top = 16
+        Width = 52
+        Height = 13
+        Caption = 'Ўирк€тин ады'
+      end
+      object EditCompany: TEdit
+        Tag = 1
+        Left = 16
+        Top = 32
+        Width = 282
+        Height = 21
+        TabOrder = 0
+        OnKeyPress = EditCompanyKeyPress
+      end
+    end
+    object GroupBox2: TGroupBox
+      Left = 1
+      Top = 64
+      Width = 316
+      Height = 61
+      Align = alClient
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 1
+      object Button1: TButton
+        Tag = 1
+        Left = 120
+        Top = 18
+        Width = 75
+        Height = 25
+        Caption = '√€бул'
+        TabOrder = 0
+        OnClick = Button1Click
+        OnKeyPress = Button1KeyPress
+      end
+    end
+  end
+  object NLSLocalizer1: TNLSLocalizer
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = [fsBold]
+    Left = 16
+    Top = 80
+  end
+end

@@ -1,0 +1,100 @@
+﻿unit EditFormImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, CMDBSearchEdit, DB, OracleData, Buttons, CurrencyEdit;
+
+type
+  TEditForm = class(TForm)
+    Label1: TLabel;
+    CMSearchEditLoacAccs: TCMSearchEdit;
+    OracleDataSet1: TOracleDataSet;
+    DataSource1: TDataSource;
+    OracleDataSet1ID: TFloatField;
+    OracleDataSet1KLI_ID: TFloatField;
+    OracleDataSet1OP_ID: TFloatField;
+    OracleDataSet1ACC_NO: TWideStringField;
+    OracleDataSet1VAL_ACC: TIntegerField;
+    OracleDataSet1NAME: TWideStringField;
+    OracleDataSet1OPEN_DAT: TDateTimeField;
+    OracleDataSet1CLOSE_DAT: TDateTimeField;
+    OracleDataSet1BAL_CN1: TFloatField;
+    OracleDataSet1BAL_CN2: TFloatField;
+    OracleDataSet1BAL_CN3: TFloatField;
+    OracleDataSet1BAL_CN4: TFloatField;
+    OracleDataSet1FILIAL: TIntegerField;
+    OracleDataSet1SIM_OTCET: TFloatField;
+    OracleDataSet1TIPACC: TWideStringField;
+    OracleDataSet1LIMIT: TFloatField;
+    OracleDataSet1OLD_ACC_NO: TWideStringField;
+    OracleDataSet1PAIR_ACC: TFloatField;
+    OracleDataSet1INSIDER: TWideStringField;
+    OracleDataSet1SID: TFloatField;
+    OracleDataSet1TEMPID: TFloatField;
+    OracleDataSet1OWNID: TFloatField;
+    OracleDataSet1P_CUSTID: TFloatField;
+    OracleDataSet1SYMB: TWideStringField;
+    OracleDataSet1BANK_CODE: TFloatField;
+    OracleDataSet1CURRENCYNAME: TWideStringField;
+    OracleDataSet1USERINSERT: TWideStringField;
+    DataSource2: TDataSource;
+    Label2: TLabel;
+    CMSearchEdit1: TCMSearchEdit;
+    CurrencyEdit1: TCurrencyEdit;
+    Label3: TLabel;
+    Label4: TLabel;
+    CurrencyEdit2: TCurrencyEdit;
+    Label5: TLabel;
+    CurrencyEdit3: TCurrencyEdit;
+    Edit1: TEdit;
+    Label6: TLabel;
+    BitBtn1: TBitBtn;
+    BitBtn2: TBitBtn;
+    procedure BitBtn2Click(Sender: TObject);
+    procedure BitBtn1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  EditForm: TEditForm;
+
+implementation
+
+{$R *.dfm}
+  uses sboapiDataModuleImpl,SimCorpImpl;
+procedure TEditForm.BitBtn1Click(Sender: TObject);
+begin
+  with SimCorp do
+  begin
+  if  OracleDataSet1.FieldByName('status').AsInteger=1 then
+  begin
+  ShowMessage('Bu əməliyatı dəyişmək olmaz !');
+  exit;
+  end;
+
+   OraclePackage1.CallProcedure('edit_arxive',
+     ['p_id' ,OracleDataSet1.FieldByName('id').AsInteger,
+      'p_debitacc',CMSearchEditLoacAccs.Text,
+      'p_kreditacc',CMSearchEdit1.Text,
+      'p_debitamount',CurrencyEdit1.Value,
+      'p_kreditamount',CurrencyEdit2.Value,
+      'p_lamount',CurrencyEdit3.Value,
+      'p_description',Edit1.Text,
+      'p_type',OracleDataSet1.FieldByName('typ').AsInteger]);
+
+      OracleDataSet1.Refresh;
+  end;
+   close;
+end;
+
+procedure TEditForm.BitBtn2Click(Sender: TObject);
+begin
+close
+end;
+
+end.

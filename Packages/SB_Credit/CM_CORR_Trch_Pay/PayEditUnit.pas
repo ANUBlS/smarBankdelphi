@@ -1,0 +1,90 @@
+unit PayEditUnit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+   ComCtrls, StdCtrls, Buttons;
+
+type
+  TPaymentEditForm = class(TForm)
+    SpeedButton1: TSpeedButton;
+    SpeedButton2: TSpeedButton;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    EditRest: TEdit;
+    EditDueRest: TEdit;
+    EditinterestRest: TEdit;
+    EditDueinterestRest: TEdit;
+    DateTimePicker: TDateTimePicker;
+    Label5: TLabel;
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure SpeedButton2Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  PaymentEditForm: TPaymentEditForm;
+
+implementation
+
+{$R *.DFM}
+
+uses CorrectDatModImpl,Commondecls,sbsystem;
+
+procedure TPaymentEditForm.SpeedButton1Click(Sender: TObject);
+var
+   P_CrdID :integer;
+   P_PayDate :TDateTime;
+   P_Rest :Real;
+   P_DueRest :Real;
+   P_InterestRest :Real;
+   P_DueInterestRest :Real;
+begin
+  P_CrdID := CorrectDatMod.Payments.fieldbyname('ID').asinteger;
+  P_PayDate := integer(trunc(DateTimePicker.DateTime));
+  P_Rest := StrToFloat(EditRest.Text);
+  P_DueRest := StrToFloat(EditDueRest.Text);
+  P_interestRest := StrToFloat(EditinterestRest.Text);
+  P_DueInterestRest := StrToFloat(EditDueinterestRest.Text);
+
+  with CorrectDatMod ,CM_CORR_TRCH_PAY ,Payments do
+  begin
+      CallProcedure('edit_payments',[P_CrdID ,
+                                    P_PayDate ,
+                                    P_Rest ,
+                                    P_interestRest ,
+                                    P_DueRest ,
+                                    P_DueInterestRest]);
+     Refresh;                               
+  end;
+
+close;
+end;
+
+procedure TPaymentEditForm.FormCreate(Sender: TObject);
+begin
+//    DateTimePicker.DateTime := Get_CurrentDate;
+
+
+
+end;
+
+procedure TPaymentEditForm.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+   if ord(Key) = VK_ESCAPE then Close;
+end;
+
+procedure TPaymentEditForm.SpeedButton2Click(Sender: TObject);
+begin
+   Close;
+end;
+
+end.

@@ -1,0 +1,153 @@
+object DMProvisions: TDMProvisions
+  OldCreateOrder = False
+  OnCreate = DataModuleCreate
+  OnDestroy = DataModuleDestroy
+  Height = 369
+  Width = 606
+  object DSRPolisNo1: TDataSource
+    DataSet = DSPolisNo1
+    Left = 136
+    Top = 8
+  end
+  object DSRPolisNo2: TDataSource
+    DataSet = DSPolisNo2
+    Left = 136
+    Top = 57
+  end
+  object DSPolisNo1: TOracleDataSet
+    SQL.Strings = (
+      'select * from ins_polisnum'
+      'where type_id in(1,-1)')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000300000004000000490044000100000000000E000000540059005000
+      45005F00490044000100000000001400000050004F004C004900430059005F00
+      4E0055004D00010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 40
+    Top = 8
+    object DSPolisNo1ID: TFloatField
+      FieldName = 'ID'
+    end
+    object DSPolisNo1TYPE_ID: TFloatField
+      FieldName = 'TYPE_ID'
+    end
+    object DSPolisNo1POLICY_NUM: TWideStringField
+      FieldName = 'POLICY_NUM'
+      Size = 128
+    end
+  end
+  object DSPolisNo2: TOracleDataSet
+    SQL.Strings = (
+      'select * from ins_polisnum'
+      'where type_id in(13,-1)')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000300000004000000490044000100000000000E000000540059005000
+      45005F00490044000100000000001400000050004F004C004900430059005F00
+      4E0055004D00010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 40
+    Top = 63
+    object DSPolisNo2ID: TFloatField
+      FieldName = 'ID'
+    end
+    object DSPolisNo2TYPE_ID: TFloatField
+      FieldName = 'TYPE_ID'
+    end
+    object DSPolisNo2POLICY_NUM: TWideStringField
+      FieldName = 'POLICY_NUM'
+      Size = 128
+    end
+  end
+  object DSContracts: TOracleDataSet
+    SQL.Strings = (
+      'select * from ins_contracts'
+      'WHERE close_prefix=0'
+      'and id=:pid')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000080000003A00500049004400030000000000000000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 40
+    Top = 110
+  end
+  object DSins_motorkasco: TOracleDataSet
+    SQL.Strings = (
+      'select * from ins_motorkasco'
+      'where cid=:pcid')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000A0000003A00500043004900440003000000000000000000
+      0000}
+    Session = sboapiDataModule.SBSession
+    Left = 39
+    Top = 161
+  end
+  object DSRContracts: TDataSource
+    DataSet = DSContracts
+    Left = 136
+    Top = 108
+  end
+  object DSRins_motorkasco: TDataSource
+    DataSet = DSins_motorkasco
+    Left = 136
+    Top = 158
+  end
+  object DSRrespon: TDataSource
+    DataSet = DSrespon
+    Left = 136
+    Top = 218
+  end
+  object DSrespon: TOracleDataSet
+    SQL.Strings = (
+      
+        'SELECT a.rowid,a.id, a.typeid, a.cid, a.close_prefix, nvl(a.resp' +
+        '_ammount,0) as resp_ammount,'
+      
+        '       nvl(a.resp_premium,0) as resp_premium, a.resp_pilisnum, n' +
+        'vl(a.resp_cid,0) as resp_cid'
+      '  FROM ins_contract_responsibility a'
+      'where a.cid=:p_cid')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000C0000003A0050005F004300490044000300000000000000
+      00000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000800000004000000490044000100000000000C000000540059005000
+      4500490044000100000000000600000043004900440001000000000018000000
+      43004C004F00530045005F005000520045004600490058000100000000001800
+      000052004500530050005F0041004D004D004F0055004E005400010000000000
+      1800000052004500530050005F005000520045004D00490055004D0001000000
+      00001A00000052004500530050005F00500049004C00490053004E0055004D00
+      0100000000001000000052004500530050005F00430049004400010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 40
+    Top = 217
+    object DSresponID: TFloatField
+      FieldName = 'ID'
+    end
+    object DSresponTYPEID: TFloatField
+      FieldName = 'TYPEID'
+    end
+    object DSresponCID: TFloatField
+      FieldName = 'CID'
+    end
+    object DSresponCLOSE_PREFIX: TFloatField
+      FieldName = 'CLOSE_PREFIX'
+    end
+    object DSresponRESP_AMMOUNT: TFloatField
+      FieldName = 'RESP_AMMOUNT'
+    end
+    object DSresponRESP_PREMIUM: TFloatField
+      FieldName = 'RESP_PREMIUM'
+    end
+    object DSresponRESP_PILISNUM: TWideStringField
+      FieldName = 'RESP_PILISNUM'
+      Size = 200
+    end
+    object DSresponRESP_CID: TFloatField
+      FieldName = 'RESP_CID'
+    end
+  end
+end

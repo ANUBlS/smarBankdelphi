@@ -1,0 +1,110 @@
+unit InsNewPayment;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, ExtCtrls, Buttons, DBCtrls;
+
+type
+
+  TCreateType = (ctNew, ctEdit);
+  TDifferentsException = Exception;
+
+
+  TfmNewPayments = class(TForm)
+    GroupBox1: TGroupBox;
+    Panel1: TPanel;
+    edDate: TEdit;
+    Label1: TLabel;
+    Label2: TLabel;
+    edAmmount: TEdit;
+    Gkfy: TLabel;
+    DBLookupComboBox1: TDBLookupComboBox;
+    btOk: TBitBtn;
+    BitBtn2: TBitBtn;
+    procedure FormCreate(Sender: TObject);
+    procedure btOkClick(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+  private
+    { Private declarations }
+    CreatedType : TCreateType;
+    PaymentID : Integer;
+  public
+    { Public declarations }
+    constructor CreateIt(cType : TCreateType; payID : Integer = -1 );
+    function  CheckIsOld():Boolean;
+  end;
+
+var
+  fmNewPayments: TfmNewPayments;
+
+implementation
+
+uses InsDataMod, PaymentsMainImpl;
+
+{$R *.DFM}
+
+constructor TfmNewPayments.CreateIt(cType : TCreateType; payID : Integer = -1 );
+begin
+  CreatedType := cType;
+  PaymentID := payID;
+  inherited Create(Owner);
+end;
+
+function TfmNewPayments.CheckIsOld():Boolean;
+begin
+ Result := True;
+ with PayDataMod, OPSBOP do
+  if CallDateFunction('get_Date', []) > ODSPaymentsPAYDATE.Value then
+    raise TDifferentsException.Create('Evvelki gunleri deyishdirmek olmaz!');
+ Result := False;
+end;
+
+
+procedure TfmNewPayments.FormCreate(Sender: TObject);
+begin
+ with PayDataMod, OPSBOP do
+  edDate.Text := DateTimeToStr(CallDateFunction('get_Date', []));
+
+ with PayDataMod, ODSPlan do begin
+   SetVariable( 'insid', id);
+   Open;
+ end;
+
+ with PayDataMod do
+ if CreatedType = ctEdit  then begin
+   if not CheckIsOld() then
+     btOk.Enabled := True;
+   edAmmount.Text := FloatToStr(ODSPaymentsAMMOUNT.Value);
+   DBLookupComboBox1.KeyValue := ODSPaymentsPLANID.Value;
+ end
+ else btOk.Enabled := True;
+
+ 
+end;
+
+procedure TfmNewPayments.btOkClick(Sender: TObject);
+begin
+
+  with PayDataMod do
+  if CreatedType = ctNew  then begin
+    if  OPCOMMON.CallBooleanFunction('addpayment', [id, StrToFloat(edAmmount.Text), ODSPlanID.Value] ) then
+    ModalResult := mrOk;
+  end
+  else
+    if  OPCOMMON.CallBooleanFunction('updpayment', [id, ODSPaymentsID.Value,
+                                                      StrToFloat(edAmmount.Text), ODSPlanID.Value] ) then
+    ModalResult := mrOk;
+
+
+end;
+
+procedure TfmNewPayments.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+ with PayDataMod do
+  ODSPlan.Close
+end;
+
+end.

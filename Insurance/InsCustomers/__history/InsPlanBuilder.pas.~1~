@@ -1,0 +1,93 @@
+unit InsPlanBuilder;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, ComCtrls, Buttons, ExtCtrls, Mask, DBCtrls, Oracle, HintBox,
+  CurrencyEdit;
+
+type
+  TfmPlanBuilder = class(TForm)
+    GroupBox1: TGroupBox;
+    Panel1: TPanel;
+    BitBtn1: TBitBtn;
+    BitBtn2: TBitBtn;
+    dtpBegin: TDateTimePicker;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    cbType: TComboBox;
+    Label4: TLabel;
+    Label5: TLabel;
+    dtpEnd: TDateTimePicker;
+    edPeriod: TEdit;
+    hbError: THintBox;
+    edAmmount: TEdit;
+    procedure BitBtn1Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure cbTypeChange(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  fmPlanBuilder: TfmPlanBuilder;
+
+implementation
+
+uses InsDataModule;
+
+{$R *.DFM}
+
+procedure TfmPlanBuilder.BitBtn1Click(Sender: TObject);
+begin
+// if MessageDlg('Plan hazirlansin', mtConfirmation,
+//                                     mbYesNoCancel, 0 ) = mrYes then
+ with InsDataMod, OPCOMMON, ODSContracts do
+ try
+  CallBooleanFunction('makeplan', [FieldByName('ID').asInteger,
+                                   dtpBegin.DateTime,
+                                   dtpEnd.DateTime,
+                                   cbType.ItemIndex,
+                                   StrToFloat(Trim(edAmmount.Text)),
+                                   StrToInt(Trim(edPeriod.Text))]);
+  ODSPayPlan.refresh;
+  ModalResult := mrOk;
+ except
+  on E:EOracleError do
+   case E.ErrorCode of
+     20001 : hbError.ShowMessage(E.Message);
+     20002 : hbError.ShowMessage(E.Message);
+     else ShowMessage(E.Message);
+   end;
+  end;
+
+end;
+
+procedure TfmPlanBuilder.FormCreate(Sender: TObject);
+begin
+ with InsDataMod, OPCOMMON, ODSContracts do begin
+   dtpBegin.DateTime := FieldByName('Begin_date').asDateTime;
+   dtpEnd.DateTime := FieldByName('End_date').asDateTime;
+   cbType.ItemIndex := 0;
+   edPeriod.Text := IntToStr(trunc((dtpEnd.DateTime - dtpBegin.DateTime)/30));
+   edAmmount.Text := CurrToStr(FieldByName('AMMOUNT').asCurrency);
+ end;
+
+end;
+
+procedure TfmPlanBuilder.cbTypeChange(Sender: TObject);
+begin
+  case cbType.ItemIndex  of
+    0 : edPeriod.Text := IntToStr(trunc((dtpEnd.DateTime - dtpBegin.DateTime)/30));
+    1 : edPeriod.Text := IntToStr(trunc((dtpEnd.DateTime - dtpBegin.DateTime)/(30*3)));
+    2 : edPeriod.Text := IntToStr(trunc((dtpEnd.DateTime - dtpBegin.DateTime)/(30*6)));
+    3 : edPeriod.Text := IntToStr(trunc((dtpEnd.DateTime - dtpBegin.DateTime)/(30*12)));
+  end;
+
+end;
+
+end.

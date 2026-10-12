@@ -1,0 +1,106 @@
+unit SettingCodeImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ExtCtrls, ComCtrls, ImgList;
+
+type
+ EItemNotFound = class(Exception);
+  TSettingCodeFrm = class(TForm)
+    TreeView1: TTreeView;
+    StatusBar1: TStatusBar;
+    Panel1: TPanel;
+    ImageList1: TImageList;
+    procedure FormCreate(Sender: TObject);
+    procedure TreeView1Click(Sender: TObject);
+  private
+    { Private declarations }
+      procedure FormingTreeView;
+  public
+    { Public declarations }
+  end;
+
+var
+  SettingCodeFrm: TSettingCodeFrm;
+
+implementation
+
+uses DmBudcetImpl;
+
+{$R *.dfm}
+procedure TSettingCodeFrm.FormCreate(Sender: TObject);
+begin
+FormingTreeView
+end;
+
+procedure TSettingCodeFrm.FormingTreeView;
+var
+  TempSubdivision : String;
+  TempSubdivid : integer;
+  i: Real;
+begin
+
+  with TreeView1.Items do begin
+    Clear;
+    //MirrorView.Items.Clear;
+    with DmBudcet.StructurDSet do begin
+    Close;
+    OPen;
+
+      First;
+      while not eof do begin
+        try
+          if FieldByName('previd').Value=0 then
+         begin
+            TreeView1.Items.Add(nil, FieldByName('name').Value);
+ //          MirrorView.Items.Add(nil, FloatToStr(FieldByName('ID').asFloat));
+          end
+          else
+            begin
+              TempSubdivid:= FieldByName('id').Value;
+              TempSubdivision:= FieldByName('name').Value;
+              i:= fieldByName('id').Value;
+              Locate('id', FieldByName('previd').Value, []);
+              TreeView1.Items.AddChild(TreeView1.Items[FieldByName('Index_by_name').Value],TempSubdivision); { Add a root node }
+              Locate('id', TempSubdivid, []);
+              if DmBudcet.DelControl.Active then
+ DmBudcet.DelControl.close;
+  DmBudcet.DelControl.SetVariable('id',TempSubdivid);
+ DmBudcet.DelControl.open;
+       if DmBudcet.DelControl.RecordCount=0 then
+              TreeView1.Items[FieldByName('Index_by_name').Value].StateIndex:=1;
+            end;
+
+
+          Next;
+        except
+          raise EItemNotFound.CreateFmt('Item (id=%d) not found',[1]{, [PrevID]});
+          Next;
+        end;
+      end;
+    end;
+  end;
+end;
+
+
+procedure TSettingCodeFrm.TreeView1Click(Sender: TObject);
+var
+  P:TPoint;
+  Node:TTreeNode;
+begin
+  Node:=TreeView1.Selected;
+  GetCursorPos(P);
+  P := TreeView1.ScreenToClient(P);
+  if (htOnStateIcon in TreeView1.GetHitTestInfoAt(P.X,P.Y)) then
+     if Assigned(Node) then
+  begin
+    if Node.StateIndex = 1 then
+      Node.StateIndex := 2
+    else if Node.StateIndex = 2 then
+      Node.StateIndex := 1
+  end;
+end;
+
+end.

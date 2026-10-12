@@ -1,0 +1,125 @@
+unit FrmIEAddEditImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, OracleData, StdCtrls, Mask, DBCtrlsEh, DBLookupEh, DBCtrls,
+  NLSLocalizer, DBGridEh;
+
+type
+  TFrmIEAddEdit = class(TForm)
+    Button1: TButton;
+    Button2: TButton;
+    GroupBox1: TGroupBox;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    CBBranch: TDBLookupComboBox;
+    DBLookupComboBox2: TDBLookupComboBox;
+    DBLookupComboboxEh1: TDBLookupComboboxEh;
+    IEAccountList: TOracleDataSet;
+    IEAccountListID: TFloatField;
+    IEAccountListACC_NO: TWideStringField;
+    IEAccountListVAL_ACC: TIntegerField;
+    IEAccountListNAME: TWideStringField;
+    BranchList: TOracleDataSet;
+    BranchListNAME: TWideStringField;
+    DataSrcIEAccountList: TDataSource;
+    DataSrcBranchList: TDataSource;
+    CurrencyList: TOracleDataSet;
+    CurrencyListVALUTE: TIntegerField;
+    CurrencyListVAL_NAME: TWideStringField;
+    DataSrcCurrencyList: TDataSource;
+    BranchListID: TFloatField;
+    DBEdit1: TDBEdit;
+    Label4: TLabel;
+    Edit1: TEdit;
+    Label6: TLabel;
+    DBLookupComboboxEh2: TDBLookupComboboxEh;
+    Label5: TLabel;
+    ods_meh: TOracleDataSet;
+    dsrc_meh: TDataSource;
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure DBLookupComboboxEh1DropDown(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmIEAddEdit: TFrmIEAddEdit;
+
+implementation
+uses actImpl,sboapiDataModuleImpl,SBTranslateProc;
+{$R *.DFM}
+
+procedure TFrmIEAddEdit.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+Edit1.Clear;
+end;
+
+procedure TFrmIEAddEdit.FormCreate(Sender: TObject);
+begin
+
+CurrencyList.open;
+BranchList.open ;
+ods_meh.Open;
+SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TFrmIEAddEdit.FormDestroy(Sender: TObject);
+begin
+IEAccountList.close;
+CurrencyList.close;
+BranchList.close ;
+ods_meh.Close;
+end;
+
+procedure TFrmIEAddEdit.Button1Click(Sender: TObject);
+begin
+  with ActFrom.LinkValuesData do
+  Post;
+  edit1.Clear;
+IEAccountList.Close;
+IEAccountList.SQL[24]:=' ';
+IEAccountList.Open;
+
+
+ModalResult := mrOK;
+end;
+
+procedure TFrmIEAddEdit.Button2Click(Sender: TObject);
+begin
+  with ActFrom.LinkValuesData do
+  Cancel;
+  ModalResult := mrOK;
+end;
+
+procedure TFrmIEAddEdit.DBLookupComboboxEh1DropDown(Sender: TObject);
+begin
+
+if edit1.Text<>'' then
+begin
+IEAccountList.Close;
+IEAccountList.SQL[24]:=' ';
+IEAccountList.SQL[24]:=IEAccountList.SQL[24]+' where bal_cn1 like upper (''%' + edit1.Text + '%'')';
+IEAccountList.Open;
+
+end
+else
+begin
+IEAccountList.Close;
+IEAccountList.SQL[24]:=' ';
+IEAccountList.Open;
+
+
+end;
+end;
+
+end.

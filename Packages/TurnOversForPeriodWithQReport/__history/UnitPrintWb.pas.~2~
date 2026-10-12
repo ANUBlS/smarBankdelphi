@@ -1,0 +1,46 @@
+unit UnitPrintWb;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls, OleCtrls, SHDocVw, ComCtrls;
+
+type
+  TPrinting = class(TForm)
+    WebBrowser1: TWebBrowser;
+    Panel1: TPanel;
+    ButtonPrint: TButton;
+    Button1: TButton;
+    prt: TRichEdit;
+    procedure ButtonPrintClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Printing: TPrinting;
+
+implementation
+
+{$R *.dfm}
+
+procedure TPrinting.ButtonPrintClick(Sender: TObject);
+var vaIn, vaOut: OleVariant;
+begin
+  WebBrowser1.ControlInterface.ExecWB(OLECMDID_PRINT, OLECMDEXECOPT_PROMPTUSER,    vaIn, vaOut)
+end;
+
+procedure TPrinting.FormCreate(Sender: TObject);
+var Doc :variant;
+begin
+ Doc := Printing.WebBrowser1.Document;
+  Doc.Clear;
+  Doc.Write(Printing.prt.Text);
+  Doc.Close;
+end;
+
+end.

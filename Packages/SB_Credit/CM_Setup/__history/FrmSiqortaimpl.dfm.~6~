@@ -1,0 +1,112 @@
+object FrmSiqorta: TFrmSiqorta
+  Left = 459
+  Top = 219
+  ClientHeight = 332
+  ClientWidth = 346
+  Color = clBtnFace
+  Font.Charset = RUSSIAN_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poScreenCenter
+  OnCreate = FormCreate
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 346
+    Height = 332
+    Align = alClient
+    BevelInner = bvLowered
+    TabOrder = 0
+    object DBGrid1: TDBGrid
+      Left = 2
+      Top = 2
+      Width = 342
+      Height = 299
+      Align = alClient
+      DataSource = DataSource1
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      Options = [dgEditing, dgTitles, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgConfirmDelete, dgCancelOnExit]
+      ParentFont = False
+      TabOrder = 0
+      TitleFont.Charset = RUSSIAN_CHARSET
+      TitleFont.Color = clWindowText
+      TitleFont.Height = -11
+      TitleFont.Name = 'Tahoma'
+      TitleFont.Style = []
+      Columns = <
+        item
+          Expanded = False
+          FieldName = 'ID'
+          Title.Caption = 'ID si'
+          Title.Color = clGradientInactiveCaption
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clBlack
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 62
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'NAME'
+          Title.Caption = 'Ad'#305
+          Title.Color = clGradientInactiveCaption
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clBlack
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 259
+          Visible = True
+        end>
+    end
+    object DBNavigator1: TDBNavigator
+      Left = 2
+      Top = 301
+      Width = 342
+      Height = 29
+      DataSource = DataSource1
+      Align = alBottom
+      Flat = True
+      TabOrder = 1
+    end
+  end
+  object OracleDataSet1: TOracleDataSet
+    SQL.Strings = (
+      'SELECT rowid ,a.*'
+      '  FROM cm_insuranceagency a')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000030000000400000049004400010000000000080000004E0041004D00
+      450001000000000006000000530049004400010000000000}
+    Session = CMDataModule.CMSession
+    Left = 232
+    Top = 56
+    object OracleDataSet1ID: TIntegerField
+      FieldName = 'ID'
+    end
+    object OracleDataSet1NAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 90
+    end
+    object OracleDataSet1SID: TWideStringField
+      FieldName = 'SID'
+      Size = 22
+    end
+  end
+  object DataSource1: TDataSource
+    DataSet = OracleDataSet1
+    Left = 144
+    Top = 56
+  end
+end

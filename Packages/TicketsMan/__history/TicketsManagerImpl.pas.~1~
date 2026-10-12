@@ -1,0 +1,552 @@
+unit TicketsManagerImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, LDialogs,
+  ActiveX, AxCtrls, TicketsManagerProj_TLB, StdVcl, ToolWin, ComCtrls,
+  ExtCtrls, Grids, DBGrids, ImgList, ActnList, Db, Menus, IniFiles;
+
+type
+  TTicketsManager = class(TActiveForm, ITicketsManager)
+    Panel1: TPanel;
+    grTickets: TDBGrid;
+    imgsTM: TImageList;
+    actsTM: TActionList;
+    actRefreshTickets: TAction;
+    CoolBar1: TCoolBar;
+    ToolBar1: TToolBar;
+    ToolButton1: TToolButton;
+    actShowFull: TAction;
+    ToolButton2: TToolButton;
+    actOpenArchive: TAction;
+    ToolButton3: TToolButton;
+    actCommitTickets: TAction;
+    ToolButton4: TToolButton;
+    ToolButton5: TToolButton;
+    actNewTicket: TAction;
+    actEditTicket: TAction;
+    ToolButton6: TToolButton;
+    ToolButton7: TToolButton;
+    ToolButton8: TToolButton;
+    TicketsMenu: TPopupMenu;
+    N1: TMenuItem;
+    N2: TMenuItem;
+    N3: TMenuItem;
+    N4: TMenuItem;
+    N5: TMenuItem;
+    N6: TMenuItem;
+    N7: TMenuItem;
+    N8: TMenuItem;
+    actSettings: TAction;
+    ToolButton9: TToolButton;
+    ToolButton10: TToolButton;
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure actRefreshTicketsExecute(Sender: TObject);
+    procedure actShowFullExecute(Sender: TObject);
+    procedure actOpenArchiveExecute(Sender: TObject);
+    procedure actCommitTicketsExecute(Sender: TObject);
+    procedure actNewTicketExecute(Sender: TObject);
+    procedure actEditTicketExecute(Sender: TObject);
+    procedure N4DrawItem(Sender: TObject; ACanvas: TCanvas; ARect: TRect;
+      Selected: Boolean);
+    procedure actSettingsExecute(Sender: TObject);
+  private
+    { Private declarations }
+    FEvents: ITicketsManagerEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+  public
+    { Public declarations }
+    procedure Initialize; override;
+  end;
+
+implementation
+
+uses ComObj, ComServ, DataModTM, TicketsFullViewImpl, TicketsArchiveImpl,
+  TicketsNewImpl, TicketsRepImpl, TicketsReportSettings;
+
+{$R *.DFM}
+
+{ TTicketsManager }
+
+procedure TTicketsManager.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_TicketsManagerPage); }
+end;
+
+procedure TTicketsManager.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as ITicketsManagerEvents;
+end;
+
+procedure TTicketsManager.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TTicketsManager.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TTicketsManager.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TTicketsManager.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TTicketsManager.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TTicketsManager.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TTicketsManager.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TTicketsManager.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TTicketsManager.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TTicketsManager.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TTicketsManager.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TTicketsManager.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TTicketsManager.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TTicketsManager.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TTicketsManager.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TTicketsManager.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TTicketsManager.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TTicketsManager.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TTicketsManager.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TTicketsManager._Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TTicketsManager.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TTicketsManager.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TTicketsManager.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TTicketsManager.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TTicketsManager.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TTicketsManager.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TTicketsManager.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TTicketsManager.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TTicketsManager.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TTicketsManager.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TTicketsManager.Set_AxBorderStyle(
+  Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TTicketsManager.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TTicketsManager.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TTicketsManager.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TTicketsManager.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TTicketsManager.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TTicketsManager.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TTicketsManager.Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TTicketsManager.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TTicketsManager.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TTicketsManager.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TTicketsManager.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TTicketsManager.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TTicketsManager.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+procedure TTicketsManager.ActiveFormCreate(Sender: TObject);
+begin
+  DataModuleTicketMan := TDataModuleTicketMan.Create(Self);
+  frmTicketFullView := TfrmTicketFullView.Create(Self);
+  frmArchive := TfrmArchive.Create(Self);
+  frmNewTicket := TfrmNewTicket.Create(Self);
+  frmSettings := TfrmSettings.Create(Self);
+  qrpTicket := TqrpTicket.Create(Self);
+end;
+
+procedure TTicketsManager.actRefreshTicketsExecute(Sender: TObject);
+begin
+  with DataModuleTicketMan.ODSTickets do begin
+    if Active then Close;
+    Open;
+  end;
+end;
+
+procedure TTicketsManager.actShowFullExecute(Sender: TObject);
+begin
+  frmTicketFullView.ShowModal;
+end;
+
+procedure TTicketsManager.actOpenArchiveExecute(Sender: TObject);
+begin
+  //
+  with DataModuleTicketMan, ODSArchive do begin
+    if Active then Close;
+    Open;
+    frmArchive.ShowModal;
+  end;
+end;
+
+procedure TTicketsManager.actCommitTicketsExecute(Sender: TObject);
+var
+  i: Integer;
+  msgstr: String;
+  F: TIniFile;
+begin
+  F := TIniFile.Create(ExtractFilePath(paramstr(0))+'tman.ini');
+  if DataModuleTicketMan.ODSTicketsSTATUS.AsInteger=5 then
+    msgstr := stringreplace(f.ReadString('tm','commithoks','Тикетляр тясдигляндикдян сонра ХЮЩКС-а ямялиййат эеэедяжяк.'+#13#10+'Яминсиниз?'),'#13#10',#13#10,[])
+  else
+    msgstr := f.ReadString('tm','committckt','Тикетляр тясдиглянсин?');
+  if f.ReadString('tm','commithoks','')='' then
+    f.WriteString('tm','commithoks','Тикетляр тясдигляндикдян сонра ХЮЩКС-а ямялиййат эеэедяжяк.'+#13#10+'Яминсиниз?');
+  if f.ReadString('tm','committckt','')='' then
+    f.WriteString('tm','committckt','Тикетляр тясдиглянсин?');
+  if MessageDlg(msgstr,mtConfirmation,[mbYes,mbNo],0)<>IDYES then exit;
+  with grTickets, SelectedRows, DataSource.DataSet, DataModuleTicketMan, tm_manage do begin
+    for i:=0 to Count-1 do begin
+      GotoBookmark(TBookmark(Items[i]));
+      CallProcedure('committicket',[ODSTicketsID.AsVariant]);
+    end;     
+    Close;
+    Open;
+  end;
+end;
+
+procedure TTicketsManager.actNewTicketExecute(Sender: TObject);
+begin
+  with frmNewTicket, DataModuleTicketMan.ODSAllTickets do begin
+    edTicketDate.Date := Now;
+    if not active then Open;
+    Insert;
+    ShowModal;
+  end;
+end;
+
+procedure TTicketsManager.actEditTicketExecute(Sender: TObject);
+begin
+  with frmNewTicket, DataModuleTicketMan, ODSAllTickets do begin
+    if active then close;       
+    open;
+    Locate('ID',ODSTicketsID.AsVariant,[]);
+    Edit;
+    ShowModal;
+  end;
+end;
+
+procedure TTicketsManager.N4DrawItem(Sender: TObject; ACanvas: TCanvas;
+  ARect: TRect; Selected: Boolean);
+var
+  LineBottom: Integer;
+  SText: String;
+  Bar: TRect;
+begin
+  with ACanvas, Sender as TMenuItem do
+  begin
+    with Font do
+    begin
+      Name := 'Azl Sans Serif';
+      Charset := RUSSIAN_CHARSET;
+      if Default then
+        Style := [fsBold];
+    end;
+    if Caption = '-' then
+    begin
+      Pen.Color := clBlack;
+      LineBottom := (ARect.Top + (ARect.Bottom - ARect.Top) div 2)-1;
+      MoveTo(ARect.Left, LineBottom);
+      LineTo(ARect.Right, LineBottom);
+      inc(LineBottom);
+      Pen.Color := clWhite;
+      MoveTo(ARect.Left, LineBottom);
+      LineTo(ARect.Right, LineBottom);
+    end
+    else
+    begin
+      if Selected then
+      begin
+        Brush.Color := clNavy;
+        if Enabled then
+          Font.Color := clWhite
+        else
+          Font.Color := clSilver;
+      end
+      else
+      begin
+        Brush.Color := clBtnFace;
+        if Enabled then
+          Font.Color := clBlack
+        else
+          Font.Color := clGrayText;
+      end;
+      Bar := ARect;
+      Inc(Bar.Left, 22);
+      FillRect(Bar);
+      TextOut(ARect.Left+{17}22, ARect.Top+1, Caption);
+    end;
+    // draw shortcut
+    SText := ShortCutToText(ShortCut);
+    TextOut(ARect.Right-TextWidth(SText)-2, ARect.Top+1, SText);
+    if ImageIndex <> -1 then
+      with GetParentMenu do
+        if Assigned(Images) then
+        begin
+          if Checked then
+          begin
+            Bar.Left := ARect.Left + 1;
+            Bar.Right := Bar.Left + 16;
+            Bar.Top := ARect.Top + 1;
+            Bar.Bottom := Bar.Top + 16;
+
+            ACanvas.Brush.Color := clBtnShadow;
+            ACanvas.FrameRect(Bar);
+
+            Inc(Bar.Left, 2);
+            Inc(Bar.Right, 2);
+            Inc(Bar.Top, 2);
+            Inc(Bar.Bottom, 2);
+            
+            ACanvas.Brush.Color := clBtnHighlight;
+            ACanvas.FrameRect(Bar);
+
+            Dec(Bar.Left, 1);
+            Dec(Bar.Right, 1);
+            Dec(Bar.Top, 1);
+            Dec(Bar.Bottom, 1);
+
+            if Selected then
+              ACanvas.Brush.Color := clBtnFace
+            else
+              ACanvas.Brush.Color := clBtnHighlight;
+            ACanvas.FillRect(Bar);
+          end;
+
+          Images.Draw(ACanvas, ARect.Left, ARect.Top, ImageIndex, Enabled);
+        end;
+  end;
+end;
+
+procedure TTicketsManager.actSettingsExecute(Sender: TObject);
+begin
+  with frmSettings do begin
+    ShowModal;
+  end;
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TTicketsManager,
+    Class_TicketsManager,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

@@ -1,0 +1,50 @@
+object CMDataModule: TCMDataModule
+  OldCreateOrder = False
+  OnCreate = DataModuleCreate
+  Height = 469
+  Width = 784
+  object CMSession: TOracleSession
+    Cursor = crDefault
+    DesignConnection = True
+    LogonUsername = 'CreditsMgr'
+    LogonPassword = 's6c457f61'
+    LogonDatabase = 'UNIC56'
+    ThreadSafe = True
+    Preferences.ConvertUTF = cuUTF8ToUTF16
+    OptimizerGoal = ogFirstRows
+    IsolationLevel = ilReadCommitted
+    Left = 40
+    Top = 40
+  end
+  object DSBankDate: TOracleDataSet
+    SQL.Strings = (
+      'select TEK_DAT , PRED_DAT '
+      '  from SB_SYSDAT')
+    Optimize = False
+    Session = CMSession
+    Left = 152
+    Top = 40
+  end
+  object Branch: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      '   KOD_FIL'
+      'from SB_BANKINFO')
+    Optimize = False
+    Session = CMSession
+    Left = 152
+    Top = 112
+  end
+  object CM_LOGIN: TOraclePackage
+    Session = CMSession
+    PackageName = 'CM_LOGIN'
+    Left = 232
+    Top = 40
+  end
+  object OrPack_SL: TOraclePackage
+    Session = CMSession
+    PackageName = 'SL_CONTROL'
+    Left = 40
+    Top = 112
+  end
+end

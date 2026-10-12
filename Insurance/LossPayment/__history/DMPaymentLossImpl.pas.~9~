@@ -1,0 +1,55 @@
+unit DMPaymentLossImpl;
+
+interface
+
+uses
+  SysUtils, Classes, DB, OracleData;
+
+type
+  TDMPaymentLoss = class(TDataModule)
+    DSRPaymentLoss: TDataSource;
+    DSPaymentLoss: TOracleDataSet;
+    DSPaymentLossReal: TOracleDataSet;
+    DSSysdat: TOracleDataSet;
+    DSRPaymentLossReal: TDataSource;
+    DSRSysdat: TDataSource;
+    DSSysdatTEK_DAT: TDateTimeField;
+    DSSysdatPRED_DAT: TDateTimeField;
+    DSSysdatARC_DAY: TDateTimeField;
+    DSSysdatCLOSE: TIntegerField;
+    DSPaymentLossID: TFloatField;
+    DSPaymentLossCID: TFloatField;
+    DSPaymentLossTRID: TFloatField;
+    DSPaymentLossSTAGE_TESDIQ_DAT: TDateTimeField;
+    DSPaymentLossNAME: TWideStringField;
+    DSPaymentLossMEBLEG: TFloatField;
+    DSpaymentAcc: TOracleDataSet;
+    DSpaymentAccID: TFloatField;
+    DSpaymentAccACC_NO: TWideStringField;
+    DSRpaymentAcc: TDataSource;
+    procedure DataModuleCreate(Sender: TObject);
+    procedure DataModuleDestroy(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  DMPaymentLoss: TDMPaymentLoss;
+
+implementation
+
+{$R *.dfm}
+ uses sboapiDataModuleimpl,SBTranslateProc,CommanParametrs;
+procedure TDMPaymentLoss.DataModuleCreate(Sender: TObject);
+begin
+DSSysdat.Open;
+end;
+
+procedure TDMPaymentLoss.DataModuleDestroy(Sender: TObject);
+begin
+DSSysdat.Close;
+end;
+
+end.

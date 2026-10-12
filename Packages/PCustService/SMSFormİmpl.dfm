@@ -1,0 +1,476 @@
+object SMSForm: TSMSForm
+  Left = 0
+  Top = 0
+  BorderIcons = [biSystemMenu]
+  Caption = 'SMSForm'
+  ClientHeight = 429
+  ClientWidth = 883
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poDesktopCenter
+  OnCanResize = FormCanResize
+  OnCreate = FormCreate
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object PageControl1: TPageControl
+    Left = 0
+    Top = 0
+    Width = 883
+    Height = 429
+    ActivePage = TabSheet1
+    Align = alClient
+    TabOrder = 0
+    object TabSheet1: TTabSheet
+      Caption = '   SMS      '
+      object XFPanel2: TXFPanel
+        Left = 0
+        Top = 0
+        Width = 875
+        Height = 351
+        Align = alClient
+        TabOrder = 0
+        object SMSMemo: TMemo
+          Left = 1
+          Top = 32
+          Width = 873
+          Height = 318
+          Align = alClient
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          MaxLength = 148
+          ParentFont = False
+          TabOrder = 0
+          OnChange = SMSMemoChange
+        end
+        object XFPanel3: TXFPanel
+          Left = 1
+          Top = 1
+          Width = 873
+          Height = 31
+          Align = alTop
+          TabOrder = 1
+          object XFLabel2: TXFLabel
+            Left = 5
+            Top = 8
+            Width = 65
+            Height = 13
+            Caption = 'Standart SMS'
+          end
+          object DBLookupComboBox1: TDBLookupComboBox
+            Left = 93
+            Top = 6
+            Width = 172
+            Height = 21
+            KeyField = 'ID'
+            ListField = 'DESCRIPTION'
+            ListSource = Dsrc_sms
+            TabOrder = 0
+            OnCloseUp = DBLookupComboBox1CloseUp
+          end
+          object XFButton1: TXFButton
+            Left = 333
+            Top = 4
+            Width = 75
+            Height = 25
+            Caption = 'File'
+            DoubleBuffered = True
+            ParentDoubleBuffered = False
+            TabOrder = 1
+            OnClick = XFButton1Click
+          end
+        end
+        object DTP1: TDateTimePicker
+          Left = 352
+          Top = 264
+          Width = 186
+          Height = 21
+          Date = 42018.536464143520000000
+          Time = 42018.536464143520000000
+          TabOrder = 2
+        end
+        object Edit2: TEdit
+          Left = 31
+          Top = 272
+          Width = 202
+          Height = 21
+          TabOrder = 3
+          Text = 'Edit2'
+        end
+        object Memo1: TMemo
+          Left = 465
+          Top = 113
+          Width = 387
+          Height = 124
+          Lines.Strings = (
+            '')
+          TabOrder = 4
+        end
+        object Memo2: TMemo
+          Left = 31
+          Top = 134
+          Width = 387
+          Height = 124
+          Lines.Strings = (
+            '')
+          TabOrder = 5
+        end
+      end
+      object XFPanel1: TXFPanel
+        Left = 0
+        Top = 351
+        Width = 875
+        Height = 50
+        Align = alBottom
+        TabOrder = 1
+        object XFLabel1: TXFLabel
+          Left = 4
+          Top = 28
+          Width = 292
+          Height = 14
+          Caption = '* Diqq'#601't! Mesaj m'#601'tni yaln'#305'z ingilis h'#601'rfl'#601'ri il'#601' yaz'#305'lmal'#305'd'#305'r'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clRed
+          Font.Height = -12
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+        end
+        object XFBitBtn1: TXFBitBtn
+          Left = 334
+          Top = 17
+          Width = 62
+          Height = 25
+          Caption = 'G'#246'nd'#601'r'
+          DoubleBuffered = True
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentDoubleBuffered = False
+          ParentFont = False
+          TabOrder = 0
+          OnClick = XFBitBtn1Click
+        end
+        object Edit1: TEdit
+          Left = 15
+          Top = 4
+          Width = 41
+          Height = 21
+          Color = clMenu
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+          ReadOnly = True
+          TabOrder = 1
+          Text = '148'
+        end
+        object Button1: TButton
+          Left = 448
+          Top = 24
+          Width = 75
+          Height = 25
+          Caption = 'Button1'
+          TabOrder = 2
+          OnClick = Button1Click
+        end
+      end
+    end
+    object TabSheet2: TTabSheet
+      Caption = '   Email  '
+      ImageIndex = 1
+      object XFPanel4: TXFPanel
+        Left = 0
+        Top = 366
+        Width = 875
+        Height = 35
+        Align = alBottom
+        TabOrder = 0
+        object XFBitBtn2: TXFBitBtn
+          Left = 238
+          Top = 7
+          Width = 62
+          Height = 25
+          Caption = 'G'#246'nd'#601'r'
+          DoubleBuffered = True
+          ParentDoubleBuffered = False
+          TabOrder = 0
+        end
+      end
+      object XFPanel5: TXFPanel
+        Left = 0
+        Top = 0
+        Width = 875
+        Height = 366
+        Align = alClient
+        TabOrder = 1
+        object EmailMemo: TMemo
+          Left = 1
+          Top = 26
+          Width = 873
+          Height = 339
+          Align = alClient
+          TabOrder = 0
+          Touch.ParentTabletOptions = False
+          Touch.TabletOptions = [toPressAndHold]
+        end
+        object XFPanel6: TXFPanel
+          Left = 1
+          Top = 1
+          Width = 873
+          Height = 25
+          Align = alTop
+          TabOrder = 1
+          object XFRadioButton3: TXFRadioButton
+            Left = 50
+            Top = 4
+            Width = 122
+            Height = 15
+            BiDiMode = bdLeftToRight
+            Caption = 'Hams'#305'na g'#246'nd'#601'r      '
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = [fsBold, fsUnderline]
+            ParentBiDiMode = False
+            ParentFont = False
+            ParentShowHint = False
+            ShowHint = False
+            TabOrder = 0
+          end
+          object XFRadioButton4: TXFRadioButton
+            Left = 200
+            Top = 2
+            Width = 130
+            Height = 17
+            BiDiMode = bdLeftToRight
+            Caption = 'Se'#231'ilmi'#351#601' g'#246'nd'#601'r  '
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = [fsBold, fsUnderline]
+            ParentBiDiMode = False
+            ParentFont = False
+            TabOrder = 1
+          end
+        end
+      end
+    end
+  end
+  object sms: TOracleDataSet
+    SQL.Strings = (
+      'select '#39'0'#39' as id from dual'
+      'order by :title')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000C0000003A005400490054004C0045000100000003000000
+      69640000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000006400000012000000500048004F004E0045005F004D004F0042000100
+      0000000004000000490044000100000000000E00000049004E0046004F005F00
+      490044000100000000001200000043005500530054005F004E0041004D004500
+      0100000000002800000049004E0043004F00520050004F005200410054004900
+      4F004E005F004E0055004D004200450052000100000000002000000054005000
+      48005F0043004F004E0054004100430054005F00540059005000450001000000
+      00002C0000005400500048005F0043004F004D004D0055004E00490043004100
+      540049004F004E005F0054005900500045000100000000001400000054005000
+      48005F004E0055004D0042004500520001000000000018000000410044004400
+      52004500530053005F0054005900500045000100000000001800000041004400
+      440052004500530053005F004300550053005400010000000000120000004300
+      4900540059005F0043005500530054000100000000002200000043004F005500
+      4E005400520059005F0043004F00440045005F00430055005300540001000000
+      0000160000004400490052004500430054004F0052005F004900440001000000
+      0000120000004400410054005F00550053005400410056000100000000000E00
+      00004400410054005F004E0041004C000100000000001400000045004D004100
+      49004C005F00430055005300540001000000000010000000550052004C005F00
+      43005500530054000100000000002600000049004E0043004F00520050004F00
+      52004100540049004F004E005F00530054004100540045000100000000002400
+      000049004E0043004F00520050004F0052004100540049004F004E005F004300
+      4E00540052000100000000001A0000005400500048005F004500580054004500
+      4E00530049004F004E000100000000000E0000005400500048005F005A004900
+      5000010000000000240000005400500048005F0043004F0055004E0054005200
+      59005F0050005200450046004900580001000000000012000000540050004800
+      5F00530054004100540045000100000000001200000046004900520053005400
+      4E0041004D0045000100000000001400000050004100540052004F004E005900
+      4D0049004300010000000000100000004C004100530054004E0041004D004500
+      0100000000002A00000049004E0046004F005F005400500048005F0043004F00
+      4E0054004100430054005F005400590050004500010000000000200000004900
+      4E0046004F005F005400500048005F0043004F0055004E005400520059000100
+      000000002A00000049004E0046004F005F005400500048005F0043004F005500
+      4E005400520059005F0043004F00440045000100000000001A00000049004E00
+      46004F005F005400500048005F0043004900540059000100000000001C000000
+      49004E0046004F005F005400500048005F005300540041005400450001000000
+      00001800000049004E0046004F005F005400500048005F005A00490050000100
+      000000002E00000049004E0046004F005F005400500048005F0043004F005500
+      4E005400520059005F005000520045004600490058000100000000001E000000
+      49004E0046004F005F005400500048005F004100440052004500530053000100
+      000000003600000049004E0046004F005F005400500048005F0043004F004D00
+      4D0055004E00490043004100540049004F004E005F0054005900500045000100
+      000000001E00000049004E0046004F005F005400500048005F004E0055004D00
+      4200450052000100000000002400000049004E0046004F005F00540050004800
+      5F0045005800540045004E00530049004F004E00010000000000220000004900
+      4E0046004F005F0043004F004E0054004100430054005F005400590050004500
+      01000000000006000000550052004C0001000000000010000000500041005300
+      530050004F005200540001000000000012000000420049005200540048004400
+      410054004500010000000000140000004200490052005400480050004C004100
+      4300450001000000000014000000460041004D005F0053005400410054005500
+      53000100000000001600000044004F0043005F0043004F0055004E0054005200
+      59000100000000001800000043004900540049005A0045004E00530048004900
+      500032000100000000001800000043004900540049005A0045004E0053004800
+      49005000330001000000000018000000460041004B0054005F0043004F005500
+      4E0054005200590001000000000012000000460041004B0054005F0043004900
+      5400590001000000000010000000460041004B0054005F005A00490050000100
+      000000001400000057004F0052004B005F0050004C0041004300450001000000
+      00001200000057004F0052004B005F0050004F00530054000100000000001600
+      000057004F0052004B005F004100440052004500530053000100000000001400
+      000057004F0052004B005F00500048004F004E0045000100000000000C000000
+      41004400520045005300530001000000000016000000460041004B0054005F00
+      4100440052004500530053000100000000000A000000500048004F004E004500
+      0100000000000A00000045004D00410049004C00010000000000100000004F00
+      500045004E004400410054004500010000000000060000005300450058000100
+      000000000C000000550053004500520049004400010000000000180000005000
+      41005300530050005F004E0055004D0042004500520001000000000014000000
+      41004400520053005F0053005400410054004500010000000000120000004100
+      4400520053005F0043004900540059000100000000001000000044004F004300
+      5F00540059005000450001000000000012000000530046004500520041005F00
+      4400450059000100000000000C0000004F0054005200410053004C0001000000
+      0000120000004E0041004C004F0047005F004B004F0044000100000000000E00
+      00004F00520047005F0053004F00420001000000000016000000420049005200
+      540048005F0053005400410054004500010000000000080000004E004F005400
+      45000100000000000600000049004E004E000100000000001400000053004800
+      4F00520054005F004E0041004D00450001000000000014000000470052004F00
+      550050005F004B004C0049004500010000000000100000005000410053005000
+      44004100540045000100000000001200000043004C004F00530045005F004400
+      41005400010000000000140000004E004500520045005A004900440045004E00
+      54000100000000000E0000005600490044005F0053004F004200010000000000
+      140000005000520049004E00410044005F004B004F0044000100000000001200
+      0000500041005300500050004C004100430045000100000000000E0000005000
+      410053005300500049004E000100000000001200000043005500530054005F00
+      54005900500045000100000000001000000043005500530054005F004A005500
+      52000100000000001200000043005500530054005F0050004800590053000100
+      000000000E00000043005500530054005F004600530001000000000006000000
+      420049004B00010000000000140000005200490053004B005F00430041005400
+      45004700010000000000140000005200490053004B0044004500530043004900
+      44000100000000001E00000043005500530054005F005200490053004B005F00
+      4300410054004500470001000000000010000000430041005400450047004F00
+      520059000100000000001600000043004900540049005A0045004E0053004800
+      4900500001000000000014000000500041005300530045005800500049005200
+      45000100000000001400000049004400430055005300540049004E0046004F00
+      01000000000014000000530041004D0045004C00590044004100540045000100
+      000000001800000057004F0052004B005F004F0054005200410053004C004900
+      0100000000001800000057004F0052004B005F005600490044005F0053004F00
+      42000100000000001A0000004D004F004E00540048004C005900500052004F00
+      460049005400010000000000140000005100550041004C004900540059005F00
+      490044000100000000000E00000043004F004D00500041004E00490001000000
+      000022000000460041004B0054005F004100440052004500530053005F004F00
+      57004E00450052000100000000000C0000004900440043005500530054000100
+      00000000}
+    Session = sboapiDataModule.SBSession
+    Left = 24
+    Top = 56
+    object smsID: TIntegerField
+      FieldName = 'ID'
+      Required = True
+    end
+    object smsPHONE_MOB: TWideStringField
+      FieldName = 'PHONE_MOB'
+      Size = 120
+    end
+  end
+  object ODS_FilesPath: TOracleDataSet
+    SQL.Strings = (
+      'select description from settings where name='#39'GoAmlFilesPath'#39)
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      0500000001000000160000004400450053004300520049005000540049004F00
+      4E00010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 120
+    Top = 48
+    object ODS_FilesPathDESCRIPTION: TWideStringField
+      FieldName = 'DESCRIPTION'
+      Size = 1024
+    end
+  end
+  object sys: TOracleDataSet
+    SQL.Strings = (
+      'select sysdate from dual')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000010000000E0000005300590053004400410054004500010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 264
+    Top = 96
+    object sysSYSDATE: TDateTimeField
+      FieldName = 'SYSDATE'
+    end
+  end
+  object HTTPRIO1: THTTPRIO
+    URL = 'http://192.168.2.218:8080/SmsSending/SmsSending?WSDL'
+    HTTPWebNode.UseUTF8InHeader = True
+    HTTPWebNode.InvokeOptions = [soIgnoreInvalidCerts, soAutoCheckAccessPointViaUDDI]
+    HTTPWebNode.WebNodeOptions = []
+    Converter.Options = [soSendMultiRefObj, soTryAllSchema, soRootRefNodesToBody, soCacheMimeResponse, soUTF8EncodeXML]
+    Left = 136
+    Top = 104
+  end
+  object Ods_sms: TOracleDataSet
+    SQL.Strings = (
+      'SELECT* FROM sms_templates where tip=2')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000050000000400000049004400010000000000080000004E0041004D00
+      450001000000000010000000540045004D0050004C0041005400450001000000
+      0000160000004400450053004300520049005000540049004F004E0001000000
+      000006000000540049005000010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 592
+    Top = 88
+    object Ods_smsID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object Ods_smsNAME: TWideStringField
+      FieldName = 'NAME'
+      Required = True
+      Size = 100
+    end
+    object Ods_smsTEMPLATE: TWideStringField
+      FieldName = 'TEMPLATE'
+      Required = True
+      Size = 300
+    end
+    object Ods_smsDESCRIPTION: TWideStringField
+      FieldName = 'DESCRIPTION'
+      Size = 50
+    end
+    object Ods_smsTIP: TFloatField
+      FieldName = 'TIP'
+    end
+  end
+  object Dsrc_sms: TDataSource
+    DataSet = Ods_sms
+    Left = 680
+    Top = 72
+  end
+  object OpenDialog1: TOpenDialog
+    Left = 464
+    Top = 160
+  end
+end

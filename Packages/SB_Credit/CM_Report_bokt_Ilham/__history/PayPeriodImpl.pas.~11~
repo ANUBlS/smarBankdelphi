@@ -1,0 +1,137 @@
+﻿unit PayPeriodImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, Mask, DBCtrlsEh, DBLookupEh, ExtCtrls, ComCtrls, Buttons,
+  DB, OracleData, CMExcelExport;
+
+type
+  TPayForm = class(TForm)
+    GroupBox1: TGroupBox;
+    DateTimePicker1: TDateTimePicker;
+    DateTimePicker2: TDateTimePicker;
+    Label1: TLabel;
+    GroupBox2: TGroupBox;
+    RadioGroup1: TRadioGroup;
+    DBLookupComboboxEh7: TDBLookupComboboxEh;
+    DBLookupComboboxEh1: TDBLookupComboboxEh;
+    CheckBox1: TCheckBox;
+    CheckBox2: TCheckBox;
+    SpeedButton1: TSpeedButton;
+    SpeedButton2: TSpeedButton;
+    OracleDataSet1: TOracleDataSet;
+    OracleDataSet2: TOracleDataSet;
+    OracleDataSet3: TOracleDataSet;
+    Main: TOracleDataSet;
+    DataSource1: TDataSource;
+    DataSource2: TDataSource;
+    OracleDataSet2ID: TFloatField;
+    OracleDataSet2RENEWABLESTATUS: TFloatField;
+    OracleDataSet2ITYPE: TFloatField;
+    OracleDataSet2ICLASS: TFloatField;
+    OracleDataSet2DESCRIPTION: TWideStringField;
+    OracleDataSet2CARDTYPE: TFloatField;
+    OracleDataSet2OUTBALANCE: TFloatField;
+    OracleDataSet2DUEPERSENTDAY: TFloatField;
+    OracleDataSet3ID: TFloatField;
+    OracleDataSet3DESCRIPTION: TWideStringField;
+    OracleDataSet3BANK_KOD: TWideStringField;
+    OracleDataSet1TEK_DAT: TDateTimeField;
+    OracleDataSet1PRED_DAT: TDateTimeField;
+    OracleDataSet1ARC_DAY: TDateTimeField;
+    OracleDataSet1CLOSE: TIntegerField;
+    MisExcelExport: TCMExcelExport;
+    MainNUMBEROFCREDIT: TWideStringField;
+    MainNAME: TWideStringField;
+    MainPAYDATE: TDateTimeField;
+    MainPAYEDAMT: TFloatField;
+    MainPAYEDINTAMT: TFloatField;
+    MainPAYEDDUEINTAMT: TFloatField;
+    MainPAYEDPENALTYAMT: TFloatField;
+    MainPAYEDDUEAMT: TFloatField;
+    procedure FormCanResize(Sender: TObject; var NewWidth, NewHeight: Integer;
+      var Resize: Boolean);
+    procedure FormCreate(Sender: TObject);
+    procedure SpeedButton2Click(Sender: TObject);
+    procedure SpeedButton1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+        function BuildFilterString : String;
+  end;
+
+var
+  PayForm: TPayForm;
+
+implementation
+
+{$R *.dfm}
+ uses sboapiDataModuleImpl;
+procedure TPayForm.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+resize:=false
+end;
+
+procedure TPayForm.FormCreate(Sender: TObject);
+begin
+OracleDataSet1.Open;
+OracleDataSet2.Open;
+OracleDataSet3.Open;
+DateTimePicker1.DateTime:=OracleDataSet1.FieldByName('tek_dat').AsDateTime;
+DateTimePicker2.DateTime:=OracleDataSet1.FieldByName('tek_dat').AsDateTime;
+end;
+ function TPayForm.BuildFilterString : String;
+
+  procedure ConcatFilter(var S: String; const Prefix : String; Checked : Boolean; KeyValue : Variant);
+  const
+     csFormat = '(%s=%s)';
+  var
+    Temp : String;
+  begin
+
+    if Checked then
+    begin
+      Temp := Format(csFormat,[Prefix,Keyvalue]);
+      if S = '' then
+        S := Temp
+      else
+        S :=S + 'AND ' + Temp;
+    end;
+
+  end;
+begin
+  Result := '';
+  ConcatFilter(Result,'Credittype',CheckBox1.Checked,DBLookupComboboxEh7.KeyValue);
+  ConcatFilter(Result,'USRGROUP',CheckBox2.Checked,DBLookupComboboxEh1.KeyValue);
+  //LogInformation(Result);
+end;
+procedure TPayForm.SpeedButton1Click(Sender: TObject);
+var s :string;
+begin
+ if  BuildFilterString <>'' then
+    S := 'and '+BuildFilterString;
+with main do
+begin
+close;
+  SetVariable('bdat',integer(trunc(DateTimePicker1.DateTime)));
+  SetVariable('edat',integer(trunc(DateTimePicker2.DateTime)));
+  SQL[4] := S;
+open;
+end;
+  with MisExcelExport do begin
+     Connect;
+     ExportDataset(main, 'Ödənişlər',True,false);
+     Disconnect;
+  end;
+end;
+
+procedure TPayForm.SpeedButton2Click(Sender: TObject);
+begin
+close
+end;
+
+end.

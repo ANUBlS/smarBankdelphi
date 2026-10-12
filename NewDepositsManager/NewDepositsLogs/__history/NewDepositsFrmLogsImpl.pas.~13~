@@ -1,0 +1,137 @@
+﻿unit NewDepositsFrmLogsImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, Oracle, OracleData, StdCtrls, Buttons, ComCtrls, Mask, DBCtrlsEh,
+  DBLookupEh, CMExcelExport, DBGridEh, XFSCtrls, ExtCtrls;
+
+type
+  TNewDepositsFrmLogs = class(TForm)
+    filials: TOracleDataSet;
+    filialsID: TFloatField;
+    dm_control: TOraclePackage;
+    filialsds: TDataSource;
+    sysdat: TOracleDataSet;
+    sysdatTEK_DAT: TDateTimeField;
+    contExport: TCMExcelExport;
+    ResultControl: TOracleDataSet;
+    filialsNAME: TWideStringField;
+    ResultControlTIMESTAMP: TDateTimeField;
+    ResultControlWHO: TWideStringField;
+    ResultControlTNAME: TWideStringField;
+    ResultControlCNAME: TWideStringField;
+    ResultControlOLD: TWideStringField;
+    ResultControlNEW: TWideStringField;
+    XFPanel1: TXFPanel;
+    XFPanel2: TXFPanel;
+    XFPanel3: TXFPanel;
+    DTPDAT: TDateTimePicker;
+    ETPDAT: TDateTimePicker;
+    XFPanel4: TXFPanel;
+    XFStaticText1: TXFStaticText;
+    XFPanel5: TXFPanel;
+    XFPanel6: TXFPanel;
+    DBLookupComboboxEh1: TDBLookupComboboxEh;
+    XFPanel7: TXFPanel;
+    XFStaticText2: TXFStaticText;
+    BitBtn1: TBitBtn;
+    BitBtn2: TBitBtn;
+    ResultControlDEPID: TFloatField;
+    ResultControlFILIAL: TWideStringField;
+    ResultControlCONTRACTNO: TWideStringField;
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormCreate(Sender: TObject);
+    procedure BitBtn1Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure BitBtn2Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  NewDepositsFrmLogs: TNewDepositsFrmLogs;
+  procedure exportproc(S:String);export;
+
+implementation
+
+{$R *.DFM}
+uses sboapiDataModuleImpl,NewCommonDeclsImpl,SBTranslateProc;
+
+procedure exportproc(S:String);export;
+begin
+   NewDepositsFrmLogs.ShowModal;
+end;
+
+exports
+   exportproc;
+
+procedure TNewDepositsFrmLogs.BitBtn2Click(Sender: TObject);
+begin
+  Close;
+end;
+
+procedure TNewDepositsFrmLogs.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+   Resize :=false
+
+   end;
+
+procedure TNewDepositsFrmLogs.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+  if ord(Key) = VK_ESCAPE then close
+end;
+
+procedure TNewDepositsFrmLogs.FormCreate(Sender: TObject);
+begin
+   sysdat.Open;
+   DTPDAT.DateTime := sysdat.FieldByName('tek_dat').asdateTime;
+   ETPDAT.DateTime := sysdat.FieldByName('tek_dat').asdateTime;
+   SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TNewDepositsFrmLogs.BitBtn1Click(Sender: TObject);
+var BrID :integer;
+    BDat,Edat :TDateTime;
+begin
+   BrID := filials.FieldByName('ID').AsInteger;
+   BDat := integer(trunc(DTPDAT.DateTime));
+   EDat := integer(trunc(ETPDAT.DateTime));
+   with ResultControl do
+   begin
+     close;
+     SetVariable('bdat',BDat);
+     SetVariable('edat',EDat);
+     IF BrID>-1 then sql[9]:='and  '+'(select branchid from dm_contracts where id=depid)='+IntToStr(BrID);
+     Open;
+     if RecordCount=0 then
+     begin
+       ShowMessage('Heç bir məlumat yoxdur');
+       exit;
+     end;
+     with contExport do
+     begin
+       Connect;
+       ExportDataset(ResultControl,'Control',true,false);
+       Disconnect;
+     end;
+   end;
+end;
+
+procedure TNewDepositsFrmLogs.FormShow(Sender: TObject);
+begin
+   filials.Open;
+   DBLookupComboboxEh1.KeyValue := filials.FieldByName('ID').asInteger;
+end;
+
+initialization
+
+    NewDepositsFrmLogs := TNewDepositsFrmLogs.Create(CommonApplication)
+
+end.

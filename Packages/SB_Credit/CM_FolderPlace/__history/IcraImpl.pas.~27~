@@ -1,0 +1,129 @@
+﻿unit IcraImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ExtCtrls, ComCtrls, StdCtrls, Grids, XDBGrids, CMExcelExport;
+
+type
+  TIcraFrm = class(TForm)
+    GroupBox1: TGroupBox;
+    Label1: TLabel;
+    DateTimePicker1: TDateTimePicker;
+    DateTimePicker2: TDateTimePicker;
+    Button1: TButton;
+    XDBGrid1: TXDBGrid;
+    Button2: TButton;
+    ExcelExport: TCMExcelExport;
+    procedure FormShow(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+    procedure XDBGrid1DblClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  IcraFrm: TIcraFrm;
+
+implementation
+
+uses FlReCalculationDataModuleImpl, IcraReportImpl,ReCalculationMainForm;
+
+{$R *.dfm}
+
+procedure TIcraFrm.Button1Click(Sender: TObject);
+begin
+
+ with PRDataModule,CalculatorPackage do
+ begin
+ OracleDataSet12.Session.Commit ;
+  OracleDataSet15.Session.Commit ;
+ if reptype=0 then
+  CallProcedure('rep_pksh',[
+    'p_bdat', DateTimePicker1.DateTime,
+    'p_edat', DateTimePicker2.DateTime
+    ]);
+
+  if reptype=1 then
+  CallProcedure('rep_pksh_afto',[
+    'p_bdat', DateTimePicker1.DateTime,
+    'p_edat', DateTimePicker2.DateTime
+    ]);
+
+  if reptype=2 then
+  CallProcedure('rep_icra',[
+    'p_bdat', DateTimePicker1.DateTime,
+    'p_edat', DateTimePicker2.DateTime
+    ]);
+
+
+  if not OracleDataSet12.Active then
+         OracleDataSet12.Open else OracleDataSet12.Refresh
+ end;
+end;
+
+procedure TIcraFrm.Button2Click(Sender: TObject);
+begin
+with ExcelExport do
+  begin
+    Connect;
+    ExportDataset(XDBGrid1.DataSource.DataSet,'Interests',True);
+  end;
+end;
+
+procedure TIcraFrm.FormShow(Sender: TObject);
+begin
+DateTimePicker1.DateTime:=now;
+DateTimePicker2.DateTime:=now;
+end;
+
+procedure TIcraFrm.XDBGrid1DblClick(Sender: TObject);
+begin
+if PRDataModule.OracleDataSet12.RecordCount=0 then
+begin
+ ShowMessage('Öncə hesablama verin !');
+ exit;
+end;
+
+ if not Assigned(IcraReportFrm) then
+    IcraReportFrm := TIcraReportFrm.Create(Self);
+ if reptype=2 then
+    With PRDataModule.OracleDataSet15 do
+    begin
+     IcraReportFrm.XDBGrid1.DataSource:= PRDataModule.DataSource15;
+     if active then
+      close;
+      SetVariable('bdat',DateTimePicker1.DateTime);
+      SetVariable('edat',DateTimePicker2.DateTime);
+      SetVariable('usid',PRDataModule.OracleDataSet12.FieldByName('usid').AsInteger);
+      open;
+    end ;
+ if reptype=1 then
+    With PRDataModule.OracleDataSet16 do
+    begin
+     IcraReportFrm.XDBGrid1.DataSource:= PRDataModule.DataSource16;
+     if active then
+      close;
+      SetVariable('bdat',DateTimePicker1.DateTime);
+      SetVariable('edat',DateTimePicker2.DateTime);
+      SetVariable('usid',PRDataModule.OracleDataSet12.FieldByName('usid').AsInteger);
+      open;
+    end ;
+
+
+ if PRDataModule.OracleDataSet15.RecordCount=0 then
+  begin
+   ShowMessage('Ödəniş yoxdur !');
+   exit;
+  end;
+
+    IcraReportFrm.showmodal;
+
+
+end;
+
+end.

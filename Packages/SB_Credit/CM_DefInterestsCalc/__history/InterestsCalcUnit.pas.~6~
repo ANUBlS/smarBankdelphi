@@ -1,0 +1,76 @@
+﻿unit InterestsCalcUnit;
+
+interface
+
+uses  Windows, Messages, SysUtils, Classes, Dialogs, DB, Controls;
+
+procedure InitPlugin(S : String); export;
+
+implementation
+
+uses IntCalcDataModImpl,InfarmatoinImpl, CommonDecls;
+
+procedure ShowStopIntCalc;
+resourcestring
+   rsStopIntCalc = 'Faizlərin balansda hesablanması dayandırılır?';
+   rsSOutIntCalc = 'Faizlərin hesablanması balansdankənarda davam etdirilsin ?';
+var
+  creditid :Integer;
+begin
+  creditid := Get_SelectedCrdID;
+  with DefineCalcDatMod.OracleDataSet1 do
+  begin
+   if Active then
+    close;
+    SetVariable('creditid',creditid);
+    open;
+
+    if  FieldByName('stopcalcdate').asstring<>'0' then
+    begin
+    ShowMessage(FieldByName('stopcalcdate').asstring+' Bu tarixdən etbarən  faizlərin hesablanması artıq dayandırlıb !  ');
+    exit;
+    end;
+   end;
+
+
+  FrmInfarmatoin.showmodal   ;
+
+
+    DefineCalcDatMod.CM_CREDITS.CallProcedure('EnabledInterestCalc',[creditid]);
+
+  end;
+
+procedure ShowContinueIntcalc;
+resourcestring
+   rsContinueintCalc = 'Faizlərin hesablanması davam etdirilsin?';
+var
+  creditid :Integer;
+begin
+  creditid := Get_SelectedCrdID;
+  if MessageDlg(
+            rsContinueintCalc,
+            mtWarning ,
+            [mbYes,mbNo],
+            0
+  ) = mrYes then
+  begin
+    DefineCalcDatMod.CM_CREDITS.CallProcedure('DisableInterestCalc',[creditid]);
+  end;
+end;
+
+procedure InitPlugin(S:String); export;
+const
+  cStopIntcalc = 'StopIntCalc';
+  CConIntCalc = 'ConIntCalc';
+begin
+  if s = cStopIntcalc then  ShowStopIntCalc;
+  if s = CConIntCalc then   ShowContinueIntcalc;
+end;
+exports
+  InitPlugin;
+Initialization
+  DefineCalcDatMod := TDefineCalcDatMod.Create(CommonApplication);
+  FrmInfarmatoin:= TFrmInfarmatoin.Create(CommonApplication);
+  FrmEndCalc:= TFrmEndCalc.Create(CommonApplication);
+
+end.

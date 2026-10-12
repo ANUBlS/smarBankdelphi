@@ -1,0 +1,87 @@
+unit dmins_reinsr_contractimpl;
+
+interface
+
+uses
+  SysUtils, Classes, DB, OracleData;
+
+type
+  Tdmins_reinsr_contract = class(TDataModule)
+    ds_ins_reinsr_contract: TOracleDataSet;
+    dsr_ins_reinsr_contract: TDataSource;
+    ds_ins_reinsr_contractID: TIntegerField;
+    ds_ins_reinsr_contractNAME: TWideStringField;
+    DSins_dict_companie: TOracleDataSet;
+    DSrins_dict_companie: TDataSource;
+    DSins_dict_companieID: TFloatField;
+    DSins_dict_companieNAME: TWideStringField;
+    dsr_contracts: TDataSource;
+    ds_contracts: TOracleDataSet;
+    ds_contractsTYPE_ID: TFloatField;
+    ds_contractsBEGIN_DATE: TDateTimeField;
+    ds_contractsEND_DATE: TDateTimeField;
+    ds_contractsAMMOUNT: TFloatField;
+    ds_contractsPOLICY_NUM: TWideStringField;
+    ds_contractsINSSUMM: TFloatField;
+    ds_contractsFRANSHIZ: TFloatField;
+    ds_contractsREINS: TFloatField;
+    ds_contractsID: TFloatField;
+    DSsysdat: TOracleDataSet;
+    DSsysdatTEK_DAT: TDateTimeField;
+    DSsysdatPRED_DAT: TDateTimeField;
+    DSsysdatARC_DAY: TDateTimeField;
+    DSsysdatCLOSE: TIntegerField;
+    ds_contractsFILIAL: TFloatField;
+    dsrins_rein_other_info: TDataSource;
+    dsins_rein_other_info: TOracleDataSet;
+    dsins_rein_other_infoID: TFloatField;
+    dsins_rein_other_infoCUSTID: TFloatField;
+    dsins_rein_other_infoREINS_PART_KOMIS: TFloatField;
+    dsins_rein_other_infoREINS_AMMOUNT: TFloatField;
+    dsins_rein_other_infoREINS_BRUTO_AMMOUNT: TFloatField;
+    dsins_rein_other_infoINS__PRED_AMMOUNT: TFloatField;
+    dsins_rein_other_infoINS_ID: TFloatField;
+    dsins_rein_other_infoINS_TYPE: TFloatField;
+    dsins_rein_other_infoINS_AMMOUNT: TFloatField;
+    dsreins: TOracleDataSet;
+    dsrreins: TDataSource;
+    dsins_rein_other_infoINS_PRED_INFO: TWideStringField;
+    procedure DataModuleCreate(Sender: TObject);
+    procedure DataModuleDestroy(Sender: TObject);
+    procedure ds_contractsAfterInsert(DataSet: TDataSet);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  dmins_reinsr_contract: Tdmins_reinsr_contract;
+
+implementation
+
+{$R *.dfm}
+ uses sboapiDataModuleImpl,CommanParametrs;
+procedure Tdmins_reinsr_contract.DataModuleCreate(Sender: TObject);
+begin
+ds_ins_reinsr_contract.Open;
+DSins_dict_companie.Open;
+DSsysdat.Open;
+dsreins.Open;
+end;
+
+procedure Tdmins_reinsr_contract.DataModuleDestroy(Sender: TObject);
+begin
+ds_ins_reinsr_contract.close;
+DSins_dict_companie.close;
+DSsysdat.close;
+end;
+
+procedure Tdmins_reinsr_contract.ds_contractsAfterInsert(DataSet: TDataSet);
+begin
+ds_contracts.FieldByName('filial').asinteger:=0;
+ds_contracts.FieldByName('reins').asinteger:=1;
+
+end;
+
+end.

@@ -1,0 +1,173 @@
+unit TicketsNewImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ExtCtrls, StdCtrls, Mask, DBCtrls, ComCtrls, Oracle, SearchEdit, DB;
+
+type
+  TfrmNewTicket = class(TForm)
+    Panel1: TPanel;
+    GroupBox1: TGroupBox;
+    Label5: TLabel;
+    Label6: TLabel;
+    edAccName: TDBEdit;
+    edAccInn: TDBEdit;
+    DBLookupComboBox1: TDBLookupComboBox;
+    Label3: TLabel;
+    Panel2: TPanel;
+    GroupBox5: TGroupBox;
+    Label7: TLabel;
+    Label8: TLabel;
+    Label9: TLabel;
+    Label10: TLabel;
+    DBLookupComboboxEh1: TDBLookupComboBox;
+    DBEdit8: TDBEdit;
+    DBEdit9: TDBEdit;
+    DBEdit10: TDBEdit;
+    GroupBox3: TGroupBox;
+    Label16: TLabel;
+    Label17: TLabel;
+    DBEdit2: TDBEdit;
+    edTicketDate: TDateTimePicker;
+    GroupBox4: TGroupBox;
+    Label4: TLabel;
+    Label1: TLabel;
+    edAmmount: TDBEdit;
+    edStrAmount: TEdit;
+    GroupBox2: TGroupBox;
+    Label14: TLabel;
+    Label15: TLabel;
+    DBEdit4: TDBEdit;
+    DBEdit5: TDBEdit;
+    Panel3: TPanel;
+    btnSave: TButton;
+    Button2: TButton;
+    procedure FormCreate(Sender: TObject);
+    procedure edAccNOClick(Sender: TObject);
+    procedure edAmmountKeyPress(Sender: TObject; var Key: Char);
+    procedure DBLookupComboBox2Click(Sender: TObject);
+    procedure DBLookupComboBox1Click(Sender: TObject);
+    procedure seAccKeyPress(Sender: TObject; var Key: Char);
+    procedure seBankKeyPress(Sender: TObject; var Key: Char);
+    procedure DBEdit4Change(Sender: TObject);
+    procedure btnSaveClick(Sender: TObject);
+    procedure edTicketDateChange(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+    procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
+    procedure edStrAmountChange(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+  private
+  public
+    { Public declarations }
+  end;
+
+var
+  frmNewTicket: TfrmNewTicket;
+
+implementation
+
+uses DataModTM, CurrencyToHR_Azeri_Impl;
+
+{$R *.DFM}
+
+
+procedure TfrmNewTicket.FormCreate(Sender: TObject);
+begin
+  with DataModuleTicketMan do begin
+    if ODSAccount.Active then ODSAccount.Close;
+    if ODSBankM.Active then ODSBankM.Close;
+    ODSAccount.Open;
+    ODSBankM.Open;
+  end;
+end;
+
+procedure TfrmNewTicket.edAccNOClick(Sender: TObject);
+begin
+  with DataModuleTicketMan do begin
+    ODSAccount.Locate('ACC_NO', TEdit(Sender).Text, [loCaseInsensitive, loPartialKey]);
+    edAccINN.Text := ODSAccountINN.AsString;
+    edAccName.Text := ODSAccountNAME.AsString;
+  end;
+end;
+
+procedure TfrmNewTicket.edAmmountKeyPress(Sender: TObject; var Key: Char);
+begin
+  if (Key=#13) and (Trim(TEdit(Sender).Text)<>'') then
+     edStrAmount.text :=CurrencyToHR_Azeri(StrToFloat(edAmmount.text),2,[0])
+  else
+   if not (key in ['0'..'9','.',',',#8]) then
+    key :=#0
+end;
+
+procedure TfrmNewTicket.DBLookupComboBox2Click(Sender: TObject);
+begin
+//  seBank.Text := DataModuleTicketMan.ODSBankMBANKCODE.AsString;
+end;
+
+procedure TfrmNewTicket.DBLookupComboBox1Click(Sender: TObject);
+begin
+//  seAcc.Text := DataModuleTicketMan.ODSAccountACC_NO.AsString;
+end;
+
+procedure TfrmNewTicket.seAccKeyPress(Sender: TObject; var Key: Char);
+begin
+  {with DataModuleTicketMan, ODSAccount do begin
+
+  end;}
+end;
+
+procedure TfrmNewTicket.seBankKeyPress(Sender: TObject; var Key: Char);
+begin
+  //
+  //if key=#13 then 
+end;
+
+procedure TfrmNewTicket.DBEdit4Change(Sender: TObject);
+begin
+  with DataModuleTicketMan do begin
+    ODSAllTicketsDACCNAME.Value := ODSAccountNAME.AsString;
+    ODSAllTicketsDACCINN.Value := ODSAccountINN.AsString;
+  end;
+end;
+
+procedure TfrmNewTicket.btnSaveClick(Sender: TObject);
+begin
+  with DataModuleTicketMan do begin
+    ODSAllTickets.Post;
+  end;
+  (Sender as TWinControl).Enabled := False;
+end;
+
+procedure TfrmNewTicket.edTicketDateChange(Sender: TObject);
+begin
+  DataModuleTicketMan.ODSAllTicketsPDATE.Value := (Sender as TDateTimePicker).Date;
+  edStrAmountChange(Sender);
+end;
+
+procedure TfrmNewTicket.Button2Click(Sender: TObject);
+begin
+  Close;
+end;
+
+procedure TfrmNewTicket.FormCloseQuery(Sender: TObject;
+  var CanClose: Boolean);
+begin
+  DataModuleTicketMan.ODSTickets.Refresh;
+end;
+
+procedure TfrmNewTicket.edStrAmountChange(Sender: TObject);
+begin
+  btnSave.Enabled := True;
+end;
+
+procedure TfrmNewTicket.FormShow(Sender: TObject);
+begin
+  with DataModuleTicketMan do begin
+    if not ODSAccount.Active then ODSAccount.Open;
+    if not ODSBankM.Active then ODSBankM.Open;
+  end;
+end;
+
+end.

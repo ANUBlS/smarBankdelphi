@@ -1,0 +1,194 @@
+object UsrGrDataMod: TUsrGrDataMod
+  OldCreateOrder = False
+  OnCreate = DataModuleCreate
+  OnDestroy = DataModuleDestroy
+  Height = 479
+  Width = 741
+  object CM_SETUP: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'CM_SETUP'
+    Left = 40
+    Top = 168
+  end
+  object UserGroupsDataSrc: TDataSource
+    DataSet = UserGroupsDataSet
+    Left = 40
+    Top = 104
+  end
+  object CatDataSet: TOracleDataSet
+    SQL.Strings = (
+      'select C.Rowid,c.*'
+      'from cm_Categories C'
+      'order by person')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000600000004000000490044000100000000000C000000500045005200
+      53004F004E000100000000000800000043004F00440045000100000000001600
+      00004400450053004300520049005000540049004F004E000100000000000C00
+      00004100430054005F0049004400010000000000080000004B004F0044005500
+      010000000000}
+    OnApplyRecord = CatDataSetApplyRecord
+    Session = sboapiDataModule.SBSession
+    Left = 152
+    Top = 40
+    object CatDataSetID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object CatDataSetPERSON: TFloatField
+      FieldName = 'PERSON'
+    end
+    object CatDataSetCODE: TWideStringField
+      FieldName = 'CODE'
+      Size = 8
+    end
+    object CatDataSetDESCRIPTION: TWideStringField
+      FieldName = 'DESCRIPTION'
+      Size = 128
+    end
+    object CatDataSetACT_ID: TFloatField
+      FieldName = 'ACT_ID'
+    end
+    object CatDataSetKODU: TWideStringField
+      FieldName = 'KODU'
+      Size = 8
+    end
+  end
+  object CatDataSource: TDataSource
+    DataSet = CatDataSet
+    Left = 152
+    Top = 104
+  end
+  object PersonsDataSet: TOracleDataSet
+    SQL.Strings = (
+      'select p.rowid,p.*'
+      'from cm_persons p')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000030000000400000049004400010000000000080000004E0041004D00
+      450001000000000014000000440045005300430052004900500049004F004E00
+      010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 256
+    Top = 40
+    object PersonsDataSetID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object PersonsDataSetNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 32
+    end
+    object PersonsDataSetDESCRIPION: TWideStringField
+      FieldName = 'DESCRIPION'
+      Size = 64
+    end
+  end
+  object PersonsDataSource: TDataSource
+    DataSet = PersonsDataSet
+    Left = 264
+    Top = 104
+  end
+  object DataSource1: TDataSource
+    DataSet = OracleDataSet1
+    Left = 200
+    Top = 208
+  end
+  object OracleDataSet1: TOracleDataSet
+    SQL.Strings = (
+      'SELECT rowid,a.*'
+      '  FROM cm_aim_cred a'
+      '')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000050000000400000049004400010000000000080000004E0041004D00
+      45000100000000000A0000004E00450057004900440001000000000008000000
+      43004F0044004500010000000000100000004300550053005400540059005000
+      4500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 280
+    Top = 208
+    object OracleDataSet1ID: TFloatField
+      FieldName = 'ID'
+    end
+    object OracleDataSet1NAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 64
+    end
+    object OracleDataSet1NEWID: TFloatField
+      FieldName = 'NEWID'
+    end
+    object OracleDataSet1CODE: TWideStringField
+      FieldName = 'CODE'
+      Size = 8
+    end
+    object OracleDataSet1CUSTTYPE: TFloatField
+      FieldName = 'CUSTTYPE'
+    end
+  end
+  object DataSource2: TDataSource
+    DataSet = OracleDataSet2
+    Left = 408
+    Top = 56
+  end
+  object OracleDataSet2: TOracleDataSet
+    SQL.Strings = (
+      
+        'select 1 id,'#39'Qeyri i'#351' g'#252'nl'#601'ri qrafik'#601' t'#601'sir etsin'#39' name from dua' +
+        'l'
+      'union'
+      
+        'select 2 id,'#39'Qeyri i'#351' g'#252'nl'#601'ri qrafik'#601' t'#601'sir etm'#601'sin'#39' name from d' +
+        'ual')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000400000049004400010000000000080000004E0041004D00
+      4500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 488
+    Top = 56
+    object OracleDataSet2ID: TFloatField
+      FieldName = 'ID'
+    end
+    object OracleDataSet2NAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 44
+    end
+  end
+  object UserGroupsDataSet: TOracleDataSet
+    SQL.Strings = (
+      'select rowid,T.*'
+      'from cm_usergroups T'
+      'order by t.id')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      0500000006000000040000004900440001000000000016000000440045005300
+      4300520049005000540049004F004E0001000000000010000000420041004E00
+      4B005F004B004F004400010000000000080000004600410049005A0001000000
+      0000080000004B00410052005400010000000000100000004B004F004D004900
+      5300530059004100010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 40
+    Top = 32
+    object UserGroupsDataSetDESCRIPTION: TWideStringField
+      FieldName = 'DESCRIPTION'
+      Size = 64
+    end
+    object UserGroupsDataSetFAIZ: TFloatField
+      FieldName = 'FAIZ'
+    end
+    object UserGroupsDataSetKART: TFloatField
+      FieldName = 'KART'
+    end
+    object UserGroupsDataSetKOMISSYA: TFloatField
+      FieldName = 'KOMISSYA'
+    end
+    object UserGroupsDataSetID: TFloatField
+      FieldName = 'ID'
+    end
+    object UserGroupsDataSetBANK_KOD: TWideStringField
+      FieldName = 'BANK_KOD'
+      Size = 2
+    end
+  end
+end

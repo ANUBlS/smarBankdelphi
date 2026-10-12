@@ -1,0 +1,420 @@
+unit DMreinsuranceImpl;
+                     //ds_reins_info
+interface
+
+uses
+  SysUtils, Classes, DB, OracleData, Oracle,Dialogs;
+
+type
+  TDMreinsurance = class(TDataModule)
+    DSRCustmers: TDataSource;
+    DSCustmers: TOracleDataSet;
+    DSCustmersID: TIntegerField;
+    DSCustmersNAME: TWideStringField;
+    DSRins_reinsurance: TDataSource;
+    DSins_reinsurance: TOracleDataSet;
+    DSins_reinsuranceID: TFloatField;
+    DSins_reinsuranceCID: TFloatField;
+    DSins_reinsuranceCUSTID: TFloatField;
+    DSRins_reinsuranceMain: TDataSource;
+    DSins_reinsuranceMain: TOracleDataSet;
+    DSins_reinsuranceMainNAME: TWideStringField;
+    DSins_reinsuranceMainID: TFloatField;
+    DSins_reinsuranceMainCID: TFloatField;
+    DSins_reinsuranceMainCUSTID: TFloatField;
+    DSins_reinsurance_upd: TOracleDataSet;
+    ins_common: TOraclePackage;
+    DSRaccounOthelik: TDataSource;
+    DSRaccountDebitor: TDataSource;
+    DSaccounOthelik: TOracleDataSet;
+    DSaccountDebitor: TOracleDataSet;
+    DSaccounOthelikID: TFloatField;
+    DSaccounOthelikACC_NO: TWideStringField;
+    DSaccountDebitorID: TFloatField;
+    DSaccountDebitorACC_NO: TWideStringField;
+    DSins_reinsuranceREINS_PART: TFloatField;
+    DSins_reinsuranceREINS_PART_KOMISIYA: TFloatField;
+    DSins_reinsuranceACCIDOHDELIK: TFloatField;
+    DSins_reinsuranceACCIDDEBITOR: TFloatField;
+    DSins_reinsuranceMainREINS_PART: TFloatField;
+    DSins_reinsuranceMainREINS_PART_KOMISIYA: TFloatField;
+    DSins_reinsuranceMainACCIDOHDELIK: TFloatField;
+    DSins_reinsuranceMainACCIDDEBITOR: TFloatField;
+    DSins_reinsuranceUSERID: TFloatField;
+    DSins_reinsuranceMainUSERID: TFloatField;
+    DSins_reinsurance_updID: TFloatField;
+    DSins_reinsurance_updCID: TFloatField;
+    DSins_reinsurance_updCUSTID: TFloatField;
+    DSins_reinsurance_updREINS_PART: TFloatField;
+    DSins_reinsurance_updREINS_PART_KOMISIYA: TFloatField;
+    DSins_reinsurance_updACCIDOHDELIK: TFloatField;
+    DSins_reinsurance_updACCIDDEBITOR: TFloatField;
+    DSins_reinsurance_updUSERID: TFloatField;
+    DSSysdat: TOracleDataSet;
+    DSSysdatTEK_DAT: TDateTimeField;
+    DSSysdatPRED_DAT: TDateTimeField;
+    DSSysdatARC_DAY: TDateTimeField;
+    DSSysdatCLOSE: TIntegerField;
+    DSins_reinsurance_updBARDERO_NO: TWideStringField;
+    DSins_reinsuranceMainBARDERO_NO: TWideStringField;
+    DSins_reinsuranceBARDERO_NO: TWideStringField;
+    DSins_reinsuranceDAT: TDateTimeField;
+    DSins_reinsuranceMainDAT: TDateTimeField;
+    DSins_reinsurance_updDAT: TDateTimeField;
+    DSFullbardero: TOracleDataSet;
+    DSFullbarderoBARDERO_NO: TWideStringField;
+    DSFullbarderoSIGORTA_HAQQI: TFloatField;
+    DSFullbarderoCUST_NAME: TWideStringField;
+    DSRFullbardero: TDataSource;
+    DSins_reinsuranceSTATUS: TFloatField;
+    DSins_reinsuranceTRID_PAYMENT: TFloatField;
+    DSins_reinsuranceMainSTATUS: TFloatField;
+    DSins_reinsuranceMainTRID_PAYMENT: TFloatField;
+    DSins_reinsurance_updSTATUS: TFloatField;
+    DSins_reinsurance_updTRID_PAYMENT: TFloatField;
+    DSFullbarderoSTATUS: TFloatField;
+    dsinsurance_type: TOracleDataSet;
+    dsrinsurance_type: TDataSource;
+    dsinsurance_typeID: TIntegerField;
+    dsinsurance_typeNAME: TWideStringField;
+    DSins_reinsuranceTYPE_ID: TFloatField;
+    DSins_reinsuranceMainTYPE_ID: TFloatField;
+    DSins_reinsurance_updTYPE_ID: TFloatField;
+    DSRcontract: TDataSource;
+    DScontract: TOracleDataSet;
+    DScontractID: TFloatField;
+    DScontractTYPE_ID: TFloatField;
+    DScontractCHKASKO: TFloatField;
+    DScontractCHM: TFloatField;
+    DScontractCHFQ: TFloatField;
+    DSins_reinsuranceMainSIGORTA_NOVU: TWideStringField;
+    ds_reins_info: TOracleDataSet;
+    dsr_reins_info: TDataSource;
+    ds_reins_infoNAME: TWideStringField;
+    ds_reins_infoPOLICY_NUM: TWideStringField;
+    ds_reins_infoSIGORTA_NOVU: TWideStringField;
+    ds_reins_infoID: TFloatField;
+    ds_reins_infoCID: TFloatField;
+    ds_reins_infoCUSTID: TFloatField;
+    ds_reins_infoREINS_PART: TFloatField;
+    ds_reins_infoREINS_PART_KOMISIYA: TFloatField;
+    ds_reins_infoACCIDOHDELIK: TFloatField;
+    ds_reins_infoACCIDDEBITOR: TFloatField;
+    ds_reins_infoUSERID: TFloatField;
+    ds_reins_infoBARDERO_NO: TWideStringField;
+    ds_reins_infoDAT: TDateTimeField;
+    ds_reins_infoSTATUS: TFloatField;
+    ds_reins_infoTRID_PAYMENT: TFloatField;
+    ds_reins_infoTYPE_ID: TFloatField;
+    ds_reins_infoSIGORTA_HAQQI: TFloatField;
+    P_ins_reins: TOraclePackage;
+    DSRCustReins: TDataSource;
+    DSREins_loss_bardero: TDataSource;
+    DSCustReins: TOracleDataSet;
+    DSins_loss_bardero: TOracleDataSet;
+    DSCustReinsID: TIntegerField;
+    DSCustReinsNAME: TWideStringField;
+    DSMainLossBardero: TOracleDataSet;
+    DSRMainLossBardero: TDataSource;
+    DSMainLossBarderoID: TFloatField;
+    DSMainLossBarderoBARDERO_NO: TWideStringField;
+    DSMainLossBarderoDEP_ID: TFloatField;
+    DSMainLossBarderoCUST_ID: TFloatField;
+    DSMainLossBarderoCLAIM_NUM: TWideStringField;
+    DSMainLossBarderoPOLICY_NUM: TWideStringField;
+    DSMainLossBarderoNAME: TWideStringField;
+    DSins_loss_barderoID: TFloatField;
+    DSins_loss_barderoBARDERO_NO: TWideStringField;
+    DSins_loss_barderoDEP_ID: TFloatField;
+    DSins_loss_barderoCUST_ID: TFloatField;
+    DSins_loss_barderoDAT: TDateTimeField;
+    ds_odenmislerin_sayi: TOracleDataSet;
+    ds_odenmislerin_sayiSAY: TFloatField;
+    dsTekrar_s_say: TOracleDataSet;
+    dsTekrar_s_saySAY: TFloatField;
+    DSFullbardero_loss: TOracleDataSet;
+    WideStringField1: TWideStringField;
+    FloatField1: TFloatField;
+    FloatField2: TFloatField;
+    WideStringField2: TWideStringField;
+    DSRFullbardero_loss: TDataSource;
+    ds_reins_info_loss: TOracleDataSet;
+    dsr_reins_info_loss: TDataSource;
+    DSKassa: TOracleDataSet;
+    TSCustacc: TOracleDataSet;
+    DSRKassa: TDataSource;
+    TSRCustacc: TDataSource;
+    DSKassaID: TFloatField;
+    DSKassaACC_NO: TWideStringField;
+    ds_reins_info_lossNAME: TWideStringField;
+    ds_reins_info_lossBARDERO_NO: TWideStringField;
+    ds_reins_info_lossT_SIGORTACI: TWideStringField;
+    ds_reins_info_lossPOLICY_NUM: TWideStringField;
+    ds_reins_info_lossSIGORTA_HAQQI: TFloatField;
+    DSRFullBardero_terminated: TDataSource;
+    DSFullBardero_terminated: TOracleDataSet;
+    DSFullBardero_ter_info: TOracleDataSet;
+    DSRFullBardero_ter_info: TDataSource;
+    DSFullBardero_terminatedBARDERO_NO: TWideStringField;
+    DSFullBardero_terminatedSTATUS: TFloatField;
+    DSFullBardero_terminatedSIGORTA_HAQQI: TFloatField;
+    DSFullBardero_terminatedCUST_NAME: TWideStringField;
+    DSFullBardero_ter_infoNAME: TWideStringField;
+    DSFullBardero_ter_infoBARDERO_NO: TWideStringField;
+    DSFullBardero_ter_infoT_SIGORTACI: TWideStringField;
+    DSFullBardero_ter_infoPOLICY_NUM: TWideStringField;
+    DSFullBardero_ter_infoSIGORTA_HAQQI: TFloatField;
+    ds_reins_info_lossCLAIM_NUM: TWideStringField;
+    DSMainLossBarderoSTATUS: TFloatField;
+    ds_reins_info_lossSTATUS: TFloatField;
+    TSCustaccZ: TOracleDataSet;
+    TSRCustaccZ: TDataSource;
+    DSRKassaZ: TDataSource;
+    DSKassaZ: TOracleDataSet;
+    FloatField3: TFloatField;
+    WideStringField3: TWideStringField;
+    ds_main_bardero_terminate: TOracleDataSet;
+    FloatField4: TFloatField;
+    WideStringField4: TWideStringField;
+    WideStringField5: TWideStringField;
+    WideStringField6: TWideStringField;
+    FloatField6: TFloatField;
+    FloatField7: TFloatField;
+    dsr_main_bardero_terminate: TDataSource;
+    DSRinsurancesX: TDataSource;
+    DSRins_terminated_bardero: TDataSource;
+    DSRcustomersX: TDataSource;
+    DSinsurancesX: TOracleDataSet;
+    DSins_terminated_bardero: TOracleDataSet;
+    DScustomersX: TOracleDataSet;
+    DSinsurancesXID: TIntegerField;
+    DSinsurancesXNAME: TWideStringField;
+    DSins_terminated_barderoID: TFloatField;
+    DSins_terminated_barderoBARDERO_NO: TWideStringField;
+    DSins_terminated_barderoCID: TFloatField;
+    DSins_terminated_barderoCUST_ID: TFloatField;
+    DSins_terminated_barderoDAT: TDateTimeField;
+    DSins_terminated_barderoSTATUS: TFloatField;
+    DSins_terminated_barderoTYPE_ID: TFloatField;
+    DScustomersXID: TIntegerField;
+    DScustomersXNAME: TWideStringField;
+    TSCustaccX: TOracleDataSet;
+    TSRCustaccX: TDataSource;
+    DSRKassaX: TDataSource;
+    DSKassaX: TOracleDataSet;
+    FloatField5: TFloatField;
+    WideStringField7: TWideStringField;
+    sb_aca: TOraclePackage;
+    DSMusteriohtek_h: TOracleDataSet;
+    DSMustero_BH: TOracleDataSet;
+    DSMustero_BHSAY: TFloatField;
+    DSMusteriohtek_hSAY: TFloatField;
+    DSMusteriDep_H: TOracleDataSet;
+    DSMusteriDep_BH: TOracleDataSet;
+    DSMusteriDep_BHSAY: TFloatField;
+    DSMusteriDep_HSAY: TFloatField;
+    DSterminated: TOracleDataSet;
+    DSterminatedSAY: TFloatField;
+    DSRFullbardero_sub: TDataSource;
+    dsR_reins_info_sub: TDataSource;
+    DSFullbardero_sub: TOracleDataSet;
+    ds_reins_info_sub: TOracleDataSet;
+    DSFullbardero_subBARDERO_NO: TWideStringField;
+    DSFullbardero_subSTATUS: TFloatField;
+    DSFullbardero_subSIGORTA_HAQQI: TFloatField;
+    DSFullbardero_subCUST_NAME: TWideStringField;
+    ds_reins_info_subNAME: TWideStringField;
+    ds_reins_info_subBARDERO_NO: TWideStringField;
+    ds_reins_info_subT_SIGORTACI: TWideStringField;
+    ds_reins_info_subPOLICY_NUM: TWideStringField;
+    ds_reins_info_subSTATUS: TFloatField;
+    ds_reins_info_subSIGORTA_HAQQI: TFloatField;
+    ds_reins_info_subCLAIM_NUM: TWideStringField;
+    DSMainSubBardero: TOracleDataSet;
+    DSrMainSubBardero: TDataSource;
+    DSMainSubBarderoID: TFloatField;
+    DSMainSubBarderoBARDERO_NO: TWideStringField;
+    DSMainSubBarderoDEP_ID: TFloatField;
+    DSMainSubBarderoCUST_ID: TFloatField;
+    DSMainSubBarderoCLAIM_NUM: TWideStringField;
+    DSMainSubBarderoPOLICY_NUM: TWideStringField;
+    DSMainSubBarderoNAME: TWideStringField;
+    DSMainSubBarderoSTATUS: TFloatField;
+    DSRins_sub_bardero: TDataSource;
+    DSins_sub_bardero: TOracleDataSet;
+    FloatField8: TFloatField;
+    WideStringField8: TWideStringField;
+    FloatField9: TFloatField;
+    FloatField10: TFloatField;
+    DateTimeField1: TDateTimeField;
+    DSRCustReinssub: TDataSource;
+    DSCustReinssub: TOracleDataSet;
+    IntegerField1: TIntegerField;
+    WideStringField9: TWideStringField;
+    TSCustaccS: TOracleDataSet;
+    TSCustaccSID: TFloatField;
+    TSCustaccSACC_NO: TWideStringField;
+    TSRCustaccS: TDataSource;
+    DSKassaS: TOracleDataSet;
+    FloatField11: TFloatField;
+    WideStringField10: TWideStringField;
+    DSRKassaS: TDataSource;
+    DSins_insurances: TOracleDataSet;
+    DSRins_insurances: TDataSource;
+    DSins_insurancesID: TIntegerField;
+    DSins_insurancesNAME: TWideStringField;
+    dssub_custH: TOracleDataSet;
+    DSFullBardero_ter_infoSTATUS: TFloatField;
+    ds_main_bardero_terminateCID: TFloatField;
+    ds_main_bardero_terminateSIGORTA_NOVU: TWideStringField;
+    DSMainSubBarderoSIGORTANOVU: TWideStringField;
+    DS_Bardero__sub_sayi: TOracleDataSet;
+    DS_Bardero__sub_sayiSAY: TFloatField;
+    DSMainLossBarderoSIGORTA_NOVU: TWideStringField;
+    DS_Bardero__loss_sayi: TOracleDataSet;
+    DS_Bardero__loss_sayiSAY: TFloatField;
+    DS_Bardero__ter_sayi: TOracleDataSet;
+    DS_Bardero__ter_sayiSAY: TFloatField;
+    DS_Sigorta_bardero_sayi: TOracleDataSet;
+    DS_Sigorta_bardero_sayiSAY: TFloatField;
+    DS_Bardero__premiya_sogortaci: TOracleDataSet;
+    DS_Bardero_ter_sogortaci: TOracleDataSet;
+    DS_Bardero_ter_sogortaciSAY: TFloatField;
+    DS_Bardero__premiya_sogortaciSAY: TFloatField;
+    DSins_reinsuranceTARIF: TFloatField;
+    DSins_reinsuranceMainTARIF: TFloatField;
+    ds_reins_infoTARIF: TFloatField;
+    DSins_reinsurance_updTARIF: TFloatField;
+    contract: TOracleDataSet;
+    procedure DataModuleCreate(Sender: TObject);
+    procedure DataModuleDestroy(Sender: TObject);
+    procedure DSFullbarderoAfterScroll(DataSet: TDataSet);
+    procedure DSFullbardero_lossAfterScroll(DataSet: TDataSet);
+    procedure DSFullBardero_terminatedAfterScroll(DataSet: TDataSet);
+    procedure DSins_terminated_barderoAfterInsert(DataSet: TDataSet);
+    procedure DSFullbardero_subAfterScroll(DataSet: TDataSet);
+    procedure DSins_loss_barderoAfterInsert(DataSet: TDataSet);
+    procedure DSins_sub_barderoAfterInsert(DataSet: TDataSet);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  DMreinsurance: TDMreinsurance;
+
+implementation
+
+{$R *.dfm}
+uses CommanParametrs,sboapiDataModuleImpl, FrmAddCustImpl,
+Frmreinsoperationimpl;
+procedure TDMreinsurance.DataModuleCreate(Sender: TObject);
+begin
+
+DSins_reinsuranceMain.close;
+DSins_reinsuranceMain.SetVariable('p_cid',contactid);
+DSins_reinsuranceMain.Open;
+
+DSCustmers.Open;
+DSSysdat.Open;
+//DSFullbardero.Open;
+ds_reins_info.Open;
+dsinsurance_type.Open;
+
+DSCustReins.close;
+DSCustReins.SetVariable('pcid',contactid);
+DSCustReins.Open;
+
+DSKassa.Open;
+DSKassaZ.Open;
+DSKassaX.Open;
+DSKassaS.Open;
+DSFullbardero_loss.Open;
+DSFullBardero_terminated.Open;
+DSFullbardero_sub.Open;
+DSins_insurances.Open;
+
+
+end;
+
+procedure TDMreinsurance.DataModuleDestroy(Sender: TObject);
+begin
+DSSysdat.close;
+//DSFullbardero.close;
+ds_reins_info.close;
+dsinsurance_type.Close;
+DSCustReins.Close;
+DSKassa.Close;
+DSKassaZ.Close;
+DSKassaX.Close;
+DSKassaS.Close;
+DSFullbardero_loss.Close;
+DSFullBardero_terminated.Close;
+DSFullbardero_sub.Close;
+DSins_insurances.Close;
+end;
+
+procedure TDMreinsurance.DSFullbarderoAfterScroll(DataSet: TDataSet);
+begin
+      //ShowMessage(Frmreinsoperation.XDBGrid1.DataSource.Dataset.FieldByName('bardero_no').asstring);
+ {with ds_reins_info   do
+ begin
+   Close;
+   SetVariable('pbardero_no', Frmreinsoperation.XDBGrid1.DataSource.Dataset.FieldByName('bardero_no').asstring);
+   Open;
+ end;  }
+end;
+
+procedure TDMreinsurance.DSFullbardero_lossAfterScroll(DataSet: TDataSet);
+begin
+ {   with ds_reins_info_loss   do
+ begin
+   Close;
+   SetVariable('pbardero_no', Frmreinsoperation.XDBGrid3.DataSource.Dataset.FieldByName('bardero_no').asstring);
+   Open;
+ end;     }
+end;
+
+procedure TDMreinsurance.DSFullbardero_subAfterScroll(DataSet: TDataSet);
+begin
+ {   with ds_reins_info_sub   do
+ begin
+   Close;
+   SetVariable('pbardero_no', Frmreinsoperation.XDBGrid7.DataSource.Dataset.FieldByName('bardero_no').asstring);
+   Open;
+ end;   }
+end;
+
+procedure TDMreinsurance.DSFullBardero_terminatedAfterScroll(DataSet: TDataSet);
+begin
+
+   { with DSFullBardero_ter_info   do
+ begin
+   Close;
+   SetVariable('pbardero_no', Frmreinsoperation.XDBGrid5.DataSource.Dataset.FieldByName('bardero_no').asstring);
+   Open;
+ end;    }
+end;
+
+procedure TDMreinsurance.DSins_loss_barderoAfterInsert(DataSet: TDataSet);
+begin
+//showmessage(inttostr(commandepid));
+DMreinsurance.DSins_loss_bardero.FieldByName('dep_id').AsInteger:=commandepid;
+DMreinsurance.DSins_loss_bardero.FieldByName('dat').AsDateTime:=DSSysdat.FieldByName('tek_dat').AsDateTime;
+end;
+
+procedure TDMreinsurance.DSins_sub_barderoAfterInsert(DataSet: TDataSet);
+begin
+DMreinsurance.DSins_sub_bardero.FieldByName('dep_id').AsInteger:=commandepid;
+DMreinsurance.DSins_sub_bardero.FieldByName('dat').AsDateTime:=DSSysdat.FieldByName('tek_dat').AsDateTime;
+end;
+
+procedure TDMreinsurance.DSins_terminated_barderoAfterInsert(DataSet: TDataSet);
+begin
+DMreinsurance.DSins_terminated_bardero.FieldByName('cid').AsInteger:=contactid;
+DMreinsurance.DSins_terminated_bardero.FieldByName('status').AsInteger:=0;
+DMreinsurance.DSins_terminated_bardero.FieldByName('dat').AsDateTime:=DSSysdat.FieldByName('tek_dat').AsDateTime;
+end;
+
+end.

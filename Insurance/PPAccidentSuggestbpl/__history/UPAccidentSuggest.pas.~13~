@@ -1,0 +1,110 @@
+unit UPAccidentSuggest;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, Buttons, XFSCtrls, ComCtrls, DBCtrls, Mask, ExtCtrls;
+
+type
+  TPAccidentSuggest = class(TForm)
+    XFPanel1: TXFPanel;
+    XFLabel1: TXFLabel;
+    XFLabel2: TXFLabel;
+    XFLabel3: TXFLabel;
+    XFLabel4: TXFLabel;
+    XFLabel5: TXFLabel;
+    XFLabel6: TXFLabel;
+    XFLabel7: TXFLabel;
+    XFLabel9: TXFLabel;
+    XFLabel10: TXFLabel;
+    XFLabel11: TXFLabel;
+    DBEdit4: TDBEdit;
+    DBEdit5: TDBEdit;
+    DBEdit3: TDBEdit;
+    DBEdit1: TDBEdit;
+    DBLookupComboBox3: TDBLookupComboBox;
+    DBLookupComboBoxCondition: TDBLookupComboBox;
+    memConditions: TMemo;
+    DBLookupComboBoxFranshiz: TDBLookupComboBox;
+    memFrashize: TMemo;
+    DBEdit6: TDBEdit;
+    DTPContractDate: TDateTimePicker;
+    cbConditions: TXFCheckBox;
+    cbFranshiz: TXFCheckBox;
+    XFPanel2: TXFPanel;
+    btPolicy: TBitBtn;
+    btPrint: TBitBtn;
+    btApply: TBitBtn;
+    BitBtn1: TBitBtn;
+    BitBtn2: TBitBtn;
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormCreate(Sender: TObject);
+    procedure DBLookupComboBox3Click(Sender: TObject);
+    procedure DBLookupComboBox3KeyPress(Sender: TObject; var Key: Char);
+    procedure DBEdit1Change(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  PAccidentSuggest: TPAccidentSuggest;
+  procedure InitPlugin(s:string);export;
+implementation
+
+uses DMPAccidentSuggestImpl,ComObj,CommanParametrs,sboapiDataModuleImpl,SBTranslateProc;
+
+{$R *.dfm}
+
+procedure InitPlugin(s:string);export;
+begin
+
+
+   PAccidentSuggest.ShowModal;
+end;
+exports
+     InitPlugin;
+
+     procedure TPAccidentSuggest.DBEdit1Change(Sender: TObject);
+begin
+     with DMPAccidentSuggest.ODSCondition do
+          memConditions.Text := FieldByName('name').asString;
+     btApply.Enabled:=true;
+end;
+
+procedure TPAccidentSuggest.DBLookupComboBox3Click(Sender: TObject);
+begin
+ btApply.Enabled:=true;
+end;
+
+procedure TPAccidentSuggest.DBLookupComboBox3KeyPress(Sender: TObject;
+  var Key: Char);
+begin
+     if Key = #13 then
+     begin
+        if HiWord(GetKeyState(VK_Shift))<>0 then
+           with Sender as TControl do
+           SelectNext(ActiveControl,False, True)
+        else
+           with Sender as TControl do
+           SelectNext(ActiveControl,True, True);
+        key:=#0;
+     end;
+end;
+
+procedure TPAccidentSuggest.FormCreate(Sender: TObject);
+begin
+DMPAccidentSuggest:=TDMPAccidentSuggest.create(self);
+SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TPAccidentSuggest.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+if ord(key)=vk_escape then  close;
+ end;
+
+initialization
+ PAccidentSuggest := TPAccidentSuggest.Create(Application);
+end.

@@ -1,0 +1,279 @@
+unit newcardeditfrm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Menus, DBLookupEh, DBCtrlsEh, ComCtrls, StdCtrls, Grids, DBGrids,
+  Mask, DBCtrls;
+
+type
+  TNewCardEditform = class(TForm)
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    Label6: TLabel;
+    Label7: TLabel;
+    Label10: TLabel;
+    Label11: TLabel;
+    Label12: TLabel;
+    Label13: TLabel;
+    Label14: TLabel;
+    Label15: TLabel;
+    Label16: TLabel;
+    Label17: TLabel;
+    Label18: TLabel;
+    Label19: TLabel;
+    Label21: TLabel;
+    Label22: TLabel;
+    Label23: TLabel;
+    Label24: TLabel;
+    Label25: TLabel;
+    Label26: TLabel;
+    Label27: TLabel;
+    Label28: TLabel;
+    Label29: TLabel;
+    Label30: TLabel;
+    Label31: TLabel;
+    Label32: TLabel;
+    Label9: TLabel;
+    Label35: TLabel;
+    Button2: TButton;
+    Edit5: TEdit;
+    ComboBox10: TComboBox;
+    CheckBox1: TCheckBox;
+    DateTimePicker4: TDateTimePicker;
+    ComboBox2: TComboBox;
+    DBDateTimeEditEh3: TDBDateTimeEditEh;
+    Edit16: TEdit;
+    Edit17: TEdit;
+    Edit18: TEdit;
+    Edit19: TEdit;
+    Edit20: TEdit;
+    Edit21: TEdit;
+    Edit22: TEdit;
+    Edit23: TEdit;
+    Edit24: TEdit;
+    Edit25: TEdit;
+    Edit26: TEdit;
+    ComboBox4: TComboBox;
+    ComboBox5: TComboBox;
+    Edit15: TEdit;
+    ComboBox11: TComboBox;
+    ComboBox12: TComboBox;
+    DateTimePicker5: TDateTimePicker;
+    DateTimePicker6: TDateTimePicker;
+    DateTimePicker7: TDateTimePicker;
+    DateTimePicker8: TDateTimePicker;
+    Edit28: TEdit;
+    DBEdit17: TDBEdit;
+    CheckBox2: TCheckBox;
+    ComboBox1: TComboBox;
+    Edit14: TEdit;
+    DBLookupComboBox6: TDBLookupComboboxEh;
+    Edit_acc_name: TEdit;
+    Edit29: TEdit;
+    procedure FormCreate(Sender: TObject);
+    procedure CheckBox1Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure Edit14KeyPress(Sender: TObject; var Key: Char);
+    procedure DBLookupComboBox6Change(Sender: TObject);
+    procedure ComboBox2Enter(Sender: TObject);
+    procedure ComboBox2KeyPress(Sender: TObject; var Key: Char);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  NewCardEditform: TNewCardEditform;
+
+implementation
+
+uses Unit18, SBTranslateProc,sboapiDataModuleImpl;
+
+
+
+
+{$R *.dfm}
+
+procedure TNewCardEditform.CheckBox1Click(Sender: TObject);
+begin
+if CheckBox1.Checked then
+begin
+if ComboBox10.Text<>'' then
+Edit23.Text:=ComboBox10.Text+'/'+Edit15.Text+'/'+edit16.Text else
+Edit23.Text:='/'+Edit15.Text+'/'+edit16.Text
+end;
+end;
+
+procedure TNewCardEditform.ComboBox2Enter(Sender: TObject);
+var z:integer;
+begin
+ComboBox2.Clear;
+   DataMod_CARDS.COMPANi.Close;
+   DataMod_CARDS.COMPANi.Open;
+   DataMod_CARDS.COMPANi.First;
+
+   if ComboBox2.ItemIndex<>0 then
+    begin
+FOR  z:=0 to DataMod_CARDS.compani.RecordCount do
+begin
+ IF Z=0 THEN  ComboBox2.Items.add(' ') else
+  begin
+
+ ComboBox2.Items.add(DataMod_CARDS.COMPANi.fieldbyname('COMPANY_NAME').asstring);
+ DataMod_CARDS.COMPANi.next;
+  end;
+ end;
+    end;
+end;
+
+procedure TNewCardEditform.ComboBox2KeyPress(Sender: TObject; var Key: Char);
+begin
+IF ORD(KEY)>126  THEN KEY:=#0;
+IF ORD(KEY)=63 THEN KEY:=#0;
+ActivateKeyboardLayout(LoadKeyboardLayout('00000409', 0), 0);
+end;
+
+procedure TNewCardEditform.DBLookupComboBox6Change(Sender: TObject);
+ var
+acc,st: String;
+Flags: TReplaceFlags;
+  begin
+  Flags:= [ rfReplaceAll, rfIgnoreCase ];
+  SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+if DataMod_CARDS.hesab.RecordCount>0 then
+   begin
+  with DataMod_CARDS, HESAB do begin
+
+  if edit14.text='' then
+   SetVariable('CID', null)
+   else
+   SetVariable('CID', edit14.text);
+
+   SetVariable('p_AccNO', dblookupcombobox6.Text);
+
+  end;
+    DataMod_CARDS.new_cust.CloseAll;
+
+ DataMod_CARDS.new_cust.SetVariable('kid',DataMod_CARDS.HESAB.Fieldbyname('KLI_ID').AsInteger);
+    DataMod_CARDS.new_cust.Open;
+
+
+   {DataMod_CARDS.mushteriler.Locate
+   ('ID',DataMod_CARDS.HESAB.Fieldbyname('KLI_ID').AsInteger, [loCaseInsensitive]);
+        }
+        acc:= DataMod_CARDS.hesab.FieldByName('ACC_NO').asString;
+
+   //DataMod_CARDS.HESAB.Locate('ACC_no',acc, [loCaseInsensitive, loPartialKey]);
+
+  // Edit14.Text:=Inttostr(DataMod_CARDS.mushteriler.fieldbyname('id').AsInteger);
+  // Edit14.Text:=Inttostr(DataMod_CARDS.new_cust.Fieldbyname('ID').AsInteger);
+   Edit_acc_name.Text:=DataMod_CARDS.new_cust.FieldByName('name').AsString;
+   end;
+
+end;
+
+procedure TNewCardEditform.Edit14KeyPress(Sender: TObject; var Key: Char);
+var acc:variant;
+mus:   integer;
+begin
+if key=#13 then
+begin  //1
+
+  if Edit14.Text='' then begin  //2
+       // ShowMessage('bura girdi 1');
+        DataMod_CARDS.hesab.Close;
+        DataMod_CARDS.hesab.SetVariable('CID', null);
+        DataMod_CARDS.hesab.SetVariable('p_AccNO', '%%');
+        DataMod_CARDS.hesab.open;
+        DBLookupComboBox6.Text:='';
+        Edit14.Text:='';
+       //Memo1.Text :=DataMod_CARDS.hesab.SQL.Text;
+//ShowMessage(IntToStr(DataMod_CARDS.hesab.RecordCount));
+      //  if DataMod_CARDS.HESAB.RecordCount>0
+        //      then
+          //       begin //3
+            //        acc:= DataMod_CARDS.hesab.FieldByName('ACC_NO').asVariant;
+              //
+                //    DataMod_CARDS.mushteriler.Locate
+                  //  ('ID',DataMod_CARDS.HESAB.Fieldbyname('KLI_ID').AsInteger, [loCaseInsensitive, loPartialKey]);
+
+                  // DataMod_CARDS.HESAB.Locate('ACC_no',acc, [loCaseInsensitive, loPartialKey]);
+                  //2
+                  end else       //1
+
+
+
+                  begin //4
+                  //ShowMessage('bura girdi');
+                  mus:= strtoint(Edit14.Text);
+                  DataMod_CARDS.hesab.Close;
+
+                  DataMod_CARDS.hesab.SetVariable('CID', edit14.text);
+                  DataMod_CARDS.hesab.SetVariable('p_AccNO', null);
+                  DataMod_CARDS.hesab.open;
+                  DBLookupComboBox6.Text:='';
+
+                  if DataMod_CARDS.HESAB.RecordCount>0
+   then
+   begin //5
+   //ShowMessage('1 '+IntToStr(DataMod_CARDS.HESAB.RecordCount));
+  acc:= DataMod_CARDS.hesab.FieldByName('ACC_NO').asVariant;
+  DataMod_CARDS.new_cust.CloseAll;
+ DataMod_CARDS.new_cust.SetVariable('kid',DataMod_CARDS.HESAB.Fieldbyname('KLI_ID').AsInteger);
+    DataMod_CARDS.new_cust.Open;
+    Edit_acc_name.Text:=DataMod_CARDS.new_cust.FieldByName('name').AsString;
+
+
+
+  {DataMod_CARDS.mushteriler.Locate
+   ('ID',DataMod_CARDS.HESAB.Fieldbyname('KLI_ID').AsInteger, [loCaseInsensitive]);
+                         }
+ // DataMod_CARDS.HESAB.Locate('ACC_no',acc, [loCaseInsensitive]);
+   //ShowMessage('2 '+IntToStr(DataMod_CARDS.HESAB.RecordCount));
+
+   end; //5
+
+end; //4
+ end;
+
+end;
+
+procedure TNewCardEditform.FormCreate(Sender: TObject);
+begin
+    {****************************************************
+      ****************************************************
+      ****************************************************
+      **************Sabuhi M. 2020.10.30******************
+      ****************************************************
+      ****************************************************
+      ***************************************************}
+      SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TNewCardEditform.FormShow(Sender: TObject);
+var i:integer;
+begin
+for i:=0 to DataMod_CARDS.CARDTYPES.recordcount do
+begin
+
+comboBox1.Items.add(DataMod_CARDS.CARDTYPES.fieldbyname('NAME').asstring);
+DataMod_CARDS.CARDTYPES.next;
+
+end;
+Edit19.Text:='BAKU';
+Edit20.Text:='AZE';
+Edit21.Text:='AZE';
+ComboBox12.Text:='CARD OK';
+
+
+
+
+end;
+
+end.

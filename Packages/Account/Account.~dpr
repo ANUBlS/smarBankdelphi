@@ -1,0 +1,27 @@
+library Account;
+
+uses
+  ComServ,
+  Account_TLB in 'Account_TLB.pas',
+  AccountImpl in 'AccountImpl.pas' {AccountForm: TActiveForm} {AccountForm: CoClass},
+  AccountDataModuleImpl in 'AccountDataModuleImpl.pas' {AccDataModule: TDataModule},
+  AccountPropertiesImpl in 'AccountPropertiesImpl.pas' {AccountPropertiesForm},
+  AccountFlagsImpl in 'AccountFlagsImpl.pas' {FormAccFlags},
+  AccountTransactionsImpl in 'AccountTransactionsImpl.pas' {FormAccountTransactions},
+  IntervalImpl in 'IntervalImpl.pas' {FormInterval},
+  AccountRestState in 'AccountRestState.pas' {Form1};
+
+{$E ocx}
+
+exports
+  DllGetClassObject,
+  DllCanUnloadNow,
+  DllRegisterServer,
+  DllUnregisterServer;
+
+{$R *.TLB}
+
+{$R *.RES}
+
+begin
+end.

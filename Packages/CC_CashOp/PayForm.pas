@@ -1,0 +1,164 @@
+unit PayForm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ExtCtrls, DB, OracleData, Grids, DBGrids, StdCtrls, Buttons,
+  ComCtrls,
+  Oracle,  CurrencyEdit, Mask, DBCtrls;
+
+type
+  TPay = class(TForm)
+    GroupBox2: TGroupBox;
+    DTPOpDate: TDateTimePicker;
+    SysDat: TOracleDataSet;
+    SysDatTEK_DAT: TDateTimeField;
+    SysDatPRED_DAT: TDateTimeField;
+    SysDatARC_DAY: TDateTimeField;
+    SysDatCLOSE: TIntegerField;
+    GroupBox1: TGroupBox;
+    StaticText1: TStaticText;
+    DBEdit1: TDBEdit;
+    StaticText2: TStaticText;
+    CurrencyEdit1: TCurrencyEdit;
+    GroupBox3: TGroupBox;
+    StaticText3: TStaticText;
+    DBEdit2: TDBEdit;
+    StaticText4: TStaticText;
+    CurrencyEdit2: TCurrencyEdit;
+    SpeedButton1: TSpeedButton;
+    SpeedButton2: TSpeedButton;
+    sbcm_construction: TOraclePackage;
+    Cash: TOracleDataSet;
+    CashID: TFloatField;
+    CashACC_NO: TWideStringField;
+    CashNAME: TWideStringField;
+    CashDatSrc: TDataSource;
+    DBText1: TDBText;
+    Label1: TLabel;
+    procedure FormCreate(Sender: TObject);
+    procedure BitBtn1Click(Sender: TObject);
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+
+  private
+    { Private declarations }
+  public
+     { Public declarations }
+    function TrDelayed_Show(AOwner: TComponent): Boolean;
+
+  end;
+
+var
+  Pay: TPay;
+
+implementation
+{$R *.dfm}
+uses sboapiDataModuleImpl,CC_CashOperationImpl, TransactionviewFormImpl,
+  cc_DataMod_CashOper, CC_CashOperationMgr_TLB, OrderImpl;
+
+
+function TPay.TrDelayed_Show(AOwner: TComponent): Boolean;
+begin
+  with TTransactionviewForm.Create(AOwner) do
+    try
+      Result := ShowModal = mrOk;
+      Update;
+
+    finally
+      Release
+    end;
+end;
+
+procedure TPay.BitBtn1Click(Sender: TObject);
+var
+  CommitPayment: Boolean;
+  TrDate: TDateTime;
+  sum: real;
+  desc: string;
+  code: integer;
+
+begin
+  TrDate := integer(Trunc(DTPOpDate.dateTime));
+
+  end;
+
+
+procedure TPay.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+//FrmOrder.main.close;
+end;
+
+procedure TPay.FormCreate(Sender: TObject);
+begin
+SysDat.open;
+  DTPOpDate.dateTime := SysDat.FieldByName('TEK_DAT').AsDateTime;
+ Cash.Open;
+end;
+
+procedure TPay.FormDestroy(Sender: TObject);
+begin
+SysDat.closeall;
+Cash.closeall  ;
+end;
+
+procedure TPay.SpeedButton1Click(Sender: TObject);
+var CommitPayment :Boolean;
+    TrDate :TDateTime;
+    faiz,sum :real;
+    desc: string;
+    code: integer;
+begin
+sum :=StrToFloat(CurrencyEdit1.text) ;
+faiz:=StrToFloat(CurrencyEdit2.text) ;
+
+   TrDate := integer(Trunc(DTPOpDate.dateTime));
+   //ShowMessage(datetostr(TrDate));
+   desc:='';
+   code:=0;
+   with sbcm_construction do
+        CallProcedure('PaymentTracttransactions2',[
+      'p_contractid',  DataMod_CCCashOper.cc_contracts.fieldbyname('id').asinteger,
+      'p_dat'  ,TrDate,
+      'p_desc' ,desc,
+      'p_code' ,code,
+      'p_flatamt',sum,
+      'p_showtr', TRUE,
+      'p_DebitAccID',Cash.FieldByName('ID').AsInteger,
+      'p_faiz',faiz]);
+
+
+      try
+
+    CommitPayment := TrDelayed_Show(Self);
+    Update;
+
+    with sbcm_construction do
+    CallProcedure('commitdelayedtransactions',[
+       'DoCommit' , CommitPayment
+    ]);
+
+
+    if CommitPayment then
+    Self.ModalResult := mrOk;
+    Self.Update;
+    FrmOrder.Payments.Refresh;
+
+  except
+
+    with sbcm_construction do
+    CallProcedure('commitdelayedtransactions',[
+       'DoCommit' , False
+    ]);
+
+    raise;
+
+  end;
+
+
+
+end;
+
+end.

@@ -1,0 +1,121 @@
+﻿unit Unit8;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, QuickRpt, QRCtrls, ExtCtrls, qrpBaseCtrls, DB, OracleData;
+
+type
+  TForm8 = class(TForm)
+    QRPQuicAct: TQRPQuickrep;
+    QRBand1: TQRBand;
+    QRLabel1: TQRLabel;
+    QRLabelLastOstat: TQRLabel;
+    QRLabelValEnd: TQRLabel;
+    QRLabel3: TQRLabel;
+    QRMemo1: TQRMemo;
+    QRMemo2: TQRMemo;
+    QRLabel4: TQRLabel;
+    QRLabel5: TQRLabel;
+    QRLabel6: TQRLabel;
+    QRLabel7: TQRLabel;
+    QRLabel8: TQRLabel;
+    QRLabel11: TQRLabel;
+    QRLabel12: TQRLabel;
+    QRLabel13: TQRLabel;
+    DBTextOpenDate: TQRDBText;
+    QRLabel2: TQRLabel;
+    QRDBText1: TQRDBText;
+    QRLabel9: TQRLabel;
+    OracleDataSet1: TOracleDataSet;
+    OracleDataSet1WORK_PLACE: TWideStringField;
+    OracleDataSet1WORK_POST: TWideStringField;
+    OracleDataSet1WORK_ADRESS: TWideStringField;
+    OracleDataSet1TAR: TWideStringField;
+    QRLabel10: TQRLabel;
+    QRLabel14: TQRLabel;
+    QRLabel15: TQRLabel;
+    QRLabel16: TQRLabel;
+    QRLabel17: TQRLabel;
+    QRLabel18: TQRLabel;
+    QRLabel19: TQRLabel;
+    QRLabel20: TQRLabel;
+    QRDBText2: TQRDBText;
+    OracleDataSet1INN: TWideStringField;
+    procedure QRBand1BeforePrint(Sender: TQRCustomBand; var PrintBand: Boolean);
+    procedure QRPQuicActBeforePrint(Sender: TCustomQuickRep;
+      var PrintReport: Boolean);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form8: TForm8;
+
+implementation
+   uses StatementFrmImpl, unitdata, SBTranslateProc, sboapiDataModuleImpl;
+{$R *.dfm}
+
+procedure TForm8.QRBand1BeforePrint(Sender: TQRCustomBand;
+  var PrintBand: Boolean);
+  var name,text,tarx, acc_no:string;
+  i:integer  ;
+  s,s1,s2,s3 :Variant;
+  s4,s5:Variant;
+begin
+with oracledataset1 do
+begin
+   close;
+      SetVariable('v_id',DataModSTX.ODSMainState.FieldByName('CUSTOMERID').AsInteger);
+   open;
+end;
+// showmessage( DataModSTX.ODSMainState.FieldByName('CUSTOMERID').AsString);
+
+    QRLabel10.Caption:=OracleDataSet1WORK_POST.AsString+'/'+OracleDataSet1TAR.AsString ;
+    tarx:=OracleDataSet1WORK_PLACE.AsString+' -ci  il   tarixli - '+ OracleDataSet1WORK_POST.AsString+ '  '+ OracleDataSet1WORK_ADRESS.AsString;
+
+   name:='         Biz aşağda imza edənlər bir tərəfdən     adsoyad                                    (İcraçı).digər tərəfdən ';
+    name := StringReplace( name,
+   'adsoyad', DataModSTX.ODSMainStateACCOUNTNAME.asstring, [rfReplaceAll, rfIgnoreCase]);
+  QRMemo1.Lines[0] := name;
+
+    acc_no := tarx + '  İcraçı   hesabno ';
+  acc_no := StringReplace( acc_no,
+   'hesabno', DataModSTX.ODSMainStateACCOUNTNUMBER.asstring, [rfReplaceAll, rfIgnoreCase]);
+  QRMemo1.Lines[4] := acc_no;
+
+   text:= 'DNN  yük tarix   -ci  ildə aşağıda göstərən məbləğdə yükdaşıma xidmətlərini yerinə yetirmişdir';
+   text:= StringReplace( text,
+   'tarix ', OracleDataSet1TAR.AsString , [rfReplaceAll, rfIgnoreCase]);
+    QRMemo1.Lines[6] := text;
+
+  s1:=0;
+  s2:=0;
+  DataModSTX.ODSExtractTrans.First;
+   for i := 0 to DataModSTX.ODSExtractTrans.RecordCount-1 do
+    begin
+     s:=DataModSTX.ODSExtractTrans.FieldByName('LDebit').AsVariant;
+     s3:=DataModSTX.ODSExtractTrans.FieldByName('LKredit').AsVariant;
+     s1:=s1+abs(s);
+     s2:=s2+abs(s3) ;
+     DataModSTX.ODSExtractTrans.Next;
+    end;
+    s5:=FormatFloat('#,##0.00',(DataModSTX.ODSMainState.FieldByName('POKOSTAT').AsCurrency));
+  s4:=s2+s5-s1;
+  QRLabelValEnd.Caption:=FormatFloat('#,##0.00',s4);
+
+//FormatFloat('#,##0.00',(DataModSTX.ODSMainState.FieldByName('EndOstat').AsCurrency));
+  QRLabel15.Caption:=DateToStr(StatementFrm.DTP_Begin.DateTime);
+  QRLabel16.Caption:=DateToStr(StatementFrm.DTP_End.DateTime);
+end;
+
+procedure TForm8.QRPQuicActBeforePrint(Sender: TCustomQuickRep;
+  var PrintReport: Boolean);
+begin
+ SBTranslateProc.TranslateAllCompQuickRep(QRPQuicAct, sboapiDataModule.OrPack_SL);
+end;
+
+end.

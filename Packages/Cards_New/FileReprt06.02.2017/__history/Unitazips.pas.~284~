@@ -1,0 +1,3231 @@
+﻿unit Unitazips;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ComCtrls, SearchEdit, SearchCombo, DBCtrls,
+  CMHintDBLookupComboBox, Mask, DBCtrlsEh, DBLookupEh,db, OracleData, DBGridEh,
+  CMDBSearchEdit,ClipBrd, Unit15, Azipstemp, Unit17, ExtCtrls, Grids, DBGrids;
+
+type
+  Tazips = class(TForm)
+    GroupBox1: TGroupBox;
+    GroupBox2: TGroupBox;
+    GroupBox3: TGroupBox;
+    Button1: TButton;
+    GroupBox4: TGroupBox;
+    Label1: TLabel;
+    Label2: TLabel;
+    referens: TEdit;
+    Label3: TLabel;
+    mf23b: TEdit;
+    Label4: TLabel;
+    val: TEdit;
+    Label5: TLabel;
+    DateTimePicker1: TDateTimePicker;
+    Label6: TLabel;
+    Label7: TLabel;
+    Edit1: TEdit;
+    GroupBox5: TGroupBox;
+    Edit2: TEdit;
+    Label8: TLabel;
+    Label9: TLabel;
+    Edit3: TEdit;
+    Label10: TLabel;
+    Edit4: TEdit;
+    Label11: TLabel;
+    Label12: TLabel;
+    Label13: TLabel;
+    Button2: TButton;
+    Button3: TButton;
+    reciverbic: TSearchEdit;
+    SearchCombo2: TComboBox;
+    OF70_RichEdit: TRichEdit;
+    OF72_RichEdit: TRichEdit;
+    Label14: TLabel;
+    amount: TEdit;
+    SearchEdit12: TDBLookupComboBox;
+    Edit5: TEdit;
+    Memo1: TMemo;
+    Memo2: TMemo;
+    SearchEdit2: TSearchEdit;
+    Label15: TLabel;
+    MT103: TRadioButton;
+    MT205: TRadioButton;
+    relatedrf: TEdit;
+    Memo3: TMemo;
+    Memo4: TMemo;
+    Info: TGroupBox;
+    Label19: TLabel;
+    Edit6: TEdit;
+    SearchEdit1: TDBLookupComboboxEh;
+    Edit7: TEdit;
+    Button4: TButton;
+    RadioButton1: TRadioButton;
+    RadioButton2: TRadioButton;
+    RadioButton3: TRadioButton;
+    Button5: TButton;
+    Label20: TLabel;
+    Edit9: TEdit;
+    RadioButton4: TRadioButton;
+    RadioButton5: TRadioButton;
+    RadioButton6: TRadioButton;
+    RadioButton7: TRadioButton;
+    Edit10: TEdit;
+    RadioButton8: TRadioButton;
+    RadioButton9: TRadioButton;
+    RadioButton10: TRadioButton;
+    RadioButton11: TRadioButton;
+    RadioButton12: TRadioButton;
+    RadioButton13: TRadioButton;
+    send1: TGroupBox;
+    Label16: TLabel;
+    Label17: TLabel;
+    Label18: TLabel;
+    Məbləğ: TLabel;
+    gSearch1: TSearchEdit;
+    gSearchEdit4: TSearchEdit;
+    gComboBox: TComboBox;
+    Edit8: TEdit;
+    gSearch: TDBLookupComboBox;
+    ComboBox1: TComboBox;
+    Button6: TButton;
+    mt298200: TRadioButton;
+    Panel2: TPanel;
+    DBGrid1: TDBGrid;
+    Edit11: TEdit;
+    Button7: TButton;
+    Label21: TLabel;
+    Label22: TLabel;
+    ComboBox2: TComboBox;
+    Edit12: TEdit;
+    Label23: TLabel;
+    Edit13: TEdit;
+    Label24: TLabel;
+    MT941: TRadioButton;
+    Panel1: TPanel;
+    MT942: TRadioButton;
+    GroupBox6: TGroupBox;
+    Edit14: TEdit;
+    Edit15: TEdit;
+    Edit16: TEdit;
+    Label25: TLabel;
+    Label26: TLabel;
+    Label27: TLabel;
+    MT999: TRadioButton;
+    GroupBox7: TGroupBox;
+    Label28: TLabel;
+    RichEdit1: TRichEdit;
+    procedure FormCreate(Sender: TObject);
+    procedure DBLookupComboBox1Enter(Sender: TObject);
+    procedure DBLookupComboBox2Enter(Sender: TObject);
+    procedure SearchCombo1Enter(Sender: TObject);
+    procedure SearchCombo2DragDrop(Sender, Source: TObject; X, Y: Integer);
+    procedure reciverbicChange(Sender: TObject);
+    procedure SearchCombo5Change(Sender: TObject);
+    procedure SearchCombo2Change(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure Button3Click(Sender: TObject);
+    procedure OF70_RichEditChange(Sender: TObject);
+    procedure OF70_RichEditKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure OF70_RichEditKeyPress(Sender: TObject; var Key: Char);
+    procedure OF72_RichEditKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure OF72_RichEditKeyPress(Sender: TObject; var Key: Char);
+    procedure OF72_RichEditChange(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
+    procedure SearchEdit12Exit(Sender: TObject);
+    procedure reciverbicExit(Sender: TObject);
+    procedure SearchEdit2Exit(Sender: TObject);
+    procedure Edit2Exit(Sender: TObject);
+    procedure Edit3Exit(Sender: TObject);
+    procedure Edit4Exit(Sender: TObject);
+    procedure SearchCombo2Exit(Sender: TObject);
+    procedure SearchEdit12CloseUp(Sender: TObject);
+    procedure Edit2Change(Sender: TObject);
+    procedure Edit3Change(Sender: TObject);
+    procedure Edit4Change(Sender: TObject);
+    procedure SearchEdit1Change(Sender: TObject);
+    procedure MT103Click(Sender: TObject);
+    procedure gSearchEdit4Change(Sender: TObject);
+    procedure gComboBoxChange(Sender: TObject);
+    procedure CMSearchEdit1Change(Sender: TObject);
+    procedure Edit6Enter(Sender: TObject);
+    procedure Edit6Change(Sender: TObject);
+    procedure Edit6KeyPress(Sender: TObject; var Key: Char);
+    procedure SearchEdit1Exit(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure reciverbicKeyPress(Sender: TObject; var Key: Char);
+    procedure SearchEdit2KeyPress(Sender: TObject; var Key: Char);
+    procedure gSearch1KeyPress(Sender: TObject; var Key: Char);
+    procedure gSearch1Change(Sender: TObject);
+    procedure gSearchCloseUp(Sender: TObject);
+    procedure Button4Click(Sender: TObject);
+    procedure RadioButton1Click(Sender: TObject);
+    procedure RadioButton2Click(Sender: TObject);
+    procedure MT205Click(Sender: TObject);
+    procedure RadioButton3Click(Sender: TObject);
+    procedure Button5Click(Sender: TObject);
+    procedure RadioButton4Click(Sender: TObject);
+    procedure RadioButton5Click(Sender: TObject);
+    procedure RadioButton6Click(Sender: TObject);
+    procedure RadioButton7Click(Sender: TObject);
+    procedure OF72_RichEditEnter(Sender: TObject);
+    procedure Button6Click(Sender: TObject);
+    procedure mt298200Click(Sender: TObject);
+    procedure DBGrid1DblClick(Sender: TObject);
+    procedure Button7Click(Sender: TObject);
+    procedure ComboBox2CloseUp(Sender: TObject);
+    procedure MT941Click(Sender: TObject);
+    procedure MT942Click(Sender: TObject);
+    procedure Edit16Enter(Sender: TObject);
+    procedure Edit15Exit(Sender: TObject);
+    procedure Edit16Exit(Sender: TObject);
+    procedure Edit15Enter(Sender: TObject);
+    procedure MT999Click(Sender: TObject);
+    procedure Memo5KeyPress(Sender: TObject; var Key: Char);
+    procedure RichEdit1KeyPress(Sender: TObject; var Key: Char);
+    procedure RichEdit1Enter(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  azips: Tazips;
+  isEmpty,CanClose: boolean;
+  n:integer;
+  codex:integer;
+  a:string;
+
+
+implementation
+
+uses Filereportform, Unitdatamod, Unittemplate, Unitazips2;
+
+{$R *.dfm}
+
+procedure Tazips.SearchCombo2Change(Sender: TObject);
+begin
+DataModbpl.banks.Locate('name',SearchCombo2.Text,[loCaseInsensitive,loPartialKey]);
+
+reciverbic.Text:=DataModbpl.banks.FieldByName('bankcode').AsString;
+SearchEdit2.Text:=DataModbpl.banks.FieldByName('swift').AsString;
+
+
+Memo2.Lines[3]:= DataModbpl.banks.FieldByName('bankcode').AsString+'/'
+              +DataModbpl.banks.FieldByName('inn').AsString+'/'+DataModbpl.banks.FieldByName('swift').AsString+'XXX';
+              Memo2.Lines[4]:= DataModbpl.banks.FieldByName('krno').AsString;
+
+end;
+
+procedure Tazips.Button1Click(Sender: TObject);
+var
+k,ids:integer;
+begin
+
+
+
+if DataModbpl.OracleDataSet2.FieldByName('time').AsString>DataModbpl.sw_settings.FieldByName('EXpire_t').AsString
+then ShowMessage( TimeToStr(now)+ ' -dan sonra əməliyyat yığmaq olmaz!!')
+ else begin
+
+ if RadioButton3.Checked=true then  begin     //mt102
+ if OF70_RichEdit.Text='' then   ShowMessage( 'Təyinat boş saxlamaq olmaz!!')
+                  else begin
+
+
+ OF70_RichEdit.lines[0]:='//'+OF70_RichEdit.lines[0];
+ OF70_RichEdit.lines[1]:='//'+OF70_RichEdit.lines[1];
+ OF70_RichEdit.lines[2]:='//'+OF70_RichEdit.lines[2];
+ OF70_RichEdit.lines[3]:='//'+OF70_RichEdit.lines[3];
+
+    OF70_RichEdit.lines[5]:='' ;
+    OF70_RichEdit.lines[6]:='' ;
+    OF70_RichEdit.lines[7]:='';
+    OF70_RichEdit.lines[8]:='';
+
+    OF70_RichEdit.lines[0]:= copy(OF70_RichEdit.lines[0],0,35);
+    OF70_RichEdit.lines[1]:= copy(OF70_RichEdit.lines[1],0,35);
+    OF70_RichEdit.lines[2]:= copy(OF70_RichEdit.lines[1],0,35);
+    OF70_RichEdit.lines[3]:= copy(OF70_RichEdit.lines[1],0,35);
+
+
+
+
+    DataModbpl.pack.CallProcedure('saving102',[ DateTimePicker1.DateTime,
+                                              referens.Text,
+                                              SearchEdit1.Text,
+                                              reciverbic.Text,
+                                              SearchCombo2.Text,
+                                              edit2.Text,
+                                              edit3.Text,
+                                              Edit4.Text,
+                                              OF70_RichEdit.Text,
+                                              OF72_RichEdit.Text,
+                                              strtofloat(amount.Text),
+                                              k,
+                                              ids,
+                                              memo1.Text,
+                                              memo2.Text ,
+                                              SearchCombo2.Text,
+                                              reciverbic.Text,
+                                              memo1.Lines[1],
+                                              memo2.Lines[1],
+                                              edit9.Text ]);
+
+                  ShowMessage('Koçürmə yadda saxlanıldı!');
+close;
+                end;
+
+ end else begin
+
+
+if mt205.Checked=false then
+    begin
+             if edit4.text <>'' then
+              begin
+              if (length(edit4.text)<>10)  then
+                 begin     ShowMessage('Vöen 10 simvoldan azdır') ;
+                 end
+              end
+               else    Memo2.Lines[2]:= '/';
+
+         if Edit5.Text='N' then
+     begin
+      DataModbpl.referans.Close;
+      //DataModbpl.referans.Open;
+      with DataModbpl.referans do
+      begin
+      SetVariable('FORMATS','');
+      SetVariable('CURRENSY','103');
+      end;
+       DataModbpl.referans.Open;
+      //DataModbpl.referans.Refresh;
+     // DataModbpl.referans.Close;
+
+
+          referens.text:=DataModbpl.referansrefe.asstring ;
+            k:=0;
+             ids:=0;
+                      end else
+                      begin
+                       k:=1;
+                      // ids:=azips2.DBGrid1.DataSource.DataSet.FieldByName('id').AsInteger;
+                      end;
+                  // showmessage( OF72_RichEdit.Text);
+                  IF (DataModbpl.SBOP.CallIntegerFunction('check_IBAN_acc_num',[Edit2.Text])=0) and (mt103.Checked=true) THEN
+begin
+ShowMessage('Hesab ibana  uyğun deyil!!!!!!');
+end else begin
+                  if OF70_RichEdit.Text='' then   ShowMessage( 'Təyinat boş saxlamaq olmaz!!')
+                  else begin
+
+        if OF72_RichEdit.Text<>'' then begin
+    OF72_RichEdit.lines[0]:='/REC/'+copy(OF72_RichEdit.lines[0],0,35);;
+    OF72_RichEdit.lines[1]:='//'+copy(OF72_RichEdit.lines[1],0,35);
+    OF72_RichEdit.lines[2]:='//'+ copy(OF72_RichEdit.lines[2],0,35);
+    OF72_RichEdit.lines[3]:='//'+ copy(OF72_RichEdit.lines[3],0,35);
+    OF72_RichEdit.lines[4]:='//'+ copy(OF72_RichEdit.lines[4],0,35);
+    OF72_RichEdit.lines[5]:='//'+ copy(OF72_RichEdit.lines[5],0,35);
+
+    OF72_RichEdit.lines[6]:='' ;
+    OF72_RichEdit.lines[7]:='' ;
+    OF72_RichEdit.lines[8]:='';
+    OF72_RichEdit.lines[9]:='';
+
+
+    OF70_RichEdit.lines[5]:='' ;
+    OF70_RichEdit.lines[6]:='' ;
+    OF70_RichEdit.lines[7]:='';
+    OF70_RichEdit.lines[8]:='';
+    OF70_RichEdit.lines[9]:='';
+
+        end;
+
+    DataModbpl.pack.CallProcedure('savetransaction',[ DateTimePicker1.DateTime,
+                                              referens.Text,
+                                              SearchEdit1.Text,
+                                              reciverbic.Text,
+                                              SearchCombo2.Text,
+                                              edit2.Text,
+                                              edit3.Text,
+                                              Edit4.Text,
+                                              OF70_RichEdit.Text,
+                                              OF72_RichEdit.Text,
+                                              strtofloat(amount.Text),
+                                              k,
+                                              ids,
+                                              memo1.Text,
+                                              memo2.Text ,
+                                              SearchCombo2.Text,
+                                              reciverbic.Text,
+                                              memo1.Lines[1],
+                                              memo2.Lines[1] ]);
+
+
+
+
+      //DataModbpl.referans.Close;
+     // DataModbpl.referans.Open;
+     // with DataModbpl.referans do
+     // begin
+     // SetVariable('FORMATS','MT103');
+     // SetVariable('CURRENSY','AZN');
+     // end;
+     // DataModbpl.referans.Refresh;
+     // DataModbpl.referans.Close;
+      //DataModbpl.referans.Open;
+     //
+          //referens.text:=DataModbpl.referansrefe.asstring ;
+        //ShowMessage(Azips2.DBGrid1.DataSource.DataSet.FieldByName('id').AsString);
+    //  DataModbpl.pack.CallProcedure('edittransaction',[
+                                 //    Azips2.DBGrid1.DataSource.DataSet.FieldByName('id').AsInteger
+                                 //             ]);
+
+
+            //redakte
+
+  //  Azips2.DBGrid1.DataSource.DataSet.Refresh;
+ShowMessage('Koçürmə yadda saxlanıldı!');
+       close;
+
+                  end;
+                  end;
+
+    end
+    else
+    begin
+
+          // MT205 saving
+
+
+         if Edit5.Text='N' then
+     begin
+      DataModbpl.referans.Close;
+     // DataModbpl.referans.Open;
+      with DataModbpl.referans do
+      begin
+      SetVariable('FORMATS','');
+      SetVariable('CURRENSY','205');
+      end;
+          DataModbpl.referans.Open;
+     // DataModbpl.referans.Close;
+
+
+
+          referens.text:=DataModbpl.referansrefe.asstring ;
+        //  relatedrf.Text:= floattostr(DataModbpl.relatedrfMAXID1.AsFloat);
+            k:=0;
+             ids:=0;
+                      end else
+                      begin
+                       k:=1;
+                      // ids:=azips2.DBGrid1.DataSource.DataSet.FieldByName('id').AsInteger;
+                      end;
+                         if OF72_RichEdit.Text='' then   ShowMessage( 'Təyinat boş saxlamaq olmaz!!') else begin
+ DataModbpl.pack.CallProcedure('saving205',[  DateTimePicker1.DateTime,
+                                              reciverbic.Text,
+                                              referens.Text,
+                                              relatedrf.Text,
+                                              edit8.Text,
+                                              memo3.Text,
+                                              memo4.Text,
+                                              OF72_RichEdit.Text,
+                                              SearchCombo2.Text,codex ]);
+
+
+
+ ShowMessage('Koçürmə yadda saxlanıldı!');
+
+
+ close;
+     end;
+    end;
+
+end;
+ end;
+
+end;
+
+
+procedure Tazips.Button2Click(Sender: TObject);
+begin
+template:=Ttemplate.Create(nil);
+template.ShowModal;
+
+
+
+end;
+
+procedure Tazips.Button3Click(Sender: TObject);
+begin
+
+ if azips.MT205.Checked=false then begin
+     if azips.OF72_RichEdit.Text<>'' then
+        begin
+            azips.OF72_RichEdit.lines[0]:='/REC/'+azips.OF72_RichEdit.lines[0];
+            azips.OF72_RichEdit.lines[1]:='//'+copy(azips.OF72_RichEdit.lines[1],0,35);
+            azips.OF72_RichEdit.lines[2]:='//'+ copy(azips.OF72_RichEdit.lines[1],0,35);
+            azips.OF72_RichEdit.lines[3]:='//'+ copy(azips.OF72_RichEdit.lines[1],0,35);
+        end;
+               form17:=tform17.Create(nil);
+    form17.ShowModal;
+DataModbpl.pack.CallProcedure('savetemplate',[azips.DateTimePicker1.DateTime,
+                                              azips.amount.Text,
+                                              azips.SearchEdit1.Text,
+                                              azips.reciverbic.Text,
+                                              azips.memo1.Text,
+                                              azips.memo2.Text,
+                                              azips.SearchCombo2.Text,
+                                              azips.Edit4.Text,
+                                              azips.OF70_RichEdit.Text,
+                                              azips.OF72_RichEdit.Text,
+                                              'MT103',form17.edit1.text
+                                              ]);
+                                               ShowMessage('Şablon yadda saxlanıldı!');
+
+
+   end else begin   //205
+   form17:=tform17.Create(nil);
+    form17.ShowModal;
+    //ShowMessage(inttostr(codex));
+   DataModbpl.pack.CallProcedure('savetemplate',[azips.DateTimePicker1.DateTime,
+                                              azips.edit8.Text,
+                                              azips.SearchEdit1.Text,
+                                              azips.reciverbic.Text,
+                                              azips.memo4.Text,
+                                              '',
+                                              '',
+                                              '',
+                                              codex,
+                                              azips.OF72_RichEdit.Text
+                                              ,'MT205',form17.edit1.text
+                                              ]);
+
+                          ShowMessage('Şablon yadda saxlanıldı!');
+   end;
+
+
+end;
+
+procedure Tazips.Button4Click(Sender: TObject);
+var
+k,ids:integer;
+begin
+        //Showmessage( copy (edit2.Text,5,4));
+        //showmessage( copy (SearchEdit2.Text,0,4));
+
+
+           {
+IF DataModbpl.SBOP.CallIntegerFunction('check_IBAN_acc_num',[Edit2.Text])=0 THEN
+begin
+ShowMessage('Hesab ibana  uyğun deyil!!!!!!');
+end else begin  }
+//Memo2.Lines[0]:= '/'+edit2.Text;
+
+
+
+
+   {except on    E:  Exception       do
+      begin
+                 ShowMessage('IBAN Hesabi yazilmayib'); }
+
+
+
+if DataModbpl.OracleDataSet2.FieldByName('time').AsString>DataModbpl.sw_settings.FieldByName('EXpire_t').AsString
+then ShowMessage( TimeToStr(now)+ ' -dan sonra əməliyyat yığmaq olmaz!!')
+ else begin
+
+if mt205.Checked=false then
+    begin      if OF70_RichEdit.Text='' then   ShowMessage( 'Təyinat boş saxlamaq olmaz!!');
+             if edit4.text <>'' then
+              begin
+              if (length(edit4.text)<>10)  then
+                 begin     ShowMessage('Vöen 10 simvoldan azdır') ;
+                 end
+              end
+               else    Memo2.Lines[2]:= '/';
+
+         if Edit5.Text='N' then
+     begin
+      DataModbpl.referans.Close;
+      //DataModbpl.referans.Open;
+     { with DataModbpl.referans do
+      begin
+      SetVariable('FORMATS','');
+      SetVariable('CURRENSY','10-');
+      end;
+       DataModbpl.referans.Open;
+      //DataModbpl.referans.Refresh;
+     // DataModbpl.referans.Close;
+
+
+          referens.text:=DataModbpl.referansrefe.asstring ; }
+            k:=0;
+             ids:=0;
+                      end else
+                      begin
+                       k:=1;
+                      // ids:=azips2.DBGrid1.DataSource.DataSet.FieldByName('id').AsInteger;
+                      end;
+                  // showmessage( OF72_RichEdit.Text);
+
+                       if copy(OF72_RichEdit.lines[0],0,5)<>'' then  begin
+
+  OF72_RichEdit.text:=
+  StringReplace(OF72_RichEdit.text,'//', '',
+                          [rfReplaceAll, rfIgnoreCase]);
+                          OF72_RichEdit.text:=
+  StringReplace(OF72_RichEdit.text,'/BNF/', '',
+                          [rfReplaceAll, rfIgnoreCase]);
+                          OF72_RichEdit.text:=
+  StringReplace(OF72_RichEdit.text,'/BCSL/', '',
+                          [rfReplaceAll, rfIgnoreCase]);
+
+                          OF72_RichEdit.text:=
+  StringReplace(OF72_RichEdit.text,'/REC/', '',
+                          [rfReplaceAll, rfIgnoreCase]);
+
+
+                              OF72_RichEdit.lines[0]:='/REC/'+OF72_RichEdit.lines[0];
+                              OF72_RichEdit.lines[1]:='//'+OF72_RichEdit.lines[1];
+                              OF72_RichEdit.lines[2]:='//'+OF72_RichEdit.lines[2];
+                              OF72_RichEdit.lines[3]:='//'+OF72_RichEdit.lines[3];
+                              OF72_RichEdit.lines[4]:='//'+OF72_RichEdit.lines[4];
+                              OF72_RichEdit.lines[5]:='//'+OF72_RichEdit.lines[5];
+
+
+
+                              OF72_RichEdit.lines[0]:= copy(OF72_RichEdit.lines[0],0,35);
+                              OF72_RichEdit.lines[1]:= copy(OF72_RichEdit.lines[1],0,35);
+                              OF72_RichEdit.lines[2]:= copy(OF72_RichEdit.lines[1],0,35);
+                              OF72_RichEdit.lines[3]:= copy(OF72_RichEdit.lines[1],0,35);
+                              OF72_RichEdit.lines[4]:= copy(OF72_RichEdit.lines[1],0,35);
+                              OF72_RichEdit.lines[5]:= copy(OF72_RichEdit.lines[1],0,35);
+
+                              OF72_RichEdit.lines[6]:='';
+                              OF72_RichEdit.lines[7]:='';
+                              OF72_RichEdit.lines[8]:='';
+                              OF72_RichEdit.lines[9]:='';
+
+
+                              OF70_RichEdit.lines[5]:='';
+                              OF70_RichEdit.lines[6]:='';
+                              OF70_RichEdit.lines[7]:='';
+                              OF70_RichEdit.lines[8]:='';
+                              OF70_RichEdit.lines[9]:='';
+
+                          end else
+                          begin
+                                edit5.Text:='4';
+                          end;
+
+
+                   if OF70_RichEdit.Text='' then   ShowMessage( 'Təyinat boş saxlamaq olmaz!!') else begin
+    DataModbpl.pack.CallProcedure('save103UPD',[ DateTimePicker1.DateTime,  //--edit
+                                              SearchEdit1.Text,
+                                              reciverbic.Text,
+                                              SearchCombo2.Text,
+                                              edit2.Text,
+                                              OF70_RichEdit.Text,
+                                              OF72_RichEdit.Text,
+                                              strtofloat(amount.Text),
+                                              v_dey,
+                                              memo1.Text,
+                                              memo2.Text ,
+                                              memo1.Lines[1],
+                                              memo2.Lines[1] ]);
+
+
+
+
+      //DataModbpl.referans.Close;
+     // DataModbpl.referans.Open;
+     // with DataModbpl.referans do
+     // begin
+     // SetVariable('FORMATS','MT103');
+     // SetVariable('CURRENSY','AZN');
+     // end;
+     // DataModbpl.referans.Refresh;
+     // DataModbpl.referans.Close;
+      //DataModbpl.referans.Open;
+     //
+          //referens.text:=DataModbpl.referansrefe.asstring ;
+        //ShowMessage(Azips2.DBGrid1.DataSource.DataSet.FieldByName('id').AsString);
+    //  DataModbpl.pack.CallProcedure('edittransaction',[
+                                 //    Azips2.DBGrid1.DataSource.DataSet.FieldByName('id').AsInteger
+                                 //             ]);
+                                        //redakte
+
+  //  Azips2.DBGrid1.DataSource.DataSet.Refresh;
+ShowMessage('Koçürmə yadda saxlanıldı!');
+close;
+
+     end;
+    end
+    else
+    begin
+          // MT205 saving
+
+
+
+         if Edit5.Text='N' then
+     begin
+
+     // DataModbpl.referans.Open;
+
+     // DataModbpl.referans.Close;
+                       //  relatedrf.Text:= floattostr(DataModbpl.relatedrfMAXID1.AsFloat);
+            k:=0;
+             ids:=0;
+                      end else
+                      begin
+                       k:=1;
+                      // ids:=azips2.DBGrid1.DataSource.DataSet.FieldByName('id').AsInteger;
+                      end;
+                        if OF72_RichEdit.Text='' then   ShowMessage( 'Təyinat boş saxlamaq olmaz!!') else begin
+ DataModbpl.pack.CallProcedure('save205UPD',[  DateTimePicker1.DateTime,
+                                              reciverbic.Text,
+                                              relatedrf.Text,
+                                              edit8.Text,
+                                              memo3.Text,
+                                              memo4.Text,
+                                              OF72_RichEdit.Text,
+                                              SearchCombo2.Text,
+                                              v_dey,codex]);
+
+
+
+ ShowMessage('Koçürmə yadda saxlanıldı!');
+
+ close;
+
+                        end;
+    end;
+
+end;
+
+
+end;
+
+procedure Tazips.Button5Click(Sender: TObject);
+
+var k,ids :integer;
+begin
+if referens.text='' then begin
+DataModbpl.referans.Close;
+      //DataModbpl.referans.Open;
+with DataModbpl.referans do
+ begin
+   SetVariable('FORMATS','');
+   SetVariable('CURRENSY','');
+  end;
+ DataModbpl.referans.Open;
+referens.text:=DataModbpl.referansrefe.asstring ;
+
+end;
+if OF70_RichEdit.Text='' then   ShowMessage( 'Təyinat boş saxlamaq olmaz!!')
+                  else begin
+         OF70_RichEdit.lines[0]:='/BNF/'+OF70_RichEdit.lines[0];
+         OF70_RichEdit.lines[1]:='//'+OF70_RichEdit.lines[1];
+         OF70_RichEdit.lines[2]:='//'+OF70_RichEdit.lines[2];
+         OF70_RichEdit.lines[3]:='//'+OF70_RichEdit.lines[3];
+         OF72_RichEdit.lines[0]:= copy(OF72_RichEdit.lines[0],0,35);
+         OF72_RichEdit.lines[1]:= copy(OF72_RichEdit.lines[1],0,35);
+         OF72_RichEdit.lines[2]:= copy(OF72_RichEdit.lines[1],0,35);
+         OF72_RichEdit.lines[3]:= copy(OF72_RichEdit.lines[1],0,35);
+
+    DataModbpl.pack.CallProcedure('saving102',[ DateTimePicker1.DateTime,
+                                              referens.Text,
+                                              SearchEdit1.Text,
+                                              reciverbic.Text,
+                                              SearchCombo2.Text,
+                                              edit2.Text,
+                                              edit3.Text,
+                                              Edit4.Text,
+                                              OF70_RichEdit.Text,
+                                              OF72_RichEdit.Text,
+                                              strtofloat(amount.Text),
+                                              k,
+                                              ids,
+                                              memo1.Text,
+                                              memo2.Text ,
+                                              SearchCombo2.Text,
+                                              reciverbic.Text,
+                                              memo1.Lines[1],
+                                              memo2.Lines[1],
+                                              edit9.Text ]);
+
+              SearchEdit1.Text:='';
+             reciverbic.Text:='';
+             memo1.Text:='';
+             memo2.Text:='';
+              amount.Text:='';
+              edit6.Text:='';
+              edit2.Text:='';
+              edit3.Text:='';
+              edit4.Text:='';
+              SearchEdit2.Text:='';
+              searchcombo2.Text:='';
+              edit9.Text:='';
+                end;
+
+
+
+
+
+end;
+
+procedure Tazips.Button6Click(Sender: TObject);
+begin
+close;
+end;
+
+procedure Tazips.Button7Click(Sender: TObject);
+begin
+if mt298200.Checked=true then      begin
+
+    if combobox2.ItemIndex=0 then   begin    //200
+
+   with DataModbpl.referans do
+      begin
+      SetVariable('FORMATS','');
+      SetVariable('CURRENSY','298');
+      end;
+       DataModbpl.referans.Open;
+       referens.text:=DataModbpl.referansrefe.asstring ;
+
+        DataModbpl.pack.CallProcedure('insert_298',[referens.Text,edit11.Text,combobox2.Text ]);
+         ShowMessage('Koçürmə yadda saxlanıldı!');
+close;
+
+           end;
+if combobox2.ItemIndex=1 then   begin    //202
+     with DataModbpl.referans do
+      begin
+      SetVariable('FORMATS','');
+      SetVariable('CURRENSY','298');
+      end;
+       DataModbpl.referans.Open;
+       referens.text:=DataModbpl.referansrefe.asstring ;
+
+     DataModbpl.pack.CallProcedure ('insert_298202',[referens.Text,edit11.Text,combobox2.Text,edit12.Text ]);
+        ShowMessage('Koçürmə yadda saxlanıldı!');
+close;
+
+end;
+
+  if combobox2.ItemIndex=2 then   begin    //800
+
+      with DataModbpl.referans do
+      begin
+      SetVariable('FORMATS','');
+      SetVariable('CURRENSY','298');
+      end;
+       DataModbpl.referans.Open;
+       referens.text:=DataModbpl.referansrefe.asstring ;
+
+     DataModbpl.pack.CallProcedure ('insert_298',[referens.Text,edit11.Text,combobox2.Text]);
+        ShowMessage('Koçürmə yadda saxlanıldı!');
+close;
+
+
+  end;
+
+
+     if combobox2.ItemIndex=3 then   begin    //801
+
+   with DataModbpl.referans do
+      begin
+      SetVariable('FORMATS','');
+      SetVariable('CURRENSY','298');
+      end;
+       DataModbpl.referans.Open;
+       referens.text:=DataModbpl.referansrefe.asstring ;
+
+        DataModbpl.pack.CallProcedure('insert_298801',[referens.Text,edit11.Text,combobox2.Text ]);
+         ShowMessage('Koçürmə yadda saxlanıldı!');
+
+close;
+
+           end;
+
+if combobox2.ItemIndex=4 then   begin    //804
+
+      with DataModbpl.referans do
+      begin
+      SetVariable('FORMATS','');
+      SetVariable('CURRENSY','298');
+      end;
+       DataModbpl.referans.Open;
+       referens.text:=DataModbpl.referansrefe.asstring ;
+
+     DataModbpl.pack.CallProcedure ('insert_298804',[referens.Text,edit11.Text,combobox2.Text,edit13.Text]);
+        ShowMessage('Koçürmə yadda saxlanıldı!');
+close;
+
+
+  end;
+
+
+end;
+
+if mt941.Checked=true then        begin
+  with DataModbpl.referans do
+      begin
+      SetVariable('FORMATS','');
+      SetVariable('CURRENSY','920');
+      end;
+       DataModbpl.referans.Open;
+       referens.text:=DataModbpl.referansrefe.asstring ;
+
+        DataModbpl.pack.CallProcedure('insert_920',[referens.Text,edit14.Text ]);
+         ShowMessage('Koçürmə yadda saxlanıldı!');
+close;
+
+end;
+
+ if mt942.Checked=true then        begin
+  with DataModbpl.referans do
+      begin
+      SetVariable('FORMATS','');
+      SetVariable('CURRENSY','920');
+      end;
+       DataModbpl.referans.Open;
+       referens.text:=DataModbpl.referansrefe.asstring ;
+
+        DataModbpl.pack.CallProcedure('insert_920_2',[referens.Text,edit14.Text,edit15.Text,edit16.Text ]);
+         ShowMessage('Koçürmə yadda saxlanıldı!');
+close;
+
+end;
+
+
+
+
+
+
+ if mt999.Checked=true then        begin
+  with DataModbpl.referans do
+      begin
+      SetVariable('FORMATS','');
+      SetVariable('CURRENSY','999');
+      end;
+       DataModbpl.referans.Open;
+       referens.text:=DataModbpl.referansrefe.asstring ;
+
+        DataModbpl.pack.CallProcedure('insert_999',[referens.Text,richedit1.Text ]);
+         ShowMessage('Koçürmə yadda saxlanıldı!');
+close;
+
+end;
+
+
+
+
+
+
+
+
+end;
+
+procedure Tazips.CMSearchEdit1Change(Sender: TObject);
+begin
+SearchCombo2.Text:=DataModbpl.banks.FieldByName('name').AsString;
+SearchEdit2.Text:= DataModbpl.banks.FieldByName('swift').AsString;
+end;
+
+procedure Tazips.ComboBox2CloseUp(Sender: TObject);
+begin
+
+if combobox2.ItemIndex=0 then      //200
+begin
+label23.Visible:=false;
+  edit12.Visible:=false;
+  label21.Caption:='L02';
+  edit13.Visible:=false;
+  label21.Visible:=true;
+   label24.Visible:=false;
+end;
+
+
+if combobox2.ItemIndex=1 then      //202
+begin
+  label23.Visible:=true;
+  edit12.Visible:=true;
+  edit13.Visible:=false;
+  label21.Visible:=true;
+  label24.Visible:=false;
+end;
+
+if combobox2.ItemIndex=2 then      //800
+begin
+label23.Visible:=false;
+  edit12.Visible:=false;
+  label21.Caption:='L02';
+  edit13.Visible:=false;
+  label21.Visible:=true;
+  label24.Visible:=false;
+end;
+
+
+
+if combobox2.ItemIndex=3 then      //801
+begin
+label23.Visible:=false;
+  edit12.Visible:=false;
+  label21.Caption:='L04';
+  edit13.Visible:=false;
+    label21.Visible:=true;
+    label24.Visible:=false;
+end;
+
+
+if combobox2.ItemIndex=4 then     // 804
+begin
+label23.Visible:=false;
+  edit12.Visible:=false;
+  label24.Visible:=true;
+  edit13.Visible:=true;
+  label21.Visible:=true;
+  label21.Caption:='L04';
+
+end;
+
+
+
+
+end;
+
+procedure Tazips.gSearchCloseUp(Sender: TObject);
+
+begin
+ gSearch.ListSource:= DataModbpl.DataSource1;
+
+//gComboBox.Text:='';
+
+
+end;
+
+
+
+procedure Tazips.DBGrid1DblClick(Sender: TObject);
+begin
+if combobox2.ItemIndex=0 then begin      //200
+
+edit11.Text:='D'+
+
+StringReplace(datetostr(DataModbpl.out.FieldByName('mf32a_date').AsDateTime),'.', '',
+                          [rfReplaceAll, rfIgnoreCase])
+
++copy(DataModbpl.out.FieldByName('messagetype').AsString,3,5)+copy(DataModbpl.out.FieldByName('messagetype').AsString,3,5)
++ DataModbpl.out.FieldByName('receiverbic').AsString
++DataModbpl.out.FieldByName('mf20_reference').AsString;
+
+
+end;
+
+
+if combobox2.ItemIndex=1 then   begin     //202
+edit11.Text:='D'+
+
+StringReplace(datetostr(DataModbpl.out.FieldByName('mf32a_date').AsDateTime),'.', '',
+                          [rfReplaceAll, rfIgnoreCase])
+
++copy(DataModbpl.out.FieldByName('messagetype').AsString,3,5)+copy(DataModbpl.out.FieldByName('messagetype').AsString,3,5)
++ DataModbpl.out.FieldByName('receiverbic').AsString
++DataModbpl.out.FieldByName('mf20_reference').AsString;
+end;
+
+
+if combobox2.ItemIndex=2 then  begin     //800
+edit11.Text:='D'+
+
+StringReplace(datetostr(DataModbpl.out.FieldByName('mf32a_date').AsDateTime),'.', '',
+                          [rfReplaceAll, rfIgnoreCase])
+
++copy(DataModbpl.out.FieldByName('messagetype').AsString,3,5)+copy(DataModbpl.out.FieldByName('messagetype').AsString,3,5)
++ DataModbpl.out.FieldByName('receiverbic').AsString
++DataModbpl.out.FieldByName('mf20_reference').AsString;
+
+end;
+
+
+
+
+if combobox2.ItemIndex=3 then      //801
+begin
+
+edit11.Text:=DataModbpl.out.FieldByName('receiverbic').AsString;
+end;
+
+
+
+if combobox2.ItemIndex=4 then     // 804
+begin
+ edit11.Text:=DataModbpl.out.FieldByName('receiverbic').AsString;
+
+end;
+end;
+
+
+
+
+procedure Tazips.DBLookupComboBox1Enter(Sender: TObject);
+begin
+//DBLookupComboBox2.Text:=DataModbpl.banks.FieldByName('name').AsString;
+
+
+
+end;
+
+procedure Tazips.DBLookupComboBox2Enter(Sender: TObject);
+begin
+//DBLookupComboBox1.Text:=DataModbpl.banks.FieldByName('bankcode').AsString;
+end;
+
+procedure Tazips.Edit15Enter(Sender: TObject);
+begin
+edit15.Text:='';
+end;
+
+procedure Tazips.Edit15Exit(Sender: TObject);
+begin
+edit15.Text:='AZND'+edit15.Text+',';
+end;
+
+procedure Tazips.Edit16Enter(Sender: TObject);
+begin
+edit16.Text:='';
+end;
+
+procedure Tazips.Edit16Exit(Sender: TObject);
+begin
+edit16.Text:='AZNC'+edit16.Text+',';
+end;
+
+procedure Tazips.Edit2Change(Sender: TObject);
+begin
+Memo2.Lines[0]:= '/'+edit2.Text;
+end;
+
+procedure Tazips.Edit2Exit(Sender: TObject);
+begin
+try
+
+
+        //Showmessage( copy (edit2.Text,5,4));
+        //showmessage( copy (SearchEdit2.Text,0,4));
+        if copy (edit2.Text,5,4)<>copy (SearchEdit2.Text,0,4)then
+        begin
+          ShowMessage('Hesabla Swift kodu uyğun deyil!!!!');
+        end;
+
+
+IF (DataModbpl.SBOP.CallIntegerFunction('check_IBAN_acc_num',[Edit2.Text])=0)
+and (mt103.Checked=true)      then
+begin
+ShowMessage('Hesab ibana  uyğun deyil!!!!!!');
+end;
+Memo2.Lines[0]:= '/'+edit2.Text;
+
+
+
+
+   except on    E:  Exception       do
+      begin
+                 ShowMessage('IBAN Hesabi yazilmayib');
+      end;
+end;
+
+end;
+procedure Tazips.Edit3Change(Sender: TObject);
+begin
+  Memo2.Lines[1]:= Edit3.Text;
+end;
+
+procedure Tazips.Edit3Exit(Sender: TObject);
+begin
+  Memo2.Lines[1]:= Edit3.Text;
+
+end;
+
+procedure Tazips.Edit4Change(Sender: TObject);
+begin
+Memo2.Lines[2]:= Edit4.Text+'/';
+end;
+
+procedure Tazips.Edit4Exit(Sender: TObject);
+begin
+if edit4.text <>'' then
+begin
+ if (length(edit4.text)<>10)  then
+ begin     ShowMessage('Vöen 10 simvoldan azdır') ;
+ end
+ else
+ Memo2.Lines[2]:= Edit4.Text+'/';
+
+end
+else Memo2.Lines[2]:= '/';
+end;
+
+procedure Tazips.Edit6Change(Sender: TObject);
+var key:char;
+begin
+
+//Memo2.Lines[3]:= DataModbpl.banks.FieldByName('bankcode').AsString+'/'
+
+
+end;
+
+procedure Tazips.Edit6Enter(Sender: TObject);
+begin
+//edit6.visible:=false;
+
+end;
+
+procedure Tazips.Edit6KeyPress(Sender: TObject; var Key: Char);
+var i:integer;
+begin
+IF not (key in ['0'..'9',#8,#13]) THEN key:=#0;
+  IF  Key=#13 THEN BEGIN
+                          edit7.Visible:=false;
+                    DataModbpl.acount.CloseAll;
+  DataModbpl.acount.SetVariable('ids',edit6.Text);
+  DataModbpl.acount.Open;
+  SearchEdit1.ListSource:= DataModbpl.acountsource;
+
+
+  //ShowMessage(inttostr(DataModbpl.acount.RecordCount)+edit6.Text);
+
+                    IF DataModbpl.acount.RecordCount=0 THEN  BEGIN
+                                                ShowMessage('Müştəri tapılmadı');
+                                                Edit6.Clear;
+                    END;
+
+  END;
+{if key=#13 then
+begin
+  DataModbpl.acount.CloseAll;
+  DataModbpl.acount.SetVariable('ids',edit6.Text);
+  DataModbpl.acount.Open;
+ for i := 1 to DataModbpl.acount.RecordCount do
+begin
+
+  ComboBox1.Items[i]:=DataModbpl.acount.FieldByName('acc_no').AsString;
+  DataModbpl.acount.Next;
+end;
+end;
+ }
+end;
+
+procedure Tazips.FormActivate(Sender: TObject);
+var a: integer;
+begin
+a:=1;
+//ShowMessage(x);
+{DataModbpl.acount.Close;
+DataModbpl.acount.SetVariable('VX',x);
+DataModbpl.acount.Open;}
+//SearchEdit1.ListSource:=nil;
+//SearchEdit1.ListSource:=DataModbpl.acountsource;
+//ShowMessage(inttostr(v_dey));
+
+    {
+if v_dey=-1 then
+            a:=1
+else
+begin
+  DataModbpl.sw_out.Closeall;
+DataModbpl.sw_out.SetVariable('ids',v_dey);
+DataModbpl.sw_out.Open;
+
+SearchEdit1.KeyValue:=DataModbpl.sw_out.FieldByName('mf50_account').AsString;
+amount.Text:=DataModbpl.sw_out.FieldByName('mf32a_amount').AsString;
+edit2.Text:=DataModbpl.sw_out.FieldByName('mf59_account').AsString;
+SearchEdit2.Text:=DataModbpl.sw_out.FieldByName('receiverbic').AsString;
+referens.Text:=DataModbpl.sw_out.FieldByName('mf20_reference').AsString;
+OF70_RichEdit.Text:= DataModbpl.sw_out.FieldByName('mf70').AsString;
+OF72_RichEdit.Text:= DataModbpl.sw_out.FieldByName('mf72').AsString;
+memo1.Text:= DataModbpl.sw_out.FieldByName('mf50_name$adress').AsString;
+memo2.Text:= DataModbpl.sw_out.FieldByName('mf59_name$adress').AsString;
+edit3.Text:=Memo2.Lines[1];
+edit4.Text:= Memo2.Lines[2];
+
+//SearchCombo2.Text:= SWDataModule.bankl.FieldByName('name').AsString;;
+
+//grid_out.DataSource.DataSet.FieldByName('mf59_account').AsString;
+end;    }
+
+
+end;
+
+procedure Tazips.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+SearchEdit1.Free;
+end;
+
+procedure Tazips.FormCreate(Sender: TObject);
+var
+i,a,m:integer;
+ke:char;
+begin
+
+button6.Visible:=false;
+ke:=char(13);
+DataModbpl:=TDataModbpl.Create(nil);
+{DataModbpl.acount.Close;
+DataModbpl.acount.SetVariable('VX',x);
+DataModbpl.acount.Open; }
+
+
+
+
+
+DataModbpl.banks.Open;
+DataModbpl.banks.First;
+for i := 1 to DataModbpl.banks.RecordCount do
+begin
+  gComboBox.Items[i]:= DataModbpl.banks.FieldByName('name').AsString;
+  SearchCombo2.Items[i]:=DataModbpl.banks.FieldByName('name').AsString;
+  DataModbpl.banks.Next;
+end;
+ DataModbpl.banks.First;
+DateTimePicker1.DateTime:=date;
+
+mt103.Checked:=true;
+  if v_dey<0 then
+begin
+
+
+v_dey:=-1*v_dey;
+           // ShowMessage(inttostr(v_dey));
+  button1.Visible:=false;
+  button2.Visible:=false;
+  button3.Visible:=false;
+  Button4.Visible:=false;
+  button5.Visible:=false;
+  button6.Visible:=false;
+  Button7.Visible:=false;
+
+
+
+
+  DataModbpl.sw_out.Closeall;
+DataModbpl.sw_out.SetVariable('ids',v_dey);
+DataModbpl.sw_out.Open;
+
+ if  (DataModbpl.sw_out.FieldByName('status').AsInteger=1) and
+  (DataModbpl.sw_out.FieldByName('application').AsString='SWF')
+then     button6.Visible:=true else button6.Visible:=false;
+
+
+if DataModbpl.sw_out.FieldByName('messagetype').AsString='MT999'
+then   begin
+        mt205.Visible:=false ;
+     mt103.Visible:=false;
+     radiobutton3.Visible:=false;
+     mt298200.Visible:=false;
+     mt941.Visible:=false;
+     button7.Visible:=false;
+     mt942.Visible:=false;
+     mt942.Checked:=false;
+     mt999.Visible:=true;
+     mt999.Checked:=true;
+     
+     richedit1.Text:=DataModbpl.sw_out.FieldByName('mf79').AsString;
+
+end;
+
+
+
+if (DataModbpl.sw_out.FieldByName('messagetype').AsString='MT920') and
+(DataModbpl.sw_out.FieldByName('mf12').AsString='941') then   begin
+        mt205.Visible:=false ;
+     mt103.Visible:=false;
+     radiobutton3.Visible:=false;
+     mt298200.Visible:=false;
+     mt941.Visible:=true;
+     button7.Visible:=false;
+     mt941.Checked:=true;
+     mt942.Visible:=false;
+     edit14.Text:=DataModbpl.sw_out.FieldByName('mf25').AsString;
+end;
+
+if (DataModbpl.sw_out.FieldByName('messagetype').AsString='MT920') and
+(DataModbpl.sw_out.FieldByName('mf12').AsString='942') then   begin
+        mt205.Visible:=false ;
+     mt103.Visible:=false;
+     radiobutton3.Visible:=false;
+     mt298200.Visible:=false;
+     mt941.Visible:=false;
+     button7.Visible:=false;
+     mt942.Visible:=true;
+     mt942.Checked:=true;
+     edit14.Text:=DataModbpl.sw_out.FieldByName('mf25').AsString;
+     edit15.Text:= DataModbpl.sw_out.FieldByName('mf34f1').AsString;
+    edit16.Text:= DataModbpl.sw_out.FieldByName('mf34f2').AsString;
+end;
+
+   if DataModbpl.sw_out.FieldByName('messagetype').AsString='MT298' then   begin
+     mt205.Visible:=false ;
+     mt103.Visible:=false;
+     radiobutton3.Visible:=false;
+     mt298200.Visible:=true;
+     mt298200.Checked:=true;
+     button4.Visible:=false;
+     button7.Visible:=false;
+
+     ComboBox2.Text:=DataModbpl.sw_out.FieldByName('mf12').AsString;
+
+       if combobox2.Text='804' then     begin
+                  edit11.Text:= DataModbpl.sw_out.FieldByName('l04').AsString;
+                  edit13.Visible:=true;
+                  edit13.Text:=DataModbpl.sw_out.FieldByName('l01').AsString;
+
+          end ;
+
+          if combobox2.Text='202' then     begin
+                  edit11.Text:= DataModbpl.sw_out.FieldByName('l02').AsString;
+                  edit12.Visible:=true;
+                  edit12.Text:=DataModbpl.sw_out.FieldByName('priority').AsString;
+
+          end ;
+           if (combobox2.Text='200') or (combobox2.Text='800') then     begin
+                edit11.Text:= DataModbpl.sw_out.FieldByName('l02').AsString;
+           end ;
+
+             if combobox2.Text='801' then     begin
+                edit11.Text:= DataModbpl.sw_out.FieldByName('l04').AsString;
+           end ;
+
+
+
+   end;
+
+
+    if DataModbpl.sw_out.FieldByName('messagetype').AsString<>'MT205' then
+     begin
+     if DataModbpl.sw_out.FieldByName('messagetype').AsString='MT102' then
+       begin
+       //ShowMessage('aas');
+       mt205.Visible:=false ;
+     mt103.Visible:=false;
+     RadioButton3.Visible:=true;
+     RadioButton3.Checked:=true;
+     edit7.Text:= DataModbpl.sw_out.FieldByName('mf50_account').AsString;
+  DataModbpl.account.Closeall;
+ DataModbpl.account.SetVariable('accno',edit7.Text);
+ DataModbpl.account.open;
+
+ edit6.Text:= DataModbpl.account.FieldByName('KLi_id').AsVariant;
+   Edit6KeyPress(edit6,ke);
+   // ShowMessage(inttostr(DataModbpl.sw_out.RecordCount));
+
+   reciverbic.DataSource :=DataModbpl.bankssource;
+   SearchEdit2.DataSource:=DataModbpl.bankssource;
+
+
+   SearchEdit1.Text := DataModbpl.sw_out.FieldByName('mf50_account').AsString;
+//DataModbpl.sw_out.FieldByName('mf50_account').AsString;
+amount.Text:=DataModbpl.sw_out.FieldByName('mf32a_amount').AsString;
+edit2.Text:=DataModbpl.sw_out.FieldByName('mf59_account').AsString;
+referens.Text:=DataModbpl.sw_out.FieldByName('mf20_reference').AsString;
+OF70_RichEdit.Text:= DataModbpl.sw_out.FieldByName('mf70').AsString;
+OF72_RichEdit.Text:= DataModbpl.sw_out.FieldByName('mf72').AsString;
+memo1.Text:= DataModbpl.sw_out.FieldByName('mf50_name$adress').AsString;
+SearchCombo2.Text:= DataModbpl.sw_out.FieldByName('rname').AsString;
+SearchCombo2Change(SearchCombo2);
+memo2.Text:= DataModbpl.sw_out.FieldByName('mf59_name$adress').AsString;
+edit3.Text:=Memo2.Lines[1];
+edit4.Text:= copy(Memo2.Lines[2],0,10);
+
+
+
+       end else begin
+       if DataModbpl.sw_out.FieldByName('messagetype').AsString='MT103' then  begin
+
+       mt205.Visible:=false ;
+       RadioButton3.Visible:=false;
+
+  edit7.Text:= DataModbpl.sw_out.FieldByName('mf50_account').AsString;
+  DataModbpl.account.Closeall;
+ DataModbpl.account.SetVariable('accno',edit7.Text);
+ DataModbpl.account.open;
+
+ edit6.Text:= DataModbpl.account.FieldByName('KLi_id').AsVariant;
+   Edit6KeyPress(edit6,ke);
+   // ShowMessage(inttostr(DataModbpl.sw_out.RecordCount));
+
+   reciverbic.DataSource :=DataModbpl.bankssource;
+   SearchEdit2.DataSource:=DataModbpl.bankssource;
+
+
+   SearchEdit1.Text := DataModbpl.sw_out.FieldByName('mf50_account').AsString;
+//DataModbpl.sw_out.FieldByName('mf50_account').AsString;
+amount.Text:=DataModbpl.sw_out.FieldByName('mf32a_amount').AsString;
+edit2.Text:=DataModbpl.sw_out.FieldByName('mf59_account').AsString;
+referens.Text:=DataModbpl.sw_out.FieldByName('mf20_reference').AsString;
+OF70_RichEdit.Text:= DataModbpl.sw_out.FieldByName('mf70').AsString;
+OF72_RichEdit.Text:= DataModbpl.sw_out.FieldByName('mf72').AsString;
+memo1.Text:= DataModbpl.sw_out.FieldByName('mf50_name$adress').AsString;
+SearchCombo2.Text:= DataModbpl.sw_out.FieldByName('rname').AsString;
+SearchCombo2Change(SearchCombo2);
+memo2.Text:= DataModbpl.sw_out.FieldByName('mf59_name$adress').AsString;
+edit3.Text:=Memo2.Lines[1];
+edit4.Text:= copy(Memo2.Lines[2],0,10);
+
+       end;
+
+
+
+     end;
+     end
+
+
+     else
+     begin
+         //ShowMessage('aas');
+    if DataModbpl.sw_out.FieldByName('messagetype').AsString='MT205' then   begin
+       // ShowMessage('205');
+       //MT205.Checked:=true;       //205
+
+         RadioButton3.Visible:=false;
+       mt103.Checked:=true ;
+     mt103.Visible:=false ;
+   edit8.Text:=DataModbpl.sw_out.FieldByName('mf32a_amount').AsString;
+
+   memo3.Text:= DataModbpl.sw_out.FieldByName('mf52_name$adress').AsString;
+    //gSearch.DataSource:=DataModbpl.bankssource ;
+   gSearch.KeyValue:= copy(Memo3.Lines[1],0,35);
+
+   memo4.Text:=DataModbpl.sw_out.FieldByName('mf58_name$location').AsString ;
+       reciverbic.DataSource :=DataModbpl.bankssource;
+       SearchEdit2.DataSource:=DataModbpl.bankssource;
+   reciverbic.Text :=copy(Memo4.Lines[0],1,8);
+   SearchEdit2.Text:=copy(Memo4.Lines[4],1,8);
+    SearchCombo2.Text:= DataModbpl.sw_out.FieldByName('rname').AsString;
+   SearchCombo2Change(SearchCombo2);
+   OF72_RichEdit.Text:=DataModbpl.sw_out.FieldByName('mf72').AsString;
+    codex:=strtoint(DataModbpl.sw_out.FieldByName('senderlt').AsString);
+   // ShowMessage(inttostr(codex));
+    case codex of
+
+    0: RadioButton1.Checked:=true;
+    1: RadioButton2.Checked:=true;
+    2:  RadioButton4.Checked:=true;
+    3:  RadioButton5.Checked:=true;
+    8:  RadioButton7.Checked:=true;
+    5:  RadioButton6.Checked:=true;
+    6: RadioButton5.Checked:=true;
+      end;
+
+
+
+
+    end;
+     end;
+
+end;
+
+
+
+if v_dey=1 then
+begin
+            a:=1 ;
+            edit7.Visible:=false;
+              reciverbic.DataSource :=DataModbpl.bankssource;
+              SearchEdit2.DataSource:=DataModbpl.bankssource;
+               button1.Visible:=true;
+                Button4.Visible:=false;
+
+end
+else
+begin
+n:=2;
+
+  button1.Visible:=false;
+  Button7.Visible:=false;
+
+
+reciverbic.DataSource :=DataModbpl.bankssource;
+SearchEdit2.DataSource:=DataModbpl.bankssource;
+  DataModbpl.sw_out.Closeall;
+DataModbpl.sw_out.SetVariable('ids',v_dey);
+DataModbpl.sw_out.Open;
+
+if DataModbpl.sw_out.FieldByName('messagetype').AsString='MT999'
+then   begin
+        mt205.Visible:=false ;
+     mt103.Visible:=false;
+     radiobutton3.Visible:=false;
+     mt298200.Visible:=false;
+     mt941.Visible:=false;
+     button7.Visible:=true;
+     mt942.Visible:=false;
+     mt942.Checked:=false;
+     mt999.Visible:=true;
+     mt999.Checked:=true;
+
+     richedit1.Text:=DataModbpl.sw_out.FieldByName('mf79').AsString;
+
+end;
+
+if (DataModbpl.sw_out.FieldByName('messagetype').AsString='MT920') and
+(DataModbpl.sw_out.FieldByName('mf12').AsString='941') then   begin
+        mt205.Visible:=false ;
+     mt103.Visible:=false;
+     radiobutton3.Visible:=false;
+     mt298200.Visible:=false;
+     mt941.Visible:=true;
+     mt941.Checked:=true;
+     mt942.Visible:=false;
+     button7.Visible:=false;
+     edit14.Text:=DataModbpl.sw_out.FieldByName('mf25').AsString;
+end;
+
+if (DataModbpl.sw_out.FieldByName('messagetype').AsString='MT920') and
+(DataModbpl.sw_out.FieldByName('mf12').AsString='942') then   begin
+        mt205.Visible:=false ;
+     mt103.Visible:=false;
+     radiobutton3.Visible:=false;
+     mt298200.Visible:=false;
+     mt941.Visible:=false;
+     button7.Visible:=false;
+     mt942.Visible:=true;
+     mt942.Checked:=true;
+     edit14.Text:=DataModbpl.sw_out.FieldByName('mf25').AsString;
+     edit15.Text:= DataModbpl.sw_out.FieldByName('mf34f1').AsString;
+    edit16.Text:= DataModbpl.sw_out.FieldByName('mf34f2').AsString;
+end;
+
+
+ if DataModbpl.sw_out.FieldByName('messagetype').AsString='MT298' then   begin
+     mt205.Visible:=false ;
+     mt103.Visible:=false;
+     radiobutton3.Visible:=false;
+     mt298200.Visible:=true;
+     button7.Visible:=false;
+     mt298200.Checked:=true;
+     button4.Visible:=false;
+
+     ComboBox2.Text:=DataModbpl.sw_out.FieldByName('mf12').AsString;
+
+       if combobox2.Text='804' then     begin
+                  edit11.Text:= DataModbpl.sw_out.FieldByName('l04').AsString;
+                  edit13.Visible:=true;
+                  edit13.Text:=DataModbpl.sw_out.FieldByName('l01').AsString;
+
+          end ;
+
+          if combobox2.Text='202' then     begin
+                  edit11.Text:= DataModbpl.sw_out.FieldByName('l02').AsString;
+                  edit12.Visible:=true;
+                  edit12.Text:=DataModbpl.sw_out.FieldByName('priority').AsString;
+
+          end ;
+           if (combobox2.Text='200') or (combobox2.Text='800') then     begin
+                edit11.Text:= DataModbpl.sw_out.FieldByName('l02').AsString;
+           end ;
+
+             if combobox2.Text='801' then     begin
+                edit11.Text:= DataModbpl.sw_out.FieldByName('l04').AsString;
+           end ;
+
+
+
+   end;
+
+  if DataModbpl.sw_out.FieldByName('messagetype').AsString<>'MT205' then
+   begin
+     if DataModbpl.sw_out.FieldByName('messagetype').AsString='MT102' then
+       begin
+       //ShowMessage('aas');
+       mt205.Visible:=false ;
+     mt103.Visible:=false;
+     RadioButton3.Visible:=true;
+     RadioButton3.Checked:=true;
+          edit7.Text:= DataModbpl.sw_out.FieldByName('mf50_account').AsString;
+  DataModbpl.account.Closeall;
+ DataModbpl.account.SetVariable('accno',edit7.Text);
+ DataModbpl.account.open;
+
+ edit6.Text:= DataModbpl.account.FieldByName('KLi_id').AsVariant;
+   Edit6KeyPress(edit6,ke);
+   // ShowMessage(inttostr(DataModbpl.sw_out.RecordCount));
+
+   reciverbic.DataSource :=DataModbpl.bankssource;
+   SearchEdit2.DataSource:=DataModbpl.bankssource;
+
+
+   SearchEdit1.Text := DataModbpl.sw_out.FieldByName('mf50_account').AsString;
+//DataModbpl.sw_out.FieldByName('mf50_account').AsString;
+amount.Text:=DataModbpl.sw_out.FieldByName('mf32a_amount').AsString;
+edit2.Text:=DataModbpl.sw_out.FieldByName('mf59_account').AsString;
+referens.Text:=DataModbpl.sw_out.FieldByName('mf20_reference').AsString;
+OF70_RichEdit.Text:= DataModbpl.sw_out.FieldByName('mf70').AsString;
+OF72_RichEdit.Text:= DataModbpl.sw_out.FieldByName('mf72').AsString;
+memo1.Text:= DataModbpl.sw_out.FieldByName('mf50_name$adress').AsString;
+SearchCombo2.Text:= DataModbpl.sw_out.FieldByName('rname').AsString;
+SearchCombo2Change(SearchCombo2);
+memo2.Text:= DataModbpl.sw_out.FieldByName('mf59_name$adress').AsString;
+edit3.Text:=Memo2.Lines[1];
+edit4.Text:= copy(Memo2.Lines[2],0,10);
+
+
+
+       end else begin
+if   DataModbpl.sw_out.FieldByName('messagetype').AsString='MT103'   then begin
+     mt205.Visible:=false;
+      RadioButton3.Visible:=false;
+
+   reciverbic.DataSource :=DataModbpl.bankssource;
+   SearchEdit2.DataSource:=DataModbpl.bankssource;
+
+edit7.Text:= DataModbpl.sw_out.FieldByName('mf50_account').AsString;
+ DataModbpl.account.Closeall;
+ DataModbpl.account.SetVariable('accno',edit7.Text);
+ DataModbpl.account.open;
+ //ShowMessage(inttostr(DataModbpl.account.RecordCount)+edit7.Text);
+
+ edit6.Text:= DataModbpl.account.FieldByName('KLi_id').AsVariant;
+  Edit6KeyPress(edit6,ke);
+
+SearchEdit1.Text := DataModbpl.sw_out.FieldByName('mf50_account').AsString;
+reciverbic.DataSource :=DataModbpl.bankssource;
+SearchEdit2.DataSource:=DataModbpl.bankssource;
+amount.Text:=DataModbpl.sw_out.FieldByName('mf32a_amount').AsString;
+edit2.Text:=DataModbpl.sw_out.FieldByName('mf59_account').AsString;
+referens.Text:=DataModbpl.sw_out.FieldByName('mf20_reference').AsString;
+OF70_RichEdit.Text:= DataModbpl.sw_out.FieldByName('mf70').AsString;
+OF72_RichEdit.Text:= DataModbpl.sw_out.FieldByName('mf72').AsString;
+memo1.Text:= DataModbpl.sw_out.FieldByName('mf50_name$adress').AsString;
+SearchCombo2.Text:= DataModbpl.sw_out.FieldByName('rname').AsString;
+SearchCombo2Change(SearchCombo2);
+memo2.Text:= DataModbpl.sw_out.FieldByName('mf59_name$adress').AsString;
+//SearchEdit2.Text:= DataModbpl.sw_out.FieldByName('receiverbic').AsString;
+//reciverbic.Text:=DataModbpl.sw_out.FieldByName('rcode').AsString ;
+//edit6.Text:= DataModbpl.sw_out.FieldByName('rcode').AsString ;
+
+///showmessage(memo2.text)  ;
+
+//CMSearchEdit1.Text:= DataModbpl.sw_out.FieldByName('rcode').AsString ;
+//--------
+edit3.Text:=Memo2.Lines[1];
+     if Length(Memo2.Lines[2])=1 then
+         edit4.Text:=''
+     else
+         edit4.Text:= copy(Memo2.Lines[2],0,10);
+
+
+       end;
+       end;
+   end
+   else      //MT205
+   if DataModbpl.sw_out.FieldByName('messagetype').AsString='MT205' then  begin
+     //ShowMessage('55');
+
+
+
+
+   MT205.Checked:=true;
+
+     mt103.Visible:=false;
+      RadioButton3.Visible:=false;
+
+   edit8.Text:=DataModbpl.sw_out.FieldByName('mf32a_amount').AsString;
+
+   memo3.Text:= DataModbpl.sw_out.FieldByName('mf52_name$adress').AsString;
+   // gSearch.DataSource:=DataModbpl.bankssource ;
+   gSearch.KeyValue:= copy(Memo3.Lines[1],0,35);
+
+   memo4.Text:=DataModbpl.sw_out.FieldByName('mf58_name$location').AsString ;
+       reciverbic.DataSource :=DataModbpl.bankssource;
+       SearchEdit2.DataSource:=DataModbpl.bankssource;
+   reciverbic.Text :=copy(Memo4.Lines[0],1,8);
+   SearchEdit2.Text:=copy(Memo4.Lines[4],1,8);
+
+    SearchCombo2.Text:= DataModbpl.sw_out.FieldByName('rname').AsString;
+   SearchCombo2Change(SearchCombo2);
+
+   codex:=strtoint(DataModbpl.sw_out.FieldByName('senderlt').AsString);
+    //ShowMessage(inttostr(codex));
+    case codex of
+
+    0: RadioButton1.Checked:=true;
+    1: RadioButton2.Checked:=true;
+    2: RadioButton4.Checked:=true;
+    3: RadioButton5.Checked:=true;
+    8: RadioButton7.Checked:=true;
+    5: RadioButton6.Checked:=true;
+    6: RadioButton5.Checked:=true;
+      end;
+          { if codex=0 then  begin
+    OF72_RichEdit.Text:=copy(DataModbpl.sw_out.FieldByName('mf72').AsString,7,120);
+  end
+  else     }
+   OF72_RichEdit.Text:=DataModbpl.sw_out.FieldByName('mf72').AsString;
+
+   end;
+end;
+end;
+
+
+procedure Tazips.FormShow(Sender: TObject);
+begin
+
+{DataModbpl.acount.Close;
+DataModbpl.acount.SetVariable('VX',strtoint(x));
+DataModbpl.acount.Open;
+DataModbpl.acount.Open; }
+//referens.Text:=DataModbpl.referans.FieldByName('REFE').AsString;
+end;
+
+procedure Tazips.gComboBoxChange(Sender: TObject);
+begin
+DataModbpl.banks.Locate('name',gComboBox.Text,[loCaseInsensitive,loPartialKey]);
+
+gSearch.KeyValue:=DataModbpl.banks.FieldByName('bankcode').AsString;
+gSearchEdit4.Text:=DataModbpl.banks.FieldByName('swift').AsString;
+
+end;
+
+procedure Tazips.gSearch1Change(Sender: TObject);
+begin
+{        gSearch.DataSource:=DataModbpl.DataSource1;
+    if gSearch.Text<>'' then
+                      begin
+
+   gSearch.DataSource:=DataModbpl.DataSource1;
+gComboBox.Text:='';
+
+memo3.Lines[0]:=  '/'+ gSearch.Text;
+memo3.Lines[1]:=DataModbpl.banks.FieldByName('name').AsString;
+memo3.Lines[2]:=DataModbpl.banks.FieldByName('krno').AsString;
+memo3.Lines[3]:=DataModbpl.banks.FieldByName('inn').AsString ;
+memo3.Lines[4]:=DataModbpl.banks.FieldByName('swift').AsString+'XXX' ;
+
+
+
+
+
+                      end; }
+
+
+
+end;
+
+procedure Tazips.gSearchEdit4Change(Sender: TObject);
+begin
+if gSearchEdit4.Text<>'' then
+                      begin
+//DataModbpl.banks.Locate('bankcode',strtoint(reciverbic.Text),[loCaseInsensitive,loPartialKey]);
+
+gComboBox.Text:=DataModbpl.banks.FieldByName('name').AsString;
+//gSearch.KeyValue:= DataModbpl.banks.FieldByName('bankcode').AsString
+end else
+gComboBox.Text:='';
+end;
+
+procedure Tazips.gSearch1KeyPress(Sender: TObject; var Key: Char);
+begin
+if key=#13 then
+begin
+// gSearch.DataSource:=DataModbpl.DataSource1;
+gComboBox.Text:='';
+memo3.Lines[0]:=  '/'+ gSearch.Text;
+memo3.Lines[1]:=DataModbpl.bank.FieldByName('name').AsString;
+memo3.Lines[2]:=DataModbpl.bank.FieldByName('krno').AsString;
+memo3.Lines[3]:=DataModbpl.bank.FieldByName('inn').AsString ;
+memo3.Lines[4]:=DataModbpl.bank.FieldByName('swift').AsString+'XXX' ;
+end;
+end;
+
+procedure Tazips.Memo5KeyPress(Sender: TObject; var Key: Char);
+var column,column2,row,row2:integer;
+begin
+
+end;
+
+procedure Tazips.MT103Click(Sender: TObject);
+begin
+if mt103.Checked=true then
+      begin
+      panel2.Visible:=false;
+      panel1.Visible:=false;
+
+      if (v_dey>0)  then button1.Visible:=false;
+      if (v_dey=1)  then button1.Visible:=true;
+
+
+      button7.Visible:=false;
+          Label4.Caption:='Əməliyyatın tipi'  ;
+          label2.Visible:=true;
+           MF23b.Visible:=true;
+           relatedrf.Visible:=false;
+           //referens205.Visible:=false;
+           send1.Visible:=false;
+           info.Visible:=false;
+           OF70_RichEdit.Left:=13;
+          OF72_RichEdit.Left:=513;
+          OF70_RichEdit.Visible:=true;
+          OF70_RichEdit.Visible:=true;
+          OF72_RichEdit.Visible:=true;
+
+
+          RadioButton1.Visible:=false;
+          RadioButton2.Visible:=false;
+          RadioButton4.Visible:=false;
+          RadioButton5.Visible:=false;
+          RadioButton6.Visible:=false;
+          RadioButton7.Visible:=false;
+
+          GroupBox1.Visible:=true;
+          edit9.Visible:=false;
+          label20.Visible:=false;
+          button5.Visible:=false;
+
+           button1.Enabled:=true;;
+
+ end;
+
+
+
+end;
+
+procedure Tazips.MT205Click(Sender: TObject);
+var i:integer;
+begin
+if mt205.Checked=true then
+      begin
+      panel2.Visible:=false;
+      panel1.Visible:=false;
+
+      if (v_dey>0)  then button1.Visible:=false;
+      if (v_dey=1)  then button1.Visible:=true;
+
+
+      button7.Visible:=false;
+          Label4.Caption:='Related reference'  ;
+          label2.Visible:=false;
+           MF23b.Visible:=false;
+           relatedrf.Visible:=true;
+           //referens205.Visible:=false;
+           info.Visible:=true;
+          //OF70_RichEdit.Left:=13;
+          OF72_RichEdit.Left:=13;
+          OF70_RichEdit.Visible:=false;
+          OF72_RichEdit.Visible:=true;;
+          Label7.Visible:=true ;
+          edit1.Visible:=true;
+          RadioButton4.Visible:=true;
+          RadioButton5.Visible:=true;
+          RadioButton1.Visible:=true;
+          RadioButton2.Visible:=true;
+          RadioButton6.Visible:=true;
+          RadioButton7.Visible:=TRue;
+
+
+          GroupBox1.Visible:=false;
+          send1.Visible:=true;
+          edit9.Visible:=false;
+          label20.Visible:=false;
+          button5.Visible:=false;
+
+          button1.Enabled:=false;
+
+       {   DataModbpl.names205.open;
+for i := 1 to DataModbpl.names205.RecordCount do
+begin
+  ComboBox1.Items[i]:= DataModbpl.names205.FieldByName('names').AsString;
+  DataModbpl.names205.Next;
+end;   }
+
+
+end;
+
+memo3.Text:='/'+DataModbpl.Bank.FieldByName('bankcode').AsString +#13#10+
+DataModbpl.Bank.FieldByName('name').AsString+#13#10+
+DataModbpl.Bank.FieldByName('krno').AsString+#13#10+
+DataModbpl.Bank.FieldByName('inn').AsString+#13#10+
+DataModbpl.Bank.FieldByName('swift').AsString+'XXX';
+end;
+
+function GetRichEditLine6(RE : TRichEdit) : string;
+ var
+   A : array [0..6] of String;
+
+   s, s_temp : String;
+   i : Byte;
+   R :integer;
+   l_first :integer;
+
+ begin
+   l_first := length(re.Text);
+   SendMessage(re.Handle, EM_GETSEL, Longint(@R), 0);
+   s:='';
+   for i:=0 to re.Lines.Count do
+   if trim(re.Lines[i])<>'' then
+   begin
+      case  i of
+         0: begin s_temp:=re.Lines[i];  if pos('/BCSL/',s_temp)>0 then begin delete(s_temp,1,6);  r:=r-6;  end; s :=s +s_temp; end;
+         1: begin s_temp:=re.Lines[i];  if pos('//',s_temp)>0     then begin delete(s_temp,1,2);  r:=r-2;  end; s :=s +s_temp; end;
+         2: begin s_temp:=re.Lines[i];  if pos('//',s_temp)>0     then begin delete(s_temp,1,2);  r:=r-2;  end; s :=s +s_temp; end;
+         3: begin s_temp:=re.Lines[i];  if pos('//',s_temp)>0     then begin delete(s_temp,1,2);  r:=r-2;  end; s :=s +s_temp; end;
+         4: begin s_temp:=re.Lines[i];  if pos('//',s_temp)>0     then begin delete(s_temp,1,2);  r:=r-2;  end; s :=s +s_temp; end;
+         5: begin s_temp:=re.Lines[i];  if pos('//',s_temp)>0     then begin delete(s_temp,1,2);  r:=r-2;  end; s :=s +s_temp; end;
+      end;
+   end;
+
+   for i :=0 to 5 do
+   begin
+      case  i of
+
+      	 0: if copy(s ,1,   35)<>''  then begin s_temp:='/BCSL/'+copy(s ,1, 28);  A[i] :=s_temp; r:=r+6;   end;
+         1: if copy(s ,29,  35)<>''  then begin s_temp:='//'+copy(s ,29, 35);     A[i] :=s_temp; r:=r+2;   end;
+         2: if copy(s ,64,  35)<>''  then begin s_temp:='//'+copy(s ,64, 35);     A[i] :=s_temp; r:=r+2;   end;
+         3: if copy(s ,103, 35)<>''  then begin s_temp:='//'+copy(s ,103, 35);    A[i] :=s_temp; r:=r+2;   end;
+         4: if copy(s ,138, 35)<>''  then begin s_temp:='//'+copy(s ,138, 35);    A[i] :=s_temp; r:=r+2;   end;
+         5: if copy(s ,173, 35)<>''  then begin s_temp:='//'+copy(s ,173, 35 );   A[i] :=s_temp; r:=r+2;   end;
+      end;
+
+   end;
+
+   re.Clear;
+   for i :=0 to 5 do
+   if A[i] <> '' then
+   re.Lines.Add(A[i]);
+
+
+   if (r in [37])  and (l_first>length(re.Text)) then begin R:=r-2; end;
+   if (r in [74])  and (l_first>length(re.Text)) then begin R:=r-2; end;
+   if (r in [111]) and (l_first>length(re.Text)) then begin R:=r-2; end;
+   if (r in [148]) and (l_first>length(re.Text)) then begin R:=r-2; end;
+   if (r in [185]) and (l_first>length(re.Text)) then begin R:=r-2; end;
+
+   if (r in [36..38])   and (l_first<=length(re.Text)) then  R:=40;
+   if (r in [73..75])   and (l_first<=length(re.Text)) then  R:=77;
+   if (r in [110..112]) and (l_first<=length(re.Text)) then  R:=114;
+   if (r in [147..149]) and (l_first<=length(re.Text)) then  R:=151;
+   if (r in [184..186]) and (l_first<=length(re.Text)) then  R:=188;
+
+   if (l_first>length(re.Text)) and (length(re.Text) in [35..38])   and not(r in [35..38])   then  R:=r+2;
+   if (l_first>length(re.Text)) and (length(re.Text) in [72..75])   and not(r in [72..75])   then  R:=r+2;
+   if (l_first>length(re.Text)) and (length(re.Text) in [109..112]) and not(r in [109..112]) then  R:=r+2;
+   if (l_first>length(re.Text)) and (length(re.Text) in [146..149]) and not(r in [146..149]) then  R:=r+2;
+   if (l_first>length(re.Text)) and (length(re.Text) in [183..186]) and not(r in [183..186]) then  R:=r+2;
+
+   SendMessage(RE.Handle, EM_SETSEL,R, R);
+ end;
+
+
+function GetRichEditLine2(RE : TRichEdit) : string;
+ var
+   A : array [0..5] of String;
+   s, s_temp : String;
+   i : Byte;
+   R :integer;
+   l_first :integer;
+
+ begin
+   l_first := length(re.Text);
+   SendMessage(re.Handle, EM_GETSEL, Longint(@R), 0);
+   s:='';
+   for i:=0 to re.Lines.Count do
+   if trim(re.Lines[i])<>'' then
+   begin
+      case  i of
+         0: begin s_temp:=re.Lines[i];  if pos('/REC/',s_temp)>0 then begin delete(s_temp,1,5);     r:=r-5;  end; s :=s +s_temp; end;
+         1: begin s_temp:=re.Lines[i];  if pos('//',s_temp)>0    then begin delete(s_temp,1,2);     r:=r-2;  end; s :=s +s_temp; end;
+         2: begin s_temp:=re.Lines[i];  if pos('//',s_temp)>0    then begin delete(s_temp,1,2);     r:=r-2;  end; s :=s +s_temp; end;
+         3: begin s_temp:=re.Lines[i];  if pos('//',s_temp)>0    then begin delete(s_temp,1,2);     r:=r-2;  end; s :=s +s_temp; end;
+         4: begin s_temp:=re.Lines[i];  if pos('//',s_temp)>0    then begin delete(s_temp,1,2);     r:=r-2;  end; s :=s +s_temp; end;
+         5: begin s_temp:=re.Lines[i];  if pos('//',s_temp)>0    then begin delete(s_temp,1,2);     r:=r-2;  end; s :=s +s_temp; end;
+      end;
+   end;
+
+   for i :=0 to 5 do
+   begin
+      case  i of
+      	 0: if copy(s ,1, 35)<>''    then begin s_temp:='/REC/'+copy(s ,1, 32);   A[i] :=s_temp; r:=r+5;   end;
+         1: if copy(s ,33, 35)<>''   then begin s_temp:='//'+copy(s ,33, 35);     A[i] :=s_temp; r:=r+2;   end;
+         2: if copy(s ,68, 35)<>''   then begin s_temp:='//'+copy(s ,68, 35);     A[i] :=s_temp; r:=r+2;   end;
+         3: if copy(s ,103, 35)<>''  then begin s_temp:='//'+copy(s ,103, 35);    A[i] :=s_temp; r:=r+2;   end;
+         4: if copy(s ,138, 35)<>''  then begin s_temp:='//'+copy(s ,138, 35);    A[i] :=s_temp; r:=r+2;   end;
+         5: if copy(s ,173, 35)<>''  then begin s_temp:='//'+copy(s ,173, 35 );   A[i] :=s_temp; r:=r+2;   end;
+      end;
+
+   end;
+
+   re.Clear;
+   for i :=0 to 5 do
+   if A[i] <> '' then
+   re.Lines.Add(A[i]);
+
+
+   if (r in [37])  and (l_first>length(re.Text)) then begin R:=r-2; end;
+   if (r in [74])  and (l_first>length(re.Text)) then begin R:=r-2; end;
+   if (r in [111]) and (l_first>length(re.Text)) then begin R:=r-2; end;
+   if (r in [148]) and (l_first>length(re.Text)) then begin R:=r-2; end;
+   if (r in [185]) and (l_first>length(re.Text)) then begin R:=r-2; end;
+
+   if (r in [36..38])   and (l_first<=length(re.Text)) then  R:=40;
+   if (r in [73..75])   and (l_first<=length(re.Text)) then  R:=77;
+   if (r in [110..112]) and (l_first<=length(re.Text)) then  R:=114;
+   if (r in [147..149]) and (l_first<=length(re.Text)) then  R:=151;
+   if (r in [184..186]) and (l_first<=length(re.Text)) then  R:=188;
+
+   if (l_first>length(re.Text)) and (length(re.Text) in [35..38])   and not(r in [35..38])   then  R:=r+2;
+   if (l_first>length(re.Text)) and (length(re.Text) in [72..75])   and not(r in [72..75])   then  R:=r+2;
+   if (l_first>length(re.Text)) and (length(re.Text) in [109..112]) and not(r in [109..112]) then  R:=r+2;
+   if (l_first>length(re.Text)) and (length(re.Text) in [146..149]) and not(r in [146..149]) then  R:=r+2;
+   if (l_first>length(re.Text)) and (length(re.Text) in [183..186]) and not(r in [183..186]) then  R:=r+2;
+
+   SendMessage(RE.Handle, EM_SETSEL,R, R);
+ end;
+
+
+
+ function GetRichEditLine(RE : TRichEdit) : string;
+ var
+   A : array [0..5] of String;
+   s: String;
+   i : Byte;
+   k : integer;
+   R :integer;
+   l_first :integer;
+ begin
+   l_first := length(re.Text);
+   SendMessage(re.Handle, EM_GETSEL, Longint(@R), 0);
+   s:='';
+   for i:=0 to re.Lines.Count do
+   if trim(re.Lines[i])<>'' then
+   s :=s +re.Lines[i];
+
+   k :=1;
+   for i :=0 to 3 do
+   begin
+      if copy(s ,k, 35)<>'' then A[i]:= copy(s ,k, 35);
+      k :=k + 35;
+   end;
+
+   re.Clear;
+   for i :=0 to 3 do
+   if A[i] <> '' then
+   re.Lines.Add(A[i]);
+
+
+
+   if (r=35)  and (l_first>=length(re.Text)) then  R:=r+2
+   else
+   if (((r-((r div 35)-1)*2) mod 35)=0) and (r<>0) and (l_first>=length(re.Text)) then R:=r+(r div 35)*2;
+   SendMessage(RE.Handle, EM_SETSEL,R, R);
+
+ end;
+
+
+
+ function GetRichEditLine3(RE : TRichEdit) : string;
+ var
+   A : array [0..5] of String;
+   s, s_temp : String;
+   i : Byte;
+   R :integer;
+   l_first :integer;
+
+ begin
+   l_first := length(re.Text);
+   SendMessage(re.Handle, EM_GETSEL, Longint(@R), 0);
+   s:='';
+   for i:=0 to re.Lines.Count do
+   if trim(re.Lines[i])<>'' then
+   begin
+      case  i of
+         0: begin s_temp:=re.Lines[i];  if pos('/BNF/',s_temp)>0 then begin delete(s_temp,1,5);  r:=r-5;  end; s :=s +s_temp; end;
+         1: begin s_temp:=re.Lines[i];  if pos('//',s_temp)>0 then begin delete(s_temp,1,2);  r:=r-2;  end; s :=s +s_temp; end;
+         2: begin s_temp:=re.Lines[i];  if pos('//',s_temp)>0 then begin delete(s_temp,1,2);  r:=r-2;  end; s :=s +s_temp; end;
+         3: begin s_temp:=re.Lines[i];  if pos('//',s_temp)>0 then begin delete(s_temp,1,2);  r:=r-2;  end; s :=s +s_temp; end;
+         4: begin s_temp:=re.Lines[i];  if pos('//',s_temp)>0 then begin delete(s_temp,1,2);  r:=r-2;  end; s :=s +s_temp; end;
+         5: begin s_temp:=re.Lines[i];  if pos('//',s_temp)>0 then begin delete(s_temp,1,2);  r:=r-2;  end; s :=s +s_temp; end;
+      end;
+   end;
+
+   for i :=0 to 5 do
+   begin
+      case  i of
+
+      	 0: if copy(s ,1, 30)<>''   then begin s_temp:='/BNF/'+copy(s ,1, 30); A[i] :=s_temp; r:=r+5;   end;
+         1: if copy(s ,31, 33)<>''  then begin s_temp:='//'+copy(s ,31, 33);   A[i] :=s_temp; r:=r+2;   end;
+         2: if copy(s ,64, 33)<>''  then begin s_temp:='//'+copy(s ,64, 33);   A[i] :=s_temp; r:=r+2;   end;
+         3: if copy(s ,97, 33)<>''  then begin s_temp:='//'+copy(s ,97, 33);   A[i] :=s_temp; r:=r+2;   end;
+         4: if copy(s ,130, 33)<>'' then begin s_temp:='//'+copy(s ,130, 33);  A[i] :=s_temp; r:=r+2;   end;
+         5: if copy(s ,163, 27)<>'' then begin s_temp:='//'+copy(s ,163, 27);  A[i] :=s_temp; r:=r+2;   end;
+      end;
+
+   end;
+
+   re.Clear;
+   for i :=0 to 5 do
+   if A[i] <> '' then
+   re.Lines.Add(A[i]);
+
+
+   if (r in [37])  and (l_first>length(re.Text)) then begin R:=r-2; end;
+   if (r in [74])  and (l_first>length(re.Text)) then begin R:=r-2; end;
+   if (r in [111]) and (l_first>length(re.Text)) then begin R:=r-2; end;
+   if (r in [148]) and (l_first>length(re.Text)) then begin R:=r-2; end;
+   if (r in [185]) and (l_first>length(re.Text)) then begin R:=r-2; end;
+
+   if (r in [36..38])   and (l_first<=length(re.Text)) then  R:=40;
+   if (r in [73..75])   and (l_first<=length(re.Text)) then  R:=77;
+   if (r in [110..112]) and (l_first<=length(re.Text)) then  R:=114;
+   if (r in [147..149]) and (l_first<=length(re.Text)) then  R:=151;
+   if (r in [184..186]) and (l_first<=length(re.Text)) then  R:=188;
+
+   if (l_first>length(re.Text)) and (length(re.Text) in [35..38])   and not(r in [35..38])   then  R:=r+2;
+   if (l_first>length(re.Text)) and (length(re.Text) in [72..75])   and not(r in [72..75])   then  R:=r+2;
+   if (l_first>length(re.Text)) and (length(re.Text) in [109..112]) and not(r in [109..112]) then  R:=r+2;
+   if (l_first>length(re.Text)) and (length(re.Text) in [146..149]) and not(r in [146..149]) then  R:=r+2;
+   if (l_first>length(re.Text)) and (length(re.Text) in [183..186]) and not(r in [183..186]) then  R:=r+2;
+
+   SendMessage(RE.Handle, EM_SETSEL,R, R);
+ end;
+
+procedure Tazips.OF70_RichEditChange(Sender: TObject);
+begin
+//GetRichEditLine2(OF72_RichEdit);
+//GetRichEditLine(OF70_RichEdit);
+
+end;
+
+procedure Tazips.OF70_RichEditKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+  var r: Longint;
+   clipb:string;
+begin
+
+{ SendMessage(OF72_RichEdit.Handle, EM_GETSEL, Longint(@R), 0);
+
+   if (r in [0..4]) and (key in [vk_delete])  then begin key:=0;  end;
+   if (r in [1..5]) and (key in [vk_back])  then begin key:=0;  end;
+   if (r in [35,72,109,146,183]) and (key in [vk_delete])  then begin key:=0;  end;
+   if (r in [36..38,73..75,110..112,147..149,184..186]) and (key in [vk_delete, vk_back])  then begin key:=0;  end;
+   if (r in [39,76,113,150,187]) and (key in [ vk_back])  then begin key:=0;  end;
+
+   if  length(trim((Sender as TRichEdit).Text))=0 then isEmpty:=true else isEmpty :=false;
+   if  (length(trim((Sender as TRichEdit).Text))>216) and not(key  in [vk_delete, vk_back]) then key:=0;
+ }
+end;
+
+procedure Tazips.OF70_RichEditKeyPress(Sender: TObject; var Key: Char);
+  var r : Longint;
+
+{   if key=#13 then key:=#0;
+     SendMessage(OF72_RichEdit.Handle, EM_GETSEL, Longint(@R), 0);
+     if (r in [1..5])  then begin key:=#0;  end;
+
+     if (r in [35..38,72..75,109..112,146..149,183..186])and
+     ((OF72_RichEdit.Text[r-1]='/')or(OF72_RichEdit.Text[r+1]='/')) then key:=#0;
+ }
+
+
+  column,column2,row,row2:integer;
+begin
+
+   column:=OF70_RichEdit.Perform(EM_LINEFROMCHAR, OF70_RichEdit.SelStart, 0);
+   row:=Length(OF70_RichEdit.Lines[column]);
+
+   if (row>=35) or (column>3) then   key:=#0;
+
+
+
+
+
+
+end;
+
+
+procedure Tazips.OF72_RichEditChange(Sender: TObject);
+var i, j:integer;
+begin
+{if mt205.Checked=false then
+GetRichEditLine(OF70_RichEdit)
+else
+
+  if (reciverbic.Text='501004')  and (RadioButton1.Checked=true) then   begin
+//OF72_RichEdit.Text:='/BCSL/'+OF72_RichEdit.Text;
+  GetRichEditLine6(OF72_RichEdit);
+end else
+//GetRichEditLine6(OF72_RichEdit) else
+ GetRichEditLine3(OF72_RichEdit)  }
+
+end;
+
+procedure Tazips.OF72_RichEditEnter(Sender: TObject);
+var c ,b,d,f,g:string;
+begin
+if MT205.Checked then  begin
+button1.Enabled:=false ;
+           RadioButton4.Checked:=false;
+          RadioButton5.Checked:=false;
+          RadioButton1.Checked:=false;
+          RadioButton2.Checked:=false;
+          RadioButton6.Checked:=false;
+          RadioButton7.Checked:=false;                                         //burda qaldim
+
+
+  OF72_RichEdit.text:=
+  StringReplace(OF72_RichEdit.text,'//', '',
+                          [rfReplaceAll, rfIgnoreCase]);
+                          OF72_RichEdit.text:=
+  StringReplace(OF72_RichEdit.text,'/BNF/', '',
+                          [rfReplaceAll, rfIgnoreCase]);
+                          OF72_RichEdit.text:=
+  StringReplace(OF72_RichEdit.text,'/BCSL/', '',
+                          [rfReplaceAll, rfIgnoreCase]);
+
+                          OF72_RichEdit.text:=
+  StringReplace(OF72_RichEdit.text,'/REC/', '',
+                          [rfReplaceAll, rfIgnoreCase]);
+
+
+end
+else
+begin
+         button1.Enabled:=true ;
+           RadioButton4.Checked:=false;
+          RadioButton5.Checked:=false;
+          RadioButton1.Checked:=false;
+          RadioButton2.Checked:=false;
+          RadioButton6.Checked:=false;
+          RadioButton7.Checked:=false;                                         //burda qaldim
+
+
+  OF72_RichEdit.text:=
+  StringReplace(OF72_RichEdit.text,'//', '',
+                          [rfReplaceAll, rfIgnoreCase]);
+                          OF72_RichEdit.text:=
+  StringReplace(OF72_RichEdit.text,'/BNF/', '',
+                          [rfReplaceAll, rfIgnoreCase]);
+                          OF72_RichEdit.text:=
+  StringReplace(OF72_RichEdit.text,'/BCSL/', '',
+                          [rfReplaceAll, rfIgnoreCase]);
+
+                          OF72_RichEdit.text:=
+  StringReplace(OF72_RichEdit.text,'/REC/', '',
+                          [rfReplaceAll, rfIgnoreCase]);
+
+
+
+
+end;
+end;
+
+procedure Tazips.OF72_RichEditKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+  var clipb:string;
+begin
+
+//  if  (length(trim((Sender as TRichEdit).Text))>147) and not(key  in [vk_delete, vk_back]) then key:=0;
+end;
+
+
+procedure Tazips.OF72_RichEditKeyPress(Sender: TObject; var Key: Char);
+var
+str1:string;
+  column,column2,row,row2:integer;
+begin
+
+
+
+   column:=OF72_RichEdit.Perform(EM_LINEFROMCHAR, OF72_RichEdit.SelStart, 0);
+   row:=Length(OF72_RichEdit.Lines[column]);
+
+         if (row>=30) and  (column=0) then   key:=#0;
+
+
+
+
+         if (row>=33) or (column>5) and (column<>0) then   key:=#0;
+
+
+
+
+    // if column>5 then   key:=#0;
+
+
+
+
+
+end;
+
+procedure Tazips.mt298200Click(Sender: TObject);
+begin
+panel2.Visible:=true;
+panel1.Visible:=false;
+DataModbpl.out.Active:=true;
+button7.Visible:=true;
+   button1.Visible:=false;
+   button2.Visible:=false;
+   button3.Visible:=false;
+   button5.Visible:=false;
+
+
+end;
+
+procedure Tazips.MT941Click(Sender: TObject);
+begin
+panel1.Visible:=true;
+DataModbpl.out.Active:=true;
+button7.Visible:=false;
+   button1.Visible:=false;
+   button7.Visible:=true;
+   button4.Visible:=false;
+   button2.Visible:=false;
+   button3.Visible:=false;
+   button5.Visible:=false;
+   groupbox7.Visible:=false;
+   groupbox6.Visible:=true;
+
+
+   edit15.Visible:=false ;
+   edit16.Visible:=false;
+   label26.Visible:=false;
+   label27.Visible:=false ;
+   edit14.Text:=DataModbpl.sw_settings.FieldByName('bic').AsString;
+
+
+end;
+
+procedure Tazips.MT942Click(Sender: TObject);
+begin
+panel1.Visible:=true;
+DataModbpl.out.Active:=true;
+button7.Visible:=false;
+   button1.Visible:=false;
+   button7.Visible:=true;
+   button4.Visible:=false;
+   button2.Visible:=false;
+   button3.Visible:=false;
+   button5.Visible:=false;
+   groupbox7.Visible:=false;
+   groupbox6.Visible:=true;
+
+   edit15.Visible:=true ;
+   edit16.Visible:=true;
+   label26.Visible:=true;
+   label27.Visible:=true ;
+   edit14.Text:=DataModbpl.sw_settings.FieldByName('bic').AsString;
+
+
+end;
+
+procedure Tazips.MT999Click(Sender: TObject);
+begin
+
+
+panel1.Visible:=true;
+GroupBox6.Visible:=false;
+groupbox7.Visible:=true;
+
+button7.Visible:=true;
+button1.Visible:=false;
+button2.Visible:=false;
+button3.Visible:=false;
+end;
+
+procedure Tazips.RadioButton1Click(Sender: TObject);
+begin
+
+          button1.Enabled:=true;;
+if copy(OF72_RichEdit.lines[0],0,6)<>'/BCSL/' then   begin
+
+if (reciverbic.Text='501004')  and (RadioButton1.Checked=true) then   begin
+ OF72_RichEdit.lines[0]:='/BCSL/'+DataModbpl.Bank.FieldByName('subkrno').AsString+OF72_RichEdit.lines[0];
+ OF72_RichEdit.lines[1]:='//'+OF72_RichEdit.lines[1];
+ OF72_RichEdit.lines[2]:='//'+OF72_RichEdit.lines[2];
+ OF72_RichEdit.lines[3]:='//'+OF72_RichEdit.lines[3];
+ OF72_RichEdit.lines[4]:='//'+OF72_RichEdit.lines[4];
+ OF72_RichEdit.lines[5]:='//'+OF72_RichEdit.lines[5];
+
+    OF72_RichEdit.lines[0]:= copy(OF72_RichEdit.lines[0],0,35);
+    OF72_RichEdit.lines[1]:= copy(OF72_RichEdit.lines[1],0,35);
+    OF72_RichEdit.lines[2]:= copy(OF72_RichEdit.lines[1],0,35);
+    OF72_RichEdit.lines[3]:= copy(OF72_RichEdit.lines[1],0,35);
+
+
+//GetRichEditLine6(OF72_RichEdit);
+end else    begin
+//GetRichEditLine6(OF72_RichEdit) else
+ OF72_RichEdit.lines[0]:='/BNF/'+OF72_RichEdit.lines[0];
+ OF72_RichEdit.lines[1]:='//'+OF72_RichEdit.lines[1];
+ OF72_RichEdit.lines[2]:='//'+OF72_RichEdit.lines[2];
+ OF72_RichEdit.lines[3]:='//'+OF72_RichEdit.lines[3];
+ OF72_RichEdit.lines[4]:='//'+OF72_RichEdit.lines[4];
+ OF72_RichEdit.lines[5]:='//'+OF72_RichEdit.lines[5];
+
+    OF72_RichEdit.lines[0]:= copy(OF72_RichEdit.lines[0],0,35);
+    OF72_RichEdit.lines[1]:= copy(OF72_RichEdit.lines[1],0,35);
+    OF72_RichEdit.lines[2]:= copy(OF72_RichEdit.lines[1],0,35);
+    OF72_RichEdit.lines[3]:= copy(OF72_RichEdit.lines[1],0,35);
+
+end;
+
+end else    begin
+
+
+                         { ShowMessage(a);
+                          ShowMessage(OF72_RichEdit.lines[0]);
+                          }
+a:=StringReplace(OF72_RichEdit.lines[0],copy(OF72_RichEdit.lines[0],0,5), '',
+                          [rfReplaceAll, rfIgnoreCase]);
+
+ OF72_RichEdit.lines[1]:='//'+a;
+ a:=StringReplace(OF72_RichEdit.lines[2],copy(OF72_RichEdit.lines[2],0,2), '',
+                          [rfReplaceAll, rfIgnoreCase]);
+
+
+ OF72_RichEdit.lines[2]:='//'+a ;
+ a:=StringReplace(OF72_RichEdit.lines[3],copy(OF72_RichEdit.lines[3],0,2), '',
+                          [rfReplaceAll, rfIgnoreCase]);
+                          
+
+ OF72_RichEdit.lines[3]:='//'+a;
+    a:=StringReplace(OF72_RichEdit.lines[4],copy(OF72_RichEdit.lines[4],0,2), '',
+                          [rfReplaceAll, rfIgnoreCase]);
+ OF72_RichEdit.lines[4]:='//'+a;
+
+  a:=StringReplace(OF72_RichEdit.lines[5],copy(OF72_RichEdit.lines[5],0,2), '',
+                          [rfReplaceAll, rfIgnoreCase]);
+ OF72_RichEdit.lines[5]:='//'+a;
+
+
+end;
+ codex:=0;
+end;
+
+procedure Tazips.RadioButton2Click(Sender: TObject);
+begin
+ button1.Enabled:=true;;
+if copy(OF72_RichEdit.lines[0],0,5)<>'/BNF/' then   begin
+if copy(OF72_RichEdit.lines[0],0,6)='/BCSL/' then
+begin
+  OF72_RichEdit.lines[0]:=copy(OF72_RichEdit.lines[0],7,35)  ;
+  OF72_RichEdit.lines[0]:='/BNF/'+OF72_RichEdit.lines[0];
+  OF72_RichEdit.lines[1]:='//'+OF72_RichEdit.lines[1];
+ OF72_RichEdit.lines[2]:='//'+OF72_RichEdit.lines[2];
+ OF72_RichEdit.lines[3]:='//'+OF72_RichEdit.lines[3];
+ OF72_RichEdit.lines[4]:='//'+OF72_RichEdit.lines[4];
+ OF72_RichEdit.lines[5]:='//'+OF72_RichEdit.lines[5];
+
+end else begin
+
+OF72_RichEdit.lines[0]:='/BNF/'+OF72_RichEdit.lines[0];
+ OF72_RichEdit.lines[1]:='//'+OF72_RichEdit.lines[1];
+ OF72_RichEdit.lines[2]:='//'+OF72_RichEdit.lines[2];
+ OF72_RichEdit.lines[3]:='//'+OF72_RichEdit.lines[3];
+ OF72_RichEdit.lines[4]:='//'+OF72_RichEdit.lines[4];
+ OF72_RichEdit.lines[5]:='//'+OF72_RichEdit.lines[5];
+
+
+
+
+      end;
+end else begin
+
+a:=StringReplace(OF72_RichEdit.lines[0],copy(OF72_RichEdit.lines[0],0,5), '',[rfReplaceAll, rfIgnoreCase]);
+ OF72_RichEdit.lines[0]:='/BNF/'+a;
+ a:=StringReplace(OF72_RichEdit.lines[1],copy(OF72_RichEdit.lines[1],0,2), '',[rfReplaceAll, rfIgnoreCase]);
+ OF72_RichEdit.lines[1]:='//'+a;
+ a:=StringReplace(OF72_RichEdit.lines[2],copy(OF72_RichEdit.lines[2],0,2), '',[rfReplaceAll, rfIgnoreCase]);
+ OF72_RichEdit.lines[2]:='//'+a ;
+ a:=StringReplace(OF72_RichEdit.lines[3],copy(OF72_RichEdit.lines[3],0,2), '',[rfReplaceAll, rfIgnoreCase]);
+  OF72_RichEdit.lines[3]:='//'+a;
+   a:=StringReplace(OF72_RichEdit.lines[4],copy(OF72_RichEdit.lines[4],0,2), '',[rfReplaceAll, rfIgnoreCase]);
+ OF72_RichEdit.lines[4]:='//'+a;
+  a:=StringReplace(OF72_RichEdit.lines[5],copy(OF72_RichEdit.lines[5],0,2), '',[rfReplaceAll, rfIgnoreCase]);
+ OF72_RichEdit.lines[5]:='//'+a;
+
+
+end;
+
+  codex:=1;
+end;
+
+procedure Tazips.RadioButton3Click(Sender: TObject);
+begin
+ {Format102:= TFormat102.Create(Self);
+  Format102.ShowModal;
+  }
+  panel2.Visible:=false;
+  panel1.Visible:=false;
+  button5.Visible:=true;
+
+
+  if (v_dey>0)  then button1.Visible:=false;
+      if (v_dey=1)  then button1.Visible:=true;
+
+  button7.Visible:=false;
+  Label4.Caption:='Əməliyyatın tipi'  ;
+          label2.Visible:=true;
+           MF23b.Visible:=true;
+           relatedrf.Visible:=false;
+           //referens205.Visible:=false;
+           send1.Visible:=false;
+           info.Visible:=false;
+           OF70_RichEdit.Left:=13;
+          OF72_RichEdit.Left:=513;
+          OF70_RichEdit.Visible:=true;
+          OF72_RichEdit.Visible:=false;
+          label2.Visible:=false;
+
+          Label7.Visible:=false ;
+          edit1.Visible:=false;
+
+          RadioButton1.Visible:=false;
+          RadioButton2.Visible:=false;
+          RadioButton4.Visible:=false;
+          RadioButton5.Visible:=false;
+          RadioButton6.Visible:=false;
+          RadioButton7.Visible:=false;
+
+          GroupBox1.Visible:=true;
+          edit9.Visible:=true;
+          label20.Visible:=true;
+           Label7.Visible:=true ;
+          edit1.Visible:=true;
+
+           button1.Enabled:=true;;
+
+
+
+end;
+
+procedure Tazips.RadioButton4Click(Sender: TObject);
+begin
+ button1.Enabled:=true;;
+if copy(OF72_RichEdit.lines[0],0,5)<>'/BNF/' then   begin
+if copy(OF72_RichEdit.lines[0],0,6)='/BCSL/' then
+begin
+  OF72_RichEdit.lines[0]:=copy(OF72_RichEdit.lines[0],7,35)  ;
+  OF72_RichEdit.lines[0]:='/BNF/'+OF72_RichEdit.lines[0];
+      OF72_RichEdit.lines[1]:='//'+OF72_RichEdit.lines[1];
+ OF72_RichEdit.lines[2]:='//'+OF72_RichEdit.lines[2];
+ OF72_RichEdit.lines[3]:='//'+OF72_RichEdit.lines[3];
+ OF72_RichEdit.lines[4]:='//'+OF72_RichEdit.lines[4];
+ OF72_RichEdit.lines[5]:='//'+OF72_RichEdit.lines[5];
+
+end else begin
+
+OF72_RichEdit.lines[0]:='/BNF/'+OF72_RichEdit.lines[0];
+ OF72_RichEdit.lines[1]:='//'+OF72_RichEdit.lines[1];
+ OF72_RichEdit.lines[2]:='//'+OF72_RichEdit.lines[2];
+ OF72_RichEdit.lines[3]:='//'+OF72_RichEdit.lines[3];
+ OF72_RichEdit.lines[4]:='//'+OF72_RichEdit.lines[4];
+ OF72_RichEdit.lines[5]:='//'+OF72_RichEdit.lines[5];
+      end;
+end else begin
+
+
+a:=StringReplace(OF72_RichEdit.lines[0],copy(OF72_RichEdit.lines[0],0,5), '',
+                          [rfReplaceAll, rfIgnoreCase]);
+  OF72_RichEdit.lines[0]:='/BNF/'+a;
+                         { ShowMessage(a);
+                          ShowMessage(OF72_RichEdit.lines[0]);
+                          }
+a:=StringReplace(OF72_RichEdit.lines[1],copy(OF72_RichEdit.lines[1],0,2), '',
+                          [rfReplaceAll, rfIgnoreCase]);
+
+ OF72_RichEdit.lines[1]:='//'+a;
+ a:=StringReplace(OF72_RichEdit.lines[2],copy(OF72_RichEdit.lines[2],0,2), '',
+                          [rfReplaceAll, rfIgnoreCase]);
+
+
+ OF72_RichEdit.lines[2]:='//'+a ;
+ a:=StringReplace(OF72_RichEdit.lines[3],copy(OF72_RichEdit.lines[3],0,2), '',
+                          [rfReplaceAll, rfIgnoreCase]);
+                           
+
+ OF72_RichEdit.lines[3]:='//'+a;
+
+   a:=StringReplace(OF72_RichEdit.lines[4],copy(OF72_RichEdit.lines[4],0,2), '',
+                          [rfReplaceAll, rfIgnoreCase]);
+ OF72_RichEdit.lines[4]:='//'+a;
+
+  a:=StringReplace(OF72_RichEdit.lines[5],copy(OF72_RichEdit.lines[5],0,2), '',
+                          [rfReplaceAll, rfIgnoreCase]);
+ OF72_RichEdit.lines[5]:='//'+a;
+
+
+end;
+
+codex:=2;
+end;
+
+procedure Tazips.RadioButton5Click(Sender: TObject);
+begin
+ button1.Enabled:=true;;
+if copy(OF72_RichEdit.lines[0],0,5)<>'/BNF/' then   begin
+if copy(OF72_RichEdit.lines[0],0,6)='/BCSL/' then
+begin
+  OF72_RichEdit.lines[0]:=copy(OF72_RichEdit.lines[0],7,35)  ;
+  OF72_RichEdit.lines[0]:='/BNF/'+OF72_RichEdit.lines[0];
+      OF72_RichEdit.lines[1]:='//'+OF72_RichEdit.lines[1];
+ OF72_RichEdit.lines[2]:='//'+OF72_RichEdit.lines[2];
+ OF72_RichEdit.lines[3]:='//'+OF72_RichEdit.lines[3];
+ OF72_RichEdit.lines[4]:='//'+OF72_RichEdit.lines[4];
+ OF72_RichEdit.lines[5]:='//'+OF72_RichEdit.lines[5];
+
+end else begin
+
+OF72_RichEdit.lines[0]:='/BNF/'+OF72_RichEdit.lines[0];
+ OF72_RichEdit.lines[1]:='//'+OF72_RichEdit.lines[1];
+ OF72_RichEdit.lines[2]:='//'+OF72_RichEdit.lines[2];
+ OF72_RichEdit.lines[3]:='//'+OF72_RichEdit.lines[3];
+ OF72_RichEdit.lines[4]:='//'+OF72_RichEdit.lines[4];
+ OF72_RichEdit.lines[5]:='//'+OF72_RichEdit.lines[5];
+
+
+
+      end;
+
+end else begin
+
+a:=StringReplace(OF72_RichEdit.lines[0],copy(OF72_RichEdit.lines[0],0,5), '',
+                          [rfReplaceAll, rfIgnoreCase]);
+  OF72_RichEdit.lines[0]:='/BNF/'+a;
+                         { ShowMessage(a);
+                          ShowMessage(OF72_RichEdit.lines[0]);
+                          }
+a:=StringReplace(OF72_RichEdit.lines[1],copy(OF72_RichEdit.lines[1],0,2), '',
+                          [rfReplaceAll, rfIgnoreCase]);
+
+ OF72_RichEdit.lines[1]:='//'+a;
+ a:=StringReplace(OF72_RichEdit.lines[2],copy(OF72_RichEdit.lines[2],0,2), '',
+                          [rfReplaceAll, rfIgnoreCase]);
+
+
+ OF72_RichEdit.lines[2]:='//'+a ;
+ a:=StringReplace(OF72_RichEdit.lines[3],copy(OF72_RichEdit.lines[3],0,2), '',
+                          [rfReplaceAll, rfIgnoreCase]);
+
+
+ OF72_RichEdit.lines[3]:='//'+a;
+
+   a:=StringReplace(OF72_RichEdit.lines[4],copy(OF72_RichEdit.lines[4],0,2), '',
+                          [rfReplaceAll, rfIgnoreCase]);
+ OF72_RichEdit.lines[4]:='//'+a;
+
+  a:=StringReplace(OF72_RichEdit.lines[5],copy(OF72_RichEdit.lines[5],0,2), '',
+                          [rfReplaceAll, rfIgnoreCase]);
+ OF72_RichEdit.lines[5]:='//'+a;
+
+
+end;
+
+codex:=3;
+end;
+
+procedure Tazips.RadioButton6Click(Sender: TObject);
+var a,b:String;
+begin
+ button1.Enabled:=true;;
+if copy(OF72_RichEdit.lines[0],0,5)<>'/BNF/' then   begin
+              if copy(OF72_RichEdit.lines[0],0,6)='/BCSL/' then
+                begin
+                      OF72_RichEdit.lines[0]:=copy(OF72_RichEdit.lines[0],7,35)  ;
+                      OF72_RichEdit.lines[0]:='/BNF/'+OF72_RichEdit.lines[0];
+                        OF72_RichEdit.lines[1]:='//'+OF72_RichEdit.lines[1];
+                      OF72_RichEdit.lines[2]:='//'+OF72_RichEdit.lines[2];
+                      OF72_RichEdit.lines[3]:='//'+OF72_RichEdit.lines[3];
+                      OF72_RichEdit.lines[4]:='//'+OF72_RichEdit.lines[4];
+                      OF72_RichEdit.lines[5]:='//'+OF72_RichEdit.lines[5];
+                      end else begin
+
+                      OF72_RichEdit.lines[0]:='/BNF/'+OF72_RichEdit.lines[0];
+                      OF72_RichEdit.lines[1]:='//'+OF72_RichEdit.lines[1];
+                      OF72_RichEdit.lines[2]:='//'+OF72_RichEdit.lines[2];
+                      OF72_RichEdit.lines[3]:='//'+OF72_RichEdit.lines[3];
+                      OF72_RichEdit.lines[4]:='//'+OF72_RichEdit.lines[4];
+                      OF72_RichEdit.lines[5]:='//'+OF72_RichEdit.lines[5];
+                  end;
+end else begin
+
+a:=StringReplace(OF72_RichEdit.lines[0],copy(OF72_RichEdit.lines[0],0,5), '',
+                          [rfReplaceAll, rfIgnoreCase]);
+  OF72_RichEdit.lines[0]:='/BNF/'+a;
+                         { ShowMessage(a);
+                          ShowMessage(OF72_RichEdit.lines[0]);
+                          }
+a:=StringReplace(OF72_RichEdit.lines[1],copy(OF72_RichEdit.lines[1],0,2), '',
+                          [rfReplaceAll, rfIgnoreCase]);
+
+ OF72_RichEdit.lines[1]:='//'+a;
+ a:=StringReplace(OF72_RichEdit.lines[2],copy(OF72_RichEdit.lines[2],0,2), '',
+                          [rfReplaceAll, rfIgnoreCase]);
+ OF72_RichEdit.lines[2]:='//'+a ;
+ a:=StringReplace(OF72_RichEdit.lines[3],copy(OF72_RichEdit.lines[3],0,2), '',
+                          [rfReplaceAll, rfIgnoreCase]);
+ OF72_RichEdit.lines[3]:='//'+a;
+
+
+  a:=StringReplace(OF72_RichEdit.lines[4],copy(OF72_RichEdit.lines[4],0,2), '',
+                          [rfReplaceAll, rfIgnoreCase]);
+ OF72_RichEdit.lines[4]:='//'+a;
+
+  a:=StringReplace(OF72_RichEdit.lines[5],copy(OF72_RichEdit.lines[5],0,2), '',
+                          [rfReplaceAll, rfIgnoreCase]);
+ OF72_RichEdit.lines[5]:='//'+a;
+
+
+end;
+codex:=5;
+end;
+
+procedure Tazips.RadioButton7Click(Sender: TObject);
+begin
+ button1.Enabled:=true;;
+if copy(OF72_RichEdit.lines[0],0,5)<>'/BNF/' then   begin
+if copy(OF72_RichEdit.lines[0],0,6)='/BCSL/' then
+begin
+  OF72_RichEdit.lines[0]:=copy(OF72_RichEdit.lines[0],7,35)  ;
+  OF72_RichEdit.lines[0]:='/BNF/'+OF72_RichEdit.lines[0];
+      OF72_RichEdit.lines[1]:='//'+OF72_RichEdit.lines[1];
+ OF72_RichEdit.lines[2]:='//'+OF72_RichEdit.lines[2];
+ OF72_RichEdit.lines[3]:='//'+OF72_RichEdit.lines[3];
+ OF72_RichEdit.lines[4]:='//'+OF72_RichEdit.lines[4];
+ OF72_RichEdit.lines[5]:='//'+OF72_RichEdit.lines[5];
+
+end else begin
+
+OF72_RichEdit.lines[0]:='/BNF/'+OF72_RichEdit.lines[0];
+ OF72_RichEdit.lines[1]:='//'+OF72_RichEdit.lines[1];
+ OF72_RichEdit.lines[2]:='//'+OF72_RichEdit.lines[2];
+ OF72_RichEdit.lines[3]:='//'+OF72_RichEdit.lines[3];
+ OF72_RichEdit.lines[4]:='//'+OF72_RichEdit.lines[4];
+ OF72_RichEdit.lines[5]:='//'+OF72_RichEdit.lines[5];
+
+
+    
+
+      end;
+end else begin
+
+
+a:=StringReplace(OF72_RichEdit.lines[0],copy(OF72_RichEdit.lines[0],0,5), '',
+                          [rfReplaceAll, rfIgnoreCase]);
+  OF72_RichEdit.lines[0]:='/BNF/'+a;
+                         { ShowMessage(a);
+                          ShowMessage(OF72_RichEdit.lines[0]);
+                          }
+a:=StringReplace(OF72_RichEdit.lines[1],copy(OF72_RichEdit.lines[1],0,2), '',
+                          [rfReplaceAll, rfIgnoreCase]);
+
+
+ OF72_RichEdit.lines[1]:='//'+a;
+ a:=StringReplace(OF72_RichEdit.lines[2],copy(OF72_RichEdit.lines[2],0,2), '',
+                          [rfReplaceAll, rfIgnoreCase]);
+
+
+ OF72_RichEdit.lines[2]:='//'+a ;
+ a:=StringReplace(OF72_RichEdit.lines[3],copy(OF72_RichEdit.lines[3],0,2), '',
+                          [rfReplaceAll, rfIgnoreCase]);
+
+
+
+ OF72_RichEdit.lines[3]:='//'+a;
+
+
+   a:=StringReplace(OF72_RichEdit.lines[4],copy(OF72_RichEdit.lines[4],0,2), '',
+                          [rfReplaceAll, rfIgnoreCase]);
+ OF72_RichEdit.lines[4]:='//'+a;
+
+  a:=StringReplace(OF72_RichEdit.lines[5],copy(OF72_RichEdit.lines[5],0,2), '',
+                          [rfReplaceAll, rfIgnoreCase]);
+ OF72_RichEdit.lines[5]:='//'+a;
+
+
+end;
+
+codex:=8;
+end;
+
+procedure Tazips.reciverbicChange(Sender: TObject);
+begin
+{
+  if mt205.Checked=false then
+  begin
+if reciverbic.Text<>'' then
+                      begin
+//DataModbpl.banks.Locate('bankcode',strtoint(reciverbic.Text),[loCaseInsensitive,loPartialKey]);
+
+SearchCombo2.Text:=DataModbpl.banks.FieldByName('name').AsString;
+SearchEdit2.Text:= DataModbpl.banks.FieldByName('swift').AsString;
+end else
+SearchCombo2.Text:='';
+
+Memo2.Lines[3]:= DataModbpl.banks.FieldByName('bankcode').AsString+'/'
++DataModbpl.banks.FieldByName('inn').AsString+'/'+DataModbpl.banks.FieldByName('swift').AsString+'XXX';
+Memo2.Lines[4]:= DataModbpl.banks.FieldByName('subkrno').AsString;
+
+  end
+  else
+  begin
+  if reciverbic.Text<>'' then
+                      begin
+//DataModbpl.banks.Locate('bankcode',strtoint(reciverbic.Text),[loCaseInsensitive,loPartialKey]);
+
+SearchCombo2.Text:=DataModbpl.banks.FieldByName('name').AsString;
+SearchEdit2.Text:= DataModbpl.banks.FieldByName('swift').AsString;
+end else
+SearchCombo2.Text:='';
+
+         memo4.Lines[0]:=  '/'+ reciverbic.Text;
+         memo4.Lines[1]:=DataModbpl.banks.FieldByName('name').AsString;
+         memo4.Lines[2]:=DataModbpl.banks.FieldByName('subkrno').AsString;
+         memo4.Lines[3]:=DataModbpl.banks.FieldByName('inn').AsString ;
+         memo4.Lines[4]:=DataModbpl.banks.FieldByName('swift').AsString ;
+
+
+
+
+
+  end;      }
+end;
+
+procedure Tazips.reciverbicExit(Sender: TObject);
+begin
+{
+  if mt205.Checked=false then
+  begin
+if reciverbic.Text<>'' then
+                      begin
+//DataModbpl.banks.Locate('bankcode',strtoint(reciverbic.Text),[loCaseInsensitive,loPartialKey]);
+
+SearchCombo2.Text:=DataModbpl.banks.FieldByName('name').AsString;
+SearchEdit2.Text:= DataModbpl.banks.FieldByName('swift').AsString;
+end else
+SearchCombo2.Text:='';
+
+Memo2.Lines[3]:= DataModbpl.banks.FieldByName('bankcode').AsString+'/'
++DataModbpl.banks.FieldByName('inn').AsString+'/'+DataModbpl.banks.FieldByName('swift').AsString+'XXX';
+Memo2.Lines[4]:= DataModbpl.banks.FieldByName('subkrno').AsString;
+
+  end
+  else
+  begin
+  if reciverbic.Text<>'' then
+                      begin
+//DataModbpl.banks.Locate('bankcode',strtoint(reciverbic.Text),[loCaseInsensitive,loPartialKey]);
+
+SearchCombo2.Text:=DataModbpl.banks.FieldByName('name').AsString;
+SearchEdit2.Text:= DataModbpl.banks.FieldByName('swift').AsString;
+end else
+SearchCombo2.Text:='';
+
+         memo4.Lines[0]:=  '/'+ reciverbic.Text;
+         memo4.Lines[1]:=DataModbpl.banks.FieldByName('name').AsString;
+         memo4.Lines[2]:=DataModbpl.banks.FieldByName('krno').AsString;
+         memo4.Lines[3]:=DataModbpl.banks.FieldByName('inn').AsString ;
+         memo4.Lines[4]:=DataModbpl.banks.FieldByName('swift').AsString ;
+
+
+
+
+
+  end;
+{
+Memo2.Lines[3]:= DataModbpl.banks.FieldByName('bankcode').AsString+'/'
+              +DataModbpl.banks.FieldByName('inn').AsString+'/'+DataModbpl.banks.FieldByName('swift').AsString+'XXX';
+              Memo2.Lines[4]:= DataModbpl.banks.FieldByName('subkrno').AsString;
+ }
+end;
+
+procedure Tazips.reciverbicKeyPress(Sender: TObject; var Key: Char);
+begin
+reciverbic.DataSource :=DataModbpl.bankssource;;
+if key=#13 then
+begin
+
+  if mt205.Checked=false then
+  begin
+if reciverbic.Text<>'' then
+                      begin
+//DataModbpl.banks.Locate('bankcode',strtoint(reciverbic.Text),[loCaseInsensitive,loPartialKey]);
+ SearchEdit2.DataSource:= DataModbpl.bankssource;
+SearchCombo2.Text:=DataModbpl.banks.FieldByName('name').AsString;
+
+    if reciverbic.Text='501004' then
+    begin
+
+      SearchEdit2.Text:=StringReplace( DataModbpl.banks.FieldByName('swift').AsString,'J', 'C',
+                          [rfReplaceAll, rfIgnoreCase])+'XXX';
+    end else   SearchEdit2.Text:=DataModbpl.banks.FieldByName('swift').AsString+'XXX';
+end else
+SearchCombo2.Text:='';
+                if reciverbic.Text='501004' then
+    begin
+Memo2.Lines[3]:= DataModbpl.banks.FieldByName('bankcode').AsString+'/'
++DataModbpl.banks.FieldByName('inn').AsString+'/'+StringReplace( DataModbpl.banks.FieldByName('swift').AsString,'J', 'C',
+                          [rfReplaceAll, rfIgnoreCase])+'XXX';
+
+    end else begin
+     Memo2.Lines[3]:= DataModbpl.banks.FieldByName('bankcode').AsString+'/'
+          +DataModbpl.banks.FieldByName('inn').AsString+'/'+DataModbpl.banks.FieldByName('swift').AsString+'XXX';
+    end;
+Memo2.Lines[4]:= DataModbpl.banks.FieldByName('krno').AsString;
+
+  end
+  else
+  begin
+  if reciverbic.Text<>'' then
+                      begin
+
+//DataModbpl.banks.Locate('bankcode',strtoint(reciverbic.Text),[loCaseInsensitive,loPartialKey]);
+  SearchEdit2.DataSource:= DataModbpl.bankssource;
+SearchCombo2.Text:=DataModbpl.banks.FieldByName('name').AsString;
+
+ if reciverbic.Text='501004' then
+    begin
+
+      SearchEdit2.Text:=StringReplace( DataModbpl.banks.FieldByName('swift').AsString,'J', 'C',
+                          [rfReplaceAll, rfIgnoreCase]);
+    end else  SearchEdit2.Text:=DataModbpl.banks.FieldByName('swift').AsString+'XXX';
+
+end else
+SearchCombo2.Text:='';
+
+         memo4.Lines[0]:=  '/'+ reciverbic.Text;
+         memo4.Lines[1]:=DataModbpl.banks.FieldByName('name').AsString;
+         memo4.Lines[2]:=DataModbpl.banks.FieldByName('krno').AsString;
+         memo4.Lines[3]:=DataModbpl.banks.FieldByName('inn').AsString ;
+               if reciverbic.Text='501004' then
+    begin
+           memo4.Lines[4]:=StringReplace( DataModbpl.banks.FieldByName('swift').AsString,'J', 'C',
+                          [rfReplaceAll, rfIgnoreCase])+'XXX';
+
+    end else  memo4.Lines[4]:=DataModbpl.banks.FieldByName('swift').AsString+'XXX';
+
+
+
+
+
+
+  end;
+
+end;
+end;
+
+procedure Tazips.RichEdit1Enter(Sender: TObject);
+begin
+richedit1.Lines[0]:='/TEXTMESSAGE/'+DataModbpl.sw_settings.FieldByName('m_bic').AsString;
+end;
+
+procedure Tazips.RichEdit1KeyPress(Sender: TObject; var Key: Char);
+var  column,column2,row,row2:integer;
+begin
+
+
+
+
+   column:=RichEdit1.Perform(EM_LINEFROMCHAR, RichEdit1.SelStart, 0);
+   row:=Length(RichEdit1.Lines[column]);
+
+
+   if (row>=35) or (column>4) then   key:=#0;
+
+
+end;
+
+procedure Tazips.SearchCombo1Enter(Sender: TObject);
+begin
+SearchCombo2.Text:=DataModbpl.banks.FieldByName('name').AsString;
+end;
+
+procedure Tazips.SearchCombo5Change(Sender: TObject);
+begin
+DataModbpl.banks.Locate('name',SearchCombo2.Text,[loCaseInsensitive,loPartialKey]);
+
+reciverbic.Text:=DataModbpl.banks.FieldByName('bankcode').AsString;
+end;
+
+procedure Tazips.SearchEdit12CloseUp(Sender: TObject);
+begin
+
+  {
+ DataModbpl.account.Closeall;
+ DataModbpl.account.SetVariable('accno',SearchEdit1.Text);
+ DataModbpl.account.open; }
+//ShowMessage (DataModbpl.acount.SQL.Text);
+
+
+ DataModbpl.gonderen.Closeall;
+ DataModbpl.gonderen.SetVariable('fid',DataModbpl.account.FieldByName('filial').AsInteger);
+ DataModbpl.gonderen.Open;
+
+                 DataModbpl.alanm.Closeall;
+                 DataModbpl.alanm.SetVariable('kid',DataModbpl.account.FieldByName('kli_id').AsInteger);
+                 DataModbpl.alanm.Open;
+
+
+              Memo1.Lines[0]:= '/'+SearchEdit1.Text;//+CHR(10);
+              Memo1.Lines[1]:= DataModbpl.alanm.FieldByName('d').AsString;
+              Memo1.Lines[2]:= DataModbpl.alanm.FieldByName('inn').AsString+'/';
+              Memo1.Lines[3]:= DataModbpl.gonderen.FieldByName('kod_b').AsString+'/'+DataModbpl.gonderen.FieldByName('inn').AsString+'/'+DataModbpl.gonderen.FieldByName('swift').AsString+'XXX';
+              Memo1.Lines[4]:= DataModbpl.gonderen.FieldByName('krno').AsString;
+end;
+
+procedure Tazips.SearchEdit12Exit(Sender: TObject);
+begin
+{
+ DataModbpl.account.Closeall;
+ DataModbpl.account.SetVariable('accno',SearchEdit1.Text);
+ DataModbpl.account.open;     }
+//ShowMessage (inttostr(DataModbpl.account.FieldByName('filial').AsInteger))  ;
+//memo1.Clear;
+              DataModbpl.gonderen.Close;
+              DataModbpl.gonderen.SetVariable('fid',DataModbpl.account.FieldByName('filial').AsInteger);
+              DataModbpl.gonderen.Open;
+
+
+
+                 DataModbpl.alanm.Close;
+                 DataModbpl.alanm.SetVariable('kid',DataModbpl.account.FieldByName('kli_id').AsInteger);
+                 DataModbpl.alanm.Open;
+
+
+              Memo1.Lines[0]:= '/'+SearchEdit1.Text;//+CHR(10);
+              Memo1.Lines[1]:= DataModbpl.alanm.FieldByName('d').AsString;
+              Memo1.Lines[2]:= DataModbpl.alanm.FieldByName('inn').AsString+'/';
+              Memo1.Lines[3]:= DataModbpl.gonderen.FieldByName('kod_b').AsString+'/'+DataModbpl.gonderen.FieldByName('inn').AsString+'/'+DataModbpl.gonderen.FieldByName('swift').AsString+'XXX';
+              Memo1.Lines[4]:= DataModbpl.gonderen.FieldByName('krno').AsString;
+
+end;
+
+procedure Tazips.SearchEdit1Change(Sender: TObject);
+begin
+{                DataModbpl.gonderen.Closeall;
+                 DataModbpl.gonderen.SetVariable('fid',DataModbpl.acount.FieldByName('filial').AsInteger);
+                 DataModbpl.gonderen.Open;
+                 DataModbpl.alanm.Closeall;
+                 DataModbpl.alanm.SetVariable('kid',edit6.Text);
+                 DataModbpl.alanm.Open;
+                 Memo1.Lines[0]:= '/'+SearchEdit1.Text;//+CHR(10);
+                 Memo1.Lines[1]:= DataModbpl.alanm.FieldByName('d').AsString;
+                 Memo1.Lines[2]:= DataModbpl.alanm.FieldByName('inn').AsString+'/';
+                 Memo1.Lines[3]:= DataModbpl.gonderen.FieldByName('kod_b').AsString+'/'+DataModbpl.gonderen.FieldByName('inn').AsString+'/'+DataModbpl.gonderen.FieldByName('swift').AsString+'XXX';
+                 Memo1.Lines[4]:= DataModbpl.gonderen.FieldByName('krno').AsString;
+               }
+
+end;
+
+procedure Tazips.SearchEdit1Exit(Sender: TObject);
+var custname:string;
+begin
+
+ DataModbpl.account.Closeall;
+ DataModbpl.account.SetVariable('accno',SearchEdit1.Text);
+ DataModbpl.account.open;
+//ShowMessage (inttostr(DataModbpl.account.FieldByName('filial').AsInteger))  ;
+//memo1.Clear;
+              DataModbpl.gonderen.Close;
+              DataModbpl.gonderen.SetVariable('fid',DataModbpl.account.FieldByName('filial').AsInteger);
+              DataModbpl.gonderen.Open;
+
+
+
+                 DataModbpl.alanm.Close;
+                 DataModbpl.alanm.SetVariable('kid',edit6.Text);
+                 DataModbpl.alanm.Open;
+ custname:=  DataModbpl.alanm.FieldByName('d').AsString;//, ' " ', '''', [rfReplaceAll, rfIgnoreCase]);
+  custname:=  Copy(custname, 1, 35);
+memo1.Text:= '/'+SearchEdit1.Text+#13#10+custname+
+#13#10+DataModbpl.alanm.FieldByName('inn').AsString+'/'+ #13#10+
+DataModbpl.gonderen.FieldByName('kod_b').AsString+'/'+DataModbpl.gonderen.FieldByName('inn').AsString+'/'+DataModbpl.gonderen.FieldByName('swift').AsString+'XXX'+#13#10+
+DataModbpl.gonderen.FieldByName('krno').AsString ;
+
+
+end;
+
+procedure Tazips.SearchEdit2Exit(Sender: TObject);
+begin
+
+Memo2.Lines[3]:= DataModbpl.banks.FieldByName('bankcode').AsString+'/'
+           +DataModbpl.banks.FieldByName('inn').AsString+'/'+DataModbpl.banks.FieldByName('swift').AsString+'XXX';
+              Memo2.Lines[4]:= DataModbpl.banks.FieldByName('krno').AsString;
+
+end;
+
+procedure Tazips.SearchEdit2KeyPress(Sender: TObject; var Key: Char);
+begin
+if key =#13 then
+begin
+if mt205.Checked=false then
+  begin
+
+   if SearchEdit2.Text<>'' then
+                      begin
+//DataModbpl.banks.Locate('bankcode',strtoint(reciverbic.Text),[loCaseInsensitive,loPartialKey]);
+reciverbic.DataSource:= DataModbpl.bankssource;
+SearchCombo2.Text:=DataModbpl.banks.FieldByName('name').AsString;
+reciverbic.Text:= DataModbpl.banks.FieldByName('bankcode').AsString
+end else
+SearchCombo2.Text:='';
+
+
+Memo2.Lines[3]:= DataModbpl.banks.FieldByName('bankcode').AsString+'/'
+           +DataModbpl.banks.FieldByName('inn').AsString+'/'+DataModbpl.banks.FieldByName('swift').AsString+'XXX';
+              Memo2.Lines[4]:= DataModbpl.banks.FieldByName('krno').AsString;
+
+end
+else
+begin
+SearchCombo2.Text:=DataModbpl.banks.FieldByName('name').AsString;
+reciverbic.Text:= DataModbpl.banks.FieldByName('bankcode').AsString;
+  SearchCombo2.Text:='';
+
+         memo4.Lines[0]:=  '/'+ reciverbic.Text;
+         memo4.Lines[1]:=DataModbpl.banks.FieldByName('name').AsString;
+         memo4.Lines[2]:=DataModbpl.banks.FieldByName('krno').AsString;
+         memo4.Lines[3]:=DataModbpl.banks.FieldByName('inn').AsString ;
+         memo4.Lines[4]:=DataModbpl.banks.FieldByName('swift').AsString+'XXX' ;
+
+end;
+end;
+end;
+
+procedure Tazips.SearchCombo2DragDrop(Sender, Source: TObject; X, Y: Integer);
+begin
+reciverbic.Text:=DataModbpl.banks.FieldByName('bankcode').AsString;
+end;
+
+procedure Tazips.SearchCombo2Exit(Sender: TObject);
+begin
+if mt205.Checked=false then
+  begin
+
+Memo2.Lines[3]:= DataModbpl.banks.FieldByName('bankcode').AsString+'/'
++DataModbpl.banks.FieldByName('inn').AsString+'/'+DataModbpl.banks.FieldByName('swift').AsString+'XXX';
+Memo2.Lines[4]:= DataModbpl.banks.FieldByName('krno').AsString;
+  end else
+  begin
+  reciverbic.Text:=DataModbpl.banks.FieldByName('bankcode').AsString;
+SearchEdit2.Text:=DataModbpl.banks.FieldByName('swift').AsString;
+       SearchCombo2.Text:='';
+
+         memo4.Lines[0]:=  '/'+ reciverbic.Text;
+         memo4.Lines[1]:=DataModbpl.banks.FieldByName('name').AsString;
+         memo4.Lines[2]:=DataModbpl.banks.FieldByName('krno').AsString;
+         memo4.Lines[3]:=DataModbpl.banks.FieldByName('inn').AsString ;
+         memo4.Lines[4]:=DataModbpl.banks.FieldByName('swift').AsString+'XXX' ;
+
+  end;
+end;
+
+end.

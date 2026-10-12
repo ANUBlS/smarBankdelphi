@@ -1,0 +1,268 @@
+﻿unit FrmIns_ammountReportImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ExtCtrls, XFSCtrls, Grids, DBGrids,CMExcelExport, StdCtrls, ComCtrls,
+  DBCtrls;
+
+type
+  TFrmIns_ammountReport = class(TForm)
+    XFPanel1: TXFPanel;
+    ExcelExport: TCMExcelExport;
+    XFGroupBox3: TXFGroupBox;
+    XFCheckBox1: TXFCheckBox;
+    DBLookupComboBox1: TDBLookupComboBox;
+    XFGroupBox7: TXFGroupBox;
+    XFCheckBox4: TXFCheckBox;
+    DBLookupComboBox3: TDBLookupComboBox;
+    XFGroupBox1: TXFGroupBox;
+    XFCheckBox7: TXFCheckBox;
+    DateTimePicker1: TDateTimePicker;
+    DateTimePicker2: TDateTimePicker;
+    XFRadioGroup1: TXFRadioGroup;
+    XFRadioButton12: TXFRadioButton;
+    XFRadioButton13: TXFRadioButton;
+    XFCheckBox2: TXFCheckBox;
+    Memo1: TMemo;
+    XFButton1: TXFButton;
+    procedure FormCreate(Sender: TObject);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormShow(Sender: TObject);
+    procedure XFCheckBox1Click(Sender: TObject);
+    procedure XFCheckBox2Click(Sender: TObject);
+    procedure XFCheckBox4Click(Sender: TObject);
+    procedure XFButton1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+
+    FilterKasko:string;
+       procedure ActionFilterExecute(Sender: TObject);
+  end;
+
+var
+  FrmIns_ammountReport: TFrmIns_ammountReport;
+
+implementation
+
+{$R *.dfm}
+uses ComObj,CommanParametrs,sboapiDataModuleImpl,SBTranslateProc,DMReportImpl;
+
+procedure TFrmIns_ammountReport.ActionFilterExecute(Sender: TObject);
+
+   function  CheckFiltered(IsChecked: Boolean; const FilterStr: String; Args: array of const): String;
+   begin
+    Result :='';
+    if  IsChecked  then
+     Result :=Format(FilterStr, Args);
+
+   end;
+
+const
+   BooleanPrefix = ' AND ';
+   p_begindatfilter='(a.begin_date=%d)';
+   bankenarfilter = '(a.bnf_type=%d)';
+   p_instypeFilter= '(ii.id=%d)';
+   nameFilter = '(ins_cus.cust_id=%d)';
+
+
+var
+   p_name:String;
+   p_begindat:String;
+   p_instype: string;
+   bankenar: String;
+   FilterStr: String;
+
+
+begin
+ FilterStr :='';
+
+ p_instype:=CheckFiltered(
+              XFCheckBox1.Checked
+             ,p_instypeFilter
+             ,[DBLookupComboBox1.ListSource.DataSet.FieldByName('id').asinteger]
+              );
+
+p_name:=CheckFiltered(
+              XFCheckBox4.Checked
+             ,nameFilter
+             ,[DBLookupComboBox3.ListSource.DataSet.FieldByName('id').asinteger]
+              );
+
+ if XFCheckBox2.Checked then
+ begin
+  if XFRadioButton12.Checked=true then
+  begin
+   bankenar:='a.bnf_type=0';
+  end;
+  if XFRadioButton13.Checked=true then
+  begin
+    bankenar:='a.bnf_type=1';
+  end;
+ end;
+
+
+    if XFCheckBox1.Checked=true then
+    begin
+    p_begindat:=' TO_DATE(a.begin_date,''dd.MM.yyyy'')'+ ' between  '+''''+datetostr(DateTimePicker1.DateTime)+''''+' and '+''''+datetostr(DateTimePicker2.DateTime)+'''';
+    end
+    else
+    begin
+     p_begindat:='';
+    end;
+
+       if  XFCheckBox4.Checked
+  then
+  if  FilterStr=''  then
+    FilterStr :=p_name
+  else
+    FilterStr :=FilterStr + BooleanPrefix + p_name;
+
+
+
+     if  XFCheckBox1.Checked
+  then
+  if  FilterStr=''  then
+    FilterStr :=p_instype
+  else
+    FilterStr :=FilterStr + BooleanPrefix + p_instype;
+
+
+     if XFCheckBox2.Checked=true then
+     begin
+     if XFRadioButton12.Checked=true then
+     begin
+    if  FilterStr=''  then
+    FilterStr :=bankenar
+  else
+    FilterStr :=FilterStr + BooleanPrefix + bankenar;
+    end;
+
+     if XFRadioButton13.Checked=true then
+     begin
+    if  FilterStr=''  then
+    FilterStr :=bankenar
+  else
+    FilterStr :=FilterStr + BooleanPrefix + bankenar;
+    end;
+    end;
+
+
+    if  XFCheckBox7.Checked
+  then
+  if  FilterStr=''  then
+    FilterStr :=p_begindat
+  else
+    FilterStr :=FilterStr + BooleanPrefix + p_begindat;
+
+
+    //ShowMessage(FilterStr);
+
+              if FilterStr<>'' then
+               begin
+         FilterStr:=' and '+ FilterStr;
+         end;
+
+
+        with ExcelExport do
+   begin
+
+
+          DMReport.Dskaskohesabat.close;
+        FilterStr:=FilterKasko+FilterStr;
+        DMReport.Dskaskohesabat.sql.Clear;
+        DMReport.Dskaskohesabat.sql.Text:=FilterStr;
+        DMReport.Dskaskohesabat.Open;
+        memo1.Text:=DMReport.Dskaskohesabat.sql.Text;
+
+
+   if DMReport.Dskaskohesabat.RecordCount<>0 then
+         begin
+      Connect;
+      ExportDataset(DMReport.Dskaskohesabat,'Kasko Hesabat.',True,false);
+      Disconnect;
+      end
+      else
+
+      showmessage('Uyğun seçimlərə uyğun məluamt yoxdur!');
+   end  ;
+
+end;
+
+procedure TFrmIns_ammountReport.FormCreate(Sender: TObject);
+begin
+//DMReport.Dskaskohesabat.open;
+end;
+
+procedure TFrmIns_ammountReport.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+if ord(key)=vk_escape then close;
+end;
+
+procedure TFrmIns_ammountReport.FormShow(Sender: TObject);
+begin
+XFCheckBox1.Checked:=false;
+XFCheckBox2.Checked:=false;
+XFCheckBox4.Checked:=false;
+XFCheckBox7.Checked:=false;
+DBLookupComboBox1.KeyValue:='';
+DBLookupComboBox3.KeyValue:='';
+
+
+DateTimePicker1.DateTime:=DMReport.DSsysdat.FieldByName('tek_dat').AsDateTime;
+DateTimePicker2.DateTime:=DMReport.DSsysdat.FieldByName('tek_dat').AsDateTime;
+
+
+DateTimePicker1.DateTime:=DMReport.DSsysdat.FieldByName('tek_dat').AsDateTime;
+DateTimePicker2.DateTime:=DMReport.DSsysdat.FieldByName('tek_dat').AsDateTime;
+
+
+
+end;
+
+procedure TFrmIns_ammountReport.XFButton1Click(Sender: TObject);
+begin
+ActionFilterExecute(Sender);
+
+
+end;
+
+procedure TFrmIns_ammountReport.XFCheckBox1Click(Sender: TObject);
+begin
+if XFCheckBox1.Checked then
+ begin
+   DBLookupComboBox1.KeyValue:=4;
+ //  DBLookupComboBox1.Text
+ end
+ else  begin
+  DBLookupComboBox1.KeyValue:=null
+  end;
+
+end;
+
+procedure TFrmIns_ammountReport.XFCheckBox2Click(Sender: TObject);
+begin
+if XFCheckBox2.Checked then
+begin
+  XFRadioButton12.Checked:=true;
+  end
+ else  begin
+  XFRadioButton12.Checked:=false;
+  end;
+end;
+
+procedure TFrmIns_ammountReport.XFCheckBox4Click(Sender: TObject);
+begin
+if XFCheckBox4.Checked then
+begin
+  DBLookupComboBox3.KeyValue:=51;
+   end
+ else  begin
+  DBLookupComboBox3.KeyValue:=null;
+  end;
+end;
+
+end.

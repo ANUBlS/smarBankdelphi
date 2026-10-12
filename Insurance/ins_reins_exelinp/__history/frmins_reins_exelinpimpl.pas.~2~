@@ -1,0 +1,41 @@
+unit frmins_reins_exelinpimpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs;
+
+type
+  Tfrmins_reins_exelinp = class(TForm)
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  frmins_reins_exelinp: Tfrmins_reins_exelinp;
+
+implementation
+
+{$R *.dfm}
+uses dmins_reins_exelinpimpl,CommanParametrs,sboapiDataModuleImpl,SBTranslateProc;
+ procedure InitPlugin(s:string);export;
+begin
+
+   if s='' then
+   begin
+   frmins_reins_exelinp.ShowModal;
+   end;
+  { if s='AllLost' then
+   begin
+     FrmAllLoss.showmodal;
+   end;   }
+end;
+exports
+     InitPlugin;
+     initialization
+ frmins_reins_exelinp :=Tfrmins_reins_exelinp.Create(Application);
+
+end.

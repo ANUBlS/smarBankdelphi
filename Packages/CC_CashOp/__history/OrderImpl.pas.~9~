@@ -1,0 +1,97 @@
+﻿unit OrderImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Grids, DBGridEh, DB, OracleData, ComCtrls, ToolWin, StdCtrls, Mask,
+  DBCtrls, ImgList, DBGrids;
+
+type
+  TFrmOrder = class(TForm)
+    ImageList1: TImageList;
+    GroupBox1: TGroupBox;
+    DBEdit1: TDBEdit;
+    ToolBar1: TToolBar;
+    ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
+    ToolButton3: TToolButton;
+    ToolButton4: TToolButton;
+    ToolButton5: TToolButton;
+    PaymentsDatSrc: TDataSource;
+    Payments: TOracleDataSet;
+    PaymentsID: TFloatField;
+    PaymentsDDD: TWideStringField;
+    PaymentsPAYDATE: TDateTimeField;
+    PaymentsID2: TFloatField;
+    PaymentsPAYAMT: TFloatField;
+    PaymentsNAME: TWideStringField;
+    DBGridEh1: TDBGridEh;
+    procedure ToolButton1Click(Sender: TObject);
+    procedure ToolButton3Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmOrder: TFrmOrder;
+
+implementation
+
+uses PayForm, cc_DataMod;
+
+{$R *.dfm}
+
+procedure TFrmOrder.ToolButton1Click(Sender: TObject);
+begin
+  Pay := TPay.Create(Self);
+  //ShowMessage(inttostr(DataModule1.cc_contracts.FieldByName('ID').asinteger));
+  DataModule1.main.Close;
+  DataModule1.main.SetVariable('cid', DataModule1.cc_contracts.FieldByName('ID').asinteger);
+  DataModule1.main.Open;
+ // pay.memo1.Clear;
+ // pay.Memo1.Lines.Add(main.SQL.Text);
+  Pay.ShowModal;
+end;
+
+procedure TFrmOrder.ToolButton3Click(Sender: TObject);
+var
+  I : Integer;
+  SelectedRowsCnt : Integer;
+begin
+   if MessageDlg(
+       'Ödəniş ləğv olunsun?'
+      ,mtWarning
+      ,[mbYes,mbNo]
+      ,0) = mrYes  then
+
+       with DBGridEh1, DataSource.DataSet do
+  begin
+
+       SelectedRowsCnt := SelectedRows.Count;
+       //ShowMessage(Payments.FieldByName('ID').AsString);
+       if SelectedRowsCnt>1 then
+           for I := 0 to SelectedRowsCnt - 1 do
+      begin
+
+      //  ShowMessage('aa');
+        GotoBookmark(Pointer(SelectedRows[I]));
+
+      with pay.sbcm_construction do
+       CallProcedure('deletePayment',
+                      ['p_PayID',Payments.FieldByName('ID').AsInteger]);
+     end
+     else
+     Pay.sbcm_construction.CallProcedure('deletePayment',
+                                        ['p_PayID',Payments.FieldByName('ID').AsInteger]);
+{  with DatModConstruction,sbcm_construction do
+       CallProcedure('deletePayment',
+                      ['p_PayID',Payments.FieldByName('ID').AsInteger]);  }
+  end;
+   Payments.Refresh;
+
+end;
+
+end.

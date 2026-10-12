@@ -1,0 +1,175 @@
+﻿unit frmCapitalizeImpl_new;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, OracleData, StdCtrls, Mask, DBCtrls, ExtCtrls, ComCtrls, ToolWin,
+  ImgList, Grids, DBGridEh, CMExcelExport, Oracle,  ActnList;
+
+type
+  TfrmCapitalize_new = class(TForm)
+    ActionList1: TActionList;
+    ActnAddTr: TAction;
+    ActnDel: TAction;
+    ActnExport: TAction;
+    Capitals: TOracleDataSet;
+    CapitalsID: TFloatField;
+    CapitalsHDATE: TDateTimeField;
+    CapitalsTOTAL: TFloatField;
+    CapitalsTRID: TFloatField;
+    DBGridEh1: TDBGridEh;
+    DepositInfo: TOracleDataSet;
+    DepositInfoCONTRACTNO: TWideStringField;
+    DepositInfoNAME: TWideStringField;
+    DepositInfoFACTICALDEBT: TFloatField;
+    DepositInfoFACTICALINTERESTDEBT: TFloatField;
+    DepositInfoCONTRACTACCNO: TWideStringField;
+    DepositInfoINTERESTACCNO: TWideStringField;
+    ExcelExp: TCMExcelExport;
+    GroupBox1: TGroupBox;
+    Panel3: TPanel;
+    DBEdit2: TDBEdit;
+    StaticText2: TStaticText;
+    ImageList1: TImageList;
+    Panel4: TPanel;
+    ToolBar1: TToolBar;
+    ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
+    ToolButton3: TToolButton;
+    ToolButton4: TToolButton;
+    ToolButton5: TToolButton;
+    ToolButton6: TToolButton;
+    ToolButton7: TToolButton;
+    sbcm_payment: TOraclePackage;
+    StatusBar1: TStatusBar;
+    DepositInfoDatSrc: TDataSource;
+    CapitalsDatSrc: TDataSource;
+    sb_aca: TOraclePackage;
+    procedure FormCanResize(Sender: TObject; var NewWidth, NewHeight: Integer;
+      var Resize: Boolean);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure ToolButton7Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure ActnAddTrExecute(Sender: TObject);
+    procedure ActnDelExecute(Sender: TObject);
+    procedure ActnExportExecute(Sender: TObject);
+    procedure ActnExportUpdate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+      CanAfterRefresh :Boolean;
+  end;
+
+var
+  frmCapitalize_new: TfrmCapitalize_new;
+   procedure exportproc(S:String);export;
+implementation
+
+{$R *.dfm}
+   uses sboapiDataModuleImpl,CommonDeclsImpl_new,frmAddCapitalizeImpl_new,SBTranslateProc;
+
+   procedure exportproc(S:String);export;
+var ContractID :Integer;
+begin
+   ContractID := Get_SelectedContID;
+
+   with frmCapitalize_new do
+   begin
+
+   with DepositInfo do
+   begin
+      if Active then CloseAll;
+      SetVariable('ContractID',ContractID);
+      Open;
+   end;
+
+   with Capitals do
+   begin
+      if Active then CloseAll;
+      SetVariable('ContractID',ContractID);
+      Open;
+   end;
+
+   Caption := Get_SelectedContNo+' nömrəli depozitin  kapitallaşdırılması';
+   ShowModal;
+
+  end;
+
+end;
+
+exports
+   exportproc;
+
+procedure TfrmCapitalize_new.ActnAddTrExecute(Sender: TObject);
+begin
+ with frmCapitalize_new,sb_aca do
+begin
+      CallProcedure('checkadvancedobjectaccess',['EXCEL_SBCM_PARTIAL_PEYMENT']);
+end;
+   if frmAddCapitalize_new.ShowModal = mrOk then
+   begin
+     CanAfterRefresh := True;
+     Capitals.Refresh;
+   end;
+end;
+
+procedure TfrmCapitalize_new.ActnDelExecute(Sender: TObject);
+begin
+    if MessageDlg('Silinməsinə əminsinizmi?',
+             mtConfirmation, [mbYes, mbNo], 0) = mrNo
+    then Exit;
+
+    with Capitals,sbcm_payment do   begin
+         CallProcedure('DeleteCapitalization',['p_capitalizationID',FieldByName('ID').AsInteger]);
+          Refresh;
+         end;
+end;
+
+procedure TfrmCapitalize_new.ActnExportExecute(Sender: TObject);
+begin
+   with ExcelExp do
+   begin
+      Connect;
+      ExportDataset(Capitals,'Kapitallaşdırma',true,false);
+      DisConnect;
+   end;
+end;
+
+procedure TfrmCapitalize_new.ActnExportUpdate(Sender: TObject);
+begin
+   with (Sender as TAction) do
+        Enabled := Capitals.RecordCount > 0
+end;
+
+procedure TfrmCapitalize_new.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+ Resize := False
+end;
+
+procedure TfrmCapitalize_new.FormCreate(Sender: TObject);
+begin
+   frmAddCapitalize_new := TfrmAddCapitalize_new.Create(Self);
+   SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TfrmCapitalize_new.FormDestroy(Sender: TObject);
+begin
+  frmAddCapitalize_new.Free;
+end;
+
+procedure TfrmCapitalize_new.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+if Ord(Key) = VK_ESCAPE then Close
+end;
+
+procedure TfrmCapitalize_new.ToolButton7Click(Sender: TObject);
+begin
+Close;
+end;
+   initialization
+    frmCapitalize_new := TfrmCapitalize_new.Create(CommonApplication);
+
+end.

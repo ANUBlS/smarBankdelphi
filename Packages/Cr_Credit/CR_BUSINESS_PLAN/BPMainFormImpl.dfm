@@ -1,0 +1,1450 @@
+object BPMainForm: TBPMainForm
+  Left = 323
+  Top = 136
+  BorderIcons = [biSystemMenu]
+  BorderStyle = bsSingle
+  ClientHeight = 498
+  ClientWidth = 735
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poMainFormCenter
+  OnClose = FormClose
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object pcMain: TPageControl
+    Left = 0
+    Top = 0
+    Width = 735
+    Height = 498
+    ActivePage = tsBP
+    Align = alClient
+    TabOrder = 0
+    OnChange = pcMainChange
+    object tsBP: TTabSheet
+      BorderWidth = 2
+      Caption = 'Ѕизнес план'
+      object GroupBox1: TGroupBox
+        Left = 0
+        Top = 0
+        Width = 723
+        Height = 53
+        Align = alTop
+        Caption = '«€ман€т щаггында'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 0
+        object GroupBox2: TGroupBox
+          Left = 2
+          Top = 15
+          Width = 303
+          Height = 36
+          Align = alLeft
+          Caption = 'ћцшт€ри'
+          TabOrder = 0
+          object DBEdit1: TDBEditEh
+            Left = 3
+            Top = 12
+            Width = 294
+            Height = 19
+            TabStop = False
+            Color = clInfoBk
+            DataField = 'NAME'
+            DataSource = BPDataModule.DSCreditInfo
+            EditButtons = <>
+            Flat = True
+            TabOrder = 0
+            Visible = True
+          end
+        end
+        object GroupBox3: TGroupBox
+          Left = 305
+          Top = 15
+          Width = 416
+          Height = 36
+          Align = alClient
+          Caption = 'ѕротокол\ѕараграф'
+          TabOrder = 1
+          object EditCrdNo: TEdit
+            Left = 5
+            Top = 12
+            Width = 153
+            Height = 21
+            TabStop = False
+            ReadOnly = True
+            TabOrder = 0
+          end
+        end
+      end
+      object Panel2: TPanel
+        Left = 0
+        Top = 53
+        Width = 723
+        Height = 79
+        Align = alTop
+        BorderStyle = bsSingle
+        TabOrder = 1
+        object Label1: TLabel
+          Left = 6
+          Top = 9
+          Width = 82
+          Height = 13
+          Caption = 'Ћайищ€нин д€й€ри :'
+        end
+        object Label2: TLabel
+          Left = 6
+          Top = 32
+          Width = 97
+          Height = 13
+          Caption = '«€ман€тл€ш€н щисс€:'
+        end
+        object Label3: TLabel
+          Left = 6
+          Top = 57
+          Width = 83
+          Height = 13
+          Caption = 'Ёцз€шт дюврц(ай):'
+        end
+        object Label4: TLabel
+          Left = 216
+          Top = 9
+          Width = 35
+          Height = 13
+          Caption = 'ƒюврц :'
+        end
+        object Label5: TLabel
+          Left = 219
+          Top = 31
+          Width = 32
+          Height = 13
+          Caption = '√€рар :'
+        end
+        object Label6: TLabel
+          Left = 219
+          Top = 55
+          Width = 32
+          Height = 13
+          Caption = 'Ќовц :'
+        end
+        object Label28: TLabel
+          Left = 424
+          Top = 8
+          Width = 34
+          Height = 13
+          Alignment = taRightJustify
+          AutoSize = False
+          Caption = 'Rayon:'
+        end
+        object Label29: TLabel
+          Left = 424
+          Top = 33
+          Width = 34
+          Height = 13
+          Alignment = taRightJustify
+          AutoSize = False
+          Caption = 'K€nd:'
+        end
+        object DBNumberEditEh1: TDBNumberEditEh
+          Left = 96
+          Top = 6
+          Width = 116
+          Height = 19
+          DataField = 'PROJECTCOST'
+          DataSource = BPDataModule.DSBPData
+          EditButtons = <>
+          Flat = True
+          TabOrder = 0
+          Visible = True
+        end
+        object DBNumberEditEh2: TDBNumberEditEh
+          Left = 104
+          Top = 29
+          Width = 108
+          Height = 19
+          DataField = 'GIVENCREDIT'
+          DataSource = BPDataModule.DSBPData
+          DecimalPlaces = 0
+          EditButtons = <>
+          Flat = True
+          TabOrder = 1
+          Visible = True
+        end
+        object DBNumberEditEh3: TDBNumberEditEh
+          Left = 104
+          Top = 54
+          Width = 108
+          Height = 19
+          DataField = 'CONCESSIONPERIOD'
+          DataSource = BPDataModule.DSBPData
+          EditButtons = <>
+          Flat = True
+          TabOrder = 2
+          Visible = True
+        end
+        object DBLookupComboboxEh1: TDBLookupComboboxEh
+          Left = 265
+          Top = 5
+          Width = 150
+          Height = 19
+          DataField = 'PURPOSE'
+          DataSource = BPDataModule.DSBPData
+          DropDownBox.Sizable = True
+          EditButtons = <>
+          Flat = True
+          KeyField = 'ID'
+          ListField = 'PURPOSEDESC'
+          ListSource = BPDataModule.DSBPPurposes
+          TabOrder = 3
+          Visible = True
+          OnKeyValueChanged = DBLookupComboboxEh1KeyValueChanged
+        end
+        object DBLookupComboboxEh2: TDBLookupComboboxEh
+          Left = 264
+          Top = 52
+          Width = 150
+          Height = 19
+          DataField = 'TYPE'
+          DataSource = BPDataModule.DSBPData
+          DropDownBox.Sizable = True
+          EditButtons = <>
+          Flat = True
+          KeyField = 'ID'
+          ListField = 'TYPEDESC'
+          ListSource = BPDataModule.DSBPTypes
+          TabOrder = 4
+          Visible = True
+          OnKeyValueChanged = DBLookupComboboxEh1KeyValueChanged
+        end
+        object DBLookupComboboxEh4: TDBLookupComboboxEh
+          Left = 464
+          Top = 5
+          Width = 121
+          Height = 19
+          EditButtons = <>
+          Flat = True
+          KeyField = 'ID'
+          ListField = 'NAME'
+          ListSource = BPDataModule.DistrictsDataSrc
+          TabOrder = 5
+          Visible = True
+        end
+        object DBLookupComboboxEh5: TDBLookupComboboxEh
+          Left = 464
+          Top = 29
+          Width = 121
+          Height = 19
+          DataField = 'VILLAGEID'
+          DataSource = BPDataModule.DSBPData
+          EditButtons = <>
+          Flat = True
+          KeyField = 'ID'
+          ListField = 'NAME'
+          ListSource = BPDataModule.VillagesDataSrc
+          TabOrder = 6
+          Visible = True
+        end
+        object DBLookupComboboxEh9: TDBLookupComboboxEh
+          Left = 265
+          Top = 29
+          Width = 150
+          Height = 19
+          DataField = 'SOURCE'
+          DataSource = BPDataModule.DSBPData
+          DropDownBox.Sizable = True
+          EditButtons = <>
+          Flat = True
+          KeyField = 'ID'
+          ListField = 'DESCRIPTION'
+          ListSource = BPDataModule.DSBPSources
+          TabOrder = 7
+          Visible = True
+          OnKeyValueChanged = DBLookupComboboxEh1KeyValueChanged
+        end
+      end
+      object GroupBox5: TGroupBox
+        Left = 332
+        Top = 132
+        Width = 391
+        Height = 299
+        Align = alClient
+        Caption = '’€ржл€р'
+        TabOrder = 2
+        object Label14: TLabel
+          Left = 3
+          Top = 12
+          Width = 71
+          Height = 13
+          Caption = 'јлынан материал.'
+        end
+        object Label15: TLabel
+          Left = 4
+          Top = 51
+          Width = 76
+          Height = 13
+          Caption = 'ям€лиййат х€ржи .'
+        end
+        object Label16: TLabel
+          Left = 5
+          Top = 92
+          Width = 87
+          Height = 13
+          Caption = '¬ерэи в€ рцсумлар .'
+        end
+        object Label17: TLabel
+          Left = 5
+          Top = 134
+          Width = 65
+          Height = 13
+          Caption = 'ƒиэ€р х€ржл€р .'
+        end
+        object Label20: TLabel
+          Left = 24
+          Top = 264
+          Width = 52
+          Height = 13
+          Caption = '∆€ми х€рж :'
+        end
+        object Label30: TLabel
+          Left = 32
+          Top = 188
+          Width = 73
+          Height = 13
+          Alignment = taRightJustify
+          AutoSize = False
+          Caption = 'ћ€щсулун типи:'
+        end
+        object Label31: TLabel
+          Left = 32
+          Top = 212
+          Width = 73
+          Height = 13
+          Alignment = taRightJustify
+          AutoSize = False
+          Caption = 'ћ€щсул:'
+        end
+        object DBEdit9: TDBEditEh
+          Left = 4
+          Top = 28
+          Width = 141
+          Height = 19
+          DataField = 'BOUGHTMATERIAL'
+          DataSource = BPDataModule.DSBPData
+          EditButtons = <>
+          Flat = True
+          TabOrder = 0
+          Visible = True
+        end
+        object DBEdit10: TDBEditEh
+          Left = 4
+          Top = 67
+          Width = 141
+          Height = 19
+          DataField = 'OPERATIONEXPENSE'
+          DataSource = BPDataModule.DSBPData
+          EditButtons = <>
+          Flat = True
+          TabOrder = 1
+          Visible = True
+        end
+        object DBEdit11: TDBEditEh
+          Left = 5
+          Top = 108
+          Width = 140
+          Height = 19
+          DataField = 'TAXEXPENSE'
+          DataSource = BPDataModule.DSBPData
+          EditButtons = <>
+          Flat = True
+          TabOrder = 2
+          Visible = True
+        end
+        object DBEdit12: TDBEditEh
+          Left = 5
+          Top = 150
+          Width = 139
+          Height = 19
+          DataField = 'OTHEREXPENCE'
+          DataSource = BPDataModule.DSBPData
+          EditButtons = <>
+          Flat = True
+          TabOrder = 3
+          Visible = True
+        end
+        object DBEdit15: TDBEditEh
+          Left = 86
+          Top = 260
+          Width = 139
+          Height = 19
+          DataField = 'SUMEXPENSE'
+          DataSource = BPDataModule.DSBPData
+          EditButtons = <>
+          Flat = True
+          TabOrder = 4
+          Visible = True
+        end
+        object DBLookupComboboxEh6: TDBLookupComboboxEh
+          Left = 112
+          Top = 184
+          Width = 141
+          Height = 19
+          EditButtons = <>
+          Flat = True
+          KeyField = 'ID'
+          ListField = 'NAME'
+          ListSource = BPDataModule.AKTargetsDataSrc
+          TabOrder = 5
+          Visible = True
+        end
+        object DBLookupComboboxEh7: TDBLookupComboboxEh
+          Left = 112
+          Top = 208
+          Width = 141
+          Height = 19
+          DataField = 'AKPURPOSE'
+          DataSource = BPDataModule.DSBPData
+          EditButtons = <>
+          Flat = True
+          KeyField = 'ID'
+          ListField = 'NAME'
+          ListSource = BPDataModule.AKPurposesDataSrc
+          TabOrder = 6
+          Visible = True
+        end
+        object DBEdit13: TDBEditEh
+          Left = 264
+          Top = 29
+          Width = 150
+          Height = 21
+          DataField = 'SOURCE'
+          DataSource = BPDataModule.DSBPData
+          EditButtons = <>
+          TabOrder = 7
+          Visible = False
+        end
+      end
+      object Panel1: TPanel
+        Left = 0
+        Top = 431
+        Width = 723
+        Height = 35
+        Align = alBottom
+        BorderStyle = bsSingle
+        TabOrder = 3
+        object Button1: TButton
+          Left = 533
+          Top = 3
+          Width = 75
+          Height = 25
+          Action = ActionSave
+          TabOrder = 0
+        end
+        object Button2: TButton
+          Left = 621
+          Top = 3
+          Width = 75
+          Height = 25
+          Action = ActionDismis
+          TabOrder = 1
+        end
+        object CMHintBox1: THintBox
+          Left = 8
+          Top = 8
+          Width = 150
+          Height = 18
+          AutoSize = True
+          BevelOuter = bvNone
+          Caption = 'CMHintBox1'
+          TabOrder = 2
+          Visible = False
+          Timeout = 4000
+          BeepOnMessage = False
+        end
+      end
+      object GroupBox4: TGroupBox
+        Left = 0
+        Top = 132
+        Width = 332
+        Height = 299
+        Align = alLeft
+        Caption = 'Ё€лирл€р'
+        TabOrder = 4
+        object Label7: TLabel
+          Left = 3
+          Top = 12
+          Width = 129
+          Height = 13
+          Caption = '»стещсал ващидл€ринин ващиди .'
+        end
+        object Label8: TLabel
+          Left = 4
+          Top = 51
+          Width = 119
+          Height = 13
+          Caption = '»стещсал ващидл€ринин сайы .'
+        end
+        object Label9: TLabel
+          Left = 5
+          Top = 92
+          Width = 77
+          Height = 13
+          Caption = 'ћ€щсулун ващиди'
+        end
+        object Label10: TLabel
+          Left = 5
+          Top = 134
+          Width = 113
+          Height = 13
+          Caption = '»стещсал олунан м€щсул .'
+        end
+        object Label11: TLabel
+          Left = 5
+          Top = 173
+          Width = 65
+          Height = 13
+          Caption = 'ћ€щсулдарлыг .'
+        end
+        object Label12: TLabel
+          Left = 5
+          Top = 212
+          Width = 125
+          Height = 13
+          Caption = 'ћ€щсулун 1кг нын гийм€ти .'
+        end
+        object Label13: TLabel
+          Left = 24
+          Top = 264
+          Width = 51
+          Height = 13
+          Caption = '∆€ми э€лир :'
+        end
+        object DBEdit2: TDBEditEh
+          Left = 4
+          Top = 28
+          Width = 223
+          Height = 19
+          DataField = 'UNTMEANSOFPRODUCTION'
+          DataSource = BPDataModule.DSBPData
+          EditButtons = <>
+          Flat = True
+          TabOrder = 0
+          Visible = True
+        end
+        object DBEdit3: TDBEditEh
+          Left = 4
+          Top = 67
+          Width = 141
+          Height = 19
+          DataField = 'NUMBEROFPRODUCTION'
+          DataSource = BPDataModule.DSBPData
+          EditButtons = <>
+          Flat = True
+          TabOrder = 1
+          Visible = True
+        end
+        object DBEdit4: TDBEditEh
+          Left = 5
+          Top = 108
+          Width = 220
+          Height = 19
+          DataField = 'UNTPRODUCTION'
+          DataSource = BPDataModule.DSBPData
+          EditButtons = <>
+          Flat = True
+          TabOrder = 2
+          Visible = True
+        end
+        object DBEdit5: TDBEditEh
+          Left = 5
+          Top = 150
+          Width = 139
+          Height = 19
+          DataField = 'PRODUCTION'
+          DataSource = BPDataModule.DSBPData
+          EditButtons = <>
+          Flat = True
+          TabOrder = 3
+          Visible = True
+        end
+        object DBEdit6: TDBEditEh
+          Left = 5
+          Top = 189
+          Width = 139
+          Height = 19
+          DataField = 'PRODUCTIVITY'
+          DataSource = BPDataModule.DSBPData
+          EditButtons = <>
+          Flat = True
+          TabOrder = 4
+          Visible = True
+        end
+        object DBEdit7: TDBEditEh
+          Left = 5
+          Top = 228
+          Width = 139
+          Height = 19
+          DataField = 'PRODUCTIONCOST'
+          DataSource = BPDataModule.DSBPData
+          EditButtons = <>
+          Flat = True
+          TabOrder = 5
+          Visible = True
+        end
+        object DBEdit8: TDBEditEh
+          Left = 86
+          Top = 260
+          Width = 139
+          Height = 19
+          DataField = 'SUMPROFIT'
+          DataSource = BPDataModule.DSBPData
+          EditButtons = <>
+          Flat = True
+          TabOrder = 6
+          Visible = True
+        end
+      end
+    end
+    object tsLM: TTabSheet
+      BorderWidth = 2
+      Caption = 'ўцгуги т€дбирл€р'
+      ImageIndex = 1
+      object GroupBox6: TGroupBox
+        Left = 0
+        Top = 0
+        Width = 723
+        Height = 41
+        Align = alTop
+        Caption = 'ћцшт€ри'
+        TabOrder = 0
+        object DBEdit14: TDBEditEh
+          Left = 5
+          Top = 16
+          Width = 492
+          Height = 21
+          DataField = 'NAME'
+          DataSource = DSCreditInfo
+          EditButtons = <>
+          TabOrder = 0
+          Visible = True
+        end
+      end
+      object GroupBox7: TGroupBox
+        Left = 0
+        Top = 41
+        Width = 723
+        Height = 272
+        Align = alTop
+        Caption = 'ўцгуги т€дбирл€р'
+        TabOrder = 1
+        object DBGrid1: TDBGrid
+          Left = 2
+          Top = 15
+          Width = 719
+          Height = 255
+          Align = alClient
+          DataSource = DataSource1
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 0
+          TitleFont.Charset = DEFAULT_CHARSET
+          TitleFont.Color = clWindow
+          TitleFont.Height = -11
+          TitleFont.Name = 'Azl Sans Serif'
+          TitleFont.Style = []
+          Columns = <
+            item
+              Expanded = False
+              FieldName = 'NUM'
+              Title.Caption = 'є'
+              Title.Color = clNavy
+              Width = 35
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'PROTOCOL'
+              Title.Caption = 'ѕрот'
+              Title.Color = clNavy
+              Width = 35
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'PARAGRAPH'
+              Title.Caption = 'ѕараг'
+              Title.Color = clNavy
+              Width = 35
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'GRANTDATE'
+              Title.Caption = '“€г. “арихи'
+              Title.Color = clNavy
+              Width = 80
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'GIVEDATE'
+              Title.Caption = '¬ер. “арихи'
+              Title.Color = clNavy
+              Width = 80
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'MEASURECODE'
+              Title.Caption = ' од'
+              Title.Color = clNavy
+              Width = 47
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'TOTALAMOUNT'
+              Title.Caption = 'јктив »нд. 1'
+              Title.Color = clNavy
+              Width = 100
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'MAINDEBT'
+              Title.Caption = 'јктив »нд. 2'
+              Title.Color = clNavy
+              Width = 100
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'MeasureDesc'
+              Title.Caption = '“€дбирин ады'
+              Title.Color = clNavy
+              Width = 170
+              Visible = True
+            end>
+        end
+      end
+      object Panel4: TPanel
+        Left = 0
+        Top = 353
+        Width = 723
+        Height = 136
+        Align = alTop
+        TabOrder = 2
+        object Label18: TLabel
+          Left = 9
+          Top = 17
+          Width = 70
+          Height = 13
+          Alignment = taRightJustify
+          AutoSize = False
+          Caption = 'є: '
+        end
+        object Label19: TLabel
+          Left = 9
+          Top = 49
+          Width = 70
+          Height = 13
+          Alignment = taRightJustify
+          AutoSize = False
+          Caption = '“€гдимат тарихи:'
+        end
+        object Label21: TLabel
+          Left = 9
+          Top = 81
+          Width = 70
+          Height = 13
+          Alignment = taRightJustify
+          AutoSize = False
+          Caption = '¬ерилм€ тарихи:'
+        end
+        object Label22: TLabel
+          Left = 200
+          Top = 49
+          Width = 55
+          Height = 13
+          Alignment = taRightJustify
+          AutoSize = False
+          Caption = ' оду :'
+        end
+        object Label23: TLabel
+          Left = 200
+          Top = 17
+          Width = 55
+          Height = 13
+          Alignment = taRightJustify
+          AutoSize = False
+          Caption = 'ѕрот :'
+        end
+        object Label24: TLabel
+          Left = 368
+          Top = 17
+          Width = 34
+          Height = 13
+          Alignment = taRightJustify
+          AutoSize = False
+          Caption = 'ѕараг :'
+        end
+        object Label25: TLabel
+          Left = 368
+          Top = 49
+          Width = 34
+          Height = 13
+          Alignment = taRightJustify
+          AutoSize = False
+          Caption = 'јды :'
+        end
+        object DBText1: TDBText
+          Left = 193
+          Top = 82
+          Width = 111
+          Height = 13
+          Alignment = taRightJustify
+          DataField = 'ACTIVEINDICATOR1'
+          DataSource = DataSource2
+        end
+        object DBText2: TDBText
+          Left = 437
+          Top = 82
+          Width = 136
+          Height = 13
+          Alignment = taRightJustify
+          DataField = 'ACTIVEINDICATOR2'
+          DataSource = DataSource2
+        end
+        object Label26: TLabel
+          Left = 309
+          Top = 80
+          Width = 3
+          Height = 13
+          Caption = ':'
+        end
+        object Label27: TLabel
+          Left = 577
+          Top = 80
+          Width = 3
+          Height = 13
+          Caption = ':'
+        end
+        object DBEdit16: TDBEditEh
+          Left = 86
+          Top = 14
+          Width = 65
+          Height = 21
+          DataField = 'NUM'
+          DataSource = DataSource1
+          EditButtons = <>
+          TabOrder = 0
+          Visible = True
+        end
+        object DBDateTimeEditEh1: TDBDateTimeEditEh
+          Left = 86
+          Top = 46
+          Width = 100
+          Height = 21
+          DataField = 'GRANTDATE'
+          DataSource = DataSource1
+          EditButtons = <>
+          Kind = dtkDateEh
+          TabOrder = 1
+          Visible = True
+        end
+        object DBDateTimeEditEh2: TDBDateTimeEditEh
+          Left = 85
+          Top = 78
+          Width = 100
+          Height = 21
+          DataField = 'GIVEDATE'
+          DataSource = DataSource1
+          EditButtons = <>
+          Kind = dtkDateEh
+          TabOrder = 2
+          Visible = True
+        end
+        object DBEdit17: TDBEditEh
+          Left = 262
+          Top = 14
+          Width = 100
+          Height = 21
+          DataField = 'PROTOCOL'
+          DataSource = DataSource1
+          EditButtons = <>
+          TabOrder = 3
+          Visible = True
+        end
+        object DBEdit18: TDBEditEh
+          Left = 406
+          Top = 14
+          Width = 80
+          Height = 21
+          DataField = 'PARAGRAPH'
+          DataSource = DataSource1
+          EditButtons = <>
+          TabOrder = 4
+          Visible = True
+        end
+        object DBEdit19: TDBEditEh
+          Left = 262
+          Top = 47
+          Width = 100
+          Height = 21
+          DataField = 'MEASURECODE'
+          DataSource = DataSource1
+          EditButtons = <>
+          TabOrder = 5
+          Visible = True
+        end
+        object DBNumberEditEh4: TDBNumberEditEh
+          Left = 315
+          Top = 78
+          Width = 100
+          Height = 21
+          DataField = 'TOTALAMOUNT'
+          DataSource = DataSource1
+          EditButtons = <>
+          TabOrder = 6
+          Visible = True
+        end
+        object DBNumberEditEh5: TDBNumberEditEh
+          Left = 584
+          Top = 78
+          Width = 87
+          Height = 21
+          DataField = 'MAINDEBT'
+          DataSource = DataSource1
+          EditButtons = <>
+          TabOrder = 7
+          Visible = True
+        end
+        object DBLookupComboboxEh3: TDBLookupComboboxEh
+          Left = 408
+          Top = 47
+          Width = 281
+          Height = 21
+          DataField = 'MEASURECODE'
+          DataSource = DataSource1
+          EditButtons = <>
+          KeyField = 'ID'
+          ListField = 'DESCRIPTION'
+          ListSource = DataSource2
+          TabOrder = 8
+          Visible = True
+        end
+      end
+      object Panel3: TPanel
+        Left = 0
+        Top = 313
+        Width = 723
+        Height = 40
+        Align = alTop
+        BorderStyle = bsSingle
+        TabOrder = 3
+        object Button3: TButton
+          Left = 152
+          Top = 5
+          Width = 75
+          Height = 25
+          Action = Action1
+          TabOrder = 0
+        end
+        object Button4: TButton
+          Left = 313
+          Top = 5
+          Width = 75
+          Height = 25
+          Action = Action2
+          TabOrder = 1
+        end
+        object Button5: TButton
+          Left = 395
+          Top = 5
+          Width = 75
+          Height = 25
+          Action = Action3
+          TabOrder = 2
+        end
+        object Button6: TButton
+          Left = 478
+          Top = 5
+          Width = 75
+          Height = 25
+          Action = Action4
+          TabOrder = 3
+        end
+        object Button7: TButton
+          Left = 232
+          Top = 5
+          Width = 75
+          Height = 25
+          Action = Action5
+          TabOrder = 4
+        end
+      end
+    end
+    object tsGrantT: TTabSheet
+      Caption = '√рант техникасы'
+      ImageIndex = 2
+      object GroupBox8: TGroupBox
+        Left = 0
+        Top = 0
+        Width = 727
+        Height = 97
+        Align = alTop
+        Caption = '«€ман€т щаггында'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 0
+        object GroupBox9: TGroupBox
+          Left = 2
+          Top = 15
+          Width = 723
+          Height = 39
+          Align = alTop
+          Caption = 'ћцшт€ри'
+          TabOrder = 0
+          object DBEdit20: TDBEditEh
+            Left = 11
+            Top = 12
+            Width = 702
+            Height = 21
+            TabStop = False
+            Color = clInfoBk
+            DataField = 'NAME'
+            DataSource = BPDataModule.DSCreditInfo
+            EditButtons = <>
+            TabOrder = 0
+            Visible = True
+          end
+        end
+        object GroupBox10: TGroupBox
+          Left = 2
+          Top = 54
+          Width = 723
+          Height = 36
+          Align = alTop
+          Caption = '«€ман€тин нюмр€си'
+          TabOrder = 1
+          object edCreditNo: TEdit
+            Left = 5
+            Top = 12
+            Width = 153
+            Height = 21
+            TabStop = False
+            ReadOnly = True
+            TabOrder = 0
+          end
+        end
+      end
+      object Panel5: TPanel
+        Left = 0
+        Top = 97
+        Width = 727
+        Height = 373
+        Align = alClient
+        BevelInner = bvLowered
+        TabOrder = 1
+        object GroupBox11: TGroupBox
+          Left = 2
+          Top = 121
+          Width = 723
+          Height = 191
+          Align = alTop
+          Caption = '√рант техникасынын м€луматлары'
+          TabOrder = 0
+          object Label32: TLabel
+            Left = 120
+            Top = 38
+            Width = 150
+            Height = 16
+            Alignment = taRightJustify
+            AutoSize = False
+            Caption = '“ехниканын ады:'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -13
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = []
+            ParentFont = False
+          end
+          object Label33: TLabel
+            Left = 120
+            Top = 74
+            Width = 150
+            Height = 16
+            Alignment = taRightJustify
+            AutoSize = False
+            Caption = '√рантын или:'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -13
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = []
+            ParentFont = False
+          end
+          object Label34: TLabel
+            Left = 120
+            Top = 110
+            Width = 150
+            Height = 16
+            Alignment = taRightJustify
+            AutoSize = False
+            Caption = '“ехниканын верилдийи тарих:'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -13
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = []
+            ParentFont = False
+          end
+          object Label35: TLabel
+            Left = 120
+            Top = 146
+            Width = 150
+            Height = 16
+            Alignment = taRightJustify
+            AutoSize = False
+            Caption = '“ехниканын д€й€ри:'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -13
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = []
+            ParentFont = False
+          end
+          object DBLookupComboboxEh8: TDBLookupComboboxEh
+            Left = 288
+            Top = 36
+            Width = 180
+            Height = 19
+            DataField = 'MACHINEID'
+            DataSource = GrantDataSrc
+            EditButtons = <>
+            Flat = True
+            KeyField = 'ID'
+            ListField = 'MACHINENAME'
+            ListSource = MachinesDataSrc
+            TabOrder = 0
+            Visible = True
+          end
+          object DBDateTimeEditEh3: TDBDateTimeEditEh
+            Left = 288
+            Top = 108
+            Width = 180
+            Height = 19
+            DataField = 'GRANTDATE'
+            DataSource = GrantDataSrc
+            EditButtons = <>
+            Flat = True
+            Kind = dtkDateEh
+            TabOrder = 1
+            Visible = True
+          end
+          object DBNumberEditEh6: TDBNumberEditEh
+            Left = 288
+            Top = 72
+            Width = 180
+            Height = 19
+            DataField = 'GRANTYEAR'
+            DataSource = GrantDataSrc
+            EditButtons = <>
+            Flat = True
+            TabOrder = 2
+            Visible = True
+          end
+          object DBNumberEditEh7: TDBNumberEditEh
+            Left = 288
+            Top = 144
+            Width = 180
+            Height = 19
+            DataField = 'MACHINEAMMOUNT'
+            DataSource = GrantDataSrc
+            EditButtons = <>
+            Flat = True
+            TabOrder = 3
+            Visible = True
+          end
+        end
+        object Button8: TButton
+          Left = 496
+          Top = 328
+          Width = 100
+          Height = 30
+          Caption = '…аддаша йаз'
+          TabOrder = 1
+          OnClick = Button8Click
+        end
+        object Button9: TButton
+          Left = 616
+          Top = 328
+          Width = 100
+          Height = 30
+          Caption = 'Imtina'
+          TabOrder = 2
+          OnClick = Button9Click
+        end
+        object Panel6: TPanel
+          Left = 2
+          Top = 2
+          Width = 723
+          Height = 119
+          Align = alTop
+          BevelInner = bvLowered
+          TabOrder = 3
+        end
+      end
+    end
+  end
+  object ActionsList: TActionList
+    Left = 251
+    Top = 28
+    object ActionSave: TAction
+      Caption = '…аддаша йаз'
+      OnExecute = ActionSaveExecute
+      OnUpdate = ActionSaveUpdate
+    end
+    object ActionDismis: TAction
+      Caption = '»мтина'
+      OnExecute = ActionDismisExecute
+    end
+  end
+  object Localizer: TNLSLocalizer
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    Left = 512
+    Top = 16
+  end
+  object ActionList1: TActionList
+    Left = 408
+    Top = 17
+    object Action1: TAction
+      Caption = '…ени'
+      OnExecute = Action1Execute
+    end
+    object Action2: TAction
+      Caption = '…аддаша йаз'
+      OnExecute = Action2Execute
+      OnUpdate = Action2Update
+    end
+    object Action3: TAction
+      Caption = '»мтина'
+      OnExecute = Action3Execute
+    end
+    object Action4: TAction
+      Caption = '„ыхыш'
+      OnExecute = Action4Execute
+    end
+    object Action5: TAction
+      Caption = '—илм€к'
+      OnExecute = Action5Execute
+      OnUpdate = Action5Update
+    end
+  end
+  object CreditInfo: TOracleDataSet
+    SQL.Strings = (
+      'Select '
+      '   Name'
+      'From '
+      '  CR_BOOROWERINFO '
+      'Where '
+      '   CreditID=:CreditID'
+      '   ')
+    Variables.Data = {
+      0300000001000000090000003A43524544495449440300000000000000000000
+      00}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 312
+    Top = 16
+  end
+  object DSCreditInfo: TDataSource
+    DataSet = CreditInfo
+    Left = 344
+    Top = 16
+  end
+  object DataSource2: TDataSource
+    DataSet = OracleDataSet2
+    Left = 464
+    Top = 17
+  end
+  object OracleDataSet2: TOracleDataSet
+    SQL.Strings = (
+      'SELECT id, description, activeindicator1, activeindicator2'
+      '  FROM cr_legal_measure_names')
+    Session = sboapiDataModule.SBSession
+    Left = 552
+    Top = 17
+    object OracleDataSet2ID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object OracleDataSet2DESCRIPTION: TStringField
+      FieldName = 'DESCRIPTION'
+      Size = 255
+    end
+    object OracleDataSet2ACTIVEINDICATOR1: TStringField
+      FieldName = 'ACTIVEINDICATOR1'
+      Size = 100
+    end
+    object OracleDataSet2ACTIVEINDICATOR2: TStringField
+      FieldName = 'ACTIVEINDICATOR2'
+      Size = 100
+    end
+  end
+  object OracleDataSet1: TOracleDataSet
+    SQL.Strings = (
+      
+        'SELECT rowid,id, creditid, protocol, paragraph, grantdate, gived' +
+        'ate,'
+      '       measurecode, totalamount, maindebt, num'
+      '  FROM cr_legal_measures'
+      'WHERE CreditID=:CreditID')
+    Variables.Data = {
+      0300000001000000090000003A43524544495449440300000000000000000000
+      00}
+    Session = sboapiDataModule.SBSession
+    AfterInsert = OracleDataSet1AfterInsert
+    AfterPost = OracleDataSet1AfterPost
+    Left = 594
+    Top = 19
+    object OracleDataSet1ID: TFloatField
+      FieldName = 'ID'
+    end
+    object OracleDataSet1CREDITID: TFloatField
+      FieldName = 'CREDITID'
+      Required = True
+    end
+    object OracleDataSet1PROTOCOL: TFloatField
+      FieldName = 'PROTOCOL'
+    end
+    object OracleDataSet1PARAGRAPH: TFloatField
+      FieldName = 'PARAGRAPH'
+    end
+    object OracleDataSet1GRANTDATE: TDateTimeField
+      FieldName = 'GRANTDATE'
+    end
+    object OracleDataSet1GIVEDATE: TDateTimeField
+      FieldName = 'GIVEDATE'
+    end
+    object OracleDataSet1MEASURECODE: TFloatField
+      FieldName = 'MEASURECODE'
+      Required = True
+    end
+    object OracleDataSet1TOTALAMOUNT: TFloatField
+      FieldName = 'TOTALAMOUNT'
+    end
+    object OracleDataSet1MAINDEBT: TFloatField
+      FieldName = 'MAINDEBT'
+    end
+    object OracleDataSet1NUM: TFloatField
+      FieldName = 'NUM'
+    end
+    object OracleDataSet1MeasureDesc: TStringField
+      FieldKind = fkLookup
+      FieldName = 'MeasureDesc'
+      LookupDataSet = OracleDataSet2
+      LookupKeyFields = 'ID'
+      LookupResultField = 'DESCRIPTION'
+      KeyFields = 'MEASURECODE'
+      Size = 255
+      Lookup = True
+    end
+  end
+  object DataSource1: TDataSource
+    DataSet = OracleDataSet1
+    Left = 634
+    Top = 19
+  end
+  object GTMachinesDataSet: TOracleDataSet
+    Tag = 12
+    SQL.Strings = (
+      'select t.rowid, t.*'
+      '  from cr_ak_grants t'
+      ' where creditid = :CREDITID')
+    Variables.Data = {
+      0300000001000000090000003A43524544495449440300000000000000000000
+      00}
+    QBEDefinition.QBEFieldDefs = {
+      0400000005000000080000004352454449544944010000000000090000004D41
+      4348494E454944010000000000090000004752414E5459454152010000000000
+      090000004752414E54444154450100000000000E0000004D414348494E45414D
+      4D4F554E54010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 564
+    Top = 304
+    object GTMachinesDataSetCREDITID: TFloatField
+      FieldName = 'CREDITID'
+      Required = True
+    end
+    object GTMachinesDataSetMACHINEID: TFloatField
+      FieldName = 'MACHINEID'
+      Required = True
+    end
+    object GTMachinesDataSetGRANTYEAR: TIntegerField
+      FieldName = 'GRANTYEAR'
+      Required = True
+    end
+    object GTMachinesDataSetGRANTDATE: TDateTimeField
+      FieldName = 'GRANTDATE'
+      Required = True
+    end
+    object GTMachinesDataSetMACHINEAMMOUNT: TFloatField
+      FieldName = 'MACHINEAMMOUNT'
+      Required = True
+    end
+  end
+  object MachinesDataSet: TOracleDataSet
+    Tag = 12
+    SQL.Strings = (
+      'select * from cr_ak_machines'
+      'order by id')
+    Session = sboapiDataModule.SBSession
+    Left = 564
+    Top = 337
+    object MachinesDataSetID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object MachinesDataSetMACHINENAME: TStringField
+      FieldName = 'MACHINENAME'
+      Required = True
+      Size = 255
+    end
+    object MachinesDataSetDESCRIPTION: TStringField
+      FieldName = 'DESCRIPTION'
+      Size = 255
+    end
+  end
+  object MachinesDataSrc: TDataSource
+    DataSet = MachinesDataSet
+    Left = 596
+    Top = 337
+  end
+  object GrantDataSrc: TDataSource
+    DataSet = GTMachinesDataSet
+    Left = 596
+    Top = 305
+  end
+end

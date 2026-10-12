@@ -1,0 +1,60 @@
+unit IETuningDataModuleImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, OracleData;
+
+type
+  TIETuningDataMod = class(TDataModule)
+    LinkValuesData: TOracleDataSet;
+    LinkValuesDataLINKID: TFloatField;
+    LinkValuesDataBRANCHID: TFloatField;
+    LinkValuesDataCURRENCYID: TFloatField;
+    LinkValuesDataACCOUNTID: TFloatField;
+    DataSrcLinkValues: TDataSource;
+    DataSrcLinks: TDataSource;
+    DataSrcCategories: TDataSource;
+    CategoriesData: TOracleDataSet;
+    CategoriesDataID: TFloatField;
+    CategoriesDataDESCRIPTION: TWideStringField;
+    LinksData: TOracleDataSet;
+    LinksDataID: TFloatField;
+    LinksDataCATEGORYID: TFloatField;
+    LinksDataDESCRIPTION: TWideStringField;
+    BranchList: TOracleDataSet;
+    IEAccountList: TOracleDataSet;
+    BranchListID: TFloatField;
+    BranchListNAME: TWideStringField;
+    DataSrcIEAccountList: TDataSource;
+    DataSrcBranchList: TDataSource;
+    LinkValuesDataBrachName: TWideStringField;
+    CurrencyList: TOracleDataSet;
+    DataSrcCurrencyList: TDataSource;
+    CurrencyListVALUTE: TIntegerField;
+    CurrencyListVAL_NAME: TWideStringField;
+    LinkValuesDataCURRENCYNAME: TWideStringField;
+    LinkValuesDataAccountNumber: TWideStringField;
+    IEAccountListID: TFloatField;
+    IEAccountListACC_NO: TWideStringField;
+    IEAccountListNAME: TWideStringField;
+    IEAccountListVAL_ACC: TIntegerField;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  IETuningDataMod: TIETuningDataMod;
+
+implementation
+
+{$R *.DFM}
+
+
+uses
+ sboapiDataModuleImpl;
+
+end.

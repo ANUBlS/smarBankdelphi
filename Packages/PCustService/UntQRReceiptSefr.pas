@@ -1,0 +1,252 @@
+﻿unit UntQRReceiptSefr;
+
+interface
+
+uses Windows, SysUtils, Messages, Classes, Graphics, Controls,
+  StdCtrls, ExtCtrls, Forms, Quickrpt, QRCtrls, DB, OracleData, Dialogs;
+
+type
+  TQRPTReceiptSefr = class(TQuickRep)
+    ChildBand1: TQRChildBand;
+    QRMain: TQRBand;
+    QRShape1: TQRShape;
+    CashIOCome: TQRLabel;
+    QRLBankName: TQRLabel;
+    QRLabel6: TQRLabel;
+    QRLabel11: TQRLabel;
+    QRLabel12: TQRLabel;
+    QRDBText2: TQRDBText;
+    QRShape8: TQRShape;
+    QRLBankInn: TQRLabel;
+    QRLabel1: TQRLabel;
+    QRLabel2: TQRLabel;
+    QRShape9: TQRShape;
+    QRLabel14: TQRLabel;
+    QRShape10: TQRShape;
+    QRLabel16: TQRLabel;
+    QRShape11: TQRShape;
+    QRLabel18: TQRLabel;
+    QRShape13: TQRShape;
+    QRShape4: TQRShape;
+    QRShape5: TQRShape;
+    QRShape6: TQRShape;
+    QRLabel5: TQRLabel;
+    QRDBText1: TQRDBText;
+    QRDBText3: TQRDBText;
+    QRDBText6: TQRDBText;
+    QRDBText8: TQRDBText;
+    QRShape14: TQRShape;
+    QRDBText25: TQRDBText;
+    QRDBText16: TQRDBText;
+    QRDBText26: TQRDBText;
+    QRDBText27: TQRDBText;
+    QRDBText28: TQRDBText;
+    QRShape39: TQRShape;
+    QRLabel35: TQRLabel;
+    QRDBText37: TQRDBText;
+    QRDBText18: TQRDBText;
+    QRDBText7: TQRDBText;
+    QRDBText9: TQRDBText;
+    QRDBImage4: TQRDBImage;
+    QRChildFirst: TQRChildBand;
+    QRDBText5: TQRDBText;
+    QRLBankName1: TQRLabel;
+    QRShape7: TQRShape;
+    QRShape15: TQRShape;
+    QRShape16: TQRShape;
+    QRShape17: TQRShape;
+    QRLabel9: TQRLabel;
+    QRShape18: TQRShape;
+    QRDBText10: TQRDBText;
+    QRDBText11: TQRDBText;
+    QRShape19: TQRShape;
+    QRLabel21: TQRLabel;
+    QRLabel22: TQRLabel;
+    QRLBankInn1: TQRLabel;
+    QRLabel24: TQRLabel;
+    QRDBText12: TQRDBText;
+    QRDBText13: TQRDBText;
+    QRDBText14: TQRDBText;
+    QRDBText15: TQRDBText;
+    QRDBText17: TQRDBText;
+    QRDBText19: TQRDBText;
+    QRLabel25: TQRLabel;
+    QRDBText21: TQRDBText;
+    QRLabel27: TQRLabel;
+    QRDBText22: TQRDBText;
+    QRShape20: TQRShape;
+    QRDBText23: TQRDBText;
+    QRShape21: TQRShape;
+    QRLAmount1: TQRLabel;
+    QRLabel29: TQRLabel;
+    QRLabel30: TQRLabel;
+    QRLabel13: TQRLabel;
+    QRDBText20: TQRDBText;
+    QRDBText24: TQRDBText;
+    QRShape22: TQRShape;
+    QRLabel15: TQRLabel;
+    QRShape23: TQRShape;
+    QRLabel23: TQRLabel;
+    QRShape25: TQRShape;
+    QRLabel31: TQRLabel;
+    QRShape26: TQRShape;
+    QRLabel32: TQRLabel;
+    QRShape27: TQRShape;
+    QRLabel52: TQRLabel;
+    QRDBImage5: TQRDBImage;
+    QRChildSecond: TQRChildBand;
+    QRLBankName2: TQRLabel;
+    QRDBText29: TQRDBText;
+    QRDBText30: TQRDBText;
+    QRDBText4: TQRDBText;
+    QRShape28: TQRShape;
+    QRShape29: TQRShape;
+    QRLBankInn2: TQRLabel;
+    QRLabel36: TQRLabel;
+    QRLabel37: TQRLabel;
+    QRDBText31: TQRDBText;
+    QRDBText32: TQRDBText;
+    QRDBText33: TQRDBText;
+    QRDBText34: TQRDBText;
+    QRDBText35: TQRDBText;
+    QRShape30: TQRShape;
+    QRDBText36: TQRDBText;
+    QRLabel38: TQRLabel;
+    QRDBText38: TQRDBText;
+    QRLabel39: TQRLabel;
+    QRShape31: TQRShape;
+    QRShape32: TQRShape;
+    QRDBText39: TQRDBText;
+    QRLabel41: TQRLabel;
+    QRDBText40: TQRDBText;
+    QRDBText41: TQRDBText;
+    QRShape33: TQRShape;
+    QRLabel42: TQRLabel;
+    QRShape34: TQRShape;
+    QRLabel43: TQRLabel;
+    QRLabel44: TQRLabel;
+    QRLAmount2: TQRLabel;
+    QRShape35: TQRShape;
+    QRDBText42: TQRDBText;
+    QRShape36: TQRShape;
+    QRLabel46: TQRLabel;
+    QRLabel47: TQRLabel;
+    QRShape37: TQRShape;
+    QRLabel49: TQRLabel;
+    QRLabel50: TQRLabel;
+    QRShape40: TQRShape;
+    QRShape41: TQRShape;
+    QRLabel53: TQRLabel;
+    QRDBImage6: TQRDBImage;
+    QRLabel56: TQRLabel;
+    QRChildBand1: TQRChildBand;
+    QRDBImage1: TQRDBImage;
+    QRShape3: TQRShape;
+    QRShape12: TQRShape;
+    QRLAmount: TQRLabel;
+    QRLabel4: TQRLabel;
+    QRLabel8: TQRLabel;
+    QRMemo1: TQRMemo;
+    procedure QuickRepBeforePrint(Sender: TCustomQuickRep;
+      var PrintReport: Boolean);
+    procedure QuickRepAfterPreview(Sender: TObject);
+    function RoundNew(X: Double; Precision: Integer ): Double;
+  private
+
+  public
+
+  end;
+
+var
+  QRPTReceiptSefr: TQRPTReceiptSefr;
+
+implementation
+
+uses  sboapiDataModuleImpl, SBTranslateProc,Unitembassy,UnitEmbasyTrans,
+  UnitDataModPCustService;
+
+{$R *.DFM}
+
+procedure TQRPTReceiptSefr.QuickRepAfterPreview(Sender: TObject);
+
+begin
+//CashDataMod.ODSTransactionsViewer2.Filtered:=false;
+end;
+
+
+
+function TQRPTReceiptSefr.RoundNew(X: Double; Precision: Integer ): Double;
+var
+  ScaledFractPart, Temp : Double;
+begin
+  ScaledFractPart := Frac(X)*Precision;
+  Temp := Frac(ScaledFractPart);
+  ScaledFractPart := Int(ScaledFractPart);
+  //if Temp >= 0.5 then ScaledFractPart := ScaledFractPart + 1; ***Closed by Hesen R.***
+  //if Temp <= -0.5 then ScaledFractPart := ScaledFractPart - 1; ***Closed by Hesen R.***
+  if Round(Temp*100) >= 50 then ScaledFractPart := ScaledFractPart + 1; //***Written by Hesen R.***
+  if Round(Temp*100) <= -50 then ScaledFractPart := ScaledFractPart - 1; //***Written by Hesen R.***
+  RoundNew := Int(X) + ScaledFractPart/Precision;
+end;
+
+procedure TQRPTReceiptSefr.QuickRepBeforePrint(Sender: TCustomQuickRep;
+  var PrintReport: Boolean);
+var
+ op_kurs:string;  aa :integer;
+dat, cust_name,acc_no,dat_ammount,cust_name1,v_dat_ammount,Embassy_name,bank_sedr ,custname_eng,sedr_Eng:string;
+begin
+  SBTranslateProc.TranslateAllCompQuickRep(Self,sboapiDataModule.OrPack_SL);
+  dat:='26.04.2017';
+  dat := StringReplace( dat,'26.04.2017',Form_embassy.sysdatDAT.AsString, [rfReplaceAll, rfIgnoreCase]);
+  QRMemo1.Lines[12] := dat;
+
+  Embassy_name := 'Embassy';
+  Embassy_name := StringReplace( Embassy_name,
+   'Embassy', Form_embassy.ods_embassyENG_NAME.asstring, [rfReplaceAll, rfIgnoreCase]);
+  QRMemo1.Lines[14] := Embassy_name;
+
+custname_eng:=DataModPCustService.convertpack.CallstringFunction('CONVERT_INT',[Form_embassy.ods_cust_accCUSTNAME.asstring]);
+cust_name := 'Hereby, we would like to inform you that {CustomerName} is a customer of OJSC';
+cust_name := StringReplace( cust_name,
+   '{CustomerName}',Form_embassy.ods_cust_accSEX.asstring+' '+ custname_eng, [rfReplaceAll, rfIgnoreCase]);
+  QRMemo1.Lines[17] := cust_name;
+
+  acc_no := '“NBCBANK” and has  account № {acc_no}. We confirm';
+  acc_no := StringReplace( acc_no,
+  '{acc_no}', Form_embassy.ods_cust_accACC_NO.asstring, [rfReplaceAll, rfIgnoreCase]);
+  QRMemo1.Lines[18] := acc_no;
+ custname_eng:=DataModPCustService.convertpack.CallstringFunction('CONVERT_INT',[Form_embassy.ods_cust_accCUSTNAME.asstring]);
+  cust_name1 := 'that the outstanding balance of  {custname1} on his/her account in our bank for';
+  cust_name1 := StringReplace( cust_name1,
+   '{custname1}',Form_embassy.ods_cust_accSEX.asstring+' '+ custname_eng, [rfReplaceAll, rfIgnoreCase]);
+  QRMemo1.Lines[19] := cust_name1;
+
+   if Form_embassy.ods_cust_accVAL_ACC.AsInteger=0 then
+  begin
+
+   Form_embassy.ods_kurstudey.Close;
+   Form_embassy.ods_kurstudey.SetVariable('v_val_kod',1);
+   Form_embassy.ods_kurstudey.open;
+
+   op_kurs:='('+FloatToStr(RoundNew(Form_embassy.ods_cust_accOSTAT.AsCurrency/ Form_embassy.ods_kurstudeyOSTAT.AsCurrency,100))
+            +'  '+'USD'+')';
+    end
+   else
+    op_kurs:='';
+
+  v_dat_ammount:=
+  dat+' ,'+'is  '+Form_embassy.ods_cust_accVAL_NAME.AsString+'   '+Form_embassy.ods_cust_accOSTAT.AsString;
+  dat_ammount := '26 April,2017 is  EUR 5000  (Five thousand)';
+  dat_ammount := StringReplace( dat_ammount,'26 April,2017 is  EUR 5000  (Five thousand)', v_dat_ammount, [rfReplaceAll, rfIgnoreCase]);
+  QRMemo1.Lines[20] := dat_ammount +'   '+op_kurs;
+
+ sedr_Eng:=DataModPCustService.convertpack.CallstringFunction('CONVERT_INT',[Form_embassy.ods_bankinfASSISTANT.asstring]);
+ bank_sedr:='Deputy chairman                                                                              {sedr}';
+ bank_sedr := StringReplace( bank_sedr,
+   '{sedr}',sedr_Eng, [rfReplaceAll, rfIgnoreCase]);
+  QRMemo1.Lines[29] := bank_sedr;
+
+
+end;
+
+end.

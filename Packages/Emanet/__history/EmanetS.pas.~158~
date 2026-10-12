@@ -1,0 +1,3676 @@
+﻿unit EmanetS;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActiveX, AxCtrls, EmanetSH_TLB, StdVcl, Grids, DBGrids, StdCtrls,
+  Buttons, DBViewComboBox, ComCtrls, ExtCtrls, Db, OracleData, Oracle,
+  ExcelXP, OleServer, Gauges, CheckLst, Evanescence, XFSCtrls;
+
+type
+  TEmanet = class(TActiveForm, IEmanet)
+    PageControl1: TPageControl;
+    TabSheet1: TTabSheet;
+    GroupBox2: TGroupBox;
+    TabSheet2: TTabSheet;
+    Panel1: TPanel;
+    Edit1: TEdit;
+    StaticText3: TStaticText;
+    BitBtn1: TBitBtn;
+    BitBtn2: TBitBtn;
+    DBGrid1: TDBGrid;
+    OracleDataSet1: TOracleDataSet;
+    DataSource1: TDataSource;
+    GroupBox4: TGroupBox;
+    OracleDataSet2: TOracleDataSet;
+    DataSource2: TDataSource;
+    StaticText4: TStaticText;
+    Edit2: TEdit;
+    BitBtn3: TBitBtn;
+    BitBtn4: TBitBtn;
+    DBGrid2: TDBGrid;
+    OracleDataSet3: TOracleDataSet;
+    DataSource3: TDataSource;
+    DBViewComboBox1: TDBViewComboBox;
+    DBViewComboBox2: TDBViewComboBox;
+    OracleDataSet1ID: TFloatField;
+    OracleDataSet1BAL_CN: TWideStringField;
+    OracleDataSet1TIP: TIntegerField;
+    OraclePackage1: TOraclePackage;
+    ExcelApplication1: TExcelApplication;
+    ExcelWorksheet1: TExcelWorksheet;
+    ExcelWorkbook1: TExcelWorkbook;
+    TabSheet3: TTabSheet;
+    TabSheet4: TTabSheet;
+    DBGrid3: TDBGrid;
+    GroupBox5: TGroupBox;
+    Edit3: TEdit;
+    StaticText5: TStaticText;
+    BitBtn6: TBitBtn;
+    BitBtn7: TBitBtn;
+    DBViewComboBox3: TDBViewComboBox;
+    GroupBox6: TGroupBox;
+    Edit4: TEdit;
+    StaticText6: TStaticText;
+    BitBtn8: TBitBtn;
+    BitBtn9: TBitBtn;
+    DBGrid4: TDBGrid;
+    DBViewComboBox4: TDBViewComboBox;
+    OracleDataSet4: TOracleDataSet;
+    OracleDataSet5: TOracleDataSet;
+    Timer1: TTimer;
+    DSIntrusted: TDataSource;
+    ODSIntrusted: TOracleDataSet;
+    Panel2: TPanel;
+    GroupBox1: TGroupBox;
+    Panel3: TPanel;
+    Panel4: TPanel;
+    CheckBox1: TCheckBox;
+    Panel5: TPanel;
+    Evanescence1: TEvanescence;
+    Panel6: TPanel;
+    Panel7: TPanel;
+    GroupBox3: TGroupBox;
+    BitBtn5: TBitBtn;
+    XFPanel1: TXFPanel;
+    XFPanel2: TXFPanel;
+    XFPanel3: TXFPanel;
+    XFPanel4: TXFPanel;
+    StaticText1: TStaticText;
+    StaticText2: TStaticText;
+    XFPanel5: TXFPanel;
+    DTP1: TDateTimePicker;
+    XFPanel6: TXFPanel;
+    DTP2: TDateTimePicker;
+    XFPanel7: TXFPanel;
+    XFPanel8: TXFPanel;
+    RadioButton1: TRadioButton;
+    RadioButton2: TRadioButton;
+    ComboBox1: TComboBox;
+    XFPanel9: TXFPanel;
+    Gauge1: TGauge;
+    ExcelApplication2: TExcelApplication;
+    ExcelWorksheet2: TExcelWorksheet;
+    ExcelWorkbook2: TExcelWorkbook;
+    ExcelApplication3: TExcelApplication;
+    ExcelApplication4: TExcelApplication;
+    procedure ComboBox1Change(Sender: TObject);
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure Edit2KeyPress(Sender: TObject; var Key: Char);
+    procedure Edit2Enter(Sender: TObject);
+    procedure Edit1KeyPress(Sender: TObject; var Key: Char);
+    procedure Edit1Enter(Sender: TObject);
+    procedure DBViewComboBox1Change(Sender: TObject);
+    procedure BitBtn1Click(Sender: TObject);
+    procedure DBViewComboBox2Change(Sender: TObject);
+    procedure BitBtn3Click(Sender: TObject);
+    procedure TabSheet1Show(Sender: TObject);
+    procedure TabSheet2Show(Sender: TObject);
+    procedure BitBtn2Click(Sender: TObject);
+    procedure BitBtn4Click(Sender: TObject);
+    procedure BitBtn5Click(Sender: TObject);
+    procedure DTP1Change(Sender: TObject);
+    procedure DBViewComboBox3Change(Sender: TObject);
+    procedure Edit3KeyPress(Sender: TObject; var Key: Char);
+    procedure Edit3Enter(Sender: TObject);
+    procedure TabSheet3Show(Sender: TObject);
+    procedure TabSheet4Show(Sender: TObject);
+    procedure DBViewComboBox4Change(Sender: TObject);
+    procedure Edit4Enter(Sender: TObject);
+    procedure Edit4KeyPress(Sender: TObject; var Key: Char);
+    procedure RadioButton1Click(Sender: TObject);
+    procedure RadioButton2Click(Sender: TObject);
+    procedure BitBtn6Click(Sender: TObject);
+    procedure BitBtn7Click(Sender: TObject);
+    procedure DTP2Change(Sender: TObject);
+    procedure CheckBox1Click(Sender: TObject);
+    procedure Evanescence1ClickCheck(Sender: TObject);
+  private
+    { Private declarations }
+    FEvents: IEmanetEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+  public
+    procedure Insert_Umumi_Emanet;
+    procedure Setfilter(FType: string);
+    procedure Delete_Emanet;
+    procedure Initialize; override;
+    function  Valyutanin_Kodu(valyutanin_adi:string):integer;
+    function  Hesabin_tipi(Num:integer):string;
+  end;
+
+implementation
+
+uses ComObj, ComServ,sboapiDataModuleImpl, SBTranslateProc;
+var Text:string[10];
+    Bas,Son:string;
+          F:integer;
+          Fk:boolean;
+{$R *.DFM}
+
+{ TEmanet }
+
+procedure TEmanet.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_EmanetPage); }
+end;
+
+procedure TEmanet.Evanescence1ClickCheck(Sender: TObject);
+var
+  I: Integer;
+  k: integer;
+begin
+  k:=0;
+  for I := 0 to Evanescence1.KeyItems.Count-1 do
+  begin
+    if  Evanescence1.Checked[i]=False  then
+    begin
+      Fk:=True;
+      CheckBox1.Checked:=False;
+      Fk:=False;
+    end;
+    if Evanescence1.Checked[i]=True  then k:=k+1;
+    if k=4 then
+    begin
+      Fk:=True;
+      CheckBox1.Checked:=True;
+      Fk:=False;
+    end;
+  end;
+end;
+
+procedure TEmanet.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as IEmanetEvents;
+end;
+
+procedure TEmanet.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TEmanet.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TEmanet.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TEmanet.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TEmanet.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TEmanet.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TEmanet.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TEmanet.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TEmanet.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TEmanet.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TEmanet.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TEmanet.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TEmanet.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TEmanet.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TEmanet.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TEmanet.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TEmanet.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TEmanet.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TEmanet.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TEmanet._Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TEmanet.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TEmanet.CheckBox1Click(Sender: TObject);
+var i:integer;
+begin
+  if not(Fk) then
+  begin
+    if CheckBox1.Checked then
+    begin
+      for i := 0 to ComponentCount - 1 do
+      if Components[i].Tag = 3112 then (Components[i] as TEvanescence).CheckAll;
+    end
+    else  begin
+            for i := 0 to ComponentCount - 1 do
+            if Components[i].Tag = 3112 then (Components[i] as TEvanescence).UncheckAll;
+          end;
+  end;
+end;
+
+procedure TEmanet.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TEmanet.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TEmanet.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TEmanet.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TEmanet.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TEmanet.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TEmanet.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TEmanet.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TEmanet.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TEmanet.Set_AxBorderStyle(Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TEmanet.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TEmanet.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TEmanet.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TEmanet.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TEmanet.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TEmanet.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TEmanet.Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TEmanet.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TEmanet.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TEmanet.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TEmanet.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TEmanet.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TEmanet.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+procedure TEmanet.ComboBox1Change(Sender: TObject);
+begin
+   PageControl1.ActivePageIndex:=(Sender as TComboBox).ItemIndex;
+ { if PageControl1.ActivePageIndex=0 then
+ begin
+   OracleDataSet1.Close;
+   OracleDataSet1.SQL.Clear;
+   OracleDataSet1.SQL.Add('select * from Emanet where Tip=0  order by bal_cn ');
+   OracleDataSet1.Open;
+ end;
+  if PageControl1.ActivePageIndex=1 then
+ begin
+   OracleDataSet1.Close;
+   OracleDataSet1.SQL.Clear;
+   OracleDataSet1.SQL.Add('select * from  Emanet where Tip=1 order by bal_cn');
+   OracleDataSet1.Open;
+ end;       }
+end;
+
+procedure TEmanet.ActiveFormCreate(Sender: TObject);
+var i:integer;
+begin
+  if CheckBox1.Checked then
+  begin
+    for i := 0 to ComponentCount - 1 do
+    if Components[i].Tag = 3112 then
+    begin
+      (Components[i] as TEvanescence).Open;
+      (Components[i] as TEvanescence).CheckAll;
+      Fk:=False;
+    end;
+  end;
+
+
+  ComboBox1.ItemIndex:=0;
+  DTP1.DateTime :=OraclePackage1.CallDateFunction('GetBankDay',[]);
+  DTP2.DateTime :=OraclePackage1.CallDateFunction('GetBankDay',[]);
+  OracleDataSet1.Active:=true;
+  OracleDataSet2.Active:=true;
+  F:=1;
+  SBTranslateProc.TranslateAllComponents(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TEmanet.Edit2KeyPress(Sender: TObject; var Key: Char);
+begin
+  if not(Ord(Key)=8) then
+  if ((Length((Sender as TEdit).Text)>4) and ((Sender as TEdit).SelLength=0)) or (not(key in ['0'..'9']) ) then
+  key:=#0;
+end;
+
+procedure TEmanet.Edit2Enter(Sender: TObject);
+begin
+  Edit2.Clear;
+end;
+
+procedure TEmanet.Edit1KeyPress(Sender: TObject; var Key: Char);
+begin
+  if not(Ord(Key)=8) then
+  if ((Length((Sender as TEdit).Text)>4) and ((Sender as TEdit).SelLength=0)) or (not(key in ['0'..'9']) ) then
+  key:=#0;
+end;
+
+procedure TEmanet.Edit1Enter(Sender: TObject);
+begin
+  Edit1.Clear;
+end;
+
+procedure TEmanet.DBViewComboBox1Change(Sender: TObject);
+begin
+  Text:=DBViewComboBox1.Text;
+end;
+
+procedure TEmanet.Insert_Umumi_Emanet;
+var
+ TmpBal: Integer;
+begin
+TmpBal:=StrToIntDef(Text,0);
+if TmpBal=0 then Exit;
+if OracleDataSet1.Active  then
+begin
+  if PageControl1.ActivePageIndex=0 then OraclePackage1.CallProcedure('Insert_Balans',[IntToStr(TmpBal),0]);
+  if PageControl1.ActivePageIndex=1 then OraclePackage1.CallProcedure('Insert_Balans',[IntToStr(TmpBal),1]);
+  if PageControl1.ActivePageIndex=2 then OraclePackage1.CallProcedure('Insert_Balans',[IntToStr(TmpBal),2]);
+end;
+OracleDataSet1.Refresh;
+end;
+procedure TEmanet.BitBtn1Click(Sender: TObject);
+begin
+  if Edit1.text<>'' then Text:=Edit1.Text;
+  Insert_Umumi_Emanet;
+  Edit1.clear;
+  DBViewComboBox1.Text:='';
+end;
+
+procedure TEmanet.DBViewComboBox2Change(Sender: TObject);
+begin
+  Text:=DBViewComboBox2.Text;
+end;
+
+procedure TEmanet.BitBtn3Click(Sender: TObject);
+begin
+  if Edit2.text<>'' then Text:=Edit2.Text;
+  Insert_Umumi_Emanet;
+  Edit2.clear;
+  DBViewComboBox2.Text:='';
+end;
+
+procedure TEmanet.Setfilter(FType: string);
+begin
+ OracleDataSet1.Filter:='(Tip='+FTYPE+')';
+end;
+
+procedure TEmanet.TabSheet1Show(Sender: TObject);
+begin
+  Setfilter('0');
+end;
+
+procedure TEmanet.TabSheet2Show(Sender: TObject);
+begin
+  Setfilter('1');
+end;
+
+procedure TEmanet.Delete_Emanet;
+begin
+with OracleDataSet1,OracleDataSet1ID do
+   if Active and  (AsInteger>0) then
+   OraclePackage1.CallProcedure('Delete_Balans',[OracleDataSet1ID.AsInteger]);
+OracleDataSet1.Refresh;
+end;
+procedure TEmanet.BitBtn2Click(Sender: TObject);
+begin
+  if Dialogs.MessageDlg('Cəvdəldə sətrin silinməsinə əminsinizmi!!!',
+    mtConfirmation, [mbYes, mbNo], 0, mbYes) = mrYes then
+  begin
+    Delete_Emanet;
+  end;
+end;
+
+procedure TEmanet.BitBtn4Click(Sender: TObject);
+begin
+  Delete_Emanet;
+end;
+
+procedure TEmanet.BitBtn5Click(Sender: TObject);
+var V, Sheet, Sheets,Vn,SheetN,SheetsN   :Variant;
+    cell, row, i, j ,K1,T,k,Kcount,Kp,Mp,M1,M3   :Integer;
+    M30,M100,M200,M300,M500,M1000:integer;
+    RR,R1,M,EKM,Val,ValOstat,SumAmount,SumEkvAmount,P,Pcount:real;
+    E_Row1,OpenedXlsCnt,VCOD:Integer;
+    Bdate,Edate:TDateTime;
+    VTIP,Soz:string;
+    IL: string;
+begin
+  Bdate:=Time();
+  Bas:=FormatDateTime('dd-MMM-yyyy',trunc(DTP1.DateTime));
+  Son:=FormatDateTime('dd-MMM-yyyy',trunc(DTP2.DateTime));
+  If Son>=Bas then
+    begin
+      for I := 0 to Evanescence1.KeyItems.Count-1 do
+      if Evanescence1.Checked[i] then
+      begin
+        if I=0 then
+        begin
+          ExcelApplication1.Disconnect;
+          V :=ExcelApplication1.Application;
+          ExcelApplication1.Connect;
+          V.Workbooks.Open(ExtractFilePath(ExtractFilePath(ParamStr(0)))+ 'Emanetler.xls');
+          for OpenedXlsCnt :=1 to 100 do
+          try
+           Sheet := V.Workbooks[OpenedXlsCnt].Worksheets['Sheet1'];
+           Break;
+          except
+          end;
+
+
+
+          Sheets := V.Sheets;
+          Sheets.Item['Sheet1'].Activate;
+          IL:=FormatDateTime('yyyy',trunc(DTP1.DateTime));
+          Sheet.cells[1,2]:=IL;
+          Bas:=FormatDateTime('dd-MMM-yyyy',trunc(DTP1.DateTime));
+          Son:=FormatDateTime('dd-MMM-yyyy',trunc(DTP2.DateTime));
+          Sheet.cells[2,2]:=Bas+'_______'+son;
+
+          Sheet.cells[7,1].Font.Name :='Tahoma';
+          Sheet.Cells[7,1].Font.Bold :=true;
+          Sheet.Cells[7,1].Font.size :=12;
+          Soz:=' Əmanətlər   Haqqında   Hesabat';
+          sheet.cells[7,1]:=Soz;
+
+         {********************************************* I-ci cedvel *****************************************************}
+          (*---------------------------------------------------------------*)
+          Gauge1.Progress:=1;
+          Application.ProcessMessages;
+          OraclePackage1.CallProcedure('Qaliqlar',[bas,son,0,2,P,Pcount]);
+          k:=OraclePackage1.GetParameter(4);
+          Kcount:=OraclePackage1.GetParameter(5);
+          Sheet.cells[11,3]:=k;
+          Sheet.cells[11,5]:=Kcount;
+         (*---------------------------------------------------------------*)
+          Gauge1.Progress:=2;
+          Application.ProcessMessages;
+          OraclePackage1.CallProcedure('Umumi_Hesablar',[bas,son,0,2,P]);
+          k:=OraclePackage1.GetParameter(4);
+          Sheet.cells[11,4]:=k;
+
+
+          Gauge1.Progress:=3;
+          Application.ProcessMessages;
+          OraclePackage1.CallProcedure('Qaliqlar',[bas,son,1,2,P,Pcount]);
+          k:=OraclePackage1.GetParameter(4);
+          Kcount:=OraclePackage1.GetParameter(5);
+          Sheet.cells[12,3]:=k;
+          Sheet.cells[12,5]:=Kcount;
+
+          Gauge1.Progress:=4;
+          Application.ProcessMessages;
+          OraclePackage1.CallProcedure('Umumi_Hesablar',[bas,son,1,2,P]);
+          k:=OraclePackage1.GetParameter(4);
+          Sheet.cells[12,4]:=k;
+
+          Gauge1.Progress:=5;
+          Application.ProcessMessages;
+          VTIP:=Hesabin_tipi(1);
+          OraclePackage1.CallProcedure('HQaliqlar',[bas,son,1,VTIP,P,Pcount]);
+          k:=OraclePackage1.GetParameter(4);
+          Kcount:=OraclePackage1.GetParameter(5);
+          Sheet.cells[15,3]:=k;
+          Sheet.cells[15,5]:=Kcount;
+
+          Gauge1.Progress:=6;
+          Application.ProcessMessages;
+          OraclePackage1.CallProcedure('Herif_Hesablar',[bas,son,1,VTIP,P]);
+          k:=OraclePackage1.GetParameter(4);
+          Sheet.cells[15,4]:=k;
+
+         (*---------------------------------------------------------------*)
+          Gauge1.Progress:=7;
+          Application.ProcessMessages;
+          VTIP:=Hesabin_tipi(2);
+          OraclePackage1.CallProcedure('HQaliqlar',[bas,son,1,VTIP,P,Pcount]);
+          k:=OraclePackage1.GetParameter(4);
+          Kcount:=OraclePackage1.GetParameter(5);
+          Sheet.cells[16,3]:=k;
+          Sheet.cells[16,5]:=Kcount;
+          (*---------------------------------------------------------------*)
+
+          Gauge1.Progress:=8;
+          Application.ProcessMessages;
+          OraclePackage1.CallProcedure('Herif_Hesablar',[bas,son,1,VTIP,P]);
+          k:=OraclePackage1.GetParameter(4);
+          Sheet.cells[16,4]:=k;
+
+
+
+          Gauge1.Progress:=9;
+          Application.ProcessMessages;
+          VTIP:=Hesabin_tipi(3);
+          OraclePackage1.CallProcedure('HQaliqlar',[bas,son,1,VTIP,P,Pcount]);
+          k:=OraclePackage1.GetParameter(4);
+          Kcount:=OraclePackage1.GetParameter(5);
+          Sheet.cells[17,3]:=k;
+          Sheet.cells[17,5]:=Kcount;
+
+          Gauge1.Progress:=10;
+          Application.ProcessMessages;
+          OraclePackage1.CallProcedure('Herif_Hesablar',[bas,son,1,VTIP,P]);
+          k:=OraclePackage1.GetParameter(4);
+          Sheet.cells[17,4]:=k;
+
+
+
+          Gauge1.Progress:=11;
+          Application.ProcessMessages;
+          k:= StrToInt(Sheet.cells[15,3])+StrToInt(Sheet.cells[16,3])+StrToInt(Sheet.cells[17,3]);
+          Sheet.cells[14,3]:=k ;
+          k:= StrToInt(Sheet.cells[15,4])+StrToInt(Sheet.cells[16,4])+StrToInt(Sheet.cells[17,4]);
+          Sheet.cells[14,4]:=k ;
+          k:= StrToInt(Sheet.cells[15,5])+StrToInt(Sheet.cells[16,5])+StrToInt(Sheet.cells[17,5]);
+          Sheet.cells[14,5]:=k ;
+
+          Gauge1.Progress:=12;
+          Application.ProcessMessages;
+          VTIP:=Hesabin_tipi(5);
+          OraclePackage1.CallProcedure('HQaliqlar',[bas,son,1,VTIP,P,Pcount]);
+          k:=OraclePackage1.GetParameter(4);
+          Kcount:=OraclePackage1.GetParameter(5);
+          Sheet.cells[19,3]:=k;
+          Sheet.cells[19,5]:=Kcount;
+
+          Gauge1.Progress:=13;
+          Application.ProcessMessages;
+          OraclePackage1.CallProcedure('Herif_Hesablar',[bas,son,1,VTIP,P]);
+          k:=OraclePackage1.GetParameter(4);
+          Sheet.cells[19,4]:=k;
+
+
+          Gauge1.Progress:=14;
+          Application.ProcessMessages;
+          VTIP:=Hesabin_tipi(6);
+          OraclePackage1.CallProcedure('HQaliqlar',[bas,son,1,VTIP,P,Pcount]);
+          k:=OraclePackage1.GetParameter(4);
+          Kcount:=OraclePackage1.GetParameter(5);
+          Sheet.cells[20,3]:=k;
+          Sheet.cells[20,5]:=Kcount;
+
+          Gauge1.Progress:=15;
+          Application.ProcessMessages;
+          OraclePackage1.CallProcedure('Herif_Hesablar',[bas,son,1,VTIP,P]);
+          k:=OraclePackage1.GetParameter(4);
+          Sheet.cells[20,4]:=k;
+
+          Gauge1.Progress:=16;
+          Application.ProcessMessages;
+          VTIP:=Hesabin_tipi(7);
+          OraclePackage1.CallProcedure('HQaliqlar',[bas,son,1,VTIP,P,Pcount]);
+          k:=OraclePackage1.GetParameter(4);
+          Kcount:=OraclePackage1.GetParameter(5);
+          Sheet.cells[21,3]:=k;
+          Sheet.cells[21,5]:=Kcount;
+
+
+          Gauge1.Progress:=17;
+          Application.ProcessMessages;
+          OraclePackage1.CallProcedure('Herif_Hesablar',[bas,son,1,VTIP,P]);
+          k:=OraclePackage1.GetParameter(4);
+          Sheet.cells[21,4]:=k;
+
+
+          Gauge1.Progress:=18;
+          Application.ProcessMessages;
+          VTIP:=Hesabin_tipi(8);
+          OraclePackage1.CallProcedure('HQaliqlar',[bas,son,1,VTIP,P,Pcount]);
+          k:=OraclePackage1.GetParameter(4);
+          Kcount:=OraclePackage1.GetParameter(5);
+          Sheet.cells[22,3]:=k;
+          Sheet.cells[22,5]:=Kcount;
+
+          Gauge1.Progress:=19;
+          Application.ProcessMessages;
+          OraclePackage1.CallProcedure('Herif_Hesablar',[bas,son,1,VTIP,P]);
+          k:=OraclePackage1.GetParameter(4);
+          Sheet.cells[22,4]:=k;
+
+
+          Gauge1.Progress:=20 ;
+          Application.ProcessMessages;
+          VTIP:=Hesabin_tipi(9);
+          OraclePackage1.CallProcedure('HQaliqlar',[bas,son,1,VTIP,P,Pcount]);
+          k:=OraclePackage1.GetParameter(4);
+          Kcount:=OraclePackage1.GetParameter(5);
+          Sheet.cells[23,3]:=k;
+          Sheet.cells[23,5]:=Kcount;
+
+          Gauge1.Progress:=21;
+          Application.ProcessMessages;
+          OraclePackage1.CallProcedure('Herif_Hesablar',[bas,son,1,VTIP,P]);
+          k:=OraclePackage1.GetParameter(4);
+          Sheet.cells[23,4]:=k;
+
+
+          Gauge1.Progress:=22;
+          Application.ProcessMessages;
+          VTIP:=Hesabin_tipi(10);
+          OraclePackage1.CallProcedure('HQaliqlar',[bas,son,1,VTIP,P,Pcount]);
+          k:=OraclePackage1.GetParameter(4);
+          Kcount:=OraclePackage1.GetParameter(5);
+          Sheet.cells[24,3]:=k;
+          Sheet.cells[24,5]:=Kcount;
+
+          Gauge1.Progress:=23;
+          Application.ProcessMessages;
+          OraclePackage1.CallProcedure('Herif_Hesablar',[bas,son,1,VTIP,P]);
+          k:=OraclePackage1.GetParameter(4);
+          Sheet.cells[24,4]:=k;
+
+
+          Gauge1.Progress:=24;
+          Application.ProcessMessages;
+          VTIP:=Hesabin_tipi(11);
+          OraclePackage1.CallProcedure('HQaliqlar',[bas,son,1,VTIP,P,Pcount]);
+          k:=OraclePackage1.GetParameter(4);
+          Kcount:=OraclePackage1.GetParameter(5);
+          Sheet.cells[25,3]:=k;
+          Sheet.cells[25,5]:=Kcount;
+
+          Gauge1.Progress:=25;
+          Application.ProcessMessages;
+          OraclePackage1.CallProcedure('Herif_Hesablar',[bas,son,1,VTIP,P]);
+          k:=OraclePackage1.GetParameter(4);
+          Sheet.cells[25,4]:=k;
+
+
+          Gauge1.Progress:=26;
+          Application.ProcessMessages;
+
+          k:= StrToInt(Sheet.cells[19,3])+StrToInt(Sheet.cells[20,3])+ StrToInt(Sheet.cells[21,3])+StrToInt(Sheet.cells[22,3])+
+              StrToInt(Sheet.cells[23,3])+StrToInt(Sheet.cells[24,3])+ StrToInt(Sheet.cells[25,3]);
+
+          Sheet.cells[18,3]:=k;
+
+          k:= StrToInt(Sheet.cells[19,4])+StrToInt(Sheet.cells[20,4])+ StrToInt(Sheet.cells[21,4])+StrToInt(Sheet.cells[22,4])+
+              StrToInt(Sheet.cells[23,4])+StrToInt(Sheet.cells[24,4])+ StrToInt(Sheet.cells[25,4]);
+
+          Sheet.cells[18,4]:=k;
+
+          k:= StrToInt(Sheet.cells[19,5])+StrToInt(Sheet.cells[20,5])+ StrToInt(Sheet.cells[21,5])+StrToInt(Sheet.cells[22,5])+
+              StrToInt(Sheet.cells[23,5])+StrToInt(Sheet.cells[24,5])+ StrToInt(Sheet.cells[25,5]);
+
+          Sheet.cells[18,5]:=k;
+
+          k:=StrToInt(Sheet.cells[12,3])-StrToInt(Sheet.cells[14,3])- StrToInt(Sheet.cells[18,3]);
+
+          Sheet.cells[27,3]:=k;
+          Kp:=k;
+
+          k:=StrToInt(Sheet.cells[12,4])-StrToInt(Sheet.cells[14,4])- StrToInt(Sheet.cells[18,4]);
+
+          Sheet.cells[27,4]:=k;
+
+          k:=StrToInt(Sheet.cells[12,5])-StrToInt(Sheet.cells[14,5])- StrToInt(Sheet.cells[18,5]);
+
+          Sheet.cells[27,5]:=k;
+      {********************************************* II-ci cedvel *****************************************************}
+
+          Gauge1.Progress:=27;
+          Application.ProcessMessages;
+          VCOD:= Valyutanin_Kodu('AZN');
+
+          OraclePackage1.CallProcedure('VAL_Qaliqlar',[bas,son,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(3);
+          Kcount:=OraclePackage1.GetParameter(4);
+          Sheet.cells[30,4]:=k;
+          Sheet.cells[30,6]:=Kcount;
+
+          Mp:=k;
+
+          Gauge1.Progress:=28;
+          Application.ProcessMessages;
+          OraclePackage1.CallProcedure('Val_Hesablar',[bas,son,VCOD,P]);
+          k:=OraclePackage1.GetParameter(3);
+          Sheet.cells[30,5]:=k;
+
+
+          Sheet.cells[30,7]:=1;
+
+          Gauge1.Progress:=29;
+          Application.ProcessMessages;
+          VCOD:= Valyutanin_Kodu('USD');
+          OraclePackage1.CallProcedure('VAL_Qaliqlar',[bas,son,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(3);
+          Kcount:=OraclePackage1.GetParameter(4);
+          Sheet.cells[31,3]:=k;
+          Sheet.cells[31,6]:=Kcount;
+
+          Gauge1.Progress:=30;
+          Application.ProcessMessages;
+          OraclePackage1.CallProcedure('Val_Hesablar',[bas,son,VCOD,P]);
+          k:=OraclePackage1.GetParameter(3);
+          Sheet.cells[31,5]:=k;
+
+
+          Gauge1.Progress:=31;
+          Application.ProcessMessages;
+          OraclePackage1.CallProcedure('Kurs',[son,VCOD,R1]);
+          RR:=OraclePackage1.GetParameter(2);
+          Sheet.cells[31,7]:=RR;
+
+          RR:=round(StrToInt(Sheet.cells[31,3])*StrToFloat(Sheet.cells[31,7]));
+          Sheet.cells[31,4]:=RR;
+
+
+          Gauge1.Progress:=32;
+          Application.ProcessMessages;
+          VCOD:= Valyutanin_Kodu('EUR');
+          OraclePackage1.CallProcedure('VAL_Qaliqlar',[bas,son,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(3);
+          Kcount:=OraclePackage1.GetParameter(4);
+          Sheet.cells[32,3]:=k;
+          Sheet.cells[32,6]:=Kcount;
+
+          Gauge1.Progress:=33;
+          Application.ProcessMessages;
+          OraclePackage1.CallProcedure('Val_Hesablar',[bas,son,VCOD,P]);
+          k:=OraclePackage1.GetParameter(3);
+          Sheet.cells[32,5]:=k;
+
+          Gauge1.Progress:=34;
+          Application.ProcessMessages;
+          OraclePackage1.CallProcedure('Kurs',[son,VCOD,R1]);
+          RR:=OraclePackage1.GetParameter(2);
+          Sheet.cells[32,7]:=RR;
+
+          RR:=round(StrToInt(Sheet.cells[32,3])*StrToFloat(Sheet.cells[32,7]));
+          Sheet.cells[32,4]:=RR;
+
+          Gauge1.Progress:=35;
+          Application.ProcessMessages;
+          VCOD:= Valyutanin_Kodu('RUR');
+          OraclePackage1.CallProcedure('VAL_Qaliqlar',[bas,son,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(3);
+          Kcount:=OraclePackage1.GetParameter(4);
+          Sheet.cells[35,3]:=k;
+          Sheet.cells[35,6]:=Kcount;
+
+          Gauge1.Progress:=36;
+          Application.ProcessMessages;
+          OraclePackage1.CallProcedure('Val_Hesablar',[bas,son,VCOD,P]);
+          k:=OraclePackage1.GetParameter(3);
+          Sheet.cells[35,5]:=k;
+
+          Gauge1.Progress:=37;
+          Application.ProcessMessages;
+          OraclePackage1.CallProcedure('Kurs',[son,VCOD,R1]);
+          RR:=OraclePackage1.GetParameter(2);
+          Sheet.cells[35,7]:=RR;
+          RR:=round(StrToFloat(Sheet.cells[35,3])*StrToFloat(Sheet.cells[35,7]));
+          Sheet.cells[35,4]:=RR;
+
+          Gauge1.Progress:=38;
+          Application.ProcessMessages;
+          VCOD:= Valyutanin_Kodu('GBP');
+          OraclePackage1.CallProcedure('VAL_Qaliqlar',[bas,son,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(3);
+          Kcount:=OraclePackage1.GetParameter(4);
+          Sheet.cells[36,3]:=k;
+          Sheet.cells[36,6]:=Kcount;
+
+          Gauge1.Progress:=39;
+          Application.ProcessMessages;
+          OraclePackage1.CallProcedure('Val_Hesablar',[bas,son,VCOD,P]);
+          k:=OraclePackage1.GetParameter(3);
+          Sheet.cells[36,5]:=k;
+
+          Gauge1.Progress:=40;
+          Application.ProcessMessages;
+          OraclePackage1.CallProcedure('Kurs',[son,VCOD,R1]);
+          RR:=OraclePackage1.GetParameter(2);
+          Sheet.cells[36,7]:=RR;
+
+          RR:=round(StrToInt(Sheet.cells[36,3])*StrToFloat(Sheet.cells[36,7]));
+          Sheet.cells[36,4]:=RR;
+
+          Gauge1.Progress:=41;
+          Application.ProcessMessages;
+          if F=1 then begin
+                        Sheet.cells[34,3]:='';
+                        Sheet.cells[34,4]:='';
+                        Sheet.cells[34,5]:='';
+                        Sheet.cells[34,6]:='';
+                        Sheet.cells[34,7]:='';
+                        k:=StrToInt(Sheet.cells[35,4])+StrToInt(Sheet.cells[36,4]);
+                        Sheet.cells[33,4]:=k;
+                        k:=StrToInt(Sheet.cells[35,5])+StrToInt(Sheet.cells[36,5]);
+                        Sheet.cells[33,5]:=k;
+                        k:=StrToInt(Sheet.cells[35,6])+StrToInt(Sheet.cells[36,6]);
+                        Sheet.cells[33,6]:=k;
+                        RR:=Sheet.cells[31,7];
+                        Sheet.cells[33,7]:=RR;
+                        k:=round(StrToInt(Sheet.cells[33,4])/strtofloat(Sheet.cells[33,7]));
+                        Sheet.cells[33,3]:=k;
+                      end;
+          if F=2 then begin
+                        Sheet.cells[33,3]:='';
+                        Sheet.cells[33,4]:='';
+                        Sheet.cells[33,5]:='';
+                        Sheet.cells[33,6]:='';
+                        Sheet.cells[33,7]:='';
+                        k:=round(StrToInt(Sheet.cells[35,4])+StrToint(Sheet.cells[36,4]));
+                        Sheet.cells[34,4]:=k;
+                        k:=StrToInt(Sheet.cells[35,4])+StrToInt(Sheet.cells[36,4]);
+                        Sheet.cells[34,5]:=k;
+                        k:=StrToInt(Sheet.cells[36,5])+StrToInt(Sheet.cells[36,5]);
+                        Sheet.cells[34,6]:=k;
+                        RR:=Sheet.cells[32,7];
+                        Sheet.cells[34,7]:=RR;
+                        k:=round(StrToInt(Sheet.cells[34,4])/strtofloat(Sheet.cells[34,7]));
+                        Sheet.cells[34,3]:=k;
+                      end;
+
+          Gauge1.Progress:=42;
+          Application.ProcessMessages;
+          IF F=1 then
+          begin
+            k:=StrToInt(Sheet.cells[30,4])+StrToInt(Sheet.cells[31,4])+StrToInt(Sheet.cells[32,4])+StrToInt(Sheet.cells[33,4]);
+
+            k:=k-Kp;
+            Mp:=Mp-k;
+            Sheet.cells[30,4]:=Mp;
+            Sheet.cells[47,4]:=Kp;
+
+            k:=StrToInt(Sheet.cells[30,5])+StrToInt(Sheet.cells[31,5])+StrToInt(Sheet.cells[32,5])+StrToInt(Sheet.cells[33,5]);
+            Sheet.cells[47,5]:=k;
+            k:=StrToInt(Sheet.cells[30,6])+StrToInt(Sheet.cells[31,6])+StrToInt(Sheet.cells[32,6])+StrToInt(Sheet.cells[33,6]);
+            Sheet.cells[47,6]:=k;
+          end;
+          IF F=2 then
+          begin
+            k:=StrToInt(Sheet.cells[30,4])+StrToInt(Sheet.cells[31,4])+StrToInt(Sheet.cells[32,4])+StrToInt(Sheet.cells[34,4]);
+
+            k:=k-Kp;
+            Mp:=Mp-k;
+
+            Sheet.cells[30,4]:=Mp;
+
+            Sheet.cells[47,4]:=Kp;
+
+            k:=StrToInt(Sheet.cells[30,5])+StrToInt(Sheet.cells[31,5])+StrToInt(Sheet.cells[32,5])+StrToInt(Sheet.cells[34,5]);
+            Sheet.cells[47,5]:=k;
+            k:=StrToInt(Sheet.cells[30,6])+StrToInt(Sheet.cells[31,6])+StrToInt(Sheet.cells[32,6])+StrToInt(Sheet.cells[34,6]);
+            Sheet.cells[47,6]:=k;
+          end;
+
+          Gauge1.Progress:=43;
+          Application.ProcessMessages;
+          k:=Sheet.cells[30,4];
+          Sheet.cells[49,3]:=k;
+          Sheet.cells[50,3]:='0.125%';
+          k:=round(StrToInt(Sheet.cells[49,3])*0.125/100);
+          Sheet.cells[51,3]:=k;
+          k:=Sheet.cells[31,3];
+          Sheet.cells[49,4]:=k;
+          Sheet.cells[50,4]:='0.125%';
+          k:=round(StrToInt(Sheet.cells[49,4])*0.125/100);
+          Sheet.cells[51,4]:=k;
+          k:=Sheet.cells[32,3];
+          Sheet.cells[49,5]:=k;
+          Sheet.cells[50,5]:='0.125%';
+          k:=round(StrToInt(Sheet.cells[49,5])*0.125/100);
+          Sheet.cells[51,5]:=k;
+          IF F=1 then  begin
+                         Sheet.cells[49,7]:='';
+                         Sheet.cells[50,7]:='';
+                         Sheet.cells[51,7]:='';
+                         k:=Sheet.cells[33,3];
+                         Sheet.cells[49,6]:=k;
+                         Sheet.cells[50,6]:='0.125%';
+                         k:=round(StrToInt(Sheet.cells[49,6])*0.125/100);
+                         Sheet.cells[51,6]:=k;
+                       end;
+          IF F=2 then  begin
+                         Sheet.cells[49,6]:='';
+                         Sheet.cells[50,6]:='';
+                         Sheet.cells[51,6]:='';
+                         k:=Sheet.cells[34,3];
+                         Sheet.cells[49,7]:=k;
+                         Sheet.cells[50,7]:='0.125%';
+                         k:=round(StrToInt(Sheet.cells[49,7])*0.125/100);
+                         Sheet.cells[51,7]:=k;
+                       end;
+
+          {********************************************* III-ci cedvel *****************************************************}
+
+          Gauge1.Progress:=44;
+          Application.ProcessMessages;
+
+          VCOD:= Valyutanin_Kodu('AZN');
+          OraclePackage1.CallProcedure('Amount_Qaliqlar',[son,0.00,1000,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(4);
+          Kcount:=OraclePackage1.GetParameter(5);
+          Sheet.cells[56,3]:=k;
+          Sheet.cells[56,4]:=Kcount;
+
+
+          VCOD:= Valyutanin_Kodu('USD');
+          OraclePackage1.CallProcedure('Amount_Qaliqlar',[son,0.00,1000,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(4);
+          Kcount:=OraclePackage1.GetParameter(5);
+          Sheet.cells[56,5]:=k;
+          Sheet.cells[56,6]:=Kcount;
+
+
+          VCOD:= Valyutanin_Kodu('EUR');
+          OraclePackage1.CallProcedure('Amount_Qaliqlar',[son,0.00,1000,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(4);
+          Kcount:=OraclePackage1.GetParameter(5);
+          Sheet.cells[56,7]:=k;
+          Sheet.cells[56,8]:=Kcount;
+
+
+          k:=StrToInt(Sheet.cells[56,3])+StrToInt(Sheet.cells[56,5])+StrToInt(Sheet.cells[56,7]);
+          Sheet.cells[56,9]:=k;
+          k:=StrToInt(Sheet.cells[56,4])+StrToInt(Sheet.cells[56,6])+StrToInt(Sheet.cells[56,8]);
+          Sheet.cells[56,10]:=k;
+
+
+          {******************************************************************************************************************}
+
+          Gauge1.Progress:=45;
+          Application.ProcessMessages;
+
+          VCOD:= Valyutanin_Kodu('AZN');
+          OraclePackage1.CallProcedure('Amount_Qaliqlar',[son,1000,6000,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(4);
+          Kcount:=OraclePackage1.GetParameter(5);
+          Sheet.cells[57,3]:=k;
+          Sheet.cells[57,4]:=Kcount;
+
+          VCOD:= Valyutanin_Kodu('USD');
+          OraclePackage1.CallProcedure('Amount_Qaliqlar',[son,1000,6000,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(4);
+          Kcount:=OraclePackage1.GetParameter(5);
+          Sheet.cells[57,5]:=k;
+          Sheet.cells[57,6]:=Kcount;
+
+
+          VCOD:= Valyutanin_Kodu('EUR');
+          OraclePackage1.CallProcedure('Amount_Qaliqlar',[son,1000,6000,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(4);
+          Kcount:=OraclePackage1.GetParameter(5);
+          Sheet.cells[57,7]:=k;
+          Sheet.cells[57,8]:=Kcount;
+
+
+          k:=StrToInt(Sheet.cells[57,3])+StrToInt(Sheet.cells[57,5])+StrToInt(Sheet.cells[57,7]);
+          Sheet.cells[57,9]:=k;
+          k:=StrToInt(Sheet.cells[57,4])+StrToInt(Sheet.cells[57,6])+StrToInt(Sheet.cells[57,8]);
+          Sheet.cells[57,10]:=k;
+
+
+          {******************************************************************************************************************}
+
+          Gauge1.Progress:=46;
+          Application.ProcessMessages;
+
+          VCOD:= Valyutanin_Kodu('AZN');
+          OraclePackage1.CallProcedure('Amount_Qaliqlar',[son,6000,30000,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(4);
+          Kcount:=OraclePackage1.GetParameter(5);
+          Sheet.cells[58,3]:=k;
+          Sheet.cells[58,4]:=Kcount;
+
+          VCOD:= Valyutanin_Kodu('USD');
+          OraclePackage1.CallProcedure('Amount_Qaliqlar',[son,6000,30000,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(4);
+          Kcount:=OraclePackage1.GetParameter(5);
+          Sheet.cells[58,5]:=k;
+          Sheet.cells[58,6]:=Kcount;
+
+          VCOD:= Valyutanin_Kodu('EUR');
+          OraclePackage1.CallProcedure('Amount_Qaliqlar',[son,6000,30000,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(4);
+          Kcount:=OraclePackage1.GetParameter(5);
+          Sheet.cells[58,7]:=k;
+          Sheet.cells[58,8]:=Kcount;
+
+          k:=StrToInt(Sheet.cells[58,3])+StrToInt(Sheet.cells[58,5])+StrToInt(Sheet.cells[58,7]);
+          Sheet.cells[58,9]:=k;
+          k:=StrToInt(Sheet.cells[58,4])+StrToInt(Sheet.cells[58,6])+StrToInt(Sheet.cells[58,8]);
+          Sheet.cells[58,10]:=k;
+
+          {******************************************************************************************************************}
+
+          Gauge1.Progress:=47;
+          Application.ProcessMessages;
+
+          VCOD:= Valyutanin_Kodu('AZN');
+          OraclePackage1.CallProcedure('Amount_Qaliqlar',[son,30000,40000,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(4);
+          Kcount:=OraclePackage1.GetParameter(5);
+          Sheet.cells[59,3]:=k;
+          Sheet.cells[59,4]:=Kcount;
+
+          VCOD:= Valyutanin_Kodu('USD');
+          OraclePackage1.CallProcedure('Amount_Qaliqlar',[son,30000,40000,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(4);
+          Kcount:=OraclePackage1.GetParameter(5);
+          Sheet.cells[59,5]:=k;
+          Sheet.cells[59,6]:=Kcount;
+
+          VCOD:= Valyutanin_Kodu('EUR');
+          OraclePackage1.CallProcedure('Amount_Qaliqlar',[son,30000,40000,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(4);
+          Kcount:=OraclePackage1.GetParameter(5);
+          Sheet.cells[59,7]:=k;
+          Sheet.cells[59,8]:=Kcount;
+
+          k:=StrToInt(Sheet.cells[59,3])+StrToInt(Sheet.cells[59,5])+StrToInt(Sheet.cells[59,7]);
+          Sheet.cells[59,9]:=k;
+          k:=StrToInt(Sheet.cells[59,4])+StrToInt(Sheet.cells[59,6])+StrToInt(Sheet.cells[59,8]);
+          Sheet.cells[59,10]:=k;
+
+
+         {******************************************************************************************************************}
+
+          Gauge1.Progress:=48;
+          Application.ProcessMessages;
+
+          VCOD:= Valyutanin_Kodu('AZN');
+          OraclePackage1.CallProcedure('Amount_Qaliqlar',[son,40000,50000,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(4);
+          Kcount:=OraclePackage1.GetParameter(5);
+          Sheet.cells[60,3]:=k;
+          Sheet.cells[60,4]:=Kcount;
+
+          VCOD:= Valyutanin_Kodu('USD');
+          OraclePackage1.CallProcedure('Amount_Qaliqlar',[son,40000,50000,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(4);
+          Kcount:=OraclePackage1.GetParameter(5);
+          Sheet.cells[60,5]:=k;
+          Sheet.cells[60,6]:=Kcount;
+
+          VCOD:= Valyutanin_Kodu('EUR');
+          OraclePackage1.CallProcedure('Amount_Qaliqlar',[son,40000,50000,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(4);
+          Kcount:=OraclePackage1.GetParameter(5);
+          Sheet.cells[60,7]:=k;
+          Sheet.cells[60,8]:=Kcount;
+
+          k:=StrToInt(Sheet.cells[60,3])+StrToInt(Sheet.cells[60,5])+StrToInt(Sheet.cells[60,7]);
+          Sheet.cells[60,9]:=k;
+          k:=StrToInt(Sheet.cells[60,4])+StrToInt(Sheet.cells[60,6])+StrToInt(Sheet.cells[60,8]);
+          Sheet.cells[60,10]:=k;
+
+          {******************************************************************************************************************}
+          Gauge1.Progress:=49;
+          Application.ProcessMessages;
+
+          VCOD:= Valyutanin_Kodu('AZN');
+          OraclePackage1.CallProcedure('Amount_Qaliqlar',[son,50000,60000,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(4);
+          Kcount:=OraclePackage1.GetParameter(5);
+          Sheet.cells[61,3]:=k;
+          Sheet.cells[61,4]:=Kcount;
+
+          VCOD:= Valyutanin_Kodu('USD');
+          OraclePackage1.CallProcedure('Amount_Qaliqlar',[son,50000,60000,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(4);
+          Kcount:=OraclePackage1.GetParameter(5);
+          Sheet.cells[61,5]:=k;
+          Sheet.cells[61,6]:=Kcount;
+
+          VCOD:= Valyutanin_Kodu('EUR');
+          OraclePackage1.CallProcedure('Amount_Qaliqlar',[son,50000,60000,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(4);
+          Kcount:=OraclePackage1.GetParameter(5);
+          Sheet.cells[61,7]:=k;
+          Sheet.cells[61,8]:=Kcount;
+
+          k:=StrToInt(Sheet.cells[61,3])+StrToInt(Sheet.cells[61,5])+StrToInt(Sheet.cells[61,7]);
+          Sheet.cells[61,9]:=k;
+          k:=StrToInt(Sheet.cells[61,4])+StrToInt(Sheet.cells[61,6])+StrToInt(Sheet.cells[61,8]);
+          Sheet.cells[61,10]:=k;
+
+
+          {********************************************************************************************************}
+          Gauge1.Progress:=50;
+          Application.ProcessMessages;
+
+          VCOD:= Valyutanin_Kodu('AZN');
+          OraclePackage1.CallProcedure('Amount_Qaliqlar',[son,60000,70000,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(4);
+          Kcount:=OraclePackage1.GetParameter(5);
+          Sheet.cells[62,3]:=k;
+          Sheet.cells[62,4]:=Kcount;
+
+          VCOD:= Valyutanin_Kodu('USD');
+          OraclePackage1.CallProcedure('Amount_Qaliqlar',[son,60000,70000,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(4);
+          Kcount:=OraclePackage1.GetParameter(5);
+          Sheet.cells[62,5]:=k;
+          Sheet.cells[62,6]:=Kcount;
+
+
+          VCOD:= Valyutanin_Kodu('EUR');
+          OraclePackage1.CallProcedure('Amount_Qaliqlar',[son,60000,70000,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(4);
+          Kcount:=OraclePackage1.GetParameter(5);
+          Sheet.cells[62,7]:=k;
+          Sheet.cells[62,8]:=Kcount;
+
+          k:=StrToInt(Sheet.cells[62,3])+StrToInt(Sheet.cells[62,5])+StrToInt(Sheet.cells[62,7]);
+          Sheet.cells[62,9]:=k;
+          k:=StrToInt(Sheet.cells[62,4])+StrToInt(Sheet.cells[62,6])+StrToInt(Sheet.cells[62,8]);
+          Sheet.cells[62,10]:=k;
+
+          {********************************************************************************************************}
+          Gauge1.Progress:=51;
+          Application.ProcessMessages;
+
+          VCOD:= Valyutanin_Kodu('AZN');
+          OraclePackage1.CallProcedure('Amount_Qaliqlar',[son,70000,100000,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(4);
+          Kcount:=OraclePackage1.GetParameter(5);
+          Sheet.cells[63,3]:=k;
+          Sheet.cells[63,4]:=Kcount;
+
+          VCOD:= Valyutanin_Kodu('USD');
+          OraclePackage1.CallProcedure('Amount_Qaliqlar',[son,70000,100000,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(4);
+          Kcount:=OraclePackage1.GetParameter(5);
+          Sheet.cells[63,5]:=k;
+          Sheet.cells[63,6]:=Kcount;
+
+          VCOD:= Valyutanin_Kodu('EUR');
+          OraclePackage1.CallProcedure('Amount_Qaliqlar',[son,70000,100000,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(4);
+          Kcount:=OraclePackage1.GetParameter(5);
+          Sheet.cells[63,7]:=k;
+          Sheet.cells[63,8]:=Kcount;
+
+          k:=StrToInt(Sheet.cells[63,3])+StrToInt(Sheet.cells[63,5])+StrToInt(Sheet.cells[63,7]);
+          Sheet.cells[63,9]:=k;
+          k:=StrToInt(Sheet.cells[63,4])+StrToInt(Sheet.cells[63,6])+StrToInt(Sheet.cells[63,8]);
+          Sheet.cells[63,10]:=k;
+
+           {********************************************************************************************************}
+          Gauge1.Progress:=52;
+          Application.ProcessMessages;
+
+          VCOD:= Valyutanin_Kodu('AZN');
+          OraclePackage1.CallProcedure('Amount_Qaliqlar',[son,100000,500000,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(4);
+          Kcount:=OraclePackage1.GetParameter(5);
+          Sheet.cells[64,3]:=k;
+          Sheet.cells[64,4]:=Kcount;
+
+          VCOD:= Valyutanin_Kodu('USD');
+          OraclePackage1.CallProcedure('Amount_Qaliqlar',[son,100000,500000,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(4);
+          Kcount:=OraclePackage1.GetParameter(5);
+          Sheet.cells[64,5]:=k;
+          Sheet.cells[64,6]:=Kcount;
+
+          VCOD:= Valyutanin_Kodu('EUR');
+          OraclePackage1.CallProcedure('Amount_Qaliqlar',[son,100000,500000,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(4);
+          Kcount:=OraclePackage1.GetParameter(5);
+          Sheet.cells[64,7]:=k;
+          Sheet.cells[64,8]:=Kcount;
+
+          k:=StrToInt(Sheet.cells[64,3])+StrToInt(Sheet.cells[64,5])+StrToInt(Sheet.cells[64,7]);
+          Sheet.cells[64,9]:=k;
+          k:=StrToInt(Sheet.cells[64,4])+StrToInt(Sheet.cells[64,6])+StrToInt(Sheet.cells[64,8]);
+          Sheet.cells[64,10]:=k;
+
+          {********************************************************************************************************}
+          Gauge1.Progress:=53;
+          Application.ProcessMessages;
+
+          VCOD:= Valyutanin_Kodu('AZN');
+          OraclePackage1.CallProcedure('Amount_Qaliqlar',[son,500000,100000000,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(4);
+          Kcount:=OraclePackage1.GetParameter(5);
+          Sheet.cells[65,3]:=k;
+          Sheet.cells[65,4]:=Kcount;
+
+          VCOD:= Valyutanin_Kodu('USD');
+          OraclePackage1.CallProcedure('Amount_Qaliqlar',[son,500000,100000000,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(4);
+          Kcount:=OraclePackage1.GetParameter(5);
+          Sheet.cells[65,5]:=k;
+          Sheet.cells[65,6]:=Kcount;
+
+          VCOD:= Valyutanin_Kodu('EUR');
+          OraclePackage1.CallProcedure('Amount_Qaliqlar',[son,500000,100000000,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(4);
+          Kcount:=OraclePackage1.GetParameter(5);
+          Sheet.cells[65,7]:=k;
+          Sheet.cells[65,8]:=Kcount;
+
+          k:=StrToInt(Sheet.cells[65,3])+StrToInt(Sheet.cells[65,5])+StrToInt(Sheet.cells[65,7]);
+          Sheet.cells[65,9]:=k;
+          k:=StrToInt(Sheet.cells[65,4])+StrToInt(Sheet.cells[65,6])+StrToInt(Sheet.cells[65,8]);
+          Sheet.cells[65,10]:=k;
+
+
+          k:=StrToInt(Sheet.cells[56,3])+StrToInt(Sheet.cells[57,3])+StrToInt(Sheet.cells[58,3])+StrToInt(Sheet.cells[59,3])+
+             StrToInt(Sheet.cells[60,3])+StrToInt(Sheet.cells[61,3])+StrToInt(Sheet.cells[62,3])+
+             StrToInt(Sheet.cells[63,3])+StrToInt(Sheet.cells[64,3])+StrToInt(Sheet.cells[65,3]);
+          Sheet.cells[66,3]:=k;
+
+          k:=StrToInt(Sheet.cells[56,4])+StrToInt(Sheet.cells[57,4])+StrToInt(Sheet.cells[58,4])+StrToInt(Sheet.cells[59,4])+
+             StrToInt(Sheet.cells[60,4])+StrToInt(Sheet.cells[61,4])+StrToInt(Sheet.cells[62,4])+
+             StrToInt(Sheet.cells[63,4])+StrToInt(Sheet.cells[64,4])+StrToInt(Sheet.cells[65,4]);
+          Sheet.cells[66,4]:=k;
+
+          k:=StrToInt(Sheet.cells[56,5])+StrToInt(Sheet.cells[57,5])+StrToInt(Sheet.cells[58,5])+StrToInt(Sheet.cells[59,5])+
+             StrToInt(Sheet.cells[60,5])+StrToInt(Sheet.cells[61,5])+StrToInt(Sheet.cells[62,5])+
+             StrToInt(Sheet.cells[63,5])+StrToInt(Sheet.cells[64,5])+StrToInt(Sheet.cells[65,5]);
+          Sheet.cells[66,5]:=k;
+
+          k:=StrToInt(Sheet.cells[56,6])+StrToInt(Sheet.cells[57,6])+StrToInt(Sheet.cells[58,6])+StrToInt(Sheet.cells[59,6])+
+             StrToInt(Sheet.cells[60,6])+StrToInt(Sheet.cells[61,6])+StrToInt(Sheet.cells[62,6])+
+             StrToInt(Sheet.cells[63,6])+StrToInt(Sheet.cells[64,6])+StrToInt(Sheet.cells[65,6]);
+          Sheet.cells[66,6]:=k;
+
+          k:=StrToInt(Sheet.cells[56,7])+StrToInt(Sheet.cells[57,7])+StrToInt(Sheet.cells[58,7])+StrToInt(Sheet.cells[59,7])+
+             StrToInt(Sheet.cells[60,7])+StrToInt(Sheet.cells[61,7])+StrToInt(Sheet.cells[62,7])+
+             StrToInt(Sheet.cells[63,7])+StrToInt(Sheet.cells[64,7])+StrToInt(Sheet.cells[65,7]);
+          Sheet.cells[66,7]:=k;
+
+          k:=StrToInt(Sheet.cells[56,8])+StrToInt(Sheet.cells[57,8])+StrToInt(Sheet.cells[58,8])+StrToInt(Sheet.cells[59,8])+
+             StrToInt(Sheet.cells[60,8])+StrToInt(Sheet.cells[61,8])+StrToInt(Sheet.cells[62,8])+
+             StrToInt(Sheet.cells[63,8])+StrToInt(Sheet.cells[64,8])+StrToInt(Sheet.cells[65,8]);
+          Sheet.cells[66,8]:=k;
+
+          k:=StrToInt(Sheet.cells[56,9])+StrToInt(Sheet.cells[57,9])+StrToInt(Sheet.cells[58,9])+StrToInt(Sheet.cells[59,9])+
+             StrToInt(Sheet.cells[60,9])+StrToInt(Sheet.cells[61,9])+StrToInt(Sheet.cells[62,9])+
+             StrToInt(Sheet.cells[63,9])+StrToInt(Sheet.cells[64,9])+StrToInt(Sheet.cells[65,9]);
+          Sheet.cells[66,9]:=k;
+          M1:=k;
+
+          k:=StrToInt(Sheet.cells[56,10])+StrToInt(Sheet.cells[57,10])+StrToInt(Sheet.cells[58,10])+StrToInt(Sheet.cells[59,10])+
+             StrToInt(Sheet.cells[60,10])+StrToInt(Sheet.cells[61,10])+StrToInt(Sheet.cells[62,10])+
+             StrToInt(Sheet.cells[63,10])+StrToInt(Sheet.cells[64,10])+StrToInt(Sheet.cells[65,10]);
+          Sheet.cells[66,10]:=k;
+        end;
+
+
+      {*********************************************V-ci Cədvəl***********************************************************}
+       if I=1 then
+        begin
+          V :=ExcelApplication2.Application;
+          ExcelApplication2.Connect;
+          V.Workbooks.Open(ExtractFilePath(ExtractFilePath(ParamStr(0)))+ 'Emanetler(II hisse).xls');
+          for OpenedXlsCnt :=1 to 100 do
+          try
+           Sheet := V.Workbooks[OpenedXlsCnt].Worksheets['hesabat'];
+           Break;
+          except
+          end;
+          Sheets := V.Sheets;
+          Sheets.Item['hesabat'].Activate;
+          IL:=FormatDateTime('yyyy',trunc(DTP1.DateTime));
+          Sheet.cells[1,2]:=IL;
+          Bas:=FormatDateTime('dd-MMM-yyyy',trunc(DTP1.DateTime));
+          Son:=FormatDateTime('dd-MMM-yyyy',trunc(DTP2.DateTime));
+          Sheet.cells[2,2]:=Bas+'_______'+son;
+
+          Sheet.cells[7,1].Font.Name :='Tahoma';
+          Sheet.Cells[7,1].Font.Bold :=true;
+          Sheet.Cells[7,1].Font.size :=12;
+
+          {*********************************************0--1000***********************************************************************}
+          Gauge1.Progress:=54;
+          Application.ProcessMessages;
+          k:=0;
+          VCOD:= Valyutanin_Kodu('AZN');
+          OraclePackage1.CallProcedure('AmountOstat',[son,0.00,1000,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(4);
+          Kcount:=OraclePackage1.GetParameter(5);
+          Sheet.cells[14,3]:=k;
+          Sheet.cells[14,4]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstat',[son,0.00,1000,0,9,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(6);
+          Kcount:=OraclePackage1.GetParameter(7);
+          Sheet.cells[14,5]:=k;
+          Sheet.cells[14,6]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstat',[son,0.00,1000,9,12,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(6);
+          Kcount:=OraclePackage1.GetParameter(7);
+          Sheet.cells[14,7]:=k;
+          Sheet.cells[14,8]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstat',[son,0.00,1000,12,15,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(6);
+          Kcount:=OraclePackage1.GetParameter(7);
+          Sheet.cells[14,9]:=k;
+          Sheet.cells[14,10]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstat',[son,0.00,1000,15,17,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(6);
+          Kcount:=OraclePackage1.GetParameter(7);
+          Sheet.cells[14,11]:=k;
+          Sheet.cells[14,12]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstat',[son,0.00,1000,17,19,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(6);
+          Kcount:=OraclePackage1.GetParameter(7);
+          Sheet.cells[14,13]:=k;
+          Sheet.cells[14,14]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstat',[son,0.00,1000,19,21,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(6);
+          Kcount:=OraclePackage1.GetParameter(7);
+          Sheet.cells[14,15]:=k;
+          Sheet.cells[14,16]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstat',[son,0.00,1000,21,30,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(6);
+          Kcount:=OraclePackage1.GetParameter(7);
+          Sheet.cells[14,17]:=k;
+          Sheet.cells[14,18]:=Kcount;
+
+
+          Sheet.cells[14,19]:=StrToInt(Sheet.cells[14,3])+StrToInt(Sheet.cells[14,5])+StrToInt(Sheet.cells[14,7])+StrToInt(Sheet.cells[14,9])+
+                              StrToInt(Sheet.cells[14,11])+StrToInt(Sheet.cells[14,13])+StrToInt(Sheet.cells[14,15])+StrToInt(Sheet.cells[14,17]);
+
+          Sheet.cells[14,20]:=StrToInt(Sheet.cells[14,4])+StrToInt(Sheet.cells[14,6])+StrToInt(Sheet.cells[14,8])+StrToInt(Sheet.cells[14,10])+
+                              StrToInt(Sheet.cells[14,12])+StrToInt(Sheet.cells[14,14])+StrToInt(Sheet.cells[14,16])+StrToInt(Sheet.cells[14,18]);
+
+
+
+          {**************************************************1000--6000***************************************************************}
+          Gauge1.Progress:=55;
+          VCOD:= Valyutanin_Kodu('AZN');
+          OraclePackage1.CallProcedure('AmountOstat',[son,1000,6000,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(4);
+          Kcount:=OraclePackage1.GetParameter(5);
+          Sheet.cells[15,3]:=k;
+          Sheet.cells[15,4]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstat',[son,1000,6000,0,9,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(6);
+          Kcount:=OraclePackage1.GetParameter(7);
+          Sheet.cells[15,5]:=k;
+          Sheet.cells[15,6]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstat',[son,1000,6000,9,12,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(6);
+          Kcount:=OraclePackage1.GetParameter(7);
+          Sheet.cells[15,7]:=k;
+          Sheet.cells[15,8]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstat',[son,1000,6000,12,15,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(6);
+          Kcount:=OraclePackage1.GetParameter(7);
+          Sheet.cells[15,9]:=k;
+          Sheet.cells[15,10]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstat',[son,1000,6000,15,17,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(6);
+          Kcount:=OraclePackage1.GetParameter(7);
+          Sheet.cells[15,11]:=k;
+          Sheet.cells[15,12]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstat',[son,1000,6000,17,19,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(6);
+          Kcount:=OraclePackage1.GetParameter(7);
+          Sheet.cells[15,13]:=k;
+          Sheet.cells[15,14]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstat',[son,1000,6000,19,21,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(6);
+          Kcount:=OraclePackage1.GetParameter(7);
+          Sheet.cells[15,15]:=k;
+          Sheet.cells[15,16]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstat',[son,1000,6000,21,30,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(6);
+          Kcount:=OraclePackage1.GetParameter(7);
+          Sheet.cells[15,17]:=k;
+          Sheet.cells[15,18]:=Kcount;
+
+
+          Sheet.cells[15,19]:=StrToInt(Sheet.cells[15,3])+StrToInt(Sheet.cells[15,5])+StrToInt(Sheet.cells[15,7])+StrToInt(Sheet.cells[15,9])+
+                              StrToInt(Sheet.cells[15,11])+StrToInt(Sheet.cells[15,13])+StrToInt(Sheet.cells[15,15])+StrToInt(Sheet.cells[15,17]);
+
+          Sheet.cells[15,20]:=StrToInt(Sheet.cells[15,4])+StrToInt(Sheet.cells[15,6])+StrToInt(Sheet.cells[15,8])+StrToInt(Sheet.cells[15,10])+
+                              StrToInt(Sheet.cells[15,12])+StrToInt(Sheet.cells[15,14])+StrToInt(Sheet.cells[15,16])+StrToInt(Sheet.cells[15,18]);
+
+
+        {********************************************6000--30000*****************************************************************************}
+          Gauge1.Progress:=56;
+          VCOD:= Valyutanin_Kodu('AZN');
+          OraclePackage1.CallProcedure('AmountOstat',[son,6000,30000,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(4);
+          Kcount:=OraclePackage1.GetParameter(5);
+          Sheet.cells[16,3]:=k;
+          Sheet.cells[16,4]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstat',[son,6000,30000,0,9,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(6);
+          Kcount:=OraclePackage1.GetParameter(7);
+          Sheet.cells[16,5]:=k;
+          Sheet.cells[16,6]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstat',[son,6000,30000,9,12,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(6);
+          Kcount:=OraclePackage1.GetParameter(7);
+          Sheet.cells[16,7]:=k;
+          Sheet.cells[16,8]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstat',[son,6000,30000,12,15,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(6);
+          Kcount:=OraclePackage1.GetParameter(7);
+          Sheet.cells[16,9]:=k;
+          Sheet.cells[16,10]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstat',[son,6000,30000,15,17,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(6);
+          Kcount:=OraclePackage1.GetParameter(7);
+          Sheet.cells[16,11]:=k;
+          Sheet.cells[16,12]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstat',[son,6000,30000,17,19,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(6);
+          Kcount:=OraclePackage1.GetParameter(7);
+          Sheet.cells[16,13]:=k;
+          Sheet.cells[16,14]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstat',[son,6000,30000,19,21,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(6);
+          Kcount:=OraclePackage1.GetParameter(7);
+          Sheet.cells[16,15]:=k;
+          Sheet.cells[16,16]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstat',[son,6000,30000,21,30,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(6);
+          Kcount:=OraclePackage1.GetParameter(7);
+          Sheet.cells[16,17]:=k;
+          Sheet.cells[16,18]:=Kcount;
+
+
+
+
+          Sheet.cells[16,19]:=StrToInt(Sheet.cells[16,3])+StrToInt(Sheet.cells[16,5])+StrToInt(Sheet.cells[16,7])+StrToInt(Sheet.cells[16,9])+
+                              StrToInt(Sheet.cells[16,11])+StrToInt(Sheet.cells[16,13])+StrToInt(Sheet.cells[16,15])+StrToInt(Sheet.cells[16,17]);
+
+
+          Sheet.cells[16,20]:=StrToInt(Sheet.cells[16,4])+StrToInt(Sheet.cells[16,6])+StrToInt(Sheet.cells[16,8])+StrToInt(Sheet.cells[16,10])+
+                              StrToInt(Sheet.cells[16,12])+StrToInt(Sheet.cells[16,14])+StrToInt(Sheet.cells[16,16])+StrToInt(Sheet.cells[16,18]);
+
+
+
+
+         {********************************************30000--40000********************************************************************************************************************}
+          Gauge1.Progress:=57;
+
+          VCOD:= Valyutanin_Kodu('AZN');
+          OraclePackage1.CallProcedure('AmountOstat',[son,30000,40000,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(4);
+          Kcount:=OraclePackage1.GetParameter(5);
+          Sheet.cells[17,3]:=k;
+          Sheet.cells[17,4]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstat',[son,30000,40000,0,9,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(6);
+          Kcount:=OraclePackage1.GetParameter(7);
+          Sheet.cells[17,5]:=k;
+          Sheet.cells[17,6]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstat',[son,30000,40000,9,12,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(6);
+          Kcount:=OraclePackage1.GetParameter(7);
+          Sheet.cells[17,7]:=k;
+          Sheet.cells[17,8]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstat',[son,30000,40000,12,15,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(6);
+          Kcount:=OraclePackage1.GetParameter(7);
+          Sheet.cells[17,9]:=k;
+          Sheet.cells[17,10]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstat',[son,30000,40000,15,17,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(6);
+          Kcount:=OraclePackage1.GetParameter(7);
+          Sheet.cells[17,11]:=k;
+          Sheet.cells[17,12]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstat',[son,30000,40000,17,19,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(6);
+          Kcount:=OraclePackage1.GetParameter(7);
+          Sheet.cells[17,13]:=k;
+          Sheet.cells[17,14]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstat',[son,30000,40000,19,21,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(6);
+          Kcount:=OraclePackage1.GetParameter(7);
+          Sheet.cells[17,15]:=k;
+          Sheet.cells[17,16]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstat',[son,30000,40000,21,30,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(6);
+          Kcount:=OraclePackage1.GetParameter(7);
+          Sheet.cells[17,17]:=k;
+          Sheet.cells[17,18]:=Kcount;
+
+
+          Sheet.cells[17,19]:=StrToInt(Sheet.cells[17,3])+StrToInt(Sheet.cells[17,5])+StrToInt(Sheet.cells[17,7])+StrToInt(Sheet.cells[17,9])+
+                              StrToInt(Sheet.cells[17,11])+StrToInt(Sheet.cells[17,13])+StrToInt(Sheet.cells[17,15])+StrToInt(Sheet.cells[17,17]);
+
+          Sheet.cells[17,20]:=StrToInt(Sheet.cells[17,4])+StrToInt(Sheet.cells[17,6])+StrToInt(Sheet.cells[17,8])+StrToInt(Sheet.cells[17,10])+
+                              StrToInt(Sheet.cells[17,12])+StrToInt(Sheet.cells[17,14])+StrToInt(Sheet.cells[17,16])+StrToInt(Sheet.cells[17,18]);
+
+
+
+
+
+          {********************************************40000--50000********************************************************************************************************************}
+          Gauge1.Progress:=58;
+
+
+          VCOD:= Valyutanin_Kodu('AZN');
+          OraclePackage1.CallProcedure('AmountOstat',[son,40000,50000,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(4);
+          Kcount:=OraclePackage1.GetParameter(5);
+          Sheet.cells[18,3]:=k;
+          Sheet.cells[18,4]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstat',[son,40000,50000,0,9,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(6);
+          Kcount:=OraclePackage1.GetParameter(7);
+          Sheet.cells[18,5]:=k;
+          Sheet.cells[18,6]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstat',[son,40000,50000,9,12,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(6);
+          Kcount:=OraclePackage1.GetParameter(7);
+          Sheet.cells[18,7]:=k;
+          Sheet.cells[18,8]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstat',[son,40000,50000,12,15,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(6);
+          Kcount:=OraclePackage1.GetParameter(7);
+          Sheet.cells[18,9]:=k;
+          Sheet.cells[18,10]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstat',[son,40000,50000,15,17,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(6);
+          Kcount:=OraclePackage1.GetParameter(7);
+          Sheet.cells[18,11]:=k;
+          Sheet.cells[18,12]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstat',[son,40000,50000,17,19,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(6);
+          Kcount:=OraclePackage1.GetParameter(7);
+          Sheet.cells[18,13]:=k;
+          Sheet.cells[18,14]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstat',[son,40000,50000,19,21,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(6);
+          Kcount:=OraclePackage1.GetParameter(7);
+          Sheet.cells[18,15]:=k;
+          Sheet.cells[18,16]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstat',[son,40000,50000,21,30,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(6);
+          Kcount:=OraclePackage1.GetParameter(7);
+          Sheet.cells[18,17]:=k;
+          Sheet.cells[18,18]:=Kcount;
+
+
+
+          Sheet.cells[18,19]:=StrToInt(Sheet.cells[18,3])+StrToInt(Sheet.cells[18,5])+StrToInt(Sheet.cells[18,7])+StrToInt(Sheet.cells[18,9])+
+                              StrToInt(Sheet.cells[18,11])+StrToInt(Sheet.cells[18,13])+StrToInt(Sheet.cells[18,15])+StrToInt(Sheet.cells[18,17]);
+
+
+          Sheet.cells[18,20]:=StrToInt(Sheet.cells[18,4])+StrToInt(Sheet.cells[18,6])+StrToInt(Sheet.cells[18,8])+StrToInt(Sheet.cells[18,10])+
+                              StrToInt(Sheet.cells[18,12])+StrToInt(Sheet.cells[18,14])+StrToInt(Sheet.cells[18,16])+StrToInt(Sheet.cells[18,18]);
+
+
+
+         {********************************************50000--60000********************************************************************************************************************}
+          Gauge1.Progress:=59;
+
+          VCOD:= Valyutanin_Kodu('AZN');
+          OraclePackage1.CallProcedure('AmountOstat',[son,50000,60000,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(4);
+          Kcount:=OraclePackage1.GetParameter(5);
+          Sheet.cells[19,3]:=k;
+          Sheet.cells[19,4]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstat',[son,50000,60000,0,9,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(6);
+          Kcount:=OraclePackage1.GetParameter(7);
+          Sheet.cells[19,5]:=k;
+          Sheet.cells[19,6]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstat',[son,50000,60000,9,12,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(6);
+          Kcount:=OraclePackage1.GetParameter(7);
+          Sheet.cells[19,7]:=k;
+          Sheet.cells[19,8]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstat',[son,50000,60000,12,15,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(6);
+          Kcount:=OraclePackage1.GetParameter(7);
+          Sheet.cells[19,9]:=k;
+          Sheet.cells[19,10]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstat',[son,50000,60000,15,17,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(6);
+          Kcount:=OraclePackage1.GetParameter(7);
+          Sheet.cells[19,11]:=k;
+          Sheet.cells[19,12]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstat',[son,50000,60000,17,19,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(6);
+          Kcount:=OraclePackage1.GetParameter(7);
+          Sheet.cells[19,13]:=k;
+          Sheet.cells[19,14]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstat',[son,50000,60000,19,21,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(6);
+          Kcount:=OraclePackage1.GetParameter(7);
+          Sheet.cells[19,15]:=k;
+          Sheet.cells[19,16]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstat',[son,50000,60000,21,30,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(6);
+          Kcount:=OraclePackage1.GetParameter(7);
+          Sheet.cells[19,17]:=k;
+          Sheet.cells[19,18]:=Kcount;
+
+
+
+          Sheet.cells[19,19]:=StrToInt(Sheet.cells[19,3])+StrToInt(Sheet.cells[19,5])+StrToInt(Sheet.cells[19,7])+StrToInt(Sheet.cells[19,9])+
+                              StrToInt(Sheet.cells[19,11])+StrToInt(Sheet.cells[19,13])+StrToInt(Sheet.cells[19,15])+StrToInt(Sheet.cells[19,17]);
+
+
+          Sheet.cells[19,20]:=StrToInt(Sheet.cells[19,4])+StrToInt(Sheet.cells[19,6])+StrToInt(Sheet.cells[19,8])+StrToInt(Sheet.cells[19,10])+
+                              StrToInt(Sheet.cells[19,12])+StrToInt(Sheet.cells[19,14])+StrToInt(Sheet.cells[19,16])+StrToInt(Sheet.cells[19,18]);
+
+
+
+
+         {********************************************60000--70000********************************************************************************************************************}
+          Gauge1.Progress:=60;
+
+
+          VCOD:= Valyutanin_Kodu('AZN');
+          OraclePackage1.CallProcedure('AmountOstat',[son,60000,70000,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(4);
+          Kcount:=OraclePackage1.GetParameter(5);
+          Sheet.cells[20,3]:=k;
+          Sheet.cells[20,4]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstat',[son,60000,70000,0,9,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(6);
+          Kcount:=OraclePackage1.GetParameter(7);
+          Sheet.cells[20,5]:=k;
+          Sheet.cells[20,6]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstat',[son,60000,70000,9,12,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(6);
+          Kcount:=OraclePackage1.GetParameter(7);
+          Sheet.cells[20,7]:=k;
+          Sheet.cells[20,8]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstat',[son,60000,70000,12,15,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(6);
+          Kcount:=OraclePackage1.GetParameter(7);
+          Sheet.cells[20,9]:=k;
+          Sheet.cells[20,10]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstat',[son,60000,70000,15,17,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(6);
+          Kcount:=OraclePackage1.GetParameter(7);
+          Sheet.cells[20,11]:=k;
+          Sheet.cells[20,12]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstat',[son,60000,70000,17,19,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(6);
+          Kcount:=OraclePackage1.GetParameter(7);
+          Sheet.cells[20,13]:=k;
+          Sheet.cells[20,14]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstat',[son,60000,70000,19,21,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(6);
+          Kcount:=OraclePackage1.GetParameter(7);
+          Sheet.cells[20,15]:=k;
+          Sheet.cells[20,16]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstat',[son,60000,70000,21,30,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(6);
+          Kcount:=OraclePackage1.GetParameter(7);
+          Sheet.cells[20,17]:=k;
+          Sheet.cells[20,18]:=Kcount;
+
+
+
+          Sheet.cells[20,19]:=StrToInt(Sheet.cells[20,3])+StrToInt(Sheet.cells[20,5])+StrToInt(Sheet.cells[20,7])+StrToInt(Sheet.cells[20,9])+
+                              StrToInt(Sheet.cells[20,11])+StrToInt(Sheet.cells[20,13])+StrToInt(Sheet.cells[20,15])+StrToInt(Sheet.cells[20,17]);
+
+
+          Sheet.cells[20,20]:=StrToInt(Sheet.cells[20,4])+StrToInt(Sheet.cells[20,6])+StrToInt(Sheet.cells[20,8])+StrToInt(Sheet.cells[20,10])+
+                              StrToInt(Sheet.cells[20,12])+StrToInt(Sheet.cells[20,14])+StrToInt(Sheet.cells[20,16])+StrToInt(Sheet.cells[20,18]);
+
+
+          {********************************************70000--100000********************************************************************************************************************}
+          Gauge1.Progress:=61;
+
+          VCOD:= Valyutanin_Kodu('AZN');
+          OraclePackage1.CallProcedure('AmountOstat',[son,70000,100000,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(4);
+          Kcount:=OraclePackage1.GetParameter(5);
+          Sheet.cells[21,3]:=k;
+          Sheet.cells[21,4]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstat',[son,70000,100000,0,9,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(6);
+          Kcount:=OraclePackage1.GetParameter(7);
+          Sheet.cells[21,5]:=k;
+          Sheet.cells[21,6]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstat',[son,70000,100000,9,12,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(6);
+          Kcount:=OraclePackage1.GetParameter(7);
+          Sheet.cells[21,7]:=k;
+          Sheet.cells[21,8]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstat',[son,70000,100000,12,15,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(6);
+          Kcount:=OraclePackage1.GetParameter(7);
+          Sheet.cells[21,9]:=k;
+          Sheet.cells[21,10]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstat',[son,70000,100000,15,17,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(6);
+          Kcount:=OraclePackage1.GetParameter(7);
+          Sheet.cells[21,11]:=k;
+          Sheet.cells[21,12]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstat',[son,70000,100000,17,19,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(6);
+          Kcount:=OraclePackage1.GetParameter(7);
+          Sheet.cells[21,13]:=k;
+          Sheet.cells[21,14]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstat',[son,70000,100000,19,21,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(6);
+          Kcount:=OraclePackage1.GetParameter(7);
+          Sheet.cells[21,15]:=k;
+          Sheet.cells[21,16]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstat',[son,70000,100000,21,30,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(6);
+          Kcount:=OraclePackage1.GetParameter(7);
+          Sheet.cells[21,17]:=k;
+          Sheet.cells[21,18]:=Kcount;
+
+
+
+          Sheet.cells[21,19]:=StrToInt(Sheet.cells[21,3])+StrToInt(Sheet.cells[21,5])+StrToInt(Sheet.cells[21,7])+StrToInt(Sheet.cells[21,9])+
+                              StrToInt(Sheet.cells[21,11])+StrToInt(Sheet.cells[21,13])+StrToInt(Sheet.cells[21,15])+StrToInt(Sheet.cells[21,17]);
+
+
+          Sheet.cells[21,20]:=StrToInt(Sheet.cells[21,4])+StrToInt(Sheet.cells[21,6])+StrToInt(Sheet.cells[21,8])+StrToInt(Sheet.cells[21,10])+
+                              StrToInt(Sheet.cells[21,12])+StrToInt(Sheet.cells[21,14])+StrToInt(Sheet.cells[21,16])+StrToInt(Sheet.cells[21,18]);
+
+
+          {********************************************100000--500000********************************************************************************************************************}
+          Gauge1.Progress:=62;
+
+          VCOD:= Valyutanin_Kodu('AZN');
+          OraclePackage1.CallProcedure('AmountOstat',[son,100000,500000,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(4);
+          Kcount:=OraclePackage1.GetParameter(5);
+          Sheet.cells[22,3]:=k;
+          Sheet.cells[22,4]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstat',[son,100000,500000,0,9,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(6);
+          Kcount:=OraclePackage1.GetParameter(7);
+          Sheet.cells[22,5]:=k;
+          Sheet.cells[22,6]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstat',[son,100000,500000,9,12,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(6);
+          Kcount:=OraclePackage1.GetParameter(7);
+          Sheet.cells[22,7]:=k;
+          Sheet.cells[22,8]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstat',[son,100000,500000,12,15,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(6);
+          Kcount:=OraclePackage1.GetParameter(7);
+          Sheet.cells[22,9]:=k;
+          Sheet.cells[22,10]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstat',[son,100000,500000,15,17,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(6);
+          Kcount:=OraclePackage1.GetParameter(7);
+          Sheet.cells[22,11]:=k;
+          Sheet.cells[22,12]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstat',[son,100000,500000,17,19,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(6);
+          Kcount:=OraclePackage1.GetParameter(7);
+          Sheet.cells[22,13]:=k;
+          Sheet.cells[22,14]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstat',[son,100000,500000,19,21,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(6);
+          Kcount:=OraclePackage1.GetParameter(7);
+          Sheet.cells[22,15]:=k;
+          Sheet.cells[22,16]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstat',[son,100000,500000,21,30,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(6);
+          Kcount:=OraclePackage1.GetParameter(7);
+          Sheet.cells[22,17]:=K;
+          Sheet.cells[22,18]:=Kcount;
+
+
+          Sheet.cells[22,19]:=StrToInt(Sheet.cells[22,3])+StrToInt(Sheet.cells[22,5])+StrToInt(Sheet.cells[22,7])+StrToInt(Sheet.cells[22,9])+
+                              StrToInt(Sheet.cells[22,11])+StrToInt(Sheet.cells[22,13])+StrToInt(Sheet.cells[22,15])+StrToInt(Sheet.cells[22,17]);
+
+
+          Sheet.cells[22,20]:=StrToInt(Sheet.cells[22,4])+StrToInt(Sheet.cells[22,6])+StrToInt(Sheet.cells[22,8])+StrToInt(Sheet.cells[22,10])+
+                              StrToInt(Sheet.cells[22,12])+StrToInt(Sheet.cells[22,14])+StrToInt(Sheet.cells[22,16])+StrToInt(Sheet.cells[22,18]);
+
+
+        {********************************************500000--1000000000********************************************************************************************************************}
+          Gauge1.Progress:=63;
+
+          VCOD:= Valyutanin_Kodu('AZN');
+          OraclePackage1.CallProcedure('AmountOstat',[son,500000,1000000000,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(4);
+          Kcount:=OraclePackage1.GetParameter(5);
+          Sheet.cells[23,3]:=k;
+          Sheet.cells[23,4]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstat',[son,500000,1000000000,0,9,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(6);
+          Kcount:=OraclePackage1.GetParameter(7);
+          Sheet.cells[23,5]:=k;
+          Sheet.cells[23,6]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstat',[son,500000,1000000000,9,12,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(6);
+          Kcount:=OraclePackage1.GetParameter(7);
+          Sheet.cells[23,7]:=k;
+          Sheet.cells[23,8]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstat',[son,500000,1000000000,12,15,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(6);
+          Kcount:=OraclePackage1.GetParameter(7);
+          Sheet.cells[23,9]:=k;
+          Sheet.cells[23,10]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstat',[son,500000,1000000000,15,17,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(6);
+          Kcount:=OraclePackage1.GetParameter(7);
+          Sheet.cells[23,11]:=k;
+          Sheet.cells[23,12]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstat',[son,500000,1000000000,17,19,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(6);
+          Kcount:=OraclePackage1.GetParameter(7);
+          Sheet.cells[23,13]:=k;
+          Sheet.cells[23,14]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstat',[son,500000,1000000000,19,21,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(6);
+          Kcount:=OraclePackage1.GetParameter(7);
+          Sheet.cells[23,15]:=k;
+          Sheet.cells[23,16]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstat',[son,500000,1000000000,21,30,VCOD,P,Pcount]);
+          k:=OraclePackage1.GetParameter(6);
+          Kcount:=OraclePackage1.GetParameter(7);
+          Sheet.cells[23,17]:=k;
+          Sheet.cells[23,18]:=Kcount;
+
+
+
+
+          Sheet.cells[23,19]:=StrToInt(Sheet.cells[23,3])+StrToInt(Sheet.cells[23,5])+StrToInt(Sheet.cells[23,7])+StrToInt(Sheet.cells[23,9])+
+                              StrToInt(Sheet.cells[23,11])+StrToInt(Sheet.cells[23,13])+StrToInt(Sheet.cells[23,15])+StrToInt(Sheet.cells[23,17]);
+
+
+          Sheet.cells[23,20]:=StrToInt(Sheet.cells[23,4])+StrToInt(Sheet.cells[23,6])+StrToInt(Sheet.cells[23,8])+StrToInt(Sheet.cells[23,10])+
+                              StrToInt(Sheet.cells[23,12])+StrToInt(Sheet.cells[23,14])+StrToInt(Sheet.cells[23,16])+StrToInt(Sheet.cells[23,18]);
+
+
+
+
+          k:=StrToInt(Sheet.cells[14,3])+StrToInt(Sheet.cells[15,3])+StrToInt(Sheet.cells[16,3])+StrToInt(Sheet.cells[17,3])+StrToInt(Sheet.cells[18,3])+
+             StrToInt(Sheet.cells[19,3])+StrToInt(Sheet.cells[20,3])+StrToInt(Sheet.cells[21,3])+StrToInt(Sheet.cells[22,3])+StrToInt(Sheet.cells[23,3]);
+
+          Sheet.cells[24,3]:=k;
+
+          k:=StrToInt(Sheet.cells[14,4])+StrToInt(Sheet.cells[15,4])+StrToInt(Sheet.cells[16,4])+StrToInt(Sheet.cells[17,4])+StrToInt(Sheet.cells[18,4])+
+             StrToInt(Sheet.cells[19,4])+StrToInt(Sheet.cells[20,4])+StrToInt(Sheet.cells[21,4])+StrToInt(Sheet.cells[22,4])+StrToInt(Sheet.cells[23,4]);
+
+          Sheet.cells[24,4]:=k;
+
+
+          k:=StrToInt(Sheet.cells[14,5])+StrToInt(Sheet.cells[15,5])+StrToInt(Sheet.cells[16,5])+StrToInt(Sheet.cells[17,5])+StrToInt(Sheet.cells[18,5])+
+             StrToInt(Sheet.cells[19,5])+StrToInt(Sheet.cells[20,5])+StrToInt(Sheet.cells[21,5])+StrToInt(Sheet.cells[22,5])+StrToInt(Sheet.cells[23,5]);
+
+          Sheet.cells[24,5]:=k;
+
+          k:=StrToInt(Sheet.cells[14,6])+StrToInt(Sheet.cells[15,6])+StrToInt(Sheet.cells[16,6])+StrToInt(Sheet.cells[17,6])+StrToInt(Sheet.cells[18,6])+
+             StrToInt(Sheet.cells[19,6])+StrToInt(Sheet.cells[20,6])+StrToInt(Sheet.cells[21,6])+StrToInt(Sheet.cells[22,6])+StrToInt(Sheet.cells[23,6]);
+
+          Sheet.cells[24,6]:=k;
+
+
+          k:=StrToInt(Sheet.cells[14,7])+StrToInt(Sheet.cells[15,7])+StrToInt(Sheet.cells[16,7])+StrToInt(Sheet.cells[17,7])+StrToInt(Sheet.cells[18,7])+
+             StrToInt(Sheet.cells[19,7])+StrToInt(Sheet.cells[20,7])+StrToInt(Sheet.cells[21,7])+StrToInt(Sheet.cells[22,7])+StrToInt(Sheet.cells[23,7]);
+
+          Sheet.cells[24,7]:=k;
+
+          k:=StrToInt(Sheet.cells[14,8])+StrToInt(Sheet.cells[15,8])+StrToInt(Sheet.cells[16,8])+StrToInt(Sheet.cells[17,8])+StrToInt(Sheet.cells[18,8])+
+             StrToInt(Sheet.cells[19,8])+StrToInt(Sheet.cells[20,8])+StrToInt(Sheet.cells[21,8])+StrToInt(Sheet.cells[22,8])+StrToInt(Sheet.cells[23,8]);
+
+          Sheet.cells[24,8]:=k;
+
+
+          k:=StrToInt(Sheet.cells[14,9])+StrToInt(Sheet.cells[15,9])+StrToInt(Sheet.cells[16,9])+StrToInt(Sheet.cells[17,9])+StrToInt(Sheet.cells[18,9])+
+             StrToInt(Sheet.cells[19,9])+StrToInt(Sheet.cells[20,9])+StrToInt(Sheet.cells[21,9])+StrToInt(Sheet.cells[22,9])+StrToInt(Sheet.cells[23,9]);
+
+          Sheet.cells[24,9]:=k;
+
+          k:=StrToInt(Sheet.cells[14,10])+StrToInt(Sheet.cells[15,10])+StrToInt(Sheet.cells[16,10])+StrToInt(Sheet.cells[17,10])+StrToInt(Sheet.cells[18,10])+
+             StrToInt(Sheet.cells[19,10])+StrToInt(Sheet.cells[20,10])+StrToInt(Sheet.cells[21,10])+StrToInt(Sheet.cells[22,10])+StrToInt(Sheet.cells[23,10]);
+
+          Sheet.cells[24,10]:=k;
+
+
+          k:=StrToInt(Sheet.cells[14,11])+StrToInt(Sheet.cells[15,11])+StrToInt(Sheet.cells[16,11])+StrToInt(Sheet.cells[17,11])+StrToInt(Sheet.cells[18,11])+
+             StrToInt(Sheet.cells[19,11])+StrToInt(Sheet.cells[20,11])+StrToInt(Sheet.cells[21,11])+StrToInt(Sheet.cells[22,11])+StrToInt(Sheet.cells[23,11]);
+
+          Sheet.cells[24,11]:=k;
+
+          k:=StrToInt(Sheet.cells[14,12])+StrToInt(Sheet.cells[15,12])+StrToInt(Sheet.cells[16,12])+StrToInt(Sheet.cells[17,12])+StrToInt(Sheet.cells[18,12])+
+             StrToInt(Sheet.cells[19,12])+StrToInt(Sheet.cells[20,12])+StrToInt(Sheet.cells[21,12])+StrToInt(Sheet.cells[22,12])+StrToInt(Sheet.cells[23,12]);
+
+          Sheet.cells[24,12]:=k;
+
+
+          k:=StrToInt(Sheet.cells[14,13])+StrToInt(Sheet.cells[15,13])+StrToInt(Sheet.cells[16,13])+StrToInt(Sheet.cells[17,13])+StrToInt(Sheet.cells[18,13])+
+             StrToInt(Sheet.cells[19,13])+StrToInt(Sheet.cells[20,13])+StrToInt(Sheet.cells[21,13])+StrToInt(Sheet.cells[22,13])+StrToInt(Sheet.cells[23,13]);
+
+          Sheet.cells[24,13]:=k;
+
+          k:=StrToInt(Sheet.cells[14,14])+StrToInt(Sheet.cells[15,14])+StrToInt(Sheet.cells[16,14])+StrToInt(Sheet.cells[17,14])+StrToInt(Sheet.cells[18,14])+
+             StrToInt(Sheet.cells[19,14])+StrToInt(Sheet.cells[20,14])+StrToInt(Sheet.cells[21,14])+StrToInt(Sheet.cells[22,14])+StrToInt(Sheet.cells[23,14]);
+
+          Sheet.cells[24,14]:=k;
+
+
+          k:=StrToInt(Sheet.cells[14,15])+StrToInt(Sheet.cells[15,15])+StrToInt(Sheet.cells[16,15])+StrToInt(Sheet.cells[17,15])+StrToInt(Sheet.cells[18,15])+
+             StrToInt(Sheet.cells[19,15])+StrToInt(Sheet.cells[20,15])+StrToInt(Sheet.cells[21,15])+StrToInt(Sheet.cells[22,15])+StrToInt(Sheet.cells[23,15]);
+
+          Sheet.cells[24,15]:=k;
+
+          k:=StrToInt(Sheet.cells[14,16])+StrToInt(Sheet.cells[15,16])+StrToInt(Sheet.cells[16,16])+StrToInt(Sheet.cells[17,16])+StrToInt(Sheet.cells[18,16])+
+             StrToInt(Sheet.cells[19,16])+StrToInt(Sheet.cells[20,16])+StrToInt(Sheet.cells[21,16])+StrToInt(Sheet.cells[22,16])+StrToInt(Sheet.cells[23,16]);
+
+          Sheet.cells[24,16]:=k;
+
+
+          k:=StrToInt(Sheet.cells[14,17])+StrToInt(Sheet.cells[15,17])+StrToInt(Sheet.cells[16,17])+StrToInt(Sheet.cells[17,17])+StrToInt(Sheet.cells[18,17])+
+             StrToInt(Sheet.cells[19,17])+StrToInt(Sheet.cells[20,17])+StrToInt(Sheet.cells[21,17])+StrToInt(Sheet.cells[22,17])+StrToInt(Sheet.cells[23,17]);
+
+          Sheet.cells[24,17]:=k;
+
+          k:=StrToInt(Sheet.cells[14,18])+StrToInt(Sheet.cells[15,18])+StrToInt(Sheet.cells[16,18])+StrToInt(Sheet.cells[17,18])+StrToInt(Sheet.cells[18,18])+
+             StrToInt(Sheet.cells[19,18])+StrToInt(Sheet.cells[20,18])+StrToInt(Sheet.cells[21,18])+StrToInt(Sheet.cells[22,18])+StrToInt(Sheet.cells[23,18]);
+
+          Sheet.cells[24,18]:=k;
+
+
+          k:=StrToInt(Sheet.cells[14,19])+StrToInt(Sheet.cells[15,19])+StrToInt(Sheet.cells[16,19])+StrToInt(Sheet.cells[17,19])+StrToInt(Sheet.cells[18,19])+
+             StrToInt(Sheet.cells[19,19])+StrToInt(Sheet.cells[20,19])+StrToInt(Sheet.cells[21,19])+StrToInt(Sheet.cells[22,19])+StrToInt(Sheet.cells[23,19]);
+
+          Sheet.cells[24,19]:=k;
+
+          k:=StrToInt(Sheet.cells[14,20])+StrToInt(Sheet.cells[15,20])+StrToInt(Sheet.cells[16,20])+StrToInt(Sheet.cells[17,20])+StrToInt(Sheet.cells[18,20])+
+             StrToInt(Sheet.cells[19,20])+StrToInt(Sheet.cells[20,20])+StrToInt(Sheet.cells[21,20])+StrToInt(Sheet.cells[22,20])+StrToInt(Sheet.cells[23,20]);
+
+          Sheet.cells[24,20]:=k;
+
+        {*********************************************************************************6-ci cevdvel*********************************************************************************************************}
+
+         {*********************************************0--1000***********************************************************************}
+          Gauge1.Progress:=64;
+          Application.ProcessMessages;
+          k:=0;
+          VCOD:= Valyutanin_Kodu('AZN');
+          OraclePackage1.CallProcedure('AmountOstatValyuta',[son,0.00,1000,P,Pcount]);
+          k:=OraclePackage1.GetParameter(3);
+          Kcount:=OraclePackage1.GetParameter(4);
+          Sheet.cells[31,3]:=k;
+          Sheet.cells[31,4]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstatValyuta',[son,0.00,1000,0,3,P,Pcount]);
+          k:=OraclePackage1.GetParameter(5);
+          Kcount:=OraclePackage1.GetParameter(6);
+          Sheet.cells[31,5]:=k;
+          Sheet.cells[31,6]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstatValyuta',[son,0.00,1000,3,5,P,Pcount]);
+          k:=OraclePackage1.GetParameter(5);
+          Kcount:=OraclePackage1.GetParameter(6);
+          Sheet.cells[31,7]:=k;
+          Sheet.cells[31,8]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstatValyuta',[son,0.00,1000,5,7,P,Pcount]);
+          k:=OraclePackage1.GetParameter(5);
+          Kcount:=OraclePackage1.GetParameter(6);
+          Sheet.cells[31,9]:=k;
+          Sheet.cells[31,10]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstatValyuta',[son,0.00,1000,7,9,P,Pcount]);
+          k:=OraclePackage1.GetParameter(5);
+          Kcount:=OraclePackage1.GetParameter(6);
+          Sheet.cells[31,11]:=k;
+          Sheet.cells[31,12]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstatValyuta',[son,0.00,1000,9,12,P,Pcount]);
+          k:=OraclePackage1.GetParameter(5);
+          Kcount:=OraclePackage1.GetParameter(6);
+          Sheet.cells[31,13]:=k;
+          Sheet.cells[31,14]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstatValyuta',[son,0.00,1000,12,15,P,Pcount]);
+          k:=OraclePackage1.GetParameter(5);
+          Kcount:=OraclePackage1.GetParameter(6);
+          Sheet.cells[31,15]:=k;
+          Sheet.cells[31,16]:=Kcount;
+
+
+          OraclePackage1.CallProcedure('AmountContractOstatValyuta',[son,0.00,1000,15,30,P,Pcount]);
+          k:=OraclePackage1.GetParameter(5);
+          Kcount:=OraclePackage1.GetParameter(6);
+          Sheet.cells[31,17]:=k;
+          Sheet.cells[31,18]:=Kcount;
+
+          Sheet.cells[31,19]:=StrToInt(Sheet.cells[31,3])+StrToInt(Sheet.cells[31,5])+StrToInt(Sheet.cells[31,7])+StrToInt(Sheet.cells[31,9])+
+                              StrToInt(Sheet.cells[31,11])+StrToInt(Sheet.cells[31,13])+StrToInt(Sheet.cells[31,15])+StrToInt(Sheet.cells[31,17]);
+
+          Sheet.cells[31,20]:=StrToInt(Sheet.cells[31,4])+StrToInt(Sheet.cells[31,6])+StrToInt(Sheet.cells[31,8])+StrToInt(Sheet.cells[31,10])+
+                              StrToInt(Sheet.cells[31,12])+StrToInt(Sheet.cells[31,14])+StrToInt(Sheet.cells[31,16])+StrToInt(Sheet.cells[31,18]);
+
+
+
+          {**************************************************1000--6000***************************************************************}
+          Gauge1.Progress:=65;
+          VCOD:= Valyutanin_Kodu('AZN');
+          OraclePackage1.CallProcedure('AmountOstatValyuta',[son,1000,6000,P,Pcount]);
+          k:=OraclePackage1.GetParameter(3);
+          Kcount:=OraclePackage1.GetParameter(4);
+          Sheet.cells[32,3]:=k;
+          Sheet.cells[32,4]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstatValyuta',[son,1000,6000,0,3,P,Pcount]);
+          k:=OraclePackage1.GetParameter(5);
+          Kcount:=OraclePackage1.GetParameter(6);
+          Sheet.cells[32,5]:=k;
+          Sheet.cells[32,6]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstatValyuta',[son,1000,6000,3,5,P,Pcount]);
+          k:=OraclePackage1.GetParameter(5);
+          Kcount:=OraclePackage1.GetParameter(6);
+          Sheet.cells[32,7]:=k;
+          Sheet.cells[32,8]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstatValyuta',[son,1000,6000,5,7,P,Pcount]);
+          k:=OraclePackage1.GetParameter(5);
+          Kcount:=OraclePackage1.GetParameter(6);
+          Sheet.cells[32,9]:=k;
+          Sheet.cells[32,10]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstatValyuta',[son,1000,6000,7,9,P,Pcount]);
+          k:=OraclePackage1.GetParameter(5);
+          Kcount:=OraclePackage1.GetParameter(6);
+          Sheet.cells[32,11]:=k;
+          Sheet.cells[32,12]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstatValyuta',[son,1000,6000,9,12,P,Pcount]);
+          k:=OraclePackage1.GetParameter(5);
+          Kcount:=OraclePackage1.GetParameter(6);
+          Sheet.cells[32,13]:=k;
+          Sheet.cells[32,14]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstatValyuta',[son,1000,6000,12,15,P,Pcount]);
+          k:=OraclePackage1.GetParameter(5);
+          Kcount:=OraclePackage1.GetParameter(6);
+          Sheet.cells[32,15]:=k;
+          Sheet.cells[32,16]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstatValyuta',[son,1000,6000,15,30,P,Pcount]);
+          k:=OraclePackage1.GetParameter(5);
+          Kcount:=OraclePackage1.GetParameter(6);
+          Sheet.cells[32,17]:=k;
+          Sheet.cells[32,18]:=Kcount;
+
+
+          Sheet.cells[32,19]:=StrToInt(Sheet.cells[32,3])+StrToInt(Sheet.cells[32,5])+StrToInt(Sheet.cells[32,7])+StrToInt(Sheet.cells[32,9])+
+                              StrToInt(Sheet.cells[32,11])+StrToInt(Sheet.cells[32,13])+StrToInt(Sheet.cells[32,15])+StrToInt(Sheet.cells[32,17]);
+
+          Sheet.cells[32,20]:=StrToInt(Sheet.cells[32,4])+StrToInt(Sheet.cells[32,6])+StrToInt(Sheet.cells[32,8])+StrToInt(Sheet.cells[32,10])+
+                              StrToInt(Sheet.cells[32,12])+StrToInt(Sheet.cells[32,14])+StrToInt(Sheet.cells[32,16])+StrToInt(Sheet.cells[32,18]);
+
+
+        {********************************************6000--30000*****************************************************************************}
+          Gauge1.Progress:=66;
+          VCOD:= Valyutanin_Kodu('AZN');
+          OraclePackage1.CallProcedure('AmountOstatValyuta',[son,6000,30000,P,Pcount]);
+          k:=OraclePackage1.GetParameter(3);
+          Kcount:=OraclePackage1.GetParameter(4);
+          Sheet.cells[33,3]:=k;
+          Sheet.cells[33,4]:=Kcount;
+
+
+          OraclePackage1.CallProcedure('AmountContractOstatValyuta',[son,6000,30000,0,3,P,Pcount]);
+          k:=OraclePackage1.GetParameter(5);
+          Kcount:=OraclePackage1.GetParameter(6);
+          Sheet.cells[33,5]:=k;
+          Sheet.cells[33,6]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstatValyuta',[son,6000,30000,3,5,P,Pcount]);
+          k:=OraclePackage1.GetParameter(5);
+          Kcount:=OraclePackage1.GetParameter(6);
+          Sheet.cells[33,7]:=k;
+          Sheet.cells[33,8]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstatValyuta',[son,6000,30000,5,7,P,Pcount]);
+          k:=OraclePackage1.GetParameter(5);
+          Kcount:=OraclePackage1.GetParameter(6);
+          Sheet.cells[33,9]:=k;
+          Sheet.cells[33,10]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstatValyuta',[son,6000,30000,7,9,P,Pcount]);
+          k:=OraclePackage1.GetParameter(5);
+          Kcount:=OraclePackage1.GetParameter(6);
+          Sheet.cells[33,11]:=k;
+          Sheet.cells[33,12]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstatValyuta',[son,6000,30000,9,12,P,Pcount]);
+          k:=OraclePackage1.GetParameter(5);
+          Kcount:=OraclePackage1.GetParameter(6);
+          Sheet.cells[33,13]:=k;
+          Sheet.cells[33,14]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstatValyuta',[son,6000,30000,12,15,P,Pcount]);
+          k:=OraclePackage1.GetParameter(5);
+          Kcount:=OraclePackage1.GetParameter(6);
+          Sheet.cells[33,15]:=k;
+          Sheet.cells[33,16]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstatValyuta',[son,6000,30000,15,30,P,Pcount]);
+          k:=OraclePackage1.GetParameter(5);
+          Kcount:=OraclePackage1.GetParameter(6);
+          Sheet.cells[33,17]:=k;
+          Sheet.cells[33,18]:=Kcount;
+
+
+          Sheet.cells[33,19]:=StrToInt(Sheet.cells[33,3])+StrToInt(Sheet.cells[33,5])+StrToInt(Sheet.cells[33,7])+StrToInt(Sheet.cells[33,9])+
+                              StrToInt(Sheet.cells[33,11])+StrToInt(Sheet.cells[33,13])+StrToInt(Sheet.cells[33,15])+StrToInt(Sheet.cells[33,17]);
+
+
+          Sheet.cells[33,20]:=StrToInt(Sheet.cells[33,4])+StrToInt(Sheet.cells[33,6])+StrToInt(Sheet.cells[33,8])+StrToInt(Sheet.cells[33,10])+
+                              StrToInt(Sheet.cells[33,12])+StrToInt(Sheet.cells[33,14])+StrToInt(Sheet.cells[33,16])+StrToInt(Sheet.cells[33,18]);
+
+
+
+
+         {********************************************30000--40000********************************************************************************************************************}
+          Gauge1.Progress:=67;
+
+          VCOD:= Valyutanin_Kodu('AZN');
+          OraclePackage1.CallProcedure('AmountOstatValyuta',[son,30000,40000,P,Pcount]);
+          k:=OraclePackage1.GetParameter(3);
+          Kcount:=OraclePackage1.GetParameter(4);
+          Sheet.cells[34,3]:=k;
+          Sheet.cells[34,4]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstatValyuta',[son,30000,40000,0,3,P,Pcount]);
+          k:=OraclePackage1.GetParameter(5);
+          Kcount:=OraclePackage1.GetParameter(6);
+          Sheet.cells[34,5]:=k;
+          Sheet.cells[34,6]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstatValyuta',[son,30000,40000,3,5,P,Pcount]);
+          k:=OraclePackage1.GetParameter(5);
+          Kcount:=OraclePackage1.GetParameter(6);
+          Sheet.cells[34,7]:=k;
+          Sheet.cells[34,8]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstatValyuta',[son,30000,40000,5,7,P,Pcount]);
+          k:=OraclePackage1.GetParameter(5);
+          Kcount:=OraclePackage1.GetParameter(6);
+          Sheet.cells[34,9]:=k;
+          Sheet.cells[34,10]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstatValyuta',[son,30000,40000,7,9,P,Pcount]);
+          k:=OraclePackage1.GetParameter(5);
+          Kcount:=OraclePackage1.GetParameter(6);
+          Sheet.cells[34,11]:=k;
+          Sheet.cells[34,12]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstatValyuta',[son,30000,40000,9,12,P,Pcount]);
+          k:=OraclePackage1.GetParameter(5);
+          Kcount:=OraclePackage1.GetParameter(6);
+          Sheet.cells[34,13]:=k;
+          Sheet.cells[34,14]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstatValyuta',[son,30000,40000,12,15,P,Pcount]);
+          k:=OraclePackage1.GetParameter(5);
+          Kcount:=OraclePackage1.GetParameter(6);
+          Sheet.cells[34,15]:=k;
+          Sheet.cells[34,16]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstatValyuta',[son,30000,40000,15,30,P,Pcount]);
+          k:=OraclePackage1.GetParameter(5);
+          Kcount:=OraclePackage1.GetParameter(6);
+          Sheet.cells[34,17]:=k;
+          Sheet.cells[34,18]:=Kcount;
+
+
+          Sheet.cells[34,19]:=StrToInt(Sheet.cells[34,3])+StrToInt(Sheet.cells[34,5])+StrToInt(Sheet.cells[34,7])+StrToInt(Sheet.cells[34,9])+
+                              StrToInt(Sheet.cells[34,11])+StrToInt(Sheet.cells[34,13])+StrToInt(Sheet.cells[34,15])+StrToInt(Sheet.cells[34,17]);
+
+          Sheet.cells[34,20]:=StrToInt(Sheet.cells[34,4])+StrToInt(Sheet.cells[34,6])+StrToInt(Sheet.cells[34,8])+StrToInt(Sheet.cells[34,10])+
+                              StrToInt(Sheet.cells[34,12])+StrToInt(Sheet.cells[34,14])+StrToInt(Sheet.cells[34,16])+StrToInt(Sheet.cells[34,18]);
+
+
+
+
+
+          {********************************************40000--50000********************************************************************************************************************}
+          Gauge1.Progress:=68;
+
+
+          VCOD:= Valyutanin_Kodu('AZN');
+          OraclePackage1.CallProcedure('AmountOstatValyuta',[son,40000,50000,P,Pcount]);
+          k:=OraclePackage1.GetParameter(3);
+          Kcount:=OraclePackage1.GetParameter(4);
+          Sheet.cells[35,3]:=k;
+          Sheet.cells[35,4]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstatValyuta',[son,40000,50000,0,3,P,Pcount]);
+          k:=OraclePackage1.GetParameter(5);
+          Kcount:=OraclePackage1.GetParameter(6);
+          Sheet.cells[35,5]:=k;
+          Sheet.cells[35,6]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstatValyuta',[son,40000,50000,3,5,P,Pcount]);
+          k:=OraclePackage1.GetParameter(5);
+          Kcount:=OraclePackage1.GetParameter(6);
+          Sheet.cells[35,7]:=k;
+          Sheet.cells[35,8]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstatValyuta',[son,40000,50000,5,7,P,Pcount]);
+          k:=OraclePackage1.GetParameter(5);
+          Kcount:=OraclePackage1.GetParameter(6);
+          Sheet.cells[35,9]:=k;
+          Sheet.cells[35,10]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstatValyuta',[son,40000,50000,7,9,P,Pcount]);
+          k:=OraclePackage1.GetParameter(5);
+          Kcount:=OraclePackage1.GetParameter(6);
+          Sheet.cells[35,11]:=k;
+          Sheet.cells[35,12]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstatValyuta',[son,40000,50000,9,12,P,Pcount]);
+          k:=OraclePackage1.GetParameter(5);
+          Kcount:=OraclePackage1.GetParameter(6);
+          Sheet.cells[35,13]:=k;
+          Sheet.cells[35,14]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstatValyuta',[son,40000,50000,12,15,P,Pcount]);
+          k:=OraclePackage1.GetParameter(5);
+          Kcount:=OraclePackage1.GetParameter(6);
+          Sheet.cells[35,15]:=k;
+          Sheet.cells[35,16]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstatValyuta',[son,40000,50000,15,30,P,Pcount]);
+          k:=OraclePackage1.GetParameter(5);
+          Kcount:=OraclePackage1.GetParameter(6);
+          Sheet.cells[35,17]:=k;
+          Sheet.cells[35,18]:=Kcount;
+
+          Sheet.cells[35,19]:=StrToInt(Sheet.cells[35,3])+StrToInt(Sheet.cells[35,5])+StrToInt(Sheet.cells[35,7])+StrToInt(Sheet.cells[35,9])+
+                              StrToInt(Sheet.cells[35,11])+StrToInt(Sheet.cells[35,13])+StrToInt(Sheet.cells[35,15])+StrToInt(Sheet.cells[35,17]);
+
+
+          Sheet.cells[35,20]:=StrToInt(Sheet.cells[35,4])+StrToInt(Sheet.cells[35,6])+StrToInt(Sheet.cells[35,8])+StrToInt(Sheet.cells[35,10])+
+                              StrToInt(Sheet.cells[35,12])+StrToInt(Sheet.cells[35,14])+StrToInt(Sheet.cells[35,16])+StrToInt(Sheet.cells[35,18]);
+
+
+
+         {********************************************50000--60000********************************************************************************************************************}
+          Gauge1.Progress:=69;
+
+          VCOD:= Valyutanin_Kodu('AZN');
+          OraclePackage1.CallProcedure('AmountOstatValyuta',[son,50000,60000,P,Pcount]);
+          k:=OraclePackage1.GetParameter(3);
+          Kcount:=OraclePackage1.GetParameter(4);
+          Sheet.cells[36,3]:=k;
+          Sheet.cells[36,4]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstatValyuta',[son,50000,60000,0,3,P,Pcount]);
+          k:=OraclePackage1.GetParameter(5);
+          Kcount:=OraclePackage1.GetParameter(6);
+          Sheet.cells[36,5]:=k;
+          Sheet.cells[36,6]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstatValyuta',[son,50000,60000,3,5,P,Pcount]);
+          k:=OraclePackage1.GetParameter(5);
+          Kcount:=OraclePackage1.GetParameter(6);
+          Sheet.cells[36,7]:=k;
+          Sheet.cells[36,8]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstatValyuta',[son,50000,60000,5,7,P,Pcount]);
+          k:=OraclePackage1.GetParameter(5);
+          Kcount:=OraclePackage1.GetParameter(6);
+          Sheet.cells[36,9]:=k;
+          Sheet.cells[36,10]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstatValyuta',[son,50000,60000,7,9,P,Pcount]);
+          k:=OraclePackage1.GetParameter(5);
+          Kcount:=OraclePackage1.GetParameter(6);
+          Sheet.cells[36,11]:=k;
+          Sheet.cells[36,12]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstatValyuta',[son,50000,60000,9,12,P,Pcount]);
+          k:=OraclePackage1.GetParameter(5);
+          Kcount:=OraclePackage1.GetParameter(6);
+          Sheet.cells[36,13]:=k;
+          Sheet.cells[36,14]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstatValyuta',[son,50000,60000,12,15,P,Pcount]);
+          k:=OraclePackage1.GetParameter(5);
+          Kcount:=OraclePackage1.GetParameter(6);
+          Sheet.cells[36,15]:=k;
+          Sheet.cells[36,16]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstatValyuta',[son,50000,60000,15,30,P,Pcount]);
+          k:=OraclePackage1.GetParameter(5);
+          Kcount:=OraclePackage1.GetParameter(6);
+          Sheet.cells[36,17]:=k;
+          Sheet.cells[36,18]:=Kcount;
+
+
+          Sheet.cells[36,19]:=StrToInt(Sheet.cells[36,3])+StrToInt(Sheet.cells[36,5])+StrToInt(Sheet.cells[36,7])+StrToInt(Sheet.cells[36,9])+
+                              StrToInt(Sheet.cells[36,11])+StrToInt(Sheet.cells[36,13])+StrToInt(Sheet.cells[36,15])+StrToInt(Sheet.cells[36,17]);
+
+
+          Sheet.cells[36,20]:=StrToInt(Sheet.cells[36,4])+StrToInt(Sheet.cells[36,6])+StrToInt(Sheet.cells[36,8])+StrToInt(Sheet.cells[36,10])+
+                              StrToInt(Sheet.cells[36,12])+StrToInt(Sheet.cells[36,14])+StrToInt(Sheet.cells[36,16])+StrToInt(Sheet.cells[36,18]);
+
+
+
+
+         {********************************************60000--70000********************************************************************************************************************}
+          Gauge1.Progress:=70;
+
+
+          VCOD:= Valyutanin_Kodu('AZN');
+          OraclePackage1.CallProcedure('AmountOstatValyuta',[son,60000,70000,P,Pcount]);
+          k:=OraclePackage1.GetParameter(3);
+          Kcount:=OraclePackage1.GetParameter(4);
+          Sheet.cells[37,3]:=k;
+          Sheet.cells[37,4]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstatValyuta',[son,60000,70000,0,3,P,Pcount]);
+          k:=OraclePackage1.GetParameter(5);
+          Kcount:=OraclePackage1.GetParameter(6);
+          Sheet.cells[37,5]:=k;
+          Sheet.cells[37,6]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstatValyuta',[son,60000,70000,3,5,P,Pcount]);
+          k:=OraclePackage1.GetParameter(5);
+          Kcount:=OraclePackage1.GetParameter(6);
+          Sheet.cells[37,7]:=k;
+          Sheet.cells[37,8]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstatValyuta',[son,60000,70000,5,7,P,Pcount]);
+          k:=OraclePackage1.GetParameter(5);
+          Kcount:=OraclePackage1.GetParameter(6);
+          Sheet.cells[37,9]:=k;
+          Sheet.cells[37,10]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstatValyuta',[son,60000,70000,7,9,P,Pcount]);
+          k:=OraclePackage1.GetParameter(5);
+          Kcount:=OraclePackage1.GetParameter(6);
+          Sheet.cells[37,11]:=k;
+          Sheet.cells[37,12]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstatValyuta',[son,60000,70000,9,12,P,Pcount]);
+          k:=OraclePackage1.GetParameter(5);
+          Kcount:=OraclePackage1.GetParameter(6);
+          Sheet.cells[37,13]:=k;
+          Sheet.cells[37,14]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstatValyuta',[son,60000,70000,12,15,P,Pcount]);
+          k:=OraclePackage1.GetParameter(5);
+          Kcount:=OraclePackage1.GetParameter(6);
+          Sheet.cells[37,15]:=k;
+          Sheet.cells[37,16]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstatValyuta',[son,60000,70000,15,30,P,Pcount]);
+          k:=OraclePackage1.GetParameter(5);
+          Kcount:=OraclePackage1.GetParameter(6);
+          Sheet.cells[37,17]:=k;
+          Sheet.cells[37,18]:=Kcount;
+
+
+
+          Sheet.cells[37,19]:=StrToInt(Sheet.cells[37,3])+StrToInt(Sheet.cells[37,5])+StrToInt(Sheet.cells[37,7])+StrToInt(Sheet.cells[37,9])+
+                              StrToInt(Sheet.cells[37,11])+StrToInt(Sheet.cells[37,13])+StrToInt(Sheet.cells[37,15])+StrToInt(Sheet.cells[37,17]);
+
+
+          Sheet.cells[37,20]:=StrToInt(Sheet.cells[37,4])+StrToInt(Sheet.cells[37,6])+StrToInt(Sheet.cells[37,8])+StrToInt(Sheet.cells[37,10])+
+                              StrToInt(Sheet.cells[37,12])+StrToInt(Sheet.cells[37,14])+StrToInt(Sheet.cells[37,16])+StrToInt(Sheet.cells[37,18]);
+
+
+          {********************************************70000--100000********************************************************************************************************************}
+          Gauge1.Progress:=71;
+
+          VCOD:= Valyutanin_Kodu('AZN');
+          OraclePackage1.CallProcedure('AmountOstatValyuta',[son,70000,100000,P,Pcount]);
+          k:=OraclePackage1.GetParameter(3);
+          Kcount:=OraclePackage1.GetParameter(4);
+          Sheet.cells[38,3]:=k;
+          Sheet.cells[38,4]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstatValyuta',[son,70000,100000,0,3,P,Pcount]);
+          k:=OraclePackage1.GetParameter(5);
+          Kcount:=OraclePackage1.GetParameter(6);
+          Sheet.cells[38,5]:=k;
+          Sheet.cells[38,6]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstatValyuta',[son,70000,100000,3,5,P,Pcount]);
+          k:=OraclePackage1.GetParameter(5);
+          Kcount:=OraclePackage1.GetParameter(6);
+          Sheet.cells[38,7]:=k;
+          Sheet.cells[38,8]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstatValyuta',[son,70000,100000,5,7,P,Pcount]);
+          k:=OraclePackage1.GetParameter(5);
+          Kcount:=OraclePackage1.GetParameter(6);
+          Sheet.cells[38,9]:=k;
+          Sheet.cells[38,10]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstatValyuta',[son,70000,100000,7,9,P,Pcount]);
+          k:=OraclePackage1.GetParameter(5);
+          Kcount:=OraclePackage1.GetParameter(6);
+          Sheet.cells[38,11]:=k;
+          Sheet.cells[38,12]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstatValyuta',[son,70000,100000,9,12,P,Pcount]);
+          k:=OraclePackage1.GetParameter(5);
+          Kcount:=OraclePackage1.GetParameter(6);
+          Sheet.cells[38,13]:=k;
+          Sheet.cells[38,14]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstatValyuta',[son,70000,100000,12,15,P,Pcount]);
+          k:=OraclePackage1.GetParameter(5);
+          Kcount:=OraclePackage1.GetParameter(6);
+          Sheet.cells[38,15]:=k;
+          Sheet.cells[38,16]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstatValyuta',[son,70000,100000,15,30,P,Pcount]);
+          k:=OraclePackage1.GetParameter(5);
+          Kcount:=OraclePackage1.GetParameter(6);
+          Sheet.cells[38,17]:=k;
+          Sheet.cells[38,18]:=Kcount;
+
+
+
+          Sheet.cells[38,19]:=StrToInt(Sheet.cells[38,3])+StrToInt(Sheet.cells[38,5])+StrToInt(Sheet.cells[38,7])+StrToInt(Sheet.cells[38,9])+
+                              StrToInt(Sheet.cells[38,11])+StrToInt(Sheet.cells[38,13])+StrToInt(Sheet.cells[38,15])+StrToInt(Sheet.cells[38,17]);
+
+
+          Sheet.cells[38,20]:=StrToInt(Sheet.cells[38,4])+StrToInt(Sheet.cells[38,6])+StrToInt(Sheet.cells[38,8])+StrToInt(Sheet.cells[38,10])+
+                              StrToInt(Sheet.cells[38,12])+StrToInt(Sheet.cells[38,14])+StrToInt(Sheet.cells[38,16])+StrToInt(Sheet.cells[38,18]);
+
+
+          {********************************************100000--500000********************************************************************************************************************}
+          Gauge1.Progress:=72;
+
+          VCOD:= Valyutanin_Kodu('AZN');
+          OraclePackage1.CallProcedure('AmountOstatValyuta',[son,100000,500000,P,Pcount]);
+          k:=OraclePackage1.GetParameter(3);
+          Kcount:=OraclePackage1.GetParameter(4);
+          Sheet.cells[39,3]:=k;
+          Sheet.cells[39,4]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstatValyuta',[son,100000,500000,0,3,P,Pcount]);
+          k:=OraclePackage1.GetParameter(5);
+          Kcount:=OraclePackage1.GetParameter(6);
+          Sheet.cells[39,5]:=k;
+          Sheet.cells[39,6]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstatValyuta',[son,100000,500000,3,5,P,Pcount]);
+          k:=OraclePackage1.GetParameter(5);
+          Kcount:=OraclePackage1.GetParameter(6);
+          Sheet.cells[39,7]:=k;
+          Sheet.cells[39,8]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstatValyuta',[son,100000,500000,5,7,P,Pcount]);
+          k:=OraclePackage1.GetParameter(5);
+          Kcount:=OraclePackage1.GetParameter(6);
+          Sheet.cells[39,9]:=k;
+          Sheet.cells[39,10]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstatValyuta',[son,100000,500000,7,9,P,Pcount]);
+          k:=OraclePackage1.GetParameter(5);
+          Kcount:=OraclePackage1.GetParameter(6);
+          Sheet.cells[39,11]:=k;
+          Sheet.cells[39,12]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstatValyuta',[son,100000,500000,9,12,P,Pcount]);
+          k:=OraclePackage1.GetParameter(5);
+          Kcount:=OraclePackage1.GetParameter(6);
+          Sheet.cells[39,13]:=k;
+          Sheet.cells[39,14]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstatValyuta',[son,100000,500000,12,15,P,Pcount]);
+          k:=OraclePackage1.GetParameter(5);
+          Kcount:=OraclePackage1.GetParameter(6);
+          Sheet.cells[39,15]:=k;
+          Sheet.cells[39,16]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstatValyuta',[son,100000,500000,15,30,P,Pcount]);
+          k:=OraclePackage1.GetParameter(5);
+          Kcount:=OraclePackage1.GetParameter(6);
+          Sheet.cells[39,17]:=k;
+          Sheet.cells[39,18]:=Kcount;
+
+
+          Sheet.cells[39,19]:=StrToInt(Sheet.cells[39,3])+StrToInt(Sheet.cells[39,5])+StrToInt(Sheet.cells[39,7])+StrToInt(Sheet.cells[39,9])+
+                              StrToInt(Sheet.cells[39,11])+StrToInt(Sheet.cells[39,13])+StrToInt(Sheet.cells[39,15])+StrToInt(Sheet.cells[39,17]);
+
+
+          Sheet.cells[39,20]:=StrToInt(Sheet.cells[39,4])+StrToInt(Sheet.cells[39,6])+StrToInt(Sheet.cells[39,8])+StrToInt(Sheet.cells[39,10])+
+                              StrToInt(Sheet.cells[39,12])+StrToInt(Sheet.cells[39,14])+StrToInt(Sheet.cells[39,16])+StrToInt(Sheet.cells[39,18]);
+
+
+        {********************************************500000--1000000000********************************************************************************************************************}
+          Gauge1.Progress:=73;
+
+          VCOD:= Valyutanin_Kodu('AZN');
+          OraclePackage1.CallProcedure('AmountOstatValyuta',[son,500000,1000000000,P,Pcount]);
+          k:=OraclePackage1.GetParameter(3);
+          Kcount:=OraclePackage1.GetParameter(4);
+          Sheet.cells[40,3]:=k;
+          Sheet.cells[40,4]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstatValyuta',[son,500000,1000000000,0,3,P,Pcount]);
+          k:=OraclePackage1.GetParameter(5);
+          Kcount:=OraclePackage1.GetParameter(6);
+          Sheet.cells[40,5]:=k;
+          Sheet.cells[40,6]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstatValyuta',[son,500000,1000000000,3,5,P,Pcount]);
+          k:=OraclePackage1.GetParameter(5);
+          Kcount:=OraclePackage1.GetParameter(6);
+          Sheet.cells[40,7]:=k;
+          Sheet.cells[40,8]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstatValyuta',[son,500000,1000000000,5,7,P,Pcount]);
+          k:=OraclePackage1.GetParameter(5);
+          Kcount:=OraclePackage1.GetParameter(6);
+          Sheet.cells[40,9]:=k;
+          Sheet.cells[40,10]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstatValyuta',[son,500000,1000000000,7,9,P,Pcount]);
+          k:=OraclePackage1.GetParameter(5);
+          Kcount:=OraclePackage1.GetParameter(6);
+          Sheet.cells[40,11]:=k;
+          Sheet.cells[40,12]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstatValyuta',[son,500000,1000000000,9,12,P,Pcount]);
+          k:=OraclePackage1.GetParameter(5);
+          Kcount:=OraclePackage1.GetParameter(6);
+          Sheet.cells[40,13]:=k;
+          Sheet.cells[40,14]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstatValyuta',[son,500000,1000000000,12,15,P,Pcount]);
+          k:=OraclePackage1.GetParameter(5);
+          Kcount:=OraclePackage1.GetParameter(6);
+          Sheet.cells[40,15]:=k;
+          Sheet.cells[40,16]:=Kcount;
+
+          OraclePackage1.CallProcedure('AmountContractOstatValyuta',[son,500000,1000000000,15,30,P,Pcount]);
+          k:=OraclePackage1.GetParameter(5);
+          Kcount:=OraclePackage1.GetParameter(6);
+          Sheet.cells[40,17]:=k;
+          Sheet.cells[40,18]:=Kcount;
+
+
+
+
+          Sheet.cells[40,19]:=StrToInt(Sheet.cells[40,3])+StrToInt(Sheet.cells[40,5])+StrToInt(Sheet.cells[40,7])+StrToInt(Sheet.cells[40,9])+
+                              StrToInt(Sheet.cells[40,11])+StrToInt(Sheet.cells[40,13])+StrToInt(Sheet.cells[40,15])+StrToInt(Sheet.cells[40,17]);
+
+
+          Sheet.cells[40,20]:=StrToInt(Sheet.cells[40,4])+StrToInt(Sheet.cells[40,6])+StrToInt(Sheet.cells[40,8])+StrToInt(Sheet.cells[40,10])+
+                              StrToInt(Sheet.cells[40,12])+StrToInt(Sheet.cells[40,14])+StrToInt(Sheet.cells[40,16])+StrToInt(Sheet.cells[40,18]);
+
+
+
+
+          k:=StrToInt(Sheet.cells[31,3])+StrToInt(Sheet.cells[32,3])+StrToInt(Sheet.cells[33,3])+StrToInt(Sheet.cells[34,3])+StrToInt(Sheet.cells[35,3])+
+             StrToInt(Sheet.cells[36,3])+StrToInt(Sheet.cells[37,3])+StrToInt(Sheet.cells[38,3])+StrToInt(Sheet.cells[39,3])+StrToInt(Sheet.cells[40,3]);
+
+          Sheet.cells[41,3]:=k;
+
+          k:=StrToInt(Sheet.cells[31,4])+StrToInt(Sheet.cells[32,4])+StrToInt(Sheet.cells[33,4])+StrToInt(Sheet.cells[34,4])+StrToInt(Sheet.cells[35,4])+
+             StrToInt(Sheet.cells[36,4])+StrToInt(Sheet.cells[37,4])+StrToInt(Sheet.cells[38,4])+StrToInt(Sheet.cells[39,4])+StrToInt(Sheet.cells[40,4]);
+
+          Sheet.cells[41,4]:=k;
+
+
+          k:=StrToInt(Sheet.cells[31,5])+StrToInt(Sheet.cells[32,5])+StrToInt(Sheet.cells[33,5])+StrToInt(Sheet.cells[34,5])+StrToInt(Sheet.cells[35,5])+
+             StrToInt(Sheet.cells[36,5])+StrToInt(Sheet.cells[37,5])+StrToInt(Sheet.cells[38,5])+StrToInt(Sheet.cells[39,5])+StrToInt(Sheet.cells[40,5]);
+
+          Sheet.cells[41,5]:=k;
+
+          k:=StrToInt(Sheet.cells[31,6])+StrToInt(Sheet.cells[32,6])+StrToInt(Sheet.cells[33,6])+StrToInt(Sheet.cells[34,6])+StrToInt(Sheet.cells[35,6])+
+             StrToInt(Sheet.cells[36,6])+StrToInt(Sheet.cells[37,6])+StrToInt(Sheet.cells[38,6])+StrToInt(Sheet.cells[39,6])+StrToInt(Sheet.cells[40,6]);
+
+          Sheet.cells[41,6]:=k;
+
+
+          k:=StrToInt(Sheet.cells[31,7])+StrToInt(Sheet.cells[32,7])+StrToInt(Sheet.cells[33,7])+StrToInt(Sheet.cells[34,7])+StrToInt(Sheet.cells[35,7])+
+             StrToInt(Sheet.cells[36,7])+StrToInt(Sheet.cells[37,7])+StrToInt(Sheet.cells[38,7])+StrToInt(Sheet.cells[39,7])+StrToInt(Sheet.cells[40,7]);
+
+          Sheet.cells[41,7]:=k;
+
+          k:=StrToInt(Sheet.cells[31,8])+StrToInt(Sheet.cells[32,8])+StrToInt(Sheet.cells[33,8])+StrToInt(Sheet.cells[34,8])+StrToInt(Sheet.cells[35,8])+
+             StrToInt(Sheet.cells[36,8])+StrToInt(Sheet.cells[37,8])+StrToInt(Sheet.cells[38,8])+StrToInt(Sheet.cells[39,8])+StrToInt(Sheet.cells[40,8]);
+
+          Sheet.cells[41,8]:=k;
+
+
+          k:=StrToInt(Sheet.cells[31,9])+StrToInt(Sheet.cells[32,9])+StrToInt(Sheet.cells[33,9])+StrToInt(Sheet.cells[34,9])+StrToInt(Sheet.cells[35,9])+
+             StrToInt(Sheet.cells[36,9])+StrToInt(Sheet.cells[37,9])+StrToInt(Sheet.cells[38,9])+StrToInt(Sheet.cells[39,9])+StrToInt(Sheet.cells[40,9]);
+
+          Sheet.cells[41,9]:=k;
+
+          k:=StrToInt(Sheet.cells[31,10])+StrToInt(Sheet.cells[32,10])+StrToInt(Sheet.cells[33,10])+StrToInt(Sheet.cells[34,10])+StrToInt(Sheet.cells[35,10])+
+             StrToInt(Sheet.cells[36,10])+StrToInt(Sheet.cells[37,10])+StrToInt(Sheet.cells[38,10])+StrToInt(Sheet.cells[39,10])+StrToInt(Sheet.cells[40,10]);
+
+          Sheet.cells[41,10]:=k;
+
+
+          k:=StrToInt(Sheet.cells[31,11])+StrToInt(Sheet.cells[32,11])+StrToInt(Sheet.cells[33,11])+StrToInt(Sheet.cells[34,11])+StrToInt(Sheet.cells[35,11])+
+             StrToInt(Sheet.cells[36,11])+StrToInt(Sheet.cells[37,11])+StrToInt(Sheet.cells[38,11])+StrToInt(Sheet.cells[39,11])+StrToInt(Sheet.cells[40,11]);
+
+          Sheet.cells[41,11]:=k;
+
+          k:=StrToInt(Sheet.cells[31,12])+StrToInt(Sheet.cells[32,12])+StrToInt(Sheet.cells[33,12])+StrToInt(Sheet.cells[34,12])+StrToInt(Sheet.cells[35,12])+
+             StrToInt(Sheet.cells[36,12])+StrToInt(Sheet.cells[37,12])+StrToInt(Sheet.cells[38,12])+StrToInt(Sheet.cells[39,12])+StrToInt(Sheet.cells[40,12]);
+
+          Sheet.cells[41,12]:=k;
+
+
+          k:=StrToInt(Sheet.cells[31,13])+StrToInt(Sheet.cells[32,13])+StrToInt(Sheet.cells[33,13])+StrToInt(Sheet.cells[34,13])+StrToInt(Sheet.cells[35,13])+
+             StrToInt(Sheet.cells[36,13])+StrToInt(Sheet.cells[37,13])+StrToInt(Sheet.cells[38,13])+StrToInt(Sheet.cells[39,13])+StrToInt(Sheet.cells[40,13]);
+
+          Sheet.cells[41,13]:=k;
+
+          k:=StrToInt(Sheet.cells[31,14])+StrToInt(Sheet.cells[32,14])+StrToInt(Sheet.cells[33,14])+StrToInt(Sheet.cells[34,14])+StrToInt(Sheet.cells[35,14])+
+             StrToInt(Sheet.cells[36,14])+StrToInt(Sheet.cells[37,14])+StrToInt(Sheet.cells[38,14])+StrToInt(Sheet.cells[39,14])+StrToInt(Sheet.cells[40,14]);
+
+          Sheet.cells[41,14]:=k;
+
+
+          k:=StrToInt(Sheet.cells[31,15])+StrToInt(Sheet.cells[32,15])+StrToInt(Sheet.cells[33,15])+StrToInt(Sheet.cells[34,15])+StrToInt(Sheet.cells[35,15])+
+             StrToInt(Sheet.cells[36,15])+StrToInt(Sheet.cells[37,15])+StrToInt(Sheet.cells[38,15])+StrToInt(Sheet.cells[39,15])+StrToInt(Sheet.cells[40,15]);
+
+          Sheet.cells[41,15]:=k;
+
+          k:=StrToInt(Sheet.cells[31,16])+StrToInt(Sheet.cells[32,16])+StrToInt(Sheet.cells[33,16])+StrToInt(Sheet.cells[34,16])+StrToInt(Sheet.cells[35,16])+
+             StrToInt(Sheet.cells[36,16])+StrToInt(Sheet.cells[37,16])+StrToInt(Sheet.cells[38,16])+StrToInt(Sheet.cells[39,16])+StrToInt(Sheet.cells[40,16]);
+
+          Sheet.cells[41,16]:=k;
+
+
+          k:=StrToInt(Sheet.cells[31,17])+StrToInt(Sheet.cells[32,17])+StrToInt(Sheet.cells[33,17])+StrToInt(Sheet.cells[34,17])+StrToInt(Sheet.cells[35,17])+
+             StrToInt(Sheet.cells[36,17])+StrToInt(Sheet.cells[37,17])+StrToInt(Sheet.cells[38,17])+StrToInt(Sheet.cells[39,17])+StrToInt(Sheet.cells[40,17]);
+
+          Sheet.cells[41,17]:=k;
+
+          k:=StrToInt(Sheet.cells[31,18])+StrToInt(Sheet.cells[32,18])+StrToInt(Sheet.cells[33,18])+StrToInt(Sheet.cells[34,18])+StrToInt(Sheet.cells[35,18])+
+             StrToInt(Sheet.cells[36,18])+StrToInt(Sheet.cells[37,18])+StrToInt(Sheet.cells[38,18])+StrToInt(Sheet.cells[39,18])+StrToInt(Sheet.cells[40,18]);
+
+          Sheet.cells[41,18]:=k;
+
+
+          k:=StrToInt(Sheet.cells[31,19])+StrToInt(Sheet.cells[32,19])+StrToInt(Sheet.cells[33,19])+StrToInt(Sheet.cells[34,19])+StrToInt(Sheet.cells[35,19])+
+             StrToInt(Sheet.cells[36,19])+StrToInt(Sheet.cells[37,19])+StrToInt(Sheet.cells[38,19])+StrToInt(Sheet.cells[39,19])+StrToInt(Sheet.cells[40,19]);
+
+          Sheet.cells[41,19]:=k;
+
+          k:=StrToInt(Sheet.cells[31,20])+StrToInt(Sheet.cells[32,20])+StrToInt(Sheet.cells[33,20])+StrToInt(Sheet.cells[34,20])+StrToInt(Sheet.cells[35,20])+
+             StrToInt(Sheet.cells[36,20])+StrToInt(Sheet.cells[37,20])+StrToInt(Sheet.cells[38,20])+StrToInt(Sheet.cells[39,20])+StrToInt(Sheet.cells[40,20]);
+
+          Sheet.cells[41,20]:=k;
+        end;
+
+
+      {*****************************************************************Cəvdvəl VII*****************************************************************************************************************************************}
+       if I=2 then
+        begin
+          V :=ExcelApplication3.Application;
+          ExcelApplication3.Connect;
+          V.Workbooks.Open(ExtractFilePath(ExtractFilePath(ParamStr(0)))+ 'Emanetler(III hisse).xls');
+          for OpenedXlsCnt :=1 to 100 do
+          try
+           Sheet := V.Workbooks[OpenedXlsCnt].Worksheets['hesabat1'];
+           Break;
+          except
+          end;
+          Sheets := V.Sheets;
+          Sheets.Item['hesabat1'].Activate;
+          IL:=FormatDateTime('yyyy',trunc(DTP1.DateTime));
+          Sheet.cells[1,2]:=IL;
+          Bas:=FormatDateTime('dd-MMM-yyyy',trunc(DTP1.DateTime));
+          Son:=FormatDateTime('dd-MMM-yyyy',trunc(DTP2.DateTime));
+          Sheet.cells[2,2]:=Bas+'_______'+son;
+
+          Sheet.cells[7,1].Font.Name :='Tahoma';
+          Sheet.Cells[7,1].Font.Bold :=true;
+          Sheet.Cells[7,1].Font.size :=12;
+
+
+
+          {*********************************************0--1000***********************************************************************}
+          Gauge1.Progress:=74;
+          Application.ProcessMessages;
+          k:=0;
+          OraclePackage1.CallProcedure('AllAmountOstat',[son,0.00,1000,P,Pcount]);
+          k:=OraclePackage1.GetParameter(3);
+          kcount:=OraclePackage1.GetParameter(4);
+          Sheet.cells[8,3]:=k;
+          Sheet.cells[8,4]:=kcount;
+
+          OraclePackage1.CallProcedure('ProtAmountOstat',[son,0.00,1000,P,Pcount]);
+          k:=OraclePackage1.GetParameter(3);
+          kcount:=OraclePackage1.GetParameter(4);
+          Sheet.cells[8,5]:=k;
+          Sheet.cells[8,6]:=kcount;
+
+          OraclePackage1.CallProcedure('CompenAmountOstat',[son,0.00,1000,P,Pcount]);
+          k:=OraclePackage1.GetParameter(3);
+          kcount:=OraclePackage1.GetParameter(4);
+          Sheet.cells[8,7]:=k;
+          Sheet.cells[8,8]:=kcount;
+
+         {******************************************1000--30000********************************************************************************}
+          Gauge1.Progress:=75;
+          Application.ProcessMessages;
+          k:=0;
+          OraclePackage1.CallProcedure('AllAmountOstat',[son,1000,30000,P,Pcount]);
+          k:=OraclePackage1.GetParameter(3);
+          kcount:=OraclePackage1.GetParameter(4);
+          Sheet.cells[9,3]:=k;
+          Sheet.cells[9,4]:=kcount;
+
+          OraclePackage1.CallProcedure('ProtAmountOstat',[son,1000,30000,P,Pcount]);
+          k:=OraclePackage1.GetParameter(3);
+          kcount:=OraclePackage1.GetParameter(4);
+          Sheet.cells[9,5]:=k;
+          Sheet.cells[9,6]:=kcount;
+
+          OraclePackage1.CallProcedure('CompenAmountOstat',[son,1000,30000,P,Pcount]);
+          k:=OraclePackage1.GetParameter(3);
+          kcount:=OraclePackage1.GetParameter(4);
+          Sheet.cells[9,7]:=k;
+          Sheet.cells[9,8]:=kcount;
+
+          M30:=StrToInt(Sheet.cells[8,5])+ StrToInt(Sheet.cells[9,5]);
+
+
+         {******************************************30000--100000********************************************************************************}
+         Gauge1.Progress:=76;
+          Application.ProcessMessages;
+          k:=0;
+          OraclePackage1.CallProcedure('AllAmountOstat',[son,30000,100000,P,Pcount]);
+          k:=OraclePackage1.GetParameter(3);
+          kcount:=OraclePackage1.GetParameter(4);
+          Sheet.cells[10,3]:=k;
+          Sheet.cells[10,4]:=kcount;
+
+          OraclePackage1.CallProcedure('ProtAmountOstat',[son,30000,100000,P,Pcount]);
+          k:=OraclePackage1.GetParameter(3);
+          kcount:=OraclePackage1.GetParameter(4);
+          Sheet.cells[10,5]:=k;
+          Sheet.cells[10,6]:=kcount;
+
+          OraclePackage1.CallProcedure('CompenAmountOstat',[son,30000,100000,P,Pcount]);
+          k:=OraclePackage1.GetParameter(3);
+          kcount:=OraclePackage1.GetParameter(4);
+          Sheet.cells[10,7]:=k;
+          Sheet.cells[10,8]:=kcount;
+
+          M100:=StrToInt(Sheet.cells[10,5]);
+
+          {******************************************100000--150000********************************************************************************}
+          Gauge1.Progress:=77;
+          Application.ProcessMessages;
+          k:=0;
+          OraclePackage1.CallProcedure('AllAmountOstat',[son,100000,150000,P,Pcount]);
+          k:=OraclePackage1.GetParameter(3);
+          kcount:=OraclePackage1.GetParameter(4);
+          Sheet.cells[11,3]:=k;
+          Sheet.cells[11,4]:=kcount;
+
+          OraclePackage1.CallProcedure('ProtAmountOstat',[son,100000,150000,P,Pcount]);
+          k:=OraclePackage1.GetParameter(3);
+          kcount:=OraclePackage1.GetParameter(4);
+          Sheet.cells[11,5]:=k;
+          Sheet.cells[11,6]:=kcount;
+
+          OraclePackage1.CallProcedure('CompenAmountOstat',[son,100000,150000,P,Pcount]);
+          k:=OraclePackage1.GetParameter(3);
+          kcount:=OraclePackage1.GetParameter(4);
+          Sheet.cells[11,7]:=k;
+          Sheet.cells[11,8]:=kcount;
+
+
+
+          {******************************************150000--200000********************************************************************************}
+          Gauge1.Progress:=78;
+          Application.ProcessMessages;
+          k:=0;
+          OraclePackage1.CallProcedure('AllAmountOstat',[son,150000,200000,P,Pcount]);
+          k:=OraclePackage1.GetParameter(3);
+          kcount:=OraclePackage1.GetParameter(4);
+          Sheet.cells[12,3]:=k;
+          Sheet.cells[12,4]:=kcount;
+
+          OraclePackage1.CallProcedure('ProtAmountOstat',[son,150000,200000,P,Pcount]);
+          k:=OraclePackage1.GetParameter(3);
+          kcount:=OraclePackage1.GetParameter(4);
+          Sheet.cells[12,5]:=k;
+          Sheet.cells[12,6]:=kcount;
+
+          OraclePackage1.CallProcedure('CompenAmountOstat',[son,150000,200000,P,Pcount]);
+          k:=OraclePackage1.GetParameter(3);
+          kcount:=OraclePackage1.GetParameter(4);
+          Sheet.cells[12,7]:=k;
+          Sheet.cells[12,8]:=kcount;
+
+          M200:=StrToInt(Sheet.cells[11,5])+StrToInt(Sheet.cells[12,5]);
+
+          {******************************************200000--250000********************************************************************************}
+          Gauge1.Progress:=79;
+          Application.ProcessMessages;
+          k:=0;
+          OraclePackage1.CallProcedure('AllAmountOstat',[son,200000,250000,P,Pcount]);
+          k:=OraclePackage1.GetParameter(3);
+          kcount:=OraclePackage1.GetParameter(4);
+          Sheet.cells[13,3]:=k;
+          Sheet.cells[13,4]:=kcount;
+
+          OraclePackage1.CallProcedure('ProtAmountOstat',[son,200000,250000,P,Pcount]);
+          k:=OraclePackage1.GetParameter(3);
+          kcount:=OraclePackage1.GetParameter(4);
+          Sheet.cells[13,5]:=k;
+          Sheet.cells[13,6]:=kcount;
+
+          OraclePackage1.CallProcedure('CompenAmountOstat',[son,200000,250000,P,Pcount]);
+          k:=OraclePackage1.GetParameter(3);
+          kcount:=OraclePackage1.GetParameter(4);
+          Sheet.cells[13,7]:=k;
+          Sheet.cells[13,8]:=kcount;
+
+          {******************************************250000--300000********************************************************************************}
+          Gauge1.Progress:=80;
+          Application.ProcessMessages;
+          k:=0;
+          OraclePackage1.CallProcedure('AllAmountOstat',[son,250000,300000,P,Pcount]);
+          k:=OraclePackage1.GetParameter(3);
+          kcount:=OraclePackage1.GetParameter(4);
+          Sheet.cells[14,3]:=k;
+          Sheet.cells[14,4]:=kcount;
+
+          OraclePackage1.CallProcedure('ProtAmountOstat',[son,250000,300000,P,Pcount]);
+          k:=OraclePackage1.GetParameter(3);
+          kcount:=OraclePackage1.GetParameter(4);
+          Sheet.cells[14,5]:=k;
+          Sheet.cells[14,6]:=kcount;
+
+          OraclePackage1.CallProcedure('CompenAmountOstat',[son,250000,300000,P,Pcount]);
+          k:=OraclePackage1.GetParameter(3);
+          kcount:=OraclePackage1.GetParameter(4);
+          Sheet.cells[14,7]:=k;
+          Sheet.cells[14,8]:=kcount;
+
+          M300:=StrToInt(Sheet.cells[13,5])+StrToInt(Sheet.cells[14,5]);
+
+          {******************************************300000--500000********************************************************************************}
+          Gauge1.Progress:=81;
+          Application.ProcessMessages;
+          k:=0;
+          OraclePackage1.CallProcedure('AllAmountOstat',[son,300000,500000,P,Pcount]);
+          k:=OraclePackage1.GetParameter(3);
+          kcount:=OraclePackage1.GetParameter(4);
+          Sheet.cells[15,3]:=k;
+          Sheet.cells[15,4]:=kcount;
+
+          OraclePackage1.CallProcedure('ProtAmountOstat',[son,300000,500000,P,Pcount]);
+          k:=OraclePackage1.GetParameter(3);
+          kcount:=OraclePackage1.GetParameter(4);
+          Sheet.cells[15,5]:=k;
+          Sheet.cells[15,6]:=kcount;
+
+          OraclePackage1.CallProcedure('CompenAmountOstat',[son,300000,500000,P,Pcount]);
+          k:=OraclePackage1.GetParameter(3);
+          kcount:=OraclePackage1.GetParameter(4);
+          Sheet.cells[15,7]:=k;
+          Sheet.cells[15,8]:=kcount;
+
+          M500:=StrToInt(Sheet.cells[15,5]);
+
+          {******************************************500000--1000000********************************************************************************}
+          Gauge1.Progress:=82;
+          Application.ProcessMessages;
+          k:=0;
+          OraclePackage1.CallProcedure('AllAmountOstat',[son,500000,1000000,P,Pcount]);
+          k:=OraclePackage1.GetParameter(3);
+          kcount:=OraclePackage1.GetParameter(4);
+          Sheet.cells[16,3]:=k;
+          Sheet.cells[16,4]:=kcount;
+
+          OraclePackage1.CallProcedure('ProtAmountOstat',[son,500000,1000000,P,Pcount]);
+          k:=OraclePackage1.GetParameter(3);
+          kcount:=OraclePackage1.GetParameter(4);
+          Sheet.cells[16,5]:=k;
+          Sheet.cells[16,6]:=kcount;
+
+          OraclePackage1.CallProcedure('CompenAmountOstat',[son,500000,1000000,P,Pcount]);
+          k:=OraclePackage1.GetParameter(3);
+          kcount:=OraclePackage1.GetParameter(4);
+          Sheet.cells[16,7]:=k;
+          Sheet.cells[16,8]:=kcount;
+
+
+          {******************************************1000000--yuxari********************************************************************************}
+          Gauge1.Progress:=83;
+          Application.ProcessMessages;
+          k:=0;
+          OraclePackage1.CallProcedure('AllAmountOstat',[son,1000000,100000000,P,Pcount]);
+          k:=OraclePackage1.GetParameter(3);
+          kcount:=OraclePackage1.GetParameter(4);
+          Sheet.cells[17,3]:=k;
+          Sheet.cells[17,4]:=kcount;
+
+          OraclePackage1.CallProcedure('ProtAmountOstat',[son,1000000,100000000,P,Pcount]);
+          k:=OraclePackage1.GetParameter(3);
+          kcount:=OraclePackage1.GetParameter(4);
+          Sheet.cells[17,5]:=k;
+          Sheet.cells[17,6]:=kcount;
+
+          OraclePackage1.CallProcedure('CompenAmountOstat',[son,1000000,100000000,P,Pcount]);
+          k:=OraclePackage1.GetParameter(3);
+          kcount:=OraclePackage1.GetParameter(4);
+          Sheet.cells[17,7]:=k;
+          Sheet.cells[17,8]:=kcount;
+
+          k:=StrToInt(Sheet.cells[8,3])+StrToInt(Sheet.cells[9,3])+StrToInt(Sheet.cells[10,3])+StrToInt(Sheet.cells[11,3])+StrToInt(Sheet.cells[12,3])+StrToInt(Sheet.cells[13,3]) +StrToInt(Sheet.cells[14,3])+
+             StrToInt(Sheet.cells[15,3])+StrToInt(Sheet.cells[16,3])+StrToInt(Sheet.cells[17,3]);
+
+          kcount:=StrToInt(Sheet.cells[8,4])+StrToInt(Sheet.cells[9,4])+StrToInt(Sheet.cells[10,4])+StrToInt(Sheet.cells[11,4])+StrToInt(Sheet.cells[12,4])+StrToInt(Sheet.cells[13,4]) +StrToInt(Sheet.cells[14,4])+
+                  StrToInt(Sheet.cells[15,4])+StrToInt(Sheet.cells[16,4])+StrToInt(Sheet.cells[17,4]);
+
+          Sheet.cells[18,3]:=k;
+          Sheet.cells[18,4]:=kcount;
+
+          k:=StrToInt(Sheet.cells[8,5])+StrToInt(Sheet.cells[9,5])+StrToInt(Sheet.cells[10,5])+StrToInt(Sheet.cells[11,5])+StrToInt(Sheet.cells[12,5])+StrToInt(Sheet.cells[13,5]) +StrToInt(Sheet.cells[14,5])+
+             StrToInt(Sheet.cells[15,5])+StrToInt(Sheet.cells[16,5])+StrToInt(Sheet.cells[17,5]);
+
+          kcount:=StrToInt(Sheet.cells[8,6])+StrToInt(Sheet.cells[9,6])+StrToInt(Sheet.cells[10,6])+StrToInt(Sheet.cells[11,6])+StrToInt(Sheet.cells[12,6])+StrToInt(Sheet.cells[13,6]) +StrToInt(Sheet.cells[14,6])+
+                  StrToInt(Sheet.cells[15,6])+StrToInt(Sheet.cells[16,6])+StrToInt(Sheet.cells[17,6]);
+
+          Sheet.cells[18,5]:=k;
+          Sheet.cells[18,6]:=kcount;
+
+          k:=StrToInt(Sheet.cells[8,7])+StrToInt(Sheet.cells[9,7])+StrToInt(Sheet.cells[10,7])+StrToInt(Sheet.cells[11,7])+StrToInt(Sheet.cells[12,7])+StrToInt(Sheet.cells[13,7]) +StrToInt(Sheet.cells[14,7])+
+             StrToInt(Sheet.cells[15,7])+StrToInt(Sheet.cells[16,7])+StrToInt(Sheet.cells[17,7]);
+
+          kcount:=StrToInt(Sheet.cells[8,8])+StrToInt(Sheet.cells[9,8])+StrToInt(Sheet.cells[10,8])+StrToInt(Sheet.cells[11,8])+StrToInt(Sheet.cells[12,8])+StrToInt(Sheet.cells[13,8]) +StrToInt(Sheet.cells[14,8])+
+                  StrToInt(Sheet.cells[15,8])+StrToInt(Sheet.cells[16,8])+StrToInt(Sheet.cells[17,8]);
+
+
+          M3:=M1-k;
+          Sheet.cells[8,7]:=StrToInt(Sheet.cells[8,7])-M3;
+          Sheet.cells[18,7]:=M1;
+          Sheet.cells[18,8]:=kcount;
+
+          M1000:=StrToInt(Sheet.cells[16,5])+StrToInt(Sheet.cells[17,5]);
+        end;
+
+          {*****************************************************************Cəvdvəl VII*****************************************************************************************************************************************}
+        if I=3 then
+        begin
+          V :=ExcelApplication4.Application;
+          ExcelApplication4.Connect;
+          V.Workbooks.Open(ExtractFilePath(ExtractFilePath(ParamStr(0)))+ 'Emanetler(IV hisse).xls');
+          for OpenedXlsCnt :=1 to 100 do
+          try
+           Sheet := V.Workbooks[OpenedXlsCnt].Worksheets['HesabatQorunan'];
+           Break;
+          except
+          end;
+          Sheets := V.Sheets;
+          Sheets.Item['HesabatQorunan'].Activate;
+          IL:=FormatDateTime('yyyy',trunc(DTP1.DateTime));
+          Sheet.cells[1,2]:=IL;
+          Bas:=FormatDateTime('dd-MMM-yyyy',trunc(DTP1.DateTime));
+          Son:=FormatDateTime('dd-MMM-yyyy',trunc(DTP2.DateTime));
+          Sheet.cells[2,2]:=Bas+'_______'+son;
+
+          Sheet.cells[5,1].Font.Name :='Tahoma';
+          Sheet.Cells[5,1].Font.Bold :=true;
+          Sheet.Cells[5,1].Font.size :=12;
+
+          {*********************************************0--30000***********************************************************************}
+          Gauge1.Progress:=84;
+          Application.ProcessMessages;
+          k:=0;
+          OraclePackage1.CallProcedure('PAmountOstat',[son,0.00,30000,P]);
+          k:=OraclePackage1.GetParameter(3);
+          Sheet.cells[7,3]:=k;
+          OraclePackage1.CallProcedure('PAmountOstatValyuta',[son,0.00,30000,P]);
+          k:=OraclePackage1.GetParameter(3);
+          Sheet.cells[7,4]:=k;
+
+          OraclePackage1.CallProcedure('ProtAmountOstat',[son,0.00,30000,P,Pcount]);
+          k:=OraclePackage1.GetParameter(3);
+          kcount:=OraclePackage1.GetParameter(4);
+          Sheet.cells[7,5]:=StrToInt(Sheet.cells[7,3])+StrToInt(Sheet.cells[7,4]);
+          Sheet.cells[7,6]:=kcount;
+
+          k:=M30-StrToInt(Sheet.cells[7,5]);
+          Sheet.cells[7,5]:=StrToInt(Sheet.cells[7,5])+k;
+
+          {*********************************************30000--40000***********************************************************************}
+          Gauge1.Progress:=85;
+          Application.ProcessMessages;
+          k:=0;
+          OraclePackage1.CallProcedure('PAmountOstat',[son,30000,40000,P]);
+          k:=OraclePackage1.GetParameter(3);
+          Sheet.cells[8,3]:=k;
+          OraclePackage1.CallProcedure('PAmountOstatValyuta',[son,30000,40000,P]);
+          k:=OraclePackage1.GetParameter(3);
+          Sheet.cells[8,4]:=k;
+
+          OraclePackage1.CallProcedure('ProtAmountOstat',[son,30000,40000,P,Pcount]);
+          k:=OraclePackage1.GetParameter(3);
+          kcount:=OraclePackage1.GetParameter(4);
+          Sheet.cells[8,5]:=StrToInt(Sheet.cells[8,3])+StrToInt(Sheet.cells[8,4]);
+          Sheet.cells[8,6]:=kcount;
+
+          {*********************************************40000--50000***********************************************************************}
+          Gauge1.Progress:=86;
+          Application.ProcessMessages;
+          k:=0;
+          OraclePackage1.CallProcedure('PAmountOstat',[son,40000,50000,P]);
+          k:=OraclePackage1.GetParameter(3);
+          Sheet.cells[9,3]:=k;
+          OraclePackage1.CallProcedure('PAmountOstatValyuta',[son,40000,50000,P]);
+          k:=OraclePackage1.GetParameter(3);
+          Sheet.cells[9,4]:=k;
+
+          OraclePackage1.CallProcedure('ProtAmountOstat',[son,40000,50000,P,Pcount]);
+          k:=OraclePackage1.GetParameter(3);
+          kcount:=OraclePackage1.GetParameter(4);
+          Sheet.cells[9,5]:=StrToInt(Sheet.cells[9,3])+StrToInt(Sheet.cells[9,4]);
+          Sheet.cells[9,6]:=kcount;
+
+          {*********************************************50000--60000***********************************************************************}
+          Gauge1.Progress:=87;
+          Application.ProcessMessages;
+          k:=0;
+          OraclePackage1.CallProcedure('PAmountOstat',[son,50000,60000,P]);
+          k:=OraclePackage1.GetParameter(3);
+          Sheet.cells[10,3]:=k;
+          OraclePackage1.CallProcedure('PAmountOstatValyuta',[son,50000,60000,P]);
+          k:=OraclePackage1.GetParameter(3);
+          Sheet.cells[10,4]:=k;
+
+          OraclePackage1.CallProcedure('ProtAmountOstat',[son,50000,60000,P,Pcount]);
+          k:=OraclePackage1.GetParameter(3);
+          kcount:=OraclePackage1.GetParameter(4);
+          Sheet.cells[10,5]:=StrToInt(Sheet.cells[10,3])+StrToInt(Sheet.cells[10,4]);
+          Sheet.cells[10,6]:=kcount;
+
+         {*********************************************60000--70000***********************************************************************}
+         Gauge1.Progress:=88;
+          Application.ProcessMessages;
+          k:=0;
+          OraclePackage1.CallProcedure('PAmountOstat',[son,60000,70000,P]);
+          k:=OraclePackage1.GetParameter(3);
+          Sheet.cells[11,3]:=k;
+          OraclePackage1.CallProcedure('PAmountOstatValyuta',[son,60000,70000,P]);
+          k:=OraclePackage1.GetParameter(3);
+          Sheet.cells[11,4]:=k;
+
+          OraclePackage1.CallProcedure('ProtAmountOstat',[son,60000,70000,P,Pcount]);
+          k:=OraclePackage1.GetParameter(3);
+          kcount:=OraclePackage1.GetParameter(4);
+          Sheet.cells[11,5]:=StrToInt(Sheet.cells[11,3])+StrToInt(Sheet.cells[11,4]);
+          Sheet.cells[11,6]:=kcount;
+
+         {*********************************************70000--80000***********************************************************************}
+          Gauge1.Progress:=89;
+          Application.ProcessMessages;
+          k:=0;
+          OraclePackage1.CallProcedure('PAmountOstat',[son,70000,80000,P]);
+          k:=OraclePackage1.GetParameter(3);
+          Sheet.cells[12,3]:=k;
+          OraclePackage1.CallProcedure('PAmountOstatValyuta',[son,70000,80000,P]);
+          k:=OraclePackage1.GetParameter(3);
+          Sheet.cells[12,4]:=k;
+
+          OraclePackage1.CallProcedure('ProtAmountOstat',[son,70000,80000,P,Pcount]);
+          k:=OraclePackage1.GetParameter(3);
+          kcount:=OraclePackage1.GetParameter(4);
+          Sheet.cells[12,5]:=StrToInt(Sheet.cells[12,3])+StrToInt(Sheet.cells[12,4]);
+          Sheet.cells[12,6]:=kcount;
+
+
+          {*********************************************80000--90000***********************************************************************}
+          Gauge1.Progress:=90;
+          Application.ProcessMessages;
+          k:=0;
+          OraclePackage1.CallProcedure('PAmountOstat',[son,80000,90000,P]);
+          k:=OraclePackage1.GetParameter(3);
+          Sheet.cells[13,3]:=k;
+          OraclePackage1.CallProcedure('PAmountOstatValyuta',[son,80000,90000,P]);
+          k:=OraclePackage1.GetParameter(3);
+          Sheet.cells[13,4]:=k;
+
+          OraclePackage1.CallProcedure('ProtAmountOstat',[son,80000,90000,P,Pcount]);
+          k:=OraclePackage1.GetParameter(3);
+          kcount:=OraclePackage1.GetParameter(4);
+          Sheet.cells[13,5]:=StrToInt(Sheet.cells[13,3])+StrToInt(Sheet.cells[13,4]);
+          Sheet.cells[13,6]:=kcount;
+
+          {*********************************************90000--100000***********************************************************************}
+          Gauge1.Progress:=91;
+          Application.ProcessMessages;
+          k:=0;
+          OraclePackage1.CallProcedure('PAmountOstat',[son,90000,100000,P]);
+          k:=OraclePackage1.GetParameter(3);
+          Sheet.cells[14,3]:=k;
+          OraclePackage1.CallProcedure('PAmountOstatValyuta',[son,90000,100000,P]);
+          k:=OraclePackage1.GetParameter(3);
+          Sheet.cells[14,4]:=k;
+
+          OraclePackage1.CallProcedure('ProtAmountOstat',[son,90000,100000,P,Pcount]);
+          k:=OraclePackage1.GetParameter(3);
+          kcount:=OraclePackage1.GetParameter(4);
+          Sheet.cells[14,5]:=StrToInt(Sheet.cells[14,3])+StrToInt(Sheet.cells[14,4]);;
+          Sheet.cells[14,6]:=kcount;
+
+          k:=M100-StrToInt(Sheet.cells[8,5])-StrToInt(Sheet.cells[9,5])-StrToInt(Sheet.cells[10,5])-StrToInt(Sheet.cells[11,5])-StrToInt(Sheet.cells[12,5])-
+             StrToInt(Sheet.cells[13,5])-StrToInt(Sheet.cells[14,5]);
+
+          Sheet.cells[14,5]:=StrToInt(Sheet.cells[14,5])+k;
+
+          {*********************************************100000--200000***********************************************************************}
+          Gauge1.Progress:=92;
+          Application.ProcessMessages;
+          k:=0;
+          OraclePackage1.CallProcedure('PAmountOstat',[son,100000,200000,P]);
+          k:=OraclePackage1.GetParameter(3);
+          Sheet.cells[15,3]:=k;
+          OraclePackage1.CallProcedure('PAmountOstatValyuta',[son,100000,200000,P]);
+          k:=OraclePackage1.GetParameter(3);
+          Sheet.cells[15,4]:=k;
+
+          OraclePackage1.CallProcedure('ProtAmountOstat',[son,100000,200000,P,Pcount]);
+          k:=OraclePackage1.GetParameter(3);
+          kcount:=OraclePackage1.GetParameter(4);
+          Sheet.cells[15,5]:=StrToInt(Sheet.cells[15,3])+StrToInt(Sheet.cells[15,4]);;
+          Sheet.cells[15,6]:=kcount;
+
+          k:=M200-StrToInt(Sheet.cells[15,5]);
+          Sheet.cells[15,5]:=StrToInt(Sheet.cells[15,5])+k;
+
+          {*********************************************200000--300000***********************************************************************}
+          Gauge1.Progress:=93;
+          Application.ProcessMessages;
+          k:=0;
+          OraclePackage1.CallProcedure('PAmountOstat',[son,200000,300000,P]);
+          k:=OraclePackage1.GetParameter(3);
+          Sheet.cells[16,3]:=k;
+          OraclePackage1.CallProcedure('PAmountOstatValyuta',[son,200000,300000,P]);
+          k:=OraclePackage1.GetParameter(3);
+          Sheet.cells[16,4]:=k;
+
+          OraclePackage1.CallProcedure('ProtAmountOstat',[son,200000,300000,P,Pcount]);
+          k:=OraclePackage1.GetParameter(3);
+          kcount:=OraclePackage1.GetParameter(4);
+          Sheet.cells[16,5]:=StrToInt(Sheet.cells[16,3])+StrToInt(Sheet.cells[16,4]);;
+          Sheet.cells[16,6]:=kcount;
+
+          k:=M300-StrToInt(Sheet.cells[16,5]);
+          Sheet.cells[16,5]:=StrToInt(Sheet.cells[16,5])+k;
+
+          {*********************************************300000--400000***********************************************************************}
+          Gauge1.Progress:=94;
+          Application.ProcessMessages;
+          k:=0;
+          OraclePackage1.CallProcedure('PAmountOstat',[son,300000,400000,P]);
+          k:=OraclePackage1.GetParameter(3);
+          Sheet.cells[17,3]:=k;
+          OraclePackage1.CallProcedure('PAmountOstatValyuta',[son,300000,400000,P]);
+          k:=OraclePackage1.GetParameter(3);
+          Sheet.cells[17,4]:=k;
+
+          OraclePackage1.CallProcedure('ProtAmountOstat',[son,300000,400000,P,Pcount]);
+          k:=OraclePackage1.GetParameter(3);
+          kcount:=OraclePackage1.GetParameter(4);
+          Sheet.cells[17,5]:=StrToInt(Sheet.cells[17,3])+StrToInt(Sheet.cells[17,4]);;
+          Sheet.cells[17,6]:=kcount;
+
+          {*********************************************400000--500000***********************************************************************}
+          Gauge1.Progress:=95;
+          Application.ProcessMessages;
+          k:=0;
+          OraclePackage1.CallProcedure('PAmountOstat',[son,400000,500000,P]);
+          k:=OraclePackage1.GetParameter(3);
+          Sheet.cells[18,3]:=k;
+          OraclePackage1.CallProcedure('PAmountOstatValyuta',[son,400000,500000,P]);
+          k:=OraclePackage1.GetParameter(3);
+          Sheet.cells[18,4]:=k;
+
+          OraclePackage1.CallProcedure('ProtAmountOstat',[son,400000,500000,P,Pcount]);
+          k:=OraclePackage1.GetParameter(3);
+          kcount:=OraclePackage1.GetParameter(4);
+          Sheet.cells[18,5]:=StrToInt(Sheet.cells[18,3])+StrToInt(Sheet.cells[18,4]);;
+          Sheet.cells[18,6]:=kcount;
+
+          k:=M500-StrToInt(Sheet.cells[17,5])-StrToInt(Sheet.cells[18,5]);
+          Sheet.cells[18,5]:=StrToInt(Sheet.cells[18,5])+k;
+
+          {*********************************************500000--yuxari***********************************************************************}
+          Gauge1.Progress:=96;
+          Application.ProcessMessages;
+          k:=0;
+          OraclePackage1.CallProcedure('PAmountOstat',[son,500000,100000000,P]);
+          k:=OraclePackage1.GetParameter(3);
+          Sheet.cells[19,3]:=k;
+          OraclePackage1.CallProcedure('PAmountOstatValyuta',[son,500000,100000000,P]);
+          k:=OraclePackage1.GetParameter(3);
+          Sheet.cells[19,4]:=k;
+
+          OraclePackage1.CallProcedure('ProtAmountOstat',[son,500000,100000000,P,Pcount]);
+          k:=OraclePackage1.GetParameter(3);
+          kcount:=OraclePackage1.GetParameter(4);
+          Sheet.cells[19,5]:=StrToInt(Sheet.cells[19,3])+StrToInt(Sheet.cells[19,4]);;
+          Sheet.cells[19,6]:=kcount;
+
+          k:=M1000-StrToInt(Sheet.cells[19,5]);
+          Sheet.cells[19,5]:=StrToInt(Sheet.cells[19,5])+k;
+
+          Gauge1.Progress:=97;
+          Application.ProcessMessages;
+          k:=StrToInt(Sheet.cells[7,3])+StrToInt(Sheet.cells[8,3])+StrToInt(Sheet.cells[9,3])+StrToInt(Sheet.cells[10,3])+StrToInt(Sheet.cells[11,3])+StrToInt(Sheet.cells[12,3]) +StrToInt(Sheet.cells[13,3])+
+             StrToInt(Sheet.cells[14,3])+StrToInt(Sheet.cells[15,3])+StrToInt(Sheet.cells[16,3])+StrToInt(Sheet.cells[17,3])+StrToInt(Sheet.cells[18,3])+StrToInt(Sheet.cells[19,3]);
+          Sheet.cells[20,3]:=k;
+
+          k:=StrToInt(Sheet.cells[7,4])+StrToInt(Sheet.cells[8,4])+StrToInt(Sheet.cells[9,4])+StrToInt(Sheet.cells[10,4])+StrToInt(Sheet.cells[11,4])+StrToInt(Sheet.cells[12,4]) +StrToInt(Sheet.cells[13,4])+
+             StrToInt(Sheet.cells[14,4])+StrToInt(Sheet.cells[15,4])+StrToInt(Sheet.cells[16,4])+StrToInt(Sheet.cells[17,4])+StrToInt(Sheet.cells[18,4])+StrToInt(Sheet.cells[19,4]);
+          Sheet.cells[20,4]:=k;
+
+          k:=StrToInt(Sheet.cells[7,5])+StrToInt(Sheet.cells[8,5])+StrToInt(Sheet.cells[9,5])+StrToInt(Sheet.cells[10,5])+StrToInt(Sheet.cells[11,5])+StrToInt(Sheet.cells[12,5]) +StrToInt(Sheet.cells[13,5])+
+             StrToInt(Sheet.cells[14,5])+StrToInt(Sheet.cells[15,5])+StrToInt(Sheet.cells[16,5])+StrToInt(Sheet.cells[17,5])+StrToInt(Sheet.cells[18,5])+StrToInt(Sheet.cells[19,5]);
+          Sheet.cells[20,5]:=k;
+
+          k:=StrToInt(Sheet.cells[7,6])+StrToInt(Sheet.cells[8,6])+StrToInt(Sheet.cells[9,6])+StrToInt(Sheet.cells[10,6])+StrToInt(Sheet.cells[11,6])+StrToInt(Sheet.cells[12,6]) +StrToInt(Sheet.cells[13,6])+
+             StrToInt(Sheet.cells[14,6])+StrToInt(Sheet.cells[15,6])+StrToInt(Sheet.cells[16,6])+StrToInt(Sheet.cells[17,6])+StrToInt(Sheet.cells[18,6])+StrToInt(Sheet.cells[19,6]);
+          Sheet.cells[20,6]:=k;
+
+
+
+
+
+        end;
+      end;
+
+
+        Gauge1.Progress:=100;
+        Gauge1.Progress:=0;
+        Edate:=Time();
+        ShowMessage('Hesabatın bitməsi.'+#13#10+TimeToStr(Bdate)+'-'+TimeToStr(Edate));
+        ExcelApplication1.Visible[0] :=True;
+        ExcelApplication1.Disconnect;
+        ExcelApplication2.Visible[0] :=True;
+        ExcelApplication2.Disconnect;
+        ExcelApplication3.Visible[0] :=True;
+        ExcelApplication3.Disconnect;
+        ExcelApplication4.Visible[0] :=True;
+        ExcelApplication4.Disconnect;
+       end
+
+   else begin
+          ShowMessage('Son tarix Baslangic tarixden kicik ola bilmez');
+          exit;
+        end;
+
+
+end;
+procedure TEmanet.DTP1Change(Sender: TObject);
+begin
+  Bas:=FormatDateTime('dd-MMM-yyyy',trunc(DTP1.DateTime));
+end;
+
+procedure TEmanet.DBViewComboBox3Change(Sender: TObject);
+begin
+  Text:=DBViewComboBox3.Text;
+end;
+
+procedure TEmanet.Edit3KeyPress(Sender: TObject; var Key: Char);
+begin
+  if not(Ord(Key)=8) then
+  if ((Length((Sender as TEdit).Text)>4) and ((Sender as TEdit).SelLength=0)) or (not(key in ['0'..'9']) ) then
+  key:=#0;
+end;
+
+procedure TEmanet.Edit3Enter(Sender: TObject);
+begin
+  Edit3.Clear;
+end;
+
+procedure TEmanet.TabSheet3Show(Sender: TObject);
+begin
+  Setfilter('2');
+end;
+
+procedure TEmanet.TabSheet4Show(Sender: TObject);
+begin
+  Setfilter('4');
+end;
+
+procedure TEmanet.DBViewComboBox4Change(Sender: TObject);
+begin
+  Text:=DBViewComboBox4.Text;
+end;
+
+procedure TEmanet.Edit4Enter(Sender: TObject);
+begin
+  Edit4.Clear;
+end;
+
+procedure TEmanet.Edit4KeyPress(Sender: TObject; var Key: Char);
+begin
+  if not(Ord(Key)=8) then
+  if ((Length((Sender as TEdit).Text)>4) and ((Sender as TEdit).SelLength=0)) or (not(key in ['0'..'9']) ) then
+  key:=#0;
+end;
+
+procedure TEmanet.RadioButton1Click(Sender: TObject);
+begin
+   F:=1;
+end;
+
+procedure TEmanet.RadioButton2Click(Sender: TObject);
+begin
+  F:=2;
+end;
+
+procedure TEmanet.BitBtn6Click(Sender: TObject);
+begin
+  if Edit3.text<>'' then Text:=Edit3.Text;
+  Insert_Umumi_Emanet;
+  Edit3.clear;
+  DBViewComboBox3.Text:='';
+end;
+
+procedure TEmanet.BitBtn7Click(Sender: TObject);
+begin
+  delete_emanet;
+end;
+function  TEmanet.Valyutanin_Kodu(valyutanin_adi:string):integer;
+begin
+  OracleDataSet4.Close;
+  OracleDataSet4.SetVariable('Val_n',valyutanin_adi);
+  OracleDataSet4.Open;
+  Valyutanin_Kodu:=OracleDataSet4.Fieldbyname('VALUTE').AsInteger;
+end;
+function  TEmanet.Hesabin_tipi(Num:integer):string;
+begin
+  OracleDataSet5.Close;
+  OracleDataSet5.SetVariable('V_ID',Num);
+  OracleDataSet5.Open;
+  Hesabin_tipi:=OracleDataSet5.Fieldbyname('SIMVOL').AsString;
+end;
+procedure TEmanet.DTP2Change(Sender: TObject);
+begin
+  Son:=FormatDateTime('dd-MMM-yyyy',trunc(DTP2.DateTime));
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TEmanet,
+    Class_Emanet,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+
+
+end.

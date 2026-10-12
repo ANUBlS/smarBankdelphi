@@ -1,0 +1,165 @@
+unit frmReferencesImpl_new;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,OracleData,
+  Db, ComCtrls,Oracle, StdCtrls, Grids, DBGrids, DBCtrls, ExtCtrls;
+
+type
+  TfrmReferences_new = class(TForm)
+    GroupBox1: TGroupBox;
+    ValuesComboBox: TComboBox;
+    ValuesEdit: TEdit;
+    BtnApply: TButton;
+    GroupBox2: TGroupBox;
+    TV: TTreeView;
+    StatusBar: TStatusBar;
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure TVChange(Sender: TObject; Node: TTreeNode);
+    procedure BtnApplyClick(Sender: TObject);
+    procedure FormCanResize(Sender: TObject; var NewWidth, NewHeight: Integer;
+      var Resize: Boolean);
+  private
+     procedure TVBuild;
+    procedure TVAddNode(Node :TTreeNode;ID :Integer);
+  public
+       TreeItems :TList;
+  end;
+
+var
+  frmReferences_new: TfrmReferences_new;
+
+implementation
+
+{$R *.dfm}
+    uses DMReferences_new,SBTranslateProc,sboapiDataModuleimpl;
+
+    procedure TFrmReferences_new.TVBuild;
+begin
+   TV.Items.Clear;
+   TVAddNode(nil,-1);
+   DataModReferences_new.ReferLink.Refresh;
+end;
+procedure TfrmReferences_new.TVChange(Sender: TObject; Node: TTreeNode);
+ procedure  ExpandItems(SourceList :TStrings;const Value :WideString);
+var
+     Index :Integer;
+     Data :WideString;
+  begin
+     SourceList.Clear;
+     Data :=Value;
+     Index :=Pos(';',Data);
+     while  Index <> 0  do
+     begin
+        SourceList.Add(Copy(Data,1,Index-1));
+        Delete(Data,1,Index);
+        Index :=Pos(';',Data);
+     end;
+     SourceList.Add(Data);
+  end;
+var
+  TargetItemID :Integer;
+begin
+  TargetItemID :=Integer(TreeItems.Items[Node.AbsoluteIndex]);
+  with  DataModReferences_new do
+  with  ReferLink  do
+  begin
+    Locate('ID',TargetItemID,[]);
+    if not FieldByName('Value').IsNull then
+    begin
+      if FieldByName('SourceList').IsNull then
+      begin
+         ValuesComboBox.Enabled :=False;
+         ValuesEdit.Enabled :=True;
+         ValuesEdit.Text :=FieldByName('Value').AsString;
+      end
+      else
+      begin
+        ValuesComboBox.Enabled :=True;
+        ValuesEdit.Enabled :=False;
+        ExpandItems(ValuesComboBox.Items,FieldByName('SourceList').AsString);
+        ValuesComboBox.ItemIndex :=ValuesComboBox.Items.IndexOf(FieldByName('Value').AsString);
+      end;
+    end else
+    begin
+      ValuesComboBox.Enabled :=False;
+      ValuesEdit.Enabled :=False;
+    end;
+  end;
+  BtnApply.Enabled :=ValuesComboBox.Enabled or ValuesEdit.Enabled;
+end;
+
+procedure TfrmReferences_new.BtnApplyClick(Sender: TObject);
+var
+  NewValue :String;
+begin
+   if ValuesComboBox.Enabled then
+     NewValue :=ValuesComboBox.Items.Strings[ValuesComboBox.ItemIndex]
+   else
+     NewValue :=ValuesEdit.Text;
+
+      with DataModReferences_new do
+      with ReferLink,ReferPackage do
+      begin
+      CallProcedure('UPD_SBCM_REFERENCES',[
+                      FieldByName('ID').Value,
+                      FieldByName('Name').Value,
+                      FieldByName('LName').Value,
+                      FieldByName('ParentID').Value,
+                      NewValue,
+                      FieldByName('SourceList').Value
+                    ]);
+        Refresh;
+      end;
+
+end;
+
+procedure TfrmReferences_new.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+      Resize := False;
+end;
+
+procedure TfrmReferences_new.FormCreate(Sender: TObject);
+begin
+   DataModReferences_new :=TDataModReferences_new.Create(Self);
+   TreeItems :=TList.Create;
+   SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TfrmReferences_new.FormDestroy(Sender: TObject);
+begin
+  TreeItems.Free;
+end;
+
+procedure TfrmReferences_new.FormShow(Sender: TObject);
+begin
+   TVBuild;
+   ValuesComboBox.Enabled :=False;
+   ValuesEdit.Enabled :=False;
+end;
+
+procedure TFrmReferences_new.TVAddNode(Node :TTreeNode;ID :Integer);
+begin
+    with  TOracleDataSet.Create(nil)  do
+    try
+      Session :=DataModReferences_new.TVSubItems.Session;
+      SQL.Assign(DataModReferences_new.TVSubItems.SQL);
+      DeclareVariable('ParentID',otInteger);
+      SetVariable('ParentID',ID);
+      Open;
+      First;
+      while  not EOF  do
+      begin
+        TreeItems.Add(Pointer(FieldByName('ID').AsInteger));
+        TVAddNode(TV.Items.AddChild(Node,FieldByName('LName').AsString),FieldByName('ID').AsInteger);
+        Next;
+      end;
+    finally
+      Free;
+    end;
+end;
+end.

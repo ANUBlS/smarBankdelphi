@@ -1,0 +1,279 @@
+object Form6: TForm6
+  Left = 0
+  Top = 0
+  BorderStyle = bsToolWindow
+  ClientHeight = 383
+  ClientWidth = 610
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poDesktopCenter
+  OnCanResize = FormCanResize
+  OnClose = FormClose
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object ComboBox2: TComboBox
+    Left = 343
+    Top = 40
+    Width = 145
+    Height = 21
+    TabOrder = 0
+  end
+  object ComboBox4: TComboBox
+    Left = 246
+    Top = 13
+    Width = 65
+    Height = 21
+    TabOrder = 1
+    Items.Strings = (
+      'AZN'
+      'USD'
+      'EUR')
+  end
+  object SearchEdit1: TSearchEdit
+    Left = 8
+    Top = 40
+    Width = 57
+    Height = 21
+    TabOrder = 2
+    SearchField = 'BAL_CN'
+  end
+  object SearchEdit2: TSearchEdit
+    Left = 280
+    Top = 40
+    Width = 57
+    Height = 21
+    TabOrder = 3
+  end
+  object DBLookupComboBox1: TDBLookupComboBox
+    Left = 8
+    Top = 8
+    Width = 145
+    Height = 21
+    KeyField = 'VALUTE'
+    ListField = 'VAL_NAME'
+    ListSource = DS_avalute_t
+    TabOrder = 4
+  end
+  object DBLookupComboBox2: TDBLookupComboBox
+    Left = 71
+    Top = 40
+    Width = 145
+    Height = 21
+    KeyField = 'ID'
+    ListField = 'ACC_NO'
+    TabOrder = 5
+  end
+  object GridAccount: TDBGrid
+    Left = 0
+    Top = 0
+    Width = 610
+    Height = 359
+    Align = alClient
+    Color = clBtnFace
+    DataSource = DS_sb_bproc_acc
+    DrawingStyle = gdsGradient
+    FixedColor = clActiveCaption
+    GradientEndColor = clNavy
+    Options = [dgTitles, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit]
+    TabOrder = 6
+    TitleFont.Charset = DEFAULT_CHARSET
+    TitleFont.Color = clWindowText
+    TitleFont.Height = -11
+    TitleFont.Name = 'Tahoma'
+    TitleFont.Style = []
+    OnDblClick = GridAccountDblClick
+    Columns = <
+      item
+        Expanded = False
+        FieldName = 'ID'
+        Title.Color = clHighlight
+        Title.Font.Charset = DEFAULT_CHARSET
+        Title.Font.Color = clWhite
+        Title.Font.Height = -11
+        Title.Font.Name = 'Tahoma'
+        Title.Font.Style = []
+        Visible = False
+      end
+      item
+        Expanded = False
+        FieldName = 'BAL_CN1'
+        Title.Caption = 'Balans'
+        Title.Color = clHighlight
+        Title.Font.Charset = DEFAULT_CHARSET
+        Title.Font.Color = clWhite
+        Title.Font.Height = -11
+        Title.Font.Name = 'Tahoma'
+        Title.Font.Style = []
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'ACC_NO'
+        Title.Caption = 'Hesab'
+        Title.Color = clHighlight
+        Title.Font.Charset = DEFAULT_CHARSET
+        Title.Font.Color = clWhite
+        Title.Font.Height = -11
+        Title.Font.Name = 'Tahoma'
+        Title.Font.Style = []
+        Width = 190
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'NAME'
+        Title.Caption = 'Hesab'#305'n ad'#305
+        Title.Color = clHighlight
+        Title.Font.Charset = DEFAULT_CHARSET
+        Title.Font.Color = clWhite
+        Title.Font.Height = -11
+        Title.Font.Name = 'Tahoma'
+        Title.Font.Style = []
+        Width = 280
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'VAL_ACC'
+        Title.Caption = 'Valyuta'
+        Title.Font.Charset = DEFAULT_CHARSET
+        Title.Font.Color = clWhite
+        Title.Font.Height = -11
+        Title.Font.Name = 'Tahoma'
+        Title.Font.Style = []
+        Width = -1
+        Visible = False
+      end
+      item
+        Expanded = False
+        FieldName = 'Val_NAME'
+        Title.Font.Charset = DEFAULT_CHARSET
+        Title.Font.Color = clWhite
+        Title.Font.Height = -11
+        Title.Font.Name = 'Tahoma'
+        Title.Font.Style = []
+        Width = 60
+        Visible = True
+      end>
+  end
+  object Panel1: TPanel
+    Left = 0
+    Top = 359
+    Width = 610
+    Height = 24
+    Align = alBottom
+    BevelInner = bvLowered
+    TabOrder = 7
+    object Edit_BalCN: TEdit
+      Left = 1
+      Top = 1
+      Width = 60
+      Height = 21
+      TabOrder = 0
+      OnChange = Edit_BalCNChange
+    end
+    object DBLookupComboBox3: TDBLookupComboBox
+      Left = 254
+      Top = 1
+      Width = 139
+      Height = 21
+      KeyField = 'VALUTE'
+      ListField = 'VAL_NAME'
+      ListSource = DS_avalute_t
+      TabOrder = 1
+      OnCloseUp = DBLookupComboBox3CloseUp
+    end
+    object Edit_AccNo: TEdit
+      Left = 62
+      Top = 1
+      Width = 190
+      Height = 21
+      TabOrder = 2
+      OnChange = Edit_AccNoChange
+    end
+  end
+  object ODS_avalute_t: TOracleDataSet
+    SQL.Strings = (
+      'select -1 valute,'#39'B'#252't'#252'n valyutalar'#39' val_name from dual'
+      'union'
+      'select valute,val_name from avalute_t')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000200000010000000560041004C005F004E0041004D00450001000000
+      00000C000000560041004C00550054004500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 176
+    Top = 208
+    object ODS_avalute_tVALUTE: TFloatField
+      FieldName = 'VALUTE'
+    end
+    object ODS_avalute_tVAL_NAME: TWideStringField
+      FieldName = 'VAL_NAME'
+      Size = 30
+    end
+  end
+  object DS_avalute_t: TDataSource
+    DataSet = ODS_avalute_t
+    Left = 304
+    Top = 208
+  end
+  object ODS_sb_bproc_acc: TOracleDataSet
+    SQL.Strings = (
+      
+        'select sb.*,a.bal_cn1,a.val_acc from sb_bproc_acc sb,account a w' +
+        'here a.id(+)=sb.id --and c.valute=a.val_acc ,avalute_t c ,c.val_' +
+        'name'
+      ''
+      ''
+      '')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000060000000400000049004400010000000000080000004E0041004D00
+      45000100000000000C0000004100430043005F004E004F000100000000000E00
+      0000420041004C005F0043004E0031000100000000000E000000560041004C00
+      5F0041004300430001000000000010000000560041004C005F004E0041004D00
+      4500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 176
+    Top = 264
+    object ODS_sb_bproc_accID: TFloatField
+      FieldName = 'ID'
+      Visible = False
+    end
+    object ODS_sb_bproc_accACC_NO: TWideStringField
+      FieldName = 'ACC_NO'
+      Size = 28
+    end
+    object ODS_sb_bproc_accNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 90
+    end
+    object ODS_sb_bproc_accBAL_CN1: TFloatField
+      FieldName = 'BAL_CN1'
+    end
+    object ODS_sb_bproc_accVAL_ACC: TIntegerField
+      FieldName = 'VAL_ACC'
+    end
+    object ODS_sb_bproc_accVal_NAME: TWideStringField
+      FieldKind = fkLookup
+      FieldName = 'Val_NAME'
+      LookupDataSet = ODS_avalute_t
+      LookupKeyFields = 'VALUTE'
+      LookupResultField = 'VAL_NAME'
+      KeyFields = 'VAL_ACC'
+      Size = 30
+      Lookup = True
+    end
+  end
+  object DS_sb_bproc_acc: TDataSource
+    DataSet = ODS_sb_bproc_acc
+    Left = 304
+    Top = 264
+  end
+end

@@ -1,0 +1,87 @@
+﻿unit UnitForeignCurrency;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ExtCtrls, StdCtrls, CMCurrencyEdit, DBCtrls;
+
+type
+  TFormForeignCurrency = class(TForm)
+    Panel1: TPanel;
+    Panel2: TPanel;
+    DBLookupComboBox1: TDBLookupComboBox;
+    Label1: TLabel;
+    Panel3: TPanel;
+    CMCurrencyEdit1: TCMCurrencyEdit;
+    Label2: TLabel;
+    Button1: TButton;
+    Button2: TButton;
+    procedure Button1Click(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormForeignCurrency: TFormForeignCurrency;
+
+implementation
+uses UnitPaymentsCredit,ExpressDecls, ExpDataModuleUnit;
+
+{$R *.dfm}
+
+procedure TFormForeignCurrency.Button1Click(Sender: TObject);
+begin
+  if DBLookupComboBox1.Text='' then begin
+                                      ShowMessage('Hesabın adı sahəsi seçilməyib!');
+                                      exit;
+                                    end;
+  if CMCurrencyEdit1.text='0.00' then begin
+                                       ShowMessage('Məbləğ sahəsi doldurulmayıb!');
+                                       exit;
+                                     end;
+
+  ExpressVariables.Fc_accid:=DBLookupComboBox1.KeyValue;
+  ExpressVariables.Fc_amount:=StrToFloat(CMCurrencyEdit1.text);
+  Close;
+end;
+
+procedure TFormForeignCurrency.Button2Click(Sender: TObject);
+begin
+  Close;
+  //DBLookupComboBox1.KeyValue:=-1;
+  //CMCurrencyEdit1.Text:='0.00';
+end;
+
+procedure TFormForeignCurrency.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+DBLookupComboBox1.KeyValue:=-1;
+                      CMCurrencyEdit1.Text:='0.00';
+end;
+
+procedure TFormForeignCurrency.FormShow(Sender: TObject);
+begin
+  WIth FormPaymentsCredit do
+  begin
+    ODSAccNo.Close;
+    ODSAccNo.Open;
+    //showmessage(inttostr(DBLookupComboBox1.KeyValue));
+   { IF FForm=0 THEN BEGIN
+
+                      DBLookupComboBox1.KeyValue:=-1;
+                      CMCurrencyEdit1.Text:='0.00';
+                    END
+               ELSE BEGIN }
+                      DBLookupComboBox1.KeyValue:=ExpDataModule.ExpBatchsDataSetDEBETACCID.AsInteger;
+                      CMCurrencyEdit1.Text:=ExpDataModule.ExpBatchsDataSetCOMISSIONAMOUNT.AsString;
+                 //   END;
+  end;
+end;
+
+end.

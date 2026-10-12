@@ -1,0 +1,93 @@
+object FormDepositAccount: TFormDepositAccount
+  Left = 0
+  Top = 0
+  Caption = 'FormDepositAccount'
+  ClientHeight = 242
+  ClientWidth = 520
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poScreenCenter
+  OnClose = FormClose
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object XFPanel1: TXFPanel
+    Left = 0
+    Top = 0
+    Width = 520
+    Height = 242
+    Align = alClient
+    BevelInner = bvSpace
+    BevelOuter = bvLowered
+    TabOrder = 0
+    object XFPanel2: TXFPanel
+      Left = 2
+      Top = 198
+      Width = 516
+      Height = 42
+      Align = alBottom
+      BevelInner = bvSpace
+      BevelOuter = bvLowered
+      TabOrder = 0
+      object XFButton1: TXFButton
+        Left = 280
+        Top = 10
+        Width = 75
+        Height = 25
+        Caption = 'Hesab a'#231'maq'
+        DoubleBuffered = True
+        ParentDoubleBuffered = False
+        TabOrder = 0
+        OnClick = XFButton1Click
+      end
+      object XFBitBtn1: TXFBitBtn
+        Left = 361
+        Top = 10
+        Width = 75
+        Height = 25
+        Caption = #304'mtina'
+        DoubleBuffered = True
+        ParentDoubleBuffered = False
+        TabOrder = 1
+        OnClick = XFBitBtn1Click
+      end
+    end
+    object XDBGrid_account: TXDBGrid
+      Left = 2
+      Top = 2
+      Width = 516
+      Height = 196
+      Align = alClient
+      DataSource = NewDataModDepositsContract.DSAccno
+      GridStyle.VisualStyle = vsXPStyle
+      TabOrder = 1
+      Columns = <
+        item
+          CheckBox = True
+          Expanded = False
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'NAMEACCNO'
+          Title.Alignment = taCenter
+          Title.Caption = 'Hesab'#305'n Ad'#305
+          Visible = True
+          Width = 200
+        end
+        item
+          Expanded = False
+          FieldName = 'ACCNO'
+          Title.Alignment = taCenter
+          Title.Caption = 'Hesab'#305'n N'#246'mr'#601'si'
+          Visible = True
+          Width = 180
+        end>
+    end
+  end
+end

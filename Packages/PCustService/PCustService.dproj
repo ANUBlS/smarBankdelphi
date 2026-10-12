@@ -1,0 +1,296 @@
+﻿	<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+		<PropertyGroup>
+			<ProjectGuid>{D8DD01D6-8374-4B7A-9880-2E7514921E51}</ProjectGuid>
+			<MainSource>PCustService.dpr</MainSource>
+			<Base>True</Base>
+			<Config Condition="'$(Config)'==''">Debug</Config>
+			<Platform>Win32</Platform>
+			<AppType>Library</AppType>
+			<FrameworkType>None</FrameworkType>
+			<DCC_DCCCompiler>DCC32</DCC_DCCCompiler>
+			<ProjectVersion>12.3</ProjectVersion>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Config)'=='Base' or '$(Base)'!=''">
+			<Base>true</Base>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Config)'=='Release' or '$(Cfg_1)'!=''">
+			<Cfg_1>true</Cfg_1>
+			<CfgParent>Base</CfgParent>
+			<Base>true</Base>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Config)'=='Debug' or '$(Cfg_2)'!=''">
+			<Cfg_2>true</Cfg_2>
+			<CfgParent>Base</CfgParent>
+			<Base>true</Base>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Base)'!=''">
+			<UsePackages>true</UsePackages>
+			<DCC_UsePackage>Vcl;Vclx;Vcldb;dclbde;SBCommon50;sbplg50;sboapi50;doa41dXE;SBCMVcl50;ehlib150;DclEhLib150;cm_common;newdepositscommon;VCLXFiles150;QR5RunDXE;SbTranslate;dclofficexp;cm_retil</DCC_UsePackage>
+			<DCC_WriteableConstants>true</DCC_WriteableConstants>
+			<DCC_SymbolReferenceInfo>1</DCC_SymbolReferenceInfo>
+			<DCC_Alignment>1</DCC_Alignment>
+			<DCC_UnitAlias>WinTypes=Windows;WinProcs=Windows;DbiTypes=BDE;DbiProcs=BDE;DbiErrs=BDE;WinTypes=Windows;WinProcs=Windows;$(DCC_UnitAlias)</DCC_UnitAlias>
+			<DCC_ImageBase>00400000</DCC_ImageBase>
+			<DCC_N>true</DCC_N>
+			<DCC_S>false</DCC_S>
+			<GenDll>true</GenDll>
+			<DCC_E>false</DCC_E>
+			<DCC_F>false</DCC_F>
+			<DCC_K>false</DCC_K>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Cfg_1)'!=''">
+			<DCC_LocalDebugSymbols>false</DCC_LocalDebugSymbols>
+			<DCC_Define>RELEASE;$(DCC_Define)</DCC_Define>
+			<DCC_SymbolReferenceInfo>0</DCC_SymbolReferenceInfo>
+			<DCC_DebugInformation>false</DCC_DebugInformation>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Cfg_2)'!=''">
+			<DCC_ExeOutput>D:\Smart-Bank\Bin\</DCC_ExeOutput>
+			<DCC_Define>DEBUG;$(DCC_Define)</DCC_Define>
+			<DCC_Optimize>false</DCC_Optimize>
+			<DCC_GenerateStackFrames>true</DCC_GenerateStackFrames>
+		</PropertyGroup>
+		<ItemGroup>
+			<DelphiCompile Include="PCustService.dpr">
+				<MainSource>MainSource</MainSource>
+			</DelphiCompile>
+			<DCCReference Include="PCustService_TLB.pas"/>
+			<DCCReference Include="PCustServiceFormImpl1.pas">
+				<Form>PCustServiceForm</Form>
+				<DesignClass>TActiveForm</DesignClass>
+				<CoClasses>PCustServiceForm</CoClasses>
+			</DCCReference>
+			<DCCReference Include="UnitDataModPCustService.pas">
+				<Form>DataModPCustService</Form>
+				<DesignClass>TDataModule</DesignClass>
+			</DCCReference>
+			<DCCReference Include="addcombobox.pas"/>
+			<DCCReference Include="Creditİmpl.pas">
+				<Form>CreditFrm</Form>
+			</DCCReference>
+			<DCCReference Include="FormTransaction1Lmpl.pas">
+				<Form>Form2</Form>
+			</DCCReference>
+			<DCCReference Include="FormTransaction2Lmpl.pas">
+				<Form>FormTransaction2</Form>
+			</DCCReference>
+			<DCCReference Include="FormTransaction3Lmpl.pas">
+				<Form>FormTransaction3</Form>
+			</DCCReference>
+			<DCCReference Include="AccountPropertiesFLmpl.pas">
+				<Form>AccountPropertiesF</Form>
+			</DCCReference>
+			<DCCReference Include="AccounFlagsLmpl.pas">
+				<Form>FormAccounFlags</Form>
+			</DCCReference>
+			<DCCReference Include="FormIntervalLmpl.pas">
+				<Form>FormInterval</Form>
+			</DCCReference>
+			<DCCReference Include="FormOperationLmpl.pas">
+				<Form>FormOperation</Form>
+			</DCCReference>
+			<DCCReference Include="FormStatmentlmpl.pas">
+				<Form>FormStatement</Form>
+			</DCCReference>
+			<DCCReference Include="UnitReport.pas">
+				<Form>FormRep</Form>
+			</DCCReference>
+			<DCCReference Include="UnitReportR.pas">
+				<Form>FormRepR</Form>
+			</DCCReference>
+			<DCCReference Include="UnitTransaction.pas">
+				<Form>FormTransaction4</Form>
+			</DCCReference>
+			<DCCReference Include="UnitTransView.pas">
+				<Form>FormTransView</Form>
+			</DCCReference>
+			<DCCReference Include="CurrencyToHR_Azeri_Impl.pas"/>
+			<DCCReference Include="UntIntervalRpt.pas">
+				<Form>QRptInterval</Form>
+				<DesignClass>TQuickRep</DesignClass>
+			</DCCReference>
+			<DCCReference Include="DepozLmpl.pas">
+				<Form>DepozitFrm</Form>
+			</DCCReference>
+			<DCCReference Include="SMSFormİmpl.pas">
+				<Form>SMSForm</Form>
+			</DCCReference>
+			<DCCReference Include="FormOperationShowLmpl.pas">
+				<Form>FormOperationShow</Form>
+			</DCCReference>
+			<DCCReference Include="FormOperationShow1Lmpl.pas">
+				<Form>FormOperationShow1</Form>
+			</DCCReference>
+			<DCCReference Include="AccountPropertiesEditFLmpl.pas">
+				<Form>AccountPropertiesEditF</Form>
+			</DCCReference>
+			<DCCReference Include="AccountPropertiesEditFormLmpl.pas">
+				<Form>AccountPropertiesEditForm</Form>
+			</DCCReference>
+			<DCCReference Include="AccountPropertiesLmpl.pas">
+				<Form>AccountProperties</Form>
+			</DCCReference>
+			<DCCReference Include="UnitFrm_Zoom.pas">
+				<Form>FormZoom</Form>
+			</DCCReference>
+			<DCCReference Include="Unit_Phys_fs.pas">
+				<Form>FormPyhsFs</Form>
+			</DCCReference>
+			<DCCReference Include="CustomersImpl.pas">
+				<Form>FormCustomers</Form>
+			</DCCReference>
+			<DCCReference Include="Pcust_CO_BookmarkSetupUnit.pas">
+				<Form>Ph_CO_BookmarkSetupFrom</Form>
+			</DCCReference>
+			<DCCReference Include="Pcust_CO_TemplAddEditUnit.pas">
+				<Form>Ph_CO_TemplAddEditForm</Form>
+			</DCCReference>
+			<DCCReference Include="Pcust_CO_BookmarkAddEditUnit.pas">
+				<Form>Ph_CO_BookmarkAddEditForm</Form>
+			</DCCReference>
+			<DCCReference Include="Pcust_CO_frmWReportUnit.pas">
+				<Form>Ph_CO_frmWReport</Form>
+			</DCCReference>
+			<DCCReference Include="HesabUnit.pas">
+				<Form>Cust_Account</Form>
+			</DCCReference>
+			<DCCReference Include="Unit_quality.pas">
+				<Form>Quality</Form>
+			</DCCReference>
+			<DCCReference Include="Unit_id_quality.pas">
+				<Form>Formid_quality</Form>
+			</DCCReference>
+			<DCCReference Include="Unit_description.pas">
+				<Form>Form_description</Form>
+			</DCCReference>
+			<DCCReference Include="FormBusProc.pas">
+				<Form>Form_busnesProc</Form>
+			</DCCReference>
+			<DCCReference Include="SmsSending1.pas"/>
+			<DCCReference Include="OrderPrintUnit_tarif.pas">
+				<Form>QReportOrderTarif</Form>
+				<DesignClass>TQuickRep</DesignClass>
+			</DCCReference>
+			<DCCReference Include="ExpUnittrans.pas">
+				<Form>Formepxtrans</Form>
+			</DCCReference>
+			<DCCReference Include="Unitembassy.pas">
+				<Form>Form_embassy</Form>
+			</DCCReference>
+			<DCCReference Include="UntQRReceiptSefr.pas">
+				<Form>QRPTReceiptSefr</Form>
+				<DesignClass>TQuickRep</DesignClass>
+			</DCCReference>
+			<DCCReference Include="UnitInvoceRep.pas">
+				<Form>QRptInvoceRep</Form>
+				<DesignClass>TQuickRep</DesignClass>
+			</DCCReference>
+			<DCCReference Include="UnitEmbasyTrans.pas">
+				<Form>Form_embasTrans</Form>
+			</DCCReference>
+			<DCCReference Include="Unitcust_potencial.pas">
+				<Form>Form_custPotencial</Form>
+			</DCCReference>
+			<DCCReference Include="UnitTransaction11.pas">
+				<Form>FormTransaction11</Form>
+			</DCCReference>
+			<DCCReference Include="Unitqaime.pas">
+				<Form>FormQaime</Form>
+			</DCCReference>
+			<DCCReference Include="UnitLikol.pas">
+				<Form>FormLikol</Form>
+			</DCCReference>
+			<DCCReference Include="Unit7.pas">
+				<Form>Form7</Form>
+			</DCCReference>
+			<DCCReference Include="Unit8.pas">
+				<Form>Form8</Form>
+			</DCCReference>
+			<DCCReference Include="companycreditpayment.pas">
+				<Form>Paymentcompany</Form>
+			</DCCReference>
+			<DCCReference Include="frommasinUni.pas">
+				<Form>FormMasin</Form>
+			</DCCReference>
+			<DCCReference Include="Unit_Other.pas">
+				<Form>Form_other</Form>
+			</DCCReference>
+			<DCCReference Include="UnitForm_other_change.pas">
+				<Form>Form_other_change</Form>
+			</DCCReference>
+			<DCCReference Include="PEPUnit.pas">
+				<Form>Pep_change</Form>
+			</DCCReference>
+			<RidlCompile Include="PCustService.ridl"/>
+			<BuildConfiguration Include="Debug">
+				<Key>Cfg_2</Key>
+				<CfgParent>Base</CfgParent>
+			</BuildConfiguration>
+			<BuildConfiguration Include="Base">
+				<Key>Base</Key>
+			</BuildConfiguration>
+			<BuildConfiguration Include="Release">
+				<Key>Cfg_1</Key>
+				<CfgParent>Base</CfgParent>
+			</BuildConfiguration>
+		</ItemGroup>
+		<Import Condition="Exists('$(BDS)\Bin\CodeGear.Delphi.Targets')" Project="$(BDS)\Bin\CodeGear.Delphi.Targets"/>
+		<Import Condition="Exists('$(APPDATA)\Embarcadero\$(BDSAPPDATABASEDIR)\$(PRODUCTVERSION)\UserTools.proj')" Project="$(APPDATA)\Embarcadero\$(BDSAPPDATABASEDIR)\$(PRODUCTVERSION)\UserTools.proj"/>
+		<ProjectExtensions>
+			<Borland.Personality>Delphi.Personality.12</Borland.Personality>
+			<Borland.ProjectType>VCLApplication</Borland.ProjectType>
+			<BorlandProject>
+				<Delphi.Personality>
+					<Source>
+						<Source Name="MainSource">PCustService.dpr</Source>
+					</Source>
+					<Language>
+						<Language Name="ProjectLang">$00000409</Language>
+					</Language>
+					<VersionInfo>
+						<VersionInfo Name="IncludeVerInfo">False</VersionInfo>
+						<VersionInfo Name="AutoIncBuild">False</VersionInfo>
+						<VersionInfo Name="MajorVer">1</VersionInfo>
+						<VersionInfo Name="MinorVer">0</VersionInfo>
+						<VersionInfo Name="Release">0</VersionInfo>
+						<VersionInfo Name="Build">0</VersionInfo>
+						<VersionInfo Name="Debug">False</VersionInfo>
+						<VersionInfo Name="PreRelease">False</VersionInfo>
+						<VersionInfo Name="Special">False</VersionInfo>
+						<VersionInfo Name="Private">False</VersionInfo>
+						<VersionInfo Name="DLL">True</VersionInfo>
+						<VersionInfo Name="Locale">1033</VersionInfo>
+						<VersionInfo Name="CodePage">1252</VersionInfo>
+					</VersionInfo>
+					<VersionInfoKeys>
+						<VersionInfoKeys Name="CompanyName"/>
+						<VersionInfoKeys Name="FileDescription"/>
+						<VersionInfoKeys Name="FileVersion">1.0.0.0</VersionInfoKeys>
+						<VersionInfoKeys Name="InternalName"/>
+						<VersionInfoKeys Name="LegalCopyright"/>
+						<VersionInfoKeys Name="LegalTrademarks"/>
+						<VersionInfoKeys Name="OriginalFilename"/>
+						<VersionInfoKeys Name="ProductName"/>
+						<VersionInfoKeys Name="ProductVersion">1.0.0.0</VersionInfoKeys>
+						<VersionInfoKeys Name="Comments"/>
+						<VersionInfoKeys Name="OleSelfRegister">1</VersionInfoKeys>
+					</VersionInfoKeys>
+					<Excluded_Packages>
+						<Excluded_Packages Name="$(BDSBIN)\dcloffice2k150.bpl">Microsoft Office 2000 Sample Automation Server Wrapper Components</Excluded_Packages>
+					</Excluded_Packages>
+					<Parameters>
+						<Parameters Name="RunParams">/LocalIniSourceLocation=winini:\Smart-Bank\Bin\SBLocal.ini /SystemIniSourceLocation=winini:\Smart-Bank\Bin\SmartBank.ini</Parameters>
+						<Parameters Name="HostApplication">D:\Smart-Bank\Bin\SmartBank.exe</Parameters>
+					</Parameters>
+				</Delphi.Personality>
+				<Platforms>
+					<Platform value="Win32">True</Platform>
+				</Platforms>
+				<ActiveXProjectInfo>
+					<version>1</version>
+				</ActiveXProjectInfo>
+				<ModelSupport>False</ModelSupport>
+			</BorlandProject>
+			<ProjectFileVersion>12</ProjectFileVersion>
+		</ProjectExtensions>
+	</Project>

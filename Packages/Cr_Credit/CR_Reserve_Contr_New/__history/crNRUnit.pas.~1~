@@ -1,0 +1,128 @@
+unit NRUnit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, NLSDialogs,
+  Buttons, NLSLocalizer;
+
+type
+  TNRForm = class(TForm)
+    NLSLocalizer1: TNLSLocalizer;
+    SpeedButton1: TSpeedButton;
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  NRForm: TNRForm;
+  procedure InitPlugin(S:String);export;
+
+implementation
+
+{$R *.DFM}
+
+uses NReservesDatModImpl,CommonDecls;
+
+ procedure InitPlugin(S:String);export;
+ begin
+   NRForm.ShowModal;
+ end;
+                                               
+ exports
+   InitPlugin;
+
+procedure TNRForm.SpeedButton1Click(Sender: TObject);
+Resourcestring Can_ReReserveInf = 'Сечилмиш ещтийатларын гиймятляндирилмясиня яминсинизми?';
+var i ,
+    SlectedRowCnt,
+    CrdId :Integer;
+begin
+    {with ProgressForm.ProgressBar do
+    begin
+      Position := 0;
+      Max := CommonDBGrid.SelectedRows.Count;
+      Step := 1;
+    end;}
+
+   if MessageDlg(Can_ReReserveInf,
+              mtInformation,
+              [mbYes,mbNo],
+               0) <> mrYes
+               then exit ;
+
+  {ProgressForm.Show;
+  ProgressForm.Update;
+  Self.Update; }
+
+  if   CommonDBGrid.SelectedRows.Count>1 then
+  begin
+
+   with CommonDBGrid, DataSource.DataSet do
+   begin
+      SlectedRowCnt := SelectedRows.Count;
+      for i:=0 to SlectedRowCnt-1 do
+      begin
+         GotoBookmark(Pointer(SelectedRows[I]));
+         CrdId :=FieldByName('ID').AsInteger;
+
+       //  try
+         with ResevesDatMod do
+              CR_RESERVE_COUNT_NEW.CallProcedure('reserve_contr_new',[CrdId]);
+         // ProgressForm.ProgressBar.Position := i + 1;
+    //   except
+    //    ShowMessage('Гиймятляндирилмя апарыла бильяди !')
+    //  end;
+   end;
+   end;
+   end
+   else
+   begin
+   with CommonDBGrid, DataSource.DataSet do
+   begin
+         CrdId :=FieldByName('ID').AsInteger;
+  //    ShowMessage(IntToStr(CrdId));
+      //   try
+         with ResevesDatMod do
+              CR_RESERVE_COUNT_NEW.CallProcedure('reserve_contr_new',[CrdId]);
+//          ProgressForm.ProgressBar.Position := i + 1;
+   //    except
+    //    ShowMessage('Гиймятляндирилмя апарыла бильяди !')
+   //  end;
+
+   end;
+
+   end;
+
+   {ProgressForm.Close;
+   ShowMessage('Гиймятляндирилмя битди !');}
+
+end;
+
+procedure TNRForm.FormCreate(Sender: TObject);
+begin
+   ResevesDatMod := TResevesDatMod.Create(Self);
+end;
+
+procedure TNRForm.FormDestroy(Sender: TObject);
+begin
+  ResevesDatMod.Free;
+end;
+
+procedure TNRForm.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+   Resize := False;
+end;
+
+Initialization
+   NRForm := TNRForm.Create(CommonApplication);
+
+end.

@@ -1,0 +1,340 @@
+﻿unit cardbranch;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Grids, DBGrids, Unitcardarxiv, datclose, Unit18, StdCtrls, DBCtrls,
+  Menus;
+
+type
+  Tcard_branch = class(TForm)
+    DBGrid1: TDBGrid;
+    DBLookupComboBox1: TDBLookupComboBox;
+    Edit1: TEdit;
+    Button1: TButton;
+    Label1: TLabel;
+    Label2: TLabel;
+    PopupMenu1: TPopupMenu;
+    S1: TMenuItem;
+    Button2: TButton;
+    Button3: TButton;
+    Button4: TButton;
+    procedure Button1Click(Sender: TObject);
+    procedure S1Click(Sender: TObject);
+    procedure DBGrid1KeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure Button2Click(Sender: TObject);
+    procedure Button3Click(Sender: TObject);
+    procedure Button4Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  card_branch: Tcard_branch;
+
+implementation
+
+{$R *.dfm}
+
+procedure Tcard_branch.Button1Click(Sender: TObject);
+begin
+DataMod_CARDS.mainpacket.CallProcedure('addbranchescode',[DBLookupComboBox1.KeyValue,DBLookupComboBox1.Text,Edit1.Text]);
+ShowMessage('Filialın Plastik kart kodu əlavə olundu..');
+DBGrid1.DataSource.DataSet.Refresh;
+edit1.Clear;
+DBLookupComboBox1.KeyValue:='' ;
+end;
+
+procedure Tcard_branch.Button2Click(Sender: TObject);
+Procedure AddStr(var BodyS : UTF8String;AddS :UTF8String;NewRow: Boolean);
+   begin
+     BodyS:=BodyS+AddS;
+     if NewRow then BodyS:=BodyS+#10;
+   end;
+ var mess_count:  Integer;
+   STmessage,MessageBody,tempStr,tempStr1,tempStr2,S : UTF8String;
+   FileName:UTF8String;
+   sum_amount,sum_all_amount : Real;
+   a:integer;
+   dir,dir2:String;
+   XMLFile : TextFile;
+   v,k:integer;
+   c,bankid,fillist:string;
+begin
+DataMod_CARDS.cardbr_upd.Open;
+dir:='C:\AZCARD\OUT';
+ FileName:=dir+'\CARDFILUPD'+'.xml';
+       AssignFile(XMLFile,Filename);
+       Rewrite(XMLFile);
+
+                     //20170806-160000_0100_
+                     StringReplace(DataMod_CARDS.cardbr_upd.FieldByName('dates').AsString, '-', '',[rfReplaceAll, rfIgnoreCase]);
+ c:= 'TUR#'+ StringReplace(DataMod_CARDS.cardbr_upd.FieldByName('dates').AsString, '-', '',[rfReplaceAll, rfIgnoreCase])+'-'+StringReplace(DataMod_CARDS.cardbr_upd.FieldByName('time').AsString, ':', '',[rfReplaceAll, rfIgnoreCase]) +'_0'+DataMod_CARDS.settings.FieldByName('rez').AsString+'_';
+
+
+       {Writeln(XMLFile,'<UFXMsg msg_type="Application" scheme="WAY4Appl" direction="Rq" version="2.0">');
+        Writeln(XMLFile,'<MsgId>AAA-555-333-EEE-23124141</MsgId>');
+          Writeln(XMLFile,'<Source app="NBCBANK"/>');
+          while not DataMod_CARDS.cardbr_upd.eof do
+                            begin
+           Writeln(XMLFile,'<MsgData>');
+               Writeln(XMLFile,'<Application>');
+                  Writeln(XMLFile,'<RegNumber>NBC-UFX-XML-'+DataMod_CARDS.cardbr_upd.FieldByName('cardnumber').AsString+'</RegNumber>');
+                   Writeln(XMLFile,'<Institution>0270</Institution>');
+                   Writeln(XMLFile,'<OrderDprt>'+DataMod_CARDS.cardbr_upd.FieldByName('branch_code').AsString+'</OrderDprt>');
+                   Writeln(XMLFile,'<ObjectType>Client</ObjectType>');
+                   Writeln(XMLFile,'<ActionType>Update</ActionType>');
+
+            Writeln(XMLFile,'<ObjectFor>');
+             Writeln(XMLFile,'<ClientIDT>');
+              Writeln(XMLFile,'<ClientInfo>');
+               Writeln(XMLFile,' <RegNumber>NBC-UFX-XML-'+DataMod_CARDS.cardbr_upd.FieldByName('cardnumber').AsString+'</RegNumber>');
+                Writeln(XMLFile,'<ShortName>'+DataMod_CARDS.cardbr_upd.FieldByName('cardholder').AsString+'</ShortName>');
+                 Writeln(XMLFile,'</ClientInfo>');
+                 Writeln(XMLFile,'</ClientIDT>');
+
+                 Writeln(XMLFile,'</ObjectFor>');
+                 Writeln(XMLFile,'<Data>');
+
+                     Writeln(XMLFile,' <Client>');
+            Writeln(XMLFile,'<ClientInfo>');
+             Writeln(XMLFile,'<OrderDprt>'+DataMod_CARDS.cardbr_upd.FieldByName('branch_code').AsString+'</OrderDprt>');
+              Writeln(XMLFile,'</ClientInfo>');
+                Writeln(XMLFile,'</Client>');
+                  Writeln(XMLFile,'</Data>');
+                  Writeln(XMLFile,'</Application>');
+                  Writeln(XMLFile,'</MsgData>');
+
+
+
+                 DataMod_CARDS.cardbr_upd.Next;
+
+
+           end;
+
+            Writeln(XMLFile,'</UFXMsg> ');    }
+
+                          k:=0;
+                          fillist:='-1';
+             while (k<DBGrid1.SelectedRows.Count) do
+  begin
+  DBGrid1.DataSource.DataSet.GotoBookmark(pointer(DBGrid1.SelectedRows.Items[k]));
+   k:=k+1;
+    fillist:= fillist+','+DataMod_CARDS.branchcodes.FieldByName('branchid').AsString    ;
+
+  end;
+
+
+           DataMod_CARDS.settings.Open;
+        bankid:=DataMod_CARDS.settings.fieldbyname('BANKID').AsString;
+
+         DataMod_CARDS.card_br_upd.Close;
+         DataMod_CARDS.card_br_upd.SetVariable('rbs',fillist);
+         DataMod_CARDS.card_br_upd.open;
+
+         //
+            Writeln(XMLFile,'<?xml version="1.0" encoding="windows-1251"?>');
+            Writeln(XMLFile,'<ApplicationFile>');
+          Writeln(XMLFile,'<FileHeader>');
+           Writeln(XMLFile,'   <FormatVersion>2.0</FormatVersion>');
+            Writeln(XMLFile,'        <Sender>'+bankid+'</Sender>');
+             Writeln(XMLFile,'       <CreationDate>'+DataMod_CARDS.card_br_upd.FieldByName('dates').AsString+'</CreationDate>');
+             Writeln(XMLFile,'         <CreationTime>'+DataMod_CARDS.card_br_upd.FieldByName('time').AsString+'</CreationTime>');
+             Writeln(XMLFile,'         <Number>'+DataMod_CARDS.settings.FieldByName('rez').AsString+'</Number>');
+             Writeln(XMLFile,'          <Institution>'+bankid+'</Institution>');
+             Writeln(XMLFile,'     </FileHeader>');
+             Writeln(XMLFile,'        <ApplicationsList>');
+
+             v:=1;
+
+
+
+          while not DataMod_CARDS.card_br_upd.eof do
+                            begin
+
+                     Writeln(XMLFile,'    <Application>');
+                     Writeln(XMLFile,'            <RegNumber>'+c+inttostr(v)+'</RegNumber>');
+                     Writeln(XMLFile,'            <OrderDprt>'+DataMod_CARDS.card_br_upd.FieldByName('branch_code').AsString+'</OrderDprt>');
+                     Writeln(XMLFile,'            <ObjectType>Client</ObjectType>');
+                     Writeln(XMLFile,'            <ActionType>Update</ActionType>');
+                     Writeln(XMLFile,'            <ObjectFor>');
+                     Writeln(XMLFile,'            <ClientIDT>');
+                     Writeln(XMLFile,'            <ClientInfo>');
+                     Writeln(XMLFile,'                <ShortName>'+DataMod_CARDS.card_br_upd.FieldByName('cardholder').AsString+'</ShortName>');
+                     Writeln(XMLFile,'             </ClientInfo>');
+                     Writeln(XMLFile,'               <RefContractNumber>'+DataMod_CARDS.card_br_upd.FieldByName('cardnumber').AsString+'</RefContractNumber>');
+                     Writeln(XMLFile,'             </ClientIDT>');
+                     Writeln(XMLFile,'                </ObjectFor>');
+                     Writeln(XMLFile,'            <Data>');
+                     Writeln(XMLFile,'                  <Client>');
+                     Writeln(XMLFile,'                    <OrderDprt>'+DataMod_CARDS.card_br_upd.FieldByName('branch_code').AsString+'</OrderDprt>');
+                     Writeln(XMLFile,'                  </Client>');
+                     Writeln(XMLFile,'            </Data>');
+                     Writeln(XMLFile,'       </Application>');
+
+                                  DataMod_CARDS.card_br_upd.Next;
+                                  v:=v+1;
+
+           end;
+
+
+                           Writeln(XMLFile,'</ApplicationsList>');
+                            Writeln(XMLFile,'</ApplicationFile>');
+        CloseFile(XMLFile);
+            ShowMessage('Xml Yaradildi');
+end;
+
+procedure Tcard_branch.Button3Click(Sender: TObject);
+
+var
+
+ i,k: Integer;
+ sum : string;
+begin
+
+       k:=0;
+       sum:='-1';
+
+ while (k<DBGrid1.SelectedRows.Count) do
+  begin
+
+   DBGrid1.DataSource.DataSet.GotoBookmark(pointer(DBGrid1.SelectedRows.Items[k]));
+
+
+      sum:= sum+','+DataMod_CARDS.branchcodes.FieldByName('branchid').AsString    ;
+      k:=k+1;
+  end;
+
+       showmessage(sum);
+end;
+
+
+procedure Tcard_branch.Button4Click(Sender: TObject);
+Procedure AddStr(var BodyS : UTF8String;AddS :UTF8String;NewRow: Boolean);
+   begin
+     BodyS:=BodyS+AddS;
+     if NewRow then BodyS:=BodyS+#10;
+   end;
+var mess_count:  Integer;
+   STmessage,MessageBody,tempStr,tempStr1,tempStr2,S : UTF8String;
+   FileName:UTF8String;
+   sum_amount,sum_all_amount : Real;
+   a:integer;
+   dir,dir2:String;
+   XMLFile : TextFile;
+   v,k:integer;
+   c,bankid,fillist:string;
+begin
+DataMod_CARDS.cardbr_upd.Open;
+dir:='C:\AZCARD\OUT';
+ FileName:=dir+'\CARDPHONEUPD'+'.xml';
+       AssignFile(XMLFile,Filename);
+       Rewrite(XMLFile);
+
+                     //20170806-160000_0100_
+                     StringReplace(DataMod_CARDS.cardbr_upd.FieldByName('dates').AsString, '-', '',[rfReplaceAll, rfIgnoreCase]);
+ c:= 'TUR#'+ StringReplace(DataMod_CARDS.cardbr_upd.FieldByName('dates').AsString, '-', '',[rfReplaceAll, rfIgnoreCase])+'-'+StringReplace(DataMod_CARDS.cardbr_upd.FieldByName('time').AsString, ':', '',[rfReplaceAll, rfIgnoreCase]) +'_0'+DataMod_CARDS.settings.FieldByName('rez').AsString+'_';
+
+
+        k:=0;
+                          fillist:='-1';
+             while (k<DBGrid1.SelectedRows.Count) do
+  begin
+  DBGrid1.DataSource.DataSet.GotoBookmark(pointer(DBGrid1.SelectedRows.Items[k]));
+   k:=k+1;
+    fillist:= fillist+','+DataMod_CARDS.branchcodes.FieldByName('branchid').AsString    ;
+
+  end;
+
+        DataMod_CARDS.settings.Open;
+        bankid:=DataMod_CARDS.settings.fieldbyname('BANKID').AsString;
+
+        DataMod_CARDS.card_br_upd.Close;
+        DataMod_CARDS.card_br_upd.SetVariable('rbs',fillist);
+        DataMod_CARDS.card_br_upd.open;
+
+       Writeln(XMLFile,'<UFXMsg msg_type="Application" scheme="WAY4Appl" direction="Rq" version="2.0">');
+            Writeln(XMLFile,'<MsgId>AAA-555-333-EEE-23124141</MsgId>');
+          Writeln(XMLFile,'<Source app="TURANBANK"/>');
+           Writeln(XMLFile,'    <MsgData>');
+
+
+             v:=1;
+
+
+          while not DataMod_CARDS.card_br_upd.eof do
+                            begin
+
+      DataMod_CARDS.umumi1.Active:=false;
+      DataMod_CARDS.umumi1.SQL.Clear;
+      DataMod_CARDS.umumi1.SQL.Add('Select * from CARD_CLIENTS where cardnumber='+''''+DataMod_CARDS.card_br_upd.FieldByName('cardnumber').AsString+'''');
+      DataMod_CARDS.umumi1.Active:=true;
+
+                     Writeln(XMLFile,'    <Application>');
+                     Writeln(XMLFile,'            <RegNumber>'+c+inttostr(v)+'</RegNumber>');
+                     Writeln(XMLFile,'            <Institution>'+bankid+'</Institution>');
+                     Writeln(XMLFile,'            <OrderDprt>'+DataMod_CARDS.card_br_upd.FieldByName('branch_code').AsString+'</OrderDprt>');
+                     Writeln(XMLFile,'            <ObjectType>ClientAddress</ObjectType>');
+                     Writeln(XMLFile,'            <ActionType>AddOrUpdate</ActionType>');
+                     Writeln(XMLFile,'            <ObjectFor>');
+                     Writeln(XMLFile,'            <ClientIDT>');
+                     Writeln(XMLFile,'            <ClientInfo>');
+                     Writeln(XMLFile,'               <RegNumber>'+DataMod_CARDS.card_br_upd.FieldByName('cardnumber').AsString+'</RegNumber>');
+                     Writeln(XMLFile,'               <ShortName>&lt;&lt;&lt;NONE&gt;&gt;&gt;</ShortName><!-- const -->');
+                     Writeln(XMLFile,'             </ClientInfo>');
+                     Writeln(XMLFile,'             </ClientIDT>');
+                     Writeln(XMLFile,'                </ObjectFor>');
+                     Writeln(XMLFile,'            <Data>');
+                     Writeln(XMLFile,'                  <Address>');
+                     Writeln(XMLFile,'                    <AddressType>SMS_1</AddressType>');
+                     Writeln(XMLFile,'                    <Language>AZE</Language>');
+                     Writeln(XMLFile,'                    <PostalCode>'+DataMod_CARDS.umumi1.FieldByName('workphone').AsString+'</PostalCode>');
+                     Writeln(XMLFile,'                    <AddressLine1>SMS</AddressLine1>');
+                     Writeln(XMLFile,'                  </Address>');
+                     Writeln(XMLFile,'            </Data>');
+                     Writeln(XMLFile,'       </Application>');
+
+                                  DataMod_CARDS.card_br_upd.Next;
+                                  v:=v+1;
+
+           end;
+
+                     Writeln(XMLFile,'            </MsgData>');
+                     Writeln(XMLFile,'       </UFXMsg>');
+
+            CloseFile(XMLFile);
+            ShowMessage('Xml Yaradildi');
+end;
+
+procedure Tcard_branch.DBGrid1KeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+if key=VK_F11 then
+begin
+Button2.Visible:=true;
+Button4.Visible:=true;
+end;
+
+if key =VK_F10 then
+begin
+Button2.Visible:=false;
+Button4.Visible:=true;
+end;
+end;
+
+procedure Tcard_branch.S1Click(Sender: TObject);
+begin
+ case MessageDlg('Əməliyyat Kodu silinsin ?', mtConfirmation,[mbyes,mbno], 0) of
+         mryes: begin
+ DataMod_CARDS.mainpacket.CallProcedure('del_branchescode',[DBGrid1.DataSource.DataSet.fieldbyName('branchid').asinteger]);
+         end;
+ end;
+ DBGrid1.DataSource.DataSet.Refresh;
+
+end;
+
+end.

@@ -1,0 +1,74 @@
+﻿unit UnitEmbasyTrans;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ExtCtrls, XFSCtrls, DB, OracleData, Grids, XDBGrids, StdCtrls,
+  Buttons;
+
+type
+  TForm_embasTrans = class(TForm)
+    XFPanel1: TXFPanel;
+    XFPanel2: TXFPanel;
+    XDBGrid1: TXDBGrid;
+    ods_embstrans: TOracleDataSet;
+    Dsrc_embstrans: TDataSource;
+    ods_embstransNAME: TWideStringField;
+    ods_embstransBAL_CN1: TFloatField;
+    ods_embstransACC_NO: TWideStringField;
+    XFBitBtn1: TXFBitBtn;
+    XFBitBtn2: TXFBitBtn;
+    ods_embstransCUSTID: TIntegerField;
+    ods_embstransACC_ID: TFloatField;
+    ods_embstransCUSTNAME: TWideStringField;
+    ods_embstransSEX: TWideStringField;
+    procedure XFBitBtn1Click(Sender: TObject);
+    procedure XFBitBtn2Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+
+    { Public declarations }
+  end;
+
+var
+  Form_embasTrans: TForm_embasTrans;
+
+implementation
+  uses
+  sboapiDataModuleImpl, Unitembassy,PCustServiceFormImpl1, UnitDataModPCustService,
+  UntQRReceiptSefr;
+{$R *.dfm}
+
+procedure TForm_embasTrans.XFBitBtn1Click(Sender: TObject);
+ var
+ f:BOOL;
+begin
+
+f:=DataModPCustService.SB_ACA.CallBooleanFunction('checkadvancedobjectaccess',['SEFRSTATUS']);
+ if  f =false then
+ begin
+  showmessage('Sizin bu  məktubu yığmaq hüquqnuz  yoxdur  !');
+ exit;
+ end;
+
+ transid_sefrlik:=DataModPCustService.PG_PCustService.CallIntegerFunction('sefr_trans',
+                                                                     [ods_embstransACC_ID.AsInteger]);
+
+ if transid_sefrlik>0 then
+  begin
+  Form_embassy:=TForm_embassy.Create(self);
+  Form_embassy.ShowModal;
+
+  end;
+
+
+end;
+
+procedure TForm_embasTrans.XFBitBtn2Click(Sender: TObject);
+begin
+Form_embasTrans.Close;
+end;
+
+end.

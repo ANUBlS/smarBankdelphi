@@ -1,0 +1,789 @@
+object DataModDonr: TDataModDonr
+  OldCreateOrder = False
+  OnCreate = DataModuleCreate
+  OnDestroy = DataModuleDestroy
+  Height = 454
+  Width = 694
+  object SysDset: TOracleDataSet
+    SQL.Strings = (
+      'select * from sysdat')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 96
+    Top = 120
+  end
+  object FilDset: TOracleDataSet
+    SQL.Strings = (
+      'select*from filial ')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000030000000400000049004400010000000000080000004E0041004D00
+      4500010000000000140000004B004F0044005F00460049004C00490041004C00
+      010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 192
+    Top = 120
+    object FilDsetID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object FilDsetNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 90
+    end
+    object FilDsetKOD_FILIAL: TWideStringField
+      FieldName = 'KOD_FILIAL'
+      Size = 6
+    end
+  end
+  object ValDset: TOracleDataSet
+    SQL.Strings = (
+      'select*from avalute_t')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000110000000C000000560041004C005500540045000100000000001000
+      0000560041004C005F004E0041004D0045000100000000001200000056004100
+      4C0055005F004E0041004D00450001000000000014000000560041004C005500
+      5F00530048004F00520054000100000000000C0000005500530054004F005200
+      47000100000000000C00000055005300540050004F004B000100000000001000
+      0000560041004C0055005F00470045004E000100000000000E00000056004100
+      4C0055005F0041005A000100000000000A0000005500530049004E0047000100
+      0000000014000000560041004C0055005F004F00540048004500520001000000
+      000014000000560041004C0055005F0049004E00540045005200010000000000
+      12000000560041004C0055005F00420041004C00410001000000000012000000
+      50005200490053005400410056004B0041000100000000000E00000043004F00
+      55004E00540052005900010000000000100000005500530054005F0050004F00
+      4B0031000100000000000E0000004F00460046004900430041004C0001000000
+      00000A0000004C0049004D0049005400010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 296
+    Top = 120
+    object ValDsetVALUTE: TIntegerField
+      FieldName = 'VALUTE'
+      Required = True
+    end
+    object ValDsetVAL_NAME: TWideStringField
+      FieldName = 'VAL_NAME'
+      Size = 10
+    end
+    object ValDsetVALU_NAME: TWideStringField
+      FieldName = 'VALU_NAME'
+      Size = 25
+    end
+    object ValDsetVALU_SHORT: TWideStringField
+      FieldName = 'VALU_SHORT'
+      Size = 10
+    end
+    object ValDsetUSTORG: TFloatField
+      FieldName = 'USTORG'
+    end
+    object ValDsetUSTPOK: TFloatField
+      FieldName = 'USTPOK'
+    end
+    object ValDsetVALU_GEN: TWideStringField
+      FieldName = 'VALU_GEN'
+      Size = 10
+    end
+    object ValDsetVALU_AZ: TWideStringField
+      FieldName = 'VALU_AZ'
+      Size = 25
+    end
+    object ValDsetUSING: TIntegerField
+      FieldName = 'USING'
+    end
+    object ValDsetVALU_OTHER: TWideStringField
+      FieldName = 'VALU_OTHER'
+      Size = 25
+    end
+    object ValDsetVALU_INTER: TWideStringField
+      FieldName = 'VALU_INTER'
+      Size = 3
+    end
+    object ValDsetVALU_BALA: TWideStringField
+      FieldName = 'VALU_BALA'
+      Size = 25
+    end
+    object ValDsetPRISTAVKA: TFloatField
+      FieldName = 'PRISTAVKA'
+    end
+    object ValDsetCOUNTRY: TWideStringField
+      FieldName = 'COUNTRY'
+    end
+    object ValDsetUST_POK1: TFloatField
+      FieldName = 'UST_POK1'
+    end
+    object ValDsetOFFICAL: TWideStringField
+      FieldName = 'OFFICAL'
+      Size = 5
+    end
+    object ValDsetLIMIT: TFloatField
+      FieldName = 'LIMIT'
+    end
+  end
+  object SysDsetSrc: TDataSource
+    DataSet = SysDset
+    Left = 96
+    Top = 184
+  end
+  object FilDsetSrc: TDataSource
+    DataSet = FilDset
+    Left = 192
+    Top = 184
+  end
+  object ValDsetSrc: TDataSource
+    DataSet = ValDset
+    Left = 304
+    Top = 184
+  end
+  object DonrDset: TOracleDataSet
+    SQL.Strings = (
+      'select '
+      '       cont.id,'
+      '       cont.contractno,'
+      
+        '       sbcm_stored_programs.Get_ContractAccount(acc.contractacci' +
+        'd) as ContractAccNO,'
+      
+        '       sbcm_stored_programs.Get_ContractAccount(acc.interestacci' +
+        'd) as InterestAccNO,'
+      '       av.val_name,'
+      
+        '       sbcm_stored_programs.Get_ContractAccountName(acc.contract' +
+        'accid) as CustomerName,'
+      ''
+      
+        '       --sbcm_stored_programs.get_CustomerNameByID(cont.customer' +
+        'id) as CustomerName,'
+      
+        '       --sbcm_stored_programs.get_customername(acc.contractaccid' +
+        ') as CustomerName,'
+      '       cont.opendate,'
+      '       cont.closedate,'
+      '       cont.amount,'
+      '       cont.amount*tmp.ostat as ekamount,'
+      '       intr.interest,         '
+      '       cstate.facticaldebt,'
+      '       cstate.facticaldebt*tmp.ostat as ekfacticaldebt,'
+      '       cstate.facticalinterestdebt,'
+      
+        '       cstate.facticalinterestdebt*tmp.ostat as ekfacticalintere' +
+        'stdebt,'
+      '       cstate.stopcalculationdate,'
+      
+        '       --SBCM_Stored_Programs.CheckContractState(cont.ID) as  St' +
+        'atus,'
+      '       cont.currency,'
+      '       cont.personaltype,'
+      '       cont.clienttype,'
+      '       cont.branchid,'
+      '       cont.contracttype,'
+      '       cstate.calculationenabled as status,'
+      '       cont.customerid,'
+      '       cont.sid# as usid'
+      'from sbcm_contracts cont,'
+      '     sbcm_contract_accounts acc,'
+      '     sbcm_interests intr,'
+      '     sbcm_contract_state cstate,'
+      '     avalute av,'
+      '     temprate tmp'
+      'where acc.id# = cont.id and'
+      '      intr.id# = cont.id and'
+      '      cstate.id# = cont.id and'
+      '      cont.currency = av.valute and'
+      
+        '      cont.currency = tmp.val_kod and cont.id in(select donid fr' +
+        'om cm_donor) and'
+      '      cont.type# = 3 --Active Deposits')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000001800000004000000490044000100000000001400000043004F004E00
+      540052004100430054004E004F000100000000001A00000043004F004E005400
+      52004100430054004100430043004E004F000100000000001A00000049004E00
+      5400450052004500530054004100430043004E004F0001000000000010000000
+      560041004C005F004E0041004D00450001000000000018000000430055005300
+      54004F004D00450052004E0041004D004500010000000000100000004F005000
+      45004E0044004100540045000100000000001200000043004C004F0053004500
+      44004100540045000100000000000C00000041004D004F0055004E0054000100
+      000000001000000045004B0041004D004F0055004E0054000100000000001000
+      000049004E005400450052004500530054000100000000001800000046004100
+      430054004900430041004C0044004500420054000100000000001C0000004500
+      4B0046004100430054004900430041004C004400450042005400010000000000
+      2800000046004100430054004900430041004C0049004E005400450052004500
+      5300540044004500420054000100000000002C00000045004B00460041004300
+      54004900430041004C0049004E00540045005200450053005400440045004200
+      540001000000000026000000530054004F005000430041004C00430055004C00
+      4100540049004F004E0044004100540045000100000000001000000043005500
+      5200520045004E00430059000100000000001800000050004500520053004F00
+      4E0041004C0054005900500045000100000000001400000043004C0049004500
+      4E0054005400590050004500010000000000100000004200520041004E004300
+      4800490044000100000000001800000043004F004E0054005200410043005400
+      54005900500045000100000000000C0000005300540041005400550053000100
+      000000001400000043005500530054004F004D00450052004900440001000000
+      0000080000005500530049004400010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    OnCalcFields = DonrDsetCalcFields
+    Left = 552
+    Top = 32
+    object DonrDsetID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object DonrDsetVAL_NAME: TWideStringField
+      FieldName = 'VAL_NAME'
+      Size = 10
+    end
+    object DonrDsetCONTRACTNO: TWideStringField
+      FieldName = 'CONTRACTNO'
+      Size = 64
+    end
+    object DonrDsetCONTRACTACCNO: TWideStringField
+      FieldName = 'CONTRACTACCNO'
+      Size = 4000
+    end
+    object DonrDsetINTERESTACCNO: TWideStringField
+      FieldName = 'INTERESTACCNO'
+      Size = 4000
+    end
+    object DonrDsetCUSTOMERNAME: TWideStringField
+      FieldName = 'CUSTOMERNAME'
+      Size = 4000
+    end
+    object DonrDsetOPENDATE: TDateTimeField
+      FieldName = 'OPENDATE'
+    end
+    object DonrDsetCLOSEDATE: TDateTimeField
+      FieldName = 'CLOSEDATE'
+    end
+    object DonrDsetAMOUNT: TFloatField
+      FieldName = 'AMOUNT'
+    end
+    object DonrDsetEKAMOUNT: TFloatField
+      FieldName = 'EKAMOUNT'
+    end
+    object DonrDsetINTEREST: TFloatField
+      FieldName = 'INTEREST'
+    end
+    object DonrDsetFACTICALDEBT: TFloatField
+      FieldName = 'FACTICALDEBT'
+      Required = True
+    end
+    object DonrDsetEKFACTICALDEBT: TFloatField
+      FieldName = 'EKFACTICALDEBT'
+    end
+    object DonrDsetFACTICALINTERESTDEBT: TFloatField
+      FieldName = 'FACTICALINTERESTDEBT'
+      Required = True
+    end
+    object DonrDsetEKFACTICALINTERESTDEBT: TFloatField
+      FieldName = 'EKFACTICALINTERESTDEBT'
+    end
+    object DonrDsetSTOPCALCULATIONDATE: TDateTimeField
+      FieldName = 'STOPCALCULATIONDATE'
+    end
+    object DonrDsetCURRENCY: TFloatField
+      FieldName = 'CURRENCY'
+    end
+    object DonrDsetPERSONALTYPE: TFloatField
+      FieldName = 'PERSONALTYPE'
+    end
+    object DonrDsetCLIENTTYPE: TFloatField
+      FieldName = 'CLIENTTYPE'
+    end
+    object DonrDsetBRANCHID: TFloatField
+      FieldName = 'BRANCHID'
+    end
+    object DonrDsetCONTRACTTYPE: TIntegerField
+      FieldName = 'CONTRACTTYPE'
+    end
+    object DonrDsetSTATUS: TFloatField
+      FieldName = 'STATUS'
+      Required = True
+    end
+    object DonrDsetCUSTOMERID: TFloatField
+      FieldName = 'CUSTOMERID'
+    end
+    object DonrDsetUSID: TFloatField
+      FieldName = 'USID'
+    end
+    object DonrDsetminus: TFloatField
+      FieldKind = fkCalculated
+      FieldName = 'minus'
+      Calculated = True
+    end
+  end
+  object DonrDsetSrc: TDataSource
+    DataSet = DonrDset
+    Left = 552
+    Top = 88
+  end
+  object CredDset: TOracleDataSet
+    SQL.Strings = (
+      
+        'select p.numberofcredit,v.val_name,get_donr (p.id) as donrname,f' +
+        '.name ,b.name as customer,'
+      
+        'p.dateofconclusion,p.duedatefirstcontract,p.duedatelastcontract,' +
+        'pr.descripion,vi.name mnovu,cr.name Bsektor, a.description Bfali' +
+        'yyet '
+      
+        ',ca.description Bfaliyetnovu ,t.description tip,p.creditlineamou' +
+        'nt ,(p.creditlineamount*o.ostat) amountek,'
+      
+        '(select percent from cm_reserve_types where id=h.reserveid ) adi' +
+        ' ,(select percent from cm_reserve_types where id=h.duereserveid)' +
+        ' meq,'
+      
+        '(select sum(donorammount) from cm_donor where creditid=p.id) don' +
+        'ves,(select sum(donorammount) from cm_donor where creditid=p.id)' +
+        '*o.ostat donvesek,'
+      
+        'h.rest,h.rest*o.ostat restek,h.interestrest,h.interestrest*o.ost' +
+        'at interestrestek,(select percent from cm_reserve_types where id' +
+        '=h.reserveid )*h.rest adimeb'
+      
+        ',(select percent from cm_reserve_types where id=h.duereserveid)*' +
+        'h.rest meqmeb,h.duerest,h.duerest*o.ostat duerestek,h.dueinteres' +
+        'trest,'
+      
+        'h.dueinterestrest*o.ostat dueinterestrestek,(select name from cm' +
+        '_expert where id=p.expertid) mutexesis,d.donid'
+      'from '
+      'cm_active_credits p,'
+      'avalute_t v,'
+      'filial f,'
+      'cm_boorowerinfo b,'
+      'cm_credittypes t,'
+      'cm_vid_sob vi,'
+      'cm_activities a,cm_creditcat cr,'
+      'cm_categories ca,cm_persons pr,operkurs o,'
+      'cm_history h ,cm_donor d'
+      ''
+      'where '
+      'p.currency=v.valute AND'
+      'p.branchid=f.id and '
+      'p.id=b.creditid and'
+      'p.credittype=t.id and'
+      'p.activities_type =vi.id AND'
+      'p.activities=a.id  and'
+      'p.creditact=cr.id  and'
+      'p.customertype=ca.id and '
+      'p.personaltype=pr.id and'
+      'p.currency=o.val_kod and o.dat=(select tek_dat from sysdat) and'
+      
+        'p.id=h.creditid and h.hdate=(select tek_dat from sysdat)   and p' +
+        '.id=d.creditid'
+      'and d.donid=:depid'
+      '')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000C0000003A00440045005000490044000300000000000000
+      00000000}
+    QBEDefinition.QBEFieldDefs = {
+      05000000200000001C0000004E0055004D004200450052004F00460043005200
+      450044004900540001000000000010000000560041004C005F004E0041004D00
+      45000100000000001000000044004F004E0052004E0041004D00450001000000
+      0000080000004E0041004D004500010000000000100000004300550053005400
+      4F004D00450052000100000000002000000044004100540045004F0046004300
+      4F004E0043004C005500530049004F004E000100000000002800000044005500
+      450044004100540045004600490052005300540043004F004E00540052004100
+      430054000100000000002600000044005500450044004100540045004C004100
+      5300540043004F004E0054005200410043005400010000000000140000004400
+      45005300430052004900500049004F004E000100000000000A0000004D004E00
+      4F00560055000100000000000E0000004200530045004B0054004F0052000100
+      00000000120000004200460041004C0049005900590045005400010000000000
+      180000004200460041004C0049005900450054004E004F005600550001000000
+      0000060000005400490050000100000000002000000043005200450044004900
+      54004C0049004E00450041004D004F0055004E00540001000000000010000000
+      41004D004F0055004E00540045004B0001000000000006000000410044004900
+      010000000000060000004D00450051000100000000000C00000044004F004E00
+      5600450053000100000000001000000044004F004E0056004500530045004B00
+      0100000000000800000052004500530054000100000000000C00000052004500
+      5300540045004B000100000000001800000049004E0054004500520045005300
+      540052004500530054000100000000001C00000049004E005400450052004500
+      53005400520045005300540045004B000100000000000C000000410044004900
+      4D00450042000100000000000C0000004D00450051004D004500420001000000
+      00000E0000004400550045005200450053005400010000000000120000004400
+      55004500520045005300540045004B000100000000001E000000440055004500
+      49004E0054004500520045005300540052004500530054000100000000002200
+      000044005500450049004E005400450052004500530054005200450053005400
+      45004B00010000000000120000004D0055005400450058004500530049005300
+      0100000000000A00000044004F004E0049004400010000000000}
+    Master = DonrDset
+    MasterFields = 'id'
+    DetailFields = 'DEPID'
+    Session = sboapiDataModule.SBSession
+    Left = 568
+    Top = 168
+    object CredDsetNUMBEROFCREDIT: TWideStringField
+      FieldName = 'NUMBEROFCREDIT'
+      Size = 32
+    end
+    object CredDsetVAL_NAME: TWideStringField
+      FieldName = 'VAL_NAME'
+      Size = 10
+    end
+    object CredDsetDONRNAME: TWideStringField
+      FieldName = 'DONRNAME'
+      Size = 4000
+    end
+    object CredDsetNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 90
+    end
+    object CredDsetCUSTOMER: TWideStringField
+      FieldName = 'CUSTOMER'
+      Size = 64
+    end
+    object CredDsetDATEOFCONCLUSION: TDateTimeField
+      FieldName = 'DATEOFCONCLUSION'
+    end
+    object CredDsetDUEDATEFIRSTCONTRACT: TDateTimeField
+      FieldName = 'DUEDATEFIRSTCONTRACT'
+    end
+    object CredDsetDUEDATELASTCONTRACT: TDateTimeField
+      FieldName = 'DUEDATELASTCONTRACT'
+    end
+    object CredDsetDESCRIPION: TWideStringField
+      FieldName = 'DESCRIPION'
+      Size = 64
+    end
+    object CredDsetMNOVU: TWideStringField
+      FieldName = 'MNOVU'
+      Required = True
+      Size = 400
+    end
+    object CredDsetBSEKTOR: TWideStringField
+      FieldName = 'BSEKTOR'
+      Size = 300
+    end
+    object CredDsetBFALIYYET: TWideStringField
+      FieldName = 'BFALIYYET'
+      Size = 400
+    end
+    object CredDsetBFALIYETNOVU: TWideStringField
+      FieldName = 'BFALIYETNOVU'
+      Size = 400
+    end
+    object CredDsetTIP: TWideStringField
+      FieldName = 'TIP'
+      Size = 128
+    end
+    object CredDsetCREDITLINEAMOUNT: TFloatField
+      FieldName = 'CREDITLINEAMOUNT'
+    end
+    object CredDsetAMOUNTEK: TFloatField
+      FieldName = 'AMOUNTEK'
+    end
+    object CredDsetADI: TFloatField
+      FieldName = 'ADI'
+    end
+    object CredDsetMEQ: TFloatField
+      FieldName = 'MEQ'
+    end
+    object CredDsetDONVES: TFloatField
+      FieldName = 'DONVES'
+    end
+    object CredDsetDONVESEK: TFloatField
+      FieldName = 'DONVESEK'
+    end
+    object CredDsetREST: TFloatField
+      FieldName = 'REST'
+    end
+    object CredDsetRESTEK: TFloatField
+      FieldName = 'RESTEK'
+    end
+    object CredDsetINTERESTREST: TFloatField
+      FieldName = 'INTERESTREST'
+    end
+    object CredDsetINTERESTRESTEK: TFloatField
+      FieldName = 'INTERESTRESTEK'
+    end
+    object CredDsetADIMEB: TFloatField
+      FieldName = 'ADIMEB'
+    end
+    object CredDsetMEQMEB: TFloatField
+      FieldName = 'MEQMEB'
+    end
+    object CredDsetDUEREST: TFloatField
+      FieldName = 'DUEREST'
+    end
+    object CredDsetDUERESTEK: TFloatField
+      FieldName = 'DUERESTEK'
+    end
+    object CredDsetDUEINTERESTREST: TFloatField
+      FieldName = 'DUEINTERESTREST'
+    end
+    object CredDsetDUEINTERESTRESTEK: TFloatField
+      FieldName = 'DUEINTERESTRESTEK'
+    end
+    object CredDsetMUTEXESIS: TWideStringField
+      FieldName = 'MUTEXESIS'
+      Size = 80
+    end
+    object CredDsetDONID: TFloatField
+      FieldName = 'DONID'
+    end
+  end
+  object CredDsetSrc: TDataSource
+    DataSet = CredDset
+    Left = 568
+    Top = 224
+  end
+  object OracleDataSet1: TOracleDataSet
+    SQL.Strings = (
+      'select '
+      '       cont.id,'
+      
+        '       cont.contractno,substr(sbcm_stored_programs.Get_ContractA' +
+        'ccount(acc.contractaccid),0,4) balcin,'
+      
+        '       sbcm_stored_programs.Get_ContractAccount(acc.contractacci' +
+        'd) as ContractAccNO,'
+      
+        '       sbcm_stored_programs.Get_ContractAccount(acc.interestacci' +
+        'd) as InterestAccNO,'
+      '       av.val_name,'
+      
+        '       sbcm_stored_programs.Get_ContractAccountName(acc.contract' +
+        'accid) as CustomerName,'
+      ''
+      
+        '       --sbcm_stored_programs.get_CustomerNameByID(cont.customer' +
+        'id) as CustomerName,'
+      
+        '       --sbcm_stored_programs.get_customername(acc.contractaccid' +
+        ') as CustomerName,'
+      '       cont.opendate,'
+      '       cont.closedate,'
+      '       cont.amount,'
+      '       cont.amount*tmp.ostat as ekamount,'
+      '       intr.interest,         '
+      '       cstate.facticaldebt,'
+      '       cstate.facticaldebt*tmp.ostat as ekfacticaldebt,'
+      '       cstate.facticalinterestdebt,'
+      
+        '       cstate.facticalinterestdebt*tmp.ostat as ekfacticalintere' +
+        'stdebt,'
+      '       cstate.stopcalculationdate,'
+      
+        '       --SBCM_Stored_Programs.CheckContractState(cont.ID) as  St' +
+        'atus,'
+      '       cont.currency,'
+      '       cont.personaltype,'
+      '       cont.clienttype,'
+      '       cont.branchid,'
+      '       cont.contracttype,'
+      '       cstate.calculationenabled as status,'
+      '       cont.customerid,'
+      '       cont.sid# as usid'
+      'from sbcm_contracts cont,'
+      '     sbcm_contract_accounts acc,'
+      '     sbcm_interests intr,'
+      '     sbcm_contract_state cstate,'
+      '     avalute av,'
+      '     temprate tmp'
+      'where acc.id# = cont.id and'
+      '      intr.id# = cont.id and'
+      '      cstate.id# = cont.id and'
+      '      cont.currency = av.valute and'
+      
+        '      cont.currency = tmp.val_kod and  cont.id in(select donid f' +
+        'rom cm_donor) and'
+      '      cont.type# = 3 --Active Deposits'
+      ''
+      ''
+      ''
+      '')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000001900000004000000490044000100000000001400000043004F004E00
+      540052004100430054004E004F000100000000001A00000043004F004E005400
+      52004100430054004100430043004E004F000100000000001A00000049004E00
+      5400450052004500530054004100430043004E004F0001000000000010000000
+      560041004C005F004E0041004D00450001000000000018000000430055005300
+      54004F004D00450052004E0041004D004500010000000000100000004F005000
+      45004E0044004100540045000100000000001200000043004C004F0053004500
+      44004100540045000100000000000C00000041004D004F0055004E0054000100
+      000000001000000045004B0041004D004F0055004E0054000100000000001000
+      000049004E005400450052004500530054000100000000001800000046004100
+      430054004900430041004C0044004500420054000100000000001C0000004500
+      4B0046004100430054004900430041004C004400450042005400010000000000
+      2800000046004100430054004900430041004C0049004E005400450052004500
+      5300540044004500420054000100000000002C00000045004B00460041004300
+      54004900430041004C0049004E00540045005200450053005400440045004200
+      540001000000000026000000530054004F005000430041004C00430055004C00
+      4100540049004F004E0044004100540045000100000000001000000043005500
+      5200520045004E00430059000100000000001800000050004500520053004F00
+      4E0041004C0054005900500045000100000000001400000043004C0049004500
+      4E0054005400590050004500010000000000100000004200520041004E004300
+      4800490044000100000000001800000043004F004E0054005200410043005400
+      54005900500045000100000000000C0000005300540041005400550053000100
+      000000001400000043005500530054004F004D00450052004900440001000000
+      00000800000055005300490044000100000000000C000000420041004C004300
+      49004E00010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 400
+    Top = 160
+    object OracleDataSet1ID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object OracleDataSet1CONTRACTNO: TWideStringField
+      FieldName = 'CONTRACTNO'
+      Size = 64
+    end
+    object OracleDataSet1CONTRACTACCNO: TWideStringField
+      FieldName = 'CONTRACTACCNO'
+      Size = 4000
+    end
+    object OracleDataSet1INTERESTACCNO: TWideStringField
+      FieldName = 'INTERESTACCNO'
+      Size = 4000
+    end
+    object OracleDataSet1VAL_NAME: TWideStringField
+      FieldName = 'VAL_NAME'
+      Size = 10
+    end
+    object OracleDataSet1CUSTOMERNAME: TWideStringField
+      FieldName = 'CUSTOMERNAME'
+      Size = 4000
+    end
+    object OracleDataSet1OPENDATE: TDateTimeField
+      FieldName = 'OPENDATE'
+    end
+    object OracleDataSet1CLOSEDATE: TDateTimeField
+      FieldName = 'CLOSEDATE'
+    end
+    object OracleDataSet1AMOUNT: TFloatField
+      FieldName = 'AMOUNT'
+    end
+    object OracleDataSet1EKAMOUNT: TFloatField
+      FieldName = 'EKAMOUNT'
+    end
+    object OracleDataSet1INTEREST: TFloatField
+      FieldName = 'INTEREST'
+    end
+    object OracleDataSet1FACTICALDEBT: TFloatField
+      FieldName = 'FACTICALDEBT'
+      Required = True
+    end
+    object OracleDataSet1EKFACTICALDEBT: TFloatField
+      FieldName = 'EKFACTICALDEBT'
+    end
+    object OracleDataSet1FACTICALINTERESTDEBT: TFloatField
+      FieldName = 'FACTICALINTERESTDEBT'
+      Required = True
+    end
+    object OracleDataSet1EKFACTICALINTERESTDEBT: TFloatField
+      FieldName = 'EKFACTICALINTERESTDEBT'
+    end
+    object OracleDataSet1STOPCALCULATIONDATE: TDateTimeField
+      FieldName = 'STOPCALCULATIONDATE'
+    end
+    object OracleDataSet1CURRENCY: TFloatField
+      FieldName = 'CURRENCY'
+    end
+    object OracleDataSet1PERSONALTYPE: TFloatField
+      FieldName = 'PERSONALTYPE'
+    end
+    object OracleDataSet1CLIENTTYPE: TFloatField
+      FieldName = 'CLIENTTYPE'
+    end
+    object OracleDataSet1BRANCHID: TFloatField
+      FieldName = 'BRANCHID'
+    end
+    object OracleDataSet1CONTRACTTYPE: TIntegerField
+      FieldName = 'CONTRACTTYPE'
+    end
+    object OracleDataSet1STATUS: TFloatField
+      FieldName = 'STATUS'
+      Required = True
+    end
+    object OracleDataSet1CUSTOMERID: TFloatField
+      FieldName = 'CUSTOMERID'
+    end
+    object OracleDataSet1USID: TFloatField
+      FieldName = 'USID'
+    end
+    object OracleDataSet1BALCIN: TWideStringField
+      FieldName = 'BALCIN'
+      Size = 16
+    end
+  end
+  object OracleDataSet2: TOracleDataSet
+    SQL.Strings = (
+      
+        'select p.numberofcredit,v.val_name,get_donr (p.id) as donrname,f' +
+        '.name ,b.name as customer,'
+      
+        'p.dateofconclusion,p.duedatefirstcontract,p.duedatelastcontract,' +
+        'pr.descripion,vi.name mnovu,cr.name Bsektor, a.description Bfali' +
+        'yyet '
+      
+        ',ca.description Bfaliyetnovu ,t.description tip,p.creditlineamou' +
+        'nt ,(p.creditlineamount*o.ostat) amountek,'
+      
+        '(select percent from cm_reserve_types where id=h.reserveid ) adi' +
+        ' ,(select percent from cm_reserve_types where id=h.duereserveid)' +
+        ' meq,'
+      
+        '(select sum(donorammount) from cm_donor where creditid=p.id) don' +
+        'ves,(select sum(donorammount) from cm_donor where creditid=p.id)' +
+        '*o.ostat donvesek,'
+      
+        'h.rest,h.rest*o.ostat restek,h.interestrest,h.interestrest*o.ost' +
+        'at interestrestek,(select percent from cm_reserve_types where id' +
+        '=h.reserveid )*h.rest adimeb'
+      
+        ',(select percent from cm_reserve_types where id=h.duereserveid)*' +
+        'h.rest meqmeb,h.duerest,h.duerest*o.ostat duerestek,h.dueinteres' +
+        'trest,'
+      
+        'h.dueinterestrest*o.ostat dueinterestrestek,(select name from cm' +
+        '_expert where id=p.expertid) mutexesis,d.donid'
+      'from '
+      'cm_active_credits p,'
+      'avalute_t v,'
+      'filial f,'
+      'cm_boorowerinfo b,'
+      'cm_credittypes t,'
+      'cm_vid_sob vi,'
+      'cm_activities a,cm_creditcat cr,'
+      'cm_categories ca,cm_persons pr,operkurs o,'
+      'cm_history h ,cm_donor d'
+      ''
+      'where '
+      'p.currency=v.valute AND'
+      'p.branchid=f.id and '
+      'p.id=b.creditid and'
+      'p.credittype=t.id and'
+      'p.activities_type =vi.id AND'
+      'p.activities=a.id  and'
+      'p.creditact=cr.id  and'
+      'p.customertype=ca.id and '
+      'p.personaltype=pr.id and'
+      'p.currency=o.val_kod and o.dat=:dat and'
+      'p.id=h.creditid and h.hdate=:dat   and p.id=d.creditid'
+      'and d.donid=:depid'
+      '')
+    Optimize = False
+    Variables.Data = {
+      0400000002000000080000003A004400410054000C0000000000000000000000
+      0C0000003A0044004500500049004400030000000000000000000000}
+    Master = OracleDataSet1
+    MasterFields = 'ID'
+    DetailFields = 'DEPID'
+    Session = sboapiDataModule.SBSession
+    Left = 400
+    Top = 232
+  end
+  object OracleDataSet3: TOracleDataSet
+    SQL.Strings = (
+      'select * from sysdat')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 184
+    Top = 312
+  end
+end

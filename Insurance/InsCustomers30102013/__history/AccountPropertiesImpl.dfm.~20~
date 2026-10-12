@@ -1,0 +1,380 @@
+object AccountPropertiesForm: TAccountPropertiesForm
+  Left = 315
+  Top = 418
+  BorderStyle = bsToolWindow
+  Caption = 'Insert & Edit Account'
+  ClientHeight = 258
+  ClientWidth = 533
+  Color = clBtnFace
+  Font.Charset = RUSSIAN_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poMainFormCenter
+  OnCreate = FormCreate
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 14
+  object hbErrorBox: THintBox
+    Left = 0
+    Top = 224
+    Width = 199
+    Height = 34
+    BevelOuter = bvNone
+    Caption = 'hbErrorBox'
+    TabOrder = 0
+    Visible = False
+    HintStyle = hsError
+    Timeout = 4000
+    BeepOnMessage = False
+  end
+  object btnCancel: TBitBtn
+    Left = 446
+    Top = 225
+    Width = 80
+    Height = 27
+    Cancel = True
+    Caption = #304'mtina'
+    DoubleBuffered = True
+    Glyph.Data = {
+      DE010000424DDE01000000000000760000002800000024000000120000000100
+      0400000000006801000000000000000000001000000000000000000000000000
+      80000080000000808000800000008000800080800000C0C0C000808080000000
+      FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00333333333333
+      333333333333333333333333000033338833333333333333333F333333333333
+      0000333911833333983333333388F333333F3333000033391118333911833333
+      38F38F333F88F33300003339111183911118333338F338F3F8338F3300003333
+      911118111118333338F3338F833338F3000033333911111111833333338F3338
+      3333F8330000333333911111183333333338F333333F83330000333333311111
+      8333333333338F3333383333000033333339111183333333333338F333833333
+      00003333339111118333333333333833338F3333000033333911181118333333
+      33338333338F333300003333911183911183333333383338F338F33300003333
+      9118333911183333338F33838F338F33000033333913333391113333338FF833
+      38F338F300003333333333333919333333388333338FFF830000333333333333
+      3333333333333333333888330000333333333333333333333333333333333333
+      0000}
+    NumGlyphs = 2
+    ParentDoubleBuffered = False
+    TabOrder = 2
+    OnClick = ButtonCancelClick
+  end
+  object btnOk: TBitBtn
+    Left = 363
+    Top = 225
+    Width = 81
+    Height = 27
+    Caption = 'Q'#601'bul'
+    DoubleBuffered = True
+    Glyph.Data = {
+      DE010000424DDE01000000000000760000002800000024000000120000000100
+      0400000000006801000000000000000000001000000000000000000000000000
+      80000080000000808000800000008000800080800000C0C0C000808080000000
+      FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00333333333333
+      3333333333333333333333330000333333333333333333333333F33333333333
+      00003333344333333333333333388F3333333333000033334224333333333333
+      338338F3333333330000333422224333333333333833338F3333333300003342
+      222224333333333383333338F3333333000034222A22224333333338F338F333
+      8F33333300003222A3A2224333333338F3838F338F33333300003A2A333A2224
+      33333338F83338F338F33333000033A33333A222433333338333338F338F3333
+      0000333333333A222433333333333338F338F33300003333333333A222433333
+      333333338F338F33000033333333333A222433333333333338F338F300003333
+      33333333A222433333333333338F338F00003333333333333A22433333333333
+      3338F38F000033333333333333A223333333333333338F830000333333333333
+      333A333333333333333338330000333333333333333333333333333333333333
+      0000}
+    NumGlyphs = 2
+    ParentDoubleBuffered = False
+    TabOrder = 1
+    OnClick = ButtonCommitClick
+  end
+  object XFGroupBox1: TXFGroupBox
+    Left = 0
+    Top = 0
+    Width = 533
+    Height = 173
+    Align = alTop
+    Caption = 'Hesab'
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -12
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 3
+    object XFLabel3: TXFLabel
+      Left = 9
+      Top = 20
+      Width = 37
+      Height = 14
+      Caption = 'Hesab:'
+    end
+    object XFLabel4: TXFLabel
+      Left = 9
+      Top = 46
+      Width = 75
+      Height = 14
+      Caption = 'Balans hesab'#305':'
+    end
+    object XFLabel5: TXFLabel
+      Left = 280
+      Top = 20
+      Width = 44
+      Height = 14
+      Caption = 'Valyuta:'
+    end
+    object XFLabel6: TXFLabel
+      Left = 9
+      Top = 72
+      Width = 67
+      Height = 14
+      Caption = 'A'#231#305'lma tarixi:'
+    end
+    object XFLabel7: TXFLabel
+      Left = 9
+      Top = 99
+      Width = 91
+      Height = 14
+      Caption = 'Hesabat s'#305'mvolu:'
+    end
+    object XFLabel8: TXFLabel
+      Left = 9
+      Top = 122
+      Width = 24
+      Height = 14
+      Caption = 'Filial:'
+    end
+    object XFLabel9: TXFLabel
+      Left = 9
+      Top = 148
+      Width = 65
+      Height = 14
+      Caption = 'Hesab'#305'n ad'#305':'
+    end
+    object XFLabel10: TXFLabel
+      Left = 308
+      Top = 72
+      Width = 59
+      Height = 14
+      Caption = 'C'#252't hesab:'
+    end
+    object XFLabel11: TXFLabel
+      Left = 308
+      Top = 99
+      Width = 29
+      Height = 14
+      Caption = 'Limit:'
+    end
+    object DBEditAccName: TDBEdit
+      Left = 100
+      Top = 143
+      Width = 425
+      Height = 22
+      DataField = 'NAME'
+      DataSource = InsDataMod.DSAccount
+      TabOrder = 11
+      OnKeyPress = DBEditAccNoKeyPress
+    end
+    object DBLookupComboBox4: TDBLookupComboBox
+      Left = 181
+      Top = 119
+      Width = 196
+      Height = 22
+      DataField = 'FILIAL'
+      DataSource = InsDataMod.DSAccount
+      KeyField = 'ID'
+      ListField = 'NAME'
+      ListSource = InsDataMod.DSBranches
+      TabOrder = 10
+      OnKeyPress = DBEditAccNoKeyPress
+    end
+    object DBEdit4: TDBEdit
+      Left = 100
+      Top = 119
+      Width = 80
+      Height = 22
+      DataField = 'FILIAL'
+      DataSource = InsDataMod.DSAccount
+      TabOrder = 9
+      OnKeyPress = DBEditAccNoKeyPress
+    end
+    object DBLookupSimotchet: TDBLookupComboBox
+      Left = 100
+      Top = 95
+      Width = 174
+      Height = 22
+      DataField = 'SIM_OTCET'
+      DataSource = InsDataMod.DSAccount
+      KeyField = 'ID'
+      ListField = 'NAME'
+      ListSource = InsDataMod.DSReportSymbols
+      TabOrder = 7
+      OnKeyPress = DBEditAccNoKeyPress
+    end
+    object DTPOpenDate: TDateTimePicker
+      Left = 100
+      Top = 69
+      Width = 174
+      Height = 22
+      Date = 37357.618323692100000000
+      Time = 37357.618323692100000000
+      Enabled = False
+      TabOrder = 5
+      OnKeyPress = DBEditAccNoKeyPress
+    end
+    object DBEditBalance1: TDBEdit
+      Left = 100
+      Top = 43
+      Width = 62
+      Height = 22
+      DataField = 'BAL_CN1'
+      DataSource = InsDataMod.DSAccount
+      TabOrder = 3
+      OnKeyPress = DBEditAccNoKeyPress
+    end
+    object DBEditAccNo: TDBEdit
+      Left = 100
+      Top = 17
+      Width = 177
+      Height = 22
+      DataField = 'ACC_NO'
+      DataSource = InsDataMod.DSAccount
+      TabOrder = 0
+      OnKeyPress = DBEditAccNoKeyPress
+    end
+    object DBLookupBalance1: TDBLookupComboBox
+      Left = 144
+      Top = 43
+      Width = 291
+      Height = 22
+      DataField = 'BAL_CN1'
+      DataSource = InsDataMod.DSAccount
+      KeyField = 'BAL_CN'
+      ListField = 'BALNAME'
+      ListSource = InsDataMod.BalAccData
+      TabOrder = 4
+      OnKeyPress = DBEditAccNoKeyPress
+    end
+    object DBEditCurrID: TDBEdit
+      Left = 329
+      Top = 17
+      Width = 43
+      Height = 22
+      DataField = 'VAL_ACC'
+      DataSource = InsDataMod.DSAccount
+      TabOrder = 1
+      OnKeyPress = DBEditAccNoKeyPress
+    end
+    object DBLookupCurr: TDBLookupComboBox
+      Left = 376
+      Top = 17
+      Width = 149
+      Height = 22
+      DataField = 'VAL_ACC'
+      DataSource = InsDataMod.DSAccount
+      KeyField = 'VALUTE'
+      ListField = 'VALU_NAME'
+      ListSource = InsDataMod.CurrencyData
+      TabOrder = 2
+      OnKeyPress = DBEditAccNoKeyPress
+    end
+    object DBLookupPairAcc: TDBLookupComboBox
+      Left = 377
+      Top = 69
+      Width = 148
+      Height = 22
+      DataField = 'PAIR_ACC'
+      DataSource = InsDataMod.DSAccount
+      KeyField = 'ID'
+      ListField = 'ACC_NO'
+      ListSource = InsDataMod.PairAccountData
+      TabOrder = 6
+      OnKeyPress = DBEditAccNoKeyPress
+    end
+    object DBEditLimit: TDBEdit
+      Left = 377
+      Top = 95
+      Width = 148
+      Height = 22
+      DataField = 'LIMIT'
+      DataSource = InsDataMod.DSAccount
+      TabOrder = 8
+      OnKeyPress = DBEditAccNoKeyPress
+    end
+  end
+  object XFGroupBox2: TXFGroupBox
+    Left = 0
+    Top = 173
+    Width = 533
+    Height = 49
+    Align = alTop
+    Caption = 'Cari qal'#305'q'
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -12
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 4
+    object XFLabel1: TXFLabel
+      Left = 9
+      Top = 21
+      Width = 30
+      Height = 14
+      Caption = 'Qal'#305'q:'
+    end
+    object XFLabel2: TXFLabel
+      Left = 279
+      Top = 21
+      Width = 58
+      Height = 14
+      Caption = 'Ekvivalent:'
+    end
+    object DBEdit6: TDBEdit
+      Left = 60
+      Top = 18
+      Width = 131
+      Height = 23
+      TabStop = False
+      Color = clSilver
+      DataField = 'OSTAT'
+      DataSource = InsDataMod.DataTenostat
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clNavy
+      Font.Height = -12
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+      ReadOnly = True
+      TabOrder = 0
+    end
+    object DBEdit7: TDBEdit
+      Left = 346
+      Top = 18
+      Width = 131
+      Height = 23
+      TabStop = False
+      Color = clSilver
+      DataField = 'POK_OSTAT'
+      DataSource = InsDataMod.DataTenostat
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clNavy
+      Font.Height = -12
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+      ReadOnly = True
+      TabOrder = 1
+    end
+  end
+  object XFPanel1: TXFPanel
+    Left = 217
+    Top = 225
+    Width = 148
+    Height = 27
+    BevelInner = bvLowered
+    TabOrder = 5
+  end
+end

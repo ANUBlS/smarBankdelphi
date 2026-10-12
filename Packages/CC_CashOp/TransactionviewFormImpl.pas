@@ -1,0 +1,180 @@
+﻿unit TransactionviewFormImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ImgList, DB, OracleData, Grids, DBGridEh, StdCtrls, Mask, DBCtrlsEh,
+  ExtCtrls;
+
+type
+  TTransactionviewForm = class(TForm)
+    Panel1: TPanel;
+    ButtonCommit: TButton;
+    ButtonDismis: TButton;
+    Panel2: TPanel;
+    DBEditEh1: TDBEditEh;
+    DBGridTransactions: TDBGridEh;
+    Transactions: TOracleDataSet;
+    TransactionsDEBITACCNO: TWideStringField;
+    TransactionsDEBITCURRENCY: TWideStringField;
+    TransactionsCREDITACCNO: TWideStringField;
+    TransactionsCREDITCURRENCY: TWideStringField;
+    TransactionsTRDATE: TDateTimeField;
+    TransactionsINBALANCECHAR: TWideStringField;
+    TransactionsFLAGS: TFloatField;
+    TransactionsDEBITAMOUNT: TFloatField;
+    TransactionsCREDITAMOUNT: TFloatField;
+    TransactionsNATAMOUNT: TFloatField;
+    TransactionsTRDESCRIPTION: TWideStringField;
+    TransactionsCANPROCESS: TFloatField;
+    DataSrcTransactions: TDataSource;
+    StatusImages: TImageList;
+    TransactionsTrAmount: TFloatField;
+    procedure ButtonCommitClick(Sender: TObject);
+    procedure FormCanResize(Sender: TObject; var NewWidth, NewHeight: Integer;
+      var Resize: Boolean);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure TransactionsCalcFields(DataSet: TDataSet);
+  private
+  FCommitTransactions : Boolean;
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  TransactionviewForm: TTransactionviewForm;
+
+implementation
+
+uses PayForm, OrderImpl, OrderPayRepFrm, CC_CashOperationImpl,
+  CC_CashOperationMgr_TLB, cc_DataMod_CashOper, CurrencyToHR_Azeri_Impl;
+
+{$R *.dfm}
+
+procedure TTransactionviewForm.ButtonCommitClick(Sender: TObject);
+
+begin
+{if   strtoint(pay.CurrencyEdit1.Text)<>0 then
+begin
+FrmOrder.ReportPayOrderData.Close;
+FrmOrder.ReportPayOrderData.FieldByName('payamt').AsFloat:=strtoFloat(pay.CurrencyEdit1.Text);
+FrmOrder.ReportPayOrderData.Open;
+OrderPayRep.ReportOrder.Preview;
+end else
+begin
+exit;
+end;}
+  FCommitTransactions := True;
+  ModalResult := mrOk;
+{  FrmOrder.cc_buyer_flats.Open;
+  FrmOrder.cc_buyer_flats.Refresh;
+  FrmOrder.ReportPayOrderData.Refresh;
+  FrmOrder.Payments.Refresh;
+    if   strtoint(pay.CurrencyEdit1.Text)<>0 then
+begin
+
+            with OrderPayRep do  begin
+
+            QRLabelAmount1.Caption :=CurrencyToHR_Azeri(Trunc(strtofloat(pay.CurrencyEdit1.Text)),0,[0]);
+            QRLabelAmount2.Caption :=CurrencyToHR_Azeri(Trunc(strtofloat(pay.CurrencyEdit1.Text)),0,[0]);
+            QRLabelAmount3.Caption :=CurrencyToHR_Azeri(Trunc(strtofloat(pay.CurrencyEdit1.Text)),0,[0]);
+
+            if Length(currtostr(Frac(FrmOrder.ReportPayOrderData.FieldByName('payamt').AsFloat)))=1 then
+            begin
+            QRLabelAmount1.Caption :=QRLabelAmount1.Caption+' 0'+CurrToStr(Frac(strtofloat(pay.CurrencyEdit1.Text)))+' qəpik';
+            QRLabelAmount2.Caption :=QRLabelAmount2.Caption+' 0'+CurrToStr(Frac(strtofloat(pay.CurrencyEdit1.Text)))+' qəpik';
+            QRLabelAmount3.Caption :=QRLabelAmount3.Caption+' 0'+CurrToStr(Frac(strtofloat(pay.CurrencyEdit1.Text)))+' qəpik';
+            end;
+            if Length(currtostr(Frac(FrmOrder.ReportPayOrderData.FieldByName('payamt').AsFloat)))>1 then
+            begin
+            QRLabelAmount1.Caption :=QRLabelAmount1.Caption+'  '+CurrToStr(Frac(strtofloat(pay.CurrencyEdit1.Text))*100)+' qəpik';
+            QRLabelAmount2.Caption :=QRLabelAmount2.Caption+'  '+CurrToStr(Frac(strtofloat(pay.CurrencyEdit1.Text))*100)+' qəpik';
+            QRLabelAmount3.Caption :=QRLabelAmount3.Caption+'  '+CurrToStr(Frac(strtofloat(pay.CurrencyEdit1.Text))*100)+' qəpik';
+            end;
+            ReportOrder.Preview;
+            end;
+
+
+end else
+begin
+exit;
+end;
+
+  {
+if   strtoint(pay.CurrencyEdit2.Text)<>0 then
+begin
+FrmOrder.ReportPayOrderData.Close;
+FrmOrder.ReportPayOrderData.FieldByName('payamt').AsFloat:=strtoFloat(pay.CurrencyEdit2.Text);
+FrmOrder.ReportPayOrderData.Open;
+OrderPayRep.ReportOrder.Preview;
+end else
+begin
+exit;
+end;
+   }
+
+
+
+end;
+
+procedure TTransactionviewForm.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+  resize :=False;
+end;
+
+procedure TTransactionviewForm.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+  update
+end;
+
+procedure TTransactionviewForm.FormCloseQuery(Sender: TObject;
+  var CanClose: Boolean);
+  resourcestring
+  SCancelTransactions = 'Əməliyyat aparılmayacaq! Əminsiniz?';
+begin
+  CanClose := FCommitTransactions or
+    (MessageDlg(
+       SCancelTransactions
+      ,mtWarning
+      ,[mbYes,mbNo]
+      ,0) = mrYes)
+
+end;
+
+procedure TTransactionviewForm.FormCreate(Sender: TObject);
+begin
+  with Transactions do begin
+  if Active then close;
+  Open;
+  end;
+  FCommitTransactions:= False;
+end;
+
+procedure TTransactionviewForm.FormDestroy(Sender: TObject);
+begin
+Transactions.Close;
+end;
+
+procedure TTransactionviewForm.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+   if ord(Key) = VK_ESCAPE then close;
+end;
+
+procedure TTransactionviewForm.TransactionsCalcFields(DataSet: TDataSet);
+begin
+ with DataSet do
+  if not FieldByName('DEBITAMOUNT').IsNull then
+    FieldByName('TrAmount').AsFloat := FieldByName('DEBITAMOUNT').AsFloat
+  else
+    FieldByName('TrAmount').AsFloat := FieldByName('CREDITAMOUNT').AsFloat
+end;
+
+end.

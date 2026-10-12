@@ -1,0 +1,719 @@
+﻿unit CRAMainFormImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActiveX, AxCtrls, CalcRateAccount_TLB, StdVcl, CMExcelExport,
+  ActnList, ImgList, ToolWin, ComCtrls, StdCtrls, ExtCtrls,DBLookupEh,
+  Grids, DBGrids, Menus,Oracle,OracleData,variants;
+const   csUnknown   = -9;
+        csCalculated=-10;
+        csDisabled  =-11;
+
+
+type
+  TCRAMainForm = class(TActiveForm, ICRAMainForm)
+    ToolBar1: TToolBar;
+    ImageList1: TImageList;
+    ActionList1: TActionList;
+    ExcelExport: TCMExcelExport;
+    ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
+    ToolButton3: TToolButton;
+    ToolButton4: TToolButton;
+    ToolButton5: TToolButton;
+    ToolButton6: TToolButton;
+    ToolButton7: TToolButton;
+    Panel2: TPanel;
+    CRADBGrid: TDBGrid;
+    ActnAdd: TAction;
+    ActnEdit: TAction;
+    ActnSetting: TAction;
+    ActnCalc: TAction;
+    ToolButton8: TToolButton;
+    ToolButton9: TToolButton;
+    ActnRefresh: TAction;
+    StatusImages: TImageList;
+    PopupMenu2: TPopupMenu;
+    N1: TMenuItem;
+    N2: TMenuItem;
+    N3: TMenuItem;
+    N4: TMenuItem;
+    N5: TMenuItem;
+    N6: TMenuItem;
+    N7: TMenuItem;
+    SearchPanel: TGroupBox;
+    Panel4: TPanel;
+    StaticText1: TStaticText;
+    EditContractNo: TEdit;
+    Panel7: TPanel;
+    StaticText2: TStaticText;
+    EditAccName: TEdit;
+    Panel8: TPanel;
+    StaticText3: TStaticText;
+    EditCONTRACTACCNO: TEdit;
+    Panel10: TPanel;
+    StaticText5: TStaticText;
+    EditCONTREST: TEdit;
+    Panel11: TPanel;
+    StaticText6: TStaticText;
+    EditINTERESTACCNO: TEdit;
+    N8: TMenuItem;
+    ActnSearch: TAction;
+    ToolButton10: TToolButton;
+    ToolButton11: TToolButton;
+    ActnFilter: TAction;
+    ActnCorrector: TAction;
+    N9: TMenuItem;
+    ActnExport: TAction;
+    Export1: TMenuItem;
+    ActnPament: TToolButton;
+    ToolButton13: TToolButton;
+    N10: TMenuItem;
+    ActnPayment: TAction;    procedure ActnAddExecute(Sender: TObject);
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure ActnEditExecute(Sender: TObject);
+    procedure ActnRefreshExecute(Sender: TObject);
+    procedure ActiveFormDestroy(Sender: TObject);
+    procedure CRADBGridDrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TColumn; State: TGridDrawState);
+    procedure ActnCalcExecute(Sender: TObject);
+    procedure ActnSettingExecute(Sender: TObject);
+    procedure N6Click(Sender: TObject);
+    procedure N7Click(Sender: TObject);
+    procedure N8Click(Sender: TObject);
+    procedure ActnSearchExecute(Sender: TObject);
+    procedure EditContractNoKeyPress(Sender: TObject; var Key: Char);
+    procedure EditContractNoExit(Sender: TObject);
+    procedure CRADBGridTitleClick(Column: TColumn);
+    procedure ActnCorrectorExecute(Sender: TObject);
+    procedure N9Click(Sender: TObject);
+    procedure ActnExportExecute(Sender: TObject);
+  private
+    { Private declarations }
+    FEvents: ICRAMainFormEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+  public
+    { Public declarations }
+    procedure Initialize; override;
+  end;
+
+implementation
+
+uses ComObj, ComServ,CRADatModImpl,AddEditContractImpl,CRAProgressUnit,UntReferences,CRACorrecttor,sbtranslateproc,sboapiDataModuleimpl;
+
+{$R *.DFM}
+
+{ TCRAMainForm }
+
+procedure TCRAMainForm.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_CRAMainFormPage); }
+end;
+
+procedure TCRAMainForm.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as ICRAMainFormEvents;
+end;
+
+procedure TCRAMainForm.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TCRAMainForm.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TCRAMainForm.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TCRAMainForm.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TCRAMainForm.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TCRAMainForm.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TCRAMainForm.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TCRAMainForm.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TCRAMainForm.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TCRAMainForm.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TCRAMainForm.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TCRAMainForm.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TCRAMainForm.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TCRAMainForm.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TCRAMainForm.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TCRAMainForm.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TCRAMainForm.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TCRAMainForm.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TCRAMainForm.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TCRAMainForm._Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TCRAMainForm.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TCRAMainForm.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TCRAMainForm.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TCRAMainForm.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TCRAMainForm.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TCRAMainForm.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TCRAMainForm.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TCRAMainForm.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TCRAMainForm.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TCRAMainForm.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TCRAMainForm.Set_AxBorderStyle(Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TCRAMainForm.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TCRAMainForm.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TCRAMainForm.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TCRAMainForm.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TCRAMainForm.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TCRAMainForm.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TCRAMainForm.Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TCRAMainForm.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TCRAMainForm.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TCRAMainForm.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TCRAMainForm.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TCRAMainForm.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TCRAMainForm.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+procedure TCRAMainForm.ActnAddExecute(Sender: TObject);
+begin
+       CRADatMod.SB_ACA.CallProcedure('CheckObjectAccess',['CALCRATEFORACCOUNT','Insert']);
+   with CRADatMod.Purpose do
+   begin
+
+      CloseAll;
+      SetVariable('CONTID',0);
+      Open;
+      Insert;
+      FieldByName('CURRENCY').AsInteger:=0;
+      FieldByName('BRANCHID').AsInteger:=CRADatMod.BranchKod.FieldByName('KOD_FIL').AsInteger;
+      FieldByName('OPENDATE').AsDateTime:=CRADatMod.BankDate.FieldByName('TEK_DAT').AsDateTime;
+      FieldByName('CLOSEDATE').AsDateTime:=CRADatMod.BankDate.FieldByName('TEK_DAT').AsDateTime;
+   end;
+   with FormAddEditContract do
+   begin
+      CMSearchEdit2.Text:='';
+      CMSearchEdit1.Text:='';
+      ShowModal;
+   end;
+end;
+
+procedure TCRAMainForm.ActiveFormCreate(Sender: TObject);
+begin
+   FormAddEditContract := TFormAddEditContract.Create(Self);
+   CRADatMod := TCRADatMod.Create(Self);
+   FormCRAProgress := TFormCRAProgress.Create(Self);
+   FrmReferences := TFrmReferences.Create(Self);
+   SBTranslateProc.TranslateAllComponents(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TCRAMainForm.ActnEditExecute(Sender: TObject);
+  procedure LocateAccounts(LookupControl :TDBLookupComboboxEh);
+  begin
+    with LookupControl do
+    if (not VarIsNull(DataSource.DataSet.FieldByName(DataField).AsVariant))
+     and (DataSource.DataSet.FieldByName(DataField).AsInteger <> 0) then
+    begin
+      KeyValue := Null;
+      KeyValue := ListSource.DataSet.FieldByName(KeyField).AsInteger;
+    end;
+  end;
+
+begin
+       CRADatMod.SB_ACA.CallProcedure('CheckObjectAccess',['CALCRATEFORACCOUNT','Update']);
+   with CRADatMod,Purpose do
+   begin
+      if Active then CloseAll;
+      SetVariable('ContID',CRADatMod.Contracts.FieldByName('ID').AsInteger);
+      Open;
+      Edit;
+     LocateAccounts(FormAddEditContract.DBLookupComboboxEh3);
+     LocateAccounts(FormAddEditContract.DBLookupComboboxEh2);
+      FormAddEditContract.ShowModal;
+   end;
+end;
+
+procedure TCRAMainForm.ActnRefreshExecute(Sender: TObject);
+begin
+    with CRADatMod.Contracts do
+         Refresh;
+end;
+
+procedure TCRAMainForm.ActiveFormDestroy(Sender: TObject);
+begin
+   CRADatMod.Free;
+   FormAddEditContract.Free;
+   FormCRAProgress.Free;
+   FrmReferences.Free;
+   FormCorrection.Free;
+end;
+
+procedure TCRAMainForm.CRADBGridDrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TColumn;
+  State: TGridDrawState);
+const
+    DataColIndex = 1;
+var
+    ImageIndex :Integer;
+begin
+  ImageIndex :=-1;
+  with Sender as TDBGrid do
+  begin
+    if DataSource.DataSet.RecordCount <> 0 then
+    begin
+      case DataSource.DataSet.FieldByName('Status').AsInteger of
+      csUnknown:
+        ImageIndex := 0;
+      csCalculated:
+        ImageIndex := 1;
+      csDisabled:
+        ImageIndex := 2;
+      end;   //Case
+      if   (DataCol = 1)   then
+        StatusImages.Draw(Canvas, Rect.Left, Rect.Top, ImageIndex, True)
+      else
+        DefaultDrawColumnCell(Rect, DataCol, Column, State);
+    end;
+  end;
+
+end;
+
+procedure TCRAMainForm.ActnCalcExecute(Sender: TObject);
+const
+   NoErrorTitle         = ' Faizlər hesablandı.';
+   ResulTitle           = ' Faizlərin  hesablanmasında səhvlər var! ';
+
+var SelRowsCount,ContID,SelRowIndex ,Aborted:integer;
+begin
+    with CRADBGrid,SelectedRows,DataSource.DataSet  do
+    begin
+      ContID :=FieldByName('ID').AsInteger;
+      SelRowsCount :=Count;
+      if   MessageDlg('Faizlər hesablanır əminisinizmi?'
+              ,mtConfirmation
+              ,[mbYes,mbNo],0
+              )<>mrYes then Abort;
+
+      with  FormCRAProgress,ProgressBar  do
+      begin
+        Max :=SelRowsCount;
+        Position :=0;
+        FormCRAProgress.Show;
+      end;
+      Application.ProcessMessages;
+    try
+    Aborted:=0;
+      for  SelRowIndex :=0  to  SelRowsCount-1 do
+      try
+        ContID :=FieldByName('ID').AsInteger;
+        GotoBookmark(Pointer(Items[SelRowIndex]));
+        FormCRAProgress.ProgressBar.StepIt;
+        FormCRAProgress.StaticTextContNo.Caption :=FieldByName('ContractNo').AsString;
+
+        with CRADatMod,CRA_CONTRACT do
+           CallProcedure('calcrapercent',['p_contid',ContID]);
+
+        except
+        on E:EOracleError do
+        begin
+
+        // ErrMessage := copy(ErrMessage,0,Pos('^',ErrMessage));
+          FormCRAProgress.MemoD.Lines.Add(' #'
+                                +FieldByName('ContractNo').AsString +' << ' + E.Message + ' >> '
+                              );
+          FormCRAProgress.MemoD.Lines.Add('');
+          Inc(Aborted);
+          Continue;
+        end;
+      end;
+    finally
+         with FormCRAProgress do begin
+           ProgressBar.Position :=0;
+           if Aborted <> 0 then
+           begin
+             LblResult.Font.Color := clRed;
+             LblResult.Caption :=IntToStr(Aborted)+ResulTitle
+           end
+           else
+           begin
+             LblResult.Font.Color := clGreen;
+             LblResult.Caption := NoErrorTitle;
+           end;
+
+          end;
+         CRADatMod.Contracts.Refresh;;
+      end;
+   end;
+
+end;
+
+procedure TCRAMainForm.ActnSettingExecute(Sender: TObject);
+begin
+   FrmReferences.ShowModal;
+end;
+
+
+procedure TCRAMainForm.N6Click(Sender: TObject);
+begin
+  with CRADBGrid,SelectedRows,DataSource.DataSet do
+  begin
+    DisableControls;
+    try
+      First;
+      while not Eof do
+      begin
+        CurrentRowSelected := True;
+        Next;
+      end;
+    finally
+      EnableControls;
+    end;
+  end;
+
+end;
+
+procedure TCRAMainForm.N7Click(Sender: TObject);
+begin
+  with CRADatMod,Contracts,CRA_CONTRACT do
+  begin
+     CallProcedure('CalcEnabledDisabled',['p_id',FieldByName('ID').AsInteger]);
+     Refresh;
+  end;
+end;
+
+procedure TCRAMainForm.N8Click(Sender: TObject);
+begin
+  SearchPanel.Visible :=  not SearchPanel.Visible;
+end;
+
+procedure TCRAMainForm.ActnSearchExecute(Sender: TObject);
+var
+  SearchField : string;
+  SearchOptions : TSearchRecordOptions;
+begin
+  SearchOptions := [srIgnoreCase ,srPartialMatch];
+
+  with Sender as TEdit  do
+  begin
+    SearchField := copy(Name,5,length(Name));
+    CRADBGrid.SelectedRows.Clear;
+
+    with  TOracleDataSet(CRADBGrid.DataSource.DataSet) do
+    if  not SearchRecord(
+                  SearchField
+                 ,Text
+                 ,SearchOptions + [srFromCurrent , srForward ]
+                 ) then
+    if MessageDlg(
+              'Axtarış sona çatdı'+#13+'Davam etmək istəyirsinizmi?'
+             ,mtInformation
+             ,[mbNo , mbYes]
+             ,0
+             ) = mrYes  then
+    if  not SearchRecord(
+                 SearchField
+                ,Text
+                ,SearchOptions + [ srFromBeginning ]
+                )  then
+    MessageDlg('Yazı tapılmadı!',mtInformation,[mbOK],0);
+  end;
+end;
+
+
+
+procedure TCRAMainForm.EditContractNoKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if Key = #13  then
+  ActnSearchExecute(Sender);
+end;
+
+procedure TCRAMainForm.EditContractNoExit(Sender: TObject);
+begin
+  with Sender as TEdit do
+  Text := '';
+end;
+
+procedure TCRAMainForm.CRADBGridTitleClick(Column: TColumn);
+var
+  OrderKind :string;
+begin
+   if Column.Index = 1 then Exit;
+   OrderKind := Column.Field.FieldName;
+   Screen.Cursor := crHourGlass;
+   try
+       with TOracleDataSet(CRADBGrid.DataSource.DataSet) do
+       begin
+         if  Active  then  CloseAll;
+         SetVariable('OrderClause',OrderKind);
+         Open
+       end;
+    finally
+      Screen.Cursor := crDefault;
+    end;
+end;
+
+procedure TCRAMainForm.ActnCorrectorExecute(Sender: TObject);
+begin
+   FormCorrection :=TFormCorrection.Create(Self);
+   FormCorrection.ShowModal;
+end;
+
+procedure TCRAMainForm.N9Click(Sender: TObject);
+begin
+        CRADatMod.SB_ACA.CallProcedure('CheckObjectAccess',['CALCRATEFORACCOUNT','Delete']);
+if   MessageDlg('Müqavilə baglanır  əminisinizmi?'
+              ,mtConfirmation
+              ,[mbYes,mbNo],0
+              )<>mrYes then Abort;
+
+  with CRADatMod,Contracts do
+  begin
+     CRA_CONTRACT.CallProcedure('close_cont',['p_contid',FieldByName('ID').Asinteger]);
+     Refresh;
+  end;
+end;
+
+procedure TCRAMainForm.ActnExportExecute(Sender: TObject);
+begin
+  with ExcelExport do
+  begin
+     Connect;
+     ExportDataset(CRADatMod.Contracts,'export',true);
+     Disconnect;
+  end;
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TCRAMainForm,
+    Class_CRAMainForm,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

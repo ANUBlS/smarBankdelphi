@@ -1,0 +1,277 @@
+unit UPAccidentSuggest;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, Buttons, XFSCtrls, ComCtrls, DBCtrls, Mask, ExtCtrls,
+  INSWordExporter,db;
+
+  const
+   WM_ModalResult = WM_USER+139;
+   fmCaption = 'Teklifname formasi: (%s)';
+type
+  TPAccidentSuggest = class(TForm)
+    XFPanel1: TXFPanel;
+    XFLabel1: TXFLabel;
+    XFLabel2: TXFLabel;
+    XFLabel3: TXFLabel;
+    XFLabel4: TXFLabel;
+    XFLabel5: TXFLabel;
+    XFLabel6: TXFLabel;
+    XFLabel7: TXFLabel;
+    XFLabel9: TXFLabel;
+    XFLabel10: TXFLabel;
+    XFLabel11: TXFLabel;
+    DBEdit4: TDBEdit;
+    DBEdit5: TDBEdit;
+    DBEdit3: TDBEdit;
+    DBEdit1: TDBEdit;
+    DBLookupComboBox3: TDBLookupComboBox;
+    DBLookupComboBoxCondition: TDBLookupComboBox;
+    memConditions: TMemo;
+    DBLookupComboBoxFranshiz: TDBLookupComboBox;
+    memFrashize: TMemo;
+    DBEdit6: TDBEdit;
+    DTPContractDate: TDateTimePicker;
+    cbConditions: TXFCheckBox;
+    cbFranshiz: TXFCheckBox;
+    XFPanel2: TXFPanel;
+    btPolicy: TBitBtn;
+    btPrint: TBitBtn;
+    btApply: TBitBtn;
+    BitBtn1: TBitBtn;
+    BitBtn2: TBitBtn;
+    SuggestExporter: TINSWordExporter;
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormCreate(Sender: TObject);
+    procedure DBLookupComboBox3Click(Sender: TObject);
+    procedure DBLookupComboBox3KeyPress(Sender: TObject; var Key: Char);
+    procedure DBEdit1Change(Sender: TObject);
+    procedure btPrintClick(Sender: TObject);
+    procedure btApplyClick(Sender: TObject);
+    procedure BitBtn1Click(Sender: TObject);
+    procedure BitBtn2Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+  private
+    { Private declarations }
+    function SaveData():boolean;
+
+  public
+    { Public declarations }
+    id : integer;
+    f:boolean;
+  end;
+
+var
+  PAccidentSuggest: TPAccidentSuggest;
+  procedure InitPlugin(s:string);export;
+
+implementation
+
+uses DMPAccidentSuggestImpl,ComObj,CommanParametrs,sboapiDataModuleImpl,SBTranslateProc;
+
+
+{$R *.dfm}
+
+procedure InitPlugin(s:string);export;
+begin
+
+
+   PAccidentSuggest.ShowModal;
+end;
+exports
+     InitPlugin;
+
+     procedure TPAccidentSuggest.BitBtn1Click(Sender: TObject);
+begin
+if SaveData() then close;
+end;
+
+procedure TPAccidentSuggest.BitBtn2Click(Sender: TObject);
+begin
+close;
+end;
+
+procedure TPAccidentSuggest.btApplyClick(Sender: TObject);
+begin
+ if SaveData() then
+   begin
+      btPolicy.Enabled:=true;
+      btPrint.Enabled:=true;
+      btApply.Enabled:=false;
+   end;
+end;
+
+function TPAccidentSuggest.SaveData: boolean;
+begin
+with DMPAccidentSuggest,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['SUGGESTIONCOMMITCONTRACT_PERSACCIDENT']);
+ end;
+        Result := False;
+    {if   cbConditions.State = cbChecked then
+    with ODSCondition do
+    begin
+         Insert;
+         FieldByName('name').asString := memConditions.Text;
+         Post;
+         RefreshRecord;
+    end;
+
+    if   cbFranshiz.State = cbChecked then
+    with Franshiz do
+    begin
+         Insert;
+         FieldByName('name').asString := memFrashize.Text;
+         Post;
+         RefreshRecord;
+    end;   }
+
+    with DMPAccidentSuggest,ODSPAccSuggest do
+    begin
+
+         FieldByName('paid').AsFloat := id;
+         FieldByName('cndt_id').AsFloat := ODSCondition.FieldByName('id').asFloat;
+         FieldByName('insurancetime').AsDateTime := DTPContractDate.DateTime;
+         if State in [dsInsert,dsEdit] then Post;
+         RefreshRecord();
+         if f then begin
+         ODSContracts.Edit;
+         //showmessage(DBEdit1.Text);
+         //ODSContracts.FieldByName('sugg_id').AsFloat := FieldByName('id').asFloat;
+         ODSContracts.FieldByName('inssumm').AsFloat := strtofloat(DBEdit1.Text);
+         ODSContracts.FieldByName('ins_date').AsDateTime := DTPContractDate.DateTime;
+
+         //if ODSContracts.State in [dsInsert,dsEdit] then
+         ODSContracts.Post;
+         end;
+         f:=false;
+         result := True;
+    end;
+end;
+
+
+procedure TPAccidentSuggest.btPrintClick(Sender: TObject);
+begin
+
+with DMPAccidentSuggest,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['SUGGESTIONPRINTCONTRACT_PERSACCIDENT']);
+ end;
+
+
+      DMPAccidentSuggest.AValute.Locate('valute',DMPAccidentSuggest.ODSCOntractsValute_ID.Value,[]);
+      DMPAccidentSuggest.Risks.Locate('id',DMPAccidentSuggest.ODSPAccidentRISKid.Value,[]);
+      DMPAccidentSuggest.ODSBeneficiary.Locate('id',DMPAccidentSuggest.ODSPAccidentPROFITID.Value,[]);
+      DMPAccidentSuggest.ODSCondition.Locate('id',DMPAccidentSuggest.ODSPaccSuggestCNDT_ID.Value,[]);
+      DMPAccidentSuggest.Franshiz.Locate('id',DMPAccidentSuggest.ODSPaccSuggestFRZ_ID.Value,[]);
+      try
+        with SuggestExporter do
+        begin
+             FileName:=ExtractFilePath(Application.ExeName)+ '\Ferdi Qeza Teklif.doc';
+             Open(False);
+             SetBookmark('Insured',DMPAccidentSuggest.CustomersName.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Insperiod',DateToStr(DMPAccidentSuggest.ODSContractsBegin_date.value)+' - '+DateToStr(DMPAccidentSuggest.ODSContractsEnd_date.value), false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Valute',DMPAccidentSuggest.AValuteValu_name.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Insrisks',DMPAccidentSuggest.RisksName.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Beneficiary',DMPAccidentSuggest.ODSBeneficiaryName.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Inssum',FloatToStr(DMPAccidentSuggest.ODSPAccSuggestInsurancesum.value), false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Franshiz',DMPAccidentSuggest.FranshizName.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Insammount',CurrToStr(DMPAccidentSuggest.ODSCONtractsAmmount.value), false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Medicalcost',CurrToStr(DMPAccidentSuggest.ODSPAccSuggestMedicalcost.value), false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('AInsammount',FloatToStr(DMPAccidentSuggest.ODSPAccSuggestAll_InsAmmount.value), false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Geo',DMPAccidentSuggest.ODSPaccSuggestGeo.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Instime',DateToStr(DMPAccidentSuggest.ODSPAccSuggestInsuranceTime.value), false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Cond',DMPAccidentSuggest.ODSConditionName.value, false, false, False, false, 8, 'Arial AzLat', False);
+
+        end;
+
+
+
+    finally
+        SuggestExporter.Show;
+    end;
+
+end;
+
+procedure TPAccidentSuggest.DBEdit1Change(Sender: TObject);
+begin
+     with DMPAccidentSuggest.ODSCondition do
+          memConditions.Text := FieldByName('name').asString;
+     btApply.Enabled:=true;
+end;
+
+procedure TPAccidentSuggest.DBLookupComboBox3Click(Sender: TObject);
+begin
+ btApply.Enabled:=true;
+end;
+
+procedure TPAccidentSuggest.DBLookupComboBox3KeyPress(Sender: TObject;
+  var Key: Char);
+begin
+     if Key = #13 then
+     begin
+        if HiWord(GetKeyState(VK_Shift))<>0 then
+           with Sender as TControl do
+           SelectNext(ActiveControl,False, True)
+        else
+           with Sender as TControl do
+           SelectNext(ActiveControl,True, True);
+        key:=#0;
+     end;
+end;
+
+procedure TPAccidentSuggest.FormCreate(Sender: TObject);
+begin
+DMPAccidentSuggest:=TDMPAccidentSuggest.create(self);
+SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TPAccidentSuggest.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+if ord(key)=vk_escape then  close;
+ end;
+
+procedure TPAccidentSuggest.FormShow(Sender: TObject);
+begin
+id := contactid;
+    //showmessage(Get_Params('Mod'));
+   // exit;
+     DBLookupComboBox3.KeyValue:=0;
+       f:=true;
+       DMPAccidentSuggest.ODSPAccident.Close;
+       DMPAccidentSuggest.ODSPAccident.SetVariable('ID',id);
+       DMPAccidentSuggest.ODSPaccident.Open;
+
+       DMPAccidentSuggest.ODSContracts.Close;
+       DMPAccidentSuggest.ODSContracts.SetVariable('cid', DMPAccidentSuggest.ODSPAccident.FieldByName('cid').AsInteger);
+       DMPAccidentSuggest.ODSContracts.Open;
+
+       if Get_Params('Mod') = 'Insert' then
+       begin
+          DMPAccidentSuggest.ODSPAccSuggest.Insert;
+          Caption := format(fmCaption, ['Elave']);
+          DMPAccidentSuggest.ODSPAccSuggest.SetVariable('paid',id);
+          DMPAccidentSuggest.ODSPAccSuggest.Open;
+          DTPContractDate.DateTime:=DMPAccidentSuggest.DsSysdat.FieldByName('tek_dat').AsDateTime;
+       end
+       else
+          begin  //-----Edit mode
+              DMPAccidentSuggest.ODSPAccSuggest.Close;
+              DMPAccidentSuggest.ODSPAccSuggest.SetVariable('paid',id);
+              DMPAccidentSuggest.ODSPAccSuggest.Open;
+              DMPAccidentSuggest.ODSPAccSuggest.Edit;
+              DTPContractDate.DateTime := DMPAccidentSuggest.ODSPAccSuggestInsurancetime.value;
+              memConditions.Text:='';
+              Caption := format(fmCaption, ['Redakte']);
+              btPrint.Enabled := True;
+              btPolicy.Enabled := True;
+           end;
+         //    end;
+
+end;
+
+initialization
+ PAccidentSuggest := TPAccidentSuggest.Create(Application);
+end.

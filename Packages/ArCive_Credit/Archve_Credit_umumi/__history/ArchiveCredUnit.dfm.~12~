@@ -1,0 +1,262 @@
+object DataMArchiveCr: TDataMArchiveCr
+  OldCreateOrder = False
+  Height = 460
+  Width = 603
+  object Ods_ArchiveCred: TOracleDataSet
+    SQL.Strings = (
+      'select a.*,translate(a.name, '#39'Ii'#304'iI'#305#39', '#39'``````'#39') as iname'
+      '  from cm_active_close a where nvl(id,0)>0'
+      ''
+      ''
+      ''
+      ''
+      ''
+      'order by :OrderField    ')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000160000003A004F0052004400450052004600490045004C00
+      4400010000000300000069640000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000002B000000040000004900440001000000000010000000430055005200
+      520045004E00430059000100000000001400000042004F004F0052004F005700
+      4500520049004400010000000000200000004300520045004400490054004C00
+      49004E00450041004D004F0055004E0054000100000000002600000041004E00
+      4E00550041004C00590049004E00540045005200450053005400520041005400
+      45000100000000001A00000049004E0049005400490041004C0041004D004F00
+      55004E0054000100000000002400000041004E004E00550041004C0059004F00
+      5600450052004400550045005200410054004500010000000000240000004100
+      4E004E00550041004C005900500045004E0041004C0054005900520041005400
+      45000100000000002000000044004100540045004F00460043004F004E004300
+      4C005500530049004F004E000100000000002800000044005500450044004100
+      540045004600490052005300540043004F004E00540052004100430054000100
+      000000002600000044005500450044004100540045004C004100530054004300
+      4F004E00540052004100430054000100000000001C0000004E0055004D004200
+      450052004F0046004300520045004400490054000100000000001E0000005000
+      5500520050004F00530045004F00460043005200450044004900540001000000
+      000010000000550053005200470052004F005500500001000000000010000000
+      4200520041004E00430048004900440001000000000008000000550053004900
+      44000100000000000C0000005300540041005400550053000100000000001800
+      000043005500530054004F004D00450052005400590050004500010000000000
+      1400000043005200450044004900540054005900500045000100000000001800
+      000050004500520053004F004E0041004C005400590050004500010000000000
+      18000000530054004F005000430041004C004300440041005400450001000000
+      00000800000052004500530054000100000000001800000049004E0054004500
+      520045005300540052004500530054000100000000000E000000440055004500
+      52004500530054000100000000001E00000044005500450049004E0054004500
+      5200450053005400520045005300540001000000000016000000500045004E00
+      41004C0054005900520045005300540001000000000012000000520045005300
+      4500520056004500490044000100000000001800000044005500450052004500
+      5300450052005600450049004400010000000000140000004F0042004C004900
+      47004100540049004F004E000100000000001600000050004C00450044004700
+      4500500052004900430045000100000000001000000050004C00450044004700
+      4500490044000100000000001A00000043004F004E0054005200410043005400
+      4100430043004E004F000100000000001A00000049004E005400450052004500
+      530054004100430043004E004F00010000000000180000004400550045004C00
+      4F0041004E004100430043004E004F00010000000000120000004C004F004100
+      4E004100430043004E004F000100000000001800000042004F004F0052004F00
+      570045005200520045005300540001000000000010000000560041004C005F00
+      4E0041004D004500010000000000080000004E0041004D004500010000000000
+      14000000520045004700490053005400520059004E004F000100000000000A00
+      000049004E0041004D0045000100000000002200000054004D004E0055005300
+      5F0050004F005200540046005300540041005400550053000100000000001200
+      000043004C004F00530045004400410054004500010000000000120000004F00
+      55005400530054004100540055005300010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 48
+    Top = 40
+    object Ods_ArchiveCredTMNUS_PORTFSTATUS: TWideStringField
+      DisplayLabel = 'Status(k'#246'hn'#601',t'#601'z'#601')'
+      FieldName = 'TMNUS_PORTFSTATUS'
+      Size = 50
+    end
+    object Ods_ArchiveCredID: TFloatField
+      DisplayLabel = 'Kredit '#304'D'
+      FieldName = 'ID'
+    end
+    object Ods_ArchiveCredBOOROWERID: TFloatField
+      DisplayLabel = 'M'#252#351't'#601'ri '#304'D-si'
+      FieldName = 'BOOROWERID'
+    end
+    object Ods_ArchiveCredNUMBEROFCREDIT: TWideStringField
+      DisplayLabel = #8470
+      FieldName = 'NUMBEROFCREDIT'
+      Size = 32
+    end
+    object Ods_ArchiveCredCONTRACTACCNO: TWideStringField
+      DisplayLabel = 'Hesab '#8470
+      FieldName = 'CONTRACTACCNO'
+      Size = 28
+    end
+    object Ods_ArchiveCredVAL_NAME: TWideStringField
+      FieldName = 'VAL_NAME'
+      Size = 10
+    end
+    object Ods_ArchiveCredSTATUS: TFloatField
+      FieldName = 'STATUS'
+    end
+    object Ods_ArchiveCredNAME: TWideStringField
+      DisplayLabel = 'M'#252#351't'#601'ri'
+      FieldName = 'NAME'
+      Size = 150
+    end
+    object Ods_ArchiveCredOUTSTATUS: TWideStringField
+      DisplayLabel = 'B.K(status)'
+      FieldName = 'OUTSTATUS'
+      Size = 7
+    end
+    object Ods_ArchiveCredDATEOFCONCLUSION: TDateTimeField
+      DisplayLabel = 'Verilm'#601' tarixi'
+      FieldName = 'DATEOFCONCLUSION'
+    end
+    object Ods_ArchiveCredDUEDATEFIRSTCONTRACT: TDateTimeField
+      DisplayLabel = 'Bitm'#601' tarixi'
+      FieldName = 'DUEDATEFIRSTCONTRACT'
+    end
+    object Ods_ArchiveCredCLOSEDATE: TDateTimeField
+      DisplayLabel = 'Ba'#287'land'#305#287#305' tarix'
+      FieldName = 'CLOSEDATE'
+    end
+    object Ods_ArchiveCredANNUALYINTERESTRATE: TFloatField
+      DisplayLabel = '% d'#601'r'#601'c'#601'si'
+      FieldName = 'ANNUALYINTERESTRATE'
+    end
+    object Ods_ArchiveCredREST: TFloatField
+      DisplayLabel = '('#399'.B)Qal'#305'q'
+      FieldName = 'REST'
+    end
+    object Ods_ArchiveCredINTERESTREST: TFloatField
+      DisplayLabel = '(F.B)Qal'#305'q'
+      FieldName = 'INTERESTREST'
+    end
+    object Ods_ArchiveCredDUEREST: TFloatField
+      DisplayLabel = '(G.B)Qal'#305'q'
+      FieldName = 'DUEREST'
+    end
+    object Ods_ArchiveCredDUEINTERESTREST: TFloatField
+      DisplayLabel = '(G.F.B)Qal'#305'q'
+      FieldName = 'DUEINTERESTREST'
+    end
+    object Ods_ArchiveCredCREDITLINEAMOUNT: TFloatField
+      DisplayLabel = 'Kreditin m'#601'bl'#601#287#305
+      FieldName = 'CREDITLINEAMOUNT'
+    end
+    object Ods_ArchiveCredINITIALAMOUNT: TFloatField
+      DisplayLabel = 'Verilimi'#351' m'#601'bl'#601#287
+      FieldName = 'INITIALAMOUNT'
+    end
+    object Ods_ArchiveCredANNUALYOVERDUERATE: TFloatField
+      DisplayLabel = 'Gecikm'#601' %'
+      FieldName = 'ANNUALYOVERDUERATE'
+    end
+    object Ods_ArchiveCredANNUALYPENALTYRATE: TFloatField
+      DisplayLabel = 'C'#601'rim'#601' %'
+      FieldName = 'ANNUALYPENALTYRATE'
+    end
+    object Ods_ArchiveCredPURPOSEOFCREDIT: TWideStringField
+      DisplayLabel = 'T'#601'yinat'#305
+      FieldName = 'PURPOSEOFCREDIT'
+      Size = 300
+    end
+    object Ods_ArchiveCredSTOPCALCDATE: TDateTimeField
+      DisplayLabel = 'Hesablaman'#305'n dayand'#305'r'#305'lma tarixi'
+      FieldName = 'STOPCALCDATE'
+    end
+    object Ods_ArchiveCredOBLIGATION: TFloatField
+      DisplayLabel = #214'hd'#601'lik'
+      FieldName = 'OBLIGATION'
+    end
+    object Ods_ArchiveCredPLEDGEPRICE: TFloatField
+      DisplayLabel = 'Girovun d'#601'y'#601'ri'
+      FieldName = 'PLEDGEPRICE'
+    end
+    object Ods_ArchiveCredDUEDATELASTCONTRACT: TDateTimeField
+      DisplayLabel = '(S.M)Ba'#287'lanma tarixi'
+      FieldName = 'DUEDATELASTCONTRACT'
+    end
+    object Ods_ArchiveCredBOOROWERREST: TFloatField
+      DisplayLabel = 'Cari Hesab'#305'n qal'#305#287#305
+      FieldName = 'BOOROWERREST'
+    end
+    object Ods_ArchiveCredPENALTYREST: TFloatField
+      DisplayLabel = 'Penya'
+      FieldName = 'PENALTYREST'
+    end
+    object Ods_ArchiveCredREGISTRYNO: TWideStringField
+      DisplayLabel = 'Avto no'
+      FieldName = 'REGISTRYNO'
+      Size = 10
+    end
+    object Ods_ArchiveCredUSRGROUP: TFloatField
+      FieldName = 'USRGROUP'
+      Visible = False
+    end
+    object Ods_ArchiveCredBRANCHID: TFloatField
+      FieldName = 'BRANCHID'
+      Visible = False
+    end
+    object Ods_ArchiveCredUSID: TFloatField
+      FieldName = 'USID'
+      Visible = False
+    end
+    object Ods_ArchiveCredCUSTOMERTYPE: TFloatField
+      FieldName = 'CUSTOMERTYPE'
+      Visible = False
+    end
+    object Ods_ArchiveCredCREDITTYPE: TFloatField
+      FieldName = 'CREDITTYPE'
+      Visible = False
+    end
+    object Ods_ArchiveCredPERSONALTYPE: TFloatField
+      FieldName = 'PERSONALTYPE'
+      Visible = False
+    end
+    object Ods_ArchiveCredRESERVEID: TFloatField
+      FieldName = 'RESERVEID'
+      Visible = False
+    end
+    object Ods_ArchiveCredDUERESERVEID: TFloatField
+      FieldName = 'DUERESERVEID'
+      Visible = False
+    end
+    object Ods_ArchiveCredPLEDGEID: TFloatField
+      FieldName = 'PLEDGEID'
+      Visible = False
+    end
+    object Ods_ArchiveCredINTERESTACCNO: TWideStringField
+      FieldName = 'INTERESTACCNO'
+      Visible = False
+      Size = 1
+    end
+    object Ods_ArchiveCredDUELOANACCNO: TWideStringField
+      FieldName = 'DUELOANACCNO'
+      Visible = False
+      Size = 1
+    end
+    object Ods_ArchiveCredLOANACCNO: TWideStringField
+      FieldName = 'LOANACCNO'
+      Visible = False
+      Size = 1
+    end
+    object Ods_ArchiveCredINAME: TWideStringField
+      FieldName = 'INAME'
+      Visible = False
+      Size = 600
+    end
+    object Ods_ArchiveCredCURRENCY: TFloatField
+      FieldName = 'CURRENCY'
+      Visible = False
+    end
+  end
+  object Dsrc_ArchiveCred: TDataSource
+    DataSet = Ods_ArchiveCred
+    Left = 56
+    Top = 104
+  end
+  object CRAr_ADMIN: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'CM_ADMINISTRATION'
+    Left = 192
+    Top = 128
+  end
+end

@@ -1,0 +1,108 @@
+﻿unit Unit_Phys_fs;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, XFSCtrls, ExtCtrls;
+
+type
+  TFormPyhsFs = class(TForm)
+    XFPanel1: TXFPanel;
+    XFLabel1: TXFLabel;
+    XFRadioButton1: TXFRadioButton;
+    XFRadioButton2: TXFRadioButton;
+    procedure XFRadioButton1Click(Sender: TObject);
+    procedure XFRadioButton2Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormPyhsFs: TFormPyhsFs;
+
+implementation
+
+uses UnitDataModPCustService, AccountPropertiesLmpl, AccountPropertiesFLmpl;
+
+{$R *.dfm}
+
+procedure TFormPyhsFs.XFRadioButton1Click(Sender: TObject);
+begin
+    if (DataModPCustService.ODS_CUSTOMERS_PHYS_FS.Active) and
+    (DataModPCustService.ODS_CUSTOMERS_PHYS_FS.RecordCount <> 0) then
+    begin
+    DataModPCustService.ODS_Bal_spr.Close;
+ //  showmessage(inttostr(DataModPCustService.ODS_CUSTOMERS_PHYS_FS.FieldByName('cust_type').asinteger));
+
+
+    if XFRadioButton1.Checked=True
+    then DataModPCustService.ODS_Bal_spr.SetVariable('cus_tip',1);
+
+    if XFRadioButton2.Checked=True
+    then DataModPCustService.ODS_Bal_spr.SetVariable('cus_tip',2);
+
+
+
+  // showmessage(inttostr(DataModPCustService.ODS_CUSTOMERS_PHYS_FS.FieldByName('nerezident').asinteger));
+  DataModPCustService.ODS_Bal_spr.SetVariable('resd',
+  DataModPCustService.ODS_CUSTOMERS_PHYS_FS.FieldByName('nerezident').asinteger);
+
+   if not assigned(AccountPropertiesF) then
+   AccountProperties:=TAccountProperties.Create(self);
+    AccountProperties.ShowModal;
+    end
+  else
+  begin
+    ShowMessage('Heç bir müştəri seçilməyib !');
+    exit;
+  end;
+
+end;
+
+procedure TFormPyhsFs.XFRadioButton2Click(Sender: TObject);
+begin
+if (DataModPCustService.ODS_CUSTOMERS_PHYS_FS.Active) and
+    (DataModPCustService.ODS_CUSTOMERS_PHYS_FS.RecordCount <> 0) then
+    begin
+    DataModPCustService.ODS_Bal_spr.Close;
+ //  showmessage(inttostr(DataModPCustService.ODS_CUSTOMERS_PHYS_FS.FieldByName('cust_type').asinteger));
+
+     showmessage(inttostr(DataModPCustService.ODS_CUSTOMERS_PHYS_FS.FieldByName('cust_fs').asinteger));
+    if (DataModPCustService.ODS_CUSTOMERS_PHYS_FS.FieldByName('cust_fs').AsInteger=1)
+       or
+       (DataModPCustService.ODS_CUSTOMERS_PHYS_FS.FieldByName('cust_phys').AsInteger=1)
+    then
+    begin
+      DataModPCustService.ODS_Bal_spr.SetVariable('cus_tip',
+    DataModPCustService.ODS_CUSTOMERS_PHYS_FS.FieldByName('cust_fs').asinteger);
+
+
+  // showmessage(inttostr(DataModPCustService.ODS_CUSTOMERS_PHYS_FS.FieldByName('nerezident').asinteger));
+  DataModPCustService.ODS_Bal_spr.SetVariable('resd',
+  DataModPCustService.ODS_CUSTOMERS_PHYS_FS.FieldByName('nerezident').asinteger);
+
+  //showmessage(inttostr(DataModPCustService.ODS_CUSTOMERS_PHYS_FS.FieldByName('sfera_dey').asinteger));
+  DataModPCustService.ODS_Bal_spr.SetVariable('sferad_ey',
+  DataModPCustService.ODS_CUSTOMERS_PHYS_FS.FieldByName('sfera_dey').asinteger);
+
+  DataModPCustService.ODS_Bal_spr.SetVariable('govern_ment',
+  DataModPCustService.ODS_CUSTOMERS_PHYS_FS.FieldByName('vid_sob').AsInteger);
+
+
+   if not assigned(AccountPropertiesF) then
+   AccountProperties:=TAccountProperties.Create(self);
+    AccountProperties.ShowModal;
+    end;
+    end
+  else
+  begin
+    ShowMessage('Heç bir müştəri seçilməyib !');
+    exit;
+  end;
+
+end;
+
+end.

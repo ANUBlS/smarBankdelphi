@@ -1,0 +1,131 @@
+unit UnitAdifData;
+
+interface
+
+uses
+  SysUtils, Classes, DB, OracleData;
+
+type
+  TAdif_Data = class(TDataModule)
+    ods_cust: TOracleDataSet;
+    Ods_cust_person_work: TOracleDataSet;
+    OracleDataSet4: TOracleDataSet;
+    dsrc_cust: TDataSource;
+    Dsrc_cust_person_work: TDataSource;
+    DataSource4: TDataSource;
+    KreditDSet: TOracleDataSet;
+    KreditDSrc: TDataSource;
+    KreditXmlstruct: TOracleDataSet;
+    DSDeposit: TDataSource;
+    ODSDeposit: TOracleDataSet;
+    ODSDepositID: TFloatField;
+    ODSDepositBANK_CODE: TIntegerField;
+    ODSDepositBANK_NAME: TWideStringField;
+    ODSDepositROWCOUNT: TFloatField;
+    ODSDepositCLIENT_NO: TWideStringField;
+    ODSDepositDEPOSIT_SYMBOL_CODE: TWideStringField;
+    ODSDepositDEPOSIT_BRANCH_CODE: TIntegerField;
+    ODSDepositDEPOSIT_ID_NUMBER: TWideStringField;
+    ODSDepositDEPOSIT_ACCOUNT_IBAN_NUMBER: TWideStringField;
+    ODSDepositDEPOSIT_CURRENCY_CODE: TWideStringField;
+    ODSDepositDEPOSIT_CURRENCY_AMOUNT: TFloatField;
+    ODSDepositCURRENCY_RATE: TFloatField;
+    ODSDepositDEPOSIT_AZN_AMOUNT: TFloatField;
+    ODSDepositDEPOSIT_INTEREST_AMOUNT: TFloatField;
+    ODSDepositDEPOSIT_FIRST_VALUE_DATE: TDateTimeField;
+    ODSDepositDEPOSIT_VALUE_DATE: TDateTimeField;
+    ODSDepositDEPOSIT_MATURITY_DATE: TDateTimeField;
+    ODSDepositDEPOSIT_FIRST_PERCENT: TFloatField;
+    ODSDepositDEPOSIT_ACTIVE_PERCENT: TFloatField;
+    ODSDepositDEPOSIT_BONUS_PERCENT: TFloatField;
+    ODSDepositDEPOSIT_BALANCE_PERCENT: TWideStringField;
+    ODSDepositDEPOSIT_BLOCKED_PERCENT: TFloatField;
+    Ods_cust_person_joint: TOracleDataSet;
+    Dsrc_cust_person_joint: TDataSource;
+    Ods_cust_joint_work: TOracleDataSet;
+    FloatField1: TFloatField;
+    Dsrc_cust_joint_work: TDataSource;
+    Ods_cust_person_workCUSTID2: TFloatField;
+    Ods_cust_person_workPRINAD_NAME: TWideStringField;
+    ods_custBANK_BRANCH_CODE: TWideStringField;
+    ods_custCLIENT_NO: TIntegerField;
+    ods_custCLIENT_TYPE: TFloatField;
+    ods_custCLIENT_NATIONALTY: TWideStringField;
+    ods_custCLIENT_SYMBOL_NO: TWideStringField;
+    ods_custCLIENT_NAME: TWideStringField;
+    ods_custCLIENT_SURNAME: TWideStringField;
+    ods_custCLIENT_FATHERS_NAME: TWideStringField;
+    ods_custCLIENT_DATE_BIRTH: TWideStringField;
+    ods_custCLIENT_PLACE_OF_BIRTH: TWideStringField;
+    ods_custCLIENT_ID_TYPE: TFloatField;
+    ods_custCLIENT_ID_COMMENT: TWideStringField;
+    ods_custCLIENT_ID_SERIAL: TWideStringField;
+    ods_custCLIENT_ID_NUMBER: TWideStringField;
+    ods_custCLIENT_ID_PIN: TWideStringField;
+    ods_custCLIENT_ID_ISSUE_DATE: TWideStringField;
+    ods_custCLIENT_ID_ISSUE_PLACE: TWideStringField;
+    ods_custCLIENT_ID_ADDRESS: TWideStringField;
+    ods_custCLIENT_ID_ADDRESS_REAL: TWideStringField;
+    ods_custCLIENT_ID_EMAIL: TWideStringField;
+    ods_custCLIENT_ID_PHONE_MOBILE: TWideStringField;
+    ods_custCLIENT_ID_PHONE_HOME: TWideStringField;
+    ods_custCLIENT_ID_PHONE: TWideStringField;
+    Ods_cust_person_jointID: TIntegerField;
+    Ods_cust_person_jointFIRSTNAME: TWideStringField;
+    Ods_cust_person_jointLASTNAME: TWideStringField;
+    Ods_cust_person_jointPATRONYMIC: TWideStringField;
+    Ods_cust_person_jointCLIENT_DATE_BIRTH: TWideStringField;
+    Ods_cust_person_jointPLACE_OF_BIRTH: TWideStringField;
+    Ods_cust_person_jointDOC_TYPE: TFloatField;
+    Ods_cust_person_jointPASSPORT: TWideStringField;
+    Ods_cust_person_jointPASSP_NUMBER: TWideStringField;
+    Ods_cust_person_jointPASSPIN: TWideStringField;
+    Ods_cust_person_jointPASPDATE: TWideStringField;
+    Ods_cust_person_jointISSUE_PLACE: TWideStringField;
+    Ods_cust_person_jointADRESS: TWideStringField;
+    Ods_cust_person_jointFAKT_ADRESS: TWideStringField;
+    Ods_cust_person_jointEMAIL: TWideStringField;
+    Ods_cust_person_jointPHONE_MOB: TWideStringField;
+    Ods_cust_person_jointPHONE: TWideStringField;
+    Ods_cust_person_jointINN: TWideStringField;
+    Ods_cust_person_jointINFO_TPH_ADRESS: TWideStringField;
+    Ods_cust_person_jointCUST_TYPE: TFloatField;
+    Ods_cust_person_jointCLIENT_SYMBOL_NO: TWideStringField;
+    Ods_cust_person_jointCLIENT_ID_COMMENT: TWideStringField;
+    Ods_cust_person_jointWORK_PHONE: TWideStringField;
+    bnkdata: TOracleDataSet;
+    bankdata: TOracleDataSet;
+    Bankdatasrc: TDataSource;
+    ods_account: TOracleDataSet;
+    dsrc_account: TDataSource;
+    Sysdat: TOracleDataSet;
+    ods_accountID: TFloatField;
+    ods_accountNAME: TWideStringField;
+    ods_accountBAL_CN1: TFloatField;
+    ods_accountFIL_KOD: TWideStringField;
+    ods_accountFIL_NAME: TWideStringField;
+    ods_accountVAL_KOD: TWideStringField;
+    ods_accountOSTAT: TFloatField;
+    ods_accountPOK_OSTAT: TFloatField;
+    ods_accountDEBT_DOV: TFloatField;
+    ods_accountKREDIT_DOV: TFloatField;
+    procedure DataModuleCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Adif_Data: TAdif_Data;
+
+implementation
+  uses sboapiDataModuleImpl;
+{$R *.dfm}
+
+procedure TAdif_Data.DataModuleCreate(Sender: TObject);
+begin
+Sysdat.Open;
+end;
+
+end.

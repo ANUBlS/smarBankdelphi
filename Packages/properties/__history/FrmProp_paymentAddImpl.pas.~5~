@@ -1,0 +1,285 @@
+﻿unit FrmProp_paymentAddImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ExtCtrls, StdCtrls, Mask, DBCtrls, DBCtrlsEh, DBLookupEh, Buttons,
+  CMDBSearchEdit;
+
+type
+  TFrmProp_paymentAdd = class(TForm)
+    Panel1: TPanel;
+    Panel2: TPanel;
+    Panel4: TPanel;
+    StaticText1: TStaticText;
+    StaticText2: TStaticText;
+    StaticText4: TStaticText;
+    SpeedButton1: TSpeedButton;
+    SpeedButton2: TSpeedButton;
+    Panel5: TPanel;
+    StaticText5: TStaticText;
+    Panel15: TPanel;
+    DBEdit1: TDBEdit;
+    DBEdit2: TDBEdit;
+    DBLookupComboBox1: TDBLookupComboBox;
+    DBLookupComboBox2: TDBLookupComboBox;
+    Edit1: TEdit;
+    GroupBox1: TGroupBox;
+    ComboBox1: TComboBox;
+    CheckBox1: TCheckBox;
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure SpeedButton2Click(Sender: TObject);
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure sell_valueEKeyPress(Sender: TObject; var Key: Char);
+    procedure PROP_COUNTEKeyPress(Sender: TObject; var Key: Char);
+    procedure sell_valueEKeyUp(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure sell_valueEChange(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure CashSymbolDBEditKeyPress(Sender: TObject; var Key: Char);
+    procedure CMSearchEdit6KeyPress(Sender: TObject; var Key: Char);
+    procedure DBLookupComboboxEh2KeyPress(Sender: TObject; var Key: Char);
+    procedure DBLookupComboboxEh2KeyValueChanged(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+
+  end;
+
+var
+  FrmProp_paymentAdd: TFrmProp_paymentAdd;
+
+implementation
+uses DMprop,CommonPropImpl,sboapiDataModuleImpl,SBTranslateProc;
+{$R *.DFM}
+
+procedure TFrmProp_paymentAdd.SpeedButton1Click(Sender: TObject);
+resourcestring
+  rsTransactionsWillProcessed = 'Əməliyyat ...';
+var
+propid,Debitaccid,p_pille:  integer ;
+sell_value,PROP_COUNT   :real;
+CommitTranchePay : Boolean;
+Sinvol,description:string;
+
+begin
+
+if  ComboBox1.Text ='' then
+begin
+ShowMessage('Satış növü seçilməyib') ;
+exit;
+end  ;
+ if CheckBox1.Checked=true then
+ p_pille:=1
+ else
+ p_pille:=0    ;
+
+Debitaccid := DBLookupComboBox2.ListSource.DataSet.FieldByName('ID').AsInteger;
+ propid:=Get_SelectedContID;
+ sell_value:=strtofloat(edit1.text) ;
+ Sinvol:= DBLookupComboBox1.ListSource.DataSet.FieldByName('SYMBOL').AsInteger;
+ // ShowMessage(inttostr(Sinvol));
+ //PROP_COUNT:=strtoint(PROP_COUNTE.text) ;
+ // description:=descriptionE.text;
+ //ShowMessage(floattostr(value));
+ // ShowMessage(inttostr(Debitaccid));
+ DMproperties.OraclePackage2.CallProcedure('AddPayment',[ 'p_propid',propid,
+                                                          'P_Debitaccid',Debitaccid,
+                                                          'P_sell_value',sell_value,
+                                                          'P_description',description,
+                                                          'P_Sinvol',Sinvol ,
+                                                          'p_pille',p_pille,
+                                                          'p_sat',ComboBox1.itemindex
+
+                                                         ]) ;
+  try
+
+    CommitTranchePay := TrDelayed_Show(Self,rsTransactionsWillProcessed);
+
+    Update;
+    
+    DMproperties.OraclePackage2.CallProcedure('CommitTranchePay',['DoCommit',
+       CommitTranchePay
+    ]);
+
+    if CommitTranchePay then
+    Self.ModalResult := mrOk;
+    Self.Update;
+  except
+
+
+   DMproperties.OraclePackage2.CallProcedure('CommitTranchePay',['DoCommit',
+        False
+    ]);
+
+    raise;
+  end;
+// DMproperties.DataSetProp_take.refresh;
+// close
+end;
+
+
+procedure TFrmProp_paymentAdd.SpeedButton2Click(Sender: TObject);
+begin
+close
+end;
+
+procedure TFrmProp_paymentAdd.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+Resize:=false;
+end;
+
+procedure TFrmProp_paymentAdd.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+   if Ord(Key) = VK_ESCAPE then Close;
+end;
+
+procedure TFrmProp_paymentAdd.sell_valueEKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+if not (key in ['0'..'9',#46,#8]) then
+begin Key:=#0;
+Beep;
+end;
+end;
+
+procedure TFrmProp_paymentAdd.PROP_COUNTEKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+if not (key in ['1'..'9',#8]) then
+begin Key:=#0;
+Beep;
+end;
+end;
+
+procedure TFrmProp_paymentAdd.sell_valueEKeyUp(Sender: TObject;
+  var Key: Word; Shift: TShiftState);
+ var
+ sell_value,value:real ;
+ count,sell_count:real;
+begin
+{value:=strtofloat(DBEdit1.text) ;
+sell_value:=strtofloat(sell_valueE.text) ;
+count:=strtoint(DBEdit2.text);
+
+sell_count:= (sell_value*count)/value ;
+if sell_valueE.text<>''  then
+PROP_COUNTE.text:= floattostr(trunc(sell_count))
+else PROP_COUNTE.text:='' }
+end;
+
+procedure TFrmProp_paymentAdd.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+//sell_valueE.text:='';
+//PROP_COUNTE.text:=''
+end;
+
+procedure TFrmProp_paymentAdd.sell_valueEChange(Sender: TObject);
+var
+ sell_value,value:real ;
+ count,sell_count:real;
+begin
+{value:=strtofloat(DBEdit1.text) ;
+count:=strtoint(DBEdit2.text);
+if sell_valueE.text<>''then
+sell_value:=strtofloat(sell_valueE.text)
+ else exit;
+sell_count:=(sell_value*count)/value ;
+//if sell_valueE.text<>''  then
+PROP_COUNTE.text:= floattostr(trunc(sell_count))
+//else PROP_COUNTE.text:=''  }
+
+end;
+{procedure TFrmProp_paymentAdd.SetCashSymbol;
+begin
+ with DMproperties, CashSymbolLookUp do
+ begin
+  if (DebitAccData.FieldByName('IsCacheAccount').AsInteger = 1) and (DebitAccData.FieldByName('val_acc').AsInteger = 0) then
+   ListSource.DataSet.Filter :='Mediocrity = 0'
+  else
+  if (CreditAccData.FieldByName('IsCacheAccount').AsInteger = 1) and (CreditAccData.FieldByName('val_acc').AsInteger = 0) then
+   ListSource.DataSet.Filter :='Mediocrity = 1'
+  else
+   ListSource.DataSet.Filter :='Mediocrity = -1';
+  ListSource.DataSet.Filtered :=False;
+  ListSource.DataSet.Filtered :=True;
+ end;
+end;  }
+procedure TFrmProp_paymentAdd.FormCreate(Sender: TObject);
+begin
+DMproperties.CashSymbols.open ;
+DMproperties.ElaveDataSet.open;
+SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TFrmProp_paymentAdd.CashSymbolDBEditKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+ if ORD(Key) = VK_RETURN then
+  if Sender is TWinControl then
+  with Sender as TWinControl do
+
+  begin
+  case Tag of
+    1,3 : SelectNext(Sender as TWinControl ,True ,True);
+  //  2 :DBLCBValutes.SetFocus;
+  end;
+   Key := #0;
+  end;
+end;
+
+procedure TFrmProp_paymentAdd.CMSearchEdit6KeyPress(Sender: TObject;
+  var Key: Char);
+begin
+if ORD(Key) = VK_RETURN then
+  if Sender is TWinControl then
+  with Sender as TWinControl do
+
+  begin
+  case Tag of
+    1,3 : SelectNext(Sender as TWinControl ,True ,True);
+   // 2 :DBLCBValutes.SetFocus;
+  end;
+   Key := #0;
+  end;
+
+end;
+
+procedure TFrmProp_paymentAdd.DBLookupComboboxEh2KeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if ORD(Key) = VK_RETURN then
+  if Sender is TWinControl then
+  with Sender as TWinControl do
+
+  begin
+  case Tag of
+    1,3 : SelectNext(Sender as TWinControl ,True ,True);
+  //  2 :DBLCBValutes.SetFocus;
+  end;
+   Key := #0;
+  end;
+end;
+
+procedure TFrmProp_paymentAdd.DBLookupComboboxEh2KeyValueChanged(
+  Sender: TObject);
+begin
+ with (Sender as TDBLookupComboboxEh) do
+  if DataSource.DataSet.Active then
+   UpdateData;
+end;
+
+procedure TFrmProp_paymentAdd.FormDestroy(Sender: TObject);
+begin
+//DMproperties.ElaveDataSet.close
+end;
+
+end.

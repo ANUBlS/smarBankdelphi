@@ -1,0 +1,68 @@
+unit Dm_Pk_investisiyaimpl;
+
+interface
+
+uses
+  SysUtils, Classes, ImgList, Controls, DB, OracleData, Oracle;
+
+type
+  TDm_Pk_investisiya = class(TDataModule)
+    DsValute: TOracleDataSet;
+    DsValuteVALUTE: TIntegerField;
+    DsValuteVAL_NAME: TWideStringField;
+    DsrValute: TDataSource;
+    Ds_Cust: TOracleDataSet;
+    Ds_CustID: TIntegerField;
+    Ds_CustNAME: TWideStringField;
+    Dsr_Cust: TDataSource;
+    dsinvest_type: TOracleDataSet;
+    dsinvest_typeID: TFloatField;
+    dsinvest_typeNAME: TWideStringField;
+    dsrinvest_type: TDataSource;
+    pk_ins_Investment: TOraclePackage;
+    DsMain_Contracts: TOracleDataSet;
+    DsMain_ContractsID: TFloatField;
+    DsMain_ContractsCONTR_TYPE: TWideStringField;
+    DsMain_ContractsBEGIN_DATE: TDateTimeField;
+    DsMain_ContractsEND_DATE: TDateTimeField;
+    DsMain_ContractsAMMOUNT: TFloatField;
+    DsMain_ContractsMUSTERI: TWideStringField;
+    DsMain_ContractsCONTRACT_NAME: TWideStringField;
+    DsMain_ContractsMUDDETLI: TWideStringField;
+    DsMain_ContractsVAL_NAME: TWideStringField;
+    DsMain_ContractsSTATUS: TIntegerField;
+    DsMain_ContractsPERCENT: TIntegerField;
+    DsrMain_Contracts: TDataSource;
+    procedure DataModuleCreate(Sender: TObject);
+    procedure DataModuleDestroy(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Dm_Pk_investisiya: TDm_Pk_investisiya;
+
+implementation
+
+{$R *.dfm}
+uses sboapiDataModuleImpl,Frm_pk_Investisiya;
+
+procedure TDm_Pk_investisiya.DataModuleCreate(Sender: TObject);
+begin
+DsValute.Open;
+Ds_Cust.Open;
+dsinvest_type.Open;
+DsMain_Contracts.Open
+end;
+
+procedure TDm_Pk_investisiya.DataModuleDestroy(Sender: TObject);
+begin
+DsValute.close;
+Ds_Cust.Close;
+dsinvest_type.Close;
+DsMain_Contracts.Close;
+end;
+
+end.

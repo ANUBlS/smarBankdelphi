@@ -1,0 +1,732 @@
+object DataMod_Buyers: TDataMod_Buyers
+  OldCreateOrder = False
+  Left = 370
+  Top = 125
+  Height = 521
+  Width = 780
+  object DSBuyers: TDataSource
+    DataSet = ODSBuyers
+    Left = 104
+    Top = 120
+  end
+  object ODSBuyers: TOracleDataSet
+    SQL.Strings = (
+      'select a.*, decode(a.gender,1,'#39'киши'#39',2,'#39'гадын'#39') as cinsi'
+      
+        ',  c.cntr_name ,d.city_name from cc_buyers a , countries  c, cit' +
+        'ies d'
+      '  where a.birthstate=c.id and a.birthcity=d.id'
+      ''
+      ''
+      ''
+      ''
+      'order by :title')
+    Variables.Data = {
+      0300000001000000060000003A5449544C45010000000A00000046697273744E
+      616D650000000000}
+    QBEDefinition.QBEFieldDefs = {
+      040000001B000000090000004249525448444154450100000000000900000057
+      4F524B504C414345010000000000040000005741474501000000000009000000
+      46495253544E414D45010000000000080000004C4153544E414D450100000000
+      000A0000004D4944444C454E414D450100000000000800000050415353505345
+      520100000000000800000050415353504E554D0100000000000900000046414D
+      53544154555301000000000009000000434E54525F4E414D4501000000000009
+      000000434954595F4E414D450100000000000200000049440100000000000800
+      0000504153535050494E01000000000009000000504153535044415445010000
+      000000090000005041535350444550540100000000000600000047454E444552
+      0100000000000A00000042495254485354415445010000000000090000004249
+      5254484349545901000000000005000000535441544501000000000004000000
+      4349545901000000000007000000414444524553530100000000000500000050
+      484F4E450100000000000800000050484F4E454D4F4201000000000005000000
+      454D41494C010000000000070000005245474441544501000000000006000000
+      5553455249440100000000000500000043494E5349010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 24
+    Top = 120
+    object ODSBuyersID: TFloatField
+      FieldName = 'ID'
+    end
+    object ODSBuyersFIRSTNAME: TStringField
+      FieldName = 'FIRSTNAME'
+      Size = 30
+    end
+    object ODSBuyersLASTNAME: TStringField
+      FieldName = 'LASTNAME'
+      Size = 30
+    end
+    object ODSBuyersMIDDLENAME: TStringField
+      FieldName = 'MIDDLENAME'
+      Size = 30
+    end
+    object ODSBuyersPASSPSER: TStringField
+      FieldName = 'PASSPSER'
+      Size = 5
+    end
+    object ODSBuyersPASSPNUM: TStringField
+      FieldName = 'PASSPNUM'
+      Size = 15
+    end
+    object ODSBuyersPASSPPIN: TStringField
+      FieldName = 'PASSPPIN'
+      Size = 15
+    end
+    object ODSBuyersPASSPDATE: TDateTimeField
+      FieldName = 'PASSPDATE'
+    end
+    object ODSBuyersPASSPDEPT: TStringField
+      FieldName = 'PASSPDEPT'
+      Size = 50
+    end
+    object ODSBuyersGENDER: TIntegerField
+      FieldName = 'GENDER'
+    end
+    object ODSBuyersBIRTHDATE: TDateTimeField
+      FieldName = 'BIRTHDATE'
+    end
+    object ODSBuyersBIRTHSTATE: TIntegerField
+      FieldName = 'BIRTHSTATE'
+    end
+    object ODSBuyersBIRTHCITY: TIntegerField
+      FieldName = 'BIRTHCITY'
+    end
+    object ODSBuyersFAMSTATUS: TIntegerField
+      FieldName = 'FAMSTATUS'
+    end
+    object ODSBuyersSTATE: TIntegerField
+      FieldName = 'STATE'
+    end
+    object ODSBuyersCITY: TIntegerField
+      FieldName = 'CITY'
+    end
+    object ODSBuyersADDRESS: TStringField
+      FieldName = 'ADDRESS'
+      Size = 100
+    end
+    object ODSBuyersWORKPLACE: TStringField
+      FieldName = 'WORKPLACE'
+      Size = 100
+    end
+    object ODSBuyersWAGE: TFloatField
+      FieldName = 'WAGE'
+    end
+    object ODSBuyersPHONE: TStringField
+      FieldName = 'PHONE'
+      Size = 40
+    end
+    object ODSBuyersPHONEMOB: TStringField
+      FieldName = 'PHONEMOB'
+      Size = 40
+    end
+    object ODSBuyersEMAIL: TStringField
+      FieldName = 'EMAIL'
+      Size = 40
+    end
+    object ODSBuyersREGDATE: TDateTimeField
+      FieldName = 'REGDATE'
+    end
+    object ODSBuyersUSERID: TFloatField
+      FieldName = 'USERID'
+    end
+    object ODSBuyersCINSI: TStringField
+      FieldName = 'CINSI'
+      Size = 5
+    end
+    object ODSBuyersCNTR_NAME: TStringField
+      FieldName = 'CNTR_NAME'
+      Size = 30
+    end
+    object ODSBuyersCITY_NAME: TStringField
+      FieldName = 'CITY_NAME'
+      Size = 80
+    end
+  end
+  object CC_GENERAL: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'CC_GENERAL'
+    Left = 464
+    Top = 128
+  end
+  object BalAcc: TOracleDataSet
+    Tag = 1
+    SQL.Strings = (
+      
+        'select '#39'Ѕцтцн баланс щесаблары'#39' as Bal_cn,'#39'Ѕцтцн баланс щесаблар' +
+        'ы'#39' as BalName from dual'
+      'Union All'
+      'select * from '
+      '('
+      'select to_char(bal_cn), BalName from bal_spr1'
+      'order by bal_cn'
+      ')')
+    QBEDefinition.QBEFieldDefs = {
+      04000000020000000600000042414C5F434E0100000000000700000042414C4E
+      414D45010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 392
+    Top = 282
+    object BalAccBAL_CN: TStringField
+      FieldName = 'BAL_CN'
+      Size = 40
+    end
+    object BalAccBALNAME: TStringField
+      FieldName = 'BALNAME'
+      Size = 181
+    end
+  end
+  object BalAccData: TDataSource
+    DataSet = BalAcc
+    Left = 392
+    Top = 331
+  end
+  object Currency: TOracleDataSet
+    Tag = 1
+    SQL.Strings = (
+      'select -1 as Valute, '#39'Ѕцтцн валйуталар'#39' as Valu_Name from Dual'
+      'Union All'
+      'select Valute, Valu_Name from Avalute'
+      'Order by valute')
+    QBEDefinition.QBEFieldDefs = {
+      04000000020000000600000056414C5554450100000000000900000056414C55
+      5F4E414D45010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 48
+    Top = 270
+    object CurrencyVALUTE: TFloatField
+      FieldName = 'VALUTE'
+    end
+    object CurrencyVALU_NAME: TStringField
+      FieldName = 'VALU_NAME'
+      Size = 25
+    end
+  end
+  object CurrencyData: TDataSource
+    DataSet = Currency
+    Left = 392
+    Top = 173
+  end
+  object Account: TOracleDataSet
+    Tag = 1
+    SQL.Strings = (
+      'SELECT   '
+      
+        '   ACCOUNT.RowID, ID, kli_id, op_id, acc_no, val_acc, NAME, open' +
+        '_dat, close_dat,'
+      
+        '   DECODE (close_dat, NULL, 1, 2) AS status, bal_cn1, bal_cn2, b' +
+        'al_cn3,'
+      
+        '   bal_cn4, filial, sim_otcet, tipacc, LIMIT, old_acc_no, pair_a' +
+        'cc,'
+      '   insider'
+      'FROM ACCOUNT '
+      'where ownid=:ownid'
+      'ORDER BY '
+      '   :title')
+    Variables.Data = {
+      0300000002000000060000003A5449544C4501000000070000006163635F6E6F
+      0000000000060000003A4F574E4944030000000000000000000000}
+    Master = ODSBuyers
+    MasterFields = 'id'
+    DetailFields = 'ownid'
+    QueryAllRecords = False
+    Session = sboapiDataModule.SBSession
+    Left = 24
+    Top = 72
+    object AccountID: TFloatField
+      FieldName = 'ID'
+    end
+    object AccountKLI_ID: TFloatField
+      FieldName = 'KLI_ID'
+      Required = True
+    end
+    object AccountOP_ID: TFloatField
+      FieldName = 'OP_ID'
+    end
+    object AccountACC_NO: TStringField
+      DisplayLabel = 'ўесаб є'
+      FieldName = 'ACC_NO'
+      Required = True
+    end
+    object AccountVAL_ACC: TIntegerField
+      DisplayLabel = '$'
+      FieldName = 'VAL_ACC'
+      Required = True
+    end
+    object AccountNAME: TStringField
+      DisplayLabel = 'ўесабын ады'
+      FieldName = 'NAME'
+      Size = 90
+    end
+    object AccountOPEN_DAT: TDateTimeField
+      DisplayLabel = 'јчылма тарихи'
+      FieldName = 'OPEN_DAT'
+      Required = True
+    end
+    object AccountCLOSE_DAT: TDateTimeField
+      DisplayLabel = 'Ѕаьланма тарихи'
+      FieldName = 'CLOSE_DAT'
+    end
+    object AccountSTATUS: TFloatField
+      FieldName = 'STATUS'
+    end
+    object AccountBAL_CN1: TFloatField
+      DisplayLabel = 'Ѕаланс є'
+      FieldName = 'BAL_CN1'
+      Required = True
+    end
+    object AccountBAL_CN2: TFloatField
+      FieldName = 'BAL_CN2'
+    end
+    object AccountBAL_CN3: TFloatField
+      FieldName = 'BAL_CN3'
+    end
+    object AccountBAL_CN4: TFloatField
+      FieldName = 'BAL_CN4'
+    end
+    object AccountFILIAL: TIntegerField
+      FieldName = 'FILIAL'
+    end
+    object AccountSIM_OTCET: TFloatField
+      FieldName = 'SIM_OTCET'
+    end
+    object AccountTIPACC: TStringField
+      FieldName = 'TIPACC'
+    end
+    object AccountLIMIT: TFloatField
+      FieldName = 'LIMIT'
+    end
+    object AccountOLD_ACC_NO: TStringField
+      FieldName = 'OLD_ACC_NO'
+    end
+    object AccountPAIR_ACC: TFloatField
+      FieldName = 'PAIR_ACC'
+    end
+    object AccountINSIDER: TStringField
+      FieldName = 'INSIDER'
+      Size = 1
+    end
+  end
+  object AccountData: TDataSource
+    DataSet = Account
+    Left = 104
+    Top = 72
+  end
+  object Avalute: TOracleDataSet
+    SQL.Strings = (
+      'select * from avalute')
+    Session = sboapiDataModule.SBSession
+    Left = 176
+    Top = 328
+    object AvaluteVALUTE: TIntegerField
+      FieldName = 'VALUTE'
+      Required = True
+    end
+    object AvaluteVAL_NAME: TStringField
+      FieldName = 'VAL_NAME'
+      Size = 10
+    end
+    object AvaluteVALU_NAME: TStringField
+      FieldName = 'VALU_NAME'
+      Size = 25
+    end
+    object AvaluteVALU_SHORT: TStringField
+      FieldName = 'VALU_SHORT'
+      Size = 10
+    end
+    object AvaluteUSTORG: TFloatField
+      FieldName = 'USTORG'
+    end
+    object AvaluteUSTPOK: TFloatField
+      FieldName = 'USTPOK'
+    end
+    object AvaluteVALU_GEN: TStringField
+      FieldName = 'VALU_GEN'
+      Size = 10
+    end
+    object AvaluteVALU_AZ: TStringField
+      FieldName = 'VALU_AZ'
+      Size = 25
+    end
+    object AvaluteUSING: TIntegerField
+      FieldName = 'USING'
+    end
+    object AvaluteVALU_OTHER: TStringField
+      FieldName = 'VALU_OTHER'
+      Size = 25
+    end
+    object AvaluteVALU_INTER: TStringField
+      FieldName = 'VALU_INTER'
+      Size = 3
+    end
+    object AvaluteVALU_BALA: TStringField
+      FieldName = 'VALU_BALA'
+      Size = 25
+    end
+    object AvalutePRISTAVKA: TFloatField
+      FieldName = 'PRISTAVKA'
+    end
+    object AvaluteCOUNTRY: TStringField
+      FieldName = 'COUNTRY'
+    end
+    object AvaluteUST_POK1: TFloatField
+      FieldName = 'UST_POK1'
+    end
+    object AvaluteOFFICAL: TStringField
+      FieldName = 'OFFICAL'
+      Size = 5
+    end
+    object AvaluteLIMIT: TFloatField
+      FieldName = 'LIMIT'
+    end
+    object AvaluteDEBET: TFloatField
+      FieldName = 'DEBET'
+    end
+    object AvaluteKREDIT: TFloatField
+      FieldName = 'KREDIT'
+    end
+    object AvaluteF5501P: TFloatField
+      FieldName = 'F5501P'
+    end
+    object AvaluteF5501V: TFloatField
+      FieldName = 'F5501V'
+    end
+    object AvaluteSDEBET: TFloatField
+      FieldName = 'SDEBET'
+    end
+    object AvaluteSCREDIT: TFloatField
+      FieldName = 'SCREDIT'
+    end
+  end
+  object Avalutedata: TDataSource
+    DataSet = Avalute
+    Left = 392
+    Top = 120
+  end
+  object Customers: TOracleDataSet
+    SQL.Strings = (
+      'select * from CUSTOMERS'
+      'where close_dat is null'
+      'order by ID')
+    QBEDefinition.QBEFieldDefs = {
+      0400000019000000020000004944010000000000050000004F505F4944010000
+      000000080000004F50454E5F44415401000000000009000000434C4F53455F44
+      41540100000000000A0000004E4552455A4944454E540100000000000A000000
+      5052494E41445F4B4F44010000000000040000004E414D450100000000000A00
+      000053484F52545F4E414D450100000000000A00000047524F55505F4B4C4945
+      010000000000070000005649445F534F42010000000000070000004F52475F53
+      4F420100000000000900000053464552415F444559010000000000060000004F
+      545241534C010000000000090000004E414C4F475F4B4F440100000000000900
+      00004B4F445F4F4B50524F01000000000003000000494E4E0100000000000700
+      00004441545F4E414C010000000000090000004441545F555354415601000000
+      00000300000042494B010000000000080000004F54565F4C49434F0100000000
+      000C0000004F54565F50415353504F52540100000000000A0000004F54565F49
+      53535545440100000000000A0000004F54565F49534441544501000000000007
+      0000004F4C445F494E4E01000000000009000000435553545F54595045010000
+      000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 316
+    Top = 178
+  end
+  object CustomersData: TDataSource
+    DataSet = Customers
+    Left = 100
+    Top = 175
+  end
+  object Bal_Spr1: TOracleDataSet
+    Tag = 1
+    Session = sboapiDataModule.SBSession
+    Left = 32
+    Top = 336
+  end
+  object Bal_Spr1Data: TDataSource
+    DataSet = Bal_Spr1
+    Left = 240
+    Top = 128
+  end
+  object Cust: TOracleDataSet
+    Session = sboapiDataModule.SBSession
+    Left = 312
+    Top = 24
+  end
+  object Custdata: TDataSource
+    DataSet = Cust
+    Left = 240
+    Top = 272
+  end
+  object Branches: TOracleDataSet
+    Tag = 1
+    SQL.Strings = (
+      'select -1 as ID, '#39'Ѕцтцн филиаллар'#39' as name from Dual'
+      'Union All'
+      'select ID, name from filial '
+      'order by ID')
+    Session = sboapiDataModule.SBSession
+    Left = 173
+    Top = 278
+    object BranchesID: TFloatField
+      FieldName = 'ID'
+    end
+    object BranchesNAME: TStringField
+      FieldName = 'NAME'
+      Size = 90
+    end
+  end
+  object BranchesData: TDataSource
+    DataSet = Branches
+    Left = 392
+    Top = 29
+  end
+  object Branch: TOracleDataSet
+    SQL.Strings = (
+      'select -1 as ID, '#39'Ѕцтцн филиаллар'#39' as name from Dual'
+      'Union All'
+      'select ID, name from filial '
+      'order by ID'
+      '')
+    QBEDefinition.QBEFieldDefs = {
+      0400000002000000020000004944010000000000040000004E414D4501000000
+      0000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 176
+    Top = 232
+  end
+  object Branchdata: TDataSource
+    DataSet = Branch
+    Left = 240
+    Top = 24
+  end
+  object cc_settings: TOracleDataSet
+    SQL.Strings = (
+      'select * from CC_Settings')
+    Session = sboapiDataModule.SBSession
+    Left = 312
+    Top = 72
+  end
+  object CC_Settingsdata: TDataSource
+    DataSet = cc_settings
+    Left = 240
+    Top = 176
+  end
+  object Accno: TOracleDataSet
+    SQL.Strings = (
+      'select * from accno order by :title')
+    Variables.Data = {
+      0300000001000000060000003A5449544C4501000000060000006163636E6F00
+      00000000}
+    QBEDefinition.QBEFieldDefs = {
+      040000000C000000020000004944010000000000050000004143434E4F010000
+      000000050000004F574E4944010000000000070000004143434E414D45010000
+      000000080000004F50454E444154450100000000000D00000043555252454E43
+      59534E414D450100000000000700000042414C414E4345010000000000080000
+      004C42414C414E4345010000000000070000004143434B4C4944010000000000
+      0600000041434356414C0100000000000A00000041434356414C434F44450100
+      0000000006000000435553544944010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 312
+    Top = 224
+  end
+  object Accnodata: TDataSource
+    DataSet = Accno
+    Left = 240
+    Top = 328
+  end
+  object Sysdat: TOracleDataSet
+    SQL.Strings = (
+      'select tek_dat from sysdat')
+    Session = sboapiDataModule.SBSession
+    Left = 176
+    Top = 184
+  end
+  object Archost: TOracleDataSet
+    Session = sboapiDataModule.SBSession
+    Left = 176
+    Top = 128
+  end
+  object Trdestination: TOracleDataSet
+    SQL.Strings = (
+      'select * from Trdestination')
+    QBEDefinition.QBEFieldDefs = {
+      0400000002000000020000004944010000000000040000004E414D4501000000
+      0000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 312
+    Top = 128
+  end
+  object Trdestinationdata: TDataSource
+    DataSet = Trdestination
+    Left = 240
+    Top = 224
+  end
+  object Country: TOracleDataSet
+    SQL.Strings = (
+      'select c.rowid,c.* from  countries c order by ID'
+      ' ')
+    QBEDefinition.QBEFieldDefs = {
+      040000000200000002000000494401000000000009000000434E54525F4E414D
+      45010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 104
+    Top = 320
+  end
+  object OPackage: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'customer_operations'
+    Left = 464
+    Top = 24
+  end
+  object OSCT: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'SB_COMPLEX_TRANSACTIONS'
+    Left = 464
+    Top = 72
+  end
+  object countrydata: TDataSource
+    DataSet = Country
+    Left = 104
+    Top = 272
+  end
+  object CC_Flat: TOracleDataSet
+    SQL.Strings = (
+      'select * from cc_buyer_flats')
+    Session = sboapiDataModule.SBSession
+    Left = 176
+    Top = 72
+  end
+  object CC_Flatdata: TDataSource
+    DataSet = CC_Flat
+    Left = 240
+    Top = 72
+  end
+  object CC_Buyer_Flat: TOracleDataSet
+    SQL.Strings = (
+      'Select * from CC_Buyer_Flat')
+    Session = sboapiDataModule.SBSession
+    Left = 312
+    Top = 280
+  end
+  object CC_Buyer_FlatData: TDataSource
+    DataSet = CC_Buyer_Flat
+    Left = 392
+    Top = 72
+  end
+  object cities: TOracleDataSet
+    SQL.Strings = (
+      'select * from cities'
+      'order by ID')
+    QBEDefinition.QBEFieldDefs = {
+      04000000030000000200000049440100000000000A000000434F554E5452595F
+      494401000000000009000000434954595F4E414D45010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 304
+    Top = 328
+  end
+  object ctiesdata: TDataSource
+    DataSet = cities
+    Left = 392
+    Top = 230
+  end
+  object ad_country: TOracleDataSet
+    SQL.Strings = (
+      'select c.rowid,c.* from  countries c '
+      'order by ID'
+      ' '
+      '')
+    QBEDefinition.QBEFieldDefs = {
+      040000000200000002000000494401000000000009000000434E54525F4E414D
+      45010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 24
+    Top = 24
+  end
+  object ad_countrydata: TDataSource
+    DataSet = ad_country
+    Left = 104
+    Top = 24
+  end
+  object ad_cities: TOracleDataSet
+    SQL.Strings = (
+      'select * from cities'
+      'order by ID')
+    QBEDefinition.QBEFieldDefs = {
+      04000000030000000200000049440100000000000A000000434F554E5452595F
+      494401000000000009000000434954595F4E414D45010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 24
+    Top = 216
+  end
+  object ad_citites: TDataSource
+    DataSet = ad_cities
+    Left = 112
+    Top = 376
+  end
+  object countries: TOracleDataSet
+    SQL.Strings = (
+      'select c.rowid,c.* from  countries c'
+      'order by ID '
+      ''
+      '')
+    Session = sboapiDataModule.SBSession
+    Left = 24
+    Top = 168
+  end
+  object countriesdata: TDataSource
+    DataSet = countries
+    Left = 104
+    Top = 222
+  end
+  object cc_countries: TOracleDataSet
+    SQL.Strings = (
+      'select c.rowid,c.* from  countries c'
+      'order by ID '
+      ''
+      ''
+      '')
+    Session = sboapiDataModule.SBSession
+    Left = 176
+    Top = 24
+  end
+  object OracleDataSet1: TOracleDataSet
+    SQL.Strings = (
+      'select max(length(workplace)) from cc_buyers')
+    Session = sboapiDataModule.SBSession
+    Left = 200
+    Top = 376
+  end
+  object paspdept: TOracleDataSet
+    SQL.Strings = (
+      'select c.rowid,c.* from  passdeps c '
+      'order by ID')
+    QBEDefinition.QBEFieldDefs = {
+      0400000002000000020000004944010000000000040000004E414D4501000000
+      0000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 312
+    Top = 384
+  end
+  object PaspdeptData: TDataSource
+    DataSet = paspdept
+    Left = 384
+    Top = 384
+  end
+  object SBOP: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'SBOP'
+    Left = 472
+    Top = 192
+  end
+  object OracleDataSet2: TOracleDataSet
+    Left = 464
+    Top = 248
+  end
+end

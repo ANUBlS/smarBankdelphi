@@ -1,0 +1,196 @@
+object sboapiDataModule: TsboapiDataModule
+  OldCreateOrder = True
+  Height = 424
+  Width = 641
+  object SBSession: TOracleSession
+    Cursor = crSQLWait
+    DesignConnection = True
+    LogonUsername = 'smart'
+    LogonPassword = 'KLsoracledb#1$'
+    LogonDatabase = 'PDBNBC'
+    ThreadSafe = True
+    Preferences.ConvertUTF = cuUTF8ToUTF16
+    IsolationLevel = ilReadCommitted
+    Connected = True
+    Left = 48
+    Top = 16
+  end
+  object SBLogon: TOracleLogon
+    Session = SBSession
+    Options = [ldDatabase]
+    Left = 128
+    Top = 8
+  end
+  object SBOperationDay: TOraclePackage
+    Session = SBSession
+    PackageName = 'SBOP'
+    ParameterMode = pmNamed
+    Cursor = crSQLWait
+    Left = 32
+    Top = 72
+  end
+  object GetCustomer: TOracleDataSet
+    SQL.Strings = (
+      'select * from CUSTOMERS'
+      'where ID = :CustomerID')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000160000003A0043005500530054004F004D00450052004900
+      4400030000000000000000000000}
+    Session = SBSession
+    Left = 280
+    Top = 24
+  end
+  object SBSecurity: TOraclePackage
+    Session = SBSession
+    PackageName = 'SBSEC'
+    Cursor = crSQLWait
+    Left = 32
+    Top = 128
+  end
+  object SBReferences: TOraclePackage
+    Session = SBSession
+    PackageName = 'SBREF'
+    ParameterMode = pmNamed
+    Left = 120
+    Top = 72
+  end
+  object SBReport: TOraclePackage
+    Session = SBSession
+    PackageName = 'SBREP'
+    ParameterMode = pmNamed
+    Left = 200
+    Top = 72
+  end
+  object SBRateManagement: TOraclePackage
+    Session = SBSession
+    PackageName = 'SBRM'
+    ParameterMode = pmNamed
+    Cursor = crHourGlass
+    Left = 280
+    Top = 72
+  end
+  object SBSystem: TOraclePackage
+    Session = SBSession
+    PackageName = 'SBSYS'
+    ParameterMode = pmNamed
+    Left = 120
+    Top = 128
+  end
+  object SBUtil: TOraclePackage
+    Session = SBSession
+    PackageName = 'SBUTIL'
+    ParameterMode = pmNamed
+    Left = 200
+    Top = 128
+  end
+  object SBInstallation: TOraclePackage
+    Session = SBSession
+    PackageName = 'SBInstall'
+    Left = 280
+    Top = 128
+  end
+  object SBCorrection: TOraclePackage
+    Session = SBSession
+    PackageName = 'SBCORRECTION'
+    ParameterMode = pmNamed
+    Left = 32
+    Top = 184
+  end
+  object SBSettings: TOraclePackage
+    Session = SBSession
+    PackageName = 'SBSETTINGS'
+    Left = 120
+    Top = 184
+  end
+  object SBTransaction: TOraclePackage
+    Session = SBSession
+    PackageName = 'SB_TRANSACTION'
+    ParameterMode = pmNamed
+    Left = 200
+    Top = 184
+  end
+  object SBMessage: TOraclePackage
+    Session = SBSession
+    PackageName = 'SBMSG'
+    ParameterMode = pmNamed
+    Left = 280
+    Top = 184
+  end
+  object SBSessionMgr: TOraclePackage
+    Session = SBSession
+    PackageName = 'SB_SESSION_MGR'
+    Left = 32
+    Top = 240
+  end
+  object SBLogin: TOraclePackage
+    Session = SBSession
+    PackageName = 'SBLOGIN'
+    Left = 120
+    Top = 240
+  end
+  object SBModules: TOraclePackage
+    Session = SBSession
+    PackageName = 'SBMODULES'
+    Left = 200
+    Top = 240
+  end
+  object SBAca: TOraclePackage
+    Session = SBSession
+    PackageName = 'sb_aca'
+    Left = 280
+    Top = 240
+  end
+  object OrPack_SL: TOraclePackage
+    Session = SBSession
+    PackageName = 'SL_CONTROL'
+    Left = 40
+    Top = 296
+  end
+  object DSBankDate: TOracleDataSet
+    SQL.Strings = (
+      'select TEK_DAT , PRED_DAT '
+      '  from SYSDAT')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000E000000540045004B005F00440041005400010000000000
+      1000000050005200450044005F00440041005400010000000000}
+    Session = SBSession
+    Left = 368
+    Top = 64
+    object DSBankDateTEK_DAT: TDateTimeField
+      FieldName = 'TEK_DAT'
+      Required = True
+    end
+    object DSBankDatePRED_DAT: TDateTimeField
+      FieldName = 'PRED_DAT'
+    end
+  end
+  object Branch: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      '   KOD_FIL'
+      'from BANKINFO')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000010000000E0000004B004F0044005F00460049004C00010000000000}
+    Session = SBSession
+    Left = 368
+    Top = 120
+    object BranchKOD_FIL: TIntegerField
+      FieldName = 'KOD_FIL'
+    end
+  end
+  object OrPack_SMS: TOraclePackage
+    Session = SBSession
+    PackageName = 'SMSBanking'
+    Left = 120
+    Top = 296
+  end
+  object SBOracleLogOn: TSBOracleLogOn
+    Session = SBSession
+    Retries = 3
+    Left = 200
+    Top = 24
+  end
+end

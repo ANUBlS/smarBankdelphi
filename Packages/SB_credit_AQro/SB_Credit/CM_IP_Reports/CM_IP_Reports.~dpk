@@ -1,0 +1,48 @@
+package CM_IP_Reports;
+
+{$R *.RES}
+{$ALIGN ON}
+{$ASSERTIONS ON}
+{$BOOLEVAL OFF}
+{$DEBUGINFO ON}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LOCALSYMBOLS ON}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION ON}
+{$OVERFLOWCHECKS OFF}
+{$RANGECHECKS OFF}
+{$REFERENCEINFO ON}
+{$SAFEDIVIDE OFF}
+{$STACKFRAMES OFF}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS ON}
+{$WRITEABLECONST ON}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
+{$DESCRIPTION 'Ipoteka reports'}
+{$DESIGNONLY}
+{$IMPLICITBUILD ON}
+
+requires
+  vcl50,
+  CM_COMMON,
+  CMOracleAPI,
+  DOA40d5,
+  Vclbde50,
+  Qrpt50;
+
+contains
+  uIprepFilter in 'uIprepFilter.pas' {frmIpRepFilter},
+  uMKTInfoImpl in 'uMKTInfoImpl.pas' {qrpMKTInfo: TQuickRep},
+  uBoorInfoRepImpl in 'uBoorInfoRepImpl.pas' {qrpBoorInfo: TQuickRep},
+  uMKTsInfoImpl in 'uMKTsInfoImpl.pas' {qrpMKTsInfo: TQuickRep},
+  uDateInfoImpl in 'uDateInfoImpl.pas' {qrpDateInfo: TQuickRep},
+  uInsurInfoImpl in 'uInsurInfoImpl.pas' {qrpInsurInfo: TQuickRep},
+  uPredInfoImpl in 'uPredInfoImpl.pas' {qrpPredInfo: TQuickRep},
+  uALEVInfoImpl in 'uALEVInfoImpl.pas' {qrpALEVInfo: TQuickRep},
+  iPSchedInfoImpl in 'iPSchedInfoImpl.pas' {qrpPSchedInfo: TQuickRep};
+
+end.

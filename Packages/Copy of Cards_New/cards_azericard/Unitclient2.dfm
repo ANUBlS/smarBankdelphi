@@ -1,0 +1,2042 @@
+object clients2: Tclients2
+  Left = 256
+  Top = 180
+  ClientHeight = 686
+  ClientWidth = 1016
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'MS Sans Serif'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poScreenCenter
+  OnActivate = FormActivate
+  OnCreate = FormCreate
+  OnPaint = FormPaint
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Label1: TLabel
+    Left = 6
+    Top = 91
+    Width = 53
+    Height = 14
+    Caption = #1048#1083#1082' '#1058#1072#1088#1080#1093
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    ParentFont = False
+  end
+  object Label2: TLabel
+    Left = 220
+    Top = 91
+    Width = 52
+    Height = 14
+    Caption = #1057#1086#1085' '#1058#1072#1088#1080#1093
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    ParentFont = False
+  end
+  object Label3: TLabel
+    Left = 2
+    Top = 131
+    Width = 66
+    Height = 14
+    Caption = #1052#1094#1096#1090#1103#1088#1080' '#1048#1044
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    ParentFont = False
+  end
+  object Label4: TLabel
+    Left = 1
+    Top = 171
+    Width = 67
+    Height = 14
+    Caption = #1046#1072#1088#1080' '#1065#1077#1089#1072#1073
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    ParentFont = False
+  end
+  object Label5: TLabel
+    Left = 252
+    Top = 133
+    Width = 43
+    Height = 14
+    Caption = #1042#1072#1083#1081#1091#1090#1072
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    ParentFont = False
+  end
+  object Label6: TLabel
+    Left = 5
+    Top = 236
+    Width = 144
+    Height = 14
+    Caption = #1040#1076#1099' '#1057#1086#1081#1072#1076#1099' '#1040#1090#1072#1089#1099#1085#1099#1085' '#1072#1076#1099
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    ParentFont = False
+  end
+  object Label7: TLabel
+    Left = 5
+    Top = 265
+    Width = 73
+    Height = 14
+    Caption = #1050#1088#1077#1076#1080#1090' '#1051#1080#1084#1080#1090
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    ParentFont = False
+  end
+  object Label8: TLabel
+    Left = 93
+    Top = 325
+    Width = 167
+    Height = 14
+    Caption = #1046#1072#1088#1080' '#1065#1077#1089#1072#1073#1072' '#1041#1072#1100#1083#1099' '#1050#1088#1077#1076#1080#1090#1083#1103#1088
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    ParentFont = False
+  end
+  object Label10: TLabel
+    Left = 386
+    Top = 370
+    Width = 26
+    Height = 14
+    Caption = 'TITLE'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    ParentFont = False
+  end
+  object Label11: TLabel
+    Left = 351
+    Top = 401
+    Width = 60
+    Height = 14
+    Caption = 'FIRST NAME'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    ParentFont = False
+  end
+  object Label12: TLabel
+    Left = 354
+    Top = 432
+    Width = 59
+    Height = 14
+    Caption = 'LAST NAME'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    ParentFont = False
+  end
+  object Label13: TLabel
+    Left = 344
+    Top = 462
+    Width = 66
+    Height = 14
+    Caption = 'HOME PHONE'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    ParentFont = False
+  end
+  object Label14: TLabel
+    Left = 342
+    Top = 496
+    Width = 69
+    Height = 14
+    Caption = 'WORK PHONE'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    ParentFont = False
+  end
+  object Label15: TLabel
+    Left = 348
+    Top = 523
+    Width = 65
+    Height = 14
+    Caption = 'PASSPORT N'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    ParentFont = False
+  end
+  object Label16: TLabel
+    Left = 357
+    Top = 556
+    Width = 55
+    Height = 14
+    Caption = 'BIRTH DAY'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    ParentFont = False
+  end
+  object Label17: TLabel
+    Left = 362
+    Top = 584
+    Width = 50
+    Height = 14
+    Caption = 'COUNTRY'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    ParentFont = False
+  end
+  object Label18: TLabel
+    Left = 527
+    Top = 584
+    Width = 29
+    Height = 13
+    Caption = 'LANG'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'MS Sans Serif'
+    Font.Style = []
+    ParentFont = False
+  end
+  object Label19: TLabel
+    Left = 390
+    Top = 615
+    Width = 23
+    Height = 14
+    Caption = 'CITY'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    ParentFont = False
+  end
+  object Label20: TLabel
+    Left = 338
+    Top = 644
+    Width = 120
+    Height = 14
+    Caption = #1071#1052#1071#1051#1048#1049#1049#1040#1058' '#1058#1040#1056#1048#1061#1048
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    ParentFont = False
+  end
+  object Label21: TLabel
+    Left = 668
+    Top = 370
+    Width = 16
+    Height = 14
+    Caption = 'VIP'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    ParentFont = False
+  end
+  object Label22: TLabel
+    Left = 796
+    Top = 370
+    Width = 41
+    Height = 14
+    Caption = 'STATUS'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    ParentFont = False
+  end
+  object Label23: TLabel
+    Left = 627
+    Top = 401
+    Width = 58
+    Height = 14
+    Caption = 'CARD TYPE'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    ParentFont = False
+  end
+  object Label24: TLabel
+    Left = 626
+    Top = 432
+    Width = 52
+    Height = 14
+    Caption = 'EXP. DATE'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    ParentFont = False
+  end
+  object Label25: TLabel
+    Left = 833
+    Top = 462
+    Width = 58
+    Height = 14
+    Caption = 'REFERENCE'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    ParentFont = False
+  end
+  object Label26: TLabel
+    Left = 629
+    Top = 462
+    Width = 48
+    Height = 14
+    Caption = 'RESIDENT'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    ParentFont = False
+  end
+  object Label27: TLabel
+    Left = 696
+    Top = 496
+    Width = 85
+    Height = 14
+    Caption = 'SECURITY WORD'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    ParentFont = False
+  end
+  object Label28: TLabel
+    Left = 777
+    Top = 432
+    Width = 92
+    Height = 14
+    Caption = 'WITH/WITHOUT PIN'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    ParentFont = False
+  end
+  object Label29: TLabel
+    Left = 627
+    Top = 523
+    Width = 74
+    Height = 14
+    Caption = 'CARD NUMBER'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    ParentFont = False
+  end
+  object Label30: TLabel
+    Left = 613
+    Top = 556
+    Width = 75
+    Height = 14
+    Caption = 'EMBOSS NAME'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    ParentFont = False
+  end
+  object Label31: TLabel
+    Left = 525
+    Top = 615
+    Width = 49
+    Height = 14
+    Caption = 'ADDRESS'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    ParentFont = False
+  end
+  object Label32: TLabel
+    Left = 661
+    Top = 584
+    Width = 52
+    Height = 14
+    Caption = 'COMPANY'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    ParentFont = False
+  end
+  object Label33: TLabel
+    Left = 579
+    Top = 644
+    Width = 120
+    Height = 14
+    Caption = #1071#1052#1071#1051#1048#1049#1049#1040#1058' '#1057#1045#1063#1048#1052#1048
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    ParentFont = False
+  end
+  object Label34: TLabel
+    Left = 95
+    Top = 508
+    Width = 173
+    Height = 14
+    Caption = #1046#1072#1088#1080' '#1065#1077#1089#1072#1073#1072' '#1041#1072#1100#1083#1099' '#1044#1077#1087#1086#1079#1080#1090#1083#1103#1088
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    ParentFont = False
+  end
+  object Label9: TLabel
+    Left = 3
+    Top = 204
+    Width = 108
+    Height = 14
+    Caption = #1046#1072#1088#1080' '#1065#1077#1089#1072#1073' '#1075#1072#1083#1099#1100#1099
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    ParentFont = False
+  end
+  object Label35: TLabel
+    Left = 589
+    Top = 369
+    Width = 24
+    Height = 13
+    Caption = 'URG'
+  end
+  object Label36: TLabel
+    Left = 5
+    Top = 291
+    Width = 137
+    Height = 14
+    Caption = #1052#1072#1072#1096#1076#1072#1085' '#1082#1088#1077#1076#1080#1090#1103' '#1090#1091#1090#1091#1083#1084#1072
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    ParentFont = False
+  end
+  object Edit1: TEdit
+    Left = 8
+    Top = 8
+    Width = 121
+    Height = 21
+    TabOrder = 0
+    Visible = False
+  end
+  object Button1: TButton
+    Left = 43
+    Top = 26
+    Width = 102
+    Height = 35
+    Caption = #1049#1045#1053#1048
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = [fsBold]
+    ParentFont = False
+    TabOrder = 32
+    OnClick = Button1Click
+  end
+  object Button2: TButton
+    Left = 181
+    Top = 25
+    Width = 102
+    Height = 35
+    Caption = #1049#1040#1044#1044#1040' '#1057#1040#1061#1051#1040
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = [fsBold]
+    ParentFont = False
+    TabOrder = 33
+    OnClick = Button2Click
+  end
+  object Button3: TButton
+    Left = 313
+    Top = 25
+    Width = 102
+    Height = 35
+    Caption = #1056#1045#1044#1040#1050#1058#1071' '#1045#1058
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = [fsBold]
+    ParentFont = False
+    TabOrder = 34
+    OnClick = Button3Click
+  end
+  object Button4: TButton
+    Left = 448
+    Top = 26
+    Width = 102
+    Height = 35
+    Caption = #1041#1040#1068#1051#1040
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = [fsBold]
+    ParentFont = False
+    TabOrder = 35
+    OnClick = Button4Click
+  end
+  object DBEdit1: TDBEdit
+    Left = 62
+    Top = 128
+    Width = 165
+    Height = 21
+    DataField = 'KLI_ID'
+    DataSource = DataMod_CARDS.ClientListSource
+    Enabled = False
+    TabOrder = 36
+    Visible = False
+  end
+  object DBEdit2: TDBEdit
+    Left = 303
+    Top = 128
+    Width = 79
+    Height = 21
+    DataField = 'VAL_ACC'
+    DataSource = DataMod_CARDS.allclientaccountsource
+    Enabled = False
+    TabOrder = 37
+    Visible = False
+  end
+  object DBEdit3: TDBEdit
+    Left = 123
+    Top = 231
+    Width = 257
+    Height = 22
+    DataField = 'NAME'
+    DataSource = DataMod_CARDS.msource
+    Enabled = False
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 7
+  end
+  object DBEdit4: TDBEdit
+    Left = 122
+    Top = 260
+    Width = 258
+    Height = 21
+    DataField = 'CREDIT_LIM'
+    DataSource = DataMod_CARDS.ClientListSource
+    Enabled = False
+    TabOrder = 38
+    Visible = False
+  end
+  object DBGrid1: TDBGrid
+    Left = 14
+    Top = 343
+    Width = 320
+    Height = 160
+    DataSource = DataMod_CARDS.allclientcreditssource
+    DrawingStyle = gdsGradient
+    Enabled = False
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgConfirmDelete, dgCancelOnExit, dgMultiSelect]
+    ParentFont = False
+    TabOrder = 39
+    TitleFont.Charset = DEFAULT_CHARSET
+    TitleFont.Color = clWindowText
+    TitleFont.Height = -11
+    TitleFont.Name = 'MS Sans Serif'
+    TitleFont.Style = []
+    OnDblClick = DBGrid1DblClick
+    Columns = <
+      item
+        Expanded = False
+        FieldName = 'NUMBEROFCREDIT'
+        ReadOnly = True
+        Title.Caption = #1052#1094#1075#1072#1074#1080#1083#1103' '#1085#1102#1084#1088#1103#1089#1080
+        Title.Color = clTeal
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clNavy
+        Title.Font.Height = -11
+        Title.Font.Name = 'Tahoma'
+        Title.Font.Style = []
+        Width = 250
+        Visible = True
+      end>
+  end
+  object DBGrid2: TDBGrid
+    Left = 15
+    Top = 525
+    Width = 320
+    Height = 149
+    DrawingStyle = gdsGradient
+    Enabled = False
+    TabOrder = 40
+    TitleFont.Charset = DEFAULT_CHARSET
+    TitleFont.Color = clWindowText
+    TitleFont.Height = -11
+    TitleFont.Name = 'MS Sans Serif'
+    TitleFont.Style = []
+    Columns = <
+      item
+        Expanded = False
+        Title.Caption = #1052#1094#1075#1072#1074#1080#1083#1103' '#1085#1102#1084#1088#1103#1089#1080
+        Title.Color = clTeal
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clNavy
+        Title.Font.Height = -11
+        Title.Font.Name = 'Azl Sans Serif'
+        Title.Font.Style = []
+        Width = 245
+        Visible = True
+      end>
+  end
+  object DBGrid3: TDBGrid
+    Left = 422
+    Top = 88
+    Width = 576
+    Height = 127
+    Enabled = False
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clBlack
+    Font.Height = -11
+    Font.Name = 'MS Sans Serif'
+    Font.Style = []
+    Options = [dgTitles, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgConfirmDelete, dgCancelOnExit, dgMultiSelect]
+    ParentFont = False
+    TabOrder = 41
+    TitleFont.Charset = DEFAULT_CHARSET
+    TitleFont.Color = clWindowText
+    TitleFont.Height = -11
+    TitleFont.Name = 'MS Sans Serif'
+    TitleFont.Style = []
+  end
+  object Edit3: TEdit
+    Left = 423
+    Top = 427
+    Width = 195
+    Height = 21
+    Enabled = False
+    MaxLength = 32
+    TabOrder = 42
+  end
+  object Edit5: TEdit
+    Left = 426
+    Top = 489
+    Width = 196
+    Height = 21
+    Enabled = False
+    MaxLength = 10
+    TabOrder = 43
+  end
+  object ComboBox10: TComboBox
+    Left = 424
+    Top = 367
+    Width = 153
+    Height = 21
+    Enabled = False
+    TabOrder = 9
+    Items.Strings = (
+      ''
+      'MR.'
+      'MS.'
+      'MR'
+      'MS'
+      'DR.'
+      'DR')
+  end
+  object Button5: TButton
+    Left = 579
+    Top = 26
+    Width = 90
+    Height = 33
+    Caption = 'ARXIV'
+    Enabled = False
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'MS Sans Serif'
+    Font.Style = [fsBold]
+    ParentFont = False
+    TabOrder = 44
+    Visible = False
+  end
+  object ComboBox6: TComboBox
+    Left = 692
+    Top = 457
+    Width = 136
+    Height = 21
+    Enabled = False
+    TabOrder = 45
+    Items.Strings = (
+      'RESIDENT'
+      'NON-RESIDENT')
+  end
+  object ComboBox7: TComboBox
+    Left = 886
+    Top = 427
+    Width = 116
+    Height = 21
+    Enabled = False
+    TabOrder = 46
+  end
+  object CheckBox1: TCheckBox
+    Left = 696
+    Top = 552
+    Width = 23
+    Height = 17
+    TabOrder = 47
+    OnClick = CheckBox1Click
+  end
+  object ComboBox9: TComboBox
+    Left = 687
+    Top = 641
+    Width = 319
+    Height = 21
+    Enabled = False
+    TabOrder = 31
+    OnClick = ComboBox9Click
+    OnEnter = ComboBox9Enter
+  end
+  object DateTimePicker4: TDateTimePicker
+    Left = 692
+    Top = 427
+    Width = 78
+    Height = 21
+    Date = 40626.812562025500000000
+    Time = 40626.812562025500000000
+    Enabled = False
+    TabOrder = 48
+  end
+  object DBGrid4: TDBGrid
+    Left = 422
+    Top = 221
+    Width = 576
+    Height = 133
+    Enabled = False
+    Options = [dgEditing, dgTitles, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgConfirmDelete, dgCancelOnExit]
+    TabOrder = 49
+    TitleFont.Charset = DEFAULT_CHARSET
+    TitleFont.Color = clWindowText
+    TitleFont.Height = -11
+    TitleFont.Name = 'MS Sans Serif'
+    TitleFont.Style = []
+  end
+  object ComboBox2: TComboBox
+    Left = 724
+    Top = 582
+    Width = 282
+    Height = 21
+    MaxLength = 21
+    TabOrder = 29
+    OnEnter = ComboBox2Enter
+    OnKeyPress = Edit15KeyPress
+  end
+  object DBEdit5: TDBEdit
+    Left = 680
+    Top = 24
+    Width = 289
+    Height = 21
+    DataField = 'ID'
+    DataSource = DataMod_CARDS.CUSTINFOSOURCE
+    TabOrder = 50
+    Visible = False
+  end
+  object DBDateTimeEditEh3: TDBDateTimeEditEh
+    Left = 691
+    Top = 427
+    Width = 80
+    Height = 21
+    DataField = 'EXPIRY'
+    DataSource = DataMod_CARDS.ClientListSource
+    Enabled = False
+    EditButtons = <>
+    Kind = dtkDateEh
+    TabOrder = 51
+    Visible = True
+  end
+  object DBEdit7: TDBEdit
+    Left = 424
+    Top = 426
+    Width = 197
+    Height = 21
+    DataField = 'LNAME'
+    DataSource = DataMod_CARDS.clientcardssource
+    Enabled = False
+    TabOrder = 52
+  end
+  object DBEdit10: TDBEdit
+    Left = 425
+    Top = 489
+    Width = 194
+    Height = 21
+    DataField = 'WORKPHONE'
+    DataSource = DataMod_CARDS.clientcardssource
+    Enabled = False
+    TabOrder = 53
+  end
+  object Edit16: TEdit
+    Left = 423
+    Top = 426
+    Width = 198
+    Height = 21
+    CharCase = ecUpperCase
+    Color = clAqua
+    MaxLength = 32
+    TabOrder = 11
+    OnKeyPress = Edit15KeyPress
+  end
+  object Edit17: TEdit
+    Left = 425
+    Top = 460
+    Width = 193
+    Height = 21
+    CharCase = ecUpperCase
+    MaxLength = 10
+    TabOrder = 12
+    OnKeyPress = Edit15KeyPress
+  end
+  object Edit18: TEdit
+    Left = 425
+    Top = 519
+    Width = 194
+    Height = 21
+    CharCase = ecUpperCase
+    Color = clAqua
+    MaxLength = 32
+    TabOrder = 14
+    OnKeyPress = Edit15KeyPress
+  end
+  object Edit19: TEdit
+    Left = 425
+    Top = 613
+    Width = 91
+    Height = 21
+    CharCase = ecUpperCase
+    Color = clAqua
+    MaxLength = 11
+    TabOrder = 18
+    Text = 'BAKU'
+    OnKeyPress = Edit15KeyPress
+  end
+  object Edit20: TEdit
+    Left = 433
+    Top = 582
+    Width = 62
+    Height = 21
+    CharCase = ecUpperCase
+    Color = clAqua
+    MaxLength = 3
+    TabOrder = 16
+    Text = 'AZE'
+    OnKeyPress = Edit15KeyPress
+  end
+  object Edit21: TEdit
+    Left = 565
+    Top = 582
+    Width = 54
+    Height = 21
+    CharCase = ecUpperCase
+    Color = clAqua
+    MaxLength = 3
+    TabOrder = 17
+    Text = 'AZE'
+    OnKeyPress = Edit15KeyPress
+  end
+  object Edit22: TEdit
+    Left = 587
+    Top = 613
+    Width = 419
+    Height = 21
+    CharCase = ecUpperCase
+    Color = clAqua
+    MaxLength = 48
+    TabOrder = 30
+    OnKeyPress = Edit15KeyPress
+  end
+  object Edit23: TEdit
+    Left = 721
+    Top = 551
+    Width = 280
+    Height = 21
+    CharCase = ecUpperCase
+    Color = clAqua
+    MaxLength = 20
+    TabOrder = 28
+    OnKeyPress = Edit15KeyPress
+  end
+  object Edit24: TEdit
+    Left = 721
+    Top = 520
+    Width = 284
+    Height = 21
+    CharCase = ecUpperCase
+    Enabled = False
+    TabOrder = 27
+  end
+  object Edit25: TEdit
+    Left = 795
+    Top = 489
+    Width = 195
+    Height = 21
+    CharCase = ecUpperCase
+    Color = clAqua
+    MaxLength = 20
+    TabOrder = 26
+    OnKeyPress = Edit15KeyPress
+  end
+  object Edit26: TEdit
+    Left = 902
+    Top = 457
+    Width = 99
+    Height = 21
+    CharCase = ecUpperCase
+    Color = clWhite
+    Enabled = False
+    TabOrder = 25
+  end
+  object ComboBox4: TComboBox
+    Left = 693
+    Top = 456
+    Width = 136
+    Height = 21
+    Color = clAqua
+    TabOrder = 24
+    Items.Strings = (
+      'RESIDENT'
+      'NON-RESIDENT')
+  end
+  object ComboBox5: TComboBox
+    Left = 886
+    Top = 426
+    Width = 116
+    Height = 21
+    Color = clWhite
+    Enabled = False
+    TabOrder = 23
+    Items.Strings = (
+      'WITH'
+      'WITHOUT')
+  end
+  object Edit27: TEdit
+    Left = 424
+    Top = 489
+    Width = 195
+    Height = 21
+    CharCase = ecUpperCase
+    MaxLength = 10
+    TabOrder = 13
+    OnKeyPress = Edit15KeyPress
+  end
+  object DBEdit18: TDBEdit
+    Left = 300
+    Top = 127
+    Width = 79
+    Height = 21
+    DataField = 'VAL_NAME'
+    DataSource = DataMod_CARDS.vsource
+    Enabled = False
+    TabOrder = 54
+  end
+  object Memo1: TMemo
+    Left = 272
+    Top = 264
+    Width = 89
+    Height = 34
+    Lines.Strings = (
+      'Memo1')
+    TabOrder = 55
+    Visible = False
+  end
+  object Edit15: TEdit
+    Left = 423
+    Top = 397
+    Width = 193
+    Height = 21
+    CharCase = ecUpperCase
+    Color = clAqua
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'MS Sans Serif'
+    Font.Style = []
+    MaxLength = 32
+    ParentFont = False
+    TabOrder = 10
+    OnKeyPress = Edit15KeyPress
+  end
+  object ComboBox11: TComboBox
+    Left = 692
+    Top = 366
+    Width = 90
+    Height = 21
+    TabOrder = 19
+    Items.Strings = (
+      ''
+      'VIP')
+  end
+  object ComboBox12: TComboBox
+    Left = 847
+    Top = 366
+    Width = 152
+    Height = 21
+    Enabled = False
+    TabOrder = 20
+    Items.Strings = (
+      'CARD OK'
+      'Card Do Not Honor -05'
+      'PickUp-04'
+      'PickUp L-41'
+      'PickUp S-43'
+      'Z-Decline-57')
+  end
+  object DateTimePicker5: TDateTimePicker
+    Left = 76
+    Top = 88
+    Width = 115
+    Height = 21
+    Date = 40653.412912858800000000
+    Time = 40653.412912858800000000
+    Enabled = False
+    TabOrder = 1
+  end
+  object DateTimePicker6: TDateTimePicker
+    Left = 292
+    Top = 91
+    Width = 95
+    Height = 21
+    Date = 40653.412912858800000000
+    Time = 40653.412912858800000000
+    Enabled = False
+    TabOrder = 2
+  end
+  object DateTimePicker7: TDateTimePicker
+    Left = 427
+    Top = 552
+    Width = 118
+    Height = 21
+    Date = 40653.419729456000000000
+    Time = 40653.419729456000000000
+    TabOrder = 15
+  end
+  object DateTimePicker8: TDateTimePicker
+    Left = 691
+    Top = 426
+    Width = 81
+    Height = 22
+    Date = 40653.419729456000000000
+    Time = 40653.419729456000000000
+    TabOrder = 22
+  end
+  object Edit28: TEdit
+    Left = 121
+    Top = 260
+    Width = 257
+    Height = 21
+    MaxLength = 14
+    TabOrder = 8
+    Text = '0'
+    OnKeyPress = Edit28KeyPress
+  end
+  object DBEdit17: TDBEdit
+    Left = 124
+    Top = 198
+    Width = 254
+    Height = 21
+    DataField = 'OSTAT'
+    DataSource = DataMod_CARDS.carisource
+    Enabled = False
+    TabOrder = 56
+  end
+  object CheckBox2: TCheckBox
+    Left = 624
+    Top = 368
+    Width = 36
+    Height = 17
+    TabOrder = 57
+  end
+  object CheckBox3: TCheckBox
+    Left = 134
+    Top = 290
+    Width = 19
+    Height = 17
+    TabOrder = 58
+  end
+  object Edit29: TEdit
+    Left = 343
+    Top = 135
+    Width = 83
+    Height = 21
+    Enabled = False
+    TabOrder = 4
+    Visible = False
+  end
+  object DBGrid5: TDBGrid
+    Left = 423
+    Top = 87
+    Width = 576
+    Height = 127
+    DataSource = DataMod_CARDS.clientcardssource
+    DrawingStyle = gdsGradient
+    Enabled = False
+    Options = [dgEditing, dgTitles, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgConfirmDelete, dgCancelOnExit, dgMultiSelect]
+    ReadOnly = True
+    TabOrder = 59
+    TitleFont.Charset = DEFAULT_CHARSET
+    TitleFont.Color = clWindowText
+    TitleFont.Height = -11
+    TitleFont.Name = 'MS Sans Serif'
+    TitleFont.Style = []
+    OnCellClick = DBGrid5CellClick
+    OnDblClick = DBGrid5DblClick
+    Columns = <
+      item
+        Expanded = False
+        FieldName = 'TIP'
+        Title.Alignment = taCenter
+        Title.Color = clTeal
+        Title.Font.Charset = DEFAULT_CHARSET
+        Title.Font.Color = clNavy
+        Title.Font.Height = -11
+        Title.Font.Name = 'MS Sans Serif'
+        Title.Font.Style = []
+        Width = 100
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'CARDNUMBER'
+        Title.Alignment = taCenter
+        Title.Caption = #1050#1040#1056#1058' '#1053#1070#1052#1056#1071#1057#1048
+        Title.Color = clTeal
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clNavy
+        Title.Font.Height = -11
+        Title.Font.Name = 'Azl Sans Serif'
+        Title.Font.Style = []
+        Width = 110
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'RBSNUMBER'
+        Title.Alignment = taCenter
+        Title.Caption = #1065#1045#1057#1040#1041' '#1053#1070#1052#1056#1071#1057#1048
+        Title.Color = clTeal
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clNavy
+        Title.Font.Height = -11
+        Title.Font.Name = 'Azl Sans Serif'
+        Title.Font.Style = []
+        Width = 130
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'FNAME'
+        Title.Alignment = taCenter
+        Title.Caption = #1040#1044#1067
+        Title.Color = clTeal
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clNavy
+        Title.Font.Height = -11
+        Title.Font.Name = 'Azl Sans Serif'
+        Title.Font.Style = []
+        Width = 133
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'LNAME'
+        Title.Alignment = taCenter
+        Title.Caption = #1057#1054#1049#1040#1044#1067
+        Title.Color = clTeal
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clNavy
+        Title.Font.Height = -11
+        Title.Font.Name = 'Azl Sans Serif'
+        Title.Font.Style = []
+        Width = 133
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'CARDHOLDER'
+        Title.Alignment = taCenter
+        Title.Caption = #1052#1062#1064#1058#1071#1056#1048
+        Title.Color = clTeal
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clNavy
+        Title.Font.Height = -11
+        Title.Font.Name = 'Azl Sans Serif'
+        Title.Font.Style = []
+        Width = 200
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'CREDIT_LIM'
+        Title.Alignment = taCenter
+        Title.Caption = #1051#1048#1052#1048#1058
+        Title.Color = clTeal
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clNavy
+        Title.Font.Height = -11
+        Title.Font.Name = 'Azl Sans Serif'
+        Title.Font.Style = []
+        Width = 71
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'CARDTYPE'
+        Title.Alignment = taCenter
+        Title.Caption = #1050#1040#1056#1058' '#1053#1070#1042#1062
+        Title.Color = clTeal
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clNavy
+        Title.Font.Height = -11
+        Title.Font.Name = 'Azl Sans Serif'
+        Title.Font.Style = []
+        Width = 100
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'COMPANY'
+        Title.Alignment = taCenter
+        Title.Caption = #1064#1048#1056#1050#1071#1058
+        Title.Color = clTeal
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clNavy
+        Title.Font.Height = -11
+        Title.Font.Name = 'Azl Sans Serif'
+        Title.Font.Style = []
+        Width = 120
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'FIL'
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        Title.Alignment = taCenter
+        Title.Caption = 'FILIAL'
+        Title.Color = clTeal
+        Title.Font.Charset = DEFAULT_CHARSET
+        Title.Font.Color = clNavy
+        Title.Font.Height = -11
+        Title.Font.Name = 'MS Sans Serif'
+        Title.Font.Style = []
+        Width = 101
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'CURRENCY'
+        Title.Alignment = taCenter
+        Title.Caption = #1042#1040#1051#1049#1059#1058#1040
+        Title.Color = clTeal
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clNavy
+        Title.Font.Height = -11
+        Title.Font.Name = 'Azl Sans Serif'
+        Title.Font.Style = []
+        Width = 80
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'CARDSTATUS'
+        Title.Alignment = taCenter
+        Title.Caption = 'KART STATUS'
+        Title.Color = clTeal
+        Title.Font.Charset = DEFAULT_CHARSET
+        Title.Font.Color = clNavy
+        Title.Font.Height = -11
+        Title.Font.Name = 'MS Sans Serif'
+        Title.Font.Style = []
+        Width = 100
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'DATEOPEN'
+        Title.Alignment = taCenter
+        Title.Caption = #1040#1063#1067#1051#1052#1040' '#1058#1040#1056#1048#1061#1048
+        Title.Color = clTeal
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clNavy
+        Title.Font.Height = -11
+        Title.Font.Name = 'Azl Sans Serif'
+        Title.Font.Style = []
+        Width = 111
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'EXPIRY'
+        Title.Alignment = taCenter
+        Title.Caption = #1041#1048#1058#1052#1071' '#1058#1040#1056#1048#1061#1048
+        Title.Color = clTeal
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clNavy
+        Title.Font.Height = -11
+        Title.Font.Name = 'Azl Sans Serif'
+        Title.Font.Style = []
+        Width = 111
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'EMBOSSNAME'
+        Title.Alignment = taCenter
+        Title.Caption = 'EMBOSS '#1040#1044#1067
+        Title.Color = clTeal
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clNavy
+        Title.Font.Height = -11
+        Title.Font.Name = 'Azl Sans Serif'
+        Title.Font.Style = []
+        Width = 160
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'PASSPORT'
+        Title.Alignment = taCenter
+        Title.Caption = 'PASPORT'
+        Title.Color = clTeal
+        Title.Font.Charset = DEFAULT_CHARSET
+        Title.Font.Color = clNavy
+        Title.Font.Height = -11
+        Title.Font.Name = 'MS Sans Serif'
+        Title.Font.Style = []
+        Width = 120
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'BIRTHDAY'
+        Title.Alignment = taCenter
+        Title.Caption = #1044#1054#1068#1059#1052' '#1058#1040#1056#1048#1061#1048
+        Title.Color = clTeal
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clNavy
+        Title.Font.Height = -11
+        Title.Font.Name = 'Azl Sans Serif'
+        Title.Font.Style = []
+        Width = 120
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'HOMEPHONE'
+        Title.Alignment = taCenter
+        Title.Caption = #1045#1042' '#1058#1045#1051#1045#1060#1054#1053#1059
+        Title.Color = clTeal
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clNavy
+        Title.Font.Height = -11
+        Title.Font.Name = 'Azl Sans Serif'
+        Title.Font.Style = []
+        Width = 100
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'WORKPHONE'
+        Title.Alignment = taCenter
+        Title.Caption = #1048#1064' '#1058#1045#1051#1045#1060#1054#1053#1059
+        Title.Color = clTeal
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clNavy
+        Title.Font.Height = -11
+        Title.Font.Name = 'Azl Sans Serif'
+        Title.Font.Style = []
+        Width = 100
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'ADDRESS'
+        Title.Alignment = taCenter
+        Title.Caption = #1062#1053#1042#1040#1053
+        Title.Color = clTeal
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clNavy
+        Title.Font.Height = -11
+        Title.Font.Name = 'Azl Sans Serif'
+        Title.Font.Style = []
+        Width = 183
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'RESIDENT'
+        Title.Alignment = taCenter
+        Title.Caption = #1042#1071#1058#1071#1053#1044#1040#1064#1051#1067#1068#1067
+        Title.Color = clTeal
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clNavy
+        Title.Font.Height = -11
+        Title.Font.Name = 'Azl Sans Serif'
+        Title.Font.Style = []
+        Width = 100
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'ID'
+        Title.Color = clTeal
+        Title.Font.Charset = DEFAULT_CHARSET
+        Title.Font.Color = clNavy
+        Title.Font.Height = -11
+        Title.Font.Name = 'MS Sans Serif'
+        Title.Font.Style = []
+        Width = 55
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'CREAT'
+        Title.Caption = 'CREATED USER'
+        Title.Color = clTeal
+        Title.Font.Charset = DEFAULT_CHARSET
+        Title.Font.Color = clNavy
+        Title.Font.Height = -11
+        Title.Font.Name = 'MS Sans Serif'
+        Title.Font.Style = []
+        Width = 95
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'MODI'
+        Title.Caption = 'MODIFIED USER'
+        Title.Color = clTeal
+        Title.Font.Charset = DEFAULT_CHARSET
+        Title.Font.Color = clNavy
+        Title.Font.Height = -11
+        Title.Font.Name = 'MS Sans Serif'
+        Title.Font.Style = []
+        Width = 96
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'DAT'
+        Title.Caption = 'CREATE DATE'
+        Title.Color = clTeal
+        Title.Font.Charset = DEFAULT_CHARSET
+        Title.Font.Color = clNavy
+        Title.Font.Height = -11
+        Title.Font.Name = 'MS Sans Serif'
+        Title.Font.Style = []
+        Width = 82
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'CRDAT'
+        Title.Caption = 'MODIFY DATE'
+        Title.Color = clTeal
+        Title.Font.Charset = DEFAULT_CHARSET
+        Title.Font.Color = clNavy
+        Title.Font.Height = -11
+        Title.Font.Name = 'MS Sans Serif'
+        Title.Font.Style = []
+        Width = 80
+        Visible = True
+      end>
+  end
+  object DBGrid6: TDBGrid
+    Left = 422
+    Top = 221
+    Width = 576
+    Height = 133
+    DataSource = DataMod_CARDS.CARDOPERATIONSOURCE
+    DrawingStyle = gdsGradient
+    Enabled = False
+    Options = [dgEditing, dgTitles, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgConfirmDelete, dgCancelOnExit, dgMultiSelect]
+    PopupMenu = PopupMenu1
+    ReadOnly = True
+    TabOrder = 60
+    TitleFont.Charset = DEFAULT_CHARSET
+    TitleFont.Color = clWindowText
+    TitleFont.Height = -11
+    TitleFont.Name = 'MS Sans Serif'
+    TitleFont.Style = []
+    Columns = <
+      item
+        Expanded = False
+        FieldName = 'EMELIYYAT'
+        Title.Alignment = taCenter
+        Title.Caption = #1071#1052#1071#1051#1048#1049#1049#1040#1058' '#1058#1048#1055#1048
+        Title.Color = clTeal
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clNavy
+        Title.Font.Height = -11
+        Title.Font.Name = 'Azl Sans Serif'
+        Title.Font.Style = []
+        Width = 98
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'CARDNUMBER'
+        Title.Alignment = taCenter
+        Title.Caption = #1050#1040#1056#1058' '#1053#1070#1052#1056#1071#1057#1048
+        Title.Color = clTeal
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clNavy
+        Title.Font.Height = -11
+        Title.Font.Name = 'Azl Sans Serif'
+        Title.Font.Style = []
+        Width = 111
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'RBSNUMBER'
+        Title.Alignment = taCenter
+        Title.Caption = #1065#1045#1057#1040#1041' '#1053#1070#1052#1056#1071#1057#1048
+        Title.Color = clTeal
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clNavy
+        Title.Font.Height = -11
+        Title.Font.Name = 'Azl Sans Serif'
+        Title.Font.Style = []
+        Width = 196
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'RBSCLOSE'
+        Title.Caption = 'RBSCHANGE HESAB'
+        Title.Color = clTeal
+        Title.Font.Charset = DEFAULT_CHARSET
+        Title.Font.Color = clNavy
+        Title.Font.Height = -11
+        Title.Font.Name = 'MS Sans Serif'
+        Title.Font.Style = []
+        Width = 121
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'FNAME'
+        Title.Alignment = taCenter
+        Title.Caption = #1040#1044#1067
+        Title.Color = clTeal
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clNavy
+        Title.Font.Height = -11
+        Title.Font.Name = 'Azl Sans Serif'
+        Title.Font.Style = []
+        Width = 135
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'LNAME'
+        Title.Alignment = taCenter
+        Title.Caption = #1057#1054#1049#1040#1044#1067
+        Title.Color = clTeal
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clNavy
+        Title.Font.Height = -11
+        Title.Font.Name = 'Azl Sans Serif'
+        Title.Font.Style = []
+        Width = 135
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'CARDHOLDER'
+        Title.Alignment = taCenter
+        Title.Caption = #1052#1062#1064#1058#1071#1056#1048
+        Title.Color = clTeal
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clNavy
+        Title.Font.Height = -11
+        Title.Font.Name = 'Azl Sans Serif'
+        Title.Font.Style = []
+        Width = 160
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'CREDIT_LIM'
+        Title.Alignment = taCenter
+        Title.Caption = #1051#1048#1052#1048#1058
+        Title.Color = clTeal
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clNavy
+        Title.Font.Height = -11
+        Title.Font.Name = 'Azl Sans Serif'
+        Title.Font.Style = []
+        Width = 71
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'CARDTYPE'
+        Title.Alignment = taCenter
+        Title.Caption = #1050#1040#1056#1058' '#1053#1070#1042#1062
+        Title.Color = clTeal
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clNavy
+        Title.Font.Height = -11
+        Title.Font.Name = 'Azl Sans Serif'
+        Title.Font.Style = []
+        Width = 150
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'COMPANY'
+        Title.Alignment = taCenter
+        Title.Caption = #1064#1048#1056#1050#1071#1058
+        Title.Color = clTeal
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clNavy
+        Title.Font.Height = -11
+        Title.Font.Name = 'Azl Sans Serif'
+        Title.Font.Style = []
+        Width = 166
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'FIL'
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        Title.Alignment = taCenter
+        Title.Caption = 'FILIAL'
+        Title.Color = clTeal
+        Title.Font.Charset = DEFAULT_CHARSET
+        Title.Font.Color = clNavy
+        Title.Font.Height = -11
+        Title.Font.Name = 'MS Sans Serif'
+        Title.Font.Style = []
+        Width = 101
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'CURRENCY'
+        Title.Alignment = taCenter
+        Title.Caption = #1042#1040#1051#1049#1059#1058#1040
+        Title.Color = clTeal
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clNavy
+        Title.Font.Height = -11
+        Title.Font.Name = 'Azl Sans Serif'
+        Title.Font.Style = []
+        Width = 80
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'CARDSTATUS'
+        Title.Alignment = taCenter
+        Title.Caption = 'KART STATUS'
+        Title.Color = clTeal
+        Title.Font.Charset = DEFAULT_CHARSET
+        Title.Font.Color = clNavy
+        Title.Font.Height = -11
+        Title.Font.Name = 'MS Sans Serif'
+        Title.Font.Style = []
+        Width = 100
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'DATEOPEN'
+        Title.Alignment = taCenter
+        Title.Caption = #1040#1063#1067#1051#1052#1040' '#1058#1040#1056#1048#1061#1048
+        Title.Color = clTeal
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clNavy
+        Title.Font.Height = -11
+        Title.Font.Name = 'Azl Sans Serif'
+        Title.Font.Style = []
+        Width = 111
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'EXPIRY'
+        Title.Alignment = taCenter
+        Title.Caption = #1041#1048#1058#1052#1071' '#1058#1040#1056#1048#1061#1048
+        Title.Color = clTeal
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clNavy
+        Title.Font.Height = -11
+        Title.Font.Name = 'Azl Sans Serif'
+        Title.Font.Style = []
+        Width = 111
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'EMBOSSNAME'
+        Title.Alignment = taCenter
+        Title.Caption = 'EMBOSS '#1040#1044#1067
+        Title.Color = clTeal
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clNavy
+        Title.Font.Height = -11
+        Title.Font.Name = 'Azl Sans Serif'
+        Title.Font.Style = []
+        Width = 160
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'PASSPORT'
+        Title.Alignment = taCenter
+        Title.Caption = 'PASPORT'
+        Title.Color = clTeal
+        Title.Font.Charset = DEFAULT_CHARSET
+        Title.Font.Color = clNavy
+        Title.Font.Height = -11
+        Title.Font.Name = 'MS Sans Serif'
+        Title.Font.Style = []
+        Width = 120
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'BIRTHDAY'
+        Title.Alignment = taCenter
+        Title.Caption = #1044#1054#1068#1059#1052' '#1058#1040#1056#1048#1061#1048
+        Title.Color = clTeal
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clNavy
+        Title.Font.Height = -11
+        Title.Font.Name = 'Azl Sans Serif'
+        Title.Font.Style = []
+        Width = 100
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'HOMEPHONE'
+        Title.Alignment = taCenter
+        Title.Caption = #1045#1042' '#1058#1045#1051#1045#1060#1054#1053#1059
+        Title.Color = clTeal
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clNavy
+        Title.Font.Height = -11
+        Title.Font.Name = 'Azl Sans Serif'
+        Title.Font.Style = []
+        Width = 100
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'WORKPHONE'
+        Title.Alignment = taCenter
+        Title.Caption = #1048#1064' '#1058#1045#1051#1045#1060#1054#1053#1059
+        Title.Color = clTeal
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clNavy
+        Title.Font.Height = -11
+        Title.Font.Name = 'Azl Sans Serif'
+        Title.Font.Style = []
+        Width = 100
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'ADDRESS'
+        Title.Alignment = taCenter
+        Title.Caption = #1062#1053#1042#1040#1053
+        Title.Color = clTeal
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clNavy
+        Title.Font.Height = -11
+        Title.Font.Name = 'Azl Sans Serif'
+        Title.Font.Style = []
+        Width = 183
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'RESIDENT'
+        Title.Alignment = taCenter
+        Title.Caption = #1042#1071#1058#1071#1053#1044#1040#1064#1051#1067#1068#1067
+        Title.Color = clTeal
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clNavy
+        Title.Font.Height = -11
+        Title.Font.Name = 'Azl Sans Serif'
+        Title.Font.Style = []
+        Width = 100
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'ID'
+        Title.Color = clTeal
+        Title.Font.Charset = DEFAULT_CHARSET
+        Title.Font.Color = clNavy
+        Title.Font.Height = -11
+        Title.Font.Name = 'MS Sans Serif'
+        Title.Font.Style = []
+        Width = 55
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'CREAT'
+        Title.Caption = 'CREATED USER'
+        Title.Color = clTeal
+        Title.Font.Charset = DEFAULT_CHARSET
+        Title.Font.Color = clNavy
+        Title.Font.Height = -11
+        Title.Font.Name = 'MS Sans Serif'
+        Title.Font.Style = []
+        Width = 97
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'MODI'
+        Title.Caption = 'MODIFIED USER'
+        Title.Color = clTeal
+        Title.Font.Charset = DEFAULT_CHARSET
+        Title.Font.Color = clNavy
+        Title.Font.Height = -11
+        Title.Font.Name = 'MS Sans Serif'
+        Title.Font.Style = []
+        Width = 97
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'DAT'
+        Title.Caption = 'CREATE DATE'
+        Title.Color = clTeal
+        Title.Font.Charset = DEFAULT_CHARSET
+        Title.Font.Color = clNavy
+        Title.Font.Height = -11
+        Title.Font.Name = 'MS Sans Serif'
+        Title.Font.Style = []
+        Width = 82
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'CRDAT'
+        Title.Caption = 'MODIFY DATE'
+        Title.Color = clTeal
+        Title.Font.Charset = DEFAULT_CHARSET
+        Title.Font.Color = clNavy
+        Title.Font.Height = -11
+        Title.Font.Name = 'MS Sans Serif'
+        Title.Font.Style = []
+        Width = 80
+        Visible = True
+      end>
+  end
+  object Edit32: TEdit
+    Left = 720
+    Top = 56
+    Width = 121
+    Height = 21
+    TabOrder = 61
+    Visible = False
+  end
+  object Edit33: TEdit
+    Left = 122
+    Top = 198
+    Width = 258
+    Height = 21
+    TabOrder = 6
+    Visible = False
+  end
+  object ComboBox1: TComboBox
+    Left = 692
+    Top = 395
+    Width = 307
+    Height = 21
+    Color = clAqua
+    TabOrder = 21
+    OnKeyPress = ComboBox1KeyPress
+  end
+  object Edit14: TEdit
+    Left = 62
+    Top = 128
+    Width = 165
+    Height = 21
+    Enabled = False
+    TabOrder = 3
+    OnKeyPress = Edit14KeyPress
+  end
+  object CurrencyEdit1: TCurrencyEdit
+    Left = 864
+    Top = 56
+    Width = 121
+    Height = 21
+    TabOrder = 62
+    Text = '0'
+    Visible = False
+  end
+  object Edit2: TEdit
+    Left = 752
+    Top = 8
+    Width = 121
+    Height = 21
+    TabOrder = 63
+    Visible = False
+  end
+  object Button6: TButton
+    Left = 328
+    Top = 312
+    Width = 75
+    Height = 25
+    Caption = 'Button6'
+    TabOrder = 64
+    Visible = False
+    OnClick = Button6Click
+  end
+  object DateTimePicker1: TDateTimePicker
+    Left = 680
+    Top = 56
+    Width = 186
+    Height = 21
+    Date = 40729.596817569400000000
+    Time = 40729.596817569400000000
+    TabOrder = 65
+    Visible = False
+  end
+  object DBLookupComboBox6: TDBLookupComboboxEh
+    Left = 120
+    Top = 166
+    Width = 263
+    Height = 21
+    Color = clAqua
+    EditButtons = <>
+    KeyField = 'ACC_NO'
+    ListField = 'ACC_NO'
+    ListSource = DataMod_CARDS.hsource
+    TabOrder = 5
+    Visible = True
+    OnChange = DBLookupComboBox6Change
+  end
+  object ComboBox8: TComboBox
+    Left = 424
+    Top = 665
+    Width = 146
+    Height = 22
+    Enabled = False
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 66
+    Visible = False
+    Items.Strings = (
+      ''
+      #1055#1083#1072#1085#1083#1072#1096#1076#1099#1088#1099#1083#1084#1099#1096)
+  end
+  object DateTimePicker2: TDateTimePicker
+    Left = 444
+    Top = 640
+    Width = 118
+    Height = 21
+    Date = 40885.652759606500000000
+    Time = 40885.652759606500000000
+    Color = clAqua
+    TabOrder = 67
+  end
+  object PopupMenu1: TPopupMenu
+    Left = 560
+    Top = 280
+    object SIL1: TMenuItem
+      Caption = 'SIL'
+      OnClick = SIL1Click
+    end
+  end
+end

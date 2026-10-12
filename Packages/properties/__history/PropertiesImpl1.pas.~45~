@@ -1,0 +1,884 @@
+﻿unit PropertiesImpl1;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, NLSDialogs,
+  ActiveX, AxCtrls, Properties_TLB, StdVcl, ComCtrls, ToolWin, Grids,Db,
+  DBGrids, ExtCtrls, ActnList, DBActns, StdCtrls, ImgList, DBGridEh,Oracledata, Menus,
+  CMExcelExport, DBGridEhGrouping, GridsEh, DBViewComboBox, Mask, DBCtrlsEh,
+  DBLookupEh;
+
+type
+  TPropertiesFrm = class(TActiveForm, IPropertiesX)
+    ImageList1: TImageList;
+    MainActionList: TActionList;
+    Refresh: TAction;
+    ShowEditForm: TAction;
+    ShowAddForm: TAction;
+    Action1: TAction;
+    PopupMenu1: TPopupMenu;
+    N1: TMenuItem;
+    N2: TMenuItem;
+    N3: TMenuItem;
+    Panel1: TPanel;
+    N4: TMenuItem;
+    N5: TMenuItem;
+    GroupBox1: TGroupBox;
+    Panel2: TPanel;
+    SetingPopupMenu: TPopupMenu;
+    N6: TMenuItem;
+    N7: TMenuItem;
+    CoolBar1: TCoolBar;
+    ToolBar1: TToolBar;
+    isertbtn: TToolButton;
+    ToolButton5: TToolButton;
+    ToolButton1: TToolButton;
+    ToolButton4: TToolButton;
+    ToolButton3: TToolButton;
+    ToolButton6: TToolButton;
+    ToolButton2: TToolButton;
+    N8: TMenuItem;
+    N9: TMenuItem;
+    N10: TMenuItem;
+    N11: TMenuItem;
+    ToolButton7: TToolButton;
+    ToolButton8: TToolButton;
+    accountPopupMenu: TPopupMenu;
+    N13: TMenuItem;
+    N14: TMenuItem;
+    Panel3: TPanel;
+    StaticText5: TStaticText;
+    Panel4: TPanel;
+    StaticText1: TStaticText;
+    Panel5: TPanel;
+    StaticText2: TStaticText;
+    Panel6: TPanel;
+    StaticText3: TStaticText;
+    Panel7: TPanel;
+    StaticText4: TStaticText;
+    editCONTRACTNUM: TEdit;
+    editname: TEdit;
+    editPROP_COUNT: TEdit;
+    editvalue: TEdit;
+    DateTimePicker1: TDateTimePicker;
+    N12: TMenuItem;
+    ddfd1: TMenuItem;
+    lavmlumat1: TMenuItem;
+    mllakbalamaq1: TMenuItem;
+    FilterPanel: TPanel;
+    Panel: TPanel;
+    MainGrid: TDBGridEh;
+    Panel8: TPanel;
+    Panel9: TPanel;
+    Panel10: TPanel;
+    Panel11: TPanel;
+    ToolButton9: TToolButton;
+    RadioGrpCont: TRadioGroup;
+    GroupBox5: TGroupBox;
+    CheckBoxFilials: TCheckBox;
+    DBLookupComboboxEh1: TDBLookupComboboxEh;
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure ShowAddFormExecute(Sender: TObject);
+    procedure ShowEditFormExecute(Sender: TObject);
+    procedure RefreshExecute(Sender: TObject);
+    procedure N1Click(Sender: TObject);
+    procedure N2Click(Sender: TObject);
+   procedure N3Click(Sender: TObject);
+    procedure N4Click(Sender: TObject);
+    procedure N5Click(Sender: TObject);
+    procedure MainGridTitleBtnClick(Sender: TObject; ACol: Integer;
+      Column: TColumnEh);
+    procedure N6Click(Sender: TObject);
+    procedure N7Click(Sender: TObject);
+    procedure N8Click(Sender: TObject);
+    procedure N10Click(Sender: TObject);
+    procedure N14Click(Sender: TObject);
+    procedure N11Click(Sender: TObject);
+    procedure N13Click(Sender: TObject);
+    procedure editCONTRACTNUMExit(Sender: TObject);
+    procedure editCONTRACTNUMKeyPress(Sender: TObject; var Key: Char);
+     procedure ActnSearchExecute(Sender: TObject);
+    procedure editvalueKeyPress(Sender: TObject; var Key: Char);
+    procedure editPROP_COUNTKeyPress(Sender: TObject; var Key: Char);
+    procedure DateTimePicker1KeyPress(Sender: TObject; var Key: Char);
+    procedure N12Click(Sender: TObject);
+    procedure ActiveFormDestroy(Sender: TObject);
+    procedure ddfd1Click(Sender: TObject);
+    procedure MainGridDblClick(Sender: TObject);
+    procedure lavmlumat1Click(Sender: TObject);
+    procedure mllakbalamaq1Click(Sender: TObject);
+    procedure Panel11Click(Sender: TObject);
+    procedure ToolButton9Click(Sender: TObject);
+    procedure RadioGrpContClick(Sender: TObject);
+    procedure CheckBoxFilialsClick(Sender: TObject);
+  private
+    { Private declarations }
+    FEvents: IPropertiesXEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+  public
+    { Public declarations }
+    procedure Initialize; override;
+  end;
+// var CommonGrid : TDBGridEh;
+implementation
+
+uses ComObj, ComServ,DMprop, FrmPropAddImpl, frmpropeditImol, FormInfoImpl,
+  FrmtypicalImpl, FrmtranceImpl,CommonPropImpl, PropQReportImpl,
+  FrmProp_paymentImpl, FrmProp_paymentAddImpl, gelirimpl,SBTranslateProc,sboapiDataModuleImpl,
+  InfoImpl, ReportImpl;
+
+{$R *.DFM}
+
+{ TPropertiesX }
+
+procedure TPropertiesFrm.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_PropertiesXPage); }
+end;
+
+procedure TPropertiesFrm.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as IPropertiesXEvents;
+end;
+
+procedure TPropertiesFrm.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TPropertiesFrm.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TPropertiesFrm.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TPropertiesFrm.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TPropertiesFrm.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TPropertiesFrm.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TPropertiesFrm.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TPropertiesFrm.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TPropertiesFrm.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TPropertiesFrm.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TPropertiesFrm.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TPropertiesFrm.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TPropertiesFrm.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TPropertiesFrm.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TPropertiesFrm.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TPropertiesFrm.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TPropertiesFrm.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TPropertiesFrm.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TPropertiesFrm.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TPropertiesFrm._Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TPropertiesFrm.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TPropertiesFrm.CheckBoxFilialsClick(Sender: TObject);
+begin
+with DMproperties,DataSetPropIns do begin
+    if CheckBoxFilials.Checked =true  then
+    begin
+      Close;
+      SQL[6]:='';
+      SQL[6]:=' and a.branchid='+inttostr(DBLookupComboboxEh1.KeyValue) ;
+      Open;
+    end;
+end;
+
+with DMproperties,DataSetPropIns do begin
+    if CheckBoxFilials.Checked =false  then
+    begin
+      Close;
+      SQL[6]:='';
+      open;
+    end;
+end;
+end;
+
+procedure TPropertiesFrm.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TPropertiesFrm.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TPropertiesFrm.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TPropertiesFrm.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TPropertiesFrm.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TPropertiesFrm.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TPropertiesFrm.lavmlumat1Click(Sender: TObject);
+begin
+InfoFrm.ShowModal;
+end;
+
+procedure TPropertiesFrm.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TPropertiesFrm.Panel11Click(Sender: TObject);
+begin
+  FilterPanel.Visible := False;
+  ToolButton9.Down := FilterPanel.Visible;
+end;
+
+procedure TPropertiesFrm.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TPropertiesFrm.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TPropertiesFrm.Set_AxBorderStyle(Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TPropertiesFrm.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TPropertiesFrm.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TPropertiesFrm.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TPropertiesFrm.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TPropertiesFrm.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TPropertiesFrm.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TPropertiesFrm.Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TPropertiesFrm.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TPropertiesFrm.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TPropertiesFrm.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TPropertiesFrm.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TPropertiesFrm.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TPropertiesFrm.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+procedure TPropertiesFrm.ActiveFormCreate(Sender: TObject);
+begin
+DMproperties:=TDMproperties.Create(Self);
+FrmPropAdd:=TFrmPropAdd.Create(self);
+InfoFrm:=tInfoFrm.Create(self);
+ReportFrm:=TReportFrm.Create(self);
+//FrmTypical:=TFrmTypical.Create(self);
+FrmTrance:=TFrmTrance.Create(self) ;
+FrmProp_payment:=TFrmProp_payment.Create(self) ;
+//PropQReport:= TPropQReport.Create(application);
+
+//FrmProp_paymentAdd:=TFrmProp_paymentAdd.Create(self) ;
+//DMproperties.DataSetProp_take.open;
+CommonGrid := MainGrid;
+
+SBTranslateProc.TranslateAllComponents(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TPropertiesFrm.ShowAddFormExecute(Sender: TObject);
+begin
+FrmPropAdd.Caption:='Əmlak barədə məlumatın yığılması';
+ with DMproperties,DataSetPropIns do
+  begin
+     //if active then close;
+    //  open;
+      insert;
+   end;
+FrmPropAdd.ShowModal
+end;
+
+
+procedure TPropertiesFrm.ShowEditFormExecute(Sender: TObject);
+
+begin
+FrmPropAdd.Caption:='Əmlak barədə məlumatın redaktə olunması';
+ with DMproperties,DataSetPropIns do
+  begin
+  //p_id:=DMproperties.OracleDataSet1.FieldByname('id').asinteger;
+   // if active then close;
+ //    open;
+      edit;
+   end;
+FrmPropAdd.ShowModal
+end;
+
+procedure TPropertiesFrm.ToolButton9Click(Sender: TObject);
+begin
+  FilterPanel.Visible := not FilterPanel.Visible;
+  ToolButton9.Down := FilterPanel.Visible;
+end;
+
+{function Get_SelectedContID : Integer;
+begin
+
+  if CommonGrid.DataSource.DataSet.FieldByName('ID').IsNull then
+  // raise ENoContractSelected.Create('Щеч бир мцгавиля сечилмяйиб !');
+  Result := CommonGrid.DataSource.DataSet.FieldByName('ID').AsInteger;
+end;
+procedure RefreshWithSavely(SaveType :Boolean);
+var SaveID : Integer;
+begin
+   
+   CommonGrid.SelectedRows.Clear;
+   with CommonGrid,DataSource,DataSet do
+   begin
+      SaveID := Get_SelectedContID;
+      Refresh;
+      Locate('ID',SaveID,[]);
+   end;
+end;    }
+
+procedure TPropertiesFrm.RadioGrpContClick(Sender: TObject);
+begin
+with DMproperties,DataSetPropIns do begin
+    if RadioGrpCont.ItemIndex=0 then
+    begin
+      Close;
+      SQL[5]:='';
+      SQL[5]:=' and a.status=0' ;
+      Open;
+    end;
+    if RadioGrpCont.ItemIndex=1 then
+    begin
+      Close;
+      SQL[5]:='';
+      SQL[5]:=' and a.status=1' ;
+      Open;
+    end;
+    if RadioGrpCont.ItemIndex=2 then
+    begin
+      Close;
+      SQL[5]:='';
+      Open;
+    end;
+end;
+end;
+
+procedure TPropertiesFrm.RefreshExecute(Sender: TObject);
+begin
+//DMproperties.DataSetPropIns.refresh;
+RefreshWithSavely(True);
+end;
+
+procedure TPropertiesFrm.N1Click(Sender: TObject);
+begin
+FrmPropAdd.Caption:='Əmlak barədə məlumatların yazılması';
+ with DMproperties,DataSetPropIns do
+  begin
+     //if active then close;
+     // open;
+      insert;
+   end;
+FrmPropAdd.ShowModal
+end;
+
+procedure TPropertiesFrm.N2Click(Sender: TObject);
+begin
+FrmPropAdd.Caption:='Əmlak barədə məlumatların redaktə olunması';
+ with DMproperties,DataSetPropIns do
+  begin
+  //p_id:=DMproperties.OracleDataSet1.FieldByname('id').asinteger;
+    // if active then close;
+      open;
+      edit;
+   end;
+FrmPropAdd.ShowModal
+end;
+
+procedure TPropertiesFrm.N3Click(Sender: TObject);
+begin
+DMproperties.DataSetPropIns.refresh;
+end;
+
+procedure TPropertiesFrm.N4Click(Sender: TObject);
+begin
+panel1.Visible:=true ;
+N4.Visible:=false;
+N5.Visible:=true;
+end;
+
+procedure TPropertiesFrm.N5Click(Sender: TObject);
+begin
+panel1.Visible:=false;
+N4.Visible:=true;
+N5.Visible:=false;
+end;
+
+procedure TPropertiesFrm.MainGridDblClick(Sender: TObject);
+begin
+FrmPropAdd.Caption:='Əmlak barədə məlumatın redaktə olunması';
+ with DMproperties,DataSetPropIns do
+  begin
+  //p_id:=DMproperties.OracleDataSet1.FieldByname('id').asinteger;
+   //  if active then close;
+    //  open;
+      edit;
+   end;
+FrmPropAdd.ShowModal
+end;
+
+procedure TPropertiesFrm.MainGridTitleBtnClick(Sender: TObject;
+  ACol: Integer; Column: TColumnEh);
+var
+  SortField : String;
+begin
+  SortField := Column.FieldName;
+  if Column.Title.SortMarker = smDownEh then
+    SortField := SortField + ' DESC';
+  with Sender as TDBGridEh , TOracleDataSet(DataSource.DataSet) do
+  begin
+   //ClearVariables;
+    Screen.Cursor := crSQLWait;
+    SetVariable('OrderField',SortField);
+    RefResh;
+    Screen.Cursor := crDefault;
+   end;
+
+end;
+
+procedure TPropertiesFrm.mllakbalamaq1Click(Sender: TObject);
+begin
+ DMproperties.OraclePackage2.CallProcedure('Close_emlak',['p_id',DMproperties.DataSetPropIns.FieldByname('id').asinteger]) ;
+   ToolButton3.Click;
+ end;
+
+procedure TPropertiesFrm.N6Click(Sender: TObject);
+begin
+//FrmSeting:=TFrmSeting.Create(self);
+if not assigned(FrmSeting) then
+ with  TFrmSeting.Create(self) do
+  try
+  ShowModal;
+  finally
+    Release;
+  end;
+
+end;
+
+procedure TPropertiesFrm.N7Click(Sender: TObject);
+begin
+if not assigned(FormInfo) then
+ with  TFormInfo.Create(self) do
+  try
+  ShowModal;
+  finally
+    Release;
+  end;
+
+end;
+
+procedure TPropertiesFrm.N8Click(Sender: TObject);
+begin
+//FrmTypical:=TFrmTypical.Create(self);
+if not assigned(FrmTypical) then
+ with  TFrmTypical.Create(self) do
+  try
+  ShowModal;
+  finally
+    Release;
+  end;
+end;
+
+procedure TPropertiesFrm.N10Click(Sender: TObject);
+var
+id: integer;
+begin
+id:=Get_SelectedContID;
+with DMproperties.DSet_Prop_Kredit do
+begin
+ close ;
+   SetVariable('id',id);
+   open   ;
+ end;
+if DMproperties.DSet_Prop_Kredit.RecordCount > 0 then
+
+    FrmTrance.showmodal
+   else
+   ShowMessage('Bu əmlak kreditlə əlaqələndirilməyib!')
+end;
+
+procedure TPropertiesFrm.N14Click(Sender: TObject);
+begin
+with DMproperties,ReportDataSet do
+begin
+  close ;
+//  sql[17]:='';
+  open ;
+
+ end;
+//if not Assigned(PropQReport) then
+  //  DMproperties.ReportDataSet.open;
+ //   DMproperties.ReportDataSet.refresh;
+     if not assigned(PropQReport) then
+      PropQReport := TPropQReport.Create(Self);
+ // PropQReport:= TPropQReport.Create(self);
+ with PropQReport  do
+
+  Preview
+
+
+end;
+
+procedure TPropertiesFrm.N11Click(Sender: TObject);
+var
+id: integer;
+begin
+id:=Get_SelectedContID;
+DMproperties.DataSetproperties_payments.open;
+  
+with DMproperties.DataSetProp_take do
+ begin
+ close ;
+   SetVariable('propid',id);
+   open   ;
+ end;
+ 
+ if DMproperties.DataSetProp_take.RecordCount > 0 then
+  FrmProp_payment.ShowModal
+  else
+  ShowMessage('Bu əmlakın alınması üçün əməliyyat aparılmayıb!')
+end;
+
+procedure TPropertiesFrm.N13Click(Sender: TObject);
+begin
+{with ExcelExport do
+   begin
+   DMproperties.ReportDataSet.open;
+   if   DMproperties.ReportDataSet.RecordCount=0 then
+   begin
+     ShowMessage('Heç bir məlumat tapılmadı ');
+     exit;
+   end;
+
+      Connect;
+      ExportDataset(DMproperties.ReportDataSet,' əmlaklar barədə hesabat',True);
+      Disconnect;
+end;  }
+  end;
+  procedure TPropertiesFrm.ActnSearchExecute(Sender: TObject);
+var
+  SearchField : string;
+  SearchOptions : TSearchRecordOptions;
+begin
+  SearchOptions := [srIgnoreCase ,srPartialMatch];
+
+  with Sender as TEdit  do
+  begin
+    SearchField := copy(Name,5,length(Name));
+    MainGrid.SelectedRows.Clear;
+    with  TOracleDataSet(MainGrid.DataSource.DataSet) do
+    if  not SearchRecord(
+                  SearchField
+                 ,Text
+                 ,SearchOptions + [srFromCurrent , srForward ]
+                 ) then
+    if MessageDlg(
+              'Axtarış sona çatıb.'+#13+'əvvəldən başlamaq istəyirsinizmi?'
+             ,mtInformation
+             ,[mbNo , mbYes]
+             ,0
+             ) = mrYes  then
+    if  not SearchRecord(
+                 SearchField
+                ,Text
+                ,SearchOptions + [ srFromBeginning ]
+                )  then
+    MessageDlg('Yazı tapılmadı!',mtInformation,[mbOK],0);
+  end;
+   end;
+
+
+procedure TPropertiesFrm.editCONTRACTNUMExit(Sender: TObject);
+begin
+(Sender as TEdit).Text := '';
+end;
+
+procedure TPropertiesFrm.editCONTRACTNUMKeyPress(Sender: TObject; var Key: Char);
+begin
+  if ord(Key) = VK_RETURN
+  then  ActnSearchExecute(Sender)
+end;
+
+procedure TPropertiesFrm.editvalueKeyPress(Sender: TObject; var Key: Char);
+begin
+  if ord(Key) = VK_RETURN
+  then  ActnSearchExecute(Sender);
+if not (key in ['0'..'9',#46,#8]) then
+begin Key:=#0;
+Beep;
+end;
+end;
+
+procedure TPropertiesFrm.editPROP_COUNTKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if ord(Key) = VK_RETURN
+  then  ActnSearchExecute(Sender);
+ if not (key in ['0'..'9',#8]) then
+begin Key:=#0;
+Beep;
+end;
+
+end;
+
+procedure TPropertiesFrm.DateTimePicker1KeyPress(Sender: TObject;
+  var Key: Char);
+ VAR
+ a:boolean;
+ begin
+ if key=#13 then
+ begin
+ a:=DMproperties.DataSetPropIns.locate('BDATE',datetimepicker1.Date,[locaseinsensitive]);
+ if a=false then
+ showmessage('Таrих tapılmadı!');
+end;
+end ;
+procedure TPropertiesFrm.N12Click(Sender: TObject);
+var
+propid :integer;
+begin
+ propid:=Get_SelectedContID;
+      if not assigned(PropQReport) then
+      PropQReport := TPropQReport.Create(Self);
+with DMproperties,ReportDataSet do
+begin
+  close ;
+  sql[22]:='and a.id ='+inttostr(propid);
+  open ;
+
+ end;
+ with PropQReport  do
+
+  Preview
+end;
+
+procedure TPropertiesFrm.ActiveFormDestroy(Sender: TObject);
+begin
+DMproperties.free;
+FrmPropAdd.free;
+//FrmSeting.free;
+//rmInfo.free;
+//FrmTypical.free;
+FrmTrance.free ;
+FrmProp_payment.free ;
+PropQReport.free;
+end;
+
+procedure TPropertiesFrm.ddfd1Click(Sender: TObject);
+begin
+DMproperties.GDataSet.open;
+DMproperties.XDataSet.open;
+if not assigned(FormGelirXerc) then  TFormGelirXerc.Create(self);
+
+    //rmGelirXerc.Sho
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TPropertiesFrm,
+    Class_PropertiesFrm,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

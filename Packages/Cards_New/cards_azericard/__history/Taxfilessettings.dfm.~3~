@@ -1,0 +1,229 @@
+object RbsTaxFileAccsett: TRbsTaxFileAccsett
+  Left = 0
+  Top = 0
+  Caption = 'RbsTaxFileAccsett'
+  ClientHeight = 539
+  ClientWidth = 1191
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poMainFormCenter
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Label3: TLabel
+    Left = 429
+    Top = 8
+    Width = 92
+    Height = 16
+    Caption = 'Hesab ATM AZN'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -13
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
+  end
+  object Label4: TLabel
+    Left = 781
+    Top = 0
+    Width = 92
+    Height = 16
+    Caption = 'Hesab ATM AZN'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -13
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
+  end
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 1191
+    Height = 89
+    Align = alTop
+    TabOrder = 0
+    object Label11: TLabel
+      Left = 140
+      Top = 0
+      Width = 26
+      Height = 16
+      Caption = 'Filial'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Label2: TLabel
+      Left = 277
+      Top = 0
+      Width = 36
+      Height = 13
+      Caption = 'Valyuta'
+    end
+    object Label5: TLabel
+      Left = 427
+      Top = -2
+      Width = 90
+      Height = 16
+      Caption = 'Hesab TAX 1% '
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Label6: TLabel
+      Left = 787
+      Top = -2
+      Width = 101
+      Height = 16
+      Caption = 'Hesab TAX 18 % '
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Label1: TLabel
+      Left = 595
+      Top = -2
+      Width = 101
+      Height = 16
+      Caption = 'Hesab TAX 10 % '
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+    end
+    object BitBtn2: TBitBtn
+      Left = 8
+      Top = 48
+      Width = 75
+      Height = 25
+      Caption = 'Sil'
+      DoubleBuffered = True
+      ParentDoubleBuffered = False
+      TabOrder = 0
+      OnClick = BitBtn2Click
+    end
+    object BitBtn1: TBitBtn
+      Left = 8
+      Top = 13
+      Width = 75
+      Height = 25
+      Caption = 'Yadda saxla'
+      DoubleBuffered = True
+      ParentDoubleBuffered = False
+      TabOrder = 1
+      OnClick = BitBtn1Click
+    end
+    object filialcombo: TDBLookupComboBox
+      Left = 103
+      Top = 15
+      Width = 133
+      Height = 21
+      DropDownRows = 10
+      KeyField = 'ID'
+      ListField = 'NAME'
+      ListSource = DataMod_CARDS.filialsource
+      TabOrder = 2
+    end
+    object Searchtax1: TSearchEdit
+      Left = 383
+      Top = 15
+      Width = 178
+      Height = 21
+      TabOrder = 3
+      DataSource = DataMod_CARDS.excsource
+      SearchField = 'acc_no'
+    end
+    object valutecombo: TDBLookupComboBox
+      Left = 245
+      Top = 15
+      Width = 124
+      Height = 21
+      DropDownRows = 10
+      KeyField = 'VALUTE'
+      ListField = 'VALU_NAME'
+      ListSource = DataMod_CARDS.valutasorce
+      TabOrder = 4
+    end
+  end
+  object Searchtax10: TSearchEdit
+    Left = 571
+    Top = 15
+    Width = 178
+    Height = 21
+    TabOrder = 1
+    DataSource = DataMod_CARDS.excsource
+    SearchField = 'acc_no'
+  end
+  object Searchtax18: TSearchEdit
+    Left = 754
+    Top = 15
+    Width = 178
+    Height = 21
+    TabOrder = 2
+    DataSource = DataMod_CARDS.excsource
+    SearchField = 'acc_no'
+  end
+  object DBGrid1: TDBGrid
+    Left = 0
+    Top = 89
+    Width = 1191
+    Height = 450
+    Align = alClient
+    DataSource = DataMod_CARDS.dt_rbstaxsettings
+    TabOrder = 3
+    TitleFont.Charset = DEFAULT_CHARSET
+    TitleFont.Color = clWindowText
+    TitleFont.Height = -11
+    TitleFont.Name = 'Tahoma'
+    TitleFont.Style = []
+    Columns = <
+      item
+        Expanded = False
+        FieldName = 'ID'
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'TAX1'
+        Width = 220
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'TAX10'
+        Width = 220
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'TAX18'
+        Width = 220
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'BRANCH'
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'VALUTE'
+        Visible = True
+      end>
+  end
+end

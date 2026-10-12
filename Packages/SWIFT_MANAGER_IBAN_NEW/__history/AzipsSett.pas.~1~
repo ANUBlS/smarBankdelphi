@@ -1,0 +1,95 @@
+﻿unit AzipsSett;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Unit2, DBCtrls, ExtCtrls, StdCtrls, Grids, DBGrids;
+
+type
+  TAzipsSettings = class(TForm)
+    DBGrid1: TDBGrid;
+    BTNadd: TButton;
+    Panel2: TPanel;
+    DBLookupComboBox1: TDBLookupComboBox;
+    DBLookupComboBox2: TDBLookupComboBox;
+    DBLookupComboBox3: TDBLookupComboBox;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    DBLookupComboBox4: TDBLookupComboBox;
+    BTnsave: TButton;
+    BTNEXIT: TButton;
+    procedure BTNaddClick(Sender: TObject);
+    procedure BTNEXITClick(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure BTnsaveClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  AzipsSettings: TAzipsSettings;
+
+implementation
+
+{$R *.dfm}
+
+procedure TAzipsSettings.BTNaddClick(Sender: TObject);
+begin
+panel2.Visible:=true;
+
+DBGrid1.Height:= 209;
+panel2.height:=148;
+btnadd.Visible:=false;
+end;
+
+procedure TAzipsSettings.BTNEXITClick(Sender: TObject);
+begin
+panel2.Visible:=false;
+btnadd.Visible:=true;
+DBGrid1.Height:=322;
+
+end;
+
+procedure TAzipsSettings.BTnsaveClick(Sender: TObject);
+begin
+
+SwDataModule.sw_in_insert.CallProcedure('azpsettings',[DBLookupComboBox1.KeyValue,
+                                                       DBLookupComboBox2.KeyValue,
+                                                       DBLookupComboBox3.KeyValue,
+                                                       DBLookupComboBox4.KeyValue
+                                                        ]);
+
+DBGrid1.DataSource.DataSet.Refresh;
+showmessage('Hesablar Əlavə edildi.');
+end;
+
+procedure TAzipsSettings.FormShow(Sender: TObject);
+begin
+with
+SWDataModule  do begin
+
+azpsettings.CloseAll;
+AzpFilial.CloseAll;
+azpval.CloseAll;
+comm_acc.CloseAll;
+mbacc.CloseAll;
+
+
+azpsettings.open;
+AzpFilial.open;
+azpval.open;
+comm_acc.open;
+mbacc.open;
+
+end;
+
+
+DBGrid1.Height:=322;
+end;
+
+end.

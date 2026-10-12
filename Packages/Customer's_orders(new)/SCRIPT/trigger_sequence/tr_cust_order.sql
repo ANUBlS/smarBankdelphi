@@ -1,0 +1,18 @@
+CREATE SEQUENCE sb_cust_order
+	START WITH 1
+	INCREMENT BY 1
+ /
+CREATE OR REPLACE TRIGGER tr_cust_order
+	BEFORE INSERT ON cust_order
+	FOR EACH ROW
+	
+DECLARE
+
+BEGIN
+	
+	SELECT sb_cust_order.NEXTVAL 
+		INTO :NEW.ID 
+	FROM DUAL;
+
+END tr_cust_order;
+/

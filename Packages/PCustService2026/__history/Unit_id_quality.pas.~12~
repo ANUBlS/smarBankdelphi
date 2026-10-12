@@ -1,0 +1,118 @@
+﻿unit Unit_id_quality;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Grids, DBGrids, XDBGrids, StdCtrls,XFSCtrls, ExtCtrls;
+
+type
+  TFormid_quality = class(TForm)
+    XDBGrid1: TXDBGrid;
+    XFPanel1: TXFPanel;
+    XFButton1: TXFButton;
+    XFButton2: TXFButton;
+    XFPanel2: TXFPanel;
+    DBGrid1: TDBGrid;
+    XFButton3: TXFButton;
+    procedure FormShow(Sender: TObject);
+    procedure XFButton1Click(Sender: TObject);
+    procedure XFButton2Click(Sender: TObject);
+    procedure XFButton3Click(Sender: TObject);
+    procedure XDBGrid1MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure FormCanResize(Sender: TObject; var NewWidth, NewHeight: Integer;
+      var Resize: Boolean);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Formid_quality: TFormid_quality;
+
+implementation
+uses
+sboapiDataModuleImpl,UnitDataModPCustService, PCustServiceFormImpl1,
+  Unit_description;
+{$R *.dfm}
+
+procedure TFormid_quality.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+Resize:=false;
+end;
+
+procedure TFormid_quality.FormShow(Sender: TObject);
+ var
+ id:integer;
+begin
+ id:= DataModPCustService.ODS_CUSTOMERS_PHYS_FS.FieldByName('quality_id').AsInteger ;
+ DataModPCustService.ods_custID_quality.Locate('id',id, []);
+
+end;
+
+procedure TFormid_quality.XDBGrid1MouseMove(Sender: TObject; Shift: TShiftState;
+  X, Y: Integer);
+begin
+DataModPCustService.Ods_cust_id_qualityCount.close ;
+DataModPCustService.Ods_cust_id_qualityCount.open ;
+
+end;
+
+procedure TFormid_quality.XFButton1Click(Sender: TObject);
+ var
+ id_quality:integer;
+ id_qualityCust:integer;
+ v_id_quality:integer;
+begin
+
+
+  id_quality:=DataModPCustService.ods_custID_quality.FieldByName('id').AsInteger;
+  id_qualityCust:=DataModPCustService.ODS_CUSTOMERS_PHYS_FS.FieldByName('id').AsInteger;
+  v_id_quality:=DataModPCustService.ods_custID_quality.FieldByName('id').AsInteger;
+  DataModPCustService.ods_cust_ID_quality1.First;
+  with DataModPCustService do
+  begin
+
+  Ods_cust_id_qualityCount.Close;
+  Ods_cust_id_qualityCount.SetVariable('custid',id_qualityCust);
+  Ods_cust_id_qualityCount.SetVariable('id_quality',id_quality);
+  Ods_cust_id_qualityCount.Open;
+  if Ods_cust_id_qualityCount.FieldByName('checked').AsInteger=0 then
+  begin
+  ShowMessage('Təsnifat keyfiyyətinin növünü daxil edin  !');
+  exit
+  end;
+  end;
+
+
+  DataModPCustService.PG_PCustService.CallProcedure('upd_custid_quality',
+     [id_quality ]);
+
+
+   DataModPCustService.PG_PCustService.CallProcedure('update_custinfo',
+     [id_qualityCust,v_id_quality ]);
+
+     PCustServiceForm. CustSearch1.Click;
+    Formid_quality.Close ;
+
+
+end;
+procedure TFormid_quality.XFButton2Click(Sender: TObject);
+begin
+Formid_quality.Close;
+end;
+
+procedure TFormid_quality.XFButton3Click(Sender: TObject);
+begin
+Form_description:=TForm_description.create(self);
+
+Form_description.Memo1.Text:=DataModPCustService.Ods_cust_id_quality1DESCRIPTION.AsString;
+
+
+Form_description.ShowModal;
+end;
+
+end.

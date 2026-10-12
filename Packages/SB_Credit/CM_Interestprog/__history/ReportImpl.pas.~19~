@@ -1,0 +1,288 @@
+﻿unit ReportImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ComCtrls, StdCtrls, Buttons, Db, OracleData,ComObj;
+
+type
+  TReport = class(TForm)
+    BitBtn1: TBitBtn;
+    BitBtn2: TBitBtn;
+    DateTimePicker1: TDateTimePicker;
+    sysdate: TOracleDataSet;
+    Main: TOracleDataSet;
+    sysdateTEK_DAT: TDateTimeField;
+    MainRESTPR: TFloatField;
+    MainSUMHRESTOOSTAT: TFloatField;
+    MainINTERESTPR: TFloatField;
+    MainSUMINTRINTERESTOOSTAT: TFloatField;
+    MainNAME: TWideStringField;
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+    procedure FormCreate(Sender: TObject);
+    procedure BitBtn1Click(Sender: TObject);
+    procedure BitBtn2Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Report: TReport;
+
+  //FrmDaily: TFrmDaily;
+  Exl, Sheet: Variant;
+
+implementation
+
+{$R *.DFM}
+uses SboAPIDataModuleImpl,SBTranslateProc;
+procedure TReport.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+resize:=false
+end;
+
+procedure TReport.FormCreate(Sender: TObject);
+begin
+with  sysdate do
+begin
+open;
+DateTimePicker1.DateTime:=fieldbyname('tek_dat').AsDateTime;
+ end;
+ SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+ end;
+ procedure CreateSheet;
+begin
+  try
+   Exl := CreateOleObject('Excel.Application');
+   Exl.WorkBooks.add;
+   Sheet := Exl.Application.Worksheets.Item[1];
+  except
+  end;
+   end;
+
+    procedure DestroySheet;
+begin
+  try
+   Finalize(Sheet);
+   Finalize(Exl);
+  except
+
+  end;
+end;
+procedure ShowSheet;
+begin
+  try
+     Exl.Visible := True;
+  except
+     DestroySheet;
+   end;
+  end;
+var
+s,l,cell, r,i , j , k ,m ,w :Integer;
+
+
+bash: string;
+
+procedure TReport.BitBtn1Click(Sender: TObject);
+const
+number_format_r='#,##0.00%';
+var
+dat:Tdatetime;
+begin
+  dat:=integer(trunc(DateTimePicker1.DateTime));
+
+  with  main  do
+ begin
+         if Active then Close;
+         SetVariable('dat',dat);
+         Open;
+end;
+
+        CreateSheet;
+ try
+  
+     Sheet.Range['A1:A60000'].ColumnWidth:=9;
+     Sheet.Range['B1:B60000'].ColumnWidth:=20;
+     Sheet.Range['C1:C60000'].ColumnWidth:=20;
+     Sheet.Range['D1:D60000'].ColumnWidth:=20;
+     Sheet.Range['E1:E60000'].ColumnWidth:=20;
+     Sheet.Range['F1:F60000'].ColumnWidth:=30;
+     Sheet.Range['F1:F60000'].NumberFormat:= number_format_r ;
+     Sheet.Range['G1:G60000'].ColumnWidth:=20;
+     // Sheet.Range['G1:G60000'].NumberFormat:= number_format_r ;
+
+     Sheet.Range['H1:H60000'].ColumnWidth:=20;
+   //  Sheet.Range['H1:H60000'].NumberFormat:= number_format_r ;
+     Sheet.Range['J1:J60000'].NumberFormat:= number_format_r ;
+     // Sheet.Range['M1:M60000'].ColumnWidth:=12;
+ /////////////////////////////////////////////////////////////////////////// /
+   Sheet.Cells[2,3]:='TuranBank ASC-də kredit portfeli və fiz gəlirləri üzrə proqnozun icra vəziyyəti';
+     Sheet.Cells[2,3].Font.size :=17;
+/////////////////////////////////////////////////////////////////////////////
+
+       Sheet.Cells[3,2]:='Hesabat tarixi ';
+       Sheet.Cells[3,2].Font.Bold :=true;
+
+       Sheet.Cells[3,3]:=DateTimePicker1.DateTime;
+
+       Sheet.Cells[4,2]:='Hesabatın valyutası manatla ';
+       Sheet.Cells[4,2].Font.Bold :=true;
+
+
+      k:=5 ; i:=0;
+       r:=0;
+          Sheet.Cells[i+k+1,1]:='Sıra №';
+          Sheet.Cells[i+k+1,1].Font.Bold :=true;
+
+          Sheet.Cells[i+k+1,2].Value:='Filialın adı';
+          Sheet.Cells[i+k+1,2].Font.Bold :=true;
+         // Sheet.Cells[i+k+1,2].WrapText := true;
+
+          Sheet.Cells[i+k+1,3].Value:='K.P Proqnoz';
+          Sheet.Cells[i+k+1,3].Font.Bold :=true;
+
+          Sheet.Cells[i+k+1,4].Value:='K.P Fakt';
+          Sheet.Cells[i+k+1,4].Font.Bold :=true;
+
+          Sheet.Cells[i+k+1,5].Value:='Fərq(artma azalma)sütun4-cütun3';
+          Sheet.Cells[i+k+1,5].Font.Bold :=true;
+          Sheet.Cells[i+k+1,5].WrapText := true;
+
+          Sheet.Cells[i+k+1,6].Value:='İcra% sütun4/sütun3';
+          Sheet.Cells[i+k+1,6].Font.Bold :=true;
+          Sheet.Cells[i+k+1,6].WrapText := true;
+
+          Sheet.Cells[i+k+1,7].Value:='%G. U Proqnoz';
+          Sheet.Cells[i+k+1,7].Font.Bold :=true;
+
+
+          Sheet.Cells[i+k+1,8].Value:='%G. U  Fakt';
+          Sheet.Cells[i+k+1,8].Font.Bold :=true;
+
+          Sheet.Cells[i+k+1,9].Value:='Fərq(artma azalma)sütun8-sütun7';
+          Sheet.Cells[i+k+1,9].Font.Bold :=true;
+          Sheet.Cells[i+k+1,9].WrapText := true;
+
+
+          Sheet.Cells[i+k+1,10].Value:='İcra % Sütun8/sütun7';
+          Sheet.Cells[i+k+1,10].Font.Bold :=true;
+          Sheet.Cells[i+k+1,10].WrapText := true;
+
+          sysdate.Close;
+                sysdate.open;
+                 ShowSheet;
+            sysdate.First ;
+           for i:=1 to main.RecordCount do begin
+         r:=r+1;
+        Sheet.Cells[i+k+1,1]:=r;
+
+        Sheet.Cells[i+k+1,2]:=main.FieldByName('name').asstring;
+
+        Sheet.Cells[i+k+1,3]:=main.FieldByName('restpr').asfloat;
+
+        Sheet.Cells[i+k+1,4]:=main.FieldByName('sum(h.rest*o.ostat)').asfloat;
+
+         Sheet.Cells[i+k+1,5]:=main.FieldByName('sum(h.rest*o.ostat)').asfloat-main.FieldByName('restpr').asfloat;
+
+        if (main.FieldByName('sum(h.rest*o.ostat)').asfloat)=0 then
+
+        begin
+        Sheet.Cells[i+k+1,6]:=0;
+
+        end
+        else
+        begin
+        Sheet.Cells[i+k+1,6]:=(main.FieldByName('sum(h.rest*o.ostat)').asfloat)/(main.FieldByName('restpr').asfloat);
+       end;
+
+        Sheet.Cells[i+k+1,7]:=main.FieldByName('interestpr').asfloat;
+
+        Sheet.Cells[i+k+1,8]:=main.FieldByName('sum(intr.interest*o.ostat)').asfloat;
+
+        Sheet.Cells[i+k+1,9]:=main.FieldByName('sum(intr.interest*o.ostat)').asfloat-main.FieldByName('interestpr').asfloat;
+
+     if main.FieldByName('sum(intr.interest*o.ostat)').asfloat =0 then
+         begin
+        Sheet.Cells[i+k+1,10]:=0;
+        end
+        else
+        begin
+        Sheet.Cells[i+k+1,10]:=(main.FieldByName('sum(intr.interest*o.ostat)').asfloat)/(main.FieldByName('interestpr').asfloat);
+
+        end;
+      //   Exl.Range['B'+Inttostr(i+k+1)+':D'+Inttostr(i+k+1)].Select;
+      //  Exl.Selection.Interior.ColorIndex := 8;
+
+        main.Next;
+       end;
+
+           w:=main.RecordCount ;
+          Sheet.Cells[w+k+2,1]:='Yekun cem';
+          Sheet.Cells[w+k+2,1].Font.Bold :=true;
+          Sheet.Cells[w+k+2,1].Font.Color:=clred;
+
+          Sheet.Cells[w+k+2,3].Font.Color:=clred;
+          Sheet.Cells[w+k+2,3]:='=SUM(C7:C'+inttostr(w+k+1)+')';
+          Sheet.Cells[w+k+2,3].Font.Color:=clred;
+                    Sheet.Cells[w+k+2,3].Font.Bold :=true;
+
+          Sheet.Cells[w+k+2,4].Font.Color:=clred;
+          Sheet.Cells[w+k+2,4]:='=SUM(D7:D'+inttostr(w+k+1)+')';
+          Sheet.Cells[w+k+2,4].Font.Color:=clred;
+                Sheet.Cells[w+k+2,4].Font.Bold :=true;
+
+          Sheet.Cells[w+k+2,5].Font.Color:=clred;
+          Sheet.Cells[w+k+2,5]:='=SUM(E7:E'+inttostr(w+k+1)+')';
+          Sheet.Cells[w+k+2,5].Font.Color:=clred;
+                     Sheet.Cells[w+k+2,5].Font.Bold :=true;
+
+          Sheet.Cells[w+k+2,6].Font.Color:=clred;
+          Sheet.Cells[w+k+2,6]:='=SUM(F7:F'+inttostr(w+k+1)+')';
+          Sheet.Cells[w+k+2,6].Font.Color:=clred;
+             Sheet.Cells[w+k+2,6].Font.Bold :=true;
+
+          Sheet.Cells[w+k+2,7].Font.Color:=clred;
+          Sheet.Cells[w+k+2,7]:='=SUM(G7:G'+inttostr(w+k+1)+')';
+          Sheet.Cells[w+k+2,7].Font.Color:=clred;
+             Sheet.Cells[w+k+2,7].Font.Bold :=true;
+
+          Sheet.Cells[w+k+2,8].Font.Color:=clred;
+          Sheet.Cells[w+k+2,8]:='=SUM(H7:H'+inttostr(w+k+1)+')';
+          Sheet.Cells[w+k+2,8].Font.Color:=clred;
+                Sheet.Cells[w+k+2,8].Font.Bold :=true;
+
+          Sheet.Cells[w+k+2,9].Font.Color:=clred;
+          Sheet.Cells[w+k+2,9]:='=SUM(I7:I'+inttostr(w+k+1)+')';
+          Sheet.Cells[w+k+2,9].Font.Color:=clred;
+              Sheet.Cells[w+k+2,9].Font.Bold :=true;
+
+          Sheet.Cells[w+k+2,10].Font.Color:=clred;
+          Sheet.Cells[w+k+2,10]:='=H'+inttostr(w+k+2)+'/G'+inttostr(w+k+2);
+          Sheet.Cells[w+k+2,10].Font.Color:=clred;
+                Sheet.Cells[w+k+2,10].Font.Bold :=true;
+         bash:=inttostr(k+1);
+
+ Sheet.Range['A'+bash+':J'+inttostr(m+k+1+main.RecordCount)].Borders.Color:=clBlack;
+
+  finally
+
+   Exl.Range['A1:A1'].Select;
+
+   Screen.Cursor := crDefault;
+   DestroySheet;
+  main.EnableControls;
+  end;
+  main.close;
+
+end;
+procedure TReport.BitBtn2Click(Sender: TObject);
+begin
+close
+end;
+
+end.

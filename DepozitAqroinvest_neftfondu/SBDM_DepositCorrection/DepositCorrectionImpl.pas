@@ -1,0 +1,409 @@
+unit DepositCorrectionImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActiveX, AxCtrls, DepositCorrection_TLB, StdVcl, ExtCtrls, Grids,
+  DBGrids, Db, OracleData, StdCtrls, ToolWin, ComCtrls, ImgList ,SBPlgAx50_TLB;
+
+type
+  TFrmDepositCorrection = class(TActiveForm, IFrmDepositCorrection ,IIconExporter)
+    Panel1: TPanel;
+    Deposits: TOracleDataSet;
+    DataSrcDeposits: TDataSource;
+    DBGrid1: TDBGrid;
+    DepositsID: TFloatField;
+    ImageList1: TImageList;
+    Panel2: TPanel;
+    SearchEdit: TEdit;
+    DepositsCLIENTACCNO: TWideStringField;
+    DepositsCLIENTACCNAME: TWideStringField;
+    DepositsCONTRACTNO: TWideStringField;
+    DepositsSTOPCALCULATIONDATE: TDateTimeField;
+    DepositsLASTPROCESSDATE: TDateTimeField;
+    DepositsFACTICALDEBT: TFloatField;
+    DepositsFACTICALINTERESTDEBT: TFloatField;
+    DepositsOVERDUEINTERESTDEBT: TFloatField;
+    DepositsRESIDUARYAMOUNT: TFloatField;
+    DepositsCLIENTCURRENCY: TWideStringField;
+    ToolBar1: TToolBar;
+    ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
+    ToolButton3: TToolButton;
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure ActiveFormDestroy(Sender: TObject);
+    procedure ToolButton1Click(Sender: TObject);
+    procedure ToolButton3Click(Sender: TObject);
+    procedure SearchEditChange(Sender: TObject);
+    procedure DBGrid1TitleClick(Column: TColumn);
+  private
+    { Private declarations }
+    FEvents: IFrmDepositCorrectionEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+  protected
+    { Protected declarations }
+    function  Get_Icon: OLE_HANDLE; safecall;
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+  public
+    { Public declarations }
+    procedure Initialize; override;
+  end;
+
+implementation
+
+uses ComObj, ComServ,sboapiDataModuleImpl, SBTranslateProc;
+
+{$R *.DFM}
+
+{ TFrmDepositCorrection }
+
+procedure TFrmDepositCorrection.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_FrmDepositCorrectionPage); }
+end;
+
+procedure TFrmDepositCorrection.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as IFrmDepositCorrectionEvents;
+end;
+
+procedure TFrmDepositCorrection.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TFrmDepositCorrection.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TFrmDepositCorrection.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TFrmDepositCorrection.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TFrmDepositCorrection.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TFrmDepositCorrection.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TFrmDepositCorrection.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TFrmDepositCorrection.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TFrmDepositCorrection.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TFrmDepositCorrection.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TFrmDepositCorrection.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TFrmDepositCorrection.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TFrmDepositCorrection.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TFrmDepositCorrection.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TFrmDepositCorrection.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TFrmDepositCorrection.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TFrmDepositCorrection.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TFrmDepositCorrection.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TFrmDepositCorrection.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TFrmDepositCorrection._Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TFrmDepositCorrection.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TFrmDepositCorrection.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TFrmDepositCorrection.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TFrmDepositCorrection.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TFrmDepositCorrection.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TFrmDepositCorrection.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TFrmDepositCorrection.KeyPressEvent(Sender: TObject;
+  var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TFrmDepositCorrection.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TFrmDepositCorrection.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TFrmDepositCorrection.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TFrmDepositCorrection.Set_AxBorderStyle(
+  Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TFrmDepositCorrection.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TFrmDepositCorrection.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TFrmDepositCorrection.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TFrmDepositCorrection.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TFrmDepositCorrection.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TFrmDepositCorrection.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TFrmDepositCorrection.Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TFrmDepositCorrection.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TFrmDepositCorrection.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TFrmDepositCorrection.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TFrmDepositCorrection.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TFrmDepositCorrection.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TFrmDepositCorrection.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+procedure TFrmDepositCorrection.ActiveFormCreate(Sender: TObject);
+begin
+  with Deposits do
+  begin
+    SetVariable('OrderKind','ContractNo');
+    Open;
+  end;
+  SBTranslateProc.TranslateAllComponents(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TFrmDepositCorrection.ActiveFormDestroy(Sender: TObject);
+begin
+  Deposits.Close;
+end;
+
+procedure TFrmDepositCorrection.ToolButton1Click(Sender: TObject);
+begin
+  sboapiDataModule.SBSession.Commit;
+end;
+
+procedure TFrmDepositCorrection.ToolButton3Click(Sender: TObject);
+begin
+  DBGrid1.DataSource.DataSet.Refresh;
+end;
+function  TFrmDepositCorrection.Get_Icon: OLE_HANDLE; safecall;
+const
+  ImageIndex = 2;
+begin
+  ImageList1.GetIcon(ImageIndex, Icon);
+  Result := Icon.Handle;
+end;
+
+procedure TFrmDepositCorrection.SearchEditChange(Sender: TObject);
+begin
+  Deposits.Locate('ContractNo',SearchEdit.Text,[loCaseInsensitive,loPartialKey]);
+end;
+
+procedure TFrmDepositCorrection.DBGrid1TitleClick(Column: TColumn);
+var
+ OrderKind : string;
+begin
+  OrderKind := copy(Column.Field.Name,9,length(Column.Field.Name));
+  with Deposits do
+  begin
+    SetVariable('OrderKind',OrderKind);
+    Refresh;
+  end;
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TFrmDepositCorrection,
+    Class_FrmDepositCorrection,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

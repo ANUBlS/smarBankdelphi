@@ -1,0 +1,396 @@
+unit SBOracleLogOn;
+{*********************************************************
+                Smart Systems Technology LTD.
+                     (Copyright 1996-2006)
+                  Made: Khalid Mamedov.
+**********************************************************}
+interface
+
+uses
+    Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+     Db, OraVariables, Registry, UnitChangePasswordForm, Oracle, DsgnIntf, ICECrypt, UnitSBOraLogOn;
+const
+    sOraErrSuccessWithInfo = 'Oracle error: OCI success with info.';
+    sOraErrNeedData = 'Oracle error: OCI need data.';
+    sOraErrNoData = 'Oracle error: OCI no data.';
+    sOraErrInvalidHandle = 'Oracle error: OCI invalid handle.';
+    sOraErrStillExecute = 'Oracle error: OCI still execute.';
+    sOraErrUNKNOWN = 'UNKNOWN ORACLE ERROR!';
+    sOraErrLoadLibrary = 'Error load OCI library "%s"!';
+    sOraErrBadOCIVersion = 'Bad OCI version [%s].';
+    sOraErrOCIVersionInfoAbsent = 'Absent information about version of OCI library';
+    sOraErrOCINotInstalled = 'OCI not properly istalled on this machine';
+    sOraErrCannotGetFunctions = 'Error in initialization OCI libriary: Cannot get next functions: %s';
+    sOraErrLogin = 'Cannot connect to server ''%s ''';
+    sOraErrDatabaseNotActive = 'Database is not active !';
+
+type
+    TOraConnectAs   = (caNormal, caSYSDBA, caSYSOPER);
+    TAskResult = (arSuccess, arError, arCancel);
+    TOCILibError =  class(Exception);
+    TOCIInitializeError =  class(Exception);
+    TpfmOraSBLogOn = ^TfmOraSBLogOn;
+
+    TSBOracleLogOn = class(TComponent)
+  private
+    FServer : String;
+    FName : String;
+    FRetries : Integer;
+    FOldPassword : String;
+    FNewPassword : String;
+    FSession :  TOracleSession;
+    FCaption : String;
+    hDll:THandle;
+    function  InitOCI(libaddrss : String) : Boolean;
+    function  TestError(where:string;ex:sword):sword;
+    function  ChaingePassword(server, usern, oldpass, newpass : String; chngstatus : boolean = false):Boolean;
+    procedure SetOracleSession(OValue : TOracleSession);
+    procedure CloseDll;
+    function  PasswordChangeExecute(var NewPassword : String) : Boolean;
+    function  AskForLogOn():TAskResult;
+    function  CheckForExpire(Sender : TpfmOraSBLogOn):TAskResult;
+    procedure AssignParams(Sender : TpfmOraSBLogOn);
+    procedure SetCaption(Value : String);
+    function  GetCaption:String;
+    { Private declarations }
+  protected
+
+    { Protected declarations }
+  public
+    LogonDatabase : String;
+    LogonUsername : String;
+    LogonPassword : String;
+
+    myenvhp:pOCIEnv;
+    mysrvhp:pOCIServer;
+    dberrhp:pOCIError;
+    myusrhp:pOCISession;
+    mysvchp:pOCISvcCtx;
+
+    OCIEnvCreate:TOCIEnvCreate;
+    OCIInitialize:TOCIInitialize;
+    OCIEnvInit:TOCIEnvInit;
+    OCIHandleAlloc:TOCIHandleAlloc;
+    OCIServerAttach:TOCIServerAttach;
+    OCIAttrSet:TOCIAttrSet;
+    OCISessionBegin:TOCISessionBegin;
+    OCIErrorGet:TOCIErrorGet;
+    OCIPasswordChange:TOCIPasswordChange;
+    OCISessionEnd:TOCISessionEnd;
+    OCIServerDetach:TOCIServerDetach;
+    OCIHandleFree:TOCIHandleFree;
+    function    Execute : TAskResult;
+    constructor Create(AOwner: TComponent); override;
+    destructor  Destroy; override;
+    { Public declarations }
+  published
+    property Session : TOracleSession read FSession write SetOracleSession;
+    property Retries : Integer read FRetries write FRetries;
+    property Caption : String read GetCaption write SetCaption;
+    { Published declarations }
+  end;
+
+procedure Register;
+
+implementation
+
+procedure Register;
+begin
+  RegisterComponents('Smart', [TSBOracleLogOn]);
+end;
+
+procedure TSBOracleLogOn.SetCaption(Value : String);
+begin
+  FCaption := Value;
+end;
+
+function TSBOracleLogOn.GetCaption:String;
+begin
+  Result := FCaption;
+end;
+
+procedure TSBOracleLogOn.SetOracleSession(OValue : TOracleSession);
+begin
+  FSession := OValue;
+  with  OValue do
+  begin
+    FServer := LogonDatabase;
+    FName := LogonUsername;
+    FOldPassword := LogonPassword;
+  end;
+end;
+
+function TSBOracleLogOn.TestError(where:string;ex:sword):sword;
+var errcode:sb4;
+    errbuf:array[0..511] of char;
+begin
+ Result:=ex;
+ try
+ case ex of
+  OCI_SUCCESS: exit;
+  OCI_SUCCESS_WITH_INFO: raise EDatabaseError.Create(sOraErrSuccessWithInfo);
+  OCI_NEED_DATA: raise EDatabaseError.Create(sOraErrNeedData);
+  OCI_NO_DATA: raise EDatabaseError.Create(sOraErrNoData);
+  OCI_ERROR: begin
+              OCIErrorGet(dberrhp,1,nil,errcode,errbuf,sizeof(errbuf),OCI_HTYPE_ERROR);
+              raise EDatabaseError.Create('Oracle error #'+inttostr(errcode)+': '+strpas(errbuf));
+             end;
+  OCI_INVALID_HANDLE: raise EDatabaseError.Create(where+sOraErrInvalidHandle);
+  OCI_STILL_EXECUTING: raise EDatabaseError.Create(sOraErrStillExecute);
+  else raise EDatabaseError.Create(sOraErrUNKNOWN);
+ end;
+ except
+   on E:Exception do
+    MessageDlg('px2'+where+E.Message, mtError, [mbOK], 0);
+ end;
+end;
+
+function TSBOracleLogOn.InitOCI(libaddrss : String) : Boolean;
+begin
+  result := false;
+  if not FileExists(libaddrss) then exit else result := true;
+
+  hDll:=LoadLibrary(PChar(libaddrss));
+
+    @OCIEnvCreate:=GetProcAddress(hDll,'OCIEnvCreate');
+    @OCIInitialize:=GetProcAddress(hDll,'OCIInitialize');
+    @OCIEnvInit:=GetProcAddress(hDll,'OCIEnvInit');
+    @OCIHandleAlloc:=GetProcAddress(hDll,'OCIHandleAlloc');
+    @OCIServerAttach:=GetProcAddress(hDll,'OCIServerAttach');
+    @OCIAttrSet:=GetProcAddress(hDll,'OCIAttrSet');
+    @OCISessionBegin:=GetProcAddress(hDll,'OCISessionBegin');
+    @OCIErrorGet:=GetProcAddress(hDll,'OCIErrorGet');
+    @OCIPasswordChange:=GetProcAddress(hDll,'OCIPasswordChange');
+    @OCISessionEnd:=GetProcAddress(hDll,'OCISessionEnd');
+    @OCIServerDetach:=GetProcAddress(hDll,'OCIServerDetach');
+    @OCIHandleFree:=GetProcAddress(hDll,'OCIHandleFree');
+
+    if @OCIEnvCreate = nil then begin
+     TestError('OCIInitialize ', OCIInitialize(OCI_DEFAULT , nil, nil, nil, nil));
+     TestError('OCIEnvInit ',    OCIEnvInit(myenvhp, OCI_DEFAULT, 0, nil));
+    end else
+    TestError('OCIEnvCreate',   OCIEnvCreate(myenvhp, OCI_DEFAULT, nil, nil, nil, nil, 0, nil));
+
+    TestError('OCIHandleAlloc ', OCIHandleAlloc(myenvhp, mysrvhp, OCI_HTYPE_SERVER, 0, nil));
+    TestError('OCIHandleAlloc ', OCIHandleAlloc(myenvhp, dberrhp, OCI_HTYPE_ERROR,  0, nil));
+    TestError('OCIHandleAlloc ', OCIHandleAlloc(myenvhp, mysvchp, OCI_HTYPE_SVCCTX, 0, nil));
+end;
+
+function TSBOracleLogOn.ChaingePassword(server,usern, oldpass, newpass : String; chngstatus : boolean = false):Boolean;
+var
+  pserver, pname, poldpass, pnewpass: array[0..31] of char ;
+  ConnAs:array[TOraConnectAs] of integer;
+  FConnectAs : TOraConnectAs;
+begin
+   Result := false;
+
+   ConnAs[caNormal]  := OCI_DEFAULT;
+   ConnAs[caSYSDBA]  := OCI_SYSDBA;
+   ConnAs[caSYSOPER] := OCI_SYSOPER;
+   FConnectAs:=caNormal;
+      
+   strpcopy(pserver, server);
+   strpcopy(pname, usern);
+   strpcopy(poldpass, oldpass);
+   strpcopy(pnewpass, newpass);
+
+
+   OCIServerAttach(mysrvhp, dberrhp, @pserver, strlen(pserver), OCI_DEFAULT);
+   OCIAttrSet(mysvchp, OCI_HTYPE_SVCCTX, mysrvhp, 0, OCI_ATTR_SERVER, dberrhp);
+   OCIHandleAlloc(myenvhp, myusrhp, OCI_HTYPE_SESSION, 0, nil);
+   TestError('OCIAttrSet ',     OCIAttrSet(myusrhp, OCI_HTYPE_SESSION, @pname, strlen(pname), OCI_ATTR_USERNAME, dberrhp));
+   TestError('OCIAttrSet ',      OCIAttrSet(myusrhp, OCI_HTYPE_SESSION, @poldpass, strlen(poldpass), OCI_ATTR_PASSWORD, dberrhp));
+
+ //TestError('OCISessionBegin ', OCISessionBegin(mysvchp, dberrhp, myusrhp, OCI_CRED_RDBMS, ConnAs[FConnectAs]));
+  OCISessionBegin(mysvchp, dberrhp, myusrhp, OCI_CRED_RDBMS, ConnAs[FConnectAs]);
+  TestError('OCIAttrSet ',      OCIAttrSet(mysvchp, OCI_HTYPE_SVCCTX, myusrhp, 0, OCI_ATTR_SESSION, dberrhp));
+  if chngstatus then
+  TestError('OCIPasswordChange ', OCIPasswordChange (mysvchp, dberrhp,
+                                                      pname,
+                                                      strlen(pname),
+                                                      poldpass,
+                                                      strlen(poldpass),
+                                                      pnewpass,
+                                                      strlen(pnewpass),
+                                                      OCI_DEFAULT));
+  Result := true;
+end;
+
+function getOCILibrary(var libpath : String):Boolean;
+var
+  Reg: TRegistry;
+  ora_home : String;
+begin
+  result := false;
+  Reg := TRegistry.Create;
+  Reg.Access := KEY_READ;
+  try
+    Reg.RootKey := HKEY_LOCAL_MACHINE;
+    if Reg.OpenKey('\SOFTWARE\ORACLE\KEY_OraDb10g_home1', False)
+    then ora_home := Reg.ReadString('ORACLE_HOME');
+  finally
+    Reg.CloseKey;
+    Reg.Free;
+  end;
+  if Length(ora_home) > 0 then
+    begin
+     libpath := ora_home + '\bin\oci.dll';
+     result := true;
+    end;
+end;
+
+function GeneratePassword(value : String):String;
+var
+   passICECrt : TICECrypt;
+begin
+  result := '';
+  passICECrt := TICECrypt.Create(nil);
+  try
+   passICECrt.Text := value;
+   result := 's'+passICECrt.GetCrypted();
+  finally
+   passICECrt.Free;
+  end;
+end;
+
+function TSBOracleLogOn.PasswordChangeExecute(var NewPassword : String) : Boolean;
+begin
+  result := false;
+  try
+
+  with TfmPassChange.Create(Self) do
+   begin
+     oldpass := LogonPassword;
+     if ShowModal = mrOk then
+      begin
+        FNewPassword := GeneratePassword(newpass);
+//        if ChaingePassword(LogonDatabase, LogonUsername,
+//                            GeneratePassword(LogonPassword), FNewPassword, true ) then
+        begin
+
+          NewPassword := FNewPassword;
+          result := true;
+        end;
+
+      end; //Password for show
+     Release;
+
+   end;//Create
+   except
+   on E:Exception do
+       MessageDlg('px1'+E.Message, mtError, [mbOK], 0);
+   end ;
+end;
+
+function TSBOracleLogOn.CheckForExpire(Sender : TpfmOraSBLogOn):TAskResult;
+var
+  newPass : String;
+begin
+  Result := arError;
+    if Assigned(FSession) then
+     with FSession do
+     try
+       LogonUsername := Sender^.LogonUsername;
+       LogonPassword := GeneratePassword(Sender^.LogonPassword);
+       LogonDatabase := Sender^.LogonDatabase;
+       AssignParams(TpfmOraSBLogOn(Sender));
+//       ChaingePassword(LogonDatabase, LogonUsername, LogonPassword, 'ss');
+       LogOn;
+       LogOff;
+       Result := arSuccess;
+     except
+{       on E:Exception do
+          if pos('ORA-28001', E.Message)>0 then
+          begin }
+        on E: EOracleError do
+          if E.ErrorCode = 28001 then begin
+            Result := arSuccess;
+            if PasswordChangeExecute(newPass) then
+               if Assigned(FSession) then  FSession.SetPassword (newPass);//FSession.LogonPassword := newPass;
+          end
+          else MessageDlg('px3'+E.Message, mtError, [mbOK], 0);
+     end;
+end;
+
+procedure TSBOracleLogOn.AssignParams(Sender : TpfmOraSBLogOn);
+begin
+   LogonUsername := Sender^.LogonUsername;
+   LogonPassword := Sender^.LogonPassword;
+   LogonDatabase := Sender^.LogonDatabase;
+end;
+
+function TSBOracleLogOn.AskForLogOn():TAskResult;
+var
+  fmLogOn : TfmOraSBLogOn;
+begin
+  result := arError;
+  try
+   fmLogOn := TfmOraSBLogOn.Create(nil);
+   fmLogOn.Caption := FCaption;
+   fmLogOn.LogonUsername := LogonUsername;
+   fmLogOn.LogonPassword := LogonPassword;
+   fmLogOn.LogonDatabase := LogonDatabase;
+   case fmLogOn.ShowModal of
+     mrOk : result := CheckForExpire(@fmLogOn);
+     mrCancel : result := arCancel;
+   end;
+  finally
+   fmLogOn.Free;
+  end;
+end;
+
+
+
+function TSBOracleLogOn.Execute : TAskResult;
+var
+  i : integer;
+  liblink : String;
+begin
+ Result := arError;
+ i := 1;
+ try
+//  if not getOCILibrary(liblink)  then
+//     raise TOCILibError.Create(liblink+'-- '+'Can not load oci library');
+//  if not InitOCI(liblink) then
+//     raise TOCIInitializeError.Create('Can not initialize oci library');
+
+ while FRetries >= i do
+  begin
+   Result := AskForLogOn;
+   if Result in [arSuccess, arCancel] then break;
+   inc(i);
+  end;
+
+
+ finally
+ //  CloseDll;
+ end;
+
+end;
+
+
+procedure TSBOracleLogOn.CloseDll;
+begin
+ OCISessionEnd(mysvchp,dberrhp,myusrhp,OCI_DEFAULT);
+ OCIServerDetach(mysrvhp,dberrhp,OCI_DEFAULT);
+ OCIHandleFree(mysrvhp,OCI_HTYPE_SERVER);
+ OCIHandleFree(mysvchp,OCI_HTYPE_SVCCTX);
+ OCIHandleFree(myusrhp,OCI_HTYPE_SESSION);
+ OCIHandleFree(dberrhp,OCI_HTYPE_ERROR);
+ OCIHandleFree(myenvhp,OCI_HTYPE_ENV);
+
+ FreeLibrary(hDll);
+end;
+
+constructor TSBOracleLogOn.Create(AOwner: TComponent);
+begin
+   inherited Create(AOwner);
+   FRetries := 3;
+end;
+
+destructor TSBOracleLogOn.Destroy;
+begin
+   inherited Destroy;
+end;
+
+end.

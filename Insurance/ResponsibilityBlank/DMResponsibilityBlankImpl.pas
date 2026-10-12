@@ -1,0 +1,97 @@
+unit DMResponsibilityBlankImpl;
+
+interface
+
+uses
+  SysUtils, Classes, DB, OracleData, Oracle;
+
+type
+  TDMResponsibilityBlank = class(TDataModule)
+    Customers: TOracleDataSet;
+    CustomersID: TIntegerField;
+    CustomersNAME: TWideStringField;
+    CustomersADDRESS: TWideStringField;
+    CustomersMOBILEPHONE: TWideStringField;
+    CustomersFAX: TWideStringField;
+    CustomersCONTACTPERSON: TWideStringField;
+    BeneficiarySource: TDataSource;
+    ODSBeneficiary: TOracleDataSet;
+    ODSBeneficiaryID: TFloatField;
+    ODSBeneficiaryNAME: TWideStringField;
+    ODSBeneficiaryADDRESS: TWideStringField;
+    ODSBeneficiaryPHONE: TWideStringField;
+    ODSBeneficiaryBANKING_DETAILS: TWideStringField;
+    CustomersData: TDataSource;
+    AgentsSource: TDataSource;
+    ODSAgents: TOracleDataSet;
+    ODSAgentsID: TFloatField;
+    ODSAgentsNAME: TWideStringField;
+    DsSysdat: TOracleDataSet;
+    DsSysdatTEK_DAT: TDateTimeField;
+    DsSysdatPRED_DAT: TDateTimeField;
+    DsSysdatARC_DAY: TDateTimeField;
+    DsSysdatCLOSE: TIntegerField;
+    DSAvalute: TDataSource;
+    ODSAvalute: TOracleDataSet;
+    ODSAvaluteVALUTE: TIntegerField;
+    ODSAvaluteVAL_NAME: TWideStringField;
+    ODSAvaluteVALU_NAME: TWideStringField;
+    ODSAvaluteVALU_SHORT: TWideStringField;
+    DSRins_contracts: TDataSource;
+    DSRins_contract_responsibility: TDataSource;
+    DSins_contracts: TOracleDataSet;
+    DSins_contract_responsibility: TOracleDataSet;
+    ins_common: TOraclePackage;
+    DSins_contractsID: TFloatField;
+    DSins_contractsTYPE_ID: TFloatField;
+    DSins_contractsINS_DATE: TDateTimeField;
+    DSins_contractsBEGIN_DATE: TDateTimeField;
+    DSins_contractsEND_DATE: TDateTimeField;
+    DSins_contractsVALUTE_ID: TFloatField;
+    DSins_contractsAMMOUNT: TFloatField;
+    DSins_contractsCLOSE_PREFIX: TIntegerField;
+    DSins_contractsKLI_ID: TFloatField;
+    DSins_contractsLOANACC_ID: TFloatField;
+    DSins_contractsCURRACC_ID: TFloatField;
+    DSins_contractsPOLICY_NUM: TWideStringField;
+    DSins_contractsINSSUMM: TFloatField;
+    DSins_contractsFRANSHIZ: TFloatField;
+    DSins_contractsTARIFF: TFloatField;
+    DSins_contractsSTATE: TIntegerField;
+    DSins_contractsAGENT_ID: TFloatField;
+    DSins_contractsPNUM: TFloatField;
+    DSins_contractsBEN_ID: TFloatField;
+    DSins_contractsBENEFICIARY: TWideStringField;
+    DSins_contractsCONDITIONS: TWideStringField;
+    DSins_contractsSUGNUM: TWideStringField;
+    DSins_contractsBLANK_ID: TFloatField;
+    DSins_contract_responsibilityID: TFloatField;
+    DSins_contract_responsibilityTYPEID: TFloatField;
+    DSins_contract_responsibilityCID: TFloatField;
+    DSins_contract_responsibilityCLOSE_PREFIX: TFloatField;
+    sb_aca: TOraclePackage;
+    procedure DataModuleCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  DMResponsibilityBlank: TDMResponsibilityBlank;
+
+implementation
+
+{$R *.dfm}
+uses sboapiDataModuleImpl;
+
+procedure TDMResponsibilityBlank.DataModuleCreate(Sender: TObject);
+begin
+ODSAvalute.Open;
+Customers.Open;
+ODSBeneficiary.Open;
+ODSAgents.Open;
+DsSysdat.Open;
+end;
+
+end.

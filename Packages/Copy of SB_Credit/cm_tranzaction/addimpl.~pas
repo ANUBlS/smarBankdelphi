@@ -1,0 +1,148 @@
+unit addimpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, CMCurrencyEdit, Mask, DBCtrls, Buttons, ExtCtrls, Oracle, Db,
+  OracleData;
+
+type
+  TAddForm = class(TForm)
+    InterestsAccounts: TOracleDataSet;
+    CustIntAccounts: TOracleDataSet;
+    OracleDataSet1: TOracleDataSet;
+    IntAccDatSrc: TDataSource;
+    CustIntAccDatSrc: TDataSource;
+    OraclePackage1: TOraclePackage;
+    Panel2: TPanel;
+    Label2: TLabel;
+    Label1: TLabel;
+    Label3: TLabel;
+    SpeedButton1: TSpeedButton;
+    SpeedButton2: TSpeedButton;
+    SpeedButton3: TSpeedButton;
+    DBEdit1: TDBEdit;
+    DBEdit2: TDBEdit;
+    CMCurrencyEdit1: TCMCurrencyEdit;
+    OutInterestsAccounts: TOracleDataSet;
+    OutInterestsAccountsID: TFloatField;
+    OutInterestsAccountsACC_NO: TStringField;
+    OutIntIncomeAccounts: TOracleDataSet;
+    InterestInfo: TOracleDataSet;
+    OutInterestsDatSrc: TDataSource;
+    OutIntIncomeDatSrc: TDataSource;
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure SpeedButton2Click(Sender: TObject);
+    procedure SpeedButton3Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  AddForm: TAddForm;
+
+implementation
+
+{$R *.DFM}
+  uses   CommonDecls ,CMOracleAPIDataModuleImpl, mainImpl;
+procedure TAddForm.SpeedButton1Click(Sender: TObject);
+resourcestring
+  rsTransactionsWillProcessed = 'Фаизлярин Б.К-да отуздурмаг ...';
+var
+  CommitTr : Boolean;
+begin
+ if dd=1 then
+OraclePackage1.CallProcedure('AdditionTrance',[
+     'p_ID' ,Get_SelectedCrdID ,
+     'p_ammount' ,CMCurrencyEdit1.value,
+     'p_debidid' ,CustIntAccounts.fieldbyname('id').asinteger,
+     'p_creditid',InterestsAccounts.fieldbyname('id').asinteger,
+     'p_status',0])
+
+ else
+ OraclePackage1.CallProcedure('AdditionTranceout',[
+     'p_ID' ,Get_SelectedCrdID ,
+     'p_ammount' ,CMCurrencyEdit1.value,
+     'p_debidid' ,OutInterestsAccounts.fieldbyname('id').asinteger,
+     'p_creditid',OutIntIncomeAccounts.fieldbyname('id').asinteger,
+     'p_status',0]);
+  try
+
+    CommitTr := TrDelayed_Show(Self,rsTransactionsWillProcessed);
+
+    Update;
+
+
+    OraclePackage1.CallProcedure('CommitTr',[
+       'DefCommit' , CommitTr
+    ]);
+
+  except
+
+
+    OraclePackage1.CallProcedure('CommitTr',[
+       'DefCommit' , False
+    ]);
+
+    raise;
+   end;
+Mainforum.OracleDataSet1.refresh;
+   close
+
+
+end;
+
+procedure TAddForm.SpeedButton2Click(Sender: TObject);
+resourcestring
+  rsTransactionsWillProcessed = 'Фаиз  ...';
+var
+  CommitTr : Boolean;
+begin
+ if dd=1 then
+OraclePackage1.CallProcedure('AdditionTrance',[
+     'p_ID' ,Get_SelectedCrdID ,
+     'p_ammount' ,CMCurrencyEdit1.value,
+     'p_debidid' ,CustIntAccounts.fieldbyname('id').asinteger,
+     'p_creditid',InterestsAccounts.fieldbyname('id').asinteger,
+     'p_status',1])
+  else
+ OraclePackage1.CallProcedure('AdditionTranceout',[
+     'p_ID' ,Get_SelectedCrdID ,
+     'p_ammount' ,CMCurrencyEdit1.value,
+     'p_debidid' ,OutInterestsAccounts.fieldbyname('id').asinteger,
+     'p_creditid',OutIntIncomeAccounts.fieldbyname('id').asinteger,
+     'p_status',1]);
+  try
+
+    CommitTr := TrDelayed_Show(Self,rsTransactionsWillProcessed);
+
+    Update;
+
+
+    OraclePackage1.CallProcedure('CommitTr',[
+       'DefCommit' , CommitTr
+    ]);
+
+  except
+
+
+    OraclePackage1.CallProcedure('CommitTr',[
+       'DefCommit' , False
+    ]);
+    raise;
+  end;
+   Mainforum.OracleDataSet1.Refresh;
+  close
+
+
+end;
+
+procedure TAddForm.SpeedButton3Click(Sender: TObject);
+begin
+close
+end;
+
+end.

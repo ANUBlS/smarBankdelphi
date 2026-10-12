@@ -1,0 +1,125 @@
+unit dmReportImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, OracleData;
+
+type
+  TdmReport = class(TDataModule)
+    valutes: TOracleDataSet;
+    valutesVALUTE: TIntegerField;
+    valutesVALU_NAME: TStringField;
+    valutesDatSrc: TDataSource;
+    Filials: TOracleDataSet;
+    FilialsID: TFloatField;
+    FilialsNAME: TStringField;
+    CustomersDatSrc: TDataSource;
+    Customers: TOracleDataSet;
+    CategoriesDatSrc: TDataSource;
+    Categories: TOracleDataSet;
+    CategoriesID: TFloatField;
+    CategoriesCATEGORY: TStringField;
+    FilialsDatSrc: TDataSource;
+    persons: TOracleDataSet;
+    personsID: TFloatField;
+    personsNAME: TStringField;
+    DepositTypes: TOracleDataSet;
+    DepositTypesID: TFloatField;
+    DepositTypesTYPE: TStringField;
+    personsDatSrc: TDataSource;
+    DepositTypesDatSrc: TDataSource;
+    Deps: TOracleDataSet;
+    DepsID: TFloatField;
+    DepsCONTRACTNO: TStringField;
+    DepsCONTRACTACCNO: TStringField;
+    DepsDatSrc: TDataSource;
+    ReportData: TOracleDataSet;
+    ReportDataCONTRACTNO: TStringField;
+    ReportDataVAL_NAME: TStringField;
+    ReportDataCUSTNAME: TStringField;
+    ReportDataCONTRACTACCNO: TStringField;
+    ReportDataINTERESTACCNO: TStringField;
+    ReportDataCLIENTACCNO: TStringField;
+    ReportDataOPENDATE: TDateTimeField;
+    ReportDataCLOSEDATE: TDateTimeField;
+    ReportDataAMOUNT: TFloatField;
+    ReportDataINTEREST: TFloatField;
+    ReportDataOVERDUEINTEREST: TFloatField;
+    ReportDataDUEINTEREST: TFloatField;
+    ReportDataFACTICALDEBT: TFloatField;
+    ReportDataEFACTICALDEBT: TFloatField;
+    ReportDataFACTICALINTERESTDEBT: TFloatField;
+    ReportDataEFACTICALINTERESTDEBT: TFloatField;
+    ReportDataCATEGORY: TStringField;
+    ReportDataPERNAME: TStringField;
+    ReportDataTYPE: TStringField;
+    ReportDataFILNAME: TStringField;
+    ReportDataCUSTID: TFloatField;
+    ReportDataBALANS: TFloatField;
+    ReportDataPAYAMT: TFloatField;
+    ReportDataEPAYAMT: TFloatField;
+    ReportDataEAMOUNT: TFloatField;
+    ReportDataFIRSTOPDATE: TDateTimeField;
+    ReportDatafclosedat: TDateField;
+    Contracts: TOracleDataSet;
+    ContractsID: TFloatField;
+    ContractsNAME: TStringField;
+    ContractsDataSource: TDataSource;
+    CustomersID: TIntegerField;
+    CustomersNAME: TStringField;
+    CustomersKOD: TStringField;
+    procedure DataModuleCreate(Sender: TObject);
+    procedure DataModuleDestroy(Sender: TObject);
+    procedure ReportDataCalcFields(DataSet: TDataSet);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  dmReport: TdmReport;
+
+implementation
+
+{$R *.DFM}
+
+uses sboapiDataModuleImpl;
+
+procedure TdmReport.DataModuleCreate(Sender: TObject);
+begin
+   valutes.Open;
+   Filials.Open;
+   Contracts.Open;
+   Customers.Open;
+   DepositTypes.Open;
+   Categories.Open;
+   persons.Open;
+   Deps.Open;
+end;
+
+procedure TdmReport.DataModuleDestroy(Sender: TObject);
+begin
+   valutes.CloseAll;
+   Filials.CloseAll;
+   Contracts.CloseAll;
+   Customers.CloseAll;
+   DepositTypes.CloseAll;
+   Categories.CloseAll;
+   persons.CloseAll;
+   Deps.CloseAll;
+
+end;
+
+procedure TdmReport.ReportDataCalcFields(DataSet: TDataSet);
+begin
+   with ReportData do begin
+    fieldByName('fclosedat').AsDateTime := fieldByName('FIRSTOPDATE').AsDateTime;
+    if fieldByName('FIRSTOPDATE').IsNull then
+    fieldByName('fclosedat').AsDateTime := fieldByName('CLOSEDATE').AsDateTime;
+  end;
+end;
+
+end.

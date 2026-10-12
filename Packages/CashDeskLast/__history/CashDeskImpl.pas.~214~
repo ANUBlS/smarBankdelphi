@@ -1,0 +1,2572 @@
+﻿unit CashDeskImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActiveX, AxCtrls, CashDesk_TLB, StdVcl, ComCtrls, Grids, DBGrids,
+  ExtCtrls, StdCtrls, ImgList, ToolWin, Buttons, Db, OracleData, DBCtrls,SBPlgAx50_TLB,
+  Mask,QuickRpt, ActnList, Menus, ExcelExporter, CMExcelExport, OleServer,
+  ExcelXP, sSkinManager,Variants;
+
+type
+  TDynamicArray =array of integer;
+
+  TFrmCashDesk = class(TActiveForm, IFrmCashDesk, IIconExporter)
+    Panel1: TPanel;
+    Panel2: TPanel;
+    CashViewer: TDBGrid;
+    Panel3: TPanel;
+    ToolBar1: TToolBar;
+    TBRefresh: TToolButton;
+    ImageList2: TImageList;
+    Panel4: TPanel;
+    GroupBox3: TGroupBox;
+    SpeedButton1: TSpeedButton;
+    ToolButton2: TToolButton;
+    TBPreview: TToolButton;
+    ToolButton4: TToolButton;
+    TBOrders: TToolButton;
+    ToolButton6: TToolButton;
+    ProgBar: TProgressBar;
+    CBConfirm: TCheckBox;
+    CPDoRefresh: TCheckBox;
+    TBCheck: TToolButton;
+    GroupBox5: TGroupBox;
+    DEBITACC: TEdit;
+    CREDITACC: TEdit;
+    AMMOUNT: TEdit;
+    AMMOUNT_C: TEdit;
+    LAMMOUNT: TEdit;
+    ASSIGNMENT: TDBEdit;
+    TBCommon: TToolButton;
+    ToolButton11: TToolButton;
+    ToolButton5: TToolButton;
+    TBIncome: TToolButton;
+    ToolButton8: TToolButton;
+    TBOutlay: TToolButton;
+    ToolButton1: TToolButton;
+    TBExtra: TToolButton;
+    BSymbol: TComboBox;
+    ActionList1: TActionList;
+    ActionOrder: TAction;
+    ActionFilter: TAction;
+    ToolButton7: TToolButton;
+    ToolButton9: TToolButton;
+    ToolButton10: TToolButton;
+    ActionTotalReport: TAction;
+    ActionWithDraw: TAction;
+    ActionSymbolReport: TAction;
+    ToolButton3: TToolButton;
+    ToolButton12: TToolButton;
+    ActionSettings: TAction;
+    GroupBox9: TGroupBox;
+    SpeedButton2: TSpeedButton;
+    EPackNo: TEdit;
+    PopupMenu1: TPopupMenu;
+    N1: TMenuItem;
+    N2: TMenuItem;
+    GroupBox10: TGroupBox;
+    SpeedButton3: TSpeedButton;
+    PopupMenu2: TPopupMenu;
+    CashBook: TMenuItem;
+    ToolButton13: TToolButton;
+    Panel7: TPanel;
+    GroupBox1: TGroupBox;
+    GroupBox2: TGroupBox;
+    Label4: TLabel;
+    CmbBoxCurrency: TComboBox;
+    CmbBoxReference: TComboBox;
+    GroupBox7: TGroupBox;
+    CBDebetFilial: TComboBox;
+    CBCreditFilial: TComboBox;
+    Panel5: TPanel;
+    Panel6: TPanel;
+    GroupBox8: TGroupBox;
+    Label5: TLabel;
+    CBCashSymbol: TComboBox;
+    RadioButton2: TRadioButton;
+    RadioButton1: TRadioButton;
+    RadioGroup2: TRadioGroup;
+    GroupBox11: TGroupBox;
+    Label1: TLabel;
+    Label2: TLabel;
+    DBLookupOperator: TDBLookupComboBox;
+    DBLookupCommitter: TDBLookupComboBox;
+    DTPBegin: TDateTimePicker;
+    DTPEnd: TDateTimePicker;
+    Memo: TMemo;
+    Memo2: TMemo;
+    TransCommit: TMenuItem;
+    Label3: TLabel;
+    CMExcelExport1: TCMExcelExport;
+    DBGrid1: TDBGrid;
+    ExcelApplication1: TExcelApplication;
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure ActiveFormDestroy(Sender: TObject);
+    procedure TBRefreshClick(Sender: TObject);
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure BSymbol1KeyPress(Sender: TObject; var Key: Char);
+    procedure DEBITACCChange(Sender: TObject);
+    procedure TBIncomeClick(Sender: TObject);
+    procedure TBExtraClick(Sender: TObject);
+    procedure RadioButton1Click(Sender: TObject);
+    procedure RadioButton2Click(Sender: TObject);
+    procedure CBDebetFilialClick(Sender: TObject);
+    procedure ActionOrderUpdate(Sender: TObject);
+    procedure ActionOrderExecute(Sender: TObject);
+    procedure ActionFilterExecute(Sender: TObject);
+    procedure CashViewerTitleClick(Column: TColumn);
+    procedure ActionTotalReportUpdate(Sender: TObject);
+    procedure ActionWithDrawExecute(Sender: TObject);
+    procedure ActionWithDrawUpdate(Sender: TObject);
+    procedure ActionSymbolReportExecute(Sender: TObject);
+    procedure ActionSymbolReportUpdate(Sender: TObject);
+    procedure ActionSettingsExecute(Sender: TObject);
+    procedure EPackNoKeyPress(Sender: TObject; var Key: Char);
+    procedure SpeedButton2Click(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure N1Click(Sender: TObject);
+    procedure N2Click(Sender: TObject);
+    procedure SpeedButton3Click(Sender: TObject);
+    procedure SpeedButton4Click(Sender: TObject);
+    procedure CashBookClick(Sender: TObject);
+    procedure ToolButton13Click(Sender: TObject);
+    procedure TransCommitClick(Sender: TObject);
+    procedure DBGrid1TitleClick(Column: TColumn);
+  private
+    { Private declarations }
+    FEvents: IFrmCashDeskEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+    function  Get_Icon: OLE_HANDLE; safecall;
+  public
+    { Public declarations }
+    Rate :TDynamicArray;
+    DebetFilialArray, CreditFilialArray :TDynamicArray;
+    TableName: String;
+    procedure InitReport(Sender :TObject);
+    procedure FillCurrency;
+    procedure OpenDataSet(DataSet :ToracleDataSet;VariableNames :array of const;VariableValues :array of const);
+    procedure InitateReport(ButtonTag :Byte);
+    function  GetCurrentDate:TDateTime;
+    procedure GetBankInfo(var BankName,BankInn :String);
+    procedure Initialize; override;
+    procedure CreateOrderRpt(IOCome :Boolean;CustID :LongInt);
+    function  IOCheck(Reference :Integer):Boolean;
+    procedure GetCustomerInfo(CustID: Integer; var CustName: String; var CustInn: String);
+    function GenerateFilialFilter :string;
+    function GenerateCurrencyFilter :string;
+    procedure FillFilial(List :TComboBox; var DynArray :TDynamicArray);
+    procedure FillCashSymbol;
+    procedure DestroyPointer(P :TDynamicArray);
+    function GetCurrencyAz(Ammount :Extended) :String;
+    function ExtractMonth(DateTime: TDateTime; DecimalSymbol: string): string;
+    procedure MouseWheelHandler(var Message: TMessage); override;
+  end;
+
+var
+    FrmCashDesk :TFrmCashDesk;
+implementation
+
+uses ComObj, ComServ, CashDataModule,sboapiDataModuleImpl, CashReportMain,
+  UntCashRpt, UntIOCome, UntLOICome,CurrencyToHR_Azeri_Impl,
+  UntLOrederRpt, UntOrderRpt, UntChecksRpt ,UntQRReceiptOrder,
+  UntFrmInfo, UntCashSettings, UntFinalResultReport, UntCashBook, SBTranslateProc;
+
+{$R *.DFM}
+
+{ TFrmCashDesk }
+
+procedure TFrmCashDesk.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_FrmCashDeskPage); }
+end;
+
+procedure TFrmCashDesk.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as IFrmCashDeskEvents;
+end;
+
+procedure TFrmCashDesk.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TFrmCashDesk.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TFrmCashDesk.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TFrmCashDesk.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TFrmCashDesk.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TFrmCashDesk.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TFrmCashDesk.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TFrmCashDesk.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TFrmCashDesk.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TFrmCashDesk.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TFrmCashDesk.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TFrmCashDesk.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TFrmCashDesk.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TFrmCashDesk.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TFrmCashDesk.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TFrmCashDesk.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TFrmCashDesk.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TFrmCashDesk.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TFrmCashDesk.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TFrmCashDesk._Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TFrmCashDesk.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TFrmCashDesk.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TFrmCashDesk.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TFrmCashDesk.DBGrid1TitleClick(Column: TColumn);
+var
+   TitleName :string;
+begin
+ if Column.FieldName ='RecordNo' then Exit;
+ Screen.Cursor := crHourGlass;
+ TitleName :=Column.FieldName;
+ try
+  with TOracleDataSet(dbgrid1.DataSource.DataSet) do
+   begin
+    SetVariable('p_orderby',TitleName);
+    Refresh;
+   end;
+ finally
+  Screen.Cursor := crDefault;
+ end;
+end;
+
+procedure TFrmCashDesk.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TFrmCashDesk.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TFrmCashDesk.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TFrmCashDesk.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TFrmCashDesk.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TFrmCashDesk.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TFrmCashDesk.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TFrmCashDesk.Set_AxBorderStyle(Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TFrmCashDesk.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TFrmCashDesk.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TFrmCashDesk.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TFrmCashDesk.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TFrmCashDesk.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TFrmCashDesk.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TFrmCashDesk.Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TFrmCashDesk.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TFrmCashDesk.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TFrmCashDesk.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TFrmCashDesk.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TFrmCashDesk.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TFrmCashDesk.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+function TFrmCashDesk.Get_Icon: OLE_HANDLE;
+const
+  ImageIndex =3;
+begin
+  ImageList2.GetIcon(ImageIndex, Icon);
+  Result := Icon.Handle;
+end;
+//   ************************************************************************************************
+
+function TFrmCashDesk.ExtractMonth(DateTime: TDateTime; DecimalSymbol: string): string;
+ const
+    Months: array [1..12] of string =(
+     'yanvar','fevral','mart','aprel','may','iyun','iyul','avqust','sentyabr','oktyabr','noyabr','dekabr'
+      );
+var
+  Year, Month, Day : Word;
+begin
+  DecodeDate(DateTime, Year, Month, Day);
+  Result :=IntToStr(Day) + DecimalSymbol + Months[month] + DecimalSymbol + IntToStr(year);
+end;
+
+procedure TFrmCashDesk.GetCustomerInfo(CustID: Integer; var CustName: String; var CustInn: String);
+begin
+   with  CashDataMod.OPCash  do
+   begin
+     CallProcedure('GetCustomerInfo',[CustID,'','']);
+     CustInn  :=GetParameter(1);
+     CustName :=GetParameter(2);
+   end;
+end;
+
+function  TFrmCashDesk.IOCheck(Reference :Integer):Boolean;
+begin
+  with  CashDataMod.OPCash  do
+    Result :=CallBooleanFunction('CheckOICome',[Reference]);
+
+  if CmbBoxCurrency.ItemIndex>0 then begin
+    if  CashDataMod.ODSTransactionsViewer2.FieldByName('DCurrency').AsInteger = Rate[CmbBoxCurrency.ItemIndex-1] then Result := Result
+    else Result := not Result;
+  end;
+end;
+
+procedure TFrmCashDesk.MouseWheelHandler(var Message: TMessage);
+begin
+ Inherited;
+ if (CashViewer.Focused) and not(CashViewer.DataSource.DataSet.IsEmpty) then
+  with TCMMouseWheel(Message), CashViewer.DataSource.DataSet do
+    if WheelDelta < 0 then
+      Next
+    else
+      Prior;
+   CashViewer.Repaint;
+end;
+
+function TFrmCashDesk.GenerateFilialFilter :string;
+var
+   DebetFilial, CreditFilial :String;
+   BoolPrefix :String;
+begin
+ if (CBDebetFilial.ItemIndex <> 0) then
+   if (CBCreditFilial.ItemIndex = 0) then
+    BoolPrefix :=' '
+   else
+    BoolPrefix :=' AND '
+ else
+   BoolPrefix :=' ';
+
+ if CBDebetFilial.ItemIndex = 0 then
+   DebetFilial :=' '
+ else
+   DebetFilial :=' (DebetFilial = ' + IntToStr(DebetFilialArray[CBDebetFilial.ItemIndex-1])+')';
+
+ if CBCreditFilial.ItemIndex = 0 then
+   CreditFilial :=' '
+ else
+   CreditFilial :=' (CreditFilial = ' + IntToStr(CreditFilialArray[CBCreditFilial.ItemIndex-1])+')';
+
+   Result :=DebetFilial + BoolPrefix + CreditFilial;
+end;
+
+function TFrmCashDesk.GenerateCurrencyFilter :string;
+const
+   CurrencyFilter ='((DCurrency=%d)OR(KCurrency=%d))';
+var
+   Currency :integer;
+begin
+ with CmbBoxCurrency do
+  begin
+   Currency :=Rate[ItemIndex-1];
+   if ItemIndex = 0 then
+     Result :=' '
+   else
+     Result :=Format(CurrencyFilter,[Currency,Currency]);
+  end;
+end;
+
+procedure TFrmCashDesk.DestroyPointer(P :TDynamicArray);
+begin
+ if Assigned(P) then SetLength(P,0)
+end;
+
+function TFrmCashDesk.GetCurrencyAz(Ammount :Extended) :String;
+var
+   WithManat, NoManat: string;
+   ManatPosition, i: integer;
+begin
+ NoManat :='';
+ WithManat :=CurrencyToHR_Azeri(AMMOUNT,0,[1]);
+
+ ManatPosition :=POS('manat',WithManat);
+if ManatPosition>0 then
+ for i:=1 to ManatPosition-1 do
+  NoManat :=NoManat + WithManat[i] ;
+
+  if NoManat=EmptyStr then NoManat:='0 ';
+
+ result :=NoManat;
+ end;
+
+procedure TFrmCashDesk.FillFilial(List :TComboBox; var DynArray :TDynamicArray);
+var
+    RateIndex :Integer;
+begin
+ RateIndex:=0;
+ with   List.Items  do
+  begin
+   Clear;
+   Add('Bütün filiallar')
+  end;
+ with  CashDataMod.Filials  do
+  begin
+    Open;
+    SetLength(DynArray,RecordCount);
+    First;
+    while  not EOF  do
+    begin
+      DynArray[RateIndex] :=FieldByName('ID').AsInteger;
+      List.Items.Add(FieldByName('Name').AsString);
+      Inc(RateIndex);
+      Next;
+    end;
+  end;
+end;
+
+procedure TFrmCashDesk.FillCashSymbol;
+begin
+ with CBCashSymbol.Items  do
+  begin
+   Clear;
+   Add('Bütün')
+  end;
+ with  CashDataMod.CashSymbols  do
+  begin
+    Open;
+    First;
+    while  not EOF  do
+    begin
+      CBCashSymbol.Items.Add(FieldByName('Symbol').AsString);
+      Next;
+    end;
+  end;
+end;
+
+procedure TFrmCashDesk.CreateOrderRpt(IOCome :Boolean;CustID :LongInt);
+var
+   BankName,BankInn      :String;
+   CustName, CustInn     :String;
+   V                     :Variant;
+   WithManat,WithCoin    :String;
+   ManatPosition,i       :Word;
+   ValuteName,NoManat    :String;
+begin
+   V :=Integer(Trunc(CashDataMod.ODSTransactionsViewer2.FieldByName('DAT').AsDateTime));
+   NoManat:='';
+   OpenDataSet(CashDataMod.ODSRates,['ADate','Currency'],[V,Rate[CmbBoxCurrency.ItemIndex-1]]);
+   GetBankInfo(BankName,BankInn);
+   GetCustomerInfo(CustID,CustName,CustInn);
+   //****************************
+   if not IOCome then
+     WithManat :=CurrencyToHR_Azeri(Trunc(CashDataMod.ODSTransactionsViewer2.FieldByName('ammount').AsFloat),0,[0])
+   else
+     WithManat :=CurrencyToHR_Azeri(Trunc(CashDataMod.ODSTransactionsViewer2.FieldByName('ammount_c').AsFloat),0,[0]);
+
+    ManatPosition :=POS('manat',WithManat);
+    if ManatPosition>0 then
+    for i:=1 to ManatPosition-1 do
+     NoManat :=NoManat +''+WithManat[i] ;
+     if NoManat=EmptyStr then NoManat:='0 ';
+
+  with CashDataMod do begin
+   if ODSTransactionsViewer2.FieldByName('DCurrency').Value=ODSTransactionsViewer2.FieldByName('CCurrency').Value then begin
+    ODSValuteName.Close;
+    ODSValuteName.SetVariable('valute',ODSTransactionsViewer2.FieldByName('DCurrency').Value);
+    ODSValuteName.Open;
+    WithCoin :=CurrToStr(Frac(StrToFloat(CashDataMod.ODSTransactionsViewer2.FieldByName('ammount').Asstring)));
+    if WithCoin<>'0' then begin
+     Delete(WithCoin,1,2);
+     if length(WithCoin) < 2 then WithCoin :=WithCoin+'0'
+      else
+       if length(WithCoin) > 2 then Delete(WithCoin,3,length(WithCoin));
+      ValuteName :=(ODSValuteName.FieldByname('Valu_name').Asstring+' '+WithCoin+' '+ODSValuteName. FieldByName('valu_bala').AsString);
+    end {if WithCoin<>'0'}
+    else ValuteName :=(ODSValuteName.FieldByname('Valu_name').Asstring);
+   end {if ODSTransactionsViewer.FieldByName('DCurrency').Value=ODSTransactionsViewer.FieldByName('KCurrency').Value}
+   else
+    if IOCome{ODSTransactionsViewer.FieldByName('DCurrency').Value=0} then begin
+     ODSValuteName.Close;
+     ODSValuteName.SetVariable('valute',ODSTransactionsViewer2.FieldByName('CCurrency').Value);
+     ODSValuteName.Open;
+     WithCoin :=FloatToStr(Frac(CashDataMod.ODSTransactionsViewer2.FieldByName('ammount_c').AsFloat));
+     if WithCoin<>'0' then begin
+      Delete(WithCoin,1,2);
+      ValuteName :=(ODSValuteName.FieldByname('Valu_name').Asstring+' '+WithCoin+' '+ODSValuteName. FieldByName('valu_bala').AsString);
+     end {if WithCoin<>'0'}
+     else ValuteName :=(ODSValuteName.FieldByname('Valu_name').Asstring);
+    end {if ODSTransactionsViewer.FieldByName('DCurrency').Value=0}
+    else begin
+     ODSValuteName.Close;
+     ODSValuteName.SetVariable('valute',ODSTransactionsViewer2.FieldByName('DCurrency').Value);
+     ODSValuteName.Open;
+     WithCoin :=FloatToStr(Frac(CashDataMod.ODSTransactionsViewer2.FieldByName('ammount').AsFloat));
+     if WithCoin<>'0' then begin
+      Delete(WithCoin,1,2);
+      ValuteName :=(ODSValuteName.FieldByname('Valu_name').Asstring+' '+WithCoin+' '+ODSValuteName. FieldByName('valu_bala').AsString);
+     end {if WithCoin<>'0'}
+     else ValuteName :=(ODSValuteName.FieldByname('Valu_name').Asstring);
+    end; {else}
+   end;
+     // //*****************************************
+   if  CmbBoxCurrency.ItemIndex = 0  then
+    if  not IOCome  then
+     begin
+      with QRPTReceiptOrder do
+       begin
+        QRLBankName.Caption :=BankName;
+        QRLBankName1.Caption :=BankName;
+        QRLBankName2.Caption :=BankName;
+        QRLBankInn.Caption :=BankInn;
+        QRLBankInn1.Caption :=BankInn;
+        QRLBankInn2.Caption :=BankInn;
+        QRInn.Caption :=CustInn;
+        QRInn1.Caption :=CustInn;
+        QRInn2.Caption :=CustInn;
+        QRLAmount.Caption := NoManat + '' +ValuteName;
+        QRLAmount1.Caption := NoManat + '' +ValuteName;
+        QRLAmount2.Caption := NoManat + '' +ValuteName;
+        Preview;
+        CashDataMod.ODSTransactionsViewer2.Filtered:=false;
+       end;
+     end
+    else
+    with   QuickRptOrder  do
+     begin
+      CashDataMod.ODSCashInfo.Open;
+      QRLBankInn.Caption :=BankInn;
+      QRLBankInn1.Caption :=BankInn;
+      QRLBankInn2.Caption :=BankInn;
+      QRLBankName.Caption :=BankName;
+      QRLBankName1.Caption :=BankName;
+      QRLBankName2.Caption :=BankName;
+      QRInn1.Caption :=CustInn;
+      QRInn2.Caption :=CustInn;
+      QRInn3.Caption :=CustInn;
+      QRLAmmount.Caption := NoManat + '' +ValuteName;
+      QRLAmmount1.Caption := NoManat + '' +ValuteName;
+      QRLAmmount2.Caption := NoManat + '' +ValuteName;
+      Preview;
+      CashDataMod.ODSTransactionsViewer2.Filtered:=false;
+   end
+ //
+  else
+   begin
+    if  not IOCome  then
+     begin
+      with QRPTReceiptOrder do
+       begin
+        QRLBankName.Caption :=BankName;
+        QRLBankName1.Caption :=BankName;
+        QRLBankName2.Caption :=BankName;
+        QRLBankInn.Caption :=BankInn;
+        QRLBankInn1.Caption :=BankInn;
+        QRLBankInn2.Caption :=BankInn;
+        QRInn.Caption :=CustInn;
+        QRInn1.Caption :=CustInn;
+        QRInn2.Caption :=CustInn;
+        QRLAmount.Caption :=NoManat + '' +ValuteName;
+        QRLAmount1.Caption :=NoManat + '' +ValuteName;
+        QRLAmount2.Caption :=NoManat + '' +ValuteName;
+        Preview;
+        CashDataMod.ODSTransactionsViewer2.Filtered:=false;
+       end;
+     end
+    else
+     begin
+      with QuickRptOrder do
+       begin
+        QRLBankName.Caption :=BankName;
+        QRLBankName1.Caption :=BankName;
+        QRLBankName2.Caption :=BankName;
+        QRLBankInn.Caption :=BankInn;
+        QRLBankInn1.Caption :=BankInn;
+        QRLBankInn2.Caption :=BankInn;
+        QRInn1.Caption :=CustInn;
+        QRInn2.Caption :=CustInn;
+        QRInn3.Caption :=CustInn;
+        QRLAmmount.Caption := NoManat + '' +ValuteName;
+        QRLAmmount1.Caption := NoManat + '' +ValuteName;
+        QRLAmmount2.Caption := NoManat + '' +ValuteName;
+        Preview;
+        CashDataMod.ODSTransactionsViewer2.Filtered:=false;
+       end;
+     end;
+   end;
+
+end;
+
+
+procedure TFrmCashDesk.InitReport(Sender :TObject);
+begin
+
+end;
+procedure TFrmCashDesk.GetBankInfo(var BankName,BankInn :String);
+begin
+  with  CashDataMod.OPCash  do
+  begin
+   CallProcedure('GetBankInfo',[BankName,BankInn]);
+   BankName :=GetParameter(0);
+   BankInn  :=GetParameter(1);
+  end;
+end;
+function  TFrmCashDesk.GetCurrentDate:TDateTime;
+begin
+  with CashDataMod.OPCash  do
+   Result :=CallDateFunction('GetPresentDate',[]);
+end;
+procedure  TFrmCashDesk.InitateReport(ButtonTag :Byte);
+var
+   BankName,BankInn :String;
+begin
+  GetBankInfo(BankName,BankInn);
+  if  ButtonTag = 0 then
+  with   MainCashReport  do
+  begin
+    QRLBankName.Caption :=BankName;
+    QRLCode.Caption :=BankInn;
+    if   DTPBegin.Date=DTPEnd.Date  then
+      QRLDate.Caption :=FormatDateTime('dd/mm/yyyy',DTPBegin.DateTime)
+     else
+      QRLDate.Caption :=FormatDateTime('dd/mm/yyyy',DTPBegin.DateTime)+'--'
+                       +FormatDateTime('dd/mm/yyyy',DTPEnd.DateTime);
+      QRLDate.Caption :=QRLDate.Caption+'  üçün KASSA dövriyyəsi haqqında hesabat';
+
+      Preview
+  end  else
+  with  CashRpt  do
+  begin
+    LBankName.Caption :=BankName;
+    LBankInn.Caption  :=BankInn;
+    if   DTPBegin.Date=DTPEnd.Date  then
+      QRLDate.Caption :=FormatDateTime('dd/mm/yyyy',DTPBegin.DateTime)
+     else
+      QRLDate.Caption :=FormatDateTime('dd/mm/yyyy',DTPBegin.DateTime)+'--'
+                       +FormatDateTime('dd/mm/yyyy',DTPEnd.DateTime);
+
+    Preview;
+  end;
+end;
+procedure  TFrmCashDesk.OpenDataSet(DataSet :ToracleDataSet; VariableNames :array of const; VariableValues :array of const);
+var
+   NameIndex  :0..255;
+   NamesCount :0..255;
+   TempruaryVName :string;
+   TempruaryVValue :Variant;
+   DataSetType: Integer;
+begin
+  NamesCount :=High(VariableNames);
+  with   DataSet  do
+  if  Active  then  Close;
+
+
+  if DataSet=CashDataMod.ODSRates then DataSetType:=1 else DataSetType:=0;;
+
+  //  if   NamesCount <> 0 then
+  for   NameIndex :=0   to  NamesCount  do
+  begin
+case DataSetType of
+0:
+  case NameIndex of
+0: TempruaryVName:='FIRSTDATE';
+1: TempruaryVName:='LASTDATE';
+  end;
+
+1:
+ case NameIndex of
+0: TempruaryVName:='ADate';
+1: TempruaryVName:='Currency';
+ end;
+
+END;
+
+     // TempruaryVName :=VariableNames[NameIndex].vpchar;   //vpchar
+      // showmessage(TempruaryVName);
+    case  VariableValues[NameIndex].VType  of
+        vtVariant :TempruaryVValue :=VariableValues[NameIndex].VVariant^;
+        vtInteger :TempruaryVValue :=Integer(VariableValues[NameIndex].VInteger);
+      end; //Case
+    with   DataSet   do
+    begin
+      SetVariable(TempruaryVName,TempruaryVValue);
+    end;
+  end;
+
+  with DataSet do
+   Open;
+end;
+
+procedure TFrmCashDesk.FillCurrency;
+var
+    RateIndex :Integer;
+begin
+  RateIndex:=0;
+   with   CmbBoxCurrency.Items  do
+   begin
+     Clear;
+     ADD('Bütün valyutalar')
+   end;
+  with  CashDataMod.ODSCurrency  do
+  begin
+    Open;
+    SetLength(Rate,RecordCount);
+    First;
+    while  not EOF  do
+    begin
+      Rate[RateIndex] :=FieldByName('Valute').AsInteger;
+      CmbBoxCurrency.Items.Add(FieldByName('Valu_Name').AsString);
+      Inc(RateIndex);
+      Next
+    end;
+  end;
+end;
+procedure TFrmCashDesk.ActiveFormCreate(Sender: TObject);
+var
+   CurrencyID :string;
+   FirstDate,LastDate :Variant;
+begin
+   FrmCashDesk :=Self;
+
+   CashDataMod := TCashDataMod.Create(Self);
+   MainCashReport :=TMainCashReport.Create(Self);
+   CashRpt :=TCashRpt.Create(Self);
+   QRptCheks :=TQRptCheks.Create(Self);
+   IOCome :=TIOCome.Create(Self);
+   LOICome :=TLOICome.Create(Self);
+   QRTotalReport :=TQRTotalReport.Create(Self);
+   QuickRptOrder :=TQuickRptOrder.Create(Self);
+   QRPTReceiptOrder:= TQRPTReceiptOrder.Create(Self);
+   QRResultReport :=TQRResultReport.Create(Self);
+   FormCashSettings :=TFormCashSettings.Create(Self);
+   QRp_CashBook :=TQRp_CashBook.Create(Self);
+
+   CashDataMod.ODSOperator.active :=true;
+   CashDataMod.OrDS_Comitters.Active :=true;
+   CashDataMod.ODSCashInfo.Open;
+   CashDataMod.ODSValute.Open;
+
+   FillCurrency;
+   FillFilial(CBDebetFilial,DebetFilialArray);
+   FillFilial(CBCreditFilial,CreditFilialArray);
+   FillCashSymbol;
+   CBDebetFilial.ItemIndex :=0;
+   CBCreditFilial.ItemIndex :=0;
+   CmbBoxCurrency.ItemIndex :=0;
+   CmbBoxReference.ItemIndex :=0;
+   CBCashSymbol.ItemIndex :=0;
+   DBLookupOperator.KeyValue :=-1;
+   DBLookupCommitter.KeyValue :=-1;
+   DTPBegin.DateTime :=GetCurrentDate;
+   DTPEnd.DateTime :=GetCurrentDate;
+
+
+
+
+   with CashDataMod.ODSCashB do
+   begin
+    Open;
+    First;
+    BSymbol.Items.Clear;
+    while not(Eof) do
+    begin
+     BSymbol.Items.Add(FieldByName('Symbol').AsString);
+     Next;
+    end;
+   end;
+   RadioButton1.Checked :=true;
+    //--
+
+      {
+
+  if CashViewer.CanFocus then
+   CashViewer.SetFocus;
+  Screen.Cursor :=crHourGlass;
+  ProgBar.Show;
+  ProgBar.Position :=0;
+  try
+  try
+   ProgBar.StepBy(17);
+   FirstDate :=Integer(Trunc(DTPBegin.DateTime));
+   LastDate  :=Integer(Trunc(DTPEnd.DateTime));
+
+   if CmbBoxCurrency.ItemIndex <> 0 then
+    begin
+    CurrencyID :=IntToStr(Rate[CmbBoxCurrency.ItemIndex-1]);
+   //OpenDataSet(CashDataMod.ODSTransactionsViewer,['FirstDate','LastDate'],[FirstDate,LastDate]);
+   //if CashDataMod.ODSTransactionsViewer.RecordCount<>0  then
+    //BSymbol.Enabled :=True;
+
+     CurrencyID :=IntToStr(Rate[CmbBoxCurrency.ItemIndex-1]);
+  //   CashDataMod.ODSTransactionsViewer.SQL[23] :='  -- AND ((PR.VAL_ACC='+CurrencyId+')OR(PR.CURRENCYID_C='+CurrencyId+')) and PR.AMMOUNT<>0 and PR.AMmount_C<>0';
+    end
+   else
+   CurrencyID :=IntToStr(Rate[CmbBoxCurrency.ItemIndex-1]);
+   //OpenDataSet(CashDataMod.ODSTransactionsViewer,['FirstDate','LastDate'],[FirstDate,LastDate]);
+   //if CashDataMod.ODSTransactionsViewer.RecordCount<>0  then
+    //BSymbol.Enabled :=True;
+    with CashDataMod.ODSTransactionsViewer2 do
+    begin
+     Close;
+     ClearVariables;
+     SetVariable('P_BEGINDATE',firstdate);
+     SetVariable('P_ENDDATE',lastdate);
+
+
+//-------------------------------------------------------------------------------------------------
+     if CmbBoxCurrency.ItemIndex <> 0 then
+       SetVariable('P_CURRENCYID',IntToStr(Rate[CmbBoxCurrency.ItemIndex-1]));
+    // ShowMessage(IntToStr(Rate[CmbBoxReference.ItemIndex-1]));
+//-------------------------------------------------------------------------------------------------
+           if CBCashSymbol.Text<>'Bütün' then
+     SetVariable('p_cashsymbol',CBCashSymbol.text);
+//-------------------------------------------------------------------------------------------------
+          if DBLookupOperator.Text<>'Butun operatorlar' then
+     SetVariable('p_userinsert',DBLookupOperator.text);
+//-------------------------------------------------------------------------------------------------
+            if DBLookupCommitter.Text<>'Butun operatorlar' then
+     SetVariable('p_usercommit',DBLookupCommitter.text);
+
+//-------------------------------------------------------------------------------------------------
+     if CBCreditFilial.ItemIndex<>0 then
+     SetVariable('p_creditbranch',IntToStr(CreditFilialArray[CBCreditFilial.ItemIndex-1]));
+//-------------------------------------------------------------------------------------------------
+          if CBDebetFilial.ItemIndex<>0 then
+     SetVariable('p_debitbranch',IntToStr(DebetFilialArray[CBDebetFilial.ItemIndex-1]));
+//-------------------------------------------------------------------------------------------------
+if  RadioButton1.Checked=true then
+     SetVariable('p_transtype',1)
+     else
+     SetVariable('p_transtype',2);
+//--------------------------------------------------------------------------------------------------
+       case CmbBoxReference.ItemIndex of
+       0:SetVariable('p_balance',1) ;
+       1:SetVariable('p_balance',2)  ;
+       2:SetVariable('p_balance',3)  ;
+       3:SetVariable('p_balance',4);
+
+     end;
+
+     //SetVariable('p_balance',IntToStr(Rate[CmbBoxReference.ItemIndex-1]));
+
+
+
+     //Memo2.Text:= SQL.Text;
+     Open;
+    end;
+   {CashDataMod.ODSTransactionsViewer.SQL[23] :='';
+    CashDataMod.ODSTransactionsViewer.SQL[17] :=' ,cashinfo c,BAL_SPR'+IntToStr(CmbBoxReference.ItemIndex+1)+' REFERENCE';
+    CashDataMod.ODSTransactionsViewer.SQL[25] :='   AND((AC1.BAL_CN'+IntToStr(CmbBoxReference.ItemIndex+1)
+   +'=REFERENCE.BAL_CN)OR(AC2.BAL_CN'+IntToStr(CmbBoxReference.ItemIndex+1)
+   +'=REFERENCE.BAL_CN)) and (Decode(PR.VID_OP,null,1,1,0,1)=1) '; //and ac1.bal_cn1<>ac2.bal_cn1';
+   CashDataMod.ODSTransactionsViewer.SQL[7] :=' ,AC1.BAL_CN'+IntToStr(CmbBoxReference.ItemIndex+1)+' AS DEBTCOME';
+   CashDataMod.ODSTransactionsViewer.SQL[8] :=' ,AC2.BAL_CN'+IntToStr(CmbBoxReference.ItemIndex+1)+' AS CREDITCOME';
+   ProgBar.StepBy(23);
+   Memo2.Text:= CashDataMod.ODSTransactionsViewer.SQL.Text;
+   OpenDataSet(CashDataMod.ODSTransactionsViewer,['FirstDate','LastDate'],[FirstDate,LastDate]);
+   if CashDataMod.ODSTransactionsViewer.RecordCount<>0  then
+    BSymbol.Enabled :=True;     }
+    {
+ except
+   raise;
+ end;
+ finally
+   Screen.Cursor :=crDefault;
+   ProgBar.Hide;
+ end;
+  ProgBar.StepBy(60);
+ UpdateActions;             }
+
+   //--
+  SBTranslateProc.TranslateAllComponents(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TFrmCashDesk.ActiveFormDestroy(Sender: TObject);
+begin
+  DestroyPointer(Rate);
+  DestroyPointer(DebetFilialArray);
+  DestroyPointer(CreditFilialArray);
+end;
+
+procedure TFrmCashDesk.TBRefreshClick(Sender: TObject);
+var
+   CurrencyID :string;
+   FirstDate,LastDate :Variant;
+begin
+
+
+
+  if CashViewer.CanFocus then
+   CashViewer.SetFocus;
+  Screen.Cursor :=crHourGlass;
+  ProgBar.Show;
+  ProgBar.Position :=0;
+  try
+  try
+   ProgBar.StepBy(17);
+   FirstDate :=Integer(Trunc(DTPBegin.DateTime));
+   LastDate  :=Integer(Trunc(DTPEnd.DateTime));
+
+   if CmbBoxCurrency.ItemIndex <> 0 then
+    begin
+    CurrencyID :=IntToStr(Rate[CmbBoxCurrency.ItemIndex-1]);
+   //OpenDataSet(CashDataMod.ODSTransactionsViewer,['FirstDate','LastDate'],[FirstDate,LastDate]);
+   //if CashDataMod.ODSTransactionsViewer.RecordCount<>0  then
+    //BSymbol.Enabled :=True;
+
+     CurrencyID :=IntToStr(Rate[CmbBoxCurrency.ItemIndex-1]);
+     //CashDataMod.ODSTransactionsViewer.SQL[23] :='  -- AND ((PR.VAL_ACC='+CurrencyId+')OR(PR.CURRENCYID_C='+CurrencyId+')) and PR.AMMOUNT<>0 and PR.AMmount_C<>0';
+    end
+   else
+   CurrencyID :=IntToStr(Rate[CmbBoxCurrency.ItemIndex-1]);
+   //OpenDataSet(CashDataMod.ODSTransactionsViewer,['FirstDate','LastDate'],[FirstDate,LastDate]);
+   //if CashDataMod.ODSTransactionsViewer.RecordCount<>0  then
+    //BSymbol.Enabled :=True;
+    with CashDataMod.ODSTransactionsViewer2 do
+    begin
+     Close;
+     ClearVariables;
+     SetVariable('P_BEGINDATE',firstdate);
+     SetVariable('P_ENDDATE',lastdate);
+
+
+//-------------------------------------------------------------------------------------------------
+     if CmbBoxCurrency.ItemIndex <> 0 then
+       SetVariable('P_CURRENCYID',IntToStr(Rate[CmbBoxCurrency.ItemIndex-1]));
+    // ShowMessage(IntToStr(Rate[CmbBoxReference.ItemIndex-1]));
+//-------------------------------------------------------------------------------------------------
+           if CBCashSymbol.Text<>'Bütün' then
+     SetVariable('p_cashsymbol',CBCashSymbol.text);
+//-------------------------------------------------------------------------------------------------
+          if DBLookupOperator.Text<>'Butun operatorlar' then
+     SetVariable('p_userinsert',DBLookupOperator.text);
+//-------------------------------------------------------------------------------------------------
+            if DBLookupCommitter.Text<>'Butun operatorlar' then
+     SetVariable('p_usercommit',DBLookupCommitter.text);
+
+//-------------------------------------------------------------------------------------------------
+     if CBCreditFilial.ItemIndex<>0 then
+     SetVariable('p_creditbranch',IntToStr(CreditFilialArray[CBCreditFilial.ItemIndex-1]));
+//-------------------------------------------------------------------------------------------------
+          if CBDebetFilial.ItemIndex<>0 then
+     SetVariable('p_debitbranch',IntToStr(DebetFilialArray[CBDebetFilial.ItemIndex-1]));
+//-------------------------------------------------------------------------------------------------
+if  RadioButton1.Checked=true then
+     SetVariable('p_transtype',1)
+     else
+     SetVariable('p_transtype',2);
+//--------------------------------------------------------------------------------------------------
+       case CmbBoxReference.ItemIndex of
+       0:SetVariable('p_balance',1) ;
+       1:SetVariable('p_balance',2)  ;
+       2:SetVariable('p_balance',3)  ;
+       3:SetVariable('p_balance',4);
+
+     end;
+
+     //SetVariable('p_balance',IntToStr(Rate[CmbBoxReference.ItemIndex-1]));
+
+
+
+     //Memo2.Text:= SQL.Text;
+     Open;
+    end;
+  { CashDataMod.ODSTransactionsViewer.SQL[23] :='';
+    CashDataMod.ODSTransactionsViewer.SQL[17] :=' ,cashinfo c,BAL_SPR'+IntToStr(CmbBoxReference.ItemIndex+1)+' REFERENCE';
+    CashDataMod.ODSTransactionsViewer.SQL[25] :='   AND((AC1.BAL_CN'+IntToStr(CmbBoxReference.ItemIndex+1)
+   +'=REFERENCE.BAL_CN)OR(AC2.BAL_CN'+IntToStr(CmbBoxReference.ItemIndex+1)
+   +'=REFERENCE.BAL_CN)) and (Decode(PR.VID_OP,null,1,1,0,1)=1) '; //and ac1.bal_cn1<>ac2.bal_cn1';
+   CashDataMod.ODSTransactionsViewer.SQL[7] :=' ,AC1.BAL_CN'+IntToStr(CmbBoxReference.ItemIndex+1)+' AS DEBTCOME';
+   CashDataMod.ODSTransactionsViewer.SQL[8] :=' ,AC2.BAL_CN'+IntToStr(CmbBoxReference.ItemIndex+1)+' AS CREDITCOME';
+   ProgBar.StepBy(23);
+   Memo2.Text:= CashDataMod.ODSTransactionsViewer.SQL.Text;
+   OpenDataSet(CashDataMod.ODSTransactionsViewer,['FirstDate','LastDate'],[FirstDate,LastDate]);
+   if CashDataMod.ODSTransactionsViewer.RecordCount<>0  then
+    BSymbol.Enabled :=True;  }
+  ProgBar.StepBy(60);
+
+ except
+   raise;
+ end;
+ finally
+   Screen.Cursor :=crDefault;
+   ProgBar.Hide;
+ end;
+ UpdateActions;
+end;
+
+procedure TFrmCashDesk.ToolButton13Click(Sender: TObject);
+begin
+CashBook.Click;
+//ShowMessage (CashDataMod.ODS_EVV_SON_QALIQ.SQL.Text);
+
+end;
+
+procedure TFrmCashDesk.TransCommitClick(Sender: TObject);
+begin
+if  varisnull(CashDataMod.ODSTransactionsViewer2.FieldByName('D1').AsVariant)  then
+  begin
+  with CashDataMod do begin
+   OrPackTransaction.CallIntegerFunction('transaction_commit',
+    [ODSTransactionsViewer2.FieldByName('ID').AsInteger, True]);
+  end;
+  sboapiDataModule.SBSession.Commit;
+  TBRefresh.Click;
+  end
+  else
+  ShowMessage('Bu əməliyyat yoxlanılmayıb!!!');
+end;
+
+procedure TFrmCashDesk.SpeedButton1Click(Sender: TObject);
+var
+   FModified :Boolean;
+   TransactionID :LongInt;
+   NewB :String; //:Integer;
+begin
+ FModified :=(BSymbol.Text<>'');
+ if   FModified  then
+  begin
+   if   (not CBConfirm.Checked) then
+    if  MessageDlg('Do you want change this field?',mtConfirmation,mbYesNoCancel,0)<>mrYes then
+     Exit;
+     try
+      NewB :=BSymbol.Text; //StrToInt(BSymbol.Text);
+      TransactionID :=CashDataMod.ODSTransactionsViewer2.FieldByName('ID').AsInteger;
+      with  CashDataMod.OPCash do
+       CallProcedure('ChooseCashSymbol',[TransactionID,NewB]);
+      if  CPDoRefresh.Checked  then
+      begin
+       CashDataMod.ODSTransactionsViewer2.Refresh;
+       CashDataMod.ODSTransactionsViewer2.Locate('ID',TransactionID,[]);
+       BSymbol.ItemIndex :=-1;
+      end;
+     except
+      ShowMessage('Wrong Arguments !');
+      Abort;
+    end;
+  end;
+end;
+
+procedure TFrmCashDesk.BSymbol1KeyPress(Sender: TObject; var Key: Char);
+begin
+    if  Key=#13  then
+    SpeedButton1.Click;
+end;
+
+procedure TFrmCashDesk.DEBITACCChange(Sender: TObject);
+begin
+ if (Sender as TEdit).Text <> '' then
+    CashDataMod.ODSTransactionsViewer2.Locate((Sender as TEdit).Name,(Sender as TEdit).Text,[loPartialKey]);
+end;
+
+procedure TFrmCashDesk.TBIncomeClick(Sender: TObject);
+var
+   CashB: string;
+   RefString: String[1];
+   CurrencyID: String[5];
+   OperatorFilter: String;
+   CommitterFilter: String;
+   BankName,BankInn: String;
+   FirstDate,Lastdate: Variant;
+   DebetFilial, CreditFilial: String;
+   Balance: string;
+   c,c2 :variant;
+   pr1,pr2 :string;
+begin
+ pr1:=' lazytransaction  ';
+ pr2:=' provarch  ';
+//------------------------------------------------------------------------------------------
+c:=   CashDataMod.Settings.FieldByName('cashbalancenational').AsVariant;//UntCashSettings.FormCashSettings.NatBalance.Text;
+ c2:=  CashDataMod.Settings.FieldByName('cashbalanceenglish').AsVariant;//UntCashSettings.FormCashSettings.ForBalance.Text ;
+ //------------------------------------------------------------------------------------------
+  RefString :=IntToStr(CmbBoxReference.ItemIndex+1);
+  GetBankInfo(BankName,BankInn);
+  FirstDate :=Integer(Trunc(DTPBegin.DateTime));
+  LastDate :=Integer(Trunc(DTPEnd.DateTime));
+  OperatorFilter :='';
+  CommitterFilter :='';
+  Screen.Cursor :=crHourGlass;
+ try
+
+
+
+
+
+
+ Balance := '  ';
+ if CmbBoxCurrency.ItemIndex = 1 then
+  Balance :=' and AC.BAL_CN1  in (''1001'',''10010'')'
+ else
+  if CmbBoxCurrency.ItemIndex  > 1 then
+    Balance :=' and AC.BAL_CN1  in (''1011'',''10020'')';
+
+  if CBDebetFilial.ItemIndex = 0 then
+     DebetFilial :=' '
+  else
+     DebetFilial :=' and AC.filial = ' + IntToStr(DebetFilialArray[CBDebetFilial.ItemIndex-1]);
+
+  if CBCreditFilial.ItemIndex = 0 then
+     CreditFilial :=' '
+  else
+     CreditFilial :=' and AC.filial = ' + IntToStr(CreditFilialArray[CBCreditFilial.ItemIndex-1]);
+
+  if CBCashSymbol.ItemIndex = 0 then
+     CashB :=''
+  else
+     CashB :=' and Pr.kassa_b = '+CBCashSymbol.Text;
+
+  with DBLookupOperator.ListSource.DataSet do
+   if FieldByName('ID').AsInteger <> -1 then
+    OperatorFilter :=' and PR.op_id= '+ FieldByName('ID').AsString;
+
+  with DBLookupCommitter.ListSource.DataSet do
+   if FieldByName('ID').AsInteger <> -1 then
+    CommitterFilter :=' and PR.Commit_OpID= '+ FieldByName('ID').AsString;
+   
+  if  CmbBoxCurrency.ItemIndex <>0 then
+  with  IOCome  do
+  begin
+   if DTPBegin.DateTime = DTPEnd.DateTime then
+    begin
+     QRLabel5.Caption:= DateToStr(DTPBegin.DateTime);
+     QRLabel8.Caption:= '';
+    end
+   else
+    begin
+     QRLabel5.Caption:= DateToStr(DTPBegin.DateTime);
+     QRLabel8.Caption:= DateToStr(DTPEnd.DateTime);
+    end;
+   QrlBankName.Caption :=BankName;
+   QRLVoin.Caption :='Vöen :'+BankInn+'   ';
+   QRLCurrency.Caption :=CmbBoxCurrency.Items[CmbBoxCurrency.ItemIndex];
+  end else
+  with LOICome do
+  begin
+   if DTPBegin.DateTime = DTPEnd.DateTime then
+    begin
+     QRLabel5.Caption:= DateToStr(DTPBegin.DateTime);
+     QRLabel8.Caption:= '';
+    end
+   else
+    begin
+     QRLabel5.Caption:= DateToStr(DTPBegin.DateTime);
+     QRLabel8.Caption:= DateToStr(DTPEnd.DateTime);
+    end;
+   QrlBankName.Caption :=BankName;
+   QRLVoin.Caption :='Vöen :'+BankInn+'   ';
+   QRLCurrency.Caption :=CmbBoxCurrency.Items[CmbBoxCurrency.ItemIndex];
+  end;
+    with  CashDataMod.ODSIOCome  do
+    begin
+    if  CmbBoxCurrency.ItemIndex<>0 then
+    begin
+       CurrencyID :=IntToStr(Rate[CmbBoxCurrency.ItemIndex-1]);
+       SQL[8] :=' AND ((PR.val_acc= '+CurrencyID+') OR (PR.CURRENCYID_C='+CurrencyID+'))';
+    end
+      else  SQL[8] :='';
+
+    Case  (Sender as TToolButton).Tag  of
+    0: begin
+         SQL[1] :=' PR.LAMMOUNT,PR.AMMOUNT  ';
+         SQL[6] :=' AND PR.KREDIT = AC.ID  /*and (ac.bal_cn1 not in (select bal_cn from bal_spr1 where cashincoming=1))*/ ' + CreditFilial + CashB;
+         SQL[7] :=' AND (PR.DEBT IN (SELECT AC.ID FROM ACCOUNT AC,BAL_SPR'+
+                   RefString+' B WHERE B.BAL_CN = AC.BAL_CN'+RefString+' AND B.CASHINCOMING = 1 ' + Balance + DebetFilial + ')) and PR.AMMOUNT<>0 and PR.AMmount_C<>0' + OperatorFilter + CommitterFilter;
+         //SQL.SaveToFile('c:\1.txt');
+        if  CmbBoxCurrency.ItemIndex <> 0 then
+         IOCome.QRLIOCome.Caption :='Mədaxil KASSA JURNALI'
+         else LOICome.QRLIOCome.Caption :='Mədaxil KASSA JURBALI'
+       end;
+
+    1: begin
+         SQL[1] :=' PR.LAMMOUNT,PR.AMMOUNT_c as ammount ';
+         SQL[6] :=' AND PR.DEBT = AC.ID  /*and (ac.bal_cn1 not in (select bal_cn from bal_spr1 where cashincoming=1))*/ ' + DebetFilial + CashB;
+         SQL[7] :=' AND (PR.KREDIT IN (SELECT AC.ID FROM ACCOUNT AC,BAL_SPR'+
+                   RefString+' B WHERE B.BAL_CN = AC.BAL_CN'+RefString+' AND B.CASHINCOMING = 1 ' + Balance + CreditFilial + ')) and PR.AMMOUNT<>0 and PR.AMmount_C<>0' + OperatorFilter + CommitterFilter;
+        if  CmbBoxCurrency.ItemIndex <> 0 then
+         IOCome.QRLIOCome.Caption :='Məxaric KASSA JURNALI'
+         else LOICome.QRLIOCome.Caption :='Məxaric KASSA JURNALI'
+       end;
+     end; //Case {0-InCome;  1-OutCome}
+   end;
+
+    CashDataMod.ODSIOCome.Close;
+    CashDataMod.ODSIOCome.SetVariable('FIRSTDATE',FirstDate);
+    CashDataMod.ODSIOCome.SetVariable('LASTDATE',LastDate);
+        if RadioButton2.Checked then
+        CashDataMod.ODSIOCome.SetVariable('prov',pr1)
+         else
+         CashDataMod.ODSIOCome.SetVariable('prov',pr2);
+     CashDataMod.ODSIOCome.Open;
+
+
+    {  OpenDataSet(CashDataMod.ODSIOCome,['FIRSTDATE','LASTDATE','prov'],[FirstDate,LastDate,pr1])
+      else
+     OpenDataSet(CashDataMod.ODSIOCome,['FIRSTDATE','LASTDATE','prov'],[FirstDate,LastDate,pr2]);
+       }
+
+   Screen.Cursor :=crDefault;
+   if   CmbBoxCurrency.ItemIndex <> 0 then
+    IOCome.Preview
+   else
+    LOICome.Preview;
+    Memo2.Text:=CashDataMod.ODSIOCome.SQL.Text;
+
+ finally
+   CashDataMod.ODSIOCome.Close;
+   Screen.Cursor :=crDefault;
+ end;
+end;
+
+procedure TFrmCashDesk.TBExtraClick(Sender: TObject);
+begin
+ try
+  CashDataMod.ODSCashInfo.Refresh;
+  FrmInfo:=TFrmInfo.Create(self);
+  FrmInfo.ShowModal;
+ finally
+  FrmInfo.Free;
+ end
+end;
+
+procedure TFrmCashDesk.RadioButton1Click(Sender: TObject);
+begin
+{ TableName :='PROVARCH';
+ with  CashDataMod do
+  begin
+   DBLookupCommitter.Enabled :=true;
+   ODSTransactionsViewer.SQL[14] :=' ,PR.OP_ID AS OperatorID , PR.COMMIT_OPID AS CommitterID ';
+   ODSTransactionsViewer.SQL[16] :=' FROM  PROVARCH PR,ACCOUNT AC1,ACCOUNT AC2 ';
+   ODSIOCome.SQL[4] :=' FROM  ACCOUNT AC,PROVARCH PR ';
+   ODSCashReport.SQL[5] :=' FROM PROVARCH PR,KASSA_B CASH ';
+   OPCash.PackageName :='SB_CASHREPORT'
+  end;}
+end;
+
+procedure TFrmCashDesk.RadioButton2Click(Sender: TObject);
+begin
+ {TableName :='LAZYTRANSACTION';
+ with CashDataMod do
+  begin
+   DBLookupCommitter.KeyValue :=-1;
+   DBLookupCommitter.Enabled :=false;
+   ODSTransactionsViewer.SQL[14] := ' ,PR.OP_ID AS OperatorID , -1 AS CommitterID';
+   ODSTransactionsViewer.SQL[16] :='FROM  LAZYTRANSACTION PR,ACCOUNT AC1,ACCOUNT AC2';
+   ODSIOCome.SQL[4] :=' FROM  ACCOUNT AC,LAZYTRANSACTION PR ';
+   ODSCashReport.SQL[5] :=' FROM LAZYTRANSACTION PR,KASSA_B CASH ';
+   OPCash.PackageName :='SB_CASHREPORT_LAZY';
+  end;  }
+end;
+
+procedure TFrmCashDesk.CBDebetFilialClick(Sender: TObject);
+var
+   DataSet :TDataSet;
+begin
+DataSet :=CashViewer.DataSource.DataSet;
+ with DataSet do
+  begin
+   Filtered := False;
+   Filter :=GenerateFilialFilter;
+   Filtered :=True;
+  end;
+
+  ActionFilterExecute(Sender);
+end;
+
+procedure TFrmCashDesk.ActionOrderUpdate(Sender: TObject);
+//var
+// IsEnabled: Boolean;
+begin
+
+{ IsEnabled :=
+             not CashViewer.DataSource.DataSet.IsEmpty;
+
+ (Sender as TAction).Enabled :=IsEnabled;
+ TBIncome.Enabled :=IsEnabled;
+ TBOutlay.Enabled :=IsEnabled;
+ TBExtra.Enabled :=IsEnabled;
+ }end;
+
+procedure TFrmCashDesk.ActionOrderExecute(Sender: TObject);
+var
+   TransactionID :String;
+   SavePlace     :TBookmark;
+begin
+
+  // --------------------------------------------------
+ // ----------------------IN--------------------------------
+ if trim(CashDataMod.Settings.fieldbyname('HANDOVER').asstring)='0' then begin
+   QRPTReceiptOrder.QRShapeHandover1.Enabled := False;
+   QRPTReceiptOrder.QRLabelHandover1.Enabled := False;
+   QRPTReceiptOrder.QRShapeHandover2.Enabled := False;
+   QRPTReceiptOrder.QRLabelHandover2.Enabled := False;
+   QRPTReceiptOrder.QRShapeHandover3.Enabled := False;
+   QRPTReceiptOrder.QRLabelHandover3.Enabled := False;
+
+   {QRPTReceiptOrder.QRShape2.left :=90;
+   QRPTReceiptOrder.QRShape4.left :=294;
+   QRPTReceiptOrder.QRShape5.left :=485;
+   QRPTReceiptOrder.QRLabel10.left :=100;
+   QRPTReceiptOrder.QRLabel11.left :=300;
+   QRPTReceiptOrder.QRLabel12.left :=500;
+
+   QRPTReceiptOrder.QRShape24.left :=90;
+   QRPTReceiptOrder.QRShape25.left :=294;
+   QRPTReceiptOrder.QRShape26.left :=485;
+   QRPTReceiptOrder.QRLabel28.left :=100;
+   QRPTReceiptOrder.QRLabel31.left :=300;
+   QRPTReceiptOrder.QRLabel32.left :=500;
+
+   QRPTReceiptOrder.QRShape38.left :=90;
+   QRPTReceiptOrder.QRShape40.left :=294;
+   QRPTReceiptOrder.QRShape41.left :=485;
+   QRPTReceiptOrder.QRLabel48.left :=100;
+   QRPTReceiptOrder.QRLabel49.left :=300;
+   QRPTReceiptOrder.QRLabel50.left :=500; }end;
+    if trim(CashDataMod.Settings.fieldbyname('HANDOVER').asstring)='1' then begin
+   QRPTReceiptOrder.QRShapeHandover1.Enabled := True;
+   QRPTReceiptOrder.QRLabelHandover1.Enabled := True;
+   QRPTReceiptOrder.QRShapeHandover2.Enabled := True;
+   QRPTReceiptOrder.QRLabelHandover2.Enabled := True;
+   QRPTReceiptOrder.QRShapeHandover3.Enabled := True;
+   QRPTReceiptOrder.QRLabelHandover3.Enabled := True;
+ {  QRPTReceiptOrder.QRShape2.left :=247;
+   QRPTReceiptOrder.QRShape4.left :=415;
+   QRPTReceiptOrder.QRShape5.left :=602;
+   QRPTReceiptOrder.QRLabel10.left :=257;
+   QRPTReceiptOrder.QRLabel11.left :=421;
+   QRPTReceiptOrder.QRLabel12.left :=618;
+   QRPTReceiptOrder.QRShape6.left :=60;
+   QRPTReceiptOrder.QRLabel5.left :=69;
+
+   QRPTReceiptOrder.QRShape23.left :=60;
+   QRPTReceiptOrder.QRShape24.left :=247;
+   QRPTReceiptOrder.QRShape25.left :=415;
+   QRPTReceiptOrder.QRLabel23.left :=69;
+   QRPTReceiptOrder.QRLabel28.left :=257;
+   QRPTReceiptOrder.QRLabel31.left :=421;
+   QRPTReceiptOrder.QRShape26.left :=602;
+   QRPTReceiptOrder.QRLabel32.left :=618;
+
+   QRPTReceiptOrder.QRShape37.left :=60;
+   QRPTReceiptOrder.QRShape38.left :=247;
+   QRPTReceiptOrder.QRShape40.left :=415;
+   QRPTReceiptOrder.QRLabel47.left :=69;
+   QRPTReceiptOrder.QRLabel48.left :=257;
+   QRPTReceiptOrder.QRLabel49.left :=421;
+   QRPTReceiptOrder.QRShape41.left :=602;
+   QRPTReceiptOrder.QRLabel50.left :=618; }
+       end;
+  if trim(CashDataMod.Settings.fieldbyname('Chief').asstring)='0' then begin
+   QRPTReceiptOrder.QRShapeChief1.Enabled := False;
+   QRPTReceiptOrder.QRLabelChief1.Enabled := False;
+   QRPTReceiptOrder.QRShapeChief2.Enabled := False;
+   QRPTReceiptOrder.QRLabelChief2.Enabled := False;
+   QRPTReceiptOrder.QRShapeChief3.Enabled := False;
+   QRPTReceiptOrder.QRLabelChief3.Enabled := False;
+   end;
+   if trim(CashDataMod.Settings.fieldbyname('Chief').asstring)='1' then begin
+   QRPTReceiptOrder.QRShapeChief1.Enabled := True;
+   QRPTReceiptOrder.QRLabelChief1.Enabled := True;
+   QRPTReceiptOrder.QRShapeChief2.Enabled := True;
+   QRPTReceiptOrder.QRLabelChief2.Enabled := True;
+   QRPTReceiptOrder.QRShapeChief3.Enabled := True;
+   QRPTReceiptOrder.QRLabelChief3.Enabled := True;
+   end;
+
+   if trim(CashDataMod.Settings.fieldbyname('Operator').asstring)='0' then begin
+   QRPTReceiptOrder.QRShapeOperator1.Enabled := False;
+   QRPTReceiptOrder.QRLabelOperator1.Enabled := False;
+   QRPTReceiptOrder.QRShapeOperator2.Enabled := False;
+   QRPTReceiptOrder.QRLabelOperator2.Enabled := False;
+   QRPTReceiptOrder.QRShapeOperator3.Enabled := False;
+   QRPTReceiptOrder.QRLabelOperator3.Enabled := False;
+      end;
+    if trim(CashDataMod.Settings.fieldbyname('Operator').asstring)='1' then begin
+   QRPTReceiptOrder.QRShapeOperator1.Enabled := True;
+   QRPTReceiptOrder.QRLabelOperator1.Enabled := True;
+   QRPTReceiptOrder.QRShapeOperator2.Enabled := True;
+   QRPTReceiptOrder.QRLabelOperator2.Enabled := True;
+   QRPTReceiptOrder.QRShapeOperator3.Enabled := True;
+   QRPTReceiptOrder.QRLabelOperator3.Enabled := True;
+   end;
+   if trim(CashDataMod.Settings.fieldbyname('Cashier').asstring)='0' then begin
+   QRPTReceiptOrder.QRShapeCashier1.Enabled := False;
+   QRPTReceiptOrder.QRLabelCashier1.Enabled := False;
+   QRPTReceiptOrder.QRShapeCashier2.Enabled := False;
+   QRPTReceiptOrder.QRLabelCashier2.Enabled := False;
+   QRPTReceiptOrder.QRShapeCashier3.Enabled := False;
+   QRPTReceiptOrder.QRLabelCashier3.Enabled := False;
+      end;
+   if trim(CashDataMod.Settings.fieldbyname('Cashier').asstring)='1' then begin
+   QRPTReceiptOrder.QRShapeCashier1.Enabled := True;
+   QRPTReceiptOrder.QRLabelCashier1.Enabled := True;
+   QRPTReceiptOrder.QRShapeCashier2.Enabled := True;
+   QRPTReceiptOrder.QRLabelCashier2.Enabled := True;
+   QRPTReceiptOrder.QRShapeCashier3.Enabled := True;
+   QRPTReceiptOrder.QRLabelCashier3.Enabled := True;
+      end;
+
+ //------------------------------------------Modified by  for AZNEQ.BANK on 17.08.2006
+            if trim(CashDataMod.Settings.fieldbyname('Controller').asstring)='1' then begin
+   QRPTReceiptOrder.QRShapeControler1.Enabled := True;
+   QRPTReceiptOrder.QRLabelControler1.Enabled := True;
+   QRPTReceiptOrder.QRShapeControler2.Enabled := True;
+   QRPTReceiptOrder.QRLabelControler2.Enabled := True;
+   QRPTReceiptOrder.QRShapeControler3.Enabled := True;
+   QRPTReceiptOrder.QRLabelControler3.Enabled := True;
+      end;
+   if trim(CashDataMod.Settings.fieldbyname('Controller').asstring)='0' then begin
+   QRPTReceiptOrder.QRShapeControler1.Enabled := False;
+   QRPTReceiptOrder.QRLabelControler1.Enabled := False;
+   QRPTReceiptOrder.QRShapeControler2.Enabled := False;
+   QRPTReceiptOrder.QRLabelControler2.Enabled := False;
+   QRPTReceiptOrder.QRShapeControler3.Enabled := False;
+   QRPTReceiptOrder.QRLabelControler3.Enabled := False;
+      end;
+
+ //-------------------OUT--------------------------------------
+       if trim(CashDataMod.Settings.fieldbyname('Amount').asstring)='0' then begin
+   QuickRptOrder.QRShapeAmountReceived1.Enabled := False;
+   QuickRptOrder.QRLabelAmountReceived1.Enabled := False;
+   QuickRptOrder.QRShapeAmountReceived2.Enabled := False;
+   QuickRptOrder.QRLabelAmountReceived2.Enabled := False;
+   QuickRptOrder.QRShapeAmountReceived3.Enabled := False;
+   QuickRptOrder.QRLabelAmountReceived3.Enabled := False;
+
+   { QuickRptOrder.QRLabel9.left :=40;
+    QuickRptOrder.QRLabel10.left :=200;
+    QuickRptOrder.QRLabel4.left :=400;
+    QuickRptOrder.QRLabel3.left :=550;
+    QuickRptOrder.QRShape33.left :=40;
+    QuickRptOrder.QRShape31.left :=180;    QuickRptOrder.QRShape5.left :=400;
+    QuickRptOrder.QRShape13.left :=550;
+
+     QuickRptOrder.QRLabel39.left :=65;
+  QuickRptOrder.QRLabel40.left :=230;
+  QuickRptOrder.QRLabel50.left :=440;
+  QuickRptOrder.QRLabel52.left :=610;
+
+   QuickRptOrder.QRShape32.left :=30;
+  QuickRptOrder.QRShape30.left :=180;
+  QuickRptOrder.QRShape34.left :=400;
+  QuickRptOrder.QRShape14.left :=550;
+
+
+   QuickRptOrder.QRLabel14.left :=65;
+  QuickRptOrder.QRLabel16.left :=220;
+  QuickRptOrder.QRLabel42.left :=440;
+  QuickRptOrder.QRLabel46.left :=610;
+
+   QuickRptOrder.QRShape19.left :=30;
+  QuickRptOrder.QRShape20.left :=180;
+  QuickRptOrder.QRShape21.left :=570;
+  QuickRptOrder.QRShape35.left :=400;   }
+   end;
+   if trim(CashDataMod.Settings.fieldbyname('Amount').asstring)='1' then begin
+   QuickRptOrder.QRShapeAmountReceived1.Enabled := True;
+   QuickRptOrder.QRLabelAmountReceived1.Enabled := True;
+   QuickRptOrder.QRShapeAmountReceived2.Enabled := True;
+   QuickRptOrder.QRLabelAmountReceived2.Enabled := True;
+   QuickRptOrder.QRShapeAmountReceived3.Enabled := True;
+   QuickRptOrder.QRLabelAmountReceived3.Enabled := True;
+
+   {  QuickRptOrder.QRLabel11.Left :=10;
+   QuickRptOrder.QRLabel9.left :=170;
+   QuickRptOrder.QRLabel10.left :=400;
+   QuickRptOrder.QRLabel4.Left :=600;
+   QuickRptOrder.QRLabel3.left :=700;
+
+   QuickRptOrder.QRShape3.left :=8;
+   QuickRptOrder.QRLabel33.Left :=170;
+   QuickRptOrder.QRShape31.Left :=400;
+   QuickRptOrder.QRShape5.Left :=600;
+   QuickRptOrder.QRShape13.Left :=700;
+
+
+      QuickRptOrder.QRLabel3.Left :=550;
+       QuickRptOrder.QRLabel4.Left :=410;
+       QuickRptOrder.QRLabel11.Left :=40;
+       QuickRptOrder.QRLabel10.Left :=220;
+
+        QuickRptOrder.QRShape3.Left :=40;
+       QuickRptOrder.QRShape31.Left :=220;
+       QuickRptOrder.QRShape5.Left :=400;
+       QuickRptOrder.QRShape13.Left :=550;
+
+        QuickRptOrder.QRLabel47.Left :=110;
+         QuickRptOrder.QRLabel40.Left :=300;
+         QuickRptOrder.QRLabel12.Left :=110;
+         QuickRptOrder.QRShape18.Left :=70;
+        QuickRptOrder.QRShape29.Left :=60;
+         QuickRptOrder.QRShape30.Left :=250;
+        QuickRptOrder.QRShape20.Left :=260;   }
+   end;
+      if trim(CashDataMod.Settings.fieldbyname('chief_out').asstring)='0' then begin
+   QuickRptOrder.QRShapeChief1.Enabled := False;
+   QuickRptOrder.QRLabelChief1.Enabled := False;
+   QuickRptOrder.QRShapeChief2.Enabled := False;
+   QuickRptOrder.QRLabelChief2.Enabled := False;
+   QuickRptOrder.QRShapeChief3.Enabled := False;
+   QuickRptOrder.QRLabelChief3.Enabled := False;
+
+     {  QuickRptOrder.QRLabel3.Left :=550;
+       QuickRptOrder.QRLabel4.Left :=410;
+       QuickRptOrder.QRLabel11.Left :=40;
+       QuickRptOrder.QRLabel10.Left :=220;
+
+       QuickRptOrder.QRShape3.Left :=40;
+       QuickRptOrder.QRShape31.Left :=220;
+       QuickRptOrder.QRShape5.Left :=400;
+       QuickRptOrder.QRShape13.Left :=550;
+
+        QuickRptOrder.QRLabel47.Left :=110;
+         QuickRptOrder.QRLabel40.Left :=300;
+         QuickRptOrder.QRLabel12.Left :=110;
+         QuickRptOrder.QRShape18.Left :=70;
+        QuickRptOrder.QRShape29.Left :=60;
+         QuickRptOrder.QRShape30.Left :=250;
+        QuickRptOrder.QRShape20.Left :=260;  }
+   end;
+   if trim(CashDataMod.Settings.fieldbyname('chief_out').asstring)='1' then begin
+   QuickRptOrder.QRShapeChief1.Enabled := True;
+   QuickRptOrder.QRLabelChief1.Enabled := True;
+   QuickRptOrder.QRShapeChief2.Enabled := True;
+   QuickRptOrder.QRLabelChief2.Enabled := True;
+   QuickRptOrder.QRShapeChief3.Enabled := True;
+   QuickRptOrder.QRLabelChief3.Enabled := True;
+   end;
+   if trim(CashDataMod.Settings.fieldbyname('accountant').asstring)='0' then begin
+   QuickRptOrder.QRShapeAccountant1.Enabled := False;
+   QuickRptOrder.QRLabelAccountant1.Enabled := False;
+   QuickRptOrder.QRShapeAccountant2.Enabled := False;
+   QuickRptOrder.QRLabelAccountant2.Enabled := False;
+   QuickRptOrder.QRShapeAccountant3.Enabled := False;
+   QuickRptOrder.QRLabelAccountant3.Enabled := False;
+   end;
+   if trim(CashDataMod.Settings.fieldbyname('accountant').asstring)='1' then begin
+   QuickRptOrder.QRShapeAccountant1.Enabled := True;
+   QuickRptOrder.QRLabelAccountant1.Enabled := True;
+   QuickRptOrder.QRShapeAccountant2.Enabled := True;
+   QuickRptOrder.QRLabelAccountant2.Enabled := True;
+   QuickRptOrder.QRShapeAccountant3.Enabled := True;
+   QuickRptOrder.QRLabelAccountant3.Enabled := True;
+   end;
+
+      if trim(CashDataMod.Settings.fieldbyname('operator_out').asstring)='0' then begin
+   QuickRptOrder.QRShapeOperator1.Enabled := False;
+   QuickRptOrder.QRLabelOperator1.Enabled := False;
+   QuickRptOrder.QRShapeOperator2.Enabled := False;
+   QuickRptOrder.QRLabelOperator2.Enabled := False;
+   QuickRptOrder.QRShapeOperator3.Enabled := False;
+   QuickRptOrder.QRLabelOperator3.Enabled := False;
+   end;
+   if trim(CashDataMod.Settings.fieldbyname('operator_out').asstring)='1' then begin
+   QuickRptOrder.QRShapeOperator1.Enabled := True;
+   QuickRptOrder.QRLabelOperator1.Enabled := True;
+   QuickRptOrder.QRShapeOperator2.Enabled := True;
+   QuickRptOrder.QRLabelOperator2.Enabled := True;
+   QuickRptOrder.QRShapeOperator3.Enabled := True;
+   QuickRptOrder.QRLabelOperator3.Enabled := True;
+   end;
+   if trim(CashDataMod.Settings.fieldbyname('cashier_out').asstring)='0' then begin
+   QuickRptOrder.QRShapeCashier1.Enabled := False;
+   QuickRptOrder.QRLabelCashier1.Enabled := False;
+   QuickRptOrder.QRShapeCashier2.Enabled := False;
+   QuickRptOrder.QRLabelCashier2.Enabled := False;
+   QuickRptOrder.QRShapeCashier3.Enabled := False;
+   QuickRptOrder.QRLabelCashier3.Enabled := False;
+   end;
+   if trim(CashDataMod.Settings.fieldbyname('cashier_out').asstring)='1' then begin
+   QuickRptOrder.QRShapeCashier1.Enabled := True;
+   QuickRptOrder.QRLabelCashier1.Enabled := True;
+   QuickRptOrder.QRShapeCashier2.Enabled := True;
+   QuickRptOrder.QRLabelCashier2.Enabled := True;
+   QuickRptOrder.QRShapeCashier3.Enabled := True;
+   QuickRptOrder.QRLabelCashier3.Enabled := True;
+   end;
+
+ //------------------------------------------Modified by for AZNEQ.BANK on 17.08.2006
+   if trim(CashDataMod.Settings.fieldbyname('controller_out').asstring)='1' then begin
+   QuickRptOrder.QRShapeControler1.Enabled := True;
+   QuickRptOrder.QRLabelControler1.Enabled := True;
+   QuickRptOrder.QRShapeControler2.Enabled := True;
+   QuickRptOrder.QRLabelControler2.Enabled := True;
+   QuickRptOrder.QRShapeControler3.Enabled := True;
+   QuickRptOrder.QRLabelControler3.Enabled := True;
+   end;
+   if trim(CashDataMod.Settings.fieldbyname('controller_out').asstring)='0' then begin
+   QuickRptOrder.QRShapeControler1.Enabled := False;
+   QuickRptOrder.QRLabelControler1.Enabled := False;
+   QuickRptOrder.QRShapeControler2.Enabled := False;
+   QuickRptOrder.QRLabelControler2.Enabled := False;
+   QuickRptOrder.QRShapeControler3.Enabled := False;
+   QuickRptOrder.QRLabelControler3.Enabled := False;
+   end;
+  //------------------------------------------------------------------------
+ //-------------------------------------------------------
+
+ if dbgrid1.DataSource.DataSet.IsEmpty then Exit;
+ SavePlace :=CashDataMod.ODSTransactionsViewer2.GetBookMark;
+ case FrmCashDesk.RadioGroup2.ItemIndex of
+   0 : begin
+        QuickRptOrder.ChildBand1.Enabled := False;
+        QuickRptOrder.ChildBand2.Enabled := False;
+        QRPTReceiptOrder.QRChildFirst.Enabled :=False;
+        QRPTReceiptOrder.QRChildSecond.Enabled :=False;
+        QuickRptOrder.QRLabelAmountReceived2.Enabled := False;
+        QuickRptOrder.QRLabelCashier2.Enabled := False;
+        QuickRptOrder.QRLabelChief2.Enabled := False;
+        QuickRptOrder.QRLabelControler2.Enabled := False;
+        QuickRptOrder.QRLabelOperator2.Enabled := False;
+        QuickRptOrder.QRLabelAccountant2.Enabled := False;
+        QuickRptOrder.QRLabelAmountReceived3.Enabled := False;
+        QuickRptOrder.QRLabelCashier3.Enabled := False;
+        QuickRptOrder.QRLabelChief3.Enabled := False;
+        QuickRptOrder.QRLabelControler3.Enabled := False;
+        QuickRptOrder.QRLabelOperator3.Enabled := False;
+        QuickRptOrder.QRLabelAccountant3.Enabled := False;
+
+       end;
+   1 : begin
+        QuickRptOrder.ChildBand1.Enabled := True;
+        QuickRptOrder.ChildBand2.Enabled := False;
+        QRPTReceiptOrder.QRChildFirst.Enabled :=True;
+        QRPTReceiptOrder.QRChildSecond.Enabled :=False;
+        QuickRptOrder.QRLabelAmountReceived3.Enabled := False;
+        QuickRptOrder.QRLabelCashier3.Enabled := False;
+        QuickRptOrder.QRLabelChief3.Enabled := False;
+        QuickRptOrder.QRLabelControler3.Enabled := False;
+        QuickRptOrder.QRLabelOperator3.Enabled := False;
+        QuickRptOrder.QRLabelAccountant3.Enabled := False;
+      end;
+   2 : begin
+        QuickRptOrder.ChildBand1.Enabled := True;
+        QuickRptOrder.ChildBand2.Enabled := True;
+        QRPTReceiptOrder.QRChildFirst.Enabled :=True;
+        QRPTReceiptOrder.QRChildSecond.Enabled :=True;
+       end;
+ end;
+
+ try
+  CashDataMod.ODSLogo.Open;
+  with CashDataMod.ODSTransactionsViewer2 do
+   begin
+   { TransactionID :=FieldByName('ID').AsString;
+    Filter :='ID='+TransactionID;
+    Filtered :=True;
+    if   IOCheck(FieldByName('DEBTCOME').AsInteger)  then
+     CreateOrderRpt(FALSE,FieldByName('KREDITID').AsInteger)
+    else
+     CreateOrderRpt(TRUE,FieldByName('DEBTID').AsInteger)
+   end;  }
+   TransactionID :=FieldByName('ID').AsString;
+    Filter :='ID='+TransactionID;
+    Filtered :=True;
+    if   IOCheck(FieldByName('debitbalance').AsInteger)  then
+     CreateOrderRpt(FALSE,FieldByName('creditcus').AsInteger)
+    else
+     CreateOrderRpt(TRUE,FieldByName('debitcus').AsInteger)
+   end;
+  finally
+  //TBRefresh.Click;
+  // ActionFilterExecute(Sender);
+   CashDataMod.ODSTransactionsViewer2.GotoBookmark(pointer(SavePlace));
+   CashDataMod.ODSLogo.Close;
+ end;
+end;
+
+procedure TFrmCashDesk.ActionFilterExecute(Sender: TObject);
+
+  function  CheckFiltred(IsChecked :Boolean;const FilterStr :String;Args :array of const):String;
+  begin
+     Result :='';
+     if  IsChecked  then
+      Result :=Format(FilterStr,Args);
+  end;
+
+const
+    CurrencyFilter ='((DCurrency=%d)OR(KCurrency=%d))';
+    DebetFilialFilter = '(DebetFilial=%d)';
+    CreditFilialFilter = '(CreditFilial=%d)';
+    CashSymbolFilter = '(BSymbol=%s)';
+    OperatorFilter = '(OperatorID=%d)';
+    CommitterFilter = '(CommitterID=%d)';
+var
+   CurrencyF        :string;
+   DebetFilialF     :string;
+   CreditFilialF    :string;
+   CashSymbolF      :string;
+   OperatorF        :string;
+   CommitterF       :string;
+   CurrencySql      :string;
+
+   FilterStr     :string;
+begin
+  FilterStr :='';
+          
+   CurrencyF :='';{CheckFiltred(
+                      not(CmbBoxCurrency.ItemIndex=0)
+                     ,CurrencyFilter
+                     ,[Rate[CmbBoxCurrency.ItemIndex-1],Rate[CmbBoxCurrency.ItemIndex-1]]
+                     ); }
+
+
+  if not (Rate[CmbBoxCurrency.ItemIndex-1]=CashDataMod.ODSCurrency.RecordCount) then
+   begin
+   CurrencySql:='and ((pr.VAL_ACC='+inttostr(Rate[CmbBoxCurrency.ItemIndex-1])+' AND CASHORNOT(PR.DEBT)=1 ) OR (pr.CURRENCYID_C='+
+   inttostr(Rate[CmbBoxCurrency.ItemIndex-1])+' AND CASHORNOT(PR.KREDIT)=1))';
+   // ShowMessage(inttostr(Rate[CmbBoxCurrency.ItemIndex-1]));
+   {CashDataMod.ODSTransactionsViewer.Close;
+   CashDataMod.ODSTransactionsViewer.SQL[30]:=CurrencySql;
+   memo2.Text:=  CashDataMod.ODSTransactionsViewer.SQL.Text;
+   CashDataMod.ODSTransactionsViewer.Open;  }
+   end
+   else
+   begin
+ { CashDataMod.ODSTransactionsViewer.Close;
+  CashDataMod.ODSTransactionsViewer.SQL[30]:='';
+  CashDataMod.ODSTransactionsViewer.Open;   }
+   end;
+
+
+
+   DebetFilialF :=CheckFiltred(
+                      not(CBDebetFilial.ItemIndex=0)
+                     ,DebetFilialFilter
+                     ,[DebetFilialArray[CBDebetFilial.ItemIndex-1]]
+                     );
+   CreditFilialF :=CheckFiltred(
+                      not(CBCreditFilial.ItemIndex=0)
+                     ,CreditFilialFilter
+                     ,[CreditFilialArray[CBCreditFilial.ItemIndex-1]]
+                     );
+   CashSymbolF :=CheckFiltred(
+                      not(CBCashSymbol.ItemIndex=0)
+                     ,CashSymbolFilter
+                     ,[''''+CBCashSymbol.Text+'''']  //[CBCashSymbol.Text]
+                     );
+   OperatorF :=CheckFiltred(
+                      not(DBLookupOperator.KeyValue=-1)
+                     ,OperatorFilter
+                     ,[DBLookupOperator.ListSource.DataSet.FieldByName('ID').AsInteger]
+                     );
+
+    CommitterF :=CheckFiltred(
+                      not(DBLookupCommitter.KeyValue=-1)
+                     ,CommitterFilter
+                     ,[DBLookupCommitter.ListSource.DataSet.FieldByName('ID').AsInteger]
+                     );
+
+    FilterStr :=CurrencyF;
+
+    if  DebetFilialF <> '' then
+    if  FilterStr=''  then
+      FilterStr :=DebetFilialF
+    else
+      FilterStr :=FilterStr + 'AND' + DebetFilialF;
+
+    if  CreditFilialF <> '' then
+    if  FilterStr=''  then
+      FilterStr :=CreditFilialF
+    else
+      FilterStr :=FilterStr + 'AND' + CreditFilialF;
+
+    if  CashSymbolF <> '' then
+    if  FilterStr=''  then
+      FilterStr :=CashSymbolF
+    else
+      FilterStr :=FilterStr + 'AND' + CashSymbolF;
+
+    if  OperatorF <> '' then
+    if  FilterStr=''  then
+      FilterStr :=OperatorF
+    else
+      FilterStr :=FilterStr + 'AND' + OperatorF;
+
+    if  CommitterF <> '' then
+    if  FilterStr=''  then
+      FilterStr :=CommitterF
+    else
+      FilterStr :=FilterStr + 'AND' + CommitterF;
+
+ with CashViewer.DataSource.DataSet do
+  begin
+    Filtered :=False;
+    Filter :=FilterStr;
+    Filtered :=True;
+  end;
+  with CashDataMod.ODS_L_CHIN do
+  begin
+    Filtered :=False;
+    Filter :=FilterStr;
+    Filtered :=True;
+  end;
+end;
+
+procedure TFrmCashDesk.CashViewerTitleClick(Column: TColumn);
+var
+   TitleName :string;
+begin
+ if Column.FieldName ='RecordNo' then Exit;
+ Screen.Cursor := crHourGlass;
+ TitleName :=Column.FieldName;
+ try
+  with TOracleDataSet(CashViewer.DataSource.DataSet) do
+   begin
+    SetVariable('Title',TitleName);
+    Refresh;
+   end;
+ finally
+  Screen.Cursor := crDefault;
+ end;
+end;
+
+procedure TFrmCashDesk.ActionTotalReportUpdate(Sender: TObject);
+begin
+{ (Sender as TAction).Enabled :=
+                 not CashViewer.DataSource.DataSet.IsEmpty
+                 and
+                 not(CmbBoxCurrency.ItemIndex = 0);
+
+ }                end;
+
+procedure TFrmCashDesk.ActionWithDrawExecute(Sender: TObject);
+var
+  CustName, CustInn: string;
+  TransactionID: string;
+  WithManat, NoManat, WithCoin: string;
+  ManatPosition, i: integer;
+  ValuteName: string;
+  a,b: Real;
+begin
+ NoManat :='';
+ try
+  with   CashDataMod.ODSTransactionsViewer2 do
+   begin
+    GetCustomerInfo(FieldByName('creditcus').AsInteger,CustName,CustInn);
+    CashDataMod.ForFizFsVoen.Close;
+    CashDataMod.ForFizFsVoen.SetVariable('v_acc_no', FieldByName('creditacc').AsString);
+    CashDataMod.ForFizFsVoen.Open;
+    if CashDataMod.ForFizFsVoen.FieldByName('CUST_TYPE').AsInteger=1 then CustInn:='';
+
+    TransactionID :=FieldByName('ID').AsString;
+    Filter :='ID='+TransactionID;
+    Filtered :=True;
+   end;
+
+   with CashDataMod, ODSValuteName do
+    begin
+     Close;
+     SetVariable('valute',ODSTransactionsViewer2.FieldByName('CCurrency').Value);
+     ODSValuteName.Open;
+     ValuteName :=AnsiLowerCase(FieldByname('Valu_name').Asstring);
+    end;
+
+   WithManat :=
+   CurrencyToHR_Azeri(Trunc(CashDataMod.ODSTransactionsViewer2.FieldByName('ammount_c').AsFloat),0,[0]);
+
+    ManatPosition :=POS('manat',WithManat);
+   if ManatPosition>0 then
+    for i:=1 to ManatPosition-1 do
+     NoManat :=NoManat + WithManat[i] ;
+
+     a:=CashDataMod.ODSTransactionsViewer2.FieldByName('ammount_c').AsFloat;
+   Memo2.Lines.Add('a='+floattostr(a));
+   Memo2.Lines.Add('Trunc (a)='+floattostr(Trunc (a)));
+   a:=a-Trunc(a);
+
+   Memo2.Lines.Add('a-trim(a)='+floattostr(a));
+   WithCoin :=FloatToStr( round((a-Trunc(a))*100)/100);
+   Memo2.Lines.Add('round((a*100)/100)='+FloatToStr((round(a*100)/100)));
+  //showmessage(FloatToStr( round((a-round(a))*100)/100));
+
+   if WithCoin<>'0' then begin
+    Delete(WithCoin,1,2);
+    if length(WithCoin) < 2 then WithCoin :=WithCoin+'0'
+     else
+     if length(WithCoin) > 2 then Delete(WithCoin,3,length(WithCoin));
+    WithCoin :=WithCoin+' '+CashDataMod.ODSValuteName. FieldByName('valu_bala').AsString;
+   end {if WithCoin<>'0'}
+   else WithCoin:='';
+
+  ValuteName :=AnsiLowerCase(CashDataMod.ODSValuteName.FieldByname('Valu_name').Asstring+'  '+WithCoin);
+
+    if NoManat=EmptyStr then NoManat:='0 ';
+
+    QRptCheks.ODSBank.Open;
+
+    QRptCheks.QRAMMOUNT1.Caption :=NoManat + ValuteName;
+    QRptCheks.QRAMMOUNT2.Caption :=NoManat + ValuteName;
+    QRptCheks.QRCustInn1.Caption :=CustInn;
+    QRptCheks.QRCustInn2.Caption :=CustInn;
+    QRptCheks.QRCustInn3.Caption :=CustInn;
+    QRptCheks.QRDat1.Caption := ExtractMonth(QRptCheks.DataSet.FieldByName('DAT').AsDateTime,'-');
+    QRptCheks.QRDat2.Caption := ExtractMonth(QRptCheks.DataSet.FieldByName('DAT').AsDateTime,'-');
+    QRptCheks.QRDat3.Caption := ExtractMonth(QRptCheks.DataSet.FieldByName('DAT').AsDateTime,'-');
+    QRptCheks.OracleDataSet2.Close;
+    QRptCheks.OracleDataSet2.SetVariable('qw',CashDataMod.ODSTransactionsViewer2.FieldByName('creditcus').AsInteger);
+    QRptCheks.OracleDataSet2.Open;   //25.10.2013
+    QRptCheks.Preview   ;
+    CashDataMod.ODSTransactionsViewer2.Filtered:=false;
+
+
+  finally
+   // ActionFilterExecute(Sender);
+    CashDataMod.ODSTransactionsViewer2.Locate('ID',TransactionID,[]);
+    QRptCheks.ODSBank.Close;
+  end;
+end;
+
+procedure TFrmCashDesk.ActionWithDrawUpdate(Sender: TObject);
+begin
+{ with CashViewer, DataSource do
+  (Sender as TAction).Enabled :=
+                  not DataSet.IsEmpty
+                  and (IOCheck(DataSet.FieldByName('DEBTCOME').AsInteger));
+ }
+                  end;
+
+procedure TFrmCashDesk.ActionSymbolReportExecute(Sender: TObject);
+var
+   FirstDate,LastDate: Variant;
+   CurrencyID:         String[5];
+   RefIndex:           String[1];
+   DebetFilial:        String;
+   CreditFilial:       String;
+   FilialRest:         String;
+begin
+ Screen.Cursor :=crHourGlass;
+ ProgBar.Show;
+ ProgBar.Position :=0;
+ try
+
+  if CBDebetFilial.ItemIndex = 0 then
+     DebetFilial :=' '
+  else
+     DebetFilial :=' and (AC.filial = ' + IntToStr(DebetFilialArray[CBDebetFilial.ItemIndex-1])+')';
+
+  if CBCreditFilial.ItemIndex = 0 then
+     CreditFilial :=' '
+  else
+     CreditFilial :=' and (AC.filial = ' + IntToStr(CreditFilialArray[CBCreditFilial.ItemIndex-1])+')';
+
+  if (CBDebetFilial.ItemIndex<>0) and (CBDebetFilial.ItemIndex = CBCreditFilial.ItemIndex) then
+   FilialRest :=' and (AC.filial = ' + IntToStr(DebetFilialArray[CBDebetFilial.ItemIndex-1])+')'
+  else
+   FilialRest :=' ';
+
+  try
+   ProgBar.StepBy(17);
+   RefIndex :=IntTostr(CmbBoxReference.ItemIndex+1);
+   FirstDate :=Integer(Trunc(DTPBegin.DateTime));
+   LastDate  :=Integer(Trunc(DTPEnd.DateTime));
+   if   CmbBoxCurrency.ItemIndex <> 0 then
+   begin
+    CurrencyId :=IntToStr(Rate[CmbBoxCurrency.ItemIndex-1]);
+    CashDataMod.ODSCashReport.SQL[10] :='  AND ((PR.VAL_ACC='+CurrencyId+')OR(PR.CURRENCYID_C='+CurrencyId+'))';
+   end else
+    CashDataMod.ODSCashReport.SQL[10] :='';
+   CashDataMod.ODSCashReport.SQL[11]:=' AND((DEBT IN (SELECT AC.ID FROM ACCOUNT AC,BAL_SPR'+RefIndex+' B WHERE B.BAL_CN=AC.BAL_CN'+RefIndex+' AND B.CASHINCOMING=1'
+   +DebetFilial+'))';
+   CashDataMod.ODSCashReport.SQL[13]:='(KREDIT IN (SELECT AC.ID FROM ACCOUNT AC,BAL_SPR'+RefIndex+' B WHERE B.BAL_CN=AC.BAL_CN'+RefIndex+' AND B.CASHINCOMING=1'
+   +CreditFilial+')))';
+   CashDataMod.ODSCashReport.SQL[32]:=' and ac.val_acc=0' + FilialRest;
+   CashDataMod.ODSCashReport.SQL[49]:=' and ac.val_acc=0' + FilialRest;
+   ProgBar.StepBy(23);
+   OpenDataSet(CashDataMod.ODSCashReport,['FirstDate','LastDate'],[FirstDate,LastDate]);
+   ProgBar.StepBy(60);
+   Screen.Cursor :=crDefault;
+   InitateReport((Sender as TComponent).Tag);
+  except
+   raise;
+  end;
+ finally
+   Screen.Cursor :=crDefault;
+   ProgBar.Hide;
+ end;
+end;
+
+procedure TFrmCashDesk.ActionSymbolReportUpdate(Sender: TObject);
+//var
+ //IsEnabled: Boolean;
+begin
+{IsEnabled :=not CashViewer.DataSource.DataSet.IsEmpty
+             and
+             (CmbBoxCurrency.ItemIndex = 1);
+
+ (Sender as TAction).Enabled :=IsEnabled;
+ TBCommon.Enabled :=IsEnabled;
+ }
+end;
+
+procedure TFrmCashDesk.ActionSettingsExecute(Sender: TObject);
+begin
+ FormCashSettings.ShowModal;
+end;
+
+procedure TFrmCashDesk.EPackNoKeyPress(Sender: TObject; var Key: Char);
+begin
+ //if not (key in ['0'..'9','.',#8]) then
+   //key :=#0
+end;
+
+procedure TFrmCashDesk.SpeedButton2Click(Sender: TObject);
+var
+   PackNo: String;
+   TransactionID: Longint;
+begin
+if RadioButton1.Checked then
+TableName:=  ' Provarch '
+else
+TableName:=  ' lazytransaction ' ;
+
+ with CashDataMod, ODSTransactionsViewer2, OPCash do
+  begin
+   PackNo :=EPackNo.Text;
+   TransactionID :=FieldbyName('ID').AsInteger;
+   CallProcedure('UpdatePackNo',[TransactionID, PackNo, TableName]);
+   DisableControls;
+   Refresh;
+   Locate('ID',TransactionID,[]);
+   EnableControls;
+  end;
+end;
+
+procedure TFrmCashDesk.Button1Click(Sender: TObject);
+var
+   CurrencyID: Integer;
+   FirstDate,LastDate: Variant;
+begin
+ UpdateActions;
+ with CashDataMod, QRResultReport do
+  begin
+   CurrencyID :=Rate[CmbBoxCurrency.ItemIndex-1];
+   FirstDate :=Integer(Trunc(DTPBegin.DateTime));
+   LastDate  :=Integer(Trunc(DTPEnd.DateTime));
+   TotalResult.CloseAll;
+   TotalResult.SetVariable('FirstDate',FirstDate);
+   TotalResult.SetVariable('LastDate',LastDate);
+   TotalResult.SetVariable('CurrencyID',CurrencyID);
+   TotalResult.Open;
+   Preview;
+  end;
+end;
+
+procedure TFrmCashDesk.N1Click(Sender: TObject);
+var
+   CurrencyID: Integer;
+   FirstDate,LastDate: Variant;
+begin
+ UpdateActions;
+ with QRTotalReport, TOracleDataSet(DataSet) do
+  begin
+   CurrencyID :=Rate[CmbBoxCurrency.ItemIndex-1];
+   FirstDate :=Integer(Trunc(DTPBegin.DateTime));
+   LastDate  :=Integer(Trunc(DTPEnd.DateTime));
+   CloseAll;
+   SetVariable('FirstDate',FirstDate);
+   SetVariable('LastDate',LastDate);
+   SetVariable('CurrencyID',CurrencyID);
+   SetVariable('BranchID', DebetFilialArray[CBDebetFilial.ItemIndex-1]);
+   Open;
+   QRAmmount1.Caption :=GetCurrencyAz(FieldByName('DAMMOUNT').AsFloat)+ '-'+FloatToStr(Round(100*Frac(FieldByName('DAMMOUNT').AsFloat)));
+   QRAmmount2.Caption :=GetCurrencyAz(FieldByName('CAMMOUNT').AsFloat)+ '-'+FloatToStr(Round(100*Frac(FieldByName('CAMMOUNT').AsFloat)));
+   QRCurrencyName1.Caption :=CmbBoxCurrency.Text;
+   QRCurrencyName2.Caption :=CmbBoxCurrency.Text;
+   QRCashRemainder.Caption :=GetCurrencyAz(FieldByName('CASHREMAINDER').AsFloat)+' '+CmbBoxCurrency.Text+'-'+
+   FloatToStr(Round(100*Frac(FieldByName('CASHREMAINDER').AsFloat)));
+   Preview;
+  end;
+
+end;
+
+procedure TFrmCashDesk.N2Click(Sender: TObject);
+var
+   CurrencyID: Integer;
+   FirstDate,LastDate: Variant;
+begin
+ UpdateActions;
+ with CashDataMod, QRResultReport do
+  begin
+   CurrencyID :=Rate[CmbBoxCurrency.ItemIndex-1];
+   FirstDate :=Integer(Trunc(DTPBegin.DateTime));
+   LastDate  :=Integer(Trunc(DTPEnd.DateTime));
+   TotalResult.CloseAll;
+   TotalResult.SetVariable('FirstDate',FirstDate);
+   TotalResult.SetVariable('LastDate',LastDate);
+   TotalResult.SetVariable('CurrencyID',CurrencyID);
+   TotalResult.Open;
+   QRLblCurName.Caption :=CmbBoxCurrency.Text;
+   QRLblCurName1.Caption :=CmbBoxCurrency.Text;
+   Preview;
+  end;
+end;
+
+procedure TFrmCashDesk.SpeedButton3Click(Sender: TObject);
+var i,j,index: Integer;
+ExcelApp,sheet: Variant;
+   CurrencyID :string;
+   FirstDate,LastDate :Variant;
+begin
+FirstDate :=Integer(Trunc(DTPBegin.DateTime));
+   LastDate  :=Integer(Trunc(DTPEnd.DateTime));
+ with CashDataMod.OracleDataSet1 do
+    begin
+     Close;
+     ClearVariables;
+     SetVariable('P_BEGINDATE',firstdate);
+     SetVariable('P_ENDDATE',lastdate);
+
+
+//-------------------------------------------------------------------------------------------------
+     if CmbBoxCurrency.ItemIndex <> 0 then
+       SetVariable('P_CURRENCYID',IntToStr(Rate[CmbBoxCurrency.ItemIndex-1]));
+    // ShowMessage(IntToStr(Rate[CmbBoxReference.ItemIndex-1]));
+//-------------------------------------------------------------------------------------------------
+           if CBCashSymbol.Text<>'Bütün' then
+     SetVariable('p_cashsymbol',CBCashSymbol.text);
+//-------------------------------------------------------------------------------------------------
+          if DBLookupOperator.Text<>'Butun operatorlar' then
+     SetVariable('p_userinsert',DBLookupOperator.text);
+//-------------------------------------------------------------------------------------------------
+            if DBLookupCommitter.Text<>'Butun operatorlar' then
+     SetVariable('p_usercommit',DBLookupCommitter.text);
+
+//-------------------------------------------------------------------------------------------------
+     if CBCreditFilial.ItemIndex<>0 then
+     SetVariable('p_creditbranch',IntToStr(CreditFilialArray[CBCreditFilial.ItemIndex-1]));
+//-------------------------------------------------------------------------------------------------
+          if CBDebetFilial.ItemIndex<>0 then
+     SetVariable('p_debitbranch',IntToStr(DebetFilialArray[CBDebetFilial.ItemIndex-1]));
+//-------------------------------------------------------------------------------------------------
+if  RadioButton1.Checked=true then
+     SetVariable('p_transtype',1)
+     else
+     SetVariable('p_transtype',2);
+//--------------------------------------------------------------------------------------------------
+       case CmbBoxReference.ItemIndex of
+       0:SetVariable('p_balance',1) ;
+       1:SetVariable('p_balance',2)  ;
+       2:SetVariable('p_balance',3)  ;
+       3:SetVariable('p_balance',4);
+
+     end;
+
+     //SetVariable('p_balance',IntToStr(Rate[CmbBoxReference.ItemIndex-1]));
+
+
+
+     //Memo2.Text:= SQL.Text;
+     Open;
+    end;
+  {with ExcelExporter do
+  Report;   }
+
+ CMExcelExport1.Connect;
+    CMExcelExport1.ExportDataset(CashDataMod.OracleDataSet1,'Cashdesk',True);
+//        Memo.Text := CashDataMod.ODSTransactionsViewer.SQL.Text;
+    CMExcelExport1.Disconnect;
+
+end;
+
+
+
+
+procedure TFrmCashDesk.SpeedButton4Click(Sender: TObject);
+ begin
+ if trim(CashDataMod.Settings.fieldbyname('HANDOVER').asstring)='1' then begin
+ showmessage('knn'); end;end;
+{var
+a: string;
+begin
+
+a :=trim(CashDataMod.Settings.fieldbyname('handover').asstring);
+if a='1' then begin
+showmessage('a');
+end;
+end; }
+//procedure editfield;
+
+procedure TFrmCashDesk.CashBookClick(Sender: TObject);
+var
+  BankName, BankINN :string;
+  CurrencyID :string;
+   FirstDate,LastDate :Variant;
+   cn,cn2 :variant;
+    us  :integer;
+   c,c2 ,k:variant ;
+begin
+
+       {      us:=CBDebetFilial.Items.Count ;
+           //k:= CashDataMod.OracleDataSet2.FieldByName('id').AsVariant ;
+             //  ShowMessage(inttostr(us));
+  if us=2 then
+   begin
+  QRp_CashBook.QRLabel12.Caption:=FormCashSettings.Edit1.Text;
+
+  QRp_CashBook.QRLabel13.Caption:=FormCashSettings.Edit2.Text;
+
+   end
+   else
+   begin
+      QRp_CashBook.QRLabel12.Caption:='Xəzinədar'  ;
+
+  QRp_CashBook.QRLabel13.Caption:='Baş mühasib'   ;
+   end;
+          }
+    cn := CashDataMod.Settings.FieldByName('cashbalancenational').AsVariant  ;
+   cn2:=  CashDataMod.Settings.FieldByName('cashbalanceenglish').AsVariant;
+
+ c:=   CashDataMod.Settings.FieldByName('cashbalancenational').AsVariant;//UntCashSettings.FormCashSettings.NatBalance.Text;
+ c2:=  CashDataMod.Settings.FieldByName('cashbalanceenglish').AsVariant;//UntCashSettings.FormCashSettings.ForBalance.Text ;
+
+ CashDataMod.ODS_L_CHIN.Close;
+ CashDataMod.ODS_L_CHIN.SetVariable('cn',cn)  ;
+ CashDataMod.ODS_L_CHIN.SetVariable('cn2',cn2)  ;
+
+ if CmbBoxCurrency.Text='Bütün valyutalar' then begin
+ CashDataMod.ODS_L_CHIN.SetVariable('amount','PR.LAMMOUNT')
+ end else begin
+  CashDataMod.ODS_L_CHIN.SetVariable('amount','PR.AMMOUNT_C')
+ end;
+
+ cashDataMod.ODS_L_CHIN.Open;
+ CashDataMod.ODS_EVV_SON_QALIQ.Close;
+ CashDataMod.ODS_EVV_SON_QALIQ.SetVariable('c',c)  ;
+ CashDataMod.ODS_EVV_SON_QALIQ.SetVariable('c2',c2)  ;
+ cashDataMod.ODS_EVV_SON_QALIQ.Open;
+
+ {ShowMessage(cn);
+                 ShowMessage(c2);
+
+     }
+  with CashDataMod.ODS_EVV_SON_QALIQ do
+  begin
+     Active:=False;
+     if (CmbBoxCurrency.ItemIndex=0) then
+     begin
+        SQL[4]:='  and AC.BAL_CN1 in (:c,:c2)';
+        SQL[13]:='  and AC.BAL_CN1 in (:c,:c2)';
+        SQL[6]:=' ';
+        SQL[15]:=' ';
+     end else
+     begin
+        if (CmbBoxCurrency.ItemIndex=1)then
+        begin
+           SQL[4]:='  and AC.BAL_CN1 in (:c,:c2)';
+           SQL[13]:='  and AC.BAL_CN1 in (:c,:c2)';
+           SQL[6]:='  and AC.VAL_ACC = '+inttostr(Rate[CmbBoxCurrency.ItemIndex-1]);
+           SQL[15]:='  and AC.VAL_ACC = '+inttostr(Rate[CmbBoxCurrency.ItemIndex-1]);
+        end else
+        begin
+           SQL[4]:='  and AC.BAL_CN1 in (:c,:c2)';
+           SQL[13]:='  and AC.BAL_CN1 in (:c,:c2)';
+           SQL[6]:='  and AC.VAL_ACC = '+inttostr(Rate[CmbBoxCurrency.ItemIndex-1]);
+           SQL[15]:='  and AC.VAL_ACC = '+IntToStr(Rate[CmbBoxCurrency.ItemIndex-1]);
+      end;
+     end;
+
+     if (CBDebetFilial.ItemIndex<>0) then
+     begin
+        SQL[5]:='  and AC.FILIAL = '+IntToStr(DebetFilialArray[CBDebetFilial.ItemIndex-1]);
+        SQL[14]:='  and AC.FILIAL = '+IntToStr(DebetFilialArray[CBDebetFilial.ItemIndex-1]);
+
+     end else
+     begin
+        SQL[5]:=' ';
+        SQL[14]:=' ';
+     end;
+     Active:=True;
+  end;
+
+
+{-----------------------------------------------}
+  if CashViewer.CanFocus then
+   CashViewer.SetFocus;
+  Screen.Cursor :=crHourGlass;
+  ProgBar.Show;
+  ProgBar.Position :=0;
+  try
+  try
+   ProgBar.StepBy(17);
+   FirstDate :=Integer(Trunc(DTPBegin.DateTime));
+   LastDate  :=Integer(Trunc(DTPEnd.DateTime));
+   if CmbBoxCurrency.ItemIndex <> 0 then
+    begin
+     CurrencyID :=IntToStr(Rate[CmbBoxCurrency.ItemIndex-1]);
+     //CashDataMod.ODS_L_CHIN.SQL[23] :='   AND ((PR.VAL_ACC='+CurrencyId+')OR(PR.CURRENCYID_C='+CurrencyId+')) and PR.AMMOUNT<>0 and PR.AMmount_C<>0';
+
+  CashDataMod.ODS_L_CHIN.SQL[23] :=' AND ((pr.val_acc = '+CurrencyId+' and ac1.bal_cn1 in (:cn,:cn2)) or (pr.currencyid_c = '+CurrencyId+' and ac2.bal_cn1 in (:cn,:cn2)))    and PR.AMMOUNT<>0 and PR.AMmount_C<>0';
+          //Changed 14.04.2015 Sabuhi.M
+
+    end
+   else
+    //CashDataMod.ODS_L_CHIN.SQL[20] :='  and AC1.FILIAL='+IntToStr(DebetFilialArray[CBDebetFilial.ItemIndex-1]);
+
+    CashDataMod.ODS_L_CHIN.SQL[23] :='';
+
+   CashDataMod.ODS_L_CHIN.SQL[17] :='  ,BAL_SPR'+IntToStr(CmbBoxReference.ItemIndex+1)+' REFERENCE';
+   CashDataMod.ODS_L_CHIN.SQL[25] :='   AND((AC1.BAL_CN'+IntToStr(CmbBoxReference.ItemIndex+1)
+   +'=REFERENCE.BAL_CN)OR(AC2.BAL_CN'+IntToStr(CmbBoxReference.ItemIndex+1)
+   +'=REFERENCE.BAL_CN)) and (Decode(PR.VID_OP,null,1,1,0,1)=1)';
+{   CashDataMod.ODS_L_CHIN.SQL[7] :=' ,AC1.BAL_CN'+IntToStr(CmbBoxReference.ItemIndex+1)+' AS DEBTCOME';   }
+ {  CashDataMod.ODS_L_CHIN.SQL[8] :=' ,AC2.BAL_CN'+IntToStr(CmbBoxReference.ItemIndex+1)+' AS CREDITCOME';}
+   ProgBar.StepBy(23);              //Memo1.Text:= CashDataMod.ODSTransactionsViewer.SQL.Text;
+   OpenDataSet(CashDataMod.ODS_L_CHIN,['FirstDate','LastDate'],[FirstDate,LastDate]);
+   if CashDataMod.ODS_L_CHIN.RecordCount<>0  then
+    BSymbol.Enabled :=True;
+   ProgBar.StepBy(60);
+  // Memo2.Text:=   CashDataMod.ODS_EVV_SON_QALIQ.SQL.Text;
+
+ memo2.Text:=CashDataMod.ODS_EVV_SON_QALIQ.SQL.Text;
+
+
+ except
+   raise;
+ end;
+ finally
+   Screen.Cursor :=crDefault;
+   ProgBar.Hide;
+ end;
+ UpdateActions;
+
+
+ {*************************************************}
+  OpenDataSet(CashDataMod.ODS_EVV_SON_QALIQ,['FirstDate','LastDate'],[FirstDate,LastDate]);
+{-------------------------------------------------}
+  GetBankInfo(BankName, BankINN);
+  with QRp_CashBook do begin
+   QRLBankName.Caption :=BankName;
+   QRL_INN.Caption :=BankInn;
+   if DTPBegin.Date=DTPEnd.Date then
+    QRLDate.Caption :=FormatDateTime('dd/mm/yyyy',DTPBegin.DateTime)
+   else
+    QRLDate.Caption :=FormatDateTime('dd/mm/yyyy',DTPBegin.DateTime)+' - '
+     +FormatDateTime('dd/mm/yyyy',DTPEnd.DateTime);
+   ii:=0;
+   dd:=0;
+   if CashDataMod.ODS_L_CHIN.RecordCount<>0 then  begin
+ //  memo2.Text:=CashDataMod.ODS_L_CHIN.SQL.Text;
+
+
+      Preview
+   end
+   else
+      ShowMessage('Çap Etmək Üçün Sənəd Yoxdur!');
+  end; {with QRp_CashBook}
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TFrmCashDesk,
+    Class_FrmCashDesk,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

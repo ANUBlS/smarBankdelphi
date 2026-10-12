@@ -1,0 +1,50 @@
+unit URiskTypes;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, Buttons, Grids, DBGrids;
+
+type
+  TfmRiskTypes = class(TForm)
+    DBGrid1: TDBGrid;
+    btAdd: TBitBtn;
+    btOk: TBitBtn;
+    procedure FormCreate(Sender: TObject);
+    procedure btAddClick(Sender: TObject);
+    procedure btOkClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  fmRiskTypes: TfmRiskTypes;
+
+implementation
+
+{$R *.DFM}
+
+procedure TfmRiskTypes.FormCreate(Sender: TObject);
+begin
+      if DataModuleFullMotor.Risktypes.IsEmpty then btAdd.Enabled := False;
+      DBGrid1.DataSource := DataModuleFullMotor.RisktypesData;
+end;
+
+procedure TfmRiskTypes.btAddClick(Sender: TObject);
+begin
+     with DataModuleFullMotor, memRisk  do
+     begin
+          if Text <> '' then Text := Text + ', ';
+          Text:= Text+RisktypesNAME.Value;
+     end;
+end;
+
+procedure TfmRiskTypes.btOkClick(Sender: TObject);
+begin
+     ModalResult := mrOk;
+end;
+
+end.

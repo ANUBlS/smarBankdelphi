@@ -1,0 +1,1467 @@
+object CustDataModu: TCustDataModu
+  OldCreateOrder = False
+  OnCreate = DataModuleCreate
+  OnDestroy = DataModuleDestroy
+  Left = 195
+  Top = 139
+  Height = 640
+  Width = 853
+  object PersonelTypeDataSet: TOracleDataSet
+    SQL.Strings = (
+      'SELECT *'
+      '  FROM smart.avalute')
+    QBEDefinition.QBEFieldDefs = {
+      04000000020000000200000049440100000000000B0000004445534352495054
+      494F4E010000000000}
+    Session = CMDataModule.CMSession
+    Left = 168
+    Top = 15
+  end
+  object srcPersonelType: TDataSource
+    DataSet = PersonelTypeDataSet
+    Left = 163
+    Top = 81
+  end
+  object sysdat: TOracleDataSet
+    SQL.Strings = (
+      'select * from smart.sysdat')
+    QBEDefinition.QBEFieldDefs = {
+      04000000040000000700000054454B5F44415401000000000008000000505245
+      445F444154010000000000070000004152435F44415901000000000005000000
+      434C4F5345010000000000}
+    Session = CMDataModule.CMSession
+    Left = 271
+    Top = 22
+  end
+  object ResultDS2: TOracleDataSet
+    SQL.Strings = (
+      
+        'SELECT rownum sira,f.*,s.*,o.ostat,(select val_name from smart.a' +
+        'valute where valute=p.currency) val'
+      ',p.dateofconclusion, p.creditlineamount krxet,'
+      
+        ' trunc(months_between( p.duedatefirstcontract ,p.dateofconclusio' +
+        'n)) muddet,p.duedatefirstcontract ,'
+      
+        'trunc(months_between(duedatelastcontract,duedatefirstcontract)) ' +
+        'plor,'
+      
+        ' (select description from cm_credittypes where id=p.credittype) ' +
+        'tip,'
+      'case when  f.DEBTMAIN<>0 then'
+      
+        '( (select round(INTEREST,2) from CM_INT_currSTATE where creditid' +
+        '=p.id)*360/f.DEBTMAIN)*KURUS/(select tek_dat-pred_dat as  d from' +
+        ' sb_sysdat)'
+      'else 0 end as krorafaiz    '
+      
+        ' FROM cm_report_f1 f,cm_active_credits p,cm_payment_schedule_por' +
+        'tfel s,smart.temprate o'
+      'where f.creditid=p.id'
+      'and s.creditid=p.id and o.val_kod=p.currency'
+      'ORDER BY'
+      '  sira'
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      '/*SELECT f.*'
+      '     , cm_ak_funcs.getlmcount(f.creditid,4) pret'
+      '     , cm_ak_funcs.getlmcount(f.creditid,6) idd'
+      '     , cm_ak_funcs.getlmcount(f.creditid,7) qatn'
+      '     , cm_ak_funcs.geticracount(f.creditid,7) icra'
+      
+        '    ,s.paymentdate,s.principal,s.interest,s.principal+s.interest' +
+        ' as cem,'
+      '  case when s.sex=1 then'
+      ' '#39'Kiши'#39'  '
+      'when s.sex=0 then '#39'Qadin'#39
+      ' end as sex,cm_r'
+      ''
+      
+        '  FROM cm_report_f1 f,cm_payment_schedule_portfel s,cm_active_cr' +
+        'edits p,cm_categories c where f.CREDITID=s.CREDITID and p.CUSTOM' +
+        'ERTYPE=c.id'
+      ''
+      ''
+      ''
+      'ORDER BY'
+      '  branch, district, village, boorowername*/'
+      ' '
+      '')
+    QBEDefinition.QBEFieldDefs = {
+      040000004A0000000800000043524544495449440100000000000A000000424F
+      4F524F5745524944010000000000060000004352444E554D0100000000000C00
+      0000424F4F524F5745524E414D45010000000000080000004252414E43484944
+      010000000000060000004252414E43480100000000000A000000444953545249
+      4354494401000000000008000000444953545249435401000000000009000000
+      56494C4C41474549440100000000000700000056494C4C414745010000000000
+      09000000505552504F5345494401000000000007000000505552504F53450100
+      0000000006000000545950454944010000000000080000005459504544455343
+      01000000000008000000435244434F554E540100000000000D00000050415945
+      44435244434F554E540100000000000D00000046495253545452434844415445
+      0100000000000B0000004C415354504159444154450100000000000B00000047
+      4956454E414D4F554E540100000000001100000043414C43554C415445445045
+      5243454E540100000000000C00000044415445444542544D41494E0100000000
+      000B0000004441544544454254494E540100000000000900000050415945444D
+      41494E010000000000080000005041594544494E540100000000000C00000050
+      415945444D4F4E4D41494E0100000000000B00000050415945444D4F4E494E54
+      01000000000008000000444542544D41494E0100000000000700000044454254
+      494E540100000000000C000000444542544F5645524D41494E0100000000000B
+      000000444542544F564552494E540100000000000A00000043414C4353544154
+      55530100000000000A00000043524544504552494F4401000000000007000000
+      494E5452415445010000000000060000004F4452415445010000000000050000
+      0053424F55540100000000000B00000050524F4C4F4E47444154450100000000
+      000A00000050524F4C4F4E47434E5401000000000010000000445545494E5445
+      5245535444454249540100000000000A00000044455343524950494F4E010000
+      0000000800000053464552414441590100000000000F000000505552504F5345
+      4F464352454449540100000000000800000043555252454E4359010000000000
+      090000004C4F414E41434349440100000000000D000000424F4F524F57455241
+      434349440100000000000F000000424F4F524F57455241434352455354010000
+      00000007000000414444524553530100000000000600000053414C4152590100
+      000000000B00000050484F4E454E554D42455201000000000007000000524553
+      45525645010000000000070000004C4154454441590100000000000B00000044
+      45534352495054494F4E010000000000090000004749524F5652455354010000
+      000000130000005052494D415259524553455256454152455354010000000000
+      160000005052494D415259505552524553455256454152455354010000000000
+      0A00000047454347554E4641495A0100000000000A000000504C454447454E41
+      4D450100000000000C0000004F44454D455F454D53414C490100000000000C00
+      00004558504552545F5F4E414D45010000000000050000004B55525553010000
+      00000010000000444154454F46434F4E434C5553494F4E010000000000050000
+      004B525845540100000000000400000053495241010000000000060000004D55
+      4444455401000000000014000000445545444154454649525354434F4E545241
+      43540100000000000A00000043524544495449445F310100000000000B000000
+      5041594D454E5444415445010000000000090000005052494E434950414C0100
+      0000000008000000494E54455245535401000000000003000000534558010000
+      000000050000004F535441540100000000000300000056414C01000000000003
+      000000544950010000000000090000004B524F52414641495A01000000000004
+      000000504C4F52010000000000}
+    Session = CMDataModule.CMSession
+    Left = 136
+    Top = 176
+    object ResultDS2SIRA: TFloatField
+      FieldName = 'SIRA'
+    end
+    object ResultDS2CREDITID: TFloatField
+      FieldName = 'CREDITID'
+      Required = True
+    end
+    object ResultDS2BOOROWERID: TFloatField
+      FieldName = 'BOOROWERID'
+      Required = True
+    end
+    object ResultDS2CRDNUM: TStringField
+      FieldName = 'CRDNUM'
+      Required = True
+      Size = 255
+    end
+    object ResultDS2BOOROWERNAME: TStringField
+      FieldName = 'BOOROWERNAME'
+      Required = True
+      Size = 255
+    end
+    object ResultDS2BRANCHID: TFloatField
+      FieldName = 'BRANCHID'
+      Required = True
+    end
+    object ResultDS2BRANCH: TStringField
+      FieldName = 'BRANCH'
+      Required = True
+      Size = 294
+    end
+    object ResultDS2DISTRICTID: TFloatField
+      FieldName = 'DISTRICTID'
+      Required = True
+    end
+    object ResultDS2DISTRICT: TStringField
+      FieldName = 'DISTRICT'
+      Required = True
+      Size = 255
+    end
+    object ResultDS2VILLAGEID: TFloatField
+      FieldName = 'VILLAGEID'
+      Required = True
+    end
+    object ResultDS2VILLAGE: TStringField
+      FieldName = 'VILLAGE'
+      Required = True
+      Size = 255
+    end
+    object ResultDS2PURPOSEID: TFloatField
+      FieldName = 'PURPOSEID'
+      Required = True
+    end
+    object ResultDS2PURPOSE: TStringField
+      FieldName = 'PURPOSE'
+      Required = True
+      Size = 255
+    end
+    object ResultDS2TYPEID: TFloatField
+      FieldName = 'TYPEID'
+      Required = True
+    end
+    object ResultDS2TYPEDESC: TStringField
+      FieldName = 'TYPEDESC'
+      Required = True
+      Size = 10
+    end
+    object ResultDS2CRDCOUNT: TFloatField
+      FieldName = 'CRDCOUNT'
+      Required = True
+    end
+    object ResultDS2PAYEDCRDCOUNT: TFloatField
+      FieldName = 'PAYEDCRDCOUNT'
+      Required = True
+    end
+    object ResultDS2FIRSTTRCHDATE: TDateTimeField
+      FieldName = 'FIRSTTRCHDATE'
+    end
+    object ResultDS2LASTPAYDATE: TDateTimeField
+      FieldName = 'LASTPAYDATE'
+    end
+    object ResultDS2GIVENAMOUNT: TFloatField
+      FieldName = 'GIVENAMOUNT'
+      Required = True
+    end
+    object ResultDS2CALCULATEDPERCENT: TFloatField
+      FieldName = 'CALCULATEDPERCENT'
+      Required = True
+    end
+    object ResultDS2DATEDEBTMAIN: TFloatField
+      FieldName = 'DATEDEBTMAIN'
+      Required = True
+    end
+    object ResultDS2DATEDEBTINT: TFloatField
+      FieldName = 'DATEDEBTINT'
+      Required = True
+    end
+    object ResultDS2PAYEDMAIN: TFloatField
+      FieldName = 'PAYEDMAIN'
+      Required = True
+    end
+    object ResultDS2PAYEDINT: TFloatField
+      FieldName = 'PAYEDINT'
+      Required = True
+    end
+    object ResultDS2PAYEDMONMAIN: TFloatField
+      FieldName = 'PAYEDMONMAIN'
+      Required = True
+    end
+    object ResultDS2PAYEDMONINT: TFloatField
+      FieldName = 'PAYEDMONINT'
+      Required = True
+    end
+    object ResultDS2DEBTMAIN: TFloatField
+      FieldName = 'DEBTMAIN'
+      Required = True
+    end
+    object ResultDS2DEBTINT: TFloatField
+      FieldName = 'DEBTINT'
+      Required = True
+    end
+    object ResultDS2DEBTOVERMAIN: TFloatField
+      FieldName = 'DEBTOVERMAIN'
+      Required = True
+    end
+    object ResultDS2DEBTOVERINT: TFloatField
+      FieldName = 'DEBTOVERINT'
+      Required = True
+    end
+    object ResultDS2CALCSTATUS: TStringField
+      FieldName = 'CALCSTATUS'
+      Required = True
+      Size = 12
+    end
+    object ResultDS2CREDPERIOD: TStringField
+      FieldName = 'CREDPERIOD'
+      Required = True
+      Size = 35
+    end
+    object ResultDS2INTRATE: TFloatField
+      FieldName = 'INTRATE'
+    end
+    object ResultDS2ODRATE: TFloatField
+      FieldName = 'ODRATE'
+    end
+    object ResultDS2SBOUT: TFloatField
+      FieldName = 'SBOUT'
+    end
+    object ResultDS2PROLONGDATE: TDateTimeField
+      FieldName = 'PROLONGDATE'
+    end
+    object ResultDS2PROLONGCNT: TFloatField
+      FieldName = 'PROLONGCNT'
+    end
+    object ResultDS2DUEINTERESTDEBIT: TFloatField
+      FieldName = 'DUEINTERESTDEBIT'
+    end
+    object ResultDS2DESCRIPION: TStringField
+      FieldName = 'DESCRIPION'
+      Size = 50
+    end
+    object ResultDS2SFERADAY: TStringField
+      FieldName = 'SFERADAY'
+      Size = 50
+    end
+    object ResultDS2PURPOSEOFCREDIT: TStringField
+      FieldName = 'PURPOSEOFCREDIT'
+      Size = 50
+    end
+    object ResultDS2CURRENCY: TStringField
+      FieldName = 'CURRENCY'
+      Size = 65
+    end
+    object ResultDS2LOANACCID: TStringField
+      FieldName = 'LOANACCID'
+      Size = 30
+    end
+    object ResultDS2BOOROWERACCID: TStringField
+      FieldName = 'BOOROWERACCID'
+      Size = 30
+    end
+    object ResultDS2BOOROWERACCREST: TFloatField
+      FieldName = 'BOOROWERACCREST'
+    end
+    object ResultDS2ADDRESS: TStringField
+      FieldName = 'ADDRESS'
+      Size = 80
+    end
+    object ResultDS2SALARY: TStringField
+      FieldName = 'SALARY'
+      Size = 100
+    end
+    object ResultDS2PHONENUMBER: TStringField
+      FieldName = 'PHONENUMBER'
+      Size = 350
+    end
+    object ResultDS2RESERVE: TStringField
+      FieldName = 'RESERVE'
+      Size = 29
+    end
+    object ResultDS2LATEDAY: TFloatField
+      FieldName = 'LATEDAY'
+    end
+    object ResultDS2DESCRIPTION: TStringField
+      FieldName = 'DESCRIPTION'
+      Size = 100
+    end
+    object ResultDS2GIROVREST: TFloatField
+      FieldName = 'GIROVREST'
+    end
+    object ResultDS2PRIMARYRESERVEAREST: TFloatField
+      FieldName = 'PRIMARYRESERVEAREST'
+    end
+    object ResultDS2PRIMARYPURRESERVEAREST: TFloatField
+      FieldName = 'PRIMARYPURRESERVEAREST'
+    end
+    object ResultDS2GECGUNFAIZ: TFloatField
+      FieldName = 'GECGUNFAIZ'
+    end
+    object ResultDS2PLEDGENAME: TStringField
+      FieldName = 'PLEDGENAME'
+      Size = 80
+    end
+    object ResultDS2ODEME_EMSALI: TFloatField
+      FieldName = 'ODEME_EMSALI'
+    end
+    object ResultDS2EXPERT__NAME: TStringField
+      FieldName = 'EXPERT__NAME'
+      Size = 50
+    end
+    object ResultDS2KURUS: TFloatField
+      FieldName = 'KURUS'
+    end
+    object ResultDS2DATEOFCONCLUSION: TDateTimeField
+      FieldName = 'DATEOFCONCLUSION'
+      Required = True
+    end
+    object ResultDS2KRXET: TFloatField
+      FieldName = 'KRXET'
+      Required = True
+    end
+    object ResultDS2MUDDET: TFloatField
+      FieldName = 'MUDDET'
+    end
+    object ResultDS2DUEDATEFIRSTCONTRACT: TDateTimeField
+      FieldName = 'DUEDATEFIRSTCONTRACT'
+      Required = True
+    end
+    object ResultDS2CREDITID_1: TFloatField
+      FieldName = 'CREDITID_1'
+      Required = True
+    end
+    object ResultDS2PAYMENTDATE: TDateTimeField
+      FieldName = 'PAYMENTDATE'
+    end
+    object ResultDS2PRINCIPAL: TFloatField
+      FieldName = 'PRINCIPAL'
+    end
+    object ResultDS2INTEREST: TFloatField
+      FieldName = 'INTEREST'
+    end
+    object ResultDS2SEX: TStringField
+      FieldName = 'SEX'
+      Size = 12
+    end
+    object ResultDS2OSTAT: TFloatField
+      FieldName = 'OSTAT'
+    end
+    object ResultDS2VAL: TStringField
+      FieldName = 'VAL'
+      Size = 10
+    end
+    object ResultDS2TIP: TStringField
+      FieldName = 'TIP'
+      Size = 128
+    end
+    object ResultDS2KRORAFAIZ: TFloatField
+      FieldName = 'KRORAFAIZ'
+    end
+    object ResultDS2PLOR: TFloatField
+      FieldName = 'PLOR'
+    end
+  end
+  object DataSource1: TDataSource
+    Left = 48
+    Top = 248
+  end
+  object DataSource2: TDataSource
+    DataSet = ResultDS2
+    Left = 144
+    Top = 248
+  end
+  object Main: TOracleDataSet
+    SQL.Strings = (
+      'select id from cm_active_credits '
+      
+        'where boorowerid in( select boorowerid from cm_active_credits wh' +
+        'ere id=:credid)'
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      '')
+    Variables.Data = {0300000001000000070000003A435245444944030000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      04000000270000000200000049440100000000000800000043555252454E4359
+      0100000000000A000000424F4F524F57455249440100000000000D000000494E
+      495449414C414D4F554E54010000000000100000004352454449544C494E4541
+      4D4F554E5401000000000013000000414E4E55414C59494E5445524553545241
+      544501000000000012000000414E4E55414C594F564552445545524154450100
+      0000000012000000414E4E55414C5950454E414C545952415445010000000000
+      10000000444154454F46434F4E434C5553494F4E0100000000000B0000004441
+      54454F464752414E540100000000001400000044554544415445464952535443
+      4F4E545241435401000000000013000000445545444154454C415354434F4E54
+      5241435401000000000009000000434C4F5345444154450100000000000E0000
+      004E554D4245524F464352454449540100000000000F000000505552504F5345
+      4F464352454449540100000000000C000000435553544F4D4552545950450100
+      000000000A000000435245444954545950450100000000000C00000050455253
+      4F4E414C545950450100000000000B0000004155544F5041594D454E54010000
+      0000000A0000004155544F455850495245010000000000080000005553524752
+      4F5550010000000000080000004252414E434849440100000000000400000055
+      5349440100000000000C000000504152544954494F4E4B45590100000000000E
+      000000414E4E55414C42414E4B52415445010000000000100000004E45574649
+      4E414E4345414D4F554E54010000000000120000004E554D4245524F4642414E
+      4B4352454449540100000000000D000000494E5443414C434D4554484F440100
+      000000000A000000504C454447534F5254530100000000000A00000041435449
+      5649544945530100000000000F000000414354495649544945535F5459504501
+      0000000000090000004352454449544143540100000000000600000041494D5F
+      4944010000000000080000004558504552544944010000000000090000005041
+      59494E5444415901000000000009000000504159504552494F44010000000000
+      0600000053544154555301000000000009000000494E53455254444154010000
+      00000008000000504F535455534552010000000000}
+    Session = CMDataModule.CMSession
+    Left = 432
+    Top = 104
+  end
+  object OraclePackage1: TOraclePackage
+    Session = CMDataModule.CMSession
+    PackageName = 'cm_ak_reports'
+    ParameterMode = pmNamed
+    Left = 443
+    Top = 178
+  end
+  object UsrGrpDataSet: TOracleDataSet
+    SQL.Strings = (
+      '  SELECT *'
+      '    FROM sb_filial')
+    QBEDefinition.QBEFieldDefs = {
+      04000000020000000200000049440100000000000B0000004445534352495054
+      494F4E010000000000}
+    Session = CMDataModule.CMSession
+    Left = 48
+    Top = 15
+  end
+  object srcUsrGrp: TDataSource
+    DataSet = UsrGrpDataSet
+    Left = 48
+    Top = 71
+  end
+  object ResultDS1: TOracleDataSet
+    SQL.Strings = (
+      
+        'SELECT rownum sira,f.*,(select val_name from smart.avalute where' +
+        ' valute=p.currency) val'
+      ',p.dateofconclusion, p.creditlineamount krxet,'
+      
+        ' trunc(months_between( p.duedatefirstcontract ,p.dateofconclusio' +
+        'n)) muddet,p.duedatefirstcontract ,'
+      
+        'trunc(months_between(duedatelastcontract,duedatefirstcontract)) ' +
+        'plor,'
+      
+        '(select description from cm_credittypes where id=p.credittype) t' +
+        'ip ,'
+      
+        '(SELECT newammount  FROM cm_prolong_crammount where id in( SELEC' +
+        'T max(id)  FROM cm_prolong_crammount where creditid=p.id )and cr' +
+        'editid=p.id) sonmeb ,'
+      'case when  f.DEBTMAIN<>0 then'
+      
+        '( (select round(INTEREST,2) from CM_INT_currSTATE where creditid' +
+        '=p.id)*360/f.DEBTMAIN)*KURUS/(select tek_dat-pred_dat as  d from' +
+        ' sb_sysdat) '
+      'else 0 end as krorafaiz '
+      ' FROM cm_report_f1 f,cm_active_credits p'
+      'where f.creditid=p.id'
+      ''
+      'ORDER BY'
+      '  sira'
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      '/*SELECT f.*'
+      '     , cm_ak_funcs.getlmcount(f.creditid,4) pret'
+      '     , cm_ak_funcs.getlmcount(f.creditid,6) idd'
+      '     , cm_ak_funcs.getlmcount(f.creditid,7) qatn'
+      '     , cm_ak_funcs.geticracount(f.creditid,7) icra'
+      
+        '    ,s.paymentdate,s.principal,s.interest,s.principal+s.interest' +
+        ' as cem,'
+      '  case when s.sex=1 then'
+      ' '#39'Kiши'#39'  '
+      'when s.sex=0 then '#39'Qadin'#39
+      ' end as sex,cm_r'
+      ''
+      
+        '  FROM cm_report_f1 f,cm_payment_schedule_portfel s,cm_active_cr' +
+        'edits p,cm_categories c where f.CREDITID=s.CREDITID and p.CUSTOM' +
+        'ERTYPE=c.id'
+      ''
+      ''
+      ''
+      'ORDER BY'
+      '  branch, district, village, boorowername*/'
+      ' ')
+    QBEDefinition.QBEFieldDefs = {
+      04000000450000000800000043524544495449440100000000000A000000424F
+      4F524F5745524944010000000000060000004352444E554D0100000000000C00
+      0000424F4F524F5745524E414D45010000000000080000004252414E43484944
+      010000000000060000004252414E43480100000000000A000000444953545249
+      4354494401000000000008000000444953545249435401000000000009000000
+      56494C4C41474549440100000000000700000056494C4C414745010000000000
+      09000000505552504F5345494401000000000007000000505552504F53450100
+      0000000006000000545950454944010000000000080000005459504544455343
+      01000000000008000000435244434F554E540100000000000D00000050415945
+      44435244434F554E540100000000000D00000046495253545452434844415445
+      0100000000000B0000004C415354504159444154450100000000000B00000047
+      4956454E414D4F554E540100000000001100000043414C43554C415445445045
+      5243454E540100000000000C00000044415445444542544D41494E0100000000
+      000B0000004441544544454254494E540100000000000900000050415945444D
+      41494E010000000000080000005041594544494E540100000000000C00000050
+      415945444D4F4E4D41494E0100000000000B00000050415945444D4F4E494E54
+      01000000000008000000444542544D41494E0100000000000700000044454254
+      494E540100000000000C000000444542544F5645524D41494E0100000000000B
+      000000444542544F564552494E540100000000000A00000043414C4353544154
+      55530100000000000A00000043524544504552494F4401000000000007000000
+      494E5452415445010000000000060000004F4452415445010000000000050000
+      0053424F55540100000000000B00000050524F4C4F4E47444154450100000000
+      000A00000050524F4C4F4E47434E5401000000000010000000445545494E5445
+      5245535444454249540100000000000A00000044455343524950494F4E010000
+      0000000800000053464552414441590100000000000F000000505552504F5345
+      4F464352454449540100000000000800000043555252454E4359010000000000
+      090000004C4F414E41434349440100000000000D000000424F4F524F57455241
+      434349440100000000000F000000424F4F524F57455241434352455354010000
+      00000007000000414444524553530100000000000600000053414C4152590100
+      000000000B00000050484F4E454E554D42455201000000000007000000524553
+      45525645010000000000070000004C4154454441590100000000000B00000044
+      45534352495054494F4E010000000000090000004749524F5652455354010000
+      000000130000005052494D415259524553455256454152455354010000000000
+      160000005052494D415259505552524553455256454152455354010000000000
+      0A00000047454347554E4641495A0100000000000A000000504C454447454E41
+      4D450100000000000C0000004F44454D455F454D53414C490100000000000C00
+      00004558504552545F5F4E414D45010000000000050000004B55525553010000
+      0000000400000053495241010000000000060000004D55444445540100000000
+      0014000000445545444154454649525354434F4E545241435401000000000010
+      000000444154454F46434F4E434C5553494F4E010000000000050000004B5258
+      45540100000000000300000056414C0100000000000300000054495001000000
+      0000090000004B524F52414641495A01000000000004000000504C4F52010000
+      00000006000000534F4E4D4542010000000000}
+    Cursor = crSQLWait
+    Session = CMDataModule.CMSession
+    Left = 48
+    Top = 168
+    object ResultDS1SIRA: TFloatField
+      FieldName = 'SIRA'
+    end
+    object ResultDS1CREDITID: TFloatField
+      FieldName = 'CREDITID'
+      Required = True
+    end
+    object ResultDS1BOOROWERID: TFloatField
+      FieldName = 'BOOROWERID'
+      Required = True
+    end
+    object ResultDS1CRDNUM: TStringField
+      FieldName = 'CRDNUM'
+      Required = True
+      Size = 255
+    end
+    object ResultDS1BOOROWERNAME: TStringField
+      FieldName = 'BOOROWERNAME'
+      Required = True
+      Size = 255
+    end
+    object ResultDS1BRANCHID: TFloatField
+      FieldName = 'BRANCHID'
+      Required = True
+    end
+    object ResultDS1BRANCH: TStringField
+      FieldName = 'BRANCH'
+      Required = True
+      Size = 294
+    end
+    object ResultDS1DISTRICTID: TFloatField
+      FieldName = 'DISTRICTID'
+      Required = True
+    end
+    object ResultDS1DISTRICT: TStringField
+      FieldName = 'DISTRICT'
+      Required = True
+      Size = 255
+    end
+    object ResultDS1VILLAGEID: TFloatField
+      FieldName = 'VILLAGEID'
+      Required = True
+    end
+    object ResultDS1VILLAGE: TStringField
+      FieldName = 'VILLAGE'
+      Required = True
+      Size = 255
+    end
+    object ResultDS1PURPOSEID: TFloatField
+      FieldName = 'PURPOSEID'
+      Required = True
+    end
+    object ResultDS1PURPOSE: TStringField
+      FieldName = 'PURPOSE'
+      Required = True
+      Size = 255
+    end
+    object ResultDS1TYPEID: TFloatField
+      FieldName = 'TYPEID'
+      Required = True
+    end
+    object ResultDS1TYPEDESC: TStringField
+      FieldName = 'TYPEDESC'
+      Required = True
+      Size = 10
+    end
+    object ResultDS1CRDCOUNT: TFloatField
+      FieldName = 'CRDCOUNT'
+      Required = True
+    end
+    object ResultDS1PAYEDCRDCOUNT: TFloatField
+      FieldName = 'PAYEDCRDCOUNT'
+      Required = True
+    end
+    object ResultDS1FIRSTTRCHDATE: TDateTimeField
+      FieldName = 'FIRSTTRCHDATE'
+    end
+    object ResultDS1LASTPAYDATE: TDateTimeField
+      FieldName = 'LASTPAYDATE'
+    end
+    object ResultDS1GIVENAMOUNT: TFloatField
+      FieldName = 'GIVENAMOUNT'
+      Required = True
+    end
+    object ResultDS1CALCULATEDPERCENT: TFloatField
+      FieldName = 'CALCULATEDPERCENT'
+      Required = True
+    end
+    object ResultDS1DATEDEBTMAIN: TFloatField
+      FieldName = 'DATEDEBTMAIN'
+      Required = True
+    end
+    object ResultDS1DATEDEBTINT: TFloatField
+      FieldName = 'DATEDEBTINT'
+      Required = True
+    end
+    object ResultDS1PAYEDMAIN: TFloatField
+      FieldName = 'PAYEDMAIN'
+      Required = True
+    end
+    object ResultDS1PAYEDINT: TFloatField
+      FieldName = 'PAYEDINT'
+      Required = True
+    end
+    object ResultDS1PAYEDMONMAIN: TFloatField
+      FieldName = 'PAYEDMONMAIN'
+      Required = True
+    end
+    object ResultDS1PAYEDMONINT: TFloatField
+      FieldName = 'PAYEDMONINT'
+      Required = True
+    end
+    object ResultDS1DEBTMAIN: TFloatField
+      FieldName = 'DEBTMAIN'
+      Required = True
+    end
+    object ResultDS1DEBTINT: TFloatField
+      FieldName = 'DEBTINT'
+      Required = True
+    end
+    object ResultDS1DEBTOVERMAIN: TFloatField
+      FieldName = 'DEBTOVERMAIN'
+      Required = True
+    end
+    object ResultDS1DEBTOVERINT: TFloatField
+      FieldName = 'DEBTOVERINT'
+      Required = True
+    end
+    object ResultDS1CALCSTATUS: TStringField
+      FieldName = 'CALCSTATUS'
+      Required = True
+      Size = 12
+    end
+    object ResultDS1CREDPERIOD: TStringField
+      FieldName = 'CREDPERIOD'
+      Required = True
+      Size = 35
+    end
+    object ResultDS1INTRATE: TFloatField
+      FieldName = 'INTRATE'
+    end
+    object ResultDS1ODRATE: TFloatField
+      FieldName = 'ODRATE'
+    end
+    object ResultDS1SBOUT: TFloatField
+      FieldName = 'SBOUT'
+    end
+    object ResultDS1PROLONGDATE: TDateTimeField
+      FieldName = 'PROLONGDATE'
+    end
+    object ResultDS1PROLONGCNT: TFloatField
+      FieldName = 'PROLONGCNT'
+    end
+    object ResultDS1DUEINTERESTDEBIT: TFloatField
+      FieldName = 'DUEINTERESTDEBIT'
+    end
+    object ResultDS1DESCRIPION: TStringField
+      FieldName = 'DESCRIPION'
+      Size = 50
+    end
+    object ResultDS1SFERADAY: TStringField
+      FieldName = 'SFERADAY'
+      Size = 50
+    end
+    object ResultDS1PURPOSEOFCREDIT: TStringField
+      FieldName = 'PURPOSEOFCREDIT'
+      Size = 50
+    end
+    object ResultDS1CURRENCY: TStringField
+      FieldName = 'CURRENCY'
+      Size = 65
+    end
+    object ResultDS1LOANACCID: TStringField
+      FieldName = 'LOANACCID'
+      Size = 30
+    end
+    object ResultDS1BOOROWERACCID: TStringField
+      FieldName = 'BOOROWERACCID'
+      Size = 30
+    end
+    object ResultDS1BOOROWERACCREST: TFloatField
+      FieldName = 'BOOROWERACCREST'
+    end
+    object ResultDS1ADDRESS: TStringField
+      FieldName = 'ADDRESS'
+      Size = 80
+    end
+    object ResultDS1SALARY: TStringField
+      FieldName = 'SALARY'
+      Size = 100
+    end
+    object ResultDS1PHONENUMBER: TStringField
+      FieldName = 'PHONENUMBER'
+      Size = 350
+    end
+    object ResultDS1RESERVE: TStringField
+      FieldName = 'RESERVE'
+      Size = 29
+    end
+    object ResultDS1LATEDAY: TFloatField
+      FieldName = 'LATEDAY'
+    end
+    object ResultDS1DESCRIPTION: TStringField
+      FieldName = 'DESCRIPTION'
+      Size = 100
+    end
+    object ResultDS1GIROVREST: TFloatField
+      FieldName = 'GIROVREST'
+    end
+    object ResultDS1PRIMARYRESERVEAREST: TFloatField
+      FieldName = 'PRIMARYRESERVEAREST'
+    end
+    object ResultDS1PRIMARYPURRESERVEAREST: TFloatField
+      FieldName = 'PRIMARYPURRESERVEAREST'
+    end
+    object ResultDS1GECGUNFAIZ: TFloatField
+      FieldName = 'GECGUNFAIZ'
+    end
+    object ResultDS1PLEDGENAME: TStringField
+      FieldName = 'PLEDGENAME'
+      Size = 80
+    end
+    object ResultDS1ODEME_EMSALI: TFloatField
+      FieldName = 'ODEME_EMSALI'
+    end
+    object ResultDS1EXPERT__NAME: TStringField
+      FieldName = 'EXPERT__NAME'
+      Size = 50
+    end
+    object ResultDS1KURUS: TFloatField
+      FieldName = 'KURUS'
+    end
+    object ResultDS1MUDDET: TFloatField
+      FieldName = 'MUDDET'
+    end
+    object ResultDS1DUEDATEFIRSTCONTRACT: TDateTimeField
+      FieldName = 'DUEDATEFIRSTCONTRACT'
+      Required = True
+    end
+    object ResultDS1DATEOFCONCLUSION: TDateTimeField
+      FieldName = 'DATEOFCONCLUSION'
+      Required = True
+    end
+    object ResultDS1KRXET: TFloatField
+      FieldName = 'KRXET'
+      Required = True
+    end
+    object ResultDS1VAL: TStringField
+      FieldName = 'VAL'
+      Size = 10
+    end
+    object ResultDS1TIP: TStringField
+      FieldName = 'TIP'
+      Size = 128
+    end
+    object ResultDS1KRORAFAIZ: TFloatField
+      FieldName = 'KRORAFAIZ'
+    end
+    object ResultDS1PLOR: TFloatField
+      FieldName = 'PLOR'
+    end
+    object ResultDS1SONMEB: TFloatField
+      FieldName = 'SONMEB'
+    end
+  end
+  object Person: TOracleDataSet
+    SQL.Strings = (
+      'select personaltype from cm_active_credits '
+      'where id=:credid')
+    Variables.Data = {0300000001000000070000003A435245444944030000000000000000000000}
+    Session = CMDataModule.CMSession
+    Left = 416
+    Top = 256
+  end
+  object ResultDS: TOracleDataSet
+    SQL.Strings = (
+      'SELECT f.*'
+      '     , cm_ak_funcs.GetLMCount(f.creditid,4) "Проблем"'
+      
+        '    ,s.paymentdate,s.principal,s.interest,s.principal+s.interest' +
+        ' as cem,'
+      '  case when s.sex=1 then'
+      
+        ' '#39'Kiши'#39' when s.sex=0 then '#39'Qadin'#39' end as sex ,p.dateofconclusion' +
+        ', p.creditlineamount krxet ,pr.name adiyat,   '
+      
+        '(select name from cm_vid_sob where id=p.ACTIVITIES_TYPE)  "Мцлки' +
+        'ййят нювц",'
+      
+        '(select name from cm_creditcat where id=p.CREDITACT) "Боржаланын' +
+        ' сектору",'
+      
+        '(select description from cm_activities where id=p.ACTIVITIES) "Б' +
+        'оржаланын фяалиййятi",'
+      
+        '(select description from cm_categories where  id=p.customertype)' +
+        '"Боржаланын фяалиййят нювц",'
+      
+        '(select description from cm_credittypes where id=p.credittype) "' +
+        'Kreditin tipi",'
+      
+        '(select name from AGRO_KREDIT_TARGET where id in (select DEPEND_' +
+        'ID from AGRO_KREDIT_PURPOSE where id =f.purposeid)) "Mящсулун ти' +
+        'пи"'
+      
+        ' FROM cm_report_f1 f,cm_payment_schedule_portfel s,cm_portfolio ' +
+        'p , CM_SB_CUSTOMERS c ,smart.prinad pr where f.CREDITID=s.CREDIT' +
+        'ID   and p.id=f.creditid and'
+      ' c.PRINAD_KOD=pr.id and  p.BOOROWERID=c.id'
+      ''
+      ''
+      ''
+      ''
+      'ORDER BY'
+      '  branch, district, village, boorowername'
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      '/*SELECT f.*'
+      '     , cm_ak_funcs.getlmcount(f.creditid,4) pret'
+      '     , cm_ak_funcs.getlmcount(f.creditid,6) idd'
+      '     , cm_ak_funcs.getlmcount(f.creditid,7) qatn'
+      '     , cm_ak_funcs.geticracount(f.creditid,7) icra'
+      
+        '    ,s.paymentdate,s.principal,s.interest,s.principal+s.interest' +
+        ' as cem,'
+      '  case when s.sex=1 then'
+      ' '#39'Kiши'#39'  '
+      'when s.sex=0 then '#39'Qadin'#39
+      ' end as sex,cm_r'
+      ''
+      
+        '  FROM cm_report_f1 f,cm_payment_schedule_portfel s,cm_active_cr' +
+        'edits p,cm_categories c where f.CREDITID=s.CREDITID and p.CUSTOM' +
+        'ERTYPE=c.id'
+      ''
+      ''
+      ''
+      'ORDER BY'
+      '  branch, district, village, boorowername*/'
+      ' ')
+    QBEDefinition.QBEFieldDefs = {
+      040000004A0000000800000043524544495449440100000000000A000000424F
+      4F524F5745524944010000000000060000004352444E554D0100000000000C00
+      0000424F4F524F5745524E414D45010000000000080000004252414E43484944
+      010000000000060000004252414E43480100000000000A000000444953545249
+      4354494401000000000008000000444953545249435401000000000009000000
+      56494C4C41474549440100000000000700000056494C4C414745010000000000
+      09000000505552504F5345494401000000000007000000505552504F53450100
+      0000000006000000545950454944010000000000080000005459504544455343
+      01000000000008000000435244434F554E540100000000000D00000050415945
+      44435244434F554E540100000000000D00000046495253545452434844415445
+      0100000000000B0000004C415354504159444154450100000000000B00000047
+      4956454E414D4F554E540100000000001100000043414C43554C415445445045
+      5243454E540100000000000C00000044415445444542544D41494E0100000000
+      000B0000004441544544454254494E540100000000000900000050415945444D
+      41494E010000000000080000005041594544494E540100000000000C00000050
+      415945444D4F4E4D41494E0100000000000B00000050415945444D4F4E494E54
+      01000000000008000000444542544D41494E0100000000000700000044454254
+      494E540100000000000C000000444542544F5645524D41494E0100000000000B
+      000000444542544F564552494E540100000000000A00000043414C4353544154
+      55530100000000000A00000043524544504552494F4401000000000007000000
+      494E5452415445010000000000060000004F4452415445010000000000050000
+      0053424F55540100000000000B00000050524F4C4F4E47444154450100000000
+      000A00000050524F4C4F4E47434E5401000000000010000000445545494E5445
+      5245535444454249540100000000000A00000044455343524950494F4E010000
+      0000000800000053464552414441590100000000000F000000505552504F5345
+      4F464352454449540100000000000800000043555252454E4359010000000000
+      090000004C4F414E41434349440100000000000D000000424F4F524F57455241
+      434349440100000000000F000000424F4F524F57455241434352455354010000
+      00000007000000414444524553530100000000000600000053414C4152590100
+      000000000B00000050484F4E454E554D42455201000000000007000000524553
+      45525645010000000000070000004C4154454441590100000000000B00000044
+      45534352495054494F4E010000000000090000004749524F5652455354010000
+      000000130000005052494D415259524553455256454152455354010000000000
+      160000005052494D415259505552524553455256454152455354010000000000
+      0A00000047454347554E4641495A0100000000000A000000504C454447454E41
+      4D450100000000000C0000004F44454D455F454D53414C490100000000000C00
+      00004558504552545F5F4E414D45010000000000050000004B55525553010000
+      0000000B0000005041594D454E5444415445010000000000090000005052494E
+      434950414C01000000000008000000494E544552455354010000000000030000
+      005345580100000000000300000043454D01000000000010000000444154454F
+      46434F4E434C5553494F4E010000000000050000004B52584554010000000000
+      0600000041444959415401000000000007000000CFF0EEE1EBE5EC0100000000
+      000E000000CCF6EBEAE8E9E9FFF220EDFEE2F601000000000012000000C1EEF0
+      E6E0EBE0EDFBED20F1E5EAF2EEF0F301000000000015000000C1EEF0E6E0EBE0
+      EDFBED20F4FFE0EBE8E9E9FFF26901000000000019000000C1EEF0E6E0EBE0ED
+      FBED20F4FFE0EBE8E9E9FFF220EDFEE2F60100000000000D0000004B72656469
+      74696E20746970690100000000000D0000004DFFF9F1F3EBF3ED20F2E8EFE801
+      0000000000}
+    Cursor = crSQLWait
+    Session = CMDataModule.CMSession
+    Left = 504
+    Top = 48
+    object ResultDSODEME_EMSALI: TFloatField
+      DisplayLabel = 'Юдямя ямсалы'
+      FieldName = 'ODEME_EMSALI'
+      DisplayFormat = '#,#0.00'
+    end
+    object ResultDSCREDITID: TFloatField
+      DisplayLabel = 'Кред ЫД'
+      FieldName = 'CREDITID'
+      Required = True
+    end
+    object ResultDSBOOROWERID: TFloatField
+      DisplayLabel = 'Мцщ ЫД'
+      FieldName = 'BOOROWERID'
+      Required = True
+    end
+    object ResultDSCRDNUM: TStringField
+      DisplayLabel = 'Мцгавиля №'
+      FieldName = 'CRDNUM'
+      Required = True
+      Size = 255
+    end
+    object ResultDSBOOROWERNAME: TStringField
+      DisplayLabel = 'Мцштяри'
+      FieldName = 'BOOROWERNAME'
+      Required = True
+      Size = 255
+    end
+    object ResultDSBRANCHID: TFloatField
+      DisplayLabel = 'Фил ЫД'
+      FieldName = 'BRANCHID'
+      Required = True
+      Visible = False
+    end
+    object ResultDSBRANCH: TStringField
+      DisplayLabel = 'Филиал'
+      FieldName = 'BRANCH'
+      Required = True
+      Size = 255
+    end
+    object ResultDSVILLAGEID: TFloatField
+      DisplayLabel = 'Кянд ЫД'
+      FieldName = 'VILLAGEID'
+      Required = True
+      Visible = False
+    end
+    object ResultDSDISTRICTID: TFloatField
+      DisplayLabel = 'Район ЫД'
+      FieldName = 'DISTRICTID'
+      Required = True
+      Visible = False
+    end
+    object ResultDSDISTRICT: TStringField
+      DisplayLabel = 'Район'
+      FieldName = 'DISTRICT'
+      Required = True
+      Size = 255
+    end
+    object ResultDSVILLAGE: TStringField
+      DisplayLabel = 'Кянд'
+      FieldName = 'VILLAGE'
+      Required = True
+      Size = 255
+    end
+    object ResultDSCREDPERIOD: TStringField
+      DisplayLabel = 'Вясаитин мянбяйи'
+      FieldName = 'CREDPERIOD'
+      Required = True
+    end
+    object ResultDSDESCRIPION: TStringField
+      DisplayLabel = 'Мцштяринин статусу'
+      FieldName = 'DESCRIPION'
+      Size = 30
+    end
+    object ResultDSSEX: TStringField
+      DisplayLabel = 'Боржаланын жинси'
+      FieldName = 'SEX'
+      Size = 12
+    end
+    object ResultDSM: TStringField
+      FieldName = 'Mящсулун типи'
+      Size = 128
+    end
+    object ResultDSPURPOSE: TStringField
+      DisplayLabel = 'Кредит мящсулунун ады'
+      FieldName = 'PURPOSE'
+      Required = True
+      Size = 255
+    end
+    object ResultDSSFERADAY: TStringField
+      DisplayLabel = 'Мцштяринин фяалиййат сащяси'
+      FieldName = 'SFERADAY'
+      Size = 30
+    end
+    object ResultDSPURPOSEOFCREDIT: TStringField
+      DisplayLabel = 'Кредитин тяйинаты'
+      FieldName = 'PURPOSEOFCREDIT'
+      Size = 50
+    end
+    object ResultDSPURPOSEID: TFloatField
+      DisplayLabel = 'Мягсяд ЫД'
+      FieldName = 'PURPOSEID'
+      Required = True
+      Visible = False
+    end
+    object ResultDSTYPEID: TFloatField
+      DisplayLabel = 'Тип ЫД'
+      FieldName = 'TYPEID'
+      Required = True
+      Visible = False
+    end
+    object ResultDSTYPEDESC: TStringField
+      DisplayLabel = 'Тип'
+      FieldName = 'TYPEDESC'
+      Required = True
+      Size = 10
+    end
+    object ResultDSCRDCOUNT: TFloatField
+      DisplayLabel = 'Кред Сай'
+      FieldName = 'CRDCOUNT'
+      Required = True
+      Visible = False
+    end
+    object ResultDSPAYEDCRDCOUNT: TFloatField
+      DisplayLabel = 'Юдянилиб'
+      FieldName = 'PAYEDCRDCOUNT'
+      Required = True
+      Visible = False
+    end
+    object ResultDSDATEOFCONCLUSION: TDateTimeField
+      DisplayLabel = 'Кредитин верилмя тарихи'
+      FieldName = 'DATEOFCONCLUSION'
+      Required = True
+    end
+    object ResultDSFIRSTTRCHDATE: TDateTimeField
+      DisplayLabel = 'Илк транш'
+      FieldName = 'FIRSTTRCHDATE'
+      Required = True
+    end
+    object ResultDSLASTPAYDATE: TDateTimeField
+      DisplayLabel = 'Сон юдямя'
+      FieldName = 'LASTPAYDATE'
+      Required = True
+    end
+    object ResultDSPROLONGCNT: TFloatField
+      DisplayLabel = 'Пролонгасйа мцддяти'
+      FieldName = 'PROLONGCNT'
+    end
+    object ResultDSPROLONGDATE: TDateTimeField
+      DisplayLabel = 'Пролонгасйа тарихи'
+      FieldName = 'PROLONGDATE'
+    end
+    object ResultDSCURRENCY: TStringField
+      DisplayLabel = 'Валйута'
+      FieldName = 'CURRENCY'
+      Size = 65
+    end
+    object ResultDSKURUS: TFloatField
+      DisplayLabel = 'Бу эцня курс'
+      FieldName = 'KURUS'
+    end
+    object ResultDSINTRATE: TFloatField
+      DisplayLabel = 'фаиз. stavkasы'
+      FieldName = 'INTRATE'
+      DisplayFormat = '#,#0.0'
+    end
+    object ResultDSODRATE: TFloatField
+      DisplayLabel = 'gec фаиз. stavkasы'
+      FieldName = 'ODRATE'
+      DisplayFormat = '#,#0.0'
+    end
+    object ResultDSKRXET: TFloatField
+      DisplayLabel = 'Кредитин мябляьи'
+      FieldName = 'KRXET'
+      DisplayFormat = '#,#0.0 '
+    end
+    object ResultDSGIVENAMOUNT: TFloatField
+      DisplayLabel = 'Верилмиш kr'
+      FieldName = 'GIVENAMOUNT'
+      Required = True
+      DisplayFormat = '#,#0.0 '
+    end
+    object ResultDSDATEDEBTMAIN: TFloatField
+      DisplayLabel = 'Вахты чат.'
+      FieldName = 'DATEDEBTMAIN'
+      Required = True
+      DisplayFormat = '#,#0.0'
+    end
+    object ResultDSPAYEDMAIN: TFloatField
+      DisplayLabel = 'Юдян. ясас'
+      FieldName = 'PAYEDMAIN'
+      Required = True
+      DisplayFormat = '#,#0.0'
+    end
+    object ResultDSPAYEDMONMAIN: TFloatField
+      DisplayLabel = 'Жари айда юдянян ясас'
+      FieldName = 'PAYEDMONMAIN'
+      Required = True
+      DisplayFormat = '#,#0.0'
+    end
+    object ResultDSDEBTMAIN: TFloatField
+      DisplayLabel = 'Галыг kredit borc'
+      FieldName = 'DEBTMAIN'
+      Required = True
+      DisplayFormat = '#,#0.0'
+    end
+    object ResultDSDEBTOVERMAIN: TFloatField
+      DisplayLabel = 'Ясас борж цзря эежикмя мяб'
+      FieldName = 'DEBTOVERMAIN'
+      Required = True
+      DisplayFormat = '#,#0.0'
+    end
+    object ResultDSLATEDAY: TFloatField
+      DisplayLabel = 'Я.Б эеж эцнлярин сайы'
+      FieldName = 'LATEDAY'
+    end
+    object ResultDSCALCULATEDPERCENT: TFloatField
+      DisplayLabel = 'Щес фаиз'
+      FieldName = 'CALCULATEDPERCENT'
+      Required = True
+      DisplayFormat = '#,#0.0'
+    end
+    object ResultDSDATEDEBTINT: TFloatField
+      DisplayLabel = 'Вахты чат. % боржу'
+      FieldName = 'DATEDEBTINT'
+      Required = True
+      DisplayFormat = '#,#0.0'
+    end
+    object ResultDSPAYEDINT: TFloatField
+      DisplayLabel = 'Юдянилмиш. % бор'
+      FieldName = 'PAYEDINT'
+      Required = True
+      DisplayFormat = '#,#0.0'
+    end
+    object ResultDSPAYEDMONINT: TFloatField
+      DisplayLabel = 'Жари айда юдянян фаиз'
+      FieldName = 'PAYEDMONINT'
+      Required = True
+      DisplayFormat = '#,#0.0'
+    end
+    object ResultDSDEBTINT: TFloatField
+      DisplayLabel = 'Фаиз галыьы'
+      FieldName = 'DEBTINT'
+      Required = True
+      DisplayFormat = '#,#0.0'
+    end
+    object ResultDSDEBTOVERINT: TFloatField
+      DisplayLabel = 'Фаиз боржу цзря  эежикмя мяб'
+      FieldName = 'DEBTOVERINT'
+      Required = True
+      DisplayFormat = '#,#0.0'
+    end
+    object ResultDSGECGUNFAIZ: TFloatField
+      DisplayLabel = 'Ф.Б эеж эцнлярин сайы'
+      FieldName = 'GECGUNFAIZ'
+    end
+    object ResultDSLOANACCID: TStringField
+      DisplayLabel = 'Ссуда щесабы'
+      FieldName = 'LOANACCID'
+      Size = 30
+    end
+    object ResultDSBOOROWERACCID: TStringField
+      DisplayLabel = 'Жари щесаб'
+      FieldName = 'BOOROWERACCID'
+      Size = 30
+    end
+    object ResultDSBOOROWERACCREST: TFloatField
+      DisplayLabel = 'Жари щесаб галыьы'
+      FieldName = 'BOOROWERACCREST'
+      DisplayFormat = '#,#0.0 '
+    end
+    object ResultDSADDRESS: TStringField
+      DisplayLabel = 'Йашайыш йери'
+      FieldName = 'ADDRESS'
+      Size = 60
+    end
+    object ResultDSPHONENUMBER: TStringField
+      DisplayLabel = 'Телефону'
+      FieldName = 'PHONENUMBER'
+      Size = 350
+    end
+    object ResultDSSALARY: TStringField
+      DisplayLabel = 'Фяалиййят йери'
+      FieldName = 'SALARY'
+      Size = 50
+    end
+    object ResultDSDESCRIPTION: TStringField
+      DisplayLabel = 'Эировун нювц'
+      FieldName = 'DESCRIPTION'
+      Size = 45
+    end
+    object ResultDSPLEDGENAME: TStringField
+      DisplayLabel = 'Эировун тясвири'
+      FieldName = 'PLEDGENAME'
+      Size = 80
+    end
+    object ResultDSGIROVREST: TFloatField
+      DisplayLabel = 'Эировун дяйяри'
+      FieldName = 'GIROVREST'
+      DisplayFormat = '#,#0.0 '
+    end
+    object ResultDSDUEBYSCHEME: TFloatField
+      FieldKind = fkCalculated
+      FieldName = 'DUEBYSCHEME'
+      Visible = False
+      Calculated = True
+    end
+    object ResultDSCALCSTATUS: TStringField
+      DisplayLabel = '% щесабламасы статусу'
+      FieldName = 'CALCSTATUS'
+      Required = True
+      Size = 12
+    end
+    object ResultDSRESERVE: TStringField
+      DisplayLabel = 'Ещтиййат дяряжяси'
+      FieldName = 'RESERVE'
+      Size = 18
+    end
+    object ResultDSPRIMARYRESERVEAREST: TFloatField
+      DisplayLabel = 'Ади ещтиййат щес галыг'
+      FieldName = 'PRIMARYRESERVEAREST'
+      DisplayFormat = '#,#0.0 '
+    end
+    object ResultDSPRIMARYPURRESERVEAREST: TFloatField
+      DisplayLabel = 'Мягсядли ещтиййат щес галыг'
+      FieldName = 'PRIMARYPURRESERVEAREST'
+      DisplayFormat = '#,#0.0 '
+    end
+    object ResultDSEXPERT__NAME: TStringField
+      DisplayLabel = 'Кредити жялб едян М ады'
+      FieldName = 'EXPERT__NAME'
+      Size = 25
+    end
+    object ResultDSDSDesigner: TStringField
+      FieldName = 'Проблем'
+      Size = 4000
+    end
+    object ResultDSPAYMENTDATE: TDateTimeField
+      DisplayLabel = 'Cari ayda юдяниш тарихи'
+      FieldName = 'PAYMENTDATE'
+    end
+    object ResultDSPRINCIPAL: TFloatField
+      DisplayLabel = 'Cari ayda ясасдан юдяниш'
+      FieldName = 'PRINCIPAL'
+    end
+    object ResultDSINTEREST: TFloatField
+      DisplayLabel = 'Cari ayda  % дян юдяниш'
+      FieldName = 'INTEREST'
+    end
+    object ResultDSCEM: TFloatField
+      DisplayLabel = 'Жями юдяниш'
+      FieldName = 'CEM'
+    end
+    object ResultDSADIYAT: TStringField
+      DisplayLabel = 'Боржаланын банка адиййаты'
+      FieldName = 'ADIYAT'
+      Size = 90
+    end
+    object ResultDSDSDesigner2: TStringField
+      FieldName = 'Мцлкиййят нювц'
+      Size = 150
+    end
+    object ResultDSDSDesigner3: TStringField
+      FieldName = 'Боржаланын сектору'
+      Size = 64
+    end
+    object ResultDSi: TStringField
+      FieldName = 'Боржаланын фяалиййятi'
+      Size = 64
+    end
+    object ResultDSDSDesigner4: TStringField
+      FieldName = 'Боржаланын фяалиййят нювц'
+      Size = 128
+    end
+    object ResultDSKreditintipi: TStringField
+      FieldName = 'Kreditin tipi'
+      Size = 128
+    end
+  end
+  object Browerinfo: TOracleDataSet
+    SQL.Strings = (
+      'select * from cm_boorowerinfo'
+      'where creditid=:crid')
+    Variables.Data = {0300000001000000050000003A43524944030000000000000000000000}
+    Session = CMDataModule.CMSession
+    Left = 64
+    Top = 328
+  end
+end

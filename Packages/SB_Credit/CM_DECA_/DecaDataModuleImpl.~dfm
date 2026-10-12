@@ -1,0 +1,129 @@
+object DecaDataModule: TDecaDataModule
+  OldCreateOrder = False
+  Left = 204
+  Top = 156
+  Height = 480
+  Width = 696
+  object DecaData: TOracleDataSet
+    SQL.Strings = (
+      'SELECT'
+      '   A.BOOROWERID AS ID,'
+      '   A.NAME AS NAME,'
+      '   A.COUNTRYCODE AS COUNTRCODE,'
+      '   A.BANKRUPTEYSTATUS AS BNKSTATUS,'
+      
+        '   cm_deca.get_custdateofbirth(b.boorowerid) AS DATOFBIRTH, --do' +
+        'gum tarixi'
+      
+        '   cm_deca.get_custplaceofbirth(b.boorowerid) AS PLACEBIRTH, --d' +
+        'ogum yeri '
+      '   A.pincode AS PINCODE,'#9#9#9'--pin kod '
+      '   A.guarantorid AS GID,'#9'--zamin id '
+      '   a.guarantorname AS GNAME,'#9'--zamin ad '
+      '   A.guarantorid2 AS GID2,'#9'--zamin id2 '
+      '   A.guarantorname2 AS GNAME2,'#9'--zamin ad2 '
+      '   A.guarantorid3 AS GID3,'#9'--zamin id3 '
+      '   A.guarantorname3 AS GNAME3,'#9'--zamin ad3 '
+      '   cm_deca.get_credittypes(b.id) CREDITTYPE,'#9'--kreditin tipi'
+      
+        '   cm_deca.get_lastcreditpayment(b.id) LASTPAYDAT,'#9'--sonuncu ode' +
+        'nish tarixi '
+      
+        '   cm_deca.get_creditpaymentamount(b.id) MPAYAMOUNT,'#9'--ayliq ode' +
+        'nish '
+      
+        '   cm_deca.get_reserveaccountostat(b.id) PROVISION,'#9'--ehtiyyat m' +
+        'iqdari'
+      '   A.FIRSTOWNERID AS ID2,'
+      '   A.FIRSTOWNERNAME AS NAME2,'
+      '   A.SECONDOWNERID AS ID3,'
+      '   A.SECONDOWNERNAME AS NAME3,'
+      '   A.THIRDOWNERID AS ID4,'
+      '   A.THIRDOWNERNAME AS NAME4,'
+      '   B.ID as InternalID, -- INTERNAL FIELD'
+      '   CM_COMMON.AccountNumber_Get(c.ContractaccID) AS ACCOUNTNO ,'
+      '   V.VAL_NAME AS CURRENCY,'
+      
+        '   DECODE(B.INITIALAMOUNT,0,B.CREDITLINEAMOUNT,B.INITIALAMOUNT) ' +
+        'AS INITIALSUM,'
+      '   B.CREDITLINEAMOUNT AS CRDLINESUM,'
+      '   D.REST + D.DUEREST AS DISOUSUM ,'
+      '   B.ANNUALYINTERESTRATE AS RATE,'
+      '   P.CODE AS PURPOSE,'
+      
+        '   TRUNC(MONTHS_BETWEEN(B.DUEDATEFIRSTCONTRACT,B.DATEOFCONCLUSIO' +
+        'N)) AS PERIODMONT ,'
+      '   B.DATEOFCONCLUSION AS DATEGRANT,'
+      '   B.DUEDATEFIRSTCONTRACT AS FIRSTCONTR,'
+      
+        '   DECODE(B.DUEDATELASTCONTRACT,null,B.DUEDATEFIRSTCONTRACT,B.DU' +
+        'EDATELASTCONTRACT) AS LASTCONTR,'
+      
+        '   CM_DECA.DueDaysCount(:HDATE , B.DUEDATEFIRSTCONTRACT) AS DAYS' +
+        'MAIN ,'
+      
+        '   CM_DECA.DueDaysCount(:HDATE , B.DUEDATEFIRSTCONTRACT) AS DAYS' +
+        'INTRST ,'
+      '   D.DUEINTERESTREST+D.interestrest AS OIAPERIOD ,'
+      
+        '   CM_DECA.OiaForLastThreeMonths(:HDATE , B.DUEDATEFIRSTCONTRACT' +
+        ',D.DUEINTERESTREST) AS OIATHREE ,'
+      '   0 AS PROLONGS ,'
+      '   E.CODE AS CLASSCODE,'
+      '   CM_DECA.Get_CreditStatus(B.ID,:HDATE) AS STATUSCODE ,'
+      '   DECODE(G.TYPECODE,'#39'000'#39',null,G.TYPECODE) AS COLLCODE,'
+      '   F.ANYINFOTODISTING AS INFDISTING,'
+      '   D.PLEDGEPRICE * O.OSTAT AS MARKETSUM ,'
+      '   F.REGISTRYNO AS REGNO,'
+      '   F.REGISTRYDATE AS REGDATE,'
+      '   F.REGISTRYAGENCY AS REGAGENCY'
+      'FROM'
+      '   CM_BOOROWERINFO A'
+      ' , CM_ACCOUNTS C'
+      ' , CM_RESERVE_TYPES E'
+      ' , CM_GUARANTEE F'
+      ' , CM_PORTFOLIO B'
+      ' , CM_PLEDGES G'
+      ' , CM_HISTORY D'
+      ' , SB_OPERKURS O'
+      ' , SB_AVALUTE V'
+      ' , CM_CATEGORIES P'
+      'WHERE'
+      '     (A.CREDITID = B.ID)'
+      ' AND (C.CREDITID = B.ID)'
+      ' AND (D.CREDITID = B.ID)'
+      ' AND (E.ID = D.RESERVEID)'
+      ' AND (F.CREDITID = B.ID)'
+      ' AND (G.ID = F.PLEDGEID)'
+      ' AND (D.HDATE=:HDATE)'
+      ' AND ((B.CLOSEDATE IS NULL) or (B.CLOSEDATE >=:HDATE))'
+      ' AND (O.DAT=:HDATE)'
+      ' AND (O.VAL_KOD=B.CURRENCY)'
+      '--AND (O.OSTAT * B.CREDITLINEAMOUNT >= 1000)'
+      ' AND (V.VALUTE=B.CURRENCY)'
+      ' AND (B.DATEOFCONCLUSION<=:HDATE)'
+      '-- AND (B.CLOSEDATE is not null)'
+      ' AND (P.ID = B.CUSTOMERTYPE)'
+      'and (B.usrgroup <> 2981)')
+    Variables.Data = {0300000001000000060000003A48444154450C0000000000000000000000}
+    Cursor = crSQLWait
+    Session = CMDataModule.CMSession
+    Left = 80
+    Top = 88
+  end
+  object DataSrcDecaData: TDataSource
+    DataSet = DecaData
+    Left = 80
+    Top = 32
+  end
+  object DecaTable: TTable
+    Left = 208
+    Top = 48
+  end
+  object SaveDlg: TSaveDialog
+    DefaultExt = 'dbf'
+    Filter = '*.dbf,*.db|*.dbf;*.db'
+    Left = 360
+    Top = 48
+  end
+end

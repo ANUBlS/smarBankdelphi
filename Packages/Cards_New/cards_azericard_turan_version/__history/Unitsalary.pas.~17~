@@ -1,0 +1,648 @@
+﻿unit Unitsalary;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Grids, DBGrids, ComCtrls, ToolWin, ImgList, CMExcelExport, Menus,
+  OleServer, ExcelXP,oracledata,Variants, DB,strutils;
+
+type
+  TSalary = class(TForm)
+    PopupMenu3: TPopupMenu;
+    EXCEL2: TMenuItem;
+    PopupMenu2: TPopupMenu;
+    EXCEL1: TMenuItem;
+    PopupMenu1: TPopupMenu;
+    N11: TMenuItem;
+    N12: TMenuItem;
+    CMExcelExport1: TCMExcelExport;
+    ImageList1: TImageList;
+    CoolBar1: TCoolBar;
+    ToolBar1: TToolBar;
+    isertbtn: TToolButton;
+    ToolButton1: TToolButton;
+    ToolButton7: TToolButton;
+    ToolButton2: TToolButton;
+    DBGrid1: TDBGrid;
+    DBGrid2: TDBGrid;
+    OpenDialogCards: TOpenDialog;
+    ExcelApplication1: TExcelApplication;
+    ToolButton3: TToolButton;
+    procedure FormActivate(Sender: TObject);
+    procedure isertbtnClick(Sender: TObject);
+    procedure DBGrid1DrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TColumn; State: TGridDrawState);
+    procedure DBGrid2DrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TColumn; State: TGridDrawState);
+    procedure DBGrid1TitleClick(Column: TColumn);
+    procedure DBGrid2TitleClick(Column: TColumn);
+    procedure N11Click(Sender: TObject);
+    procedure N12Click(Sender: TObject);
+    procedure EXCEL1Click(Sender: TObject);
+    procedure EXCEL2Click(Sender: TObject);
+    procedure ToolButton2Click(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure ToolButton1Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure ToolButton3Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Salary: TSalary;
+
+implementation
+
+uses Unit18,sboapiDataModuleImpl, SBTranslateProc, UFX71;
+
+{$R *.DFM}
+
+procedure TSalary.FormActivate(Sender: TObject);
+begin
+DataMod_CARDS.salarybase.Open;
+DataMod_CARDS.salarybase2.Open;
+end;
+
+procedure TSalary.isertbtnClick(Sender: TObject);
+const
+    c_info = '%d record is imported!';
+var
+   V,Sheet,Sheets  :Variant;
+   cell,row,i,j    :Integer;
+   t:string;
+begin
+  if OpenDialogCards.Execute then begin
+//**********************
+
+
+  DataMod_CARDS.salarybase.Open;
+  V:=ExcelApplication1.Application;
+  ExcelApplication1.Connect;
+  V.Workbooks.Open( OpenDialogCards.FileName);
+  Sheet := V.Workbooks[1].Worksheets['CARDS'];
+  Sheets := V.Sheets;
+
+  DataMod_CARDS.salarybase.First;
+  //for j:=10 to RecCount do
+  j:=10;
+  repeat
+   //begin
+   cell :=2;
+   DataMod_CARDS.salarybase.Insert ;
+    for i:=0  to DataMod_CARDS.salarybase.FieldCount-4 do
+     begin
+      Application.ProcessMessages;
+     //  ShowMessage(DataMod_CARDS.salarybase.Fields[i].AsString);
+      DataMod_CARDS.salarybase.Fields[i].AsString :=Sheet.cells[j,cell];
+      cell:=cell+1;
+     end;
+    DataMod_CARDS.salarybase.Post;
+    DataMod_CARDS.salarybase.Next;
+    j:=j+1;
+  until Sheet.cells[j,2].Text = '';
+//   end;
+ t:=Sheet.cells[6,3];
+
+//ShowMessage(Sheet.cells[6,3]);
+  V :=null;
+  Application.ProcessMessages;
+  ExcelApplication1.Quit;
+  ExcelApplication1.Disconnect;
+  Application.ProcessMessages;
+  DataMod_CARDS.salarybase.session.Commit;
+  ShowMessage(Format(c_info, [j-10]));
+//**********************
+  end;
+
+  {if OpenDialogCards.Execute}
+  if t<>'' then
+     DataMod_CARDS.mainpacket.CallProcedure('saltr',[t]);
+
+
+  DataMod_CARDS.salarybase.Refresh;
+  DataMod_CARDS.salarybase2.Refresh;
+
+  end;
+
+
+procedure TSalary.DBGrid1DrawColumnCell(Sender: TObject; const Rect: TRect;
+  DataCol: Integer; Column: TColumn; State: TGridDrawState);
+var
+  ImageIndex: Integer;
+
+begin
+
+ ImageIndex := -1;
+  with Sender as TDBGrid do
+  begin
+    if DataSource.DataSet.RecordCount <> 0 then
+    begin
+      case DataSource.DataSet.FieldByName('STATUS').AsInteger of
+
+      1:
+        ImageIndex :=25;
+      2:
+        ImageIndex :=3 ;
+      3:
+        ImageIndex :=26;
+
+      4:
+        ImageIndex:=13;  
+
+      else
+      end;
+      if (DataCol = 1) and (ImageIndex <> -1) then
+        ImageList1.Draw(Canvas, Rect.Left, Rect.Top, ImageIndex, True)
+      else
+        DefaultDrawColumnCell(Rect, DataCol, Column, State);
+    end;
+
+
+
+
+  end;
+end;
+
+procedure TSalary.DBGrid2DrawColumnCell(Sender: TObject; const Rect: TRect;
+  DataCol: Integer; Column: TColumn; State: TGridDrawState);
+var
+  ImageIndex: Integer;
+
+begin
+
+ ImageIndex := -1;
+  with Sender as TDBGrid do
+  begin
+    if DataSource.DataSet.RecordCount <> 0 then
+    begin
+      case DataSource.DataSet.FieldByName('STATUS').AsInteger of
+
+      1:
+        ImageIndex :=25;
+      2:
+        ImageIndex :=3 ;
+      3:
+        ImageIndex :=26;
+
+      4:
+        ImageIndex:=13;  
+
+      else
+      end;
+      if (DataCol = 1) and (ImageIndex <> -1) then
+        ImageList1.Draw(Canvas, Rect.Left, Rect.Top, ImageIndex, True)
+      else
+        DefaultDrawColumnCell(Rect, DataCol, Column, State);
+    end;
+
+
+
+
+  end;
+end;
+
+procedure TSalary.DBGrid1TitleClick(Column: TColumn);
+var
+   TitleName :string;
+   SortPosition: word;
+begin
+ SortPosition :=100;
+ //OrderedTitle :=Column.FieldName; //H.R. 24.06.2008
+ if (DBGrid1.DataSource.DataSet.IsEmpty) or (Column.FieldName = EmptyStr) then Exit;
+ Screen.Cursor :=crHourGlass;
+ TitleName :=Column.FieldName;
+ with TOracleDataSet(DBGrid1.DataSource.DataSet) do
+  try
+  
+   SortPosition :=SQL.Add('ORDER BY '+ TitleName);
+   Refresh;
+  finally
+   SQL[SortPosition] :=EmptyStr;
+   Screen.Cursor :=crDefault;
+  end;
+end;
+
+procedure TSalary.DBGrid2TitleClick(Column: TColumn);
+var
+   TitleName :string;
+   SortPosition: word;
+begin
+ SortPosition :=100;
+ //OrderedTitle :=Column.FieldName; //H.R. 24.06.2008
+ if (DBGrid2.DataSource.DataSet.IsEmpty) or (Column.FieldName = EmptyStr) then Exit;
+ Screen.Cursor :=crHourGlass;
+ TitleName :=Column.FieldName;
+ with TOracleDataSet(DBGrid2.DataSource.DataSet) do
+  try
+  
+   SortPosition :=SQL.Add('ORDER BY '+ TitleName);
+   Refresh;
+  finally
+   SQL[SortPosition] :=EmptyStr;
+   Screen.Cursor :=crDefault;
+  end;
+end;
+
+procedure TSalary.N11Click(Sender: TObject);
+begin
+  if not CMExcelExport1.Connected then CMExcelExport1.Connect;
+  CMExcelExport1.ExportDataset(DataMod_CARDS.salarybase,'salary',true);
+  CMExcelExport1.Disconnect;
+end;
+
+procedure TSalary.N12Click(Sender: TObject);
+begin
+  if not CMExcelExport1.Connected then CMExcelExport1.Connect;
+  CMExcelExport1.ExportDataset(DataMod_CARDS.salarybase2,'salary',true);
+  CMExcelExport1.Disconnect;
+end;
+
+procedure TSalary.EXCEL1Click(Sender: TObject);
+begin
+N11.Click;
+end;
+
+procedure TSalary.EXCEL2Click(Sender: TObject);
+begin
+N12.Click;
+end;
+
+procedure TSalary.ToolButton2Click(Sender: TObject);
+begin
+DataMod_CARDS.mainpacket.CallProcedure('delete_salary',[]);
+DataMod_CARDS.salarybase.close;
+DataMod_CARDS.salarybase.open;
+
+DataMod_CARDS.salarybase2.close;
+DataMod_CARDS.salarybase2.open;
+end;
+
+
+
+
+
+
+function DateTimeToStrUs(dt: TDatetime): string;
+var
+    us: string;
+begin
+    //Spit out most of the result: '20160802 11:34:36.'
+    Result := FormatDateTime('hh":"nn":"ss"-" dd.mm.yyyy', dt);
+
+    //extract the number of microseconds
+    dt := Frac(dt); //fractional part of day
+    dt := dt * 24*60*60; //number of seconds in that day
+    us := IntToStr(Round(Frac(dt)*1000000))+'*';
+
+    //Add the us integer to the end:
+    // '20160801 11:34:36.' + '00' + '123456'
+    Result := us+Result + StringOfChar('0', 6-Length(us));
+end;
+
+
+function String2Hex(const Buffer: AnsiString): string;
+begin
+  SetLength(Result, Length(Buffer) * 2);
+  BinToHex(PAnsiChar(Buffer), PChar(Result), Length(Buffer));
+end;
+
+function Hex2String(const Buffer: string): AnsiString;
+begin
+  SetLength(Result, Length(Buffer) div 2);
+  HexToBin(PChar(Buffer), PAnsiChar(Result), Length(Result));
+end;
+
+function Encrypting(key:integer): AnsiString;
+var
+st,s,dt,str:string;
+x,i,k:integer;
+begin
+
+   //ShowMessage(DateTimeToStr(now));
+
+//memo1.Lines.Add(String2Hex('SMARTBANK.EXE'));
+//memo1.Lines.Add(String2Hex(DateTimeToStr(now)));
+
+//memo1.Lines.Add(String2Hex(DateTimeToStr(now)+'SMARTBANK.EXE'+'AZIPS'));
+
+//memo1.Lines.Add(Hex2String(copy(edit1.Text,39,26)));
+    dt:=   DateTimeToStrUs(now);
+
+    k:=strtoint(copy(dt,8,2));
+ st:=String2Hex(dt+'SMARTBANK.EXE'+'XOHKS');
+x:=k;
+//Edit3.Text:='';
+for i:=1 to length(st) do
+//if (st[i]<>' ') and (st[i]<>'.') then
+begin
+s:=chr((ord(st[i])-x) );
+str:=str+s;
+
+end;
+//memo1.Lines.Add(str)  ;
+  //showmessage('--0');
+Result:=  str;
+end ;
+function Decrypt(v_str:String;key:integer)   : AnsiString;
+  var
+st,str,s:string;
+x,i:integer;
+begin
+st:=v_str;
+x:=key;
+
+for i:=1 to length(st) do
+//if (st[i]<>' ') and (st[i]<>'.') then
+begin
+s:=chr((ord(st[i])+x) );
+str:=str+s;
+end;
+
+//showmessage(inttostr(key));
+Result := str;
+end;
+
+
+
+
+
+function  ufxcredit(accountid:Integer;v_amount:Double):Double  ;
+ var   st2,st,st5,st4,st3:string;
+begin
+
+with  DataMod_CARDS do
+ begin
+
+   get_cr_acc.Close;
+   get_cr_acc.SetVariable('vaccid',accountid);
+   get_cr_acc.Open;
+
+   get_ufx_check.Close;
+   get_ufx_check.SetVariable('vaccid',accountid);
+   get_ufx_check.Open;
+
+  //  ShowMessage(inttostr(get_cr_acc.FieldByName('ncount').AsInteger));
+
+   if get_cr_acc.FieldByName('ncount').AsInteger>0 then
+     begin
+        if get_ufx_check.FieldByName('v_cnt').AsInteger=0 then
+         begin
+          get_creditid.Close;
+          get_creditid.SetVariable('vaccid',accountid);
+          get_creditid.Open;
+
+
+          get_debtamount.Close;
+          get_debtamount.SetVariable('VCREDITID',get_creditid.FieldByName('VCREDITID').AsInteger);
+          get_debtamount.Open;
+
+
+
+          if v_amount<get_debtamount.FieldByName('vdueinterestrest').AsFloat then
+            begin
+            Result:= 0  ;
+
+            end
+            else
+            begin
+            Result:=  v_amount- get_debtamount.FieldByName('vdueinterestrest').AsFloat;
+
+            end;
+
+
+          Insufx.Close;
+          Insufx.SetVariable('VCREDITID',get_creditid.FieldByName('VCREDITID').AsInteger);
+          Insufx.SetVariable('vaccid',accountid);
+          Insufx.SetVariable('VDUEINTERESTREST',get_debtamount.FieldByName('vdueinterestrest').AsFloat);
+          Insufx.SetVariable('V_REST',v_amount- get_debtamount.FieldByName('vdueinterestrest').AsFloat);
+          Insufx.SetVariable('VCODE',Encrypting(get_creditid.FieldByName('VCREDITID').AsInteger));
+          Insufx.ExecSQL;
+          sboapiDataModule.SBSession.Commit();
+         end
+        else
+         begin
+         ufxcode.Close;
+         ufxcode.SetVariable('vaccid',accountid);
+         ufxcode.Open ;
+
+            get_creditid.Close;
+          get_creditid.SetVariable('vaccid',accountid);
+          get_creditid.Open;
+
+        // ShowMessage( 'eee' )  ;
+
+
+    st2:= Decrypt(ufxcode.FieldByName('code').AsAnsiString,strtoint(copy(ufxcode.FieldByName('dat').AsString,12,2)));
+     // showmessage(inttostr(strtoint(copy(ufxcode.FieldByName('dat').AsString,12,2))));
+st:=copy(ReverseString((copy(st2,Length(st2)-length('534D41525442414E4B2E455845584F484B53')+1,Length(st2)))),Pos('584F484B53',ReverseString((copy(st2,Length(st2)-length('534D41525442414E4B2E455845584F484B53')+1,Length(st2)))))+length('584F484B53')+1,length(ReverseString((copy(st2,Length(st2)-length('534D41525442414E4B2E455845584F484B53')+1,Length(st2))))));
+            //   showmessage(st2);
+            //  showmessage(st);
+            //  st3:=hex2string(st2);
+            //  showmessage(st3);
+            //    showmessage(String2hex(st2));
+
+          if ContainsText(st2,ReverseString(st)) then
+      begin
+
+
+
+   st4:=copy(st2,0,Length(st2)-length('534D41525442414E4B2E455845584F484B53') );
+
+   st5:=hex2string(st4);
+  // showmessage(st5);
+   st5:=copy(st5,LastDelimiter('*', st5)+1,2) ;
+
+      {   showmessage(st4);
+        showmessage(st5) ;
+       showmessage(datetostr(now)) ;   }
+
+    if st5=copy(ufxcode.FieldByName('dat').AsString,12,2) then
+     begin
+
+            //  showmessage('yeah');
+
+
+         get_restufxcheck.Close;
+         get_restufxcheck.SetVariable('vaccid',accountid);
+         get_restufxcheck.Open ;
+
+         if get_restufxcheck.FieldByName('v_rstamount').AsFloat<0 then
+          begin
+
+          Result:= v_amount-  abs(get_restufxcheck.FieldByName('v_rstamount').AsFloat);
+
+          updufx.Close;
+          updufx.SetVariable('vaccid',accountid);
+          updufx.SetVariable('TRANSAMOUNT',v_amount-  abs(get_restufxcheck.FieldByName('v_rstamount').AsFloat));
+          updufx.ExecSQL;
+          sboapiDataModule.SBSession.Commit();
+
+          if (v_amount-  abs(get_restufxcheck.FieldByName('v_rstamount').AsFloat))<0 then
+            begin
+              Result:=0;
+
+              end
+              else
+              begin
+                Result:= v_amount-  abs(get_restufxcheck.FieldByName('v_rstamount').AsFloat);
+
+              end;
+
+
+          end
+          else
+          begin
+            Result:=v_amount;
+          end;
+
+        end
+          else
+      begin
+      ShowMessage('Kode Standarta uygun deyil');
+      exit;
+      end;
+          //---
+      end
+      else
+      begin
+      ShowMessage('Kode Standarta uygun deyil');
+      exit;
+      end;
+
+
+         end;
+     end
+     else
+     Result:=v_amount;
+ end;
+end;
+
+
+
+
+procedure TSalary.ToolButton3Click(Sender: TObject);
+var  transamount,v_transamount,v_sendammount:real;
+ij :integer;
+
+
+   vcardtype,resp,RespText,ufxrrn,pcardnumber,valyutaname,descript,cardnumber,cardtype,descp,valyuta:string;
+begin
+
+for ij:= 0 to DataMod_CARDS.salarybase2.RecordCount-1 do
+begin
+
+
+ if DataMod_CARDS.card.CallIntegerFunction('CardCheck',[DataMod_CARDS.salarybase2.fieldbyName('id').asinteger,9])>0 then
+         begin
+             if DataMod_CARDS.card.CallFloatFunction('UfxCheck',[DataMod_CARDS.salarybase2.fieldbyName('id').asinteger])=0 then
+            begin    //ufxsend;
+             DataMod_CARDS.card.CallProcedure('Ufx_send',[DataMod_CARDS.salarybase2.fieldbyName('id').asinteger,9,vcardtype,pcardnumber,valyutaname,transamount,descript]) ;
+             v_transamount:=DataMod_CARDS.card.GetParameter(5);
+             cardnumber:= DataMod_CARDS.card.GetParameter(3);
+             cardtype:=  DataMod_CARDS.card.GetParameter(2);
+             descp:= DataMod_CARDS.card.GetParameter(6);
+             valyuta:=DataMod_CARDS.card.GetParameter(4) ;
+
+              DataMod_CARDS.cardfindcredit.close;
+             DataMod_CARDS.cardfindcredit.SetVariable('card_accid',DataMod_CARDS.salarybase2.fieldbyName('rbsnumber').Asstring);
+             DataMod_CARDS.cardfindcredit.Open;
+
+
+               v_sendammount:= ufxcredit(DataMod_CARDS.cardfindcredit.fieldbyname('crdt').asInteger,v_transamount) ;
+              //  resp:='qqwqw#Successfully processed';
+             // ShowMessage('y');
+
+
+
+
+          if v_sendammount=0 then
+          begin
+             RespText:=  'Successfully processed' ;
+        //     ShowMessage('Əməliyyat Karta getmedi mebleg 0 !!!');
+          end else begin
+              resp:=UFX71.GetUFX7.fundstransfer(cardnumber,cardtype,FormatDateTime('YYYY-MM-DD hh:mm:ss',now),descp,valyuta,floattostr(v_sendammount)) ;
+
+
+             ufxrrn:=copy (resp,0,pos('#',resp));
+
+             RespText:= copy (resp,pos('#',resp)+1,length(resp));
+               // ShowMessage(  resp);
+                DataMod_CARDS.card.callprocedure('UfxResponse',[DataMod_CARDS.salarybase2.fieldbyName('id').asinteger,9,RespText,v_sendammount,resp]) ;
+
+          end;
+
+                 if UPPERCASE(RespText)=UPPERCASE('Successfully processed')
+             then
+               begin
+                 if v_sendammount<>0 then  begin
+                // ShowMessage('Əməliyyat uğurla keçdi!!!') ;
+               DataMod_CARDS.card.callprocedure('ufxsucces',[DataMod_CARDS.salarybase2.fieldbyName('id').asinteger]) ;
+                 end
+                 else
+                 begin
+                   DataMod_CARDS.salarybase2.Refresh;
+                 end;
+
+
+
+               end
+             else
+               begin
+                 //ShowMessage('Əməliyyat keçmədi!!!'+','+'Səhvin adı:'+RespText);
+                 DataMod_CARDS.card.callprocedure('ufxerror',[DataMod_CARDS.salarybase2.fieldbyName('id').asinteger]) ;
+
+
+                // Exit;
+               end;
+            end
+            else
+              begin
+              DataMod_CARDS.salarybase2.Refresh;
+              {  SwDataModule.sw_in_insert.CallProcedure('add_in_transactions2',[fieldbyName('id').asinteger,
+                                                                  fieldbyName('bic').AsString,
+                                                                  fieldbyName('ACOUNT').AsString,
+                                                                  fieldbyName('valu').AsFloat,
+                                                                  fieldbyName('description').asstring,
+                                                                  fieldbyName('description2').asstring,
+                                                                  fieldbyName('TAX').asstring]);   }
+              end;
+          end
+          else
+       begin
+
+       end;
+    DataMod_CARDS.salarybase2.Next
+end;
+end;
+
+procedure TSalary.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+DataMod_CARDS.mainpacket.CallProcedure('delete_salary',[]);
+DataMod_CARDS.salarybase.Refresh;
+DataMod_CARDS.salarybase2.Refresh;
+end;
+
+procedure TSalary.FormCreate(Sender: TObject);
+begin
+SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TSalary.ToolButton1Click(Sender: TObject);
+begin
+if MessageDlg('əməliyyatları təsdiq etmək istəyirsinizmi?',mtinformation,[mbyes,mbno],0)=mryes
+then
+
+
+DataMod_CARDS.mainpacket.CallProcedure('transaction_salary',[]);
+DataMod_CARDS.salarybase.refresh;
+DataMod_CARDS.salarybase2.refresh;
+
+ToolButton3.Click;
+
+end;
+
+end.

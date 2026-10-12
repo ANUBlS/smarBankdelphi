@@ -1,0 +1,44 @@
+1. Добавление иконок
+
+Для того чтобы отобразить иконку в меню SmartBank'а, для модуля необходимо
+внести изменения в его код. Иконка должна быть размером 16х16 пикселов.
+
+  а.)	Добавить пакет sbplg50 в список RunTime пакетов (панель Project
+	Options\Packages)
+  б.)	В модуле содержащем ActiveX форму пакета в список используемых модулей
+	добавить модуль SBPlgAx50_TLB. Например:
+
+...
+uses Windows, Forms, ..., Classes, SBPlgAx50_TLB;
+...
+
+  в.)	Внести изменение в описание класса ActiveX формы - добавить поддержку
+	интерфейса IIconExporter. Например:
+
+...
+type
+     TMyAxForm = class(TActiveFormX, IMyAxForm, IIconExporter)
+...
+
+  г.)	Добавить в раздел "protected" ActiveX формы прототип функции Get_Icon:
+
+	function Get_Icon: OLE_HANDLE; safecall;
+
+  д.)	Поместить компоненту TImageList на форму, например ImageList1.
+	Добавить в него желаемую иконку.
+
+  е.)   Описать тело функции Get_Icon:
+
+function TMyAxForm.Get_Icon: OLE_HANDLE;
+const
+  ImageIndex = 0;  // позиция иконки в списке ImageList1
+begin
+  ImageList1.GetIcon(ImageIndex, Icon);
+  Result := Icon.Handle;
+end;
+
+  ё.)	Откомпилируйте проект как обычно и запустите SmartBank. Активируйте
+	элемент меню соответствующий данному модулю
+
+После данных манипуляций иконка должна появиться в списке справа от
+модифицируемого модуля.

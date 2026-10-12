@@ -1,0 +1,465 @@
+object fmMKPolicy: TfmMKPolicy
+  Left = 0
+  Top = 0
+  BorderIcons = [biSystemMenu]
+  BorderStyle = bsSingle
+  ClientHeight = 406
+  ClientWidth = 389
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poDesktopCenter
+  OnCreate = FormCreate
+  OnKeyPress = FormKeyPress
+  PixelsPerInch = 96
+  TextHeight = 13
+  object XFPanel1: TXFPanel
+    Left = 0
+    Top = 317
+    Width = 389
+    Height = 89
+    Align = alBottom
+    BevelInner = bvLowered
+    TabOrder = 0
+    DesignSize = (
+      389
+      89)
+    object DBLookupComboBox1: TDBLookupComboBox
+      Left = 9
+      Top = 9
+      Width = 201
+      Height = 21
+      DataField = 'UNDERTABLE'
+      DataSource = DMMKPolicy.DSPolicy
+      KeyField = 'TEMPLATE'
+      ListField = 'NAME'
+      ListSource = DMMKPolicy.DSTemplates
+      TabOrder = 0
+      Visible = False
+    end
+    object btApply: TBitBtn
+      Left = 64
+      Top = 40
+      Width = 70
+      Height = 27
+      Anchors = []
+      Caption = '&Apply'
+      DoubleBuffered = True
+      Enabled = False
+      Glyph.Data = {
+        F2010000424DF201000000000000760000002800000024000000130000000100
+        0400000000007C01000000000000000000001000000000000000000000000000
+        80000080000000808000800000008000800080800000C0C0C000808080000000
+        FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00333334433333
+        3333333333388F3333333333000033334224333333333333338338F333333333
+        0000333422224333333333333833338F33333333000033422222243333333333
+        83333338F3333333000034222A22224333333338F33F33338F33333300003222
+        A2A2224333333338F383F3338F33333300003A2A222A222433333338F8333F33
+        38F33333000034A22222A22243333338833333F3338F333300004222A2222A22
+        2433338F338F333F3338F3330000222A3A2224A22243338F3838F338F3338F33
+        0000A2A333A2224A2224338F83338F338F3338F300003A33333A2224A2224338
+        333338F338F3338F000033333333A2224A2243333333338F338F338F00003333
+        33333A2224A2233333333338F338F83300003333333333A2224A333333333333
+        8F338F33000033333333333A222433333333333338F338F30000333333333333
+        A224333333333333338F38F300003333333333333A223333333333333338F8F3
+        000033333333333333A3333333333333333383330000}
+      NumGlyphs = 2
+      ParentDoubleBuffered = False
+      TabOrder = 1
+      OnClick = btApplyClick
+    end
+    object btPrint: TBitBtn
+      Left = 137
+      Top = 40
+      Width = 71
+      Height = 27
+      Anchors = []
+      Caption = #1063#1072#1087
+      DoubleBuffered = True
+      Enabled = False
+      Glyph.Data = {
+        76010000424D7601000000000000760000002800000020000000100000000100
+        04000000000000010000130B0000130B00001000000000000000000000000000
+        800000800000008080008000000080008000808000007F7F7F00BFBFBF000000
+        FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00300000000000
+        00033FFFFFFFFFFFFFFF0888888888888880777777777777777F088888888888
+        8880777777777777777F0000000000000000FFFFFFFFFFFFFFFF0F8F8F8F8F8F
+        8F80777777777777777F08F8F8F8F8F8F9F0777777777777777F0F8F8F8F8F8F
+        8F807777777777777F7F0000000000000000777777777777777F3330FFFFFFFF
+        03333337F3FFFF3F7F333330F0000F0F03333337F77773737F333330FFFFFFFF
+        03333337F3FF3FFF7F333330F00F000003333337F773777773333330FFFF0FF0
+        33333337F3FF7F3733333330F08F0F0333333337F7737F7333333330FFFF0033
+        33333337FFFF7733333333300000033333333337777773333333}
+      NumGlyphs = 2
+      ParentDoubleBuffered = False
+      TabOrder = 2
+      OnClick = btPrintClick
+    end
+    object btOk: TBitBtn
+      Left = 213
+      Top = 40
+      Width = 70
+      Height = 27
+      Anchors = []
+      Caption = 'OK'
+      DoubleBuffered = True
+      Glyph.Data = {
+        DE010000424DDE01000000000000760000002800000024000000120000000100
+        0400000000006801000000000000000000001000000000000000000000000000
+        80000080000000808000800000008000800080800000C0C0C000808080000000
+        FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00333333333333
+        3333333333333333333333330000333333333333333333333333F33333333333
+        00003333344333333333333333388F3333333333000033334224333333333333
+        338338F3333333330000333422224333333333333833338F3333333300003342
+        222224333333333383333338F3333333000034222A22224333333338F338F333
+        8F33333300003222A3A2224333333338F3838F338F33333300003A2A333A2224
+        33333338F83338F338F33333000033A33333A222433333338333338F338F3333
+        0000333333333A222433333333333338F338F33300003333333333A222433333
+        333333338F338F33000033333333333A222433333333333338F338F300003333
+        33333333A222433333333333338F338F00003333333333333A22433333333333
+        3338F38F000033333333333333A223333333333333338F830000333333333333
+        333A333333333333333338330000333333333333333333333333333333333333
+        0000}
+      NumGlyphs = 2
+      ParentDoubleBuffered = False
+      TabOrder = 3
+      OnClick = btOkClick
+    end
+    object btCancel: TBitBtn
+      Left = 287
+      Top = 41
+      Width = 87
+      Height = 26
+      Anchors = []
+      Cancel = True
+      Caption = 'Cancel'
+      DoubleBuffered = True
+      Glyph.Data = {
+        DE010000424DDE01000000000000760000002800000024000000120000000100
+        0400000000006801000000000000000000001000000000000000000000000000
+        80000080000000808000800000008000800080800000C0C0C000808080000000
+        FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00333333333333
+        333333333333333333333333000033338833333333333333333F333333333333
+        0000333911833333983333333388F333333F3333000033391118333911833333
+        38F38F333F88F33300003339111183911118333338F338F3F8338F3300003333
+        911118111118333338F3338F833338F3000033333911111111833333338F3338
+        3333F8330000333333911111183333333338F333333F83330000333333311111
+        8333333333338F3333383333000033333339111183333333333338F333833333
+        00003333339111118333333333333833338F3333000033333911181118333333
+        33338333338F333300003333911183911183333333383338F338F33300003333
+        9118333911183333338F33838F338F33000033333913333391113333338FF833
+        38F338F300003333333333333919333333388333338FFF830000333333333333
+        3333333333333333333888330000333333333333333333333333333333333333
+        0000}
+      NumGlyphs = 2
+      ParentDoubleBuffered = False
+      TabOrder = 4
+      OnClick = btCancelClick
+    end
+    object BitBtn1: TBitBtn
+      Left = 289
+      Top = 6
+      Width = 87
+      Height = 27
+      Anchors = []
+      Caption = #1071#1083#1072#1074#1103'/'#1056#1077#1076#1072#1082#1090#1103
+      DoubleBuffered = True
+      ParentDoubleBuffered = False
+      TabOrder = 5
+      OnClick = BitBtn1Click
+    end
+    object BitBtn2: TBitBtn
+      Left = 213
+      Top = 6
+      Width = 70
+      Height = 27
+      Anchors = []
+      Caption = #1071#1083#1072#1074#1103#1083#1103#1088
+      DoubleBuffered = True
+      ParentDoubleBuffered = False
+      TabOrder = 6
+      OnClick = BitBtn2Click
+    end
+  end
+  object XFGroupBox1: TXFGroupBox
+    Left = 0
+    Top = 0
+    Width = 389
+    Height = 317
+    Align = alClient
+    Caption = 'N'#601'qliyyat vasit'#601'l'#601'rinin (KASKO) s'#305#287'orta '#351#601'had'#601'tnam'#601'si'
+    TabOrder = 1
+    object XFGroupBox2: TXFGroupBox
+      Left = 2
+      Top = 56
+      Width = 385
+      Height = 62
+      Align = alTop
+      Caption = 'S'#305#287'orta hadis'#601'si'
+      TabOrder = 0
+      object BitBtn4: TBitBtn
+        Left = 283
+        Top = 35
+        Width = 93
+        Height = 22
+        Caption = #1057#1099#1100'.'#1082#1072#1088#1090#1099
+        DoubleBuffered = True
+        Glyph.Data = {
+          76010000424D7601000000000000760000002800000020000000100000000100
+          04000000000000010000130B0000130B00001000000000000000000000000000
+          800000800000008080008000000080008000808000007F7F7F00BFBFBF000000
+          FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00300000000000
+          00033FFFFFFFFFFFFFFF0888888888888880777777777777777F088888888888
+          8880777777777777777F0000000000000000FFFFFFFFFFFFFFFF0F8F8F8F8F8F
+          8F80777777777777777F08F8F8F8F8F8F9F0777777777777777F0F8F8F8F8F8F
+          8F807777777777777F7F0000000000000000777777777777777F3330FFFFFFFF
+          03333337F3FFFF3F7F333330F0000F0F03333337F77773737F333330FFFFFFFF
+          03333337F3FF3FFF7F333330F00F000003333337F773777773333330FFFF0FF0
+          33333337F3FF7F3733333330F08F0F0333333337F7737F7333333330FFFF0033
+          33333337FFFF7733333333300000033333333337777773333333}
+        NumGlyphs = 2
+        ParentDoubleBuffered = False
+        TabOrder = 0
+        OnClick = BitBtn4Click
+      end
+      object BitBtn3: TBitBtn
+        Left = 283
+        Top = 8
+        Width = 93
+        Height = 23
+        Caption = #1055#1086#1083#1080#1089#1103' '#1103#1083#1072#1074#1103
+        DoubleBuffered = True
+        Glyph.Data = {
+          76010000424D7601000000000000760000002800000020000000100000000100
+          04000000000000010000130B0000130B00001000000000000000000000000000
+          800000800000008080008000000080008000808000007F7F7F00BFBFBF000000
+          FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00300000000000
+          00033FFFFFFFFFFFFFFF0888888888888880777777777777777F088888888888
+          8880777777777777777F0000000000000000FFFFFFFFFFFFFFFF0F8F8F8F8F8F
+          8F80777777777777777F08F8F8F8F8F8F9F0777777777777777F0F8F8F8F8F8F
+          8F807777777777777F7F0000000000000000777777777777777F3330FFFFFFFF
+          03333337F3FFFF3F7F333330F0000F0F03333337F77773737F333330FFFFFFFF
+          03333337F3FF3FFF7F333330F00F000003333337F773777773333330FFFF0FF0
+          33333337F3FF7F3733333330F08F0F0333333337F7737F7333333330FFFF0033
+          33333337FFFF7733333333300000033333333337777773333333}
+        NumGlyphs = 2
+        ParentDoubleBuffered = False
+        TabOrder = 1
+        OnClick = BitBtn3Click
+      end
+      object cbRisk: TXFCheckBox
+        Left = 9
+        Top = 18
+        Width = 190
+        Height = 17
+        Caption = 'B'#252't'#252'n t'#601'minatlar '#252'zr'#601' fran'#351'izalar eynidir'
+        Checked = True
+        State = cbChecked
+        TabOrder = 2
+        OnClick = cbRiskClick
+      end
+      object cbDifRisk: TXFCheckBox
+        Left = 9
+        Top = 39
+        Width = 137
+        Height = 17
+        Caption = 'Fran'#351'izalar m'#252'xt'#601'lifdir'
+        TabOrder = 3
+        OnClick = cbDifRiskClick
+      end
+    end
+    object XFPanel2: TXFPanel
+      Left = 2
+      Top = 15
+      Width = 385
+      Height = 41
+      Align = alTop
+      TabOrder = 1
+      object XFLabel1: TXFLabel
+        Left = 7
+        Top = 11
+        Width = 106
+        Height = 13
+        Caption = #350#601'had'#601'tnam'#601' n'#246'mr'#601'si'
+      end
+      object DBEdit7: TDBEdit
+        Left = 148
+        Top = 6
+        Width = 191
+        Height = 21
+        Color = clScrollBar
+        DataField = 'POLICY_NUM'
+        DataSource = DMMKPolicy.DSContracts
+        Enabled = False
+        TabOrder = 0
+        OnKeyPress = DBEdit7KeyPress
+      end
+    end
+    object gbGrid: TXFGroupBox
+      Left = 2
+      Top = 118
+      Width = 385
+      Height = 197
+      Align = alClient
+      TabOrder = 2
+      object DBNavigator1: TDBNavigator
+        Left = 2
+        Top = 15
+        Width = 381
+        Height = 27
+        DataSource = DMMKPolicy.DSPolicy
+        Align = alTop
+        Flat = True
+        TabOrder = 0
+      end
+      object DBGrid1: TDBGrid
+        Left = 2
+        Top = 42
+        Width = 381
+        Height = 153
+        Align = alClient
+        DataSource = DMMKPolicy.DSPolicy
+        DrawingStyle = gdsGradient
+        TabOrder = 1
+        TitleFont.Charset = DEFAULT_CHARSET
+        TitleFont.Color = clWindowText
+        TitleFont.Height = -11
+        TitleFont.Name = 'Tahoma'
+        TitleFont.Style = []
+        Columns = <
+          item
+            Expanded = False
+            FieldName = 'risk'
+            Title.Caption = #1057#1099#1100#1086#1088#1090#1072' '#1090#1103#1084#1080#1085#1072#1090#1099
+            Title.Color = clNavy
+            Width = 250
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'RISKS'
+            Title.Caption = #1060#1088#1072#1085#1096#1080#1079#1072
+            Title.Color = clNavy
+            Visible = True
+          end>
+      end
+    end
+    object gbSame: TXFGroupBox
+      Left = 2
+      Top = 118
+      Width = 385
+      Height = 197
+      Align = alClient
+      Caption = 'S'#305#287'orta t'#601'minatlar'#305
+      TabOrder = 3
+      object XFLabel2: TXFLabel
+        Left = 9
+        Top = 25
+        Width = 52
+        Height = 13
+        Caption = 'O'#287'urlanma'
+      end
+      object XFLabel3: TXFLabel
+        Left = 9
+        Top = 48
+        Width = 32
+        Height = 13
+        Caption = 'Yan'#287#305'n'
+      end
+      object XFLabel4: TXFLabel
+        Left = 9
+        Top = 76
+        Width = 41
+        Height = 13
+        Caption = 'Partlay'#305#351
+      end
+      object XFLabel5: TXFLabel
+        Left = 9
+        Top = 100
+        Width = 102
+        Height = 13
+        Caption = 'Yol n'#601'qliyyat hadis'#601'si'
+      end
+      object XFLabel6: TXFLabel
+        Left = 9
+        Top = 125
+        Width = 102
+        Height = 26
+        Caption = 'H'#601'r hans'#305'  predmetl'#601' toqqu'#351'ma'
+        WordWrap = True
+      end
+      object DBEdit5: TDBEdit
+        Left = 146
+        Top = 123
+        Width = 217
+        Height = 21
+        DataField = 'IMPACTANYOBJECT'
+        DataSource = DMMKPolicy.DSPolicy
+        TabOrder = 0
+      end
+      object DBEdit4: TDBEdit
+        Left = 146
+        Top = 97
+        Width = 217
+        Height = 21
+        DataField = 'TRAFFICACCIDENT'
+        DataSource = DMMKPolicy.DSPolicy
+        TabOrder = 1
+      end
+      object DBEdit3: TDBEdit
+        Left = 146
+        Top = 71
+        Width = 217
+        Height = 21
+        DataField = 'EXPLOSION'
+        DataSource = DMMKPolicy.DSPolicy
+        TabOrder = 2
+      end
+      object DBEdit2: TDBEdit
+        Left = 146
+        Top = 45
+        Width = 217
+        Height = 21
+        DataField = 'FIRE'
+        DataSource = DMMKPolicy.DSPolicy
+        TabOrder = 3
+      end
+      object DBEdit1: TDBEdit
+        Left = 146
+        Top = 19
+        Width = 217
+        Height = 21
+        DataField = 'THEFT'
+        DataSource = DMMKPolicy.DSPolicy
+        TabOrder = 4
+      end
+      object hbErrMsg: THintBox
+        Left = 0
+        Top = 170
+        Width = 269
+        Height = 19
+        AutoSize = True
+        BevelOuter = bvNone
+        Caption = 'hbErrMsg'
+        TabOrder = 5
+        Visible = False
+        HintStyle = hsError
+        Timeout = 4000
+        BeepOnMessage = False
+      end
+    end
+  end
+  object ExtraODialog: TOpenDialog
+    Left = 282
+    Top = 253
+  end
+  object INSWordExporter: TINSWordExporter
+    Left = 224
+    Top = 72
+  end
+end

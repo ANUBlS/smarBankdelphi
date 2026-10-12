@@ -1,0 +1,62 @@
+unit DMProvisionsImpl;
+
+interface
+
+uses
+  SysUtils, Classes, DB, OracleData;
+
+type
+  TDMProvisions = class(TDataModule)
+    DSRPolisNo1: TDataSource;
+    DSRPolisNo2: TDataSource;
+    DSPolisNo1: TOracleDataSet;
+    DSPolisNo2: TOracleDataSet;
+    DSPolisNo1ID: TFloatField;
+    DSPolisNo1TYPE_ID: TFloatField;
+    DSPolisNo1POLICY_NUM: TWideStringField;
+    DSPolisNo2ID: TFloatField;
+    DSPolisNo2TYPE_ID: TFloatField;
+    DSPolisNo2POLICY_NUM: TWideStringField;
+    DSContracts: TOracleDataSet;
+    DSins_motorkasco: TOracleDataSet;
+    DSRContracts: TDataSource;
+    DSRins_motorkasco: TDataSource;
+    DSRrespon: TDataSource;
+    DSrespon: TOracleDataSet;
+    DSresponID: TFloatField;
+    DSresponTYPEID: TFloatField;
+    DSresponCID: TFloatField;
+    DSresponCLOSE_PREFIX: TFloatField;
+    DSresponRESP_AMMOUNT: TFloatField;
+    DSresponRESP_PREMIUM: TFloatField;
+    DSresponRESP_PILISNUM: TWideStringField;
+    DSresponRESP_CID: TFloatField;
+    procedure DataModuleCreate(Sender: TObject);
+    procedure DataModuleDestroy(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  DMProvisions: TDMProvisions;
+
+implementation
+
+{$R *.dfm}
+      uses sboapiDataModuleImpl,CommanParametrs;
+procedure TDMProvisions.DataModuleCreate(Sender: TObject);
+begin
+DSPolisNo2.Open;
+DSPolisNo1.Open;
+
+end;
+
+procedure TDMProvisions.DataModuleDestroy(Sender: TObject);
+begin
+DSPolisNo2.Close;
+DSPolisNo1.Close;
+end;
+
+end.

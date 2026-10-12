@@ -1,0 +1,32 @@
+unit frmReferencesImpl_new;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,OracleData,
+  Db, ComCtrls,Oracle, StdCtrls, Grids, DBGrids, DBCtrls, ExtCtrls;
+
+type
+  TfrmReferences_new = class(TForm)
+    GroupBox1: TGroupBox;
+    ValuesComboBox: TComboBox;
+    ValuesEdit: TEdit;
+    BtnApply: TButton;
+    GroupBox2: TGroupBox;
+    TV: TTreeView;
+    StatusBar: TStatusBar;
+  private
+     procedure TVBuild;
+    procedure TVAddNode(Node :TTreeNode;ID :Integer);
+  public
+    { Public declarations }
+  end;
+
+var
+  frmReferences_new: TfrmReferences_new;
+
+implementation
+
+{$R *.dfm}
+    uses DMReferences_new,SBTranslateProc,sboapiDataModuleimpl;
+end.

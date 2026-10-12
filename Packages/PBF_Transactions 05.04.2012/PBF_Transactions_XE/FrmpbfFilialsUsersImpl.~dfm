@@ -1,0 +1,174 @@
+object FrmpbfFilialsUsers: TFrmpbfFilialsUsers
+  Left = 298
+  Top = 176
+  Width = 285
+  Height = 309
+  BorderIcons = [biSystemMenu]
+  Caption = 'FrmpbfFilialsUsers'
+  Color = clBtnFace
+  Font.Charset = RUSSIAN_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poMainFormCenter
+  OnCanResize = FormCanResize
+  OnCreate = FormCreate
+  OnKeyPress = FormKeyPress
+  PixelsPerInch = 96
+  TextHeight = 13
+  object DBGridEh1: TDBGridEh
+    Left = 0
+    Top = 25
+    Width = 277
+    Height = 231
+    Align = alClient
+    DataSource = pbfusersds
+    FooterColor = clWindow
+    FooterFont.Charset = RUSSIAN_CHARSET
+    FooterFont.Color = clWindowText
+    FooterFont.Height = -11
+    FooterFont.Name = 'Azl Sans Serif'
+    FooterFont.Style = []
+    TabOrder = 0
+    TitleFont.Charset = RUSSIAN_CHARSET
+    TitleFont.Color = clWindowText
+    TitleFont.Height = -11
+    TitleFont.Name = 'Azl Sans Serif'
+    TitleFont.Style = []
+    VertScrollBar.VisibleMode = sbNeverShowEh
+    Columns = <
+      item
+        EditButtons = <>
+        FieldName = 'filialname'
+        Footers = <>
+        Title.Color = clNavy
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clWhite
+        Title.Font.Height = -11
+        Title.Font.Name = 'Azl Sans Serif'
+        Title.Font.Style = []
+        Width = 130
+      end
+      item
+        EditButtons = <>
+        FieldName = 'username'
+        Footers = <>
+        Title.Color = clNavy
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clWhite
+        Title.Font.Height = -11
+        Title.Font.Name = 'Azl Sans Serif'
+        Title.Font.Style = []
+        Width = 120
+      end>
+  end
+  object StatusBar1: TStatusBar
+    Left = 0
+    Top = 256
+    Width = 277
+    Height = 19
+    Panels = <>
+    SimplePanel = False
+  end
+  object DBNavigator1: TDBNavigator
+    Left = 0
+    Top = 0
+    Width = 277
+    Height = 25
+    DataSource = pbfusersds
+    Align = alTop
+    Flat = True
+    TabOrder = 2
+  end
+  object pbfusersds: TDataSource
+    DataSet = pbfusers
+    Left = 64
+    Top = 112
+  end
+  object pbfusers: TOracleDataSet
+    SQL.Strings = (
+      'SELECT rowid, id,filial, userid'
+      '  FROM pbf_operationsusers a'
+      'order by filial')
+    QBEDefinition.QBEFieldDefs = {
+      04000000030000000200000049440100000000000600000046494C49414C0100
+      0000000006000000555345524944010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 32
+    Top = 112
+    object pbfusersID: TFloatField
+      FieldName = 'ID'
+    end
+    object pbfusersFILIAL: TFloatField
+      FieldName = 'FILIAL'
+      Required = True
+    end
+    object pbfusersUSERID: TStringField
+      FieldName = 'USERID'
+      Required = True
+      Size = 30
+    end
+    object pbfusersfilialname: TStringField
+      DisplayLabel = 'Филиал'
+      FieldKind = fkLookup
+      FieldName = 'filialname'
+      LookupDataSet = allF
+      LookupKeyFields = 'ID'
+      LookupResultField = 'NAME'
+      KeyFields = 'FILIAL'
+      Size = 40
+      Lookup = True
+    end
+    object pbfusersusername: TStringField
+      DisplayLabel = 'Истифадячи'
+      FieldKind = fkLookup
+      FieldName = 'username'
+      LookupDataSet = allu
+      LookupKeyFields = 'ID'
+      LookupResultField = 'NAME'
+      KeyFields = 'USERID'
+      Size = 50
+      Lookup = True
+    end
+  end
+  object allF: TOracleDataSet
+    SQL.Strings = (
+      'select id,name from filial_t')
+    QBEDefinition.QBEFieldDefs = {
+      0400000002000000020000004944010000000000040000004E414D4501000000
+      0000}
+    Session = sboapiDataModule.SBSession
+    Left = 34
+    Top = 144
+    object allFID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object allFNAME: TStringField
+      FieldName = 'NAME'
+      Size = 90
+    end
+  end
+  object allu: TOracleDataSet
+    SQL.Strings = (
+      'select id,name from user$')
+    QBEDefinition.QBEFieldDefs = {
+      0400000002000000020000004944010000000000040000004E414D4501000000
+      0000}
+    Session = sboapiDataModule.SBSession
+    Left = 64
+    Top = 144
+    object alluID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object alluNAME: TStringField
+      FieldName = 'NAME'
+      Required = True
+      Size = 30
+    end
+  end
+end

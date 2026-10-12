@@ -1,0 +1,41 @@
+unit MKSUnderTable;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, Mask, DBCtrls, HintBox, Buttons, ExtCtrls, OleCtnrs;
+
+type
+  TfmUndertable = class(TForm)
+    OleContainer1: TOleContainer;
+    Panel1: TPanel;
+    BitBtn1: TBitBtn;
+    BitBtn2: TBitBtn;
+    RadioButton1: TRadioButton;
+    RadioButton2: TRadioButton;
+    hbError: THintBox;
+    DBEdit1: TDBEdit;
+    Panel2: TPanel;
+    BitBtn3: TBitBtn;
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  fmUndertable: TfmUndertable;
+
+implementation
+
+{$R *.dfm}
+
+procedure TfmUndertable.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+if ord(key)=vk_escape then close;
+
+end;
+
+end.

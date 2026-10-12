@@ -1,0 +1,267 @@
+object FrmInfo: TFrmInfo
+  Left = 230
+  Top = 172
+  BorderIcons = [biSystemMenu]
+  BorderStyle = bsDialog
+  Caption = 'Order Extra Information'
+  ClientHeight = 197
+  ClientWidth = 403
+  Color = clBtnFace
+  Font.Charset = RUSSIAN_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poMainFormCenter
+  OnActivate = FormActivate
+  OnCreate = FormCreate
+  OnKeyDown = FormKeyDown
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 403
+    Height = 197
+    Align = alClient
+    AutoSize = True
+    BevelOuter = bvNone
+    TabOrder = 0
+    object Panel2: TPanel
+      Left = 0
+      Top = 17
+      Width = 403
+      Height = 41
+      Align = alTop
+      AutoSize = True
+      TabOrder = 0
+      object StaticText2: TStaticText
+        Left = 1
+        Top = 1
+        Width = 401
+        Height = 17
+        Align = alTop
+        Alignment = taCenter
+        Caption = 'ёд€й€н,алан ш€хс:'
+        Color = clSilver
+        ParentColor = False
+        TabOrder = 0
+      end
+      object EIssuedBy: TEdit
+        Left = 2
+        Top = 19
+        Width = 400
+        Height = 21
+        TabOrder = 1
+      end
+    end
+    object StaticText1: TStaticText
+      Left = 0
+      Top = 0
+      Width = 403
+      Height = 17
+      Align = alTop
+      Alignment = taCenter
+      Caption = 'ћ€дахил / ћ€хариж ќрдерин€ ялав€л€р'
+      Color = clNavy
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWhite
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentColor = False
+      ParentFont = False
+      TabOrder = 1
+    end
+    object Panel3: TPanel
+      Left = 0
+      Top = 58
+      Width = 403
+      Height = 43
+      Align = alTop
+      TabOrder = 2
+      object Panel4: TPanel
+        Left = 1
+        Top = 1
+        Width = 202
+        Height = 41
+        Align = alLeft
+        BevelOuter = bvLowered
+        TabOrder = 0
+        object StaticText3: TStaticText
+          Left = 1
+          Top = 1
+          Width = 200
+          Height = 17
+          Align = alTop
+          Alignment = taCenter
+          Caption = '—€н€дин ады:'
+          Color = clSilver
+          ParentColor = False
+          TabOrder = 0
+        end
+        object EPersonDoc: TEdit
+          Left = 2
+          Top = 19
+          Width = 200
+          Height = 21
+          TabOrder = 1
+        end
+      end
+      object Panel5: TPanel
+        Left = 204
+        Top = 1
+        Width = 198
+        Height = 41
+        Align = alRight
+        BevelOuter = bvLowered
+        TabOrder = 1
+        object StaticText4: TStaticText
+          Left = 1
+          Top = 1
+          Width = 196
+          Height = 17
+          Align = alTop
+          Alignment = taCenter
+          Caption = 'ўарадан,н€ вахт верилиб'
+          Color = clSilver
+          ParentColor = False
+          TabOrder = 0
+        end
+        object EFromWhen: TEdit
+          Left = 2
+          Top = 19
+          Width = 196
+          Height = 21
+          TabOrder = 1
+        end
+      end
+    end
+    object Panel6: TPanel
+      Left = 0
+      Top = 101
+      Width = 403
+      Height = 43
+      Align = alTop
+      TabOrder = 3
+      object Panel7: TPanel
+        Left = 1
+        Top = 1
+        Width = 202
+        Height = 41
+        Align = alLeft
+        BevelOuter = bvLowered
+        TabOrder = 0
+        object StaticText5: TStaticText
+          Left = 1
+          Top = 1
+          Width = 200
+          Height = 17
+          Align = alTop
+          Alignment = taCenter
+          Caption = '—ерийасы:'
+          Color = clSilver
+          ParentColor = False
+          TabOrder = 0
+        end
+        object ESeria: TEdit
+          Left = 2
+          Top = 19
+          Width = 200
+          Height = 21
+          TabOrder = 1
+        end
+      end
+      object Panel8: TPanel
+        Left = 204
+        Top = 1
+        Width = 198
+        Height = 41
+        Align = alRight
+        BevelOuter = bvLowered
+        TabOrder = 1
+        object StaticText6: TStaticText
+          Left = 1
+          Top = 1
+          Width = 196
+          Height = 17
+          Align = alTop
+          Alignment = taCenter
+          Caption = 'Ќюмр€си:'
+          Color = clSilver
+          ParentColor = False
+          TabOrder = 0
+        end
+        object EDocNumber: TEdit
+          Left = 2
+          Top = 19
+          Width = 196
+          Height = 21
+          TabOrder = 1
+        end
+      end
+    end
+    object BitBtn1: TBitBtn
+      Left = 207
+      Top = 170
+      Width = 62
+      Height = 25
+      Action = ActionInsert
+      Caption = 'ялав€'
+      Default = True
+      TabOrder = 4
+    end
+    object BitBtn2: TBitBtn
+      Left = 273
+      Top = 170
+      Width = 62
+      Height = 25
+      Action = ActionUpdate
+      Caption = '–едакт€'
+      Default = True
+      TabOrder = 5
+    end
+    object BitBtn3: TBitBtn
+      Left = 339
+      Top = 170
+      Width = 62
+      Height = 25
+      Action = ActionDelete
+      Caption = '—ил'
+      Default = True
+      TabOrder = 6
+    end
+    object DBLookupCashInfo: TDBLookupComboBox
+      Left = 1
+      Top = 145
+      Width = 402
+      Height = 21
+      KeyField = 'ID'
+      ListField = 'ISSUEDBY'
+      ListSource = CashDataMod.DataBrowseCashInfo
+      TabOrder = 7
+      OnClick = DBLookupCashInfoClick
+    end
+  end
+  object ActionList1: TActionList
+    Left = 456
+    Top = 280
+    object ActionInsert: TAction
+      Caption = 'ялав€'
+      OnExecute = ActionInsertExecute
+      OnUpdate = ActionInsertUpdate
+    end
+    object ActionUpdate: TAction
+      Caption = '–едакт€'
+      OnExecute = ActionUpdateExecute
+      OnUpdate = ActionUpdateUpdate
+    end
+    object ActionDelete: TAction
+      Caption = '—ил'
+      OnExecute = ActionDeleteExecute
+      OnUpdate = ActionUpdateUpdate
+    end
+  end
+end

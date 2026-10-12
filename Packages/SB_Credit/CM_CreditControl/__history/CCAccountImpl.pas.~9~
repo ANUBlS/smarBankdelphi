@@ -1,0 +1,217 @@
+unit CCAccountImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, Buttons,  ExtCtrls, Mask, DBCtrls, XFSCtrls;
+
+type
+  TFormContractAccounts = class(TForm)
+    XFPanel1: TXFPanel;
+    XFPanel2: TXFPanel;
+    XFPanel3: TXFPanel;
+    XFPanel4: TXFPanel;
+    XFPanel5: TXFPanel;
+    XFPanel6: TXFPanel;
+    XFPanel7: TXFPanel;
+    XFPanel8: TXFPanel;
+    XFPanel9: TXFPanel;
+    XFPanel10: TXFPanel;
+    XFLabel1: TXFLabel;
+    XFLabel2: TXFLabel;
+    XFLabel3: TXFLabel;
+    XFLabel4: TXFLabel;
+    XFLabel5: TXFLabel;
+    XFLabel6: TXFLabel;
+    XFLabel7: TXFLabel;
+    XFLabel8: TXFLabel;
+    XFLabel9: TXFLabel;
+    XFLabel10: TXFLabel;
+    XFCheckBox1: TXFCheckBox;
+    XFCheckBox2: TXFCheckBox;
+    XFCheckBox3: TXFCheckBox;
+    XFCheckBox4: TXFCheckBox;
+    XFCheckBox5: TXFCheckBox;
+    XFCheckBox6: TXFCheckBox;
+    XFCheckBox7: TXFCheckBox;
+    XFCheckBox8: TXFCheckBox;
+    XFCheckBox9: TXFCheckBox;
+    XFCheckBox10: TXFCheckBox;
+    XFLabel11: TXFLabel;
+    XFLabel12: TXFLabel;
+    XFLabel13: TXFLabel;
+    XFLabel14: TXFLabel;
+    XFLabel15: TXFLabel;
+    XFLabel16: TXFLabel;
+    XFLabel17: TXFLabel;
+    XFLabel18: TXFLabel;
+    XFLabel19: TXFLabel;
+    DBEdit1: TDBEdit;
+    DBEdit2: TDBEdit;
+    DBEdit3: TDBEdit;
+    DBEdit4: TDBEdit;
+    DBEdit5: TDBEdit;
+    DBEdit6: TDBEdit;
+    DBEdit7: TDBEdit;
+    DBEdit8: TDBEdit;
+    DBEdit9: TDBEdit;
+    DBEdit10: TDBEdit;
+    DBEdit11: TDBEdit;
+    DBEdit12: TDBEdit;
+    DBEdit13: TDBEdit;
+    DBEdit14: TDBEdit;
+    DBEdit15: TDBEdit;
+    DBEdit16: TDBEdit;
+    DBEdit17: TDBEdit;
+    DBEdit18: TDBEdit;
+    DBEdit19: TDBEdit;
+    XFPanel11: TXFPanel;
+    XFBitBtn1: TXFBitBtn;
+    XFBitBtn2: TXFBitBtn;
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure XFBitBtn1Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormContractAccounts: TFormContractAccounts;
+
+implementation
+
+{$R *.DFM}
+uses CCDataModuleImpl;
+
+procedure TFormContractAccounts.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+XFCheckBox1.Checked:=false;
+XFCheckBox2.Checked:=false;
+XFCheckBox3.Checked:=false;
+XFCheckBox4.Checked:=false;
+XFCheckBox5.Checked:=false;
+XFCheckBox6.Checked:=false;
+XFCheckBox7.Checked:=false;
+XFCheckBox8.Checked:=false;
+XFCheckBox9.Checked:=false;
+XFCheckBox10.Checked:=false;
+end;
+
+procedure TFormContractAccounts.FormKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if ord(Key) = VK_ESCAPE then Close;
+end;
+
+procedure TFormContractAccounts.FormShow(Sender: TObject);
+begin
+
+
+if CCDataMod.Accounts.fieldbyname('BOOROWERID').AsInteger>0 then
+begin
+     XFPanel2.Visible:=true;
+end
+else XFPanel2.Visible:=false;
+if CCDataMod.Accounts. fieldbyname('loanaccid').AsInteger>0  then
+begin
+     XFPanel3.Visible:=true;
+end
+else XFPanel3.Visible:=False;
+if CCDataMod.Accounts. fieldbyname('dueloanaccid').AsInteger>0 then
+begin
+     XFPanel4.Visible:=true;
+end
+else XFPanel4.Visible:=false;
+if CCDataMod.Accounts. fieldbyname('interestaccid').AsInteger>0 then
+begin
+     XFPanel5.Visible:=true;
+end
+else XFPanel5.Visible:=false;
+if CCDataMod.Accounts. fieldbyname('dueinterestaccid').AsInteger>0 then
+begin
+     XFPanel6.Visible:=true;
+end
+else XFPanel6.Visible:=false;
+if CCDataMod.Accounts.fieldbyname('primaryreserveaccid').AsInteger>0 then
+begin
+     XFPanel7.Visible:=true;
+end
+else XFPanel7.Visible:=false;
+if CCDataMod.Accounts.fieldbyname('secondaryreserveaccid').AsInteger>0 then
+begin
+     XFPanel8.Visible:=true;
+end
+else XFPanel8.Visible:=false;
+
+if CCDataMod.Accounts.fieldbyname('primarypurreserveaccid').AsInteger>0 then
+begin
+     XFPanel9.Visible:=true;
+end
+else XFPanel9.Visible:=false;
+if CCDataMod.Accounts.fieldbyname('secondarypurreserveaccid').AsInteger>0  then
+begin
+     XFPanel10.Visible:=true;
+end
+else XFPanel10.Visible:=false;
+end;
+
+procedure TFormContractAccounts.XFBitBtn1Click(Sender: TObject);
+var
+    boorowerid,
+    booroweraccid,
+    loanaccid,
+    dueloanaccid,
+    interestaccid ,
+    dueinterestaccid,
+    primaryreserveaccid ,
+    secondaryreserveaccid,
+    secondarypurreserveaccid ,
+    primarypurreserveaccid,
+                  Loanid,Presid,intid,custid :integer;
+begin
+   with CCDataMod,Accounts, CM_CREDIT do
+   begin
+    boorowerid              := fieldbyname('BOOROWERID').AsInteger;
+    booroweraccid           := fieldbyname('BOOROWERAccID').AsInteger;
+    loanaccid                := fieldbyname('loanaccid').AsInteger;
+    dueloanaccid             := fieldbyname('dueloanaccid').AsInteger;
+    interestaccid            := fieldbyname('interestaccid').AsInteger;
+    dueinterestaccid         := fieldbyname('dueinterestaccid').AsInteger;
+    primaryreserveaccid      := fieldbyname('primaryreserveaccid').AsInteger;
+    secondaryreserveaccid    := fieldbyname('secondaryreserveaccid').AsInteger;
+    secondarypurreserveaccid := fieldbyname('secondarypurreserveaccid').AsInteger;
+    primarypurreserveaccid   := fieldbyname('primarypurreserveaccid').AsInteger;
+
+    CallProcedure('CloseCont_Account',[  'p_id',boorowerid,
+                                           'defCA',XFCheckBox1.Checked]);
+     CallProcedure('CloseCont_Account',[  'p_id',booroweraccid,
+                                           'defCA',XFCheckBox2.Checked]);
+     CallProcedure('CloseCont_Account',[  'p_id',loanaccid,
+                                           'defCA',XFCheckBox3.Checked]);
+     CallProcedure('CloseCont_Account',[  'p_id',dueloanaccid,
+                                           'defCA',XFCheckBox4.Checked]);
+     CallProcedure('CloseCont_Account',[  'p_id',interestaccid,
+                                           'defCA',XFCheckBox5.Checked]);
+     CallProcedure('CloseCont_Account',[  'p_id',dueinterestaccid,
+                                           'defCA',XFCheckBox6.Checked]);
+     CallProcedure('CloseCont_Account',[  'p_id',primaryreserveaccid,
+                                           'defCA',XFCheckBox7.Checked]);
+     CallProcedure('CloseCont_Account',[  'p_id',secondaryreserveaccid,
+                                           'defCA',XFCheckBox8.Checked]);
+     CallProcedure('CloseCont_Account',[  'p_id',secondarypurreserveaccid,
+                                           'defCA',XFCheckBox9.Checked]);
+     CallProcedure('CloseCont_Account',[  'p_id',primarypurreserveaccid,
+                                           'defCA',XFCheckBox10.Checked]);
+     CallProcedure('CloseCont_Customers',[ 'p_id',custid,
+                                            'defCA',XFCheckBox1.Checked]);
+      CloseAll;
+   end;
+end;
+
+
+end.

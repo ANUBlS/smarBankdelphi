@@ -1,0 +1,462 @@
+﻿unit FrmAddPaymentImpl;
+                 //CurrencyEdit1
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, Buttons, DBCtrls, XFSCtrls, ExtCtrls, Mask, CMCurrencyEdit,
+  CurrencyEdit;
+
+type
+  TCreateType = (ctNew, ctEdit);
+  TDifferentsException = Exception;
+  TFrmAddPayment = class(TForm)
+    XFPanel1: TXFPanel;
+    XFPanel2: TXFPanel;
+    BitBtn2: TBitBtn;
+    btOk: TBitBtn;
+    XFPanel6: TXFPanel;
+    XFLabel1: TXFLabel;
+    XFLabel7: TXFLabel;
+    edDate: TEdit;
+    DBLookupComboBox2: TDBLookupComboBox;
+    XFLabel3: TXFLabel;
+    DBLookupComboBox1: TDBLookupComboBox;
+    XFPanel7: TXFPanel;
+    XFPanel8: TXFPanel;
+    XFLabel4: TXFLabel;
+    XFLabel2: TXFLabel;
+    edAmmount: TCMCurrencyEdit;
+    XFLabel5: TXFLabel;
+    CMCurrencyEdit1: TCMCurrencyEdit;
+    XFPanel4: TXFPanel;
+    XFLabel6: TXFLabel;
+    CMCurrencyEdit2: TCMCurrencyEdit;
+    CMCurrencyEdit3: TCMCurrencyEdit;
+    XFLabel8: TXFLabel;
+    CMCurrencyEdit4: TCMCurrencyEdit;
+    CMCurrencyEdit5: TCMCurrencyEdit;
+    CMCurrencyEdit6: TCMCurrencyEdit;
+    XFLabel9: TXFLabel;
+    XFLabel10: TXFLabel;
+    XFPanel3: TXFPanel;
+    CurrencyEdit2: TCurrencyEdit;
+    XFLabel11: TXFLabel;
+    XFGroupBox1: TXFGroupBox;
+    CurrencyEdit1: TCurrencyEdit;
+    CurrencyEdit3: TCurrencyEdit;
+    XFLabel12: TXFLabel;
+    XFLabel13: TXFLabel;
+    DBEdit1: TDBEdit;
+    XFLabel14: TXFLabel;
+    Edit1: TEdit;
+    XFLabel15: TXFLabel;
+    procedure BitBtn2Click(Sender: TObject);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure btOkClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormShow(Sender: TObject);
+    procedure DBLookupComboBox1Click(Sender: TObject);
+    procedure DBLookupComboBox2Click(Sender: TObject);
+  private
+    { Private declarations }
+    CreatedType : TCreateType;
+    PaymentID : Integer;
+  public
+    { Public declarations }
+    constructor CreateIt(cType : TCreateType; payID : Integer = -1 );
+    function  CheckIsOld():Boolean;
+  end;
+
+var
+  FrmAddPayment: TFrmAddPayment;
+     id : Integer;
+implementation
+
+uses DMPaymentImpl,sboapiDataModuleimpl,SBTranslateProc,CommanParametrs,
+  FrmPaymentImpl;
+
+{$R *.dfm}
+
+constructor TFrmAddPayment.CreateIt(cType : TCreateType; payID : Integer = -1 );
+begin
+  CreatedType := cType;
+  PaymentID := payID;
+  inherited Create(Owner);
+end;
+
+procedure TFrmAddPayment.DBLookupComboBox1Click(Sender: TObject);
+begin
+if DBLookupComboBox1.KeyValue=2 then
+begin
+  XFPanel3.Enabled:=true;
+  XFPanel7.Enabled:=false;
+  XFPanel8.Enabled:=false;
+  XFPanel4.Enabled:=false;
+  edAmmount.Value:=0;
+  CMCurrencyEdit1.Value:=0;
+  CMCurrencyEdit2.Value:=0;
+end
+else
+begin
+  XFPanel3.Enabled:=false;
+  XFPanel7.Enabled:=true;
+  XFPanel8.Enabled:=true;
+  XFPanel4.Enabled:=true;
+  //CMCurrencyEdit2.Value:=0;
+
+if DMPayment.DSPlansetting.FieldByName('PAYMENT_TYPE').AsInteger=2 then
+begin
+ FrmAddPayment.edAmmount.Value:=0;
+ FrmAddPayment.CMCurrencyEdit1.Value:=0;
+ FrmAddPayment.CMCurrencyEdit2.Value:=0;
+ FrmAddPayment.edAmmount.Enabled:=true;
+ FrmAddPayment.CMCurrencyEdit1.Enabled:=true;
+ FrmAddPayment.CMCurrencyEdit2.Enabled:=true;
+end
+else
+
+begin
+
+ FrmAddPayment.edAmmount.Value:=CMCurrencyEdit4.Value;
+ FrmAddPayment.CMCurrencyEdit1.Value:=CMCurrencyEdit5.Value;
+ FrmAddPayment.CMCurrencyEdit2.Value:=CMCurrencyEdit6.Value;
+ FrmAddPayment.edAmmount.Enabled:=false;
+ //FrmAddPayment.CMCurrencyEdit1.Enabled:=false;
+ //FrmAddPayment.CMCurrencyEdit2.Enabled:=false;
+
+end;
+end
+end;
+
+procedure TFrmAddPayment.DBLookupComboBox2Click(Sender: TObject);
+begin
+if (DBLookupComboBox2.KeyValue<>0) and (DBLookupComboBox2.KeyValue<>null) then
+
+begin
+DMPayment.dscustname.Close;
+DMPayment.dscustname.SetVariable('pid',DBLookupComboBox2.KeyValue);
+DMPayment.dscustname.open;
+end;
+DMPayment.Dskassabalans.Close;
+DMPayment.Dskassabalans.SetVariable('p_acc_no',DBLookupComboBox2.Text);
+DMPayment.Dskassabalans.open;
+//ShowMessage(DMPayment.Dskassabalans.FieldByName('bal_cn1').AsString);
+  if DMPayment.Dskassabalans.FieldByName('bal_cn1').AsInteger=221 then
+  begin
+    XFLabel15.Visible:=true;
+    Edit1.Visible:=true;
+    end
+    else  begin
+      XFLabel15.Visible:=false;
+    Edit1.Visible:=false;
+     end;
+
+//ShowMessage(DMPayment.Dskassabalans.FieldByName('bal_cn1').AsString);
+
+
+end;
+
+function TFrmAddPayment.CheckIsOld():Boolean;
+begin
+ Result := True;
+ with DMPayment, OPSBOP do
+  if CallDateFunction('get_Date', []) > ODSPaymentsPAYDATE.Value then
+    raise TDifferentsException.Create('Əvvəlki günləri deyişdirmək olmaz!');
+ Result := False;
+end;
+
+procedure TFrmAddPayment.BitBtn2Click(Sender: TObject);
+begin
+DMPayment.DSpaymentAcc.Close;
+
+close;
+end;
+
+procedure TFrmAddPayment.btOkClick(Sender: TObject);
+begin
+
+      //showmessage('Salam');
+if DMPayment.DSContracts.FieldByName('close_prefix').AsInteger=1 then
+begin
+  showmessage('Diqqət! Bağlanmış müqavilələrdə heç bir dəyişiklik etmək olmaz!');
+  exit;
+end;
+
+if DMPayment.DSContracts.FieldByName('state').AsInteger<>6 then
+begin
+  showmessage('Diqqət! Yalnız təsdiq olunmuş müqavilə üçün ödəniş etmək olar!');
+  exit;
+end;
+
+ if DBLookupComboBox1.Text='' then
+ begin
+  showmessage('Diqqət!Plan sahəsi boşdur!');
+  exit;
+ end;
+
+  if DBLookupComboBox2.Text='' then
+ begin
+  showmessage('Diqqət!Hesab sahəsi boşdur!');
+  exit;
+ end;
+
+       //showmessage('Salam1');
+
+
+if DBLookupComboBox1.KeyValue=1 then
+begin
+
+      //showmessage('Salam2');
+if edAmmount.Value<0 then
+begin
+  showmessage('Diqqət!Ödəniləcək məbləğ sıfırdan böyük olmalıdır!');
+  exit;
+end;
+
+ if DMPayment.Dskassabalans.FieldByName('bal_cn1').AsInteger=221 then
+ begin
+ if Edit1.Text='' then begin
+ showmessage('Diqqət!Qəbz nömrəsi sahəsi boşdur!');
+  exit;
+ end;
+  end;
+
+
+if CMCurrencyEdit1.Value<0 then
+begin
+  showmessage('Diqqət!Ödəniləcək məbləğ sıfırdan böyük olmalıdır!');
+  exit;
+end;
+if CMCurrencyEdit2.Value<0 then
+begin
+  showmessage('Diqqət!Ödəniləcək məbləğ sıfırdan böyük olmalıdır!');
+  exit;
+end;
+
+{  if edAmmount.Value>CMCurrencyEdit4.Value then
+  begin
+  showmessage('Diqqət! Plan üzrə  ödəniləcək məbləğ Sığorta qalığı məbləğindən böyük olmamalıdır!');
+  exit;
+  end;  }
+
+    if CMCurrencyEdit1.Value>CMCurrencyEdit5.Value then
+  begin
+  showmessage('Diqqət!Ödəniləcək məbləğ Sığ. haqqı Məsul. qalığı məbləğindən böyük olmamalıdır!');
+  exit;
+  end;
+
+  if CMCurrencyEdit2.Value>CMCurrencyEdit6.Value then
+  begin
+  showmessage('Diqqət!Ödəniləcək məbləğ Sığ. haqqı Fərdi Q. qalığı məbləğindən böyük olmamalıdır!');
+  exit;
+  end;
+ // showmessage(floattostr(edAmmount.Value));
+ // showmessage(floattostr(CMCurrencyEdit1.Value));
+//  showmessage(floattostr(CMCurrencyEdit2.Value));
+
+  with DMPayment do
+ // begin
+  //if CreatedType = ctNew  then
+  begin
+    if  OPCOMMON.CallBooleanFunction('addpaymentReal',[contactid,
+                                                       edAmmount.Value,
+                                                       DBLookupComboBox1.KeyValue,
+                                                       CMCurrencyEdit1.Value,
+                                                       CMCurrencyEdit2.Value,
+                                                       DBLookupComboBox2.KeyValue,
+                                                       Edit1.Text] )=true then
+   // ModalResult := mrOk;
+  //end;
+
+end;
+        end;
+
+
+if DBLookupComboBox1.KeyValue=2 then
+begin
+{if  CurrencyEdit3.Value<=CurrencyEdit2.Value then
+begin
+  showmessage('Diqqət! Əlavə alınacaq sığorta haqqı natamamlığa görə hesablanmış ödəniləcək sığorta haqqından böyük olmamalıdır!');
+  exit;
+end;  }
+      // showmessage('Salam3');
+       with DMPayment do
+  begin
+  //if CreatedType = ctNew  then
+  //begin
+    if  OPCOMMON.CallBooleanFunction('addaditionalpaymentReal',[contactid,
+                                                       CurrencyEdit2.Value,
+                                                       DBLookupComboBox1.KeyValue,
+                                                       DBLookupComboBox2.KeyValue,
+                                                       CMCurrencyEdit3.Value,
+                                                       CurrencyEdit1.Value,
+                                                       CurrencyEdit2.Value
+                                                       ] )=true then
+    showmessage('Əməliyyat keçdi!');
+    //ModalResult := mrOk;
+  //end;
+  end;
+
+end;
+
+
+  FrmPayment.DBGrid2.DataSource.DataSet.Refresh;
+
+  FrmAddPayment.Close;
+end;
+
+procedure TFrmAddPayment.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+ with DMPayment do
+ begin
+  ODSPlan.Close ;
+DSpaymentAcc.Close;
+DMPayment.DSins_dict_next_event_per.Close;
+ end;
+
+end;
+
+procedure TFrmAddPayment.FormCreate(Sender: TObject);
+begin
+ with DMPayment, OPSBOP do
+  edDate.Text := DateTimeToStr(CallDateFunction('get_Date', []));
+
+ with DMPayment, ODSPlan do begin
+ close;
+  // SetVariable( 'insid', contactid);
+   Open;
+ end;
+
+{ with DMPayment do
+ if CreatedType = ctEdit  then begin
+   if not CheckIsOld() then
+     btOk.Enabled := True;
+   edAmmount.Text := FloatToStr(ODSPaymentsAMMOUNT.Value);
+  // DBLookupComboBox1.KeyValue := ODSPaymentsPLANID.Value;
+ end
+ else btOk.Enabled := True;     }
+
+
+SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+
+end;
+
+procedure TFrmAddPayment.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+if ord(key)=vk_escape then close
+
+end;
+
+procedure TFrmAddPayment.FormShow(Sender: TObject);
+begin
+
+DBEdit1.Text:='';
+DMPayment.DSpaymentAcc.Close;
+DMPayment.DSpaymentAcc.Open;
+
+DMPayment.DSins_dict_next_event_per.Close;
+DMPayment.DSins_dict_next_event_per.Open;
+
+
+
+DMPayment.DSRestPayment.Close;
+DMPayment.DSRestPayment.SetVariable('pcid',contactid);
+DMPayment.DSRestPayment.Open;
+
+
+
+if DMPayment.DSContracts.FieldByName('type_id').AsInteger=4 then   ////kasko ve ya tam
+begin
+DMPayment.DSTSighaqqıK.Close;
+DMPayment.DSTSighaqqıK.SetVariable('pcid',contactid);
+DMPayment.DSTSighaqqıK.Open;
+  CMCurrencyEdit4.Value:=DMPayment.DSTSighaqqıK.FieldByName('SIGHAQQIQALIQ').AsFloat;
+
+if DMPayment.DSContracts.FieldByName('CHM').AsInteger=1 then
+begin
+
+DMPayment.DSTSighaqqıM.Close;
+DMPayment.DSTSighaqqıM.SetVariable('pcid',contactid);
+DMPayment.DSTSighaqqıM.Open;
+
+XFPanel8.Visible:=true;
+CMCurrencyEdit5.Value:=DMPayment.DSTSighaqqıM.FieldByName('SIGHAQQIQALIQ').AsFloat;
+if CMCurrencyEdit5.Value=0 then
+begin
+   CMCurrencyEdit1.Enabled:=false;
+   CMCurrencyEdit1.Value:=0 ;
+end;
+
+end;
+
+
+if DMPayment.DSContracts.FieldByName('CHFQ').AsInteger=1 then
+begin
+
+DMPayment.DSTSighaqqıFQ.Close;
+DMPayment.DSTSighaqqıFQ.SetVariable('pcid',contactid);
+DMPayment.DSTSighaqqıFQ.Open;
+
+XFPanel4.Visible:=true;
+CMCurrencyEdit6.Value:=DMPayment.DSTSighaqqıFQ.FieldByName('SIGHAQQIQALIQ').AsFloat;
+
+if CMCurrencyEdit6.Value=0 then
+begin
+   CMCurrencyEdit2.Enabled:=false;
+   CMCurrencyEdit2.Value:=0;
+end;
+end;
+ end;
+  ////kasko ve ya tam
+
+
+  ////diger sigorta novleri
+if DMPayment.DSContracts.FieldByName('type_id').AsInteger<>4 then
+begin
+DMPayment.DSTSighaqqı.Close;
+DMPayment.DSTSighaqqı.SetVariable('pcid',contactid);
+DMPayment.DSTSighaqqı.Open;
+  CMCurrencyEdit4.Value:=DMPayment.DSTSighaqqı.FieldByName('SIGHAQQIQALIQ').AsFloat;
+
+ end;
+ ////diger sigorta novleri
+ CMCurrencyEdit3.Value:=DMPayment.DSins_dict_next_event_per.FieldByName('PERCENT').AsFloat;
+
+ DBLookupComboBox1.KeyValue:=1;
+
+ CurrencyEdit1.Value:=DMPayment.OPCOMMON.CallFloatFunction('getInsnatammebleg',[contactid]);
+ CurrencyEdit3.Value:=DMPayment.OPCOMMON.CallFloatFunction('getInsnatamsigortahaaqi',[contactid]);
+
+ if DMPayment.DSPlansetting.FieldByName('PAYMENT_TYPE').AsInteger=2 then
+begin
+ FrmAddPayment.edAmmount.Value:=0;
+ FrmAddPayment.CMCurrencyEdit1.Value:=0;
+ FrmAddPayment.CMCurrencyEdit2.Value:=0;
+ FrmAddPayment.edAmmount.Enabled:=true;
+ FrmAddPayment.CMCurrencyEdit1.Enabled:=true;
+ FrmAddPayment.CMCurrencyEdit2.Enabled:=true;
+end
+else
+
+begin
+
+ FrmAddPayment.edAmmount.Value:=CMCurrencyEdit4.Value;
+ FrmAddPayment.CMCurrencyEdit1.Value:=CMCurrencyEdit5.Value;
+ FrmAddPayment.CMCurrencyEdit2.Value:=CMCurrencyEdit6.Value;
+ //FrmAddPayment.edAmmount.Enabled:=false;
+ //FrmAddPayment.CMCurrencyEdit1.Enabled:=false;
+ //FrmAddPayment.CMCurrencyEdit2.Enabled:=false;
+
+  FrmAddPayment.edAmmount.Enabled:=true;
+ FrmAddPayment.CMCurrencyEdit1.Enabled:=true;
+ FrmAddPayment.CMCurrencyEdit2.Enabled:=true;
+
+end;
+end;
+
+
+
+
+end.

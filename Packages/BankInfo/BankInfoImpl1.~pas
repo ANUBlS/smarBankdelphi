@@ -1,0 +1,469 @@
+unit BankInfoImpl1;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActiveX, AxCtrls, BankInfo_TLB, StdVcl, Menus, StdCtrls, Mask, ExtCtrls,
+  ComCtrls, ToolWin, Buttons, OracleData, ExtDlgs, Db, DBCtrls, Oracle;
+
+type
+  TBankInfoX = class(TActiveForm, IBankInfoX)
+    GroupBox1: TGroupBox;
+    GroupBox2: TGroupBox;
+    GroupBox3: TGroupBox;
+    Label14: TLabel;
+    Label15: TLabel;
+    Label16: TLabel;
+    Label17: TLabel;
+    Label18: TLabel;
+    Label19: TLabel;
+    Label20: TLabel;
+    Label21: TLabel;
+    Label22: TLabel;
+    Label23: TLabel;
+    Label24: TLabel;
+    Label25: TLabel;
+    Label31: TLabel;
+    DBEdit1: TDBEdit;
+    DBEdit2: TDBEdit;
+    DBEdit3: TDBEdit;
+    DBEdit4: TDBEdit;
+    DBEdit5: TDBEdit;
+    DBEdit6: TDBEdit;
+    DBEdit7: TDBEdit;
+    DBEdit8: TDBEdit;
+    DBEdit9: TDBEdit;
+    DBEdit10: TDBEdit;
+    DBEdit11: TDBEdit;
+    DBEdit12: TDBEdit;
+    DBEdit13: TDBEdit;
+    DBEdit18: TDBEdit;
+    ToolBar1: TToolBar;
+    ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
+    ToolButton3: TToolButton;
+    Label2: TLabel;
+    EditBANK: TDBEdit;
+    GroupBox4: TGroupBox;
+    Label1: TLabel;
+    Label4: TLabel;
+    Label11: TLabel;
+    Label12: TLabel;
+    Label27: TLabel;
+    Label28: TLabel;
+    EditKOD_B: TDBEdit;
+    EditKRNO: TDBEdit;
+    EditSWIFT: TDBEdit;
+    EditTELEX: TDBEdit;
+    DBEdit14: TDBEdit;
+    EditINN: TDBEdit;
+    GroupBox5: TGroupBox;
+    GroupBox6: TGroupBox;
+    GroupBox7: TGroupBox;
+    Label5: TLabel;
+    Label6: TLabel;
+    Label9: TLabel;
+    Label10: TLabel;
+    EditSEHER: TDBEdit;
+    EditADRESS: TDBEdit;
+    EditTEL: TDBEdit;
+    EditFAX: TDBEdit;
+    Label13: TLabel;
+    EditEMAIL: TDBEdit;
+    Label29: TLabel;
+    DBEdit16: TDBEdit;
+    Label30: TLabel;
+    DBEdit17: TDBEdit;
+    Label7: TLabel;
+    EditSEDR: TDBEdit;
+    Label8: TLabel;
+    EditBUHALTR: TDBEdit;
+    BANKINFODataSet: TOracleDataSet;
+    dsBANKINFO: TDataSource;
+    DBECapital: TDBEdit;
+    Label3: TLabel;
+    DBImage1: TDBImage;
+    OpenPictureDialog1: TOpenPictureDialog;
+    GroupBox8: TGroupBox;
+    DBEdit15: TDBEdit;
+    DBEdit19: TDBEdit;
+    Label26: TLabel;
+    OBPackage: TOraclePackage;
+    EditAssistant: TDBEdit;
+    EditAssistantTitle: TDBEdit;
+    CBoxBank: TComboBox;
+    OrDS_GetUserBranchID: TOracleDataSet;
+    procedure ToolButton2Click(Sender: TObject);
+    procedure ToolButton3Click(Sender: TObject);
+    procedure DBImage1DblClick(Sender: TObject);
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure CBoxBankADD;
+    function GetUserBranchID:integer;
+  private
+    { Private declarations }
+    FEvents: IBankInfoXEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+  public
+    { Public declarations }
+    procedure Initialize; override;
+  end;
+
+implementation
+
+uses ComObj, ComServ, sboapiDataModuleImpl, SBCore;
+
+{$R *.DFM}
+
+{ TBankInfoX }
+
+procedure TBankInfoX.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_BankInfoXPage); }
+end;
+
+procedure TBankInfoX.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as IBankInfoXEvents;
+end;
+
+procedure TBankInfoX.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TBankInfoX.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TBankInfoX.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TBankInfoX.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TBankInfoX.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TBankInfoX.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TBankInfoX.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TBankInfoX.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TBankInfoX.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TBankInfoX.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TBankInfoX.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TBankInfoX.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TBankInfoX.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TBankInfoX.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TBankInfoX.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TBankInfoX.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TBankInfoX.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TBankInfoX.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TBankInfoX.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TBankInfoX._Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TBankInfoX.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TBankInfoX.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TBankInfoX.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TBankInfoX.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TBankInfoX.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TBankInfoX.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TBankInfoX.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TBankInfoX.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TBankInfoX.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TBankInfoX.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TBankInfoX.Set_AxBorderStyle(Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TBankInfoX.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TBankInfoX.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TBankInfoX.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TBankInfoX.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TBankInfoX.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TBankInfoX.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TBankInfoX.Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TBankInfoX.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TBankInfoX.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TBankInfoX.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TBankInfoX.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TBankInfoX.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TBankInfoX.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+procedure TBankInfoX.ToolButton2Click(Sender: TObject);
+begin
+  BANKINFODataSet.Cancel;
+  BANKINFODataSet.Edit;
+end;
+
+procedure TBankInfoX.ToolButton3Click(Sender: TObject);
+begin
+  BANKINFODataSet.Post;
+  BANKINFODataSet.Edit;
+end;
+
+procedure TBankInfoX.DBImage1DblClick(Sender: TObject);
+var
+   Logo:TPicture;
+begin
+ Logo :=TPicture.Create;
+  try
+   if  not OpenPictureDialog1.Execute  then Exit;
+    Logo.LoadFromFile(OpenPictureDialog1.FileName);
+    DBImage1.Picture.Assign(Logo);
+   finally
+    Logo.Free;
+   end;
+end;
+
+procedure TBankInfoX.ActiveFormCreate(Sender: TObject);
+begin
+  CBoxBankADD;
+  BANKINFODataSet.Locate('kod_fil',1,[]);
+  BANKINFODataSet.Edit;
+end;
+
+procedure TBankInfoX.CBoxBankADD;
+var
+  i :integer;
+begin
+  BANKINFODataSet.First;
+  for i :=1 to BANKINFODataSet.RecordCount do begin
+   CBoxBank.Items.Add(BANKINFODataSet.FieldByName('kod_fil').AsString);
+   BANKINFODataSet.Next;
+  end; {for i :=1}
+end;
+
+function TBankInfoX.GetUserBranchId :integer;
+begin
+  result:=1;
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TBankInfoX,
+    Class_BankInfoX,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

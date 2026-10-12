@@ -1,0 +1,39 @@
+unit FrmSiqortaimpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, OracleData, DBCtrls, Grids, DBGrids, ExtCtrls, NLSLocalizer;
+
+type
+  TFrmSiqorta = class(TForm)
+    Panel1: TPanel;
+    DBGrid1: TDBGrid;
+    DBNavigator1: TDBNavigator;
+    OracleDataSet1: TOracleDataSet;
+    DataSource1: TDataSource;
+    OracleDataSet1ID: TIntegerField;
+    OracleDataSet1NAME: TStringField;
+    OracleDataSet1SID: TStringField;
+    NLSLocalizer1: TNLSLocalizer;
+    procedure FormCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmSiqorta: TFrmSiqorta;
+
+implementation
+uses CMOracleAPIDataModuleImpl;
+{$R *.DFM}
+
+procedure TFrmSiqorta.FormCreate(Sender: TObject);
+begin
+OracleDataSet1.open
+end;
+
+end.

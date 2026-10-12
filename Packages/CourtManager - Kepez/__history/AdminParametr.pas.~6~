@@ -1,0 +1,92 @@
+unit AdminParametr;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Grids, XDBGrids, StdCtrls, XFSCtrls, ExtCtrls;
+
+type
+  TFormParametr = class(TForm)
+    XFPanel1: TXFPanel;
+    XFPanel2: TXFPanel;
+    XFPanel3: TXFPanel;
+    XFPanel4: TXFPanel;
+    XFPanel5: TXFPanel;
+    XFGroupBox1: TXFGroupBox;
+    XFGroupBox2: TXFGroupBox;
+    XDBGrid1: TXDBGrid;
+    XDBGrid2: TXDBGrid;
+    XDBGrid3: TXDBGrid;
+    procedure XDBGrid2DblClick(Sender: TObject);
+    procedure XDBGrid1DblClick(Sender: TObject);
+    procedure XDBGrid1KeyPress(Sender: TObject; var Key: Char);
+    procedure XDBGrid3KeyPress(Sender: TObject; var Key: Char);
+    procedure XDBGrid1KeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormParametr: TFormParametr;
+
+implementation
+
+uses UnitDataModuleCourt;
+
+{$R *.dfm}
+
+procedure TFormParametr.XDBGrid1DblClick(Sender: TObject);
+begin
+  DataModuleCourt.CT_CONTROL.CallProcedure('admin_add',[DataModuleCourt.ODSCourtAdmin.FieldByName('ID').AsInteger
+                                                       ,DataModuleCourt.ODSAdminGroups.FieldByName('ID').AsInteger
+                                                       ,DataModuleCourt.ODSCourtAdmin.FieldByName('NAME').AsString
+                                                       ,DataModuleCourt.ODSAdminGroups.FieldByName('NAME').AsString]);
+  DataModuleCourt.ODSAdminIn.Refresh;
+end;
+
+procedure TFormParametr.XDBGrid1KeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if Key=46 then
+   begin
+      XDBGrid2DblClick(Sender);
+      key:=0;
+   end;
+end;
+
+procedure TFormParametr.XDBGrid1KeyPress(Sender: TObject; var Key: Char);
+begin
+  if key=#13 then
+      XDBGrid1DblClick(Sender);
+   if key=#27 then
+   begin
+      Close;
+      key:=#0;
+   end;
+end;
+
+procedure TFormParametr.XDBGrid2DblClick(Sender: TObject);
+begin
+  begin
+   DataModuleCourt.CT_CONTROL.CallProcedure('admin_del',[DataModuleCourt.ODSAdminIn.FieldByName('USERID').AsInteger
+                                                        ,DataModuleCourt.ODSAdminIn.FieldByName('QRUP').AsInteger
+                                                        ,DataModuleCourt.ODSAdminIn.FieldByName('USERNAME').AsString
+                                                        ,DataModuleCourt.ODSAdminIn.FieldByName('QRUPNAME').AsString]);
+   DataModuleCourt.ODSAdminIn.Refresh;
+end;
+end;
+
+procedure TFormParametr.XDBGrid3KeyPress(Sender: TObject; var Key: Char);
+begin
+  if key=#27 then
+   begin
+      Close;
+      key:=#0;
+   end;
+end;
+
+end.

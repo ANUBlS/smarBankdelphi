@@ -1,0 +1,269 @@
+unit frmusaid_prognozImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, NLSDialogs,
+  StdCtrls, Grids, DBGridEh,db;
+
+type
+  Tfrmusaid_prognoz = class(TForm)
+    GroupBox1: TGroupBox;
+    GroupBox2: TGroupBox;
+    GroupBox3: TGroupBox;
+    DBGridEh1: TDBGridEh;
+    DBGridEh2: TDBGridEh;
+    Gridpr: TDBGridEh;
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure GridprKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure GridprKeyPress(Sender: TObject; var Key: Char);
+    procedure DBGridEh2DblClick(Sender: TObject);
+  private
+
+  public
+    ProgSet :String;
+    ProgSetInt :Integer;
+    procedure WaitForOp;
+    function checkaccess:boolean;
+  end;
+
+var
+  frmusaid_prognoz: Tfrmusaid_prognoz;
+
+implementation
+
+{$R *.DFM}
+uses dmusaid_prognozImpl, frmcollprogImpl;
+
+function Tfrmusaid_prognoz.checkaccess:boolean;
+begin
+   result := dmusaid_prognoz.usaidreport.CallBooleanFunction('CheckAccessSettings',[]);
+   if not result then
+     ShowMessage('Эириш щцгцгунуз йохдур!');
+end;
+
+procedure Tfrmusaid_prognoz.WaitForOp;
+var P_BranchID,P_CrdTypeID :Integer;
+begin
+  with dmusaid_prognoz do begin
+      with Branches do
+           P_BranchID := FieldByName('ID').AsInteger;
+
+      with CreditTypes do
+           P_CrdTypeID := FieldByName('ID').AsInteger;
+
+      if ProgSetInt = 3 then
+      with Fcollection do
+           P_CrdTypeID := FieldByName('ID').AsInteger;
+
+   with prog do
+   begin
+      close;
+      setVariable('BRID',P_BranchID);
+      setVariable('CRDTYPE',P_CrdTypeID);
+      SetVariable('typ',ProgSetInt);
+      open;
+   end;
+end;
+end;
+
+
+procedure Tfrmusaid_prognoz.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+  Resize := false
+end;
+
+procedure Tfrmusaid_prognoz.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+  if ord(key) = VK_ESCAPE then close;
+end;
+
+procedure Tfrmusaid_prognoz.FormCreate(Sender: TObject);
+begin
+   dmusaid_prognoz := tdmusaid_prognoz.create(self);
+  //frmcollprog := Tfrmcollprog.create(self);
+end;
+
+procedure Tfrmusaid_prognoz.FormDestroy(Sender: TObject);
+begin
+
+   dmusaid_prognoz.free;
+  // frmcollprog.free;
+end;
+
+procedure Tfrmusaid_prognoz.FormShow(Sender: TObject);
+var BrID,CrdType :Integer;
+
+begin
+
+   with dmusaid_prognoz do begin
+        Branches.open;
+        CreditTypes.open;
+        Fcollection.open;
+        brid := Branches.FieldByName('ID').AsInteger;
+        CrdType := CreditTypes.FieldByName('ID').AsInteger;
+        DBGridEh2.DataSource := CreditTypesds;
+        GroupBox3.Visible := true;
+        GroupBox2.Caption := 'Кредитин типи';
+        if ProgSetInt = 3 then begin
+        GroupBox2.Caption := 'Жямляшмя';
+        GroupBox3.Visible := false;
+        CrdType := Fcollection.FieldByName('ID').AsInteger;
+        DBGridEh2.DataSource := Fcollectionds;
+        end;
+   end;
+
+   with dmusaid_prognoz,prog do begin
+        if Active then CloseAll;
+        SetVariable('BRID',brid);
+        SetVariable('CRDTYPE',CrdType);
+
+        {if ProgSet = 'R1' then t := 1;
+        if ProgSet = 'R2' then t := 2;
+        if ProgSet = 'R3' then t := 3; }
+        
+        SetVariable('TYP',ProgSetInt);
+        open;
+   end;
+end;
+
+procedure Tfrmusaid_prognoz.GridprKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+
+   if (key = VK_DELETE) and (Gridpr.DataSource.DataSet.RecordCount>0) then  begin
+      if MessageDlg('Силинмясиня яминсинизми?',
+      mtConfirmation, [mbYes, mbNo], 0) = mrNo then exit;
+
+      Gridpr.DataSource.DataSet.Delete;
+      end;
+end;
+
+procedure Tfrmusaid_prognoz.GridprKeyPress(Sender: TObject; var Key: Char);
+begin
+   with dmusaid_prognoz,prog do
+   begin
+   if UpdateStatus in [usInserted, usModified] then begin
+     FieldByName('branchid').AsInteger := Branches.FieldByName('ID').AsInteger;
+     FieldByName('credittype').AsInteger := CreditTypes.FieldByName('id').AsInteger;
+     fieldByName('type#').AsInteger := ProgSetInt;
+     end;
+   end;
+end;
+
+procedure Tfrmusaid_prognoz.DBGridEh2DblClick(Sender: TObject);
+var depid :integer;
+begin
+   if ProgSetInt = 3 then  begin
+  with dmusaid_prognoz do begin
+   CatP.open;
+  PerP.open;
+  PledgesP.open;
+  valp.open;
+  RegionP.open;
+  ResP.open;
+  AnnIntP.open;
+  PeriodP.open;
+   end;
+     try
+     frmcollprog :=Tfrmcollprog.create(Self);
+      case dmusaid_prognoz.Fcollection.FieldByName('ID').AsInteger of  //c
+           1:begin
+                frmcollprog.DBGridEh2.DataSource := dmusaid_prognoz.CatPds;
+                with  dmusaid_prognoz,CollProg do begin //7
+                      if Active then CloseAll;
+                      SetVariable('collid',1);
+                      SetVariable('depid',frmcollprog.get_DepID);
+                      SetVariable('brid',dmusaid_prognoz.Branches.FieldByName('id').asInteger);
+                      Open;
+                end;//7
+             end;
+
+           2:begin
+                frmcollprog.DBGridEh2.DataSource := dmusaid_prognoz.perPds;
+                with  dmusaid_prognoz,CollProg do begin //7
+                      if Active then CloseAll;
+                      SetVariable('collid',2);
+                      SetVariable('depid',frmcollprog.get_DepID);
+                      SetVariable('brid',dmusaid_prognoz.Branches.FieldByName('id').asInteger);
+                      Open;
+                end;//7
+             end;
+           3:begin
+                frmcollprog.DBGridEh2.DataSource := dmusaid_prognoz.PledgesPds;
+                with  dmusaid_prognoz,CollProg do begin //7
+                      if Active then CloseAll;
+                      SetVariable('collid',3);
+                      SetVariable('depid',frmcollprog.get_DepID);
+                      SetVariable('brid',dmusaid_prognoz.Branches.FieldByName('id').asInteger);
+                      Open;
+                end;//7
+             end;
+           4:begin
+                 frmcollprog.DBGridEh2.DataSource := dmusaid_prognoz.valpds;
+                with  dmusaid_prognoz,CollProg do begin //7
+                      if Active then CloseAll;
+                      SetVariable('collid',4);
+                      SetVariable('depid',frmcollprog.get_DepID);
+                      SetVariable('brid',dmusaid_prognoz.Branches.FieldByName('id').asInteger);
+                      Open;
+                end;//7
+             end;
+           5:begin
+                 frmcollprog.DBGridEh2.DataSource := dmusaid_prognoz.RegionPds;
+                with  dmusaid_prognoz,CollProg do begin //7
+                      if Active then CloseAll;
+                      SetVariable('collid',5);
+                      SetVariable('depid',frmcollprog.get_DepID);
+                      SetVariable('brid',dmusaid_prognoz.Branches.FieldByName('id').asInteger);
+                      Open;
+                end;//7
+             end;
+           6:begin
+               frmcollprog.DBGridEh2.DataSource := dmusaid_prognoz.ResPds;
+                with  dmusaid_prognoz,CollProg do begin //7
+                      if Active then CloseAll;
+                      SetVariable('collid',6);
+                      SetVariable('depid',frmcollprog.get_DepID);
+                      SetVariable('brid',dmusaid_prognoz.Branches.FieldByName('id').asInteger);
+                      Open;
+                end;//7
+             end;
+           7:begin
+                frmcollprog.DBGridEh2.DataSource := dmusaid_prognoz.AnnIntPds;
+                with  dmusaid_prognoz,CollProg do begin //7
+                      if Active then CloseAll;
+                      SetVariable('collid',7);
+                      SetVariable('depid',frmcollprog.get_DepID);
+                      SetVariable('brid',dmusaid_prognoz.Branches.FieldByName('id').asInteger);
+                      Open;
+                end;//7
+             end;
+           8:begin
+                frmcollprog.DBGridEh2.DataSource := dmusaid_prognoz.PeriodPds;
+                with  dmusaid_prognoz,CollProg do begin //7
+                      if Active then CloseAll;
+                      SetVariable('collid',8);
+                      SetVariable('depid',frmcollprog.get_DepID);
+                      SetVariable('brid',dmusaid_prognoz.Branches.FieldByName('id').asInteger);
+                      Open;
+                end;//7
+             end;
+
+      end; //c
+
+        frmcollprog.ShowModal;
+        finally
+          frmcollprog.Release;
+        end;
+      end; //if
+end;
+
+end.

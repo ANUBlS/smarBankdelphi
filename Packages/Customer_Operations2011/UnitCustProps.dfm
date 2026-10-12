@@ -1,0 +1,410 @@
+object FrmCustProps: TFrmCustProps
+  Left = 322
+  Top = 202
+  Caption = 'FrmCustProps'
+  ClientHeight = 342
+  ClientWidth = 536
+  Color = clBtnFace
+  Font.Charset = RUSSIAN_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poDesktopCenter
+  OnClose = FormClose
+  OnCreate = FormCreate
+  OnKeyDown = FormKeyDown
+  OnKeyPress = FormKeyPress
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Label3: TLabel
+    Tag = 17
+    Left = 7
+    Top = 5
+    Width = 106
+    Height = 13
+    Caption = 'Qeydiyyata al'#305'nm'#305#351'd'#305'r:'
+  end
+  object Label5: TLabel
+    Tag = 22
+    Left = 7
+    Top = 27
+    Width = 70
+    Height = 13
+    Caption = 'M'#252#351't'#601'rinin ad'#305':'
+  end
+  object Label7: TLabel
+    Tag = 23
+    Left = 7
+    Top = 50
+    Width = 42
+    Height = 13
+    Caption = 'Q'#305'sa ad'#305':'
+  end
+  object Label9: TLabel
+    Tag = 25
+    Left = 7
+    Top = 96
+    Width = 34
+    Height = 13
+    Caption = 'Qrupu:'
+  end
+  object Label10: TLabel
+    Tag = 26
+    Left = 7
+    Top = 119
+    Width = 76
+    Height = 13
+    Caption = 'M'#252'lkiyy'#601't n'#246'v'#252':'
+  end
+  object Label11: TLabel
+    Tag = 27
+    Left = 7
+    Top = 142
+    Width = 78
+    Height = 13
+    Caption = 'T'#601#351'kilat formas'#305':'
+  end
+  object Label12: TLabel
+    Tag = 28
+    Left = 7
+    Top = 166
+    Width = 81
+    Height = 13
+    Caption = 'F'#601'aliyy'#601't sah'#601'si:'
+  end
+  object Label13: TLabel
+    Tag = 29
+    Left = 7
+    Top = 188
+    Width = 28
+    Height = 13
+    Caption = 'Sah'#601':'
+  end
+  object Label15: TLabel
+    Tag = 30
+    Left = 7
+    Top = 211
+    Width = 58
+    Height = 13
+    Caption = 'OKPO kodu:'
+  end
+  object Label16: TLabel
+    Tag = 31
+    Left = 7
+    Top = 234
+    Width = 82
+    Height = 13
+    Caption = 'Vergi m'#252'f'#601'tti'#351'liyi:'
+  end
+  object Label17: TLabel
+    Tag = 32
+    Left = 7
+    Top = 257
+    Width = 31
+    Height = 13
+    Caption = 'V'#214'EN:'
+  end
+  object Label18: TLabel
+    Tag = 33
+    Left = 7
+    Top = 281
+    Width = 120
+    Height = 13
+    Caption = 'DVM-d'#601' qeyd'#601' al'#305'nm'#305#351'd'#305'r:'
+  end
+  object Label19: TLabel
+    Tag = 34
+    Left = 262
+    Top = 281
+    Width = 144
+    Height = 13
+    Caption = 'Nizamnam'#601'si qeyd'#601' al'#305'nm'#305#351'd'#305'r:'
+  end
+  object Bevel1: TBevel
+    Left = 2
+    Top = 300
+    Width = 526
+    Height = 4
+  end
+  object Label6: TLabel
+    Tag = 21
+    Left = 7
+    Top = 73
+    Width = 67
+    Height = 13
+    Caption = 'M'#601'nsubiyy'#601'ti:'
+  end
+  object Label8: TLabel
+    Tag = 24
+    Left = 343
+    Top = 257
+    Width = 24
+    Height = 13
+    Caption = #1041#1048#1050':'
+  end
+  object OpenDateEdit: TDateTimePicker
+    Left = 138
+    Top = 1
+    Width = 94
+    Height = 21
+    Date = 37342.553889039400000000
+    Time = 37342.553889039400000000
+    TabOrder = 0
+  end
+  object OkButton: TButton
+    Left = 377
+    Top = 308
+    Width = 72
+    Height = 24
+    Caption = 'Ok'
+    TabOrder = 16
+    OnClick = OkButtonClick
+  end
+  object CancelButton: TButton
+    Left = 454
+    Top = 308
+    Width = 72
+    Height = 24
+    Caption = '&Cancel'
+    TabOrder = 17
+    OnClick = CancelButtonClick
+  end
+  object NameEdit: TDBEdit
+    Left = 138
+    Top = 23
+    Width = 392
+    Height = 21
+    DataField = 'NAME'
+    DataSource = CO_DataMod.Custdata
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 1
+  end
+  object RelationCB: TDBLookupComboBox
+    Left = 138
+    Top = 69
+    Width = 200
+    Height = 21
+    DataField = 'PRINAD_KOD'
+    DataSource = CO_DataMod.Custdata
+    KeyField = 'ID'
+    ListField = 'NAME'
+    ListSource = CO_DataMod.Relation
+    TabOrder = 4
+  end
+  object GroupCB: TDBLookupComboBox
+    Left = 138
+    Top = 92
+    Width = 200
+    Height = 21
+    DataField = 'GROUP_KLIE'
+    DataSource = CO_DataMod.Custdata
+    KeyField = 'ID'
+    ListField = 'NAME'
+    ListSource = CO_DataMod.ClientGroup
+    TabOrder = 5
+  end
+  object EstateTypeCB: TDBLookupComboBox
+    Left = 138
+    Top = 115
+    Width = 200
+    Height = 21
+    DataField = 'VID_SOB'
+    DataSource = CO_DataMod.Custdata
+    KeyField = 'ID'
+    ListField = 'NAME'
+    ListSource = CO_DataMod.EstateType
+    TabOrder = 6
+  end
+  object OrganizationTypeCB: TDBLookupComboBox
+    Left = 138
+    Top = 138
+    Width = 200
+    Height = 21
+    DataField = 'ORG_SOB'
+    DataSource = CO_DataMod.Custdata
+    KeyField = 'ID'
+    ListField = 'NAME'
+    ListSource = CO_DataMod.OrganizationType
+    TabOrder = 7
+  end
+  object ActionAreaCB: TDBLookupComboBox
+    Left = 138
+    Top = 161
+    Width = 200
+    Height = 21
+    DataField = 'SFERA_DEY'
+    DataSource = CO_DataMod.Custdata
+    KeyField = 'ID'
+    ListField = 'NAME'
+    ListSource = CO_DataMod.ActionArea
+    TabOrder = 8
+  end
+  object BranchCB: TDBLookupComboBox
+    Left = 138
+    Top = 184
+    Width = 200
+    Height = 21
+    DataField = 'OTRASL'
+    DataSource = CO_DataMod.Custdata
+    KeyField = 'ID'
+    ListField = 'NAME'
+    ListSource = CO_DataMod.Branch
+    TabOrder = 9
+  end
+  object ClientClosedCB: TCheckBox
+    Left = 238
+    Top = 3
+    Width = 139
+    Height = 17
+    Caption = 'Qeydiyyatdan '#231#305'xar'#305'lm'#305#351'd'#305'r'
+    TabOrder = 18
+    OnClick = ClientClosedCBClick
+  end
+  object ClientClosedPanel: TPanel
+    Left = 384
+    Top = 0
+    Width = 146
+    Height = 23
+    Alignment = taLeftJustify
+    BevelOuter = bvNone
+    Caption = 'Tarix:'
+    TabOrder = 19
+    object CloseDateEdit: TDateTimePicker
+      Left = 31
+      Top = 0
+      Width = 114
+      Height = 21
+      Date = 37354.872120451400000000
+      Time = 37354.872120451400000000
+      TabOrder = 0
+    end
+  end
+  object IsNotResidentCB: TDBCheckBox
+    Tag = 20
+    Left = 409
+    Top = 49
+    Width = 88
+    Height = 15
+    Caption = 'Rezident'
+    DataField = 'NEREZIDENT'
+    DataSource = CO_DataMod.Custdata
+    TabOrder = 3
+    ValueChecked = '1'
+    ValueUnchecked = '0'
+  end
+  object OKPOCodeEdit: TDBEdit
+    Left = 138
+    Top = 207
+    Width = 200
+    Height = 21
+    DataField = 'KOD_OKPRO'
+    DataSource = CO_DataMod.Custdata
+    TabOrder = 10
+  end
+  object TazAreaCB: TDBLookupComboBox
+    Left = 138
+    Top = 230
+    Width = 200
+    Height = 21
+    DataField = 'NALOG_KOD'
+    DataSource = CO_DataMod.Custdata
+    KeyField = 'ID'
+    ListField = 'NAME'
+    ListSource = CO_DataMod.TaxArea
+    TabOrder = 11
+  end
+  object TaxIDEdit: TDBEdit
+    Left = 138
+    Top = 253
+    Width = 199
+    Height = 21
+    DataField = 'INN'
+    DataSource = CO_DataMod.Custdata
+    TabOrder = 12
+  end
+  object BankIDEdit: TDBEdit
+    Left = 376
+    Top = 253
+    Width = 153
+    Height = 21
+    DataField = 'BIK'
+    DataSource = CO_DataMod.Custdata
+    TabOrder = 13
+  end
+  object DBEdit1: TDBEdit
+    Left = 138
+    Top = 46
+    Width = 200
+    Height = 21
+    DataField = 'SHORT_NAME'
+    DataSource = CO_DataMod.Custdata
+    TabOrder = 2
+  end
+  object DBEdit3: TDBEdit
+    Left = 138
+    Top = 276
+    Width = 121
+    Height = 21
+    DataField = 'DAT_NAL'
+    DataSource = CO_DataMod.Custdata
+    TabOrder = 20
+    Visible = False
+  end
+  object DBEdit4: TDBEdit
+    Left = 408
+    Top = 276
+    Width = 121
+    Height = 21
+    DataField = 'DAT_USTAV'
+    DataSource = CO_DataMod.Custdata
+    TabOrder = 21
+    Visible = False
+  end
+  object Button1: TButton
+    Left = 2
+    Top = 307
+    Width = 143
+    Height = 25
+    Caption = #399'lav'#601' informasiya'
+    TabOrder = 22
+    Visible = False
+    OnClick = Button1Click
+  end
+  object Dpt_Nal: TDateTimePicker
+    Left = 138
+    Top = 276
+    Width = 121
+    Height = 21
+    Date = 39366.622235416700000000
+    Time = 39366.622235416700000000
+    TabOrder = 14
+    OnChange = Dpt_NalChange
+  end
+  object Dtp_Ustav: TDateTimePicker
+    Left = 408
+    Top = 276
+    Width = 121
+    Height = 21
+    Date = 39366.622235416700000000
+    Time = 39366.622235416700000000
+    TabOrder = 15
+    OnChange = Dpt_NalChange
+  end
+  object ActionList1: TActionList
+    Left = 344
+    Top = 304
+    object InfoView: TAction
+      Caption = #1071#1083#1072#1074#1103' '#1080#1085#1092#1086#1088#1084#1072#1089#1080#1081#1072
+    end
+    object IpInfoView: TAction
+      Caption = #1041#1086#1088#1078#1072#1083#1072#1085#1099#1085' '#1080#1085#1092#1086#1088#1084#1072#1089#1080#1081#1072#1089#1099
+    end
+  end
+end

@@ -1,0 +1,32 @@
+object RAllDatMod: TRAllDatMod
+  OldCreateOrder = False
+  Left = 225
+  Top = 173
+  Height = 480
+  Width = 696
+  object CR_RESERVE_COUNT_NEW: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'CR_RESERVE_COUNT_NEW'
+    ParameterMode = pmNamed
+    Left = 64
+    Top = 8
+  end
+  object CreditsInfo: TOracleDataSet
+    SQL.Strings = (
+      'select ID , NumberOfCredit'
+      '  from cr_active_credits'
+      ' where currency <> 0')
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 64
+    Top = 72
+    object CreditsInfoID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object CreditsInfoNUMBEROFCREDIT: TStringField
+      FieldName = 'NUMBEROFCREDIT'
+      Size = 32
+    end
+  end
+end

@@ -1,0 +1,78 @@
+unit CompanySelection;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls, DB, OracleData;
+
+type
+  TCompanyForm = class(TForm)
+    RadioGroup: TRadioGroup;
+    SetCompany: TOracleDataSet;
+    complist_id: TOracleDataSet;
+    complist_idID: TFloatField;
+    complist_idCOMPANYID: TWideStringField;
+    company_list: TOracleDataSet;
+    company_listID: TFloatField;
+    company_listCOMPANY_NAME: TWideStringField;
+    procedure FormShow(Sender: TObject);
+    procedure RadioGroupClick(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  CompanyForm: TCompanyForm;
+
+implementation
+
+{$R *.dfm}
+
+procedure TCompanyForm.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+company_list.CloseAll;
+CompanyForm.ClientHeight:=100;
+RadioGroup.Items.Clear;
+end;
+
+procedure TCompanyForm.FormShow(Sender: TObject);
+ var i :integer;
+begin
+if not company_list.Active then
+    company_list.Open ;
+
+ for i := 0 to company_list.RecordCount-1 do
+  begin
+   RadioGroup.Items.Add(company_list.FieldByName('company_name').AsString);
+   CompanyForm.ClientHeight:= CompanyForm.ClientHeight+15;
+    company_list.Next;
+  end;
+
+
+end;
+
+procedure TCompanyForm.RadioGroupClick(Sender: TObject);
+begin
+
+
+complist_id.CloseAll;
+complist_id.SetVariable('COMPNAME',RadioGroup.Items[RadioGroup.ItemIndex]);
+complist_id.Open;
+
+setCompany.CloseAll;
+setCompany.SetVariable('COMP_ID',complist_id.FieldByName('id').AsInteger);
+setCompany.open;
+
+
+complist_id.Refresh;
+
+//ShowMessage( complist_id.FieldByName('companyid').AsString);
+
+ close;
+end;
+
+end.

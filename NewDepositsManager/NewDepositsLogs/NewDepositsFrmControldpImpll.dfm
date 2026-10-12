@@ -1,0 +1,209 @@
+object NewDepositsFrmControldp: TNewDepositsFrmControldp
+  Left = 295
+  Top = 250
+  BorderIcons = [biSystemMenu]
+  Caption = 'Control'
+  ClientHeight = 113
+  ClientWidth = 210
+  Color = clBtnFace
+  Font.Charset = RUSSIAN_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poMainFormCenter
+  OnCanResize = FormCanResize
+  OnCreate = FormCreate
+  OnKeyPress = FormKeyPress
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 14
+  object Label1: TLabel
+    Left = 13
+    Top = 51
+    Width = 85
+    Height = 14
+    Caption = #1065#1077#1089#1072#1073#1072#1090' '#1090#1072#1088#1080#1093#1080
+  end
+  object Label2: TLabel
+    Left = 13
+    Top = 17
+    Width = 38
+    Height = 14
+    Caption = #1060#1080#1083#1080#1072#1083
+  end
+  object DBLookupComboboxEh1: TDBLookupComboboxEh
+    Left = 61
+    Top = 14
+    Width = 146
+    Height = 22
+    DropDownBox.Sizable = True
+    EditButtons = <>
+    KeyField = 'ID'
+    ListField = 'NAME'
+    ListSource = filialsds
+    TabOrder = 0
+    Visible = True
+  end
+  object DTPDAT: TDateTimePicker
+    Left = 89
+    Top = 48
+    Width = 116
+    Height = 21
+    Date = 40052.413013969900000000
+    Time = 40052.413013969900000000
+    TabOrder = 1
+  end
+  object BitBtn1: TBitBtn
+    Left = 32
+    Top = 82
+    Width = 81
+    Height = 27
+    Caption = #1043#1103#1073#1091#1083
+    Default = True
+    DoubleBuffered = True
+    Glyph.Data = {
+      DE010000424DDE01000000000000760000002800000024000000120000000100
+      0400000000006801000000000000000000001000000000000000000000000000
+      80000080000000808000800000008000800080800000C0C0C000808080000000
+      FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00333333333333
+      3333333333333333333333330000333333333333333333333333F33333333333
+      00003333344333333333333333388F3333333333000033334224333333333333
+      338338F3333333330000333422224333333333333833338F3333333300003342
+      222224333333333383333338F3333333000034222A22224333333338F338F333
+      8F33333300003222A3A2224333333338F3838F338F33333300003A2A333A2224
+      33333338F83338F338F33333000033A33333A222433333338333338F338F3333
+      0000333333333A222433333333333338F338F33300003333333333A222433333
+      333333338F338F33000033333333333A222433333333333338F338F300003333
+      33333333A222433333333333338F338F00003333333333333A22433333333333
+      3338F38F000033333333333333A223333333333333338F830000333333333333
+      333A333333333333333338330000333333333333333333333333333333333333
+      0000}
+    NumGlyphs = 2
+    ParentDoubleBuffered = False
+    TabOrder = 2
+    OnClick = BitBtn1Click
+  end
+  object BitBtn2: TBitBtn
+    Left = 119
+    Top = 82
+    Width = 81
+    Height = 27
+    Caption = #1041#1072#1100#1083#1072
+    DoubleBuffered = True
+    Kind = bkClose
+    NumGlyphs = 2
+    ParentDoubleBuffered = False
+    TabOrder = 3
+  end
+  object filials: TOracleDataSet
+    SQL.Strings = (
+      'select -1 as id,'#39'B'#252't'#252'n filiallar'#39' as name from dual'
+      'union'
+      'select id,name from filial'
+      '')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000400000049004400010000000000080000004E0041004D00
+      4500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 32
+    object filialsID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object filialsNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 90
+    end
+  end
+  object dm_control: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'dm_control'
+    Cursor = crSQLWait
+    Left = 24
+    Top = 112
+  end
+  object filialsds: TDataSource
+    DataSet = filials
+  end
+  object sysdat: TOracleDataSet
+    SQL.Strings = (
+      'select tek_dat from sysdat')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000010000000E000000540045004B005F00440041005400010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 16
+    Top = 40
+    object sysdatTEK_DAT: TDateTimeField
+      FieldName = 'TEK_DAT'
+      Required = True
+    end
+  end
+  object contExport: TCMExcelExport
+    StyleColumnWidth = cwDefault
+    ColumnWidth = 0
+    FontTitles.Charset = RUSSIAN_CHARSET
+    FontTitles.Color = clWindowText
+    FontTitles.Height = -11
+    FontTitles.Name = 'Arial AzLat'
+    FontTitles.Style = []
+    OrientationTitles = 0
+    FontData.Charset = RUSSIAN_CHARSET
+    FontData.Color = clWindowText
+    FontData.Height = -11
+    FontData.Name = 'Arial AzLat'
+    FontData.Style = []
+    FontSummary.Charset = DEFAULT_CHARSET
+    FontSummary.Color = clWindowText
+    FontSummary.Height = -11
+    FontSummary.Name = 'MS Sans Serif'
+    FontSummary.Style = []
+    SummarySelection = ssNone
+    SummaryCalculation = scSUM
+    Left = 56
+    Top = 40
+  end
+  object ResultControl: TOracleDataSet
+    SQL.Strings = (
+      'SELECT a.contractnum, a.custname, a.drest, a.dintrest, a.filial'
+      '  FROM dm_controls a'
+      '  order by filial')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000050000001600000043004F004E00540052004100430054004E005500
+      4D000100000000001000000043005500530054004E0041004D00450001000000
+      00000A0000004400520045005300540001000000000010000000440049004E00
+      540052004500530054000100000000000C000000460049004C00490041004C00
+      010000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 104
+    Top = 32
+    object ResultControlCONTRACTNUM: TWideStringField
+      FieldName = 'CONTRACTNUM'
+      Required = True
+      Size = 90
+    end
+    object ResultControlCUSTNAME: TWideStringField
+      FieldName = 'CUSTNAME'
+      Required = True
+      Size = 90
+    end
+    object ResultControlDREST: TFloatField
+      FieldName = 'DREST'
+      Required = True
+    end
+    object ResultControlDINTREST: TFloatField
+      FieldName = 'DINTREST'
+      Required = True
+    end
+    object ResultControlFILIAL: TWideStringField
+      FieldName = 'FILIAL'
+      Size = 35
+    end
+  end
+end

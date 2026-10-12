@@ -1,0 +1,229 @@
+﻿unit ExpCustomersTypeUnit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, variants, Classes, Graphics, Controls, Forms,
+  Dialogs,
+  StdCtrls, DBCtrls, ExtCtrls, ComCtrls, ImgList, XFSCtrls;
+
+type
+  TExpCustomersType = class(TForm)
+    Panel1: TPanel;
+    XFPanel1: TXFPanel;
+    XFLabel1: TXFLabel;
+    ImageList1: TImageList;
+    TreeView1: TTreeView;
+    procedure DBLookupComboBox1Click(Sender: TObject);
+    procedure TreeView1Change(Sender: TObject; Node: TTreeNode);
+    procedure TreeView1DblClick(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormCreate(Sender: TObject);
+
+  private
+    { Private declarations }
+  public
+    typecode: Integer;
+    typetext: String;
+  end;
+
+var
+  ExpCustomersType: TExpCustomersType;
+
+implementation
+
+uses ExpDataModuleUnit, ExpUnitImpl, ExpUnitNewImpl, UnitPayments,
+  UnitPaymentsCredit, ExpressDecls;
+{$R *.DFM}
+
+procedure TExpCustomersType.DBLookupComboBox1Click(Sender: TObject);
+resourcestring
+  rsExpCaption = '(Йени)';
+begin
+  ExpCustomersType.Close;
+  ExpDataModule.SB_ACA.CallProcedure('CheckAdvancedObjectAccess',
+    ['EXPRESS_ADD']);
+  { with  ExpFormAdd,ExpDataModule do
+    begin
+    Panel5.Enabled    :=true;
+    Panel1.Enabled    :=true;
+    Timer1.Enabled    :=true;
+    GroupBox7.Enabled :=true;
+    GroupBox8.Enabled :=true;
+    GroupBox9.Enabled :=true;
+    GroupBox10.Enabled:=true;
+    GroupBox18.Enabled:=false;
+    Edit1.ReadOnly    :=false;
+    id:=ExpBatchsDataSet.fieldbyname('id').AsInteger;
+    Clear;
+    ExpFormAdd.Caption:=ExpTypeDataSet.fieldbyname('name').AsString+rsExpCaption;
+    Width:=612;
+    Button1.Enabled:=True;
+    ComboBox1.ItemIndex:=0;
+    Edit5.Text:='AZE';
+    DBLookupComboBox2.KeyValue:=FilialDataSet.fieldbyname('id').AsInteger;
+    DBLookupComboBox3.KeyValue:=0;
+    DBLookupComboBox4.KeyValue:=-1;
+    DateTimePicker3.Date:=trunc(StrToDateTime(SysdateDataSet.fieldbyname('dat').AsString));
+    DateTimePicker4.Date:=trunc(StrToDateTime(SysdateDataSet.fieldbyname('dat').AsString));
+    DateTimePicker4.Time:=Time;
+    DateEdit.Value:=null;
+    DateEdit1.Value:=null;
+
+    ShowModal;
+    end; }
+  ExpFormNew.ShowModal;
+end;
+
+procedure TExpCustomersType.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+  // TreeView1.SaveToFile('teymur.txt',TUnicodeEncoding.UTF8);
+end;
+
+procedure TExpCustomersType.FormCreate(Sender: TObject);
+var
+  MyTreeNode1, MyTreeNode2: TTreeNode;
+begin
+  TreeView1.Items.Clear;
+  with ExpDataModule do
+  begin
+    ExpTypeDataSet.First;
+    while not ExpTypeDataSet.Eof do
+    begin
+      MyTreeNode1 := TreeView1.Items.AddChild(nil,
+        ExpTypeDataSet.FieldByName('name').AsString);
+      MyTreeNode1.ImageIndex := 0;
+      MyTreeNode1.SelectedIndex := 1;
+
+      begin
+        ExpSettingsDataSet.First;
+        while not ExpSettingsDataSet.Eof do
+        begin
+          Case ExpSettingsDataSet.FieldByName('id').AsInteger of
+            1:
+              begin
+                MyTreeNode2 := TreeView1.Items.AddChild(MyTreeNode1,
+                  ExpSettingsDataSet.FieldByName('name').AsString);
+                MyTreeNode2.ImageIndex := 2;
+                MyTreeNode2.SelectedIndex := 2;
+              end;
+            2:
+              begin
+                MyTreeNode2 := TreeView1.Items.AddChild(MyTreeNode1,
+                  ExpSettingsDataSet.FieldByName('name').AsString);
+                MyTreeNode2.ImageIndex := 3;
+                MyTreeNode2.SelectedIndex := 3;
+              end;
+            3:
+              begin
+                MyTreeNode2 := TreeView1.Items.AddChild(MyTreeNode1,
+                  ExpSettingsDataSet.FieldByName('name').AsString);
+                MyTreeNode2.ImageIndex := 4;
+                MyTreeNode2.SelectedIndex := 4;
+              end;
+            4:
+              begin
+                MyTreeNode2 := TreeView1.Items.AddChild(MyTreeNode1,
+                  ExpSettingsDataSet.FieldByName('name').AsString);
+                MyTreeNode2.ImageIndex := 5;
+                MyTreeNode2.SelectedIndex := 5;
+              end;
+
+            { 5:begin
+              MyTreeNode2:=TreeView1.Items.AddChild(MyTreeNode1,ExpSettingsDataSet.FieldByName('name').AsString);
+              MyTreeNode2.ImageIndex:=6;
+              MyTreeNode2.SelectedIndex:=6;
+              end;
+
+              6:begin
+              MyTreeNode2:=TreeView1.Items.AddChild(MyTreeNode1,ExpSettingsDataSet.FieldByName('name').AsString);
+              MyTreeNode2.ImageIndex:=7;
+              MyTreeNode2.SelectedIndex:=7;
+              end;
+              { 7:begin
+              MyTreeNode2:=TreeView1.Items.AddChild(MyTreeNode1,ExpSettingsDataSet.FieldByName('name').AsString);
+              MyTreeNode2.ImageIndex:=8;
+              MyTreeNode2.SelectedIndex:=8;
+              end; }
+
+          End;
+
+          ExpSettingsDataSet.Next;
+        end;
+      end;
+      ExpTypeDataSet.Next;
+    end;
+  end;
+  TreeView1.FullExpand;
+end;
+
+procedure TExpCustomersType.TreeView1Change(Sender: TObject; Node: TTreeNode);
+begin
+  typecode := Node.ImageIndex;
+  typetext := Node.Text;
+end;
+
+procedure TExpCustomersType.TreeView1DblClick(Sender: TObject);
+var
+  v_groups: Integer;
+begin
+  if (typecode = 2) or (typecode = 3) or (typecode = 4) or (typecode = 5) or
+    (typecode = 6) or (typecode = 7) then
+  begin
+    with ExpDataModule, ExpGroupsDataset do
+    begin
+      Close;
+      SetVariable('name', typetext);
+      Open;
+      v_groups := FieldByName('groups').AsInteger;
+    end;
+
+    case v_groups of
+      1:
+        begin
+          ExpDataModule.ValyutaDataSet.Filtered := False;
+          ExpressVariables.exid := 1;
+          WITH ExpFormNew DO
+          BEGIN
+            FForm := 0;
+            Button1.Visible := True;
+            PageControl1.ActivePageIndex := 0;
+            ShowModal;
+          END;
+        end;
+      2:
+        begin
+          with ExpDataModule do
+          begin
+            ExpSetDataSet.Close;
+            ExpSetDataSet.SetVariable('name', typetext);
+            ExpSetDataSet.Open;
+
+            if typetext = 'Cari Hesaba Mədaxil' then
+            begin
+              ExpressVariables.exid := 2;
+              with FormPaymentsCredit do
+              begin
+                FForm := 0;
+                optype := ExpSetDataSet.FieldByName('id').AsInteger;
+                ShowModal;
+              end;
+            end
+            else
+            begin
+              with Formpayments do
+              begin
+                exid := 2;
+                FForm := 0;
+                optype := ExpSetDataSet.FieldByName('id').AsInteger;
+                ShowModal;
+              end;
+            end;
+          end;
+        end;
+    end;
+  end;
+end;
+
+end.

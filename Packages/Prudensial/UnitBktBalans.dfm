@@ -1,0 +1,299 @@
+object BKTBalans: TBKTBalans
+  Left = 0
+  Top = 0
+  AutoSize = True
+  Caption = 'Balan hesabalr'#305
+  ClientHeight = 568
+  ClientWidth = 859
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poScreenCenter
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 859
+    Height = 568
+    Align = alClient
+    BevelInner = bvRaised
+    BevelOuter = bvLowered
+    TabOrder = 0
+    object Panel2: TPanel
+      Left = 2
+      Top = 2
+      Width = 855
+      Height = 39
+      Align = alTop
+      BevelInner = bvSpace
+      BevelOuter = bvLowered
+      TabOrder = 0
+      object Button1: TButton
+        Left = 7
+        Top = 5
+        Width = 80
+        Height = 28
+        Caption = #399'lav'#601' et'
+        Default = True
+        DoubleBuffered = False
+        ParentDoubleBuffered = False
+        TabOrder = 0
+        OnClick = Button1Click
+      end
+      object Button2: TButton
+        Left = 86
+        Top = 5
+        Width = 80
+        Height = 28
+        Caption = 'L'#601#287'v et'
+        Default = True
+        TabOrder = 1
+        OnClick = Button2Click
+      end
+      object Button3: TButton
+        Left = 165
+        Top = 5
+        Width = 80
+        Height = 28
+        Caption = 'Yenil'#601
+        Default = True
+        TabOrder = 2
+        OnClick = Button3Click
+      end
+      object Button4: TButton
+        Left = 320
+        Top = 5
+        Width = 80
+        Height = 28
+        Caption = 'Excel'
+        Default = True
+        TabOrder = 3
+        OnClick = Button4Click
+      end
+      object Button5: TButton
+        Left = 245
+        Top = 5
+        Width = 75
+        Height = 28
+        Caption = 'Filter'
+        Default = True
+        TabOrder = 4
+        OnClick = Button5Click
+      end
+    end
+    object DBGrid1: TDBGrid
+      Left = 187
+      Top = 41
+      Width = 670
+      Height = 525
+      Align = alClient
+      DataSource = DSBKTBalans
+      Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit, dgTitleClick, dgTitleHotTrack]
+      TabOrder = 1
+      TitleFont.Charset = DEFAULT_CHARSET
+      TitleFont.Color = clWindowText
+      TitleFont.Height = -11
+      TitleFont.Name = 'Tahoma'
+      TitleFont.Style = []
+      Columns = <
+        item
+          Expanded = False
+          FieldName = 'NAME'
+          Width = 50
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'DESCRIPTION'
+          Width = 500
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'BALANS'
+          Width = 80
+          Visible = True
+        end>
+    end
+    object Panel3: TPanel
+      Left = 2
+      Top = 41
+      Width = 185
+      Height = 525
+      Align = alLeft
+      BevelInner = bvRaised
+      BevelOuter = bvLowered
+      TabOrder = 2
+      Visible = False
+      object GroupBox1: TGroupBox
+        Left = 2
+        Top = 2
+        Width = 181
+        Height = 521
+        Align = alClient
+        Caption = 'Filter'
+        TabOrder = 0
+        object GroupBox2: TGroupBox
+          Left = 2
+          Top = 15
+          Width = 177
+          Height = 33
+          Align = alTop
+          Caption = 'Ad'#305
+          TabOrder = 0
+          object DBLookupComboboxEh1: TDBLookupComboboxEh
+            Left = 35
+            Top = 9
+            Width = 140
+            Height = 21
+            EditButtons = <>
+            KeyField = 'ID'
+            ListField = 'NAME'
+            ListSource = DSBKTName
+            TabOrder = 0
+            Visible = True
+            OnChange = DBLookupComboboxEh1Change
+          end
+          object CheckBox1: TCheckBox
+            Left = 12
+            Top = 12
+            Width = 15
+            Height = 17
+            TabOrder = 1
+            OnClick = CheckBox1Click
+          end
+        end
+      end
+    end
+  end
+  object BKTBalans: TOracleDataSet
+    SQL.Strings = (
+      'select * from '
+      
+        '(select bb.bkt,bb.tip,bb.balans_h,(select name from bkt_name whe' +
+        're id=bb.bkt)name, (select A||description       from bkt1   wher' +
+        'e idd=bb.tip)description ,bb.balans_h balans   from  bkt_balans ' +
+        'bb where bkt=1 '
+      'union all'
+      
+        'select bb.bkt,bb.tip,bb.balans_h,(select name from bkt_name wher' +
+        'e id=bb.bkt)name, (select A||description       from bkt2   where' +
+        ' id=bb.tip)description ,bb.balans_h balans    from  bkt_balans b' +
+        'b where bkt=2'
+      'union all'
+      
+        'select bb.bkt,bb.tip,bb.balans_h,(select name from bkt_name wher' +
+        'e id=bb.bkt)name, (select    description       from bkt3   where' +
+        ' id=bb.tip)description ,bb.balans_h balans    from  bkt_balans b' +
+        'b where bkt=3'
+      'union all'
+      
+        'select bb.bkt,bb.tip,bb.balans_h,(select name from bkt_name wher' +
+        'e id=bb.bkt)name, (select    description       from bkt7   where' +
+        ' id=bb.tip)description ,bb.balans_h balans    from  bkt_balans b' +
+        'b where bkt=7 '
+      'union all'
+      
+        'select bb.bkt,bb.tip,bb.balans_h,(select name from bkt_name wher' +
+        'e id=bb.bkt)name, (select A||description       from bkt9_1 where' +
+        ' idd=bb.tip)description ,bb.balans_h balans    from  bkt_balans ' +
+        'bb where bkt=9.1'
+      'union all'
+      
+        'select bb.bkt,bb.tip,bb.balans_h,(select name from bkt_name wher' +
+        'e id=bb.bkt)name, (select A||'#39' '#39'||description  from bkt11  where' +
+        ' id=bb.tip)description ,bb.balans_h balans    from  bkt_balans b' +
+        'b where bkt=11'
+      'union all'
+      
+        'select bb.bkt,bb.tip,bb.balans_h,(select name from bkt_name wher' +
+        'e id=bb.bkt)name, (select A||'#39' '#39'||description  from bkt12  where' +
+        ' id=bb.tip)description ,bb.balans_h balans    from  bkt_balans b' +
+        'b where bkt=12)'
+      ''
+      ''
+      ''
+      'order by bkt,tip')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      0500000006000000080000004E0041004D0045000100000000000C0000004200
+      41004C0041004E0053000100000000000600000042004B005400010000000000
+      0600000054004900500001000000000010000000420041004C0041004E005300
+      5F00480001000000000016000000440045005300430052004900500054004900
+      4F004E00010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 280
+    Top = 80
+    object BKTBalansBKT: TFloatField
+      FieldName = 'BKT'
+    end
+    object BKTBalansTIP: TIntegerField
+      FieldName = 'TIP'
+    end
+    object BKTBalansBALANS_H: TIntegerField
+      FieldName = 'BALANS_H'
+    end
+    object BKTBalansNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 400
+    end
+    object BKTBalansDESCRIPTION: TWideStringField
+      FieldName = 'DESCRIPTION'
+      Size = 312
+    end
+    object BKTBalansBALANS: TIntegerField
+      FieldName = 'BALANS'
+    end
+  end
+  object DSBKTBalans: TDataSource
+    DataSet = BKTBalans
+    Left = 344
+    Top = 80
+  end
+  object BKTName: TOracleDataSet
+    SQL.Strings = (
+      'select * from bkt_name')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000400000049004400010000000000080000004E0041004D00
+      4500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 280
+    Top = 136
+  end
+  object DSBKTName: TDataSource
+    DataSet = BKTName
+    Left = 351
+    Top = 138
+  end
+  object CMExcelExport1: TCMExcelExport
+    StyleColumnWidth = cwDefault
+    ColumnWidth = 0
+    FontTitles.Charset = DEFAULT_CHARSET
+    FontTitles.Color = clWindowText
+    FontTitles.Height = -11
+    FontTitles.Name = 'Tahoma'
+    FontTitles.Style = []
+    OrientationTitles = 0
+    FontData.Charset = DEFAULT_CHARSET
+    FontData.Color = clWindowText
+    FontData.Height = -11
+    FontData.Name = 'Tahoma'
+    FontData.Style = []
+    FontSummary.Charset = DEFAULT_CHARSET
+    FontSummary.Color = clWindowText
+    FontSummary.Height = -11
+    FontSummary.Name = 'Tahoma'
+    FontSummary.Style = []
+    SummarySelection = ssNone
+    SummaryCalculation = scSUM
+    Left = 456
+    Top = 96
+  end
+end

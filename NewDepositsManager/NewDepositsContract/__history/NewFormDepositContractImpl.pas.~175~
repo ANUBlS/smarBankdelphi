@@ -1,0 +1,1000 @@
+﻿unit NewFormDepositContractImpl;
+         {ClientTypes}
+interface
+      //GenAnnualInt
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,LDialogs,
+  ExtCtrls, StdCtrls, Mask, DBCtrlsEh, DBLookupEh, CMDBSearchEdit, ComCtrls,
+  DBCtrls, Buttons, HintBox, DB,variants, DBGridEh, XFSCtrls,DateUtils;
+
+type
+  TNewFormDepositContract = class(TForm)
+    ButtonPanel: TXFPanel;
+    RefreshListLbl: TLabel;
+    Lbluser: TLabel;
+    Label13: TLabel;
+    XFBitBtn1: TXFBitBtn;
+    XFBitBtn2: TXFBitBtn;
+    XFBitBtn3: TXFBitBtn;
+    ContractHint: THintBox;
+    ThirdPersonNamePanel: TXFPanel;
+    XFLabel3: TXFLabel;
+    ProlonqasiyaPanel: TXFPanel;
+    XFLabel10: TXFLabel;
+    CustTypePanel: TXFPanel;
+    CustTypeLabel: TXFLabel;
+    CustCategoryPanel: TXFPanel;
+    XFLabel16: TXFLabel;
+    PeriodAfterPercentPanel: TXFPanel;
+    XFLabel15: TXFLabel;
+    PeriodBeforePercentPanel: TXFPanel;
+    XFLabel14: TXFLabel;
+    PercentPanel: TXFPanel;
+    XFLabel13: TXFLabel;
+    CloseDatPanel: TXFPanel;
+    XFLabel12: TXFLabel;
+    DTCLOSE: TDBDateTimeEditEh;
+    OpenDatPanel: TXFPanel;
+    XFLabel111: TXFLabel;
+    DTOPEN: TDBDateTimeEditEh;
+    ContractNumPanel: TXFPanel;
+    XFLabel1: TXFLabel;
+    Contractno: TDBEditEh;
+    CapitalPeriodPanel: TXFPanel;
+    Label3: TLabel;
+    XFLU6: TXFLabel;
+    LCBCapPer: TDBLookupComboboxEh;
+    PecentDatePanel: TXFPanel;
+    XFLabel24: TXFLabel;
+    XFLU8: TXFLabel;
+    DBDateTimeEditEh3: TDBDateTimeEditEh;
+    PeriodPanel: TXFPanel;
+    XFLabel7: TXFLabel;
+    XFLU5: TXFLabel;
+    LCBPeriods: TDBLookupComboboxEh;
+    DepAmountPanel: TXFPanel;
+    XFLabel8: TXFLabel;
+    XFLU4: TXFLabel;
+    DBNumberEditeh: TDBNumberEditEh;
+    ValyutaPanel: TXFPanel;
+    XFLabel6: TXFLabel;
+    XFLU3: TXFLabel;
+    DBLCBValutes: TDBLookupComboboxEh;
+    DepTypePanel: TXFPanel;
+    XFLabel9: TXFLabel;
+    XFLU2: TXFLabel;
+    ContractTypes: TDBLookupComboboxEh;
+    FilialPanel: TXFPanel;
+    XFilial: TXFLabel;
+    XFLabel18: TXFLabel;
+    DBLCBFilial: TDBEditEh;
+    CustNamePanel: TXFPanel;
+    XFLabel30: TXFLabel;
+    XFLabel31: TXFLabel;
+    DBEditName: TDBEditEh;
+    CustNomPanel: TXFPanel;
+    XCustNomPanel: TXFLabel;
+    XFLU1: TXFLabel;
+    DBEditNumber: TDBEditEh;
+    CBPersons: TDBEditEh;
+    CBCategories: TDBEditEh;
+    ChAutopr: TDBLookupComboboxEh;
+    DBEditPercent: TDBNumberEditEh;
+    CreditParticepatePanel: TXFPanel;
+    XFLabel11: TXFLabel;
+    XFPanel22: TXFPanel;
+    PlasticCardPanel: TXFPanel;
+    XFLabel20: TXFLabel;
+    XFLU7: TXFLabel;
+    ComboBoxCard: TComboBox;
+    AgentPanel: TXFPanel;
+    XFLabel17: TXFLabel;
+    DBEditAgentid: TDBEditEh;
+    DBDUEPercent: TDBNumberEditEh;
+    DBOVERDUEPercent: TDBNumberEditEh;
+    SpeedButton1: TSpeedButton;
+    ThirdPerson: TDBEditEh;
+    ComboBoxPrizePanel: TXFPanel;
+    XFLabel2: TXFLabel;
+    ComboBoxPrize: TComboBox;
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure BitBtnCloseClick(Sender: TObject);
+    procedure FormCanResize(Sender: TObject; var NewWidth, NewHeight: Integer;
+      var Resize: Boolean);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
+    procedure FormShow(Sender: TObject);
+    procedure DBLCBFilialKeyPress(Sender: TObject; var Key: Char);
+    procedure BitBtnCancelClick(Sender: TObject);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure RefreshListLblClick(Sender: TObject);
+    procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure ContractTypesKeyPress(Sender: TObject; var Key: Char);
+    procedure LCBCapPerKeyPress(Sender: TObject; var Key: Char);
+    procedure LCBPeriodsKeyValueChanged(Sender: TObject);
+    procedure LCBCapPerChange(Sender: TObject);
+    procedure DBNumberEditehKeyPress(Sender: TObject; var Key: Char);
+    procedure CBCategories1KeyPress(Sender: TObject; var Key: Char);
+    procedure DBEditNumberKeyPress(Sender: TObject; var Key: Char);
+    procedure DBEditNumberChange(Sender: TObject);
+    procedure XFBitBtn3Click(Sender: TObject);
+    procedure ContractTypesChange(Sender: TObject);
+    procedure XFBitBtn1Click(Sender: TObject);
+    procedure XFBitBtn2Click(Sender: TObject);
+    procedure XFPanel22Click(Sender: TObject);
+    procedure DBNumberEditehChange(Sender: TObject);
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure ComboBoxCardChange(Sender: TObject);
+    procedure LCBPeriodsChange(Sender: TObject);
+  private
+    procedure AddContract;
+    function  New:Integer;
+    procedure EditContract;
+    function  Edit:Integer;
+    procedure SaveDeposits;
+    procedure RefreshAllDeposits;
+    procedure CheckNeedsFields;
+    procedure GenAnnualInt;
+    procedure PanelInsertVizible;
+    procedure PanelUpdateVizible;
+    procedure AddAccount;
+  public
+
+    FInserted,
+    FCommited,
+    FEdited:Boolean;
+    FClientType:integer;
+    FPersonstype:integer;
+    FDepPerSetid:integer;
+    FPrize:integer;
+    FTocard:integer;
+    procedure ShowAccounts;
+    procedure SaveState(Save :Boolean);
+  end;
+
+var
+  NewFormDepositContract: TNewFormDepositContract;
+  OIntRate,DIntRate:real;
+  IntRate:string;
+  procedure exportproc(S:String);export;
+implementation
+
+{$R *.dfm}
+  uses NewContractCommonDecls,
+       NewCommonDeclsImpl,
+       SBTranslateProc,
+       sboapiDataModuleimpl, NewDepositsContractImpl, NewDepozitAccno,
+  NewFormCreditImpl;
+
+procedure TNewFormDepositContract.GenAnnualInt;
+
+var DepositID,CurrencyID ,PeriodID,CapitalperID:Integer;
+    CheckSett,R :Boolean;
+    Amount:real;
+begin
+   with NewDataModDepositsContract,dm_contract,DepositPorps do
+   begin
+     DepositID := ContractTypes.ListSource.DataSet.FieldByName('ID').AsInteger;
+     CurrencyID := DBLCBValutes.ListSource.DataSet.FieldByName('valute').AsInteger;
+     PeriodID := LCBPeriods.ListSource.DataSet.FieldByName('ID').AsInteger;
+     CapitalperID := LCBCapPer.ListSource.DataSet.FieldByName('ID').AsInteger;
+     Amount:=DBNumberEditEh.Value;
+   end;
+end;
+
+procedure TNewFormDepositContract.PanelInsertVizible;
+var
+  i,j:integer;
+begin
+  NewDataModDepositsContract.DmContractType.Close;
+  NewDataModDepositsContract.DmContractType.Open;
+  NewDataModDepositsContract.DmContractType.First;
+  With NewDataModDepositsContract do
+  begin
+    for i:=0 to DmContractType.RecordCount-1 do
+    begin
+      for j:=0 to NewFormDepositContract.ComponentCount-1 do
+      begin
+        if NewFormDepositContract.Components[j] is TXFPanel then
+        begin
+          if ((NewFormDepositContract.Components[j] as TXFPanel).Name=DmContractTypeNAME.AsString) then
+          begin
+            if DmContractTypePANELTYPE.AsInteger=1 then
+             begin
+              (NewFormDepositContract.Components[j] as TXFPanel).Visible:=True;
+              (NewFormDepositContract.Components[j] as TXFPanel).Top:=DmContractTypeTOPID.AsInteger;
+             end
+            else  (NewFormDepositContract.Components[j] as TXFPanel).Visible:=False;
+          end;
+        end;
+      end;
+      DmContractType.Next;
+    end;
+  end;
+   NewFormDepositContract.Height:=ClientHeight;
+   NewFormDepositContract.Position:=poScreenCenter;
+end;
+procedure TNewFormDepositContract.PanelUpdateVizible;
+var
+  i,j,k,n:integer;
+  S:string;
+begin
+  NewDataModDepositsContract.DmContractType.Close;
+  NewDataModDepositsContract.DmContractType.Open;
+  NewDataModDepositsContract.DmContractType.First;
+  n:=NewFormDepositContract.ComponentCount-1;
+ // ShowMessage('aaa');
+  With NewDataModDepositsContract do
+  begin
+    for i := 0 to DmContractType.RecordCount-1 do
+    begin
+      for j:=n downto 0 do
+      begin
+        IF NewFormDepositContract.Components[j] is TXFPanel THEN
+        IF ((NewFormDepositContract.Components[j] as TXFPanel).Name=DmContractTypeNAME.AsString) THEN
+        IF (NewFormDepositContract.Components[j] as TXFPanel).Name <>'ThirdPersonNamePanel' THEN
+        begin
+          (NewFormDepositContract.Components[j] as TXFPanel).Align:=alNone;
+          (NewFormDepositContract.Components[j] as TXFPanel).Visible:=True;
+          (NewFormDepositContract.Components[j] as TXFPanel).Top:=DmContractTypeTOPID.AsInteger;
+          (NewFormDepositContract.Components[j] as TXFPanel).Align:=alTop;
+          DmContractType.Next;
+        end;
+        IF (NewFormDepositContract.Components[j] is TXFLabel) THEN
+        begin
+          IF ((NewFormDepositContract.Components[j] as TXFLabel).Name ='XFLU1') or
+             ((NewFormDepositContract.Components[j] as TXFLabel).Name ='XFLU2') or
+             ((NewFormDepositContract.Components[j] as TXFLabel).Name ='XFLU3') or
+             ((NewFormDepositContract.Components[j] as TXFLabel).Name ='XFLU4') or
+             ((NewFormDepositContract.Components[j] as TXFLabel).Name ='XFLU5') or
+             ((NewFormDepositContract.Components[j] as TXFLabel).Name ='XFLU6') or
+             ((NewFormDepositContract.Components[j] as TXFLabel).Name ='XFLU7') or
+             ((NewFormDepositContract.Components[j] as TXFLabel).Name ='XFLU8')
+          THEN (NewFormDepositContract.Components[j]  as TXFLabel).Left:=3
+          ELSE (NewFormDepositContract.Components[j]  as TXFLabel).Left:=12
+        end;
+        IF (NewFormDepositContract.Components[j] is TDBDateTimeEditEh) THEN
+        begin
+          (NewFormDepositContract.Components[j]  as TDBDateTimeEditEh).Left:=193;
+        end;
+        IF NewFormDepositContract.Components[j]  is TDBEditEh THEN
+        begin
+          (NewFormDepositContract.Components[j]  as TDBEditEh).Left:=193;
+        end;
+        IF NewFormDepositContract.Components[j]  is TDBLookupComboboxEh THEN
+        begin
+          (NewFormDepositContract.Components[j]  as TDBLookupComboboxEh).Left:=193;
+        end;
+        IF NewFormDepositContract.Components[j]  is TDBNumberEditEh THEN
+        begin
+          (NewFormDepositContract.Components[j]  as TDBNumberEditEh).Left:=193;
+        end;
+
+      end;
+    end;
+  end;
+  NewFormDepositContract.Height:=ClientHeight;
+  NewFormDepositContract.Position:=poScreenCenter;
+end;
+
+procedure TNewFormDepositContract.LCBCapPerChange(Sender: TObject);
+
+var period:integer;
+begin
+//  LCBPeriodsChange(Sender);
+  With NewDataModDepositsContract,SaveDeposit,DepositPorps,Dm_Contract do
+  begin
+    IF Active
+    THEN
+      BEGIN
+        period       := LCBPeriods.ListSource.DataSet.FieldByName('period').AsInteger;
+        periodtype   := LCBPeriods.ListSource.DataSet.FieldByName('period_type').AsString;
+        depid        := ContractTypes.ListSource.DataSet.FieldByName('id').AsInteger;
+        periodid     := LCBPeriods.ListSource.DataSet.FieldByName('id').AsInteger;
+        capitalperid := LCBCapPer.ListSource.DataSet.FieldByName('id').AsInteger;
+        currency     := DBLCBValutes.ListSource.DataSet.FieldByName('valute').AsInteger;
+
+        if not VarIsNull(DBNumberEditeh.Value) then amount := StrToFloat(VarToStr(DBNumberEditeh.Value))
+                                               else amount :=0.00;
+
+        if periodtype='İL'  then  DepositPorpsCloseDate.AsDateTime := IncYear(DepositPorpsOpenDate.AsDateTime,period);
+        if periodtype='AY'  then  DepositPorpsCloseDate.AsDateTime := IncMonth(DepositPorpsOpenDate.AsDateTime,period);
+        if periodtype='GÜN' then  DepositPorpsCloseDate.AsDateTime := DepositPorpsOpenDate.AsDateTime + period;
+
+        if period = 0 then DtClose.Enabled := False
+                      else DtClose.Enabled := True;
+
+        DmDepositPerSettings.Close;
+        DmDepositPerSettings.SetVariable('depid',depid);
+        DmDepositPerSettings.SetVariable('periodid',periodid);
+        DmDepositPerSettings.SetVariable('capitalid',capitalperid);
+        DmDepositPerSettings.SetVariable('currencyid',currency);
+        DmDepositPerSettings.SetVariable('amount',amount);
+        DmDepositPerSettings.Open;
+
+        if FInserted then
+        begin
+          DbEditPercent.Value   :=DmDepositPerSettingsInterestRate.AsFloat;
+          DbDuePercent.Value    :=DmDepositPerSettingsDueIntRate.AsFloat;
+          DbOverDuePercent.Value:=DmDepositPerSettingsBefoIntRate.AsFloat;
+        end
+        else
+        begin
+          DbEditPercent.Value   :=DepositPorpsINTEREST.AsFloat;
+          DbDuePercent.Value    :=DepositPorpsDUEINTEREST.AsFloat;
+          DbOverDuePercent.Value:=DepositPorpsOVERDUEINTEREST.AsFloat;
+        end;
+
+        FDepPerSetid          :=DmDepositPerSettingsID.AsInteger;
+
+        DmProlanqasiya.Close;
+        DmProlanqasiya.Open;
+        ChAutopr.KeyValue  :=FieldByName('prolanid').AsInteger;
+      END;
+  period := LCBCapPer.ListSource.DataSet.FieldByName('period').AsInteger;
+  IF period>0 then
+   with NewDataModDepositsContract,DepositPorps do
+   FieldByName('FIRSTINTERESTPAYDAT').AsDateTime := IncMonth(FieldByName('OpenDate').AsDateTime,period div 30)
+  ELSE
+   with NewDataModDepositsContract,DepositPorps do
+   FieldByName('FIRSTINTERESTPAYDAT').AsDateTime := IncMonth(FieldByName('OpenDate').AsDateTime,period)
+  end;
+
+
+end;
+
+procedure TNewFormDepositContract.LCBCapPerKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+//ContractTypesKeyPress(Sender,key);
+end;
+
+procedure TNewFormDepositContract.LCBPeriodsChange(Sender: TObject);
+begin
+  { With NewDataModDepositsContract,SaveDeposit,DepositPorps,Dm_Contract do
+  begin
+    IF Active
+    THEN
+      BEGIN
+        period       := LCBPeriods.ListSource.DataSet.FieldByName('period').AsInteger;
+        periodtype   := LCBPeriods.ListSource.DataSet.FieldByName('period_type').AsString;
+        depid        := ContractTypes.ListSource.DataSet.FieldByName('id').AsInteger;
+        periodid     := LCBPeriods.ListSource.DataSet.FieldByName('id').AsInteger;
+        capitalperid := LCBCapPer.ListSource.DataSet.FieldByName('id').AsInteger;
+        currency     := DBLCBValutes.ListSource.DataSet.FieldByName('valute').AsInteger;
+
+        if not VarIsNull(DBNumberEditeh.Value) then amount := StrToFloat(VarToStr(DBNumberEditeh.Value))
+                                               else amount :=0.00;
+
+        if periodtype='İL'  then  DepositPorpsCloseDate.AsDateTime := IncYear(DepositPorpsOpenDate.AsDateTime,period);
+        if periodtype='AY'  then  DepositPorpsCloseDate.AsDateTime := IncMonth(DepositPorpsOpenDate.AsDateTime,period);
+        if periodtype='GÜN' then  DepositPorpsCloseDate.AsDateTime := DepositPorpsOpenDate.AsDateTime + period;
+
+        if period = 0 then DtClose.Enabled := False
+                      else DtClose.Enabled := True;
+
+        DmDepositPerSettings.Close;
+        DmDepositPerSettings.SetVariable('depid',depid);
+        DmDepositPerSettings.SetVariable('periodid',periodid);
+        DmDepositPerSettings.SetVariable('capitalid',capitalperid);
+        DmDepositPerSettings.SetVariable('currencyid',currency);
+        DmDepositPerSettings.SetVariable('amount',amount);
+        DmDepositPerSettings.Open;
+
+        DbEditPercent.Value   :=DmDepositPerSettingsInterestRate.AsFloat;
+        DbDuePercent.Value    :=DmDepositPerSettingsDueIntRate.AsFloat;
+        DbOverDuePercent.Value:=DmDepositPerSettingsBefoIntRate.AsFloat;
+        FDepPerSetid          :=DmDepositPerSettingsID.AsInteger;
+
+        DmProlanqasiya.Close;
+        DmProlanqasiya.Open;
+        ChAutopr.KeyValue  :=FieldByName('prolanid').AsInteger;
+      END;
+  end;    }
+end;
+
+procedure TNewFormDepositContract.LCBPeriodsKeyValueChanged(Sender: TObject);
+begin
+if LCBPeriods.KeyValue = null
+then
+ NewDataModDepositsContract.DepCapperiod.CloseAll
+else
+begin
+  NewDataModDepositsContract.DepCapperiod.CloseAll;
+  NewDataModDepositsContract.DepCapperiod.open;
+end;
+end;
+
+procedure TNewFormDepositContract.BitBtnCancelClick(Sender: TObject);
+begin
+SaveState(False)
+end;
+
+procedure TNewFormDepositContract.BitBtnCloseClick(Sender: TObject);
+begin
+Close;
+end;
+
+procedure TNewFormDepositContract.CBCategories1KeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if ORD(Key) = VK_RETURN then
+  if Sender is TWinControl then
+  with Sender as TWinControl do
+
+  begin
+  case Tag of
+    1,3 : SelectNext(Sender as TWinControl ,True ,True);
+    2 :DBLCBValutes.SetFocus;
+  end;
+   Key := #0;
+  end;
+end;
+
+procedure TNewFormDepositContract.CheckNeedsFields;
+  const
+    sDefEmptyFieldMessage = '"%s" sahəsinə qiymət daxil olunmayıb! ';
+
+    procedure ShowMessage(const Message: String);
+    begin
+      ContractHint.ShowMessage(Message);
+      Abort;
+    end;
+
+    procedure Check(
+      Field: TField;
+      Message: String = sDefEmptyFieldMessage;
+      FieldName: String = '');
+    begin
+      if Field.IsNull  then
+      begin
+        if (FieldName = '')   then
+          FieldName := Field.DisplayName;
+        Message := Format(Message, [FieldName]);
+        ShowMessage(Message);
+      end;
+    end;
+
+    procedure CheckByName(const FieldName: String);
+    begin
+      with NewDataModDepositsContract.DepositPorps do
+        Check(FieldByName(FieldName));
+    end;
+
+    procedure CheckByNames(const Names: array of String);
+    var
+      Index: Integer;
+    begin
+      for Index := Low(Names) to High(Names) do
+        CheckByName(Names[Index]);
+    end;
+
+  begin
+    CheckByNames(['CUSTOMERID','CONTRACTTYPE','CURRENCY','CONTRACTNO','AMOUNT','OPENDATE','CLOSEDATE',
+                  'PERIODID','CAPITALPERID']);
+   { with NewDataModDepositsContract,DepositPorps,dm_contract do
+    begin
+
+       if FieldByName('ContractAccID').AsInteger = 0 then ShowMessage('Depozit Hesabı sahəsinə qiymət daxil olunmayıb! ');
+       if FieldByName('InterestAccID').AsInteger = 0 then ShowMessage('Faizlər Hesabı sahəsinə qiymət daxil olunmayıb! ');
+       if FieldByName('ClientAccID').AsInteger   = 0 then ShowMessage('Müştəri Hesabı sahəsinə qiymət daxil olunmayıb! ');
+       if FieldByName('Booroweraccid').AsInteger = 0 then ShowMessage('Köçürmə Hesabı sahəsinə qiymət daxil olunmayıb! ');
+
+    {  if not CallBooleanFunction('Check_BankAccount',['p_categoryID',FieldByName('ClientType').AsInteger,
+                                                       'p_currencyID',FieldByName('CURRENCY').AsInteger,
+                                                       'p_BranchID',FieldByName('BRANCHID').AsInteger]) then
+       ShowMessage('Bu tip müqaviləyə "depozitlərdə  faizlər üçün məxaric hesabı" sazlanılmayıb! ');  }
+
+
+  end;
+
+
+procedure TNewFormDepositContract.ComboBoxCardChange(Sender: TObject);
+begin
+  FTocard:=ComboBoxCard.ItemIndex;
+end;
+
+procedure TNewFormDepositContract.ContractTypesChange(Sender: TObject);
+Var St:string;
+begin
+  FPrize:=ComboBoxPrize.ItemIndex;
+  With NewDataModDepositsContract do
+  begin
+    if ContractTypes.KeyValue=null then begin
+                                          DepPeriods.CloseAll;
+                                          DepCapperiod.CloseAll;
+                                          DmDepositPerSettings.CloseAll;
+                                        end
+                                   else begin
+                                          DepPeriods.CloseAll;
+                                          DepPeriods.open;
+                                          DepCapperiod.CloseAll;
+                                          DepCapperiod.open;
+                                          if FInserted then
+                                          DepositPorpsCONTRACTNO.AsString:=
+                                          dm_contract.CallStringFunction('getcontractno',['dtid',DepositTypesID.AsInteger,'filialid',FilalsID.AsInteger,'przid',FPrize]);
+                                        end;
+
+
+  end;
+
+end;
+
+procedure TNewFormDepositContract.ContractTypesKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if ORD(Key) = VK_RETURN then
+  GenAnnualInt;
+  DBLCBFilialKeyPress(Sender,Key);
+end;
+
+procedure TNewFormDepositContract.DBEditNumberChange(Sender: TObject);
+var st:string;
+    valkod:integer;
+
+begin
+st:='0';
+if DBEditNumber.Text<>'' then
+ st:=VarToStr(DBEditNumber.Value);
+
+  With  NewDataModDepositsContract do
+  begin
+    Customers.Close;
+    Customers.SetVariable('custid',strtoint(St));
+    Customers.Open;
+    DBEditName.Text:=CustomersNAME.AsString;
+    FPersonstype:=CustomersCUST_TYPE.AsInteger;
+    CBPersons.Text:=CustomersCUSTTYPE_NAME.AsString;
+
+    ClientTypes.Close;
+    if Customers.RecordCount>0 then
+    begin
+
+
+    ClientTypes.SetVariable('custcategory',CustomersCUST_TYPE.AsInteger);
+    ClientTypes.SetVariable('rezcategory',CustomersNEREZIDENT.AsInteger);
+    valkod:=DBLCBValutes.ListSource.DataSet.FieldByName('valute').AsInteger;
+
+    if valkod<>0 then ClientTypes.SetVariable('valcategory',1)
+                 else ClientTypes.SetVariable('valcategory',0);
+
+
+    ClientTypes.Open;
+    FClientType:=ClientTypesID.AsInteger;
+    //ShowMessage(IntToStr(FClientType));
+    CBCategories.Text:=ClientTypesCATEGORY.AsString;
+     end;
+  end;
+
+
+end;
+
+procedure TNewFormDepositContract.DBEditNumberKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if ORD(Key) = VK_RETURN then
+  if Sender is TWinControl then
+  with Sender as TWinControl do
+
+  begin
+  case Tag of
+    1,3 : SelectNext(Sender as TWinControl ,True ,True);
+    2 :ContractTypes.SetFocus;
+  end;
+   Key := #0;
+  end;
+
+end;
+
+procedure TNewFormDepositContract.DBLCBFilialKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if ORD(Key) = VK_RETURN then
+  if Sender is TWinControl then
+  with Sender as TWinControl do
+
+  begin
+  case Tag of
+    1,3 : SelectNext(Sender as TWinControl ,True ,True);
+    2 :ContractTypes.SetFocus;
+  end;
+   Key := #0;
+  end;
+end;
+
+
+procedure TNewFormDepositContract.DBNumberEditehChange(Sender: TObject);
+begin
+{  if not VarIsNull(LCBPeriods.Value) then  begin
+                                             LCBPeriodsChange(Self);
+                                           end }
+
+end;
+
+procedure TNewFormDepositContract.DBNumberEditehKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if ORD(Key) = VK_RETURN then
+  GenAnnualInt;
+  DBLCBFilialKeyPress(Sender,Key);
+end;
+
+
+procedure exportproc(S:String);export;
+const
+   csAddContract = 'InsertContract';
+   csEditContract = 'EditContract';
+   csLookContract = 'LookContract';
+Var ResultOp : Integer;
+begin
+   if S = csAddContract then
+   begin
+     NewFormDepositContract.PanelInsertVizible;
+     NewFormDepositContract.XFBitBtn1.Visible:=True;
+     NewFormDepositContract.XFBitBtn2.Visible:=True;
+     NewDataModDepositsContract.DepositTypes.Close;
+     NewDataModDepositsContract.DepositTypes.SQL[2]:='';
+     NewDataModDepositsContract.DepositTypes.SQL[2]:='where  status=0';
+     NewDataModDepositsContract.DepositTypes.Open;
+     With NewDataModDepositsContract,Filals do
+      begin
+        Filtered:=False;
+        Filter:='';
+      end;
+
+     ResultOp := NewFormDepositContract.New;
+   end;
+
+   if S = csEditContract then
+   begin
+     NewFormDepositContract.PanelUpdateVizible;
+     NewFormDepositContract.XFBitBtn1.Visible:=True;
+     NewFormDepositContract.XFBitBtn2.Visible:=True;
+     NewDataModDepositsContract.DepositTypes.Close;
+     NewDataModDepositsContract.DepositTypes.SQL[2]:='';
+     NewDataModDepositsContract.DepositTypes.Open;
+     ResultOp := NewFormDepositContract.Edit;
+   end;
+   if S=csLookContract then
+   begin
+     NewFormDepositContract.PanelUpdateVizible;
+     NewFormDepositContract.XFBitBtn1.Visible:=False;
+     NewFormDepositContract.XFBitBtn2.Visible:=False;
+     NewDataModDepositsContract.DepositTypes.Close;
+     NewDataModDepositsContract.DepositTypes.SQL[2]:='';
+     NewDataModDepositsContract.DepositTypes.Open;
+     ResultOp := NewFormDepositContract.Edit;
+   end;
+
+end;
+
+exports
+   exportproc;
+
+procedure TNewFormDepositContract.AddContract;
+begin
+   with NewDataModDepositsContract,DepositPorps do
+   begin
+
+      if Active then CloseAll;
+      SetVariable('CONTRACTID',0);
+      Open;
+
+      Insert;
+
+      FieldByName('CURRENCY').AsInteger := 0;
+      FieldByName('Branchid').AsInteger := Get_FilialID;
+      FieldByName('OpenDate').AsDateTime := Get_BankDate;
+      FieldByName('Closedate').AsDateTime := Get_BankDate;
+      FieldByName('FIRSTINTERESTPAYDAT').AsDateTime := Get_BankDate;
+      FieldByName('Amount').AsVariant:='0.00';
+      FieldbyName('dueinterest').AsVariant:='0.00';
+      FieldbyName('overdueinterest').AsVariant:='0.00';
+      FieldByName('prizeid').AsInteger:=ComboBoxPrize.ItemIndex;
+      FieldByName('ToCard').AsInteger:=ComboBoxCard.ItemIndex;
+      DBEditAgentid.Value:=0;
+
+
+   end;
+end;
+
+procedure TNewFormDepositContract.EditContract;
+  procedure LocateAccounts(LookupControl : TDBLookupComboboxEh);
+  begin
+    with LookupControl do
+    if (not VarIsNull(DataSource.DataSet.FieldByName(DataField).AsVariant))
+     and (DataSource.DataSet.FieldByName(DataField).AsInteger <> 0) then
+    begin
+      KeyValue := Null;
+      KeyValue := ListSource.DataSet.FieldByName(KeyField).AsInteger;
+    end;
+  end;
+   begin
+   FInserted := False;
+  // ShowMessage('ccc');
+   with NewDataModDepositsContract,DepositPorps do
+   begin
+      if Active then CloseAll;
+      SetVariable('CONTRACTID',Get_SelectedContID);
+      Open;
+      Edit;
+      //ShowAccounts;
+
+      With Filals do
+      begin
+        Filtered:=False;
+        Filter:='id='+IntToStr(DepositPorpsBRANCHID.AsInteger);
+        Filtered:=True;
+      end;
+
+      ComboBoxPrize.ItemIndex:=FieldByName('prizeid').AsInteger;
+      ComboBoxCard.ItemIndex:=FieldByName('tocard').AsInteger;
+      FEdited := True;
+   end;
+    end;
+
+    procedure TNewFormDepositContract.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+//Resize := False;
+end;
+
+procedure TNewFormDepositContract.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+//  IF NewDataModDepositsContract.DepositPorps.RecordCount>0 THEN
+  if FCommited then RefreshWithSavely(True) ;
+  // RefreshAllDeposits;
+end;
+
+procedure TNewFormDepositContract.FormCloseQuery(Sender: TObject;
+  var CanClose: Boolean);
+begin
+  CanClose :=
+     (not NewDataModDepositsContract.DepositPorps.Modified)
+      or (
+     MessageDlg('Dəyişiklər qeyd olunmayacaq !'+#13+'Əminsiniz?'
+     ,mtConfirmation
+     ,[mbYes,mbNo]
+     ,0
+     ) = mrYes);
+end;
+
+procedure TNewFormDepositContract.FormCreate(Sender: TObject);
+begin
+    NewDataModDepositsContract := TNewDataModDepositsContract.Create(Self);
+    SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+
+end;
+
+procedure TNewFormDepositContract.FormDestroy(Sender: TObject);
+begin
+  NewDataModDepositsContract.Free;
+end;
+
+procedure TNewFormDepositContract.FormKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if Key = VK_F5 then
+    RefreshListLbl.OnClick(nil);
+end;
+
+procedure TNewFormDepositContract.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+if Ord(Key) = VK_ESCAPE then Close;
+end;
+
+procedure TNewFormDepositContract.FormShow(Sender: TObject);
+begin
+  DBEditNumber.SetFocus;
+  ThirdPerson.ReadOnly:=True;
+  ThirdPerson.Color:=clBtnFace;
+end;
+
+procedure TNewFormDepositContract.ShowAccounts;
+var CustomerID:Integer;
+begin
+  with NewDataModDepositsContract,DepositPorps do begin
+                                                    CustomerID:= FieldByName('CustomerID').AsInteger;
+                                                  end;
+end;
+
+procedure TNewFormDepositContract.SpeedButton1Click(Sender: TObject);
+begin
+  if ThirdPerson.ReadOnly then
+  begin
+    ThirdPerson.ReadOnly:=False;
+    ThirdPerson.Color:=clWhite;
+  end
+  else begin
+         ThirdPerson.ReadOnly:=True;
+         ThirdPerson.Color:=clBtnFace;
+       end;
+
+end;
+
+procedure TNewFormDepositContract.AddAccount;
+var R,I:integer;
+begin
+  With NewDataModDepositsContract,ODSAccno do
+  begin
+    dm_contract.CallProcedure('dmgenerateaccountnumber',['DmType'    ,ContractTypes.Value,
+                                                         'Filialid'  ,NewDataModDepositsContract.FilalsID.AsInteger,
+                                                         'CustomerID',DBEditNumber.Value,
+                                                         'Valid'     ,DBLCBValutes.Value,
+                                                         'begindat'  ,DTOPEN.Value,
+                                                         'enddate'   ,DTCLOSE.Value,
+                                                         'cardcode'  ,ComboBoxCard.ItemIndex,
+                                                         'contractid',SaveDeposit.contractid
+                                                        ]);
+  ODSAccno.Close;
+  ODSAccno.Open;
+  with ODSAccno do
+  begin
+    First;
+
+    for I := 0 to RecordCount-1 do
+    begin
+        with NewFormDepositContract do
+        begin
+          R:=dm_contract.CallIntegerFunction('getaddaccount',[ 'p_id',        I
+                                                              ,'v_contractid',SaveDeposit.contractid
+                                                              ,'v_customerid',ODSAccnoCUSTOMERID.asinteger
+                                                              ,'v_accno'     ,ODSAccnoACCNO.AsString
+                                                              ,'v_val_id'    ,ODSAccnoVAL_ID.AsInteger
+                                                              ,'v_nameaccno' ,ODSAccnoNAMEACCNO.AsString
+                                                              ,'v_opendat'   ,ODSAccnoOPENDAT.AsDateTime
+                                                              ,'v_old_balcn' ,ODSAccnoOLD_BALCN.AsInteger
+                                                              ,'v_new_balcn' ,ODSAccnoNEW_BALCN.AsInteger
+                                                              ,'v_filial'    ,ODSAccnoFILIAL.AsInteger
+                                                              ,'v_fieldname' ,ODSAccnoDEPOSITFIELDACCNO.AsString
+                                                              ,'v_simvoltype',ODSAccnoSIMVOLTYPE.AsInteger
+                                                             ]);
+        end;
+        Next;
+    end;
+  end;
+  end;
+
+end;
+
+
+
+
+procedure TNewFormDepositContract.XFBitBtn1Click(Sender: TObject);
+
+begin
+  CheckNeedsFields;
+  SaveDeposits;
+  SaveState(True);
+  FCommited:=True;
+
+  //FormDepositAccount:=TFormDepositAccount.Create(Self);
+  //FormDepositAccount.XFButton1.Click;
+end;
+
+procedure TNewFormDepositContract.XFBitBtn2Click(Sender: TObject);
+begin
+ SaveState(False)
+end;
+
+procedure TNewFormDepositContract.XFBitBtn3Click(Sender: TObject);
+begin
+ Close;
+end;
+
+procedure TNewFormDepositContract.XFPanel22Click(Sender: TObject);
+begin
+  IF not FInserted THEN
+  begin
+    FormCredit:=TFormCredit.Create(Self);
+    FormCredit.ShowModal;
+  end;
+end;
+
+function TNewFormDepositContract.New:integer;
+resourcestring
+   rs_NewContract = 'Müqavilənin  əlavə olunması';
+begin
+   FInserted := True;
+   AddContract;
+   Caption := rs_NewContract;
+   Lbluser.Visible := false;
+   Label13.Visible := false;
+   ComboBoxPrize.ItemIndex:=0;
+   ComboBoxCard.ItemIndex:=0;
+   Result := ShowModal;
+end;
+
+function TNewFormDepositContract.Edit:Integer;
+resourcestring
+   rs_EditContract = '%s № li müqavilənin redaktə olunması';
+var FContractNo :String;
+begin
+
+   FContractNo := Get_SelectedContNo;
+   EditContract;
+   Caption := Format(rs_EditContract,[FContractNo]);
+   Lbluser.Visible := true;
+   Label13.Visible := true;
+   Lbluser.Caption := NewDataModDepositsContract.DepositPorps.FieldByName('username').AsString;
+   Result := ShowModal;
+end;
+procedure TNewFormDepositContract.SaveDeposits;
+begin
+   with NewDataModDepositsContract,DepositPorps,SaveDeposit do
+   begin
+     FieldByName('agentid').AsVariant:=DBEditAgentid.Value;
+     FieldByName('clienttype').AsInteger:=FClientType;
+     FieldByName('personaltype').AsInteger:=FPersonstype;
+     FieldByName('deppersetid').AsInteger:=FDepPerSetid;
+     FieldByName('tocard').AsInteger:=FTocard;
+     FieldByName('prizeid').AsInteger:=FPrize;
+     contractid         := FieldByName('id').AsInteger;
+     TypeD              := 3;
+     ContractNo         := FieldByName('Contractno').AsString;
+     opendate           := FieldByName('opendate').AsDateTime;
+     CloseDate          := FieldByName('CloseDate').AsDateTime;
+     amount             := FieldByName('amount').AsFloat;
+     contracttype       := FieldByName('contracttype').AsInteger;
+     clienttype         := FieldByName('clienttype').AsInteger;
+     branchid           := FieldByName('branchid').AsInteger;
+     currency           := FieldByName('currency').AsInteger;
+     personaltype       := FieldByName('personaltype').AsInteger;
+     customerid         := FieldByName('customerid').AsInteger;
+     interest           := FieldByName('interest').AsFloat;
+     overdueinterest    := FieldByName('dueinterest').AsFloat;
+     dueinterest        := FieldByName('overdueinterest').AsFloat;
+     FirstPayDateforInt := FieldByName('firstinterestpaydat').AsDateTime;
+     PeriodID           := FieldbyName('PeriodID').AsInteger;
+     CapitalperID       := FieldbyName('CapitalperID').AsInteger;
+     autopr             := FieldbyName('PROLANID').AsInteger;
+     tocard             := FieldByName('tocard').AsInteger;
+     personsid          := FieldByName('personsid').AsInteger;
+     agentid            := FieldByName('agentid').AsVariant;
+     prizeid            := FieldByName('prizeid').AsInteger;
+     deppersetid        := FieldByName('deppersetid').AsInteger;
+     bonusstatus        := FieldByName('bonusstatus').AsInteger;
+    end;
+
+end;
+
+procedure TNewFormDepositContract.SaveState(Save :Boolean);
+begin
+  with NewDataModDepositsContract,DepositPorps do
+  begin
+    if  Save then
+        Post else
+        Cancel;
+
+    if  FInserted then
+    begin
+       if Save then
+       begin
+         AddAccount;
+      //   RefreshAllDeposits;
+         AddContract;
+       end
+       else
+       Cancel;
+       DBLCBFilial.SetFocus;
+    end else
+    Self.Close;
+
+  end;
+end;
+
+procedure TNewFormDepositContract.RefreshListLblClick(Sender: TObject);
+begin
+  with NewDataModDepositsContract do
+        RefreshDataSets;
+end;
+procedure TNewFormDepositContract.RefreshAllDeposits;
+var Bookm :pointer;
+begin
+  if FCommited then  RefreshWithSavely(True)
+end;
+   initialization
+   NewFormDepositContract := TNewFormDepositContract.Create(CommonApplication);
+end.

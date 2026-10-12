@@ -1,0 +1,464 @@
+﻿unit FormTransaction2Lmpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, CurrencyEdit, DBCtrls, StdCtrls, ExtCtrls, Buttons, XFSCtrls, Mask,
+  DBCtrlsEh, DBLookupEh, OracleData, DBGridEh;
+
+type
+  TFormTransaction2 = class(TForm)
+    Panel1: TPanel;
+    Label7: TLabel;
+    Label9: TLabel;
+    Label1: TLabel;
+    Label10: TLabel;
+    Label11: TLabel;
+    Label12: TLabel;
+    Label13: TLabel;
+    Edit1: TEdit;
+    Edit3: TEdit;
+    Edit6: TEdit;
+    Edit4: TEdit;
+    Edit5: TEdit;
+    CurrencyEdit1: TCurrencyEdit;
+    Label2: TLabel;
+    CurrencyEdit2: TCurrencyEdit;
+    Label3: TLabel;
+    Label4: TLabel;
+    Panel2: TPanel;
+    XFBitBtn2: TXFBitBtn;
+    XFBitBtn1: TXFBitBtn;
+    XFBitBtn3: TXFBitBtn;
+    DBEdit1: TDBEdit;
+    DBEdit2_A: TDBEdit;
+    DBEdit3: TDBEdit;
+    DBLookupComboboxEh_A: TDBLookupComboboxEh;
+    DBCBoxAccNo_A: TDBLookupComboboxEh;
+    Label5: TLabel;
+    Edit_AccName: TEdit;
+    DBEdit2: TDBEdit;
+    DBEdit4: TDBEdit;
+    Label6: TLabel;
+    DBLookupCEh_contrsName2: TDBLookupComboBox;
+    Label8: TLabel;
+    Edit_description: TEdit;
+    DBLookupComboboxEh_description: TDBLookupComboboxEh;
+    EditDescription: TEdit;
+    Label14: TLabel;
+    Edit_ostatA: TEdit;
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure XFBitBtn1Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure CurrencyEdit1Change(Sender: TObject);
+    procedure XFBitBtn3Click(Sender: TObject);
+    procedure Edit1KeyPress(Sender: TObject; var Key: Char);
+    procedure DBCBoxAccNo_ACloseUp(Sender: TObject; Accept: Boolean);
+    procedure DBLookupComboboxEh_ACloseUp(Sender: TObject; Accept: Boolean);
+    procedure DBCBoxAccNo_AChange(Sender: TObject);
+    procedure XFBitBtn2Click(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure CurrencyEdit1Click(Sender: TObject);
+    procedure CurrencyEdit2Click(Sender: TObject);
+    procedure CurrencyEdit1KeyPress(Sender: TObject; var Key: Char);
+    procedure CurrencyEdit2KeyPress(Sender: TObject; var Key: Char);
+    procedure FormCanResize(Sender: TObject; var NewWidth, NewHeight: Integer;
+      var Resize: Boolean);
+    procedure FormCreate(Sender: TObject);
+    procedure Edit_descriptionExit(Sender: TObject);
+    procedure Edit_descriptionKeyPress(Sender: TObject; var Key: Char);
+    procedure DBLookupComboboxEh_descriptionChange(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormTransaction2: TFormTransaction2;
+  v_ostat: Real;
+
+implementation
+
+uses UnitDataBussProc, {PCustServiceFormImpl1,}SBTranslateProc, sboapiDataModuleImpl;
+{$R *.dfm}
+
+procedure TFormTransaction2.CurrencyEdit1Change(Sender: TObject);
+begin
+
+  with DataModule_bussProc do
+  begin
+    if (ODS_AccNO_A.active) and (ODS_AccNO_A.RecordCount <> 0) and
+      (not(ODS_AccNO_A.FieldByName('id').IsNull)) and
+      (CurrencyEdit1.Value > 0) then
+    begin
+      v_ostat := PG_PCustService.CallFloatFunction('get_rate',
+        [-1, ODS_AccNO_A.FieldByName('ID').AsInteger, -1, -1, -1]);
+      XFBitBtn3.Enabled := True;
+      CurrencyEdit2.Value := (CurrencyEdit1.Value) * v_ostat;
+    end
+    else
+
+      XFBitBtn3.Enabled := False;
+  end;
+end;
+
+procedure TFormTransaction2.CurrencyEdit1Click(Sender: TObject);
+begin
+  CurrencyEdit1.Text := '';
+end;
+
+procedure TFormTransaction2.CurrencyEdit1KeyPress(Sender: TObject;
+  var Key: Char);
+begin
+ if (not (Key in ['0'..'9',#46,Chr(8)])) then Key:=#0;
+end;
+
+procedure TFormTransaction2.CurrencyEdit2Click(Sender: TObject);
+begin
+  CurrencyEdit2.Text := '';
+end;
+
+procedure TFormTransaction2.CurrencyEdit2KeyPress(Sender: TObject;
+  var Key: Char);
+begin
+if (not (Key in ['0'..'9',#46,Chr(8)])) then Key:=#0;
+end;
+
+procedure TFormTransaction2.DBCBoxAccNo_AChange(Sender: TObject);
+begin
+ with DataModule_bussProc do
+begin
+ Ods_Tenostat_A.Close;
+ Ods_Tenostat_A.SetVariable('id',ODS_AccNO_A.FieldByName('id').AsInteger );
+ Ods_Tenostat_A.Open;
+ Edit_ostatA.Text:= Ods_Tenostat_A.FieldByName('ostat').AsString;
+end;
+  Edit_AccName.Text := DataModule_bussProc.ODS_AccNO_A.FieldByName
+    ('name').AsString;
+  if (DBCBoxAccNo_A.KeyValue <> '') and (CurrencyEdit1.Value > 0) and
+    (not DataModule_bussProc.ODS_AccNO_A.FieldByName('ID').IsNull) then
+  begin
+    v_ostat := DataModule_bussProc.PG_PCustService.CallFloatFunction('get_rate',
+      [-1, DataModule_bussProc.ODS_AccNO_A.FieldByName('ID').AsInteger,
+      -1, -1, -1]);
+    XFBitBtn3.Enabled := True;
+    CurrencyEdit2.Value := (CurrencyEdit1.Value) * v_ostat;
+  end
+  else
+
+    XFBitBtn3.Enabled := False
+end;
+
+procedure TFormTransaction2.DBCBoxAccNo_ACloseUp(Sender: TObject;
+  Accept: Boolean);
+begin
+ if  DataModule_bussProc.ODS_AccNO_A.FieldByName('symb').IsNull then
+  begin
+   DBLookupComboboxEh_A.KeyValue:=DataModule_bussProc.ODS_account_symbols_A.FieldByName('symbol').AsString;
+  end
+  else
+  DBLookupComboboxEh_A.KeyValue := DataModule_bussProc.ODS_AccNO_A.FieldByName('symb').AsString;
+
+   end;
+
+
+
+procedure TFormTransaction2.DBLookupComboboxEh_ACloseUp(Sender: TObject;
+  Accept: Boolean);
+var
+  a, s: string;
+begin
+  if (DBLookupComboboxEh_A.KeyValue <> '') then
+  begin
+    with DataModule_bussProc, ODS_AccNO_A do
+    begin
+      s := '';
+      a := DBLookupComboboxEh_A.KeyValue; // ='hhh';
+
+      if a <> 'hhh' then
+        s := 'and  a.symb like  ''%' + a + '%''';
+      close;
+      // ShowMessage(s);
+      sql[13] := s;
+      open;
+      if RecordCount=1 then
+      DBCBoxAccNo_A.KeyValue:=DataModule_bussProc.ODS_AccNO_A.FieldByName('acc_no').AsString
+
+    else
+        begin
+        DBCBoxAccNo_A.KeyValue:='';
+      //  DBLookupComboboxEh3.text:=''; }
+
+        end;
+    end;
+  end;
+
+end;
+
+procedure TFormTransaction2.DBLookupComboboxEh_descriptionChange(
+  Sender: TObject);
+begin
+if not(DBLookupComboboxEh_description.KeyValue = null) then
+    Edit_description.Text := DBLookupComboboxEh_description.KeyValue;
+    EditDescription.Text:=DBLookupComboboxEh_description.text ;
+end;
+
+procedure TFormTransaction2.Edit1KeyPress(Sender: TObject; var Key: Char);
+var
+  v_cust_type_id: integer;
+begin
+  if ord(Key) = 13 then
+  begin
+    with DataModule_bussProc.ODS_CUSTOMERSPHYS_FS do
+    begin
+      close;
+      sql[8] := ' ';
+      if Edit1.Text <> '' then
+        sql[8] := sql[8] + ' and c.ID = ' + Edit1.Text;
+      open;
+      if RecordCount = 0 then
+      begin
+        showmessage('Belə müştəri yoxdu  !');
+        // exit;
+        Edit1.Clear;
+      end;
+      Edit3.Text := FieldByName('cust_name').AsString;
+
+      with DataModule_bussProc.ODS_AccNO_A do
+      begin
+        close;
+        SetVariable('CustID', strtoint(Edit1.Text));
+        // DataModPCustService.ODS_CUSTOMERS_PHYS_FS.        FieldByName('ID').AsInteger);
+        { if DataModPCustService.ODS_BusProc.FieldByName('AccBalCn_A').asstring = '' then
+          SetVariable('BalCn', ' not in (-1)')
+          else
+          SetVariable('BalCn', DataModPCustService.ODS_BusProc.FieldByName
+          ('AccBalCn_A').asstring);
+
+          SetVariable('vTipAcc', '''%' + DataModPCustService.ODS_BusProc.FieldByName
+          ('AccSymb_A').asstring + '%''');
+
+          if DataModPCustService.ODS_BusProc.FieldByName('AccCurr_A')
+          .asstring = '' then
+          SetVariable('Currency', ' not in (-1)')
+          else
+          SetVariable('Currency', DataModPCustService.ODS_BusProc.FieldByName
+          ('AccCurr_A').asstring); }
+        open;
+      end;
+        end;
+    if DataModule_bussProc.ODS_AccNO_A.RecordCount <= 2 then
+    begin
+      DataModule_bussProc.ODS_AccNO_A.First;
+      DBCBoxAccNo_A.KeyValue := DataModule_bussProc.ODS_AccNO_A.FieldByName
+        ('acc_no').AsString;
+      DBLookupComboboxEh_A.KeyValue :=
+        DataModule_bussProc.ODS_AccNO_A.FieldByName('symb').AsString;
+    end
+    else
+      BEGIN DataModule_bussProc.ODS_AccNO_A.Last;
+    DBLookupComboboxEh_A.KeyValue := ' ';
+  END;
+  CurrencyEdit1.Clear;
+  CurrencyEdit2.Clear;
+  EditDescription.Clear;
+end;
+end;
+
+procedure TFormTransaction2.Edit_descriptionExit(Sender: TObject);
+begin
+ if Edit_description.Text <> '' then
+    DBLookupComboboxEh_description.KeyValue := Edit_description.Text;
+end;
+
+procedure TFormTransaction2.Edit_descriptionKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+if Key = #13 then
+  begin
+    DBLookupComboboxEh_description.KeyValue := Edit_description.Text;
+end;
+ end;
+procedure TFormTransaction2.FormCanResize(Sender: TObject;
+  var NewWidth, NewHeight: Integer; var Resize: Boolean);
+begin
+  Resize := False;
+end;
+
+procedure TFormTransaction2.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+  CurrencyEdit1.Value := 0;
+  CurrencyEdit2.Value := 0;
+  DataModule_bussProc.ODS_account_symbols_A.Refresh;
+  DataModule_bussProc.ODS_account_symbols_B.Refresh;
+  Edit_description.Clear;
+  DBLookupComboboxEh_description.KeyValue:=-1;
+  end;
+
+
+procedure TFormTransaction2.FormCreate(Sender: TObject);
+begin
+
+DataModule_bussProc.ODS_contrs3.open;
+SBTranslateProc.TranslateAllCompForms(Self, sboapiDataModule.OrPack_SL);
+
+end;
+
+procedure TFormTransaction2.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+  if ord(Key) = 27 then
+    close;
+
+end;
+
+procedure TFormTransaction2.FormShow(Sender: TObject);
+var
+  SPos:integer;
+  a, s: string;
+begin
+
+  SPos := DataModule_bussProc.SBOP.CallIntegerFunction('get_acc_no_sub',[]);
+  DataModule_bussProc.ODS_AccNO_A.SetVariable('ACCSRCHPOS', SPos);
+  DBLookupCEh_contrsName2.KeyValue:=1;
+  { if DBCBoxAccNo_A.ListFieldIndex = 0 then }
+  with DataModule_bussProc.ODS_AccNO_A do
+  begin
+    if RecordCount = 2 then
+      DBCBoxAccNo_A.KeyValue := FieldByName('acc_no').AsString
+    else
+      DBCBoxAccNo_A.KeyValue := '';
+  end;
+
+  Edit1.Text := DataModule_bussProc.ODS_CUSTOMERSPHYS_FS.FieldByName
+    ('id').AsString;
+  Edit3.Text := DataModule_bussProc.ODS_CUSTOMERSPHYS_FS.FieldByName
+    ('cust_name').AsString;
+
+  if DataModule_bussProc.ODS_CUSTOMERSPHYS_FS.FieldByName('cust_type').AsInteger in[0,2] then
+  begin
+    Edit5.Visible := True;
+    Edit5.Text := DataModule_bussProc.ODS_CUSTOMERSPHYS_FS.FieldByName
+      ('inn').AsString;
+    Edit4.Visible := False;
+    Edit6.Visible := False;
+    Label10.Caption := 'VÖEN';
+    end
+    else
+    begin
+    Edit4.Visible := True;
+    Edit6.Visible := True;
+    Edit4.Text := DataModule_bussProc.ODS_CUSTOMERSPHYS_FS.FieldByName
+      ('passport').AsString;
+    Edit6.Text := DataModule_bussProc.ODS_CUSTOMERSPHYS_FS.FieldByName
+      ('passp_number').AsString;
+    Edit5.Visible := False;
+    Label10.Caption := 'Pasport seriyasi'
+  end;
+  if DataModule_bussProc.ODS_CUSTOMERSPHYS_FS.FieldByName('cust_type').AsInteger=3 then
+  begin
+  if {PCustServiceForm.XFRadioGroup1.ItemIndex}1=1   then
+  begin
+    Edit5.Visible := True;
+    Edit5.Text := DataModule_bussProc.ODS_CUSTOMERSPHYS_FS.FieldByName
+      ('inn').AsString;
+    Edit4.Visible := False;
+    Edit6.Visible := False;
+    Label10.Caption := 'VÖEN';
+    end
+    else
+    begin
+    Edit4.Visible := True;
+    Edit6.Visible := True;
+    Edit4.Text := DataModule_bussProc.ODS_CUSTOMERSPHYS_FS.FieldByName
+      ('passport').AsString;
+    Edit6.Text := DataModule_bussProc.ODS_CUSTOMERSPHYS_FS.FieldByName
+      ('passp_number').AsString;
+    Edit5.Visible := False;
+    Label10.Caption := 'Pasport seriyasi'
+  end;
+
+  end;
+
+  CurrencyEdit1.Clear;
+  CurrencyEdit2.Clear;
+  EditDescription.Clear;
+
+  DBLookupComboboxEh_A.KeyValue := 'hhh';
+
+  if (DBLookupComboboxEh_A.KeyValue <> '') then
+  begin
+    with DataModule_bussProc, ODS_AccNO_A do
+    begin
+      s := '';
+      a := DBLookupComboboxEh_A.KeyValue; // ='hhh';
+
+      if a <> 'hhh' then
+        s := 'and  a.symb like  ''%' + a + '%''';
+      close;
+      sql[13] := s;
+      open;
+      if RecordCount=1 then
+      DBCBoxAccNo_A.KeyValue:=DataModule_bussProc.ODS_AccNO_A.FieldByName('acc_no').AsString
+
+      else
+        begin
+        DBCBoxAccNo_A.KeyValue:='';
+     end;
+    end;
+  end;
+
+end;
+
+procedure TFormTransaction2.XFBitBtn1Click(Sender: TObject);
+begin
+  close;
+end;
+
+procedure TFormTransaction2.XFBitBtn2Click(Sender: TObject);
+begin
+  close;
+end;
+
+procedure TFormTransaction2.XFBitBtn3Click(Sender: TObject);
+var
+  busp_id, v_debt_hes: integer;
+  v_ammount, v_lammount: Real;
+
+begin
+  { busp_id := DataModPCustService.ODS_BusProcID.AsInteger;
+    v_ammount := CurrencyEdit1.Value;
+    v_lammount := CurrencyEdit2.Value;
+    v_debt_hes := DataModPCustService.ODS_AccNO_A.FieldByName('ID').AsInteger;
+    DataModPCustService.PG_SAMIR_CUST.CallProcedure('add_transaction2',
+    [busp_id, v_debt_hes, v_ammount, v_lammount]);
+    FormTransaction2.close; }
+
+    DataModule_bussProc.OPG_BusProc.CallProcedure('ExecBProcess',
+    [DataModule_bussProc.ODS_BussProc.FieldByName('ID').AsInteger,
+    strtoint(Edit1.Text), DataModule_bussProc.ODS_AccNO_A.FieldByName('ID')
+    .AsInteger, 0, 0, CurrencyEdit1.Value, CurrencyEdit1.Value,
+    CurrencyEdit2.Value, 0, 0, EditDescription.Text, 0, DBLookupCEh_contrsName2.KeyValue,
+    DBEdit2_A.Text, 0, 0,0]);
+  FormTransaction2.close;
+  { procid
+    AccID_A
+    // AccID_B
+    /// AccID_C
+    //debtamount
+    //credamount
+    // equivamount
+    //inbalchar
+    //outbalchar
+    tdescription
+    //trreportid
+    // trcountrid
+    Rate_A
+    Rate_B
+    Rate_C }
+
+end;
+
+end.

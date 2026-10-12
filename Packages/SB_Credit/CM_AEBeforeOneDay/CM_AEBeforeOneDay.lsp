@@ -1,0 +1,1 @@
+-+d:\creditsmgr\source\packages\cm_common\CommonDecls.obj -+d:\creditsmgr\source\packages\cm_common\LogoutputImpl.obj -+d:\creditsmgr\source\packages\cm_common\TemporaryTransactionsViewFormImpl.obj -+D:\CreditsMgr\Source\Packages\CM_AEBeforeOneDay\FrmOneDayImpl.obj -+c:\program files\borland\delphi5\Lib\SysInit.obj 

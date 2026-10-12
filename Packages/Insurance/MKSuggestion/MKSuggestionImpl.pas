@@ -1,0 +1,1003 @@
+unit MKSuggestionImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActiveX, AxCtrls, MKSuggestion_TLB, StdVcl, SBPlgAx50_TLB, StdCtrls,
+  HintBox, ExtCtrls, Buttons, Mask, DBCtrls, Db, OracleData, ComCtrls,
+  INSWordExporter, PlgModalContainer, Oracle, Grids, DBGrids, TntStdCtrls;
+
+const
+   WM_ModalResult = WM_USER+139;
+   fmCaption = 'Kasko sigortasi teklifname formasi: (%s)';
+   pSuggMaking = 2;
+   pSuggDone   = 3;
+
+type
+  TConversionExcept = Exception;
+
+  TfmMKSuggestion = class(TActiveForm,
+                          IfmMKSuggestion,
+                          IUIObject,
+                          IParamInput,
+                          ISBPlgAc50BufferForm)
+    Panel1: TPanel;
+    btOk: TBitBtn;
+    BitBtn2: TBitBtn;
+    DSCusts: TDataSource;
+    ODSCusts: TOracleDataSet;
+    ODSCustsID: TIntegerField;
+    ODSCustsADDRESS: TStringField;
+    ODSBankinfo: TOracleDataSet;
+    ODSBankinfoBANK: TStringField;
+    ODSBankinfoAZ_NAME: TStringField;
+    ODSBankinfoSEHER: TStringField;
+    ODSBankinfoADRESS: TStringField;
+    ODSBankinfoTEL: TStringField;
+    ODSBankinfoFAX: TStringField;
+    ODSBankinfoEMAIL: TStringField;
+    DSBankinfo: TDataSource;
+    ODSPolicy: TOracleDataSet;
+    DSPolicy: TDataSource;
+    DSRisks: TDataSource;
+    ODSRisk: TOracleDataSet;
+    ODSFranshiz: TOracleDataSet;
+    DSFranshiz: TDataSource;
+    SuggestionReport: TINSWordExporter;
+    ODSFranshizID: TFloatField;
+    ODSFranshizNAME: TStringField;
+    btApply: TBitBtn;
+    btPolicy: TBitBtn;
+    pmcPolicy: TPlgModalContainer;
+    ODSContracts: TOracleDataSet;
+    ODSContractsID: TFloatField;
+    ODSContractsTYPE_ID: TFloatField;
+    ODSContractsINS_DATE: TDateTimeField;
+    ODSContractsBEGIN_DATE: TDateTimeField;
+    ODSContractsEND_DATE: TDateTimeField;
+    ODSContractsVALUTE_ID: TFloatField;
+    ODSContractsAMMOUNT: TFloatField;
+    ODSContractsCLOSE_PREFIX: TIntegerField;
+    ODSContractsKLI_ID: TFloatField;
+    ODSContractsLOANACC_ID: TFloatField;
+    ODSContractsCURRACC_ID: TFloatField;
+    ODSContractsPOLICY_NUM: TStringField;
+    DSContracts: TDataSource;
+    OPKASKO: TOraclePackage;
+    ODSMotorKasko: TOracleDataSet;
+    ODSMotorKaskoID: TFloatField;
+    ODSMotorKaskoINSUREDTYPE: TStringField;
+    ODSMotorKaskoINSUREDCOLOR: TStringField;
+    ODSMotorKaskoINSUREDOUTPUTYEAR: TIntegerField;
+    ODSMotorKaskoINSUREDSTATENUM: TStringField;
+    ODSMotorKaskoUNDERFRAMENUM: TStringField;
+    ODSMotorKaskoINSUREDBANNUM: TStringField;
+    ODSMotorKaskoINSUREDENGINENUM: TStringField;
+    ODSMotorKaskoDRIVEINTENDED: TStringField;
+    ODSMotorKaskoDRIVECOST: TFloatField;
+    ODSMotorKaskoBEGINDATE: TDateTimeField;
+    ODSMotorKaskoENDDATE: TDateTimeField;
+    ODSMotorKaskoTYPEID: TIntegerField;
+    ODSMotorKaskoCLOSE_PREFIX: TIntegerField;
+    ODSMotorKaskoBANK_ID: TFloatField;
+    ODSMotorKaskoMONTH_ID: TFloatField;
+    ODSMotorKaskoINSOBJECT: TStringField;
+    ODSContractsINSSUMM: TFloatField;
+    ODSContractsFRANSHIZ: TFloatField;
+    ODSContractsTARIFF: TFloatField;
+    ODSMotorKaskoINSUREDMARK: TStringField;
+    ODSMotorKaskoINSUREDMODEL: TStringField;
+    Panel2: TPanel;
+    Panel3: TPanel;
+    Label1: TLabel;
+    Label2: TLabel;
+    Edit1: TEdit;
+    DBEdit1: TDBEdit;
+    GroupBox1: TGroupBox;
+    Label3: TLabel;
+    Label4: TLabel;
+    DBEdit2: TDBEdit;
+    DBEdit3: TDBEdit;
+    GroupBox2: TGroupBox;
+    OPCOMMON: TOraclePackage;
+    ODSContractsSTATE: TIntegerField;
+    btPrint: TBitBtn;
+    ODSMotorKaskoFRANSHIZ: TFloatField;
+    ODSMotorKaskoTARIFF: TFloatField;
+    ODSMotorKaskoINSSUMM: TFloatField;
+    ODSMotorKaskoAMMOUNT: TFloatField;
+    ODSAvalute: TOracleDataSet;
+    ODSAvaluteVALUTE: TIntegerField;
+    ODSAvaluteVAL_NAME: TStringField;
+    ODSAvaluteVALU_NAME: TStringField;
+    ODSAvaluteVALU_SHORT: TStringField;
+    DSAvalute: TDataSource;
+    ODSPolicyID: TFloatField;
+    ODSPolicyTHEFT: TFloatField;
+    ODSPolicyFIRE: TFloatField;
+    ODSPolicyEXPLOSION: TFloatField;
+    ODSPolicyTRAFFICACCIDENT: TFloatField;
+    ODSPolicyIMPACTANYOBJECT: TFloatField;
+    ODSPolicyNATCATASTROPHE: TFloatField;
+    ODSPolicyPOLICYNUM: TStringField;
+    ODSPolicyUNDERTABLE: TBlobField;
+    ODSPolicyCID: TFloatField;
+    ODSPolicyRISKS: TFloatField;
+    ODSPolicyNAME: TStringField;
+    ODSPolicyRISKADDRESS: TStringField;
+    cbRisk: TCheckBox;
+    cbDifRisk: TCheckBox;
+    gbGrid: TGroupBox;
+    DBGrid1: TDBGrid;
+    DBNavigator1: TDBNavigator;
+    gbSame: TGroupBox;
+    Label6: TLabel;
+    Label7: TLabel;
+    Label8: TLabel;
+    Label9: TLabel;
+    Label10: TLabel;
+    DBEdit5: TDBEdit;
+    DBEdit6: TDBEdit;
+    DBEdit7: TDBEdit;
+    DBEdit8: TDBEdit;
+    DBEdit9: TDBEdit;
+    ODSRiskID: TFloatField;
+    ODSRiskNAME: TStringField;
+    ODSPolicyrisk: TStringField;
+    DSTemplates: TDataSource;
+    ODSTemplates: TOracleDataSet;
+    ODSTemplatesID: TFloatField;
+    ODSTemplatesNAME: TStringField;
+    ODSTemplatesTEMPLATE: TBlobField;
+    lbNonUnicode: TListBox;
+    tlbUnicode: TTntListBox;
+    ODSCustsNAME: TStringField;
+    OPSBMSG: TOraclePackage;
+    ODSReport: TOracleDataSet;
+    ODSReportNAME: TStringField;
+    ODSReportINSUREDTYPE: TStringField;
+    ODSReportINSUREDCOLOR: TStringField;
+    ODSReportINSUREDOUTPUTYEAR: TIntegerField;
+    ODSReportINSUREDMODEL: TStringField;
+    ODSReportINSUREDSTATENUM: TStringField;
+    ODSReportUNDERFRAMENUM: TStringField;
+    ODSReportINSUREDBANNUM: TStringField;
+    ODSReportDRIVEACCESSPIOPLE: TStringField;
+    ODSReportINSUREDENGINENUM: TStringField;
+    ODSReportACCESSORIESNAME: TStringField;
+    ODSReportBEGINDATE: TStringField;
+    ODSReportINSDATE: TStringField;
+    ODSReportENDDATE: TStringField;
+    ODSReportPOLICYNUM: TStringField;
+    ODSReportTHEFT: TFloatField;
+    ODSReportFIRE: TFloatField;
+    ODSReportTRAFFICACCIDENT: TFloatField;
+    ODSReportIMPACTANYOBJECT: TFloatField;
+    ODSReportEXPLOSION: TFloatField;
+    ODSReportAGENT: TStringField;
+    ODSReportVALUTE: TStringField;
+    ODSReportBENEFICIARY: TStringField;
+    ODSReportLOANACC_ID: TFloatField;
+    ODSReportCURRACC_ID: TFloatField;
+    ODSReportDRIVEINTENDED: TStringField;
+    ODSReportSEX: TIntegerField;
+    ODSReportNUMSEATS: TStringField;
+    ODSReportFRANSHIZ: TFloatField;
+    ODSReportEXTRAFRANSHIZ: TStringField;
+    ODSReportAVTOCOST: TFloatField;
+    ODSReportINSSUMM: TFloatField;
+    ODSReportAMMOUNT: TFloatField;
+    ODSReportINSUREDADDRESS: TStringField;
+    ODSReportMOBILEPHONE: TStringField;
+    ODSReportHOMEPHONE: TStringField;
+    ODSReportTARIFF: TFloatField;
+    ODSActivity: TOracleDataSet;
+    DSActivity: TDataSource;
+    ODSActivityID: TFloatField;
+    ODSActivityNAME: TStringField;
+    ODSReportACTIVITY: TStringField;
+    ODSCustsACT_ID: TIntegerField;
+    ODSReportSUGNUM: TStringField;
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure btOkClick(Sender: TObject);
+    procedure BitBtn2Click(Sender: TObject);
+    procedure memConditionsChange(Sender: TObject);
+    procedure btPrintClick(Sender: TObject);
+    procedure btApplyClick(Sender: TObject);
+    procedure DBEdit4KeyPress(Sender: TObject; var Key: Char);
+    procedure DTPContractDateChange(Sender: TObject);
+    procedure btPolicyClick(Sender: TObject);
+    procedure ODSPolicyAfterEdit(DataSet: TDataSet);
+    procedure ODSPolicyAfterInsert(DataSet: TDataSet);
+    procedure DBEdit7Change(Sender: TObject);
+    procedure memRiskExit(Sender: TObject);
+    procedure cbRiskClick(Sender: TObject);
+    procedure cbDifRiskClick(Sender: TObject);
+    procedure BitBtn1Click(Sender: TObject);
+    procedure DBEdit4Change(Sender: TObject);
+  private
+    { Private declarations }
+    FParams : TStrings;
+    FOwnerHandle : Integer;
+    ID : Integer;
+    IsSaved : Boolean;
+    FEvents: IfmMKSuggestionEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+    function  SaveData():Boolean;
+    function UTFEncoder(str:WideString):WideString;
+    procedure LoadValues(var params : TStringlist);
+    procedure DisableControls(ControlName : TCustomControl; disable : boolean = true);
+    procedure FillRow(Doc : Variant; Row : Integer;
+                 Text0,Text1,Text2,Text3: String);
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+////////////////////////////////////////////////////////
+    function  Get_Owner:Integer; safecall;
+    procedure Set_Owner(val : Integer);  safecall;
+    {IParamInput}
+    function  Get_Params(const Name: WideString): OleVariant; safecall;
+    procedure Set_Params(const Name: WideString; Value: OleVariant); safecall;
+    property Params[const Name: WideString]: OleVariant read Get_Params write Set_Params;
+    {IInstance}
+    function InstanceInitialize: HResult; safecall;
+    function IUIObject.Initialize = InstanceInitialize;
+    function Cleanup: HResult; safecall;
+    {IUIObject}
+//    function  Get_Icon: OLE_HANDLE; safecall;
+    function UIObjectActivate: HResult; safecall;
+    function IUIObject.Activate = UIObjectActivate;
+    function QueryDeactivate: HResult; safecall;
+    function UIObjectDeactivate: HResult; safecall;
+    function IUIObject.Deactivate = UIObjectDeactivate;
+    function SaveState: HResult; safecall;
+    function  Get_Height : Integer; safecall;
+    function  Get_Width  : Integer; safecall;
+  public
+    { Public declarations }
+    procedure Initialize; override;
+  end;
+
+var
+   fmMKSuggestion : TfmMKSuggestion;
+
+implementation
+
+uses ComObj, ComServ, sboapiDataModuleImpl, URiskTypes, MKSUnderTable;
+
+{$R *.DFM}
+
+{ TfmMKSuggestion }
+
+procedure TfmMKSuggestion.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_fmMKSuggestionPage); }
+end;
+
+procedure TfmMKSuggestion.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as IfmMKSuggestionEvents;
+end;
+
+procedure TfmMKSuggestion.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TfmMKSuggestion.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TfmMKSuggestion.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TfmMKSuggestion.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TfmMKSuggestion.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TfmMKSuggestion.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TfmMKSuggestion.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TfmMKSuggestion.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TfmMKSuggestion.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TfmMKSuggestion.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TfmMKSuggestion.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TfmMKSuggestion.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TfmMKSuggestion.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TfmMKSuggestion.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TfmMKSuggestion.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TfmMKSuggestion.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TfmMKSuggestion.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TfmMKSuggestion.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TfmMKSuggestion.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TfmMKSuggestion._Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TfmMKSuggestion.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TfmMKSuggestion.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TfmMKSuggestion.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TfmMKSuggestion.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TfmMKSuggestion.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TfmMKSuggestion.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TfmMKSuggestion.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TfmMKSuggestion.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TfmMKSuggestion.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TfmMKSuggestion.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TfmMKSuggestion.Set_AxBorderStyle(
+  Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TfmMKSuggestion.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TfmMKSuggestion.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TfmMKSuggestion.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TfmMKSuggestion.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TfmMKSuggestion.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TfmMKSuggestion.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TfmMKSuggestion.Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TfmMKSuggestion.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TfmMKSuggestion.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TfmMKSuggestion.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TfmMKSuggestion.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TfmMKSuggestion.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TfmMKSuggestion.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+function  TfmMKSuggestion.Get_Owner:Integer;
+begin
+  Result := handle;
+end;
+
+procedure TfmMKSuggestion.Set_Owner(val : Integer);
+begin
+  if val > 0 then
+     FOwnerHandle := val;
+end;
+
+
+function  TfmMKSuggestion.Get_Params(const Name: WideString): OleVariant;
+begin
+  Result := FParams.Values[Name];
+end;
+
+procedure TfmMKSuggestion.Set_Params(const Name: WideString; Value: OleVariant);
+begin
+  FParams.Values[Name] := Value;
+end;
+
+function TfmMKSuggestion.InstanceInitialize: HResult;
+begin
+  Result := S_OK;
+end;
+
+function TfmMKSuggestion.Cleanup: HResult;
+begin
+  Result := S_OK;
+end;
+
+procedure TfmMKSuggestion.DisableControls(ControlName : TCustomControl; disable : boolean = true);
+
+  procedure DisableControl(CName : TCustomControl);
+  var i : Integer;
+  begin
+    with CName do
+      for i := 0 to ControlCount -1 do begin
+        if (Controls[i] is TCustomControl) then
+          DisableControl(Controls[i] as TCustomControl);
+        Controls[i].Enabled := disable;
+      end
+  end;
+
+begin
+  if OPCOMMON.CallIntegerFunction('disablepolicies', []) = 0 then
+    Exit;
+
+  DisableControl(ControlName);
+  btApply.Enabled := Disable;
+  btOk.Enabled := Disable;
+
+end;
+
+function TfmMKSuggestion.UIObjectActivate: HResult;
+begin
+
+       id := StrToInt(Get_Params('CID'));
+
+       ODSTemplates.Open;
+       
+       ODSCusts.SetVariable('id',StrToInt(Get_Params('KLI_ID')));
+       ODSCusts.Open;       
+
+       ODSContracts.SetVariable('cid', id);
+       ODSContracts.Open;
+
+       ODSMotorKasko.SetVariable('cid', id);
+       ODSMotorKasko.Open;
+
+       ODSPolicy.SetVariable('CID',id);
+       ODSPolicy.Open;
+
+       IsSaved := True;
+
+       if ODSPolicy.isEmpty then begin   //-----Insert mod
+         ODSPolicy.Insert;
+         ODSContracts.FieldByName('INSSUMM').asFloat := ODSMotorKaskoDRIVECOST.Value;
+         Caption := format(fmCaption, ['Yeni teklifname']);
+       end
+       else begin  //-----Edit mod
+         ODSPolicy.Edit;
+         Caption := format(fmCaption, ['Redakte']);
+         btPrint.Enabled := True;
+         btPolicy.Enabled := True;
+         btApply.Enabled := False;
+       //-----------Disable controls -------------
+       with OPCOMMON do
+         if CallIntegerFunction('get_state',[ODSContracts.FieldByName('ID').asInteger]) = 6 {is disable?} then
+           DisableControls(Panel2, false);
+       end;
+//    end;
+  Result := S_OK;
+end;
+
+function TfmMKSuggestion.QueryDeactivate: HResult;
+begin
+  Result := S_OK;
+end;
+
+function TfmMKSuggestion.UIObjectDeactivate: HResult;
+begin
+  Result := S_OK;
+end;
+
+function TfmMKSuggestion.SaveState: HResult;
+begin
+  Result := S_OK;
+end;
+
+function  TfmMKSuggestion.Get_Height : Integer;
+begin
+  Result := Height;
+end;
+
+function  TfmMKSuggestion.Get_Width  : Integer;
+begin
+  Result := Width;
+end;
+
+
+procedure TfmMKSuggestion.ActiveFormCreate(Sender: TObject);
+begin
+  fmMKSuggestion := Self;
+  FParams := TStringList.Create;
+  ODSRisk.Open;
+  ODSFranshiz.Open;
+end;
+
+
+function TfmMKSuggestion.SaveData():Boolean;
+var
+  res : boolean;
+begin
+    res := False;
+
+    if cbRisk.Checked then
+    with ODSPolicy do
+    if State in [dsEdit, dsInsert] then
+    begin
+      Fieldbyname('THEFT').AsFloat := ODSMotorKaskoFRANSHIZ.AsFloat;
+      Fieldbyname('FIRE').AsFloat := ODSMotorKaskoFRANSHIZ.AsFloat;
+      Fieldbyname('EXPLOSION').AsFloat := ODSMotorKaskoFRANSHIZ.AsFloat;
+      Fieldbyname('TRAFFICACCIDENT').AsFloat := ODSMotorKaskoFRANSHIZ.AsFloat;
+      Fieldbyname('IMPACTANYOBJECT').AsFloat := ODSMotorKaskoFRANSHIZ.AsFloat;
+      Post;
+      RefreshRecord();
+    end;
+
+  with ODSContracts do
+  begin
+     Edit;
+     if FieldByName('state').AsInteger<3 then
+        FieldByName('state').AsInteger := pSuggMaking;
+     Post;
+     RefreshRecord;
+    // OPCommon.CallBooleanFunction('commitsuggestion',[id]);
+     res := True;
+  end;
+  Result := res;
+
+end;
+
+procedure TfmMKSuggestion.btOkClick(Sender: TObject);
+begin
+  if SaveData() or IsSaved then
+    PostMessage(FOwnerHandle, WM_ModalResult, mrOk, 0);
+end;
+
+procedure TfmMKSuggestion.BitBtn2Click(Sender: TObject);
+begin
+  PostMessage(FOwnerHandle, WM_ModalResult, mrCancel, 0);
+end;
+
+procedure TfmMKSuggestion.memConditionsChange(Sender: TObject);
+begin
+   DTPContractDateChange(Sender)
+end;
+
+procedure TfmMKSuggestion.btPrintClick(Sender: TObject);
+const
+    months : array [1..12] of String = ('Éàíâàð', 'Ôåâðàë', 'Ìàðò', 'Àïðåë', 'Ìàé', 'Èéóí',
+                                         'Èéóë', 'Àâãóñò', 'Ñåíòéàáð', 'Îêòéàáð', 'Íîéàáð', 'Äåêàáð');
+var
+  DocFile : TFileName;
+  str,str1,strDate,ErrorStr,FileName : String;
+  day, month, year : word;
+  WordApp:OleVariant;
+  wrdDataDoc,wrdApp,wrdSelection : Variant;
+  n,i:integer;
+begin
+
+   ODSAValute.Locate('valute',ODSContractsValute_ID.Value,[]);     
+   ODSActivity.SetVariable('id',ODSCustsAct_Id.Value);
+   ODSActivity.Open;
+   StrDate := IntToStr(Trunc((ODSContractsEND_DATE.Value - ODSContractsBEGIN_DATE.Value)/30));
+
+   ODSContracts.Close;
+   ODSContracts.SetVariable('CID',ID);
+   ODSContracts.Open;
+
+   ODSReport.Close;
+   ODSReport.SetVariable('CID',ID);
+   ODSReport.Open;
+
+   if ODSReportSex.Value=0 then str:='îüëó'
+      else if ODSReportSex.Value=1 then str:='ãûçû';
+
+   try
+   FileName:=ExtractFilePath(Application.ExeName)+ '\KascoSuggestion.doc';
+   wrdApp := CreateOleObject('Word.Application');
+   wrdApp.Visible := True;
+   wrdDataDoc := wrdApp.Documents.Open(FileName);
+   wrdSelection:=wrdApp.Selection;
+   except
+      raise;
+   end;
+
+   try
+
+   wrdSelection.GoTo(-1,unAssigned,unAssigned,'sugnum');
+   wrdSelection.TypeText(UTFEncoder(ODSReportSugnum.AsString));
+
+   wrdSelection.GoTo(-1,unAssigned,unAssigned,'name');
+   wrdSelection.TypeText(UTFEncoder(ODSReportNAME.Value));
+
+   wrdSelection.GoTo(-1,unAssigned,unAssigned,'str');
+   wrdSelection.TypeText(UTFEncoder(str));
+
+   wrdSelection.GoTo(-1,unAssigned,unAssigned,'activity');
+   wrdSelection.TypeText(UTFEncoder(ODSActivityName.Value));
+
+   {wrdSelection.GoTo(-1,unAssigned,unAssigned,'name2');
+   wrdSelection.TypeText(UTFEncoder(ODSReportNAME.Value));
+
+   wrdSelection.GoTo(-1,unAssigned,unAssigned,'address');
+   wrdSelection.TypeText(UTFEncoder(ODSReportInsuredADDRESS.Value));
+
+   wrdSelection.GoTo(-1,unAssigned,unAssigned,'riskaddress');
+   wrdSelection.TypeText(UTFEncoder(ODSPolicyRiskADDRESS.Value));}
+   {DecodeDate(ODSReportInsDate.AsDateTime, year, month, day);
+
+   str1:=IntToStr(day)+'    '+months[month]+'    '+IntToStr(year);
+   wrdSelection.GoTo(-1,unAssigned,unAssigned,'insdate');
+   wrdSelection.TypeText(UTFEncoder(str1));  }
+
+   wrdSelection.GoTo(-1,unAssigned,unAssigned,'period');
+   wrdSelection.TypeText(UTFEncoder(strDate));
+
+   wrdSelection.GoTo(-1,unAssigned,unAssigned,'mark');
+   wrdSelection.TypeText(UTFEncoder(ODSReportInsuredModel.AsString));
+
+   wrdSelection.GoTo(-1,unAssigned,unAssigned,'type');
+   wrdSelection.TypeText(UTFEncoder(ODSReportInsuredType.AsString));
+
+   wrdSelection.GoTo(-1,unAssigned,unAssigned,'ammount');
+   wrdSelection.TypeText(UTFEncoder(ODSReportInsSumm.AsString+' '+ODSReportValute.AsString));
+
+   wrdSelection.GoTo(-1,unAssigned,unAssigned,'tarif');
+   wrdSelection.TypeText(UTFEncoder(ODSReportTariff.AsString));
+
+   wrdSelection.GoTo(-1,unAssigned,unAssigned,'inssumm');
+   wrdSelection.TypeText(UTFEncoder(ODSReportAmmount.AsString+' '+ODSReportValute.AsString));
+
+   wrdSelection.GoTo(-1,unAssigned,unAssigned,'franshiz');
+   wrdSelection.TypeText(UTFEncoder(ODSReportFranshiz.AsString+' '+ODSReportValute.AsString));
+
+   wrdSelection.GoTo(-1,unAssigned,unAssigned,'date');
+   wrdSelection.TypeText(UTFEncoder(ODSReportBeginDate.AsString));
+
+  {wrdSelection.GoTo(-1,unAssigned,unAssigned,'str1');
+   wrdSelection.TypeText(UTFEncoder(str));
+    }
+
+   except
+      raise;
+   end;
+
+  { try
+   wrdSelection.GoTo(-1,unAssigned,unAssigned,'undertable');
+   fmUndertable := TfmUndertable.Create(Self);
+   with fmUndertable do
+   begin
+      fmUndertable.Show;
+      OleContainer1.OleObject.Application.Selection.WholeStory;
+      OleContainer1.OleObject.Application.Selection.Copy;
+      try
+        fmUndertable.Free;
+      except
+        ErrorStr:='urra!';
+      end;
+        wrdSelection.Paste;
+   end;
+   except
+      raise;
+   end;    }
+end;
+
+procedure TfmMKSuggestion.btApplyClick(Sender: TObject);
+begin
+  if SaveData() then
+  begin
+    btPrint.Enabled := True;
+    btPolicy.Enabled := True;
+    btApply.Enabled := False;
+  end;        
+ if ODSContracts.FieldByName('state').AsInteger=2 then
+    OPSBMSG.CallProcedure('sendmessage',[707]);
+
+end;
+
+
+procedure TfmMKSuggestion.DBEdit4KeyPress(Sender: TObject; var Key: Char);
+begin
+  if Key = #13 then
+     begin
+       FindNextControl(ActiveControl,true,true,false).SetFocus;
+       Key := #0
+     end else btApply.Enabled := True;
+end;
+
+procedure TfmMKSuggestion.DTPContractDateChange(Sender: TObject);
+var Key : Char;
+begin
+  DBEdit4KeyPress(Sender, Key);
+end;
+
+procedure TfmMKSuggestion.LoadValues(var params : TStringlist);
+begin
+  with params do begin
+    values['name'] := ODSCustsNAME.Value;
+  end;
+end;
+
+procedure TfmMKSuggestion.btPolicyClick(Sender: TObject);
+var
+  PolicFormGuid : TGuid;
+  Params : TStringList;
+begin
+
+  if not IsSaved then
+    btApplyClick(Sender); //Save data
+
+  with  ODSContracts do
+    FieldByName('state').AsInteger := pSuggDone;
+
+  Params := TStringList.Create;
+  PolicFormGuid := StringToGUID('{3C454A4C-C304-4633-AAAD-4C46C68BB8EE}');
+  //Params.Values['MKS_ID'] := FloatToStr(ODSMKID.Value);
+  Params.Values['CID'] := FloatToStr(ODSContractsID.Value);
+  with pmcPolicy do
+   ShowModal(PolicFormGuid, Params);
+  Params.Free;
+end;
+
+
+procedure TfmMKSuggestion.ODSPolicyAfterEdit(DataSet: TDataSet);
+begin
+//   btApply.Enabled := True;
+end;
+
+procedure TfmMKSuggestion.ODSPolicyAfterInsert(DataSet: TDataSet);
+begin
+  DataSet.Fieldbyname('CID').AsInteger := ID;
+end;
+
+procedure TfmMKSuggestion.DBEdit7Change(Sender: TObject);
+begin
+  btApply.Enabled := True;
+end;
+
+procedure TfmMKSuggestion.memRiskExit(Sender: TObject);
+begin
+  if (Sender as TDBMemo).Text <> '' then
+    btApply.Enabled := True;
+  ODSPolicy.Edit;
+end;
+
+procedure TfmMKSuggestion.FillRow(Doc: Variant; Row: Integer; Text0, Text1,
+  Text2, Text3: String);
+begin
+     Doc.Tables.Item(1).Cell(Row,1).Range.InsertAfter(Text0);
+     Doc.Tables.Item(1).Cell(Row,2).Range.InsertAfter(Text1);
+     Doc.Tables.Item(1).Cell(Row,3).Range.InsertAfter(Text2);
+     Doc.Tables.Item(1).Cell(Row,4).Range.InsertAfter(Text3);
+end;
+
+procedure TfmMKSuggestion.cbRiskClick(Sender: TObject);
+begin
+     gbSame.Visible:=cbRisk.Checked;
+     gbGrid.Visible:=cbRisk.Checked;
+     cbDifRisk.Checked:=false;
+     btApply.Enabled:=true;
+end;
+
+procedure TfmMKSuggestion.cbDifRiskClick(Sender: TObject);
+begin
+    gbGrid.Visible:=cbDifRisk.Checked;
+    gbSame.Visible:=not(cbDifRisk.Checked);
+    cbRisk.Checked:=false;
+    btApply.Enabled:=true;
+end;
+
+procedure TfmMKSuggestion.BitBtn1Click(Sender: TObject);
+begin
+    fmUndertable := TfmUndertable.Create(Self);
+    fmUndertable.ShowModal;
+    fmUndertable.Free;
+    btApply.Enabled:=true;
+end;
+
+function TfmMKSuggestion.UTFEncoder(str: WideString): WideString;
+var
+   i,j:integer;
+begin
+   for i:=1 to length(str) do
+   begin
+       for j:=0 to lbNonUnicode.Items.Count-1 do
+       begin
+           if str[i]=lbNonUnicode.Items[j] then
+              str[i]:=tlbUnicode.Items[j][1];
+       end;
+   end;
+   result:=str;
+end;
+
+procedure TfmMKSuggestion.DBEdit4Change(Sender: TObject);
+begin
+     btApply.Enabled:=true;
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TfmMKSuggestion,
+    Class_fmMKSuggestion,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

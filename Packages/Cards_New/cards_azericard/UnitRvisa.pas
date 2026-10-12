@@ -1,0 +1,458 @@
+unit UnitRvisa;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ComCtrls, ToolWin, ImgList, Grids, DBGrids, StdCtrls, FileCtrl,
+  CMExcelExport,OracleData;
+
+type
+  Trvisa = class(TForm)
+    REFiles: TRichEdit;
+    DBGrid1: TDBGrid;
+    ImageList1: TImageList;
+    CoolBar1: TCoolBar;
+    ToolBar1: TToolBar;
+    ToolButton3: TToolButton;
+    isertbtn: TToolButton;
+    ToolButton1: TToolButton;
+    ToolButton7: TToolButton;
+    FileListRvisaFiles: TFileListBox;
+    CMExcelExport1: TCMExcelExport;
+    procedure ToolButton3Click(Sender: TObject);
+    procedure isertbtnClick(Sender: TObject);
+    procedure ToolButton7Click(Sender: TObject);
+    procedure DBGrid1TitleClick(Column: TColumn);
+    procedure FormPaint(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  rvisa: Trvisa;
+
+implementation
+
+uses U9, applicationpas, atmendpos, balans, balhs, banksettings, CARDS_TLB,
+  cfilepas, comp, crdtype, creditinfopas, customers, datclose, domesticbank,
+  dpforms, filialaccounts, MAINFORMImpl1, newcard, payment, poscomission,
+  rezform, setac, sms, Unit155, Unit18, UnitDxxx, Unitintfile,SBTranslateProc,sboapiDataModuleImpl;
+
+{$R *.DFM}
+
+
+function CheckFileExt(fname : string) : boolean;
+    var i, checkFileExtLen: integer;
+        fileExt : String;
+begin
+      checkFileExtLen:=0;
+      fileExt:='';
+      fileExt:= trim(ExtractFileExt(fname));
+      for i:=0 to length(fileExt) do
+        begin
+        if fileExt[i] in ['0'..'9','.'] then inc(checkFileExtLen);
+        end;
+      {check for file extention}
+      if checkFileExtLen <> length(fileext) then result:=false else result:=true;
+end;
+
+procedure Trvisa.ToolButton3Click(Sender: TObject);
+var F :TextFile;
+     Test :real;
+     SysSim, Stmessage :string;
+     ROLLUP, CURRENCY, TOTAL_TYPE, TOTAL_AMOUNT, ISDEBET,report,report_type,
+     funds,funds_type,report_code,total_code,funds_code,proc_date,report_date,
+     TOTAL_TYPE2, TOTAL_AMOUNT2, ISDEBET2,TOTAL_TYPE3, TOTAL_AMOUNT3, ISDEBET3,TOTAL_TYPE4, TOTAL_AMOUNT4, ISDEBET4:string;
+     File_Count, i, MSGCount, RowCount, selst, selstF :integer;
+begin
+   REFiles.Lines.Clear;
+
+   if not DirectoryExists('C:\AZCARD\IN') then MkDir('C:\AZCARD\IN');
+   FileListRVisaFiles.Directory:='C:\AZCARD\IN';
+   FileListRVisaFiles.Update;
+
+   if FileListRVisaFiles.Items.Count = 0 then exit;
+   FileListRVisaFiles.Mask:='*.*';
+   FileListRVisaFiles.Update;
+   Test:=122 / 10;
+   if pos('.',FloatToStr(Test))>0 then SysSim:='.' else
+   if pos(',',FloatToStr(Test))>0 then SysSim:=',';
+   File_Count :=0;
+
+   for i:=0 to FileListRVisaFiles.Items.Count-1 do
+   begin
+    Application.ProcessMessages;
+    MSGCount:=0;
+
+    if (uppercase(copy(FileListRVisaFiles.Items[i],0,5)) <> 'RVISA') then Continue;
+    File_Count:=File_Count+1;
+    if CheckFileExt(FileListRVisaFiles.Directory+FileListRVisaFiles.items[i])=false then continue;
+    AssignFile(F,'C:\AZCARD\IN\'+FileListRVisaFiles.Items[i]);
+   { Reset(F);
+    RowCount:=0;
+    while not Eof(F) do
+    begin
+      Readln(F,Stmessage);
+      RowCount:=RowCount+1;
+      if   ((Length(Trim(StMessage))>100)
+       and (Copy(trim(STmessage),1,3) <> '---')
+       and (Copy(trim(STmessage),1,8) <> 'Merchant'))
+       then MSGCount:=MSGCount+1;
+    end; {while}
+
+    STmessage:='';
+    Reset(F);
+
+    {VIEW FILE NAME}
+  // REFiles.Lines.Add('FILE NAME: < '+FileListRVisaFiles.Items[i]+' >    '+'Message count: '+IntToStr(MSGCount));
+    REFiles.Lines.Add('FILE NAME: < '+FileListRVisaFiles.Items[i]+' >    ');
+    REFiles.Lines.Add('                                                  ');
+    {VIEW FILE MESSAGE}
+    while not Eof(F) do
+    begin
+     Application.ProcessMessages;
+     Readln(F,Stmessage);
+     if Copy(trim(STmessage),63,23)='INTERCHANGE VALUE REPORT' then break;
+     if Copy(trim(STmessage),1,14)='REPORTING FOR:' then
+     begin
+      report:= trim(Copy(trim(STmessage),32,15));
+      report_code:=trim(Copy(trim(STmessage),21,10));
+      report_date:=trim(Copy(trim(STmessage),124,7));
+
+
+      Readln(F,Stmessage);
+      if Copy(trim(STmessage),1,10)='ROLLUP TO:' then
+      begin
+      ROLLUP :=trim(Copy(trim(STmessage),32,15));
+      total_code:= trim(Copy(trim(STmessage),21,10));
+      proc_date:=trim(Copy(trim(STmessage),124,7));
+      end;
+      Readln(F,Stmessage);
+
+
+      if Copy(trim(STmessage),1,18)='FUNDS XFER ENTITY:' then
+      begin
+      funds :=trim(Copy(trim(STmessage),32,15));
+      funds_code:= trim(Copy(trim(STmessage),21,10));
+      
+      end;
+      Readln(F,Stmessage);
+
+
+
+      while Copy(trim(STmessage),1,7)<>'*** END' do
+      begin
+       Readln(F,Stmessage);
+       if Copy(trim(STmessage),1,31)='*** NO DATA FOR THIS REPORT ***' then break;
+       if Copy(trim(STmessage),1,20)='SETTLEMENT CURRENCY:' then CURRENCY :=trim(Copy(trim(STmessage),23,3));
+
+       if Copy(trim(STmessage),1,23)='TOTAL INTERCHANGE VALUE' then
+       begin
+        TOTAL_TYPE :='TOTAL INTERCHANGE VALUE';
+        TOTAL_AMOUNT :=trim(Copy(trim(STmessage),106,20));
+        ISDEBET :=trim(Copy(trim(STmessage),126,2));
+       END;
+              if Copy(trim(STmessage),1,24)='TOTAL REIMBURSEMENT FEES' then
+       begin
+        TOTAL_TYPE2 :='TOTAL REIMBURSEMENT FEES';
+        TOTAL_AMOUNT2 :=trim(Copy(trim(STmessage),106,20));
+        ISDEBET2 :=trim(Copy(trim(STmessage),126,2));
+       END;
+
+       if Copy(trim(STmessage),1,18)='TOTAL VISA CHARGES' then
+       begin
+        TOTAL_TYPE3 :='TOTAL VISA CHARGES';
+        TOTAL_AMOUNT3 :=trim(Copy(trim(STmessage),106,20));
+        ISDEBET3 :=trim(Copy(trim(STmessage),126,2));
+       END;
+             if Copy(trim(STmessage),1,21)='NET SETTLEMENT AMOUNT' then
+       begin
+        TOTAL_TYPE4 :='NET SETTLEMENT AMOUNT';
+        TOTAL_AMOUNT4 :=trim(Copy(trim(STmessage),106,20));
+        ISDEBET4 :=trim(Copy(trim(STmessage),126,2));
+
+
+        with REFiles.Lines do
+        begin
+         ADD('REPORTING FOR:       : ' + report);
+         ADD('REPORTING CODE:      : ' + report_code);
+         ADD('REPORTING DATE:      : ' +report_date);
+         ADD('ROLLUP TO            : ' + ROLLUP);
+         ADD('ROLLUP TO CODE       : ' +total_code);
+         ADD('PROC DATE            : ' +proc_date);
+         ADD('FUNDS XFER ENTITY:   : ' + funds);
+         ADD('FUND XFER CODE:      : ' +funds_code);
+         ADD('SETTLEMENT CURRENCY  : ' + CURRENCY);
+         ADD('TOTAL TYPE           : ' + TOTAL_TYPE);
+         ADD('TOTAL AMOUNT         : ' + TOTAL_AMOUNT);
+         ADD('ISDEBET              : ' + ISDEBET);
+         ADD('TOTAL TYPE           : ' + TOTAL_TYPE2);
+         ADD('TOTAL AMOUNT         : ' + TOTAL_AMOUNT2);
+         ADD('ISDEBET              : ' + ISDEBET2);
+         ADD('TOTAL TYPE           : ' + TOTAL_TYPE3);
+         ADD('TOTAL AMOUNT         : ' + TOTAL_AMOUNT3);
+         ADD('ISDEBET              : ' + ISDEBET3);
+         ADD('TOTAL TYPE           : ' + TOTAL_TYPE4);
+         ADD('TOTAL AMOUNT         : ' + TOTAL_AMOUNT4);
+         ADD('ISDEBET              : ' + ISDEBET4);
+         ADD('*************************************************');
+        end;
+
+       END;
+
+
+      end; //while Copy(trim(STmessage),1,7)<>'*** END' do
+     end;  //if Copy(trim(STmessage),1,14)='REPORTING FOR:' then
+    end;    //while not Eof(F) do
+      REFiles.SelStart:=REFiles.FindText('Message count:',selst,LENGTH(REFiles.Text),[stMatchCase]);
+      REFiles.SelLength:=18;
+     // REFiles.SelAttributes.Color:=clBlue;
+      REFiles.SelAttributes.Style:=[];
+      selst:=REFiles.FindText('Message count:',selst,LENGTH(REFiles.Text),[stMatchCase])+1;
+      REFiles.SelLength:=-1;
+      REFiles.SelStart:=REFiles.FindText('FILE NAME',selstF,LENGTH(REFiles.Text),[stMatchCase]);
+      REFiles.SelLength:=33;
+      REFiles.SelAttributes.Color:=clred;
+      selstF:=REFiles.FindText('FILE NAME',selstF,LENGTH(REFiles.Text),[stMatchCase])+1;
+      REFiles.SelLength:=-1;
+    CloseFile(F);
+
+    end; //for i:=0 to FileListIntRetailFiles.Items.Count-1 do
+    REFiles.SelStart:=0;
+    SendMessage(REFiles.Handle, EM_LINESCROLL, 0,(-1)*(REFiles.Lines.Count-1));
+
+
+
+
+end;
+
+procedure Trvisa.isertbtnClick(Sender: TObject);
+var F :TextFile;
+     Test :real;
+     SysSim, Stmessage :string;
+     ROLLUP, CURRENCY, TOTAL_TYPE, TOTAL_AMOUNT, ISDEBET,report,report_type,
+     funds,funds_type,report_code,total_code,funds_code,proc_date,report_date,
+     TOTAL_TYPE2, TOTAL_AMOUNT2, ISDEBET2,TOTAL_TYPE3, TOTAL_AMOUNT3, ISDEBET3,TOTAL_TYPE4, TOTAL_AMOUNT4, ISDEBET4:string;
+     File_Count, i, MSGCount, RowCount, selst, selstF :integer;
+begin
+  // REFiles.Lines.Clear;
+    DataMod_CARDS.mainpacket.CallProcedure('rvisa_delete',[]);
+   if not DirectoryExists('C:\AZCARD\IN') then MkDir('C:\AZCARD\IN');
+   FileListRVisaFiles.Directory:='C:\AZCARD\IN';
+   FileListRVisaFiles.Update;
+
+   if FileListRVisaFiles.Items.Count = 0 then exit;
+   FileListRVisaFiles.Mask:='*.*';
+   FileListRVisaFiles.Update;
+   Test:=122 / 10;
+   if pos('.',FloatToStr(Test))>0 then SysSim:='.' else
+   if pos(',',FloatToStr(Test))>0 then SysSim:=',';
+   File_Count :=0;
+
+   for i:=0 to FileListRVisaFiles.Items.Count-1 do
+   begin
+    Application.ProcessMessages;
+    MSGCount:=0;
+
+    if (uppercase(copy(FileListRVisaFiles.Items[i],0,5)) <> 'RVISA') then Continue;
+    File_Count:=File_Count+1;
+    if CheckFileExt(FileListRVisaFiles.Directory+FileListRVisaFiles.items[i])=false then continue;
+    AssignFile(F,'C:\AZCARD\IN\'+FileListRVisaFiles.Items[i]);
+   { Reset(F);
+    RowCount:=0;
+    while not Eof(F) do
+    begin
+      Readln(F,Stmessage);
+      RowCount:=RowCount+1;
+      if   ((Length(Trim(StMessage))>100)
+       and (Copy(trim(STmessage),1,3) <> '---')
+       and (Copy(trim(STmessage),1,8) <> 'Merchant'))
+       then MSGCount:=MSGCount+1;
+    end; {while}
+
+    STmessage:='';
+    Reset(F);
+
+    {VIEW FILE NAME}
+  // REFiles.Lines.Add('FILE NAME: < '+FileListRVisaFiles.Items[i]+' >    '+'Message count: '+IntToStr(MSGCount));
+   // REFiles.Lines.Add('FILE NAME: < '+FileListRVisaFiles.Items[i]+' >    ');
+   // REFiles.Lines.Add('                                                  ');
+    {VIEW FILE MESSAGE}
+    while not Eof(F) do
+    begin
+     Application.ProcessMessages;
+     Readln(F,Stmessage);
+     if Copy(trim(STmessage),63,23)='INTERCHANGE VALUE REPORT' then break;
+     if Copy(trim(STmessage),1,14)='REPORTING FOR:' then
+     begin
+      report:= trim(Copy(trim(STmessage),32,15));
+      report_code:=trim(Copy(trim(STmessage),21,10));
+      report_date:=trim(Copy(trim(STmessage),124,7));
+
+
+      Readln(F,Stmessage);
+      if Copy(trim(STmessage),1,10)='ROLLUP TO:' then
+      begin
+      ROLLUP :=trim(Copy(trim(STmessage),32,15));
+      total_code:= trim(Copy(trim(STmessage),21,10));
+      proc_date:=trim(Copy(trim(STmessage),124,7));
+      end;
+      Readln(F,Stmessage);
+
+
+      if Copy(trim(STmessage),1,18)='FUNDS XFER ENTITY:' then
+      begin
+      funds :=trim(Copy(trim(STmessage),32,15));
+      funds_code:= trim(Copy(trim(STmessage),21,10));
+      
+      end;
+      Readln(F,Stmessage);
+
+
+
+      while Copy(trim(STmessage),1,7)<>'*** END' do
+      begin
+       Readln(F,Stmessage);
+       if Copy(trim(STmessage),1,31)='*** NO DATA FOR THIS REPORT ***' then break;
+       if Copy(trim(STmessage),1,20)='SETTLEMENT CURRENCY:' then CURRENCY :=trim(Copy(trim(STmessage),23,3));
+
+       if Copy(trim(STmessage),1,23)='TOTAL INTERCHANGE VALUE' then
+       begin
+        TOTAL_TYPE :='TOTAL INTERCHANGE VALUE';
+        TOTAL_AMOUNT :=trim(Copy(trim(STmessage),106,20));
+        ISDEBET :=trim(Copy(trim(STmessage),126,2));
+       END;
+              if Copy(trim(STmessage),1,24)='TOTAL REIMBURSEMENT FEES' then
+       begin
+        TOTAL_TYPE2 :='TOTAL REIMBURSEMENT FEES';
+        TOTAL_AMOUNT2 :=trim(Copy(trim(STmessage),106,20));
+        ISDEBET2 :=trim(Copy(trim(STmessage),126,2));
+       END;
+
+       if Copy(trim(STmessage),1,18)='TOTAL VISA CHARGES' then
+       begin
+        TOTAL_TYPE3 :='TOTAL VISA CHARGES';
+        TOTAL_AMOUNT3 :=trim(Copy(trim(STmessage),106,20));
+        ISDEBET3 :=trim(Copy(trim(STmessage),126,2));
+       END;
+             if Copy(trim(STmessage),1,21)='NET SETTLEMENT AMOUNT' then
+       begin
+        TOTAL_TYPE4 :='NET SETTLEMENT AMOUNT';
+        TOTAL_AMOUNT4 :=trim(Copy(trim(STmessage),106,20));
+        ISDEBET4 :=trim(Copy(trim(STmessage),126,2));
+          
+        DataMod_CARDS.mainpacket.CallProcedure('insert_rvisa',[report,
+                                                               report_code,
+                                                               report_date,
+                                                               ROLLUP,
+                                                               total_code,
+                                                               proc_date,
+                                                               funds,
+                                                               funds_code,
+                                                               CURRENCY,
+
+                                                               TOTAL_AMOUNT,
+                                                               ISDEBET,
+
+                                                               TOTAL_AMOUNT2,
+                                                               ISDEBET2,
+
+                                                               TOTAL_AMOUNT3,
+                                                               ISDEBET3,
+
+                                                               TOTAL_AMOUNT4,
+                                                               ISDEBET4,
+                                                               FileListRVisaFiles.Items[i]]) ;
+
+
+  //      with REFiles.Lines do
+   //     begin
+    //     ADD('REPORTING FOR:       : ' + report);
+     //    ADD('REPORTING CODE:      : ' + report_code);
+     //    ADD('REPORTING DATE:      : ' +report_date);
+     //    ADD('ROLLUP TO            : ' + ROLLUP);
+     //    ADD('ROLLUP TO CODE       : ' +total_code);
+     //    ADD('REPORTING DATE       : ' +report_date);
+     //    ADD('FUNDS XFER ENTITY:   : ' + funds);
+     //    ADD('FUND XFER CODE:      : ' +funds_code);
+     //    ADD('SETTLEMENT CURRENCY  : ' + CURRENCY);
+     //    ADD('TOTAL TYPE           : ' + TOTAL_TYPE);
+     //    ADD('TOTAL AMOUNT         : ' + TOTAL_AMOUNT);
+     //    ADD('ISDEBET              : ' + ISDEBET);
+     //    ADD('TOTAL TYPE           : ' + TOTAL_TYPE2);
+     //    ADD('TOTAL AMOUNT         : ' + TOTAL_AMOUNT2);
+     //    ADD('ISDEBET              : ' + ISDEBET2);
+     //    ADD('TOTAL TYPE           : ' + TOTAL_TYPE3);
+     //    ADD('TOTAL AMOUNT         : ' + TOTAL_AMOUNT3);
+     //    ADD('ISDEBET              : ' + ISDEBET3);
+     //    ADD('TOTAL TYPE           : ' + TOTAL_TYPE4);
+     //    ADD('TOTAL AMOUNT         : ' + TOTAL_AMOUNT4);
+     //    ADD('ISDEBET              : ' + ISDEBET4);
+     //    ADD('*************************************************');
+     //   end;
+
+       END;
+
+
+      end; //while Copy(trim(STmessage),1,7)<>'*** END' do
+     end;  //if Copy(trim(STmessage),1,14)='REPORTING FOR:' then
+    end;    //while not Eof(F) do
+
+    CloseFile(F);
+
+    end; //for i:=0 to FileListIntRetailFiles.Items.Count-1 do
+ DataMod_CARDS.rvisa.close;
+  DataMod_CARDS.rvisa.open;
+
+
+
+
+end;
+
+procedure Trvisa.ToolButton7Click(Sender: TObject);
+begin
+  if not CMExcelExport1.Connected then CMExcelExport1.Connect;
+  CMExcelExport1.ExportDataset(DataMod_CARDS.rvisa,'RVISA',true);
+  CMExcelExport1.Disconnect;
+end;
+
+procedure Trvisa.DBGrid1TitleClick(Column: TColumn);
+var
+   TitleName :string;
+   SortPosition: word;
+begin
+ SortPosition :=100;
+ //OrderedTitle :=Column.FieldName; //H.R. 24.06.2008
+ if (DBGrid1.DataSource.DataSet.IsEmpty) or (Column.FieldName = EmptyStr) then Exit;
+ Screen.Cursor :=crHourGlass;
+ TitleName :=Column.FieldName;
+ with TOracleDataSet(DBGrid1.DataSource.DataSet) do
+  try
+  
+   SortPosition :=SQL.Add('ORDER BY '+ TitleName);
+   Refresh;
+  finally
+   SQL[SortPosition] :=EmptyStr;
+   Screen.Cursor :=crDefault;
+  end;
+end;
+
+procedure Trvisa.FormCreate(Sender: TObject);
+begin
+SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure Trvisa.FormPaint(Sender: TObject);
+begin
+DataMod_CARDS.mainpacket.CallProcedure('rvisa_delete',[]);
+REFiles.Clear;
+ DataMod_CARDS.rvisa.close;
+  DataMod_CARDS.rvisa.open;
+
+end;
+
+end.

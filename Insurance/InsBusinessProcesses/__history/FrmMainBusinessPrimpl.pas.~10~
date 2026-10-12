@@ -1,0 +1,41 @@
+unit FrmMainBusinessPrimpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ExtCtrls, XFSCtrls, StdCtrls;
+
+type
+  TFrmMainBusinessPr = class(TForm)
+    XFPanel1: TXFPanel;
+    XFButton1: TXFButton;
+    XFButton2: TXFButton;
+    XFPanel2: TXFPanel;
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure XFButton2Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmMainBusinessPr: TFrmMainBusinessPr;
+
+implementation
+
+{$R *.dfm}
+
+procedure TFrmMainBusinessPr.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+if ord(key)=vk_escape then
+             close;
+end;
+
+procedure TFrmMainBusinessPr.XFButton2Click(Sender: TObject);
+begin
+ FrmMainBusinessPr.Close;
+end;
+
+end.

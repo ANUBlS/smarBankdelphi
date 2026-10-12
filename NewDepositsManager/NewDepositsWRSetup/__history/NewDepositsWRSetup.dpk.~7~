@@ -1,0 +1,46 @@
+package NewDepositsWRSetup;
+
+{$R *.res}
+{$ALIGN 8}
+{$ASSERTIONS ON}
+{$BOOLEVAL OFF}
+{$DEBUGINFO ON}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LOCALSYMBOLS ON}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION ON}
+{$OVERFLOWCHECKS OFF}
+{$RANGECHECKS OFF}
+{$REFERENCEINFO ON}
+{$SAFEDIVIDE OFF}
+{$STACKFRAMES OFF}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS ON}
+{$WRITEABLECONST OFF}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
+{$IMPLICITBUILD ON}
+
+requires
+  vcl,
+  DOA41dxe,
+  Ehlib150,
+  sboapi50,
+  CMVCL50,
+  DclEhlib150,
+  SBTranslate,
+  NewDepositsCommon,
+  rtl;
+
+contains
+  NewDepositsSBBookmarkAddEditunt in 'NewDepositsSBBookmarkAddEditunt.pas' {NewDepositsSBBookmarkAddEditForm},
+  NewDepositsSBTemplateAddEditUnt in 'NewDepositsSBTemplateAddEditUnt.pas' {NewDepositsSBTemplAddEditForm},
+  NewDepositsSBWRBookmarksTuning in 'NewDepositsSBWRBookmarksTuning.pas' {NewDepositsSBWRBookmarkSetup},
+  NewDepositsSBWRSetupDataModImpl in 'NewDepositsSBWRSetupDataModImpl.pas' {NewDepositsSBWRSetupDataMod: TDataModule},
+  NewDepositsSSBWRSetupLoader in 'NewDepositsSSBWRSetupLoader.pas',
+  NewDepositsSBWRTemplatesTuning in 'NewDepositsSBWRTemplatesTuning.pas' {NewDepositsSBWRTemplateSetup};
+
+end.

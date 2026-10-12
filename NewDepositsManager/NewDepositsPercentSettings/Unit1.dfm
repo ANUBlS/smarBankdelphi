@@ -1,0 +1,71 @@
+object Form1: TForm1
+  Left = 0
+  Top = 0
+  Caption = 'Form1'
+  ClientHeight = 649
+  ClientWidth = 1167
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  PixelsPerInch = 96
+  TextHeight = 13
+  object XFPanel1: TXFPanel
+    Left = 0
+    Top = 0
+    Width = 1167
+    Height = 649
+    Align = alClient
+    BevelInner = bvRaised
+    BevelKind = bkSoft
+    BevelOuter = bvLowered
+    TabOrder = 0
+    ExplicitWidth = 917
+    object XDBGrid1: TXDBGrid
+      Left = 2
+      Top = 47
+      Width = 1159
+      Height = 596
+      Align = alClient
+      GridStyle.VisualStyle = vsXPStyle
+      TabOrder = 0
+    end
+    object XFPanel2: TXFPanel
+      Left = 2
+      Top = 2
+      Width = 1159
+      Height = 45
+      Align = alTop
+      BevelInner = bvRaised
+      BevelKind = bkSoft
+      BevelOuter = bvLowered
+      TabOrder = 1
+      ExplicitWidth = 909
+      object XFButton1: TXFButton
+        Left = -3
+        Top = 4
+        Width = 102
+        Height = 33
+        Caption = 'Yeni'
+        DoubleBuffered = True
+        ParentDoubleBuffered = False
+        TabOrder = 0
+        Flat = True
+      end
+      object XFButton2: TXFButton
+        Left = 99
+        Top = 8
+        Width = 102
+        Height = 29
+        Caption = 'Redakt'#601
+        DoubleBuffered = True
+        ParentDoubleBuffered = False
+        TabOrder = 1
+        Flat = True
+      end
+    end
+  end
+end

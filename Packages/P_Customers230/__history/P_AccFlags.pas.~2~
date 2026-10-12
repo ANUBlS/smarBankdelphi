@@ -1,0 +1,96 @@
+unit P_AccFlags;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, CheckLst, ExtCtrls;
+const
+     cs_add_account = 'add_account';
+     cs_upd_account = 'upd_account';
+     cs_close_account = 'close_account';
+     cs_generateID = 'GenerateID';
+     cs_flagexsist = 'FlagExsist';
+//type tstr = string[100]; 
+type
+  TAccFlags = class(TForm)
+    CLBAccFlags: TCheckListBox;
+    Panel1: TPanel;
+    ButtonApply: TButton;
+    procedure FormCreate(Sender: TObject);
+    procedure ButtonApplyClick(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
+//    procedure ButtonApplyClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    function FlagExsist(AccID : Integer;Ch : Char):Boolean;
+
+  end;
+
+var
+  AccFlags: TAccFlags;  
+    FlagMap: String;
+implementation
+
+uses P_Datamod_Unit;
+
+{$R *.DFM}
+function TAccFlags.FlagExsist(AccID : Integer;Ch : Char):Boolean;
+begin
+   with P_DataModule.SBUTIL do
+    Result :=
+     CallBooleanFunction(cs_flagexsist,[
+       'AccID', AccID ,
+       'FlagChar', ch
+     ]);
+end;
+procedure TAccFlags.FormCreate(Sender: TObject);
+
+var
+   Index: Word;
+begin
+ with P_Datamodule do
+ begin
+  AccFlags.Close;
+  AccFlags.Open;
+  AccFlags.First;
+  AccFlags.Next;
+
+  while not AccFlags.Eof do
+  begin
+   Index :=CLBAccFlags.Items.Add(AccFlags.FieldByName('Name').AsString);
+ //  if AccountForm.OperationMode = omEdit then
+    CLBAccFlags.Checked[Index] :=FlagExsist(AccFlag.FieldByName('ID').AsInteger, AccFlags.FieldByName('Symbol').AsString[1]);
+   AccFlags.Next;
+  end;
+
+ end;
+end;
+
+procedure TAccFlags.ButtonApplyClick(Sender: TObject);
+
+var
+   Index, IndexCount: Word;
+   Symbol: String;
+begin
+  FlagMap :='';
+  IndexCount :=CLBAccFlags.Items.Count;
+  for Index :=0 to IndexCount -1 do
+   if CLBAccFlags.Checked[Index] then
+   begin
+    Symbol :=CLBAccFlags.Items[index];
+    FlagMap :=FlagMap + ',' + Symbol[1];
+   end;
+  Delete(FlagMap, 1, 1);
+end;
+
+
+
+procedure TAccFlags.FormActivate(Sender: TObject);
+begin
+P_DataModule.AccFlags.Open;
+end;
+
+end.

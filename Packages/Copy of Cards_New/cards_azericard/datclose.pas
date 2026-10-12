@@ -1,0 +1,54 @@
+﻿unit datclose;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, Mask, DBCtrls, NLSLocalizer;
+
+type
+  Tdateclose = class(TForm)
+    DBEdit1: TDBEdit;
+    Button1: TButton;
+    Label1: TLabel;
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure Button1Click(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  dateclose: Tdateclose;
+
+implementation
+
+uses Unit18,SBTranslateProc,sboapiDataModuleImpl;
+
+{$R *.DFM}
+
+procedure Tdateclose.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+DataMod_CARDS.settings.Cancel;
+end;
+
+procedure Tdateclose.FormCreate(Sender: TObject);
+begin
+SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure Tdateclose.Button1Click(Sender: TObject);
+begin
+if MessageDlg('Yadda saxlanılsın?',mtinformation,[mbyes,mbno],0)=mryes then
+DataMod_CARDS.settings.Post;
+end;
+
+procedure Tdateclose.FormActivate(Sender: TObject);
+begin
+DataMod_CARDS.settings.Edit;
+end;
+
+end.

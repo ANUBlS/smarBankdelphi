@@ -1,0 +1,180 @@
+object Mainfrm: TMainfrm
+  Left = 315
+  Top = 158
+  ClientHeight = 312
+  ClientWidth = 613
+  Color = clBtnFace
+  Font.Charset = RUSSIAN_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poScreenCenter
+  OnDestroy = FormDestroy
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object GroupBox14: TGroupBox
+    Left = 0
+    Top = 0
+    Width = 613
+    Height = 277
+    Align = alTop
+    Caption = 'Resturuqrizasya '#601'lav'#601' m'#601'lumatlar'
+    TabOrder = 0
+    ExplicitWidth = 558
+    DesignSize = (
+      613
+      277)
+    object SpeedButton1: TSpeedButton
+      Left = 285
+      Top = 69
+      Width = 25
+      Height = 20
+      Anchors = [akLeft, akBottom]
+      Caption = '>>'
+      Enabled = False
+      Flat = True
+      OnClick = SpeedButton1Click
+    end
+    object SpeedButton2: TSpeedButton
+      Left = 286
+      Top = 143
+      Width = 25
+      Height = 24
+      Anchors = [akLeft, akBottom]
+      Caption = '<<'
+      Enabled = False
+      Flat = True
+      OnClick = SpeedButton2Click
+    end
+    object lAdditionGrants: TEvanescence
+      Tag = 3112
+      Left = 9
+      Top = 42
+      Width = 269
+      Height = 219
+      OnClickCheck = lAdditionGrantsClickCheck
+      Anchors = [akLeft, akBottom]
+      ItemHeight = 13
+      TabOrder = 0
+      DataSource = ResDataSource
+      ListField = 'NMAE'
+      KeyField = 'ID'
+    end
+    object AUserGrants: TEvanescence
+      Tag = 3112
+      Left = 318
+      Top = 42
+      Width = 272
+      Height = 222
+      OnClickCheck = AUserGrantsClickCheck
+      Anchors = [akLeft, akBottom]
+      ItemHeight = 13
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 1
+      DataSource = ResAddDataSource
+      ListField = 'NAME'
+      KeyField = 'ID'
+    end
+    object CheckBox2: TCheckBox
+      Left = 10
+      Top = 20
+      Width = 104
+      Height = 19
+      Caption = 'Hams'#305'n'#305' se'#231
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clNavy
+      Font.Height = -12
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 2
+      OnClick = CheckBox2Click
+    end
+    object CheckBox1: TCheckBox
+      Left = 318
+      Top = 20
+      Width = 104
+      Height = 19
+      Caption = 'Hams'#305'n'#305' se'#231
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clNavy
+      Font.Height = -12
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 3
+      OnClick = CheckBox1Click
+    end
+  end
+  object Button1: TButton
+    Left = 508
+    Top = 284
+    Width = 81
+    Height = 27
+    Caption = 'Close'
+    TabOrder = 1
+    OnClick = Button1Click
+  end
+  object ResDataSet: TOracleDataSet
+    SQL.Strings = (
+      'select * from cm_resinfo '
+      'WHERE ID NOT IN (SELECT reinfoid'
+      ' FROM cm_resaddinfo WHERE CREDITID=:CRID)'
+      ' ')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000A0000003A00430052004900440003000000000000000000
+      0000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000300000004000000490044000100000000000E000000530045005900
+      4E0042004F004C00010000000000080000004E004D0041004500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 200
+    Top = 112
+    object ResDataSetID: TFloatField
+      FieldName = 'ID'
+    end
+    object ResDataSetSEYNBOL: TWideStringField
+      FieldName = 'SEYNBOL'
+      Size = 1
+    end
+    object ResDataSetNMAE: TWideStringField
+      FieldName = 'NMAE'
+      Size = 100
+    end
+  end
+  object ResAddDataSet: TOracleDataSet
+    SQL.Strings = (
+      'select r.id,r.nmae name from CM_RESADDINFO a,cm_resinfo r'
+      'where a.reinfoid=r.id'
+      'AND A.CREDITID=:CRID')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000A0000003A00430052004900440003000000000000000000
+      0000}
+    Session = sboapiDataModule.SBSession
+    Left = 368
+    Top = 120
+  end
+  object ResDataSource: TDataSource
+    DataSet = ResDataSet
+    Left = 232
+    Top = 112
+  end
+  object ResAddDataSource: TDataSource
+    DataSet = ResAddDataSet
+    Left = 424
+    Top = 120
+  end
+  object IUPackage: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'CM_CREDIT'
+    ParameterMode = pmNamed
+    Left = 312
+    Top = 150
+  end
+end

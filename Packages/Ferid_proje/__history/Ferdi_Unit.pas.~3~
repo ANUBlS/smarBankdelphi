@@ -1,0 +1,36 @@
+unit Ferdi_Unit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs;
+
+type
+  TForm1 = class(TForm)
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form1: TForm1;
+
+
+
+implementation
+uses Data_Unit;
+{$R *.DFM}
+
+   procedure InitPlugin(s:string);export;
+begin
+   Form1.ShowModal;
+end;
+exports
+     InitPlugin;
+
+initialization
+ Form1 := TForm1.Create(Application);
+
+end.

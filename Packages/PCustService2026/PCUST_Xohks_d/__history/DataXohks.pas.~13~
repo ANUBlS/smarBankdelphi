@@ -1,0 +1,297 @@
+unit DataXohks;
+
+interface
+
+uses
+  sboapiDataModuleImpl ,SysUtils , Classes, DB, OracleData, Oracle;
+
+type
+  TDataModXhoks = class(TDataModule)
+    DataCheck: TOracleDataSet;
+    DataAccount: TOracleDataSet;
+    DataBankInfo: TOracleDataSet;
+    DS_BATCHS: TDataSource;
+    XS_BATCHS: TOracleDataSet;
+    XS_BATCHSID: TFloatField;
+    XS_BATCHSF_ID: TFloatField;
+    XS_BATCHSOPERCODE: TWideStringField;
+    XS_BATCHSACC_ID: TFloatField;
+    XS_BATCHSCLIENT_NAME: TWideStringField;
+    XS_BATCHSCLIENT_CODE: TWideStringField;
+    XS_BATCHSTRANS_REF: TWideStringField;
+    XS_BATCHSAMOUNT: TFloatField;
+    XS_BATCHSVAL_ACC: TIntegerField;
+    XS_BATCHSTRANSDATE: TDateTimeField;
+    XS_BATCHSSEND: TIntegerField;
+    XS_BATCHSSTATUS: TIntegerField;
+    XS_BATCHSFILIAL: TFloatField;
+    XS_BATCHSTRANSACTION_ID: TFloatField;
+    XS_BATCHSCLIENT_INN: TWideStringField;
+    XS_BATCHSUSERID: TFloatField;
+    XS_BATCHSACC_NO: TWideStringField;
+    XS_BATCHSNAME: TWideStringField;
+    XS_BATCHSVAL_NAME: TWideStringField;
+    XS_BATCHSFUSERID: TWideStringField;
+    XS_BATCHSVUSERID: TWideStringField;
+    XS_BATCHSAUSERID: TWideStringField;
+    XS_BATCHSUSERNAME: TWideStringField;
+    XS_BATCHSFORMAT: TWideStringField;
+    DataSourceFilial: TDataSource;
+    DataSetFilial: TOracleDataSet;
+    DataSetFilialID: TFloatField;
+    DataSetFilialNAME: TWideStringField;
+    XS_CONFIG: TOracleDataSet;
+    XS_CONFIGID: TFloatField;
+    XS_CONFIGIN_DIR: TWideStringField;
+    XS_CONFIGOUT_DIR: TWideStringField;
+    XS_CONFIGAMOUNT_LIMIT: TFloatField;
+    XS_CONFIGACCOUNT: TWideStringField;
+    XS_CONFIGARCHIVE_DIR: TWideStringField;
+    XS_CONFIGUSEBANKDATE: TFloatField;
+    XS_CONFIGCOMMISIONID: TFloatField;
+    XS_CONFIGNB_SWIFT: TWideStringField;
+    XS_CONFIGCORACCOUNT: TWideStringField;
+    XS_CONFIGNEW_DATE: TDateTimeField;
+    XS_CONFIGVER_DIR: TWideStringField;
+    GetSysDate: TOraclePackage;
+    Ins: TOraclePackage;
+    SB_ACA: TOraclePackage;
+    DataValute: TOracleDataSet;
+    DataBankM: TOracleDataSet;
+    XS_BENEFICIARY: TOracleDataSet;
+    XS_BENEFICIARYID: TFloatField;
+    XS_BENEFICIARYBATCHID: TFloatField;
+    XS_BENEFICIARYREC_BANK_ID: TFloatField;
+    XS_BENEFICIARYREC_BANK_SUB_ACC: TFloatField;
+    XS_BENEFICIARYCLIENT_ACC_NO: TWideStringField;
+    XS_BENEFICIARYCLIENT_NAME: TWideStringField;
+    XS_BENEFICIARYCLIENT_CODE: TWideStringField;
+    XS_BENEFICIARYCLIENT_INN: TWideStringField;
+    XS_BENEFICIARYREMIT_INF: TWideStringField;
+    XS_BENEFICIARYTRANS_COD: TIntegerField;
+    XS_BENEFICIARYADD_INF: TWideStringField;
+    XS_BENEFICIARYVAL_DATE: TDateTimeField;
+    XS_BENEFICIARYVAL_COD: TIntegerField;
+    XS_BENEFICIARYMESS_REFERENCE: TWideStringField;
+    XS_BENEFICIARYAMOUNT: TFloatField;
+    XS_BENEFICIARYBNFCOUNT: TIntegerField;
+    XS_BENEFICIARYSTATUS: TIntegerField;
+    XS_BENEFICIARYTRANSACTION_ID: TFloatField;
+    XS_BENEFICIARYUSERID: TFloatField;
+    XS_BENEFICIARYVAL_NAME: TWideStringField;
+    XS_BENEFICIARYBANKNAME: TWideStringField;
+    DS_BENEFICIARY: TDataSource;
+    TransTypeCode: TOracleDataSet;
+    TransTypeCodeCODE: TIntegerField;
+    TransTypeCodeNAME: TWideStringField;
+    TransTypeCodeNAMEID: TFloatField;
+    TransTypeCodeID: TFloatField;
+    DSTransTypeCode: TDataSource;
+    DSTransTypeName: TDataSource;
+    TransTypeName: TOracleDataSet;
+    Del: TOraclePackage;
+    PackTemp: TOraclePackage;
+    GetReference: TOraclePackage;
+    XS_IncomingView: TOracleDataSet;
+    DS_XS_IncomingView: TDataSource;
+    ODS_CODE: TOracleDataSet;
+    DS_CODE: TDataSource;
+    DS_BatchsArchive: TDataSource;
+    XS_BatchsArchive: TOracleDataSet;
+    FloatField1: TFloatField;
+    FloatField2: TFloatField;
+    StringField1: TWideStringField;
+    FloatField3: TFloatField;
+    StringField2: TWideStringField;
+    StringField3: TWideStringField;
+    StringField4: TWideStringField;
+    FloatField4: TFloatField;
+    IntegerField1: TIntegerField;
+    DateTimeField1: TDateTimeField;
+    IntegerField2: TIntegerField;
+    IntegerField3: TIntegerField;
+    FloatField5: TFloatField;
+    FloatField6: TFloatField;
+    StringField5: TWideStringField;
+    FloatField7: TFloatField;
+    StringField6: TWideStringField;
+    StringField7: TWideStringField;
+    StringField8: TWideStringField;
+    XS_BatchsArchiveFUSERID: TWideStringField;
+    XS_BatchsArchiveVUSERID: TWideStringField;
+    XS_BatchsArchiveAUSERID: TWideStringField;
+    XS_BatchsArchiveSDATE: TDateTimeField;
+    XS_BatchsArchiveUSERNAME: TWideStringField;
+    XS_BatchsArchiveFORMAT: TWideStringField;
+    XS_BeneficiaryArchive: TOracleDataSet;
+    FloatField8: TFloatField;
+    FloatField9: TFloatField;
+    FloatField10: TFloatField;
+    FloatField11: TFloatField;
+    StringField9: TWideStringField;
+    StringField10: TWideStringField;
+    StringField11: TWideStringField;
+    StringField12: TWideStringField;
+    IntegerField4: TIntegerField;
+    StringField13: TWideStringField;
+    DateTimeField2: TDateTimeField;
+    IntegerField5: TIntegerField;
+    StringField14: TWideStringField;
+    FloatField12: TFloatField;
+    IntegerField6: TIntegerField;
+    IntegerField7: TIntegerField;
+    FloatField13: TFloatField;
+    StringField15: TWideStringField;
+    StringField16: TWideStringField;
+    StringField17: TWideStringField;
+    DS_BeneficiaryArchive: TDataSource;
+    Data_Admin_in: TOracleDataSet;
+    DS_Adminin: TDataSource;
+    Data_Code: TOracleDataSet;
+    DSCode: TDataSource;
+    XS_INCOMING: TOracleDataSet;
+    DS_XS_INCOMING: TDataSource;
+    Account_Source: TDataSource;
+    ODS_shablon: TOracleDataSet;
+    DS_shablon: TDataSource;
+    ODS_Institution: TOracleDataSet;
+    DS_Institution: TDataSource;
+    ODS_BudgetLevel: TOracleDataSet;
+    DS_BudgetLevel: TDataSource;
+    ODS_Destination: TOracleDataSet;
+    DS_Destination: TDataSource;
+    XS_INCOMINGID: TFloatField;
+    XS_INCOMINGREFERENCE: TWideStringField;
+    XS_INCOMINGVAL_COD: TIntegerField;
+    XS_INCOMINGAMOUNT: TFloatField;
+    XS_INCOMINGSEN_ACC: TWideStringField;
+    XS_INCOMINGSEN_NAME: TWideStringField;
+    XS_INCOMINGSEN_INN: TWideStringField;
+    XS_INCOMINGSEN_BANK_ID: TFloatField;
+    XS_INCOMINGSEN_BANK_SUBACC: TFloatField;
+    XS_INCOMINGSEN_BANK_BIK: TWideStringField;
+    XS_INCOMINGSEN_BANK_CODE: TFloatField;
+    XS_INCOMINGSEN_BANK_KRNO: TWideStringField;
+    XS_INCOMINGSEN_BANK_INN: TWideStringField;
+    XS_INCOMINGREC_BANK_SUBACC: TWideStringField;
+    XS_INCOMINGREC_BANK_BIK: TWideStringField;
+    XS_INCOMINGREC_CLIENT_ACC: TWideStringField;
+    XS_INCOMINGREC_CLIENT_ACC_ID: TFloatField;
+    XS_INCOMINGREC_CLIENT_NAME: TWideStringField;
+    XS_INCOMINGREC_CLIENT_INN: TWideStringField;
+    XS_INCOMINGREMIT_INF: TWideStringField;
+    XS_INCOMINGTYPECODE: TIntegerField;
+    XS_INCOMINGADD_INF: TWideStringField;
+    XS_INCOMINGTRANS_DATE: TDateTimeField;
+    XS_INCOMINGSTATUS: TIntegerField;
+    XS_INCOMINGFILIAL: TFloatField;
+    XS_INCOMINGUSERID: TFloatField;
+    XS_INCOMINGF_20: TWideStringField;
+    XS_INCOMINGF_21: TWideStringField;
+    XS_INCOMINGPART: TIntegerField;
+    XS_INCOMINGDESCRPTIONCORRECT: TWideStringField;
+    XS_INCOMINGMAIN_REC_CLIENT_ACC: TWideStringField;
+    XS_INCOMINGMAIN_REC_CLIENT_INN: TWideStringField;
+    XS_INCOMINGMAIN_FILIAL: TFloatField;
+    XS_INCOMINGVAL_NAME: TWideStringField;
+    XS_INCOMINGNAME: TWideStringField;
+    procedure XS_BATCHSAfterScroll(DataSet: TDataSet);
+    procedure XS_BENEFICIARYAfterScroll(DataSet: TDataSet);
+    procedure XS_IncomingViewAfterScroll(DataSet: TDataSet);
+    procedure XS_BatchsArchiveAfterScroll(DataSet: TDataSet);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+  const
+   {Lvpcss Batchs Message Status}
+   msDefault = 0;
+   msCommit = 1;
+   msReject = 2;
+   msFileCreated=3;
+   msFilial = 0;
+   MsHeadOffice =0;
+   msSwiftIN = 1;
+   msVerifikator=4;
+   msFVerifikator=5;
+   msAvtorizator=6;
+   msReturnBack=7;
+var
+  DataModXhoks: TDataModXhoks;
+
+implementation
+
+uses MainXhoksFormImpl;
+
+{$R *.dfm}
+
+procedure TDataModXhoks.XS_BATCHSAfterScroll(DataSet: TDataSet);
+
+var Filial_id: Integer;
+begin
+
+  MainXohksForm.GridBeneficiary.SelectedRows.Clear;
+  MainXohksForm.AcceptButton.Enabled:=not DataSet.IsEmpty;
+  MainXohksForm.AcceptButton.Enabled:=DataModXhoks.XS_BATCHS.FieldByName('status').AsInteger in [msdefault];
+
+  MainXohksForm.ToolButton9.Enabled:= not DataSet.IsEmpty;
+  MainXohksForm.ToolButton9.Enabled:=DataModXhoks.XS_BATCHS.FieldByName('status').AsInteger in [msdefault];
+   {
+  MainXohksForm.N19.Enabled:=not DataSet.IsEmpty;
+  MainXohksForm.N19.Enabled:=DataModXhoks.XS_BATCHS.FieldByName('status').AsInteger in [msdefault];
+
+  MainXohksForm.N2.Enabled:=not DataSet.IsEmpty;
+  MainXohksForm.N2.Enabled:=DataModXhoks.XS_BATCHS.FieldByName('status').AsInteger in [msdefault];
+
+  MainXohksForm.N4.Enabled:=not DataSet.IsEmpty;
+  MainXohksForm.N4.Enabled:=DataModXhoks.XS_BATCHS.FieldByName('status').AsInteger in [msdefault]; }
+
+
+
+    {FIND FILIAL NAME}
+ Filial_Id:=DataModXhoks.XS_BATCHS.FieldByName('Filial').AsInteger;
+ DataModXhoks.DataSetFilial.SetVariable('FilialID',Filial_Id);
+ DataModXhoks.DataSetFilial.Refresh;
+
+end;
+
+procedure TDataModXhoks.XS_BatchsArchiveAfterScroll(DataSet: TDataSet);
+var Filial_ID :integer;
+begin
+  MainXohksForm.DBGridOUTArchBeneficiary.SelectedRows.Clear;
+    {FIND FILIAL NAME}
+  Filial_Id:=DataModXhoks.XS_BatchsArchive.FieldByName('Filial').AsInteger;
+  DataModXhoks.DataSetFilial.SetVariable('FilialID',Filial_Id);
+  DataModXhoks.DataSetFilial.Refresh;
+
+end;
+
+procedure TDataModXhoks.XS_BENEFICIARYAfterScroll(DataSet: TDataSet);
+begin
+{  MainXohksForm.ToolButton27.Enabled:=not DataSet.IsEmpty;
+  MainXohksForm.ToolButton27.Enabled:=DataModXhoks.XS_BENEFICIARY.FieldByName('status').AsInteger in [msdefault];
+
+  MainXohksForm.MenuItem1.Enabled:=not DataSet.IsEmpty;
+  MainXohksForm.MenuItem1.Enabled:=DataModXhoks.XS_BATCHS.FieldByName('status').AsInteger in [msdefault];
+
+  MainXohksForm.MenuItem2.Enabled:=not DataSet.IsEmpty;
+  MainXohksForm.MenuItem2.Enabled:=DataModXhoks.XS_BATCHS.FieldByName('status').AsInteger in [msdefault];
+
+  MainXohksForm.MenuItem4.Enabled:=not DataSet.IsEmpty;
+  MainXohksForm.MenuItem4.Enabled:=DataModXhoks.XS_BATCHS.FieldByName('status').AsInteger in [msdefault];
+
+  MainXohksForm.ToolButton2.Enabled:=not DataSet.IsEmpty;
+  MainXohksForm.ToolButton2.Enabled:=DataModXhoks.XS_BENEFICIARY.FieldByName('status').AsInteger in [msdefault];
+  MainXohksForm.MessAcceptButton.Enabled:=not DataSet.IsEmpty;
+  MainXohksForm.MessAcceptButton.Enabled:=DataModXhoks.XS_BENEFICIARY.FieldByName('status').AsInteger=0;
+}
+  end;
+
+procedure TDataModXhoks.XS_IncomingViewAfterScroll(DataSet: TDataSet);
+begin
+ MainXohksForm.ButtonMessInAccept.Enabled:=
+                             XS_IncomingView.FieldByName('status').AsInteger in [msdefault];
+end;
+
+end.

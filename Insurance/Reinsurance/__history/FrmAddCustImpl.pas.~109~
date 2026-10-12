@@ -1,0 +1,370 @@
+﻿unit FrmAddCustImpl;
+                        //memo1
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, XFSCtrls, ExtCtrls, Mask, DBCtrls, CurrencyEdit;
+
+type
+  TFrmAddCust = class(TForm)
+    XFPanel1: TXFPanel;
+    XFPanel2: TXFPanel;
+    XFButton1: TXFButton;
+    XFButton2: TXFButton;
+    XFGroupBox1: TXFGroupBox;
+    DBLookupComboBox1: TDBLookupComboBox;
+    DBEdit10: TDBEdit;
+    XFLabel1: TXFLabel;
+    XFLabel2: TXFLabel;
+    XFLabel3: TXFLabel;
+    Label1: TLabel;
+    XFLabel4: TXFLabel;
+    Edit1: TEdit;
+    DBLookupComboBox4: TDBLookupComboBox;
+    XFLabel7: TXFLabel;
+    Memo1: TMemo;
+    CurrencyEdit3: TCurrencyEdit;
+    XFLabel5: TXFLabel;
+    Edit2: TEdit;
+    Edit3: TEdit;
+    procedure XFButton2Click(Sender: TObject);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure DBEdit10KeyPress(Sender: TObject; var Key: Char);
+    procedure XFButton1Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure DBLookupComboBox1Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure Edit1KeyPress(Sender: TObject; var Key: Char);
+    procedure Edit2KeyPress(Sender: TObject; var Key: Char);
+    procedure Edit3KeyPress(Sender: TObject; var Key: Char);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+       filter :string;
+  end;
+
+var
+  FrmAddCust: TFrmAddCust;
+
+implementation
+
+{$R *.dfm}
+      uses DMreinsuranceImpl,CommanParametrs, FrmreinsuranceImpl,sboapiDataModuleImpl;
+procedure TFrmAddCust.DBEdit10KeyPress(Sender: TObject; var Key: Char);
+begin
+   if Key = #13 then
+     begin
+       FindNextControl(ActiveControl,true,true,false).SetFocus;
+       Key := #0
+     end;
+end;
+
+procedure TFrmAddCust.DBLookupComboBox1Click(Sender: TObject);
+begin
+if DBLookupComboBox1.KeyValue<>0 then
+begin
+DMreinsurance.DSaccounOthelik.Close;
+DMreinsurance.DSaccounOthelik.SetVariable('p_kli_id',DBLookupComboBox1.KeyValue);
+DMreinsurance.DSaccounOthelik.open;
+
+DMreinsurance.DSaccountDebitor.Close;
+DMreinsurance.DSaccountDebitor.SetVariable('p_kli_id',DBLookupComboBox1.KeyValue);
+DMreinsurance.DSaccountDebitor.open;
+
+end;
+end;
+
+procedure TFrmAddCust.Edit1KeyPress(Sender: TObject; var Key: Char);
+begin
+                if not (Key in ['A'..'Z','a'..'z','0'..'9',#8,'/','-',' '] )then begin Key:=#0; end;
+end;
+
+procedure TFrmAddCust.Edit2KeyPress(Sender: TObject; var Key: Char);
+begin
+ if not (Key in ['0'..'9',#8,'.'] )then begin Key:=#0; end;
+end;
+
+procedure TFrmAddCust.Edit3KeyPress(Sender: TObject; var Key: Char);
+begin
+ if not (Key in ['0'..'9',#8,'.'] )then begin Key:=#0; end;
+end;
+
+procedure TFrmAddCust.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+DMreinsurance.DSCustmers.close;
+end;
+
+procedure TFrmAddCust.FormCreate(Sender: TObject);
+begin
+filter:=DMreinsurance.dsinsurance_type.SQL.Text;
+end;
+
+procedure TFrmAddCust.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+if ord(key)=vk_escape then close;
+
+end;
+
+procedure TFrmAddCust.FormShow(Sender: TObject);
+var
+t,tm,tfq,t1 :string;
+begin
+
+CurrencyEdit3.Value:=0;
+
+DMreinsurance.DScontract.close;
+DMreinsurance.DScontract.SetVariable('p_id',contactid);
+DMreinsurance.DScontract.Open;
+
+if (DMreinsurance.DScontract.FieldByName('TYPE_ID').AsInteger=8) or
+(DMreinsurance.DScontract.FieldByName('TYPE_ID').AsInteger=21) then
+begin
+CurrencyEdit3.Enabled:=true;
+end
+else
+begin
+   CurrencyEdit3.Enabled:=false;
+end;
+
+t:='';
+tm:='';
+tfq:='';
+t1:='';
+
+if (DMreinsurance.DScontract.FieldByName('type_id').AsInteger=4)
+and (DMreinsurance.DScontract.FieldByName('chm').AsInteger=1) then
+begin
+    tm:='(13)';
+end;
+
+if (DMreinsurance.DScontract.FieldByName('type_id').AsInteger=4)
+and (DMreinsurance.DScontract.FieldByName('chfq').AsInteger=1) then
+begin
+    tfq:='(1)';
+end  ;
+
+if (DMreinsurance.DScontract.FieldByName('type_id').AsInteger=4)
+and (DMreinsurance.DScontract.FieldByName('chkasko').AsInteger=1) then
+begin
+    t:='(4)';
+end  ;
+
+if (DMreinsurance.DScontract.FieldByName('type_id').AsInteger=4) then
+
+begin
+if tm<>'' then
+  begin
+    if t1='' then
+    t1:=tm
+    else
+    t1:=t1+','+tm ;
+
+  end;
+   if tfq<>'' then
+   begin
+    if t1='' then
+    t1:=tfq
+    else
+    t1:=t1+','+tfq ;
+         end;
+
+       if t<>'' then
+       begin
+    if t1='' then
+    t1:=t
+    else
+    t1:=t1+','+t ;
+        end;
+end
+else
+begin
+  t1:=DMreinsurance.DScontract.FieldByName('type_id').AsString;
+end;
+
+//showmessage(t1);
+
+
+
+//DMreinsurance.dsinsurance_type.Close;
+
+ DMreinsurance.dsinsurance_type.Close;
+ DMreinsurance.dsinsurance_type.SQL.Text:=filter+ ' and id in ('+t1+')';
+ memo1.Text:=DMreinsurance.dsinsurance_type.SQL.Text;
+ DMreinsurance.dsinsurance_type.open;
+
+DMreinsurance.DSCustmers.close;
+DMreinsurance.DSCustmers.open;
+
+if Frmreinsurance.op='insert' then
+begin
+   DMreinsurance.DSins_reinsurance.Insert;
+   Edit2.Text:='';
+   Edit3.Text:='';
+   Edit1.Text:='';
+
+    DMreinsurance.DSaccounOthelik.Close;
+    DMreinsurance.DSaccountDebitor.Close;
+
+
+end;
+
+if Frmreinsurance.op='update' then
+begin
+
+
+    //DMreinsurance.DSins_reinsurance.
+
+    DMreinsurance.DSins_reinsurance.edit;
+
+    FrmAddCust.CurrencyEdit3.Value:=Frmreinsurance.XDBGrid1.DataSource.DataSet.FieldByName('TARIF').AsFloat;
+    FrmAddCust.Edit2.text:=FloatToStr(Frmreinsurance.XDBGrid1.DataSource.DataSet.FieldByName('reins_part').AsFloat);
+    FrmAddCust.Edit3.text:=FloatToStr(Frmreinsurance.XDBGrid1.DataSource.DataSet.FieldByName('REINS_PART_KOMISIYA').AsFloat);
+    FrmAddCust.DBLookupComboBox1.KeyValue:=Frmreinsurance.XDBGrid1.DataSource.DataSet.FieldByName('custid').AsInteger;
+    FrmAddCust.DBEdit10.Text:=Frmreinsurance.XDBGrid1.DataSource.DataSet.FieldByName('custid').AsString;
+    Edit1.text:= Frmreinsurance.XDBGrid1.DataSource.DataSet.FieldByName('BARDERO_NO').AsString;
+
+    if DBLookupComboBox1.KeyValue<>0 then
+begin
+DMreinsurance.DSaccounOthelik.Close;
+DMreinsurance.DSaccounOthelik.SetVariable('p_kli_id',DBLookupComboBox1.KeyValue);
+DMreinsurance.DSaccounOthelik.open;
+
+DMreinsurance.DSaccountDebitor.Close;
+DMreinsurance.DSaccountDebitor.SetVariable('p_kli_id',DBLookupComboBox1.KeyValue);
+DMreinsurance.DSaccountDebitor.open;
+
+end;
+
+end;
+
+end;
+
+procedure TFrmAddCust.XFButton1Click(Sender: TObject);
+
+
+begin
+
+if (DBEdit10.Text='') or (DBLookupComboBox1.KeyValue=0)  then
+begin
+  showmessage('Diqqət!Təkrarsığortaçı seçilməyib.');
+  exit;
+end;
+
+{if CurrencyEdit1.Value<=0  then
+begin
+  showmessage('Diqqət!Təkrarsığortaçı payı düzgün seçilməyib.');
+  exit;
+end;         }
+
+{
+    24.05.18
+DMreinsurance.DS_Bardero__premiya_sogortaci.Close;
+DMreinsurance.DS_Bardero__premiya_sogortaci.SetVariable('p_cid',contactid);
+DMreinsurance.DS_Bardero__premiya_sogortaci.SetVariable('p_type_id',DBLookupComboBox4.KeyValue);
+DMreinsurance.DS_Bardero__premiya_sogortaci.SetVariable('p_custid',DBLookupComboBox1.KeyValue);
+DMreinsurance.DS_Bardero__premiya_sogortaci.open;
+
+    if DMreinsurance.DS_Bardero__premiya_sogortaci.FieldByName('say').AsInteger>0 then
+    begin
+      showmessage('Bu müqavilə artiq təkrar sığortaya göndərilib.');
+      exit;
+    end;
+           }
+
+
+{
+
+if DBLookupComboBox2.KeyValue=0  then
+begin
+  showmessage('Diqqət!Təkrar.sığ. öhdəlik hesabı seçilməyib.');
+  exit;
+end;
+
+
+if DBLookupComboBox3.KeyValue=0  then
+begin
+  showmessage('Diqqət!Təkrar.sığ. üzrə debitor hesabı seçilməyib.');
+  exit;
+end; }
+
+if Edit1.text=''  then
+begin
+  showmessage('Diqqət!Bardero № sahəsi boşdur.');
+  exit;
+end;
+
+if DBLookupComboBox4.KeyValue=null  then
+begin
+  showmessage('Diqqət!Siğorta növü seçilməyib.');
+  exit;
+end;
+
+if Frmreinsurance.op='insert' then
+    begin
+
+    DMreinsurance.DS_Sigorta_bardero_sayi.Close;
+    DMreinsurance.DS_Sigorta_bardero_sayi.SetVariable('p_bardero_no',Edit1.Text);
+    DMreinsurance.DS_Sigorta_bardero_sayi.SetVariable('p_type_id',DBLookupComboBox4.KeyValue);
+    DMreinsurance.DS_Sigorta_bardero_sayi.SetVariable('p_cid',contactid);
+    DMreinsurance.DS_Sigorta_bardero_sayi.open;
+
+
+
+if DMreinsurance.DS_Sigorta_bardero_sayi.FieldByName('say').AsInteger>0 then
+begin
+   showmessage('Diqqət!Premiya barderosu ucun eyni adda və eyni siğorta növündə Bardero yığıla bilməz.');
+  exit;
+end;
+
+with DMreinsurance,DSins_reinsurance do
+begin
+  FieldByName('cid').AsInteger:=contactid;
+  FieldByName('custid').AsInteger:=DBLookupComboBox1.KeyValue;
+  FieldByName('reins_part').AsFloat:=StrToFloat(Edit2.Text);
+
+  FieldByName('REINS_PART_KOMISIYA').AsFloat:=StrToFloat(Edit3.Text);
+  FieldByName('TARIF').AsFloat:=CurrencyEdit3.Value;
+
+
+  FieldByName('BARDERO_NO').AsString:=Edit1.text;
+  FieldByName('dat').AsDateTime:=DSSysdat.FieldByName('tek_dat').AsDateTime;
+  //FieldByName('userid').AsInteger:=DBLookupComboBox3.KeyValue;
+    post;
+    end;
+    end;
+
+   if Frmreinsurance.op='update' then
+        begin
+DMreinsurance.DSins_reinsurance_upd.Close;
+DMreinsurance.DSins_reinsurance_upd.SetVariable('p_id',Frmreinsurance.XDBGrid1.DataSource.DataSet.FieldByName('id').AsInteger);
+DMreinsurance.DSins_reinsurance_upd.open;
+DMreinsurance.DSins_reinsurance_upd.edit;
+
+with DMreinsurance,DSins_reinsurance_upd do
+begin
+  FieldByName('cid').AsInteger:=contactid;
+  FieldByName('custid').AsInteger:=DBLookupComboBox1.KeyValue;
+  FieldByName('reins_part').AsFloat:=StrToFloat(Edit2.Text);
+
+  FieldByName('REINS_PART_KOMISIYA').AsFloat:=StrToFloat(Edit3.Text);
+  FieldByName('TARIF').AsFloat:=CurrencyEdit3.Value;
+  FieldByName('BARDERO_NO').AsString:=Edit1.text;
+    post;
+    end;
+        end;
+Frmreinsurance.XDBGrid1.DataSource.DataSet.Refresh;
+DMreinsurance.DSins_reinsurance.Refresh;
+DMreinsurance.DSins_reinsuranceMain.Refresh;
+FrmAddCust.Close;
+
+end;
+
+procedure TFrmAddCust.XFButton2Click(Sender: TObject);
+begin
+close
+end;
+
+end.

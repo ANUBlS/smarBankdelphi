@@ -1,0 +1,123 @@
+object FrmCatagories: TFrmCatagories
+  Left = 423
+  Top = 209
+  ClientHeight = 77
+  ClientWidth = 448
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'MS Sans Serif'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poScreenCenter
+  OnCanResize = FormCanResize
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  OnKeyPress = FormKeyPress
+  PixelsPerInch = 96
+  TextHeight = 13
+  object SpeedButton1: TSpeedButton
+    Left = 300
+    Top = 48
+    Width = 66
+    Height = 22
+    Caption = #1071#1083#1072#1074#1103' '#1077#1090
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    ParentFont = False
+    OnClick = SpeedButton1Click
+  end
+  object SpeedButton2: TSpeedButton
+    Left = 369
+    Top = 48
+    Width = 63
+    Height = 22
+    Caption = #1041#1072#1100#1083#1072
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    ParentFont = False
+    OnClick = SpeedButton2Click
+  end
+  object Label1: TLabel
+    Left = 9
+    Top = 4
+    Width = 39
+    Height = 14
+    Caption = #1058#1080#1087#1083#1103#1088' '
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    ParentFont = False
+  end
+  object DBLookupComboboxEh1: TDBLookupComboboxEh
+    Left = 9
+    Top = 18
+    Width = 436
+    Height = 22
+    DropDownBox.Sizable = True
+    EditButtons = <>
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    KeyField = 'ID'
+    ListField = 'DESCRIPTION'
+    ListSource = DataSource1
+    ParentFont = False
+    TabOrder = 0
+    Visible = True
+  end
+  object DataSource1: TDataSource
+    DataSet = OracleDataSet1
+    Top = 48
+  end
+  object OracleDataSet1: TOracleDataSet
+    SQL.Strings = (
+      'select c.id,v.name||'#39'-'#39'||c.description description  from '
+      'creditsmgr.CM_CATEGORIES c,'
+      'creditsmgr.cm_activities a,'
+      'creditsmgr.cm_creditcat k,'
+      'creditsmgr.cm_vid_sob   v'
+      'where  '
+      'c.act_id=a.id and'
+      'k.id=a.act_id and'
+      'v.id=k.vid_sob and'
+      'c.id not in (SELECT catagoriesid'
+      '  FROM cm_categories_add) '
+      'order by description'
+      ''
+      ''
+      ''
+      ''
+      '')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      0500000002000000040000004900440001000000000016000000440045005300
+      4300520049005000540049004F004E00010000000000}
+    Left = 40
+    Top = 48
+    object OracleDataSet1ID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object OracleDataSet1DESCRIPTION: TStringField
+      FieldName = 'DESCRIPTION'
+      Size = 279
+    end
+  end
+  object OraclePackage1: TOraclePackage
+    PackageName = 'CM_N3_SD'
+    Left = 72
+    Top = 48
+  end
+end

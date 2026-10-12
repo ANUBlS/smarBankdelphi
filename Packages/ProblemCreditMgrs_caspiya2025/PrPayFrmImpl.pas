@@ -1,0 +1,66 @@
+unit PrPayFrmImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ComCtrls, DBGridEhGrouping, GridsEh, DBGridEh,
+  CMExcelExport;
+
+type
+  TPrPayFrm = class(TForm)
+    GroupBox1: TGroupBox;
+    Label1: TLabel;
+    DateTimePicker1: TDateTimePicker;
+    DateTimePicker2: TDateTimePicker;
+    Button1: TButton;
+    Button2: TButton;
+    DBGridEh1: TDBGridEh;
+    ExcelExport: TCMExcelExport;
+    procedure FormShow(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  PrPayFrm: TPrPayFrm;
+
+implementation
+ uses PrCmDMImpl;
+{$R *.dfm}
+
+procedure TPrPayFrm.Button1Click(Sender: TObject);
+var
+Bdat,Edat :TDateTime;
+begin
+   Bdat := Integer(Trunc(DateTimePicker1.DateTime));
+   Edat := Integer(Trunc(DateTimePicker2.DateTime));
+   with PrCmDM.PaymentReport do
+   begin
+    if Active then close;
+    SetVariable('bdat',Bdat);
+    SetVariable('edat',Edat);
+    open;
+   end;
+end;
+
+procedure TPrPayFrm.Button2Click(Sender: TObject);
+begin
+with ExcelExport do
+  begin
+    Connect;
+    ExportDataset(DBGridEh1.DataSource.DataSet,'Odenishler',True);
+  end;
+end;
+
+procedure TPrPayFrm.FormShow(Sender: TObject);
+begin
+DateTimePicker1.DateTime:=now-30;
+DateTimePicker2.DateTime:=now;
+end;
+
+end.

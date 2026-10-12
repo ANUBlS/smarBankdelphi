@@ -1,0 +1,29 @@
+unit Dm_invstimpl;
+
+interface
+
+uses
+  SysUtils, Classes, DB, OracleData;
+
+type
+  TDm_invst = class(TDataModule)
+    DsSysdat: TOracleDataSet;
+    DsSysdatTEK_DAT: TDateTimeField;
+    DsSysdatPRED_DAT: TDateTimeField;
+    DsSysdatARC_DAY: TDateTimeField;
+    DsSysdatCLOSE: TIntegerField;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Dm_invst: TDm_invst;
+
+implementation
+
+{$R *.dfm}
+uses  CommanParametrs,sboapiDataModuleImpl;
+
+end.

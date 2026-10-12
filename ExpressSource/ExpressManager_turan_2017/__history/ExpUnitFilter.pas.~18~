@@ -1,0 +1,159 @@
+unit ExpUnitFilter;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ExtCtrls, StdCtrls, DBCtrls, DB, OracleData,XDBGrids;
+
+type
+  TFormFilter = class(TForm)
+    Panel1: TPanel;
+    Panel2: TPanel;
+    GroupBox1: TGroupBox;
+    DBLCBTransfer: TDBLookupComboBox;
+    CheckBox3: TCheckBox;
+    Panel3: TPanel;
+    GroupBox2: TGroupBox;
+    DBLCBValyuta: TDBLookupComboBox;
+    CheckBox2: TCheckBox;
+    Panel4: TPanel;
+    GroupBox3: TGroupBox;
+    DBLCSFilial: TDBLookupComboBox;
+    CheckBox1: TCheckBox;
+    Button1: TButton;
+    Button2: TButton;
+    DataSource1: TDataSource;
+    OracleDataSet1: TOracleDataSet;
+    OracleDataSet2: TOracleDataSet;
+    DataSource2: TDataSource;
+    OracleDataSet3: TOracleDataSet;
+    DataSource3: TDataSource;
+    Panel5: TPanel;
+    GroupBox4: TGroupBox;
+    DBLCBFilial: TDBLookupComboBox;
+    CheckBox4: TCheckBox;
+    OracleDataSet4: TOracleDataSet;
+    DataSource4: TDataSource;
+    procedure Button2Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    DBGridFilter:TXDBGrid;
+  end;
+
+var
+  FormFilter: TFormFilter;
+
+implementation
+uses sboapiDataModuleImpl,ExpressManagerImpl,ExpDataModuleUnit;
+
+{$R *.dfm}
+
+procedure TFormFilter.Button1Click(Sender: TObject);
+var  s,st,sk,sp,Tx:string;
+begin
+  if CheckBox1.Checked then s:='(filial='+VarToStr(DBLCSFilial.KeyValue)+')'
+                       else s:='';
+
+  if CheckBox4.Checked then st:='(bfilial='+VarToStr(DBLCBFilial.KeyValue)+')'
+                       else st:='';
+
+  if CheckBox2.Checked then sk:='(val_cod='+VarToStr(DBLCBValyuta.KeyValue)+')'
+                       else sk:='';
+
+  if CheckBox3.Checked then sp:='(setid='+VarToStr(DBLCBTransfer.KeyValue)+')'
+                       else sp:='';
+
+  if (s='')  and (st='') and (sk='')  and (sp='')   then Tx:=s;
+  if (s='')  and (st='') and (sk='')  and (sp<>'')  then Tx:=sp;
+  if (s='')  and (st='') and (sk<>'') and (sp='')   then Tx:=sk;
+  if (s='')  and (st='') and (sk<>'') and (sp<>'')  then Tx:=sk+' and '+sp;
+
+
+  if (s='')  and (st<>'')  and (sk='')   and (sp='')  then Tx:=st;
+  if (s='')  and (st<>'')  and (sk='')   and (sp<>'') then Tx:=st+' and '+sp;
+  if (s='')  and (st<>'')  and (sk<>'')  and (sp='')  then Tx:=st+' and '+sk;
+  if (s='')  and (st<>'')  and (sk<>'')  and (sp<>'') then Tx:=st+' and '+sk+' and '+sp;
+
+
+  if (s<>'') and (st='')  and (sk='')   and (sp='')   then Tx:=s;
+  if (s<>'') and (st='')  and (sk='')   and (sp<>'')  then Tx:=s+' and '+sp;
+  if (s<>'') and (st='')  and (sk<>'')  and (sp='')   then Tx:=s+' and '+sk;
+  if (s<>'') and (st<>'') and (sk='')   and (sp='')   then Tx:=s+' and '+st;
+
+
+  if (s<>'') and (st<>'') and (sk='')   and (sp<>'')   then Tx:=s+' and '+st+' and '+sp;
+  if (s<>'') and (st='')  and (sk<>'')  and (sp<>'')   then Tx:=s+' and '+sk+' and '+sp;
+  if (s<>'') and (st<>'') and (sk<>'')  and (sp='')    then Tx:=s+' and '+st+' and '+sk;
+  if (s<>'') and (st<>'') and (sk<>'')  and (sp<>'')   then Tx:=s+' and '+st+' and '+sk+' and '+sp;
+
+  if ExpressFrom.XDBGrid1=DBGridFilter
+  then
+      With ExpDataModule,ExpBatchsDataSet do
+      begin
+        Filtered:=False;
+        Filter:=Tx;
+        Filtered:=True;
+      end;
+
+  if ExpressFrom.XDBGrid2=DBGridFilter
+  then
+      With ExpDataModule,ExpIncomingDataSet do
+      begin
+        Filtered:=False;
+        Filter:=Tx;
+        Filtered:=True;
+      end;
+
+   if ExpressFrom.XDBGrid3=DBGridFilter
+   then
+      With ExpDataModule,ExpBatchsArchiveDataSet do
+      begin
+        Filtered:=False;
+        Filter:=Tx;
+        Filtered:=True;
+      end;
+
+   if ExpressFrom.XDBGrid4=DBGridFilter
+   then
+      With ExpDataModule,ExpIncomingarchiveDataSet do
+      begin
+        Filtered:=False;
+        Filter:=Tx;
+        Filtered:=True;
+      end;
+
+
+end;
+
+procedure TFormFilter.Button2Click(Sender: TObject);
+begin
+  FormFilter.Close;
+  CheckBox1.Checked:=False;
+  CheckBox2.Checked:=False;
+  CheckBox3.Checked:=False;
+  DBLCSFilial.KeyValue:=-1;
+  DBLCBFilial.KeyValue:=-1;
+  DBLCBValyuta.KeyValue:=-1;
+  DBLCBTransfer.KeyValue:=-1;
+  DBGridFilter.DataSource.DataSet.Filtered:=False;
+  DBGridFilter.DataSource.DataSet.Filter:='';
+  DBGridFilter.DataSource.DataSet.Refresh;
+end;
+
+procedure TFormFilter.FormShow(Sender: TObject);
+begin
+  OracleDataSet1.Close;
+  OracleDataSet1.Open;
+  OracleDataSet2.Close;
+  OracleDataSet2.Open;
+  OracleDataSet3.Close;
+  OracleDataSet3.Open;
+  OracleDataSet4.Close;
+  OracleDataSet4.Open;
+end;
+
+end.

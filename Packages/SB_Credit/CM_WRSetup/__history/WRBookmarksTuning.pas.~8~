@@ -1,0 +1,273 @@
+﻿unit WRBookmarksTuning;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,dialogs,
+   ComCtrls, ToolWin, ActnList, ImgList, Grids, DBGridEh,   DBGrids, StdCtrls, Mask, DBCtrls, PluginToolBar, ExtCtrls, NLSLocalizer;
+
+type
+  TWRBookmarkSetup = class(TForm)
+    ActionList1: TActionList;
+    ActnAddBookmark: TAction;
+    ActnDeleteBookmark: TAction;
+    ActnEditBookmark: TAction;
+    ActnNewBookmark: TAction;
+    ActnClose: TAction;
+    ImageList1: TImageList;
+    Panel1: TPanel;
+    Panel2: TPanel;
+    DBGridEh1: TDBGridEh;
+    DBGridEh2: TDBGridEh;
+    GroupBox1: TGroupBox;
+    DBEdit1: TDBEdit;
+    PluginToolBar1: TPluginToolBar;
+    PluginToolBar2: TPluginToolBar;
+    ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
+    ToolButton3: TToolButton;
+    ToolButton4: TToolButton;
+    ToolButton5: TToolButton;
+    ToolButton6: TToolButton;
+    ToolButton7: TToolButton;
+    ToolButton8: TToolButton;
+    ToolButton10: TToolButton;
+    ToolButton11: TToolButton;
+    ToolButton12: TToolButton;
+    ToolButton13: TToolButton;
+    ToolButton14: TToolButton;
+    ToolButton15: TToolButton;
+    ToolButton16: TToolButton;
+    ToolButton17: TToolButton;
+    ToolButton18: TToolButton;
+    ActionList2: TActionList;
+    ActionAddTemplare: TAction;
+    ActionDeleteTemplate: TAction;
+    ActionRfreshTemplate: TAction;
+    ActionClose: TAction;
+    ActionEditTemplate: TAction;
+    ToolButton9: TToolButton;
+    procedure ActnAddBookmarkExecute(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure ActnDeleteBookmarkExecute(Sender: TObject);
+    procedure ActnEditBookmarkExecute(Sender: TObject);
+    procedure ActnNewBookmarkExecute(Sender: TObject);
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+    procedure ActnCloseExecute(Sender: TObject);
+    procedure ActnDeleteBookmarkUpdate(Sender: TObject);
+    procedure ActnEditBookmarkUpdate(Sender: TObject);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure ActionAddTemplareExecute(Sender: TObject);
+    procedure ActionEditTemplateExecute(Sender: TObject);
+    procedure ActionDeleteTemplateExecute(Sender: TObject);
+    procedure ActionRfreshTemplateExecute(Sender: TObject);
+    procedure ActionDeleteTemplateUpdate(Sender: TObject);
+    procedure ActionEditTemplateUpdate(Sender: TObject);
+    procedure ToolButton9Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  WRBookmarkSetup: TWRBookmarkSetup;
+  i:integer;
+ implementation
+ uses WRSetupDataModImpl,BookmarkAddEditUnt,TemplateAddEditUnt,
+  Filialinfoimpl,SBTranslateProc,sboapiDataModuleImpl,WRSetupLoader;
+ {$R *.DFM}
+
+    procedure TWRBookmarkSetup.ActnAddBookmarkExecute(Sender: TObject);
+    resourcestring
+           rsBookmarkCaption = 'Yeni';
+    begin
+
+       with WRSetupDataMod.WRBookmarksDataSet do
+            Insert;
+            i:= BookmarkAddEditForm.ShowModal;
+            Caption := rsBookmarkCaption;
+            if i=mrOK then
+            begin
+              WRSetupDataMod.WRBookmarksDataSet.Refresh;
+            end;
+    end;
+
+    procedure TWRBookmarkSetup.FormCreate(Sender: TObject);
+    begin
+
+      WRSetupDataMod := TWRSetupDataMod.Create(Self);
+      BookmarkAddEditForm := TBookmarkAddEditForm.create(self);
+      TemplAddEditForm := TTemplAddEditForm.Create(Self);
+      WRSetupDataMod.WRFieldsDataSet.Open;
+      WRSetupDataMod.WRBookmarksDataSet.Open;
+      WRSetupDataMod.OracleDataSetTamplates.Open;
+      WRSetupDataMod.WRTemplatesDataSet.Open;
+     SBTranslateProc.TranslateAllCompForms(Self, sboapiDataModule.OrPack_SL);
+    end;
+
+    procedure TWRBookmarkSetup.FormDestroy(Sender: TObject);
+    begin
+
+      WRSetupDataMod.WRFieldsDataSet.CloseAll;
+      WRSetupDataMod.WRTemplatesDataSet.CloseAll;
+      WRSetupDataMod.WRBookmarksDataSet.CloseAll;
+      WRSetupDataMod.OracleDataSetTamplates.CloseAll;
+      BookmarkAddEditForm.Free;
+      TemplAddEditForm.Free;
+      WRSetupDataMod.Free;
+
+    end;
+
+    procedure TWRBookmarkSetup.ActnDeleteBookmarkExecute(Sender: TObject);
+     resourcestring
+           BookmarkDelete = 'Silinməsinə əminsinizmi?';
+    begin
+
+      if MessageDlg( Bookmarkdelete,
+                     mtConfirmation,
+                     [mbYes, mbNo],
+                     0) = mrYes then
+      begin
+        with WRSetupDataMod.WRBookmarksDataSet do
+        Delete;
+      end;
+    end;
+
+    procedure TWRBookmarkSetup.ActnEditBookmarkExecute(Sender: TObject);
+    resourcestring
+      rsBookmarkUpdCaption = 'Redaktə';
+    begin
+      with WRSetupDataMod.WRBookmarksDataSet do
+           Edit;
+          Caption:=rsBookmarkUpdCaption;
+           BookmarkAddEditForm.ShowModal;
+    end;
+
+    procedure TWRBookmarkSetup.ActnNewBookmarkExecute(Sender: TObject);
+    begin
+
+      with WRSetupDataMod.WRBookmarksDataSet do
+      Refresh;
+
+    end;
+
+    procedure TWRBookmarkSetup.FormCanResize(Sender: TObject; var NewWidth,
+              NewHeight: Integer; var Resize: Boolean);
+    begin
+      Resize:=false;
+    end;
+
+    procedure TWRBookmarkSetup.ActnCloseExecute(Sender: TObject);
+
+    begin
+      Close;
+    end;
+
+    procedure TWRBookmarkSetup.ActnDeleteBookmarkUpdate(Sender: TObject);
+    begin
+
+      with WRSetupDataMod.WRBookmarksDataSet do
+     (Sender as TAction).Enabled := Active and (RecordCount > 0)
+
+     end;
+
+
+     procedure TWRBookmarkSetup.ActnEditBookmarkUpdate(Sender: TObject);
+      begin
+
+        with WRSetupDataMod.WRBookmarksDataSet do
+        (Sender as TAction).Enabled := Active and (RecordCount > 0)
+
+     end;
+
+
+     procedure TWRBookmarkSetup.FormKeyPress(Sender: TObject; var Key: Char);
+     begin
+
+       if Ord(Key) = VK_ESCAPE then Close;
+
+     end;
+
+    procedure TWRBookmarkSetup.ActionAddTemplareExecute(Sender: TObject);
+    resourcestring
+      rsTemplateCaption = 'Yeni şablon';
+    var i:integer;
+    begin
+      ShowMessage(meh);
+      with WRSetupDataMod.WRTemplatesDataSet do
+           Insert;
+           Caption:= meh;
+           i:=TemplAddEditForm.ShowModal;
+           if i=mrOK then
+           begin
+             with WRSetupDataMod.WRTemplatesDataSet do
+                  Refresh;
+           end;
+
+    end;
+
+    procedure TWRBookmarkSetup.ActionEditTemplateExecute(Sender: TObject);
+     resourcestring
+             rsUpdTemplateCaption='Şablonun redaktəsi';
+    begin
+
+      with WRSetupDataMod.WRTemplatesDataSet do
+           Edit;
+          Caption:=  rsUpdTemplateCaption;
+           TemplAddEditForm.ShowModal;
+    end;
+
+    procedure TWRBookmarkSetup.ActionDeleteTemplateExecute(Sender: TObject);
+      resourcestring
+        TempdeleteMsg='Silinməsinə əminsinizmi?';
+    begin
+
+      if MessageDlg(
+                   TempdeleteMsg,
+                   mtConfirmation,
+                   [mbYes,
+                   mbNo],
+                    0) = mrYes then
+       begin
+         with WRSetupDataMod.WRTemplatesDataSet do
+               Delete;
+        end;
+
+    end;
+
+    procedure TWRBookmarkSetup.ActionRfreshTemplateExecute(Sender: TObject);
+     begin
+
+       with WRSetupDataMod.WRTemplatesDataSet do
+            Refresh;
+
+     end;
+
+     procedure TWRBookmarkSetup.ActionDeleteTemplateUpdate(Sender: TObject);
+     begin
+       with WRSetupDataMod.WRTemplatesDataSet do
+            (Sender as TAction).Enabled := Active and (RecordCount > 0)
+     end;
+
+    procedure TWRBookmarkSetup.ActionEditTemplateUpdate(Sender: TObject);
+    begin
+      with WRSetupDataMod.WRTemplatesDataSet do
+      (Sender as TAction).Enabled := Active and (RecordCount > 0)
+    end;
+
+  procedure TWRBookmarkSetup.ToolButton9Click(Sender: TObject);
+begin
+WRSetupDataMod.FilialDataSet.open;
+if not assigned(FrmFilial) then
+ with  TFrmFilial.Create(self) do
+  try
+  ShowModal;
+  finally
+    Release;
+  end;
+end;
+
+end.

@@ -1,0 +1,716 @@
+﻿unit TranceTransactions;
+
+{$WARN SYMBOL_PLATFORM OFF}
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActiveX, AxCtrls, TranshTransaction_TLB, StdVcl, DBGridEhGrouping, GridsEh,
+  DBGridEh, ExtCtrls, Grids, DBGrids, DB, OracleData, StdCtrls, DBCtrls,
+  ComCtrls, ActnList;
+
+  const
+
+  tsDelayed       = 1;
+  tsCommited      = 2;
+  tsRejected      = 3;
+    resourcestring
+   cs_CommitInformation = 'Ümumi əməliyyatlar: %d'+#13+'Təsdiqlənmiş əməliyyatlar: %d'+#13+'Təsdiqlənməmiş əməliyyatlar: %d';
+type
+  TTranceTransaction = class(TActiveForm, ITranceTransaction)
+    Panel2: TPanel;
+    PageControl1: TPageControl;
+    TabSheet1: TTabSheet;
+    TabSheet2: TTabSheet;
+    TabSheet3: TTabSheet;
+    GridTransactions: TDBGrid;
+    Panel1: TPanel;
+    Panel4: TPanel;
+    StaticText3: TStaticText;
+    DTPCurrentDate_laz: TDateTimePicker;
+    Panel3: TPanel;
+    DBText1: TDBText;
+    StaticText1: TStaticText;
+    Panel5: TPanel;
+    Panel6: TPanel;
+    StaticText2: TStaticText;
+    DTPCurrentDate_pro: TDateTimePicker;
+    Panel7: TPanel;
+    DBText2: TDBText;
+    StaticText4: TStaticText;
+    DBGrid1: TDBGrid;
+    Button1: TButton;
+    Button2: TButton;
+    Button3: TButton;
+    ActionList1: TActionList;
+    Action1: TAction;
+    Panel8: TPanel;
+    DBGrid2: TDBGrid;
+    Button4: TButton;
+
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+    procedure Button3Click(Sender: TObject);
+    procedure Action1Execute(Sender: TObject);
+    procedure Button4Click(Sender: TObject);
+    procedure GridTransactionsDrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TColumn; State: TGridDrawState);
+  private
+
+    { Private declarations }
+    FEvents: ITranceTransactionEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure MouseEnterEvent(Sender: TObject);
+    procedure MouseLeaveEvent(Sender: TObject);
+    procedure PaintEvent(Sender: TObject);
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AlignDisabled: WordBool; safecall;
+    function Get_AlignWithMargins: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_BorderWidth: Integer; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_DockSite: WordBool; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_ExplicitHeight: Integer; safecall;
+    function Get_ExplicitLeft: Integer; safecall;
+    function Get_ExplicitTop: Integer; safecall;
+    function Get_ExplicitWidth: Integer; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_MouseInClient: WordBool; safecall;
+    function Get_ParentCustomHint: WordBool; safecall;
+    function Get_ParentDoubleBuffered: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PopupMode: TxPopupMode; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_ScreenSnap: WordBool; safecall;
+    function Get_SnapBuffer: Integer; safecall;
+    function Get_UseDockManager: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_AlignWithMargins(Value: WordBool); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_BorderWidth(Value: Integer); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_DockSite(Value: WordBool); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_ParentCustomHint(Value: WordBool); safecall;
+    procedure Set_ParentDoubleBuffered(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PopupMode(Value: TxPopupMode); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_ScreenSnap(Value: WordBool); safecall;
+    procedure Set_SnapBuffer(Value: Integer); safecall;
+    procedure Set_UseDockManager(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+  public
+
+    { Public declarations }
+    procedure Initialize; override;
+
+  end;
+
+implementation
+
+uses ComObj, ComServ,sboapiDataModuleImpl, TrdataUnit;
+
+{$R *.DFM}
+
+{ TTranceTransaction }
+
+procedure TTranceTransaction.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_TranceTransactionPage); }
+end;
+
+procedure TTranceTransaction.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as ITranceTransactionEvents;
+  inherited EventSinkChanged(EventSink);
+end;
+
+procedure TTranceTransaction.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnMouseEnter := MouseEnterEvent;
+  OnMouseLeave := MouseLeaveEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TTranceTransaction.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TTranceTransaction.Get_AlignDisabled: WordBool;
+begin
+  Result := AlignDisabled;
+end;
+
+function TTranceTransaction.Get_AlignWithMargins: WordBool;
+begin
+  Result := AlignWithMargins;
+end;
+
+function TTranceTransaction.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TTranceTransaction.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TTranceTransaction.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TTranceTransaction.Get_BorderWidth: Integer;
+begin
+  Result := Integer(BorderWidth);
+end;
+
+function TTranceTransaction.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TTranceTransaction.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TTranceTransaction.Get_DockSite: WordBool;
+begin
+  Result := DockSite;
+end;
+
+function TTranceTransaction.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TTranceTransaction.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TTranceTransaction.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TTranceTransaction.Get_ExplicitHeight: Integer;
+begin
+  Result := ExplicitHeight;
+end;
+
+function TTranceTransaction.Get_ExplicitLeft: Integer;
+begin
+  Result := ExplicitLeft;
+end;
+
+function TTranceTransaction.Get_ExplicitTop: Integer;
+begin
+  Result := ExplicitTop;
+end;
+
+function TTranceTransaction.Get_ExplicitWidth: Integer;
+begin
+  Result := ExplicitWidth;
+end;
+
+function TTranceTransaction.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TTranceTransaction.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TTranceTransaction.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TTranceTransaction.Get_MouseInClient: WordBool;
+begin
+  Result := MouseInClient;
+end;
+
+function TTranceTransaction.Get_ParentCustomHint: WordBool;
+begin
+  Result := ParentCustomHint;
+end;
+
+function TTranceTransaction.Get_ParentDoubleBuffered: WordBool;
+begin
+  Result := ParentDoubleBuffered;
+end;
+
+function TTranceTransaction.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TTranceTransaction.Get_PopupMode: TxPopupMode;
+begin
+  Result := Ord(PopupMode);
+end;
+
+function TTranceTransaction.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TTranceTransaction.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TTranceTransaction.Get_ScreenSnap: WordBool;
+begin
+  Result := ScreenSnap;
+end;
+
+function TTranceTransaction.Get_SnapBuffer: Integer;
+begin
+  Result := SnapBuffer;
+end;
+
+function TTranceTransaction.Get_UseDockManager: WordBool;
+begin
+  Result := UseDockManager;
+end;
+
+function TTranceTransaction.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TTranceTransaction.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TTranceTransaction.GridTransactionsDrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TColumn; State: TGridDrawState);
+
+ begin
+   if not (gdSelected in State) then
+     begin
+    if GridTransactions.DataSource.DataSet.FieldByName('vid_op').AsFloat= 99 then
+    begin
+
+      GridTransactions.Canvas.Brush.Color := clAqua;     // Fon rəngi
+      GridTransactions.Canvas.Font.Color := clBlack;    // Mətn rəngi
+    end
+//    else
+//    begin
+//      GridTransactions.Canvas.Brush.Color := clYellow;   // Normal sətr
+//      GridTransactions.Canvas.Font.Color := clWhite;
+//    end;
+     end;
+       GridTransactions.DefaultDrawColumnCell(Rect, DataCol, Column, State);
+
+end;
+
+procedure TTranceTransaction._Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TTranceTransaction.Action1Execute(Sender: TObject);
+begin
+{ with GridTransactions, SelectedRows, DataSource.DataSet do
+  begin
+    DisableControls;
+    try
+      First;
+      while not Eof do
+       begin
+        CurrentRowSelected := True;
+        Next;
+       end;
+    finally
+      EnableControls;
+    end;
+  end; }
+end;
+
+procedure TTranceTransaction.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+
+
+procedure TTranceTransaction.ActiveFormCreate(Sender: TObject);
+var
+CurrentDate:TDateTime;
+begin
+TrData:=TTrData.create(self);
+with TrData do
+begin
+ DTPCurrentDate_laz.Date:=ods_sys.FieldByName('TEK_DAT').AsDateTime;
+ DTPCurrentDate_pro.Date:=ods_sys.FieldByName('TEK_DAT').AsDateTime;
+ CurrentDate:= ods_sysTEK_DAT.AsDateTime;
+ Transactions_lazytr.Close;
+ Transactions_lazytr.SetVariable('TransactionDate', CurrentDate);
+ Transactions_lazytr.Open;
+end;
+end;
+
+procedure TTranceTransaction.Button1Click(Sender: TObject);
+var
+CurrentDate:TDateTime;
+begin
+  with TrData do
+begin
+Transactions_lazytr.Close;
+Transactions_lazytr.SetVariable('TransactionDate',Trunc( DTPCurrentDate_laz.DateTime));
+Transactions_lazytr.Open;
+end;
+
+end;
+
+procedure TTranceTransaction.Button2Click(Sender: TObject);
+var
+CurrentDate:TDateTime;
+begin
+  with TrData do
+begin
+Transactions_provarch.Close;
+Transactions_provarch.SetVariable('TransactionDate',Trunc( DTPCurrentDate_pro.DateTime));
+Transactions_provarch.Open;
+end;
+
+end;
+
+procedure TTranceTransaction.Button3Click(Sender: TObject);
+var
+   i: Integer;
+   ID: Longint;
+   f,WillRefresh: Boolean;
+   Status, CommitedCount, ErrorCount: Word;
+   LastErrorMessage: String;
+   vidop :integer;
+begin
+{f:=TransactionDataModule.SB_ACA.CallBooleanFunction('checkadvancedobjectaccess',['COMMITSTATUS']);
+ if  f =false then
+ begin
+  showmessage('Əməliyyatı təsdiqləmək hüquqnuz  yoxdur  !');
+ exit;
+ end; }
+
+ CommitedCount :=0;
+ ErrorCount :=0;
+
+ with TrData, GridTransactions, SelectedRows, DataSource.DataSet do
+  if MessageDlg('Əməliyyatlar təsdiqlənsin?', mtConfirmation, [mbYes, mbCancel], 0) = mrYes then
+  begin
+   DisableControls;
+   try
+    Application.ProcessMessages;
+    if Count = 0 then CurrentRowSelected :=True;
+    for i :=0 to Count -1 do
+    try
+     GotoBookmark(TBookmark(Items[i]));
+     Status :=FieldByname('Status').AsInteger;
+     if Status in [tsDelayed, tsRejected] then
+     begin
+      ID := FieldByName('ID').AsInteger;
+      vidop:= FieldByName('vid_op').AsInteger;
+
+      if vidop=99 then
+      begin
+      ods_m10_chek.close;
+      ods_m10_chek.SetVariable('trid',id);
+      ods_m10_chek.open;
+
+
+     webservispkg.CallProcedure('call_services',[ods_m10_chekPHONE_M.AsString,
+                                                 ods_m10_chekAMMOUNT.AsFloat,
+                                                 ods_m10_chekcreditID.AsString,
+                                                 ods_m10_chekPASSPIN.AsString
+                                               ]);
+        ods_payout_chek.Close;
+        ods_payout_chek.SetVariable('v_creditid',ods_m10_chekCREDITID.AsInteger);
+        ods_payout_chek.Open;
+
+        if ods_payout_chekoperationStatus.AsString='IDLE' then
+          begin
+            tranche.CallProcedure('tranche_commit',[ID]);
+           // CommitTransaction(ID);
+            Inc(CommitedCount);
+            SBCommit();
+          end;
+
+      end;
+     if vidop=98 then
+      begin
+      tranche.CallProcedure('tranche_commit',[ID]);
+      //CommitTransaction(ID);
+      Inc(CommitedCount);
+      SBCommit();
+        end;
+
+     end;
+     except
+     on E: Exception do
+      begin
+       LastErrorMessage :=E.Message;
+       Inc(ErrorCount);
+       Continue;
+      end;
+    end;
+   finally
+    if ErrorCount > 0 then
+     if ErrorCount = 1 then
+      MessageDlg(LastErrorMessage, mtConfirmation, [mbOk], 0)
+     else
+      MessageDlg(Format(cs_CommitInformation, [CommitedCount + ErrorCount, CommitedCount, ErrorCount]), mtConfirmation, [mbOk], 0);
+
+    EnableControls;
+
+TrData.Transactions_lazytr.Refresh;
+
+   end;
+  end;
+ GridTransactions.DataSource.DataSet.Locate('ID',ID,[loCaseInsensitive,loPartialKey]);
+
+
+end;
+
+procedure TTranceTransaction.Button4Click(Sender: TObject);
+begin
+{with TrData ,ods_payout do
+begin
+  close;
+  SetVariable('dat',Trunc( DTPCurrentDate_pro.DateTime));
+  open;
+end;  }
+end;
+
+procedure TTranceTransaction.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TTranceTransaction.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TTranceTransaction.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TTranceTransaction.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TTranceTransaction.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TTranceTransaction.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TTranceTransaction.MouseEnterEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnMouseEnter;
+end;
+
+procedure TTranceTransaction.MouseLeaveEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnMouseLeave;
+end;
+
+procedure TTranceTransaction.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TTranceTransaction.Set_AlignWithMargins(Value: WordBool);
+begin
+  AlignWithMargins := Value;
+end;
+
+procedure TTranceTransaction.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TTranceTransaction.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TTranceTransaction.Set_AxBorderStyle(Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TTranceTransaction.Set_BorderWidth(Value: Integer);
+begin
+  BorderWidth := TBorderWidth(Value);
+end;
+
+procedure TTranceTransaction.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TTranceTransaction.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TTranceTransaction.Set_DockSite(Value: WordBool);
+begin
+  DockSite := Value;
+end;
+
+procedure TTranceTransaction.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TTranceTransaction.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TTranceTransaction.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TTranceTransaction.Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TTranceTransaction.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := string(Value);
+end;
+
+procedure TTranceTransaction.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TTranceTransaction.Set_ParentCustomHint(Value: WordBool);
+begin
+  ParentCustomHint := Value;
+end;
+
+procedure TTranceTransaction.Set_ParentDoubleBuffered(Value: WordBool);
+begin
+  ParentDoubleBuffered := Value;
+end;
+
+procedure TTranceTransaction.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TTranceTransaction.Set_PopupMode(Value: TxPopupMode);
+begin
+  PopupMode := TPopupMode(Value);
+end;
+
+procedure TTranceTransaction.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TTranceTransaction.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TTranceTransaction.Set_ScreenSnap(Value: WordBool);
+begin
+  ScreenSnap := Value;
+end;
+
+procedure TTranceTransaction.Set_SnapBuffer(Value: Integer);
+begin
+  SnapBuffer := Value;
+end;
+
+procedure TTranceTransaction.Set_UseDockManager(Value: WordBool);
+begin
+  UseDockManager := Value;
+end;
+
+procedure TTranceTransaction.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TTranceTransaction,
+    Class_TranceTransaction,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

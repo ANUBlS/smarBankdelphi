@@ -1,0 +1,585 @@
+object admDM: TadmDM
+  OldCreateOrder = False
+  OnCreate = DataModuleCreate
+  Height = 479
+  Width = 830
+  object PluginsDataSet: TOracleDataSet
+    Tag = 1
+    SQL.Strings = (
+      'SELECT p.id, pluginname, paramname, description, typeid, name'
+      '  FROM cm_adm_plugins p, cm_adm_plugintypes t'
+      ' WHERE typeid=t.id'
+      'ORDER BY pluginname')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = True
+    Left = 32
+    Top = 24
+    object PluginsDataSetID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object PluginsDataSetPLUGINNAME: TWideStringField
+      FieldName = 'PLUGINNAME'
+      Required = True
+      Size = 255
+    end
+    object PluginsDataSetPARAMNAME: TWideStringField
+      FieldName = 'PARAMNAME'
+      Size = 255
+    end
+    object PluginsDataSetDESCRIPTION: TWideStringField
+      FieldName = 'DESCRIPTION'
+      Size = 255
+    end
+    object PluginsDataSetTYPEID: TFloatField
+      FieldName = 'TYPEID'
+      Required = True
+    end
+    object PluginsDataSetNAME: TWideStringField
+      FieldName = 'NAME'
+      Required = True
+      Size = 255
+    end
+  end
+  object PluginsDataSrc: TDataSource
+    DataSet = PluginsDataSet
+    Left = 136
+    Top = 24
+  end
+  object CM_ADMIN: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'CM_ADMINISTRATION'
+    Left = 512
+    Top = 312
+  end
+  object CredUsersDataSet: TOracleDataSet
+    Tag = 1
+    SQL.Strings = (
+      
+        'SELECT   c.ID, cm_administration.getuserid (c.NAME) systemid, c.' +
+        'NAME,'
+      
+        '         o.createdate, o.description, o.fullname, f.name filial,' +
+        ' c.typeid'
+      '    FROM cm_adm_users c, sb_usersinfo o, filial f'
+      '   WHERE c.NAME = o.obj'
+      '     and o.filialid = f.id'
+      'ORDER BY c.NAME')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = True
+    Left = 32
+    Top = 72
+    object CredUsersDataSetID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object CredUsersDataSetSYSTEMID: TFloatField
+      FieldName = 'SYSTEMID'
+    end
+    object CredUsersDataSetNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 255
+    end
+    object CredUsersDataSetCREATEDATE: TDateTimeField
+      FieldName = 'CREATEDATE'
+    end
+    object CredUsersDataSetDESCRIPTION: TWideStringField
+      FieldName = 'DESCRIPTION'
+      Size = 96
+    end
+    object CredUsersDataSetFULLNAME: TWideStringField
+      FieldName = 'FULLNAME'
+      Size = 96
+    end
+    object CredUsersDataSetFILIAL: TWideStringField
+      FieldName = 'FILIAL'
+      Size = 90
+    end
+    object CredUsersDataSetTYPEID: TFloatField
+      FieldName = 'TYPEID'
+      Required = True
+    end
+  end
+  object CredUsersDataSrc: TDataSource
+    DataSet = CredUsersDataSet
+    Left = 136
+    Top = 72
+  end
+  object SmartUsersDataSet: TOracleDataSet
+    Tag = 1
+    SQL.Strings = (
+      'SELECT   ID, NAME'
+      '    FROM cm_all_users'
+      '   WHERE NAME NOT IN (SELECT NAME'
+      
+        '                        FROM cm_adm_users) AND NAME NOT IN (SELE' +
+        'CT NAME'
+      
+        '                                                              FR' +
+        'OM cm_adm_roots)'
+      'ORDER BY NAME')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = True
+    Left = 32
+    Top = 120
+    object SmartUsersDataSetID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object SmartUsersDataSetNAME: TWideStringField
+      FieldName = 'NAME'
+      Required = True
+      Size = 30
+    end
+  end
+  object SmartUsersDataSrc: TDataSource
+    DataSet = SmartUsersDataSet
+    Left = 136
+    Top = 120
+  end
+  object LAZIM: TOracleDataSet
+    Tag = 1
+    SQL.Strings = (
+      
+        'SELECT description, pluginname, paramname, decode(userid, null, ' +
+        '0, 1) as granthav'
+      '  FROM cm_adm_plugins p, (SELECT userid, pluginid'
+      '                            FROM cm_adm_usergrants'
+      '                           WHERE userid = :userid) g'
+      ' WHERE p.ID = g.pluginid(+)')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000E0000003A00550053004500520049004400030000000000
+      000000000000}
+    Session = sboapiDataModule.SBSession
+    DesignActivation = True
+    Left = 568
+    Top = 312
+    object LAZIMDESCRIPTION: TWideStringField
+      FieldName = 'DESCRIPTION'
+      Size = 255
+    end
+    object LAZIMPLUGINNAME: TWideStringField
+      FieldName = 'PLUGINNAME'
+      Required = True
+      Size = 255
+    end
+    object LAZIMPARAMNAME: TWideStringField
+      FieldName = 'PARAMNAME'
+      Size = 255
+    end
+    object LAZIMGRANTHAV: TFloatField
+      FieldName = 'GRANTHAV'
+    end
+  end
+  object UserGrantsDataSrc: TDataSource
+    DataSet = UserGrantsDataSet
+    Left = 136
+    Top = 176
+  end
+  object OtherGrantsDataSet: TOracleDataSet
+    SQL.Strings = (
+      'SELECT  id, description'
+      '    FROM cm_adm_plugins'
+      '   WHERE ID NOT IN (SELECT pluginid'
+      '                      FROM cm_adm_usergrants'
+      '                     WHERE userid = :USID)'
+      'ORDER BY description')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000A0000003A00550053004900440003000000000000000000
+      0000}
+    Session = sboapiDataModule.SBSession
+    DesignActivation = True
+    Left = 32
+    Top = 232
+    object OtherGrantsDataSetID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object OtherGrantsDataSetDESCRIPTION: TWideStringField
+      FieldName = 'DESCRIPTION'
+      Size = 255
+    end
+  end
+  object OtherGrantsDataSrc: TDataSource
+    DataSet = OtherGrantsDataSet
+    Left = 136
+    Top = 232
+  end
+  object UserGrantsDataSet: TOracleDataSet
+    SQL.Strings = (
+      'SELECT   ID, description'
+      '    FROM cm_adm_usergrants g, cm_adm_plugins p'
+      '   WHERE g.pluginid = p.ID AND userid = :usid'
+      'ORDER BY description')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000A0000003A00550053004900440003000000000000000000
+      0000}
+    Session = sboapiDataModule.SBSession
+    DesignActivation = True
+    Left = 32
+    Top = 176
+    object UserGrantsDataSetID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object UserGrantsDataSetDESCRIPTION: TWideStringField
+      FieldName = 'DESCRIPTION'
+      Size = 255
+    end
+  end
+  object GroupsDataSet: TOracleDataSet
+    Tag = 1
+    SQL.Strings = (
+      'SELECT   g.ID, g.NAME, t.NAME grouptype, g.description'
+      '    FROM cm_adm_groups g, cm_adm_grouptypes t'
+      '   WHERE g.typeid = t.ID'
+      'ORDER BY g.NAME')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = True
+    Left = 32
+    Top = 288
+    object GroupsDataSetID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object GroupsDataSetNAME: TWideStringField
+      FieldName = 'NAME'
+      Required = True
+      Size = 255
+    end
+    object GroupsDataSetGROUPTYPE: TWideStringField
+      FieldName = 'GROUPTYPE'
+      Required = True
+      Size = 255
+    end
+    object GroupsDataSetDESCRIPTION: TWideStringField
+      FieldName = 'DESCRIPTION'
+      Size = 255
+    end
+  end
+  object GroupsDataSrc: TDataSource
+    DataSet = GroupsDataSet
+    Left = 136
+    Top = 288
+  end
+  object GroupManagerDataSet: TOracleDataSet
+    SQL.Strings = (
+      'SELECT userid, groupid, usertype'
+      '  FROM cm_adm_groupmanager')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 32
+    Top = 344
+  end
+  object GroupManagerDataSrc: TDataSource
+    DataSet = GroupManagerDataSet
+    Left = 136
+    Top = 344
+  end
+  object UserInGroupDataSet: TOracleDataSet
+    Tag = 1
+    SQL.Strings = (
+      
+        'SELECT t.description usertype, g.NAME groupname, gt.NAME groupty' +
+        'pe,'
+      '       g.description groupdesc, userid'
+      '  FROM cm_adm_groupmanager m,'
+      '       cm_adm_groups g,'
+      '       cm_adm_groupusertypes t,'
+      '       cm_adm_grouptypes gt'
+      ' WHERE userid = :userid'
+      '   AND m.groupid = g.ID'
+      '   AND m.usertype = t.ID'
+      '   AND g.typeid = gt.ID')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000E0000003A00550053004500520049004400030000000400
+      00006400000000000000}
+    Master = CredUsersDataSet
+    MasterFields = 'SYSTEMID'
+    DetailFields = 'USERID'
+    Session = sboapiDataModule.SBSession
+    DesignActivation = True
+    Left = 248
+    Top = 24
+    object UserInGroupDataSetUSERTYPE: TWideStringField
+      FieldName = 'USERTYPE'
+      Size = 255
+    end
+    object UserInGroupDataSetGROUPNAME: TWideStringField
+      FieldName = 'GROUPNAME'
+      Required = True
+      Size = 255
+    end
+    object UserInGroupDataSetGROUPTYPE: TWideStringField
+      FieldName = 'GROUPTYPE'
+      Required = True
+      Size = 255
+    end
+    object UserInGroupDataSetGROUPDESC: TWideStringField
+      FieldName = 'GROUPDESC'
+      Size = 255
+    end
+    object UserInGroupDataSetUSERID: TFloatField
+      FieldName = 'USERID'
+      Required = True
+    end
+  end
+  object UserInGroupDataSrc: TDataSource
+    DataSet = UserInGroupDataSet
+    Left = 344
+    Top = 24
+  end
+  object GroupTypeDataSet: TOracleDataSet
+    Tag = 1
+    SQL.Strings = (
+      'SELECT   ID, NAME'
+      '    FROM cm_adm_grouptypes'
+      'ORDER BY ID')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 248
+    Top = 72
+    object GroupTypeDataSetID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object GroupTypeDataSetNAME: TWideStringField
+      FieldName = 'NAME'
+      Required = True
+      Size = 255
+    end
+  end
+  object GroupTypeDataSrc: TDataSource
+    DataSet = GroupTypeDataSet
+    Left = 344
+    Top = 72
+  end
+  object GroupUsersDataSet: TOracleDataSet
+    Tag = 1
+    SQL.Strings = (
+      'SELECT   u.NAME, t.description, m.groupid'
+      
+        '    FROM cm_adm_groupmanager m, cm_adm_users u, cm_adm_groupuser' +
+        'types t'
+      '   WHERE m.groupid = :GROUPID'
+      '     AND m.userid = cm_administration.getuserid (u.NAME)'
+      '     AND t.ID = m.usertype'
+      'ORDER BY m.usertype')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000100000003A00470052004F00550050004900440003000000
+      040000000500000000000000}
+    Master = GroupsDataSet
+    MasterFields = 'ID'
+    DetailFields = 'GROUPID'
+    Session = sboapiDataModule.SBSession
+    DesignActivation = True
+    Left = 248
+    Top = 120
+    object GroupUsersDataSetNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 255
+    end
+    object GroupUsersDataSetDESCRIPTION: TWideStringField
+      FieldName = 'DESCRIPTION'
+      Size = 255
+    end
+    object GroupUsersDataSetGROUPID: TFloatField
+      FieldName = 'GROUPID'
+      Required = True
+    end
+  end
+  object GroupUsersDataSrc: TDataSource
+    DataSet = GroupUsersDataSet
+    Left = 344
+    Top = 120
+  end
+  object GrMasterUsers: TOracleDataSet
+    Tag = 1
+    SQL.Strings = (
+      'SELECT u.NAME, m.groupid'
+      '  FROM cm_adm_groupmanager m, cm_all_users u'
+      ' WHERE m.usertype = 1 AND m.userid = u.ID AND groupid = :groupid')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000100000003A00470052004F00550050004900440003000000
+      040000000500000000000000}
+    Master = GroupsDataSet
+    MasterFields = 'ID'
+    DetailFields = 'GROUPID'
+    Session = sboapiDataModule.SBSession
+    DesignActivation = True
+    Left = 248
+    Top = 176
+    object GrMasterUsersNAME: TWideStringField
+      FieldName = 'NAME'
+      Required = True
+      Size = 30
+    end
+    object GrMasterUsersGROUPID: TFloatField
+      FieldName = 'GROUPID'
+      Required = True
+    end
+  end
+  object GrSlaveUsers: TOracleDataSet
+    Tag = 1
+    SQL.Strings = (
+      'SELECT u.NAME, m.groupid'
+      '  FROM cm_adm_groupmanager m, cm_all_users u'
+      ' WHERE m.usertype = 2 AND m.userid = u.ID AND groupid = :groupid')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000100000003A00470052004F00550050004900440003000000
+      040000000500000000000000}
+    Master = GroupsDataSet
+    MasterFields = 'ID'
+    DetailFields = 'GROUPID'
+    Session = sboapiDataModule.SBSession
+    DesignActivation = True
+    Left = 248
+    Top = 232
+    object GrSlaveUsersNAME: TWideStringField
+      FieldName = 'NAME'
+      Required = True
+      Size = 30
+    end
+    object GrSlaveUsersGROUPID: TFloatField
+      FieldName = 'GROUPID'
+      Required = True
+    end
+  end
+  object GrNeutralUsers: TOracleDataSet
+    Tag = 1
+    SQL.Strings = (
+      'SELECT u.NAME, m.groupid'
+      '  FROM cm_adm_groupmanager m, cm_all_users u'
+      ' WHERE m.usertype = 3 AND m.userid = u.ID AND groupid = :groupid')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000100000003A00470052004F00550050004900440003000000
+      040000000500000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      0500000002000000080000004E0041004D0045000100000000000E0000004700
+      52004F005500500049004400010000000000}
+    Master = GroupsDataSet
+    MasterFields = 'ID'
+    DetailFields = 'GROUPID'
+    Session = sboapiDataModule.SBSession
+    DesignActivation = True
+    Left = 248
+    Top = 289
+    object GrNeutralUsersNAME: TWideStringField
+      FieldName = 'NAME'
+      Required = True
+      Size = 30
+    end
+    object GrNeutralUsersGROUPID: TFloatField
+      FieldName = 'GROUPID'
+      Required = True
+    end
+  end
+  object PluginTypesDataSet: TOracleDataSet
+    Tag = 1
+    SQL.Strings = (
+      'select id, name'
+      '  from cm_adm_plugintypes')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 448
+    Top = 24
+    object PluginTypesDataSetID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object PluginTypesDataSetNAME: TWideStringField
+      FieldName = 'NAME'
+      Required = True
+      Size = 255
+    end
+  end
+  object PluginTypesDataSrc: TDataSource
+    DataSet = PluginTypesDataSet
+    Left = 520
+    Top = 24
+  end
+  object UserTypeDataSet: TOracleDataSet
+    Tag = 1
+    SQL.Strings = (
+      'select typeid, name'
+      '  from cm_adm_users'
+      ' where name = :name')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000A0000003A004E0041004D00450005000000000000000000
+      0000}
+    Master = CredUsersDataSet
+    MasterFields = 'NAME'
+    DetailFields = 'NAME'
+    Session = sboapiDataModule.SBSession
+    Left = 448
+    Top = 72
+    object UserTypeDataSetTYPEID: TFloatField
+      FieldName = 'TYPEID'
+      Required = True
+    end
+    object UserTypeDataSetNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 255
+    end
+  end
+  object UserTypeDataSrc: TDataSource
+    DataSet = UserTypeDataSet
+    Left = 520
+    Top = 72
+  end
+  object AdditionSrcGr: TDataSource
+    DataSet = AdditionSrcGRDSet
+    Left = 456
+    Top = 160
+  end
+  object AdditionSrcGRDSet: TOracleDataSet
+    SQL.Strings = (
+      'SELECT a.id, a.name'
+      '  FROM cm_adm_addition a ,cm_adm_additiongr g'
+      '  where a.id=g.additionid '
+      ' and g.userid = :USID')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000A0000003A00550053004900440003000000000000000000
+      0000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000300000004000000490044000100000000000C000000550053004500
+      520049004400010000000000080000004E0041004D004500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 552
+    Top = 160
+  end
+  object AdditionDSet: TOracleDataSet
+    SQL.Strings = (
+      'SELECT id, name'
+      '  FROM cm_adm_addition '
+      '  WHERE ID NOT IN (SELECT additionid'
+      '                  FROM cm_adm_additiongr  WHERE userid = :USID)'
+      ' order by id        ')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000A0000003A00550053004900440003000000000000000000
+      0000}
+    Session = sboapiDataModule.SBSession
+    Left = 544
+    Top = 216
+  end
+  object AdditionSrc: TDataSource
+    DataSet = AdditionDSet
+    Left = 456
+    Top = 224
+  end
+end

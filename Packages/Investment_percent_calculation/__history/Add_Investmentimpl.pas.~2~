@@ -1,0 +1,43 @@
+unit Add_Investmentimpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ComCtrls, CurrencyEdit, Mask, DBCtrls, ExtCtrls;
+
+type
+  TAdd_Investment = class(TForm)
+    Panel1: TPanel;
+    Panel2: TPanel;
+    Panel3: TPanel;
+    Label1: TLabel;
+    DBLookupComboBox1: TDBLookupComboBox;
+    DBLookupComboBox2: TDBLookupComboBox;
+    DBEdit1: TDBEdit;
+    Edit1: TEdit;
+    CurrencyEdit1: TCurrencyEdit;
+    DateTimePicker1: TDateTimePicker;
+    Button1: TButton;
+    Button2: TButton;
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Add_Investment: TAdd_Investment;
+
+implementation
+
+{$R *.dfm}
+uses CommanParametrs,sboapiDataModuleImpl,DmCalculationimpl,FrmCalculationimpl;
+
+procedure TAdd_Investment.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+if ord(key)=vk_escape then  close;
+end;
+
+end.

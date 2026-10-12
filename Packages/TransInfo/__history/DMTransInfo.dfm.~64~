@@ -1,0 +1,369 @@
+object DM: TDM
+  OldCreateOrder = False
+  Height = 270
+  Width = 854
+  object ODS_mmx_account_status: TOracleDataSet
+    SQL.Strings = (
+      'SELECT a.id, a.symbol, a.description'
+      '  FROM mmx_account_status a')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000300000004000000490044000100000000000C000000530059004D00
+      42004F004C000100000000001600000044004500530043005200490050005400
+      49004F004E00010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 64
+    Top = 8
+    object ODS_mmx_account_statusID: TFloatField
+      FieldName = 'ID'
+    end
+    object ODS_mmx_account_statusSYMBOL: TWideStringField
+      FieldName = 'SYMBOL'
+      Size = 1
+    end
+    object ODS_mmx_account_statusDESCRIPTION: TWideStringField
+      FieldName = 'DESCRIPTION'
+      Size = 30
+    end
+  end
+  object ODS_mmx_account_type: TOracleDataSet
+    SQL.Strings = (
+      'SELECT a.id, a.symbol, a.description'
+      '  FROM mmx_account_type a')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000300000004000000490044000100000000000C000000530059004D00
+      42004F004C000100000000001600000044004500530043005200490050005400
+      49004F004E00010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 200
+    Top = 8
+    object ODS_mmx_account_typeID: TFloatField
+      FieldName = 'ID'
+    end
+    object ODS_mmx_account_typeSYMBOL: TWideStringField
+      FieldName = 'SYMBOL'
+      Size = 1
+    end
+    object ODS_mmx_account_typeDESCRIPTION: TWideStringField
+      FieldName = 'DESCRIPTION'
+      Size = 30
+    end
+  end
+  object ODS_mmx_communication_type: TOracleDataSet
+    SQL.Strings = (
+      'SELECT a.id, a.symbol, a.description'
+      '  FROM mmx_communication_type a')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000300000004000000490044000100000000000C000000530059004D00
+      42004F004C000100000000001600000044004500530043005200490050005400
+      49004F004E00010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 344
+    Top = 10
+    object ODS_mmx_communication_typeID: TIntegerField
+      FieldName = 'ID'
+    end
+    object ODS_mmx_communication_typeSYMBOL: TWideStringField
+      FieldName = 'SYMBOL'
+      Size = 1
+    end
+    object ODS_mmx_communication_typeDESCRIPTION: TWideStringField
+      FieldName = 'DESCRIPTION'
+      Size = 100
+    end
+  end
+  object ODS_mmx_contact_type: TOracleDataSet
+    SQL.Strings = (
+      'SELECT a.id, a.symbol, a.description'
+      '  FROM mmx_contact_type a')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000300000004000000490044000100000000000C000000530059004D00
+      42004F004C000100000000001600000044004500530043005200490050005400
+      49004F004E00010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 200
+    Top = 136
+    object ODS_mmx_contact_typeID: TIntegerField
+      FieldName = 'ID'
+    end
+    object ODS_mmx_contact_typeSYMBOL: TWideStringField
+      FieldName = 'SYMBOL'
+      Size = 1
+    end
+    object ODS_mmx_contact_typeDESCRIPTION: TWideStringField
+      FieldName = 'DESCRIPTION'
+      Size = 100
+    end
+  end
+  object ODS_mmx_fromfunds: TOracleDataSet
+    SQL.Strings = (
+      'SELECT a.id, a.symbol, a.description'
+      '  FROM mmx_fromfunds a')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000300000004000000490044000100000000000C000000530059004D00
+      42004F004C000100000000001600000044004500530043005200490050005400
+      49004F004E00010000000000}
+    Session = sboapiDataModule.SBSession
+    AfterScroll = ODS_mmx_fromfundsAfterScroll
+    Left = 336
+    Top = 136
+    object ODS_mmx_fromfundsID: TIntegerField
+      FieldName = 'ID'
+    end
+    object ODS_mmx_fromfundsSYMBOL: TWideStringField
+      FieldName = 'SYMBOL'
+      Size = 1
+    end
+    object ODS_mmx_fromfundsDESCRIPTION: TWideStringField
+      FieldName = 'DESCRIPTION'
+      Size = 100
+    end
+  end
+  object ODS_mmx_reportcode: TOracleDataSet
+    SQL.Strings = (
+      'SELECT a.id, a.name, a.description'
+      '  FROM mmx_reportcode a')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000030000000400000049004400010000000000080000004E0041004D00
+      4500010000000000160000004400450053004300520049005000540049004F00
+      4E00010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 656
+    Top = 11
+    object ODS_mmx_reportcodeID: TIntegerField
+      FieldName = 'ID'
+    end
+    object ODS_mmx_reportcodeNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 5
+    end
+    object ODS_mmx_reportcodeDESCRIPTION: TWideStringField
+      FieldName = 'DESCRIPTION'
+      Size = 150
+    end
+  end
+  object ODS_mmx_transaction_item_type: TOracleDataSet
+    SQL.Strings = (
+      'SELECT a.id, a.symbol, a.description'
+      '  FROM mmx_transaction_item_type a')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000300000004000000490044000100000000000C000000530059004D00
+      42004F004C000100000000001600000044004500530043005200490050005400
+      49004F004E00010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 510
+    Top = 11
+    object ODS_mmx_transaction_item_typeID: TFloatField
+      FieldName = 'ID'
+    end
+    object ODS_mmx_transaction_item_typeSYMBOL: TWideStringField
+      FieldName = 'SYMBOL'
+      Size = 2
+    end
+    object ODS_mmx_transaction_item_typeDESCRIPTION: TWideStringField
+      FieldName = 'DESCRIPTION'
+      Size = 15
+    end
+  end
+  object ODS_mmx_transmode: TOracleDataSet
+    SQL.Strings = (
+      'SELECT a.id, a.name, a.description'
+      '  FROM mmx_transmode a')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000030000000400000049004400010000000000080000004E0041004D00
+      4500010000000000160000004400450053004300520049005000540049004F00
+      4E00010000000000}
+    Session = sboapiDataModule.SBSession
+    AfterScroll = ODS_mmx_transmodeAfterScroll
+    Left = 64
+    Top = 135
+    object ODS_mmx_transmodeID: TIntegerField
+      FieldName = 'ID'
+    end
+    object ODS_mmx_transmodeNAME: TIntegerField
+      FieldName = 'NAME'
+    end
+    object ODS_mmx_transmodeDESCRIPTION: TWideStringField
+      FieldName = 'DESCRIPTION'
+      Size = 400
+    end
+  end
+  object DS_mmx_account_status: TDataSource
+    DataSet = ODS_mmx_account_status
+    Left = 64
+    Top = 64
+  end
+  object DS_mmx_account_type: TDataSource
+    DataSet = ODS_mmx_account_type
+    Left = 200
+    Top = 64
+  end
+  object DS_mmx_communication_type: TDataSource
+    DataSet = ODS_mmx_communication_type
+    Left = 344
+    Top = 64
+  end
+  object DS_mmx_transaction_item_type: TDataSource
+    DataSet = ODS_mmx_transaction_item_type
+    Left = 512
+    Top = 64
+  end
+  object DS_mmx_reportcode: TDataSource
+    DataSet = ODS_mmx_reportcode
+    Left = 656
+    Top = 64
+  end
+  object DS_mmx_transmode: TDataSource
+    DataSet = ODS_mmx_transmode
+    Left = 56
+    Top = 192
+  end
+  object DS_mmx_contact_type: TDataSource
+    DataSet = ODS_mmx_contact_type
+    Left = 192
+    Top = 192
+  end
+  object DS_mmx_fromfunds: TDataSource
+    DataSet = ODS_mmx_fromfunds
+    Left = 336
+    Top = 192
+  end
+  object ODS_MMX_TRANS_ITEM_STATUS: TOracleDataSet
+    SQL.Strings = (
+      'SELECT a.id, a.symbol, a.description'
+      '  FROM MMX_TRANS_ITEM_STATUS a')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000300000004000000490044000100000000000C000000530059004D00
+      42004F004C000100000000001600000044004500530043005200490050005400
+      49004F004E00010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 579
+    Top = 136
+    object ODS_MMX_TRANS_ITEM_STATUSID: TFloatField
+      FieldName = 'ID'
+    end
+    object ODS_MMX_TRANS_ITEM_STATUSSYMBOL: TWideStringField
+      FieldName = 'SYMBOL'
+      Size = 1
+    end
+    object ODS_MMX_TRANS_ITEM_STATUSDESCRIPTION: TWideStringField
+      FieldName = 'DESCRIPTION'
+      Size = 30
+    end
+  end
+  object DS_MMX_TRANS_ITEM_STATUS: TDataSource
+    DataSet = ODS_MMX_TRANS_ITEM_STATUS
+    Left = 579
+    Top = 192
+  end
+  object ODS_Countries: TOracleDataSet
+    SQL.Strings = (
+      'SELECT a.id, a.CNTR_NAME,a.SYMB'
+      '  FROM COUNTRIES a order by a.id, a.CNTR_NAME')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000300000004000000490044000100000000001200000043004E005400
+      52005F004E0041004D00450001000000000008000000530059004D0042000100
+      00000000}
+    Session = sboapiDataModule.SBSession
+    AfterScroll = ODS_CountriesAfterScroll
+    Left = 715
+    Top = 136
+    object ODS_CountriesID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object ODS_CountriesCNTR_NAME: TWideStringField
+      FieldName = 'CNTR_NAME'
+      Size = 30
+    end
+    object ODS_CountriesSYMB: TWideStringField
+      FieldName = 'SYMB'
+      Size = 12
+    end
+  end
+  object ODS_Cityes: TOracleDataSet
+    SQL.Strings = (
+      'SELECT a.id, a.country_id, a.city_name'
+      '  FROM cities a '
+      'where country_id = :country_id'
+      'order by a.id, a.city_name')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000160000003A0043004F0055004E005400520059005F004900
+      440003000000040000000100000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000300000004000000490044000100000000001400000043004F005500
+      4E005400520059005F0049004400010000000000120000004300490054005900
+      5F004E0041004D004500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 795
+    Top = 136
+    object ODS_CityesID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object ODS_CityesCOUNTRY_ID: TFloatField
+      FieldName = 'COUNTRY_ID'
+      Required = True
+    end
+    object ODS_CityesCITY_NAME: TWideStringField
+      FieldName = 'CITY_NAME'
+      Size = 80
+    end
+  end
+  object DS_Countries: TDataSource
+    DataSet = ODS_Countries
+    Left = 715
+    Top = 200
+  end
+  object DS_Cityes: TDataSource
+    DataSet = ODS_Cityes
+    Left = 795
+    Top = 200
+  end
+  object MMX: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'MMX'
+    Left = 752
+    Top = 32
+  end
+  object ODS_mmx_tofunds: TOracleDataSet
+    SQL.Strings = (
+      'SELECT a.id, a.symbol, a.description'
+      '  FROM mmx_fromfunds a')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000300000004000000490044000100000000000C000000530059004D00
+      42004F004C000100000000001600000044004500530043005200490050005400
+      49004F004E00010000000000}
+    Session = sboapiDataModule.SBSession
+    AfterScroll = ODS_mmx_tofundsAfterScroll
+    Left = 440
+    Top = 136
+    object IntegerField1: TIntegerField
+      FieldName = 'ID'
+    end
+    object WideStringField1: TWideStringField
+      FieldName = 'SYMBOL'
+      Size = 1
+    end
+    object WideStringField2: TWideStringField
+      FieldName = 'DESCRIPTION'
+      Size = 100
+    end
+  end
+  object DS_mmx_tofunds: TDataSource
+    DataSet = ODS_mmx_tofunds
+    Left = 440
+    Top = 190
+  end
+end

@@ -1,0 +1,128 @@
+unit BriefcaseImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  NLSLocalizer, DBCtrls, ComCtrls, Grids, DBGrids, StdCtrls, ExtCtrls,
+  Mask, DBCtrlsEh, DBLookupEh;
+               
+type
+  TBriefcaseForm = class(TForm)
+    Localizer: TNLSLocalizer;
+    Panel1: TPanel;
+    GroupBox1: TPanel;
+    Panel2: TPanel;
+    GroupBox2: TGroupBox;
+    GroupBox3: TGroupBox;
+    RPBegin: TDateTimePicker;
+    RPEnd: TDateTimePicker;
+    Label1: TLabel;
+    Label2: TLabel;
+    GroupBox4: TGroupBox;
+    Label3: TLabel;
+    Label4: TLabel;
+    KDBegin: TDateTimePicker;
+    KDEnd: TDateTimePicker;
+    GroupBox5: TGroupBox;
+    GroupBox6: TGroupBox;
+    ReportNameList: TDBGrid;
+    Panel3: TPanel;
+    GroupBox7: TGroupBox;
+    cbUsers: TDBLookupComboboxEh;
+    GroupBox8: TGroupBox;
+    edCreditIntervalBegin: TMaskEdit;
+    edCreditIntervalEnd: TMaskEdit;
+    Label9: TLabel;
+    GroupBox9: TGroupBox;
+    Label6: TLabel;
+    Label7: TLabel;
+    Label8: TLabel;
+    cbDistricts: TDBLookupComboboxEh;
+    cbVillages: TDBLookupComboboxEh;
+    cbCustomers: TDBLookupComboboxEh;
+    GroupBox10: TGroupBox;
+    GroupBox11: TGroupBox;
+    cbCreditTypes: TDBLookupComboboxEh;
+    GroupBox12: TGroupBox;
+    edPercentArtmaBegin: TMaskEdit;
+    edPercentArtmaEnd: TMaskEdit;
+    Label10: TLabel;
+    edPercentPogashBegin: TMaskEdit;
+    edPercentPogashEnd: TMaskEdit;
+    Label11: TLabel;
+    cbCreditDirection: TDBLookupComboboxEh;
+    procedure FormCreate(Sender: TObject);
+    procedure cbDistrictsChange(Sender: TObject);
+    procedure cbVillagesChange(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  BriefcaseForm: TBriefcaseForm;
+
+implementation
+
+uses BriefcaseDataModuleImpl, CommonDecls;
+
+{$R *.DFM}
+
+procedure TBriefcaseForm.FormCreate(Sender: TObject);
+begin
+  BriefcaseDataMod := TBriefcaseDataMod.Create(CommonApplication);
+  //cbCreditTypes.KeyValue := 0;
+end;
+
+procedure TBriefcaseForm.cbDistrictsChange(Sender: TObject);
+var
+  DistrictID: Integer;
+begin
+  with BriefcaseDataMod, VillagesDataSet do begin
+    cbCustomers.Enabled := False;
+    cbCustomers.ListSource.DataSet.Close;
+    DistrictID := cbDistricts.KeyValue;
+    if Active then begin
+      Close;
+      {try
+      if FieldByName('ID') = nil then begin
+        cbCustomers.Enabled := False;
+        Exit;
+      end; //if FieldByName
+      except
+      end; }
+    end; //if Active
+    if DistrictID <= 0 then begin
+      //
+      cbVillages.Enabled := False;
+      cbCustomers.Enabled := False;
+      Exit;
+    end;
+    SetVariable('DISTRICT_ID', DistrictID);
+    Open;
+    cbVillages.Enabled := True;
+    //cbCustomers.Enabled := True;
+  end;
+end;
+
+procedure TBriefcaseForm.cbVillagesChange(Sender: TObject);
+var
+  VillageID: Integer;
+begin
+  with BriefcaseDataMod, CustomersDataSet do begin
+    VillageID := cbVillages.KeyValue;
+    if Active then Close;
+    if VillageID <= 0 then begin
+      //
+      cbCustomers.Enabled := False;
+      Exit;
+    end;
+    SetVariable('VILLAGEID', VillageID);
+    Open;
+    cbCustomers.Enabled := True;
+  end;
+end;
+
+end.

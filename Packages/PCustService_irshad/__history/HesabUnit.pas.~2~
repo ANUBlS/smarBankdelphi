@@ -1,0 +1,62 @@
+﻿unit HesabUnit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Grids, XDBGrids, StdCtrls, XFSCtrls, ExtCtrls;
+
+type
+  TCust_Account = class(TForm)
+    XDBGrid_hesab: TXDBGrid;
+    XFPanel1: TXFPanel;
+    XFButton1: TXFButton;
+    XFButton2: TXFButton;
+    procedure XFButton2Click(Sender: TObject);
+    procedure XFButton1Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Cust_Account: TCust_Account;
+ resourcestring
+ no_selected_account = 'Heç bir hesab qeyd edilməyib!';
+implementation
+ uses UnitDataModPCustService, Pcust_CO_frmWReportUnit;
+{$R *.dfm}
+
+procedure TCust_Account.FormCreate(Sender: TObject);
+begin
+ Ph_CO_frmWReport:=TPh_CO_frmWReport.Create(self);
+end;
+
+procedure TCust_Account.XFButton1Click(Sender: TObject);
+begin
+If DataModPCustService.Ods_HesabCap.IsEmpty then
+  begin
+    ShowMessage(no_selected_account);
+    Exit;
+  end
+  else
+  begin
+    DataModPCustService.CustomerInfoDataSet.Close;
+    DataModPCustService.CustomerInfoDataSet.SetVariable('Acc_ID',
+    XDBGrid_hesab.DataSource.DataSet.FieldByName('kli_id').asInteger);
+    DataModPCustService.CustomerInfoDataSet.Open;
+    DataModPCustService.Templates.Close;
+    DataModPCustService.Templates.Open;
+    Pcust_CO_frmWReportUnit.Ph_CO_frmWReport.ShowModal;
+  end;
+
+end;
+
+procedure TCust_Account.XFButton2Click(Sender: TObject);
+begin
+Cust_Account.Close;
+end;
+
+end.

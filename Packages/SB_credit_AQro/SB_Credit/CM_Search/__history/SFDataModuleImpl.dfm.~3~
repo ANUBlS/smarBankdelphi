@@ -1,0 +1,39 @@
+object SFDataModule: TSFDataModule
+  OldCreateOrder = False
+  OnCreate = DataModuleCreate
+  OnDestroy = DataModuleDestroy
+  Height = 480
+  Width = 696
+  object EnabledFieldsData: TOracleDataSet
+    SQL.Strings = (
+      'select seqno, fieldname,fielddesc'
+      'from cm_fields_list '
+      'where visible=0'
+      'order by seqno')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000030000000A0000005300450051004E004F0001000000000012000000
+      4600490045004C0044004E0041004D0045000100000000001200000046004900
+      45004C0044004400450053004300010000000000}
+    Left = 208
+    Top = 184
+    object EnabledFieldsDataSEQNO: TFloatField
+      FieldName = 'SEQNO'
+      Required = True
+    end
+    object EnabledFieldsDataFIELDDESC: TWideStringField
+      FieldName = 'FIELDDESC'
+      Required = True
+      Size = 128
+    end
+    object EnabledFieldsDataFIELDNAME: TWideStringField
+      FieldName = 'FIELDNAME'
+      Size = 64
+    end
+  end
+  object DSEnabledFieldsData: TDataSource
+    DataSet = EnabledFieldsData
+    Left = 208
+    Top = 232
+  end
+end

@@ -1,0 +1,811 @@
+unit frmLoanPipeLineReportImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, NLSDialogs,
+  ActiveX, AxCtrls, LoanPipeLineReport_TLB, StdVcl, ComCtrls, ToolWin,
+  CMExcelExport, ActnList, ImgList, Menus, Grids, DBGridEh, StdCtrls,
+  ExtCtrls,oracle,oracledata, Buttons, Mask, DBCtrlsEh, DBLookupEh,db;
+
+type
+  TfrmLoanPipeLineReport = class(TActiveForm, IfrmLoanPipeLineReport)
+    ToolBar: TToolBar;
+    ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
+    ToolButton3: TToolButton;
+    ToolButton4: TToolButton;
+    ToolButton7: TToolButton;
+    ToolButton8: TToolButton;
+    ToolButton14: TToolButton;
+    ToolButton6: TToolButton;
+    ActionList1: TActionList;
+    PanelMain: TPanel;
+    SearchPanel: TGroupBox;
+    GridCrdPL: TDBGridEh;
+    ImageList: TImageList;
+    actnadd: TAction;
+    actnedit: TAction;
+    actndel: TAction;
+    ActnRefresh: TAction;
+    ToolButton5: TToolButton;
+    ToolButton9: TToolButton;
+    ActnLevel: TAction;
+    Panel1: TPanel;
+    StaticText2: TStaticText;
+    EditLOANAMOUNT: TEdit;
+    Panel2: TPanel;
+    StaticText3: TStaticText;
+    EditCUSTOMERID: TEdit;
+    Panel3: TPanel;
+    StaticText4: TStaticText;
+    EditCUSTOMERNAME: TEdit;
+    actnsearch: TAction;
+    PopupMenu: TPopupMenu;
+    N3: TMenuItem;
+    N4: TMenuItem;
+    N6: TMenuItem;
+    N8: TMenuItem;
+    N9: TMenuItem;
+    actnshowsearchpan: TAction;
+    N1: TMenuItem;
+    FilterPanel: TPanel;
+    Panel4: TPanel;
+    SpeedButton1: TSpeedButton;
+    GroupBox1: TGroupBox;
+    CBCurrency: TCheckBox;
+    DBLookupComboboxEh1: TDBLookupComboboxEh;
+    GroupBox2: TGroupBox;
+    CBpersons: TCheckBox;
+    DBLookupComboboxEh4: TDBLookupComboboxEh;
+    GroupBox4: TGroupBox;
+    CBFilial: TCheckBox;
+    DBLookupComboboxEh2: TDBLookupComboboxEh;
+    GroupBox5: TGroupBox;
+    CBContractType: TCheckBox;
+    DBLookupComboboxEh3: TDBLookupComboboxEh;
+    GroupBox9: TGroupBox;
+    LCBStatus: TComboBox;
+    CBStatus: TCheckBox;
+    GroupBox7: TGroupBox;
+    Label1: TLabel;
+    DTPOpenDate: TDateTimePicker;
+    DTPCloseDate: TDateTimePicker;
+    CBOpendat: TCheckBox;
+    GroupBox6: TGroupBox;
+    BitBtnexp: TBitBtn;
+    TBFilteration: TToolButton;
+    ActnFilter: TAction;
+    ExcelExportcpl: TCMExcelExport;
+    N2: TMenuItem;
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure ActiveFormDestroy(Sender: TObject);
+    procedure actnaddExecute(Sender: TObject);
+    procedure actneditExecute(Sender: TObject);
+    procedure actndelExecute(Sender: TObject);
+    procedure ActnRefreshExecute(Sender: TObject);
+    procedure GridCrdPLTitleBtnClick(Sender: TObject; ACol: Integer;
+      Column: TColumnEh);
+    procedure actnsearchExecute(Sender: TObject);
+    procedure EditCUSTOMERNAMEKeyPress(Sender: TObject; var Key: Char);
+    procedure EditCUSTOMERNAMEExit(Sender: TObject);
+    procedure N9DrawItem(Sender: TObject; ACanvas: TCanvas; ARect: TRect;
+      Selected: Boolean);
+    procedure actnshowsearchpanExecute(Sender: TObject);
+    procedure ActnLevelExecute(Sender: TObject);
+    procedure TBFilterationClick(Sender: TObject);
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure BitBtnexpClick(Sender: TObject);
+    procedure ActnFilterExecute(Sender: TObject);
+    procedure DBLookupComboboxEh1Change(Sender: TObject);
+    procedure DTPOpenDateChange(Sender: TObject);
+    procedure N2Click(Sender: TObject);
+    procedure LCBStatusChange(Sender: TObject);
+  private
+    { Private declarations }
+    FEvents: IfrmLoanPipeLineReportEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+    procedure PrepareFilter;
+    function BuildFilterString:string;
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+  public
+    { Public declarations }
+    procedure Initialize; override;
+  end;
+
+implementation
+
+uses ComObj, ComServ,dmLoanPipeLineReportImpl, frmAddEditClpImpl,
+  frmInfoflevelsImpl,frmReportOfLOLIMPL;
+
+{$R *.DFM}
+
+{ TfrmLoanPipeLineReport }
+var scomm :boolean;
+
+procedure TfrmLoanPipeLineReport.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_frmLoanPipeLineReportPage); }
+end;
+
+procedure TfrmLoanPipeLineReport.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as IfrmLoanPipeLineReportEvents;
+end;
+
+procedure TfrmLoanPipeLineReport.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TfrmLoanPipeLineReport.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TfrmLoanPipeLineReport.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TfrmLoanPipeLineReport.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TfrmLoanPipeLineReport.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TfrmLoanPipeLineReport.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TfrmLoanPipeLineReport.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TfrmLoanPipeLineReport.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TfrmLoanPipeLineReport.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TfrmLoanPipeLineReport.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TfrmLoanPipeLineReport.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TfrmLoanPipeLineReport.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TfrmLoanPipeLineReport.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TfrmLoanPipeLineReport.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TfrmLoanPipeLineReport.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TfrmLoanPipeLineReport.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TfrmLoanPipeLineReport.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TfrmLoanPipeLineReport.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TfrmLoanPipeLineReport.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TfrmLoanPipeLineReport._Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TfrmLoanPipeLineReport.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TfrmLoanPipeLineReport.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TfrmLoanPipeLineReport.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TfrmLoanPipeLineReport.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TfrmLoanPipeLineReport.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TfrmLoanPipeLineReport.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TfrmLoanPipeLineReport.KeyPressEvent(Sender: TObject;
+  var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TfrmLoanPipeLineReport.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TfrmLoanPipeLineReport.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TfrmLoanPipeLineReport.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TfrmLoanPipeLineReport.Set_AxBorderStyle(
+  Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TfrmLoanPipeLineReport.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TfrmLoanPipeLineReport.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TfrmLoanPipeLineReport.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TfrmLoanPipeLineReport.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TfrmLoanPipeLineReport.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TfrmLoanPipeLineReport.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TfrmLoanPipeLineReport.Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TfrmLoanPipeLineReport.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TfrmLoanPipeLineReport.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TfrmLoanPipeLineReport.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TfrmLoanPipeLineReport.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TfrmLoanPipeLineReport.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TfrmLoanPipeLineReport.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+procedure TfrmLoanPipeLineReport.ActiveFormCreate(Sender: TObject);
+begin
+   dmLoanPipeLineReport := TdmLoanPipeLineReport.Create(self);
+   frmAddEditClp := TfrmAddEditClp.Create(self);
+   frmInfoflevels := TfrmInfoflevels.Create(self);
+   frmReportOflpl := TfrmReportOflpl.Create(self);
+   PrepareFilter;
+
+end;
+
+procedure TfrmLoanPipeLineReport.PrepareFilter;
+begin
+   //scomm := true;
+   //CBStatus.Checked := true;
+   with dmLoanPipeLineReport do
+   begin
+      DBLookupComboboxEh1.KeyValue := valutesclp.fieldByName('Valute').AsInteger;
+      DBLookupComboboxEh2.KeyValue := filialsclp.fieldByName('id').AsInteger;
+      DBLookupComboboxEh3.KeyValue := crdType.fieldByName('id').AsInteger;
+      DBLookupComboboxEh4.KeyValue := users.fieldByName('id').AsInteger;
+      LCBStatus.ItemIndex := 0;
+   end;
+   // LCBStatus.ItemIndex := 3;
+end;
+
+procedure TfrmLoanPipeLineReport.ActiveFormDestroy(Sender: TObject);
+begin
+   frmAddEditClp.free;
+   frmInfoflevels.free;
+   frmReportOflpl.free;
+   dmLoanPipeLineReport.free
+end;
+
+procedure TfrmLoanPipeLineReport.actnaddExecute(Sender: TObject);
+begin
+   with dmLoanPipeLineReport,CrdPipeLines,GridCrdPL ,frmAddEditClp do begin
+        insert;
+        SelectedRows.Clear;
+        OperationType := 'insert';
+        ShowModal;
+   end;
+end;
+
+procedure TfrmLoanPipeLineReport.actneditExecute(Sender: TObject);
+begin
+   with dmLoanPipeLineReport,CrdPipeLines,GridCrdPL ,frmAddEditClp do begin
+        Edit;
+        SelectedRows.Clear;
+        OperationType := 'edit';
+        ShowModal;
+   end;
+
+end;
+
+procedure TfrmLoanPipeLineReport.actndelExecute(Sender: TObject);
+begin
+ if MessageDlg('Мцгавиля баьланыр яминсинизми?', mtConfirmation, [mbYes, mbCancel], 0) <> mrYes then exit;
+
+  with dmLoanPipeLineReport,CrdPipeLines,USAID_REPORT do begin
+       CallProcedure('close_crdpipelines',['v_id',FieldbyName('ID').AsInteger]);
+       refresh;
+   end;
+
+end;
+
+procedure TfrmLoanPipeLineReport.ActnRefreshExecute(Sender: TObject);
+var
+    SaveID :Integer;
+begin
+
+   GridCrdPL.SelectedRows.Clear;
+
+   with dmLoanPipeLineReport,CrdPipeLines do
+   begin
+      SaveID := FieldbyName('ID').AsInteger;
+      Refresh;
+      Locate('ID',SaveID,[]);
+   end;
+end;
+
+procedure TfrmLoanPipeLineReport.GridCrdPLTitleBtnClick(Sender: TObject;
+  ACol: Integer; Column: TColumnEh);
+var
+  SortField : String;
+begin
+  SortField := Column.FieldName;
+  if Column.Title.SortMarker = smDownEh then
+    SortField := SortField + ' DESC';
+  with Sender as TDBGridEh , TOracleDataSet(DataSource.DataSet) do
+  begin
+    Screen.Cursor := crSQLWait;
+    SetVariable('OrderField',SortField);
+    RefResh;
+    Screen.Cursor := crDefault;
+   end;
+end;
+
+procedure TfrmLoanPipeLineReport.actnsearchExecute(Sender: TObject);
+var
+  SearchField : string;
+  SearchOptions : TSearchRecordOptions;
+begin
+  SearchOptions := [srIgnoreCase ,srPartialMatch];
+
+  with Sender as TEdit  do
+  begin
+    SearchField := copy(Name,5,length(Name));
+    GridCrdPL.SelectedRows.Clear;
+    with  TOracleDataSet(GridCrdPL.DataSource.DataSet) do
+    if  not SearchRecord(
+                  SearchField
+                 ,Text
+                 ,SearchOptions + [srFromCurrent , srForward ]
+                 ) then
+    if MessageDlg(
+              'Ахтарыш сона чатыб.'+#13+'яввялдян башламаг истяйирсиниэми?'
+             ,mtInformation
+             ,[mbNo , mbYes]
+             ,0
+             ) = mrYes  then
+    if  not SearchRecord(
+                 SearchField
+                ,Text
+                ,SearchOptions + [ srFromBeginning ]
+                )  then
+    MessageDlg('Йазы тапылмады!',mtInformation,[mbOK],0);
+  end;
+
+end;
+
+procedure TfrmLoanPipeLineReport.EditCUSTOMERNAMEKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if ord(Key) = VK_RETURN
+  then  ActnSearchExecute(Sender)
+end;
+
+procedure TfrmLoanPipeLineReport.EditCUSTOMERNAMEExit(Sender: TObject);
+begin
+  with (Sender as TEdit) do
+       Text := ''
+end;
+
+procedure TfrmLoanPipeLineReport.N9DrawItem(Sender: TObject;
+  ACanvas: TCanvas; ARect: TRect; Selected: Boolean);
+var
+  LineBottom: Integer;
+  SText: String;
+  Bar: TRect;
+begin
+  with ACanvas, Sender as TMenuItem do
+  begin
+    with ACanvas.Font do
+    begin
+      Charset := DEFAULT_CHARSET;
+      Name := 'Azl Sans Serif';
+      if Default then
+        Style := [fsBold];
+    end;
+    if Caption = '-' then
+    begin
+      Pen.Color := clBlack;
+      LineBottom := (ARect.Top + (ARect.Bottom - ARect.Top) div 2)-1;
+      MoveTo(ARect.Left, LineBottom);
+      LineTo(ARect.Right, LineBottom);
+      inc(LineBottom);
+      Pen.Color := clWhite;
+      MoveTo(ARect.Left, LineBottom);
+      LineTo(ARect.Right, LineBottom);
+    end
+    else
+    begin
+      if Selected then
+      begin
+        Brush.Color := clNavy;
+        if Enabled then
+          Font.Color := clWhite
+        else
+          Font.Color := clSilver;
+      end
+      else
+      begin
+        Brush.Color := clBtnFace;
+        if Enabled then
+          Font.Color := clBlack
+        else
+          Font.Color := clGrayText;
+      end;
+      Bar := ARect;
+      Inc(Bar.Left, 22);
+      FillRect(Bar);
+      TextOut(ARect.Left+{17}22, ARect.Top+1, Caption);
+    end;
+    // draw shortcut
+    SText := ShortCutToText(ShortCut);
+    TextOut(ARect.Right-TextWidth(SText)-7, ARect.Top+1, SText);
+    if ImageIndex <> -1 then
+      with GetParentMenu do
+        if Assigned(Images) then
+        begin
+          if Checked then
+          begin
+            Bar.Left := ARect.Left + 1;
+            Bar.Right := Bar.Left + 16;
+            Bar.Top := ARect.Top + 1;
+            Bar.Bottom := Bar.Top + 16;
+
+            ACanvas.Brush.Color := clBtnShadow;
+            ACanvas.FrameRect(Bar);
+
+            Inc(Bar.Left, 2);
+            Inc(Bar.Right, 2);
+            Inc(Bar.Top, 2);
+            Inc(Bar.Bottom, 2);
+
+            ACanvas.Brush.Color := clBtnHighlight;
+            ACanvas.FrameRect(Bar);
+
+            Dec(Bar.Left, 1);
+            Dec(Bar.Right, 1);
+            Dec(Bar.Top, 1);
+            Dec(Bar.Bottom, 1);
+
+            if Selected then
+              ACanvas.Brush.Color := clBtnFace
+            else
+              ACanvas.Brush.Color := clBtnHighlight;
+            ACanvas.FillRect(Bar);
+          end;
+
+          Images.Draw(ACanvas, ARect.Left, ARect.Top, ImageIndex, Enabled);
+        end;
+  end;
+
+end;
+
+procedure TfrmLoanPipeLineReport.actnshowsearchpanExecute(Sender: TObject);
+begin
+  SearchPanel.Visible := not SearchPanel.Visible
+end;
+
+procedure TfrmLoanPipeLineReport.ActnLevelExecute(Sender: TObject);
+begin
+   with frmInfoflevels do begin
+       ContractID := dmLoanPipeLineReport.CrdPipeLines.FieldByName('ID').AsInteger;
+       ShowModal;
+   end;
+end;
+
+procedure TfrmLoanPipeLineReport.TBFilterationClick(Sender: TObject);
+begin
+   FilterPanel.Visible :=not FilterPanel.Visible;
+   DTPOpenDate.DateTime := dmLoanPipeLineReport.curdat.FieldByName('tek_dat').asDateTime;
+   DTPCloseDate.DateTime := dmLoanPipeLineReport.curdat.FieldByName('tek_dat').asDateTime;
+   TBFilteration.Down :=FilterPanel.Visible; 
+end;
+
+procedure TfrmLoanPipeLineReport.SpeedButton1Click(Sender: TObject);
+begin
+   FilterPanel.Visible :=false;
+   TBFilteration.Down :=false; 
+end;
+
+procedure TfrmLoanPipeLineReport.BitBtnexpClick(Sender: TObject);
+begin
+   with ExcelExportcpl do
+   begin
+     // GridCrdPL.DataSource.DataSet.Last;
+      Connect;
+      ExportDataset(GridCrdPL.DataSource.DataSet,'Credits',True,false);
+      Disconnect;
+   end;
+
+end;
+
+function TfrmLoanPipeLineReport.BuildFilterString : String;
+
+  procedure ConcatFilter(var S: String; const Prefix : String; Checked : Boolean; KeyValue : Variant;check :boolean);
+  const
+     csFormat = '(%s=%s)';
+  var
+    Temp,op : String;
+
+  begin
+
+     if check then op := ' and ' else op := ' or ';
+
+    if Checked then
+    begin
+      Temp := Format(csFormat,[Prefix,Keyvalue]);
+      if S = '' then
+        S := Temp
+      else
+        S :=S + op + Temp;
+    end;
+
+  end;
+
+  procedure  ConcatFilter1(var S: String; var Prefix : String);
+  begin
+     if (S <> '') and (Prefix <> '') then S := S+' and '+Prefix;
+     if (S = '') and (Prefix <> '') then S := Prefix;
+  end;
+
+  
+var  FStatus,FopenDat1,FopenDat2,FopenDat : String;
+begin
+  Result := '';
+  FStatus := '';
+  FopenDat1 := '';
+  FopenDat2 := '';
+  FopenDat := '';
+
+  ConcatFilter(Result,'CURRENCY',CBCurrency.Checked,DBLookupComboboxEh1.KeyValue,true);
+  ConcatFilter(Result,'branchid',CBFilial.Checked,DBLookupComboboxEh2.KeyValue,true);
+  ConcatFilter(Result,'credittype',CBContractType.Checked,DBLookupComboboxEh3.KeyValue,true);
+  ConcatFilter(Result,'usid',CBpersons.Checked,DBLookupComboboxEh4.KeyValue,true);
+
+  if CBStatus.Checked then
+     Case LCBStatus.ItemIndex of
+          0: FStatus := '((fdeny=0) and (fwait=0))';
+          1: FStatus := '((fdeny=0) and (fwait<> 0))';
+          2: FStatus := '((fdeny<>0) and (fwait=0))';
+     end;
+
+  if CBOpendat.Checked then
+  begin
+     FopenDat1 := ' OPENDATE >=  '''+FormatDateTime('dd/MM/yyyy',DTPOpenDate.Date)+'''';
+     FopenDat2 := ' OPENDATE <=  '''+FormatDateTime('dd/MM/yyyy',DTPCloseDate.Date)+'''';
+     FopenDat := '('+'('+FopenDat1+')'+' and '+'('+FopenDat2+')'+')';
+  end;
+
+
+  ConcatFilter1(Result,FStatus);
+  ConcatFilter1(Result,FopenDat);
+
+end;
+
+procedure TfrmLoanPipeLineReport.ActnFilterExecute(Sender: TObject);
+begin
+   with GridCrdPL,SelectedRows do
+        Clear;
+  // if BuildFilterString <> '' then
+   with GridCrdPL,DataSource.DataSet as TOracleDataSet do
+   begin
+      if scomm then begin
+      Close;
+      sql[20] := dmLoanPipeLineReport.qr2.SQL.Text;
+      open;
+      end else begin sql[20]:=dmLoanPipeLineReport.qr.SQL.Text;  end;
+      Cursor := crSqlWait;
+      Filtered := False;
+      Filter := BuildFilterString;
+      Filtered := true;
+      Cursor := crDefault;
+      Refresh;
+   end; 
+
+end;
+
+procedure TfrmLoanPipeLineReport.DBLookupComboboxEh1Change(
+  Sender: TObject);
+begin
+ActnFilterExecute(sender);
+end;
+
+procedure TfrmLoanPipeLineReport.DTPOpenDateChange(Sender: TObject);
+begin
+DBLookupComboboxEh1Change(nil);
+end;
+
+procedure TfrmLoanPipeLineReport.N2Click(Sender: TObject);
+begin
+   frmReportOflpl.ShowModal
+end;
+
+procedure TfrmLoanPipeLineReport.LCBStatusChange(Sender: TObject);
+begin
+  if CBStatus.Checked then  begin
+  if LCBStatus.ItemIndex = 3 then scomm := true else scomm := false; end
+  else  scomm :=false;
+  DBLookupComboboxEh1Change(sender);
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TfrmLoanPipeLineReport,
+    Class_frmLoanPipeLineReport,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

@@ -1,0 +1,452 @@
+object atmpos: Tatmpos
+  Left = 382
+  Top = 494
+  BorderStyle = bsSingle
+  Caption = 'ATM - POS'
+  ClientHeight = 466
+  ClientWidth = 890
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'MS Sans Serif'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poScreenCenter
+  OnCreate = FormCreate
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Label3: TLabel
+    Left = 665
+    Top = 281
+    Width = 52
+    Height = 13
+    Caption = 'Hesab (28)'
+  end
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 890
+    Height = 112
+    Align = alTop
+    BevelOuter = bvNone
+    TabOrder = 0
+    object Label1: TLabel
+      Left = 590
+      Top = 11
+      Width = 20
+      Height = 13
+      Caption = 'Filial'
+    end
+    object Label2: TLabel
+      Left = 687
+      Top = 11
+      Width = 35
+      Height = 13
+      Caption = 'Valyuta'
+    end
+    object Label4: TLabel
+      Left = 56
+      Top = 66
+      Width = 66
+      Height = 14
+      Caption = 'Hesab ('#1103#1089#1072#1089')'
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Label5: TLabel
+      Left = 208
+      Top = 66
+      Width = 60
+      Height = 14
+      Caption = 'Hesab ('#1072#1088#1072')'
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Label6: TLabel
+      Left = 352
+      Top = 65
+      Width = 72
+      Height = 14
+      Caption = 'Hesab ('#1101#1103#1083#1080#1088')'
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Label7: TLabel
+      Left = 44
+      Top = 10
+      Width = 24
+      Height = 14
+      Caption = #1058#1080#1087#1080
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Label8: TLabel
+      Left = 156
+      Top = 10
+      Width = 17
+      Height = 14
+      Caption = #1048#1044
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Label9: TLabel
+      Left = 418
+      Top = 10
+      Width = 22
+      Height = 14
+      Caption = #1040#1076#1099
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Label10: TLabel
+      Left = 267
+      Top = 9
+      Width = 98
+      Height = 14
+      Caption = #1052#1094#1075#1072#1074#1080#1083#1103' '#1085#1102#1084#1088#1103#1089#1080
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Button1: TButton
+      Left = 483
+      Top = 80
+      Width = 78
+      Height = 25
+      Caption = #1049#1072#1076#1076#1072' '#1089#1072#1093#1083#1072
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 0
+      OnClick = Button1Click
+    end
+    object Button2: TButton
+      Left = 575
+      Top = 80
+      Width = 75
+      Height = 25
+      Caption = #1057#1080#1083
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 1
+      OnClick = Button2Click
+    end
+    object DBLookupComboBox1: TDBLookupComboBox
+      Left = 673
+      Top = 27
+      Width = 80
+      Height = 21
+      KeyField = 'VALU_NAME'
+      ListField = 'VAL_NAME'
+      ListSource = DataMod_CARDS.valutasorce
+      TabOrder = 2
+    end
+    object DBLookupComboBox2: TDBLookupComboBox
+      Left = 546
+      Top = 27
+      Width = 123
+      Height = 22
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      KeyField = 'NAME'
+      ListField = 'NAME'
+      ListSource = DataMod_CARDS.filialsource
+      ParentFont = False
+      TabOrder = 3
+    end
+    object SearchEdit1: TSearchEdit
+      Left = 313
+      Top = 80
+      Width = 134
+      Height = 21
+      TabOrder = 4
+      DataSource = DataMod_CARDS.accountbankomatsource
+      SearchField = 'acc_no'
+    end
+    object SearchEdit2: TSearchEdit
+      Left = 166
+      Top = 81
+      Width = 136
+      Height = 21
+      TabOrder = 5
+      DataSource = DataMod_CARDS.accountbankomatsource
+      SearchField = 'acc_no'
+    end
+    object SearchEdit3: TSearchEdit
+      Left = 22
+      Top = 81
+      Width = 136
+      Height = 21
+      TabOrder = 6
+      DataSource = DataMod_CARDS.accountbankomatsource
+      SearchField = 'acc_no'
+    end
+    object ComboBox1: TComboBox
+      Left = 25
+      Top = 27
+      Width = 97
+      Height = 21
+      TabOrder = 7
+      Items.Strings = (
+        'ATM'
+        'POS'
+        'CASH')
+    end
+    object Edit1: TEdit
+      Left = 128
+      Top = 27
+      Width = 110
+      Height = 21
+      TabOrder = 8
+    end
+    object Edit2: TEdit
+      Left = 371
+      Top = 27
+      Width = 169
+      Height = 21
+      TabOrder = 9
+    end
+    object Button3: TButton
+      Left = 670
+      Top = 80
+      Width = 75
+      Height = 25
+      Caption = #1045#1093#1078#1077#1083
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 10
+      OnClick = Button3Click
+    end
+    object Edit3: TEdit
+      Left = 244
+      Top = 27
+      Width = 121
+      Height = 21
+      TabOrder = 11
+    end
+  end
+  object Panel2: TPanel
+    Left = 0
+    Top = 112
+    Width = 890
+    Height = 354
+    Align = alClient
+    BevelOuter = bvNone
+    TabOrder = 1
+    object DBGrid1: TDBGrid
+      Left = 0
+      Top = 0
+      Width = 890
+      Height = 354
+      Align = alClient
+      DataSource = DataMod_CARDS.bankomatsource
+      DrawingStyle = gdsGradient
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      Options = [dgEditing, dgTitles, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgCancelOnExit, dgMultiSelect, dgTitleClick]
+      ParentFont = False
+      ReadOnly = True
+      TabOrder = 0
+      TitleFont.Charset = DEFAULT_CHARSET
+      TitleFont.Color = clWindowText
+      TitleFont.Height = -11
+      TitleFont.Name = 'MS Sans Serif'
+      TitleFont.Style = []
+      OnTitleClick = DBGrid1TitleClick
+      Columns = <
+        item
+          Expanded = False
+          FieldName = 'ATMPOS'
+          Title.Alignment = taCenter
+          Title.Caption = #1058#1080#1087
+          Title.Color = clTeal
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'ATMID'
+          Title.Alignment = taCenter
+          Title.Caption = #1048#1044
+          Title.Color = clTeal
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'CONTRACTNUMBER'
+          Title.Alignment = taCenter
+          Title.Caption = #1052#1094#1075#1072#1074#1080#1083#1103' '#1085#1102#1084#1088#1103#1089#1080
+          Title.Color = clTeal
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 109
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'ATMNAME'
+          Title.Alignment = taCenter
+          Title.Caption = #1040#1076
+          Title.Color = clTeal
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 150
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'FILIAL'
+          Title.Alignment = taCenter
+          Title.Caption = #1060#1080#1083#1080#1072#1083
+          Title.Color = clTeal
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 70
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'VALYUTA'
+          Title.Alignment = taCenter
+          Title.Caption = #1042#1072#1083#1081#1091#1090#1072
+          Title.Color = clTeal
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 55
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'MAINACCOUNT'
+          Title.Alignment = taCenter
+          Title.Caption = #1065#1077#1089#1072#1073' ('#1103#1089#1072#1089')'
+          Title.Color = clTeal
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 125
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'INTERACOUNT'
+          Title.Alignment = taCenter
+          Title.Caption = #1065#1077#1089#1072#1073' ('#1072#1088#1072')'
+          Title.Color = clTeal
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 125
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'PROFITACOUNT'
+          Title.Alignment = taCenter
+          Title.Caption = #1065#1077#1089#1072#1073' ('#1101#1103#1083#1080#1088')'
+          Title.Color = clTeal
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 125
+          Visible = True
+        end>
+    end
+  end
+  object CMExcelExport1: TCMExcelExport
+    StyleColumnWidth = cwDefault
+    ColumnWidth = 0
+    FontTitles.Charset = DEFAULT_CHARSET
+    FontTitles.Color = clWindowText
+    FontTitles.Height = -11
+    FontTitles.Name = 'MS Sans Serif'
+    FontTitles.Style = []
+    OrientationTitles = 0
+    FontData.Charset = DEFAULT_CHARSET
+    FontData.Color = clWindowText
+    FontData.Height = -11
+    FontData.Name = 'MS Sans Serif'
+    FontData.Style = []
+    FontSummary.Charset = DEFAULT_CHARSET
+    FontSummary.Color = clWindowText
+    FontSummary.Height = -11
+    FontSummary.Name = 'MS Sans Serif'
+    FontSummary.Style = []
+    SummarySelection = ssNone
+    SummaryCalculation = scSUM
+    Left = 711
+    Top = 40
+  end
+end

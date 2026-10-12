@@ -1,0 +1,366 @@
+unit balans;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ComCtrls, ToolWin, ExtCtrls, ImgList, Grids, DBGrids, StdCtrls,oracledata,
+  FileCtrl, CMExcelExport;
+
+type
+  TBalance = class(TForm)
+    Panel1: TPanel;
+    Panel2: TPanel;
+    DBGrid1: TDBGrid;
+    Panel3: TPanel;
+    Panel4: TPanel;
+    Edit2: TEdit;
+    Edit3: TEdit;
+    Edit4: TEdit;
+    Edit5: TEdit;
+    Edit6: TEdit;
+    Edit7: TEdit;
+    Button1: TButton;
+    Button2: TButton;
+    Button3: TButton;
+    Button4: TButton;
+    Button5: TButton;
+    Label1: TLabel;
+    Edit1: TEdit;
+    CheckBox1: TCheckBox;
+    FileListBox1: TFileListBox;
+    CMExcelExport1: TCMExcelExport;
+    Animate1: TAnimate;
+    DateTimePicker1: TDateTimePicker;
+    procedure FormActivate(Sender: TObject);
+    procedure CheckBox1Click(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure Button3Click(Sender: TObject);
+    procedure Button5Click(Sender: TObject);
+    procedure Button4Click(Sender: TObject);
+    procedure DBGrid1TitleClick(Column: TColumn);
+    procedure FormCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Balance: TBalance;
+
+implementation
+
+uses Unit18, payment,SBTranslateProc,sboapiDataModuleImpl;
+
+{$R *.DFM}
+
+procedure TBalance.FormActivate(Sender: TObject);
+begin
+if CheckBox1.Checked then edit1.Enabled:=True else edit1.Enabled:=False;
+
+DateTimePicker1.DateTime:=date;
+
+end;
+
+procedure TBalance.FormCreate(Sender: TObject);
+begin
+SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TBalance.CheckBox1Click(Sender: TObject);
+begin
+if CheckBox1.Checked then edit1.Enabled:=True else edit1.Enabled:=False;
+end;
+
+procedure TBalance.Button1Click(Sender: TObject);
+begin
+DataMod_CARDS.SB_ACA.CallProcedure('CheckAdvancedObjectAccess', ['cardbalansopen']);
+Animate1.Visible:=True;
+Animate1.Active:=True;
+Animate1.Play(0,0,1);
+DataMod_CARDS.balans.Open;
+Animate1.active:=False;
+   Animate1.Visible:=False;
+   Animate1.Stop;
+end;
+
+ Function when2Str(wday:integer): string;
+  var
+  wd: string;
+
+ begin
+  wd:=InttoStr(wday);
+  case length(wd) of
+                    1: wd:='00'+wd;
+                    2: wd:='0'+wd;
+  end;
+  when2Str:=wd;
+ end;
+
+
+     function whenday2(dat:tdatetime):integer;
+  const yan=31;mar=31;apr=30;may=31;jun=30;jul=31;avg=31;seb=30;okt=31;nov=30;dec=31;
+  var   wday,feb:integer;
+ begin
+  wday:=0;
+  if IsLeapYear(strtoint(FormatDateTime('yyyy',dat))) then feb:=29 else feb:=28;
+  case strtoint(FormatDateTime('mm',dat)) of
+                                              1:wday:=StrToInt(FormatDateTime('dd',dat));
+                                              2:wday:=yan+StrToInt(FormatDateTime('dd',dat));
+                                              3:wday:=yan+feb+StrToInt(FormatDateTime('dd',dat));
+                                              4:wday:=yan+feb+mar+StrToInt(FormatDateTime('dd',dat));
+                                              5:wday:=yan+feb+mar+apr+StrToInt(FormatDateTime('dd',dat));
+                                              6:wday:=yan+feb+mar+apr+may+StrToInt(FormatDateTime('dd',dat));
+                                              7:wday:=yan+feb+mar+apr+may+jun+StrToInt(FormatDateTime('dd',dat));
+                                              8:wday:=yan+feb+mar+apr+may+jun+jul+StrToInt(FormatDateTime('dd',dat));
+                                              9:wday:=yan+feb+mar+apr+may+jun+jul+avg+StrToInt(FormatDateTime('dd',dat));
+                                             10:wday:=yan+feb+mar+apr+may+jun+jul+avg+seb+StrToInt(FormatDateTime('dd',dat));
+                                             11:wday:=yan+feb+mar+apr+may+jun+jul+avg+seb+okt+StrToInt(FormatDateTime('dd',dat));
+                                             12:wday:=yan+feb+mar+apr+may+jun+jul+avg+seb+okt+nov+StrToInt(FormatDateTime('dd',dat));
+  end;
+  Result:=wday;
+ end;
+
+
+
+    function whenday:integer;
+  const yan=31;mar=31;apr=30;may=31;jun=30;jul=31;avg=31;seb=30;okt=31;nov=30;dec=31;
+  var   wday,feb:integer;
+ begin
+  wday:=0;
+  if IsLeapYear(strtoint(FormatDateTime('yyyy',date))) then feb:=29 else feb:=28;
+  case strtoint(FormatDateTime('mm',date)) of
+                                              1:wday:=StrToInt(FormatDateTime('dd',date));
+                                              2:wday:=yan+StrToInt(FormatDateTime('dd',date));
+                                              3:wday:=yan+feb+StrToInt(FormatDateTime('dd',date));
+                                              4:wday:=yan+feb+mar+StrToInt(FormatDateTime('dd',date));
+                                              5:wday:=yan+feb+mar+apr+StrToInt(FormatDateTime('dd',date));
+                                              6:wday:=yan+feb+mar+apr+may+StrToInt(FormatDateTime('dd',date));
+                                              7:wday:=yan+feb+mar+apr+may+jun+StrToInt(FormatDateTime('dd',date));
+                                              8:wday:=yan+feb+mar+apr+may+jun+jul+StrToInt(FormatDateTime('dd',date));
+                                              9:wday:=yan+feb+mar+apr+may+jun+jul+avg+StrToInt(FormatDateTime('dd',date));
+                                             10:wday:=yan+feb+mar+apr+may+jun+jul+avg+seb+StrToInt(FormatDateTime('dd',date));
+                                             11:wday:=yan+feb+mar+apr+may+jun+jul+avg+seb+okt+StrToInt(FormatDateTime('dd',date));
+                                             12:wday:=yan+feb+mar+apr+may+jun+jul+avg+seb+okt+nov+StrToInt(FormatDateTime('dd',date));
+  end;
+  Result:=wday;
+ end;
+
+ function ViewBalanceSign(Balance : real):String;
+begin
+       if balance = 0 then result:='N';
+       if balance > 0 then result:='C';
+       if balance < 0 then result:='D';
+end;
+   function insertzero(acc:real):string ;
+var modpart,s:string;
+    dempos:integer;
+begin
+       result:='';
+       result:=inttostr(trunc(acc));
+       s:=FloatToStr(acc);
+       dempos:=pos(DecimalSeparator,s);
+       if dempos = 0 then  modpart:='00' else
+       begin
+          if length(copy(s,dempos+1,length(s)-dempos)) = 1 then
+          modpart:= copy(s,dempos+1,length(s)-dempos)+'0' else
+          if length(copy(s,dempos+1,length(s)-dempos)) = 2 then
+          modpart:=copy(s,dempos+1,length(s)-dempos);
+       end;
+       Result:=Result+modpart;
+end;
+ function DirectoryExists(const Name: string): Boolean;
+var
+  Code: Integer;
+begin
+  Code := GetFileAttributes(PChar(Name));
+  Result := (Code <> -1) and (FILE_ATTRIBUTE_DIRECTORY and Code <> 0);
+end;
+procedure TBalance.Button3Click(Sender: TObject);
+var
+  F :TextFile;
+  num, j, i, rowCount  :integer;
+  StMessage, TempStr, FileName, FileHeader, FileFooter, rowNum,v_dir:string;
+  BalanceSum :real;
+  ODS :TOracleDataSet;
+begin
+v_dir:= GetCurrentDir;
+DataMod_CARDS.SB_ACA.CallProcedure('CheckAdvancedObjectAccess', ['cardbalanscreatefile']);
+
+   //if CheckAcceptForAll.Checked then ODS :=DataMod.ODSCardRest else ODS :=DataMod.ODSBalances;
+
+   ODS:= DataMod_CARDS.balans;
+   //PanelAcceptCount.Caption:='0';
+  // ODS.Close;
+ // ODS.Open;
+   if ODS.RecordCount =0 then begin  exit; end;
+   //ProgressBar1.Position:=1;
+   {File name}
+   if not DirectoryExists('C:\AZCARD\OUT\'+FormatDateTime('DDMMYY',datetimepicker1.datetime{DATE})) then MkDir('C:\AZCARD\OUT\'+FormatDateTime('DDMMYY',datetimepicker1.datetime{DATE}));
+   FileListBox1.Directory:='C:\AZCARD\OUT\'+FormatDateTime('DDMMYY',datetimepicker1.datetime{DATE});
+   FileListBox1.Update;
+   num :=0;
+   for i:=1 to 999 do begin
+    TempStr :='';
+    for j :=Length(IntToStr(i)) to 2 do TempStr :='_'+TempStr;
+    FileName :='C:\AZCARD\OUT\'+FormatDateTime('DDMMYY',datetimepicker1.datetime{DATE})+'\b'+DataMod_CARDS.settings.fieldbyname('bankid').asstring+TempStr+IntToStr(i)+'.'+when2Str(whenday2(DateTimePicker1.DateTime));
+    if not(FileExists(FileName)) then begin num :=i; break; end;
+   end; {for i:=1 to 999}
+  { if MainForm.PanelCLFDbase.Visible then
+   filename:='C:\AZCARD\OUT\'+FormatDateTime('DDMMYY',DATE)+'\'+MainForm.FileListBoxCl.Items[MainForm.FileListBoxCl.itemindex];
+  }
+   AssignFile(F,FileName);
+   Rewrite(F);
+   {File header}
+   FileHeader :='';
+   TempStr :=IntToStr(num);
+   for j :=Length(TempStr) to 1 do TempStr :='0'+TempStr;
+   FileHeader :='FH000001BALANCE   20 '+DataMod_CARDS.settings.fieldbyname('bankid').asstring +'  '+
+    FormatDateTime('yyyymmdd',datetimepicker1.datetime {date})+FormatDateTime('hhmmss',time)+'00'+TempStr+DataMod_CARDS.settings.fieldbyname('bankid').asstring+'  BA'+
+    DataMod_CARDS.settings.fieldbyname('bankid').asstring+'          '+FormatDateTime('yyyymmdd',datetimepicker1.datetime{date})+'FRND';
+  // for j:=80 to 169 do
+   FileHeader :=FileHeader+'                                                                                             ';    //get rid off
+   FileHeader :=FileHeader+'*';
+   Writeln(f,FileHeader);
+
+   BalanceSum :=0;
+  // ProgressBar1.Max:=ODS.RecordCount-1;
+   {********************************************************************}
+   for i:=0 to ODS.RecordCount-1 do begin
+   StMessage :='';
+   rowCount :=0;
+   Reset(f);
+   while not Eof(F) do begin Rowcount := RowCount+1; Readln(f); end;
+   Append(f);
+   RowNum :=IntToStr(RowCount+1);
+   for j :=Length(RowNum) to 5 do RowNum :='0'+RowNum;
+   StMessage :='RD'+RowNum;
+   {}
+
+ //  TempStr :=copy(ODS.FieldByName('RBSNumber').AsString,1,Length(ODS.FieldByName('RBSNumber').AsString));
+ TempStr :=copy(ODS.FieldByName('multi_acc').AsString,1,Length(ODS.FieldByName('multi_acc').AsString));
+
+   for j :=Length(TempStr) to 31 do TempStr :=TempStr+' ';
+   StMessage :=StMessage+TempStr;
+   {}
+   {for j:=41 to 100 do} StMessage :=StMessage+'                                                            ';  //get rid+
+   {}
+   TempStr :='';
+   if ODS.FieldByName('Currency').AsString ='AZN' then TempStr:='944'
+    else if ODS.FieldByName('Currency').AsString ='EUR' then TempStr:='978'
+    else if ODS.FieldByName('Currency').AsString ='USD' then TempStr:='840';
+   StMessage :=StMessage+TempStr;
+   {}
+   //TempStr :=(InsertZero(abs(ODS.FieldByName('Ostat').AsFloat)));
+   TempStr :=ODS.FieldByName('Ostat').AsString;
+   TempStr:= StringReplace(TempStr,'.','',[rfReplaceAll, rfIgnoreCase]);
+   TempStr:= StringReplace(TempStr,'-','',[rfReplaceAll, rfIgnoreCase]);
+   for j :=length(TempStr) to 14 do TempStr :='0'+TempStr;
+   StMessage :=StMessage+TempStr;
+   {}
+   if ViewBalanceSign(ODS.FieldByName('Ostat').AsFloat)='C' then TempStr :='C  '
+    else
+    if ViewBalanceSign(ODS.FieldByName('Ostat').AsFloat)='D' then TempStr :='D  '
+    else
+    if ViewBalanceSign(ODS.FieldByName('Ostat').AsFloat)='N' then TempStr :='   ';
+   StMessage :=StMessage+TempStr;
+   {}
+  { for j:=122 to 169 do }StMessage :=StMessage+'000000000000000000000000000000000000000000000000';     //get rid
+   {}
+   StMessage :=StMessage+'*';
+   {}
+   Writeln(F, StMessage);
+   {}
+   BalanceSum :=BalanceSum+StrToFloat(InsertZero(abs(ODS.FieldByName('Ostat').AsFloat)));
+   {}
+   //DataMod.OPBC_BALANCE.CallProcedure('create_file',[ODS.FieldByName('id').AsInteger]);
+   ODS.Next;
+
+   {*-*-*-*-*-*-*-*-*-*-*-*-*-*-*}
+   //PanelAcceptCount.Caption:=IntToStr(StrToInt(PanelAcceptCount.Caption)+1);
+   //ProgressBar1.Position:=ProgressBar1.Position+1;
+
+   {*-*-*-*-*-*-*-*-*-*-*-*-*-*-*}
+  end;
+  {********************************************************************}
+  {File footer}
+  FileFooter :='';
+  TempStr :='';
+  rowCount :=0;
+  Reset(f);
+  while not Eof(f) do begin rowCount :=rowCount+1; Readln(f); end;
+  Append(f);
+  FileFooter :='FT';
+  {}
+  TempStr :=IntToStr(rowCount+1);
+
+  for i :=Length(TempStr) to 5 do TempStr :='0'+TempStr;
+  FileFooter :=FileFooter+TempStr;
+  {}
+  TempStr :=IntToStr(rowCount-1);
+  for i :=Length(TempStr) to 5 do TempStr :='0'+TempStr;
+  FileFooter :=FileFooter+TempStr;
+  {}
+  TempStr :='';
+  TempStr :=FloatToStr(BalanceSum/100);
+  for j :=Length(TempStr) to 17 do TempStr :='0'+TempStr;
+  FileFooter :=FileFooter+TempStr;
+  {}
+  //for j:= 33 to 169 do
+  FileFooter :=FileFooter+'                                                                                                                                      ';        //get rid
+  {}
+  FileFooter :=FileFooter+'*';
+  {}
+  Writeln(F,FileFooter);
+  {}
+  CloseFile(F);
+  ShowMessage ('BALANCE FILE CREATED');
+
+  // ProgressBar1.Position:=0;
+  // BitBtnCreate.Enabled:=False;
+  // BitBtnAccept.Enabled:=False;
+  // BitBtnReject.Enabled:=False;
+  // BitBtnBreak.Enabled:=False;
+  // SBBalRefresh.Enabled:=True;
+
+  FileListBox1.Directory:=v_dir;
+end;
+
+
+procedure TBalance.Button5Click(Sender: TObject);
+begin
+DataMod_CARDS.SB_ACA.CallProcedure('CheckAdvancedObjectAccess', ['cardbalansclose']);
+DataMod_CARDS.balans.Close;
+end;
+
+procedure TBalance.Button4Click(Sender: TObject);
+begin
+DataMod_CARDS.SB_ACA.CallProcedure('CheckAdvancedObjectAccess', ['cardbalansexcel']);
+  if not CMExcelExport1.Connected then CMExcelExport1.Connect;
+  CMExcelExport1.ExportDataset(DataMod_CARDS.balans,'payment',true);
+  CMExcelExport1.Disconnect;
+end;
+
+procedure TBalance.DBGrid1TitleClick(Column: TColumn);
+var
+   TitleName :string;
+   SortPosition: word;
+begin
+ SortPosition :=100;
+ //OrderedTitle :=Column.FieldName; //H.R. 24.06.2008
+ if (DBGrid1.DataSource.DataSet.IsEmpty) or (Column.FieldName = EmptyStr) then Exit;
+ Screen.Cursor :=crHourGlass;
+ TitleName :=Column.FieldName;
+ with TOracleDataSet(DBGrid1.DataSource.DataSet) do
+  try
+  
+   SortPosition :=SQL.Add('ORDER BY '+ TitleName);
+   Refresh;
+  finally
+   SQL[SortPosition] :=EmptyStr;
+   Screen.Cursor :=crDefault;
+  end;
+end;
+
+end.

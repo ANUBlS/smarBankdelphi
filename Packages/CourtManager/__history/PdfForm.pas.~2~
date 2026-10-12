@@ -1,0 +1,61 @@
+unit PdfForm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, XFSCtrls, Grids, XDBGrids, ExtCtrls,DB;
+
+type
+  TFormPdf = class(TForm)
+    XFPanel1: TXFPanel;
+    XDBGrid1: TXDBGrid;
+    XFPanel2: TXFPanel;
+    XFButton1: TXFButton;
+    XFButton2: TXFButton;
+    XFButton3: TXFButton;
+    ODExport: TOpenDialog;
+    SDImport: TSaveDialog;
+    procedure XFButton1Click(Sender: TObject);
+    procedure XFButton2Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormPdf: TFormPdf;
+
+implementation
+uses UnitDataModuleCourt;
+
+{$R *.dfm}
+
+procedure TFormPdf.XFButton1Click(Sender: TObject);
+begin
+ if ODExport.Execute then
+  begin
+    With DataModuleCourt do
+    begin
+      ODSPdf.Open;
+      ODSPdf.insert;
+      tblobfield(ODSPdf.FieldByName('pdf')).LoadFromFile(ODExport.FileName);
+      ODSPdf.Post;
+    end;
+  end;
+end;
+
+procedure TFormPdf.XFButton2Click(Sender: TObject);
+var
+ptkwrd:Tmemorystream;
+begin
+ptkwrd:= Tmemorystream.Create;
+tblobfield(DataModuleCourt.ODSPdf.FieldByName('pdf')).SaveToStream(ptkwrd);
+ptkwrd.Position:=0;
+if SDImport.Execute then
+ptkwrd.SaveToFile(SDImport.FileName);
+ptkwrd.Free;
+end;
+
+end.

@@ -1,0 +1,45 @@
+unit UnitInsurance;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Grids, DBGrids, DB, OracleData;
+
+type
+  TFormInsurance = class(TForm)
+    DBGrid1: TDBGrid;
+    DBGrid2: TDBGrid;
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormShow(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormInsurance: TFormInsurance;
+
+implementation
+uses ScheduleDataModuleImpl,sboapiDataModuleImpl;
+{$R *.dfm}
+
+
+
+procedure TFormInsurance.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+ScheduleDataModule.ScheduleData.Refresh;
+end;
+
+procedure TFormInsurance.FormShow(Sender: TObject);
+begin
+with ScheduleDataModule ,Ods_insurance,Ods_SERVICE   do
+begin
+     edit ;
+     post;
+end;
+
+end;
+
+end.

@@ -1,0 +1,253 @@
+﻿unit UnitSearchCustName;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Grids, DBGrids, StdCtrls, ExtCtrls, OracleData, DB;
+
+type
+  TFormSearchCustName = class(TForm)
+    DBGrid1: TDBGrid;
+    Panel1: TPanel;
+    EditLastName: TEdit;
+    EditName: TEdit;
+    EditSoName: TEdit;
+    EditPasspin: TEdit;
+    Button1: TButton;
+    SendDataSetName: TOracleDataSet;
+    DSSendDataName: TDataSource;
+    SendDataSetNameID: TIntegerField;
+    SendDataSetNameDOC_TYPE: TFloatField;
+    SendDataSetNamePASSPIN: TWideStringField;
+    SendDataSetNamePASSER: TWideStringField;
+    SendDataSetNamePASPNUM: TWideStringField;
+    SendDataSetNameBIRTHPLACE: TWideStringField;
+    SendDataSetNamePASPPLACE: TWideStringField;
+    SendDataSetNamePASPDATE: TDateTimeField;
+    SendDataSetNamePASSEXPIRE: TDateTimeField;
+    SendDataSetNameCITIZENSHIP: TFloatField;
+    SendDataSetNameCITIZENSHIP2: TFloatField;
+    SendDataSetNameCITIZENSHIP3: TFloatField;
+    SendDataSetNameLASTNAME: TWideStringField;
+    SendDataSetNameSONAME: TWideStringField;
+    SendDataSetNameNAME: TWideStringField;
+    SendDataSetNameCUSTNAME: TWideStringField;
+    SendDataSetNameINN: TWideStringField;
+    SendDataSetNameSEX: TFloatField;
+    SendDataSetNameFAM_STATUS: TFloatField;
+    SendDataSetNameADRS_STATE: TWideStringField;
+    SendDataSetNameBIRTH_STATE: TWideStringField;
+    SendDataSetNameBIRTHDAY: TDateTimeField;
+    SendDataSetNameDOC_COUNTRY: TWideStringField;
+    SendDataSetNameCITY: TWideStringField;
+    SendDataSetNameADDRESS: TWideStringField;
+    SendDataSetNameREG_ZIP: TWideStringField;
+    SendDataSetNamePHONE_M: TWideStringField;
+    SendDataSetNamePHONE_H: TWideStringField;
+    SendDataSetNameE_MAIL: TWideStringField;
+    SendDataSetNameNEREZIDENT: TFloatField;
+    SendDataSetNameCUST_TYPE: TIntegerField;
+    SendDataSetNameCUST_TYPE_NAME: TWideStringField;
+    SendDataSetNameWORK_PLACE: TWideStringField;
+    SendDataSetNameWORK_ADRS_SPEC: TFloatField;
+    SendDataSetNameWORK_CNTR: TFloatField;
+    SendDataSetNameWORK_CITY: TFloatField;
+    SendDataSetNameWORK_STATE: TWideStringField;
+    SendDataSetNameWORK_ZIP: TWideStringField;
+    SendDataSetNameWORK_ADRESS: TWideStringField;
+    SendDataSetNameWORK_PHONE_SPEC: TFloatField;
+    SendDataSetNameWORK_PHCONTTYPE: TFloatField;
+    SendDataSetNameWORK_PHOPPREF: TWideStringField;
+    SendDataSetNameWORK_PHONE: TWideStringField;
+    SendDataSetNameWORK_PHEXT: TWideStringField;
+    SendDataSetNameWORK_PHCODE: TWideStringField;
+    EditPaspnum: TEdit;
+    procedure EditLastNameExit(Sender: TObject);
+    procedure EditLastNameKeyPress(Sender: TObject; var Key: Char);
+    procedure ActionSearchExecute(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormSearchCustName: TFormSearchCustName;
+
+implementation
+
+uses ExpDataModuleUnit, ExpUnitNewImpl, UnitNominalCustomers, ExpressDecls;
+
+{$R *.dfm}
+
+procedure TFormSearchCustName.Button1Click(Sender: TObject);
+begin
+  WITH DBGrid1.DataSource.DataSet DO
+  BEGIN
+    WITH FormNominalCustomers DO
+    BEGIN
+      ExpressVariables.custid := FieldByName('id').AsInteger;
+      EditPasspin.Text := FieldByName('passpin').AsString;
+
+      EditLastName.Text := FieldByName('lastname').AsString;
+      EditName1.Text := FieldByName('name').AsString;
+      EditSoName.Text := FieldByName('soname').AsString;
+
+      CBoxPassPlace.KeyValue := FieldByName('doc_type').AsInteger;
+      EditSerial.Text := FieldByName('passer').AsString;
+      EditPassport.Text := FieldByName('paspnum').AsString;
+      Issue_country.KeyValue := FieldByName('doc_country').AsVariant;
+
+      DBCBox_DocTYPE.KeyValue := FieldByName('paspplace').AsString;
+      DateEdit.Value := FieldByName('paspdate').AsVariant;
+      DateEdit1.Value := FieldByName('passexpire').AsVariant;
+      DBCBox_Citizenship.KeyValue := FieldByName('citizenship').AsInteger;
+
+      CBoxSex.KeyValue := FieldByName('sex').AsString;
+      CBoxFamStatus.KeyValue := FieldByName('fam_status').AsString;
+      BirthPlace.KeyValue := FieldByName('birthplace').AsString;
+      EditBirthCity.KeyValue := FieldByName('birth_state').AsString;
+      DateEdit2.Value := FieldByName('birthday').AsVariant;
+
+      Adrs_State.KeyValue := FieldByName('adrs_state').AsString;
+      Adrs_City.KeyValue := FieldByName('city').AsString;
+      ZipQ.Text := FieldByName('reg_zip').AsString;
+      EditMobil.Text := FieldByName('phone_m').AsString;
+      EditPhone.Text := FieldByName('phone_h').AsString;
+      EditEmail.Text := FieldByName('e_mail').AsString;
+      AdressEdit.Text := FieldByName('address').AsString;
+
+      Work_Place.Text := FieldByName('work_place').AsString;
+      Address_type.KeyValue := FieldByName('work_adrs_spec').AsVariant;
+      CountryByConctType.KeyValue := FieldByName('work_cntr').AsVariant;
+
+      CityByConctType.KeyValue := FieldByName('work_city').AsVariant;
+      Db_Tph_State.Text := FieldByName('work_state').AsString;
+      Db_Tph_Zip.Text := FieldByName('work_zip').AsString;
+
+      Db_Tph_Adress.Text := FieldByName('work_adress').AsString;
+      Tph_Contact_Type.KeyValue := FieldByName('work_phone_spec').AsVariant;
+      Tph_Communication_Type.KeyValue := FieldByName('work_phconttype')
+        .AsVariant;
+
+      Tph_Country_Prefix.KeyValue := FieldByName('work_phoppref').AsVariant;
+      Db_Tph_Number.Text := FieldByName('work_phone').AsString;
+      Db_Tph_extension.Text := FieldByName('work_phext').AsString;
+      Db_Tph_Cod.Text := FieldByName('work_phcode').AsString;
+
+    END;
+    IF ExpFormNew.RFormNew THEN
+    BEGIN
+      WITH ExpFormNew DO
+      BEGIN
+        CASE PageControl1.ActivePageIndex OF
+          0:BEGIN
+              CASE FieldByName('cust_type').AsInteger OF
+                0:
+                  RadioGroup1.ItemIndex := 3;
+                1:
+                  RadioGroup1.ItemIndex := 1;
+                2:
+                  RadioGroup1.ItemIndex := 2;
+                3:
+                  RadioGroup1.ItemIndex := 4;
+                4:
+                  RadioGroup1.ItemIndex := 0;
+              END;
+              EditCustid.Text := FieldByName('id').AsString;
+              EditPINCodeI.Text := FieldByName('passpin').AsString;
+              EditLastNameI.Text := FieldByName('lastname').AsString;
+              EditNameI.Text := FieldByName('name').AsString;
+              EditSonameI.Text := FieldByName('soname').AsString;
+              CBoxPassPlaceI.KeyValue := FieldByName('doc_type').AsInteger;
+              EditSerialI.Text := FieldByName('passer').AsString;
+              EditPassportI.Text := FieldByName('paspnum').AsString;
+              DBCBox_DocTYPEI.KeyValue := FieldByName('paspplace').AsVariant;
+              DateEditI.Value := FieldByName('paspdate').AsVariant;
+            END;
+          1:BEGIN
+              CASE FieldByName('cust_type').AsInteger OF
+                0:
+                  RadioGroup2.ItemIndex := 3;
+                1:
+                  RadioGroup2.ItemIndex := 1;
+                2:
+                  RadioGroup2.ItemIndex := 2;
+                3:
+                  RadioGroup2.ItemIndex := 4;
+                4:
+                  RadioGroup2.ItemIndex := 0;
+              END;
+              EditCustidII.Text := FieldByName('id').AsString;
+              EditPINCodeII.Text := FieldByName('passpin').AsString;
+              EditLastNameII.Text := FieldByName('lastname').AsString;
+              EditNameII.Text := FieldByName('name').AsString;
+              EditSonameII.Text := FieldByName('soname').AsString;
+              CBoxPassPlaceII.KeyValue := FieldByName('doc_type').AsInteger;
+              EditSerialII.Text := FieldByName('passer').AsString;
+              EditPassportII.Text := FieldByName('paspnum').AsString;
+              DBCBox_DocTYPEII.KeyValue := FieldByName('paspplace').AsVariant;
+              DateEditII.Value := FieldByName('paspdate').AsVariant;
+            END;
+        END;
+      END;
+    END;
+
+  END;
+  FormSearchCustName.Close;
+end;
+
+procedure TFormSearchCustName.EditLastNameExit(Sender: TObject);
+begin
+  TEdit(Sender).Text := EmptyStr;
+end;
+
+procedure TFormSearchCustName.EditLastNameKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if Key = #13 then
+    ActionSearchExecute(Sender);
+end;
+
+procedure TFormSearchCustName.ActionSearchExecute(Sender: TObject);
+var
+  SearchField: string;
+  SearchOptions: TSearchRecordOptions;
+  Grid: TDBGrid;
+begin
+  SearchOptions := [srIgnoreCase, srPartialMatch];
+
+  with Sender as TEdit do
+  begin
+    SearchField := copy(Name, 5, length(Name));
+    with TOracleDataSet(DBGrid1.DataSource.DataSet) do
+
+      if not SearchRecord(SearchField, Text, SearchOptions + [srFromCurrent,
+        srForward]) then
+
+        if MessageDlg('Axtarış sona çatdı.' + #13 + 'Əvvəldən başlasın?',
+          mtInformation, [mbNo, mbYes], 0) = mrYes then
+
+          if not SearchRecord(SearchField, Text,
+            SearchOptions + [srFromBeginning]) then
+            MessageDlg('Yazı tapılmayıb!', mtInformation, [mbOK], 0);
+
+  end;
+end;
+
+procedure TFormSearchCustName.FormActivate(Sender: TObject);
+begin
+  IF not(FormNominalCustomers.RH) THEN
+    BorderIcons := BorderIcons - [biSystemMenu];
+  IF ExpFormNew.RFormNew THEN
+    BorderIcons := BorderIcons + [biSystemMenu];
+  IF MessageDlg('Belə müştəri artıq mövcuddur' + #10#13 +
+    'Cədvəldən müştərini seçib qəbul düyməsinə basın', mtWarning, [mbYes], 0,
+    mbYes) = mrYes then
+    Close;
+end;
+
+end.

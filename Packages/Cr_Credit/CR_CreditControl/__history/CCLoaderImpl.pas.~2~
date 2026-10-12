@@ -1,0 +1,85 @@
+unit CCLoaderImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, NLSDialogs, DB, Controls;
+
+procedure InitPlugin(S : String); export;
+
+implementation
+
+uses
+  CCDataModuleImpl, crCommonDecls,CCAccountImpl;
+
+
+procedure InitPlugin(S : String); export;
+resourcestring
+  rsUserSureCloseCredit = 'Сечилмиш мцгавиля(ляр) баьланажаг ! Яминсиниз?';
+  rsUserSureCloseCreditAccount = 'Сечилмиш мцгавиля(ляр) цзря щесаблар баьланажаг ! Яминсиниз?';
+var
+  CreditID : Integer;
+  I : Integer;
+  CloseAccB :boolean;
+ begin
+   CloseAccB := False;
+  if MessageDlg(
+            rsUserSureCloseCredit ,
+            mtWarning ,
+            [mbYes,mbNo],
+            0
+  ) = mrYes then
+  begin
+  if MessageDlg(
+            rsUserSureCloseCreditAccount ,
+            mtWarning ,
+            [mbYes,mbNo],
+            0
+  ) = mrYes then   CloseAccB:= True;
+  with CommonDBGrid  do
+  begin
+    if SelectedRows.Count > 0 then
+    for I := 0 to SelectedRows.Count - 1 do
+    begin
+      DataSource.DataSet.GotoBookmark(Pointer(SelectedRows[I]));
+      CreditID := Get_SelectedCrdID;
+      CCDataMod.CR_CREDIT.CallProcedure('Contract_Close',['p_CreditID',CreditID]);
+      if CloseAccB then
+      begin
+         with CCDataMod.Accounts do
+         begin
+            if Active then CloseAll;
+            SetVariable('CrdID',CreditID);
+            Open;
+         end;
+         with FormContractAccounts do
+              ShowModal;
+      end;
+    end else
+    begin
+      CreditID := Get_SelectedCrdID;
+      CCDataMod.CR_CREDIT.CallProcedure('Contract_Close',['p_CreditID',CreditID]);
+      if CloseAccB then
+      begin
+         with CCDataMod.Accounts do
+         begin
+            if Active then CloseAll;
+            SetVariable('CrdID',CreditID);
+            Open;
+         end;
+         with FormContractAccounts do
+              ShowModal;
+      end;
+    end;
+    SafeRefresh(True,rmRefreshOnly);
+  end;
+  end;
+end;
+
+exports
+  InitPlugin;
+
+initialization
+  CCDataMod := TCCDataMod.Create(CommonApplication);
+  FormContractAccounts := TFormContractAccounts.Create(CommonApplication);
+end.

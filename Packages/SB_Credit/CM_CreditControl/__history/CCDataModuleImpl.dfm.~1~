@@ -1,0 +1,184 @@
+object CCDataMod: TCCDataMod
+  OldCreateOrder = False
+  Left = 65
+  Top = 132
+  Height = 480
+  Width = 696
+  object CM_CREDIT: TOraclePackage
+    Session = CMDataModule.CMSession
+    Debug = False
+    PackageName = 'CM_CREDIT'
+    ParameterMode = pmNamed
+    Cursor = crHourGlass
+    Optimize = True
+    Left = 32
+    Top = 24
+  end
+  object Accounts: TOracleDataSet
+    SQL.Strings = (
+      'SELECT p.boorowerid,'
+      '       b.name,'
+      '       a.creditid, '
+      '       a.booroweraccid, '
+      '       a.loanaccid, '
+      '       a.dueloanaccid,'
+      '       a.interestaccid, '
+      '       a.dueinterestaccid, '
+      '       a.primaryreserveaccid,'
+      '       a.secondaryreserveaccid,'
+      '       cm_common.AccountNumber_Get(loanaccid) as LoanAccno,'
+      
+        '       cm_common.AccountNumber_Get(booroweraccid) as BoorowerAcc' +
+        'no,'
+      
+        '       cm_common.AccountNumber_Get(interestaccid) as InterestAcc' +
+        'no,'
+      
+        '       cm_common.AccountNumber_Get(dueloanaccid) as DueloanAccno' +
+        ','
+      
+        '       cm_common.AccountNumber_Get(primaryreserveaccid) as Prima' +
+        'ryresAccno,'
+      
+        '       cm_common.AccountNumber_Get(dueinterestaccid) as Dueinter' +
+        'estAccno,'
+      
+        '       cm_common.AccountNumber_Get(secondaryreserveaccid) as Sec' +
+        'ondaryresAccno,'
+      '       cm_common.AccountRest_Get(booroweraccid) as BoorowerRest,'
+      '      cm_common.AccountRest_Get(loanaccid) as LoanRest,'
+      '      cm_common.AccountRest_Get(interestaccid) as interestRest,'
+      '      cm_common.AccountRest_Get(dueloanaccid) as dueloanRest,'
+      
+        '      cm_common.AccountRest_Get(primaryreserveaccid) as primaryr' +
+        'esRest,'
+      
+        '      cm_common.AccountRest_Get(dueinterestaccid) as dueinterest' +
+        'Rest,'
+      
+        '      cm_common.AccountRest_Get(secondaryreserveaccid) as second' +
+        'aryresRest'
+      '  FROM cm_accounts a,'
+      '       cm_boorowerinfo b,'
+      '       cm_portfolio p'
+      'where a.creditid = :CrdID'
+      'and  b.creditid  = :CrdID'
+      'and p.id = :Crdid')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    Variables.Data = {0300000001000000060000003A4352444944030000000000000000000000}
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = CMDataModule.CMSession
+    DesignActivation = False
+    Active = False
+    Left = 120
+    Top = 24
+    object AccountsCREDITID: TFloatField
+      FieldName = 'CREDITID'
+      Required = True
+    end
+    object AccountsBOOROWERACCID: TFloatField
+      FieldName = 'BOOROWERACCID'
+    end
+    object AccountsLOANACCID: TFloatField
+      FieldName = 'LOANACCID'
+    end
+    object AccountsDUELOANACCID: TFloatField
+      FieldName = 'DUELOANACCID'
+    end
+    object AccountsINTERESTACCID: TFloatField
+      FieldName = 'INTERESTACCID'
+    end
+    object AccountsDUEINTERESTACCID: TFloatField
+      FieldName = 'DUEINTERESTACCID'
+    end
+    object AccountsPRIMARYRESERVEACCID: TFloatField
+      FieldName = 'PRIMARYRESERVEACCID'
+    end
+    object AccountsSECONDARYRESERVEACCID: TFloatField
+      FieldName = 'SECONDARYRESERVEACCID'
+    end
+    object AccountsLOANACCNO: TWideStringField
+      FieldName = 'LOANACCNO'
+      Size = 4000
+    end
+    object AccountsBOOROWERACCNO: TWideStringField
+      FieldName = 'BOOROWERACCNO'
+      Size = 4000
+    end
+    object AccountsINTERESTACCNO: TWideStringField
+      FieldName = 'INTERESTACCNO'
+      Size = 4000
+    end
+    object AccountsDUELOANACCNO: TWideStringField
+      FieldName = 'DUELOANACCNO'
+      Size = 4000
+    end
+    object AccountsPRIMARYRESACCNO: TWideStringField
+      FieldName = 'PRIMARYRESACCNO'
+      Size = 4000
+    end
+    object AccountsDUEINTERESTACCNO: TWideStringField
+      FieldName = 'DUEINTERESTACCNO'
+      Size = 4000
+    end
+    object AccountsSECONDARYRESACCNO: TWideStringField
+      FieldName = 'SECONDARYRESACCNO'
+      Size = 4000
+    end
+    object AccountsBOOROWERREST: TFloatField
+      FieldName = 'BOOROWERREST'
+    end
+    object AccountsLOANREST: TFloatField
+      FieldName = 'LOANREST'
+    end
+    object AccountsINTERESTREST: TFloatField
+      FieldName = 'INTERESTREST'
+    end
+    object AccountsDUELOANREST: TFloatField
+      FieldName = 'DUELOANREST'
+    end
+    object AccountsPRIMARYRESREST: TFloatField
+      FieldName = 'PRIMARYRESREST'
+    end
+    object AccountsDUEINTERESTREST: TFloatField
+      FieldName = 'DUEINTERESTREST'
+    end
+    object AccountsSECONDARYRESREST: TFloatField
+      FieldName = 'SECONDARYRESREST'
+    end
+    object AccountsNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 64
+    end
+    object AccountsBOOROWERID: TFloatField
+      FieldName = 'BOOROWERID'
+      Required = True
+    end
+  end
+  object AccountsDatSrc: TDataSource
+    DataSet = Accounts
+    Left = 32
+    Top = 88
+  end
+end

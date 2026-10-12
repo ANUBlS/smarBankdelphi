@@ -1,0 +1,22 @@
+library InsMedical;
+
+uses
+  ComServ,
+  InsMedical_TLB in 'InsMedical_TLB.pas',
+  fmMedicalImpl in 'fmMedicalImpl.pas' {fmMedical: TActiveForm} {fmMedical: CoClass},
+  InsFindFilter in 'InsFindFilter.pas' {fmFind};
+
+{$E ocx}
+
+exports
+  DllGetClassObject,
+  DllCanUnloadNow,
+  DllRegisterServer,
+  DllUnregisterServer;
+
+{$R *.TLB}
+
+{$R *.RES}
+
+begin
+end.

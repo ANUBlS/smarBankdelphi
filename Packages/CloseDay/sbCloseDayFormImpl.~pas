@@ -1,0 +1,414 @@
+unit sbCloseDayFormImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActiveX, AxCtrls, CloseDay_TLB, StdVcl, StdCtrls, ExtCtrls, ComCtrls,
+  Buttons, DBCtrls, Grids, DBGrids, Db, OracleData, Oracle, SBPlgAx50_TLB,
+  ImgList;
+
+type
+  TsbCloseDayForm = class(TActiveForm, IsbCloseDayForm,IIconExporter)
+    Panel1: TPanel;
+    CurrentDateLabel: TLabel;
+    NewDateEdit: TDateTimePicker;
+    Label1: TLabel;
+    Label2: TLabel;
+    CloseButton: TSpeedButton;
+    Bevel1: TBevel;
+    SBSYSTEM: TOraclePackage;
+    ImageList1: TImageList;
+    Button1: TButton;
+    RGroupTransCommit: TRadioGroup;
+    ODS_Settings: TOracleDataSet;
+    procedure CloseButtonClick(Sender: TObject);
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure RGroupTransCommitClick(Sender: TObject);
+  private
+    { Private declarations }
+    FEvents: IsbCloseDayFormEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+  protected
+    { Protected declarations }
+    function Get_Icon: OLE_HANDLE; safecall;
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+  public
+    { Public declarations }
+    procedure Initialize; override;
+  end;
+
+implementation
+
+uses ComObj, ComServ, SBCore, SBSystem, sboapiDataModuleImpl,
+  ControlManagerImpl;
+
+{$R *.DFM}
+
+{ TsbCloseDayForm }
+function TsbCloseDayForm.Get_Icon: OLE_HANDLE;
+const
+  ImageIndex = 0;  // позиция иконки в списке ImageList1
+begin
+  ImageList1.GetIcon(ImageIndex, Icon);
+  Result := Icon.Handle;
+end;
+
+
+procedure TsbCloseDayForm.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_sbCloseDayFormPage); }
+end;
+
+procedure TsbCloseDayForm.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as IsbCloseDayFormEvents;
+end;
+
+procedure TsbCloseDayForm.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TsbCloseDayForm.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TsbCloseDayForm.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TsbCloseDayForm.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TsbCloseDayForm.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TsbCloseDayForm.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TsbCloseDayForm.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TsbCloseDayForm.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TsbCloseDayForm.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TsbCloseDayForm.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TsbCloseDayForm.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TsbCloseDayForm.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TsbCloseDayForm.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TsbCloseDayForm.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TsbCloseDayForm.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TsbCloseDayForm.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TsbCloseDayForm.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TsbCloseDayForm.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TsbCloseDayForm.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TsbCloseDayForm._Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TsbCloseDayForm.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TsbCloseDayForm.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TsbCloseDayForm.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TsbCloseDayForm.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TsbCloseDayForm.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TsbCloseDayForm.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TsbCloseDayForm.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TsbCloseDayForm.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TsbCloseDayForm.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TsbCloseDayForm.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TsbCloseDayForm.Set_AxBorderStyle(
+  Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TsbCloseDayForm.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TsbCloseDayForm.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TsbCloseDayForm.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TsbCloseDayForm.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TsbCloseDayForm.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TsbCloseDayForm.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TsbCloseDayForm.Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TsbCloseDayForm.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TsbCloseDayForm.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TsbCloseDayForm.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TsbCloseDayForm.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TsbCloseDayForm.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TsbCloseDayForm.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+procedure TsbCloseDayForm.CloseButtonClick(Sender: TObject);
+resourcestring
+  Message_CloseDayWarning =
+      'Are you sure to close current operation day '+
+      '(current operation date is: "%s"), and open with date: "%s"';
+var NewDate: tDateTime;
+tBeg, tEnd: Ttime;
+begin
+  if
+    MessageDlg(
+      Format(
+        Message_CloseDayWarning,
+        [DateToStr(Sb_GetSystemDate()), DateToStr(NewDateEdit.Date)]),
+      mtConfirmation,
+      [mbYes, mbCancel],
+      0)
+     = mrYes
+  then
+   begin
+  TBeg:=Time();
+  NewDate := Trunc(NewDateEdit.Date);
+  SBSYSTEM.CallProcedure('close_day', ['NewDate', NewDate]);
+//   Sb_CloseDay(NewDateEdit.Date);
+    TEnd:=Time();
+    ShowMessage('Day Closed.'+#13#10+TimeToStr(TBeg)+'-'+TimeToStr(TEnd));
+   end;
+end;
+
+procedure TsbCloseDayForm.ActiveFormCreate(Sender: TObject);
+begin
+  CurrentDateLabel.Caption := DateToStr(Sb_GetSystemDate);
+  NewDateEdit.Date := Sb_GetSystemDate+1;
+
+  ODS_Settings.Open;
+  RGroupTransCommit.ItemIndex := ODS_Settings.FieldByName('Value').AsInteger;
+end;
+
+procedure TsbCloseDayForm.Button1Click(Sender: TObject);
+begin
+// if not Assigned(ControlManagerForm) then
+ ControlManagerForm :=TControlManagerForm.Create(Self);
+ try
+  ControlManagerForm.ShowModal;
+ finally
+  ControlManagerForm.Release;
+ end;
+end;
+
+procedure TsbCloseDayForm.RGroupTransCommitClick(Sender: TObject);
+begin
+  with ODS_Settings do begin
+   Edit;
+   FieldByName('Value').AsInteger := RGroupTransCommit.ItemIndex;
+   Post;
+  end; 
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TsbCloseDayForm,
+    Class_sbCloseDayForm,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

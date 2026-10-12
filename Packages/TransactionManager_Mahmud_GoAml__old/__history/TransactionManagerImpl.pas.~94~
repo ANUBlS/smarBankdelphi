@@ -1,0 +1,1463 @@
+﻿
+unit TransactionManagerImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActiveX, AxCtrls, TransactionManager_TLB, StdVcl, ExtCtrls, StdCtrls,
+  ComCtrls, ToolWin, Grids, DBGrids, ImgList, ActnList, DBCtrls, OracleData,
+  Db, DBTables, Mask, Menus, SBPlgAx50_TLB, CheckLst, Buttons, Keyboard;
+
+type
+  TOperationMode = (omInsert, omEdit, omCommission);
+  TTransactionState = (tsCommit, tsDelete, tsReject);
+
+const
+
+  tsDelayed       = 1;
+  tsCommited      = 2;
+  tsRejected      = 3;
+
+  BooleanPrefix = ' AND ';
+
+  resourcestring
+   cs_CommitInformation = 'Ümumi əməliyyatlar: %d'+#13+'Təsdiqlənmiş əməliyyatlar: %d'+#13+'Təsdiqlənməmiş əməliyyatlar: %d';
+   cs_RejectInformation = 'Ümumi əməliyyatlar: %d'+#13+'İnkar edilmiş əməliyyatlar: %d'+#13+'İnkar edilməmiş əməliyyatlar: %d';
+
+type
+  TTransactionManagerForm = class(TActiveForm, ITransactionManagerForm, IIconExporter)
+    Panel1: TPanel;
+    Panel2: TPanel;
+    Panel3: TPanel;
+    StaticText1: TStaticText;
+    GroupBox1: TGroupBox;
+    PanelSettings: TGroupBox;
+    Panel4: TPanel;
+    StaticText3: TStaticText;
+    ToolBar1: TToolBar;
+    DTPCurrentDate: TDateTimePicker;
+    PanelDestination: TPanel;
+    PanelSearch: TPanel;
+    GridTransactions: TDBGrid;
+    EditID: TEdit;
+    EditDEBITACCNO: TEdit;
+    EditCREDITACCNO: TEdit;
+    EditDEBITAMOUNT: TEdit;
+    EditCREDITAMOUNT: TEdit;
+    EditLAMOUNT: TEdit;
+    ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
+    ToolButton3: TToolButton;
+    ToolButton4: TToolButton;
+    ImageList: TImageList;
+    ActionList: TActionList;
+    ActionRefresh: TAction;
+    DBText1: TDBText;
+    ActionInsert: TAction;
+    Panel5: TPanel;
+    Panel6: TPanel;
+    DBEditAssignment: TDBEdit;
+    DBEditRejectReason: TDBEdit;
+    ActionDelete: TAction;
+    ActionEdit: TAction;
+    ButtonFilter: TToolButton;
+    ActionShowFilter: TAction;
+    ActionSpeedSearch: TAction;
+    ActionSelectAll: TAction;
+    PopupMenu: TPopupMenu;
+    N1: TMenuItem;
+    N2: TMenuItem;
+    N3: TMenuItem;
+    N4: TMenuItem;
+    N5: TMenuItem;
+    NFirst: TMenuItem;
+    NLast: TMenuItem;
+    ToolButton6: TToolButton;
+    ActionCommit: TAction;
+    GroupBox2: TGroupBox;
+    Panel7: TPanel;
+    CBDebetFilial: TCheckBox;
+    Panel8: TPanel;
+    CBOperator: TCheckBox;
+    DBLookup2: TDBLookupComboBox;
+    DBLookup3: TDBLookupComboBox;
+    Panel9: TPanel;
+    CBCreditFilial: TCheckBox;
+    DBLookup1: TDBLookupComboBox;
+    GroupBox3: TGroupBox;
+    CLBOperationTypes: TCheckListBox;
+    GroupBox4: TGroupBox;
+    CLBCurrency: TCheckListBox;
+    Panel10: TPanel;
+    CBImmediatelyRefresh: TCheckBox;
+    ActionLoadFilters: TAction;
+    GroupBox5: TGroupBox;
+    CBDelayed: TCheckBox;
+    CBCommited: TCheckBox;
+    CBRejected: TCheckBox;
+    ActionFilter: TAction;
+    Label1: TLabel;
+    DBText2: TDBText;
+    N6: TMenuItem;
+    N7: TMenuItem;
+    N8: TMenuItem;
+    N9: TMenuItem;
+    Panel11: TPanel;
+    SpeedButton1: TSpeedButton;
+    ActionStepCommit: TAction;
+    ToolButton7: TToolButton;
+    ToolButton8: TToolButton;
+    ActionReject: TAction;
+    ActionCommission: TAction;
+    N10: TMenuItem;
+    PopupRefresh: TPopupMenu;
+    NFullRefresh: TMenuItem;
+    ChBoxStatusT: TCheckBox;
+    procedure EditIDExit(Sender: TObject);
+    procedure ActionRefreshExecute(Sender: TObject);
+    procedure DTPCurrentDateChange(Sender: TObject);
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure ActionInsertExecute(Sender: TObject);
+    procedure GridTransactionsTitleClick(Column: TColumn);
+    procedure ActionEditExecute(Sender: TObject);
+    procedure ActionSpeedSearchExecute(Sender: TObject);
+    procedure EditIDKeyPress(Sender: TObject; var Key: Char);
+    procedure ActionSelectAllExecute(Sender: TObject);
+    procedure N2DrawItem(Sender: TObject; ACanvas: TCanvas; ARect: TRect;
+      Selected: Boolean);
+    procedure ActionSelectAllUpdate(Sender: TObject);
+    procedure NFirstClick(Sender: TObject);
+    procedure GridTransactionsDrawColumnCell(Sender: TObject;
+      const Rect: TRect; DataCol: Integer; Column: TColumn;
+      State: TGridDrawState);
+    procedure ActionCommitExecute(Sender: TObject);
+    procedure ActionCommitUpdate(Sender: TObject);
+    procedure ActionDeleteExecute(Sender: TObject);
+    procedure ActionDeleteUpdate(Sender: TObject);
+    procedure CBDebetFilialClick(Sender: TObject);
+    procedure ActionShowFilterExecute(Sender: TObject);
+    procedure ActionLoadFiltersExecute(Sender: TObject);
+    procedure CLBOperationTypesKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure ActionFilterExecute(Sender: TObject);
+    procedure DBLookup2Click(Sender: TObject);
+    procedure ActionStepCommitExecute(Sender: TObject);
+    procedure ActionRejectExecute(Sender: TObject);
+    procedure ActionCommissionExecute(Sender: TObject);
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure ActiveFormKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure NFullRefreshClick(Sender: TObject);
+    procedure BtnKeyboardClick(Sender: TObject);
+    procedure ChBoxStatusTClick(Sender: TObject);
+  private
+    { Private declarations }
+    FEvents: ITransactionManagerFormEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+  protected
+    { Protected declarations }
+
+    FCurrentDate: TDateTime;
+
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+    procedure SetCurrentDate(Value: TDateTime);
+    function  Get_Icon: OLE_HANDLE; safecall;
+  public
+
+    RequiredOrderByField: variant;
+    OperationMode: TOperationMode;
+
+    LastTransactionID: Longint;
+    TransactionState: TTransactionState;
+
+    sik :boolean;
+
+    property CurrentDate: TDateTime read FCurrentDate write SetCurrentDate;
+
+    procedure Focus;
+    procedure SetAddress;
+    procedure InitData;
+    procedure InitProperties;
+    procedure GotoTransaction(ID: Longint);
+    procedure MouseWheelHandler(var Message: TMessage); override;
+    function FlagEnabled(Flag: Word): Boolean;
+
+    procedure Initialize; override;
+
+  end;
+
+var
+   TransactionManagerForm: TTransactionManagerForm;
+   OperationIDs, CurrencyIDs: TStringList;
+   OrderedTitle :string; //H.R. 24.06.2008
+
+implementation
+
+uses ComObj, ComServ, TransactionDataModuleUnit, TransactionPropertiesImpl,
+  TransactionDestinationImpl, CommissionImpl, BProcTrans, sboapiDataModuleImpl,
+  SBTranslateProc, FormAccountsImpl, FormBalCnImpl, SmSBankImpl;
+
+{$R *.DFM}
+
+{ TTransactionManagerForm }
+
+procedure TTransactionManagerForm.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_TransactionManagerFormPage); }
+end;
+
+procedure TTransactionManagerForm.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as ITransactionManagerFormEvents;
+end;
+
+procedure TTransactionManagerForm.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TTransactionManagerForm.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TTransactionManagerForm.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TTransactionManagerForm.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TTransactionManagerForm.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TTransactionManagerForm.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TTransactionManagerForm.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TTransactionManagerForm.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TTransactionManagerForm.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TTransactionManagerForm.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TTransactionManagerForm.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TTransactionManagerForm.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TTransactionManagerForm.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TTransactionManagerForm.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TTransactionManagerForm.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TTransactionManagerForm.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TTransactionManagerForm.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TTransactionManagerForm.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TTransactionManagerForm.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TTransactionManagerForm._Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TTransactionManagerForm.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TTransactionManagerForm.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TTransactionManagerForm.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TTransactionManagerForm.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TTransactionManagerForm.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TTransactionManagerForm.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TTransactionManagerForm.KeyPressEvent(Sender: TObject;
+  var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TTransactionManagerForm.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TTransactionManagerForm.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TTransactionManagerForm.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TTransactionManagerForm.Set_AxBorderStyle(
+  Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TTransactionManagerForm.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TTransactionManagerForm.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TTransactionManagerForm.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TTransactionManagerForm.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TTransactionManagerForm.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TTransactionManagerForm.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TTransactionManagerForm.Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TTransactionManagerForm.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TTransactionManagerForm.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TTransactionManagerForm.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TTransactionManagerForm.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TTransactionManagerForm.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TTransactionManagerForm.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+function TTransactionManagerForm.Get_Icon: OLE_HANDLE;
+const
+  ImageIndex =0;
+begin
+  ImageList.GetIcon(ImageIndex, Icon);
+  Result := Icon.Handle;
+end;
+
+procedure TTransactionManagerForm.SetCurrentDate(Value: TDateTime);
+begin
+  FCurrentDate := Value;
+  DTPCurrentDate.DateTime := Int(Value);
+end;
+
+//-----------------------------------------------{-Main-}----------------------------------------------------------------
+
+procedure TTransactionManagerForm.SetAddress;
+begin
+ if not(Assigned(OperationIDs)) then
+  OperationIDs:=TStringList.Create
+ else
+  OperationIDs.Clear;
+
+ if not(Assigned(CurrencyIDs)) then
+  CurrencyIDs:=TStringList.Create
+ else
+  CurrencyIDs.Clear;
+
+ CLBOperationTypes.Tag:=Integer(@OperationIDs);
+ CLBCurrency.Tag:=Integer(@CurrencyIDs);
+end;
+
+procedure TTransactionManagerForm.EditIDExit(Sender: TObject);
+begin
+ TEdit(Sender).Text :=EmptyStr;
+end;
+
+procedure TTransactionManagerForm.MouseWheelHandler(var Message: TMessage);
+begin
+ inherited;
+ if GridTransactions.Focused then
+  begin
+   GridTransactions.SelectedRows.Clear;
+   with TCMMouseWheel(Message), GridTransactions.DataSource.DataSet do
+    if WheelDelta < 0 then
+      Next
+    else
+      Prior;
+  end;
+end;
+
+procedure TTransactionManagerForm.InitData;
+const
+   c_err_message = ' Table or View in Dataset "%s" does not exist! ';
+var
+   i: Word;  //Modified by TNariman at 28.04.2005
+begin
+ with TransactionDataModule do
+  for i :=0 to ComponentCount -1 do
+  if (Components[i] is TDataSet) then
+   if (Components[i] as TDataSet).Tag = 1 then
+   try
+     (Components[i] as TDataSet).Open;
+   except
+     raise Exception.Create(Format(c_err_message, [(Components[i] as TDataSet).Name]));
+   end;
+end;
+
+procedure TTransactionManagerForm.InitProperties;
+begin
+ if not Assigned(TransactionEditForm) then
+  TransactionEditForm :=TTransactionEditForm.Create(Self);
+   if not assigned (FormBal_CN) then
+FormBal_CN:=TFormBal_CN.Create(self);
+  if not assigned (FormAccounts) then
+FormAccounts:=TFormAccounts.Create(self);
+ try
+  TransactionEditForm.ShowModal;
+ finally
+  TransactionEditForm.Release;
+  TransactionEditForm :=Nil;
+  FormAccounts.Release;
+  FormAccounts:=Nil;
+  FormBal_CN.Release;
+  FormBal_CN:=Nil;
+ end;
+end;
+
+procedure TTransactionManagerForm.GotoTransaction(ID: Longint);
+begin
+ with TransactionDataModule.Transactions do
+  Locate('ID', ID, []);
+end;
+
+procedure TTransactionManagerForm.Focus;
+begin
+ if GridTransactions.CanFocus then
+  GridTransactions.SetFocus;
+end;
+
+procedure TTransactionManagerForm.ActionRefreshExecute(Sender: TObject);
+var
+  kiS: TTime;
+  //SavePlace: Pointer;
+  TransactionID: Longint;
+  k: word;     //H.R. 24.06.2008
+begin
+ with TransactionDataModule.Transactions do
+ begin
+  //DisableControls;
+  try
+   //kiS :=now;
+   TransactionID :=FieldByName('ID').AsInteger;
+   //SavePlace :=GetBookmark;
+   Close;
+   TransactionDataModule.Transactions.SetVariable('TransactionDate', CurrentDate);
+   if OrderedTitle <> '' then begin
+   //k := SQL.Add(' order by '+  OrderedTitle);    //H.R. 24.06.2008
+   if ChBoxStatusT.Checked then TransactionDataModule.Transactions.SetVariable('TITLE', ' Status desc, '+OrderedTitle) //H.R. 24.09.2010
+    else TransactionDataModule.Transactions.SetVariable('TITLE', OrderedTitle); //H.R. 24.09.2010
+
+   end;
+   Open;
+   //GotoBookmark(SavePlace);                   Ie iaei  ii?iaeuii ia ?aaioaao.....
+   if TransactionState <> tsDelete then
+    GotoTransaction(TransactionID);
+   TransactionState :=tsDelete;
+   //SearchRecord('ID', LastTransactionID, [srFromBeginning]);
+   //ShowMessage('Start:   '+TimeToStr(kiS)+#13 + 'Finish: '+TimeToStr(now));
+  finally
+   //EnableControls;
+   //SQL[k] :=EmptyStr;      //H.R. 24.06.2008
+   GridTransactions.DataSource.DataSet.Last; //H.R. 25.02.2010
+  end;
+ end;
+end;
+
+procedure TTransactionManagerForm.DTPCurrentDateChange(Sender: TObject);
+begin
+  CurrentDate :=Int((Sender as TDateTimePicker).DateTime);
+end;
+
+procedure TTransactionManagerForm.ActiveFormCreate(Sender: TObject);
+begin
+ TransactionManagerForm :=Self;
+ TransactionDataModule :=TTransactionDataModule.Create(Self);
+ TransactionDestinationForm :=TTransactionDestinationForm.Create(Self);
+ frmBTrans := TfrmBTrans.Create(Self);
+ InitData;
+
+ with TransactionDataModule do
+ begin
+  CurrentDate :=Sysdat.FieldByName('tek_dat').AsDateTime;
+  Transactions.Open;
+  //RequiredOrderByField :=Transactions.GetVariable('Title');
+   //-----
+ end;
+
+ TransactionState :=tsDelete;
+ OrderedTitle :=' ID ';
+ TransactionDataModule.ODS_StatusT.Open;
+ if TransactionDataModule.ODS_StatusT.FieldByName('VALUE').AsInteger =1 then ChBoxStatusT.Checked :=True
+  else ChBoxStatusT.Checked :=False; //H.R. 24.09.2010
+ ActionRefreshExecute(Sender);
+ //DTPCurrentDate.MaxDate :=CurrentDate;
+ SetAddress;
+ ActionLoadFilters.Execute;
+ SBTranslateProc.TranslateAllComponents(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TTransactionManagerForm.ActionInsertExecute(Sender: TObject);
+begin
+try
+ OperationMode :=omInsert;
+ with TransactionDataModule, TransactionEditForm do begin
+ SB_ACA.CallProcedure('CheckObjectAccess', ['TransactionManager','insert']);
+  Transactions.Insert;
+ InitProperties;
+
+{ TransactionsREPORTID.Value := 0;
+ TransactionsCOUNTRID.Value := 0;
+
+ CountrIDDBEdit.Text := '0';
+ ReportIDDBEdit.Text := '0';
+
+ CountrIDLookUp.KeyValue := 0;
+ ReportIDLookUp.KeyValue := 0;
+                                  }
+ end;
+
+ GridTransactions.SelectedRows.Clear;
+finally
+end;
+end;
+
+procedure TTransactionManagerForm.GridTransactionsTitleClick(
+  Column: TColumn);
+var
+   TitleName :string;
+   SortPosition: word;
+begin
+ SortPosition :=100;
+
+ OrderedTitle :=Column.FieldName; //H.R. 24.06.2008
+ if OrderedTitle='DEBITACCNO' then OrderedTitle:='D_ACCNO';
+ if OrderedTitle='CREDITACCNO' then OrderedTitle:='C_ACCNO';
+// showmessage(OrderedTitle);
+ if (GridTransactions.DataSource.DataSet.IsEmpty) or (Column.FieldName = EmptyStr) then Exit;
+ Screen.Cursor :=crHourGlass;
+ TitleName :=Column.FieldName;
+ with TOracleDataSet(GridTransactions.DataSource.DataSet) do
+  try
+   //SortPosition :=SQL.Add('ORDER BY '+ TitleName);
+   if ChBoxStatusT.Checked then SetVariable('Title', ' Status desc, ' + OrderedTitle) // H.R. 24.09.2010
+    else SetVariable('Title', OrderedTitle); // H.R. 24.09.2010
+   Refresh;
+  finally
+   SQL[SortPosition] :=EmptyStr;
+   Screen.Cursor :=crDefault;
+  end;
+end;
+
+procedure TTransactionManagerForm.ActionEditExecute(Sender: TObject);
+begin
+
+if GridTransactions.DataSource.DataSet.FieldByName('status').AsInteger=1
+then
+TransactionDataModule.SB_ACA.CallProcedure('checkadvancedobjectaccess',['DELAYEDEDIT']);
+
+if GridTransactions.DataSource.DataSet.FieldByName('status').AsInteger=2
+then
+TransactionDataModule.SB_ACA.CallProcedure('checkadvancedobjectaccess',['COMMITEDEDIT']);
+
+
+ OperationMode :=omEdit;
+ with TransactionDataModule do begin
+
+ SB_ACA.CallProcedure('CheckObjectAccess', ['TransactionManager','update']);
+  Transactions.Edit;
+ end;
+ InitProperties;
+ GridTransactions.SelectedRows.Clear;
+end;
+
+procedure TTransactionManagerForm.ActionSpeedSearchExecute(
+  Sender: TObject);
+var
+  SearchField : string;
+  SearchOptions : TSearchRecordOptions;
+begin
+  SearchOptions := [srIgnoreCase ,srPartialMatch ];
+  
+  with Sender as TEdit  do
+  begin
+    SearchField := copy(Name,5,length(Name));
+    with  TOracleDataSet(GridTransactions.DataSource.DataSet) do
+    if  not SearchRecord(
+                  SearchField
+                 ,Text
+                 ,SearchOptions + [srFromCurrent , srForward ]
+                 ) then
+    if MessageDlg(
+              'Axtarış sona çatdı.'+#13+'Əvvəldən başlansın?'
+             ,mtInformation
+             ,[mbNo , mbYes]
+             ,0
+             ) = mrYes  then
+    if not SearchRecord(
+                 SearchField
+                ,Text
+                ,SearchOptions + [ srFromBeginning ]
+                )  then
+    MessageDlg('Yazı tapılmayıb!',mtInformation,[mbOK],0);
+ end;
+
+end;
+
+procedure TTransactionManagerForm.EditIDKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if Key = #13  then
+   ActionSpeedSearchExecute(Sender);
+end;
+
+procedure TTransactionManagerForm.ActionSelectAllExecute(Sender: TObject);
+begin
+ with GridTransactions, SelectedRows, DataSource.DataSet do
+  begin
+    DisableControls;
+    try
+      First;
+      while not Eof do
+       begin
+        CurrentRowSelected := True;
+        Next;
+       end;
+    finally
+      EnableControls;
+    end;
+  end;   
+end;
+
+procedure TTransactionManagerForm.N2DrawItem(Sender: TObject;
+  ACanvas: TCanvas; ARect: TRect; Selected: Boolean);
+var
+  LineBottom: Integer;
+  SText: String;
+  Bar: TRect;
+begin
+  with ACanvas, Sender as TMenuItem do
+  begin
+    with Font do
+    begin
+      Name := 'Azl Sans Serif';
+      Charset := RUSSIAN_CHARSET;
+      if Default then
+        Style := [fsBold];
+    end;
+    if Caption = '-' then
+    begin
+      Pen.Color := clBlack;
+      LineBottom := (ARect.Top + (ARect.Bottom - ARect.Top) div 2)-1;
+      MoveTo(ARect.Left, LineBottom);
+      LineTo(ARect.Right, LineBottom);
+      inc(LineBottom);
+      Pen.Color := clWhite;
+      MoveTo(ARect.Left, LineBottom);
+      LineTo(ARect.Right, LineBottom);
+    end
+    else
+    begin
+      if Selected then
+      begin
+        Brush.Color := clNavy;
+        if Enabled then
+          Font.Color := clWhite
+        else
+          Font.Color := clSilver;
+      end
+      else
+      begin
+        Brush.Color := clBtnFace;
+        if Enabled then
+          Font.Color := clBlack
+        else
+          Font.Color := clGrayText;
+      end;
+      Bar := ARect;
+      Inc(Bar.Left, 22);
+      FillRect(Bar);
+      TextOut(ARect.Left+{17}22, ARect.Top+1, Caption);
+    end;
+    // draw shortcut
+    SText := ShortCutToText(ShortCut);
+    TextOut(ARect.Right-TextWidth(SText)-2, ARect.Top+1, SText);
+    if ImageIndex <> -1 then
+      with GetParentMenu do
+        if Assigned(Images) then
+        begin
+          if Checked then
+          begin
+            Bar.Left := ARect.Left + 1;
+            Bar.Right := Bar.Left + 16;
+            Bar.Top := ARect.Top + 1;
+            Bar.Bottom := Bar.Top + 16;
+
+            ACanvas.Brush.Color := clBtnShadow;
+            ACanvas.FrameRect(Bar);
+
+            Inc(Bar.Left, 2);
+            Inc(Bar.Right, 2);
+            Inc(Bar.Top, 2);
+            Inc(Bar.Bottom, 2);
+            
+            ACanvas.Brush.Color := clBtnHighlight;
+            ACanvas.FrameRect(Bar);
+
+            Dec(Bar.Left, 1);
+            Dec(Bar.Right, 1);
+            Dec(Bar.Top, 1);
+            Dec(Bar.Bottom, 1);
+
+            if Selected then
+              ACanvas.Brush.Color := clBtnFace
+            else
+              ACanvas.Brush.Color := clBtnHighlight;
+            ACanvas.FillRect(Bar);
+          end;
+
+          Images.Draw(ACanvas, ARect.Left, ARect.Top, ImageIndex, Enabled);
+        end;
+  end;
+end;
+
+procedure TTransactionManagerForm.ActionSelectAllUpdate(Sender: TObject);
+begin
+ {$B-}
+ with (Sender as TAction) do
+  Enabled :=not GridTransactions.DataSource.DataSet.IsEmpty
+ {$B+}
+end;
+
+procedure TTransactionManagerForm.NFirstClick(Sender: TObject);
+begin
+ if TMenuItem(Sender).Tag =1 then
+  GridTransactions.DataSource.DataSet.First
+ else
+  GridTransactions.DataSource.DataSet.Last;
+end;
+
+procedure TTransactionManagerForm.GridTransactionsDrawColumnCell(
+  Sender: TObject; const Rect: TRect; DataCol: Integer; Column: TColumn;
+  State: TGridDrawState);
+var
+  ImageIndex: Integer;
+begin
+ ImageIndex := -1;
+  with Sender as TDBGrid do
+  begin
+    if DataSource.DataSet.RecordCount <> 0 then
+    begin
+      case DataSource.DataSet.FieldByName('Status').AsInteger of
+      tsCommited:
+        ImageIndex := 7;
+      tsRejected:
+        ImageIndex := 8;
+      tsDelayed:
+        ImageIndex := 9;
+      else
+      end;
+      if (DataCol = 1) and (ImageIndex <> -1) then
+        ImageList.Draw(Canvas, Rect.Left, Rect.Top, ImageIndex, True)
+      else
+        DefaultDrawColumnCell(Rect, DataCol, Column, State);
+    end;
+  end;
+end;
+
+procedure TTransactionManagerForm.ActionCommitExecute(Sender: TObject);
+var
+   i: Integer;
+   IDs: WideString;
+   Status, TrCount: Word;
+begin
+ IDs :='';
+ TrCount :=0;
+ with GridTransactions, SelectedRows, DataSource.DataSet do
+  if Count = 0 then
+   begin
+    Inc(TrCount);
+    IDs := FieldByName('ID').AsString;
+   end
+  else
+  begin
+   DisableControls;
+   try
+    for i :=0 to Count -1 do
+    begin
+     GotoBookmark(TBookmark(Items[i]));
+     Status :=FieldByname('Status').AsInteger;
+     if Status in [tsDelayed, tsRejected] then
+     begin
+      Inc(TrCount); 
+      IDs :=IDs + ',' + FieldByName('ID').AsString;
+     end;
+    end;
+   System.Delete(IDs, 1, 1);
+   finally
+    EnableControls;
+   end;
+  end;
+  if MessageDlg(Format('%d sayda əməliyyat təsdiqlənsin?', [TrCount]), mtConfirmation, [mbYes, mbCancel], 0) = mrYes then
+  with TransactionDataModule do
+  begin
+   CommitTransactions(IDs);
+   SBCommit();
+   ActionRefreshExecute(Sender);
+  end;
+end;
+
+procedure TTransactionManagerForm.ActionCommitUpdate(Sender: TObject);
+begin
+ {$B-}
+ with (Sender as TAction), TransactionDataModule.Transactions do
+  Enabled :=not(IsEmpty)
+            {and
+            FlagEnabled(tsDelayed);} {closed by H.R. 21.07.2008}
+            //(FieldByName('Status').AsInteger <> tsCommited);
+ {$B-}
+end;
+
+procedure TTransactionManagerForm.ActionDeleteExecute(Sender: TObject);
+var
+   Index :Integer;
+   WaitNextConfirm, WillRefresh: Boolean;
+   TransactionID :Integer;
+begin
+if GridTransactions.DataSource.DataSet.FieldByName('status').AsInteger=1
+then
+TransactionDataModule.SB_ACA.CallProcedure('checkadvancedobjectaccess',['DELAYEDDELETE']);
+
+if GridTransactions.DataSource.DataSet.FieldByName('status').AsInteger=2
+then
+TransactionDataModule.SB_ACA.CallProcedure('checkadvancedobjectaccess',['COMMITEDDELETE']);
+
+ TransactionDataModule.SB_ACA.CallProcedure('CheckObjectAccess', ['TransactionManager','delete']);
+  WaitNextConfirm :=True;
+  WillRefresh :=False;
+  Focus;
+  with  GridTransactions, SelectedRows, DataSource.DataSet, TransactionDataModule do
+  try
+    if Count = 0 then CurrentRowSelected := True;
+    for  Index :=0 to  Count - 1 do
+    begin
+      GotoBookmark(Pointer(Items[Index]));
+      TransactionID :=FieldbyName('ID').AsInteger;
+
+      if  WaitNextConfirm  then
+      case MessageDlg(
+        Format('Əməliyyat #%d silinsin?',[TransactionID])
+       ,mtConfirmation
+       ,[mbYes, mbNo ,mbCancel ,mbYesToAll]
+       ,0
+       )   of
+        mrNo       : Continue;
+        mrCancel   : Break;
+        mrYesToAll :
+          if MessageDlg(Format('%d sayda əməliyyat silinsin?', [Count - Index]), mtConfirmation, [mbYes, mbCancel], 0) = mrYes then
+           WaitNextConfirm :=False
+          else
+           Continue;
+      end;
+      Application.ProcessMessages;
+
+      with ODS_VidOPTrDel do begin {H.R. 04.10.2010}
+       Close;
+       SetVariable('v_ID', GridTransactions.DataSource.DataSet.FieldByName('OperationCode').AsInteger);
+       Open;
+      end;
+      if ODS_VidOPTrDel.FieldByName('Cnt').AsInteger = 1 then begin
+       ShowMessage('Bu növ əməliyyatı bu moduldan silmək olmaz.');
+       Continue;
+      end; {*** H.R. 04.10.2010}
+
+      if GridTransactions.SelectedRows.Count>1 then begin  {H.R. 17.03.2011}
+       try
+       DeleteTransaction(TransactionID);
+       except
+       end;
+      end
+      else
+      begin
+       DeleteTransaction(TransactionID); {*** H.R. 17.03.2011}
+      end;
+
+      WillRefresh :=True;
+      SBCommit;
+      TransactionState :=tsDelete;
+    end;
+  finally
+   if WillRefresh then
+    ActionRefreshExecute(Sender);
+  end;
+end;
+
+procedure TTransactionManagerForm.ActionDeleteUpdate(Sender: TObject);
+begin
+  {$B-}
+  with (Sender as TAction), TransactionDataModule.Transactions do
+   Enabled :=not(IsEmpty);
+  {$B-}
+end;
+
+procedure TTransactionManagerForm.CBDebetFilialClick(Sender: TObject);
+var
+   DBLookupNo: string[1];
+   DBLookupName: string[10];
+   DBLookup: TDBLookupComboBox;
+begin
+ with TCheckBox(Sender) do
+  DBLookupNo :=IntToStr(Tag);
+
+  DBLookupName :='DBLookup' + DBLookupNo;
+  DBLookup :=TDBLookupComboBox(FindComponent(DBLookupName));
+
+  with DBLookup, TCheckBox(Sender) do
+   if Checked then
+   begin
+    ListSource.DataSet.First;
+    KeyValue :=ListSource.DataSet.FieldByName(KeyField).AsInteger;
+   end
+   else
+    KeyValue :=-1;
+  ActionFilter.Execute;  
+end;
+
+procedure TTransactionManagerForm.ChBoxStatusTClick(Sender: TObject);
+begin
+  with TransactionDataModule.ODS_StatusT do begin
+   Edit;
+   if ChBoxStatusT.Checked then FieldByName('Value').AsInteger :=1
+    else FieldByName('Value').AsInteger :=0;
+   Post;
+  end;
+end;
+
+procedure TTransactionManagerForm.ActionShowFilterExecute(Sender: TObject);
+begin
+  PanelSettings.Visible :=not PanelSettings.Visible;
+end;
+
+procedure TTransactionManagerForm.ActionLoadFiltersExecute(
+  Sender: TObject);
+begin
+ CLBOperationTypes.Clear;
+ TStringList(Pointer(CLBOperationTypes.Tag)^).Clear;
+ CLBCurrency.Clear;
+ TStringList(Pointer(CLBCurrency.Tag)^).Clear;
+ with TransactionDataModule do
+  begin
+   Operations.Execute;
+   Valute.Execute;
+  end;
+end;
+
+procedure TTransactionManagerForm.CLBOperationTypesKeyDown(Sender: TObject;
+  var Key: Word; Shift: TShiftState);
+begin
+ if (Key = VK_F6) then
+  ActionLoadFilters.Execute;
+end;
+
+procedure TTransactionManagerForm.ActionFilterExecute(Sender: TObject);
+
+   function  CheckFiltred(IsChecked: Boolean; const FilterStr: String; Args: array of const): String;
+   begin
+    Result :='';
+    if  IsChecked  then
+     Result :=Format(FilterStr, Args);
+   end;
+
+   function AddBoolPrefix(WillAdd: boolean): string;
+   begin
+    Result :=' ';
+    if WillAdd then Result :=BooleanPrefix;
+   end;
+
+
+  function GenerateFilter(CheckListBox: TCheckListBox; const FilterConst: string; ICount: word): string;
+  var
+     Position, i: word;
+     Filter: string;
+  begin
+  Result :='';
+   with CheckListBox,Items do
+    begin
+     Position :=0;
+     if not(Count>0) then Exit;
+     if not Checked[0] then
+      if ICount= 1 then
+       Filter :=Format(FilterConst,[StrToInt(TStringList(Pointer(Tag)^).Strings[0])])
+      else
+       Filter :=Format(FilterConst,[StrToInt(TStringList(Pointer(Tag)^).Strings[0]),StrToInt(TStringList(Pointer(Tag)^).Strings[0])])
+     else
+      Filter :='';
+
+     for i :=1 to Items.Count -1 do
+      if not Checked[i] then
+       begin
+
+        if ICount= 1 then
+         Filter :=Filter + AddBoolPrefix(not Checked[Position]) + Format(FilterConst,[StrToInt(TStringList(Pointer(Tag)^).Strings[i])])
+        else
+         Filter :=Filter + AddBoolPrefix(not Checked[Position]) + Format(FilterConst,[StrToInt(TStringList(Pointer(Tag)^).Strings[i]),StrToInt(TStringList(Pointer(Tag)^).Strings[i])]);
+
+        Position :=i;
+       end;
+    end;
+    Result :=Filter;
+  end;
+
+
+const
+   CurrencyFilter ='((DebitCurrencyID<>%d)AND(CreditCurrencyID<>%d))';
+   DebetFilialFilter = '(DebitBranch=%d)';
+   CreditFilialFilter = '(CreditBranch=%d)';
+   OperatorFilter = '(OperatorID=%d)';
+   OperationTypeFilter = '(OperationCode<>%d)';
+   OperationStatus = '((Status=%d)OR(Status=%d)OR(Status=%d))';
+
+var
+   T_Delayed:  Word;
+   T_Commited: Word;
+   T_Rejected: Word;
+
+   CurrencyF:        String;
+   DebetFilialF:     String;
+   CreditFilialF:    String;
+   OperatorF:        String;
+   OperationTypeF:   String;
+   OperationStatusF: String;
+   FilterStr:        String;
+
+begin
+ FilterStr :='';
+ T_Delayed :=Word(CBDelayed.Checked)*CBDelayed.Tag;
+ T_Commited :=Word(CBCommited.Checked)*CBCommited.Tag;
+ T_Rejected :=Word(CBRejected.Checked)*CBRejected.Tag;
+
+   DebetFilialF :=CheckFiltred(
+                      CBDebetFilial.Checked
+                     ,DebetFilialFilter
+                     ,[DBLookup2.ListSource.DataSet.FieldByName('ID').AsInteger]
+                     );
+
+   CreditFilialF :=CheckFiltred(
+                      CBCreditFilial.Checked
+                     ,CreditFilialFilter
+                     ,[DBLookup1.ListSource.DataSet.FieldByName('ID').AsInteger]
+                     );
+
+   OperatorF :=CheckFiltred(
+                      CBOperator.Checked
+                     ,OperatorFilter
+                     ,[DBLookup3.ListSource.DataSet.FieldByName('ID').AsInteger]
+                     );
+
+   OperationStatusF :=CheckFiltred(
+                      True
+                     ,OperationStatus
+                     ,[T_Delayed, T_Commited, T_Rejected]);
+                     
+   CurrencyF :=GenerateFilter(CLBCurrency,CurrencyFilter,2);
+   OperationTypeF :=GenerateFilter(CLBOperationTypes,OperationTypeFilter,1);
+
+
+   FilterStr :=CurrencyF;
+
+    if  DebetFilialF <> '' then
+    if  FilterStr=''  then
+      FilterStr :=DebetFilialF
+    else
+      FilterStr :=FilterStr + BooleanPrefix + DebetFilialF;
+
+    if  CreditFilialF <> '' then
+    if  FilterStr=''  then
+      FilterStr :=CreditFilialF
+    else
+      FilterStr :=FilterStr + BooleanPrefix + CreditFilialF;
+
+    if  OperatorF <> '' then
+    if  FilterStr=''  then
+      FilterStr :=OperatorF
+    else
+      FilterStr :=FilterStr + BooleanPrefix +OperatorF;
+
+    if  OperationTypeF <> '' then
+    if  FilterStr=''  then
+      FilterStr :=OperationTypeF
+    else
+      FilterStr :=FilterStr + BooleanPrefix +OperationTypeF;
+
+    if  OperationStatusF <> '' then
+    if  FilterStr=''  then
+      FilterStr :=OperationStatusF
+    else
+      FilterStr :=FilterStr + BooleanPrefix +OperationStatusF;
+   with GridTransactions.DataSource.DataSet do
+   begin
+    Filtered :=False;
+    Filter :=FilterStr;
+    Filtered :=True;
+   end;
+
+end;
+
+function TTransactionManagerForm.FlagEnabled(Flag: Word): Boolean;
+
+  procedure CheckRow;
+  begin
+    Result := GridTransactions.DataSource.DataSet.FieldByName('Status').AsInteger = Flag;
+  end;
+
+var
+  SavedPos: TBookmark;
+  Index: Integer;
+
+begin
+  Result :=False;
+  with GridTransactions, SelectedRows, DataSource.DataSet do
+  begin
+   if (Count = 1) or (Count = 0) then
+     CheckRow
+   else
+   begin
+    DisableControls;
+    SavedPos := GetBookmark;
+    try
+      for Index := 0 to Count -1 do
+      begin
+        GotoBookmark(TBookmark(Items[Index]));
+        CheckRow;
+        if Result then
+         break;
+      end;
+    finally
+      GotoBookmark(SavedPos);
+      EnableControls;
+    end;
+   end;
+  end;
+end;
+
+procedure TTransactionManagerForm.DBLookup2Click(Sender: TObject);
+begin
+  ActionFilter.Execute;
+end;
+
+procedure TTransactionManagerForm.ActionStepCommitExecute(Sender: TObject);
+var
+   i: Integer;
+   ID: Longint;
+   WillRefresh: Boolean;
+   Status, CommitedCount, ErrorCount: Word;
+   LastErrorMessage: String;
+begin
+ CommitedCount :=0;
+ ErrorCount :=0;
+ WillRefresh :=False;
+ with TransactionDataModule, GridTransactions, SelectedRows, DataSource.DataSet do
+  if MessageDlg('Əməliyyatlar təsdiqlənsin?', mtConfirmation, [mbYes, mbCancel], 0) = mrYes then
+  begin
+   DisableControls;
+   try
+    Application.ProcessMessages;
+    if Count = 0 then CurrentRowSelected :=True;
+    for i :=0 to Count -1 do
+    try
+     GotoBookmark(TBookmark(Items[i]));
+     Status :=FieldByname('Status').AsInteger;
+     if Status in [tsDelayed, tsRejected] then
+     begin
+      ID := FieldByName('ID').AsInteger;
+      CommitTransaction(ID);
+      WillRefresh :=True;
+      Inc(CommitedCount);
+      SBCommit();
+      
+      //***
+     //SmSBankImpl.sendSMSByTemplate( 100, 'username',  '994505314301',  'smartuser', sboapiDataModule.OrPack_SMS,
+       //                        '999', 'nu','nnn','','','','','','','');
+      //***
+
+     end;
+     except
+     on E: Exception do
+      begin
+       LastErrorMessage :=E.Message;
+       Inc(ErrorCount);
+       Continue;
+      end;
+    end;
+   finally
+    if ErrorCount > 0 then
+     if ErrorCount = 1 then
+      MessageDlg(LastErrorMessage, mtConfirmation, [mbOk], 0)
+     else
+      MessageDlg(Format(cs_CommitInformation, [CommitedCount + ErrorCount, CommitedCount, ErrorCount]), mtConfirmation, [mbOk], 0);
+
+    EnableControls;
+
+
+    if WillRefresh then
+    begin
+     TransactionState :=tsCommit;
+     ActionRefreshExecute(Sender);
+    end;
+
+   end;
+  end;
+ GridTransactions.DataSource.DataSet.Locate('ID',ID,[loCaseInsensitive,loPartialKey]);
+
+ //showmessage( SmSBankImpl.TransactionSMS(ID, sboapiDataModule.OrPack_SMS));
+ //SmSBankImpl.TransactionSMS2(ID, sboapiDataModule.OrPack_SMS);      
+ end;
+
+
+procedure TTransactionManagerForm.ActionRejectExecute(Sender: TObject);
+var
+  i: integer;
+  ID: Longint;
+  WillRefresh: Boolean;
+  RejectReason: String;
+  Status, RejectedCount, ErrorCount: Word;
+begin
+ ErrorCount :=0;
+ RejectedCount :=0;
+ WillRefresh :=False;
+ if InputQuery('İnkarolunma !!! ', 'Təyinat:',RejectReason ) then
+  with TransactionDataModule, GridTransactions, SelectedRows, DataSource.DataSet do
+  begin
+   if Count = 0 then CurrentRowSelected :=True;
+   for i:=0 to Count-1 do
+   try
+    GotoBookmark(TBookmark(Items[i]));
+    Status :=FieldByname('Status').AsInteger;
+    if Status in [tsDelayed, tsRejected] then
+    begin
+     ID :=FieldByName('ID').AsInteger;
+     RejectTransaction(ID, RejectReason);
+     WillRefresh :=True;
+     Inc(RejectedCount);
+     SBCommit();
+    end;
+   except
+    Inc(ErrorCount);
+    Continue;
+   end
+  end;
+
+ if ErrorCount > 0 then
+  MessageDlg(Format(cs_RejectInformation, [RejectedCount + ErrorCount, RejectedCount, ErrorCount]), mtConfirmation, [mbOk], 0);
+
+ if WillRefresh then
+  ActionRefreshExecute(Sender);
+
+
+end;
+
+procedure TTransactionManagerForm.ActionCommissionExecute(Sender: TObject);
+begin
+ if not Assigned(CommissionForm) then
+  CommissionForm :=TCommissionForm.Create(Self);
+  CommissionForm.ShowModal;
+end;
+
+procedure TTransactionManagerForm.SpeedButton1Click(Sender: TObject);
+begin
+ ButtonFilter.Down :=False;
+ PanelSettings.Visible :=False;
+end;
+
+procedure TTransactionManagerForm.ActiveFormKeyDown(Sender: TObject;
+  var Key: Word; Shift: TShiftState);
+begin
+ if (ssCtrl in Shift) and (Key = VK_F1) then
+  TransactionDataModule.ShowInfo;
+end;
+
+procedure TTransactionManagerForm.BtnKeyboardClick(Sender: TObject);
+begin
+//  TouchKeyboard1.Visible := not TouchKeyboard1.Visible;
+end;
+
+procedure TTransactionManagerForm.NFullRefreshClick(Sender: TObject);
+begin
+ TransactionDataModule.FullRefresh;
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TTransactionManagerForm,
+    Class_TransactionManagerForm,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

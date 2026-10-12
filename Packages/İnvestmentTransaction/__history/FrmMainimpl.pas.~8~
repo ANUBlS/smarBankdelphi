@@ -1,0 +1,40 @@
+unit FrmMainimpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ExtCtrls;
+
+type
+  TFrmMain = class(TForm)
+    Panel1: TPanel;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmMain: TFrmMain;
+
+implementation
+
+{$R *.dfm}
+uses CommanParametrs,sboapiDataModuleImpl;
+  procedure InitPlugin(s:string);export;
+begin
+
+   if s='' then
+   begin
+   FrmMain.ShowModal;
+   end;
+
+end;
+exports
+     InitPlugin;
+
+initialization
+ FrmMain :=TFrmMain.Create(Application);
+
+end.

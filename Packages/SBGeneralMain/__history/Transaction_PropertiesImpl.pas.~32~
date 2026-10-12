@@ -1,0 +1,1855 @@
+﻿unit Transaction_PropertiesImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ComCtrls, StdCtrls, ImgList, ExtCtrls, CurrencyEdit, DBCtrls, Mask,
+  DBViewComboBox, Db, SearchEdit, ActnList, Variants, Buttons;
+
+type
+  TTransactionSide = (tsDebet, tsCredit, tsUnknown);
+  TOperationMode = (omInsert, omEdit, omCommission);
+
+type
+  TTransactionForm = class(TForm)
+    GroupBox1: TGroupBox;
+    Panel1: TPanel;
+    PanelDebit: TPanel;
+    Panel4: TPanel;
+    Panel5: TPanel;
+    Panel6: TPanel;
+    GroupBox2: TGroupBox;
+    GroupBox3: TGroupBox;
+    Panel14: TPanel;
+    Panel15: TPanel;
+    CashSymbolLookUp: TDBLookupComboBox;
+    CashSymbolDBEdit: TDBEdit;
+    ConvertationSymbolIDBEdit: TDBEdit;
+    Panel17: TPanel;
+    ButtonApply: TButton;
+    ButtonCancel: TButton;
+    ButtonClose: TButton;
+    DebitCurrencyIDEdit: TDBEdit;
+    DebitCurrencyRate: TDBEdit;
+    DebitCurrencyLookUp: TDBLookupComboBox;
+    ConvertationSymbolLookUp: TDBLookupComboBox;
+    GroupBox4: TGroupBox;
+    Label5: TLabel;
+    TransDate: TDateTimePicker;
+    PanelDebitRest: TPanel;
+    Label1: TLabel;
+    DBText1: TDBText;
+    Label2: TLabel;
+    DBText2: TDBText;
+    Label6: TLabel;
+    DBLookupComboBox1: TDBLookupComboBox;
+    Button1: TButton;
+    EditDebtBal_CN: TSearchEdit;
+    EditDebtAccNo: TEdit;
+    DBEdit1: TDBEdit;
+    Panel16: TPanel;
+    TrDestNoEdit: TEdit;
+    Panel3: TPanel;
+    ReportIDDBEdit: TDBEdit;
+    ReportIDLookUp: TDBLookupComboBox;
+    Panel7: TPanel;
+    CountrIDDBEdit: TDBEdit;
+    CountrIDLookUp: TDBLookupComboBox;
+    Label7: TLabel;
+    DBEditOperationNo: TDBEdit;
+    DBEdit4: TDBEdit;
+    OperationTypeLookUp: TDBLookupComboBox;
+    Panel11: TPanel;
+    CurrencyEditDebit: TCurrencyEdit;
+    Panel12: TPanel;
+    CurrencyEditCredit: TCurrencyEdit;
+    Panel13: TPanel;
+    CurrencyEditLammount: TCurrencyEdit;
+    HeaderControl1: THeaderControl;
+    GoAml: TButton;
+    Panel18: TPanel;
+    DBLC_MMX_Transmode: TDBLookupComboBox;
+    EditTransModeCode: TEdit;
+    Label8: TLabel;
+    Label9: TLabel;
+    Panel2: TPanel;
+    PanelCredit: TPanel;
+    PanelCreditRest: TPanel;
+    Label3: TLabel;
+    DBText3: TDBText;
+    Label4: TLabel;
+    DBText4: TDBText;
+    Panel8: TPanel;
+    DBEdit2: TDBEdit;
+    Panel9: TPanel;
+    EditKredBal_CN: TSearchEdit;
+    EditCredAccNo: TEdit;
+    Panel10: TPanel;
+    CreditCurrencyIDEdit: TDBEdit;
+    CreditCurrencyRate: TDBEdit;
+    CreditCurrencyLookUp: TDBLookupComboBox;
+    Panel20: TPanel;
+    Label10: TLabel;
+    Edit_DCustId: TEdit;
+    BtnDebtCustomer: TSpeedButton;
+    DCust: TDBEdit;
+    Panel21: TPanel;
+    Label11: TLabel;
+    Edit_CCustId: TEdit;
+    BtnCredCustomer: TSpeedButton;
+    CCust: TDBEdit;
+    ComboBox1: TComboBox;
+    HeaderControl2: THeaderControl;
+    Label12: TLabel;
+    Label13: TLabel;
+    Label14: TLabel;
+    Label15: TLabel;
+    Label16: TLabel;
+    Label17: TLabel;
+    DBEditDestination: TDBEdit;
+    ActionList1: TActionList;
+    ActionInsert: TAction;
+    ActionCancel: TAction;
+    ActionExit: TAction;
+    Button2: TButton;
+    Button3: TButton;
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormShow(Sender: TObject);
+    procedure CreditAccNoLookUpDropDown(Sender: TObject);
+    procedure DebtAccSearchEditChange(Sender: TObject);
+    procedure CashSymbolDBEditEnter(Sender: TObject);
+    procedure DebtAccSearchEditEnter(Sender: TObject);
+    procedure CreditAccSearchEditEnter(Sender: TObject);
+    procedure CreditAccSearchEditChange(Sender: TObject);
+    procedure CurrencyEditDebitChange(Sender: TObject);
+    procedure FormKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure FormCreate(Sender: TObject);
+    procedure DebitCurrencyIDEditExit(Sender: TObject);
+    procedure CreditCurrencyIDEditExit(Sender: TObject);
+
+    procedure Button3Click(Sender: TObject);
+    procedure ActionCancelExecute(Sender: TObject);
+    procedure ActionExitExecute(Sender: TObject);
+    procedure ActionInsertExecute(Sender: TObject);
+    procedure ActionInsertUpdate(Sender: TObject);
+    procedure TrDestNoEditChange(Sender: TObject);
+    procedure TransDateChange(Sender: TObject);
+    procedure CashSymbolDBEditExit(Sender: TObject);
+    procedure DBEditDestinationChange(Sender: TObject);
+    procedure ConvertationSymbolIDBEditExit(Sender: TObject);
+    procedure DebitCurrencyRateChange(Sender: TObject);
+    procedure ComboBox1DropDown(Sender: TObject);
+    procedure ComboBox1Click(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure EditDebtBal_CNDblClick(Sender: TObject);
+    procedure EditKredBal_CNDblClick(Sender: TObject);
+    procedure EditDebtAccNoDblClick(Sender: TObject);
+    procedure EditDebtBal_CNKeyPress(Sender: TObject; var Key: Char);
+    procedure EditKredBal_CNKeyPress(Sender: TObject; var Key: Char);
+    procedure EditCredAccNoDblClick(Sender: TObject);
+    procedure EditDebtAccNoKeyPress(Sender: TObject; var Key: Char);
+    procedure DebitCurrencyIDEditKeyPress(Sender: TObject; var Key: Char);
+    procedure CreditCurrencyIDEditKeyPress(Sender: TObject; var Key: Char);
+    procedure EditCredAccNoKeyPress(Sender: TObject; var Key: Char);
+    procedure CurrencyEditDebitKeyPress(Sender: TObject; var Key: Char);
+    procedure CurrencyEditCreditKeyPress(Sender: TObject; var Key: Char);
+    procedure CurrencyEditLammountKeyPress(Sender: TObject; var Key: Char);
+    procedure CashSymbolDBEditKeyPress(Sender: TObject; var Key: Char);
+    procedure TrDestNoEditKeyPress(Sender: TObject; var Key: Char);
+    procedure ConvertationSymbolIDBEditKeyPress(Sender: TObject; var Key: Char);
+    procedure CountrIDDBEditKeyPress(Sender: TObject; var Key: Char);
+    procedure ReportIDDBEditKeyPress(Sender: TObject; var Key: Char);
+    procedure CashSymbolLookUpKeyPress(Sender: TObject; var Key: Char);
+    procedure ConvertationSymbolLookUpKeyPress(Sender: TObject; var Key: Char);
+    procedure DBEditDestinationKeyPress(Sender: TObject; var Key: Char);
+    procedure CountrIDLookUpKeyPress(Sender: TObject; var Key: Char);
+    procedure ReportIDLookUpKeyPress(Sender: TObject; var Key: Char);
+    procedure GoAmlClick(Sender: TObject);
+    procedure EditTransModeCodeKeyPress(Sender: TObject; var Key: Char);
+    procedure DBLC_MMX_TransmodeCloseUp(Sender: TObject);
+    procedure DBLC_MMX_TransmodeKeyPress(Sender: TObject; var Key: Char);
+    procedure Edit_CCustIDKeyPress(Sender: TObject; var Key: Char);
+    procedure Edit_DCustIdKeyPress(Sender: TObject; var Key: Char);
+    procedure Edit_DCustIdChange(Sender: TObject);
+    procedure Edit_CCustIdChange(Sender: TObject);
+    procedure EditTransModeCodeChange(Sender: TObject);
+    procedure CountrIDDBEditChange(Sender: TObject);
+    procedure BtnDebtCustomerClick(Sender: TObject);
+    procedure BtnCredCustomerClick(Sender: TObject);
+    procedure EditDebtBal_CNChange(Sender: TObject);
+    procedure EditKredBal_CNChange(Sender: TObject);
+    procedure Edit_DCustIdKeyUp(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure Edit_CCustIdKeyUp(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure Button2Click(Sender: TObject);
+
+  private
+
+  public
+    TransactionSide: TTransactionSide;
+    OperationMode: TOperationMode;
+    DebitCurrencyID, CreditCurrencyID: Word;
+    Modifed: Boolean;
+    text: string;
+
+    procedure SetCurrencyFilter(AccountDataSet, CurrencyDataSet: TDataSet);
+    function RoundNew(X: Double; Precision: Integer ): Double;
+    procedure SetAmmounts(TransactionSide: TTransactionSide);
+
+    procedure ResetAccountFilter(AccountDataSet: TDataSet);
+    procedure ResetTransaction;
+    procedure SaveTransaction;
+
+    procedure OperationCancel;
+    procedure ClearAmmounts;
+    procedure SetCashSymbol;
+    procedure Scroll;
+
+    procedure Init;
+    procedure Tr_Insert;
+     procedure Tr_Update;
+      procedure Tr_Credit;
+       procedure Tr_Debt;
+    procedure LoadComboData(Sender: TComboBox);
+
+    procedure SIK(var message: TMessage); message WM_KILLFOCUS;
+    procedure CMDialogKey(var Msg: TWMKey); message CM_DIALOGKEY;
+
+  end;
+
+var
+  TransactionForm: TTransactionForm;
+
+implementation
+
+uses Transaction_DataModuleUnit,  sboapidatamoduleimpl,
+  Transaction_DestinationImpl, BProc_Trans, SBTranslateProc, FormBalCnImpl,
+  Form_AccountsImpl,OpenAccountImpl;
+
+{$R *.DFM}
+
+procedure TTransactionForm.SIK(var message: TMessage);
+begin
+// ShowMessage('SIK');
+ inherited;
+
+end;
+
+procedure LoadPlugin(PluginName :String;PluginParam :String;PluginParam2 :String);
+var PluginHandle :THandle;
+    exportproc : procedure(s:String;k:String);
+begin
+   PluginHandle := LoadPackage(ExtractFilePath(Application.ExeName)+PluginName);
+
+   if PluginHandle > 0 then
+   begin
+      @exportproc := GetProcAddress(PluginHandle,'InitPlugin');
+      exportproc(PluginParam,PluginParam2);
+   end;
+end;
+
+procedure TTransactionForm.SetCurrencyFilter(AccountDataSet, CurrencyDataSet: TDataSet);
+var
+   AccountID: integer;
+begin
+ AccountID :=AccountDataSet.FieldByName('ID').AsInteger;
+ //AccountDataSet.Filtered :=False;
+// AccountDataSet.Filter :='val_acc='+CurrencyDataSet.FieldByName('ID').AsString;
+// AccountDataSet.Filtered :=True;
+ AccountDataSet.Locate('ID',AccountID,[]);
+end;
+
+procedure TTransactionForm.OperationCancel;
+begin
+ with transaction_DataModule, Transactions do
+  if State in [dsInsert, dsEdit] then
+  begin
+   Cancel;
+   RefreshRecord; //-->Сменить на что нибудь нормальное!!!
+  end;
+end;
+
+procedure TTransactionForm.SetAmmounts(TransactionSide: TTransactionSide);
+var
+   DebetRate, CreditRate : real;
+   DebitAmmount,CreditAmmount,LAmmount: Currency;
+begin
+ with Transaction_DataModule do
+ begin
+  DebetRate :=DebitCurrencyData.FieldByName('Rate').AsFloat;
+  CreditRate :=CreditCurrencyData.FieldByName('Rate').AsFloat;
+ end;
+ case TransactionSide of
+  tsDebet:
+         begin
+          LAmmount:=RoundNew(CurrencyEditDebit.Value * DebetRate, 1000000);
+          if Transaction_DataModule.DebitCurrencyData.FieldByName('ID').AsInteger =
+             Transaction_DataModule.CreditCurrencyData.FieldByName('ID').AsInteger {H.R. 24.09.2010}
+           then CreditAmmount := CurrencyEditDebit.Value
+           else CreditAmmount:=RoundNew(LAmmount / CreditRate, 1000000);
+          //CreditAmmount:=RoundNew(LAmmount / CreditRate, 1000000);
+          CurrencyEditLammount.Value :=RoundNew(LAmmount, 100);
+          CurrencyEditCredit.Value :=RoundNew(CreditAmmount , 100);
+
+          //CurrencyEditLammount.Value :=RoundNew(CurrencyEditDebit.Value * DebetRate, 100);
+          //CurrencyEditCredit.Value :=RoundNew(CurrencyEditLammount.Value / CreditRate, 100);
+         end;
+  tsCredit:
+         begin
+          LAmmount:= RoundNew(CurrencyEditCredit.Value * CreditRate, 1000000);
+          if Transaction_DataModule.DebitCurrencyData.FieldByName('ID').AsInteger =
+             Transaction_DataModule.CreditCurrencyData.FieldByName('ID').AsInteger {H.R. 24.09.2010}
+           then DebitAmmount := CurrencyEditCredit.Value
+           else DebitAmmount:=RoundNew(LAmmount / DebetRate, 1000000);
+          //DebitAmmount:=RoundNew(LAmmount / DebetRate, 1000000);
+          CurrencyEditLammount.Value :=RoundNew(LAmmount, 100);
+          CurrencyEditDebit.Value :=RoundNew(DebitAmmount, 100);
+
+         // CurrencyEditLammount.Value :=RoundNew(CurrencyEditCredit.Value * CreditRate, 100);
+         // CurrencyEditDebit.Value :=RoundNew(CurrencyEditLammount.Value / DebetRate, 100);
+         end;
+  tsUnknown:
+        begin
+         with Transaction_DataModule do
+         begin
+          if DebitCurrencyData.FieldByName('ID').AsInteger = 0 then
+           CurrencyEditDebit.Value :=CurrencyEditLammount.Value;
+          if CreditCurrencyData.FieldByName('ID').AsInteger = 0 then
+           CurrencyEditCredit.Value :=CurrencyEditLammount.Value;
+         end;
+        end;
+ end;
+end;
+
+procedure TTransactionForm.SetCashSymbol;
+begin
+ with Transaction_DataModule, CashSymbolLookUp do
+ begin
+  if (DebitAccData.FieldByName('IsCacheAccount').AsInteger = 1) and (DebitAccData.FieldByName('val_acc').AsInteger = 0) then
+   ListSource.DataSet.Filter :='Mediocrity = 0'
+  else
+  if (CreditAccData.FieldByName('IsCacheAccount').AsInteger = 1) and (CreditAccData.FieldByName('val_acc').AsInteger = 0) then
+   ListSource.DataSet.Filter :='Mediocrity = 1'
+  else
+   ListSource.DataSet.Filter :='Mediocrity = -1';
+  ListSource.DataSet.Filtered :=False;
+  ListSource.DataSet.Filtered :=True;
+ end;
+end;
+
+procedure TTransactionForm.CMDialogKey(var Msg: TWMKey);
+begin
+// if not (ActiveControl is TButton) then
+ // if Msg.Charcode = 13 then
+  // Msg.Charcode := 9;
+  inherited;
+end;
+  procedure TTransactionForm.Tr_Update;
+  begin
+   with  Transaction_DataModule, Transactions do
+ begin
+   TransDate.DateTime :=FieldByName('TransactionDate').AsDateTime;
+
+      with DebitAccData do begin
+        Close;
+        SetVariable('v_id',Transactions.FieldByName('DEBITID').asInteger);
+        Open;
+        EditDebtBal_CN.Text:=FieldByName('BAL_CN').asString;
+
+      end;
+
+      with CreditAccData do begin
+        Close;
+        SetVariable('v_id',Transactions.FieldByName('CREDITID').asInteger);
+        Open;
+        EditKredBal_CN.Text:=FieldByName('BAL_CN').asString;
+      end;
+
+     //DebtAccSearchEdit.Text :=FieldByName('DebitAccNo').AsString;
+     // CreditAccSearchEdit.Text :=FieldByName('CreditAccNo').AsString;
+
+     EditDebtAccNo.Text :=FieldByName('DebitAccNo').AsString;
+     EditCredAccNo.Text :=FieldByName('CREDITACCNO').AsString;
+     CurrencyEditDebit.Value :=FieldByName('DebitAmount').AsCurrency;
+     CurrencyEditCredit.Value :=FieldByName('CreditAmount').AsCurrency;
+     CurrencyEditLammount.Value :=FieldByName('Lamount').AsCurrency;
+    // CountrIDLookUp.KeyValue:=FieldByName('COUNTRID').AsInteger ;
+    ODS_TransInfo.Close;
+    ODS_TransInfo.SetVariable('v_trID',TransactionsID.AsFloat);
+    ODS_TransInfo.Open;
+
+    //if ODS_TransInfo.RecordCount>0 then {closed by Hesen R. 22.01.2013}
+    //begin
+    DBLC_MMX_Transmode.KeyValue:=ODS_TransInfo.FieldByName('TRANSMODE_CODE').AsInteger;
+    EditTransModeCode.Text:=ODS_TransInfo.FieldByName('TRANSMODE_CODE').AsString;
+
+    ODS_DebtCustomer.CloseAll;
+    ODS_DebtCustomer.SetVariable('v_custid',ODS_TransInfo.FieldByName('DCUSTID').AsInteger);
+    ODS_DebtCustomer.Open;
+    Edit_DCustId.Text:=ODS_DebtCustomerID.AsString;
+
+
+    ODS_CredCustomer.CloseAll;
+    ODS_CredCustomer.SetVariable('v_custid',ODS_TransInfo.FieldByName('CCUSTID').AsInteger);
+    ODS_CredCustomer.Open;
+    Edit_CCustId.Text:=ODS_CredCustomerID.AsString;
+    //end;
+     end;
+
+  end;
+
+
+procedure TTransactionForm.Tr_Insert;  // Modified by TNariman at 1.Jul.2004
+                                      // UnModified version shown below at 274
+begin
+ with  Transaction_DataModule, Transactions do
+ begin
+
+     FieldByName('DebitCurrencyID').AsInteger :=0;
+     FieldByName('CreditCurrencyID').AsInteger :=0;
+     FieldByName('DebitRate').AsFloat :=DebitCurrencyData.FieldByName('Rate').AsFloat;
+     FieldByName('CreditRate').AsFloat :=CreditCurrencyData.FieldByName('Rate').AsFloat;
+     FieldByName('DebitID').Clear;
+     FieldByName('CreditID').Clear;
+   //  PanelDebitRest.Visible :=False;
+   //  PanelCreditRest.Visible :=False;
+     Country.Locate('name','Azərbaycan',[loCaseInsensitive]);
+   //showmessage(inttostr(Country.FieldByName('id').AsInteger));
+     CountrIDDBEdit.Text := Country.FieldByName('id').AsString;
+     CountrIDLookUp.KeyValue := Country.FieldByName('id').AsInteger;
+    ///////////////////////////////////////////////////////////
+     Transaction_DataModule.TransactionsREPORTID.Value := 0;
+     //Transaction_DataModule.TransactionsCOUNTRID.Value := 0;
+     ///////////////////////////////////////////////////////
+      DBLC_MMX_Transmode.KeyValue:=-1;
+      EditTransModeCode.Text:=''
+    end;
+end;
+
+procedure TTransactionForm.Tr_Credit;  // Modified by TNariman at 1.Jul.2004
+                                      // UnModified version shown below at 274
+begin
+ with  Transaction_DataModule, Transactions do
+ begin
+
+     FieldByName('DebitCurrencyID').AsInteger :=0;
+     FieldByName('CreditCurrencyID').AsInteger :=0;
+     FieldByName('DebitRate').AsFloat :=DebitCurrencyData.FieldByName('Rate').AsFloat;
+     FieldByName('CreditRate').AsFloat :=CreditCurrencyData.FieldByName('Rate').AsFloat;
+     FieldByName('DebitID').Clear;
+     FieldByName('CreditID').Clear;
+   //  PanelDebitRest.Visible :=False;
+   //  PanelCreditRest.Visible :=False;
+     Country.Locate('name','Azərbaycan',[loCaseInsensitive]);
+   //showmessage(inttostr(Country.FieldByName('id').AsInteger));
+     CountrIDDBEdit.Text := Country.FieldByName('id').AsString;
+     CountrIDLookUp.KeyValue := Country.FieldByName('id').AsInteger;
+    ///////////////////////////////////////////////////////////
+     Transaction_DataModule.TransactionsREPORTID.Value := 0;
+     //Transaction_DataModule.TransactionsCOUNTRID.Value := 0;
+     ///////////////////////////////////////////////////////
+      DBLC_MMX_Transmode.KeyValue:=-1;
+      EditTransModeCode.Text:=''
+    end;
+end;
+
+procedure TTransactionForm.Tr_Debt;  // Modified by TNariman at 1.Jul.2004
+                                      // UnModified version shown below at 274
+begin
+ with  Transaction_DataModule, Transactions do
+ begin
+
+     FieldByName('DebitCurrencyID').AsInteger :=0;
+     FieldByName('CreditCurrencyID').AsInteger :=0;
+     FieldByName('DebitRate').AsFloat :=DebitCurrencyData.FieldByName('Rate').AsFloat;
+     FieldByName('CreditRate').AsFloat :=CreditCurrencyData.FieldByName('Rate').AsFloat;
+     FieldByName('DebitID').Clear;
+     FieldByName('CreditID').Clear;
+   //  PanelDebitRest.Visible :=False;
+   //  PanelCreditRest.Visible :=False;
+     Country.Locate('name','Azərbaycan',[loCaseInsensitive]);
+   //showmessage(inttostr(Country.FieldByName('id').AsInteger));
+     CountrIDDBEdit.Text := Country.FieldByName('id').AsString;
+     CountrIDLookUp.KeyValue := Country.FieldByName('id').AsInteger;
+    ///////////////////////////////////////////////////////////
+     Transaction_DataModule.TransactionsREPORTID.Value := 0;
+     //Transaction_DataModule.TransactionsCOUNTRID.Value := 0;
+     ///////////////////////////////////////////////////////
+      DBLC_MMX_Transmode.KeyValue:=-1;
+      EditTransModeCode.Text:=''
+    end;
+end;
+procedure TTransactionForm.Init;  // Modified by TNariman at 1.Jul.2004
+                                      // UnModified version shown below at 274
+begin
+ with  Transaction_DataModule, Transactions do
+ case OperationMode of
+  omInsert:
+    begin
+
+     FieldByName('DebitCurrencyID').AsInteger :=0;
+     FieldByName('CreditCurrencyID').AsInteger :=0;
+     FieldByName('DebitRate').AsFloat :=DebitCurrencyData.FieldByName('Rate').AsFloat;
+     FieldByName('CreditRate').AsFloat :=CreditCurrencyData.FieldByName('Rate').AsFloat;
+     FieldByName('DebitID').Clear;
+     FieldByName('CreditID').Clear;
+   //  PanelDebitRest.Visible :=False;
+   //  PanelCreditRest.Visible :=False;
+     Country.Locate('name','Azərbaycan',[loCaseInsensitive]);
+   //showmessage(inttostr(Country.FieldByName('id').AsInteger));
+     CountrIDDBEdit.Text := Country.FieldByName('id').AsString;
+     CountrIDLookUp.KeyValue := Country.FieldByName('id').AsInteger;
+    end;
+  omEdit:
+    begin
+
+     TransDate.DateTime :=FieldByName('TransactionDate').AsDateTime;
+
+      with DebitAccData do begin
+        Close;
+        SetVariable('v_id',Transactions.FieldByName('DEBITID').asInteger);
+        Open;
+        EditDebtBal_CN.Text:=FieldByName('BAL_CN').asString;
+
+      end;
+
+      with CreditAccData do begin
+        Close;
+        SetVariable('v_id',Transactions.FieldByName('CREDITID').asInteger);
+        Open;
+        EditKredBal_CN.Text:=FieldByName('BAL_CN').asString;
+      end;
+
+     //DebtAccSearchEdit.Text :=FieldByName('DebitAccNo').AsString;
+     // CreditAccSearchEdit.Text :=FieldByName('CreditAccNo').AsString;
+
+     EditDebtAccNo.Text :=FieldByName('DebitAccNo').AsString;
+     EditCredAccNo.Text :=FieldByName('CREDITACCNO').AsString;
+     CurrencyEditDebit.Value :=FieldByName('DebitAmount').AsCurrency;
+     CurrencyEditCredit.Value :=FieldByName('CreditAmount').AsCurrency;
+     CurrencyEditLammount.Value :=FieldByName('Lamount').AsCurrency;
+    // CountrIDLookUp.KeyValue:=FieldByName('COUNTRID').AsInteger ;
+    ODS_TransInfo.Close;
+    ODS_TransInfo.SetVariable('v_trID',TransactionsID.AsFloat);
+    ODS_TransInfo.Open;
+
+    //if ODS_TransInfo.RecordCount>0 then {closed by Hesen R. 22.01.2013}
+    //begin
+    DBLC_MMX_Transmode.KeyValue:=ODS_TransInfo.FieldByName('TRANSMODE_CODE').AsInteger;
+    EditTransModeCode.Text:=ODS_TransInfo.FieldByName('TRANSMODE_CODE').AsString;
+
+    ODS_DebtCustomer.CloseAll;
+    ODS_DebtCustomer.SetVariable('v_custid',ODS_TransInfo.FieldByName('DCUSTID').AsInteger);
+    ODS_DebtCustomer.Open;
+    Edit_DCustId.Text:=ODS_DebtCustomerID.AsString;
+
+
+    ODS_CredCustomer.CloseAll;
+    ODS_CredCustomer.SetVariable('v_custid',ODS_TransInfo.FieldByName('CCUSTID').AsInteger);
+    ODS_CredCustomer.Open;
+    Edit_CCustId.Text:=ODS_CredCustomerID.AsString;
+    //end;
+     end;
+  omCommission:
+    begin
+     FieldByName('DebitCurrencyID').AsInteger :=Commission.FieldByName('DebitCurrencyID').AsInteger;
+     FieldByName('CreditCurrencyID').AsInteger :=Commission.FieldByName('CreditCurrencyID').AsInteger;
+     FieldByName('DebitID').AsInteger :=Commission.FieldByName('Debt').AsInteger;
+     FieldByName('CreditID').AsInteger :=Commission.FieldByName('Credit').AsInteger;
+     //DebtAccSearchEdit.Text :=Commission.FieldByName('DebitAccount').AsString;
+    // CreditAccSearchEdit.Text :=Commission.FieldByName('CreditAccount').AsString;
+     EditDebtAccNo.Text :=FieldByName('DebitAccNo').AsString;
+   //-------s  EditCreditAccNo.Text :=FieldByName('CreditAccNo').AsString;
+     FieldByName('Name').AsString :=Commission.FieldByName('Assignment').AsString;
+     //PanelDebitRest.Visible :=DebtAccSearchEdit.Text <> EmptyStr;
+    // PanelCreditRest.Visible :=CreditAccSearchEdit.Text <> EmptyStr;
+    end;
+ end;
+
+
+ end;
+
+procedure CutEditText(Sender: TObject);//Eldarix
+var
+ X, Sel: Integer;
+begin
+with TCurrencyEdit(Sender) do
+ begin
+ if DecimalSeparator=ThousandSeparator then Exit;
+  if Pos(DecimalSeparator,Text) = 0 then Exit;
+  Sel :=SelStart;
+  X :=Length(Text)-Pos(DecimalSeparator,Text)-CurrencyDecimals;
+  if (X>0) then
+   begin
+    Text:=Copy(Text, 0, (Length(Text)-X));
+    SelStart :=Sel;
+   end;
+ end;
+end;
+
+//D:\Personal\DELPHI\Delphi Examples\New\20052002.html
+function TTransactionForm.RoundNew(X: Double; Precision: Integer ): Double;
+var
+  ScaledFractPart, Temp : Double;
+begin
+  ScaledFractPart := Frac(X)*Precision;
+  Temp := Frac(ScaledFractPart);
+  ScaledFractPart := Int(ScaledFractPart);
+  //if Temp >= 0.5 then ScaledFractPart := ScaledFractPart + 1; ***Closed by Hesen R.***
+  //if Temp <= -0.5 then ScaledFractPart := ScaledFractPart - 1; ***Closed by Hesen R.***
+  if Round(Temp*100) >= 50 then ScaledFractPart := ScaledFractPart + 1; //***Written by Hesen R.***
+  if Round(Temp*100) <= -50 then ScaledFractPart := ScaledFractPart - 1; //***Written by Hesen R.***
+  RoundNew := Int(X) + ScaledFractPart/Precision;
+end;
+
+procedure TTransactionForm.ClearAmmounts;
+begin
+ CurrencyEditDebit.Value :=0.0;
+ CurrencyEditCredit.Value :=0.0;
+ CurrencyEditLammount.Value :=0.0;
+ 
+end;
+
+procedure TTransactionForm.ReportIDDBEditKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+if key=#13 then ReportIDLookUp.SetFocus;
+end;
+
+procedure TTransactionForm.ReportIDLookUpKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+if key=#13 then EditTransModeCode.SetFocus;
+end;
+
+procedure TTransactionForm.ResetAccountFilter(AccountDataSet: TDataSet);
+begin
+ with AccountDataSet do
+ if Filter <> '' then
+ begin
+  Filtered :=False;
+  Filter :='';
+  //Filtered :=True; ***Closed by Hesen R. 03.05.2010
+ end;
+end;
+
+procedure TTransactionForm.SaveTransaction;
+begin
+  with Transaction_DataModule, Transactions do
+   if State in [dsEdit, dsInsert] then begin
+    //if FieldByName('Status').AsInteger =2 then
+     //SB_ACA.CallProcedure('CheckAdvancedObjectAccess',['TRANSACTIONCOMMITEDEDIT']); {S.A. 23.10.2012} {H.R. 28.10.2010}
+
+     if (DebitAccData.FieldByName('fromTrans').AsInteger = 1) or (CreditAccData.FieldByName('fromTrans').AsInteger = 1) then begin
+       ShowMessage('Bu balans hesabı ilə bu moduldan əməliyyat aparmaq olmaz!');
+       Exit;
+     end; {*** H.R. 10.01.2011}
+
+     with ODS_VidOPTrDel do begin {H.R. 04.10.2010}
+       Close;
+       SetVariable('v_ID', Transaction_DataModule.Transactions.FieldByName('OperationCode').AsInteger);
+       Open;
+      end;
+      if ODS_VidOPTrDel.FieldByName('Cnt').AsInteger = 1 then begin
+       ShowMessage('Bu növ əməliyyatı bu moduldan redaktə etmək olmaz.');
+       Exit;
+      end; {*** H.R. 04.10.2010}
+
+   
+     FieldByName('TransactionDate').AsDateTime :=Int(TransDate.DateTime);
+     FieldByName('DebitAmount').AsCurrency :=CurrencyEditDebit.Value;
+     FieldByName('CreditAmount').AsCurrency :=CurrencyEditCredit.Value;
+     FieldByName('Lamount').AsCurrency :=CurrencyEditLammount.Value;
+
+     FieldByName('Status').AsInteger :=1;
+     FieldByName('DebitAccNo').AsString :=EditDebtAccNo.Text;
+     FieldByName('CreditAccNo').AsString :=EditCredAccNo.Text;
+     FieldByName('DebitCurrencySName').AsString :=DebitCurrencyData.FieldByName('SName').AsString;
+     FieldByName('CreditCurrencySName').AsString :=CreditCurrencyData.FieldByName('SName').AsString;
+     FieldByName('OperationNo').AsString :=DBEditOperationNo.Text;
+     FieldByName('COUNTRID').AsString := CountrIDDBEdit.Text;
+
+     if OperationTypeLookUp.Text = EmptyStr then
+      FieldByName('OperationCode').Value :=Null;
+
+     OP_MMX.CallProcedure('mmx_transaction',[DebitAccData.FieldByName('ID').AsInteger
+                                           ,Sysdat.FieldByName('tek_dat').AsDateTime,
+                                            CurrencyEditLammount.Value,DBLC_MMX_Transmode.KeyValue]);
+
+     OP_MMX.CallProcedure('mmx_transaction',[CreditAccData.FieldByName('ID').AsInteger
+                                           ,Sysdat.FieldByName('tek_dat').AsDateTime,
+                                            CurrencyEditLammount.Value,DBLC_MMX_Transmode.KeyValue]);
+    // p_reportcode:=DBLC_MMX_Transmode.KeyValue;
+
+     Post;
+     SBCommit();
+    end;
+
+end;
+
+procedure TTransactionForm.ResetTransaction;
+begin
+
+ OperationCancel;
+ ClearAmmounts;
+ with Transaction_DataModule, Transactions do
+ begin
+  Insert;
+  FieldByName('DebitCurrencyID').AsInteger :=DebitCurrencyID;
+  FieldByName('CreditCurrencyID').AsInteger :=CreditCurrencyID;
+  //FieldByName('DebitID').Clear;
+  //FieldByName('CreditID').Clear;       Modified by TNariman at 24.Jun.2004
+  end;
+    EditDebtAccNo.Clear;
+    EditDebtBal_CN.Clear;
+    EditKredBal_CN.Clear;
+    EditCredAccNo.Clear;
+    DBLC_MMX_Transmode.KeyValue:=null;
+    EditTransModeCode.Clear;
+    EditTransModeCode.Color:=clWhite;
+    Transaction_DataModule.DebitAccData.Close;
+    Transaction_DataModule.CreditAccData.Close;
+    Transaction_DataModule.ODS_DebtCustomer.Close;
+    Transaction_DataModule.ODS_CredCustomer.Close;
+    Edit_DCustId.Clear;
+    Edit_CCustId.Clear;
+    DebitCurrencyIDEdit.SetFocus;
+end;
+
+procedure TTransactionForm.Scroll;
+begin
+ if {Transaction_ManagerForm.}OperationMode = omEdit then
+ with Transaction_DataModule do
+ begin
+  DebitAccData.Next;
+  DebitAccData.Prior;
+  CreditAccData.Next;
+  CreditAccData.Prior;   //  Don't laugh PADLA :)
+ end;
+end;
+
+
+function CheckCurrency(Value: Variant): boolean;
+begin
+ with Transaction_DataModule, Currency do
+  Result :=Locate('valute', Value, []);
+ end;
+
+procedure TTransactionForm.Edit_DCustIdChange(Sender: TObject);
+begin
+ Modifed :=True;
+
+end;
+
+procedure TTransactionForm.Edit_DCustIdKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if key=#13 then begin
+   if trim(Edit_DCustID.Text)<>'' then
+    with Transaction_DataModule.ODS_DebtCustomer do begin
+     Close;
+     SetVariable('v_CustID',Edit_DCustID.Text);
+     Open;
+     Edit_CCustId.SetFocus;
+    end
+   else DCust.Clear;
+  end
+  else
+   if not (key in ['0'..'9',#8]) then key :=#0;
+
+end;
+
+procedure TTransactionForm.Edit_DCustIdKeyUp(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+ EditDebtBal_CN.Clear;
+ EditDebtAccNo.Clear;
+end;
+
+procedure TTransactionForm.Edit_CCustIDKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if key=#13 then begin
+   if trim(Edit_CCustID.Text)<>'' then
+    with  Transaction_DataModule.ODS_CredCustomer do begin
+     Close;
+     SetVariable('v_CustID',Edit_CCustID.Text);
+     Open;
+     CurrencyEditDebit.SetFocus;
+    end
+   else CCust.Clear;
+  end
+  else
+   if not (key in ['0'..'9',#8]) then key :=#0;
+end;
+
+procedure TTransactionForm.Edit_CCustIdKeyUp(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+ EditKredBal_CN.Clear;
+ EditCredAccNo.Clear;
+end;
+
+procedure TTransactionForm.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+try //if Modifed then  // Modified by TNariman at 21.Jun.2004. Offical tanks to Mamed m. for FC(compare).
+ with Transaction_DataModule do
+ begin
+  ResetAccountFilter(DebitAccData);
+  ResetAccountFilter(CreditAccData);
+  ResetAccountFilter(CashSymbols);
+  DebitAccData.Close;
+  CreditAccData.Close;
+ Edit_DCustId.Clear;
+ DCust.Clear;
+ Edit_CCustId.Clear;
+ CCust.Clear;
+ ResetAccountFilter(DEBT_BAL_SPR1);
+ ResetAccountFilter(KREDT_BAL_SPR1);
+ EditDebtBal_CN.Clear;
+ EditDebtAccNo.Clear;
+ EditKredBal_CN.Clear;
+ EditCredAccNo.Clear;
+ DBEdit1.Clear;
+ DBEdit2.Clear;
+ end;
+ OperationCancel;
+except
+  on E: Exception do ShowMessage(E.Message);
+end;
+end;
+
+procedure TTransactionForm.FormShow(Sender: TObject);
+var
+db_bal_cn,db_AccNo,db_Acc_name,cr_bal_cn,cr_AccNo,cr_Acc_name:string;
+begin
+
+if phys_cust_DbHesabID<>'' then
+begin
+ Tr_Credit;
+
+  with Transaction_DataModule,DebitAccData do begin
+      close;
+  SetVariable('v_id',phys_cust_DbHesabID);
+      open;
+      db_bal_cn:=FieldByName('BAL_CN').asString;
+      db_AccNo:=FieldByName('acc_no').asString;
+      db_Acc_name:=FieldByName('name').asString;
+   Edit_DCustId.Text:=inttostr(FieldByName('kli_id').asinteger);
+   Transaction_DataModule.TransactionsDEBITCURRENCYID.AsInteger:=FieldByName('VAL_ACC').asinteger;
+
+   EditDebtBal_CN.Text:=db_bal_cn;
+   EditDebtAccNo.text:=db_AccNo;
+   DBEdit1.Text:=db_Acc_name;
+   Transaction_DataModule.Transactions.FieldByName('DEBITID').AsInteger:= strtoint( phys_cust_DbHesabID);
+
+   end;
+  if trim(Edit_DCustID.Text)<>'' then
+  with Transaction_DataModule.ODS_DebtCustomer do begin
+     Close;
+  SetVariable('v_CustID',Edit_DCustID.Text);
+     Open;
+
+    end ;
+  //showmessage('jjjj'+phys_cust);
+  phys_cust_DbHesabID:='';
+  end
+  else
+
+  if phys_cust_CrHesabID<>'' then
+  begin
+   Tr_Debt;
+   with Transaction_DataModule,CreditAccData do begin
+      close;
+  SetVariable('v_id',phys_cust_CrHesabID);
+      open;
+      cr_bal_cn:=FieldByName('BAL_CN').asString;
+      cr_AccNo:=FieldByName('acc_no').asString;
+      cr_Acc_name:=FieldByName('name').asString;
+   Edit_CCustId.Text:=inttostr(FieldByName('kli_id').asinteger);
+   Transaction_DataModule.TransactionsCREDITCURRENCYID.AsInteger:=FieldByName('VAL_ACC').asinteger;
+
+   EditKredBal_CN.Text:=cr_bal_cn;
+   EditCredAccNo.text:=cr_AccNo;
+   DBEdit2.Text:=cr_Acc_name;
+   Transactions.FieldByName('CREDITID').AsInteger:=strtoint(phys_cust_CrHesabID);
+   end;
+  if trim(Edit_CCustID.Text)<>'' then
+  with Transaction_DataModule.ODS_CredCustomer do begin
+     Close;
+  SetVariable('v_CustID',Edit_CCustID.Text);
+     Open;
+
+    end ;
+  //showmessage('jjjj'+phys_cust);
+  phys_cust_CrHesabID:='';
+  end
+  else
+
+   if trid='' then
+ begin
+
+  Tr_Insert ;
+ //showmessage('jjjjssss');
+ end
+     else
+    begin
+    Tr_Update ;
+     end;
+
+  Modifed :=False;
+
+end;
+
+
+    { if trid<>'' then
+  begin
+   init;
+   with Transaction_DataModule, TransactionForm do begin
+    //Transactions.open;
+
+   if Transaction_DataModule.Transactions.FieldByName('status').AsInteger=1
+   then
+   Transaction_DataModule.SB_ACA.CallProcedure('checkadvancedobjectaccess',['DELAYEDEDIT']);
+
+   if Transaction_DataModule.Transactions.FieldByName('status').AsInteger=2
+   then
+   Transaction_DataModule.SB_ACA.CallProcedure('checkadvancedobjectaccess',['COMMITEDEDIT']);
+
+
+
+   //with Transaction_DataModule do begin
+
+
+ with  Transaction_DataModule, Transactions do
+begin
+ if Active then close;
+  SetVariable(':trid',trid);
+  SetVariable(':TransactionDate',sysdat.FieldByName('tek_dat').AsDateTime);
+  open;
+   OperationMode :=omEdit;
+SB_ACA.CallProcedure('CheckObjectAccess', ['TransactionManager','update']);
+//showmessage(inttostr( Transaction_DataModule.Transactions.FieldByName('a1').AsInteger));
+Edit;
+
+end;
+   end;
+   end;
+  // Init;  }
+//
+
+procedure TTransactionForm.GoAmlClick(Sender: TObject);
+begin
+{if TransactionManagerForm.OperationMode=omEdit then
+begin
+ TransInfo.isedit:=True;
+ TransInfo.v_trID:=TransactionDataModule.TransactionsID.AsFloat;
+end
+else
+ TransInfo.isedit:=False;
+
+LoadPlugin('TransInfoPack.bpl','TransInfoImpl','');}
+end;
+
+procedure TTransactionForm.CreditAccNoLookUpDropDown(Sender: TObject);
+begin
+ with Transaction_DataModule do
+  SetCurrencyFilter(CreditAccData, CreditCurrencyData);
+end;
+
+procedure TTransactionForm.DebtAccSearchEditChange(Sender: TObject);
+begin
+ with TSearchEdit(Sender), Transaction_DataModule, Transactions do
+ begin
+ if Text = EmptyStr then
+  begin
+   FieldByName('DebitID').Clear;
+   FieldByName('InBalanceChar').Clear;
+  end;
+  Modifed :=True;
+  {$B-}
+  PanelDebitRest.Visible :=not(Trim(Text) = EmptyStr) and (not FieldByName('DebitID').IsNull);
+  {$B+}
+ end;
+end;
+
+procedure TTransactionForm.CashSymbolDBEditEnter(Sender: TObject);
+begin
+ SetCashSymbol;
+end;
+
+procedure TTransactionForm.DebtAccSearchEditEnter(Sender: TObject);
+begin
+ with Transaction_DataModule do
+ begin
+  SetCurrencyFilter(DebitAccData, DebitCurrencyData);
+  if TEdit(Sender).Text = EmptyStr then
+   Transactions.FieldByName('DebitID').Clear;
+ end;
+end;
+
+
+procedure TTransactionForm.Edit_CCustIdChange(Sender: TObject);
+begin
+ Modifed :=True;
+end;
+
+procedure TTransactionForm.EditCredAccNoDblClick(Sender: TObject);
+begin
+{  Transaction_DataModule.ODS_Account.Close;
+  Transaction_DataModule.ODS_Account.SetVariable('V_BALCN',EditKredBal_CN.Text);
+  Transaction_DataModule.ODS_Account.SetVariable('V_val',strtoint(CreditCurrencyIDEdit.Text));
+  if Edit_CCustId.Text<>'' then
+   Transaction_DataModule.ODS_Account.SetVariable('V_KliID','='+Edit_CCustId.Text)
+   else Transaction_DataModule.ODS_Account.SetVariable('V_KliID','>0');
+  Transaction_DataModule.ODS_Account.Open;
+   }
+
+  with Transaction_DataModule,ODS_Account  do
+ begin
+  SQL[18]:='';
+   close;
+   if Edit_CCustId.Text<>'' then
+    SQL[18]:='and  A.Kli_ID='+ Edit_CCustId.Text;
+
+   if CreditCurrencyIDEdit.Text<>'' then
+    SQL[18]:= SQL[18]+ 'and  A.VAL_ACC='+ CreditCurrencyIDEdit.Text;
+
+    if EditKredBal_CN.Text<>'' then
+    SQL[18]:= SQL[18]+ 'and B.BAL_CN='+'''' +EditKredBal_CN.Text+'''';
+   open;
+ end;
+  FormAccounts.DebOrKred:=True;
+  FormAccounts.v_AccNo:=EditDebtAccNo.Text;
+  FormAccounts.ShowModal;
+  EditKredBal_CN.Text:=FormAccounts.v_bal_cn;
+  EditCredAccNo.Text:= FormAccounts.v_AccNo;
+  //showmessage(EditCredAccNo.Text);
+    {Hesen R. 10.12.2012}
+  Edit_CCustId.Text := IntToStr(FormAccounts.v_KliID);
+  Edit_CCustId.SetFocus;
+  keybd_event(VK_RETURN, 0, 0, 0);
+  {*** Hesen R. 10.12.2012}
+
+with Transaction_DataModule do
+begin
+CreditAccData.Close;
+CreditAccData.SetVariable('v_id',ODS_Account.FieldByName('ID').AsInteger);
+CreditAccData.Open;
+end;
+
+  Transaction_DataModule.Transactions.FieldByName('CreditID').AsInteger:=
+  Transaction_DataModule.CreditAccData.FieldByName('ID').AsInteger;
+
+
+
+
+
+end;
+
+procedure TTransactionForm.EditCredAccNoKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+if (EditCredAccNo.Text='') and (key=#13)  then
+begin
+ { Transaction_DataModule.ODS_Account.Close;
+  Transaction_DataModule.ODS_Account.SetVariable('V_BALCN',EditKredBal_CN.Text);
+  Transaction_DataModule.ODS_Account.SetVariable('V_val',strtoint(CreditCurrencyIDEdit.Text));
+  if Edit_CCustId.Text<>'' then
+   Transaction_DataModule.ODS_Account.SetVariable('V_KliID','='+Edit_CCustId.Text)
+   else Transaction_DataModule.ODS_Account.SetVariable('V_KliID','>0');
+   Transaction_DataModule.ODS_Account.Open; }
+
+  with Transaction_DataModule,ODS_Account  do
+ begin
+   SQL[18]:='';
+   close;
+   if Edit_CCustId.Text<>'' then
+    SQL[18]:='and  A.Kli_ID='+Edit_CCustId.Text;
+   if CreditCurrencyIDEdit.Text<>'' then
+    SQL[18]:= SQL[18]+ ' and  A.VAL_ACC='+CreditCurrencyIDEdit.Text;
+   if EditKredBal_CN.Text<>'' then
+    SQL[18]:= SQL[18]+ ' and B.BAL_CN='+'''' +EditKredBal_CN.Text+'''';
+   open;
+
+ end;
+
+FormAccounts.DebOrKred:=False;
+FormAccounts.v_AccNo:=EditCredAccNo.Text;
+FormAccounts.ShowModal;
+EditCredAccNo.Text:= FormAccounts.v_AccNo;
+
+EditKredBal_CN.Text:=FormAccounts.v_bal_cn;
+
+  {Hesen R. 10.12.2012}
+  Edit_CCustId.Text := IntToStr(FormAccounts.v_KliID);
+  Edit_CCustId.SetFocus;
+  keybd_event(VK_RETURN, 0, 0, 0);
+  {*** Hesen R. 10.12.2012}
+
+with Transaction_DataModule do
+begin
+CreditAccData.Close;
+CreditAccData.SetVariable('v_id',ODS_Account.FieldByName('ID').AsInteger);
+CreditAccData.Open;
+end ;
+Transaction_DataModule.Transactions.FieldByName('CREDITID').AsInteger:=
+Transaction_DataModule.CreditAccData.FieldByName('ID').AsInteger;
+end
+else
+if (key =#13) then  Edit_DCustId.SetFocus;
+end;
+
+
+
+procedure TTransactionForm.EditDebtAccNoDblClick(Sender: TObject);
+begin
+{  Transaction_DataModule.ODS_Account.CloseAll;
+  Transaction_DataModule.ODS_Account.SetVariable('V_BALCN',EditDebtBal_CN.Text);
+  Transaction_DataModule.ODS_Account.SetVariable('V_val',strtoint(DebitCurrencyIDEdit.Text));
+  if Edit_DCustId.Text<>'' then
+   Transaction_DataModule.ODS_Account.SetVariable('V_KliID','='+Edit_DCustId.Text)
+   else Transaction_DataModule.ODS_Account.SetVariable('V_KliID','>0');
+  Transaction_DataModule.ODS_Account.Open;
+  }
+   with Transaction_DataModule,ODS_Account  do
+ begin
+  SQL[18]:='';
+   close;
+   if Edit_DCustId.Text<>'' then
+    SQL[18]:='and  A.Kli_ID='+ Edit_DCustId.Text;
+
+   if DebitCurrencyIDEdit.Text<>'' then
+    SQL[18]:= SQL[18]+ 'and  A.VAL_ACC='+ DebitCurrencyIDEdit.Text;
+
+    if EditDebtBal_CN.Text<>'' then
+    SQL[18]:= SQL[18]+ 'and B.BAL_CN='+'''' +EditDebtBal_CN.Text+'''';
+   open;
+ end;
+FormAccounts.DebOrKred:=True;
+FormAccounts.v_AccNo:=EditDebtAccNo.Text;
+FormAccounts.ShowModal;
+ EditDebtBal_CN.Text:=FormAccounts.v_bal_cn;
+ EditDebtAccNo.Text:= FormAccounts.v_AccNo;
+  {Hesen R. 10.12.2012}
+  Edit_DCustId.Text := FormAccounts.v_KliID;
+  Edit_DCustId.SetFocus;
+  keybd_event(VK_RETURN, 0, 0, 0);
+  {*** Hesen R. 10.12.2012}
+
+with Transaction_DataModule do
+begin
+DebitAccData.Close;
+DebitAccData.SetVariable('v_id',ODS_Account.FieldByName('ID').AsInteger);
+DebitAccData.Open;
+end;
+
+  Transaction_DataModule.Transactions.FieldByName('DEBITID').AsInteger:=
+  Transaction_DataModule.DebitAccData.FieldByName('ID').AsInteger;
+end;
+
+procedure TTransactionForm.EditDebtAccNoKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+if (EditDebtAccNo.Text='') and (key=#13)  then
+begin
+ { Transaction_DataModule.ODS_Account.Close;
+  Transaction_DataModule.ODS_Account.SetVariable('V_BALCN',EditDebtBal_CN.Text);
+  Transaction_DataModule.ODS_Account.SetVariable('V_val',strtoint(DebitCurrencyIDEdit.Text));
+  if Edit_DCustId.Text<>'' then
+   Transaction_DataModule.ODS_Account.SetVariable('V_KliID','='+Edit_DCustId.Text)
+   else Transaction_DataModule.ODS_Account.SetVariable('V_KliID','>0');
+  Transaction_DataModule.ODS_Account.Open;
+     }
+ with Transaction_DataModule,ODS_Account  do
+ begin
+  SQL[18]:='';
+   close;
+   if Edit_DCustId.Text<>'' then
+    SQL[18]:='and  A.Kli_ID='+ Edit_DCustId.Text;
+
+   if DebitCurrencyIDEdit.Text<>'' then
+    SQL[18]:= SQL[18]+ 'and  A.VAL_ACC='+ DebitCurrencyIDEdit.Text;
+
+    if EditDebtBal_CN.Text<>'' then
+    SQL[18]:= SQL[18]+ 'and B.BAL_CN='+'''' +EditDebtBal_CN.Text+'''';
+   open;
+ end;
+  FormAccounts.DebOrKred:=True;
+FormAccounts.v_AccNo:=EditDebtAccNo.Text;
+FormAccounts.ShowModal;
+
+EditDebtAccNo.Text:= FormAccounts.v_AccNo;
+EditDebtBal_CN.Text:=FormAccounts.v_bal_cn;
+  {Hesen R. 10.12.2012}
+  Edit_DCustId.Text := IntToStr(FormAccounts.v_KliID);
+  Edit_DCustId.SetFocus;
+  keybd_event(VK_RETURN, 0, 0, 0);
+  {*** Hesen R. 10.12.2012}
+with Transaction_DataModule do
+begin
+DebitAccData.Close;
+DebitAccData.SetVariable('v_id',ODS_Account.FieldByName('ID').AsInteger);
+DebitAccData.Open;
+end;
+  Transaction_DataModule.Transactions.FieldByName('DEBITID').AsInteger:=
+  Transaction_DataModule.DebitAccData.FieldByName('ID').AsInteger;
+
+end
+else
+if (key =#13) then  CreditCurrencyIDEdit.SetFocus;
+end;
+
+procedure TTransactionForm.EditDebtBal_CNChange(Sender: TObject);
+begin
+EditDebtAccNo.Clear;
+end;
+
+procedure TTransactionForm.EditDebtBal_CNDblClick(Sender: TObject);
+begin
+FormBal_CN12.XDBGridBal_spr1.DataSource:=Transaction_DataModule.DEB_BAL_SPR1;
+FormBal_CN12.DebOrKred:=True;
+FormBal_CN12.V_balCn:=EditDebtBal_CN.Text;
+FormBal_CN12.ShowModal;
+EditDebtBal_CN.Text:= FormBal_CN12.V_balCn;
+end;
+
+procedure TTransactionForm.EditDebtBal_CNKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+if (EditDebtBal_CN.Text='') and (key=#13)  then
+ begin
+FormBal_CN12.DebOrKred:=True;
+FormBal_CN12.V_balCn:=EditDebtBal_CN.Text;
+FormBal_CN12.ShowModal;
+EditDebtBal_CN.Text:= FormBal_CN12.V_balCn;
+ end
+ else
+ if (key=#13) then
+       begin
+    EditDebtAccNo.SetFocus;
+     end;
+end;
+
+procedure TTransactionForm.EditKredBal_CNChange(Sender: TObject);
+begin
+EditCredAccNo.Clear;
+end;
+
+procedure TTransactionForm.EditKredBal_CNDblClick(Sender: TObject);
+begin
+FormBal_CN12.XDBGridBal_spr1.DataSource:=Transaction_DataModule.KRED_BAL_SPR1;
+FormBal_CN12.DebOrKred:=False;
+FormBal_CN12.V_balCn:=EditKredBal_CN.Text;
+FormBal_CN12.ShowModal;
+EditKredBal_CN.Text:= FormBal_CN12.V_balCn;
+
+end;
+
+procedure TTransactionForm.EditKredBal_CNKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+if (EditKredBal_CN.Text='') and (key=#13)  then
+ begin
+FormBal_CN12.DebOrKred:=False;
+FormBal_CN12.V_balCn:=EditKredBal_CN.Text;
+FormBal_CN12.ShowModal;
+EditKredBal_CN.Text:= FormBal_CN12.V_balCn;
+ end
+ else
+ if (key=#13) then
+       begin
+     EditCredAccNo.SetFocus;
+       end;
+end;
+
+procedure TTransactionForm.EditTransModeCodeChange(Sender: TObject);
+begin
+ Modifed :=True;
+end;
+
+procedure TTransactionForm.EditTransModeCodeKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+if key=#13 then
+begin
+if trim(EditTransModeCode.Text)<>'' then
+DBLC_MMX_Transmode.KeyValue:=EditTransModeCode.Text;
+
+DBLC_MMX_Transmode.SetFocus;
+end;
+
+end;
+
+procedure TTransactionForm.CreditAccSearchEditEnter(Sender: TObject);
+begin
+ with Transaction_DataModule do
+ begin
+  SetCurrencyFilter(CreditAccData, CreditCurrencyData);
+  if TEdit(Sender).Text = EmptyStr then
+   Transactions.FieldByName('CreditID').Clear;
+ end;
+end;
+
+procedure TTransactionForm.CreditAccSearchEditChange(Sender: TObject);
+begin
+ with TSearchEdit(Sender), Transaction_DataModule, Transactions do
+ begin
+ if Text = EmptyStr then
+ begin
+  Transaction_DataModule.Transactions.FieldByName('CreditID').Clear;
+  Transaction_DataModule.Transactions.FieldByName('InBalanceChar').Clear;
+ end;
+  Modifed :=True;
+  {$B-}
+  PanelCreditRest.Visible :=not(Trim(Text) = EmptyStr) and (not FieldByName('CreditID').IsNull);
+  {$B+}
+ end;
+end;
+
+procedure TTransactionForm.CurrencyEditCreditKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+if key=#13 then CurrencyEditLammount.SetFocus;
+end;
+
+procedure TTransactionForm.CurrencyEditDebitChange(Sender: TObject);
+begin
+ CutEditText(Sender);
+ if TCurrencyEdit(Sender).Text =EmptyStr then TCurrencyEdit(Sender).Value :=0;
+ case TCurrencyEdit(Sender).Tag of
+  1: TransactionSide :=tsDebet;
+  2: TransactionSide :=tsCredit;
+  3: TransactionSide :=tsUnknown;
+ end;
+  SetAmmounts(TransactionSide);
+  Modifed :=True;
+end;
+
+procedure TTransactionForm.CurrencyEditDebitKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+if key=#13 then CurrencyEditCredit.SetFocus;
+
+end;
+
+procedure TTransactionForm.CurrencyEditLammountKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+if key=#13 then CashSymbolDBEdit.SetFocus;
+end;
+
+procedure TTransactionForm.FormKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+ if Key = VK_F3 then
+ with TransactionDestinationForm, Transaction_DataModule do
+ begin
+  ShowModal;
+  if ModalResult = mrOk then
+  begin
+   Transactions.FieldByName('Name').AsString :=Value;
+   TrDestNoEdit.Text :=TrDest. FieldByName('ID').AsString;
+  end;
+ end
+ else
+  if Key = VK_ESCAPE then
+   Close;
+end;
+
+procedure TTransactionForm.FormCreate(Sender: TObject);
+begin
+
+Transaction_DataModule:=TTransaction_DataModule.Create(self);
+if not assigned (FormBal_CN12) then
+FormBal_CN12:=TFormBal_CN12.Create(self);
+
+if not assigned (FormAccounts) then
+FormAccounts:=TFormAccounts.Create(self);
+
+ with Transaction_DataModule, Sysdat, TransDate do
+ begin
+ if not ODS_Settings.Active then ODS_Settings.Open;
+
+ // if not DebitAccData.Active then DebitAccData.Open;
+ // if not CreditAccData.Active then CreditAccData.Open;
+  if ReportDesc.Active then ReportDesc.Close;
+  ReportDesc.Open;
+  if Country.Active then Country.Close;
+  Country.Open;
+  if ODS_MMX_TRANSMODE.Active then ODS_MMX_TRANSMODE.Close;
+  ODS_MMX_TRANSMODE.Open;
+
+  DateTime :=FieldByName('tek_dat').AsDateTime;
+
+ { if TransactionsCOUNTRID.AsString='' then begin
+    CountrIDDBEdit.Text := '1';
+    CountrIDLookUp.KeyValue := 1;
+  end;
+  }
+
+  if TransactionsREPORTID.AsString='' then begin
+    ReportIDDBEdit.Text := '0';
+    ReportIDLookUp.KeyValue := 0;
+  end;
+
+ end;
+
+ SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TTransactionForm.DebitCurrencyIDEditExit(Sender: TObject);
+begin
+ {with TDBEdit(Sender), TransactionDataModule, Transactions do
+  if not CheckCurrency(Text) then
+   begin
+    DebtAccSearchEdit.Text :=EmptyStr;
+    FieldByName('DebitRate').Clear;
+    Color :=clRed;
+    SetFocus;
+   end
+  else
+   Color :=clWindow;     }
+end;
+
+procedure TTransactionForm.DebitCurrencyIDEditKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+if key=#13  then
+EditDebtBal_CN.SetFocus;
+end;
+
+procedure TTransactionForm.CreditCurrencyIDEditExit(Sender: TObject);
+begin
+{ with TDBEdit(Sender), TransactionDataModule, Transactions do
+  if not CheckCurrency(Text) then
+   begin
+    CreditAccSearchEdit.Text :=EmptyStr;
+    FieldByName('CreditRate').Clear;
+    Color :=clRed;
+    SetFocus;
+   end
+  else
+   Color :=clWindow;  }
+end;
+
+procedure TTransactionForm.CreditCurrencyIDEditKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+if key=#13 then EditKredBal_CN.SetFocus;
+
+end;
+
+procedure TTransactionForm.Button3Click(Sender: TObject);
+begin
+EditDebtAccNo.OnDblClick(sender);
+end;
+
+procedure TTransactionForm.ActionCancelExecute(Sender: TObject);
+begin
+ ResetTransaction;
+end;
+
+procedure TTransactionForm.ActionExitExecute(Sender: TObject);
+begin
+ Close;
+end;
+
+procedure TTransactionForm.ActionInsertExecute(Sender: TObject);
+begin
+   {Modified by Mahmud Aliyev 04.05.2012 for GoAml}
+{ with TransactionDataModule do
+ begin
+    if
+    OP_MMX.CallIntegerFunction('check_customer',[DebitAccData.FieldByName('ID').AsInteger,
+                                                Sysdat.FieldByName('tek_dat').AsDateTime,
+                                                CurrencyEditLammount.Value,
+                                                DBLC_MMX_Transmode.KeyValue
+                                                ])=1
+    then
+      begin
+          if DBLC_MMX_Transmode.KeyValue=null then
+          begin
+           EditTransModeCode.Color:=clRed;
+           showmessage('Əməliyyatın növü daxil edilməıidir!');
+           Exit;
+          end;
+      end;
+
+     if OP_MMX.CallIntegerFunction('check_customer',[CreditAccData.FieldByName('ID').AsInteger,
+                                                Sysdat.FieldByName('tek_dat').AsDateTime,
+                                                CurrencyEditLammount.Value,
+                                                DBLC_MMX_Transmode.KeyValue
+                                                ])=1
+    then
+    begin
+    if DBLC_MMX_Transmode.KeyValue=null then
+    begin
+     EditTransModeCode.Color:=clRed;
+     showmessage('Əməliyyatın növü daxil edilməıidir!');
+     Exit;
+    end;
+    end;
+ end; }
+    if CountrIDLookUp.KeyValue=null then
+    begin
+           showmessage('Ölkə daxil edilməıidir!');
+           Exit;
+    end;
+    if CountrIDLookUp.Text='' then
+    begin
+           showmessage('Ölkə daxil edilməıidir!');
+           Exit;
+    end;
+
+
+
+    if DBLC_MMX_Transmode.KeyValue=null then
+    begin
+           showmessage('Əməliyyatın növü daxil edilməıidir!');
+           Exit;
+    end;
+
+    if (Transaction_DataModuleUnit.NonCustMustBe=True)
+    //and (DBLC_NonCustomers.KeyValue=Null)
+    then
+    begin
+       showmessage('Nominal  seçilməlidir!');
+           Exit;
+    end;
+
+ SaveTransaction;
+ ResetTransaction;
+ if (Form_Close='DB_Hesab')or( Form_Close='CR_Hesab') then
+ begin
+ TransactionForm.close;
+  Form_Close:='';
+ end
+
+end;
+
+
+
+procedure TTransactionForm.ActionInsertUpdate(Sender: TObject);
+begin
+ with (Sender as TAction), Transaction_DataModule.Transactions do
+  Enabled :=
+      Modifed
+      and (not FieldByName('DebitID').IsNull)
+      and (not FieldByName('CreditID').IsNull)
+
+      and (CurrencyEditLammount.Value<>0.0);
+end;
+
+procedure TTransactionForm.TrDestNoEditChange(Sender: TObject);
+begin
+ with TEdit(Sender), TransactionDestinationForm.TrDest, Transaction_DataModule do
+  if Text <> EmptyStr then
+   if Locate('ID', Text, []) then
+    Transactions.FieldByName('Name').AsString :=FieldByName('Name').AsString;
+end;
+
+procedure TTransactionForm.TrDestNoEditKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+if key=#13 then DBEditDestination.SetFocus;
+end;
+
+procedure TTransactionForm.TransDateChange(Sender: TObject);
+begin
+ Modifed :=True;
+end;
+
+procedure TTransactionForm.CashSymbolDBEditExit(Sender: TObject);
+var
+   CashSymbol :String;  //: Word;
+begin
+ with TDBEdit(Sender), Transaction_DataModule do
+ begin
+  if Text = EmptyStr then Exit;
+  CashSymbol :=Transactions.FieldByName('InBalanceChar').AsString; //.AsInteger;
+  if not CashSymbols.Locate('Symbol', CashSymbol, [loCaseInsensitive]) then
+   begin
+    Modifed :=False;
+    Color :=clRed;
+    SetFocus;
+   end
+  else
+   begin
+    Color :=clWhite;
+    Modifed :=True;
+   end;
+ end;
+end;
+
+procedure TTransactionForm.CashSymbolDBEditKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+if key=#13 then CashSymbolLookUp.SetFocus;
+end;
+
+procedure TTransactionForm.CashSymbolLookUpKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+if key=#13 then ConvertationSymbolIDBEdit.SetFocus;
+end;
+
+procedure TTransactionForm.DBEditDestinationChange(Sender: TObject);
+begin
+ Modifed :=True;
+end;
+
+procedure TTransactionForm.DBEditDestinationKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+if key=#13 then CountrIDDBEdit.SetFocus;
+end;
+
+procedure TTransactionForm.DBLC_MMX_TransmodeCloseUp(Sender: TObject);
+begin
+if DBLC_MMX_Transmode.KeyVAlue<>null then
+TransactionForm.EditTransModeCode.Text:=DBLC_MMX_Transmode.KeyVAlue;
+ Modifed :=True;
+end;
+
+procedure TTransactionForm.DBLC_MMX_TransmodeKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+if ButtonApply.Enabled=True then
+if key=#13 then ButtonApply.SetFocus;
+end;
+
+procedure TTransactionForm.ConvertationSymbolIDBEditExit(
+  Sender: TObject);
+var
+   ConvertationSymbol: Word;
+begin
+ with TDBEdit(Sender), Transaction_DataModule do
+ begin
+  if Text = EmptyStr then Exit;
+  ConvertationSymbol :=Transactions.FieldByName('OutBalanceChar').AsInteger;
+  if not ConvertationSymbols.Locate('ID', ConvertationSymbol, []) then
+   begin
+    Modifed :=False;
+    Color :=clRed;
+    SetFocus;
+   end
+  else
+   begin
+    Color :=clWhite;
+    Modifed :=True;
+   end;
+ end;         
+end;
+
+procedure TTransactionForm.ConvertationSymbolIDBEditKeyPress(
+  Sender: TObject; var Key: Char);
+begin
+if key=#13 then ConvertationSymbolLookUp.SetFocus;
+end;
+
+procedure TTransactionForm.ConvertationSymbolLookUpKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+if key=#13 then TrDestNoEdit.SetFocus;
+end;
+
+procedure TTransactionForm.CountrIDDBEditChange(Sender: TObject);
+begin
+ Modifed :=True;
+end;
+
+procedure TTransactionForm.CountrIDDBEditKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+if key=#13 then CountrIDLookUp.SetFocus;
+end;
+
+procedure TTransactionForm.CountrIDLookUpKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+if key=#13 then ReportIDDBEdit.SetFocus;
+end;
+
+procedure TTransactionForm.DebitCurrencyRateChange(Sender: TObject);
+begin
+ Modifed :=True;
+end;
+
+procedure TTransactionForm.LoadComboData(Sender: TComboBox);
+begin
+ with Transaction_DataModule.Destinations, Sender do
+  begin
+    if not(Active) then Open
+    else
+      begin
+       Refresh;
+      end;
+   if Items.Count<>RecordCount then
+     begin
+       Items.Clear;
+       First;
+     while not(EOF) do
+        begin
+         Items.Add(FieldByName('NAME').AsString);
+         Next;
+        end;
+     end;
+  end;
+end;
+
+
+procedure TTransactionForm.ComboBox1DropDown(Sender: TObject);// Modified by Elnur,Orxan at 08.02.2005
+begin
+  LoadComboData(TComboBox(Sender));
+end;
+
+procedure TTransactionForm.ComboBox1Click(Sender: TObject);
+begin
+ with Transaction_DataModule do
+  Transactions.FieldByName('Name').AsString :=(Sender as TComboBox).Text;
+end;
+
+procedure TTransactionForm.BtnCredCustomerClick(Sender: TObject);
+begin
+{  Transaction_DataModule.ODS_Account.Close;
+  Transaction_DataModule.ODS_Account.SetVariable('V_BALCN',EditKredBal_CN.Text);
+  Transaction_DataModule.ODS_Account.SetVariable('V_val',strtoint(CreditCurrencyIDEdit.Text));
+  Transaction_DataModule.ODS_Account.SetVariable('V_KliID','='+Edit_CCustId.Text);
+  Transaction_DataModule.ODS_Account.Open;
+  }
+  EditKredBal_CN.Clear;
+  EditCredAccNo.Clear;
+
+ with Transaction_DataModule,ODS_Account  do
+ begin
+   SQL[18]:='';
+   close;
+   if Edit_CCustId.Text<>'' then
+    SQL[18]:='and  A.Kli_ID='+Edit_CCustId.Text;
+   if CreditCurrencyIDEdit.Text<>'' then
+    SQL[18]:= SQL[18]+ ' and  A.VAL_ACC='+CreditCurrencyIDEdit.Text;
+   if EditKredBal_CN.Text<>'' then
+    SQL[18]:= SQL[18]+ ' and B.BAL_CN='+'''' +EditKredBal_CN.Text+'''';
+   open;
+
+ end;
+
+  FormAccounts.DebOrKred:=False;
+  FormAccounts.v_AccNo:=EditCredAccNo.Text;
+
+  FormAccounts.ShowModal;
+
+   EditKredBal_CN.Text:=FormAccounts.v_bal_cn;
+   EditCredAccNo.Text:= FormAccounts.v_AccNo;
+
+    Edit_CCustId.Text := FormAccounts.v_KliID;
+    Edit_CCustId.SetFocus;
+    keybd_event(VK_RETURN, 0, 0, 0);
+
+  with Transaction_DataModule do begin
+
+   CreditAccData.Close;
+   CreditAccData.SetVariable('v_id',ODS_Account.FieldByName('ID').AsInteger);
+   CreditAccData.Open;
+   Transactions.FieldByName('CREDITID').AsInteger:=CreditAccData.FieldByName('ID').AsInteger;
+  end;
+end;
+
+procedure TTransactionForm.BtnDebtCustomerClick(Sender: TObject);
+begin
+{if Edit_DCustId.Text='' then
+Transaction_DataModule.ODS_Account1.open; }
+EditDebtBal_CN.Clear;
+EditDebtAccNo.Clear;
+
+ with Transaction_DataModule,ODS_Account  do
+ begin
+  SQL[18]:='';
+   close;
+   if Edit_DCustId.Text<>'' then
+    SQL[18]:='and  A.Kli_ID='+Edit_DCustId.Text;
+
+   if DebitCurrencyIDEdit.Text<>'' then
+    SQL[18]:= SQL[18]+ ' and  A.VAL_ACC='+DebitCurrencyIDEdit.Text;
+
+    if EditDebtBal_CN.Text<>'' then
+    SQL[18]:= SQL[18]+ ' and B.BAL_CN='+'''' +EditDebtBal_CN.Text+'''';
+   open;
+
+ end;
+ { Transaction_DataModule.ODS_Account.Close;
+  Transaction_DataModule.ODS_Account.SetVariable('V_BALCN',EditDebtBal_CN.Text);
+  Transaction_DataModule.ODS_Account.SetVariable('V_val',strtoint(DebitCurrencyIDEdit.Text));
+  Transaction_DataModule.ODS_Account.SetVariable('V_KliID','='+Edit_DCustId.Text);
+  Transaction_DataModule.ODS_Account.Open;
+  }
+  FormAccounts.DebOrKred:=True;
+  FormAccounts.v_AccNo:=EditDebtAccNo.Text;
+
+  FormAccounts.ShowModal;
+       EditDebtBal_CN.Text:=FormAccounts.v_bal_cn;
+       EditDebtAccNo.Text:= FormAccounts.v_AccNo;
+
+        Edit_DCustId.Text := FormAccounts.v_KliID;
+        Edit_DCustId.SetFocus;
+        keybd_event(VK_RETURN, 0, 0, 0);
+
+  with Transaction_DataModule do begin
+   DebitAccData.Close;
+   DebitAccData.SetVariable('v_id',ODS_Account.FieldByName('ID').AsInteger);
+   DebitAccData.Open;
+  end;
+  Transaction_DataModule.Transactions.FieldByName('DEBITID').AsInteger:=
+  Transaction_DataModule.DebitAccData.FieldByName('ID').AsInteger;
+end;
+
+procedure TTransactionForm.Button1Click(Sender: TObject);
+begin
+  with Transaction_DataModule, PACKBPROC do begin
+    callprocedure('execbprocess',[
+      BProcDataID.AsVariant,
+     // DebitAccNoLookUp.KeyValue,
+     // CreditAccNoLookUp.KeyValue,
+      CurrencyEditDebit.Value,
+      CurrencyEditCredit.Value,
+      CurrencyEditLammount.Value,
+      CashSymbolLookUp.KeyValue,
+      ConvertationSymbolLookUp.KeyValue,
+      DBEditDestination.text,
+      ReportIDDBEdit.Text,
+      CountrIDDBEdit.Text]);
+    BPTransData.Close;
+    BPTransData.Open;
+    if frmBTrans.ShowModal = IDOK then begin
+      try
+      callprocedure('commitprocs',[]);
+      finally
+      Session.commit;
+      end
+    end
+    else
+      Session.commit;
+  end;
+ ///------ss-- TransactionManagerForm.GridTransactions.DataSource.DataSet.Refresh;
+end;
+
+procedure TTransactionForm.Button2Click(Sender: TObject);
+begin
+EditCredAccNo.OnDblClick(sender);
+end;
+
+end.
+
+//ShowMessage('DebitAccData: ' + TransactionDataModule.DebitAccData.Filter + '/ CreditAccData: '+TransactionDataModule.CreditAccData.Filter)
+
+//------------------------------------------------- COMMENTS -----------------------------------------
+
+// 249
+// 318
+// 338
+// 711

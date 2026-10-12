@@ -1,0 +1,97 @@
+unit ExpSubUnit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, DBViewComboBox, SearchEdit, Grids, DBGrids, Buttons, ExtCtrls,
+  NLSLocalizer;
+
+type
+  TExpSubForm = class(TForm)
+    Panel1: TPanel;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    SpeedButton1: TSpeedButton;
+    SpeedButton2: TSpeedButton;
+    Label4: TLabel;
+    Label5: TLabel;
+    DBGrid1: TDBGrid;
+    DBGrid2: TDBGrid;
+    SearchEdit1: TSearchEdit;
+    SearchEdit2: TSearchEdit;
+    DBViewComboBox1: TDBViewComboBox;
+    DBViewComboBox2: TDBViewComboBox;
+    NLSLocalizer1: TNLSLocalizer;
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure SpeedButton2Click(Sender: TObject);
+    procedure DBGrid1DblClick(Sender: TObject);
+    procedure DBGrid2DblClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  ExpSubForm: TExpSubForm;
+
+implementation
+uses ExpDataModuleUnit;
+
+{$R *.DFM}
+
+procedure TExpSubForm.SpeedButton1Click(Sender: TObject);
+begin
+  if SearchEdit1.Text = '' then exit;
+  begin
+    with ExpDataModule do
+    begin
+      Repair.CallProcedure('Exp_cashboxaccount_add',[ValyutaDataSet.fieldbyname('VALUTE').asinteger,
+                                                    AccountDataSet.fieldbyname('id').asinteger,
+                                                    FilialDataSet.fieldbyname('id').asinteger]);
+       SearchEdit1.clear;
+       ExpCashboxAccDataSet.Refresh;
+  end;
+end;
+
+end;
+
+procedure TExpSubForm.SpeedButton2Click(Sender: TObject);
+begin
+  if SearchEdit2.Text = '' then exit;
+  begin
+  with ExpDataModule do
+  begin
+    Repair.CallProcedure('Exp_transitaccount_add',   [ValyutaDataSet.fieldbyname('VALUTE').asinteger,
+                                                      AccountDataSet.fieldbyname('id').asinteger,
+                                                      FilialDataSet.fieldbyname('id').asinteger]);
+    SearchEdit2.clear;
+    ExpTransitAccDataSet.Refresh;
+  end;
+end;
+
+end;
+
+procedure TExpSubForm.DBGrid1DblClick(Sender: TObject);
+begin
+  with  ExpDataModule do
+  begin
+    Repair.CallProcedure('Exp_cashboxaccount_del',[ExpCashboxAccDataSet.FieldByName('id').AsInteger]);
+    ExpCashboxAccDataSet.Refresh;
+  end;
+end;
+
+
+
+procedure TExpSubForm.DBGrid2DblClick(Sender: TObject);
+begin
+  with  ExpDataModule do
+  begin
+    Repair.CallProcedure('Exp_transitaccount_del',[ExpTransitAccDataSet.FieldByName('id').AsInteger]);
+    ExpTransitAccDataSet.Refresh;
+  end;
+end;
+
+end.

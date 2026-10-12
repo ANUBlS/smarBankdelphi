@@ -1,0 +1,401 @@
+unit CountriesImpl1;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActiveX, AxCtrls, CountriesP_TLB, StdVcl, Grids, DBGrids, Db, OracleData,
+  StdCtrls, ExtCtrls, DBCtrls;
+
+type
+  TCountries = class(TActiveForm, ICountries)
+    DataSource1: TDataSource;
+    DBGrid1: TDBGrid;
+    DBGrid2: TDBGrid;
+    Contries: TOracleDataSet;
+    cities: TOracleDataSet;
+    DataSource2: TDataSource;
+    Panel1: TPanel;
+    Panel2: TPanel;
+    DBNavigator1: TDBNavigator;
+    DBNavigator2: TDBNavigator;
+    citiesID: TFloatField;
+    citiesCOUNTRY_ID: TFloatField;
+    ContriesID: TFloatField;
+    ContriesCNTR_NAME: TWideStringField;
+    citiesCITY_NAME: TWideStringField;
+    procedure button1Click(Sender: TObject);
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure ActiveFormDestroy(Sender: TObject);
+  private
+    { Private declarations }
+    FEvents: ICountriesEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;  function ICountries.Get_Color = ICountries_Get_Color;
+    function ICountries.Get_Font = ICountries_Get_Font;
+    procedure ICountries._Set_Font = ICountries__Set_Font;
+    procedure ICountries.Set_Color = ICountries_Set_Color;
+    procedure ICountries.Set_Font = ICountries_Set_Font;
+  
+    function ICountries_Get_Color:OLE_COLOR;  safecall;
+    function ICountries_Get_Font:IFontDisp ; safecall;
+    procedure ICountries__Set_Font(var Value: IFontDisp); safecall;
+    procedure ICountries_Set_Color( Value:OLE_COLOR); safecall;
+    procedure ICountries_Set_Font(const Value: IFontDisp); safecall;
+  public
+    { Public declarations }
+    procedure Initialize; override;
+  end;
+
+implementation
+
+uses ComObj, ComServ,sboapiDataModuleImpl;
+
+{$R *.DFM}
+
+{ TCountries }
+
+procedure TCountries.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_CountriesPage); }
+end;
+
+procedure TCountries.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as ICountriesEvents;
+end;
+
+procedure TCountries.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TCountries.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TCountries.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TCountries.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TCountries.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TCountries.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TCountries.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TCountries.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TCountries.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TCountries.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TCountries.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TCountries.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TCountries.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TCountries.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TCountries.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TCountries.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TCountries.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TCountries.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TCountries.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TCountries._Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TCountries.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TCountries.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TCountries.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TCountries.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TCountries.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TCountries.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TCountries.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TCountries.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TCountries.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TCountries.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TCountries.Set_AxBorderStyle(Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TCountries.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TCountries.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TCountries.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TCountries.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TCountries.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TCountries.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TCountries.Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TCountries.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TCountries.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TCountries.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TCountries.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TCountries.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TCountries.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+procedure TCountries.button1Click(Sender: TObject);
+begin
+  DBGrid1.SetFocus;
+  DBGrid1.SelectedIndex:=0;
+end;
+
+procedure TCountries.ActiveFormCreate(Sender: TObject);
+begin
+   Contries.open;
+   cities.open;
+end;
+
+procedure TCountries.ActiveFormDestroy(Sender: TObject);
+begin
+   Contries.close;
+   cities.close;
+
+end;
+
+function TCountries.ICountries_Get_Color:OLE_COLOR ;
+begin
+
+end;
+
+function TCountries.ICountries_Get_Font:IFontDisp ;
+begin
+
+end;
+
+procedure TCountries.ICountries__Set_Font(var Value: IFontDisp);
+begin
+
+end;
+
+procedure TCountries.ICountries_Set_Color(Value:OLE_COLOR);
+begin
+
+end;
+
+procedure TCountries.ICountries_Set_Font(const Value: IFontDisp);
+begin
+
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TCountries,
+    Class_Countries,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

@@ -1,0 +1,83 @@
+﻿unit Unit_id_quality;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, XFSCtrls, Grids, DBGrids, ExtCtrls, XDBGrids;
+
+type
+  TFormid_quality = class(TForm)
+    XFPanel2: TXFPanel;
+    DBGrid1: TDBGrid;
+    XFButton3: TXFButton;
+    XFPanel1: TXFPanel;
+    XFButton1: TXFButton;
+    XFButton2: TXFButton;
+    XDBGrid1: TXDBGrid;
+    procedure XFButton1Click(Sender: TObject);
+    procedure XFButton3Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Formid_quality: TFormid_quality;
+
+implementation
+ uses sboapiDataModuleImpl,CO_datamod_impl, Unit_description;
+{$R *.dfm}
+
+procedure TFormid_quality.XFButton1Click(Sender: TObject);
+var
+ id_quality:integer;
+ id_qualityCust:integer;
+ v_id_quality:integer;
+begin
+
+
+  id_quality:=CO_DataMod.ods_custID_quality.FieldByName('id').AsInteger;
+  id_qualityCust:=CO_DataMod.customers.FieldByName('id').AsInteger;
+  v_id_quality:=CO_DataMod.ods_custID_quality.FieldByName('id').AsInteger;
+  CO_DataMod.ods_cust_ID_quality1.First;
+  with CO_DataMod do
+  begin
+
+  Ods_cust_id_qualityCount.Close;
+  Ods_cust_id_qualityCount.SetVariable('custid',id_qualityCust);
+  Ods_cust_id_qualityCount.SetVariable('id_quality',id_quality);
+  Ods_cust_id_qualityCount.Open;
+  if Ods_cust_id_qualityCount.FieldByName('checked').AsInteger=0 then
+  begin
+  ShowMessage('Təsnifat keyfiyyətinin növünü daxil edin  !');
+  exit
+  end;
+  end;
+
+
+  CO_DataMod.SBOP.CallProcedure('upd_custid_quality',
+     [id_quality ]);
+
+
+   CO_DataMod.SBOP.CallProcedure('update_customers',
+     [id_qualityCust,v_id_quality ]);
+
+     //-----------PCustServiceForm. CustSearch1.Click;
+    Formid_quality.Close ;
+
+
+end;
+
+procedure TFormid_quality.XFButton3Click(Sender: TObject);
+begin
+Form_description:=TForm_description.create(self);
+
+Form_description.Memo1.Text:=CO_DataMod.Ods_cust_id_quality1DESCRIPTION.AsString;
+
+
+Form_description.ShowModal;
+end;
+
+end.

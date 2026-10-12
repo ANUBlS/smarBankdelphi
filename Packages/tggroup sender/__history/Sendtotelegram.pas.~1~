@@ -1,0 +1,86 @@
+unit Sendtotelegram;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs,IdMultipartFormData, IdServerIOHandler,
+  IdSSL, IdSSLOpenSSL, IdBaseComponent, IdComponent, IdTCPConnection,
+  IdTCPClient, IdHTTP, Vcl.StdCtrls;
+
+type
+  TForm1 = class(TForm)
+    Button1: TButton;
+    IdHTTP1: TIdHTTP;
+    IdServerIOHandlerSSLOpenSSL1: TIdServerIOHandlerSSLOpenSSL;
+    procedure Button1Click(Sender: TObject);
+
+  private
+  procedure SendFileToTelegramGroup(const AToken, AChatID, AFilePath: string);
+    { Private declarations }
+
+  public
+    { Public declarations }
+  end;
+
+var
+  Form1: TForm1;
+
+implementation
+
+{$R *.dfm}
+
+
+procedure TForm1.SendFileToTelegramGroup(const AToken, AChatID, AFilePath: string);
+var
+  HTTP: TIdHTTP;
+  Params: TIdMultipartFormDataStream;
+  ResponseContent: string;
+begin
+  HTTP := TIdHTTP.Create(nil);
+  Params := TIdMultipartFormDataStream.Create;
+  try
+    Params.AddFormField('chat_id', AChatID);
+    Params.AddFile('document', AFilePath, 'application/octet-stream');
+
+    HTTP.Request.ContentType := Params.RequestContentType;
+
+    // Set SSL/TLS version to TLSv1.2
+    HTTP.IOHandler := TIdSSLIOHandlerSocketOpenSSL.Create(HTTP);
+    TIdSSLIOHandlerSocketOpenSSL(HTTP.IOHandler).SSLOptions.Method := sslvTLSv1_2;
+
+    ResponseContent := HTTP.Post('https://api.telegram.org/bot' + AToken + '/sendDocument', Params);
+    // Process the response content as needed
+
+    ShowMessage('File sent successfully!');
+  except
+    on E: Exception do
+      ShowMessage('Error sending file: ' + E.Message);
+  end;
+
+  Params.Free;
+  HTTP.Free;
+end;
+
+procedure TForm1.Button1Click(Sender: TObject);
+const
+  TelegramBotToken = '5547473364:AAHoh0kyv_UrbES5BVQuoJ0WQfh6pI-D4u8';
+  TelegramGroupChatID = '-1001503811110';
+  FilePath = 'D:\file.xlsx';
+begin
+ SendFileToTelegramGroup(TelegramBotToken, TelegramGroupChatID, FilePath);
+end;
+
+
+
+
+end.
+
+
+
+
+
+
+
+
+

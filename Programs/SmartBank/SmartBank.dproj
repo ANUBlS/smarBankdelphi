@@ -1,0 +1,155 @@
+﻿	<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+		<PropertyGroup>
+			<ProjectGuid>{2AABAA6E-480E-46DE-BAB6-60B9876A3729}</ProjectGuid>
+			<MainSource>SmartBank.dpr</MainSource>
+			<Config Condition="'$(Config)'==''">Debug</Config>
+			<DCC_DCCCompiler>DCC32</DCC_DCCCompiler>
+			<ProjectVersion>12.3</ProjectVersion>
+			<Base>True</Base>
+			<Platform>Win32</Platform>
+			<AppType>Application</AppType>
+			<FrameworkType>VCL</FrameworkType>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Config)'=='Base' or '$(Base)'!=''">
+			<Base>true</Base>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Config)'=='Release' or '$(Cfg_1)'!=''">
+			<Cfg_1>true</Cfg_1>
+			<CfgParent>Base</CfgParent>
+			<Base>true</Base>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Config)'=='Debug' or '$(Cfg_2)'!=''">
+			<Cfg_2>true</Cfg_2>
+			<CfgParent>Base</CfgParent>
+			<Base>true</Base>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Base)'!=''">
+			<DCC_ExeOutput>D:\Smart-Bank\Bin</DCC_ExeOutput>
+			<DCC_Description>Smart - Common Components, Functions and Classes</DCC_Description>
+			<DCC_DependencyCheckOutputName>..\..\..\Bin\SmartBank.exe</DCC_DependencyCheckOutputName>
+			<DCC_UnitSearchPath>$(DELPHI)\Source\Toolsapi;$(DELPHI)\Components\ABC5\Source;$(DELPHI)\Components\ABC5\Delphi5;$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
+			<DCC_Platform>x86</DCC_Platform>
+			<DCC_Alignment>1</DCC_Alignment>
+			<DCC_BplOutput>D:\Smart-B\Bin</DCC_BplOutput>
+			<UsePackages>true</UsePackages>
+			<DCC_UnitAlias>WinTypes=Windows;WinProcs=Windows;DbiTypes=BDE;DbiProcs=BDE;DbiErrs=BDE;WinTypes=Windows;WinProcs=Windows;$(DCC_UnitAlias)</DCC_UnitAlias>
+			<DCC_ImageBase>00400000</DCC_ImageBase>
+			<DCC_K>false</DCC_K>
+			<DCC_F>false</DCC_F>
+			<DCC_S>false</DCC_S>
+			<DCC_N>true</DCC_N>
+			<DCC_E>false</DCC_E>
+			<DCC_WriteableConstants>true</DCC_WriteableConstants>
+			<DCC_UsePackage>VCL;Vcldb;SBCommon50;sbplg50;Vclx;sbovcl50;sboapi50;SBTranslate</DCC_UsePackage>
+			<DCC_DcuOutput>$(DELPHI)\lib</DCC_DcuOutput>
+			<DCC_SymbolReferenceInfo>1</DCC_SymbolReferenceInfo>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Cfg_1)'!=''">
+			<DCC_LocalDebugSymbols>false</DCC_LocalDebugSymbols>
+			<DCC_Define>RELEASE;$(DCC_Define)</DCC_Define>
+			<DCC_SymbolReferenceInfo>0</DCC_SymbolReferenceInfo>
+			<DCC_DebugInformation>false</DCC_DebugInformation>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Cfg_2)'!=''">
+			<DCC_BplOutput>D:\Smart-Bank\Bin</DCC_BplOutput>
+			<DCC_ExeOutput>D:\Smart-Bank\Bin</DCC_ExeOutput>
+			<DCC_Define>DEBUG;$(DCC_Define)</DCC_Define>
+		</PropertyGroup>
+		<ItemGroup>
+			<DelphiCompile Include="SmartBank.dpr">
+				<MainSource>MainSource</MainSource>
+			</DelphiCompile>
+			<DCCReference Include="sbMainForm_Unit.pas">
+				<Form>sbMainForm</Form>
+			</DCCReference>
+			<DCCReference Include="PluginViewImpl.pas">
+				<Form>PluginViewForm</Form>
+			</DCCReference>
+			<DCCReference Include="AlertThread.pas"/>
+			<DCCReference Include="ErrorFormImpl.pas">
+				<Form>ErrorForm</Form>
+			</DCCReference>
+			<DCCReference Include="AbountProgrammUnit.pas">
+				<Form>frmAbout</Form>
+			</DCCReference>
+			<DCCReference Include="PasswordChange_unit.pas">
+				<Form>PasswordChange</Form>
+			</DCCReference>
+			<DCCReference Include="SmLicense1.pas"/>
+			<DCCReference Include="CompanySelection.pas">
+				<Form>CompanyForm</Form>
+			</DCCReference>
+			<BuildConfiguration Include="Debug">
+				<Key>Cfg_2</Key>
+				<CfgParent>Base</CfgParent>
+			</BuildConfiguration>
+			<BuildConfiguration Include="Base">
+				<Key>Base</Key>
+			</BuildConfiguration>
+			<BuildConfiguration Include="Release">
+				<Key>Cfg_1</Key>
+				<CfgParent>Base</CfgParent>
+			</BuildConfiguration>
+		</ItemGroup>
+		<Import Condition="Exists('$(BDS)\Bin\CodeGear.Delphi.Targets')" Project="$(BDS)\Bin\CodeGear.Delphi.Targets"/>
+		<Import Condition="Exists('$(APPDATA)\Embarcadero\$(BDSAPPDATABASEDIR)\$(PRODUCTVERSION)\UserTools.proj')" Project="$(APPDATA)\Embarcadero\$(BDSAPPDATABASEDIR)\$(PRODUCTVERSION)\UserTools.proj"/>
+		<ProjectExtensions>
+			<Borland.Personality>Delphi.Personality.12</Borland.Personality>
+			<Borland.ProjectType>VCLApplication</Borland.ProjectType>
+			<BorlandProject>
+				<Delphi.Personality>
+					<Source>
+						<Source Name="MainSource">SmartBank.dpr</Source>
+					</Source>
+					<Parameters>
+						<Parameters Name="RunParams">/LocalIniSourceLocation=winini:\Smart-Bank\Bin\SBLocal.ini /SystemIniSourceLocation=winini:\Smart-Bank\Bin\SmartBank.ini /ShowLog /IgnoreSecurity</Parameters>
+						<Parameters Name="HostApplication">D:\Smart-Bank\Bin\SmartBank.exe</Parameters>
+					</Parameters>
+					<Language>
+						<Language Name="ProjectLang">$00000419</Language>
+					</Language>
+					<VersionInfo>
+						<VersionInfo Name="IncludeVerInfo">True</VersionInfo>
+						<VersionInfo Name="AutoIncBuild">True</VersionInfo>
+						<VersionInfo Name="MajorVer">1</VersionInfo>
+						<VersionInfo Name="MinorVer">0</VersionInfo>
+						<VersionInfo Name="Release">0</VersionInfo>
+						<VersionInfo Name="Build">123</VersionInfo>
+						<VersionInfo Name="Debug">False</VersionInfo>
+						<VersionInfo Name="PreRelease">False</VersionInfo>
+						<VersionInfo Name="Special">False</VersionInfo>
+						<VersionInfo Name="Private">False</VersionInfo>
+						<VersionInfo Name="DLL">False</VersionInfo>
+						<VersionInfo Name="Locale">1049</VersionInfo>
+						<VersionInfo Name="CodePage">1251</VersionInfo>
+					</VersionInfo>
+					<VersionInfoKeys>
+						<VersionInfoKeys Name="CompanyName"/>
+						<VersionInfoKeys Name="FileDescription"/>
+						<VersionInfoKeys Name="FileVersion">1.0.0.123</VersionInfoKeys>
+						<VersionInfoKeys Name="InternalName"/>
+						<VersionInfoKeys Name="LegalCopyright"/>
+						<VersionInfoKeys Name="LegalTrademarks"/>
+						<VersionInfoKeys Name="OriginalFilename"/>
+						<VersionInfoKeys Name="ProductName"/>
+						<VersionInfoKeys Name="ProductVersion">1.0.0.0</VersionInfoKeys>
+						<VersionInfoKeys Name="Comments"/>
+					</VersionInfoKeys>
+					<Excluded_Packages>
+						<Excluded_Packages Name="D:\Smart-Bank\Bin\sbplg50.bpl">Smart - Plugins Support Package</Excluded_Packages>
+						<Excluded_Packages Name="D:\Smart-Bank\Bin\SearchCB.bpl">File D:\Smart-Bank\Bin\SearchCB.bpl not found</Excluded_Packages>
+						<Excluded_Packages Name="C:\Documents and Settings\All Users\Documents\RAD Studio\7.0\Bpl\FieldSearch.bpl">File C:\Documents and Settings\All Users\Documents\RAD Studio\7.0\Bpl\FieldSearch.bpl not found</Excluded_Packages>
+						<Excluded_Packages Name="$(BDSBIN)\SBCrypto.bpl">File c:\program files\embarcadero\rad studio\7.0\Bin\SBCrypto.bpl not found</Excluded_Packages>
+						<Excluded_Packages Name="D:\Smart-Bank\Bin\SBTranslate.bpl">File D:\Smart-Bank\Bin\SBTranslate.bpl not found</Excluded_Packages>
+						<Excluded_Packages Name="$(BDSBIN)\dcloffice2k140.bpl">Microsoft Office 2000 Sample Automation Server Wrapper Components</Excluded_Packages>
+						<Excluded_Packages Name="$(BDSBIN)\dclofficexp140.bpl">Microsoft Office XP Sample Automation Server Wrapper Components</Excluded_Packages>
+					</Excluded_Packages>
+				</Delphi.Personality>
+				<Platforms>
+					<Platform value="Win32">True</Platform>
+				</Platforms>
+				<ModelSupport>False</ModelSupport>
+			</BorlandProject>
+			<ProjectFileVersion>12</ProjectFileVersion>
+		</ProjectExtensions>
+	</Project>

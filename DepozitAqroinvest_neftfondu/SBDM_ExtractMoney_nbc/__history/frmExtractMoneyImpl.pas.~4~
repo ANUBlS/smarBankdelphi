@@ -1,0 +1,199 @@
+﻿unit frmExtractMoneyImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, Mask, DBCtrls, ExtCtrls, ComCtrls, ImgList, ToolWin, Grids,
+  DBGridEh, ActnList, CMExcelExport, Menus;
+
+type
+  TfrmExtractMoney = class(TForm)
+    GroupBox1: TGroupBox;
+    DBEdit2: TDBEdit;
+    StatusBar1: TStatusBar;
+    Panel1: TPanel;
+    ToolBar1: TToolBar;
+    ToolButton3: TToolButton;
+    ToolButton4: TToolButton;
+    ToolButton5: TToolButton;
+    ToolButton6: TToolButton;
+    ImageList1: TImageList;
+    ToolButton7: TToolButton;
+    ToolButton8: TToolButton;
+    ToolButton9: TToolButton;
+    DBGridEh1: TDBGridEh;
+    ActionList1: TActionList;
+    ActnAdd: TAction;
+    ActnDel: TAction;
+    ExcelExport: TCMExcelExport;
+    ActnExprt: TAction;
+    PMShowTr: TPopupMenu;
+    N1: TMenuItem;
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure ActnAddExecute(Sender: TObject);
+    procedure ActnDelExecute(Sender: TObject);
+    procedure ToolButton9Click(Sender: TObject);
+    procedure ActnExprtExecute(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure ActnDelUpdate(Sender: TObject);
+    procedure N1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    RefreshAfterOperation : Boolean;
+  end;
+
+var
+  frmExtractMoney: TfrmExtractMoney;
+
+  procedure exportproc(S:String);export;
+implementation
+
+{$R *.DFM}
+uses DMExtractMoneyImpl,frmAddExtractMoneyImpl,CommonDeclsImpl;
+
+procedure exportproc(S:String);export;
+var ContractID,CustAccID : Integer;
+begin
+
+   ContractID := Get_SelectedContID;
+
+   with DMExtractMoney do
+   begin
+
+       with Payments do
+       begin
+          if Active then CloseAll;
+          SetVariable('ContractID',ContractID);
+          Open;
+       end;
+
+       with DepositInfo do
+       begin
+          if Active then CloseAll;
+          SetVariable('ContractID',ContractID);
+          Open;
+       end;
+
+       with CustAcc do
+       begin
+          if Active then CloseAll;
+          SetVariable('ContractID',ContractID);
+          Open;
+          CustAccID := FieldByName('ClientACCID').AsInteger;
+       end;
+
+       with CreditAccs do
+       begin
+        if not Active then
+          //SetVariable('kliID',CustID);
+          Open;
+        if Locate('ID',CustAccID,[]) then
+        frmAddExtractMoney.AccountListCB.KeyValue := CustAccID;
+       end;
+
+
+   end;
+
+    with frmExtractMoney do begin
+         Caption := Get_SelectedContNo+' nömrəli donorun ödənişləri';
+         ShowModal;
+    end;
+end;
+
+exports
+  exportproc;
+
+procedure TfrmExtractMoney.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+   Resize := False 
+end;
+
+procedure TfrmExtractMoney.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+   if ord(Key) = VK_ESCAPE then Close
+end;
+
+procedure TfrmExtractMoney.FormCreate(Sender: TObject);
+begin
+   DMExtractMoney := TDMExtractMoney.Create(Self);
+   frmAddExtractMoney := TfrmAddExtractMoney.Create(Self);
+end;
+
+procedure TfrmExtractMoney.FormDestroy(Sender: TObject);
+begin
+   DMExtractMoney.Free;
+   frmAddExtractMoney.Free;
+end;
+
+procedure TfrmExtractMoney.ActnAddExecute(Sender: TObject);
+begin
+   if frmAddExtractMoney.ShowModal = mrOk then
+   begin
+      RefreshAfterOperation := True;
+      DMExtractMoney.Payments.Refresh;
+   end;
+end;
+
+procedure TfrmExtractMoney.ActnDelExecute(Sender: TObject);
+begin
+
+    if MessageDlg('Silinməsinə əminsinizmi?',
+             mtConfirmation, [mbYes, mbNo], 0) = mrNo
+    then Exit;
+
+    with DMExtractMoney,Payments,sbcm_payment do
+    begin
+         CallProcedure('DeleteWithDrawMoney',['P_DepWMoneyID',FieldByName('ID').AsInteger]);
+         Refresh;
+    end;
+
+end;
+
+procedure TfrmExtractMoney.ToolButton9Click(Sender: TObject);
+begin
+   Close;
+end;
+
+procedure TfrmExtractMoney.ActnExprtExecute(Sender: TObject);
+begin
+   with ExcelExport do
+   begin
+      Connect;
+      ExportDataset(DMExtractMoney.Payments,'Ödənilmiş əmanətlər',True,false);
+      Disconnect;
+   end;
+end;
+
+procedure TfrmExtractMoney.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+   if RefreshAfterOperation then
+      RefreshWithSavely(True);
+
+end;
+
+procedure TfrmExtractMoney.ActnDelUpdate(Sender: TObject);
+begin
+    with (Sender as TAction) do
+          Enabled := DMExtractMoney.Payments.RecordCount > 0
+end;
+
+
+procedure TfrmExtractMoney.N1Click(Sender: TObject);
+var TrID :String;
+begin
+   {TrID := IntToStr(DMApplyMoney.Tranches.FieldByname('TrID').AsInteger);
+   LoadPlugin('SBDM_TransactionViewer.bpl',TrID);  }
+end;
+
+initialization
+    frmExtractMoney := TfrmExtractMoney.Create(CommonApplication);
+
+end.

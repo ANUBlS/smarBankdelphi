@@ -1,0 +1,136 @@
+object ControlDatMod: TControlDatMod
+  OldCreateOrder = False
+  Left = 187
+  Top = 142
+  Height = 405
+  Width = 573
+  object CM_CONTROL: TOraclePackage
+    Session = CMDataModule.CMSession
+    Debug = False
+    PackageName = 'CM_CONTROL'
+    ParameterMode = pmPositional
+    Cursor = crSQLWait
+    Optimize = True
+    Left = 32
+    Top = 32
+  end
+  object ResultsDatSet: TOracleDataSet
+    SQL.Strings = (
+      'SELECT numberofcredit, '
+      '       custname, '
+      '       sum(drest) as drest , '
+      '       sum(dinterestrest) as dinterestrest, '
+      '       sum(dduerest) as dduerest,'
+      '       sum(ddueinterestrest) as ddueinterestrest'
+      '  FROM cm_controls'
+      'group by NUMBEROFCREDIT, custname')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = CMDataModule.CMSession
+    DesignActivation = False
+    Active = False
+    Left = 128
+    Top = 32
+    object ResultsDatSetNUMBEROFCREDIT: TWideStringField
+      DisplayLabel = 'ּצדאגטכÿםטם ם‏לנÿסט'
+      DisplayWidth = 30
+      FieldName = 'NUMBEROFCREDIT'
+      Required = True
+      Size = 30
+    end
+    object ResultsDatSetCUSTNAME: TWideStringField
+      DisplayLabel = 'ֱמנז אכאםûם ְ.װ.ׁ'
+      DisplayWidth = 90
+      FieldName = 'CUSTNAME'
+      Required = True
+      Size = 68
+    end
+    object ResultsDatSetDREST: TFloatField
+      DisplayLabel = 'ß.ֱ צחנÿ פÿנד'
+      FieldName = 'DREST'
+    end
+    object ResultsDatSetDINTERESTREST: TFloatField
+      DisplayLabel = 'װ ֱ צחנÿ פÿנד'
+      FieldName = 'DINTERESTREST'
+    end
+    object ResultsDatSetDDUEREST: TFloatField
+      DisplayLabel = 'Ü. ֱ צחנÿ פÿנד'
+      FieldName = 'DDUEREST'
+    end
+    object ResultsDatSetDDUEINTERESTREST: TFloatField
+      DisplayLabel = 'Ü .װ.ֱ צחנÿ פÿנד'
+      FieldName = 'DDUEINTERESTREST'
+    end
+  end
+  object ResultDatSrc: TDataSource
+    DataSet = ResultsDatSet
+    Left = 32
+    Top = 104
+  end
+  object Branchs: TOracleDataSet
+    SQL.Strings = (
+      'select *from sb_filial')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = CMDataModule.CMSession
+    DesignActivation = False
+    Active = True
+    Left = 128
+    Top = 96
+    object BranchsID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object BranchsNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 90
+    end
+  end
+  object BranchsDatScr: TDataSource
+    DataSet = Branchs
+    Left = 128
+    Top = 192
+  end
+end

@@ -1,0 +1,1196 @@
+﻿unit OpenAccountImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Buttons, StdCtrls, DBCtrlsEh, DBLookupEh, XFSCtrls, DBCtrls, Mask,
+  ComCtrls, ExtCtrls,Db, DBGridEh,Oracle ;
+
+
+type
+  TOperationMode = (omInsert, omEdit, omCommission);
+
+type
+  TOpenAccount = class(TForm)
+    XFPanel3: TXFPanel;
+    XFBitBtn1: TXFBitBtn;
+    XFBitBtn2: TXFBitBtn;
+    GroupBox1: TGroupBox;
+    XFLabel1: TXFLabel;
+    XFLabel2: TXFLabel;
+    DTPOpenDate: TDateTimePicker;
+    DBEditBranchID: TDBEdit;
+    DBLookupComboBoxBranchName: TDBLookupComboBox;
+    GroupBox2: TGroupBox;
+    XFLabel3: TXFLabel;
+    XFLabel6: TXFLabel;
+    XFLaCBox: TXFLabel;
+    XFLabel5: TXFLabel;
+    XFCheckBox_type: TXFCheckBox;
+    RBtnNoResident: TXFRadioButton;
+    EditId: TEdit;
+    EditName: TEdit;
+    RadioGroup1: TRadioGroup;
+    DBLookupvid_sob: TDBLookupComboBox;
+    DBLookupSFERA_DEY: TDBLookupComboBox;
+    XFButtEdit: TXFButton;
+    Pcust_Balans_hesabı: TGroupBox;
+    Label2: TLabel;
+    XFLabel24: TXFLabel;
+    XFPanel4: TXFPanel;
+    XFButton2: TXFButton;
+    Edit2: TEdit;
+    DBLookupComboboxEh6: TDBLookupComboboxEh;
+    GroupBoxOpenAccount_elave: TGroupBox;
+    XFLabel10: TXFLabel;
+    XFLabel18: TXFLabel;
+    XFLabel11: TXFLabel;
+    Label_Symbols: TLabel;
+    XFLabel12: TXFLabel;
+    XFLabel14: TXFLabel;
+    XFLabel15: TXFLabel;
+    Edit5: TEdit;
+    DBLookupComboboxEh4: TDBLookupComboboxEh;
+    Edit6: TEdit;
+    DBLookupComboboxEh5: TDBLookupComboboxEh;
+    Button1: TButton;
+    EditNoteCode: TEdit;
+    Edit7: TEdit;
+    Panel1: TPanel;
+    XFLabel16: TXFLabel;
+    Acc_nuber_avto: TSpeedButton;
+    XFLabel17: TXFLabel;
+    EditAccNo: TEdit;
+    Panel2: TPanel;
+    XFLabel13: TXFLabel;
+    Edit_AccName: TEdit;
+    Panel3: TPanel;
+    Panel_BAnkCode: TPanel;
+    Edit_BankCod: TEdit;
+    Button2: TButton;
+    Müxabirləşmə_kodu: TPanel;
+    Label10: TLabel;
+    Edit_MuxKod: TEdit;
+    Label1: TLabel;
+    Panel4: TPanel;
+    XFLabel7: TXFLabel;
+    XFLabel21: TXFLabel;
+    Edit1: TEdit;
+    DBLookupComboboxEh1: TDBLookupComboboxEh;
+    XFLabel8: TXFLabel;
+    XFLabel19: TXFLabel;
+    Edit3: TEdit;
+    DBLookupComboboxEh2: TDBLookupComboboxEh;
+    XFLabel9: TXFLabel;
+    XFLabel20: TXFLabel;
+    XFPanel1: TXFPanel;
+    XFButton1: TXFButton;
+    Edit4: TEdit;
+    DBLookupComboboxEh3: TDBLookupComboboxEh;
+    procedure FormCreate(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure Edit1Exit(Sender: TObject);
+    procedure DBLookupComboboxEh1Change(Sender: TObject);
+    procedure Edit1KeyPress(Sender: TObject; var Key: Char);
+    procedure Edit3Exit(Sender: TObject);
+    procedure Edit3KeyPress(Sender: TObject; var Key: Char);
+    procedure DBLookupComboboxEh2Change(Sender: TObject);
+    procedure DBLookupComboboxEh2CloseUp(Sender: TObject; Accept: Boolean);
+    procedure Edit4Exit(Sender: TObject);
+    procedure Edit4KeyPress(Sender: TObject; var Key: Char);
+    procedure Edit5Exit(Sender: TObject);
+    procedure Edit5KeyPress(Sender: TObject; var Key: Char);
+    procedure DBLookupComboboxEh4Change(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure RadioGroup1Click(Sender: TObject);
+    procedure Edit2Exit(Sender: TObject);
+    procedure Edit2KeyPress(Sender: TObject; var Key: Char);
+    procedure DBLookupComboboxEh6Change(Sender: TObject);
+    procedure Acc_nuber_avtoClick(Sender: TObject);
+    procedure XFBitBtn2Click(Sender: TObject);
+    procedure Edit6Exit(Sender: TObject);
+    procedure Edit6KeyPress(Sender: TObject; var Key: Char);
+    procedure DBLookupComboboxEh5Change(Sender: TObject);
+    procedure XFBitBtn1Click(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure XFButtEditClick(Sender: TObject);
+    procedure DBLookupvid_sobCloseUp(Sender: TObject);
+    procedure DBLookupSFERA_DEYCloseUp(Sender: TObject);
+    procedure DBLookupComboboxEh1CloseUp(Sender: TObject; Accept: Boolean);
+    procedure DBLookupComboboxEh3Change(Sender: TObject);
+    procedure DBLookupComboboxEh3CloseUp(Sender: TObject; Accept: Boolean);
+    procedure XFButton1Click(Sender: TObject);
+    procedure XFButton2Click(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+
+  private
+    { Private declarations }
+
+  public
+      retrun_custid:Variant;
+      OperationMode: TOperationMode;
+
+          { Public declarations }
+  end;
+
+var
+  OpenAccount: TOpenAccount;
+  ominsert_edit,om_create :Boolean;
+  Form_Close:string ;
+  nomid,cust_id, val_id, fil_id, bal_cn1 ,sim_otcet: integer;
+  bal_cn2:Variant;
+  depozit_custid,depozit_contractid:string;
+  cust_noteid,contract_id,aaa, a,tacc,notecode,trid ,tr,phys_cust_DbHesabID,phys_cust_CrHesabID,accont_id,odeme_trid:string;
+  phys_jur_accid,phys_jur_custid:string ;
+
+
+implementation
+uses OpenAccdataImpl, AccounFlagsLmpl, Form_BalCnImpl, FormCustNomImpl,
+  Transaction_PropertiesImpl, Transaction_DataModuleUnit, FormOperationbplLmpl,
+  Form1_BalCnImpl, Unit_Rekvezit, UnitPayment_order, Account_edit_Unit,
+  SBTranslateProc,sboapiDataModuleImpl, SMSUnit, UnitNote, UnitbussProc,
+  UnitDataBussProc, Form_Statmentlmpl;
+
+{$R *.dfm}
+procedure InitPlugin(s:string;custid :string;accid:string='0' );export;
+begin
+   tacc:=custid;
+   if s='smsunit' then   begin
+    aaa:= custid;
+   //showmessage(IntToStr(aaa));
+
+   sms(StrToInt(aaa));
+   end;
+  if s='note' then
+  begin
+  cust_noteid:=  custid;
+  contract_id:= accid;
+  formnote.showmodal;
+
+   // cust_noteid:=strtoint(note_id);  showmessage(inttostr(cust_noteid));
+  end;
+
+  if s='FormCusNom' then
+  begin
+
+  FormCustNom.ShowModal;
+
+  end;
+  if s='ForOperation' then
+  begin
+   a:=tacc;
+
+  FormOperationbpl:=TFormOperationbpl.Create(nil);
+  FormOperationbpl.ShowModal;
+
+  end;
+
+  if s='bussPuroc' then
+                begin
+    FormBussProc:=TFormBussProc.Create(nil);
+     phys_jur_accid:=custid;
+     phys_jur_custid:=accid;
+    // DataModule_bussProc.ODS_BussProc.open;
+     FormBussProc.showmodal;
+  end;
+
+
+    if s='FormPaymentOrder' then
+    Payment_order.ShowModal;
+
+    if s='Trancation_FormPaymentOrder' then
+    begin
+    odeme_trid:=custid;
+    Payment_order.ShowModal;
+    end;
+   if s='DB_Hesab' then
+     begin
+    Form_Close:='DB_Hesab' ;
+    phys_cust_DbHesabID:=custid;
+   //  showmessage('custid'+phys_cust_DbHesabID);
+        with Transaction_DataModule, TransactionForm,Transactions do begin
+    if Active then close;
+    // SetVariable(':trid',0);
+     SetVariable(':TransactionDate',sysdat.FieldByName('tek_dat').AsDateTime);
+      Transactions.open;
+     SB_ACA.CallProcedure('CheckObjectAccess', ['TransactionManager','insert']);
+    open;
+    Insert;
+     end;
+
+     TransactionForm.ShowModal;
+
+         end;
+
+     if s='CR_Hesab' then
+     begin
+     Form_Close:='CR_Hesab' ;
+    phys_cust_CrHesabID:=custid;
+    // showmessage('custid'+custid);
+        with Transaction_DataModule, TransactionForm,Transactions do begin
+    if Active then close;
+    // SetVariable(':trid',0);
+     SetVariable(':TransactionDate',sysdat.FieldByName('tek_dat').AsDateTime);
+      Transactions.open;
+     SB_ACA.CallProcedure('CheckObjectAccess', ['TransactionManager','insert']);
+    open;
+    Insert;
+     end;
+
+     TransactionForm.ShowModal;
+         end;
+
+     if s='TransactionInsrtForm' then
+     begin
+    trid:='';
+
+    with Transaction_DataModule, TransactionForm,Transactions do begin
+    if Active then close;
+     SetVariable(':trid',0);
+     SetVariable(':TransactionDate',sysdat.FieldByName('tek_dat').AsDateTime);
+
+    //Transactions.open;
+
+    SB_ACA.CallProcedure('CheckObjectAccess', ['TransactionManager','insert']);
+    open;
+    Insert;
+
+     TransactionForm.ShowModal;
+
+     end;
+     end;
+
+
+   if s='TransactionEditForm' then
+     begin
+
+   trid:=custid;
+
+
+   with Transaction_DataModule, TransactionForm do begin
+    //Transactions.open;
+
+   if Transaction_DataModule.Transactions.FieldByName('status').AsInteger=1
+   then
+   Transaction_DataModule.SB_ACA.CallProcedure('checkadvancedobjectaccess',['DELAYEDEDIT']);
+
+   if Transaction_DataModule.Transactions.FieldByName('status').AsInteger=2
+   then
+   Transaction_DataModule.SB_ACA.CallProcedure('checkadvancedobjectaccess',['COMMITEDEDIT']);
+
+   with  Transaction_DataModule, Transactions do
+ begin
+ if Active then close;
+  SetVariable(':trid',trid);
+  SetVariable(':TransactionDate',sysdat.FieldByName('tek_dat').AsDateTime);
+  open;
+
+SB_ACA.CallProcedure('CheckObjectAccess', ['TransactionManager','update']);
+//showmessage(inttostr( Transaction_DataModule.Transactions.FieldByName('a1').AsInteger));
+   Edit;
+
+end;
+   end;
+    TransactionForm.ShowModal;
+ end;
+
+ // InitProperties;
+ //GridTransactions.SelectedRows.Clear   ;
+
+
+  if s='account_edit' then
+  begin
+  accont_id:=custid;
+  Account_edit.ShowModal;
+
+  end;
+
+  if s='depozit_stetment' then
+   begin
+
+  // showmessage(custid);
+  // showmessage(accid);
+    with  DataModule_bussProc do
+    begin
+    depozit_custid:=custid;
+    depozit_contractid:=accid;
+      ODS_State.Close;
+      ODS_State.SetVariable('custid',depozit_custid);
+      ODS_State.SetVariable('accid', depozit_contractid);
+      ODS_State.Open;
+
+
+  end;
+     FormStatement.ShowModal
+    end;
+
+  if s='' then
+  begin
+     OpenAccount.ShowModal;
+
+  end;
+end;
+ exports
+     InitPlugin;
+
+
+
+procedure TOpenAccount.Acc_nuber_avtoClick(Sender: TObject);
+var
+  bal_cn2,cust_id, val_id, fil_id, bal_cn1 ,sim_otcet:Variant;
+
+
+id: variant;
+begin
+if XFLabel21.Visible=true then
+ if DBLookupComboboxEh1.Text = '' then
+  begin
+    ShowMessage('Hesabın tipi  seçilmeyib !');
+    exit;
+  end;
+
+  if DBLookupComboboxEh2.Text = '' then
+  begin
+    ShowMessage('Hesabın valyutası  seçilmeyib !');
+    exit;
+  end;
+
+  if DBLookupComboboxEh3.Text = '' then
+  begin
+    ShowMessage('Balans hesabı  seçilmeyib!');
+    exit;
+  end;
+ if  Pcust_Balans_hesabı.Visible=true then
+ begin
+   if DBLookupComboboxEh6.Text = '' then
+  begin
+    ShowMessage('Yeni Balans hesabı  seçilmeyib!');
+    exit;
+  end;
+  end;
+  if XFLabel18.Visible=true then
+    begin
+  if DBLookupComboboxEh4.Text = '' then
+  begin
+    ShowMessage('Hesabın  təyinatı  seçilmeyib !');
+    exit;
+  end;
+  end;
+  cust_id := DataAcc.customers.FieldByName('ID').AsInteger;
+  val_id := DBLookupComboboxEh2.KeyValue;
+  fil_id := DBLookupComboBoxBranchName.KeyValue;
+  bal_cn1 := DBLookupComboboxEh3.KeyValue;
+  bal_cn2:= DBLookupComboboxEh6.KeyValue;
+  if  VarIsNull(DBLookupComboboxEh5.KeyValue) then
+   DBLookupComboboxEh5.KeyValue:=null
+  else
+  sim_otcet :=DBLookupComboboxEh5.KeyValue;
+  notecode:=(EditNoteCode.Text);
+  id:=DataAcc.Account.FieldByName('id').AsVariant;
+  EditAccNo.Text:=DataAcc.SBOP.CallStringFunction
+ ('GenerateAccountNumber',[bal_cn1,
+                           val_id,
+                           cust_id,
+                           fil_id,
+                           sim_otcet,
+                           notecode,
+                           bal_cn2
+                          ]);
+end;
+
+procedure TOpenAccount.Button1Click(Sender: TObject);
+begin
+ FormAccounFlags := TFormAccounFlags.Create(Self);
+  try
+    with FormAccounFlags, DataAcc.Accflags do
+      if (ShowModal = mrOk) and (State in [dsInsert, dsEdit]) then
+        FieldByName('Tipacc').AsString := FlagMap;
+
+  finally
+    if Assigned(FormAccounFlags) then
+      FormAccounFlags.Release;
+  end;
+end;
+
+procedure TOpenAccount.Button2Click(Sender: TObject);
+begin
+FormRekvezit:=TFormRekvezit.Create(self);
+FormRekvezit.ShowModal;
+end;
+
+procedure TOpenAccount.DBLookupComboboxEh1Change(Sender: TObject);
+begin
+
+  if not(DBLookupComboboxEh1.KeyValue = null) then
+    Edit1.Text := DBLookupComboboxEh1.KeyValue;
+
+    DataAcc.ODS_Bal_spr.close;
+  // showmessage(inttostr(DBLookupComboboxEh5.KeyValue));
+    DataAcc.ODS_Bal_spr.SetVariable('ACCTYPE',
+    DataAcc.Ods_acc_types.FieldByName('id').AsInteger);
+  // showmessage(DataModPCustService.ODS_Bal_spr.SQL.Text);
+    DataAcc.ODS_Bal_spr.Open;
+   // if DBLookupComboboxEh3.Text<>'' then
+     DBLookupComboboxEh2.KeyValue:=-1;
+     DBLookupComboboxEh3.Text:='';
+     edit3.Clear;
+     edit4.Clear;
+
+   { -DataAcc.ODS_Bal_spr1.close;
+    DataAcc.ODS_Bal_spr1.SetVariable('ACCTYPE',
+    DataAcc.Ods_acc_types.FieldByName('id').AsInteger);
+    DataAcc.ODS_Bal_spr1.Open; --}
+     DBLookupComboboxEh2.KeyValue:=-1;
+   //--  DBLookupComboboxEh6.Text:='';
+     edit3.Clear;
+   //--  edit2.Clear;
+
+end;
+
+procedure TOpenAccount.DBLookupComboboxEh1CloseUp(Sender: TObject;
+  Accept: Boolean);
+begin
+     DBLookupComboboxEh2.KeyValue:=-1;
+     DBLookupComboboxEh3.KeyValue:=-1;
+    //--- DBLookupComboboxEh6.KeyValue:=-1;
+     edit3.Clear;
+     edit4.Clear;
+    //--- edit2.Clear;
+
+ if DataAcc.Customers.FieldByName('cust_type').AsInteger=3 then
+
+if RadioGroup1.ItemIndex=-1 then
+  showmessage(' Fiziki və ya Fiziki sahibkar olduğunu seçin   !');
+  exit;
+  end;
+
+procedure TOpenAccount.DBLookupComboboxEh2Change(Sender: TObject);
+begin
+{bank ucun-- DBLookupComboboxEh3.ListSource:=DataAcc.Dsrc_bal_spr; --- }
+//----DBLookupComboboxEh6.ListSource:=DataAcc.Dsrc_bal_spr1;
+ if not(DBLookupComboboxEh2.KeyValue = null) then
+  begin
+    Edit3.Text := DBLookupComboboxEh2.KeyValue;
+    DBLookupComboboxEh3.KeyValue :=-1 ;
+  {bank ucun
+    DataAcc.ODS_Bal_spr.close;
+    if DBLookupComboboxEh2.KeyValue = 0 then
+      DataAcc.ODS_Bal_spr.SetVariable('int_val', 0)
+    else
+      DataAcc.ODS_Bal_spr.SetVariable('int_val', 1);
+      DataAcc.ODS_Bal_spr.Open;
+                 bank                }
+   {---  DataAcc.ODS_Bal_spr1.close;
+    if DBLookupComboboxEh2.KeyValue = 0 then
+      DataAcc.ODS_Bal_spr1.SetVariable('int_val', 0)
+    else
+      DataAcc.ODS_Bal_spr1.SetVariable('int_val', 1);
+      DataAcc.ODS_Bal_spr1.Open; ---}
+    end;
+    end;
+
+procedure TOpenAccount.DBLookupComboboxEh2CloseUp(Sender: TObject;
+  Accept: Boolean);
+begin
+{Bank ucun--- DBLookupComboboxEh3.ListSource:=DataAcc.Dsrc_bal_spr; ---}
+//---DBLookupComboboxEh6.ListSource:=DataAcc.Dsrc_bal_spr1;
+ with DataAcc, ODS_Bal_spr do
+  begin
+    // showmessage(edit4.text)   ;
+    if RecordCount = 1 then
+    begin
+      Edit4.Text := FieldByName('bal_cn').AsString;
+      DBLookupComboboxEh3.Text := FieldByName('balname').AsString;
+
+       end
+        else
+        begin
+        edit4.Text:='';
+     end;
+     end;
+
+    with DataAcc, ODS_Bal_spr1 do
+  begin
+    // showmessage(edit4.text)   ;
+ {--   if RecordCount = 1 then
+    begin
+      Edit2.Text := FieldByName('bal_cn').AsString;
+      DBLookupComboboxEh6.Text := FieldByName('balname').AsString;
+
+       end
+        else
+        begin
+        edit2.Text:='';
+     end; --}
+     end;
+
+  end;
+
+procedure TOpenAccount.DBLookupComboboxEh3Change(Sender: TObject);
+begin
+  if VarIsNull(DBLookupComboboxEh3.KeyValue) then
+   begin
+    Edit4.Text := '' ;
+  end
+  else
+
+    Edit4.Text:=VarToStr(DBLookupComboboxEh3.KeyValue);
+
+
+end;
+
+procedure TOpenAccount.DBLookupComboboxEh3CloseUp(Sender: TObject;
+  Accept: Boolean);
+begin
+{if VarIsNull(DBLookupComboboxEh3.KeyValue)
+ then
+ begin
+    XFButton1.Visible:=true  ;
+   end
+  else
+  begin
+    XFButton1.Visible:=false;
+  end;  }
+
+  if DBLookupComboboxEh3.text='' then
+    // XFButton1.Visible:=true
+end;
+
+procedure TOpenAccount.DBLookupComboboxEh4Change(Sender: TObject);
+begin
+ if not(DBLookupComboboxEh4.KeyValue = null) then
+    Edit5.Text := DBLookupComboboxEh4.KeyValue;
+  if DBLookupComboboxEh4.Text <> '' then
+    Edit_AccName.Text := DataAcc.customers.FieldByName
+      ('name').AsString + '/' + DBLookupComboboxEh4.Text
+  else
+    Edit_AccName.Text := DataAcc.customers.FieldByName
+      ('name').AsString;
+end;
+
+procedure TOpenAccount.DBLookupComboboxEh5Change(Sender: TObject);
+begin
+ if not(DBLookupComboboxEh6.KeyValue = null) then
+    Edit6.Text := DBLookupComboboxEh5.KeyValue;
+end;
+
+procedure TOpenAccount.DBLookupComboboxEh6Change(Sender: TObject);
+begin
+ if not(DBLookupComboboxEh6.KeyValue = null) then
+    Edit2.Text := DBLookupComboboxEh6.KeyValue;
+end;
+
+procedure TOpenAccount.DBLookupSFERA_DEYCloseUp(Sender: TObject);
+begin
+DBLookupComboboxEh1.KeyValue:=-1;
+DBLookupComboboxEh2.KeyValue:=-1;
+DBLookupComboboxEh3.KeyValue:=-1;
+edit1.Clear;
+edit3.Clear;
+edit4.Clear;
+end;
+
+procedure TOpenAccount.DBLookupvid_sobCloseUp(Sender: TObject);
+begin
+DBLookupComboboxEh1.KeyValue:=-1;
+DBLookupComboboxEh2.KeyValue:=-1;
+DBLookupComboboxEh3.KeyValue:=-1;
+edit1.Clear;
+edit3.Clear;
+edit4.Clear;
+end;
+
+procedure TOpenAccount.Edit1Exit(Sender: TObject);
+begin
+ if Edit1.Text <> '' then
+    DBLookupComboboxEh1.KeyValue := Edit1.Text;
+end;
+
+procedure TOpenAccount.Edit1KeyPress(Sender: TObject; var Key: Char);
+begin
+ if Key = #13 then
+  begin
+    DBLookupComboboxEh1.KeyValue := Edit1.Text;
+  end;
+end;
+
+procedure TOpenAccount.Edit2Exit(Sender: TObject);
+begin
+if Edit2.Text <> '' then
+    DBLookupComboboxEh6.KeyValue := Edit2.Text;
+end;
+
+procedure TOpenAccount.Edit2KeyPress(Sender: TObject; var Key: Char);
+begin
+if Key = #13 then
+  begin
+    DBLookupComboboxEh6.KeyValue := Edit2.Text;
+  end;
+end;
+
+procedure TOpenAccount.Edit3Exit(Sender: TObject);
+begin
+ if Edit3.Text <> '' then
+    DBLookupComboboxEh2.KeyValue := Edit3.Text;
+end;
+
+procedure TOpenAccount.Edit3KeyPress(Sender: TObject; var Key: Char);
+begin
+  if Key = #13 then
+  begin
+
+    DBLookupComboboxEh2.KeyValue := Edit3.Text;
+  end;
+end;
+
+procedure TOpenAccount.Edit4Exit(Sender: TObject);
+begin
+ if Edit4.Text <> '' then
+    DBLookupComboboxEh3.KeyValue := Edit4.Text;
+end;
+
+procedure TOpenAccount.Edit4KeyPress(Sender: TObject; var Key: Char);
+begin
+ if Key = #13 then
+  begin
+    DBLookupComboboxEh3.KeyValue := Edit4.Text;
+  end;
+end;
+
+procedure TOpenAccount.Edit5Exit(Sender: TObject);
+begin
+ if Edit5.Text <> '' then
+    DBLookupComboboxEh4.KeyValue := Edit5.Text;
+end;
+
+procedure TOpenAccount.Edit5KeyPress(Sender: TObject; var Key: Char);
+begin
+  if Key = #13 then
+  begin
+    DBLookupComboboxEh4.KeyValue := Edit5.Text;
+  end;
+end;
+
+procedure TOpenAccount.Edit6Exit(Sender: TObject);
+begin
+ if Edit6.Text <> '' then
+    DBLookupComboboxEh5.KeyValue := Edit6.Text;
+end;
+
+procedure TOpenAccount.Edit6KeyPress(Sender: TObject; var Key: Char);
+begin
+ if Key = #13 then
+  begin
+    DBLookupComboboxEh5.KeyValue := Edit6.Text;
+  end;
+end;
+
+procedure TOpenAccount.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+//bank ucun OpenAccount.DBLookupComboboxEh3.ListSource:=DataAcc.Dsrc_bal_spr;
+DataAcc.ODS_Bal_spr.open;
+DBEditBranchID.Clear;
+DBLookupComboBoxBranchName.KeyValue:=-1;
+EditId.Clear;
+EditName.Clear;
+XFCheckBox_type.Checked:=false;
+RBtnNoResident.Checked:=false;
+DBLookupvid_sob.KeyValue:=-1;
+DBLookupSFERA_DEY.KeyValue:=-1;
+DBLookupComboboxEh1.KeyValue:=-1 ;
+DBLookupComboboxEh2.KeyValue:=-1;
+DBLookupComboboxEh3.KeyValue:=-1;
+DBLookupComboboxEh4.KeyValue:='' ;
+DBLookupComboboxEh5.KeyValue:=-1 ;
+DBLookupComboboxEh6.KeyValue:=-1 ;
+Edit1.Clear;
+Edit2.Clear;
+Edit3.Clear;
+Edit4.Clear;
+Edit5.Clear;
+Edit6.Clear;
+Edit7.Clear;
+Label_Symbols.Caption := '';
+EditNoteCode.Clear;
+EditAccNo.Clear;
+Edit_AccName.Clear;
+DBLookupvid_sob.Enabled:=false;
+DBLookupSFERA_DEY.Enabled:=false;
+RadioGroup1.ItemIndex:=-1;
+RadioGroup1.Visible:=false;
+   DBLookupComboboxEh1.Enabled:=true;
+   DBLookupComboboxEh2.Enabled:=true;
+   DBLookupComboboxEh3.Enabled:=true;
+   edit1.Enabled:=true;
+   edit3.Enabled:=true;
+   edit4.Enabled:=true;
+   XFCheckBox_type.Visible:=true;
+   Edit_BankCod.Clear;
+   Edit_MuxKod.Clear;
+end;
+
+procedure TOpenAccount.FormCreate(Sender: TObject);
+var  tt,j:integer;
+begin
+a:=tacc;
+DataAcc:=tDataAcc.Create(self);
+FormCustNom:=TFormCustNom.Create(self);
+Payment_order:=TPayment_order.Create(self);
+TransactionForm:=TTransactionForm.Create(self);
+Account_edit:=TAccount_edit.Create(self);
+FormNote:=TFormNote.create(self);
+FormStatement := TFormStatement.Create(self);
+a:=tacc;
+om_create:=true;
+end;
+
+procedure TOpenAccount.FormShow(Sender: TObject);
+ var
+ tt,j:integer;
+begin
+ominsert_edit:=true;
+j:=DataAcc.PG_PCustService.CallIntegerFunction('get_Messaj',['acc_types','name']);
+   if j=0 then XFLabel21.Visible:=false
+          else
+          XFLabel21.Visible:=true;
+
+
+ tt:=DataAcc.PG_PCustService.CallIntegerFunction('get_Modle_comp',['Sb_General.bpl','OpenAccount','Pcust_Balans_hesabı']);
+   if tt=0 then Pcust_Balans_hesabı.Visible:=false
+          else
+          Pcust_Balans_hesabı.Visible:=true;
+
+tt:=DataAcc.PG_PCustService.CallIntegerFunction('get_Modle_comp',['Sb_General.bpl','OpenAccount','Panel_BAnkCode']);
+   if tt=0 then Panel_BAnkCode.Visible:=false
+          else
+               Panel_BAnkCode.Visible:=true;
+
+ tt:=DataAcc.PG_PCustService.CallIntegerFunction('get_Modle_comp',['Sb_General.bpl','OpenAccount','Müxabirləşmə_kodu']);
+   if tt=0 then Müxabirləşmə_kodu.Visible:=false
+          else
+               Müxabirləşmə_kodu.Visible:=true;
+
+
+ tt:=DataAcc.PG_PCustService.CallIntegerFunction('get_Modle_comp',['Sb_General.bpl','OpenAccount','GroupBoxOpenAccount_elave']);
+   if tt=0 then GroupBoxOpenAccount_elave.Visible:=false
+          else
+               GroupBoxOpenAccount_elave.Visible:=true;
+
+ tt:=DataAcc.PG_PCustService.CallIntegerFunction('get_Modle_comp',['Sb_General.bpl','OpenAccount','Acc_nuber_avto']);
+   if tt=0 then Acc_nuber_avto.Enabled:=false
+          else
+               Acc_nuber_avto.Enabled:=true;
+
+
+
+
+j:=DataAcc.PG_PCustService.CallIntegerFunction('get_Messaj',['account_symbols','name']);
+   if j=0 then XFLabel18.Visible:=false
+          else
+          XFLabel18.Visible:=true;
+
+
+  { if Pcust_Balans_hesabı.Visible=true then
+  begin
+    OpenAccount.AutoSize:=true ;
+    OpenAccount.ClientHeight:=602
+  end
+    else
+    begin
+    OpenAccount.AutoSize:=False;
+    OpenAccount.ClientHeight:=567;
+    end;  }
+
+DBLookupComboBoxBranchName.KeyValue:=DataAcc.sb_aca.CallIntegerFunction('getuserfilial',[] );
+ //  showmessage(tacc);
+    with DataAcc,customers do
+begin
+ if Active then close;
+  SetVariable(':custid',strtoint(tacc));
+  open;
+ editid.text:=inttostr(customers.FieldByName('id').AsInteger);
+ editName.Text:=customers.FieldByName('name').AsString;
+case customers.FieldByName('NEREZIDENT').AsInteger of
+  0:begin
+  RBtnNoResident.Checked:=true;
+  RBtnNoResident.Caption:='Qeyri-Rezident';
+end;
+  1:begin
+   RBtnNoResident.Checked:=true;
+   RBtnNoResident.Caption:='Rezident';
+end;
+end;
+
+DBLookupComboboxEh1.KeyValue:=DataAcc.Ods_acc_types.Lookup('NAME',
+    'Cari hesab','id');
+
+
+
+ case customers.FieldByName('cust_type').AsInteger of
+ 0:begin
+ XFButtEdit.Enabled:=true;
+ XFCheckBox_type.Checked:=true;
+ XFCheckBox_type.Caption:='Hüquqi şəxs';
+
+ ODS_Bal_spr.SetVariable('cus_tip',0);
+ ODS_Bal_spr.SetVariable('resd',
+ customers.FieldByName('nerezident').asinteger);
+ ODS_Bal_spr.SetVariable('sferad_ey',
+ customers.FieldByName('sfera_dey').asstring);
+ ODS_Bal_spr.SetVariable('govern_ment',
+ customers.FieldByName('vid_sob').asstring);
+
+{-- ODS_Bal_spr1.SetVariable('cus_tip',0);
+ ODS_Bal_spr1.SetVariable('resd',
+ customers.FieldByName('nerezident').asinteger);
+ ODS_Bal_spr1.SetVariable('sferad_ey',
+ customers.FieldByName('sfera_dey').asstring);
+ ODS_Bal_spr1.SetVariable('govern_ment',
+ customers.FieldByName('vid_sob').asstring); ---}
+ end;
+ 1:begin
+ XFButtEdit.Enabled:=false;
+ XFCheckBox_type.Checked:=true;
+ XFCheckBox_type.Caption:='Fiziki şəxs';
+  //   ODS_Bal_spr.Close;
+     ODS_Bal_spr.SetVariable('cus_tip',1);
+     ODS_Bal_spr.SetVariable('resd',
+     customers.FieldByName('nerezident').asinteger);
+      ODS_Bal_spr.SetVariable('sferad_ey',
+  '%%');
+      ODS_Bal_spr.SetVariable('govern_ment',
+  '%%');
+
+ {---    ODS_Bal_spr1.SetVariable('cus_tip',1);
+     ODS_Bal_spr1.SetVariable('resd',
+     customers.FieldByName('nerezident').asinteger);
+      ODS_Bal_spr1.SetVariable('sferad_ey',
+  '%%');
+      ODS_Bal_spr1.SetVariable('govern_ment',
+  '%%'); --- }
+ end;
+ 2:begin
+ XFButtEdit.Enabled:=true;
+ XFCheckBox_type.Checked:=true;
+ XFCheckBox_type.Caption:='Fiziki Sahibkar';
+    // ODS_Bal_spr.Close;
+     ODS_Bal_spr.SetVariable('cus_tip',2);
+     ODS_Bal_spr.SetVariable('resd',
+     customers.FieldByName('nerezident').asinteger);
+
+    ODS_Bal_spr.SetVariable('sferad_ey',
+    customers.FieldByName('sfera_dey').asstring);
+    ODS_Bal_spr.SetVariable('govern_ment',
+    customers.FieldByName('vid_sob').asstring);
+
+  {-----   ODS_Bal_spr1.SetVariable('cus_tip',2);
+     ODS_Bal_spr1.SetVariable('resd',
+     customers.FieldByName('nerezident').asinteger);
+     ODS_Bal_spr1.SetVariable('sferad_ey',
+     customers.FieldByName('sfera_dey').asstring);
+     ODS_Bal_spr1.SetVariable('govern_ment',
+     customers.FieldByName('vid_sob').asstring);
+      ---}
+ end;
+ 3:begin
+   XFButtEdit.Enabled:=false;
+   RadioGroup1.Visible:=true;
+   XFCheckBox_type.Visible:=false
+
+ end ;
+ end;
+    DBLookupvid_sob.KeyValue:=DataAcc.Customers.FieldByName('vid_sob').AsString;
+    DBLookupSFERA_DEY.KeyValue:=DataAcc.Customers.FieldByName('SFERA_DEY').AsString;
+ {
+    if  DataAcc.customers.FieldByName('SFERA_DEY').AsString<>'' then
+    begin
+    ActionArea_Data.Locate('id', customers.FieldByName('SFERA_DEY').AsString, []);
+    editSFERA_DEY.Text:= ActionArea_Data.FieldByName('name').asstring;
+    end
+    else
+   editSFERA_DEY.Text:='';
+        }
+
+end;
+ with  DataAcc do
+ begin
+
+// if OperationMode = omInsert then
+   DTPOpenDate.DateTime :=Sysdat.FieldByName('Tek_dat').AsDateTime;
+//  else
+ //  DTPOpenDate.DateTime :=Account.FieldByName('open_dat').AsDateTime;
+
+  if not Customers.Active then Customers.Open;
+  //if not PairAccount.Active then PairAccount.Open;
+ end;
+  EditNoteCode.Clear;
+  accont_id:='';
+  SBTranslateProc.TranslateAllCompForms(Self, sboapiDataModule.OrPack_SL);
+
+end;
+
+procedure TOpenAccount.RadioGroup1Click(Sender: TObject);
+begin
+case RadioGroup1.ItemIndex of
+0:begin
+     XFButtEdit.Enabled:=false;
+     dataAcc.ODS_Bal_spr.SetVariable('cus_tip',1);
+     dataAcc.ODS_Bal_spr.SetVariable('resd',
+     dataAcc.customers.FieldByName('nerezident').asinteger);
+      dataAcc.ODS_Bal_spr.SetVariable('sferad_ey',
+  '%%');
+      dataAcc.ODS_Bal_spr.SetVariable('govern_ment',
+  '%%');
+
+ {-------    dataAcc.ODS_Bal_spr1.SetVariable('cus_tip',1);
+     dataAcc.ODS_Bal_spr1.SetVariable('resd',
+     dataAcc.customers.FieldByName('nerezident').asinteger);
+      dataAcc.ODS_Bal_spr1.SetVariable('sferad_ey',
+  '%%');
+      dataAcc.ODS_Bal_spr1.SetVariable('govern_ment',
+  '%%');  ---}
+
+
+  DBLookupComboboxEh1.KeyValue:=-1;
+  DBLookupComboboxEh2.KeyValue:=-1;
+  edit1.Clear;
+  edit3.Clear;
+  edit4.Clear;
+  edit2.Clear;
+  end;
+
+
+1:begin
+    XFButtEdit.Enabled:=true;
+     dataAcc.ODS_Bal_spr.SetVariable('cus_tip',2);
+     dataAcc.ODS_Bal_spr.SetVariable('resd',
+     dataAcc.customers.FieldByName('nerezident').asinteger);
+
+     dataAcc.ODS_Bal_spr.SetVariable('sferad_ey',
+     dataAcc.customers.FieldByName('sfera_dey').asstring);
+
+     dataAcc.ODS_Bal_spr.SetVariable('govern_ment',
+     dataAcc.customers.FieldByName('vid_sob').asstring);
+
+
+   {--  dataAcc.ODS_Bal_spr1.SetVariable('cus_tip',2);
+     dataAcc.ODS_Bal_spr1.SetVariable('resd',
+     dataAcc.customers.FieldByName('nerezident').asinteger);
+
+    dataAcc.ODS_Bal_spr1.SetVariable('sferad_ey',
+    dataAcc.customers.FieldByName('sfera_dey').asstring);
+
+    dataAcc.ODS_Bal_spr1.SetVariable('govern_ment',
+    dataAcc.customers.FieldByName('vid_sob').asstring);
+       -- }
+   DBLookupComboboxEh1.KeyValue:=-1;
+  DBLookupComboboxEh2.KeyValue:=-1;
+  edit1.Clear;
+  edit3.Clear;
+  edit4.Clear;
+  edit2.Clear;
+end;
+end;
+end;
+
+
+procedure TOpenAccount.XFBitBtn1Click(Sender: TObject);
+var
+  v_bal_cn2, v_sim_otcet, v_symbol:Variant;
+  v_old_accNo,v_BankCode,v_acc_no, v_tip_acc, v_accName,v_limit: String;
+  v_open_dat: Tdatetime;
+  v_cust_id,v_id, v_val_id ,  v_fil_id ,v_bal_cn1: Integer;
+  id :variant;
+begin
+ // if Acc_bal_cn = 0 then
+  //begin
+    if XFLabel21.Visible=true then
+    if DBLookupComboboxEh1.Text = '' then
+    begin
+      ShowMessage('Hesabın tipi  seçilmeyib !');
+      exit;
+    end;
+
+    if DBLookupComboboxEh2.Text = '' then
+    begin
+      ShowMessage('Hesabın valyutası  seçilmeyib !');
+      exit;
+    end;
+
+    if DBLookupComboboxEh3.Text = '' then
+    begin
+      ShowMessage('Balans hesabı  seçilmeyib!');
+      exit;
+    end;
+     if XFLabel18.Visible=true then
+    begin
+    if DBLookupComboboxEh4.Text = '' then
+    begin
+      ShowMessage('Hesabın  təyinatı  seçilmeyib !');
+      exit;
+    end;
+    end;
+    if EditAccNo.Text = '' then
+    begin
+      ShowMessage('Hesab nömrəsi yaradılmayıb !');
+      exit;
+    end;
+    v_cust_id := DataAcc.customers.FieldByName('ID').AsInteger;
+    v_tip_acc := Label_Symbols.Caption;
+    v_accName := Edit_AccName.Text;
+    v_symbol := DBLookupComboboxEh4.KeyValue;
+    v_sim_otcet := DBLookupComboboxEh5.KeyValue;
+    v_bal_cn1 := DBLookupComboboxEh3.KeyValue;
+    v_bal_cn2 :=DBLookupComboboxEh6.KeyValue;
+    v_Limit :=edit7.Text;
+    v_fil_id := DBLookupComboBoxBranchName.KeyValue;
+    v_val_id := DBLookupComboboxEh2.KeyValue;
+    v_BankCode:=(Edit_BankCod.Text);
+    v_old_accNo:=Edit_MuxKod.Text;
+    // ShowMessage((v_acc_no));
+    v_open_dat := DataAcc.Sysdat.FieldByName('Tek_dat')
+      .AsDateTime;
+      id:=DataAcc.Account.FieldByName('id').AsVariant;
+    //----- ShowMessage((inttostr(v_BankCode)));
+
+    v_acc_no:=EditAccNo.Text;
+    v_acc_no:=StringReplace(v_acc_no,' ','',[rfReplaceAll]);
+
+    DataAcc.SBOP.CallStringFunction('add_account',
+   [  v_cust_id,null, v_acc_no, v_val_id, v_accName,
+      v_open_dat, v_bal_cn1, v_Limit, null, v_bal_cn2,
+      0, 0, v_fil_id, v_sim_otcet, v_tip_acc, v_old_accNo, 0, 0, v_symbol,null,v_BankCode]);
+
+      OpenAccount.Close;
+
+  end;
+
+procedure TOpenAccount.XFBitBtn2Click(Sender: TObject);
+begin
+close;
+end;
+
+procedure TOpenAccount.XFButtEditClick(Sender: TObject);
+var
+c_id, c_vid_sob,c_SFERA_DEY :integer;
+begin
+
+
+
+if DBLookupvid_sob.Enabled=false  then
+begin
+  DBLookupvid_sob.Enabled:=true;
+  DBLookupSFERA_DEY.Enabled:=true;
+  // if (DBLookupvid_sob.Enabled=true)and(DBLookupSFERA_DEY.Enabled=true) then
+   //begin
+   DBLookupComboboxEh1.Enabled:=false;
+   DBLookupComboboxEh2.Enabled:=false;
+   DBLookupComboboxEh3.Enabled:=false;
+   edit1.Enabled:=false;
+   edit3.Enabled:=false;
+   edit4.Enabled:=false;
+   DBLookupComboboxEh1.KeyValue:=-1;
+   DBLookupComboboxEh2.KeyValue:=-1;
+   DBLookupComboboxEh3.KeyValue:=-1;
+   edit1.Clear;
+   edit3.Clear;
+   edit4.Clear;
+   //end;
+
+  exit;
+end;
+c_id:=strtoint(editid.Text);
+c_vid_sob:=DBLookupvid_sob.KeyValue;
+c_SFERA_DEY:=DBLookupSFERA_DEY.KeyValue;
+ if MessageDlg('Dəyşikliki Yadda saxlanılsınmı ?',
+   mtConfirmation, mbYesNoCancel, 0) = mrYes then
+   begin
+     dataAcc.PG_PCustService.CallProcedure('edit_cust_Vid_sbo_sfera_dey',
+      [ c_id,
+       c_vid_sob ,
+       c_SFERA_DEY]);
+       DBLookupvid_sob.Enabled:=false;
+       DBLookupSFERA_DEY.Enabled:=false;
+   DBLookupComboboxEh1.Enabled:=true;
+   DBLookupComboboxEh2.Enabled:=true;
+   DBLookupComboboxEh3.Enabled:=true;
+   edit1.Enabled:=true;
+   edit3.Enabled:=true;
+   edit4.Enabled:=true;
+       DataAcc.customers.Refresh;
+   end;
+
+     with DataAcc,customers do
+begin
+   case customers.FieldByName('cust_type').AsInteger of
+ 0:begin
+ XFCheckBox_type.Checked:=true;
+ XFCheckBox_type.Caption:='Hüquqi şəxs';
+     ODS_Bal_spr.SetVariable('cus_tip',0);
+     ODS_Bal_spr.SetVariable('resd',
+     customers.FieldByName('nerezident').asinteger);
+
+     ODS_Bal_spr.SetVariable('sferad_ey',
+     customers.FieldByName('sfera_dey').asstring);
+
+  ODS_Bal_spr.SetVariable('govern_ment',
+  customers.FieldByName('vid_sob').asstring);
+ end;
+ 1:begin
+ XFCheckBox_type.Checked:=true;
+ XFCheckBox_type.Caption:='Fiziki şəxs';
+  //   ODS_Bal_spr.Close;
+     ODS_Bal_spr.SetVariable('cus_tip',1);
+     ODS_Bal_spr.SetVariable('resd',
+     customers.FieldByName('nerezident').asinteger);
+      ODS_Bal_spr.SetVariable('sferad_ey',
+  '%%');
+      ODS_Bal_spr.SetVariable('govern_ment',
+  '%%');
+
+
+ end;
+ 2:begin
+
+ XFCheckBox_type.Checked:=true;
+ XFCheckBox_type.Caption:='Fiziki Sahibkar';
+    // ODS_Bal_spr.Close;
+     ODS_Bal_spr.SetVariable('cus_tip',2);
+     ODS_Bal_spr.SetVariable('resd',
+     customers.FieldByName('nerezident').asinteger);
+
+    ODS_Bal_spr.SetVariable('sferad_ey',
+    customers.FieldByName('sfera_dey').asstring);
+
+    ODS_Bal_spr.SetVariable('govern_ment',
+    customers.FieldByName('vid_sob').asstring);
+
+ end;
+ 3:begin
+   RadioGroup1.Visible:=true;
+   XFCheckBox_type.Visible:=false;
+ end;
+
+ end;
+end;
+
+end;
+
+
+procedure TOpenAccount.XFButton1Click(Sender: TObject);
+begin
+FormBalCn:=TFormBalCn.Create(self);
+FormBalCn.ShowModal;
+end;
+
+procedure TOpenAccount.XFButton2Click(Sender: TObject);
+begin
+FormBalCn1:=TFormBalCn1.Create(self);
+FormBalCn1.ShowModal;
+end;
+
+initialization
+ OpenAccount := TOpenAccount.Create(Application);
+
+end.

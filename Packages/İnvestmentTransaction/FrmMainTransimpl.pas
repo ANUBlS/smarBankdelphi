@@ -1,0 +1,144 @@
+﻿unit FrmMainTransimpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ExtCtrls, ImgList, Grids, DBGrids, ComCtrls, ToolWin, StdCtrls, Mask,
+  DBCtrls, CMExcelExport;
+
+type
+  TFrmMainTrans = class(TForm)
+    Panel1: TPanel;
+    Panel2: TPanel;
+    GroupBox1: TGroupBox;
+    Panel3: TPanel;
+    ToolBar1: TToolBar;
+    ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
+    ToolButton3: TToolButton;
+    ToolButton4: TToolButton;
+    ToolButton5: TToolButton;
+    ToolButton6: TToolButton;
+    ToolButton7: TToolButton;
+    DBInvest: TDBGrid;
+    ImageList: TImageList;
+    Edit1: TEdit;
+    ToolButton8: TToolButton;
+    ToolButton9: TToolButton;
+    CMExcelExport1: TCMExcelExport;
+    GroupBox2: TGroupBox;
+    Label1: TLabel;
+    procedure FormCreate(Sender: TObject);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure ToolButton1Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure ToolButton5Click(Sender: TObject);
+    procedure ToolButton9Click(Sender: TObject);
+    procedure ToolButton3Click(Sender: TObject);
+    procedure ToolButton7Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmMainTrans: TFrmMainTrans;
+
+implementation
+
+{$R *.dfm}
+uses CommanParametrs,sboapiDataModuleImpl,Dm_invstimpl,AddInvestmentimpl;
+  procedure InitPlugin(s:string);export;
+begin
+
+   if s='' then
+   begin
+   FrmMainTrans.ShowModal;
+   end;
+
+end;
+exports
+     InitPlugin;
+
+procedure TFrmMainTrans.FormCreate(Sender: TObject);
+begin
+//DBGrid1:=Maininvestgrid;
+Dm_invst:=TDm_invst.Create(self);
+AddInvestment:=TAddInvestment.Create(self);
+end;
+
+procedure TFrmMainTrans.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+if ord(key)=vk_escape then  close;
+end;
+
+procedure TFrmMainTrans.FormShow(Sender: TObject);
+begin
+Edit1.Enabled:=false;
+
+Dm_invst.Dscontracts.Close;
+Dm_invst.Dscontracts.SetVariable('cid',contactid);
+Dm_invst.Dscontracts.Open;
+
+Dm_invst.DsMain.Close;
+Dm_invst.DsMain.SetVariable('pcid',contactid);
+Dm_invst.DsMain.Open;
+Dm_invst.ds_kassa.Refresh;
+
+
+//ShowMessage(Dm_invst.Dscontracts.FieldByName('MUSTERI').AsString);
+Edit1.Text:=Dm_invst.Dscontracts.FieldByName('MUSTERI').AsString;
+end;
+
+procedure TFrmMainTrans.ToolButton1Click(Sender: TObject);
+begin
+AddInvestment.ShowModal;
+end;
+
+procedure TFrmMainTrans.ToolButton3Click(Sender: TObject);
+begin
+  if DBInvest.DataSource.DataSet.RecordCount=0 then
+    begin
+     ShowMessage('Cədvəldə məlumat yoxdu!!!');
+    end;
+
+    if MessageDlg('Seçilmiş sətir silinsinmi ??',mtConfirmation,
+ mbYesNoCancel, 0) = mrYes then
+ begin
+ //ShowMessage(DBInvest.DataSource.DataSet.FieldByName('id').AsString);
+Dm_invst.pk_ins_investment.CallIntegerFunction('del_invest_transaction',[DBInvest.DataSource.DataSet.FieldByName('id').AsInteger]);
+DBInvest.DataSource.DataSet.Refresh;
+   end;
+end;
+
+procedure TFrmMainTrans.ToolButton5Click(Sender: TObject);
+begin
+Dm_invst.DsMain.Close;
+Dm_invst.DsMain.SetVariable('pcid',contactid);
+Dm_invst.DsMain.Open;
+//Dm_invst.DsMain.ref;
+end;
+
+procedure TFrmMainTrans.ToolButton7Click(Sender: TObject);
+begin
+close;
+
+end;
+
+procedure TFrmMainTrans.ToolButton9Click(Sender: TObject);
+begin
+  with CMExcelExport1 do
+   begin
+      Connect;
+      ExportDataset(FrmMainTrans.DBInvest.DataSource.DataSet,'Yatirim Müqavilələri',True,false);
+      Disconnect;
+   end;
+end;
+
+initialization
+ FrmMainTrans :=TFrmMainTrans.Create(Application);
+
+
+end.

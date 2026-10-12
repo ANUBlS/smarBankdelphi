@@ -1,0 +1,25 @@
+unit frmaddlossimpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs;
+
+type
+  Tfrmaddloss = class(TForm)
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  frmaddloss: Tfrmaddloss;
+
+implementation
+
+{$R *.dfm}
+//uses DMreinsuranceImpl,CommanParametrs, FrmreinsuranceImpl,sboapiDataModuleImpl;
+
+end.

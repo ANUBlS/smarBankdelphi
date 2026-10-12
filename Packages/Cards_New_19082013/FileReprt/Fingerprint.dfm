@@ -1,0 +1,128 @@
+object Finger: TFinger
+  Left = 311
+  Top = 131
+  Caption = 'Finger'
+  ClientHeight = 606
+  ClientWidth = 862
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'MS Sans Serif'
+  Font.Style = []
+  OldCreateOrder = False
+  OnActivate = FormActivate
+  OnClose = FormClose
+  OnCreate = FormCreate
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Image1: TImage
+    Left = 528
+    Top = 8
+    Width = 296
+    Height = 457
+  end
+  object DBLookupComboboxEh1: TDBLookupComboboxEh
+    Left = 152
+    Top = 80
+    Width = 217
+    Height = 21
+    EditButtons = <>
+    ListField = 'ID'
+    ListSource = DataSource1
+    TabOrder = 0
+    Visible = True
+  end
+  object DBLookupComboboxEh2: TDBLookupComboboxEh
+    Left = 152
+    Top = 120
+    Width = 217
+    Height = 21
+    EditButtons = <>
+    ListField = 'NAME'
+    ListSource = DataSource1
+    TabOrder = 1
+    Visible = True
+  end
+  object TakeSampleButton: TButton
+    Left = 178
+    Top = 171
+    Width = 161
+    Height = 25
+    Caption = 'scan'
+    TabOrder = 2
+    OnClick = TakeSampleButtonClick
+  end
+  object Save2DbButton: TButton
+    Left = 178
+    Top = 203
+    Width = 161
+    Height = 25
+    Caption = 'save'
+    TabOrder = 3
+    OnClick = Save2DbButtonClick
+  end
+  object SearchInDbButton: TButton
+    Left = 178
+    Top = 235
+    Width = 161
+    Height = 25
+    Caption = 'find'
+    TabOrder = 4
+  end
+  object LogMemo: TMemo
+    Left = 56
+    Top = 272
+    Width = 369
+    Height = 113
+    TabOrder = 5
+  end
+  object OracleDataSet1: TOracleDataSet
+    SQL.Strings = (
+      'select * from customers')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000001B00000004000000490044000100000000000A0000004F0050005F00
+      49004400010000000000100000004F00500045004E005F004400410054000100
+      000000001200000043004C004F00530045005F00440041005400010000000000
+      140000004E004500520045005A004900440045004E0054000100000000001400
+      00005000520049004E00410044005F004B004F00440001000000000008000000
+      4E0041004D00450001000000000014000000530048004F00520054005F004E00
+      41004D00450001000000000014000000470052004F00550050005F004B004C00
+      490045000100000000000E0000005600490044005F0053004F00420001000000
+      00000E0000004F00520047005F0053004F004200010000000000120000005300
+      46004500520041005F004400450059000100000000000C0000004F0054005200
+      410053004C00010000000000120000004E0041004C004F0047005F004B004F00
+      4400010000000000120000004B004F0044005F004F004B00500052004F000100
+      000000000600000049004E004E000100000000000E0000004400410054005F00
+      4E0041004C00010000000000120000004400410054005F005500530054004100
+      560001000000000006000000420049004B00010000000000100000004F005400
+      56005F004C00490043004F00010000000000180000004F00540056005F005000
+      41005300530050004F0052005400010000000000140000004F00540056005F00
+      490053005300550045004400010000000000140000004F00540056005F004900
+      530044004100540045000100000000000E0000004F004C0044005F0049004E00
+      4E000100000000001200000043005500530054005F0054005900500045000100
+      0000000010000000430041005400450047004F00520059000100000000000200
+      00005000000000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 408
+    Top = 24
+  end
+  object DataSource1: TDataSource
+    DataSet = OracleDataSet1
+    Left = 456
+    Top = 24
+  end
+  object OracleDataSet2: TOracleDataSet
+    SQL.Strings = (
+      'select * from dual--finger')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000200000004000000490044000100000000000E000000460049004E00
+      4700450052005300000000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 432
+    Top = 128
+  end
+end

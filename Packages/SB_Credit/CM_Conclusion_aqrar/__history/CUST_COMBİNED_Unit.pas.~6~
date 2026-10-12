@@ -1,0 +1,68 @@
+﻿unit CUST_COMBİNED_Unit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, Grids, DBGrids, CurrencyEdit, ExtCtrls, DBCtrls;
+
+type
+  TFORM_CUST_COMBİNED = class(TForm)
+    Panel2: TPanel;
+    Panel3: TPanel;
+    b: TDBGrid;
+    DBNavigator1: TDBNavigator;
+    procedure FormShow(Sender: TObject);
+    procedure bTitleClick(Column: TColumn);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FORM_CUST_COMBİNED: TFORM_CUST_COMBİNED;
+
+implementation
+
+uses DataModuleConclusion,ConclusionMainUnitImpl,CommonDecls;
+
+{$R *.dfm}
+
+procedure TFORM_CUST_COMBİNED.bTitleClick(Column: TColumn);
+var
+  titlename: string;
+  kind: string;
+begin
+
+  if not((Column.FieldName = 'NAME') or (Column.FieldName = 'ID')) then
+    Exit;
+  // else
+
+  titlename := Column.FieldName;
+  if Column.Field.Calculated then
+    Exit;
+  with DataModuleConcl.ODS_CUST_COMBİNED do
+  begin
+    Screen.Cursor := crSQLWait;
+    SetVariable('sort', titlename + ' ' + kind);
+    Open;
+    refresh;
+    Screen.Cursor := crDefault;
+  end;
+
+
+end;
+
+procedure TFORM_CUST_COMBİNED.FormShow(Sender: TObject);
+begin
+with DataModuleConcl,ODS_CUST_COMBİNED do
+begin
+Close;
+SetVariable('creditid',Get_SelectedCrdID);
+open;
+
+end;
+end;
+
+end.

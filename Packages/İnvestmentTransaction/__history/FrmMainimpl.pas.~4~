@@ -1,0 +1,33 @@
+unit FrmMainimpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ExtCtrls;
+
+type
+  TFrmMain = class(TForm)
+    Panel1: TPanel;
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmMain: TFrmMain;
+
+implementation
+
+uses CommanParametrs,sboapiDataModuleImpl,Dm_Contracts_Investisiyaimpl;
+
+{$R *.dfm}
+
+procedure TFrmMain.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+if ord(key)=vk_escape then  close;
+end;
+
+end.

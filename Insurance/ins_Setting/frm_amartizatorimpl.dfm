@@ -1,0 +1,260 @@
+object frm_amartizator: Tfrm_amartizator
+  Left = 0
+  Top = 0
+  BorderIcons = [biSystemMenu]
+  BorderStyle = bsSingle
+  Caption = 'Amartizasiyaya aid sazlamalar'
+  ClientHeight = 377
+  ClientWidth = 364
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poDesktopCenter
+  OnKeyPress = FormKeyPress
+  PixelsPerInch = 96
+  TextHeight = 13
+  object PageControl1: TPageControl
+    Left = 0
+    Top = 0
+    Width = 364
+    Height = 377
+    ActivePage = TabSheet1
+    Align = alClient
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -12
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 0
+    object TabSheet1: TTabSheet
+      Caption = 'Avto. Ke'#231'diyi m'#601'saf'#601'y'#601' g'#246'r'#601' k.'#601
+      object XFGroupBox1: TXFGroupBox
+        Left = 0
+        Top = 96
+        Width = 356
+        Height = 130
+        Align = alBottom
+        Caption = 'M'#252'h'#601'rrikin i'#351#231'i h'#601'cmi'
+        TabOrder = 0
+        object DBGrid1: TDBGrid
+          Left = 2
+          Top = 16
+          Width = 352
+          Height = 112
+          Align = alClient
+          DataSource = DMMain.Dsr_motor_capacity
+          DrawingStyle = gdsGradient
+          TabOrder = 0
+          TitleFont.Charset = DEFAULT_CHARSET
+          TitleFont.Color = clWindowText
+          TitleFont.Height = -12
+          TitleFont.Name = 'Tahoma'
+          TitleFont.Style = []
+          Columns = <
+            item
+              Expanded = False
+              FieldName = 'NAME'
+              Width = 300
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'ID'
+              Visible = False
+            end
+            item
+              Expanded = False
+              FieldName = 'TYPE_MOTOR'
+              Visible = False
+            end>
+        end
+      end
+      object XFGroupBox2: TXFGroupBox
+        Left = 0
+        Top = 255
+        Width = 356
+        Height = 93
+        Align = alBottom
+        Caption = 'H'#601'r ke'#231'ilmi'#351' 1000km m'#601'saf'#601'y'#601' g'#246'r'#601',%-l'#601
+        TabOrder = 1
+        object DBGrid2: TDBGrid
+          Left = 2
+          Top = 16
+          Width = 352
+          Height = 75
+          Align = alClient
+          DataSource = DMMain.dsr_ins_motor_capacity_tarif
+          DrawingStyle = gdsGradient
+          TabOrder = 0
+          TitleFont.Charset = DEFAULT_CHARSET
+          TitleFont.Color = clWindowText
+          TitleFont.Height = -12
+          TitleFont.Name = 'Tahoma'
+          TitleFont.Style = []
+          Columns = <
+            item
+              Expanded = False
+              FieldName = 'TARIF'
+              Width = 150
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'ID'
+              Visible = False
+            end
+            item
+              Expanded = False
+              FieldName = 'CAPACITY_ID'
+              Visible = False
+            end>
+        end
+      end
+      object XFPanel1: TXFPanel
+        Left = 0
+        Top = 226
+        Width = 356
+        Height = 29
+        Align = alBottom
+        TabOrder = 2
+        object XDBNavigator1: TXDBNavigator
+          Left = 1
+          Top = 1
+          Width = 354
+          Height = 27
+          DataSource = DMMain.dsr_ins_motor_capacity_tarif
+          Align = alClient
+          TabOrder = 0
+        end
+      end
+      object XFGroupBox5: TXFGroupBox
+        Left = 0
+        Top = 0
+        Width = 356
+        Height = 96
+        Align = alClient
+        Caption = 'M'#252'h'#601'rrikin N'#246'v'#252
+        TabOrder = 3
+        object DBGrid5: TDBGrid
+          Left = 2
+          Top = 16
+          Width = 352
+          Height = 78
+          Align = alClient
+          DataSource = DMMain.Dsr_motor_type
+          DrawingStyle = gdsGradient
+          TabOrder = 0
+          TitleFont.Charset = DEFAULT_CHARSET
+          TitleFont.Color = clWindowText
+          TitleFont.Height = -12
+          TitleFont.Name = 'Tahoma'
+          TitleFont.Style = []
+          Columns = <
+            item
+              Expanded = False
+              FieldName = 'NAME'
+              Title.Caption = 'Ad'
+              Width = 300
+              Visible = True
+            end>
+        end
+      end
+    end
+    object TabSheet2: TTabSheet
+      Caption = #304'stismar m'#252'dd'#601'tin'#601' g'#246'r'#601' k.'#601
+      ImageIndex = 1
+      object XFGroupBox3: TXFGroupBox
+        Left = 0
+        Top = 0
+        Width = 356
+        Height = 152
+        Align = alClient
+        Caption = '1 il '#601'rzind'#601' ke'#231'ilmi'#351' orta m'#601'saf'#601'(min km)'
+        TabOrder = 0
+        object DBGrid3: TDBGrid
+          Left = 2
+          Top = 16
+          Width = 352
+          Height = 134
+          Align = alClient
+          DataSource = DMMain.dsr_ins_dict_year_distanc_travel
+          DrawingStyle = gdsGradient
+          TabOrder = 0
+          TitleFont.Charset = DEFAULT_CHARSET
+          TitleFont.Color = clWindowText
+          TitleFont.Height = -12
+          TitleFont.Name = 'Tahoma'
+          TitleFont.Style = []
+          Columns = <
+            item
+              Expanded = False
+              FieldName = 'VALUE1'
+              Title.Caption = 'Interval1'
+              Width = 100
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'VALUE2'
+              Title.Caption = 'Interval2'
+              Width = 100
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'ID'
+              Visible = False
+            end>
+        end
+      end
+      object XFGroupBox4: TXFGroupBox
+        Left = 0
+        Top = 152
+        Width = 356
+        Height = 196
+        Align = alBottom
+        Caption = 'Tam 1 il '#252#231#252'n %-l'#601
+        TabOrder = 1
+        object DBGrid4: TDBGrid
+          Left = 2
+          Top = 16
+          Width = 352
+          Height = 178
+          Align = alClient
+          DataSource = DMMain.dsr_ins_dict_all_for_year
+          DrawingStyle = gdsGradient
+          TabOrder = 0
+          TitleFont.Charset = DEFAULT_CHARSET
+          TitleFont.Color = clWindowText
+          TitleFont.Height = -12
+          TitleFont.Name = 'Tahoma'
+          TitleFont.Style = []
+          Columns = <
+            item
+              Expanded = False
+              FieldName = 'TARIF'
+              Title.Caption = 'Tam 1il '#252#231#252'n %'
+              Width = 150
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'VALUE_ID'
+              Visible = False
+            end
+            item
+              Expanded = False
+              FieldName = 'ID'
+              Visible = False
+            end>
+        end
+      end
+    end
+  end
+end

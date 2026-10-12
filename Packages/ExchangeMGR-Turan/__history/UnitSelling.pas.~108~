@@ -1,0 +1,923 @@
+﻿unit UnitSelling;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Mask, DBCtrls, StdCtrls, Buttons, ComCtrls, ExtCtrls,Unit_ExchangeMGR,Oracle,
+  CMCurrencyEdit,sboapiDataModuleImpl,Math, DBCtrlsEh,Variants, XFSCtrls;
+
+type
+  TFormSelling = class(TForm)
+    GroupBoxMain: TGroupBox;
+    Panel2: TPanel;
+    Panel3: TPanel;
+    Panel4: TPanel;
+    Panel5: TPanel;
+    Timer: TTimer;
+    Panel1: TPanel;
+    Label1: TLabel;
+    Label20: TLabel;
+    DTP_Date: TDateTimePicker;
+    DTP_System_Time: TDateTimePicker;
+    Panel6: TPanel;
+    Bevel21: TBevel;
+    Label2: TLabel;
+    Label15: TLabel;
+    Edit_Exch: TDBEdit;
+    Panel7: TPanel;
+    Panel8: TPanel;
+    RadioButton1: TRadioButton;
+    RadioButton2: TRadioButton;
+    Panel10: TPanel;
+    GroupBox3: TGroupBox;
+    Label3: TLabel;
+    Label7: TLabel;
+    Label8: TLabel;
+    Label21: TLabel;
+    Bevel2: TBevel;
+    Bevel1: TBevel;
+    Bevel3: TBevel;
+    DBLC_Currency: TDBLookupComboBox;
+    Edit_selling_course: TEdit;
+    Edit_nb_course: TEdit;
+    Edit_Val_Changed: TEdit;
+    Panel11: TPanel;
+    Panel12: TPanel;
+    Label9: TLabel;
+    Label13: TLabel;
+    Label14: TLabel;
+    Bevel4: TBevel;
+    Bevel5: TBevel;
+    Bevel6: TBevel;
+    Edit_Ekv_Amount: TEdit;
+    Edit_Fee_Amount: TEdit;
+    Edit_Selling_Amount: TEdit;
+    Panel9: TPanel;
+    GroupBox1: TGroupBox;
+    Bevel7: TBevel;
+    Bevel8: TBevel;
+    Bevel9: TBevel;
+    Bevel10: TBevel;
+    Bevel11: TBevel;
+    Bevel12: TBevel;
+    Bevel13: TBevel;
+    Bevel14: TBevel;
+    Bevel15: TBevel;
+    Bevel16: TBevel;
+    Bevel17: TBevel;
+    Bevel18: TBevel;
+    Label6: TLabel;
+    Label5: TLabel;
+    Label4: TLabel;
+    Label12: TLabel;
+    Label10: TLabel;
+    Label11: TLabel;
+    Label16: TLabel;
+    Label17: TLabel;
+    Bevel19: TBevel;
+    Label18: TLabel;
+    Bevel20: TBevel;
+    Bevel27: TBevel;
+    Bevel28: TBevel;
+    Bevel22: TBevel;
+    Label19: TLabel;
+    Bevel23: TBevel;
+    DBLC_First_Name: TDBLookupComboBox;
+    Edit_First_Name: TEdit;
+    Edit_Last_Name: TEdit;
+    DBLC_Last_Name: TDBLookupComboBox;
+    DBLC_Father: TDBLookupComboBox;
+    Edit_Father: TEdit;
+    Edit_Country: TEdit;
+    Edit_Giving_Member: TEdit;
+    DBLC_Country: TDBLookupComboBox;
+    DBLC_Cust_Confirm: TDBLookupComboBox;
+    Edit_Cust_Confirm: TEdit;
+    DBLC_Giving_Member: TDBLookupComboBox;
+    Edit_Pasport: TEdit;
+    CB_AZE: TComboBox;
+    Edit_AZE: TEdit;
+    Edit_Cust_Date: TDBDateTimeEditEh;
+    Edit_Source_Type: TEdit;
+    DBLC_Source_Type: TDBLookupComboBox;
+    BtnRun: TBitBtn;
+    BtnExit: TBitBtn;
+    Source_text: TMemo;
+    XFStaticText1: TXFStaticText;
+    Edit_Passpin: TEdit;
+    Panel13: TPanel;
+    Label22: TLabel;
+    Edit_Setting: TEdit;
+    procedure ClearEdit;
+    function  ExRemOstat(valid:integer):real;
+    procedure DBLC_CurrencyClick(Sender: TObject);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure Edit_Selling_Amount1KeyPress(Sender: TObject; var Key: Char);
+    procedure Edit_selling_courseKeyPress(Sender: TObject; var Key: Char);
+    procedure BtnRunClick(Sender: TObject);
+    procedure TimerTimer(Sender: TObject);
+    procedure Edit_Selling_AmountChange(Sender: TObject);
+    procedure Edit_Selling_AmountKeyPress(Sender: TObject; var Key: Char);
+    procedure DBLC_CountryClick(Sender: TObject);
+    procedure DBLC_First_NameClick(Sender: TObject);
+    procedure DBLC_Last_NameClick(Sender: TObject);
+    procedure DBLC_FatherClick(Sender: TObject);
+    procedure DBLC_Cust_ConfirmClick(Sender: TObject);
+    procedure DBLC_Giving_MemberClick(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
+    procedure Edit_PasportKeyPress(Sender: TObject; var Key: Char);
+    procedure FormCreate(Sender: TObject);
+    procedure Edit_selling_courseChange(Sender: TObject);
+    procedure RadioButton1Click(Sender: TObject);
+    procedure Edit_PasspinKeyPress(Sender: TObject; var Key: Char);
+    procedure BtnExitClick(Sender: TObject);
+    procedure CB_AZEChange(Sender: TObject);
+    procedure Edit_Ekv_AmountChange(Sender: TObject);
+    procedure DBLC_Source_TypeClick(Sender: TObject);
+    procedure CB_AZEClick(Sender: TObject);
+    procedure Edit_First_NameKeyPress(Sender: TObject; var Key: Char);
+
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormSelling: TFormSelling;
+   resultID:integer;
+implementation
+              uses UnitDateExch,UnitProcAndFunc, SBTranslateProc, UnitRate; //,UnitMain;
+{$R *.DFM}
+
+function RoundToEx(const AValue: Double; const ADigit: TRoundToRange = -2): double;
+var
+  LFactor: double;
+  i: integer;
+  s: string;
+begin
+  LFactor := IntPower(10, ADigit);
+  i := Round(AValue / (LFactor / 10));
+  s := IntToStr(i);
+  Result := (Trunc(i/10) + ord(StrToInt(s[Length(s)]) >= 5)) * LFactor;
+  //Result:=Roundto(AValue,-2);   {Yuvarlasdirma ile elaqedar yuxari hiiseni bagladim}
+end;
+procedure TFormSelling.CB_AZEChange(Sender: TObject);
+begin
+  Edit_AZE.Text:=CB_AZE.Text;
+end;
+
+procedure TFormSelling.CB_AZEClick(Sender: TObject);
+begin
+  Edit_AZE.Text:=CB_AZE.Text;
+end;
+
+procedure TFormSelling.ClearEdit;
+begin
+  Edit_nb_course.Text:='';
+  Edit_selling_course.Text:='';
+  Edit_Selling_Amount.Text:='';
+  Edit_Ekv_Amount.Text:='';
+  Edit_Fee_Amount.Text:='';
+  DBLC_Currency.KeyValue:=-1;
+
+
+  Edit_First_Name.Text:='';
+  Edit_Last_Name.Text:='';
+  Edit_Father.Text:='';
+  Edit_Pasport.Text:='';
+  Edit_Cust_Date.Text:='';
+  Edit_Cust_Confirm.Text:='';
+  Edit_Giving_Member.Text:='';
+  Edit_Country.Text:='';
+  Edit_Passpin.Text:='';
+  Edit_Source_Type.Text:='';
+  Source_text.Clear;
+end;
+
+
+function TFormSelling.ExRemOstat(valid:integer):real;
+var
+ rest:real;
+begin
+  with DataModExch do
+  begin
+   ODSExRemainder.Close;
+   ODSExRemainder.Filtered:=False;
+   ODSExRemainder.Filter:='val_id='+IntToStr(valid);
+   ODSExRemainder.Filtered:=True;
+   ODSExRemainder.Open;
+   rest:=ODSExRemainder.FieldByName('current_ostat').AsFloat;
+   ExRemOstat:=rest;
+   ODSExRemainder.Close;
+   ODSExRemainder.Filtered:=False;
+   ODSExRemainder.Filter:='';
+   ODSExRemainder.Open;
+  end;
+end;
+
+
+procedure TFormSelling.DBLC_CurrencyClick(Sender: TObject);
+begin
+    if RadioButton1.Checked then
+  begin
+    Edit_selling_course.Text:=FormatFloat('#.0000000',DataModExch.ODSExchAcc.FieldByName('val_selling_course').AsFloat);
+    Edit_nb_course.Text:= DataModExch.ODSExchAcc.FieldByName('val_nb_course').AsString;
+
+    Edit_selling_Amount.Enabled:=(Edit_selling_course.Text<>'');
+    Edit_Ekv_Amount.Enabled:=(Edit_selling_course.Text<>'');
+    Edit_Fee_Amount.Enabled:=(Edit_selling_course.Text<>'');
+  end
+  else
+    begin
+      Edit_selling_course.Text:=FormatFloat('#.0000000',DataModExch.ODSExchAcc.FieldByName('cashless_selling_course').AsFloat);
+      Edit_nb_course.Text:= DataModExch.ODSExchAcc.FieldByName('val_nb_course').AsString;
+
+      Edit_selling_Amount.Enabled:=(Edit_selling_course.Text<>'');
+      Edit_Ekv_Amount.Enabled:=(Edit_selling_course.Text<>'');
+      Edit_Fee_Amount.Enabled:=(Edit_selling_course.Text<>'');
+    end;
+
+
+
+ (* Edit_selling_course.Text:=FormatFloat('#.0000000',DataModExch.ODSExchAcc.FieldByName('val_selling_course').AsFloat);
+  Edit_nb_course.Text:= DataModExch.ODSExchAcc.FieldByName('val_nb_course').AsString;
+
+
+ Edit_selling_Amount.Enabled:=(Edit_selling_course.Text<>'');
+ Edit_Ekv_Amount.Enabled:=(Edit_selling_course.Text<>'');
+ Edit_Fee_Amount.Enabled:=(Edit_selling_course.Text<>'');  *)
+
+    if Edit_Selling_Amount.Text<>'' then
+      begin
+           Edit_Selling_AmountChange(Sender);
+      end;
+
+
+end;
+
+procedure TFormSelling.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+        if ( ORD(Key) = VK_ESCAPE ) then Close;
+end;
+
+procedure TFormSelling.RadioButton1Click(Sender: TObject);
+begin
+  DBLC_Country.KeyValue:=-1;
+  DBLC_Cust_Confirm.KeyValue:=-1;
+  DBLC_Father.KeyValue:=-1;
+  DBLC_First_Name.KeyValue:=-1;
+  DBLC_Giving_Member.KeyValue:=-1;
+  DBLC_Last_Name.KeyValue:=-1;
+  with  DataModExch.ODSExchProvarch do
+  begin
+    ClearEdit;
+    Edit_Selling_Amount.Enabled:=false;
+  end;
+end;
+
+procedure TFormSelling.Edit_Selling_Amount1KeyPress(Sender: TObject;
+  var Key: Char);
+begin
+   //BlockEditKeyPress(Key); unitmain--
+end;
+
+procedure TFormSelling.Edit_selling_courseChange(Sender: TObject);
+begin
+  if Edit_selling_course.Text='' then exit;
+
+  if Edit_Selling_Amount.Text<>'' then  Edit_Selling_AmountChange(Sender);
+end;
+
+procedure TFormSelling.Edit_selling_courseKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+   //BlockEditKeyPress(Key); unitmain--
+end;
+
+procedure TFormSelling.BtnExitClick(Sender: TObject);
+begin
+  Close;
+end;
+
+procedure TFormSelling.BtnRunClick(Sender: TObject);
+const
+       ex_status=2;
+var
+v_id         :integer;
+s            :integer;
+a_Flags      :boolean;
+DebitAccId   :Integer;
+KreditAccId  :Integer;
+CashAccId    :Integer;
+PurAccId     :Integer;
+C            :Integer;
+KreditAccNo  :string;
+DebitAccno   :string;
+CashAccno    :string;
+PurAccno     :string;
+A,B:real;
+sysdate:TDateTime;
+dat:TDateTime;
+say:integer;
+Pbol:boolean;
+
+
+begin
+say :=0 ;
+Pbol:=true;
+if Edit_First_Name.Text=''     then   say:=say+1;
+if Edit_Last_Name.Text=''      then   say:=say+1;
+if Edit_Father.Text =''        then   say:=say+1;
+if Edit_Cust_Confirm.text =''  then   say:=say+1;
+if Edit_Giving_Member.Text ='' then   say:=say+1;
+if Edit_Country.Text =''       then   say:=say+1;
+if Edit_Pasport.Text =''       then   say:=say+1;
+if Edit_Cust_Date.Value =null  then   say:=say+1;
+if Edit_Passpin.Text =''       then   say:=say+1;
+
+
+
+if (say<>9) and (say<>0) then
+begin
+  showmessage('   Məlumatlar tam doldurulmayıb     ! ');
+  exit;
+end;
+
+if DBLC_Source_Type.Enabled  and (Edit_Source_Type.Text='') then
+begin
+  showmessage('   Mənbə növünü seçin     ! ');
+  exit;
+end;
+
+if DBLC_Source_Type.Enabled  and Source_text.Enabled and (Source_text.Text='') then
+begin
+  showmessage('   Mənbəy haqqında məlumatı doldurun     ! ');
+  exit;
+end;
+
+
+
+  sysdate:=Integer(Trunc(DataModExch.SBOPDate.CallDateFunction('get_date',[])));
+  dat:=Integer(Trunc(DTP_Date.DateTime));
+
+//DataModExch.SBA_ACA.CallProcedure('checkadvancedobjectaccess',['EXCH_TRANS']);
+
+
+
+  a_Flags     :=false;
+if sysdate<dat then a_Flags:=True;
+
+if DBLC_Currency.Text<>'AZN' then
+begin
+  try
+          Screen.Cursor:=crSQLWait;
+
+ with DataModExch do
+  begin
+        v_id                      :=  ODSExchProvarch.FieldByName('id').AsInteger;
+        Trans.status              :=  ex_status;
+        Trans.operator_id         :=  OPExchMgr.CallIntegerFunction('UserID',[]);
+        Trans.trans_date          :=  Integer(Trunc(DTP_Date.DateTime));
+        Trans.debit_amount        :=  StrToFloat(Edit_Selling_Amount.Text);
+        Trans.l_amount            :=  StrToFloat(Edit_Ekv_Amount.Text);
+        Trans.fee_amount          :=  StrToFloat(Edit_Fee_Amount.Text);
+        Trans.val_course          :=  StrToFloat(Edit_selling_course.Text);
+        Trans.trans_name          :=  Edit_Setting.Text;
+        Trans.cust_name           :=  Edit_First_Name.Text;
+        Trans.cust_lname          :=  Edit_Last_Name.Text;
+        Trans.cust_passport       :=  Edit_Pasport.Text;
+        Trans.exch_name           :=  Edit_Exch.Text;
+        Trans.val_id              :=  DBLC_Currency.KeyValue;
+        Trans.ex_id               :=  ODSExchOffice.FieldByName('ex_no').AsInteger;
+        Trans.cust_father         :=  Edit_Father.Text;
+        Trans.cust_date           :=  Edit_Cust_Date.Value;
+        Trans.cust_confirm        :=  Edit_Cust_Confirm.Text;
+        Trans.cust_giving_member  :=  Edit_Giving_Member.Text;
+        Trans.val_nb_course       :=  StrToFloat(Edit_nb_course.Text);
+        Trans.op_time             :=  DTP_Date.DateTime;
+        Trans.val_name            :=  DBLC_Currency.Text;
+        Trans.val_changed_name    :=  Edit_Val_Changed.Text;
+        Trans.val_changed_id      :=  Edit_Val_Changed.Tag;
+        Trans.val_changed_course  :=  1;
+        Trans.cust_country        :=  Edit_Country.Text;
+        Trans.country             :=  Edit_AZE.Text;
+        Trans.transclose          :=  0;
+        Trans.SessionName         :=  OPExchMgr.Session.LogonUserName;
+        Trans.RDebitAmount        :=  ExRemOstat(DBLC_Currency.KeyValue);
+        Trans.RLAmount            :=  ExRemOstat(0);
+        if RadioButton1.Checked then    Trans.Cashless := 0
+                                else    Trans.Cashless := 1;
+
+        Trans.cust_passpin        :=  Edit_Passpin.Text;
+        Trans.cust_passp          :=  Edit_AZE.Text;
+        Trans.Source_type         :=  Edit_Source_Type.Text;
+        Trans.Source_text         :=  Source_text.Text;
+
+   A:=StrToFloat(Edit_selling_course.Text);
+   C:=OPExchMgr.CallIntegerFunction('Ex_CourseRates',[Trans.val_id,A,Trans.status,Trans.Cashless]);
+   if C=0 then Trans.transclose:=1;
+
+       case StatusExchange of
+seSellingInsert:
+begin
+  with OPTrans do begin
+   resultID:=
+       CallIntegerFunction('add_ex_prov_trans',[
+                                                'status',             Trans.status,
+                                                'operator_id',        Trans.operator_id,
+		                                            'trans_date',         Trans.trans_date,
+		                                            'debit_amount',       Trans.debit_amount,
+	                                              'l_amount',           Trans.l_amount,
+	                                              'fee_amount',         Trans.fee_amount,
+		                                            'val_course',         Trans.val_course,
+		                                            'trans_name',         Trans.trans_name,
+		                                            'cust_name',          Trans.cust_name,
+                                                'cust_lname',         Trans.cust_lname,
+                                                'cust_passport',      Trans.cust_passport,
+                                                'exch_name',          Trans.exch_name,
+                                                'val_id',             Trans.val_id,
+                                                'ex_id',              Trans.ex_id,
+                                                'cust_father',        Trans.cust_father,
+                                                'cust_date',          Trans.cust_date,
+                                                'cust_confirm',       Trans.cust_confirm,
+                                                'cust_giving_member', Trans.cust_giving_member,
+                                                'val_nb_course',      Trans.val_nb_course,
+                                                'op_time',            Trans.op_time,
+                                                'val_name',           Trans.val_name,
+                                                'val_changed_name',   'AZN',
+                                                'val_changed_id',     Trans.val_changed_id,
+                                                'val_changed_course', Trans.val_changed_course,
+                                                'cust_country',       Trans.cust_country,
+                                                'country',            Trans.country,
+                                                'trans_close',        Trans.transclose,
+                                                'SessionName',        Trans.SessionName,
+                                                'RDebitAmount',       Trans.RDebitAmount,
+                                                'RLAmount',           Trans.RLAmount,
+                                                'PCashless',          Trans.Cashless,
+                                                'cust_passpin',       Trans.cust_passpin,
+                                                'cust_passp'  ,       Trans.cust_passp,
+                                                'Source_type' ,       Trans.Source_type,
+                                                'Source_text',        Trans.Source_text
+                                                  ]);
+
+                CallProcedure('ex_constants_add',[
+                                                   'a_ex_id',              Trans.ex_id,
+                                                   'a_cust_name',          Trans.cust_name,
+                                                   'a_cust_lname',         Trans.cust_lname,
+                                                   'a_cust_passport',      Trans.cust_passport,
+                                                   'a_cust_father',        Trans.cust_father,
+                                                   'a_cust_date',          Trans.cust_date,
+                                                   'a_cust_confirm',       Trans.cust_confirm,
+                                                   'a_cust_giving_member', Trans.cust_giving_member,
+                                                   'a_cust_country',       Trans.cust_country,
+                                                   'a_country',            Trans.country
+                                                   ]);
+                          end;
+                    open_cust_data_sets;
+
+              KreditAccId:=OPExchMgr.CallStringFunction('get_purchase_no',
+                                                           [Trans.ex_id,
+                                                            Trans.val_id]
+                                                          );
+              DebitAccId :=OPExchMgr.CallStringFunction('get_selling_no',
+                                                            [Trans.ex_id,
+                                                             Trans.val_id]
+                                                          );
+              CashAccId :=OPExchMgr.CallStringFunction('get_cash_acc_no',
+                                                            [Trans.ex_id,
+                                                             Trans.val_id]
+                                                          );
+              PurAccId :=OPExchMgr.CallStringFunction('get_pur_acc_no',
+                                                            [Trans.ex_id,
+                                                             Trans.val_id]
+                                                          );
+
+
+
+             { DebitAccId  :=sb_transaction.CallIntegerFunction('Get_Acc_Id',[DebitAccno]);
+              KreditAccId :=sb_transaction.CallIntegerFunction('Get_Acc_Id',[KreditAccNo]);
+              CashAccId   :=sb_transaction.CallIntegerFunction('Get_Acc_Id',[CashAccno]);
+              PurAccId    :=sb_transaction.CallIntegerFunction('Get_Acc_Id',[PurAccno]);}
+
+
+             if (C=0)  then
+             begin
+             s := sb_transaction.CallIntegerFunction('ex_transaction_additional',
+
+                                                                        [
+                                                                          resultID,
+                                                                          KreditAccId,               { K }
+                                                                          DebitAccId,
+                                                                          CashAccId,
+                                                                          PurAccId,
+                                                                          Trans.ex_id,
+                                                                          Trans.debit_amount,
+                                                                          Trans.debit_amount,       { N }
+                                                                          Trans.l_amount,
+                                                                          Trans.val_changed_course,
+                                                                          Trans.val_course, { N }
+                                                                          Trans.val_nb_course,
+                                                                          Trans.trans_name,
+                                                                          a_Flags,
+                                                                          Trans.operator_id
+                                                                        ]
+                                                                        );
+
+
+           Label1.Caption:= Trans.SessionName;
+           end;
+           sboapiDataModule.SBSession.Commit;
+           with ODSExchProvarch do Refresh;
+           with ODSExchRate do Refresh;
+           ODSExRemainder.Refresh;
+
+
+end;{case -1-}
+
+seSellingEdit:
+begin
+
+
+  with OPTrans do
+
+              CallProcedure('ex_provarch_edit',[
+                                                'v_id',               v_id,
+                                                'status',             Trans.status,
+                                                'operator_id',        Trans.operator_id,
+		                                            'trans_date',         Trans.trans_date,
+		                                            'debit_amount',       Trans.debit_amount,
+	                                              'l_amount',           Trans.l_amount,
+	                                              'fee_amount',         Trans.fee_amount,
+		                                            'val_course',         Trans.val_course,
+		                                            'trans_name',         Trans.trans_name,
+		                                            'cust_name',          Trans.cust_name,
+                                                'cust_lname',         Trans.cust_lname,
+                                                'cust_passport',      Trans.cust_passport,
+                                                'exch_name',          Trans.exch_name,
+                                                'cust_father',        Trans.cust_father,
+                                                'cust_date',          Trans.cust_date,
+                                                'cust_confirm',       Trans.cust_confirm,
+                                                'cust_giving_member', Trans.cust_giving_member,
+                                                'val_nb_course',      Trans.val_nb_course,
+                                                'val_name',           Trans.val_name,
+                                                'val_changed_name',   'AZN',
+                                                'val_changed_id',     Trans.val_changed_id,
+                                                'val_changed_course', Trans.val_changed_course,
+                                                'cust_country',       Trans.cust_country,
+                                                'country',            Trans.country,
+                                                'SessionName',       Trans.SessionName
+                                                  ]);
+
+           with ODSExchProvarch do Refresh;
+           with ODSExchRate do Refresh;
+           with DataModExch.ODSExRemainder do Refresh;
+
+      end; {case -2-}
+
+
+   end;{case}
+
+end;{with}
+
+       Except
+           on E : Exception do
+           begin
+             sboapiDataModule.SBSession.Rollback;
+             ShowMessage(E.Message);
+             Pbol:=False;
+           end;{try}
+       end;
+
+    Screen.Cursor:=crDefault;
+    IF Pbol THEN Close;
+    end
+        else
+             ShowMessage('Valyutalar eynidir!');
+end;
+
+
+procedure TFormSelling.TimerTimer(Sender: TObject);
+begin
+  DTP_System_Time.Time:=Time;
+end;
+
+procedure TFormSelling.Edit_Selling_AmountChange(Sender: TObject);
+const
+      selling_status=' KURSLA SATIŞI ';
+var
+      // Ekv,Fee :Extended;
+      EkvM,Ekv,Fee,FeeM,FeeR,FeeMM,FeeRR :Double;
+begin
+
+if Edit_Selling_Amount.Text<>'' then
+ begin
+
+   Edit_Setting.Text:=SumNumToFull(StrToFloat(Edit_Selling_Amount.Text))
+    +
+    ' '
+    +
+     DBLC_Currency.ListSource.DataSet.FieldByName('val_name').AsString
+    +
+    ' -nin '
+    +
+    Edit_selling_course.Text
+    +
+    selling_status;
+
+    EkvM:=StrToFloat(Edit_Selling_Amount.Text)*StrToFloat(Edit_selling_course.Text);
+    FeeR:=StrToFloat(Edit_Selling_Amount.Text)*StrToFloat(Edit_selling_course.Text);
+    FeeM:=StrToFloat(Edit_Selling_Amount.Text)*StrToFloat(Edit_nb_course.Text);
+    {Ekv:=DataModExch.OPExchMgr.CallFloatFunction('FracNumberEkv',[EkvM]);
+    Fee:=DataModExch.OPExchMgr.CallFloatFunction('FracNumberIncome',[FeeR,FeeM]);
+    Edit_Ekv_Amount.Text:=FloatToStr(Ekv);
+    Edit_Fee_Amount.Text:=FloatToStr(Fee);}
+
+    Ekv:=DataModExch.OPExchMgr.CallFloatFunction('RoundNew',[EkvM]);
+    FeeRR:=DataModExch.OPExchMgr.CallFloatFunction('RoundNew',[FeeR]);
+    FeeMM:=DataModExch.OPExchMgr.CallFloatFunction('RoundNew',[FeeM]);
+    Fee:=abs(FeeRR-FeeMM);
+    Edit_Ekv_Amount.Text:=FloatToStr(Ekv);
+    Edit_Fee_Amount.Text:=FloatToStr(Fee);
+
+ { Ekv:=StrToFloat(Edit_Selling_Amount.Text)*StrToFloat(Edit_selling_course.Text);
+  Fee:=//ABS
+           (
+           RoundToEx((StrToFloat(Edit_Selling_Amount.Text)*StrToFloat(Edit_selling_course.Text)),-2)
+           -
+           RoundToEx((StrToFloat(Edit_Selling_Amount.Text)*StrToFloat(Edit_nb_course.Text)),-2)
+           );
+
+     // Edit_Ekv_Amount.Text:=FormatFloat('#.00',Ekv);
+      //Edit_Fee_Amount.Text:=FormatFloat('#.##',Fee);
+       Edit_Ekv_Amount.Text:=FloatToStr(RoundToEx(Ekv,-2));
+       Edit_Fee_Amount.Text:=FloatToStr(RoundToEx(Fee,-2));  }
+
+ end
+   else
+     begin
+      Edit_Setting.Text:=EmptyStr;
+      Edit_Ekv_Amount.Text:=EmptyStr;
+      Edit_Fee_Amount.Text:=EmptyStr;
+    end;
+
+
+ end;
+
+procedure TFormSelling.Edit_Selling_AmountKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+   //BlockEditKeyPress(Key); unitmain--
+end;
+
+
+
+procedure TFormSelling.DBLC_CountryClick(Sender: TObject);
+begin
+     Edit_Country.Text:=DBLC_Country.Text;
+     if (DBLC_Country.KeyValue=14) and (DBLC_Cust_Confirm.KeyValue=1)
+                              then begin
+                                     CB_AZE.Visible:=True;
+                                     CB_AZE.ItemIndex:=0;
+                                     Edit_AZE.Visible:=False;
+                                     DBLC_Giving_Member.Enabled:=True;
+                                     Edit_Giving_Member.ReadOnly:=False;
+                                     Edit_Passpin.MaxLength:=7;
+                                   end
+                              else begin
+                                     CB_AZE.Visible:=False;
+                                     Edit_AZE.Visible:=True;
+                                     Edit_AZE.Text:='';
+                                     DBLC_Giving_Member.Enabled:=False;
+                                     DBLC_Giving_Member.KeyValue:=-1;
+                                     Edit_Giving_Member.ReadOnly:=True;
+                                     Edit_Giving_Member.Clear;
+                                     Edit_Passpin.MaxLength:=0;
+                                   end;
+end;
+
+procedure TFormSelling.DBLC_First_NameClick(Sender: TObject);
+begin
+  Edit_First_Name.Text:=DBLC_First_Name.Text;
+end;
+
+procedure TFormSelling.DBLC_Last_NameClick(Sender: TObject);
+begin
+  Edit_Last_Name.Text:=DBLC_Last_Name.Text;
+end;
+
+procedure TFormSelling.DBLC_Source_TypeClick(Sender: TObject);
+begin
+  Edit_Source_Type.Text:=DBLC_Source_Type.Text;
+end;
+
+procedure TFormSelling.DBLC_FatherClick(Sender: TObject);
+begin
+  Edit_Father.Text:=DBLC_Father.Text;
+end;
+
+procedure TFormSelling.DBLC_Cust_ConfirmClick(Sender: TObject);
+begin
+  Edit_Cust_Confirm.Text:=DBLC_Cust_Confirm.Text;
+  if (DBLC_Country.KeyValue=14) and (DBLC_Cust_Confirm.KeyValue=1)
+                              then begin
+                                     CB_AZE.Visible:=True;
+                                     CB_AZE.ItemIndex:=0;
+                                     Edit_AZE.Text:=CB_AZE.Text;
+                                     Edit_AZE.Visible:=False;
+                                     DBLC_Giving_Member.Enabled:=True;
+                                     Edit_Giving_Member.ReadOnly:=True;
+                                     Edit_Passpin.MaxLength:=7;
+                                   end
+                              else begin
+                                     CB_AZE.Visible:=False;
+                                     Edit_AZE.Visible:=True;
+                                     Edit_AZE.Text:='';
+                                     DBLC_Giving_Member.Enabled:=False;
+                                     Edit_Giving_Member.ReadOnly:=False;
+                                     Edit_Passpin.MaxLength:=0;
+                                   end;
+end;
+
+procedure TFormSelling.DBLC_Giving_MemberClick(Sender: TObject);
+begin
+  Edit_Giving_Member.Text:=DBLC_Giving_Member.Text;
+end;
+
+procedure TFormSelling.FormActivate(Sender: TObject);
+Var Delta:integer;
+    Pdat :TDateTime;
+    Sdat:TDateTime;
+begin
+
+           DBLC_Country.KeyValue:=-1;
+           DBLC_Cust_Confirm.KeyValue:=-1;
+           DBLC_Father.KeyValue:=-1;
+           DBLC_First_Name.KeyValue:=-1;
+           DBLC_Giving_Member.KeyValue:=-1;
+           DBLC_Last_Name.KeyValue:=-1;
+           DBLC_Source_Type.KeyValue:=-1;
+           RadioButton1.Checked:=True;
+           RadioButton2.Checked:=False;
+           DBLC_Source_Type.Enabled:=False;
+           DBLC_Source_Type.Color:=clGray;
+           Edit_Source_Type.Color:=clGray;
+           Source_text.Enabled:=False;
+           Source_text.Color:=clGray;
+           ClearEdit;
+
+         sdat:=Integer(Trunc(DataModExch.SBOPDate.CallDateFunction('get_date',[])));
+         Pdat:=DataModExch.ODSSysdatSSDAT.AsDateTime;
+
+         DTP_Date.Date:=DataModExch.ODSSysdatSSDAT.AsDateTime;
+         DTP_System_Time.Time:=DataModExch.ODSSysdatSTIME.AsDateTime;
+
+         IF DataModExch.ODSdate.RecordCount>0
+         then
+           begin
+             DTP_Date.Date:=DataModExch.ODSdateDAT.AsDateTime;
+             DTP_System_Time.Time:=DataModExch.ODSdateDAT.AsDateTime;
+           end;
+
+        if sdat>pdat then
+        begin
+          DTP_Date.Date:=sdat;
+          DTP_System_Time.Time:=sdat;
+       end;
+
+
+   //DataModExch.OPExchMgr.CallProcedure('Ex_CourseDifference',[DataModExch.ODSExchOfficeEX_NO.AsInteger]);
+  With DataModExch,OPExchMgr do
+  begin
+     Delta:=CallIntegerFunction('ex_date_change',[]);
+    Case Delta of 0:DataModExch.OPExchMgr.CallProcedure('Ex_RemainderProv_Change',[DataModExch.ODSExchOfficeEX_NO.AsInteger]);
+                  1:DataModExch.OPExchMgr.CallProcedure('Ex_RemainderLaz_Change',[DataModExch.ODSExchOfficeEX_NO.AsInteger]);
+                  2:exit;
+    End;
+  end;
+    //DataModExch.OPExchMgr.CallProcedure('Ex_Remainder_Change',[DataModExch.ODSExchOfficeEX_NO.AsInteger]);
+
+
+with  DataModExch.ODSExchProvarch do
+ begin
+       case StatusExchange of
+  seSellingInsert:
+                 begin
+                  ClearEdit;
+                  Edit_Selling_Amount.Enabled:=false;
+                 end;
+ seSellingEdit:
+            begin
+                DataModExch.ODSExchAcc.Open;
+                Edit_Selling_Amount.Enabled:=true;
+                DTP_Date.Date:=Int(FieldByName('dat').AsDateTime);
+                DBLC_Currency.KeyValue:=DataModExch.ODSExchProvarch.FieldByName('val_id').AsVariant;
+                Edit_selling_course.Text:=FloatToStr(FieldByName('op_course').AsFloat);
+                Edit_nb_course.Text:=FloatToStr(FieldByName('val_nb_course').AsFloat);
+                Edit_Selling_Amount.Text:=FloatToStr(FieldByName('debitamount').AsFloat);
+                Edit_Ekv_Amount.Text:=FloatToStr(FieldByName('lamount').AsFloat);
+                Edit_Fee_Amount.Text:=FloatToStr(FieldByName('fee_amount').AsFloat);
+                Edit_Setting.Text:=FieldByName('oper_name').AsString;
+                Edit_First_Name.Text:=FieldByName('cust_name').AsString;
+                Edit_Last_Name.Text:=FieldByName('cust_lname').AsString;
+                Edit_Pasport.Text:=FieldByName('cust_passport').AsString;
+                Edit_Father.Text:=FieldByName('cust_father').AsString;
+                Edit_Cust_Date.value:=FieldByName('cust_date').AsVariant;
+                Edit_Cust_Confirm.Text:=FieldByName('cust_confirm').AsString;
+                Edit_Giving_Member.Text:=FieldByName('cust_giving_member').AsString;
+                Edit_Val_Changed.Tag:=1;
+                Edit_Country.Text:= FieldByName('cust_country').AsString;
+                Edit_AZE.Text:= FieldByName('country').AsString;
+                Edit_Passpin.Text:=FieldByName('cust_passpin').AsString;
+               end;
+        end;
+     end;
+
+end;
+
+procedure TFormSelling.FormCreate(Sender: TObject);
+begin
+ SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TFormSelling.Edit_Ekv_AmountChange(Sender: TObject);
+var Ekv:real;
+begin
+  Ekv:=StrToFloat(Edit_Ekv_Amount.Text);
+  if Ekv>=500 then
+  begin
+  if (Ekv>=500) and (Ekv<20000) then
+  begin
+    Edit_Source_Type.Color:=clWhite;
+    DBLC_Source_Type.Color:=clWhite;
+    DBLC_Source_Type.Enabled:=True;
+    Source_text.Enabled:=False;
+    Source_text.Clear;
+    Source_text.Color:=clGray;
+  end;
+  if (Ekv>=20000)  then
+  begin
+    Source_text.Enabled:=True;
+    Source_text.Color:=clWhite;
+    Edit_Source_Type.Color:=clWhite;
+    DBLC_Source_Type.Enabled:=True;
+    DBLC_Source_Type.Color:=clWhite;
+  end;
+  end
+  else
+    begin
+      Source_text.Enabled:=False;
+      Source_text.Clear;
+      Source_text.Color:=clGray;
+      Edit_Source_Type.Color:=clGray;
+      Edit_Source_Type.Clear;
+      DBLC_Source_Type.KeyValue:=-1;
+      DBLC_Source_Type.Enabled:=False;
+      DBLC_Source_Type.Color:=clGray;
+    end;
+
+
+end;
+
+procedure TFormSelling.Edit_First_NameKeyPress(Sender: TObject; var Key: Char);
+var b:integer;
+begin
+  b:=ord(Key);
+  if not(Key in ['a'..'z','A'..'Z',' ',#8]) and
+  (b<>286) and
+  (b<>287) and
+  (b<>350) and
+  (b<>351) and
+  (b<>399) and
+  (b<>601) and
+  (b<>220) and
+  (b<>252) and
+  (b<>214) and
+  (b<>246) and
+  (b<>199) and
+  (b<>231) and
+  (b<>305) and
+  (b<>73)  and
+  (b<>304) and
+  (b<>105)
+  then
+    Key:=#0;
+
+
+end;
+
+procedure TFormSelling.Edit_PasportKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+   //BlockEditKeyPress(Key); unitmain--
+   if not (Key in ['0'..'9','.',#8]) then
+   Key :=#0
+end;
+
+procedure TFormSelling.Edit_PasspinKeyPress(Sender: TObject; var Key: Char);
+begin
+  if (Key in ['O','o','i']) then Key:=#0
+end;
+
+end.

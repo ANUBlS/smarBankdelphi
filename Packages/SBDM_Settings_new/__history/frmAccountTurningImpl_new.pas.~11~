@@ -1,0 +1,108 @@
+unit frmAccountTurningImpl_new;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, NLSDialogs,
+  ComCtrls, ToolWin, ExtCtrls,  ImgList, Grids, DBGridEh, Db,
+  OracleData, Oracle, ActnList;
+
+
+type
+  TfrmAccountTurning = class(TForm)
+    Panel2: TPanel;
+    ToolBar1: TToolBar;
+    ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
+    ToolButton3: TToolButton;
+    ToolButton4: TToolButton;
+    ToolButton5: TToolButton;
+    ToolButton9: TToolButton;
+    ToolButton8: TToolButton;
+    ToolButton6: TToolButton;
+    ToolButton7: TToolButton;
+    Panel4: TPanel;
+    DBGridEh3: TDBGridEh;
+    Panel3: TPanel;
+    DBGridEh2: TDBGridEh;
+    Panel1: TPanel;
+    DBGridEh1: TDBGridEh;
+    sbcm_ds: TOraclePackage;
+    Categories: TOracleDataSet;
+    CategoriesID: TFloatField;
+    CategoriesCATEGORY: TWideStringField;
+    CategoriesDatSrc: TDataSource;
+    Accounts: TOracleDataSet;
+    AccountsID: TFloatField;
+    AccountsACC_NO: TWideStringField;
+    AccountsNAME: TWideStringField;
+    AccountsVAL_ACC: TIntegerField;
+    AccountsDatSrc: TDataSource;
+    Filials: TOracleDataSet;
+    FilialsID: TFloatField;
+    FilialsNAME: TWideStringField;
+    FilialsDatSrc: TDataSource;
+    valute: TOracleDataSet;
+    valuteVALUTE: TIntegerField;
+    valuteVAL_NAME: TWideStringField;
+    valuteVALU_NAME: TWideStringField;
+    ValutesDatSrc: TDataSource;
+    movie_names: TOracleDataSet;
+    movie_namesID: TIntegerField;
+    movie_namesTYPEID: TIntegerField;
+    movie_namesDESCRIPTION: TWideStringField;
+    movie_namesDatSrc: TDataSource;
+    ImageList1: TImageList;
+    ActionList1: TActionList;
+    ActnAdd: TAction;
+    ActnEdit: TAction;
+    ActnDel: TAction;
+    settings: TOracleDataSet;
+    settingsID: TFloatField;
+    settingsPARENTID: TFloatField;
+    settingsCURRENCYID: TFloatField;
+    settingsACCID: TFloatField;
+    settingsBRANCHID: TFloatField;
+    settingsfilialname: TWideStringField;
+    settingscurrencyname: TWideStringField;
+    settingsaccountnumber: TWideStringField;
+    settingsDatSrc: TDataSource;
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  frmAccountTurning: TfrmAccountTurning;
+
+implementation
+
+{$R *.dfm}
+   uses  sboapiDataModuleImpl,frmAddEditAccTurningImpl_new,SBTranslateProc;
+procedure TfrmAccountTurning.FormCreate(Sender: TObject);
+begin
+     Categories.Open;
+     Accounts.Open;
+     Filials.Open;
+     Valute.Open;
+     movie_names.Open;
+     settings.Open;
+     frmAddEditAccTurning_new:= TfrmAddEditAccTurning_new.Create(Self);
+     SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TfrmAccountTurning.FormDestroy(Sender: TObject);
+begin
+     Categories.CloseAll;
+     Accounts.CloseAll;
+     Filials.CloseAll;
+     Valute.CloseAll;
+     movie_names.CloseAll;
+     settings.CloseAll;
+     frmAddEditAccTurning_new.Free;
+end;
+
+end.

@@ -1,0 +1,55 @@
+unit WRSetupLoader;
+ 
+interface
+
+
+procedure InitPlugin(S : String ;mehid :integer);export;
+
+implementation
+
+uses
+  CommonDecls,WRBookmarksTuning, WRTemplatesTuning,TemplateAddEditUnt,
+ BookmarkAddEditunt;
+
+
+
+  procedure ShowWRTemplateSetup;
+  begin
+     with TWRTemplateSetup.Create(CommonApplication) do
+     try
+       ShowModal;
+     finally
+       Release;
+  end;
+
+end;
+
+  procedure ShowWRBookmarkSetup;
+  begin
+     with TWRBookmarkSetup.Create(CommonApplication) do
+     try
+       Showmodal;
+     finally
+       Release;
+    end;
+ end;
+
+procedure InitPlugin(S : String;mehid :integer);export;
+const
+
+  SWRTemplateSetup = 'WRTemplateSetup';
+  SWRBookmarkSetup ='WRBookmarkSetup';
+
+begin
+  if S = SWRTemplateSetup then
+     ShowWRTemplateSetup;
+
+  if S=SWRBookmarkSetup then
+     ShowWRbookmarkSetup;
+
+end;
+
+exports
+  InitPlugin;
+
+end.

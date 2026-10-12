@@ -1,0 +1,29 @@
+unit DmLoaderImpl;
+
+interface
+uses
+  Windows, Sysutils;
+  
+procedure exportproc(S : String);export;
+
+implementation
+
+uses frmBankSettingsImpl,CommonDeclsImpl;
+
+procedure ShowBankSettings;
+begin
+   frmBankSettings := TfrmBankSettings.Create(CommonApplication);
+   frmBankSettings.ShowModal
+end;
+
+ procedure exportproc(S : String);export;
+ resourcestring  rs_shbs = 'BankSettings';
+ begin
+     if S = rs_shbs then
+      ShowBankSettings;
+ end;
+
+ exports
+    exportproc;
+
+end.

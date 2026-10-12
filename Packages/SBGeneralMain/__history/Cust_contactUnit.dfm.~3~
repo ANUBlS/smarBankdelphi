@@ -1,0 +1,95 @@
+object Cust_contact: TCust_contact
+  Left = 0
+  Top = 0
+  ClientHeight = 378
+  ClientWidth = 671
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poMainFormCenter
+  PixelsPerInch = 96
+  TextHeight = 13
+  object XFPanel2: TXFPanel
+    Left = 0
+    Top = 0
+    Width = 671
+    Height = 337
+    Align = alClient
+    BevelInner = bvLowered
+    BevelKind = bkFlat
+    TabOrder = 0
+    ExplicitTop = 41
+    object XDBGrid1: TXDBGrid
+      Left = 2
+      Top = 2
+      Width = 663
+      Height = 329
+      Align = alClient
+      GridStyle.VisualStyle = vsXPStyle
+      TabOrder = 0
+    end
+  end
+  object XFPanel1: TXFPanel
+    Left = 0
+    Top = 337
+    Width = 671
+    Height = 41
+    Align = alBottom
+    BevelInner = bvLowered
+    BevelKind = bkFlat
+    TabOrder = 1
+    ExplicitTop = 0
+    object DBNavigator1: TDBNavigator
+      Left = 2
+      Top = 2
+      Width = 663
+      Height = 33
+      VisibleButtons = [nbPrior, nbNext, nbInsert, nbDelete, nbEdit, nbPost, nbCancel, nbRefresh]
+      Align = alClient
+      TabOrder = 0
+      ExplicitLeft = 41
+      ExplicitWidth = 312
+      ExplicitHeight = 38
+    end
+  end
+  object OracleDataSet1: TOracleDataSet
+    SQL.Strings = (
+      'select rowid,a.*from customer_relatives a')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000300000004000000490044000100000000000C00000043004F004E00
+      5400490044000100000000001200000043004E00540052005F0043004F004400
+      4500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 272
+    Top = 184
+    object OracleDataSet1ID: TFloatField
+      FieldName = 'ID'
+    end
+    object OracleDataSet1CONTID: TFloatField
+      FieldName = 'CONTID'
+    end
+    object OracleDataSet1CNTR_CODE: TIntegerField
+      FieldName = 'CNTR_CODE'
+    end
+    object OracleDataSet1count_name: TWideStringField
+      DisplayWidth = 20
+      FieldKind = fkLookup
+      FieldName = 'count_name'
+      LookupKeyFields = 'ID'
+      LookupResultField = 'CNTR_NAME'
+      KeyFields = 'CONTID'
+      Size = 100
+      Lookup = True
+    end
+  end
+  object DataSource1: TDataSource
+    DataSet = OracleDataSet1
+    Left = 184
+    Top = 184
+  end
+end

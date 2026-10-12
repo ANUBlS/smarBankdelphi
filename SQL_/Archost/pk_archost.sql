@@ -1,0 +1,10 @@
+ALTER TABLE ARCHOST ADD CONSTRAINT PK_ARCHOST
+  PRIMARY KEY (
+  ACC_ID
+  ,DATDATE
+) 
+using index
+tablespace SmartIdx
+/
+
+

@@ -1,0 +1,26 @@
+object DMImpPayments: TDMImpPayments
+  OldCreateOrder = False
+  Height = 480
+  Width = 696
+  object CM_Common: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'CM_Common'
+    Left = 32
+    Top = 16
+  end
+  object cm_dif_trans: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'cm_agro_pay'
+    ParameterMode = pmNamed
+    Left = 32
+    Top = 64
+  end
+  object OracleDataSet1: TOracleDataSet
+    SQL.Strings = (
+      'select * from cm_agrolaztr where status=1')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 208
+    Top = 72
+  end
+end

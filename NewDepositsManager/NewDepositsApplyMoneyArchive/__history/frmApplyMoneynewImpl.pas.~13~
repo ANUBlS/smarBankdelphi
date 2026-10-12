@@ -1,0 +1,197 @@
+unit frmApplyMoneynewImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
+   Grids, DBGridEh, ComCtrls, ToolWin, ActnList,dialogs,
+  CMExcelExport, ImgList, StdCtrls, Mask, DBCtrls, ExtCtrls, Menus;
+
+type
+  TFrmApplyMoneynew = class(TForm)
+    ActionList1: TActionList;
+    ActnAdd: TAction;
+    ActnDel: TAction;
+    ActnExport: TAction;
+    DBGridEh1: TDBGridEh;
+    ExcelExport: TCMExcelExport;
+    GroupBox1: TGroupBox;
+    Panel3: TPanel;
+    DBEdit2: TDBEdit;
+    StaticText2: TStaticText;
+    ImageList1: TImageList;
+    Panel4: TPanel;
+    ToolBar1: TToolBar;
+    ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
+    ToolButton3: TToolButton;
+    ToolButton4: TToolButton;
+    ToolButton5: TToolButton;
+    ToolButton6: TToolButton;
+    ToolButton7: TToolButton;
+    PMShowTr: TPopupMenu;
+    N1: TMenuItem;
+    StatusBar1: TStatusBar;
+    procedure FormCanResize(Sender: TObject; var NewWidth, NewHeight: Integer;
+      var Resize: Boolean);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure ToolButton7Click(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure ActnAddExecute(Sender: TObject);
+    procedure ActnDelExecute(Sender: TObject);
+    procedure ActnExportExecute(Sender: TObject);
+    procedure ActnDelUpdate(Sender: TObject);
+
+
+
+    procedure ToolButton3Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+     CanRefReshDeposit :Boolean;
+  end;
+
+var
+  FrmApplyMoneynew: TFrmApplyMoneynew;
+       procedure exportproc(S :String);export;
+implementation
+
+{$R *.dfm}
+   uses DMApplyMoneynewImpl,frmAddMoneynewImpl,CommonDeclsImpl,SBTranslateProc,sboapiDataModuleimpl;
+
+procedure exportproc(S :String);export;
+var ContractID,
+    CustAccID,CustID:Integer;
+
+begin
+   FrmApplyMoneynew. Caption := Get_SelectedContNo+' íşìğÿëè ìöãàâèëÿíèí éàòğûìëàğû';
+   ContractID := Get_SelectedContID;
+   with DMApplyMoney_new do
+   begin
+       with Tranches do
+       begin
+          close;
+          SetVariable('ContractID',ContractID);
+          Open;
+       end;
+
+       with DepositInfo do
+       begin
+          close;
+          SetVariable('ContractID',ContractID);
+          CustID := FieldByName('CustomerID').AsInteger;
+          Open;
+       end;
+
+       with CustAcc do
+       begin
+          close;
+          SetVariable('ContractID',ContractID);
+          Open;
+          CustAccID := FieldByName('ClientACCID').AsInteger;
+       end;
+
+       with DebitAccs do
+       begin
+        close;
+        if not Active then
+          SetVariable('CustID',CustAccID);
+          Open;
+       // if Locate('ID',CustAccID,[]) then
+        frmAddMoneynew.AccountListCB.KeyValue := CustAccID;
+       end;
+
+      FrmApplyMoneynew.ShowModal;
+   end;
+end;
+
+exports
+  exportproc;
+procedure TFrmApplyMoneynew.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+   Resize := False;
+end;
+
+procedure TFrmApplyMoneynew.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+   if CanRefReshDeposit then
+      RefreshWithSavely(True);
+    with DMApplyMoney_new do
+    begin
+       Tranches.CloseAll;
+      // DebitAccs.CloseAll;
+       DepositInfo.CloseAll;
+       CustAcc.CloseAll;
+    end;
+end;
+
+procedure TFrmApplyMoneynew.FormCreate(Sender: TObject);
+begin
+   DMApplyMoney_new := TDMApplyMoney_new.Create(Self);
+   frmAddMoneynew:= TfrmAddMoneynew.Create(Self);
+   SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TFrmApplyMoneynew.FormDestroy(Sender: TObject);
+begin
+  frmAddMoneynew.Free;
+   DMApplyMoney_new.Free;
+end;
+
+procedure TFrmApplyMoneynew.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+if ord(Key) = VK_ESCAPE then close;
+end;
+
+
+
+procedure TFrmApplyMoneynew.ToolButton7Click(Sender: TObject);
+begin
+Close
+end;
+
+procedure TFrmApplyMoneynew.ActnAddExecute(Sender: TObject);
+begin
+   if frmAddMoneynew.ShowModal = mrOk then
+   begin
+      CanRefReshDeposit := True;
+      DMApplyMoney_new.Tranches.Refresh;
+   end;
+
+end;
+procedure TFrmApplyMoneynew.ActnDelExecute(Sender: TObject);
+begin
+
+    if MessageDlg('Ñèëèíìÿñèíÿ ÿìèíñèíèçìè?',
+             mtConfirmation, [mbYes, mbNo], 0) = mrNo
+    then Exit;
+
+    with DMApplyMoney_new,Tranches,sbcm_tranches do begin
+         CallProcedure('DeleteDepositMoney',['P_DepMoneyID',FieldByName('ID').AsInteger]);
+          refresh;
+         end;
+
+end;
+
+
+procedure TFrmApplyMoneynew.ActnExportExecute(Sender: TObject);
+begin
+   with ExcelExport do
+   begin
+      Connect;
+      ExportDataset(DMApplyMoney_new.Tranches,'Äåïîçèò éàòğûìëàğû',True,false);
+      Disconnect;
+   end;
+
+end;
+
+procedure TFrmApplyMoneynew.ActnDelUpdate(Sender: TObject);
+begin
+   with (Sender as TAction) do
+        Enabled := DMApplyMoney_new.Tranches.RecordCount > 0;
+end;
+end.

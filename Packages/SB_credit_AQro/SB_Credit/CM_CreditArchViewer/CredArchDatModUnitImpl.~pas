@@ -1,0 +1,58 @@
+unit CredArchDatModUnitImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, OracleData;
+
+type
+  TCredArchDatMod = class(TDataModule)
+    DatSetCreditArchView: TOracleDataSet;
+    DatSrcCredArch: TDataSource;
+    DatSetCreditArchViewNUMBEROFCREDIT: TStringField;
+    DatSetCreditArchViewCREDITLINEAMOUNT: TFloatField;
+    DatSetCreditArchViewANNUALYINTERESTRATE: TFloatField;
+    DatSetCreditArchViewANNUALYOVERDUERATE: TFloatField;
+    DatSetCreditArchViewANNUALYPENALTYRATE: TFloatField;
+    DatSetCreditArchViewDATEOFCONCLUSION: TDateTimeField;
+    DatSetCreditArchViewDUEDATEFIRSTCONTRACT: TDateTimeField;
+    DatSetCreditArchViewPURPOSEOFCREDIT: TStringField;
+    DatSetCreditArchViewCUSTNAME: TStringField;
+    DatSetCreditArchViewCATDESCRIPTION: TStringField;
+    DatSetCreditArchViewPERDESCRIPION: TStringField;
+    DatSetCreditArchViewCRDTYPEDESCRIPTION: TStringField;
+    DatSetCreditArchViewUSRGRDESCRIPTION: TStringField;
+    DatSetCreditArchViewFILNAME: TStringField;
+    DatSetCreditArchViewLOANACCNO: TStringField;
+    DatSetCreditArchViewINTERESTACCNO: TStringField;
+    DatSetCreditArchViewDUELOANACCNO: TStringField;
+    DatSetCreditArchViewDUEINTERESTACCNO: TStringField;
+    DatSetCreditArchViewHDATE: TDateTimeField;
+    DatSetCreditArchViewVAL_NAME: TStringField;
+    DatSetCreditArchViewDEFCALCINT: TFloatField;
+    DatSetCreditArchViewOP_ID: TStringField;
+    DatSetCreditArchViewCALCMETHOD: TStringField;
+    procedure DataModuleDestroy(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  CredArchDatMod: TCredArchDatMod;
+
+implementation
+
+{$R *.DFM}
+
+uses CMOracleApiDataModuleImpl,CommonDecls;
+
+procedure TCredArchDatMod.DataModuleDestroy(Sender: TObject);
+begin
+  DatSetCreditArchView.CloseAll;
+  DatSetCreditArchViewForAcc.CloseAll
+end;
+
+end.

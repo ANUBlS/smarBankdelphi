@@ -1,0 +1,145 @@
+unit UnitDataModuleCourt;
+
+interface
+
+uses
+  SysUtils, Classes, DB, OracleData,sboapiDataModuleImpl, Oracle;
+
+type
+  TDataModuleCourt = class(TDataModule)
+    ODSCourt: TOracleDataSet;
+    DSCourt: TDataSource;
+    DSCourtAdmin: TDataSource;
+    ODSCourtAdmin: TOracleDataSet;
+    DSAdminGroups: TDataSource;
+    ODSAdminGroups: TOracleDataSet;
+    DSAdminIn: TDataSource;
+    ODSAdminIn: TOracleDataSet;
+    ct_control: TOraclePackage;
+    ODSGroups: TOracleDataSet;
+    DSGroups: TDataSource;
+    DSFilial: TDataSource;
+    ODSFilial: TOracleDataSet;
+    ODSFilialID: TFloatField;
+    ODSFilialNAME: TWideStringField;
+    ODSInfo: TOracleDataSet;
+    DSInfo: TDataSource;
+    ODSGroupsSend: TOracleDataSet;
+    DSGroupsSend: TDataSource;
+    ODSPdf: TOracleDataSet;
+    DSPdf: TDataSource;
+    ZaminDSet: TOracleDataSet;
+    ZaminDSetCREDITID: TFloatField;
+    ZaminDSetCARDID: TFloatField;
+    ZaminDSetGUARANTORNAME: TWideStringField;
+    ZaminDSetGUARANTORID: TWideStringField;
+    ZaminDSetGUARANTORSALARY: TWideStringField;
+    ZaminDSetZAMINWORK1: TWideStringField;
+    ZaminDSetZAMINADRES1: TWideStringField;
+    ZaminDSetZAMINTEL1: TWideStringField;
+    ZaminDSetZMPASPYER1: TWideStringField;
+    ZaminDSetZMPASPDAT1: TDateTimeField;
+    ZaminDSetZMTELMOB1: TWideStringField;
+    ZaminDSetPINCODE: TWideStringField;
+    ZaminDSetPERSONALTYPE: TFloatField;
+    ZaminDSetCUNTRYCODE: TWideStringField;
+    ZaminDSetDATEOFBIRTH: TDateTimeField;
+    ZaminDSetCUNTRY: TWideStringField;
+    ZaminDSetCITY: TWideStringField;
+    ZaminDSetFACTADRES: TWideStringField;
+    ZaminDSrc: TDataSource;
+    GirovDSet: TOracleDataSet;
+    GirovDSetCREDITID: TFloatField;
+    GirovDSetPLEDGENAME: TWideStringField;
+    GirovDSetANYINFOTODISTING: TWideStringField;
+    GirovDSetREGISTRYNO: TWideStringField;
+    GirovDSetREGISTRYAGENCY: TWideStringField;
+    GirovDSetGQNAME: TWideStringField;
+    GirovDSetGQPASPNUM: TWideStringField;
+    GirovDSetGQPASPYER: TWideStringField;
+    GirovDSetGQPASPDATE: TDateTimeField;
+    GirovDSetGQADRESS: TWideStringField;
+    GirovDSetPLEDGEPRICE: TFloatField;
+    GirovDSetGQTELHOME: TWideStringField;
+    GirovDSetGQTELMOB: TWideStringField;
+    GirovDSetREYSTER: TWideStringField;
+    GirovDSrc: TDataSource;
+    DSSchedule: TDataSource;
+    Schedule: TOracleDataSet;
+    ScheduleID: TFloatField;
+    ScheduleCREDITID: TFloatField;
+    SchedulePAYMENTDATE: TDateTimeField;
+    SchedulePRINCIPAL: TFloatField;
+    ScheduleINTEREST: TFloatField;
+    ScheduleSM: TFloatField;
+    ScheduleSIRA: TFloatField;
+    ScheduleREST: TFloatField;
+    Payments: TOracleDataSet;
+    PaymentsSIRA: TFloatField;
+    PaymentsID: TFloatField;
+    PaymentsCREDITID: TFloatField;
+    PaymentsPAYDATE: TDateTimeField;
+    PaymentsPAYEDAMT: TFloatField;
+    PaymentsPAYEDINTAMT: TFloatField;
+    PaymentsPAYEDDUEAMT: TFloatField;
+    PaymentsPAYEDDUEINTAMT: TFloatField;
+    PaymentsPAYEDPENALTYAMT: TFloatField;
+    PaymentsSM: TFloatField;
+    DSPayments: TDataSource;
+    ReportDSrc: TDataSource;
+    PaymentReport: TOracleDataSet;
+    PaymentReportID: TFloatField;
+    PaymentReportNUMBEROFCREDIT: TWideStringField;
+    PaymentReportCUSTNAME: TWideStringField;
+    PaymentReportPAYDATE: TDateTimeField;
+    PaymentReportPAYEDAMT: TFloatField;
+    PaymentReportPAYEDINTAMT: TFloatField;
+    PaymentReportPAYEDDUEAMT: TFloatField;
+    PaymentReportPAYEDDUEINTAMT: TFloatField;
+    PaymentReportPAYEDPENALTYAMT: TFloatField;
+    PaymentReportDUEDAY: TFloatField;
+    PaymentReportNAME: TWideStringField;
+    ODSInfoROWNUM: TFloatField;
+    ODSInfoID: TFloatField;
+    ODSInfoCREDITID: TFloatField;
+    ODSInfoDAT: TDateTimeField;
+    ODSInfoUSERNAME: TWideStringField;
+    ODSInfoINFO1: TWideStringField;
+    ODSInfoDESCRIPTION: TWideStringField;
+    ODSInfoINFO: TWideMemoField;
+    DSExecutive: TDataSource;
+    ODSExecutive: TOracleDataSet;
+    DSCourtBody: TDataSource;
+    ODSCourtBody: TOracleDataSet;
+    procedure DataModuleCreate(Sender: TObject);
+    procedure DataModuleDestroy(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  DataModuleCourt: TDataModuleCourt;
+
+implementation
+
+{$R *.dfm}
+
+procedure TDataModuleCourt.DataModuleCreate(Sender: TObject);
+begin
+ODSCourt.Open;
+ODSInfo.Open;
+ODSPdf.Open;
+ODSGroupsSend.Open;
+end;
+
+procedure TDataModuleCourt.DataModuleDestroy(Sender: TObject);
+begin
+ODSCourt.CloseAll;
+ODSInfo.CloseAll;
+ODSPdf.CloseAll;
+ODSGroupsSend.CloseAll;
+end;
+
+end.

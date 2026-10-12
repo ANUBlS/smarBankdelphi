@@ -1,0 +1,146 @@
+object FrmCardTrRests: TFrmCardTrRests
+  Left = 232
+  Top = 210
+  Width = 393
+  Height = 256
+  BorderIcons = [biSystemMenu]
+  Color = clBtnFace
+  Font.Charset = RUSSIAN_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poScreenCenter
+  OnCanResize = FormCanResize
+  OnKeyPress = FormKeyPress
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 385
+    Height = 193
+    Align = alTop
+    BevelInner = bvRaised
+    BevelOuter = bvLowered
+    TabOrder = 0
+    object DBGridEh1: TDBGridEh
+      Left = 2
+      Top = 23
+      Width = 381
+      Height = 168
+      Align = alClient
+      DataSource = DMCorrectorCardPer.RestsDatSrc
+      FooterColor = clWindow
+      FooterFont.Charset = RUSSIAN_CHARSET
+      FooterFont.Color = clWindowText
+      FooterFont.Height = -11
+      FooterFont.Name = 'Azl Sans Serif'
+      FooterFont.Style = []
+      TabOrder = 0
+      TitleFont.Charset = RUSSIAN_CHARSET
+      TitleFont.Color = clWindowText
+      TitleFont.Height = -11
+      TitleFont.Name = 'Azl Sans Serif'
+      TitleFont.Style = []
+      Columns = <
+        item
+          EditButtons = <>
+          FieldName = 'HDATE'
+          Footers = <>
+          Title.Caption = 'Òאנטץ'
+          Title.Color = clNavy
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = []
+          Width = 67
+        end
+        item
+          EditButtons = <>
+          FieldName = 'REST'
+          Footers = <>
+          Title.Caption = 'Ãאכûד'
+          Title.Color = clNavy
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = []
+          Width = 67
+        end
+        item
+          EditButtons = <>
+          FieldName = 'INTREST'
+          Footers = <>
+          Title.Caption = ' % דאכûדû'
+          Title.Color = clNavy
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = []
+          Width = 66
+        end
+        item
+          EditButtons = <>
+          FieldName = 'PARTKEY'
+          Footers = <>
+          Title.Caption = 'part'
+          Title.Color = clNavy
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = []
+          Width = 36
+        end
+        item
+          EditButtons = <>
+          FieldName = 'cardsort'
+          Footers = <>
+          Title.Caption = 'Kart'
+          Title.Color = clNavy
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = []
+          Width = 117
+        end>
+    end
+    object DBNavigator1: TDBNavigator
+      Left = 2
+      Top = 2
+      Width = 381
+      Height = 21
+      DataSource = DMCorrectorCardPer.RestsDatSrc
+      Align = alTop
+      Flat = True
+      TabOrder = 1
+    end
+  end
+  object BitBtn1: TBitBtn
+    Left = 309
+    Top = 200
+    Width = 75
+    Height = 25
+    Caption = 'Áאüכא'
+    TabOrder = 1
+    OnClick = BitBtn1Click
+    Kind = bkClose
+  end
+  object NLSLocalizer1: TNLSLocalizer
+    Caption = 'Ãאכûדכאנ'
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    Left = 24
+    Top = 192
+  end
+end

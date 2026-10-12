@@ -1,0 +1,282 @@
+object DMWReport: TDMWReport
+  OldCreateOrder = False
+  OnCreate = DataModuleCreate
+  OnDestroy = DataModuleDestroy
+  Left = 192
+  Top = 107
+  Height = 480
+  Width = 696
+  object TemplatesDataSet: TOracleDataSet
+    Tag = 1
+    SQL.Strings = (
+      'select id,path,name from'
+      'sbcm_wr_templates'
+      'order by name')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = False
+    Active = False
+    Left = 32
+    Top = 32
+    object TemplatesDataSetID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object TemplatesDataSetPATH: TStringField
+      FieldName = 'PATH'
+      Size = 4000
+    end
+    object TemplatesDataSetNAME: TStringField
+      FieldName = 'NAME'
+      Required = True
+      Size = 255
+    end
+  end
+  object TemplatesDataSrc: TDataSource
+    DataSet = TemplatesDataSet
+    Left = 32
+    Top = 96
+  end
+  object DepositInfoDataSet: TOracleDataSet
+    Tag = 2
+    SQL.Strings = (
+      
+        'SELECT id#, customerid, name, opendate, closedate, amount, contr' +
+        'actno,'
+      '       interest, overdueinterest, personaltype'
+      '  FROM sbcm_wr_depositinfo'
+      'where id# = :ContractID')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    Variables.Data = {
+      03000000010000000B0000003A434F4E54524143544944030000000000000000
+      000000}
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = False
+    Active = False
+    Left = 152
+    Top = 32
+    object DepositInfoDataSetID: TFloatField
+      FieldName = 'ID#'
+      Required = True
+    end
+    object DepositInfoDataSetCUSTOMERID: TFloatField
+      FieldName = 'CUSTOMERID'
+    end
+    object DepositInfoDataSetNAME: TStringField
+      FieldName = 'NAME'
+      Size = 90
+    end
+    object DepositInfoDataSetOPENDATE: TDateTimeField
+      FieldName = 'OPENDATE'
+      Required = True
+    end
+    object DepositInfoDataSetCLOSEDATE: TDateTimeField
+      FieldName = 'CLOSEDATE'
+      Required = True
+    end
+    object DepositInfoDataSetAMOUNT: TFloatField
+      FieldName = 'AMOUNT'
+    end
+    object DepositInfoDataSetCONTRACTNO: TStringField
+      FieldName = 'CONTRACTNO'
+      Size = 64
+    end
+    object DepositInfoDataSetINTEREST: TFloatField
+      FieldName = 'INTEREST'
+    end
+    object DepositInfoDataSetOVERDUEINTEREST: TFloatField
+      FieldName = 'OVERDUEINTEREST'
+    end
+    object DepositInfoDataSetPERSONALTYPE: TStringField
+      FieldName = 'PERSONALTYPE'
+    end
+  end
+  object DepositInfoDataSrc: TDataSource
+    DataSet = DepositInfoDataSet
+    Left = 152
+    Top = 96
+  end
+  object BookmarksDataSet: TOracleDataSet
+    Tag = 2
+    SQL.Strings = (
+      'select  fieldid, bookmarkname'
+      'from sbcm_wr_bookmarks'
+      'where templateid=:templid'
+      '')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    Variables.Data = {
+      0300000001000000080000003A54454D504C4944030000000000000000000000}
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = False
+    Active = False
+    Left = 256
+    Top = 32
+  end
+  object BookmarksDataSrc: TDataSource
+    DataSet = BookmarksDataSet
+    Left = 256
+    Top = 96
+  end
+  object FieldsDataSet: TOracleDataSet
+    Tag = 2
+    SQL.Strings = (
+      'select id,fieldname,description'
+      'from sbcm_wr_fields'
+      '')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = False
+    Active = False
+    Left = 360
+    Top = 32
+    object FieldsDataSetID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object FieldsDataSetFIELDNAME: TStringField
+      FieldName = 'FIELDNAME'
+      Required = True
+      Size = 255
+    end
+    object FieldsDataSetDESCRIPTION: TStringField
+      FieldName = 'DESCRIPTION'
+      Size = 255
+    end
+  end
+  object FieldsDataSrc: TDataSource
+    Left = 360
+    Top = 96
+  end
+  object ReplaceDataSet: TOracleDataSet
+    Tag = 2
+    SQL.Strings = (
+      'SELECT'
+      '   B.TEMPLATEID , B.BOOKMARKNAME , A.FIELDNAME'
+      'FROM'
+      '   sbCM_WR_BOOKMARKS B'
+      ' , sbCM_WR_FIELDS A'
+      'WHERE'
+      '     (B.FIELDID = A.ID)'
+      '   AND templateid = :tid'
+      '   AND bookmarkname = :bname')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    Variables.Data = {
+      0300000002000000040000003A54494403000000000000000000000006000000
+      3A424E414D45050000000000000000000000}
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = False
+    Active = False
+    Left = 32
+    Top = 160
+  end
+end

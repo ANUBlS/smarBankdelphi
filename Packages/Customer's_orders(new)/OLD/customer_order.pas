@@ -1,0 +1,803 @@
+                                   {------------------------------------}
+                                   {(c) Smart Systems Technology Ltd.   }
+                                   {            2006                    }
+                                   {          Customer's Orders         }
+                                   {                   Kenan MEMMEDOV   }
+                                   {------------------------------------}
+unit customer_order;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActiveX, AxCtrls, customer_order__TLB, StdVcl, Buttons, StdCtrls,OracleData,Db, Grids,
+  DBGrids;
+
+type
+  Tcustomers_orders = class(TActiveForm, IActiveFormX)
+    GroupBox3: TGroupBox;
+    DBGrid1: TDBGrid;
+    GroupBox7: TGroupBox;
+    noedit: TEdit;
+    innEdit: TEdit;
+    nameEdit: TEdit;
+    open_datEdit: TEdit;
+    GroupBox1: TGroupBox;
+    SpeedButton1: TSpeedButton;
+    SpeedButton2: TSpeedButton;
+    SpeedButton3: TSpeedButton;
+    GroupBox4: TGroupBox;
+    SpeedButton9: TSpeedButton;
+    SpeedButton10: TSpeedButton;
+    SpeedButton6: TSpeedButton;
+    DBGrid2: TDBGrid;
+    procedure noeditChange(Sender: TObject);
+    procedure innEditChange(Sender: TObject);
+    procedure nameEditChange(Sender: TObject);
+    procedure open_datEditChange(Sender: TObject);
+    procedure DBGrid1CellClick(Column: TColumn);
+    procedure DBGrid1DblClick(Sender: TObject);
+    procedure DBGrid1KeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure DBGrid1TitleClick(Column: TColumn);
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure SpeedButton2Click(Sender: TObject);
+    procedure SpeedButton3Click(Sender: TObject);
+    procedure SpeedButton9Click(Sender: TObject);
+    procedure SpeedButton10Click(Sender: TObject);
+    procedure SpeedButton6Click(Sender: TObject);
+    procedure DBGrid2DblClick(Sender: TObject);
+    procedure DBGrid2TitleClick(Column: TColumn);
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure ActiveFormKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure innEditKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure innEditExit(Sender: TObject);
+    procedure innEditKeyPress(Sender: TObject; var Key: Char);
+    procedure noeditExit(Sender: TObject);
+    procedure noeditKeyPress(Sender: TObject; var Key: Char);
+    procedure nameEditExit(Sender: TObject);
+    procedure open_datEditExit(Sender: TObject);
+  private
+    { Private declarations }
+    FEvents: IActiveFormXEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+  public
+    { Public declarations }
+    procedure Initialize; override;
+  end;
+
+implementation
+
+uses ComObj, ComServ,sboapiDataModuleImpl, datamodule, customers_orders_arest__, all_orders__,
+  arxiv_orders__, m_edit_order___, q_report ;
+
+{$R *.DFM}
+
+{ TActiveFormX }
+
+procedure Tcustomers_orders.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_ActiveFormXPage); }
+end;
+
+procedure Tcustomers_orders.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as IActiveFormXEvents;
+end;
+
+procedure Tcustomers_orders.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function Tcustomers_orders.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function Tcustomers_orders.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function Tcustomers_orders.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function Tcustomers_orders.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function Tcustomers_orders.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function Tcustomers_orders.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function Tcustomers_orders.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function Tcustomers_orders.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function Tcustomers_orders.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function Tcustomers_orders.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function Tcustomers_orders.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function Tcustomers_orders.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function Tcustomers_orders.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function Tcustomers_orders.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function Tcustomers_orders.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function Tcustomers_orders.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function Tcustomers_orders.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function Tcustomers_orders.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure Tcustomers_orders._Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure Tcustomers_orders.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure Tcustomers_orders.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure Tcustomers_orders.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure Tcustomers_orders.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure Tcustomers_orders.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure Tcustomers_orders.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure Tcustomers_orders.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure Tcustomers_orders.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure Tcustomers_orders.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure Tcustomers_orders.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure Tcustomers_orders.Set_AxBorderStyle(Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure Tcustomers_orders.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure Tcustomers_orders.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure Tcustomers_orders.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure Tcustomers_orders.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure Tcustomers_orders.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure Tcustomers_orders.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure Tcustomers_orders.Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure Tcustomers_orders.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure Tcustomers_orders.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure Tcustomers_orders.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure Tcustomers_orders.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure Tcustomers_orders.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure Tcustomers_orders.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+procedure Tcustomers_orders.noeditChange(Sender: TObject);
+begin
+if noedit.Text<>'' then
+   datamodule1.cust.Locate
+   ('id',noedit.Text,[loCaseInsensitive, loPartialKey]);
+     DBGrid1.Options:=[dgRowSelect,dgAlwaysShowEditor,dgTitles,dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs,dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit, dgMultiSelect];
+   datamodule1.acc_inn.setvariable('ac',datamodule1.cust.fieldbyname('inn').asstring);
+     datamodule1.acc_inn.open;
+    datamodule1.acc_inn.refresh;
+
+end;
+
+procedure Tcustomers_orders.innEditChange(Sender: TObject);
+begin
+ if innedit.Text<>'' then
+   datamodule1.cust.Locate
+   ('inn',innedit.Text,[loCaseInsensitive, loPartialKey]);
+     DBGrid1.Options:=[dgRowSelect,dgAlwaysShowEditor,dgTitles,dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs,dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit, dgMultiSelect];
+  datamodule1.acc_inn.setvariable('ac',datamodule1.cust.fieldbyname('inn').asstring);
+     datamodule1.acc_inn.open;
+    datamodule1.acc_inn.refresh;
+
+end;
+
+procedure Tcustomers_orders.nameEditChange(Sender: TObject);
+begin
+  if nameedit.Text<>'' then
+    datamodule1.cust.Locate
+     ('name',nameedit.Text,[loCaseInsensitive, loPartialKey]);
+      DBGrid1.Options:=[dgRowSelect,dgAlwaysShowEditor,dgTitles,dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs,dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit, dgMultiSelect];
+     datamodule1.acc_inn.setvariable('ac',datamodule1.cust.fieldbyname('inn').asstring);
+     datamodule1.acc_inn.open;
+    datamodule1.acc_inn.refresh;
+
+end;
+
+procedure Tcustomers_orders.open_datEditChange(Sender: TObject);
+begin
+   if open_datedit.Text<>'' then
+     datamodule1.cust.Locate
+      ('open_dat',open_datedit.Text,[loCaseInsensitive, loPartialKey]);
+        DBGrid1.Options:=[dgRowSelect,dgAlwaysShowEditor,dgTitles,dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs,dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit, dgMultiSelect];
+          datamodule1.acc_inn.setvariable('ac',datamodule1.cust.fieldbyname('inn').asstring);
+     datamodule1.acc_inn.open;
+    datamodule1.acc_inn.refresh;
+
+end;
+
+procedure Tcustomers_orders.DBGrid1CellClick(Column: TColumn);
+begin
+datamodule1.acc_inn.setvariable('ac',datamodule1.cust.fieldbyname('inn').asstring);
+  datamodule1.acc_inn.open;
+  datamodule1.acc_inn.refresh;
+
+end;
+
+procedure Tcustomers_orders.DBGrid1DblClick(Sender: TObject);
+begin
+{customers_orders_arest :=Tcustomers_orders_arest.Create(self);
+     with datamodule1.acc_inn,customers_orders_arest do
+       edit1.text :=fieldbyname('acc_inn').asstring;
+       if customers_orders_arest.edit1.text <>'' then
+datamodule1.serach_cust.setvariable('cust',strtoint(customers_orders_arest.edit1.text));
+ datamodule1.serach_cust.open;
+ datamodule1.serach_cust.refresh;
+ datamodule1.order.setvariable('order_s',customers_orders_arest.edit1.text);
+datamodule1.order.open;
+datamodule1.order.refresh;
+datamodule1.search_acc.setvariable('acc',datamodule1.serach_cust.fieldbyname('id').asinteger);
+  datamodule1.search_acc.open;
+   datamodule1.search_acc.refresh;
+   customers_orders_arest.edit1.enabled :=false; }
+
+      customers_orders_arest :=Tcustomers_orders_arest.create(self);
+    with datamodule1.cust,customers_orders_arest do begin
+     edit1.text :=fieldbyname('inn').asstring;
+       if customers_orders_arest.edit1.text <>'' then
+    datamodule1.serach_cust.setvariable('cust',customers_orders_arest.edit1.text);
+ datamodule1.serach_cust.open;
+ datamodule1.serach_cust.refresh;
+ datamodule1.order.setvariable('order_s',customers_orders_arest.edit1.text);
+datamodule1.order.open;
+datamodule1.order.refresh;
+datamodule1.search_acc.setvariable('acc',datamodule1.serach_cust.fieldbyname('id').asinteger);
+  datamodule1.search_acc.open;
+   datamodule1.search_acc.refresh;
+    customers_orders_arest.edit1.enabled :=false;
+     customers_orders_arest.dbedit1.enabled :=false;
+      customers_orders_arest.dbedit2.enabled :=false;
+       customers_orders_arest.dbedit3.enabled :=false;
+          customers_orders_arest.dbedit4.enabled :=false;
+          customers_orders_arest.dbedit1.color :=clmenu;
+          customers_orders_arest.dbedit2.color :=clmenu;
+          customers_orders_arest.dbedit3.color :=clmenu;
+          customers_orders_arest.dbedit4.color :=clmenu;
+    customers_orders_arest.edit1.color :=clmenu;
+     customers_orders_arest.showmodal;
+
+
+  end;
+
+
+
+end;
+
+procedure Tcustomers_orders.DBGrid1KeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+if key=vk_insert then SpeedButton2Click(self);
+
+end;
+
+procedure Tcustomers_orders.DBGrid1TitleClick(Column: TColumn);
+
+var
+   TitleName :string;
+begin
+ TitleName :=Column.FieldName;
+  with datamodule1.cust do
+   begin
+    SetVariable('Title',TitleName);
+    Refresh;
+   end;  end;
+
+
+
+
+procedure Tcustomers_orders.SpeedButton1Click(Sender: TObject);
+begin
+try
+all_orders :=Tall_orders.Create(self);
+with datamodule1.cust_orders do
+ if Active =false then Open else Refresh;
+  all_orders.Showmodal;
+  finally
+  all_orders.Release;
+
+end;end;
+
+
+procedure Tcustomers_orders.SpeedButton2Click(Sender: TObject);
+begin
+      customers_orders_arest :=Tcustomers_orders_arest.create(self);
+    with datamodule1.cust,customers_orders_arest do begin
+     edit1.text :=fieldbyname('inn').asstring;
+       if customers_orders_arest.edit1.text <>'' then
+    datamodule1.serach_cust.setvariable('cust',customers_orders_arest.edit1.text);
+ datamodule1.serach_cust.open;
+ datamodule1.serach_cust.refresh;
+ datamodule1.order.setvariable('order_s',customers_orders_arest.edit1.text);
+datamodule1.order.open;
+datamodule1.order.refresh;
+datamodule1.search_acc.setvariable('acc',datamodule1.serach_cust.fieldbyname('id').asinteger);
+  datamodule1.search_acc.open;
+   datamodule1.search_acc.refresh;
+    customers_orders_arest.edit1.enabled :=false;
+     customers_orders_arest.dbedit1.enabled :=false;
+      customers_orders_arest.dbedit2.enabled :=false;
+       customers_orders_arest.dbedit3.enabled :=false;
+          customers_orders_arest.dbedit4.enabled :=false;
+          customers_orders_arest.dbedit1.color :=clmenu;
+          customers_orders_arest.dbedit2.color :=clmenu;
+          customers_orders_arest.dbedit3.color :=clmenu;
+          customers_orders_arest.dbedit4.color :=clmenu;
+    customers_orders_arest.edit1.color :=clmenu;
+
+     customers_orders_arest.showmodal;
+
+
+
+
+end;   end;
+
+
+procedure Tcustomers_orders.SpeedButton3Click(Sender: TObject);
+begin
+try
+  arxiv_orders :=Tarxiv_orders.Create(self);
+  with datamodule1.arxiv_order do
+   if Active =false then Open else Refresh;
+  arxiv_orders.Showmodal;
+ finally
+  arxiv_orders.Release;
+end;
+
+end;
+
+
+procedure Tcustomers_orders.SpeedButton9Click(Sender: TObject);
+begin
+  {form1.isUpdate :=true;}
+
+  m_edit_order :=Tm_edit_order.Create(self);
+     with datamodule1.acc_inn,m_edit_order do
+   begin
+    if IsEmpty then
+    begin
+     ShowMessage('Hec bir serencam qeyd olunmayib!');
+     Exit;
+    end
+  else
+    editc_acc.text :=FieldByName('c_acc').AsString;
+    Editc_name.text :=FieldByName('c_name').AsString;
+    Editc_voin.text :=FieldByName('c_inn').AsString;
+
+    editname.text :=FieldByName('b_name').AsString;
+    editcode.text :=FieldByName('b_code').AsString;
+    Editvoin.text :=FieldByName('b_inn').AsString;
+    EditAcc.text :=FieldByName('b_acc').AsString;
+    EditSwift.text :=FieldByName('b_swift').AsString;
+
+    Editm_name.text :=FieldByName('m_name').AsString;
+    Editm_acc.text :=FieldByName('m_acc').AsString;
+    Editm_voin.text :=FieldByName('m_inn').AsString;
+
+    Editn_mon.text :=FieldByName('n_mon').AsString;
+    Editw_mon.text :=FieldByName('w_mon').AsString;
+    Editcon.Text :=FieldByName('content').AsString;
+    Editedv.text :=FieldByName('edv').AsString;
+    Editedv_f.text :=FieldByName('edv_f').AsString;
+    editedv_t.text :=FieldByName('edv_c').AsString;
+    editpro.text :=FieldByName('pro').AsString;
+    editpro_p.text :=FieldByName('pro_f').AsString;
+    editpro_t.text :=FieldByName('pro_c').AsString;
+    editnumber.text :=FieldByName('pnum').AsString;
+    editval.text :=FieldByName('val').AsString;
+    editdate.DateTime :=FieldByName('ddate').AsDateTime;
+    editchief.text :=FieldByName('chief').AsString;
+    edithead.Text :=FieldByName('head').AsString;
+    edit1.text :=fieldbyname('acc_inn').asstring;
+    m_edit_order.edit1.Enabled :=false;
+    m_edit_order.edit1.color :=clmenu;
+
+  m_edit_order.Showmodal;
+
+end;
+      end;
+
+
+
+
+procedure Tcustomers_orders.SpeedButton10Click(Sender: TObject);
+var
+    v_pnum: String;
+    v_id:integer;
+begin
+ with datamodule1.acc_inn do
+   begin
+    if IsEmpty then
+    begin
+     ShowMessage('Hec bir serencam qeyd olunmayib!');
+     Exit;
+    end
+    else
+datamodule1.acc_inn.active :=true;
+ v_pnum :=datamodule1.acc_inn.FieldByName('PNUM').AsString;
+  v_id :=datamodule1.acc_inn.FieldByName('id').asinteger;
+ if MessageDlg(Format('¹%s serencam silinsin?',[v_pnum]),mtConfirmation,mbYesNoCancel,0)=mrYes then
+ with datamodule1.acc_inn,datamodule1.customer_orders do
+  begin
+     CallProcedure('delete_order',[v_id]);
+   Refresh; end;datamodule1.acc_inn.refresh;
+     end;
+              end;
+
+
+
+
+procedure Tcustomers_orders.SpeedButton6Click(Sender: TObject);
+  var
+    pnum :String;
+      begin
+   with datamodule1.acc_inn do
+      begin
+   if IsEmpty then
+      begin
+  ShowMessage('Hec bir serencam qeyd olunmayib!');
+      Exit;
+      end
+      else
+  pnum :=datamodule1.acc_inn.FieldByName('pnum').AsString;
+   try
+     with QuickReport1,datamodule1.acc_inn do
+       begin
+         Filter:=' pnum= '+pnum;
+           Filtered :=true;
+               Preview;
+                end;
+            finally
+         datamodule1.acc_inn.Filtered :=false;
+       end;
+        end;
+         end;
+
+
+procedure Tcustomers_orders.DBGrid2DblClick(Sender: TObject);
+begin
+  m_edit_order :=Tm_edit_order.Create(self);
+     with datamodule1.acc_inn,m_edit_order do
+   begin
+    if IsEmpty then
+    begin
+     ShowMessage('Hec bir serencam qeyd olunmayib!');
+     Exit;
+    end
+  else
+    editc_acc.text :=FieldByName('c_acc').AsString;
+    Editc_name.text :=FieldByName('c_name').AsString;
+    Editc_voin.text :=FieldByName('c_inn').AsString;
+
+    editname.text :=FieldByName('b_name').AsString;
+    editcode.text :=FieldByName('b_code').AsString;
+    Editvoin.text :=FieldByName('b_inn').AsString;
+    EditAcc.text :=FieldByName('b_acc').AsString;
+    EditSwift.text :=FieldByName('b_swift').AsString;
+
+    Editm_name.text :=FieldByName('m_name').AsString;
+    Editm_acc.text :=FieldByName('m_acc').AsString;
+    Editm_voin.text :=FieldByName('m_inn').AsString;
+
+    Editn_mon.text :=FieldByName('n_mon').AsString;
+    Editw_mon.text :=FieldByName('w_mon').AsString;
+    Editcon.Text :=FieldByName('content').AsString;
+    Editedv.text :=FieldByName('edv').AsString;
+    Editedv_f.text :=FieldByName('edv_f').AsString;
+    editedv_t.text :=FieldByName('edv_c').AsString;
+    editpro.text :=FieldByName('pro').AsString;
+    editpro_p.text :=FieldByName('pro_f').AsString;
+    editpro_t.text :=FieldByName('pro_c').AsString;
+    editnumber.text :=FieldByName('pnum').AsString;
+    editval.text :=FieldByName('val').AsString;
+    editdate.DateTime :=FieldByName('ddate').AsDateTime;
+    editchief.text :=FieldByName('chief').AsString;
+    edithead.Text :=FieldByName('head').AsString;
+    edit1.text :=fieldbyname('acc_inn').asstring;
+    m_edit_order.edit1.Enabled :=false;
+    m_edit_order.edit1.color :=clmenu;
+  m_edit_order.Showmodal;
+
+end;
+
+end;
+
+
+
+procedure Tcustomers_orders.DBGrid2TitleClick(Column: TColumn);
+var
+   TitleName :string;
+begin
+ TitleName :=Column.FieldName;
+  with datamodule1.acc_inn do
+   begin
+    SetVariable('Title',TitleName);
+    Refresh;
+   end;
+end;
+
+
+procedure Tcustomers_orders.ActiveFormCreate(Sender: TObject);
+begin
+ datamodule1 :=tdatamodule1.create(self);
+      datamodule1.cust.open;
+      datamodule1.cust_orders.open;
+      datamodule1.sear_inn.open;
+     
+       QuickReport1 :=tQuickReport1.Create(self);
+      DBGrid1.Options:=[dgRowSelect,dgAlwaysShowEditor,dgTitles,dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs,dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit, dgMultiSelect];
+     
+end;
+
+procedure Tcustomers_orders.ActiveFormKeyDown(Sender: TObject;
+  var Key: Word; Shift: TShiftState);
+begin
+if key=vk_insert then  SpeedButton1Click(self);
+
+end;
+
+procedure Tcustomers_orders.innEditKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+
+
+if key=vk_insert then SpeedButton2Click(self);
+
+end;
+
+procedure Tcustomers_orders.innEditExit(Sender: TObject);
+begin
+(Sender as tedit).text :='';        end;
+
+procedure Tcustomers_orders.innEditKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+ if not (key in ['0'..'9','.',#8]) then
+    key :=#0;
+
+end;
+
+procedure Tcustomers_orders.noeditExit(Sender: TObject);
+begin
+(Sender as tedit).text :=''; end;
+
+
+
+procedure Tcustomers_orders.noeditKeyPress(Sender: TObject; var Key: Char);
+begin
+ if not (key in ['0'..'9','.',#8]) then
+    key :=#0;
+
+end;
+
+procedure Tcustomers_orders.nameEditExit(Sender: TObject);
+begin
+ (Sender as tedit).text :='';    end;
+
+
+
+procedure Tcustomers_orders.open_datEditExit(Sender: TObject);
+begin
+(Sender as tedit).text :=''; end;
+
+
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    Tcustomers_orders,
+    Class_customers_orders,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

@@ -1,0 +1,241 @@
+﻿	<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+		<PropertyGroup>
+			<ProjectGuid>{BF2897F7-A931-4145-8D41-4ECE1F2FF7E9}</ProjectGuid>
+			<MainSource>customer_operations.dpr</MainSource>
+			<Base>True</Base>
+			<Config Condition="'$(Config)'==''">Debug</Config>
+			<Platform>Win32</Platform>
+			<AppType>Library</AppType>
+			<FrameworkType>VCL</FrameworkType>
+			<DCC_DCCCompiler>DCC32</DCC_DCCCompiler>
+			<ProjectVersion>12.3</ProjectVersion>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Config)'=='Base' or '$(Base)'!=''">
+			<Base>true</Base>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Config)'=='Release' or '$(Cfg_1)'!=''">
+			<Cfg_1>true</Cfg_1>
+			<CfgParent>Base</CfgParent>
+			<Base>true</Base>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Config)'=='Debug' or '$(Cfg_2)'!=''">
+			<Cfg_2>true</Cfg_2>
+			<CfgParent>Base</CfgParent>
+			<Base>true</Base>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Base)'!=''">
+			<DCC_ImageBase>00400000</DCC_ImageBase>
+			<DCC_UsePackage>Vcl;Vcldb;dclbde;sboapi50;SBCommon50;sbplg50;doa41dXE;Ehlib50;SearchCB;SBTranslate;SBCMVcl50;SBExcelExporter;QR5RunDXE</DCC_UsePackage>
+			<DCC_WriteableConstants>true</DCC_WriteableConstants>
+			<DCC_ExeOutput>D:\Smart-Bank\Bin</DCC_ExeOutput>
+			<DCC_Alignment>1</DCC_Alignment>
+			<DCC_UnitAlias>WinTypes=Windows;WinProcs=Windows;DbiTypes=BDE;DbiProcs=BDE;DbiErrs=BDE;WinTypes=Windows;WinProcs=Windows;$(DCC_UnitAlias)</DCC_UnitAlias>
+			<UsePackages>true</UsePackages>
+			<DCC_N>true</DCC_N>
+			<DCC_S>false</DCC_S>
+			<GenDll>true</GenDll>
+			<DCC_K>false</DCC_K>
+			<DCC_SymbolReferenceInfo>1</DCC_SymbolReferenceInfo>
+			<DCC_E>false</DCC_E>
+			<DCC_F>false</DCC_F>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Cfg_1)'!=''">
+			<DCC_LocalDebugSymbols>false</DCC_LocalDebugSymbols>
+			<DCC_Define>RELEASE;$(DCC_Define)</DCC_Define>
+			<DCC_SymbolReferenceInfo>0</DCC_SymbolReferenceInfo>
+			<DCC_DebugInformation>false</DCC_DebugInformation>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Cfg_2)'!=''">
+			<DCC_Define>DEBUG;$(DCC_Define)</DCC_Define>
+			<DCC_Optimize>false</DCC_Optimize>
+			<DCC_GenerateStackFrames>true</DCC_GenerateStackFrames>
+		</PropertyGroup>
+		<ItemGroup>
+			<DelphiCompile Include="customer_operations.dpr">
+				<MainSource>MainSource</MainSource>
+			</DelphiCompile>
+			<DCCReference Include="customer_operations_TLB.pas"/>
+			<DCCReference Include="customers_operation_impl.pas">
+				<Form>CO_Main</Form>
+				<DesignClass>TActiveForm</DesignClass>
+				<CoClasses>ActiveFormX</CoClasses>
+			</DCCReference>
+			<DCCReference Include="CO_datamod_impl.pas">
+				<Form>CO_DataMod</Form>
+				<DesignClass>TDataModule</DesignClass>
+			</DCCReference>
+			<DCCReference Include="co_report_unit.pas">
+				<Form>FormReport</Form>
+			</DCCReference>
+			<DCCReference Include="co_st_check.pas">
+				<Form>CO_St_Form</Form>
+			</DCCReference>
+			<DCCReference Include="co_memorial.pas">
+				<Form>CO_MemorialForm</Form>
+			</DCCReference>
+			<DCCReference Include="Rep_unit.pas">
+				<Form>FormRep</Form>
+			</DCCReference>
+			<DCCReference Include="RepR_unit.pas">
+				<Form>FormRepR</Form>
+			</DCCReference>
+			<DCCReference Include="transview_unit.pas">
+				<Form>FormTransView</Form>
+			</DCCReference>
+			<DCCReference Include="CO_Statement_impl.pas">
+				<Form>CO_Statement_Form</Form>
+			</DCCReference>
+			<DCCReference Include="CO_Interval_unit.pas">
+				<Form>FormInterval</Form>
+			</DCCReference>
+			<DCCReference Include="forms.pas"/>
+			<DCCReference Include="MemorialRep.pas">
+				<Form>CO_MemorialRep</Form>
+				<DesignClass>TQuickRep</DesignClass>
+			</DCCReference>
+			<DCCReference Include="CO_MemorialRep1_unit.pas">
+				<Form>CO_MemorialRep1</Form>
+				<DesignClass>TQuickRep</DesignClass>
+			</DCCReference>
+			<DCCReference Include="CO_Choose_unit.pas">
+				<Form>CO_Choose</Form>
+			</DCCReference>
+			<DCCReference Include="CO_In_Unit.pas">
+				<Form>CO_TransTypeIncOut</Form>
+			</DCCReference>
+			<DCCReference Include="FormAcc_Unit.pas">
+				<Form>FormAccount</Form>
+			</DCCReference>
+			<DCCReference Include="CO_reportUnit.pas">
+				<Form>CO_Report</Form>
+				<DesignClass>TQuickRep</DesignClass>
+			</DCCReference>
+			<DCCReference Include="CurrencyToHR_Azeri_Impl.pas"/>
+			<DCCReference Include="CO_AccFlags.pas">
+				<Form>AccFlags</Form>
+			</DCCReference>
+			<DCCReference Include="CO_AccSettings_Unit.pas">
+				<Form>CO_AccSettings</Form>
+			</DCCReference>
+			<DCCReference Include="P_AccState_Unit.pas">
+				<Form>P_AccState</Form>
+			</DCCReference>
+			<DCCReference Include="P_AccTransaction_Unit.pas">
+				<Form>FormAccTransaction</Form>
+			</DCCReference>
+			<DCCReference Include="P_Interval_Unit.pas">
+				<Form>P_Interval</Form>
+			</DCCReference>
+			<DCCReference Include="CO_Transact_Unitp.pas">
+				<Form>CO_Transactions</Form>
+			</DCCReference>
+			<DCCReference Include="co_properties_unit.pas">
+				<Form>co_properties</Form>
+			</DCCReference>
+			<DCCReference Include="UnitCustProps.pas">
+				<Form>FrmCustProps</Form>
+			</DCCReference>
+			<DCCReference Include="CustInfoFormImpl.pas">
+				<Form>CustomerInfoForm</Form>
+			</DCCReference>
+			<DCCReference Include="..\commonforms\uAccViewFormImpl.pas">
+				<Form>frmAccInfo</Form>
+			</DCCReference>
+			<DCCReference Include="..\commonforms\uTrViewFormImpl.pas">
+				<Form>frmTrView</Form>
+			</DCCReference>
+			<DCCReference Include="UnitBProc.pas">
+				<Form>FormBProc</Form>
+			</DCCReference>
+			<DCCReference Include="co_Order_Rep_unit.pas">
+				<Form>QRep_Order</Form>
+				<DesignClass>TQuickRep</DesignClass>
+			</DCCReference>
+			<DCCReference Include="co_order_qrep_unit.pas">
+				<Form>QuickRep_Order</Form>
+				<DesignClass>TQuickRep</DesignClass>
+			</DCCReference>
+			<DCCReference Include="BookmarkSetup.pas">
+				<Form>CO_BookmarkSetup</Form>
+			</DCCReference>
+			<DCCReference Include="CO_TemplateAddEditUnt.pas">
+				<Form>CO_TemplAddEditForm</Form>
+			</DCCReference>
+			<DCCReference Include="CO_BookmarkAddEditunt.pas">
+				<Form>CO_BookmarkAddEditForm</Form>
+			</DCCReference>
+			<DCCReference Include="CO_frmWReportImpl.pas">
+				<Form>CO_frmWReport</Form>
+			</DCCReference>
+			<DCCReference Include="UnitOrderInfo.pas">
+				<Form>FormOrderInfo</Form>
+			</DCCReference>
+			<RidlCompile Include="customer_operations.ridl"/>
+			<BuildConfiguration Include="Debug">
+				<Key>Cfg_2</Key>
+				<CfgParent>Base</CfgParent>
+			</BuildConfiguration>
+			<BuildConfiguration Include="Base">
+				<Key>Base</Key>
+			</BuildConfiguration>
+			<BuildConfiguration Include="Release">
+				<Key>Cfg_1</Key>
+				<CfgParent>Base</CfgParent>
+			</BuildConfiguration>
+		</ItemGroup>
+		<Import Condition="Exists('$(BDS)\Bin\CodeGear.Delphi.Targets')" Project="$(BDS)\Bin\CodeGear.Delphi.Targets"/>
+		<Import Condition="Exists('$(APPDATA)\Embarcadero\$(BDSAPPDATABASEDIR)\$(PRODUCTVERSION)\UserTools.proj')" Project="$(APPDATA)\Embarcadero\$(BDSAPPDATABASEDIR)\$(PRODUCTVERSION)\UserTools.proj"/>
+		<ProjectExtensions>
+			<Borland.Personality>Delphi.Personality.12</Borland.Personality>
+			<Borland.ProjectType>VCLApplication</Borland.ProjectType>
+			<BorlandProject>
+				<Delphi.Personality>
+					<Source>
+						<Source Name="MainSource">customer_operations.dpr</Source>
+					</Source>
+					<Parameters>
+						<Parameters Name="RunParams">/LocalIniSourceLocation=winini:\Smart-Bank\Bin\SBLocal.ini /SystemIniSourceLocation=winini:\Smart-Bank\Bin\SmartBank.ini</Parameters>
+						<Parameters Name="HostApplication">D:\Smart-Bank\Bin\SmartBank.exe</Parameters>
+					</Parameters>
+					<Language>
+						<Language Name="ProjectLang">$00000409</Language>
+					</Language>
+					<VersionInfo>
+						<VersionInfo Name="IncludeVerInfo">False</VersionInfo>
+						<VersionInfo Name="AutoIncBuild">False</VersionInfo>
+						<VersionInfo Name="MajorVer">1</VersionInfo>
+						<VersionInfo Name="MinorVer">0</VersionInfo>
+						<VersionInfo Name="Release">0</VersionInfo>
+						<VersionInfo Name="Build">0</VersionInfo>
+						<VersionInfo Name="Debug">False</VersionInfo>
+						<VersionInfo Name="PreRelease">False</VersionInfo>
+						<VersionInfo Name="Special">False</VersionInfo>
+						<VersionInfo Name="Private">False</VersionInfo>
+						<VersionInfo Name="DLL">True</VersionInfo>
+						<VersionInfo Name="Locale">1033</VersionInfo>
+						<VersionInfo Name="CodePage">1252</VersionInfo>
+					</VersionInfo>
+					<VersionInfoKeys>
+						<VersionInfoKeys Name="CompanyName"/>
+						<VersionInfoKeys Name="FileDescription"/>
+						<VersionInfoKeys Name="FileVersion">1.0.0.0</VersionInfoKeys>
+						<VersionInfoKeys Name="InternalName"/>
+						<VersionInfoKeys Name="LegalCopyright"/>
+						<VersionInfoKeys Name="LegalTrademarks"/>
+						<VersionInfoKeys Name="OriginalFilename"/>
+						<VersionInfoKeys Name="ProductName"/>
+						<VersionInfoKeys Name="ProductVersion">1.0.0.0</VersionInfoKeys>
+						<VersionInfoKeys Name="Comments"/>
+						<VersionInfoKeys Name="OleSelfRegister">1</VersionInfoKeys>
+					</VersionInfoKeys>
+				</Delphi.Personality>
+				<Platforms>
+					<Platform value="Win32">True</Platform>
+				</Platforms>
+				<ActiveXProjectInfo>
+					<version>1</version>
+				</ActiveXProjectInfo>
+			</BorlandProject>
+			<ProjectFileVersion>12</ProjectFileVersion>
+		</ProjectExtensions>
+	</Project>

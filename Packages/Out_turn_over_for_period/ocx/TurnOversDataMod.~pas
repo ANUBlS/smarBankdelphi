@@ -1,0 +1,65 @@
+unit TurnOversDataMod;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, OracleData;
+
+type
+  Tout_datamodule = class(TDataModule)
+    CurrencyData: TOracleDataSet;
+    CurrencyDataCURRENCYID: TIntegerField;
+    CurrencyDataCURRLNAME: TStringField;
+    BranchData: TOracleDataSet;
+    BranchDataBRANCHID: TFloatField;
+    BranchDataBRANCHNAME: TStringField;
+    DataSrcCurrency: TDataSource;
+    DataSrcBranch: TDataSource;
+    TurnOversData: TOracleDataSet;
+    TurnOversDataACCOUNTID: TFloatField;
+    TurnOversDataACCNO: TStringField;
+    TurnOversDataCURRENCYID: TIntegerField;
+    TurnOversDataBALANCENO: TFloatField;
+    TurnOversDataBEGINACTIVE: TFloatField;
+    TurnOversDataLBEGINACTIVE: TFloatField;
+    TurnOversDataBEGINPASSIVE: TFloatField;
+    TurnOversDataLBEGINPASSIVE: TFloatField;
+    TurnOversDataDTURNOVER: TFloatField;
+    TurnOversDataLDTURNOVER: TFloatField;
+    TurnOversDataCTURNOVER: TFloatField;
+    TurnOversDataLCTURNOVER: TFloatField;
+    TurnOversDataENDACTIVE: TFloatField;
+    TurnOversDataLENDACTIVE: TFloatField;
+    TurnOversDataENDPASSIVE: TFloatField;
+    TurnOversDataLENDPASSIVE: TFloatField;
+    TurnOversDataACC_NAME: TStringField;
+    TurnOversDataBRANCHID: TIntegerField;
+    DataSrcTurnOvers: TDataSource;
+    SYSDAT: TOracleDataSet;
+    SYSDATTEK_DAT: TDateTimeField;
+    PeriodPrefixData: TOracleDataSet;
+    PeriodPrefixDataPERIODPREFIX: TDateTimeField;
+    BankInfo: TOracleDataSet;
+    BankInfoBANK: TStringField;
+    BankInfoINN: TStringField;
+    BankInfoLOGO: TBlobField;
+    BankInfoMANAGERTITLE: TStringField;
+    BankInfoACCOUNTANTTITLE: TStringField;
+    BankInfoMANAGER: TStringField;
+    BankInfoACCOUNTANT: TStringField;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  out_datamodule: Tout_datamodule;
+
+implementation
+
+uses sboapiDataModuleImpl;
+{$R *.DFM}
+
+end.

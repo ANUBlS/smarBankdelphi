@@ -1,0 +1,915 @@
+unit AboutBanksImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActiveX, AxCtrls, AboutBanksProj_TLB, StdVcl, StdCtrls, ExtCtrls, Grids,
+  DBGrids, DBCtrls,Db, Buttons,
+  IdHTTP,IdSSL, IdSSLOpenSSL, IdServerIOHandler, xmldom, XMLIntf, msxmldom, XMLDoc,
+  Oracle, OracleData;
+
+type
+  TAboutBanks = class(TActiveForm, IAboutBanks)
+    DBBanksViewer: TDBGrid;
+    Panel1: TPanel;
+    DBNavigator1: TDBNavigator;
+    Panel2: TPanel;
+    Panel3: TPanel;
+    Panel4: TPanel;
+    Panel5: TPanel;
+    Panel6: TPanel;
+    StaticText1: TStaticText;
+    StaticText2: TStaticText;
+    StaticText3: TStaticText;
+    StaticText4: TStaticText;
+    EditBANKCODE: TEdit;
+    EditName: TEdit;
+    EditKRNO: TEdit;
+    Panel7: TPanel;
+    StaticText5: TStaticText;
+    EditInn: TEdit;
+    SpeedButton1: TSpeedButton;
+    Panel8: TPanel;
+    StaticText6: TStaticText;
+    EditSWIFT: TEdit;
+    EditSubKRNO: TEdit;
+    Panel9: TPanel;
+    EditLICENSE_DATE: TEdit;
+    Panel10: TPanel;
+    EditTAX_REGCODE: TEdit;
+    StaticText8: TStaticText;
+    StaticText7: TStaticText;
+    Panel11: TPanel;
+    CheckBox1: TCheckBox;
+    Memo1: TMemo;
+    SpeedButton2: TSpeedButton;
+    OpenDialog1: TOpenDialog;
+    XMLDocument1: TXMLDocument;
+    OracleQuery1: TOracleQuery;
+    OracleDataSet1: TOracleDataSet;
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure DBBanksViewerTitleClick(Column: TColumn);
+    procedure EditBANKCODEExit(Sender: TObject);
+    procedure EditBANKCODChange(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure EditNameChange(Sender: TObject);
+    procedure EditNameExit(Sender: TObject);
+    procedure EditKRNOChange(Sender: TObject);
+    procedure EditKRNOExit(Sender: TObject);
+    procedure EditInnChange(Sender: TObject);
+    procedure EditInnExit(Sender: TObject);
+    procedure EditSWIFTExit(Sender: TObject);
+    procedure EditSWIFTChange(Sender: TObject);
+    procedure EditSubKRNOChange(Sender: TObject);
+    procedure EditSubKRNOExit(Sender: TObject);
+    procedure EditTAX_REGCODEExit(Sender: TObject);
+    procedure EditTAX_REGCODEChange(Sender: TObject);
+    procedure CheckBox1Click(Sender: TObject);
+    procedure SpeedButton2Click(Sender: TObject);
+  private
+    { Private declarations }
+    FEvents: IAboutBanksEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+  public
+    { Public declarations }
+    procedure MouseWheelHandler(var Message: TMessage); override;
+    procedure Initialize; override;
+  end;
+ var
+ p_Code,
+p_SWIFTBI,
+p_Name ,
+p_CorAccountAZN,
+p_CorAccountEUR,
+p_CorAccountGBP,
+p_CorAccountUSD,
+p_SubCorAccountLVPCSS ,
+p_SubCorAccountIPS,
+p_TaxNumber,
+p_Address,
+p_PhoneNumbe,
+p_valAZN,
+p_valUSD,
+p_valEUR,
+p_valGBP:string;
+implementation
+
+uses ComObj, ComServ, BanksDataModule, UntQRPBanks,sboapiDataModuleImpl, SBTranslateProc;
+
+{$R *.DFM}
+
+{ TAboutBanks }
+
+procedure TAboutBanks.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_AboutBanksPage); }
+end;
+
+procedure TAboutBanks.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as IAboutBanksEvents;
+end;
+
+procedure TAboutBanks.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TAboutBanks.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TAboutBanks.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TAboutBanks.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TAboutBanks.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TAboutBanks.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TAboutBanks.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TAboutBanks.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TAboutBanks.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TAboutBanks.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TAboutBanks.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TAboutBanks.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TAboutBanks.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TAboutBanks.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TAboutBanks.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TAboutBanks.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TAboutBanks.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TAboutBanks.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TAboutBanks.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TAboutBanks._Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TAboutBanks.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TAboutBanks.CheckBox1Click(Sender: TObject);
+var
+  FName :string;
+begin
+
+
+EditName.Text:='';
+EditBANKCODE.Text:='';
+EditSwift.Text:=''         ;
+EditInn.Text:=''      ;
+EditTAX_REGCODE.Text:=''       ;
+EditKRNO.Text:='' ;
+EditSubKRNO.Text:='';
+EditLICENSE_DATE.Text:=''      ;
+
+
+DataModuleBanks.Banks.Close;
+         DataModuleBanks.Banks.SQL[8]:='';
+          DataModuleBanks.Banks.Open;
+
+
+
+
+
+
+end;
+
+procedure TAboutBanks.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TAboutBanks.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TAboutBanks.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TAboutBanks.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TAboutBanks.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TAboutBanks.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TAboutBanks.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TAboutBanks.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TAboutBanks.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TAboutBanks.Set_AxBorderStyle(Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TAboutBanks.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TAboutBanks.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TAboutBanks.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TAboutBanks.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TAboutBanks.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TAboutBanks.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TAboutBanks.Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TAboutBanks.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TAboutBanks.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TAboutBanks.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TAboutBanks.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TAboutBanks.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TAboutBanks.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+//*********************************************{ - Main  - }*******************************************************
+
+procedure TAboutBanks.MouseWheelHandler(var Message: TMessage);
+begin
+ Inherited;
+ if DBBanksViewer.Focused then
+  with TCMMouseWheel(Message), DBBanksViewer.DataSource.DataSet do
+    if WheelDelta < 0 then
+      Next
+    else
+      Prior;
+  // WaresViewer.Repaint;
+end;
+
+procedure TAboutBanks.ActiveFormCreate(Sender: TObject);
+begin
+ DataModuleBanks :=TDataModuleBanks.Create(Self);
+ QRBanks :=TQRBanks.Create(Self);
+
+ DataModuleBanks.Banks.Open;
+SBTranslateProc.TranslateAllComponents(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TAboutBanks.DBBanksViewerTitleClick(Column: TColumn);
+var
+   TitleName :string;
+begin
+{ TitleName :=Column.FieldName;
+ with DataModuleBanks.Banks do
+  begin
+   SetVariable('Title',TitleName);
+   Refresh;
+  end;       }
+  Screen.Cursor := crSQLWait;
+  TitleName :=Column.FieldName;
+  //ShowMessage(TitleName);
+  try
+   with DataModuleBanks.Banks do
+    begin
+     SetVariable('Title',TitleName);
+     Refresh;
+    end;
+  finally
+   Screen.Cursor := crDefault;
+  end;
+
+
+end;
+
+procedure TAboutBanks.EditBANKCODEExit(Sender: TObject);
+begin
+
+ (Sender as TEdit).Text :='';
+end;
+
+procedure TAboutBanks.EditInnChange(Sender: TObject);
+var
+  FName :string;
+begin
+    if CheckBox1.Checked=false then
+begin
+       if (Sender as TEdit).Text = '' then Exit;
+  FName :=copy((Sender as TEdit).Name,5,Length((Sender as TEdit).Name));
+  DataModuleBanks.Banks.Locate(FName,(Sender as TEdit).Text,[loCaseInsensitive,loPartialKey]);
+
+end
+else
+begin
+
+   {DataModuleBanks.Banks.Filter := 'inn =  '''+Editinn.Text+('*')+'''';
+       DataModuleBanks.Banks.Filtered:=true;   }
+          DataModuleBanks.Banks.Close;
+         DataModuleBanks.Banks.SQL[8]:='where inn like '''+('%')+Editinn.Text+('%')+'''';
+          DataModuleBanks.Banks.Open;
+
+
+          if Editinn.Text ='' then
+          begin
+                  DataModuleBanks.Banks.Close;
+         DataModuleBanks.Banks.SQL[8]:='';
+          DataModuleBanks.Banks.Open;
+          end;
+       //memo1.Text:=    DataModuleBanks.Banks.filter;
+end;
+
+
+end;
+
+procedure TAboutBanks.EditInnExit(Sender: TObject);
+begin
+//DataModuleBanks.Banks.Filtered:=false;
+//EditInn.Clear;
+end;
+
+procedure TAboutBanks.EditKRNOChange(Sender: TObject);
+var
+  FName :string;
+begin
+if CheckBox1.Checked=false then
+begin
+       if (Sender as TEdit).Text = '' then Exit;
+  FName :=copy((Sender as TEdit).Name,5,Length((Sender as TEdit).Name));
+  DataModuleBanks.Banks.Locate(FName,(Sender as TEdit).Text,[loCaseInsensitive,loPartialKey]);
+
+end
+else
+begin
+if (Sender as TEdit).Text = '' then Exit;
+
+{   DataModuleBanks.Banks.Filter := 'krno =  '''+EditKRNO.Text+('*')+'''';
+       DataModuleBanks.Banks.Filtered:=true;
+ }
+          DataModuleBanks.Banks.Close;
+         DataModuleBanks.Banks.SQL[8]:='where KRNO like '''+('%')+EditKRNO.Text+('%')+'''';
+          DataModuleBanks.Banks.Open;
+
+          if EditKRNO.Text ='' then
+          begin
+                  DataModuleBanks.Banks.Close;
+         DataModuleBanks.Banks.SQL[8]:='';
+          DataModuleBanks.Banks.Open;
+          end;
+       memo1.Text:=    DataModuleBanks.Banks.sql.Text;
+end;
+
+end;
+
+procedure TAboutBanks.EditKRNOExit(Sender: TObject);
+begin
+//DataModuleBanks.Banks.Filtered:=False;
+//EditKRNO.Clear;
+end;
+
+procedure TAboutBanks.EditNameChange(Sender: TObject);
+var
+  FName :string;
+begin
+
+if CheckBox1.Checked=false then
+begin
+       if (Sender as TEdit).Text = '' then Exit;
+  FName :=copy((Sender as TEdit).Name,5,Length((Sender as TEdit).Name));
+  DataModuleBanks.Banks.Locate(FName,(Sender as TEdit).Text,[loCaseInsensitive,loPartialKey]);
+
+end
+else
+begin
+
+
+{   DataModuleBanks.Banks.Filter := 'name =  '''+EditName.Text+('*')+'''';
+       DataModuleBanks.Banks.Filtered:=true;
+         }
+               DataModuleBanks.Banks.Close;
+         DataModuleBanks.Banks.SQL[8]:='where name like '''+('%')+EditName.Text+('%')+'''';
+          DataModuleBanks.Banks.Open;
+                     //  memo1.Text:=    DataModuleBanks.Banks.sql.Text;
+          if EditName.Text ='' then
+          begin
+                  DataModuleBanks.Banks.Close;
+         DataModuleBanks.Banks.SQL[8]:='';
+          DataModuleBanks.Banks.Open;
+          end;
+
+       memo1.Text:=    DataModuleBanks.Banks.sql.Text;
+end;
+end;
+
+procedure TAboutBanks.EditNameExit(Sender: TObject);
+begin
+//DataModuleBanks.Banks.Filtered:=False;;
+//EditName.Clear;
+end;
+
+procedure TAboutBanks.EditSubKRNOChange(Sender: TObject);
+var fname:string;
+begin
+if CheckBox1.Checked=false then
+begin
+       if (Sender as TEdit).Text = '' then Exit;
+  FName :=copy((Sender as TEdit).Name,5,Length((Sender as TEdit).Name));
+  DataModuleBanks.Banks.Locate(FName,(Sender as TEdit).Text,[loCaseInsensitive,loPartialKey]);
+
+end
+else
+begin
+
+{
+   DataModuleBanks.Banks.Filter := 'subkrno =  '''+Editsubkrno.Text+('*')+'''';
+       DataModuleBanks.Banks.Filtered:=true;     }
+
+  DataModuleBanks.Banks.Close;
+         DataModuleBanks.Banks.SQL[8]:='where subkrno like '''+('%')+EditSubKRNO.Text+('%')+'''';
+          DataModuleBanks.Banks.Open;
+
+          if EditSubKRNO.Text ='' then
+          begin
+                  DataModuleBanks.Banks.Close;
+         DataModuleBanks.Banks.SQL[8]:='';
+          DataModuleBanks.Banks.Open;
+          end;
+       //memo1.Text:=    DataModuleBanks.Banks.filter;
+end;
+
+end;
+
+procedure TAboutBanks.EditSubKRNOExit(Sender: TObject);
+begin
+//DataModuleBanks.Banks.Filtered:=false;
+//EditSubKRNO.Clear;
+end;
+
+procedure TAboutBanks.EditSWIFTChange(Sender: TObject);
+var
+       FName:string;
+begin
+if CheckBox1.Checked=false then
+begin
+       if (Sender as TEdit).Text = '' then Exit;
+  FName :=copy((Sender as TEdit).Name,5,Length((Sender as TEdit).Name));
+  DataModuleBanks.Banks.Locate(FName,(Sender as TEdit).Text,[loCaseInsensitive,loPartialKey]);
+
+end
+else
+begin
+
+
+  { DataModuleBanks.Banks.Filter := 'swift =  '''+EditSwift.Text+('*')+'''';
+       DataModuleBanks.Banks.Filtered:=true;  }
+          DataModuleBanks.Banks.Close;
+         DataModuleBanks.Banks.SQL[8]:='where swift like '''+('%')+EditSwift.Text+('%')+'''';
+          DataModuleBanks.Banks.Open;
+
+          if EditSwift.Text ='' then
+          begin
+                  DataModuleBanks.Banks.Close;
+         DataModuleBanks.Banks.SQL[8]:='';
+          DataModuleBanks.Banks.Open;
+          end;
+       //memo1.Text:=    DataModuleBanks.Banks.filter;
+end;
+
+
+end;
+
+procedure TAboutBanks.EditSWIFTExit(Sender: TObject);
+begin
+//DataModuleBanks.Banks.Filtered:=false;
+//EditSWIFT.Clear;
+end;
+
+procedure TAboutBanks.EditTAX_REGCODEChange(Sender: TObject);
+var fname:string;
+begin
+if CheckBox1.Checked=false then
+begin
+       if (Sender as TEdit).Text = '' then Exit;
+  FName :=copy((Sender as TEdit).Name,5,Length((Sender as TEdit).Name));
+  DataModuleBanks.Banks.Locate(FName,(Sender as TEdit).Text,[loCaseInsensitive,loPartialKey]);
+
+end
+else
+begin
+
+
+  { DataModuleBanks.Banks.Filter := 'tax_regcode =  '''+EditTAX_REGCODE.Text+('*')+'''';
+       DataModuleBanks.Banks.Filtered:=true;   }
+
+       DataModuleBanks.Banks.Close;
+         DataModuleBanks.Banks.SQL[8]:='where tax_regcode like '''+('%')+EditTAX_REGCODE.Text+('%')+'''';
+          DataModuleBanks.Banks.Open;
+
+          if EditTAX_REGCODE.Text ='' then
+          begin
+                  DataModuleBanks.Banks.Close;
+         DataModuleBanks.Banks.SQL[8]:='';
+          DataModuleBanks.Banks.Open;
+          end;
+       memo1.Text:=    DataModuleBanks.Banks.SQL.Text
+end;
+end;
+
+procedure TAboutBanks.EditTAX_REGCODEExit(Sender: TObject);
+begin
+//DataModuleBanks.Banks.Filtered:=false;
+//EditTAX_REGCODE.Clear;
+end;
+
+procedure TAboutBanks.EditBANKCODChange(Sender: TObject);
+var
+  FName :string;
+begin
+
+       if (Sender as TEdit).Text = '' then Exit;
+  FName :=copy((Sender as TEdit).Name,5,Length((Sender as TEdit).Name));
+  DataModuleBanks.Banks.Locate(FName,(Sender as TEdit).Text,[loCaseInsensitive,loPartialKey]);
+
+
+
+
+end;
+procedure TAboutBanks.Button1Click(Sender: TObject);
+begin
+ with DataModuleBanks.Banks  do
+   if Active then
+    First
+   else
+    Open;
+  QRBanks.Preview;
+end;
+
+procedure TAboutBanks.SpeedButton1Click(Sender: TObject);
+begin
+ with DataModuleBanks.Banks  do
+   if Active then
+    First
+   else
+    Open;
+  QRBanks.Preview;
+end;
+
+procedure TAboutBanks.SpeedButton2Click(Sender: TObject);
+var
+   IdHTTP : TIdHTTP;
+  Id_HandlerSocket : TIdSSLIOHandlerSocketOpenSSL;
+  ss: TStringStream;
+  ms: TMemoryStream;
+  aa:TStringList;
+  tt:string;
+  i, bi:integer;
+    ii:integer;
+
+   MainNode, CustomerNode, Basofis ,HiderBasofis,Bank: IXMLNode;
+
+
+begin
+  IdHTTP := TIdHTTP.Create(Nil);
+    ms:=TMemoryStream.Create;
+    aa:=TStringList.Create;
+
+  Id_HandlerSocket := TIdSSLIOHandlerSocketOpenSSL.Create(IdHTTP);
+  Try
+
+      tt:=('https://www.cbar.az/bankinfonew/banks.xml' );
+
+    TEncoding.UTF8.ToString;
+    aa.LoadFromStream(ms,TENCODING.UTF8);
+    ss := TStringStream.Create('', TEncoding.UTF8);
+    IdHTTP.Request.ContentType := 'application/xml; charset=utf-8';
+    IdHTTP.Request.BasicAuthentication := false;
+    IdHTTP.Request.UserAgent := 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:12.0) Gecko/20100101 Firefox/12.0';
+    Id_HandlerSocket.SSLOptions.Mode := sslmClient;
+    Id_HandlerSocket.SSLOptions.Method:=sslvSSLv23;
+    IdHTTP.IOHandler:=Id_HandlerSocket;
+       ////////////////memo///////
+      // IdHTTP.get(tt,ss);
+      // memo1.Text:= ss.DataString;
+      //////////////////////////
+
+      IdHTTP.get(tt,ms);
+      XMLDocument1.LoadFromStream( ms);
+
+        MainNode := XMLDocument1.DocumentElement;
+
+      HiderBasofis:=  MainNode.ChildNodes['HeadOffices'].ChildNodes['Operations'];
+      ii:=0;
+     for i:=0 to HiderBasofis.ChildNodes.Count-1 do
+       begin
+      Bank := HiderBasofis.ChildNodes[i];
+      ii:=ii+1;
+      //showmessage(inttostr(Bank.ChildNodes.Count));
+        //  showmessage(inttostr(ii)) ;
+
+     p_CorAccountAZN:='';
+     p_valAZN:='';
+     p_CorAccountUSD:='';
+     p_valUSD:='';
+     p_CorAccountEUR:='';
+     p_valEUR:='';
+     p_CorAccountGBP:='';
+     p_valGBP:='';
+      p_code:='';
+     for BI :=0 to Bank.ChildNodes.Count-1 do
+     begin
+
+      if Bank.ChildNodes[bi].NodeName='Code' then
+       begin
+       p_code:=bank.ChildNodes[bi].Text;
+
+      end;
+      // if Bank.ChildNodes[bi].NodeName='CorAccount' and concat(bank.ChildNodes[bi].Text then
+    // if  (bank.ChildNodes[bi].NodeName<>'CorAccount')and (bank.ChildNodes[bi].NodeName<>'SubCorAccount') then
+    //        begin
+      // p_code:=bank.ChildNodes[bi].Text;
+
+    //   p_SWIFTBI:=bank.ChildNodes[bi].Text;
+    //   p_name:=bank.ChildNodes[bi].Text;
+    //   p_TaxNumber:=bank.ChildNodes[bi].Text;
+     //  p_Address:=bank.ChildNodes[bi].Text;
+     //  p_PhoneNumbe:=bank.ChildNodes[bi].Text;
+       //      end;
+
+   if  bank.ChildNodes[bi].NodeName='CorAccount' then   begin
+    if  bank.ChildNodes[bi].Attributes['Currency']='AZN'then
+     begin
+       p_CorAccountAZN:=bank.ChildNodes[bi].Text ;
+       p_valAZN:='AZN';
+       end;
+     if  bank.ChildNodes[bi].Attributes['Currency']='USD'then
+     begin
+
+       p_CorAccountUSD:=bank.ChildNodes[bi].Text ;
+       p_valUSD:='USD';
+     end;
+     if  bank.ChildNodes[bi].Attributes['Currency']='EUR'then
+     begin
+       p_CorAccountEUR:=bank.ChildNodes[bi].Text ;
+       p_valEUR:='EUR';
+     end;
+     if  bank.ChildNodes[bi].Attributes['Currency']='GBP'then
+     begin
+       p_CorAccountGBP:=bank.ChildNodes[bi].Text ;
+       p_valGBP:='GBP';
+
+     end;
+
+   end ;
+   if  bank.ChildNodes[bi].NodeName='SubCorAccount' then   begin
+    if  bank.ChildNodes[bi].Attributes['System']='LVPCSS'then
+    begin
+       p_SubCorAccountLVPCSS:=bank.ChildNodes[bi].Text ;
+    end;
+    if  bank.ChildNodes[bi].Attributes['System']='IPS'then
+    begin
+       p_SubCorAccountIPS:=bank.ChildNodes[bi].Text ;
+    end;
+   end ;
+
+     end;
+
+      if p_valAZN='AZN' then
+        begin
+  OracleDataSet1.Close;
+  OracleDataSet1.SetVariable('aa',p_CorAccountAZN);
+  OracleDataSet1.SetVariable('cc',p_code);
+  OracleDataSet1.SetVariable('bb',p_SubCorAccountLVPCSS);
+  OracleDataSet1.Open;
+        end;
+   if p_valUSD='USD' then
+        begin
+  OracleDataSet1.Close;
+  OracleDataSet1.SetVariable('aa',p_CorAccountUSD);
+  OracleDataSet1.SetVariable('cc',p_code);
+  OracleDataSet1.SetVariable('bb',p_SubCorAccountLVPCSS);
+  OracleDataSet1.Open;
+        end;
+   if p_valEUR='EUR' then
+        begin
+  OracleDataSet1.Close;
+  OracleDataSet1.SetVariable('aa',p_CorAccountEUR);
+ OracleDataSet1.SetVariable('cc',p_code);
+  OracleDataSet1.SetVariable('bb',p_SubCorAccountLVPCSS);
+  OracleDataSet1.Open;
+        end;
+
+    if p_valGBP='GBP' then
+        begin
+  OracleDataSet1.Close;
+  OracleDataSet1.SetVariable('aa',p_CorAccountGBP);
+  OracleDataSet1.SetVariable('cc',p_code);
+  OracleDataSet1.SetVariable('bb',p_SubCorAccountLVPCSS);
+  OracleDataSet1.Open;
+        end;
+
+   end;
+
+
+  Finally
+    Id_HandlerSocket.Free;
+    IdHTTP.Free;
+     aa.Free;
+
+  End;
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TAboutBanks,
+    Class_AboutBanks,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

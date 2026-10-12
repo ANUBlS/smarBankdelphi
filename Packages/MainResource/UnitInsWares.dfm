@@ -1,0 +1,500 @@
+object FormInsert: TFormInsert
+  Left = 452
+  Top = 129
+  BorderStyle = bsDialog
+  Caption = 'FormInsert'
+  ClientHeight = 457
+  ClientWidth = 494
+  Color = clBtnFace
+  Font.Charset = RUSSIAN_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poMainFormCenter
+  OnActivate = FormActivate
+  OnCreate = FormCreate
+  OnKeyPress = FormKeyPress
+  PixelsPerInch = 96
+  TextHeight = 13
+  object PanelMain: TPanel
+    Left = 0
+    Top = 0
+    Width = 494
+    Height = 457
+    Align = alClient
+    BevelInner = bvRaised
+    BevelOuter = bvLowered
+    TabOrder = 0
+    object GBoxPublic: TGroupBox
+      Left = 2
+      Top = 2
+      Width = 319
+      Height = 45
+      Caption = #1042#1103#1089#1072#1080#1090#1080#1085' '#1072#1076#1099' '
+      TabOrder = 0
+      object Edit_Wares_Name: TEdit
+        Left = 3
+        Top = 20
+        Width = 312
+        Height = 21
+        TabOrder = 0
+        OnKeyPress = Edit_Wares_NameKeyPress
+      end
+    end
+    object GroupBoxFXM: TGroupBox
+      Left = 2
+      Top = 48
+      Width = 121
+      Height = 41
+      Caption = #1060#1072#1081#1076#1072#1083#1099' '#1093#1080#1076#1084#1103#1090' '#1084#1094#1076#1076#1103#1090#1080
+      TabOrder = 1
+      object CBoxFXM: TComboBox
+        Left = 4
+        Top = 15
+        Width = 113
+        Height = 21
+        TabOrder = 0
+        Text = '4'
+        Items.Strings = (
+          '1'
+          '2'
+          '3'
+          '4'
+          '5'
+          '6'
+          '7'
+          '8'
+          '9'
+          '10'
+          '11'
+          '12'
+          '13')
+      end
+    end
+    object GroupBoxSector: TGroupBox
+      Left = 123
+      Top = 48
+      Width = 198
+      Height = 41
+      Caption = #1057#1072#1093#1083#1072#1085#1099#1083#1076#1099#1100#1099' '#1073#1102#1083#1084#1103
+      TabOrder = 2
+      object DBLCBName22: TDBLookupComboBox
+        Left = 4
+        Top = 14
+        Width = 190
+        Height = 21
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        KeyField = 'ID'
+        ListField = 'NAME'
+        ListSource = DataModWares.DataSource3
+        ParentFont = False
+        TabOrder = 0
+        Visible = False
+      end
+      object Edit_Keeping_Sec: TEdit
+        Left = 6
+        Top = 15
+        Width = 189
+        Height = 21
+        TabOrder = 1
+      end
+    end
+    object GroupBox_Using_Date: TGroupBox
+      Left = 3
+      Top = 89
+      Width = 118
+      Height = 42
+      Caption = #1044#1072#1093#1080#1083#1086#1083#1084#1072' '#1090#1072#1088#1080#1093#1080
+      TabOrder = 3
+      object DTP_Using_Date: TDateTimePicker
+        Left = 3
+        Top = 16
+        Width = 94
+        Height = 21
+        Date = 38820.239196296300000000
+        Time = 38820.239196296300000000
+        TabOrder = 0
+      end
+    end
+    object GroupBoxNB: TGroupBox
+      Left = -2
+      Top = 133
+      Width = 245
+      Height = 197
+      Caption = #1052#1080#1083#1083#1080' '#1041#1072#1085#1082' '
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clNavy
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 4
+      object Label_First_Price: TLabel
+        Left = 6
+        Top = 16
+        Width = 48
+        Height = 13
+        Caption = #1048#1083#1082#1080#1085' '#1076#1103#1081#1103#1088
+      end
+      object Label_Balance_Price: TLabel
+        Left = 6
+        Top = 64
+        Width = 53
+        Height = 13
+        Caption = #1043#1072#1083#1099#1075' '#1076#1103#1081#1103#1088
+      end
+      object Label_All_Amort: TLabel
+        Left = 6
+        Top = 111
+        Width = 94
+        Height = 13
+        Caption = #1049#1099#1100#1099#1083#1084#1099#1096' '#1072#1084#1086#1088#1090#1080#1079#1072#1089#1080#1081#1072
+      end
+      object Label_Amort: TLabel
+        Left = 6
+        Top = 156
+        Width = 82
+        Height = 13
+        Caption = #1040#1081#1083#1099#1075' '#1072#1084#1086#1088#1090#1080#1079#1072#1089#1080#1081#1072
+      end
+      object Edit_First_Price: TEdit
+        Left = 6
+        Top = 34
+        Width = 236
+        Height = 21
+        TabOrder = 0
+        OnChange = Edit_First_PriceChange
+        OnKeyPress = Edit_First_PriceKeyPress
+      end
+      object Edit_Balance_Price: TEdit
+        Left = 6
+        Top = 82
+        Width = 236
+        Height = 21
+        TabOrder = 1
+        OnChange = Edit_Balance_PriceChange
+        OnKeyPress = Edit_First_PriceKeyPress
+      end
+      object Edit_All_Amort: TEdit
+        Left = 6
+        Top = 128
+        Width = 236
+        Height = 21
+        TabOrder = 2
+        OnKeyPress = Edit_First_PriceKeyPress
+      end
+      object Edit_Amort: TEdit
+        Left = 6
+        Top = 173
+        Width = 235
+        Height = 21
+        TabOrder = 3
+        Text = '0'
+        OnKeyPress = Edit_First_PriceKeyPress
+      end
+    end
+    object GroupBoxNL: TGroupBox
+      Left = 249
+      Top = 133
+      Width = 239
+      Height = 197
+      Caption = #1042#1077#1088#1101#1080
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clNavy
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 5
+      object Label_Tax_First_Price: TLabel
+        Left = 6
+        Top = 17
+        Width = 112
+        Height = 13
+        Caption = #1048#1083#1080#1085' '#1103#1074#1074#1103#1083#1080#1085#1103' '#1075#1072#1083#1099#1075' '#1076#1103#1081#1103#1088#1080
+      end
+      object Label_Tax_Balance_Price: TLabel
+        Left = 7
+        Top = 66
+        Width = 53
+        Height = 13
+        Caption = #1043#1072#1083#1099#1075' '#1076#1103#1081#1103#1088
+      end
+      object LabelTax_All_Amort: TLabel
+        Left = 6
+        Top = 112
+        Width = 94
+        Height = 13
+        Caption = #1049#1099#1100#1099#1083#1084#1099#1096' '#1072#1084#1086#1088#1090#1080#1079#1072#1089#1080#1081#1072
+      end
+      object LabelTax_Amort: TLabel
+        Left = 6
+        Top = 158
+        Width = 82
+        Height = 13
+        Caption = #1040#1081#1083#1099#1075' '#1072#1084#1086#1088#1090#1080#1079#1072#1089#1080#1081#1072
+      end
+      object Edit_Tax_First_Price: TEdit
+        Left = 3
+        Top = 34
+        Width = 232
+        Height = 21
+        TabOrder = 0
+        OnKeyPress = Edit_First_PriceKeyPress
+      end
+      object Edit_Tax_Balance_Price: TEdit
+        Left = 3
+        Top = 81
+        Width = 232
+        Height = 21
+        TabOrder = 1
+        OnChange = Edit_Tax_Balance_PriceChange
+        OnKeyPress = Edit_First_PriceKeyPress
+      end
+      object Edit_Tax_All_Amort: TEdit
+        Left = 3
+        Top = 128
+        Width = 232
+        Height = 21
+        TabOrder = 2
+        OnKeyPress = Edit_First_PriceKeyPress
+      end
+      object Edit_Tax_Amort: TEdit
+        Left = 3
+        Top = 173
+        Width = 232
+        Height = 21
+        TabOrder = 3
+        Text = '0'
+        OnKeyPress = Edit_First_PriceKeyPress
+      end
+    end
+    object GroupBoxAction: TGroupBox
+      Left = -4
+      Top = 332
+      Width = 492
+      Height = 80
+      Caption = #1043#1077#1081#1076
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clTeal
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 6
+      object Image: TImage
+        Left = 397
+        Top = 24
+        Width = 25
+        Height = 25
+        Picture.Data = {
+          07544269746D617036030000424D360300000000000036000000280000001000
+          0000100000000100180000000000000300000000000000000000000000000000
+          0000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF606060
+          404040FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFFFF3F3F3F404040404040FFFFFFFFFFFFFFFFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF2020203F3F3FFFFFFF404040
+          404040FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF4040
+          40606060404040AFAFAFFFFFFF404040808080808080404040FFFFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFFFFFF2020206F6F6FAFAFAFFFFFFFFFFFFFFFFFFFAFAFAF
+          6F6F6F404040808080606060FFFFFFFFFFFFFFFFFFFFFFFF3F3F3FEFEFEFFFFF
+          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFEFEF5F5F5F808080606060FF
+          FFFFFFFFFF5F5F5FFFFFFFFFFFFFFFFFFFFFFFFFEFAFAFFF0000EFAFAFFFFFFF
+          FFFFFFFFFFFFFFFFFF5F5F5F808080404040404040EFEFEFFFFFFFFFFFFFFFFF
+          FFFFFFFFEFAFAFFF0000EFAFAFFFFFFFFFFFFFFFFFFFFFFFFFEFEFEF40404080
+          8080AFAFAFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF7F7FFFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFFFFFFFF6F6F6F808080BFBFBFFFFFFFFFFFFFFFFFFFFFFF
+          FFFFFFFFFFFFFFFF0000EFAFAFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF7F7F7F80
+          8080BFBFBFFFFFFFFFFFFFFFFFFFFFFFFFEFAFAFEFAFAFEF6F6FFF0000FFBFBF
+          FFFFFFFFFFFFFFFFFFFFFFFF7F7F7F606060707070FFFFFFFFFFFFFFFFFFFFFF
+          FFFF0000FF0000EFEFEFFF0000FF0000FFFFFFFFFFFFFFFFFFFFFFFF50505020
+          2020202020CFCFCFFFFFFFFFFFFFFFFFFFEF3030EFEFEFFFBFBFFF0000EF3030
+          FFFFFFFFFFFFFFFFFFAFAFAF000000FFFFFFFFFFFF202020DFDFDFFFFFFFFFFF
+          FFEFEFEFFF7F7FFF7F7FFF7F7FEFEFEFFFFFFFFFFFFFBFBFBF000000FFFFFFFF
+          FFFFFFFFFFFFFFFF202020AFAFAFEFEFEFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+          EFEFEFAFAFAF202020FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF4040
+          40707070BFBFBFBFBFBFBFBFBF707070404040FFFFFFFFFFFFFFFFFFFFFFFFFF
+          FFFF}
+        Stretch = True
+      end
+      object MemoAction: TMemo
+        Left = 12
+        Top = 14
+        Width = 357
+        Height = 54
+        BorderStyle = bsNone
+        Color = clBtnFace
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clBlue
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        Lines.Strings = (
+          'V'#601'sait yeni daxil olunarsa istifad'#601' olunma tarixi '
+          'amortizasiya tarixin'#601' b'#601'rab'#601'rdir!'
+          'V'#601'sait yeni daxil olunarsa ilin '#601'vv'#601'lin'#601' '
+          'qal'#305'q d'#601'y'#601'ri ilkin d'#601'y'#601'r'#601' b'#601'rab'#601'rdir!')
+        ParentFont = False
+        ReadOnly = True
+        TabOrder = 0
+      end
+    end
+    object GroupBoxInv_No: TGroupBox
+      Left = 322
+      Top = 48
+      Width = 165
+      Height = 41
+      Caption = 'Inventar '#8470
+      TabOrder = 7
+      object Edit_Inv_No: TEdit
+        Left = 5
+        Top = 15
+        Width = 155
+        Height = 21
+        TabOrder = 0
+      end
+    end
+    object GroupBox1: TGroupBox
+      Left = 323
+      Top = 2
+      Width = 164
+      Height = 45
+      Caption = #1048#1089#1090#1080#1092#1072#1076#1103#1095#1080
+      TabOrder = 8
+      object DBLCBName33: TDBLookupComboBox
+        Left = 5
+        Top = 19
+        Width = 157
+        Height = 21
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        KeyField = 'ID'
+        ListField = 'NAME'
+        ListSource = DataModWares.DataSource1
+        ParentFont = False
+        TabOrder = 0
+        Visible = False
+      end
+      object Edit_User: TEdit
+        Left = 4
+        Top = 20
+        Width = 158
+        Height = 21
+        TabOrder = 1
+      end
+    end
+    object GroupBox2: TGroupBox
+      Left = 128
+      Top = 88
+      Width = 361
+      Height = 42
+      Caption = 
+        #1048#1089#1090#1080#1092#1072#1076#1103' '#1086#1083#1091#1085#1084#1072' '#1090#1072#1088#1080#1093#1080'                              '#1040#1084#1086#1088#1090#1080#1079#1072#1089#1080#1081#1072 +
+        ' '#1090#1072#1088#1080#1093#1080'                         '
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 9
+      object DTP_Inv_Date: TDateTimePicker
+        Left = 32
+        Top = 16
+        Width = 137
+        Height = 21
+        Date = 40113.460380127300000000
+        Time = 40113.460380127300000000
+        Enabled = False
+        TabOrder = 0
+        OnChange = DTP_Inv_DateChange
+      end
+      object ChBox1: TCheckBox
+        Left = 8
+        Top = 16
+        Width = 25
+        Height = 17
+        TabOrder = 1
+        Visible = False
+        OnClick = ChBox1Click
+      end
+      object DTP_Amort_Date: TDateTimePicker
+        Left = 192
+        Top = 16
+        Width = 137
+        Height = 21
+        Date = 40113.460380127300000000
+        Time = 40113.460380127300000000
+        Enabled = False
+        TabOrder = 2
+      end
+      object DBDateTimeEditEh1: TDBDateTimeEditEh
+        Left = 32
+        Top = 16
+        Width = 137
+        Height = 21
+        EditButtons = <>
+        Kind = dtkDateEh
+        TabOrder = 3
+        Visible = True
+        OnButtonClick = DBDateTimeEditEh1ButtonClick
+        OnChange = DBDateTimeEditEh1Change
+      end
+      object DBDateTimeEditEh2: TDBDateTimeEditEh
+        Left = 192
+        Top = 18
+        Width = 137
+        Height = 21
+        Enabled = False
+        EditButtons = <>
+        Kind = dtkDateEh
+        TabOrder = 4
+        Visible = True
+        OnChange = DBDateTimeEditEh2Change
+      end
+    end
+    object BitBtn2: TBitBtn
+      Left = 309
+      Top = 418
+      Width = 88
+      Height = 29
+      Caption = #1043#1103#1073#1091#1083' '#1077#1090'....'
+      DoubleBuffered = True
+      ParentDoubleBuffered = False
+      TabOrder = 10
+      OnClick = BtnOkClick
+    end
+    object BitBtn1: TBitBtn
+      Left = 6
+      Top = 418
+      Width = 111
+      Height = 29
+      Caption = #1071#1083#1072#1074#1103' '#1048#1085#1092#1086#1088#1084#1072#1089#1080#1081#1072
+      DoubleBuffered = True
+      ParentDoubleBuffered = False
+      TabOrder = 11
+      OnClick = BitBtn1Click
+    end
+    object BitBtn3: TBitBtn
+      Left = 402
+      Top = 418
+      Width = 81
+      Height = 28
+      Caption = #1048#1084#1090#1080#1085#1072' '#1077#1090
+      DoubleBuffered = True
+      ParentDoubleBuffered = False
+      TabOrder = 12
+      OnClick = BitBtn3Click
+    end
+  end
+end

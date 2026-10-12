@@ -1,0 +1,101 @@
+unit SettingsUnit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  DBCtrls, Grids, DBGrids, ExtCtrls, ComCtrls, Db, OracleData, ImgList,
+  ToolWin;
+
+type
+  TSettingsForm = class(TForm)
+    LinkDatSrc: TDataSource;
+    Link: TOracleDataSet;
+    LinksDatSrc: TDataSource;
+    Links: TOracleDataSet;
+    LinkID: TFloatField;
+    LinkNAME: TStringField;
+    LinksBALCN: TFloatField;
+    LinksPARENTID: TFloatField;
+    PageControl1: TPageControl;
+    TabSheet1: TTabSheet;
+    TabSheet2: TTabSheet;
+    Panel1: TPanel;
+    DBGrid1: TDBGrid;
+    Panel2: TPanel;
+    DBNavigator1: TDBNavigator;
+    DBGrid2: TDBGrid;
+    StatusBar1: TStatusBar;
+    Panel3: TPanel;
+    Panel4: TPanel;
+    DBGrid3: TDBGrid;
+    SettingsDatSrc: TDataSource;
+    Settings: TOracleDataSet;
+    SettAccsDatSrc: TDataSource;
+    SettAccs: TOracleDataSet;
+    SettingsID: TFloatField;
+    SettingsNAME: TStringField;
+    AccLookup: TOracleDataSet;
+    AccLookupID: TFloatField;
+    AccLookupACC_NO: TStringField;
+    AccLookupNAME: TStringField;
+    SettAccsPARENTID: TFloatField;
+    SettAccsACCID: TFloatField;
+    SettAccsAccountno: TStringField;
+    SettAccsAccName: TStringField;
+    Panel5: TPanel;
+    DBGrid4: TDBGrid;
+    ImageList2: TImageList;
+    DBGrid5: TDBGrid;
+    Companiy: TOracleDataSet;
+    CompaniyDatSrc: TDataSource;
+    CompaniyID: TFloatField;
+    CompaniyCOMP_NAME: TStringField;
+    SettingsCOMPID: TFloatField;
+    Panel6: TPanel;
+    DBNavigator2: TDBNavigator;
+     
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  SettingsForm: TSettingsForm;
+
+implementation
+
+{$R *.DFM}
+uses sboapiDataModuleImpl;
+
+
+procedure TSettingsForm.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+   if ord(Key) = VK_ESCAPE then close;
+end;
+
+procedure TSettingsForm.FormCreate(Sender: TObject);
+begin
+   Link.Open;
+   Links.Open;
+   Settings.open;
+   AccLookup.open;
+   SettAccs.open;
+   Companiy.Open;
+end;
+
+procedure TSettingsForm.FormDestroy(Sender: TObject);
+begin
+   Link.Close;
+   Links.Close;
+   Settings.Close;
+   AccLookup.Close;
+   SettAccs.Close;
+   Companiy.Close;
+end;
+
+end.

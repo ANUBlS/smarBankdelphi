@@ -1,0 +1,543 @@
+unit CalendarImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActiveX, AxCtrls, CalendarLmp_TLB, StdVcl, ComCtrls, ExtCtrls, Grids,
+  DBGrids, DBCtrls, StdCtrls, Buttons, DBGridEh;
+
+type
+  TCalendar = class(TActiveForm, ICalendar)
+    Panel2: TPanel;
+    Panel3: TPanel;
+    Panel4: TPanel;
+    Panel5: TPanel;
+    Panel6: TPanel;
+    Panel7: TPanel;
+    Panel8: TPanel;
+    MonthCalendar1: TMonthCalendar;
+    MonthCalendar2: TMonthCalendar;
+    MonthCalendar3: TMonthCalendar;
+    MonthCalendar4: TMonthCalendar;
+    MonthCalendar5: TMonthCalendar;
+    MonthCalendar6: TMonthCalendar;
+    Panel9: TPanel;
+    Panel10: TPanel;
+    Panel11: TPanel;
+    Panel12: TPanel;
+    Panel13: TPanel;
+    Panel14: TPanel;
+    Panel15: TPanel;
+    MonthCalendar7: TMonthCalendar;
+    MonthCalendar8: TMonthCalendar;
+    MonthCalendar9: TMonthCalendar;
+    MonthCalendar10: TMonthCalendar;
+    MonthCalendar11: TMonthCalendar;
+    MonthCalendar12: TMonthCalendar;
+    Panel1: TPanel;
+    DBNavigator1: TDBNavigator;
+    BitBtn1: TBitBtn;
+    BitBtn2: TBitBtn;
+    BitBtn3: TBitBtn;
+    DBGridEh1: TDBGridEh;
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure MonthCalendar1DblClick(Sender: TObject);
+    procedure MonthCalendar2DblClick(Sender: TObject);
+    procedure MonthCalendar3DblClick(Sender: TObject);
+    procedure MonthCalendar4DblClick(Sender: TObject);
+    procedure MonthCalendar5DblClick(Sender: TObject);
+    procedure MonthCalendar6DblClick(Sender: TObject);
+    procedure MonthCalendar7DblClick(Sender: TObject);
+    procedure MonthCalendar8DblClick(Sender: TObject);
+    procedure MonthCalendar9DblClick(Sender: TObject);
+    procedure MonthCalendar10DblClick(Sender: TObject);
+    procedure MonthCalendar11DblClick(Sender: TObject);
+    procedure MonthCalendar12DblClick(Sender: TObject);
+    procedure BitBtn2Click(Sender: TObject);
+    procedure BitBtn3Click(Sender: TObject);
+    procedure BitBtn1Click(Sender: TObject);
+  private
+    { Private declarations }
+    FEvents: ICalendarEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+  public
+    { Public declarations }
+    procedure Initialize; override;
+  end;
+
+implementation
+
+uses ComObj, ComServ,CalendarDatamodLmpl, AddHolidayLmpl;
+
+{$R *.DFM}
+
+{ TCalendar }
+
+procedure TCalendar.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_CalendarPage); }
+end;
+
+procedure TCalendar.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as ICalendarEvents;
+end;
+
+procedure TCalendar.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TCalendar.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TCalendar.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TCalendar.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TCalendar.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TCalendar.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TCalendar.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TCalendar.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TCalendar.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TCalendar.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TCalendar.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TCalendar.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TCalendar.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TCalendar.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TCalendar.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TCalendar.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TCalendar.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TCalendar.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TCalendar.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TCalendar._Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TCalendar.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TCalendar.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TCalendar.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TCalendar.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TCalendar.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TCalendar.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TCalendar.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TCalendar.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TCalendar.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TCalendar.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TCalendar.Set_AxBorderStyle(Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TCalendar.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TCalendar.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TCalendar.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TCalendar.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TCalendar.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TCalendar.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TCalendar.Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TCalendar.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TCalendar.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TCalendar.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TCalendar.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TCalendar.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TCalendar.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+procedure TCalendar.ActiveFormCreate(Sender: TObject);
+begin
+CalendarDataMod:=TCalendarDataMod.create(self);
+AddHoliday:=TAddHoliday.create(self);
+// CalendarDataMod.OracleDataSet2.open;
+MonthCalendar1.date:=CalendarDataMod.OracleDataSet2.fieldbyname('jan').AsDateTime;
+MonthCalendar2.date:=CalendarDataMod.OracleDataSet2.fieldbyname('feb').AsDateTime;
+MonthCalendar3.date:=CalendarDataMod.OracleDataSet2.fieldbyname('mar').AsDateTime;
+MonthCalendar4.date:=CalendarDataMod.OracleDataSet2.fieldbyname('apr').AsDateTime;
+MonthCalendar5.date:=CalendarDataMod.OracleDataSet2.fieldbyname('may').AsDateTime;
+MonthCalendar6.date:=CalendarDataMod.OracleDataSet2.fieldbyname('jun').AsDateTime;
+MonthCalendar7.date:=CalendarDataMod.OracleDataSet2.fieldbyname('jul').AsDateTime;
+MonthCalendar8.date:=CalendarDataMod.OracleDataSet2.fieldbyname('aug').AsDateTime;
+MonthCalendar9.date:=CalendarDataMod.OracleDataSet2.fieldbyname('sep').AsDateTime;
+MonthCalendar10.date:=CalendarDataMod.OracleDataSet2.fieldbyname('oct').AsDateTime;
+MonthCalendar11.date:=CalendarDataMod.OracleDataSet2.fieldbyname('nov').AsDateTime;
+MonthCalendar12.date:=CalendarDataMod.OracleDataSet2.fieldbyname('dec').AsDateTime;
+end;
+
+procedure TCalendar.MonthCalendar1DblClick(Sender: TObject);
+
+var
+dat:tdatetime;
+begin
+dat:=MonthCalendar1.date;
+dat:=integer(trunc(MonthCalendar1.Date));
+CalendarDataMod.OraclePackage1.CallProcedure('add_calendar',[dat]) ;
+CalendarDataMod.OracleDataSet1.refresh;
+end;
+
+procedure TCalendar.MonthCalendar2DblClick(Sender: TObject);
+var                                               
+dat:tdatetime;
+begin
+dat:=MonthCalendar1.date;
+dat:=integer(trunc(MonthCalendar2.Date));
+CalendarDataMod.OraclePackage1.CallProcedure('add_calendar',[dat]) ;
+CalendarDataMod.OracleDataSet1.refresh;
+end;
+
+procedure TCalendar.MonthCalendar3DblClick(Sender: TObject);
+var
+dat:tdatetime;
+begin
+dat:=MonthCalendar3.date;
+dat:=integer(trunc(MonthCalendar3.Date));
+CalendarDataMod.OraclePackage1.CallProcedure('add_calendar',[dat]) ;
+CalendarDataMod.OracleDataSet1.refresh;
+end;
+
+procedure TCalendar.MonthCalendar4DblClick(Sender: TObject);
+var
+dat:tdatetime;
+begin
+dat:=MonthCalendar4.date;
+dat:=integer(trunc(MonthCalendar4.Date));
+CalendarDataMod.OraclePackage1.CallProcedure('add_calendar',[dat]) ;
+CalendarDataMod.OracleDataSet1.refresh;
+
+end;
+
+procedure TCalendar.MonthCalendar5DblClick(Sender: TObject);
+var
+dat:tdatetime;
+begin
+dat:=MonthCalendar5.date;
+dat:=integer(trunc(MonthCalendar5.Date));
+CalendarDataMod.OraclePackage1.CallProcedure('add_calendar',[dat]) ;
+CalendarDataMod.OracleDataSet1.refresh;
+
+end;
+
+procedure TCalendar.MonthCalendar6DblClick(Sender: TObject);
+var
+dat:tdatetime;
+begin
+dat:=MonthCalendar6.date;
+dat:=integer(trunc(MonthCalendar6.Date));
+CalendarDataMod.OraclePackage1.CallProcedure('add_calendar',[dat]) ;
+CalendarDataMod.OracleDataSet1.refresh;
+
+end;
+
+procedure TCalendar.MonthCalendar7DblClick(Sender: TObject);
+var
+dat:tdatetime;
+begin
+dat:=MonthCalendar7.date;
+dat:=integer(trunc(MonthCalendar7.Date));
+CalendarDataMod.OraclePackage1.CallProcedure('add_calendar',[dat]) ;
+CalendarDataMod.OracleDataSet1.refresh;
+
+end;
+
+procedure TCalendar.MonthCalendar8DblClick(Sender: TObject);
+var
+dat:tdatetime;
+begin
+dat:=MonthCalendar8.date;
+dat:=integer(trunc(MonthCalendar8.Date));
+CalendarDataMod.OraclePackage1.CallProcedure('add_calendar',[dat]) ;
+CalendarDataMod.OracleDataSet1.refresh;
+
+end;
+
+procedure TCalendar.MonthCalendar9DblClick(Sender: TObject);
+var
+dat:tdatetime;
+begin
+dat:=MonthCalendar9.date;
+dat:=integer(trunc(MonthCalendar9.Date));
+CalendarDataMod.OraclePackage1.CallProcedure('add_calendar',[dat]) ;
+CalendarDataMod.OracleDataSet1.refresh;
+
+end;
+
+procedure TCalendar.MonthCalendar10DblClick(Sender: TObject);
+var
+dat:tdatetime;
+begin
+dat:=MonthCalendar10.date;
+dat:=integer(trunc(MonthCalendar10.Date));
+CalendarDataMod.OraclePackage1.CallProcedure('add_calendar',[dat]) ;
+CalendarDataMod.OracleDataSet1.refresh;
+
+end;
+
+procedure TCalendar.MonthCalendar11DblClick(Sender: TObject);
+var
+dat:tdatetime;
+begin
+dat:=MonthCalendar11.date;
+dat:=integer(trunc(MonthCalendar11.Date));
+CalendarDataMod.OraclePackage1.CallProcedure('add_calendar',[dat]) ;
+CalendarDataMod.OracleDataSet1.refresh;
+
+end;
+
+procedure TCalendar.MonthCalendar12DblClick(Sender: TObject);
+var
+dat:tdatetime;
+begin
+dat:=MonthCalendar12.date;
+dat:=integer(trunc(MonthCalendar12.Date));
+CalendarDataMod.OraclePackage1.CallProcedure('add_calendar',[dat]) ;
+CalendarDataMod.OracleDataSet1.refresh;
+
+end;
+
+procedure TCalendar.BitBtn2Click(Sender: TObject);
+begin
+ CalendarDataMod.OraclePackage1.CallProcedure('SATURDAY',[]) ;
+CalendarDataMod.OracleDataSet1.refresh;
+end;
+
+procedure TCalendar.BitBtn3Click(Sender: TObject);
+begin
+  CalendarDataMod.OraclePackage1.CallProcedure('SUNDAY',[]) ;
+CalendarDataMod.OracleDataSet1.refresh;
+end;
+
+procedure TCalendar.BitBtn1Click(Sender: TObject);
+begin
+AddHoliday.ShowModal;
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TCalendar,
+    Class_Calendar,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

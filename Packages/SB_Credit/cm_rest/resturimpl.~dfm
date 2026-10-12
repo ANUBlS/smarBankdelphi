@@ -1,0 +1,169 @@
+object Mainfrm: TMainfrm
+  Left = 315
+  Top = 158
+  Width = 566
+  Height = 329
+  Color = clBtnFace
+  Font.Charset = RUSSIAN_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  OldCreateOrder = False
+  OnDestroy = FormDestroy
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object GroupBox14: TGroupBox
+    Left = 0
+    Top = 0
+    Width = 558
+    Height = 257
+    Align = alTop
+    Caption = 'Рестругризасийа ялавя мялуматлар'
+    TabOrder = 0
+    object SpeedButton1: TSpeedButton
+      Left = 265
+      Top = 64
+      Width = 23
+      Height = 19
+      Anchors = [akLeft, akBottom]
+      Caption = '>>'
+      Enabled = False
+      Flat = True
+      OnClick = SpeedButton1Click
+    end
+    object SpeedButton2: TSpeedButton
+      Left = 266
+      Top = 133
+      Width = 23
+      Height = 22
+      Anchors = [akLeft, akBottom]
+      Caption = '<<'
+      Enabled = False
+      Flat = True
+      OnClick = SpeedButton2Click
+    end
+    object lAdditionGrants: TEvanescence
+      Tag = 3112
+      Left = 8
+      Top = 39
+      Width = 250
+      Height = 203
+      OnClickCheck = lAdditionGrantsClickCheck
+      Anchors = [akLeft, akBottom]
+      ItemHeight = 13
+      TabOrder = 0
+      DataSource = ResDataSource
+      ListField = 'NMAE'
+      KeyField = 'ID'
+    end
+    object AUserGrants: TEvanescence
+      Tag = 3112
+      Left = 295
+      Top = 39
+      Width = 253
+      Height = 206
+      OnClickCheck = AUserGrantsClickCheck
+      Anchors = [akLeft, akBottom]
+      ItemHeight = 13
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 1
+      DataSource = ResAddDataSource
+      ListField = 'NAME'
+      KeyField = 'ID'
+    end
+    object CheckBox2: TCheckBox
+      Left = 9
+      Top = 19
+      Width = 97
+      Height = 17
+      Caption = 'Щамсыны сеч'
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clNavy
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 2
+      OnClick = CheckBox2Click
+    end
+    object CheckBox1: TCheckBox
+      Left = 297
+      Top = 19
+      Width = 97
+      Height = 17
+      Caption = 'Щамсыны сеч'
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clNavy
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 3
+      OnClick = CheckBox1Click
+    end
+  end
+  object Button1: TButton
+    Left = 472
+    Top = 264
+    Width = 75
+    Height = 25
+    Caption = 'Close'
+    TabOrder = 1
+    OnClick = Button1Click
+  end
+  object ResDataSet: TOracleDataSet
+    SQL.Strings = (
+      'select * from cm_resinfo '
+      'WHERE ID NOT IN (SELECT reinfoid'
+      ' FROM cm_resaddinfo WHERE CREDITID=:CRID)'
+      ' ')
+    Variables.Data = {0300000001000000050000003A43524944030000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      0400000003000000020000004944010000000000070000005345594E424F4C01
+      0000000000040000004E4D4145010000000000}
+    Session = CMDataModule.CMSession
+    Left = 200
+    Top = 112
+    object ResDataSetID: TFloatField
+      FieldName = 'ID'
+    end
+    object ResDataSetSEYNBOL: TStringField
+      FieldName = 'SEYNBOL'
+      Size = 1
+    end
+    object ResDataSetNMAE: TStringField
+      FieldName = 'NMAE'
+      Size = 100
+    end
+  end
+  object ResAddDataSet: TOracleDataSet
+    SQL.Strings = (
+      'select r.id,r.nmae name from CM_RESADDINFO a,cm_resinfo r'
+      'where a.reinfoid=r.id'
+      'AND A.CREDITID=:CRID')
+    Variables.Data = {0300000001000000050000003A43524944030000000000000000000000}
+    Session = CMDataModule.CMSession
+    Left = 368
+    Top = 120
+  end
+  object ResDataSource: TDataSource
+    DataSet = ResDataSet
+    Left = 232
+    Top = 112
+  end
+  object ResAddDataSource: TDataSource
+    DataSet = ResAddDataSet
+    Left = 424
+    Top = 120
+  end
+  object IUPackage: TOraclePackage
+    Session = CMDataModule.CMSession
+    PackageName = 'CM_CREDIT'
+    ParameterMode = pmNamed
+    Left = 312
+    Top = 150
+  end
+end

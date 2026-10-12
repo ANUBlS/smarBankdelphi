@@ -1,0 +1,67 @@
+﻿unit balhs;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  DBCtrls, StdCtrls, Grids, DBGrids, NLSLocalizer, SearchEdit, ExtCtrls;
+
+type
+  TForm11 = class(TForm)
+    DBGrid1: TDBGrid;
+    Panel1: TPanel;
+    Button1: TButton;
+    Button2: TButton;
+    DBLookupComboBox1: TSearchEdit;
+    SearchEdit1: TSearchEdit;
+    procedure Button1Click(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form11: TForm11;
+
+implementation
+
+uses Unit18, setac,SBTranslateProc,sboapiDataModuleImpl;
+
+{$R *.DFM}
+
+procedure TForm11.Button1Click(Sender: TObject);
+begin
+DataMod_CARDS.balanslar.Insert;
+DataMod_CARDS.balanslar.FieldByName('balans').AsString:=DBLookupComboBox1.Text;
+if  SearchEdit1.Text<>'' then
+DataMod_CARDS.balanslar.FieldByName('hes').AsInteger:=strtoint(SearchEdit1.text);
+
+DataMod_CARDS.balanslar.Post;
+DataMod_CARDS.balanslar.Session.Commit;
+DataMod_CARDS.balanslar.Refresh;
+end;
+
+procedure TForm11.Button2Click(Sender: TObject);
+begin
+
+if MessageDlg('Seçilmiş sətir silinsin?',mtinformation,[mbyes,mbno],0)=mryes then
+DataMod_CARDS.balanslar.Delete;
+DataMod_CARDS.balanslar.Session.commit;
+end;
+
+procedure TForm11.FormActivate(Sender: TObject);
+begin
+DBLookupComboBox1.Text:='';
+DataMod_CARDS.balanslar.open;
+end;
+
+procedure TForm11.FormCreate(Sender: TObject);
+begin
+SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+end.

@@ -1,0 +1,137 @@
+﻿unit FrmProp_paymentImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+   StdCtrls, Mask, DBCtrls, ExtCtrls, ComCtrls, ToolWin,
+  CMExcelExport, ActnList, ImgList, Grids, DBGridEh;
+
+type
+  TFrmProp_payment = class(TForm)
+    GroupBox1: TGroupBox;
+    Panel1: TPanel;
+    DBEdit1: TDBEdit;
+    CoolBar1: TCoolBar;
+    ToolBar1: TToolBar;
+    ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
+    ToolButton3: TToolButton;
+    ImageList1: TImageList;
+    ActionList1: TActionList;
+    ActnAdd: TAction;
+    ActnDel: TAction;
+    ActnExport: TAction;
+    ExcelExport: TCMExcelExport;
+    ToolButton4: TToolButton;
+    DBGridEh1: TDBGridEh;
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormShow(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure ActnAddExecute(Sender: TObject);
+    procedure ActnDelUpdate(Sender: TObject);
+    procedure ActnDelExecute(Sender: TObject);
+    procedure ActnExportExecute(Sender: TObject);
+    procedure ToolButton4Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+   RefreshContracts :Boolean;
+    { Public declarations }
+  end;
+
+var
+  FrmProp_payment: TFrmProp_payment;
+
+implementation
+
+uses DMprop, FrmProp_paymentAddImpl;
+
+{$R *.DFM}
+
+procedure TFrmProp_payment.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+  Resize := false;
+end;
+
+procedure TFrmProp_payment.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+ if Ord(Key) = VK_ESCAPE then Close;
+end;
+
+procedure TFrmProp_payment.FormShow(Sender: TObject);
+var
+propid:integer;
+name:string;
+begin
+propid:=DMproperties.DataSetPropIns.FieldByname('id').asinteger;
+name:= DMproperties.DataSetPropIns.FieldByname('name').asstring;
+Caption:= name+' adlı əmlakın satılması';
+with DMproperties.DataSetproperties_payments do
+begin
+  close ;
+   SetVariable('propid',propid);
+   open   ;
+ refresh
+ end;    
+end;
+
+procedure TFrmProp_payment.FormCreate(Sender: TObject);
+begin
+FrmProp_paymentAdd:=TFrmProp_paymentAdd.create(self)
+end;
+
+procedure TFrmProp_payment.FormDestroy(Sender: TObject);
+begin
+FrmProp_paymentAdd.Free;
+DMproperties.DataSetproperties_payments.CloseAll
+end;
+
+
+procedure TFrmProp_payment.ActnAddExecute(Sender: TObject);
+begin
+   if FrmProp_paymentAdd.ShowModal = mrOk then
+   begin
+      RefreshContracts := True;
+      DMproperties.DataSetproperties_payments.Refresh  ;
+   end;
+end;
+
+procedure TFrmProp_payment.ActnDelUpdate(Sender: TObject);
+begin
+  with (Sender as TAction) do
+        Enabled := (DMproperties.DataSetproperties_payments.RecordCount > 0)
+end;
+
+procedure TFrmProp_payment.ActnDelExecute(Sender: TObject);
+begin
+ if MessageDlg('Silinməsinə əminsinizmi?',
+             mtConfirmation, [mbYes, mbNo], 0) = mrNo
+    then Exit;
+
+    with DMproperties,OraclePackage2,DataSetproperties_payments do begin
+         CallProcedure('DeleteTranche_pay',['P_Prop_PayId',FieldByName('ID').AsInteger]);
+         Refresh;
+    end;
+end;
+
+procedure TFrmProp_payment.ActnExportExecute(Sender: TObject);
+begin
+with ExcelExport do
+   begin
+      Connect;
+      ExportDataset(DMproperties.DataSetproperties_payments,'Tranşlar',True);
+      Disconnect;
+   end
+end;
+
+procedure TFrmProp_payment.ToolButton4Click(Sender: TObject);
+begin
+close
+end;
+
+end.

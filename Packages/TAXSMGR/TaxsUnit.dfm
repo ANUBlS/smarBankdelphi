@@ -1,0 +1,769 @@
+object TAXS: TTAXS
+  Left = 0
+  Top = 0
+  Width = 1447
+  Height = 449
+  Caption = 'TAXS'
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = True
+  OnCreate = ActiveFormCreate
+  PixelsPerInch = 96
+  TextHeight = 13
+  object PageControl1: TPageControl
+    Left = 0
+    Top = 0
+    Width = 1447
+    Height = 449
+    ActivePage = TabSheet1
+    Align = alClient
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -13
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
+    ParentFont = False
+    TabOrder = 0
+    object TabSheet1: TTabSheet
+      Caption = '       In            '
+      object XFPanel1: TXFPanel
+        Left = 0
+        Top = 0
+        Width = 213
+        Height = 418
+        Align = alLeft
+        TabOrder = 0
+        Visible = False
+        ExplicitLeft = -6
+        object XFLabel2: TXFLabel
+          Left = 9
+          Top = 37
+          Width = 30
+          Height = 16
+          Caption = 'dan-'
+        end
+        object XFLabel3: TXFLabel
+          Left = 9
+          Top = 66
+          Width = 29
+          Height = 16
+          Caption = 'd'#601'k-'
+        end
+        object DateTimePicker3: TDateTimePicker
+          Left = 45
+          Top = 36
+          Width = 130
+          Height = 24
+          Date = 43392.452315995370000000
+          Time = 43392.452315995370000000
+          TabOrder = 0
+          OnCloseUp = DateTimePicker3CloseUp
+        end
+        object DateTimePicker2: TDateTimePicker
+          Left = 45
+          Top = 63
+          Width = 130
+          Height = 24
+          Date = 43392.452315995370000000
+          Time = 43392.452315995370000000
+          TabOrder = 1
+          OnCloseUp = DateTimePicker3CloseUp
+        end
+        object XFCheckBox1: TXFCheckBox
+          Left = 9
+          Top = 109
+          Width = 105
+          Height = 17
+          Caption = 'Vergi    H'#601'bs'
+          TabOrder = 2
+          OnClick = XFCheckBox1Click
+        end
+        object XFCheckBox2: TXFCheckBox
+          Left = 9
+          Top = 129
+          Width = 103
+          Height = 17
+          Caption = 'Vergi    Limit'
+          TabOrder = 3
+          OnClick = XFCheckBox1Click
+        end
+        object XFCheckBox3: TXFCheckBox
+          Left = 9
+          Top = 239
+          Width = 191
+          Height = 17
+          Caption = 'Vergi    H'#601'ps Geri'#231'a'#287'r'#305'lma'
+          TabOrder = 4
+          OnClick = XFCheckBox1Click
+        end
+        object XFCheckBox4: TXFCheckBox
+          Left = 8
+          Top = 262
+          Width = 190
+          Height = 17
+          Caption = 'Vergi    Limit Geri'#231'a'#287'r'#305'lma'
+          TabOrder = 5
+          OnClick = XFCheckBox1Click
+        end
+        object XFCheckBox5: TXFCheckBox
+          Left = 9
+          Top = 151
+          Width = 105
+          Height = 17
+          Caption = #304#351'sizlik  H'#601'bs'
+          TabOrder = 6
+          OnClick = XFCheckBox1Click
+        end
+        object XFCheckBox6: TXFCheckBox
+          Left = 9
+          Top = 196
+          Width = 109
+          Height = 17
+          Caption = 'Sosiyal H'#601'bs'
+          TabOrder = 7
+          OnClick = XFCheckBox1Click
+        end
+        object XFCheckBox7: TXFCheckBox
+          Left = 9
+          Top = 218
+          Width = 106
+          Height = 17
+          Caption = 'Sosiyal Limit'
+          TabOrder = 8
+          OnClick = XFCheckBox1Click
+        end
+        object XFCheckBox8: TXFCheckBox
+          Left = 9
+          Top = 174
+          Width = 104
+          Height = 17
+          Caption = #304#351'sizlik  Limit'
+          TabOrder = 9
+          OnClick = XFCheckBox1Click
+        end
+        object XFCheckBox9: TXFCheckBox
+          Left = 9
+          Top = 283
+          Width = 193
+          Height = 17
+          Caption = #304#351'sizlik  H'#601'ps Geri'#231'a'#287'r'#305'lma'
+          TabOrder = 10
+          OnClick = XFCheckBox1Click
+        end
+        object XFCheckBox10: TXFCheckBox
+          Left = 9
+          Top = 306
+          Width = 193
+          Height = 17
+          Caption = #304#351'sizlik  Limit Geri'#231'a'#287'r'#305'lma'
+          TabOrder = 11
+          OnClick = XFCheckBox1Click
+        end
+        object XFCheckBox11: TXFCheckBox
+          Left = 9
+          Top = 327
+          Width = 194
+          Height = 17
+          Caption = 'Sosiyal  H'#601'ps Geri'#231'a'#287'r'#305'lma'
+          TabOrder = 12
+          OnClick = XFCheckBox1Click
+        end
+        object XFCheckBox12: TXFCheckBox
+          Left = 9
+          Top = 351
+          Width = 194
+          Height = 17
+          Caption = 'Sosiyal  Limit Geri'#231'a'#287'r'#305'lma'
+          TabOrder = 13
+          OnClick = XFCheckBox1Click
+        end
+      end
+      object XFPanel2: TXFPanel
+        Left = 213
+        Top = 0
+        Width = 1226
+        Height = 418
+        Align = alClient
+        TabOrder = 1
+        ExplicitLeft = 256
+        ExplicitTop = 24
+        ExplicitWidth = 185
+        ExplicitHeight = 41
+        object XFPanel3: TXFPanel
+          Left = 1
+          Top = 1
+          Width = 1224
+          Height = 52
+          Align = alTop
+          TabOrder = 0
+          ExplicitLeft = 64
+          ExplicitTop = 3
+          ExplicitWidth = 1439
+          object DateTimePicker1: TDateTimePicker
+            Left = 1
+            Top = 109
+            Width = 24
+            Height = 951
+            Date = 43391.686976678240000000
+            Time = 43391.686976678240000000
+            TabOrder = 0
+          end
+          object ToolBar1: TToolBar
+            Left = 1
+            Top = 1
+            Width = 211
+            Height = 50
+            Align = alLeft
+            ButtonHeight = 34
+            ButtonWidth = 92
+            DrawingStyle = dsGradient
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -9
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            Images = ImageList1
+            ParentFont = False
+            ShowCaptions = True
+            TabOrder = 1
+            object ToolButton1: TToolButton
+              Left = 0
+              Top = 0
+              Caption = '          Yenil'#601'          '
+              ImageIndex = 2
+              OnClick = ToolButton1Click
+            end
+            object ToolButton2: TToolButton
+              Left = 92
+              Top = 0
+              Caption = 'Filtir'
+              ImageIndex = 1
+              OnClick = ToolButton2Click
+            end
+          end
+        end
+        object XDBGrid1: TXDBGrid
+          Left = 1
+          Top = 53
+          Width = 1224
+          Height = 323
+          Align = alClient
+          DataSource = dsrc_in
+          FillerColor = clSilver
+          GridStyle.VisualStyle = vsXPStyle
+          Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit, dgExtendedSelect, dgInternalSelect, dgRowResize, dgRowScroll, dgHotButtons, dgTitleButtons, dgTitleHeaders, dgTitleWidthOff, dgMarkerAutoAlign, dgMarkerAutoToggle]
+          PopupMenu = PluginPopupMenu1
+          TabOrder = 1
+          OnDblClick = XDBGrid1DblClick
+          Columns = <
+            item
+              Expanded = False
+              FieldName = 'CUST_ID'
+              Title.Alignment = taCenter
+              Title.Caption = 'Mus ID'
+              Visible = True
+              Width = 100
+            end
+            item
+              Expanded = False
+              FieldName = 'COLL_NUM'
+              Title.Alignment = taCenter
+              Title.Caption = 'S'#601'r'#601'ncam  '#8470
+              Visible = True
+              Width = 124
+            end
+            item
+              Expanded = False
+              FieldName = 'COLL_DATE'
+              Title.Alignment = taCenter
+              Title.Caption = 'S'#601'r'#601'ncam tarixi'
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'CUST_NAME'
+              Title.Alignment = taCenter
+              Title.Caption = 'M'#252#351't'#601'ri ad'#305
+              Visible = True
+              Width = 200
+            end
+            item
+              Expanded = False
+              FieldName = 'ACC_NO'
+              Title.Alignment = taCenter
+              Title.Caption = 'Hesab n'#246'mr'#601'si'
+              Visible = True
+              Width = 240
+            end
+            item
+              Expanded = False
+              FieldName = 'ACC_NAME'
+              Title.Alignment = taCenter
+              Title.Caption = 'Hesab'#305'n Ad'#305
+              Visible = True
+              Width = 220
+            end
+            item
+              Expanded = False
+              FieldName = 'AMMOUNT'
+              Title.Alignment = taCenter
+              Title.Caption = 'M'#601'bl'#601#287
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'LIMIT'
+              Title.Alignment = taCenter
+              Title.Caption = 'Limit'
+              Visible = True
+              Width = 100
+            end
+            item
+              Expanded = False
+              FieldName = 'SYS_DATETIM'
+              Title.Alignment = taCenter
+              Title.Caption = 'Sistem tarix'
+              Visible = True
+              Width = 100
+            end
+            item
+              Expanded = False
+              FieldName = 'FLEG'
+              Title.Alignment = taCenter
+              Title.Caption = 'Tip'
+              Visible = True
+              Width = 33
+            end
+            item
+              Expanded = False
+              FieldName = 'FLEG_TXT'
+              Title.Alignment = taCenter
+              Title.Caption = 'S'#601'rancam tipi'
+              Visible = True
+              Width = 600
+            end>
+        end
+        object XFPanel4: TXFPanel
+          Left = 1
+          Top = 376
+          Width = 1224
+          Height = 41
+          Align = alBottom
+          TabOrder = 2
+          ExplicitLeft = 0
+          ExplicitTop = 377
+          ExplicitWidth = 1439
+          object CBSearch: TComboBox
+            Left = 5
+            Top = 4
+            Width = 145
+            Height = 24
+            Style = csDropDownList
+            TabOrder = 0
+          end
+          object EditSearch: TEdit
+            Left = 156
+            Top = 4
+            Width = 269
+            Height = 24
+            TabOrder = 1
+            OnKeyPress = EditSearchKeyPress
+          end
+        end
+      end
+    end
+  end
+  object ods_in: TOracleDataSet
+    SQL.Strings = (
+      
+        'select c.id as cust_id,a.id as acc_id,c.name as cust_name, a.acc' +
+        '_no,a.name acc_name,t.fleg,t.sys_date,t.sys_datetim,t.block_text' +
+        ',t.ammount,'
+      'case when t.fleg='#39'D'#39'then a.limit'
+      '    when t.fleg='#39'A'#39'then t.ammount end limit,'
+      'case  when t.fleg ='#39'A'#39' then '#39'Vergi Alinmali'#39
+      '      when t.fleg ='#39'D'#39' then '#39'Vergi Dondurulmali'#39
+      '      when t.fleg ='#39'AI'#39' then '#39#304#351'sizlik Alinmali'#39
+      '      when t.fleg ='#39'DI'#39' then '#39#304#351'sizlik Dondurulmali'#39
+      '      when t.fleg ='#39'AS'#39' then '#39'Sosiyal Alinmali'#39
+      '      when t.fleg ='#39'DS'#39' then '#39'Sosiyal Dondurulmali'#39
+      '      when t.fleg ='#39'GA'#39' then '#39'Vergi Al'#305'nma Geri '#231'a'#287'rlmal'#305#39
+      '      when t.fleg ='#39'GD'#39' then '#39'Vergi Dondurulma Geri '#231'a'#287'rlmal'#305#39
+      '      when t.fleg ='#39'GAI'#39' then '#39#304#351'sizlik Al'#305'nma Geri '#231'a'#287'rlmal'#305#39
+      
+        '      when t.fleg ='#39'GDI'#39' then '#39#304#351'sizlik Dondurulma Geri '#231'a'#287'rlmal' +
+        #305#39
+      '      when t.fleg ='#39'GAS'#39' then '#39'Sosiyal Al'#305'nma Geri '#231'a'#287'rlmal'#305#39
+      
+        '      when t.fleg ='#39'GDS'#39' then '#39'Sosiyal Dondurulma Geri '#231'a'#287'rlmal'#305 +
+        #39
+      'end fleg_txt,'
+      '    t.coll_num,t.bank_text,t.limit_tesxt,coll_date'
+      
+        ' from  taxs_accept t,account a,customers c where t.accno=a.acc_n' +
+        'o and a.kli_id=c.id'
+      'and sys_date between :begin_dat and :end_dat'
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      'order by c.id asc'
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      '')
+    Optimize = False
+    Variables.Data = {
+      0400000002000000140000003A0042004500470049004E005F00440041005400
+      050000000000000000000000100000003A0045004E0044005F00440041005400
+      0C0000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      05000000100000000C0000004100430043005F004E004F000100000000000A00
+      00004C0049004D0049005400010000000000100000005300590053005F004400
+      4100540045000100000000000800000046004C00450047000100000000000E00
+      000043005500530054005F00490044000100000000000C000000410043004300
+      5F00490044000100000000001200000043005500530054005F004E0041004D00
+      4500010000000000100000004100430043005F004E0041004D00450001000000
+      00001000000046004C00450047005F0054005800540001000000000010000000
+      43004F004C004C005F004E0055004D0001000000000012000000420041004E00
+      4B005F005400450058005400010000000000160000004C0049004D0049005400
+      5F00540045005300580054000100000000001200000043004F004C004C005F00
+      4400410054004500010000000000160000005300590053005F00440041005400
+      4500540049004D000100000000001400000042004C004F0043004B005F005400
+      4500580054000100000000000E00000041004D004D004F0055004E0054000100
+      00000000}
+    Session = sboapiDataModule.SBSession
+    Left = 552
+    Top = 208
+    object ods_inCUST_ID: TIntegerField
+      FieldName = 'CUST_ID'
+      Required = True
+    end
+    object ods_inCOLL_NUM: TWideStringField
+      FieldName = 'COLL_NUM'
+    end
+    object ods_inCUST_NAME: TWideStringField
+      FieldName = 'CUST_NAME'
+      Size = 250
+    end
+    object ods_inACC_NAME: TWideStringField
+      FieldName = 'ACC_NAME'
+      Size = 250
+    end
+    object ods_inACC_ID: TFloatField
+      FieldName = 'ACC_ID'
+      Required = True
+    end
+    object ods_inACC_NO: TWideStringField
+      FieldName = 'ACC_NO'
+      Size = 28
+    end
+    object ods_inSYS_DATE: TDateTimeField
+      FieldName = 'SYS_DATE'
+    end
+    object ods_inFLEG: TWideStringField
+      FieldName = 'FLEG'
+      Size = 3
+    end
+    object ods_inLIMIT: TFloatField
+      FieldName = 'LIMIT'
+    end
+    object ods_inFLEG_TXT: TWideStringField
+      FieldName = 'FLEG_TXT'
+      Size = 50
+    end
+    object ods_inBANK_TEXT: TWideMemoField
+      FieldName = 'BANK_TEXT'
+      BlobType = ftWideMemo
+    end
+    object ods_inLIMIT_TESXT: TWideMemoField
+      FieldName = 'LIMIT_TESXT'
+      BlobType = ftWideMemo
+    end
+    object ods_inCOLL_DATE: TDateTimeField
+      FieldName = 'COLL_DATE'
+    end
+    object ods_inSYS_DATETIM: TDateTimeField
+      FieldName = 'SYS_DATETIM'
+    end
+    object ods_inBLOCK_TEXT: TWideMemoField
+      FieldName = 'BLOCK_TEXT'
+      BlobType = ftWideMemo
+    end
+    object ods_inAMMOUNT: TFloatField
+      FieldName = 'AMMOUNT'
+    end
+  end
+  object dsrc_in: TDataSource
+    DataSet = ods_in
+    Left = 440
+    Top = 168
+  end
+  object ImageList1: TImageList
+    Left = 264
+    Top = 192
+    Bitmap = {
+      494C010107007000700010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      0000000000003600000028000000400000002000000001001000000000000010
+      0000000000000000000000000000000000000000000010000000000000000000
+      0000000000001042FF7F00000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000021000000000000000
+      00000000000000001042000000000000000000000000000000000000FF7F0000
+      FF7F0000FF7F0000FF7F00000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000100000020002000000000000
+      00000000104200000000000000000000000000000000000000000000FF7F0000
+      FF7F0000FF7F0000FF7F00000000000000000000007C007C007C007C007C0040
+      007C007C007C007C007CE07F0000000000000000000000000000000000000000
+      00000000000000000000000000000000000010000002E0030002100000000000
+      000010420000FF7F0000104200000000000000000000000000000000FF7F0000
+      FF7F0000FF7F0000FF7F000000000000000000000000007C007C007C00400040
+      0040007C007C007C007C00000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000002000200020002100000000000
+      00001042000000000000104200000000000000000000000000000000FF7F0000
+      FF7F0000FF7F0000FF7F00000000000000000000000000000042100010000042
+      00420042E07FE07FE07F00000000000000000000000000000000000000000000
+      000000000000000000000000000000000000E003E0030002E003000200000000
+      0000104210420000FF7F0000FF7F0000000000000000000000000000FF7F0000
+      FF7F0000FF7F0000FF7F000000000000000000000000000000001F0010001000
+      1042104200000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000001000000200020002000210000000
+      00001042000000000000000010420000000000000000000000000000FF7F0000
+      FF7F0000FF7F0000FF7F0000000000000000000000000000FF031F001F001F00
+      1000100010421042000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000002000200020002000200020000
+      0000FF7F0000FF7F000000000000FF7F000000000000000000000000FF7F0000
+      FF7F0000FF7F0000FF7F0000000000000000000000000000FF031F001000FF03
+      1F00100010421042104200000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000002000000000002100000020002
+      0000FF7F00000000FF7F104200000000FF7F00000000000000000000FF7F0000
+      FF7F0000FF7F0000FF7F0000000000000000000000000000FF031F0010001042
+      1F001F0010001042104200000000000000000000000000000000000000000000
+      000000000000000000000000000000000000E00300000000E0030002E0030002
+      100010420000000010420000FF7F0000104200000000000000000000FF7F0000
+      FF7F0000FF7F0000FF7F0000000000000000000000000000FF03100010421042
+      FF031F0010001000104210420000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000210000002
+      10000000000000000000000010420000104200000000000000000000FF7F0000
+      FF7F0000FF7F0000FF7F0000000000000000000000000000FF031F0000000000
+      000000001F001F00100010421042104200000000000000000000000000000000
+      000000000000000000000000000000000000000000000000000000020002E003
+      00020000000000000000FF7F0000FF7F00000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000000FF031F001F0010001042104200000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000E00300021000
+      0000000000000000000010420000104200000000000000000000FF7FFF7FFF7F
+      FF7FFF7FFF7FFF7FFF7FFF7F0000000000000000000000000000000000000000
+      000000000000FF031F0010001000104200000000000000000000000000000000
+      00000000000000000000000000000000000000000000000000000000E0030002
+      00000000000000000000000010420000FF7F0000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000FF031F001000104200000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000002
+      0000000000000000000000000000FF7FFF7F0000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000000000000000000000000000E003
+      0000000000000000000000000000104200000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000008218C31
+      1042104210428C31082100000000000000000000113E52460000000000000000
+      0000000000000000000000000000000000000000000000000000000000004042
+      005F606B005F2021000000000000000000000000000000000000000000004042
+      005F606B005F20210000000000000000000000000000000084108430844C005C
+      005C005C844C084110428C318410000000000000DE7BF75E534A000000000000
+      00000000000000000000000000000000000000000000000000006025215BC773
+      C877E97BC877A46B215B000000000000000000000000000000006025215BC773
+      C877E97BC877A46B215B0000000000000000000000000010844C007C007C007C
+      007C007C007C007C844C8C41104284100000000009217B6F734A114200000000
+      000000000000000000000000000000000000000000002004A242855F8563A56B
+      CE73F87BF77BAA6B85636357A24200000000000000002004A242855F8563A56B
+      CE73F87BF77BAA6B85636357A2420000000000000010006C007C007C007C007C
+      007C007C007C007C007C006C8C418C31000000007B6FB6563A67B65610420000
+      000000000000000000000000000000000000000000004232434B6357635B9763
+      7557985FFE7BFF7FD5734353434B00000000000000004232434B6357635B9763
+      7557985FFE7BFF7FD5734353434B000000000000003C007C007CE77C007C007C
+      007C007C007CE77C007C007C844C104208210000B6567B6F6B2D3A6731423142
+      0000000000000000000000000000000000000000000024432347434F444B6257
+      625B625B625B945FFF7FB46B2347A33600000000000024432347434F444B6257
+      625B625B625B945FFF7FB46B2347A33600000020007C007CE77C0000F77E007C
+      007C007CF77E0000E77C007C007C08418C310000000000000000B6563A67744E
+      103E000000000000000000000000000000000000E110043F24438F63434B4253
+      625362536253444BDC73FF7F274B043BE1100000E110043F24438F63434B4253
+      625362536253444BDC73FF7F274B043BE110003C007C007C007CF77E0000F77E
+      007CF77E0000F77E007C007C007C844C1042000000000000185FBD776B2D3A67
+      F03D1142000000000000000000000000000000002422073FFD7BFF7FD8732447
+      444B244B444B24474C53FF7F9563E532242200002422073FFD7BFF7FD8732447
+      444B244B444B24474C53FF7F9563E5322422005C007C007C007C007CF77E0000
+      00000000F77E007C007C007C007C005C104200000000000000000000BD77514A
+      5601FB01FA01FA011A02970100000000000000006422B767FF7FFF7FFF7F2543
+      254325432543DB6FFE7FFF7FFF7F0A37642200006422B767FF7FFF7FFF7F2543
+      254325432543DB6FFE7FFF7FFF7F0A376422005C007C007C007C007C007C0000
+      00000000007C007C007C007C007C005C104200000000000000000000B65A2C19
+      3B063B061B061B061B061B065936000000000000041AE82E965FFF7F4F4F073F
+      073F073F073F073B975BFF7FDC6FC726041A0000041AE82E965FFF7F4F4F073F
+      073F073F073F073B975BFF7FDC6FC726041A005C007C007C007C007CF77E0000
+      00000000F77E007C007C007C007C005C8C31000000000000000000001C575E53
+      7C167C167C167C167C167C125C12770D000000008311EA32524FFF7F955F093B
+      093F093F093F093BEB36FF7F0F3FA722831100008311EA32524FFF7F955F093B
+      093F093F093F093BEB36FF7F0F3FA7228311003C007C007C007CF77E0000F77E
+      007CF77E0000F77E007C007C007C844C0821000000000000000000005A2E5F47
+      9D1A9D1A9D1A9D1A9C1A9C1A7C165B26000000000000CB2EED36FF7FFF7F0D3F
+      0C3F0C3F0C3F0D3B0E3FED36ED364612000000000000CB2EED36FF7FFF7F0D3F
+      0C3F0C3F0C3F0D3B0E3FED36ED36461200000020007C007CE77C0000F77E007C
+      007C007CF77E0000E77C007C007C8430000000000000000000000000BB367F53
+      FE2EFE2EB60DDF773E475E4B5F477B2A000000000000891A0F3B785BFF7FDC73
+      524F0F3F0F3F544F103B0F3B0F3BE204000000000000891A0F3B785BFF7FDC73
+      524F0F3F0F3F544F103B0F3B0F3BE20400000000003C007C007CE77C007C007C
+      007C007C007CE77C007C007C844C84100000000000000000000000003D4FDF73
+      7F4F7F535D5F0000BF731D3F5F4B7B260000000000002000E6093347334B3447
+      5653554F123F534B334BEE2EE60900000000000000002000E6093347334B3447
+      5653554F123F534B334BEE2EE6090000000000000010006C007C007C007C007C
+      007C007C007C007C007C006C0010000000000000000000000000000000001D43
+      7F539F531D43F721DB3A9F531E3F9E6F00000000000000002000AD22544B5553
+      5553555355535553544BA5052000000000000000000000002000AD22544B5553
+      5553555355535553544BA505200000000000000000000010003C007C007C007C
+      007C007C007C007C003C00100000000000000000000000000000000000009F6B
+      DF6F9F5B9F57BF5BBF577F4F1C4F000000000000000000000000000000004401
+      C6010702C601A200000000000000000000000000000000000000000000004401
+      C6010702C601A2000000000000000000000000000000000000000020003C005C
+      005C005C003C0020000000000000000000000000000000000000000000000000
+      FF7B7F5FFE3A9C2EDD3A9F6B0000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000424D3E000000000000003E000000
+      2800000040000000200000000100010000000000000100000000000000000000
+      000000000000000000000000FFFFFF00DFCFF80FFFFF0000CFEFF007FFFF0000
+      8FBFF007800700000757F007C00F00000777F007E00F0000072BF007F07F0000
+      037BF007E01F0000035DF007E00F00006166F007E00F0000606AF007E0070000
+      F0FAF007E7810000F0F5E003FF810000F1F5E003FFC10000F9FAF007FFE10000
+      FDFCFE3FFFFF0000FDFDFFFFFFFF0000F80F9FFF00000000E0038FFF00000000
+      C00187FF00000000800183FF00000000800081FF000000000820F0FF00000000
+      0440E07F000000000380F807000000000380F803000000000380F80100000000
+      0440F801000000000821F801000000008001F821000000008003FC0100000000
+      C007FC0300000000F01FFE070000000000000000000000000000000000000000
+      000000000000}
+  end
+  object OraclePackage1: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'pg_pcustservice'
+    Left = 464
+    Top = 232
+  end
+  object OraclePackage2: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'sb_taxs'
+    Left = 608
+    Top = 256
+  end
+  object PluginPopupMenu1: TPluginPopupMenu
+    Active = False
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    Left = 360
+    Top = 288
+    object ap1: TMenuItem
+      Caption = #199'ap'
+      OnClick = ap1Click
+    end
+    object Exceleat1: TMenuItem
+      Caption = 'Excel'#601' at'
+      OnClick = Exceleat1Click
+    end
+  end
+  object OracleDataSet1: TOracleDataSet
+    SQL.Strings = (
+      
+        'select coll_num,text ,replace(replace(field,'#39'/'#39',null),'#39'-'#39','#39'_'#39') a' +
+        's colum from taxs_fild_temporary')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000030000001000000043004F004C004C005F004E0055004D0001000000
+      00000800000054004500580054000100000000000A00000043004F004C005500
+      4D00010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 704
+    Top = 128
+    object OracleDataSet1COLL_NUM: TWideStringField
+      FieldName = 'COLL_NUM'
+    end
+    object OracleDataSet1TEXT: TWideStringField
+      FieldName = 'TEXT'
+      Size = 500
+    end
+    object OracleDataSet1COLUM: TWideStringField
+      FieldName = 'COLUM'
+      Size = 1600
+    end
+  end
+  object ods_sys: TOracleDataSet
+    SQL.Strings = (
+      'select trunc(sysdate) dat from dual')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {050000000100000006000000440041005400010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 832
+    Top = 128
+    object ods_sysDAT: TDateTimeField
+      FieldName = 'DAT'
+    end
+  end
+  object CMExcelExport1: TCMExcelExport
+    StyleColumnWidth = cwDefault
+    ColumnWidth = 0
+    FontTitles.Charset = DEFAULT_CHARSET
+    FontTitles.Color = clWindowText
+    FontTitles.Height = -11
+    FontTitles.Name = 'Tahoma'
+    FontTitles.Style = []
+    OrientationTitles = 0
+    FontData.Charset = DEFAULT_CHARSET
+    FontData.Color = clWindowText
+    FontData.Height = -11
+    FontData.Name = 'Tahoma'
+    FontData.Style = []
+    FontSummary.Charset = DEFAULT_CHARSET
+    FontSummary.Color = clWindowText
+    FontSummary.Height = -11
+    FontSummary.Name = 'Tahoma'
+    FontSummary.Style = []
+    SummarySelection = ssNone
+    SummaryCalculation = scSUM
+    Left = 344
+    Top = 144
+  end
+end

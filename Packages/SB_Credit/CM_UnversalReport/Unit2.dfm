@@ -1,0 +1,32 @@
+object Form2: TForm2
+  Left = 0
+  Top = 0
+  ClientHeight = 22
+  ClientWidth = 573
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poMainFormCenter
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Gauge1: TGauge
+    Left = 0
+    Top = 0
+    Width = 573
+    Height = 22
+    Align = alClient
+    BackColor = clAqua
+    Color = clRed
+    ForeColor = clYellow
+    ParentColor = False
+    Progress = 0
+    ExplicitLeft = 4
+    ExplicitTop = -20
+    ExplicitWidth = 289
+    ExplicitHeight = 42
+  end
+end

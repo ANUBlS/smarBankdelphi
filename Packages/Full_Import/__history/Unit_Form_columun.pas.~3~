@@ -1,0 +1,46 @@
+unit Unit_Form_columun;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, CheckLst, ExtCtrls;
+
+type
+  TForm_column = class(TForm)
+    CheckListBox: TCheckListBox;
+    Panel1: TPanel;
+    Button1: TButton;
+    procedure Button1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form_column: TForm_column;
+
+implementation
+
+{$R *.dfm}
+
+procedure TForm_column.Button1Click(Sender: TObject);
+  var
+  i,a:integer     ;
+  s:string;
+begin
+for i := 0 to CheckListBox.Items.Count - 1 do
+    begin
+
+    a:= CheckListBox.ItemEnabled[i];
+    end;
+   { if CheckListBox.Checked[i] then
+      s :=s+CheckListBox.Items[i]+ #13#10;
+  ShowMessage(s);           }
+//if CheckListBox.Checked=true then
+
+//showmessage(CheckListBox.text);
+end;
+
+end.

@@ -1,0 +1,282 @@
+object SheduleReplace: TSheduleReplace
+  Left = 485
+  Top = 255
+  BorderIcons = []
+  BorderStyle = bsSingle
+  ClientHeight = 299
+  ClientWidth = 293
+  Color = clBtnFace
+  Font.Charset = RUSSIAN_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poScreenCenter
+  OnCanResize = FormCanResize
+  OnClose = FormClose
+  OnKeyPress = FormKeyPress
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object XFGroupBox1: TXFGroupBox
+    Left = 0
+    Top = 0
+    Width = 293
+    Height = 299
+    Align = alClient
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    Gradient.Direction = gdHorizontal
+    Gradient.EndColor = clSilver
+    Gradient.StartColor = cl3DLight
+    Gradient.SwapColors = True
+    ParentFont = False
+    TabOrder = 0
+    DesignSize = (
+      293
+      299)
+    object Image1: TImage
+      Left = 12
+      Top = 20
+      Width = 25
+      Height = 25
+      Picture.Data = {
+        07544269746D6170F6060000424DF60600000000000036000000280000001800
+        0000180000000100180000000000C00600000000000000000000000000000000
+        0000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        8181B43C3C8A3B3B8A7D7DB1FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        FFFFFFFFFF6666A419197F32329A33339B1A1A806060A1FFFFFFFFFFFFFFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFFF1A1A792F2FA03C3CB03C3CB03131A3141476FF
+        FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF1E1E7B1E1E972727A82727
+        A820209B161677FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF7A7AB0
+        11117A10108910108911117A7575ADFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        FFFFFFFFFFFFFFFFA0A0C75E5E9F5E5EA0A0A0C6FFFFFFFFFFFFFFFFFFFFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFFFFEFEFFFDFDFEFAFAFCFAFAFCFDFDFEFEFEFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF6A6AA67171
+        AAFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        43439005057F06067D55559AFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        FFFFFFFFFFC4C4DC14147B0404950404931F1F7FD6D6E7FFFFFFFFFFFFFFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFFFA5A5C909097B0303980303970E0E7ABCBCD8FF
+        FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF9393BF04047D0202980202
+        9809097BA6A6CAFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF8282B4
+        0808801818A21515A007077D9090BDFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        FFFFFFFFFF6F6FA92C2C925959BC5757BB27278E7979B0FFFFFFFFFFFFFFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFFF5D5D9E3131975555BA5555BA3131966060A0FF
+        FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF4A4A933030994C4CB74C4C
+        B732329A494993FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF39398A
+        2E2E9C4242B34242B331319E343487FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        FFFFFFFFFF2C2C822B2B9E3939AF3939AF2D2DA023237DFFFFFFFFFFFFFFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFFF1F1F7C25259D2F2FAB2F2FAB2929A1121276FF
+        FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF1414771F1F9D2626A72626
+        A72222A0070771FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF101075
+        18189A1C1CA31C1CA319199C070772FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        FFFFFFFFFF1A1A790F0F9313139F13139F1010941B1B7AFFFFFFFFFFFFFFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFFF6565A308087909098F09099107077D59599CFF
+        FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFE1E1ED6767A41B1B791515
+        77484892CFCFE3FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        FFFF}
+      Transparent = True
+    end
+    object XFLabel1: TXFLabel
+      Left = 46
+      Top = 23
+      Width = 227
+      Height = 26
+      Alignment = taCenter
+      BiDiMode = bdLeftToRight
+      Caption = 'Diqq'#601't ! '#214'd'#601'm'#601' plan'#305'n'#305'n d'#601'yi'#351'dirilm'#601'sini ist'#601'yirsinizmi  ?'
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clMaroon
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentBiDiMode = False
+      ParentFont = False
+      WordWrap = True
+    end
+    object XFLabel2: TXFLabel
+      Left = 10
+      Top = 167
+      Width = 34
+      Height = 13
+      Caption = 'Qal'#305'q :'
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+    end
+    object XFLabel3: TXFLabel
+      Left = 157
+      Top = 167
+      Width = 42
+      Height = 13
+      Caption = 'Period :'
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+    end
+    object XFButton11: TXFButton
+      Left = 215
+      Top = 260
+      Width = 75
+      Height = 30
+      Anchors = []
+      Caption = 'Ba'#287'la'
+      DoubleBuffered = True
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentDoubleBuffered = False
+      ParentFont = False
+      TabOrder = 0
+      OnClick = XFButton11Click
+      Flat = True
+      Gradient.EndColor = clGray
+      Gradient.HotColor = clLime
+      Gradient.Options = [goGradient, goHotButton, goHotTrack, goHotColor]
+    end
+    object XFButton1: TXFButton
+      Left = 137
+      Top = 260
+      Width = 75
+      Height = 30
+      Anchors = []
+      Caption = 'Q'#601'bul et'
+      DoubleBuffered = True
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentDoubleBuffered = False
+      ParentFont = False
+      TabOrder = 1
+      OnClick = XFButton1Click
+      Flat = True
+      Gradient.EndColor = clGray
+      Gradient.HotColor = clLime
+      Gradient.Options = [goGradient, goHotButton, goHotTrack, goHotColor]
+    end
+    object XFRadioGroup1: TXFRadioGroup
+      Left = 2
+      Top = 71
+      Width = 288
+      Height = 84
+      Caption = 'Se'#231'iml'#601'r'
+      Gradient.Direction = gdHorizontal
+      Gradient.EndColor = clSilver
+      Gradient.StartColor = cl3DLight
+      Gradient.SwapColors = True
+      ItemIndex = 0
+      Items.Strings = (
+        'Anuitet azalmas'#305
+        #214'd'#601'ni'#351' m'#252'dd'#601'tinin q'#305'sald'#305'lmas'#305
+        'Yox')
+      TabOrder = 2
+      OnClick = XFRadioGroup1Click
+    end
+    object Rest: TCMCurrencyEdit
+      Tag = 1
+      Left = 50
+      Top = 163
+      Width = 94
+      Height = 21
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = [fsBold]
+      ParentFont = False
+      ReadOnly = True
+      TabOrder = 3
+      Text = '0'
+    end
+    object Edit1: TEdit
+      Left = 208
+      Top = 163
+      Width = 74
+      Height = 21
+      TabOrder = 4
+      Text = '0'
+    end
+    object XFGroupBox2: TXFGroupBox
+      Left = 1
+      Top = 189
+      Width = 292
+      Height = 68
+      Caption = #214'd'#601'ni'#351' tarixinin d'#601'yi'#351'dirilm'#601'si'
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clNavy
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      Gradient.Direction = gdHorizontal
+      Gradient.EndColor = clSilver
+      Gradient.StartColor = cl3DLight
+      Gradient.SwapColors = True
+      ParentFont = False
+      TabOrder = 5
+      object XFCheckBox1: TXFCheckBox
+        Left = 89
+        Top = 18
+        Width = 192
+        Height = 17
+        Caption = #214'd'#601'ni'#351' tarixini d'#601'yi'#351'sin?'
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clBlack
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 0
+        OnClick = XFCheckBox1Click
+      end
+      object DateTimePicker1: TDateTimePicker
+        Left = 67
+        Top = 40
+        Width = 156
+        Height = 21
+        Date = 40735.483427187500000000
+        Time = 40735.483427187500000000
+        Checked = False
+        Enabled = False
+        TabOrder = 1
+      end
+    end
+  end
+end

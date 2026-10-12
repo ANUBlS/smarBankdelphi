@@ -1,0 +1,101 @@
+unit UnitBalansAdd;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, DB, OracleData, DBGridEh, StdCtrls, Buttons, Mask, DBCtrlsEh,
+  DBLookupEh, ExtCtrls, Oracle;
+
+type
+  TFormAdd = class(TForm)
+    BKTName: TOracleDataSet;
+    DSBKTName: TDataSource;
+    Panel1: TPanel;
+    Panel2: TPanel;
+    Panel3: TPanel;
+    Panel4: TPanel;
+    DBLookupComboboxEh1: TDBLookupComboboxEh;
+    DBLookupComboboxEh2: TDBLookupComboboxEh;
+    DBLookupComboboxEh3: TDBLookupComboboxEh;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    BitBtn1: TBitBtn;
+    BitBtn2: TBitBtn;
+    ODSBKT: TOracleDataSet;
+    DSBKT: TDataSource;
+    DSBalanas: TDataSource;
+    ODSBalans: TOracleDataSet;
+    prudensial: TOraclePackage;
+    ODSBKTID: TFloatField;
+    ODSBKTDESCRIPTION: TWideStringField;
+    procedure FormShow(Sender: TObject);
+    procedure DBLookupComboboxEh1Change(Sender: TObject);
+    procedure BitBtn1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormAdd: TFormAdd;
+
+implementation
+uses sboapiDataModuleImpl, UnitBktBalans;
+
+{$R *.dfm}
+
+procedure TFormAdd.BitBtn1Click(Sender: TObject);
+var
+  Bkttype:variant;
+  Tip:variant;
+  Balans:variant;
+begin
+  Bkttype:=DBLookupComboboxEh1.KeyValue;
+  Tip:=DBLookupComboboxEh2.KeyValue;
+  Balans:=DBLookupComboboxEh3.KeyValue;
+  if VarIsNull(Bkttype)then begin
+                              ShowMessage('Bkt-ni daxil edin!!!!');
+                            end;
+  if VarIsNull(Tip)     then begin
+                               ShowMessage('Tip-i daxil edin!!!!');
+                             end;
+
+  if VarIsNull(Balans)  then begin
+                               ShowMessage('Balansý daxil edin!!!!');
+                             end;
+
+
+  Prudensial.CallProcedure('BktAdd',[Bkttype,Tip,Balans]);
+  FormAdd.close;
+  BKTBalans.BKTBalans.Refresh;
+end;
+
+procedure TFormAdd.DBLookupComboboxEh1Change(Sender: TObject);
+begin
+  With ODSBKT do
+  begin
+    Close;
+    Sql.Clear;
+    IF BKTName.FieldByName('name').AsString='BKT1'   then  SQL.Add('select id,A||description description from bkt1');
+    IF BKTName.FieldByName('name').AsString='BKT2'   then  SQL.Add('select id,A||description description from bkt2');
+    IF BKTName.FieldByName('name').AsString='BKT3'   then  SQL.Add('select * from bkt3');
+    IF BKTName.FieldByName('name').AsString='BKT7'   then  SQL.Add('select * from bkt7');
+    IF BKTName.FieldByName('name').AsString='BKT9.1' then  SQL.Add('select id,A||description description from bkt9_1');
+    IF BKTName.FieldByName('name').AsString='BKT11'  then  SQL.Add('select id,A||description description from bkt11');
+    IF BKTName.FieldByName('name').AsString='BKT12'  then  SQL.Add('select id,A||description description from bkt12');
+    Open;
+  end;
+end;
+
+procedure TFormAdd.FormShow(Sender: TObject);
+begin
+  BKTName.Close;
+  BKTName.Open;
+  ODSBalans.Close;
+  ODSBalans.Open;
+end;
+
+end.

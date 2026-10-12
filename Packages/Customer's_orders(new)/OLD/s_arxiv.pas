@@ -1,0 +1,62 @@
+unit s_arxiv;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, ComCtrls, ExtCtrls;
+
+type
+  Tsend_arxiv = class(TForm)
+    Panel1: TPanel;
+    GroupBox1: TGroupBox;
+    Label1: TLabel;
+    Label2: TLabel;
+    GroupBox2: TGroupBox;
+    closedate: TDateTimePicker;
+    GroupBox3: TGroupBox;
+    Button1: TButton;
+    procedure Button1Click(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  send_arxiv: Tsend_arxiv;
+
+implementation
+
+uses datamodule;
+
+{$R *.DFM}
+
+procedure Tsend_arxiv.Button1Click(Sender: TObject);
+var
+    v_pnum: String;
+    v_id: integer;
+    v_close_date  :TDateTime;
+   begin
+   v_close_date  :=Trunc(closedate.DateTime);
+  v_id :=datamodule1.order.FieldByName('id').asinteger;
+  v_pnum :=datamodule1.order.FieldByName('PNUM').AsString;
+  with datamodule1.arxiv_order,datamodule1.customer_orders do
+  begin
+
+        CallProcedure('trans_arxiv',[v_id,v_close_date]);
+
+ with datamodule1.order,datamodule1.customer_orders do
+  begin
+
+        CallProcedure('delete_order',[v_id]); refresh; send_arxiv.close; end; end;end;
+
+
+
+
+procedure Tsend_arxiv.FormActivate(Sender: TObject);
+begin
+closedate.datetime :=datamodule1.customer_orders.CallDateFunction('CurrentDate',[]);
+end;
+end.

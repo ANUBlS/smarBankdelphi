@@ -1,0 +1,55 @@
+object BarForm: TBarForm
+  Left = 351
+  Top = 294
+  BorderIcons = []
+  BorderStyle = bsToolWindow
+  ClientHeight = 81
+  ClientWidth = 358
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  OldCreateOrder = False
+  OnClose = FormClose
+  OnCloseQuery = FormCloseQuery
+  OnCreate = FormCreate
+  OnDeactivate = FormDeactivate
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 358
+    Height = 81
+    Align = alClient
+    TabOrder = 0
+    object BarTitle: TGroupBox
+      Left = 1
+      Top = 1
+      Width = 356
+      Height = 79
+      Align = alClient
+      Caption = 'MyBar'
+      TabOrder = 0
+      object BarCaption: TLabel
+        Left = 16
+        Top = 16
+        Width = 37
+        Height = 13
+        Caption = 'BarText'
+      end
+      object Bar: TProgressBar
+        Left = 16
+        Top = 32
+        Width = 321
+        Height = 25
+        Min = 0
+        Max = 100
+        Smooth = True
+        TabOrder = 0
+      end
+    end
+  end
+end

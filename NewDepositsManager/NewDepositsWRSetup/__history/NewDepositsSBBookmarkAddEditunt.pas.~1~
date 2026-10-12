@@ -1,0 +1,100 @@
+﻿unit NewDepositsSBBookmarkAddEditunt;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+   ActnList, DBCtrlsEh, DBLookupEh, StdCtrls, Mask, DBCtrls;
+
+type
+  TSBBookmarkAddEditForm_new = class(TForm)
+    ActionList1: TActionList;
+    ActnAccept: TAction;
+    ActnReject: TAction;
+    Button1: TButton;
+    Button2: TButton;
+    DBEdit3: TDBEdit;
+    DBLookupComboboxEh1: TDBLookupComboboxEh;
+    Label1: TLabel;
+    Label4: TLabel;
+    procedure ActnAcceptExecute(Sender: TObject);
+    procedure ActnRejectExecute(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure FormCanResize(Sender: TObject; var NewWidth, NewHeight: Integer;
+      var Resize: Boolean);
+    procedure FormDestroy(Sender: TObject);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  SBBookmarkAddEditForm_new: TSBBookmarkAddEditForm_new;
+
+implementation
+    uses SBWRSetupDataModImpl_new,SBWRBookmarksTuning_new,SBTranslateProc,sboapiDataModuleimpl;
+{$R *.dfm}
+
+procedure TSBBookmarkAddEditForm_new.ActnAcceptExecute(Sender: TObject);
+
+resourcestring
+     BookmarkNameEmptyMsg='Bukmakın adı  daxil edilməyib';
+     descriptionNameEmptyMsg='Təyinatı daxil edilməyib';
+   begin
+
+     if  (DBLookupComboboxEh1.Text<>'') and (DBEdit3.Text<>'') then
+     begin
+       with SBWRSetupDataMod_new.SBWRBookmarksDSet do
+            Post;
+            ModalResult := mrOk;
+     end else
+     begin
+       if DBLookupComboboxEh1.Text='' then Showmessage('Təyinatı daxil edilməyib');
+       if DBEdit3.Text='' then Showmessage('Bukmakın adı  daxil edilməyib');
+       with SBWRSetupDataMod_new.SBWRBookmarksDSet do
+            Cancel;
+    end;
+end;
+
+procedure TSBBookmarkAddEditForm_new.ActnRejectExecute(Sender: TObject);
+begin
+ with SBWRSetupDataMod_new.SBWRBookmarksDSet do
+        Cancel;
+    ModalResult := mrCancel;
+end;
+
+procedure TSBBookmarkAddEditForm_new.FormCanResize(Sender: TObject;
+  var NewWidth, NewHeight: Integer; var Resize: Boolean);
+begin
+Resize:=false;
+end;
+
+procedure TSBBookmarkAddEditForm_new.FormCreate(Sender: TObject);
+begin
+  with  SBWRSetupDataMod_new do
+     begin
+       SBWRBookmarksDSet.Open;
+       SBWRFieldsDSet.Open;
+     end;
+     SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TSBBookmarkAddEditForm_new.FormDestroy(Sender: TObject);
+begin
+ with  SBWRSetupDataMod_new do
+       begin
+         SBWRBookmarksDSet.CloseAll;
+         SBWRFieldsDSet.CloseAll;
+       end;
+end;
+
+procedure TSBBookmarkAddEditForm_new.FormKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+     if ORD(Key) = VK_ESCAPE then
+     ActnRejectExecute(nil);
+end;
+
+end.

@@ -1,0 +1,304 @@
+object TransactionsViewForm: TTransactionsViewForm
+  Left = 247
+  Top = 258
+  BorderIcons = [biSystemMenu]
+  ClientHeight = 319
+  ClientWidth = 736
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'MS Sans Serif'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  OnCanResize = FormCanResize
+  OnClose = FormClose
+  OnCloseQuery = FormCloseQuery
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  OnKeyPress = FormKeyPress
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object DBGridTransactions: TDBGridEh
+    Left = 0
+    Top = 0
+    Width = 736
+    Height = 267
+    Align = alClient
+    DataSource = DataSrcTransactions
+    Flat = True
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    FooterColor = clWindow
+    FooterFont.Charset = RUSSIAN_CHARSET
+    FooterFont.Color = clWindowText
+    FooterFont.Height = -11
+    FooterFont.Name = 'Tahoma'
+    FooterFont.Style = []
+    Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit, dgMultiSelect]
+    OptionsEh = [dghFixed3D, dghHighlightFocus, dghClearSelection, dghDblClickOptimizeColWidth, dghDialogFind]
+    ParentFont = False
+    TabOrder = 0
+    TitleFont.Charset = DEFAULT_CHARSET
+    TitleFont.Color = clWhite
+    TitleFont.Height = -13
+    TitleFont.Name = 'Azl Sans Serif'
+    TitleFont.Style = []
+    VertScrollBar.VisibleMode = sbNeverShowEh
+    OnDrawColumnCell = DBGridTransactionsDrawColumnCell
+    Columns = <
+      item
+        EditButtons = <>
+        FieldName = 'TRDATE'
+        Footers = <>
+        Title.Color = clNavy
+        Width = 85
+      end
+      item
+        Color = clSilver
+        EditButtons = <>
+        Footers = <>
+        Title.Color = clNavy
+        Width = 18
+      end
+      item
+        EditButtons = <>
+        FieldName = 'DEBITACCNO'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        Footers = <>
+        Title.Color = clNavy
+        Title.Font.Charset = DEFAULT_CHARSET
+        Title.Font.Color = clWhite
+        Title.Font.Height = -13
+        Title.Font.Name = 'Tahoma'
+        Title.Font.Style = []
+        Width = 200
+      end
+      item
+        Color = clSilver
+        EditButtons = <>
+        FieldName = 'DEBITCURRENCY'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clNavy
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        Footers = <>
+        Title.Color = clNavy
+        Width = 24
+      end
+      item
+        EditButtons = <>
+        FieldName = 'CREDITACCNO'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        Footers = <>
+        Title.Color = clNavy
+        Title.Font.Charset = DEFAULT_CHARSET
+        Title.Font.Color = clWhite
+        Title.Font.Height = -13
+        Title.Font.Name = 'Tahoma'
+        Title.Font.Style = []
+        Width = 200
+      end
+      item
+        Color = clSilver
+        EditButtons = <>
+        FieldName = 'CREDITCURRENCY'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clNavy
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        Footers = <>
+        Title.Color = clNavy
+        Width = 28
+      end
+      item
+        EditButtons = <>
+        FieldName = 'INBALANCECHAR'
+        Footers = <>
+        Title.Color = clNavy
+        Visible = False
+      end
+      item
+        EditButtons = <>
+        FieldName = 'TrAmount'
+        Footers = <>
+        Title.Color = clNavy
+        Width = 138
+      end>
+  end
+  object Panel1: TPanel
+    Left = 0
+    Top = 267
+    Width = 736
+    Height = 52
+    Align = alBottom
+    BevelOuter = bvNone
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 1
+    ExplicitWidth = 594
+    object ButtonCommit: TButton
+      Left = 574
+      Top = 25
+      Width = 75
+      Height = 25
+      Caption = #1058#1103#1089#1076#1080#1075' '#1077#1090
+      TabOrder = 0
+      OnClick = ButtonCommitClick
+    end
+    object ButtonDismis: TButton
+      Left = 654
+      Top = 25
+      Width = 75
+      Height = 25
+      Caption = #1048#1084#1090#1080#1085#1072' '#1077#1090
+      ModalResult = 2
+      TabOrder = 1
+    end
+    object DBEditEh1: TDBEditEh
+      Left = 2
+      Top = 3
+      Width = 727
+      Height = 21
+      Color = clInfoBk
+      DataField = 'TRDESCRIPTION'
+      DataSource = DataSrcTransactions
+      EditButtons = <>
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 2
+      Visible = True
+    end
+  end
+  object Transactions: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      '    DEBITACCNO,'
+      '    DEBITCURRENCY,'
+      '    CREDITACCNO,'
+      '    CREDITCURRENCY,'
+      '    TRDATE,'
+      '    INBALANCECHAR,'
+      '    FLAGS,'
+      '    DEBITAMOUNT,'
+      '    CREDITAMOUNT,'
+      '    NATAMOUNT,'
+      '    TRDESCRIPTION,'
+      '    CANPROCESS'
+      '  from SBCM_DELAYED_TRANSACTIONS'
+      ' '
+      ' ')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000C00000014000000440045004200490054004100430043004E004F00
+      0100000000001A00000044004500420049005400430055005200520045004E00
+      4300590001000000000016000000430052004500440049005400410043004300
+      4E004F000100000000001C000000430052004500440049005400430055005200
+      520045004E00430059000100000000000C000000540052004400410054004500
+      0100000000001A00000049004E00420041004C0041004E004300450043004800
+      410052000100000000000A00000046004C004100470053000100000000001600
+      00004400450042004900540041004D004F0055004E0054000100000000001800
+      000043005200450044004900540041004D004F0055004E005400010000000000
+      120000004E004100540041004D004F0055004E0054000100000000001A000000
+      540052004400450053004300520049005000540049004F004E00010000000000
+      14000000430041004E00500052004F004300450053005300010000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    OnCalcFields = TransactionsCalcFields
+    Left = 280
+    Top = 112
+    object TransactionsDEBITACCNO: TStringField
+      DisplayLabel = #1044#1077#1073#1080#1090
+      FieldName = 'DEBITACCNO'
+      Size = 28
+    end
+    object TransactionsDEBITCURRENCY: TStringField
+      DisplayLabel = '$'
+      FieldName = 'DEBITCURRENCY'
+      Size = 25
+    end
+    object TransactionsCREDITACCNO: TStringField
+      DisplayLabel = #1050#1088#1077#1076#1080#1090
+      FieldName = 'CREDITACCNO'
+      Size = 28
+    end
+    object TransactionsCREDITCURRENCY: TStringField
+      DisplayLabel = '$'
+      FieldName = 'CREDITCURRENCY'
+      Size = 25
+    end
+    object TransactionsTRDATE: TDateTimeField
+      DisplayLabel = #1058#1072#1088#1080#1093
+      FieldName = 'TRDATE'
+      Required = True
+    end
+    object TransactionsINBALANCECHAR: TFloatField
+      DisplayLabel = #1050#1072#1089#1089#1072' '#1089#1080#1084'.'
+      FieldName = 'INBALANCECHAR'
+    end
+    object TransactionsFLAGS: TFloatField
+      FieldName = 'FLAGS'
+      Required = True
+    end
+    object TransactionsDEBITAMOUNT: TFloatField
+      FieldName = 'DEBITAMOUNT'
+      currency = True
+    end
+    object TransactionsCREDITAMOUNT: TFloatField
+      FieldName = 'CREDITAMOUNT'
+      currency = True
+    end
+    object TransactionsNATAMOUNT: TFloatField
+      FieldName = 'NATAMOUNT'
+      currency = True
+    end
+    object TransactionsTRDESCRIPTION: TStringField
+      DisplayLabel = #1058#1103#1081#1080#1085#1072#1090#1099
+      FieldName = 'TRDESCRIPTION'
+      Required = True
+      Size = 255
+    end
+    object TransactionsTrAmount: TFloatField
+      DisplayLabel = #1052#1103#1073#1083#1103#1100
+      FieldKind = fkCalculated
+      FieldName = 'TrAmount'
+      currency = True
+      Calculated = True
+    end
+    object TransactionsCANPROCESS: TFloatField
+      FieldName = 'CANPROCESS'
+    end
+  end
+  object DataSrcTransactions: TDataSource
+    DataSet = Transactions
+    Left = 312
+    Top = 112
+  end
+  object StatusImages: TImageList
+    Left = 224
+    Top = 112
+  end
+end

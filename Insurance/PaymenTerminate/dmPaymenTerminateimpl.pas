@@ -1,0 +1,70 @@
+unit dmPaymenTerminateimpl;
+
+interface
+
+uses
+  SysUtils, Classes, DB, OracleData, Oracle;
+
+type
+  TdmPaymentTer = class(TDataModule)
+    DSRSysdat: TDataSource;
+    DSSysdat: TOracleDataSet;
+    DSSysdatTEK_DAT: TDateTimeField;
+    DSSysdatPRED_DAT: TDateTimeField;
+    DSSysdatARC_DAY: TDateTimeField;
+    DSSysdatCLOSE: TIntegerField;
+    DSPaymentTer: TOracleDataSet;
+    DSRPaymentTer: TDataSource;
+    DSTerBarderoSay: TOracleDataSet;
+    DSTerBarderoSaySAY: TFloatField;
+    DSRPaymentLoss: TDataSource;
+    DSPaymentTerReal: TOracleDataSet;
+    DSRPaymentTerReal: TDataSource;
+    DSpaymentAcc: TOracleDataSet;
+    DSpaymentAccID: TFloatField;
+    DSpaymentAccACC_NO: TWideStringField;
+    DSRpaymentAcc: TDataSource;
+    DSPaymentTerRealCID: TFloatField;
+    DSPaymentTerRealTRAID: TFloatField;
+    DSPaymentTerRealPAYDATE: TDateTimeField;
+    DSPaymentTerRealMEBLEG: TFloatField;
+    DSPaymentTerRealNAME: TWideStringField;
+    DSPaymentTerID: TFloatField;
+    DSPaymentTerCID: TFloatField;
+    DSPaymentTerSTAGE_TESDIQ_DAT: TDateTimeField;
+    DSPaymentTerMEBLEG: TFloatField;
+    DSPaymentTerNAME: TWideStringField;
+    sb_aca: TOraclePackage;
+    Pins_common: TOraclePackage;
+    DSPaymentTerRealID: TFloatField;
+    DSqaliq: TOracleDataSet;
+    DSqaliqQALIQ: TFloatField;
+    procedure DataModuleCreate(Sender: TObject);
+    procedure DataModuleDestroy(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  dmPaymentTer: TdmPaymentTer;
+
+implementation
+
+{$R *.dfm}
+uses sboapiDataModuleimpl,SBTranslateProc,CommanParametrs;
+
+procedure TdmPaymentTer.DataModuleCreate(Sender: TObject);
+begin
+     DSSysdat.Open;
+     DSpaymentAcc.Open;
+end;
+
+procedure TdmPaymentTer.DataModuleDestroy(Sender: TObject);
+begin
+DSSysdat.close;
+     DSpaymentAcc.close;
+end;
+
+end.

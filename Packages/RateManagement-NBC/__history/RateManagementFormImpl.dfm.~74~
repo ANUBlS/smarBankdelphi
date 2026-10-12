@@ -1,0 +1,956 @@
+object RateManagementForm: TRateManagementForm
+  Left = 443
+  Top = 166
+  Width = 985
+  Height = 736
+  Caption = 'Valyuta kurslar'#305
+  Color = clBtnFace
+  Font.Charset = RUSSIAN_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  OnCreate = ActiveFormCreate
+  PixelsPerInch = 96
+  TextHeight = 13
+  object RatesGB: TGroupBox
+    Left = 0
+    Top = 23
+    Width = 985
+    Height = 713
+    Align = alClient
+    Caption = 'Yeni valyuta m'#601'z'#601'nn'#601'l'#601'rini daxil edin'
+    TabOrder = 0
+    object SpeedButton1: TSpeedButton
+      Left = 632
+      Top = 352
+      Width = 23
+      Height = 22
+    end
+    object Panel2: TPanel
+      Left = 2
+      Top = 15
+      Width = 981
+      Height = 26
+      Align = alTop
+      BevelOuter = bvNone
+      TabOrder = 0
+      object DBNavigator1: TDBNavigator
+        Left = 0
+        Top = 1
+        Width = 232
+        Height = 25
+        DataSource = DataSource1
+        VisibleButtons = [nbFirst, nbPrior, nbNext, nbLast, nbEdit, nbPost, nbCancel, nbRefresh]
+        Flat = True
+        TabOrder = 0
+        OnClick = DBNavigator1Click
+      end
+    end
+    object Panel1: TPanel
+      Left = 2
+      Top = 682
+      Width = 981
+      Height = 29
+      Align = alBottom
+      BevelInner = bvLowered
+      TabOrder = 1
+      DesignSize = (
+        981
+        29)
+      object CommitButton: TButton
+        Left = 762
+        Top = 2
+        Width = 108
+        Height = 25
+        Action = CommitNewRates
+        Anchors = [akTop, akRight]
+        Caption = 'Yeni m'#601'z'#601'nn'#601'l'#601'r'
+        TabOrder = 0
+      end
+      object RevertButton: TButton
+        Left = 871
+        Top = 2
+        Width = 108
+        Height = 25
+        Action = Recalculate
+        Anchors = [akTop, akRight]
+        Caption = 'Yenid'#601'n hesablama'
+        TabOrder = 1
+      end
+      object Button1: TButton
+        Left = 2
+        Top = 2
+        Width = 151
+        Height = 25
+        Caption = 'N'#246'vb'#601'ti g'#252'nl'#601'r'#601' m'#601'z'#601'nn'#601'l'#601'r'
+        TabOrder = 2
+        OnClick = Button1Click
+      end
+      object Button5: TButton
+        Left = 175
+        Top = 3
+        Width = 75
+        Height = 25
+        Caption = 'S'#601'hvl'#601'r'
+        TabOrder = 3
+        OnClick = Button5Click
+      end
+    end
+    object GroupBox1: TGroupBox
+      Left = 2
+      Top = 41
+      Width = 981
+      Height = 641
+      Align = alClient
+      Caption = 'M'#601'rk'#601'zi bank'#305'n real m'#601'z'#601'nn'#601'l'#601'ri'
+      TabOrder = 2
+      Visible = False
+      object Panel4: TPanel
+        Left = 2
+        Top = 608
+        Width = 977
+        Height = 31
+        Align = alBottom
+        BevelOuter = bvLowered
+        TabOrder = 0
+        Visible = False
+        object BitBtn1: TBitBtn
+          Left = 854
+          Top = 1
+          Width = 122
+          Height = 29
+          Align = alRight
+          Caption = 'M'#601'z'#601'nn'#601'ni d'#601'yi'#351
+          DoubleBuffered = True
+          ParentDoubleBuffered = False
+          TabOrder = 0
+          OnClick = BitBtn1Click
+        end
+      end
+      object DBGrid2: TDBGrid
+        Left = 2
+        Top = 15
+        Width = 977
+        Height = 593
+        Align = alClient
+        DataSource = DataSource2
+        DrawingStyle = gdsGradient
+        TabOrder = 1
+        TitleFont.Charset = RUSSIAN_CHARSET
+        TitleFont.Color = clWindowText
+        TitleFont.Height = -11
+        TitleFont.Name = 'Tahoma'
+        TitleFont.Style = []
+        Columns = <
+          item
+            Expanded = False
+            FieldName = 'VAL_NAME'
+            Title.Caption = 'Valyuta'
+            Width = 151
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'VAL_COD'
+            Title.Caption = 'Kod'
+            Width = 36
+            Visible = True
+          end
+          item
+            Color = clScrollBar
+            Expanded = False
+            FieldName = 'OSTAT'
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Tahoma'
+            Font.Style = [fsBold]
+            Title.Caption = 'M'#601'rk'#601'zi bank'#305'n real m'#601'z'#601'nn'#601'si'
+            Visible = True
+          end>
+      end
+    end
+    object GroupBox2: TGroupBox
+      Left = 2
+      Top = 41
+      Width = 981
+      Height = 641
+      Align = alClient
+      TabOrder = 3
+      object DBGrid1: TDBGrid
+        Left = 2
+        Top = 15
+        Width = 977
+        Height = 377
+        Align = alClient
+        Ctl3D = True
+        DataSource = DataSource1
+        DrawingStyle = gdsGradient
+        FixedColor = clActiveCaption
+        Options = [dgEditing, dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgCancelOnExit]
+        ParentCtl3D = False
+        TabOrder = 0
+        TitleFont.Charset = RUSSIAN_CHARSET
+        TitleFont.Color = clWindowText
+        TitleFont.Height = -11
+        TitleFont.Name = 'Tahoma'
+        TitleFont.Style = []
+        Columns = <
+          item
+            Color = clScrollBar
+            Expanded = False
+            FieldName = 'NAME'
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clNavy
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            Title.Caption = 'Valyuta'
+            Title.Color = clNavy
+            Title.Font.Charset = RUSSIAN_CHARSET
+            Title.Font.Color = clNavy
+            Title.Font.Height = -11
+            Title.Font.Name = 'Tahoma'
+            Title.Font.Style = []
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'OSTAT'
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clNavy
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            Title.Caption = 'M'#601'rk'#601'zi Bank'#305'n m'#601'z'#601'nn'#601'si'
+            Title.Color = clBtnFace
+            Title.Font.Charset = RUSSIAN_CHARSET
+            Title.Font.Color = clNavy
+            Title.Font.Height = -11
+            Title.Font.Name = 'Tahoma'
+            Title.Font.Style = []
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'BUY_RATE'
+            Title.Caption = 'Al'#305#351' m'#601'z'#601'nn'#601'si(ba'#351'.)'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'BUY_RATE_END'
+            Title.Caption = 'Al'#305#351' m'#601'z'#601'nn'#601'si(son)'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'SELL_RATE'
+            Title.Caption = 'Sat'#305#351' m'#601'z'#601'nn'#601'si(ba'#351'.)'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'SELL_RATE_END'
+            Title.Caption = 'Sat'#305#351' m'#601'z'#601'nn'#601'si(son.)'
+            Visible = True
+          end>
+      end
+      object Panel5: TPanel
+        Left = 2
+        Top = 399
+        Width = 977
+        Height = 240
+        Align = alBottom
+        TabOrder = 1
+        Visible = False
+        object DBGrid3: TDBGrid
+          Left = 1
+          Top = 1
+          Width = 975
+          Height = 207
+          Align = alClient
+          Ctl3D = True
+          DataSource = dsroperkurs
+          DrawingStyle = gdsGradient
+          FixedColor = clActiveCaption
+          Options = [dgEditing, dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgCancelOnExit]
+          ParentCtl3D = False
+          TabOrder = 0
+          TitleFont.Charset = RUSSIAN_CHARSET
+          TitleFont.Color = clWindowText
+          TitleFont.Height = -11
+          TitleFont.Name = 'Tahoma'
+          TitleFont.Style = []
+          Columns = <
+            item
+              Color = clScrollBar
+              Expanded = False
+              FieldName = 'VAL_NAME'
+              Font.Charset = RUSSIAN_CHARSET
+              Font.Color = clBlack
+              Font.Height = -11
+              Font.Name = 'Tahoma'
+              Font.Style = []
+              ReadOnly = True
+              Title.Color = clBlack
+              Width = 60
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'DAT'
+              ReadOnly = True
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'OSTAT'
+              Title.Color = clBtnFace
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'BUY_RATE'
+              Title.Caption = 'Al'#305#351' m'#601'z'#601'nn'#601'si(ba'#351'.)'
+              Width = 107
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'BUY_RATE_END'
+              Title.Caption = 'Al'#305#351' m'#601'z'#601'nn'#601'si(son)'
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'SELL_RATE'
+              Width = 100
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'SELL_RATE_END'
+              Title.Caption = 'Sat'#305#351' m'#601'z'#601'nn'#601'si(son)'
+              Visible = True
+            end>
+        end
+        object Panel6: TPanel
+          Left = 1
+          Top = 208
+          Width = 975
+          Height = 31
+          Align = alBottom
+          TabOrder = 1
+          object DBNavigator2: TDBNavigator
+            Left = 503
+            Top = 4
+            Width = 232
+            Height = 23
+            DataSource = dsroperkurs
+            VisibleButtons = [nbFirst, nbPrior, nbNext, nbLast, nbEdit, nbPost, nbCancel, nbRefresh]
+            TabOrder = 0
+            OnClick = DBNavigator2Click
+          end
+          object Button3: TButton
+            Left = 188
+            Top = 3
+            Width = 60
+            Height = 23
+            Caption = 'L'#601#287'v et'
+            TabOrder = 1
+            OnClick = Button3Click
+          end
+          object Button2: TButton
+            Left = 122
+            Top = 3
+            Width = 60
+            Height = 23
+            Caption = #399'lav'#601' et'
+            TabOrder = 2
+            OnClick = Button2Click
+          end
+          object DateTimePicker1: TDateTimePicker
+            Left = 3
+            Top = 3
+            Width = 113
+            Height = 21
+            Date = 41733.558807141200000000
+            Time = 41733.558807141200000000
+            TabOrder = 3
+            OnChange = DateTimePicker1Change
+          end
+          object Button6: TButton
+            Left = 254
+            Top = 3
+            Width = 60
+            Height = 23
+            Caption = 'G'#246'nd'#601'r'
+            TabOrder = 4
+            OnClick = Button4Click
+          end
+        end
+      end
+      object Panel7: TPanel
+        Left = 2
+        Top = 392
+        Width = 977
+        Height = 7
+        Align = alBottom
+        TabOrder = 2
+        Visible = False
+      end
+    end
+  end
+  object Panel3: TPanel
+    Left = 0
+    Top = 0
+    Width = 985
+    Height = 23
+    Align = alTop
+    Alignment = taLeftJustify
+    TabOrder = 1
+    object Label1: TLabel
+      Left = 8
+      Top = 3
+      Width = 79
+      Height = 13
+      Caption = #399'm'#601'liyyat tarixi:'
+    end
+    object DBEdit1: TDBEdit
+      Left = 96
+      Top = 0
+      Width = 87
+      Height = 21
+      Color = clBtnFace
+      DataField = 'DAT'
+      DataSource = DataSource1
+      ReadOnly = True
+      TabOrder = 0
+    end
+  end
+  object DataSource1: TDataSource
+    DataSet = RatesDataSet
+    Left = 24
+    Top = 104
+  end
+  object RatesDataSet: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      '  tr.VAL_KOD as CurrencyID,'
+      '  tr.OSTAT,'
+      '  tr.buy_rate,'
+      '  tr.buy_rate_end,'
+      '  tr.sell_rate,'
+      '  tr.sell_rate_end,'
+      '  Currency.val_name,'
+      '  Currency.VALU_NAME as Name,'
+      '  tr.dat,'
+      '  tr.rowid'
+      'from'
+      '  temprate tr,'
+      '  AVALUTE Currency'
+      'where'
+      '  Currency.VALUTE = tr.VAL_KOD'
+      'order by Currency.Valute')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000900000014000000430055005200520045004E004300590049004400
+      0100000000000A0000004F005300540041005400010000000000080000004E00
+      41004D0045000100000000000600000044004100540001000000000010000000
+      4200550059005F00520041005400450001000000000012000000530045004C00
+      4C005F00520041005400450001000000000010000000560041004C005F004E00
+      41004D004500010000000000180000004200550059005F005200410054004500
+      5F0045004E0044000100000000001A000000530045004C004C005F0052004100
+      540045005F0045004E004400010000000000}
+    Session = sboapiDataModule.SBSession
+    BeforeInsert = RatesDataSetBeforeInsert
+    AfterPost = RatesDataSetAfterPost
+    BeforeDelete = RatesDataSetBeforeDelete
+    Left = 88
+    Top = 104
+    object RatesDataSetCURRENCYID: TIntegerField
+      FieldName = 'CURRENCYID'
+      Required = True
+    end
+    object RatesDataSetOSTAT: TFloatField
+      FieldName = 'OSTAT'
+    end
+    object RatesDataSetSELL_RATE: TFloatField
+      FieldName = 'SELL_RATE'
+    end
+    object RatesDataSetBUY_RATE: TFloatField
+      FieldName = 'BUY_RATE'
+    end
+    object RatesDataSetNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 25
+    end
+    object RatesDataSetDAT: TDateTimeField
+      FieldName = 'DAT'
+      Required = True
+    end
+    object RatesDataSetVAL_NAME: TWideStringField
+      FieldName = 'VAL_NAME'
+      Size = 160
+    end
+    object RatesDataSetBUY_RATE_END: TFloatField
+      FieldName = 'BUY_RATE_END'
+    end
+    object RatesDataSetSELL_RATE_END: TFloatField
+      FieldName = 'SELL_RATE_END'
+    end
+  end
+  object ActionList1: TActionList
+    Left = 232
+    Top = 96
+    object RefreshAction: TAction
+      Caption = 'RefreshAction'
+      OnExecute = RefreshActionExecute
+    end
+    object CommitNewRates: TAction
+      Caption = #1049#1077#1085#1080' '#1084#1103#1079#1103#1085#1085#1103#1083#1103#1088
+      OnExecute = CommitNewRatesExecute
+    end
+    object ChangeRates: TAction
+      Caption = 'ChangeRates'
+    end
+    object RevertAction: TAction
+      Caption = 'Revert'
+    end
+    object Recalculate: TAction
+      Caption = #1049#1077#1085#1080#1076#1103#1085' '#1097#1077#1089#1072#1073#1083#1072#1084#1072
+      OnExecute = RecalculateExecute
+    end
+  end
+  object ImageList1: TImageList
+    Left = 136
+    Top = 176
+    Bitmap = {
+      494C010103000500040010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      0000000000003600000028000000400000001000000001001000000000000008
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000000000008C311042104210421042
+      1042104210421042104210421042104284100000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000010420042E07F00421042104200000000000000000000000000000000
+      0000000000000000000000000000000000008010604EE03DE03DE03DE03DE03D
+      E03DE03DE03DE03DE03DE03D4A29104210420000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      100000000000000000000000000000000000E05EE07FE07FE07FE07FE07FE07F
+      E07FE07FE07FE07FE07FE07FA677082110420000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000010420042E07F00421042104200000000000000000000000000001000
+      000210000000000000000000000000000000E05EE07FE07FE07FE07FE07FA656
+      0000A656E07FE07FE07FE07FA677082108210000000000000000000000000000
+      00000000000000000000000000000000000010420042E07F0042104210420000
+      0000000000000000000000000000000000000000000000000000000010000002
+      0002000200000000000000000000000000000021E07FE07FE07FE07FE07FA656
+      0000A656E07FE07FE07FE07FA635104200000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000010420042E07F00421042104200000000000000000000100000020002
+      0002000210000000000000000000000000000000E05EE07FE07FE07FE07FE07F
+      E05EE07FE07FE07FE07FA6770821082100000000000000000000000000000000
+      00000000000000000000000000000000000010420042E07F0042104210420000
+      000000000000000000000000000000000000000000000000000000020002E003
+      E0030002000210000000000000000000000000000021E07FE07FE07FE07F2667
+      4629E07FE07FE07FE07FA6351042000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000010420042E07FFF7FE07F0042000000000000000000000002E0030000
+      0000E003000200021000000000000000000000000000E05EE07FE07FE07FA635
+      0000A677E07FE07FA67708210821000000000000000000000000000000000000
+      00000000000000000000000000000000000010420042E07FFF7FE07F00420000
+      0000000000001042104210421042104200000000000000000000E00300000000
+      000000000002000200020000000000000000000000000021E07FE07FE07F8010
+      0000604EE07FE07FA63510420000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000104210421042104210420000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000000E003000200021000000000000000000000000000E05EE07FE07F0000
+      0000E03DE07FA677082108210000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000001042000000000000
+      00000000000010420000FF7F0000000000000000000000000000000000000000
+      0000000000000000E00300020002100000000000000000000021E07FE07F0000
+      0000E03DE07FA635104200000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000010420000
+      0000FF7F00000000104200000000000000000000000000000000000000000000
+      0000000000000000000000020002000200000000000000000000E05EE07FA656
+      E03DA677A6770821082100000000000000000000000000000000000000000000
+      000000000000000000000000000000000000000000000000FF7F000000001042
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000E00300020002000000000000000000000021E07FE07F
+      E07FE07FA6351042000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      1042000010420000000000000000000000000000000000000000000000000000
+      000000000000000000000000E0030002000000000000000000000000E05EE07F
+      E07FA67708210821000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000FF7F00000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000000000000000000000000021E07F
+      E07FA6358C310000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      1042000010420000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000000000000000000000000000E03D
+      A656000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000424D3E000000000000003E000000
+      2800000040000000100000000100010000000000800000000000000000000000
+      000000000000000000000000FFFFFF00FFC1FFFFC0000000FF80FFFF00000000
+      FFC1FEFF000000008380FC7F0000000001C1F87F000100008380F03F80010000
+      01C1F01F800300008380F30FC003000001C1F78FC007000083F7FF87E0070000
+      EF43FFE1E00F0000E807FFF1F00F0000C17FFFF1F01F0000EE3FFFF9F81F0000
+      FE3FFFFFF83F0000FE3FFFFFFC7F000000000000000000000000000000000000
+      000000000000}
+  end
+  object SBRateManagement: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'SBRM'
+    ParameterMode = pmNamed
+    Cursor = crHourGlass
+    Left = 160
+    Top = 104
+  end
+  object OracleDataSet1: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      '* from'
+      'valute_cek')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000030000000A0000004F0053005400410054000100000000000E000000
+      560041004C005F0043004F00440001000000000010000000560041004C005F00
+      4E0041004D004500010000000000}
+    Session = sboapiDataModule.SBSession
+    BeforeInsert = RatesDataSetBeforeInsert
+    BeforeDelete = RatesDataSetBeforeDelete
+    Left = 528
+    Top = 136
+    object OracleDataSet1VAL_COD: TWideStringField
+      FieldName = 'VAL_COD'
+      Size = 3
+    end
+    object OracleDataSet1VAL_NAME: TWideStringField
+      FieldName = 'VAL_NAME'
+      Size = 30
+    end
+    object OracleDataSet1OSTAT: TFloatField
+      FieldName = 'OSTAT'
+    end
+  end
+  object DataSource2: TDataSource
+    DataSet = OracleDataSet1
+    Left = 528
+    Top = 192
+  end
+  object OracleDataSet2: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      '* from'
+      'valute_cek')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000030000000A0000004F0053005400410054000100000000000E000000
+      560041004C005F0043004F00440001000000000010000000560041004C005F00
+      4E0041004D004500010000000000}
+    Session = sboapiDataModule.SBSession
+    BeforeInsert = RatesDataSetBeforeInsert
+    BeforeDelete = RatesDataSetBeforeDelete
+    Left = 616
+    Top = 136
+  end
+  object OracleQuery1: TOracleQuery
+    SQL.Strings = (
+      'DECLARE '
+      'CURSOR C_P is'
+      'select v.ostat,vt.valute from valute_cek V,avalute_t vt'
+      ' where v.val_cod=vt.val_name;'
+      ' BEGIN'
+      ' for c in c_p loop'
+      'update temprate  set ostat=c.ostat'
+      'where val_kod=c.valute;'
+      'end loop; '
+      ' end;')
+    Session = sboapiDataModule.SBSession
+    Optimize = False
+    Left = 600
+    Top = 208
+  end
+  object dsoperkurs: TOracleDataSet
+    SQL.Strings = (
+      
+        '/*select a.val_name,o.ostat,o.dat,o.sell_rate,o.buy_rate,a.rowid' +
+        ' from avalute a,operkurs o'
+      'where a.valute=o.val_kod'
+      'and o.dat=:PDATE'
+      'order by a.valute*/'
+      ''
+      ''
+      
+        'select o.rowid,o.ostat,a.val_name,o.dat,o.sell_rate,o.buy_rate,o' +
+        '.sell_rate_end,o.buy_rate_end from operkurs o,avalute a'
+      'where a.valute=o.val_kod'
+      'and o.dat=:PDATE'
+      'order by a.valute'
+      ''
+      ''
+      '')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000C0000003A00500044004100540045000C00000000000000
+      00000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000700000010000000560041004C005F004E0041004D00450001000000
+      00000A0000004F00530054004100540001000000000006000000440041005400
+      01000000000012000000530045004C004C005F00520041005400450001000000
+      0000100000004200550059005F0052004100540045000100000000001A000000
+      530045004C004C005F0052004100540045005F0045004E004400010000000000
+      180000004200550059005F0052004100540045005F0045004E00440001000000
+      0000}
+    Session = sboapiDataModule.SBSession
+    Left = 528
+    Top = 304
+    object dsoperkursVAL_NAME: TWideStringField
+      DisplayLabel = 'Valyuta'
+      FieldName = 'VAL_NAME'
+      Size = 160
+    end
+    object dsoperkursDAT: TDateTimeField
+      DisplayLabel = 'Tarix'
+      FieldName = 'DAT'
+    end
+    object dsoperkursOSTAT: TFloatField
+      DisplayLabel = 'M'#601'rk'#601'zi Bankin M'#601'z'#601'nn'#601'si '
+      FieldName = 'OSTAT'
+    end
+    object dsoperkursBUY_RATE: TFloatField
+      DisplayLabel = 'Al'#305#351' m'#601'z'#601'nn'#601'si '
+      FieldName = 'BUY_RATE'
+    end
+    object dsoperkursBUY_RATE_END: TFloatField
+      FieldName = 'BUY_RATE_END'
+    end
+    object dsoperkursSELL_RATE: TFloatField
+      DisplayLabel = 'Sat'#305#351' m'#601'z'#601'nn'#601'si(ba'#351'.)'
+      FieldName = 'SELL_RATE'
+    end
+    object dsoperkursSELL_RATE_END: TFloatField
+      FieldName = 'SELL_RATE_END'
+    end
+  end
+  object dsroperkurs: TDataSource
+    DataSet = dsoperkurs
+    Left = 528
+    Top = 392
+  end
+  object sysdat: TOracleDataSet
+    SQL.Strings = (
+      'select tek_dat from sysdat')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000010000000E000000540045004B005F00440041005400010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 472
+    Top = 352
+    object sysdatTEK_DAT: TDateTimeField
+      FieldName = 'TEK_DAT'
+    end
+  end
+  object Fsbsys: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'sbsys'
+    Left = 584
+    Top = 360
+  end
+  object ExchMgr: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'Exch_mgr'
+    Left = 40
+    Top = 184
+  end
+  object OracleDataSet3: TOracleDataSet
+    SQL.Strings = (
+      
+        'SELECT a.id, a.op_id, a.no_prov, a.dat, a.debt, a.kredit, a.val_' +
+        'acc,'
+      
+        '       a.vid_op, a.ammount, a.lammount, a.tim, a.shifr, a.no_pac' +
+        'k,'
+      '       a.kassa_b, a.kassa_z, a.no_filial, a.sloj_prov, a.bank_d,'
+      
+        '       a.bank_k, a.no_doc, a.no_mem, a.d1, a.k1, a.rate_d, a.rat' +
+        'e_c,'
+      
+        '       a.parentid, a.currencyid_c, a.ammount_c, a.name, a.commit' +
+        '_opid,'
+      
+        '       a.countrid, a.reportid, a.committime, a.userinsert, a.use' +
+        'rcommit,'
+      '       a.bdg_code, a.procname'
+      '  FROM temprepairerrors a')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000002500000004000000490044000100000000000A0000004F0050005F00
+      490044000100000000000E0000004E004F005F00500052004F00560001000000
+      0000060000004400410054000100000000000800000044004500420054000100
+      000000000C0000004B00520045004400490054000100000000000E0000005600
+      41004C005F004100430043000100000000000C0000005600490044005F004F00
+      50000100000000000E00000041004D004D004F0055004E005400010000000000
+      100000004C0041004D004D004F0055004E005400010000000000060000005400
+      49004D000100000000000A000000530048004900460052000100000000000E00
+      00004E004F005F005000410043004B000100000000000E0000004B0041005300
+      530041005F0042000100000000000E0000004B0041005300530041005F005A00
+      010000000000120000004E004F005F00460049004C00490041004C0001000000
+      00001200000053004C004F004A005F00500052004F0056000100000000000C00
+      0000420041004E004B005F0044000100000000000C000000420041004E004B00
+      5F004B000100000000000C0000004E004F005F0044004F004300010000000000
+      0C0000004E004F005F004D0045004D0001000000000004000000440031000100
+      00000000040000004B0031000100000000000C00000052004100540045005F00
+      44000100000000000C00000052004100540045005F0043000100000000001000
+      000050004100520045004E005400490044000100000000001800000043005500
+      5200520045004E0043005900490044005F004300010000000000120000004100
+      4D004D004F0055004E0054005F004300010000000000080000004E0041004D00
+      45000100000000001600000043004F004D004D00490054005F004F0050004900
+      44000100000000001000000043004F0055004E00540052004900440001000000
+      0000100000005200450050004F00520054004900440001000000000014000000
+      43004F004D004D0049005400540049004D004500010000000000140000005500
+      53004500520049004E0053004500520054000100000000001400000055005300
+      4500520043004F004D004D004900540001000000000010000000420044004700
+      5F0043004F004400450001000000000010000000500052004F0043004E004100
+      4D004500010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 664
+    Top = 360
+  end
+  object DataSource3: TDataSource
+    DataSet = OracleDataSet3
+    Left = 744
+    Top = 360
+  end
+  object Timer1: TTimer
+    OnTimer = Timer1Timer
+    Left = 400
+    Top = 536
+  end
+  object OracleDataSet4: TOracleDataSet
+    SQL.Strings = (
+      'select * from updateoperkurs')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      0500000003000000140000004F0050004500520049004E005300450052005400
+      010000000000140000004F005000450052005500500044004100540045000100
+      00000000140000004F00500045005200440045004C0045005400450001000000
+      0000}
+    Session = sboapiDataModule.SBSession
+    Left = 88
+    Top = 264
+    object OracleDataSet4OPERINSERT: TFloatField
+      FieldName = 'OPERINSERT'
+    end
+    object OracleDataSet4OPERUPDATE: TFloatField
+      FieldName = 'OPERUPDATE'
+    end
+    object OracleDataSet4OPERDELETE: TFloatField
+      FieldName = 'OPERDELETE'
+    end
+  end
+  object OracleDataSet5: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      '  SID,'
+      '  Serial#,'
+      '  AudSID,'
+      '  user#,'
+      '  UserName,'
+      '  Status,'
+      '  OSUser,'
+      '  Process,'
+      '  Machine,'
+      '  Terminal,'
+      '  Program,'
+      '  Logon_Time,'
+      '  decode(UserEnv('#39'SESSIONID'#39'), AudSID, 1, 0) as IsCurrentUser'
+      'from sys.v_$session'
+      'where'
+      '  (Type = '#39'USER'#39')'
+      '  and (UserName is not null)'
+      '  and (Program = ('
+      '    select program '
+      '      from sys.v_$session '
+      '    where AudSID = UserEnv('#39'SESSIONID'#39')'
+      '    )'
+      '  )'
+      '  and (Status <> '#39'KILLED'#39')')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000D000000060000005300490044000100000000000E00000053004500
+      5200490041004C0023000100000000000C000000410055004400530049004400
+      0100000000000A00000055005300450052002300010000000000100000005500
+      5300450052004E0041004D0045000100000000000C0000005300540041005400
+      550053000100000000000C0000004F0053005500530045005200010000000000
+      0E000000500052004F0043004500530053000100000000000E0000004D004100
+      4300480049004E004500010000000000100000005400450052004D0049004E00
+      41004C000100000000000E000000500052004F004700520041004D0001000000
+      0000140000004C004F0047004F004E005F00540049004D004500010000000000
+      1A00000049005300430055005200520045004E00540055005300450052000100
+      00000000}
+    Session = sboapiDataModule.SBSession
+    Left = 224
+    Top = 216
+    object OracleDataSet5SID: TFloatField
+      FieldName = 'SID'
+    end
+    object OracleDataSet5SERIAL: TFloatField
+      FieldName = 'SERIAL#'
+    end
+    object OracleDataSet5AUDSID: TFloatField
+      FieldName = 'AUDSID'
+    end
+    object OracleDataSet5USER: TFloatField
+      FieldName = 'USER#'
+    end
+    object OracleDataSet5USERNAME: TWideStringField
+      FieldName = 'USERNAME'
+      Size = 30
+    end
+    object OracleDataSet5STATUS: TWideStringField
+      FieldName = 'STATUS'
+      Size = 8
+    end
+    object OracleDataSet5OSUSER: TWideStringField
+      FieldName = 'OSUSER'
+      Size = 30
+    end
+    object OracleDataSet5PROCESS: TWideStringField
+      FieldName = 'PROCESS'
+      Size = 24
+    end
+    object OracleDataSet5MACHINE: TWideStringField
+      FieldName = 'MACHINE'
+      Size = 64
+    end
+    object OracleDataSet5TERMINAL: TWideStringField
+      FieldName = 'TERMINAL'
+      Size = 16
+    end
+    object OracleDataSet5PROGRAM: TWideStringField
+      FieldName = 'PROGRAM'
+      Size = 64
+    end
+    object OracleDataSet5LOGON_TIME: TDateTimeField
+      FieldName = 'LOGON_TIME'
+    end
+    object OracleDataSet5ISCURRENTUSER: TFloatField
+      FieldName = 'ISCURRENTUSER'
+    end
+  end
+  object SBA_ACA: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'SB_ACA'
+    Cursor = crSQLWait
+    Left = 376
+    Top = 169
+  end
+end

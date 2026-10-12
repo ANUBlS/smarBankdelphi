@@ -1,0 +1,109 @@
+﻿unit UntBalanceRpt1;
+
+interface
+
+uses Windows, SysUtils, Messages, Classes, Graphics, Controls,
+  StdCtrls, ExtCtrls, Forms, Quickrpt, QRCtrls, QRExport,db;
+
+type
+  TBalanceRpt1 = class(TQuickRep)
+    SummaryBand1: TQRBand;
+    QRLabel10: TQRLabel;
+    QRExpr1: TQRExpr;
+    QRExpr2: TQRExpr;
+    QRDBText6: TQRDBText;
+    QRDBText7: TQRDBText;
+    QRDBText8: TQRDBText;
+    QRDBText9: TQRDBText;
+    QRSubDetail1: TQRSubDetail;
+    QRDBText1: TQRDBText;
+    QRDBText2: TQRDBText;
+    QRShape6: TQRShape;
+    QRShape9: TQRShape;
+    QRShape2: TQRShape;
+    QRShape7: TQRShape;
+    QRDBText3: TQRDBText;
+    QRBand1: TQRBand;
+    QRShape1: TQRShape;
+    QRShape3: TQRShape;
+    QRShape4: TQRShape;
+    QRShape5: TQRShape;
+    QRLabel5: TQRLabel;
+    QRLabel6: TQRLabel;
+    QRLabel3: TQRLabel;
+    QRLabel11: TQRLabel;
+    QRLabel15: TQRLabel;
+    TargetDate: TQRLabel;
+    QRLabel1: TQRLabel;
+    QRDBText11: TQRDBText;
+    QRDBText10: TQRDBText;
+    QRCurr: TQRLabel;
+    QRTextFilter1: TQRTextFilter;
+    QRImage1: TQRImage;
+    procedure QuickRepBeforePrint(Sender: TCustomQuickRep;
+      var PrintReport: Boolean);
+    procedure QRBand1BeforePrint(Sender: TQRCustomBand; var PrintBand: Boolean);
+  private
+
+  public
+
+  end;
+
+var
+  BalanceRpt1: TBalanceRpt1;
+
+implementation
+
+{$R *.DFM}
+uses TB_DataModuleImpl,sboapiDataModuleImpl, SBTranslateProc;
+
+procedure TBalanceRpt1.QRBand1BeforePrint(Sender: TQRCustomBand;
+  var PrintBand: Boolean);
+var
+  BS: TStream;
+  WIC: TWICImage;
+  Field: TField;
+begin
+  Field := out_balancedatamodule.BankInfo.FieldByName('LOGO');
+
+  if (Field <> nil) and not Field.IsNull then
+  begin
+    WIC := TWICImage.Create;
+    try
+      // Dataset-dən Stream yaradılır
+      BS := out_balancedatamodule.BankInfo.CreateBlobStream(Field, bmRead);
+      try
+        if (BS <> nil) and (BS.Size > 0) then
+        begin
+          BS.Position := 0;
+          WIC.LoadFromStream(BS);
+
+          // QRImage-i təmizləyib yeni şəkli çəkirik
+          QRImage1.Picture.Graphic := WIC;
+        end
+        else
+          QRImage1.Picture := nil;
+      finally
+        BS.Free;
+      end;
+    except
+      QRImage1.Picture := nil;
+    end;
+    WIC.Free;
+  end
+  else
+  begin
+    QRImage1.Picture := nil;
+  end;
+
+end;
+
+procedure TBalanceRpt1.QuickRepBeforePrint(Sender: TCustomQuickRep;
+  var PrintReport: Boolean);
+
+begin
+
+SBTranslateProc.TranslateAllCompQuickRep(Self,sboapiDataModule.OrPack_SL);
+end;
+
+end.

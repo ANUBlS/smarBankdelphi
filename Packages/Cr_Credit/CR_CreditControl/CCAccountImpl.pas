@@ -1,0 +1,80 @@
+unit CCAccountImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, Buttons,  ExtCtrls, Mask, DBCtrls;
+
+type
+  TFormContractAccounts = class(TForm)
+    GroupBox1: TGroupBox;
+    GroupBox2: TGroupBox;
+    GroupBox3: TGroupBox;
+    BitBtn3: TBitBtn;
+    BitBtn4: TBitBtn;
+    DBEdit1: TDBEdit;
+    DBEdit3: TDBEdit;
+    DBEdit4: TDBEdit;
+    Label1: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    DBEdit8: TDBEdit;
+    DBEdit10: TDBEdit;
+    DBEdit11: TDBEdit;
+    CBLoan: TCheckBox;
+    CBPrRes: TCheckBox;
+    CBInt: TCheckBox;
+    GroupBox4: TGroupBox;
+    DBEdit2: TDBEdit;
+    CBCust: TCheckBox;
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure BitBtn3Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormContractAccounts: TFormContractAccounts;
+
+implementation
+
+{$R *.DFM}
+uses CCDataModuleImpl, sboapiDataModuleImpl, SBTranslateProc;
+
+procedure TFormContractAccounts.FormCreate(Sender: TObject);
+begin
+SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TFormContractAccounts.FormKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if ord(Key) = VK_ESCAPE then Close;
+end;
+
+procedure TFormContractAccounts.BitBtn3Click(Sender: TObject);
+var Loanid,Presid,intid,custid :integer;
+begin
+   with CCDataMod,Accounts, CR_CREDIT do
+   begin
+      custid := fieldbyname('BOOROWERID').AsInteger;
+      Loanid := fieldByName('LoanAccID').AsInteger;
+      Presid := fieldByName('primaryreserveaccid').AsInteger;
+      intid := fieldByName('Interestaccid').AsInteger;
+      CallProcedure('CloseCont_Account',['p_id',Loanid,
+                                           'defCA',CBLoan.Checked]);
+      CallProcedure('CloseCont_Account',['p_id',Presid ,
+                                           'defCA',CBPrRes.Checked]);
+      CallProcedure('CloseCont_Account',['p_id',intid,
+                                           'defCA',CBInt.Checked]);
+      CallProcedure('CloseCont_Customers',['p_id',custid,
+                                            'defCA',CBCust.Checked]);
+      CloseAll;
+   end;
+end;
+
+end.

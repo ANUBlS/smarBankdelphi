@@ -1,0 +1,66 @@
+unit DMCorrectorCardPerImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, OracleData;
+
+type
+  TDMCorrectorCardPer = class(TDataModule)
+    TranchesDatSrc: TDataSource;
+    Tranches: TOracleDataSet;
+    TranchesID: TFloatField;
+    TranchesTRANCHEDATE: TDateTimeField;
+    TranchesTRANCHEAMOUNT: TFloatField;
+    RestsDatSrc: TDataSource;
+    Rests: TOracleDataSet;
+    RestsTRANCHID: TFloatField;
+    RestsREST: TFloatField;
+    RestsINTREST: TFloatField;
+    RestsHDATE: TDateTimeField;
+    Int: TOracleDataSet;
+    IntDatSrc: TDataSource;
+    IntHDATE: TDateTimeField;
+    IntTRANCHID: TFloatField;
+    IntINTEREST: TFloatField;
+    RestsPARTKEY: TFloatField;
+    IntPARTKEY: TFloatField;
+    cardsorts: TOracleDataSet;
+    cardsortsDatSrc: TDataSource;
+    cardsortsID: TFloatField;
+    cardsortsDESCRIPTION: TStringField;
+    RestsCARDID: TFloatField;
+    Restscardsort: TStringField;
+    IntCARDID: TFloatField;
+    Intcardsort: TStringField;
+    procedure RestsBeforePost(DataSet: TDataSet);
+    procedure IntBeforePost(DataSet: TDataSet);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  DMCorrectorCardPer: TDMCorrectorCardPer;
+
+implementation
+
+{$R *.DFM}
+
+uses CMOracleAPIDataModuleImpl;
+
+procedure TDMCorrectorCardPer.RestsBeforePost(DataSet: TDataSet);
+begin
+   with DataSet do
+   FieldByName('Tranchid').AsInteger := Tranches.FieldByName('ID').AsInteger;
+end;
+
+procedure TDMCorrectorCardPer.IntBeforePost(DataSet: TDataSet);
+begin
+   with DataSet do
+   FieldByName('Tranchid').AsInteger := Tranches.FieldByName('ID').AsInteger;
+end;
+
+end.

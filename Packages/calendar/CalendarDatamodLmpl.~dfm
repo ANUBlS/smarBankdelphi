@@ -1,0 +1,150 @@
+object CalendarDataMod: TCalendarDataMod
+  OldCreateOrder = False
+  OnCreate = DataModuleCreate
+  OnDestroy = DataModuleDestroy
+  Left = 188
+  Top = 227
+  Height = 640
+  Width = 870
+  object DataSource1: TDataSource
+    DataSet = OracleDataSet1
+    Left = 112
+    Top = 40
+  end
+  object OracleDataSet1: TOracleDataSet
+    SQL.Strings = (
+      'select rownum,rowid,c.*from calendar c order by holiday_date'
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      '')
+    QBEDefinition.QBEFieldDefs = {
+      04000000040000000200000049440100000000000B0000004445534352495054
+      494F4E0100000000000C000000484F4C494441595F4441544501000000000006
+      000000524F574E554D010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 200
+    Top = 40
+    object OracleDataSet1ID: TFloatField
+      FieldName = 'ID'
+    end
+    object OracleDataSet1DESCRIPTION: TStringField
+      FieldName = 'DESCRIPTION'
+      Size = 1000
+    end
+    object OracleDataSet1HOLIDAY_DATE: TDateTimeField
+      FieldName = 'HOLIDAY_DATE'
+    end
+    object OracleDataSet1ROWNUM: TFloatField
+      FieldName = 'ROWNUM'
+    end
+  end
+  object OracleDataSet2: TOracleDataSet
+    SQL.Strings = (
+      'select '
+      'to_date(01||'#39'-'#39'||'#39'JAN'#39'||'#39'-'#39'||to_char(sysdate,'#39'yyyy'#39')) JAN,'
+      'to_date(01||'#39'-'#39'||'#39'FEB'#39'||'#39'-'#39'||to_char(sysdate,'#39'yyyy'#39')) FEB,'
+      'to_date(01||'#39'-'#39'||'#39'MAR'#39'||'#39'-'#39'||to_char(sysdate,'#39'yyyy'#39')) MAR,'
+      'to_date(01||'#39'-'#39'||'#39'APR'#39'||'#39'-'#39'||to_char(sysdate,'#39'yyyy'#39')) APR,'
+      'to_date(01||'#39'-'#39'||'#39'MAY'#39'||'#39'-'#39'||to_char(sysdate,'#39'yyyy'#39')) MAY,'
+      'to_date(01||'#39'-'#39'||'#39'JUN'#39'||'#39'-'#39'||to_char(sysdate,'#39'yyyy'#39')) JUN,'
+      'to_date(01||'#39'-'#39'||'#39'JUL'#39'||'#39'-'#39'||to_char(sysdate,'#39'yyyy'#39')) JUL,'
+      'to_date(01||'#39'-'#39'||'#39'AUG'#39'||'#39'-'#39'||to_char(sysdate,'#39'yyyy'#39')) AUG,'
+      'to_date(01||'#39'-'#39'||'#39'SEP'#39'||'#39'-'#39'||to_char(sysdate,'#39'yyyy'#39')) SEP,'
+      'to_date(01||'#39'-'#39'||'#39'OCT'#39'||'#39'-'#39'||to_char(sysdate,'#39'YYYY'#39')) OCT,'
+      'to_date(01||'#39'-'#39'||'#39'NOV'#39'||'#39'-'#39'||to_char(sysdate,'#39'YYYY'#39')) NOV,'
+      'to_date(01||'#39'-'#39'||'#39'DEC'#39'||'#39'-'#39'||to_char(sysdate,'#39'YYYY'#39')) DEC'
+      ''
+      ''
+      'from dual')
+    QBEDefinition.QBEFieldDefs = {
+      040000000C000000030000004A414E0100000000000300000046454201000000
+      0000030000004D41520100000000000300000041505201000000000003000000
+      4D4159010000000000030000004A554E010000000000030000004A554C010000
+      0000000300000041554701000000000003000000534550010000000000030000
+      004F4354010000000000030000004E4F56010000000000030000004445430100
+      00000000}
+    Session = sboapiDataModule.SBSession
+    Left = 336
+    Top = 40
+    object OracleDataSet2JAN: TDateTimeField
+      FieldName = 'JAN'
+    end
+    object OracleDataSet2FEB: TDateTimeField
+      FieldName = 'FEB'
+    end
+    object OracleDataSet2MAR: TDateTimeField
+      FieldName = 'MAR'
+    end
+    object OracleDataSet2APR: TDateTimeField
+      FieldName = 'APR'
+    end
+    object OracleDataSet2MAY: TDateTimeField
+      FieldName = 'MAY'
+    end
+    object OracleDataSet2JUN: TDateTimeField
+      FieldName = 'JUN'
+    end
+    object OracleDataSet2JUL: TDateTimeField
+      FieldName = 'JUL'
+    end
+    object OracleDataSet2AUG: TDateTimeField
+      FieldName = 'AUG'
+    end
+    object OracleDataSet2SEP: TDateTimeField
+      FieldName = 'SEP'
+    end
+    object OracleDataSet2OCT: TDateTimeField
+      FieldName = 'OCT'
+    end
+    object OracleDataSet2NOV: TDateTimeField
+      FieldName = 'NOV'
+    end
+    object OracleDataSet2DEC: TDateTimeField
+      FieldName = 'DEC'
+    end
+  end
+  object OraclePackage1: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'PG_CALENDAR'
+    Left = 112
+    Top = 112
+  end
+  object OracleDataSet3: TOracleDataSet
+    SQL.Strings = (
+      
+        'select  rowid, a.* from calendar_standart a order by holiday_dat' +
+        'e')
+    QBEDefinition.QBEFieldDefs = {
+      04000000030000000C000000484F4C494441595F444154450100000000000B00
+      00004445534352495054494F4E010000000000020000004944010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 176
+    Top = 224
+    object OracleDataSet3HOLIDAY_DATE: TDateTimeField
+      FieldName = 'HOLIDAY_DATE'
+    end
+    object OracleDataSet3DESCRIPTION: TStringField
+      FieldName = 'DESCRIPTION'
+      Size = 150
+    end
+    object OracleDataSet3ID: TFloatField
+      FieldName = 'ID'
+    end
+  end
+  object DataSource2: TDataSource
+    DataSet = OracleDataSet3
+    Left = 80
+    Top = 224
+  end
+end

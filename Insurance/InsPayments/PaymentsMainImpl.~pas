@@ -1,0 +1,516 @@
+unit PaymentsMainImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActiveX, AxCtrls, InsPayments_TLB, StdVcl, ImgList, ActnList, Grids,
+  DBGrids, ComCtrls, ToolWin, SBPlgAx50_TLB;
+
+
+const
+   WM_ModalResult = WM_USER+139;
+
+
+type
+  TfmPaymentsMain = class(
+                       TActiveForm,
+                       IfmPaymentsMain,
+                       IUIObject,
+                       IParamInput,
+                       ISBPlgAc50BufferForm)
+    ToolBar1: TToolBar;
+    ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
+    ToolButton3: TToolButton;
+    ToolButton4: TToolButton;
+    DBGrid1: TDBGrid;
+    ActionList1: TActionList;
+    ImageList1: TImageList;
+    aNew: TAction;
+    aDelete: TAction;
+    aRefresh: TAction;
+    aSort: TAction;
+    aEdit: TAction;
+    ToolButton5: TToolButton;
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure aNewExecute(Sender: TObject);
+    procedure aRefreshExecute(Sender: TObject);
+    procedure aDeleteExecute(Sender: TObject);
+    procedure aEditExecute(Sender: TObject);
+    procedure DBGrid1DblClick(Sender: TObject);
+  private
+    { Private declarations }
+    FParams: TStrings;
+    FOwnerHandle : Integer;
+    FEvents: IfmPaymentsMainEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+    {IParamInput}
+    function  Get_Params(const Name: WideString): OleVariant; safecall;
+    procedure Set_Params(const Name: WideString; Value: OleVariant); safecall;
+    property Params[const Name: WideString]: OleVariant read Get_Params write Set_Params;
+    function  Get_Owner:Integer; safecall;
+    procedure Set_Owner(val : Integer);  safecall;    
+    {IInstance}
+    function InstanceInitialize: HResult; safecall;
+    function IUIObject.Initialize = InstanceInitialize;
+    function Cleanup: HResult; safecall;
+    {IUIObject}
+//    function  Get_Icon: OLE_HANDLE; safecall;
+    function UIObjectActivate: HResult; safecall;
+    function IUIObject.Activate = UIObjectActivate;
+    function QueryDeactivate: HResult; safecall;
+    function UIObjectDeactivate: HResult; safecall;
+    function IUIObject.Deactivate = UIObjectDeactivate;
+    function SaveState: HResult; safecall;
+    function  Get_Height : Integer; safecall;
+    function  Get_Width  : Integer; safecall;
+  public
+    { Public declarations }
+    procedure Initialize; override;
+  end;
+
+var
+  fmPaymentsMain : TfmPaymentsMain;
+  id : Integer;
+    
+implementation
+
+uses ComObj, ComServ, InsDataMod, InsNewPayment;
+
+{$R *.DFM}
+
+{ TfmPaymentsMain }
+
+procedure TfmPaymentsMain.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_fmPaymentsMainPage); }
+end;
+
+procedure TfmPaymentsMain.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as IfmPaymentsMainEvents;
+end;
+
+procedure TfmPaymentsMain.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TfmPaymentsMain.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TfmPaymentsMain.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TfmPaymentsMain.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TfmPaymentsMain.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TfmPaymentsMain.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TfmPaymentsMain.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TfmPaymentsMain.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TfmPaymentsMain.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TfmPaymentsMain.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TfmPaymentsMain.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TfmPaymentsMain.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TfmPaymentsMain.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TfmPaymentsMain.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TfmPaymentsMain.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TfmPaymentsMain.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TfmPaymentsMain.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TfmPaymentsMain.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TfmPaymentsMain.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TfmPaymentsMain._Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TfmPaymentsMain.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TfmPaymentsMain.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TfmPaymentsMain.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TfmPaymentsMain.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TfmPaymentsMain.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TfmPaymentsMain.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TfmPaymentsMain.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TfmPaymentsMain.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TfmPaymentsMain.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TfmPaymentsMain.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TfmPaymentsMain.Set_AxBorderStyle(
+  Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TfmPaymentsMain.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TfmPaymentsMain.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TfmPaymentsMain.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TfmPaymentsMain.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TfmPaymentsMain.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TfmPaymentsMain.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TfmPaymentsMain.Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TfmPaymentsMain.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TfmPaymentsMain.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TfmPaymentsMain.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TfmPaymentsMain.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TfmPaymentsMain.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TfmPaymentsMain.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+function  TfmPaymentsMain.Get_Owner:Integer;
+begin
+  Result := handle;
+end;
+
+procedure TfmPaymentsMain.Set_Owner(val : Integer);
+begin
+  if val > 0 then
+     FOwnerHandle := val;
+end;
+
+
+function  TfmPaymentsMain.Get_Params(const Name: WideString): OleVariant;
+begin
+  Result := FParams.Values[Name];
+end;
+
+procedure TfmPaymentsMain.Set_Params(const Name: WideString; Value: OleVariant);
+begin
+  FParams.Values[Name] := Value;
+end;
+
+function TfmPaymentsMain.InstanceInitialize: HResult;
+begin
+  Result := S_OK;
+end;
+
+function TfmPaymentsMain.Cleanup: HResult;
+begin
+  Result := S_OK;
+end;
+
+function TfmPaymentsMain.UIObjectActivate: HResult;
+begin
+  id  := StrToInt( Get_Params('INSID') );
+  with PayDataMod, ODSPayments do begin
+//   SQL.Add('and ')
+   SetVariable( 'insid', id);
+   Open;
+  end;
+  Result := S_OK;
+end;
+
+function TfmPaymentsMain.QueryDeactivate: HResult;
+begin
+  Result := S_OK;
+end;
+
+function TfmPaymentsMain.UIObjectDeactivate: HResult;
+begin
+  Result := S_OK;
+end;
+
+function TfmPaymentsMain.SaveState: HResult;
+begin
+  Result := S_OK;
+end;
+
+function  TfmPaymentsMain.Get_Height : Integer;
+begin
+  Result := Height;
+end;
+
+function  TfmPaymentsMain.Get_Width  : Integer;
+begin
+  Result := Width;
+end;
+
+
+procedure TfmPaymentsMain.ActiveFormCreate(Sender: TObject);
+begin
+  fmPaymentsMain := Self;
+  FParams := TStringList.Create;
+
+  PayDataMod :=  TPayDataMod.Create(Self)
+end;
+
+procedure TfmPaymentsMain.aNewExecute(Sender: TObject);
+begin
+  fmNewPayments := TfmNewPayments.CreateIt(ctNew);
+  try
+    if fmNewPayments.ShowModal = mrOk then
+      PayDataMod.ODSPayments.Refresh;
+  finally
+    fmNewPayments.free;
+  end;
+end;
+
+procedure TfmPaymentsMain.aRefreshExecute(Sender: TObject);
+begin
+ with PayDataMod, ODSPayments do
+   Refresh;
+end;
+
+procedure TfmPaymentsMain.aDeleteExecute(Sender: TObject);
+var
+  traDelAskRes : Boolean;
+begin
+
+  with PayDataMod do
+   if MessageDlg('Secilmish odeme pozulacaq',
+        mtWarning, [mbYes, mbNo], 0) = mrYes then
+        begin
+          traDelAskRes := MessageDlg('Odemenin emeliyyati pozlsun?', mtWarning, [mbYes, mbNo], 0) = mrYes;
+          if ODSPayments.FieldByName('PLANID').asInteger = -1 then
+            OPCOMMON.CallBooleanFunction('deletepayment', [ODSPaymentsID.Value, traDelAskRes])
+          else
+            OPCOMMON.CallBooleanFunction('delpaybyplan', [ODSPayments.FieldByName('PLANID').asInteger]);
+          ODSPayments.Refresh;
+        end;
+
+
+end;
+
+procedure TfmPaymentsMain.aEditExecute(Sender: TObject);
+begin
+  fmNewPayments := TfmNewPayments.CreateIt(ctEdit, PayDataMod.ODSPaymentsID.asInteger);
+  try
+    if fmNewPayments.ShowModal = mrOk then
+      PayDataMod.ODSPayments.Refresh;
+  finally
+    fmNewPayments.free;
+  end;
+end;
+
+procedure TfmPaymentsMain.DBGrid1DblClick(Sender: TObject);
+begin
+  aEdit.Execute;
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TfmPaymentsMain,
+    Class_fmPaymentsMain,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

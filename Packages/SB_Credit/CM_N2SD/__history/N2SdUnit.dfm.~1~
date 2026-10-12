@@ -1,0 +1,276 @@
+object FormSd: TFormSd
+  Left = 390
+  Top = 189
+  Width = 577
+  Height = 189
+  BorderIcons = [biSystemMenu]
+  Caption = 'FormSd'
+  Color = clBtnFace
+  Font.Charset = RUSSIAN_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poMainFormCenter
+  OnCreate = FormCreate
+  PixelsPerInch = 96
+  TextHeight = 13
+  object SpeedButton1: TSpeedButton
+    Left = 408
+    Top = 126
+    Width = 75
+    Height = 27
+    Caption = 'Гябул'
+    OnClick = SpeedButton1Click
+  end
+  object SpeedButton2: TSpeedButton
+    Left = 492
+    Top = 126
+    Width = 73
+    Height = 27
+    Caption = 'Имтина'
+    OnClick = SpeedButton2Click
+  end
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 569
+    Height = 122
+    Align = alTop
+    BevelOuter = bvLowered
+    TabOrder = 0
+    object Panel2: TPanel
+      Left = 194
+      Top = 1
+      Width = 193
+      Height = 120
+      Align = alLeft
+      BevelOuter = bvNone
+      TabOrder = 0
+      object GroupBox1: TGroupBox
+        Left = 0
+        Top = 57
+        Width = 193
+        Height = 60
+        Align = alTop
+        Caption = 'Мцддятляр цзря'
+        TabOrder = 0
+        object ChBPeriod: TCheckBox
+          Left = 158
+          Top = 26
+          Width = 17
+          Height = 17
+          Caption = 'ChBPeriod'
+          TabOrder = 0
+        end
+        object DBLookupComboboxEhPR: TDBLookupComboboxEh
+          Left = 8
+          Top = 24
+          Width = 144
+          Height = 21
+          DropDownBox.Options = [dlgColumnResizeEh, dlgColLinesEh, dlgRowLinesEh]
+          EditButtons = <>
+          KeyField = 'PERIOD'
+          ListField = 'PERIOD'
+          ListSource = DatModN2Sd.PeriodDatSrc
+          TabOrder = 1
+          Visible = True
+        end
+      end
+      object GroupBox4: TGroupBox
+        Left = 0
+        Top = 0
+        Width = 193
+        Height = 57
+        Align = alTop
+        Caption = 'Филиаллар'
+        TabOrder = 1
+        object DBLookupComboboxEhBr: TDBLookupComboboxEh
+          Left = 5
+          Top = 19
+          Width = 149
+          Height = 21
+          EditButtons = <>
+          KeyField = 'ID'
+          ListField = 'NAME'
+          ListSource = DatModN2Sd.BrDatSrc
+          TabOrder = 0
+          Visible = True
+        end
+        object CheckBoxBr: TCheckBox
+          Left = 160
+          Top = 21
+          Width = 17
+          Height = 17
+          Caption = 'CheckBox1'
+          TabOrder = 1
+        end
+      end
+    end
+    object Panel3: TPanel
+      Left = 1
+      Top = 1
+      Width = 193
+      Height = 120
+      Align = alLeft
+      BevelOuter = bvNone
+      TabOrder = 1
+      object GroupBox2: TGroupBox
+        Left = 0
+        Top = 57
+        Width = 193
+        Height = 60
+        Align = alTop
+        Caption = 'Реэионлар'
+        TabOrder = 0
+        object DBLookupComboboxEhReg: TDBLookupComboboxEh
+          Left = 5
+          Top = 17
+          Width = 149
+          Height = 21
+          EditButtons = <>
+          KeyField = 'ID'
+          ListField = 'NAME'
+          ListSource = DatModN2Sd.RegDatSrc
+          TabOrder = 0
+          Visible = True
+        end
+        object CheckBoxReg: TCheckBox
+          Left = 160
+          Top = 19
+          Width = 17
+          Height = 17
+          Caption = 'CheckBox1'
+          TabOrder = 1
+        end
+      end
+      object GroupBox3: TGroupBox
+        Left = 0
+        Top = 0
+        Width = 193
+        Height = 57
+        Align = alTop
+        Caption = 'Валйута'
+        TabOrder = 1
+        object DBLookupComboboxEhVal: TDBLookupComboboxEh
+          Left = 5
+          Top = 20
+          Width = 149
+          Height = 21
+          EditButtons = <>
+          KeyField = 'VALUTE'
+          ListField = 'VALU_NAME'
+          ListSource = DatModN2Sd.ValDatSrc
+          TabOrder = 0
+          Visible = True
+        end
+        object CheckBoxVal: TCheckBox
+          Left = 160
+          Top = 22
+          Width = 17
+          Height = 17
+          Caption = 'CheckBox1'
+          TabOrder = 1
+        end
+      end
+    end
+    object GroupBox5: TGroupBox
+      Left = 387
+      Top = 1
+      Width = 178
+      Height = 117
+      Caption = 'Тарих аралыэы'
+      TabOrder = 2
+      object Label1: TLabel
+        Left = 8
+        Top = 32
+        Width = 29
+        Height = 13
+        Caption = 'Б.тарих'
+      end
+      object Label2: TLabel
+        Left = 9
+        Top = 65
+        Width = 29
+        Height = 13
+        Caption = 'С.тарих'
+      end
+      object BeginDate: TDateTimePicker
+        Left = 52
+        Top = 27
+        Width = 114
+        Height = 21
+        CalAlignment = dtaLeft
+        Date = 38675.7178271412
+        Time = 38675.7178271412
+        DateFormat = dfShort
+        DateMode = dmComboBox
+        Kind = dtkDate
+        ParseInput = False
+        TabOrder = 0
+      end
+      object EndDate: TDateTimePicker
+        Left = 53
+        Top = 61
+        Width = 114
+        Height = 21
+        CalAlignment = dtaLeft
+        Date = 38675.7178271412
+        Time = 38675.7178271412
+        DateFormat = dfShort
+        DateMode = dmComboBox
+        Kind = dtkDate
+        ParseInput = False
+        TabOrder = 1
+      end
+    end
+  end
+  object ProgressBar: TProgressBar
+    Left = 0
+    Top = 155
+    Width = 569
+    Height = 1
+    Anchors = [akLeft, akTop, akRight, akBottom]
+    Min = 0
+    Max = 100
+    TabOrder = 1
+  end
+  object NLSLocalizer1: TNLSLocalizer
+    Caption = 'Форма  Н2-СД'
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    Left = 48
+    Top = 128
+  end
+  object CMExcelExport1: TCMExcelExport
+    ConnectTo = ctNewInstance
+    StyleColumnWidth = cwAutoFit
+    ColumnWidth = 0
+    FontTitles.Charset = DEFAULT_CHARSET
+    FontTitles.Color = clNavy
+    FontTitles.Height = -11
+    FontTitles.Name = 'Azl Sans Serif'
+    FontTitles.Style = [fsBold]
+    BorderTitles.Weight = bwThin
+    BorderTitles.LineStyle = blLine
+    OrientationTitles = 0
+    FontData.Charset = RUSSIAN_CHARSET
+    FontData.Color = clWindowText
+    FontData.Height = -11
+    FontData.Name = 'Azl Sans Serif'
+    FontData.Style = []
+    FontSummary.Charset = DEFAULT_CHARSET
+    FontSummary.Color = clWindowText
+    FontSummary.Height = -11
+    FontSummary.Name = 'Azl Sans Serif'
+    FontSummary.Style = []
+    SummarySelection = ssNone
+    SummaryCalculation = scSUM
+    Left = 152
+    Top = 120
+  end
+end

@@ -1,0 +1,52 @@
+unit NewDepositsDMWRGroupsImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, OracleData;
+
+type
+  TNewDepositsDMWRGroups = class(TDataModule)
+    TemplatesDataSet: TOracleDataSet;
+    TemplatesDataSetID: TFloatField;
+    TemplatesDataSetPATH: TWideStringField;
+    TemplatesDataSetNAME: TWideStringField;
+    TemplatesDataSrc: TDataSource;
+    DepositInfoDataSet: TOracleDataSet;
+    DepositInfoDataSrc: TDataSource;
+    BookmarksDataSet: TOracleDataSet;
+    BookmarksDataSrc: TDataSource;
+    FieldsDataSet: TOracleDataSet;
+    FieldsDataSetID: TFloatField;
+    FieldsDataSetFIELDNAME: TWideStringField;
+    FieldsDataSetDESCRIPTION: TWideStringField;
+    FieldsDataSrc: TDataSource;
+    ReplaceDataSet: TOracleDataSet;
+    procedure DataModuleCreate(Sender: TObject);
+    procedure DataModuleDestroy(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  NewDepositsDMWRGroups: TNewDepositsDMWRGroups;
+
+implementation
+
+{$R *.dfm}
+    uses sboapiDatamoduleImpl;
+
+procedure TNewDepositsDMWRGroups.DataModuleCreate(Sender: TObject);
+begin
+   TemplatesDataSet.Open
+end;
+
+procedure TNewDepositsDMWRGroups.DataModuleDestroy(Sender: TObject);
+begin
+   TemplatesDataSet.CloseAll
+end;
+
+end.

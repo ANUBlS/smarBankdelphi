@@ -1,0 +1,92 @@
+﻿unit ExpComingAccountUnit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Grids, DBGrids, StdCtrls, SearchEdit, DBViewComboBox, Buttons,
+  ExtCtrls, DB, OracleData;
+
+type
+  TExpComingAccountForm = class(TForm)
+    ExpComingAccDataSet: TOracleDataSet;
+    ExpComingAccDataSource: TDataSource;
+    Panel1: TPanel;
+    Panel2: TPanel;
+    Panel4: TPanel;
+    DBGrid1: TDBGrid;
+    SpeedButton1: TSpeedButton;
+    SpeedButton2: TSpeedButton;
+    SpeedButton3: TSpeedButton;
+    SpeedButton4: TSpeedButton;
+    ExpComingAccDataSetID: TFloatField;
+    ExpComingAccDataSetDEBET: TFloatField;
+    ExpComingAccDataSetKREDET: TFloatField;
+    ExpComingAccDataSetVALUTE: TIntegerField;
+    ExpComingAccDataSetBRANCHID: TFloatField;
+    ExpComingAccDataSetDebit: TStringField;
+    ExpComingAccDataSetKredit: TStringField;
+    ExpComingAccDataSetFilial: TStringField;
+    ExpComingAccDataSetValyuta: TStringField;
+    ExpComingAccDataSetTYPE: TFloatField;
+    ExpComingAccDataSetTip: TStringField;
+    procedure SpeedButton4Click(Sender: TObject);
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure SpeedButton2Click(Sender: TObject);
+    procedure SpeedButton3Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  ExpComingAccountForm: TExpComingAccountForm;
+
+implementation
+
+uses ExpComingAccUnit;
+
+{$R *.dfm}
+
+procedure TExpComingAccountForm.FormShow(Sender: TObject);
+begin
+  ExpComingAccDataSet.Close;
+  ExpComingAccDataSet.Open;
+end;
+
+procedure TExpComingAccountForm.SpeedButton1Click(Sender: TObject);
+begin
+  FormComingAcc.Tip:=0;
+  FormComingAcc.ShowModal;
+end;
+
+procedure TExpComingAccountForm.SpeedButton2Click(Sender: TObject);
+begin
+  FormComingAcc.Tip:=1;
+  FormComingAcc.ShowModal;
+end;
+
+procedure TExpComingAccountForm.SpeedButton3Click(Sender: TObject);
+begin
+  if ExpComingAccDataSet.RecordCount = 0 then
+    exit;
+  if MessageDlg('Silinməsinə  əminsiniz?', mtConfirmation, [mbYes, mbNo], 0) <>
+    mrYes then
+    exit;
+  with ExpComingAccDataSet do
+  begin
+    Delete;
+    Refresh;
+  end;
+
+
+end;
+
+procedure TExpComingAccountForm.SpeedButton4Click(Sender: TObject);
+begin
+  Close;
+end;
+
+end.

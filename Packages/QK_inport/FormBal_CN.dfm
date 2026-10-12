@@ -1,0 +1,113 @@
+﻿object FormBalCN: TFormBalCN
+  Left = 0
+  Top = 0
+  Caption = 'Balans hesb'#305'...'
+  ClientHeight = 270
+  ClientWidth = 657
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poDesktopCenter
+  OnClose = FormClose
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object XFPanel1: TXFPanel
+    Left = 0
+    Top = 0
+    Width = 657
+    Height = 229
+    Align = alClient
+    BevelInner = bvSpace
+    BevelKind = bkFlat
+    BevelOuter = bvSpace
+    TabOrder = 0
+    object XDBGrid1: TXDBGrid
+      Left = 2
+      Top = 2
+      Width = 649
+      Height = 221
+      Align = alClient
+      DataSource = QKİmportDataMod.DSRC_BAL_SPR1
+      GridStyle.VisualStyle = vsXPStyle
+      Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit, dgExtendedSelect, dgInternalSelect, dgRowResize, dgRowScroll, dgHotButtons, dgTitleButtons, dgTitleHeaders, dgTitleWidthOff, dgMarkerAutoAlign, dgMarkerAutoToggle]
+      TabOrder = 0
+      OnDblClick = XDBGrid1DblClick
+      Columns = <
+        item
+          Expanded = False
+          FieldName = 'BAL_CN'
+          Title.Caption = 'Balans '#8470
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'BALNAME'
+          Title.Caption = 'Balans'#305'n ad'#305
+          Visible = True
+          Width = 555
+        end>
+    end
+  end
+  object XFPanel2: TXFPanel
+    Left = 0
+    Top = 229
+    Width = 657
+    Height = 41
+    Align = alBottom
+    BevelInner = bvSpace
+    BevelKind = bkFlat
+    BevelOuter = bvSpace
+    TabOrder = 1
+    object Edit_BalCn: TEdit
+      Left = 7
+      Top = 8
+      Width = 87
+      Height = 21
+      TabOrder = 0
+      OnChange = Edit_BalCnChange
+    end
+    object Edit_BalName: TEdit
+      Left = 97
+      Top = 8
+      Width = 382
+      Height = 21
+      TabOrder = 1
+      OnChange = Edit_BalNameChange
+    end
+    object XFButton1: TXFButton
+      Left = 574
+      Top = 5
+      Width = 75
+      Height = 25
+      Caption = 'Q'#601'bul'
+      DoubleBuffered = True
+      ParentDoubleBuffered = False
+      TabOrder = 2
+      OnClick = XFButton1Click
+    end
+    object XFButton2: TXFButton
+      Left = 489
+      Top = 5
+      Width = 77
+      Height = 26
+      Caption = 'Axtar'#305#351
+      DoubleBuffered = True
+      ParentDoubleBuffered = False
+      TabOrder = 3
+      OnClick = XFButton2Click
+    end
+  end
+  object ActionList_BalCN: TActionList
+    Left = 392
+    Top = 104
+    object Action_Src: TAction
+      Caption = 'Action_Src'
+      OnExecute = Action_SrcExecute
+    end
+  end
+end

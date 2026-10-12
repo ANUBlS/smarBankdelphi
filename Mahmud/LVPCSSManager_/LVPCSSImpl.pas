@@ -1,0 +1,2817 @@
+unit LVPCSSImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActiveX, AxCtrls, LVPCSSManager_TLB, StdVcl, StdCtrls, ComCtrls,
+  ExtCtrls, Grids, DBGrids, Mask, DBCtrls, ToolWin, ActnList, Menus,
+  ImgList, Db, OracleData, FileCtrl, sboapiDataModuleImpl,QuickRpt,Qrctrls;
+
+type
+  TLVPCSSForm = class(TActiveForm, ILVPCSS)
+    OpenDialogIn: TOpenDialog;
+    ImageList: TImageList;
+    ImageListFilial: TImageList;
+    PopupMT102: TPopupMenu;
+    N1: TMenuItem;
+    N15: TMenuItem;
+    N19: TMenuItem;
+    N2: TMenuItem;
+    N3: TMenuItem;
+    N18: TMenuItem;
+    N4: TMenuItem;
+    PopupMessIn: TPopupMenu;
+    MenuItem5: TMenuItem;
+    MenuItem3: TMenuItem;
+    MenuItem6: TMenuItem;
+    MenuItem7: TMenuItem;
+    N13: TMenuItem;
+    N7: TMenuItem;
+    N6: TMenuItem;
+    N17: TMenuItem;
+    N8: TMenuItem;
+    N21: TMenuItem;
+    InfoPopup: TPopupMenu;
+    Clear1: TMenuItem;
+    Popup_SingleConvert: TPopupMenu;
+    Convert1: TMenuItem;
+    ConvertAll1: TMenuItem;
+    N14: TMenuItem;
+    Sendtoarchive2: TMenuItem;
+    SendToArchive1: TMenuItem;
+    N20: TMenuItem;
+    ClearSelected1: TMenuItem;
+    ClearList1: TMenuItem;
+    PopupMessOut: TPopupMenu;
+    MenuItem1: TMenuItem;
+    N5: TMenuItem;
+    MenuItem2: TMenuItem;
+    MenuItem4: TMenuItem;
+    N12: TMenuItem;
+    N10: TMenuItem;
+    N11: TMenuItem;
+    N16: TMenuItem;
+    N9: TMenuItem;
+    MainAction: TActionList;
+    Mt102Insert: TAction;
+    MT102Delete: TAction;
+    Mt102Refresh: TAction;
+    Mt102Accept: TAction;
+    MessagesOutAdd: TAction;
+    MessagesOutEdit: TAction;
+    MessOutDelete: TAction;
+    MessagesOutAccept: TAction;
+    MessagesInConvert: TAction;
+    MessagesInEdit: TAction;
+    MessagesInRefresh: TAction;
+    MessInDelete: TAction;
+    MessagesInAccept: TAction;
+    MessageOutSelAll: TAction;
+    MessageInSelAll: TAction;
+    Mt102Edit: TAction;
+    Panel1: TPanel;
+    MainPageControl: TPageControl;
+    TabSheet1: TTabSheet;
+    PanelBeneficary: TPanel;
+    ControlBar2: TControlBar;
+    ToolBar2: TToolBar;
+    ToolButton2: TToolButton;
+    ToolButton7: TToolButton;
+    ToolButton4: TToolButton;
+    MessAcceptButton: TToolButton;
+    ToolButton13: TToolButton;
+    Panel27: TPanel;
+    Panel5: TPanel;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label5: TLabel;
+    Label3: TLabel;
+    Label6: TLabel;
+    DBEdit8: TDBEdit;
+    DBEdit9: TDBEdit;
+    DBEdit23: TDBEdit;
+    DBEdit7: TDBEdit;
+    DBEdit24: TDBEdit;
+    Panel26: TPanel;
+    GridBeneficiary: TDBGrid;
+    ControlBar1: TControlBar;
+    ToolBar1: TToolBar;
+    ToolButton1: TToolButton;
+    ToolButton12: TToolButton;
+    ToolButton9: TToolButton;
+    ToolButton3: TToolButton;
+    AcceptButton: TToolButton;
+    ToolButton18: TToolButton;
+    ToolButton11: TToolButton;
+    ToolButton5: TToolButton;
+    ToolButton6: TToolButton;
+    ToolButton8: TToolButton;
+    ToolButton21: TToolButton;
+    BtnSendToArchive: TToolButton;
+    Panel22: TPanel;
+    StDate: TDateTimePicker;
+    EndDate: TDateTimePicker;
+    ToolButton15: TToolButton;
+    Panel3: TPanel;
+    GridBatchs: TDBGrid;
+    Panel4: TPanel;
+    Panel6: TPanel;
+    DBEdit19: TDBEdit;
+    DBEdit3: TDBEdit;
+    DBEdit6: TDBEdit;
+    DBEdit5: TDBEdit;
+    DBEdit4: TDBEdit;
+    DBEdit2: TDBEdit;
+    DBEdit1: TDBEdit;
+    Panel24: TPanel;
+    Label4: TLabel;
+    Label7: TLabel;
+    DBEdit21: TDBEdit;
+    DBEdit22: TDBEdit;
+    DBEdit20: TDBEdit;
+    TabSheet2: TTabSheet;
+    Panel7: TPanel;
+    Panel8: TPanel;
+    Splitter2: TSplitter;
+    FileListIncoming: TListBox;
+    RichEdit1: TRichEdit;
+    GridIncoming: TDBGrid;
+    Panel9: TPanel;
+    Panel10: TPanel;
+    Panel13: TPanel;
+    DBEdit13: TDBEdit;
+    Panel14: TPanel;
+    DBEdit10: TDBEdit;
+    Panel11: TPanel;
+    Panel12: TPanel;
+    DBEdit12: TDBEdit;
+    Panel15: TPanel;
+    DBEdit11: TDBEdit;
+    Panel16: TPanel;
+    Panel17: TPanel;
+    DBEdit15: TDBEdit;
+    Panel20: TPanel;
+    DBEdit16: TDBEdit;
+    Panel21: TPanel;
+    DBEdit18: TDBEdit;
+    Panel18: TPanel;
+    Panel19: TPanel;
+    DBEdit17: TDBEdit;
+    Panel23: TPanel;
+    DBEdit14: TDBEdit;
+    Panel_info: TPanel;
+    Info_ListBox: TListBox;
+    ControlBar3: TControlBar;
+    ToolBar3: TToolBar;
+    ToolButton10: TToolButton;
+    ButtonMessInConvert: TToolButton;
+    ButtonMessInRefresh: TToolButton;
+    ButtonMessIneEdit: TToolButton;
+    ButtonMessInDel: TToolButton;
+    ButtonMessInAccept: TToolButton;
+    ToolButton17: TToolButton;
+    Panel25: TPanel;
+    StDate_in: TDateTimePicker;
+    EndDate_in: TDateTimePicker;
+    ToolButton14: TToolButton;
+    MessageInFileLoad: TAction;
+    PgOutArchive: TTabSheet;
+    ControlBar4: TControlBar;
+    ToolBar4: TToolBar;
+    ToolButton16: TToolButton;
+    ToolButton19: TToolButton;
+    ToolButton22: TToolButton;
+    OutArchRefresh: TToolButton;
+    ToolButton24: TToolButton;
+    ToolButton25: TToolButton;
+    ToolButton26: TToolButton;
+    ToolButton27: TToolButton;
+    ToolButton28: TToolButton;
+    ToolButton29: TToolButton;
+    ToolButton30: TToolButton;
+    ToolButton31: TToolButton;
+    Panel2: TPanel;
+    DTPickOutArchBeg: TDateTimePicker;
+    DTPickOutArchEnd: TDateTimePicker;
+    ToolButton32: TToolButton;
+    Panel28: TPanel;
+    DBGridOUTArchBatchs: TDBGrid;
+    Panel29: TPanel;
+    Panel30: TPanel;
+    DBEdit25: TDBEdit;
+    DBEdit26: TDBEdit;
+    DBEdit27: TDBEdit;
+    DBEdit28: TDBEdit;
+    DBEdit29: TDBEdit;
+    DBEdit30: TDBEdit;
+    DBEdit31: TDBEdit;
+    Panel31: TPanel;
+    Label8: TLabel;
+    Label9: TLabel;
+    DBEdit32: TDBEdit;
+    DBEdit33: TDBEdit;
+    DBEdit34: TDBEdit;
+    Panel32: TPanel;
+    ControlBar5: TControlBar;
+    ToolBar5: TToolBar;
+    ToolButton33: TToolButton;
+    ToolButton34: TToolButton;
+    ToolButton35: TToolButton;
+    ToolButton36: TToolButton;
+    ToolButton37: TToolButton;
+    Panel33: TPanel;
+    Panel34: TPanel;
+    Label10: TLabel;
+    Label11: TLabel;
+    Label12: TLabel;
+    Label13: TLabel;
+    Label14: TLabel;
+    DBEdit35: TDBEdit;
+    DBEdit36: TDBEdit;
+    DBEdit37: TDBEdit;
+    DBEdit38: TDBEdit;
+    DBEdit39: TDBEdit;
+    Panel35: TPanel;
+    DBGridOUTArchBeneficiary: TDBGrid;
+    PopupMenuConvert: TPopupMenu;
+    ConvertConfirme: TMenuItem;
+    N22: TMenuItem;
+    PopMenuArchPrint: TPopupMenu;
+    Print1: TMenuItem;
+    procedure ActiveFormCreate(Sender: TObject);
+    function OnlyNumber(key :Char): CHAR;
+    procedure MainPageControlChange(Sender: TObject);
+    procedure GridBatchsDrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TColumn; State: TGridDrawState);
+    procedure RefreshDataBatchs;
+    procedure Refresh_mess_in;
+    procedure ToolButton21Click(Sender: TObject);
+    procedure showdetals;
+    procedure ToolButton4Click(Sender: TObject);
+    procedure ToolButton8Click(Sender: TObject);
+    procedure ToolButton11Click(Sender: TObject);
+    procedure ToolButton5Click(Sender: TObject);
+    function LoadToRich(FileName : String): string;
+    procedure ConvertToBase(Rich : TRichEdit;ref : string);
+    procedure RefreshWithPos;
+    procedure Clear1Click(Sender: TObject);
+    procedure Popup_SingleConvertPopup(Sender: TObject);
+    procedure Convert1Click(Sender: TObject);
+    procedure MessInDeleteExecute(Sender: TObject);
+    procedure ToolButton14Click(Sender: TObject);
+    procedure MT102DeleteExecute(Sender: TObject);
+    procedure MessOutDeleteExecute(Sender: TObject);
+    procedure RefreshMessinWithPos;
+    procedure SelectDate;
+    procedure MessageInSelAllExecute(Sender: TObject);
+    procedure Mt102RefreshExecute(Sender: TObject);
+    procedure Mt102AcceptExecute(Sender: TObject);
+    procedure MessagesOutAddExecute(Sender: TObject);
+    procedure ToolButton2Click(Sender: TObject);
+    procedure MessagesOutEditExecute(Sender: TObject);
+    procedure ToolButton7Click(Sender: TObject);
+    procedure MessagesOutAcceptExecute(Sender: TObject);
+    procedure MessAcceptButtonClick(Sender: TObject);
+    procedure GridBeneficiaryDblClick(Sender: TObject);
+    procedure MessagesInConvertExecute(Sender: TObject);
+    procedure ButtonMessInConvertClick(Sender: TObject);
+    procedure MessagesInEditExecute(Sender: TObject);
+    procedure MessagesInRefreshExecute(Sender: TObject);
+    procedure MessagesInAcceptExecute(Sender: TObject);
+    procedure GridIncomingDblClick(Sender: TObject);
+    procedure Mt102InsertExecute(Sender: TObject);
+    procedure ToolButton1Click(Sender: TObject);
+    procedure N4DrawItem(Sender: TObject; ACanvas: TCanvas; ARect: TRect;
+      Selected: Boolean);
+    procedure ConvertAll1Click(Sender: TObject);
+    procedure MainPageControlDrawTab(Control: TCustomTabControl;
+      TabIndex: Integer; const Rect: TRect; Active: Boolean);
+    procedure N6Click(Sender: TObject);
+    procedure N7Click(Sender: TObject);
+    procedure N8Click(Sender: TObject);
+    procedure N9Click(Sender: TObject);
+    procedure MessageOutSelAllExecute(Sender: TObject);
+    procedure N10Click(Sender: TObject);
+    procedure N11Click(Sender: TObject);
+    procedure GridBatchsTitleClick(Column: TColumn);
+    procedure PopupMT102Popup(Sender: TObject);
+    procedure Sendtoarchive2Click(Sender: TObject);
+    procedure SendToArchive1Click(Sender: TObject);
+    procedure Mt102EditExecute(Sender: TObject);
+    procedure N19Click(Sender: TObject);
+    procedure ToolButton12Click(Sender: TObject);
+    procedure UpdateFileInList;
+    procedure GrantAmount;
+    function  StrPart(S : String;FindStr : String ;nom : integer): String;
+    procedure ToolButton10Click(Sender: TObject);
+    procedure ClearList1Click(Sender: TObject);
+    procedure ClearSelected1Click(Sender: TObject);
+    procedure MessageInFileLoadExecute(Sender: TObject);
+    function  LoadFileNames(Dir : String) : Boolean;
+    procedure MouseWheelHandler(var Message: TMessage);override;
+    procedure GridIncomingDrawColumnCell(Sender: TObject;
+      const Rect: TRect; DataCol: Integer; Column: TColumn;
+      State: TGridDrawState);
+    procedure OutArchRefreshClick(Sender: TObject);
+    procedure GridBatchsDblClick(Sender: TObject);
+    procedure BtnSendToArchiveClick(Sender: TObject);
+    procedure ConvertConfirmeClick(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure N21Click(Sender: TObject);
+    procedure N22Click(Sender: TObject);
+    procedure Print1Click(Sender: TObject);
+    procedure ToolButton22Click(Sender: TObject);
+    procedure ToolButton35Click(Sender: TObject);
+  private
+    { Private declarations }
+    FEvents: ILVPCSSEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+    Procedure Open____ODS_Report_Temp____Add_SQL(SQL_Label : String);
+  public
+    { Public declarations }
+    procedure Initialize; override;
+    procedure ViewBankInfo(filial : boolean; AFilialID : Integer);
+
+  end;
+var
+   LVPCSSForm : TLVPCSSForm;
+   new_id : integer;
+   Batchs_Edit,
+   Mess_Edit,
+   After_Add: boolean;
+   Trans_Date : TDateTime;
+   AcceptTransForCreated : Boolean;
+   function GetUseDate : TDateTime;
+
+implementation
+
+uses ComObj, ComServ, Data_Unit, Transaction_Unit, Payment_Det,
+  TransTypeUnit, Properties_Unit, PrepareFile_Unit, FileSend_Unit,
+  ReceiveMessDetals_Unit, AcceptTransUnit, Unit_setting, unit_Report,
+  Admin_Setting, Unit_Report_in;
+
+{$R *.DFM}
+
+{ TLVPCSS }
+procedure TLVPCSSForm.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_LVPCSSPage); }
+end;
+
+procedure TLVPCSSForm.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as ILVPCSSEvents;
+end;
+
+procedure TLVPCSSForm.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TLVPCSSForm.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TLVPCSSForm.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TLVPCSSForm.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TLVPCSSForm.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TLVPCSSForm.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TLVPCSSForm.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TLVPCSSForm.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TLVPCSSForm.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TLVPCSSForm.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TLVPCSSForm.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TLVPCSSForm.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TLVPCSSForm.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TLVPCSSForm.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TLVPCSSForm.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TLVPCSSForm.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TLVPCSSForm.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TLVPCSSForm.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TLVPCSSForm.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TLVPCSSForm._Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TLVPCSSForm.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TLVPCSSForm.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TLVPCSSForm.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TLVPCSSForm.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TLVPCSSForm.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TLVPCSSForm.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TLVPCSSForm.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TLVPCSSForm.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TLVPCSSForm.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TLVPCSSForm.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TLVPCSSForm.Set_AxBorderStyle(Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TLVPCSSForm.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TLVPCSSForm.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TLVPCSSForm.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TLVPCSSForm.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TLVPCSSForm.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TLVPCSSForm.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TLVPCSSForm.Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TLVPCSSForm.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TLVPCSSForm.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TLVPCSSForm.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TLVPCSSForm.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TLVPCSSForm.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TLVPCSSForm.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+procedure TLVPCSSForm.ActiveFormCreate(Sender: TObject);
+begin
+    LVPCSSForm := Self;
+    DataMod:=TDatamod.Create(Self);
+    TransForm:=TTransForm.Create(Self);
+    PaymentDetalsForm:=TPaymentDetalsForm.Create(Self);
+    TransCodeForm:=TTransCodeForm.Create(Self);
+    PropertiesForm:=TPropertiesForm.Create(Self);
+    PrepareFile_Form:=TPrepareFile_Form.Create(Self);
+    SendFileForm:=TSendFileForm.Create(Self);
+    RecMessDet_form:=TRecMessDet_form.Create(Self);
+    Form_Setting:=TForm_Setting.Create(Self);
+    Form_Admin_Setting:=TForm_Admin_Setting.Create(Self);
+    
+    try with DataMod.SB_ACA do
+      CallProcedure('CheckAdvancedObjectAccess',['XOHKSBENIFICARY']);
+    except
+      PanelBeneficary.Hide;
+    end;
+
+    {DATE GENARATE}
+    DataMod.XS_CONFIG.Active:=true;
+    StDate.date:= GetUseDate;
+    EndDate.date:= GetUseDate;
+    selectdate;
+    DataMod.DataSetFilial.Open;
+    DataMod.XS_BATCHS.open;
+    DataMod.XS_BENEFICIARY.open;
+    DataMod.XS_IncomingView.Active:=true;
+    {Setup Main Page}
+    MainPageControl.ActivePageIndex:=0;
+    MainPageControl.Pages[0].Highlighted:=true;
+    {Set Messsagein DATE}
+    UpdateFileInList;
+
+    StDate_in.date:= GetUseDate;
+    EndDate_in.date:= GetUseDate;
+    Refresh_mess_in;
+    DTPickOutArchBeg.Date :=StDate.date;
+    DTPickOutArchEnd.Date :=StDate.date; 
+end;
+{*************************************************MY PROCEDURES AND FUNCTION**************************************************}
+function GetUseDate : TDateTime;
+begin
+    if DataMod.XS_CONFIG.FieldByName('USEBANKDATE').AsInteger = 1 then
+       Result := Trunc(DataMod.GetSysDate.CallDateFunction('GET_DATE',[]))
+    else
+       Result := Trunc(Date);
+end;
+
+Procedure TLVPCSSForm.UpdateFileInList;
+begin
+    DataMod.XS_CONFIG.Refresh;
+    FileListIncoming.Update;
+end;
+
+procedure TLVPCSSForm.GrantAmount;
+var
+  AdvGrantName :String;
+  Amount :Real;
+begin
+  Amount := DataMod.XS_BATCHS.fieldbyname('Amount').AsFloat ;
+  with DataMod.DataTemp do begin
+   Close;
+   SQL.Clear;
+   SQL.Add('select Ostat from OperKurs where Dat ='''+
+    //FormatDateTime('dd-mmm-yyyy',DataMod.XS_BATCHS.fieldbyname('TransDate').AsDateTime)+
+    FormatDateTime('dd-mmm-yyyy',GetUseDate)+
+    ''' and Val_Kod='+
+    DataMod.XS_BATCHS.fieldbyname('Val_Acc').AsString);
+    Open;
+  end; {with DataMod.DataTemp}
+
+  Amount:=Amount*(DataMod.DataTemp.FieldByName('Ostat').AsFloat);
+  DataMod.SB_ACA.CallProcedure('CheckMoneyBorderAccess',[Amount]);
+end;
+
+function TLVPCSSForm.StrPart(S : String;FindStr : String ;nom : integer): String;
+   var strpos,i : integer;
+       tempstr : String;
+begin
+   if Length(s) = 0 then begin Result:='';exit; end;
+   for i:= 1 to nom do
+   begin
+      strpos:=Pos(FindStr,S);
+      tempstr:=copy(S,0,strpos);
+      S:=      copy(S,strpos+1,length(S)-strpos);
+   end;
+   tempstr:=StringReplace(tempstr,FindStr,'',[rfReplaceAll, rfIgnoreCase]);
+   Result:=tempstr;
+end;
+//--------------------------------------------------------------------------
+procedure SendXmlFileToArchive(All:Boolean;Index:Integer);
+  var  FileCount : Integer;
+       FileDir : String;
+begin
+   if MessageDlg('Сиз яминсиниз ки бу файллары архивя эюндярмяк истйирсиниз ?',mtConfirmation,[mbyes,mbno,mbcancel],0)<>mryes then exit;
+   FileDir :=  DataMod.XS_CONFIG.fieldbyname('in_dir').asstring+'\';
+   with LVPCSSForm, DataMod do
+   begin
+        if (FileListIncoming.Items.Count = 0 ) then exit;
+        if (all=false)and(FileListIncoming.ItemIndex=-1) then exit;
+        if XS_CONFIG.Active then XS_CONFIG.Refresh else XS_CONFIG.Active:=true;
+        if all = false then
+        begin
+            if  MoveFileEx(pchar(FileDir+FileListIncoming.Items[Index]),Pchar(DataMod.XS_CONFIG.fieldbyname('archive_dir').asstring+'\'+FileListIncoming.items[index]),MOVEFILE_REPLACE_EXISTING) then
+            MessageDlg(
+                       format('File " %s " Moved to directory " %s " !',
+                              [FileListIncoming.items[index],
+                              DataMod.XS_CONFIG.fieldbyname('archive_dir').asstring])
+                       ,mtInformation,[mbok],0);
+            FileListIncoming.Items.Delete(Index);
+        end else
+        begin
+           FileCount:=FileListIncoming.Items.Count;
+           while  FileListIncoming.Items.Count > 0 do
+           begin
+              MoveFileEx(pchar(FileDir+FileListIncoming.items[0]),Pchar(DataMod.XS_CONFIG.fieldbyname('archive_dir').asstring+'\'+FileListIncoming.items[0]),MOVEFILE_REPLACE_EXISTING);
+              FileListIncoming.Items.Delete(0);
+           end;
+           MessageDlg(Format('" %d " File Moved!',[filecount]),mtInformation,[mbok],0);
+        end;
+   end;
+end;
+//------------------------------------------------------------------
+procedure TLVPCSSForm.MouseWheelHandler(var Message: TMessage);
+begin
+  inherited;
+  if GridBatchs.Focused then
+  begin
+     GridBatchs.SelectedRows.Clear;
+     with TCMMouseWheel(message),GridBatchs.DataSource.DataSet do
+     if WheelDelta < 0 then
+        Next
+     else
+        Prior;
+  end else
+
+ if GridBeneficiary.Focused then
+  begin
+     GridBeneficiary.SelectedRows.Clear;
+     with TCMMouseWheel(message),GridBeneficiary.DataSource.DataSet do
+     if WheelDelta < 0 then
+        Next
+     else
+        Prior;
+  end else
+  if GridIncoming.Focused then
+  begin
+    GridIncoming.SelectedRows.Clear;
+    GridIncoming.SetFocus;
+    with TCMMouseWheel(message),GridIncoming.DataSource.DataSet do
+     if WheelDelta < 0 then
+        Next
+     else
+        Prior;
+  end;
+end;
+//------------------------------------------------------------------{VIEW in COMBO}
+procedure AddtoCOMBO(ComBo: TComboBox;ListB: TListBox;DatSet : TOracleDataSet;SQLstring,field_ListBox,field_Combo: String);
+begin
+    DatSet.Close;
+    DatSet.SQL.Clear;
+    DatSet.SQL.Add(SQLstring);
+    DatSet.Open;
+    DatSet.First;
+    ListB.Clear;
+    Combo.Clear;
+    while not DatSet.Eof do
+    begin
+        ListB.Items.Add(DatSet.fieldbyname(field_ListBox).AsString);
+        Combo.Items.Add(DatSet.fieldbyname(field_Combo).AsString);
+    DatSet.Next;
+    end;
+    DatSet.First;
+end;
+//------------------------------------------------------------------
+function TLVPCSSForm.OnlyNumber(key : char) :CHAR;
+begin
+   if not (key in ['0'..'9',#8]) then key:=#0; Result:=key;
+end;
+//------------------------------------------------------------------
+procedure createTransCodeTree;
+    var
+    TR,TRC :TTreeNode ;
+begin
+    {VIEW trans type code}
+    if DataMod.TransTypeName.Active=false then DataMod.TransTypeName.Active:=true;
+    DataMod.TransTypeName.FIRST;
+    if DataMod.TransTypeCode.Active=false then DataMod.TransTypeCode.Active:=true;
+    TransCodeForm.TreeView1.Items.Clear;
+    while not DataMod.TransTypeName.Eof do
+    begin
+        TR:=TransCodeForm.TreeView1.Items.Add(TransCodeForm.TreeView1.Items.GetFirstNode,DataMod.TransTypeName.fieldbyname('NAME').AsString) ;
+        TR.ImageIndex:=0;
+        TR.SelectedIndex:=1;
+        DataMod.TransTypeCode.First;
+        while not DataMod.TransTypeCode.EOF do
+        begin
+            TRC:=TransCodeForm.TreeView1.Items.AddChild(TR,DataMod.TransTypeCode.fieldbyname('Name').AsString);
+            TRC.ImageIndex:=2;
+            TRC.SelectedIndex:=2;
+            TRC.StateIndex:=DataMod.TransTypeCode.fieldbyname('CODE').AsInteger;
+        DataMod.TransTypeCode.NEXT;
+        end;
+    DataMod.TransTypeName.Next;
+    end;
+end;
+//------------------------------------------------------------------
+procedure TLVPCSSForm.ViewBankInfo(filial : boolean; AFilialID : Integer);
+begin
+
+    if filial then
+    begin
+       DataMod.DataCheck.Active:=false;
+       DataMod.DataCheck.SQL.Clear;
+       DataMod.DataCheck.SQL.Add('Select * from filialinfo where kod_fil='''+IntToStr(AFilialID)+'''');
+       DataMod.DataCheck.Active:=true;
+
+       TransForm.Edit_BankCode.Text:=DataMod.DataCheck.fieldbyname('KOD_BFIL').AsString;
+       TransForm.Edit_voen.Text:=DataMod.DataCheck.fieldbyname('INN_FIL').AsString;
+    end else
+    begin
+       TransForm.Edit_BankCode.Text:=DataMod.DataBankInfo.fieldbyname('KOD_B').AsString;
+       TransForm.Edit_voen.Text:=DataMod.DataBankInfo.fieldbyname('INN').AsString;
+    end;
+    TransForm.Edit_Sender.Text:=DataMod.DataBankInfo.fieldbyname('SWIFT').AsString+'AXXX';
+    TransForm.Edit_BIK.Text:=DataMod.DataBankInfo.fieldbyname('SWIFT').AsString;
+    TransForm.Edit_account.Text:=DataMod.DataBankInfo.fieldbyname('KRNO').AsString;
+    TransForm.Edit_account_sub.Text:=DataMod.XS_CONFIG.fieldbyname('Account').AsString;
+
+end;
+procedure PrepareTrans(BnfCount: integer;EditBeneficiary : Boolean);
+begin
+    {OPEN DATA}
+    if DataMod.XS_CONFIG.Active = false then DataMod.XS_CONFIG.Open;
+    if DataMod.DataAccount.Active = false then DataMod.DataAccount.Open;
+    if DataMod.DataSetFilial.Active = false then DataMod.DataSetFilial.Open;
+    {VARS}
+    PaymentDetalsForm.bnf_count:=bnfcount;
+    {SELF BANK INFO}
+    DataMod.DataBankInfo.Close;
+    DataMod.DataBankInfo.SQL.Clear;
+    DataMod.DataBankInfo.SQL.Add('Select * from BankInfo');
+    DataMod.DataBankInfo.Open;
+    {VIEW IN COMBO BANK name}
+     AddtoCOMBO(PaymentDetalsForm.Combo_BankName,PaymentDetalsForm.Bank_ID,DataMod.DataBankM,'Select * from BankM order by name','ID','NAME');
+    {VIEW IN COMBO VALUTE in PAYMENTS}
+     AddtoCOMBO(PaymentDetalsForm.Combo_Valute,PaymentDetalsForm.Valute_ID,DataMod.DataValute,'Select valute,val_name,valu_name from Avalute order by valute','VALUTE','VALU_NAME');
+    {VIEW IN COMBO VALUTE in Main}
+     AddtoCOMBO(TransForm.Combo_Valute,TransForm.Valute_ID,DataMod.DataValute,'Select valute,val_name,valu_name from Avalute order by valute','VALUTE','VALU_NAME');
+
+    {VIEW BANK INFO in EDIT}
+    LVPCSSForm.ViewBankInfo(false,0);
+
+    TransForm.Combo_Valute.ItemIndex:=0;
+    TransForm.ComboBox_CD.ItemIndex:=0;
+    {Clear edit's}
+    if EditBeneficiary= false then
+    begin
+       TransForm.AccSearch.Clear;
+       TransForm.Edit_clientName.Clear;
+       TransForm.Edit_client_code.Text:='/';
+       TransForm.Edit_Amount.text:='0';
+       TransForm.Edit_BNF.Text:='/BNF/0';
+       TransForm.Combo_date.Date:=Date;
+       TransForm.Edit_Client_Voen.Clear;
+       TransForm.Edit_Referens.clear;
+       {Settings For Filial}
+       TransForm.LabelFilialName.Caption:='';
+       TransForm.Button_add.Enabled:=true;
+       Batchs_Edit:=false;
+    end else
+    begin
+       DataMod.DataAccount.Locate('id',DataMod.XS_BATCHS.fieldbyname('acc_id').AsInteger,[]);
+       TransForm.AccSearch.Text:=DataMod.DataAccount.fieldbyname('acc_no').AsString;
+       TransForm.Edit_clientName.Text:=DataMod.XS_BATCHS.fieldbyname('client_name').AsString;
+       TransForm.Edit_client_code.Text:=DataMod.XS_BATCHS.fieldbyname('client_code').AsString;
+       TransForm.Edit_Amount.text:=DataMod.XS_BATCHS.fieldbyname('Amount').AsString;;
+       TransForm.Edit_BNF.Text:='/BNF/'+inttostr(DataMod.XS_BENEFICIARY.RecordCount);
+       TransForm.Combo_date.Date:=DataMod.XS_BATCHS.fieldbyname('transdate').AsDateTime;
+       TransForm.Edit_Client_Voen.Text:=DataMod.XS_BATCHS.fieldbyname('client_inn').AsString;
+       TransForm.Edit_Referens.text:=DataMod.XS_BATCHS.fieldbyname('trans_ref').AsString;;
+       {Settings For Filial}
+       TransForm.LabelFilialName.Caption:='';
+       TransForm.Button_add.Enabled:=false;
+       Batchs_Edit:=true;
+    end;
+    TransForm.ButtonPost.Enabled:=False;
+end;
+
+procedure TLVPCSSForm.RefreshDataBatchs;
+begin
+   SelectDate;
+   GridBeneficiary.SelectedRows.Clear;
+   GridBatchs.SelectedRows.Clear;
+   DataMod.XS_BATCHS.Refresh;
+   DataMod.XS_BENEFICIARY.Refresh;
+end;
+procedure TLVPCSSForm.Refresh_mess_in;
+   var   Dtst,dtEnd:TDateTime;
+begin
+   {}
+   Dtst:=trunc(Stdate_in.DateTime);
+   dtEnd:=trunc(EndDate_in.DateTime);
+   datamod.XS_IncomingView.SetVariable('BeginDate',Dtst);
+   datamod.XS_IncomingView.SetVariable('EndDate',dtEnd);
+   DataMod.XS_IncomingView.Refresh;
+end;
+
+procedure TLVPCSSForm.RefreshMessinWithPos;
+   var firstpos: pointer;
+begin
+   firstpos:=DataMod.XS_IncomingView.GetBookmark;
+   DataMod.XS_IncomingView.Refresh;
+   DataMod.XS_IncomingView.GotoBookmark(firstpos);
+   GridIncoming.SelectedRows.Clear;
+end;
+procedure TLVPCSSForm.ShowDetals;
+begin
+    CreateTransCodeTree;
+    {OPEN DATA}
+    if DataMod.XS_CONFIG.Active = false then DataMod.XS_CONFIG.Open;
+    if DataMod.DataAccount.Active = false then DataMod.DataAccount.Open;
+    {VIEW IN COMBO BANK name}
+    AddtoCOMBO(PaymentDetalsForm.Combo_BankName,PaymentDetalsForm.Bank_ID,DataMod.DataBankM,'Select * from BankM','ID','NAME');
+    {VIEW IN COMBO VALUTE}
+    AddtoCOMBO(PaymentDetalsForm.Combo_Valute,PaymentDetalsForm.Valute_ID,DataMod.DataValute,'Select * from Avalute','VALUTE','VAL_NAME');
+
+    new_id:=DataMod.XS_BATCHS.fieldbyname('id').AsInteger;
+    {}
+    with PaymentDetalsForm do
+         begin
+             {SHOW BANK INFO}
+             if DataMod.DataBankInfo.Active = false then DataMod.DataBankInfo.Open;
+
+             Edit_BankName_Self.Text:=DataMod.DataBankInfo.fieldbyname('BANK').AsString;
+             Edit_BIK_Self.Text:=DataMod.DataBankInfo.fieldbyname('SWIFT').AsString;
+             Edit_BankCode_Self.Text:=DataMod.DataBankInfo.fieldbyname('KOD_B').AsString;
+             Edit_account_Self.Text:=DataMod.DataBankInfo.fieldbyname('KRNO').AsString;
+             Edit_Voen_Self.Text:=DataMod.DataBankInfo.fieldbyname('INN').AsString;
+             Combo_Valute.ItemIndex:=PaymentDetalsForm.Combo_Valute.Items.IndexOf('AZM');
+             Edit_account_sub_Self.Text:=Edit_account_sub.text;
+             {VALUTE AND RECEIVE BANK}
+             Combo_BankName.ItemIndex:=Bank_ID.Items.IndexOf(DataMod.XS_BENEFICIARY.fieldbyname('rec_bank_id').AsString);
+             Combo_Valute.ItemIndex:=Valute_ID.Items.IndexOf(DataMod.XS_BENEFICIARY.fieldbyname('val_cod').AsString);
+{}           if DataMod.DataBankM.Active = false then DataMod.DataBankM.Open;
+
+//             Edit_BankCode.Text:=DataMod.DataSetBankM.fieldbyname('BankCode').AsString;
+//             Edit_account.Text:=DataMod.DataSetBankM.fieldbyname('KRNO').AsString;
+//             Edit_Voen.Text:=DataMod.DataSetBankM.fieldbyname('INN').AsString;
+//             Edit_Bik.Text:=DataMod.DataSetBankM.fieldbyname('SWIFT').AsString;
+             Combo_BankName.Items.IndexOf(DataMod.DataBankM.fieldbyname('name').AsString);
+             Combo_BankName.OnChange(self);
+             Edit_Account_Sub.Text:=DataMod.XS_BENEFICIARY.fieldbyname('REC_BANK_SUB_ACC').AsString;
+             Edit_account_sub_Self.Text:=DataMod.XS_CONFIG.fieldbyname('Account').AsString;
+             Edit_Referens.Text:=DataMod.XS_BENEFICIARY.fieldbyname('MESS_REFERENCE').AsString;
+             Edit_Amount.Text:=DataMod.XS_BENEFICIARY.fieldbyname('amount').AsString;
+             Edit_TransCode.Text:=DataMod.XS_BENEFICIARY.fieldbyname('TRANS_COD').AsString;
+             Edit_Client_acc_no.Text:=DataMod.XS_BENEFICIARY.fieldbyname('CLIENT_ACC_NO').AsString;
+             Edit_Client_Name.Text:=DataMod.XS_BENEFICIARY.fieldbyname('CLIENT_NAME').AsString;
+             Edit_Client_Code.Text:=DataMod.XS_BENEFICIARY.fieldbyname('CLIENT_Code').AsString;
+             Edit_Client_Voen.Text:=DataMod.XS_BENEFICIARY.fieldbyname('CLIENT_INN').AsString;
+
+
+             Edit_tey1.Text:=StrPart(DataMod.XS_BENEFICIARY.fieldbyname('REMIT_INF').AsString,'|',1);//copy(DataMod.XS_BENEFICIARY.fieldbyname('REMIT_INF').AsString,0,35);
+             Edit_tey2.Text:=StrPart(DataMod.XS_BENEFICIARY.fieldbyname('REMIT_INF').AsString,'|',2);//copy(DataMod.XS_BENEFICIARY.fieldbyname('REMIT_INF').AsString,35,35);
+             Edit_tey3.Text:=StrPart(DataMod.XS_BENEFICIARY.fieldbyname('REMIT_INF').AsString,'|',3);//copy(DataMod.XS_BENEFICIARY.fieldbyname('REMIT_INF').AsString,70,35);
+             Edit_tey4.Text:=StrPart(DataMod.XS_BENEFICIARY.fieldbyname('REMIT_INF').AsString,'|',4);//copy(DataMod.XS_BENEFICIARY.fieldbyname('REMIT_INF').AsString,105,35);
+             Edit_inf1.Text:=StrPart(DataMod.XS_BENEFICIARY.fieldbyname('ADD_INF').AsString,'|',1);//copy(DataMod.XS_BENEFICIARY.fieldbyname('ADD_INF').AsString,0,35);
+             Edit_inf2.Text:=StrPart(DataMod.XS_BENEFICIARY.fieldbyname('ADD_INF').AsString,'|',2);//copy(DataMod.XS_BENEFICIARY.fieldbyname('ADD_INF').AsString,35,35);
+             Edit_inf3.Text:=StrPart(DataMod.XS_BENEFICIARY.fieldbyname('ADD_INF').AsString,'|',3);//copy(DataMod.XS_BENEFICIARY.fieldbyname('ADD_INF').AsString,70,35);
+         end;
+    mess_edit:=true;
+    {BUTTONS}
+    PaymentDetalsForm.Button4.Visible:=false;
+    PaymentDetalsForm.ButtonFinish.Enabled:=True;
+    PaymentDetalsForm.Button2.Enabled:=False;
+    PaymentDetalsForm.ButtonFinish.Caption:='Йаддаша йаз';
+end;
+{LOAD TO RICH}
+function TLVPCSSForm.LoadToRich(FileName : String) : string;
+   var stpos,endpos: integer;
+   ref : string;
+begin
+   RichEdit1.Clear;
+   RichEdit1.Lines.LoadFromFile(FileName);
+   stpos:=RichEdit1.FindText('<msg_user_reference>',0,RichEdit1.GetTextLen,[stMatchCase]);
+   endpos:=RichEdit1.FindText('</msg_user_reference>',0,RichEdit1.GetTextLen,[stMatchCase]);
+   RichEdit1.SelStart:=stpos+length('<msg_user_reference>');
+   RichEdit1.SelLength:=abs(endpos-stpos)-length('<msg_user_reference>');
+   ref:=RichEdit1.SelText;
+   DataMod.DataCheck.Close;
+   DataMod.DataCheck.sql.Clear;
+   DataMod.DataCheck.SQL.Add('Select reference from xs_incoming where reference='''+ref+'''');
+   DataMod.DataCheck.Open;
+   if DataMod.DataCheck.RecordCount > 0 then begin RichEdit1.Clear;Result:='0'; end else Result:=ref;
+end;
+{CONVERT TO BASE}
+procedure TLVPCSSForm.ConvertToBase(Rich : TRichEdit;ref :string);
+   var  startPos,EndPos, FnStartPos, FnEndPos,
+        TempPos,TempLine, LineIndex, TempVar : integer;
+        StMessage,sub50K,name50K,inn50K,Code50K,BnkRek50K : string;
+        Fn77B: boolean; accfinded: Boolean;
+        I : Integer;
+ function FindMyText(Tx:string;posStart,posEnd : integer) :integer;
+   var  temp : integer;
+   begin
+    Temp:=Rich.FindText(Tx,posStart+1,posEnd+1,[stMatchCase]);
+    Rich.SelStart:=Temp;
+    Rich.SelLength:=length(tx);
+    Result:=temp;
+   end;
+ function FindLines(Tx:string;posStart,posEnd : integer) :integer;
+   var  temp : integer;
+   begin
+     Temp:=Rich.FindText(Tx,posStart+1,posEnd+1,[stMatchCase]);
+     if temp >-1 then
+     begin
+       Rich.SelStart:=Temp;
+       Rich.SelLength:=length(tx);
+       Result:=Rich.CaretPos.y
+     end
+     else  Result:=-1;
+   end;
+begin
+  TRY
+   if Rich.GetTextLen = 0 then exit;
+   startPos:=0;
+   Fn77B:=false;
+   FnStartPos:=FindMyText(':21:',startPos,Rich.GetTextLen);
+   LineIndex:=Rich.CaretPos.y;
+   FnEndPos:=FindMyText(':26T:',startPos,Rich.GetTextLen);
+   TempPos:=FindMyText(':77B:',startPos,Rich.GetTextLen);
+   if (TempPos >-1)and(TempPos=FnEndPos+10) then begin FnEndPos:=TempPos;Fn77B:=true; end;
+   while  FnStartPos >-1 do
+   begin
+       DataMod.XS_Incoming.Insert;
+       {READ FROM BODY}
+        DataMod.XS_Incoming.FieldByName('trans_date').AsDateTime := GetUseDate;  //DataMod.GetSysDate.CallDateFunction('Get_date',[]);
+        DataMod.XS_Incoming.FieldByName('reference').AsString:=ref;
+        {32B}
+        TempLine:=   FindLines(':32B:',FnStartPos,FnEndPos);
+
+        StMessage:=trim(copy(Rich.Lines[TempLine],6,3));
+        DataMod.DataTemp.Close;
+        DataMod.DataTemp.SQL.Clear;
+        DataMod.DataTemp.SQL.Add('Select valute from avalute where val_name='''+StMessage+'''');
+        DataMod.DataTemp.Open;
+
+        DataMod.XS_Incoming.FieldByName('val_cod').AsInteger:=DataMod.DataTemp.fieldbyname('valute').AsInteger;
+        StMessage:=trim(copy(Rich.Lines[TempLine],9,Length(Rich.Lines[TempLine])-8));
+
+   //     ShowMessage(StMessage);
+
+        StMessage :=StringReplace(StMessage,',',DecimalSeparator,[rfReplaceAll]);
+
+    //    ShowMessage(StMessage);
+
+        DataMod.XS_Incoming.FieldByName('amount').AsFloat:=StrToFloat(StMessage);
+//        DataMod.XS_Incoming.FieldByName('amount').AsString:=StMessage;
+        {50K}
+        TempLine:=   FindLines(':50K:',FnStartPos,FnEndPos);
+        TempVar:=abs(FindLines(':52A:',FnStartPos,FnEndPos)-TempLine);
+        if (tempvar<=5) then
+        begin
+          StMessage:=trim(copy(Rich.Lines[TempLine],7,Length(Rich.Lines[TempLine])-6));
+          sub50K:=StMessage;
+          DataMod.XS_Incoming.FieldByName('sen_acc').AsString:=StMessage;
+          {}
+          StMessage:=trim(Rich.Lines[TempLine+1]);
+          name50K:=StMessage;
+          DataMod.XS_Incoming.FieldByName('sen_name').AsString:=StMessage;
+          {}
+          StMessage:=trim(Rich.Lines[TempLine+2]);
+          Code50K:=StMessage;
+          {}
+          StMessage:=trim(Rich.Lines[TempLine+3]);
+          inn50K:=StMessage;
+          DataMod.XS_Incoming.FieldByName('sen_inn').AsString:=StMessage;
+          {}
+          StMessage:=copy(trim(Rich.Lines[TempLine+4]),0,pos('/',trim(Rich.Lines[TempLine+4]))-1);
+          BnkRek50K:=StMessage;
+
+          DataMod.DataTemp.Close;
+          DataMod.DataTemp.SQL.Clear;
+          DataMod.DataTemp.SQL.Add('Select id from BankM where bankcode='''+StMessage+'''');
+          DataMod.DataTemp.Open;
+          DataMod.XS_Incoming.FieldByName('sen_bank_id').AsInteger:=DataMod.DataTemp.fieldbyname('id').AsInteger;
+        end
+         else
+            begin
+              DataMod.XS_Incoming.FieldByName('sen_acc').AsString:=sub50K;
+              {}
+              DataMod.XS_Incoming.FieldByName('sen_name').AsString:=name50K;
+              {}
+              DataMod.XS_Incoming.FieldByName('sen_inn').AsInteger:=strtoint(inn50K);
+              {}
+              DataMod.DataTemp.Close;
+              DataMod.DataTemp.SQL.Clear;
+              DataMod.DataTemp.SQL.Add('Select id from BankM where bankcode='''+BnkRek50K+'''');
+              DataMod.DataTemp.Open;
+              DataMod.XS_Incoming.FieldByName('sen_bank_id').AsInteger:=DataMod.DataTemp.fieldbyname('id').AsInteger;
+            end;
+
+        {52A}
+        TempLine:=   FindLines(':52A:',FnStartPos,FnEndPos);
+        StMessage:=trim(copy(Rich.Lines[TempLine],9,Length(Rich.Lines[TempLine])-8));
+        DataMod.XS_Incoming.FieldByName('sen_bank_subacc').AsFloat:=StrToFloat(StMessage);
+        {}
+        StMessage:=Rich.Lines[TempLine+1];
+        {57A}
+        TempLine:=   FindLines(':57A:',FnStartPos,FnEndPos);
+        StMessage:=trim(copy(Rich.Lines[TempLine],9,Length(Rich.Lines[TempLine])-8));
+        DataMod.XS_Incoming.FieldByName('rec_bank_subacc').AsFloat:=strtoFloat(StMessage);
+        {}
+        StMessage:=trim(Rich.Lines[TempLine+1]);
+        DataMod.XS_Incoming.FieldByName('rec_bank_bik').AsString:=StMessage;
+        {59}
+        TempLine:=   FindLines(':59:',FnStartPos,FnEndPos);
+        StMessage:=trim(copy(Rich.Lines[TempLine],6,Length(Rich.Lines[TempLine])-5));
+        DataMod.XS_Incoming.FieldByName('rec_client_acc').AsString:=StMessage;
+        DataMod.XS_Incoming.FieldByName('Filial').AsInteger:=0;
+
+        {DataMod.DataTemp.Close;
+        DataMod.DataTemp.SQL.Clear;
+        DataMod.DataTemp.SQL.Add('Select id,filial from account where acc_no='''+StMessage+''' and close_dat is null');
+        DataMod.DataTemp.Open;
+        if DataMod.DataTemp.RecordCount >0 then
+        Begin
+          accfinded:=true;
+          DataMod.XS_Incoming.FieldByName('rec_client_acc_id').AsInteger:=DataMod.DataTemp.fieldbyname('id').AsInteger;}
+          {Find FILIAL CLIENT OR HEAD OFFICE}
+        {  if DataMod.DataTemp.FieldByName('filial').AsInteger>0 then
+             DataMod.XS_Incoming.FieldByName('Filial').AsInteger:=DataMod.DataTemp.FieldByName('Filial').AsInteger;
+
+        end else
+        accfinded:=false;}
+
+        {}
+        StMessage:=trim(Rich.Lines[TempLine+1]);
+        DataMod.XS_Incoming.FieldByName('rec_client_name').AsString:=StMessage;
+        {}
+        StMessage:=trim(Rich.Lines[TempLine+2]);
+        {}
+        StMessage:=trim(Rich.Lines[TempLine+3]);
+        DataMod.XS_Incoming.FieldByName('rec_client_inn').AsString:=StMessage;
+        {FIND INN OF CLIENT after CLIENT ACCOUNT ID}
+        AccFinded :=True; {for not working the next condition. In future I may need it}
+        if (Length(Trim(StMessage)) > 0)and(accfinded=false) then begin
+          for i := Length(StMessage) - 1 downto  0 do
+            if not( StMessage[I]  in ['0'..'9']) then
+             Delete(StMessage, I, 1);
+          DataMod.DataTemp.Close;
+          DataMod.DataTemp.SQL.Clear;
+          DataMod.DataTemp.SQL.Add('Select a.id acc_id,a.acc_no acc_no from customers c,account a,avalute v   where (c.inn='''+StMessage+''')and(a.kli_id=c.id)and(a.close_dat is null)and(v.valute = a.val_acc)and((v.val_name=''AZM''))');
+          DataMod.DataTemp.Open;
+          {if inn find then find client}
+          if DataMod.DataTemp.RecordCount > 0 then
+          begin
+            DataMod.XS_Incoming.FieldByName('rec_client_acc_id').AsInteger:=DataMod.DataTemp.fieldbyname('acc_id').AsInteger;
+            DataMod.XS_Incoming.FieldByName('rec_client_acc').AsString:=DataMod.DataTemp.fieldbyname('acc_no').AsString;
+          end;
+        end;
+
+        {}
+        StMessage:=Trim(Copy(Rich.Lines[TempLine+4],1,6)); {Bank code}
+
+        with DataMod.DataTemp do begin
+         Close;
+         SQL.Clear;
+         SQL.Add('Select Kod_Fil from BankInfo_T where Kod_B='''+StMessage+'''');
+         Open;
+         if RecordCount =1 then
+          DataMod.XS_Incoming.FieldByName('Filial').AsInteger:=DataMod.DataTemp.FieldByName('Kod_Fil').AsInteger;
+        end;{with DataMod.DataTemp}
+        
+        with DataMod.DataTemp do begin
+         Close;
+         SQL.Clear;
+         SQL.Add('Select ID from Account where Acc_no='''+DataMod.XS_Incoming.FieldByName('Rec_Client_Acc').AsString+
+                 '''and Filial='''+DataMod.XS_Incoming.FieldByName('Filial').AsString+
+                  ''' and close_dat is null');
+         Open;
+        if RecordCount =1 then
+          DataMod.XS_Incoming.FieldByName('Rec_Client_Acc_ID').AsInteger:=DataMod.DataTemp.FieldByName('ID').AsInteger;
+        end;{with DataMod.DataTemp}
+
+        {70}
+        startPos:=FindMyText(':70:',FnStartPos,Rich.GetTextLen);
+        EndPos:=FindMyText(':26T:',FnStartPos,FnEndPos);
+        Rich.SelStart:=startPos + 4;
+        Rich.SelLength:=EndPos-startPos - 4;
+        StMessage:=trim(Rich.SelText);
+        StMessage:=StringReplace(StMessage, chr(10), ' ', [rfReplaceAll]);
+        StMessage:=StringReplace(StMessage, '  ', ' ', [rfReplaceAll]);
+        DataMod.XS_Incoming.FieldByName('remit_inf').AsString:=StMessage;
+        {26T}
+        TempLine:=   FindLines(':26T:',FnStartPos,FnEndPos);
+        StMessage:=trim(copy(Rich.Lines[TempLine],6,3));
+        DataMod.XS_Incoming.FieldByName('typecode').AsInteger:=strtoint(StMessage);
+        {77B}
+        if Fn77B then
+        begin
+            startPos:=FindMyText(':77B:',FnStartPos,Rich.GetTextLen);
+            EndPos:=FindMyText(':21:',FnStartPos,FnEndPos);
+            Rich.SelStart:=startPos+5;
+            Rich.SelLength:=EndPos-startPos-5;
+            StMessage:=trim(Rich.SelText);
+            StMessage:=StringReplace(StMessage,chr(10),' ',[rfReplaceAll]);
+            StMessage:=StringReplace(StMessage,'  ',' ',[rfReplaceAll]);
+            DataMod.XS_Incoming.FieldByName('add_inf').AsString:=StMessage;
+        end;
+   {FIND NEW MESSAGE BLOCK}
+   FnStartPos:=FindMyText(':21:',FnEndPos,Rich.GetTextLen);
+   LineIndex:=Rich.CaretPos.y;
+   FnEndPos:=FindMyText(':26T:',FnEndPos,Rich.GetTextLen);
+   TempPos:=FindMyText(':77B:',FnEndPos,Rich.GetTextLen);
+
+   if (TempPos >-1)and(TempPos=FnEndPos+10) then
+   begin
+    FnEndPos:=TempPos;
+    Fn77B:=true;
+   end
+     else Fn77B:=false;
+
+   end;
+   finally
+     DataMod.XS_Incoming.Post;
+     Rich.Clear;
+   end;
+end;
+//---------------------
+procedure TLVPCSSForm.SelectDate;
+var
+  Dtst,dtEnd:TDateTime;
+begin
+  Dtst:=  Trunc(StDate.DateTime);
+  dtEnd:= Trunc(EndDate.DateTime);
+  datamod.XS_BATCHS.SetVariable('BeginDate',Dtst);
+  datamod.XS_BATCHS.SetVariable('EndDate',dtEnd);
+end;
+procedure TLVPCSSForm.RefreshWithPos;
+   var firstpos: pointer;
+begin
+   {}
+   firstpos:=DataMod.XS_BATCHS.GetBookmark;
+   DataMod.XS_BATCHS.Refresh;
+   DataMod.XS_BATCHS.GotoBookmark(firstpos);
+   {}
+   firstpos:=DataMod.XS_BENEFICIARY.GetBookmark;
+   DataMod.XS_BENEFICIARY.Refresh;
+   DataMod.XS_BENEFICIARY.GotoBookmark(firstpos);
+   GridBatchs.SelectedRows.Clear;
+   GridBeneficiary.SelectedRows.Clear;
+end;
+Function TLVPCSSForm.LoadFileNames(Dir : String) : Boolean;
+  var CurrDir : String;
+      FileInfo: TSearchRec;
+      FileDir: String;
+      FileAttrs: Word;
+begin
+  CurrDir := GetCurrentDir;
+  TRY
+    FileDir := Dir;
+    if DirectoryExists(FileDir) then
+       ChDir(FileDir)
+    else
+    begin
+      MessageDlg('Directory '+FileDir+' not Exists!',mtWarning,[mbOk],0);
+      Result := False;
+      Exit;
+    end;
+    FileAttrs := Integer(faReadOnly);
+    FileAttrs := FileAttrs + faHidden;
+    FileAttrs := FileAttrs + faSysFile;
+    FileAttrs := FileAttrs + faVolumeID;
+    FileAttrs := FileAttrs + faDirectory;
+    FileAttrs := FileAttrs + faArchive;
+    LVPCSSForm.FileListIncoming.Items.Clear;
+    if FindFirst('*.xml', FileAttrs, FileInfo) = 0 then
+    begin
+          repeat
+            if (FileInfo.Attr and FileAttrs) = FileInfo.Attr then
+              begin
+                 LVPCSSForm.FileListIncoming.Items.Add(FileInfo.Name);
+              end
+          until  FindNext(FileInfo) <> 0;
+
+    FindClose(FileInfo);
+    end;
+  FINALLY
+     ChDir(CurrDir);
+  END;
+  Result := False;
+END;
+
+{******************************************************************************}
+
+procedure TLVPCSSForm.MainPageControlChange(Sender: TObject);
+begin
+     MainPageControl.Pages[0].Highlighted:=MainPageControl.ActivePageIndex = 0;
+     MainPageControl.Pages[1].Highlighted:=MainPageControl.ActivePageIndex = 1;
+     if MainPageControl.ActivePageIndex=1 then
+     begin
+        if DataMod.XS_CONFIG.Active=false then DataMod.XS_CONFIG.Active:=true else DataMod.XS_CONFIG.Refresh;
+     end;
+
+end;
+
+procedure TLVPCSSForm.GridBatchsDrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TColumn;
+  State: TGridDrawState);
+var
+  ImageIndex,ImageIndexFilial: Integer;
+begin
+  ImageIndex:=-1;
+  with (Sender as TDBGrid) do
+  begin
+    if (Sender as TDBGrid).DataSource.DataSet.RecordCount <> 0 then
+    begin
+      case (Sender as TDBGrid).DataSource.DataSet.FieldByName('Status').AsInteger of
+      msDefault:
+        ImageIndex := 3;
+      msCommit:
+        ImageIndex := 10;
+      msReject:
+        ImageIndex := 4;
+      msFileCreated:
+        ImageIndex := 5;
+      end;
+      if (DataCol = 2) and (ImageIndex <> -1) then
+        ImageList.Draw(Canvas, Rect.Left, Rect.Top, ImageIndex, True)
+      else
+        DefaultDrawColumnCell(Rect, DataCol, Column, State);
+
+      {view filial}
+      if ((Sender as TDBGrid)=GridBatchs)or
+         ((Sender as TDBGrid)=GridIncoming) or
+         (((Sender as TDBGrid)=DBGridOUTArchBatchs))  then
+      begin
+        case (Sender as TDBGrid).DataSource.DataSet.FieldByName('FILIAL').AsInteger of
+              MsHeadOffice:  ImageIndexFilial := -1;
+              else
+                  ImageIndexFilial := 0;
+        end;
+        if (DataCol = 1) and (ImageIndex <> -1) then
+            ImageListFilial.Draw(Canvas, Rect.Left, Rect.Top, ImageIndexFilial, True);
+      end;
+    end;
+  end;
+
+end;
+
+procedure TLVPCSSForm.ToolButton21Click(Sender: TObject);
+begin
+   if (DataMod.XS_BENEFICIARY.RecordCount = 0)or
+   (DataMod.XS_BATCHS.fieldbyname('status').AsInteger=1)or
+   (DataMod.XS_BATCHS.fieldbyname('status').AsInteger=2)
+   then exit;
+   DataMod.Ins.callintegerfunction('xs_Batchs_ChangeStatus',[DataMod.XS_BATCHS.fieldbyname('ID').ASinteger,2]);
+   LVPCSSForm.RefreshDataBatchs;
+end;
+
+procedure TLVPCSSForm.ToolButton4Click(Sender: TObject);
+begin
+   MessOutDelete.Execute;
+end;
+
+procedure TLVPCSSForm.ToolButton8Click(Sender: TObject);
+begin
+    {VIEW IN COMBO VALUTE}
+
+   with PropertiesForm , DataMod do
+   begin
+     AddtoCOMBO(Combo_Valute,Valute_ID,DataMod.DataValute,'Select * from Avalute order by valute','VALUTE','VALU_NAME');
+     Combo_valute.ItemIndex:=0;
+     if TransTypeName.Active = false then TransTypeName.Open;
+     if TransTypeCode.Active = false then TransTypeCode.Open;
+     if DataAccount.Active =false then DataAccount.Open;
+     if Commision.Active = false then Commision.Open;
+     if DataXSAccount.Active = false then DataXSAccount.Open;
+     if OrDSXS_BranchAccount.Active = false then OrDSXS_BranchAccount.Open;
+     if DataFilial.Active = false then DataFilial.Open;
+
+     DataTemp.Close;
+     DataTemp.SQL.Clear;
+     DataTemp.SQL.Add('Select * from xs_config');
+     DataTemp.Open;
+
+     Edit_Account.Text:=DataTemp.fieldbyname('account').asstring;
+     Edit_limit.Text:=DataTemp.fieldbyname('amount_limit').asstring;
+     Edit_IN_Dir.Text:=DataTemp.fieldbyname('in_dir').asstring;
+     Edit_out_dir.Text:=DataTemp.fieldbyname('out_dir').asstring;
+     Edit_archiv_dir.Text:=DataTemp.fieldbyname('archive_dir').asstring;
+     Commision.Locate('id',DataTemp.fieldbyname('commisionid').AsInteger,[]);
+     DataFilial.First;
+     ComFilial.ItemIndex := 0;
+   end;  
+   PropertiesForm.ShowModal;
+end;
+
+procedure TLVPCSSForm.ToolButton11Click(Sender: TObject);
+begin
+  DataMod.SB_ACA.CallProcedure('CheckAdvancedObjectAccess',['XOHKS_CREATEFILE']);
+   with DataMod, PrepareFile_Form do
+   begin
+       if not XS_BATCHS.Active then XS_BATCHS.Active := True;
+       if DataBankInfo.Active = false then
+          DataMod.DataBankInfo.Open;
+       if XS_CONFIG.Active = false then
+          DataMod.XS_CONFIG.Open;
+       Edit_sender.Text:=DataMod.DataBankInfo.FieldByName('SWIFT').AsString+'AXXX';
+       Edit_reference.Clear;
+       Edit_count.Text:='0';
+       CurrencyEdit1.Text:='0';
+       Edit_receiver.Text := XS_CONFIG.FieldByName('NB_SWIFT').AsString;
+       Convert_pack.CallProcedure('BatchToReadyBatchs',[0,1]);
+       if ReadyBatchs.Active = false then
+          ReadyBatchs.Open
+        else
+          ReadyBatchs.Refresh;
+       if SendingBatchs.Active = false then
+          SendingBatchs.Open
+        else
+          SendingBatchs.Refresh;
+   end;
+   PrepareFile_Form.ShowModal;
+end;
+
+procedure TLVPCSSForm.ToolButton5Click(Sender: TObject);
+begin
+   SendFileForm.DateTimePicker1.Date:=date;
+   SendFileForm.DateTimePicker2.Date:=date;
+   SendFileForm.RefDate;
+   SendFileForm.ShowModal;
+end;
+
+procedure TLVPCSSForm.Clear1Click(Sender: TObject);
+begin
+   Info_ListBox.Items.Clear;
+   Panel_info.Hide;
+end;
+
+procedure TLVPCSSForm.Popup_SingleConvertPopup(Sender: TObject);
+begin
+    if ((Popup_SingleConvert.PopupComponent as TListBox).Items.Count = 0)or((Popup_SingleConvert.PopupComponent as TListBox).ItemIndex =-1) then
+        begin
+        Popup_SingleConvert.Items[0].Enabled:=False;
+        Popup_SingleConvert.Items[3].Enabled:=False;
+        end
+    else
+        begin
+        Popup_SingleConvert.Items[0].Enabled:=True;
+        Popup_SingleConvert.Items[3].Enabled:=True;
+        end;
+end;
+
+procedure TLVPCSSForm.Convert1Click(Sender: TObject);
+    var ref :string;
+        FileDir : String;
+begin
+    FileDir := DataMod.XS_CONFIG.fieldbyname('in_dir').AsString+'\';
+    Screen.Cursor := crSQLWait;
+    TRY
+    Info_ListBox.Clear;
+    ref:='';
+    ref:=LoadToRich(FileDir+FileListIncoming.Items[FileListIncoming.itemindex]);
+    if ref<>'0' then
+       begin
+         DataMod.XS_Incoming.Open;
+         ConvertToBase(RichEdit1,ref );
+       end
+    else
+       begin
+         Panel_info.Show;
+         Info_ListBox.Items.Add('Warning:  <'+FileListIncoming.Items[FileListIncoming.itemindex]+'>   Артыг конверт олунуб !');
+       end;
+   DataMod.XS_IncomingView.Refresh;
+   GridIncoming.SelectedRows.Clear;
+   FINALLY
+   Screen.Cursor := crDefault;
+   END;
+end;
+
+procedure TLVPCSSForm.MessInDeleteExecute(Sender: TObject);
+   var i,j : integer;
+begin
+   if GridIncoming.DataSource.DataSet.RecordCount = 0 then Exit;
+   GridIncoming.SetFocus;
+   GridIncoming.SelectedRows.CurrentRowSelected:=GridIncoming.DataSource.DataSet.RecordCount<>0;
+   for i:=0 to GridIncoming.SelectedRows.Count-1 do
+   begin
+      GridIncoming.DataSource.DataSet.GotoBookmark(pointer(GridIncoming.SelectedRows.items[i]));
+      case MessageDlg(format('Ямялиййат силинсинми #%d ?',[GridIncoming.DataSource.DataSet.fieldbyname('id').asinteger]), mtConfirmation,[mbyes,mbno,mbcancel,mball], 0) of
+           mryes :begin
+                    DataMod.DEL.CallProcedure('xs_incoming_delete',[GridIncoming.DataSource.DataSet.fieldbyname('ID').asinteger]);
+                    GridIncoming.DataSource.DataSet.Refresh;
+                    GridIncoming.SelectedRows.Clear;
+                  end;
+           mrno  : exit;
+           mrcancel : Break;
+           mrall : begin
+                   case MessageDlg(inttostr(GridIncoming.SelectedRows.Count)+' sayda emeliyat silinsinmi ?', mtConfirmation,[mbyes,mbno], 0) of
+                   mryes: begin
+                             for j:=0 to GridIncoming.SelectedRows.Count-1 do
+                             begin
+                                GridIncoming.DataSource.DataSet.GotoBookmark(pointer(GridIncoming.SelectedRows.items[j]));
+                                DataMod.DEL.CallProcedure('xs_incoming_delete',[GridIncoming.DataSource.DataSet.fieldbyname('ID').asinteger]);
+                             end;
+                          GridIncoming.DataSource.DataSet.Refresh;
+                          GridIncoming.SelectedRows.Clear;
+                          break;
+                          end;
+                   mrno : exit;
+                   end;
+                   end;
+      end;
+   end;
+end;
+
+procedure TLVPCSSForm.ToolButton14Click(Sender: TObject);
+begin
+   MessInDelete.Execute;
+end;
+
+procedure TLVPCSSForm.MT102DeleteExecute(Sender: TObject);
+   var i,j : integer;
+begin
+  DataMod.SB_ACA.CallProcedure('CheckAdvancedObjectAccess',['XOHKS_DELETE']);
+   GridBatchs.SetFocus;
+   GridBatchs.SelectedRows.CurrentRowSelected:=GridBatchs.DataSource.DataSet.RecordCount<>0;
+   for i:=0 to GridBatchs.SelectedRows.Count-1 do
+   begin
+      GridBatchs.DataSource.DataSet.GotoBookmark(pointer(GridBatchs.SelectedRows.items[i]));
+      case MessageDlg('Emeliyyat grupu #'+DataMod.XS_BATCHS.fieldbyname('id').AsString+' silinsinmi ?', mtConfirmation,[mbyes,mbno,mbcancel,mball], 0) of
+           mryes :begin
+                  DataMod.DEL.CallProcedure('xs_batchs_delete',[GridBatchs.DataSource.DataSet.fieldbyname('ID').asinteger]);
+                  RefreshDataBatchs;
+                  end;
+           mrno  : exit;
+           mrcancel : Break;
+           mrall : begin
+                   case MessageDlg(inttostr(GridBatchs.SelectedRows.Count)+' sayda emeliyyat silinsinmi ?', mtConfirmation,[mbyes,mbno], 0) of
+                   mryes: begin
+                             for j:=0 to GridBatchs.SelectedRows.Count-1 do
+                             begin
+                                GridBatchs.DataSource.DataSet.GotoBookmark(pointer(GridBatchs.SelectedRows.items[j]));
+                                DataMod.DEL.CallProcedure('xs_batchs_delete',[GridBatchs.DataSource.DataSet.fieldbyname('ID').asinteger]);
+                             end;
+                          RefreshDataBatchs;
+                          break;
+                          end;
+                   mrno : exit;
+                   end;
+                   end;
+      end;
+   end;
+
+end;
+
+procedure TLVPCSSForm.MessOutDeleteExecute(Sender: TObject);
+   var i,j : integer;
+begin
+  DataMod.SB_ACA.CallProcedure('CheckAdvancedObjectAccess',['XOHKS_DELETE']);
+   GridBeneficiary.SetFocus;
+   GridBeneficiary.SelectedRows.CurrentRowSelected:=GridBeneficiary.DataSource.DataSet.RecordCount<>0;
+   for i:=0 to GridBeneficiary.SelectedRows.Count-1 do
+   begin
+      GridBeneficiary.DataSource.DataSet.GotoBookmark(pointer(GridBeneficiary.SelectedRows.items[i]));
+      case MessageDlg('Emeliyyat #'+DataMod.XS_BENEFICIARY.fieldbyname('id').AsString+' silinsizmi ?', mtConfirmation,[mbyes,mbno,mbcancel,mball], 0) of
+           mryes :begin
+                  DataMod.DEL.CallProcedure('xs_beneficiary_delete',[GridBeneficiary.DataSource.DataSet.fieldbyname('ID').asinteger]);
+                  DataMod.INS.Callprocedure('xs_BatchAmount_update',[DataMod.XS_BATCHS.fieldbyname('ID').asinteger]);
+                  DataMod.Ins.callintegerfunction('xs_Batchs_ChangeStatus',[DataMod.XS_BATCHS.fieldbyname('ID').ASinteger,0]);
+                  LVPCSSForm.RefreshDataBatchs;
+                  end;
+           mrno  : exit;
+           mrcancel : Break;
+           mrall : begin
+                   case MessageDlg(inttostr(GridBeneficiary.SelectedRows.Count)+' sayda emeliyat silinsinmi ?', mtConfirmation,[mbyes,mbno], 0) of
+                   mryes: begin
+                             for j:=0 to GridBeneficiary.SelectedRows.Count-1 do
+                             begin
+                                GridBeneficiary.DataSource.DataSet.GotoBookmark(pointer(GridBeneficiary.SelectedRows.items[j]));
+                                DataMod.DEL.CallProcedure('xs_beneficiary_delete',[GridBeneficiary.DataSource.DataSet.fieldbyname('ID').asinteger]);
+                             end;
+                          DataMod.INS.Callprocedure('xs_BatchAmount_update',[DataMod.XS_BATCHS.fieldbyname('ID').asinteger]);
+                          DataMod.Ins.callintegerfunction('xs_Batchs_ChangeStatus',[DataMod.XS_BATCHS.fieldbyname('ID').ASinteger,0]);
+                          LVPCSSForm.RefreshDataBatchs;
+                          break;
+                          end;
+                   mrno : exit;
+                   end;
+                   end;
+      end;
+   end;
+
+end;
+
+procedure TLVPCSSForm.MessageInSelAllExecute(Sender: TObject);
+begin
+  with GridIncoming, SelectedRows, DataSource.DataSet do
+  begin
+    DisableControls;
+    try
+      First;
+      while not Eof do
+      begin
+        CurrentRowSelected := True;
+        Next;
+      end;
+    finally
+      EnableControls;
+    end;
+  end;
+
+end;
+
+procedure TLVPCSSForm.Mt102RefreshExecute(Sender: TObject);
+begin
+   RefreshDataBatchs;
+end;
+
+procedure TLVPCSSForm.Mt102AcceptExecute(Sender: TObject);
+var  BookmarkList : TBookmarkList;
+     Bookmark     : TBookmarkStr;
+            u, i    :integer;
+begin
+   if (DataMod.XS_BATCHS.RecordCount = 0)or
+      (DataMod.XS_BENEFICIARY.RecordCount = 0)or
+      (DataMod.XS_BATCHS.fieldbyname('status').AsInteger <> msDefault)and
+      (DataMod.XS_BATCHS.fieldbyname('status').AsInteger <> msFileCreated) then exit;
+
+  GrantAmount;  {Checking for right depend on amount}
+
+   GridBatchs.SelectedRows.CurrentRowSelected:=GridBatchs.DataSource.DataSet.RecordCount<>0;
+
+
+   if (DataMod.XS_BATCHS.fieldbyname('status').AsInteger=msFileCreated) then
+   begin
+     if not Assigned(FormAcceptTransaction) then
+      FormAcceptTransaction:=TFormAcceptTransaction.Create(Self)
+     else
+       ShowMessage('Created');
+     AcceptTransForCreated := False;
+     with  FormAcceptTransaction do
+      begin
+       CheckBox1.Checked := True;
+       CheckBox2.Checked := True;
+       GroupBox1.Enabled := True;
+       Edit_Referens.Text := DataMod.XS_BATCHS.fieldbyname('trans_ref').AsString;
+      end;
+
+     FormAcceptTransaction.ShowModal;
+     FormAcceptTransaction.Release;
+     FormAcceptTransaction:= Nil;
+
+     if not AcceptTransForCreated then Exit;
+   end;
+   
+   //if DataMod.Ins.CallIntegerFunction('xs_Batchs_ChangeStatus',[DataMod.XS_BATCHS.fieldbyname('ID').ASinteger,1])=1 then
+ //  begin
+     //if GridBatchs.SelectedRows.Count < 1 then exit;
+     Bookmark     :=DataMod.XS_BATCHS.Bookmark;
+     BookmarkList := GridBatchs.SelectedRows;
+     for i := 0 to BookmarkList.Count -1 do
+     begin
+     DataMod.XS_BATCHS.Bookmark := BookmarkList[i];
+     DataMod.Ins.CallProcedure('SetBatchsTransaction',
+                                 [DataMod.XS_BATCHS.fieldbyname('ID').ASinteger]);
+                                 //Showmessage(IntToStr(DataMod.XS_BATCHS.fieldbyname('ID').ASinteger));
+     sboapiDataModule.SBSession.Commit;
+     u := DataMod.Ins.CallIntegerFunction('xs_Batchs_ChangeStatus',[DataMod.XS_BATCHS.fieldbyname('ID').ASinteger,1]);
+
+     end;
+     sboapiDataModule.SBSession.Commit;
+     DataMod.XS_BATCHS.RefreshRecord;
+     DataMod.XS_BENEFICIARY.Refresh ;
+   //end
+   //else
+     //  MessageDlg('Batch-da olan butun messaglarin duzgunluyu testiq olunmalidi !', mtWarning,[mbOk], 0);
+
+     Mt102RefreshExecute(Sender);
+end;
+
+procedure TLVPCSSForm.MessagesOutAddExecute(Sender: TObject);
+begin
+  DataMod.SB_ACA.CallProcedure('CheckAdvancedObjectAccess',['XOHKS_ADD']);
+     if DataMod.XS_BATCHS.RecordCount = 0 then exit;
+     PrepareTrans(1,false);
+     CreateTransCodeTree;
+     new_id:=DataMod.XS_BATCHS.fieldbyname('id').AsInteger;
+     After_Add:=true;
+    {VIEW IN EDIT}
+    if DataMod.DataBankInfo.Active = false then DataMod.DataBankInfo.Open;
+    with PaymentDetalsForm do
+    begin
+          Edit_BankName_Self.Text:=DataMod.DataBankInfo.fieldbyname('BANK').AsString;
+          Edit_BIK_Self.Text:=DataMod.DataBankInfo.fieldbyname('SWIFT').AsString;
+          Edit_BankCode_Self.Text:=DataMod.DataBankInfo.fieldbyname('KOD_B').AsString;
+          Edit_account_Self.Text:=DataMod.DataBankInfo.fieldbyname('KRNO').AsString;
+          Edit_Voen_Self.Text:=DataMod.DataBankInfo.fieldbyname('INN').AsString;
+          Combo_Valute.ItemIndex:=Combo_Valute.Items.IndexOf('AZM');
+          Edit_account_sub_Self.Text:=TransForm.Edit_account_sub.text;
+          {Cler edit's}
+          Combo_BankName.ItemIndex:=-1;
+          Edit_BIK.Clear;
+          Edit_BankCode.clear;
+          Edit_Referens.Clear;
+          Edit_account.Clear;
+          Edit_Voen.Clear;
+          Edit_Amount.Clear;
+          Edit_Account_Sub.Clear;
+          Edit_TransCode.Clear;
+          Edit_Client_Name.Clear;
+          Edit_Client_Code.Text:='/';
+          Edit_Client_acc_no.Clear;
+          Edit_Client_Voen.Clear;
+          Edit_inf1.Clear;
+          Edit_inf2.Clear;
+          Edit_inf3.Clear;
+          Edit_tey1.Clear;
+          Edit_tey2.Clear;
+          Edit_tey3.Clear;
+          Edit_tey4.Clear;
+          Combo_Valute.ItemIndex:=0;
+          ButtonFinish.Enabled := True;
+          ShowModal;
+    end;
+end;
+
+procedure TLVPCSSForm.ToolButton2Click(Sender: TObject);
+begin
+   MessagesOutAdd.Execute;
+end;
+
+procedure TLVPCSSForm.MessagesOutEditExecute(Sender: TObject);
+begin
+  DataMod.SB_ACA.CallProcedure('CheckAdvancedObjectAccess',['XOHKS_EDIT']);
+    if DataMod.XS_BENEFICIARY.RecordCount = 0 then exit;
+    ShowDetals;
+    PaymentDetalsForm.ButtonFinish.Enabled := false;
+    PaymentDetalsForm.ShowModal;
+end;
+
+procedure TLVPCSSForm.ToolButton7Click(Sender: TObject);
+begin
+   MessagesOutEdit.Execute;
+end;
+
+procedure TLVPCSSForm.MessagesOutAcceptExecute(Sender: TObject);
+   var i : integer;
+begin
+   if (DataMod.XS_BENEFICIARY.RecordCount = 0)or
+   (DataMod.XS_BENEFICIARY.fieldbyname('status').AsInteger <> 0)or
+   (DataMod.XS_BATCHS.fieldbyname('status').AsInteger = 2)
+   then exit;
+   GridBeneficiary.SelectedRows.CurrentRowSelected:=GridBeneficiary.DataSource.DataSet.RecordCount <> 0;
+   for i:=0 to GridBeneficiary.SelectedRows.Count-1 do
+   begin
+      GridBeneficiary.DataSource.DataSet.GotoBookmark(pointer(GridBeneficiary.SelectedRows.items[i]));
+      DataMod.Ins.callprocedure('xs_beneficiary_ChangeStatus',[DataMod.XS_BENEFICIARY.fieldbyname('ID').ASinteger,1]);
+      DataMod.XS_BENEFICIARY.RefreshRecord;
+   end;
+//   LVPCSSForm.RefreshWithPos ;
+end;
+
+procedure TLVPCSSForm.MessAcceptButtonClick(Sender: TObject);
+begin
+   MessagesOutAccept.Execute;
+end;
+
+procedure TLVPCSSForm.GridBeneficiaryDblClick(Sender: TObject);
+begin
+   MessagesOutEdit.Execute;
+end;
+
+procedure TLVPCSSForm.MessagesInConvertExecute(Sender: TObject);
+     var i : integer;
+     ref : string;
+     ErrStr : String;
+     FileDir : String;
+begin
+   Screen.Cursor := crSQLWait;
+    TRY
+     Info_ListBox.Clear;
+     Panel_info.Hide;
+     ref:='';
+     FileDir := DataMod.XS_CONFIG.FieldByName('in_dir').AsString+'\';
+     for i:=0 to FileListIncoming.Items.Count - 1 do
+     begin
+         ref:=LoadToRich(FileDir+FileListIncoming.Items[i]);
+         if ref <> '0' then
+         begin
+         DataMod.XS_Incoming.Open;
+         ConvertToBase(RichEdit1,ref );
+         end
+         else
+         begin
+           ErrStr := ErrStr + 'Warning:  <'+FileListIncoming.Items[i]+'>   Артыг конверт олунуб !'+#13;
+         end;
+     end;
+   DataMod.XS_IncomingView.Refresh;
+   GridIncoming.SelectedRows.Clear;
+   if Length(ErrStr) > 0 then
+   begin
+     Info_ListBox.Items.Text := ErrStr;
+     Panel_Info.Show;
+   end;
+   {After the convertation ACCEPT THE TRANSACTIONS}
+   {MessageInSelAll.Execute;
+   MessagesInAccept.Execute;}
+
+   FINALLY
+   Screen.Cursor := crDefault;
+   END;
+
+end;
+
+procedure TLVPCSSForm.ButtonMessInConvertClick(Sender: TObject);
+begin
+  MessagesInConvert.Execute;
+end;
+
+procedure TLVPCSSForm.MessagesInEditExecute(Sender: TObject);
+begin
+   if DataMod.XS_IncomingView.RecordCount = 0 then exit;
+   if DataMod.DataAccount.Active = false then DataMod.DataAccount.Open;
+   RecMessDet_form.showmodal;
+end;
+
+procedure TLVPCSSForm.MessagesInRefreshExecute(Sender: TObject);
+begin
+   DataMod.XS_CONFIG.Refresh;
+   LoadFileNames(DataMod.XS_CONFIG.fieldbyname('in_dir').AsString);
+   FileListIncoming.Update;
+   Refresh_mess_in;
+end;
+
+procedure TLVPCSSForm.MessagesInAcceptExecute(Sender: TObject);
+   var i : integer;
+begin
+     if (GridIncoming.DataSource.DataSet.RecordCount = 0) then exit;
+     GridIncoming.SelectedRows.CurrentRowSelected := GridIncoming.DataSource.DataSet.RecordCount>0;
+     if  (DataMod.XS_IncomingView.fieldbyname('trans_date').AsDateTime <> GetUseDate)and
+         (DataMod.XS_IncomingView.fieldbyname('trans_date').AsDateTime <> DataMod.GetSysDate.CallDateFunction('Get_Date',[]))
+     then
+     begin
+       MessageDlg(Format('Emeliyyat #%d deyishdirile bilmez!',[DataMod.XS_IncomingView.fieldbyname('id').AsInteger]), mtWarning,[mbOk], 0);
+       Exit;
+     end;
+     for i:=0 to GridIncoming.SelectedRows.Count-1 do
+     begin
+     if DataMod.XS_IncomingView.FieldByName('status').AsInteger = 1 then Continue;
+        GridIncoming.DataSource.DataSet.GotoBookmark(pointer(GridIncoming.SelectedRows.items[i]));
+        DataMod.Ins.callprocedure('SetIncomingTransaction',
+                                   [DataMod.XS_IncomingView.fieldbyname('ID').ASinteger]);
+     end;
+     FileListIncoming.Update;
+     DataMod.XS_IncomingView.Refresh;
+end;
+
+procedure TLVPCSSForm.GridIncomingDblClick(Sender: TObject);
+begin
+   MessagesinEdit.Execute;
+end;
+
+procedure TLVPCSSForm.Mt102InsertExecute(Sender: TObject);
+begin
+   DataMod.SB_ACA.CallProcedure('CheckAdvancedObjectAccess',['XOHKS_ADD']);
+      preparetrans(0,false);
+      createTransCodeTree;
+      after_add:=false;
+      mess_edit:=false;
+     {INSERT TO HOX102}
+      new_id := DataMod.INS.Callintegerfunction('XS_BATCHS_insert',['CREDIT',
+                                                  0,
+                                                  TransForm.edit_clientname.text,
+                                                  TransForm.edit_client_code.text,
+                                                  TransForm.edit_referens.text,
+                                                  strtofloat(TransForm.edit_amount.Text),
+                                                  strtofloat(TransForm.valute_id.items[TransForm.combo_valute.itemindex]),
+                                                  0]);
+      TransForm.ShowModal;
+end;
+
+procedure TLVPCSSForm.ToolButton1Click(Sender: TObject);
+begin
+   Mt102Insert.Execute;
+end;
+
+procedure TLVPCSSForm.N4DrawItem(Sender: TObject; ACanvas: TCanvas;
+  ARect: TRect; Selected: Boolean);
+ var Stext : String;
+  LineBottom: Integer;
+  Bar: TRect;
+begin
+  with ACanvas, Sender as TMenuItem do
+  begin
+    with Font do
+    begin
+      Name := 'Azl Sans Serif';
+      Charset := RUSSIAN_CHARSET;
+      if Default then
+        Style := [fsBold];
+    end;
+    if Caption = '-' then
+    begin
+      Pen.Color := clBlack;
+      LineBottom := (ARect.Top + (ARect.Bottom - ARect.Top) div 2)-1;
+      MoveTo(ARect.Left, LineBottom);
+      LineTo(ARect.Right, LineBottom);
+      inc(LineBottom);
+      Pen.Color := clWhite;
+      MoveTo(ARect.Left, LineBottom);
+      LineTo(ARect.Right, LineBottom);
+    end
+    else
+    begin
+      if Selected then
+      begin
+        Brush.Color := clNavy;
+        if Enabled then
+          Font.Color := clWhite
+        else
+          Font.Color := clSilver;
+      end
+      else
+      begin
+        Brush.Color := clBtnFace;
+        if Enabled then
+          Font.Color := clBlack
+        else
+          Font.Color := clGrayText;
+      end;
+      Bar := ARect;
+      Inc(Bar.Left, 22);
+      FillRect(Bar);
+      TextOut(ARect.Left+{17}22, ARect.Top+1, Caption+'      ');
+    end;
+    // draw shortcut
+    SText := ShortCutToText(ShortCut);
+    TextOut(ARect.Right-TextWidth(SText)-2, ARect.Top+1, SText);
+    if ImageIndex <> -1 then
+      with GetParentMenu do
+        if Assigned(Images) then
+        begin
+          if Checked then
+          begin
+            Bar.Left := ARect.Left + 1;
+            Bar.Right := Bar.Left + 16;
+            Bar.Top := ARect.Top + 1;
+            Bar.Bottom := Bar.Top + 16;
+
+            ACanvas.Brush.Color := clBtnShadow;
+            ACanvas.FrameRect(Bar);
+
+            Inc(Bar.Left, 2);
+            Inc(Bar.Right, 2);
+            Inc(Bar.Top, 2);
+            Inc(Bar.Bottom, 2);
+            
+            ACanvas.Brush.Color := clBtnHighlight;
+            ACanvas.FrameRect(Bar);
+
+            Dec(Bar.Left, 1);
+            Dec(Bar.Right, 1);
+            Dec(Bar.Top, 1);
+            Dec(Bar.Bottom, 1);
+
+            if Selected then
+              ACanvas.Brush.Color := clBtnFace
+            else
+              ACanvas.Brush.Color := clBtnHighlight;
+            ACanvas.FillRect(Bar);
+          end;
+
+          Images.Draw(ACanvas, ARect.Left, ARect.Top, ImageIndex, Enabled);
+        end;
+  end;
+
+end;
+
+procedure TLVPCSSForm.ConvertAll1Click(Sender: TObject);
+begin
+   ButtonMessInConvert.Click;
+end;
+
+procedure TLVPCSSForm.MainPageControlDrawTab(Control: TCustomTabControl;
+  TabIndex: Integer; const Rect: TRect; Active: Boolean);
+begin
+
+ with MainPageControl.Canvas do
+  begin
+     Font.Name:='Azl Sans Serif';
+     Font.Charset:=RUSSIAN_CHARSET;
+     Font.Size:=8;
+     TextRect(Rect,Rect.Left,Rect.Top,TabSheet1.Caption);
+  end;
+end;
+
+procedure TLVPCSSForm.N6Click(Sender: TObject);
+begin
+  DataMod.XS_IncomingView.Last;
+  GridIncoming.SelectedRows.Clear;
+end;
+
+procedure TLVPCSSForm.N7Click(Sender: TObject);
+begin
+  DataMod.XS_IncomingView.First;
+  GridIncoming.SelectedRows.Clear;
+end;
+
+procedure TLVPCSSForm.N8Click(Sender: TObject);
+begin
+  MessageInSelAll.Execute;
+end;
+
+procedure TLVPCSSForm.N9Click(Sender: TObject);
+begin
+  MessageOutSelAll.Execute;
+end;
+
+procedure TLVPCSSForm.MessageOutSelAllExecute(Sender: TObject);
+begin
+  with GridBeneficiary, SelectedRows, DataSource.DataSet do
+  begin
+    DisableControls;
+    try
+      First;
+      while not Eof do
+      begin
+        CurrentRowSelected := True;
+        Next;
+      end;
+    finally
+      EnableControls;
+    end;
+  end; 
+end;
+
+procedure TLVPCSSForm.N10Click(Sender: TObject);
+begin
+   DataMod.XS_BENEFICIARY.First;
+   GridBeneficiary.SelectedRows.Clear;
+end;
+
+procedure TLVPCSSForm.N11Click(Sender: TObject);
+begin
+   DataMod.XS_BENEFICIARY.Last;
+   GridBeneficiary.SelectedRows.Clear;
+end;
+
+procedure TLVPCSSForm.GridBatchsTitleClick(Column: TColumn);
+  {Ordering}
+  Procedure XS_BatchsOrderBy(OFields:String);
+  begin
+     screen.Cursor:=crSQLWait;
+     try
+       DataMod.XS_BATCHS.SetVariable('Title',Ofields);
+       RefreshDataBatchs;
+     finally
+      screen.Cursor:=crDefault;
+     end;
+  end;
+  {Change color}
+  procedure ChangeTitleColor(Grid:Tdbgrid; ChColumn:Integer; OrderingColor,DefaulColor:Tcolor );
+    var i : Integer;
+  begin
+    for i := 0 to Grid.Columns.Count-1 do   Grid.Columns[i].Title.Color:=DefaulColor;
+        Grid.Columns[ChColumn].Title.Color:=OrderingColor;
+  end;
+begin
+   if Column.Title.Caption= '№' then
+   begin
+     XS_BatchsOrderBy('x.id,x.status');
+   end
+   else
+    if Column.Title.Caption='F' then
+    begin
+      XS_BatchsOrderBy('x.filial,x.status');
+    end
+    else
+      if Column.Title.Caption='' then
+      begin
+        XS_BatchsOrderBy('x.status');
+      end
+      else
+         exit;
+   ChangeTitleColor(GridBatchs,Column.Index,clMaroon, $00804000);
+end;
+
+procedure TLVPCSSForm.PopupMT102Popup(Sender: TObject);
+begin
+  n4.Enabled:=DataMod.XS_BATCHS.FieldByName('status').AsInteger in [msdefault,msfilecreated];
+end;
+
+procedure TLVPCSSForm.Sendtoarchive2Click(Sender: TObject);
+begin
+    SendXmlFileToArchive(false,FileListIncoming.ItemIndex);
+end;
+
+procedure TLVPCSSForm.SendToArchive1Click(Sender: TObject);
+begin
+    SendXmlFileToArchive(true,0);
+end;
+
+procedure TLVPCSSForm.Mt102EditExecute(Sender: TObject);
+begin
+  DataMod.SB_ACA.CallProcedure('CheckAdvancedObjectAccess',['XOHKS_EDIT']);
+  if DataMod.XS_BATCHS.RecordCount = 0 then exit;
+  preparetrans(0,true);
+  TransForm.ShowModal;
+end;
+
+procedure TLVPCSSForm.N19Click(Sender: TObject);
+begin
+  Mt102Edit.Execute;
+end;
+
+procedure TLVPCSSForm.ToolButton12Click(Sender: TObject);
+begin
+   Mt102Edit.Execute;
+end;
+
+
+procedure TLVPCSSForm.ToolButton10Click(Sender: TObject);
+    var CurrDir : String;
+        i : Integer;
+begin
+   CurrDir := GetCurrentDir;
+   TRY
+       if OpenDialogIn.Execute then
+       begin
+         for i := 0 to OpenDialogIn.Files.Count -1 do
+         begin
+            if FileListIncoming.Items.IndexOf(OpenDialogIn.Files[i]) = -1 then
+               FileListIncoming.Items.Add(OpenDialogIn.Files[i]);
+         end;
+       end;
+   FINALLY
+   SetCurrentDir(CurrDir);
+   END;
+end;
+
+procedure TLVPCSSForm.ClearList1Click(Sender: TObject);
+begin
+    FileListIncoming.Clear;
+end;
+
+procedure TLVPCSSForm.ClearSelected1Click(Sender: TObject);
+begin
+    if FileListIncoming.ItemIndex > -1 then
+       FileListIncoming.Items.Delete(FileListIncoming.ItemIndex);
+end;
+
+
+procedure TLVPCSSForm.MessageInFileLoadExecute(Sender: TObject);
+    var CurrDir : String;
+        i : Integer;
+begin
+   CurrDir := GetCurrentDir;
+   TRY
+       if OpenDialogIn.Execute then
+       begin
+         for i := 0 to OpenDialogIn.Files.Count -1 do
+         begin
+            if FileListIncoming.Items.IndexOf(OpenDialogIn.Files[i]) = -1 then 
+               FileListIncoming.Items.Add(OpenDialogIn.Files[i]);
+         end;
+       end;
+   FINALLY
+   SetCurrentDir(CurrDir);
+   END;
+end;
+
+procedure TLVPCSSForm.GridIncomingDrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TColumn;
+  State: TGridDrawState);
+var
+  ImageIndex,ImageIndexFilial: Integer;
+begin
+  ImageIndex:=-1;
+  with (Sender as TDBGrid) do
+  begin
+    if (Sender as TDBGrid).DataSource.DataSet.RecordCount <> 0 then
+    begin
+      case (Sender as TDBGrid).DataSource.DataSet.FieldByName('Status').AsInteger of
+      msDefault:
+        ImageIndex := 3;
+      msCommit:
+        ImageIndex := 10;
+      msReject:
+        ImageIndex := 4;
+      msFileCreated:
+        ImageIndex := 5;
+      end;
+      if (DataCol = 2) and (ImageIndex <> -1) then
+        ImageList.Draw(Canvas, Rect.Left, Rect.Top, ImageIndex, True)
+      else
+        DefaultDrawColumnCell(Rect, DataCol, Column, State);
+
+      {view filial}
+      if ((Sender as TDBGrid)=GridBatchs)or
+         ((Sender as TDBGrid)=GridIncoming)  then
+      begin
+        case (Sender as TDBGrid).DataSource.DataSet.FieldByName('FILIAL').AsInteger of
+              -1:  ImageIndexFilial := -1;
+              else
+                  ImageIndexFilial := 0;
+        end;
+        if (DataCol = 1) and (ImageIndex <> -1) then
+            ImageListFilial.Draw(Canvas, Rect.Left, Rect.Top, ImageIndexFilial, True);
+      end;
+    end;
+  end;
+end;
+
+procedure TLVPCSSForm.OutArchRefreshClick(Sender: TObject);
+var BegDate, EndDate :TDateTime;
+begin
+  BegDate :=Trunc(DTPickOutArchBeg.DateTime);
+  EndDate :=Trunc(DTPickOutArchEnd.DateTime);
+  with DataMod.XS_BatchsArchive do begin
+   Close;
+   SetVariable('BeginDate',BegDate);
+   SetVariable('EndDate',EndDate);
+   Open;
+  end;
+  DBGridOUTArchBeneficiary.SelectedRows.Clear;
+  DBGridOUTArchBatchs.SelectedRows.Clear;
+  DataMod.XS_BeneficiaryArchive.Close;
+  DataMod.XS_BeneficiaryArchive.Open;
+end;
+
+procedure TLVPCSSForm.GridBatchsDblClick(Sender: TObject);
+begin
+  Mt102Edit.Execute;
+end;
+
+procedure TLVPCSSForm.BtnSendToArchiveClick(Sender: TObject);
+begin
+  DataMod.PackTemp.CallProcedure('SendToArchive',[]);
+  ShowMessage('Mesajlar arxive gonderildi');
+end;
+
+procedure TLVPCSSForm.ConvertConfirmeClick(Sender: TObject);
+begin
+  ButtonMessInConvertClick(Sender);
+
+  {After the convertation ACCEPT THE TRANSACTIONS}
+  MessageInSelAll.Execute;
+  MessagesInAccept.Execute;
+end;
+
+procedure TLVPCSSForm.Button1Click(Sender: TObject);
+   var
+      KRNO_     :       String;
+      INN_      :       String;
+      KOD_B_    :       String;
+begin
+   ShowMessage(inttostr(GridBeneficiary.Fields[0].asinteger));
+   with DataMod.ODS_Report do
+   begin
+      Close;
+      SQL.Clear;
+      SQL.Add('select * from xs_beneficiary where id='+inttostr(GridBeneficiary.Fields[0].asinteger));
+      Open;
+   end;
+
+
+   form_report:=Tform_report.create(self);
+
+{------------------------------------------------------}
+{//////////////////}
+   Open____ODS_Report_Temp____Add_SQL('Select account from xs_config');
+   Form_Report.QRL_52A_1.Caption := '';
+   Form_Report.QRL_52A_1.Caption := '/D/'+DataMod.ODS_Report_Temp.FieldByName('account').AsString;
+{//////////////////}
+
+{//////////////////}
+   Open____ODS_Report_Temp____Add_SQL('Select swift from bankinfo');
+   Form_Report.QRL_52A_2.Caption := '';
+   Form_Report.QRL_52A_2.Caption := DataMod.ODS_Report_Temp.FieldByName('swift').AsString;
+{//////////////////}
+
+{//////////////////}
+   Form_Report.QRL_57A_1.Caption := '';
+   Form_Report.QRL_57A_1.Caption := '/C/0'+DataMod.ODS_Report.FieldByName('REC_BANK_SUB_ACC').AsString;
+{//////////////////}
+
+{//////////////////}
+   Open____ODS_Report_Temp____Add_SQL('Select swift from bankm where id='''+DataMod.ODS_Report.fieldbyname('REC_BANK_ID').AsString+'''');
+   Form_Report.QRL_57A_2.Caption := '';
+   Form_Report.QRL_57A_2.Caption := DataMod.ODS_Report_Temp.FieldByName('swift').AsString;
+{//////////////////}
+
+{//////////////////}
+   Open____ODS_Report_Temp____Add_SQL('Select kod_b,krno,inn,swift from bankinfo');
+   KRNO_ :=DataMod.ODS_Report_Temp.FieldByName('KRNO').AsString;
+   INN_  :=DataMod.ODS_Report_Temp.FieldByName('INN').AsString;
+   KOD_B_:=DataMod.ODS_Report_Temp.FieldByName('KOD_B').AsString;
+   Form_Report.QRL_50K.Caption := '';
+   Form_Report.QRL_50K.Caption := KOD_B_+'/0'+KRNO_+'/'+INN_;
+
+   if (DataMod.xs_batchs.FieldByName('filial').AsInteger>0)and(DataMod.xs_batchs.FieldByName('filial').AsInteger <> null) then
+   begin
+      Open____ODS_Report_Temp____Add_SQL('Select kod_bFil,inn_Fil from Filialinfo where kod_fil='''+DataMod.xs_batchs.FieldByName('filial').AsString+'''');
+      INN_  :=DataMod.ODS_Report_Temp.FieldByName('inn_Fil').AsString;
+      KOD_B_:=DataMod.ODS_Report_Temp.FieldByName('kod_bFil').AsString;
+      Form_Report.QRL_50K.Caption := '';
+      Form_Report.QRL_50K.Caption := KOD_B_+'/0'+KRNO_+'/'+INN_;
+   end;
+{//////////////////}
+
+{//////////////////}
+   Open____ODS_Report_Temp____Add_SQL('Select krno,inn,bankcode from bankm where id='''+DataMod.ODS_Report.fieldbyname('REC_BANK_ID').AsString+'''');
+   KRNO_ :=DataMod.ODS_Report_Temp.FieldByName('KRNO').AsString;
+   INN_  :=DataMod.ODS_Report_Temp.FieldByName('INN').AsString;
+   KOD_B_:=DataMod.ODS_Report_Temp.FieldByName('bankcode').AsString;
+   Form_Report.QRL_59.Caption := '';
+   Form_Report.QRL_59.Caption := KOD_B_+'/0'+KRNO_+'/'+INN_;
+{//////////////////}
+
+{//////////////////}
+   Open____ODS_Report_Temp____Add_SQL('Select SWIFT from bankinfo');
+   Form_Report.QRLabel7.Caption := '';
+   Form_Report.QRLabel7.Caption := DataMod.ODS_Report_Temp.FieldByName('SWIFT').AsString+'AXXX';
+{//////////////////}
+
+{//////////////////}
+   Open____ODS_Report_Temp____Add_SQL('Select SWIFT from bankinfo');
+   Form_Report.QRLabel7.Caption := '';
+   Form_Report.QRLabel7.Caption := DataMod.ODS_Report_Temp.FieldByName('SWIFT').AsString+'AXXX';
+{//////////////////}
+
+{//////////////////}
+   Open____ODS_Report_Temp____Add_SQL('SELECT nb_swift FROM xs_config');
+   Form_Report.QRLabel8.Caption := '';
+   Form_Report.QRLabel8.Caption := DataMod.ODS_Report_Temp.FieldByName('nb_swift').AsString;
+{//////////////////}
+
+{------------------------------------------------------}
+   Form_Report.QRLabel44.Caption:='';
+   Form_Report.QRLabel44.Caption:='/BNF/ '+IntToStr(DataMod.XS_BENEFICIARY.RecordCount);
+   form_report.QuickRep1.Preview;
+end;
+
+
+
+
+Procedure TLVPCSSForm.Open____ODS_Report_Temp____Add_SQL(SQL_Label : String);
+begin
+   if SQL_Label<>'' then
+   begin
+      with DataMod.ODS_Report_Temp do
+      begin
+         Close;
+         SQL.Clear;
+         SQL.Add(SQL_Label);
+         Open;
+      end;
+   end;
+end;
+
+procedure TLVPCSSForm.N21Click(Sender: TObject);
+   var
+      KRNO_     :       String;
+      INN_      :       String;
+      KOD_B_    :       String;
+      Dow_s     :       String;
+      Dow_i     :       Integer;
+begin
+  Form_Report := TForm_Report.Create(Self);
+  {added by Hesen R. 13Feb2008}
+   with Form_Report do begin
+    QuickRep1.DataSet := DataMod.XS_Beneficiary;
+    QRDBText1.DataSet := DataMod.XS_Batchs;
+    QRDBText2.DataSet := DataMod.XS_Batchs;
+    QRDBText5.DataSet := DataMod.XS_Batchs;
+    QRDBText6.DataSet := DataMod.XS_Batchs;
+    QRDBText7.DataSet := DataMod.XS_Batchs;
+    QRDBText8.DataSet := DataMod.XS_Batchs;
+
+   end; {with Form_Report}
+  {}
+
+
+   if DataMod.XS_BENEFICIARY.RecordCount>0 then
+   begin
+   with DataMod.ODS_Report do
+   begin
+      Close;
+      SQL.Clear;
+      SQL.Add('select * from xs_beneficiary where id='+inttostr(GridBeneficiary.Fields[0].asinteger));
+      Open;
+   end;
+
+
+{------------------------------------------------------}
+{//////////////////}
+   Open____ODS_Report_Temp____Add_SQL('Select account from xs_config');
+   Form_Report.QRL_52A_1.Caption := '';
+   Form_Report.QRL_52A_1.Caption := '/D/'+DataMod.ODS_Report_Temp.FieldByName('account').AsString;
+{//////////////////}
+
+{//////////////////}
+   Open____ODS_Report_Temp____Add_SQL('Select swift from bankinfo');
+   Form_Report.QRL_52A_2.Caption := '';
+   Form_Report.QRL_52A_2.Caption := DataMod.ODS_Report_Temp.FieldByName('swift').AsString;
+{//////////////////}
+{//////////////////}
+//   Open____ODS_Report_Temp____Add_SQL('Select * from bankm where subkrno='''+'0'+DataMod.ODS_Report.fieldbyname('SEN_BANK_SUBACC').AsString+'''');
+   Dow_s:=DataMod.ODS_Report.FieldByName('REMIT_INF').AsString;
+   Form_report.QRL_70_70.Caption :=' ';
+   Form_report.QRL_70_140.Caption :=' ';
+   Form_report.QRL_70_210.Caption :=' ';
+   Dow_i:=0;
+   repeat
+      Dow_i:=Dow_i+70;
+      with Form_report do
+      begin
+         TQRLabel(FindComponent('QRL_70_'+IntToStr(Dow_i))).Caption :=copy(Dow_s,Dow_i-69,70);
+      end;
+   until Dow_i>length(Dow_s);
+
+{//////////////////}
+{//////////////////}
+   Form_Report.QRL_57A_1.Caption := '';
+   Form_Report.QRL_57A_1.Caption := '/C/0'+DataMod.ODS_Report.FieldByName('REC_BANK_SUB_ACC').AsString;
+{//////////////////}
+
+{//////////////////}
+   Open____ODS_Report_Temp____Add_SQL('Select swift from bankm where id='''+DataMod.ODS_Report.fieldbyname('REC_BANK_ID').AsString+'''');
+   Form_Report.QRL_57A_2.Caption := '';
+   Form_Report.QRL_57A_2.Caption := DataMod.ODS_Report_Temp.FieldByName('swift').AsString;
+{//////////////////}
+
+{//////////////////}
+   Open____ODS_Report_Temp____Add_SQL('Select kod_b,krno,inn,swift from bankinfo');
+   KRNO_ :=DataMod.ODS_Report_Temp.FieldByName('KRNO').AsString;
+   INN_  :=DataMod.ODS_Report_Temp.FieldByName('INN').AsString;
+   KOD_B_:=DataMod.ODS_Report_Temp.FieldByName('KOD_B').AsString;
+   Form_Report.QRL_50K.Caption := '';
+   Form_Report.QRL_50K.Caption := KOD_B_+'/0'+KRNO_+'/'+INN_;
+
+   if (DataMod.xs_batchs.FieldByName('filial').AsInteger>0)and(DataMod.xs_batchs.FieldByName('filial').AsInteger <> null) then
+   begin
+      Open____ODS_Report_Temp____Add_SQL('Select kod_bFil,inn_Fil from Filialinfo where kod_fil='''+DataMod.xs_batchs.FieldByName('filial').AsString+'''');
+      INN_  :=DataMod.ODS_Report_Temp.FieldByName('inn_Fil').AsString;
+      KOD_B_:=DataMod.ODS_Report_Temp.FieldByName('kod_bFil').AsString;
+      Form_Report.QRL_50K.Caption := '';
+      Form_Report.QRL_50K.Caption := KOD_B_+'/0'+KRNO_+'/'+INN_;
+   end;
+{//////////////////}
+
+{//////////////////}
+   Open____ODS_Report_Temp____Add_SQL('Select krno,inn,bankcode from bankm where id='''+DataMod.ODS_Report.fieldbyname('REC_BANK_ID').AsString+'''');
+   KRNO_ :=DataMod.ODS_Report_Temp.FieldByName('KRNO').AsString;
+   INN_  :=DataMod.ODS_Report_Temp.FieldByName('INN').AsString;
+   KOD_B_:=DataMod.ODS_Report_Temp.FieldByName('bankcode').AsString;
+   Form_Report.QRL_59.Caption := '';
+   Form_Report.QRL_59.Caption := KOD_B_+'/0'+KRNO_+'/'+INN_;
+{//////////////////}
+
+{//////////////////}
+   Open____ODS_Report_Temp____Add_SQL('Select SWIFT from bankinfo');
+   Form_Report.QRLabel7.Caption := '';
+   Form_Report.QRLabel7.Caption := DataMod.ODS_Report_Temp.FieldByName('SWIFT').AsString+'AXXX';
+{//////////////////}
+
+{//////////////////}
+   Open____ODS_Report_Temp____Add_SQL('Select SWIFT from bankinfo');
+   Form_Report.QRLabel7.Caption := '';
+   Form_Report.QRLabel7.Caption := DataMod.ODS_Report_Temp.FieldByName('SWIFT').AsString+'AXXX';
+{//////////////////}
+
+{//////////////////}
+   Open____ODS_Report_Temp____Add_SQL('SELECT nb_swift FROM xs_config');
+   Form_Report.QRLabel8.Caption := '';
+   Form_Report.QRLabel8.Caption := DataMod.ODS_Report_Temp.FieldByName('nb_swift').AsString;
+{//////////////////}
+
+{------------------------------------------------------}
+   Form_Report.QRLabel44.Caption:='';
+   Form_Report.QRLabel44.Caption:='/BNF/'+IntToStr(DataMod.XS_BENEFICIARY.RecordCount);
+   form_report.QuickRep1.Preview;
+   end;
+end;
+
+
+procedure TLVPCSSForm.N22Click(Sender: TObject);
+   var
+      KRNO_     :       String;
+      INN_      :       String;
+      KOD_B_    :       String;
+      Dow_i     :       Integer;
+      Dow_s     :       String;
+begin
+   if DataMod.XS_IncomingView.RecordCount>0 then
+   begin
+   with DataMod.ODS_Report do
+   begin
+      Close;
+      SQL.Clear;
+      SQL.Add('select * from xs_incoming where id='+inttostr(GridIncoming.Fields[0].asinteger));
+      Open;
+   end;
+
+
+   Form_Report_in:=TForm_Report_in.create(self);
+
+{------------------------------------------------------}
+{//////////////////}
+//   Open____ODS_Report_Temp____Add_SQL('Select account from xs_config');
+   Form_report_in.QRL_52A_1.Caption := '';
+   Form_report_in.QRL_52A_1.Caption := '/D/0'+DataMod.ODS_Report.FieldByName('SEN_BANK_SUBACC').AsString;
+{//////////////////}
+
+{//////////////////}
+   Open____ODS_Report_Temp____Add_SQL('Select * from bankm where subkrno='''+'0'+DataMod.ODS_Report.fieldbyname('SEN_BANK_SUBACC').AsString+'''');
+   Form_report_in.QRL_52A_2.Caption := '';
+   Form_report_in.QRL_52A_2.Caption := DataMod.ODS_Report_Temp.FieldByName('SWIFT').AsString;
+{//////////////////}
+{//////////////////}
+//   Open____ODS_Report_Temp____Add_SQL('Select * from bankm where subkrno='''+'0'+DataMod.ODS_Report.fieldbyname('SEN_BANK_SUBACC').AsString+'''');
+   Dow_s:=DataMod.ODS_Report.FieldByName('REMIT_INF').AsString;
+   Form_Report_in.QRL_70_70.Caption :=' ';
+   Form_Report_in.QRL_70_140.Caption :=' ';
+   Form_Report_in.QRL_70_210.Caption :=' ';
+   Dow_i:=0;
+   repeat
+      Dow_i:=Dow_i+70;
+      with Form_report_in do
+      begin
+//         TQRLabel(FindComponent('QRL_70_'+IntToStr(Dow_i))).Caption :='';
+         TQRLabel(FindComponent('QRL_70_'+IntToStr(Dow_i))).Caption :=copy(Dow_s,Dow_i-69,70);
+      end;
+   until Dow_i>length(Dow_s);
+
+{//////////////////}
+
+{//////////////////}
+   Form_report_in.QRL_57A_1.Caption := '';
+   Form_report_in.QRL_57A_1.Caption := '/C/0'+DataMod.ODS_Report.FieldByName('REC_BANK_SUBACC').AsString;
+{//////////////////}
+
+{//////////////////}
+  // Open____ODS_Report_Temp____Add_SQL('Select swift from bankm where id='''+DataMod.ODS_Report.fieldbyname('REC_BANK_ID').AsString+'''');
+   Form_report_in.QRL_57A_2.Caption := '';
+   Form_report_in.QRL_57A_2.Caption := DataMod.ODS_Report.FieldByName('REC_BANK_BIK').AsString;
+{//////////////////}
+
+{//////////////////}
+   Open____ODS_Report_Temp____Add_SQL('Select * from bankm where id='''+DataMod.ODS_Report.fieldbyname('SEN_BANK_ID').AsString+'''');
+   KRNO_ :=DataMod.ODS_Report_Temp.FieldByName('SUBKRNO').AsString;
+   INN_  :=DataMod.ODS_Report_Temp.FieldByName('INN').AsString;
+   KOD_B_:=DataMod.ODS_Report_Temp.FieldByName('BANKCODE').AsString;
+   Form_report_in.QRL_50K.Caption := '';
+   Form_report_in.QRL_50K.Caption := KOD_B_+'/'+KRNO_+'/'+INN_;
+
+  { if (DataMod.xs_batchs.FieldByName('filial').AsInteger>0)and(DataMod.xs_batchs.FieldByName('filial').AsInteger <> null) then
+   begin
+      Open____ODS_Report_Temp____Add_SQL('Select kod_bFil,inn_Fil from Filialinfo where kod_fil='''+DataMod.xs_batchs.FieldByName('filial').AsString+'''');
+      INN_  :=DataMod.ODS_Report_Temp.FieldByName('inn_Fil').AsString;
+      KOD_B_:=DataMod.ODS_Report_Temp.FieldByName('kod_bFil').AsString;
+      Form_report_in.QRL_50K.Caption := '';
+      Form_report_in.QRL_50K.Caption := KOD_B_+'/0'+KRNO_+'/'+INN_;
+   end;}
+{//////////////////}
+
+{//////////////////}
+   Open____ODS_Report_Temp____Add_SQL('select * from filialinfo where KOD_FIL = '''+DataMod.ODS_Report.fieldbyname('FILIAL').AsString+'''');
+   KRNO_ :=DataMod.ODS_Report_Temp.FieldByName('KRNO').AsString;
+   INN_  :=DataMod.ODS_Report_Temp.FieldByName('INN').AsString;
+   KOD_B_:=DataMod.ODS_Report_Temp.FieldByName('KOD_B').AsString;
+   Form_report_in.QRL_59.Caption := '';
+   Form_report_in.QRL_59.Caption := KOD_B_+'/0'+KRNO_+'/'+INN_;
+{//////////////////}
+
+{//////////////////}
+   Open____ODS_Report_Temp____Add_SQL('Select SWIFT from bankinfo');
+   Form_report_in.QRLabel7.Caption := '';
+   Form_report_in.QRLabel7.Caption := DataMod.ODS_Report_Temp.FieldByName('SWIFT').AsString+'XXXX';
+{//////////////////}
+
+{//////////////////}
+   Open____ODS_Report_Temp____Add_SQL('Select SWIFT from bankinfo');
+   Form_report_in.QRLabel7.Caption := '';
+   Form_report_in.QRLabel7.Caption := DataMod.ODS_Report_Temp.FieldByName('SWIFT').AsString+'XXXX';
+{//////////////////}
+
+{//////////////////}
+   Open____ODS_Report_Temp____Add_SQL('SELECT nb_swift FROM xs_config');
+   Form_report_in.QRLabel8.Caption := '';
+   Form_report_in.QRLabel8.Caption := DataMod.ODS_Report_Temp.FieldByName('nb_swift').AsString;
+{//////////////////}
+
+{//////////////////}
+   Open____ODS_Report_Temp____Add_SQL('SELECT * FROM xs_transtype_code where CODE = '''+DataMod.ODS_Report.fieldbyname('TYPECODE').AsString+'''');
+   Form_report_in.QRL_77.Caption := '';
+   Form_report_in.QRL_77.Caption := DataMod.ODS_Report_Temp.FieldByName('NAME').AsString;
+{//////////////////}
+
+
+{------------------------------------------------------}
+   Form_report_in.QRLabel44.Caption:='';
+   Form_report_in.QRLabel44.Caption:='/BNF/'+IntToStr(DataMod.XS_IncomingView.RecordCount);
+   Form_report_in.QuickRep1.Preview;
+   end;
+end;
+
+procedure TLVPCSSForm.Print1Click(Sender: TObject);
+var
+  KRNO_, INN_, KOD_B_, Dow_s :String;
+  Dow_i :Integer;
+begin
+  Form_Report :=TForm_Report.Create(Self);
+  {added by Hesen R. 13Feb2008}
+   with Form_Report do begin
+    QuickRep1.DataSet := DataMod.XS_BeneficiaryArchive;
+    QRDBText1.DataSet := DataMod.XS_BatchsArchive;
+    QRDBText2.DataSet := DataMod.XS_BatchsArchive;
+    QRDBText5.DataSet := DataMod.XS_BatchsArchive;
+    QRDBText6.DataSet := DataMod.XS_BatchsArchive;
+    QRDBText7.DataSet := DataMod.XS_BatchsArchive;
+    QRDBText8.DataSet := DataMod.XS_BatchsArchive;
+    
+   end; {with Form_Report}
+  {}
+
+  if DataMod.XS_BeneficiaryArchive.RecordCount>0 then begin
+   with DataMod.ODS_Report do begin
+    Close;
+    SQL.Clear;
+    SQL.Add('select * from XS_BENEFICIARY_ARCHIVE where ID='+IntToStr(DBGridOUTArchBeneficiary.Fields[0].AsInteger));
+    Open;
+   end;
+
+
+   Open____ODS_Report_Temp____Add_SQL('Select account from xs_config');
+   Form_Report.QRL_52A_1.Caption := '';
+   Form_Report.QRL_52A_1.Caption := '/D/'+DataMod.ODS_Report_Temp.FieldByName('account').AsString;
+   Open____ODS_Report_Temp____Add_SQL('Select swift from bankinfo');
+   Form_Report.QRL_52A_2.Caption := '';
+   Form_Report.QRL_52A_2.Caption := DataMod.ODS_Report_Temp.FieldByName('swift').AsString;
+   Dow_s:=DataMod.ODS_Report.FieldByName('REMIT_INF').AsString;
+   Form_report.QRL_70_70.Caption :=' ';
+   Form_report.QRL_70_140.Caption :=' ';
+   Form_report.QRL_70_210.Caption :=' ';
+   Dow_i:=0;
+   repeat
+      Dow_i:=Dow_i+70;
+      with Form_report do
+      begin
+         TQRLabel(FindComponent('QRL_70_'+IntToStr(Dow_i))).Caption :=copy(Dow_s,Dow_i-69,70);
+      end;
+   until Dow_i>length(Dow_s);
+
+{//////////////////}
+{//////////////////}
+   Form_Report.QRL_57A_1.Caption := '';
+   Form_Report.QRL_57A_1.Caption := '/C/0'+DataMod.ODS_Report.FieldByName('REC_BANK_SUB_ACC').AsString;
+{//////////////////}
+
+{//////////////////}
+   Open____ODS_Report_Temp____Add_SQL('Select swift from bankm where id='''+DataMod.ODS_Report.fieldbyname('REC_BANK_ID').AsString+'''');
+   Form_Report.QRL_57A_2.Caption := '';
+   Form_Report.QRL_57A_2.Caption := DataMod.ODS_Report_Temp.FieldByName('swift').AsString;
+{//////////////////}
+
+{//////////////////}
+   Open____ODS_Report_Temp____Add_SQL('Select kod_b,krno,inn,swift from bankinfo');
+   KRNO_ :=DataMod.ODS_Report_Temp.FieldByName('KRNO').AsString;
+   INN_  :=DataMod.ODS_Report_Temp.FieldByName('INN').AsString;
+   KOD_B_:=DataMod.ODS_Report_Temp.FieldByName('KOD_B').AsString;
+   Form_Report.QRL_50K.Caption := '';
+   Form_Report.QRL_50K.Caption := KOD_B_+'/0'+KRNO_+'/'+INN_;
+
+   if (DataMod.XS_BatchsArchive.FieldByName('filial').AsInteger>0)and(DataMod.XS_BatchsArchive.FieldByName('filial').AsInteger <> null) then
+   begin
+      Open____ODS_Report_Temp____Add_SQL('Select kod_bFil,inn_Fil from Filialinfo where kod_fil='''+DataMod.xs_batchs.FieldByName('filial').AsString+'''');
+      INN_  :=DataMod.ODS_Report_Temp.FieldByName('inn_Fil').AsString;
+      KOD_B_:=DataMod.ODS_Report_Temp.FieldByName('kod_bFil').AsString;
+      Form_Report.QRL_50K.Caption := '';
+      Form_Report.QRL_50K.Caption := KOD_B_+'/0'+KRNO_+'/'+INN_;
+   end;
+{//////////////////}
+
+{//////////////////}
+   Open____ODS_Report_Temp____Add_SQL('Select krno,inn,bankcode from bankm where id='''+DataMod.ODS_Report.fieldbyname('REC_BANK_ID').AsString+'''');
+   KRNO_ :=DataMod.ODS_Report_Temp.FieldByName('KRNO').AsString;
+   INN_  :=DataMod.ODS_Report_Temp.FieldByName('INN').AsString;
+   KOD_B_:=DataMod.ODS_Report_Temp.FieldByName('bankcode').AsString;
+   Form_Report.QRL_59.Caption := '';
+   Form_Report.QRL_59.Caption := KOD_B_+'/0'+KRNO_+'/'+INN_;
+{//////////////////}
+
+{//////////////////}
+   Open____ODS_Report_Temp____Add_SQL('Select SWIFT from bankinfo');
+   Form_Report.QRLabel7.Caption := '';
+   Form_Report.QRLabel7.Caption := DataMod.ODS_Report_Temp.FieldByName('SWIFT').AsString+'AXXX';
+{//////////////////}
+
+{//////////////////}
+   Open____ODS_Report_Temp____Add_SQL('Select SWIFT from bankinfo');
+   Form_Report.QRLabel7.Caption := '';
+   Form_Report.QRLabel7.Caption := DataMod.ODS_Report_Temp.FieldByName('SWIFT').AsString+'AXXX';
+{//////////////////}
+
+{//////////////////}
+   Open____ODS_Report_Temp____Add_SQL('SELECT nb_swift FROM xs_config');
+   Form_Report.QRLabel8.Caption := '';
+   Form_Report.QRLabel8.Caption := DataMod.ODS_Report_Temp.FieldByName('nb_swift').AsString;
+{//////////////////}
+
+{------------------------------------------------------}
+   Form_Report.QRLabel44.Caption:='';
+   Form_Report.QRLabel44.Caption:='/BNF/'+IntToStr(DataMod.XS_BeneficiaryArchive.RecordCount);
+   form_report.QuickRep1.Preview;
+   end;
+
+end;
+
+procedure TLVPCSSForm.ToolButton22Click(Sender: TObject);
+var BookmarkList : TBookmarkList;
+    Bookmark     : TBookmarkStr;
+                i:integer;
+begin
+
+  if DBGridOUTArchBatchs.SelectedRows.Count < 1 then exit;
+  Bookmark     := DataMod.XS_BatchsArchive.Bookmark;
+  BookmarkList := DBGridOUTArchBatchs.SelectedRows;
+  for i := 0 to BookmarkList.Count -1 do
+  begin
+    DataMod.XS_BatchsArchive.Bookmark := BookmarkList[i];
+    showmessage(IntToStr(DataMod.XS_BatchsArchive.fieldbyname('ID').asinteger));
+    DataMod.Ab.CallProcedure('xs_batchs_Archive_delete',[DataMod.XS_BatchsArchive.fieldbyname('ID').asinteger]);
+  end;
+  DataMod.XS_BatchsArchive.Refresh;
+end;
+
+procedure TLVPCSSForm.ToolButton35Click(Sender: TObject);
+var BookmarkList : TBookmarkList;
+    Bookmark     : TBookmarkStr;
+                i:integer;
+begin
+  if DBGridOUTArchBeneficiary.SelectedRows.Count < 1 then exit;
+  Bookmark     := DataMod.XS_BeneficiaryArchive.Bookmark;
+  BookmarkList := DBGridOUTArchBeneficiary.SelectedRows;
+  for i := 0 to BookmarkList.Count -1 do
+  begin
+    DataMod.XS_BeneficiaryArchive .Bookmark := BookmarkList[i];
+    showmessage(IntToStr(DataMod.XS_BeneficiaryArchive.fieldbyname('ID').asinteger));
+    DataMod.Ab.CallProcedure('xs_beneficiary_Archive_delete',[DataMod.XS_BeneficiaryArchive.fieldbyname('ID').asinteger]);
+  end;
+  DataMod.XS_BeneficiaryArchive .Refresh;
+end;
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TLVPCSSForm,
+    Class_LVPCSS,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

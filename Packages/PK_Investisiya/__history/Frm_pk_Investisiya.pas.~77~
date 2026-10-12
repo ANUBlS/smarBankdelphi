@@ -1,0 +1,1089 @@
+﻿unit Frm_pk_Investisiya;
+
+{$WARN SYMBOL_PLATFORM OFF}            //ActionFilterExecute
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActiveX, AxCtrls, PK_Investisiya_TLB, StdVcl, StdCtrls, ExtCtrls, XFSCtrls,
+  ComCtrls, ToolWin, ImgList, Grids, DBGrids, DB, OracleData, Oracle,
+  CMExcelExport, Menus, XDBGrids, DBCtrls;
+
+type
+  TFrm_Investisiya = class(TActiveForm, IFrm_Investisiya)
+    XFPanel1: TXFPanel;
+    Panel1: TPanel;
+    XFPanel2: TXFPanel;
+    Grpfilter: TXFGroupBox;
+    ImageList: TImageList;
+    Button1: TButton;
+    Button2: TButton;
+    Button3: TButton;
+    Button4: TButton;
+    Button6: TButton;
+    Button7: TButton;
+    DBGrid1: TDBGrid;
+    Image1: TImage;
+    Button5: TButton;
+    ExcelExport: TCMExcelExport;
+    EditCONTR_TYPE: TEdit;
+    Label1: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    EditAMMOUNT: TEdit;
+    EditMUSTERI: TEdit;
+    EditCONTRACT_NAME: TEdit;
+    Button8: TButton;
+    Button9: TButton;
+    Label2: TLabel;
+    PopupMenu1: TPopupMenu;
+    laveEtmk1: TMenuItem;
+    Redakt1: TMenuItem;
+    sdiql1: TMenuItem;
+    Bala1: TMenuItem;
+    mliyyatlar1: TMenuItem;
+    Yenilma1: TMenuItem;
+    Filter1: TMenuItem;
+    Sazlama1: TMenuItem;
+    Excel1: TMenuItem;
+    N1: TMenuItem;
+    N2: TMenuItem;
+    N3: TMenuItem;
+    N4: TMenuItem;
+    N5: TMenuItem;
+    N6: TMenuItem;
+    N7: TMenuItem;
+    N8: TMenuItem;
+    N9: TMenuItem;
+    PopupMenu2: TPopupMenu;
+    rans1: TMenuItem;
+    Kredir1: TMenuItem;
+    Yatrm1: TMenuItem;
+    FaziHesablamas1: TMenuItem;
+    dni1: TMenuItem;
+    Button10: TButton;
+    Memo1: TMemo;
+    XFGroupBox1: TXFGroupBox;
+    DBLookupComboBox1: TDBLookupComboBox;
+    XFCheckBox1: TXFCheckBox;
+    XFGroupBox2: TXFGroupBox;
+    XFRadioGroup1: TXFRadioGroup;
+    DateTimePicker1: TDateTimePicker;
+    DateTimePicker2: TDateTimePicker;
+    XFCheckBox2: TXFCheckBox;
+    XFGroupBox3: TXFGroupBox;
+    XFCheckBox3: TXFCheckBox;
+    DBLookupComboBox2: TDBLookupComboBox;
+    XFGroupBox4: TXFGroupBox;
+    DBLookupComboBox3: TDBLookupComboBox;
+    XFCheckBox4: TXFCheckBox;
+    XFRadioGroup2: TXFRadioGroup;
+    XFCheckBox6: TXFCheckBox;
+    Button11: TButton;
+    XFRadioGroup3: TXFRadioGroup;
+    XFButton1: TXFButton;
+    XFCheckBox5: TXFCheckBox;
+    A1: TMenuItem;
+
+    procedure Button2Click(Sender: TObject);
+    procedure Button7Click(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure Button3Click(Sender: TObject);
+    procedure Button6Click(Sender: TObject);
+    procedure Button4Click(Sender: TObject);
+    procedure Button5Click(Sender: TObject);
+    procedure EditCONTR_TYPEExit(Sender: TObject);
+    procedure EditCONTR_TYPEKeyPress(Sender: TObject; var Key: Char);
+    procedure laveEtmk1Click(Sender: TObject);
+    procedure Redakt1Click(Sender: TObject);
+    procedure Yenilma1Click(Sender: TObject);
+    procedure Filter1Click(Sender: TObject);
+    procedure Sazlama1Click(Sender: TObject);
+    procedure Excel1Click(Sender: TObject);
+    procedure DBGrid1DrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TColumn; State: TGridDrawState);
+    procedure DBGrid1TitleClick(Column: TColumn);
+    procedure Button8Click(Sender: TObject);
+    procedure Button9Click(Sender: TObject);
+    procedure rans1Click(Sender: TObject);
+    procedure Kredir1Click(Sender: TObject);
+    procedure Yatrm1Click(Sender: TObject);
+    procedure FaziHesablamas1Click(Sender: TObject);
+    procedure dni1Click(Sender: TObject);
+    procedure Button10Click(Sender: TObject);
+    procedure XFButton1Click(Sender: TObject);
+    procedure Button11Click(Sender: TObject);
+    procedure A1Click(Sender: TObject);
+  private
+    { Private declarations }
+    FEvents: IFrm_InvestisiyaEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure MouseEnterEvent(Sender: TObject);
+    procedure MouseLeaveEvent(Sender: TObject);
+    procedure PaintEvent(Sender: TObject);
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AlignDisabled: WordBool; safecall;
+    function Get_AlignWithMargins: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_BorderWidth: Integer; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_DockSite: WordBool; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_ExplicitHeight: Integer; safecall;
+    function Get_ExplicitLeft: Integer; safecall;
+    function Get_ExplicitTop: Integer; safecall;
+    function Get_ExplicitWidth: Integer; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_MouseInClient: WordBool; safecall;
+    function Get_ParentCustomHint: WordBool; safecall;
+    function Get_ParentDoubleBuffered: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PopupMode: TxPopupMode; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_ScreenSnap: WordBool; safecall;
+    function Get_SnapBuffer: Integer; safecall;
+    function Get_UseDockManager: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_AlignWithMargins(Value: WordBool); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_BorderWidth(Value: Integer); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_DockSite(Value: WordBool); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_ParentCustomHint(Value: WordBool); safecall;
+    procedure Set_ParentDoubleBuffered(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PopupMode(Value: TxPopupMode); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_ScreenSnap(Value: WordBool); safecall;
+    procedure Set_SnapBuffer(Value: Integer); safecall;
+    procedure Set_UseDockManager(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+    procedure ActionFilterExecute(Sender: TObject);
+  public
+    { Public declarations }
+    procedure Initialize; override;
+    procedure ActionSpeedSearchExecute(Sender: TObject);
+    //procedure ActionFilterExecute(Sender: TObject);
+  end;
+
+implementation
+
+uses ComObj, ComServ,sboapiDataModuleImpl,Dm_Pk_investisiyaimpl,CommanParametrs;
+ var
+ sql,sql1:string;
+
+{$R *.DFM}
+
+{ TFrm_Investisiya }
+
+procedure TFrm_Investisiya.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_Frm_InvestisiyaPage); }
+end;
+
+procedure TFrm_Investisiya.EditCONTR_TYPEExit(Sender: TObject);
+begin
+  TEdit(Sender).Text :=EmptyStr;
+end;
+
+procedure TFrm_Investisiya.EditCONTR_TYPEKeyPress(Sender: TObject; var Key: Char);
+begin
+ if Key = #13  then
+  begin
+   ActionSpeedSearchExecute(Sender);
+  end;
+
+end;
+
+procedure TFrm_Investisiya.ActionSpeedSearchExecute(Sender: TObject);
+var
+  SearchField : string;
+  SearchOptions : TSearchRecordOptions;
+begin
+  SearchOptions := [srIgnoreCase ,srPartialMatch ];
+
+  with Sender as TEdit  do
+  begin
+    SearchField := copy(Name,5,length(Name));
+    with  TOracleDataSet(DBGrid1.DataSource.DataSet) do
+    if  not SearchRecord(
+                  SearchField
+                 ,Text
+                 ,SearchOptions + [srFromCurrent , srForward ]
+                 ) then
+    if MessageDlg(
+              'Axtarış sona çatdı.'+#13+'Əvvəldən başlansın?'
+             ,mtInformation
+             ,[mbNo , mbYes]
+             ,0
+             ) = mrYes  then
+    if not SearchRecord(
+                 SearchField
+                ,Text
+                ,SearchOptions + [ srFromBeginning ]
+                )  then
+    MessageDlg('Yazı tapılmayıb!',mtInformation,[mbOK],0);
+ end;
+end;
+
+
+
+
+procedure TFrm_Investisiya.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as IFrm_InvestisiyaEvents;
+  inherited EventSinkChanged(EventSink);
+end;
+
+procedure TFrm_Investisiya.Excel1Click(Sender: TObject);
+begin
+ with ExcelExport do
+   begin
+      Connect;
+      ExportDataset(DBGrid1.DataSource.DataSet,'Investisiya Müqavilələri',True,false);
+      Disconnect;
+   end;
+end;
+
+procedure TFrm_Investisiya.FaziHesablamas1Click(Sender: TObject);
+begin
+//loadPlugin('Investment_percent_calculation.bpl','');
+end;
+
+procedure TFrm_Investisiya.Filter1Click(Sender: TObject);
+begin
+Grpfilter.Visible :=not Grpfilter.Visible;
+end;
+
+procedure TFrm_Investisiya.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnMouseEnter := MouseEnterEvent;
+  OnMouseLeave := MouseLeaveEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TFrm_Investisiya.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TFrm_Investisiya.Get_AlignDisabled: WordBool;
+begin
+  Result := AlignDisabled;
+end;
+
+function TFrm_Investisiya.Get_AlignWithMargins: WordBool;
+begin
+  Result := AlignWithMargins;
+end;
+
+function TFrm_Investisiya.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TFrm_Investisiya.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TFrm_Investisiya.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TFrm_Investisiya.Get_BorderWidth: Integer;
+begin
+  Result := Integer(BorderWidth);
+end;
+
+function TFrm_Investisiya.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TFrm_Investisiya.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TFrm_Investisiya.Get_DockSite: WordBool;
+begin
+  Result := DockSite;
+end;
+
+function TFrm_Investisiya.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TFrm_Investisiya.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TFrm_Investisiya.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TFrm_Investisiya.Get_ExplicitHeight: Integer;
+begin
+  Result := ExplicitHeight;
+end;
+
+function TFrm_Investisiya.Get_ExplicitLeft: Integer;
+begin
+  Result := ExplicitLeft;
+end;
+
+function TFrm_Investisiya.Get_ExplicitTop: Integer;
+begin
+  Result := ExplicitTop;
+end;
+
+function TFrm_Investisiya.Get_ExplicitWidth: Integer;
+begin
+  Result := ExplicitWidth;
+end;
+
+function TFrm_Investisiya.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TFrm_Investisiya.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TFrm_Investisiya.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TFrm_Investisiya.Get_MouseInClient: WordBool;
+begin
+  Result := MouseInClient;
+end;
+
+function TFrm_Investisiya.Get_ParentCustomHint: WordBool;
+begin
+  Result := ParentCustomHint;
+end;
+
+function TFrm_Investisiya.Get_ParentDoubleBuffered: WordBool;
+begin
+  Result := ParentDoubleBuffered;
+end;
+
+function TFrm_Investisiya.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TFrm_Investisiya.Get_PopupMode: TxPopupMode;
+begin
+  Result := Ord(PopupMode);
+end;
+
+function TFrm_Investisiya.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TFrm_Investisiya.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TFrm_Investisiya.Get_ScreenSnap: WordBool;
+begin
+  Result := ScreenSnap;
+end;
+
+function TFrm_Investisiya.Get_SnapBuffer: Integer;
+begin
+  Result := SnapBuffer;
+end;
+
+function TFrm_Investisiya.Get_UseDockManager: WordBool;
+begin
+  Result := UseDockManager;
+end;
+
+function TFrm_Investisiya.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TFrm_Investisiya.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TFrm_Investisiya._Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TFrm_Investisiya.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TFrm_Investisiya.ActiveFormCreate(Sender: TObject);
+begin
+//Maininvestgrid:=DBGrid1;
+Dm_Pk_investisiya := TDm_Pk_investisiya.Create(Self);
+sql1:=Dm_Pk_investisiya.DsMain_Contracts.SQL.Text;
+memo1.Text:=sql1;
+commandataset:=Dm_Pk_investisiya.DsMain_Contracts;
+end;
+
+procedure TFrm_Investisiya.Button10Click(Sender: TObject);
+begin
+ActionFilterExecute(Sender);
+end;
+
+procedure TFrm_Investisiya.Button11Click(Sender: TObject);
+begin
+         //
+
+
+   if DBGrid1.DataSource.DataSet.RecordCount=0 then
+    begin
+     ShowMessage('Cədvəldə məlumat yoxdu!!!');
+    end;
+            {
+    if DBGrid1.DataSource.DataSet.FieldByName('STATUS').AsInteger<>0 then
+    begin
+      ShowMessage('Yalniz redakte Müqaviləni  silmek olar!!!');
+      exit;
+    end;          }
+
+//if DBGrid1.DataSource.DataSet.FieldByName('STATUS').AsInteger=0 then
+ if MessageDlg('Seçilmiş müqavilə silinəcək!',mtConfirmation,
+ mbYesNoCancel, 0) = mrYes then
+ begin
+Dm_Pk_investisiya.pk_ins_Investment.CallBooleanFunction('del_invest_contracts',[DBGrid1.DataSource.DataSet.FieldByName('id').AsInteger]);
+DBGrid1.DataSource.DataSet.Refresh;
+
+   end;
+
+end;
+
+procedure TFrm_Investisiya.Button1Click(Sender: TObject);
+begin
+loadPlugin('Investisiya_settings.bpl','');
+end;
+
+procedure TFrm_Investisiya.Button2Click(Sender: TObject);
+begin
+Grpfilter.Visible :=not Grpfilter.Visible;
+end;
+
+procedure TFrm_Investisiya.Button3Click(Sender: TObject);
+begin
+//DBGrid1.DataSource.DataSet.Refresh;
+
+
+Dm_Pk_investisiya.DsMain_Contracts.Locate('id',Dm_Pk_investisiya.DsMain_Contractsid.Value,[]);
+Dm_Pk_investisiya.DsMain_Contracts.Close;
+Dm_Pk_investisiya.DsMain_Contracts.Open;
+
+end;
+procedure TFrm_Investisiya.Button4Click(Sender: TObject);
+begin
+   if DBGrid1.DataSource.DataSet.RecordCount=0 then
+    begin
+     ShowMessage('Cədvəldə məlumat yoxdu!!!');
+    end;
+     if DBGrid1.DataSource.DataSet.FieldByName('close_prefix').AsInteger=1 then
+    begin
+      ShowMessage('Müqavilə bağlı statusundadır!!!');
+      exit;
+    end;
+
+    if DBGrid1.DataSource.DataSet.FieldByName('STATUS').AsInteger=1 then
+    begin
+      ShowMessage('Tesdiqlenmis Müqaviləni  baqlamaq olmaz!!!');
+      exit;
+    end;
+
+ if MessageDlg('Seçilmiş müqavilə bağlı olunacaq!',mtConfirmation,
+ mbYesNoCancel, 0) = mrYes then
+ begin
+Dm_Pk_investisiya.pk_ins_Investment.CallBooleanFunction('close_Investment_contracts',[DBGrid1.DataSource.DataSet.FieldByName('id').AsInteger]);
+DBGrid1.DataSource.DataSet.Refresh;
+   end;
+
+end;
+
+procedure TFrm_Investisiya.Button5Click(Sender: TObject);
+begin
+  with ExcelExport do
+   begin
+      Connect;
+      ExportDataset(DBGrid1.DataSource.DataSet,'Investisiya Müqavilələri',True,false);
+      Disconnect;
+   end;
+end;
+
+procedure TFrm_Investisiya.Button6Click(Sender: TObject);
+begin
+ if DBGrid1.DataSource.DataSet.RecordCount=0 then
+  begin
+    showmessage ('Məlumat Yoxdur');
+    exit;
+ end;
+opetion:='upd';
+contactid:=DBGrid1.DataSource.DataSet.FieldByName('id').AsInteger;
+//ShowMessage(DBGrid1.DataSource.DataSet.FieldByName('id').AsString);
+loadPlugin('Investisiya_Contracts.bpl','');
+
+  //DBGrid1.DataSource.DataSet.Refresh;
+  //DBGrid1.DataSource.DataSet.Locate('id',DsMain_Contractsid.Value,[]);
+end;
+
+procedure TFrm_Investisiya.Button7Click(Sender: TObject);
+begin
+opetion:='ins';
+contactid:=-1;
+loadPlugin('Investisiya_Contracts.bpl','');
+end;
+
+procedure TFrm_Investisiya.Button8Click(Sender: TObject);
+begin
+if DBGrid1.DataSource.DataSet.RecordCount=0 then
+    begin
+     ShowMessage('Cədvəldə məlumat yoxdu!!!');
+     exit;
+    end;
+    if DBGrid1.DataSource.DataSet.FieldByName('STATUS').AsInteger=1 then
+    begin
+      ShowMessage('Müqavilə təsdiq statusundadır!!!');
+      exit;
+    end;
+     if MessageDlg('Seçilmiş müqavilə təsdiqlənəcək!',mtConfirmation,
+ mbYesNoCancel, 0) = mrYes then
+ begin
+Dm_Pk_investisiya.pk_ins_Investment.CallBooleanFunction('commit_Investment_contracts',[DBGrid1.DataSource.DataSet.FieldByName('id').AsInteger]);
+DBGrid1.DataSource.DataSet.Refresh;
+   end;
+end;
+
+procedure TFrm_Investisiya.Button9Click(Sender: TObject);
+//var
+//p:TPoint;
+begin
+
+
+//p:=Button9.ClientToScreen(Point(101,Button9.Height));
+//PopupMenu2.Popup(p.X,p.y);
+end;
+
+procedure TFrm_Investisiya.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TFrm_Investisiya.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TFrm_Investisiya.DBGrid1DrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TColumn; State: TGridDrawState);
+
+var
+  ImageIndex: Integer;
+begin
+  with Sender as TDBGrid do
+  begin
+    if DataSource.DataSet.RecordCount <> 0 then
+    begin
+      ImageIndex := DataSource.DataSet.FieldByName('status').AsInteger ;
+      if (DataCol = 2) and (ImageIndex= 0) then begin
+ ImageList.Draw(Canvas, Rect.Left, Rect.Top,6, True) ;
+      end;
+  if (DataCol = 2) and (ImageIndex=1) then begin
+ ImageList.Draw(Canvas, Rect.Left, Rect.Top,16, True)
+      end;
+       if (DataCol = 2) and (ImageIndex=2) then begin
+ ImageList.Draw(Canvas, Rect.Left, Rect.Top,8, True)
+      end;
+
+  end;
+  end;
+
+end;
+
+procedure TFrm_Investisiya.DBGrid1TitleClick(Column: TColumn);
+
+var
+   TitleName :string;
+   SortPosition: word;
+begin
+ SortPosition :=100;
+ if (Dm_Pk_investisiya.DsMain_Contracts.IsEmpty) or (Column.FieldName = EmptyStr) then Exit;
+ Screen.Cursor :=crHourGlass;
+ TitleName :=Column.FieldName;
+ with  Dm_Pk_investisiya.DsMain_Contracts do
+  try
+   SortPosition :=SQL.Add('ORDER BY '+ TitleName + ' desc');
+   Refresh;
+  finally
+   SQL[SortPosition] :=EmptyStr;
+   Screen.Cursor :=crDefault;
+  end;
+
+end;
+
+procedure TFrm_Investisiya.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TFrm_Investisiya.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TFrm_Investisiya.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TFrm_Investisiya.dni1Click(Sender: TObject);
+begin
+// loadPlugin('Investment_payment.bpl','');
+end;
+
+procedure TFrm_Investisiya.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TFrm_Investisiya.Kredir1Click(Sender: TObject);
+begin
+ShowMessage('Kredit');
+end;
+
+procedure TFrm_Investisiya.laveEtmk1Click(Sender: TObject);
+begin
+opetion:='ins';
+loadPlugin('Investisiya_Contracts.bpl','');
+end;
+
+procedure TFrm_Investisiya.MouseEnterEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnMouseEnter;
+end;
+
+procedure TFrm_Investisiya.MouseLeaveEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnMouseLeave;
+end;
+
+procedure TFrm_Investisiya.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TFrm_Investisiya.rans1Click(Sender: TObject);
+begin
+ShowMessage('Transh');
+end;
+
+procedure TFrm_Investisiya.Redakt1Click(Sender: TObject);
+begin
+ if DBGrid1.DataSource.DataSet.RecordCount=0 then
+  begin
+    showmessage ('Məlumat Yoxdur');
+    exit;
+ end;
+opetion:='upd';
+contactid:=DBGrid1.DataSource.DataSet.FieldByName('id').AsInteger;
+loadPlugin('Investisiya_Contracts.bpl','');
+end;
+
+procedure TFrm_Investisiya.Sazlama1Click(Sender: TObject);
+begin
+loadPlugin('Investisiya_settings.bpl','');
+end;
+
+procedure TFrm_Investisiya.Set_AlignWithMargins(Value: WordBool);
+begin
+  AlignWithMargins := Value;
+end;
+
+procedure TFrm_Investisiya.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TFrm_Investisiya.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TFrm_Investisiya.Set_AxBorderStyle(Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TFrm_Investisiya.Set_BorderWidth(Value: Integer);
+begin
+  BorderWidth := TBorderWidth(Value);
+end;
+
+procedure TFrm_Investisiya.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TFrm_Investisiya.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TFrm_Investisiya.Set_DockSite(Value: WordBool);
+begin
+  DockSite := Value;
+end;
+
+procedure TFrm_Investisiya.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TFrm_Investisiya.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TFrm_Investisiya.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TFrm_Investisiya.Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TFrm_Investisiya.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := string(Value);
+end;
+
+procedure TFrm_Investisiya.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TFrm_Investisiya.Set_ParentCustomHint(Value: WordBool);
+begin
+  ParentCustomHint := Value;
+end;
+
+procedure TFrm_Investisiya.Set_ParentDoubleBuffered(Value: WordBool);
+begin
+  ParentDoubleBuffered := Value;
+end;
+
+procedure TFrm_Investisiya.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TFrm_Investisiya.Set_PopupMode(Value: TxPopupMode);
+begin
+  PopupMode := TPopupMode(Value);
+end;
+
+procedure TFrm_Investisiya.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TFrm_Investisiya.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TFrm_Investisiya.Set_ScreenSnap(Value: WordBool);
+begin
+  ScreenSnap := Value;
+end;
+
+procedure TFrm_Investisiya.Set_SnapBuffer(Value: Integer);
+begin
+  SnapBuffer := Value;
+end;
+
+procedure TFrm_Investisiya.Set_UseDockManager(Value: WordBool);
+begin
+  UseDockManager := Value;
+end;
+
+procedure TFrm_Investisiya.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+procedure TFrm_Investisiya.XFButton1Click(Sender: TObject);
+begin
+XFRadioGroup3.ItemIndex:=-1;
+end;
+
+procedure TFrm_Investisiya.Yatrm1Click(Sender: TObject);
+begin
+contactid:=DBGrid1.DataSource.DataSet.FieldByName('id').AsInteger;
+loadPlugin('Investment_transaction.bpl','');
+end;
+
+procedure TFrm_Investisiya.Yenilma1Click(Sender: TObject);
+begin
+DBGrid1.DataSource.DataSet.Refresh;
+end;
+
+procedure TFrm_Investisiya.A1Click(Sender: TObject);
+begin
+   if DBGrid1.DataSource.DataSet.RecordCount=0 then
+    begin
+     ShowMessage('Cədvəldə məlumat yoxdu!!!');
+    end;
+     if DBGrid1.DataSource.DataSet.FieldByName('close_prefix').AsInteger=0 then
+    begin
+      ShowMessage('Müqavilə aktivdir!!!');
+      exit;
+    end;
+
+
+if DBGrid1.DataSource.DataSet.FieldByName('close_prefix').AsInteger=1 then
+if MessageDlg('Seçilmiş müqavilə aktiv olunacaq!',mtConfirmation,
+ mbYesNoCancel, 0) = mrYes then
+ begin
+Dm_Pk_investisiya.pk_ins_Investment.CallBooleanFunction('open_Investment_contracts',[DBGrid1.DataSource.DataSet.FieldByName('id').AsInteger]);
+DBGrid1.DataSource.DataSet.Refresh;
+end;
+
+
+end;
+
+procedure TFrm_Investisiya.ActionFilterExecute(Sender: TObject);
+
+  function  CheckFiltered(IsChecked: Boolean; const FilterStr: String; Args: array of const): String;
+   begin
+    Result :='';
+    if  IsChecked  then
+     Result :=Format(FilterStr, Args);
+   end;
+
+
+ const
+   BooleanPrefix = ' AND ';
+   Filter_invest_type= '(iit.id=%d)';
+   Filter_begin_date= '(a.begin_date)';
+   Filter_end_date= '(a.end_date)';
+   Filter_valute= '(av.valute=%d)';
+   Filter_Musteri= '(cust.id=%d)';
+   Filter_Zaman= '(ii.id=%d)';
+   Filter_status='(a.close_prefix=%d)';
+ var
+
+ FilterStr: String;
+ P_invest_type: string;
+ p_begin_date:   String;
+ p_end_date:   String;
+ p_valute : String;
+ P_musteri :string;
+ p_zaman :string;
+ p_status: string;
+
+
+ begin
+ //ShowMessage(sql1);
+ FilterStr :='';
+
+//////// aktiv ve baqli muqavileler//////////
+
+
+        p_status :=CheckFiltered(
+               XFRadioGroup3.ItemIndex <> -1
+             ,Filter_status
+             ,[XFRadioGroup3.ItemIndex]
+              );
+
+   if  XFCheckBox5.Checked
+  then
+  if  FilterStr=''  then
+  FilterStr :=p_status
+  else
+  FilterStr :=FilterStr + BooleanPrefix + p_status;
+
+
+ //////// aktiv ve baqli muqavileler//////////
+
+
+
+
+  /////////// investsiya novu////////////////////////
+  P_invest_type :=CheckFiltered(XFCheckBox1.Checked ,Filter_invest_type
+  ,[DBLookupComboBox1.ListSource.DataSet.FieldByName('id').asinteger]);
+
+  if  XFCheckBox1.Checked //Branch <> ''
+  then
+  if  FilterStr=''  then
+  FilterStr :=P_invest_type
+  else
+  FilterStr :=FilterStr + BooleanPrefix + P_invest_type;
+ /////////// investsiya novu////////////////////////
+
+   /////////// tarix araliqi////////////////////////
+
+ if XFCheckBox2.Checked then
+ begin
+ if XFRadioGroup1.ItemIndex=0 then
+ begin
+ p_begin_date:=Filter_begin_date+ ' between  '+''''+datetostr(DateTimePicker1.DateTime)+''''+' and '+''''+datetostr(DateTimePicker2.DateTime)+'''';
+ if  FilterStr=''  then
+ FilterStr :=p_begin_date
+ else
+ FilterStr :=FilterStr + BooleanPrefix + p_begin_date;
+ end;
+
+
+ if XFRadioGroup1.ItemIndex=1 then
+ begin
+ p_end_date:=Filter_end_date+ ' between  '+''''+datetostr(DateTimePicker1.DateTime)+''''+' and '+''''+datetostr(DateTimePicker2.DateTime)+'''';
+ if  FilterStr=''  then
+ FilterStr :=p_end_date
+ else
+ FilterStr :=FilterStr + BooleanPrefix + p_end_date;
+ end;
+ end;
+    /////////// tarix araliqi////////////////////////
+
+
+
+    ///////////valyuta///////////////////////
+ p_valute :=CheckFiltered(XFCheckBox3.Checked ,Filter_valute
+ ,[DBLookupComboBox2.ListSource.DataSet.FieldByName('valute').asinteger]);
+
+ if XFCheckBox3.Checked then
+ if  FilterStr=''  then
+ FilterStr :=p_valute
+ else
+ FilterStr :=FilterStr + BooleanPrefix + p_valute;
+  /////////// valyuta////////////////////////
+
+     /////////// musteri////////////////////////
+  p_musteri :=CheckFiltered(XFCheckBox4.Checked ,Filter_musteri
+  ,[DBLookupComboBox3.ListSource.DataSet.FieldByName('id').asinteger]);
+
+  if XFCheckBox4.Checked then
+  if FilterStr='' then
+  FilterStr :=p_musteri
+  else
+  FilterStr :=FilterStr + BooleanPrefix+ P_musteri;
+   /////////// musteri////////////////////////
+
+
+
+   /////////// muddetli////////////////////////
+  if XFCheckBox6.Checked then begin
+  if XFRadioGroup2.ItemIndex=0 then begin
+  p_zaman:=CheckFiltered(XFCheckBox6.Checked ,Filter_Zaman ,[1]);
+  if FilterStr='' then
+  FilterStr :=p_zaman
+  else
+  FilterStr :=FilterStr + BooleanPrefix+ p_zaman;
+  end;
+
+  if  XFRadioGroup2.ItemIndex=1 then begin
+  p_zaman:=CheckFiltered(XFCheckBox6.Checked ,Filter_Zaman ,[2]);
+  if FilterStr='' then
+  FilterStr :=p_zaman
+  else
+  FilterStr :=FilterStr + BooleanPrefix+ p_zaman;
+  end;
+  end;
+/////////// muddetsiz////////////////////////
+
+
+
+if FilterStr='' then
+Dm_Pk_investisiya.DsMain_Contracts.sql.Text:=sql1
+else
+Dm_Pk_investisiya.DsMain_Contracts.sql.Text:=sql1+BooleanPrefix+FilterStr;
+memo1.Text:= Dm_Pk_investisiya.DsMain_Contracts.sql.Text;
+Dm_Pk_investisiya.DsMain_Contracts.close;
+Dm_Pk_investisiya.DsMain_Contracts.Open;
+
+ end;
+
+
+
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TFrm_Investisiya,
+    Class_Frm_Investisiya,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+
+end.
+

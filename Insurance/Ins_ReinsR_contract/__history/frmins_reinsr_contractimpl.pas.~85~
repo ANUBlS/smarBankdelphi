@@ -1,0 +1,252 @@
+﻿unit frmins_reinsr_contractimpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, DBCtrls, StdCtrls, XFSCtrls, ExtCtrls, Mask, ComCtrls;
+
+type
+  Tfrmins_reinsr_contract = class(TForm)
+    XFPanel1: TXFPanel;
+    XFPanel2: TXFPanel;
+    XFButton1: TXFButton;
+    XFLabel1: TXFLabel;
+    XFLabel2: TXFLabel;
+    XFLabel3: TXFLabel;
+    XFLabel4: TXFLabel;
+    XFLabel5: TXFLabel;
+    XFLabel6: TXFLabel;
+    XFLabel7: TXFLabel;
+    XFLabel8: TXFLabel;
+    XFLabel9: TXFLabel;
+    DBLookupComboBox1: TDBLookupComboBox;
+    Label1: TLabel;
+    DBLookupComboBox2: TDBLookupComboBox;
+    DateTimePicker2: TDateTimePicker;
+    DBEdit1: TDBEdit;
+    DBEdit2: TDBEdit;
+    DBEdit3: TDBEdit;
+    DBLookupComboBox3: TDBLookupComboBox;
+    DBEdit4: TDBEdit;
+    DBEdit5: TDBEdit;
+    DBEdit6: TDBEdit;
+    DBEdit7: TDBEdit;
+    DBEdit8: TDBEdit;
+    DBLookupComboBox4: TDBLookupComboBox;
+    DBMemo1: TDBMemo;
+    XFLabel10: TXFLabel;
+    XFLabel11: TXFLabel;
+    XFLabel12: TXFLabel;
+    XFLabel13: TXFLabel;
+    XFLabel14: TXFLabel;
+    XFLabel15: TXFLabel;
+    XFLabel16: TXFLabel;
+    XFLabel17: TXFLabel;
+    DBEdit9: TDBEdit;
+    DBComboBox1: TDBComboBox;
+    XFButton2: TXFButton;
+    DateTimePicker1: TDateTimePicker;
+    procedure FormCreate(Sender: TObject);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+
+    procedure FormShow(Sender: TObject);
+    procedure XFButton1Click(Sender: TObject);
+    procedure XFButton2Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  frmins_reinsr_contract: Tfrmins_reinsr_contract;
+    CID :integer;
+implementation
+
+uses dmins_reinsr_contractimpl,CommanParametrs,sboapiDataModuleImpl,SBTranslateProc;
+
+{$R *.dfm}
+   procedure InitPlugin(s:string);export;
+begin
+
+   if s='' then
+   begin
+   frmins_reinsr_contract.ShowModal;
+   end;
+  { if s='AllLost' then
+   begin
+     FrmAllLoss.showmodal;
+   end;   }
+end;
+exports
+     InitPlugin;
+
+procedure Tfrmins_reinsr_contract.FormCreate(Sender: TObject);
+begin
+dmins_reinsr_contract:=Tdmins_reinsr_contract.create(self);
+end;
+   procedure Tfrmins_reinsr_contract.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+if ord(key)=vk_escape then close
+end;
+
+procedure Tfrmins_reinsr_contract.FormShow(Sender: TObject);
+begin
+if opetion= 'ins' then
+begin
+with dmins_reinsr_contract do
+begin
+
+  ds_contracts.Close;
+  ds_contracts.SetVariable('pid',-1);
+  ds_contracts.Open;
+
+  dsins_rein_other_info.Close;
+  dsins_rein_other_info.SetVariable(':pid',-1);
+  dsins_rein_other_info.Open;
+
+DateTimePicker1.DateTime:= dmins_reinsr_contract.DSsysdat.FieldByName('tek_dat').AsDateTime;
+DateTimePicker2.DateTime:= dmins_reinsr_contract.DSsysdat.FieldByName('tek_dat').AsDateTime;
+end;
+end;
+if opetion= 'upd' then
+begin
+with dmins_reinsr_contract do
+begin
+
+  ds_contracts.Close;
+  ds_contracts.SetVariable('pid',contactid);
+  ds_contracts.Open;
+
+  dsins_rein_other_info.Close;
+  dsins_rein_other_info.SetVariable('pid',contactid);
+  dsins_rein_other_info.Open;
+
+DateTimePicker1.DateTime:= ds_contracts.FieldByName('begin_date').AsDateTime;
+DateTimePicker2.DateTime:= ds_contracts.FieldByName('end_date').AsDateTime;
+
+end;
+
+   end;
+   end;
+
+procedure Tfrmins_reinsr_contract.XFButton1Click(Sender: TObject);
+begin
+
+With dmins_reinsr_contract  do
+begin
+if opetion= 'ins' then
+begin
+
+   ds_contracts.open;
+   ds_contracts.edit;
+   dsins_rein_other_info.Open;
+   dsins_rein_other_info.Edit;
+  //ds_contracts.FieldByName('type_id').AsInteger:=DBLookupComboBox1.KeyValue;
+  ds_contracts.FieldByName('begin_date').AsDateTime:=DateTimePicker1.DateTime;
+  ds_contracts.FieldByName('end_date').AsDateTime:=DateTimePicker2.DateTime;
+  if DBLookupComboBox1.KeyValue='' then
+  begin
+    showmessage('Diqqət! Sığorta növü sahesi boşdu')
+  end;
+  if DBComboBox1.Text='' then
+  begin
+     showmessage('Diqqət! Təkrarsığorta forması  sahəsi boşdu')
+  end;
+if DBLookupComboBox3.KeyValue='' then
+  begin
+    showmessage('Diqqət! Sığortalı sahesi boşdu')
+  end;
+  if DBLookupComboBox4.Text='' then
+  begin
+     showmessage('Diqqət! Sığortaçı(təkrarsığortalı)  sahəsi boşdu')
+  end;
+
+   end;
+   if DBLookupComboBox2.KeyValue='' then
+  begin
+    showmessage('Diqqət! Təkrarsığortaçı sahesi boşdu')
+  end;
+  if DBEdit9.Text='' then
+  begin
+     showmessage('Diqqət! Polis № sahəsi boşdu')
+  end;
+   if DBEdit1.Text='' then
+  begin
+     showmessage('Diqqət! Azadolma məbləği sahəsi boşdu')
+  end;
+  if DBEdit3.Text='' then
+  begin
+     showmessage('Diqqət! Orijinal ümumi sığorta(t.s) məbləği sahəsi boşdu')
+  end;
+  if DBEdit8.Text='' then
+  begin
+     showmessage('Diqqət!Təkrarsığorta komissiyası sahəsi boşdu')
+  end;
+  if DBEdit2.Text='' then
+  begin
+     showmessage('Diqqət! Sığortaçının(t.sığortalının) payı sahəsi boşdu')
+  end;
+  if DBEdit4.Text='' then
+  begin
+     showmessage('Diqqət! Təkrarsığortaçının payı sahəsi boşdu')
+  end;
+  if DBEdit6.Text='' then
+  begin
+     showmessage('Diqqət! Təkrarsığortaçının brutto haqqı sahəsi boşdu')
+  end;
+  if DBEdit7.Text='' then
+  begin
+     showmessage('Diqqət! Sığorta predmetinin bazar dəyəri sahəsi boşdu')
+  end;
+  if DBEdit5.Text='' then
+  begin
+     showmessage('Diqqət!Təmiz təkrarsığorta haqqı sahəsi boşdu')
+  end;
+       if DBMemo1.Text='' then
+       begin
+       showmessage('Diqqət!Sığorta predmeti barədə məlumat sahəsi boşdu')
+   end;
+   end;
+   end;
+   //frmins_reinsr_contract.Close;
+// Reinsgrid.refresh;
+if opetion= 'upd' then
+begin
+ ds_contracts.open;
+ ds_contracts.edit;
+dsins_rein_other_info.Open;
+dsins_rein_other_info.Edit;
+ ds_contracts.FieldByName('type_id').AsInteger:=DBLookupComboBox1.KeyValue;
+  ds_contracts.FieldByName('begin_date').AsDateTime:=DateTimePicker1.DateTime;
+  ds_contracts.FieldByName('end_date').AsDateTime:=DateTimePicker2.DateTime;
+
+end;
+      ds_contracts.Post;
+      ds_contracts.RefreshRecord;
+      CID := ds_contracts.FieldByName('id').asInteger;
+
+
+          dsins_rein_other_info.FieldByName('cid').asInteger:=CID;
+          dsins_rein_other_info.Post;
+          dsins_rein_other_info.RefreshRecord;
+
+      frmins_reinsr_contract.Close;
+      Reinsgrid.refresh;
+
+
+end;
+
+end;
+
+
+
+procedure Tfrmins_reinsr_contract.XFButton2Click(Sender: TObject);
+begin
+close;
+end;
+
+initialization
+ frmins_reinsr_contract :=Tfrmins_reinsr_contract.Create(Application);
+end.

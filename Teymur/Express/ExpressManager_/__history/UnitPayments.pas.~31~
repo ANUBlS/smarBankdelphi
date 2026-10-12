@@ -1,0 +1,139 @@
+﻿unit UnitPayments;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls, CMCurrencyEdit, DBCtrls, CMDBSearchEdit,
+  SearchEdit;
+
+type
+  TFormPayments = class(TForm)
+    Panel1: TPanel;
+    EditPayments: TEdit;
+    Button1: TButton;
+    Button2: TButton;
+    Label1: TLabel;
+    CMCurrencyEdit1: TCMCurrencyEdit;
+    Label4: TLabel;
+    DBLookupComboBox2: TDBLookupComboBox;
+    Label5: TLabel;
+    FilialName: TEdit;
+    Label6: TLabel;
+    EditDescription: TEdit;
+    Label2: TLabel;
+    procedure FormShow(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+  private
+    { Private declarations }
+  public
+     var exid:integer;
+         FForm:integer;
+
+  end;
+
+var
+  FormPayments: TFormPayments;
+
+implementation
+uses ExpDataModuleUnit,ExpCustomersTypeUnit;
+
+{$R *.dfm}
+
+procedure TFormPayments.Button1Click(Sender: TObject);
+var
+    val_cod    :Integer;
+    accid      :Variant;
+    amount     :real;
+    paymentname:string;
+    filname    :string;
+    v_id       :Integer;
+
+
+begin
+  v_id:=0;
+  val_cod:=DBLookupComboBox2.KeyValue;
+  amount :=CMCurrencyEdit1.Value;
+  paymentname:=EditPayments.Text;
+  filname    :=FilialName.Text;
+
+
+  IF FForm=0 THEN
+  BEGIN
+    ExpDataModule.EXPESSPAC.CallProcedure('exp_payments_insert',
+                                        [ 'batchid'      ,v_id
+                                         ,'v_exid'       ,exid
+                                         ,'v_paymentname',paymentname
+                                         ,'v_accid'      ,accid
+                                         ,'v_val_cod'    ,val_cod
+                                         ,'v_amount'     ,amount
+                                         ,'v_filname'    ,filname] );
+
+   v_id:=ExpDataModule.EXPESSPAC.GetParameter(0);
+  END
+
+  ELSE
+    BEGIN
+      v_id:=ExpDataModule.ExpBatchsDataSet.FieldByName('id').AsInteger;
+      ExpDataModule.EXPESSPAC.CallProcedure('exp_payments_update',
+                                           ['batchid'      ,v_id
+                                           ,'v_paymentname',paymentname
+                                           ,'v_accid'      ,accid
+                                           ,'v_val_cod'    ,val_cod
+                                           ,'v_amount'     ,amount] ) ;
+
+    END;
+
+  FormPayments.Close;
+  ExpCustomersType.Close;
+
+  ExpDataModule.ExpBatchsDataSet.Refresh;
+  ExpDataModule.ExpBatchsDataSet.Locate('ID',V_ID,[]);
+end;
+
+procedure TFormPayments.Button2Click(Sender: TObject);
+begin
+  Close;
+end;
+
+procedure TFormPayments.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  ExpDataModule.ExpSetDataSet.Filter:='';
+  ExpDataModule.ExpSetDataSet.Filtered:=False;
+end;
+
+procedure TFormPayments.FormShow(Sender: TObject);
+begin
+  case FForm of
+  0:begin
+      with  ExpDataModule do
+      begin
+        CMCurrencyEdit1.Value:=0.00;
+        FilialName.Text  :=FilialDataSet.FieldByName('name').AsString;
+        EditPayments.Text:=ExpCustomersType.typetext;
+        DBLookupComboBox2.KeyValue:=0;
+        EditDescription.Text:=ExpSetDataSet.FieldByName('description').AsString;
+      end;
+    end;
+  1:begin
+      with ExpDataModule do
+      begin
+        ExpSetDataSet.Filter      :='where id='+ExpBatchsDataSet.FieldByName('optype').AsString;
+        ExpSetDataSet.Filtered    :=true;
+        FilialName.Text           :=ExpDataModule.FilialDataSet.FieldByName('name').AsString;
+        EditPayments.Text         :=ExpSetDataSet.FieldByName('name').AsString;
+        DBLookupComboBox2.KeyValue:=ExpBatchsDataSet.FieldByName('val_cod').AsInteger;
+        CMCurrencyEdit1.Value     :=ExpBatchsDataSet.FieldByName('amount').AsInteger;
+      end;
+    end;
+
+  end;
+
+
+
+
+end;
+
+end.

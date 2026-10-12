@@ -1,0 +1,554 @@
+object Frmrep: TFrmrep
+  Left = 338
+  Top = 200
+  Width = 443
+  Height = 249
+  BorderIcons = [biSystemMenu]
+  Color = clBtnFace
+  Font.Charset = RUSSIAN_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poScreenCenter
+  OnCanResize = FormCanResize
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  OnKeyPress = FormKeyPress
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Gauge1: TGauge
+    Left = 1
+    Top = 182
+    Width = 267
+    Height = 32
+    BackColor = clAqua
+    Color = clRed
+    ForeColor = clYellow
+    ParentColor = False
+    Progress = 0
+    Visible = False
+  end
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 435
+    Height = 60
+    Align = alTop
+    TabOrder = 0
+    object GroupBox1: TGroupBox
+      Left = 1
+      Top = 1
+      Width = 216
+      Height = 58
+      Align = alLeft
+      Caption = 'Валйута'
+      TabOrder = 0
+      object CheckBox1: TCheckBox
+        Left = 5
+        Top = 38
+        Width = 97
+        Height = 17
+        Caption = 'Тятбиг ет'
+        TabOrder = 0
+      end
+      object DBLookupComboboxEh1: TDBLookupComboboxEh
+        Left = 5
+        Top = 14
+        Width = 204
+        Height = 21
+        DropDownBox.Sizable = True
+        EditButtons = <>
+        KeyField = 'VALUTE'
+        ListField = 'VALU_NAME'
+        ListSource = ValutesDatSrc
+        TabOrder = 1
+        Visible = True
+      end
+    end
+    object GroupBox3: TGroupBox
+      Left = 217
+      Top = 1
+      Width = 216
+      Height = 58
+      Align = alLeft
+      Caption = 'Филиал'
+      TabOrder = 1
+      object DBLookupComboboxEh2: TDBLookupComboboxEh
+        Left = 5
+        Top = 14
+        Width = 204
+        Height = 21
+        DropDownBox.Sizable = True
+        EditButtons = <>
+        KeyField = 'ID'
+        ListField = 'NAME'
+        ListSource = FilialsDatSrc
+        TabOrder = 0
+        Visible = True
+      end
+      object CheckBox2: TCheckBox
+        Left = 6
+        Top = 38
+        Width = 97
+        Height = 17
+        Caption = 'Тятбиг ет'
+        TabOrder = 1
+      end
+    end
+  end
+  object Panel5: TPanel
+    Left = 0
+    Top = 60
+    Width = 435
+    Height = 60
+    Align = alTop
+    TabOrder = 1
+    object GroupBox7: TGroupBox
+      Left = 1
+      Top = 1
+      Width = 216
+      Height = 58
+      Align = alLeft
+      Caption = 'Боржаланын типи'
+      TabOrder = 0
+      object CheckBox7: TCheckBox
+        Left = 5
+        Top = 38
+        Width = 97
+        Height = 17
+        Caption = 'Тятбиг ет'
+        TabOrder = 0
+      end
+      object DBLookupComboboxEh7: TDBLookupComboboxEh
+        Left = 5
+        Top = 14
+        Width = 204
+        Height = 21
+        DropDownBox.Sizable = True
+        EditButtons = <>
+        KeyField = 'ID'
+        ListField = 'DESCRIPTION'
+        ListSource = CustTypeDatSrc
+        TabOrder = 1
+        Visible = True
+      end
+    end
+    object GroupBox9: TGroupBox
+      Left = 217
+      Top = 1
+      Width = 216
+      Height = 58
+      Align = alLeft
+      Caption = 'Боржаланын категорйасы'
+      TabOrder = 1
+      object CheckBox8: TCheckBox
+        Left = 5
+        Top = 38
+        Width = 97
+        Height = 17
+        Caption = 'Тятбиг ет'
+        TabOrder = 0
+      end
+      object DBLookupComboboxEh8: TDBLookupComboboxEh
+        Left = 5
+        Top = 14
+        Width = 204
+        Height = 21
+        DropDownBox.Sizable = True
+        EditButtons = <>
+        KeyField = 'ID'
+        ListField = 'DESCRIPION'
+        ListSource = PersonsDatSrc
+        TabOrder = 1
+        Visible = True
+      end
+    end
+  end
+  object BitBtn1: TBitBtn
+    Left = 271
+    Top = 186
+    Width = 75
+    Height = 25
+    Caption = 'Гябул'
+    TabOrder = 2
+    OnClick = BitBtn1Click
+  end
+  object BitBtn2: TBitBtn
+    Left = 359
+    Top = 186
+    Width = 75
+    Height = 25
+    Caption = 'Имтина'
+    TabOrder = 3
+    OnClick = BitBtn2Click
+  end
+  object Panel9: TPanel
+    Left = 0
+    Top = 120
+    Width = 435
+    Height = 60
+    Align = alTop
+    TabOrder = 4
+    object GroupBox10: TGroupBox
+      Left = 1
+      Top = 1
+      Width = 216
+      Height = 58
+      Align = alLeft
+      Caption = 'Кредитин новц'
+      TabOrder = 0
+      object CheckBox10: TCheckBox
+        Left = 5
+        Top = 38
+        Width = 97
+        Height = 17
+        Caption = 'Тятбиг ет'
+        TabOrder = 0
+      end
+      object DBLookupComboboxEh9: TDBLookupComboboxEh
+        Left = 5
+        Top = 14
+        Width = 204
+        Height = 21
+        DropDownBox.Sizable = True
+        EditButtons = <>
+        KeyField = 'ID'
+        ListField = 'DESCRIPTION'
+        ListSource = CredTypeDatScr
+        TabOrder = 1
+        Visible = True
+      end
+    end
+    object GroupBox11: TGroupBox
+      Left = 217
+      Top = 1
+      Width = 217
+      Height = 58
+      Align = alClient
+      Caption = 'Тарих'
+      TabOrder = 1
+      object Label1: TLabel
+        Left = 7
+        Top = 35
+        Width = 41
+        Height = 13
+        Caption = 'Сон тарих'
+      end
+      object Label2: TLabel
+        Left = 6
+        Top = 15
+        Width = 68
+        Height = 13
+        Caption = 'Башланьыж тарих'
+      end
+      object BeginDate: TDateTimePicker
+        Left = 92
+        Top = 7
+        Width = 116
+        Height = 21
+        CalAlignment = dtaLeft
+        Date = 39134.682371956
+        Time = 39134.682371956
+        DateFormat = dfShort
+        DateMode = dmComboBox
+        Kind = dtkDate
+        ParseInput = False
+        TabOrder = 0
+      end
+      object EndDate: TDateTimePicker
+        Left = 92
+        Top = 33
+        Width = 116
+        Height = 21
+        CalAlignment = dtaLeft
+        Date = 39134.682371956
+        Time = 39134.682371956
+        DateFormat = dfShort
+        DateMode = dmComboBox
+        Kind = dtkDate
+        ParseInput = False
+        TabOrder = 1
+      end
+    end
+  end
+  object NLSLocalizer1: TNLSLocalizer
+    Caption = 'Щесабат'
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    Left = 8
+    Top = 264
+  end
+  object Valutes: TOracleDataSet
+    SQL.Strings = (
+      'select valute,valu_name from sb_avalute')
+    Session = CMDataModule.CMSession
+    Left = 5
+    Top = 184
+    object ValutesVALUTE: TIntegerField
+      FieldName = 'VALUTE'
+      Required = True
+    end
+    object ValutesVALU_NAME: TStringField
+      FieldName = 'VALU_NAME'
+      Size = 25
+    end
+  end
+  object Filials: TOracleDataSet
+    SQL.Strings = (
+      'select id,name from sb_filial')
+    Session = CMDataModule.CMSession
+    Left = 36
+    Top = 184
+    object FilialsID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object FilialsNAME: TStringField
+      FieldName = 'NAME'
+      Size = 90
+    end
+  end
+  object CustomerTypes: TOracleDataSet
+    SQL.Strings = (
+      'select id,description from cm_categories')
+    Session = CMDataModule.CMSession
+    Left = 65
+    Top = 185
+    object CustomerTypesID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object CustomerTypesDESCRIPTION: TStringField
+      FieldName = 'DESCRIPTION'
+      Size = 128
+    end
+  end
+  object Persons: TOracleDataSet
+    SQL.Strings = (
+      'select * from cm_persons')
+    Session = CMDataModule.CMSession
+    Left = 95
+    Top = 184
+    object PersonsID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object PersonsNAME: TStringField
+      FieldName = 'NAME'
+      Required = True
+      Size = 32
+    end
+    object PersonsDESCRIPION: TStringField
+      FieldName = 'DESCRIPION'
+      Size = 64
+    end
+  end
+  object CreditTypes: TOracleDataSet
+    SQL.Strings = (
+      'select *from cm_credittypes')
+    Session = CMDataModule.CMSession
+    Left = 126
+    Top = 184
+    object CreditTypesID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object CreditTypesRENEWABLESTATUS: TFloatField
+      FieldName = 'RENEWABLESTATUS'
+      Required = True
+    end
+    object CreditTypesITYPE: TFloatField
+      FieldName = 'ITYPE'
+      Required = True
+    end
+    object CreditTypesICLASS: TFloatField
+      FieldName = 'ICLASS'
+      Required = True
+    end
+    object CreditTypesDESCRIPTION: TStringField
+      FieldName = 'DESCRIPTION'
+      Size = 128
+    end
+    object CreditTypesCARDTYPE: TFloatField
+      FieldName = 'CARDTYPE'
+    end
+  end
+  object Results: TOracleDataSet
+    SQL.Strings = (
+      'select '
+      '       p.numberofcredit,b.name,'
+      '       p.dateofconclusion,'
+      '       p.duedatefirstcontract,'
+      '       p.annualyinterestrate,'
+      
+        '       cm_sd.get_creditbalance (p.ID) AS balance ,av.val_name ,p' +
+        'er.descripion'
+      
+        '    ,t.rest_debit dovrunevveli,t.erest_debit dovrunsonu,t.rest_c' +
+        'redit odenish,t.erest_credit transhe,'
+      
+        '    trunc(months_between(p.duedatefirstcontract, p.dateofconclus' +
+        'ion))||'#39' aya qeder'#39' period'
+      
+        'from cm_portfolio p,cm_boorowerinfo b,  sb_avalute av, cm_person' +
+        's per, cm_turnover t'
+      'where p.id=b.creditid'
+      
+        'and p.currency=av.valute  and per.id = p.personaltype and p.id=t' +
+        '.creditid')
+    QBEDefinition.QBEFieldDefs = {
+      040000000D0000000E0000004E554D4245524F46435245444954010000000000
+      040000004E414D4501000000000010000000444154454F46434F4E434C555349
+      4F4E01000000000014000000445545444154454649525354434F4E5452414354
+      01000000000013000000414E4E55414C59494E54455245535452415445010000
+      0000000700000042414C414E43450100000000000800000056414C5F4E414D45
+      0100000000000A00000044455343524950494F4E0100000000000C000000444F
+      5652554E455656454C490100000000000A000000444F5652554E534F4E550100
+      00000000070000004F44454E495348010000000000070000005452414E534845
+      01000000000006000000504552494F44010000000000}
+    Cursor = crSQLWait
+    Session = CMDataModule.CMSession
+    Left = 157
+    Top = 186
+    object ResultsNUMBEROFCREDIT: TStringField
+      DisplayLabel = 'Мцгавилянин №-си'
+      FieldName = 'NUMBEROFCREDIT'
+      Size = 32
+    end
+    object ResultsNAME: TStringField
+      DisplayLabel = 'Мцштяринин ады'
+      FieldName = 'NAME'
+      Size = 90
+    end
+    object ResultsDATEOFCONCLUSION: TDateTimeField
+      DisplayLabel = 'Ачылма тарихи'
+      FieldName = 'DATEOFCONCLUSION'
+      Required = True
+    end
+    object ResultsDUEDATEFIRSTCONTRACT: TDateTimeField
+      DisplayLabel = 'Баьланма тарихи'
+      FieldName = 'DUEDATEFIRSTCONTRACT'
+      Required = True
+    end
+    object ResultsANNUALYINTERESTRATE: TFloatField
+      DisplayLabel = '%'
+      FieldName = 'ANNUALYINTERESTRATE'
+      Required = True
+    end
+    object ResultsBALANCE: TFloatField
+      DisplayLabel = 'Баланс'
+      FieldName = 'BALANCE'
+    end
+    object ResultsVAL_NAME: TStringField
+      DisplayLabel = 'Valute'
+      FieldName = 'VAL_NAME'
+      Size = 10
+    end
+    object ResultsDESCRIPION: TStringField
+      DisplayLabel = 'статус'
+      FieldName = 'DESCRIPION'
+      Size = 64
+    end
+    object ResultsDOVRUNEVVELI: TFloatField
+      DisplayLabel = 'дюврцн яввялиня галыг'
+      FieldName = 'DOVRUNEVVELI'
+      Required = True
+    end
+    object ResultsDOVRUNSONU: TFloatField
+      DisplayLabel = 'DOVRUNEVVдюврцн сонуна галыг'
+      FieldName = 'DOVRUNSONU'
+      Required = True
+    end
+    object ResultsODENISH: TFloatField
+      DisplayLabel = 'Юдягтшляр'
+      FieldName = 'ODENISH'
+    end
+    object ResultsTRANSHE: TFloatField
+      DisplayLabel = 'траншлар'
+      FieldName = 'TRANSHE'
+    end
+    object ResultsPERIOD: TStringField
+      FieldName = 'PERIOD'
+      Size = 50
+    end
+  end
+  object ExcelExport: TCMExcelExport
+    StyleColumnWidth = cwDefault
+    ColumnWidth = 0
+    FontTitles.Charset = RUSSIAN_CHARSET
+    FontTitles.Color = clWindowText
+    FontTitles.Height = -11
+    FontTitles.Name = 'Azl Sans Serif'
+    FontTitles.Style = []
+    OrientationTitles = 0
+    FontData.Charset = RUSSIAN_CHARSET
+    FontData.Color = clWindowText
+    FontData.Height = -11
+    FontData.Name = 'Azl Sans Serif'
+    FontData.Style = []
+    FontSummary.Charset = DEFAULT_CHARSET
+    FontSummary.Color = clWindowText
+    FontSummary.Height = -11
+    FontSummary.Name = 'MS Sans Serif'
+    FontSummary.Style = []
+    SummarySelection = ssNone
+    SummaryCalculation = scSUM
+    Left = 232
+    Top = 184
+  end
+  object CredTypeDatScr: TDataSource
+    DataSet = CreditTypes
+    Left = 130
+    Top = 216
+  end
+  object PersonsDatSrc: TDataSource
+    DataSet = Persons
+    Left = 98
+    Top = 215
+  end
+  object CustTypeDatSrc: TDataSource
+    DataSet = CustomerTypes
+    Left = 67
+    Top = 217
+  end
+  object FilialsDatSrc: TDataSource
+    DataSet = Filials
+    Left = 37
+    Top = 216
+  end
+  object ValutesDatSrc: TDataSource
+    DataSet = Valutes
+    Left = 4
+    Top = 216
+  end
+  object cm_sd: TOraclePackage
+    Session = CMDataModule.CMSession
+    PackageName = 'cm_sd'
+    ParameterMode = pmNamed
+    Cursor = crSQLWait
+    Left = 195
+    Top = 186
+  end
+  object Active: TOracleDataSet
+    SQL.Strings = (
+      
+        'select p.id from cm_portfolio p where nvl(p.duedatelastcontract,' +
+        'p.duedatefirstcontract)>:dat'
+      ''
+      ''
+      ''
+      ''
+      '')
+    Variables.Data = {0300000001000000040000003A4441540C0000000000000000000000}
+    Session = CMDataModule.CMSession
+    Left = 91
+    Top = 26
+  end
+end

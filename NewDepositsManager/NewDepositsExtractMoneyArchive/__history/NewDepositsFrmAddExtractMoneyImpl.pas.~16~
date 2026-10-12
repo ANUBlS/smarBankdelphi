@@ -1,0 +1,176 @@
+﻿unit NewDepositsFrmAddExtractMoneyImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, NLSDialogs,
+  StdCtrls, Mask, DBCtrlsEh, DBLookupEh, ExtCtrls, ComCtrls, CMCurrencyEdit,
+   ActnList, DBGridEh, XFSCtrls;
+
+type
+  TNewDepositsFrmAddExtractMoney = class(TForm)
+    ActionList1: TActionList;
+    Actiontr: TAction;
+    XFPanel1: TXFPanel;
+    XFGroupBox1: TXFGroupBox;
+    XFPanel2: TXFPanel;
+    XFPanel3: TXFPanel;
+    DBEditClient: TDBEditEh;
+    XFPanel5: TXFPanel;
+    XFStaticText1: TXFStaticText;
+    XFPanel4: TXFPanel;
+    XFPanel6: TXFPanel;
+    XFStaticText2: TXFStaticText;
+    XFPanel7: TXFPanel;
+    XFStaticText3: TXFStaticText;
+    XFPanel8: TXFPanel;
+    EdClientDebit: TCMCurrencyEdit;
+    XFGroupBox2: TXFGroupBox;
+    XFPanel9: TXFPanel;
+    XFPanel10: TXFPanel;
+    DBEditContract: TDBEditEh;
+    XFPanel11: TXFPanel;
+    XFStaticText4: TXFStaticText;
+    XFPanel12: TXFPanel;
+    XFPanel13: TXFPanel;
+    XFStaticText5: TXFStaticText;
+    XFPanel14: TXFPanel;
+    XFStaticText6: TXFStaticText;
+    XFPanel15: TXFPanel;
+    EdMainDebit: TCMCurrencyEdit;
+    XFGroupBox3: TXFGroupBox;
+    XFPanel16: TXFPanel;
+    XFPanel17: TXFPanel;
+    DBEditInterest: TDBEditEh;
+    XFPanel18: TXFPanel;
+    XFStaticText7: TXFStaticText;
+    XFPanel19: TXFPanel;
+    XFPanel20: TXFPanel;
+    XFStaticText8: TXFStaticText;
+    XFPanel21: TXFPanel;
+    XFStaticText9: TXFStaticText;
+    XFPanel22: TXFPanel;
+    EdIntDebit: TCMCurrencyEdit;
+    XFPanel23: TXFPanel;
+    XFPanel24: TXFPanel;
+    XFStaticText10: TXFStaticText;
+    XFButton1: TXFButton;
+    XFButton2: TXFButton;
+    XFPanel25: TXFPanel;
+    DTPOperation: TDateTimePicker;
+    Action1: TAction;
+    DBEditEh1: TDBEditEh;
+    DBEditEh2: TDBEditEh;
+    DBEditEh3: TDBEditEh;
+    procedure FormCanResize(Sender: TObject; var NewWidth, NewHeight: Integer;
+      var Resize: Boolean);
+    procedure FormCreate(Sender: TObject);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormShow(Sender: TObject);
+    procedure ActiontrExecute(Sender: TObject);
+    procedure ActiontrUpdate(Sender: TObject);
+    procedure AccnameLictCbChange(Sender: TObject);
+    procedure AccountListCBChange(Sender: TObject);
+    procedure XFButton2Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  NewDepositsFrmAddExtractMoney: TNewDepositsFrmAddExtractMoney;
+
+implementation
+
+{$R *.dfm}
+  uses NewDepositsDMExtractMoneyImpl,NewCommonDeclsImpl,SBTranslateproc,sboapiDataModuleimpl;
+procedure TNewDepositsFrmAddExtractMoney.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+Resize := False
+end;
+
+procedure TNewDepositsFrmAddExtractMoney.FormCreate(Sender: TObject);
+begin
+SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TNewDepositsFrmAddExtractMoney.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+ if Ord(Key) = VK_ESCAPE then Close
+end;
+
+procedure TNewDepositsFrmAddExtractMoney.FormShow(Sender: TObject);
+begin
+   NewDepositsDMExtractMoney.DepositInfo.Refresh;
+   DTPOperation.DateTime := Get_BankDate;
+   EdMainDebit.Value := 0;
+   EdIntDebit.Value := 0;
+end;
+
+
+procedure TNewDepositsFrmAddExtractMoney.XFButton2Click(Sender: TObject);
+begin
+  Close
+end;
+
+procedure TNewDepositsFrmAddExtractMoney.AccnameLictCbChange(Sender: TObject);
+begin
+  //AccountListCB.KeyValue := AccnameLictCb.KeyValue
+end;
+
+procedure TNewDepositsFrmAddExtractMoney.AccountListCBChange(Sender: TObject);
+begin
+  //AccnameLictCb.KeyValue:= AccountListCB.KeyValue
+end;
+
+procedure TNewDepositsFrmAddExtractMoney.ActiontrExecute(Sender: TObject);
+resourcestring
+  rsTransactionsWillProcessed = 'Depozitin ödənilməsi ...';
+Var p_accid :Integer;
+    CommitExtractMoney :Boolean;
+
+begin
+   p_accid  := NewDepositsDMExtractMoney.CustAcc.FieldByName('CLIENTACCID').AsInteger;
+
+    with NewDepositsDMExtractMoney,dm_payment do
+     CallProcedure('WithDrawMoney',['ContractID',Get_SelectedContID,
+                                    'P_AccID',p_accid,
+                                    'HDate',Get_BankDate,
+                                    'FacticalDebtWithdraw',EdMainDebit.Value,
+                                    'InterestDebtWithdraw',EdIntDebit.value,
+                                    'ClientDebtWithdraw',EdClientDebit.Value,
+                                    'showTransaction',0]);
+
+    try
+    CommitExtractMoney := TrDelayed_Show(Self,rsTransactionsWillProcessed);
+
+    Update;
+
+    NewDepositsDMExtractMoney.DM_PAYMENT.CallProcedure('CommitWithDrawMoney',[
+       'DoCommit',CommitExtractMoney
+    ]);
+
+    if CommitExtractMoney then
+    Self.ModalResult := mrOk;
+    Self.Update;
+  except
+
+
+    NewDepositsDMExtractMoney.DM_PAYMENT.CallProcedure('CommitWithDrawMoney',['DoCommit',
+        False
+    ]);
+
+    raise;
+
+  end;
+
+  end;
+
+  procedure TNewDepositsFrmAddExtractMoney.ActiontrUpdate(Sender: TObject);
+begin
+   with (Sender as TAction) do
+         Enabled := (EdMainDebit.Value + EdIntDebit.Value) > 0
+end;
+end.

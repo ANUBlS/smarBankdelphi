@@ -1,0 +1,613 @@
+unit ThomsonImpl1;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActiveX, AxCtrls, ThomsonProj1_TLB, StdVcl, Db, OracleData, Grids,
+  DBGrids, ExtCtrls, Excel97, OleServer, StdCtrls, Oracle, ImgList,
+  ComCtrls, ToolWin;
+
+type
+  TThomson = class(TActiveForm, IThomson)
+    Panel1: TPanel;
+    DBGrid1: TDBGrid;
+    DataSource1: TDataSource;
+    OpenDialog1: TOpenDialog;
+    ExcelApplication1: TExcelApplication;
+    ExcelWorksheet1: TExcelWorksheet;
+    ExcelWorkbook1: TExcelWorkbook;
+    OracleDataSet1: TOracleDataSet;
+    OracleDataSet2: TOracleDataSet;
+    OracleDataSet3: TOracleDataSet;
+    OraclePackage1: TOraclePackage;
+    OraclePackage2: TOraclePackage;
+    ToolBar1: TToolBar;
+    ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
+    ImageList1: TImageList;
+    ToolButton3: TToolButton;
+    ToolButton4: TToolButton;
+    ToolButton5: TToolButton;
+    ToolButton6: TToolButton;
+    procedure Button1Click(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+    procedure Button3Click(Sender: TObject);
+    procedure ToolButton1Click(Sender: TObject);
+    procedure ToolButton3Click(Sender: TObject);
+    procedure ToolButton5Click(Sender: TObject);
+  private
+    { Private declarations }
+    FEvents: IThomsonEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+  public
+    { Public declarations }
+    procedure Initialize; override;
+  end;
+
+implementation
+
+uses ComObj, ComServ,sboapiDataModuleImpl;
+
+{$R *.DFM}
+
+{ TThomson }
+
+procedure TThomson.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_ThomsonPage); }
+end;
+
+procedure TThomson.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as IThomsonEvents;
+end;
+
+procedure TThomson.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TThomson.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TThomson.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TThomson.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TThomson.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TThomson.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TThomson.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TThomson.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TThomson.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TThomson.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TThomson.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TThomson.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TThomson.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TThomson.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TThomson.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TThomson.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TThomson.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TThomson.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TThomson.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TThomson._Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TThomson.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TThomson.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TThomson.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TThomson.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TThomson.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TThomson.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TThomson.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TThomson.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TThomson.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TThomson.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TThomson.Set_AxBorderStyle(Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TThomson.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TThomson.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TThomson.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TThomson.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TThomson.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TThomson.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TThomson.Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TThomson.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TThomson.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TThomson.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TThomson.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TThomson.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TThomson.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+procedure TThomson.Button1Click(Sender: TObject);
+const RootCell = 2;
+var
+    V, Sheet, Sheets  :Variant;
+    Row: Integer;
+    a,VAL_NAME:string;
+    F:boolean;
+    i:char;
+    say,k:integer;
+begin
+  if not OpenDialog1.Execute then Exit;
+  V:=ExcelApplication1.Application;
+  ExcelApplication1.Connect;
+   try
+     V.Workbooks.Open(OpenDialog1.FileName);
+     Sheet := V.Workbooks[1].Worksheets['ILENTRIES'];
+     Sheets := V.Sheets;
+
+     OracleDataSet2.close;
+     OracleDataSet2.Open;
+     OracleDataSet1.Open;
+     OracleDataSet1.First;
+     with OracleDataSet1 do
+     begin
+       say:=1;
+       for Row:=4 to Sheet.cells.CurrentRegion.Rows.Count do
+       begin
+         F:=False;
+         a:=Sheet.cells[Row,1];
+         for i:='0' to '9' do
+         if a[1]=i then F:=true;
+         if F then
+         begin
+           Insert;
+           Val_Name:=Sheet.cells[Row,7];
+           FieldByName('TRANS').AsInteger                := Sheet.cells[Row,1];
+           FieldByName('ACCNUM').Asstring                := Sheet.cells[Row,2];
+           FieldByName('ACCNUM').Asstring:=FieldByName('ACCNUM').Asstring+VAL_NAME;
+           FieldByName('DEBIT').AsString                 := Sheet.cells[Row,3];
+           FieldByName('TRADE').AsDateTime               := Sheet.cells[Row,4];
+           FieldByName('SETTLEDAT').AsDateTime           := Sheet.cells[Row,5];
+           FieldByName('POSTING').AsDateTime             := Sheet.cells[Row,6];
+           FieldByName('SECURITY').AsString              := Sheet.cells[Row,7];
+           FieldByName('POSTEDAMT').AsFloat              := Sheet.cells[Row,8];
+           FieldByName('REPORT1').AsString               := Sheet.cells[Row,9];
+           FieldByName('POSTEDAMT1').AsFloat             := Sheet.cells[Row,10];
+           FieldByName('SECRPT1').AsFloat                := Sheet.cells[Row,11];
+           FieldByName('TRANSACTION_REMARKS').AsString   := Sheet.cells[Row,12];
+           FieldByName('ID').AsInteger                   :=say;
+
+           Post;
+           inc(say);
+         end;
+       end;
+       Next;
+     end;
+     OracleDataSet3.Close;
+     OracleDataSet3.Open;
+     for k:=1 to OracleDataSet3.RecordCount do
+       begin
+         OraclePackage2.CallProcedure('loops',[OracleDataSet3.FieldByName('TRANS').AsInteger]);
+         OracleDataSet3.Next;
+       end;
+     oracledataset1.refresh;
+   finally
+     ExcelApplication1.Quit;
+     ExcelApplication1.Disconnect;
+   end;
+end;
+
+
+
+(*const RootCell = 2;
+             n =12 ;
+var
+    V, Sheet, Sheets  :Variant;
+    Row: Integer;
+    a,b: string;
+    c:array[1..n]of string;
+    d:char;
+    F:boolean;
+    i,j,say,Dey,ab,k:integer;
+
+begin
+  if not OpenDialog1.Execute then Exit;
+  V:=ExcelApplication1.Application;
+  ExcelApplication1.Connect;
+   try
+     V.Workbooks.Open(OpenDialog1.FileName);
+     Sheet := V.Workbooks[1].Worksheets['ILENTRIES'];
+     Sheets := V.Sheets;
+     OracleDataSet2.close;
+     OracleDataSet2.Open;
+     OracleDataSet1.Open;
+
+       i:=1;
+       d:='"';
+       say:=1;
+       for Row:=5 to Sheet.cells.CurrentRegion.Rows.Count do
+       begin
+         A:=Sheet.cells[Row,1];
+         if a[1] in ['0'..'9'] then
+         begin
+           b:=a;
+           j:=1;
+           c[j]:='';
+           for i:=1 to length(b) do
+           begin
+             if (b[i] <> ',') and (b[i]<>'"')  then c[j]:=c[j]+b[i];
+             if b[i] in [',','"']  then
+             begin
+               if (c[j]<>'') and (j<=n-1) then j:=j+1;
+               if i<length(b) then c[j]:='';
+             end;
+           end;
+           with OracleDataSet1 do
+              begin
+                Insert;
+                FieldByName('TRANS').AsInteger              :=StrToInt(c[1]);
+                FieldByName('ACCNUM').AsString              :=c[2];
+                FieldByName('DEBIT').AsString               := c[3];
+                FieldByName('TRADE').AsDateTime             :=StrToDate(c[4]);
+                FieldByName('SETTLEDAT').AsDateTime         :=StrToDate(c[5]);
+                FieldByName('POSTING').AsDateTime           :=StrToDate(c[6]);
+                FieldByName('SECURITY').AsString            := c[7];
+                FieldByName('POSTEDAMT').AsFloat            :=StrToFloat(c[8]);
+                FieldByName('REPORT1').AsString             :=c[9];
+                FieldByName('POSTEDAMT1').AsFloat           :=StrToFloat(c[10]);
+                FieldByName('SECRPT1').AsFloat              :=StrToFloat(c[11]);
+                FieldByName('TRANSACTION_REMARKS').AsString := c[12];
+                FieldByName('ID').AsInteger                 :=say;
+               Post;
+               Next;
+               Inc(say);
+              end;
+
+       end;
+     end;
+     oracledataset1.refresh;
+   finally
+     ExcelApplication1.Quit;
+     ExcelApplication1.Disconnect;
+   end;    *)
+
+
+procedure TThomson.Button2Click(Sender: TObject);
+var a:integer;
+begin
+  while not OracleDataSet1.Eof do
+  begin
+    if a<> OracleDataSet1.FieldByName('ID_NUMBER').AsInteger then
+    begin
+      OraclePackage1.CallProcedure('SetThomsonTransaction',[OracleDataSet1.FieldByName('TRANS').AsInteger,OracleDataSet1.FieldByName('ID_NUMBER').AsInteger]);
+      a:=OracleDataSet1.FieldByName('ID_NUMBER').AsInteger;
+    end;
+    OracleDataSet1.next;
+  end;
+ ShowMessage('Emeliyyatlar gunun senedlerine gonderildi');
+end;
+
+procedure TThomson.Button3Click(Sender: TObject);
+begin
+   OracleDataSet1.Refresh;
+end;
+
+procedure TThomson.ToolButton1Click(Sender: TObject);
+const RootCell = 2;
+var
+    V, Sheet, Sheets  :Variant;
+    Row: Integer;
+    a,VAL_NAME:string;
+    F:boolean;
+    i:char;
+    say,k:integer;
+begin
+  if not OpenDialog1.Execute then Exit;
+  V:=ExcelApplication1.Application;
+  ExcelApplication1.Connect;
+   try
+     V.Workbooks.Open(OpenDialog1.FileName);
+     Sheet := V.Workbooks[1].Worksheets['ILENTRIES'];
+     Sheets := V.Sheets;
+
+     OracleDataSet2.close;
+     OracleDataSet2.Open;
+     OracleDataSet1.Open;
+     OracleDataSet1.First;
+     with OracleDataSet1 do
+     begin
+       say:=1;
+       for Row:=4 to Sheet.cells.CurrentRegion.Rows.Count do
+       begin
+         F:=False;
+         a:=Sheet.cells[Row,1];
+         for i:='0' to '9' do
+         if a[1]=i then F:=true;
+         if F then
+         begin
+           Insert;
+           Val_Name:=Sheet.cells[Row,7];
+           FieldByName('TRANS').AsInteger                := Sheet.cells[Row,1];
+           FieldByName('ACCNUM').Asstring                := Sheet.cells[Row,2];
+           FieldByName('ACCNUM').Asstring:=FieldByName('ACCNUM').Asstring+VAL_NAME;
+           FieldByName('DEBIT').AsString                 := Sheet.cells[Row,3];
+           FieldByName('TRADE').AsDateTime               := Sheet.cells[Row,4];
+           FieldByName('SETTLEDAT').AsDateTime           := Sheet.cells[Row,5];
+           FieldByName('POSTING').AsDateTime             := Sheet.cells[Row,6];
+           FieldByName('SECURITY').AsString              := Sheet.cells[Row,7];
+           FieldByName('POSTEDAMT').AsFloat              := Sheet.cells[Row,8];
+           FieldByName('REPORT1').AsString               := Sheet.cells[Row,9];
+           FieldByName('POSTEDAMT1').AsFloat             := Sheet.cells[Row,10];
+           FieldByName('SECRPT1').AsFloat                := Sheet.cells[Row,11];
+           FieldByName('TRANSACTION_REMARKS').AsString   := Sheet.cells[Row,12];
+           FieldByName('ID').AsInteger                   :=say;
+
+           Post;
+           inc(say);
+         end;
+       end;
+       Next;
+     end;
+     OracleDataSet3.Close;
+     OracleDataSet3.Open;
+     for k:=1 to OracleDataSet3.RecordCount do
+       begin
+         OraclePackage2.CallProcedure('loops',[OracleDataSet3.FieldByName('TRANS').AsInteger]);
+         OracleDataSet3.Next;
+       end;
+     oracledataset1.refresh;
+   finally
+     ExcelApplication1.Quit;
+     ExcelApplication1.Disconnect;
+   end;
+end;
+
+procedure TThomson.ToolButton3Click(Sender: TObject);
+var a:integer;
+begin
+  while not OracleDataSet1.Eof do
+  begin
+    if a<> OracleDataSet1.FieldByName('ID_NUMBER').AsInteger then
+    begin
+      OraclePackage1.CallProcedure('SetThomsonTransaction',[OracleDataSet1.FieldByName('TRANS').AsInteger,OracleDataSet1.FieldByName('ID_NUMBER').AsInteger]);
+      ShowMessage('Trans_id='+IntToStr(OracleDataSet1.FieldByName('TRANS').AsInteger));
+      ShowMessage('Id_number='+IntToStr(OracleDataSet1.FieldByName('ID_NUMBER').AsInteger));
+      a:=OracleDataSet1.FieldByName('ID_NUMBER').AsInteger;
+    end;
+    OracleDataSet1.next;
+  end;
+ ShowMessage('Emeliyyatlar gunun senedlerine gonderildi');
+end;
+
+procedure TThomson.ToolButton5Click(Sender: TObject);
+begin
+   OracleDataSet1.Refresh;
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TThomson,
+    Class_Thomson,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

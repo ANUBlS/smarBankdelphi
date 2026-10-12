@@ -1,0 +1,95 @@
+unit ExpAccTypeUnit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, DBCtrls, StdCtrls, ExtCtrls, DB, OracleData;
+
+type
+  TExpAccType = class(TForm)
+    Panel1: TPanel;
+    GroupBox1: TGroupBox;
+    DBLookupComboBox1: TDBLookupComboBox;
+    DBLookupComboBox2: TDBLookupComboBox;
+    DBLookupComboBox3: TDBLookupComboBox;
+    DBLookupComboBox4: TDBLookupComboBox;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Button1: TButton;
+    Button2: TButton;
+    FilialDataSet: TOracleDataSet;
+    FilialDataSource: TDataSource;
+    ValyutaDataSet: TOracleDataSet;
+    ValyutaDataSource: TDataSource;
+    KredetDataSet: TOracleDataSet;
+    KredetDataSource: TDataSource;
+    DebetDataSet: TOracleDataSet;
+    DebetDataSource: TDataSource;
+    procedure Button1Click(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  ExpAccType: TExpAccType;
+
+implementation
+uses ExpDataModuleUnit,ExpAllParametrUnit;
+
+{$R *.dfm}
+
+procedure TExpAccType.Button1Click(Sender: TObject);
+begin
+    with ExpDataModule  do
+    begin
+      ExpTypeAccountsDataSet.FieldByName('branchid').AsInteger :=FilialDataSet.FieldByName('id').AsInteger;
+      ExpTypeAccountsDataSet.FieldByName('valute').AsInteger   :=ValyutaDataSet.FieldByName('Valute').AsInteger;
+      ExpTypeAccountsDataSet.FieldByName('debet').AsInteger    :=DebetDataSet.FieldByName('id').AsInteger;
+      ExpTypeAccountsDataSet.FieldByName('kredet').AsInteger   :=KredetDataSet.FieldByName('id').AsInteger;
+      ExpTypeAccountsDataSet.Post;
+    end;
+   Close;
+end;
+
+procedure TExpAccType.Button2Click(Sender: TObject);
+begin
+   with ExpDataModule,ExpTypeAccountsDataSet do
+   begin
+     Cancel;
+
+   end;
+   Close;
+
+end;
+
+procedure TExpAccType.FormShow(Sender: TObject);
+begin
+  IF not(ExpAllParametr.F)
+  THEN
+    BEGIN
+      IF not (FilialDataSet.Active) then FilialDataSet.Open;
+      IF not (ValyutaDataSet.Active)then ValyutaDataSet.Open;
+      IF not (DebetDataSet.Active)  then DebetDataSet.Open;
+      IF not (KredetDataSet.Active) then KredetDataSet.Open;
+      DBLookupComboBox1.KeyValue:=0;
+      DBLookupComboBox2.KeyValue:=-1;
+      DBLookupComboBox3.KeyValue:=-1;
+      DBLookupComboBox4.KeyValue:=-1;
+    END
+  ELSE
+    BEGIN
+      DBLookupComboBox1.KeyValue:=ExpAllParametr.XDBGrid3.DataSource.DataSet.FieldByName('branchid').AsInteger;
+      DBLookupComboBox2.KeyValue:=ExpAllParametr.XDBGrid3.DataSource.DataSet.FieldByName('valute').AsInteger;
+      DBLookupComboBox3.KeyValue:=ExpAllParametr.XDBGrid3.DataSource.DataSet.FieldByName('debet').AsInteger;
+      DBLookupComboBox4.KeyValue:=ExpAllParametr.XDBGrid3.DataSource.DataSet.FieldByName('kredet').AsInteger;
+    END;
+end;
+
+end.

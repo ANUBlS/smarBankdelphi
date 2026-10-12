@@ -1,0 +1,557 @@
+unit BusinessProcessSetupImpl;
+
+interface
+
+uses
+
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActiveX, AxCtrls, BusProcSet_TLB, StdVcl, Db, OracleData, ExtCtrls,
+  DBCtrls, Grids, DBGrids, StdCtrls, Mask, XDBGrids;
+
+type
+  TBusinessProcessSetup = class(TActiveForm, IBusinessProcessSetup)
+    Panel1: TPanel;
+    Panel2: TPanel;
+    Panel3: TPanel;
+    DBLookupComboBox1: TDBLookupComboBox;
+    DBLookupComboBox2: TDBLookupComboBox;
+    DBEdit1: TDBEdit;
+    DBEdit2: TDBEdit;
+    DBEdit3: TDBEdit;
+    DBLookupComboBox3: TDBLookupComboBox;
+    DBLookupComboBox4: TDBLookupComboBox;
+    XDBGrid1: TXDBGrid;
+    XDBGrid2: TXDBGrid;
+    DBNavigator3: TDBNavigator;
+    XDBGrid3: TXDBGrid;
+    DBNavigator1: TDBNavigator;
+    Label1: TLabel;
+    Panel4: TPanel;
+    DBLookupComboBox5: TDBLookupComboBox;
+    Label2: TLabel;
+    DBNavigator2: TDBNavigator;
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure DBNavigator2Click(Sender: TObject; Button: TNavigateBtn);
+    procedure OracleDataSet2AfterInsert(DataSet: TDataSet);
+    procedure DBGrid2TitleClick(Column: TColumn);
+    procedure XDBGrid1TitleClick(Column: TXColumn);
+    procedure OracleDataSet1AfterScroll(DataSet: TDataSet);
+    procedure XDBGrid3CellDblClick(Column: TXColumn);
+    procedure DBLookupComboBox5CloseUp(Sender: TObject);
+    procedure OracleDataSet3BeforePost(DataSet: TDataSet);
+  private
+    { Private declarations }
+    FEvents: IBusinessProcessSetupEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage
+      : TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(var Value: IFontDisp); safecall;
+    procedure AboutBox; safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+  public
+    { Public declarations }
+    procedure Initialize; override;
+  end;
+  var BusinessProcessSetup:TBusinessProcessSetup;
+
+
+implementation
+
+uses ComObj, ComServ, About1, sboapidatamoduleimpl, SBTranslateProc, Unit6,
+  konvert, DMBusProcSetimpl, UnitRp, kassa, UnitTr;
+
+{$R *.DFM}
+// VAR
+// v_accNo: String;
+{ TBusinessProcessSetup }
+
+procedure TBusinessProcessSetup.DefinePropertyPages(DefinePropertyPage
+  : TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+    DefinePropertyPage(Class_BusinessProcessSetupPage); }
+end;
+
+procedure TBusinessProcessSetup.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as IBusinessProcessSetupEvents;
+end;
+
+procedure TBusinessProcessSetup.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TBusinessProcessSetup.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TBusinessProcessSetup.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TBusinessProcessSetup.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TBusinessProcessSetup.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TBusinessProcessSetup.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TBusinessProcessSetup.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TBusinessProcessSetup.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TBusinessProcessSetup.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TBusinessProcessSetup.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TBusinessProcessSetup.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TBusinessProcessSetup.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TBusinessProcessSetup.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TBusinessProcessSetup.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TBusinessProcessSetup.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TBusinessProcessSetup.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TBusinessProcessSetup.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TBusinessProcessSetup.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TBusinessProcessSetup.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TBusinessProcessSetup._Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TBusinessProcessSetup.AboutBox;
+begin
+  ShowBusinessProcessSetupAbout;
+end;
+
+procedure TBusinessProcessSetup.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then
+    FEvents.OnActivate;
+end;
+
+procedure TBusinessProcessSetup.ActiveFormCreate(Sender: TObject);
+begin
+
+  BusinessProcessSetup:=self;
+  DMBusProcSet:=TDMBusProcSet.Create(self);
+  DBLookupComboBox5.KeyValue:=-1;
+
+  SBTranslateProc.TranslateAllComponents(Self, sboapiDataModule.OrPack_SL);
+end;
+
+procedure TBusinessProcessSetup.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then
+    FEvents.OnClick;
+end;
+
+procedure TBusinessProcessSetup.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then
+    FEvents.OnCreate;
+end;
+
+procedure TBusinessProcessSetup.DBGrid2TitleClick(Column: TColumn);
+
+begin
+  { if  Column.FieldName='NAME' then Exit;
+    //else
+    TitleName :=Column.FieldName;
+    if Column.Field.Calculated then Exit;
+    with OracleDataSet2 do
+    begin
+    Screen.Cursor :=crSQLWait;
+    SetVariable('sort',TitleName);
+    Open;
+    refresh;
+    Screen.Cursor :=crDefault;
+    end; }
+end;
+
+procedure TBusinessProcessSetup.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then
+    FEvents.OnDblClick;
+end;
+
+procedure TBusinessProcessSetup.DBLookupComboBox5CloseUp(Sender: TObject);
+begin
+ if not (DMBusProcSet.ODS_SB_BUSINESS_PROC_TARIFS.State in [dsInsert,dsedit] ) then
+ begin
+
+ DMBusProcSet.ODS_SB_BUSINESS_PROC_TARIFS.Close;
+ DMBusProcSet.ODS_SB_BUSINESS_PROC_TARIFS.SQL[4]:=' and groupid='+ inttostr(DBLookupComboBox5.KeyValue);
+// ShowMessage(OracleDataSet3.SQL.Text);
+if DBLookupComboBox5.KeyValue=-1  then
+DMBusProcSet.ODS_SB_BUSINESS_PROC_TARIFS.SQL[4]:='';
+DMBusProcSet.ODS_SB_BUSINESS_PROC_TARIFS.Open;
+ end;
+
+ end;
+
+procedure TBusinessProcessSetup.DBNavigator2Click(Sender: TObject;
+  Button: TNavigateBtn);
+begin
+  // if button=nbPost  then datasource2.DataSet.Refresh;
+end;
+
+procedure TBusinessProcessSetup.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then
+    FEvents.OnDeactivate;
+end;
+
+procedure TBusinessProcessSetup.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then
+    FEvents.OnDestroy;
+end;
+
+procedure TBusinessProcessSetup.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then
+    FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TBusinessProcessSetup.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then
+    FEvents.OnPaint;
+end;
+
+procedure TBusinessProcessSetup.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TBusinessProcessSetup.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TBusinessProcessSetup.Set_AxBorderStyle
+  (Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TBusinessProcessSetup.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TBusinessProcessSetup.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TBusinessProcessSetup.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TBusinessProcessSetup.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TBusinessProcessSetup.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TBusinessProcessSetup.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TBusinessProcessSetup.Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TBusinessProcessSetup.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TBusinessProcessSetup.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TBusinessProcessSetup.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TBusinessProcessSetup.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TBusinessProcessSetup.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TBusinessProcessSetup.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+procedure TBusinessProcessSetup.XDBGrid1TitleClick(Column: TXColumn);
+var
+  titlename: string;
+  kind: string;
+begin
+
+  if not((Column.FieldName = 'NAME') or (Column.FieldName = 'ID')) then
+    Exit;
+  // else
+
+  titlename := Column.FieldName;
+  if Column.Field.Calculated then
+    Exit;
+  with DMBusProcSet.ODS_SB_BUSINESS_PROCESSES do
+  begin
+    Screen.Cursor := crSQLWait;
+    SetVariable('sort', titlename + ' ' + kind);
+    Open;
+    refresh;
+    Screen.Cursor := crDefault;
+  end;
+
+end;
+
+procedure TBusinessProcessSetup.XDBGrid3CellDblClick(Column: TXColumn);
+var
+  a,b: String;
+
+
+  begin
+  b := Column.FieldName;
+  a := Column.FieldName;
+  //c := Column.FieldName;
+
+  if b = 'KASSA_Z_NAME' then
+    begin a := 'KASSA_Z';
+      if not assigned(konvert1) then konvert1:= Tkonvert1.Create(Self);
+      konvert1.ShowModal;
+       if not(DMBusProcSet.Ods_sb_business_proc_childs.State in [dsInsert, dsEdit]) then
+      DMBusProcSet.Ods_sb_business_proc_childs.Edit;
+    DMBusProcSet.Ods_sb_business_proc_childs.FieldByName(a).AsInteger := konvert1.v_shortname;
+    DMBusProcSet.Ods_sb_business_proc_childs.Post;
+    DMBusProcSet.Ods_sb_business_proc_childs.refresh;
+    end;
+
+  if b = 'REPORTDESC' then
+    begin a := 'REPORTID';
+      if not assigned(FrmReport) then FrmReport:= TFrmReport.Create(Self);
+      FrmReport.ShowModal;
+       if not(DMBusProcSet.Ods_sb_business_proc_childs.State in [dsInsert, dsEdit]) then
+      DMBusProcSet.Ods_sb_business_proc_childs.Edit;
+    DMBusProcSet.Ods_sb_business_proc_childs.FieldByName(a).AsInteger := FrmReport.v_id;
+    DMBusProcSet.Ods_sb_business_proc_childs.Post;
+    DMBusProcSet.Ods_sb_business_proc_childs.refresh;
+    end;
+
+   if b = 'KASSA_B' then
+    begin a := 'KASSA_B';
+      if not assigned(kassa1) then kassa1:= Tkassa1.Create(Self);
+      kassa1.ShowModal;
+       if not(DMBusProcSet.Ods_sb_business_proc_childs.State in [dsInsert, dsEdit]) then
+      DMBusProcSet.Ods_sb_business_proc_childs.Edit;
+    DMBusProcSet.Ods_sb_business_proc_childs.FieldByName(a).AsString := kassa1.v_kassa;
+    DMBusProcSet.Ods_sb_business_proc_childs.Post;
+    DMBusProcSet.Ods_sb_business_proc_childs.refresh;
+    end;
+
+    if b = 'VID_OP_NAME' then
+    begin a := 'VID_OP';
+      if not assigned(FrmTransaction) then FrmTransaction:= TFrmTransaction.Create(Self);
+      FrmTransaction.ShowModal;
+       if not(DMBusProcSet.Ods_sb_business_proc_childs.State in [dsInsert, dsEdit]) then
+      DMBusProcSet.Ods_sb_business_proc_childs.Edit;
+    DMBusProcSet.Ods_sb_business_proc_childs.FieldByName(a).Asinteger                                                                                                       := FrmTransaction.v_transaction;
+    DMBusProcSet.Ods_sb_business_proc_childs.Post;
+    DMBusProcSet.Ods_sb_business_proc_childs.refresh;
+    end;
+
+
+
+
+
+
+
+
+    if a = 'DEBTACC' then
+    begin
+     a := 'DEBT' ;
+    if not assigned (Form6) then  Form6:= TForm6.Create(Self);
+    Form6.v_accID := DMBusProcSet.Ods_sb_business_proc_childs.FieldByName(a).AsInteger;
+    Form6.ShowModal;
+
+    if not(DMBusProcSet.Ods_sb_business_proc_childs.State in [dsInsert, dsEdit]) then
+      DMBusProcSet.Ods_sb_business_proc_childs.Edit;
+    DMBusProcSet.Ods_sb_business_proc_childs.FieldByName(a).AsInteger := Form6.v_accID;
+    DMBusProcSet.Ods_sb_business_proc_childs.Post;
+    DMBusProcSet.Ods_sb_business_proc_childs.refresh;
+    end;
+
+    if a = 'KREDACC' then
+    begin
+     a := 'KREDIT';
+      if not assigned (Form6) then  Form6:= TForm6.Create(Self);
+    Form6.v_accID := DMBusProcSet.Ods_sb_business_proc_childs.FieldByName(a).AsInteger;
+    Form6.ShowModal;
+
+    if not(DMBusProcSet.Ods_sb_business_proc_childs.State in [dsInsert, dsEdit]) then
+    DMBusProcSet.Ods_sb_business_proc_childs.Edit;
+    DMBusProcSet.Ods_sb_business_proc_childs.FieldByName(a).AsInteger := Form6.v_accID;
+    DMBusProcSet.Ods_sb_business_proc_childs.Post;
+    DMBusProcSet.Ods_sb_business_proc_childs.refresh;
+    end;
+end;
+
+procedure TBusinessProcessSetup.OracleDataSet1AfterScroll(DataSet: TDataSet);
+begin
+  { with OracleDataSet2 do
+    begin
+    CLose;
+    SetVariable('PARENTID',OracleDataSet1.FieldByNAme('ID').asInteger);
+    Open; }
+end;
+
+procedure TBusinessProcessSetup.OracleDataSet2AfterInsert(DataSet: TDataSet);
+begin
+  // dataset.fields[0].value:=0;
+end;
+
+procedure TBusinessProcessSetup.OracleDataSet3BeforePost(DataSet: TDataSet);
+begin
+DataSet.FieldByName('GroupID').AsInteger:=DBLookupComboBox5.KeyValue;
+end;
+
+initialization
+
+TActiveFormFactory.Create(ComServer, TActiveFormControl, TBusinessProcessSetup,
+  Class_BusinessProcessSetup, 1, '', OLEMISC_SIMPLEFRAME or
+  OLEMISC_ACTSLIKELABEL, tmApartment);
+
+end.

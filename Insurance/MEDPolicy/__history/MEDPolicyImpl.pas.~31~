@@ -1,0 +1,716 @@
+﻿unit MEDPolicyImpl;
+               //ODSPolicy
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActiveX, AxCtrls, MEDPolicy_TLB, StdVcl, INSWordExporter, Db, OracleData,
+  HintBox, StdCtrls, Buttons, ExtCtrls, DBCtrls, Mask, SBPlgAx50_TLB,variants ,
+  Oracle, XFSCtrls;
+
+const
+   WM_ModalResult = WM_USER+139;
+   fmCaption = 'Tibbi sigorta policy: (%s)';
+
+type
+  TfmMEDPolicy = class(TActiveForm,
+                       IfmMEDPolicy,
+                       IUIObject,
+                       IParamInput)
+    ODSPolicy: TOracleDataSet;
+    DSPolicy: TDataSource;
+    INSWordExporter: TINSWordExporter;
+    ODSReport: TOracleDataSet;
+    ODSPolicyID: TFloatField;
+    ODSPolicyMEDS_ID: TFloatField;
+    ODSPolicyVAL_ID: TFloatField;
+    ODSPolicyPOLICYNUM: TWideStringField;
+    ODSPolicyINSCONTRACT: TWideStringField;
+    ODSPolicyFRANSHIZ: TFloatField;
+    ODSPolicySC_ID: TFloatField;
+    ODSSpecCond: TOracleDataSet;
+    ODSSpecCondID: TFloatField;
+    ODSSpecCondNAME: TWideStringField;
+    DSSpecCond: TDataSource;
+    ODSReportNAME: TWideStringField;
+    ODSReportADDRESS: TWideStringField;
+    ODSReportEMPNUM: TIntegerField;
+    ODSReportINSSUM: TWideStringField;
+    ODSReportINSAMMOUNTALL: TWideStringField;
+    ODSReportPERIOD: TWideStringField;
+    ODSReportINSCONTRACT: TWideStringField;
+    ODSReportFRANSHIZ: TWideStringField;
+    ODSReportVALU_NAME: TWideStringField;
+    ODSReportSCNAME: TWideStringField;
+    ODSReportCONTRACTDATE: TDateTimeField;
+    ODSContracts: TOracleDataSet;
+    ODSContractsID: TFloatField;
+    ODSContractsTYPE_ID: TFloatField;
+    ODSContractsBLANK_ID: TFloatField;
+    ODSContractsINS_DATE: TDateTimeField;
+    ODSContractsBEGIN_DATE: TDateTimeField;
+    ODSContractsEND_DATE: TDateTimeField;
+    ODSContractsVALUTE_ID: TFloatField;
+    ODSContractsAMMOUNT: TFloatField;
+    ODSContractsCLOSE_PREFIX: TIntegerField;
+    ODSContractsKLI_ID: TFloatField;
+    ODSContractsLOANACC_ID: TFloatField;
+    ODSContractsCURRACC_ID: TFloatField;
+    ODSContractsPOLICY_NUM: TWideStringField;
+    DSContracts: TDataSource;
+    ODSReportPOLICY_NUM: TWideStringField;
+    OPCOMMON: TOraclePackage;
+    ODSReportLOANACC_ID: TFloatField;
+    ODSReportCURRACC_ID: TFloatField;
+    ODSReportAMMOUNT: TFloatField;
+    DSins_medical: TOracleDataSet;
+    DSins_medicalID: TIntegerField;
+    DSins_medicalCID: TFloatField;
+    DSins_med_suggestion: TOracleDataSet;
+    DSins_med_suggestionID: TFloatField;
+    DSins_med_suggestionMED_ID: TFloatField;
+    XFPanel2: TXFPanel;
+    XFPanel1: TXFPanel;
+    btPrint: TBitBtn;
+    btApply: TBitBtn;
+    btOk: TBitBtn;
+    btCancel: TBitBtn;
+    XFGroupBox1: TXFGroupBox;
+    XFLabel1: TXFLabel;
+    XFLabel2: TXFLabel;
+    XFLabel3: TXFLabel;
+    XFLabel4: TXFLabel;
+    XFLabel5: TXFLabel;
+    memSpecCond: TMemo;
+    DBLookupComboBox2: TDBLookupComboBox;
+    DBEdit2: TDBEdit;
+    DBEdit1: TDBEdit;
+    DBEdit7: TDBEdit;
+    hbErrMsg: THintBox;
+    ODSContractsINSSUMM: TFloatField;
+    ODSContractsFRANSHIZ: TFloatField;
+    ODSContractsTARIFF: TFloatField;
+    ODSContractsSTATE: TIntegerField;
+    ODSContractsAGENT_ID: TFloatField;
+    ODSContractsPNUM: TFloatField;
+    ODSContractsBEN_ID: TFloatField;
+    ODSContractsBENEFICIARY: TWideStringField;
+    ODSContractsCONDITIONS: TWideStringField;
+    ODSContractsSUGNUM: TWideStringField;
+    ODSReportBEGINDATE: TWideStringField;
+    ODSReportENDDATE: TWideStringField;
+    ODSReportID: TFloatField;
+    procedure btApplyClick(Sender: TObject);
+    procedure btOkClick(Sender: TObject);
+    procedure btCancelClick(Sender: TObject);
+    procedure DBEdit7KeyPress(Sender: TObject; var Key: Char);
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure DBLookupComboBox2Click(Sender: TObject);
+    procedure btPrintClick(Sender: TObject);
+  private
+    { Private declarations }
+    FParams : TStrings;
+    FOwnerHandle : Integer;
+    ID: Integer;
+    cid:integer;
+    tid:real;
+    IsSaved : Boolean;    
+    FEvents: IfmMEDPolicyEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+    function  SaveData():Boolean;
+    procedure ExportToWord();
+    procedure AddTransh;
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+////////////////////////////////////////////////////////
+    function  Get_Owner:Integer; safecall;
+    procedure Set_Owner(val : Integer);  safecall;
+    {IParamInput}
+    function  Get_Params(const Name: WideString): OleVariant; safecall;
+    procedure Set_Params(const Name: WideString; Value: OleVariant); safecall;
+    property Params[const Name: WideString]: OleVariant read Get_Params write Set_Params;
+    {IInstance}
+    function InstanceInitialize: HResult; safecall;
+    function IUIObject.Initialize = InstanceInitialize;
+    function Cleanup: HResult; safecall;
+    {IUIObject}
+//    function  Get_Icon: OLE_HANDLE; safecall;
+    function UIObjectActivate: HResult; safecall;
+    function IUIObject.Activate = UIObjectActivate;
+    function QueryDeactivate: HResult; safecall;
+    function UIObjectDeactivate: HResult; safecall;
+    function IUIObject.Deactivate = UIObjectDeactivate;
+    function SaveState: HResult; safecall;
+    function  Get_Height : Integer; safecall;
+    function  Get_Width  : Integer; safecall;
+  public
+    { Public declarations }
+    procedure Initialize; override;
+  end;
+var
+  fmMEDPolicy : TfmMEDPolicy;
+
+implementation
+
+uses ComObj, ComServ, sboapiDataModuleImpl,SBTranslateProc;
+
+{$R *.DFM}
+
+{ TfmMEDPolicy }
+
+procedure TfmMEDPolicy.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_fmMEDPolicyPage); }
+end;
+
+procedure TfmMEDPolicy.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as IfmMEDPolicyEvents;
+end;
+
+procedure TfmMEDPolicy.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TfmMEDPolicy.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TfmMEDPolicy.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TfmMEDPolicy.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TfmMEDPolicy.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TfmMEDPolicy.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TfmMEDPolicy.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TfmMEDPolicy.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TfmMEDPolicy.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TfmMEDPolicy.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TfmMEDPolicy.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TfmMEDPolicy.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TfmMEDPolicy.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TfmMEDPolicy.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TfmMEDPolicy.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TfmMEDPolicy.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TfmMEDPolicy.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TfmMEDPolicy.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TfmMEDPolicy.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TfmMEDPolicy._Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TfmMEDPolicy.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TfmMEDPolicy.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TfmMEDPolicy.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TfmMEDPolicy.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TfmMEDPolicy.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TfmMEDPolicy.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TfmMEDPolicy.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TfmMEDPolicy.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TfmMEDPolicy.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TfmMEDPolicy.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TfmMEDPolicy.Set_AxBorderStyle(Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TfmMEDPolicy.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TfmMEDPolicy.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TfmMEDPolicy.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TfmMEDPolicy.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TfmMEDPolicy.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TfmMEDPolicy.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TfmMEDPolicy.Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TfmMEDPolicy.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TfmMEDPolicy.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TfmMEDPolicy.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TfmMEDPolicy.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TfmMEDPolicy.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TfmMEDPolicy.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+function  TfmMEDPolicy.Get_Owner:Integer;
+begin
+  Result := handle;
+end;
+
+procedure TfmMEDPolicy.Set_Owner(val : Integer);
+begin
+  if val > 0 then
+     FOwnerHandle := val;
+end;
+
+
+function  TfmMEDPolicy.Get_Params(const Name: WideString): OleVariant;
+begin
+  Result := FParams.Values[Name];
+end;
+
+procedure TfmMEDPolicy.Set_Params(const Name: WideString; Value: OleVariant);
+begin
+  FParams.Values[Name] := Value;
+end;
+
+function TfmMEDPolicy.InstanceInitialize: HResult;
+begin
+  Result := S_OK;
+end;
+
+function TfmMEDPolicy.Cleanup: HResult;
+begin
+  Result := S_OK;
+end;
+
+function TfmMEDPolicy.UIObjectActivate: HResult;
+begin
+
+       id := StrToInt(Get_Params('MEDS_ID'));
+       //cid:= StrToInt(Get_Params('CID'));
+       //showmessage(Get_Params('MEDS_ID'));
+       //showmessage(Get_Params('med_id'));
+       //exit;
+//       ODSCusts.SetVariable('id',StrToInt(Get_Params('KLI_ID')));
+//       ODSCusts.Open;
+//       ODSAvalute.open;
+     // DSins_med_suggestion
+
+       ODSSpecCond.Open;
+
+       ODSPolicy.Close;
+       ODSPolicy.SetVariable('MEDS_ID', id);
+       ODSPolicy.Open;
+
+       {DSins_medical.Close;
+       DSins_medical.SetVariable('p_id', strtofloat(Get_Params('med_id')));
+       DSins_medical.Open; }
+
+       DSins_medical.Close;
+       DSins_medical.SetVariable('p_id', strtofloat(Get_Params('med_id')));
+       DSins_medical.Open;
+
+       showmessage(DSins_medical.FieldByName('CID').AsString);
+
+       ODSContracts.Close;
+       ODSContracts.SetVariable('pid', DSins_medical.FieldByName('CID').AsFloat);
+       ODSContracts.Open;
+
+       tid:=ODSContractsType_ID.Value;
+       ODSContracts.Edit;                 //--?
+       if ODSPolicy.isEmpty then begin   //-----Insert mod
+         ODSPolicy.Insert;
+         Caption := format(fmCaption, ['Yeni policy']);
+       end
+       else begin  //-----Edit mod
+         ODSPolicy.Edit;
+         Caption := format(fmCaption, ['Redakte']);
+         btPrint.Enabled := True;
+       end;
+
+  Result := S_OK;
+end;
+
+function TfmMEDPolicy.QueryDeactivate: HResult;
+begin
+  Result := S_OK;
+end;
+
+function TfmMEDPolicy.UIObjectDeactivate: HResult;
+begin
+  Result := S_OK;
+end;
+
+function TfmMEDPolicy.SaveState: HResult;
+begin
+  Result := S_OK;
+end;
+
+function  TfmMEDPolicy.Get_Height : Integer;
+begin
+  Result := Height;
+end;
+
+function  TfmMEDPolicy.Get_Width  : Integer;
+begin
+  Result := Width;
+end;
+
+function TfmMEDPolicy.SaveData():Boolean;
+begin
+  //----------Save new risk----------------
+  if  memSpecCond.Text <> ''  then
+  with ODSSpecCond do begin
+    Insert;
+    FieldByName('name').asString := memSpecCond.Text;
+    Post;
+    RefreshRecord;
+    memSpecCond.Text := '';
+  end;
+
+  with ODSPolicy do
+  if State in [dsEdit, dsInsert] then begin
+    FieldByName('MEDS_ID').asFloat := id;
+    FieldByName('sc_id').AsFloat := ODSSpecCond.FieldByName('id').asFloat;
+    Post;
+    RefreshRecord;
+  end;
+
+  with ODSContracts do
+  if State in [dsEdit, dsInsert] then begin
+     FieldByName('franshiz').asFloat:=ODSPolicy.FieldByName('FRANSHIZ').asFloat;
+     //FieldByName('policy_id').asFloat := ODSPolicy.FieldByName('id').asFloat;
+     if ODSContractsPolicy_Num.IsNull then
+        FieldByName('POLICY_NUM').AsString:=OPCommon.callStringFunction('generatePolicy_Num',[tid]);
+     Post;
+  end;
+
+  Result := True;
+end;
+
+procedure TfmMEDPolicy.ExportToWord();
+const
+    months : array [1..12] of String = ('Yanvar', 'Fevral', 'Mart', 'Aprel', 'May', 'Iyun',
+                                         'Iyul', 'Avgust', 'Sentyabr', 'Oktyabr', 'Noyabr', 'Dekabr');
+var
+  DocFile : TFileName;
+  day, month, year : word;
+  i : integer;
+begin
+
+    DocFile := ExtractFilePath(Application.ExeName)+'\MedicalPolicy.doc';
+    with INSWordExporter, ODSReport do begin
+      FileName := DocFile;
+      INSWordExporter.Open(False);
+      SetVariable('mp_id', ODSPolicyID.value);
+      ODSReport.Open;
+
+      for i:=0 to FieldCount-5 do
+      try
+        SetBookmark(lowercase(fields[i].DisplayName), VarToStr( fields[i].AsVariant ),
+              False, False, False, False, 10, 'Arial AzLat', False);
+      except
+        on E:Exception do
+          MessageDlg(E.Message, mtConfirmation, [mbYes, mbNo], 0);
+      end;
+
+      DecodeDate(ODSReport.FieldByName('CONTRACTDATE').Value, year, month, day);
+
+      SetBookmark('contractdate', IntToStr(day)+'    '+months[month]+'    '+IntToStr(year),
+              False, False, False, False, 10, 'Arial AzLat', False);
+      Show;
+      INSWordExporter.Close;
+//      ShowMessage(FieldByName('policy_num').asString);
+      Close;
+    end;
+
+end;
+
+
+procedure TfmMEDPolicy.btApplyClick(Sender: TObject);
+begin
+  if SaveData() then
+  begin
+    btPrint.Enabled := True;
+    btApply.Enabled := False;
+  end;
+end;
+
+procedure TfmMEDPolicy.btOkClick(Sender: TObject);
+begin
+  if SaveData() then
+    PostMessage(FOwnerHandle, WM_ModalResult, mrOk, 0);
+end;
+
+procedure TfmMEDPolicy.btCancelClick(Sender: TObject);
+begin
+  if SaveData() then
+    PostMessage(FOwnerHandle, WM_ModalResult, mrCancel, 0);
+end;
+
+procedure TfmMEDPolicy.DBEdit7KeyPress(Sender: TObject; var Key: Char);
+begin
+  if Key = #13 then
+     begin
+       FindNextControl(ActiveControl,true,true,false).SetFocus;
+       Key := #0
+     end else btApply.Enabled := True;
+end;
+
+procedure TfmMEDPolicy.ActiveFormCreate(Sender: TObject);
+begin
+  fmMEDPolicy := Self;
+  FParams := TStringList.Create;
+  SBTranslateProc.TranslateAllComponents(Self,sboapiDataModule.OrPack_SL);
+
+end;
+
+procedure TfmMEDPolicy.DBLookupComboBox2Click(Sender: TObject);
+var
+  Key : Char;
+begin
+   DBEdit7KeyPress(Sender,key);
+end;
+
+procedure TfmMEDPolicy.AddTransh;
+var
+i:integer;
+begin
+    with ODSReport, OPCOMMON do begin
+      ODSReport.Close;
+      ODSReport.SetVariable('mp_id', ODSPolicyID.value);
+      ODSReport.Open;
+
+      showmessage(FieldByName('AMMOUNT').AsString);
+      //exit;
+      i:=CallIntegerFunction('get_acc_id',[ODSReport.FieldByName('id').AsInteger]);
+        if i=0 then
+        begin
+          showmessage('Diqqət! Bu müqavilə üçün uyğun hesablar açılmayıb.');
+          exit;
+        end;
+
+      if CallIntegerFunction('addtransaction', [
+                      FieldByName('LOANACC_ID').asFloat,
+                      FieldByName('CURRACC_ID').asFloat,
+                      FieldByName('AMMOUNT').asFloat]) > 0 then
+      MessageDlg('Əməliyyat keçirildi.', mtInformation, [mbOK], 0);
+      Close;
+    end;
+end;
+
+procedure TfmMEDPolicy.btPrintClick(Sender: TObject);
+begin
+  if  MessageDlg('Əməliyyat aparılsın?', mtConfirmation	, [mbYes, mbNo], 0) = mrYes then
+     AddTransh();
+  ExportToWord();
+end;
+
+
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TfmMEDPolicy,
+    Class_fmMEDPolicy,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

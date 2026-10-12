@@ -1,0 +1,427 @@
+unit RepairNewDataModule;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Oracle, Db,RepairNewEdit, OracleData,TypInfo,Variants;
+
+type
+  TRepDataModule = class(TDataModule)
+    TransactionData: TOracleDataSet;
+    Transaction: TDataSource;
+    DebetRateData: TOracleDataSet;
+    CreditRateData: TOracleDataSet;
+    DebetRate: TDataSource;
+    CreditRate: TDataSource;
+    CurDebetData: TOracleDataSet;
+    CurKreditData: TOracleDataSet;
+    CurDebet: TDataSource;
+    CurKredit: TDataSource;
+    DebetAccData: TOracleDataSet;
+    CreditAccData: TOracleDataSet;
+    DebetAcc: TDataSource;
+    CreditAcc: TDataSource;
+    TrDescriptionData: TOracleDataSet;
+    OutBalanceCharData: TOracleDataSet;
+    OutBalanceChar: TDataSource;
+    InBalanceCharData: TOracleDataSet;
+    InBalanceChar: TDataSource;
+    pcCorrect: TOraclePackage;
+    UsersData: TOracleDataSet;
+    Users: TDataSource;
+    Valutes: TOracleQuery;
+    VidOp: TOracleQuery;
+    FilialDebetData: TOracleDataSet;
+    FilialCreditData: TOracleDataSet;
+    FilialDebet: TDataSource;
+    FilialCredit: TDataSource;
+    TransactionDataID: TFloatField;
+    TransactionDataOPERATORID: TFloatField;
+    TransactionDataTRANSACTIONDATE: TDateTimeField;
+    TransactionDataDEBITID: TFloatField;
+    TransactionDataDEBITACCNO: TWideStringField;
+    TransactionDataDEBFIL: TIntegerField;
+    TransactionDataDEBITCURRENCYID: TFloatField;
+    TransactionDataDEBITCURRENCYSNAME: TWideStringField;
+    TransactionDataCREDITID: TFloatField;
+    TransactionDataCREDITACCNO: TWideStringField;
+    TransactionDataCREDFIL: TIntegerField;
+    TransactionDataCREDITCURRENCYID: TIntegerField;
+    TransactionDataCREDITCURRENCYSNAME: TWideStringField;
+    TransactionDataDEBITAMOUNT: TFloatField;
+    TransactionDataCREDITAMOUNT: TFloatField;
+    TransactionDataLAMOUNT: TFloatField;
+    TransactionDataDEBITRATE: TFloatField;
+    TransactionDataCREDITRATE: TFloatField;
+    TransactionDataDEBITBANK: TFloatField;
+    TransactionDataCREDITBANK: TFloatField;
+    TransactionDataPACKAGENUMBER: TIntegerField;
+    TransactionDataCYPHERCODE: TIntegerField;
+    TransactionDataOPERATIONCODE: TIntegerField;
+    TransactionDataINBALANCECHAR: TIntegerField;
+    TransactionDataOUTBALANCECHAR: TIntegerField;
+    TransactionDataFILIALID: TIntegerField;
+    TransactionDataDEBITBALANCE: TFloatField;
+    TransactionDataNAME: TWideStringField;
+    TransactionDataOPERATIONTYPE: TIntegerField;
+    DebetRateDataID: TIntegerField;
+    DebetRateDataNAME: TWideStringField;
+    DebetRateDataDESCRIPTION: TWideStringField;
+    DebetRateDataRATE: TFloatField;
+    CreditRateDataID: TIntegerField;
+    CreditRateDataNAME: TWideStringField;
+    CreditRateDataDESCRIPTION: TWideStringField;
+    CreditRateDataRATE: TFloatField;
+    CurDebetDataVALUTE: TIntegerField;
+    CurDebetDataVAL_NAME: TWideStringField;
+    CurDebetDataVALU_NAME: TWideStringField;
+    CurKreditDataVALUTE: TIntegerField;
+    CurKreditDataVAL_NAME: TWideStringField;
+    CurKreditDataVALU_NAME: TWideStringField;
+    DebetAccDataID: TFloatField;
+    DebetAccDataKLI_ID: TFloatField;
+    DebetAccDataACC_NO: TWideStringField;
+    DebetAccDataVAL_ACC: TIntegerField;
+    DebetAccDataNAME: TWideStringField;
+    DebetAccDataOPEN_DAT: TDateTimeField;
+    DebetAccDataBAL_CN1: TFloatField;
+    DebetAccDataBAL_CN2: TFloatField;
+    DebetAccDataBAL_CN3: TFloatField;
+    DebetAccDataBAL_CN4: TFloatField;
+    DebetAccDataISCACHEACCOUNT: TFloatField;
+    CreditAccDataID: TFloatField;
+    CreditAccDataKLI_ID: TFloatField;
+    CreditAccDataACC_NO: TWideStringField;
+    CreditAccDataVAL_ACC: TIntegerField;
+    CreditAccDataNAME: TWideStringField;
+    CreditAccDataOPEN_DAT: TDateTimeField;
+    CreditAccDataBAL_CN1: TFloatField;
+    CreditAccDataBAL_CN2: TFloatField;
+    CreditAccDataBAL_CN3: TFloatField;
+    CreditAccDataBAL_CN4: TFloatField;
+    CreditAccDataISCACHEACCOUNT: TFloatField;
+    TrDescriptionDataID: TFloatField;
+    TrDescriptionDataNAME: TWideStringField;
+    OutBalanceCharDataID: TFloatField;
+    OutBalanceCharDataSHORTNAME: TWideStringField;
+    OutBalanceCharDataFULLPATH: TWideStringField;
+    OutBalanceCharDataEXTRA: TWideStringField;
+    OutBalanceCharDataDIFFERENT: TFloatField;
+    InBalanceCharDataSYMBOL: TWideStringField;
+    InBalanceCharDataNAME: TWideStringField;
+    InBalanceCharDataMEDIOCRITY: TFloatField;
+    UsersDataID: TFloatField;
+    UsersDataNAME: TWideStringField;
+    UsersDataCTIME: TDateTimeField;
+    FilialDebetDataID: TFloatField;
+    FilialDebetDataNAME: TWideStringField;
+    FilialDebetDataKOD_FILIAL: TWideStringField;
+    FilialCreditDataID: TFloatField;
+    FilialCreditDataNAME: TWideStringField;
+    FilialCreditDataKOD_FILIAL: TWideStringField;
+    procedure TransactionDataApplyRecord(Sender: TOracleDataSet;
+      Action: Char; var Applied: Boolean; var NewRowId: String);
+    procedure CurDebetDataAfterScroll(DataSet: TDataSet);
+    procedure CurKreditDataAfterScroll(DataSet: TDataSet);
+    procedure DebetAccDataAfterScroll(DataSet: TDataSet);
+    procedure CreditAccDataAfterScroll(DataSet: TDataSet);
+    procedure UsersDataAfterOpen(DataSet: TDataSet);
+    procedure DataModuleCreate(Sender: TObject);
+    procedure ValutesThreadFinished(Sender: TOracleQuery);
+    procedure ValutesThreadRecord(Sender: TOracleQuery);
+    procedure VidOpThreadRecord(Sender: TOracleQuery);
+    procedure InBalanceCharDataAfterScroll(DataSet: TDataSet);
+  private
+    { Private declarations }
+  public
+    function  CheckTransaction(Value: TTransaction): boolean;
+    function SaveTransaction(Value: TTransaction): Boolean;
+    procedure FullRefresh;
+  end;
+procedure CheckDates;
+var
+  RepDataModule: TRepDataModule;
+
+implementation
+
+uses  sboapiDataModuleImpl,  Out_RepairImpl1;
+
+{$R *.DFM}
+
+procedure TRepDataModule.TransactionDataApplyRecord(Sender: TOracleDataSet;
+  Action: Char; var Applied: Boolean; var NewRowId: String);
+begin
+ case Action of
+  'I':
+    begin
+      Applied := True;
+    end;
+  'U':
+    begin
+      Applied := True;
+    end;
+  'L','R','C':
+      Applied := True;
+  else
+    Applied := False;
+  end;
+end;
+
+procedure TRepDataModule.CurDebetDataAfterScroll(DataSet: TDataSet);
+begin
+{if Assigned(OutRepairEdit) then
+with OutRepairEdit,DataSet do
+  begin
+   DebetRateData.Locate('id',FieldByName('VALUTE').AsInteger,[loCaseInsensitive,loPartialKey]);
+   if dblcCurDebet.KeyValue<>FieldByName('VALUTE').AsInteger then
+     dblcCurDebet.KeyValue:=FieldByName('VALUTE').AsInteger;
+  end;   }
+end;
+
+procedure TRepDataModule.CurKreditDataAfterScroll(DataSet: TDataSet);
+begin
+{if Assigned(OutRepairEdit) then
+with OutRepairEdit,DataSet do
+  begin
+   CreditRateData.Locate('id',FieldByName('VALUTE').AsInteger,[loCaseInsensitive,loPartialKey]);
+   if dblcCurKredit.KeyValue<>FieldByName('VALUTE').AsInteger then
+     dblcCurKredit.KeyValue:=FieldByName('VALUTE').AsInteger;
+  end; }
+end;
+ 
+function TRepDataModule.CheckTransaction(Value: TTransaction): boolean;
+
+procedure ShowError(value: string);
+begin
+ raise EHint.Create(value);
+end;
+
+resourcestring
+ erConvert='Конвертасиййа тяйинаты дахил олунмайыб. Редактяни давам етмяйя разысынызмы?'#13#10'''Имтина'' дцймясини басандан сонра ямалиййат эцнцн сярядляриня ялавя олунажаг. ';
+ erDebt= 'Дебет щесабынын валйутасы дцзэцн дахил един ';
+ erCred='Кредит щесабынын валйутасы дцзэцн дахил един ';
+ erKassa='Касса символу дцзэцн дахил един ';
+ erDescr='Ямалиййатын тяйиннаты дахил един ';
+begin
+ Result:=False;
+ with Value do
+ begin
+  if DebitCurId<>DebetAccData.FieldByName('VAL_ACC').AsInteger then ShowError(erDebt);
+  if CreditCurId<>CreditAccData.FieldByName('VAL_ACC').AsInteger then ShowError(erCred);
+  if Name=EmptyStr then ShowError(erDescr);
+  if not(OutRepairEdit.CheckInBalance) and (InBalanceChar=null) then ShowError(erKassa);
+
+  if not((DebitCurId<>CreditCurId)
+     and (not (RepDataModule.DebetAccData.FieldByName('IsCacheAccount').AsInteger in [1,2]))
+     and (not (RepDataModule.CreditAccData.FieldByName('IsCacheAccount').AsInteger in [1,2]))
+     and (OutBalanceChar=0))
+     then
+       Result := True
+     else
+       if MessageDlg(erConvert,mtConfirmation,[mbYes, mbCancel],0)=mrYes then
+          Exit
+      else Result := True;
+ end;
+end;
+
+procedure TRepDataModule.DebetAccDataAfterScroll(DataSet: TDataSet);
+begin
+ if Assigned(OutRepairEdit) then
+  with OutRepairEdit,DataSet do
+   if (edDebitAccNo.Focused)then
+    begin
+     RefreshAccounts(aoDebet);
+     TransactionData.FieldByName('DEBITID').AsInteger:=FieldByName(dlbcDebitAccNo.KeyField).AsInteger;
+   end;
+end;
+function DisableProperty(Sender: TComponent;Propertyname: String): Boolean;
+var
+ PropInfo: PPropInfo;
+begin
+ PropInfo := GetPropInfo(Sender.ClassInfo, Propertyname);
+ if PropInfo <> nil then
+    SetPropValue(sender,'Enabled',False);
+ Result:=PropInfo <> nil;
+end;
+
+procedure CheckDates;
+begin
+if Assigned(Out_RepairFrm) then
+with Out_RepairFrm do
+if dtpOpDat.DateTime>dtOpDatEnd.DateTime  then
+ begin
+  MessageDlg('Ямялиййат тарихини дцзэцн дахил един',mtError,[mbOk],0);
+  Abort;
+ end;
+end;
+procedure TRepDataModule.CreditAccDataAfterScroll(DataSet: TDataSet);
+begin
+ if Assigned(OutRepairEdit) then
+  with OutRepairEdit,DataSet do
+   if (edKreditAccNo.Focused)then
+    begin
+    RefreshAccounts(aoCredit);
+    TransactionData.FieldByName('CREDITID').AsInteger:=FieldByName(dlbcKreditAccNo.KeyField).AsInteger;
+  end;
+end;
+function TRepDataModule.SaveTransaction(Value: TTransaction): Boolean;
+var
+ TempAct: Integer;
+begin
+with Value do
+begin
+ case Action of
+  acDelete: TempAct:=0;
+  acInsert: TempAct:=1;
+  acUpdate: TempAct:=2;
+ else
+  TempAct:=-1;
+ end;
+
+ Result:=pcCorrect.CallIntegerFunction('Main', [
+   'Flag',TempAct
+  ,'CorMode',Mode
+  ,'TransactionID'   ,ID
+  ,'TransactionDate' ,Date
+  ,'DebitID'         ,DebitId
+  ,'CreditID'        ,CreditId
+  ,'DebitAmount'     ,DebitAmmount
+  ,'CreditAmount'    ,CreditAmmount
+  ,'LAmount'         ,LAmmount
+  ,'DebitRate'       ,DebitRate
+  ,'CreditRate'      ,CreditRate
+  ,'TrName'          ,Name
+  ,'InBalanceChar'   ,InBalanceChar
+  ,'OutBalanceChar'  ,OutBalanceChar
+ ]);
+
+ end;
+
+end;
+
+procedure TRepDataModule.UsersDataAfterOpen(DataSet: TDataSet);
+begin
+if Assigned(Out_RepairFrm) then
+ try
+   with Out_RepairFrm do
+   scUser.Refresh;
+ except
+  Dataset.Close;
+ end;
+end;
+procedure TRepDataModule.FullRefresh;
+
+procedure DisableAllControls;
+
+procedure DisableContr(Value: TComponent);
+ var
+ I : Integer;
+ begin
+  if Assigned(Value) then
+     with Value do
+       For i:=0 to ComponentCount-1 do
+        DisableProperty(Components[i],'Enabled');
+ end;
+
+begin
+ DisableContr(self);
+ DisableContr(Out_RepairFrm);
+ DisableContr(OutRepairEdit);
+ end;
+procedure OpenData(Value: TDataSet);
+begin
+ with Value do
+  if not(Active) then Open else Refresh;
+end;
+
+begin
+
+try
+ CheckDates;
+ //TransactionData.SetVariable('DAT',trunc(Out_RepairFrm.dtpOpDat.DateTime));
+ //TransactionData.SetVariable('DAT2',trunc(Out_RepairFrm.dtOpDatEnd.DateTime));
+//TransactionData.Open;
+
+ with CreditRateData do
+  begin
+   SetVariable('DAT',Out_RepairFrm.dtpOpDat.DateTime);
+   OpenData(CreditRateData);
+  end;
+ with DebetRateData do
+  begin
+   SetVariable('DAT',Out_RepairFrm.dtpOpDat.DateTime);
+   OpenData(DebetRateData);
+  end;
+ OpenData(CurDebetData);
+ OpenData(CurKreditData);
+ OpenData(DebetAccData);
+ OpenData(CreditAccData);
+ OpenData(OutBalanceCharData);
+ OpenData(InBalanceCharData);
+ if UsersData.Active then
+  begin
+   Out_RepairFrm.FilterShowAction(ftAll);
+   Out_RepairFrm.Filter.Execute;
+  end;
+except
+ on E: EAbort do
+  Beep;
+ else
+  begin
+   DisableAllControls;
+   raise;
+  end;
+end;
+end;
+
+
+procedure TRepDataModule.DataModuleCreate(Sender: TObject);
+begin
+FullRefresh;
+end;
+
+procedure TRepDataModule.ValutesThreadFinished(Sender: TOracleQuery);
+begin
+if Assigned(Out_RepairFrm) then
+ with Out_RepairFrm,clbValute,Items do
+  begin
+    Add('Мулти-валйута');
+    TStringList(Pointer(clbValute.Tag)^).Add('CreditCurrencyID');
+    Checked[Count-1]:=True;
+  end;
+end;
+
+procedure TRepDataModule.ValutesThreadRecord(Sender: TOracleQuery);
+begin
+if Assigned(Out_RepairFrm) then
+ with Out_RepairFrm,clbValute,Items do
+  begin
+   Add(Sender.Field('valu_name'));
+   Checked[Count-1]:=True;
+   TStringList(Pointer(clbValute.Tag)^).Add(Sender.Field('valute'))
+ end;
+end;
+
+procedure TRepDataModule.VidOpThreadRecord(Sender: TOracleQuery);
+begin
+if Assigned(Out_RepairFrm) then
+ with Out_RepairFrm,clbOperation,Items do
+  begin
+   Add(Sender.Field('name'));
+   Checked[Count-1]:=True;
+   TStringList(Pointer(clbOperation.Tag)^).Add(Sender.Field('ID'))
+  end;
+end;
+
+procedure TRepDataModule.InBalanceCharDataAfterScroll(DataSet: TDataSet);
+begin
+ if Assigned(OutRepairEdit) then
+   with OutRepairEdit,Dataset do
+   if not(dlbcBalance.Focused) then
+    if dlbcBalance.KeyValue<>FieldByName('SYMBOL').AsInteger then
+      dlbcBalance.KeyValue:=FieldByName('SYMBOL').AsInteger;
+end;
+
+end.
+

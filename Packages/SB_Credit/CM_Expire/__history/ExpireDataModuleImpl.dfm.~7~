@@ -1,0 +1,192 @@
+object ExpireDataModule: TExpireDataModule
+  OldCreateOrder = False
+  Height = 480
+  Width = 696
+  object LoanRest: TOracleDataSet
+    SQL.Strings = (
+      'SELECT'
+      '   C.REST , '
+      '   CM_COMMON.AccountNumber_Get(D.LOANACCID) as ACC_NO'
+      'FROM'
+      '   CM_ACTIVE_CREDITS B'
+      ' , CM_CURR_STATE C'
+      ' , CM_ACCOUNTS D'
+      'WHERE'
+      '     (B.ID =:CreditID)'
+      ' AND (D.CREDITID =:CreditID)'
+      ' AND (C.CREDITID =:CreditID)')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000120000003A00430052004500440049005400490044000300
+      00000000000000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 144
+    Top = 288
+    object LoanRestREST: TFloatField
+      FieldName = 'REST'
+      Required = True
+    end
+    object LoanRestACC_NO: TWideStringField
+      FieldName = 'ACC_NO'
+      Size = 4000
+    end
+  end
+  object DSLoanRest: TDataSource
+    DataSet = LoanRest
+    Left = 144
+    Top = 224
+  end
+  object DueRest: TOracleDataSet
+    SQL.Strings = (
+      'SELECT'
+      '   C.DUEREST , '
+      '   CM_COMMON.AccountNumber_Get(D.DUELOANACCID) as ACC_NO'
+      'FROM'
+      '   CM_ACTIVE_CREDITS B'
+      ' , CM_CURR_STATE C'
+      ' , CM_ACCOUNTS D'
+      'WHERE'
+      '     (B.ID =:CreditID)'
+      ' AND (D.CREDITID =:CreditID)'
+      ' AND (C.CREDITID =:CreditID)')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000120000003A00430052004500440049005400490044000300
+      00000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000E0000004400550045005200450053005400010000000000
+      0C0000004100430043005F004E004F00010000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 216
+    Top = 288
+    object DueRestDUEREST: TFloatField
+      FieldName = 'DUEREST'
+      Required = True
+    end
+    object DueRestACC_NO: TWideStringField
+      FieldName = 'ACC_NO'
+      Size = 4000
+    end
+  end
+  object DSDueRest: TDataSource
+    DataSet = DueRest
+    Left = 208
+    Top = 224
+  end
+  object SReserves: TOracleDataSet
+    SQL.Strings = (
+      'SELECT id, percent, description'
+      '  FROM cm_reserves'
+      'ORDER BY Percent')
+    Optimize = False
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    OnCalcFields = PReservesCalcFields
+    Left = 64
+    Top = 128
+    object SReservesID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object SReservesPERCENT: TFloatField
+      FieldName = 'PERCENT'
+      Required = True
+    end
+    object SReservesDESCRIPTION: TWideStringField
+      FieldName = 'DESCRIPTION'
+      Required = True
+      Size = 64
+    end
+    object SReservesFullDesc: TWideStringField
+      FieldKind = fkCalculated
+      FieldName = 'FullDesc'
+      Size = 255
+      Calculated = True
+    end
+  end
+  object DataSrcSReserves: TDataSource
+    DataSet = SReserves
+    Left = 64
+    Top = 176
+  end
+  object CreditInfo: TOracleDataSet
+    SQL.Strings = (
+      'SELECT '
+      '  RESERVEID ,'
+      ' DUERESERVEID ,'
+      ' NAME'
+      'FROM CM_ACTIVE'
+      'WHERE ID=:CREDITID ')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000120000003A00430052004500440049005400490044000300
+      00000000000000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 224
+    Top = 64
+  end
+  object DataSrcCreditInfo: TDataSource
+    DataSet = CreditInfo
+    Left = 248
+    Top = 128
+  end
+  object CM_EXPIRE: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'CM_EXPIRE'
+    ParameterMode = pmNamed
+    Cursor = crHourGlass
+    Left = 144
+    Top = 64
+  end
+  object ExpireData: TOracleDataSet
+    SQL.Strings = (
+      'SELECT id, creditid, expdate, expamount, intrest'
+      '  FROM cm_expires'
+      ' WHERE CreditID=:CreditID')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000120000003A00430052004500440049005400490044000300
+      00000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      0500000005000000040000004900440001000000000010000000430052004500
+      440049005400490044000100000000000E000000450058005000440041005400
+      45000100000000001200000045005800500041004D004F0055004E0054000100
+      000000000E00000049004E0054005200450053005400010000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 344
+    Top = 16
+    object ExpireDataID: TFloatField
+      DisplayLabel = #8470
+      FieldName = 'ID'
+      Required = True
+    end
+    object ExpireDataCREDITID: TFloatField
+      FieldName = 'CREDITID'
+      Required = True
+      Visible = False
+    end
+    object ExpireDataEXPDATE: TDateTimeField
+      DisplayLabel = #1058#1072#1088#1080#1093#1080
+      FieldName = 'EXPDATE'
+      Required = True
+    end
+    object ExpireDataEXPAMOUNT: TFloatField
+      DisplayLabel = #1052#1103#1073#1083#1103#1101
+      FieldName = 'EXPAMOUNT'
+      Required = True
+      DisplayFormat = '#,##0.00'
+    end
+    object ExpireDataINTREST: TFloatField
+      FieldName = 'INTREST'
+    end
+  end
+  object DataSrcExpire: TDataSource
+    DataSet = ExpireData
+    Left = 344
+    Top = 64
+  end
+end

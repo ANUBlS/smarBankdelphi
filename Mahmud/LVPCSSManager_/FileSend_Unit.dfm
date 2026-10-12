@@ -1,0 +1,259 @@
+object SendFileForm: TSendFileForm
+  Left = 303
+  Top = 267
+  BorderIcons = [biSystemMenu]
+  BorderStyle = bsSingle
+  Caption = 'Sent File'
+  ClientHeight = 336
+  ClientWidth = 326
+  Color = clBtnFace
+  Font.Charset = RUSSIAN_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poMainFormCenter
+  OnConstrainedResize = FormConstrainedResize
+  OnKeyUp = FormKeyUp
+  PixelsPerInch = 96
+  TextHeight = 13
+  object DBGrid1: TDBGrid
+    Left = 0
+    Top = 0
+    Width = 326
+    Height = 281
+    Align = alTop
+    BorderStyle = bsNone
+    Color = clBtnFace
+    DataSource = Mt150_DataSource
+    Options = [dgTitles, dgColumnResize, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit]
+    TabOrder = 0
+    TitleFont.Charset = RUSSIAN_CHARSET
+    TitleFont.Color = clWindowText
+    TitleFont.Height = -11
+    TitleFont.Name = 'Azl Sans Serif'
+    TitleFont.Style = []
+    OnDrawColumnCell = DBGrid1DrawColumnCell
+    OnDblClick = DBGrid1DblClick
+    Columns = <
+      item
+        Color = clWhite
+        Expanded = False
+        FieldName = 'ID'
+        Title.Alignment = taCenter
+        Title.Color = 8404992
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clWhite
+        Title.Font.Height = -11
+        Title.Font.Name = 'Azl Sans Serif'
+        Title.Font.Style = []
+        Width = 58
+        Visible = True
+      end
+      item
+        Color = clSilver
+        Expanded = False
+        Title.Alignment = taCenter
+        Title.Color = 8404992
+        Width = 20
+        Visible = True
+      end
+      item
+        Color = clWhite
+        Expanded = False
+        FieldName = 'USER_REFERENCE'
+        Title.Alignment = taCenter
+        Title.Caption = 'Гейдиййат №'
+        Title.Color = 8404992
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clWhite
+        Title.Font.Height = -11
+        Title.Font.Name = 'Azl Sans Serif'
+        Title.Font.Style = []
+        Visible = True
+      end
+      item
+        Alignment = taCenter
+        Color = clSilver
+        Expanded = False
+        FieldName = 'TYPE'
+        Title.Alignment = taCenter
+        Title.Caption = 'Тип(МТ150)'
+        Title.Color = 8404992
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clWhite
+        Title.Font.Height = -11
+        Title.Font.Name = 'Azl Sans Serif'
+        Title.Font.Style = []
+        Visible = True
+      end
+      item
+        Alignment = taCenter
+        Color = clWhite
+        Expanded = False
+        FieldName = 'CREATE_DATE'
+        Title.Alignment = taCenter
+        Title.Caption = 'Тарих'
+        Title.Color = 8404992
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clWhite
+        Title.Font.Height = -11
+        Title.Font.Name = 'Azl Sans Serif'
+        Title.Font.Style = []
+        Width = 73
+        Visible = True
+      end>
+  end
+  object But_cancel: TBitBtn
+    Left = 263
+    Top = 313
+    Width = 58
+    Height = 20
+    Anchors = [akRight, akBottom]
+    Caption = 'Чыхыш'
+    TabOrder = 1
+    OnClick = But_cancelClick
+  end
+  object Panel1: TPanel
+    Left = 0
+    Top = 281
+    Width = 326
+    Height = 24
+    Align = alTop
+    BevelInner = bvLowered
+    Color = clGray
+    TabOrder = 2
+    object Label1: TLabel
+      Left = 106
+      Top = 6
+      Width = 21
+      Height = 13
+      Caption = '-дян'
+    end
+    object Label2: TLabel
+      Left = 226
+      Top = 6
+      Width = 21
+      Height = 13
+      Caption = '-дяк'
+    end
+    object DateTimePicker1: TDateTimePicker
+      Left = 0
+      Top = 2
+      Width = 105
+      Height = 21
+      CalAlignment = dtaLeft
+      Date = 37830.710877662
+      Time = 37830.710877662
+      DateFormat = dfShort
+      DateMode = dmComboBox
+      Kind = dtkDate
+      ParseInput = False
+      TabOrder = 0
+    end
+    object DateTimePicker2: TDateTimePicker
+      Left = 132
+      Top = 2
+      Width = 92
+      Height = 21
+      CalAlignment = dtaLeft
+      Date = 37830.710877662
+      Time = 37830.710877662
+      DateFormat = dfShort
+      DateMode = dmComboBox
+      Kind = dtkDate
+      ParseInput = False
+      TabOrder = 1
+    end
+    object BitBtn1: TBitBtn
+      Left = 255
+      Top = 2
+      Width = 69
+      Height = 20
+      Caption = 'Йениля'
+      TabOrder = 2
+      OnClick = BitBtn1Click
+    end
+  end
+  object SentInfo: TOracleDataSet
+    SQL.Strings = (
+      'select '
+      '    *'
+      ' from '
+      '    XS_SENTINFO'
+      'where'
+      '    create_date>=:BeginDate  and create_date<=:EndDate'
+      ''
+      'order by id')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    Variables.Data = {
+      03000000020000000A0000003A424547494E444154450C000000000000000000
+      0000080000003A454E44444154450C0000000000000000000000}
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = False
+    Active = False
+    Left = 48
+    Top = 56
+  end
+  object Mt150_DataSource: TDataSource
+    DataSet = SentInfo
+    Left = 48
+    Top = 88
+  end
+  object ForCheck: TOracleDataSet
+    SQL.Strings = (
+      'select out_dir from xs_config')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = False
+    Active = False
+    Left = 144
+    Top = 72
+  end
+end

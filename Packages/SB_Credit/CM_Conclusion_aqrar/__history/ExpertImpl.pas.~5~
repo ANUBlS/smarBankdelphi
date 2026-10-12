@@ -1,0 +1,52 @@
+unit ExpertImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, CheckLst, Buttons, ComCtrls;
+
+type
+  TExpertFrm = class(TForm)
+    BitBtn1: TBitBtn;
+    CheckListBox1: TCheckListBox;
+    procedure FormShow(Sender: TObject);
+    procedure BitBtn1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  ExpertFrm: TExpertFrm;
+
+implementation
+
+{$R *.dfm}
+uses DataModuleConclusion;
+procedure TExpertFrm.BitBtn1Click(Sender: TObject);
+var i : integer;
+begin
+//	for i := 0 to checklistbox1.items.Count - 1 do
+//	  begin
+//	    if checklistbox1.Checked[i] = true then
+//	     begin
+//       ShowMessage(checklistbox1.Items.Strings[i]);
+//      end;
+//    end;
+end;
+
+procedure TExpertFrm.FormShow(Sender: TObject);
+
+
+begin
+  while not DataModuleConcl.ExpertSet.Eof do
+  begin
+   CheckListBox1.Items.Add(DataModuleConcl.ExpertSet.Fields[0].AsString);
+    DataModuleConcl.ExpertSet.Next;
+  end;
+
+end;
+
+end.

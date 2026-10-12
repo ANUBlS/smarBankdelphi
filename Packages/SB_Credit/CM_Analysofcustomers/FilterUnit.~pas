@@ -1,0 +1,206 @@
+unit FilterUnit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, ExtCtrls, NLSLocalizer, Mask, DBCtrlsEh, DBLookupEh, CheckLst,
+  Evanescence, Buttons, ActnList;
+
+type
+  TFilterForm = class(TForm)
+    NLSLocalizer1: TNLSLocalizer;
+    Panel1: TPanel;
+    Panel2: TPanel;
+    GroupBox2: TGroupBox;
+    EvanescenceValute: TEvanescence;
+    CheckBoxValute: TCheckBox;
+    GroupBox1: TGroupBox;
+    EvanescenceFilial: TEvanescence;
+    CheckBoxFilial: TCheckBox;
+    Panel3: TPanel;
+    GroupBox3: TGroupBox;
+    DBLookupComEhCustomer: TDBLookupComboboxEh;
+    CheckBoxCustomer: TCheckBox;
+    GroupBox4: TGroupBox;
+    DBLookupComEhCredittype: TDBLookupComboboxEh;
+    GroupBox5: TGroupBox;
+    DBLookupComEhCategories: TDBLookupComboboxEh;
+    CheckBoxCategories: TCheckBox;
+    GroupBox6: TGroupBox;
+    DBLookupComEhUsersGroup: TDBLookupComboboxEh;
+    CheckBoxUsersgroup: TCheckBox;
+    GroupBox7: TGroupBox;
+    DBLookupComEhUsers: TDBLookupComboboxEh;
+    CheckBoxUsers: TCheckBox;
+    GroupBox8: TGroupBox;
+    DBLookupComEhPersons: TDBLookupComboboxEh;
+    CheckBoxPersons: TCheckBox;
+    CheckBoxCreditType: TCheckBox;
+    Panel4: TPanel;
+    ActionList1: TActionList;
+    ActionFlterAccept: TAction;
+    ActionFilterReject: TAction;
+    SpeedButton1: TSpeedButton;
+    SpeedButton2: TSpeedButton;
+    SpeedButton3: TSpeedButton;
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure ActionFlterAcceptExecute(Sender: TObject);
+    procedure ActionFilterRejectExecute(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure SpeedButton3Click(Sender: TObject);
+  private
+   function FilterString:string;
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+    massiv =array[1..254] of string;
+var
+  FilterForm: TFilterForm;
+
+implementation
+   uses CustAnalysDataModuleImpl,CreditUnit;
+{$R *.DFM}
+
+
+
+function TFilterForm.FilterString:String;
+var scurrency,sbranchid,spersons,sandpersons ,
+    susers,sandusers,sandcustomertype,scustomertype,
+    sandcredittype, screditType,susergroup,sandusergroup,
+    scustomer,sandcustomer: String; mass :massiv; i:integer;
+
+function F_Ev(Const cs :string; Checked :Boolean; Ev :TEvanescence):String;
+var s,s1 :string;
+ i :integer;
+
+begin
+   s:='';S1:='';
+   if Checked then
+   begin
+     for i :=0 to Ev.GetCheckedKeyList.Count - 1 do
+      begin
+         s1 := '('+cs+'='+Ev.GetCheckedKeyList[I]+')';
+         if s ='' then s :=s1 else s := s+' or '+s1;
+       end;
+      Result :=s;
+   end
+   else Result :='';
+end;
+
+function F_LCOMB(Const cs,cd :string; Checked :Boolean; Comb :TDBLookupComboboxEh):String;
+var Kv :string;
+begin
+  if Checked then
+  begin
+     Kv := String(Comb.KeyValue);
+     Result := cd+'('+cs+'='+Kv+')';
+  end
+  else Result :='';
+end;
+
+begin
+
+   sandpersons := F_LCOMB('PERSONALTYPE','AND',CheckBoxPersons.Checked,DBLookupComEhPersons);
+   spersons := F_LCOMB('PERSONALTYPE','',CheckBoxPersons.Checked,DBLookupComEhPersons);
+   sandusers := F_LCOMB('USID','AND',CheckBoxUsers.Checked,DBLookupComEhUsers);
+   susers := F_LCOMB('USID','',CheckBoxUsers.Checked,DBLookupComEhUsers);
+   sandusergroup := F_LCOMB('USRGROUP','AND',CheckBoxUsersgroup.Checked,DBLookupComEhUsersGroup);
+   susergroup := F_LCOMB('USRGROUP','',CheckBoxUsersgroup.Checked,DBLookupComEhUsersGroup);
+   sandcustomerType := F_LCOMB('CUSTOMERTYPE','AND',CheckBoxCategories.Checked,DBLookupComEhCategories);
+   scustomerType := F_LCOMB('CUSTOMERTYPE','',CheckBoxCategories.Checked,DBLookupComEhCategories);
+   sandcreditType := F_LCOMB('CREDITTYPE','AND',CheckBoxCreditType.Checked,DBLookupComEhCredittype);
+   screditType := F_LCOMB('CREDITTYPE','',CheckBoxCreditType.Checked,DBLookupComEhCredittype);
+   sandcustomer := F_LCOMB('BOOROWERID','AND',CheckBoxCustomer.Checked,DBLookupComEhCustomer);
+   scustomer := F_LCOMB('BOOROWERID','',CheckBoxCustomer.Checked,DBLookupComEhCustomer);
+   scurrency := F_Ev('CURRENCY',CheckBoxValute.Checked,EvanescenceValute);
+   sbranchid := F_Ev('BRANCHID',CheckBoxFilial.Checked,EvanescenceFilial);
+
+   IF (scurrency <>'')and(sbranchid <> '') then
+   Result :=scurrency+'and'+sbranchid+sandpersons+sandusers+sandcustomertype+
+   sandcredittype+sandusergroup+sandcustomer;
+
+   IF (scurrency <>'')and(sbranchid = '') then
+   Result :=scurrency+sandpersons+sandusers+sandcustomertype+
+   sandcredittype+sandusergroup+sandcustomer;
+
+   IF (scurrency ='')and(sbranchid <> '') then
+   Result :=sbranchid+sandpersons+sandusers+sandcustomertype+
+   sandcredittype+sandusergroup+sandcustomer;
+
+   mass[1] := spersons;
+   mass[2] := susers;
+   mass[3] := scustomertype;
+   mass[4] := scredittype;
+   mass[5] := susergroup;
+   mass[6] := scustomer;
+
+
+   IF (scurrency ='')and(sbranchid = '') then
+   begin
+      Result :='';
+      for i := 1 to 6 do
+      if mass[i] <> '' then
+      begin
+        if Result = '' then Result := mass[i]
+        else Result := Result+' and '+mass[i]
+      end;
+   end;
+
+ //  ShowMessage(Result);
+end;
+
+
+procedure TFilterForm.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+Begin
+  Resize := False;
+end;
+
+procedure TFilterForm.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+  if ord(Key) = VK_ESCAPE then Close;
+end;
+
+procedure TFilterForm.ActionFlterAcceptExecute(Sender: TObject);
+begin
+     //try
+     with CreditForm.DBGridEhCredit ,DataSource.DataSet  do
+     begin
+       Filter :=FilterString;
+      // ShowMessage(FilterString);
+       Filtered :=False;
+       Filtered :=True;
+       SelectedRows.Clear;
+    end;
+   {except
+     ShowMessage('Uygun sahÿ(lÿr) ce÷ilmÿyib !');
+     ActionFilterRejectExecute(Sender);
+  end;}
+end;
+
+procedure TFilterForm.ActionFilterRejectExecute(Sender: TObject);
+begin
+   With CreditForm.DBGridEhCredit ,DataSource.DataSet  do
+   begin
+     Filter := '';
+     Filtered := False;
+     SelectedRows.Clear;
+    end;
+end;
+
+procedure TFilterForm.FormDestroy(Sender: TObject);
+begin
+   EvanescenceValute.Close;
+   EvanescenceFilial.Close;
+end;
+
+procedure TFilterForm.SpeedButton3Click(Sender: TObject);
+begin
+   Close;
+end;
+
+end.

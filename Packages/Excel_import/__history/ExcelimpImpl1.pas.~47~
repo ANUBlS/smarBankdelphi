@@ -1,0 +1,591 @@
+﻿unit ExcelimpImpl1;
+      //OracleDataSet2
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActiveX, AxCtrls, Excel_import_TLB, StdVcl, Db, ExcelXP, OleServer,
+  Oracle, OracleData, ImgList, ComCtrls, ToolWin, Grids, DBGrids, StdCtrls,
+  DBCtrls,ShellAPI;
+
+type
+  TExcelimp = class(TActiveForm, IExcelimp)
+    DBGrid1: TDBGrid;
+    ToolBar1: TToolBar;
+    ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
+    ToolButton3: TToolButton;
+    ToolButton6: TToolButton;
+    ToolButton5: TToolButton;
+    ToolButton4: TToolButton;
+    ImageList1: TImageList;
+    OracleDataSet3: TOracleDataSet;
+    OraclePackage1: TOraclePackage;
+    OracleDataSet2: TOracleDataSet;
+    ExcelWorkbook1: TExcelWorkbook;
+    ExcelWorksheet1: TExcelWorksheet;
+    ExcelApplication1: TExcelApplication;
+    OpenDialog1: TOpenDialog;
+    DataSource1: TDataSource;
+    OracleDataSet1: TOracleDataSet;
+    Label1: TLabel;
+    ComboBox1: TDBLookupComboBox;
+    DataSource2: TDataSource;
+    Edit1: TEdit;
+    ToolButton7: TToolButton;
+    DBLookupComboBox1: TDBLookupComboBox;
+    DBGrid2: TDBGrid;
+    accountins: TOracleDataSet;
+    DataSource3: TDataSource;
+    bankinfo: TOracleDataSet;
+    bankinfoSWIFT: TWideStringField;
+    ToolButton8: TToolButton;
+    procedure ToolButton1Click(Sender: TObject);
+    procedure ToolButton5Click(Sender: TObject);
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure ToolButton3Click(Sender: TObject);
+    procedure ComboBox1CloseUp(Sender: TObject);
+    procedure ActiveFormActivate(Sender: TObject);
+    procedure ToolButton7Click(Sender: TObject);
+    procedure ToolButton8Click(Sender: TObject);
+  private
+    { Private declarations }
+    FEvents: IExcelimpEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+
+  public
+
+    { Public declarations }
+    procedure Initialize; override;
+
+
+  end;
+
+implementation
+
+uses ComObj, ComServ,sboapiDataModuleImpl;
+
+{$R *.DFM}
+
+{ TExcelimp }
+
+procedure TExcelimp.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_ExcelimpPage); }
+end;
+
+procedure TExcelimp.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as IExcelimpEvents;
+end;
+
+procedure TExcelimp.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TExcelimp.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TExcelimp.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TExcelimp.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TExcelimp.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TExcelimp.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TExcelimp.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TExcelimp.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TExcelimp.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TExcelimp.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TExcelimp.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TExcelimp.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TExcelimp.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TExcelimp.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TExcelimp.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TExcelimp.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TExcelimp.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TExcelimp.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TExcelimp.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TExcelimp._Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TExcelimp.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TExcelimp.ActiveFormActivate(Sender: TObject);
+begin
+//ShowMessage('1111');
+// ComboBox1.KeyValue:='Əməliyyatın Tipi';
+end;
+
+procedure TExcelimp.ActiveFormCreate(Sender: TObject);
+var i,j,k :integer;
+begin
+{j:=OracleDataSet3.RecordCount;
+//ShowMessage(inttostr(j));
+for i := 0 to j do
+
+                begin
+//ComboBox1.:=OracleDataSet3.FieldByName('Name').AsString;
+
+                OracleDataSet3.Next;
+                end;
+                OracleDataSet3.Next;  }
+               //
+
+oraclePackage1.CallProcedure('Del_excel',[]);
+OracleDataSet1.Refresh;
+//
+ OracleDataSet3.Open;
+ ComboBox1.KeyValue:='Əməliyyatın Tipi';
+ DBLookupComboBox1.KeyValue:='Hesab';
+
+ //sboapiDataModule.SBSession.commit;
+//SBTranslateProc.TranslateAllComponents(Self,sboapiDataModule.OrPack_SL);
+end;
+
+
+procedure TExcelimp.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TExcelimp.ComboBox1CloseUp(Sender: TObject);
+begin
+Edit1.Text:=ComboBox1.KeyValue;
+end;
+
+procedure TExcelimp.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TExcelimp.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TExcelimp.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TExcelimp.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TExcelimp.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TExcelimp.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TExcelimp.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TExcelimp.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TExcelimp.Set_AxBorderStyle(Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TExcelimp.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TExcelimp.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TExcelimp.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TExcelimp.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TExcelimp.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TExcelimp.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TExcelimp.Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TExcelimp.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TExcelimp.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TExcelimp.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TExcelimp.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TExcelimp.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TExcelimp.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+procedure TExcelimp.ToolButton1Click(Sender: TObject);
+Const xlCellTypeLast=$000000B;
+var Excel:Variant;
+    m, n:Integer;
+    b:string;
+begin
+
+
+  if  not OpenDialog1.Execute then Exit;
+  ShowMessage(OpenDialog1.FileName);
+  //ToolButton8.Click;
+  {
+  Excel:=CreateoleObject('Excel.Application');
+  Excel.Workbooks.Open(OpenDialog1.FileName);
+  m := 2;
+  n := excel.ActiveCell.SpecialCells(xlCellTypeLast).Row+1;//axrinci
+
+     OracleDataSet1.Close;
+
+    OracleDataSet1.Open;
+
+  while m<>n do begin
+  OracleDataSet1.Insert;
+
+
+    OracleDataSet1.FieldByName('f1').Value :=Excel.Cells[m, 1].value;
+    OracleDataSet1.FieldByName('f2').Value :=Excel.Cells[m, 2].value;
+    OracleDataSet1.FieldByName('f3').Value :=Excel.Cells[m, 3].value;
+    OracleDataSet1.FieldByName('f4').Value :=Excel.Cells[m, 4].value;
+    OracleDataSet1.FieldByName('f5').Value :=Excel.Cells[m, 5].value;
+    OracleDataSet1.FieldByName('f6').Value :=Excel.Cells[m, 6].value;
+    OracleDataSet1.FieldByName('f7').Value :=Excel.Cells[m, 7].value;
+    OracleDataSet1.FieldByName('f8').Value :=Excel.Cells[m, 8].value;
+    OracleDataSet1.FieldByName('f9').Value :=Excel.Cells[m, 9].value;
+    OracleDataSet1.FieldByName('f10').Value :=Excel.Cells[m, 10].value;
+    OracleDataSet1.FieldByName('f11').Value :=Excel.Cells[m, 11].value;
+    OracleDataSet1.FieldByName('f12').Value :=Excel.Cells[m, 12].value;
+    OracleDataSet1.FieldByName('f13').Value :=Excel.Cells[m, 13].value;
+    OracleDataSet1.FieldByName('f14').Value :=Excel.Cells[m, 14].value;
+    OracleDataSet1.FieldByName('f15').Value :=Excel.Cells[m, 15].value;
+    OracleDataSet1.FieldByName('f16').Value :=Excel.Cells[m, 16].value;
+    OracleDataSet1.FieldByName('f17').Value :=Excel.Cells[m, 17].value;
+    OracleDataSet1.FieldByName('f18').Value :=Excel.Cells[m, 18].value;
+    OracleDataSet1.FieldByName('f19').Value :=Excel.Cells[m, 19].value;
+    OracleDataSet1.FieldByName('f20').Value :=Excel.Cells[m, 20].value;
+    OracleDataSet1.FieldByName('f21').Value :=Excel.Cells[m, 21].value;
+    OracleDataSet1.FieldByName('f22').Value :=Excel.Cells[m, 22].value;
+    OracleDataSet1.FieldByName('f23').Value :=Excel.Cells[m, 23].value;
+    OracleDataSet1.FieldByName('f24').Value :=Excel.Cells[m, 24].value;
+    OracleDataSet1.FieldByName('f25').Value :=Excel.Cells[m, 25].value;
+    OracleDataSet1.FieldByName('f26').Value :=Excel.Cells[m, 26].value;
+    OracleDataSet1.FieldByName('f27').Value :=Excel.Cells[m, 27].value;
+    OracleDataSet1.FieldByName('f28').Value :=Excel.Cells[m, 28].value;
+    OracleDataSet1.FieldByName('f29').Value :=Excel.Cells[m, 29].value;
+    OracleDataSet1.FieldByName('f30').Value :=Excel.Cells[m, 30].value;
+    OracleDataSet1.FieldByName('f31').Value :=Excel.Cells[m, 31].value;
+    OracleDataSet1.FieldByName('f32').Value :=Excel.Cells[m, 32].value;
+    OracleDataSet1.FieldByName('f33').Value :=Excel.Cells[m, 33].value;
+    OracleDataSet1.FieldByName('f34').Value :=Excel.Cells[m, 34].value;
+    OracleDataSet1.FieldByName('f35').Value :=Excel.Cells[m, 35].value;
+    OracleDataSet1.FieldByName('f36').Value :=Excel.Cells[m, 36].value;
+    OracleDataSet1.FieldByName('f37').Value :=Excel.Cells[m, 37].value;
+    OracleDataSet1.FieldByName('f38').Value :=Excel.Cells[m, 38].value;
+    OracleDataSet1.FieldByName('f39').Value :=Excel.Cells[m, 39].value;
+    OracleDataSet1.FieldByName('f40').Value :=Excel.Cells[m, 40].value;
+    OracleDataSet1.FieldByName('f41').Value :=Excel.Cells[m, 41].value;
+    OracleDataSet1.FieldByName('f42').Value :=Excel.Cells[m, 42].value;
+    OracleDataSet1.FieldByName('f43').Value :=Excel.Cells[m, 43].value;
+    OracleDataSet1.FieldByName('f44').Value :=Excel.Cells[m, 44].value;
+    OracleDataSet1.FieldByName('f45').Value :=Excel.Cells[m, 45].value;
+    OracleDataSet1.FieldByName('f46').Value :=Excel.Cells[m, 46].value;
+    OracleDataSet1.FieldByName('f47').Value :=Excel.Cells[m, 47].value;
+    OracleDataSet1.FieldByName('f48').Value :=Excel.Cells[m, 48].value;
+    OracleDataSet1.FieldByName('f49').Value :=Excel.Cells[m, 49].value;
+    OracleDataSet1.FieldByName('f50').Value :=Excel.Cells[m, 50].value;
+    OracleDataSet1.FieldByName('f51').Value :=Excel.Cells[m, 51].value;
+    OracleDataSet1.FieldByName('f52').Value :=Excel.Cells[m, 52].value;
+    OracleDataSet1.FieldByName('f53').Value :=Excel.Cells[m, 53].value;
+    OracleDataSet1.FieldByName('f54').Value :=Excel.Cells[m, 54].value;
+    OracleDataSet1.FieldByName('f55').Value :=Excel.Cells[m, 55].value;
+    OracleDataSet1.FieldByName('f56').Value :=Excel.Cells[m, 56].value;
+    OracleDataSet1.FieldByName('f57').Value :=Excel.Cells[m, 57].value;
+    OracleDataSet1.FieldByName('f58').Value :=Excel.Cells[m, 58].value;
+    OracleDataSet1.FieldByName('f59').Value :=Excel.Cells[m, 59].value;
+    OracleDataSet1.FieldByName('f60').Value :=Excel.Cells[m, 60].value;
+    OracleDataSet1.FieldByName('f61').Value :=Excel.Cells[m, 61].value;
+    OracleDataSet1.FieldByName('f62').Value :=Excel.Cells[m, 62].value;
+    OracleDataSet1.FieldByName('f63').Value :=Excel.Cells[m, 63].value;
+    OracleDataSet1.FieldByName('f64').Value :=Excel.Cells[m, 64].value;
+    OracleDataSet1.FieldByName('f65').Value :=Excel.Cells[m, 65].value;
+    OracleDataSet1.FieldByName('f66').Value :=Excel.Cells[m, 66].value;
+    OracleDataSet1.FieldByName('f67').Value :=Excel.Cells[m, 67].value;
+    OracleDataSet1.FieldByName('f68').Value :=Excel.Cells[m, 68].value;
+    OracleDataSet1.Post;
+    inc(m);
+  end;
+       OracleDataSet1.Close;
+
+    OracleDataSet1.Open;
+  OracleDataSet1.First;
+
+
+  Excel.Workbooks.Close;
+  Excel.Quit;                }
+
+    //sabuhi 21.10.2014
+
+end;
+
+procedure TExcelimp.ToolButton3Click(Sender: TObject);
+begin
+bankinfo.Open   ;
+if MessageDlg('Koçürmələrini həyata keçirim?',
+   mtConfirmation, [mbYes, mbNo], 0) = mrYes then
+   begin
+
+ if bankinfo.FieldByName('SWIFT').AsString='REVAAZ22' then
+    oraclePackage1.CallProcedure('EXCELTRANSACTIONSins',[DBLookupComboBox1.Text])
+   else
+   oraclePackage1.CallProcedure('EXCELTRANSACTIONS',[edit1.Text]);
+
+ShowMessage('Əməliyyatlar göndərildi!');
+oraclePackage1.CallProcedure('Del_excel',[]);
+  OracleDataSet1.Refresh;
+
+   end;
+sboapiDataModule.SBSession.commit;
+end;
+
+procedure TExcelimp.ToolButton5Click(Sender: TObject);
+begin
+OracleDataSet1.Open;
+//OracleDataSet4.Open;
+accountins.Open;
+OracleDataSet3.Open;
+OracleDataSet1.Refresh;
+end;
+
+procedure TExcelimp.ToolButton7Click(Sender: TObject);
+begin
+oraclePackage1.CallProcedure('del_inspayments',[]);
+ShowMessage('Əməliyyatlar silindi!');
+oraclePackage1.CallProcedure('Del_excel',[]);
+  OracleDataSet1.Refresh;
+end;
+
+procedure OpenCmdWithParameters(const Parameters: string; var ProcessHandle: THandle);
+var
+  StartupInfo: TStartupInfo;
+  ProcessInfo: TProcessInformation;
+  CommandLine: string;
+begin
+  ZeroMemory(@StartupInfo, SizeOf(StartupInfo));
+  StartupInfo.cb := SizeOf(StartupInfo);
+   CommandLine:= 'cmd.exe ' + Parameters;
+  CreateProcess(nil, PChar(CommandLine), nil, nil, False, CREATE_NEW_CONSOLE, nil, nil, StartupInfo, ProcessInfo);
+  ProcessHandle := ProcessInfo.hProcess;
+  CloseHandle(ProcessInfo.hThread);
+end;
+
+procedure CloseCmd(ProcessHandle: THandle);
+begin
+  TerminateProcess(ProcessHandle, 0);
+  CloseHandle(ProcessHandle);
+end;
+
+procedure TExcelimp.ToolButton8Click(Sender: TObject);
+var
+  Cmd: string;
+  CmdLine: string;
+  CmdProcessHandle: THandle;
+
+ ScriptPath: string;
+
+begin
+
+ OpenCmdWithParameters('/K D:\Smart-Bank\Env\Import\inpybase.py ', CmdProcessHandle);
+
+
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TExcelimp,
+    Class_Excelimp,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

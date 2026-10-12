@@ -1,0 +1,78 @@
+unit Frmpaymentimpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ExtCtrls, CMExcelExport, ImgList, Grids, DBGrids, ComCtrls, ToolWin,
+  StdCtrls;
+
+type
+  TFrmpayment = class(TForm)
+    Panel1: TPanel;
+    Panel2: TPanel;
+    Panel3: TPanel;
+    GroupBox1: TGroupBox;
+    Label1: TLabel;
+    Edit1: TEdit;
+    Panel4: TPanel;
+    ToolBar1: TToolBar;
+    ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
+    ToolButton3: TToolButton;
+    ToolButton4: TToolButton;
+    ToolButton5: TToolButton;
+    ToolButton6: TToolButton;
+    ToolButton7: TToolButton;
+    ToolButton8: TToolButton;
+    ToolButton9: TToolButton;
+    DBInvest: TDBGrid;
+    ImageList: TImageList;
+    CMExcelExport1: TCMExcelExport;
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormCreate(Sender: TObject);
+    procedure ToolButton1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Frmpayment: TFrmpayment;
+
+implementation
+
+{$R *.dfm}
+uses CommanParametrs,sboapiDataModuleImpl,DmPaymentimpl,Add_Invest_paymentimpl;
+  procedure InitPlugin(s:string);export;
+begin
+
+   if s='' then
+   begin
+   Frmpayment.ShowModal;
+   end;
+
+end;
+exports
+     InitPlugin;
+
+procedure TFrmpayment.FormCreate(Sender: TObject);
+begin
+DmPayment:=TDmPayment.Create(self);
+end;
+
+procedure TFrmpayment.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+if ord(key)=vk_escape then  close;
+end;
+procedure TFrmpayment.ToolButton1Click(Sender: TObject);
+begin
+ShowMessage('salam');
+Add_Invest_payment.ShowModal;
+end;
+
+initialization
+ Frmpayment :=TFrmpayment.Create(Application);
+
+end.

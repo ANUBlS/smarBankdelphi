@@ -1,0 +1,1180 @@
+﻿unit FrmMainIns_ReinsReceiveImpl;
+
+{$WARN SYMBOL_PLATFORM OFF}
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActiveX, AxCtrls, PrjIns_ReinsReceive_TLB, StdVcl, StdCtrls, Grids, XDBGrids,
+  ComCtrls, variants, DB, OracleData,Oracle,ToolWin,ActnList, DBGrids, XFSCtrls, ExtCtrls, DBCtrls, ImgList, CMExcelExport, Menus;
+
+
+type
+  TMainReInsReceive = class(TActiveForm, IMainReInsReceive)
+    Emeliyyat: TPopupMenu;
+    dmplan1: TMenuItem;
+    N8: TMenuItem;
+    dmlr1: TMenuItem;
+    N7: TMenuItem;
+    Zrrlr1: TMenuItem;
+    N9: TMenuItem;
+    Xitam1: TMenuItem;
+    ExcelExport: TCMExcelExport;
+    ImageList: TImageList;
+    ImageList2: TImageList;
+    XFGroupBox1: TXFGroupBox;
+    RGContract: TXFRadioGroup;
+    XFGroupBox2: TXFGroupBox;
+    DBLookupComboBox1: TDBLookupComboBox;
+    XFCheckBox1: TXFCheckBox;
+    XFGroupBox11: TXFGroupBox;
+    DBLookupComboBox6: TDBLookupComboBox;
+    XFCheckBox9: TXFCheckBox;
+    XFGroupBox3: TXFGroupBox;
+    DBLookupComboBox2: TDBLookupComboBox;
+    XFCheckBox2: TXFCheckBox;
+    XFPanel2: TXFPanel;
+    XFGroupBox4: TXFGroupBox;
+    XFRadioGroup1: TXFRadioGroup;
+    XFCheckBox6: TXFCheckBox;
+    DateTimePicker1: TDateTimePicker;
+    DateTimePicker2: TDateTimePicker;
+    XFButton1: TXFButton;
+    XFCheckBox3: TXFCheckBox;
+    XFGroupBox5: TXFGroupBox;
+    ComboBox1: TComboBox;
+    XFCheckBox4: TXFCheckBox;
+    XFPanel1: TXFPanel;
+    ToolBar1: TToolBar;
+    ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
+    ToolButton3: TToolButton;
+    ToolButton5: TToolButton;
+    ToolButton7: TToolButton;
+    ToolButton9: TToolButton;
+    ToolButton12: TToolButton;
+    ToolButton13: TToolButton;
+    XFPanel4: TXFPanel;
+    XDBGrid1: TXDBGrid;
+    XFPanel3: TXFPanel;
+    EditAMMOUNT: TEdit;
+    EditFRANSHIZ: TEdit;
+    EditINSSUMM: TEdit;
+    Memo1: TMemo;
+    N1: TMenuItem;
+    Xitambarderosu1: TMenuItem;
+    EditPOLICY_NUM: TEdit;
+    editNAME: TEdit;
+    editSIGORTA_NOVU: TEdit;
+    XFGroupBox6: TXFGroupBox;
+    DBLookupComboBox3: TDBLookupComboBox;
+    XFCheckBox5: TXFCheckBox;
+    ToolButton14: TToolButton;
+    T1: TMenuItem;
+    N2: TMenuItem;
+    procedure ToolButton1Click(Sender: TObject);
+    procedure ToolButton3Click(Sender: TObject);
+    procedure ToolButton5Click(Sender: TObject);
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure ToolButton7Click(Sender: TObject);
+    procedure XDBGrid1DblClick(Sender: TObject);
+    procedure ToolButton9Click(Sender: TObject);
+    procedure EditPOLICY_NUMExit(Sender: TObject);
+    procedure EditPOLICY_NUMKeyPress(Sender: TObject; var Key: Char);
+    procedure XDBGrid1DrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TXColumn; State: TGridDrawState);
+    procedure ToolButton13Click(Sender: TObject);
+    procedure XFButton1Click(Sender: TObject);
+    procedure RGContractClick(Sender: TObject);
+    procedure Xitam1Click(Sender: TObject);
+    procedure dmplan1Click(Sender: TObject);
+    procedure dmlr1Click(Sender: TObject);
+    procedure Zrrlr1Click(Sender: TObject);
+    procedure editNAMEExit(Sender: TObject);
+    procedure Xitambarderosu1Click(Sender: TObject);
+    procedure ToolButton14Click(Sender: TObject);
+    procedure T1Click(Sender: TObject);
+
+  private
+    { Private declarations }
+    FEvents: IMainReInsReceiveEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure MouseEnterEvent(Sender: TObject);
+    procedure MouseLeaveEvent(Sender: TObject);
+    procedure PaintEvent(Sender: TObject);
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_AlignDisabled: WordBool; safecall;
+    function Get_AlignWithMargins: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_BorderWidth: Integer; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_DockSite: WordBool; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_ExplicitHeight: Integer; safecall;
+    function Get_ExplicitLeft: Integer; safecall;
+    function Get_ExplicitTop: Integer; safecall;
+    function Get_ExplicitWidth: Integer; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_MouseInClient: WordBool; safecall;
+    function Get_ParentCustomHint: WordBool; safecall;
+    function Get_ParentDoubleBuffered: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PopupMode: TxPopupMode; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_ScreenSnap: WordBool; safecall;
+    function Get_SnapBuffer: Integer; safecall;
+    function Get_UseDockManager: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_AlignWithMargins(Value: WordBool); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_BorderWidth(Value: Integer); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_DockSite(Value: WordBool); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_ParentCustomHint(Value: WordBool); safecall;
+    procedure Set_ParentDoubleBuffered(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PopupMode(Value: TxPopupMode); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_ScreenSnap(Value: WordBool); safecall;
+    procedure Set_SnapBuffer(Value: Integer); safecall;
+    procedure Set_UseDockManager(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+  public
+    { Public declarations }
+    procedure Initialize; override;
+    procedure ActionSpeedSearchExecute(Sender: TObject);
+    procedure ActionFilterExecute(Sender: TObject);
+
+  end;
+
+implementation
+
+uses ComObj, ComServ,CommanParametrs,DMIns_ReinsReceiveImpl,sboapiDataModuleImpl;
+var
+           filterstatus:integer;
+            sort_ASC: Boolean;
+             sqlstring,sql,sql1:string;
+
+{$R *.DFM}
+
+{ TMainReInsReceive }
+
+
+procedure TMainReInsReceive.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_MainReInsReceivePage); }
+end;
+
+procedure TMainReInsReceive.EditPOLICY_NUMExit(Sender: TObject);
+begin
+  TEdit(Sender).Text :=EmptyStr;
+end;
+
+procedure TMainReInsReceive.EditPOLICY_NUMKeyPress(Sender: TObject; var Key: Char);
+begin
+  if Key = #13  then
+  begin
+   ActionSpeedSearchExecute(Sender);
+  end;
+end;
+procedure TMainReInsReceive.editNAMEExit(Sender: TObject);
+begin
+ TEdit(Sender).Text :=EmptyStr;
+end;
+
+procedure TMainReInsReceive.ActionSpeedSearchExecute(
+  Sender: TObject);
+var
+  SearchField : string;
+  SearchOptions : TSearchRecordOptions;
+begin
+  SearchOptions := [srIgnoreCase ,srPartialMatch ];
+
+  with Sender as TEdit  do
+  begin
+    SearchField := copy(Name,5,length(Name));
+    with  TOracleDataSet(XDBGrid1.DataSource.DataSet) do
+    if  not SearchRecord(
+                  SearchField
+                 ,Text
+                 ,SearchOptions + [srFromCurrent , srForward ]
+                 ) then
+    if MessageDlg(
+              'Axtarış sona çatdı.'+#13+'Əvvəldən başlansın?'
+             ,mtInformation
+             ,[mbNo , mbYes]
+             ,0
+             ) = mrYes  then
+    if not SearchRecord(
+                 SearchField
+                ,Text
+                ,SearchOptions + [ srFromBeginning ]
+                )  then
+    MessageDlg('Yazı tapılmayıb!',mtInformation,[mbOK],0);
+ end;
+end;
+
+
+procedure TMainReInsReceive.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as IMainReInsReceiveEvents;
+  inherited EventSinkChanged(EventSink);
+end;
+
+procedure TMainReInsReceive.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnMouseEnter := MouseEnterEvent;
+  OnMouseLeave := MouseLeaveEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TMainReInsReceive.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TMainReInsReceive.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TMainReInsReceive.Get_AlignDisabled: WordBool;
+begin
+  Result := AlignDisabled;
+end;
+
+function TMainReInsReceive.Get_AlignWithMargins: WordBool;
+begin
+  Result := AlignWithMargins;
+end;
+
+function TMainReInsReceive.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TMainReInsReceive.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TMainReInsReceive.Get_BorderWidth: Integer;
+begin
+  Result := Integer(BorderWidth);
+end;
+
+function TMainReInsReceive.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TMainReInsReceive.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TMainReInsReceive.Get_DockSite: WordBool;
+begin
+  Result := DockSite;
+end;
+
+function TMainReInsReceive.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TMainReInsReceive.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TMainReInsReceive.Get_ExplicitHeight: Integer;
+begin
+  Result := ExplicitHeight;
+end;
+
+function TMainReInsReceive.Get_ExplicitLeft: Integer;
+begin
+  Result := ExplicitLeft;
+end;
+
+function TMainReInsReceive.Get_ExplicitTop: Integer;
+begin
+  Result := ExplicitTop;
+end;
+
+function TMainReInsReceive.Get_ExplicitWidth: Integer;
+begin
+  Result := ExplicitWidth;
+end;
+
+function TMainReInsReceive.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TMainReInsReceive.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TMainReInsReceive.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TMainReInsReceive.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TMainReInsReceive.Get_MouseInClient: WordBool;
+begin
+  Result := MouseInClient;
+end;
+
+function TMainReInsReceive.Get_ParentCustomHint: WordBool;
+begin
+  Result := ParentCustomHint;
+end;
+
+function TMainReInsReceive.Get_ParentDoubleBuffered: WordBool;
+begin
+  Result := ParentDoubleBuffered;
+end;
+
+function TMainReInsReceive.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TMainReInsReceive.Get_PopupMode: TxPopupMode;
+begin
+  Result := Ord(PopupMode);
+end;
+
+function TMainReInsReceive.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TMainReInsReceive.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TMainReInsReceive.Get_ScreenSnap: WordBool;
+begin
+  Result := ScreenSnap;
+end;
+
+function TMainReInsReceive.Get_SnapBuffer: Integer;
+begin
+  Result := SnapBuffer;
+end;
+
+function TMainReInsReceive.Get_UseDockManager: WordBool;
+begin
+  Result := UseDockManager;
+end;
+
+function TMainReInsReceive.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TMainReInsReceive.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TMainReInsReceive._Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TMainReInsReceive.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TMainReInsReceive.ActiveFormCreate(Sender: TObject);
+begin
+filterstatus:=0;
+Reinsgrid:=XDBGrid1;
+DMIns_ReinsReceive:=TDMIns_ReinsReceive.Create(self);
+ sql1:=DMIns_ReinsReceive.DSMAIN.SQL.Text;
+ RGContract.ItemIndex:=0;
+ XFRadioGroup1.ItemIndex:=0;
+end;
+
+procedure TMainReInsReceive.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TMainReInsReceive.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TMainReInsReceive.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TMainReInsReceive.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TMainReInsReceive.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TMainReInsReceive.dmlr1Click(Sender: TObject);
+begin
+with DMIns_ReinsReceive,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['SEEPAYMENT']);
+ end;
+
+contactid:=XDBGrid1.DataSource.DataSet.FieldByName('cid').AsInteger;
+ contractstatus:=XDBGrid1.DataSource.DataSet.FieldByName('STATE').AsInteger;
+ loadPlugin('InsPayment.bpl','');
+end;
+
+
+
+procedure TMainReInsReceive.dmplan1Click(Sender: TObject);
+begin
+contactid:=XDBGrid1.DataSource.DataSet.FieldByName('cid').AsInteger;
+contractstatus:=XDBGrid1.DataSource.DataSet.FieldByName('STATE').AsInteger;
+loadPlugin('InsPaymentPlan.bpl','');
+end;
+
+
+
+procedure TMainReInsReceive.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TMainReInsReceive.MouseEnterEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnMouseEnter;
+end;
+
+procedure TMainReInsReceive.MouseLeaveEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnMouseLeave;
+end;
+
+procedure TMainReInsReceive.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TMainReInsReceive.RGContractClick(Sender: TObject);
+begin
+           ActionFilterExecute(Sender);
+end;
+
+procedure TMainReInsReceive.Set_AxBorderStyle(Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TMainReInsReceive.Set_AlignWithMargins(Value: WordBool);
+begin
+  AlignWithMargins := Value;
+end;
+
+procedure TMainReInsReceive.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TMainReInsReceive.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TMainReInsReceive.Set_BorderWidth(Value: Integer);
+begin
+  BorderWidth := TBorderWidth(Value);
+end;
+
+procedure TMainReInsReceive.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TMainReInsReceive.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TMainReInsReceive.Set_DockSite(Value: WordBool);
+begin
+  DockSite := Value;
+end;
+
+procedure TMainReInsReceive.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TMainReInsReceive.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TMainReInsReceive.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TMainReInsReceive.Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TMainReInsReceive.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := string(Value);
+end;
+
+procedure TMainReInsReceive.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TMainReInsReceive.Set_ParentCustomHint(Value: WordBool);
+begin
+  ParentCustomHint := Value;
+end;
+
+procedure TMainReInsReceive.Set_ParentDoubleBuffered(Value: WordBool);
+begin
+  ParentDoubleBuffered := Value;
+end;
+
+procedure TMainReInsReceive.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TMainReInsReceive.Set_PopupMode(Value: TxPopupMode);
+begin
+  PopupMode := TPopupMode(Value);
+end;
+
+procedure TMainReInsReceive.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TMainReInsReceive.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TMainReInsReceive.Set_ScreenSnap(Value: WordBool);
+begin
+  ScreenSnap := Value;
+end;
+
+procedure TMainReInsReceive.Set_SnapBuffer(Value: Integer);
+begin
+  SnapBuffer := Value;
+end;
+
+procedure TMainReInsReceive.Set_UseDockManager(Value: WordBool);
+begin
+  UseDockManager := Value;
+end;
+
+procedure TMainReInsReceive.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+procedure TMainReInsReceive.T1Click(Sender: TObject);
+begin
+loadPlugin('ins_reins_exelinp.bpl','');
+end;
+
+procedure TMainReInsReceive.ToolButton13Click(Sender: TObject);
+begin
+ with ExcelExport do
+   begin
+      Connect;
+      ExportDataset(XDBGrid1.DataSource.DataSet,'tekrar sigorta.',True,false);
+      Disconnect;
+   end;
+end;
+
+procedure TMainReInsReceive.ToolButton14Click(Sender: TObject);
+var
+  funcname : String;
+begin
+
+ with DMIns_ReinsReceive,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['COMMITINSCONTRACTS']);
+ end;
+
+ if contractstatus=1 then
+ begin
+   showmessage('Diqqət! Bu müqavilə bağlanmış müqavilə olduğundan heç bir deyişiklik oluna bilməz.');
+   exit;
+ end;
+    contactid:=XDBGrid1.DataSource.DataSet.FieldByName('ID').asInteger ;
+ with DMIns_ReinsReceive do
+ begin
+   DSPaymentSettingInfo.Close;
+   DSPaymentSettingInfo.SetVariable('pcid',contactid);
+   DSPaymentSettingInfo.Open;
+
+   if DSPaymentSettingInfo.FieldByName('say').AsInteger=0 then
+   begin
+     showmessage('Diqqət! Bu müqavilənin Ödəmə planı haqqındakı məlumatları yığılmayıb!');
+     exit;
+   end;
+
+
+   DSPaymentsetting.Close;
+   DSPaymentsetting.SetVariable('pcid',contactid);
+   DSPaymentsetting.Open;
+
+   DSPaymentInfo.Close;
+   DSPaymentInfo.SetVariable('pcid',contactid);
+   DSPaymentInfo.Open;
+
+    if DSPaymentsetting.FieldByName('payment_type').AsInteger=2 then
+    begin
+   if DSPaymentInfo.FieldByName('say').AsInteger=0 then
+   begin
+     showmessage('Diqqət! Bu müqavilənin Ödəmə planı hissələrlə ödəniş olduğundan ödəmə planı yığılmalıdır!');
+     exit;
+   end;
+   end;
+
+ end;
+ {if (XDBGrid1.DataSource.DataSet.FieldByName('type_id').asInteger=2)   then
+ begin
+  InsDataMod.DSMedEmploes.Close;
+  InsDataMod.DSMedEmploes.SetVariable('pcid',contactid);
+  InsDataMod.DSMedEmploes.Open;
+ if (InsDataMod.DSMedEmploes.RecordCount=0) then
+ begin
+   showmessage('Diqqət! Bu tibbi sığorta müqaviləsi üçün Sığortalanacaq işçilərin siyahısı yığılmayıb!');
+   exit;
+ end;
+ end;   }
+
+   {DMIns_ReinsReceive.DScontractcommit.Close;
+   DMIns_ReinsReceive.DScontractcommit.SetVariable('pid',contactid);
+   DMIns_ReinsReceive.DScontractcommit.Open; }
+
+ if XDBGrid1.DataSource.DataSet.FieldByName('valute_id').AsInteger<>0 then
+   begin
+
+   DMIns_ReinsReceive.DSOperkurs.close;
+   DMIns_ReinsReceive.DSOperkurs.SetVariable('pval_kod',XDBGrid1.DataSource.DataSet.FieldByName('valute_id').AsInteger);
+   DMIns_ReinsReceive.DSOperkurs.SetVariable('pdat',XDBGrid1.DataSource.DataSet.FieldByName('ins_date').AsDateTime);
+   DMIns_ReinsReceive.DSOperkurs.Open;
+           if DMIns_ReinsReceive.DSOperkurs.FieldByName('say').AsInteger=0 then
+           begin
+
+       showmessage('Diqqət !Sistemdə bu müqavilənin  muqavilə tarixinə və valyutasına uyğun kurs movcudd deyil.');
+       exit;
+           end;
+   end;
+
+
+ {InsDataMod.ODSContracts.RefreshRecord;  //user,group ??
+ with InsDataMod, ODSContracts do
+   case fieldbyname('state').asInteger of
+    0 : funcname := 'commitblank';
+    2:  funcname := 'commitsuggestion';
+    4 : funcname := 'commitpolicy';
+    else exit;
+   end;
+
+ with InsDataMod, OPCOMMON do
+  if CallBooleanFunction(funcname, [ODSContracts.fieldbyname('ID').asInteger]) then begin
+    MessageDlg('Testiq olundu.', mtInformation, [mbok], 0);
+    ODSContracts.RefreshRecord;
+  end; }
+  //showmessage(DBGridContracts.DataSource.DataSet.FieldByName('ID').AsString);
+  //showmessage(InsDataMod.ODSContracts.FieldByName('ID').AsString);
+
+   with DMIns_ReinsReceive, OPCOMMON do
+  if OPCOMMON.CallIntegerFunction('commitcontract', [contactid])=1 then
+  begin
+    MessageDlg('Testiq olundu.', mtInformation, [mbok], 0);
+    DMIns_ReinsReceive.DSMain.RefreshRecord;
+  end;
+
+
+end;
+
+
+procedure TMainReInsReceive.ToolButton1Click(Sender: TObject);
+begin
+opetion:='ins';
+loadPlugin('Ins_ReinsR_contract.bpl','');
+end;
+
+procedure TMainReInsReceive.ToolButton3Click(Sender: TObject);
+begin
+  if XDBGrid1.DataSource.DataSet.RecordCount=0 then
+  begin
+    showmessage ('Məlumat Yoxdur');
+    exit;
+  end;
+
+opetion:='upd';
+contactid:=XDBGrid1.DataSource.DataSet.FieldByName('id').AsInteger;
+loadPlugin('Ins_ReinsR_contract.bpl','');
+
+end;
+
+procedure TMainReInsReceive.ToolButton5Click(Sender: TObject);
+begin
+  DMIns_ReinsReceive.DSMain.refresh;
+ // XDBGrid1.DataSource.DataSet.Refresh;
+end;
+
+procedure TMainReInsReceive.ToolButton7Click(Sender: TObject);
+begin
+with DMIns_ReinsReceive,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['CLOSECONTRACT_ALLReinsurance']);
+ end;
+
+    if contractstatus=1 then
+ begin
+   showmessage('Diqqət! Bu müqavilə bağlanmış müqavilə olduğundan heç bir deyişiklik oluna bilməz.');
+   exit;
+ end;
+
+ {ShowMessage(FloatToStr(InsDataMod.ODSContractsID.Value));
+ ShowMessage(FloatToStr(InsDataMod.ODSContractsType_Id.value));  }
+ if MessageDlg('Seçilmiş siğorta ləğv olunacaq!',mtConfirmation,
+ mbYesNoCancel, 0) = mrYes then
+try
+   with DMIns_ReinsReceive,OPCOMMON,DSMain do
+   begin
+   //showmessage(inttostr(ODSContracts.FieldByName('ID').AsInteger));
+   //showmessage(inttostr(ODSContracts.FieldByName('TYPE_ID').AsInteger));
+
+if DMIns_ReinsReceive.OPCOMMON.callbooleanfunction('del_ins',[DSMainID.Value,DSMainType_Id.value]) then
+
+     XDBGrid1.DataSource.DataSet.Refresh;
+
+   end;
+except
+    on E:EOracleError do
+    case E.ErrorCode of
+       20002: if MessageDlg('Seçilmiş müqaviləyə uyğun hesablar ləğv olunacaq!',mtConfirmation,mbYesNoCancel, 0) = mrYes then
+                 DMIns_ReinsReceive.OPCOMMON.CallProcedure('close_acc', [DMIns_ReinsReceive.ODSAccountID.value]);
+       20001: ShowMessage('Aslı hesablarda qalıq sıfırdan fərqlidir!');
+     end;
+ end;
+
+end;
+
+procedure TMainReInsReceive.ToolButton9Click(Sender: TObject);
+begin
+XFGroupBox1.Visible :=not XFGroupBox1.Visible;
+ if XFGroupBox1.Visible=true then
+ begin
+   DMIns_ReinsReceive.DSIns_cust.Close;
+   DMIns_ReinsReceive.DSIns_cust.Open;
+
+   DMIns_ReinsReceive.DScutomers.Close;
+   DMIns_ReinsReceive.DScutomers.Open;
+
+   DMIns_ReinsReceive.DSins_agents.Close;
+   DMIns_ReinsReceive.DSins_agents.Open;
+
+end;
+end;
+
+procedure TMainReInsReceive.XDBGrid1DblClick(Sender: TObject);
+begin
+opetion:='upd';
+contactid:=XDBGrid1.DataSource.DataSet.FieldByName('id').AsInteger;
+loadPlugin('Ins_ReinsR_contract.bpl','');
+end;
+
+procedure TMainReInsReceive.XDBGrid1DrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TXColumn; State: TGridDrawState);
+
+var
+  ImageIndex: Integer;
+begin
+ with Sender as TXDBGrid do
+  begin
+    if DataSource.DataSet.RecordCount <> 0 then
+    begin
+      ImageIndex := DataSource.DataSet.FieldByName('state').AsInteger;
+      if (DataCol = 1) and (ImageIndex <> -1) then begin
+        Canvas.brush.Style := bsSolid;
+        Canvas.FillRect(Rect);
+        ImageList2.Draw(Canvas, Rect.Left, Rect.Top, ImageIndex, True); end
+      else
+        DefaultDrawColumnCell(Rect, DataCol, Column, State);
+    end;
+
+
+end;
+end;
+
+procedure TMainReInsReceive.XFButton1Click(Sender: TObject);
+begin
+ActionFilterExecute(Sender);
+end;
+  procedure TMainReInsReceive.Xitam1Click(Sender: TObject);
+begin
+with DMIns_ReinsReceive,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['TERMINATEDINS_CONTRACT']);
+ end;
+ if XDBGrid1.DataSource.DataSet.FieldByName('state').AsInteger<>6  then
+ begin
+ Showmessage('Diqqət!Yalnız Təsdiq statusunda olan muqaviləyə xitam vermək olar.');
+   exit;
+ end;
+
+contactid:=XDBGrid1.DataSource.DataSet.FieldByName('cid').AsInteger;
+contractstatus:=XDBGrid1.DataSource.DataSet.FieldByName('STATE').AsInteger;
+ loadPlugin('InsContracterminated.bpl','');
+end;
+
+
+
+procedure TMainReInsReceive.Xitambarderosu1Click(Sender: TObject);
+
+var
+a:string;
+begin
+with DMIns_ReinsReceive,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['SEEBARDERO_TERMINATE']);
+ end;
+    DMIns_ReinsReceive.DSReins.close;
+    DMIns_ReinsReceive.DSReins.SetVariable('pcid',XDBGrid1.DataSource.DataSet.FieldByName('cid').AsInteger);
+    DMIns_ReinsReceive.DSReins.Open;
+
+   if DMIns_ReinsReceive.DSReins.FieldByName('say').AsInteger=0 then
+    begin
+       showmessage('Diqqət! Yalnız təkrarsığortaya göndərilmiş müqavilə üçün Xitam barderosu yığmaq olar!');
+       exit;
+    end;
+
+       if XDBGrid1.DataSource.DataSet.FieldByName('state').AsInteger<>8 then
+    begin
+       showmessage('Diqqət! Yalnız xitam statusunda olan müqavilə üçün Xitam barderosu yığmaq olar!');
+       exit;
+    end;
+//commandepid:=XDBGrid1.DataSource.DataSet.FieldByName('ID').AsInteger;
+//a:=XDBGrid1.DataSource.DataSet.FieldByName('idc').AsString;
+Bordero_type:='xitam';
+//showmessage(a);
+contactid:=XDBGrid1.DataSource.DataSet.FieldByName('cid').AsInteger;
+ loadPlugin('reinsurance.bpl','terminate');
+end;
+
+
+
+procedure TMainReInsReceive.Zrrlr1Click(Sender: TObject);
+begin
+ if XDBGrid1.DataSource.DataSet.FieldByName('type_id').AsInteger=4 then
+ begin
+ with DMIns_ReinsReceive,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['SEELOSSKASKO']);
+ end;
+ end;
+
+ if XDBGrid1.DataSource.DataSet.FieldByName('type_id').AsInteger=1 then
+ begin
+ with DMIns_ReinsReceive,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['SEELOSSFQ']);
+ end;
+ end;
+
+ if XDBGrid1.DataSource.DataSet.FieldByName('type_id').AsInteger=13 then
+ begin
+ with DMIns_ReinsReceive,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['SEELOSSMES']);
+ end;
+ end;
+
+  if XDBGrid1.DataSource.DataSet.FieldByName('type_id').AsInteger=8 then
+ begin
+ with DMIns_ReinsReceive,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['SEELOSYUK']);
+ end;
+  end;
+
+  if XDBGrid1.DataSource.DataSet.FieldByName('type_id').AsInteger=3 then
+ begin
+ with DMIns_ReinsReceive,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['SEELOSSEMLAK']);
+ end;
+ end;
+
+ if XDBGrid1.DataSource.DataSet.FieldByName('type_id').AsInteger=21 then
+ begin
+ with DMIns_ReinsReceive,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['SEELOSSSEYAHET']);
+ end;
+ end;
+
+ if XDBGrid1.DataSource.DataSet.FieldByName('type_id').AsInteger=2 then
+ begin
+ with DMIns_ReinsReceive,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['SEELOSSTIBB']);
+ end;
+ end;
+ commoncid:=XDBGrid1.DataSource.DataSet.FieldByName('cid').AsInteger;
+contactid:=XDBGrid1.DataSource.DataSet.FieldByName('cid').AsInteger;
+  contractstatus:=XDBGrid1.DataSource.DataSet.FieldByName('STATE').AsInteger;
+     loadPlugin('loss.bpl','');
+end;
+
+
+procedure TMainReInsReceive.ActionFilterExecute(Sender: TObject);
+
+   function  CheckFiltered(IsChecked: Boolean; const FilterStr: String; Args: array of const): String;
+   begin
+    Result :='';
+    if  IsChecked  then
+     Result :=Format(FilterStr, Args);
+     //showmessage('Result= '+Result)  ;
+   end;
+      // a.type_id=1
+const
+   BooleanPrefix = ' AND ';
+   StatusFilter = '(a.close_prefix=%d)';
+   nametype= '(a.type_id=%d)';
+   nameFilter = '(a.KLI_ID=%d)';
+   //custFilter = '(custgroup_id=%d)';
+   custFilter = '(cust.id=%d)';
+   AGENT_IDFilter = '(a.AGENT_ID=%d)';
+   FransizaFilter = '(a.franshiz=%d)';
+   begindateFilter = ' a.begin_date ';
+   enddateFilter = ' a.end_date ';
+   sigortanovuFilter = '(a.type_id=%d)';
+var
+   Status:    String;
+   p_name:    String;
+   p_CUST_ID:  String;
+   p_AGENT_ID:  String;
+   p_marka:    String;
+   p_Avtotype:   String;
+   p_fransiza:   String;
+   p_type:     String;
+   p_begin_date:   String;
+   p_end_date:   String;
+   p_ins_type:string;
+     pstate :integer;
+   FilterStr: String;
+begin
+ FilterStr :='';
+  // showmessage(StatusFilter);
+ Status :=CheckFiltered(
+               RGContract.ItemIndex <> -1
+             ,StatusFilter
+             ,[RGContract.ItemIndex]
+              );
+  // showmessage(Status);
+    //showmessage(nameFilter);
+    //showmessage(DBLookupComboBox1.ListSource.DataSet.FieldByName('name1').asstring);
+
+
+ p_name :=CheckFiltered(
+              XFCheckBox1.Checked//DBLookupBranch.KeyValue <> -1
+             ,nameFilter
+             ,[DBLookupComboBox1.ListSource.DataSet.FieldByName('id').asinteger]
+              );
+ p_cust_id :=CheckFiltered(
+              XFCheckBox9.Checked  //DBLookupOperator.KeyValue <> -1
+             ,custFilter
+             ,[DBLookupComboBox6.ListSource.DataSet.FieldByName('ID').AsInteger]
+              );
+
+ p_AGENT_ID:=CheckFiltered(
+              XFCheckBox2.Checked//DBLookupCurrency.KeyValue <> -1
+             ,AGENT_IDFilter
+             ,[DBLookupComboBox2.ListSource.DataSet.FieldByName('id').AsInteger]
+              );
+
+  p_ins_type :=CheckFiltered(
+              XFCheckBox5.Checked  //DBLookupOperator.KeyValue <> -1
+             ,sigortanovuFilter
+             ,[DBLookupComboBox3.ListSource.DataSet.FieldByName('ID').AsInteger]
+              );
+
+  if Status='' then
+   FilterStr:='status is not null'
+ else
+    FilterStr :=Status;
+
+  if  XFCheckBox1.Checked //Branch <> ''
+  then
+  if  FilterStr=''  then
+    FilterStr :=p_name
+  else
+    FilterStr :=FilterStr + BooleanPrefix + p_name;
+
+     if  XFCheckBox5.Checked //Branch <> ''
+  then
+     if  FilterStr=''  then
+    FilterStr := p_ins_type
+  else
+    FilterStr :=FilterStr + BooleanPrefix + p_ins_type;
+
+    if  XFCheckBox9.Checked //Operator <> ''
+  then
+  if  FilterStr=''  then
+    FilterStr :=p_cust_id
+  else
+    FilterStr :=FilterStr + BooleanPrefix + p_cust_id;
+
+ if  XFCheckBox2.Checked //Currency <> ''
+  then
+  if  FilterStr=''  then
+    FilterStr :=p_AGENT_ID
+  else
+    FilterStr :=FilterStr + BooleanPrefix + p_AGENT_ID;
+
+
+  if XFCheckBox3.Checked then
+  begin
+      if XFRadioGroup1.ItemIndex=0 then
+      begin
+        p_begin_date:=begindateFilter+ ' between  '+''''+datetostr(DateTimePicker1.DateTime)+''''+' and '+''''+datetostr(DateTimePicker2.DateTime)+'''';
+
+  if  FilterStr=''  then
+    FilterStr :=BooleanPrefix+p_begin_date
+  else
+    FilterStr :=FilterStr + BooleanPrefix + p_begin_date;
+    //showmessage(FilterStr);
+      end;
+
+      if XFRadioGroup1.ItemIndex=1 then
+      begin
+       p_end_date:=enddateFilter+ ' between  '+''''+datetostr(DateTimePicker1.DateTime)+''''+' and '+''''+datetostr(DateTimePicker2.DateTime)+'''';
+       //showmessage(p_end_date);
+  if  FilterStr=''  then
+    FilterStr :=p_end_date
+  else
+    FilterStr :=FilterStr + BooleanPrefix + p_end_date;
+      end;
+        //else
+
+
+  end;
+    if XFCheckBox4.Checked=true then
+    begin
+
+    case ComboBox1.ItemIndex of
+   0:pstate:=6;
+   1:pstate:=0;
+   2:pstate:=7;
+   3:pstate:=8;
+     end;
+
+       if  FilterStr=''  then
+       begin
+
+    FilterStr :=' and ic.state='+inttostr(pstate);
+    end
+  else
+    FilterStr :=FilterStr + ' and a.state='+inttostr(pstate);
+      end;
+
+    //showmessage(' and '+ FilterStr);
+    //showmessage(DMMainTravel.DSContract.sql.Text);
+    DMIns_ReinsReceive.DSMain.sql.Text:='';
+              sql:=sql1+' and '+ FilterStr;
+  //DMMainTravel.DSContract.sql:=' and '+ FilterStr;
+  DMIns_ReinsReceive.DSMain.sql.Text:=sql;
+
+  memo1.Text:= DMIns_ReinsReceive.DSMain.sql.Text;
+  DMIns_ReinsReceive.DSMain.sql.text:=Stringreplace(DMIns_ReinsReceive.DSMain.sql.text,'status','DECODE (a.close_prefix, 0, 1, 2)', [rfReplaceAll, rfIgnoreCase]);
+
+  DMIns_ReinsReceive.DSMain.close;
+  DMIns_ReinsReceive.DSMain.Open;
+
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TMainReInsReceive,
+    Class_MainReInsReceive,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

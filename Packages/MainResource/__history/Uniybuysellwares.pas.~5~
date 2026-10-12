@@ -1,0 +1,57 @@
+unit Uniybuysellwares;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ComCtrls, ExtCtrls, StdCtrls, ImgList, ToolWin, Grids, DBGrids;
+
+type
+  TFormbuysellwares = class(TForm)
+    ImageList1: TImageList;
+    Panel1: TPanel;
+    DBGrid1: TDBGrid;
+    Panel2: TPanel;
+    RadioGroup1: TRadioGroup;
+    ToolBar2: TToolBar;
+    ToolButton1: TToolButton;
+    procedure RadioGroup1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Formbuysellwares: TFormbuysellwares;
+
+implementation
+
+uses UnitDat, UnitData;
+
+{$R *.dfm}
+
+procedure TFormbuysellwares.RadioGroup1Click(Sender: TObject);
+begin
+case RadioGroup1.ItemIndex of
+    0:
+      begin
+                  DataModWares.OracleDatabuy.Close;
+                  DataModWares.OracleDatabuy.Open;
+                 DBGrid1.DataSource:=DataModWares.DataSourcebuy;
+                 DataModWares.OracleDatabuy.Refresh;
+        ShowMessage('First option selected');
+      end;
+
+    1:
+      begin
+        DataModWares.OracleDataSetsell.Close;
+                  DataModWares.OracleDataSetsell.Open;
+                 DBGrid1.DataSource:=DataModWares.DataSourcesell;
+                 DataModWares.OracleDataSetsell.Refresh;
+      end;
+
+end;
+end;
+
+end.

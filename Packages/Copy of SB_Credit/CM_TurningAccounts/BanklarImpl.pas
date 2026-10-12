@@ -1,0 +1,74 @@
+unit BanklarImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, nlsDialogs,
+  Buttons, DBCtrls, StdCtrls, Mask, CMDBSearchEdit, DBCtrlsEh;
+
+type
+  TFormBank = class(TForm)
+    Label1: TLabel;
+    DBLookupComboBox1: TDBLookupComboBox;
+    SpeedButton1: TSpeedButton;
+    SpeedButton2: TSpeedButton;
+    SpeedButton3: TSpeedButton;
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure SpeedButton2Click(Sender: TObject);
+    procedure SpeedButton3Click(Sender: TObject);
+    procedure DBEdit1Change(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormBank: TFormBank;
+
+implementation
+
+{$R *.DFM}
+ uses LazyTransactionDatModImpl;
+procedure TFormBank.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+Resize:=false;
+end;
+
+procedure TFormBank.SpeedButton1Click(Sender: TObject);
+var
+s :string;
+begin
+if LazTrDatMod.OracleDataSet1.fieldbyname('BANK_KOD').asstring ='' then
+begin
+showmessage('Ѕу банкын коду дахил едилм€йиб');
+exit;
+end;
+
+s:='and substr(ad.acc_no,5,2)='+ LazTrDatMod.OracleDataSet1.fieldbyname('BANK_KOD').asstring;
+LazTrDatMod.TransactionsData.Close;
+LazTrDatMod.TransactionsData.sql[28]:=s;
+LazTrDatMod.TransactionsData.open;
+end;
+
+procedure TFormBank.SpeedButton2Click(Sender: TObject);
+begin
+LazTrDatMod.TransactionsData.Close;
+LazTrDatMod.TransactionsData.sql[28]:='';
+LazTrDatMod.TransactionsData.open;
+end;
+
+procedure TFormBank.SpeedButton3Click(Sender: TObject);
+begin
+close
+end;
+
+procedure TFormBank.DBEdit1Change(Sender: TObject);
+begin
+//LazTrDatMod.OracleDataSet1.Locate('BANK_KOD',DBEdit1.text,[])
+end;
+
+end.

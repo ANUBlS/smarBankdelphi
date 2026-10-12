@@ -1,0 +1,180 @@
+unit PortfelFilialsUnit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+   CMExcelExport, StdCtrls, Buttons, CheckLst, Evanescence,
+  ComCtrls, ExtCtrls;
+
+type
+  TPFForm = class(TForm)
+    CMExcelExport: TCMExcelExport;
+    Panel1: TPanel;
+    GroupBox1: TGroupBox;
+    GroupBox2: TGroupBox;
+    GroupBox3: TGroupBox;
+    DTPBegin: TDateTimePicker;
+    DTPEnd: TDateTimePicker;
+    Label1: TLabel;
+    Label2: TLabel;
+    Panel2: TPanel;
+    Evanescence1: TEvanescence;
+    Evanescence2: TEvanescence;
+    BitBtn1: TBitBtn;
+    BitBtn2: TBitBtn;
+    Bevel1: TBevel;
+    PrBarPart: TProgressBar;
+    PrBarMain: TProgressBar;
+    SpeedButton1: TSpeedButton;
+    SpeedButton2: TSpeedButton;
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure BitBtn1Click(Sender: TObject);
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure SpeedButton2Click(Sender: TObject);
+  private
+  function FilterString(Elgun :TEvanescence):String;
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  PFForm: TPFForm;
+
+implementation
+                   
+{$R *.DFM}
+uses PortfelFilialsDatModImpl,CommonDecls,sbsystem;
+
+procedure InitPlugin(s:string);export;
+begin
+  PFForm.ShowModal;
+end;
+
+exports InitPlugin ;
+
+function TPFForm.FilterString(Elgun :TEvanescence):String;
+
+function F_Ev(Const cs :string; Ev :TEvanescence):String;
+var s,s1 :string;
+ i :integer;
+
+begin
+   s:='';S1:='';
+  // Result :='';
+     for i :=0 to Ev.GetCheckedKeyList.Count - 1 do
+      begin
+         s1 := '('+cs+'='+Ev.GetCheckedKeyList[I]+')';
+         if s ='' then s :=s1 else s := s+' or '+s1;
+       end;
+      Result :=s;
+end;
+
+begin
+
+   Result := F_Ev('ID',Elgun);
+end;
+
+
+procedure TPFForm.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+   if ord(Key) = VK_ESCAPE then close;
+end;
+
+procedure TPFForm.FormCreate(Sender: TObject);
+begin
+   PFDataMod := TPFDataMod.Create(self);
+   Evanescence1.Open;
+   Evanescence1.CheckAll;
+   Evanescence2.Open;
+   Evanescence2.CheckAll;
+   DTPBegin.DateTime := Get_CurrentDate;
+   DTPEnd.DateTime := Get_CurrentDate;
+end;
+
+procedure TPFForm.FormDestroy(Sender: TObject);
+begin
+   Evanescence1.Close;
+   Evanescence2.Close;
+   PFDataMod.Free;
+end;
+
+procedure TPFForm.BitBtn1Click(Sender: TObject);
+var CntPer,
+    CntBrch,
+    PerID,
+    BrID :integer;
+    Bdat,Edat :TDateTime;
+begin
+  PFDataMod.Results.Session.Commit;
+  with PFDataMod.Persons do
+  begin
+     Filter :=FilterString(Evanescence2);
+     Filtered := False;
+     Filtered := True;
+     First;
+  end;
+
+  with PFDataMod.Branches do
+  begin
+     Filter :=FilterString(Evanescence1);
+     Filtered := False;
+     Filtered := True;
+     First;
+  end;
+
+            PrBarPart.Position:=0;
+            PrBarMain.Position:=0;
+  Bdat := Integer(Trunc(DTPBegin.DateTime));
+  Edat := Integer(Trunc(DTPEnd.DateTime));
+
+  for CntPer :=1 to PFDataMod.Persons.RecordCount do
+  begin
+             PrBarMain.Position:= ((CntPer)*100) div PFDataMod.Persons.RecordCount;
+      PerID := PFDataMod.Persons.FieldByName('ID').AsInteger;
+
+     if CntPer = 2 then PFDataMod.Branches.First;
+    for CntBrch :=1 to PFDataMod.Branches.RecordCount do
+    begin
+     PrBarPart.Position:= (CntBrch*100) div PFDataMod.Branches.RecordCount;
+
+
+       BrID := PFDataMod.Branches.FieldByName('ID').AsInteger;
+        PFDataMod.CM_AK_REPORTS.CallProcedure('Portfel_Filials',[BrID,PerID,Bdat,Edat]);
+       PFDataMod.Branches.next;
+    end;
+
+     PFDataMod.Persons.next;
+     PrBarMain.Position:=100;
+  end;
+
+  PrBarPart.Position:=0;
+  PrBarMain.Position:=0;
+
+  with CMExcelExport do
+  begin
+     PFDataMod.Results.CloseAll;
+     PFDataMod.Results.Open;
+     Connect;
+     ExportDataset(PFDataMod.Results,'ww',true);
+     Disconnect;
+     PFDataMod.Results.CloseAll;
+  end;
+end;
+
+procedure TPFForm.SpeedButton1Click(Sender: TObject);
+begin
+ Evanescence1.CheckAll
+end;
+
+procedure TPFForm.SpeedButton2Click(Sender: TObject);
+begin
+Evanescence1.UncheckAll
+end;
+
+initialization
+  PFForm :=TPFForm.Create(CommonApplication);
+end.

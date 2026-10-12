@@ -1,0 +1,90 @@
+object Methods: TMethods
+  OldCreateOrder = False
+  Height = 280
+  Width = 608
+  object queries: TSQLQuery
+    GetMetadata = True
+    ObjectView = True
+    MaxBlobSize = 32768
+    Params = <>
+    SQLConnection = conn
+    Left = 88
+    Top = 120
+  end
+  object conn: TSQLConnection
+    ConnectionName = 'OracleConnection'
+    DriverName = 'Oracle'
+    LoginPrompt = False
+    Params.Strings = (
+      'DriverName=Oracle'
+      'DataBase=pdbnbc'
+      'User_Name=salary'
+      'Password=salary'
+      'RowsetSize=20'
+      'BlobSize=-1'
+      'ErrorResourceFile='
+      'LocaleCode=0000'
+      'IsolationLevel=ReadCommitted'
+      'OS Authentication=False'
+      'Multiple Transaction=False'
+      'Trim Char=False'
+      'Decimal Separator=.')
+    Connected = True
+    Left = 88
+    Top = 64
+  end
+  object XMLDoc: TXMLDocument
+    Left = 88
+    Top = 8
+  end
+  object procsnfuncs: TSQLStoredProc
+    MaxBlobSize = -1
+    ParamCheck = False
+    Params = <
+      item
+        DataType = ftFMTBcd
+        Precision = 34
+        NumericScale = 1
+        Name = 'v_a'
+        ParamType = ptInput
+        Value = '0'
+      end>
+    SQLConnection = conn
+    StoredProcName = 'UPD_FIL'
+    Left = 88
+    Top = 184
+  end
+  object FDConnection1: TFDConnection
+    Params.Strings = (
+      'Database=PDBNBC'
+      'User_Name=salary'
+      'Password=salary'
+      'ODBCDriver=Oracle in OraClient12Home1_32bit'
+      'DriverID=ODBC')
+    LoginPrompt = False
+    Left = 280
+    Top = 40
+  end
+  object qery: TFDQuery
+    Connection = FDConnection1
+    SQL.Strings = (
+      'select id,dok from otdel')
+    Left = 288
+    Top = 112
+  end
+  object DataSource1: TDataSource
+    DataSet = queries
+    Left = 152
+    Top = 120
+  end
+  object FDBatchMoveTextReader1: TFDBatchMoveTextReader
+    DataDef.Fields = <>
+    Left = 296
+    Top = 200
+  end
+  object DataSource2: TDataSource
+    DataSet = qery
+    Left = 472
+    Top = 184
+  end
+end

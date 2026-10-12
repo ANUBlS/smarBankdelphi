@@ -1,0 +1,53 @@
+unit UnitSearchLegalCustName;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls, Grids, DBGrids, DB, OracleData,sboapiDataModuleImpl;
+
+type
+  TFormSearchLegalCustName = class(TForm)
+    DBGrid1: TDBGrid;
+    Panel1: TPanel;
+    EditName: TEdit;
+    Edit4: TEdit;
+    Button1: TButton;
+    EditLastName: TEdit;
+    LegalDataSource: TDataSource;
+    LegalDataSet: TOracleDataSet;
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormShow(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormSearchLegalCustName: TFormSearchLegalCustName;
+
+implementation
+
+uses ExpDataModuleUnit;
+//uses ExpDataModuleUnit;
+
+{$R *.dfm}
+
+procedure TFormSearchLegalCustName.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+  with ExpDataModule do
+  begin
+    SendDataSet.Filter:='';
+    SendDataSet.Filtered:=false;
+  end;
+end;
+
+procedure TFormSearchLegalCustName.FormShow(Sender: TObject);
+begin
+  LegalDataSet.Close;
+  LegalDataSet.Open;
+end;
+
+end.

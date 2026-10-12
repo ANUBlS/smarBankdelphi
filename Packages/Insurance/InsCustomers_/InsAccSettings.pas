@@ -1,0 +1,159 @@
+unit InsAccSettings;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  DBCtrls, StdCtrls, Buttons, ComCtrls, ExtCtrls, Mask, SearchCombo, DB;
+
+type
+  TfmAccSettings = class(TForm)
+    Panel1: TPanel;
+    PageControl1: TPageControl;
+    TabSheet1: TTabSheet;
+    BitBtn1: TBitBtn;
+    BitBtn2: TBitBtn;
+    Label1: TLabel;
+    DBLookupComboBox1: TDBLookupComboBox;
+    Label2: TLabel;
+    DBLookupComboBox2: TDBLookupComboBox;
+    SearchCombo1: TSearchCombo;
+    SearchCombo2: TSearchCombo;
+    procedure BitBtn1Click(Sender: TObject);
+    procedure Panel1DblClick(Sender: TObject);
+    procedure SearchCombo1Click(Sender: TObject);
+    procedure SearchCombo1KeyPress(Sender: TObject; var Key: Char);
+    procedure FormShow(Sender: TObject);
+    procedure SearchCombo2Click(Sender: TObject);
+    procedure DBLookupComboBox1Click(Sender: TObject);
+    procedure BitBtn2Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  fmAccSettings: TfmAccSettings;
+  currSt : Integer;
+implementation
+
+uses InsDataModule;
+
+{$R *.DFM}
+
+procedure TfmAccSettings.BitBtn1Click(Sender: TObject);
+begin
+  with InsDataMod, ODSContracts do
+   if State in [dsInsert, dsEdit] then Post;
+  with InsDataMod, OPCOMMON do begin
+    CallProcedure('addcontractacc', [ODSContractsid.value,
+                                     ODSContractsLOANACC_ID.Value,
+                                     ODSContractsCURRACC_ID.Value]);
+  end;
+end;
+
+procedure TfmAccSettings.Panel1DblClick(Sender: TObject);
+begin
+//  with InsDataMod do
+//  if ODSLoanAccLists.Active then ShowMessage('Open') else ShowMessage('Closed')
+end;
+
+procedure TfmAccSettings.SearchCombo1Click(Sender: TObject);
+begin
+      with InsDataMod, ODSCurrAccList do begin
+       Locate('acc_no', SearchCombo1.Text, [loPartialKey]);
+       //DBLookupComboBox1.KeyValue := FieldbyName('ID').value;
+       ODSContractsCURRACC_ID.Value := FieldbyName('ID').value;
+      end
+end;
+
+procedure TfmAccSettings.SearchCombo1KeyPress(Sender: TObject;
+  var Key: Char);
+var
+  Found: boolean;
+  i,SelSt: Integer;
+  TmpStr: string;
+begin
+  { first, process the keystroke to obtain the current string }
+  { This code requires all items in list to be uppercase}
+  if Key in ['a'..'z'] then Dec(Key,32); {Force Uppercase only!}
+  with (Sender as TComboBox) do
+  begin
+    SelSt := SelStart;
+    if (Key = Chr(vk_Back)) and (SelLength <> 0) then
+     TmpStr := Copy(Text,1,SelStart)+Copy(Text,SelLength+SelStart+1,255)
+
+    else if Key = Chr(vk_Back) then {SelLength = 0}
+     TmpStr := Copy(Text,1,SelStart-1)+Copy(Text,SelStart+1,255)
+    else {Key in ['A'..'Z', etc]}
+     TmpStr := Copy(Text,1,SelStart)+Key+Copy(Text,SelLength+SelStart+1,255);
+    if TmpStr = '' then Exit;
+    { update SelSt to the current insertion point }
+
+    if (Key = Chr(vk_Back)) and (SelSt > 0) then Dec(SelSt)
+
+    else if Key <> Chr(vk_Back) then Inc(SelSt);
+    Key := #0; { indicate that key was handled }
+    if SelSt = 0 then 
+    begin
+      Text:= '';
+      Exit;
+    end;
+
+   {Now that TmpStr is the currently typed string, see if we can locate a match }
+
+    Found := False;
+    for i := 1 to Items.Count do
+      if Copy(Items[i-1],1,Length(TmpStr)) = TmpStr then
+      begin
+        Text := Items[i-1]; { update to the match that was found }
+        ItemIndex := i-1;
+        Found := True;
+        Break;
+      end;
+    if Found then { select the untyped end of the string }
+    begin
+      SelStart := SelSt;
+      SelLength := Length(Text)-SelSt;
+      if SearchCombo1.Focused then SearchCombo1Click(Sender)
+      else SearchCombo2Click(Sender);
+    end
+    else Beep;
+  end;
+
+end;
+
+procedure TfmAccSettings.FormShow(Sender: TObject);
+begin
+  with InsDataMod, ODSCurrAccList do
+  begin
+    Locate('ID', ODSContractsCURRACC_ID.Value, []);
+    SearchCombo1.Text := FieldbyName('ACC_NO').asString;
+  end;
+  with InsDataMod, ODSLoanAccLists do begin
+    Locate('ID', ODSContractsLOANACC_ID.Value, []);
+    SearchCombo2.Text := FieldbyName('ACC_NO').asString;
+  end;
+end;
+
+procedure TfmAccSettings.SearchCombo2Click(Sender: TObject);
+begin
+      with InsDataMod, ODSLoanAccLists do begin
+       Locate('acc_no', SearchCombo2.Text, [loPartialKey]);
+       ODSContractsLOANACC_ID.Value := FieldbyName('ID').value;
+      end
+end;
+
+procedure TfmAccSettings.DBLookupComboBox1Click(Sender: TObject);
+begin
+  FormShow(Sender);
+end;
+
+procedure TfmAccSettings.BitBtn2Click(Sender: TObject);
+begin
+  with InsDataMod, ODSContracts do
+   if State in [dsInsert, dsEdit] then Cancel;
+end;
+
+end.

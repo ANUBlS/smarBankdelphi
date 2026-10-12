@@ -1,0 +1,898 @@
+object DatModAex: TDatModAex
+  OldCreateOrder = False
+  OnCreate = DataModuleCreate
+  OnDestroy = DataModuleDestroy
+  Left = 226
+  Top = 130
+  Height = 480
+  Width = 696
+  object DatSetExpCredits: TOracleDataSet
+    SQL.Strings = (
+      ''
+      
+        'SELECT p.ID, p.numberofcredit, p.currency, p.personaltype, p.cus' +
+        'tomertype,'
+      '       p.branchid, p.credittype, b.NAME, av.val_name,b.salary,'
+      
+        '       cm_common.accountnumber_get (a.contractaccid) AS contract' +
+        'accno,'
+      
+        '       cm_common.accountrest_get (a.booroweraccid) AS custaccres' +
+        't,'
+      '       cm_utils.Get_PlanPrincipal (p.ID, :PDAT) AS principal,'
+      '       cm_utils.Get_IntPlanPayment (p.ID, :PDAT) AS interest,'
+      '         cm_utils.Get_PlanPrincipal(p.ID, :PDAT)'
+      '       + cm_utils.Get_IntPlanPayment(p.ID, :PDAT) AS sumamt,'
+      '        cm_utils.get_gecgun(p.ID, :PDAT)as expdatcount,'
+      '       c.penaltyrest, c.reserveid,'
+      '       cm_utils.get_creditplanrest (p.ID, :PDAT) AS plr,'
+      '       p.dateofconclusion as opendate,'
+      '       p.duedatefirstcontract as closedate,'
+      '       p.annualyinterestrate,'
+      
+        '       cm_common.get_AccountBalance(a.contractaccid) as BalaccNo' +
+        ','
+      '       p.boorowerid ,b.PHONENUMBER,'
+      
+        'case when p.duedatefirstcontract<:PDAT and nvl(p.duedatelastcont' +
+        'ract,'#39'01-jan-2002'#39')<:PDAT '
+      
+        'then '#39'¬ахты bitib '#39' else '#39' - '#39' end as creditend,c.rest,c.interes' +
+        'trest'
+      '  FROM cm_active_credits p,'
+      '       cm_boorowerinfo b,'
+      '       cm_accounts a,'
+      '       cm_curr_state c,'
+      '       sb_avalute av'
+      '       '
+      ' WHERE b.creditid = p.ID'
+      '   AND a.creditid = p.ID'
+      '   AND c.creditid = p.ID'
+      '   AND av.valute = p.currency'
+      
+        '  -- AND abs((cm_utils.get_creditplanrest (p.ID, :PDAT) - (c.res' +
+        't+c.duerest)))>=0.5'
+      'and c.rest+c.duerest <> 0'
+      'and  cm_utils.Get_PlanPrincipal (p.ID, :PDAT)>0'
+      '--and p.intcalcmethod=0'
+      'ORDER BY :orderfield'
+      ''
+      ''
+      ''
+      '')
+    Variables.Data = {
+      03000000020000000B0000003A4F524445524649454C44010000000000000000
+      000000050000003A504441540C0000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      040000001C0000000200000049440100000000000E0000004E554D4245524F46
+      4352454449540100000000000800000043555252454E43590100000000000C00
+      0000504552534F4E414C545950450100000000000C000000435553544F4D4552
+      54595045010000000000080000004252414E434849440100000000000A000000
+      43524544495454595045010000000000040000004E414D450100000000000800
+      000056414C5F4E414D450100000000000D000000434F4E54524143544143434E
+      4F0100000000000B000000435553544143435245535401000000000009000000
+      5052494E434950414C01000000000008000000494E5445524553540100000000
+      000600000053554D414D540100000000000B000000455850444154434F554E54
+      0100000000000B00000050454E414C5459524553540100000000000900000052
+      455345525645494401000000000003000000504C52010000000000080000004F
+      50454E4441544501000000000009000000434C4F534544415445010000000000
+      13000000414E4E55414C59494E54455245535452415445010000000000080000
+      0042414C4143434E4F0100000000000A000000424F4F524F5745524944010000
+      0000000B00000050484F4E454E554D4245520100000000000600000053414C41
+      525901000000000009000000435245444954454E440100000000000400000052
+      4553540100000000000C000000494E54455245535452455354010000000000}
+    Cursor = crSQLWait
+    Session = CMDataModule.CMSession
+    Left = 40
+    Top = 16
+    object DatSetExpCreditsID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object DatSetExpCreditsNUMBEROFCREDIT: TStringField
+      DisplayLabel = 'ћцгавил€нин є-си'
+      FieldName = 'NUMBEROFCREDIT'
+      Required = True
+      Size = 32
+    end
+    object DatSetExpCreditsCONTRACTACCNO: TStringField
+      DisplayLabel = 'ўесабын є-си'
+      FieldName = 'CONTRACTACCNO'
+      Size = 4000
+    end
+    object DatSetExpCreditsVAL_NAME: TStringField
+      DisplayLabel = '$'
+      FieldName = 'VAL_NAME'
+      Size = 10
+    end
+    object DatSetExpCreditsOPENDATE: TDateTimeField
+      DisplayLabel = 'јчылма тарихи'
+      FieldName = 'OPENDATE'
+      Required = True
+    end
+    object DatSetExpCreditsCLOSEDATE: TDateTimeField
+      DisplayLabel = 'Ѕаьланма тарихи'
+      FieldName = 'CLOSEDATE'
+      Required = True
+    end
+    object DatSetExpCreditsANNUALYINTERESTRATE: TFloatField
+      DisplayLabel = '»ллик %'
+      FieldName = 'ANNUALYINTERESTRATE'
+      Required = True
+    end
+    object DatSetExpCreditsBALACCNO: TFloatField
+      DisplayLabel = 'Ѕаланс щесабы'
+      FieldName = 'BALACCNO'
+    end
+    object DatSetExpCreditsNAME: TStringField
+      DisplayLabel = 'ћцшт€ринин ады'
+      FieldName = 'NAME'
+      Size = 64
+    end
+    object DatSetExpCreditsPHONENUMBER: TStringField
+      DisplayLabel = '“елефон є'
+      FieldName = 'PHONENUMBER'
+      Size = 255
+    end
+    object DatSetExpCreditsBOOROWERID: TFloatField
+      DisplayLabel = 'ћцшт€ринин коду'
+      FieldName = 'BOOROWERID'
+      Required = True
+    end
+    object DatSetExpCreditsCUSTACCREST: TFloatField
+      DisplayLabel = '∆ари щесабын галыьы'
+      FieldName = 'CUSTACCREST'
+    end
+    object DatSetExpCreditsPRINCIPAL: TFloatField
+      DisplayLabel = 'ясас борждан '
+      FieldName = 'PRINCIPAL'
+      Required = True
+    end
+    object DatSetExpCreditsINTEREST: TFloatField
+      DisplayLabel = '‘аиз цзр€ борждан'
+      FieldName = 'INTEREST'
+      Required = True
+    end
+    object DatSetExpCreditsEXPDATCOUNT: TFloatField
+      DisplayLabel = '№еж . ьцнл€рин сайы'
+      FieldName = 'EXPDATCOUNT'
+    end
+    object DatSetExpCreditsPENALTYREST: TFloatField
+      DisplayLabel = 'ѕенийа'
+      FieldName = 'PENALTYREST'
+    end
+    object DatSetExpCreditsCURRENCY: TFloatField
+      FieldName = 'CURRENCY'
+      Required = True
+      Visible = False
+    end
+    object DatSetExpCreditsPERSONALTYPE: TFloatField
+      FieldName = 'PERSONALTYPE'
+      Required = True
+      Visible = False
+    end
+    object DatSetExpCreditsCUSTOMERTYPE: TFloatField
+      FieldName = 'CUSTOMERTYPE'
+      Required = True
+      Visible = False
+    end
+    object DatSetExpCreditsBRANCHID: TFloatField
+      FieldName = 'BRANCHID'
+      Required = True
+      Visible = False
+    end
+    object DatSetExpCreditsCREDITTYPE: TFloatField
+      FieldName = 'CREDITTYPE'
+      Required = True
+      Visible = False
+    end
+    object DatSetExpCreditsRESERVEID: TFloatField
+      FieldName = 'RESERVEID'
+      Required = True
+      Visible = False
+    end
+    object DatSetExpCreditsSUMAMT: TFloatField
+      DisplayLabel = '∆€ми'
+      FieldName = 'SUMAMT'
+    end
+    object DatSetExpCreditsPLR: TFloatField
+      FieldName = 'PLR'
+      Visible = False
+    end
+    object DatSetExpCreditsSALARY: TStringField
+      DisplayLabel = '»ш йери / ¬€зиф€си / ям€к щаггы'
+      FieldName = 'SALARY'
+      Size = 64
+    end
+    object DatSetExpCreditsCREDITEND: TStringField
+      DisplayLabel = 'Vaxtы битмиш кредитл€р'
+      FieldName = 'CREDITEND'
+      Size = 12
+    end
+    object DatSetExpCreditsREST: TFloatField
+      FieldName = 'REST'
+      Required = True
+    end
+    object DatSetExpCreditsINTERESTREST: TFloatField
+      FieldName = 'INTERESTREST'
+      Required = True
+    end
+  end
+  object DatSrcExpCredits: TDataSource
+    DataSet = DatSetExpCredits
+    Left = 152
+    Top = 16
+  end
+  object DatSetPayments: TOracleDataSet
+    SQL.Strings = (
+      'SELECT paydate, '
+      '       payedamt, '
+      '       payedintamt, '
+      '       payeddueamt,'
+      '       payeddueintamt,'
+      '       payedpenaltyamt'
+      '  FROM cm_payments'
+      'where creditid  = :CrdID'
+      'order by paydate')
+    Variables.Data = {0300000001000000060000003A4352444944030000000000000000000000}
+    Session = CMDataModule.CMSession
+    Left = 40
+    Top = 88
+    object DatSetPaymentsPAYDATE: TDateTimeField
+      DisplayLabel = '“арих'
+      FieldName = 'PAYDATE'
+      Required = True
+    end
+    object DatSetPaymentsPAYEDAMT: TFloatField
+      DisplayLabel = 'ясас борждан '
+      FieldName = 'PAYEDAMT'
+      Required = True
+    end
+    object DatSetPaymentsPAYEDINTAMT: TFloatField
+      DisplayLabel = '‘аиз цзр€ борждан'
+      FieldName = 'PAYEDINTAMT'
+      Required = True
+    end
+    object DatSetPaymentsPAYEDDUEAMT: TFloatField
+      FieldName = 'PAYEDDUEAMT'
+      Required = True
+    end
+    object DatSetPaymentsPAYEDDUEINTAMT: TFloatField
+      FieldName = 'PAYEDDUEINTAMT'
+      Required = True
+    end
+    object DatSetPaymentsPAYEDPENALTYAMT: TFloatField
+      DisplayLabel = 'ѕенийа'
+      FieldName = 'PAYEDPENALTYAMT'
+      Required = True
+    end
+  end
+  object DatSetSchedule: TOracleDataSet
+    SQL.Strings = (
+      'SELECT  paymentdate, '
+      '        principal, '
+      '        interest'
+      '  FROM cm_payment_schedule'
+      'where creditid = :CrdID'
+      'order by paymentdate'
+      '')
+    Variables.Data = {0300000001000000060000003A4352444944030000000000000000000000}
+    Session = CMDataModule.CMSession
+    Left = 40
+    Top = 152
+    object DatSetSchedulePAYMENTDATE: TDateTimeField
+      DisplayLabel = '“арих'
+      FieldName = 'PAYMENTDATE'
+      Required = True
+    end
+    object DatSetSchedulePRINCIPAL: TFloatField
+      DisplayLabel = 'ясас борждан '
+      FieldName = 'PRINCIPAL'
+      Required = True
+    end
+    object DatSetScheduleINTEREST: TFloatField
+      DisplayLabel = '‘аиз цзр€ борждан'
+      FieldName = 'INTEREST'
+      Required = True
+    end
+  end
+  object DatSrcPayments: TDataSource
+    DataSet = DatSetPayments
+    Left = 148
+    Top = 90
+  end
+  object DatSrcSchedule: TDataSource
+    DataSet = DatSetSchedule
+    Left = 144
+    Top = 153
+  end
+  object DatSetTranches: TOracleDataSet
+    SQL.Strings = (
+      'SELECT '
+      '      tranchedate, '
+      '      trancheamount'
+      '  FROM cm_tranches'
+      'where creditid  =:CrdID'
+      'order by tranchedate')
+    Variables.Data = {0300000001000000060000003A4352444944030000000000000000000000}
+    Session = CMDataModule.CMSession
+    Left = 40
+    Top = 211
+    object DatSetTranchesTRANCHEDATE: TDateTimeField
+      DisplayLabel = '“арих'
+      FieldName = 'TRANCHEDATE'
+      Required = True
+    end
+    object DatSetTranchesTRANCHEAMOUNT: TFloatField
+      DisplayLabel = 'ћ€бл€ь'
+      FieldName = 'TRANCHEAMOUNT'
+      Required = True
+    end
+  end
+  object DatSrcTranches: TDataSource
+    DataSet = DatSetTranches
+    Left = 149
+    Top = 210
+  end
+  object DatSetInterests: TOracleDataSet
+    SQL.Strings = (
+      'SELECT hdate, '
+      '       interest, '
+      '       dueinterest, '
+      '       nvl(penaltyinterest,0) as penaltyinterest'
+      '  FROM cm_interests'
+      'where CreditID = :CrdID'
+      'order by hdate ')
+    Variables.Data = {0300000001000000060000003A4352444944030000000000000000000000}
+    Session = CMDataModule.CMSession
+    Left = 40
+    Top = 264
+    object DatSetInterestsHDATE: TDateTimeField
+      DisplayLabel = '“арих'
+      FieldName = 'HDATE'
+      Required = True
+    end
+    object DatSetInterestsINTEREST: TFloatField
+      DisplayLabel = '‘аиз'
+      FieldName = 'INTEREST'
+      Required = True
+    end
+    object DatSetInterestsDUEINTEREST: TFloatField
+      DisplayLabel = 'Ёежикмиш фаиз'
+      FieldName = 'DUEINTEREST'
+      Required = True
+    end
+    object DatSetInterestsPENALTYINTEREST: TFloatField
+      DisplayLabel = 'ўесабланмыш пенийа'
+      FieldName = 'PENALTYINTEREST'
+    end
+  end
+  object DatSrcInterests: TDataSource
+    DataSet = DatSetInterests
+    Left = 152
+    Top = 264
+  end
+  object DatSetReserves: TOracleDataSet
+    SQL.Strings = (
+      'SELECT id, description||'#39' - '#39'||PERCENT as description'
+      '  FROM cm_reserves')
+    Session = CMDataModule.CMSession
+    Left = 256
+    Top = 304
+    object DatSetReservesID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object DatSetReservesDESCRIPTION: TStringField
+      FieldName = 'DESCRIPTION'
+      Required = True
+      Size = 64
+    end
+  end
+  object DatSrcReserves: TDataSource
+    DataSet = DatSetReserves
+    Left = 368
+    Top = 304
+  end
+  object DatSetCategories: TOracleDataSet
+    SQL.Strings = (
+      'SELECT id,  description'
+      '  FROM cm_categories')
+    Session = CMDataModule.CMSession
+    Left = 256
+    Top = 200
+    object DatSetCategoriesID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object DatSetCategoriesDESCRIPTION: TStringField
+      FieldName = 'DESCRIPTION'
+      Size = 128
+    end
+  end
+  object DatSrcPersons: TDataSource
+    DataSet = DatSetPersons
+    Left = 352
+    Top = 136
+  end
+  object DatSetCreditTypes: TOracleDataSet
+    SQL.Strings = (
+      'SELECT id,   description'
+      '  FROM cm_credittypes')
+    Session = CMDataModule.CMSession
+    Left = 264
+    Top = 256
+    object DatSetCreditTypesID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object DatSetCreditTypesDESCRIPTION: TStringField
+      FieldName = 'DESCRIPTION'
+      Size = 128
+    end
+  end
+  object DatSrctCategories: TDataSource
+    DataSet = DatSetCategories
+    Left = 360
+    Top = 200
+  end
+  object DatSetValute: TOracleDataSet
+    SQL.Strings = (
+      'select valute,valu_name from sb_avalute')
+    Session = CMDataModule.CMSession
+    Left = 256
+    Top = 16
+    object DatSetValuteVALUTE: TIntegerField
+      FieldName = 'VALUTE'
+      Required = True
+    end
+    object DatSetValuteVALU_NAME: TStringField
+      FieldName = 'VALU_NAME'
+      Size = 25
+    end
+  end
+  object DatSrcCreditTypes: TDataSource
+    DataSet = DatSetCreditTypes
+    Left = 368
+    Top = 256
+  end
+  object DatSetFilials: TOracleDataSet
+    SQL.Strings = (
+      'select id,name from sb_filial')
+    Session = CMDataModule.CMSession
+    Left = 256
+    Top = 80
+  end
+  object DatSrcFilials: TDataSource
+    DataSet = DatSetFilials
+    Left = 352
+    Top = 80
+  end
+  object DatSetPersons: TOracleDataSet
+    SQL.Strings = (
+      'select id,descripion from cm_persons')
+    Session = CMDataModule.CMSession
+    Left = 257
+    Top = 133
+    object DatSetPersonsID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object DatSetPersonsDESCRIPION: TStringField
+      FieldName = 'DESCRIPION'
+      Size = 64
+    end
+  end
+  object DatSrcValute: TDataSource
+    DataSet = DatSetValute
+    Left = 352
+    Top = 16
+  end
+  object DatSetExpCredits_: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      '    p.id,'
+      '    p.numberofcredit,'
+      
+        '    p.currency, p.personaltype, p.customertype,p.branchid, p.cre' +
+        'dittype,'
+      '    p.dateofconclusion as opendate,'
+      '    p.duedatefirstcontract as closedate,'
+      '    p.annualyinterestrate,p.boorowerid ,b.PHONENUMBER,b.salary,'
+      '    lacc.acc_no as contractaccno,'
+      '    cust.name,'
+      '    p.dateofconclusion,'
+      '    p.duedatefirstcontract,'
+      '    p.duedatelastcontract,'
+      '    expcrd.outdat,'
+      '    psh.planrest, '
+      '    expcrd.exdatcount,'
+      '    av.val_name,'
+      '    br.ostat as custaccrest,'
+      '   /* case '
+      
+        '    when nvl(planpay.pay,0) - nvl(realpay.realpay,0)  <= 0 then ' +
+        '0  '
+      '    else nvl(planpay.pay,0) - nvl(realpay.realpay,0) '
+      '    end as principal,'
+      ' '
+      '    case '
+      
+        '    when nvl(planpay.payint,0) - nvl(realpay.Realpayint,0)  <= 0' +
+        ' then 0  '
+      '    else nvl(planpay.payint,0) - nvl(realpay.Realpayint,0)'
+      '    end as interest,'
+      ''
+      ''
+      '    case '
+      '    when nvl(planpay.pay,0) - nvl(realpay.realpay,0) +'
+      
+        '    nvl(planpay.payint,0) - nvl(realpay.Realpayint,0)  <= 0 then' +
+        ' 0  '
+      '    else nvl(planpay.pay,0) - nvl(realpay.realpay,0) +'
+      '    nvl(planpay.payint,0) - nvl(realpay.Realpayint,0)'
+      '    end as sumamt,*/'
+      ''
+      ''
+      '    '
+      '       cm_utils.Get_PlanPrincipal (p.ID, :dat) AS principal,'
+      '       cm_utils.Get_IntPlanPayment (p.ID) AS interest,'
+      '         cm_utils.Get_PlanPrincipal(p.ID, :dat)'
+      '       + cm_utils.Get_IntPlanPayment(p.ID) AS sumamt,'
+      '    c.penaltyrest, '
+      '    c.reserveid,  '
+      '    cm_common.get_AccountBalance(a.contractaccid) as BalaccNo'
+      'from'
+      '   cm_portfolio p,'
+      '   cm_loanaccounts lacc,'
+      '   cm_sb_customers cust,'
+      '   sb_avalute av,'
+      '   cm_boorowerrest br,'
+      '   cm_boorowerinfo b,'
+      '   cm_curr_state c,'
+      '   cm_accounts a,'
+      '   '
+      ' (select '
+      '   psh.creditid,'
+      '   sum(psh.principal) as pay,'
+      '   sum(psh.interest) as payint'
+      '  from cm_payment_schedule psh '
+      '  where psh.paymentdate<=:dat '
+      'group by psh.creditid) planpay,'
+      ''
+      '(select '
+      '   pay.creditid,'
+      '   sum(pay.PAYEDAMT+pay.PAYEDDUEAMT) as Realpay,'
+      '   sum(pay.PAYEDINTAMT+pay.PAYEDDUEINTAMT) as Realpayint'
+      '  from cm_payments pay '
+      'group by pay.creditid) realpay,'
+      '      '
+      '(select  creditid, null as outdat,0 as exdatcount from('
+      'select id as creditid'
+      'from   cm_portfolio'
+      ''
+      'minus'
+      ''
+      'select psh.creditid'
+      'from   cm_payment_schedule psh ,cm_curr_state cs'
+      
+        'where  psh.rest < (cs.rest+cs.duerest) and (cs.duerest+cs.rest -' +
+        ' psh.rest >= 0.5) '
+      'and psh.creditid = cs.creditid'
+      'and psh.paymentdate <=:dat'
+      'group by psh.creditid)'
+      ''
+      'union'
+      
+        'select psh.creditid,min(psh.paymentdate)  as outdat,cm_utils.ban' +
+        'kdaysbetween (MIN (psh.paymentdate),'
+      '                                   :dat'
+      '                                  ) AS exdatcount'
+      'from   cm_payment_schedule psh ,cm_curr_state cs'
+      
+        'where  psh.rest < cs.rest+cs.duerest and (cs.duerest+cs.rest - p' +
+        'sh.rest >= 0.5) '
+      'and psh.creditid = cs.creditid'
+      'and psh.paymentdate <=:dat'
+      'group by psh.creditid'
+      ') expcrd , '
+      ''
+      ''
+      '(SELECT  creditid, rest as planrest,principal, interest'
+      '  FROM cm_payment_schedule where paymentdate = :dat'
+      '  union'
+      
+        '   select  creditid , 0 as planrest, 0 as principal, 0 as intere' +
+        'st from '
+      '  (select id as creditid '
+      '  from cm_portfolio'
+      '  minus'
+      '  SELECT  creditid'
+      '  FROM cm_payment_schedule where paymentdate = :dat)) psh'
+      ''
+      'where p.id = lacc.creditid  and '
+      '      p.boorowerid = cust.id and'
+      '      p.id = c.creditid and'
+      '      c.rest + c.duerest <> 0 and'
+      '      p.id = psh.creditid and'
+      '      br.creditid = p.id and'
+      '      expcrd.creditid = p.id and '
+      '      b.creditid = p.id and'
+      '      a.creditid = p.id and '
+      '      p.currency = av.valute and'
+      '      p.id=planpay.creditid(+) and'
+      '      p.id = realpay.creditid(+)'
+      '      order by :ORDERFIELD'
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      '')
+    Variables.Data = {
+      0300000002000000040000003A4441540C00000000000000000000000B000000
+      3A4F524445524649454C44010000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      040000001D000000040000004E414D4501000000000010000000444154454F46
+      434F4E434C5553494F4E01000000000014000000445545444154454649525354
+      434F4E545241435401000000000013000000445545444154454C415354434F4E
+      5452414354010000000000060000004F55544441540100000000000800000050
+      4C414E524553540100000000000A0000004558444154434F554E540100000000
+      000200000049440100000000000E0000004E554D4245524F4643524544495401
+      00000000000800000043555252454E43590100000000000C000000504552534F
+      4E414C545950450100000000000C000000435553544F4D455254595045010000
+      000000080000004252414E434849440100000000000A00000043524544495454
+      595045010000000000080000004F50454E444154450100000000000900000043
+      4C4F53454441544501000000000013000000414E4E55414C59494E5445524553
+      54524154450100000000000A000000424F4F524F57455249440100000000000B
+      00000050484F4E454E554D4245520100000000000D000000434F4E5452414354
+      4143434E4F0100000000000800000056414C5F4E414D450100000000000B0000
+      004355535441434352455354010000000000090000005052494E434950414C01
+      000000000008000000494E5445524553540100000000000600000053554D414D
+      540100000000000B00000050454E414C54595245535401000000000009000000
+      5245534552564549440100000000000800000042414C4143434E4F0100000000
+      000600000053414C415259010000000000}
+    Cursor = crSQLWait
+    Session = CMDataModule.CMSession
+    Left = 39
+    Top = 320
+    object DatSetExpCredits_ID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object DatSetExpCredits_NUMBEROFCREDIT: TStringField
+      DisplayLabel = 'ћцгавил€нин є-си'
+      FieldName = 'NUMBEROFCREDIT'
+      Size = 32
+    end
+    object DatSetExpCredits_CONTRACTACCNO: TStringField
+      DisplayLabel = 'ўесабын є-си'
+      FieldName = 'CONTRACTACCNO'
+      Required = True
+    end
+    object DatSetExpCredits_VAL_NAME: TStringField
+      DisplayLabel = '$'
+      FieldName = 'VAL_NAME'
+      Size = 10
+    end
+    object DatSetExpCredits_OPENDATE: TDateTimeField
+      DisplayLabel = 'јчылма тарихи'
+      FieldName = 'OPENDATE'
+      Required = True
+    end
+    object DatSetExpCredits_CLOSEDATE: TDateTimeField
+      DisplayLabel = 'Ѕаьланма тарихи'
+      FieldName = 'CLOSEDATE'
+      Required = True
+    end
+    object DatSetExpCredits_ANNUALYINTERESTRATE: TFloatField
+      DisplayLabel = '»ллик %'
+      FieldName = 'ANNUALYINTERESTRATE'
+      Required = True
+    end
+    object DatSetExpCredits_BALACCNO: TFloatField
+      DisplayLabel = 'Ѕаланс щесабы'
+      FieldName = 'BALACCNO'
+    end
+    object DatSetExpCredits_NAME: TStringField
+      DisplayLabel = 'ћцшт€ринин ады'
+      FieldName = 'NAME'
+      Size = 90
+    end
+    object DatSetExpCredits_BOOROWERID: TFloatField
+      DisplayLabel = 'ћцшт€ринин коду'
+      FieldName = 'BOOROWERID'
+      Required = True
+    end
+    object DatSetExpCredits_PHONENUMBER: TStringField
+      DisplayLabel = '“елефон є'
+      FieldName = 'PHONENUMBER'
+      Size = 255
+    end
+    object DatSetExpCredits_CUSTACCREST: TFloatField
+      DisplayLabel = '∆ари щесабын галыьы'
+      FieldName = 'CUSTACCREST'
+    end
+    object DatSetExpCredits_PRINCIPAL: TFloatField
+      DisplayLabel = 'ясас борждан '
+      FieldName = 'PRINCIPAL'
+    end
+    object DatSetExpCredits_INTEREST: TFloatField
+      DisplayLabel = '‘аиз цзр€ борждан'
+      FieldName = 'INTEREST'
+    end
+    object DatSetExpCredits_PENALTYREST: TFloatField
+      DisplayLabel = 'ѕенийа'
+      FieldName = 'PENALTYREST'
+    end
+    object DatSetExpCredits_SUMAMT: TFloatField
+      DisplayLabel = '∆€ми'
+      FieldName = 'SUMAMT'
+    end
+    object DatSetExpCredits_OUTDAT: TDateTimeField
+      DisplayLabel = '√рафикд€н к€нарлашма тарихи'
+      FieldName = 'OUTDAT'
+    end
+    object DatSetExpCredits_PLANREST: TFloatField
+      DisplayLabel = ' €нарлашма тарихинд€ план цзр€ олмалы  я.Ѕ. '
+      FieldName = 'PLANREST'
+    end
+    object DatSetExpCredits_RESERVEID: TFloatField
+      FieldName = 'RESERVEID'
+      Required = True
+      Visible = False
+    end
+    object DatSetExpCredits_CURRENCY: TFloatField
+      FieldName = 'CURRENCY'
+      Required = True
+      Visible = False
+    end
+    object DatSetExpCredits_PERSONALTYPE: TFloatField
+      FieldName = 'PERSONALTYPE'
+      Required = True
+      Visible = False
+    end
+    object DatSetExpCredits_CUSTOMERTYPE: TFloatField
+      FieldName = 'CUSTOMERTYPE'
+      Required = True
+      Visible = False
+    end
+    object DatSetExpCredits_BRANCHID: TFloatField
+      FieldName = 'BRANCHID'
+      Required = True
+      Visible = False
+    end
+    object DatSetExpCredits_CREDITTYPE: TFloatField
+      FieldName = 'CREDITTYPE'
+      Required = True
+      Visible = False
+    end
+    object DatSetExpCredits_DATEOFCONCLUSION: TDateTimeField
+      FieldName = 'DATEOFCONCLUSION'
+      Required = True
+      Visible = False
+    end
+    object DatSetExpCredits_DUEDATEFIRSTCONTRACT: TDateTimeField
+      FieldName = 'DUEDATEFIRSTCONTRACT'
+      Required = True
+      Visible = False
+    end
+    object DatSetExpCredits_DUEDATELASTCONTRACT: TDateTimeField
+      FieldName = 'DUEDATELASTCONTRACT'
+      Visible = False
+    end
+    object DatSetExpCredits_EXDATCOUNT: TFloatField
+      DisplayLabel = '№еж . ьцнл€рин сайы'
+      FieldName = 'EXDATCOUNT'
+    end
+    object DatSetExpCredits_SALARY: TStringField
+      DisplayLabel = '»ш йери / ¬€зиф€си / ям€к щаггы'
+      FieldName = 'SALARY'
+      Size = 64
+    end
+  end
+  object OracleDataSet1: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      '    p.id,'
+      '    p.numberofcredit,'
+      
+        '    p.currency, p.personaltype, p.customertype,p.branchid, p.cre' +
+        'dittype,'
+      '    p.dateofconclusion as opendate,'
+      '    p.duedatefirstcontract as closedate,'
+      '    p.annualyinterestrate,p.boorowerid ,b.PHONENUMBER,'
+      '    lacc.acc_no as contractaccno,'
+      '    cust.name,'
+      '    p.dateofconclusion,'
+      '    p.duedatefirstcontract,'
+      '    p.duedatelastcontract,'
+      '    expcrd.outdat,'
+      '    psh.planrest, '
+      '    expcrd.exdatcount,'
+      '    av.val_name,'
+      '    br.ostat as custaccrest,'
+      '       cm_utils.Get_PlanPrincipal (p.ID, :DAT) AS principal,'
+      '       cm_utils.Get_IntPlanPayment (p.ID) AS interest,'
+      '         cm_utils.Get_PlanPrincipal(p.ID, :DAT)'
+      '       + cm_utils.Get_IntPlanPayment(p.ID) AS sumamt,'
+      '    c.penaltyrest, '
+      '    c.reserveid,  '
+      '    cm_common.get_AccountBalance(a.contractaccid) as BalaccNo'
+      'from'
+      '   cm_portfolio p,'
+      '   cm_loanaccounts lacc,'
+      '   cm_sb_customers cust,'
+      '   sb_avalute av,'
+      '   cm_boorowerrest br,'
+      '   cm_boorowerinfo b,'
+      '   cm_curr_state c,'
+      '   cm_accounts a,'
+      '      '
+      '(select  creditid, null as outdat,0 as exdatcount from('
+      'select id as creditid'
+      'from   cm_payment_schedule where paymentdate = :dat)/*'
+      ''
+      'minus  '
+      ''
+      'select psh.creditid'
+      'from   cm_payment_schedule psh ,cm_curr_state cs'
+      
+        'where  psh.rest < (cs.rest+cs.duerest) and (cs.duerest+cs.rest -' +
+        ' psh.rest >= 1) '
+      'and psh.creditid = cs.creditid'
+      'and psh.paymentdate <=:dat'
+      'group by psh.creditid)*/'
+      ''
+      'union'
+      
+        'select psh.creditid,min(psh.paymentdate)  as outdat,cm_utils.ban' +
+        'kdaysbetween (MIN (psh.paymentdate),'
+      '                                   :dat'
+      '                                  ) AS exdatcount'
+      'from   cm_payment_schedule psh ,cm_curr_state cs'
+      
+        'where  psh.rest < cs.rest+cs.duerest and (cs.duerest+cs.rest - p' +
+        'sh.rest >= 2) '
+      'and psh.creditid = cs.creditid'
+      'and psh.paymentdate <=:dat'
+      'group by psh.creditid'
+      ') expcrd , '
+      ''
+      ''
+      '(SELECT  creditid, rest as planrest,principal, interest'
+      '  FROM cm_payment_schedule where paymentdate = :dat'
+      '  union'
+      
+        '   select  creditid , 0 as planrest, 0 as principal, 0 as intere' +
+        'st from '
+      '  (select id as creditid '
+      '  from cm_portfolio'
+      '  minus'
+      '  SELECT  creditid'
+      '  FROM cm_payment_schedule where paymentdate = :dat)) psh'
+      ''
+      'where p.id = lacc.creditid  and '
+      '      p.boorowerid = cust.id and'
+      '      p.id = c.creditid and'
+      '      c.rest + c.duerest <> 0 and'
+      '      p.id = psh.creditid and'
+      '      br.creditid = p.id and'
+      '      expcrd.creditid = p.id and '
+      '      b.creditid = p.id and'
+      '      a.creditid = p.id and '
+      '      p.currency = av.valute --and'
+      '     -- abs(psh.planrest - c.rest)>=2 and'
+      '     -- p.intcalcmethod=0 '
+      '      ORDER BY :orderfield'
+      ''
+      ''
+      ''
+      ''
+      ''
+      '')
+    Left = 144
+    Top = 328
+  end
+end

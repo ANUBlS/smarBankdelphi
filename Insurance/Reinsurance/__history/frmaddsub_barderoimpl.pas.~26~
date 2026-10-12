@@ -1,0 +1,122 @@
+﻿unit frmaddsub_barderoimpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, XFSCtrls, DBCtrls, Mask,ExtCtrls;
+
+type
+  Tfrmaddsub_bardero = class(TForm)
+    XFPanel1: TXFPanel;
+    XFLabel1: TXFLabel;
+    XFLabel2: TXFLabel;
+    DBEdit1: TDBEdit;
+    DBLookupComboBox1: TDBLookupComboBox;
+    XFPanel2: TXFPanel;
+    XFButton1: TXFButton;
+    XFButton2: TXFButton;
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure XFButton2Click(Sender: TObject);
+    procedure XFButton1Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure DBEdit1KeyPress(Sender: TObject; var Key: Char);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  frmaddsub_bardero: Tfrmaddsub_bardero;
+
+implementation
+uses DMreinsuranceImpl,CommanParametrs, FrmreinsuranceImpl,sboapiDataModuleImpl,
+  frmsubbarderoimpl;
+
+{$R *.dfm}
+
+procedure Tfrmaddsub_bardero.DBEdit1KeyPress(Sender: TObject; var Key: Char);
+begin
+if not (Key in ['A'..'Z','a'..'z','0'..'9',#8] )then begin Key:=#0; end;
+end;
+
+procedure Tfrmaddsub_bardero.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+if ord(key)=vk_escape then close
+end;
+
+procedure Tfrmaddsub_bardero.FormShow(Sender: TObject);
+begin
+ DMreinsurance.DSCustReinssub.Close;
+  DMreinsurance.DSCustReinssub.SetVariable('pcid',contactid);
+  DMreinsurance.DSCustReinssub.open;
+
+if opetion='ins' then
+begin
+  DMreinsurance.DSins_sub_bardero.Close;
+  DMreinsurance.DSins_sub_bardero.SetVariable('pid',-1);
+  DMreinsurance.DSins_sub_bardero.open;
+end;
+
+end;
+
+procedure Tfrmaddsub_bardero.XFButton1Click(Sender: TObject);
+ var
+ b:integer;
+begin
+if DBEdit1.Text='' then
+begin
+  showmessage('Subroqasiya Bardero № Sahəsi boşdur.');
+  exit;
+end;
+if DBLookupComboBox1.KeyValue=null then
+begin
+  showmessage ('Təkrarsığortaçının adı Sahəsi boşdur.');
+  exit;
+end;
+
+ ////////////////////// funciton yoxlam/////////////////////////
+{ if (DBEdit1.Text <> '') then
+  begin
+  b:= DMreinsurance.ins_common.CallIntegerFunction('get_Add_Bardero_yoxlama',['p_barderono',DBEdit1.Text]);
+  if b<>-1 then begin
+   showmessage('Diqqət!Subroqasiya barderosu ucun eyni adda Bardero №-si yığıla bilməz.');
+   Exit;
+   end;
+  end;   }
+ ///////////////////////////////////////////////////////////////
+
+
+if opetion='ins' then
+begin
+//bordero_say :=DBEdit1.Text;
+DMreinsurance.DS_Bardero__sub_sayi.Close;
+DMreinsurance.DS_Bardero__sub_sayi.SetVariable('p_bardero_no',DBEdit1.Text);
+DMreinsurance.DS_Bardero__sub_sayi.open;
+if DMreinsurance.DS_Bardero__sub_sayi.FieldByName('say').AsInteger>0 then
+begin
+  showmessage('Diqqət!Subroqasiya barderosu ucun eyni adda Bardero №-si yığıla bilməz.');
+  exit;
+end;
+with DMreinsurance do
+begin
+      DSins_sub_bardero.Edit;
+      DSins_sub_bardero.post;
+  {DMreinsurance.DSins_loss_bardero.Close;
+  DMreinsurance.DSins_loss_bardero.SetVariable('pid',-1);
+  DMreinsurance.DSins_loss_bardero.open;  }
+
+  end;
+end;
+      frmaddsub_bardero.Close;
+      frmsubbardero.XDBGrid1.DataSource.DataSet.Refresh;
+
+end;
+
+procedure Tfrmaddsub_bardero.XFButton2Click(Sender: TObject);
+begin
+close;
+end;
+
+end.

@@ -1,0 +1,167 @@
+unit frmBankSettingsImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, NLSLocalizer, ComCtrls, ExtCtrls, ActnList, Db, OracleData,
+  Oracle;
+
+type
+  TfrmBankSettings = class(TForm)
+    NLSLocalizer1: TNLSLocalizer;
+    Panel1: TPanel;
+    CmbBoxValue: TComboBox;
+    BtnApply: TButton;
+    TV: TTreeView;
+    StatusBar1: TStatusBar;
+    SetupPackage: TOraclePackage;
+    Temp: TOracleDataSet;
+    Refers: TOracleDataSet;
+    ActionLst: TActionList;
+    SaveActn: TAction;
+    TempID: TFloatField;
+    TempNAME: TStringField;
+    TempLNAME: TStringField;
+    TempPARENTID: TFloatField;
+    TempVALUE: TStringField;
+    TempSOURCELIST: TStringField;
+    RefersID: TFloatField;
+    RefersNAME: TStringField;
+    RefersLNAME: TStringField;
+    RefersPARENTID: TFloatField;
+    RefersVALUE: TStringField;
+    RefersSOURCELIST: TStringField;
+    ValuesEdit: TEdit;
+    RefDetails: TOracleDataSet;
+    RefDetailsID: TFloatField;
+    RefDetailsNAME: TStringField;
+    RefDetailsLNAME: TStringField;
+    RefDetailsPARENTID: TFloatField;
+    RefDetailsVALUE: TStringField;
+    RefDetailsSOURCELIST: TStringField;
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure TVChange(Sender: TObject; Node: TTreeNode);
+  private
+    TreeLst : TList;
+    procedure TVAddNode(Node :TTreeNode;ID :Integer);
+  public
+  end;
+
+var
+  frmBankSettings: TfrmBankSettings;
+
+implementation
+
+{$R *.DFM}
+uses sboapiDataModuleImpl;
+
+
+
+procedure TfrmBankSettings.TVAddNode(Node :TTreeNode;ID :Integer);
+begin
+    with  TOracleDataSet.Create(nil)  do
+    try
+      Session :=Temp.Session;
+      SQL.Assign(Temp.SQL);
+      DeclareVariable('ParentID',otInteger);
+      SetVariable('ParentID',ID);
+      Open;
+      First;
+      while  not EOF  do
+      begin
+        TreeLst.Add(Pointer(FieldByName('ID').AsInteger));
+        TVAddNode(TV.Items.AddChild(Node,FieldByName('LName').AsString),FieldByName('ID').AsInteger);
+        Next;
+      end;
+    finally
+      Free;
+    end;
+end;
+
+
+procedure TfrmBankSettings.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+  Resize := false;
+end;
+
+procedure TfrmBankSettings.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+   if ord(key) = VK_ESCAPE then Close;
+end;
+
+procedure TfrmBankSettings.FormCreate(Sender: TObject);
+begin
+  TreeLst := TList.Create;
+  Refers.Open;
+  TVAddNode(nil,-1);
+
+end;
+
+procedure TfrmBankSettings.FormDestroy(Sender: TObject);
+begin
+  TreeLst.Free;
+end;
+
+procedure TfrmBankSettings.TVChange(Sender: TObject; Node: TTreeNode);
+  procedure  ExpandItems(SourceList :TStrings;const Value :WideString);
+  var
+     Index :Integer;
+     Data :WideString;
+  begin
+     SourceList.Clear;
+     Data :=Value;
+     Index :=Pos(';',Data);
+     while  Index <> 0  do
+     begin
+        SourceList.Add(Copy(Data,1,Index-1));
+        Delete(Data,1,Index);
+        Index :=Pos(';',Data);
+     end;
+     SourceList.Add(Data);
+  end;
+
+var TargetItemID,RefID :Integer;
+begin
+  //TargetItemID :=Integer(TV.Items[Node.AbsoluteIndex]);
+  TargetItemID := Node.AbsoluteIndex;
+  RefID := Integer(TreeLst[TargetItemID]);
+  ShowMessage(inttostr(RefID));
+  with  RefDetails  do
+  begin
+    close;
+    SetVariable('ID',TargetItemID);
+    open;
+    Locate('ID',TargetItemID,[]);
+    ShowMessage(FieldByName('Value').asString);
+    if not FieldByName('Value').IsNull then
+    begin
+      if FieldByName('SourceList').IsNull then
+      begin
+         CmbBoxValue.Enabled :=False;
+         ValuesEdit.Enabled :=True;
+         ValuesEdit.Text :=FieldByName('Value').AsString;
+      end
+      else
+      begin
+        CmbBoxValue.Enabled :=True;
+        ValuesEdit.Enabled :=False;
+        ExpandItems(CmbBoxValue.Items,FieldByName('SourceList').AsString);
+        CmbBoxValue.ItemIndex :=CmbBoxValue.Items.IndexOf(FieldByName('Value').AsString);
+      end;
+    end else
+    begin
+      CmbBoxValue.Enabled :=False;
+      ValuesEdit.Enabled :=False;
+    end;
+  end;
+  BtnApply.Enabled := CmbBoxValue.Enabled or ValuesEdit.Enabled;
+
+end;
+
+end.

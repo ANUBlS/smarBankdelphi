@@ -1,0 +1,153 @@
+object Expert: TExpert
+  Left = 445
+  Top = 199
+  Caption = 'Krediti inspektorunun ad'#305' soyad'#305' '
+  ClientHeight = 299
+  ClientWidth = 400
+  Color = clBtnFace
+  Font.Charset = RUSSIAN_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poScreenCenter
+  OnCanResize = FormCanResize
+  OnCreate = FormCreate
+  PixelsPerInch = 96
+  TextHeight = 13
+  object DBGrid1: TDBGrid
+    Left = 0
+    Top = 0
+    Width = 400
+    Height = 270
+    Align = alClient
+    DataSource = DataSource1
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    Options = [dgEditing, dgTitles, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgConfirmDelete, dgCancelOnExit]
+    ParentFont = False
+    TabOrder = 0
+    TitleFont.Charset = RUSSIAN_CHARSET
+    TitleFont.Color = clWindowText
+    TitleFont.Height = -11
+    TitleFont.Name = 'Tahoma'
+    TitleFont.Style = []
+    Columns = <
+      item
+        Expanded = False
+        FieldName = 'CODE'
+        Title.Caption = 'Kodu'
+        Title.Color = clBlack
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clBlack
+        Title.Font.Height = -11
+        Title.Font.Name = 'Tahoma'
+        Title.Font.Style = []
+        Width = 38
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'NAME'
+        Title.Caption = 'Ad'#305
+        Title.Color = clWindowText
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clBlack
+        Title.Font.Height = -11
+        Title.Font.Name = 'Tahoma'
+        Title.Font.Style = []
+        Width = 217
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'filid'
+        Title.Caption = 'Filial'
+        Title.Color = clBtnText
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clBlack
+        Title.Font.Height = -11
+        Title.Font.Name = 'Tahoma'
+        Title.Font.Style = []
+        Width = 95
+        Visible = True
+      end>
+  end
+  object DBNavigator1: TDBNavigator
+    Left = 0
+    Top = 270
+    Width = 400
+    Height = 29
+    DataSource = DataSource1
+    VisibleButtons = [nbPrior, nbLast, nbInsert, nbDelete, nbEdit, nbPost, nbCancel, nbRefresh]
+    Align = alBottom
+    TabOrder = 1
+  end
+  object OracleDataSet1: TOracleDataSet
+    SQL.Strings = (
+      'select rowid,t.* from cm_expert t')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000400000004000000490044000100000000000800000043004F004400
+      4500010000000000080000004E0041004D004500010000000000100000004600
+      49004C00490041004C0049004400010000000000}
+    Session = CMDataModule.CMSession
+    Left = 112
+    Top = 72
+    object OracleDataSet1ID: TFloatField
+      FieldName = 'ID'
+    end
+    object OracleDataSet1CODE: TWideStringField
+      FieldName = 'CODE'
+      Size = 12
+    end
+    object OracleDataSet1NAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 80
+    end
+    object OracleDataSet1FILIALID: TFloatField
+      FieldName = 'FILIALID'
+    end
+    object OracleDataSet1filid: TWideStringField
+      FieldKind = fkLookup
+      FieldName = 'filid'
+      LookupDataSet = OracleDataSet2
+      LookupKeyFields = 'ID'
+      LookupResultField = 'NAME'
+      KeyFields = 'FILIALID'
+      Lookup = True
+    end
+  end
+  object DataSource1: TDataSource
+    DataSet = OracleDataSet1
+    Left = 192
+    Top = 72
+  end
+  object OracleDataSet2: TOracleDataSet
+    SQL.Strings = (
+      'select * from sb_filial')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000080000000400000049004400010000000000080000004E0041004D00
+      4500010000000000140000004B004F0044005F00460049004C00490041004C00
+      0100000000000C00000043005F004E0041004D0045000100000000000C000000
+      440052004E0041004D0045000100000000001400000044005200460055004C00
+      4C004E0041004D0045000100000000000A0000004E004E0041004D0045000100
+      00000000120000004E00460055004C004C004E0041004D004500010000000000}
+    Session = CMDataModule.CMSession
+    Left = 272
+    Top = 80
+    object OracleDataSet2ID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object OracleDataSet2NAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 90
+    end
+  end
+end

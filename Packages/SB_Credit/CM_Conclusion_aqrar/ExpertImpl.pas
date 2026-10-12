@@ -1,0 +1,76 @@
+unit ExpertImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, CheckLst, Buttons, ComCtrls;
+
+type
+  TExpertFrm = class(TForm)
+    BitBtn1: TBitBtn;
+    CheckListBox1: TCheckListBox;
+    CheckListBox2: TCheckListBox;
+    procedure FormShow(Sender: TObject);
+    procedure BitBtn1Click(Sender: TObject);
+    procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure FormCanResize(Sender: TObject; var NewWidth, NewHeight: Integer;
+      var Resize: Boolean);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  ExpertFrm: TExpertFrm;
+  expmap :string;
+implementation
+
+{$R *.dfm}
+uses DataModuleConclusion;
+procedure TExpertFrm.BitBtn1Click(Sender: TObject);
+var i : integer;
+begin
+expmap:='';
+	for i := 0 to checklistbox1.items.Count - 1 do
+	  begin
+	    if checklistbox1.Checked[i] = true then
+	     begin
+       ShowMessage(checklistbox1.Items.Strings[i]);
+       ShowMessage(checklistbox2.Items.Strings[i]);
+       expmap:=expmap+','+checklistbox2.Items.Strings[i];
+      // ShowMessage(checklistbox1.It);
+      end;
+   end;
+    Delete(expmap, 1, 1);
+   ShowMessage(expmap);
+end;
+
+procedure TExpertFrm.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+resize:=false
+end;
+
+procedure TExpertFrm.FormKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+ if Key = VK_ESCAPE then
+ close;
+end;
+
+procedure TExpertFrm.FormShow(Sender: TObject);
+  var index:word;
+
+begin
+  while not DataModuleConcl.ExpertSet.Eof do
+  begin
+    CheckListBox1.Items.Add(DataModuleConcl.ExpertSet.Fields[2].AsString);
+    CheckListBox2.Items.Add(DataModuleConcl.ExpertSet.Fields[0].AsString);
+    DataModuleConcl.ExpertSet.Next;
+  end;
+
+end;
+
+end.

@@ -1,0 +1,72 @@
+unit UCategories;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, NLSDialogs,
+  NLSLocalizer, ComCtrls, StdCtrls, Mask, DBCtrlsEh, Buttons, DBLookupEh;
+
+type
+  TAddEditCatForm = class(TForm)
+    Localizer: TNLSLocalizer;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    DBEditEh2: TDBEditEh;
+    DBEditEh3: TDBEditEh;
+    SpeedButton1: TSpeedButton;
+    SpeedButton2: TSpeedButton;
+    DBLookupComboboxEh1: TDBLookupComboboxEh;
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure SpeedButton2Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  AddEditCatForm: TAddEditCatForm;
+
+implementation
+
+uses CommonDecls,uUsrGroupDMImpl;
+
+{$R *.DFM}
+
+procedure TAddEditCatForm.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+  if Ord(Key) = VK_ESCAPE then
+    ModalResult := mrCancel
+end;
+
+procedure TAddEditCatForm.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+  Resize := False;
+end;
+
+procedure TAddEditCatForm.SpeedButton1Click(Sender: TObject);
+begin
+   with UsrGrDataMod,CatDataSet do
+     begin
+        Post;
+        Refresh;
+     end;
+     Close;
+end;
+
+procedure TAddEditCatForm.SpeedButton2Click(Sender: TObject);
+begin
+   with UsrGrDataMod,CatDataSet do
+     begin
+        cancel;
+        Refresh;
+     end;
+     Close;
+end;
+
+end.

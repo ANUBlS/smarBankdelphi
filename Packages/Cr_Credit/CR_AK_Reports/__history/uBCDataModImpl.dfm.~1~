@@ -1,0 +1,4400 @@
+object DMBC: TDMBC
+  OldCreateOrder = False
+  Left = 324
+  Top = 166
+  Height = 484
+  Width = 885
+  object ResultDS: TOracleDataSet
+    SQL.Strings = (
+      'SELECT f.*'
+      '     /*, cr_ak_funcs.getlmcount(f.creditid,4) pret'
+      '     , cr_ak_funcs.getlmcount(f.creditid,6) idd'
+      '     , cr_ak_funcs.getlmcount(f.creditid,7) qatn'
+      '     , cr_ak_funcs.geticracount(f.creditid,7) icra*/'
+      
+        '    ,s.paymentdate,s.principal,s.interest,s.principal+s.interest' +
+        ' as cem,'
+      '  case when s.sex=1 then'
+      ' '#39'Kiши'#39'  '
+      'when s.sex=0 then '#39'Qadin'#39
+      
+        ' end as sex ,p.dateofconclusion, p.creditlineamount krxet ,pr.na' +
+        'me adiyat'
+      
+        ' FROM cr_report_f1 f,cr_payment_schedule_portfel s,cr_portfolio ' +
+        'p ,smart.CUSTOMERS c ,smart.prinad pr where f.CREDITID=s.CREDITI' +
+        'D   and p.id=f.creditid and'
+      ' c.PRINAD_KOD=pr.id and  p.BOOROWERID=c.id'
+      ''
+      ''
+      ''
+      ''
+      'ORDER BY'
+      '  branch, district, village, boorowername'
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      '/*SELECT f.*'
+      '     , cm_ak_funcs.getlmcount(f.creditid,4) pret'
+      '     , cm_ak_funcs.getlmcount(f.creditid,6) idd'
+      '     , cm_ak_funcs.getlmcount(f.creditid,7) qatn'
+      '     , cm_ak_funcs.geticracount(f.creditid,7) icra'
+      
+        '    ,s.paymentdate,s.principal,s.interest,s.principal+s.interest' +
+        ' as cem,'
+      '  case when s.sex=1 then'
+      ' '#39'Kiши'#39'  '
+      'when s.sex=0 then '#39'Qadin'#39
+      ' end as sex,cm_r'
+      ''
+      
+        '  FROM cm_report_f1 f,cm_payment_schedule_portfel s,cm_active_cr' +
+        'edits p,cm_categories c where f.CREDITID=s.CREDITID and p.CUSTOM' +
+        'ERTYPE=c.id'
+      ''
+      ''
+      ''
+      'ORDER BY'
+      '  branch, district, village, boorowername*/')
+    QBEDefinition.QBEFieldDefs = {
+      04000000470000000800000043524544495449440100000000000A000000424F
+      4F524F5745524944010000000000060000004352444E554D0100000000000C00
+      0000424F4F524F5745524E414D45010000000000080000004252414E43484944
+      010000000000060000004252414E43480100000000000A000000444953545249
+      4354494401000000000008000000444953545249435401000000000009000000
+      56494C4C41474549440100000000000700000056494C4C414745010000000000
+      09000000505552504F5345494401000000000007000000505552504F53450100
+      0000000006000000545950454944010000000000080000005459504544455343
+      01000000000008000000435244434F554E540100000000000D00000050415945
+      44435244434F554E540100000000000D00000046495253545452434844415445
+      0100000000000B0000004C415354504159444154450100000000000B00000047
+      4956454E414D4F554E540100000000001100000043414C43554C415445445045
+      5243454E540100000000000C00000044415445444542544D41494E0100000000
+      000B0000004441544544454254494E540100000000000900000050415945444D
+      41494E010000000000080000005041594544494E540100000000000C00000050
+      415945444D4F4E4D41494E0100000000000B00000050415945444D4F4E494E54
+      01000000000008000000444542544D41494E0100000000000700000044454254
+      494E540100000000000C000000444542544F5645524D41494E0100000000000B
+      000000444542544F564552494E540100000000000A00000043414C4353544154
+      55530100000000000A00000043524544504552494F4401000000000007000000
+      494E5452415445010000000000060000004F4452415445010000000000050000
+      0053424F55540100000000000B00000050524F4C4F4E47444154450100000000
+      000A00000050524F4C4F4E47434E5401000000000010000000445545494E5445
+      5245535444454249540100000000000400000050524554010000000000030000
+      00494444010000000000040000005141544E0100000000000400000049435241
+      0100000000000A00000044455343524950494F4E010000000000080000005346
+      4552414441590100000000000F000000505552504F53454F4643524544495401
+      00000000000800000043555252454E4359010000000000090000004C4F414E41
+      434349440100000000000D000000424F4F524F57455241434349440100000000
+      000F000000424F4F524F57455241434352455354010000000000070000004144
+      44524553530100000000000600000053414C4152590100000000000B00000050
+      484F4E454E554D42455201000000000007000000524553455256450100000000
+      00070000004C4154454441590100000000000B0000004445534352495054494F
+      4E010000000000090000004749524F5652455354010000000000130000005052
+      494D415259524553455256454152455354010000000000160000005052494D41
+      52595055525245534552564541524553540100000000000A0000004745434755
+      4E4641495A0100000000000A000000504C454447454E414D450100000000000C
+      0000004F44454D455F454D53414C490100000000000C0000004558504552545F
+      5F4E414D45010000000000050000004B555255530100000000000B0000005041
+      594D454E5444415445010000000000090000005052494E434950414C01000000
+      000008000000494E544552455354010000000000030000005345580100000000
+      000300000043454D01000000000010000000444154454F46434F4E434C555349
+      4F4E010000000000050000004B52584554010000000000060000004144495941
+      54010000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    OnCalcFields = ResultDSCalcFields
+    Left = 32
+    Top = 24
+    object ResultDSODEME_EMSALI: TFloatField
+      DisplayLabel = 'ёд€м€ €мсалы'
+      FieldName = 'ODEME_EMSALI'
+      DisplayFormat = '#,#0.00'
+    end
+    object ResultDSCREDITID: TFloatField
+      DisplayLabel = ' ред џƒ'
+      FieldName = 'CREDITID'
+      Required = True
+    end
+    object ResultDSBOOROWERID: TFloatField
+      DisplayLabel = 'ћцщ џƒ'
+      FieldName = 'BOOROWERID'
+      Required = True
+    end
+    object ResultDSCRDNUM: TWideStringField
+      DisplayLabel = 'ћцгавил€ є'
+      FieldName = 'CRDNUM'
+      Required = True
+      Size = 255
+    end
+    object ResultDSBOOROWERNAME: TWideStringField
+      DisplayLabel = 'ћцшт€ри'
+      FieldName = 'BOOROWERNAME'
+      Required = True
+      Size = 255
+    end
+    object ResultDSBRANCHID: TFloatField
+      DisplayLabel = '‘ил џƒ'
+      FieldName = 'BRANCHID'
+      Required = True
+      Visible = False
+    end
+    object ResultDSBRANCH: TWideStringField
+      DisplayLabel = '‘илиал'
+      FieldName = 'BRANCH'
+      Required = True
+      Size = 255
+    end
+    object ResultDSVILLAGEID: TFloatField
+      DisplayLabel = ' €нд џƒ'
+      FieldName = 'VILLAGEID'
+      Required = True
+      Visible = False
+    end
+    object ResultDSDISTRICTID: TFloatField
+      DisplayLabel = '–айон џƒ'
+      FieldName = 'DISTRICTID'
+      Required = True
+      Visible = False
+    end
+    object ResultDSDISTRICT: TWideStringField
+      DisplayLabel = '–айон'
+      FieldName = 'DISTRICT'
+      Required = True
+      Size = 255
+    end
+    object ResultDSVILLAGE: TWideStringField
+      DisplayLabel = ' €нд'
+      FieldName = 'VILLAGE'
+      Required = True
+      Size = 255
+    end
+    object ResultDSCREDPERIOD: TWideStringField
+      DisplayLabel = '¬€саитин м€нб€йи'
+      FieldName = 'CREDPERIOD'
+      Required = True
+    end
+    object ResultDSDESCRIPION: TWideStringField
+      DisplayLabel = 'ћцшт€ринин статусу'
+      FieldName = 'DESCRIPION'
+      Size = 30
+    end
+    object ResultDSSEX: TWideStringField
+      DisplayLabel = 'Ѕоржаланын жинси'
+      FieldName = 'SEX'
+      Size = 12
+    end
+    object ResultDSPURPOSE: TWideStringField
+      DisplayLabel = '«€ман€т м€щсулунун ады'
+      FieldName = 'PURPOSE'
+      Required = True
+      Size = 255
+    end
+    object ResultDSSFERADAY: TWideStringField
+      DisplayLabel = 'ћцшт€ринин ф€алиййат сащ€си'
+      FieldName = 'SFERADAY'
+      Size = 30
+    end
+    object ResultDSPURPOSEOFCREDIT: TWideStringField
+      DisplayLabel = '«€ман€тин т€йинаты'
+      FieldName = 'PURPOSEOFCREDIT'
+      Size = 50
+    end
+    object ResultDSPURPOSEID: TFloatField
+      DisplayLabel = 'ћ€гс€д џƒ'
+      FieldName = 'PURPOSEID'
+      Required = True
+      Visible = False
+    end
+    object ResultDSTYPEID: TFloatField
+      DisplayLabel = '“ип џƒ'
+      FieldName = 'TYPEID'
+      Required = True
+      Visible = False
+    end
+    object ResultDSTYPEDESC: TWideStringField
+      DisplayLabel = '“ип'
+      FieldName = 'TYPEDESC'
+      Required = True
+      Size = 10
+    end
+    object ResultDSCRDCOUNT: TFloatField
+      DisplayLabel = '«€ман€т  —ай'
+      FieldName = 'CRDCOUNT'
+      Required = True
+      Visible = False
+    end
+    object ResultDSPAYEDCRDCOUNT: TFloatField
+      DisplayLabel = 'ёд€нилиб'
+      FieldName = 'PAYEDCRDCOUNT'
+      Required = True
+      Visible = False
+    end
+    object ResultDSDATEOFCONCLUSION: TDateTimeField
+      DisplayLabel = '«€ман€тин  верилм€ тарихи'
+      FieldName = 'DATEOFCONCLUSION'
+      Required = True
+    end
+    object ResultDSFIRSTTRCHDATE: TDateTimeField
+      DisplayLabel = '»лк транш'
+      FieldName = 'FIRSTTRCHDATE'
+      Required = True
+    end
+    object ResultDSLASTPAYDATE: TDateTimeField
+      DisplayLabel = '—он юд€м€'
+      FieldName = 'LASTPAYDATE'
+      Required = True
+    end
+    object ResultDSPROLONGCNT: TFloatField
+      DisplayLabel = 'ѕролонгасйа мцдд€ти'
+      FieldName = 'PROLONGCNT'
+    end
+    object ResultDSPROLONGDATE: TDateTimeField
+      DisplayLabel = 'ѕролонгасйа тарихи'
+      FieldName = 'PROLONGDATE'
+    end
+    object ResultDSCURRENCY: TWideStringField
+      DisplayLabel = '¬алйута'
+      FieldName = 'CURRENCY'
+      Size = 65
+    end
+    object ResultDSKURUS: TFloatField
+      DisplayLabel = 'Ѕу эцн€ курс'
+      FieldName = 'KURUS'
+    end
+    object ResultDSINTRATE: TFloatField
+      DisplayLabel = 'фаиз. stavkasы'
+      FieldName = 'INTRATE'
+      DisplayFormat = '#,#0.0'
+    end
+    object ResultDSODRATE: TFloatField
+      DisplayLabel = 'gec фаиз. stavkasы'
+      FieldName = 'ODRATE'
+      DisplayFormat = '#,#0.0'
+    end
+    object ResultDSKRXET: TFloatField
+      DisplayLabel = '«€ман€тин  м€бл€ьи'
+      FieldName = 'KRXET'
+      DisplayFormat = '#,#0.0 '
+    end
+    object ResultDSGIVENAMOUNT: TFloatField
+      DisplayLabel = '¬ерилмиш kr'
+      FieldName = 'GIVENAMOUNT'
+      Required = True
+      DisplayFormat = '#,#0.0 '
+    end
+    object ResultDSDATEDEBTMAIN: TFloatField
+      DisplayLabel = '¬ахты чат.'
+      FieldName = 'DATEDEBTMAIN'
+      Required = True
+      DisplayFormat = '#,#0.0'
+    end
+    object ResultDSPAYEDMAIN: TFloatField
+      DisplayLabel = 'ёд€н. €сас'
+      FieldName = 'PAYEDMAIN'
+      Required = True
+      DisplayFormat = '#,#0.0'
+    end
+    object ResultDSPAYEDMONMAIN: TFloatField
+      DisplayLabel = '∆ари айда юд€н€н €сас'
+      FieldName = 'PAYEDMONMAIN'
+      Required = True
+      DisplayFormat = '#,#0.0'
+    end
+    object ResultDSDEBTMAIN: TFloatField
+      DisplayLabel = '√алыг kredit borc'
+      FieldName = 'DEBTMAIN'
+      Required = True
+      DisplayFormat = '#,#0.0'
+    end
+    object ResultDSDEBTOVERMAIN: TFloatField
+      DisplayLabel = 'ясас борж цзр€ эежикм€ м€б'
+      FieldName = 'DEBTOVERMAIN'
+      Required = True
+      DisplayFormat = '#,#0.0'
+    end
+    object ResultDSLATEDAY: TFloatField
+      DisplayLabel = 'я.Ѕ эеж эцнл€рин сайы'
+      FieldName = 'LATEDAY'
+    end
+    object ResultDSCALCULATEDPERCENT: TFloatField
+      DisplayLabel = 'ўес фаиз'
+      FieldName = 'CALCULATEDPERCENT'
+      Required = True
+      DisplayFormat = '#,#0.0'
+    end
+    object ResultDSDATEDEBTINT: TFloatField
+      DisplayLabel = '¬ахты чат. %; боржу.'
+      FieldName = 'DATEDEBTINT'
+      Required = True
+      DisplayFormat = '#,#0.0'
+    end
+    object ResultDSPAYEDINT: TFloatField
+      DisplayLabel = 'ёд€нилмиш. % бор'
+      FieldName = 'PAYEDINT'
+      Required = True
+      DisplayFormat = '#,#0.0'
+    end
+    object ResultDSPAYEDMONINT: TFloatField
+      DisplayLabel = '∆ари айда юд€н€н фаиз'
+      FieldName = 'PAYEDMONINT'
+      Required = True
+      DisplayFormat = '#,#0.0'
+    end
+    object ResultDSDEBTINT: TFloatField
+      DisplayLabel = '‘аиз галыьы'
+      FieldName = 'DEBTINT'
+      Required = True
+      DisplayFormat = '#,#0.0'
+    end
+    object ResultDSDEBTOVERINT: TFloatField
+      DisplayLabel = '‘аиз боржу цзр€  эежикм€ м€б'
+      FieldName = 'DEBTOVERINT'
+      Required = True
+      DisplayFormat = '#,#0.0'
+    end
+    object ResultDSGECGUNFAIZ: TFloatField
+      DisplayLabel = '‘.Ѕ эеж эцнл€рин сайы'
+      FieldName = 'GECGUNFAIZ'
+    end
+    object ResultDSLOANACCID: TWideStringField
+      DisplayLabel = '—суда щесабы'
+      FieldName = 'LOANACCID'
+      Size = 30
+    end
+    object ResultDSBOOROWERACCID: TWideStringField
+      DisplayLabel = '∆ари щесаб'
+      FieldName = 'BOOROWERACCID'
+      Size = 30
+    end
+    object ResultDSBOOROWERACCREST: TFloatField
+      DisplayLabel = '∆ари щесаб галыьы'
+      FieldName = 'BOOROWERACCREST'
+      DisplayFormat = '#,#0.0 '
+    end
+    object ResultDSADDRESS: TWideStringField
+      DisplayLabel = '…ашайыш йери'
+      FieldName = 'ADDRESS'
+      Size = 60
+    end
+    object ResultDSPHONENUMBER: TWideStringField
+      DisplayLabel = '“елефону'
+      FieldName = 'PHONENUMBER'
+      Size = 350
+    end
+    object ResultDSSALARY: TWideStringField
+      DisplayLabel = '‘€алийй€т йери'
+      FieldName = 'SALARY'
+      Size = 50
+    end
+    object ResultDSDESCRIPTION: TWideStringField
+      DisplayLabel = 'Ёировун нювц'
+      FieldName = 'DESCRIPTION'
+      Size = 45
+    end
+    object ResultDSGIROVREST: TFloatField
+      DisplayLabel = 'Ёировун д€й€ри'
+      FieldName = 'GIROVREST'
+      DisplayFormat = '#,#0.0 '
+    end
+    object ResultDSDUEBYSCHEME: TFloatField
+      FieldKind = fkCalculated
+      FieldName = 'DUEBYSCHEME'
+      Visible = False
+      Calculated = True
+    end
+    object ResultDSCALCSTATUS: TWideStringField
+      DisplayLabel = '% щесабламасы статусу'
+      FieldName = 'CALCSTATUS'
+      Required = True
+      Size = 12
+    end
+    object ResultDSRESERVE: TWideStringField
+      DisplayLabel = '≈щтиййат д€р€ж€си'
+      FieldName = 'RESERVE'
+      Size = 18
+    end
+    object ResultDSPRIMARYRESERVEAREST: TFloatField
+      DisplayLabel = 'јди ещтиййат щес галыг'
+      FieldName = 'PRIMARYRESERVEAREST'
+      DisplayFormat = '#,#0.0 '
+    end
+    object ResultDSPRIMARYPURRESERVEAREST: TFloatField
+      DisplayLabel = 'ћ€гс€дли ещтиййат щес галыг'
+      FieldName = 'PRIMARYPURRESERVEAREST'
+      DisplayFormat = '#,#0.0 '
+    end
+    object ResultDSEXPERT__NAME: TWideStringField
+      DisplayLabel = '«€ман€ти  ж€лб ед€н ћ ады'
+      FieldName = 'EXPERT__NAME'
+      Size = 25
+    end
+    object ResultDSPAYMENTDATE: TDateTimeField
+      DisplayLabel = 'Cari ayda юд€ниш тарихи'
+      FieldName = 'PAYMENTDATE'
+    end
+    object ResultDSPRINCIPAL: TFloatField
+      DisplayLabel = 'Cari ayda €сасдан юд€ниш'
+      FieldName = 'PRINCIPAL'
+    end
+    object ResultDSINTEREST: TFloatField
+      DisplayLabel = 'Cari ayda  % д€н юд€ниш'
+      FieldName = 'INTEREST'
+    end
+    object ResultDSCEM: TFloatField
+      DisplayLabel = '∆€ми юд€ниш'
+      FieldName = 'CEM'
+    end
+    object ResultDSADIYAT: TWideStringField
+      DisplayLabel = 'Ѕоржаланын банка адиййаты'
+      FieldName = 'ADIYAT'
+      Size = 90
+    end
+  end
+  object ResultGB: TOracleDataSet
+    SQL.Strings = (
+      'SELECT * FROM ('
+      'SELECT * FROM cr_report_f1 UNION'
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ')'
+      'ORDER BY branch, district, village, boorowername')
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    OnCalcFields = ResultDSCalcFields
+    Left = 88
+    Top = 24
+    object ResultGBCREDITID: TFloatField
+      FieldName = 'CREDITID'
+      Required = True
+    end
+    object ResultGBBOOROWERID: TFloatField
+      FieldName = 'BOOROWERID'
+      Required = True
+    end
+    object ResultGBCRDNUM: TWideStringField
+      FieldName = 'CRDNUM'
+      Required = True
+      Size = 255
+    end
+    object ResultGBBOOROWERNAME: TWideStringField
+      FieldName = 'BOOROWERNAME'
+      Required = True
+      Size = 255
+    end
+    object ResultGBBRANCHID: TFloatField
+      FieldName = 'BRANCHID'
+      Required = True
+    end
+    object ResultGBBRANCH: TWideStringField
+      FieldName = 'BRANCH'
+      Required = True
+      Size = 255
+    end
+    object ResultGBDISTRICTID: TFloatField
+      FieldName = 'DISTRICTID'
+      Required = True
+    end
+    object ResultGBDISTRICT: TWideStringField
+      FieldName = 'DISTRICT'
+      Required = True
+      Size = 255
+    end
+    object ResultGBVILLAGEID: TFloatField
+      FieldName = 'VILLAGEID'
+      Required = True
+    end
+    object ResultGBVILLAGE: TWideStringField
+      FieldName = 'VILLAGE'
+      Required = True
+      Size = 255
+    end
+    object ResultGBPURPOSEID: TFloatField
+      FieldName = 'PURPOSEID'
+      Required = True
+    end
+    object ResultGBPURPOSE: TWideStringField
+      FieldName = 'PURPOSE'
+      Required = True
+      Size = 255
+    end
+    object ResultGBTYPEID: TFloatField
+      FieldName = 'TYPEID'
+      Required = True
+    end
+    object ResultGBTYPEDESC: TWideStringField
+      FieldName = 'TYPEDESC'
+      Required = True
+      Size = 10
+    end
+    object ResultGBCRDCOUNT: TFloatField
+      FieldName = 'CRDCOUNT'
+      Required = True
+    end
+    object ResultGBPAYEDCRDCOUNT: TFloatField
+      FieldName = 'PAYEDCRDCOUNT'
+      Required = True
+    end
+    object ResultGBFIRSTTRCHDATE: TDateTimeField
+      FieldName = 'FIRSTTRCHDATE'
+      Required = True
+    end
+    object ResultGBLASTPAYDATE: TDateTimeField
+      FieldName = 'LASTPAYDATE'
+      Required = True
+    end
+    object ResultGBGIVENAMOUNT: TFloatField
+      FieldName = 'GIVENAMOUNT'
+      Required = True
+    end
+    object ResultGBCALCULATEDPERCENT: TFloatField
+      FieldName = 'CALCULATEDPERCENT'
+      Required = True
+    end
+    object ResultGBDATEDEBTMAIN: TFloatField
+      FieldName = 'DATEDEBTMAIN'
+      Required = True
+    end
+    object ResultGBDATEDEBTINT: TFloatField
+      FieldName = 'DATEDEBTINT'
+      Required = True
+    end
+    object ResultGBPAYEDMAIN: TFloatField
+      FieldName = 'PAYEDMAIN'
+      Required = True
+    end
+    object ResultGBPAYEDINT: TFloatField
+      FieldName = 'PAYEDINT'
+      Required = True
+    end
+    object ResultGBPAYEDMONMAIN: TFloatField
+      FieldName = 'PAYEDMONMAIN'
+      Required = True
+    end
+    object ResultGBPAYEDMONINT: TFloatField
+      FieldName = 'PAYEDMONINT'
+      Required = True
+    end
+    object ResultGBDEBTMAIN: TFloatField
+      FieldName = 'DEBTMAIN'
+      Required = True
+    end
+    object ResultGBDEBTINT: TFloatField
+      FieldName = 'DEBTINT'
+      Required = True
+    end
+    object ResultGBDEBTOVERMAIN: TFloatField
+      FieldName = 'DEBTOVERMAIN'
+      Required = True
+    end
+    object ResultGBDEBTOVERINT: TFloatField
+      FieldName = 'DEBTOVERINT'
+      Required = True
+    end
+    object ResultGBCALCSTATUS: TWideStringField
+      FieldName = 'CALCSTATUS'
+      Required = True
+      Size = 12
+    end
+    object ResultGBCREDPERIOD: TWideStringField
+      FieldName = 'CREDPERIOD'
+      Required = True
+    end
+  end
+  object CR_AK_REP: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'CR_AK_REPORTS'
+    Left = 152
+    Top = 24
+  end
+  object ResultDS2: TOracleDataSet
+    SQL.Strings = (
+      'SELECT *'
+      '  FROM cr_report_f2'
+      ''
+      ''
+      'ORDER BY'
+      '  branch, boorower')
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    OnCalcFields = ResultDSCalcFields
+    Left = 32
+    Top = 88
+    object ResultDS2CREDITID: TFloatField
+      FieldName = 'CREDITID'
+    end
+    object ResultDS2BOORID: TFloatField
+      FieldName = 'BOORID'
+    end
+    object ResultDS2BOOROWER: TWideStringField
+      FieldName = 'BOOROWER'
+      Size = 255
+    end
+    object ResultDS2CRDNUM: TWideStringField
+      FieldName = 'CRDNUM'
+      Size = 32
+    end
+    object ResultDS2BRANCHID: TFloatField
+      FieldName = 'BRANCHID'
+    end
+    object ResultDS2BRANCH: TWideStringField
+      FieldName = 'BRANCH'
+      Size = 255
+    end
+    object ResultDS2TYPEID: TFloatField
+      FieldName = 'TYPEID'
+    end
+    object ResultDS2CNTALL: TFloatField
+      DisplayLabel = '—ай'
+      FieldName = 'CNTALL'
+      Required = True
+      DisplayFormat = '#,#0.00'
+    end
+    object ResultDS2CNTALLPAY: TFloatField
+      DisplayLabel = 'ёд€н'
+      FieldName = 'CNTALLPAY'
+      Required = True
+      DisplayFormat = '#,#0.00'
+    end
+    object ResultDS2CNTYEAR: TFloatField
+      DisplayLabel = 'ил €рз. юд€н'
+      FieldName = 'CNTYEAR'
+      Required = True
+      DisplayFormat = '#,#0.00'
+    end
+    object ResultDS2CNTMON: TFloatField
+      DisplayLabel = 'ай €рз. юд€н'
+      FieldName = 'CNTMON'
+      Required = True
+      DisplayFormat = '#,#0.00'
+    end
+    object ResultDS2GIVENALL: TFloatField
+      DisplayLabel = '¬ерилмиш'
+      FieldName = 'GIVENALL'
+      Required = True
+      DisplayFormat = '#,#0.00'
+    end
+    object ResultDS2GIVENALLCALC: TFloatField
+      DisplayLabel = 'ўес фаиз'
+      FieldName = 'GIVENALLCALC'
+      Required = True
+      DisplayFormat = '#,#0.00'
+    end
+    object ResultDS2GIVENYEAR: TFloatField
+      DisplayLabel = '»л €рз верил.'
+      FieldName = 'GIVENYEAR'
+      Required = True
+      DisplayFormat = '#,#0.00'
+    end
+    object ResultDS2GIVENYEARCALC: TFloatField
+      DisplayLabel = 'ил щес фаиз'
+      FieldName = 'GIVENYEARCALC'
+      Required = True
+      DisplayFormat = '#,#0.00'
+    end
+    object ResultDS2GIVENMON: TFloatField
+      DisplayLabel = 'ай €рз верил.'
+      FieldName = 'GIVENMON'
+      Required = True
+      DisplayFormat = '#,#0.00'
+    end
+    object ResultDS2GIVENMONCALC: TFloatField
+      DisplayLabel = 'ай щес фаиз'
+      FieldName = 'GIVENMONCALC'
+      Required = True
+      DisplayFormat = '#,#0.00'
+    end
+    object ResultDS2OVERMAIN: TFloatField
+      DisplayLabel = '¬ахты чат. €сас'
+      FieldName = 'OVERMAIN'
+      Required = True
+      DisplayFormat = '#,#0.00'
+    end
+    object ResultDS2OVERINT: TFloatField
+      DisplayLabel = 'вахты чат фаиз'
+      FieldName = 'OVERINT'
+      Required = True
+      DisplayFormat = '#,#0.00'
+    end
+    object ResultDS2OVERMAINMON: TFloatField
+      FieldName = 'OVERMAINMON'
+    end
+    object ResultDS2OVERINTMON: TFloatField
+      FieldName = 'OVERINTMON'
+    end
+    object ResultDS2PAYEDALLMAIN: TFloatField
+      DisplayLabel = 'ёд€н €сас'
+      FieldName = 'PAYEDALLMAIN'
+      Required = True
+      DisplayFormat = '#,#0.00'
+    end
+    object ResultDS2PAYEDALLINT: TFloatField
+      DisplayLabel = 'юд€н фаиз'
+      FieldName = 'PAYEDALLINT'
+      Required = True
+      DisplayFormat = '#,#0.00'
+    end
+    object ResultDS2PAYEDYEARMAIN: TFloatField
+      FieldName = 'PAYEDYEARMAIN'
+      Required = True
+      DisplayFormat = '#,#0.00'
+    end
+    object ResultDS2PAYEDYEARINT: TFloatField
+      FieldName = 'PAYEDYEARINT'
+      Required = True
+      DisplayFormat = '#,#0.00'
+    end
+    object ResultDS2PAYEDMONMAIN: TFloatField
+      FieldName = 'PAYEDMONMAIN'
+      Required = True
+      DisplayFormat = '#,#0.00'
+    end
+    object ResultDS2PAYEDMONINT: TFloatField
+      FieldName = 'PAYEDMONINT'
+      Required = True
+      DisplayFormat = '#,#0.00'
+    end
+    object ResultDS2DEBTMAIN: TFloatField
+      FieldName = 'DEBTMAIN'
+      Required = True
+      DisplayFormat = '#,#0.00'
+    end
+    object ResultDS2DEBTINT: TFloatField
+      FieldName = 'DEBTINT'
+      Required = True
+      DisplayFormat = '#,#0.00'
+    end
+    object ResultDS2DEBTDUEMAIN: TFloatField
+      FieldName = 'DEBTDUEMAIN'
+      Required = True
+      DisplayFormat = '#,#0.00'
+    end
+    object ResultDS2DEBTDUEINT: TFloatField
+      FieldName = 'DEBTDUEINT'
+      Required = True
+      DisplayFormat = '#,#0.00'
+    end
+    object ResultDS2DEBTPERCENTMAIN: TFloatField
+      FieldName = 'DEBTPERCENTMAIN'
+      Required = True
+      DisplayFormat = '#,#0.00'
+    end
+    object ResultDS2DEBTPERCENTINT: TFloatField
+      FieldName = 'DEBTPERCENTINT'
+      Required = True
+      DisplayFormat = '#,#0.00'
+    end
+  end
+  object F2QisaDS: TOracleDataSet
+    SQL.Strings = (
+      'SELECT   typeid, SUM (cntall) cntall, SUM (cntallpay) cntallpay'
+      
+        '       , SUM (cntyear) cntyear, SUM (cntmon) cntmon, SUM (givena' +
+        'll) givenall'
+      
+        '       , SUM (givenallcalc) givenallcalc, SUM (givenyear) giveny' +
+        'ear'
+      
+        '       , SUM (givenyearcalc) givenyearcalc, SUM (givenmon) given' +
+        'mon'
+      
+        '       , SUM (givenmoncalc) givenmoncalc, SUM (overmain) overmai' +
+        'n'
+      '       , SUM (overint) overint, SUM (overmainmon) overmainmon'
+      
+        '       , SUM (overintmon) overintmon, SUM (payedallmain) payedal' +
+        'lmain'
+      
+        '       , SUM (payedallint) payedallint, SUM (payedyearmain) paye' +
+        'dyearmain'
+      
+        '       , SUM (payedyearint) payedyearint, SUM (payedmonmain) pay' +
+        'edmonmain'
+      '       , SUM (payedmonint) payedmonint, SUM (debtmain) debtmain'
+      '       , SUM (debtint) debtint, SUM (debtduemain) debtduemain'
+      '       , SUM (debtdueint) debtdueint'
+      
+        '       , cr_ak_reports.datapercentdiv(SUM (PAYEDALLMAIN), SUM (O' +
+        'VERMAIN)) debtpercentmain'
+      
+        '       , cr_ak_reports.datapercentdiv(SUM (PAYEDALLINT), SUM (OV' +
+        'ERINT)) debtpercentint'
+      '    FROM cr_report_f2'
+      '   WHERE typeid = 1'
+      'GROUP BY typeid')
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    OnCalcFields = ResultDSCalcFields
+    Left = 88
+    Top = 80
+    object F2QisaDSTYPEID: TFloatField
+      FieldName = 'TYPEID'
+    end
+    object F2QisaDSCNTALL: TFloatField
+      FieldName = 'CNTALL'
+    end
+    object F2QisaDSCNTALLPAY: TFloatField
+      FieldName = 'CNTALLPAY'
+    end
+    object F2QisaDSCNTYEAR: TFloatField
+      FieldName = 'CNTYEAR'
+    end
+    object F2QisaDSCNTMON: TFloatField
+      FieldName = 'CNTMON'
+    end
+    object F2QisaDSGIVENALL: TFloatField
+      FieldName = 'GIVENALL'
+    end
+    object F2QisaDSGIVENALLCALC: TFloatField
+      FieldName = 'GIVENALLCALC'
+    end
+    object F2QisaDSGIVENYEAR: TFloatField
+      FieldName = 'GIVENYEAR'
+    end
+    object F2QisaDSGIVENYEARCALC: TFloatField
+      FieldName = 'GIVENYEARCALC'
+    end
+    object F2QisaDSGIVENMON: TFloatField
+      FieldName = 'GIVENMON'
+    end
+    object F2QisaDSGIVENMONCALC: TFloatField
+      FieldName = 'GIVENMONCALC'
+    end
+    object F2QisaDSOVERMAIN: TFloatField
+      FieldName = 'OVERMAIN'
+    end
+    object F2QisaDSOVERINT: TFloatField
+      FieldName = 'OVERINT'
+    end
+    object F2QisaDSOVERMAINMON: TFloatField
+      FieldName = 'OVERMAINMON'
+    end
+    object F2QisaDSOVERINTMON: TFloatField
+      FieldName = 'OVERINTMON'
+    end
+    object F2QisaDSPAYEDALLMAIN: TFloatField
+      FieldName = 'PAYEDALLMAIN'
+    end
+    object F2QisaDSPAYEDALLINT: TFloatField
+      FieldName = 'PAYEDALLINT'
+    end
+    object F2QisaDSPAYEDYEARMAIN: TFloatField
+      FieldName = 'PAYEDYEARMAIN'
+    end
+    object F2QisaDSPAYEDYEARINT: TFloatField
+      FieldName = 'PAYEDYEARINT'
+    end
+    object F2QisaDSPAYEDMONMAIN: TFloatField
+      FieldName = 'PAYEDMONMAIN'
+    end
+    object F2QisaDSPAYEDMONINT: TFloatField
+      FieldName = 'PAYEDMONINT'
+    end
+    object F2QisaDSDEBTMAIN: TFloatField
+      FieldName = 'DEBTMAIN'
+    end
+    object F2QisaDSDEBTINT: TFloatField
+      FieldName = 'DEBTINT'
+    end
+    object F2QisaDSDEBTDUEMAIN: TFloatField
+      FieldName = 'DEBTDUEMAIN'
+    end
+    object F2QisaDSDEBTDUEINT: TFloatField
+      FieldName = 'DEBTDUEINT'
+    end
+    object F2QisaDSDEBTPERCENTMAIN: TFloatField
+      FieldName = 'DEBTPERCENTMAIN'
+    end
+    object F2QisaDSDEBTPERCENTINT: TFloatField
+      FieldName = 'DEBTPERCENTINT'
+    end
+  end
+  object F2OrtaDS: TOracleDataSet
+    SQL.Strings = (
+      'SELECT   typeid, SUM (cntall) cntall, SUM (cntallpay) cntallpay'
+      
+        '       , SUM (cntyear) cntyear, SUM (cntmon) cntmon, SUM (givena' +
+        'll) givenall'
+      
+        '       , SUM (givenallcalc) givenallcalc, SUM (givenyear) giveny' +
+        'ear'
+      
+        '       , SUM (givenyearcalc) givenyearcalc, SUM (givenmon) given' +
+        'mon'
+      
+        '       , SUM (givenmoncalc) givenmoncalc, SUM (overmain) overmai' +
+        'n'
+      '       , SUM (overint) overint, SUM (overmainmon) overmainmon'
+      
+        '       , SUM (overintmon) overintmon, SUM (payedallmain) payedal' +
+        'lmain'
+      
+        '       , SUM (payedallint) payedallint, SUM (payedyearmain) paye' +
+        'dyearmain'
+      
+        '       , SUM (payedyearint) payedyearint, SUM (payedmonmain) pay' +
+        'edmonmain'
+      '       , SUM (payedmonint) payedmonint, SUM (debtmain) debtmain'
+      '       , SUM (debtint) debtint, SUM (debtduemain) debtduemain'
+      '       , SUM (debtdueint) debtdueint'
+      
+        '       , cr_ak_reports.datapercentdiv(SUM (PAYEDALLMAIN), SUM (O' +
+        'VERMAIN)) debtpercentmain'
+      
+        '       , cr_ak_reports.datapercentdiv(SUM (PAYEDALLINT), SUM (OV' +
+        'ERINT)) debtpercentint'
+      '    FROM cr_report_f2'
+      '   WHERE typeid = 2'
+      'GROUP BY typeid')
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    OnCalcFields = ResultDSCalcFields
+    Left = 144
+    Top = 80
+    object F2OrtaDSTYPEID: TFloatField
+      FieldName = 'TYPEID'
+    end
+    object F2OrtaDSCNTALL: TFloatField
+      FieldName = 'CNTALL'
+    end
+    object F2OrtaDSCNTALLPAY: TFloatField
+      FieldName = 'CNTALLPAY'
+    end
+    object F2OrtaDSCNTYEAR: TFloatField
+      FieldName = 'CNTYEAR'
+    end
+    object F2OrtaDSCNTMON: TFloatField
+      FieldName = 'CNTMON'
+    end
+    object F2OrtaDSGIVENALL: TFloatField
+      FieldName = 'GIVENALL'
+    end
+    object F2OrtaDSGIVENALLCALC: TFloatField
+      FieldName = 'GIVENALLCALC'
+    end
+    object F2OrtaDSGIVENYEAR: TFloatField
+      FieldName = 'GIVENYEAR'
+    end
+    object F2OrtaDSGIVENYEARCALC: TFloatField
+      FieldName = 'GIVENYEARCALC'
+    end
+    object F2OrtaDSGIVENMON: TFloatField
+      FieldName = 'GIVENMON'
+    end
+    object F2OrtaDSGIVENMONCALC: TFloatField
+      FieldName = 'GIVENMONCALC'
+    end
+    object F2OrtaDSOVERMAIN: TFloatField
+      FieldName = 'OVERMAIN'
+    end
+    object F2OrtaDSOVERINT: TFloatField
+      FieldName = 'OVERINT'
+    end
+    object F2OrtaDSOVERMAINMON: TFloatField
+      FieldName = 'OVERMAINMON'
+    end
+    object F2OrtaDSOVERINTMON: TFloatField
+      FieldName = 'OVERINTMON'
+    end
+    object F2OrtaDSPAYEDALLMAIN: TFloatField
+      FieldName = 'PAYEDALLMAIN'
+    end
+    object F2OrtaDSPAYEDALLINT: TFloatField
+      FieldName = 'PAYEDALLINT'
+    end
+    object F2OrtaDSPAYEDYEARMAIN: TFloatField
+      FieldName = 'PAYEDYEARMAIN'
+    end
+    object F2OrtaDSPAYEDYEARINT: TFloatField
+      FieldName = 'PAYEDYEARINT'
+    end
+    object F2OrtaDSPAYEDMONMAIN: TFloatField
+      FieldName = 'PAYEDMONMAIN'
+    end
+    object F2OrtaDSPAYEDMONINT: TFloatField
+      FieldName = 'PAYEDMONINT'
+    end
+    object F2OrtaDSDEBTMAIN: TFloatField
+      FieldName = 'DEBTMAIN'
+    end
+    object F2OrtaDSDEBTINT: TFloatField
+      FieldName = 'DEBTINT'
+    end
+    object F2OrtaDSDEBTDUEMAIN: TFloatField
+      FieldName = 'DEBTDUEMAIN'
+    end
+    object F2OrtaDSDEBTDUEINT: TFloatField
+      FieldName = 'DEBTDUEINT'
+    end
+    object F2OrtaDSDEBTPERCENTMAIN: TFloatField
+      FieldName = 'DEBTPERCENTMAIN'
+    end
+    object F2OrtaDSDEBTPERCENTINT: TFloatField
+      FieldName = 'DEBTPERCENTINT'
+    end
+  end
+  object F2UzunDS: TOracleDataSet
+    SQL.Strings = (
+      'SELECT   typeid, SUM (cntall) cntall, SUM (cntallpay) cntallpay'
+      
+        '       , SUM (cntyear) cntyear, SUM (cntmon) cntmon, SUM (givena' +
+        'll) givenall'
+      
+        '       , SUM (givenallcalc) givenallcalc, SUM (givenyear) giveny' +
+        'ear'
+      
+        '       , SUM (givenyearcalc) givenyearcalc, SUM (givenmon) given' +
+        'mon'
+      
+        '       , SUM (givenmoncalc) givenmoncalc, SUM (overmain) overmai' +
+        'n'
+      '       , SUM (overint) overint, SUM (overmainmon) overmainmon'
+      
+        '       , SUM (overintmon) overintmon, SUM (payedallmain) payedal' +
+        'lmain'
+      
+        '       , SUM (payedallint) payedallint, SUM (payedyearmain) paye' +
+        'dyearmain'
+      
+        '       , SUM (payedyearint) payedyearint, SUM (payedmonmain) pay' +
+        'edmonmain'
+      '       , SUM (payedmonint) payedmonint, SUM (debtmain) debtmain'
+      '       , SUM (debtint) debtint, SUM (debtduemain) debtduemain'
+      '       , SUM (debtdueint) debtdueint'
+      
+        '       , cr_ak_reports.datapercentdiv(SUM (PAYEDALLMAIN), SUM (O' +
+        'VERMAIN)) debtpercentmain'
+      
+        '       , cr_ak_reports.datapercentdiv(SUM (PAYEDALLINT), SUM (OV' +
+        'ERINT)) debtpercentint'
+      '    FROM cr_report_f2'
+      '   WHERE typeid = 3'
+      'GROUP BY typeid')
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    OnCalcFields = ResultDSCalcFields
+    Left = 200
+    Top = 80
+    object F2UzunDSTYPEID: TFloatField
+      FieldName = 'TYPEID'
+    end
+    object F2UzunDSCNTALL: TFloatField
+      FieldName = 'CNTALL'
+    end
+    object F2UzunDSCNTALLPAY: TFloatField
+      FieldName = 'CNTALLPAY'
+    end
+    object F2UzunDSCNTYEAR: TFloatField
+      FieldName = 'CNTYEAR'
+    end
+    object F2UzunDSCNTMON: TFloatField
+      FieldName = 'CNTMON'
+    end
+    object F2UzunDSGIVENALL: TFloatField
+      FieldName = 'GIVENALL'
+    end
+    object F2UzunDSGIVENALLCALC: TFloatField
+      FieldName = 'GIVENALLCALC'
+    end
+    object F2UzunDSGIVENYEAR: TFloatField
+      FieldName = 'GIVENYEAR'
+    end
+    object F2UzunDSGIVENYEARCALC: TFloatField
+      FieldName = 'GIVENYEARCALC'
+    end
+    object F2UzunDSGIVENMON: TFloatField
+      FieldName = 'GIVENMON'
+    end
+    object F2UzunDSGIVENMONCALC: TFloatField
+      FieldName = 'GIVENMONCALC'
+    end
+    object F2UzunDSOVERMAIN: TFloatField
+      FieldName = 'OVERMAIN'
+    end
+    object F2UzunDSOVERINT: TFloatField
+      FieldName = 'OVERINT'
+    end
+    object F2UzunDSOVERMAINMON: TFloatField
+      FieldName = 'OVERMAINMON'
+    end
+    object F2UzunDSOVERINTMON: TFloatField
+      FieldName = 'OVERINTMON'
+    end
+    object F2UzunDSPAYEDALLMAIN: TFloatField
+      FieldName = 'PAYEDALLMAIN'
+    end
+    object F2UzunDSPAYEDALLINT: TFloatField
+      FieldName = 'PAYEDALLINT'
+    end
+    object F2UzunDSPAYEDYEARMAIN: TFloatField
+      FieldName = 'PAYEDYEARMAIN'
+    end
+    object F2UzunDSPAYEDYEARINT: TFloatField
+      FieldName = 'PAYEDYEARINT'
+    end
+    object F2UzunDSPAYEDMONMAIN: TFloatField
+      FieldName = 'PAYEDMONMAIN'
+    end
+    object F2UzunDSPAYEDMONINT: TFloatField
+      FieldName = 'PAYEDMONINT'
+    end
+    object F2UzunDSDEBTMAIN: TFloatField
+      FieldName = 'DEBTMAIN'
+    end
+    object F2UzunDSDEBTINT: TFloatField
+      FieldName = 'DEBTINT'
+    end
+    object F2UzunDSDEBTDUEMAIN: TFloatField
+      FieldName = 'DEBTDUEMAIN'
+    end
+    object F2UzunDSDEBTDUEINT: TFloatField
+      FieldName = 'DEBTDUEINT'
+    end
+    object F2UzunDSDEBTPERCENTMAIN: TFloatField
+      FieldName = 'DEBTPERCENTMAIN'
+    end
+    object F2UzunDSDEBTPERCENTINT: TFloatField
+      FieldName = 'DEBTPERCENTINT'
+    end
+  end
+  object ResultDS3: TOracleDataSet
+    SQL.Strings = (
+      'select * from ('
+      
+        'SELECT creditid, boorid, boorower, crdnum, branchid, branch, typ' +
+        'eid, t.name purposeid, cntall, cntallpay, cntyear, cntmon, given' +
+        'all,      givenallcalc, givenyear, givenyearcalc, givenmon, give' +
+        'nmoncalc,overmain, overint, payedallmain, payedallint, payedyear' +
+        'main,payedyearint, payedmonmain, payedmonint, debtmain, debtint,' +
+        'debtduemain, debtdueint, debtpercentmain, debtpercentint FROM cr' +
+        '_report_f3 f, cr_agro_kredit_target t where f.purposeid=t.id)'
+      ''
+      ''
+      ''
+      'ORDER BY'
+      '  :f1, boorower')
+    Variables.Data = {0300000001000000030000003A4631050000000000000000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    OnCalcFields = ResultDSCalcFields
+    Left = 32
+    Top = 136
+    object ResultDS3CREDITID: TFloatField
+      FieldName = 'CREDITID'
+    end
+    object ResultDS3BOORID: TFloatField
+      FieldName = 'BOORID'
+    end
+    object ResultDS3BOOROWER: TWideStringField
+      FieldName = 'BOOROWER'
+      Size = 255
+    end
+    object ResultDS3CRDNUM: TWideStringField
+      FieldName = 'CRDNUM'
+      Size = 32
+    end
+    object ResultDS3BRANCHID: TFloatField
+      FieldName = 'BRANCHID'
+    end
+    object ResultDS3BRANCH: TWideStringField
+      FieldName = 'BRANCH'
+      Size = 255
+    end
+    object ResultDS3TYPEID: TFloatField
+      FieldName = 'TYPEID'
+    end
+    object ResultDS3PURPOSEID: TWideStringField
+      FieldName = 'PURPOSEID'
+      Size = 128
+    end
+    object ResultDS3CNTALL: TFloatField
+      FieldName = 'CNTALL'
+    end
+    object ResultDS3CNTALLPAY: TFloatField
+      FieldName = 'CNTALLPAY'
+    end
+    object ResultDS3CNTYEAR: TFloatField
+      FieldName = 'CNTYEAR'
+    end
+    object ResultDS3CNTMON: TFloatField
+      FieldName = 'CNTMON'
+    end
+    object ResultDS3GIVENALL: TFloatField
+      FieldName = 'GIVENALL'
+    end
+    object ResultDS3GIVENALLCALC: TFloatField
+      FieldName = 'GIVENALLCALC'
+    end
+    object ResultDS3GIVENYEAR: TFloatField
+      FieldName = 'GIVENYEAR'
+    end
+    object ResultDS3GIVENYEARCALC: TFloatField
+      FieldName = 'GIVENYEARCALC'
+    end
+    object ResultDS3GIVENMON: TFloatField
+      FieldName = 'GIVENMON'
+    end
+    object ResultDS3GIVENMONCALC: TFloatField
+      FieldName = 'GIVENMONCALC'
+    end
+    object ResultDS3OVERMAIN: TFloatField
+      FieldName = 'OVERMAIN'
+    end
+    object ResultDS3OVERINT: TFloatField
+      FieldName = 'OVERINT'
+    end
+    object ResultDS3PAYEDALLMAIN: TFloatField
+      FieldName = 'PAYEDALLMAIN'
+    end
+    object ResultDS3PAYEDALLINT: TFloatField
+      FieldName = 'PAYEDALLINT'
+    end
+    object ResultDS3PAYEDYEARMAIN: TFloatField
+      FieldName = 'PAYEDYEARMAIN'
+    end
+    object ResultDS3PAYEDYEARINT: TFloatField
+      FieldName = 'PAYEDYEARINT'
+    end
+    object ResultDS3PAYEDMONMAIN: TFloatField
+      FieldName = 'PAYEDMONMAIN'
+    end
+    object ResultDS3PAYEDMONINT: TFloatField
+      FieldName = 'PAYEDMONINT'
+    end
+    object ResultDS3DEBTMAIN: TFloatField
+      FieldName = 'DEBTMAIN'
+    end
+    object ResultDS3DEBTINT: TFloatField
+      FieldName = 'DEBTINT'
+    end
+    object ResultDS3DEBTDUEMAIN: TFloatField
+      FieldName = 'DEBTDUEMAIN'
+    end
+    object ResultDS3DEBTDUEINT: TFloatField
+      FieldName = 'DEBTDUEINT'
+    end
+    object ResultDS3DEBTPERCENTMAIN: TFloatField
+      FieldName = 'DEBTPERCENTMAIN'
+    end
+    object ResultDS3DEBTPERCENTINT: TFloatField
+      FieldName = 'DEBTPERCENTINT'
+    end
+  end
+  object ResultDSBP: TOracleDataSet
+    SQL.Strings = (
+      'SELECT r.creditid, d.ID districtid, d.NAME district, r.villageid'
+      '     , v.NAME village, m.ID targetid, m.NAME target, r.purposeid'
+      '     , p.NAME purposename, r.custid'
+      
+        '     , r.custname, r.credittypeid, t.typedesc, r.crdnum, r.first' +
+        'trchdate'
+      
+        '     , r.lastdate, r.projectcost, r.givencredit, r.untmeansofpro' +
+        'duction'
+      
+        '     , r.untproduction, r.numberofproduction, r.production, r.bo' +
+        'ughtmaterial'
+      
+        '     , r.operationexpense, r.otherexpense, r.productioncost, r.p' +
+        'roductivity'
+      
+        '     , r.sumexpense, r.sumprofit, r.taxexpense, r.istehsaltype, ' +
+        'r.galir'
+      '     , r.manfaat, r.bpcreditpart'
+      '  FROM cr_report_bp r'
+      '     , cr_agro_village v'
+      '     , cr_agro_region d'
+      '     , cr_bp_types t'
+      '     , cr_agro_kredit_target m'
+      '     , cr_agro_kredit_purpose p'
+      ' WHERE r.villageid(+) = v.ID'
+      '   AND v.depend_id = d.ID'
+      '   AND r.credittypeid = t.ID'
+      '   AND r.purposeid = p.ID'
+      '   AND p.depend_id (+) = m.ID'
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      'ORDER BY districtid, villageid, custid, creditid')
+    Session = sboapiDataModule.SBSession
+    Left = 32
+    Top = 192
+  end
+  object QUERYDS: TOracleDataSet
+    SQL.Strings = (
+      'begin'
+      'cr_ak_reports.insinfobp(15725);'
+      'end;')
+    Session = sboapiDataModule.SBSession
+    Left = 584
+    Top = 184
+  end
+  object ResultDSTrouble: TOracleDataSet
+    SQL.Strings = (
+      
+        'SELECT t.creditid, t.branchid, d.ID districtid, d.NAME district,' +
+        ' t.villageid, v.NAME village'
+      
+        '     , t.akpurposeid, p.name purpose, t.custid, t.custname, t.cr' +
+        'edittypeid, b.typedesc'
+      '     , t.crdnum, t.firsttrchdate, t.lastdate, t.givenamount'
+      
+        '     , t.computedpercent, t.creddebtmaindebt, t.creddebtpercentd' +
+        'ebt'
+      
+        '     , t.creddebtovermaindebt, t.creddebtoverpercentdebt, t.pokc' +
+        'urratio'
+      '     , t.pokratiochange, t.pokpercent, t.pokosp, t.girovtorpaq'
+      '     , t.girovtorpaqcost, t.girovev, t.girovevcost, t.girovother'
+      
+        '     , t.girovyekun, t.pretenziadate, t.iddiadate, t.measurespre' +
+        'tenziacost'
+      
+        '     , t.measuresiddiacost, t.maindebtpretenzia, t.maindebtprete' +
+        'nziadate'
+      '     , t.costafterpretenzia, t.maindebt'
+      
+        '  FROM cr_report_trouble t, cr_agro_village v, cr_agro_region d,' +
+        ' cr_bp_types b, cr_agro_kredit_purpose p'
+      
+        ' WHERE t.villageid = v.ID AND v.depend_id = d.ID AND t.credittyp' +
+        'eid = b.ID AND t.akpurposeid=p.id'
+      'ORDER BY branchid, districtid, villageid, custid, creditid')
+    Session = sboapiDataModule.SBSession
+    Left = 32
+    Top = 248
+  end
+  object ResultDSLYT: TOracleDataSet
+    SQL.Strings = (
+      'SELECT t.*, d.ID districtid, d.NAME district, v.NAME village'
+      '     , b.typedesc'
+      
+        '  FROM cr_report_lastyeartrch t, cr_agro_village v, cr_agro_regi' +
+        'on d, cr_bp_types b'
+      
+        ' WHERE t.villageid = v.ID AND v.depend_id = d.ID AND t.typeid = ' +
+        'b.ID'
+      
+        'ORDER BY branchid, districtid, typeid,villageid, custid, crediti' +
+        'd')
+    Session = sboapiDataModule.SBSession
+    Left = 32
+    Top = 296
+  end
+  object ResultDSL5YP: TOracleDataSet
+    SQL.Strings = (
+      'SELECT t.*, d.ID districtid, d.NAME district, v.NAME village'
+      '     , b.typedesc'
+      
+        '  FROM cr_report_last5yearpay t, cr_agro_village v, cr_agro_regi' +
+        'on d, cr_bp_types b'
+      
+        ' WHERE t.villageid = v.ID AND v.depend_id = d.ID AND t.typeid = ' +
+        'b.ID'
+      
+        'ORDER BY branchid, districtid, typeid,villageid, custid, crediti' +
+        'd')
+    Session = sboapiDataModule.SBSession
+    Left = 288
+    Top = 24
+    object ResultDSL5YPCREDITID: TFloatField
+      FieldName = 'CREDITID'
+    end
+    object ResultDSL5YPCUSTID: TFloatField
+      FieldName = 'CUSTID'
+    end
+    object ResultDSL5YPCRDNUM: TWideStringField
+      FieldName = 'CRDNUM'
+      Size = 255
+    end
+    object ResultDSL5YPCUSTNAME: TWideStringField
+      FieldName = 'CUSTNAME'
+      Size = 255
+    end
+    object ResultDSL5YPBRANCHID: TFloatField
+      FieldName = 'BRANCHID'
+    end
+    object ResultDSL5YPVILLAGEID: TFloatField
+      FieldName = 'VILLAGEID'
+    end
+    object ResultDSL5YPPURPOSEID: TFloatField
+      FieldName = 'PURPOSEID'
+    end
+    object ResultDSL5YPTYPEID: TFloatField
+      FieldName = 'TYPEID'
+    end
+    object ResultDSL5YPCRDCOUNT: TFloatField
+      FieldName = 'CRDCOUNT'
+    end
+    object ResultDSL5YPPAYEDALL: TFloatField
+      FieldName = 'PAYEDALL'
+    end
+    object ResultDSL5YPPAYEDMAIN: TFloatField
+      FieldName = 'PAYEDMAIN'
+    end
+    object ResultDSL5YPPAYEDINT: TFloatField
+      FieldName = 'PAYEDINT'
+    end
+    object ResultDSL5YPPAYEDMAIN1: TFloatField
+      FieldName = 'PAYEDMAIN1'
+    end
+    object ResultDSL5YPPAYEDINT1: TFloatField
+      FieldName = 'PAYEDINT1'
+    end
+    object ResultDSL5YPPAYEDMAIN2: TFloatField
+      FieldName = 'PAYEDMAIN2'
+    end
+    object ResultDSL5YPPAYEDINT2: TFloatField
+      FieldName = 'PAYEDINT2'
+    end
+    object ResultDSL5YPPAYEDMAIN3: TFloatField
+      FieldName = 'PAYEDMAIN3'
+    end
+    object ResultDSL5YPPAYEDINT3: TFloatField
+      FieldName = 'PAYEDINT3'
+    end
+    object ResultDSL5YPPAYEDMAIN4: TFloatField
+      FieldName = 'PAYEDMAIN4'
+    end
+    object ResultDSL5YPPAYEDINT4: TFloatField
+      FieldName = 'PAYEDINT4'
+    end
+    object ResultDSL5YPPAYEDMAIN5: TFloatField
+      FieldName = 'PAYEDMAIN5'
+    end
+    object ResultDSL5YPPAYEDINT5: TFloatField
+      FieldName = 'PAYEDINT5'
+    end
+    object ResultDSL5YPDISTRICTID: TFloatField
+      FieldName = 'DISTRICTID'
+      Required = True
+    end
+    object ResultDSL5YPDISTRICT: TWideStringField
+      FieldName = 'DISTRICT'
+      Size = 128
+    end
+    object ResultDSL5YPVILLAGE: TWideStringField
+      FieldName = 'VILLAGE'
+      Size = 128
+    end
+    object ResultDSL5YPTYPEDESC: TWideStringField
+      FieldName = 'TYPEDESC'
+      Size = 32
+    end
+  end
+  object ResultDSL5YT: TOracleDataSet
+    SQL.Strings = (
+      'SELECT t.*, d.ID districtid, d.NAME district, v.NAME village'
+      '     , b.typedesc'
+      
+        '  FROM cr_report_last5yeartr t, cr_agro_village v, cr_agro_regio' +
+        'n d, cr_bp_types b'
+      
+        ' WHERE t.villageid = v.ID AND v.depend_id = d.ID AND t.typeid = ' +
+        'b.ID'
+      
+        'ORDER BY branchid, districtid, typeid,villageid, custid, crediti' +
+        'd')
+    Session = sboapiDataModule.SBSession
+    Left = 288
+    Top = 80
+    object ResultDSL5YTCREDITID: TFloatField
+      FieldName = 'CREDITID'
+    end
+    object ResultDSL5YTCUSTID: TFloatField
+      FieldName = 'CUSTID'
+    end
+    object ResultDSL5YTCRDNUM: TWideStringField
+      FieldName = 'CRDNUM'
+      Size = 255
+    end
+    object ResultDSL5YTCUSTNAME: TWideStringField
+      FieldName = 'CUSTNAME'
+      Size = 255
+    end
+    object ResultDSL5YTBRANCHID: TFloatField
+      FieldName = 'BRANCHID'
+    end
+    object ResultDSL5YTVILLAGEID: TFloatField
+      FieldName = 'VILLAGEID'
+    end
+    object ResultDSL5YTPURPOSEID: TFloatField
+      FieldName = 'PURPOSEID'
+    end
+    object ResultDSL5YTTYPEID: TFloatField
+      FieldName = 'TYPEID'
+    end
+    object ResultDSL5YTCRDCOUNT: TFloatField
+      FieldName = 'CRDCOUNT'
+    end
+    object ResultDSL5YTTREDMAIN: TFloatField
+      FieldName = 'TREDMAIN'
+    end
+    object ResultDSL5YTTREDMAIN1: TFloatField
+      FieldName = 'TREDMAIN1'
+    end
+    object ResultDSL5YTTREDMAIN2: TFloatField
+      FieldName = 'TREDMAIN2'
+    end
+    object ResultDSL5YTTREDMAIN3: TFloatField
+      FieldName = 'TREDMAIN3'
+    end
+    object ResultDSL5YTTREDMAIN4: TFloatField
+      FieldName = 'TREDMAIN4'
+    end
+    object ResultDSL5YTTREDMAIN5: TFloatField
+      FieldName = 'TREDMAIN5'
+    end
+    object ResultDSL5YTDISTRICTID: TFloatField
+      FieldName = 'DISTRICTID'
+      Required = True
+    end
+    object ResultDSL5YTDISTRICT: TWideStringField
+      FieldName = 'DISTRICT'
+      Size = 128
+    end
+    object ResultDSL5YTVILLAGE: TWideStringField
+      FieldName = 'VILLAGE'
+      Size = 128
+    end
+    object ResultDSL5YTTYPEDESC: TWideStringField
+      FieldName = 'TYPEDESC'
+      Size = 32
+    end
+  end
+  object ResultDSLYPS: TOracleDataSet
+    SQL.Strings = (
+      'SELECT t.*, d.ID districtid, d.NAME district, v.NAME village'
+      ''
+      
+        '  FROM cr_report_lastyearmpays t, cr_agro_village v, cr_agro_reg' +
+        'ion d, sb_filial b'
+      
+        ' WHERE t.villageid = v.ID AND v.depend_id = d.ID AND branchid=b.' +
+        'id'
+      'ORDER BY b.name, d.name, v.name, custname, creditid')
+    QBEDefinition.QBEFieldDefs = {
+      0400000033000000080000004352454449544944010000000000060000004355
+      53544944010000000000060000004352444E554D010000000000080000004355
+      53544E414D45010000000000080000004252414E434849440100000000000900
+      000056494C4C414745494401000000000009000000505552504F534549440100
+      000000000600000054595045494401000000000008000000435244434F554E54
+      0100000000000B0000004D5245544D41494E414C4C0100000000000A0000004D
+      524554494E54414C4C010000000000090000004D5245544D41494E3101000000
+      0000080000004D524554494E5431010000000000090000004D5245544D41494E
+      32010000000000080000004D524554494E5432010000000000090000004D5245
+      544D41494E33010000000000080000004D524554494E54330100000000000900
+      00004D5245544D41494E34010000000000080000004D524554494E5434010000
+      000000090000004D5245544D41494E35010000000000080000004D524554494E
+      5435010000000000090000004D5245544D41494E36010000000000080000004D
+      524554494E5436010000000000090000004D5245544D41494E37010000000000
+      080000004D524554494E5437010000000000090000004D5245544D41494E3801
+      0000000000080000004D524554494E5438010000000000090000004D5245544D
+      41494E39010000000000080000004D524554494E54390100000000000A000000
+      4D5245544D41494E3130010000000000090000004D524554494E543130010000
+      0000000A0000004D5245544D41494E3131010000000000090000004D52455449
+      4E5431310100000000000A0000004D5245544D41494E31320100000000000900
+      00004D524554494E5431320100000000000A0000004449535452494354494401
+      00000000000800000044495354524943540100000000000700000056494C4C41
+      4745010000000000090000004D4F4E544850415931010000000000090000004D
+      4F4E544850415932010000000000090000004D4F4E5448504159330100000000
+      00090000004D4F4E544850415934010000000000090000004D4F4E5448504159
+      35010000000000090000004D4F4E544850415936010000000000090000004D4F
+      4E544850415937010000000000090000004D4F4E544850415938010000000000
+      090000004D4F4E5448504159390100000000000A0000004D4F4E544850415931
+      300100000000000A0000004D4F4E544850415931310100000000000A0000004D
+      4F4E544850415931320100000000000600000056414C555445010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 288
+    Top = 136
+    object ResultDSLYPSCREDITID: TFloatField
+      FieldName = 'CREDITID'
+    end
+    object ResultDSLYPSCUSTID: TFloatField
+      FieldName = 'CUSTID'
+    end
+    object ResultDSLYPSCRDNUM: TWideStringField
+      FieldName = 'CRDNUM'
+      Size = 255
+    end
+    object ResultDSLYPSCUSTNAME: TWideStringField
+      FieldName = 'CUSTNAME'
+      Size = 255
+    end
+    object ResultDSLYPSBRANCHID: TFloatField
+      FieldName = 'BRANCHID'
+    end
+    object ResultDSLYPSVILLAGEID: TFloatField
+      FieldName = 'VILLAGEID'
+    end
+    object ResultDSLYPSPURPOSEID: TFloatField
+      FieldName = 'PURPOSEID'
+    end
+    object ResultDSLYPSTYPEID: TFloatField
+      FieldName = 'TYPEID'
+    end
+    object ResultDSLYPSCRDCOUNT: TFloatField
+      FieldName = 'CRDCOUNT'
+    end
+    object ResultDSLYPSVALUTE: TWideStringField
+      FieldName = 'VALUTE'
+      Size = 15
+    end
+    object ResultDSLYPSMRETMAINALL: TFloatField
+      FieldName = 'MRETMAINALL'
+    end
+    object ResultDSLYPSMRETINTALL: TFloatField
+      FieldName = 'MRETINTALL'
+    end
+    object ResultDSLYPSMONTHPAY1: TDateTimeField
+      FieldName = 'MONTHPAY1'
+    end
+    object ResultDSLYPSMRETMAIN1: TFloatField
+      FieldName = 'MRETMAIN1'
+    end
+    object ResultDSLYPSMRETINT1: TFloatField
+      FieldName = 'MRETINT1'
+    end
+    object ResultDSLYPSMONTHPAY2: TDateTimeField
+      FieldName = 'MONTHPAY2'
+    end
+    object ResultDSLYPSMRETMAIN2: TFloatField
+      FieldName = 'MRETMAIN2'
+    end
+    object ResultDSLYPSMRETINT2: TFloatField
+      FieldName = 'MRETINT2'
+    end
+    object ResultDSLYPSMONTHPAY3: TDateTimeField
+      FieldName = 'MONTHPAY3'
+    end
+    object ResultDSLYPSMRETMAIN3: TFloatField
+      FieldName = 'MRETMAIN3'
+    end
+    object ResultDSLYPSMRETINT3: TFloatField
+      FieldName = 'MRETINT3'
+    end
+    object ResultDSLYPSMONTHPAY4: TDateTimeField
+      FieldName = 'MONTHPAY4'
+    end
+    object ResultDSLYPSMRETMAIN4: TFloatField
+      FieldName = 'MRETMAIN4'
+    end
+    object ResultDSLYPSMRETINT4: TFloatField
+      FieldName = 'MRETINT4'
+    end
+    object ResultDSLYPSMONTHPAY5: TDateTimeField
+      FieldName = 'MONTHPAY5'
+    end
+    object ResultDSLYPSMRETMAIN5: TFloatField
+      FieldName = 'MRETMAIN5'
+    end
+    object ResultDSLYPSMRETINT5: TFloatField
+      FieldName = 'MRETINT5'
+    end
+    object ResultDSLYPSMONTHPAY6: TDateTimeField
+      FieldName = 'MONTHPAY6'
+    end
+    object ResultDSLYPSMRETMAIN6: TFloatField
+      FieldName = 'MRETMAIN6'
+    end
+    object ResultDSLYPSMRETINT6: TFloatField
+      FieldName = 'MRETINT6'
+    end
+    object ResultDSLYPSMONTHPAY7: TDateTimeField
+      FieldName = 'MONTHPAY7'
+    end
+    object ResultDSLYPSMRETMAIN7: TFloatField
+      FieldName = 'MRETMAIN7'
+    end
+    object ResultDSLYPSMRETINT7: TFloatField
+      FieldName = 'MRETINT7'
+    end
+    object ResultDSLYPSMONTHPAY8: TDateTimeField
+      FieldName = 'MONTHPAY8'
+    end
+    object ResultDSLYPSMRETMAIN8: TFloatField
+      FieldName = 'MRETMAIN8'
+    end
+    object ResultDSLYPSMRETINT8: TFloatField
+      FieldName = 'MRETINT8'
+    end
+    object ResultDSLYPSMONTHPAY9: TDateTimeField
+      FieldName = 'MONTHPAY9'
+    end
+    object ResultDSLYPSMRETMAIN9: TFloatField
+      FieldName = 'MRETMAIN9'
+    end
+    object ResultDSLYPSMRETINT9: TFloatField
+      FieldName = 'MRETINT9'
+    end
+    object ResultDSLYPSMONTHPAY10: TDateTimeField
+      FieldName = 'MONTHPAY10'
+    end
+    object ResultDSLYPSMRETMAIN10: TFloatField
+      FieldName = 'MRETMAIN10'
+    end
+    object ResultDSLYPSMRETINT10: TFloatField
+      FieldName = 'MRETINT10'
+    end
+    object ResultDSLYPSMONTHPAY11: TDateTimeField
+      FieldName = 'MONTHPAY11'
+    end
+    object ResultDSLYPSMRETMAIN11: TFloatField
+      FieldName = 'MRETMAIN11'
+    end
+    object ResultDSLYPSMRETINT11: TFloatField
+      FieldName = 'MRETINT11'
+    end
+    object ResultDSLYPSMONTHPAY12: TDateTimeField
+      FieldName = 'MONTHPAY12'
+    end
+    object ResultDSLYPSMRETMAIN12: TFloatField
+      FieldName = 'MRETMAIN12'
+    end
+    object ResultDSLYPSMRETINT12: TFloatField
+      FieldName = 'MRETINT12'
+    end
+    object ResultDSLYPSDISTRICTID: TFloatField
+      FieldName = 'DISTRICTID'
+      Required = True
+    end
+    object ResultDSLYPSDISTRICT: TWideStringField
+      FieldName = 'DISTRICT'
+      Size = 128
+    end
+    object ResultDSLYPSVILLAGE: TWideStringField
+      FieldName = 'VILLAGE'
+      Size = 128
+    end
+  end
+  object ResultDSMg: TOracleDataSet
+    SQL.Strings = (
+      'SELECT t.*, d.ID districtid, d.NAME district, v.NAME village'
+      '     , b.typedesc'
+      
+        '  FROM cr_report_mong t, cr_agro_village v, cr_agro_region d, cr' +
+        '_bp_types b'
+      
+        ' WHERE t.villageid = v.ID AND v.depend_id = d.ID AND t.typeid = ' +
+        'b.ID'
+      
+        'ORDER BY branchid, districtid, typeid,villageid, custid, crediti' +
+        'd')
+    Session = sboapiDataModule.SBSession
+    Left = 288
+    Top = 184
+    object ResultDSMgCREDITID: TFloatField
+      FieldName = 'CREDITID'
+    end
+    object ResultDSMgCUSTID: TFloatField
+      FieldName = 'CUSTID'
+    end
+    object ResultDSMgCRDNUM: TWideStringField
+      FieldName = 'CRDNUM'
+      Size = 255
+    end
+    object ResultDSMgCUSTNAME: TWideStringField
+      FieldName = 'CUSTNAME'
+      Size = 255
+    end
+    object ResultDSMgBRANCHID: TFloatField
+      FieldName = 'BRANCHID'
+    end
+    object ResultDSMgVILLAGEID: TFloatField
+      FieldName = 'VILLAGEID'
+    end
+    object ResultDSMgPURPOSEID: TFloatField
+      FieldName = 'PURPOSEID'
+    end
+    object ResultDSMgTYPEID: TFloatField
+      FieldName = 'TYPEID'
+    end
+    object ResultDSMgCRDCOUNT: TFloatField
+      FieldName = 'CRDCOUNT'
+    end
+    object ResultDSMgGIVENAMOUNT: TFloatField
+      FieldName = 'GIVENAMOUNT'
+    end
+    object ResultDSMgPAYEDMAIN: TFloatField
+      FieldName = 'PAYEDMAIN'
+    end
+    object ResultDSMgPAYEDINT: TFloatField
+      FieldName = 'PAYEDINT'
+    end
+    object ResultDSMgDEBTMAIN: TFloatField
+      FieldName = 'DEBTMAIN'
+    end
+    object ResultDSMgDEBTINT: TFloatField
+      FieldName = 'DEBTINT'
+    end
+    object ResultDSMgDEBTDUEMAIN: TFloatField
+      FieldName = 'DEBTDUEMAIN'
+    end
+    object ResultDSMgDEBTDUEINT: TFloatField
+      FieldName = 'DEBTDUEINT'
+    end
+    object ResultDSMgMONCOUNT: TFloatField
+      FieldName = 'MONCOUNT'
+    end
+    object ResultDSMgLASTMONDATE: TDateTimeField
+      FieldName = 'LASTMONDATE'
+    end
+    object ResultDSMgDISTRICTID: TFloatField
+      FieldName = 'DISTRICTID'
+      Required = True
+    end
+    object ResultDSMgDISTRICT: TWideStringField
+      FieldName = 'DISTRICT'
+      Size = 128
+    end
+    object ResultDSMgVILLAGE: TWideStringField
+      FieldName = 'VILLAGE'
+      Size = 128
+    end
+    object ResultDSMgTYPEDESC: TWideStringField
+      FieldName = 'TYPEDESC'
+      Size = 32
+    end
+  end
+  object ResultDS2Full: TOracleDataSet
+    SQL.Strings = (
+      'SELECT r.*, d.name district, t.name target, b.typedesc'
+      
+        '  FROM cr_report_f2_full r, cr_agro_region d, cr_agro_kredit_pur' +
+        'pose p, cr_agro_kredit_target t, cr_bp_types b'
+      
+        ' WHERE r.districtid=d.id(+) AND r.purposeid=p.id AND p.depend_id' +
+        '(+)=t.id AND r.typeid=b.id'
+      ''
+      ''
+      ''
+      'ORDER BY'
+      '  branchid, districtid, typeid, purposeid, village,boorid')
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    OnCalcFields = ResultDSCalcFields
+    Left = 288
+    Top = 240
+    object ResultDS2FullCREDITID: TFloatField
+      FieldName = 'CREDITID'
+    end
+    object ResultDS2FullBOORID: TFloatField
+      FieldName = 'BOORID'
+    end
+    object ResultDS2FullBOOROWER: TWideStringField
+      FieldName = 'BOOROWER'
+      Size = 255
+    end
+    object ResultDS2FullCRDNUM: TWideStringField
+      FieldName = 'CRDNUM'
+      Size = 32
+    end
+    object ResultDS2FullBRANCHID: TFloatField
+      FieldName = 'BRANCHID'
+    end
+    object ResultDS2FullBRANCH: TWideStringField
+      FieldName = 'BRANCH'
+      Size = 255
+    end
+    object ResultDS2FullVILLAGEID: TFloatField
+      FieldName = 'VILLAGEID'
+    end
+    object ResultDS2FullVILLAGE: TWideStringField
+      FieldName = 'VILLAGE'
+      Size = 255
+    end
+    object ResultDS2FullDISTRICTID: TFloatField
+      FieldName = 'DISTRICTID'
+    end
+    object ResultDS2FullPURPOSEID: TFloatField
+      FieldName = 'PURPOSEID'
+    end
+    object ResultDS2FullTYPEID: TFloatField
+      FieldName = 'TYPEID'
+    end
+    object ResultDS2FullCNTALL: TFloatField
+      FieldName = 'CNTALL'
+    end
+    object ResultDS2FullCNTALLPAY: TFloatField
+      FieldName = 'CNTALLPAY'
+    end
+    object ResultDS2FullCNTYEAR: TFloatField
+      FieldName = 'CNTYEAR'
+    end
+    object ResultDS2FullCNTMON: TFloatField
+      FieldName = 'CNTMON'
+    end
+    object ResultDS2FullGIVENALL: TFloatField
+      FieldName = 'GIVENALL'
+    end
+    object ResultDS2FullGIVENALLCALC: TFloatField
+      FieldName = 'GIVENALLCALC'
+    end
+    object ResultDS2FullGIVENYEAR: TFloatField
+      FieldName = 'GIVENYEAR'
+    end
+    object ResultDS2FullGIVENYEARCALC: TFloatField
+      FieldName = 'GIVENYEARCALC'
+    end
+    object ResultDS2FullGIVENMON: TFloatField
+      FieldName = 'GIVENMON'
+    end
+    object ResultDS2FullGIVENMONCALC: TFloatField
+      FieldName = 'GIVENMONCALC'
+    end
+    object ResultDS2FullOVERMAIN: TFloatField
+      FieldName = 'OVERMAIN'
+    end
+    object ResultDS2FullOVERINT: TFloatField
+      FieldName = 'OVERINT'
+    end
+    object ResultDS2FullOVERMAINMON: TFloatField
+      FieldName = 'OVERMAINMON'
+    end
+    object ResultDS2FullOVERINTMON: TFloatField
+      FieldName = 'OVERINTMON'
+    end
+    object ResultDS2FullPAYEDALLMAIN: TFloatField
+      FieldName = 'PAYEDALLMAIN'
+    end
+    object ResultDS2FullPAYEDALLINT: TFloatField
+      FieldName = 'PAYEDALLINT'
+    end
+    object ResultDS2FullPAYEDYEARMAIN: TFloatField
+      FieldName = 'PAYEDYEARMAIN'
+    end
+    object ResultDS2FullPAYEDYEARINT: TFloatField
+      FieldName = 'PAYEDYEARINT'
+    end
+    object ResultDS2FullPAYEDMONMAIN: TFloatField
+      FieldName = 'PAYEDMONMAIN'
+    end
+    object ResultDS2FullPAYEDMONINT: TFloatField
+      FieldName = 'PAYEDMONINT'
+    end
+    object ResultDS2FullDEBTMAIN: TFloatField
+      FieldName = 'DEBTMAIN'
+    end
+    object ResultDS2FullDEBTINT: TFloatField
+      FieldName = 'DEBTINT'
+    end
+    object ResultDS2FullDEBTDUEMAIN: TFloatField
+      FieldName = 'DEBTDUEMAIN'
+    end
+    object ResultDS2FullDEBTDUEINT: TFloatField
+      FieldName = 'DEBTDUEINT'
+    end
+    object ResultDS2FullDEBTPERCENTMAIN: TFloatField
+      FieldName = 'DEBTPERCENTMAIN'
+    end
+    object ResultDS2FullDEBTPERCENTINT: TFloatField
+      FieldName = 'DEBTPERCENTINT'
+    end
+    object ResultDS2FullDISTRICT: TWideStringField
+      FieldName = 'DISTRICT'
+      Size = 128
+    end
+    object ResultDS2FullTARGET: TWideStringField
+      FieldName = 'TARGET'
+      Size = 128
+    end
+    object ResultDS2FullTYPEDESC: TWideStringField
+      FieldName = 'TYPEDESC'
+      Size = 32
+    end
+    object ResultDS2FullOVERMAINY: TFloatField
+      FieldName = 'OVERMAINY'
+    end
+    object ResultDS2FullOVERINTY: TFloatField
+      FieldName = 'OVERINTY'
+    end
+  end
+  object ResultDS2Type: TOracleDataSet
+    SQL.Strings = (
+      'SELECT r.*, d.name district, t.name target, b.typedesc'
+      
+        '  FROM cr_report_f2_full r, cr_agro_region d, cr_agro_kredit_pur' +
+        'pose p, cr_agro_kredit_target t, cr_bp_types b'
+      
+        ' WHERE r.districtid=d.id(+) AND r.purposeid=p.id AND p.depend_id' +
+        '(+)=t.id AND r.typeid=b.id'
+      ''
+      ''
+      ''
+      'ORDER BY'
+      '  branchid, typeid, districtid, purposeid, village,boorid')
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    OnCalcFields = ResultDSCalcFields
+    Left = 288
+    Top = 288
+    object ResultDS2TypeCREDITID: TFloatField
+      FieldName = 'CREDITID'
+    end
+    object ResultDS2TypeBOORID: TFloatField
+      FieldName = 'BOORID'
+    end
+    object ResultDS2TypeBOOROWER: TWideStringField
+      FieldName = 'BOOROWER'
+      Size = 255
+    end
+    object ResultDS2TypeCRDNUM: TWideStringField
+      FieldName = 'CRDNUM'
+      Size = 32
+    end
+    object ResultDS2TypeBRANCHID: TFloatField
+      FieldName = 'BRANCHID'
+    end
+    object ResultDS2TypeBRANCH: TWideStringField
+      FieldName = 'BRANCH'
+      Size = 255
+    end
+    object ResultDS2TypeVILLAGEID: TFloatField
+      FieldName = 'VILLAGEID'
+    end
+    object ResultDS2TypeVILLAGE: TWideStringField
+      FieldName = 'VILLAGE'
+      Size = 255
+    end
+    object ResultDS2TypeDISTRICTID: TFloatField
+      FieldName = 'DISTRICTID'
+    end
+    object ResultDS2TypePURPOSEID: TFloatField
+      FieldName = 'PURPOSEID'
+    end
+    object ResultDS2TypeTYPEID: TFloatField
+      FieldName = 'TYPEID'
+    end
+    object ResultDS2TypeCNTALL: TFloatField
+      FieldName = 'CNTALL'
+    end
+    object ResultDS2TypeCNTALLPAY: TFloatField
+      FieldName = 'CNTALLPAY'
+    end
+    object ResultDS2TypeCNTYEAR: TFloatField
+      FieldName = 'CNTYEAR'
+    end
+    object ResultDS2TypeCNTMON: TFloatField
+      FieldName = 'CNTMON'
+    end
+    object ResultDS2TypeGIVENALL: TFloatField
+      FieldName = 'GIVENALL'
+    end
+    object ResultDS2TypeGIVENALLCALC: TFloatField
+      FieldName = 'GIVENALLCALC'
+    end
+    object ResultDS2TypeGIVENYEAR: TFloatField
+      FieldName = 'GIVENYEAR'
+    end
+    object ResultDS2TypeGIVENYEARCALC: TFloatField
+      FieldName = 'GIVENYEARCALC'
+    end
+    object ResultDS2TypeGIVENMON: TFloatField
+      FieldName = 'GIVENMON'
+    end
+    object ResultDS2TypeGIVENMONCALC: TFloatField
+      FieldName = 'GIVENMONCALC'
+    end
+    object ResultDS2TypeOVERMAIN: TFloatField
+      FieldName = 'OVERMAIN'
+    end
+    object ResultDS2TypeOVERINT: TFloatField
+      FieldName = 'OVERINT'
+    end
+    object ResultDS2TypeOVERMAINMON: TFloatField
+      FieldName = 'OVERMAINMON'
+    end
+    object ResultDS2TypeOVERINTMON: TFloatField
+      FieldName = 'OVERINTMON'
+    end
+    object ResultDS2TypePAYEDALLMAIN: TFloatField
+      FieldName = 'PAYEDALLMAIN'
+    end
+    object ResultDS2TypePAYEDALLINT: TFloatField
+      FieldName = 'PAYEDALLINT'
+    end
+    object ResultDS2TypePAYEDYEARMAIN: TFloatField
+      FieldName = 'PAYEDYEARMAIN'
+    end
+    object ResultDS2TypePAYEDYEARINT: TFloatField
+      FieldName = 'PAYEDYEARINT'
+    end
+    object ResultDS2TypePAYEDMONMAIN: TFloatField
+      FieldName = 'PAYEDMONMAIN'
+    end
+    object ResultDS2TypePAYEDMONINT: TFloatField
+      FieldName = 'PAYEDMONINT'
+    end
+    object ResultDS2TypeDEBTMAIN: TFloatField
+      FieldName = 'DEBTMAIN'
+    end
+    object ResultDS2TypeDEBTINT: TFloatField
+      FieldName = 'DEBTINT'
+    end
+    object ResultDS2TypeDEBTDUEMAIN: TFloatField
+      FieldName = 'DEBTDUEMAIN'
+    end
+    object ResultDS2TypeDEBTDUEINT: TFloatField
+      FieldName = 'DEBTDUEINT'
+    end
+    object ResultDS2TypeDEBTPERCENTMAIN: TFloatField
+      FieldName = 'DEBTPERCENTMAIN'
+    end
+    object ResultDS2TypeDEBTPERCENTINT: TFloatField
+      FieldName = 'DEBTPERCENTINT'
+    end
+    object ResultDS2TypeDISTRICT: TWideStringField
+      FieldName = 'DISTRICT'
+      Size = 128
+    end
+    object ResultDS2TypeTARGET: TWideStringField
+      FieldName = 'TARGET'
+      Size = 128
+    end
+    object ResultDS2TypeTYPEDESC: TWideStringField
+      FieldName = 'TYPEDESC'
+      Size = 32
+    end
+  end
+  object ResultDS2AboutTruoble: TOracleDataSet
+    SQL.Strings = (
+      
+        'SELECT t.*, d.ID districtid, d.NAME district, v.NAME village, b.' +
+        'typedesc'
+      
+        '  FROM cr_report_abouttrouble t, cr_agro_village v, cr_agro_regi' +
+        'on d, cr_bp_types b'
+      
+        ' WHERE t.villageid(+) = v.ID AND v.depend_id(+) = d.ID AND t.cre' +
+        'dittypeid = b.ID '
+      'ORDER BY branchid, districtid, villageid, custid, creditid')
+    Session = sboapiDataModule.SBSession
+    Left = 288
+    Top = 336
+    object ResultDS2AboutTruobleCREDITID: TFloatField
+      FieldName = 'CREDITID'
+      Required = True
+    end
+    object ResultDS2AboutTruobleBRANCHID: TFloatField
+      FieldName = 'BRANCHID'
+    end
+    object ResultDS2AboutTruobleVILLAGEID: TFloatField
+      FieldName = 'VILLAGEID'
+    end
+    object ResultDS2AboutTruobleAKPURPOSEID: TFloatField
+      FieldName = 'AKPURPOSEID'
+    end
+    object ResultDS2AboutTruobleCUSTID: TFloatField
+      FieldName = 'CUSTID'
+      Required = True
+    end
+    object ResultDS2AboutTruobleCUSTNAME: TWideStringField
+      FieldName = 'CUSTNAME'
+      Size = 90
+    end
+    object ResultDS2AboutTruobleCREDITTYPEID: TFloatField
+      FieldName = 'CREDITTYPEID'
+    end
+    object ResultDS2AboutTruobleCRDNUM: TWideStringField
+      FieldName = 'CRDNUM'
+      Size = 32
+    end
+    object ResultDS2AboutTruoblePRETENZIACOUNT: TFloatField
+      FieldName = 'PRETENZIACOUNT'
+    end
+    object ResultDS2AboutTruobleIDDIACOUNT: TFloatField
+      FieldName = 'IDDIACOUNT'
+    end
+    object ResultDS2AboutTruobleGIVENAMOUNT: TFloatField
+      FieldName = 'GIVENAMOUNT'
+    end
+    object ResultDS2AboutTruobleCOMPUTEDPERCENT: TFloatField
+      FieldName = 'COMPUTEDPERCENT'
+    end
+    object ResultDS2AboutTruobleALLREST: TFloatField
+      FieldName = 'ALLREST'
+    end
+    object ResultDS2AboutTruobleALLINTERESTREST: TFloatField
+      FieldName = 'ALLINTERESTREST'
+    end
+    object ResultDS2AboutTruobleDUEREST: TFloatField
+      FieldName = 'DUEREST'
+    end
+    object ResultDS2AboutTruobleDUEINTERESTREST: TFloatField
+      FieldName = 'DUEINTERESTREST'
+    end
+    object ResultDS2AboutTruobleGIROVTORPAQ: TFloatField
+      FieldName = 'GIROVTORPAQ'
+    end
+    object ResultDS2AboutTruobleGIROVTORPAQCOST: TFloatField
+      FieldName = 'GIROVTORPAQCOST'
+    end
+    object ResultDS2AboutTruobleGIROVEV: TFloatField
+      FieldName = 'GIROVEV'
+    end
+    object ResultDS2AboutTruobleGIROVEVCOST: TFloatField
+      FieldName = 'GIROVEVCOST'
+    end
+    object ResultDS2AboutTruobleGIROVOTHER: TFloatField
+      FieldName = 'GIROVOTHER'
+    end
+    object ResultDS2AboutTruobleGIROVYEKUN: TFloatField
+      FieldName = 'GIROVYEKUN'
+    end
+    object ResultDS2AboutTruobleMEASURESPRETENZIACOST: TFloatField
+      FieldName = 'MEASURESPRETENZIACOST'
+    end
+    object ResultDS2AboutTruobleMEASURESPRETENZIAMAIN: TFloatField
+      FieldName = 'MEASURESPRETENZIAMAIN'
+    end
+    object ResultDS2AboutTruobleMEASURESIDDIACOST: TFloatField
+      FieldName = 'MEASURESIDDIACOST'
+    end
+    object ResultDS2AboutTruobleMEASURESIDDIAMAIN: TFloatField
+      FieldName = 'MEASURESIDDIAMAIN'
+    end
+    object ResultDS2AboutTruobleMEASURESQATNAMECOST: TFloatField
+      FieldName = 'MEASURESQATNAMECOST'
+    end
+    object ResultDS2AboutTruobleMEASURESQATNAMEMAIN: TFloatField
+      FieldName = 'MEASURESQATNAMEMAIN'
+    end
+    object ResultDS2AboutTruoblePAYEDMAIN: TFloatField
+      FieldName = 'PAYEDMAIN'
+    end
+    object ResultDS2AboutTruoblePAYEDINT: TFloatField
+      FieldName = 'PAYEDINT'
+    end
+    object ResultDS2AboutTruobleDISTRICTID: TFloatField
+      FieldName = 'DISTRICTID'
+      Required = True
+    end
+    object ResultDS2AboutTruobleDISTRICT: TWideStringField
+      FieldName = 'DISTRICT'
+      Size = 128
+    end
+    object ResultDS2AboutTruobleVILLAGE: TWideStringField
+      FieldName = 'VILLAGE'
+      Size = 128
+    end
+    object ResultDS2AboutTruobleTYPEDESC: TWideStringField
+      FieldName = 'TYPEDESC'
+      Size = 32
+    end
+  end
+  object ResultDSMeasures: TOracleDataSet
+    SQL.Strings = (
+      
+        'SELECT t.*, d.ID districtid, d.NAME district, v.NAME village, b.' +
+        'typedesc'
+      
+        '  FROM cr_report_measures t, cr_agro_village v, cr_agro_region d' +
+        ', cr_bp_types b'
+      
+        ' WHERE t.villageid = v.ID AND v.depend_id = d.ID AND t.credittyp' +
+        'eid = b.ID '
+      'ORDER BY branchid, districtid, villageid, custid, creditid')
+    Session = sboapiDataModule.SBSession
+    Left = 399
+    Top = 80
+    object ResultDSMeasuresCREDITID: TFloatField
+      FieldName = 'CREDITID'
+      Required = True
+    end
+    object ResultDSMeasuresBRANCHID: TFloatField
+      FieldName = 'BRANCHID'
+    end
+    object ResultDSMeasuresVILLAGEID: TFloatField
+      FieldName = 'VILLAGEID'
+    end
+    object ResultDSMeasuresAKPURPOSEID: TFloatField
+      FieldName = 'AKPURPOSEID'
+    end
+    object ResultDSMeasuresCUSTID: TFloatField
+      FieldName = 'CUSTID'
+      Required = True
+    end
+    object ResultDSMeasuresCUSTNAME: TWideStringField
+      FieldName = 'CUSTNAME'
+      Size = 90
+    end
+    object ResultDSMeasuresCREDITTYPEID: TFloatField
+      FieldName = 'CREDITTYPEID'
+    end
+    object ResultDSMeasuresCRDNUM: TWideStringField
+      FieldName = 'CRDNUM'
+      Size = 32
+    end
+    object ResultDSMeasuresPRETENZIADATE: TDateTimeField
+      FieldName = 'PRETENZIADATE'
+    end
+    object ResultDSMeasuresPRETENZIAGIVEDATE: TDateTimeField
+      FieldName = 'PRETENZIAGIVEDATE'
+    end
+    object ResultDSMeasuresPRETENZIAMAINDEBT: TFloatField
+      FieldName = 'PRETENZIAMAINDEBT'
+    end
+    object ResultDSMeasuresPRETENZIAINTDEBT: TFloatField
+      FieldName = 'PRETENZIAINTDEBT'
+    end
+    object ResultDSMeasuresPRETENZIAAFTERMAINDEBT: TFloatField
+      FieldName = 'PRETENZIAAFTERMAINDEBT'
+    end
+    object ResultDSMeasuresPRETENZIAAFTERINTDEBT: TFloatField
+      FieldName = 'PRETENZIAAFTERINTDEBT'
+    end
+    object ResultDSMeasuresIDDIADATE: TDateTimeField
+      FieldName = 'IDDIADATE'
+    end
+    object ResultDSMeasuresIDDIAGIVEDATE: TDateTimeField
+      FieldName = 'IDDIAGIVEDATE'
+    end
+    object ResultDSMeasuresIDDIAMAINDEBT: TFloatField
+      FieldName = 'IDDIAMAINDEBT'
+    end
+    object ResultDSMeasuresIDDIAINTDEBT: TFloatField
+      FieldName = 'IDDIAINTDEBT'
+    end
+    object ResultDSMeasuresIDDIAAFTERMAINDEBT: TFloatField
+      FieldName = 'IDDIAAFTERMAINDEBT'
+    end
+    object ResultDSMeasuresIDDIAAFTERINTDEBT: TFloatField
+      FieldName = 'IDDIAAFTERINTDEBT'
+    end
+    object ResultDSMeasuresQATNAMEDATE: TDateTimeField
+      FieldName = 'QATNAMEDATE'
+    end
+    object ResultDSMeasuresQATNAMEGIVEDATE: TDateTimeField
+      FieldName = 'QATNAMEGIVEDATE'
+    end
+    object ResultDSMeasuresQATNAMEAFTERMAINDEBT: TFloatField
+      FieldName = 'QATNAMEAFTERMAINDEBT'
+    end
+    object ResultDSMeasuresQATNAMEAFTERINTDEBT: TFloatField
+      FieldName = 'QATNAMEAFTERINTDEBT'
+    end
+    object ResultDSMeasuresNOTESIDDIA: TFloatField
+      FieldName = 'NOTESIDDIA'
+    end
+    object ResultDSMeasuresNOTESQATNAME: TFloatField
+      FieldName = 'NOTESQATNAME'
+    end
+    object ResultDSMeasuresDISTRICTID: TFloatField
+      FieldName = 'DISTRICTID'
+      Required = True
+    end
+    object ResultDSMeasuresDISTRICT: TWideStringField
+      FieldName = 'DISTRICT'
+      Size = 128
+    end
+    object ResultDSMeasuresVILLAGE: TWideStringField
+      FieldName = 'VILLAGE'
+      Size = 128
+    end
+    object ResultDSMeasuresTYPEDESC: TWideStringField
+      FieldName = 'TYPEDESC'
+      Size = 32
+    end
+  end
+  object ResultDSProlongs: TOracleDataSet
+    SQL.Strings = (
+      
+        'SELECT t.*, d.ID districtid, d.NAME district, v.NAME village, b.' +
+        'typedesc'
+      
+        '  FROM cr_report_prolongations t, cr_agro_village v, cr_agro_reg' +
+        'ion d, cr_bp_types b'
+      
+        ' WHERE t.villageid = v.ID AND v.depend_id = d.ID AND t.credittyp' +
+        'eid = b.ID '
+      
+        'ORDER BY branchid, districtid, credittypeid, villageid, custid, ' +
+        'creditid')
+    Session = sboapiDataModule.SBSession
+    Left = 399
+    Top = 136
+    object ResultDSProlongsCREDITID: TFloatField
+      FieldName = 'CREDITID'
+      Required = True
+    end
+    object ResultDSProlongsBRANCHID: TFloatField
+      FieldName = 'BRANCHID'
+    end
+    object ResultDSProlongsVILLAGEID: TFloatField
+      FieldName = 'VILLAGEID'
+    end
+    object ResultDSProlongsAKPURPOSEID: TFloatField
+      FieldName = 'AKPURPOSEID'
+    end
+    object ResultDSProlongsCUSTID: TFloatField
+      FieldName = 'CUSTID'
+      Required = True
+    end
+    object ResultDSProlongsCUSTNAME: TWideStringField
+      FieldName = 'CUSTNAME'
+      Size = 90
+    end
+    object ResultDSProlongsCREDITTYPEID: TFloatField
+      FieldName = 'CREDITTYPEID'
+    end
+    object ResultDSProlongsCRDNUM: TWideStringField
+      FieldName = 'CRDNUM'
+      Size = 32
+    end
+    object ResultDSProlongsTRANCHESCOUNT: TFloatField
+      FieldName = 'TRANCHESCOUNT'
+    end
+    object ResultDSProlongsTRANCHESAMOUNT: TFloatField
+      FieldName = 'TRANCHESAMOUNT'
+    end
+    object ResultDSProlongsPROLONGSCOUNT: TFloatField
+      FieldName = 'PROLONGSCOUNT'
+    end
+    object ResultDSProlongsPROLONGSAMOUNT: TFloatField
+      FieldName = 'PROLONGSAMOUNT'
+    end
+    object ResultDSProlongsMON3COUNT: TFloatField
+      FieldName = 'MON3COUNT'
+    end
+    object ResultDSProlongsMON3AMOUNT: TFloatField
+      FieldName = 'MON3AMOUNT'
+    end
+    object ResultDSProlongsMON6COUNT: TFloatField
+      FieldName = 'MON6COUNT'
+    end
+    object ResultDSProlongsMON6AMOUNT: TFloatField
+      FieldName = 'MON6AMOUNT'
+    end
+    object ResultDSProlongsMON12COUNT: TFloatField
+      FieldName = 'MON12COUNT'
+    end
+    object ResultDSProlongsMON12AMOUNT: TFloatField
+      FieldName = 'MON12AMOUNT'
+    end
+    object ResultDSProlongsMONBIGCOUNT: TFloatField
+      FieldName = 'MONBIGCOUNT'
+    end
+    object ResultDSProlongsMONBIGAMOUNT: TFloatField
+      FieldName = 'MONBIGAMOUNT'
+    end
+    object ResultDSProlongsDISTRICTID: TFloatField
+      FieldName = 'DISTRICTID'
+      Required = True
+    end
+    object ResultDSProlongsDISTRICT: TWideStringField
+      FieldName = 'DISTRICT'
+      Size = 128
+    end
+    object ResultDSProlongsVILLAGE: TWideStringField
+      FieldName = 'VILLAGE'
+      Size = 128
+    end
+    object ResultDSProlongsTYPEDESC: TWideStringField
+      FieldName = 'TYPEDESC'
+      Size = 32
+    end
+  end
+  object ResultDSYPays: TOracleDataSet
+    SQL.Strings = (
+      'SELECT t.*, d.ID districtid, d.NAME district, v.NAME village'
+      '     , b.typedesc'
+      
+        '  FROM cr_report_lastyearpayments t, cr_agro_village v, cr_agro_' +
+        'region d, cr_bp_types b'
+      
+        ' WHERE t.villageid = v.ID AND v.depend_id = d.ID AND t.typeid = ' +
+        'b.ID'
+      
+        'ORDER BY branchid, districtid, typeid, villageid, custid, credit' +
+        'id')
+    Session = sboapiDataModule.SBSession
+    Left = 400
+    Top = 184
+    object ResultDSYPaysCREDITID: TFloatField
+      FieldName = 'CREDITID'
+    end
+    object ResultDSYPaysCUSTID: TFloatField
+      FieldName = 'CUSTID'
+    end
+    object ResultDSYPaysCRDNUM: TWideStringField
+      FieldName = 'CRDNUM'
+      Size = 255
+    end
+    object ResultDSYPaysCUSTNAME: TWideStringField
+      FieldName = 'CUSTNAME'
+      Size = 255
+    end
+    object ResultDSYPaysBRANCHID: TFloatField
+      FieldName = 'BRANCHID'
+    end
+    object ResultDSYPaysVILLAGEID: TFloatField
+      FieldName = 'VILLAGEID'
+    end
+    object ResultDSYPaysPURPOSEID: TFloatField
+      FieldName = 'PURPOSEID'
+    end
+    object ResultDSYPaysTYPEID: TFloatField
+      FieldName = 'TYPEID'
+    end
+    object ResultDSYPaysCRDCOUNT: TFloatField
+      FieldName = 'CRDCOUNT'
+    end
+    object ResultDSYPaysPAYEDMAINALL: TFloatField
+      FieldName = 'PAYEDMAINALL'
+    end
+    object ResultDSYPaysPAYEDINTALL: TFloatField
+      FieldName = 'PAYEDINTALL'
+    end
+    object ResultDSYPaysPAYEDMAIN1: TFloatField
+      FieldName = 'PAYEDMAIN1'
+    end
+    object ResultDSYPaysPAYEDINT1: TFloatField
+      FieldName = 'PAYEDINT1'
+    end
+    object ResultDSYPaysPAYEDMAIN2: TFloatField
+      FieldName = 'PAYEDMAIN2'
+    end
+    object ResultDSYPaysPAYEDINT2: TFloatField
+      FieldName = 'PAYEDINT2'
+    end
+    object ResultDSYPaysPAYEDMAIN3: TFloatField
+      FieldName = 'PAYEDMAIN3'
+    end
+    object ResultDSYPaysPAYEDINT3: TFloatField
+      FieldName = 'PAYEDINT3'
+    end
+    object ResultDSYPaysPAYEDMAIN4: TFloatField
+      FieldName = 'PAYEDMAIN4'
+    end
+    object ResultDSYPaysPAYEDINT4: TFloatField
+      FieldName = 'PAYEDINT4'
+    end
+    object ResultDSYPaysPAYEDMAIN5: TFloatField
+      FieldName = 'PAYEDMAIN5'
+    end
+    object ResultDSYPaysPAYEDINT5: TFloatField
+      FieldName = 'PAYEDINT5'
+    end
+    object ResultDSYPaysPAYEDMAIN6: TFloatField
+      FieldName = 'PAYEDMAIN6'
+    end
+    object ResultDSYPaysPAYEDINT6: TFloatField
+      FieldName = 'PAYEDINT6'
+    end
+    object ResultDSYPaysPAYEDMAIN7: TFloatField
+      FieldName = 'PAYEDMAIN7'
+    end
+    object ResultDSYPaysPAYEDINT7: TFloatField
+      FieldName = 'PAYEDINT7'
+    end
+    object ResultDSYPaysPAYEDMAIN8: TFloatField
+      FieldName = 'PAYEDMAIN8'
+    end
+    object ResultDSYPaysPAYEDINT8: TFloatField
+      FieldName = 'PAYEDINT8'
+    end
+    object ResultDSYPaysPAYEDMAIN9: TFloatField
+      FieldName = 'PAYEDMAIN9'
+    end
+    object ResultDSYPaysPAYEDINT9: TFloatField
+      FieldName = 'PAYEDINT9'
+    end
+    object ResultDSYPaysPAYEDMAIN10: TFloatField
+      FieldName = 'PAYEDMAIN10'
+    end
+    object ResultDSYPaysPAYEDINT10: TFloatField
+      FieldName = 'PAYEDINT10'
+    end
+    object ResultDSYPaysPAYEDMAIN11: TFloatField
+      FieldName = 'PAYEDMAIN11'
+    end
+    object ResultDSYPaysPAYEDINT11: TFloatField
+      FieldName = 'PAYEDINT11'
+    end
+    object ResultDSYPaysPAYEDMAIN12: TFloatField
+      FieldName = 'PAYEDMAIN12'
+    end
+    object ResultDSYPaysPAYEDINT12: TFloatField
+      FieldName = 'PAYEDINT12'
+    end
+    object ResultDSYPaysDISTRICTID: TFloatField
+      FieldName = 'DISTRICTID'
+      Required = True
+    end
+    object ResultDSYPaysDISTRICT: TWideStringField
+      FieldName = 'DISTRICT'
+      Size = 128
+    end
+    object ResultDSYPaysVILLAGE: TWideStringField
+      FieldName = 'VILLAGE'
+      Size = 128
+    end
+    object ResultDSYPaysTYPEDESC: TWideStringField
+      FieldName = 'TYPEDESC'
+      Size = 32
+    end
+  end
+  object ResultDSAboutCrediting: TOracleDataSet
+    SQL.Strings = (
+      'SELECT t.*, d.ID districtid, d.NAME district, v.NAME village'
+      '     , b.typedesc'
+      
+        '  FROM cr_report_aboutcrediting t, cr_agro_village v, cr_agro_re' +
+        'gion d, cr_bp_types b'
+      
+        ' WHERE t.villageid = v.ID AND v.depend_id = d.ID AND t.typeid = ' +
+        'b.ID'
+      
+        'ORDER BY branchid, districtid, typeid, villageid, custid, credit' +
+        'id')
+    Session = sboapiDataModule.SBSession
+    Left = 400
+    Top = 237
+    object ResultDSAboutCreditingCREDITID: TFloatField
+      FieldName = 'CREDITID'
+    end
+    object ResultDSAboutCreditingCUSTID: TFloatField
+      FieldName = 'CUSTID'
+    end
+    object ResultDSAboutCreditingCRDNUM: TWideStringField
+      FieldName = 'CRDNUM'
+      Size = 255
+    end
+    object ResultDSAboutCreditingCUSTNAME: TWideStringField
+      FieldName = 'CUSTNAME'
+      Size = 255
+    end
+    object ResultDSAboutCreditingBRANCHID: TFloatField
+      FieldName = 'BRANCHID'
+    end
+    object ResultDSAboutCreditingVILLAGEID: TFloatField
+      FieldName = 'VILLAGEID'
+    end
+    object ResultDSAboutCreditingPURPOSEID: TFloatField
+      FieldName = 'PURPOSEID'
+    end
+    object ResultDSAboutCreditingTYPEID: TFloatField
+      FieldName = 'TYPEID'
+    end
+    object ResultDSAboutCreditingCRDCOUNT: TFloatField
+      FieldName = 'CRDCOUNT'
+    end
+    object ResultDSAboutCreditingBPCOST: TFloatField
+      FieldName = 'BPCOST'
+    end
+    object ResultDSAboutCreditingPROJECTCOST: TFloatField
+      FieldName = 'PROJECTCOST'
+    end
+    object ResultDSAboutCreditingGIVENAMOUNT: TFloatField
+      FieldName = 'GIVENAMOUNT'
+    end
+    object ResultDSAboutCreditingCALCULATEDPERCENT: TFloatField
+      FieldName = 'CALCULATEDPERCENT'
+    end
+    object ResultDSAboutCreditingCURRMONCNT: TFloatField
+      FieldName = 'CURRMONCNT'
+    end
+    object ResultDSAboutCreditingCURRMONGIVENAMT: TFloatField
+      FieldName = 'CURRMONGIVENAMT'
+    end
+    object ResultDSAboutCreditingOVERDATEMAIN: TFloatField
+      FieldName = 'OVERDATEMAIN'
+    end
+    object ResultDSAboutCreditingOVERDATEINT: TFloatField
+      FieldName = 'OVERDATEINT'
+    end
+    object ResultDSAboutCreditingPAYEDCOUNT: TFloatField
+      FieldName = 'PAYEDCOUNT'
+    end
+    object ResultDSAboutCreditingPAYEDMAIN: TFloatField
+      FieldName = 'PAYEDMAIN'
+    end
+    object ResultDSAboutCreditingPAYEDINT: TFloatField
+      FieldName = 'PAYEDINT'
+    end
+    object ResultDSAboutCreditingPAYEDCURRCNT: TFloatField
+      FieldName = 'PAYEDCURRCNT'
+    end
+    object ResultDSAboutCreditingPAYEDCURRMAIN: TFloatField
+      FieldName = 'PAYEDCURRMAIN'
+    end
+    object ResultDSAboutCreditingPAYEDCURRINT: TFloatField
+      FieldName = 'PAYEDCURRINT'
+    end
+    object ResultDSAboutCreditingRESTCOUNT: TFloatField
+      FieldName = 'RESTCOUNT'
+    end
+    object ResultDSAboutCreditingRESTMAIN: TFloatField
+      FieldName = 'RESTMAIN'
+    end
+    object ResultDSAboutCreditingRESTINT: TFloatField
+      FieldName = 'RESTINT'
+    end
+    object ResultDSAboutCreditingDUERESTCOUNT: TFloatField
+      FieldName = 'DUERESTCOUNT'
+    end
+    object ResultDSAboutCreditingDUERESTMAIN: TFloatField
+      FieldName = 'DUERESTMAIN'
+    end
+    object ResultDSAboutCreditingDUERESTINT: TFloatField
+      FieldName = 'DUERESTINT'
+    end
+    object ResultDSAboutCreditingDISTRICTID: TFloatField
+      FieldName = 'DISTRICTID'
+      Required = True
+    end
+    object ResultDSAboutCreditingDISTRICT: TWideStringField
+      FieldName = 'DISTRICT'
+      Size = 128
+    end
+    object ResultDSAboutCreditingVILLAGE: TWideStringField
+      FieldName = 'VILLAGE'
+      Size = 128
+    end
+    object ResultDSAboutCreditingTYPEDESC: TWideStringField
+      FieldName = 'TYPEDESC'
+      Size = 32
+    end
+  end
+  object ResultDSCreditPaying: TOracleDataSet
+    SQL.Strings = (
+      'SELECT t.*, d.ID districtid, d.NAME district, v.NAME village'
+      '     , b.typedesc'
+      
+        '  FROM cr_report_creditpaying t, cr_agro_village v, cr_agro_regi' +
+        'on d, cr_bp_types b'
+      
+        ' WHERE t.villageid = v.ID AND v.depend_id = d.ID AND t.typeid = ' +
+        'b.ID'
+      
+        'ORDER BY branchid, districtid, typeid, villageid, custid, credit' +
+        'id')
+    Session = sboapiDataModule.SBSession
+    Left = 400
+    Top = 285
+    object ResultDSCreditPayingCREDITID: TFloatField
+      FieldName = 'CREDITID'
+    end
+    object ResultDSCreditPayingCUSTID: TFloatField
+      FieldName = 'CUSTID'
+    end
+    object ResultDSCreditPayingCRDNUM: TWideStringField
+      FieldName = 'CRDNUM'
+      Size = 255
+    end
+    object ResultDSCreditPayingCUSTNAME: TWideStringField
+      FieldName = 'CUSTNAME'
+      Size = 255
+    end
+    object ResultDSCreditPayingBRANCHID: TFloatField
+      FieldName = 'BRANCHID'
+    end
+    object ResultDSCreditPayingVILLAGEID: TFloatField
+      FieldName = 'VILLAGEID'
+    end
+    object ResultDSCreditPayingPURPOSEID: TFloatField
+      FieldName = 'PURPOSEID'
+    end
+    object ResultDSCreditPayingTYPEID: TFloatField
+      FieldName = 'TYPEID'
+    end
+    object ResultDSCreditPayingCRDCOUNT: TFloatField
+      FieldName = 'CRDCOUNT'
+    end
+    object ResultDSCreditPayingGIVENAMOUNT: TFloatField
+      FieldName = 'GIVENAMOUNT'
+    end
+    object ResultDSCreditPayingCALCULATEDPERCENT: TFloatField
+      FieldName = 'CALCULATEDPERCENT'
+    end
+    object ResultDSCreditPayingFULLCOUNT: TFloatField
+      FieldName = 'FULLCOUNT'
+    end
+    object ResultDSCreditPayingFULLMAIN: TFloatField
+      FieldName = 'FULLMAIN'
+    end
+    object ResultDSCreditPayingFULLINT: TFloatField
+      FieldName = 'FULLINT'
+    end
+    object ResultDSCreditPayingPARTCOUNT: TFloatField
+      FieldName = 'PARTCOUNT'
+    end
+    object ResultDSCreditPayingPARTMAIN: TFloatField
+      FieldName = 'PARTMAIN'
+    end
+    object ResultDSCreditPayingPARTINT: TFloatField
+      FieldName = 'PARTINT'
+    end
+    object ResultDSCreditPayingPARTMAINCOUNT: TFloatField
+      FieldName = 'PARTMAINCOUNT'
+    end
+    object ResultDSCreditPayingPARTMAINMAIN: TFloatField
+      FieldName = 'PARTMAINMAIN'
+    end
+    object ResultDSCreditPayingPARTMAININT: TFloatField
+      FieldName = 'PARTMAININT'
+    end
+    object ResultDSCreditPayingRESTCOUNT: TFloatField
+      FieldName = 'RESTCOUNT'
+    end
+    object ResultDSCreditPayingRESTMAIN: TFloatField
+      FieldName = 'RESTMAIN'
+    end
+    object ResultDSCreditPayingRESTINT: TFloatField
+      FieldName = 'RESTINT'
+    end
+    object ResultDSCreditPayingDISTRICTID: TFloatField
+      FieldName = 'DISTRICTID'
+      Required = True
+    end
+    object ResultDSCreditPayingDISTRICT: TWideStringField
+      FieldName = 'DISTRICT'
+      Size = 128
+    end
+    object ResultDSCreditPayingVILLAGE: TWideStringField
+      FieldName = 'VILLAGE'
+      Size = 128
+    end
+    object ResultDSCreditPayingTYPEDESC: TWideStringField
+      FieldName = 'TYPEDESC'
+      Size = 32
+    end
+  end
+  object ResultDSWBMain: TOracleDataSet
+    SQL.Strings = (
+      'SELECT t.*, d.ID districtid, d.NAME district, v.NAME village'
+      '     , b.typedesc'
+      
+        '  FROM cr_report_worldbankmain t, cr_agro_village v, cr_agro_reg' +
+        'ion d, cr_bp_types b'
+      
+        ' WHERE t.villageid = v.ID AND v.depend_id = d.ID AND t.typeid = ' +
+        'b.ID'
+      
+        'ORDER BY branchid, districtid, typeid, villageid, custid, credit' +
+        'id')
+    Session = sboapiDataModule.SBSession
+    Left = 498
+    Top = 136
+    object ResultDSWBMainCREDITID: TFloatField
+      FieldName = 'CREDITID'
+    end
+    object ResultDSWBMainCUSTID: TFloatField
+      FieldName = 'CUSTID'
+    end
+    object ResultDSWBMainCRDNUM: TWideStringField
+      FieldName = 'CRDNUM'
+      Size = 255
+    end
+    object ResultDSWBMainCUSTNAME: TWideStringField
+      FieldName = 'CUSTNAME'
+      Size = 255
+    end
+    object ResultDSWBMainBRANCHID: TFloatField
+      FieldName = 'BRANCHID'
+    end
+    object ResultDSWBMainVILLAGEID: TFloatField
+      FieldName = 'VILLAGEID'
+    end
+    object ResultDSWBMainPURPOSEID: TFloatField
+      FieldName = 'PURPOSEID'
+    end
+    object ResultDSWBMainTYPEID: TFloatField
+      FieldName = 'TYPEID'
+    end
+    object ResultDSWBMainCRDCOUNT: TFloatField
+      FieldName = 'CRDCOUNT'
+    end
+    object ResultDSWBMainKKCOUNT: TFloatField
+      FieldName = 'KKCOUNT'
+    end
+    object ResultDSWBMainYUXCOUNT: TFloatField
+      FieldName = 'YUXCOUNT'
+    end
+    object ResultDSWBMainBPCOUNT: TFloatField
+      FieldName = 'BPCOUNT'
+    end
+    object ResultDSWBMainGIVENAMOUNT: TFloatField
+      FieldName = 'GIVENAMOUNT'
+    end
+    object ResultDSWBMainCOMMITEDGIVEN: TFloatField
+      FieldName = 'COMMITEDGIVEN'
+    end
+    object ResultDSWBMainLAZIEDGIVEN: TFloatField
+      FieldName = 'LAZIEDGIVEN'
+    end
+    object ResultDSWBMainMUSTPAYMAIN: TFloatField
+      FieldName = 'MUSTPAYMAIN'
+    end
+    object ResultDSWBMainMUSTPAYINT: TFloatField
+      FieldName = 'MUSTPAYINT'
+    end
+    object ResultDSWBMainMUSTPAYALL: TFloatField
+      FieldName = 'MUSTPAYALL'
+    end
+    object ResultDSWBMainPAYMAIN: TFloatField
+      FieldName = 'PAYMAIN'
+    end
+    object ResultDSWBMainPAYINT: TFloatField
+      FieldName = 'PAYINT'
+    end
+    object ResultDSWBMainPAYALL: TFloatField
+      FieldName = 'PAYALL'
+    end
+    object ResultDSWBMainPAYEVVEL: TFloatField
+      FieldName = 'PAYEVVEL'
+    end
+    object ResultDSWBMainPAYPMAIN: TFloatField
+      FieldName = 'PAYPMAIN'
+    end
+    object ResultDSWBMainPAYPINT: TFloatField
+      FieldName = 'PAYPINT'
+    end
+    object ResultDSWBMainPAYPALL: TFloatField
+      FieldName = 'PAYPALL'
+    end
+    object ResultDSWBMainDUEMAIN: TFloatField
+      FieldName = 'DUEMAIN'
+    end
+    object ResultDSWBMainDUEINT: TFloatField
+      FieldName = 'DUEINT'
+    end
+    object ResultDSWBMainDUEALL: TFloatField
+      FieldName = 'DUEALL'
+    end
+    object ResultDSWBMainDISTRICTID: TFloatField
+      FieldName = 'DISTRICTID'
+      Required = True
+    end
+    object ResultDSWBMainDISTRICT: TWideStringField
+      FieldName = 'DISTRICT'
+      Size = 128
+    end
+    object ResultDSWBMainVILLAGE: TWideStringField
+      FieldName = 'VILLAGE'
+      Size = 128
+    end
+    object ResultDSWBMainTYPEDESC: TWideStringField
+      FieldName = 'TYPEDESC'
+      Size = 32
+    end
+  end
+  object ResultDSWBActive: TOracleDataSet
+    SQL.Strings = (
+      'SELECT t.*, d.ID districtid, d.NAME district, v.NAME village'
+      '     , b.typedesc'
+      
+        '  FROM cr_report_worldbankactive t, cr_agro_village v, cr_agro_r' +
+        'egion d, cr_bp_types b'
+      
+        ' WHERE t.villageid = v.ID AND v.depend_id = d.ID AND t.typeid = ' +
+        'b.ID'
+      
+        'ORDER BY branchid, districtid, typeid, villageid, custid, credit' +
+        'id')
+    Session = sboapiDataModule.SBSession
+    Left = 498
+    Top = 184
+    object ResultDSWBActiveCREDITID: TFloatField
+      FieldName = 'CREDITID'
+    end
+    object ResultDSWBActiveCUSTID: TFloatField
+      FieldName = 'CUSTID'
+    end
+    object ResultDSWBActiveCRDNUM: TWideStringField
+      FieldName = 'CRDNUM'
+      Size = 255
+    end
+    object ResultDSWBActiveCUSTNAME: TWideStringField
+      FieldName = 'CUSTNAME'
+      Size = 255
+    end
+    object ResultDSWBActiveBRANCHID: TFloatField
+      FieldName = 'BRANCHID'
+    end
+    object ResultDSWBActiveVILLAGEID: TFloatField
+      FieldName = 'VILLAGEID'
+    end
+    object ResultDSWBActivePURPOSEID: TFloatField
+      FieldName = 'PURPOSEID'
+    end
+    object ResultDSWBActiveTYPEID: TFloatField
+      FieldName = 'TYPEID'
+    end
+    object ResultDSWBActiveCRDCOUNT: TFloatField
+      FieldName = 'CRDCOUNT'
+    end
+    object ResultDSWBActiveMAINCAP: TFloatField
+      FieldName = 'MAINCAP'
+    end
+    object ResultDSWBActiveDUEMAIN: TFloatField
+      FieldName = 'DUEMAIN'
+    end
+    object ResultDSWBActiveDUEINT: TFloatField
+      FieldName = 'DUEINT'
+    end
+    object ResultDSWBActiveDUEALL: TFloatField
+      FieldName = 'DUEALL'
+    end
+    object ResultDSWBActiveMUSTPAYMONMAIN: TFloatField
+      FieldName = 'MUSTPAYMONMAIN'
+    end
+    object ResultDSWBActiveMUSTPAYMONINT: TFloatField
+      FieldName = 'MUSTPAYMONINT'
+    end
+    object ResultDSWBActiveMUSTPAYMONALL: TFloatField
+      FieldName = 'MUSTPAYMONALL'
+    end
+    object ResultDSWBActiveCALCULATEDPERCENT: TFloatField
+      FieldName = 'CALCULATEDPERCENT'
+    end
+    object ResultDSWBActivePAYINT: TFloatField
+      FieldName = 'PAYINT'
+    end
+    object ResultDSWBActiveVAXTKEC1: TFloatField
+      FieldName = 'VAXTKEC1'
+    end
+    object ResultDSWBActiveVAXTKEC2: TFloatField
+      FieldName = 'VAXTKEC2'
+    end
+    object ResultDSWBActiveVAXTKEC3: TFloatField
+      FieldName = 'VAXTKEC3'
+    end
+    object ResultDSWBActiveVAXTKEC4: TFloatField
+      FieldName = 'VAXTKEC4'
+    end
+    object ResultDSWBActiveVAXTKEC5: TFloatField
+      FieldName = 'VAXTKEC5'
+    end
+    object ResultDSWBActiveVKBORC1: TFloatField
+      FieldName = 'VKBORC1'
+    end
+    object ResultDSWBActiveVKBORC2: TFloatField
+      FieldName = 'VKBORC2'
+    end
+    object ResultDSWBActiveVKBORC3: TFloatField
+      FieldName = 'VKBORC3'
+    end
+    object ResultDSWBActiveVKBORC4: TFloatField
+      FieldName = 'VKBORC4'
+    end
+    object ResultDSWBActiveVKBORC5: TFloatField
+      FieldName = 'VKBORC5'
+    end
+    object ResultDSWBActiveDISTRICTID: TFloatField
+      FieldName = 'DISTRICTID'
+      Required = True
+    end
+    object ResultDSWBActiveDISTRICT: TWideStringField
+      FieldName = 'DISTRICT'
+      Size = 128
+    end
+    object ResultDSWBActiveVILLAGE: TWideStringField
+      FieldName = 'VILLAGE'
+      Size = 128
+    end
+    object ResultDSWBActiveTYPEDESC: TWideStringField
+      FieldName = 'TYPEDESC'
+      Size = 32
+    end
+  end
+  object ResultDSMTr: TOracleDataSet
+    SQL.Strings = (
+      'SELECT t.*, d.ID districtid, d.NAME district, v.NAME village'
+      '     , b.typedesc'
+      
+        '  FROM cr_report_lastyearmtr t, cr_agro_village v, cr_agro_regio' +
+        'n d, cr_bp_types b'
+      
+        ' WHERE t.villageid = v.ID AND v.depend_id = d.ID AND t.typeid = ' +
+        'b.ID'
+      
+        'ORDER BY branchid, districtid, typeid, villageid, custid, credit' +
+        'id')
+    Session = sboapiDataModule.SBSession
+    Left = 498
+    Top = 237
+    object ResultDSMTrCREDITID: TFloatField
+      FieldName = 'CREDITID'
+    end
+    object ResultDSMTrCUSTID: TFloatField
+      FieldName = 'CUSTID'
+    end
+    object ResultDSMTrCRDNUM: TWideStringField
+      FieldName = 'CRDNUM'
+      Size = 255
+    end
+    object ResultDSMTrCUSTNAME: TWideStringField
+      FieldName = 'CUSTNAME'
+      Size = 255
+    end
+    object ResultDSMTrBRANCHID: TFloatField
+      FieldName = 'BRANCHID'
+    end
+    object ResultDSMTrVILLAGEID: TFloatField
+      FieldName = 'VILLAGEID'
+    end
+    object ResultDSMTrPURPOSEID: TFloatField
+      FieldName = 'PURPOSEID'
+    end
+    object ResultDSMTrTYPEID: TFloatField
+      FieldName = 'TYPEID'
+    end
+    object ResultDSMTrCRDCOUNT: TFloatField
+      FieldName = 'CRDCOUNT'
+    end
+    object ResultDSMTrPARAM01: TFloatField
+      FieldName = 'PARAM01'
+    end
+    object ResultDSMTrPARAM02: TFloatField
+      FieldName = 'PARAM02'
+    end
+    object ResultDSMTrPARAM03: TFloatField
+      FieldName = 'PARAM03'
+    end
+    object ResultDSMTrPARAM04: TFloatField
+      FieldName = 'PARAM04'
+    end
+    object ResultDSMTrPARAM05: TFloatField
+      FieldName = 'PARAM05'
+    end
+    object ResultDSMTrPARAM06: TFloatField
+      FieldName = 'PARAM06'
+    end
+    object ResultDSMTrPARAM07: TFloatField
+      FieldName = 'PARAM07'
+    end
+    object ResultDSMTrPARAM08: TFloatField
+      FieldName = 'PARAM08'
+    end
+    object ResultDSMTrPARAM09: TFloatField
+      FieldName = 'PARAM09'
+    end
+    object ResultDSMTrPARAM10: TFloatField
+      FieldName = 'PARAM10'
+    end
+    object ResultDSMTrPARAM11: TFloatField
+      FieldName = 'PARAM11'
+    end
+    object ResultDSMTrPARAM12: TFloatField
+      FieldName = 'PARAM12'
+    end
+    object ResultDSMTrPARAM13: TFloatField
+      FieldName = 'PARAM13'
+    end
+    object ResultDSMTrPARAM14: TFloatField
+      FieldName = 'PARAM14'
+    end
+    object ResultDSMTrPARAM15: TFloatField
+      FieldName = 'PARAM15'
+    end
+    object ResultDSMTrPARAM16: TFloatField
+      FieldName = 'PARAM16'
+    end
+    object ResultDSMTrPARAM17: TFloatField
+      FieldName = 'PARAM17'
+    end
+    object ResultDSMTrPARAM18: TFloatField
+      FieldName = 'PARAM18'
+    end
+    object ResultDSMTrPARAM19: TFloatField
+      FieldName = 'PARAM19'
+    end
+    object ResultDSMTrPARAM20: TFloatField
+      FieldName = 'PARAM20'
+    end
+    object ResultDSMTrPARAM21: TFloatField
+      FieldName = 'PARAM21'
+    end
+    object ResultDSMTrPARAM22: TFloatField
+      FieldName = 'PARAM22'
+    end
+    object ResultDSMTrPARAM23: TFloatField
+      FieldName = 'PARAM23'
+    end
+    object ResultDSMTrPARAM24: TFloatField
+      FieldName = 'PARAM24'
+    end
+    object ResultDSMTrPARAM25: TFloatField
+      FieldName = 'PARAM25'
+    end
+    object ResultDSMTrPARAM26: TFloatField
+      FieldName = 'PARAM26'
+    end
+    object ResultDSMTrDISTRICTID: TFloatField
+      FieldName = 'DISTRICTID'
+      Required = True
+    end
+    object ResultDSMTrDISTRICT: TWideStringField
+      FieldName = 'DISTRICT'
+      Size = 128
+    end
+    object ResultDSMTrVILLAGE: TWideStringField
+      FieldName = 'VILLAGE'
+      Size = 128
+    end
+    object ResultDSMTrTYPEDESC: TWideStringField
+      FieldName = 'TYPEDESC'
+      Size = 32
+    end
+  end
+  object ResultDSPurposes: TOracleDataSet
+    SQL.Strings = (
+      
+        'SELECT r.*, d.name district, p.name purpose, t.name target, m.na' +
+        'me mainpurp'
+      
+        '  FROM cr_report_f2_full r, cr_agro_region d, cr_agro_kredit_pur' +
+        'pose p, cr_agro_kredit_target t, cr_agro_kredit_mainpurpose m'
+      
+        ' WHERE r.districtid(+)=d.id AND r.purposeid=p.id AND p.depend_id' +
+        '(+)=t.id and t.depend_id(+)=m.id'
+      ''
+      ''
+      ''
+      'ORDER BY'
+      '  m.id, t.id, purposeid, village, boorid')
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    OnCalcFields = ResultDSCalcFields
+    Left = 496
+    Top = 285
+    object ResultDSPurposesCREDITID: TFloatField
+      FieldName = 'CREDITID'
+    end
+    object ResultDSPurposesBOORID: TFloatField
+      FieldName = 'BOORID'
+    end
+    object ResultDSPurposesBOOROWER: TWideStringField
+      FieldName = 'BOOROWER'
+      Size = 255
+    end
+    object ResultDSPurposesCRDNUM: TWideStringField
+      FieldName = 'CRDNUM'
+      Size = 32
+    end
+    object ResultDSPurposesBRANCHID: TFloatField
+      FieldName = 'BRANCHID'
+    end
+    object ResultDSPurposesBRANCH: TWideStringField
+      FieldName = 'BRANCH'
+      Size = 255
+    end
+    object ResultDSPurposesVILLAGEID: TFloatField
+      FieldName = 'VILLAGEID'
+    end
+    object ResultDSPurposesVILLAGE: TWideStringField
+      FieldName = 'VILLAGE'
+      Size = 255
+    end
+    object ResultDSPurposesDISTRICTID: TFloatField
+      FieldName = 'DISTRICTID'
+    end
+    object ResultDSPurposesPURPOSEID: TFloatField
+      FieldName = 'PURPOSEID'
+    end
+    object ResultDSPurposesTYPEID: TFloatField
+      FieldName = 'TYPEID'
+    end
+    object ResultDSPurposesCNTALL: TFloatField
+      FieldName = 'CNTALL'
+    end
+    object ResultDSPurposesCNTALLPAY: TFloatField
+      FieldName = 'CNTALLPAY'
+    end
+    object ResultDSPurposesCNTYEAR: TFloatField
+      FieldName = 'CNTYEAR'
+    end
+    object ResultDSPurposesCNTMON: TFloatField
+      FieldName = 'CNTMON'
+    end
+    object ResultDSPurposesGIVENALL: TFloatField
+      FieldName = 'GIVENALL'
+    end
+    object ResultDSPurposesGIVENALLCALC: TFloatField
+      FieldName = 'GIVENALLCALC'
+    end
+    object ResultDSPurposesGIVENYEAR: TFloatField
+      FieldName = 'GIVENYEAR'
+    end
+    object ResultDSPurposesGIVENYEARCALC: TFloatField
+      FieldName = 'GIVENYEARCALC'
+    end
+    object ResultDSPurposesGIVENMON: TFloatField
+      FieldName = 'GIVENMON'
+    end
+    object ResultDSPurposesGIVENMONCALC: TFloatField
+      FieldName = 'GIVENMONCALC'
+    end
+    object ResultDSPurposesOVERMAIN: TFloatField
+      FieldName = 'OVERMAIN'
+    end
+    object ResultDSPurposesOVERINT: TFloatField
+      FieldName = 'OVERINT'
+    end
+    object ResultDSPurposesOVERMAINMON: TFloatField
+      FieldName = 'OVERMAINMON'
+    end
+    object ResultDSPurposesOVERINTMON: TFloatField
+      FieldName = 'OVERINTMON'
+    end
+    object ResultDSPurposesPAYEDALLMAIN: TFloatField
+      FieldName = 'PAYEDALLMAIN'
+    end
+    object ResultDSPurposesPAYEDALLINT: TFloatField
+      FieldName = 'PAYEDALLINT'
+    end
+    object ResultDSPurposesPAYEDYEARMAIN: TFloatField
+      FieldName = 'PAYEDYEARMAIN'
+    end
+    object ResultDSPurposesPAYEDYEARINT: TFloatField
+      FieldName = 'PAYEDYEARINT'
+    end
+    object ResultDSPurposesPAYEDMONMAIN: TFloatField
+      FieldName = 'PAYEDMONMAIN'
+    end
+    object ResultDSPurposesPAYEDMONINT: TFloatField
+      FieldName = 'PAYEDMONINT'
+    end
+    object ResultDSPurposesDEBTMAIN: TFloatField
+      FieldName = 'DEBTMAIN'
+    end
+    object ResultDSPurposesDEBTINT: TFloatField
+      FieldName = 'DEBTINT'
+    end
+    object ResultDSPurposesDEBTDUEMAIN: TFloatField
+      FieldName = 'DEBTDUEMAIN'
+    end
+    object ResultDSPurposesDEBTDUEINT: TFloatField
+      FieldName = 'DEBTDUEINT'
+    end
+    object ResultDSPurposesDEBTPERCENTMAIN: TFloatField
+      FieldName = 'DEBTPERCENTMAIN'
+    end
+    object ResultDSPurposesDEBTPERCENTINT: TFloatField
+      FieldName = 'DEBTPERCENTINT'
+    end
+    object ResultDSPurposesDISTRICT: TWideStringField
+      FieldName = 'DISTRICT'
+      Size = 128
+    end
+    object ResultDSPurposesPURPOSE: TWideStringField
+      FieldName = 'PURPOSE'
+      Size = 128
+    end
+    object ResultDSPurposesTARGET: TWideStringField
+      FieldName = 'TARGET'
+      Size = 128
+    end
+    object ResultDSPurposesOVERMAINY: TFloatField
+      FieldName = 'OVERMAINY'
+    end
+    object ResultDSPurposesOVERINTY: TFloatField
+      FieldName = 'OVERINTY'
+    end
+    object ResultDSPurposesMAINPURP: TWideStringField
+      FieldName = 'MAINPURP'
+      Required = True
+      Size = 255
+    end
+  end
+  object ResultDS3Full: TOracleDataSet
+    SQL.Strings = (
+      
+        'SELECT f.*, p.name purpose, t.id targetid, t.name target, m.id m' +
+        'ainid, m.name mainpurp'
+      
+        '  FROM cr_report_f3_full f, cr_agro_kredit_purpose p, cr_agro_kr' +
+        'edit_target t, cr_agro_kredit_mainpurpose m'
+      '  where purposeid=p.id and p.depend_id=t.id and t.depend_id=m.id'
+      ''
+      ''
+      ''
+      'ORDER BY'
+      '  m.id, t.id, purposeid, creditid')
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    OnCalcFields = ResultDSCalcFields
+    Left = 141
+    Top = 144
+    object ResultDS3FullCREDITID: TFloatField
+      FieldName = 'CREDITID'
+    end
+    object ResultDS3FullBOORID: TFloatField
+      FieldName = 'BOORID'
+    end
+    object ResultDS3FullBOOROWER: TWideStringField
+      FieldName = 'BOOROWER'
+      Size = 255
+    end
+    object ResultDS3FullCRDNUM: TWideStringField
+      FieldName = 'CRDNUM'
+      Size = 32
+    end
+    object ResultDS3FullBRANCHID: TFloatField
+      FieldName = 'BRANCHID'
+    end
+    object ResultDS3FullBRANCH: TWideStringField
+      FieldName = 'BRANCH'
+      Size = 255
+    end
+    object ResultDS3FullVILLAGEID: TFloatField
+      FieldName = 'VILLAGEID'
+    end
+    object ResultDS3FullDISTRICTID: TFloatField
+      FieldName = 'DISTRICTID'
+    end
+    object ResultDS3FullPURPOSEID: TFloatField
+      FieldName = 'PURPOSEID'
+    end
+    object ResultDS3FullCNTYEAR: TFloatField
+      FieldName = 'CNTYEAR'
+    end
+    object ResultDS3FullCNTMON: TFloatField
+      FieldName = 'CNTMON'
+    end
+    object ResultDS3FullCNTGIVE: TFloatField
+      FieldName = 'CNTGIVE'
+    end
+    object ResultDS3FullCNTCLOSE: TFloatField
+      FieldName = 'CNTCLOSE'
+    end
+    object ResultDS3FullFRESTMAIN: TFloatField
+      FieldName = 'FRESTMAIN'
+    end
+    object ResultDS3FullFRESTINT: TFloatField
+      FieldName = 'FRESTINT'
+    end
+    object ResultDS3FullFDUERESTMAIN: TFloatField
+      FieldName = 'FDUERESTMAIN'
+    end
+    object ResultDS3FullFDUERESTINT: TFloatField
+      FieldName = 'FDUERESTINT'
+    end
+    object ResultDS3FullGIVENYEAR: TFloatField
+      FieldName = 'GIVENYEAR'
+    end
+    object ResultDS3FullGIVENYEARCALC: TFloatField
+      FieldName = 'GIVENYEARCALC'
+    end
+    object ResultDS3FullGIVENMON: TFloatField
+      FieldName = 'GIVENMON'
+    end
+    object ResultDS3FullGIVENMONCALC: TFloatField
+      FieldName = 'GIVENMONCALC'
+    end
+    object ResultDS3FullOVERMAINYEAR: TFloatField
+      FieldName = 'OVERMAINYEAR'
+    end
+    object ResultDS3FullOVERINTYEAR: TFloatField
+      FieldName = 'OVERINTYEAR'
+    end
+    object ResultDS3FullOVERMAINMON: TFloatField
+      FieldName = 'OVERMAINMON'
+    end
+    object ResultDS3FullOVERINTMON: TFloatField
+      FieldName = 'OVERINTMON'
+    end
+    object ResultDS3FullPAYEDYEARMAIN: TFloatField
+      FieldName = 'PAYEDYEARMAIN'
+    end
+    object ResultDS3FullPAYEDYEARINT: TFloatField
+      FieldName = 'PAYEDYEARINT'
+    end
+    object ResultDS3FullPAYEDMONMAIN: TFloatField
+      FieldName = 'PAYEDMONMAIN'
+    end
+    object ResultDS3FullPAYEDMONINT: TFloatField
+      FieldName = 'PAYEDMONINT'
+    end
+    object ResultDS3FullDEBTMAIN: TFloatField
+      FieldName = 'DEBTMAIN'
+    end
+    object ResultDS3FullDEBTINT: TFloatField
+      FieldName = 'DEBTINT'
+    end
+    object ResultDS3FullDEBTDUEMAIN: TFloatField
+      FieldName = 'DEBTDUEMAIN'
+    end
+    object ResultDS3FullDEBTDUEINT: TFloatField
+      FieldName = 'DEBTDUEINT'
+    end
+    object ResultDS3FullWEIGHTGLOBAL: TFloatField
+      FieldName = 'WEIGHTGLOBAL'
+    end
+    object ResultDS3FullWEIGHTLOCAL: TFloatField
+      FieldName = 'WEIGHTLOCAL'
+    end
+    object ResultDS3FullPURPOSE: TWideStringField
+      FieldName = 'PURPOSE'
+      Size = 128
+    end
+    object ResultDS3FullTARGETID: TFloatField
+      FieldName = 'TARGETID'
+      Required = True
+    end
+    object ResultDS3FullTARGET: TWideStringField
+      FieldName = 'TARGET'
+      Size = 128
+    end
+    object ResultDS3FullMAINID: TFloatField
+      FieldName = 'MAINID'
+      Required = True
+    end
+    object ResultDS3FullMAINPURP: TWideStringField
+      FieldName = 'MAINPURP'
+      Required = True
+      Size = 255
+    end
+  end
+  object ResultDS3Filial: TOracleDataSet
+    SQL.Strings = (
+      'SELECT f.*, d.id did, d.name districtname '
+      '  FROM cr_report_f3_full f, cr_agro_village v, cr_agro_region d'
+      '  where villageid=v.id and v.depend_id=d.id'
+      ''
+      ''
+      ''
+      'ORDER BY'
+      '  branchid, d.name')
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    OnCalcFields = ResultDSCalcFields
+    Left = 141
+    Top = 208
+    object ResultDS3FilialCREDITID: TFloatField
+      FieldName = 'CREDITID'
+    end
+    object ResultDS3FilialBOORID: TFloatField
+      FieldName = 'BOORID'
+    end
+    object ResultDS3FilialBOOROWER: TWideStringField
+      FieldName = 'BOOROWER'
+      Size = 255
+    end
+    object ResultDS3FilialCRDNUM: TWideStringField
+      FieldName = 'CRDNUM'
+      Size = 32
+    end
+    object ResultDS3FilialBRANCHID: TFloatField
+      FieldName = 'BRANCHID'
+    end
+    object ResultDS3FilialBRANCH: TWideStringField
+      FieldName = 'BRANCH'
+      Size = 255
+    end
+    object ResultDS3FilialVILLAGEID: TFloatField
+      FieldName = 'VILLAGEID'
+    end
+    object ResultDS3FilialDISTRICTID: TFloatField
+      FieldName = 'DISTRICTID'
+    end
+    object ResultDS3FilialPURPOSEID: TFloatField
+      FieldName = 'PURPOSEID'
+    end
+    object ResultDS3FilialCNTYEAR: TFloatField
+      FieldName = 'CNTYEAR'
+    end
+    object ResultDS3FilialCNTMON: TFloatField
+      FieldName = 'CNTMON'
+    end
+    object ResultDS3FilialCNTGIVE: TFloatField
+      FieldName = 'CNTGIVE'
+    end
+    object ResultDS3FilialCNTCLOSE: TFloatField
+      FieldName = 'CNTCLOSE'
+    end
+    object ResultDS3FilialFRESTMAIN: TFloatField
+      FieldName = 'FRESTMAIN'
+    end
+    object ResultDS3FilialFRESTINT: TFloatField
+      FieldName = 'FRESTINT'
+    end
+    object ResultDS3FilialFDUERESTMAIN: TFloatField
+      FieldName = 'FDUERESTMAIN'
+    end
+    object ResultDS3FilialFDUERESTINT: TFloatField
+      FieldName = 'FDUERESTINT'
+    end
+    object ResultDS3FilialGIVENYEAR: TFloatField
+      FieldName = 'GIVENYEAR'
+    end
+    object ResultDS3FilialGIVENYEARCALC: TFloatField
+      FieldName = 'GIVENYEARCALC'
+    end
+    object ResultDS3FilialGIVENMON: TFloatField
+      FieldName = 'GIVENMON'
+    end
+    object ResultDS3FilialGIVENMONCALC: TFloatField
+      FieldName = 'GIVENMONCALC'
+    end
+    object ResultDS3FilialOVERMAINYEAR: TFloatField
+      FieldName = 'OVERMAINYEAR'
+    end
+    object ResultDS3FilialOVERINTYEAR: TFloatField
+      FieldName = 'OVERINTYEAR'
+    end
+    object ResultDS3FilialOVERMAINMON: TFloatField
+      FieldName = 'OVERMAINMON'
+    end
+    object ResultDS3FilialOVERINTMON: TFloatField
+      FieldName = 'OVERINTMON'
+    end
+    object ResultDS3FilialPAYEDYEARMAIN: TFloatField
+      FieldName = 'PAYEDYEARMAIN'
+    end
+    object ResultDS3FilialPAYEDYEARINT: TFloatField
+      FieldName = 'PAYEDYEARINT'
+    end
+    object ResultDS3FilialPAYEDMONMAIN: TFloatField
+      FieldName = 'PAYEDMONMAIN'
+    end
+    object ResultDS3FilialPAYEDMONINT: TFloatField
+      FieldName = 'PAYEDMONINT'
+    end
+    object ResultDS3FilialDEBTMAIN: TFloatField
+      FieldName = 'DEBTMAIN'
+    end
+    object ResultDS3FilialDEBTINT: TFloatField
+      FieldName = 'DEBTINT'
+    end
+    object ResultDS3FilialDEBTDUEMAIN: TFloatField
+      FieldName = 'DEBTDUEMAIN'
+    end
+    object ResultDS3FilialDEBTDUEINT: TFloatField
+      FieldName = 'DEBTDUEINT'
+    end
+    object ResultDS3FilialWEIGHTGLOBAL: TFloatField
+      FieldName = 'WEIGHTGLOBAL'
+    end
+    object ResultDS3FilialWEIGHTLOCAL: TFloatField
+      FieldName = 'WEIGHTLOCAL'
+    end
+    object ResultDS3FilialDID: TFloatField
+      FieldName = 'DID'
+      Required = True
+    end
+    object ResultDS3FilialDISTRICTNAME: TWideStringField
+      FieldName = 'DISTRICTNAME'
+      Size = 128
+    end
+  end
+  object ResultDS3Proj: TOracleDataSet
+    SQL.Strings = (
+      'SELECT f.*, d.id prid, d.description project'
+      '  FROM cr_report_f3_full f, cr_active_credits v, cr_usergroups d'
+      '  where creditid=v.id and v.usrgroup=d.id'
+      ''
+      ''
+      ''
+      'ORDER BY'
+      '  d.id')
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    OnCalcFields = ResultDSCalcFields
+    Left = 141
+    Top = 255
+    object ResultDS3ProjCREDITID: TFloatField
+      FieldName = 'CREDITID'
+    end
+    object ResultDS3ProjBOORID: TFloatField
+      FieldName = 'BOORID'
+    end
+    object ResultDS3ProjBOOROWER: TWideStringField
+      FieldName = 'BOOROWER'
+      Size = 255
+    end
+    object ResultDS3ProjCRDNUM: TWideStringField
+      FieldName = 'CRDNUM'
+      Size = 32
+    end
+    object ResultDS3ProjBRANCHID: TFloatField
+      FieldName = 'BRANCHID'
+    end
+    object ResultDS3ProjBRANCH: TWideStringField
+      FieldName = 'BRANCH'
+      Size = 255
+    end
+    object ResultDS3ProjVILLAGEID: TFloatField
+      FieldName = 'VILLAGEID'
+    end
+    object ResultDS3ProjDISTRICTID: TFloatField
+      FieldName = 'DISTRICTID'
+    end
+    object ResultDS3ProjPURPOSEID: TFloatField
+      FieldName = 'PURPOSEID'
+    end
+    object ResultDS3ProjCNTYEAR: TFloatField
+      FieldName = 'CNTYEAR'
+    end
+    object ResultDS3ProjCNTMON: TFloatField
+      FieldName = 'CNTMON'
+    end
+    object ResultDS3ProjCNTGIVE: TFloatField
+      FieldName = 'CNTGIVE'
+    end
+    object ResultDS3ProjCNTCLOSE: TFloatField
+      FieldName = 'CNTCLOSE'
+    end
+    object ResultDS3ProjFRESTMAIN: TFloatField
+      FieldName = 'FRESTMAIN'
+    end
+    object ResultDS3ProjFRESTINT: TFloatField
+      FieldName = 'FRESTINT'
+    end
+    object ResultDS3ProjFDUERESTMAIN: TFloatField
+      FieldName = 'FDUERESTMAIN'
+    end
+    object ResultDS3ProjFDUERESTINT: TFloatField
+      FieldName = 'FDUERESTINT'
+    end
+    object ResultDS3ProjGIVENYEAR: TFloatField
+      FieldName = 'GIVENYEAR'
+    end
+    object ResultDS3ProjGIVENYEARCALC: TFloatField
+      FieldName = 'GIVENYEARCALC'
+    end
+    object ResultDS3ProjGIVENMON: TFloatField
+      FieldName = 'GIVENMON'
+    end
+    object ResultDS3ProjGIVENMONCALC: TFloatField
+      FieldName = 'GIVENMONCALC'
+    end
+    object ResultDS3ProjOVERMAINYEAR: TFloatField
+      FieldName = 'OVERMAINYEAR'
+    end
+    object ResultDS3ProjOVERINTYEAR: TFloatField
+      FieldName = 'OVERINTYEAR'
+    end
+    object ResultDS3ProjOVERMAINMON: TFloatField
+      FieldName = 'OVERMAINMON'
+    end
+    object ResultDS3ProjOVERINTMON: TFloatField
+      FieldName = 'OVERINTMON'
+    end
+    object ResultDS3ProjPAYEDYEARMAIN: TFloatField
+      FieldName = 'PAYEDYEARMAIN'
+    end
+    object ResultDS3ProjPAYEDYEARINT: TFloatField
+      FieldName = 'PAYEDYEARINT'
+    end
+    object ResultDS3ProjPAYEDMONMAIN: TFloatField
+      FieldName = 'PAYEDMONMAIN'
+    end
+    object ResultDS3ProjPAYEDMONINT: TFloatField
+      FieldName = 'PAYEDMONINT'
+    end
+    object ResultDS3ProjDEBTMAIN: TFloatField
+      FieldName = 'DEBTMAIN'
+    end
+    object ResultDS3ProjDEBTINT: TFloatField
+      FieldName = 'DEBTINT'
+    end
+    object ResultDS3ProjDEBTDUEMAIN: TFloatField
+      FieldName = 'DEBTDUEMAIN'
+    end
+    object ResultDS3ProjDEBTDUEINT: TFloatField
+      FieldName = 'DEBTDUEINT'
+    end
+    object ResultDS3ProjWEIGHTGLOBAL: TFloatField
+      FieldName = 'WEIGHTGLOBAL'
+    end
+    object ResultDS3ProjWEIGHTLOCAL: TFloatField
+      FieldName = 'WEIGHTLOCAL'
+    end
+    object ResultDS3ProjPRID: TFloatField
+      FieldName = 'PRID'
+      Required = True
+    end
+    object ResultDS3ProjPROJECT: TWideStringField
+      FieldName = 'PROJECT'
+      Size = 64
+    end
+  end
+  object ResultDSabLegM: TOracleDataSet
+    SQL.Strings = (
+      'SELECT   l.*, v.NAME village, d.NAME district'
+      
+        '    FROM cr_report_ab_legal_m l, cr_agro_village v, cr_agro_regi' +
+        'on d'
+      '   WHERE villageid = v.ID AND v.depend_id = d.ID'
+      ''
+      ''
+      ''
+      ''
+      'ORDER BY branch, district, village, boorower')
+    Session = sboapiDataModule.SBSession
+    Left = 144
+    Top = 312
+    object ResultDSabLegMCREDITID: TFloatField
+      FieldName = 'CREDITID'
+    end
+    object ResultDSabLegMBOORID: TFloatField
+      FieldName = 'BOORID'
+    end
+    object ResultDSabLegMBOOROWER: TWideStringField
+      FieldName = 'BOOROWER'
+      Size = 255
+    end
+    object ResultDSabLegMCRDNUM: TWideStringField
+      FieldName = 'CRDNUM'
+      Size = 32
+    end
+    object ResultDSabLegMBRANCHID: TFloatField
+      FieldName = 'BRANCHID'
+    end
+    object ResultDSabLegMBRANCH: TWideStringField
+      FieldName = 'BRANCH'
+      Size = 255
+    end
+    object ResultDSabLegMVILLAGEID: TFloatField
+      FieldName = 'VILLAGEID'
+    end
+    object ResultDSabLegMDISTRICTID: TFloatField
+      FieldName = 'DISTRICTID'
+    end
+    object ResultDSabLegMGIVENDATE: TDateTimeField
+      FieldName = 'GIVENDATE'
+    end
+    object ResultDSabLegMLASTPAYMENTDATE: TDateTimeField
+      FieldName = 'LASTPAYMENTDATE'
+    end
+    object ResultDSabLegMTRANCHEAMOUNT: TFloatField
+      FieldName = 'TRANCHEAMOUNT'
+    end
+    object ResultDSabLegMCALCPERCENTS: TFloatField
+      FieldName = 'CALCPERCENTS'
+    end
+    object ResultDSabLegMDEBTRESTMAIN: TFloatField
+      FieldName = 'DEBTRESTMAIN'
+    end
+    object ResultDSabLegMDEBTRESTINT: TFloatField
+      FieldName = 'DEBTRESTINT'
+    end
+    object ResultDSabLegMPRETDATE: TDateTimeField
+      FieldName = 'PRETDATE'
+    end
+    object ResultDSabLegMPRETAMOUNT: TFloatField
+      FieldName = 'PRETAMOUNT'
+    end
+    object ResultDSabLegMPRETPAYEDAMT: TFloatField
+      FieldName = 'PRETPAYEDAMT'
+    end
+    object ResultDSabLegMPRETPAYEDINTAMT: TFloatField
+      FieldName = 'PRETPAYEDINTAMT'
+    end
+    object ResultDSabLegMIDDDATE: TDateTimeField
+      FieldName = 'IDDDATE'
+    end
+    object ResultDSabLegMIDDAMOUNT: TFloatField
+      FieldName = 'IDDAMOUNT'
+    end
+    object ResultDSabLegMIDDPAYEDAMT: TFloatField
+      FieldName = 'IDDPAYEDAMT'
+    end
+    object ResultDSabLegMIDDPAYEDINTAMT: TFloatField
+      FieldName = 'IDDPAYEDINTAMT'
+    end
+    object ResultDSabLegMQATNDATE: TDateTimeField
+      FieldName = 'QATNDATE'
+    end
+    object ResultDSabLegMQATNAMOUNT: TFloatField
+      FieldName = 'QATNAMOUNT'
+    end
+    object ResultDSabLegMQATNPAYEDAMT: TFloatField
+      FieldName = 'QATNPAYEDAMT'
+    end
+    object ResultDSabLegMQATNPAYEDINTAMT: TFloatField
+      FieldName = 'QATNPAYEDINTAMT'
+    end
+    object ResultDSabLegMPAYEDAFTERMAIN: TFloatField
+      FieldName = 'PAYEDAFTERMAIN'
+    end
+    object ResultDSabLegMPAYEDAFTERINT: TFloatField
+      FieldName = 'PAYEDAFTERINT'
+    end
+    object ResultDSabLegMOCITTOMAIN: TFloatField
+      FieldName = 'OCITTOMAIN'
+    end
+    object ResultDSabLegMOCITTOINT: TFloatField
+      FieldName = 'OCITTOINT'
+    end
+    object ResultDSabLegMBEGTHA: TFloatField
+      FieldName = 'BEGTHA'
+    end
+    object ResultDSabLegMBEGTAMOUNT: TFloatField
+      FieldName = 'BEGTAMOUNT'
+    end
+    object ResultDSabLegMBEGEKVM: TFloatField
+      FieldName = 'BEGEKVM'
+    end
+    object ResultDSabLegMBEGEAMOUNT: TFloatField
+      FieldName = 'BEGEAMOUNT'
+    end
+    object ResultDSabLegMBEGOAMOUNT: TFloatField
+      FieldName = 'BEGOAMOUNT'
+    end
+    object ResultDSabLegMVILLAGE: TWideStringField
+      FieldName = 'VILLAGE'
+      Size = 128
+    end
+    object ResultDSabLegMDISTRICT: TWideStringField
+      FieldName = 'DISTRICT'
+      Size = 128
+    end
+    object ResultDSabLegMCNTP: TFloatField
+      FieldName = 'CNTP'
+    end
+    object ResultDSabLegMCNTI: TFloatField
+      FieldName = 'CNTI'
+    end
+    object ResultDSabLegMCNTQ: TFloatField
+      FieldName = 'CNTQ'
+    end
+  end
+  object ResultDSProviz: TOracleDataSet
+    SQL.Strings = (
+      'SELECT f.*, d.id did, d.name districtname '
+      '  FROM CR_REPORT_PROVIZ f, cr_agro_village v, cr_agro_region d'
+      '  where villageid=v.id and v.depend_id=d.id'
+      ''
+      ''
+      ''
+      'ORDER BY'
+      '  branchid, d.name')
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    OnCalcFields = ResultDSCalcFields
+    Left = 133
+    Top = 376
+    object ResultDSProvizCREDITID: TFloatField
+      FieldName = 'CREDITID'
+      Required = True
+    end
+    object ResultDSProvizBOOROWERID: TFloatField
+      FieldName = 'BOOROWERID'
+      Required = True
+    end
+    object ResultDSProvizCRDNUM: TWideStringField
+      FieldName = 'CRDNUM'
+      Required = True
+      Size = 255
+    end
+    object ResultDSProvizBOOROWERNAME: TWideStringField
+      FieldName = 'BOOROWERNAME'
+      Required = True
+      Size = 255
+    end
+    object ResultDSProvizBRANCHID: TFloatField
+      FieldName = 'BRANCHID'
+      Required = True
+    end
+    object ResultDSProvizBRANCH: TWideStringField
+      FieldName = 'BRANCH'
+      Required = True
+      Size = 255
+    end
+    object ResultDSProvizDISTRICTID: TFloatField
+      FieldName = 'DISTRICTID'
+      Required = True
+    end
+    object ResultDSProvizDISTRICT: TWideStringField
+      FieldName = 'DISTRICT'
+      Required = True
+      Size = 255
+    end
+    object ResultDSProvizVILLAGEID: TFloatField
+      FieldName = 'VILLAGEID'
+      Required = True
+    end
+    object ResultDSProvizVILLAGE: TWideStringField
+      FieldName = 'VILLAGE'
+      Required = True
+      Size = 255
+    end
+    object ResultDSProvizPURPOSEID: TFloatField
+      FieldName = 'PURPOSEID'
+      Required = True
+    end
+    object ResultDSProvizPURPOSE: TWideStringField
+      FieldName = 'PURPOSE'
+      Required = True
+      Size = 255
+    end
+    object ResultDSProvizTYPEID: TFloatField
+      FieldName = 'TYPEID'
+      Required = True
+    end
+    object ResultDSProvizTYPEDESC: TWideStringField
+      FieldName = 'TYPEDESC'
+      Required = True
+      Size = 10
+    end
+    object ResultDSProvizOPENDATMAIN: TFloatField
+      FieldName = 'OPENDATMAIN'
+    end
+    object ResultDSProvizOPENDATVK: TFloatField
+      FieldName = 'OPENDATVK'
+    end
+    object ResultDSProvizDEBTDUE1: TFloatField
+      FieldName = 'DEBTDUE1'
+    end
+    object ResultDSProvizDEBTDUE2: TFloatField
+      FieldName = 'DEBTDUE2'
+    end
+    object ResultDSProvizDEBTDUE3: TFloatField
+      FieldName = 'DEBTDUE3'
+    end
+    object ResultDSProvizDEBTDUE4: TFloatField
+      FieldName = 'DEBTDUE4'
+    end
+    object ResultDSProvizDEBTDUE5: TFloatField
+      FieldName = 'DEBTDUE5'
+    end
+    object ResultDSProvizDEBTDUEI1: TFloatField
+      FieldName = 'DEBTDUEI1'
+    end
+    object ResultDSProvizDEBTDUEI2: TFloatField
+      FieldName = 'DEBTDUEI2'
+    end
+    object ResultDSProvizDEBTDUEI3: TFloatField
+      FieldName = 'DEBTDUEI3'
+    end
+    object ResultDSProvizDEBTDUEI4: TFloatField
+      FieldName = 'DEBTDUEI4'
+    end
+    object ResultDSProvizDEBTDUEI5: TFloatField
+      FieldName = 'DEBTDUEI5'
+    end
+    object ResultDSProvizACTIVE1: TFloatField
+      FieldName = 'ACTIVE1'
+    end
+    object ResultDSProvizACTIVE2: TFloatField
+      FieldName = 'ACTIVE2'
+    end
+    object ResultDSProvizACTIVE3: TFloatField
+      FieldName = 'ACTIVE3'
+    end
+    object ResultDSProvizACTIVE4: TFloatField
+      FieldName = 'ACTIVE4'
+    end
+    object ResultDSProvizACTIVE5: TFloatField
+      FieldName = 'ACTIVE5'
+    end
+    object ResultDSProvizACTIVEP1: TFloatField
+      FieldName = 'ACTIVEP1'
+    end
+    object ResultDSProvizACTIVEP2: TFloatField
+      FieldName = 'ACTIVEP2'
+    end
+    object ResultDSProvizACTIVEP3: TFloatField
+      FieldName = 'ACTIVEP3'
+    end
+    object ResultDSProvizACTIVEP4: TFloatField
+      FieldName = 'ACTIVEP4'
+    end
+    object ResultDSProvizACTIVEP5: TFloatField
+      FieldName = 'ACTIVEP5'
+    end
+    object ResultDSProvizDID: TFloatField
+      FieldName = 'DID'
+      Required = True
+    end
+    object ResultDSProvizDISTRICTNAME: TWideStringField
+      FieldName = 'DISTRICTNAME'
+      Size = 128
+    end
+  end
+  object ResultDSGrantYear: TOracleDataSet
+    SQL.Strings = (
+      'SELECT f.*'
+      '  FROM CR_REPORT_GRANTS f'
+      ''
+      ''
+      ''
+      'ORDER BY'
+      '  tecyear, tecname')
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    OnCalcFields = ResultDSCalcFields
+    Left = 261
+    Top = 417
+    object ResultDSGrantYearCREDITID: TFloatField
+      FieldName = 'CREDITID'
+      Visible = False
+    end
+    object ResultDSGrantYearTECYEAR: TFloatField
+      DisplayLabel = '»л'
+      FieldName = 'TECYEAR'
+    end
+    object ResultDSGrantYearTECNAME: TWideStringField
+      DisplayLabel = 'јды'
+      FieldName = 'TECNAME'
+      Size = 50
+    end
+    object ResultDSGrantYearTECCOUNT: TFloatField
+      DisplayLabel = '—айы'
+      FieldName = 'TECCOUNT'
+    end
+    object ResultDSGrantYearTECAMT: TFloatField
+      DisplayLabel = 'ћ€бл€ьи'
+      FieldName = 'TECAMT'
+    end
+    object ResultDSGrantYearTECAREND: TFloatField
+      DisplayLabel = '»жар€чил€р'
+      FieldName = 'TECAREND'
+    end
+    object ResultDSGrantYearPAYALLMAIN: TFloatField
+      DisplayLabel = 'Ћай. €вв. юд. €сас борж'
+      FieldName = 'PAYALLMAIN'
+    end
+    object ResultDSGrantYearPAYALLINT: TFloatField
+      DisplayLabel = 'Ћай. €вв. юд. фаиз боржу'
+      FieldName = 'PAYALLINT'
+    end
+    object ResultDSGrantYearOVERDEBTYESR: TFloatField
+      DisplayLabel = 'ил €рз. юд-ли'
+      FieldName = 'OVERDEBTYESR'
+    end
+    object ResultDSGrantYearPAYYEARMAIN: TFloatField
+      DisplayLabel = 'ил €рз. юд. яЅ.'
+      FieldName = 'PAYYEARMAIN'
+    end
+    object ResultDSGrantYearPAYYEARINT: TFloatField
+      DisplayLabel = 'ил €рз. юд. ‘Ѕ.'
+      FieldName = 'PAYYEARINT'
+    end
+    object ResultDSGrantYearOVERDEBTMON: TFloatField
+      DisplayLabel = 'ай €рз. юд-ли'
+      FieldName = 'OVERDEBTMON'
+    end
+    object ResultDSGrantYearPAYMONMAIN: TFloatField
+      DisplayLabel = 'ай €рз. юд. яЅ.'
+      FieldName = 'PAYMONMAIN'
+    end
+    object ResultDSGrantYearPAYMONINT: TFloatField
+      DisplayLabel = 'ай €рз. юд. ‘Ѕ.'
+      FieldName = 'PAYMONINT'
+    end
+    object ResultDSGrantYearREST: TFloatField
+      DisplayLabel = '√алыг'
+      FieldName = 'REST'
+    end
+  end
+  object ResultDSGrantBranch: TOracleDataSet
+    SQL.Strings = (
+      'SELECT f.*'
+      '  FROM CR_REPORT_GRANTS f'
+      ''
+      ''
+      ''
+      'ORDER BY'
+      '  branch, tecname')
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    OnCalcFields = ResultDSCalcFields
+    Left = 365
+    Top = 417
+    object ResultDSGrantBranchCREDITID: TFloatField
+      FieldName = 'CREDITID'
+      Visible = False
+    end
+    object ResultDSGrantBranchBRANCH: TWideStringField
+      DisplayLabel = '‘илиал'
+      FieldName = 'BRANCH'
+      Size = 255
+    end
+    object ResultDSGrantBranchTECNAME: TWideStringField
+      DisplayLabel = 'јды'
+      FieldName = 'TECNAME'
+      Size = 50
+    end
+    object ResultDSGrantBranchTECCOUNT: TFloatField
+      DisplayLabel = '—айы'
+      FieldName = 'TECCOUNT'
+    end
+    object ResultDSGrantBranchTECAMT: TFloatField
+      DisplayLabel = 'ћ€бл€ьи'
+      FieldName = 'TECAMT'
+    end
+    object ResultDSGrantBranchTECAREND: TFloatField
+      DisplayLabel = '»жар€чил€р'
+      FieldName = 'TECAREND'
+    end
+    object ResultDSGrantBranchPAYALLMAIN: TFloatField
+      DisplayLabel = 'Ћай. €вв. юд. €сас борж'
+      FieldName = 'PAYALLMAIN'
+    end
+    object ResultDSGrantBranchPAYALLINT: TFloatField
+      DisplayLabel = 'Ћай. €вв. юд. фаиз боржу'
+      FieldName = 'PAYALLINT'
+    end
+    object ResultDSGrantBranchOVERDEBTYESR: TFloatField
+      DisplayLabel = 'ил €рз. юд-ли'
+      FieldName = 'OVERDEBTYESR'
+    end
+    object ResultDSGrantBranchPAYYEARMAIN: TFloatField
+      DisplayLabel = 'ил €рз. юд. яЅ.'
+      FieldName = 'PAYYEARMAIN'
+    end
+    object ResultDSGrantBranchPAYYEARINT: TFloatField
+      DisplayLabel = 'ил €рз. юд. ‘Ѕ.'
+      FieldName = 'PAYYEARINT'
+    end
+    object ResultDSGrantBranchOVERDEBTMON: TFloatField
+      DisplayLabel = 'ай €рз. юд-ли'
+      FieldName = 'OVERDEBTMON'
+    end
+    object ResultDSGrantBranchPAYMONMAIN: TFloatField
+      DisplayLabel = 'ай €рз. юд. яЅ.'
+      FieldName = 'PAYMONMAIN'
+    end
+    object ResultDSGrantBranchPAYMONINT: TFloatField
+      DisplayLabel = 'ай €рз. юд. ‘Ѕ.'
+      FieldName = 'PAYMONINT'
+    end
+    object ResultDSGrantBranchREST: TFloatField
+      DisplayLabel = '√алыг'
+      FieldName = 'REST'
+    end
+  end
+  object ResultDSGrantContract: TOracleDataSet
+    SQL.Strings = (
+      'SELECT f.*, d.name disname'
+      '  FROM CR_REPORT_GRANTS f, cr_agro_village v, cr_agro_region d'
+      '  where villageid=v.id and v.depend_id=d.id'
+      ''
+      ''
+      ''
+      ''
+      'ORDER BY'
+      '  branch, d.name, boorowername'
+      '')
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    OnCalcFields = ResultDSCalcFields
+    Left = 461
+    Top = 417
+    object ResultDSGrantContractCREDITID: TFloatField
+      FieldName = 'CREDITID'
+      Visible = False
+    end
+    object ResultDSGrantContractBOOROWERNAME: TWideStringField
+      DisplayLabel = 'ћцшт€ри'
+      FieldName = 'BOOROWERNAME'
+      Size = 255
+    end
+    object ResultDSGrantContractBRANCH: TWideStringField
+      DisplayLabel = '‘илиал'
+      FieldName = 'BRANCH'
+      Size = 255
+    end
+    object ResultDSGrantContractDISNAME: TWideStringField
+      DisplayLabel = '–айон'
+      FieldName = 'DISNAME'
+      Size = 128
+    end
+    object ResultDSGrantContractTECYEAR: TFloatField
+      FieldName = 'TECYEAR'
+    end
+    object ResultDSGrantContractTECNAME: TWideStringField
+      DisplayLabel = 'јды'
+      FieldName = 'TECNAME'
+      Size = 50
+    end
+    object ResultDSGrantContractTECDATE: TDateTimeField
+      DisplayLabel = '“арих'
+      FieldName = 'TECDATE'
+    end
+    object ResultDSGrantContractTECCOUNT: TFloatField
+      DisplayLabel = '—айы'
+      FieldName = 'TECCOUNT'
+    end
+    object ResultDSGrantContractTECAMT: TFloatField
+      DisplayLabel = 'ћ€бл€ьи'
+      FieldName = 'TECAMT'
+    end
+    object ResultDSGrantContractTECAREND: TFloatField
+      DisplayLabel = '»жар€чил€р'
+      FieldName = 'TECAREND'
+    end
+    object ResultDSGrantContractPAYALLMAIN: TFloatField
+      DisplayLabel = 'Ћай. €вв. юд. €сас борж'
+      FieldName = 'PAYALLMAIN'
+    end
+    object ResultDSGrantContractPAYALLINT: TFloatField
+      DisplayLabel = 'Ћай. €вв. юд. фаиз боржу'
+      FieldName = 'PAYALLINT'
+    end
+    object ResultDSGrantContractOVERDEBTYESR: TFloatField
+      DisplayLabel = 'ил €рз. юд-ли'
+      FieldName = 'OVERDEBTYESR'
+    end
+    object ResultDSGrantContractPAYYEARMAIN: TFloatField
+      DisplayLabel = 'ил €рз. юд. яЅ.'
+      FieldName = 'PAYYEARMAIN'
+    end
+    object ResultDSGrantContractPAYYEARINT: TFloatField
+      DisplayLabel = 'ил €рз. юд. ‘Ѕ.'
+      FieldName = 'PAYYEARINT'
+    end
+    object ResultDSGrantContractOVERDEBTMON: TFloatField
+      DisplayLabel = 'ай €рз. юд-ли'
+      FieldName = 'OVERDEBTMON'
+    end
+    object ResultDSGrantContractPAYMONMAIN: TFloatField
+      DisplayLabel = 'ай €рз. юд. яЅ.'
+      FieldName = 'PAYMONMAIN'
+    end
+    object ResultDSGrantContractPAYMONINT: TFloatField
+      DisplayLabel = 'ай €рз. юд. ‘Ѕ.'
+      FieldName = 'PAYMONINT'
+    end
+    object ResultDSGrantContractREST: TFloatField
+      DisplayLabel = '√алыг'
+      FieldName = 'REST'
+    end
+  end
+end

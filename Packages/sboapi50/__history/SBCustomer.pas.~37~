@@ -1,0 +1,313 @@
+unit SBCustomer;
+
+interface
+
+uses Windows,Dialogs;
+
+type
+  TCustomer = record
+    OperatorID: Integer;
+    Name: String;
+    ShortName: String;
+    OpenDate: TDateTime;
+    CloseDate: TDateTime;
+    IsResident: Boolean; {!NEREZIDENT}
+    RelationID: Integer; {PRINAD_KOD}
+    GroupID: Integer; {GROUP_KLIE}
+    EstateType: Integer; {VID_SOB}
+    OrganizationType: Integer; {ORG_SOB}
+    ActionArea: Integer; {SFERA_DEY}
+    BranchID: Integer; {OTRASL}
+    TaxAreaID: Integer; {NALOG_KOD}
+    TaxIDString: String;
+    BankIDString: String;
+    OKPRO: String;
+    GovOfficer: String; {OTV_LICO}
+    TaxDepartmentRegDate: TDateTime;
+    CapitalRegDate: TDateTime;
+    INCORPORATION_NUMBER: String;
+    TPH_CONTACT_TYPE: String;
+    TPH_COMMUNICATION_TYPE: String;
+    TPH_NUMBER: String;
+    ADDRESS_TYPE: String;
+    ADDRESS: String;
+    CITY: String;
+    COUNTRY_CODE: String;
+    EMAIL: String;
+    URL: String;
+    INCORPORATION_STATE: String;
+    INCORPORATION_CNTR: String;
+    TPH_EXTENSION: String;
+    TPH_ZIP: String;
+    TPH_COUNTRY_PREFIX: String;
+    TPH_STATE: String;
+    RISK_CATEG:Integer;
+    riskdescid:Integer;
+    samelydate:Variant;
+    {about 10 items pending}
+  end;
+
+  TCustomerInfo = record
+    Name: String;
+    LastName: String;
+    SurName: String;
+    BirthDate: TDateTime;
+    BirthPlace: String;
+    Address: String;
+    City: String;
+    Country: String;
+    WorkPlace: String;
+    {phone section will be modified}
+    PhoneWork: String;
+    PhoneHome: String;
+    PhoneCelular: String;
+    passer: String;
+    paspnum: String;
+    paspdate: TDateTime;
+    paspplace: String;
+    garanted: String;
+    otv_passport: String;
+    otv_issued: String;
+    otv_isdate: String;
+    note: String;
+    work: String;
+    test: String;
+    fam_status: Integer;
+    sex: Integer;
+    adrs_state: String;
+    birth_state: String;
+    fakt_adress: String;
+    child_info: String;
+    doc_type: Integer;
+    passpin: String;
+    citizenship: Integer;
+    passexpire: TDateTime;
+    reg_zip: String;
+    doc_country: Integer;
+    citizenship2: Integer;
+    citizenship3: Integer;
+    fakt_country: Integer;
+    fakt_city: Integer;
+    fakt_zip: String;
+    work_place: String;
+    work_post: String;
+    work_adress: String;
+    work_phone: String;
+    tph_contact_type: String;
+    tph_country: Integer;
+    tph_country_code: String;
+    tph_city: Integer;
+    tph_state: String;
+    tph_zip: String;
+    tph_country_prefix: Integer;
+    tph_adress: String;
+    tph_communication_type: String;
+    tph_number: String;
+    tph_extension: String;
+    contact_type: String;
+    Email: String;
+    Url: String;
+    Sign: HBITMAP;
+    Photo: HBitmap;
+    Recomendation: String;
+  end;
+
+function Sb_AddCustomer(const Customer: TCustomer): Integer;
+procedure Sb_GetCustomer(ID: Integer; var Customer: TCustomer);
+procedure Sb_CloseCustomer(ID: Integer);
+procedure Sb_EditCustomer(ID: Integer; const Customer: TCustomer);
+
+function Sb_AddCustomerInfo(CustomerID: Integer; const Info: TCustomerInfo): Integer;
+procedure Sb_EditCustomerInfo(ID: Integer; const Info: TCustomerInfo);
+function Sb_DropCustomerInfo(ID: Integer): Integer;
+
+implementation
+
+uses sboapiDataModuleImpl, SysUtils, Classes, SBCore, SBSrvIntf;
+
+procedure Sb_GetCustomer(ID: Integer; var Customer: TCustomer);
+begin
+  with sboapiDataModule.GetCustomer do
+  begin
+    Close;
+    SetVariable('CustomerID', ID);
+    Open;
+
+    with Customer do
+    begin
+      Name := FieldByName('NAME').AsString;
+      OpenDate := Trunc(FieldByName('OPEN_DAT').AsDateTime);
+      CloseDate := Trunc(FieldByName('CLOSE_DAT').AsDateTime);
+      IsResident := FieldByName('NEREZIDENT').AsInteger =0;
+      RelationID := FieldByName('PRINAD_KOD').AsInteger;
+      GroupID := FieldByName('GROUP_KLIE').AsInteger;
+      EstateType := FieldByName('VID_SOB').AsInteger;
+      OrganizationType := FieldByName('ORG_SOB').AsInteger;
+      ActionArea := FieldByName('SFERA_DEY').AsInteger;
+      BranchID := FieldByName('OTRASL').AsInteger;
+      TaxAreaID := FieldByName('NALOG_KOD').AsInteger;
+      OKPRO := FieldByName('KOD_OKPRO').AsString;
+      INCORPORATION_NUMBER := FieldByName('INCORPORATION_NUMBER').AsString;
+      TPH_CONTACT_TYPE := FieldByName('TPH_CONTACT_TYPE').AsString;
+      TPH_COMMUNICATION_TYPE := FieldByName('TPH_COMMUNICATION_TYPE').asString;
+      TPH_NUMBER := FieldByName('TPH_NUMBER').AsString;
+      ADDRESS_TYPE := FieldByName('ADDRESS_TYPE').asString;
+      ADDRESS := FieldByNAme('ADDRESS').AsString;
+      CITY := FieldByName('CITY').AsString;
+      COUNTRY_CODE := FieldByName('COUNTRY_CODE').AsString;
+      EMAIL := FieldByName('EMAIL').AsString;
+      URL := FieldByName('URL').AsString;
+      INCORPORATION_STATE := FieldByName('INCORPORATION_STATE').AsString;
+      INCORPORATION_CNTR := FieldByName('INCORPORATION_CNTR').AsString;
+      TPH_EXTENSION := FieldByName('TPH_EXTENSION').AsString;
+      TPH_ZIP := FieldByName('TPH_ZIP').AsString;
+      TPH_COUNTRY_PREFIX := FieldByName('TPH_COUNTRY_PREFIX').AsString;
+      TPH_STATE := FieldByName('TPH_STATE').AsString;
+      riskdescid:=FieldByName('riskdescid').AsInteger;
+       samelydate:=FieldByName('SamelyDate').AsVariant;
+    end;
+
+    Close;
+  end;
+end;
+
+function Sb_AddCustomer(const Customer: TCustomer): Integer;
+begin
+  with sboapiDataModule, Customer do
+    SBOperationDay.CallProcedure(sPN_AddCustomer, [
+      'OP_ID', 0,
+      'OPEN_DAT', Customer.OpenDate,
+      'NAME', Customer.Name,
+      'CLOSE_DAT', NullDate,
+      'NEREZIDENT', Integer(IsResident),
+      'PRINAD_KOD', RelationID,
+      'SHORT_NAME', ShortName,
+      'GROUP_KLIE', GroupID,
+      'VID_SOB', EstateType,
+      'ORG_SOB', OrganizationType,
+      'SFERA_DEY', ActionArea,
+      'OTRASL', BranchID,
+      'NALOG_KOD', TaxAreaID,
+      'INN', TaxIDString,
+      'BIK', BankIDString,
+      'KOD_OKPRO', OKPRO,
+      'DAT_NAL', TaxDepartmentRegDate,
+      'DAT_USTAV', CapitalRegDate,
+      'v_INCORP_NUM', INCORPORATION_NUMBER,
+      'v_TPH_CONTACT_TYPE',TPH_CONTACT_TYPE,
+      'v_TPH_COMMUNICATION_TYPE',TPH_COMMUNICATION_TYPE,
+      'v_TPH_NUMBER', TPH_NUMBER,
+      'v_ADDRESS_TYPE',ADDRESS_TYPE,
+      'v_ADDRESS',  ADDRESS,
+      'v_CITY',  CITY,
+      'v_COUNTRY_CODE',COUNTRY_CODE,
+      'v_EMAIL', EMAIL,
+      'v_URL',URL,
+      'v_INCORPORATION_STATE', INCORPORATION_STATE,
+      'v_INCORPORATION_CNTR',  INCORPORATION_CNTR,
+      'v_TPH_EXTENSION',   TPH_EXTENSION,
+      'v_TPH_ZIP',  TPH_ZIP,
+      'v_TPH_COUNTRY_PREFIX', TPH_COUNTRY_PREFIX,
+      'v_TPH_STATE',TPH_STATE,
+      'v_risk_categ',risk_categ,
+      'v_riskdescid',riskdescid,
+      'v_samelydate',samelydate
+
+    ]);
+  Result := -1;
+end;
+
+procedure Sb_CloseCustomer(ID: Integer);
+begin
+  with sboapiDataModule.SBOperationDay do
+    CallProcedure(sPN_CloseCustomer, [
+      'v_ID', ID,
+      'CURRENTDATE', Sb_GetSystemDate(),
+      'RESULT', 0]);
+end;
+
+procedure Sb_EditCustomer(ID: Integer; const Customer: TCustomer);
+begin
+  with sboapiDataModule.SBOperationDay, Customer do
+    CallProcedure(sPN_UpdateCustomer, [
+      'v_ID', ID,
+      'v_OP_ID', 0,
+      'v_OPEN_DAT', Customer.OpenDate,
+      'v_NAME', Customer.Name,
+      'v_CLOSE_DAT', NullDate,
+      'v_NEREZIDENT', Integer(IsResident),
+      'v_PRINAD_KOD', RelationID,
+      'v_SHORT_NAME', ShortName,
+      'v_GROUP_KLIE', GroupID,
+      'v_VID_SOB', EstateType,
+      'v_ORG_SOB', OrganizationType,
+      'v_SFERA_DEY', ActionArea,
+      'v_OTRASL', BranchID,
+      'v_NALOG_KOD', TaxAreaID,
+      'v_INN', TaxIDString,
+      'v_BIK', BankIDString,
+      'v_KOD_OKPRO', OKPRO,
+      'v_DAT_NAL', TaxDepartmentRegDate,
+      'v_DAT_USTAV', CapitalRegDate,
+      'v_INCORP_NUM', INCORPORATION_NUMBER,
+      'v_TPH_CONTACT_TYPE',TPH_CONTACT_TYPE,
+      'v_TPH_COMMUNICATION_TYPE',TPH_COMMUNICATION_TYPE,
+      'v_TPH_NUMBER', TPH_NUMBER,
+      'v_ADDRESS_TYPE',ADDRESS_TYPE,
+      'v_ADDRESS',  ADDRESS,
+      'v_CITY',  CITY,
+      'v_COUNTRY_CODE',COUNTRY_CODE,
+      'v_EMAIL', EMAIL,
+      'v_URL',URL,
+      'v_INCORPORATION_STATE', INCORPORATION_STATE,
+      'v_INCORPORATION_CNTR',  INCORPORATION_CNTR,
+      'v_TPH_EXTENSION',   TPH_EXTENSION,
+      'v_TPH_ZIP',  TPH_ZIP,
+      'v_TPH_COUNTRY_PREFIX', TPH_COUNTRY_PREFIX,
+      'v_TPH_STATE',TPH_STATE,
+      'v_risk_categ',risk_categ,
+      'v_riskdescid',riskdescid,
+      'v_samelydate',samelydate
+    ]);
+end;
+
+function Sb_AddCustomerInfo(CustomerID: Integer; const Info: TCustomerInfo): Integer;
+begin
+  with sboapiDataModule.SBReferences, Info do
+    Result := CallIntegerFunction('add_custinfo', [
+      'v_idcust', CustomerID,
+      'v_soname', SurName,
+      'v_name', Name,
+      'v_lastname', LastName,
+      'v_birthday', BirthDate,
+      'v_birthplace', BirthPlace,
+//      'v_passer',
+//      'v_paspnum
+//      'v_paspdate
+//      'v_paspplace
+      'v_city', City,
+      'v_address', Address,
+      'v_workplace', WorkPlace,
+      'v_phone_w', PhoneWork,
+      'v_phone_h', PhoneHome,
+      'v_phone_m', PhoneCelular,
+      'v_e_mail', EMail,
+      'v_url', Url
+//      'v_recomendation' Recomendations,
+//      'v_garanted
+//      'v_photo
+//      'v_custsign
+    ]);
+end;
+
+procedure Sb_EditCustomerInfo(ID: Integer; const Info: TCustomerInfo);
+begin
+end;
+
+function Sb_DropCustomerInfo(ID: Integer): Integer;
+begin
+  with sboapiDataModule.SBReferences do
+    Result := CallIntegerFunction('del_custinfo', ['v_ID', ID]);
+end;
+
+end.

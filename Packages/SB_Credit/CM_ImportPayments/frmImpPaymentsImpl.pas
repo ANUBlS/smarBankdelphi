@@ -1,0 +1,211 @@
+﻿unit frmImpPaymentsImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
+   Excelxp, OleServer, StdCtrls, Buttons, ComCtrls, ExtCtrls,
+  Oracle,OracleData, Dialogs, CMExcelExport;
+
+type
+  TfrmImpPayments = class(TForm)
+    SaveDlg: TOpenDialog;
+    ExcelWorksheet1: TExcelWorksheet;
+    ExcelWorkbook1: TExcelWorkbook;
+    ExcelApplication1: TExcelApplication;
+    GroupBox1: TGroupBox;
+    SpeedButton1: TSpeedButton;
+    SavePathEdit: TEdit;
+    Panel1: TPanel;
+    DTPImpDate: TDateTimePicker;
+    Label1: TLabel;
+    ProgressShower: TProgressBar;
+    BitBtn1: TBitBtn;
+    BitBtn2: TBitBtn;
+    ExortOperations: TCMExcelExport;
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure BitBtn2Click(Sender: TObject);
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure BitBtn1Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  frmImpPayments: TfrmImpPayments;
+
+  Procedure InitPlugin(S:String);export;
+implementation
+
+{$R *.DFM}
+uses DMImpPaymentsImpl,CommonDecls,sbsystem;
+
+Procedure InitPlugin(S:String);export;
+begin
+   frmImpPayments.ShowModal;
+end;
+
+exports
+   InitPlugin;
+
+procedure TfrmImpPayments.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+   Resize := False;
+end;
+
+procedure TfrmImpPayments.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+   if Ord(Key) = VK_ESCAPE then close
+end;
+
+procedure TfrmImpPayments.BitBtn2Click(Sender: TObject);
+begin
+   Close
+end;
+
+procedure TfrmImpPayments.SpeedButton1Click(Sender: TObject);
+begin
+  with SaveDlg do
+   if Execute then
+      SavePathEdit.Text := FileName;
+end;
+
+procedure TfrmImpPayments.BitBtn1Click(Sender: TObject);
+const
+  StartRow = 2;
+  RootCell = 2;
+var
+    V, Sheet, Sheets  :Variant;
+    Row : Integer;
+    CellStr : String;
+     p_maina : Real;
+      p_inta : Real;
+      p_pena : Real;
+      p_trdate :TDatetime;
+      accno, crno,ErrMessage,CustName : String;
+      CheckResults : integer;
+      CountOperaions : Integer;
+
+begin
+          DMImpPayments.OracleDataSet2.close;
+          DMImpPayments.OracleDataSet2.open;
+          DMImpPayments.OracleDataSet2.Session.Commit;
+
+  // p_trdate := Integer(Trunc(DTPImpDate.DateTime));
+   CountOperaions := 0;
+   Row := StartRow;
+   ProgressShower.Position := 1;
+   ProgressShower.Max := 100;
+
+   V:=ExcelApplication1.Application;
+   ExcelApplication1.Connect;
+   try
+     V.Workbooks.Open(SavePathEdit.Text);
+     Sheet := V.Workbooks[1].Worksheets['MIS']; //
+     Sheets := V.Sheets;
+     CellStr := Sheet.cells[Row,RootCell];
+
+     with  DMImpPayments do
+  // ShowMessage(CellStr);
+     while CellStr <> '' do
+     try
+       crno :=  Sheet.cells[Row,1];
+       CustName :=  Sheet.cells[Row,2];
+       p_maina:=Sheet.cells[Row,3];
+       p_inta:=Sheet.cells[Row,4];
+       p_pena:=Sheet.cells[Row,5];
+       p_trdate:=Sheet.cells[Row,6];
+       accno:=Sheet.cells[Row,7];
+
+       ProgressShower.Position := 50;
+       with  DMImpPayments do begin
+
+       {------------------------------------MainDebit----------------------------------}
+
+        //  ShowMessage(crno);
+
+        CheckResults := cm_dif_trans.CallStringFunction('add_pay',[
+                                       'p_crnum',crno,
+                                       'p_cust',CustName,
+                                       'p_main',p_maina,
+                                       'p_int', p_inta  ,
+                                       'p_pen',p_pena,
+                                       'p_dat',p_trdate,
+                                       'p_accno',accno]);
+
+
+        CountOperaions:=CountOperaions+1;
+       {------------------------------------EndIntDebit-----------------------------}
+
+       Inc(Row);
+       CellStr := Sheet.cells[Row,RootCell];
+    end;
+
+   except
+        on E:EOracleError do
+        begin
+          ErrMessage := E.Message;
+          ShowMessage(ErrMessage+'---'+CustName);
+          Continue;
+         end;
+   end;
+
+   finally
+     ExcelApplication1.Quit;
+     ExcelApplication1.Disconnect;
+     DMImpPayments.cm_dif_trans.Session.Commit;
+     DMImpPayments.cm_dif_trans.CallProcedure('add_payy',[ ]);
+     ProgressShower.Position := 100;
+     ProgressShower.Position := 0;
+        DMImpPayments.OracleDataSet1.close;
+        DMImpPayments.OracleDataSet1.open;
+   if DMImpPayments.OracleDataSet1.RecordCount=0 then
+     ShowMessage(IntToStr(CountOperaions)+' - sayda əməliyyat aparıldı')
+     else
+     begin
+      if MessageDlg(
+      IntToStr(DMImpPayments.OracleDataSet1.RecordCount)+' - sayda əməliyyat aparla bilmedi'+#13+
+      ' Excele atmaq isteyirsinizmi ?'
+     ,mtConfirmation
+     ,[mbYes,mbNo]
+     ,0
+     ) = mrYES then
+
+     with ExortOperations do begin
+        Connect;
+        ExportDataset(DMImpPayments.OracleDataSet1,'Кредит Ямялиййатлары',True);
+        Disconnect;
+     end;
+   end;
+
+   end;
+
+end;
+
+procedure TfrmImpPayments.FormCreate(Sender: TObject);
+begin
+   DMImpPayments := TDMImpPayments.Create(Self);
+end;
+
+procedure TfrmImpPayments.FormDestroy(Sender: TObject);
+begin
+   DMImpPayments.Free;
+end;
+
+  procedure TfrmImpPayments.FormShow(Sender: TObject);
+begin
+   DTPImpDate.DateTime := Get_CurrentDate;
+end;
+
+Initialization
+     frmImpPayments := TfrmImpPayments.Create(CommonApplication);
+
+end.

@@ -1,0 +1,57 @@
+unit limittur;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Menus, OleServer, ExcelXP, CMExcelExport, ImgList, Grids, DBGrids,
+  ComCtrls, ToolWin, DB, OracleData;
+
+type
+  Tlim = class(TForm)
+    CoolBar1: TCoolBar;
+    ToolBar1: TToolBar;
+    ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
+    DBGrid1: TDBGrid;
+    DBGrid2: TDBGrid;
+    ImageList1: TImageList;
+    CMExcelExport1: TCMExcelExport;
+    OpenDialogCards: TOpenDialog;
+    ExcelApplication1: TExcelApplication;
+    PopupMenu1: TPopupMenu;
+    N11: TMenuItem;
+    N12: TMenuItem;
+    PopupMenu2: TPopupMenu;
+    EXCEL1: TMenuItem;
+    PopupMenu3: TPopupMenu;
+    EXCEL2: TMenuItem;
+    DataSource1: TDataSource;
+    DataSource2: TDataSource;
+    OracleDataSet1: TOracleDataSet;
+    OracleDataSet2: TOracleDataSet;
+    procedure ToolButton2Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  lim: Tlim;
+
+implementation
+
+{$R *.dfm}
+uses
+Sboapidatamoduleimpl;
+
+
+procedure Tlim.ToolButton2Click(Sender: TObject);
+begin
+OracleDataSet1.Refresh;
+OracleDataSet2.Refresh;
+
+end;
+
+end.

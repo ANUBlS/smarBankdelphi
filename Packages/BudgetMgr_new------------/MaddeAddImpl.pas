@@ -1,0 +1,66 @@
+unit MaddeAddImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ExtCtrls, DBCtrls, Grids, DBGrids;
+
+type
+  TMaddeAdd = class(TForm)
+    DBGrid1: TDBGrid;
+    DBNavigator1: TDBNavigator;
+    procedure FormCanResize(Sender: TObject; var NewWidth, NewHeight: Integer;
+      var Resize: Boolean);
+    procedure DBNavigator1Click(Sender: TObject; Button: TNavigateBtn);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormShow(Sender: TObject);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  MaddeAdd: TMaddeAdd;
+
+implementation
+
+{$R *.dfm}
+ uses DmBudcetImpl,MainformImpl;
+procedure TMaddeAdd.DBNavigator1Click(Sender: TObject; Button: TNavigateBtn);
+
+begin
+case Button of
+    nbPost :  begin
+  m:=DmBudcet.MaddSrc.DataSet.FieldByName('index_by_name').AsInteger;
+  st:=1;
+    end;
+end;
+end;
+
+procedure TMaddeAdd.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+resize:=False
+end;
+
+procedure TMaddeAdd.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+//ad:=DmBudcet.MaddSrc.DataSet.FieldByName('name').AsString;
+DmBudcet.MaddSrc.DataSet.Refresh;
+end;
+
+procedure TMaddeAdd.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+  if ORD(Key) = VK_ESCAPE then
+    Close else
+end;
+
+procedure TMaddeAdd.FormShow(Sender: TObject);
+begin
+st:=0;
+end;
+
+end.

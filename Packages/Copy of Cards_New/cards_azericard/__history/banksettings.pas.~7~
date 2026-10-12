@@ -1,0 +1,118 @@
+﻿unit banksettings;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, Mask, DBCtrls, SearchEdit, ExtCtrls;
+
+type
+  TBank_Settings = class(TForm)
+    DBEdit1: TDBEdit;
+    Label1: TLabel;
+    Label2: TLabel;
+    Button1: TButton;
+    Label3: TLabel;
+    Label4: TLabel;
+    CheckBox1: TCheckBox;
+    DBEdit2: TDBEdit;
+    SearchEdit3: TSearchEdit;
+    SearchEdit4: TSearchEdit;
+    Label7: TLabel;
+    Label8: TLabel;
+    Label5: TLabel;
+    CheckBox2: TCheckBox;
+    RadioGroup1: TRadioGroup;
+    procedure FormActivate(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure Button1Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Bank_Settings: TBank_Settings;
+
+implementation
+
+uses Unit18,SBTranslateProc,sboapiDataModuleImpl;
+
+{$R *.DFM}
+
+procedure TBank_Settings.FormActivate(Sender: TObject);
+begin
+
+
+DataMod_CARDS.settings.Close;
+DataMod_CARDS.settings.Open;
+DataMod_CARDS.settings.Edit;
+if DataMod_CARDS.settings.fieldbyname('ARAHESAB').asinteger=1 then CheckBox1.Checked:=true else
+CheckBox1.Checked:=false;
+
+if DataMod_CARDS.settings.fieldbyname('dord').asinteger=1 then CheckBox2.Checked:=true else
+CheckBox2.Checked:=false;
+
+
+if DataMod_CARDS.settings.fieldbyname('rez').asinteger=0 then
+RadioGroup1.ItemIndex:=0 else
+RadioGroup1.ItemIndex:=1;
+
+
+end;
+
+procedure TBank_Settings.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+DataMod_CARDS.settings.Cancel;
+end;
+
+procedure TBank_Settings.Button1Click(Sender: TObject);
+begin
+DataMod_CARDS.SB_ACA.CallProcedure('CheckAdvancedObjectAccess', ['cardsettingssave']);
+if MessageDlg('Dəyişiklik yadda saxlanılsın?',mtinformation,[mbyes,mbno],0)=mryes then
+begin
+
+if RadioGroup1.ItemIndex=0 then
+DataMod_CARDS.settings.fieldbyname('rez').AsInteger:=0
+else
+DataMod_CARDS.settings.fieldbyname('rez').AsInteger:=1;
+
+if CheckBox1.Checked=true then
+DataMod_CARDS.settings.fieldbyname('ARAHESAB').AsInteger:=1;
+
+
+if CheckBox2.Checked=true then
+DataMod_CARDS.settings.fieldbyname('dord').AsInteger:=1 else
+DataMod_CARDS.settings.fieldbyname('dord').AsInteger:=0;
+DataMod_CARDS.settings.fieldbyname('kliring_25').AsString:=SearchEdit3.Text;
+DataMod_CARDS.settings.fieldbyname('kliring_45').AsString:=SearchEdit4.Text;
+DataMod_CARDS.settings.Post;
+end;
+DataMod_CARDS.settings.Close;
+DataMod_CARDS.settings.Open;
+
+SearchEdit3.Text:=DataMod_CARDS.settings.fieldbyname('kliring_25').AsString;
+SearchEdit4.Text:=DataMod_CARDS.settings.fieldbyname('kliring_45').AsString;
+end;
+
+procedure TBank_Settings.FormShow(Sender: TObject);
+begin
+DataMod_CARDS.hesab1.Locate('acc_no',DataMod_CARDS.settings.fieldbyname('kliring_25').AsString,[]);
+DataMod_CARDS.hesab2.Locate('acc_no',DataMod_CARDS.settings.fieldbyname('kliring_45').AsString,[]);
+
+SearchEdit3.Text:=DataMod_CARDS.settings.fieldbyname('kliring_25').AsString;
+SearchEdit4.Text:=DataMod_CARDS.settings.fieldbyname('kliring_45').AsString;
+end;
+
+procedure TBank_Settings.FormCreate(Sender: TObject);
+begin
+DataMod_CARDS.hesab1.Open;
+DataMod_CARDS.hesab2.Open;
+SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+end.

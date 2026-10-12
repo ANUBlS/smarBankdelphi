@@ -1,0 +1,107 @@
+object AccountDModule: TAccountDModule
+  OldCreateOrder = False
+  Height = 0
+  Width = 0
+  object Account: TOracleDataSet
+    Tag = 1
+    SQL.Strings = (
+      'SELECT   '
+      
+        '   ACCOUNT.RowID, ID, kli_id, op_id, acc_no, val_acc, NAME, open' +
+        '_dat, close_dat,'
+      
+        '   DECODE (close_dat, NULL, 1, 2) AS status, bal_cn1, bal_cn2, b' +
+        'al_cn3,'
+      
+        '   bal_cn4, filial, sim_otcet, tipacc, LIMIT, old_acc_no, pair_a' +
+        'cc,'
+      '   insider'
+      'FROM ACCOUNT'
+      'ORDER BY '
+      '   :title')
+    Variables.Data = {
+      0300000001000000060000003A5449544C4501000000070000006163635F6E6F
+      0000000000}
+    QueryAllRecords = False
+    Left = 120
+    Top = 40
+    object AccountID: TFloatField
+      FieldName = 'ID'
+    end
+    object AccountKLI_ID: TFloatField
+      FieldName = 'KLI_ID'
+      Required = True
+    end
+    object AccountOP_ID: TFloatField
+      FieldName = 'OP_ID'
+    end
+    object AccountACC_NO: TStringField
+      DisplayLabel = 'Щесаб №'
+      FieldName = 'ACC_NO'
+      Required = True
+    end
+    object AccountVAL_ACC: TIntegerField
+      DisplayLabel = '$'
+      FieldName = 'VAL_ACC'
+      Required = True
+    end
+    object AccountNAME: TStringField
+      DisplayLabel = 'Щесабын ады'
+      FieldName = 'NAME'
+      Size = 90
+    end
+    object AccountOPEN_DAT: TDateTimeField
+      DisplayLabel = 'Ачылма тарихи'
+      FieldName = 'OPEN_DAT'
+      Required = True
+    end
+    object AccountCLOSE_DAT: TDateTimeField
+      DisplayLabel = 'Баьланма тарихи'
+      FieldName = 'CLOSE_DAT'
+    end
+    object AccountSTATUS: TFloatField
+      FieldName = 'STATUS'
+    end
+    object AccountBAL_CN1: TFloatField
+      DisplayLabel = 'Баланс №'
+      FieldName = 'BAL_CN1'
+      Required = True
+    end
+    object AccountBAL_CN2: TFloatField
+      FieldName = 'BAL_CN2'
+    end
+    object AccountBAL_CN3: TFloatField
+      FieldName = 'BAL_CN3'
+    end
+    object AccountBAL_CN4: TFloatField
+      FieldName = 'BAL_CN4'
+    end
+    object AccountFILIAL: TIntegerField
+      FieldName = 'FILIAL'
+    end
+    object AccountSIM_OTCET: TFloatField
+      FieldName = 'SIM_OTCET'
+    end
+    object AccountTIPACC: TStringField
+      FieldName = 'TIPACC'
+    end
+    object AccountLIMIT: TFloatField
+      FieldName = 'LIMIT'
+    end
+    object AccountOLD_ACC_NO: TStringField
+      FieldName = 'OLD_ACC_NO'
+    end
+    object AccountPAIR_ACC: TFloatField
+      FieldName = 'PAIR_ACC'
+    end
+    object AccountINSIDER: TStringField
+      FieldName = 'INSIDER'
+      Size = 1
+    end
+  end
+  object AccountData: TDataSource
+    DataSet = Account
+    Left = 48
+    Top = 40
+  end
+end

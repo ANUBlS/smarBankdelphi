@@ -1,0 +1,498 @@
+﻿unit AccountPropertiesImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ExtCtrls, StdCtrls, ComCtrls, DBCtrls, Mask, Buttons, Db, ActnList, OracleData,
+  DBCtrlsEh,Variants;
+
+type
+  TAccountPropertiesForm = class(TForm)
+    AccountGB: TGroupBox;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    Label6: TLabel;
+    Label13: TLabel;
+    Label14: TLabel;
+    Label15: TLabel;
+    DBEditAccNo: TDBEdit;
+    DBEditCurrID: TDBEdit;
+    DBLookupCurr: TDBLookupComboBox;
+    DBEditBalance1: TDBEdit;
+    DBLookupBalance1: TDBLookupComboBox;
+    DBEditCustID: TDBEdit;
+    DBLookupCust: TDBLookupComboBox;
+    DTPOpenDate: TDateTimePicker;
+    Label12: TLabel;
+    DBLookupPairAcc: TDBLookupComboBox;
+    DBEditLimit: TDBEdit;
+    DBLookupSimotchet: TDBLookupComboBox;
+    DBEditBranchID: TDBEdit;
+    DBLookupComboBoxBranchName: TDBLookupComboBox;
+    DBEditAccName: TDBEdit;
+    DayStartStateGB: TGroupBox;
+    Label8: TLabel;
+    Label9: TLabel;
+    DBEdit6: TDBEdit;
+    DBEdit7: TDBEdit;
+    AccountFlagsGB: TGroupBox;
+    Button3: TButton;
+    DBText1: TDBText;
+    ActionListForHotKey: TActionList;
+    AccountAvtoCreate: TAction;
+    FullRefresh: TAction;
+    CBPairLookUp: TCheckBox;
+    Label7: TLabel;
+    EditNoteCode: TEdit;
+    DBEditSimOtcet: TDBEdit;
+    Panel4: TPanel;
+    Panel1: TPanel;
+    SpeedButton3: TSpeedButton;
+    Panel2: TPanel;
+    SpeedButton1: TSpeedButton;
+    ButtonCommit: TButton;
+    ButtonCancel: TButton;
+    Bal_CN2: TGroupBox;
+    Label11: TLabel;
+    DBEditBalance2: TDBEdit;
+    DBLookupBalance2: TDBLookupComboBox;
+    Label10: TLabel;
+    DBEdit1: TDBEdit;
+    Müxabirləşmə_kodu: TPanel;
+    GroupBox1: TGroupBox;
+    Label16: TLabel;
+    DBEdit_kli_id2: TDBEdit;
+    DBLookupComboBox_kli_name: TDBLookupComboBox;
+    OracleDataSet1: TOracleDataSet;
+    DataSource1: TDataSource;
+    OracleDataSet1ID: TIntegerField;
+    OracleDataSet1NAME: TWideStringField;
+    Label17: TLabel;
+    DBDateTimeEditEh1: TDBDateTimeEditEh;
+    Label18: TLabel;
+    DBLookupComboBox1: TDBLookupComboBox;
+    OracleDataSet2: TOracleDataSet;
+    DataSource2: TDataSource;
+    OracleDataSet2ID: TFloatField;
+    OracleDataSet2CODE: TWideStringField;
+    OracleDataSet2NAME: TWideStringField;
+    OracleDataSet2FILIALID: TFloatField;
+    procedure ButtonCommitClick(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure ButtonCancelClick(Sender: TObject);
+    procedure FormKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure Button3Click(Sender: TObject);
+    procedure SpeedButton3Click(Sender: TObject);
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure DBEditAccNoKeyPress(Sender: TObject; var Key: Char);
+    procedure AccountAvtoCreateExecute(Sender: TObject);
+    procedure FullRefreshExecute(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure CBPairLookUpClick(Sender: TObject);
+    procedure DBEditCustIDExit(Sender: TObject);
+    procedure DBLookupCustCloseUp(Sender: TObject);
+
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  AccountPropertiesForm: TAccountPropertiesForm;
+
+implementation
+
+uses AccountDataModuleImpl, AccountImpl, AccountFlagsImpl,sboapiDataModuleImpl, SBTranslateProc;
+
+{$R *.DFM}
+
+procedure TAccountPropertiesForm.ButtonCommitClick(Sender: TObject);
+var acc_number :string  ;
+begin
+   if DBLookupCurr.Text='' then
+   begin
+   ShowMessage('Valyuta seçimini düzgün edin');
+   Exit;
+   end;
+
+   if DBLookupBalance1.Text='' then
+   begin
+   ShowMessage('Balans hesabı seçimini düzgün edin');
+   Exit;
+   end;
+   if Bal_CN2.Visible=true then
+     begin
+   if DBLookupBalance2.Text='' then
+   begin
+   ShowMessage('Balans hesabı yeni seçimini düzgün edin');
+   Exit;
+   end;
+     end;
+
+   if DBLookupCust.Text='' then
+   begin
+   ShowMessage('Müştəri seçimini düzgün edin');
+   Exit;
+   end;
+
+
+  if DBEditAccNo.Text<>'' then
+   begin
+    if MessageDlg('Dəyişikliklər yadda saxlansın?',mtWarning, [mbYes, mbNo],0)=idyes then
+     with AccDataModule.Account do
+      if State in [dsInsert, dsEdit] then begin
+
+
+        FieldByName('open_dat').AsDateTime :=Int(DTPOpenDate.DateTime);
+
+        FieldByName('procuration_dat').AsVariant :=DBDateTimeEditEh1.Value ;
+
+        if DBLookupComboBoxBranchName.Text='' then begin
+         ShowMessage('Filial seçimi edin');
+         Exit;
+        end; {if DBLookupComboBoxBranchName.Text=''}
+        Post;
+      end; {if State in [dsInsert, dsEdit]}
+    Close;
+
+  acc_number :=DBEditAccNo.Text;
+  with AccDataModule.Account do
+ begin
+
+  CloseAll;
+  Open;
+  Locate('ACC_NO', acc_number, []);
+ end;
+
+   end
+   else ShowMessage('Hesab № yaradılmayıb!!');
+end;
+
+procedure TAccountPropertiesForm.CBPairLookUpClick(Sender: TObject);
+begin
+if CBPairLookUp.Checked=True then
+begin
+if not AccDataModule.PairAccount.Active=True then  AccDataModule.PairAccount.Open;
+DBLookupPairAcc.Enabled:=True;
+end
+else
+begin
+DBLookupPairAcc.Enabled:=False;
+if AccDataModule.PairAccount.Active=True then  AccDataModule.PairAccount.Close;
+end;
+end;
+
+procedure TAccountPropertiesForm.FormShow(Sender: TObject);
+  var
+ tt:integer;
+begin
+
+if AccDataModule.user_Branches.RecordCount=1 then
+ begin
+  DBEditBranchID.text:=inttostr(AccDataModule.user_Branches.FieldByName('id').AsInteger);
+  DBLookupComboBoxBranchName.KeyValue:=AccDataModule.user_Branches.FieldByName('id').AsInteger;
+ end;
+{
+ end
+ else
+ begin
+ DBEditBranchID.text:='';
+  DBLookupComboBoxBranchName.KeyValue:=-1;
+ end; }
+ with AccDataModule, Currency do
+ begin
+  if RecordCount=1 then
+  begin
+ DBEditCurrID.Text:=inttostr(AccDataModule.Currency.FieldByName('VALUTE').AsInteger);
+ DBLookupCurr.KeyValue:=0;//AccDataModule.Currency.FieldByName('VALU_NAME').AsString;
+ AccDataModule.account.FieldByName('val_acc').AsVariant:=DBLookupCurr.KeyValue
+ end;
+ end;
+
+ with AccountForm, AccDataModule do
+ begin
+
+  if OperationMode = omInsert then
+  begin
+   DTPOpenDate.DateTime :=Sysdat.FieldByName('Tek_dat').AsDateTime;
+     DBDateTimeEditEh1.text:='';
+
+  end
+   else
+   begin
+
+
+   DTPOpenDate.DateTime :=Account.FieldByName('open_dat').AsDateTime;
+   DBDateTimeEditEh1.Value :=Account.FieldByName('procuration_dat').AsVariant;
+   end;
+
+  //if not PairAccount.Active then PairAccount.Open;
+    end;
+
+  EditNoteCode.Clear;
+    tt:=AccDataModule.PG_PCustService.CallIntegerFunction('get_Modle_comp',['Account','AccountPropertiesForm','Müxabirləşmə_kodu']);
+
+   if tt=0 then
+
+         Müxabirləşmə_kodu.Visible:=false
+           else
+         Müxabirləşmə_kodu.Visible:=true;
+
+   tt:=AccDataModule.PG_PCustService.CallIntegerFunction('get_Modle_comp',['Account','AccountPropertiesForm','Bal_CN2']);
+
+   if tt=0 then
+          Bal_CN2.Visible:=false
+           else
+          Bal_CN2.Visible:=true;
+
+
+   tt:=AccDataModule.PG_PCustService.CallIntegerFunction('get_Modle_comp',['Account','AccountPropertiesForm','DBLookupPairAcc']);
+    if tt=0 then
+   begin
+          DBLookupPairAcc.Visible:=false ;
+          CBPairLookUp.Visible:=false
+   end
+           else
+           begin
+          DBLookupPairAcc.Visible:=true;
+          CBPairLookUp.Visible:=true;
+           end;
+   tt:=AccDataModule.PG_PCustService.CallIntegerFunction('get_Modle_comp',['Account','AccountPropertiesForm','DBEditLimit']);
+    if tt=0 then
+   begin
+          DBEditLimit.Visible:=false ;
+          Label12.Visible:=false
+   end
+           else
+           begin
+          DBEditLimit.Visible:=true;
+          Label12.Visible:=true;
+           end;
+
+  tt:=AccDataModule.PG_PCustService.CallIntegerFunction('get_Modle_comp',['Account','AccountPropertiesForm','AccountFlagsGB']);
+    if tt=0 then
+   begin
+          AccountFlagsGB.Visible:=false ;
+          Label15.Visible:=false;
+          DBText1.Visible:=false
+   end
+           else
+           begin
+          AccountFlagsGB.Visible:=true;
+          Label15.Visible:=true;
+          DBText1.Visible:=true;
+           end;
+
+ { if Bal_CN2.Visible=true then
+  begin
+    AccountPropertiesForm.AutoSize:=true ;
+    AccountPropertiesForm.ClientHeight:=465
+  end
+    else
+    begin
+    AccountPropertiesForm.AutoSize:=False;
+    AccountPropertiesForm.ClientHeight:=382;
+    end;   }
+
+
+
+with AccountForm, AccDataModule do
+ begin
+  if OperationMode=omEdit then
+
+if AccDataModule.CustomersCUST_TYPE.AsInteger in[0]  then
+  begin
+  //showmessage(AccDataModule.CustomersCUST_TYPE.AsString);
+ DBEdit_kli_id2.Text:='';
+ DBLookupComboBox_kli_name.KeyValue:=-1;
+ DBLookupComboBox_kli_name.Enabled:=false;
+ DBEdit_kli_id2.Enabled:=false;
+
+  end
+ else
+   begin
+   DBLookupComboBox_kli_name.Enabled:=true;
+   DBEdit_kli_id2.Enabled:=true;
+end;
+ end;
+
+
+end;
+
+procedure TAccountPropertiesForm.FullRefreshExecute(Sender: TObject);
+begin
+SpeedButton3.Click;
+end;
+
+procedure TAccountPropertiesForm.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+ with AccDataModule, Account do
+  if State in [dsInsert, dsEdit] then
+  begin
+   Cancel;
+   RefreshRecord; //-->Сменить на что нибудь нормальное!!!
+  end;
+end;
+
+procedure TAccountPropertiesForm.FormCreate(Sender: TObject);
+var
+  a:string;
+begin
+  SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+  AccDataModule.DSsettings.Open;
+  AccDataModule.ODS_AccNoLength.Open;
+  OracleDataSet1.Open;
+  if not AccDataModule.Customers.Active then AccDataModule.Customers.Open;
+  a :=AccDataModule.DSsettings.FieldByName('VALUE').AsString;
+  if a='0' then DBEditAccNo.ReadOnly:=true
+   else DBEditAccNo.ReadOnly:=false;
+  DBEditAccNo.MaxLength :=AccDataModule.ODS_AccNoLength.FieldByName('VALUE').AsInteger;
+end;
+
+procedure TAccountPropertiesForm.ButtonCancelClick(Sender: TObject);
+begin
+ Close;
+end;
+
+procedure TAccountPropertiesForm.FormKeyDown(Sender: TObject;
+  var Key: Word; Shift: TShiftState);
+begin
+  if Key = VK_ESCAPE then
+   Close;
+end;
+
+procedure TAccountPropertiesForm.FormKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+ if Ord(Key) = VK_RETURN then
+  with Sender as TControl do
+   SelectNext(ActiveControl, True, True);
+end;
+
+procedure TAccountPropertiesForm.AccountAvtoCreateExecute(Sender: TObject);
+begin
+SpeedButton1.Click;
+end;
+
+procedure TAccountPropertiesForm.Button3Click(Sender: TObject);
+begin
+ FormAccFlags :=TFormAccFlags.Create(Self);
+ try
+  with FormAccFlags, AccDataModule.Account do
+   if (ShowModal = mrOk) and (State in [dsInsert, dsEdit]) then
+    FieldByName('Tipacc').AsString :=FlagMap;
+ finally
+  if Assigned(FormAccFlags) then
+   FormAccFlags.Release;
+ end;
+end;
+
+
+procedure TAccountPropertiesForm.SpeedButton3Click(Sender: TObject);
+begin
+ with AccDataModule do
+  Refresh_('Account');
+end;
+
+procedure TAccountPropertiesForm.SpeedButton1Click(Sender: TObject);
+const
+   c_name = 'GenerateAccountNumber';
+begin
+{
+        BalCn Bal_spr1.bal_cn%type
+       ,CurrencyID Avalute.valute%type
+       ,CustomerID Customers.id%type
+       ,BranchID Filial.id%type) return Account.acc_no%type
+ }
+ //ShowMessage(IntToStr(DBLookupCurr.KeyValue));
+
+ with AccDataModule, Account do
+ begin
+
+  if State in [dsInsert, dsEdit] then
+   FieldByName('acc_no').AsString :=SBOP.CallStringFunction(c_name,
+                                          [
+                                           //'Acc_id',FieldByName('id').AsVariant ,
+                                          'BalCn', FieldByName('bal_cn1').AsVariant
+                                          ,'CurrencyID', FieldByName('val_acc').AsVariant
+                                          ,'CustomerID', FieldByName('kli_id').AsVariant
+                                          ,'BranchID', AccDataModule.user_Branches.FieldByName('id').AsVariant{user} {FieldByName('filial').AsVariant }
+                                          ,'AnalitKod', FieldByName('SIM_OTCET').AsVariant
+                                          ,'NoteCode', EditNoteCode.Text
+                                           ,'BalCn2', FieldByName('bal_cn2').AsVariant
+                                          ]);
+
+
+ end;
+//  showmessage(AccDataModule.user_Branches.FieldByName('id').AsString)
+ {        For Agrar Kredit           Shahmeddin A.
+
+  FieldByName('acc_no').AsString :=SBOP.CallStringFunction(c_name,
+                                          [
+                                           //'Acc_id',FieldByName('id').AsVariant,
+                                           'BalCn', FieldByName('bal_cn2').AsVariant
+                                          ,'CurrencyID', FieldByName('val_acc').AsVariant
+                                          ,'CustomerID', FieldByName('kli_id').AsVariant
+                                          ,'BranchID', FieldByName('filial').AsVariant
+                                          ,'AnalitKod', FieldByName('SIM_OTCET').AsVariant
+                                          //,'BalCn2', FieldByName('bal_cn2').AsVariant
+                                       //   ,'NoteCode', EditNoteCode.Text
+                                          ]);  }
+end;
+
+
+procedure TAccountPropertiesForm.DBEditAccNoKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if ((not (key in ['0'..'9','a'..'z','A'..'Z','/','-',':','(',')','.',',','''','+','{','}',' ',#8])))
+   then key:=#0;
+end;
+
+
+
+procedure TAccountPropertiesForm.DBEditCustIDExit(Sender: TObject);
+begin
+
+if AccDataModule.CustomersCUST_TYPE.AsInteger in[0,2]  then
+begin
+DBEdit_kli_id2.Text:='';
+DBLookupComboBox_kli_name.KeyValue:=-1;
+ DBEdit_kli_id2.Enabled:=false;
+ DBLookupComboBox_kli_name.Enabled:=false;
+end
+else
+begin
+ DBEdit_kli_id2.Enabled:=true;
+ DBLookupComboBox_kli_name.Enabled:=true;
+end;
+
+end;
+
+procedure TAccountPropertiesForm.DBLookupCustCloseUp(Sender: TObject);
+begin
+
+if AccDataModule.CustomersCUST_TYPE.AsInteger in[0,2]  then
+begin
+DBEdit_kli_id2.Text:='';
+DBLookupComboBox_kli_name.KeyValue:=-1;
+DBEdit_kli_id2.Enabled:=false;
+DBLookupComboBox_kli_name.Enabled:=false;
+end
+else
+begin
+ DBEdit_kli_id2.Enabled:=true;
+ DBLookupComboBox_kli_name.Enabled:=true;
+end;
+end;
+
+
+end.

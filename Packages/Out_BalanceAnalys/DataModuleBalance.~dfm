@@ -1,0 +1,666 @@
+object DataModulBalance: TDataModulBalance
+  OldCreateOrder = False
+  Left = 286
+  Top = 139
+  Height = 480
+  Width = 696
+  object DataBalance: TDataSource
+    DataSet = Balance
+    Left = 24
+    Top = 32
+  end
+  object Balance: TOracleDataSet
+    SQL.Strings = (
+      '  SELECT   lastremainder.balancebill AS balanceaccount,'
+      '         firstremainder.active AS firstactive,'
+      '         firstremainder.passive AS firstpassive,'
+      '         turnovers.dturnover,'
+      '         turnovers.cturnover,'
+      '         lastremainder.active AS lastactive,'
+      '         lastremainder.passive AS lastpassive'
+      '    FROM (SELECT   b.bal_cn balancebill,'
+      '                   SUM ('
+      '                      out_sb_mtoutview.active ('
+      '                         ar.%sostat, /*10*/'
+      '                         b.typeid,'
+      '                         b.additionaltypeid'
+      '                      )'
+      '                   ) active,'
+      '                   SUM ('
+      '                      out_sb_mtoutview.passiv ('
+      '                         ar.%sostat,     /*17*/'
+      '                         b.typeid,'
+      '                         b.additionaltypeid'
+      '                      )'
+      '                   ) passive'
+      
+        '              FROM out_archost ar, out_ACCOUNT ac, out_bal_spr%d' +
+        ' b /*22*/'
+      '             WHERE (ar.acc_id = ac.id)'
+      '               AND (ac.bal_cn%d = b.bal_cn)    /*24*/'
+      '               /*25 BRANCH and CURRENCY*/'
+      '               AND (ar.datdate = :BeginPeriod)'
+      '          GROUP BY'
+      '           b.bal_cn) firstremainder,'
+      '         (SELECT   b.bal_cn balancebill,'
+      '                   SUM (ar.%sobr_d) dturnover,/*30*/'
+      '                   SUM (ar.%sobr_k) cturnover /*31*/'
+      
+        '              FROM out_archost ar, out_ACCOUNT ac, out_bal_spr%d' +
+        ' b /*32*/'
+      '             WHERE (ar.acc_id = ac.id)'
+      
+        '               AND (ac.bal_cn%d = b.bal_cn)                 /*34' +
+        '*/'
+      '               /*35 BRANCH and CURRENCY*/'
+      '               AND (ar.datdate BETWEEN :BeginDate AND :EndDate)'
+      '          GROUP BY b.bal_cn) turnovers,'
+      '         (SELECT  b.bal_cn balancebill,'
+      '                   SUM ('
+      '                      out_sb_mtoutview.active ('
+      '                         ar.%sostat,/*41*/'
+      '                         b.typeid,'
+      '                         b.additionaltypeid'
+      '                      )'
+      '                   ) active,'
+      '                   SUM ('
+      '                      out_sb_mtoutview.passiv ('
+      '                         ar.%sostat,/*48*/'
+      '                         b.typeid,'
+      '                         b.additionaltypeid'
+      '                      )'
+      '                   ) passive'
+      
+        '              FROM out_archost ar, out_ACCOUNT ac, out_bal_spr%d' +
+        ' b  /*53*/'
+      '             WHERE (ar.acc_id = ac.id)'
+      '               AND (ac.bal_cn%d = b.bal_cn)  /*55*/'
+      '               /*56 BRANCH and CURRENCY*/'
+      '               AND (ar.datdate = :EndDate)'
+      '          GROUP BY'
+      '           b.bal_cn) lastremainder'
+      '   WHERE'
+      '    lastremainder.balancebill = firstremainder.balancebill(+)'
+      '     AND lastremainder.balancebill = turnovers.balancebill'
+      'ORDER BY lastremainder.balancebill'
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ' '
+      ' '
+      ' '
+      ' ')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    Variables.Data = {
+      03000000030000000C0000003A424547494E504552494F440C00000000000000
+      000000000A0000003A424547494E444154450C00000000000000000000000800
+      00003A454E44444154450C0000000000000000000000}
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = False
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = False
+    Active = False
+    AfterScroll = BalanceAfterScroll
+    Left = 80
+    Top = 32
+    object BalanceBALANCEACCOUNT: TFloatField
+      DisplayLabel = 'Баланс Щесабы'
+      FieldName = 'BALANCEACCOUNT'
+      Required = True
+    end
+    object BalanceFIRSTACTIVE: TFloatField
+      DisplayLabel = 'Илкин галыг(Актив)'
+      FieldName = 'FIRSTACTIVE'
+      DisplayFormat = '#,##0.00'
+    end
+    object BalanceFIRSTPASSIVE: TFloatField
+      DisplayLabel = 'Илкин галыг(Пассив)'
+      FieldName = 'FIRSTPASSIVE'
+      DisplayFormat = '#,##0.00'
+    end
+    object BalanceDTURNOVER: TFloatField
+      DisplayLabel = 'Дебет Дювриййя'
+      FieldName = 'DTURNOVER'
+      DisplayFormat = '#,##0.00'
+    end
+    object BalanceCTURNOVER: TFloatField
+      DisplayLabel = 'Кредит Дювриййя'
+      FieldName = 'CTURNOVER'
+      DisplayFormat = '#,##0.00'
+    end
+    object BalanceLASTACTIVE: TFloatField
+      DisplayLabel = 'Сон галыг(Актив)'
+      FieldName = 'LASTACTIVE'
+      DisplayFormat = '#,##0.00'
+    end
+    object BalanceLASTPASSIVE: TFloatField
+      DisplayLabel = 'Сон галыг(Пассив)'
+      FieldName = 'LASTPASSIVE'
+      DisplayFormat = '#,##0.00'
+    end
+  end
+  object DataAccount: TDataSource
+    DataSet = Account
+    Left = 248
+    Top = 40
+  end
+  object Account: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      '  RestForLastPeriod.AccountID , RestForLastPeriod.Name ,'
+      '  RestForLastPeriod.AccNo ,'
+      '  RestForLastPeriod.CurrencyID ,'
+      '  RestForLastPeriod.BranchID ,'
+      '  RestForLastPeriod.BalanceNo ,'
+      '  RestForFirstPeriod.Active as BeginActive ,'
+      '  RestForFirstPeriod.Passive as BeginPassive ,'
+      '  TurnOvers.DTurnOver ,'
+      '  TurnOvers.CTurnOver ,'
+      '  RestForLastPeriod.Active as EndActive ,'
+      '  RestForLastPeriod.Passive as EndPassive'
+      'from'
+      ''
+      '(select'
+      '  ac.ID as AccountID ,'
+      '  ac.acc_no as AccNo ,'
+      '  b.bal_cn  as BalanceNo ,'
+      ''
+      '  sb_mtoutview.active ('
+      '    ar.%sostat,  /*20*/'
+      '    b.typeid,'
+      '    b.additionaltypeid'
+      '  ) as Active ,'
+      ''
+      '  sb_mtoutview.passiv ('
+      '     ar.%sostat,   /*26*/'
+      '     b.typeid,'
+      '     b.additionaltypeid'
+      '  ) as Passive'
+      ''
+      'from'
+      '  account ac ,'
+      '  archost ar ,'
+      '  bal_spr%d b  /*34*/'
+      'where'
+      '  ar.acc_id = ac.id and'
+      '  ac.bal_cn%d = b.bal_cn and     /*37*/'
+      '  ar.DatDate = :BeginPeriod and'
+      '  ((ac.Close_Dat is null)or(ac.Close_Dat > :BeginPeriod))'
+      ') RestForFirstPeriod ,'
+      ''
+      '(select'
+      '  ac.ID as AccountID , ac.name ,'
+      '  ac.acc_no as AccNo ,'
+      '  ac.val_acc as CurrencyID ,'
+      '  ac.filial as BranchID ,'
+      '  b.bal_cn  as BalanceNo ,'
+      ''
+      '  sb_mtoutview.active ('
+      '    ar.%sostat,  /*50*/'
+      '    b.typeid,'
+      '    b.additionaltypeid'
+      '  ) as Active ,'
+      ''
+      '  sb_mtoutview.passiv ('
+      '     ar.%sostat,  /*56*/'
+      '     b.typeid,'
+      '     b.additionaltypeid'
+      '  ) as Passive'
+      ''
+      'from'
+      '  account ac ,'
+      '  archost ar ,'
+      '  bal_spr%d b  /*64*/'
+      'where'
+      '  ar.acc_id = ac.id and'
+      '  ac.bal_cn%d = b.bal_cn and  /*67*/'
+      '  ar.DatDate = :EndDate and'
+      '  ((ac.Close_Dat is null)or(ac.Close_Dat > :EndDate))'
+      ') RestForLastPeriod ,'
+      ''
+      '(select'
+      '  ac.ID as AccountID ,'
+      '  min(ac.acc_no) as AccNo,'
+      '  min(b.bal_cn)  as BalanceNo ,'
+      '  sum(ar.%sObr_D) as DTurnOver , /*76*/'
+      '  sum(ar.%sObr_K) as CTurnOver   /*77*/'
+      'from'
+      '  account ac ,'
+      '  archost ar ,'
+      '  bal_spr%d b  /*81*/'
+      'where'
+      '  ar.acc_id = ac.id and'
+      '  ac.bal_cn%d = b.bal_cn and /*84*/'
+      '  ar.DatDate between :BeginDate and :EndDate'
+      'group by'
+      '  ac.ID'
+      ') TurnOvers'
+      ''
+      'where'
+      '  /* Branch & Currency*/'
+      
+        '  RestForLastPeriod.AccountID = RestForFirstPeriod.AccountID  (+' +
+        ') and'
+      '  RestForLastPeriod.AccountID = TurnOvers.AccountID'
+      '  --and'
+      '  --RestForLastPeriod.BalanceNo =:BalanceNo'
+      ''
+      'order by'
+      '  RestForLastPeriod.AccNo'
+      ' '
+      ' '
+      ''
+      ' '
+      ' '
+      ' '
+      '')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    Variables.Data = {
+      03000000030000000C0000003A424547494E504552494F440C00000000000000
+      00000000080000003A454E44444154450C00000000000000000000000A000000
+      3A424547494E444154450C0000000000000000000000}
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = False
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = False
+    Active = False
+    AfterScroll = AccountAfterScroll
+    Left = 296
+    Top = 40
+    object AccountACCNO: TStringField
+      DisplayLabel = 'Щесаб №'
+      FieldName = 'ACCNO'
+    end
+    object AccountBALANCENO: TFloatField
+      DisplayLabel = 'Баланс Щесабы'
+      FieldName = 'BALANCENO'
+      Required = True
+    end
+    object AccountBEGINACTIVE: TFloatField
+      DisplayLabel = 'Илкин Галыг(Актив)'
+      FieldName = 'BEGINACTIVE'
+      DisplayFormat = '#,##0.00'
+    end
+    object AccountBEGINPASSIVE: TFloatField
+      DisplayLabel = 'Илкин Галыг(Пассив)'
+      FieldName = 'BEGINPASSIVE'
+      DisplayFormat = '#,##0.00'
+    end
+    object AccountDTURNOVER: TFloatField
+      DisplayLabel = 'Дебет Дювриййя'
+      FieldName = 'DTURNOVER'
+      DisplayFormat = '#,##0.00'
+    end
+    object AccountCTURNOVER: TFloatField
+      DisplayLabel = 'Кредит Дювриййя'
+      FieldName = 'CTURNOVER'
+      DisplayFormat = '#,##0.00'
+    end
+    object AccountENDACTIVE: TFloatField
+      DisplayLabel = 'Сон Галыг(Актив)'
+      FieldName = 'ENDACTIVE'
+      DisplayFormat = '#,##0.00'
+    end
+    object AccountENDPASSIVE: TFloatField
+      DisplayLabel = 'Сон Галыг(Пассив)'
+      FieldName = 'ENDPASSIVE'
+      DisplayFormat = '#,##0.00'
+    end
+    object AccountACCOUNTID: TFloatField
+      FieldName = 'ACCOUNTID'
+      Required = True
+    end
+    object AccountCURRENCYID: TIntegerField
+      FieldName = 'CURRENCYID'
+    end
+    object AccountBRANCHID: TIntegerField
+      FieldName = 'BRANCHID'
+    end
+    object AccountNAME: TStringField
+      FieldName = 'NAME'
+      Size = 90
+    end
+  end
+  object DataTransaction: TDataSource
+    DataSet = Transaction
+    Left = 32
+    Top = 120
+  end
+  object Transaction: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      '      t.ID,t.op_id as OperatorID, t.vid_op as OperationType,'
+      
+        '      t.dat, t.DEBT, d.acc_no as DebtAcc, dv.val_name as DValNam' +
+        'e,'
+      '      t.KREDIT, c.acc_no as CreditAcc, cv.val_name as CValName,'
+      
+        '      t.ammount, t.ammount_c, t.lammount, t.name, SB_EXPERTANALY' +
+        'SE.GetUserName(t.op_id) as UserName'
+      'from'
+      '      provarch t,'
+      '      account d,'
+      '      account c,'
+      '      avalute dv,'
+      '      avalute cv'
+      'where'
+      '     t.DEBT = d.ID and'
+      '     t.KREDIT = c.ID and'
+      '     t.val_acc = dv.valute and'
+      '     t.currencyID_c = cv.valute and'
+      '     /* 16 Operator & Operation Type*/'
+      '     t.dat between :BeginDate and :EndDate'
+      'order by'
+      '     :Title'
+      ''
+      ' '
+      ' ')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    Variables.Data = {
+      03000000030000000A0000003A424547494E444154450C000000000000000000
+      0000080000003A454E44444154450C0000000000000000000000060000003A54
+      49544C450100000006000000742E6461740000000000}
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = False
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = False
+    Active = False
+    Left = 88
+    Top = 120
+    object TransactionDAT: TDateTimeField
+      DisplayLabel = 'Тарих'
+      FieldName = 'DAT'
+    end
+    object TransactionDEBTACC: TStringField
+      DisplayLabel = 'Дебет'
+      FieldName = 'DEBTACC'
+    end
+    object TransactionDVALNAME: TStringField
+      DisplayLabel = '$'
+      FieldName = 'DVALNAME'
+      Size = 10
+    end
+    object TransactionCREDITACC: TStringField
+      DisplayLabel = 'Кредит'
+      FieldName = 'CREDITACC'
+    end
+    object TransactionCVALNAME: TStringField
+      DisplayLabel = '$'
+      FieldName = 'CVALNAME'
+      Size = 10
+    end
+    object TransactionAMMOUNT: TFloatField
+      DisplayLabel = 'Дебет Мябляь'
+      FieldName = 'AMMOUNT'
+      DisplayFormat = '#,##0.00'
+    end
+    object TransactionAMMOUNT_C: TFloatField
+      DisplayLabel = 'Кредит Мябляь'
+      FieldName = 'AMMOUNT_C'
+      DisplayFormat = '#,##0.00'
+    end
+    object TransactionLAMMOUNT: TFloatField
+      DisplayLabel = 'Еквивалент'
+      FieldName = 'LAMMOUNT'
+      DisplayFormat = '#,##0.00'
+    end
+    object TransactionNAME: TStringField
+      DisplayLabel = 'Тяйинаты'
+      FieldName = 'NAME'
+      Size = 255
+    end
+    object TransactionID: TFloatField
+      DisplayLabel = '№'
+      FieldName = 'ID'
+      Required = True
+    end
+    object TransactionOPERATORID: TFloatField
+      FieldName = 'OPERATORID'
+    end
+    object TransactionOPERATIONTYPE: TIntegerField
+      FieldName = 'OPERATIONTYPE'
+    end
+    object TransactionDEBT: TFloatField
+      FieldName = 'DEBT'
+    end
+    object TransactionKREDIT: TFloatField
+      FieldName = 'KREDIT'
+    end
+    object TransactionUSERNAME: TStringField
+      FieldName = 'USERNAME'
+      Size = 4000
+    end
+  end
+  object DataOperator: TDataSource
+    DataSet = Operator
+    Left = 376
+    Top = 104
+  end
+  object Operator: TOracleDataSet
+    SQL.Strings = (
+      'Select * from user$ order by ID')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = False
+    Active = True
+    Left = 432
+    Top = 104
+  end
+  object DataCurrency: TDataSource
+    DataSet = Currency
+    Left = 376
+    Top = 168
+  end
+  object OperationType: TOracleQuery
+    SQL.Strings = (
+      'select  '
+      '   ID, Name '
+      'from '
+      '   filial '
+      'order by ID')
+    Session = sboapiDataModule.SBSession
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    Cursor = crDefault
+    StringFieldsOnly = False
+    Threaded = True
+    ThreadSynchronized = True
+    OnThreadRecord = OperationTypeThreadRecord
+    Left = 440
+    Top = 232
+  end
+  object PeriodData: TOracleDataSet
+    SQL.Strings = (
+      'select '
+      '  Max(dat) as BeginPeriod'
+      'from '
+      '  Operkurs'
+      'where '
+      '  dat<:BeginDate')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    Variables.Data = {
+      03000000010000000A0000003A424547494E444154450C000000000000000000
+      0000}
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = False
+    Active = False
+    Left = 208
+    Top = 256
+  end
+  object SysDat: TOracleDataSet
+    SQL.Strings = (
+      'select tek_dat from sysdat')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = False
+    Active = False
+    Left = 272
+    Top = 256
+  end
+  object Currency: TOracleDataSet
+    SQL.Strings = (
+      'select valute, valu_name from avalute order by valute'
+      '')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = False
+    Active = True
+    Left = 432
+    Top = 168
+  end
+end

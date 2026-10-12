@@ -1,0 +1,2168 @@
+object CustomersInformations: TCustomersInformations
+  Left = 256
+  Top = 110
+  Width = 1003
+  Height = 612
+  Caption = 'CustomersInformations'
+  Color = clBtnFace
+  Font.Charset = RUSSIAN_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  OldCreateOrder = False
+  OnCreate = ActiveFormCreate
+  OnDestroy = ActiveFormDestroy
+  PixelsPerInch = 96
+  TextHeight = 14
+  object PanelAlTop: TPanel
+    Left = 0
+    Top = 0
+    Width = 1003
+    Height = 29
+    Align = alTop
+    TabOrder = 0
+    object Label1: TLabel
+      Left = 42
+      Top = 8
+      Width = 48
+      Height = 15
+      Caption = #1060#1080#1083#1080#1072#1083
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = [fsBold]
+      ParentFont = False
+    end
+    object HideBtn: TSpeedButton
+      Left = 14
+      Top = -1
+      Width = 25
+      Height = 24
+      Hint = #1055#1072#1085#1077#1083#1080' '#1101#1080#1079#1083#1103#1090'/'#1100#1102#1089#1090#1103#1088
+      Flat = True
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = [fsBold]
+      Glyph.Data = {
+        DE000000424DDE0000000000000076000000280000000D0000000D0000000100
+        0400000000006800000000000000000000001000000010000000000000000000
+        BF0000BF000000BFBF00BF000000BF00BF00BFBF0000C0C0C000808080000000
+        FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00777777777777
+        7000777707707777700077770070077770007777060060777000000006606607
+        7000066666660660700006666666606600000666666606607000000006606607
+        7000777706006077700077770070077770007777077077777000777777777777
+        7000}
+      ParentFont = False
+      ParentShowHint = False
+      ShowHint = True
+      OnClick = HideBtnClick
+    end
+    object Label10: TLabel
+      Left = 744
+      Top = 9
+      Width = 54
+      Height = 14
+      Caption = '08.10.2015'
+    end
+    object SearchCFilial: TSearchCombo
+      Left = 78
+      Top = 2
+      Width = 156
+      Height = 22
+      Style = csDropDownList
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 0
+      OnChange = SearchCFilialChange
+      DataSource = DataSourceFilial
+      ViewField = 'NAME'
+      DefaultString = #220'mumi bank '#252'zr'#601
+      DefaultStringUse = False
+      DefaultStringColor = clWindowText
+    end
+    object ActiveGBox: TGroupBox
+      Left = 250
+      Top = -3
+      Width = 297
+      Height = 31
+      Caption = #1071#1089#1072#1089' '#1078#1103#1076#1074#1103#1083
+      TabOrder = 1
+      object RBtnCust: TRadioButton
+        Left = 24
+        Top = 14
+        Width = 75
+        Height = 14
+        Caption = #1052#1094#1096#1090#1103#1088#1080#1083#1103#1088
+        TabOrder = 0
+        OnClick = RBtnCustClick
+      end
+      object RBtnAcc: TRadioButton
+        Left = 122
+        Top = 14
+        Width = 75
+        Height = 14
+        Caption = #1065#1077#1089#1072#1073#1083#1072#1088
+        TabOrder = 1
+        OnClick = RBtnAccClick
+      end
+      object RBtnDocs: TRadioButton
+        Left = 219
+        Top = 14
+        Width = 75
+        Height = 14
+        Caption = #1057#1103#1085#1103#1076#1083#1103#1088
+        TabOrder = 2
+        OnClick = RBtnDocsClick
+      end
+    end
+    object ComboBox1: TComboBox
+      Left = 554
+      Top = 5
+      Width = 144
+      Height = 22
+      Style = csDropDownList
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ItemIndex = 0
+      ParentFont = False
+      TabOrder = 2
+      Text = 'B'#252't'#252'n m'#252#351't'#601'ril'#601'r'
+      OnCloseUp = ComboBox1CloseUp
+      Items.Strings = (
+        'B'#252't'#252'n m'#252#351't'#601'ril'#601'r'
+        'H'#252'quqi '#351#601'xsl'#601'r'
+        'Fiziki '#351#601'xsl'#601'r'
+        'Fiziki sahibkarlar'
+        'Fiziki '#351#601'xs v'#601' sahibkarlar')
+    end
+  end
+  object Panel1: TPanel
+    Left = 234
+    Top = 29
+    Width = 769
+    Height = 583
+    Align = alClient
+    TabOrder = 1
+    object DBGridCustomers: TDBGrid
+      Left = 1
+      Top = 1
+      Width = 767
+      Height = 189
+      Align = alTop
+      DataSource = DataSourceCustomers
+      DrawingStyle = gdsGradient
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit, dgTitleClick]
+      ParentFont = False
+      TabOrder = 0
+      TitleFont.Charset = RUSSIAN_CHARSET
+      TitleFont.Color = clWindowText
+      TitleFont.Height = -11
+      TitleFont.Name = 'Tahoma'
+      TitleFont.Style = []
+      OnTitleClick = DBGridCustomersTitleClick
+      Columns = <
+        item
+          Alignment = taCenter
+          Color = clSilver
+          Expanded = False
+          FieldName = 'ID'
+          Title.Alignment = taCenter
+          Title.Color = clActiveCaption
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 30
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'NAME'
+          Title.Alignment = taCenter
+          Title.Color = clActiveCaption
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 250
+          Visible = True
+        end
+        item
+          Alignment = taCenter
+          Expanded = False
+          FieldName = 'INN'
+          Title.Alignment = taCenter
+          Title.Color = clActiveCaption
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 70
+          Visible = True
+        end
+        item
+          Alignment = taCenter
+          Expanded = False
+          FieldName = 'OPEN_DAT'
+          Title.Alignment = taCenter
+          Title.Color = clActiveCaption
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 70
+          Visible = True
+        end
+        item
+          Alignment = taCenter
+          Expanded = False
+          FieldName = 'CLOSE_DAT'
+          Title.Alignment = taCenter
+          Title.Color = clActiveCaption
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 70
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'CUST_TYPE_NAME'
+          Title.Color = clActiveCaption
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 110
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'USER_NAME'
+          Title.Color = clActiveCaption
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 100
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'FILIAL_NAME'
+          Title.Color = clActiveCaption
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 100
+          Visible = True
+        end>
+    end
+    object DBGridAccounts: TDBGrid
+      Left = 1
+      Top = 190
+      Width = 767
+      Height = 161
+      Align = alTop
+      DataSource = DataSourceAccount
+      DrawingStyle = gdsGradient
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit, dgTitleClick]
+      ParentFont = False
+      TabOrder = 1
+      TitleFont.Charset = RUSSIAN_CHARSET
+      TitleFont.Color = clWindowText
+      TitleFont.Height = -11
+      TitleFont.Name = 'Tahoma'
+      TitleFont.Style = []
+      OnTitleClick = DBGridAccountsTitleClick
+      Columns = <
+        item
+          Expanded = False
+          FieldName = 'ID'
+          Visible = True
+        end
+        item
+          Color = clSilver
+          Expanded = False
+          FieldName = 'ACC_NO'
+          Title.Alignment = taCenter
+          Title.Caption = #1065#1077#1089#1072#1073' '#8470
+          Title.Color = clActiveCaption
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 200
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'NAME'
+          Title.Alignment = taCenter
+          Title.Caption = #1040#1076#1099
+          Title.Color = clActiveCaption
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 200
+          Visible = True
+        end
+        item
+          Alignment = taCenter
+          Expanded = False
+          FieldName = 'VAL_NAME'
+          Title.Alignment = taCenter
+          Title.Color = clActiveCaption
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 30
+          Visible = True
+        end
+        item
+          Alignment = taCenter
+          Expanded = False
+          FieldName = 'OPEN_DAT'
+          Title.Alignment = taCenter
+          Title.Color = clActiveCaption
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 70
+          Visible = True
+        end
+        item
+          Alignment = taCenter
+          Expanded = False
+          FieldName = 'CLOSE_DAT'
+          Title.Alignment = taCenter
+          Title.Color = clActiveCaption
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 70
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'ABS(TEN.OSTAT)'
+          Title.Alignment = taCenter
+          Title.Caption = #1043#1072#1083#1099#1075
+          Title.Color = clActiveCaption
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 65
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'ABS(TEN.POK_OSTAT)'
+          Title.Alignment = taCenter
+          Title.Caption = #1052#1072#1085#1072#1090' '#1077#1082#1074'.'
+          Title.Color = clActiveCaption
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 65
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'FILIAL'
+          Title.Color = clActiveCaption
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 100
+          Visible = True
+        end>
+    end
+    object DBGridDocs: TDBGrid
+      Left = 1
+      Top = 351
+      Width = 767
+      Height = 231
+      Align = alClient
+      DataSource = DataSourceDocs
+      DrawingStyle = gdsGradient
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit, dgTitleClick]
+      ParentFont = False
+      TabOrder = 2
+      TitleFont.Charset = RUSSIAN_CHARSET
+      TitleFont.Color = clWindowText
+      TitleFont.Height = -11
+      TitleFont.Name = 'Tahoma'
+      TitleFont.Style = []
+      OnTitleClick = DBGridDocsTitleClick
+      Columns = <
+        item
+          Alignment = taCenter
+          Expanded = False
+          FieldName = 'DAT'
+          Title.Alignment = taCenter
+          Title.Color = clActiveCaption
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 60
+          Visible = True
+        end
+        item
+          Color = clSilver
+          Expanded = False
+          FieldName = 'DEBIT'
+          Title.Alignment = taCenter
+          Title.Caption = #1044#1077#1073#1077#1090' '
+          Title.Color = clActiveCaption
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 190
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'DNAME'
+          Title.Alignment = taCenter
+          Title.Caption = 'Debet hesab'#305'n ad'#305
+          Width = 200
+          Visible = True
+        end
+        item
+          Color = clSilver
+          Expanded = False
+          FieldName = 'CREDIT'
+          Title.Alignment = taCenter
+          Title.Color = clActiveCaption
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 190
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'CNAME'
+          Title.Alignment = taCenter
+          Title.Caption = 'Kredit hesab'#305'n ad'#305
+          Width = 200
+          Visible = True
+        end
+        item
+          Alignment = taLeftJustify
+          Expanded = False
+          FieldName = 'AMMOUNT'
+          Title.Alignment = taCenter
+          Title.Color = clActiveCaption
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Visible = True
+        end
+        item
+          Alignment = taLeftJustify
+          Expanded = False
+          FieldName = 'AMMOUNT_C'
+          Title.Alignment = taCenter
+          Title.Color = clActiveCaption
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 70
+          Visible = True
+        end
+        item
+          Alignment = taLeftJustify
+          Expanded = False
+          FieldName = 'LAMMOUNT'
+          Title.Alignment = taCenter
+          Title.Color = clActiveCaption
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 70
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'NAME'
+          Title.Alignment = taCenter
+          Title.Color = clActiveCaption
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 250
+          Visible = True
+        end>
+    end
+    object Memo1: TMemo
+      Left = 192
+      Top = 212
+      Width = 345
+      Height = 133
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      Lines.Strings = (
+        'Memo1')
+      ParentFont = False
+      TabOrder = 3
+      Visible = False
+    end
+    object Button1: TButton
+      Left = 616
+      Top = 80
+      Width = 75
+      Height = 25
+      Caption = 'Button1'
+      TabOrder = 4
+      OnClick = Button1Click
+    end
+    object Button2: TButton
+      Left = 608
+      Top = 43
+      Width = 75
+      Height = 25
+      Caption = 'Button2'
+      TabOrder = 5
+      OnClick = Button2Click
+    end
+  end
+  object Panel2: TPanel
+    Left = 0
+    Top = 29
+    Width = 234
+    Height = 583
+    Align = alLeft
+    TabOrder = 2
+    object GrBoxCustomers: TGroupBox
+      Left = 1
+      Top = 1
+      Width = 232
+      Height = 189
+      Align = alTop
+      Caption = #1052#1094#1096#1090#1103#1088#1080#1083#1103#1088
+      TabOrder = 0
+      object LabelCountCust: TLabel
+        Left = 178
+        Top = 2
+        Width = 18
+        Height = 14
+        Alignment = taRightJustify
+        Caption = '000'
+      end
+      object CustExcel: TSpeedButton
+        Left = 205
+        Top = 148
+        Width = 23
+        Height = 23
+        Hint = 'Excel'
+        Glyph.Data = {
+          7E010000424D7E01000000000000760000002800000016000000160000000100
+          0400000000000801000000000000000000001000000000000000000000000000
+          8000008000000080800080000000800080008080000080808000C0C0C0000000
+          FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00727272727272
+          72727272720027272727272727272727270072FFFFFFFFFFFFFFFFFF720027FF
+          FFFFFFFFFFFFFFFF270072FFFFFFFFFFFFFFFFFF720027FFFFFFFFFFF727272F
+          270072F2727272727F72727F720027F727272727F72727FF270072FF7272727F
+          72727FFF720027FFF72727F7272727FF270072FFFF727F72727272FF720027FF
+          FFF7F72727FFFFFF270072FFFF2F7272727FFFFF720027FFF2F727272727FFFF
+          270072FF2F72727272727FFF720027F7F72727F7272727FF270072F272727FFF
+          727272FF720027FFFFFFFFFFFFFFFFFF270072FFFFFFFFFFFFFFFFFF720027FF
+          FFFFFFFFFFFFFFFF270072727272727272727272720027272727272727272727
+          2700}
+        ParentShowHint = False
+        ShowHint = True
+        OnClick = CustExcelClick
+      end
+      object Label3: TLabel
+        Left = 6
+        Top = 135
+        Width = 56
+        Height = 14
+        Caption = '-'#1040#1093#1090#1072#1088#1099#1096'-'
+      end
+      object GrBoxCustDates: TGroupBox
+        Left = 3
+        Top = 68
+        Width = 224
+        Height = 68
+        Caption = #1058#1072#1088#1080#1093
+        TabOrder = 0
+        object RGrCustDates: TRadioGroup
+          Left = 8
+          Top = 12
+          Width = 122
+          Height = 52
+          ItemIndex = 0
+          Items.Strings = (
+            #1040#1095#1099#1083#1084#1072' '#1090#1072#1088#1080#1093#1083#1103#1088#1080
+            #1041#1072#1100#1083#1072#1085#1084#1072' '#1090#1072#1088#1080#1093#1083#1103#1088#1080)
+          TabOrder = 0
+          OnClick = CBoxOpenCustClick
+        end
+        object BegDateCust: TDateTimePicker
+          Left = 130
+          Top = 17
+          Width = 90
+          Height = 18
+          Date = 32874.709195046300000000
+          Time = 32874.709195046300000000
+          TabOrder = 1
+          OnChange = CBoxOpenCustClick
+        end
+        object EndDateCust: TDateTimePicker
+          Left = 130
+          Top = 39
+          Width = 90
+          Height = 18
+          Date = 37868.709872291700000000
+          Time = 37868.709872291700000000
+          TabOrder = 2
+          OnChange = CBoxOpenCustClick
+        end
+      end
+      object GBoxOpenFilterCust: TGroupBox
+        Left = 3
+        Top = 16
+        Width = 224
+        Height = 53
+        TabOrder = 1
+        object CBoxOpenCust: TCheckBox
+          Left = 15
+          Top = 12
+          Width = 162
+          Height = 18
+          Caption = #1043#1077#1081#1076#1080#1081#1081#1072#1090#1076#1072' '#1086#1083#1072#1085' '#1084#1094#1096#1090#1103#1088#1080#1083#1103#1088
+          Checked = True
+          State = cbChecked
+          TabOrder = 0
+          OnClick = CBoxOpenCustClick
+        end
+        object CBoxCloseCust: TCheckBox
+          Left = 15
+          Top = 30
+          Width = 175
+          Height = 16
+          Caption = #1043#1077#1081#1076#1080#1081#1081#1072#1090#1076#1072#1085' '#1095#1099#1093#1072#1085' '#1084#1094#1096#1090#1103#1088#1080#1083#1103#1088
+          TabOrder = 1
+          OnClick = CBoxOpenCustClick
+        end
+      end
+      object LocCustNum: TEdit
+        Left = 5
+        Top = 149
+        Width = 36
+        Height = 22
+        TabOrder = 2
+        OnChange = LocCustNumChange
+        OnExit = LocCustNumExit
+      end
+      object EditLocate: TEdit
+        Left = 38
+        Top = 149
+        Width = 167
+        Height = 22
+        CharCase = ecUpperCase
+        TabOrder = 3
+        OnChange = EditLocateChange
+        OnExit = EditLocateExit
+        OnKeyPress = EditLocateKeyPress
+      end
+    end
+    object GrBoxDocs: TGroupBox
+      Left = 1
+      Top = 351
+      Width = 232
+      Height = 231
+      Align = alClient
+      Caption = #1057#1103#1085#1103#1076#1083#1103#1088
+      TabOrder = 1
+      object WaitLabel: TLabel
+        Left = 118
+        Top = 120
+        Width = 60
+        Height = 14
+        Caption = #1069#1102#1079#1083#1103#1081#1080#1085'...'
+        Visible = False
+      end
+      object LabelCountDocs: TLabel
+        Left = 203
+        Top = 1
+        Width = 18
+        Height = 14
+        Alignment = taRightJustify
+        Caption = '000'
+      end
+      object DocExcel: TSpeedButton
+        Left = 202
+        Top = 114
+        Width = 24
+        Height = 24
+        Hint = 'Excel'
+        Glyph.Data = {
+          7E010000424D7E01000000000000760000002800000016000000160000000100
+          0400000000000801000000000000000000001000000000000000000000000000
+          8000008000000080800080000000800080008080000080808000C0C0C0000000
+          FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00727272727272
+          72727272720027272727272727272727270072FFFFFFFFFFFFFFFFFF720027FF
+          FFFFFFFFFFFFFFFF270072FFFFFFFFFFFFFFFFFF720027FFFFFFFFFFF727272F
+          270072F2727272727F72727F720027F727272727F72727FF270072FF7272727F
+          72727FFF720027FFF72727F7272727FF270072FFFF727F72727272FF720027FF
+          FFF7F72727FFFFFF270072FFFF2F7272727FFFFF720027FFF2F727272727FFFF
+          270072FF2F72727272727FFF720027F7F72727F7272727FF270072F272727FFF
+          727272FF720027FFFFFFFFFFFFFFFFFF270072FFFFFFFFFFFFFFFFFF720027FF
+          FFFFFFFFFFFFFFFF270072727272727272727272720027272727272727272727
+          2700}
+        ParentShowHint = False
+        ShowHint = True
+        OnClick = DocExcelClick
+      end
+      object OKBtn: TSpeedButton
+        Left = 177
+        Top = 114
+        Width = 24
+        Height = 24
+        Hint = #1043#1103#1073#1091#1083
+        Glyph.Data = {
+          66010000424D6601000000000000760000002800000016000000140000000100
+          040000000000F0000000CE0E0000D80E00001000000000000000000000000000
+          80000080000000808000800000008000800080800000C0C0C000808080000000
+          FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00555555555555
+          5555555555005555555555555555555555005555888888888888888555005599
+          9999119999999B5555005559999111199999B555550055553B443333BBBB5555
+          5500555554C448888555555555005555ECCCC4488855555555005555ECCCCC44
+          8885555555005555ECC4ECC44888555555005555ECC48ECC4488855555005555
+          EC4885ECC448885555005555EF48855ECC44888555005555EEC55555ECC44888
+          55005555555555555ECC4488550055555555555555ECC4485500555555555555
+          555ECC4855005555555555555555EC4555005555555555555555555555005555
+          55555555555555555500}
+        ParentShowHint = False
+        ShowHint = True
+        OnClick = OKBtnClick
+      end
+      object GBoxDateDocs: TGroupBox
+        Left = 3
+        Top = 15
+        Width = 224
+        Height = 60
+        Caption = #1058#1072#1088#1080#1093
+        TabOrder = 0
+        object Label4: TLabel
+          Left = 34
+          Top = 12
+          Width = 94
+          Height = 14
+          Caption = #1041#1072#1096#1083#1072#1085#1100#1099#1078' '#1090#1072#1088#1080#1093
+        end
+        object Label5: TLabel
+          Left = 34
+          Top = 37
+          Width = 52
+          Height = 14
+          Caption = #1057#1086#1085' '#1090#1072#1088#1080#1093
+        end
+        object BegDateDocs: TDateTimePicker
+          Left = 123
+          Top = 8
+          Width = 87
+          Height = 21
+          Date = 37868.705724317100000000
+          Time = 37868.705724317100000000
+          TabOrder = 0
+        end
+        object EndDateDocs: TDateTimePicker
+          Left = 123
+          Top = 32
+          Width = 87
+          Height = 21
+          Date = 37868.705774386600000000
+          Time = 37868.705774386600000000
+          TabOrder = 1
+        end
+      end
+      object ChListDocs: TCheckListBox
+        Left = 3
+        Top = 76
+        Width = 223
+        Height = 36
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -12
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ItemHeight = 14
+        Items.Strings = (
+          'Debet '#252'zr'#601
+          'Kredit '#252'zr'#601)
+        ParentFont = False
+        TabOrder = 1
+      end
+      object Memo2: TMemo
+        Left = 11
+        Top = 118
+        Width = 185
+        Height = 89
+        Lines.Strings = (
+          'select c.ID, c.Name, c.INN,'
+          'c.Open_Dat, c.Close_Dat,'
+          'c.Cust_TYPE, c.op_id,'
+          'decode(c.nerezident,0,'#39'Q/Rezident'
+          #39','
+          '1,'#39'Rezident'#39','#39#39') as '
+          'nerezident,'
+          '(select name from prinad where '
+          'id=c.prinad_kod) as prinad,'
+          'c.short_name,'
+          '(SELECT name FROM qrp_klie '
+          'where id=c.group_klie) as '
+          'group_klie,'
+          '(SELECT name FROM vid_sob'
+          'where id=c.vid_sob) as vid_sob,'
+          '(SELECT name FROM org_prav '
+          'where id=c.org_sob) as org_sob,'
+          ' (SELECT name FROM sferadey '
+          'where id=c.sfera_dey) as '
+          'sfera_dey,'
+          '(SELECT name FROM otrasli '
+          'where '
+          'id=c.otrasl) as otrasl,'
+          '(SELECT name FROM nalog '
+          'where '
+          'id=c.nalog_kod) as nalog_kod,'
+          ' c.kod_okpro,'
+          'c.dat_nal, c.dat_ustav, c.bik, '
+          'c.otv_lico, c.otv_passport, '
+          'c.otv_issued, c.otv_isdate, '
+          'c.old_inn,'
+          '(SELECT name FROM categories '
+          'where id= c.category) as category,'
+          'c.incorporation_number, '
+          'c.tph_contact_type,'
+          'c.tph_communication_type, '
+          'c.tph_number, c.address_type,'
+          'c.address, c.city, c.country_code, '
+          'c.director_id, '
+          'c.email, c.url,c.incorporation_state, '
+          'c.incorporation_cntr, '
+          'c.tph_extension, c.tph_zip, '
+          'c.tph_country_prefix, c.tph_state, '
+          'c.risk_categ,       '
+          'ci.soname, ci.name as ci_name,  '
+          'ci.lastname, ci.birthday,'
+          'ci.birthplace, ci.passer, '
+          'ci.paspnum, '
+          'ci.paspdate, '
+          'ci.paspplace, ci.city as ci_city, '
+          'ci.address as ci_address,'
+          'ci.workplace, ci.phone_w, '
+          'ci.phone_h, ci.phone_m,'
+          'ci.e_mail, ci.url as ci_url, '
+          'ci.recomendation, ci.garanted,'
+          'ci.otv_passport as '
+          'ci_otv_passport, ci.otv_issued as '
+          'ci_otv_issued,'
+          'ci.otv_isdate as ci_otv_isdate, '
+          'ci.note, ci.work, ci.test,'
+          'ci.fam_status, ci.sex, ci.adrs_state, '
+          'ci.birth_state, ci.fakt_adress,'
+          'ci.child_info, ci.doc_type, '
+          'ci.passpin, ci.citizenship, '
+          'ci.passexpire,'
+          'ci.reg_zip, ci.doc_country, '
+          'ci.citizenship2, ci.citizenship3, '
+          'ci.fakt_country,'
+          'ci.fakt_city, ci.fakt_zip, '
+          'ci.work_place, ci.work_post, '
+          'ci.work_adress,'
+          'ci.work_phone, '
+          'ci.tph_contact_type '
+          'as ci_tph_contact_type,'
+          'ci.tph_country, '
+          'ci.tph_country_code, ci.tph_city, '
+          'ci.tph_state as ci_tph_state,'
+          'ci.tph_zip as ci_tph_zip, '
+          'ci.tph_country_prefix as '
+          'ci_tph_country_prefix,'
+          'ci.tph_adress, '
+          'ci.tph_communication_type as '
+          'ci_tph_communication_type,'
+          'ci.tph_number as ci_tph_number, '
+          'ci.tph_extension as '
+          'ci_tph_extension,'
+          'ci.contact_type, ci.cuinfaml, '
+          'ci.risk_categ as ci_risk_categ ,'
+          'ci.work_adrs_spec, '
+          'ci.work_strnumb, ci.work_city,'
+          'ci.work_state, ci.work_zip, '
+          'ci.work_cntr, ci.work_phone_spec,'
+          'ci.work_phconttype, '
+          'ci.work_phoppref, ci.work_phext, '
+          'ci.work_phcode,'
+          ''
+          '(select name from user$ where '
+          'id=c.op_id) as USER_NAME,'
+          '  (select filialid from sba_objinf '
+          'where obj=(select name from user$ '
+          'where id=c.op_id)) filial_id,'
+          '  (select name from filial_t where '
+          'id=(select filialid from sba_objinf '
+          'where obj=(select name from user$ '
+          'where id=c.op_id))) filial_name'
+          '  '
+          'from Customers c, custinfo ci'
+          'where c.id=ci.idcust and')
+        TabOrder = 2
+        Visible = False
+      end
+    end
+    object AccPageControl: TPageControl
+      Left = 1
+      Top = 190
+      Width = 232
+      Height = 161
+      ActivePage = AccAdtPage
+      Align = alTop
+      TabOrder = 2
+      object AccMainPage: TTabSheet
+        Caption = #1065#1077#1089#1072#1073#1083#1072#1088
+        object Label2: TLabel
+          Left = 5
+          Top = 9
+          Width = 46
+          Height = 15
+          Caption = #1042#1072#1083#1081#1091#1090#1072
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -12
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = []
+          ParentFont = False
+        end
+        object LabelCountAcc: TLabel
+          Left = 196
+          Top = -1
+          Width = 18
+          Height = 14
+          Alignment = taRightJustify
+          Caption = '000'
+        end
+        object Label6: TLabel
+          Left = 8
+          Top = 70
+          Width = 48
+          Height = 14
+          Caption = #1040#1093#1090#1072#1088#1099#1096
+        end
+        object AccExcel: TSpeedButton
+          Left = 197
+          Top = 108
+          Width = 24
+          Height = 23
+          Hint = 'Excel'
+          Glyph.Data = {
+            7E010000424D7E01000000000000760000002800000016000000160000000100
+            0400000000000801000000000000000000001000000000000000000000000000
+            8000008000000080800080000000800080008080000080808000C0C0C0000000
+            FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00727272727272
+            72727272720027272727272727272727270072FFFFFFFFFFFFFFFFFF720027FF
+            FFFFFFFFFFFFFFFF270072FFFFFFFFFFFFFFFFFF720027FFFFFFFFFFF727272F
+            270072F2727272727F72727F720027F727272727F72727FF270072FF7272727F
+            72727FFF720027FFF72727F7272727FF270072FFFF727F72727272FF720027FF
+            FFF7F72727FFFFFF270072FFFF2F7272727FFFFF720027FFF2F727272727FFFF
+            270072FF2F72727272727FFF720027F7F72727F7272727FF270072F272727FFF
+            727272FF720027FFFFFFFFFFFFFFFFFF270072FFFFFFFFFFFFFFFFFF720027FF
+            FFFFFFFFFFFFFFFF270072727272727272727272720027272727272727272727
+            2700}
+          ParentShowHint = False
+          ShowHint = True
+          OnClick = AccExcelClick
+        end
+        object SearchCAvaluteAcc: TSearchCombo
+          Left = 47
+          Top = 12
+          Width = 174
+          Height = 22
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -12
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 0
+          OnChange = SearchCAvaluteAccChange
+          DataSource = DataSourceAvalute
+          ViewField = 'VALU_NAME'
+          DefaultString = 'B'#252't'#252'n valyutalar'
+          DefaultStringUse = True
+          DefaultStringColor = clWindowText
+        end
+        object LocAccNum: TEdit
+          Left = 6
+          Top = 83
+          Width = 90
+          Height = 22
+          TabOrder = 1
+          OnChange = LocAccNumChange
+          OnExit = LocAccNumExit
+        end
+        object LocAccName: TEdit
+          Left = 99
+          Top = 83
+          Width = 123
+          Height = 22
+          CharCase = ecUpperCase
+          TabOrder = 2
+          OnChange = LocAccNameChange
+          OnExit = LocAccNameExit
+          OnKeyPress = LocAccNameKeyPress
+        end
+        object GBoxOpenFilterAcc: TGroupBox
+          Left = 6
+          Top = 37
+          Width = 215
+          Height = 32
+          TabOrder = 3
+          object CBoxOpenAccs: TCheckBox
+            Left = 8
+            Top = 9
+            Width = 92
+            Height = 16
+            Caption = #1040#1095#1099#1075' '#1097#1077#1089#1072#1073#1083#1072#1088
+            Checked = True
+            State = cbChecked
+            TabOrder = 0
+            OnClick = SearchCAvaluteAccChange
+          end
+          object CBoxCloseAccs: TCheckBox
+            Left = 107
+            Top = 10
+            Width = 95
+            Height = 16
+            Caption = #1041#1072#1100#1083#1099' '#1097#1077#1089#1072#1073#1083#1072#1088
+            TabOrder = 1
+            OnClick = SearchCAvaluteAccChange
+          end
+        end
+      end
+      object AccAdtPage: TTabSheet
+        Caption = #1071#1083#1072#1074#1103
+        ImageIndex = 1
+        object GBoxOstatValAcc: TGroupBox
+          Left = 125
+          Top = 3
+          Width = 93
+          Height = 57
+          TabOrder = 0
+          object RBtnOstatAZM: TRadioButton
+            Left = 9
+            Top = 16
+            Width = 58
+            Height = 13
+            Caption = #1052#1072#1085#1072#1090
+            Checked = True
+            TabOrder = 0
+            TabStop = True
+          end
+          object RBtnOstatValute: TRadioButton
+            Left = 9
+            Top = 36
+            Width = 59
+            Height = 12
+            Caption = 'Valyuta'
+            TabOrder = 1
+          end
+        end
+        object GBoxOstatSumAcc: TGroupBox
+          Left = 3
+          Top = 3
+          Width = 126
+          Height = 57
+          Caption = #1043#1072#1083#1099#1075
+          TabOrder = 1
+          object Label7: TLabel
+            Left = 9
+            Top = 18
+            Width = 23
+            Height = 14
+            Caption = #1052#1080#1085'.'
+          end
+          object Label8: TLabel
+            Left = 9
+            Top = 41
+            Width = 22
+            Height = 14
+            Caption = #1052#1072#1082'.'
+          end
+          object EditOstatMin: TEdit
+            Left = 36
+            Top = 10
+            Width = 87
+            Height = 22
+            TabOrder = 0
+            OnKeyPress = EditOstatMinKeyPress
+          end
+          object EditOstatMax: TEdit
+            Left = 36
+            Top = 32
+            Width = 87
+            Height = 22
+            TabOrder = 1
+            OnKeyPress = EditOstatMinKeyPress
+          end
+        end
+        object GBoxAccCBDates: TGroupBox
+          Left = 3
+          Top = 60
+          Width = 126
+          Height = 71
+          Caption = #1058#1072#1088#1080#1093
+          TabOrder = 2
+          object BegDateAcc: TDateTimePicker
+            Left = 31
+            Top = 17
+            Width = 92
+            Height = 21
+            Date = 32874.657739247700000000
+            Time = 32874.657739247700000000
+            TabOrder = 0
+            OnChange = SearchCAvaluteAccChange
+          end
+          object EndDateAcc: TDateTimePicker
+            Left = 31
+            Top = 43
+            Width = 92
+            Height = 21
+            Date = 38062.657803576400000000
+            Time = 38062.657803576400000000
+            TabOrder = 1
+            OnChange = SearchCAvaluteAccChange
+          end
+        end
+        object RGrAccDates: TRadioGroup
+          Left = 125
+          Top = 60
+          Width = 93
+          Height = 71
+          ItemIndex = 0
+          Items.Strings = (
+            #1040#1095#1099#1083#1084#1072' '#1090#1072#1088#1080#1093#1080
+            #1041#1072#1100#1083#1072#1085#1084#1072' '#1090'.')
+          TabOrder = 3
+          OnClick = SearchCAvaluteAccChange
+        end
+      end
+      object AccDatePage: TTabSheet
+        Caption = 'Tarix'
+        ImageIndex = 2
+        object Label9: TLabel
+          Left = 4
+          Top = 17
+          Width = 72
+          Height = 14
+          Caption = #1043#1072#1083#1099#1075' '#1090#1072#1088#1080#1093#1080':'
+        end
+        object DTPicker_Archost: TDateTimePicker
+          Left = 72
+          Top = 13
+          Width = 149
+          Height = 21
+          Date = 39584.496018877300000000
+          Time = 39584.496018877300000000
+          TabOrder = 0
+          OnChange = SearchCAvaluteAccChange
+        end
+      end
+    end
+  end
+  object OrDSCustomers: TOracleDataSet
+    SQL.Strings = (
+      
+        'select c.ID, c.Name, c.INN, c.Open_Dat, c.Close_Dat, c.Cust_TYPE' +
+        ', c.op_id,'
+      '       '
+      
+        '       decode(c.nerezident,0,'#39'Q/Rezident'#39',1,'#39'Rezident'#39','#39#39') as ne' +
+        'rezident, '
+      
+        '       (select name from prinad where id=c.prinad_kod) as prinad' +
+        ', '
+      '       c.short_name,'
+      
+        '       (SELECT name FROM qrp_klie where id=c.group_klie) as grou' +
+        'p_klie,'
+      '       (SELECT name FROM vid_sob where id=c.vid_sob) as vid_sob,'
+      
+        '       (SELECT name FROM org_prav where id=c.org_sob) as org_sob' +
+        ','
+      
+        '       (SELECT name FROM sferadey where id=c.sfera_dey) as sfera' +
+        '_dey,'
+      '       (SELECT name FROM otrasli where id=c.otrasl) as otrasl,'
+      
+        '       (SELECT name FROM nalog where id=c.nalog_kod) as nalog_ko' +
+        'd,'
+      '       c.kod_okpro,'
+      
+        '       c.dat_nal, c.dat_ustav, c.bik, c.otv_lico, c.otv_passport' +
+        ','
+      '       c.otv_issued, c.otv_isdate, c.old_inn,'
+      
+        '       (SELECT name FROM categories where id= c.category) as cat' +
+        'egory,'
+      '       c.incorporation_number, c.tph_contact_type,'
+      '       c.tph_communication_type, c.tph_number, c.address_type,'
+      
+        '       c.address, c.city, c.country_code, c.director_id, c.email' +
+        ', c.url,'
+      
+        '       c.incorporation_state, c.incorporation_cntr, c.tph_extens' +
+        'ion,'
+      
+        '       c.tph_zip, c.tph_country_prefix, c.tph_state, c.risk_cate' +
+        'g,'
+      '       '
+      '       ci.soname, '
+      '       ci.name as ci_name,  -- name'
+      '       ci.lastname, ci.birthday,'
+      
+        '       ci.birthplace, ci.passer, ci.paspnum, ci.paspdate, ci.pas' +
+        'pplace,'
+      '       ci.city as ci_city, -- city'
+      '       ci.address as ci_address,  --address'
+      '       ci.workplace, ci.phone_w, ci.phone_h, ci.phone_m,'
+      '       ci.e_mail, '
+      '       ci.url as ci_url,   --url'
+      '       ci.recomendation, ci.garanted,'
+      '       ci.otv_passport as ci_otv_passport, --otv_passport'
+      '       ci.otv_issued as ci_otv_issued, --otv_issued'
+      '       ci.otv_isdate as ci_otv_isdate, --otv_isdate'
+      '       ci.note, ci.work, ci.test, ci.fam_status,'
+      
+        '       ci.sex, ci.adrs_state, ci.birth_state, ci.fakt_adress, ci' +
+        '.child_info,'
+      
+        '       ci.doc_type, ci.passpin, ci.citizenship, ci.passexpire, c' +
+        'i.reg_zip,'
+      
+        '       ci.doc_country, ci.citizenship2, ci.citizenship3, ci.fakt' +
+        '_country,'
+      '       ci.fakt_city, ci.fakt_zip, ci.work_place, ci.work_post,'
+      '       ci.work_adress, ci.work_phone, '
+      
+        '       ci.tph_contact_type as ci_tph_contact_type, --tph_contact' +
+        '_type'
+      '       ci.tph_country,'
+      '       ci.tph_country_code, ci.tph_city, '
+      '       ci.tph_state as ci_tph_state,  -- tph_state'
+      '       ci.tph_zip as ci_tph_zip, --tph_zip'
+      
+        '       ci.tph_country_prefix as ci_tph_country_prefix, --tph_cou' +
+        'ntry_prefix'
+      '       ci.tph_adress, '
+      
+        '       ci.tph_communication_type as ci_tph_communication_type, -' +
+        '-tph_communication_type'
+      '       ci.tph_number as ci_tph_number, --tph_number'
+      '       ci.tph_extension as ci_tph_extension, --tph_extension'
+      '       ci.contact_type, ci.cuinfaml,'
+      '       ci.risk_categ as ci_risk_categ , --risk_categ'
+      '       ci.work_adrs_spec, ci.work_strnumb, ci.work_city,'
+      
+        '       ci.work_state, ci.work_zip, ci.work_cntr, ci.work_phone_s' +
+        'pec,'
+      
+        '       ci.work_phconttype, ci.work_phoppref, ci.work_phext, ci.w' +
+        'ork_phcode,'
+      ''
+      ''
+      '(select name from user$ where id=c.op_id) as USER_NAME,'
+      
+        '  (select filialid from sba_objinf where obj=(select name from u' +
+        'ser$ where id=c.op_id)) filial_id,'
+      
+        '  (select name from filial_t where id=(select filialid from sba_' +
+        'objinf where obj=(select name from user$ where id=c.op_id))) fil' +
+        'ial_name'
+      '  '
+      'from Customers c, custinfo ci'
+      'where c.id=ci.idcust'
+      'and c.ID in (select KLI_ID from Account where Filial =0) and'
+      
+        'c.close_dat is null and (c.open_dat between (:BegDate) and (:End' +
+        'Date))'
+      
+        'and (c.name like:pName) and (nvl(c.cust_type,0) in (:P_CUSTTYPE)' +
+        ')'
+      'order by c.ID')
+    ReadBuffer = 10000
+    Optimize = False
+    Variables.Data = {
+      0400000004000000100000003A0042004500470044004100540045000C000000
+      0000000000000000100000003A0045004E00440044004100540045000C000000
+      00000000000000000C0000003A0050004E0041004D0045000500000000000000
+      00000000160000003A0050005F00430055005300540054005900500045000100
+      000008000000302C312C322C330000000000}
+    QBEDefinition.QBEFieldDefs = {
+      05000000760000000400000049004400010000000000080000004E0041004D00
+      45000100000000000600000049004E004E00010000000000100000004F005000
+      45004E005F004400410054000100000000001200000043004C004F0053004500
+      5F004400410054000100000000001200000043005500530054005F0054005900
+      500045000100000000000A0000004F0050005F00490044000100000000001200
+      000055005300450052005F004E0041004D004500010000000000160000004600
+      49004C00490041004C005F004E0041004D004500010000000000120000004600
+      49004C00490041004C005F0049004400010000000000140000004E0045005200
+      45005A004900440045004E00540001000000000014000000530048004F005200
+      54005F004E0041004D00450001000000000014000000470052004F0055005000
+      5F004B004C00490045000100000000000E0000005600490044005F0053004F00
+      42000100000000000E0000004F00520047005F0053004F004200010000000000
+      12000000530046004500520041005F004400450059000100000000000C000000
+      4F0054005200410053004C00010000000000120000004E0041004C004F004700
+      5F004B004F004400010000000000120000004B004F0044005F004F004B005000
+      52004F000100000000000E0000004400410054005F004E0041004C0001000000
+      0000120000004400410054005F00550053005400410056000100000000000600
+      0000420049004B00010000000000100000004F00540056005F004C0049004300
+      4F00010000000000180000004F00540056005F00500041005300530050004F00
+      52005400010000000000140000004F00540056005F0049005300530055004500
+      4400010000000000140000004F00540056005F00490053004400410054004500
+      0100000000000E0000004F004C0044005F0049004E004E000100000000001000
+      0000430041005400450047004F00520059000100000000002800000049004E00
+      43004F00520050004F0052004100540049004F004E005F004E0055004D004200
+      45005200010000000000200000005400500048005F0043004F004E0054004100
+      430054005F0054005900500045000100000000002C0000005400500048005F00
+      43004F004D004D0055004E00490043004100540049004F004E005F0054005900
+      50004500010000000000140000005400500048005F004E0055004D0042004500
+      52000100000000001800000041004400440052004500530053005F0054005900
+      500045000100000000000E000000410044004400520045005300530001000000
+      00000800000043004900540059000100000000001800000043004F0055004E00
+      5400520059005F0043004F004400450001000000000016000000440049005200
+      4500430054004F0052005F00490044000100000000000A00000045004D004100
+      49004C0001000000000006000000550052004C00010000000000260000004900
+      4E0043004F00520050004F0052004100540049004F004E005F00530054004100
+      540045000100000000002400000049004E0043004F00520050004F0052004100
+      540049004F004E005F0043004E00540052000100000000001A00000054005000
+      48005F0045005800540045004E00530049004F004E000100000000000E000000
+      5400500048005F005A0049005000010000000000240000005400500048005F00
+      43004F0055004E005400520059005F0050005200450046004900580001000000
+      0000120000005400500048005F00530054004100540045000100000000001400
+      00005200490053004B005F00430041005400450047000100000000000C000000
+      53004F004E0041004D0045000100000000000E000000430049005F004E004100
+      4D004500010000000000100000004C004100530054004E0041004D0045000100
+      0000000010000000420049005200540048004400410059000100000000001400
+      00004200490052005400480050004C004100430045000100000000000C000000
+      5000410053005300450052000100000000000E00000050004100530050004E00
+      55004D0001000000000010000000500041005300500044004100540045000100
+      0000000012000000500041005300500050004C00410043004500010000000000
+      0E000000430049005F0043004900540059000100000000001400000043004900
+      5F0041004400440052004500530053000100000000001200000057004F005200
+      4B0050004C004100430045000100000000000E000000500048004F004E004500
+      5F0057000100000000000E000000500048004F004E0045005F00480001000000
+      00000E000000500048004F004E0045005F004D000100000000000C0000004500
+      5F004D00410049004C000100000000000C000000430049005F00550052004C00
+      0100000000001A0000005200450043004F004D0045004E004400410054004900
+      4F004E000100000000001000000047004100520041004E005400450044000100
+      000000001E000000430049005F004F00540056005F0050004100530053005000
+      4F00520054000100000000001A000000430049005F004F00540056005F004900
+      530053005500450044000100000000001A000000430049005F004F0054005600
+      5F00490053004400410054004500010000000000080000004E004F0054004500
+      0100000000000800000057004F0052004B000100000000000800000054004500
+      5300540001000000000014000000460041004D005F0053005400410054005500
+      5300010000000000060000005300450058000100000000001400000041004400
+      520053005F005300540041005400450001000000000016000000420049005200
+      540048005F005300540041005400450001000000000016000000460041004B00
+      54005F0041004400520045005300530001000000000014000000430048004900
+      4C0044005F0049004E0046004F000100000000001000000044004F0043005F00
+      54005900500045000100000000000E0000005000410053005300500049004E00
+      0100000000001600000043004900540049005A0045004E005300480049005000
+      0100000000001400000050004100530053004500580050004900520045000100
+      000000000E0000005200450047005F005A004900500001000000000016000000
+      44004F0043005F0043004F0055004E0054005200590001000000000018000000
+      43004900540049005A0045004E00530048004900500032000100000000001800
+      000043004900540049005A0045004E0053004800490050003300010000000000
+      18000000460041004B0054005F0043004F0055004E0054005200590001000000
+      000012000000460041004B0054005F0043004900540059000100000000001000
+      0000460041004B0054005F005A00490050000100000000001400000057004F00
+      52004B005F0050004C004100430045000100000000001200000057004F005200
+      4B005F0050004F00530054000100000000001600000057004F0052004B005F00
+      4100440052004500530053000100000000001400000057004F0052004B005F00
+      500048004F004E00450001000000000026000000430049005F00540050004800
+      5F0043004F004E0054004100430054005F005400590050004500010000000000
+      160000005400500048005F0043004F0055004E00540052005900010000000000
+      200000005400500048005F0043004F0055004E005400520059005F0043004F00
+      44004500010000000000100000005400500048005F0043004900540059000100
+      0000000018000000430049005F005400500048005F0053005400410054004500
+      01000000000014000000430049005F005400500048005F005A00490050000100
+      000000002A000000430049005F005400500048005F0043004F0055004E005400
+      520059005F005000520045004600490058000100000000001400000054005000
+      48005F0041004400520045005300530001000000000032000000430049005F00
+      5400500048005F0043004F004D004D0055004E00490043004100540049004F00
+      4E005F0054005900500045000100000000001A000000430049005F0054005000
+      48005F004E0055004D0042004500520001000000000020000000430049005F00
+      5400500048005F0045005800540045004E00530049004F004E00010000000000
+      1800000043004F004E0054004100430054005F00540059005000450001000000
+      0000100000004300550049004E00460041004D004C000100000000001A000000
+      430049005F005200490053004B005F0043004100540045004700010000000000
+      1C00000057004F0052004B005F0041004400520053005F005300500045004300
+      0100000000001800000057004F0052004B005F005300540052004E0055004D00
+      42000100000000001200000057004F0052004B005F0043004900540059000100
+      000000001400000057004F0052004B005F005300540041005400450001000000
+      00001000000057004F0052004B005F005A004900500001000000000012000000
+      57004F0052004B005F0043004E00540052000100000000001E00000057004F00
+      52004B005F00500048004F004E0045005F005300500045004300010000000000
+      1E00000057004F0052004B005F005000480043004F004E005400540059005000
+      45000100000000001A00000057004F0052004B005F00500048004F0050005000
+      5200450046000100000000001400000057004F0052004B005F00500048004500
+      580054000100000000001600000057004F0052004B005F005000480043004F00
+      440045000100000000000C0000005000520049004E0041004400010000000000}
+    QueryAllRecords = False
+    Session = sboapiDataModule.SBSession
+    BeforeOpen = OrDSCustomersBeforeOpen
+    AfterOpen = OrDSCustomersAfterOpen
+    AfterScroll = OrDSCustomersAfterScroll
+    OnCalcFields = OrDSCustomersCalcFields
+    AfterRefresh = OrDSCustomersAfterRefresh
+    Left = 301
+    Top = 98
+    object OrDSCustomersID: TIntegerField
+      DisplayLabel = #8470
+      FieldName = 'ID'
+      Required = True
+    end
+    object OrDSCustomersNAME: TWideStringField
+      DisplayLabel = 'M'#252#351't'#601'ri'
+      FieldName = 'NAME'
+      Size = 90
+    end
+    object OrDSCustomersINN: TWideStringField
+      DisplayLabel = 'V'#214'EN'
+      FieldName = 'INN'
+    end
+    object OrDSCustomersOPEN_DAT: TDateTimeField
+      DisplayLabel = #1040#1095#1099#1083#1084#1072' '#1090#1072#1088#1080#1093#1080
+      FieldName = 'OPEN_DAT'
+    end
+    object OrDSCustomersCLOSE_DAT: TDateTimeField
+      DisplayLabel = #1041#1072#1100#1083#1072#1085#1084#1072' '#1090#1072#1088#1080#1093#1080
+      FieldName = 'CLOSE_DAT'
+    end
+    object OrDSCustomersCUST_TYPE_NAME: TWideStringField
+      DisplayLabel = 'M'#252#351't'#601'rinin tipi'
+      FieldKind = fkCalculated
+      FieldName = 'CUST_TYPE_NAME'
+      Size = 30
+      Calculated = True
+    end
+    object OrDSCustomersCUST_TYPE: TIntegerField
+      FieldName = 'CUST_TYPE'
+      Visible = False
+    end
+    object OrDSCustomersOP_ID: TFloatField
+      FieldName = 'OP_ID'
+      Visible = False
+    end
+    object OrDSCustomersUSER_NAME: TWideStringField
+      DisplayLabel = #304'stifad'#601#231'inin ad'#305
+      FieldName = 'USER_NAME'
+      Size = 30
+    end
+    object OrDSCustomersFILIAL_ID: TFloatField
+      FieldName = 'FILIAL_ID'
+      Visible = False
+    end
+    object OrDSCustomersFILIAL_NAME: TWideStringField
+      DisplayLabel = 'M'#252#351't'#601'rinin Filial'#305
+      FieldName = 'FILIAL_NAME'
+      Size = 90
+    end
+    object OrDSCustomersNEREZIDENT: TWideStringField
+      DisplayLabel = 'Rezidentliyi'
+      FieldName = 'NEREZIDENT'
+      Size = 30
+    end
+    object OrDSCustomersPRINAD: TWideStringField
+      DisplayLabel = 'M'#601'nsubiyy'#601'ti'
+      FieldName = 'PRINAD'
+      Size = 360
+    end
+    object OrDSCustomersSHORT_NAME: TWideStringField
+      DisplayLabel = 'Q'#305'sa ad'#305
+      FieldName = 'SHORT_NAME'
+      Size = 360
+    end
+    object OrDSCustomersGROUP_KLIE: TWideStringField
+      DisplayLabel = 'Qrupu'
+      FieldName = 'GROUP_KLIE'
+      Size = 360
+    end
+    object OrDSCustomersVID_SOB: TWideStringField
+      DisplayLabel = 'M'#252'lkiyy'#601't n'#246'v'#252
+      FieldName = 'VID_SOB'
+      Size = 480
+    end
+    object OrDSCustomersORG_SOB: TWideStringField
+      DisplayLabel = 'T'#601#351'kilat formas'#305
+      FieldName = 'ORG_SOB'
+      Size = 240
+    end
+    object OrDSCustomersSFERA_DEY: TWideStringField
+      DisplayLabel = 'F'#601'aliyy'#601't sah'#601'si'
+      FieldName = 'SFERA_DEY'
+      Size = 360
+    end
+    object OrDSCustomersOTRASL: TWideStringField
+      DisplayLabel = 'Sah'#601
+      FieldName = 'OTRASL'
+      Size = 360
+    end
+    object OrDSCustomersNALOG_KOD: TWideStringField
+      DisplayLabel = 'Vergi m'#252'f'#601'tti'#351'liyi'
+      FieldName = 'NALOG_KOD'
+      Size = 360
+    end
+    object OrDSCustomersDAT_NAL: TDateTimeField
+      DisplayLabel = 'DVM-d'#601' qeyd'#601' al'#305'nd'#305#287#305' tarix'
+      FieldName = 'DAT_NAL'
+    end
+    object OrDSCustomersDAT_USTAV: TDateTimeField
+      DisplayLabel = 'Nizamnam'#601'si qeyd'#601' al'#305'nd'#305#287#305' tarix'
+      FieldName = 'DAT_USTAV'
+    end
+    object OrDSCustomersBIK: TWideStringField
+      FieldName = 'BIK'
+      Size = 56
+    end
+    object OrDSCustomersCATEGORY: TWideStringField
+      DisplayLabel = 'Kateqoriyas'#305
+      FieldName = 'CATEGORY'
+      Size = 320
+    end
+    object OrDSCustomersINCORPORATION_NUMBER: TWideStringField
+      DisplayLabel = 'D'#246'vl'#601't qeydiyyat n'#246'mr'#601'si'
+      FieldName = 'INCORPORATION_NUMBER'
+      Size = 80
+    end
+  end
+  object DataSourceCustomers: TDataSource
+    DataSet = OrDSCustomers
+    Left = 325
+    Top = 154
+  end
+  object OrDSDates: TOracleDataSet
+    SQL.Strings = (
+      'Select min(C.open_dat) as CMinDate,max(C.open_dat) as CMaxDate,'
+      
+        '          min(A.open_dat) as AMinDate,max(A.open_dat) as AMaxDat' +
+        'e'
+      'From Customers C, Account A')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 752
+    Top = 176
+    object OrDSDatesCMINDATE: TDateTimeField
+      FieldName = 'CMINDATE'
+    end
+    object OrDSDatesCMAXDATE: TDateTimeField
+      FieldName = 'CMAXDATE'
+    end
+    object OrDSDatesAMINDATE: TDateTimeField
+      FieldName = 'AMINDATE'
+    end
+    object OrDSDatesAMAXDATE: TDateTimeField
+      FieldName = 'AMAXDATE'
+    end
+  end
+  object OrDSAccount: TOracleDataSet
+    SQL.Strings = (
+      
+        'select ac.id,ac.ACC_NO,ac.Name,val.Val_Name,ac.Open_Dat,ac.Close' +
+        '_Dat,'
+      
+        '       ac.Kli_ID,abs(ten.Ostat),abs(ten.Pok_Ostat), ten.datdate ' +
+        'as Tarix,'
+      
+        '       ac.tipacc as symbol, f.Name as Filial, cu.name as cust_na' +
+        'me,ac.bal_cn1,cu.inn as cust_voen,ct.name as cust_type'
+      
+        'from Account ac, Avalute val, ArchOst ten, Filial f, customers c' +
+        'u, cust_types ct'
+      'where ac.kli_ID=1'
+      
+        ' and (ac.open_dat between :BegDate and :EndDate) and ten.datdate' +
+        '=:BalDate'
+      
+        ' and (ac.name like:pName) and f.id=ac.filial and cu.id=ac.kli_id' +
+        ' and ct.id=cu.cust_type'
+      ''
+      ' ')
+    Optimize = False
+    Variables.Data = {
+      0400000004000000100000003A0042004500470044004100540045000C000000
+      0000000000000000100000003A0045004E00440044004100540045000C000000
+      0000000000000000100000003A00420041004C0044004100540045000C000000
+      00000000000000000C0000003A0050004E0041004D0045000500000000000000
+      00000000}
+    QBEDefinition.QBEFieldDefs = {
+      05000000100000000C0000004100430043005F004E004F000100000000000800
+      00004E0041004D00450001000000000010000000560041004C005F004E004100
+      4D004500010000000000100000004F00500045004E005F004400410054000100
+      000000001200000043004C004F00530045005F00440041005400010000000000
+      0C0000004B004C0049005F00490044000100000000001C000000410042005300
+      2800540045004E002E004F005300540041005400290001000000000024000000
+      4100420053002800540045004E002E0050004F004B005F004F00530054004100
+      540029000100000000000C000000530059004D0042004F004C00010000000000
+      0A000000540041005200490058000100000000000C000000460049004C004900
+      41004C0001000000000004000000490044000100000000001200000043005500
+      530054005F004E0041004D004500010000000000120000004300550053005400
+      5F0056004F0045004E000100000000001200000043005500530054005F005400
+      5900500045000100000000000E000000420041004C005F0043004E0031000100
+      00000000}
+    Session = sboapiDataModule.SBSession
+    BeforeOpen = OrDSAccountBeforeOpen
+    AfterOpen = OrDSAccountAfterOpen
+    AfterScroll = OrDSAccountAfterScroll
+    Left = 256
+    Top = 259
+    object OrDSAccountID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object OrDSAccountACC_NO: TWideStringField
+      DisplayLabel = 'Hesab '#8470
+      FieldName = 'ACC_NO'
+      Size = 28
+    end
+    object OrDSAccountNAME: TWideStringField
+      DisplayLabel = 'Hesab'#305'n ad'#305
+      FieldName = 'NAME'
+      Size = 90
+    end
+    object OrDSAccountVAL_NAME: TWideStringField
+      DisplayLabel = '$'
+      FieldName = 'VAL_NAME'
+      Size = 10
+    end
+    object OrDSAccountOPEN_DAT: TDateTimeField
+      DisplayLabel = 'A'#231#305'lma tarixi'
+      FieldName = 'OPEN_DAT'
+    end
+    object OrDSAccountCLOSE_DAT: TDateTimeField
+      DisplayLabel = 'Ba'#287'lanma tarixi'
+      FieldName = 'CLOSE_DAT'
+    end
+    object OrDSAccountABSTENOSTAT: TFloatField
+      DisplayLabel = 'Qal'#305'q (val.)'
+      FieldName = 'ABS(TEN.OSTAT)'
+      DisplayFormat = '#,##0.00'
+    end
+    object OrDSAccountABSTENPOK_OSTAT: TFloatField
+      DisplayLabel = 'Qal'#305'q (man.)'
+      FieldName = 'ABS(TEN.POK_OSTAT)'
+      DisplayFormat = '#,##0.00'
+    end
+    object OrDSAccountTARIX: TDateTimeField
+      DisplayLabel = 'Tarix'
+      FieldName = 'TARIX'
+      Required = True
+    end
+    object OrDSAccountSYMBOL: TWideStringField
+      DisplayLabel = 'Simvol'
+      FieldName = 'SYMBOL'
+    end
+    object OrDSAccountFILIAL: TWideStringField
+      DisplayLabel = 'Hesab'#305'n Filial'#305
+      FieldName = 'FILIAL'
+      Size = 90
+    end
+    object OrDSAccountKLI_ID: TFloatField
+      DisplayLabel = 'M'#252#351't'#601'rinin '#304'D'
+      FieldName = 'KLI_ID'
+    end
+    object OrDSAccountCUST_NAME: TWideStringField
+      DisplayLabel = 'M'#252#351't'#601'rinin ad'#305
+      FieldName = 'CUST_NAME'
+      Size = 360
+    end
+    object OrDSAccountBAL_CN1: TFloatField
+      DisplayLabel = 'Balans hesab'#305
+      FieldName = 'BAL_CN1'
+    end
+    object OrDSAccountCUST_VOEN: TWideStringField
+      DisplayLabel = 'V'#214'EN'
+      FieldName = 'CUST_VOEN'
+      Size = 80
+    end
+    object OrDSAccountCUST_TYPE: TWideStringField
+      DisplayLabel = 'M'#252#351't'#601'rinin tipi'
+      FieldName = 'CUST_TYPE'
+      Size = 120
+    end
+  end
+  object DataSourceAccount: TDataSource
+    DataSet = OrDSAccount
+    Left = 304
+    Top = 307
+  end
+  object OrDSSysDat: TOracleDataSet
+    SQL.Strings = (
+      'select Tek_Dat from SysDat')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 760
+    Top = 466
+    object OrDSSysDatTEK_DAT: TDateTimeField
+      FieldName = 'TEK_DAT'
+    end
+  end
+  object OrDSFilials: TOracleDataSet
+    SQL.Strings = (
+      'select -1 ID, '#39#220'mumi'#39' Name from dual'
+      'union'
+      'select ID, NAME from Filial')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000400000049004400010000000000080000004E0041004D00
+      4500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 72
+    Top = 24
+    object OrDSFilialsID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object OrDSFilialsNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 90
+    end
+  end
+  object DataSourceFilial: TDataSource
+    DataSet = OrDSFilials
+    Left = 136
+  end
+  object OrDSAvalute: TOracleDataSet
+    SQL.Strings = (
+      'select * from Avalute')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000170000000C000000560041004C005500540045000100000000001000
+      0000560041004C005F004E0041004D0045000100000000001200000056004100
+      4C0055005F004E0041004D00450001000000000014000000560041004C005500
+      5F00530048004F00520054000100000000000C0000005500530054004F005200
+      47000100000000000C00000055005300540050004F004B000100000000001000
+      0000560041004C0055005F00470045004E000100000000000E00000056004100
+      4C0055005F0041005A000100000000000A0000005500530049004E0047000100
+      0000000014000000560041004C0055005F004F00540048004500520001000000
+      000014000000560041004C0055005F0049004E00540045005200010000000000
+      12000000560041004C0055005F00420041004C00410001000000000012000000
+      50005200490053005400410056004B0041000100000000000E00000043004F00
+      55004E00540052005900010000000000100000005500530054005F0050004F00
+      4B0031000100000000000E0000004F00460046004900430041004C0001000000
+      00000A0000004C0049004D00490054000100000000000A000000440045004200
+      450054000100000000000C0000004B0052004500440049005400010000000000
+      0C0000004600350035003000310050000100000000000C000000460035003500
+      3000310056000100000000000C00000053004400450042004500540001000000
+      00000E0000005300430052004500440049005400010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 132
+    Top = 206
+    object OrDSAvaluteVALUTE: TIntegerField
+      FieldName = 'VALUTE'
+      Required = True
+    end
+    object OrDSAvaluteVAL_NAME: TWideStringField
+      FieldName = 'VAL_NAME'
+      Size = 10
+    end
+    object OrDSAvaluteVALU_NAME: TWideStringField
+      FieldName = 'VALU_NAME'
+      Size = 25
+    end
+  end
+  object DataSourceAvalute: TDataSource
+    DataSet = OrDSAvalute
+    Left = 172
+    Top = 206
+  end
+  object OrDSDocs: TOracleDataSet
+    SQL.Strings = (
+      'select '
+      
+        ' p.dat,a1.acc_no as Debit,a1.Name as DName,a2.acc_no as Credit,a' +
+        '2.Name as CName,'
+      
+        ' p.ammount,p.lammount,p.ammount_c,p.name, a1.tipacc as d_symbol,' +
+        'a2.tipacc as c_symbol '
+      'from provarch p, account a1, account a2'
+      'where '
+      '    (dat between (:BegDate) and (:EndDate))'
+      
+        '        and (p.debt in (select id from account where acc_no=:Acc' +
+        '_NO)'
+      
+        '      or p.kredit in (select id from account where acc_no=:Acc_N' +
+        'O))'
+      '  and (p.debt=a1.id and p.kredit=a2.id)')
+    Optimize = False
+    Variables.Data = {
+      0400000002000000100000003A0042004500470044004100540045000C000000
+      0000000000000000100000003A0045004E00440044004100540045000C000000
+      0000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000B000000060000004400410054000100000000000A00000044004500
+      4200490054000100000000000C00000043005200450044004900540001000000
+      00000E00000041004D004D004F0055004E005400010000000000100000004C00
+      41004D004D004F0055004E0054000100000000001200000041004D004D004F00
+      55004E0054005F004300010000000000080000004E0041004D00450001000000
+      00001000000044005F00530059004D0042004F004C0001000000000010000000
+      43005F00530059004D0042004F004C000100000000000A00000044004E004100
+      4D0045000100000000000A00000043004E0041004D004500010000000000}
+    Session = sboapiDataModule.SBSession
+    BeforeOpen = OrDSDocsBeforeOpen
+    AfterOpen = OrDSDocsAfterOpen
+    AfterScroll = OrDSDocsAfterScroll
+    Left = 240
+    Top = 457
+    object OrDSDocsDAT: TDateTimeField
+      DisplayLabel = #1058#1072#1088#1080#1093
+      FieldName = 'DAT'
+    end
+    object OrDSDocsDEBIT: TWideStringField
+      DisplayLabel = #1044#1077#1073#1077#1090
+      FieldName = 'DEBIT'
+    end
+    object OrDSDocsDNAME: TWideStringField
+      FieldName = 'DNAME'
+      Size = 1440
+    end
+    object OrDSDocsCREDIT: TWideStringField
+      DisplayLabel = #1050#1088#1077#1076#1080#1090
+      FieldName = 'CREDIT'
+    end
+    object OrDSDocsCNAME: TWideStringField
+      FieldName = 'CNAME'
+      Size = 1440
+    end
+    object OrDSDocsAMMOUNT: TFloatField
+      DisplayLabel = #1044#1077#1073#1077#1090' '#1084#1103#1073#1083#1103#1100
+      FieldName = 'AMMOUNT'
+    end
+    object OrDSDocsAMMOUNT_C: TFloatField
+      DisplayLabel = #1050#1088#1077#1076#1080#1090' '#1084#1103#1073#1083#1103#1100
+      FieldName = 'AMMOUNT_C'
+    end
+    object OrDSDocsLAMMOUNT: TFloatField
+      DisplayLabel = #1052#1072#1085#1072#1090' '#1077#1082#1074'.'
+      FieldName = 'LAMMOUNT'
+    end
+    object OrDSDocsNAME: TWideStringField
+      DisplayLabel = 'T'#601'yinat'
+      FieldName = 'NAME'
+      Size = 255
+    end
+    object OrDSDocsD_SYMBOL: TWideStringField
+      DisplayLabel = 'D. Simvol'
+      FieldName = 'D_SYMBOL'
+    end
+    object OrDSDocsC_SYMBOL: TWideStringField
+      DisplayLabel = 'K. Simvol'
+      FieldName = 'C_SYMBOL'
+    end
+  end
+  object DataSourceDocs: TDataSource
+    DataSet = OrDSDocs
+    Left = 296
+    Top = 457
+  end
+  object ImageList: TImageList
+    Left = 496
+    Top = 40
+    Bitmap = {
+      494C010101000300040010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      0000000000003600000028000000400000001000000001001000000000000008
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000001040104000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000010401042FF7F186310400000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000001040
+      1042FF7FFF7F1042186318631040000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000000000000000000010401863FF7F
+      FF7F104200001040000018631863104000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000FF7FFF7FF67F104018631042
+      2D7F104010401040104000001863186310400000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000F67F1863734EAD3510404A291040
+      10401040E07F1040104010400000186300000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000524AFF7FFF7FF67F727F10401040
+      104010401040E07F004210401040000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000F67F1863734EAD35AD354A291040
+      10401040104010401040E07F0042104000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000524AFF7FFF7FF67F727F727F727F
+      104010401040E07FE07FE07F1040104000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000F67F967FF67FF67FF67F2D7FF75E
+      B556104010401040104010400000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000727FF75EF75E2D7F18631042727F
+      727F727F10401040727F00000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000967F2D7F2D7F2D7F2D7FF75E727F
+      F67F967F727F727F000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000727F727F2D7F2D7F727F727F
+      967FFE7FFF7F0000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000424D3E000000000000003E000000
+      2800000040000000100000000100010000000000800000000000000000000000
+      000000000000000000000000FFFFFF00FFFF000000000000FFCF000000000000
+      FF07000000000000FC03000000000000F0510000000000008008000000000000
+      0005000000000000000300000000000000010000000000000001000000000000
+      0007000000000000000F000000000000001F000000000000803F000000000000
+      FFFF000000000000FFFF00000000000000000000000000000000000000000000
+      000000000000}
+  end
+  object ExcelExporter: TCMExcelExport
+    StyleColumnWidth = cwDefault
+    ColumnWidth = 100
+    FontTitles.Charset = RUSSIAN_CHARSET
+    FontTitles.Color = clWindowText
+    FontTitles.Height = -11
+    FontTitles.Name = 'Tahoma'
+    FontTitles.Style = [fsBold]
+    OrientationTitles = 0
+    FontData.Charset = RUSSIAN_CHARSET
+    FontData.Color = clWindowText
+    FontData.Height = -11
+    FontData.Name = 'Tahoma'
+    FontData.Style = []
+    FontSummary.Charset = RUSSIAN_CHARSET
+    FontSummary.Color = clWindowText
+    FontSummary.Height = -11
+    FontSummary.Name = 'Tahoma'
+    FontSummary.Style = []
+    SummarySelection = ssGiven
+    SummaryCalculation = scSUM
+    Left = 561
+    Top = 76
+  end
+  object CMExcelExport1: TCMExcelExport
+    StyleColumnWidth = cwDefault
+    ColumnWidth = 0
+    FontTitles.Charset = DEFAULT_CHARSET
+    FontTitles.Color = clWindowText
+    FontTitles.Height = -11
+    FontTitles.Name = 'Tahoma'
+    FontTitles.Style = []
+    OrientationTitles = 0
+    FontData.Charset = DEFAULT_CHARSET
+    FontData.Color = clWindowText
+    FontData.Height = -11
+    FontData.Name = 'Tahoma'
+    FontData.Style = []
+    FontSummary.Charset = DEFAULT_CHARSET
+    FontSummary.Color = clWindowText
+    FontSummary.Height = -11
+    FontSummary.Name = 'Tahoma'
+    FontSummary.Style = []
+    SummarySelection = ssNone
+    SummaryCalculation = scSUM
+    Left = 240
+    Top = 136
+  end
+  object OracleDataSet1: TOracleDataSet
+    SQL.Strings = (
+      'select c.ID, c.Name, c.INN,'
+      'c.Open_Dat, c.Close_Dat,'
+      'c.Cust_TYPE, c.op_id,'
+      
+        'decode(c.nerezident,0,'#39'Q/Rezident'#39',1,'#39'Rezident'#39','#39#39') as nereziden' +
+        't,'
+      '('#39'0'#39') as prinad,'
+      'c.short_name,'
+      '('#39'0'#39') as group_klie,'
+      '('#39'0'#39') as vid_sob,'
+      '('#39'0'#39') as org_sob,'
+      ' ('#39'0'#39') as sfera_dey,'
+      '('#39'0'#39') as otrasl,'
+      '('#39'0'#39') as nalog_kod,'
+      ' c.kod_okpro,'
+      'c.dat_nal, c.dat_ustav, c.bik,'
+      'c.otv_lico, c.otv_passport,'
+      'c.otv_issued, c.otv_isdate,'
+      'c.old_inn,'
+      '('#39'0'#39') as category,'
+      'c.incorporation_number,'
+      'c.tph_contact_type,'
+      'c.tph_communication_type,'
+      'c.tph_number, c.address_type,'
+      'c.address, c.city, c.country_code,'
+      'c.director_id,'
+      'c.email, c.url,c.incorporation_state,'
+      'c.incorporation_cntr,'
+      'c.tph_extension, c.tph_zip,'
+      'c.tph_country_prefix, c.tph_state,'
+      'c.risk_categ,'
+      'ci.soname, ci.name as ci_name,'
+      'ci.lastname, ci.birthday,'
+      'ci.birthplace, ci.passer,'
+      'ci.paspnum,'
+      'ci.paspdate,'
+      'ci.paspplace, ci.city as ci_city,'
+      'ci.address as ci_address,'
+      'ci.workplace, ci.phone_w,'
+      'ci.phone_h, ci.phone_m,'
+      'ci.e_mail, ci.url as ci_url,'
+      'ci.recomendation, ci.garanted,'
+      'ci.otv_passport as'
+      'ci_otv_passport, ci.otv_issued as'
+      'ci_otv_issued,'
+      'ci.otv_isdate as ci_otv_isdate,'
+      'ci.note, ci.work, ci.test,'
+      'ci.fam_status, ci.sex, ci.adrs_state,'
+      'ci.birth_state, ci.fakt_adress,'
+      'ci.child_info, ci.doc_type,'
+      'ci.passpin, ci.citizenship,'
+      'ci.passexpire,'
+      'ci.reg_zip, ci.doc_country,'
+      'ci.citizenship2, ci.citizenship3,'
+      'ci.fakt_country,'
+      'ci.fakt_city, ci.fakt_zip,'
+      'ci.work_place, ci.work_post,'
+      'ci.work_adress,'
+      'ci.work_phone,'
+      'ci.tph_contact_type'
+      'as ci_tph_contact_type,'
+      'ci.tph_country,'
+      'ci.tph_country_code, ci.tph_city,'
+      'ci.tph_state as ci_tph_state,'
+      'ci.tph_zip as ci_tph_zip,'
+      'ci.tph_country_prefix as'
+      'ci_tph_country_prefix,'
+      'ci.tph_adress,'
+      'ci.tph_communication_type as'
+      'ci_tph_communication_type,'
+      'ci.tph_number as ci_tph_number,'
+      'ci.tph_extension as'
+      'ci_tph_extension,'
+      'ci.contact_type, ci.cuinfaml,'
+      'ci.risk_categ as ci_risk_categ ,'
+      'ci.work_adrs_spec,'
+      'ci.work_strnumb, ci.work_city,'
+      'ci.work_state, ci.work_zip,'
+      'ci.work_cntr, ci.work_phone_spec,'
+      'ci.work_phconttype,'
+      'ci.work_phoppref, ci.work_phext,'
+      'ci.work_phcode,'
+      ''
+      '('#39'0'#39') as USER_NAME,'
+      '  ('#39'0'#39') filial_id,'
+      '  ('#39'0'#39') filial_name'
+      ''
+      'from Customers c, custinfo ci'
+      'where c.id=ci.idcust')
+    ReadBuffer = 10000
+    Optimize = False
+    ReadOnly = True
+    Session = sboapiDataModule.SBSession
+    Left = 712
+    Top = 80
+  end
+end

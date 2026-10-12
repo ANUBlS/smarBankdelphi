@@ -1,0 +1,166 @@
+unit UDataMod;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, OracleData, Oracle;
+
+type
+  TMedBDataMod = class(TDataModule)
+    ODSMedical: TOracleDataSet;
+    ODSMedicalID: TIntegerField;
+    ODSMedicalEMPNUM: TIntegerField;
+    ODSMedicalGROUPA: TIntegerField;
+    ODSMedicalGROUPACOVERAGE: TWideStringField;
+    ODSMedicalGROUPB: TIntegerField;
+    ODSMedicalGROUPBCOVERAGE: TWideStringField;
+    ODSMedicalGROUPC: TIntegerField;
+    ODSMedicalGROUPCCOVERAGE: TWideStringField;
+    ODSMedicalINSPROGRAM: TWideStringField;
+    ODSMedicalSERV_ID: TIntegerField;
+    ODSMedicalBEGINDATE: TDateTimeField;
+    ODSMedicalENDDATE: TDateTimeField;
+    ODSMedicalEMPS_ID: TWideStringField;
+    ODSMedicalINPATSERV: TIntegerField;
+    ODSMedicalOUTPATSERV: TIntegerField;
+    ODSMedicalEMERAID: TIntegerField;
+    ODSMedicalPRESCDRUGS: TIntegerField;
+    ODSMedicalDENTSERV: TIntegerField;
+    ODSMedicalPROPHYSERV: TIntegerField;
+    ODSMedicalPROPHYINS: TIntegerField;
+    ODSMedicalSANATORIUM: TIntegerField;
+    ODSMedicalCHILDBIRTH: TIntegerField;
+    ODSMedicalPRIVATEDRSERV: TIntegerField;
+    ODSMedicalMEDICALEVAC: TIntegerField;
+    ODSMedicalPROSTINS: TIntegerField;
+    ODSMedicalCHEMORADIOTHERAPY: TIntegerField;
+    ODSMedicalKLI_ID: TIntegerField;
+    ODSCusts: TOracleDataSet;
+    ODSCustsID: TIntegerField;
+    ODSCustsNAME: TWideStringField;
+    ODSCustsADDRESS: TWideStringField;
+    DSCusts: TDataSource;
+    ODSMedServices: TOracleDataSet;
+    ODSMedServicesID: TFloatField;
+    ODSMedServicesNAME: TWideStringField;
+    DSMedServices: TDataSource;
+    ODSEmployees: TOracleDataSet;
+    ODSEmployeesID: TIntegerField;
+    ODSEmployeesMED_ID: TIntegerField;
+    ODSEmployeesNAME: TWideStringField;
+    ODSEmployeesSURNAME: TWideStringField;
+    ODSEmployeesFATHERNAME: TWideStringField;
+    ODSEmployeesDATEOFBIRTH: TDateTimeField;
+    ODSEmployeesOCC_ID: TIntegerField;
+    ODSEmployeesGROUP_: TWideStringField;
+    DSEmployees: TDataSource;
+    ODSOccupation: TOracleDataSet;
+    DSOccupation: TDataSource;
+    ODSEmployeesOCCCombo: TWideStringField;
+    DSMedical: TDataSource;
+    ODSOccupationID: TFloatField;
+    ODSOccupationNAME: TWideStringField;
+    OPCOMMON: TOraclePackage;
+    ODSEmployeesSEX: TWideStringField;
+    ODSMedicalCID: TFloatField;
+    DsSysdat: TOracleDataSet;
+    DsSysdatTEK_DAT: TDateTimeField;
+    DsSysdatPRED_DAT: TDateTimeField;
+    DsSysdatARC_DAY: TDateTimeField;
+    DsSysdatCLOSE: TIntegerField;
+    DSRAgent: TDataSource;
+    DSAgent: TOracleDataSet;
+    DSAgentID: TFloatField;
+    DSAgentNAME: TWideStringField;
+    DSContract: TOracleDataSet;
+    DSRContract: TDataSource;
+    DSContractID: TFloatField;
+    DSContractTYPE_ID: TFloatField;
+    DSContractINS_DATE: TDateTimeField;
+    DSContractBEGIN_DATE: TDateTimeField;
+    DSContractEND_DATE: TDateTimeField;
+    DSContractVALUTE_ID: TFloatField;
+    DSContractAMMOUNT: TFloatField;
+    DSContractCLOSE_PREFIX: TIntegerField;
+    DSContractKLI_ID: TFloatField;
+    DSContractLOANACC_ID: TFloatField;
+    DSContractCURRACC_ID: TFloatField;
+    DSContractPOLICY_NUM: TWideStringField;
+    DSContractINSSUMM: TFloatField;
+    DSContractFRANSHIZ: TFloatField;
+    DSContractTARIFF: TFloatField;
+    DSContractSTATE: TIntegerField;
+    DSContractAGENT_ID: TFloatField;
+    DSContractPNUM: TFloatField;
+    DSContractBEN_ID: TFloatField;
+    DSContractBENEFICIARY: TWideStringField;
+    DSContractCONDITIONS: TWideStringField;
+    DSContractSUGNUM: TWideStringField;
+    DSContractBLANK_ID: TFloatField;
+    Sb_aca: TOraclePackage;
+    DSavalute: TOracleDataSet;
+    DSavaluteVALUTE: TIntegerField;
+    DSavaluteVAL_NAME: TWideStringField;
+    DSavaluteVALU_NAME: TWideStringField;
+    DSavaluteVALU_SHORT: TWideStringField;
+    DSRavalute: TDataSource;
+    DSRins_med_suggestion: TDataSource;
+    DSins_med_suggestion: TOracleDataSet;
+    DSins_med_suggestionID: TFloatField;
+    DSins_med_suggestionMED_ID: TFloatField;
+    DSins_med_suggestionINSURANCETIME: TFloatField;
+    DSins_med_suggestionENDDATE: TDateTimeField;
+    DSins_med_suggestionITSPEC: TWideStringField;
+    DSins_med_suggestionINSSUM: TFloatField;
+    DSins_med_suggestionINSAMMOUNTEVERYONE: TFloatField;
+    DSins_med_suggestionINSAMMOUNTALL: TFloatField;
+    DSins_med_suggestionINSSUMTEVERYONE: TFloatField;
+    procedure ODSEmployeesAfterInsert(DataSet: TDataSet);
+    procedure DataModuleCreate(Sender: TObject);
+    procedure DSContractAfterInsert(DataSet: TDataSet);
+    procedure DataModuleDestroy(Sender: TObject);
+  private
+    { Private declarations }
+  public
+  end;
+
+var
+  MedBDataMod: TMedBDataMod;
+
+implementation
+uses sboapiDataModuleImpl;
+{$R *.DFM}
+
+procedure TMedBDataMod.DataModuleDestroy(Sender: TObject);
+begin
+
+   ODSCusts.close;
+   ODSMedServices.close;
+   DSavalute.close;
+end;
+
+procedure TMedBDataMod.DSContractAfterInsert(DataSet: TDataSet);
+begin
+   DSContract.FieldByName('type_id').AsInteger:=2;
+end;
+
+procedure TMedBDataMod.ODSEmployeesAfterInsert(DataSet: TDataSet);
+begin
+   with DataSet do
+   begin
+     FieldByName('MED_ID').AsFloat := ODSMedicalID.Value;
+   end;
+
+   //showmessage(MedBDataMod.ODSEmployees.FieldByName('MED_ID').AsString);
+
+end;
+
+procedure TMedBDataMod.DataModuleCreate(Sender: TObject);
+begin
+   ODSCusts.Open;
+   ODSMedServices.Open;
+   DSavalute.Open;
+end;
+
+end.

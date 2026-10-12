@@ -1,0 +1,63 @@
+object Checkinacc: TCheckinacc
+  Left = 0
+  Top = 0
+  Caption = 'Checking_acc'
+  ClientHeight = 125
+  ClientWidth = 226
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poMainFormCenter
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Label1: TLabel
+    Left = 8
+    Top = 8
+    Width = 39
+    Height = 13
+    Caption = 'Account'
+  end
+  object Label2: TLabel
+    Left = 8
+    Top = 51
+    Width = 27
+    Height = 13
+    Caption = 'Name'
+  end
+  object Edit1: TEdit
+    Left = 1
+    Top = 24
+    Width = 217
+    Height = 21
+    TabOrder = 0
+  end
+  object Edit2: TEdit
+    Left = 0
+    Top = 70
+    Width = 217
+    Height = 21
+    TabOrder = 1
+  end
+  object Button1: TButton
+    Left = 56
+    Top = 97
+    Width = 75
+    Height = 25
+    Caption = 'Yoxla'
+    TabOrder = 2
+    OnClick = Button1Click
+  end
+  object Edit3: TEdit
+    Left = 97
+    Top = -3
+    Width = 121
+    Height = 21
+    TabOrder = 3
+    Text = 'Edit3'
+    Visible = False
+  end
+end

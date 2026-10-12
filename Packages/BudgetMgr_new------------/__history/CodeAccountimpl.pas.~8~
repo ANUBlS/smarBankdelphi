@@ -1,0 +1,87 @@
+﻿unit CodeAccountimpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ExtCtrls, DBCtrls, Grids, DBGrids, StdCtrls, Buttons, CMExcelExport;
+
+type
+  TCodeAccountFrm = class(TForm)
+    DBGrid1: TDBGrid;
+    DBNavigator1: TDBNavigator;
+    DBGrid2: TDBGrid;
+    BitBtn1: TBitBtn;
+    BitBtn2: TBitBtn;
+    BitBtn3: TBitBtn;
+    BitBtn4: TBitBtn;
+    ExcelExport: TCMExcelExport;
+    procedure FormCanResize(Sender: TObject; var NewWidth, NewHeight: Integer;
+      var Resize: Boolean);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure BitBtn1Click(Sender: TObject);
+    procedure BitBtn2Click(Sender: TObject);
+    procedure BitBtn4Click(Sender: TObject);
+    procedure BitBtn3Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  CodeAccountFrm: TCodeAccountFrm;
+
+implementation
+
+{$R *.dfm}
+ uses DmBudcetImpl , BalanceImpl, SettingCodeImpl;
+procedure TCodeAccountFrm.BitBtn1Click(Sender: TObject);
+begin
+    if not Assigned(SettingCodeFrm) then
+      SettingCodeFrm:= TSettingCodeFrm.Create(application);
+  SettingCodeFrm.ShowModal ;
+end;
+
+procedure TCodeAccountFrm.BitBtn2Click(Sender: TObject);
+begin
+if MessageDlg('Silinməsinə !'#13' Əminsinizmi?',
+    mtWarning, [mbYes, mbCancel], 0)= mrYes then
+DmBudcet.DataSource5.DataSet.Delete;
+end;
+
+procedure TCodeAccountFrm.BitBtn3Click(Sender: TObject);
+begin
+with DmBudcet.CodeExcelSet do
+begin
+if Active then  close   ;
+open;
+   with ExcelExport do
+   begin
+     Connect;
+      ExportDataset(DmBudcet.CodeExcelSet ,'Maddələrə bağlı hesablar',True,True);
+
+     Disconnect;
+   end;
+end;
+
+end;
+
+procedure TCodeAccountFrm.BitBtn4Click(Sender: TObject);
+begin
+close
+end;
+
+procedure TCodeAccountFrm.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+resize:=false
+end;
+
+procedure TCodeAccountFrm.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+  if ORD(Key) = VK_ESCAPE then
+    Close ;
+end;
+
+end.

@@ -1,0 +1,154 @@
+unit setac;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, Grids, DBGrids, Db,OracleData;
+
+type
+  TForm10 = class(TForm)
+    DBGrid1: TDBGrid;
+    Button1: TButton;
+    DataSource1: TDataSource;
+    Edit1: TEdit;
+    Edit2: TEdit;
+    procedure DBGrid1DblClick(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure Edit1Change(Sender: TObject);
+    procedure Edit2Change(Sender: TObject);
+    procedure DBGrid1TitleClick(Column: TColumn);
+    procedure FormCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form10: TForm10;
+
+implementation
+
+uses Unit18, balhs, comp, crdtype, banksettings, filialaccounts, datclose,
+  domesticbank, atmendpos, poscomission, Unit155,SBTranslateProc,sboapiDataModuleImpl;
+
+{$R *.DFM}
+
+procedure TForm10.DBGrid1DblClick(Sender: TObject);
+begin
+if DataMod_CARDS.sazlamalar.FieldByName('id').asinteger=1 then
+Form11.showmodal;
+if DataMod_CARDS.sazlamalar.FieldByName('id').asinteger=2 then
+Form13.showmodal;
+if DataMod_CARDS.sazlamalar.FieldByName('id').asinteger=4 then
+dateclose.showmodal;
+if DataMod_CARDS.sazlamalar.FieldByName('id').asinteger=6 then
+domestic_bank.showmodal;
+if DataMod_CARDS.sazlamalar.FieldByName('id').asinteger=3 then
+Form14.showmodal;
+if DataMod_CARDS.sazlamalar.FieldByName('id').asinteger=7 then
+Bank_Settings.showmodal;
+if DataMod_CARDS.sazlamalar.FieldByName('id').asinteger=5 then
+filial_accounts.showmodal;
+if DataMod_CARDS.sazlamalar.FieldByName('id').asinteger=8 then
+atmpos.showmodal;
+if DataMod_CARDS.sazlamalar.FieldByName('id').AsInteger=9 then
+POS_COMMISION.showmodal;
+if DataMod_CARDS.sazlamalar.FieldByName('id').AsInteger=10 then
+PROVS.showmodal;
+end;
+
+procedure TForm10.Button1Click(Sender: TObject);
+begin
+if DataMod_CARDS.sazlamalar.FieldByName('id').asinteger=1 then
+begin
+Form11:=TForm11.create(self);
+Form11.showmodal;
+end;
+if DataMod_CARDS.sazlamalar.FieldByName('id').asinteger=2 then
+begin
+Form13:=Tform13.create(self);
+Form13.showmodal;
+end;
+if DataMod_CARDS.sazlamalar.FieldByName('id').asinteger=4 then
+begin
+dateclose:=tdateclose.create(self);
+dateclose.showmodal;
+end;
+if DataMod_CARDS.sazlamalar.FieldByName('id').asinteger=6 then
+begin
+domestic_bank:=tdomestic_bank.create(self);
+domestic_bank.showmodal;
+end;
+if DataMod_CARDS.sazlamalar.FieldByName('id').asinteger=3 then
+begin
+Form14:=Tform14.create(self);
+Form14.showmodal;
+end;
+if DataMod_CARDS.sazlamalar.FieldByName('id').asinteger=7 then
+begin
+Bank_Settings:=TBank_Settings.create(self);
+Bank_Settings.showmodal;
+end;
+if DataMod_CARDS.sazlamalar.FieldByName('id').asinteger=5 then
+begin
+filial_accounts:=tfilial_accounts.create(self);
+filial_accounts.showmodal;
+end;
+if DataMod_CARDS.sazlamalar.FieldByName('id').asinteger=8 then
+begin
+atmpos:=tatmpos.create(self);
+atmpos.showmodal;
+end;
+if DataMod_CARDS.sazlamalar.FieldByName('id').AsInteger=9 then
+begin
+POS_COMMISION:=TPOS_COMMISION.create(self);
+POS_COMMISION.showmodal;
+end;
+if DataMod_CARDS.sazlamalar.FieldByName('id').AsInteger=10 then
+PROVS.showmodal;
+
+end;
+
+procedure TForm10.Edit1Change(Sender: TObject);
+begin
+  with DataMod_CARDS.sazlamalar do begin
+   Filter := 'id = '''+edit1.Text+('*')+'''';
+  end;
+end;
+
+procedure TForm10.Edit2Change(Sender: TObject);
+begin
+  with DataMod_CARDS.sazlamalar do begin
+   Filter := 'SAZLAMALAR = '''+edit2.Text+('*')+'''';
+  end;
+end;
+
+procedure TForm10.FormCreate(Sender: TObject);
+begin
+SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TForm10.DBGrid1TitleClick(Column: TColumn);
+var
+   TitleName :string;
+   SortPosition: word;
+begin
+ SortPosition :=100;
+ //OrderedTitle :=Column.FieldName; //H.R. 24.06.2008
+ if (form10.DBGrid1.DataSource.DataSet.IsEmpty) or (Column.FieldName = EmptyStr) then Exit;
+ Screen.Cursor :=crHourGlass;
+ TitleName :=Column.FieldName;
+ with TOracleDataSet(form10.DBGrid1.DataSource.DataSet) do
+  try
+  
+   SortPosition :=SQL.Add('ORDER BY '+ TitleName);
+   Refresh;
+  finally
+   SQL[SortPosition] :=EmptyStr;
+   Screen.Cursor :=crDefault;
+  end;
+end;
+
+end.

@@ -1,0 +1,24 @@
+library SBLogsX;
+
+uses
+  ComServ,
+  SBLogsX_TLB in 'SBLogsX_TLB.pas',
+  SBLogsImpl in 'SBLogsImpl.pas' {SBLogs: TActiveForm} {SBLogs: CoClass},
+  About1 in 'About1.pas' {SBLogsAbout},
+  DMImpl in 'DMImpl.pas' {DataModuleLogs: TDataModule},
+  uHidden in 'uHidden.pas' {fHid};
+
+{$E ocx}
+
+exports
+  DllGetClassObject,
+  DllCanUnloadNow,
+  DllRegisterServer,
+  DllUnregisterServer;
+
+{$R *.TLB}
+
+{$R *.RES}
+
+begin
+end.

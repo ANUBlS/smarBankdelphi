@@ -1,0 +1,120 @@
+unit DataModCableContr;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, OracleData, Oracle;
+
+type
+  TDataModC = class(TDataModule)
+    odsContracts: TOracleDataSet;
+    dsContracts: TDataSource;
+    odsValutes: TOracleDataSet;
+    dsValutes: TDataSource;
+    odsPacks: TOracleDataSet;
+    dsPacks: TDataSource;
+    odsServices: TOracleDataSet;
+    dsServices: TDataSource;
+    odsAccs: TOracleDataSet;
+    dsAccs: TDataSource;
+    odsEngineers: TOracleDataSet;
+    dsEngineers: TDataSource;
+    CABLE: TOraclePackage;
+    odsAbonents: TOracleDataSet;
+    dsAbonents: TDataSource;
+    dsfAbonents: TDataSource;
+    dsfPacks: TDataSource;
+    dsfEngineers: TDataSource;
+    dsfAccs: TDataSource;
+    odsContractsID: TFloatField;
+    odsContractsCONTRACT_NUM: TStringField;
+    odsContractsCARD_NUM: TStringField;
+    odsContractsSIGN_DATE: TDateTimeField;
+    odsContractsABN_ID: TFloatField;
+    odsContractsINST_DATE: TDateTimeField;
+    odsContractsINST_PLACE: TFloatField;
+    odsContractsSERIE: TStringField;
+    odsContractsWORKS_NUM: TStringField;
+    odsContractsRECEIVER_NUM: TFloatField;
+    odsContractsCABLE_LENGTH: TFloatField;
+    odsContractsAMOUNT: TFloatField;
+    odsContractsAMOUNT_EQV: TFloatField;
+    odsContractsCURR_CODE: TFloatField;
+    odsContractsDISCOUNT: TFloatField;
+    odsContractsENG_ID: TFloatField;
+    odsContractsPACK_NUM: TFloatField;
+    odsContractsACC_ID: TFloatField;
+    odsContractsREST: TFloatField;
+    odsContractsREST_EQV: TFloatField;
+    odsContractsABONENT: TStringField;
+    odsContractsACC_NO: TStringField;
+    odsContractsPACKAGENAME: TStringField;
+    odsContractsENGINEER: TStringField;
+    odsContractsVAL_NAME: TStringField;
+    odsContractsINSTPLC: TStringField;
+    odsContractsREST_R: TFloatField;
+    odsContractsLASTCALCDATE: TDateTimeField;
+    odsContractsCALCAG: TFloatField;
+    odsContractsCALCAGS: TStringField;
+    odsContractsDISCOUNT_DESC: TStringField;
+    odsContractsUSNAME: TStringField;
+    odsContractsUPDUSNAME: TStringField;
+    odsContractsUPDDATE: TDateTimeField;
+    odsContractsEXP_DATE: TDateTimeField;
+    odsContractsPRICE: TFloatField;
+    odsContractsLASTMON: TDateTimeField;
+    OrDS_DeletedConts: TOracleDataSet;
+    DS_DeletedConts: TDataSource;
+    procedure DataModuleCreate(Sender: TObject);
+    procedure odsContractsCalcFields(DataSet: TDataSet);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  DataModC: TDataModC;
+
+implementation
+
+uses sboapidatamoduleimpl, CableContractsImpl;
+
+{$R *.DFM}
+     
+function getlastdate(fromdate: TDateTime; amount: Double; monprice: Double): TDate;
+var
+  moncnt: Integer;
+  restamt: Double;
+  lastmon: TDateTime;
+begin
+  try
+  moncnt := StrToInt(FloatToStr(Int(amount/monprice)));
+  restamt := amount - moncnt * monprice;
+  lastmon := IncMonth(fromdate, moncnt);
+  Result := lastmon + Int(restamt/((monprice*12)/365));
+  except
+    result := StrToDate('01.01.1970');
+  end;
+end;
+procedure TDataModC.DataModuleCreate(Sender: TObject);
+var
+ i: Integer;
+begin
+  for i:=0 to componentcount-1 do
+    if (components[i] is toracledataset )and (components[i].tag=1 )then begin
+      (components[i] as toracledataset).open;
+    end;
+end;
+
+procedure TDataModC.odsContractsCalcFields(DataSet: TDataSet);
+begin
+  if odsContractsREST.Value<=0 then odsContractsLASTMON.AsVariant := null
+  else
+  odsContractsLASTMON.Value := getlastdate(odsContractsLASTCALCDATE.Value
+                                          ,odsContractsREST.Value*(100-odsContractsDISCOUNT.Value)/100
+                                          ,odsContractsPRICE.Value)
+end;
+
+end.

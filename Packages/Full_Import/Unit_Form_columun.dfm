@@ -1,0 +1,79 @@
+object Form_column: TForm_column
+  Left = 0
+  Top = 0
+  ClientHeight = 332
+  ClientWidth = 335
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poDesktopCenter
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Panel1: TPanel
+    Left = 0
+    Top = 291
+    Width = 335
+    Height = 41
+    Align = alBottom
+    TabOrder = 0
+    ExplicitWidth = 452
+    object Button1: TButton
+      Left = 32
+      Top = 6
+      Width = 75
+      Height = 25
+      Caption = 'Button1'
+      TabOrder = 0
+      OnClick = Button1Click
+    end
+  end
+  object CheckListBox: TCheckListBox
+    Left = 0
+    Top = 0
+    Width = 335
+    Height = 291
+    Align = alClient
+    ItemHeight = 13
+    TabOrder = 1
+    ExplicitWidth = 452
+  end
+  object Memo1: TMemo
+    Left = 232
+    Top = 8
+    Width = 185
+    Height = 233
+    TabOrder = 2
+  end
+  object OraclePackage1: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'full_import'
+    Left = 88
+    Top = 128
+  end
+  object OracleDataSet1: TOracleDataSet
+    SQL.Strings = (
+      'select rowid,a.*from full_imp a')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000A00000004000000490044000100000000001200000043004E005400
+      52005F004E0041004D0045000100000000001200000043004E00540052005F00
+      43004F004400450001000000000008000000530059004D004200010000000000
+      0A00000041004C004600410031000100000000000A00000041004C0046004100
+      320001000000000014000000500048004F004E0045005F0043004F0044004500
+      01000000000010000000430055005200520045004E0043005900010000000000
+      100000004300550052005F00530059004D0042000100000000000C0000005300
+      59004D0042004F004C00010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 272
+    Top = 80
+  end
+  object DataSource1: TDataSource
+    DataSet = OracleDataSet1
+    Left = 360
+    Top = 88
+  end
+end

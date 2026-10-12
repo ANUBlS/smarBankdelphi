@@ -1,0 +1,101 @@
+unit frmAddProlongationImpl_new;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, NLSDialogs,
+   ComCtrls, StdCtrls, Buttons;
+
+type
+  TfrmAddProlongation_new = class(TForm)
+    BitBtnClose: TBitBtn;
+    BitBtnOk: TBitBtn;
+    GroupBox1: TGroupBox;
+    DTPLast: TDateTimePicker;
+    GroupBox2: TGroupBox;
+    DTPNew: TDateTimePicker;
+    procedure FormCanResize(Sender: TObject; var NewWidth, NewHeight: Integer;
+      var Resize: Boolean);
+    procedure FormCreate(Sender: TObject);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure BitBtnCloseClick(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure BitBtnOkClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  frmAddProlongation_new: TfrmAddProlongation_new;
+
+implementation
+
+{$R *.dfm}
+  uses frmProlongationImpl_new,CommonDeclsImpl_new,SBTranslateProc,sboapiDataModuleimpl;
+procedure TfrmAddProlongation_new.BitBtnCloseClick(Sender: TObject);
+begin
+Close
+end;
+
+procedure TfrmAddProlongation_new.BitBtnOkClick(Sender: TObject);
+const
+  rsInvalidDate = 'Тарихи дцзэцн  дахил един !';
+var
+  CloseDate, ProlongDate : TDateTime;
+  ContractID : Integer;
+
+begin
+
+  ProlongDate := Integer(Trunc(DTPNew.DateTime));
+  CloseDate := frmProlongation_new.DepositInf.FieldByName('CloseDate').AsDateTime;
+  ContractID := Get_SelectedContID;
+
+  if ProlongDate <= CloseDate then
+    MessageDlg(rsInvalidDate, mtWarning, [mbOK],0)
+  else
+  begin
+      with frmProlongation_new,sbcm_prolongation do
+      begin
+      CallProcedure('AddProlongation',[
+       ContractID ,
+       Get_BankDate ,
+       ProlongDate
+      ]);
+
+       prolongations.Refresh;
+       DepositInf.Refresh;
+      end;
+
+      ModalResult := mrOk;
+
+   end;
+
+end;
+
+
+
+procedure TfrmAddProlongation_new.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+Resize := False;
+end;
+
+procedure TfrmAddProlongation_new.FormCreate(Sender: TObject);
+begin
+SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TfrmAddProlongation_new.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+   if Ord(Key) = VK_ESCAPE then close
+end;
+
+procedure TfrmAddProlongation_new.FormShow(Sender: TObject);
+begin
+   DTPNew.DateTime :=  Get_BankDate;
+   DTPLast.DateTime := frmProlongation_new.DepositInf.FieldByName('CloseDate').AsDateTime;
+end;
+
+end.

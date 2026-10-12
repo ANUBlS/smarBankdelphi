@@ -1,0 +1,84 @@
+﻿unit CO_TemplateAddEditUnt;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, ActnList, Buttons, Mask, DBCtrls;
+
+type
+  TCO_TemplAddEditForm = class(TForm)
+    DBEdit1: TDBEdit;
+    DBEdit2: TDBEdit;
+    SBOpenDlg: TSpeedButton;
+    ActionList1: TActionList;
+    ActnAccept: TAction;
+    ActnReject: TAction;
+    Label1: TLabel;
+    Label2: TLabel;
+    Button1: TButton;
+    Button2: TButton;
+    DBEdit3: TDBEdit;
+    procedure ActnAcceptExecute(Sender: TObject);
+    procedure ActnRejectExecute(Sender: TObject);
+    procedure SBOpenDlgClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  CO_TemplAddEditForm: TCO_TemplAddEditForm;
+
+implementation
+
+uses CO_datamod_impl, BookmarkSetup, SBTranslateProc, sboapiDataModuleImpl;
+{$R *.DFM}
+
+procedure TCO_TemplAddEditForm.ActnAcceptExecute(Sender: TObject);
+begin
+  DBEdit3.Text := '0';
+  if (DBEdit1.Text <> '') and (DBEdit2.Text <> '') then
+  begin
+    with CO_DataMod.Templates do
+      Post;
+
+    ModalResult := mrOk;
+   CO_DataMod.Templates.Refresh;
+ end
+  else
+  begin
+    if DBEdit1.Text = '' then
+      ShowMessage('Şablonun adı daxil edilməyib');
+    if DBEdit2.Text = '' then
+      ShowMessage('Şablon faylı daxil edilməyib');
+    with CO_DataMod.Templates do
+      Cancel;
+  end;
+
+end;
+
+procedure TCO_TemplAddEditForm.ActnRejectExecute(Sender: TObject);
+begin
+  with CO_DataMod.Templates do
+    Cancel;
+  ModalResult := mrCancel;
+end;
+
+procedure TCO_TemplAddEditForm.FormCreate(Sender: TObject);
+begin
+  SBTranslateProc.TranslateAllCompForms(Self, sboapiDataModule.OrPack_SL);
+end;
+
+procedure TCO_TemplAddEditForm.SBOpenDlgClick(Sender: TObject);
+begin
+  if CO_BookmarkSetup.OpenDlg.Execute then
+    CO_DataMod.Templates.FieldByName('Path').AsString :=
+      CO_BookmarkSetup.OpenDlg.FileName;
+
+end;
+
+end.

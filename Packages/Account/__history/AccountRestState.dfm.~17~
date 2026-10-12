@@ -1,0 +1,457 @@
+object FormAccountState: TFormAccountState
+  Left = 312
+  Top = 181
+  Caption = 'Account State'
+  ClientHeight = 432
+  ClientWidth = 710
+  Color = clBtnFace
+  Font.Charset = RUSSIAN_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  OnActivate = FormActivate
+  OnCreate = FormCreate
+  OnKeyDown = FormKeyDown
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Panel1: TPanel
+    Left = 0
+    Top = 402
+    Width = 710
+    Height = 30
+    Align = alBottom
+    TabOrder = 0
+    DesignSize = (
+      710
+      30)
+    object SpeedButton1: TSpeedButton
+      Left = 8
+      Top = 4
+      Width = 65
+      Height = 22
+      Caption = 'To ->'
+      Glyph.Data = {
+        36040000424D3604000000000000360000002800000010000000100000000100
+        2000000000000004000000000000000000000000000000000000FF00FF00FF00
+        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF000080
+        0000008000000080000000800000008000000080000000800000008000000080
+        00000080000000800000008000000080000000800000FF00FF00FF00FF000080
+        0000008000000080000000800000008000000080000000800000008000000080
+        00000080000000800000008000000080000000800000FF00FF00FF00FF000080
+        0000FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF000080000000800000FF00FF00FF00FF000080
+        0000FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF000080000000800000FF00FF00FF00FF000080
+        0000FFFFFF000080000000800000008000000080000000800000008000000080
+        00000080000000800000008000000080000000800000FF00FF00FF00FF000080
+        0000FFFFFF000080000000800000008000000080000000800000FFFFFF000080
+        00000080000000800000FFFFFF000080000000800000FF00FF00FF00FF000080
+        0000FFFFFF00FFFFFF00008000000080000000800000FFFFFF00008000000080
+        00000080000000800000FFFFFF000080000000800000FF00FF00FF00FF000080
+        0000FFFFFF00FFFFFF00FFFFFF0000800000FFFFFF0000800000008000000080
+        0000FFFFFF00FFFFFF00FFFFFF000080000000800000FF00FF00FF00FF000080
+        0000FFFFFF00FFFFFF00FFFFFF00FFFFFF000080000000800000008000000080
+        0000FFFFFF00FFFFFF00FFFFFF000080000000800000FF00FF00FF00FF000080
+        0000FFFFFF00FFFFFF00FFFFFF00008000000080000000800000008000000080
+        000000800000FFFFFF00FFFFFF000080000000800000FF00FF00FF00FF000080
+        0000FFFFFF00FFFFFF00008000000080000000800000FFFFFF00008000000080
+        00000080000000800000FFFFFF000080000000800000FF00FF00FF00FF000080
+        0000FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF000080000000800000FF00FF00FF00FF000080
+        0000FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF000080000000800000FF00FF00FF00FF000080
+        0000008000000080000000800000008000000080000000800000008000000080
+        00000080000000800000008000000080000000800000FF00FF00FF00FF00FF00
+        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00}
+      Layout = blGlyphRight
+      OnClick = SpeedButton1Click
+    end
+    object CloseButton: TButton
+      Left = 632
+      Top = 3
+      Width = 75
+      Height = 25
+      Anchors = [akTop, akRight]
+      Caption = '&'#199#305'x'#305#351
+      TabOrder = 0
+      OnClick = CloseButtonClick
+    end
+  end
+  object PageControl1: TPageControl
+    Left = 0
+    Top = 0
+    Width = 710
+    Height = 402
+    ActivePage = TabSheet1
+    Align = alClient
+    TabOrder = 1
+    TabPosition = tpBottom
+    TabStop = False
+    object AccAmountSheet: TTabSheet
+      Caption = 'Hesab'#305'n qal'#305'qlar'#305
+      object DBGridAccState: TDBGrid
+        Left = 0
+        Top = 0
+        Width = 702
+        Height = 376
+        Align = alClient
+        DataSource = AccState
+        DrawingStyle = gdsClassic
+        FixedColor = clActiveCaption
+        TabOrder = 0
+        TitleFont.Charset = RUSSIAN_CHARSET
+        TitleFont.Color = clWindowText
+        TitleFont.Height = -11
+        TitleFont.Name = 'Tahoma'
+        TitleFont.Style = []
+        Columns = <
+          item
+            Color = clSilver
+            Expanded = False
+            FieldName = 'ARCHIVEDATE'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clNavy
+            Font.Height = -11
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = []
+            Title.Color = clNavy
+            Title.Font.Charset = DEFAULT_CHARSET
+            Title.Font.Color = clWhite
+            Title.Font.Height = -11
+            Title.Font.Name = 'Tahoma'
+            Title.Font.Style = []
+            Width = 73
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'AMOUNT'
+            Title.Color = clNavy
+            Title.Font.Charset = DEFAULT_CHARSET
+            Title.Font.Color = clWhite
+            Title.Font.Height = -11
+            Title.Font.Name = 'Tahoma'
+            Title.Font.Style = []
+            Width = 114
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'LAMOUNT'
+            Title.Caption = 'Ekvivalent'
+            Title.Color = clNavy
+            Title.Font.Charset = DEFAULT_CHARSET
+            Title.Font.Color = clWhite
+            Title.Font.Height = -11
+            Title.Font.Name = 'Tahoma'
+            Title.Font.Style = []
+            Width = 110
+            Visible = True
+          end>
+      end
+    end
+    object AccTurnoverSheet: TTabSheet
+      Caption = 'Hesab'#305'n d'#246'vriyy'#601'l'#601'ri'
+      ImageIndex = 1
+      object DBGrid2: TDBGrid
+        Left = 0
+        Top = 0
+        Width = 702
+        Height = 376
+        Align = alClient
+        DataSource = AccState
+        DrawingStyle = gdsClassic
+        FixedColor = clActiveCaption
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 0
+        TitleFont.Charset = DEFAULT_CHARSET
+        TitleFont.Color = clWhite
+        TitleFont.Height = -11
+        TitleFont.Name = 'Azl Sans Serif'
+        TitleFont.Style = []
+        Columns = <
+          item
+            Color = clSilver
+            Expanded = False
+            FieldName = 'ARCHIVEDATE'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clNavy
+            Font.Height = -11
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = []
+            Title.Color = clNavy
+            Title.Font.Charset = DEFAULT_CHARSET
+            Title.Font.Color = clWhite
+            Title.Font.Height = -11
+            Title.Font.Name = 'Tahoma'
+            Title.Font.Style = []
+            Width = 92
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'DEBITTURNOVER'
+            Title.Caption = 'D. d'#246'vriyy'#601
+            Title.Color = clNavy
+            Title.Font.Charset = DEFAULT_CHARSET
+            Title.Font.Color = clWhite
+            Title.Font.Height = -11
+            Title.Font.Name = 'Tahoma'
+            Title.Font.Style = []
+            Width = 85
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'DEBITLTURNOVER'
+            Title.Caption = 'D. d'#246'vriyy'#601' ekv.'
+            Title.Color = clNavy
+            Title.Font.Charset = DEFAULT_CHARSET
+            Title.Font.Color = clWhite
+            Title.Font.Height = -11
+            Title.Font.Name = 'Tahoma'
+            Title.Font.Style = []
+            Width = 85
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'CREDITTURNOVER'
+            Title.Caption = 'K. d'#246'vriyy'#601
+            Title.Color = clNavy
+            Title.Font.Charset = DEFAULT_CHARSET
+            Title.Font.Color = clWhite
+            Title.Font.Height = -11
+            Title.Font.Name = 'Tahoma'
+            Title.Font.Style = []
+            Width = 85
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'CREDITLTURNOVER'
+            Title.Caption = 'K. d'#246'vriyy'#601' ekv.'
+            Title.Color = clNavy
+            Title.Font.Charset = DEFAULT_CHARSET
+            Title.Font.Color = clWhite
+            Title.Font.Height = -11
+            Title.Font.Name = 'Tahoma'
+            Title.Font.Style = []
+            Visible = True
+          end>
+      end
+    end
+    object TabSheet1: TTabSheet
+      Caption = 'Hesab'#305'n qal'#305'q v'#601' d'#246'vriyy'#601'l'#601'ri'
+      ImageIndex = 2
+      object DBGrid1: TDBGrid
+        Left = 0
+        Top = 0
+        Width = 702
+        Height = 376
+        Align = alClient
+        DataSource = AccState
+        DrawingStyle = gdsClassic
+        FixedColor = clActiveCaption
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 0
+        TitleFont.Charset = DEFAULT_CHARSET
+        TitleFont.Color = clWhite
+        TitleFont.Height = -11
+        TitleFont.Name = 'Azl Sans Serif'
+        TitleFont.Style = []
+        Columns = <
+          item
+            Color = clSilver
+            Expanded = False
+            FieldName = 'ARCHIVEDATE'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clNavy
+            Font.Height = -11
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = []
+            Title.Color = clNavy
+            Title.Font.Charset = DEFAULT_CHARSET
+            Title.Font.Color = clWhite
+            Title.Font.Height = -11
+            Title.Font.Name = 'Tahoma'
+            Title.Font.Style = []
+            Width = 92
+            Visible = True
+          end
+          item
+            Color = clWhite
+            Expanded = False
+            FieldName = 'AMOUNT'
+            Title.Color = clNavy
+            Title.Font.Charset = DEFAULT_CHARSET
+            Title.Font.Color = clWhite
+            Title.Font.Height = -11
+            Title.Font.Name = 'Tahoma'
+            Title.Font.Style = []
+            Width = 105
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'LAMOUNT'
+            Title.Caption = 'Qal'#305'q ekv.'
+            Title.Color = clNavy
+            Title.Font.Charset = DEFAULT_CHARSET
+            Title.Font.Color = clWhite
+            Title.Font.Height = -11
+            Title.Font.Name = 'Tahoma'
+            Title.Font.Style = []
+            Width = 100
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'DEBITTURNOVER'
+            Title.Caption = 'D. d'#246'vriyy'#601
+            Title.Color = clNavy
+            Title.Font.Charset = DEFAULT_CHARSET
+            Title.Font.Color = clWhite
+            Title.Font.Height = -11
+            Title.Font.Name = 'Tahoma'
+            Title.Font.Style = []
+            Width = 85
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'DEBITLTURNOVER'
+            Title.Caption = 'D. d'#246'vriyy'#601' ekv.'
+            Title.Color = clNavy
+            Title.Font.Charset = DEFAULT_CHARSET
+            Title.Font.Color = clWhite
+            Title.Font.Height = -11
+            Title.Font.Name = 'Tahoma'
+            Title.Font.Style = []
+            Width = 85
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'CREDITTURNOVER'
+            Title.Caption = 'K. d'#246'vriyy'#601
+            Title.Color = clNavy
+            Title.Font.Charset = DEFAULT_CHARSET
+            Title.Font.Color = clWhite
+            Title.Font.Height = -11
+            Title.Font.Name = 'Tahoma'
+            Title.Font.Style = []
+            Width = 85
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'CREDITLTURNOVER'
+            Title.Caption = 'K. d'#246'vriyy'#601' ekv.'
+            Title.Color = clNavy
+            Title.Font.Charset = DEFAULT_CHARSET
+            Title.Font.Color = clWhite
+            Title.Font.Height = -11
+            Title.Font.Name = 'Tahoma'
+            Title.Font.Style = []
+            Visible = True
+          end>
+      end
+    end
+  end
+  object AccState: TDataSource
+    DataSet = AccStateData
+    Left = 76
+    Top = 96
+  end
+  object AccStateData: TOracleDataSet
+    SQL.Strings = (
+      'begin'
+      
+        'pkg_report.get_account_turnover(p_accid =>:accid,p_result=>:resu' +
+        'lt);'
+      'end;')
+    Optimize = False
+    Variables.Data = {
+      04000000020000000C0000003A00410043004300490044000300000004000000
+      01000000000000000E0000003A0052004500530055004C005400740000000000
+      000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      0500000008000000160000004100520043004800490056004500440041005400
+      45000100000000000A000000410043004300490044000100000000001A000000
+      440045004200490054005400550052004E004F00560045005200010000000000
+      1C000000440045004200490054004C005400550052004E004F00560045005200
+      0100000000001C0000004300520045004400490054005400550052004E004F00
+      5600450052000100000000001E0000004300520045004400490054004C005400
+      550052004E004F005600450052000100000000000A0000004F00530054004100
+      54000100000000001200000050004F004B005F004F0053005400410054000100
+      00000000}
+    MasterFields = 'ACCID'
+    DetailFields = 'ACCID'
+    QueryAllRecords = False
+    Session = sboapiDataModule.SBSession
+    Left = 108
+    Top = 96
+    object AccStateDataARCHIVEDATE: TDateTimeField
+      DisplayLabel = 'Tarix'
+      FieldName = 'ARCHIVEDATE'
+      Required = True
+    end
+    object AccStateDataACCID: TFloatField
+      DisplayLabel = 'Hesab'#305'n '#304'D-si'
+      FieldName = 'ACCID'
+      Required = True
+    end
+    object AccStateDataAMOUNT: TFloatField
+      DisplayLabel = 'Qal'#305'q'
+      FieldName = 'AMOUNT'
+    end
+    object AccStateDataLAMOUNT: TFloatField
+      DisplayLabel = 'Qal'#305'q ekv'
+      FieldName = 'LAMOUNT'
+    end
+    object AccStateDataDEBITTURNOVER: TFloatField
+      DisplayLabel = 'Debet d'#246'vriyy'#601
+      FieldName = 'DEBITTURNOVER'
+    end
+    object AccStateDataDEBITLTURNOVER: TFloatField
+      DisplayLabel = 'Debet d'#246'vriyy'#601' ekv'
+      FieldName = 'DEBITLTURNOVER'
+    end
+    object AccStateDataCREDITTURNOVER: TFloatField
+      DisplayLabel = 'Kredit d'#246'vriyy'#601
+      FieldName = 'CREDITTURNOVER'
+    end
+    object AccStateDataCREDITLTURNOVER: TFloatField
+      DisplayLabel = 'Kredit d'#246'vriyy'#601' ekv'
+      FieldName = 'CREDITLTURNOVER'
+    end
+  end
+  object AccStateExporter: TExcelExporter
+    ExportSource = AccState
+    SheetName = 'AccountState'
+    ShowTitles = True
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    Left = 196
+    Top = 150
+  end
+end

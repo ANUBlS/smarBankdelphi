@@ -1,0 +1,124 @@
+object FrmCustcat: TFrmCustcat
+  Left = 304
+  Top = 137
+  BorderIcons = [biSystemMenu]
+  ClientHeight = 322
+  ClientWidth = 302
+  Color = clBtnFace
+  Font.Charset = RUSSIAN_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poScreenCenter
+  OnCanResize = FormCanResize
+  OnClose = FormClose
+  OnKeyPress = FormKeyPress
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object DBGridEh1: TDBGridEh
+    Left = 0
+    Top = 29
+    Width = 302
+    Height = 293
+    Align = alClient
+    DataSource = DatSrcCusCat
+    Flat = True
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    FooterColor = clWindow
+    FooterFont.Charset = RUSSIAN_CHARSET
+    FooterFont.Color = clWindowText
+    FooterFont.Height = -11
+    FooterFont.Name = 'Tahoma'
+    FooterFont.Style = []
+    ParentFont = False
+    TabOrder = 0
+    TitleFont.Charset = RUSSIAN_CHARSET
+    TitleFont.Color = clWindowText
+    TitleFont.Height = -11
+    TitleFont.Name = 'Tahoma'
+    TitleFont.Style = []
+    VertScrollBar.VisibleMode = sbNeverShowEh
+    Columns = <
+      item
+        EditButtons = <>
+        FieldName = 'NAME'
+        Footers = <>
+        Title.Caption = 'Ad'#305
+        Title.Color = clNavy
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clWhite
+        Title.Font.Height = -11
+        Title.Font.Name = 'Tahoma'
+        Title.Font.Style = []
+        Width = 128
+      end
+      item
+        EditButtons = <>
+        FieldName = 'KOD'
+        Footers = <>
+        Title.Caption = 'Kodu'
+        Title.Color = clNavy
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clWhite
+        Title.Font.Height = -11
+        Title.Font.Name = 'Tahoma'
+        Title.Font.Style = []
+        Width = 99
+      end>
+  end
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 302
+    Height = 29
+    Align = alTop
+    BevelInner = bvRaised
+    BevelOuter = bvLowered
+    TabOrder = 1
+    object DBNavigator1: TDBNavigator
+      Left = 2
+      Top = 2
+      Width = 298
+      Height = 25
+      DataSource = DatSrcCusCat
+      Align = alClient
+      Flat = True
+      TabOrder = 0
+    end
+  end
+  object CustCatDataSet: TOracleDataSet
+    SQL.Strings = (
+      'select t.rowid,t.* from custsoccategories T')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000030000000400000049004400010000000000080000004E0041004D00
+      4500010000000000060000004B004F004400010000000000}
+    Session = CMDataModule.CMSession
+    Left = 56
+    Top = 175
+    object CustCatDataSetID: TFloatField
+      FieldName = 'ID'
+    end
+    object CustCatDataSetNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 30
+    end
+    object CustCatDataSetKOD: TWideStringField
+      FieldName = 'KOD'
+      Size = 10
+    end
+  end
+  object DatSrcCusCat: TDataSource
+    DataSet = CustCatDataSet
+    Left = 96
+    Top = 176
+  end
+end

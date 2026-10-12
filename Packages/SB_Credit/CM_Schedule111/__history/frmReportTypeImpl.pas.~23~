@@ -1,0 +1,473 @@
+﻿unit frmReportTypeImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+   StdCtrls, ExtCtrls, Buttons, CMExcelExport, DB, OracleData;
+
+type
+  TfrmReportType = class(TForm)
+    RGReport: TRadioGroup;
+    BitBtn1: TBitBtn;
+    BitBtn2: TBitBtn;
+    ExcelExport: TCMExcelExport;
+    DataSet11: TOracleDataSet;
+    DataSet11ID: TFloatField;
+    DataSet11PAYMENTDATE: TDateTimeField;
+    DataSet11PAMENT: TFloatField;
+    DataSet11PRINCIPAL: TFloatField;
+    DataSet11INTEREST: TFloatField;
+    DataSet11REST: TFloatField;
+    OracleDataSet2: TOracleDataSet;
+    OracleDataSet2KRNO: TWideStringField;
+    OracleDataSet2INN: TWideStringField;
+    OracleDataSet2AZ_NAME: TWideStringField;
+    OracleDataSet3: TOracleDataSet;
+    OracleDataSet3NUMBEROFCREDIT: TWideStringField;
+    OracleDataSet3NAME: TWideStringField;
+    OracleDataSet3ADDRESS: TWideStringField;
+    OracleDataSet3PASS: TWideStringField;
+    OracleDataSet3PASSPIN: TWideStringField;
+    OracleDataSet3DATEOFCONCLUSION: TDateTimeField;
+    OracleDataSet3CREDITLINEAMOUNT: TFloatField;
+    OracleDataSet3ANNUALYINTERESTRATE: TFloatField;
+    OracleDataSet3PERIODCONTRACTS: TFloatField;
+    OracleDataSet2TEL: TWideStringField;
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure BitBtn1Click(Sender: TObject);
+    procedure BitBtn2Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+  private
+    procedure exportreport;
+    procedure exportexel;
+    function CalcFullIntpayment:Real;
+  public
+    procedure word_export;
+    { Public declarations }
+  end;
+
+var
+  frmReportType: TfrmReportType;
+
+implementation
+
+{$R *.DFM}
+
+uses ReportImpl,ScheduleMainFormImpl, ScheduleDataModuleImpl,CommonDecls,ComObj,WordXP;
+
+   procedure TfrmReportType.word_export;
+     var
+   WordApp: OleVariant;
+   LogoPath:string; ii,j, i:integer;
+    Doc: OleVariant; InlineShape: OleVariant;
+   Table, Table1,Table3, Table2: OleVariant;
+   Range: OleVariant;
+   LineShape: OleVariant;
+   LeftPosition: Single;
+   TopPosition: Single;
+   test:string;         CurrentPage: Integer;
+   Row: Integer;
+   TextBox,TextRange,TextRange1,TextRange2,TextRange3,TextRange4,TextRange5: OleVariant;
+   TextRange_xett,TextRange_xett1,TextRange_tel,TextRange_tel1 : OleVariant;
+
+  LastTable11: OleVariant;
+  LastRow11: Integer;
+  LineShape11: OleVariant;
+
+   LastRowCount:integer;
+   LastTable: OleVariant;
+  LastRow: OleVariant;
+
+begin
+  WordApp := CreateOleObject('Word.Application');
+ // WordApp.Visible := True; // Word t?tbiqini görün?n etm?k
+  Doc := WordApp.Documents.Add;
+
+  // Logo ?lav? et
+   LogoPath := 'D:\Smart-Bank\Env\logo.png'; // Logo s?kilinin tam yolu
+   InlineShape:=Doc.Content.InlineShapes.AddPicture(LogoPath, False, True,Doc.Range);
+        InlineShape.Width := 150;   // Ist?diyiniz genislik (santimetr, düym v? ya piksel)
+        InlineShape.Height := 90;
+       //  InlineShape.Left := 100; // Soldan konum (piksel cinsinden)
+      //   InlineShape.Top := 50;
+      Doc.Content.InsertParagraphAfter;
+    TextRange1 := Doc.Shapes.AddTextbox(1, 500, 60, 180, 30); // Belgenin basina konumlandir
+
+    TextRange1.TextFrame.TextRange.Text := ' VÖEN:  '+OracleDataSet2inn.asstring;
+    TextRange1.left:=20;
+    TextRange1.top :=95;
+    TextRange1.TextFrame.TextRange.Font.Bold := True; // Kalin yap
+    TextRange1.TextFrame.TextRange.Font.Size := 14;
+    TextRange1.line.Visible := False;
+
+     Doc.Content.InsertParagraphAfter;
+  Table1 := Doc.Tables.Add(Doc.Range(Doc.Content.end-1, Doc.Content.End - 1), 8, 4);
+                                // Doc.Tables.Add(Doc.Range(0, 0), 2, 2);
+
+  Table1.Cell(1, 1).Range.Text := 'Müqavilə №';
+  Table1.Cell(1, 2).Range.Text := OracleDataSet3NUMBEROFCREDIT.asstring;
+  Table1.Cell(2, 1).Range.Text := 'Borcalan';
+  Table1.Cell(2, 2).Range.Text := OracleDataSet3NAME.asstring;
+  Table1.Cell(3, 1).Range.Text := 'Vəsiqə';
+  Table1.Cell(3, 2).Range.Text := OracleDataSet3PASS.asstring;
+  Table1.Cell(4, 1).Range.Text := 'Ünvan';
+  Table1.Cell(4, 2).Range.Text := OracleDataSet3ADDRESS.asstring;
+
+  Table1.Cell(2, 3).Range.Text := 'Müqavilə №';
+  Table1.Cell(2, 3).Range.Font.Name := 'Arial';
+  Table1.Cell(2, 3).Range.Font.Size := 12;
+  Table1.Cell(2, 3).Range.Font.Bold := 1;
+
+  Table1.Cell(2, 4).Range.Text := OracleDataSet3NUMBEROFCREDIT.asstring;
+  Table1.Cell(2, 4).Range.Font.Name := 'Arial';
+  Table1.Cell(2, 4).Range.Font.Size := 12;
+  Table1.Cell(2, 4).Range.Font.Bold := 1;
+
+  Table1.Cell(3, 3).Range.Text := 'FIN kod:';
+  Table1.Cell(3, 3).Range.Font.Name := 'Arial';
+  Table1.Cell(3, 3).Range.Font.Size := 12;
+  Table1.Cell(3, 3).Range.Font.Bold := 1;
+
+  Table1.Cell(3, 4).Range.Text := OracleDataSet3PASSPIN.asstring;
+  Table1.Cell(3, 4).Range.Font.Name := 'Arial';
+  Table1.Cell(3, 4).Range.Font.Size := 12;
+  Table1.Cell(3, 4).Range.Font.Bold := 1;
+
+  Table1.Cell(5, 1).Range.Text := 'Tarix';
+  Table1.Cell(5, 2).Range.Text := OracleDataSet3DATEOFCONCLUSION.asstring;
+
+  Table1.Cell(6, 1).Range.Text := 'Məbləğ';
+  Table1.Cell(6, 2).Range.Text := OracleDataSet3CREDITLINEAMOUNT.asstring;
+
+  Table1.Cell(7, 1).Range.Text := 'Faiz dərəcəsi';
+  Table1.Cell(7, 2).Range.Text := OracleDataSet3ANNUALYINTERESTRATE.asstring;
+
+  Table1.Cell(8, 1).Range.Text := 'Ödəmə müddəti';
+  Table1.Cell(8, 2).Range.Text := OracleDataSet3PERIODCONTRACTS.asstring;
+
+  Table1.Borders.Enable :=1;
+ // Table1.Range.ParagraphFormat.Alignment :=1;
+  Table1.Columns.Item(1).Width := 85;
+  Table1.Columns.Item(2).Width := 220;
+  Table1.Columns.Item(3).Width := 110;
+  Table1.Columns.Item(4).Width := 110;
+
+
+   Table1.Cell(1, 3).Delete;
+   Table1.Cell(1, 3).Delete;
+   Table1.Cell(4, 3).Delete;
+   Table1.Cell(4, 3).Delete;
+   Table1.Cell(5, 3).Delete;
+   Table1.Cell(5, 3).Delete;
+   Table1.Cell(6, 3).Delete;
+   Table1.Cell(6, 3).Delete;
+   Table1.Cell(7, 3).Delete;
+   Table1.Cell(7, 3).Delete;
+   Table1.Cell(8, 3).Delete;
+   Table1.Cell(8, 3).Delete;
+
+  for i := 1 to Table1.Rows.Count do
+    begin
+    Table1.Cell(i, 1).Range.ParagraphFormat.Alignment := 3; // 1 - mərkəz
+    Table1.Cell(i, 2).Range.ParagraphFormat.Alignment := 3; // 1 - mərkəz
+    end;
+     for i := 1 to Table1.Rows.Count do
+  begin
+
+    Table1.Cell(i, 1).Range.Font.Name := 'Arial';
+    Table1.Cell(i, 1).Range.Font.Size := 14;
+    Table1.Cell(i, 1).Range.Font.bold :=1;
+
+    Table1.Cell(i, 2).Range.Font.Name := 'Arial';
+    Table1.Cell(i, 2).Range.Font.Size := 12;
+    Table1.Cell(i, 2).Range.Font.bold :=1;
+   end;////////////////
+
+
+
+   /////////////////////////////////
+  
+
+    TextRange2 := Doc.Shapes.AddTextbox(1, 500, 60, 120, 40); // Belgenin basina konumlandir
+    TextRange2.TextFrame.TextRange.Text := ' Million';
+    TextRange2.left:=370;
+    TextRange2.top :=15;
+    TextRange2.TextFrame.TextRange.Font.Bold := True; // Kalin yap
+    TextRange2.TextFrame.TextRange.Font.Size := 30;
+    TextRange2.line.Visible := False;
+    Doc.Content.InsertParagraphAfter;
+
+    TextRange3 := Doc.Shapes.AddTextbox(1, 500, 60, 130, 30); // Belgenin basina konumlandir
+    TextRange3.TextFrame.TextRange.Text := ' Ödəniş Sistemləri ';
+    TextRange3.left:=370;
+    TextRange3.top :=55;
+    TextRange3.TextFrame.TextRange.Font.Bold := True; // Kalin yap
+    TextRange3.TextFrame.TextRange.Font.Size := 14;
+    TextRange3.line.Visible := False;
+
+
+
+    TextRange4 := Doc.Shapes.AddTextbox(1, 500, 50, 150, 30); // Belgenin basina konumlandir
+    TextRange4.TextFrame.TextRange.Text := ' Ödəniş Məlumatları ';
+    TextRange4.left:=370;
+    TextRange4.top :=110;
+    TextRange4.TextFrame.TextRange.Font.Bold := True; // Kalin yap
+    TextRange4.TextFrame.TextRange.Font.Size := 14;
+    TextRange4.line.Visible := False;
+
+     Doc.Content.InsertParagraphAfter;
+
+   ////////////////////////////////////////////////////////////////
+
+    Table := Doc.Tables.Add(Doc.Range(Doc.Content.end-1, Doc.Content.End - 1),DataSet11.recordcount + 1, 6);
+    Table.Cell(1, 1).Range.Text := '№. '; // 1-ci sütun başlığı
+    Table.Cell(1, 2).Range.Text := 'Ödəniş tarixi'; // 2-ci sütun başlığı
+    Table.Cell(1, 3).Range.Text := 'Ödəniş məbləği';
+    Table.Cell(1, 4).Range.Text := 'Əsas borc';
+    Table.Cell(1, 5).Range.Text := 'Faiz';
+    Table.Cell(1, 6).Range.Text := 'Ödənişdən sonra qalıq borc';
+   // Table.Cell(1, 6).Range.Text := 'Başlıq 2';
+
+    // DataSet-i oxuyun və cədvələ əlavə edin
+    DataSet11.First; // Yenidən ilk sətrə gətirin
+    Row := 1; // Məlumatların başladığı sətir
+
+    for  ii:=0 to DataSet11.recordcount-1 do
+    begin
+
+      // Cədvələ məlumat əlavə edin
+      Table.Cell(Row+ 1,1).Range.Text := DataSet11.FieldByName('ID').asstring;
+      Table.Cell(Row+ 1,2).Range.Text := DataSet11.FieldByName('PAYMENTDATE').asstring; // 2-ci sütun
+      Table.Cell(Row+ 1,3).Range.Text := DataSet11.FieldByName('PAMENT').asstring; // 1-ci sütun
+      Table.Cell(Row+ 1,4).Range.Text := DataSet11.FieldByName('PRINCIPAL').asstring; // 2-ci sütun
+      Table.Cell(Row+ 1,5).Range.Text := DataSet11.FieldByName('INTEREST').asstring; // 2-ci sütun
+      Table.Cell(Row+ 1,6).Range.Text := DataSet11.FieldByName('rest').asstring; // 2-ci sütun
+
+      Inc(Row);
+       LastRow := Table.Rows.Count;
+      DataSet11.Next;
+     end;
+
+
+       Table.Borders.Enable := 1; // Sərhədləri aktiv edin
+
+
+  Table.Columns.Item(1).Width := 50; // 1-ci sütunun genişliyi
+  Table.Columns.Item(2).Width := 120; // 2-ci sütunun genişliyi
+  Table.Columns.Item(3).Width := 80; // 3-cü sütunun genişliyi
+  Table.Columns.Item(4).Width := 80; // 4-cü sütunun genişliyi
+  Table.Columns.Item(5).Width := 80; // 5-ci sütunun genişliyi
+  Table.Columns.Item(6).Width := 115;// 5-ci sütunun genişliyi
+
+
+  // Başlıqları formatlayın
+  for i := 0 to 6 do
+  begin
+    Table.Cell(1, i).Range.Font.Bold := True; // Kalın font
+    Table.Cell(1, i).Range.Font.Size := 14; // Font ölçüsü
+    Table.Cell(1, i).Range.ParagraphFormat.Alignment := 1; // Mərkəzləşdir
+  end;
+
+  // Məlumatları formatlayın
+  for i := 1 to DataSet11.recordcount+1  do
+  begin
+    for  j := 0 to 6 do
+    begin
+      Table.Cell(i, j).Range.Font.Name := 'Arial'; // Font adı
+      Table.Cell(i, j).Range.Font.Size := 12; // Font ölçüsü
+      Table.Cell(i, j).Range.Font.Bold := True;
+      Table.Cell(i, j).Range.ParagraphFormat.Alignment := 1; // Mərkəzləşdir
+      end;
+
+  end;
+  Doc.Content.InsertParagraphAfter; // Yeni sətir yaradın
+  Doc.Content.InsertParagraphAfter;
+   TextRange_xett:=Doc.Content;
+   TextRange_xett.InsertAfter('Borcverən: '+OracleDataSet2AZ_NAME.asstring+'      _____________________');
+   TextRange_xett.Font.Name := 'Arial'; // Fontu Arial edin
+   TextRange_xett.Font.Size := 12; // Font ölçüsünü 12 edin
+   TextRange_xett.Font.Bold := True;
+   TextRange_xett.ParagraphFormat.Alignment := wdAlignParagraphLeft;
+
+   Doc.Content.InsertParagraphAfter; // Yeni sətir yaradın
+   Doc.Content.InsertParagraphAfter;
+   TextRange_xett1:=Doc.Content;
+   TextRange_xett1.InsertAfter('Borcalan: '+OracleDataSet3NAME.asstring +'          _____________________     ' );
+   TextRange_xett1.Font.Name := 'Arial'; // Fontu Arial edin
+   TextRange_xett1.Font.Size := 12; // Font ölçüsünü 12 edin
+   TextRange_xett1.Font.Bold := True;
+   TextRange_xett1.ParagraphFormat.Alignment :=wdAlignParagraphLeft;// wdAlignParagraphRight;
+
+     //     showmessage( inttostr(LastRow));
+     //TopPosition := Table.Range.Information(wdVerticalPositionRelativeToPage) + Table.Range.Height + 10;
+   ///////////////////////////////////////////////////////////////
+
+   // LeftPosition:=400; // Soldan 50 birim
+   // TopPosition :=Doc.Content.end-LastRow;
+   // LineShape := Doc.Shapes.AddLine(LeftPosition, TopPosition, LeftPosition + 200, TopPosition);
+
+
+   // LineShape.Line.ForeColor.RGB := RGB(0, 0, 0);
+   // LineShape.Line.Weight := 50;
+
+
+    TextRange_tel := Doc.Shapes.AddTextbox(1, 500, 60, 180, 30);
+    TextRange_tel.TextFrame.TextRange.Text := ' Əlaqə vasitələri ';
+    TextRange_tel.TextFrame.TextRange.Font.Italic := True;
+    TextRange_tel.left:=350;
+    TextRange_tel.top :=210;
+    TextRange_tel.TextFrame.TextRange.Font.Bold := True; // Kalin yap
+    TextRange_tel.TextFrame.TextRange.Font.Size := 14;
+    TextRange_tel.TextFrame.TextRange.Font.Color := RGB(0, 102, 204);
+    TextRange_tel.line.Visible := False;
+
+
+    TextRange_tel1 := Doc.Shapes.AddTextbox(1, 500, 60, 180, 30);
+    TextRange_tel1.TextFrame.TextRange.Text := OracleDataSet2tel.asstring;
+    TextRange_tel1.left:=354;
+    TextRange_tel1.top :=225;
+    TextRange_tel1.TextFrame.TextRange.Font.Bold := True; // Kalin yap
+    TextRange_tel1.TextFrame.TextRange.Font.Size := 14;
+    TextRange_tel1.TextFrame.TextRange.Font.Color := RGB(0, 102, 204);
+    TextRange_tel1.line.Visible := False;
+
+
+
+
+
+    TextRange := Doc.Shapes.AddTextbox(1, 500, 60, 250, 30); // Belgenin basina konumlandir
+    TextRange.TextFrame.TextRange.Text := ' Bank Hesablarımız ';
+    TextRange.left:=350;
+    TextRange.top :=245;
+    TextRange.TextFrame.TextRange.Font.Bold := True; // Kalin yap
+    TextRange.TextFrame.TextRange.Font.Size := 14;
+    TextRange.line.Visible := False;
+
+      TextBox := Doc.Shapes.AddTextbox(1, 300, 60, 220, 60); // (Üst, Sol, Genislik, Yükseklik)
+      TextBox.TextFrame.TextRange.Text := 'Kapital Bank '#13 +OracleDataSet2KRNO.asstring; // Metni ekle
+      TextBox.Left :=306; // Soldan 50 birim
+      TextBox.top :=270;
+      TextBox.TextFrame.TextRange.Font.Bold := True; // Kalin yap
+      TextBox.TextFrame.TextRange.Font.Size := 14;
+      TextBox.TextFrame.TextRange.Font.Color := RGB(0, 102, 204); // Yazi rengini mavi yap
+      TextBox.TextFrame.TextRange.ParagraphFormat.Alignment :=1;// Italik yap
+
+
+   WordApp.Visible := True; // Word t?tbiqini görün?n etm?k
+
+
+
+end;
+
+
+
+
+
+function TfrmReportType.CalcFullIntpayment:Real;
+begin
+   result := 0;
+   with ScheduleDataModule,ScheduleData do
+   begin
+      First;
+      while not EOF do
+      begin
+       result := result+ FieldByName('INTEREST').AsFloat;
+       Next;
+      end;
+   end;
+end;
+
+procedure TfrmReportType.exportreport;
+var factint :real;
+  s :string[5];
+  num:string;
+  dat:TDateTime;
+
+begin
+    with ScheduleDataModule,CreditInfo do  begin
+          factint := (CalcFullIntpayment/FieldByName('CREDITLINEAMOUNT').AsFloat)*100;
+           s := FloatToStr(FieldByName('ANNUALYINTERESTRATE').AsFloat);
+           num:=FieldByName('numberofcredit').AsString;
+           dat:=  FieldByName('DATEOFCONCLUSION').AsDateTime;
+   end;
+
+    with ReportForm do
+    begin
+         ANNUALYINTERESTRATE.Caption := s+'%';
+         QRLabel22.Caption:=datetostr(dat)+' tarixli '+num+' saylı kredit müqaviləsinə 1№-li əlavə';
+         FullIntPayment.Caption := FloatToStr(CalcFullIntpayment);
+         s := Floattostr(factint);
+//         Facticalintforrest.Caption :=  s+'%';
+         QrpfrmRep.Preview;
+    end;
+
+end;
+
+procedure TfrmReportType.exportexel;
+begin
+   with ScheduleDataModule,ExportData do begin
+   if Active then close;
+   setvariable('Creditid',Get_SelectedCrdID);
+   open;
+   with ExcelExport do
+   begin
+   connect;
+   ExportDataset(ExportData,'Ödəmə planı',true,false);
+   Disconnect;
+   end;
+   end;
+end;
+
+
+procedure TfrmReportType.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+   Resize := False
+end;
+
+procedure TfrmReportType.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+   if ord(Key) = VK_ESCAPE then close
+end;
+
+procedure TfrmReportType.FormShow(Sender: TObject);
+begin
+with DataSet11 do
+begin
+ close;
+ SetVariable('v_creditid', Get_SelectedCrdID );
+  open;
+end;
+with OracleDataSet2 do
+begin
+ close;
+ SetVariable('v_creditid', Get_SelectedCrdID );
+  open;
+end;
+with OracleDataSet3 do
+begin
+ close;
+ SetVariable('v_creditid', Get_SelectedCrdID );
+  open;
+end;
+end;
+
+procedure TfrmReportType.BitBtn1Click(Sender: TObject);
+begin
+   close
+end;
+
+procedure TfrmReportType.BitBtn2Click(Sender: TObject);
+begin
+   with RGReport do
+    case ItemIndex of
+         0:exportreport;
+         1:word_export;
+         2:exportexel;
+     end;     
+end;
+
+end.

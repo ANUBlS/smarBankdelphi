@@ -1,0 +1,114 @@
+unit SBCore;
+
+interface
+
+uses Bde, Math, Oracle, SysUtils;
+
+type
+  ESmartError = class(Exception)
+  private
+    FErrorCode: Integer;
+    FOriginalMessage: String;
+  public
+    property ErrorCode: Integer read FErrorCode;
+    property OriginalMessage: String read FOriginalMessage;
+    constructor Create(ErrCode: Integer; const Message, OriginalMessage: String); overload;
+    constructor Create(const Message: String); overload;
+  end;
+
+  ESessionKilled = class(ESmartError);
+
+function SB_GetDatabaseHandle: HDBIDB;
+function Sb_GetSystemDate: TDateTime;
+function Sb_RoundCurrency(Value: Currency; Decimals: Integer = -1): Currency;
+procedure Sb_Commit;
+procedure Sb_Rollback;
+procedure Sb_ProcessException(E: EOracleError);
+procedure Sb_CheckFatalError(ErrorCode: Integer);
+
+const
+  NullDate: TDateTime = 0.0;
+
+implementation
+
+uses sboapiDataModuleImpl, SBSrvIntf, SBMessage;
+
+constructor ESmartError.Create(ErrCode: Integer; const Message, OriginalMessage: String);
+begin
+  FErrorCode := ErrCode;
+  FOriginalMessage := OriginalMessage;
+  inherited Create(Message);
+end;
+
+constructor ESmartError.Create(const Message: String);
+begin
+  inherited Create(Message);
+end;
+
+function SB_GetDatabaseHandle: HDBIDB;
+begin
+  Result := nil;
+end;
+
+function Sb_GetSystemDate: TDateTime;
+begin
+  with sboapiDataModule do
+    Result := SBOperationDay.CallDateFunction(sPN_GetDate, []);
+end;
+
+function Sb_RoundCurrency(Value: Currency; Decimals: Integer): Currency;
+var
+  P                         : Currency;
+begin
+  P := Power(10, Decimals);
+  Result := Trunc(Value) + Trunc(Frac(Value) * P) / P;
+
+  if Abs((Abs(Result) - Abs(Value)) * P * 10) >= 5 then
+    Result := Result + (1 / P)*(Result / Abs(Result));
+end;
+
+procedure Sb_Commit;
+begin
+  with sboapiDataModule.SBSession do
+    Commit;
+end;
+
+procedure Sb_Rollback;
+begin
+  with sboapiDataModule.SBSession do
+    Rollback;
+end;
+
+// If error code is recognized, an exception is raised
+// If not, nothing will happen
+procedure Sb_CheckFatalError(ErrorCode: Integer);
+begin
+  if ErrorCode = SError_Disconnected then
+  begin
+    with sboapiDataModule.SBSession do
+      Connected := False;
+    raise ESessionKilled.Create('Your session has been killed');
+  end;
+end;
+
+procedure Sb_ProcessException(E: EOracleError);
+var
+  NewMessage: String;
+begin
+  // Try to finalize exception
+  Sb_CheckFatalError(-E.ErrorCode);
+
+  // Exception is'nt known.
+  // Try to retreive translated error message from database
+  if not Sb_GetError(-E.ErrorCode, NewMessage) then
+    // message cannot be retreived or is'nt known.
+    // Raise exception with default message
+    NewMessage := E.Message;
+
+  // We did'nt find an appropriate exception class
+  // Raising the default class with the original or
+  // translated message (depends on Sb_GetError function result)
+  raise ESmartError.Create(E.ErrorCode, NewMessage, E.Message);
+end;
+
+end.

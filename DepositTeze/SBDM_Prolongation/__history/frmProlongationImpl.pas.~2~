@@ -1,0 +1,161 @@
+unit frmProlongationImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, NLSDialogs,
+  Oracle, Db, OracleData, ComCtrls, ToolWin, ExtCtrls, CMExcelExport,
+  ImgList, ActnList,  Grids, DBGridEh;
+
+type
+  TfrmProlongation = class(TForm)
+    prolongations: TOracleDataSet;
+    prolongationsID: TFloatField;
+    prolongationsID2: TFloatField;
+    prolongationsHDATE: TDateTimeField;
+    prolongationsOLDDATE: TDateTimeField;
+    prolongationsNEWDATE: TDateTimeField;
+    prolongationsDatSrc: TDataSource;
+    sbcm_prolongation: TOraclePackage;
+    ActionList1: TActionList;
+    ActnAddProlong: TAction;
+    ActnDel: TAction;
+    ActnExport: TAction;
+    ActnQuit: TAction;
+    ImageList1: TImageList;
+    EExporter: TCMExcelExport;
+    Panel1: TPanel;
+    ToolBar1: TToolBar;
+    ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
+    ToolButton3: TToolButton;
+    ToolButton4: TToolButton;
+    ToolButton5: TToolButton;
+    ToolButton7: TToolButton;
+    ToolButton6: TToolButton;
+    StatusBar1: TStatusBar;
+    DBGridEh1: TDBGridEh;
+    DepositInf: TOracleDataSet;
+    DepositInfCLOSEDATE: TDateTimeField;
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure ActnAddProlongExecute(Sender: TObject);
+    procedure ActnDelExecute(Sender: TObject);
+    procedure ActnExportExecute(Sender: TObject);
+    procedure ActnDelUpdate(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure ActnQuitExecute(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  frmProlongation: TfrmProlongation;
+  procedure exportproc(s:String);export;
+
+
+implementation
+
+{$R *.DFM}
+
+uses sboapiDataModuleImpl, frmAddProlongationImpl,CommonDeclsImpl;
+
+procedure exportproc(s:String);export;
+begin
+   frmProlongation.ShowModal;
+end;
+
+exports
+   exportproc;
+
+procedure TfrmProlongation.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+   Resize  := False;
+end;
+
+procedure TfrmProlongation.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+   if ord(Key) = VK_ESCAPE then  Close
+end;
+
+procedure TfrmProlongation.FormCreate(Sender: TObject);
+begin
+   frmAddProlongation := TfrmAddProlongation.Create(Self);
+end;
+
+procedure TfrmProlongation.FormDestroy(Sender: TObject);
+begin
+   frmAddProlongation.Free;
+end;
+
+procedure TfrmProlongation.ActnAddProlongExecute(Sender: TObject);
+begin
+    frmAddProlongation.ShowModal;
+end;
+
+procedure TfrmProlongation.ActnDelExecute(Sender: TObject);
+begin
+   if MessageDlg('Силинмясиня яминсинизми?', mtInformation, [mbYes,mbNo],0) = mrNo then
+      exit;
+
+   with  sbcm_prolongation do
+        CallProcedure('DelLastProlongation',[Get_SelectedContID]);
+
+    prolongations.refresh;
+    DepositInf.refresh;
+    
+end;
+
+procedure TfrmProlongation.ActnExportExecute(Sender: TObject);
+begin
+   with EExporter do
+   begin
+      Connect;
+      ExportDataset(prolongations,'Пролонгасийа',True);
+      Disconnect;
+   end;
+end;
+
+procedure TfrmProlongation.ActnDelUpdate(Sender: TObject);
+begin
+    with (Sender as TAction) do
+          Enabled := prolongations.RecordCount > 0
+end;
+
+procedure TfrmProlongation.FormShow(Sender: TObject);
+var ContID :Integer;
+begin
+   ContID := Get_SelectedContID;
+
+   with prolongations do
+   begin
+      if Active then CloseAll;
+      SetVariable('ContractID',ContID);
+      Open;
+   end;
+
+
+   with DepositInf do
+   begin
+      if Active then CloseAll;
+      SetVariable('ContractID',ContID);
+      Open;
+   end;
+
+end;
+
+procedure TfrmProlongation.ActnQuitExecute(Sender: TObject);
+begin
+   Close;
+end;
+
+initialization
+   frmProlongation := TfrmProlongation.Create(CommonApplication);
+
+end.

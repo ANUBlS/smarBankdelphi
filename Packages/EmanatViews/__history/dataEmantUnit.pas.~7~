@@ -1,0 +1,44 @@
+unit dataEmantUnit;
+
+interface
+
+uses
+  SysUtils, Classes, DB, OracleData, Oracle;
+
+type
+  TDataEmanat = class(TDataModule)
+    Ods_wspaymentemant: TOracleDataSet;
+    Ods_sysdate: TOracleDataSet;
+    dsrc_wspaymentemant: TDataSource;
+    Ods_wspaymentemantID: TFloatField;
+    Ods_wspaymentemantACCOUNT: TWideStringField;
+    Ods_wspaymentemantAMOUNT: TFloatField;
+    Ods_wspaymentemantCURRENCY: TWideStringField;
+    Ods_wspaymentemantCUSTOMER: TWideStringField;
+    Ods_wspaymentemantRESPDATETIME: TDateTimeField;
+    Ods_wspaymentemantRESPDATE: TWideStringField;
+    Ods_wspaymentemantRESPTIME: TWideStringField;
+    Ods_wspaymentemantRRN: TWideStringField;
+    Ods_wspaymentemantSUBRRN: TFloatField;
+    Ods_wspaymentemantSYS_DATE: TDateTimeField;
+    Ods_wspaymentemantTARGET: TWideStringField;
+    Ods_wspaymentemantTERMINAL: TWideStringField;
+    Ods_wspaymentemantPAYMENT_ID: TFloatField;
+    Ods_wspaymentemantSTATUS: TWideStringField;
+    buusnesproc: TOraclePackage;
+    ods_settings_emanat: TOracleDataSet;
+    ods_info: TOracleDataSet;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  DataEmanat: TDataEmanat;
+
+implementation
+uses sboapiDataModuleImpl;
+{$R *.dfm}
+
+end.

@@ -1,0 +1,47 @@
+unit Birthexcel;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ComCtrls, StdCtrls, CMExcelExport;
+
+type
+  TForm5 = class(TForm)
+    Button1: TButton;
+    DateTimePicker1: TDateTimePicker;
+    ExcelExport: TCMExcelExport;
+    procedure Button1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form5: TForm5;
+
+implementation
+
+uses BlankDMImpl;
+
+{$R *.dfm}
+
+procedure TForm5.Button1Click(Sender: TObject);
+begin
+if (BlankDM.DSFullContarct.FieldByName('user').AsString='SEDR') or
+((BlankDM.DSFullContarct.FieldByName('user').AsString='SATISH_MUD')  then
+begin
+  (BlankDM.DSFullContarct.FieldByName('mobilephone').Visible:=true;
+ (BlankDM.DSFullContarct.FieldByName('USER_ADI').Visible:=true;
+end;
+
+ with ExcelExport do
+   begin
+      Connect;
+      ExportDataset(XDBGrid1.DataSource.DataSet,'Bütün sýðortalar.',True,false);
+      Disconnect;
+   end;
+end;
+
+end.

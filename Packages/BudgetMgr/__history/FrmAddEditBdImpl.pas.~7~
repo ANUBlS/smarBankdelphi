@@ -1,0 +1,79 @@
+unit FrmAddEditBdImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Grids, DBGridEh, StdCtrls, ExtCtrls, DBCtrls;
+
+type
+  TFrmAddEditBdFr = class(TForm)
+    Panel4: TPanel;
+    GroupBox2: TGroupBox;
+    DBGridEh3: TDBGridEh;
+    DBNavigator1: TDBNavigator;
+    GroupBox1: TGroupBox;
+    DBNavigator2: TDBNavigator;
+    DBGridEh1: TDBGridEh;
+    Button1: TButton;
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+    procedure Button1Click(Sender: TObject);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormCreate(Sender: TObject);
+    procedure DBNavigator1Click(Sender: TObject; Button: TNavigateBtn);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmAddEditBdFr: TFrmAddEditBdFr;
+
+implementation
+ uses Dmbudgetimpl,sboapiDataModuleImpl, SBTranslateProc,FrmItemaddImpl;
+{$R *.DFM}
+
+procedure TFrmAddEditBdFr.DBNavigator1Click(Sender: TObject;
+  Button: TNavigateBtn);
+begin
+  case Button of
+    nbInsert:
+      begin
+      FrmItemadd.showmodal;
+      end;
+  end;
+end;
+
+procedure TFrmAddEditBdFr.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+ resize := false;
+end;
+
+procedure TFrmAddEditBdFr.Button1Click(Sender: TObject);
+begin
+//DMBudget.ArtDataSet.refresh;
+close
+end;
+
+procedure TFrmAddEditBdFr.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+   if ord(key) = VK_ESCAPE then close
+end;
+
+procedure TFrmAddEditBdFr.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+DMBudget.ArtDataSet.refresh;
+end;
+
+procedure TFrmAddEditBdFr.FormCreate(Sender: TObject);
+begin
+FrmItemadd:=TFrmItemadd.Create(self);
+ SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+end.

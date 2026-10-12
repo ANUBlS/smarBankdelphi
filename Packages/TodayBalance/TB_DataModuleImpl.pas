@@ -1,0 +1,88 @@
+unit TB_DataModuleImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, OracleData;
+
+type
+  TDataModTB = class(TDataModule)
+    BalanceData: TOracleDataSet;
+    DataSrcBalanceData: TDataSource;
+    DataSrcAccountData: TDataSource;
+    SYSDAT: TOracleDataSet;
+    BankInfo: TOracleDataSet;
+    CurrencyInfo: TOracleDataSet;
+    DataSrcCurrencyInfo: TDataSource;
+    BranchesInfo: TOracleDataSet;
+    DataSrcBranchesInfo: TDataSource;
+    SYSDATCURRENTDATE: TDateTimeField;
+    BalanceDataACTIVE: TFloatField;
+    BalanceDataPASSIVE: TFloatField;
+    BalanceDataDTURNOVER: TFloatField;
+    BalanceDataCTURNOVER: TFloatField;
+    AccountData: TOracleDataSet;
+    TransactionsData: TOracleDataSet;
+    DataSrcTransactionsData: TDataSource;
+    WorkDateData: TOracleDataSet;
+    WorkDateDataWORKDATE: TDateTimeField;
+    CurrencyInfoCURRENCY: TIntegerField;
+    CurrencyInfoCURRLNAME: TWideStringField;
+    BranchesInfoBRANCHID: TFloatField;
+    BranchesInfoBRANCHNAME: TWideStringField;
+    BalanceDataACCOUNTNUMBER: TFloatField;
+    BalanceDataACCOUNTNAME: TWideStringField;
+    AccountDataACCNUMBER: TWideStringField;
+    AccountDataACCCURRENCY: TWideStringField;
+    AccountDataACTIVE: TFloatField;
+    AccountDataPASSIVE: TFloatField;
+    AccountDataACCOUNTNUMBER: TFloatField;
+    AccountDataACCID: TFloatField;
+    AccountDataDTURNOVER: TFloatField;
+    AccountDataCTURNOVER: TFloatField;
+    AccountDataACCOUNTNAME: TWideStringField;
+    TransactionsDataID: TFloatField;
+    TransactionsDataDEBITACCID: TFloatField;
+    TransactionsDataCREDITACCID: TFloatField;
+    TransactionsDataOPERATORID: TWideStringField;
+    TransactionsDataTRANSACTIONDATE: TDateTimeField;
+    TransactionsDataDEBITACCNO: TWideStringField;
+    TransactionsDataDEBITCURRENCYSNAME: TWideStringField;
+    TransactionsDataCREDITACCNO: TWideStringField;
+    TransactionsDataCREDITCURRENCYSNAME: TWideStringField;
+    TransactionsDataDEBITAMOUNT: TFloatField;
+    TransactionsDataCREDITAMOUNT: TFloatField;
+    TransactionsDataLAMOUNT: TFloatField;
+    TransactionsDataTRDESCRIPTION: TWideStringField;
+    procedure AccountDataAfterScroll(DataSet: TDataSet);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  DataModTB: TDataModTB;
+
+implementation
+
+{$R *.DFM}
+
+uses  sboapidatamoduleimpl;
+
+procedure TDataModTB.AccountDataAfterScroll(DataSet: TDataSet);
+var
+  AccID : Integer;
+begin
+  with DataSet do
+  if not FieldByName('AccID').IsNull then
+    AccID := FieldByName('AccID').AsInteger else
+    AccID := -1;
+  TransactionsData.Filtered := False;
+  TransactionsData.Filter := Format('(DebitAccID = %d) or (CreditAccID = %d)',[AccID ,AccID]);
+  TransactionsData.Filtered := True;
+end;
+
+end.
+

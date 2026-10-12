@@ -1,0 +1,855 @@
+object CustAnalyz: TCustAnalyz
+  Left = 0
+  Top = 0
+  Width = 1083
+  Height = 679
+  ActiveControl = CBSearch
+  Caption = 'CustAnalyz'
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  OnCreate = ActiveFormCreate
+  PixelsPerInch = 96
+  TextHeight = 13
+  object XFPanel1: TXFPanel
+    Left = 0
+    Top = 0
+    Width = 293
+    Height = 679
+    Align = alLeft
+    BevelInner = bvLowered
+    BevelKind = bkFlat
+    BevelOuter = bvSpace
+    TabOrder = 0
+    object XFPanel2: TXFPanel
+      Left = 2
+      Top = 2
+      Width = 285
+      Height = 74
+      Align = alTop
+      BevelInner = bvLowered
+      BevelKind = bkFlat
+      BevelOuter = bvSpace
+      TabOrder = 0
+      object XFLabel1: TXFLabel
+        Left = 6
+        Top = 5
+        Width = 44
+        Height = 13
+        Caption = 'Axtari'#351':'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object XFLabel2: TXFLabel
+        Left = 129
+        Top = 5
+        Width = 86
+        Height = 13
+        Caption = 'M'#252'st'#601'rinin Tipi:'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object CBSearch: TComboBox
+        Left = 5
+        Top = 37
+        Width = 82
+        Height = 21
+        Style = csDropDownList
+        TabOrder = 0
+      end
+      object EditSearch: TEdit
+        Left = 87
+        Top = 37
+        Width = 191
+        Height = 21
+        TabOrder = 1
+        OnChange = EditSearchChange
+      end
+      object XFRadioButton1: TXFRadioButton
+        Left = 107
+        Top = 18
+        Width = 148
+        Height = 17
+        Checked = True
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentFont = False
+        TabOrder = 2
+        TabStop = True
+      end
+    end
+    object XFGroupBox3: TXFGroupBox
+      Left = 2
+      Top = 76
+      Width = 285
+      Height = 597
+      Align = alClient
+      Caption = 'M'#252#351't'#601'ril'#601'r'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 1
+      object XDBGrid1: TXDBGrid
+        Left = 2
+        Top = 15
+        Width = 281
+        Height = 580
+        Align = alClient
+        DataSource = DataModCustAnalyz.Dsrc_cust
+        GridStyle.VisualStyle = vsXPStyle
+        SelectCellColor = clBlue
+        SelectionColor = clFuchsia
+        TabOrder = 0
+        OnDblClick = XDBGrid1DblClick
+        Columns = <
+          item
+            Expanded = False
+            FieldName = 'ID'
+            Visible = True
+            Width = 50
+          end
+          item
+            Expanded = False
+            FieldName = 'TAM_ADI'
+            Visible = True
+            Width = 150
+          end>
+      end
+    end
+  end
+  object ScrollBox1: TScrollBox
+    Left = 293
+    Top = 0
+    Width = 790
+    Height = 679
+    Align = alClient
+    TabOrder = 1
+    object XFGroupBox1: TXFGroupBox
+      Left = 0
+      Top = 0
+      Width = 786
+      Height = 73
+      Align = alTop
+      Caption = 'M'#252#351't'#601'i  m'#601'lumat'#305
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 0
+      object XFLabel3: TXFLabel
+        Left = 5
+        Top = 48
+        Width = 42
+        Height = 13
+        Caption = 'Adress:'
+      end
+      object XFLabel4: TXFLabel
+        Left = 174
+        Top = 18
+        Width = 58
+        Height = 13
+        Caption = 'Seriya / N:'
+      end
+      object XFLabel8: TXFLabel
+        Left = 5
+        Top = 19
+        Width = 3
+        Height = 13
+      end
+      object XFLabel7: TXFLabel
+        Left = 412
+        Top = 17
+        Width = 86
+        Height = 13
+        Caption = 'Telefon (mobil)'
+      end
+      object DBEdit1: TDBEdit
+        Left = 52
+        Top = 44
+        Width = 567
+        Height = 21
+        DataField = 'FAKT_ADRESS'
+        DataSource = DataModCustAnalyz.Dsrc_custinfo
+        TabOrder = 0
+      end
+      object DBEdit2: TDBEdit
+        Left = 234
+        Top = 15
+        Width = 56
+        Height = 21
+        DataField = 'PASSPORT'
+        DataSource = DataModCustAnalyz.Dsrc_custinfo
+        TabOrder = 1
+      end
+      object DBEdit3: TDBEdit
+        Left = 289
+        Top = 15
+        Width = 122
+        Height = 21
+        DataField = 'PASSP_NUMBER'
+        DataSource = DataModCustAnalyz.Dsrc_custinfo
+        TabOrder = 2
+      end
+      object DBEdit4: TDBEdit
+        Left = 498
+        Top = 15
+        Width = 121
+        Height = 21
+        DataField = 'PHONE_MOB'
+        DataSource = DataModCustAnalyz.Dsrc_custinfo
+        TabOrder = 3
+      end
+      object DBEdit5: TDBEdit
+        Left = 52
+        Top = 15
+        Width = 121
+        Height = 21
+        TabOrder = 4
+      end
+    end
+    object XFGroupBox4: TXFGroupBox
+      Left = 0
+      Top = 73
+      Width = 786
+      Height = 120
+      Align = alTop
+      Caption = 'Kreditl'#601'r'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 1
+      object XDBGrid2: TXDBGrid
+        Left = 2
+        Top = 15
+        Width = 782
+        Height = 103
+        Align = alClient
+        Ctl3D = False
+        Ctl3DAuto = False
+        DataSource = DataModCustAnalyz.Dsrc_portfol
+        GridStyle.VisualStyle = vsXPStyle
+        ParentCtl3D = False
+        TabOrder = 0
+        Columns = <
+          item
+            Expanded = False
+            FieldName = 'NUMBEROFCREDIT'
+            Title.Caption = 'M'#252'q '#8470
+            Visible = True
+            Width = 74
+          end
+          item
+            Expanded = False
+            FieldName = 'DATEOFCONCLUSION'
+            Title.Caption = 'A'#231'ilma tarixi'
+            Visible = True
+            Width = 80
+          end
+          item
+            Expanded = False
+            FieldName = 'DUEDATEFIRSTCONTRACT'
+            Title.Caption = 'Ba'#287'lanma tarixi'
+            Visible = True
+            Width = 100
+          end
+          item
+            Expanded = False
+            FieldName = 'MUTEXSIS'
+            Title.Caption = 'M'#252't'#601'x'#601'ssis Ad'#305
+            Visible = True
+            Width = 90
+          end
+          item
+            Expanded = False
+            FieldName = 'MALIYE'
+            Title.Caption = 'Kreditin  maliy'#601' m'#601'nb'#601'yi'
+            Visible = True
+            Width = 146
+          end
+          item
+            Expanded = False
+            FieldName = 'ANNUALYINTERESTRATE'
+            Title.Caption = '% d'#601'r'#601'c'#601'si'
+            Visible = True
+            Width = 70
+          end
+          item
+            Expanded = False
+            FieldName = 'INITIALAMOUNT'
+            Title.Caption = 'Kredit m'#601'bl'#601#287'i'
+            Visible = True
+            Width = 94
+          end
+          item
+            Expanded = False
+            FieldName = 'INTEREST'
+            Title.Caption = 'Faiz m'#601'bl'#601#287'i'
+            Visible = True
+            Width = 80
+          end
+          item
+            Expanded = False
+            FieldName = 'CLOSEDATE'
+            Title.Caption = 'm/b tarix'
+            Visible = True
+            Width = 78
+          end
+          item
+            Expanded = False
+            FieldName = 'STOPCALCDATE'
+            Title.Caption = 'f/h dayan'
+            Visible = True
+            Width = 82
+          end>
+      end
+    end
+    object XFGroupBox2: TXFGroupBox
+      Left = 0
+      Top = 193
+      Width = 786
+      Height = 120
+      Align = alTop
+      Caption = 'Zaminl'#601'r'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 2
+      object XDBGrid3: TXDBGrid
+        Left = 2
+        Top = 15
+        Width = 782
+        Height = 103
+        Align = alClient
+        Ctl3D = False
+        Ctl3DAuto = False
+        DataSource = DataModCustAnalyz.Dsrc_zamin
+        GridStyle.VisualStyle = vsXPStyle
+        ParentCtl3D = False
+        TabOrder = 0
+        Columns = <
+          item
+            Expanded = False
+            FieldName = 'GUARANTORNAME'
+            Title.Caption = 'Adi'
+            Visible = True
+            Width = 160
+          end
+          item
+            Expanded = False
+            FieldName = 'GUARANTORID'
+            Title.Caption = 'Seriya / N: '
+            Visible = True
+            Width = 100
+          end
+          item
+            Expanded = False
+            FieldName = 'ZMPASPYER1'
+            Title.Caption = #350'/V v'#601'r'#601'n orqan '
+            Visible = True
+            Width = 117
+          end
+          item
+            Expanded = False
+            FieldName = 'PINCODE'
+            Title.Caption = 'Pincod'
+            Visible = True
+            Width = 80
+          end
+          item
+            Expanded = False
+            FieldName = 'ZAMINADRES1'
+            Title.Caption = 'Adress'
+            Visible = True
+            Width = 173
+          end
+          item
+            Expanded = False
+            FieldName = 'CARDID'
+            Title.Caption = 'Zamin '#8470
+            Visible = True
+            Width = 103
+          end>
+      end
+    end
+    object Girovlar: TXFGroupBox
+      Left = 0
+      Top = 313
+      Width = 786
+      Height = 120
+      Align = alTop
+      Caption = 'Girovlar'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 3
+      object XDBGrid4: TXDBGrid
+        Left = 2
+        Top = 15
+        Width = 782
+        Height = 103
+        Align = alClient
+        Ctl3D = False
+        Ctl3DAuto = False
+        DataSource = DataModCustAnalyz.Dsrc_girov
+        GridStyle.VisualStyle = vsXPStyle
+        ParentCtl3D = False
+        TabOrder = 0
+        Columns = <
+          item
+            Expanded = False
+            FieldName = 'PLEDGENAME'
+            Title.Caption = 'Ad'#305
+            Visible = True
+            Width = 179
+          end
+          item
+            Expanded = False
+            FieldName = 'PLEDGES_NAME'
+            Title.Caption = 'Tipi'
+            Visible = True
+            Width = 115
+          end
+          item
+            Expanded = False
+            FieldName = 'PLEDGSORTS_NAME'
+            Title.Caption = #199'e'#351'idi'
+            Visible = True
+            Width = 100
+          end
+          item
+            Expanded = False
+            FieldName = 'PLEDGEPRICE'
+            Title.Caption = 'M'#601'bl'#601#287'i'
+            Visible = True
+            Width = 60
+          end
+          item
+            Expanded = False
+            FieldName = 'ANYINFOTODISTING'
+            Title.Caption = 'F'#601'rql'#601'ndir'#601'n m'#601'lumat'
+            Visible = True
+            Width = 227
+          end
+          item
+            Expanded = False
+            FieldName = 'CARDID'
+            Title.Caption = 'Sayi'
+            Visible = True
+            Width = 52
+          end>
+      end
+    end
+    object XFGroupBox8: TXFGroupBox
+      Left = 0
+      Top = 433
+      Width = 786
+      Height = 71
+      Align = alTop
+      Caption = 'Kredit haqda:'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 4
+      object XFLabel5: TXFLabel
+        Left = 16
+        Top = 22
+        Width = 50
+        Height = 13
+        Caption = ' M'#601'bl'#601#287'i:'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object XFLabel11: TXFLabel
+        Left = 108
+        Top = 27
+        Width = 48
+        Height = 13
+        Caption = #399's.Qal'#305'q:'
+      end
+      object XFLabel22: TXFLabel
+        Left = 207
+        Top = 27
+        Width = 55
+        Height = 13
+        Caption = 'Faiz qalq'#305':'
+      end
+      object XFLabel23: TXFLabel
+        Left = 278
+        Top = 27
+        Width = 78
+        Height = 13
+        Caption = 'Gec. '#601's borcu:'
+      end
+      object XFLabel12: TXFLabel
+        Left = 366
+        Top = 27
+        Width = 94
+        Height = 13
+        Caption = 'Gec. '#601's % borcu:'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object XFLabel9: TXFLabel
+        Left = 560
+        Top = 27
+        Width = 49
+        Height = 13
+        Caption = 'M'#252'dd'#601'ti:'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object XFLabel6: TXFLabel
+        Left = 466
+        Top = 28
+        Width = 83
+        Height = 13
+        Caption = 'Gecikm'#601' g'#252'n'#252':'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object XFLabel10: TXFLabel
+        Left = 641
+        Top = 12
+        Width = 100
+        Height = 13
+        Caption = ' Verilm'#601' m'#601'qs'#601'di:'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object DBEdit6: TDBEdit
+        Left = 5
+        Top = 44
+        Width = 85
+        Height = 21
+        DataField = 'INITIALAMOUNT'
+        DataSource = DataModCustAnalyz.Dsrc_portfol
+        TabOrder = 0
+      end
+      object DBEdit10: TDBEdit
+        Left = 96
+        Top = 44
+        Width = 85
+        Height = 21
+        DataField = 'REST'
+        DataSource = DataModCustAnalyz.Dsrc_portfol
+        TabOrder = 1
+      end
+      object DBEdit11: TDBEdit
+        Left = 186
+        Top = 44
+        Width = 85
+        Height = 21
+        DataField = 'INTERESTREST'
+        DataSource = DataModCustAnalyz.Dsrc_portfol
+        TabOrder = 2
+      end
+      object DBEdit21: TDBEdit
+        Left = 278
+        Top = 44
+        Width = 85
+        Height = 21
+        DataField = 'DUEREST'
+        DataSource = DataModCustAnalyz.Dsrc_portfol
+        TabOrder = 3
+      end
+      object DBEdit22: TDBEdit
+        Left = 366
+        Top = 44
+        Width = 93
+        Height = 21
+        DataField = 'DUEINTERESTREST'
+        DataSource = DataModCustAnalyz.Dsrc_portfol
+        TabOrder = 4
+      end
+      object DBEdit8: TDBEdit
+        Left = 559
+        Top = 44
+        Width = 51
+        Height = 21
+        DataField = 'PERIODCONTRACTS'
+        DataSource = DataModCustAnalyz.Dsrc_portfol
+        TabOrder = 5
+      end
+      object DBEdit7: TDBEdit
+        Left = 464
+        Top = 44
+        Width = 86
+        Height = 21
+        DataField = 'GEC_GUN'
+        DataSource = DataModCustAnalyz.Dsrc_portfol
+        TabOrder = 6
+      end
+      object DBMemo1: TDBMemo
+        Left = 615
+        Top = 28
+        Width = 150
+        Height = 38
+        DataField = 'VERILME_MEQSED'
+        DataSource = DataModCustAnalyz.Dsrc_portfol
+        TabOrder = 7
+      end
+    end
+    object XFGroupBox5: TXFGroupBox
+      Left = 0
+      Top = 504
+      Width = 786
+      Height = 87
+      Align = alTop
+      Caption = #214'd'#601'm'#601' c'#601'dv'#601'li'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 5
+      object XFLabel13: TXFLabel
+        Left = 5
+        Top = 21
+        Width = 131
+        Height = 13
+        Caption = #399'sasdan '#246'd'#601'ni'#351'in c'#601'mi:'
+      end
+      object XFLabel14: TXFLabel
+        Left = 5
+        Top = 56
+        Width = 118
+        Height = 13
+        Caption = 'Faiz  '#246'd'#601'ni'#351'inin c'#601'mi:'
+      end
+      object XFLabel15: TXFLabel
+        Left = 274
+        Top = 24
+        Width = 184
+        Height = 13
+        Caption = 'Gecikmi'#351' '#601'sasdan '#246'd'#601'ni'#351'in c'#601'mi:'
+      end
+      object XFLabel16: TXFLabel
+        Left = 274
+        Top = 59
+        Width = 167
+        Height = 13
+        Caption = 'Gecikmi'#351' faiz '#246'd'#601'ni'#351'inin c'#601'mi:'
+      end
+      object XFBitBtn1: TXFBitBtn
+        Left = 645
+        Top = 58
+        Width = 99
+        Height = 25
+        Caption = #214'd'#601'ni'#351' c'#601'dv'#601'li'
+        DoubleBuffered = True
+        ParentDoubleBuffered = False
+        TabOrder = 0
+        OnClick = XFBitBtn1Click
+      end
+      object DBEdit12: TDBEdit
+        Left = 141
+        Top = 20
+        Width = 121
+        Height = 21
+        DataField = 'PAYEDAMT'
+        DataSource = DataModCustAnalyz.Dsrc_portfol
+        TabOrder = 1
+      end
+      object DBEdit13: TDBEdit
+        Left = 141
+        Top = 51
+        Width = 121
+        Height = 21
+        DataField = 'PAYEDINTAMT'
+        DataSource = DataModCustAnalyz.Dsrc_portfol
+        TabOrder = 2
+      end
+      object DBEdit14: TDBEdit
+        Left = 461
+        Top = 20
+        Width = 121
+        Height = 21
+        DataField = 'PAYEDDUEAMT'
+        DataSource = DataModCustAnalyz.Dsrc_portfol
+        TabOrder = 3
+      end
+      object DBEdit15: TDBEdit
+        Left = 461
+        Top = 51
+        Width = 121
+        Height = 21
+        DataField = 'PAYEDDUEINTAMT'
+        DataSource = DataModCustAnalyz.Dsrc_portfol
+        TabOrder = 4
+      end
+      object XFGroupBox7: TXFGroupBox
+        Left = 604
+        Top = 6
+        Width = 161
+        Height = 50
+        Caption = 'Penya:'
+        TabOrder = 5
+        object XFLabel17: TXFLabel
+          Left = 16
+          Top = 12
+          Width = 22
+          Height = 13
+          Caption = 'Cari'
+        end
+        object XFLabel20: TXFLabel
+          Left = 101
+          Top = 12
+          Width = 28
+          Height = 13
+          Caption = 'C'#601'mi'
+        end
+        object DBEdit9: TDBEdit
+          Left = 7
+          Top = 26
+          Width = 65
+          Height = 21
+          DataField = 'PENALTYREST'
+          DataSource = DataModCustAnalyz.Dsrc_portfol
+          TabOrder = 0
+        end
+        object DBEdit16: TDBEdit
+          Left = 90
+          Top = 26
+          Width = 65
+          Height = 21
+          DataField = 'PAYEDPENALTYAMT'
+          DataSource = DataModCustAnalyz.Dsrc_portfol
+          TabOrder = 1
+        end
+      end
+    end
+    object XFGroupBox6: TXFGroupBox
+      Left = 0
+      Top = 591
+      Width = 786
+      Height = 70
+      Align = alTop
+      Caption = #214'd'#601'm'#601' plan'#305
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 6
+      object XFLabel18: TXFLabel
+        Left = 5
+        Top = 15
+        Width = 93
+        Height = 13
+        Caption = #399'sasdan '#246'd'#601'm'#601':'
+      end
+      object XFLabel19: TXFLabel
+        Left = 274
+        Top = 15
+        Width = 88
+        Height = 13
+        Caption = 'Faizd'#601'n '#246'd'#601'm'#601':'
+      end
+      object XFLabel21: TXFLabel
+        Left = 5
+        Top = 42
+        Width = 122
+        Height = 13
+        Caption = 'Ayl'#305'q '#214'd'#601'ni'#351'inin c'#601'mi:'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object XFBitBtn2: TXFBitBtn
+        Left = 645
+        Top = 34
+        Width = 99
+        Height = 25
+        Caption = #214'd'#601'm'#601' plan'#305
+        DoubleBuffered = True
+        ParentDoubleBuffered = False
+        TabOrder = 0
+        OnClick = XFBitBtn2Click
+      end
+      object DBEdit17: TDBEdit
+        Left = 140
+        Top = 11
+        Width = 121
+        Height = 21
+        DataField = 'PRINCIPAL'
+        DataSource = DataModCustAnalyz.Dsrc_portfol
+        TabOrder = 1
+      end
+      object DBEdit18: TDBEdit
+        Left = 458
+        Top = 11
+        Width = 121
+        Height = 21
+        DataField = 'INTEREST'
+        DataSource = DataModCustAnalyz.Dsrc_portfol
+        TabOrder = 2
+      end
+      object DBEdit20: TDBEdit
+        Left = 140
+        Top = 39
+        Width = 121
+        Height = 21
+        DataField = 'AYOD_CEM'
+        DataSource = DataModCustAnalyz.Dsrc_portfol
+        TabOrder = 3
+      end
+    end
+  end
+end

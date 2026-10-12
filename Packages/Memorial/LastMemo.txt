@@ -1,0 +1,147 @@
+PACKAGE BODY SB_MEMORIAL
+IS
+Function GetBankDay return date is
+   Bankday Date;
+begin
+ Select Tek_dat into BankDay from SysDat; 
+ return BankDay;
+end;
+  FUNCTION  GetRate(
+      ID  integer
+                    )
+      Return  Number                    
+   IS
+     Rate Number(7);
+   Begin
+        Select  Ostat into Rate from OperKurs where(Val_Kod=ID)and(Dat=getBankDay);
+       Exception 
+       when no_data_found then
+       begin
+        return 0;
+       end; 
+   End;
+                       
+  PROCEDURE  INTO_TABLE(
+     TableName VarChar2,
+     SqlString VarChar2
+                      )
+IS
+
+ V_Cursor Number(38);
+     nRow Number(38);    
+      vCount Integer;
+Begin
+  select Count(*) into vCount from tab where TNAME=TableName;
+  if   vCount=1  then     
+       V_Cursor:=dbms_sql.open_cursor;
+       dbms_sql.parse(V_Cursor,'Drop table ' || TableName ,dbms_sql.v7);
+       NRow:=dbms_sql.execute(V_Cursor);
+       dbms_sql.Close_cursor(v_cursor);
+    end if;                                 
+        v_Cursor:=dbms_sql.open_cursor;
+        dbms_sql.parse(V_Cursor,SqlString,dbms_sql.v7);
+        NRow:=dbms_sql.execute(V_Cursor);
+        dbms_sql.Close_cursor(v_cursor);     
+End;               
+    FUNCTION    getCustINN(
+         Cust_ID IN Number
+                           ) 
+        return Number
+     IS
+     TempINN  Number(10);
+     Begin
+       Select  Cust.INN into TempINN 
+         from CUSTOMERS CUST 
+           where  (CUST.ID=Cust_ID);
+          return TempINN;            
+        EXCEPTION  
+        WHEN NO_DATA_FOUND THEN 
+        Begin       
+          return NULL;
+        End;      
+     End;
+                                       
+    PROCEDURE   getBankInfo(
+      BankName  OUT  VarChar2,
+      BankINN   OUT  VarChar2
+                           )
+       IS
+       Begin
+         Select  Bank , INN into BankName,BankINN from BankInfo;
+       End;
+                                   
+    PROCEDURE   MEMORIAL(
+     aDateBegin   Date
+    ,aDateEnd     Date
+    ,aValute      Integer
+    ,BalanceType  Integer
+    ,BalOrACC     Integer   -- 0-ACC_NO ,1-BAL_CN
+    ,Balance      VARCHAR2
+    ,RateDiff     Integer  --1 Kurs Ferqi ile,0-ferqsiz    
+    ,KredDebt     Integer   -- -1-None ,0-All ,1-Debt,2-Kredit      
+                        )
+    IS
+    cCreate  constant VarChar2(20) :='CREATE  TABLE ';    
+    cFrom    constant VarChar2(64) :=' FROM PROVARCH PR,ACCOUNT A1 ,ACCOUNT A2 ';
+    cSelect  constant VarChar2(556):=',PR.NMAE,PR.ID,PR.SHIFR,PR.VAL_ACC,PR.AMMOUNT,PR.LAMMOUNT,PR.OP_ID,PR.DAT,A1.ACC_NO DEBITOR,GETCUSTINN(A1.KLI_ID) DEBTINN,A1.NAME DNAME,A2.ACC_NO KREDITOR,GETCUSTINN(A2.KLI_ID) KREDINN ,A2.NAME KNAME,PR.DEBT,PR.KREDIT'; 
+    cWhere   constant VarChar2(64):=' WHERE (A1.ID=PR.Debt)AND(A2.ID=PR.Kredit)AND';
+    aBalCN     VarChar2(16):='BAL_CN'; 
+    QueryStr   VarChar2(1024);--main
+    aSelect    VarChar2(256):=' AS SELECT ';
+    TableName  VarChar2(64);
+    ValFilter  VarChar2(64); 
+    DateFilter VarChar2(64);
+    BalFilter  VarChar2(64);
+    RateFilter VarChar2(64);   
+ Begin
+   TableName :='MEMORIAL_'||GetUserName; 
+   aBalCN  :=aBalCN||TO_CHAR(BalanceType);
+   aSelect :=aSelect||'A1.'||aBalCN||' DBAL_CN,A2.'||aBalCN||' KBAL_CN';
+   DateFilter :='(PR.DAT >='||''''||TO_CHAR(aDateBegin)||''''||')AND(PR.DAT<='||''''||TO_CHAR(aDateEnd)||''''||')';
+   ValFilter  :='AND(PR.VAL_ACC='||TO_CHAR(aValute)||')';
+   if  RateDiff=0 then
+      RateFilter :='AND(NOT ((PR.AMMOUNT=0)AND(PR.LAMMOUNT<>0)))';
+     else
+      RateFilter :='';
+   end if;  
+   if  KredDebt=-1 then --hec biri
+    BalFilter:='';
+    end if;        
+   if KredDebt=0 then   --D&K
+    if BalOrACC=0 then  --acc_no 
+      BalFilter:='AND(A1.ACC_NO='||''''||Balance||''''||')AND(A2.ACC_NO='||''''||Balance||''''||')';
+    end if;
+    if BalOrACC=1 then  --bal_cn
+      BalFilter:='AND(A1.'||aBalCN||'='||''''||Balance||''''||')AND(A2.'||aBalCN||'='||''''||Balance||''''||')';
+    end if;            
+   end if;
+   if  KredDebt=1 then  --D
+    if BalOrACC=0 then  --acc_no 
+      BalFilter:='AND(A1.ACC_NO='||''''||Balance||''''||')';
+    end if;
+    if BalOrACC=1 then  --bal_cn
+      BalFilter:='AND(A1.'||aBalCN||'='||''''||Balance||''''||')';
+    end if;    
+   end if;
+   if  KredDebt=2 then  --K
+    if BalOrACC=0 then  --acc_no 
+      BalFilter:='AND(A2.ACC_NO='||''''||Balance||''''||')';
+    end if;
+    if BalOrACC=1 then  --bal_cn
+      BalFilter:='AND(A2.'||aBalCN||'='||''''||Balance||''''||')';
+    end if;    
+   end if;  
+   
+   QueryStr :=cCreate||TableName||aSelect||cSelect||cFrom||cWhere||DateFilter||RateFilter||BalFilter||ValFilter;
+   INTO_TABLE(TableName,QueryStr);       
+ End;
+    FUNCTION  GetUserName return VarChar2
+    IS
+     UserName VarChar2(40);
+    Begin
+      UserName:=User;
+      return UserName;    
+    End;                               
+END;
+     /* Nezerov Asif
+        SMART  SYSTEMS  2002  */

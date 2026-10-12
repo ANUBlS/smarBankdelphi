@@ -1,0 +1,738 @@
+﻿unit ReCalculationMainForm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+   ComCtrls, StdCtrls, Grids, DBGridEh, DBSumLst, ToolWin,
+  ExtCtrls, ImgList, DB, ActnList, Oracle, OracleData, CMExcelExport, Menus,
+  DBGridEhGrouping, GridsEh;
+
+type
+
+  ESearchError = class(Exception);
+
+  TPRMainForm = class(TForm)
+    CalcGrid: TDBGridEh;
+    ImageList1: TImageList;
+    Panel1: TPanel;
+    ToolBar1: TToolBar;
+    ActionList1: TActionList;
+    ActnCalculate: TAction;
+    ActnAcceptCalc: TAction;
+    ActnRejectCalc: TAction;
+    Panel2: TPanel;
+    ActnRefresh: TAction;
+    ExcelExport: TCMExcelExport;
+    GroupBox2: TGroupBox;
+    CBEOM: TCheckBox;
+    DTPCalcDate: TDateTimePicker;
+    ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
+    ToolButton3: TToolButton;
+    ToolButton4: TToolButton;
+    ToolButton5: TToolButton;
+    ToolButton6: TToolButton;
+    ToolButton7: TToolButton;
+    ToolButton8: TToolButton;
+    ToolButton9: TToolButton;
+    ToolButton10: TToolButton;
+    ActnExport: TAction;
+    EditNumberOfCredit: TEdit;
+    EditCONTRACTACCNO: TEdit;
+    EditVAL_NAME: TEdit;
+    EditNAME: TEdit;
+    ToolButton11: TToolButton;
+    ToolButton12: TToolButton;
+    ActnFilter: TAction;
+    PmCalcInterests: TPopupMenu;
+    N1: TMenuItem;
+    N2: TMenuItem;
+    ActnCalcAllintrest: TAction;
+    ToolButton13: TToolButton;
+    procedure FormDestroy(Sender: TObject);
+    procedure CalcGridDrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TColumnEh; State: TGridDrawState);
+    procedure FormCreate(Sender: TObject);
+    procedure ActnCalculateUpdate(Sender: TObject);
+    procedure ActnCalculateExecute(Sender: TObject);
+    procedure ActnAcceptCalcExecute(Sender: TObject);
+    procedure ActnRejectCalcExecute(Sender: TObject);
+    procedure CalcGridColumnMoved(Sender: TObject; FromIndex,
+      ToIndex: Integer);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure ActnRefreshExecute(Sender: TObject);
+    procedure ActnAcceptCalcUpdate(Sender: TObject);
+    procedure ActnRejectCalcUpdate(Sender: TObject);
+    procedure CalcGridTitleBtnClick(Sender: TObject; ACol: Integer;
+      Column: TColumnEh);
+    procedure ActnExportExecute(Sender: TObject);
+    procedure EditNumberOfCreditKeyPress(Sender: TObject; var Key: Char);
+    procedure EditNumberOfCreditExit(Sender: TObject);
+    procedure ActnFilterExecute(Sender: TObject);
+    procedure ActnFilterUpdate(Sender: TObject);
+    procedure ActnCalcAllintrestExecute(Sender: TObject);
+    procedure ActnCalcAllintrestUpdate(Sender: TObject);
+  private
+    procedure PrepareProgress(ProgCnt : Integer; opDesc : String);
+    procedure ShowInterestCalculator;
+    function ExcuseMeUser(Question : String) : Boolean;
+    procedure CalcIntForOne(ID : Integer; Date : TDateTime; EndOfMonth : Boolean; Number : String);
+    procedure SafelyRefresh(Safely : Boolean);
+    procedure CancelCalcIntForOne(ID : Integer;  Number : String);
+    procedure AcceptCalcedIntForOne(ID : Integer;  Number : String);
+    function FindNextRecord(DataSet : TDataSet;FieldName : String;Value : String) : Boolean;
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  PRMainForm: TPRMainForm;
+
+procedure InitPlugin(S : String); export;
+
+implementation
+
+{$R *.DFM}
+
+uses
+  CommonDecls, ProgressFormImpl, ReCalculationDataModuleImpl, sbSystem,
+  FilterDataModuleImpl, FilterUnitImpl, newProgressimpl;
+
+const
+  LoadingFailed : Boolean = True;
+  DataColIndex : Integer = 4;
+
+procedure TPRMainForm.PrepareProgress;
+begin
+  with NewProgressForm , ProgressShower do
+  begin
+    Position := 0;
+    Max := ProgCnt;
+    Step := 1;
+    Caption := opDesc;
+  end;
+  NewProgressForm.Show;
+end;
+
+function TPRMainForm.ExcuseMeUser(Question : String) : Boolean;
+begin
+  Result :=
+    MessageDlg(
+      Question
+     ,mtConfirmation
+     ,[mbYes,mbNo]
+     ,0
+     ) = mrYes;
+end;
+
+procedure TPRMainForm.SafelyRefresh(Safely : Boolean);
+var
+  SavePlace : TBookmark;
+begin
+  with CalcGrid, DataSource.DataSet do
+  begin
+    SavePlace := GetBookmark;
+    Refresh;
+    SelectedRows.Clear;
+    if Safely then
+    GotoBookmark(SavePlace);
+  end;
+end;
+
+procedure TPRMainForm.CalcIntForOne;
+resourcestring
+  rsProcessInfo = '%s - № Lİ kredit üçün faiz hesablanır ...';
+  rsCreditNumber = '%s - № Li kredit : ';
+  rsProcessed = 'Hesablandı.';
+begin
+  with PRDataModule.CalculatorPackage do
+  try
+    LogInformation(Format(rsProcessInfo,[Number]));
+    CallProcedure('CalcPercents',[
+    'p_CreditID', ID ,
+    'p_Date', Date ,
+    'p_holidat',PRDataModule.OracleDataSet1.FieldByName('dat').AsDateTime,
+    'p_EndOfMonth', EndOfMonth
+
+    ]);
+    LogInformation(rsProcessed);
+  except
+    on E:Exception do
+    LogError(Format(rsCreditNumber,[Number]) + E.Message);
+  end;
+end;
+
+procedure TPRMainForm.CancelCalcIntForOne;
+resourcestring
+  rsProcessInfo = '%s - № Li kredit üçün hesablanmış faizlər ləğv olunur ...';
+  rsCreditNumber = '%s - № Li kredit : ';
+  rsProcessed = 'Ləğv olundu.';
+begin
+  with PRDataModule.CalculatorPackage do
+  try
+    LogInformation(Format(rsProcessInfo,[Number]));
+    CallProcedure('CancelCalculation',[
+    'p_CreditID', ID
+    ]);
+    LogInformation(rsProcessed);
+  except
+    on E:Exception do
+    LogError(Format(rsCreditNumber,[Number]) + E.Message);
+  end;
+end;
+
+procedure TPRMainForm.AcceptCalcedIntForOne;
+resourcestring
+  rsProcessInfo = '%s - № Li kredit üçün hesablanmış faizlər təstiq olunur ...';
+  rsCreditNumber = '%s - № li kredit : ';
+  rsProcessed = 'Təstiq olundu.';
+begin
+  with PRDataModule.CalculatorPackage do
+  try
+    LogInformation(Format(rsProcessInfo,[Number]));
+    CallProcedure('AcceptCalcedPercents',[
+    'p_CreditID', ID
+    ]);
+    LogInformation(rsProcessed);
+  except
+    on E:Exception do
+    LogError(Format(rsCreditNumber,[Number]) + E.Message);
+  end;
+end;
+
+procedure TPRMainForm.ShowInterestCalculator;
+resourcestring
+   rsLoadingFailed = 'Yükləmə vaxtı səhv baş vermişdir.';
+begin
+  if not LoadingFailed then
+    ShowModal
+  else
+    LogError(rsLoadingFailed);
+end;
+
+procedure InitPlugin(S : String); export;
+begin
+  PRMainForm.ShowInterestCalculator;
+end;
+
+exports
+  InitPlugin;
+
+procedure TPRMainForm.FormDestroy(Sender: TObject);
+begin
+  PRDataModule.Free;
+  ProgressForm.Free;
+end;
+
+procedure TPRMainForm.CalcGridDrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TColumnEh;
+  State: TGridDrawState);
+var
+    ImageIndex :Integer;
+begin
+  with Sender as TDBGridEh do
+  begin
+      if DataSource.DataSet.RecordCount > 0 then
+    begin
+    ImageIndex := DataSource.DataSet.FieldByName('TrProcessed').AsInteger;
+      if   (DataCol = DataColIndex)   then
+      ImageList1.Draw(Canvas, Rect.Left, Rect.Top, ImageIndex, True)
+      else
+      DefaultDrawColumnCell(Rect, DataCol, Column, State);
+    end;
+  end;    
+end;
+
+procedure TPRMainForm.FormCreate(Sender: TObject);
+begin
+  PRDataModule := TPRDataModule.Create(Self);
+  NewProgressForm := TNewProgressForm.Create(Self);
+  FilterDataModule := TFilterDataModule.Create(Self);
+  FilterMainForm := TFilterMainForm.Create(Self);
+  FilterMainForm.FFilterGrid := CalcGrid;
+  
+  DTPCalcDate.DateTime := Get_CurrentDate;
+  LoadingFailed := False;
+end;
+
+procedure TPRMainForm.ActnCalculateUpdate(Sender: TObject);
+begin
+  with CalcGrid.DataSource.DataSet do
+  (Sender as TAction).Enabled :=
+             Active and (FieldByName('TrProcessed').AsInteger in [0,1]);
+end;
+
+procedure TPRMainForm.ActnCalculateExecute(Sender: TObject);
+resourcestring
+  rsConfirmForOne = '%s  - № li kredit üçün %s. Əminsiniz?';
+  rsConfirmForAll = '%d - sayda kredit üçün %s. Əminsiniz?';
+  rsCalcPercent   = 'Faiz hesablanacaq';
+  rsAlreadyCalced = '%s - № li kredit üçün faizlər artıq hesablanıb !';
+  rsProgressCaption = '                            Faizlər hesablanır. gözləyin.   .....';
+var
+  I : Integer;
+  SelectedRowsCnt : Integer;
+  CrdID : Integer;
+  CrdNo : String;
+  Date : TDateTime;
+  EndOfMonth : Boolean;
+  CrdStatus : Integer;
+
+begin
+
+  Date := Integer(Trunc(DTPCalcDate.DateTime));
+  EndOfMonth := CBEOM.Checked;
+  with CalcGrid, DataSource.DataSet do
+  begin
+
+    SelectedRowsCnt := SelectedRows.Count;
+
+    if SelectedRowsCnt > 1 then
+    begin
+
+      if not
+        ExcuseMeUser(
+              Format(rsConfirmForAll,[SelectedRowsCnt,rsCalcPercent])
+              ) then   Exit;
+
+      Self.Update;
+
+      PrepareProgress(SelectedRowsCnt,rsProgressCaption);
+
+      for I := 0 to SelectedRowsCnt - 1 do
+      begin
+      
+        GotoBookmark(Pointer(SelectedRows[I]));
+
+        CrdID := FieldByName('ID').AsInteger;
+        CrdNo := FieldByName('NumberOfCredit').AsString;
+        CrdStatus := FieldByName('TrProcessed').AsInteger;
+        if CrdStatus in [0,1] then
+          begin
+         //   PlaceOutBForOne(CrdID,Date,CrdNo);
+            CalcIntForOne(CrdID, Date, EndOfMonth,CrdNo);
+          end
+        else
+          LogWarning(Format(rsAlreadyCalced,[CrdNo]));
+
+        NewProgressForm.ProgressShower.Position := I + 1;
+      end;
+
+      newProgressForm.Close; //
+
+    end else
+    begin
+      CrdID := FieldByName('ID').AsInteger;
+      CrdNo := FieldByName('NumberOfCredit').AsString;
+      CrdStatus := FieldByName('TrProcessed').AsInteger;
+
+      if not
+         ExcuseMeUser(Format(rsConfirmForOne,[CrdNo,rsCalcPercent]))
+         then         Exit;
+         
+      if CrdStatus in [0,1] then
+      begin
+        CalcIntForOne(CrdID, Date, EndOfMonth,CrdNo);
+       // PlaceOutBForOne(CrdID,Date,CrdNo);
+        end
+      else
+        LogWarning(Format(rsAlreadyCalced,[CrdNo]));
+    end;
+    
+    SafelyRefresh(False);
+
+  end; // WITH
+
+end;
+
+procedure TPRMainForm.ActnAcceptCalcExecute(Sender: TObject);
+resourcestring
+  rsConfirmForOne = '%s  - № li kredit üçün %s. Əminsiniz?';
+  rsConfirmForAll = '%d - sayda kredit üçün %s. Əminsiniz?';
+  rsCalcPercent   = 'Hesablanmış faizlər təstiq olunacaq';
+  rsAlreadyCalced = '%s - № li kredit üçün hələ hesablanmayıb və ya  təstiq olunub !';
+  rsProgressCaption = '                        Faizlər təstiq olunur . gözləyin.   .....';
+
+
+var
+  I : Integer;
+  SelectedRowsCnt : Integer;
+  CrdID : Integer;
+  CrdNo : String;
+  CrdStatus : Integer;
+
+begin
+
+  with CalcGrid, DataSource.DataSet do
+  begin
+  
+    SelectedRowsCnt := SelectedRows.Count;
+
+    if SelectedRowsCnt > 1 then
+    begin
+    
+      if not
+        ExcuseMeUser(
+              Format(rsConfirmForAll,[SelectedRowsCnt,rsCalcPercent])
+              ) then   Exit;
+
+      Self.Update;
+      
+      PrepareProgress(SelectedRowsCnt,rsProgressCaption);
+
+      for I := 0 to SelectedRowsCnt - 1 do
+      begin
+      
+        GotoBookmark(Pointer(SelectedRows[I]));
+
+        CrdID := FieldByName('ID').AsInteger;
+        CrdNo := FieldByName('NumberOfCredit').AsString;
+        CrdStatus := FieldByName('TrProcessed').AsInteger;
+
+        if CrdStatus in [0,1] then
+          AcceptCalcedIntForOne(CrdID, CrdNo)
+        else
+          LogWarning(Format(rsAlreadyCalced,[CrdNo]));
+
+        NewProgressForm.ProgressShower.Position := I + 1;
+      end;
+
+      newProgressForm.Close; //
+
+    end else
+    begin
+    
+      CrdID := FieldByName('ID').AsInteger;
+      CrdNo := FieldByName('NumberOfCredit').AsString;
+      CrdStatus := FieldByName('TrProcessed').AsInteger;
+
+      if not
+         ExcuseMeUser(Format(rsConfirmForOne,[CrdNo,rsCalcPercent]))
+         then         Exit;
+         
+      if CrdStatus in [0,1] then      
+        AcceptCalcedIntForOne(CrdID, CrdNo)
+      else
+        LogWarning(Format(rsAlreadyCalced,[CrdNo]));
+    end;
+
+   { with PRDataModule.cm_autoexp do
+    try
+     CallProcedure('autoexp',[Get_CurrentDate]);
+     CallProcedure('autores',[Get_CurrentDate]);
+     except
+     on E:Exception do
+     LogError(E.Message);
+   end;
+    SafelyRefresh(False);
+
+}  end; // WITH  
+
+end;
+
+procedure TPRMainForm.ActnRejectCalcExecute(Sender: TObject);
+resourcestring
+  rsConfirmForOne = '%s  - № li kredit üçün %s. Əminsiniz?';
+  rsConfirmForAll = '%d - sayda kredit üçün %s. Əminsiniz?';
+  rsCalcPercent   = 'Hesablanmış faizlər ləğv olunacaq';
+  rsAlreadyCalced = '%s - № li kredit üçün faizlər hələ hesablanmayıb !';
+  rsProgressCaption = '                       Faizlər ləğv olunur. gözləyin.   .....';
+
+
+var
+  I : Integer;
+  SelectedRowsCnt : Integer;
+  CrdID : Integer;
+  CrdNo : String;
+  CrdStatus : Integer;
+begin
+  with CalcGrid, DataSource.DataSet do
+  begin
+
+    SelectedRowsCnt := SelectedRows.Count;
+
+    if SelectedRowsCnt > 1 then
+    begin
+
+      if not
+        ExcuseMeUser(
+              Format(rsConfirmForAll,[SelectedRowsCnt,rsCalcPercent])
+              ) then   Exit;
+
+      Self.Update;
+
+      PrepareProgress(SelectedRowsCnt, rsProgressCaption);
+
+      for I := 0 to SelectedRowsCnt - 1 do
+      begin
+
+        GotoBookmark(Pointer(SelectedRows[I]));
+
+        CrdID := FieldByName('ID').AsInteger;
+        CrdNo := FieldByName('NumberOfCredit').AsString;
+        CrdStatus := FieldByName('TrProcessed').AsInteger;
+
+        if CrdStatus in [1,2] then
+          CancelCalcIntForOne(CrdID, CrdNo)
+        else
+          LogWarning(Format(rsAlreadyCalced,[CrdNo]));
+
+        newProgressForm.ProgressShower.Position := I + 1;
+      end;
+
+      newProgressForm.Close; //
+
+
+    end else
+    begin
+    
+      CrdID := FieldByName('ID').AsInteger;
+      CrdNo := FieldByName('NumberOfCredit').AsString;
+      CrdStatus := FieldByName('TrProcessed').AsInteger;
+
+      if not
+         ExcuseMeUser(Format(rsConfirmForOne,[CrdNo,rsCalcPercent]))
+         then         Exit;
+         
+      if CrdStatus in [1,2] then
+        CancelCalcIntForOne(CrdID, CrdNo)
+      else
+        LogWarning(Format(rsAlreadyCalced,[CrdNo]));
+    end;
+
+    SafelyRefresh(False);
+
+  end; // WITH
+
+end;
+
+procedure TPRMainForm.CalcGridColumnMoved(Sender: TObject; FromIndex,
+  ToIndex: Integer);
+
+function FindSpecialRowIndex : Integer;
+begin
+  Result := 0;
+  with Sender as TDBGridEh do
+  while (Result < Columns.Count) and (Columns[Result].Tag <> 1) do
+  Inc(Result);
+end;
+
+begin
+  DataColIndex := FindSpecialRowIndex();
+end;
+
+procedure TPRMainForm.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  newProgressForm.Close;
+end;
+
+procedure TPRMainForm.ActnRefreshExecute(Sender: TObject);
+begin
+  SafelyRefresh(True);
+end;
+
+procedure TPRMainForm.ActnAcceptCalcUpdate(Sender: TObject);
+begin
+  with CalcGrid.DataSource.DataSet do
+  (Sender as TAction).Enabled :=
+             Active and (FieldByName('TrProcessed').AsInteger = 1);
+end;
+
+procedure TPRMainForm.ActnRejectCalcUpdate(Sender: TObject);
+begin
+  with CalcGrid.DataSource.DataSet do
+  (Sender as TAction).Enabled :=
+             Active and (FieldByName('TrProcessed').AsInteger in [1,2]);
+end;
+
+procedure TPRMainForm.CalcGridTitleBtnClick(Sender: TObject; ACol: Integer;
+  Column: TColumnEh);
+var
+  SortField : String;
+begin
+  if ACol <> DataColIndex then
+    SortField := Column.FieldName
+  else
+    SortField := 'TRPROCESSED';
+
+  if Column.Title.SortMarker = smDownEh then
+    SortField := SortField + ' DESC';
+
+  with Sender as TDBGridEh , TOracleDataSet(DataSource.DataSet) do
+  begin
+    ClearVariables;
+    SetVariable('OrderField',SortField);
+    SafelyRefresh(True);
+  end;
+
+end;
+
+procedure TPRMainForm.ActnExportExecute(Sender: TObject);
+begin
+  with ExcelExport do
+  begin
+    Connect;
+    ExportDataset(CalcGrid.DataSource.DataSet,'Interests',True);
+  end;
+end;
+
+function TPRMainForm.FindNextRecord(DataSet : TDataSet;FieldName : String;Value : String) : Boolean;
+
+resourcestring
+  rsRecordRecachedEOF = 'Axtarış cərgənin sonuna çatıb .';
+  rsContinueFromTop   = 'Əvvəldən axtarmaqla davam etmək istəyirsiniz?';
+  rsRecordNotFound    = 'Yazı tapılmadı.';
+
+var
+  SearchOptions : TSearchRecordOptions;
+
+begin
+  SearchOptions := [srIgnoreCase ,srPartialMatch];
+  with  (DataSet as TOracleDataSet) do
+  begin
+
+    Result := SearchRecord(
+                FieldName,
+                Value,
+                SearchOptions + [srFromCurrent, srForward]
+    );
+    if not Result then
+
+    if MessageDlg(
+              rsRecordRecachedEOF + #10#13 + rsContinueFromTop
+             ,mtInformation
+             ,[mbNo , mbYes]
+             ,0
+             ) = mrYes  then
+    begin
+
+      Result := SearchRecord(
+                  FieldName,
+                  Value,
+                  SearchOptions + [srFromBeginning]
+      );
+
+
+      if not Result then
+      MessageDlg(rsRecordNotFound,mtInformation,[mbOk],0);
+
+    end;
+  end;
+end;
+
+procedure TPRMainForm.EditNumberOfCreditKeyPress(Sender: TObject;
+  var Key: Char);
+  
+resourcestring
+  rsNothingToSearch = 'Axtarılmalı olanı daxil edin';
+
+var
+  FieldToSearch : String;
+  SearchValue : String;
+begin
+  if ORD(Key) = VK_RETURN then
+  begin
+
+
+  CalcGrid.SelectedRows.Clear; //!!!
+
+  FieldToSearch := Copy((Sender as TEdit).Name,5,Length((Sender as TEdit).Name));
+  SearchValue := (Sender as TEdit).Text;
+  
+  if SearchValue = '' then
+    raise ESearchError.Create(rsNothingToSearch);
+
+  FindNextRecord(
+      CalcGrid.DataSource.DataSet,
+      FieldToSearch,
+      SearchValue
+  );
+  Key := #0
+  end;
+end;
+
+procedure TPRMainForm.EditNumberOfCreditExit(Sender: TObject);
+begin
+  (Sender as TEdit).Text := '';
+end;
+
+procedure TPRMainForm.ActnFilterExecute(Sender: TObject);
+begin
+  FilterMainForm.ShowModal
+end;
+
+procedure TPRMainForm.ActnFilterUpdate(Sender: TObject);
+begin
+  (Sender as TAction).Enabled := not LoadingFailed;
+end;
+
+procedure TPRMainForm.ActnCalcAllintrestExecute(Sender: TObject);
+resourcestring   rsProgressCaption = '                        Faizler tesdiq olunur. gözləyin.   .....';
+  rsConfirmForAll = '%d -  sayda kredit üçün %s. Əminsiniz?';
+  rsCalcPercent   = ' faizlər hesablanıb, təsdiq olunacaq';
+
+var crdid,i,rowcnt :integer;
+currdat :TDateTime;
+
+begin
+
+   i:=1;
+   Currdat := integer(trunc(DTPCalcDate.datetime)){Get_CurrentDate};
+//   ShowMessage(DateToStr(Currdat));
+   PRDataModule.IntCache.CloseAll;
+   PRDataModule.IntCache.Open;
+   rowcnt := PRDataModule.IntCache.RecordCount;
+
+       if not
+        ExcuseMeUser(
+              Format(rsConfirmForAll,[rowcnt,rsCalcPercent])
+              ) then   Exit;
+
+   PrepareProgress(rowcnt,rsProgressCaption);
+   with PRDataModule,IntCache,CalculatorPackage do
+   begin
+      First;
+      while not EOF do
+      begin
+      try
+        crdid := FieldByName('ID').AsInteger;
+        CallProcedure('CalcPercents',['p_CreditID',
+                                      crdid,
+                                      'p_date',Currdat,
+                                      'p_EndOfMonth',false]);
+       CallProcedure ('AcceptCalcedPercents',['p_CreditID',crdid]);
+        except
+         on E: Exception do
+         LogError(E.Message);
+       end;
+       Next;
+       newProgressForm.ProgressShower.Position := I + 1;
+       i:= i+1;
+      end;
+   end;
+  {  with PRDataModule.cm_autoexp do
+    try
+     CallProcedure('autoexp',[Get_CurrentDate]);
+     CallProcedure('autores',[Get_CurrentDate]);
+     except
+     on E:Exception do
+     LogError(E.Message);
+   end;       }
+   
+   newProgressForm.Close;
+   SafelyRefresh(False);
+end;
+
+procedure TPRMainForm.ActnCalcAllintrestUpdate(Sender: TObject);
+begin
+  with CalcGrid.DataSource.DataSet do
+  (Sender as TAction).Enabled :=
+             Active and (FieldByName('TrProcessed').AsInteger in [0,1]);
+end;
+
+initialization
+  PRMainForm := TPRMainForm.Create(CommonApplication);
+
+end.

@@ -1,0 +1,135 @@
+object DataModuleMain: TDataModuleMain
+  OldCreateOrder = False
+  Left = 192
+  Top = 107
+  Height = 480
+  Width = 696
+  object BankDate: TOracleDataSet
+    SQL.Strings = (
+      'select TEK_DAT from SYSDAT')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = False
+    Active = True
+    Left = 136
+    Top = 128
+  end
+  object TurnOvers: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      '    ar.DatDate,'
+      '    ac.bal_cn1 as BalanceNo ,'
+      '    ac.Acc_No ,'
+      '    ac.val_acc ,'
+      '    av.val_name ,'
+      '    ar.ostat as Rest ,'
+      '    ar.pok_ostat as RestInNational ,'
+      '    ar.obr_D ,'
+      '    ar.pok_obr_D ,'
+      '    ar.obr_k ,'
+      '    ar.pok_obr_k'
+      '  from'
+      '    avalute av ,'
+      '    account ac ,'
+      '    archost ar'
+      ' where'
+      '    av.valute = ac.val_acc and'
+      '    ac.id = ar.acc_id and'
+      '    ar.datdate between :FirstDate and :LastDate'
+      '')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    Variables.Data = {
+      03000000020000000A0000003A4649525354444154450C000000000000000000
+      0000090000003A4C415354444154450C0000000000000000000000}
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = False
+    Active = False
+    OnCalcFields = TurnOversCalcFields
+    Left = 136
+    Top = 176
+    object TurnOversDATDATE: TDateTimeField
+      FieldName = 'DATDATE'
+    end
+    object TurnOversBALANCENO: TFloatField
+      FieldName = 'BALANCENO'
+    end
+    object TurnOversACC_NO: TStringField
+      FieldName = 'ACC_NO'
+    end
+    object TurnOversVAL_ACC: TIntegerField
+      FieldName = 'VAL_ACC'
+    end
+    object TurnOversVAL_NAME: TStringField
+      FieldName = 'VAL_NAME'
+      Size = 10
+    end
+    object TurnOversREST: TFloatField
+      FieldName = 'REST'
+    end
+    object TurnOversRESTINNATIONAL: TFloatField
+      FieldName = 'RESTINNATIONAL'
+    end
+    object TurnOversOBR_D: TFloatField
+      FieldName = 'OBR_D'
+    end
+    object TurnOversPOK_OBR_D: TFloatField
+      FieldName = 'POK_OBR_D'
+    end
+    object TurnOversOBR_K: TFloatField
+      FieldName = 'OBR_K'
+    end
+    object TurnOversPOK_OBR_K: TFloatField
+      FieldName = 'POK_OBR_K'
+    end
+    object TurnOversID: TStringField
+      FieldKind = fkCalculated
+      FieldName = 'ID'
+      Size = 255
+      Calculated = True
+    end
+  end
+end

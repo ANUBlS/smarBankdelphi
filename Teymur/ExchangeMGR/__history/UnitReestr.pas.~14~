@@ -1,0 +1,52 @@
+unit UnitReestr;
+
+interface
+
+uses Windows, SysUtils, Messages, Classes, Graphics, Controls,
+  StdCtrls, ExtCtrls, Forms, Quickrpt, QRCtrls;
+
+type
+  TFormReestrReport = class(TQuickRep)
+    QRBand1: TQRBand;
+    QRLabel2: TQRLabel;
+    QRDateReestr: TQRLabel;
+    QRBankName: TQRLabel;
+    DetailBand1: TQRBand;
+    QRShape3: TQRShape;
+    QRShape4: TQRShape;
+    QRDBText1: TQRDBText;
+    QRShape5: TQRShape;
+    QRDBText2: TQRDBText;
+    QRShape1: TQRShape;
+    QRShape6: TQRShape;
+    QRLabel1: TQRLabel;
+    QRCompositeReport1: TQRCompositeReport;
+    procedure QuickRepBeforePrint(Sender: TCustomQuickRep;
+      var PrintReport: Boolean);
+    procedure QRCompositeReport1AddReports(Sender: TObject);
+  private
+
+  public
+
+  end;
+
+var
+  FormReestrReport: TFormReestrReport;
+
+implementation
+  uses UnitDateExch,sboapiDataModuleImpl,SBTranslateProc, UnitFormReester;
+{$R *.DFM}
+
+procedure TFormReestrReport.QRCompositeReport1AddReports(Sender: TObject);
+begin
+  QRCompositeReport1.OnAddReports(FormReestrReport);
+  QRCompositeReport1.OnAddReports(FormReestr);
+end;
+
+procedure TFormReestrReport.QuickRepBeforePrint(Sender: TCustomQuickRep;
+  var PrintReport: Boolean);
+begin
+  SBTranslateProc.TranslateAllCompQuickRep(Self,sboapiDataModule.OrPack_SL);
+end;
+
+end.

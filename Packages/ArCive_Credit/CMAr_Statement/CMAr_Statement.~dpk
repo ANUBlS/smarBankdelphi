@@ -1,0 +1,47 @@
+package CMAr_Statement;
+
+{$R *.RES}
+{$ALIGN ON}
+{$ASSERTIONS ON}
+{$BOOLEVAL OFF}
+{$DEBUGINFO ON}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LOCALSYMBOLS ON}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION ON}
+{$OVERFLOWCHECKS OFF}
+{$RANGECHECKS OFF}
+{$REFERENCEINFO ON}
+{$SAFEDIVIDE OFF}
+{$STACKFRAMES OFF}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS ON}
+{$WRITEABLECONST ON}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
+{$DESCRIPTION 'CM Statement'}
+{$DESIGNONLY}
+{$IMPLICITBUILD ON}
+
+requires
+  vcl50,
+  CMOracleAPI,
+  CMAr_COMMON,
+  CMVCL50,
+  doa,
+  Ehlib50,
+  Vclbde50,
+  Qrpt50;
+
+contains
+  ArStatementDataModule in 'ARStatementDataModule.pas' {StatementDataMod: TDataModule},
+  ArStatementMainFormImpl in 'ArStatementMainFormImpl.pas' {CrdStatementMainForm},
+  ArRestsHistoryImpl in 'ArRestsHistoryImpl.pas' {RestForm},
+  ArInterestshistoryImpl in 'ArInterestshistoryImpl.pas' {InterestsForm},
+  ArRepUnit in 'ArRepUnit.pas' {ReportForm},
+  ArReportsheduleUnit in 'ArReportsheduleUnit.pas' {ReportSheduleForm};
+
+end.

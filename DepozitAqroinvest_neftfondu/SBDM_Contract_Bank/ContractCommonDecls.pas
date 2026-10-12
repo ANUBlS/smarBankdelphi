@@ -1,0 +1,40 @@
+unit ContractCommonDecls;
+
+interface
+
+uses
+  Controls;
+
+type
+  TDeposit = record
+     TypeD :Integer;
+     ContractNo :String;
+     opendate : TDateTime;
+     CloseDate : TDateTime;
+     amount : Real;
+     contracttype : Integer;
+     clienttype : Integer;
+     branchid :Integer;
+     currency : Integer;
+     personaltype: Integer;
+     customerid: Integer;
+     interest: Real;
+     overdueinterest: Real;
+     dueinterest: Real;
+     contractaccid: Integer;
+     clientaccid: Integer;
+     interestaccid: Integer;
+     overdueaccid : Integer;
+     FirstPayDateforInt :TDateTime;
+     BEFO_INTERESTPEYTACCID:Integer;
+
+  end;
+
+var
+  SaveDeposit :TDeposit;  
+
+implementation
+
+
+
+end.

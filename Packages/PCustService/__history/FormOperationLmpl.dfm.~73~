@@ -1,0 +1,381 @@
+object FormOperation: TFormOperation
+  Left = 0
+  Top = 0
+  BorderIcons = [biSystemMenu, biMaximize]
+  Caption = #399'm'#601'liyyatlar'
+  ClientHeight = 601
+  ClientWidth = 927
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poDesktopCenter
+  OnCanResize = FormCanResize
+  OnCreate = FormCreate
+  OnKeyPress = FormKeyPress
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object XFPanel1: TXFPanel
+    Left = 0
+    Top = 35
+    Width = 927
+    Height = 566
+    Align = alClient
+    BevelKind = bkFlat
+    Caption = 'XFPanel1'
+    TabOrder = 0
+    object XDBGrid2: TXDBGrid
+      Left = 1
+      Top = 1
+      Width = 921
+      Height = 218
+      Align = alTop
+      DataSource = DataModPCustService.Dsrc_sb_business_opers
+      GridStyle.VisualStyle = vsXPStyle
+      Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit, dgMultiSelect, dgExtendedSelect, dgInternalSelect, dgRowResize, dgRowScroll, dgHotButtons, dgTitleButtons, dgTitleWidthOff, dgMarkerAutoAlign, dgMarkerAutoToggle]
+      PopupMenu = PopupMenu1
+      TabOrder = 0
+      OnDblClick = XDBGrid2DblClick
+      Columns = <
+        item
+          Expanded = False
+          FieldName = 'REFERENCE'
+          Title.Alignment = taCenter
+          Title.Caption = 'Reference'
+          Visible = True
+          Width = 220
+        end
+        item
+          Expanded = False
+          FieldName = 'NAME'
+          Title.Alignment = taCenter
+          Title.Caption = 'Biznes prosesin ad'#305
+          Visible = True
+          Width = 350
+        end
+        item
+          Expanded = False
+          FieldName = 'DAT'
+          Title.Alignment = taCenter
+          Title.Caption = 'Sistem tarixi'
+          Visible = True
+          Width = 150
+        end
+        item
+          Expanded = False
+          FieldName = 'TIM'
+          Title.Alignment = taCenter
+          Title.Caption = #399'm'#601'liyyat'#305'n verilm'#601' tarixi'
+          Visible = True
+          Width = 180
+        end>
+    end
+    object XDBGrid1: TXDBGrid
+      Left = 1
+      Top = 250
+      Width = 921
+      Height = 311
+      Align = alClient
+      DataSource = DataModPCustService.Dsrc_trancation
+      GridStyle.VisualStyle = vsXPStyle
+      Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit, dgExtendedSelect, dgInternalSelect, dgRowResize, dgRowScroll, dgHotButtons, dgTitleButtons, dgTitleHeaders, dgTitleWidthOff, dgMarkerAutoAlign, dgMarkerAutoToggle]
+      PopupMenu = PMTransactions
+      TabOrder = 1
+      OnDblClick = XDBGrid1DblClick
+      OnDrawColumnCell = XDBGrid1DrawColumnCell
+      Columns = <
+        item
+          Expanded = False
+          Visible = True
+          Width = 30
+        end
+        item
+          Expanded = False
+          FieldName = 'ID'
+          Title.Alignment = taCenter
+          Visible = True
+          Width = 60
+        end
+        item
+          Expanded = False
+          FieldName = 'DEBITACCNO'
+          Title.Alignment = taCenter
+          Title.Caption = 'Debt hesab'
+          Visible = True
+          Width = 220
+        end
+        item
+          Expanded = False
+          FieldName = 'DEBITCURRENCYSNAME'
+          Title.Alignment = taCenter
+          Title.Caption = '$'
+          Visible = True
+          Width = 40
+        end
+        item
+          Expanded = False
+          FieldName = 'CREDITACCNO'
+          Title.Alignment = taCenter
+          Title.Caption = 'Kredit hesab'#305
+          Visible = True
+          Width = 220
+        end
+        item
+          Expanded = False
+          FieldName = 'CREDITCURRENCYSNAME'
+          Title.Alignment = taCenter
+          Title.Caption = '$'
+          Visible = True
+          Width = 40
+        end
+        item
+          Expanded = False
+          FieldName = 'CREDITAMOUNT'
+          Title.Alignment = taCenter
+          Title.Caption = 'Kredit m'#601'bl'#601#287
+          Visible = True
+          Width = 100
+        end
+        item
+          Expanded = False
+          FieldName = 'DEBITAMOUNT'
+          Title.Alignment = taCenter
+          Title.Caption = 'Debt m'#601'bl'#601#287
+          Visible = True
+          Width = 100
+        end
+        item
+          Expanded = False
+          FieldName = 'LAMOUNT'
+          Title.Alignment = taCenter
+          Title.Caption = 'Ekvivalent'
+          Visible = True
+          Width = 100
+        end
+        item
+          Expanded = False
+          FieldName = 'NAME'
+          Title.Alignment = taCenter
+          Title.Caption = 'T'#601'yinat'#305
+          Visible = True
+          Width = 250
+        end
+        item
+          Expanded = False
+          FieldName = 'STATUS'
+          Title.Alignment = taCenter
+          Title.Caption = 'Status'
+          Visible = True
+          Width = 100
+        end>
+    end
+    object Memo1: TMemo
+      Left = 176
+      Top = 54
+      Width = 297
+      Height = 81
+      Lines.Strings = (
+        'Memo1')
+      TabOrder = 2
+      Visible = False
+    end
+    object XFPanel3: TXFPanel
+      Left = 1
+      Top = 219
+      Width = 921
+      Height = 31
+      Align = alTop
+      TabOrder = 3
+    end
+  end
+  object XFPanel2: TXFPanel
+    Left = 0
+    Top = 0
+    Width = 927
+    Height = 35
+    Align = alTop
+    BevelKind = bkFlat
+    TabOrder = 1
+    object XFLabel1: TXFLabel
+      Left = 481
+      Top = 8
+      Width = 74
+      Height = 13
+      Caption = 'Ba'#351'lan'#287#305'c tarixi '
+    end
+    object XFLabel2: TXFLabel
+      Left = 684
+      Top = 8
+      Width = 45
+      Height = 13
+      Caption = 'Son tarixi'
+    end
+    object BeginDat: TDateTimePicker
+      Left = 561
+      Top = 6
+      Width = 115
+      Height = 21
+      Date = 40848.484083831020000000
+      Time = 40848.484083831020000000
+      TabOrder = 0
+    end
+    object EndDat: TDateTimePicker
+      Left = 738
+      Top = 6
+      Width = 115
+      Height = 21
+      Date = 40848.484083831020000000
+      Time = 40848.484083831020000000
+      TabOrder = 1
+    end
+    object XFButton1: TXFButton
+      Left = 858
+      Top = 5
+      Width = 53
+      Height = 23
+      Caption = 'OK'
+      DoubleBuffered = True
+      ParentDoubleBuffered = False
+      TabOrder = 2
+      OnClick = XFButton1Click
+    end
+    object XFButton2: TXFButton
+      Left = 2
+      Top = 4
+      Width = 150
+      Height = 23
+      Caption = #399'm'#601'liyyatlar'#305'n T'#601'diql'#601'nm'#601'si'
+      DoubleBuffered = True
+      ParentDoubleBuffered = False
+      TabOrder = 3
+      OnClick = XFButton2Click
+    end
+    object XFBitBtn1: TXFBitBtn
+      Left = 158
+      Top = 5
+      Width = 110
+      Height = 23
+      Caption = #399'm'#601'liyyatlar'#305'n l'#601#287'vi'
+      DoubleBuffered = True
+      ParentDoubleBuffered = False
+      TabOrder = 4
+      OnClick = XFBitBtn1Click
+    end
+  end
+  object ImageList1: TImageList
+    Left = 248
+    Top = 360
+    Bitmap = {
+      494C010103000500040010001000FFFFFFFFFF00FFFFFFFFFFFFFFFF424D3600
+      0000000000003600000028000000400000001000000001001000000000000008
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000008410
+      E73D841000000000000000000000000000000000000000000000000000000000
+      000000008C310821000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000000000000000000000000000F75E
+      E07F2A6700000000000000000000000000000000000000000000000000000000
+      0000E71C08210821000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      100000000000000000000000000000000000000000000000000000000821EF7F
+      E07FE07F4A290000000000000000000000000000000000000000000000008410
+      E71C000008210821000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000001000
+      00021000000000000000000000000000000000000000000000000000F75EE07F
+      E07FE07F2A67000000000000000000000000000000000000000008218C310821
+      B556000008211042104208210000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000010000002
+      00020002000000000000000000000000000000000000000000000821EF7FE07F
+      E07FE07FE07F4A29000000000000000000000000000000008410AD35B5560000
+      00000000B556AD35082110428C31000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000100000020002
+      0002000210000000000000000000000000000000000000000000F75EE07FE07F
+      A656A656E07F2A670000000000000000000000000000E71CBD77000000000000
+      0000000000000000BD776B2D10428C3100000000000000000000000000000000
+      000000000000000000000000000000000000000000000000000000020002E003
+      E003000200021000000000000000000000000000000000000821EF7FE07FE07F
+      00000000E07FE07F4A29000000000000000000006B2D000000000000FF5EFF3D
+      FF3DFF3DFF3D0000000000006B2D104208210000000000000000000000000000
+      00000000000000000000000000000000000000000000000000000002E0030000
+      0000E0030002000210000000000000000000000000000000F75EE07FE07FE07F
+      A656A656E07FE07F2A6700000000000000000821BD770000000000000000FF3D
+      1F001F000000000000000000BD77082110420000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000E00300000000
+      000000000002000200020000000000000000000000000821EF7FE07FE07FE07F
+      A635A677E07FE07FE07F4A29000000000000B55600000000000000000000FF3D
+      1F001F0000000000000000000000AD3510420000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000000E00300020002100000000000000000000000F75EE07FE07FE07FE07F
+      8410644EE07FE07FE07F2A67000000000000F75E00000000000000000000FF3D
+      1F001F0000000000000000000000EF3D10420000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000E003000200021000000000000821EF7FE07FE07FE07F2A67
+      00004A29E07FE07FE07FE07F4A2900000000F75E0000000000000000FF5EFF1C
+      1F001F0000000000000000000000EF3D8C310000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000020002000200000000F75EE07FE07FE07FE07FE03D
+      00000000E07FE07FE07FE07F2A6700000000CE39000000000000000000000000
+      00000000000000000000000000004A2984100000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000E0030002000200000821EF7FE07FE07FE07FE07FE03D
+      00000000E07FE07FE07FE07FE07F4A290000841039670000000000000000DD18
+      1F00DD180000000000000000B556000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000E00300020000F75EE07FE07FE07FE07FE07FA677
+      E03DA656E07FE07FE07FE07FE07FE85E0000000084107B6F000000000000DD18
+      1F00DD18000000000000F75E0000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000F75EE07FE07FE07FE07FE07FE07F
+      E07FE07FE07FE07FE07FE07FE07FE85E0000000000008410B556BD7700000000
+      000000000000BD77B55684100000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000008C31EF5EE85EE85EE85EE85EE85E
+      E85EE85EE85EE85EE85EE85EE85E0821000000000000000000000821CE39F75E
+      F75EF75ECE390821000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000424D3E000000000000003E000000
+      2800000040000000100000000100010000000000800000000000000000000000
+      000000000000000000000000FFFFFF00FFFFFC7FFF9F0000FFFFFC3FFF1F0000
+      FEFFF83FFC9F0000FC7FF81FF0870000F87FF01FE3830000F03FF00FCFE10000
+      F01FE00FB8380000F30FE0073C780000F78FC0077C7C0000FF87C0037C7C0000
+      FFE18003787C0000FFF180017FFC0000FFF100013C790000FFF900009C730000
+      FFFF0000C7C70000FFFF0001F01F0000}
+  end
+  object PMTransactions: TPopupMenu
+    OnPopup = PMTransactionsPopup
+    Left = 392
+    Top = 384
+    object MemorialOrder1: TMenuItem
+      Caption = 'Memorial Order'
+      Visible = False
+    end
+    object KassaOrderi1: TMenuItem
+      Caption = 'Kassa Orderi'
+      Visible = False
+    end
+    object Qbz1: TMenuItem
+      Caption = 'Q'#601'bz'
+      OnClick = Qbz1Click
+    end
+    object mliyyatlarExcelat1: TMenuItem
+      Caption = #399'm'#601'liyyatlar'#305' Excel-'#601' at'
+      Visible = False
+    end
+    object dmtapr1: TMenuItem
+      Caption = #214'd'#601'm'#601' tap'#351#305'r'#305#287#305
+      OnClick = dmtapr1Click
+    end
+  end
+  object PopupMenu1: TPopupMenu
+    Left = 368
+    Top = 176
+    object tesdiq1: TMenuItem
+      Caption = #399'm'#601'liyyatlar'#305'n T'#601'diql'#601'nm'#601'si'
+      OnClick = tesdiq1Click
+    end
+  end
+end

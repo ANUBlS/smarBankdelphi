@@ -1,0 +1,74 @@
+unit Unitexcel;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, StdCtrls, Grids, DBGrids;
+
+type
+  TEXCELform = class(TForm)
+    DBGrid1: TDBGrid;
+    Button1: TButton;
+    DataSource1: TDataSource;
+    procedure DBGrid1DblClick(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  EXCELform: TEXCELform;
+
+implementation
+
+uses U9, Unit18, Unitsalary, EXCELNEWCARD, PROLONGATIONUNIT,
+  accountcloseunit,SBTranslateProc,sboapiDataModuleImpl;
+
+{$R *.DFM}
+
+procedure TEXCELform.DBGrid1DblClick(Sender: TObject);
+begin
+Button1.Click;
+end;
+
+procedure TEXCELform.FormActivate(Sender: TObject);
+begin
+DataMod_CARDS.excels.Open;
+end;
+
+procedure TEXCELform.Button1Click(Sender: TObject);
+begin
+if DBGrid1.DataSource.DataSet.FieldByName('Id').AsInteger=1 then
+begin
+Salary:=TSalary.create(Self);
+Salary.showmodal;
+end;
+if DBGrid1.DataSource.DataSet.FieldByName('Id').AsInteger=2 then
+begin
+newcardex.showmodal;
+end;
+if DBGrid1.DataSource.DataSet.FieldByName('Id').AsInteger=3 then
+begin
+Prolongationxls.showmodal;
+end;
+if DBGrid1.DataSource.DataSet.FieldByName('Id').AsInteger=4 then
+begin
+accountclose:=taccountclose.create(self);
+accountclose.showmodal;
+end;
+
+end;
+
+procedure TEXCELform.FormCreate(Sender: TObject);
+begin
+newcardex:=Tnewcardex.create(Self);                                      
+Prolongationxls:=TProlongationxls.create(Self);
+SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+end.

@@ -1,0 +1,89 @@
+unit PersonalQrFmImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, QRCtrls, QuickRpt, ExtCtrls,ASANFinanceImpl;
+
+type
+  TPersonalQrFm = class(TForm)
+    PersonalRep: TQuickRep;
+    QrBand: TQRBand;
+    QRDBImage1: TQRDBImage;
+    QRDBText1: TQRDBText;
+    PIN: TQRLabel;
+    QRImage1: TQRImage;
+    DocumentNumber: TQRLabel;
+    Name: TQRLabel;
+    Surname: TQRLabel;
+    Patronymic: TQRLabel;
+    BirthDate: TQRLabel;
+    BirthAddress: TQRLabel;
+    Gender: TQRLabel;
+    RegistrationAddress: TQRLabel;
+    GivenDate: TQRLabel;
+    ExpireDate: TQRLabel;
+    MaritalStatus: TQRLabel;
+    GivenOrganization: TQRLabel;
+    Citizenship: TQRLabel;
+    MilitaryStatus: TQRLabel;
+    BloodType: TQRLabel;
+    EyeColor: TQRLabel;
+    Height: TQRLabel;
+    QRLabel1: TQRLabel;
+    QRLabel2: TQRLabel;
+    QRLabel3: TQRLabel;
+    QRLabel4: TQRLabel;
+    QRLabel5: TQRLabel;
+    QRLabel6: TQRLabel;
+    QRLabel7: TQRLabel;
+    QRLabel8: TQRLabel;
+    QRLabel9: TQRLabel;
+    QRLabel10: TQRLabel;
+    QRLabel11: TQRLabel;
+    QRLabel12: TQRLabel;
+    QRLabel13: TQRLabel;
+    QRLabel14: TQRLabel;
+    QRLabel15: TQRLabel;
+    QRLabel16: TQRLabel;
+    QRLabel17: TQRLabel;
+    QRLabel18: TQRLabel;
+    procedure PersonalRepBeforePrint(Sender: TCustomQuickRep;
+      var PrintReport: Boolean);
+  private
+    { Private declarations }
+
+  public
+      procedure Print(txt: String;name :String);
+    { Public declarations }
+  end;
+
+var
+  PersonalQrFm: TPersonalQrFm;
+
+implementation
+uses AsanDmInpl;
+{$R *.dfm}
+    procedure TPersonalQrFm.PersonalRepBeforePrint(Sender: TCustomQuickRep;
+  var PrintReport: Boolean);
+  var
+  i:integer;
+begin
+
+
+end;
+    procedure TPersonalQrFm.Print(txt: String;name :String);
+    var
+    s :integer;
+    begin
+     try
+        (FindComponent(name) as TQRLabel).Caption := txt;
+     except
+    on Exception do
+      s:=0;
+   end;
+
+    end;
+end .
+

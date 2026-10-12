@@ -1,0 +1,138 @@
+object Cust_Account: TCust_Account
+  Left = 0
+  Top = 0
+  Caption = 'M'#252#351't'#601'rinin hesablar'#305
+  ClientHeight = 450
+  ClientWidth = 863
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poDesktopCenter
+  OnCreate = FormCreate
+  PixelsPerInch = 96
+  TextHeight = 13
+  object XDBGrid_hesab: TXDBGrid
+    Left = 0
+    Top = 0
+    Width = 863
+    Height = 409
+    Align = alClient
+    DataSource = DataModPCustService.Dsrc_hesbCap
+    GridStyle.VisualStyle = vsXPStyle
+    Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit, dgExtendedSelect, dgInternalSelect, dgRowResize, dgRowScroll, dgHotButtons, dgTitleButtons, dgTitleHeaders, dgTitleWidthOff, dgMarkerAutoAlign, dgMarkerAutoToggle]
+    TabOrder = 0
+    Columns = <
+      item
+        Expanded = False
+        FieldName = 'KLI_ID'
+        Title.Alignment = taCenter
+        Title.Caption = 'M'#252#351't'#601'ri kodu'
+        Visible = True
+        Width = 80
+      end
+      item
+        Expanded = False
+        FieldName = 'ACC_NO'
+        Title.Alignment = taCenter
+        Title.Caption = 'Hesab'
+        Visible = True
+        Width = 180
+      end
+      item
+        Expanded = False
+        FieldName = 'BAL_CN1'
+        Title.Alignment = taCenter
+        Title.Caption = 'Balans'
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'VAL_ACC'
+        Title.Alignment = taCenter
+        Title.Caption = '$'
+        Visible = True
+        Width = 40
+      end
+      item
+        Expanded = False
+        FieldName = 'NAME'
+        Title.Alignment = taCenter
+        Title.Caption = 'Hesab'#305'n ad'#305
+        Visible = True
+        Width = 300
+      end
+      item
+        Expanded = False
+        FieldName = 'OPEN_DAT'
+        Title.Alignment = taCenter
+        Title.Caption = 'A'#231#305'lma tarixi'
+        Visible = True
+        Width = 80
+      end
+      item
+        Expanded = False
+        FieldName = 'CLOSE_DAT'
+        Title.Alignment = taCenter
+        Title.Caption = 'Ba'#287'lanma tarixi'
+        Visible = True
+        Width = 80
+      end>
+  end
+  object XFPanel1: TXFPanel
+    Left = 0
+    Top = 409
+    Width = 863
+    Height = 41
+    Align = alBottom
+    TabOrder = 1
+    object XFButton1: TXFButton
+      Left = 332
+      Top = 6
+      Width = 98
+      Height = 32
+      Caption = 'M'#252'qavil'#601' '#231'ap'#305
+      DoubleBuffered = True
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentDoubleBuffered = False
+      ParentFont = False
+      TabOrder = 0
+      OnClick = XFButton1Click
+    end
+    object XFButton2: TXFButton
+      Left = 772
+      Top = 6
+      Width = 75
+      Height = 32
+      Caption = 'Close'
+      DoubleBuffered = True
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentDoubleBuffered = False
+      ParentFont = False
+      TabOrder = 1
+      OnClick = XFButton2Click
+    end
+    object XFBitBtn1: TXFBitBtn
+      Left = 448
+      Top = 8
+      Width = 133
+      Height = 32
+      Caption = 'S'#601'firlik M'#252'q\'#231'api'
+      DoubleBuffered = True
+      ParentDoubleBuffered = False
+      TabOrder = 2
+      OnClick = XFBitBtn1Click
+    end
+  end
+end

@@ -1,0 +1,311 @@
+object ScheduleDataModule: TScheduleDataModule
+  OldCreateOrder = False
+  OnCreate = DataModuleCreate
+  Height = 480
+  Width = 696
+  object DataSrcScheduleData: TDataSource
+    DataSet = ScheduleData
+    Left = 64
+    Top = 32
+  end
+  object ScheduleData: TOracleDataSet
+    SQL.Strings = (
+      'SELECT Z.RowID,Z.*'
+      '  FROM CM_PAYMENT_SCHEDULE Z'
+      'WHERE Z.CREDITID=:CREDITID'
+      'ORDER BY PAYMENTDATE')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000120000003A00430052004500440049005400490044000300
+      00000000000000000000}
+    Cursor = crSQLWait
+    AutoCalcFields = False
+    OnApplyRecord = ScheduleDataApplyRecord
+    CommitOnPost = False
+    CachedUpdates = True
+    Session = sboapiDataModule.SBSession
+    OnCalcFields = ScheduleDataCalcFields
+    Left = 64
+    Top = 80
+    object ScheduleDataSeqNo: TIntegerField
+      FieldKind = fkCalculated
+      FieldName = 'SeqNo'
+      OnGetText = ScheduleDataSeqNoGetText
+      Calculated = True
+    end
+    object ScheduleDataID: TFloatField
+      FieldName = 'ID'
+    end
+    object ScheduleDataCREDITID: TFloatField
+      FieldName = 'CREDITID'
+      Required = True
+    end
+    object ScheduleDataPAYMENTDATE: TDateTimeField
+      DisplayLabel = #1058#1072#1088#1080#1093
+      FieldName = 'PAYMENTDATE'
+      Required = True
+    end
+    object ScheduleDataREST: TFloatField
+      FieldName = 'REST'
+      DisplayFormat = '#,##0.00'
+    end
+    object ScheduleDataPRINCIPAL: TFloatField
+      DisplayLabel = #1071#1089#1072#1089' '#1073#1086#1088#1078#1076#1072#1085
+      FieldName = 'PRINCIPAL'
+      Required = True
+      DisplayFormat = '#,##0.00'
+    end
+    object ScheduleDataINTEREST: TFloatField
+      DisplayLabel = #1065#1077#1089#1072#1073#1083#1072#1085#1084#1099#1096' '#1092#1072#1080#1079#1076#1103#1085
+      FieldName = 'INTEREST'
+      Required = True
+      DisplayFormat = '#,##0.00'
+    end
+    object ScheduleDataTOTALPAY: TFloatField
+      DisplayLabel = #1046#1103#1084#1080
+      FieldKind = fkCalculated
+      FieldName = 'TOTALPAY'
+      DisplayFormat = '#,#0.00'
+      Calculated = True
+    end
+  end
+  object BoorowerInfo: TOracleDataSet
+    SQL.Strings = (
+      'SELECT'
+      '   bi.NAME,'
+      '   cm_common.AccountNumber_Get(a.booroweraccid) as custaccno,'
+      '   cm_common.AccountNumber_Get(a.Loanaccid) as loanaccno  '
+      'FROM'
+      '  CM_BOOROWERINFO bi, cm_accounts a'
+      'WHERE bi.CreditID=:CREDITID'
+      'and a.creditid = :CREDITID')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000120000003A00430052004500440049005400490044000300
+      00000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      0500000003000000080000004E0041004D004500010000000000120000004300
+      5500530054004100430043004E004F00010000000000120000004C004F004100
+      4E004100430043004E004F00010000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 64
+    Top = 192
+    object BoorowerInfoCUSTACCNO: TWideStringField
+      FieldName = 'CUSTACCNO'
+      Size = 4000
+    end
+    object BoorowerInfoLOANACCNO: TWideStringField
+      FieldName = 'LOANACCNO'
+      Size = 4000
+    end
+    object BoorowerInfoNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 64
+    end
+  end
+  object DSBoorowerInfo: TDataSource
+    DataSet = BoorowerInfo
+    Left = 184
+    Top = 184
+  end
+  object CreditInfo: TOracleDataSet
+    SQL.Strings = (
+      'SELECT'
+      
+        '   A.ID , A.CURRENCY , A.CREDITLINEAMOUNT , A.ANNUALYINTERESTRAT' +
+        'E , A.DATEOFCONCLUSION'
+      ' , A.DUEDATEFIRSTCONTRACT , '
+      '   A.CREDITTYPE,a.branchid,'
+      
+        '   TRUNC (MONTHS_BETWEEN (A.DUEDATEFIRSTCONTRACT ,A.DATEOFCONCLU' +
+        'SION)) as period,v.val_name,'
+      '   c.rest'
+      'FROM'
+      '   CM_ACTIVE_CREDITS A,avalute v,'
+      '   cm_curr_state c'
+      'WHERE a.ID=:ID'
+      'and c.creditid = :ID'
+      'and a.currency=v.valute'
+      '')
+    Optimize = False
+    Variables.Data = {0400000001000000060000003A0049004400030000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000B000000040000004900440001000000000010000000430055005200
+      520045004E004300590001000000000020000000430052004500440049005400
+      4C0049004E00450041004D004F0055004E005400010000000000260000004100
+      4E004E00550041004C00590049004E0054004500520045005300540052004100
+      540045000100000000002000000044004100540045004F00460043004F004E00
+      43004C005500530049004F004E00010000000000280000004400550045004400
+      4100540045004600490052005300540043004F004E0054005200410043005400
+      0100000000001400000043005200450044004900540054005900500045000100
+      00000000100000004200520041004E0043004800490044000100000000000C00
+      000050004500520049004F004400010000000000080000005200450053005400
+      01000000000010000000560041004C005F004E0041004D004500010000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 184
+    Top = 80
+    object FloatField1: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object FloatField2: TFloatField
+      FieldName = 'CURRENCY'
+      Required = True
+    end
+    object FloatField3: TFloatField
+      FieldName = 'CREDITLINEAMOUNT'
+      Required = True
+      DisplayFormat = '#,#0.00'
+    end
+    object FloatField4: TFloatField
+      FieldName = 'ANNUALYINTERESTRATE'
+      Required = True
+      DisplayFormat = '#,#0.0000'
+    end
+    object DateTimeField1: TDateTimeField
+      FieldName = 'DATEOFCONCLUSION'
+      Required = True
+    end
+    object DateTimeField2: TDateTimeField
+      FieldName = 'DUEDATEFIRSTCONTRACT'
+      Required = True
+    end
+    object FloatField5: TFloatField
+      FieldName = 'CREDITTYPE'
+      Required = True
+    end
+    object CreditInfoPERIOD: TFloatField
+      FieldName = 'PERIOD'
+    end
+    object CreditInfoREST: TFloatField
+      FieldName = 'REST'
+      Required = True
+    end
+    object CreditInfoBRANCHID: TFloatField
+      FieldName = 'BRANCHID'
+      Required = True
+    end
+    object CreditInfoVAL_NAME: TWideStringField
+      FieldName = 'VAL_NAME'
+      Size = 10
+    end
+  end
+  object DataSrcCreditInfo: TDataSource
+    DataSet = CreditInfo
+    Left = 184
+    Top = 32
+  end
+  object CM_SCHEDULE: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'CM_SCHEDULE'
+    ParameterMode = pmNamed
+    Cursor = crHourGlass
+    Left = 184
+    Top = 136
+  end
+  object ExportData: TOracleDataSet
+    SQL.Strings = (
+      'SELECT  paymentdate, principal, interest,rest'
+      '  FROM cm_payment_schedule'
+      'where Creditid=:CREDITID'
+      'ORDER BY PAYMENTDATE')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000120000003A00430052004500440049005400490044000300
+      00000000000000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 64
+    Top = 144
+    object ExportDataPAYMENTDATE: TDateTimeField
+      DisplayLabel = #1058#1072#1088#1080#1093
+      FieldName = 'PAYMENTDATE'
+      Required = True
+    end
+    object ExportDataREST: TFloatField
+      DisplayLabel = #1043#1072#1083#1099#1075
+      FieldName = 'REST'
+    end
+    object ExportDataPRINCIPAL: TFloatField
+      DisplayLabel = #1071#1089#1072#1089' '#1052#1103#1073#1083#1103#1100
+      FieldName = 'PRINCIPAL'
+      Required = True
+    end
+    object ExportDataINTEREST: TFloatField
+      DisplayLabel = #1060#1072#1080#1079
+      FieldName = 'INTEREST'
+      Required = True
+    end
+  end
+  object BankInfo: TOracleDataSet
+    SQL.Strings = (
+      'select BANK,logo,az_name from smart.bankinfo')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000300000008000000420041004E004B00010000000000080000004C00
+      4F0047004F000000000000000E00000041005A005F004E0041004D0045000100
+      00000000}
+    Session = sboapiDataModule.SBSession
+    Left = 272
+    Top = 32
+    object BankInfoLOGO: TBlobField
+      FieldName = 'LOGO'
+    end
+    object BankInfoBANK: TWideStringField
+      FieldName = 'BANK'
+      Size = 80
+    end
+    object BankInfoAZ_NAME: TWideStringField
+      FieldName = 'AZ_NAME'
+      Size = 80
+    end
+  end
+  object FilialInfods: TDataSource
+    DataSet = FilialInfo
+    Left = 336
+    Top = 32
+  end
+  object FilialInfo: TOracleDataSet
+    SQL.Strings = (
+      'select id,name from filial'
+      'where id = :brid '
+      '--smart.sb_aca.getuserfilialid(user)')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000A0000003A00420052004900440003000000000000000000
+      0000}
+    QBEDefinition.QBEFieldDefs = {
+      0500000002000000080000004E0041004D004500010000000000040000004900
+      4400010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 408
+    Top = 32
+    object FilialInfoNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 90
+    end
+    object FilialInfoID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+  end
+  object HeadOfficeID: TOracleDataSet
+    SQL.Strings = (
+      'select min(id) as minid from smart.filial_t')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {05000000010000000A0000004D0049004E0049004400010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 336
+    Top = 88
+    object HeadOfficeIDMINID: TFloatField
+      FieldName = 'MINID'
+    end
+  end
+  object adm: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'CM_ADMINISTRATION'
+    Left = 296
+    Top = 216
+  end
+end

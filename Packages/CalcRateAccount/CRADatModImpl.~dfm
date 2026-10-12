@@ -1,0 +1,355 @@
+object CRADatMod: TCRADatMod
+  OldCreateOrder = False
+  OnCreate = DataModuleCreate
+  OnDestroy = DataModuleDestroy
+  Left = 208
+  Top = 133
+  Height = 480
+  Width = 696
+  object Purpose: TOracleDataSet
+    SQL.Strings = (
+      'select p.rowid, '
+      '       p.currency, '
+      '       p.annualinterest,'
+      '       p.opendate, '
+      '       p.closedate, '
+      '       p.contractno, '
+      '       p.personaltype,'
+      '       p.clienttype, '
+      '       p.branchid,'
+      '       a.contractaccid,'
+      '       a.interestaccid'
+      'from CRA_CONTRACTS P,'
+      '     CRA_ACCOUNTS a'
+      'where p.id = a.id#'
+      'and p.id=:ContID')
+    Variables.Data = {0300000001000000070000003A434F4E544944030000000000000000000000}
+    OnApplyRecord = PurposeApplyRecord
+    Session = sboapiDataModule.SBSession
+    Left = 32
+    Top = 10
+    object PurposeCURRENCY: TFloatField
+      FieldName = 'CURRENCY'
+      Required = True
+    end
+    object PurposeANNUALINTEREST: TFloatField
+      FieldName = 'ANNUALINTEREST'
+      Required = True
+    end
+    object PurposeOPENDATE: TDateTimeField
+      FieldName = 'OPENDATE'
+      Required = True
+    end
+    object PurposeCLOSEDATE: TDateTimeField
+      FieldName = 'CLOSEDATE'
+      Required = True
+    end
+    object PurposeCONTRACTNO: TStringField
+      FieldName = 'CONTRACTNO'
+      Size = 64
+    end
+    object PurposePERSONALTYPE: TFloatField
+      FieldName = 'PERSONALTYPE'
+      Required = True
+    end
+    object PurposeCLIENTTYPE: TFloatField
+      FieldName = 'CLIENTTYPE'
+      Required = True
+    end
+    object PurposeBRANCHID: TFloatField
+      FieldName = 'BRANCHID'
+      Required = True
+    end
+    object PurposeCONTRACTACCID: TFloatField
+      FieldName = 'CONTRACTACCID'
+      Required = True
+    end
+    object PurposeINTERESTACCID: TFloatField
+      FieldName = 'INTERESTACCID'
+    end
+  end
+  object Currency: TOracleDataSet
+    SQL.Strings = (
+      'select  valute,val_name,valu_name from avalute')
+    Session = sboapiDataModule.SBSession
+    Left = 32
+    Top = 61
+    object CurrencyVALUTE: TIntegerField
+      FieldName = 'VALUTE'
+      Required = True
+    end
+    object CurrencyVAL_NAME: TStringField
+      FieldName = 'VAL_NAME'
+      Size = 10
+    end
+    object CurrencyVALU_NAME: TStringField
+      FieldName = 'VALU_NAME'
+      Size = 25
+    end
+  end
+  object Branches: TOracleDataSet
+    SQL.Strings = (
+      'select  *from filial ')
+    Session = sboapiDataModule.SBSession
+    Left = 32
+    Top = 111
+    object BranchesID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object BranchesNAME: TStringField
+      FieldName = 'NAME'
+      Size = 90
+    end
+  end
+  object ContAccs: TOracleDataSet
+    SQL.Strings = (
+      'select id,acc_no,name from account '
+      'where Bal_Cn1'
+      '       In ('
+      '           Select'
+      '             AccGroup'
+      '            From  SBCM_Acc_Zone_Info'
+      '                  Where'
+      '                   ZoneID = ('
+      '                     Select ZoneID'
+      '                       From  SBCM_Acc_Zones'
+      '                             Where'
+      '                               Upper(Name) = '#39'DEPOSIT'#39
+      '                             )'
+      '           )'
+      ''
+      '        AND (Close_Dat is null) '
+      '     order by  acc_no'
+      '')
+    Session = sboapiDataModule.SBSession
+    Left = 32
+    Top = 164
+  end
+  object IntAccs: TOracleDataSet
+    SQL.Strings = (
+      'select id,acc_no,name from account'
+      'where Bal_Cn1'
+      '       In ('
+      '           Select'
+      '             AccGroup'
+      '            From  SBCM_Acc_Zone_Info'
+      '                  Where'
+      '                   ZoneID = ('
+      '                     Select ZoneID'
+      '                       From  SBCM_Acc_Zones'
+      '                             Where'
+      '                               Upper(Name) = '#39'PERCENT'#39
+      '                             )'
+      '           )'
+      ''
+      '        AND (Close_Dat is null) '
+      '     order by  acc_no')
+    Session = sboapiDataModule.SBSession
+    Left = 33
+    Top = 214
+  end
+  object Categories: TOracleDataSet
+    SQL.Strings = (
+      'Select *from sbcm_categories')
+    Session = sboapiDataModule.SBSession
+    Left = 35
+    Top = 267
+  end
+  object Persons: TOracleDataSet
+    SQL.Strings = (
+      'select *from sbcm_persons')
+    Session = sboapiDataModule.SBSession
+    Left = 36
+    Top = 325
+  end
+  object PurposeDatSrc: TDataSource
+    DataSet = Purpose
+    Left = 110
+    Top = 12
+  end
+  object CurrencyDatSrc: TDataSource
+    DataSet = Currency
+    Left = 112
+    Top = 63
+  end
+  object BranchesDatSrc: TDataSource
+    DataSet = Branches
+    Left = 113
+    Top = 114
+  end
+  object ContAccsDatSrc: TDataSource
+    DataSet = ContAccs
+    Left = 113
+    Top = 164
+  end
+  object IntAccsDatSrc: TDataSource
+    DataSet = IntAccs
+    Left = 116
+    Top = 216
+  end
+  object CategoriesDatSrc: TDataSource
+    DataSet = Categories
+    Left = 117
+    Top = 269
+  end
+  object PersonsDatSrc: TDataSource
+    DataSet = Persons
+    Left = 120
+    Top = 323
+  end
+  object Contracts: TOracleDataSet
+    SQL.Strings = (
+      'select '
+      '       p.id,'
+      '       av.val_name , '
+      '       p.annualinterest,'
+      '       p.opendate, '
+      '       p.closedate, '
+      '       p.contractno, '
+      '       cra_contract.CheckContractState(p.id) as status,'
+      '       cra_contract.Get_AccountName(a.contractaccid) as accname,'
+      
+        '       cra_contract.get_accountnumber(a.contractaccid) as contra' +
+        'ctaccno,'
+      
+        '       cra_contract.get_accountnumber(a.interestaccid) as intere' +
+        'staccno,'
+      
+        '       cra_contract.get_accountbalance(a.contractaccid) as ContR' +
+        'est,'
+      
+        '       cra_contract.get_accountbalance(a.interestaccid) as IntRe' +
+        'st'
+      'from CRA_CONTRACTS P,'
+      '     CRA_ACCOUNTS a,'
+      '     avalute av'
+      'where p.id = a.id#'
+      'and  p.currency=av.valute'
+      'and  p.type#=0'
+      '  Order By  Status,:OrderClause')
+    Variables.Data = {
+      03000000010000000C0000003A4F52444552434C415553450100000000000000
+      00000000}
+    Session = sboapiDataModule.SBSession
+    Left = 208
+    Top = 16
+    object ContractsID: TFloatField
+      FieldName = 'ID'
+      Required = True
+      Visible = False
+    end
+    object ContractsCONTRACTNO: TStringField
+      DisplayLabel = 'Мцгавилянин №'
+      FieldName = 'CONTRACTNO'
+      Size = 64
+    end
+    object ContractsACCNAME: TStringField
+      DisplayLabel = 'Щесабын ады'
+      FieldName = 'ACCNAME'
+      Size = 4000
+    end
+    object ContractsANNUALINTEREST: TFloatField
+      DisplayLabel = '%'
+      FieldName = 'ANNUALINTEREST'
+      Required = True
+    end
+    object ContractsCONTRACTACCNO: TStringField
+      DisplayLabel = 'Щесабын №'
+      FieldName = 'CONTRACTACCNO'
+      Size = 4000
+    end
+    object ContractsCONTREST: TFloatField
+      DisplayLabel = 'Галыьы'
+      FieldName = 'CONTREST'
+    end
+    object ContractsVAL_NAME: TStringField
+      DisplayLabel = '$'
+      FieldName = 'VAL_NAME'
+      Size = 10
+    end
+    object ContractsOPENDATE: TDateTimeField
+      DisplayLabel = 'Ачылма тарихи'
+      FieldName = 'OPENDATE'
+      Required = True
+    end
+    object ContractsCLOSEDATE: TDateTimeField
+      DisplayLabel = 'Баэланма тарихи'
+      FieldName = 'CLOSEDATE'
+      Required = True
+    end
+    object ContractsINTERESTACCNO: TStringField
+      DisplayLabel = 'Фаиз Щесабын №'
+      FieldName = 'INTERESTACCNO'
+      Size = 4000
+    end
+    object ContractsINTREST: TFloatField
+      DisplayLabel = 'Галыьы'
+      FieldName = 'INTREST'
+    end
+    object ContractsSTATUS: TFloatField
+      DisplayLabel = 'Status'
+      FieldName = 'STATUS'
+    end
+  end
+  object ContractsDatSrc: TDataSource
+    DataSet = Contracts
+    Left = 280
+    Top = 17
+  end
+  object BranchKod: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      '   KOD_FIL'
+      'from BANKINFO')
+    Session = sboapiDataModule.SBSession
+    Left = 208
+    Top = 80
+    object BranchKodKOD_FIL: TIntegerField
+      FieldName = 'KOD_FIL'
+    end
+  end
+  object BankDate: TOracleDataSet
+    SQL.Strings = (
+      'select tek_dat '
+      'from sysdat')
+    Session = sboapiDataModule.SBSession
+    Left = 208
+    Top = 136
+    object BankDateTEK_DAT: TDateTimeField
+      FieldName = 'TEK_DAT'
+      Required = True
+    end
+  end
+  object CRA_CONTRACT: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'CRA_CONTRACT'
+    ParameterMode = pmNamed
+    Cursor = crSQLWait
+    Left = 288
+    Top = 72
+  end
+  object Corrector: TOracleDataSet
+    SQL.Strings = (
+      'SELECT rowid, '
+      '      contractno,'
+      '      lastprocessdate    '
+      '  FROM cra_contracts')
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 208
+    Top = 200
+    object CorrectorCONTRACTNO: TStringField
+      FieldName = 'CONTRACTNO'
+      Size = 64
+    end
+    object CorrectorLASTPROCESSDATE: TDateTimeField
+      FieldName = 'LASTPROCESSDATE'
+    end
+  end
+  object CorrectorDatSrc: TDataSource
+    DataSet = Corrector
+    Left = 288
+    Top = 200
+  end
+end

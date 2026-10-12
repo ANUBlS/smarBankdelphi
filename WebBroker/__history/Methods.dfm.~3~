@@ -1,0 +1,46 @@
+object Web: TWeb
+  OldCreateOrder = False
+  Actions = <
+    item
+      Default = True
+      Name = 'DefaultHandler'
+      PathInfo = '/'
+      OnAction = WebModule1DefaultHandlerAction
+    end
+    item
+      Name = 'otdel'
+      PathInfo = '/otdel'
+      OnAction = WebotdelAction
+    end>
+  Height = 230
+  Width = 415
+  object conn: TSQLConnection
+    ConnectionName = 'OracleConnection'
+    DriverName = 'Oracle'
+    Params.Strings = (
+      'DriverName=Oracle'
+      'DataBase=Database Name'
+      'User_Name=user'
+      'Password=password'
+      'RowsetSize=20'
+      'BlobSize=-1'
+      'ErrorResourceFile='
+      'LocaleCode=0000'
+      'IsolationLevel=ReadCommitted'
+      'OS Authentication=False'
+      'Multiple Transaction=False'
+      'Trim Char=False'
+      'Decimal Separator=.')
+    Left = 48
+    Top = 56
+  end
+  object queries: TSQLQuery
+    Params = <>
+    Left = 48
+    Top = 104
+  end
+  object XMLDoc: TXMLDocument
+    Left = 64
+    Top = 8
+  end
+end

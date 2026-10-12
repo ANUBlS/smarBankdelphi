@@ -1,0 +1,241 @@
+﻿unit OrderMgrUnit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  DBCtrls, StdCtrls, Mask, ComCtrls, Buttons, Db, OracleData,
+  DBViewComboBox, SearchEdit, ExtCtrls, Grids, DBGridEh, ImgList, ToolWin,
+  ActnList, CMExcelExport, DBGrids;
+
+type
+  TOrderForm = class(TForm)
+    CashDatSrc: TDataSource;
+    Cash: TOracleDataSet;
+    PayData: TOracleDataSet;
+    PayDatSrc: TDataSource;
+    PayDataID: TFloatField;
+    PayDataMAINAMT: TFloatField;
+    SysDat: TOracleDataSet;
+    SysDatTEK_DAT: TDateTimeField;
+    Panel1: TPanel;
+    GroupBox1: TGroupBox;
+    DBEdit1: TDBEdit;
+    ToolBar1: TToolBar;
+    ImageList1: TImageList;
+    ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
+    ToolButton3: TToolButton;
+    ToolButton4: TToolButton;
+    ToolButton5: TToolButton;
+    DBGridEh1: TDBGridEh;
+    ActionList1: TActionList;
+    ActnAddPay: TAction;
+    ActnDelPay: TAction;
+    ActnExport: TAction;
+    ActnClose: TAction;
+    PaymentsDatSrc: TDataSource;
+    Payments: TOracleDataSet;
+    ExcelExportPayments: TCMExcelExport;
+    ExportPayments: TOracleDataSet;
+    ReportPayOrderDataDatSrc: TDataSource;
+    ReportPayOrderData: TOracleDataSet;
+    AboutBank: TOracleDataSet;
+    AboutBankDatSrc: TDataSource;
+    AboutBankLOGO: TBlobField;
+    ActnReport: TAction;
+    AboutBankFULLBANKNAME: TWideStringField;
+    AboutBankINN: TWideStringField;
+    AboutBankMANAGERTITLE: TWideStringField;
+    CashID: TFloatField;
+    CashACC_NO: TWideStringField;
+    CashNAME: TWideStringField;
+    ReportPayOrderDataID: TFloatField;
+    ReportPayOrderDataPAYDATE: TDateTimeField;
+    ReportPayOrderDataPAYAMT: TFloatField;
+    ReportPayOrderDataCONTAMOUNT: TFloatField;
+    ReportPayOrderDataLOANACCNO: TWideStringField;
+    ReportPayOrderDataCLIENTACCNO: TWideStringField;
+    ReportPayOrderDataNAME: TWideStringField;
+    ReportPayOrderDataOPENDATE: TDateTimeField;
+    ReportPayOrderDataCCONTRACTNO: TWideStringField;
+    ReportPayOrderDataVAL_NAME: TWideStringField;
+    ReportPayOrderDataDUEINTERESTRATE: TFloatField;
+    ReportPayOrderDataPERIOD: TFloatField;
+    cc_buyer_flats: TOracleDataSet;
+    cc_buyer_flatsDataDatSrc: TDataSource;
+    cc_buyer_flatsADDRESS: TWideStringField;
+    cc_buyer_flatsBLD_NAME: TWideStringField;
+    cc_buyer_flatsID: TFloatField;
+    cc_buyer_flatsFLATCODE: TWideStringField;
+    ExportPaymentsTARIX: TDateTimeField;
+    ExportPaymentsMEBLEG: TFloatField;
+    ExportPaymentsTEYINAT: TWideStringField;
+    ozzun: TCMExcelExport;
+    PaymentsID: TFloatField;
+    PaymentsPAYDATE: TDateTimeField;
+    PaymentsID2: TFloatField;
+    PaymentsPAYAMT: TFloatField;
+    PaymentsNAME: TWideStringField;
+    PaymentsDDD: TWideStringField;
+    DBGridEh2: TDBGridEh;
+    Panel2: TPanel;
+    BtnPrint: TBitBtn;
+    BtnClose: TBitBtn;
+    Edit1: TEdit;
+    Label1: TLabel;
+    Label2: TLabel;
+    Edit2: TEdit;
+    Edit3: TEdit;
+    Label3: TLabel;
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormCreate(Sender: TObject);
+    procedure ActnAddPayExecute(Sender: TObject);
+    procedure ActnDelPayExecute(Sender: TObject);
+    procedure ActnExportExecute(Sender: TObject);
+    procedure ActnReportExecute(Sender: TObject);
+    procedure DBGridEh1DblClick(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormShow(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  OrderForm: TOrderForm;
+
+implementation
+
+{$R *.DFM}
+uses DatModConstructionImpl,sboapiDataModuleImpl,PaymentMgrUnit,OrderPaymentRepUnit;
+
+procedure TOrderForm.FormActivate(Sender: TObject);
+begin
+   DatModConstruction.PaySumDataSet.Close;
+   DatModConstruction.PaySumDataSet.SetVariable('TID',DatModConstruction.Credits.FieldByName('ID').AsInteger);
+   DatModConstruction.PaySumDataSet.Open;
+
+   DatModConstruction.cc_sum_cols_payments.Close;
+   DatModConstruction.cc_sum_cols_payments.SetVariable('SID',DatModConstruction.Credits.FieldByName('ID').AsInteger);
+   DatModConstruction.cc_sum_cols_payments.Open;
+   Edit2.Text:=DatModConstruction.cc_sum_cols_payments.FieldByName('SUM(PAYAMT)').AsString;
+   Edit1.Text:=DatModConstruction.Credits.FieldByName('CREDITAMOUNT').AsString;
+   Edit3.Text:=FloatToStr(DatModConstruction.Credits.FieldByName('CREDITAMOUNT').AsFloat-DatModConstruction.cc_sum_cols_payments.FieldByName('SUM(PAYAMT)').AsFloat);
+
+   end;
+
+procedure TOrderForm.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+   Resize := False
+end;
+
+procedure TOrderForm.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+  if ord(Key) = VK_ESCAPE Then close
+end;
+
+procedure TOrderForm.FormCreate(Sender: TObject);
+begin
+    OrderPaymentRepForm :=  TOrderPaymentRepForm.Create(Self);
+end;
+
+procedure TOrderForm.ActnAddPayExecute(Sender: TObject);
+begin
+   PaymentAddForm := TPaymentAddForm.Create(Self);
+   PaymentAddForm.ShowModal;
+   
+end;
+
+procedure TOrderForm.ActnDelPayExecute(Sender: TObject);
+begin
+   if MessageDlg(
+       'Ödəniş ləğv olunsun?'
+      ,mtWarning
+      ,[mbYes,mbNo]
+      ,0) = mrYes  then 
+  with DatModConstruction,sbcm_construction do
+       CallProcedure('deletePayment',
+                      ['p_PayID',Payments.FieldByName('ID').AsInteger]);
+
+   Payments.Refresh;                   
+end;
+
+procedure TOrderForm.ActnExportExecute(Sender: TObject);
+begin
+   with Payments do
+   begin
+      if Active then close;
+      SetVariable('CrdID',DatModConstruction.Credits.FieldbyName('ID').AsInteger);
+      open;
+   end;
+   with ozzun do begin
+       Connect;
+       ExportDataset(Payments,'Ödənişlər özzün',true);
+       Disconnect;
+   end;
+end;
+
+procedure TOrderForm.ActnReportExecute(Sender: TObject);
+begin
+      with cc_buyer_flats do begin
+       ClearVariables;
+       CloseAll;
+       SetVariable('PayID',Payments.FieldByName('ID').AsInteger);
+       Open;
+   end;
+
+   with ReportPayOrderData do begin
+       ClearVariables;
+       CloseAll;
+       SetVariable('PayID',Payments.FieldByName('ID').AsInteger);
+       Open;
+   end;
+   AboutBank.open;
+   if ReportPayOrderData.RecordCount > 0 then begin
+
+   with OrderPaymentRepForm do  begin
+        ReportOrder.Preview;
+   end;
+   end;
+end;
+
+procedure TOrderForm.DBGridEh1DblClick(Sender: TObject);
+begin
+   ActnReportExecute(Sender)
+end;
+
+procedure TOrderForm.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  Cash.close;
+  PayData.close;
+  SysDat.close;
+  Payments.Close;
+end;
+
+procedure TOrderForm.FormShow(Sender: TObject);
+begin
+   Cash.open;
+   with PayData do
+   begin
+      close;
+      SetVariable('CrdID',DatModConstruction.Credits.FieldbyName('ID').AsInteger);
+      open;
+   end;
+   SysDat.open;
+
+  with Payments do
+   begin
+      close;
+      SetVariable('CrdID',DatModConstruction.Credits.FieldbyName('ID').AsInteger);
+      open;
+   end;
+
+end;
+
+end.

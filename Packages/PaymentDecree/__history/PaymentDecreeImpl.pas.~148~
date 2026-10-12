@@ -1,0 +1,1238 @@
+﻿                                   {------------------------------------}
+                                   {(c) Smart Systems Technology Ltd.   }
+                                   {            2003.                   }
+                                   {          Payment Decree            }
+                                   {                 Nariman Narimanov  }
+                                   {------------------------------------}
+unit PaymentDecreeImpl;                                         //EDAName
+
+interface
+                           //DBLookupComboBox1
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActiveX, AxCtrls, PaymentDecreeX_TLB, StdVcl, StdCtrls, ExtCtrls, Mask,
+  DBCtrls,Db, OracleData, ComCtrls, ToolWin, ImgList,Buttons, SBPlgAx50_TLB,
+  CMDBSearchEdit, Grids, XDBGrids, XDBCtrls, DBGrids;
+
+type
+  TPaymentDecree = class(TActiveForm, IPaymentDecree,IIconExporter)
+    Panel1: TPanel;
+    GroupBox1: TGroupBox;
+    Panel2: TPanel;
+    Panel3: TPanel;
+    Panel4: TPanel;
+    Panel5: TPanel;
+    Panel6: TPanel;
+    GroupBox3: TGroupBox;
+    Panel12: TPanel;
+    Panel13: TPanel;
+    Panel14: TPanel;
+    GroupBox4: TGroupBox;
+    Panel15: TPanel;
+    Panel16: TPanel;
+    Panel17: TPanel;
+    EKBCod: TEdit;
+    CBKBName: TComboBox;
+    EKBInn: TEdit;
+    EKBCorAcc: TEdit;
+    EKBSwift: TEdit;
+    CBDANum: TComboBox;
+    EDAName: TEdit;
+    EDAInn: TEdit;
+    EKANum: TEdit;
+    EKAName: TEdit;
+    EKAInn: TEdit;
+    GroupBox5: TGroupBox;
+    Panel18: TPanel;
+    EAmmountW: TEdit;
+    Panel19: TPanel;
+    EAmmount: TEdit;
+    GroupBox6: TGroupBox;
+    Panel20: TPanel;
+    EExtra: TEdit;
+    Panel21: TPanel;
+    EPNum: TEdit;
+    Panel22: TPanel;
+    EAssignment: TEdit;
+    Panel23: TPanel;
+    DTPayment: TDateTimePicker;
+    ImageList: TImageList;
+    ToolBar1: TToolBar;
+    ToolButton2: TToolButton;
+    ToolButton3: TToolButton;
+    ToolButton8: TToolButton;
+    CheckBox: TCheckBox;
+    GroupBox2: TGroupBox;
+    Panel7: TPanel;
+    Panel8: TPanel;
+    Panel9: TPanel;
+    Panel10: TPanel;
+    Panel11: TPanel;
+    ToolButton1: TToolButton;
+    ToolButton4: TToolButton;
+    ToolButton5: TToolButton;
+    DBName: TComboBox;
+    DBCod: TEdit;
+    DBInn: TEdit;
+    DBCorAcc: TEdit;
+    DBSwift: TEdit;
+    Panel24: TPanel;
+    mod_bank: TDBLookupComboBox;
+    Panel25: TPanel;
+    Panel26: TPanel;
+    Edit1: TEdit;
+    Label1: TLabel;
+    Label4: TLabel;
+    Edit4: TEdit;
+    Label2: TLabel;
+    EditDebtAccNo: TEdit;
+    DBLookupComboBox1: TDBLookupComboBox;
+    DBLookupComboBox2: TDBLookupComboBox;
+    ToolButton6: TToolButton;
+    ToolButton7: TToolButton;
+    ToolButton9: TToolButton;
+    ToolButton10: TToolButton;
+    ToolButton11: TToolButton;
+    ToolButton12: TToolButton;
+    GroupBox7: TGroupBox;
+    ToolButton13: TToolButton;
+    ToolButton14: TToolButton;
+    DBNavigator1: TDBNavigator;
+    DBGrid1: TDBGrid;
+    GroupBox8: TGroupBox;
+    Label3: TLabel;
+    Label5: TLabel;
+    Label7: TLabel;
+    Label8: TLabel;
+    Label9: TLabel;
+    Label10: TLabel;
+    DateTimePicker1: TDateTimePicker;
+    EdNum: TEdit;
+    GroupBox9: TGroupBox;
+    edPrescription: TMemo;
+    Col1: TMemo;
+    Col2: TMemo;
+    Col3: TMemo;
+    Col4: TMemo;
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure CBDANumChange(Sender: TObject);
+    procedure CBKBNameChange(Sender: TObject);
+    procedure ActiveFormDestroy(Sender: TObject);
+    procedure EAmmountKeyPress(Sender: TObject; var Key: Char);
+    procedure ToolButton8Click(Sender: TObject);
+    procedure ToolButton2Click(Sender: TObject);
+    procedure ToolButton6Click(Sender: TObject);
+    procedure EKAInnChange(Sender: TObject);
+    procedure EKBCodKeyPress(Sender: TObject; var Key: Char);
+    procedure CheckBoxClick(Sender: TObject);
+    procedure EAmmountExit(Sender: TObject);
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure ToolButton4Click(Sender: TObject);
+    procedure DBNameChange(Sender: TObject);
+    procedure DBCodKeyPress(Sender: TObject; var Key: Char);
+    procedure EditDebtAccNoDblClick(Sender: TObject);
+    procedure EditDebtAccNoExit(Sender: TObject);
+    procedure DBLookupComboBox2Click(Sender: TObject);
+    procedure ToolButton10Click(Sender: TObject);
+    procedure ToolButton12Click(Sender: TObject);
+    procedure ToolButton14Click(Sender: TObject);
+    procedure XDBGrid1CellClick(Column: TXColumn);
+  private
+    { Private declarations }
+    FEvents: IPaymentDecreeEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    function Get_Icon: OLE_HANDLE; safecall;
+    procedure _Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+  public
+    { Public declarations }
+    Rate :array of integer;
+    Rate1:array of integer;
+    isUpdate :boolean;
+    cid: integer;
+    procedure Initialize; override;
+    procedure PustToCombo(DataSet: TOracleDataSet; Field: String; ComboBox: TComboBox);
+    procedure PustToComboID(DataSet :TOracleDataSet; Field,IDfield :String; ComboBox :TComboBox);
+    procedure PustToComboKOD(DataSet :TOracleDataSet; Field,IDfield :String; ComboBox :TComboBox);
+    function WithCoin(Ammount :string):String;
+    function ExtractMonth(DateTime :TDateTime;DecimalSymbol :string) :string;
+    procedure CleanUp;
+  end;
+ var
+   PaymentDecree :TPaymentDecree;
+    val_name:string;
+
+    Activ:integer;
+implementation
+
+uses ComObj, ComServ, PaymentDataModul,CurrencyToHR_Azeri_Impl, UntArchive,
+  UntMainReport, UntSecondReport, sboapiDataModuleImpl,
+  accserch,SBTranslateProc, inv_Archiveimpl,CommanParametrs;
+
+{$R *.DFM}
+
+{ TPaymentDecree }
+
+procedure TPaymentDecree.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_PaymentDecreePage); }
+end;
+
+procedure TPaymentDecree.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as IPaymentDecreeEvents;
+end;
+
+procedure TPaymentDecree.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TPaymentDecree.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TPaymentDecree.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TPaymentDecree.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TPaymentDecree.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TPaymentDecree.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TPaymentDecree.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TPaymentDecree.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TPaymentDecree.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TPaymentDecree.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TPaymentDecree.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TPaymentDecree.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TPaymentDecree.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TPaymentDecree.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TPaymentDecree.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TPaymentDecree.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TPaymentDecree.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TPaymentDecree.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TPaymentDecree.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TPaymentDecree._Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TPaymentDecree.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TPaymentDecree.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TPaymentDecree.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TPaymentDecree.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TPaymentDecree.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TPaymentDecree.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TPaymentDecree.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TPaymentDecree.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TPaymentDecree.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TPaymentDecree.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TPaymentDecree.Set_AxBorderStyle(Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TPaymentDecree.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TPaymentDecree.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TPaymentDecree.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TPaymentDecree.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TPaymentDecree.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TPaymentDecree.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TPaymentDecree.Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TPaymentDecree.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TPaymentDecree.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TPaymentDecree.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TPaymentDecree.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TPaymentDecree.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TPaymentDecree.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+//**************************************************************************************************************************************
+function TPaymentDecree.Get_Icon: OLE_HANDLE;
+const
+  ImageIndex =1;
+begin
+  ImageList.GetIcon(ImageIndex,Icon);
+  Result := Icon.Handle;
+end;
+//*********************************************************{-Main-}*********************************************************************
+
+function TPaymentDecree.WithCoin(Ammount :string):string;
+var
+  tTrunc :currency;
+  tDev: Double;
+  s:integer;
+  sr,ET:string;
+  st:real;
+ aa:string;
+
+begin
+
+if Activ=1 then
+   begin
+    aa:= PaymentDataMod.ODSArchive.FieldByName('Dacc_no').AsString;
+
+  // showmessage('yy');
+   end;
+   if Activ=2 then
+   begin
+   //showmessage('hh');
+      aa:=DBLookupComboBox2.Text;//  EditDebtAccNo.text;
+
+   end;
+with PaymentDataMod do
+  begin
+    Ods_Acc_Vall.Close;
+    Ods_Acc_Vall.SetVariable('acc_no',aa );
+    Ods_Acc_Vall.Open;
+ { if Ods_Acc_Vall.FieldByName('val_acc').AsInteger=0 then
+ begin
+   tTrunc :=Trunc(StrToCurr(Ammount));
+   tDev:=(Round(Frac(StrToCurr(Ammount))*100));
+  // Delete(Ammount,Pos(CurrToStr(tTrunc),Ammount),Length(CurrToStr(tTrunc))+1);
+  //  if Ammount ='' then Ammount :='00';
+  // result :=CurrencyToHR_Azeri(tTrunc,0,[0])+' '+'='+' '+Ammount+' гяп';
+
+  result :=CurrencyToHR_Azeri(tTrunc,0,[0])+' '+'='+' '+FloatToStr(tDev)+' qəp';
+    val_name:=Ods_Acc_Vall.FieldByName('val_name').AsString ;
+
+  end;       }
+/// ShowMessage(inttostr( Ods_Acc_Vall.FieldByName('val_acc').AsInteger));
+  if (Ods_Acc_Vall.FieldByName('val_acc').AsInteger>=0) {*or
+   (Ods_Acc_Vall.FieldByName('val_acc').AsInteger=0)*/ }then
+  begin
+  sr := CurrencyToHR_Azeri(StrToCurr(Ammount), 0, [1]);    //0  1
+  s := pos('manat', sr);
+  delete(sr, s, 5);
+  tDev:=(Round(Frac(StrToCurr(Ammount))*100));
+   //ShowMessage(sr);
+  // ShowMessage(inttostr(s));
+ // ShowMessage(tDev);
+      { if tDev > 0 then
+    begin }
+  //  showmessage(FloatToStr(tDev) );
+      ET := sr + '' +Ods_Acc_Vall.FieldByName('VALU_SHORT')
+        .AsString + ' ' + ', ' + ' '+ FloatToStr(tDev) + ' ' +
+       Ods_Acc_Vall.FieldByName('Valu_Bala').AsString ;
+   val_name:=Ods_Acc_Vall.FieldByName('val_name').AsString ;
+
+   { end
+    else
+      ET := '(' + sr + ')' + '  ' + Ods_Acc_Vall.FieldByName
+        ('VALU_SHORT').AsString;
+
+  end
+  else
+    ET := '(' + FloatToStr(st) + ')' + '  ' +
+      (Ods_Acc_Vall.FieldByName('Valu_Bala').AsString );
+            }
+   WithCoin :=ET;
+   end;
+
+
+
+   if Ods_Acc_Vall.RecordCount=0   then  begin
+   //DBLookupComboBox1.Visible:=true;
+   if (Ds_valute.FieldByName('valute').AsInteger>=1) or
+   (Ds_valute.FieldByName('valute').AsInteger=0) then
+  begin
+  sr := CurrencyToHR_Azeri(StrToCurr(Ammount), 0, [1]);    //0  1
+  s := pos('manat', sr);
+  delete(sr, s, 5);
+  tDev:=(Round(Frac(StrToCurr(Ammount))*100));
+
+      ET := sr + '' +Ds_valute.FieldByName('VALU_SHORT')
+        .AsString + ' ' + ', ' + ' '+ FloatToStr(tDev) + ' ' +
+       Ds_valute.FieldByName('Valu_Bala').AsString ;
+   val_name:=Ds_valute.FieldByName('val_name').AsString ;
+   WithCoin :=ET;
+
+   end;
+   end;
+
+end;
+
+
+
+end;
+
+
+
+
+
+procedure TPaymentDecree.XDBGrid1CellClick(Column: TXColumn);
+begin
+PaymentDataMod.Ds_Inv_child.Close;
+PaymentDataMod.Ds_Inv_child.SetVariable('PID',PaymentDataMod.Ds_Inv_Archive.FieldByName('id').AsInteger);
+PaymentDataMod.Ds_Inv_child.Open;
+end;
+
+function TPaymentDecree.ExtractMonth(DateTime: TDateTime; DecimalSymbol: string): string;
+ const
+    Months: array [1..12] of string =(
+     'yanvar','fevral','mart','aprel','may','iyun','iyul','avqust','sentyabr','oktyabr','noyabr','dekabr'
+      );
+var
+  Year, Month, Day : Word;
+begin
+  DecodeDate(DateTime, Year, Month, Day);
+  Result :=IntToStr(Day) + DecimalSymbol + Months[month] + DecimalSymbol + IntToStr(year);
+end;
+
+procedure TPaymentDecree.CleanUp;
+var
+  CompCount: word;
+begin
+ for CompCount :=0 to ComponentCount-1 do
+  if(Components[CompCount] is TEdit) then
+     (Components[CompCount] as TEdit).Text :=''
+  else
+   if(Components[CompCount] is TComboBox) then
+      (Components[CompCount] as TComboBox).Text :=''
+end;
+
+procedure TPaymentDecree.PustToCombo(DataSet: TOracleDataSet; Field: String; ComboBox: TComboBox);
+begin
+ if DataSet.Active=false then DataSet.Open;
+  DataSet.First;
+   ComboBox.Items.Clear;
+    while not(DataSet.Eof) do
+     begin
+      ComboBox.Items.Add(DataSet. FieldByName(Field).AsString);
+      DataSet.Next;
+     end;
+end;
+
+procedure TPaymentDecree.PustToComboID(DataSet :TOracleDataSet; Field,IDfield :String; ComboBox :TComboBox);
+var
+   RateIndex :Integer;
+begin
+ RateIndex :=0;
+ if DataSet. Active=false then DataSet.Open;
+  DataSet.First;
+   SetLength(Rate,DataSet.RecordCount);
+   ComboBox.Items.Clear;
+    while not(DataSet.Eof) do
+     begin
+      ComboBox.Items.Add(DataSet. FieldByName(Field).AsString);
+      Rate[RateIndex] :=DataSet. FieldByName(IDfield).AsInteger;
+      DataSet.Next;
+      Inc(RateIndex);
+     end;
+end;
+procedure TPaymentDecree.PustToComboKOD(DataSet :TOracleDataSet; Field,IDfield :String; ComboBox :TComboBox);
+var
+   RateIndex1 :Integer;
+begin
+ RateIndex1 :=0;
+ if DataSet. Active=false then DataSet.Open;
+  DataSet.First;
+   SetLength(Rate1,DataSet.RecordCount);
+   ComboBox.Items.Clear;
+    while not(DataSet.Eof) do
+     begin
+      ComboBox.Items.Add(DataSet. FieldByName(Field).AsString);
+      Rate1[RateIndex1] :=DataSet. FieldByName(IDfield).AsInteger;
+      DataSet.Next;
+      Inc(RateIndex1);
+     end;
+end;
+
+
+procedure TPaymentDecree.ActiveFormCreate(Sender: TObject);
+begin
+ PaymentDecree :=Self;
+
+ PaymentDataMod :=TPaymentDataMod.Create(Self);
+ //PaymentDataMod.Ds_Acoount.Open;
+ QRMainReport :=TQRMainReport.Create(Self);
+ QRCommonReport :=TQRCommonReport.Create(Self);
+FormAccounts:=TFormAccounts.Create(Self);
+ with PaymentDataMod do
+  begin
+   ODSAccounts.Open;
+   ODSBankInfo.Open;
+   ODSBankM.Open;
+   Ds_valute.Open;
+   Ds_Acoount.Open;
+
+   ODSbank.Open;
+   DBLookupComboBox1.KeyValue:='';
+   PaymentDecree.PustToComboID(ODSBankM,'NAME','ID',CBKBName);
+   PaymentDecree.PustToComboKod(ODSBankInfo,'NAME','bankcode',DBName);
+   //paymentDecree.PustToCombo(ODSAccounts,'ACC_NO',CBDANum);
+
+     if ODSbank.FieldByName('swift').AsString='REVAAZ22' then     //  REVAAZ22
+     begin
+              ODSTransferaccount.Filtered:=false;
+   ODSTransferaccount.Filter:='';
+   ODSTransferaccount.Open;
+         DBLookupComboBox2.ListSource:=DS_transferaccount;
+         EDAName.Text:=PaymentDataMod.ODSbank.FieldByName('bank').AsString;
+         EDAInn.Text :=PaymentDataMod.ODSbank.FieldByName('inn').AsString;
+     end;
+
+
+
+   DTPayment.DateTime :=OPPayment.CallDateFunction('GetCurrentDate',[]);
+   CheckBox.Checked :=OPPayment.CallBooleanFunction('isAccountDetails',[]);
+  end;
+    SBTranslateProc.TranslateAllComponents(Self, sboapiDataModule.OrPack_SL);
+end;
+
+procedure TPaymentDecree.CBDANumChange(Sender: TObject);
+begin
+ with PaymentDataMod.ODSAccounts do
+  begin
+   Close;
+    SQL.Clear;
+    SQL.Text :='Select AC.*,C.Inn From Account AC,Customers C Where AC.kli_ID =C.ID and AC.acc_no= '+''''+CBDANum.Text+'''';
+   Open;
+   EDAName.Text :=FieldByName('NAME').AsString;
+   EDAInn.Text :=FieldByName('INN').AsString;
+  end;
+end;
+
+procedure TPaymentDecree.CBKBNameChange(Sender: TObject);
+begin
+ EKBCod.Text :='';
+ EKBInn.Text :='';
+ EKBCorAcc.Text :='';
+ EKBSwift.Text :='';
+ try
+  with PaymentDataMod.ODSBankM do
+   begin
+    Close;
+     SQL. Clear;
+     SQL.Text :='Select * From BankM Where ID= '+IntToStr(Rate[CBKBName.ItemIndex])+'order by name';
+    Open;
+    EKBCod.Text :=FieldByName('BANKCODE').AsString;
+    EKBInn.Text :=FieldByName('INN').AsString;
+    EKBCorAcc.Text :=FieldByName('KRNO').AsString;
+    EKBSwift.Text :=FieldByName('SWIFT').AsString;
+   end;
+ finally
+    with PaymentDataMod.ODSBankM do
+    begin
+     Close;
+      SQL. Clear;
+      SQL.Text :='Select * From BankM  order by name';
+     Open;
+    end;
+ end;
+end;
+
+procedure TPaymentDecree.ActiveFormDestroy(Sender: TObject);
+begin
+ if Assigned(Rate) then   SetLength(Rate,0);
+   if Assigned(Rate1) then  SetLength(Rate1,0);
+ PaymentDecree.Free;
+
+end;
+
+procedure TPaymentDecree.EAmmountKeyPress(Sender: TObject; var Key: Char);
+begin
+Activ:=2 ;
+  if (Key=#13) and (Trim(TEdit(Sender).Text)<>'') then
+     EAmmountW.text :=WithCoin(EAmmount.text)
+  else
+   if not (key in ['0'..'9','.',#8]) then
+    key :=#0
+end;
+
+procedure TPaymentDecree.EditDebtAccNoDblClick(Sender: TObject);
+begin
+EAmmount.Clear;
+EAmmountW.Clear;
+ with PaymentDataMod.ODSAccounts do
+  begin
+   Close;
+    SQL.Clear;
+    SQL.Text :=PaymentDataMod.rezerv.sql.Text;
+   Open;
+   //PaymentDecree.EDAName.Text :=FieldByName('NAME').AsString;
+   //PaymentDecree.EDAInn.Text :=FieldByName('INN').AsString;
+  end;
+
+
+
+
+FormAccounts.DebOrKred:=True;
+FormAccounts.v_AccNo:=EditDebtAccNo.Text;
+FormAccounts.ShowModal;
+EditDebtAccNo.Text:= FormAccounts.v_AccNo;
+
+
+end;
+
+procedure TPaymentDecree.EditDebtAccNoExit(Sender: TObject);
+begin
+
+PaymentDataMod.Ods_Acc_Vall.Close;
+PaymentDataMod.Ods_Acc_Vall.SetVariable('acc_no',EditDebtAccNo.Text);
+PaymentDataMod.Ods_Acc_Vall.Open;
+
+
+//ShowMessage(IntToStr(PaymentDataMod.Ods_Acc_Vall.RecordCount));
+
+
+if PaymentDataMod.Ods_Acc_Vall.RecordCount=1 then
+begin
+  DBLookupComboBox1.Visible:=false;
+ end else begin
+  DBLookupComboBox1.Visible:=true;
+  DBLookupComboBox1.KeyValue:='';
+ end;
+
+
+
+end;
+
+procedure TPaymentDecree.ToolButton8Click(Sender: TObject);
+begin
+ try
+  FrmArchive :=TFrmArchive.Create(self);
+  with PaymentDataMod.ODSArchive do
+   if Active =false then Open else Refresh;
+  FrmArchive.ShowModal;
+ finally
+  FrmArchive.Release;
+ end;
+end;
+
+procedure TPaymentDecree.ToolButton10Click(Sender: TObject);
+begin
+CleanUp;
+ToolButton12.Enabled:=true;
+GroupBox5.Visible:=false;
+Panel25.Visible:=false;
+GroupBox4.Visible:=false;
+GroupBox6.Visible:=false;
+Panel26.Visible:=false;
+GroupBox7.Visible:=true;
+GroupBox8.Visible:=true;
+edPrescription.Text:='';
+EDAInn.Visible:=false;
+Panel13.Visible:=false;
+Panel24.Visible:=false;
+CheckBox.Visible:=false;
+DBLookupComboBox2.KeyValue:='';
+Col1.Text:='';
+Col2.Text:='';
+Col3.Text:='';
+Col4.Text:='';
+edPrescription.Text:='';
+cid:=-1;
+
+PaymentDataMod.Ds_Inv_Archive.close;
+
+ DBGrid1.Columns.Items[1].Title.Caption:=PaymentDataMod.Ds_Inv_Archive.FieldByName('col1').AsString;
+ DBGrid1.Columns.Items[2].Title.Caption:=PaymentDataMod.Ds_Inv_Archive.FieldByName('col2').AsString;
+ DBGrid1.Columns.Items[3].Title.Caption:=PaymentDataMod.Ds_Inv_Archive.FieldByName('col3').AsString;
+ DBGrid1.Columns.Items[4].Title.Caption:=PaymentDataMod.Ds_Inv_Archive.FieldByName('col4').AsString;
+
+DBGrid1.Refresh;
+
+
+end;
+
+procedure TPaymentDecree.ToolButton12Click(Sender: TObject);
+begin
+PaymentDataMod.Ds_Inv_Archive.open;
+ if isUpdate =false then
+  begin
+ if MessageDlg('Do you want to transfer this invoices?',mtConfirmation,mbYesNoCancel,0)=mrYes then
+     with PaymentDataMod.OPPayment do
+      CallProcedure('add_invoices',[
+                  DateTimePicker1.DateTime,
+                  DBName.text
+                 ,DBCod.text
+                 ,DBInn.text
+                 ,DBCorAcc.text
+                 ,DBSwift.Text
+                 ,CBKBName.text
+                 ,EKBInn.text
+                 ,DBLookupComboBox2.KeyValue
+                 ,EdNum.Text
+                 ,edPrescription.Text
+                 ,Col1.Text
+                 ,Col2.Text
+                 ,Col3.Text
+                 ,Col4.Text]);
+                 PaymentDataMod.Dsr_Inv_Archive.DataSet.Refresh;
+                 cid:=PaymentDataMod.Dsr_Inv_Archive.DataSet.FieldByName('id').AsInteger;
+                 //ShowMessage(IntToStr(cid));
+                 {ShowMessage(PaymentDataMod.Ds_Inv_Archive.FieldByName('id').AsString);
+                 ShowMessage(PaymentDataMod.Ds_Inv_Archive.FieldByName('col1').AsString);
+                 ShowMessage(PaymentDataMod.Ds_Inv_Archive.FieldByName('col2').AsString);
+                 ShowMessage(PaymentDataMod.Ds_Inv_Archive.FieldByName('col3').AsString); }
+
+          PaymentDataMod.Ds_Inv_child.Close;
+          PaymentDataMod.Ds_Inv_child.SetVariable('INV_ID',cid);
+          PaymentDataMod.Ds_Inv_child.Open;
+
+
+          DBGrid1.Columns.Items[1].Title.Caption:=PaymentDataMod.Ds_Inv_Archive.FieldByName('col1').AsString;
+          DBGrid1.Columns.Items[2].Title.Caption:=PaymentDataMod.Ds_Inv_Archive.FieldByName('col2').AsString;
+          DBGrid1.Columns.Items[3].Title.Caption:=PaymentDataMod.Ds_Inv_Archive.FieldByName('col3').AsString;
+          DBGrid1.Columns.Items[4].Title.Caption:=PaymentDataMod.Ds_Inv_Archive.FieldByName('col4').AsString;
+          DBGrid1.Refresh;
+           ToolButton12.Enabled:=false;
+  end
+  else
+   begin
+   if MessageDlg('Do you want to change this invoices?',mtConfirmation,mbYesNoCancel,0)=mrYes then
+    begin
+    //ShowMessage(IntToStr(cid));
+     with PaymentDataMod.OPPayment,PaymentDataMod.Ds_Inv_Archive do
+      CallProcedure('update_invoices',[
+                  cid                      // FieldByName('id').AsInteger
+                 ,DateTimePicker1.DateTime
+                 ,DBName.text
+                 ,DBCod.text
+                 ,DBInn.text
+                 ,DBCorAcc.text
+                 ,DBSwift.Text
+                 ,CBKBName.text
+                 ,EKBInn.text
+                 ,DBLookupComboBox2.KeyValue
+                 ,EdNum.Text
+                 ,edPrescription.Text
+                 ,Col1.Text
+                 ,Col2.Text
+                 ,Col3.Text
+                 ,Col4.Text]);
+
+          PaymentDataMod.Ds_Inv_child.Close;                 //PaymentDataMod.Ds_Inv_Archive.FieldByName('id').AsInteger
+          PaymentDataMod.Ds_Inv_child.SetVariable('INV_ID',cid);
+          PaymentDataMod.Ds_Inv_child.Open;
+          PaymentDataMod.Ds_Inv_Archive.RefreshRecord;
+
+          DBGrid1.Columns.Items[1].Title.Caption:=PaymentDataMod.Ds_Inv_Archive.FieldByName('col1').AsString;
+          DBGrid1.Columns.Items[2].Title.Caption:=PaymentDataMod.Ds_Inv_Archive.FieldByName('col2').AsString;
+          DBGrid1.Columns.Items[3].Title.Caption:=PaymentDataMod.Ds_Inv_Archive.FieldByName('col3').AsString;
+          DBGrid1.Columns.Items[4].Title.Caption:=PaymentDataMod.Ds_Inv_Archive.FieldByName('col4').AsString;
+          DBGrid1.Refresh;
+          //PaymentDataMod.Ds_Inv_Archive.Refresh;
+
+          ToolButton12.Enabled:=false;
+        isUpdate :=false;
+    end;
+
+   end;
+end;
+
+
+procedure TPaymentDecree.ToolButton14Click(Sender: TObject);
+begin
+  try
+   inv_Archive:=Tinv_Archive.Create(Self);
+   PaymentDataMod.Ds_Inv_Archive.Open;
+   PaymentDataMod.Ds_Inv_Archive.Refresh;
+   inv_Archive.ShowModal;
+
+  finally
+   inv_Archive.Release;
+ end;
+
+end;
+
+procedure TPaymentDecree.ToolButton2Click(Sender: TObject);
+var
+   PDate :TDateTime;
+begin
+ //  ShowMessage(EditDebtAccNo.Text);
+   // ShowMessage(DBLookupComboBox2.Text);
+
+
+CBDANum.text:=EditDebtAccNo.Text;
+CBDANum.text:=DBLookupComboBox2.Text;
+
+ PDate :=Trunc(DTPayment.DateTime);
+ //if StrToFloat(EAmmount.Text)=StrToFloat(EAmmount.Text) then begin end; {Hesen R. 08.01.2009}
+ if trim(EPNum.Text) = '' then with PaymentDataMod.ODS_PNUM do begin
+  //SHOWMESSAGE('Ödəmə tapşırığının nömrəsini daxil edin!');Exit;
+  Close;
+  Open;
+  EPNum.Text := FieldByName('PNum').AsString;
+ end;
+
+ if isUpdate =false then
+  begin
+
+
+
+
+
+    if MessageDlg('Do you want to transfer this payment?',mtConfirmation,mbYesNoCancel,0)=mrYes then
+     with PaymentDataMod.OPPayment do
+      CallProcedure('add_payment',[
+                  PDate
+                 ,strtoint(EPNum.text)
+                 ,DBName.text
+                 ,DBCod.text
+                 ,DBInn.text
+                 ,DBCorAcc.text
+                 ,DBSwift.text
+                 ,EditDebtAccNo.text// CBDANum.text
+                 ,EDAName.text
+                 ,EDAInn.text
+                 ,CBKBName.text
+                 ,EKBCod.text
+                 ,EKBInn.text
+                 ,EKBCorAcc.text
+                 ,EKBSwift.text
+                 ,EKANum.text
+                 ,EKAName.text
+                 ,EKAInn.text
+                 //,StringReplace(EAmmount.text,',' , '.', [rfReplaceAll])
+                 ,strtofloat(EAmmount.text)
+                 ,EAssignment.text
+                 ,EExtra.text
+                 ,Mod_Bank.text
+                 ,edit1.text
+                 ,edit4.text
+                 ,DBLookupComboBox1.Text
+                 ]);
+  end
+ else
+  begin
+   if MessageDlg('Do you want to change this payment?',mtConfirmation,mbYesNoCancel,0)=mrYes then
+    begin
+     with PaymentDataMod.OPPayment,PaymentDataMod.ODSArchive do
+      CallProcedure('update_payment',[
+                  FieldByName('ID').AsInteger
+                 ,PDate
+                 ,EPNum.text
+                 ,DBName.text
+                 ,DBCod.text
+                 ,DBInn.text
+                 ,DBCorAcc.text
+                 ,DBSwift.text
+                 ,CBDANum.text
+                 ,EDAName.text
+                 ,EDAInn.text
+                 ,CBKBName.text
+                 ,EKBCod.text
+                 ,EKBInn.text
+                 ,EKBCorAcc.text
+                 ,EKBSwift.text
+                 ,EKANum.text
+                 ,EKAName.text
+                 ,EKAInn.text
+                // ,StringReplace(EAmmount.text,',' , '.', [rfReplaceAll])
+                 ,strtofloat(EAmmount.text)
+                 ,EAssignment.text
+                 ,EExtra.text
+                 ,Mod_Bank.text
+                 ,edit1.text
+                 ,edit4.text
+                 ,DBLookupComboBox1.Text
+                               ]);
+        isUpdate :=false;
+    end;
+  end;
+ CleanUp;
+
+ if PaymentDataMod.ODSbank.FieldByName('swift').AsString='REVAAZ22' then     //REVAAZ22   NBCBAZ22
+  begin
+         EDAName.Text:=PaymentDataMod.ODSbank.FieldByName('bank').AsString ;
+         EDAInn.Text :=PaymentDataMod.ODSbank.FieldByName('inn').AsString  ;
+
+  end
+end;
+
+procedure TPaymentDecree.ToolButton6Click(Sender: TObject);
+begin
+ try
+  QRMainReport :=TQRMainReport.Create(Self);
+  QRMainReport.Preview;
+ finally
+  QRMainReport.Free;
+ end;
+
+end;
+
+procedure TPaymentDecree.EKAInnChange(Sender: TObject);
+var
+   LengthStr:word;
+   Str :string;
+begin
+ Str :=(Sender as TEdit).text;
+ LengthStr :=Length(Str);
+ if LengthStr>10 then
+ begin
+  ShowMessage('Field inn contains 10 numbers!');
+  Delete(str, 11, LengthStr - 10);
+  (Sender as TEdit).text :=Str;
+ end;
+end;
+
+procedure TPaymentDecree.EKBCodKeyPress(Sender: TObject; var Key: Char);
+begin
+ if key =#13 then
+ with PaymentDataMod.ODSBankM do
+  begin
+   if Locate('BANKCODE',EKBCod.Text,[loCaseInsensitive, loPartialKey]) then
+    begin
+     CBKBName.Text :=FieldByName('NAME').AsString;
+    // EKBCod.Text :=FieldByName('BANKCODE').AsString;
+     EKBInn.Text :=FieldByName('INN').AsString;
+     EKBCorAcc.Text :=FieldByName('KRNO').AsString;
+     EKBSwift.Text :=FieldByName('SWIFT').AsString;
+    end;
+  end;
+
+end;
+
+procedure TPaymentDecree.CheckBoxClick(Sender: TObject);
+begin
+ PaymentDataMod.OPPayment.CallProcedure('SetNewDetails',[Word((Sender as TCheckBox).Checked)]);
+ case (Sender as TCheckBox).Checked of
+  true :begin
+         with QRMainReport, QRCommonReport do
+          begin
+           QRDBACCNAME1.DataField :='DACCNAME';
+           QRDBACCNAME2.DataField :='DACCNAME';
+           QRDBACCINN1.DataField :='DACCINN';
+           QRDBACCINN2.DataField :='DACCINN';
+           QRDBACCNAME.DataField :='DACCNAME';
+           QRDBACCINN.DataField :='DACCINN';
+          end;
+        end;
+  false :begin
+          with QRMainReport, QRCommonReport do
+           begin
+            QRDBACCNAME1.DataField :='DBNAME';
+            QRDBACCNAME2.DataField :='DBNAME';
+            QRDBACCINN1.DataField :='DBINN';
+            QRDBACCINN2.DataField :='DBINN';
+            QRDBACCNAME.DataField :='DBNAME';
+            QRDBACCINN.DataField :='DBINN';
+           end;
+         end;
+ end;
+end;
+
+procedure TPaymentDecree.EAmmountExit(Sender: TObject);
+begin
+Activ:=2 ;
+ if EAmmount.text<>'' then
+  EAmmountW.text :=WithCoin(EAmmount.text);
+end;
+
+procedure TPaymentDecree.SpeedButton1Click(Sender: TObject);
+begin
+ CleanUp;
+end;
+
+procedure TPaymentDecree.ToolButton4Click(Sender: TObject);
+begin
+ CleanUp;
+GroupBox7.Visible:=false;
+GroupBox5.Visible:=true;
+Panel25.Visible:=true;
+GroupBox4.Visible:=true;
+GroupBox6.Visible:=true;
+Panel26.Visible:=true;
+GroupBox7.Visible:=false;
+GroupBox8.Visible:=false;
+EDAInn.Visible:=true;
+Panel13.Visible:=true;
+Panel24.Visible:=true;
+CheckBox.Visible:=true;
+
+ if PaymentDataMod.ODSbank.FieldByName('swift').AsString='REVAAZ22' then     //REVAAZ22
+  begin
+         EDAName.Text:=PaymentDataMod.ODSbank.FieldByName('bank').AsString ;
+         EDAInn.Text :=PaymentDataMod.ODSbank.FieldByName('inn').AsString  ;
+
+  end
+end;
+
+procedure TPaymentDecree.DBLookupComboBox2Click(Sender: TObject);
+begin
+if PaymentDataMod.ODSbank.FieldByName('swift').AsString<>'REVAAZ22' then
+begin
+with PaymentDataMod.Ds_Acoount do
+   begin
+   EDAName.Text := FieldByName('name').AsString;
+   EDAInn.Text := FieldByName('inn').AsString;
+   end;
+end;
+
+end;
+
+procedure TPaymentDecree.DBNameChange(Sender: TObject);
+begin
+DBCod.Text :='';
+ DBInn.Text :='';
+ DBCorAcc.Text :='';
+ DBSwift.Text :='';
+ try
+  with PaymentDataMod.ODSBankInfo do
+   begin
+    Close;
+     SQL. Clear;
+     SQL.Text :='Select * From bankm_ours Where bankcode= '+IntToStr(Rate1[DBName.ItemIndex]);
+    Open;
+    DBCod.Text :=FieldByName('bankcode').AsString;
+    DBInn.Text :=FieldByName('INN').AsString;
+    DBCorAcc.Text :=FieldByName('KRNO').AsString;
+    DBSwift.Text :=FieldByName('SWIFT').AsString;
+   end;
+ finally
+    with PaymentDataMod.ODSBankInfo do
+    begin
+     Close;
+      SQL. Clear;
+      SQL.Text :='Select * From Bankm_ours ';
+     Open;
+    end;
+ end;
+end;
+
+procedure TPaymentDecree.DBCodKeyPress(Sender: TObject; var Key: Char);
+begin
+ if key =#13 then
+ with PaymentDataMod.ODSBankInfo do
+  begin
+   if Locate('bankcode',DBCod.Text,[loCaseInsensitive, loPartialKey]) then
+    begin
+     DBName.Text :=FieldByName('name').AsString;
+    // EKBCod.Text :=FieldByName('BANKCODE').AsString;
+     DBInn.Text :=FieldByName('INN').AsString;
+     DBCorAcc.Text :=FieldByName('KRNO').AsString;
+     DBSwift.Text :=FieldByName('SWIFT').AsString;
+    end;
+  end;
+end;
+
+
+
+
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TPaymentDecree,
+    Class_PaymentDecree,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

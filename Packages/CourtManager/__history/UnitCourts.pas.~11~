@@ -1,0 +1,77 @@
+﻿unit UnitCourts;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, XFSCtrls, DBCtrls, Mask, ExtCtrls;
+
+type
+  TFormCourts = class(TForm)
+    XFPanel1: TXFPanel;
+    XFPanel2: TXFPanel;
+    XFPanel3: TXFPanel;
+    XFLabel2: TXFLabel;
+    DBEdit1: TDBEdit;
+    XFPanel4: TXFPanel;
+    XFLabel1: TXFLabel;
+    DBEdit2: TDBEdit;
+    XFPanel5: TXFPanel;
+    XFLabel3: TXFLabel;
+    DBLookupComboBox1: TDBLookupComboBox;
+    XFButton1: TXFButton;
+    XFButton2: TXFButton;
+    DBEdit3: TDBEdit;
+    procedure XFButton1Click(Sender: TObject);
+    procedure XFButton2Click(Sender: TObject);
+    procedure DBLookupComboBox1Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormCourts: TFormCourts;
+
+implementation
+uses UnitDataModuleCourt;
+
+{$R *.dfm}
+
+procedure TFormCourts.DBLookupComboBox1Click(Sender: TObject);
+begin
+  DBEdit3.Text:=DBLookupComboBox1.Text;
+end;
+
+procedure TFormCourts.FormShow(Sender: TObject);
+begin
+  DBEdit3.Text:='';
+end;
+
+procedure TFormCourts.XFButton1Click(Sender: TObject);
+begin
+  if DBEdit3.text='' then
+   begin
+   ShowMessage('Gondərəcəyiniz yeri seçin!');
+   exit;
+   end
+  else  begin
+          with DataModuleCourt.ct_control do
+          begin
+            CallProcedure('CourtBodyUpdate',[DBEdit1.DataSource.DataSet.FieldByName('id').AsInteger,
+                                             DBEdit2.DataSource.DataSet.FieldByName('id').AsInteger]);
+          end;
+        end;
+  Close;
+  DataModuleCourt.ODSCourt.Refresh;
+
+end;
+
+procedure TFormCourts.XFButton2Click(Sender: TObject);
+begin
+  Close;
+end;
+
+end.

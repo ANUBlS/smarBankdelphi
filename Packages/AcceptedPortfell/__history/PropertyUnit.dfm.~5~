@@ -1,0 +1,197 @@
+object Propertyfrm: TPropertyfrm
+  Left = 0
+  Top = 0
+  Caption = 'Propertyfrm'
+  ClientHeight = 547
+  ClientWidth = 1176
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poMainFormCenter
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Label1: TLabel
+    Left = 16
+    Top = 16
+    Width = 64
+    Height = 13
+    Caption = #399'mlak'#305'n n'#246'v'#252
+  end
+  object Label2: TLabel
+    Left = 224
+    Top = 16
+    Width = 31
+    Height = 13
+    Caption = 'T'#601'sviri'
+  end
+  object Label3: TLabel
+    Left = 448
+    Top = 16
+    Width = 33
+    Height = 13
+    Caption = #220'nvan'#305
+  end
+  object Label4: TLabel
+    Left = 656
+    Top = 16
+    Width = 183
+    Height = 13
+    Caption = 'D'#399'RDRX-d'#601'n '#231#305'xar'#305#351' v'#601' ya texpasport'
+  end
+  object Label5: TLabel
+    Left = 880
+    Top = 16
+    Width = 152
+    Height = 13
+    Caption = #399'mlak'#305'n balans '#252'zr'#601' d'#601'y'#601'ri-AZN'
+  end
+  object Label6: TLabel
+    Left = 16
+    Top = 64
+    Width = 26
+    Height = 13
+    Caption = 'Qeyd'
+  end
+  object DBEdit1: TDBEdit
+    Left = 16
+    Top = 35
+    Width = 193
+    Height = 21
+    DataField = 'PROPERTY'
+    DataSource = DataMod.Data_main_one
+    TabOrder = 0
+  end
+  object DBEdit2: TDBEdit
+    Left = 224
+    Top = 35
+    Width = 193
+    Height = 21
+    DataField = 'PROP_DESC'
+    DataSource = DataMod.Data_main_one
+    TabOrder = 1
+  end
+  object DBEdit3: TDBEdit
+    Left = 880
+    Top = 35
+    Width = 193
+    Height = 21
+    DataField = 'PROP_PRICE'
+    DataSource = DataMod.Data_main_one
+    TabOrder = 2
+  end
+  object DBEdit4: TDBEdit
+    Left = 656
+    Top = 35
+    Width = 193
+    Height = 21
+    DataField = 'PORP_PASSPORT'
+    DataSource = DataMod.Data_main_one
+    TabOrder = 3
+  end
+  object DBEdit5: TDBEdit
+    Left = 440
+    Top = 35
+    Width = 193
+    Height = 21
+    DataField = 'PROP_ADDRESS'
+    DataSource = DataMod.Data_main_one
+    TabOrder = 4
+  end
+  object Button3: TButton
+    Left = 1093
+    Top = 448
+    Width = 75
+    Height = 25
+    Caption = 'Ba'#287'la'
+    TabOrder = 5
+    OnClick = Button3Click
+  end
+  object Button4: TButton
+    Left = 1012
+    Top = 448
+    Width = 75
+    Height = 25
+    Caption = 'Yadda Saxla'
+    TabOrder = 6
+    OnClick = Button4Click
+  end
+  object DBGrid1: TDBGrid
+    Left = 16
+    Top = 151
+    Width = 1152
+    Height = 252
+    DataSource = DataMod.Data_main_one
+    TabOrder = 7
+    TitleFont.Charset = DEFAULT_CHARSET
+    TitleFont.Color = clWindowText
+    TitleFont.Height = -11
+    TitleFont.Name = 'Tahoma'
+    TitleFont.Style = []
+    Columns = <
+      item
+        Expanded = False
+        FieldName = 'PROPERTY'
+        Title.Caption = #399'mlak'#305'n N'#246'v'#252
+        Width = 240
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'PROP_DESC'
+        Title.Caption = 'T'#601'sviri'
+        Width = 65
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'PROP_ADDRESS'
+        Title.Caption = #220'nvan'#305
+        Width = 140
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'PORP_PASSPORT'
+        Title.Caption = #199#305'xar'#305#351' v'#601'ya texpassport'
+        Width = 150
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'PROP_PRICE'
+        Title.Caption = 'Bazar D'#601'y'#601'ri'
+        Width = 120
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'PROP_INFO'
+        Title.Caption = 'Qeyd'
+        Width = 300
+        Visible = True
+      end>
+  end
+  object DBMemo1: TDBMemo
+    Left = 16
+    Top = 83
+    Width = 409
+    Height = 54
+    DataField = 'PROP_info'
+    DataSource = DataMod.Data_main_one
+    TabOrder = 8
+  end
+  object Button1: TButton
+    Left = 931
+    Top = 448
+    Width = 75
+    Height = 25
+    Caption = 'Yeni'
+    TabOrder = 9
+    OnClick = Button1Click
+  end
+end

@@ -1,0 +1,92 @@
+object DataModuleEnforcement: TDataModuleEnforcement
+  OldCreateOrder = False
+  OnCreate = DataModuleCreate
+  Height = 658
+  Width = 914
+  object ODSEnforcement: TOracleDataSet
+    SQL.Strings = (
+      
+        'SELECT p.id,p.courtid,p.boorowerid,p.numberofcredit,val_name,b.n' +
+        'ame,'
+      
+        '       rest,duerest,interestrest,p.creditlineamount,h.penaltyres' +
+        't, '
+      
+        '       p.dateofconclusion,p.duedatefirstcontract,p.qovid,(select' +
+        ' name from ct_qrup where id=p.courtid) CORT_STATUS,'
+      
+        '       case when p.placestatus=0 then (select name from ct_execu' +
+        'tive_body where id=p.placeid) else (select name from ct_judicial' +
+        '_body where id=p.placeid) end as placename,'
+      
+        '       cr.description crtype,b.phonenumber,p.annualyinterestrate' +
+        ',p.annualyoverduerate,p.annualypenaltyrate,'
+      
+        '       dueinterestrest,p.purposeofcredit,cm_utils.Get_MainPlanPa' +
+        'yment(p.id) odenilmeli,'
+      
+        '       cm_utils.Get_MainPlanPayment(p.id)+ duerest + interestres' +
+        't + dueinterestrest+h.penaltyrest fullrest,'
+      
+        '       dueday,q.name qovluq,f.name filial,m.name mehsul,a.name m' +
+        'eqed,e.name expert,r.description ehtiyyat,py.maxpaydate,'
+      '       case when dueday =1 then 0'
+      
+        '        when py.maxpaydate=sbop.GET_DATE then 1  end as status, ' +
+        '       '
+      
+        '  b.pincode,b.boorowerid pasnum,b.address,i.birthday dogum_tarix' +
+        'i,i.birthplace dogum_yeri,i.work_place,i.work_post'
+      'FROM cm_active_credits p,'
+      '     cm_credittypes cr,'
+      '     cm_curr_state h,'
+      '     cm_boorowerinfo b,'
+      '     cm_qovluq q,'
+      '     filial_t f,'
+      '     avalute_t v,'
+      '     cm_mehsul m ,'
+      '     cm_aim_cred a,'
+      '     cm_expert e,'
+      '     cm_reserve_types r,custinfo i,'
+      
+        '     (select creditid ,max(paydate) maxpaydate from cm_payments ' +
+        'group by creditid) py'
+      '     '
+      'WHERE     p.id = h.creditid'
+      '      AND p.id = b.creditid'
+      '      AND p.id = py.creditid(+)'
+      '      AND p.qovid = q.id'
+      '      AND p.mehsulid=m.id'
+      '      AND h.reserveid=r.id'
+      '      AND p.aim_id=a.id'
+      '      AND p.expertid=e.id'
+      
+        '      AND h.rest + h.duerest + h.interestrest + h.interestrest >' +
+        ' 0'
+      '      AND h.dueday>0'
+      '      AND p.branchid = f.id'
+      '      AND p.currency = v.valute'
+      '      AND p.credittype = cr.id'
+      '      ANDp.courtid=5 and p.boorowerid=i.idcust'
+      '  '
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      '  order by :title')
+    Optimize = False
+    Left = 48
+    Top = 24
+  end
+  object DSEnforcement: TDataSource
+    DataSet = ODSEnforcement
+    Left = 144
+    Top = 24
+  end
+end

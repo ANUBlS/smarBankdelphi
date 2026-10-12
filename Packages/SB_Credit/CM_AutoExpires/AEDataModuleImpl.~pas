@@ -1,0 +1,134 @@
+unit AEDataModuleImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, OracleData, Oracle;
+
+type
+  TDataModAE = class(TDataModule)
+    ExpiresData: TOracleDataSet;
+    DSExpiresData: TDataSource;
+    ExpiresDataID: TFloatField;
+    ExpiresDataDATEOFCONCLUSION: TDateTimeField;
+    ExpiresDataDUEDATEFIRSTCONTRACT: TDateTimeField;
+    ExpiresDataDUEDATELASTCONTRACT: TDateTimeField;
+    ExpiresDataNUMBEROFCREDIT: TStringField;
+    ExpiresDataCONTRACTACCNO: TStringField;
+    ExpiresDataVAL_NAME: TStringField;
+    ExpiresDataNAME: TStringField;
+    ExpiresDataDUEMAINAMT: TFloatField;
+    ExpiresDataDUEINTAMT: TFloatField;
+    ExpiresDataDAYSMAIN: TFloatField;
+    ExpiresDataDAYSINT: TFloatField;
+    CM_AUTO_EXPIRE: TOraclePackage;
+    DSPayments: TDataSource;
+    Payments: TOracleDataSet;
+    PaymentsID: TFloatField;
+    PaymentsCREDITID: TFloatField;
+    PaymentsPAYDATE: TDateTimeField;
+    PaymentsPAYEDAMT: TFloatField;
+    PaymentsPAYEDINTAMT: TFloatField;
+    PaymentsPAYEDDUEAMT: TFloatField;
+    PaymentsPAYEDDUEINTAMT: TFloatField;
+    PaymentsPAYEDPENALTYAMT: TFloatField;
+    Schedule: TOracleDataSet;
+    ScheduleID: TFloatField;
+    ScheduleCREDITID: TFloatField;
+    SchedulePAYMENTDATE: TDateTimeField;
+    SchedulePRINCIPAL: TFloatField;
+    ScheduleINTEREST: TFloatField;
+    DSSchedule: TDataSource;
+    ScheduleTotal: TFloatField;
+    PaymentData: TOracleDataSet;
+    PayDataS: TDataSource;
+    Customers: TOracleDataSet;
+    DSCustomers: TDataSource;
+    BoorDSet: TOracleDataSet;
+    BoorDSource: TDataSource;
+    BoorDSetNAME: TStringField;
+    AvalDSet: TOracleDataSet;
+    AvalDSetVALUTE: TIntegerField;
+    AvalDSetVALU_NAME: TStringField;
+    AvalDSource: TDataSource;
+    FilialDSet: TOracleDataSet;
+    FilialDSetID: TFloatField;
+    FilialDSetNAME: TStringField;
+    FilialDSource: TDataSource;
+    PortDSet: TOracleDataSet;
+    PortDSource: TDataSource;
+    PortDSetNUMBEROFCREDIT: TStringField;
+    DSPReserves: TDataSource;
+    PReserves: TOracleDataSet;
+    PReservesID: TFloatField;
+    PReservesPERCENT: TFloatField;
+    PReservesDESCRIPTION: TStringField;
+    DateDSet: TOracleDataSet;
+    DateDSource: TDataSource;
+    DateDSetTEK_DAT: TDateTimeField;
+    Persons: TOracleDataSet;
+    DSPersons: TDataSource;
+    PersonsID: TFloatField;
+    PersonsDESCRIPION: TStringField;
+    DSPledges: TDataSource;
+    Pledges: TOracleDataSet;
+    PledgesID: TFloatField;
+    PledgesDESCRIPTION: TStringField;
+    SReserves: TOracleDataSet;
+    SReservesID: TFloatField;
+    SReservesPERCENT: TFloatField;
+    SReservesDESCRIPTION: TStringField;
+    SReservesFULLDESC: TStringField;
+    DSSReserves: TDataSource;
+    Categories: TOracleDataSet;
+    DSCategories: TDataSource;
+    CategoriesID: TFloatField;
+    CategoriesDESCRIPTION: TStringField;
+    UserGroups: TOracleDataSet;
+    DSUserGroups: TDataSource;
+    UserGroupsID: TFloatField;
+    UserGroupsDESCRIPTION: TStringField;
+    DSCreditTypes: TDataSource;
+    CreditTypes: TOracleDataSet;
+    CreditTypesID: TFloatField;
+    CreditTypesDESCRIPTION: TStringField;
+    AccDSource: TDataSource;
+    AccDSet: TOracleDataSet;
+    AccDSetACC_NUMBER: TStringField;
+    MusIdDSource: TDataSource;
+    MusIdDSet: TOracleDataSet;
+    PaymentDataID: TFloatField;
+    PaymentDataNAME: TStringField;
+    PaymentDataNUMBEROFCREDIT: TStringField;
+    PaymentDataACC_NUMBER: TStringField;
+    PaymentDataPAYMENTDATE: TDateTimeField;
+    PaymentDataPRINCIPAL: TFloatField;
+    PaymentDataPAYMENTAMOUNT: TFloatField;
+    MusIdDSetBOOROWERID: TFloatField;
+    PaymentDataMOUNTHPAY: TFloatField;
+    PaymentDataPAYEDINTAMT: TFloatField;
+    procedure ScheduleCalcFields(DataSet: TDataSet);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  DataModAE: TDataModAE;
+
+implementation
+
+{$R *.DFM}
+
+uses
+  CMOracleAPIDataModuleImpl,PayUnit;
+
+procedure TDataModAE.ScheduleCalcFields(DataSet: TDataSet);
+begin
+  with DataSet do
+    FieldByName('Total').AsFloat := FieldByName('PRINCIPAL').AsFloat + FieldByName('INTEREST').AsFloat; 
+end;
+
+end.

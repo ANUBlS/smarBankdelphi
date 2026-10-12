@@ -1,0 +1,511 @@
+object FrmCoefficient: TFrmCoefficient
+  Left = 192
+  Top = 114
+  Width = 460
+  Height = 480
+  Caption = 'FrmCoefficient'
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'MS Sans Serif'
+  Font.Style = []
+  OldCreateOrder = False
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Gauge1: TGauge
+    Left = 4
+    Top = 347
+    Width = 289
+    Height = 42
+    BackColor = clAqua
+    Color = clRed
+    ForeColor = clYellow
+    ParentColor = False
+    Progress = 0
+  end
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 452
+    Height = 339
+    Align = alTop
+    BevelOuter = bvNone
+    BiDiMode = bdLeftToRight
+    BorderStyle = bsSingle
+    Color = clWhite
+    Ctl3D = False
+    ParentBiDiMode = False
+    ParentCtl3D = False
+    TabOrder = 0
+    object SpeedButton1: TSpeedButton
+      Left = 297
+      Top = 304
+      Width = 74
+      Height = 31
+      Caption = 'Ãÿáóë'
+      Flat = True
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clNavy
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      Glyph.Data = {
+        DE010000424DDE01000000000000760000002800000024000000120000000100
+        0400000000006801000000000000000000001000000000000000000000000000
+        80000080000000808000800000008000800080800000C0C0C000808080000000
+        FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00333333333333
+        3333333333333333333333330000333333333333333333333333F33333333333
+        00003333300333333333333333388F3333333333000033330440333333333333
+        338338F3333333330000333044440333333333333833338F3333333300003304
+        444440333333333383333338F3333333000030444C44440333333338F338F333
+        8F33333300003444C3C4440333333338F3838F338F33333300003C4C333C4440
+        33333338F83338F338F33333000033C33333C444033333338333338F338F3333
+        0000333333333C444033333333333338F338F33300003333333333C444033333
+        333333338F338F33000033333333333C444033333333333338F338F300003333
+        33333333C444033333333333338F338F00003333333333333C44033333333333
+        3338F38F000033333333333333C443333333333333338F830000333333333333
+        333C333333333333333338330000333333333333333333333333333333333333
+        0000}
+      NumGlyphs = 2
+      ParentFont = False
+      OnClick = SpeedButton1Click
+    end
+    object SpeedButton2: TSpeedButton
+      Left = 377
+      Top = 303
+      Width = 70
+      Height = 32
+      Caption = 'Èìòèíà'
+      Flat = True
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clNavy
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      Glyph.Data = {
+        DE010000424DDE01000000000000760000002800000024000000120000000100
+        0400000000006801000000000000000000001000000000000000000000000000
+        80000080000000808000800000008000800080800000C0C0C000808080000000
+        FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00333333333333
+        333333333333333333333333000033338833333333333333333F333333333333
+        0000333C44833333C83333333388F333333F33330000333C4448333C44833333
+        38F38F333F88F3330000333C444483C44448333338F338F3F8338F3300003333
+        C44448444448333338F3338F833338F3000033333C44444444833333338F3338
+        3333F8330000333333C44444483333333338F333333F83330000333333344444
+        8333333333338F333338333300003333333C444483333333333338F333833333
+        0000333333C444448333333333333833338F3333000033333C44484448333333
+        33338333338F333300003333C44483C44483333333383338F338F33300003333
+        C448333C44483333338F33838F338F33000033333C433333C4443333338FF833
+        38F338F300003333333333333C4C333333388333338FFF830000333333333333
+        3333333333333333333888330000333333333333333333333333333333333333
+        0000}
+      NumGlyphs = 2
+      ParentFont = False
+      OnClick = SpeedButton2Click
+    end
+    object GroupBox6: TGroupBox
+      Left = 2
+      Top = 1
+      Width = 223
+      Height = 65
+      Caption = 'Òàðèõ '
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clBlue
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 0
+      object CBaValute: TCheckBox
+        Left = 8
+        Top = 40
+        Width = 97
+        Height = 17
+        Caption = 'Tÿtbiq et'
+        Checked = True
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clNavy
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ParentFont = False
+        State = cbChecked
+        TabOrder = 0
+      end
+      object DateTimePicker1: TDateTimePicker
+        Left = 5
+        Top = 17
+        Width = 213
+        Height = 21
+        CalAlignment = dtaLeft
+        Date = 40113.5973054051
+        Time = 40113.5973054051
+        DateFormat = dfShort
+        DateMode = dmComboBox
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clNavy
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        Kind = dtkDate
+        ParseInput = False
+        ParentFont = False
+        TabOrder = 1
+      end
+    end
+    object GroupBox1: TGroupBox
+      Left = 4
+      Top = 67
+      Width = 221
+      Height = 233
+      Caption = 'Filial'
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clBlue
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 1
+      object LookUsrGrp: TEvanescence
+        Tag = 3112
+        Left = 3
+        Top = 31
+        Width = 215
+        Height = 200
+        Color = clWhite
+        Flat = False
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clNavy
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ItemHeight = 13
+        ParentFont = False
+        TabOrder = 0
+        DataSource = srcFilial
+        ListField = 'NAME'
+        KeyField = 'ID'
+      end
+      object CheckBox2: TCheckBox
+        Left = 6
+        Top = 14
+        Width = 97
+        Height = 17
+        Caption = 'Ùàìñûíû ñå÷'
+        Checked = True
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clNavy
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ParentFont = False
+        State = cbChecked
+        TabOrder = 1
+        OnClick = CheckBox2Click
+      end
+    end
+    object GroupBox2: TGroupBox
+      Left = 230
+      Top = 1
+      Width = 223
+      Height = 65
+      Caption = 'Áîðæàëàíûí tipi'
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clBlue
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 2
+      object CBPersons: TCheckBox
+        Left = 8
+        Top = 40
+        Width = 97
+        Height = 17
+        Caption = 'Tÿtbiq et'
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clNavy
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 0
+      end
+      object LCBPersons: TDBLookupComboBox
+        Left = 5
+        Top = 18
+        Width = 211
+        Height = 19
+        Ctl3D = False
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clNavy
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        KeyField = 'ID'
+        ListField = 'DESCRIPION'
+        ListSource = DataSrcPersonTypes
+        ParentCtl3D = False
+        ParentFont = False
+        TabOrder = 1
+      end
+    end
+    object GroupBox3: TGroupBox
+      Left = 231
+      Top = 67
+      Width = 221
+      Height = 233
+      Caption = 'Möøtÿri tipi'
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clBlue
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 3
+      object LookPersonelType: TEvanescence
+        Tag = 3112
+        Left = 3
+        Top = 31
+        Width = 215
+        Height = 200
+        Color = clWhite
+        Flat = False
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clNavy
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ItemHeight = 13
+        ParentFont = False
+        TabOrder = 0
+        DataSource = srcPersonelType
+        ListField = 'DESCRIPTION'
+        KeyField = 'ID'
+      end
+      object CheckBox1: TCheckBox
+        Left = 6
+        Top = 14
+        Width = 97
+        Height = 17
+        Caption = 'Ùàìñûíû ñå÷'
+        Checked = True
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clNavy
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ParentFont = False
+        State = cbChecked
+        TabOrder = 1
+        OnClick = CheckBox1Click
+      end
+    end
+  end
+  object PersonTypes: TOracleDataSet
+    SQL.Strings = (
+      'select '
+      '  ID,'
+      '  DESCRIPION'
+      'from'
+      '  CM_PERSONS'
+      ''
+      'order by id')
+    Cursor = crHourGlass
+    Session = CMDataModule.CMSession
+    Left = 320
+    Top = 40
+  end
+  object DataSrcPersonTypes: TDataSource
+    DataSet = PersonTypes
+    Left = 368
+    Top = 40
+  end
+  object ExcelExport: TCMExcelExport
+    ConnectTo = ctNewInstance
+    StyleColumnWidth = cwAutoFit
+    ColumnWidth = 0
+    FontTitles.Charset = DEFAULT_CHARSET
+    FontTitles.Color = clNavy
+    FontTitles.Height = -13
+    FontTitles.Name = 'Azl Sans Serif'
+    FontTitles.Style = [fsBold]
+    BorderTitles.Weight = bwThin
+    BorderTitles.LineStyle = blLine
+    OrientationTitles = 0
+    FontData.Charset = RUSSIAN_CHARSET
+    FontData.Color = clWindowText
+    FontData.Height = -11
+    FontData.Name = 'Azl Sans Serif'
+    FontData.Style = []
+    FontSummary.Charset = DEFAULT_CHARSET
+    FontSummary.Color = clWindowText
+    FontSummary.Height = -11
+    FontSummary.Name = 'Azl Sans Serif'
+    FontSummary.Style = []
+    SummarySelection = ssNone
+    SummaryCalculation = scSUM
+    Left = 376
+    Top = 152
+  end
+  object srcPersonelType: TDataSource
+    DataSet = PersonelTypeDataSet
+    Left = 275
+    Top = 177
+  end
+  object PersonelTypeDataSet: TOracleDataSet
+    SQL.Strings = (
+      ''
+      'SELECT id, description'
+      '  FROM creditsmgr.cm_categories')
+    QBEDefinition.QBEFieldDefs = {
+      04000000020000000200000049440100000000000B0000004445534352495054
+      494F4E010000000000}
+    Session = CMDataModule.CMSession
+    Left = 280
+    Top = 119
+  end
+  object FilialDataSet: TOracleDataSet
+    SQL.Strings = (
+      '  SELECT id, name'
+      '    FROM creditsmgr.sb_filial')
+    QBEDefinition.QBEFieldDefs = {
+      0400000002000000020000004944010000000000040000004E414D4501000000
+      0000}
+    Session = CMDataModule.CMSession
+    Left = 184
+    Top = 119
+    object FilialDataSetID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object FilialDataSetNAME: TStringField
+      FieldName = 'NAME'
+      Size = 90
+    end
+  end
+  object srcFilial: TDataSource
+    DataSet = FilialDataSet
+    Left = 184
+    Top = 167
+  end
+  object Main: TOracleDataSet
+    SQL.Strings = (
+      
+        'SELECT a.filial, sum(a.kreditin_meb*s.ostat), sum(a.hes_tar_odes' +
+        'as*s.ostat), sum(a.odenilmish_esas*s.ostat),'
+      
+        '       sum(a.artiq_odeme*s.ostat), sum(a.gec_esas*s.ostat), sum(' +
+        'a.gec_esas_qaliq*s.ostat), sum(a.gec_xususi_p_ceki*s.ostat),'
+      
+        '       sum(a.gec_xususi_q_ceki*s.ostat), sum(a.odenish_nisbeti*s' +
+        '.ostat)'
+      '  FROM cm_rest_coefficient a ,smart.temprate s'
+      'where'
+      'a.currency=s.VAL_KOD'
+      ''
+      ''
+      ''
+      ''
+      'group by a.filial'
+      ''
+      ''
+      ''
+      ''
+      ''
+      ' '
+      ''
+      ''
+      ' '
+      ''
+      ' ')
+    QBEDefinition.QBEFieldDefs = {
+      040000000A0000000600000046494C49414C0100000000001B00000053554D28
+      412E4B5245444954494E5F4D45422A532E4F53544154290100000000001D0000
+      0053554D28412E4845535F5441525F4F44455341532A532E4F53544154290100
+      000000001E00000053554D28412E4F44454E494C4D4953485F455341532A532E
+      4F53544154290100000000001A00000053554D28412E41525449515F4F44454D
+      452A532E4F53544154290100000000001700000053554D28412E4745435F4553
+      41532A532E4F53544154290100000000001D00000053554D28412E4745435F45
+      5341535F51414C49512A532E4F53544154290100000000001E00000053554D28
+      412E4745435F5855535553495F505F43454B492A532E4F535441010000000000
+      1E00000053554D28412E4745435F5855535553495F515F43454B492A532E4F53
+      54410100000000001E00000053554D28412E4F44454E4953485F4E4953424554
+      492A532E4F5354415429010000000000}
+    Session = CMDataModule.CMSession
+    Left = 272
+    Top = 236
+    object MainFILIAL: TStringField
+      FieldName = 'FILIAL'
+      Size = 40
+    end
+    object MainSUMAKREDITIN_MEBSOSTAT: TFloatField
+      FieldName = 'SUM(A.KREDITIN_MEB*S.OSTAT)'
+    end
+    object MainSUMAHES_TAR_ODESASSOSTAT: TFloatField
+      FieldName = 'SUM(A.HES_TAR_ODESAS*S.OSTAT)'
+    end
+    object MainSUMAODENILMISH_ESASSOSTAT: TFloatField
+      FieldName = 'SUM(A.ODENILMISH_ESAS*S.OSTAT)'
+    end
+    object MainSUMAARTIQ_ODEMESOSTAT: TFloatField
+      FieldName = 'SUM(A.ARTIQ_ODEME*S.OSTAT)'
+    end
+    object MainSUMAGEC_ESASSOSTAT: TFloatField
+      FieldName = 'SUM(A.GEC_ESAS*S.OSTAT)'
+    end
+    object MainSUMAGEC_ESAS_QALIQSOSTAT: TFloatField
+      FieldName = 'SUM(A.GEC_ESAS_QALIQ*S.OSTAT)'
+    end
+    object MainSUMAGEC_XUSUSI_P_CEKISOSTA: TFloatField
+      FieldName = 'SUM(A.GEC_XUSUSI_P_CEKI*S.OSTA'
+    end
+    object MainSUMAGEC_XUSUSI_Q_CEKISOSTA: TFloatField
+      FieldName = 'SUM(A.GEC_XUSUSI_Q_CEKI*S.OSTA'
+    end
+    object MainSUMAODENISH_NISBETISOSTAT: TFloatField
+      FieldName = 'SUM(A.ODENISH_NISBETI*S.OSTAT)'
+    end
+  end
+  object sysdate: TOracleDataSet
+    SQL.Strings = (
+      'select * from smart.sysdat')
+    QBEDefinition.QBEFieldDefs = {
+      04000000040000000700000054454B5F44415401000000000008000000505245
+      445F444154010000000000070000004152435F44415901000000000005000000
+      434C4F5345010000000000}
+    Session = CMDataModule.CMSession
+    Left = 336
+    Top = 236
+    object sysdateTEK_DAT: TDateTimeField
+      FieldName = 'TEK_DAT'
+      Required = True
+    end
+  end
+  object NLSLocalizer1: TNLSLocalizer
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    Left = 109
+    Top = 172
+  end
+  object active: TOracleDataSet
+    SQL.Strings = (
+      'select * from cm_active_credits --where id<1000')
+    Session = CMDataModule.CMSession
+    Left = 165
+    Top = 236
+  end
+  object OraclePackage1: TOraclePackage
+    Session = CMDataModule.CMSession
+    PackageName = 'CM_COEFFICIENT'
+    ParameterMode = pmNamed
+    Left = 69
+    Top = 236
+  end
+end

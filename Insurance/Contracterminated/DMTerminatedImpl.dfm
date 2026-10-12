@@ -1,0 +1,626 @@
+object DMTerminated: TDMTerminated
+  OldCreateOrder = False
+  OnCreate = DataModuleCreate
+  OnDestroy = DataModuleDestroy
+  Height = 446
+  Width = 733
+  object DSRContract: TDataSource
+    DataSet = DSContract
+    Left = 151
+    Top = 16
+  end
+  object DSContract: TOracleDataSet
+    SQL.Strings = (
+      'select * from ins_contracts'
+      'where close_prefix=0'
+      'and state in (6,8)'
+      'and id=:p_id')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000A0000003A0050005F004900440003000000000000000000
+      0000}
+    QBEDefinition.QBEFieldDefs = {
+      050000002000000004000000490044000100000000000E000000540059005000
+      45005F00490044000100000000001000000049004E0053005F00440041005400
+      45000100000000001400000042004500470049004E005F004400410054004500
+      0100000000001000000045004E0044005F004400410054004500010000000000
+      12000000560041004C005500540045005F00490044000100000000000E000000
+      41004D004D004F0055004E0054000100000000001800000043004C004F005300
+      45005F005000520045004600490058000100000000000C0000004B004C004900
+      5F0049004400010000000000140000004C004F0041004E004100430043005F00
+      490044000100000000001400000043005500520052004100430043005F004900
+      44000100000000001400000050004F004C004900430059005F004E0055004D00
+      0100000000000E00000049004E005300530055004D004D000100000000001000
+      00004600520041004E005300480049005A000100000000000C00000054004100
+      52004900460046000100000000000A0000005300540041005400450001000000
+      0000100000004100470045004E0054005F004900440001000000000008000000
+      50004E0055004D000100000000000C000000420045004E005F00490044000100
+      0000000016000000420045004E00450046004900430049004100520059000100
+      000000001400000043004F004E0044004900540049004F004E00530001000000
+      00000C0000005300550047004E0055004D000100000000001000000042004C00
+      41004E004B005F00490044000100000000000A0000004F0050005F0049004400
+      0100000000000A0000005200450049004E0053000100000000000E0000004300
+      48004B00410053004B004F0001000000000006000000430048004D0001000000
+      00000800000043004800460051000100000000001600000043004F004D004D00
+      490054004F0050005F00490044000100000000001600000043004F004D004D00
+      490054005F00440041005400450001000000000014000000430041004E004300
+      45004C004F0050004900440001000000000014000000430041004E0043004500
+      4C004400410054004500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 46
+    Top = 16
+    object DSContractID: TFloatField
+      FieldName = 'ID'
+    end
+    object DSContractTYPE_ID: TFloatField
+      FieldName = 'TYPE_ID'
+    end
+    object DSContractINS_DATE: TDateTimeField
+      FieldName = 'INS_DATE'
+    end
+    object DSContractBEGIN_DATE: TDateTimeField
+      FieldName = 'BEGIN_DATE'
+    end
+    object DSContractEND_DATE: TDateTimeField
+      FieldName = 'END_DATE'
+    end
+    object DSContractVALUTE_ID: TFloatField
+      FieldName = 'VALUTE_ID'
+    end
+    object DSContractAMMOUNT: TFloatField
+      FieldName = 'AMMOUNT'
+    end
+    object DSContractCLOSE_PREFIX: TIntegerField
+      FieldName = 'CLOSE_PREFIX'
+    end
+    object DSContractKLI_ID: TFloatField
+      FieldName = 'KLI_ID'
+    end
+    object DSContractLOANACC_ID: TFloatField
+      FieldName = 'LOANACC_ID'
+    end
+    object DSContractCURRACC_ID: TFloatField
+      FieldName = 'CURRACC_ID'
+    end
+    object DSContractPOLICY_NUM: TWideStringField
+      FieldName = 'POLICY_NUM'
+      Size = 128
+    end
+    object DSContractINSSUMM: TFloatField
+      FieldName = 'INSSUMM'
+    end
+    object DSContractFRANSHIZ: TFloatField
+      FieldName = 'FRANSHIZ'
+    end
+    object DSContractTARIFF: TFloatField
+      FieldName = 'TARIFF'
+    end
+    object DSContractSTATE: TIntegerField
+      FieldName = 'STATE'
+    end
+    object DSContractAGENT_ID: TFloatField
+      FieldName = 'AGENT_ID'
+    end
+    object DSContractPNUM: TFloatField
+      FieldName = 'PNUM'
+    end
+    object DSContractBEN_ID: TFloatField
+      FieldName = 'BEN_ID'
+    end
+    object DSContractBENEFICIARY: TWideStringField
+      FieldName = 'BENEFICIARY'
+      Size = 4000
+    end
+    object DSContractCONDITIONS: TWideStringField
+      FieldName = 'CONDITIONS'
+      Size = 4000
+    end
+    object DSContractSUGNUM: TWideStringField
+      FieldName = 'SUGNUM'
+      Size = 128
+    end
+    object DSContractBLANK_ID: TFloatField
+      FieldName = 'BLANK_ID'
+    end
+    object DSContractOP_ID: TFloatField
+      FieldName = 'OP_ID'
+    end
+    object DSContractREINS: TFloatField
+      FieldName = 'REINS'
+    end
+    object DSContractCHKASKO: TFloatField
+      FieldName = 'CHKASKO'
+    end
+    object DSContractCHM: TFloatField
+      FieldName = 'CHM'
+    end
+    object DSContractCHFQ: TFloatField
+      FieldName = 'CHFQ'
+    end
+    object DSContractCOMMITOP_ID: TFloatField
+      FieldName = 'COMMITOP_ID'
+    end
+    object DSContractCOMMIT_DATE: TDateTimeField
+      FieldName = 'COMMIT_DATE'
+    end
+    object DSContractCANCELOPID: TFloatField
+      FieldName = 'CANCELOPID'
+    end
+    object DSContractCANCELDATE: TDateTimeField
+      FieldName = 'CANCELDATE'
+    end
+  end
+  object DSPayment: TOracleDataSet
+    SQL.Strings = (
+      
+        'select nvl(sum(lammount),0)as sigortahaqqi from ins_payments pm,' +
+        'provarch p,sb_business_opers bp'
+      'where p.vid_op=30'
+      'and p.id=bp.parentid'
+      'and pm.traid=p.id'
+      'and bp.busproc=:pbusproc'
+      'and pm.ins_id=:p_cid')
+    Optimize = False
+    Variables.Data = {
+      04000000020000000C0000003A0050005F004300490044000300000000000000
+      00000000120000003A005000420055005300500052004F004300030000000000
+      000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      0500000001000000180000005300490047004F00520054004100480041005100
+      51004900010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 245
+    Top = 103
+    object DSPaymentSIGORTAHAQQI: TFloatField
+      FieldName = 'SIGORTAHAQQI'
+    end
+  end
+  object DSRPayment: TDataSource
+    DataSet = DSPayment
+    Left = 319
+    Top = 106
+  end
+  object DSRins_c_terminated: TDataSource
+    DataSet = DSins_c_terminated
+    Left = 151
+    Top = 108
+  end
+  object DSins_c_terminated: TOracleDataSet
+    SQL.Strings = (
+      'select a.rowid,a.* from ins_contract_terminated a'
+      'where a.cid=:pcid')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000A0000003A00500043004900440003000000000000000000
+      0000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000D000000040000004900440001000000000006000000430049004400
+      0100000000001A0000005400450052004D0049004E005400450044005F004400
+      410054000100000000002000000049004E005400450052004500530054005F00
+      4300480041005200470045004400010000000000200000005400450052004D00
+      49004E005400450044005F0041004D004F0055004E0054000100000000002000
+      0000530054004100470045005F004F004B005F0056004500520049004C004900
+      420001000000000028000000530054004100470045005F004F004B005F005600
+      4500520049004C00490042005F004400410054000100000000002A0000005300
+      54004100470045005F004F004B005F0056004500520049004C00490042005F00
+      4F0050004900440001000000000018000000530054004100470045005F005400
+      4500530044004900510001000000000020000000530054004100470045005F00
+      5400450053004400490051005F00440041005400010000000000220000005300
+      54004100470045005F005400450053004400490051005F004F00500049004400
+      0100000000000A0000004F0050005F0049004400010000000000080000005400
+      520049004400010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 45
+    Top = 108
+    object DSins_c_terminatedID: TFloatField
+      FieldName = 'ID'
+    end
+    object DSins_c_terminatedCID: TFloatField
+      FieldName = 'CID'
+    end
+    object DSins_c_terminatedTERMINTED_DAT: TDateTimeField
+      FieldName = 'TERMINTED_DAT'
+    end
+    object DSins_c_terminatedINTEREST_CHARGED: TFloatField
+      FieldName = 'INTEREST_CHARGED'
+    end
+    object DSins_c_terminatedSTAGE_OK_VERILIB: TFloatField
+      FieldName = 'STAGE_OK_VERILIB'
+    end
+    object DSins_c_terminatedSTAGE_OK_VERILIB_DAT: TDateTimeField
+      FieldName = 'STAGE_OK_VERILIB_DAT'
+    end
+    object DSins_c_terminatedSTAGE_OK_VERILIB_OPID: TFloatField
+      FieldName = 'STAGE_OK_VERILIB_OPID'
+    end
+    object DSins_c_terminatedSTAGE_TESDIQ: TFloatField
+      FieldName = 'STAGE_TESDIQ'
+    end
+    object DSins_c_terminatedSTAGE_TESDIQ_DAT: TDateTimeField
+      FieldName = 'STAGE_TESDIQ_DAT'
+    end
+    object DSins_c_terminatedSTAGE_TESDIQ_OPID: TFloatField
+      FieldName = 'STAGE_TESDIQ_OPID'
+    end
+    object DSins_c_terminatedOP_ID: TFloatField
+      FieldName = 'OP_ID'
+    end
+  end
+  object DSRSysdat: TDataSource
+    DataSet = DSSysdat
+    Left = 153
+    Top = 154
+  end
+  object DSSysdat: TOracleDataSet
+    SQL.Strings = (
+      'select * from sysdat')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000040000000E000000540045004B005F00440041005400010000000000
+      1000000050005200450044005F004400410054000100000000000E0000004100
+      520043005F004400410059000100000000000A00000043004C004F0053004500
+      010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 45
+    Top = 160
+    object DSSysdatTEK_DAT: TDateTimeField
+      FieldName = 'TEK_DAT'
+    end
+    object DSSysdatPRED_DAT: TDateTimeField
+      FieldName = 'PRED_DAT'
+    end
+    object DSSysdatARC_DAY: TDateTimeField
+      FieldName = 'ARC_DAY'
+    end
+    object DSSysdatCLOSE: TIntegerField
+      FieldName = 'CLOSE'
+    end
+  end
+  object ins_common: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'ins_common'
+    Left = 344
+    Top = 24
+  end
+  object DSRTerminateAmount: TDataSource
+    DataSet = DSTerminateAmount
+    Left = 153
+    Top = 204
+  end
+  object DSTerminateAmount: TOracleDataSet
+    SQL.Strings = (
+      'select a.rowid,a.* from ins_contract_terminated_detal a'
+      'where a.ter_id=:pter_id')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000100000003A0050005400450052005F004900440003000000
+      0000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      05000000070000000C0000005400450052005F00490044000100000000002000
+      00005400450052004D0049004E005400450044005F0041004D004F0055004E00
+      5400010000000000220000005400450052004D0049004E005400450044005F00
+      41004D004F0055004E0054003100010000000000220000005400450052004D00
+      49004E005400450044005F0041004D004F0055004E0054003200010000000000
+      0800000054005200490044000100000000000A00000054005200490044003100
+      0100000000000A00000054005200490044003200010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 45
+    Top = 204
+    object DSTerminateAmountTER_ID: TFloatField
+      FieldName = 'TER_ID'
+    end
+    object DSTerminateAmountTERMINTED_AMOUNT: TFloatField
+      FieldName = 'TERMINTED_AMOUNT'
+    end
+    object DSTerminateAmountTERMINTED_AMOUNT1: TFloatField
+      FieldName = 'TERMINTED_AMOUNT1'
+    end
+    object DSTerminateAmountTERMINTED_AMOUNT2: TFloatField
+      FieldName = 'TERMINTED_AMOUNT2'
+    end
+    object DSTerminateAmountTRID: TFloatField
+      FieldName = 'TRID'
+    end
+    object DSTerminateAmountTRID1: TFloatField
+      FieldName = 'TRID1'
+    end
+    object DSTerminateAmountTRID2: TFloatField
+      FieldName = 'TRID2'
+    end
+  end
+  object DSPayment1: TOracleDataSet
+    SQL.Strings = (
+      
+        'select nvl(sum(lammount),0)as sigortahaqqi from ins_payments pm,' +
+        'provarch p,sb_business_opers bp'
+      'where p.vid_op=30'
+      'and p.id=bp.parentid'
+      'and pm.traid=p.id'
+      'and bp.busproc=:pbusproc'
+      'and pm.ins_id=:p_cid')
+    Optimize = False
+    Variables.Data = {
+      04000000020000000C0000003A0050005F004300490044000300000000000000
+      00000000120000003A005000420055005300500052004F004300030000000000
+      000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      0500000001000000180000005300490047004F00520054004100480041005100
+      51004900010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 245
+    Top = 159
+    object DSPayment1SIGORTAHAQQI: TFloatField
+      FieldName = 'SIGORTAHAQQI'
+    end
+  end
+  object DSRPayment1: TDataSource
+    DataSet = DSPayment1
+    Left = 319
+    Top = 162
+  end
+  object DSPayment2: TOracleDataSet
+    SQL.Strings = (
+      
+        'select nvl(sum(lammount),0)as sigortahaqqi from ins_payments pm,' +
+        'provarch p,sb_business_opers bp'
+      'where p.vid_op=30'
+      'and p.id=bp.parentid'
+      'and pm.traid=p.id'
+      'and bp.busproc=:pbusproc'
+      'and pm.ins_id=:p_cid')
+    Optimize = False
+    Variables.Data = {
+      04000000020000000C0000003A0050005F004300490044000300000000000000
+      00000000120000003A005000420055005300500052004F004300030000000000
+      000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      0500000001000000180000005300490047004F00520054004100480041005100
+      51004900010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 245
+    Top = 215
+    object DSPayment2SIGORTAHAQQI: TFloatField
+      FieldName = 'SIGORTAHAQQI'
+    end
+  end
+  object DSRPayment2: TDataSource
+    DataSet = DSPayment2
+    Left = 319
+    Top = 218
+  end
+  object DSBarderoSay: TOracleDataSet
+    SQL.Strings = (
+      'select count(*) as say from ins_terminated_bardero'
+      'where cid=:pcid')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000A0000003A00500043004900440003000000000000000000
+      0000}
+    QBEDefinition.QBEFieldDefs = {050000000100000006000000530041005900010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 424
+    Top = 104
+    object DSBarderoSaySAY: TFloatField
+      FieldName = 'SAY'
+    end
+  end
+  object DSBarderoInfo: TOracleDataSet
+    SQL.Strings = (
+      'select * from ins_terminated_bardero'
+      'where cid=:pcid')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000A0000003A00500043004900440003000000000000000000
+      0000}
+    QBEDefinition.QBEFieldDefs = {
+      0500000007000000040000004900440001000000000014000000420041005200
+      4400450052004F005F004E004F00010000000000060000004300490044000100
+      000000000E00000043005500530054005F004900440001000000000006000000
+      4400410054000100000000000C00000053005400410054005500530001000000
+      00000E00000054005900500045005F0049004400010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 416
+    Top = 176
+    object DSBarderoInfoID: TFloatField
+      FieldName = 'ID'
+    end
+    object DSBarderoInfoBARDERO_NO: TWideStringField
+      FieldName = 'BARDERO_NO'
+      Size = 800
+    end
+    object DSBarderoInfoCID: TFloatField
+      FieldName = 'CID'
+    end
+    object DSBarderoInfoCUST_ID: TFloatField
+      FieldName = 'CUST_ID'
+    end
+    object DSBarderoInfoDAT: TDateTimeField
+      FieldName = 'DAT'
+    end
+    object DSBarderoInfoSTATUS: TFloatField
+      FieldName = 'STATUS'
+    end
+    object DSBarderoInfoTYPE_ID: TFloatField
+      FieldName = 'TYPE_ID'
+    end
+  end
+  object DSpaytercount: TOracleDataSet
+    SQL.Strings = (
+      'select count(*) as say from ins_terminate_payment'
+      'where cid=:pcid')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000A0000003A00500043004900440003000000000000000000
+      0000}
+    QBEDefinition.QBEFieldDefs = {050000000100000006000000530041005900010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 536
+    Top = 112
+    object DSpaytercountSAY: TFloatField
+      FieldName = 'SAY'
+    end
+  end
+  object Ds_debt_acc: TOracleDataSet
+    SQL.Strings = (
+      'select id,acc_no from account'
+      'where bal_cn1=702')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000200000004000000490044000100000000000C000000410043004300
+      5F004E004F00010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 520
+    Top = 24
+  end
+  object DsR_debt_acc: TDataSource
+    DataSet = Ds_debt_acc
+    Left = 592
+    Top = 24
+  end
+  object Ds_cont_state: TOracleDataSet
+    SQL.Strings = (
+      'select ic.rowid,ic.* from ins_contracts ic'
+      'where ic.id=:pid')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000080000003A00500049004400030000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000002000000004000000490044000100000000000E000000540059005000
+      45005F00490044000100000000001000000049004E0053005F00440041005400
+      45000100000000001400000042004500470049004E005F004400410054004500
+      0100000000001000000045004E0044005F004400410054004500010000000000
+      12000000560041004C005500540045005F00490044000100000000000E000000
+      41004D004D004F0055004E0054000100000000001800000043004C004F005300
+      45005F005000520045004600490058000100000000000C0000004B004C004900
+      5F0049004400010000000000140000004C004F0041004E004100430043005F00
+      490044000100000000001400000043005500520052004100430043005F004900
+      44000100000000001400000050004F004C004900430059005F004E0055004D00
+      0100000000000E00000049004E005300530055004D004D000100000000001000
+      00004600520041004E005300480049005A000100000000000C00000054004100
+      52004900460046000100000000000A0000005300540041005400450001000000
+      0000100000004100470045004E0054005F004900440001000000000008000000
+      50004E0055004D000100000000000C000000420045004E005F00490044000100
+      0000000016000000420045004E00450046004900430049004100520059000100
+      000000001400000043004F004E0044004900540049004F004E00530001000000
+      00000C0000005300550047004E0055004D000100000000001000000042004C00
+      41004E004B005F00490044000100000000000A0000004F0050005F0049004400
+      0100000000000A0000005200450049004E0053000100000000000E0000004300
+      48004B00410053004B004F0001000000000006000000430048004D0001000000
+      00000800000043004800460051000100000000001600000043004F004D004D00
+      490054004F0050005F00490044000100000000001600000043004F004D004D00
+      490054005F00440041005400450001000000000014000000430041004E004300
+      45004C004F0050004900440001000000000014000000430041004E0043004500
+      4C004400410054004500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 38
+    Top = 296
+    object FloatField1: TFloatField
+      FieldName = 'ID'
+    end
+    object FloatField2: TFloatField
+      FieldName = 'TYPE_ID'
+    end
+    object DateTimeField1: TDateTimeField
+      FieldName = 'INS_DATE'
+    end
+    object DateTimeField2: TDateTimeField
+      FieldName = 'BEGIN_DATE'
+    end
+    object DateTimeField3: TDateTimeField
+      FieldName = 'END_DATE'
+    end
+    object FloatField3: TFloatField
+      FieldName = 'VALUTE_ID'
+    end
+    object FloatField4: TFloatField
+      FieldName = 'AMMOUNT'
+    end
+    object IntegerField1: TIntegerField
+      FieldName = 'CLOSE_PREFIX'
+    end
+    object FloatField5: TFloatField
+      FieldName = 'KLI_ID'
+    end
+    object FloatField6: TFloatField
+      FieldName = 'LOANACC_ID'
+    end
+    object FloatField7: TFloatField
+      FieldName = 'CURRACC_ID'
+    end
+    object WideStringField1: TWideStringField
+      FieldName = 'POLICY_NUM'
+      Size = 128
+    end
+    object FloatField8: TFloatField
+      FieldName = 'INSSUMM'
+    end
+    object FloatField9: TFloatField
+      FieldName = 'FRANSHIZ'
+    end
+    object FloatField10: TFloatField
+      FieldName = 'TARIFF'
+    end
+    object IntegerField2: TIntegerField
+      FieldName = 'STATE'
+    end
+    object FloatField11: TFloatField
+      FieldName = 'AGENT_ID'
+    end
+    object FloatField12: TFloatField
+      FieldName = 'PNUM'
+    end
+    object FloatField13: TFloatField
+      FieldName = 'BEN_ID'
+    end
+    object WideStringField2: TWideStringField
+      FieldName = 'BENEFICIARY'
+      Size = 4000
+    end
+    object WideStringField3: TWideStringField
+      FieldName = 'CONDITIONS'
+      Size = 4000
+    end
+    object WideStringField4: TWideStringField
+      FieldName = 'SUGNUM'
+      Size = 128
+    end
+    object FloatField14: TFloatField
+      FieldName = 'BLANK_ID'
+    end
+    object FloatField15: TFloatField
+      FieldName = 'OP_ID'
+    end
+    object FloatField16: TFloatField
+      FieldName = 'REINS'
+    end
+    object FloatField17: TFloatField
+      FieldName = 'CHKASKO'
+    end
+    object FloatField18: TFloatField
+      FieldName = 'CHM'
+    end
+    object FloatField19: TFloatField
+      FieldName = 'CHFQ'
+    end
+    object FloatField20: TFloatField
+      FieldName = 'COMMITOP_ID'
+    end
+    object DateTimeField4: TDateTimeField
+      FieldName = 'COMMIT_DATE'
+    end
+    object FloatField21: TFloatField
+      FieldName = 'CANCELOPID'
+    end
+    object DateTimeField5: TDateTimeField
+      FieldName = 'CANCELDATE'
+    end
+  end
+  object sb_aca: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'sb_aca'
+    Left = 648
+    Top = 120
+  end
+end

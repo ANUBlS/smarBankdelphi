@@ -1,0 +1,99 @@
+object BankInfoForm: TBankInfoForm
+  Left = 315
+  Top = 263
+  BorderStyle = bsDialog
+  Caption = 'Bank Info'
+  ClientHeight = 106
+  ClientWidth = 346
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'MS Sans Serif'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poMainFormCenter
+  OnKeyPress = FormKeyPress
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Label1: TLabel
+    Left = 4
+    Top = 9
+    Width = 51
+    Height = 13
+    Caption = 'BankID :'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'MS Sans Serif'
+    Font.Style = [fsBold]
+    ParentFont = False
+  end
+  object Label2: TLabel
+    Left = 4
+    Top = 41
+    Width = 74
+    Height = 13
+    Caption = 'Bank Name :'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'MS Sans Serif'
+    Font.Style = [fsBold]
+    ParentFont = False
+  end
+  object Bevel1: TBevel
+    Left = -2
+    Top = 64
+    Width = 351
+    Height = 2
+  end
+  object TntEditBankID: TTntEdit
+    Left = 80
+    Top = 7
+    Width = 121
+    Height = 22
+    Font.Charset = TURKISH_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'MS Sans Serif'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 0
+    OnChange = TntEditBankIDChange
+  end
+  object TntEditBankName: TTntEdit
+    Left = 80
+    Top = 37
+    Width = 257
+    Height = 22
+    Font.Charset = TURKISH_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'MS Sans Serif'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 1
+    OnChange = TntEditBankIDChange
+  end
+  object btnSave: TButton
+    Left = 184
+    Top = 72
+    Width = 75
+    Height = 25
+    Caption = '&Save'
+    TabOrder = 2
+    OnClick = btnSaveClick
+  end
+  object btnCancel: TButton
+    Left = 264
+    Top = 72
+    Width = 75
+    Height = 25
+    Caption = '&Close'
+    ModalResult = 2
+    TabOrder = 3
+  end
+end

@@ -1,0 +1,27 @@
+unit IntCalcDataModImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Oracle;
+
+type
+  TDefineCalcDatMod = class(TDataModule)
+    CM_CREDITS: TOraclePackage;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  DefineCalcDatMod: TDefineCalcDatMod;
+
+implementation
+
+{$R *.DFM}
+uses
+  sboapiDataModuleImpl;
+
+end.

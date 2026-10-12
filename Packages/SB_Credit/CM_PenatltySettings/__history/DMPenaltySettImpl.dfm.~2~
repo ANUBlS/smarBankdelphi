@@ -1,0 +1,171 @@
+object DMPenaltySett: TDMPenaltySett
+  OldCreateOrder = False
+  OnCreate = DataModuleCreate
+  OnDestroy = DataModuleDestroy
+  Height = 480
+  Width = 696
+  object Valutes: TOracleDataSet
+    SQL.Strings = (
+      'select valute,val_name ,valu_name from sb_avalute')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000030000000C000000560041004C005500540045000100000000001000
+      0000560041004C005F004E0041004D0045000100000000001200000056004100
+      4C0055005F004E0041004D004500010000000000}
+    Session = CMDataModule.CMSession
+    Left = 56
+    Top = 32
+    object ValutesVALUTE: TIntegerField
+      FieldName = 'VALUTE'
+      Required = True
+    end
+    object ValutesVAL_NAME: TWideStringField
+      FieldName = 'VAL_NAME'
+      Size = 10
+    end
+    object ValutesVALU_NAME: TWideStringField
+      FieldName = 'VALU_NAME'
+      Size = 25
+    end
+  end
+  object ValutesDatSrc: TDataSource
+    DataSet = Valutes
+    Left = 136
+    Top = 32
+  end
+  object Accounts: TOracleDataSet
+    SQL.Strings = (
+      'select id,acc_no from sb_account'
+      'where bal_cn1 in (SELECT  accountnumber'
+      '  FROM cm_aginfo where groupid = ('
+      
+        'select id from cm_accountgroups where iname = '#39'InternalBankAccs'#39 +
+        '))')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000200000004000000490044000100000000000C000000410043004300
+      5F004E004F00010000000000}
+    Session = CMDataModule.CMSession
+    Left = 248
+    Top = 32
+    object AccountsID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object AccountsACC_NO: TWideStringField
+      FieldName = 'ACC_NO'
+    end
+  end
+  object AccountsDatSrc: TDataSource
+    DataSet = Accounts
+    Left = 328
+    Top = 32
+  end
+  object Branches: TOracleDataSet
+    SQL.Strings = (
+      'select id,name from sb_filial ')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000400000049004400010000000000080000004E0041004D00
+      4500010000000000}
+    Session = CMDataModule.CMSession
+    Left = 64
+    Top = 104
+    object BranchesID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object BranchesNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 90
+    end
+  end
+  object BranchesDatSrc: TDataSource
+    DataSet = Branches
+    Left = 144
+    Top = 104
+  end
+  object PenaltySettings: TOracleDataSet
+    SQL.Strings = (
+      'SELECT id, branchid, currencyid, accid'
+      '  FROM cm_penaltysettings'
+      'where currencyid = :currencyid ')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000160000003A00430055005200520045004E00430059004900
+      4400030000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      0500000004000000040000004900440001000000000010000000420052004100
+      4E00430048004900440001000000000014000000430055005200520045004E00
+      43005900490044000100000000000A0000004100430043004900440001000000
+      0000}
+    Master = Valutes
+    MasterFields = 'valute'
+    DetailFields = 'currencyid '
+    OnApplyRecord = PenaltySettingsApplyRecord
+    Session = CMDataModule.CMSession
+    Left = 256
+    Top = 104
+    object PenaltySettingsACCID: TFloatField
+      FieldName = 'ACCID'
+    end
+    object PenaltySettingsCURRENCYID: TFloatField
+      FieldName = 'CURRENCYID'
+    end
+    object PenaltySettingsBRANCHID: TFloatField
+      FieldName = 'BRANCHID'
+    end
+    object PenaltySettingsFilial: TStringField
+      FieldKind = fkLookup
+      FieldName = 'Filial'
+      LookupDataSet = Branches
+      LookupKeyFields = 'ID'
+      LookupResultField = 'NAME'
+      KeyFields = 'BRANCHID'
+      Lookup = True
+    end
+    object PenaltySettingsID: TFloatField
+      FieldName = 'ID'
+    end
+  end
+  object PenaltySettingsDatSrc: TDataSource
+    DataSet = PenaltySettings
+    Left = 352
+    Top = 105
+  end
+  object cm_setup: TOraclePackage
+    Session = CMDataModule.CMSession
+    PackageName = 'cm_setup'
+    Left = 64
+    Top = 200
+  end
+  object avalutes: TOracleDataSet
+    SQL.Strings = (
+      'select valute,val_name ,valu_name from sb_avalute')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000030000000C000000560041004C005500540045000100000000001000
+      0000560041004C005F004E0041004D0045000100000000001200000056004100
+      4C0055005F004E0041004D004500010000000000}
+    Session = CMDataModule.CMSession
+    Left = 344
+    Top = 183
+    object avalutesVALUTE: TIntegerField
+      FieldName = 'VALUTE'
+      Required = True
+    end
+    object avalutesVAL_NAME: TWideStringField
+      FieldName = 'VAL_NAME'
+      Size = 10
+    end
+    object avalutesVALU_NAME: TWideStringField
+      FieldName = 'VALU_NAME'
+      Size = 25
+    end
+  end
+  object avalutesDatSourc: TDataSource
+    DataSet = avalutes
+    Left = 272
+    Top = 184
+  end
+end

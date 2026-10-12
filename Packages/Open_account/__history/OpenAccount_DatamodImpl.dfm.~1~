@@ -1,0 +1,29 @@
+object OenAccount_DataModule: TOenAccount_DataModule
+  OldCreateOrder = False
+  Height = 359
+  Width = 564
+  object ODS_bal_spr_parts: TOracleDataSet
+    SQL.Strings = (
+      'select*from bal_spr_parts')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      0500000002000000080000005000410052005400010000000000100000005000
+      4100520054004E0041004D004500010000000000}
+    QueryAllRecords = False
+    Session = sboapiDataModule.SBSession
+    Left = 40
+    Top = 8
+    object ODS_bal_spr_partsPART: TIntegerField
+      FieldName = 'PART'
+    end
+    object ODS_bal_spr_partsPARTNAME: TWideStringField
+      FieldName = 'PARTNAME'
+      Size = 3200
+    end
+  end
+  object DSRC_bal_spr_parts: TDataSource
+    DataSet = ODS_bal_spr_parts
+    Left = 40
+    Top = 64
+  end
+end

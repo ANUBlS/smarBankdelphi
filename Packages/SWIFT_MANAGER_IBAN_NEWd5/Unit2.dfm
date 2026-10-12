@@ -1,0 +1,3443 @@
+object SWDataModule: TSWDataModule
+  OldCreateOrder = False
+  OnCreate = DataModuleCreate
+  Left = 286
+  Top = 32
+  Height = 655
+  Width = 917
+  object MT: TOracleDataSet
+    SQL.Strings = (
+      
+        'select distinct COLUMN_NAME from dba_tab_columns where TABLE_NAM' +
+        'E='#39'SW_FIELDS'#39' and COLUMN_NAME<>'#39'CATEGORY'#39' and COLUMN_NAME<>'#39'SW_F' +
+        'IELD'#39' and COLUMN_NAME<>'#39'SW_MAIN'#39
+      
+        ' and COLUMN_NAME<>'#39'SW_MAIN_FIELD'#39'  and COLUMN_NAME='#39'MT103'#39'    or' +
+        'der by COLUMN_NAME'
+      ' ')
+    QBEDefinition.QBEFieldDefs = {04000000010000000B000000434F4C554D4E5F4E414D45010000000000}
+    Session = sboapiDataModule.SBSession
+    DesignActivation = True
+    Left = 88
+    Top = 120
+  end
+  object MtSource: TDataSource
+    DataSet = MT
+    Left = 352
+    Top = 16
+  end
+  object mt_select: TOracleDataSet
+    SQL.Strings = (
+      
+        'select * from sw_fields where  sw_main_field='#39'00'#39' and sw_field=:' +
+        'PANELNAME'
+      ''
+      ' '
+      '')
+    Variables.Data = {
+      03000000010000000A0000003A50414E454C4E414D4505000000000000000000
+      0000}
+    QBEDefinition.QBEFieldDefs = {
+      040000001E0000000800000053575F4649454C440100000000000D0000005357
+      5F4D41494E5F4649454C44010000000000050000004D54313030010000000000
+      050000004D54313031010000000000050000004D543130320100000000000500
+      00004D54313033010000000000050000004D5432303001000000000005000000
+      4D54323032010000000000050000004D54323035010000000000050000004D54
+      333030010000000000050000004D54333230010000000000050000004D543730
+      37010000000000050000004D54373330010000000000050000004D5437333201
+      0000000000050000004D54373334010000000000050000004D54373430010000
+      000000050000004D54373432010000000000050000004D543734370100000000
+      00050000004D54373534010000000000050000004D5437363001000000000005
+      0000004D54373637010000000000050000004D54373638010000000000050000
+      004D54373639010000000000050000004D54393030010000000000050000004D
+      54393130010000000000050000004D54393430010000000000050000004D5439
+      35300100000000000800000043415445474F5259010000000000070000005357
+      5F4D41494E010000000000080000004D54313033415A4E010000000000}
+    QueryAllRecords = False
+    Session = sboapiDataModule.SBSession
+    Left = 24
+    Top = 8
+    object mt_selectSW_FIELD: TStringField
+      FieldName = 'SW_FIELD'
+      Required = True
+      Size = 6
+    end
+    object mt_selectSW_MAIN_FIELD: TStringField
+      FieldName = 'SW_MAIN_FIELD'
+      Size = 2
+    end
+    object mt_selectMT100: TStringField
+      FieldName = 'MT100'
+      Size = 45
+    end
+    object mt_selectMT101: TStringField
+      FieldName = 'MT101'
+      Size = 45
+    end
+    object mt_selectMT102: TStringField
+      FieldName = 'MT102'
+      Size = 45
+    end
+    object mt_selectMT103: TStringField
+      FieldName = 'MT103'
+      Size = 45
+    end
+    object mt_selectMT200: TStringField
+      FieldName = 'MT200'
+      Size = 45
+    end
+    object mt_selectMT202: TStringField
+      FieldName = 'MT202'
+      Size = 45
+    end
+    object mt_selectMT205: TStringField
+      FieldName = 'MT205'
+      Size = 45
+    end
+    object mt_selectMT300: TStringField
+      FieldName = 'MT300'
+      Size = 45
+    end
+    object mt_selectMT320: TStringField
+      FieldName = 'MT320'
+      Size = 45
+    end
+    object mt_selectMT707: TStringField
+      FieldName = 'MT707'
+      Size = 45
+    end
+    object mt_selectMT730: TStringField
+      FieldName = 'MT730'
+      Size = 45
+    end
+    object mt_selectMT732: TStringField
+      FieldName = 'MT732'
+      Size = 45
+    end
+    object mt_selectMT734: TStringField
+      FieldName = 'MT734'
+      Size = 45
+    end
+    object mt_selectMT740: TStringField
+      FieldName = 'MT740'
+      Size = 45
+    end
+    object mt_selectMT742: TStringField
+      FieldName = 'MT742'
+      Size = 45
+    end
+    object mt_selectMT747: TStringField
+      FieldName = 'MT747'
+      Size = 45
+    end
+    object mt_selectMT754: TStringField
+      FieldName = 'MT754'
+      Size = 45
+    end
+    object mt_selectMT760: TStringField
+      FieldName = 'MT760'
+      Size = 45
+    end
+    object mt_selectMT767: TStringField
+      FieldName = 'MT767'
+      Size = 45
+    end
+    object mt_selectMT768: TStringField
+      FieldName = 'MT768'
+      Size = 45
+    end
+    object mt_selectMT769: TStringField
+      FieldName = 'MT769'
+      Size = 45
+    end
+    object mt_selectMT900: TStringField
+      FieldName = 'MT900'
+      Size = 45
+    end
+    object mt_selectMT910: TStringField
+      FieldName = 'MT910'
+      Size = 45
+    end
+    object mt_selectMT940: TStringField
+      FieldName = 'MT940'
+      Size = 45
+    end
+    object mt_selectMT950: TStringField
+      FieldName = 'MT950'
+      Size = 45
+    end
+  end
+  object OracleDataSet2: TOracleDataSet
+    SQL.Strings = (
+      'select * from sw_fields order by sw_field desc')
+    QBEDefinition.QBEFieldDefs = {
+      040000001E0000000800000053575F4649454C440100000000000D0000005357
+      5F4D41494E5F4649454C44010000000000050000004D54313030010000000000
+      050000004D54313031010000000000050000004D543130320100000000000500
+      00004D54313033010000000000050000004D5432303001000000000005000000
+      4D54323032010000000000050000004D54323035010000000000050000004D54
+      333030010000000000050000004D54333230010000000000050000004D543730
+      37010000000000050000004D54373330010000000000050000004D5437333201
+      0000000000050000004D54373334010000000000050000004D54373430010000
+      000000050000004D54373432010000000000050000004D543734370100000000
+      00050000004D54373534010000000000050000004D5437363001000000000005
+      0000004D54373637010000000000050000004D54373638010000000000050000
+      004D54373639010000000000050000004D54393030010000000000050000004D
+      54393130010000000000050000004D54393430010000000000050000004D5439
+      35300100000000000800000043415445474F5259010000000000070000005357
+      5F4D41494E010000000000080000004D54313033415A4E010000000000}
+    QueryAllRecords = False
+    Session = sboapiDataModule.SBSession
+    Left = 168
+    Top = 8
+    object OracleDataSet2SW_FIELD: TStringField
+      FieldName = 'SW_FIELD'
+      Required = True
+      Size = 6
+    end
+    object OracleDataSet2SW_MAIN_FIELD: TStringField
+      FieldName = 'SW_MAIN_FIELD'
+      Size = 2
+    end
+    object OracleDataSet2MT100: TStringField
+      FieldName = 'MT100'
+      Size = 45
+    end
+    object OracleDataSet2MT101: TStringField
+      FieldName = 'MT101'
+      Size = 45
+    end
+    object OracleDataSet2MT102: TStringField
+      FieldName = 'MT102'
+      Size = 45
+    end
+    object OracleDataSet2MT103: TStringField
+      FieldName = 'MT103'
+      Size = 45
+    end
+    object OracleDataSet2MT200: TStringField
+      FieldName = 'MT200'
+      Size = 45
+    end
+    object OracleDataSet2MT202: TStringField
+      FieldName = 'MT202'
+      Size = 45
+    end
+    object OracleDataSet2MT205: TStringField
+      FieldName = 'MT205'
+      Size = 45
+    end
+    object OracleDataSet2MT300: TStringField
+      FieldName = 'MT300'
+      Size = 45
+    end
+    object OracleDataSet2MT320: TStringField
+      FieldName = 'MT320'
+      Size = 45
+    end
+    object OracleDataSet2MT707: TStringField
+      FieldName = 'MT707'
+      Size = 45
+    end
+    object OracleDataSet2MT730: TStringField
+      FieldName = 'MT730'
+      Size = 45
+    end
+    object OracleDataSet2MT732: TStringField
+      FieldName = 'MT732'
+      Size = 45
+    end
+    object OracleDataSet2MT734: TStringField
+      FieldName = 'MT734'
+      Size = 45
+    end
+    object OracleDataSet2MT740: TStringField
+      FieldName = 'MT740'
+      Size = 45
+    end
+    object OracleDataSet2MT742: TStringField
+      FieldName = 'MT742'
+      Size = 45
+    end
+    object OracleDataSet2MT747: TStringField
+      FieldName = 'MT747'
+      Size = 45
+    end
+    object OracleDataSet2MT754: TStringField
+      FieldName = 'MT754'
+      Size = 45
+    end
+    object OracleDataSet2MT760: TStringField
+      FieldName = 'MT760'
+      Size = 45
+    end
+    object OracleDataSet2MT767: TStringField
+      FieldName = 'MT767'
+      Size = 45
+    end
+    object OracleDataSet2MT768: TStringField
+      FieldName = 'MT768'
+      Size = 45
+    end
+    object OracleDataSet2MT769: TStringField
+      FieldName = 'MT769'
+      Size = 45
+    end
+    object OracleDataSet2MT900: TStringField
+      FieldName = 'MT900'
+      Size = 45
+    end
+    object OracleDataSet2MT910: TStringField
+      FieldName = 'MT910'
+      Size = 45
+    end
+    object OracleDataSet2MT940: TStringField
+      FieldName = 'MT940'
+      Size = 45
+    end
+    object OracleDataSet2MT950: TStringField
+      FieldName = 'MT950'
+      Size = 45
+    end
+  end
+  object InvisibleAll: TOracleDataSet
+    SQL.Strings = (
+      
+        'select * from sw_fields where SW_MAIN_FIELD='#39'00'#39' and SW_FIELD=:p' +
+        'anelname2 order by sw_field desc')
+    Variables.Data = {
+      03000000010000000B0000003A50414E454C4E414D4532050000000000000000
+      000000}
+    QBEDefinition.QBEFieldDefs = {
+      040000001E0000000800000053575F4649454C440100000000000D0000005357
+      5F4D41494E5F4649454C44010000000000050000004D54313030010000000000
+      050000004D54313031010000000000050000004D543130320100000000000500
+      00004D54313033010000000000050000004D5432303001000000000005000000
+      4D54323032010000000000050000004D54323035010000000000050000004D54
+      333030010000000000050000004D54333230010000000000050000004D543730
+      37010000000000050000004D54373330010000000000050000004D5437333201
+      0000000000050000004D54373334010000000000050000004D54373430010000
+      000000050000004D54373432010000000000050000004D543734370100000000
+      00050000004D54373534010000000000050000004D5437363001000000000005
+      0000004D54373637010000000000050000004D54373638010000000000050000
+      004D54373639010000000000050000004D54393030010000000000050000004D
+      54393130010000000000050000004D54393430010000000000050000004D5439
+      35300100000000000800000043415445474F5259010000000000070000005357
+      5F4D41494E010000000000080000004D54313033415A4E010000000000}
+    QueryAllRecords = False
+    Session = sboapiDataModule.SBSession
+    Left = 96
+    Top = 8
+    object InvisibleAllSW_FIELD: TStringField
+      FieldName = 'SW_FIELD'
+      Required = True
+      Size = 6
+    end
+    object InvisibleAllSW_MAIN_FIELD: TStringField
+      FieldName = 'SW_MAIN_FIELD'
+      Size = 2
+    end
+    object InvisibleAllMT100: TStringField
+      FieldName = 'MT100'
+      Size = 45
+    end
+    object InvisibleAllMT101: TStringField
+      FieldName = 'MT101'
+      Size = 45
+    end
+    object InvisibleAllMT102: TStringField
+      FieldName = 'MT102'
+      Size = 45
+    end
+    object InvisibleAllMT103: TStringField
+      FieldName = 'MT103'
+      Size = 45
+    end
+    object InvisibleAllMT200: TStringField
+      FieldName = 'MT200'
+      Size = 45
+    end
+    object InvisibleAllMT202: TStringField
+      FieldName = 'MT202'
+      Size = 45
+    end
+    object InvisibleAllMT205: TStringField
+      FieldName = 'MT205'
+      Size = 45
+    end
+    object InvisibleAllMT300: TStringField
+      FieldName = 'MT300'
+      Size = 45
+    end
+    object InvisibleAllMT320: TStringField
+      FieldName = 'MT320'
+      Size = 45
+    end
+    object InvisibleAllMT707: TStringField
+      FieldName = 'MT707'
+      Size = 45
+    end
+    object InvisibleAllMT730: TStringField
+      FieldName = 'MT730'
+      Size = 45
+    end
+    object InvisibleAllMT732: TStringField
+      FieldName = 'MT732'
+      Size = 45
+    end
+    object InvisibleAllMT734: TStringField
+      FieldName = 'MT734'
+      Size = 45
+    end
+    object InvisibleAllMT740: TStringField
+      FieldName = 'MT740'
+      Size = 45
+    end
+    object InvisibleAllMT742: TStringField
+      FieldName = 'MT742'
+      Size = 45
+    end
+    object InvisibleAllMT747: TStringField
+      FieldName = 'MT747'
+      Size = 45
+    end
+    object InvisibleAllMT754: TStringField
+      FieldName = 'MT754'
+      Size = 45
+    end
+    object InvisibleAllMT760: TStringField
+      FieldName = 'MT760'
+      Size = 45
+    end
+    object InvisibleAllMT767: TStringField
+      FieldName = 'MT767'
+      Size = 45
+    end
+    object InvisibleAllMT768: TStringField
+      FieldName = 'MT768'
+      Size = 45
+    end
+    object InvisibleAllMT769: TStringField
+      FieldName = 'MT769'
+      Size = 45
+    end
+    object InvisibleAllMT900: TStringField
+      FieldName = 'MT900'
+      Size = 45
+    end
+    object InvisibleAllMT910: TStringField
+      FieldName = 'MT910'
+      Size = 45
+    end
+    object InvisibleAllMT940: TStringField
+      FieldName = 'MT940'
+      Size = 45
+    end
+    object InvisibleAllMT950: TStringField
+      FieldName = 'MT950'
+      Size = 45
+    end
+  end
+  object ComboItems: TOracleDataSet
+    SQL.Strings = (
+      
+        'select * from sw_fields where sw_main_field=:comboname and categ' +
+        'ory<>'#39'00'#39' '
+      ''
+      ''
+      ''
+      ''
+      ''
+      '')
+    Variables.Data = {
+      03000000010000000A0000003A434F4D424F4E414D4505000000000000000000
+      0000}
+    QBEDefinition.QBEFieldDefs = {
+      040000001E0000000800000053575F4649454C440100000000000D0000005357
+      5F4D41494E5F4649454C44010000000000050000004D54313030010000000000
+      050000004D54313031010000000000050000004D543130320100000000000500
+      00004D54313033010000000000050000004D5432303001000000000005000000
+      4D54323032010000000000050000004D54323035010000000000050000004D54
+      333030010000000000050000004D54333230010000000000050000004D543730
+      37010000000000050000004D54373330010000000000050000004D5437333201
+      0000000000050000004D54373334010000000000050000004D54373430010000
+      000000050000004D54373432010000000000050000004D543734370100000000
+      00050000004D54373534010000000000050000004D5437363001000000000005
+      0000004D54373637010000000000050000004D54373638010000000000050000
+      004D54373639010000000000050000004D54393030010000000000050000004D
+      54393130010000000000050000004D54393430010000000000050000004D5439
+      35300100000000000800000043415445474F5259010000000000070000005357
+      5F4D41494E010000000000080000004D54313033415A4E010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 24
+    Top = 64
+    object ComboItemsSW_FIELD: TStringField
+      FieldName = 'SW_FIELD'
+      Required = True
+      Size = 10
+    end
+    object ComboItemsSW_MAIN_FIELD: TStringField
+      FieldName = 'SW_MAIN_FIELD'
+      Size = 10
+    end
+    object ComboItemsMT100: TStringField
+      FieldName = 'MT100'
+      Size = 45
+    end
+    object ComboItemsMT101: TStringField
+      FieldName = 'MT101'
+      Size = 45
+    end
+    object ComboItemsMT102: TStringField
+      FieldName = 'MT102'
+      Size = 45
+    end
+    object ComboItemsMT103: TStringField
+      FieldName = 'MT103'
+      Size = 45
+    end
+    object ComboItemsMT200: TStringField
+      FieldName = 'MT200'
+      Size = 45
+    end
+    object ComboItemsMT202: TStringField
+      FieldName = 'MT202'
+      Size = 45
+    end
+    object ComboItemsMT205: TStringField
+      FieldName = 'MT205'
+      Size = 45
+    end
+    object ComboItemsMT300: TStringField
+      FieldName = 'MT300'
+      Size = 45
+    end
+    object ComboItemsMT320: TStringField
+      FieldName = 'MT320'
+      Size = 45
+    end
+    object ComboItemsMT707: TStringField
+      FieldName = 'MT707'
+      Size = 45
+    end
+    object ComboItemsMT730: TStringField
+      FieldName = 'MT730'
+      Size = 45
+    end
+    object ComboItemsMT732: TStringField
+      FieldName = 'MT732'
+      Size = 45
+    end
+    object ComboItemsMT734: TStringField
+      FieldName = 'MT734'
+      Size = 45
+    end
+    object ComboItemsMT740: TStringField
+      FieldName = 'MT740'
+      Size = 45
+    end
+    object ComboItemsMT742: TStringField
+      FieldName = 'MT742'
+      Size = 45
+    end
+    object ComboItemsMT747: TStringField
+      FieldName = 'MT747'
+      Size = 45
+    end
+    object ComboItemsMT754: TStringField
+      FieldName = 'MT754'
+      Size = 45
+    end
+    object ComboItemsMT760: TStringField
+      FieldName = 'MT760'
+      Size = 45
+    end
+    object ComboItemsMT767: TStringField
+      FieldName = 'MT767'
+      Size = 45
+    end
+    object ComboItemsMT768: TStringField
+      FieldName = 'MT768'
+      Size = 45
+    end
+    object ComboItemsMT769: TStringField
+      FieldName = 'MT769'
+      Size = 45
+    end
+    object ComboItemsMT900: TStringField
+      FieldName = 'MT900'
+      Size = 45
+    end
+    object ComboItemsMT910: TStringField
+      FieldName = 'MT910'
+      Size = 45
+    end
+    object ComboItemsMT940: TStringField
+      FieldName = 'MT940'
+      Size = 45
+    end
+    object ComboItemsMT950: TStringField
+      FieldName = 'MT950'
+      Size = 45
+    end
+    object ComboItemsCATEGORY: TStringField
+      FieldName = 'CATEGORY'
+      Size = 45
+    end
+  end
+  object Comboselect: TOracleDataSet
+    SQL.Strings = (
+      
+        'select * from sw_fields where sw_main_field=:name and category=:' +
+        'selected'
+      '')
+    Variables.Data = {
+      0300000002000000090000003A53454C45435445440500000000000000000000
+      00050000003A4E414D45050000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      040000001E0000000800000053575F4649454C440100000000000D0000005357
+      5F4D41494E5F4649454C44010000000000050000004D54313030010000000000
+      050000004D54313031010000000000050000004D543130320100000000000500
+      00004D54313033010000000000050000004D5432303001000000000005000000
+      4D54323032010000000000050000004D54323035010000000000050000004D54
+      333030010000000000050000004D54333230010000000000050000004D543730
+      37010000000000050000004D54373330010000000000050000004D5437333201
+      0000000000050000004D54373334010000000000050000004D54373430010000
+      000000050000004D54373432010000000000050000004D543734370100000000
+      00050000004D54373534010000000000050000004D5437363001000000000005
+      0000004D54373637010000000000050000004D54373638010000000000050000
+      004D54373639010000000000050000004D54393030010000000000050000004D
+      54393130010000000000050000004D54393430010000000000050000004D5439
+      35300100000000000800000043415445474F5259010000000000070000005357
+      5F4D41494E010000000000080000004D54313033415A4E010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 24
+    Top = 120
+    object ComboselectSW_FIELD: TStringField
+      FieldName = 'SW_FIELD'
+      Required = True
+      Size = 10
+    end
+    object ComboselectSW_MAIN_FIELD: TStringField
+      FieldName = 'SW_MAIN_FIELD'
+      Size = 10
+    end
+    object ComboselectMT100: TStringField
+      FieldName = 'MT100'
+      Size = 45
+    end
+    object ComboselectMT101: TStringField
+      FieldName = 'MT101'
+      Size = 45
+    end
+    object ComboselectMT102: TStringField
+      FieldName = 'MT102'
+      Size = 45
+    end
+    object ComboselectMT103: TStringField
+      FieldName = 'MT103'
+      Size = 45
+    end
+    object ComboselectMT200: TStringField
+      FieldName = 'MT200'
+      Size = 45
+    end
+    object ComboselectMT202: TStringField
+      FieldName = 'MT202'
+      Size = 45
+    end
+    object ComboselectMT205: TStringField
+      FieldName = 'MT205'
+      Size = 45
+    end
+    object ComboselectMT300: TStringField
+      FieldName = 'MT300'
+      Size = 45
+    end
+    object ComboselectMT320: TStringField
+      FieldName = 'MT320'
+      Size = 45
+    end
+    object ComboselectMT707: TStringField
+      FieldName = 'MT707'
+      Size = 45
+    end
+    object ComboselectMT730: TStringField
+      FieldName = 'MT730'
+      Size = 45
+    end
+    object ComboselectMT732: TStringField
+      FieldName = 'MT732'
+      Size = 45
+    end
+    object ComboselectMT734: TStringField
+      FieldName = 'MT734'
+      Size = 45
+    end
+    object ComboselectMT740: TStringField
+      FieldName = 'MT740'
+      Size = 45
+    end
+    object ComboselectMT742: TStringField
+      FieldName = 'MT742'
+      Size = 45
+    end
+    object ComboselectMT747: TStringField
+      FieldName = 'MT747'
+      Size = 45
+    end
+    object ComboselectMT754: TStringField
+      FieldName = 'MT754'
+      Size = 45
+    end
+    object ComboselectMT760: TStringField
+      FieldName = 'MT760'
+      Size = 45
+    end
+    object ComboselectMT767: TStringField
+      FieldName = 'MT767'
+      Size = 45
+    end
+    object ComboselectMT768: TStringField
+      FieldName = 'MT768'
+      Size = 45
+    end
+    object ComboselectMT769: TStringField
+      FieldName = 'MT769'
+      Size = 45
+    end
+    object ComboselectMT900: TStringField
+      FieldName = 'MT900'
+      Size = 45
+    end
+    object ComboselectMT910: TStringField
+      FieldName = 'MT910'
+      Size = 45
+    end
+    object ComboselectMT940: TStringField
+      FieldName = 'MT940'
+      Size = 45
+    end
+    object ComboselectMT950: TStringField
+      FieldName = 'MT950'
+      Size = 45
+    end
+    object ComboselectCATEGORY: TStringField
+      FieldName = 'CATEGORY'
+      Size = 45
+    end
+  end
+  object aftercomboselect: TOracleDataSet
+    SQL.Strings = (
+      
+        'select * from sw_fields where sw_main_field=:name and category<>' +
+        ':selected'
+      ''
+      ''
+      '')
+    Variables.Data = {
+      0300000002000000090000003A53454C45435445440500000000000000000000
+      00050000003A4E414D45050000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      040000001E0000000800000053575F4649454C440100000000000D0000005357
+      5F4D41494E5F4649454C44010000000000050000004D54313030010000000000
+      050000004D54313031010000000000050000004D543130320100000000000500
+      00004D54313033010000000000050000004D5432303001000000000005000000
+      4D54323032010000000000050000004D54323035010000000000050000004D54
+      333030010000000000050000004D54333230010000000000050000004D543730
+      37010000000000050000004D54373330010000000000050000004D5437333201
+      0000000000050000004D54373334010000000000050000004D54373430010000
+      000000050000004D54373432010000000000050000004D543734370100000000
+      00050000004D54373534010000000000050000004D5437363001000000000005
+      0000004D54373637010000000000050000004D54373638010000000000050000
+      004D54373639010000000000050000004D54393030010000000000050000004D
+      54393130010000000000050000004D54393430010000000000050000004D5439
+      35300100000000000800000043415445474F5259010000000000070000005357
+      5F4D41494E010000000000080000004D54313033415A4E010000000000}
+    QueryAllRecords = False
+    Session = sboapiDataModule.SBSession
+    Left = 96
+    Top = 72
+    object aftercomboselectSW_FIELD: TStringField
+      FieldName = 'SW_FIELD'
+      Required = True
+      Size = 10
+    end
+    object aftercomboselectSW_MAIN_FIELD: TStringField
+      FieldName = 'SW_MAIN_FIELD'
+      Size = 10
+    end
+    object aftercomboselectMT100: TStringField
+      FieldName = 'MT100'
+      Size = 45
+    end
+    object aftercomboselectMT101: TStringField
+      FieldName = 'MT101'
+      Size = 45
+    end
+    object aftercomboselectMT102: TStringField
+      FieldName = 'MT102'
+      Size = 45
+    end
+    object aftercomboselectMT103: TStringField
+      FieldName = 'MT103'
+      Size = 45
+    end
+    object aftercomboselectMT200: TStringField
+      FieldName = 'MT200'
+      Size = 45
+    end
+    object aftercomboselectMT202: TStringField
+      FieldName = 'MT202'
+      Size = 45
+    end
+    object aftercomboselectMT205: TStringField
+      FieldName = 'MT205'
+      Size = 45
+    end
+    object aftercomboselectMT300: TStringField
+      FieldName = 'MT300'
+      Size = 45
+    end
+    object aftercomboselectMT320: TStringField
+      FieldName = 'MT320'
+      Size = 45
+    end
+    object aftercomboselectMT707: TStringField
+      FieldName = 'MT707'
+      Size = 45
+    end
+    object aftercomboselectMT730: TStringField
+      FieldName = 'MT730'
+      Size = 45
+    end
+    object aftercomboselectMT732: TStringField
+      FieldName = 'MT732'
+      Size = 45
+    end
+    object aftercomboselectMT734: TStringField
+      FieldName = 'MT734'
+      Size = 45
+    end
+    object aftercomboselectMT740: TStringField
+      FieldName = 'MT740'
+      Size = 45
+    end
+    object aftercomboselectMT742: TStringField
+      FieldName = 'MT742'
+      Size = 45
+    end
+    object aftercomboselectMT747: TStringField
+      FieldName = 'MT747'
+      Size = 45
+    end
+    object aftercomboselectMT754: TStringField
+      FieldName = 'MT754'
+      Size = 45
+    end
+    object aftercomboselectMT760: TStringField
+      FieldName = 'MT760'
+      Size = 45
+    end
+    object aftercomboselectMT767: TStringField
+      FieldName = 'MT767'
+      Size = 45
+    end
+    object aftercomboselectMT768: TStringField
+      FieldName = 'MT768'
+      Size = 45
+    end
+    object aftercomboselectMT769: TStringField
+      FieldName = 'MT769'
+      Size = 45
+    end
+    object aftercomboselectMT900: TStringField
+      FieldName = 'MT900'
+      Size = 45
+    end
+    object aftercomboselectMT910: TStringField
+      FieldName = 'MT910'
+      Size = 45
+    end
+    object aftercomboselectMT940: TStringField
+      FieldName = 'MT940'
+      Size = 45
+    end
+    object aftercomboselectMT950: TStringField
+      FieldName = 'MT950'
+      Size = 45
+    end
+    object aftercomboselectCATEGORY: TStringField
+      FieldName = 'CATEGORY'
+      Size = 45
+    end
+  end
+  object sw_in_insert: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'sw_main'
+    Left = 512
+    Top = 16
+  end
+  object Visible_main: TOracleDataSet
+    SQL.Strings = (
+      
+        'select * from sw_fields where sw_field=:panel_name and category=' +
+        #39'combo'#39)
+    Variables.Data = {
+      03000000010000000B0000003A50414E454C5F4E414D45050000000000000000
+      000000}
+    QBEDefinition.QBEFieldDefs = {
+      040000001E0000000800000053575F4649454C440100000000000D0000005357
+      5F4D41494E5F4649454C44010000000000050000004D54313030010000000000
+      050000004D54313031010000000000050000004D543130320100000000000500
+      00004D54313033010000000000050000004D5432303001000000000005000000
+      4D54323032010000000000050000004D54323035010000000000050000004D54
+      333030010000000000050000004D54333230010000000000050000004D543730
+      37010000000000050000004D54373330010000000000050000004D5437333201
+      0000000000050000004D54373334010000000000050000004D54373430010000
+      000000050000004D54373432010000000000050000004D543734370100000000
+      00050000004D54373534010000000000050000004D5437363001000000000005
+      0000004D54373637010000000000050000004D54373638010000000000050000
+      004D54373639010000000000050000004D54393030010000000000050000004D
+      54393130010000000000050000004D54393430010000000000050000004D5439
+      35300100000000000800000043415445474F5259010000000000070000005357
+      5F4D41494E010000000000080000004D54313033415A4E010000000000}
+    QueryAllRecords = False
+    Session = sboapiDataModule.SBSession
+    Left = 168
+    Top = 64
+    object Visible_mainSW_FIELD: TStringField
+      FieldName = 'SW_FIELD'
+      Required = True
+      Size = 10
+    end
+    object Visible_mainSW_MAIN_FIELD: TStringField
+      FieldName = 'SW_MAIN_FIELD'
+      Size = 10
+    end
+    object Visible_mainMT100: TStringField
+      FieldName = 'MT100'
+      Size = 45
+    end
+    object Visible_mainMT101: TStringField
+      FieldName = 'MT101'
+      Size = 45
+    end
+    object Visible_mainMT102: TStringField
+      FieldName = 'MT102'
+      Size = 45
+    end
+    object Visible_mainMT103: TStringField
+      FieldName = 'MT103'
+      Size = 45
+    end
+    object Visible_mainMT200: TStringField
+      FieldName = 'MT200'
+      Size = 45
+    end
+    object Visible_mainMT202: TStringField
+      FieldName = 'MT202'
+      Size = 45
+    end
+    object Visible_mainMT205: TStringField
+      FieldName = 'MT205'
+      Size = 45
+    end
+    object Visible_mainMT300: TStringField
+      FieldName = 'MT300'
+      Size = 45
+    end
+    object Visible_mainMT320: TStringField
+      FieldName = 'MT320'
+      Size = 45
+    end
+    object Visible_mainMT707: TStringField
+      FieldName = 'MT707'
+      Size = 45
+    end
+    object Visible_mainMT730: TStringField
+      FieldName = 'MT730'
+      Size = 45
+    end
+    object Visible_mainMT732: TStringField
+      FieldName = 'MT732'
+      Size = 45
+    end
+    object Visible_mainMT734: TStringField
+      FieldName = 'MT734'
+      Size = 45
+    end
+    object Visible_mainMT740: TStringField
+      FieldName = 'MT740'
+      Size = 45
+    end
+    object Visible_mainMT742: TStringField
+      FieldName = 'MT742'
+      Size = 45
+    end
+    object Visible_mainMT747: TStringField
+      FieldName = 'MT747'
+      Size = 45
+    end
+    object Visible_mainMT754: TStringField
+      FieldName = 'MT754'
+      Size = 45
+    end
+    object Visible_mainMT760: TStringField
+      FieldName = 'MT760'
+      Size = 45
+    end
+    object Visible_mainMT767: TStringField
+      FieldName = 'MT767'
+      Size = 45
+    end
+    object Visible_mainMT768: TStringField
+      FieldName = 'MT768'
+      Size = 45
+    end
+    object Visible_mainMT769: TStringField
+      FieldName = 'MT769'
+      Size = 45
+    end
+    object Visible_mainMT900: TStringField
+      FieldName = 'MT900'
+      Size = 45
+    end
+    object Visible_mainMT910: TStringField
+      FieldName = 'MT910'
+      Size = 45
+    end
+    object Visible_mainMT940: TStringField
+      FieldName = 'MT940'
+      Size = 45
+    end
+    object Visible_mainMT950: TStringField
+      FieldName = 'MT950'
+      Size = 45
+    end
+    object Visible_mainCATEGORY: TStringField
+      FieldName = 'CATEGORY'
+      Size = 45
+    end
+  end
+  object Sw_out_datasource: TDataSource
+    DataSet = sw_out
+    Left = 440
+    Top = 16
+  end
+  object sw_out: TOracleDataSet
+    SQL.Strings = (
+      
+        'select s.*,s.rowid,sw_main.Find_UserName_out(s.id)  from sw_out_' +
+        'new PARTITION (TODAY)'
+      ' s   where status=2  or status=8 or status=15'
+      ''
+      ''
+      '')
+    QBEDefinition.QBEFieldDefs = {
+      0400000056000000040000004D463230010000000000050000004D4632334201
+      0000000000050000004D46323654010000000000040000004D46323701000000
+      0000050000004D46333241010000000000040000004D4633360100000000000A
+      00000053454E444552545950450100000000000900000053454E444552424943
+      0100000000000800000053454E4445524C540100000000000B0000004150504C
+      49434154494F4E0100000000000700000046494E434F50590100000000000B00
+      00004D45535341474554595045010000000000080000005052494F5249545901
+      00000000000A0000004D4F4E49544F52494E470100000000000C000000524543
+      4549564552545950450100000000000B00000052454345495645524249430100
+      000000000A0000004D463332415F444154450100000000000A0000004D463332
+      415F435552520100000000000C0000004D463332415F414D4F554E5401000000
+      00000C0000004D4635305F4143434F554E54010000000000080000004D463530
+      5F424943010000000000100000004D4635305F4E414D45244144524553530100
+      000000000C0000004D4635325F4143434F554E54010000000000080000004D46
+      35325F424943010000000000100000004D4635325F4E414D4524414452455353
+      0100000000000C0000004D4635335F4143434F554E5401000000000008000000
+      4D4635335F424943010000000000120000004D4635335F4E414D45244C4F4341
+      54494F4E0100000000000C0000004D4635345F4143434F554E54010000000000
+      080000004D4635345F424943010000000000120000004D4635345F4E414D4524
+      4C4F434154494F4E0100000000000C0000004D4635355F4143434F554E540100
+      00000000080000004D4635355F424943010000000000120000004D4635355F4E
+      414D45244C4F434154494F4E0100000000000C0000004D4635365F4143434F55
+      4E54010000000000080000004D4635365F424943010000000000120000004D46
+      35365F4E414D45244C4F434154494F4E0100000000000C0000004D4635375F41
+      43434F554E54010000000000080000004D4635375F4249430100000000001200
+      00004D4635375F4E414D45244C4F434154494F4E0100000000000C0000004D46
+      35395F4143434F554E54010000000000100000004D4635395F4E414D45244144
+      5245535301000000000006000000535441545553010000000000020000004944
+      0100000000000B0000004D463731465F4348494C440100000000000B0000004D
+      463731475F4348494C44010000000000030000004D3230010000000000040000
+      004D323342010000000000040000004D323654010000000000040000004D3332
+      41010000000000030000004D3336010000000000030000004D35300100000000
+      00030000004D3532010000000000030000004D3533010000000000030000004D
+      3534010000000000030000004D3535010000000000030000004D353601000000
+      0000030000004D3537010000000000030000004D353901000000000003000000
+      4D3730010000000000040000004D373141010000000000040000004D37314601
+      0000000000040000004D373147010000000000030000004D3732010000000000
+      040000004D3737420100000000000E0000004D4632305F5245464552454E4345
+      010000000000050000004F505F49440100000000000A00000044454C5F535441
+      5455530100000000000B000000434F4D4D49545F4F5049440100000000000C00
+      0000464352454154455F4F5049440100000000000B00000044454C4554455F4F
+      504944010000000000040000004D463730010000000000050000005348494652
+      010000000000050000004D46373141010000000000040000004D463732010000
+      000000050000004D4637374201000000000004000000494E464F010000000000
+      0B0000004544495445445F4F5049440100000000000500000054525F49440100
+      000000000600000054525F494432010000000000030000005441580100000000
+      0007000000434F554E5452590100000000000700000048455341424154010000
+      0000001E00000053575F4D41494E2E46494E445F555345524E414D455F4F5554
+      28532E4944010000000000080000004D4635395F424943010000000000090000
+      00434F4D5F4143434944010000000000}
+    QueryAllRecords = False
+    Session = sboapiDataModule.SBSession
+    BeforePost = sw_outBeforePost
+    Left = 88
+    Top = 240
+    object sw_outMF20: TStringField
+      FieldName = 'MF20'
+      Size = 99
+    end
+    object sw_outMF23B: TStringField
+      FieldName = 'MF23B'
+      Size = 99
+    end
+    object sw_outMF26T: TStringField
+      FieldName = 'MF26T'
+      Size = 99
+    end
+    object sw_outMF27: TStringField
+      FieldName = 'MF27'
+      Size = 99
+    end
+    object sw_outMF32A: TStringField
+      FieldName = 'MF32A'
+      Size = 99
+    end
+    object sw_outMF36: TStringField
+      FieldName = 'MF36'
+      Size = 99
+    end
+    object sw_outSENDERTYPE: TStringField
+      FieldName = 'SENDERTYPE'
+      Size = 99
+    end
+    object sw_outSENDERBIC: TStringField
+      FieldName = 'SENDERBIC'
+      Size = 99
+    end
+    object sw_outSENDERLT: TStringField
+      FieldName = 'SENDERLT'
+      Size = 99
+    end
+    object sw_outAPPLICATION: TStringField
+      FieldName = 'APPLICATION'
+      Size = 99
+    end
+    object sw_outFINCOPY: TStringField
+      FieldName = 'FINCOPY'
+      Size = 99
+    end
+    object sw_outMESSAGETYPE: TStringField
+      FieldName = 'MESSAGETYPE'
+      Size = 99
+    end
+    object sw_outPRIORITY: TStringField
+      FieldName = 'PRIORITY'
+      Size = 99
+    end
+    object sw_outMONITORING: TStringField
+      FieldName = 'MONITORING'
+      Size = 99
+    end
+    object sw_outRECEIVERTYPE: TStringField
+      FieldName = 'RECEIVERTYPE'
+      Size = 99
+    end
+    object sw_outRECEIVERBIC: TStringField
+      FieldName = 'RECEIVERBIC'
+      Size = 99
+    end
+    object sw_outMF32A_DATE: TDateTimeField
+      FieldName = 'MF32A_DATE'
+    end
+    object sw_outMF32A_CURR: TStringField
+      FieldName = 'MF32A_CURR'
+      Size = 8
+    end
+    object sw_outMF32A_AMOUNT: TFloatField
+      FieldName = 'MF32A_AMOUNT'
+    end
+    object sw_outMF50_ACCOUNT: TStringField
+      FieldName = 'MF50_ACCOUNT'
+      Size = 30
+    end
+    object sw_outMF50_BIC: TStringField
+      FieldName = 'MF50_BIC'
+      Size = 15
+    end
+    object sw_outMF50_NAMEADRESS: TStringField
+      FieldName = 'MF50_NAME$ADRESS'
+      Size = 99
+    end
+    object sw_outMF52_ACCOUNT: TStringField
+      FieldName = 'MF52_ACCOUNT'
+      Size = 30
+    end
+    object sw_outMF52_BIC: TStringField
+      FieldName = 'MF52_BIC'
+      Size = 15
+    end
+    object sw_outMF52_NAMEADRESS: TStringField
+      FieldName = 'MF52_NAME$ADRESS'
+      Size = 99
+    end
+    object sw_outMF53_ACCOUNT: TStringField
+      FieldName = 'MF53_ACCOUNT'
+      Size = 30
+    end
+    object sw_outMF53_BIC: TStringField
+      FieldName = 'MF53_BIC'
+      Size = 15
+    end
+    object sw_outMF53_NAMELOCATION: TStringField
+      FieldName = 'MF53_NAME$LOCATION'
+      Size = 145
+    end
+    object sw_outMF54_ACCOUNT: TStringField
+      FieldName = 'MF54_ACCOUNT'
+      Size = 30
+    end
+    object sw_outMF54_BIC: TStringField
+      FieldName = 'MF54_BIC'
+      Size = 15
+    end
+    object sw_outMF54_NAMELOCATION: TStringField
+      FieldName = 'MF54_NAME$LOCATION'
+      Size = 145
+    end
+    object sw_outMF55_ACCOUNT: TStringField
+      FieldName = 'MF55_ACCOUNT'
+      Size = 30
+    end
+    object sw_outMF55_BIC: TStringField
+      FieldName = 'MF55_BIC'
+      Size = 15
+    end
+    object sw_outMF55_NAMELOCATION: TStringField
+      FieldName = 'MF55_NAME$LOCATION'
+      Size = 145
+    end
+    object sw_outMF56_ACCOUNT: TStringField
+      FieldName = 'MF56_ACCOUNT'
+      Size = 30
+    end
+    object sw_outMF56_BIC: TStringField
+      FieldName = 'MF56_BIC'
+      Size = 15
+    end
+    object sw_outMF56_NAMELOCATION: TStringField
+      FieldName = 'MF56_NAME$LOCATION'
+      Size = 145
+    end
+    object sw_outMF57_ACCOUNT: TStringField
+      FieldName = 'MF57_ACCOUNT'
+      Size = 30
+    end
+    object sw_outMF57_BIC: TStringField
+      FieldName = 'MF57_BIC'
+      Size = 15
+    end
+    object sw_outMF57_NAMELOCATION: TStringField
+      FieldName = 'MF57_NAME$LOCATION'
+      Size = 145
+    end
+    object sw_outMF59_ACCOUNT: TStringField
+      FieldName = 'MF59_ACCOUNT'
+      Size = 30
+    end
+    object sw_outMF59_NAMEADRESS: TStringField
+      FieldName = 'MF59_NAME$ADRESS'
+      Size = 145
+    end
+    object sw_outSTATUS: TIntegerField
+      FieldName = 'STATUS'
+    end
+    object sw_outID: TFloatField
+      FieldName = 'ID'
+    end
+    object sw_outMF71F_CHILD: TStringField
+      FieldName = 'MF71F_CHILD'
+      Size = 99
+    end
+    object sw_outMF71G_CHILD: TStringField
+      FieldName = 'MF71G_CHILD'
+      Size = 99
+    end
+    object sw_outM20: TStringField
+      FieldName = 'M20'
+      Size = 7
+    end
+    object sw_outM23B: TStringField
+      FieldName = 'M23B'
+      Size = 7
+    end
+    object sw_outM26T: TStringField
+      FieldName = 'M26T'
+      Size = 7
+    end
+    object sw_outM32A: TStringField
+      FieldName = 'M32A'
+      Size = 7
+    end
+    object sw_outM36: TStringField
+      FieldName = 'M36'
+      Size = 7
+    end
+    object sw_outM50: TStringField
+      FieldName = 'M50'
+      Size = 7
+    end
+    object sw_outM52: TStringField
+      FieldName = 'M52'
+      Size = 7
+    end
+    object sw_outM53: TStringField
+      FieldName = 'M53'
+      Size = 7
+    end
+    object sw_outM54: TStringField
+      FieldName = 'M54'
+      Size = 7
+    end
+    object sw_outM55: TStringField
+      FieldName = 'M55'
+      Size = 7
+    end
+    object sw_outM56: TStringField
+      FieldName = 'M56'
+      Size = 7
+    end
+    object sw_outM57: TStringField
+      FieldName = 'M57'
+      Size = 7
+    end
+    object sw_outM59: TStringField
+      FieldName = 'M59'
+      Size = 7
+    end
+    object sw_outM70: TStringField
+      FieldName = 'M70'
+      Size = 200
+    end
+    object sw_outM71A: TStringField
+      FieldName = 'M71A'
+      Size = 7
+    end
+    object sw_outM71F: TStringField
+      FieldName = 'M71F'
+      Size = 7
+    end
+    object sw_outM71G: TStringField
+      FieldName = 'M71G'
+      Size = 7
+    end
+    object sw_outM72: TStringField
+      FieldName = 'M72'
+      Size = 200
+    end
+    object sw_outM77B: TStringField
+      FieldName = 'M77B'
+      Size = 7
+    end
+    object sw_outMF20_REFERENCE: TStringField
+      FieldName = 'MF20_REFERENCE'
+    end
+    object sw_outOP_ID: TFloatField
+      FieldName = 'OP_ID'
+    end
+    object sw_outDEL_STATUS: TIntegerField
+      FieldName = 'DEL_STATUS'
+    end
+    object sw_outCOMMIT_OPID: TFloatField
+      FieldName = 'COMMIT_OPID'
+    end
+    object sw_outFCREATE_OPID: TFloatField
+      FieldName = 'FCREATE_OPID'
+    end
+    object sw_outDELETE_OPID: TFloatField
+      FieldName = 'DELETE_OPID'
+    end
+    object sw_outMF70: TStringField
+      FieldName = 'MF70'
+      Size = 500
+    end
+    object sw_outSHIFR: TIntegerField
+      FieldName = 'SHIFR'
+    end
+    object sw_outMF71A: TStringField
+      FieldName = 'MF71A'
+      Size = 100
+    end
+    object sw_outMF72: TStringField
+      FieldName = 'MF72'
+      Size = 500
+    end
+    object sw_outMF77B: TStringField
+      FieldName = 'MF77B'
+      Size = 200
+    end
+    object sw_outEDITED_OPID: TFloatField
+      FieldName = 'EDITED_OPID'
+    end
+    object sw_outTR_ID: TFloatField
+      FieldName = 'TR_ID'
+    end
+    object sw_outTR_ID2: TFloatField
+      FieldName = 'TR_ID2'
+    end
+    object sw_outINFO: TStringField
+      FieldName = 'INFO'
+      Size = 50
+    end
+    object sw_outTAX: TStringField
+      FieldName = 'TAX'
+      Size = 14
+    end
+    object sw_outCOUNTRY: TStringField
+      FieldName = 'COUNTRY'
+      Size = 100
+    end
+    object sw_outHESABAT: TStringField
+      FieldName = 'HESABAT'
+      Size = 100
+    end
+    object sw_outMF59_BIC: TStringField
+      FieldName = 'MF59_BIC'
+    end
+    object sw_outSW_MAINFIND_USERNAME_OUTSID: TStringField
+      FieldName = 'SW_MAIN.FIND_USERNAME_OUT(S.ID'
+      Size = 4000
+    end
+    object sw_outCOM_ACCID: TFloatField
+      FieldName = 'COM_ACCID'
+    end
+  end
+  object ViewPanel: TOracleDataSet
+    SQL.Strings = (
+      'select sw_field from sw_fields  ')
+    QBEDefinition.QBEFieldDefs = {04000000010000000800000053575F4649454C44010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 24
+    Top = 184
+    object ViewPanelSW_FIELD: TStringField
+      FieldName = 'SW_FIELD'
+      Required = True
+      Size = 10
+    end
+  end
+  object OracleDataSet1: TOracleDataSet
+    SQL.Strings = (
+      'select * from sw_fields where sw_main_field='#39'00'#39)
+    QBEDefinition.QBEFieldDefs = {
+      040000001E0000000800000053575F4649454C440100000000000D0000005357
+      5F4D41494E5F4649454C44010000000000050000004D54313030010000000000
+      050000004D54313031010000000000050000004D543130320100000000000500
+      00004D54313033010000000000050000004D5432303001000000000005000000
+      4D54323032010000000000050000004D54323035010000000000050000004D54
+      333030010000000000050000004D54333230010000000000050000004D543730
+      37010000000000050000004D54373330010000000000050000004D5437333201
+      0000000000050000004D54373334010000000000050000004D54373430010000
+      000000050000004D54373432010000000000050000004D543734370100000000
+      00050000004D54373534010000000000050000004D5437363001000000000005
+      0000004D54373637010000000000050000004D54373638010000000000050000
+      004D54373639010000000000050000004D54393030010000000000050000004D
+      54393130010000000000050000004D54393430010000000000050000004D5439
+      35300100000000000800000043415445474F5259010000000000070000005357
+      5F4D41494E010000000000080000004D54313033415A4E010000000000}
+    QueryAllRecords = False
+    Session = sboapiDataModule.SBSession
+    Left = 168
+    Top = 120
+    object OracleDataSet1SW_FIELD: TStringField
+      FieldName = 'SW_FIELD'
+      Required = True
+      Size = 10
+    end
+    object OracleDataSet1SW_MAIN_FIELD: TStringField
+      FieldName = 'SW_MAIN_FIELD'
+      Size = 10
+    end
+    object OracleDataSet1MT100: TStringField
+      FieldName = 'MT100'
+      Size = 45
+    end
+    object OracleDataSet1MT101: TStringField
+      FieldName = 'MT101'
+      Size = 45
+    end
+    object OracleDataSet1MT102: TStringField
+      FieldName = 'MT102'
+      Size = 45
+    end
+    object OracleDataSet1MT103: TStringField
+      FieldName = 'MT103'
+      Size = 45
+    end
+    object OracleDataSet1MT200: TStringField
+      FieldName = 'MT200'
+      Size = 45
+    end
+    object OracleDataSet1MT202: TStringField
+      FieldName = 'MT202'
+      Size = 45
+    end
+    object OracleDataSet1MT205: TStringField
+      FieldName = 'MT205'
+      Size = 45
+    end
+    object OracleDataSet1MT300: TStringField
+      FieldName = 'MT300'
+      Size = 45
+    end
+    object OracleDataSet1MT320: TStringField
+      FieldName = 'MT320'
+      Size = 45
+    end
+    object OracleDataSet1MT707: TStringField
+      FieldName = 'MT707'
+      Size = 45
+    end
+    object OracleDataSet1MT730: TStringField
+      FieldName = 'MT730'
+      Size = 45
+    end
+    object OracleDataSet1MT732: TStringField
+      FieldName = 'MT732'
+      Size = 45
+    end
+    object OracleDataSet1MT734: TStringField
+      FieldName = 'MT734'
+      Size = 45
+    end
+    object OracleDataSet1MT740: TStringField
+      FieldName = 'MT740'
+      Size = 45
+    end
+    object OracleDataSet1MT742: TStringField
+      FieldName = 'MT742'
+      Size = 45
+    end
+    object OracleDataSet1MT747: TStringField
+      FieldName = 'MT747'
+      Size = 45
+    end
+    object OracleDataSet1MT754: TStringField
+      FieldName = 'MT754'
+      Size = 45
+    end
+    object OracleDataSet1MT760: TStringField
+      FieldName = 'MT760'
+      Size = 45
+    end
+    object OracleDataSet1MT767: TStringField
+      FieldName = 'MT767'
+      Size = 45
+    end
+    object OracleDataSet1MT768: TStringField
+      FieldName = 'MT768'
+      Size = 45
+    end
+    object OracleDataSet1MT769: TStringField
+      FieldName = 'MT769'
+      Size = 45
+    end
+    object OracleDataSet1MT900: TStringField
+      FieldName = 'MT900'
+      Size = 45
+    end
+    object OracleDataSet1MT910: TStringField
+      FieldName = 'MT910'
+      Size = 45
+    end
+    object OracleDataSet1MT940: TStringField
+      FieldName = 'MT940'
+      Size = 45
+    end
+    object OracleDataSet1MT950: TStringField
+      FieldName = 'MT950'
+      Size = 45
+    end
+    object OracleDataSet1CATEGORY: TStringField
+      FieldName = 'CATEGORY'
+      Size = 45
+    end
+    object OracleDataSet1SW_MAIN: TStringField
+      FieldName = 'SW_MAIN'
+      Size = 45
+    end
+  end
+  object valute: TOracleDataSet
+    SQL.Strings = (
+      'select * from avalute'
+      'where val_name<>'#39'AZN'#39)
+    QBEDefinition.QBEFieldDefs = {
+      04000000170000000600000056414C5554450100000000000800000056414C5F
+      4E414D450100000000000900000056414C555F4E414D450100000000000A0000
+      0056414C555F53484F5254010000000000060000005553544F52470100000000
+      0006000000555354504F4B0100000000000800000056414C555F47454E010000
+      0000000700000056414C555F415A010000000000050000005553494E47010000
+      0000000A00000056414C555F4F544845520100000000000A00000056414C555F
+      494E5445520100000000000900000056414C555F42414C410100000000000900
+      0000505249535441564B4101000000000007000000434F554E54525901000000
+      0000080000005553545F504F4B31010000000000070000004F46464943414C01
+      0000000000050000004C494D4954010000000000050000004445424554010000
+      000000060000004B524544495401000000000006000000463535303150010000
+      0000000600000046353530315601000000000006000000534445424554010000
+      0000000700000053435245444954010000000000}
+    QueryAllRecords = False
+    Session = sboapiDataModule.SBSession
+    Left = 224
+    Top = 8
+  end
+  object val_DataSource: TDataSource
+    DataSet = valute
+    Left = 368
+    Top = 144
+  end
+  object Sysdate: TOracleDataSet
+    SQL.Strings = (
+      'select tek_dat from smart.sysdat')
+    QBEDefinition.QBEFieldDefs = {04000000010000000700000054454B5F444154010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 216
+    Top = 192
+    object SysdateTEK_DAT: TDateTimeField
+      FieldName = 'TEK_DAT'
+      Required = True
+    end
+  end
+  object sw_settings: TOracleDataSet
+    SQL.Strings = (
+      'select * from sw_settings')
+    QBEDefinition.QBEFieldDefs = {
+      040000000500000004000000504154480100000000000D0000005553455F4241
+      4E4B5F4441544501000000000008000000504154485F4F555401000000000003
+      00000042494301000000000009000000434F4D495353494F4E010000000000}
+    QueryAllRecords = False
+    Session = sboapiDataModule.SBSession
+    Left = 272
+    Top = 8
+  end
+  object banks: TOracleDataSet
+    SQL.Strings = (
+      'select BIC,NAME,CITY,address,country from sw_banks'
+      '')
+    QBEDefinition.QBEFieldDefs = {
+      040000000500000003000000424943010000000000040000004E414D45010000
+      0000000400000043495459010000000000070000004144445245535301000000
+      000007000000434F554E545259010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 80
+    Top = 184
+    object banksBIC: TStringField
+      FieldName = 'BIC'
+      Size = 100
+    end
+    object banksNAME: TStringField
+      FieldName = 'NAME'
+      Size = 106
+    end
+    object banksCITY: TStringField
+      FieldName = 'CITY'
+      Size = 36
+    end
+    object banksADDRESS: TStringField
+      FieldName = 'ADDRESS'
+      Size = 141
+    end
+    object banksCOUNTRY: TStringField
+      FieldName = 'COUNTRY'
+      Size = 71
+    end
+  end
+  object sw_banks: TDataSource
+    DataSet = banks
+    Left = 432
+    Top = 88
+  end
+  object settings: TOracleDataSet
+    SQL.Strings = (
+      'select * from sw_settings')
+    QBEDefinition.QBEFieldDefs = {
+      040000000700000004000000504154480100000000000D0000005553455F4241
+      4E4B5F4441544501000000000008000000504154485F4F555401000000000003
+      00000042494301000000000009000000434F4D495353494F4E0100000000000C
+      000000494E4E5F46494C45545950450100000000000F000000494E4E5F4D545F
+      524541444C494E45010000000000}
+    QueryAllRecords = False
+    Session = sboapiDataModule.SBSession
+    Left = 224
+    Top = 64
+    object settingsPATH: TStringField
+      FieldName = 'PATH'
+      Size = 100
+    end
+    object settingsUSE_BANK_DATE: TIntegerField
+      FieldName = 'USE_BANK_DATE'
+    end
+    object settingsPATH_OUT: TStringField
+      FieldName = 'PATH_OUT'
+      Size = 100
+    end
+    object settingsBIC: TStringField
+      FieldName = 'BIC'
+      Size = 100
+    end
+    object settingsCOMISSION: TFloatField
+      FieldName = 'COMISSION'
+    end
+    object settingsINN_FILETYPE: TIntegerField
+      FieldName = 'INN_FILETYPE'
+    end
+    object settingsINN_MT_READLINE: TIntegerField
+      FieldName = 'INN_MT_READLINE'
+    end
+  end
+  object Account: TOracleDataSet
+    SQL.Strings = (
+      'select * from account where CLOSE_DAT is null order by acc_no')
+    QBEDefinition.QBEFieldDefs = {
+      0400000017000000020000004944010000000000060000004B4C495F49440100
+      00000000050000004F505F4944010000000000060000004143435F4E4F010000
+      0000000700000056414C5F414343010000000000040000004E414D4501000000
+      0000080000004F50454E5F44415401000000000009000000434C4F53455F4441
+      540100000000000700000042414C5F434E310100000000000700000042414C5F
+      434E320100000000000700000042414C5F434E33010000000000070000004241
+      4C5F434E340100000000000600000046494C49414C0100000000000900000053
+      494D5F4F54434554010000000000060000005449504143430100000000000500
+      00004C494D49540100000000000A0000004F4C445F4143435F4E4F0100000000
+      0008000000504149525F41434301000000000007000000494E53494445520100
+      0000000004000000534944230100000000000600000054454D50494401000000
+      0000050000004F574E494401000000000008000000505F435553544944010000
+      000000}
+    QueryAllRecords = False
+    Session = sboapiDataModule.SBSession
+    Left = 272
+    Top = 72
+  end
+  object Account_sw: TDataSource
+    DataSet = Account
+    Left = 296
+    Top = 128
+  end
+  object corracount: TOracleDataSet
+    SQL.Strings = (
+      
+        'select a.acc_no,b.bic from sw_coraccounts b, account a where b.A' +
+        'CC_ID=a.id')
+    QBEDefinition.QBEFieldDefs = {
+      040000000200000003000000424943010000000000060000004143435F4E4F01
+      0000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 232
+    Top = 128
+  end
+  object sw_coraccounts: TDataSource
+    DataSet = corracount
+    Left = 352
+    Top = 80
+  end
+  object OracleDataSet3: TOracleDataSet
+    Left = 176
+    Top = 504
+  end
+  object sw_out_2s: TDataSource
+    DataSet = sw_out_2
+    Left = 96
+    Top = 304
+  end
+  object sw_out_2: TOracleDataSet
+    SQL.Strings = (
+      
+        'select s.rowid, s.*,sw_main.Find_UserName_out(s.id),sw_main.Find' +
+        '_UserName3_out(s.id) from sw_out_new PARTITION (TODAY)'
+      ' s   where status=5  or status=7'
+      ''
+      ''
+      '')
+    ReadBuffer = 100
+    QBEDefinition.QBEFieldDefs = {
+      0400000057000000040000004D463230010000000000050000004D4632334201
+      0000000000050000004D46323654010000000000040000004D46323701000000
+      0000050000004D46333241010000000000040000004D4633360100000000000A
+      00000053454E444552545950450100000000000900000053454E444552424943
+      0100000000000800000053454E4445524C540100000000000B0000004150504C
+      49434154494F4E0100000000000700000046494E434F50590100000000000B00
+      00004D45535341474554595045010000000000080000005052494F5249545901
+      00000000000A0000004D4F4E49544F52494E470100000000000C000000524543
+      4549564552545950450100000000000B00000052454345495645524249430100
+      000000000A0000004D463332415F444154450100000000000A0000004D463332
+      415F435552520100000000000C0000004D463332415F414D4F554E5401000000
+      00000C0000004D4635305F4143434F554E54010000000000080000004D463530
+      5F424943010000000000100000004D4635305F4E414D45244144524553530100
+      000000000C0000004D4635325F4143434F554E54010000000000080000004D46
+      35325F424943010000000000100000004D4635325F4E414D4524414452455353
+      0100000000000C0000004D4635335F4143434F554E5401000000000008000000
+      4D4635335F424943010000000000120000004D4635335F4E414D45244C4F4341
+      54494F4E0100000000000C0000004D4635345F4143434F554E54010000000000
+      080000004D4635345F424943010000000000120000004D4635345F4E414D4524
+      4C4F434154494F4E0100000000000C0000004D4635355F4143434F554E540100
+      00000000080000004D4635355F424943010000000000120000004D4635355F4E
+      414D45244C4F434154494F4E0100000000000C0000004D4635365F4143434F55
+      4E54010000000000080000004D4635365F424943010000000000120000004D46
+      35365F4E414D45244C4F434154494F4E0100000000000C0000004D4635375F41
+      43434F554E54010000000000080000004D4635375F4249430100000000001200
+      00004D4635375F4E414D45244C4F434154494F4E0100000000000C0000004D46
+      35395F4143434F554E54010000000000100000004D4635395F4E414D45244144
+      5245535301000000000006000000535441545553010000000000020000004944
+      0100000000000B0000004D463731465F4348494C440100000000000B0000004D
+      463731475F4348494C44010000000000030000004D3230010000000000040000
+      004D323342010000000000040000004D323654010000000000040000004D3332
+      41010000000000030000004D3336010000000000030000004D35300100000000
+      00030000004D3532010000000000030000004D3533010000000000030000004D
+      3534010000000000030000004D3535010000000000030000004D353601000000
+      0000030000004D3537010000000000030000004D353901000000000003000000
+      4D3730010000000000040000004D373141010000000000040000004D37314601
+      0000000000040000004D373147010000000000030000004D3732010000000000
+      040000004D3737420100000000000E0000004D4632305F5245464552454E4345
+      010000000000050000004F505F49440100000000000A00000044454C5F535441
+      5455530100000000000B000000434F4D4D49545F4F5049440100000000000C00
+      0000464352454154455F4F5049440100000000000B00000044454C4554455F4F
+      504944010000000000040000004D463730010000000000050000005348494652
+      010000000000050000004D46373141010000000000040000004D463732010000
+      000000050000004D463737420100000000000B0000004544495445445F4F5049
+      440100000000000500000054525F49440100000000000600000054525F494432
+      01000000000004000000494E464F010000000000030000005441580100000000
+      0007000000434F554E5452590100000000000700000048455341424154010000
+      0000001E00000053575F4D41494E2E46494E445F555345524E414D455F4F5554
+      28532E49440100000000001E00000053575F4D41494E2E46494E445F55534552
+      4E414D45335F4F555428532E49010000000000080000004D4635395F42494301
+      000000000009000000434F4D5F4143434944010000000000}
+    QueryAllRecords = False
+    Session = sboapiDataModule.SBSession
+    Left = 152
+    Top = 192
+    object sw_out_2MF20: TStringField
+      FieldName = 'MF20'
+      Size = 99
+    end
+    object sw_out_2MF23B: TStringField
+      FieldName = 'MF23B'
+      Size = 99
+    end
+    object sw_out_2MF26T: TStringField
+      FieldName = 'MF26T'
+      Size = 99
+    end
+    object sw_out_2MF27: TStringField
+      FieldName = 'MF27'
+      Size = 99
+    end
+    object sw_out_2MF32A: TStringField
+      FieldName = 'MF32A'
+      Size = 99
+    end
+    object sw_out_2MF36: TStringField
+      FieldName = 'MF36'
+      Size = 99
+    end
+    object sw_out_2SENDERTYPE: TStringField
+      FieldName = 'SENDERTYPE'
+      Size = 99
+    end
+    object sw_out_2SENDERBIC: TStringField
+      FieldName = 'SENDERBIC'
+      Size = 99
+    end
+    object sw_out_2SENDERLT: TStringField
+      FieldName = 'SENDERLT'
+      Size = 99
+    end
+    object sw_out_2APPLICATION: TStringField
+      FieldName = 'APPLICATION'
+      Size = 99
+    end
+    object sw_out_2FINCOPY: TStringField
+      FieldName = 'FINCOPY'
+      Size = 99
+    end
+    object sw_out_2MESSAGETYPE: TStringField
+      FieldName = 'MESSAGETYPE'
+      Size = 99
+    end
+    object sw_out_2PRIORITY: TStringField
+      FieldName = 'PRIORITY'
+      Size = 99
+    end
+    object sw_out_2MONITORING: TStringField
+      FieldName = 'MONITORING'
+      Size = 99
+    end
+    object sw_out_2RECEIVERTYPE: TStringField
+      FieldName = 'RECEIVERTYPE'
+      Size = 99
+    end
+    object sw_out_2RECEIVERBIC: TStringField
+      FieldName = 'RECEIVERBIC'
+      Size = 99
+    end
+    object sw_out_2MF32A_DATE: TDateTimeField
+      FieldName = 'MF32A_DATE'
+    end
+    object sw_out_2MF32A_CURR: TStringField
+      FieldName = 'MF32A_CURR'
+      Size = 8
+    end
+    object sw_out_2MF32A_AMOUNT: TFloatField
+      FieldName = 'MF32A_AMOUNT'
+    end
+    object sw_out_2MF50_ACCOUNT: TStringField
+      FieldName = 'MF50_ACCOUNT'
+      Size = 30
+    end
+    object sw_out_2MF50_BIC: TStringField
+      FieldName = 'MF50_BIC'
+      Size = 15
+    end
+    object sw_out_2MF50_NAMEADRESS: TStringField
+      FieldName = 'MF50_NAME$ADRESS'
+      Size = 99
+    end
+    object sw_out_2MF52_ACCOUNT: TStringField
+      FieldName = 'MF52_ACCOUNT'
+      Size = 30
+    end
+    object sw_out_2MF52_BIC: TStringField
+      FieldName = 'MF52_BIC'
+      Size = 15
+    end
+    object sw_out_2MF52_NAMEADRESS: TStringField
+      FieldName = 'MF52_NAME$ADRESS'
+      Size = 99
+    end
+    object sw_out_2MF53_ACCOUNT: TStringField
+      FieldName = 'MF53_ACCOUNT'
+      Size = 30
+    end
+    object sw_out_2MF53_BIC: TStringField
+      FieldName = 'MF53_BIC'
+      Size = 15
+    end
+    object sw_out_2MF53_NAMELOCATION: TStringField
+      FieldName = 'MF53_NAME$LOCATION'
+      Size = 145
+    end
+    object sw_out_2MF54_ACCOUNT: TStringField
+      FieldName = 'MF54_ACCOUNT'
+      Size = 30
+    end
+    object sw_out_2MF54_BIC: TStringField
+      FieldName = 'MF54_BIC'
+      Size = 15
+    end
+    object sw_out_2MF54_NAMELOCATION: TStringField
+      FieldName = 'MF54_NAME$LOCATION'
+      Size = 145
+    end
+    object sw_out_2MF55_ACCOUNT: TStringField
+      FieldName = 'MF55_ACCOUNT'
+      Size = 30
+    end
+    object sw_out_2MF55_BIC: TStringField
+      FieldName = 'MF55_BIC'
+      Size = 15
+    end
+    object sw_out_2MF55_NAMELOCATION: TStringField
+      FieldName = 'MF55_NAME$LOCATION'
+      Size = 145
+    end
+    object sw_out_2MF56_ACCOUNT: TStringField
+      FieldName = 'MF56_ACCOUNT'
+      Size = 30
+    end
+    object sw_out_2MF56_BIC: TStringField
+      FieldName = 'MF56_BIC'
+      Size = 15
+    end
+    object sw_out_2MF56_NAMELOCATION: TStringField
+      FieldName = 'MF56_NAME$LOCATION'
+      Size = 145
+    end
+    object sw_out_2MF57_ACCOUNT: TStringField
+      FieldName = 'MF57_ACCOUNT'
+      Size = 30
+    end
+    object sw_out_2MF57_BIC: TStringField
+      FieldName = 'MF57_BIC'
+      Size = 15
+    end
+    object sw_out_2MF57_NAMELOCATION: TStringField
+      FieldName = 'MF57_NAME$LOCATION'
+      Size = 145
+    end
+    object sw_out_2MF59_ACCOUNT: TStringField
+      FieldName = 'MF59_ACCOUNT'
+      Size = 30
+    end
+    object sw_out_2MF59_NAMEADRESS: TStringField
+      FieldName = 'MF59_NAME$ADRESS'
+      Size = 145
+    end
+    object sw_out_2STATUS: TIntegerField
+      FieldName = 'STATUS'
+    end
+    object sw_out_2ID: TFloatField
+      FieldName = 'ID'
+    end
+    object sw_out_2MF71F_CHILD: TStringField
+      FieldName = 'MF71F_CHILD'
+      Size = 99
+    end
+    object sw_out_2MF71G_CHILD: TStringField
+      FieldName = 'MF71G_CHILD'
+      Size = 99
+    end
+    object sw_out_2M20: TStringField
+      FieldName = 'M20'
+      Size = 7
+    end
+    object sw_out_2M23B: TStringField
+      FieldName = 'M23B'
+      Size = 7
+    end
+    object sw_out_2M26T: TStringField
+      FieldName = 'M26T'
+      Size = 7
+    end
+    object sw_out_2M32A: TStringField
+      FieldName = 'M32A'
+      Size = 7
+    end
+    object sw_out_2M36: TStringField
+      FieldName = 'M36'
+      Size = 7
+    end
+    object sw_out_2M50: TStringField
+      FieldName = 'M50'
+      Size = 7
+    end
+    object sw_out_2M52: TStringField
+      FieldName = 'M52'
+      Size = 7
+    end
+    object sw_out_2M53: TStringField
+      FieldName = 'M53'
+      Size = 7
+    end
+    object sw_out_2M54: TStringField
+      FieldName = 'M54'
+      Size = 7
+    end
+    object sw_out_2M55: TStringField
+      FieldName = 'M55'
+      Size = 7
+    end
+    object sw_out_2M56: TStringField
+      FieldName = 'M56'
+      Size = 7
+    end
+    object sw_out_2M57: TStringField
+      FieldName = 'M57'
+      Size = 7
+    end
+    object sw_out_2M59: TStringField
+      FieldName = 'M59'
+      Size = 7
+    end
+    object sw_out_2M70: TStringField
+      FieldName = 'M70'
+      Size = 7
+    end
+    object sw_out_2M71A: TStringField
+      FieldName = 'M71A'
+      Size = 7
+    end
+    object sw_out_2M71F: TStringField
+      FieldName = 'M71F'
+      Size = 7
+    end
+    object sw_out_2M71G: TStringField
+      FieldName = 'M71G'
+      Size = 7
+    end
+    object sw_out_2M72: TStringField
+      FieldName = 'M72'
+      Size = 7
+    end
+    object sw_out_2M77B: TStringField
+      FieldName = 'M77B'
+      Size = 7
+    end
+    object sw_out_2MF20_REFERENCE: TStringField
+      FieldName = 'MF20_REFERENCE'
+    end
+    object sw_out_2OP_ID: TFloatField
+      FieldName = 'OP_ID'
+    end
+    object sw_out_2DEL_STATUS: TIntegerField
+      FieldName = 'DEL_STATUS'
+    end
+    object sw_out_2COMMIT_OPID: TFloatField
+      FieldName = 'COMMIT_OPID'
+    end
+    object sw_out_2FCREATE_OPID: TFloatField
+      FieldName = 'FCREATE_OPID'
+    end
+    object sw_out_2DELETE_OPID: TFloatField
+      FieldName = 'DELETE_OPID'
+    end
+    object sw_out_2MF70: TStringField
+      FieldName = 'MF70'
+      Size = 200
+    end
+    object sw_out_2SHIFR: TIntegerField
+      FieldName = 'SHIFR'
+    end
+    object sw_out_2MF71A: TStringField
+      FieldName = 'MF71A'
+      Size = 100
+    end
+    object sw_out_2MF72: TStringField
+      FieldName = 'MF72'
+      Size = 500
+    end
+    object sw_out_2MF77B: TStringField
+      FieldName = 'MF77B'
+      Size = 100
+    end
+    object sw_out_2EDITED_OPID: TFloatField
+      FieldName = 'EDITED_OPID'
+    end
+    object sw_out_2TR_ID: TFloatField
+      FieldName = 'TR_ID'
+    end
+    object sw_out_2TR_ID2: TFloatField
+      FieldName = 'TR_ID2'
+    end
+    object sw_out_2INFO: TStringField
+      FieldName = 'INFO'
+      Size = 50
+    end
+    object sw_out_2TAX: TStringField
+      FieldName = 'TAX'
+      Size = 14
+    end
+    object sw_out_2COUNTRY: TStringField
+      FieldName = 'COUNTRY'
+      Size = 100
+    end
+    object sw_out_2HESABAT: TStringField
+      FieldName = 'HESABAT'
+      Size = 100
+    end
+    object sw_out_2SW_MAINFIND_USERNAME_OUTSID: TStringField
+      FieldName = 'SW_MAIN.FIND_USERNAME_OUT(S.ID'
+      Size = 4000
+    end
+    object sw_out_2SW_MAINFIND_USERNAME3_OUTSI: TStringField
+      FieldName = 'SW_MAIN.FIND_USERNAME3_OUT(S.I'
+      Size = 4000
+    end
+    object sw_out_2MF59_BIC: TStringField
+      FieldName = 'MF59_BIC'
+    end
+    object sw_out_2COM_ACCID: TFloatField
+      FieldName = 'COM_ACCID'
+    end
+  end
+  object SW_OUT3: TOracleDataSet
+    SQL.Strings = (
+      
+        'select s.rowid, s.*,sw_main.Find_UserName_out(s.id),sw_main.Find' +
+        '_UserName3_out(s.id),sw_main.Find_UserName2_out(s.id) from sw_ou' +
+        't_new PARTITION (TODAY)'
+      ' s   where status=1 '
+      ''
+      ''
+      '')
+    QBEDefinition.QBEFieldDefs = {
+      0400000058000000040000004D463230010000000000050000004D4632334201
+      0000000000050000004D46323654010000000000040000004D46323701000000
+      0000050000004D46333241010000000000040000004D4633360100000000000A
+      00000053454E444552545950450100000000000900000053454E444552424943
+      0100000000000800000053454E4445524C540100000000000B0000004150504C
+      49434154494F4E0100000000000700000046494E434F50590100000000000B00
+      00004D45535341474554595045010000000000080000005052494F5249545901
+      00000000000A0000004D4F4E49544F52494E470100000000000C000000524543
+      4549564552545950450100000000000B00000052454345495645524249430100
+      000000000A0000004D463332415F444154450100000000000A0000004D463332
+      415F435552520100000000000C0000004D463332415F414D4F554E5401000000
+      00000C0000004D4635305F4143434F554E54010000000000080000004D463530
+      5F424943010000000000100000004D4635305F4E414D45244144524553530100
+      000000000C0000004D4635325F4143434F554E54010000000000080000004D46
+      35325F424943010000000000100000004D4635325F4E414D4524414452455353
+      0100000000000C0000004D4635335F4143434F554E5401000000000008000000
+      4D4635335F424943010000000000120000004D4635335F4E414D45244C4F4341
+      54494F4E0100000000000C0000004D4635345F4143434F554E54010000000000
+      080000004D4635345F424943010000000000120000004D4635345F4E414D4524
+      4C4F434154494F4E0100000000000C0000004D4635355F4143434F554E540100
+      00000000080000004D4635355F424943010000000000120000004D4635355F4E
+      414D45244C4F434154494F4E0100000000000C0000004D4635365F4143434F55
+      4E54010000000000080000004D4635365F424943010000000000120000004D46
+      35365F4E414D45244C4F434154494F4E0100000000000C0000004D4635375F41
+      43434F554E54010000000000080000004D4635375F4249430100000000001200
+      00004D4635375F4E414D45244C4F434154494F4E0100000000000C0000004D46
+      35395F4143434F554E54010000000000100000004D4635395F4E414D45244144
+      5245535301000000000006000000535441545553010000000000020000004944
+      0100000000000B0000004D463731465F4348494C440100000000000B0000004D
+      463731475F4348494C44010000000000030000004D3230010000000000040000
+      004D323342010000000000040000004D323654010000000000040000004D3332
+      41010000000000030000004D3336010000000000030000004D35300100000000
+      00030000004D3532010000000000030000004D3533010000000000030000004D
+      3534010000000000030000004D3535010000000000030000004D353601000000
+      0000030000004D3537010000000000030000004D353901000000000003000000
+      4D3730010000000000040000004D373141010000000000040000004D37314601
+      0000000000040000004D373147010000000000030000004D3732010000000000
+      040000004D3737420100000000000E0000004D4632305F5245464552454E4345
+      010000000000050000004F505F49440100000000000A00000044454C5F535441
+      5455530100000000000B000000434F4D4D49545F4F5049440100000000000C00
+      0000464352454154455F4F5049440100000000000B00000044454C4554455F4F
+      504944010000000000040000004D463730010000000000050000005348494652
+      010000000000050000004D46373141010000000000040000004D463732010000
+      000000050000004D463737420100000000000B0000004544495445445F4F5049
+      440100000000000500000054525F49440100000000000600000054525F494432
+      01000000000004000000494E464F010000000000030000005441580100000000
+      0007000000434F554E5452590100000000000700000048455341424154010000
+      0000001E00000053575F4D41494E2E46494E445F555345524E414D455F4F5554
+      28532E49440100000000001E00000053575F4D41494E2E46494E445F55534552
+      4E414D45335F4F555428532E490100000000001E00000053575F4D41494E2E46
+      494E445F555345524E414D45325F4F555428532E49010000000000080000004D
+      4635395F42494301000000000009000000434F4D5F4143434944010000000000}
+    QueryAllRecords = False
+    Session = sboapiDataModule.SBSession
+    Left = 32
+    Top = 240
+    object SW_OUT3MF20: TStringField
+      FieldName = 'MF20'
+      Size = 99
+    end
+    object SW_OUT3MF23B: TStringField
+      FieldName = 'MF23B'
+      Size = 99
+    end
+    object SW_OUT3MF26T: TStringField
+      FieldName = 'MF26T'
+      Size = 99
+    end
+    object SW_OUT3MF27: TStringField
+      FieldName = 'MF27'
+      Size = 99
+    end
+    object SW_OUT3MF32A: TStringField
+      FieldName = 'MF32A'
+      Size = 99
+    end
+    object SW_OUT3MF36: TStringField
+      FieldName = 'MF36'
+      Size = 99
+    end
+    object SW_OUT3SENDERTYPE: TStringField
+      FieldName = 'SENDERTYPE'
+      Size = 99
+    end
+    object SW_OUT3SENDERBIC: TStringField
+      FieldName = 'SENDERBIC'
+      Size = 99
+    end
+    object SW_OUT3SENDERLT: TStringField
+      FieldName = 'SENDERLT'
+      Size = 99
+    end
+    object SW_OUT3APPLICATION: TStringField
+      FieldName = 'APPLICATION'
+      Size = 99
+    end
+    object SW_OUT3FINCOPY: TStringField
+      FieldName = 'FINCOPY'
+      Size = 99
+    end
+    object SW_OUT3MESSAGETYPE: TStringField
+      FieldName = 'MESSAGETYPE'
+      Size = 99
+    end
+    object SW_OUT3PRIORITY: TStringField
+      FieldName = 'PRIORITY'
+      Size = 99
+    end
+    object SW_OUT3MONITORING: TStringField
+      FieldName = 'MONITORING'
+      Size = 99
+    end
+    object SW_OUT3RECEIVERTYPE: TStringField
+      FieldName = 'RECEIVERTYPE'
+      Size = 99
+    end
+    object SW_OUT3RECEIVERBIC: TStringField
+      FieldName = 'RECEIVERBIC'
+      Size = 99
+    end
+    object SW_OUT3MF32A_DATE: TDateTimeField
+      FieldName = 'MF32A_DATE'
+    end
+    object SW_OUT3MF32A_CURR: TStringField
+      FieldName = 'MF32A_CURR'
+      Size = 8
+    end
+    object SW_OUT3MF32A_AMOUNT: TFloatField
+      FieldName = 'MF32A_AMOUNT'
+    end
+    object SW_OUT3MF50_ACCOUNT: TStringField
+      FieldName = 'MF50_ACCOUNT'
+      Size = 30
+    end
+    object SW_OUT3MF50_BIC: TStringField
+      FieldName = 'MF50_BIC'
+      Size = 15
+    end
+    object SW_OUT3MF50_NAMEADRESS: TStringField
+      FieldName = 'MF50_NAME$ADRESS'
+      Size = 99
+    end
+    object SW_OUT3MF52_ACCOUNT: TStringField
+      FieldName = 'MF52_ACCOUNT'
+      Size = 30
+    end
+    object SW_OUT3MF52_BIC: TStringField
+      FieldName = 'MF52_BIC'
+      Size = 15
+    end
+    object SW_OUT3MF52_NAMEADRESS: TStringField
+      FieldName = 'MF52_NAME$ADRESS'
+      Size = 99
+    end
+    object SW_OUT3MF53_ACCOUNT: TStringField
+      FieldName = 'MF53_ACCOUNT'
+      Size = 30
+    end
+    object SW_OUT3MF53_BIC: TStringField
+      FieldName = 'MF53_BIC'
+      Size = 15
+    end
+    object SW_OUT3MF53_NAMELOCATION: TStringField
+      FieldName = 'MF53_NAME$LOCATION'
+      Size = 145
+    end
+    object SW_OUT3MF54_ACCOUNT: TStringField
+      FieldName = 'MF54_ACCOUNT'
+      Size = 30
+    end
+    object SW_OUT3MF54_BIC: TStringField
+      FieldName = 'MF54_BIC'
+      Size = 15
+    end
+    object SW_OUT3MF54_NAMELOCATION: TStringField
+      FieldName = 'MF54_NAME$LOCATION'
+      Size = 145
+    end
+    object SW_OUT3MF55_ACCOUNT: TStringField
+      FieldName = 'MF55_ACCOUNT'
+      Size = 30
+    end
+    object SW_OUT3MF55_BIC: TStringField
+      FieldName = 'MF55_BIC'
+      Size = 15
+    end
+    object SW_OUT3MF55_NAMELOCATION: TStringField
+      FieldName = 'MF55_NAME$LOCATION'
+      Size = 145
+    end
+    object SW_OUT3MF56_ACCOUNT: TStringField
+      FieldName = 'MF56_ACCOUNT'
+      Size = 30
+    end
+    object SW_OUT3MF56_BIC: TStringField
+      FieldName = 'MF56_BIC'
+      Size = 15
+    end
+    object SW_OUT3MF56_NAMELOCATION: TStringField
+      FieldName = 'MF56_NAME$LOCATION'
+      Size = 145
+    end
+    object SW_OUT3MF57_ACCOUNT: TStringField
+      FieldName = 'MF57_ACCOUNT'
+      Size = 30
+    end
+    object SW_OUT3MF57_BIC: TStringField
+      FieldName = 'MF57_BIC'
+      Size = 15
+    end
+    object SW_OUT3MF57_NAMELOCATION: TStringField
+      FieldName = 'MF57_NAME$LOCATION'
+      Size = 145
+    end
+    object SW_OUT3MF59_ACCOUNT: TStringField
+      FieldName = 'MF59_ACCOUNT'
+      Size = 30
+    end
+    object SW_OUT3MF59_NAMEADRESS: TStringField
+      FieldName = 'MF59_NAME$ADRESS'
+      Size = 145
+    end
+    object SW_OUT3STATUS: TIntegerField
+      FieldName = 'STATUS'
+    end
+    object SW_OUT3ID: TFloatField
+      FieldName = 'ID'
+    end
+    object SW_OUT3MF71F_CHILD: TStringField
+      FieldName = 'MF71F_CHILD'
+      Size = 99
+    end
+    object SW_OUT3MF71G_CHILD: TStringField
+      FieldName = 'MF71G_CHILD'
+      Size = 99
+    end
+    object SW_OUT3M20: TStringField
+      FieldName = 'M20'
+      Size = 7
+    end
+    object SW_OUT3M23B: TStringField
+      FieldName = 'M23B'
+      Size = 7
+    end
+    object SW_OUT3M26T: TStringField
+      FieldName = 'M26T'
+      Size = 7
+    end
+    object SW_OUT3M32A: TStringField
+      FieldName = 'M32A'
+      Size = 7
+    end
+    object SW_OUT3M36: TStringField
+      FieldName = 'M36'
+      Size = 7
+    end
+    object SW_OUT3M50: TStringField
+      FieldName = 'M50'
+      Size = 7
+    end
+    object SW_OUT3M52: TStringField
+      FieldName = 'M52'
+      Size = 7
+    end
+    object SW_OUT3M53: TStringField
+      FieldName = 'M53'
+      Size = 7
+    end
+    object SW_OUT3M54: TStringField
+      FieldName = 'M54'
+      Size = 7
+    end
+    object SW_OUT3M55: TStringField
+      FieldName = 'M55'
+      Size = 7
+    end
+    object SW_OUT3M56: TStringField
+      FieldName = 'M56'
+      Size = 7
+    end
+    object SW_OUT3M57: TStringField
+      FieldName = 'M57'
+      Size = 7
+    end
+    object SW_OUT3M59: TStringField
+      FieldName = 'M59'
+      Size = 7
+    end
+    object SW_OUT3M70: TStringField
+      FieldName = 'M70'
+      Size = 7
+    end
+    object SW_OUT3M71A: TStringField
+      FieldName = 'M71A'
+      Size = 7
+    end
+    object SW_OUT3M71F: TStringField
+      FieldName = 'M71F'
+      Size = 7
+    end
+    object SW_OUT3M71G: TStringField
+      FieldName = 'M71G'
+      Size = 7
+    end
+    object SW_OUT3M72: TStringField
+      FieldName = 'M72'
+      Size = 7
+    end
+    object SW_OUT3M77B: TStringField
+      FieldName = 'M77B'
+      Size = 7
+    end
+    object SW_OUT3MF20_REFERENCE: TStringField
+      FieldName = 'MF20_REFERENCE'
+    end
+    object SW_OUT3OP_ID: TFloatField
+      FieldName = 'OP_ID'
+    end
+    object SW_OUT3DEL_STATUS: TIntegerField
+      FieldName = 'DEL_STATUS'
+    end
+    object SW_OUT3COMMIT_OPID: TFloatField
+      FieldName = 'COMMIT_OPID'
+    end
+    object SW_OUT3FCREATE_OPID: TFloatField
+      FieldName = 'FCREATE_OPID'
+    end
+    object SW_OUT3DELETE_OPID: TFloatField
+      FieldName = 'DELETE_OPID'
+    end
+    object SW_OUT3MF70: TStringField
+      FieldName = 'MF70'
+      Size = 500
+    end
+    object SW_OUT3SHIFR: TIntegerField
+      FieldName = 'SHIFR'
+    end
+    object SW_OUT3MF71A: TStringField
+      FieldName = 'MF71A'
+      Size = 100
+    end
+    object SW_OUT3MF72: TStringField
+      FieldName = 'MF72'
+      Size = 500
+    end
+    object SW_OUT3MF77B: TStringField
+      FieldName = 'MF77B'
+      Size = 200
+    end
+    object SW_OUT3EDITED_OPID: TFloatField
+      FieldName = 'EDITED_OPID'
+    end
+    object SW_OUT3TR_ID: TFloatField
+      FieldName = 'TR_ID'
+    end
+    object SW_OUT3TR_ID2: TFloatField
+      FieldName = 'TR_ID2'
+    end
+    object SW_OUT3INFO: TStringField
+      FieldName = 'INFO'
+      Size = 50
+    end
+    object SW_OUT3TAX: TStringField
+      FieldName = 'TAX'
+      Size = 14
+    end
+    object SW_OUT3COUNTRY: TStringField
+      FieldName = 'COUNTRY'
+      Size = 100
+    end
+    object SW_OUT3HESABAT: TStringField
+      FieldName = 'HESABAT'
+      Size = 100
+    end
+    object SW_OUT3MF59_BIC: TStringField
+      FieldName = 'MF59_BIC'
+      Size = 15
+    end
+    object SW_OUT3SW_MAINFIND_USERNAME_OUTSID: TStringField
+      FieldName = 'SW_MAIN.FIND_USERNAME_OUT(S.ID'
+      Size = 4000
+    end
+    object SW_OUT3SW_MAINFIND_USERNAME3_OUTSI: TStringField
+      FieldName = 'SW_MAIN.FIND_USERNAME3_OUT(S.I'
+      Size = 4000
+    end
+    object SW_OUT3SW_MAINFIND_USERNAME2_OUTSI: TStringField
+      FieldName = 'SW_MAIN.FIND_USERNAME2_OUT(S.I'
+      Size = 4000
+    end
+    object SW_OUT3COM_ACCID: TFloatField
+      FieldName = 'COM_ACCID'
+    end
+  end
+  object sw_out3s: TDataSource
+    DataSet = SW_OUT3
+    Left = 32
+    Top = 304
+  end
+  object referans: TOracleDataSet
+    SQL.Strings = (
+      
+        'select sw_main.Set_Referense(:FORMATS,:currensy) as refe from du' +
+        'al ')
+    Variables.Data = {
+      0300000002000000080000003A464F524D415453050000000000000000000000
+      090000003A43555252454E5359050000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {04000000010000000400000052454645010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 152
+    Top = 296
+    object referansREFE: TStringField
+      FieldName = 'REFE'
+      Size = 4000
+    end
+  end
+  object sw_in: TOracleDataSet
+    SQL.Strings = (
+      
+        'select s.rowid, s.*,sw_main.Find_UserName2_in(s.id) from sw_in_s' +
+        'yn s  where s.status<>10 '
+      ''
+      ''
+      ''
+      ' '
+      ' ')
+    QBEDefinition.QBEFieldDefs = {
+      0400000019000000060000005354415455530100000000000200000049440100
+      00000000050000004F505F494401000000000005000000534849465201000000
+      00000600000041434F554E54010000000000090000005245464552414E434501
+      00000000000400000056414C5501000000000003000000424943010000000000
+      0600000056414C5554450100000000000B0000004445534352495054494F4E01
+      000000000010000000434F4D4D495445445F555345525F494401000000000002
+      0000004D5401000000000008000000414C4C5F544558540100000000000B0000
+      0044454C4554455F4F5049440100000000000300000044415401000000000004
+      000000494E464F010000000000030000005441580100000000000C0000004445
+      534352495054494F4E32010000000000040000004B4F44450100000000000400
+      0000434F525201000000000008000000424E4B5F564F494E0100000000000B00
+      00004348454B45445F4F50494401000000000007000000434F554E5452590100
+      0000000007000000484553414241540100000000001E00000053575F4D41494E
+      2E46494E445F555345524E414D45325F494E28532E4944010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 160
+    Top = 448
+    object sw_inID: TFloatField
+      FieldName = 'ID'
+    end
+    object sw_inACOUNT: TStringField
+      FieldName = 'ACOUNT'
+      Size = 100
+    end
+    object sw_inREFERANCE: TStringField
+      FieldName = 'REFERANCE'
+      Size = 100
+    end
+    object sw_inVALU: TFloatField
+      FieldName = 'VALU'
+    end
+    object sw_inBIC: TStringField
+      FieldName = 'BIC'
+      Size = 100
+    end
+    object sw_inVALUTE: TStringField
+      FieldName = 'VALUTE'
+      Size = 100
+    end
+    object sw_inDESCRIPTION: TStringField
+      FieldName = 'DESCRIPTION'
+      Size = 100
+    end
+    object sw_inSTATUS: TIntegerField
+      FieldName = 'STATUS'
+    end
+    object sw_inSHIFR: TIntegerField
+      FieldName = 'SHIFR'
+    end
+    object sw_inCOMMITED_USER_ID: TFloatField
+      FieldName = 'COMMITED_USER_ID'
+    end
+    object sw_inOP_ID: TFloatField
+      FieldName = 'OP_ID'
+    end
+    object sw_inMT: TStringField
+      FieldName = 'MT'
+      Size = 100
+    end
+    object sw_inALL_TEXT: TStringField
+      FieldName = 'ALL_TEXT'
+      Size = 4000
+    end
+    object sw_inDELETE_OPID: TFloatField
+      FieldName = 'DELETE_OPID'
+    end
+    object sw_inDAT: TDateTimeField
+      FieldName = 'DAT'
+    end
+    object sw_inINFO: TStringField
+      FieldName = 'INFO'
+      Size = 200
+    end
+    object sw_inTAX: TStringField
+      FieldName = 'TAX'
+      Size = 100
+    end
+    object sw_inDESCRIPTION2: TStringField
+      FieldName = 'DESCRIPTION2'
+      Size = 100
+    end
+    object sw_inKODE: TStringField
+      FieldName = 'KODE'
+    end
+    object sw_inCORR: TStringField
+      FieldName = 'CORR'
+    end
+    object sw_inBNK_VOIN: TStringField
+      FieldName = 'BNK_VOIN'
+    end
+    object sw_inCHEKED_OPID: TFloatField
+      FieldName = 'CHEKED_OPID'
+    end
+    object sw_inCOUNTRY: TFloatField
+      FieldName = 'COUNTRY'
+    end
+    object sw_inHESABAT: TStringField
+      FieldName = 'HESABAT'
+      Size = 100
+    end
+    object sw_inSW_MAINFIND_USERNAME2_INSID: TStringField
+      FieldName = 'SW_MAIN.FIND_USERNAME2_IN(S.ID'
+      Size = 4000
+    end
+  end
+  object sw_in1: TDataSource
+    DataSet = sw_in
+    Left = 432
+    Top = 224
+  end
+  object fillial: TOracleDataSet
+    SQL.Strings = (
+      'select name from filial')
+    QBEDefinition.QBEFieldDefs = {0400000001000000040000004E414D45010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 288
+    Top = 248
+  end
+  object filial_datasource: TDataSource
+    DataSet = fillial
+    Left = 328
+    Top = 384
+  end
+  object settings_fields: TOracleDataSet
+    SQL.Strings = (
+      
+        'select sw_field from sw_fields where :formats is not null order ' +
+        'by SW_FIELD')
+    Variables.Data = {
+      0300000001000000080000003A464F524D415453050000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {04000000010000000800000053575F4649454C44010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 88
+    Top = 384
+  end
+  object set_fields: TDataSource
+    DataSet = settings_fields
+    Left = 32
+    Top = 368
+  end
+  object settings_fields2: TOracleDataSet
+    SQL.Strings = (
+      
+        'select sw_field from sw_fields where :formats is not null order ' +
+        'by SW_FIELD')
+    Variables.Data = {
+      0300000001000000080000003A464F524D415453050000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {04000000010000000800000053575F4649454C44010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 88
+    Top = 448
+  end
+  object set_fields2: TDataSource
+    DataSet = settings_fields2
+    Left = 32
+    Top = 424
+  end
+  object settings_fields3: TOracleDataSet
+    SQL.Strings = (
+      
+        'select sw_field from sw_fields where :formats is not null order ' +
+        'by SW_FIELD')
+    Variables.Data = {
+      0300000001000000080000003A464F524D415453050000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {04000000010000000800000053575F4649454C44010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 224
+    Top = 248
+  end
+  object set_fields3: TDataSource
+    DataSet = settings_fields3
+    Left = 152
+    Top = 376
+  end
+  object settings_fields4: TOracleDataSet
+    SQL.Strings = (
+      
+        'select sw_field from sw_fields where :formats is not null order ' +
+        'by SW_FIELD')
+    Variables.Data = {
+      0300000001000000080000003A464F524D415453050000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {04000000010000000800000053575F4649454C44010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 96
+    Top = 504
+  end
+  object set_fields4: TDataSource
+    DataSet = settings_fields4
+    Left = 24
+    Top = 496
+  end
+  object prowo: TOracleDataSet
+    SQL.Strings = (
+      'select * from sw_prow')
+    QBEDefinition.QBEFieldDefs = {
+      040000000A000000050000004445424554010000000000060000004B52454449
+      540100000000000400000053554D4D0100000000000B00000044455354494E41
+      54494F4E0100000000000C00000044454245545F52455A455256010000000000
+      0D0000004B52454449545F52455A45525601000000000006000000464F524D41
+      540100000000000600000046494C49414C01000000000006000000494E5F4F55
+      54010000000000020000004944010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 384
+    Top = 256
+  end
+  object prowok: TDataSource
+    DataSet = prowo
+    Left = 280
+    Top = 384
+  end
+  object setprow: TOracleDataSet
+    SQL.Strings = (
+      'select * from sw_prow where format=:Q')
+    Variables.Data = {0300000001000000020000003A51050000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      040000000B000000050000004445424554010000000000060000004B52454449
+      540100000000000400000053554D4D0100000000000B00000044455354494E41
+      54494F4E0100000000000C00000044454245545F52455A455256010000000000
+      0D0000004B52454449545F52455A45525601000000000006000000464F524D41
+      540100000000000600000046494C49414C01000000000006000000494E5F4F55
+      540100000000000200000049440100000000000A000000444553545F5449544C
+      45010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 144
+    Top = 240
+    object setprowDEBET: TStringField
+      FieldName = 'DEBET'
+      Size = 12
+    end
+    object setprowKREDIT: TStringField
+      FieldName = 'KREDIT'
+      Size = 12
+    end
+    object setprowSUMM: TStringField
+      FieldName = 'SUMM'
+    end
+    object setprowDESTINATION: TStringField
+      FieldName = 'DESTINATION'
+      Size = 50
+    end
+    object setprowDEBET_REZERV: TStringField
+      FieldName = 'DEBET_REZERV'
+      Size = 12
+    end
+    object setprowKREDIT_REZERV: TStringField
+      FieldName = 'KREDIT_REZERV'
+      Size = 12
+    end
+    object setprowFORMAT: TStringField
+      FieldName = 'FORMAT'
+      Size = 6
+    end
+    object setprowFILIAL: TStringField
+      FieldName = 'FILIAL'
+      Size = 30
+    end
+    object setprowIN_OUT: TStringField
+      FieldName = 'IN_OUT'
+      Size = 5
+    end
+    object setprowID: TFloatField
+      FieldName = 'ID'
+    end
+    object setprowDEST_TITLE: TStringField
+      FieldName = 'DEST_TITLE'
+    end
+  end
+  object transac: TOracleDataSet
+    SQL.Strings = (
+      'select  *  from  sw_out_new where id=:ids1')
+    Variables.Data = {0300000001000000050000003A49445331030000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      0400000054000000040000004D463230010000000000050000004D4632334201
+      0000000000050000004D46323654010000000000040000004D46323701000000
+      0000050000004D46333241010000000000040000004D4633360100000000000A
+      00000053454E444552545950450100000000000900000053454E444552424943
+      0100000000000800000053454E4445524C540100000000000B0000004150504C
+      49434154494F4E0100000000000700000046494E434F50590100000000000B00
+      00004D45535341474554595045010000000000080000005052494F5249545901
+      00000000000A0000004D4F4E49544F52494E470100000000000C000000524543
+      4549564552545950450100000000000B00000052454345495645524249430100
+      000000000A0000004D463332415F444154450100000000000A0000004D463332
+      415F435552520100000000000C0000004D463332415F414D4F554E5401000000
+      00000C0000004D4635305F4143434F554E54010000000000080000004D463530
+      5F424943010000000000100000004D4635305F4E414D45244144524553530100
+      000000000C0000004D4635325F4143434F554E54010000000000080000004D46
+      35325F424943010000000000100000004D4635325F4E414D4524414452455353
+      0100000000000C0000004D4635335F4143434F554E5401000000000008000000
+      4D4635335F424943010000000000120000004D4635335F4E414D45244C4F4341
+      54494F4E0100000000000C0000004D4635345F4143434F554E54010000000000
+      080000004D4635345F424943010000000000120000004D4635345F4E414D4524
+      4C4F434154494F4E0100000000000C0000004D4635355F4143434F554E540100
+      00000000080000004D4635355F424943010000000000120000004D4635355F4E
+      414D45244C4F434154494F4E0100000000000C0000004D4635365F4143434F55
+      4E54010000000000080000004D4635365F424943010000000000120000004D46
+      35365F4E414D45244C4F434154494F4E0100000000000C0000004D4635375F41
+      43434F554E54010000000000080000004D4635375F4249430100000000001200
+      00004D4635375F4E414D45244C4F434154494F4E0100000000000C0000004D46
+      35395F4143434F554E54010000000000100000004D4635395F4E414D45244144
+      5245535301000000000006000000535441545553010000000000020000004944
+      0100000000000B0000004D463731465F4348494C440100000000000B0000004D
+      463731475F4348494C44010000000000030000004D3230010000000000040000
+      004D323342010000000000040000004D323654010000000000040000004D3332
+      41010000000000030000004D3336010000000000030000004D35300100000000
+      00030000004D3532010000000000030000004D3533010000000000030000004D
+      3534010000000000030000004D3535010000000000030000004D353601000000
+      0000030000004D3537010000000000030000004D353901000000000003000000
+      4D3730010000000000040000004D373141010000000000040000004D37314601
+      0000000000040000004D373147010000000000030000004D3732010000000000
+      040000004D3737420100000000000E0000004D4632305F5245464552454E4345
+      010000000000050000004F505F49440100000000000A00000044454C5F535441
+      5455530100000000000B000000434F4D4D49545F4F5049440100000000000C00
+      0000464352454154455F4F5049440100000000000B00000044454C4554455F4F
+      504944010000000000040000004D463730010000000000050000005348494652
+      010000000000050000004D46373141010000000000040000004D463732010000
+      000000050000004D463737420100000000000B0000004544495445445F4F5049
+      440100000000000500000054525F49440100000000000600000054525F494432
+      01000000000004000000494E464F010000000000030000005441580100000000
+      0007000000434F554E5452590100000000000700000048455341424154010000
+      000000080000004D4635395F424943010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 328
+    Top = 192
+  end
+  object test: TOracleDataSet
+    SQL.Strings = (
+      'select * from sw_fields where sw_main_field='#39'00'#39
+      ''
+      ''
+      ''
+      'order by sw_field '
+      ''
+      ''
+      ''
+      ''
+      ' ')
+    QBEDefinition.QBEFieldDefs = {
+      040000001E0000000800000053575F4649454C440100000000000D0000005357
+      5F4D41494E5F4649454C44010000000000050000004D54313030010000000000
+      050000004D54313031010000000000050000004D543130320100000000000500
+      00004D54313033010000000000050000004D5432303001000000000005000000
+      4D54323032010000000000050000004D54323035010000000000050000004D54
+      333030010000000000050000004D54333230010000000000050000004D543730
+      37010000000000050000004D54373330010000000000050000004D5437333201
+      0000000000050000004D54373334010000000000050000004D54373430010000
+      000000050000004D54373432010000000000050000004D543734370100000000
+      00050000004D54373534010000000000050000004D5437363001000000000005
+      0000004D54373637010000000000050000004D54373638010000000000050000
+      004D54373639010000000000050000004D54393030010000000000050000004D
+      54393130010000000000050000004D54393430010000000000050000004D5439
+      35300100000000000800000043415445474F5259010000000000070000005357
+      5F4D41494E010000000000080000004D54313033415A4E010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 336
+    Top = 248
+  end
+  object test2: TOracleDataSet
+    SQL.Strings = (
+      
+        'select * from sw_fields where sw_main_field='#39'00'#39'  order by sw_fi' +
+        'eld')
+    QBEDefinition.QBEFieldDefs = {
+      040000001E0000000800000053575F4649454C440100000000000D0000005357
+      5F4D41494E5F4649454C44010000000000050000004D54313030010000000000
+      050000004D54313031010000000000050000004D543130320100000000000500
+      00004D54313033010000000000050000004D5432303001000000000005000000
+      4D54323032010000000000050000004D54323035010000000000050000004D54
+      333030010000000000050000004D54333230010000000000050000004D543730
+      37010000000000050000004D54373330010000000000050000004D5437333201
+      0000000000050000004D54373334010000000000050000004D54373430010000
+      000000050000004D54373432010000000000050000004D543734370100000000
+      00050000004D54373534010000000000050000004D5437363001000000000005
+      0000004D54373637010000000000050000004D54373638010000000000050000
+      004D54373639010000000000050000004D54393030010000000000050000004D
+      54393130010000000000050000004D54393430010000000000050000004D5439
+      35300100000000000800000043415445474F5259010000000000070000005357
+      5F4D41494E010000000000080000004D54313033415A4E010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 280
+    Top = 320
+  end
+  object test3: TOracleDataSet
+    SQL.Strings = (
+      
+        'select * from sw_fields where sw_main_field='#39'00'#39'  order by sw_fi' +
+        'eld ')
+    QBEDefinition.QBEFieldDefs = {
+      040000001E0000000800000053575F4649454C440100000000000D0000005357
+      5F4D41494E5F4649454C44010000000000050000004D54313030010000000000
+      050000004D54313031010000000000050000004D543130320100000000000500
+      00004D54313033010000000000050000004D5432303001000000000005000000
+      4D54323032010000000000050000004D54323035010000000000050000004D54
+      333030010000000000050000004D54333230010000000000050000004D543730
+      37010000000000050000004D54373330010000000000050000004D5437333201
+      0000000000050000004D54373334010000000000050000004D54373430010000
+      000000050000004D54373432010000000000050000004D543734370100000000
+      00050000004D54373534010000000000050000004D5437363001000000000005
+      0000004D54373637010000000000050000004D54373638010000000000050000
+      004D54373639010000000000050000004D54393030010000000000050000004D
+      54393130010000000000050000004D54393430010000000000050000004D5439
+      35300100000000000800000043415445474F5259010000000000070000005357
+      5F4D41494E010000000000080000004D54313033415A4E010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 392
+    Top = 200
+  end
+  object bankinfo: TOracleDataSet
+    SQL.Strings = (
+      'select * from bankinfo')
+    QBEDefinition.QBEFieldDefs = {
+      040000002A000000050000004B4F445F420100000000000400000042414E4B01
+      000000000007000000415A5F4E414D45010000000000040000004B524E4F0100
+      0000000003000000494E4E010000000000050000005345484552010000000000
+      0600000041445245535301000000000004000000534544520100000000000700
+      0000425548414C54520100000000000300000054454C01000000000003000000
+      4641580100000000000500000053574946540100000000000500000054454C45
+      5801000000000005000000454D41494C01000000000007000000504F53545F49
+      4E010000000000070000004B4F445F46494C0100000000000600000046494C49
+      414C0100000000000900000041445245535F46494C0100000000000700000054
+      454C5F46494C010000000000070000004641585F46494C010000000000090000
+      0053574946545F46494C0100000000000900000054454C45585F46494C010000
+      0000000A000000504F5354494E5F46494C010000000000090000005345484552
+      5F46494C01000000000007000000494E4E5F46494C010000000000080000004B
+      524E4F5F46494C010000000000070000005345445246494C0100000000000900
+      0000425548414C5F46494C010000000000080000004B4F445F4246494C010000
+      000000020000004E420100000000000700000056414C5F4D4F56010000000000
+      040000004C4F474F000000000000040000004C494E4B01000000000003000000
+      5344560100000000000300000053564D01000000000002000000424601000000
+      00000C0000004D414E414745525449544C450100000000000F0000004143434F
+      554E54414E545449544C450100000000000E00000053564D5F43555252454E43
+      594944010000000000070000004341504954414C010000000000090000004153
+      53495354414E540100000000000E000000415353495354414E545449544C4501
+      0000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 224
+    Top = 368
+  end
+  object sb_aca: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'sb_aca'
+    Left = 488
+    Top = 80
+  end
+  object sw_customers: TOracleDataSet
+    SQL.Strings = (
+      'select * from customers order by id')
+    QBEDefinition.QBEFieldDefs = {
+      0400000019000000020000004944010000000000050000004F505F4944010000
+      000000080000004F50454E5F44415401000000000009000000434C4F53455F44
+      41540100000000000A0000004E4552455A4944454E540100000000000A000000
+      5052494E41445F4B4F44010000000000040000004E414D450100000000000A00
+      000053484F52545F4E414D450100000000000A00000047524F55505F4B4C4945
+      010000000000070000005649445F534F42010000000000070000004F52475F53
+      4F420100000000000900000053464552415F444559010000000000060000004F
+      545241534C010000000000090000004E414C4F475F4B4F440100000000000900
+      00004B4F445F4F4B50524F01000000000003000000494E4E0100000000000700
+      00004441545F4E414C010000000000090000004441545F555354415601000000
+      00000300000042494B010000000000080000004F54565F4C49434F0100000000
+      000C0000004F54565F50415353504F52540100000000000A0000004F54565F49
+      53535545440100000000000A0000004F54565F49534441544501000000000007
+      0000004F4C445F494E4E01000000000009000000435553545F54595045010000
+      000000}
+    Session = sboapiDataModule.SBSession
+    Left = 264
+    Top = 192
+  end
+  object customer: TDataSource
+    DataSet = sw_customers
+    Left = 448
+    Top = 152
+  end
+  object ARXIVIN: TOracleDataSet
+    SQL.Strings = (
+      'SELECT * FROM SW_ARCHIVE where dat between :dat1 and :dat2 ')
+    Variables.Data = {
+      0300000002000000050000003A444154310C0000000000000000000000050000
+      003A444154320C0000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      04000000180000000200000049440100000000000600000041434F554E540100
+      00000000090000005245464552414E43450100000000000400000056414C5501
+      0000000000030000004249430100000000000600000056414C55544501000000
+      00000B0000004445534352495054494F4E010000000000060000005354415455
+      5301000000000005000000534849465201000000000010000000434F4D4D4954
+      45445F555345525F4944010000000000050000004F505F494401000000000002
+      0000004D5401000000000008000000414C4C5F544558540100000000000B0000
+      0044454C4554455F4F5049440100000000000300000044415401000000000004
+      000000494E464F010000000000030000005441580100000000000C0000004445
+      534352495054494F4E32010000000000040000004B4F44450100000000000400
+      0000434F525201000000000008000000424E4B5F564F494E0100000000000B00
+      00004348454B45445F4F50494401000000000007000000434F554E5452590100
+      000000000700000048455341424154010000000000}
+    QueryAllRecords = False
+    Session = sboapiDataModule.SBSession
+    Left = 216
+    Top = 304
+  end
+  object ARCHIVEIN: TDataSource
+    DataSet = ARXIVIN
+    Left = 320
+    Top = 312
+  end
+  object country: TOracleDataSet
+    SQL.Strings = (
+      'select * from COUNTRIES')
+    QBEDefinition.QBEFieldDefs = {
+      040000000600000002000000494401000000000009000000434E54525F4E414D
+      4501000000000009000000434E54525F434F4445010000000000040000005359
+      4D4201000000000005000000414C46413101000000000005000000414C464132
+      010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 408
+    Top = 384
+  end
+  object DataSourcecountry: TDataSource
+    DataSet = country
+    Left = 480
+    Top = 384
+  end
+  object hteyinat: TOracleDataSet
+    SQL.Strings = (
+      'select * from reportdescs'
+      '')
+    QBEDefinition.QBEFieldDefs = {
+      0400000002000000020000004944010000000000040000004E414D4501000000
+      0000}
+    Session = sboapiDataModule.SBSession
+    Left = 328
+    Top = 448
+  end
+  object DataSourcehteyinat: TDataSource
+    DataSet = hteyinat
+    Left = 392
+    Top = 448
+  end
+  object Tobic: TOracleDataSet
+    SQL.Strings = (
+      'select * from sw_banks where bic=:dbs')
+    Variables.Data = {0300000001000000040000003A444253050000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      040000000D000000030000004249430100000000000200000049440100000000
+      00040000004E414D450100000000000400000043495459010000000000060000
+      004252414E43480100000000000700000042414E4B494E470100000000000800
+      000042414E4B494E475F01000000000007000000414444524553530100000000
+      0007000000434F44455A495001000000000007000000434F554E545259010000
+      00000003000000504F4201000000000005000000434954593201000000000008
+      000000434F554E54525932010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 256
+    Top = 512
+  end
+  object DataSource1Tobic: TDataSource
+    DataSet = Tobic
+    Left = 320
+    Top = 512
+  end
+  object out_archive: TOracleDataSet
+    SQL.Strings = (
+      
+        'select s.*  from sw_out_sba s where MF32A_DATE between :dat1 and' +
+        ' :dat2')
+    Variables.Data = {
+      0300000002000000050000003A444154310C0000000000000000000000050000
+      003A444154320C0000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      0400000054000000040000004D463230010000000000050000004D4632334201
+      0000000000050000004D46323654010000000000040000004D46323701000000
+      0000050000004D46333241010000000000040000004D4633360100000000000A
+      00000053454E444552545950450100000000000900000053454E444552424943
+      0100000000000800000053454E4445524C540100000000000B0000004150504C
+      49434154494F4E0100000000000700000046494E434F50590100000000000B00
+      00004D45535341474554595045010000000000080000005052494F5249545901
+      00000000000A0000004D4F4E49544F52494E470100000000000C000000524543
+      4549564552545950450100000000000B00000052454345495645524249430100
+      000000000A0000004D463332415F444154450100000000000A0000004D463332
+      415F435552520100000000000C0000004D463332415F414D4F554E5401000000
+      00000C0000004D4635305F4143434F554E54010000000000080000004D463530
+      5F424943010000000000100000004D4635305F4E414D45244144524553530100
+      000000000C0000004D4635325F4143434F554E54010000000000080000004D46
+      35325F424943010000000000100000004D4635325F4E414D4524414452455353
+      0100000000000C0000004D4635335F4143434F554E5401000000000008000000
+      4D4635335F424943010000000000120000004D4635335F4E414D45244C4F4341
+      54494F4E0100000000000C0000004D4635345F4143434F554E54010000000000
+      080000004D4635345F424943010000000000120000004D4635345F4E414D4524
+      4C4F434154494F4E0100000000000C0000004D4635355F4143434F554E540100
+      00000000080000004D4635355F424943010000000000120000004D4635355F4E
+      414D45244C4F434154494F4E0100000000000C0000004D4635365F4143434F55
+      4E54010000000000080000004D4635365F424943010000000000120000004D46
+      35365F4E414D45244C4F434154494F4E0100000000000C0000004D4635375F41
+      43434F554E54010000000000080000004D4635375F4249430100000000001200
+      00004D4635375F4E414D45244C4F434154494F4E0100000000000C0000004D46
+      35395F4143434F554E54010000000000100000004D4635395F4E414D45244144
+      5245535301000000000006000000535441545553010000000000020000004944
+      0100000000000B0000004D463731465F4348494C440100000000000B0000004D
+      463731475F4348494C44010000000000030000004D3230010000000000040000
+      004D323342010000000000040000004D323654010000000000040000004D3332
+      41010000000000030000004D3336010000000000030000004D35300100000000
+      00030000004D3532010000000000030000004D3533010000000000030000004D
+      3534010000000000030000004D3535010000000000030000004D353601000000
+      0000030000004D3537010000000000030000004D353901000000000003000000
+      4D3730010000000000040000004D373141010000000000040000004D37314601
+      0000000000040000004D373147010000000000030000004D3732010000000000
+      040000004D3737420100000000000E0000004D4632305F5245464552454E4345
+      010000000000050000004F505F49440100000000000A00000044454C5F535441
+      5455530100000000000B000000434F4D4D49545F4F5049440100000000000C00
+      0000464352454154455F4F5049440100000000000B00000044454C4554455F4F
+      504944010000000000040000004D463730010000000000050000005348494652
+      010000000000050000004D46373141010000000000040000004D463732010000
+      000000050000004D463737420100000000000B0000004544495445445F4F5049
+      440100000000000500000054525F49440100000000000600000054525F494432
+      01000000000004000000494E464F010000000000030000005441580100000000
+      0007000000434F554E5452590100000000000700000048455341424154010000
+      000000080000004D4635395F424943010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 208
+    Top = 448
+  end
+  object outarchive: TDataSource
+    DataSet = out_archive
+    Left = 272
+    Top = 448
+  end
+  object CORR: TOracleDataSet
+    SQL.Strings = (
+      
+        'SELECT * FROM sw_coraccounts where (BIC=:b) and (VALUTE=(select ' +
+        'VALUTE from smart.avalute_t where VAL_NAME=:v))')
+    Variables.Data = {
+      0300000002000000020000003A42050000000000000000000000020000003A56
+      050000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      0400000005000000020000004944010000000000060000004143435F49440100
+      000000000600000056414C555445010000000000030000004249430100000000
+      0009000000434F5241434F554E54010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 456
+    Top = 288
+  end
+  object corrsource: TDataSource
+    DataSet = CORR
+    Left = 472
+    Top = 336
+  end
+  object SW_IN_FORAddIn: TOracleDataSet
+    SQL.Strings = (
+      
+        'select s.*,sw_main.Find_UserName2_in(s.id) from sw_in_syn s  whe' +
+        're s.status<>10 and s.id in (:IDs)'
+      ''
+      ''
+      ''
+      ' '
+      ' ')
+    Variables.Data = {
+      0300000001000000040000003A49445301000000050000006E756C6C00000000
+      00}
+    QBEDefinition.QBEFieldDefs = {
+      0400000019000000060000005354415455530100000000000200000049440100
+      00000000050000004F505F494401000000000005000000534849465201000000
+      00000600000041434F554E54010000000000090000005245464552414E434501
+      00000000000400000056414C5501000000000003000000424943010000000000
+      0600000056414C5554450100000000000B0000004445534352495054494F4E01
+      000000000010000000434F4D4D495445445F555345525F494401000000000002
+      0000004D5401000000000008000000414C4C5F544558540100000000000B0000
+      0044454C4554455F4F5049440100000000000300000044415401000000000004
+      000000494E464F010000000000030000005441580100000000000C0000004445
+      534352495054494F4E32010000000000040000004B4F44450100000000000400
+      0000434F525201000000000008000000424E4B5F564F494E0100000000000B00
+      00004348454B45445F4F50494401000000000007000000434F554E5452590100
+      0000000007000000484553414241540100000000001E00000053575F4D41494E
+      2E46494E445F555345524E414D45325F494E28532E4944010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 400
+    Top = 320
+    object FloatField1: TFloatField
+      FieldName = 'ID'
+    end
+    object StringField1: TStringField
+      FieldName = 'ACOUNT'
+      Size = 100
+    end
+    object StringField2: TStringField
+      FieldName = 'REFERANCE'
+      Size = 100
+    end
+    object FloatField2: TFloatField
+      FieldName = 'VALU'
+    end
+    object StringField3: TStringField
+      FieldName = 'BIC'
+      Size = 100
+    end
+    object StringField4: TStringField
+      FieldName = 'VALUTE'
+      Size = 100
+    end
+    object StringField5: TStringField
+      FieldName = 'DESCRIPTION'
+      Size = 100
+    end
+    object IntegerField1: TIntegerField
+      FieldName = 'STATUS'
+    end
+    object IntegerField2: TIntegerField
+      FieldName = 'SHIFR'
+    end
+    object FloatField3: TFloatField
+      FieldName = 'COMMITED_USER_ID'
+    end
+    object FloatField4: TFloatField
+      FieldName = 'OP_ID'
+    end
+    object StringField6: TStringField
+      FieldName = 'MT'
+      Size = 100
+    end
+    object StringField7: TStringField
+      FieldName = 'ALL_TEXT'
+      Size = 4000
+    end
+    object FloatField5: TFloatField
+      FieldName = 'DELETE_OPID'
+    end
+    object DateTimeField1: TDateTimeField
+      FieldName = 'DAT'
+    end
+    object StringField8: TStringField
+      FieldName = 'INFO'
+      Size = 200
+    end
+    object StringField9: TStringField
+      FieldName = 'TAX'
+      Size = 100
+    end
+    object StringField10: TStringField
+      FieldName = 'DESCRIPTION2'
+      Size = 100
+    end
+    object StringField11: TStringField
+      FieldName = 'KODE'
+    end
+    object StringField12: TStringField
+      FieldName = 'CORR'
+    end
+    object StringField13: TStringField
+      FieldName = 'BNK_VOIN'
+    end
+    object FloatField6: TFloatField
+      FieldName = 'CHEKED_OPID'
+    end
+    object FloatField7: TFloatField
+      FieldName = 'COUNTRY'
+    end
+    object StringField14: TStringField
+      FieldName = 'HESABAT'
+      Size = 100
+    end
+    object StringField15: TStringField
+      FieldName = 'SW_MAIN.FIND_USERNAME2_IN(S.ID'
+      Size = 4000
+    end
+  end
+  object DS_AccsForComission: TOracleDataSet
+    SQL.Strings = (
+      'select id,acc_no from account -- SBA_ACCOUNT'
+      
+        'where kli_id=(select kli_id from account where acc_no=:v_acc_no)' +
+        '  ')
+    Variables.Data = {
+      0300000001000000090000003A565F4143435F4E4F0500000000000000000000
+      00}
+    QBEDefinition.QBEFieldDefs = {
+      0400000002000000020000004944010000000000060000004143435F4E4F0100
+      00000000}
+    Session = sboapiDataModule.SBSession
+    Left = 528
+    Top = 176
+    object DS_AccsForComissionID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object DS_AccsForComissionACC_NO: TStringField
+      FieldName = 'ACC_NO'
+      Size = 28
+    end
+  end
+  object AccsForComission_Data: TDataSource
+    DataSet = DS_AccsForComission
+    Left = 520
+    Top = 232
+  end
+  object Chk_AccNo: TOracleDataSet
+    SQL.Strings = (
+      
+        'select cust_type from bal_spr1 where bal_cn=(select bal_cn1 from' +
+        ' account where acc_no=:acc_no)'
+      '')
+    Variables.Data = {0300000001000000070000003A4143435F4E4F050000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {040000000100000009000000435553545F54595045010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 480
+    Top = 456
+    object Chk_AccNoCUST_TYPE: TIntegerField
+      FieldName = 'CUST_TYPE'
+    end
+  end
+  object settings_fields5: TOracleDataSet
+    SQL.Strings = (
+      
+        'select sw_field from sw_fields where :formats is not null order ' +
+        'by SW_FIELD')
+    Variables.Data = {
+      0300000001000000080000003A464F524D415453050000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {04000000010000000800000053575F4649454C44010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 408
+    Top = 512
+  end
+  object set_fields5: TDataSource
+    DataSet = settings_fields5
+    Left = 488
+    Top = 512
+  end
+  object ValForCommit_Dsrc: TDataSource
+    DataSet = ValuteForCommit
+    Left = 584
+    Top = 448
+  end
+  object ValuteForCommit: TOracleDataSet
+    SQL.Strings = (
+      'select * from avalute'
+      '')
+    QBEDefinition.QBEFieldDefs = {
+      04000000170000000600000056414C5554450100000000000800000056414C5F
+      4E414D450100000000000900000056414C555F4E414D450100000000000A0000
+      0056414C555F53484F5254010000000000060000005553544F52470100000000
+      0006000000555354504F4B0100000000000800000056414C555F47454E010000
+      0000000700000056414C555F415A010000000000050000005553494E47010000
+      0000000A00000056414C555F4F544845520100000000000A00000056414C555F
+      494E5445520100000000000900000056414C555F42414C410100000000000900
+      0000505249535441564B4101000000000007000000434F554E54525901000000
+      0000080000005553545F504F4B31010000000000070000004F46464943414C01
+      0000000000050000004C494D4954010000000000050000004445424554010000
+      000000060000004B524544495401000000000006000000463535303150010000
+      0000000600000046353530315601000000000006000000534445424554010000
+      0000000700000053435245444954010000000000}
+    QueryAllRecords = False
+    Session = sboapiDataModule.SBSession
+    Left = 584
+    Top = 392
+  end
+end

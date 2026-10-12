@@ -1,0 +1,163 @@
+﻿unit UnitSearchLegalCustName;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls, Grids, DBGrids, DB, OracleData,sboapiDataModuleImpl;
+
+type
+  TFormSearchLegalCustName = class(TForm)
+    DBGrid1: TDBGrid;
+    Panel1: TPanel;
+    EditName: TEdit;
+    EditCust_Type: TEdit;
+    Button1: TButton;
+    EditID: TEdit;
+    LegalDataSource: TDataSource;
+    LegalDataSet: TOracleDataSet;
+    LegalDataSetID: TIntegerField;
+    LegalDataSetDOC_TYPE: TFloatField;
+    LegalDataSetPASSPIN: TWideStringField;
+    LegalDataSetPASSER: TWideStringField;
+    LegalDataSetPASPNUM: TWideStringField;
+    LegalDataSetBIRTHPLACE: TWideStringField;
+    LegalDataSetPASPPLACE: TWideStringField;
+    LegalDataSetPASPDATE: TDateTimeField;
+    LegalDataSetPASSEXPIRE: TDateTimeField;
+    LegalDataSetCITIZENSHIP: TFloatField;
+    LegalDataSetCITIZENSHIP2: TFloatField;
+    LegalDataSetCITIZENSHIP3: TFloatField;
+    LegalDataSetINN: TWideStringField;
+    LegalDataSetSEX: TIntegerField;
+    LegalDataSetFAM_STATUS: TIntegerField;
+    LegalDataSetADRS_STATE: TWideStringField;
+    LegalDataSetBIRTH_STATE: TWideStringField;
+    LegalDataSetBIRTHDAY: TDateTimeField;
+    LegalDataSetDOC_COUNTRY: TFloatField;
+    LegalDataSetCITY: TWideStringField;
+    LegalDataSetREG_ZIP: TWideStringField;
+    LegalDataSetADDRESS: TWideStringField;
+    LegalDataSetPHONE_M: TWideStringField;
+    LegalDataSetPHONE_H: TWideStringField;
+    LegalDataSetE_MAIL: TWideStringField;
+    LegalDataSetNEREZIDENT: TFloatField;
+    LegalDataSetCUST_TYPE: TIntegerField;
+    LegalDataSetNAME: TWideStringField;
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure EditIDKeyPress(Sender: TObject; var Key: Char);
+    procedure EditIDExit(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure ActionSearchExecute(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormSearchLegalCustName: TFormSearchLegalCustName;
+
+implementation
+
+uses UnitSearchCustName, ExpUnitNewImpl;
+
+
+{$R *.dfm}
+
+procedure TFormSearchLegalCustName.Button1Click(Sender: TObject);
+begin
+
+  with ExpFormNew do
+  begin
+    with DBGrid1.DataSource.DataSet do
+    begin
+      RadioGroup1.ItemIndex:=3;
+      if FieldByName('nerezident').AsInteger=1 then RadioButton1.Checked :=true
+                                               else RadioButton2.Checked :=true;
+
+      EditCustid.Text            :=FieldByName('id').AsString;
+      EditName.Text              :=FieldByName('name').AsString;
+      Adrs_State.KeyValue        :=FieldByName('adrs_state').AsString;
+      EditVoin.Text              :=FieldByName('inn').AsString;
+      Adrs_City.KeyValue         :=FieldByName('city').AsString;
+      ZipQ.Text                  :=FieldByName('reg_zip').AsString;
+      EditMobil.Text             :=FieldByName('phone_m').AsString;
+      EditPhone.Text             :=FieldByName('phone_h').AsString;
+      EditEmail.Text             :=FieldByName('e_mail').AsString;
+      AdressEdit.Text            :=FieldByName('address').AsString;
+
+    end;
+    FormSearchLegalCustName.close;
+  end;
+end;
+
+procedure TFormSearchLegalCustName.EditIDExit(Sender: TObject);
+begin
+   TEdit(Sender).Text :=EmptyStr;
+end;
+
+procedure TFormSearchLegalCustName.EditIDKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if Key = #13  then
+  FormSearchLegalCustName.ActionSearchExecute(Sender);
+end;
+
+procedure TFormSearchLegalCustName.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+  with LegalDataSet do
+  begin
+    Filter:='';
+    Filtered:=false;
+  end;
+end;
+
+procedure TFormSearchLegalCustName.FormShow(Sender: TObject);
+begin
+  LegalDataSet.Open;
+  LegalDataSet.Filtered:=false;
+  LegalDataSet.Filter:='name='''+ ExpFormNew.EditName.Text+ ('*')+'''' ;
+  LegalDataSet.Filtered:=True;
+end;
+
+procedure TFormSearchLegalCustName.ActionSearchExecute(Sender: TObject);
+var
+  SearchField : string;
+  SearchOptions : TSearchRecordOptions;
+  Grid :TDBGrid;
+begin
+  SearchOptions := [srIgnoreCase ,srPartialMatch ];
+
+  with Sender as TEdit  do
+  begin
+    SearchField := copy(Name,5,length(Name));
+    with  TOracleDataSet(DBGrid1.DataSource.DataSet) do
+
+    if  not SearchRecord(
+                  SearchField
+                 ,Text
+                 ,SearchOptions + [srFromCurrent , srForward ]
+                 ) then
+
+    if MessageDlg(
+              'Axtarış sona çatdı.'+#13+'Əvvəldən başlasın?'
+             ,mtInformation
+             ,[mbNo , mbYes]
+             ,0
+             ) = mrYes  then
+
+    if not SearchRecord(
+                 SearchField
+                ,Text
+                ,SearchOptions + [ srFromBeginning ]
+                )  then
+    MessageDlg('Yazı tapılmayıb!',mtInformation,[mbOK],0);
+
+ end;
+end;
+
+
+end.

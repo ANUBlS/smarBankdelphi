@@ -1,0 +1,83 @@
+﻿unit CUST_COMBİNED_Unit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, Grids, DBGrids, CurrencyEdit, ExtCtrls, DBCtrls;
+
+type
+  TFORM_CUST_COMBİNED = class(TForm)
+    Panel2: TPanel;
+    Panel3: TPanel;
+    b: TDBGrid;
+    DBNavigator1: TDBNavigator;
+    procedure FormShow(Sender: TObject);
+    procedure bTitleClick(Column: TColumn);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FORM_CUST_COMBİNED: TFORM_CUST_COMBİNED;
+
+implementation
+
+uses DataModuleConclusion,ConclusionMainUnitImpl,CommonDecls;
+
+{$R *.dfm}
+
+procedure TFORM_CUST_COMBİNED.bTitleClick(Column: TColumn);
+var
+  titlename: string;
+  kind: string;
+begin
+
+  if not((Column.FieldName = 'NAME') or (Column.FieldName = 'ID')) then
+    Exit;
+  // else
+
+  titlename := Column.FieldName;
+  if Column.Field.Calculated then
+    Exit;
+  with DataModuleConcl.ODS_CUST_COMBİNED do
+  begin
+    Screen.Cursor := crSQLWait;
+    SetVariable('sort', titlename + ' ' + kind);
+    Open;
+    refresh;
+    Screen.Cursor := crDefault;
+  end;
+
+
+end;
+
+procedure TFORM_CUST_COMBİNED.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+DataModuleConcl.ODS_CUST_COMBİNED.Refresh;
+if DataModuleConcl.ODS_CUST_COMBİNED.RecordCount>0 then
+begin
+DataModuleConcl.ODS_CUST_COMBİNED_SUM.close;
+DataModuleConcl.ODS_CUST_COMBİNED_SUM.SetVariable('creditid',crid);
+DataModuleConcl.ODS_CUST_COMBİNED_SUM.open;
+if ConclusionForm.DBNumberEditEh1.Value<>
+  FloatToStr ( DataModuleConcl.ODS_CUST_COMBİNED_SUM.FieldByName('ammount').AsFloat) then
+  begin
+    showmessage('Birgə borc alanlara verilmiş məbləğin cəmi '+#13+' Kreditin məbləği ilə eyni olmalıdı  ! ');
+    Abort;
+ end;
+
+end;
+end;
+
+procedure TFORM_CUST_COMBİNED.FormShow(Sender: TObject);
+begin
+DataModuleConcl.ODS_CUST_COMBİNED.Close;
+DataModuleConcl.ODS_CUST_COMBİNED.SetVariable('creditid',crid);
+DataModuleConcl.ODS_CUST_COMBİNED.open;
+end;
+ end.

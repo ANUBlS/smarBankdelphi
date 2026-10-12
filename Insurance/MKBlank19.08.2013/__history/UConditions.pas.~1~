@@ -1,0 +1,77 @@
+unit UConditions;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, Buttons, Grids, DBGrids, ExtCtrls, DBCtrls;
+
+type
+  TfrmCond = class(TForm)
+    GroupBox1: TGroupBox;
+    Panel1: TPanel;
+    memConditions: TMemo;
+    DBGrid1: TDBGrid;
+    btAdd: TBitBtn;
+    btOk: TBitBtn;
+    DBNavigator1: TDBNavigator;
+    Label1: TLabel;
+    BitBtn1: TBitBtn;
+    BitBtn2: TBitBtn;
+    BitBtn3: TBitBtn;
+    procedure btAddClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure btOkClick(Sender: TObject);
+    procedure BitBtn2Click(Sender: TObject);
+    procedure BitBtn3Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  frmCond: TfrmCond;
+
+implementation
+
+uses UMKDataMod, UMKBlank;
+
+{$R *.DFM}
+
+procedure TfrmCond.btAddClick(Sender: TObject);
+begin
+     with memConditions  do
+     begin
+          if Text <> '' then Text := Text +'.'+ #13#10;
+          Text:= Text+InsMkDataMod.ODSConditionsNAME.Value+'.';
+     end;
+end;
+
+procedure TfrmCond.FormCreate(Sender: TObject);
+begin
+      if InsMkDataMod.ODSConditions.IsEmpty then btAdd.Enabled := False;
+      DBGrid1.DataSource := InsMkDataMod.DSConditions;
+      memConditions.Text:=InsMkDataMod.ODSContractsConditions.Value;
+end;
+
+procedure TfrmCond.btOkClick(Sender: TObject);
+begin
+     InsMkDataMod.ODSContracts.Edit;
+     InsMkDataMod.ODSContractsConditions.Value:=memConditions.Text;
+     InsMkDataMod.ODSContracts.Post;
+     ModalResult:=mrOk;
+end;
+
+procedure TfrmCond.BitBtn2Click(Sender: TObject);
+begin
+     memConditions.Lines.SaveToFile(ExtractFilePath(Application.ExeName)+ '\InsConditions.txt');
+     memConditions.Text:='';
+end;
+
+procedure TfrmCond.BitBtn3Click(Sender: TObject);
+begin
+      memConditions.Lines.LoadFromFile(ExtractFilePath(Application.ExeName)+ '\InsConditions.txt');
+end;
+
+end.

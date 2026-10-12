@@ -1,0 +1,78 @@
+unit UntBalnceRpt3;
+
+interface
+
+uses Windows, SysUtils, Messages, Classes, Graphics, Controls,
+  StdCtrls, ExtCtrls, Forms, Quickrpt, QRCtrls, QRExport;
+
+type
+  TBalanceRpt3 = class(TQuickRep)
+    TitleBand1: TQRBand;
+    QRShape1: TQRShape;
+    QRLabel1: TQRLabel;
+    QRLabel7: TQRLabel;
+    QRLabel15: TQRLabel;
+    QRLabel16: TQRLabel;
+    QRLabel17: TQRLabel;
+    QRLabel18: TQRLabel;
+    QRLabel12: TQRLabel;
+    QRShape5: TQRShape;
+    QRShape3: TQRShape;
+    QRShape4: TQRShape;
+    QRShape2: TQRShape;
+    QRShape6: TQRShape;
+    QRSubDetail1: TQRSubDetail;
+    SummaryBand1: TQRBand;
+    QRLabel2: TQRLabel;
+    QRDBText1: TQRDBText;
+    QRDBText2: TQRDBText;
+    QRDBText3: TQRDBText;
+    QRDBText4: TQRDBText;
+    QRLabel3: TQRLabel;
+    QRLBank: TQRLabel;
+    QRLCode: TQRLabel;
+    QRLValute: TQRLabel;
+    QRLabel10: TQRLabel;
+    QRDBText5: TQRDBText;
+    QRExpr1: TQRExpr;
+    QRExpr2: TQRExpr;
+    QRExpr3: TQRExpr;
+    QRExpr4: TQRExpr;
+    QRShape7: TQRShape;
+    QRShape8: TQRShape;
+    QRShape9: TQRShape;
+    QRShape10: TQRShape;
+    FDate: TQRLabel;
+    LDate: TQRLabel;
+    QRTextFilter1: TQRTextFilter;
+    QRDBText6: TQRDBText;
+    QRLSedr: TQRLabel;
+    QRDBText7: TQRDBText;
+    QRDBText8: TQRDBText;
+    QRDBText9: TQRDBText;
+    QRLBM: TQRLabel;
+    procedure QuickRepBeforePrint(Sender: TCustomQuickRep;
+      var PrintReport: Boolean);
+  private
+
+  public
+
+  end;
+
+var
+  BalanceRpt3: TBalanceRpt3;
+
+implementation
+
+uses UnitDataMod,sboapiDataModuleImpl, SBTranslateProc;
+
+
+{$R *.DFM}
+
+procedure TBalanceRpt3.QuickRepBeforePrint(Sender: TCustomQuickRep;
+  var PrintReport: Boolean);
+begin
+SBTranslateProc.TranslateAllCompQuickRep(Self,sboapiDataModule.OrPack_SL);
+end;
+
+end.

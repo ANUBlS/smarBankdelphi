@@ -1,0 +1,529 @@
+﻿unit CustanalysUnit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+   ExtCtrls, Grids, DBGridEh, Buttons, StdCtrls, ComCtrls,
+  ImgList, ToolWin, PluginToolBar, ActnList, DBCtrls, CMExcelExport,
+  CheckLst, Evanescence, Mask, DBCtrlsEh, DBLookupEh,oracledata ,oracle,Menus,DB,
+  DBGridEhGrouping, GridsEh;
+
+
+  type
+  TCustanalysForm = class(TForm)
+    MainPanel: TPanel;
+    PluginToolBar1: TPluginToolBar;
+    ImageList1: TImageList;
+    CustPanel: TPanel;
+    DBGridEh1: TDBGridEh;
+    ActionList: TActionList;
+    ImageList2: TImageList;
+    ToolButton6: TToolButton;
+    ActionClose: TAction;
+    ActionExcelExport: TAction;
+    ToolButton8: TToolButton;
+    ExcelExport: TCMExcelExport;
+    ToolButton9: TToolButton;
+    ActionSearchCust: TAction;
+    ActionFilteAccept: TAction;
+    ActionFilterReject: TAction;
+    SearchPanel: TGroupBox;
+    Panel13: TPanel;
+    StaticText4: TStaticText;
+    Editboorowername: TEdit;
+    Panel14: TPanel;
+    StaticText5: TStaticText;
+    EditBoorowerid: TEdit;
+    ToolButton3: TToolButton;
+    ToolButton7: TToolButton;
+    ActionDateinterval: TAction;
+    Action1: TAction;
+    PopupMenu2: TPopupMenu;
+    N3: TMenuItem;
+    N4: TMenuItem;
+    N5: TMenuItem;
+    ToolButton1: TToolButton;
+    Label1: TLabel;
+    DBLookupComboBox1: TDBLookupComboBox;
+    CheckBox1: TCheckBox;
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+    procedure ActionCloseExecute(Sender: TObject);
+    procedure ActionExcelExportExecute(Sender: TObject);
+    procedure ActionSearchCustExecute(Sender: TObject);
+    procedure EditBooroweridKeyPress(Sender: TObject; var Key: Char);
+    procedure EditBooroweridExit(Sender: TObject);
+    procedure EditboorowernameKeyPress(Sender: TObject; var Key: Char);
+    procedure EditboorowernameExit(Sender: TObject);
+    procedure ActionDateintervalExecute(Sender: TObject);
+    procedure Tarix1Click(Sender: TObject);
+    procedure Excel1Click(Sender: TObject);
+    procedure EditAcc_noExit(Sender: TObject);
+    procedure N1DrawItem(Sender: TObject; ACanvas: TCanvas; ARect: TRect;
+      Selected: Boolean);
+    procedure DBGridEh1TitleClick(Column: TColumnEh);
+    procedure N3Click(Sender: TObject);
+    procedure N4Click(Sender: TObject);
+    procedure N5Click(Sender: TObject);
+    procedure DBGridEh1DblClick(Sender: TObject);
+    procedure DBGridEh1KeyPress(Sender: TObject; var Key: Char);
+    procedure ToolButton1Click(Sender: TObject);
+    procedure CheckBox1Click(Sender: TObject);
+
+   private
+    { Private declarations }
+
+    function  FindNextRecord(DataSet : TDataSet;FieldName : String;Value : String) : Boolean;
+    procedure MenuShrift(Sender: TObject; ACanvas: TCanvas;
+                  ARect: TRect; Selected: Boolean);
+    public
+       FFilterGrid :TDBGridEh;
+    { Public declarations }
+  end;
+
+var
+  CustanalysForm: TCustanalysForm;
+
+implementation
+  uses CustAnalysDataModuleImpl,Filterunit,CommonDecls,
+  CreditsinDateUnit,DateintervalUnit,PaymentsUnit,SBSystem,CreditUnit,sboapiDataModuleImpl, SBTranslateProc,
+  PayImpl;
+{$R *.DFM}
+
+
+function TCustAnalysForm.FindNextRecord(DataSet : TDataSet;FieldName : String;Value : String) : Boolean;
+
+resourcestring
+  rsRecordRecachedEOF = 'АAxtarış cərgənin sonuna çatıb .';
+  rsContinueFromTop   = 'Əvvəldən axtarmaqla davam etmək istayirsiniz?';
+  rsRecordNotFound    = 'Yazı tapılmadı.';
+
+var
+  SearchOptions : TSearchRecordOptions;
+
+begin
+  SearchOptions := [srIgnoreCase ,srPartialMatch];
+  with  (DataSet as TOracleDataSet) do
+  begin
+
+    Result := SearchRecord(
+                FieldName,
+                Value,
+                SearchOptions + [srFromCurrent, srForward]
+    );
+
+    if not Result then
+
+    if MessageDlg(
+              rsRecordRecachedEOF + #10#13 + rsContinueFromTop
+             ,mtInformation
+             ,[mbNo , mbYes]
+             ,0
+             ) = mrYes  then
+    begin
+
+      Result := SearchRecord(
+                  FieldName,
+                  Value,
+                  SearchOptions + [srFromBeginning]
+      );
+
+      if not Result then
+      MessageDlg(rsRecordNotFound,mtInformation,[mbOk],0);
+
+    end;
+  end;
+end;
+
+
+procedure TCustanalysForm.MenuShrift(Sender: TObject; ACanvas: TCanvas;
+  ARect: TRect; Selected: Boolean);
+var
+  LineBottom: Integer;
+  SText: String;
+  Bar: TRect;
+
+begin
+  with ACanvas, Sender as TMenuItem do
+  begin
+    with Font do
+    begin
+      Name := 'Azl Sans Serif';
+      Charset := RUSSIAN_CHARSET;
+      if Default then
+        Style := [fsBold];
+    end;
+    if Caption = '-' then
+    begin
+      Pen.Color := clBlack;
+      LineBottom := (ARect.Top + (ARect.Bottom - ARect.Top) div 2)-1;
+      MoveTo(ARect.Left, LineBottom);
+      LineTo(ARect.Right, LineBottom);
+      inc(LineBottom);
+      Pen.Color := clWhite;
+      MoveTo(ARect.Left, LineBottom);
+      LineTo(ARect.Right, LineBottom);
+    end
+    else
+    begin
+      if Selected then
+      begin
+        Brush.Color := clNavy;
+        if Enabled then
+          Font.Color := clWhite
+        else
+          Font.Color := clSilver;
+      end
+      else
+      begin
+        Brush.Color := clBtnFace;
+        if Enabled then
+          Font.Color := clBlack
+        else
+          Font.Color := clGrayText;
+      end;
+      Bar := ARect;
+     // Inc(Bar.Left, 22);
+      FillRect(Bar);
+      TextOut(ARect.Left+2, ARect.Top+1, Caption);
+    end;
+    SText :=ShortCutToText(ShortCut);
+    TextOut(ARect.Right-TextWidth(SText)-2, ARect.Top+1, SText);
+    if ImageIndex <> -1 then
+      with GetParentMenu do
+        if Assigned(Images) then
+        begin
+          if Checked then
+          begin
+            Bar.Left := ARect.Left + 1;
+            Bar.Right := Bar.Left + 16;
+            Bar.Top := ARect.Top + 1;
+            Bar.Bottom := Bar.Top + 16;
+
+            ACanvas.Brush.Color := clBtnShadow;
+            ACanvas.FrameRect(Bar);
+
+            Inc(Bar.Left, 2);
+            Inc(Bar.Right, 2);
+            Inc(Bar.Top, 2);
+            Inc(Bar.Bottom, 2);
+
+            ACanvas.Brush.Color := clBtnHighlight;
+            ACanvas.FrameRect(Bar);
+
+            Dec(Bar.Left, 1);
+            Dec(Bar.Right, 1);
+            Dec(Bar.Top, 1);
+            Dec(Bar.Bottom, 1);
+
+            if Selected then
+              ACanvas.Brush.Color := clBtnFace
+            else
+              ACanvas.Brush.Color := clBtnHighlight;
+            ACanvas.FillRect(Bar);
+          end;
+
+          Images.Draw(ACanvas, ARect.Left, ARect.Top, ImageIndex, Enabled);
+        end;
+  end;
+end;
+
+
+
+
+procedure TCustanalysForm.FormCreate(Sender: TObject);
+begin
+
+   Screen.Cursor := crHourGlass;
+
+   try
+
+   try
+     CustAnalysDataModule := TCustAnalysDataModule.Create(Self);
+     CreditForm := TCreditForm.Create(Self);
+     FilterForm := TFilterForm.create(self);
+     DateintervalForm := TDateintervalForm.Create(Self);
+     PaymentsForm := TPaymentsForm.Create(Self);
+     CreditinDateForm := TCreditinDateForm.Create(Self);
+     PayForm:=TPayForm.Create(Self);
+     with CustAnalysDataModule do
+     begin
+
+       with CustAnalysDataSet do
+       begin
+         if Active then CloseAll;
+         SetVariable('orderfield','ID');
+         Open;
+       end;
+
+       CustomersDataSet.Open;
+       CurrencysDataSet.Open;
+       PersonsDataSet.Open;
+       UsersDataSet.Open;
+       FilialDataSet.Open;
+       CategoriesDataSet.Open;
+       UserGroupsDataSet.Open;
+       CreditTypeDataSet.Open;
+
+     end;
+
+     SearchPanel.Visible := True;
+
+     with FilterForm do
+     begin
+       EvanescenceValute.Open;
+       EvanescenceFilial.Open;
+     end;
+   except
+     Screen.Cursor := crDefault;
+     raise;
+   end;
+
+   finally
+     Screen.Cursor := crDefault;
+   end;
+ SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TCustanalysForm.FormDestroy(Sender: TObject);
+begin
+   with CustAnalysDataModule do
+   begin
+      CustAnalysDataSet.CloseAll;
+      CreditAnalysDataSet.CloseAll;
+      CustomersDataSet.CloseAll;
+      CurrencysDataSet.CloseAll;
+      PersonsDataSet.CloseAll;
+      UsersDataSet.CloseAll;
+      FilialDataSet.CloseAll;
+      CategoriesDataSet.CloseAll;
+      UserGroupsDataSet.CloseAll;
+      CreditTypeDataSet.CloseAll;
+      CustAnalysDataSet.CloseAll;
+      Free;
+   end;
+     FilterForm.EvanescenceValute.Close;
+     FilterForm.EvanescenceFilial.Close;
+     CreditForm.Free ;
+     FilterForm.Free;
+     DateintervalForm.Free ;
+     PaymentsForm.Free;
+     CreditinDateForm.Free;
+
+end;
+
+procedure TCustanalysForm.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+
+   // Resize:=False;
+end;
+
+procedure TCustanalysForm.ActionCloseExecute(Sender: TObject);
+begin
+   Close;
+end;
+
+procedure TCustanalysForm.ActionExcelExportExecute(Sender: TObject);
+begin
+    with ExcelExport do
+    begin
+      Connect;
+      ExportDataset(CustAnalysDataModule.CreditAnalysDataSet,'Müştəri üzrə analiz',True);
+    end;
+end;
+
+
+procedure TCustanalysForm.ActionSearchCustExecute(Sender: TObject);
+var SearchField,SearchRecord : String;
+begin
+   SearchField := Copy((Sender as TEdit).name,5,length((Sender as TEdit).name));
+   SearchRecord := (Sender as TEdit).Text;
+   FindNextRecord (CustAnalysDataModule.CustAnalysDataSet,SearchField,SearchRecord);
+
+end;
+
+procedure TCustanalysForm.CheckBox1Click(Sender: TObject);
+begin
+with CustAnalysDataModule.CustAnalysDataSet do
+begin
+if CheckBox1.Checked then
+begin
+if DBLookupComboBox1.Text<>'' then
+   begin
+
+        Filter := ' expertid='+inttostr(DBLookupComboBox1.KeyValue);
+        Filtered := False;
+    Filtered := True;
+   end;
+end
+else
+ Filtered := False;
+
+end;
+end;
+
+procedure TCustanalysForm.EditBooroweridKeyPress(Sender: TObject; var Key: Char);
+begin
+    if (Key = #13)and(EditBoorowerid.Text <> '')  then
+    //////Samir/////
+    begin
+    Editboorowername.Text:='';
+    EditboorowernameKeyPress(sender,key);
+    //////Samir/////
+     ActionSearchCustExecute(Sender);
+    end;
+end;
+
+procedure TCustanalysForm.EditBooroweridExit(Sender: TObject);
+begin
+  EditBoorowerid.Text := '';
+end;
+
+procedure TCustanalysForm.EditboorowernameKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+   if Key = #13 then
+     // ActionSearchCustExecute(Sender);
+ ///////Samir//////////////////
+   with CustAnalysDataModule, CustAnalysDataSet do
+   begin
+   close;
+   SQL[5] :='';
+   if Editboorowername.Text <> '' then
+      SQL[5] := SQL[5] + ' and nvl(upper(name),0) like upper (''%' +
+        Editboorowername.Text + '%'')';
+    open;
+   end;
+   ///////samir///////////
+   // showmessage(CustAnalysDataModule.CustAnalysDataSet.sql.Text);
+end;
+
+procedure TCustanalysForm.EditboorowernameExit(Sender: TObject);
+begin
+//   Editboorowername.Text := '';
+end;
+
+
+procedure TCustanalysForm.ActionDateintervalExecute(Sender: TObject);
+begin
+   DateintervalForm := TDateintervalForm.Create(Self);
+   DateintervalForm.ShowModal;
+end;
+
+procedure TCustanalysForm.Tarix1Click(Sender: TObject);
+begin
+  ActionDateintervalExecute(Sender);
+end;
+
+procedure TCustanalysForm.Excel1Click(Sender: TObject);
+begin
+   ActionExcelExportExecute(Sender);
+end;
+
+
+procedure TCustanalysForm.EditAcc_noExit(Sender: TObject);
+begin
+   with (sender as TEdit) do
+        Text := '';
+end;
+
+
+procedure TCustanalysForm.N1DrawItem(Sender: TObject; ACanvas: TCanvas;
+  ARect: TRect; Selected: Boolean);
+begin
+   MenuShrift(Sender, ACanvas,
+  ARect, Selected);
+end;
+
+procedure TCustanalysForm.DBGridEh1TitleClick(Column: TColumnEh);
+var
+  OrderField :string;
+begin
+   OrderField := Column.Field.FieldName;
+   Screen.Cursor := crSQLWait;
+   try
+       with TOracleDataSet(DBGridEh1.DataSource.DataSet) do
+       begin
+         if  Active  then  CloseAll;
+         SetVariable('OrderField',OrderField);
+         Open
+       end;
+    finally
+     Screen.Cursor := crDefault;
+    end;
+end;
+
+
+
+procedure TCustanalysForm.N3Click(Sender: TObject);
+begin
+   ActionExcelExportExecute(Sender);
+end;
+
+procedure TCustanalysForm.N4Click(Sender: TObject);
+begin
+   ActionDateintervalExecute(Sender);
+end;
+
+procedure TCustanalysForm.N5Click(Sender: TObject);
+begin
+  SearchPanel.Visible := not SearchPanel.Visible;
+  DBGridEh1.Align := alnone;
+  SearchPanel.Align := albottom;
+  DBGridEh1.Align := alClient;
+  end;
+
+procedure TCustanalysForm.DBGridEh1DblClick(Sender: TObject);
+begin
+    try
+    Screen.Cursor := crSQLWait;
+    with CustAnalysDataModule.CreditAnalysDataSet do
+    begin
+      if Active then CloseAll;
+      SetVariable('boorowerid',CustAnalysDataModule.CustAnalysDataSet.FieldByName('BoorowerId').asInteger);
+      SetVariable('orderfield','numberofcredit');
+      Open;
+    end;
+   CreditForm.ShowModal;
+   finally
+   Screen.Cursor := crDefault;
+   end;
+end;
+
+procedure TCustanalysForm.DBGridEh1KeyPress(Sender: TObject;
+  var Key: Char);
+begin
+   if ord(key) = VK_RETURN then
+   begin
+      with CustAnalysDataModule.CreditAnalysDataSet do
+      begin
+        if Active then CloseAll;
+        SetVariable('boorowerid',CustAnalysDataModule.CustAnalysDataSet.FieldByName('BoorowerId').asInteger);
+       SetVariable('orderfield','numberofcredit');
+       Open;
+      end;
+    CreditForm.ShowModal;
+   end;
+end;
+
+
+
+
+
+procedure TCustanalysForm.ToolButton1Click(Sender: TObject);
+begin
+      with CustAnalysDataModule.CreditAnalysDataSet do
+      begin
+        if Active then CloseAll;
+        SetVariable('boorowerid',CustAnalysDataModule.CustAnalysDataSet.FieldByName('BoorowerId').asInteger);
+       SetVariable('orderfield','numberofcredit');
+       Open;
+      end;
+    CreditForm.ShowModal;
+   end;
+
+end.

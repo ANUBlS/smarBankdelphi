@@ -1,0 +1,106 @@
+unit poscomission;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, Grids, DBGrids, NLSLocalizer, CMExcelExport,LDialogs,oracledata;
+
+type
+  TPOS_COMMISION = class(TForm)
+    Edit1: TEdit;
+    Edit2: TEdit;
+    Edit3: TEdit;
+    Edit4: TEdit;
+    DBGrid1: TDBGrid;
+    Button1: TButton;
+    Button2: TButton;
+    Button3: TButton;
+    Edit5: TEdit;
+    Edit6: TEdit;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    Label6: TLabel;
+    NLSLocalizer1: TNLSLocalizer;
+    CMExcelExport1: TCMExcelExport;
+    procedure Button2Click(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure Button3Click(Sender: TObject);
+    procedure DBGrid1TitleClick(Column: TColumn);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  POS_COMMISION: TPOS_COMMISION;
+
+implementation
+
+uses Unit18;
+
+{$R *.DFM}
+
+procedure TPOS_COMMISION.Button2Click(Sender: TObject);
+begin
+if MessageDlg('Сечилмиш сятир силинсин?',mtinformation,[mbyes,mbno],0)=mryes then
+DataMod_CARDS.POSCOMISSION.Delete;
+DataMod_CARDS.POSCOMISSION.Session.commit;
+end;
+
+procedure TPOS_COMMISION.Button1Click(Sender: TObject);
+begin
+try
+DataMod_CARDS.POSCOMISSION.Insert;
+DataMod_CARDS.POSCOMISSION.FieldByName('POSID').AsString:=Edit1.Text;
+DataMod_CARDS.POSCOMISSION.FieldByName('MINVALUE').AsString:=Edit6.Text;
+DataMod_CARDS.POSCOMISSION.FieldByName('MAXVALUE').AsString:=Edit3.Text;
+DataMod_CARDS.POSCOMISSION.FieldByName('DOMESTICPERCENT').AsString:=Edit4.Text;
+DataMod_CARDS.POSCOMISSION.FieldByName('INTERPERCENT1').AsString:=Edit5.Text;
+DataMod_CARDS.POSCOMISSION.FieldByName('INTERPERCENT2').AsString:=Edit2.Text;
+DataMod_CARDS.POSCOMISSION.Post;
+DataMod_CARDS.POSCOMISSION.Session.Commit;
+DataMod_CARDS.POSCOMISSION.CLOSE;
+DataMod_CARDS.POSCOMISSION.OPEN;
+except
+begin
+DataMod_CARDS.POSCOMISSION.CLOSE;
+DataMod_CARDS.POSCOMISSION.OPEN;
+
+end;
+end;
+end;
+
+procedure TPOS_COMMISION.Button3Click(Sender: TObject);
+begin
+  if not CMExcelExport1.Connected then CMExcelExport1.Connect;
+  CMExcelExport1.ExportDataset(DataMod_CARDS.POSCOMISSION,'POS',true);
+  CMExcelExport1.Disconnect;
+end;
+
+procedure TPOS_COMMISION.DBGrid1TitleClick(Column: TColumn);
+var
+   TitleName :string;
+   SortPosition: word;
+begin
+ SortPosition :=100;
+ //OrderedTitle :=Column.FieldName; //H.R. 24.06.2008
+ if (DBGrid1.DataSource.DataSet.IsEmpty) or (Column.FieldName = EmptyStr) then Exit;
+ Screen.Cursor :=crHourGlass;
+ TitleName :=Column.FieldName;
+ with TOracleDataSet(DBGrid1.DataSource.DataSet) do
+  try
+  
+   SortPosition :=SQL.Add('ORDER BY '+ TitleName);
+   Refresh;
+  finally
+   SQL[SortPosition] :=EmptyStr;
+   Screen.Cursor :=crDefault;
+  end;
+end;
+
+end.

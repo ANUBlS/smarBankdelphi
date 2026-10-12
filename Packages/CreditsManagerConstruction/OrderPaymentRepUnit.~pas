@@ -1,0 +1,71 @@
+unit OrderPaymentRepUnit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  QuickRpt, Qrctrls, ExtCtrls;
+
+type
+  TOrderPaymentRepForm = class(TForm)
+    ReportOrder: TQuickRep;
+    TitleBand1: TQRBand;
+    QRLabel2: TQRLabel;
+    QRDBText1: TQRDBText;
+    QRShape1: TQRShape;
+    QRShape2: TQRShape;
+    QRShape3: TQRShape;
+    QRLabel1: TQRLabel;
+    QRShape4: TQRShape;
+    QRLabel4: TQRLabel;
+    QRLabel5: TQRLabel;
+    QRLabel6: TQRLabel;
+    QRLabel7: TQRLabel;
+    QRDBText3: TQRDBText;
+    QRShape6: TQRShape;
+    QRShape10: TQRShape;
+    QRDBText28: TQRDBText;
+    QRShape17: TQRShape;
+    QRLabel3: TQRLabel;
+    FacticalDebtChild: TQRChildBand;
+    QRShape5: TQRShape;
+    QRShape7: TQRShape;
+    QRShape8: TQRShape;
+    QRDBText4: TQRDBText;
+    QRDBText5: TQRDBText;
+    QRDBText7: TQRDBText;
+    QRDBText27: TQRDBText;
+    QRShape18: TQRShape;
+    QRDBText9: TQRDBText;
+    QRDBText12: TQRDBText;
+    SumaryBand: TQRBand;
+    QRLabel10: TQRLabel;
+    QRLabel11: TQRLabel;
+    QRLabel12: TQRLabel;
+    QRDBText29: TQRDBText;
+    QRLabel13: TQRLabel;
+    QRLabel14: TQRLabel;
+    QRShape13: TQRShape;
+    QRDBText2: TQRDBText;
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  OrderPaymentRepForm: TOrderPaymentRepForm;
+
+implementation
+
+{$R *.DFM}
+uses DatModConstructionImpl,OrderMgrUnit;
+
+procedure TOrderPaymentRepForm.FormKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  If ord(Key) = VK_ESCAPE then Close;
+end;
+
+end.

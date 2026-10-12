@@ -1,0 +1,80 @@
+object FormBProc: TFormBProc
+  Left = 200
+  Top = 155
+  Caption = 'Business processes'
+  ClientHeight = 251
+  ClientWidth = 648
+  Color = clBtnFace
+  Font.Charset = RUSSIAN_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poDesktopCenter
+  OnCreate = FormCreate
+  PixelsPerInch = 96
+  TextHeight = 13
+  object DBGridBussProc: TDBGrid
+    Left = 0
+    Top = 0
+    Width = 648
+    Height = 192
+    Align = alTop
+    DataSource = CO_DataMod.DS_BussProc
+    DrawingStyle = gdsGradient
+    Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit]
+    TabOrder = 0
+    TitleFont.Charset = RUSSIAN_CHARSET
+    TitleFont.Color = clWindowText
+    TitleFont.Height = -11
+    TitleFont.Name = 'Tahoma'
+    TitleFont.Style = []
+    OnDblClick = DBGridBussProcDblClick
+    Columns = <
+      item
+        Expanded = False
+        FieldName = 'ID'
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clNavy
+        Title.Font.Height = -11
+        Title.Font.Name = 'Tahoma'
+        Title.Font.Style = []
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'NAME'
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clNavy
+        Title.Font.Height = -11
+        Title.Font.Name = 'Tahoma'
+        Title.Font.Style = []
+        Visible = True
+      end>
+  end
+  object BtnOK: TButton
+    Left = 442
+    Top = 208
+    Width = 81
+    Height = 27
+    Caption = #1043#1103#1073#1091#1083
+    TabOrder = 1
+    OnClick = DBGridBussProcDblClick
+  end
+  object BtnClose: TButton
+    Left = 537
+    Top = 208
+    Width = 82
+    Height = 27
+    Caption = #1041#1072#1100#1083#1072
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -12
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 2
+    OnClick = BtnCloseClick
+  end
+end

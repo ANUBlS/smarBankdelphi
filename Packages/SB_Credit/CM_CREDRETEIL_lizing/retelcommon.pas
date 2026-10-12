@@ -1,0 +1,31 @@
+unit retelcommon;
+
+interface
+
+uses
+  Controls;
+
+type
+
+  TCredit = record
+    pldgid_t,Currency : Integer;
+   XIDMETHAQQI,KOMISION, CreditLineAmount : Real;
+    AnnualyInterestRate : Real;
+    AnnualyOverdueRate : Real;
+    AnnualyPenaltyRate : Real;
+    DateOfConclusion : TDateTime;
+    DueDateFirstContract : TDateTime;
+    NumberOfCredit : String;
+    PurposeOfCredit : String;
+    BranchID : Integer;
+    boorowerid : Integer;
+    citiesid,usrgroup,ins :integer;
+    edv :Boolean;
+  end;
+
+var
+  SavedCredit : TCredit;
+
+implementation
+
+end.

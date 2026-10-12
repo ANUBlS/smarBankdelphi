@@ -1,0 +1,22 @@
+library PPAccidentBlank;
+
+uses
+  ComServ,
+  PPAccidentBlank_TLB in 'PPAccidentBlank_TLB.pas',
+  UPAccidentBlank in 'UPAccidentBlank.pas' {PAccidentBlank: TActiveForm} {PAccidentBlank: CoClass},
+  UPAccidentRisks in '..\PersonalAccMain\UPAccidentRisks.pas' {fmRiskTypes};
+
+{$E ocx}
+
+exports
+  DllGetClassObject,
+  DllCanUnloadNow,
+  DllRegisterServer,
+  DllUnregisterServer;
+
+{$R *.TLB}
+
+{$R *.RES}
+
+begin
+end.

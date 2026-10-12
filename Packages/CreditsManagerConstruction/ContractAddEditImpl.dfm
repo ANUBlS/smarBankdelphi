@@ -1,0 +1,967 @@
+object AddEditContractForm: TAddEditContractForm
+  Left = 249
+  Top = 281
+  BorderIcons = [biSystemMenu]
+  Caption = 'AddEditContractForm'
+  ClientHeight = 437
+  ClientWidth = 612
+  Color = clBtnFace
+  Font.Charset = RUSSIAN_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poScreenCenter
+  OnActivate = FormActivate
+  OnCanResize = FormCanResize
+  OnKeyPress = FormKeyPress
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 242
+    Height = 400
+    BevelInner = bvRaised
+    BevelOuter = bvLowered
+    TabOrder = 0
+    object GroupBox1: TGroupBox
+      Left = 2
+      Top = 2
+      Width = 238
+      Height = 50
+      Align = alTop
+      Caption = 'Valyuta'
+      TabOrder = 0
+      object BranchCBEh: TDBLookupComboboxEh
+        Tag = 1
+        Left = 5
+        Top = 19
+        Width = 217
+        Height = 21
+        DataField = 'CONTCUR'
+        DataSource = DatModConstruction.CreditPurposeDatSrc
+        DropDownBox.Sizable = True
+        EditButtons = <>
+        KeyField = 'VALUTE'
+        ListField = 'VALU_NAME'
+        ListSource = DatModConstruction.ValutesDatSrc
+        TabOrder = 0
+        Visible = True
+      end
+    end
+    object Panel3: TPanel
+      Left = 2
+      Top = 52
+      Width = 238
+      Height = 49
+      Align = alTop
+      BevelInner = bvLowered
+      TabOrder = 1
+      object StaticText2: TStaticText
+        Left = 2
+        Top = 2
+        Width = 234
+        Height = 17
+        Align = alTop
+        BiDiMode = bdLeftToRight
+        Caption = '                      M'#252'qavil'#601'nin n'#246'mr'#601'si '
+        Color = clSilver
+        ParentBiDiMode = False
+        ParentColor = False
+        TabOrder = 0
+      end
+      object DBEditContNum: TDBEdit
+        Tag = 1
+        Left = 6
+        Top = 24
+        Width = 220
+        Height = 21
+        DataField = 'CONTNUM'
+        DataSource = DatModConstruction.CreditPurposeDatSrc
+        TabOrder = 1
+      end
+    end
+    object GroupBox2: TGroupBox
+      Left = 2
+      Top = 101
+      Width = 238
+      Height = 298
+      Align = alTop
+      Caption = ' M'#601'nzil '
+      TabOrder = 2
+      object Panel10: TPanel
+        Left = 2
+        Top = 43
+        Width = 234
+        Height = 51
+        Align = alBottom
+        BevelInner = bvLowered
+        TabOrder = 1
+        object StaticText8: TStaticText
+          Left = 2
+          Top = 2
+          Width = 230
+          Height = 17
+          Align = alTop
+          Caption = '                       M'#601'nzilin nominal d'#601'y'#601'ri'
+          Color = clSilver
+          ParentColor = False
+          TabOrder = 0
+        end
+        object Edit6: TEdit
+          Left = 4
+          Top = 24
+          Width = 226
+          Height = 21
+          ReadOnly = True
+          TabOrder = 1
+        end
+      end
+      object Panel2: TPanel
+        Left = 2
+        Top = 94
+        Width = 234
+        Height = 202
+        Align = alBottom
+        BevelInner = bvLowered
+        TabOrder = 2
+        object StaticText3: TStaticText
+          Left = 3
+          Top = 8
+          Width = 74
+          Height = 17
+          Caption = 'Binan'#305'n N-si     '
+          Color = clSilver
+          ParentColor = False
+          TabOrder = 0
+        end
+        object StaticText4: TStaticText
+          Left = 3
+          Top = 32
+          Width = 62
+          Height = 17
+          Caption = 'Giri'#351'in N-si   '
+          Color = clSilver
+          ParentColor = False
+          TabOrder = 1
+        end
+        object StaticText5: TStaticText
+          Left = 4
+          Top = 58
+          Width = 68
+          Height = 17
+          Caption = 'M'#601'nzilin N-si  '
+          Color = clSilver
+          ParentColor = False
+          TabOrder = 2
+        end
+        object StaticText6: TStaticText
+          Left = 3
+          Top = 88
+          Width = 108
+          Height = 17
+          Caption = 'M'#601'nzilin sah'#601'si (kv.m)'
+          Color = clSilver
+          ParentColor = False
+          TabOrder = 3
+        end
+        object StaticText19: TStaticText
+          Left = 4
+          Top = 113
+          Width = 70
+          Height = 17
+          Caption = 'Otaqlar'#305'n say'#305
+          Color = clSilver
+          ParentColor = False
+          TabOrder = 4
+        end
+        object Edit1: TEdit
+          Left = 83
+          Top = 6
+          Width = 146
+          Height = 21
+          ReadOnly = True
+          TabOrder = 5
+        end
+        object Edit2: TEdit
+          Left = 83
+          Top = 31
+          Width = 146
+          Height = 21
+          ReadOnly = True
+          TabOrder = 6
+        end
+        object Edit3: TEdit
+          Left = 83
+          Top = 57
+          Width = 147
+          Height = 21
+          ReadOnly = True
+          TabOrder = 7
+        end
+        object Edit4: TEdit
+          Left = 115
+          Top = 85
+          Width = 115
+          Height = 21
+          ReadOnly = True
+          TabOrder = 8
+        end
+        object Edit5: TEdit
+          Left = 80
+          Top = 110
+          Width = 146
+          Height = 21
+          ReadOnly = True
+          TabOrder = 9
+        end
+        object StaticText20: TStaticText
+          Left = 3
+          Top = 137
+          Width = 61
+          Height = 17
+          Caption = '1m2 qiym'#601'ti'
+          Color = clSilver
+          ParentColor = False
+          TabOrder = 10
+        end
+        object StaticText21: TStaticText
+          Left = 3
+          Top = 164
+          Width = 22
+          Height = 17
+          Caption = 'Kod'
+          Color = clSilver
+          ParentColor = False
+          TabOrder = 11
+        end
+        object EditPrice1: TEdit
+          Left = 80
+          Top = 136
+          Width = 121
+          Height = 21
+          TabOrder = 12
+        end
+        object EditFlatCode: TEdit
+          Left = 80
+          Top = 163
+          Width = 121
+          Height = 21
+          TabOrder = 13
+        end
+      end
+      object BitBtn3: TBitBtn
+        Tag = 1
+        Left = 8
+        Top = 16
+        Width = 75
+        Height = 22
+        Caption = 'Se'#231
+        DoubleBuffered = True
+        ParentDoubleBuffered = False
+        TabOrder = 0
+        OnClick = BitBtn3Click
+      end
+    end
+  end
+  object Panel4: TPanel
+    Left = 244
+    Top = 0
+    Width = 369
+    Height = 428
+    BevelInner = bvLowered
+    TabOrder = 1
+    object Panel9: TPanel
+      Left = 2
+      Top = 96
+      Width = 365
+      Height = 63
+      Align = alTop
+      BevelInner = bvLowered
+      BevelOuter = bvSpace
+      TabOrder = 2
+      ExplicitTop = 141
+      object Label1: TLabel
+        Left = 229
+        Top = 4
+        Width = 73
+        Height = 13
+        Caption = 'Ba'#287'lanma tarixi'
+        Color = clSilver
+        ParentColor = False
+      end
+      object Label2: TLabel
+        Left = 18
+        Top = 4
+        Width = 57
+        Height = 13
+        Caption = 'A'#231#305'lma tarixi'
+        Color = clSilver
+        ParentColor = False
+      end
+      object DTPOpenDate: TDateTimePicker
+        Tag = 1
+        Left = 7
+        Top = 17
+        Width = 177
+        Height = 21
+        Date = 37630.633116886600000000
+        Time = 37630.633116886600000000
+        TabOrder = 0
+      end
+      object DTPCloseDate: TDateTimePicker
+        Tag = 1
+        Left = 187
+        Top = 17
+        Width = 177
+        Height = 21
+        Date = 37630.633116886600000000
+        Time = 37630.633116886600000000
+        TabOrder = 1
+        OnChange = DTPCloseDateChange
+      end
+      object DBEdit6: TDBEdit
+        Tag = 1
+        Left = 370
+        Top = 17
+        Width = 71
+        Height = 21
+        DataField = 'INTERESTRATE'
+        TabOrder = 2
+        Visible = False
+      end
+      object StaticText17: TStaticText
+        Left = 377
+        Top = 1
+        Width = 39
+        Height = 17
+        Caption = #304'llik faiz'
+        Color = clSilver
+        ParentColor = False
+        TabOrder = 3
+        Visible = False
+      end
+      object StaticText1: TStaticText
+        Left = 47
+        Top = 42
+        Width = 130
+        Height = 17
+        Caption = 'M'#252'qvil'#601'nin m'#252'dd'#601'ti aylarla'
+        Color = clSilver
+        ParentColor = False
+        TabOrder = 4
+      end
+      object DBEditEh3: TDBEditEh
+        Left = 183
+        Top = 44
+        Width = 121
+        Height = 21
+        DataField = 'PeriodContracts'
+        DataSource = DatModConstruction.CreditPurposeDatSrc
+        EditButtons = <>
+        TabOrder = 5
+        Visible = False
+      end
+      object Edit7: TEdit
+        Left = 177
+        Top = 40
+        Width = 121
+        Height = 21
+        TabOrder = 6
+        OnChange = Edit7Change
+        OnKeyPress = Edit7KeyPress
+      end
+    end
+    object GroupBox5: TGroupBox
+      Left = 2
+      Top = 159
+      Width = 365
+      Height = 239
+      Align = alTop
+      TabOrder = 3
+      object StaticText14: TStaticText
+        Left = 385
+        Top = 1
+        Width = 29
+        Height = 17
+        Caption = 'Girov'
+        Color = clSilver
+        ParentColor = False
+        TabOrder = 3
+        Visible = False
+      end
+      object StaticText15: TStaticText
+        Left = 378
+        Top = 51
+        Width = 104
+        Height = 17
+        Caption = 'Girovun bazar d'#601'y'#601'ri'
+        Color = clSilver
+        ParentColor = False
+        TabOrder = 4
+        Visible = False
+      end
+      object DBEdit4: TDBEdit
+        Tag = 1
+        Left = 494
+        Top = 27
+        Width = 177
+        Height = 21
+        TabOrder = 1
+        Visible = False
+      end
+      object StaticText16: TStaticText
+        Left = 15
+        Top = 12
+        Width = 121
+        Height = 17
+        Caption = 'Gecikmi'#351' borc % d'#601'r'#601'c'#305'si'
+        Color = clSilver
+        ParentColor = False
+        TabOrder = 5
+      end
+      object DBEdit5: TDBEdit
+        Tag = 1
+        Left = 177
+        Top = 10
+        Width = 121
+        Height = 21
+        DataField = 'DUEINTERESTRATE'
+        DataSource = DatModConstruction.CreditPurposeDatSrc
+        TabOrder = 2
+      end
+      object StaticText18: TStaticText
+        Left = 15
+        Top = 171
+        Width = 138
+        Height = 17
+        Caption = 'Ayl'#305'q v'#601' ilkin '#246'd'#601'ni'#351'  m'#601'bl'#601#287'i'
+        Color = clSilver
+        ParentColor = False
+        TabOrder = 6
+      end
+      object DBLookupComboboxEh3: TDBLookupComboboxEh
+        Tag = 1
+        Left = 319
+        Top = 16
+        Width = 177
+        Height = 21
+        DropDownBox.Sizable = True
+        EditButtons = <>
+        TabOrder = 0
+        Visible = False
+      end
+      object StaticText7: TStaticText
+        Left = 15
+        Top = 34
+        Width = 126
+        Height = 17
+        Caption = 'Bir kvadrat metrin qiym'#601'ti'
+        Color = clSilver
+        ParentColor = False
+        TabOrder = 7
+      end
+      object StaticText9: TStaticText
+        Left = 15
+        Top = 57
+        Width = 111
+        Height = 17
+        Caption = 'M'#601'nzilin '#252'mumi qiym'#601'ti'
+        Color = clSilver
+        ParentColor = False
+        TabOrder = 8
+      end
+      object DBNumberEditEh1: TDBNumberEditEh
+        Left = 177
+        Top = 33
+        Width = 121
+        Height = 21
+        currency = True
+        DataField = 'SQUAREMETRAMOUNT'
+        DataSource = DatModConstruction.CreditPurposeDatSrc
+        EditButtons = <>
+        TabOrder = 9
+        Visible = True
+      end
+      object DBNumberEditEh2: TDBNumberEditEh
+        Left = 177
+        Top = 55
+        Width = 121
+        Height = 21
+        currency = True
+        DataField = 'fullammount'
+        DataSource = DatModConstruction.CreditPurposeDatSrc
+        EditButtons = <>
+        TabOrder = 10
+        Visible = True
+      end
+      object DBNumberEditEh3: TDBNumberEditEh
+        Left = 177
+        Top = 168
+        Width = 121
+        Height = 21
+        currency = True
+        DataField = 'monthspay'
+        DataSource = DatModConstruction.CreditPurposeDatSrc
+        EditButtons = <>
+        TabOrder = 11
+        Visible = True
+      end
+      object StaticText10: TStaticText
+        Left = 15
+        Top = 148
+        Width = 114
+        Height = 17
+        Caption = 'C'#601'mi '#246'd'#601'nil'#601'ck m'#601'bl'#601#287' '
+        Color = clSilver
+        ParentColor = False
+        TabOrder = 12
+      end
+      object DBNumberEditEh4: TDBNumberEditEh
+        Left = 177
+        Top = 146
+        Width = 121
+        Height = 21
+        currency = True
+        DataField = 'restt'
+        DataSource = DatModConstruction.CreditPurposeDatSrc
+        EditButtons = <>
+        ReadOnly = True
+        TabOrder = 13
+        Visible = True
+      end
+      object StaticText11: TStaticText
+        Left = 15
+        Top = 79
+        Width = 128
+        Height = 17
+        Caption = #214'd'#601'nilmi'#351' sah'#601'nin m'#601'bl'#601#287'i'
+        Color = clSilver
+        ParentColor = False
+        TabOrder = 14
+      end
+      object DBNumberEditEh5: TDBNumberEditEh
+        Left = 177
+        Top = 79
+        Width = 121
+        Height = 21
+        currency = True
+        DataField = 'INITIALAMOUNT'
+        DataSource = DatModConstruction.CreditPurposeDatSrc
+        EditButtons = <>
+        ReadOnly = True
+        TabOrder = 15
+        Visible = True
+      end
+      object StaticText12: TStaticText
+        Left = 15
+        Top = 128
+        Width = 75
+        Height = 17
+        Caption = #214'd'#601'nilmi'#351' sah'#601
+        Color = clSilver
+        ParentColor = False
+        TabOrder = 16
+      end
+      object DBNumberEditEh6: TDBNumberEditEh
+        Left = 177
+        Top = 124
+        Width = 121
+        Height = 21
+        currency = True
+        DataField = 'buyarea'
+        DataSource = DatModConstruction.CreditPurposeDatSrc
+        EditButtons = <>
+        TabOrder = 17
+        Visible = True
+      end
+      object DBLookupComboBox1: TDBLookupComboBox
+        Left = 177
+        Top = 190
+        Width = 121
+        Height = 21
+        DataField = 'NOTE'
+        DataSource = DatModConstruction.CreditPurposeDatSrc
+        KeyField = 'ID'
+        ListField = 'NOTE'
+        ListSource = DatModConstruction.DataSource1
+        TabOrder = 18
+      end
+      object StaticText13: TStaticText
+        Left = 15
+        Top = 194
+        Width = 30
+        Height = 17
+        Caption = 'Qeyd'
+        Color = clSilver
+        ParentColor = False
+        TabOrder = 19
+      end
+      object DBNumberEditEh7: TDBNumberEditEh
+        Left = 177
+        Top = 101
+        Width = 121
+        Height = 21
+        currency = True
+        DataField = 'PRICECRED'
+        DataSource = DatModConstruction.CreditPurposeDatSrc
+        EditButtons = <>
+        TabOrder = 20
+        Visible = True
+      end
+      object StaticText22: TStaticText
+        Left = 15
+        Top = 102
+        Width = 159
+        Height = 17
+        Caption = #214'd'#601'nilmi'#351' sah'#601' '#252'zr'#601' 1m2 qiym'#601'ti'
+        Color = clSilver
+        ParentColor = False
+        TabOrder = 21
+      end
+    end
+    object GroupBox4: TGroupBox
+      Left = 2
+      Top = 52
+      Width = 365
+      Height = 44
+      Align = alTop
+      TabOrder = 1
+      object Label3: TLabel
+        Left = 10
+        Top = 18
+        Width = 38
+        Height = 13
+        Caption = 'M'#252#351't'#601'ri '
+      end
+      object DBEdit1: TDBEdit
+        Tag = 1
+        Left = 86
+        Top = 17
+        Width = 94
+        Height = 21
+        DataField = 'BUYER'
+        DataSource = DatModConstruction.CreditPurposeDatSrc
+        TabOrder = 0
+      end
+      object DBLookupComboboxEh6: TDBLookupComboboxEh
+        Tag = 1
+        Left = 186
+        Top = 17
+        Width = 177
+        Height = 21
+        DataField = 'BUYER'
+        DataSource = DatModConstruction.CreditPurposeDatSrc
+        DropDownBox.Sizable = True
+        EditButtons = <>
+        KeyField = 'ID'
+        ListField = 'BYR_NAME'
+        ListSource = DatModConstruction.CustomersDatSur
+        TabOrder = 1
+        Visible = True
+        OnChange = DBLookupComboboxEh6Change
+        OnKeyValueChanged = DBLookupComboboxEh6KeyValueChanged
+      end
+    end
+    object GroupBox6: TGroupBox
+      Left = 2
+      Top = 2
+      Width = 365
+      Height = 50
+      Align = alTop
+      Caption = 'Filial  '
+      TabOrder = 0
+      object SpeedButton2: TSpeedButton
+        Left = 273
+        Top = 20
+        Width = 69
+        Height = 24
+        Caption = 'Yeni'
+        Glyph.Data = {
+          BE060000424DBE06000000000000360400002800000024000000120000000100
+          0800000000008802000000000000000000000001000000000000000000000000
+          80000080000000808000800000008000800080800000C0C0C000C0DCC000F0CA
+          A600000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          000000000000000000000000000000000000F0FBFF00A4A0A000808080000000
+          FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00030303030303
+          0303030303030303030303030303030303030303030303030303030303030303
+          03030303030303030303030303030303030303030303FF030303030303030303
+          03030303030303040403030303030303030303030303030303F8F8FF03030303
+          03030303030303030303040202040303030303030303030303030303F80303F8
+          FF030303030303030303030303040202020204030303030303030303030303F8
+          03030303F8FF0303030303030303030304020202020202040303030303030303
+          0303F8030303030303F8FF030303030303030304020202FA0202020204030303
+          0303030303F8FF0303F8FF030303F8FF03030303030303020202FA03FA020202
+          040303030303030303F8FF03F803F8FF0303F8FF03030303030303FA02FA0303
+          03FA0202020403030303030303F8FFF8030303F8FF0303F8FF03030303030303
+          FA0303030303FA0202020403030303030303F80303030303F8FF0303F8FF0303
+          0303030303030303030303FA0202020403030303030303030303030303F8FF03
+          03F8FF03030303030303030303030303FA020202040303030303030303030303
+          0303F8FF0303F8FF03030303030303030303030303FA02020204030303030303
+          03030303030303F8FF0303F8FF03030303030303030303030303FA0202020403
+          030303030303030303030303F8FF0303F8FF03030303030303030303030303FA
+          0202040303030303030303030303030303F8FF03F8FF03030303030303030303
+          03030303FA0202030303030303030303030303030303F8FFF803030303030303
+          030303030303030303FA0303030303030303030303030303030303F803030303
+          0303030303030303030303030303030303030303030303030303030303030303
+          0303}
+        NumGlyphs = 2
+        Visible = False
+        OnClick = SpeedButton2Click
+      end
+      object SpeedButton1: TSpeedButton
+        Left = 273
+        Top = 3
+        Width = 69
+        Height = 24
+        Caption = 'Yeni'
+        Glyph.Data = {
+          BE060000424DBE06000000000000360400002800000024000000120000000100
+          0800000000008802000000000000000000000001000000000000000000000000
+          80000080000000808000800000008000800080800000C0C0C000C0DCC000F0CA
+          A600000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          000000000000000000000000000000000000F0FBFF00A4A0A000808080000000
+          FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00030303030303
+          0303030303030303030303030303030303030303030303030303030303030303
+          03030303030303030303030303030303030303030303FF030303030303030303
+          03030303030303040403030303030303030303030303030303F8F8FF03030303
+          03030303030303030303040202040303030303030303030303030303F80303F8
+          FF030303030303030303030303040202020204030303030303030303030303F8
+          03030303F8FF0303030303030303030304020202020202040303030303030303
+          0303F8030303030303F8FF030303030303030304020202FA0202020204030303
+          0303030303F8FF0303F8FF030303F8FF03030303030303020202FA03FA020202
+          040303030303030303F8FF03F803F8FF0303F8FF03030303030303FA02FA0303
+          03FA0202020403030303030303F8FFF8030303F8FF0303F8FF03030303030303
+          FA0303030303FA0202020403030303030303F80303030303F8FF0303F8FF0303
+          0303030303030303030303FA0202020403030303030303030303030303F8FF03
+          03F8FF03030303030303030303030303FA020202040303030303030303030303
+          0303F8FF0303F8FF03030303030303030303030303FA02020204030303030303
+          03030303030303F8FF0303F8FF03030303030303030303030303FA0202020403
+          030303030303030303030303F8FF0303F8FF03030303030303030303030303FA
+          0202040303030303030303030303030303F8FF03F8FF03030303030303030303
+          03030303FA0202030303030303030303030303030303F8FFF803030303030303
+          030303030303030303FA0303030303030303030303030303030303F803030303
+          0303030303030303030303030303030303030303030303030303030303030303
+          0303}
+        NumGlyphs = 2
+        Visible = False
+        OnClick = SpeedButton1Click
+      end
+      object DBLookupComboboxEh5: TDBLookupComboboxEh
+        Tag = 1
+        Left = 5
+        Top = 19
+        Width = 249
+        Height = 21
+        DataField = 'BRANCHID'
+        DataSource = DatModConstruction.CreditPurposeDatSrc
+        DropDownBox.Sizable = True
+        EditButtons = <>
+        KeyField = 'ID'
+        ListField = 'NAME'
+        ListSource = DatModConstruction.FilialsDatSrc
+        TabOrder = 0
+        Visible = True
+      end
+    end
+  end
+  object Panel5: TPanel
+    Left = 0
+    Top = 398
+    Width = 612
+    Height = 39
+    Align = alBottom
+    BevelInner = bvLowered
+    TabOrder = 2
+    ExplicitTop = 429
+    ExplicitWidth = 614
+    object BitBtn1: TBitBtn
+      Left = 417
+      Top = 5
+      Width = 85
+      Height = 28
+      Caption = 'Yadda saxla'
+      DoubleBuffered = True
+      Glyph.Data = {
+        DE000000424DDE0000000000000076000000280000000E0000000D0000000100
+        0400000000006800000000000000000000001000000000000000000000000000
+        8000008000000080800080000000800080008080000080808000C0C0C0000000
+        FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00333333333333
+        3300333333333333330033333000333333003333300033333300333330003333
+        3300330000000003330033000000000333003300000000033300333330003333
+        3300333330003333330033333000333333003333333333333300333333333333
+        3300}
+      ParentDoubleBuffered = False
+      TabOrder = 0
+      OnClick = BitBtn1Click
+    end
+    object BitBtn2: TBitBtn
+      Left = 508
+      Top = 5
+      Width = 85
+      Height = 28
+      Caption = #304'mtina'
+      DoubleBuffered = True
+      Glyph.Data = {
+        36050000424D3605000000000000360400002800000010000000100000000100
+        08000000000000010000CE0E0000D80E00000001000000000000000000008080
+        8000000080000080800000800000808000008000000080008000408080004040
+        0000FF80000080400000FF00400000408000FFFFFF00C0C0C0000000FF0000FF
+        FF0000FF0000FFFF0000FF000000FF00FF0080FFFF0080FF0000FFFF8000FF80
+        80008000FF004080FF00C0DCC000F0CAA6000008000000000800000808000804
+        00000800080008080800130E0800040314001008100010101000151414001311
+        1F002525210018133F004E0C11004D1D0F00681C1000561D21006B1C21004A3B
+        36005655560077141800741324008F0E2200940F30008818230084292300893C
+        400011097E004C4B75005A6B6300666666005A73630065706D00736D6D007373
+        73007878730073737B0077777B00945D670096706D007B7B7B00837B8100947B
+        73009C7B730084847B008484840084848C0090878700948C8E00948C94008C94
+        9400949494009C9494009C9C940094949C009C949C009C9C9C00A80F2300AD18
+        2900A9083100A5143500AF102B00AD0C3900BC072B00C10D3600AD1E2900A82C
+        2700AD183900A9293100BE1B2900BD183100C01F3100B2154200A9213900B121
+        3D00B5214200AB2C3900A9294200A92F4600BB1B4000B5294200BD293900B929
+        4600C7184200CC253E00C1254A00CF254E00AC3F3200AB3F4200AE354A00AD4A
+        4200C1383D00C6314A00CE314A00BD394A00AD3D4F00BD355200AD475000BD42
+        5200C8395100C1425A00CC3F5E00B3524200B5525300B54E5E00B85C5B00C654
+        5000D95F5100F6624600B2606A00C15A6B00CC586500CC5D6F00B7848300DD7C
+        6E00E89889000C08B5000D0DE1001010EF000000F7000808F7000D0DFC001B1B
+        ED003A3AE2002222FB003939FF006E6ECD005656FF007777FF009494A5009C9C
+        A500A59CA500A5A5A500ADA5A5009494AD00A5A5AD00ADA5AD00A5A7B500A0A0
+        C6009B9BDB008C8CFF009494FF009C9CFF00A5A5FF00B5A5A500BDA5A500B5AD
+        A500BDADA500ADADAD00B5ADAD00B5B5AD00B1ADB500C6A7AA00C9B1AE00D6B1
+        A900EDB0A900FFAFA200FFB5AD00FFBDAD00B5B5B500BDB5B500BDBDB500ADAD
+        BD00B9B5BD00B3B3DB00B1B1FF00C1B9B900BDBDC600CBBBBA00E5BBB700C6C6
+        C600DABDC600C1C1D600BDBDFF00D6C6C600DEC6C600CEC6CE00D6C6CE00DEC6
+        CE00CECECE00D6CECE00D6D6CE00D2CED600D6D6D600DECECE00DECED600DED6
+        D600D6D6DE00DED6DE00F4C8BE00F0CFCB00FFD6C600E7CED600E7D6D600F1D3
+        D600FFD6CE00DEDEDE00E7DED600E7E7D600EBD6DE00E7DEDE00FFD6D600FFDE
+        D600D2D2EF00C6C6FF00CECEFF00D6D6FF00DEDEE700DEDEFF00E7DEE700E7E7
+        E700E7E7FF00EFDEDE00EFE7E700EFE7EF00F7E7E700FFDEDE00FFE7DE00FFE7
+        E700EFEFEF00EFEFFF00F7EFEF00F7EFF700FFEFE700FFEFEF000F0F01010F0F
+        0F0F0F0F0F0F0F0F0F0F0F100202010F0F0F0F0F10010F0F0F0F0F1002020201
+        0F0F0F100202010F0F0F0F1002020202010F1002020202010F0F0F0F10020202
+        02010202020202010F0F0F0F0F100202020202020202010F0F0F0F0F0F0F1002
+        0202020202010F0F0F0F0F0F0F0F0F0202020202010F0F0F0F0F0F0F0F0F0F10
+        02020202010F0F0F0F0F0F0F0F0F100202020202010F0F0F0F0F0F0F0F100202
+        0201020202010F0F0F0F0F0F10020202010F10020202010F0F0F0F0F10020201
+        0F0F0F10020202010F0F0F0F0F10020F0F0F0F0F100202020F0F0F0F0F0F0F0F
+        0F0F0F0F0F1002100F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F}
+      ParentDoubleBuffered = False
+      TabOrder = 1
+      OnClick = BitBtn2Click
+    end
+    object HBConclusion: TCMHintBox
+      Left = 7
+      Top = 9
+      Width = 175
+      Height = 21
+      AutoSize = True
+      BevelOuter = bvNone
+      Caption = 'HBConclusion'
+      Color = clYellow
+      TabOrder = 2
+      Visible = False
+      Timeout = 4000
+      BeepOnMessage = False
+    end
+  end
+  object GroupBox3: TGroupBox
+    Left = 46
+    Top = 517
+    Width = 614
+    Height = 45
+    Caption = 'Kredit hesab'#305' '
+    TabOrder = 3
+    Visible = False
+    object CMSearchEditLoacAccs: TCMSearchEdit
+      Tag = 1
+      Left = 4
+      Top = 16
+      Width = 177
+      Height = 21
+      TabOrder = 0
+      DataField = 'ACCID'
+      DataSource = DatModConstruction.CreditPurposeDatSrc
+      KeyField = 'ID'
+      ListField = 'ACC_NO'
+      ListSource = DatModConstruction.AccountsDatSrc
+      ErrorColor = clRed
+      BeepOnNotFound = False
+    end
+    object DBLookupComboboxEh2: TDBLookupComboboxEh
+      Tag = 1
+      Left = 187
+      Top = 16
+      Width = 177
+      Height = 21
+      DataField = 'ACCID'
+      DataSource = DatModConstruction.CreditPurposeDatSrc
+      DropDownBox.Sizable = True
+      EditButtons = <>
+      KeyField = 'ID'
+      ListField = 'NAME'
+      ListSource = DatModConstruction.AccountsDatSrc
+      TabOrder = 1
+      Visible = True
+      OnKeyValueChanged = DBLookupComboboxEh6KeyValueChanged
+    end
+  end
+end

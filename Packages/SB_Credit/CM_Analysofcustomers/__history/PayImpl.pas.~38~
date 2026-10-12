@@ -1,0 +1,562 @@
+﻿unit PayImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, CurrencyEdit, CMCurrencyEdit, dblookup, DBCtrls, Mask,
+  DBCtrlsEh;
+
+type
+  TPayForm = class(TForm)
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    Label6: TLabel;
+    Label7: TLabel;
+    Label8: TLabel;
+    Label9: TLabel;
+    Label10: TLabel;
+    Label11: TLabel;
+    Label12: TLabel;
+    Label13: TLabel;
+    Button1: TButton;
+    Button2: TButton;
+    CMCurrencyEdit1: TCMCurrencyEdit;
+    DBLookupComboBox1: TDBLookupComboBox;
+    Button3: TButton;
+    Label14: TLabel;
+    procedure FormCanResize(Sender: TObject; var NewWidth, NewHeight: Integer;
+      var Resize: Boolean);
+    procedure Button2Click(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure Button3Click(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  PayForm: TPayForm;
+
+implementation
+
+uses CustAnalysDataModuleImpl,sboapiDataModuleImpl;
+
+{$R *.dfm}
+
+procedure TPayForm.Button1Click(Sender: TObject);
+var a ,proc,b :integer;
+begin
+if CustAnalysDataModule.CreditAnalysDataSetCURRENCY.AsInteger=0 then
+
+if (CustAnalysDataModule.CreditAnalysDataSetBRANCHID.AsInteger<>0)and
+  (CustAnalysDataModule.CreditAnalysDataSetUSERFIL.AsInteger=0)  then
+      begin
+
+//ShowMessage(inttostr(CustAnalysDataModule.CreditAnalysDataSetBRANCHID.AsInteger)+'**'+inttostr(CustAnalysDataModule.CreditAnalysDataSetUSERFIL.AsInteger)  );
+
+    CustAnalysDataModule.OraclePackage1.CallProcedure('execbprocess',[
+        'procid' ,5,
+        'custid',0,
+        'accid_a',CustAnalysDataModule.CreditAnalysDataSetBOOROWERACCID.AsInteger,
+        'accid_b',DBLookupComboBox1.KeyValue,
+        'accid_c',CustAnalysDataModule.CreditAnalysDataSetBOOROWERACCID.AsInteger,
+        'debtamount'  ,CMCurrencyEdit1.Value,
+        'credamount'  , null,
+        'equivamount' , null,
+        'inbalchar'   , null,
+        'outbalchar'  , null,
+        'tdescription', CustAnalysDataModule.CreditAnalysDataSetTEY.AsString,
+        'trreportid', null,
+        'trcountrid',  null,
+        'rate_a' ,    null,
+        'rate_b' ,   null,
+        'rate_c'  ,   null,
+        'transactionid' ,a ,
+        'branch'  ,CustAnalysDataModule.CreditAnalysDataSetBRANCHID.AsInteger ,
+        'transactiondate' , null,
+        'currencyid' ,CustAnalysDataModule.CreditAnalysDataSetCURRENCY.AsInteger
+  ]);
+          b:=CustAnalysDataModule.OraclePackage1.GetParameter('transactionid');
+          CustAnalysDataModule.Returnquery.Close;
+     CustAnalysDataModule.Returnquery.SetVariable('BORROWERID',CustAnalysDataModule.CreditAnalysDataSetBOOROWERID.AsInteger);
+      CustAnalysDataModule.Returnquery.SetVariable('TRANSID',b);
+      CustAnalysDataModule.Returnquery.SetVariable('cr',CustAnalysDataModule.CreditAnalysDataSetCREDITID.AsInteger);
+      CustAnalysDataModule.Returnquery.SetVariable('usr',CustAnalysDataModule.usrfilFILIALID.AsInteger);
+      CustAnalysDataModule.Returnquery.Execute;
+      end;
+  {
+if CustAnalysDataModule.CreditAnalysDataSetCURRENCY.AsInteger=0 then
+
+if (CustAnalysDataModule.CreditAnalysDataSetBRANCHID.AsInteger=0)and (CustAnalysDataModule.CreditAnalysDataSetUSERFIL.AsInteger=0)  then
+      begin
+
+//ShowMessage(inttostr(CustAnalysDataModule.CreditAnalysDataSetBRANCHID.AsInteger)+'**'+inttostr(CustAnalysDataModule.CreditAnalysDataSetUSERFIL.AsInteger)  );
+
+    CustAnalysDataModule.OraclePackage1.CallProcedure('execbprocess',[
+        'procid' ,4,
+        'custid',0,
+        'accid_a',CustAnalysDataModule.CreditAnalysDataSetBOOROWERACCID.AsInteger,
+        'accid_b',DBLookupComboBox1.KeyValue,
+        'accid_c',CustAnalysDataModule.CreditAnalysDataSetBOOROWERACCID.AsInteger,
+        'debtamount'  ,CMCurrencyEdit1.Value,
+        'credamount'  , null,
+        'equivamount' , null,
+        'inbalchar'   , null,
+        'outbalchar'  , null,
+        'tdescription', CustAnalysDataModule.CreditAnalysDataSetTEY.AsString,
+        'trreportid', null,
+        'trcountrid',  null,
+        'rate_a' ,    null,
+        'rate_b' ,   null,
+        'rate_c'  ,   null,
+        'transactionid' ,a ,
+        'branch'  ,CustAnalysDataModule.CreditAnalysDataSetBRANCHID.AsInteger ,
+        'transactiondate' , null,
+        'currencyid' ,CustAnalysDataModule.CreditAnalysDataSetCURRENCY.AsInteger
+  ]);
+          b:=CustAnalysDataModule.OraclePackage1.GetParameter('transactionid');
+          CustAnalysDataModule.Returnquery.Close;
+     CustAnalysDataModule.Returnquery.SetVariable('BORROWERID',CustAnalysDataModule.CreditAnalysDataSetBOOROWERID.AsInteger);
+      CustAnalysDataModule.Returnquery.SetVariable('TRANSID',b);
+      CustAnalysDataModule.Returnquery.SetVariable('cr',CustAnalysDataModule.CreditAnalysDataSetCREDITID.AsInteger);
+      CustAnalysDataModule.Returnquery.SetVariable('usr',CustAnalysDataModule.usrfilFILIALID.AsInteger);
+      CustAnalysDataModule.Returnquery.Execute;
+      end;                         }
+
+  if CustAnalysDataModule.CreditAnalysDataSetCURRENCY.AsInteger<>0 then
+
+if (CustAnalysDataModule.CreditAnalysDataSetBRANCHID.AsInteger<>0)and
+ (CustAnalysDataModule.CreditAnalysDataSetUSERFIL.AsInteger=0)  then
+    begin
+    CustAnalysDataModule.OraclePackage1.CallProcedure('execbprocess',[
+        'procid' ,5,
+        'custid',0,
+        'accid_a',CustAnalysDataModule.CreditAnalysDataSetBOOROWERACCID.AsInteger,
+        'accid_b',DBLookupComboBox1.KeyValue,
+        'accid_c',CustAnalysDataModule.CreditAnalysDataSetBOOROWERACCID.AsInteger,
+        'debtamount'  ,CMCurrencyEdit1.Value,
+        'credamount'  , null,
+        'equivamount' , null,
+        'inbalchar'   , null,
+        'outbalchar'  , null,
+        'tdescription', CustAnalysDataModule.CreditAnalysDataSetTEY.AsString,
+        'trreportid', null,
+        'trcountrid',  null,
+        'rate_a' ,    null,
+        'rate_b' ,   null,
+        'rate_c'  ,   null,
+        'transactionid' ,  a,
+        'branch'  ,CustAnalysDataModule.CreditAnalysDataSetBRANCHID.AsInteger ,
+        'transactiondate' , null,
+        'currencyid' ,CustAnalysDataModule.CreditAnalysDataSetCURRENCY.AsInteger
+  ]);
+   b:=CustAnalysDataModule.OraclePackage1.GetParameter('transactionid');
+   CustAnalysDataModule.Returnquery.Close;
+     CustAnalysDataModule.Returnquery.SetVariable('BORROWERID',CustAnalysDataModule.CreditAnalysDataSetBOOROWERID.AsInteger);
+      CustAnalysDataModule.Returnquery.SetVariable('TRANSID',b);
+      CustAnalysDataModule.Returnquery.SetVariable('cr',CustAnalysDataModule.CreditAnalysDataSetCREDITID.AsInteger);
+      CustAnalysDataModule.Returnquery.SetVariable('usr',CustAnalysDataModule.usrfilFILIALID.AsInteger);
+      CustAnalysDataModule.Returnquery.Execute;
+      end;
+    //  showmessage(DBLookupComboBox1.KeyValue );
+
+
+
+    if CustAnalysDataModule.CreditAnalysDataSetCURRENCY.AsInteger=0 then
+
+if (CustAnalysDataModule.CreditAnalysDataSetBRANCHID.AsInteger=CustAnalysDataModule.CreditAnalysDataSetUSERFIL.AsInteger)
+  then
+       begin
+    CustAnalysDataModule.OraclePackage1.CallProcedure('execbprocess',[
+        'procid' ,4,
+        'custid',0,
+        'accid_a',CustAnalysDataModule.CreditAnalysDataSetBOOROWERACCID.AsInteger,
+        'accid_b',DBLookupComboBox1.KeyValue,
+        'accid_c',CustAnalysDataModule.CreditAnalysDataSetBOOROWERACCID.AsInteger,
+        'debtamount'  ,CMCurrencyEdit1.Value,
+        'credamount'  , null,
+        'equivamount' , null,
+        'inbalchar'   , null,
+        'outbalchar'  , null,
+        'tdescription', CustAnalysDataModule.CreditAnalysDataSetTEY.AsString,
+        'trreportid', null,
+        'trcountrid',  null,
+        'rate_a' ,    null,
+        'rate_b' ,   null,
+        'rate_c'  ,   null,
+        'transactionid' ,  a,
+        'branch'  ,CustAnalysDataModule.CreditAnalysDataSetUSERFIL.AsInteger ,
+        'transactiondate' , null,
+        'currencyid' ,CustAnalysDataModule.CreditAnalysDataSetCURRENCY.AsInteger
+  ]);
+        b:=CustAnalysDataModule.OraclePackage1.GetParameter('transactionid');
+        CustAnalysDataModule.Returnquery.Close;
+     CustAnalysDataModule.Returnquery.SetVariable('BORROWERID',CustAnalysDataModule.CreditAnalysDataSetBOOROWERID.AsInteger);
+      CustAnalysDataModule.Returnquery.SetVariable('TRANSID',b);
+      CustAnalysDataModule.Returnquery.SetVariable('cr',CustAnalysDataModule.CreditAnalysDataSetCREDITID.AsInteger);
+      CustAnalysDataModule.Returnquery.SetVariable('usr',CustAnalysDataModule.usrfilFILIALID.AsInteger);
+      CustAnalysDataModule.Returnquery.Execute;
+      end;
+
+
+
+    if CustAnalysDataModule.CreditAnalysDataSetCURRENCY.AsInteger<>0 then
+
+if (CustAnalysDataModule.CreditAnalysDataSetBRANCHID.AsInteger=CustAnalysDataModule.CreditAnalysDataSetUSERFIL.AsInteger)
+  then
+       begin
+    CustAnalysDataModule.OraclePackage1.CallProcedure('execbprocess',[
+        'procid' ,4,
+        'custid',0,
+        'accid_a',CustAnalysDataModule.CreditAnalysDataSetBOOROWERACCID.AsInteger,
+        'accid_b',DBLookupComboBox1.KeyValue,
+        'accid_c',CustAnalysDataModule.CreditAnalysDataSetBOOROWERACCID.AsInteger,
+        'debtamount'  ,CMCurrencyEdit1.Value,
+        'credamount'  , null,
+        'equivamount' , null,
+        'inbalchar'   , null,
+        'outbalchar'  , null,
+        'tdescription', CustAnalysDataModule.CreditAnalysDataSetTEY.AsString,
+        'trreportid', null,
+        'trcountrid',  null,
+        'rate_a' ,    null,
+        'rate_b' ,   null,
+        'rate_c'  ,   null,
+        'transactionid' ,  a,
+        'branch'  ,CustAnalysDataModule.CreditAnalysDataSetUSERFIL.AsInteger ,
+        'transactiondate' , null,
+        'currencyid' ,CustAnalysDataModule.CreditAnalysDataSetCURRENCY.AsInteger
+  ]);
+        b:=CustAnalysDataModule.OraclePackage1.GetParameter('transactionid');
+        CustAnalysDataModule.Returnquery.Close;
+     CustAnalysDataModule.Returnquery.SetVariable('BORROWERID',CustAnalysDataModule.CreditAnalysDataSetBOOROWERID.AsInteger);
+      CustAnalysDataModule.Returnquery.SetVariable('TRANSID',b);
+      CustAnalysDataModule.Returnquery.SetVariable('cr',CustAnalysDataModule.CreditAnalysDataSetCREDITID.AsInteger);
+      CustAnalysDataModule.Returnquery.SetVariable('usr',CustAnalysDataModule.usrfilFILIALID.AsInteger);
+      CustAnalysDataModule.Returnquery.Execute;
+      end;
+///Filial filyalda manat
+ if CustAnalysDataModule.CreditAnalysDataSetCURRENCY.AsInteger=0 then
+
+if (CustAnalysDataModule.CreditAnalysDataSetBRANCHID.AsInteger<>0)and
+(CustAnalysDataModule.CreditAnalysDataSetUSERFIL.AsInteger<>0)
+and (CustAnalysDataModule.CreditAnalysDataSetBRANCHID.AsInteger
+<>CustAnalysDataModule.CreditAnalysDataSetUSERFIL.AsInteger)  then
+       begin
+    CustAnalysDataModule.OraclePackage1.CallProcedure('execbprocess',[
+        'procid' ,9,
+        'custid',0,
+        'accid_a',CustAnalysDataModule.CreditAnalysDataSetBOOROWERACCID.AsInteger,
+        'accid_b',DBLookupComboBox1.KeyValue,
+        'accid_c',CustAnalysDataModule.CreditAnalysDataSetBOOROWERACCID.AsInteger,
+        'debtamount'  ,CMCurrencyEdit1.Value,
+        'credamount'  , null,
+        'equivamount' , null,
+        'inbalchar'   , null,
+        'outbalchar'  , null,
+        'tdescription', CustAnalysDataModule.CreditAnalysDataSetTEY.AsString,
+        'trreportid', null,
+        'trcountrid',  null,
+        'rate_a' ,    null,
+        'rate_b' ,   null,
+        'rate_c'  ,   null,
+        'transactionid' ,  a,
+        'branch'  ,CustAnalysDataModule.CreditAnalysDataSetUSERFIL.AsInteger ,
+        'transactiondate' , null,
+        'currencyid' ,CustAnalysDataModule.CreditAnalysDataSetCURRENCY.AsInteger
+  ]);
+        b:=CustAnalysDataModule.OraclePackage1.GetParameter('transactionid');
+        CustAnalysDataModule.Returnquery.Close;
+     CustAnalysDataModule.Returnquery.SetVariable('BORROWERID',CustAnalysDataModule.CreditAnalysDataSetBOOROWERID.AsInteger);
+      CustAnalysDataModule.Returnquery.SetVariable('TRANSID',b);
+      CustAnalysDataModule.Returnquery.SetVariable('cr',CustAnalysDataModule.CreditAnalysDataSetCREDITID.AsInteger);
+      CustAnalysDataModule.Returnquery.SetVariable('usr',CustAnalysDataModule.usrfilFILIALID.AsInteger);
+      CustAnalysDataModule.Returnquery.Execute;
+      end;
+ ///S.M 20.07.2020
+ if CustAnalysDataModule.CreditAnalysDataSetCURRENCY.AsInteger<>0 then
+
+if (CustAnalysDataModule.CreditAnalysDataSetBRANCHID.AsInteger<>0)and
+(CustAnalysDataModule.CreditAnalysDataSetUSERFIL.AsInteger<>0)
+and (CustAnalysDataModule.CreditAnalysDataSetBRANCHID.AsInteger<>CustAnalysDataModule.CreditAnalysDataSetUSERFIL.AsInteger)  then
+        begin
+    CustAnalysDataModule.OraclePackage1.CallProcedure('execbprocess',[
+        'procid' ,9,
+        'custid',0,
+        'accid_a',CustAnalysDataModule.CreditAnalysDataSetBOOROWERACCID.AsInteger,
+        'accid_b',DBLookupComboBox1.KeyValue,
+        'accid_c',CustAnalysDataModule.CreditAnalysDataSetBOOROWERACCID.AsInteger,
+        'debtamount'  ,CMCurrencyEdit1.Value,
+        'credamount'  , null,
+        'equivamount' , null,
+        'inbalchar'   , null,
+        'outbalchar'  , null,
+        'tdescription', CustAnalysDataModule.CreditAnalysDataSetTEY.AsString,
+        'trreportid', null,
+        'trcountrid',  null,
+        'rate_a' ,    null,
+        'rate_b' ,   null,
+        'rate_c'  ,   null,
+        'transactionid' ,  a,
+        'branch'  ,CustAnalysDataModule.CreditAnalysDataSetUSERFIL.AsInteger ,
+        'transactiondate' , null,
+        'currencyid' ,CustAnalysDataModule.CreditAnalysDataSetCURRENCY.AsInteger
+  ]);
+         b:=CustAnalysDataModule.OraclePackage1.GetParameter('transactionid');
+  CustAnalysDataModule.Returnquery.Close;
+     CustAnalysDataModule.Returnquery.SetVariable('BORROWERID',CustAnalysDataModule.CreditAnalysDataSetBOOROWERID.AsInteger);
+      CustAnalysDataModule.Returnquery.SetVariable('TRANSID',b);
+      CustAnalysDataModule.Returnquery.SetVariable('cr',CustAnalysDataModule.CreditAnalysDataSetCREDITID.AsInteger);
+      CustAnalysDataModule.Returnquery.SetVariable('usr',CustAnalysDataModule.usrfilFILIALID.AsInteger);
+      CustAnalysDataModule.Returnquery.Execute;
+      end;
+ // Bas ofis filalda   manat
+  if CustAnalysDataModule.CreditAnalysDataSetCURRENCY.AsInteger=0 then
+ if (CustAnalysDataModule.CreditAnalysDataSetBRANCHID.AsInteger=0)and
+ (CustAnalysDataModule.CreditAnalysDataSetUSERFIL.AsInteger<>0)  then
+        begin
+    CustAnalysDataModule.OraclePackage1.CallProcedure('execbprocess',[
+        'procid' ,7,
+        'custid',0,
+        'accid_a',CustAnalysDataModule.CreditAnalysDataSetBOOROWERACCID.AsInteger,
+        'accid_b',DBLookupComboBox1.KeyValue,
+        'accid_c',CustAnalysDataModule.CreditAnalysDataSetBOOROWERACCID.AsInteger,
+        'debtamount'  ,CMCurrencyEdit1.Value,
+        'credamount'  , null,
+        'equivamount' , null,
+        'inbalchar'   , null,
+        'outbalchar'  , null,
+        'tdescription', CustAnalysDataModule.CreditAnalysDataSetTEY.AsString,
+        'trreportid', null,
+        'trcountrid',  null,
+        'rate_a' ,    null,
+        'rate_b' ,   null,
+        'rate_c'  ,   null,
+        'transactionid' ,  a,
+        'branch'  ,CustAnalysDataModule.CreditAnalysDataSetUSERFIL.AsInteger,//CustAnalysDataModule.CreditAnalysDataSetBRANCHID.AsInteger ,
+        'transactiondate' , null,
+        'currencyid' ,CustAnalysDataModule.CreditAnalysDataSetCURRENCY.AsInteger
+  ]);
+   b:=CustAnalysDataModule.OraclePackage1.GetParameter('transactionid');
+   CustAnalysDataModule.Returnquery.Close;
+     CustAnalysDataModule.Returnquery.SetVariable('BORROWERID',CustAnalysDataModule.CreditAnalysDataSetBOOROWERID.AsInteger);
+      CustAnalysDataModule.Returnquery.SetVariable('TRANSID',b);
+      CustAnalysDataModule.Returnquery.SetVariable('cr',CustAnalysDataModule.CreditAnalysDataSetCREDITID.AsInteger);
+      CustAnalysDataModule.Returnquery.Execute;
+      end;
+  // Bas ofis filalda   Usd
+  if CustAnalysDataModule.CreditAnalysDataSetCURRENCY.AsInteger<>0 then
+ if (CustAnalysDataModule.CreditAnalysDataSetBRANCHID.AsInteger=0)and (CustAnalysDataModule.CreditAnalysDataSetUSERFIL.AsInteger<>0)  then
+         begin
+    CustAnalysDataModule.OraclePackage1.CallProcedure('execbprocess',[
+        'procid' ,8,
+        'custid',0,
+        'accid_a',CustAnalysDataModule.CreditAnalysDataSetBOOROWERACCID.AsInteger,
+        'accid_b',DBLookupComboBox1.KeyValue,
+        'accid_c',CustAnalysDataModule.CreditAnalysDataSetBOOROWERACCID.AsInteger,
+        'debtamount'  ,CMCurrencyEdit1.Value,
+        'credamount'  , null,
+        'equivamount' , null,
+        'inbalchar'   , null,
+        'outbalchar'  , null,
+        'tdescription', CustAnalysDataModule.CreditAnalysDataSetTEY.AsString,
+        'trreportid', null,
+        'trcountrid',  null,
+        'rate_a' ,    null,
+        'rate_b' ,   null,
+        'rate_c'  ,   null,
+        'transactionid' ,  a,
+        'branch'  ,CustAnalysDataModule.CreditAnalysDataSetUSERFIL.AsInteger ,
+        'transactiondate' , null,
+        'currencyid' ,CustAnalysDataModule.CreditAnalysDataSetCURRENCY.AsInteger
+  ]);
+  b:=CustAnalysDataModule.OraclePackage1.GetParameter('transactionid');
+      CustAnalysDataModule.Returnquery.Close;
+      CustAnalysDataModule.Returnquery.SetVariable('BORROWERID',CustAnalysDataModule.CreditAnalysDataSetBOOROWERID.AsInteger);
+      CustAnalysDataModule.Returnquery.SetVariable('TRANSID',b);
+      CustAnalysDataModule.Returnquery.SetVariable('cr',CustAnalysDataModule.CreditAnalysDataSetCREDITID.AsInteger);
+      CustAnalysDataModule.Returnquery.SetVariable('usr',CustAnalysDataModule.usrfilFILIALID.AsInteger);
+
+      CustAnalysDataModule.Returnquery.Execute;
+      end;
+
+
+
+  ShowMessage('Ödəniş qəbul olundu  ');
+  //CustAnalysDataModule.Returntrans.Refresh;
+
+  PayForm.close;
+end;
+
+procedure TPayForm.Button2Click(Sender: TObject);
+begin
+close
+end;
+
+procedure TPayForm.Button3Click(Sender: TObject);
+var user_name :string; a,proc,b,p_busid , p_filial,debtid_a,creditid_b,creditid_ab:integer;
+begin
+
+    if (CustAnalysDataModule.CreditAnalysDataSetDUEREST.AsVariant=0)and
+   (CustAnalysDataModule.CreditAnalysDataSetDUEINTERESTREST.AsVariant=0)and
+   (CustAnalysDataModule.CreditAnalysDataSetPENALTYREST.AsVariant=0)and
+   (CustAnalysDataModule.CreditAnalysDataSetMAINPAY.AsVariant=0)and
+   (CustAnalysDataModule.CreditAnalysDataSetINTERESTREST.AsVariant=0)and
+   (CustAnalysDataModule.CreditAnalysDataSetCEMPAY.AsVariant=0) then
+   begin
+
+  showmessage ( 'Heç bir hesabda pul yoxdu ! ') ;
+   exit ;
+   end;
+
+
+
+
+// aznif CustAnalysDataModule.CreditAnalysDataSetCURRENCY.AsInteger=0 then    begin
+
+if (CustAnalysDataModule.CreditAnalysDataSetBRANCHID.AsInteger=CustAnalysDataModule.CreditAnalysDataSetUSERFIL.AsInteger)
+    then
+    begin
+      debtid_a :=DBLookupComboBox1.KeyValue;
+      creditid_b :=CustAnalysDataModule.CreditAnalysDataSetBOOROWERACCID.AsInteger;
+      creditid_ab :=CustAnalysDataModule.CreditAnalysDataSetBOOROWERACCID.AsInteger;
+     p_filial:=CustAnalysDataModule.CreditAnalysDataSetBRANCHID.AsInteger;
+      with CustAnalysDataModule,ODS_Bus_payment do
+      begin
+      close;
+      SetVariable('v_trtype','F=F');
+      SetVariable('v_currency',CustAnalysDataModule.CreditAnalysDataSetCURRENCY.AsInteger);
+      open;
+      p_busid:=CustAnalysDataModule.ODS_Bus_paymentBUROC_ID.asinteger;
+       user_name:=CustAnalysDataModule.ODS_Bus_paymentUSERNAME.asstring;
+
+        end;
+    end;
+
+   if (CustAnalysDataModule.CreditAnalysDataSetBRANCHID.AsInteger<>CustAnalysDataModule.CreditAnalysDataSetUSERFIL.AsInteger)and
+      (CustAnalysDataModule.CreditAnalysDataSetUSERFIL.AsInteger<>0)and(CustAnalysDataModule.CreditAnalysDataSetBRANCHID.AsInteger<>0)  then
+      begin
+       debtid_a :=CustAnalysDataModule.CreditAnalysDataSetBOOROWERACCID.AsInteger;
+       creditid_b :=DBLookupComboBox1.KeyValue;
+       p_filial:=CustAnalysDataModule.CreditAnalysDataSetUSERFIL.AsInteger;
+      with CustAnalysDataModule,ODS_Bus_payment do
+      begin
+      close;
+      SetVariable('v_trtype','F<>F');
+      SetVariable('v_currency',CustAnalysDataModule.CreditAnalysDataSetCURRENCY.AsInteger);
+      open;
+      p_busid:=CustAnalysDataModule.ODS_Bus_paymentBUROC_ID.asinteger;
+      user_name:=CustAnalysDataModule.ODS_Bus_paymentUSERNAME.asstring;
+      end;
+      end;
+
+    if (CustAnalysDataModule.CreditAnalysDataSetBRANCHID.AsInteger<>CustAnalysDataModule.CreditAnalysDataSetUSERFIL.AsInteger)and
+       (CustAnalysDataModule.CreditAnalysDataSetUSERFIL.AsInteger=0)  then
+       begin
+       debtid_a :=CustAnalysDataModule.CreditAnalysDataSetBOOROWERACCID.AsInteger;
+       creditid_b :=DBLookupComboBox1.KeyValue;
+       p_filial:=CustAnalysDataModule.CreditAnalysDataSetUSERFIL.AsInteger;
+
+      with CustAnalysDataModule,ODS_Bus_payment do
+      begin
+      close;
+      SetVariable('v_trtype','F<>B');
+      SetVariable('v_currency',CustAnalysDataModule.CreditAnalysDataSetCURRENCY.AsInteger);
+      open;
+      p_busid:=CustAnalysDataModule.ODS_Bus_paymentBUROC_ID.asinteger;
+      user_name:=CustAnalysDataModule.ODS_Bus_paymentUSERNAME.asstring;
+           end;
+       end;
+
+    if (CustAnalysDataModule.CreditAnalysDataSetBRANCHID.AsInteger<>CustAnalysDataModule.CreditAnalysDataSetUSERFIL.AsInteger)and
+       (CustAnalysDataModule.CreditAnalysDataSetBRANCHID.AsInteger=0)  then
+       begin
+       debtid_a :=CustAnalysDataModule.CreditAnalysDataSetBOOROWERACCID.AsInteger;
+       creditid_b :=DBLookupComboBox1.KeyValue;
+       p_filial:=CustAnalysDataModule.CreditAnalysDataSetUSERFIL.AsInteger;
+       with CustAnalysDataModule,ODS_Bus_payment do
+      begin
+      close;
+      SetVariable('v_trtype','B<>F');
+      SetVariable('v_currency',CustAnalysDataModule.CreditAnalysDataSetCURRENCY.AsInteger);
+      open;
+      p_busid:=CustAnalysDataModule.ODS_Bus_paymentBUROC_ID.asinteger;
+      user_name:=CustAnalysDataModule.ODS_Bus_paymentUSERNAME.asstring;
+       end;
+       end;
+
+
+        // showmessage('ff'+inttostr(p_busid));
+        CustAnalysDataModule.OraclePackage1.CallProcedure('execbprocess',[
+        'procid' ,p_busid,
+        'custid',0,
+        'accid_a',debtid_a,
+        'accid_b',creditid_b,
+        'accid_c',0,
+        'debtamount'  ,CMCurrencyEdit1.Value,
+        'credamount'  , null,
+        'equivamount' , null,
+        'inbalchar'   , null,
+        'outbalchar'  , null,
+        'tdescription', CustAnalysDataModule.CreditAnalysDataSetTEY.AsString,
+        'trreportid', null,
+        'trcountrid',  null,
+        'rate_a' ,    null,
+        'rate_b' ,   null,
+        'rate_c'  ,   null,
+        'transactionid' ,a ,
+        'branch'  ,p_filial ,
+        'transactiondate' , null,
+        'currencyid' ,CustAnalysDataModule.CreditAnalysDataSetCURRENCY.AsInteger,
+        'userinsert'  , user_name
+  ]);
+          b:=CustAnalysDataModule.OraclePackage1.GetParameter('transactionid');
+          //showmessage(inttostr(b));
+          CustAnalysDataModule.Returnquery.Close;
+      CustAnalysDataModule.Returnquery.SetVariable('BORROWERID',CustAnalysDataModule.CreditAnalysDataSetBOOROWERID.AsInteger);
+      CustAnalysDataModule.Returnquery.SetVariable('TRANSID',b);
+      CustAnalysDataModule.Returnquery.SetVariable('cr',CustAnalysDataModule.CreditAnalysDataSetCREDITID.AsInteger);
+      CustAnalysDataModule.Returnquery.SetVariable('usr',CustAnalysDataModule.usrfilFILIALID.AsInteger);
+      CustAnalysDataModule.Returnquery.Execute;
+
+
+    sboapiDataModule.SBSession.Commit;
+   ShowMessage('Ödəniş qəbul olundu  ');
+   PayForm.close;
+
+end;
+
+procedure TPayForm.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+resize:=false
+end;
+
+procedure TPayForm.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+DBLookupComboBox1.KeyValue:=-1;
+
+CMCurrencyEdit1.Clear;
+end;
+
+procedure TPayForm.FormShow(Sender: TObject);
+begin
+//if not CustAnalysDataModule.bnkacc.Active then
+    //    CustAnalysDataModule.bnkacc.Active:=true;
+ with  CustAnalysDataModule do
+ begin
+  bnkacc.Close;
+   bnkacc.SetVariable('v_valacc',CreditAnalysDataSetCURRENCY.AsInteger);
+  bnkacc.open;
+ end;
+
+end;
+
+end.

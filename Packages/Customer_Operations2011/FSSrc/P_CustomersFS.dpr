@@ -1,0 +1,50 @@
+library P_CustomersFS;
+
+uses
+  ComServ,
+  P_Customers_TLB in 'P_Customers_TLB.pas',
+  phy_cust_Unit in 'phy_cust_Unit.pas' {P_Customers_Form: TActiveForm} {P_Customers_Form: CoClass},
+  P_ch_Unit in 'P_ch_Unit.pas' {P_Ch_Form},
+  P_Datamod_Unit in 'P_Datamod_Unit.pas' {P_DataModuleFS: TDataModule},
+  P_CO_In_Form in 'P_CO_In_Form.pas' {P_Co_In},
+  P_CO_Memorial_Unit in 'P_CO_Memorial_Unit.pas' {P_CO_MemorialForm},
+  P_Co_MemorialRep_Unit in 'P_Co_MemorialRep_Unit.pas' {P_Co_MemorialRep: TQuickRep},
+  P_CO_MemorialRep1_Unit in 'P_CO_MemorialRep1_Unit.pas' {P_CO_MemorialRep1: TQuickRep},
+  P_CO_Out_Unit in 'P_CO_Out_Unit.pas' {P_Co_Out},
+  P_CO_Report_Unit in 'P_CO_Report_Unit.pas' {P_CO_Report: TQuickRep},
+  P_CO_ST_Unit in 'P_CO_ST_Unit.pas' {P_CO_ST},
+  p_CO_Statement_Unit in 'p_CO_Statement_Unit.pas' {P_CO_Statement_Form},
+  P_CO_Account_Unit in 'P_CO_Account_Unit.pas' {P_CO_Account_Form},
+  P_CO_Interval in 'P_CO_Interval.pas' {P_CO_IntervalForm},
+  P_FormRep in 'P_FormRep.pas' {P_RepForm},
+  P_FormReport_Unit in 'P_FormReport_Unit.pas' {P_FormReport},
+  P_FormRepR_unit in 'P_FormRepR_unit.pas' {P_FormRepR},
+  P_FormTransView_Unit in 'P_FormTransView_Unit.pas' {P_FormTransView},
+  P_Inform_Unit in 'P_Inform_Unit.pas' {P_Inform},
+  P_OutForm_Unit in 'P_OutForm_Unit.pas' {P_OutForm},
+  P_CO_Cust in 'P_CO_Cust.pas' {P_CO_Cust_Form},
+  P_CO_Cust_Settings in 'P_CO_Cust_Settings.pas' {P_Cust_Settings},
+  P_Upd_Cust_Form in 'P_Upd_Cust_Form.pas' {P_Upd_Cust},
+  CurrencyToHR_Azeri_Impl in 'CurrencyToHR_Azeri_Impl.pas',
+  P_AccSettings_Unit in 'P_AccSettings_Unit.pas' {P_AccSettings},
+  P_AccFlags in 'P_AccFlags.pas' {AccFlags},
+  P_AccState_Unit in 'P_AccState_Unit.pas' {P_AccState},
+  P_Interval in 'P_Interval.pas' {FormInterval},
+  P_AccTransaction_Unit in 'P_AccTransaction_Unit.pas' {FormAccTransaction},
+  P_Transaction_Unit in 'P_Transaction_Unit.pas' {P_Transaction},
+  CustInfoFormImpl in 'CustInfoFormImpl.pas' {CustInfoForm};
+
+{$E ocx}
+
+exports
+  DllGetClassObject,
+  DllCanUnloadNow,
+  DllRegisterServer,
+  DllUnregisterServer;
+
+{$R *.TLB}
+
+{$R *.RES}
+
+begin
+end.

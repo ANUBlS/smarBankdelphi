@@ -1,0 +1,180 @@
+﻿unit FrmProvisionsImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ExtCtrls, XFSCtrls, StdCtrls, Mask, DBCtrls,db,oracle;
+
+type
+  TFrmProvisions = class(TForm)
+    XFPanel1: TXFPanel;
+    XFPanel2: TXFPanel;
+    XFButton1: TXFButton;
+    XFButton2: TXFButton;
+    XFGroupBox2: TXFGroupBox;
+    XFGroupBox3: TXFGroupBox;
+    DBEdit1: TDBEdit;
+    DBEdit3: TDBEdit;
+    XFLabel1: TXFLabel;
+    XFLabel3: TXFLabel;
+    DBLookupComboBox1: TDBLookupComboBox;
+    XFLabel5: TXFLabel;
+    XFCheckBox1: TXFCheckBox;
+    XFCheckBox2: TXFCheckBox;
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure XFButton2Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure XFCheckBox1Click(Sender: TObject);
+    procedure XFCheckBox2Click(Sender: TObject);
+    procedure XFButton1Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmProvisions: TFrmProvisions;
+
+implementation
+uses ComObj,CommanParametrs,sboapiDataModuleImpl,SBTranslateProc,
+  DMProvisionsImpl, Frmpersonal_accimpl;
+
+{$R *.dfm}
+   procedure InitPlugin(s:string);export;
+begin
+
+
+if s='' then
+ begin
+   FrmProvisions.ShowModal;
+ end;
+
+
+if s='Frmpersonal_acc' then
+ begin
+   Frmpersonal_acc.ShowModal;
+ end;
+
+end;
+exports
+     InitPlugin;
+
+  procedure TFrmProvisions.FormCreate(Sender: TObject);
+begin
+DMProvisions:=TDMProvisions.create(self);
+Frmpersonal_acc:=TFrmpersonal_acc.Create(self);
+end;
+
+procedure TFrmProvisions.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+if ord(key)=vk_escape then  close;
+
+end;
+
+procedure TFrmProvisions.FormShow(Sender: TObject);
+begin
+//showmessage(IntToStr(contactid));
+DMProvisions.DSrespon.close;
+DMProvisions.DSrespon.SetVariable('p_cid',contactid);
+DMProvisions.DSrespon.open;
+DMProvisions.DSrespon.Edit;
+//showmessage('Salam1');
+end;
+
+procedure TFrmProvisions.XFButton1Click(Sender: TObject);
+begin
+if XFCheckBox2.Checked=true then
+begin
+
+if DBEdit1.Text='' then
+begin
+  Showmessage('Diqqət! Məsuliyyət sığ. məbləği sahəsi boşdur.');
+  exit;
+end;
+
+
+if DBEdit3.Text='' then
+begin
+  Showmessage('Diqqət! Məsuliyyət sığ. haqqı sahəsi boşdur.');
+  exit;
+end;
+with DMProvisions, DSrespon do
+   if State in [dsEdit, dsInsert] then
+   begin
+        FieldByName('TYPEID').AsInteger:=4;
+        FieldByName('CID').AsInteger:=contactid;
+        FieldByName('CLOSE_PREFIX').AsInteger:=0;
+
+      DSrespon.Post;
+   end;
+end;
+
+if XFCheckBox2.Checked=false then
+begin
+
+if DBLookupComboBox1.Text='' then
+begin
+    Showmessage('Diqqət! Məsuliyyət sığ. müq. polis № sahəsi boşdur.');
+  exit;
+end;
+
+with DMProvisions, DSrespon do
+   if State in [dsEdit, dsInsert] then
+   begin
+        FieldByName('TYPEID').AsInteger:=4;
+        FieldByName('CID').AsInteger:=contactid;
+        FieldByName('CLOSE_PREFIX').AsInteger:=0;
+        FieldByName('resp_ammount').AsInteger:=0;
+        FieldByName('resp_premium').AsInteger:=0;
+
+      DSrespon.Post;
+   end;
+end;
+
+end;
+
+procedure TFrmProvisions.XFButton2Click(Sender: TObject);
+begin
+close;
+end;
+
+procedure TFrmProvisions.XFCheckBox1Click(Sender: TObject);
+begin
+if XFCheckBox1.Checked=true then
+begin
+  XFCheckBox2.Checked:=false;
+  XFGroupBox3.Enabled:=true;
+  DMProvisions.DSPolisNo1.Refresh;
+  DMProvisions.DSPolisNo2.Refresh;
+end;
+
+if XFCheckBox1.Checked=false then
+begin
+XFGroupBox3.Enabled:=false;
+  XFCheckBox2.Checked:=true;
+end;
+
+end;
+
+procedure TFrmProvisions.XFCheckBox2Click(Sender: TObject);
+begin
+if XFCheckBox2.Checked=true then
+begin
+XFGroupBox2.Enabled:=true;
+  XFCheckBox1.Checked:=false;
+end;
+
+if XFCheckBox2.Checked=false then
+begin
+XFGroupBox2.Enabled:=false;
+  XFCheckBox1.Checked:=true;
+end;
+
+end;
+
+initialization
+ FrmProvisions :=TFrmProvisions.Create(Application);
+end.

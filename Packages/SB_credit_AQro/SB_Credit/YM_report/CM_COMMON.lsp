@@ -1,0 +1,1 @@
+-+c:\program files\borland\delphi5\Lib\CommonDataModuleImpl.obj -+c:\program files\borland\delphi5\Lib\TemporaryTransactionsViewFormImpl.obj -+c:\program files\borland\delphi5\Lib\DatasetsContol.obj -+c:\program files\borland\delphi5\Lib\LogoutputImpl.obj -+c:\program files\borland\delphi5\Lib\CommonDecls.obj -+c:\program files\borland\delphi5\Lib\SysInit.obj 

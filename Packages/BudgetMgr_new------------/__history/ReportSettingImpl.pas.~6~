@@ -1,0 +1,62 @@
+unit ReportSettingImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, CheckLst, Evanescence, ExtCtrls;
+
+type
+  TFrmRepSetting = class(TForm)
+    Panel1: TPanel;
+    Panel2: TPanel;
+    Button1: TButton;
+    Even: TEvanescence;
+    challValute: TButton;
+    unchallValute: TButton;
+    procedure Button1Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure challValuteClick(Sender: TObject);
+    procedure unchallValuteClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmRepSetting: TFrmRepSetting;
+
+implementation
+
+uses DmBudcetImpl, ProgresImpl;
+
+{$R *.dfm}
+
+procedure TFrmRepSetting.Button1Click(Sender: TObject);
+begin
+  DmBudcet.PackgSubdiv.CallProcedure('fakt_updateay',[]);
+     end;
+
+procedure TFrmRepSetting.challValuteClick(Sender: TObject);
+begin
+Even.CheckAll;
+end;
+
+procedure TFrmRepSetting.FormShow(Sender: TObject);
+var
+i:integer;
+begin
+  for i := 0 to ComponentCount - 1 do
+    if Components[i].Tag = 3112 then begin
+      (Components[i] as TEvanescence).Open;
+      (Components[i] as TEvanescence).CheckAll;
+    end;
+end;
+
+procedure TFrmRepSetting.unchallValuteClick(Sender: TObject);
+begin
+ Even.UncheckAll;
+end;
+
+end.

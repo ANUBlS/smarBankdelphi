@@ -1,0 +1,2277 @@
+object PAccidentBlank: TPAccidentBlank
+  Left = 220
+  Top = 107
+  Width = 645
+  Height = 462
+  Caption = 'Qrup ferdi qeza sigortasi'
+  Color = clBtnFace
+  Font.Charset = RUSSIAN_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  OldCreateOrder = False
+  OnCreate = ActiveFormCreate
+  PixelsPerInch = 96
+  TextHeight = 14
+  object Label25: TLabel
+    Left = 9
+    Top = 69
+    Width = 163
+    Height = 14
+    Caption = '1) '#1048#1076#1072#1088#1103' '#1074#1103' '#1080#1085#1079#1080#1073#1072#1090#1080' '#1087#1077#1088#1089#1086#1085#1072#1083
+  end
+  object Label26: TLabel
+    Left = 9
+    Top = 112
+    Width = 249
+    Height = 14
+    Caption = '2) '#1057#1072#1090#1099#1096' '#1074#1103' '#1084#1072#1088#1082#1077#1090#1080#1085#1075#1083#1103' '#1084#1103#1096#1100#1091#1083' '#1086#1083#1072#1085' '#1080#1096#1095#1080#1083#1103#1088
+  end
+  object Label27: TLabel
+    Left = 9
+    Top = 146
+    Width = 269
+    Height = 14
+    Caption = '3) '#1060#1103#1097#1083#1103#1083#1103#1088' ('#1092#1072#1073#1088#1080#1082#1072', '#1089#1094#1088#1094#1078#1094#1083#1103#1088', '#1084#1094#1097#1072#1092#1080#1079#1103#1095#1080#1083#1103#1088','
+  end
+  object Label28: TLabel
+    Left = 19
+    Top = 164
+    Width = 88
+    Height = 14
+    Caption = #1072#1100#1099#1088' '#1072#1074#1072#1076#1072#1085#1083#1099#1075')'
+  end
+  object Label31: TLabel
+    Left = 17
+    Top = 155
+    Width = 269
+    Height = 14
+    Caption = '3) '#1060#1103#1097#1083#1103#1083#1103#1088' ('#1092#1072#1073#1088#1080#1082#1072', '#1089#1094#1088#1094#1078#1094#1083#1103#1088', '#1084#1094#1097#1072#1092#1080#1079#1103#1095#1080#1083#1103#1088','
+  end
+  object Label32: TLabel
+    Left = 28
+    Top = 172
+    Width = 88
+    Height = 14
+    Caption = #1072#1100#1099#1088' '#1072#1074#1072#1076#1072#1085#1083#1099#1075')'
+  end
+  object AccidentPageControl: TPageControl
+    Left = 0
+    Top = 0
+    Width = 645
+    Height = 385
+    ActivePage = TabSheet2
+    Align = alTop
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -12
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 0
+    OnChange = AccidentPageControlChange
+    object TabSheet1: TTabSheet
+      Caption = 'S'#601'hif'#601'1'
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+      object Panel1: TXFPanel
+        Left = 0
+        Top = 0
+        Width = 639
+        Height = 352
+        BevelInner = bvLowered
+        BevelKind = bkSoft
+        BevelOuter = bvNone
+        TabOrder = 0
+        object XFLabel1: TXFLabel
+          Left = 9
+          Top = 25
+          Width = 114
+          Height = 15
+          Caption = #350'irk'#601'tin ad'#305'(S'#305#287'ortal'#305')'
+        end
+        object XFLabel2: TXFLabel
+          Left = 9
+          Top = 51
+          Width = 90
+          Height = 15
+          Caption = #350'irk'#601'tin f'#601'aliyy'#601'ti'
+        end
+        object XFLabel3: TXFLabel
+          Left = 9
+          Top = 77
+          Width = 125
+          Height = 15
+          Caption = 'H'#252'quqi v'#601' faktiki '#252'nvan'
+        end
+        object XFLabel4: TXFLabel
+          Left = 9
+          Top = 103
+          Width = 41
+          Height = 15
+          Caption = 'Telefon'
+        end
+        object XFLabel5: TXFLabel
+          Left = 9
+          Top = 129
+          Width = 62
+          Height = 15
+          Caption = 'M'#601'sul '#351#601'xs'
+        end
+        object XFLabel6: TXFLabel
+          Left = 9
+          Top = 154
+          Width = 84
+          Height = 15
+          Caption = 'Bank rekvizitl'#601'ri'
+        end
+        object XFLabel7: TXFLabel
+          Left = 9
+          Top = 180
+          Width = 75
+          Height = 15
+          Caption = 'Faydag'#246't'#252'r'#601'n'
+        end
+        object XFLabel8: TXFLabel
+          Left = 9
+          Top = 206
+          Width = 171
+          Height = 15
+          Caption = 'S'#305#287'orta olunanlar'#305'n '#252'mumi say'#305
+        end
+        object XFLabel9: TXFLabel
+          Left = 9
+          Top = 232
+          Width = 31
+          Height = 15
+          Caption = 'Agent'
+        end
+        object XFLabel10: TXFLabel
+          Left = 9
+          Top = 253
+          Width = 582
+          Height = 15
+          Caption = 
+            'Az'#601'rbaycan xaricind'#601' ba'#351' ver'#601'n b'#601'd'#601'n x'#601'sar'#601'tl'#601'ri t'#601'minat xaricin' +
+            'd'#601'dir.Bu t'#601'minat'#305' daxil etm'#601'k ist'#601'rdinizmi?'
+        end
+        object XFLabel11: TXFLabel
+          Left = 9
+          Top = 269
+          Width = 333
+          Height = 15
+          Caption = #304'st'#601'diyiniz halda yerl'#601'r v'#601' m'#252'dd'#601'tl'#601'r haqq'#305'nda m'#601'lumat verin.'
+        end
+        object XFLabel12: TXFLabel
+          Left = 161
+          Top = 322
+          Width = 88
+          Height = 15
+          Caption = 'Ba'#351'lanma tarixi:'
+        end
+        object XFLabel13: TXFLabel
+          Left = 384
+          Top = 322
+          Width = 63
+          Height = 15
+          Caption = 'Bitm'#601' tarixi:'
+        end
+        object XFLabel14: TXFLabel
+          Left = 9
+          Top = 322
+          Width = 90
+          Height = 15
+          Caption = 'S'#305#287'orta m'#252'dd'#601'ti:'
+        end
+        object InsLookupComboBox: TDBLookupComboBox
+          Left = 241
+          Top = 17
+          Width = 372
+          Height = 23
+          DataField = 'KLI_ID'
+          DataSource = ODSPAccidentSource
+          KeyField = 'ID'
+          ListField = 'NAME'
+          ListSource = ODSCustomersSource
+          TabOrder = 0
+          OnClick = DBEdit4Change
+          OnKeyPress = DBEdit3KeyPress
+        end
+        object DBLookupComboBox2: TDBLookupComboBox
+          Left = 241
+          Top = 43
+          Width = 372
+          Height = 23
+          DataField = 'KLI_ID'
+          DataSource = ODSPAccidentSource
+          KeyField = 'ID'
+          ListField = 'NAME'
+          ListSource = ODSCustomersSource
+          TabOrder = 1
+          OnKeyPress = DBEdit3KeyPress
+        end
+        object DBLookupComboBox3: TDBLookupComboBox
+          Left = 241
+          Top = 69
+          Width = 372
+          Height = 23
+          DataField = 'KLI_ID'
+          DataSource = ODSPAccidentSource
+          KeyField = 'ID'
+          ListField = 'ADDRESS'
+          ListSource = ODSCustomersSource
+          TabOrder = 2
+          OnKeyPress = DBEdit3KeyPress
+        end
+        object DBLookupComboBox4: TDBLookupComboBox
+          Left = 241
+          Top = 95
+          Width = 372
+          Height = 23
+          DataField = 'KLI_ID'
+          DataSource = ODSPAccidentSource
+          KeyField = 'ID'
+          ListField = 'MOBILEPHONE'
+          ListSource = ODSCustomersSource
+          TabOrder = 3
+          OnKeyPress = DBEdit3KeyPress
+        end
+        object DBEdit3: TDBEdit
+          Left = 241
+          Top = 121
+          Width = 372
+          Height = 23
+          DataField = 'CONTACT_PERSON'
+          DataSource = ODSPAccidentSource
+          TabOrder = 4
+          OnChange = DBEdit4Change
+          OnKeyPress = DBEdit3KeyPress
+        end
+        object DBEdit4: TDBEdit
+          Left = 241
+          Top = 146
+          Width = 372
+          Height = 23
+          DataField = 'BANKING_DETAILS'
+          DataSource = ODSPAccidentSource
+          TabOrder = 5
+          OnChange = DBEdit4Change
+          OnKeyPress = DBEdit3KeyPress
+        end
+        object DBLookupComboBox5: TDBLookupComboBox
+          Left = 241
+          Top = 172
+          Width = 372
+          Height = 23
+          DataField = 'PROFITID'
+          DataSource = ODSPAccidentSource
+          KeyField = 'ID'
+          ListField = 'NAME'
+          ListSource = BeneficiarySource
+          TabOrder = 6
+          OnKeyPress = DBEdit3KeyPress
+        end
+        object DBEdit10: TDBEdit
+          Left = 241
+          Top = 198
+          Width = 372
+          Height = 23
+          DataField = 'TOTALEMP_NUMBER'
+          DataSource = ODSPAccidentSource
+          TabOrder = 7
+          OnChange = DBEdit4Change
+          OnKeyPress = DBEdit3KeyPress
+        end
+        object AgentLookupComboBox: TDBLookupComboBox
+          Left = 241
+          Top = 224
+          Width = 372
+          Height = 23
+          DataField = 'AGENTID'
+          DataSource = ODSPAccidentSource
+          KeyField = 'ID'
+          ListField = 'NAME'
+          ListSource = AgentSource
+          TabOrder = 8
+          OnClick = DBEdit4Change
+          OnKeyPress = DBEdit3KeyPress
+        end
+        object DBEdit2: TDBEdit
+          Left = 9
+          Top = 287
+          Width = 604
+          Height = 23
+          Color = clInfoBk
+          DataField = 'OUTSIDEOFAZE'
+          DataSource = ODSPAccidentSource
+          TabOrder = 9
+          OnChange = DBEdit4Change
+          OnKeyPress = DBEdit3KeyPress
+        end
+        object edBeginDate: TDateTimePicker
+          Left = 263
+          Top = 318
+          Width = 97
+          Height = 23
+          Date = 39026.671935219900000000
+          Time = 39026.671935219900000000
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -12
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 10
+          OnChange = edBeginDateChange
+          OnKeyPress = DBEdit3KeyPress
+        end
+        object edEndDate: TDateTimePicker
+          Left = 463
+          Top = 318
+          Width = 93
+          Height = 23
+          Date = 39026.672476666700000000
+          Time = 39026.672476666700000000
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -12
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 11
+          OnChange = edBeginDateChange
+          OnKeyPress = DBEdit3KeyPress
+        end
+        object MonthEdit: TEdit
+          Left = 565
+          Top = 318
+          Width = 48
+          Height = 23
+          Color = clMenu
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -12
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = [fsBold]
+          ParentFont = False
+          ReadOnly = True
+          TabOrder = 12
+          Text = 'MonthEdit'
+          OnKeyPress = DBEdit3KeyPress
+        end
+      end
+    end
+    object TabSheet2: TTabSheet
+      Caption = 'S'#601'hif'#601'2'
+      ImageIndex = 1
+      object XFPanel2: TXFPanel
+        Left = 3
+        Top = 3
+        Width = 639
+        Height = 353
+        BevelInner = bvLowered
+        BevelKind = bkSoft
+        BevelOuter = bvNone
+        TabOrder = 0
+        object XFLabel15: TXFLabel
+          Left = 9
+          Top = 26
+          Width = 50
+          Height = 14
+          Caption = '1.Qrup :'
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -12
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
+        object XFLabel16: TXFLabel
+          Left = 9
+          Top = 228
+          Width = 38
+          Height = 14
+          Caption = 'Qrup :'
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -12
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
+        object XFLabel17: TXFLabel
+          Left = 7
+          Top = 58
+          Width = 147
+          Height = 14
+          Caption = '1) '#304'dar'#601' v'#601' inzibati persanal'
+        end
+        object XFLabel18: TXFLabel
+          Left = 7
+          Top = 78
+          Width = 221
+          Height = 14
+          Caption = '2) Sati'#351' v'#601' marketinql'#601' m'#601#351#287'ul olan i'#351#231'il'#601'r'
+        end
+        object XFLabel19: TXFLabel
+          Left = 7
+          Top = 98
+          Width = 303
+          Height = 14
+          Caption = '3) F'#601'hl'#601'l'#601'r (fabrika,s'#252'r'#252'c'#252'l'#601'r,m'#252'hafiz'#601#231'il'#601'r,a'#287#305'r avadanl'#305'q)'
+        end
+        object XFLabel20: TXFLabel
+          Left = 312
+          Top = 23
+          Width = 55
+          Height = 14
+          Caption = 'Onlardan'
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -12
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
+        object XFLabel21: TXFLabel
+          Left = 436
+          Top = 23
+          Width = 192
+          Height = 14
+          Caption = 'Bir '#351#601'xs ba'#351#305'na t'#601'minat m'#601'bl'#601#287'i'
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -12
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
+        object XFLabel22: TXFLabel
+          Left = 9
+          Top = 139
+          Width = 491
+          Height = 14
+          Caption = 
+            'S'#305#287'orta t'#601'minat'#305'n'#305' m'#601'bl'#601#287'i h'#601'r i'#351#231'inin illik '#601'm'#601'k haqq'#305'n'#305'n (g'#601'li' +
+            'rl'#601'rinin) mislidirmi ?'
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -12
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
+        object XFLabel23: TXFLabel
+          Left = 9
+          Top = 163
+          Width = 229
+          Height = 14
+          Caption = #399'g'#601'r el'#601'dirs'#601' t'#601'l'#601'b olunan m'#601'bl'#601#287'i g'#246'st'#601'rin'
+        end
+        object XFLabel24: TXFLabel
+          Left = 9
+          Top = 191
+          Width = 404
+          Height = 14
+          Caption = 
+            '(S'#305#287'orta t'#601'minatlar'#305'n'#305'n '#601'm'#601'k haqq'#305'n'#305'n limitl'#601'ri mislidirs'#601',doldu' +
+            'run)'
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -12
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
+        object XFLabel25: TXFLabel
+          Left = 9
+          Top = 208
+          Width = 445
+          Height = 14
+          Caption = 
+            'H'#601'r qrup '#252#231#252'n orta v'#601' maksimal illik '#601'm'#601'k haqq'#305'n'#305' g'#246'st'#601'rin(1.'#8470'-l' +
+            'i sualda g'#246'st'#601'ril'#601'n)'
+        end
+        object XFLabel26: TXFLabel
+          Left = 312
+          Top = 225
+          Width = 55
+          Height = 14
+          Caption = 'Onlardan'
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -12
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
+        object Label1: TLabel
+          Left = 436
+          Top = 225
+          Width = 192
+          Height = 14
+          Caption = 'Bir '#351#601'xs ba'#351#305'na t'#601'minat m'#601'bl'#601#287'i'
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -12
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
+        object XFLabel27: TXFLabel
+          Left = 9
+          Top = 251
+          Width = 147
+          Height = 14
+          Caption = '1) '#304'dar'#601' v'#601' inzibati persanal'
+        end
+        object XFLabel28: TXFLabel
+          Left = 9
+          Top = 279
+          Width = 221
+          Height = 14
+          Caption = '2) Sati'#351' v'#601' marketinql'#601' m'#601#351#287'ul olan i'#351#231'il'#601'r'
+        end
+        object XFLabel29: TXFLabel
+          Left = 9
+          Top = 308
+          Width = 303
+          Height = 14
+          Caption = '3) F'#601'hl'#601'l'#601'r (fabrika,s'#252'r'#252'c'#252'l'#601'r,m'#252'hafiz'#601#231'il'#601'r,a'#287#305'r avadanl'#305'q)'
+        end
+        object AOGEdit: TDBEdit
+          Left = 312
+          Top = 43
+          Width = 120
+          Height = 22
+          DataField = 'AOG'
+          DataSource = ODSPAccidentSource
+          TabOrder = 0
+          OnChange = DBEdit4Change
+          OnKeyPress = DBEdit3KeyPress
+        end
+        object SMGEdit: TDBEdit
+          Left = 312
+          Top = 69
+          Width = 120
+          Height = 22
+          DataField = 'SMG'
+          DataSource = ODSPAccidentSource
+          TabOrder = 1
+          OnChange = DBEdit4Change
+          OnKeyPress = DBEdit3KeyPress
+        end
+        object BCGEdit: TDBEdit
+          Left = 312
+          Top = 95
+          Width = 120
+          Height = 22
+          DataField = 'BCG'
+          DataSource = ODSPAccidentSource
+          TabOrder = 2
+          OnChange = DBEdit4Change
+          OnKeyPress = DBEdit3KeyPress
+        end
+        object AOPEdit: TDBEdit
+          Left = 436
+          Top = 43
+          Width = 165
+          Height = 22
+          DataField = 'AOP'
+          DataSource = ODSPAccidentSource
+          TabOrder = 3
+          OnChange = DBEdit4Change
+          OnKeyPress = DBEdit3KeyPress
+        end
+        object SMPEdit: TDBEdit
+          Left = 436
+          Top = 69
+          Width = 165
+          Height = 22
+          DataField = 'SMP'
+          DataSource = ODSPAccidentSource
+          TabOrder = 4
+          OnChange = DBEdit4Change
+          OnKeyPress = DBEdit3KeyPress
+        end
+        object DBEdit27: TDBEdit
+          Left = 436
+          Top = 95
+          Width = 165
+          Height = 22
+          DataField = 'BCP'
+          DataSource = ODSPAccidentSource
+          TabOrder = 5
+          OnChange = DBEdit4Change
+          OnKeyPress = DBEdit3KeyPress
+        end
+        object DeciredEdit: TDBEdit
+          Left = 436
+          Top = 155
+          Width = 165
+          Height = 22
+          DataField = 'DECIRED_AMOUNT'
+          DataSource = ODSPAccidentSource
+          TabOrder = 6
+          OnChange = DBEdit4Change
+          OnKeyPress = DBEdit3KeyPress
+        end
+        object DBEdit28: TDBEdit
+          Left = 312
+          Top = 248
+          Width = 120
+          Height = 22
+          DataField = 'AOG1'
+          DataSource = ODSPAccidentSource
+          TabOrder = 7
+          OnChange = DBEdit4Change
+          OnKeyPress = DBEdit3KeyPress
+        end
+        object DBEdit30: TDBEdit
+          Left = 312
+          Top = 276
+          Width = 120
+          Height = 22
+          DataField = 'SMG1'
+          DataSource = ODSPAccidentSource
+          TabOrder = 8
+          OnChange = DBEdit4Change
+          OnKeyPress = DBEdit3KeyPress
+        end
+        object DBEdit32: TDBEdit
+          Left = 312
+          Top = 302
+          Width = 120
+          Height = 22
+          DataField = 'BCG1'
+          DataSource = ODSPAccidentSource
+          TabOrder = 9
+          OnChange = DBEdit4Change
+          OnKeyPress = DBEdit3KeyPress
+        end
+        object DBEdit33: TDBEdit
+          Left = 436
+          Top = 302
+          Width = 165
+          Height = 22
+          DataField = 'BCP1'
+          DataSource = ODSPAccidentSource
+          TabOrder = 10
+          OnChange = DBEdit4Change
+          OnKeyPress = DBEdit3KeyPress
+        end
+        object DBEdit31: TDBEdit
+          Left = 436
+          Top = 276
+          Width = 165
+          Height = 22
+          DataField = 'SMP1'
+          DataSource = ODSPAccidentSource
+          TabOrder = 11
+          OnChange = DBEdit4Change
+          OnKeyPress = DBEdit3KeyPress
+        end
+        object DBEdit29: TDBEdit
+          Left = 436
+          Top = 248
+          Width = 165
+          Height = 22
+          DataField = 'AOP1'
+          DataSource = ODSPAccidentSource
+          TabOrder = 12
+          OnChange = DBEdit4Change
+          OnKeyPress = DBEdit3KeyPress
+        end
+      end
+    end
+    object TabSheet3: TTabSheet
+      Caption = 'S'#601'hif'#601'3'
+      ImageIndex = 2
+      object XFPanel3: TXFPanel
+        Left = -4
+        Top = 0
+        Width = 639
+        Height = 350
+        BevelInner = bvLowered
+        BevelKind = bkSoft
+        BevelOuter = bvNone
+        TabOrder = 0
+        object Bevel1: TBevel
+          Left = 360
+          Top = 321
+          Width = 27
+          Height = 5
+          Shape = bsTopLine
+          Style = bsRaised
+        end
+        object XFLabel30: TXFLabel
+          Left = 12
+          Top = 14
+          Width = 145
+          Height = 14
+          Caption = 'T'#601'l'#601'b olunan t'#601'minatlar'
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -12
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
+        object XFLabel31: TXFLabel
+          Left = 12
+          Top = 51
+          Width = 174
+          Height = 14
+          Caption = 'B'#601'db'#601'xt hadis'#601' n'#601'tic'#601'sind'#601' '#246'l'#252'm'
+        end
+        object XFLabel32: TXFLabel
+          Left = 12
+          Top = 75
+          Width = 110
+          Height = 14
+          Caption = 'Daimi '#601'lillik-C'#601'dv'#601'l(A)'
+        end
+        object XFLabel33: TXFLabel
+          Left = 12
+          Top = 101
+          Width = 248
+          Height = 14
+          Caption = 'H'#601'r'#601'k'#601't qabiliyy'#601'tinin daimi itrilm'#601'si - C'#601'dv'#601'l(B)'
+        end
+        object XFLabel34: TXFLabel
+          Left = 12
+          Top = 128
+          Width = 272
+          Height = 14
+          Caption = 'T'#601'cili tibbi yard'#305'm-yaln'#305'z b'#601'db'#601'xt hadis'#601' n'#601'tic'#601'sind'#601
+        end
+        object XFLabel35: TXFLabel
+          Left = 12
+          Top = 155
+          Width = 117
+          Height = 14
+          Caption = 'X'#601'st'#601'xanadaxili x'#601'rcl'#601'r'
+        end
+        object XFLabel36: TXFLabel
+          Left = 12
+          Top = 179
+          Width = 132
+          Height = 14
+          Caption = 'X'#601'st'#601'xanadaxili '#601'm'#601'liyyat'
+        end
+        object XFLabel37: TXFLabel
+          Left = 12
+          Top = 208
+          Width = 37
+          Height = 14
+          Caption = 'S'#305'n'#305'qlar'
+        end
+        object XFLabel38: TXFLabel
+          Left = 12
+          Top = 232
+          Width = 42
+          Height = 14
+          Caption = 'Yan'#305'qlar'
+        end
+        object XFLabel39: TXFLabel
+          Left = 12
+          Top = 258
+          Width = 106
+          Height = 14
+          Caption = 'M'#252'v'#601'qq'#601'ti tam '#601'lillik'
+        end
+        object XFLabel40: TXFLabel
+          Left = 12
+          Top = 288
+          Width = 324
+          Height = 14
+          Caption = #214'd'#601'n'#601'c'#601'k h'#601'ft'#601'l'#601'rin maksimal say'#305'(52 h'#601'ft'#601' v'#601' ya az)'
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -12
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
+        object XFLabel41: TXFLabel
+          Left = 12
+          Top = 315
+          Width = 195
+          Height = 14
+          Caption = 'T'#601'minata daxil olmayan m'#252'dd'#601't'
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -12
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
+        object XFLabel42: TXFLabel
+          Left = 296
+          Top = 14
+          Width = 207
+          Height = 14
+          Caption = 'Bir '#351#601'xs ba'#351#305'na t'#601'minat m'#601'bl'#601#287'l'#601'ri'
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -12
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
+        object XFLabel43: TXFLabel
+          Left = 297
+          Top = 51
+          Width = 128
+          Height = 14
+          Caption = 'M'#252#601'yy'#601'n edilmi'#351' m'#601'bl'#601#287
+        end
+        object XFLabel44: TXFLabel
+          Left = 297
+          Top = 75
+          Width = 128
+          Height = 14
+          Caption = 'M'#252#601'yy'#601'n edilmi'#351' m'#601'bl'#601#287
+        end
+        object XFLabel45: TXFLabel
+          Left = 297
+          Top = 101
+          Width = 128
+          Height = 14
+          Caption = 'M'#252#601'yy'#601'n edilmi'#351' m'#601'bl'#601#287
+        end
+        object XFLabel46: TXFLabel
+          Left = 297
+          Top = 128
+          Width = 128
+          Height = 14
+          Caption = 'M'#252#601'yy'#601'n edilmi'#351' m'#601'bl'#601#287
+        end
+        object XFLabel47: TXFLabel
+          Left = 297
+          Top = 179
+          Width = 128
+          Height = 14
+          Caption = 'M'#252#601'yy'#601'n edilmi'#351' m'#601'bl'#601#287
+        end
+        object XFLabel48: TXFLabel
+          Left = 297
+          Top = 208
+          Width = 128
+          Height = 14
+          Caption = 'M'#252#601'yy'#601'n edilmi'#351' m'#601'bl'#601#287
+        end
+        object XFLabel49: TXFLabel
+          Left = 297
+          Top = 232
+          Width = 128
+          Height = 14
+          Caption = 'M'#252#601'yy'#601'n edilmi'#351' m'#601'bl'#601#287
+        end
+        object XFLabel50: TXFLabel
+          Left = 297
+          Top = 155
+          Width = 170
+          Height = 14
+          Caption = 'G'#252'nl'#252'k m'#252#601'yy'#601'n edilmi'#351' m'#601'bl'#601#287
+        end
+        object XFLabel51: TXFLabel
+          Left = 297
+          Top = 250
+          Width = 162
+          Height = 14
+          Caption = 'H'#601'r tam h'#601'ft'#601' '#252#231#252'n m'#252#601'yy'#601'n '
+        end
+        object XFLabel52: TXFLabel
+          Left = 297
+          Top = 261
+          Width = 77
+          Height = 14
+          Caption = 'edilmi'#351' m'#601'bl'#601#287
+        end
+        object DateTP1: TDateTimePicker
+          Left = 233
+          Top = 310
+          Width = 121
+          Height = 23
+          Date = 39063.418851794000000000
+          Time = 39063.418851794000000000
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clBlack
+          Font.Height = -12
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 0
+          OnChange = DBEdit4Change
+          OnKeyPress = DBEdit3KeyPress
+        end
+        object DateTP2: TDateTimePicker
+          Left = 392
+          Top = 310
+          Width = 113
+          Height = 23
+          Date = 39063.418948969900000000
+          Time = 39063.418948969900000000
+          TabOrder = 1
+          OnChange = DBEdit4Change
+          OnKeyPress = DBEdit3KeyPress
+        end
+        object DBEdit1: TDBEdit
+          Left = 487
+          Top = 281
+          Width = 131
+          Height = 22
+          DataField = 'MAXWEEKS'
+          DataSource = ODSPAccidentSource
+          TabOrder = 2
+          OnChange = DBEdit4Change
+          OnKeyPress = DBEdit3KeyPress
+        end
+        object TTDEdit: TDBEdit
+          Left = 487
+          Top = 250
+          Width = 131
+          Height = 22
+          DataField = 'TTD'
+          DataSource = ODSPAccidentSource
+          TabOrder = 3
+          OnChange = DBEdit4Change
+          OnKeyPress = DBEdit3KeyPress
+        end
+        object BuEdit: TDBEdit
+          Left = 487
+          Top = 224
+          Width = 131
+          Height = 22
+          DataField = 'BURN'
+          DataSource = ODSPAccidentSource
+          TabOrder = 4
+          OnChange = DBEdit4Change
+          OnKeyPress = DBEdit3KeyPress
+        end
+        object BrBEdit: TDBEdit
+          Left = 487
+          Top = 200
+          Width = 131
+          Height = 22
+          DataField = 'BRB'
+          DataSource = ODSPAccidentSource
+          TabOrder = 5
+          OnChange = DBEdit4Change
+          OnKeyPress = DBEdit3KeyPress
+        end
+        object HSEdit: TDBEdit
+          Left = 487
+          Top = 171
+          Width = 131
+          Height = 22
+          DataField = 'HS'
+          DataSource = ODSPAccidentSource
+          TabOrder = 6
+          OnChange = DBEdit4Change
+          OnKeyPress = DBEdit3KeyPress
+        end
+        object HCEdit: TDBEdit
+          Left = 487
+          Top = 147
+          Width = 131
+          Height = 22
+          DataField = 'HC'
+          DataSource = ODSPAccidentSource
+          TabOrder = 7
+          OnChange = DBEdit4Change
+          OnKeyPress = DBEdit3KeyPress
+        end
+        object EMEEdit: TDBEdit
+          Left = 487
+          Top = 120
+          Width = 131
+          Height = 22
+          DataField = 'EME'
+          DataSource = ODSPAccidentSource
+          TabOrder = 8
+          OnChange = DBEdit4Change
+          OnKeyPress = DBEdit3KeyPress
+        end
+        object PLUEdit: TDBEdit
+          Left = 487
+          Top = 93
+          Width = 131
+          Height = 22
+          DataField = 'PLU'
+          DataSource = ODSPAccidentSource
+          TabOrder = 9
+          OnChange = DBEdit4Change
+          OnKeyPress = DBEdit3KeyPress
+        end
+        object PDEdit: TDBEdit
+          Left = 487
+          Top = 67
+          Width = 131
+          Height = 22
+          DataField = 'PD'
+          DataSource = ODSPAccidentSource
+          TabOrder = 10
+          OnChange = DBEdit4Change
+          OnKeyPress = DBEdit3KeyPress
+        end
+        object ADEdit: TDBEdit
+          Left = 487
+          Top = 43
+          Width = 131
+          Height = 22
+          DataField = 'AD'
+          DataSource = ODSPAccidentSource
+          TabOrder = 11
+          OnChange = DBEdit4Change
+          OnKeyPress = DBEdit3KeyPress
+        end
+      end
+    end
+    object TabSheet4: TTabSheet
+      Caption = 'S'#601'hif'#601'4'
+      ImageIndex = 3
+      object XFPanel4: TXFPanel
+        Left = 0
+        Top = 3
+        Width = 639
+        Height = 363
+        BevelInner = bvLowered
+        BevelKind = bkSoft
+        BevelOuter = bvNone
+        TabOrder = 0
+        object XFLabel53: TXFLabel
+          Left = 13
+          Top = 23
+          Width = 143
+          Height = 14
+          Caption = 'T'#601'tbiq edil'#601'c'#601'k t'#601'minat'
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -12
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
+        object XFLabel54: TXFLabel
+          Left = 13
+          Top = 169
+          Width = 576
+          Height = 14
+          Caption = 
+            'Bu g'#252'n'#601' kimi h'#601'r hans'#305' bir s'#305#287'ortasirk'#601'ti m'#252'raci'#601'tinizi q'#601'bul et' +
+            'm'#601'yib v'#601' ya s'#305#287'ortani yenil'#601'm'#601'kd'#601'n imtina edib'
+        end
+        object XFLabel55: TXFLabel
+          Left = 13
+          Top = 183
+          Width = 165
+          Height = 14
+          Caption = 'v'#601' ya x'#252'susi '#351#601'rtl'#601'r qoyubmu ?'
+        end
+        object XFLabel56: TXFLabel
+          Left = 8
+          Top = 242
+          Width = 615
+          Height = 14
+          Caption = 
+            'M'#252#601'yy'#601'n edilmi'#351' qaydada lisenziyala'#351'm'#305#351' kommersiya hava yollar'#305' ' +
+            'v'#601' ya kommersiya konserni t'#601'r'#601'find'#601'n idar'#601' olunan'
+        end
+        object XFLabel57: TXFLabel
+          Left = 8
+          Top = 256
+          Width = 621
+          Height = 14
+          Caption = 
+            #231'ox-m'#252'h'#601'rrikli hava n'#601'qliyyat vasit'#601'si il'#601' hava il'#601' da'#351#305'nma hall' +
+            'ar'#305' istisna olmaqla s'#305#287'orta olunan '#351#601'xsl'#601'rin etdiyi u'#231'u'#351'lar'#305'n'
+        end
+        object XFLabel58: TXFLabel
+          Left = 9
+          Top = 271
+          Width = 264
+          Height = 14
+          Caption = 'say'#305'n'#305' v'#601' n'#601'z'#601'rd'#601' tutulan t'#601'yinat yerl'#601'rini g'#246'st'#601'rin'
+        end
+        object btRisksAdd: TBitBtn
+          Left = 17
+          Top = 47
+          Width = 70
+          Height = 22
+          Caption = 'Dig'#601'r'
+          DoubleBuffered = True
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -12
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = []
+          Glyph.Data = {
+            76010000424D7601000000000000760000002800000020000000100000000100
+            04000000000000010000120B0000120B00001000000000000000000000000000
+            800000800000008080008000000080008000808000007F7F7F00BFBFBF000000
+            FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00333333333333
+            33333FF3333333333333447333333333333377FFF33333333333744473333333
+            333337773FF3333333333444447333333333373F773FF3333333334444447333
+            33333373F3773FF3333333744444447333333337F333773FF333333444444444
+            733333373F3333773FF333334444444444733FFF7FFFFFFF77FF999999999999
+            999977777777777733773333CCCCCCCCCC3333337333333F7733333CCCCCCCCC
+            33333337F3333F773333333CCCCCCC3333333337333F7733333333CCCCCC3333
+            333333733F77333333333CCCCC333333333337FF7733333333333CCC33333333
+            33333777333333333333CC333333333333337733333333333333}
+          Layout = blGlyphRight
+          NumGlyphs = 2
+          ParentDoubleBuffered = False
+          ParentFont = False
+          TabOrder = 0
+          OnClick = btRisksAddClick
+          OnKeyPress = DBEdit3KeyPress
+        end
+        object cbRisks: TCheckBox
+          Left = 17
+          Top = 75
+          Width = 96
+          Height = 19
+          Caption = 'Yadda saxla'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -12
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = [fsBold]
+          ParentFont = False
+          TabOrder = 1
+          OnClick = DBEdit4Change
+          OnKeyPress = DBEdit3KeyPress
+        end
+        object DBLookupComboBoxRisk: TDBLookupComboBox
+          Left = 173
+          Top = 14
+          Width = 449
+          Height = 23
+          DataField = 'RISKID'
+          DataSource = ODSPAccidentSource
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -12
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = []
+          KeyField = 'ID'
+          ListField = 'NAME'
+          ListSource = RisksData
+          ParentFont = False
+          TabOrder = 2
+          OnClick = DBEdit4Change
+          OnKeyPress = DBEdit3KeyPress
+        end
+        object memRisk: TMemo
+          Left = 173
+          Top = 40
+          Width = 449
+          Height = 105
+          Color = clInfoBk
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -12
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = []
+          ParentFont = False
+          ScrollBars = ssVertical
+          TabOrder = 3
+          OnChange = DBEdit4Change
+          OnKeyPress = DBEdit3KeyPress
+        end
+        object DBEdit20: TDBEdit
+          Left = 9
+          Top = 200
+          Width = 604
+          Height = 22
+          DataField = 'RENEWAL'
+          DataSource = ODSPAccidentSource
+          TabOrder = 4
+          OnChange = DBEdit4Change
+          OnKeyPress = DBEdit3KeyPress
+        end
+        object DBEdit21: TDBEdit
+          Left = 9
+          Top = 296
+          Width = 604
+          Height = 22
+          DataField = 'TRAVELS'
+          DataSource = ODSPAccidentSource
+          TabOrder = 5
+          OnChange = DBEdit4Change
+          OnKeyPress = DBEdit3KeyPress
+        end
+      end
+    end
+  end
+  object XFPanel1: TXFPanel
+    Left = 0
+    Top = 385
+    Width = 645
+    Height = 77
+    Align = alClient
+    BevelInner = bvLowered
+    BevelKind = bkFlat
+    TabOrder = 1
+    object Suggest: TBitBtn
+      Left = 18
+      Top = 15
+      Width = 87
+      Height = 26
+      Caption = #1058#1103#1082#1083#1080#1092#1085#1072#1084#1103
+      DoubleBuffered = True
+      Enabled = False
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      Glyph.Data = {
+        42010000424D4201000000000000760000002800000011000000110000000100
+        040000000000CC00000000000000000000001000000000000000000000000000
+        8000008000000080800080000000800080008080000080808000C0C0C0000000
+        FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00888888888888
+        8888800000008888888888888888800000008888888888888888800000008800
+        0000000000088000000088888228448118888000000088188228448118888000
+        0000888882284481188880000000881882284481188880000000888882284481
+        1888800000008818888844811888800000008888888844811888800000008818
+        8888448888888000000088888888448888888000000088188888888888888000
+        0000888888888888888880000000888888888888888880000000888888888888
+        888880000000}
+      ParentDoubleBuffered = False
+      ParentFont = False
+      TabOrder = 0
+      OnClick = SuggestClick
+      OnKeyPress = DBEdit3KeyPress
+    end
+    object Report: TBitBtn
+      Left = 115
+      Top = 47
+      Width = 82
+      Height = 26
+      Caption = #1065#1077#1089#1072#1073#1072#1090
+      DoubleBuffered = True
+      Enabled = False
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      Glyph.Data = {
+        76010000424D7601000000000000760000002800000020000000100000000100
+        04000000000000010000130B0000130B00001000000000000000000000000000
+        800000800000008080008000000080008000808000007F7F7F00BFBFBF000000
+        FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00300000000000
+        00033FFFFFFFFFFFFFFF0888888888888880777777777777777F088888888888
+        8880777777777777777F0000000000000000FFFFFFFFFFFFFFFF0F8F8F8F8F8F
+        8F80777777777777777F08F8F8F8F8F8F9F0777777777777777F0F8F8F8F8F8F
+        8F807777777777777F7F0000000000000000777777777777777F3330FFFFFFFF
+        03333337F3FFFF3F7F333330F0000F0F03333337F77773737F333330FFFFFFFF
+        03333337F3FF3FFF7F333330F00F000003333337F773777773333330FFFF0FF0
+        33333337F3FF7F3733333330F08F0F0333333337F7737F7333333330FFFF0033
+        33333337FFFF7733333333300000033333333337777773333333}
+      NumGlyphs = 2
+      ParentDoubleBuffered = False
+      ParentFont = False
+      TabOrder = 1
+      Visible = False
+      OnClick = ReportClick
+      OnKeyPress = DBEdit3KeyPress
+    end
+    object Back: TBitBtn
+      Left = 189
+      Top = 15
+      Width = 85
+      Height = 26
+      Caption = #1071#1074#1074#1103#1083#1082#1080
+      DoubleBuffered = True
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      Glyph.Data = {
+        76010000424D7601000000000000760000002800000020000000100000000100
+        04000000000000010000120B0000120B00001000000000000000000000000000
+        800000800000008080008000000080008000808000007F7F7F00BFBFBF000000
+        FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00333333333333
+        3333333333333333333333333333333333333333333333333333333333333333
+        3333333333333FF3333333333333003333333333333F77F33333333333009033
+        333333333F7737F333333333009990333333333F773337FFFFFF330099999000
+        00003F773333377777770099999999999990773FF33333FFFFF7330099999000
+        000033773FF33777777733330099903333333333773FF7F33333333333009033
+        33333333337737F3333333333333003333333333333377333333333333333333
+        3333333333333333333333333333333333333333333333333333333333333333
+        3333333333333333333333333333333333333333333333333333}
+      NumGlyphs = 2
+      ParentDoubleBuffered = False
+      ParentFont = False
+      TabOrder = 2
+      OnClick = BackClick
+      OnKeyPress = DBEdit3KeyPress
+    end
+    object Next: TBitBtn
+      Left = 275
+      Top = 15
+      Width = 86
+      Height = 26
+      Caption = #1053#1102#1074#1073#1103#1090#1080
+      DoubleBuffered = True
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      Glyph.Data = {
+        76010000424D7601000000000000760000002800000020000000100000000100
+        04000000000000010000120B0000120B00001000000000000000000000000000
+        800000800000008080008000000080008000808000007F7F7F00BFBFBF000000
+        FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00333333333333
+        3333333333333333333333333333333333333333333333333333333333333333
+        3333333333333333333333333333333333333333333FF3333333333333003333
+        3333333333773FF3333333333309003333333333337F773FF333333333099900
+        33333FFFFF7F33773FF30000000999990033777777733333773F099999999999
+        99007FFFFFFF33333F7700000009999900337777777F333F7733333333099900
+        33333333337F3F77333333333309003333333333337F77333333333333003333
+        3333333333773333333333333333333333333333333333333333333333333333
+        3333333333333333333333333333333333333333333333333333}
+      NumGlyphs = 2
+      ParentDoubleBuffered = False
+      ParentFont = False
+      TabOrder = 3
+      OnClick = NextClick
+      OnKeyPress = DBEdit3KeyPress
+    end
+    object btApply: TBitBtn
+      Left = 363
+      Top = 15
+      Width = 80
+      Height = 26
+      Caption = 'Apply'
+      DoubleBuffered = True
+      DragCursor = crArrow
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      Glyph.Data = {
+        F2010000424DF201000000000000760000002800000024000000130000000100
+        0400000000007C01000000000000000000001000000000000000000000000000
+        80000080000000808000800000008000800080800000C0C0C000808080000000
+        FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00333334433333
+        3333333333388F3333333333000033334224333333333333338338F333333333
+        0000333422224333333333333833338F33333333000033422222243333333333
+        83333338F3333333000034222A22224333333338F33F33338F33333300003222
+        A2A2224333333338F383F3338F33333300003A2A222A222433333338F8333F33
+        38F33333000034A22222A22243333338833333F3338F333300004222A2222A22
+        2433338F338F333F3338F3330000222A3A2224A22243338F3838F338F3338F33
+        0000A2A333A2224A2224338F83338F338F3338F300003A33333A2224A2224338
+        333338F338F3338F000033333333A2224A2243333333338F338F338F00003333
+        33333A2224A2233333333338F338F83300003333333333A2224A333333333333
+        8F338F33000033333333333A222433333333333338F338F30000333333333333
+        A224333333333333338F38F300003333333333333A223333333333333338F8F3
+        000033333333333333A3333333333333333383330000}
+      NumGlyphs = 2
+      ParentDoubleBuffered = False
+      ParentFont = False
+      TabOrder = 4
+      OnClick = btApplyClick
+      OnKeyPress = DBEdit3KeyPress
+    end
+    object Commit: TBitBtn
+      Left = 445
+      Top = 15
+      Width = 82
+      Height = 26
+      Caption = 'Ok'
+      DoubleBuffered = True
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      Glyph.Data = {
+        F6000000424DF600000000000000760000002800000010000000100000000100
+        0400000000008000000000000000000000001000000000000000000000000000
+        8000008000000080800080000000800080008080000080808000C0C0C0000000
+        FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00888888888888
+        8888800000000008888803300008030888880330000803000888033000000303
+        0888033333333303000803300000330303080308888803030308030888880303
+        0308030888880003030803088888080303080000000000000308880308888808
+        0308880000000000000888880308888808088888000000000008}
+      ParentDoubleBuffered = False
+      ParentFont = False
+      TabOrder = 5
+      OnClick = CommitClick
+      OnKeyPress = DBEdit3KeyPress
+    end
+    object BitBtn2: TBitBtn
+      Left = 529
+      Top = 15
+      Width = 87
+      Height = 26
+      Caption = #1048#1084#1090#1080#1085#1072
+      DoubleBuffered = True
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      Glyph.Data = {
+        36050000424D3605000000000000360400002800000010000000100000000100
+        08000000000000010000CE0E0000D80E00000001000000000000000000008080
+        8000000080000080800000800000808000008000000080008000408080004040
+        0000FF80000080400000FF00400000408000FFFFFF00C0C0C0000000FF0000FF
+        FF0000FF0000FFFF0000FF000000FF00FF0080FFFF0080FF0000FFFF8000FF80
+        80008000FF004080FF00C0DCC000F0CAA6000008000000000800000808000804
+        00000800080008080800130E0800040314001008100010101000151414001311
+        1F002525210018133F004E0C11004D1D0F00681C1000561D21006B1C21004A3B
+        36005655560077141800741324008F0E2200940F30008818230084292300893C
+        400011097E004C4B75005A6B6300666666005A73630065706D00736D6D007373
+        73007878730073737B0077777B00945D670096706D007B7B7B00837B8100947B
+        73009C7B730084847B008484840084848C0090878700948C8E00948C94008C94
+        9400949494009C9494009C9C940094949C009C949C009C9C9C00A80F2300AD18
+        2900A9083100A5143500AF102B00AD0C3900BC072B00C10D3600AD1E2900A82C
+        2700AD183900A9293100BE1B2900BD183100C01F3100B2154200A9213900B121
+        3D00B5214200AB2C3900A9294200A92F4600BB1B4000B5294200BD293900B929
+        4600C7184200CC253E00C1254A00CF254E00AC3F3200AB3F4200AE354A00AD4A
+        4200C1383D00C6314A00CE314A00BD394A00AD3D4F00BD355200AD475000BD42
+        5200C8395100C1425A00CC3F5E00B3524200B5525300B54E5E00B85C5B00C654
+        5000D95F5100F6624600B2606A00C15A6B00CC586500CC5D6F00B7848300DD7C
+        6E00E89889000C08B5000D0DE1001010EF000000F7000808F7000D0DFC001B1B
+        ED003A3AE2002222FB003939FF006E6ECD005656FF007777FF009494A5009C9C
+        A500A59CA500A5A5A500ADA5A5009494AD00A5A5AD00ADA5AD00A5A7B500A0A0
+        C6009B9BDB008C8CFF009494FF009C9CFF00A5A5FF00B5A5A500BDA5A500B5AD
+        A500BDADA500ADADAD00B5ADAD00B5B5AD00B1ADB500C6A7AA00C9B1AE00D6B1
+        A900EDB0A900FFAFA200FFB5AD00FFBDAD00B5B5B500BDB5B500BDBDB500ADAD
+        BD00B9B5BD00B3B3DB00B1B1FF00C1B9B900BDBDC600CBBBBA00E5BBB700C6C6
+        C600DABDC600C1C1D600BDBDFF00D6C6C600DEC6C600CEC6CE00D6C6CE00DEC6
+        CE00CECECE00D6CECE00D6D6CE00D2CED600D6D6D600DECECE00DECED600DED6
+        D600D6D6DE00DED6DE00F4C8BE00F0CFCB00FFD6C600E7CED600E7D6D600F1D3
+        D600FFD6CE00DEDEDE00E7DED600E7E7D600EBD6DE00E7DEDE00FFD6D600FFDE
+        D600D2D2EF00C6C6FF00CECEFF00D6D6FF00DEDEE700DEDEFF00E7DEE700E7E7
+        E700E7E7FF00EFDEDE00EFE7E700EFE7EF00F7E7E700FFDEDE00FFE7DE00FFE7
+        E700EFEFEF00EFEFFF00F7EFEF00F7EFF700FFEFE700FFEFEF000F0F01010F0F
+        0F0F0F0F0F0F0F0F0F0F0F100202010F0F0F0F0F10010F0F0F0F0F1002020201
+        0F0F0F100202010F0F0F0F1002020202010F1002020202010F0F0F0F10020202
+        02010202020202010F0F0F0F0F100202020202020202010F0F0F0F0F0F0F1002
+        0202020202010F0F0F0F0F0F0F0F0F0202020202010F0F0F0F0F0F0F0F0F0F10
+        02020202010F0F0F0F0F0F0F0F0F100202020202010F0F0F0F0F0F0F0F100202
+        0201020202010F0F0F0F0F0F10020202010F10020202010F0F0F0F0F10020201
+        0F0F0F10020202010F0F0F0F0F10020F0F0F0F0F100202020F0F0F0F0F0F0F0F
+        0F0F0F0F0F1002100F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F}
+      ParentDoubleBuffered = False
+      ParentFont = False
+      TabOrder = 6
+      OnClick = BitBtn2Click
+      OnKeyPress = DBEdit3KeyPress
+    end
+    object Button1: TButton
+      Left = 108
+      Top = 16
+      Width = 79
+      Height = 25
+      Caption = 'T'#601'krars'#305#287'orta'
+      TabOrder = 7
+      OnClick = Button1Click
+    end
+  end
+  object ODSPAccidentSource: TDataSource
+    DataSet = ODSPAccident
+    Left = 60
+    Top = 240
+  end
+  object ODSCustomersSource: TDataSource
+    DataSet = ODSCustomers
+    Left = 212
+    Top = 240
+  end
+  object ODSPAccident: TOracleDataSet
+    SQL.Strings = (
+      
+        'select pacc.rowid,pacc.* from ins_grouppersonalaccident pacc whe' +
+        're cid=:cid')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000080000003A00430049004400030000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000002700000004000000490044000100000000000C0000004B004C004900
+      5F00490044000100000000001C00000043004F004E0054004100430054005F00
+      50004500520053004F004E000100000000001E000000420041004E004B004900
+      4E0047005F00440045005400410049004C0053000100000000001E0000005400
+      4F00540041004C0045004D0050005F004E0055004D0042004500520001000000
+      00000600000041004F0047000100000000000600000041004F00500001000000
+      00000600000053004D0047000100000000000600000053004D00500001000000
+      0000060000004200430047000100000000000600000042004300500001000000
+      00001C00000044004500430049005200450044005F0041004D004F0055004E00
+      5400010000000000040000004100440001000000000004000000500044000100
+      000000000600000050004C0055000100000000000600000045004D0045000100
+      0000000004000000480043000100000000000400000048005300010000000000
+      06000000420052004200010000000000080000004200550052004E0001000000
+      000006000000540054004400010000000000220000004E004F0054005F004300
+      4F005600450052004500440050004500520049004F0044000100000000001800
+      00004F005500540053004900440045004F00460041005A004500010000000000
+      0E000000520045004E004500570041004C000100000000000E00000054005200
+      4100560045004C0053000100000000000C000000540059005000450049004400
+      0100000000000C0000005200490053004B004900440001000000000022000000
+      4E004F0054005F0043004F00560045005200450050004500520049004F004400
+      3100010000000000100000004D00410058005700450045004B00530001000000
+      000010000000500052004F00460049005400490044000100000000000E000000
+      4100470045004E005400490044000100000000001800000043004C004F005300
+      45005F005000520045004600490058000100000000000800000041004F004700
+      31000100000000000800000041004F0050003100010000000000080000005300
+      4D00470031000100000000000800000053004D00500031000100000000000800
+      0000420043004700310001000000000008000000420043005000310001000000
+      000006000000430049004400010000000000}
+    Session = sboapiDataModule.SBSession
+    OnNewRecord = ODSPAccidentNewRecord
+    Left = 52
+    Top = 288
+    object ODSPAccidentID: TFloatField
+      FieldName = 'ID'
+    end
+    object ODSPAccidentKLI_ID: TFloatField
+      FieldName = 'KLI_ID'
+    end
+    object ODSPAccidentCONTACT_PERSON: TWideStringField
+      FieldName = 'CONTACT_PERSON'
+      Size = 128
+    end
+    object ODSPAccidentBANKING_DETAILS: TWideStringField
+      FieldName = 'BANKING_DETAILS'
+      Size = 128
+    end
+    object ODSPAccidentTOTALEMP_NUMBER: TFloatField
+      FieldName = 'TOTALEMP_NUMBER'
+    end
+    object ODSPAccidentAOG: TFloatField
+      FieldName = 'AOG'
+    end
+    object ODSPAccidentAOP: TFloatField
+      FieldName = 'AOP'
+    end
+    object ODSPAccidentSMG: TFloatField
+      FieldName = 'SMG'
+    end
+    object ODSPAccidentSMP: TFloatField
+      FieldName = 'SMP'
+    end
+    object ODSPAccidentBCG: TFloatField
+      FieldName = 'BCG'
+    end
+    object ODSPAccidentBCP: TFloatField
+      FieldName = 'BCP'
+    end
+    object ODSPAccidentDECIRED_AMOUNT: TFloatField
+      FieldName = 'DECIRED_AMOUNT'
+    end
+    object ODSPAccidentAD: TFloatField
+      FieldName = 'AD'
+    end
+    object ODSPAccidentPD: TFloatField
+      AutoGenerateValue = arDefault
+      FieldName = 'PD'
+    end
+    object ODSPAccidentPLU: TFloatField
+      FieldName = 'PLU'
+    end
+    object ODSPAccidentEME: TFloatField
+      FieldName = 'EME'
+    end
+    object ODSPAccidentHC: TFloatField
+      FieldName = 'HC'
+    end
+    object ODSPAccidentHS: TFloatField
+      FieldName = 'HS'
+    end
+    object ODSPAccidentBRB: TFloatField
+      FieldName = 'BRB'
+    end
+    object ODSPAccidentBURN: TFloatField
+      FieldName = 'BURN'
+    end
+    object ODSPAccidentTTD: TFloatField
+      FieldName = 'TTD'
+    end
+    object ODSPAccidentOUTSIDEOFAZE: TWideStringField
+      FieldName = 'OUTSIDEOFAZE'
+      Size = 1024
+    end
+    object ODSPAccidentRENEWAL: TWideStringField
+      FieldName = 'RENEWAL'
+      Size = 1024
+    end
+    object ODSPAccidentTRAVELS: TWideStringField
+      FieldName = 'TRAVELS'
+      Size = 1024
+    end
+    object ODSPAccidentTYPEID: TIntegerField
+      FieldName = 'TYPEID'
+    end
+    object ODSPAccidentRISKID: TFloatField
+      FieldName = 'RISKID'
+    end
+    object ODSPAccidentMAXWEEKS: TIntegerField
+      FieldName = 'MAXWEEKS'
+    end
+    object ODSPAccidentPROFITID: TFloatField
+      FieldName = 'PROFITID'
+    end
+    object ODSPAccidentAGENTID: TFloatField
+      FieldName = 'AGENTID'
+    end
+    object ODSPAccidentAOG1: TFloatField
+      FieldName = 'AOG1'
+    end
+    object ODSPAccidentAOP1: TFloatField
+      FieldName = 'AOP1'
+    end
+    object ODSPAccidentSMG1: TFloatField
+      FieldName = 'SMG1'
+    end
+    object ODSPAccidentSMP1: TFloatField
+      FieldName = 'SMP1'
+    end
+    object ODSPAccidentBCG1: TFloatField
+      FieldName = 'BCG1'
+    end
+    object ODSPAccidentBCP1: TFloatField
+      FieldName = 'BCP1'
+    end
+    object ODSPAccidentCLOSE_PREFIX: TIntegerField
+      FieldName = 'CLOSE_PREFIX'
+    end
+    object ODSPAccidentCID: TFloatField
+      FieldName = 'CID'
+    end
+    object ODSPAccidentNOT_COVEREDPERIOD: TDateTimeField
+      FieldName = 'NOT_COVEREDPERIOD'
+    end
+    object ODSPAccidentNOT_COVEREPERIOD1: TDateTimeField
+      FieldName = 'NOT_COVEREPERIOD1'
+    end
+  end
+  object ODSCustomers: TOracleDataSet
+    SQL.Strings = (
+      
+        'select c.rowid,c.id,c.name||'#39' '#39'||c.surname||'#39' '#39'||c.fathername as' +
+        ' name,c.address,c.mobilephone,c.fax from ins_customers c')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000050000000400000049004400010000000000080000004E0041004D00
+      45000100000000000E0000004100440044005200450053005300010000000000
+      160000004D004F00420049004C004500500048004F004E004500010000000000
+      06000000460041005800010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 204
+    Top = 288
+    object ODSCustomersID: TIntegerField
+      FieldName = 'ID'
+      Required = True
+    end
+    object ODSCustomersNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 386
+    end
+    object ODSCustomersADDRESS: TWideStringField
+      FieldName = 'ADDRESS'
+      Size = 1024
+    end
+    object ODSCustomersMOBILEPHONE: TWideStringField
+      FieldName = 'MOBILEPHONE'
+      Size = 32
+    end
+    object ODSCustomersFAX: TWideStringField
+      FieldName = 'FAX'
+      Size = 32
+    end
+  end
+  object PINS_PACCIDENT: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'PINS_PACCIDENT'
+    ParameterMode = pmNamed
+    Left = 280
+    Top = 40
+  end
+  object RisksData: TDataSource
+    DataSet = Risks
+    Left = 480
+    Top = 13
+  end
+  object Risks: TOracleDataSet
+    SQL.Strings = (
+      'select idr.rowid, idr.* from ins_dict_risks idr')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000400000049004400010000000000080000004E0041004D00
+      4500010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 408
+    Top = 21
+    object RisksID: TFloatField
+      FieldName = 'ID'
+    end
+    object RisksNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 1024
+    end
+  end
+  object ODSRiskType: TOracleDataSet
+    SQL.Strings = (
+      'select * from ins_dict_risk_types')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000400000049004400010000000000080000004E0041004D00
+      4500010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 420
+    Top = 124
+    object ODSRiskTypeID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object ODSRiskTypeNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 256
+    end
+  end
+  object RiskTypeData: TDataSource
+    DataSet = ODSRiskType
+    Left = 476
+    Top = 124
+  end
+  object ODSPAccidentR: TOracleDataSet
+    SQL.Strings = (
+      
+        'select  PINS_FullMotor.returnName(kli_id) as name,Pins_FullMotor' +
+        '.returnAddress(kli_id) as Address,Pins_FullMotor.returnPhone(kli' +
+        '_id) as phone,pins_fullmotor.returnFax(kli_id) as fax,c.*from in' +
+        's_grouppersonalaccident c  where c.id=:id')
+    Optimize = False
+    Variables.Data = {0400000001000000060000003A0049004400040000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000002B000000080000004E0041004D0045000100000000000E0000004100
+      4400440052004500530053000100000000000A000000500048004F004E004500
+      0100000000000600000046004100580001000000000004000000490044000100
+      000000000C0000004B004C0049005F00490044000100000000001C0000004300
+      4F004E0054004100430054005F0050004500520053004F004E00010000000000
+      1E000000420041004E004B0049004E0047005F00440045005400410049004C00
+      53000100000000001E00000054004F00540041004C0045004D0050005F004E00
+      55004D004200450052000100000000000600000041004F004700010000000000
+      0600000041004F0050000100000000000600000053004D004700010000000000
+      0600000053004D00500001000000000006000000420043004700010000000000
+      060000004200430050000100000000001C000000440045004300490052004500
+      44005F0041004D004F0055004E00540001000000000004000000410044000100
+      0000000004000000500044000100000000000600000050004C00550001000000
+      00000600000045004D0045000100000000000400000048004300010000000000
+      0400000048005300010000000000060000004200520042000100000000000800
+      00004200550052004E0001000000000006000000540054004400010000000000
+      220000004E004F0054005F0043004F0056004500520045004400500045005200
+      49004F004400010000000000180000004F005500540053004900440045004F00
+      460041005A0045000100000000000E000000520045004E004500570041004C00
+      0100000000000E000000540052004100560045004C0053000100000000000C00
+      00005400590050004500490044000100000000000C0000005200490053004B00
+      49004400010000000000220000004E004F0054005F0043004F00560045005200
+      450050004500520049004F0044003100010000000000100000004D0041005800
+      5700450045004B00530001000000000010000000500052004F00460049005400
+      490044000100000000000E0000004100470045004E0054004900440001000000
+      00001800000043004C004F00530045005F005000520045004600490058000100
+      000000000800000041004F00470031000100000000000800000041004F005000
+      31000100000000000800000053004D0047003100010000000000080000005300
+      4D00500031000100000000000800000042004300470031000100000000000800
+      0000420043005000310001000000000006000000430049004400010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 376
+    Top = 72
+    object ODSPAccidentRNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 4000
+    end
+    object ODSPAccidentRADDRESS: TWideStringField
+      FieldName = 'ADDRESS'
+      Size = 4000
+    end
+    object ODSPAccidentRPHONE: TWideStringField
+      FieldName = 'PHONE'
+      Size = 4000
+    end
+    object ODSPAccidentRFAX: TWideStringField
+      FieldName = 'FAX'
+      Size = 4000
+    end
+    object ODSPAccidentRCONTACT_PERSON: TWideStringField
+      FieldName = 'CONTACT_PERSON'
+      Size = 128
+    end
+    object ODSPAccidentRBANKING_DETAILS: TWideStringField
+      FieldName = 'BANKING_DETAILS'
+      Size = 128
+    end
+    object ODSPAccidentRTOTALEMP_NUMBER: TFloatField
+      FieldName = 'TOTALEMP_NUMBER'
+    end
+    object ODSPAccidentRAOG: TFloatField
+      FieldName = 'AOG'
+    end
+    object ODSPAccidentRAOP: TFloatField
+      FieldName = 'AOP'
+    end
+    object ODSPAccidentRSMG: TFloatField
+      FieldName = 'SMG'
+    end
+    object ODSPAccidentRSMP: TFloatField
+      FieldName = 'SMP'
+    end
+    object ODSPAccidentRBCG: TFloatField
+      FieldName = 'BCG'
+    end
+    object ODSPAccidentRBCP: TFloatField
+      FieldName = 'BCP'
+    end
+    object ODSPAccidentRDECIRED_AMOUNT: TFloatField
+      FieldName = 'DECIRED_AMOUNT'
+    end
+    object ODSPAccidentRAD: TFloatField
+      FieldName = 'AD'
+    end
+    object ODSPAccidentRPD: TFloatField
+      FieldName = 'PD'
+    end
+    object ODSPAccidentRPLU: TFloatField
+      FieldName = 'PLU'
+    end
+    object ODSPAccidentREME: TFloatField
+      FieldName = 'EME'
+    end
+    object ODSPAccidentRHC: TFloatField
+      FieldName = 'HC'
+    end
+    object ODSPAccidentRHS: TFloatField
+      FieldName = 'HS'
+    end
+    object ODSPAccidentRBRB: TFloatField
+      FieldName = 'BRB'
+    end
+    object ODSPAccidentRBURN: TFloatField
+      FieldName = 'BURN'
+    end
+    object ODSPAccidentRTTD: TFloatField
+      FieldName = 'TTD'
+    end
+    object ODSPAccidentROUTSIDEOFAZE: TWideStringField
+      FieldName = 'OUTSIDEOFAZE'
+      Size = 1024
+    end
+    object ODSPAccidentRRENEWAL: TWideStringField
+      FieldName = 'RENEWAL'
+      Size = 1024
+    end
+    object ODSPAccidentRTRAVELS: TWideStringField
+      FieldName = 'TRAVELS'
+      Size = 1024
+    end
+    object ODSPAccidentRTYPEID: TIntegerField
+      FieldName = 'TYPEID'
+      Required = True
+    end
+    object ODSPAccidentRRISKID: TFloatField
+      FieldName = 'RISKID'
+    end
+    object ODSPAccidentRMAXWEEKS: TIntegerField
+      FieldName = 'MAXWEEKS'
+    end
+    object ODSPAccidentRID: TFloatField
+      FieldName = 'ID'
+    end
+    object ODSPAccidentRKLI_ID: TFloatField
+      FieldName = 'KLI_ID'
+    end
+    object ODSPAccidentRNOT_COVEREDPERIOD: TDateTimeField
+      FieldName = 'NOT_COVEREDPERIOD'
+    end
+    object ODSPAccidentRNOT_COVEREPERIOD1: TDateTimeField
+      FieldName = 'NOT_COVEREPERIOD1'
+    end
+    object ODSPAccidentRPROFITID: TFloatField
+      FieldName = 'PROFITID'
+    end
+    object ODSPAccidentRAGENTID: TFloatField
+      FieldName = 'AGENTID'
+    end
+    object ODSPAccidentRCLOSE_PREFIX: TIntegerField
+      FieldName = 'CLOSE_PREFIX'
+    end
+    object ODSPAccidentRAOG1: TFloatField
+      FieldName = 'AOG1'
+    end
+    object ODSPAccidentRAOP1: TFloatField
+      FieldName = 'AOP1'
+    end
+    object ODSPAccidentRBCG1: TFloatField
+      FieldName = 'BCG1'
+    end
+    object ODSPAccidentRBCP1: TFloatField
+      FieldName = 'BCP1'
+    end
+    object ODSPAccidentRSMG1: TFloatField
+      FieldName = 'SMG1'
+    end
+    object ODSPAccidentRSMP1: TFloatField
+      FieldName = 'SMP1'
+    end
+    object ODSPAccidentRCID: TFloatField
+      FieldName = 'CID'
+    end
+  end
+  object AccidentReportSource: TDataSource
+    DataSet = ODSPAccidentR
+    Left = 320
+    Top = 88
+  end
+  object AccidentExporter: TINSWordExporter
+    Left = 248
+    Top = 32
+  end
+  object ODSBeneficiary: TOracleDataSet
+    SQL.Strings = (
+      'select ib.rowid,ib.* from ins_beneficiary ib')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000050000000400000049004400010000000000080000004E0041004D00
+      45000100000000000E0000004100440044005200450053005300010000000000
+      0A000000500048004F004E0045000100000000001E000000420041004E004B00
+      49004E0047005F00440045005400410049004C005300010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 556
+    Top = 16
+    object ODSBeneficiaryID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object ODSBeneficiaryNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 128
+    end
+    object ODSBeneficiaryADDRESS: TWideStringField
+      FieldName = 'ADDRESS'
+      Size = 128
+    end
+    object ODSBeneficiaryPHONE: TWideStringField
+      FieldName = 'PHONE'
+      Size = 64
+    end
+    object ODSBeneficiaryBANKING_DETAILS: TWideStringField
+      FieldName = 'BANKING_DETAILS'
+      Size = 128
+    end
+  end
+  object BeneficiarySource: TDataSource
+    DataSet = ODSBeneficiary
+    Left = 572
+    Top = 152
+  end
+  object OPCOMMON: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'INS_COMMON'
+    Left = 322
+    Top = 2
+  end
+  object ODSContracts: TOracleDataSet
+    SQL.Strings = (
+      'select ic.rowid, ic.* from ins_contracts ic'
+      'where id = :cid'
+      '')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000080000003A00430049004400030000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000002100000004000000490044000100000000000E000000540059005000
+      45005F00490044000100000000001000000042004C0041004E004B005F004900
+      44000100000000001000000049004E0053005F00440041005400450001000000
+      00001400000042004500470049004E005F004400410054004500010000000000
+      1000000045004E0044005F004400410054004500010000000000120000005600
+      41004C005500540045005F00490044000100000000000E00000041004D004D00
+      4F0055004E0054000100000000001800000043004C004F00530045005F005000
+      520045004600490058000100000000000C0000004B004C0049005F0049004400
+      010000000000140000004C004F0041004E004100430043005F00490044000100
+      000000001400000043005500520052004100430043005F004900440001000000
+      00001400000050004F004C004900430059005F004E0055004D00010000000000
+      0E00000049004E005300530055004D004D000100000000001000000046005200
+      41004E005300480049005A000100000000000C00000054004100520049004600
+      46000100000000000A0000005300540041005400450001000000000010000000
+      4100470045004E0054005F00490044000100000000000800000050004E005500
+      4D000100000000000C000000420045004E005F00490044000100000000001600
+      0000420045004E00450046004900430049004100520059000100000000001400
+      000043004F004E0044004900540049004F004E0053000100000000000C000000
+      5300550047004E0055004D000100000000000A0000004F0050005F0049004400
+      0100000000000A0000005200450049004E005300010000000000200000004100
+      430043004900440045004E0054005F0041004D004D004F0055004E0054000100
+      000000001800000052004500530050005F0041004D004D004F0055004E005400
+      010000000000200000004100430043004900440045004E0054005F0050005200
+      45004D00490055004D000100000000001800000052004500530050005F005000
+      520045004D00490055004D000100000000001800000041004300430049004400
+      45004E0054005F00430049004400010000000000100000005200450053005000
+      5F00430049004400010000000000220000004100430043004900440045004E00
+      54005F0050004F004C00490053004E0055004D000100000000001A0000005200
+      4500530050005F00500049004C00490053004E0055004D00010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 192
+    Top = 32
+    object ODSContractsID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object ODSContractsTYPE_ID: TFloatField
+      FieldName = 'TYPE_ID'
+    end
+    object ODSContractsBLANK_ID: TFloatField
+      FieldName = 'BLANK_ID'
+    end
+    object ODSContractsINS_DATE: TDateTimeField
+      FieldName = 'INS_DATE'
+    end
+    object ODSContractsBEGIN_DATE: TDateTimeField
+      FieldName = 'BEGIN_DATE'
+    end
+    object ODSContractsEND_DATE: TDateTimeField
+      FieldName = 'END_DATE'
+    end
+    object ODSContractsVALUTE_ID: TFloatField
+      FieldName = 'VALUTE_ID'
+    end
+    object ODSContractsAMMOUNT: TFloatField
+      FieldName = 'AMMOUNT'
+    end
+    object ODSContractsCLOSE_PREFIX: TIntegerField
+      FieldName = 'CLOSE_PREFIX'
+      Required = True
+    end
+    object ODSContractsKLI_ID: TFloatField
+      FieldName = 'KLI_ID'
+    end
+    object ODSContractsLOANACC_ID: TFloatField
+      FieldName = 'LOANACC_ID'
+    end
+    object ODSContractsCURRACC_ID: TFloatField
+      FieldName = 'CURRACC_ID'
+    end
+    object ODSContractsPOLICY_NUM: TWideStringField
+      FieldName = 'POLICY_NUM'
+      Size = 128
+    end
+    object ODSContractsINSSUMM: TFloatField
+      FieldName = 'INSSUMM'
+      Visible = False
+    end
+    object ODSContractsFRANSHIZ: TFloatField
+      FieldName = 'FRANSHIZ'
+      Visible = False
+    end
+    object ODSContractsTARIFF: TFloatField
+      FieldName = 'TARIFF'
+      Visible = False
+    end
+    object ODSContractsSTATE: TIntegerField
+      FieldName = 'STATE'
+      Visible = False
+    end
+    object ODSContractsAGENT_ID: TFloatField
+      FieldName = 'AGENT_ID'
+      Visible = False
+    end
+    object ODSContractsPNUM: TFloatField
+      FieldName = 'PNUM'
+      Visible = False
+    end
+    object ODSContractsBEN_ID: TFloatField
+      FieldName = 'BEN_ID'
+      Visible = False
+    end
+    object ODSContractsBENEFICIARY: TWideStringField
+      FieldName = 'BENEFICIARY'
+      Visible = False
+      Size = 4000
+    end
+    object ODSContractsCONDITIONS: TWideStringField
+      FieldName = 'CONDITIONS'
+      Visible = False
+      Size = 4000
+    end
+    object ODSContractsSUGNUM: TWideStringField
+      FieldName = 'SUGNUM'
+      Visible = False
+      Size = 128
+    end
+  end
+  object DSContracts: TDataSource
+    DataSet = ODSContracts
+    Left = 160
+    Top = 77
+  end
+  object SuggestContainer: TPlgModalContainer
+    Left = 228
+    Top = 72
+  end
+  object ODSPAccSuggest: TOracleDataSet
+    SQL.Strings = (
+      'select s.rowid,s.* from ins_pacc_suggestion s'
+      'where paid = :paid')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000A0000003A00500041004900440004000000000000000000
+      0000}
+    QBEDefinition.QBEFieldDefs = {
+      0500000009000000040000004900440001000000000008000000500041004900
+      44000100000000000E00000043004E00440054005F0049004400010000000000
+      1800000049004E0053005500520041004E0043004500530055004D0001000000
+      00001A00000049004E0053005500520041004E0043004500540049004D004500
+      010000000000160000004D00450044004900430041004C0043004F0053005400
+      0100000000001C00000041004C004C005F0049004E00530041004D004D004F00
+      55004E00540001000000000006000000470045004F000100000000000C000000
+      460052005A005F0049004400010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 152
+    Top = 128
+    object ODSPAccSuggestID: TFloatField
+      FieldName = 'ID'
+    end
+    object ODSPAccSuggestPAID: TFloatField
+      FieldName = 'PAID'
+    end
+    object ODSPAccSuggestCNDT_ID: TFloatField
+      FieldName = 'CNDT_ID'
+    end
+    object ODSPAccSuggestINSURANCESUM: TFloatField
+      FieldName = 'INSURANCESUM'
+    end
+    object ODSPAccSuggestINSURANCETIME: TDateTimeField
+      FieldName = 'INSURANCETIME'
+    end
+    object ODSPAccSuggestMEDICALCOST: TFloatField
+      FieldName = 'MEDICALCOST'
+    end
+    object ODSPAccSuggestALL_INSAMMOUNT: TFloatField
+      FieldName = 'ALL_INSAMMOUNT'
+    end
+    object ODSPAccSuggestGEO: TWideStringField
+      FieldName = 'GEO'
+      Size = 128
+    end
+  end
+  object PAccSugestSource: TDataSource
+    DataSet = ODSPAccSuggest
+    Left = 104
+    Top = 168
+  end
+  object AgentSource: TDataSource
+    DataSet = ODSAgent
+    Left = 144
+    Top = 237
+  end
+  object ODSAgent: TOracleDataSet
+    SQL.Strings = (
+      
+        'select id,(name||'#39' '#39'||surname||'#39' '#39'||fathername) as name from ins' +
+        '_agents')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      0500000002000000080000004E0041004D004500010000000000040000004900
+      4400010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 136
+    Top = 288
+    object ODSAgentID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object ODSAgentNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 386
+    end
+  end
+  object OracleDataSet1: TOracleDataSet
+    SQL.Strings = (
+      'select ins_personalaccseq.currval  as id from dual')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {05000000010000000400000049004400010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 256
+    object OracleDataSet1ID: TFloatField
+      FieldName = 'ID'
+    end
+  end
+  object DsSysdat: TOracleDataSet
+    SQL.Strings = (
+      'select * from sysdat')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000040000000E000000540045004B005F00440041005400010000000000
+      1000000050005200450044005F004400410054000100000000000E0000004100
+      520043005F004400410059000100000000000A00000043004C004F0053004500
+      010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 280
+    Top = 272
+    object DsSysdatTEK_DAT: TDateTimeField
+      FieldName = 'TEK_DAT'
+      Required = True
+    end
+    object DsSysdatPRED_DAT: TDateTimeField
+      FieldName = 'PRED_DAT'
+    end
+    object DsSysdatARC_DAY: TDateTimeField
+      FieldName = 'ARC_DAY'
+    end
+    object DsSysdatCLOSE: TIntegerField
+      FieldName = 'CLOSE'
+    end
+  end
+  object DSRIns_cid: TDataSource
+    DataSet = DSIns_cid
+    Left = 256
+    Top = 168
+  end
+  object DSIns_cid: TOracleDataSet
+    SQL.Strings = (
+      'select * from ins_cid')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      0500000004000000060000004300490044000100000000000600000042004900
+      44000100000000000C0000004B004C0049005F00490044000100000000000600
+      00004D004F004400010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 208
+    Top = 120
+    object DSIns_cidCID: TFloatField
+      FieldName = 'CID'
+    end
+    object DSIns_cidBID: TFloatField
+      FieldName = 'BID'
+    end
+    object DSIns_cidKLI_ID: TFloatField
+      FieldName = 'KLI_ID'
+    end
+    object DSIns_cidMOD: TWideStringField
+      FieldName = 'MOD'
+    end
+  end
+  object Sb_aca: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'Sb_aca'
+    Left = 176
+    Top = 184
+  end
+end

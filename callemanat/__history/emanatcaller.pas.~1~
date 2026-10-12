@@ -1,0 +1,69 @@
+unit emanatcaller;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs,IniFiles, IdBaseComponent, IdComponent, IdTCPConnection, IdTCPClient,
+  IdHTTP, StdCtrls;
+
+type
+  TForm1 = class(TForm)
+    Button1: TButton;
+    IdHTTP1: TIdHTTP;
+    procedure Button1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form1: TForm1;
+
+implementation
+
+{$R *.dfm}
+
+procedure TForm1.Button1Click(Sender: TObject);
+var a,b,c:integer;
+ val :string;
+
+
+   st:string;
+   Contract: string;
+   credamount:real;
+   ins_date:String;
+   MyText: TStringlist;
+     uname,upass,dbname,ulink,smlink,link,Websrvuser,Websrvpass:string;
+    ini: TIniFile;
+   sl: TStringList;
+
+begin
+
+   ini := TIniFile.Create('D:\Smart-bank\webservices\conn.ini');
+
+
+     dbname:= ini.ReadString('Smart', 'DataBase', 'default value');
+     uname:=  ini.ReadString('Smart', 'Username', 'default value');
+     upass:=  ini.ReadString('Smart', 'Password', 'default value');
+     ulink:=  ini.ReadString('Smart', 'Link', 'default value');
+     smlink := ini.ReadString('Smart', 'Link', 'default value');
+     Websrvuser:= ini.ReadString('Smart', 'Websrvuser', 'default value');
+     Websrvpass:= ini.ReadString('Smart', 'Websrvpass', 'default value');
+
+    sl := TStringList.Create;
+    sl.Add(FormatDateTime('YYYYMMDD',now));
+
+
+    //link:=ulink+'/';
+//hand.Host:= 'http://www.mjfinance.serverxx.com/mj_web/hs/smart/getdata/20200428';
+
+
+st:=IdHTTP1.post(link,sl);
+
+
+showmessage(FormatDateTime('YYYYMMDD',now));
+end;
+
+end.

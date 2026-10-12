@@ -1,0 +1,253 @@
+﻿unit UnitAddGroups;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ExtCtrls,  StdCtrls, Buttons, DBCtrls, Mask, DBCtrlsEh, DBLookupEh, DBGridEh,
+  XFSCtrls;
+
+type
+  TFormAddGroups = class(TForm)
+    PanelM: TPanel;
+    GroupBoxName: TGroupBox;
+    EditGroupName: TEdit;
+    GroupBoxNBPercent: TGroupBox;
+    GroupBoxNLPercent: TGroupBox;
+    EditPercentNB: TEdit;
+    EditPercentNL: TEdit;
+    GroupBoxDebtAcc: TGroupBox;
+    GroupBoxCredAcc: TGroupBox;
+    CBoxDebtAcc: TComboBox;
+    CBoxCredAcc: TComboBox;
+    GroupBox_main_acc: TGroupBox;
+    GroupBox_sale_acc: TGroupBox;
+    CB_main_acc1: TDBLookupComboBox;
+    CB_sale_acc1: TDBLookupComboBox;
+    CB_main_acc: TDBLookupComboboxEh;
+    CB_sale_acc: TDBLookupComboboxEh;
+    Button1: TButton;
+    Edit1: TEdit;
+    Edit2: TEdit;
+    ComboBox2: TComboBox;
+    Edit3: TEdit;
+    Edit4: TEdit;
+    ComboBox4: TComboBox;
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormActivate(Sender: TObject);
+    procedure CBoxDebtAccChange(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure Edit1Change(Sender: TObject);
+    procedure Edit2Change(Sender: TObject);
+    procedure Edit3Change(Sender: TObject);
+    procedure Edit4Change(Sender: TObject);
+    procedure Edit1Enter(Sender: TObject);
+    procedure Edit2Enter(Sender: TObject);
+    procedure Edit3Enter(Sender: TObject);
+    procedure Edit4Enter(Sender: TObject);
+    procedure ComboBox1Change(Sender: TObject);
+    procedure ComboBox2Change(Sender: TObject);
+    procedure ComboBox3Change(Sender: TObject);
+    procedure ComboBox4Change(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormAddGroups: TFormAddGroups;
+
+implementation
+           uses unitdata,sboapiDataModuleImpl, SBTranslateProc;
+{$R *.DFM}
+
+procedure TFormAddGroups.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+ if (ORD(Key) =VK_ESCAPE) then Close;
+end;
+
+procedure TFormAddGroups.FormActivate(Sender: TObject);
+var
+rec :integer;
+begin
+     {   DataModWares.ODSViewGr.Close;
+        DataModWares.ODSViewGr.Open;
+
+          CBoxDebtAcc.Clear;
+          CBoxCredAcc.Clear;
+      for rec := 1 to DataModWares.ODSViewGr.RecordCount do
+      begin
+        CBoxDebtAcc.Items.Add(DataModWares.ODSViewGr.FieldByName('Acc_No').AsString);
+        CBoxCredAcc.Items.Add(DataModWares.ODSViewGr.FieldByName('Acc_No').AsString);
+      DataModWares.ODSViewGr.Next;
+      end;      }
+
+end;
+
+procedure TFormAddGroups.FormCreate(Sender: TObject);
+begin
+SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TFormAddGroups.Button1Click(Sender: TObject);
+begin
+ if (EditGroupName.Text<>'') and (EditPercentNB.Text<>'') and
+    (EditPercentNL.Text<>'') and (CBoxCredAcc.Text<>'') and
+   (CBoxDebtAcc.Text<>'')
+   //(ComboBox1.Text<>'')   and (ComboBox2.Text<>'') and (ComboBox3.Text<>'') and (ComboBox4.Text<>'')
+   then
+   begin
+  DataModWares.SB_MAIN_RESOURCE.CallProcedure('add_groups',[EditGroupName.Text,
+                                  strtofloat(EditPercentNB.Text),
+                                                      // combobox2.text,
+                                                      CB_main_acc.KeyValue,
+                                                      // ComboBox1.Text,
+                                                      CBoxDebtAcc.tag,
+                                                      // combobox3.text,
+                                                      CBoxCredAcc.tag,
+                                                      // combobox4.text,
+                                                      CB_sale_acc.KeyValue,
+                                                        strtofloat(EditPercentNL.Text)]);
+
+                             DataModWares.ODSGroups.Refresh;
+                           close;
+
+   end
+   else
+   begin
+   ShowMessage('Boş qalan xanalar var!');
+    //ShowMessage('ddddd');
+
+   end;
+
+end;
+
+procedure TFormAddGroups.CBoxDebtAccChange(Sender: TObject);
+begin
+ with DataModWares.SB_MAIN_RESOURCE do
+  begin
+   (Sender as TComboBox).Tag:=CallIntegerFunction('GetAccountID',[(Sender as TComboBox).Text]);
+  end;
+end;
+
+procedure TFormAddGroups.ComboBox1Change(Sender: TObject);
+var a :string;
+begin
+//a:=  combobox1.text ;
+
+ //CBoxDebtAcc.ItemIndex:= strtoint(a)   ;
+end;
+
+procedure TFormAddGroups.ComboBox2Change(Sender: TObject);
+begin
+CB_main_acc.text:=combobox2.Text
+end;
+
+procedure TFormAddGroups.ComboBox3Change(Sender: TObject);
+var a :string;
+begin
+//a:=  combobox1.text ;
+//CBoxCredAcc.ItemIndex:=1// strtoint(a);
+end;
+
+procedure TFormAddGroups.ComboBox4Change(Sender: TObject);
+begin
+CB_sale_acc.text:=combobox4.Text;
+end;
+
+procedure TFormAddGroups.Edit1Change(Sender: TObject);
+begin
+
+with
+DataModWares.ODSViewGr1 do
+
+begin
+close;
+SetVariable('a',edit1.Text);
+Open;
+end;
+while not DataModWares.ODSViewGr1.eof do
+begin
+  CBoxDebtAcc.Items.Add(DataModWares.ODSViewGr1.FieldByName('acc_no').AsString)  ;
+DataModWares.ODSViewGr1.Next;
+end;
+  ;
+end;
+
+procedure TFormAddGroups.Edit1Enter(Sender: TObject);
+begin
+//ComboBox1.Items.Clear;
+end;
+
+procedure TFormAddGroups.Edit2Change(Sender: TObject);
+begin
+with
+DataModWares.ODSViewGr1 do
+
+begin
+close;
+SetVariable('a',edit2.Text);
+Open;
+end;
+while not DataModWares.ODSViewGr1.eof do
+begin
+  ComboBox2.Items.Add(DataModWares.ODSViewGr1.FieldByName('acc_no').AsString)  ;
+DataModWares.ODSViewGr1.Next;
+end;
+end;
+
+procedure TFormAddGroups.Edit2Enter(Sender: TObject);
+begin
+ComboBox2.Items.Clear;
+end;
+
+procedure TFormAddGroups.Edit3Change(Sender: TObject);
+begin
+with
+DataModWares.ODSViewGr1 do
+
+begin
+close;
+SetVariable('a',edit3.Text);
+Open;
+end;
+while not DataModWares.ODSViewGr1.eof do
+begin
+  CBoxCredAcc.Items.Add(DataModWares.ODSViewGr1.FieldByName('acc_no').AsString)  ;
+  //ComboBox3.Items.Add(DataModWares.ODSViewGr1.FieldByName('acc_no').AsString)  ;
+DataModWares.ODSViewGr1.Next;
+end;
+
+end;
+
+procedure TFormAddGroups.Edit3Enter(Sender: TObject);
+begin
+//ComboBox3.Items.Clear;
+end;
+
+procedure TFormAddGroups.Edit4Change(Sender: TObject);
+begin
+with
+DataModWares.ODSViewGr1 do
+
+begin
+close;
+SetVariable('a',edit4.Text);
+Open;
+end;
+while not DataModWares.ODSViewGr1.eof do
+begin
+  ComboBox4.Items.Add(DataModWares.ODSViewGr1.FieldByName('acc_no').AsString)  ;
+DataModWares.ODSViewGr1.Next;
+end;
+
+end;
+
+procedure TFormAddGroups.Edit4Enter(Sender: TObject);
+begin
+ComboBox4.Items.Clear;
+end;
+
+end.

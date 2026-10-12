@@ -1,0 +1,834 @@
+object DataModulBalance: TDataModulBalance
+  OldCreateOrder = False
+  Height = 480
+  Width = 696
+  object DataBalance: TDataSource
+    DataSet = Balance
+    Left = 24
+    Top = 32
+  end
+  object Balance: TOracleDataSet
+    SQL.Strings = (
+      '  SELECT   lastremainder.balancebill AS balanceaccount,'
+      '         firstremainder.active AS firstactive,'
+      '         firstremainder.passive AS firstpassive,'
+      '         turnovers.dturnover,'
+      '         turnovers.cturnover,'
+      '         lastremainder.active AS lastactive,'
+      '         lastremainder.passive AS lastpassive'
+      '    FROM (SELECT   b.bal_cn balancebill,'
+      '                   SUM ('
+      '                      sb_mtoutview.active ('
+      '                         ar.%sostat, /*10*/'
+      '                         b.typeid,'
+      '                         b.additionaltypeid'
+      '                      )'
+      '                   ) active,'
+      '                   SUM ('
+      '                      sb_mtoutview.passiv ('
+      '                         ar.%sostat,     /*17*/'
+      '                         b.typeid,'
+      '                         b.additionaltypeid'
+      '                      )'
+      '                   ) passive'
+      '              FROM archost ar, ACCOUNT ac, bal_spr%d b /*22*/'
+      '             WHERE (ar.acc_id = ac.id)'
+      '               AND (ac.bal_cn%d = b.bal_cn)    /*24*/'
+      '               /*25 BRANCH and CURRENCY*/'
+      '               AND (ar.datdate = :BeginPeriod)'
+      '          GROUP BY'
+      '           b.bal_cn) firstremainder,'
+      '         (SELECT   b.bal_cn balancebill,'
+      '                   SUM (ar.%sobr_d) dturnover,/*30*/'
+      '                   SUM (ar.%sobr_k) cturnover /*31*/'
+      '              FROM archost ar, ACCOUNT ac, bal_spr%d b /*32*/'
+      '             WHERE (ar.acc_id = ac.id)'
+      
+        '               AND (ac.bal_cn%d = b.bal_cn)                 /*34' +
+        '*/'
+      '               /*35 BRANCH and CURRENCY*/'
+      '               AND (ar.datdate BETWEEN :BeginDate AND :EndDate)'
+      '          GROUP BY b.bal_cn) turnovers,'
+      '         (SELECT  b.bal_cn balancebill,'
+      '                   SUM ('
+      '                      sb_mtoutview.active ('
+      '                         ar.%sostat,/*41*/'
+      '                         b.typeid,'
+      '                         b.additionaltypeid'
+      '                      )'
+      '                   ) active,'
+      '                   SUM ('
+      '                      sb_mtoutview.passiv ('
+      '                         ar.%sostat,/*48*/'
+      '                         b.typeid,'
+      '                         b.additionaltypeid'
+      '                      )'
+      '                   ) passive'
+      '              FROM archost ar, ACCOUNT ac, bal_spr%d b  /*53*/'
+      '             WHERE (ar.acc_id = ac.id)'
+      '               AND (ac.bal_cn%d = b.bal_cn)  /*55*/'
+      '               /*56 BRANCH and CURRENCY*/'
+      '               AND (ar.datdate = :EndDate)'
+      '          GROUP BY'
+      '           b.bal_cn) lastremainder'
+      '   WHERE'
+      '    lastremainder.balancebill = firstremainder.balancebill(+)'
+      '     AND lastremainder.balancebill = turnovers.balancebill'
+      'ORDER BY lastremainder.balancebill '
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ' '
+      ' '
+      ' '
+      ' ')
+    Optimize = False
+    Variables.Data = {
+      0400000003000000180000003A0042004500470049004E005000450052004900
+      4F0044000C0000000000000000000000140000003A0042004500470049004E00
+      44004100540045000C0000000000000000000000100000003A0045004E004400
+      44004100540045000C0000000000000000000000}
+    QueryAllRecords = False
+    Session = sboapiDataModule.SBSession
+    AfterScroll = BalanceAfterScroll
+    Left = 80
+    Top = 32
+    object BalanceBALANCEACCOUNT: TFloatField
+      DisplayLabel = #1041#1072#1083#1072#1085#1089' '#1065#1077#1089#1072#1073#1099
+      FieldName = 'BALANCEACCOUNT'
+      Required = True
+    end
+    object BalanceFIRSTACTIVE: TFloatField
+      DisplayLabel = #1048#1083#1082#1080#1085' '#1075#1072#1083#1099#1075'('#1040#1082#1090#1080#1074')'
+      FieldName = 'FIRSTACTIVE'
+      DisplayFormat = '#,##0.00'
+    end
+    object BalanceFIRSTPASSIVE: TFloatField
+      DisplayLabel = #1048#1083#1082#1080#1085' '#1075#1072#1083#1099#1075'('#1055#1072#1089#1089#1080#1074')'
+      FieldName = 'FIRSTPASSIVE'
+      DisplayFormat = '#,##0.00'
+    end
+    object BalanceDTURNOVER: TFloatField
+      DisplayLabel = #1044#1077#1073#1077#1090' '#1044#1102#1074#1088#1080#1081#1081#1103
+      FieldName = 'DTURNOVER'
+      DisplayFormat = '#,##0.00'
+    end
+    object BalanceCTURNOVER: TFloatField
+      DisplayLabel = #1050#1088#1077#1076#1080#1090' '#1044#1102#1074#1088#1080#1081#1081#1103
+      FieldName = 'CTURNOVER'
+      DisplayFormat = '#,##0.00'
+    end
+    object BalanceLASTACTIVE: TFloatField
+      DisplayLabel = #1057#1086#1085' '#1075#1072#1083#1099#1075'('#1040#1082#1090#1080#1074')'
+      FieldName = 'LASTACTIVE'
+      DisplayFormat = '#,##0.00'
+    end
+    object BalanceLASTPASSIVE: TFloatField
+      DisplayLabel = #1057#1086#1085' '#1075#1072#1083#1099#1075'('#1055#1072#1089#1089#1080#1074')'
+      FieldName = 'LASTPASSIVE'
+      DisplayFormat = '#,##0.00'
+    end
+  end
+  object DataAccount: TDataSource
+    DataSet = Account
+    Left = 248
+    Top = 40
+  end
+  object Account: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      '  RestForLastPeriod.AccountID , RestForLastPeriod.Name ,'
+      '  RestForLastPeriod.AccNo ,'
+      '  RestForLastPeriod.CurrencyID ,'
+      '  RestForLastPeriod.BranchID ,'
+      '  RestForLastPeriod.BalanceNo ,'
+      '  RestForFirstPeriod.Active as BeginActive ,'
+      '  RestForFirstPeriod.Passive as BeginPassive ,'
+      '  TurnOvers.DTurnOver ,'
+      '  TurnOvers.CTurnOver ,'
+      '  RestForLastPeriod.Active as EndActive ,'
+      '  RestForLastPeriod.Passive as EndPassive'
+      'from'
+      ''
+      '(select'
+      '  ac.ID as AccountID ,'
+      '  ac.acc_no as AccNo ,'
+      '  b.bal_cn  as BalanceNo ,'
+      ''
+      '  sb_mtoutview.active ('
+      '    ar.%sostat,  /*20*/'
+      '    b.typeid,'
+      '    b.additionaltypeid'
+      '  ) as Active ,'
+      ''
+      '  sb_mtoutview.passiv ('
+      '     ar.%sostat,   /*26*/'
+      '     b.typeid,'
+      '     b.additionaltypeid'
+      '  ) as Passive'
+      ''
+      'from'
+      '  account ac ,'
+      '  archost ar ,'
+      '  bal_spr%d b  /*34*/'
+      'where'
+      '  ar.acc_id = ac.id and'
+      '  ac.bal_cn%d = b.bal_cn and     /*37*/'
+      '  ar.DatDate = :BeginPeriod and'
+      '  ((ac.Close_Dat is null)or(ac.Close_Dat > :BeginPeriod))'
+      ') RestForFirstPeriod ,'
+      ''
+      '(select'
+      '  ac.ID as AccountID , ac.name ,'
+      '  ac.acc_no as AccNo ,'
+      '  ac.val_acc as CurrencyID ,'
+      '  ac.filial as BranchID ,'
+      '  b.bal_cn  as BalanceNo ,'
+      ''
+      '  sb_mtoutview.active ('
+      '    ar.%sostat,  /*50*/'
+      '    b.typeid,'
+      '    b.additionaltypeid'
+      '  ) as Active ,'
+      ''
+      '  sb_mtoutview.passiv ('
+      '     ar.%sostat,  /*56*/'
+      '     b.typeid,'
+      '     b.additionaltypeid'
+      '  ) as Passive'
+      ''
+      'from'
+      '  account ac ,'
+      '  archost ar ,'
+      '  bal_spr%d b  /*64*/'
+      'where'
+      '  ar.acc_id = ac.id and'
+      '  ac.bal_cn%d = b.bal_cn and  /*67*/'
+      '  ar.DatDate = :EndDate and'
+      '  ((ac.Close_Dat is null)or(ac.Close_Dat > :EndDate))'
+      ') RestForLastPeriod ,'
+      ''
+      '(select'
+      '  ac.ID as AccountID ,'
+      '  min(ac.acc_no) as AccNo,'
+      '  min(b.bal_cn)  as BalanceNo ,'
+      '  sum(ar.%sObr_D) as DTurnOver , /*76*/'
+      '  sum(ar.%sObr_K) as CTurnOver   /*77*/'
+      'from'
+      '  account ac ,'
+      '  archost ar ,'
+      '  bal_spr%d b  /*81*/'
+      'where'
+      '  ar.acc_id = ac.id and'
+      '  ac.bal_cn%d = b.bal_cn and /*84*/'
+      '  ar.DatDate between :BeginDate and :EndDate'
+      'group by'
+      '  ac.ID'
+      ') TurnOvers'
+      ''
+      'where'
+      '  /* Branch & Currency*/'
+      
+        '  RestForLastPeriod.AccountID = RestForFirstPeriod.AccountID  (+' +
+        ') and'
+      '  RestForLastPeriod.AccountID = TurnOvers.AccountID'
+      '  --and'
+      '  --RestForLastPeriod.BalanceNo =:BalanceNo'
+      ''
+      'order by'
+      '  RestForLastPeriod.AccNo'
+      ' '
+      ' '
+      ''
+      ' '
+      ' '
+      ' '
+      '')
+    Optimize = False
+    Variables.Data = {
+      0400000003000000180000003A0042004500470049004E005000450052004900
+      4F0044000C0000000000000000000000100000003A0045004E00440044004100
+      540045000C0000000000000000000000140000003A0042004500470049004E00
+      44004100540045000C0000000000000000000000}
+    QueryAllRecords = False
+    Session = sboapiDataModule.SBSession
+    AfterScroll = AccountAfterScroll
+    Left = 312
+    Top = 40
+    object AccountACCNO: TWideStringField
+      DisplayLabel = 'Hesab '#8470
+      FieldName = 'ACCNO'
+      Size = 28
+    end
+    object AccountBALANCENO: TFloatField
+      DisplayLabel = #1041#1072#1083#1072#1085#1089' '#1065#1077#1089#1072#1073#1099
+      FieldName = 'BALANCENO'
+      Required = True
+    end
+    object AccountBEGINACTIVE: TFloatField
+      DisplayLabel = #1048#1083#1082#1080#1085' '#1043#1072#1083#1099#1075'('#1040#1082#1090#1080#1074')'
+      FieldName = 'BEGINACTIVE'
+      DisplayFormat = '#,##0.00'
+    end
+    object AccountBEGINPASSIVE: TFloatField
+      DisplayLabel = #1048#1083#1082#1080#1085' '#1043#1072#1083#1099#1075'('#1055#1072#1089#1089#1080#1074')'
+      FieldName = 'BEGINPASSIVE'
+      DisplayFormat = '#,##0.00'
+    end
+    object AccountDTURNOVER: TFloatField
+      DisplayLabel = #1044#1077#1073#1077#1090' '#1044#1102#1074#1088#1080#1081#1081#1103
+      FieldName = 'DTURNOVER'
+      DisplayFormat = '#,##0.00'
+    end
+    object AccountCTURNOVER: TFloatField
+      DisplayLabel = #1050#1088#1077#1076#1080#1090' '#1044#1102#1074#1088#1080#1081#1081#1103
+      FieldName = 'CTURNOVER'
+      DisplayFormat = '#,##0.00'
+    end
+    object AccountENDACTIVE: TFloatField
+      DisplayLabel = #1057#1086#1085' '#1043#1072#1083#1099#1075'('#1040#1082#1090#1080#1074')'
+      FieldName = 'ENDACTIVE'
+      DisplayFormat = '#,##0.00'
+    end
+    object AccountENDPASSIVE: TFloatField
+      DisplayLabel = #1057#1086#1085' '#1043#1072#1083#1099#1075'('#1055#1072#1089#1089#1080#1074')'
+      FieldName = 'ENDPASSIVE'
+      DisplayFormat = '#,##0.00'
+    end
+    object AccountACCOUNTID: TFloatField
+      FieldName = 'ACCOUNTID'
+      Required = True
+    end
+    object AccountCURRENCYID: TIntegerField
+      FieldName = 'CURRENCYID'
+    end
+    object AccountBRANCHID: TIntegerField
+      FieldName = 'BRANCHID'
+    end
+    object AccountNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 90
+    end
+  end
+  object DataTransaction: TDataSource
+    DataSet = Transaction
+    Left = 32
+    Top = 120
+  end
+  object Transaction: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      '      t.ID,t.op_id as OperatorID, t.vid_op as OperationType,'
+      
+        '      t.dat, t.DEBT, d.acc_no as DebtAcc, dv.val_name as DValNam' +
+        'e,'
+      '      t.KREDIT, c.acc_no as CreditAcc, cv.val_name as CValName,'
+      
+        '      t.ammount, t.ammount_c, t.lammount, t.name, SB_EXPERTANALY' +
+        'SE.GetUserName(t.op_id) as UserName'
+      'from'
+      '      provarch t,'
+      '      account d,'
+      '      account c,'
+      '      avalute dv,'
+      '      avalute cv'
+      'where'
+      '     t.DEBT = d.ID and'
+      '     t.KREDIT = c.ID and'
+      '     t.val_acc = dv.valute and'
+      '     t.currencyID_c = cv.valute and'
+      '     /* 16 Operator & Operation Type*/'
+      '     t.dat between :BeginDate and :EndDate'
+      'order by'
+      '     :Title'
+      ''
+      ' '
+      ' ')
+    Optimize = False
+    Variables.Data = {
+      0400000003000000140000003A0042004500470049004E004400410054004500
+      0C0000000000000000000000100000003A0045004E0044004400410054004500
+      0C00000000000000000000000C0000003A005400490054004C00450001000000
+      06000000742E6461740000000000}
+    QueryAllRecords = False
+    Session = sboapiDataModule.SBSession
+    Left = 104
+    Top = 120
+    object TransactionDAT: TDateTimeField
+      DisplayLabel = #1058#1072#1088#1080#1093
+      FieldName = 'DAT'
+    end
+    object TransactionDEBTACC: TWideStringField
+      DisplayLabel = 'Debet'
+      FieldName = 'DEBTACC'
+      Size = 28
+    end
+    object TransactionDVALNAME: TWideStringField
+      DisplayLabel = '$'
+      FieldName = 'DVALNAME'
+      Size = 10
+    end
+    object TransactionCREDITACC: TWideStringField
+      DisplayLabel = 'Kredit'
+      FieldName = 'CREDITACC'
+      Size = 28
+    end
+    object TransactionCVALNAME: TWideStringField
+      DisplayLabel = '$'
+      FieldName = 'CVALNAME'
+      Size = 10
+    end
+    object TransactionAMMOUNT: TFloatField
+      DisplayLabel = #1044#1077#1073#1077#1090' '#1052#1103#1073#1083#1103#1100
+      FieldName = 'AMMOUNT'
+      DisplayFormat = '#,##0.00'
+    end
+    object TransactionAMMOUNT_C: TFloatField
+      DisplayLabel = #1050#1088#1077#1076#1080#1090' '#1052#1103#1073#1083#1103#1100
+      FieldName = 'AMMOUNT_C'
+      DisplayFormat = '#,##0.00'
+    end
+    object TransactionLAMMOUNT: TFloatField
+      DisplayLabel = #1045#1082#1074#1080#1074#1072#1083#1077#1085#1090
+      FieldName = 'LAMMOUNT'
+      DisplayFormat = '#,##0.00'
+    end
+    object TransactionNAME: TWideStringField
+      DisplayLabel = #1058#1103#1081#1080#1085#1072#1090#1099
+      FieldName = 'NAME'
+      Size = 255
+    end
+    object TransactionID: TFloatField
+      DisplayLabel = #8470
+      FieldName = 'ID'
+      Required = True
+    end
+    object TransactionOPERATORID: TFloatField
+      FieldName = 'OPERATORID'
+    end
+    object TransactionOPERATIONTYPE: TIntegerField
+      FieldName = 'OPERATIONTYPE'
+    end
+    object TransactionDEBT: TFloatField
+      FieldName = 'DEBT'
+    end
+    object TransactionKREDIT: TFloatField
+      FieldName = 'KREDIT'
+    end
+    object TransactionUSERNAME: TWideStringField
+      FieldName = 'USERNAME'
+      Size = 4000
+    end
+  end
+  object DataOperator: TDataSource
+    DataSet = Operators
+    Left = 376
+    Top = 104
+  end
+  object Operators: TOracleDataSet
+    SQL.Strings = (
+      'Select * from user$ order by ID')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000030000000400000049004400010000000000080000004E0041004D00
+      45000100000000000A0000004300540049004D004500010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 440
+    Top = 104
+  end
+  object DataCurrency: TDataSource
+    DataSet = Currency
+    Left = 376
+    Top = 168
+  end
+  object OperationType: TOracleQuery
+    SQL.Strings = (
+      'select  '
+      '   ID, Name '
+      'from '
+      '   filial '
+      'order by ID')
+    Session = sboapiDataModule.SBSession
+    Optimize = False
+    Threaded = True
+    OnThreadRecord = OperationTypeThreadRecord
+    Left = 440
+    Top = 232
+  end
+  object PeriodData: TOracleDataSet
+    SQL.Strings = (
+      'select '
+      '  Max(dat) as BeginPeriod'
+      'from '
+      '  Operkurs'
+      'where '
+      '  dat<:BeginDate')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000140000003A0042004500470049004E004400410054004500
+      0C0000000000000000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 208
+    Top = 256
+  end
+  object SysDat: TOracleDataSet
+    SQL.Strings = (
+      'select tek_dat from sysdat')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 272
+    Top = 256
+  end
+  object Currency: TOracleDataSet
+    SQL.Strings = (
+      'select valute, valu_name from avalute order by valute'
+      '')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000C000000560041004C005500540045000100000000001200
+      0000560041004C0055005F004E0041004D004500010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 432
+    Top = 168
+  end
+  object DatadebtTransaction: TDataSource
+    DataSet = debtTransaction
+    Left = 40
+    Top = 184
+  end
+  object debtTransaction: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      '      t.ID,t.op_id as OperatorID, t.vid_op as OperationType,'
+      
+        '      t.dat, t.DEBT, d.acc_no as DebtAcc, dv.val_name as DValNam' +
+        'e,'
+      '      t.KREDIT, c.acc_no as CreditAcc, cv.val_name as CValName,'
+      
+        '      t.ammount, t.ammount_c, t.lammount, t.name, SB_EXPERTANALY' +
+        'SE.GetUserName(t.op_id) as UserName'
+      'from'
+      '      provarch t,'
+      '      account d,'
+      '      account c,'
+      '      avalute dv,'
+      '      avalute cv'
+      'where'
+      '     t.DEBT = d.ID and'
+      '     t.KREDIT = c.ID and'
+      '     t.val_acc = dv.valute and'
+      '     t.currencyID_c = cv.valute and'
+      '     /* 16 Operator & Operation Typ------------e*/'
+      '     t.dat between :BeginDate and :EndDate'
+      ''
+      ''
+      ''
+      'order by'
+      '     :Title'
+      ''
+      ' '
+      ' ')
+    Optimize = False
+    Variables.Data = {
+      0400000003000000140000003A0042004500470049004E004400410054004500
+      0C0000000000000000000000100000003A0045004E0044004400410054004500
+      0C00000000000000000000000C0000003A005400490054004C00450001000000
+      06000000742E6461740000000000}
+    QueryAllRecords = False
+    Session = sboapiDataModule.SBSession
+    Left = 144
+    Top = 184
+    object DateTimeField1: TDateTimeField
+      DisplayLabel = #1058#1072#1088#1080#1093
+      FieldName = 'DAT'
+    end
+    object WideStringField1: TWideStringField
+      DisplayLabel = 'Debet'
+      FieldName = 'DEBTACC'
+      Size = 28
+    end
+    object WideStringField2: TWideStringField
+      DisplayLabel = '$'
+      FieldName = 'DVALNAME'
+      Size = 10
+    end
+    object WideStringField3: TWideStringField
+      DisplayLabel = 'Kredit'
+      FieldName = 'CREDITACC'
+      Size = 28
+    end
+    object WideStringField4: TWideStringField
+      DisplayLabel = '$'
+      FieldName = 'CVALNAME'
+      Size = 10
+    end
+    object FloatField1: TFloatField
+      DisplayLabel = #1044#1077#1073#1077#1090' '#1052#1103#1073#1083#1103#1100
+      FieldName = 'AMMOUNT'
+      DisplayFormat = '#,##0.00'
+    end
+    object FloatField2: TFloatField
+      DisplayLabel = #1050#1088#1077#1076#1080#1090' '#1052#1103#1073#1083#1103#1100
+      FieldName = 'AMMOUNT_C'
+      DisplayFormat = '#,##0.00'
+    end
+    object FloatField3: TFloatField
+      DisplayLabel = #1045#1082#1074#1080#1074#1072#1083#1077#1085#1090
+      FieldName = 'LAMMOUNT'
+      DisplayFormat = '#,##0.00'
+    end
+    object WideStringField5: TWideStringField
+      DisplayLabel = #1058#1103#1081#1080#1085#1072#1090#1099
+      FieldName = 'NAME'
+      Size = 255
+    end
+    object FloatField4: TFloatField
+      DisplayLabel = #8470
+      FieldName = 'ID'
+      Required = True
+    end
+    object FloatField5: TFloatField
+      FieldName = 'OPERATORID'
+    end
+    object IntegerField1: TIntegerField
+      FieldName = 'OPERATIONTYPE'
+    end
+    object FloatField6: TFloatField
+      FieldName = 'DEBT'
+    end
+    object FloatField7: TFloatField
+      FieldName = 'KREDIT'
+    end
+    object WideStringField6: TWideStringField
+      FieldName = 'USERNAME'
+      Size = 4000
+    end
+  end
+  object DatacredTransaction: TDataSource
+    DataSet = credTransaction
+    Left = 40
+    Top = 256
+  end
+  object credTransaction: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      '      t.ID,t.op_id as OperatorID, t.vid_op as OperationType,'
+      
+        '      t.dat, t.DEBT, d.acc_no as DebtAcc, dv.val_name as DValNam' +
+        'e,'
+      '      t.KREDIT, c.acc_no as CreditAcc, cv.val_name as CValName,'
+      
+        '      t.ammount, t.ammount_c, t.lammount, t.name, SB_EXPERTANALY' +
+        'SE.GetUserName(t.op_id) as UserName'
+      'from'
+      '      provarch t,'
+      '      account d,'
+      '      account c,'
+      '      avalute dv,'
+      '      avalute cv'
+      'where'
+      '     t.DEBT = d.ID and'
+      '     t.KREDIT = c.ID and'
+      '     t.val_acc = dv.valute and'
+      '     t.currencyID_c = cv.valute and'
+      '     /* 16 Operator & Operation Typ------------e*/'
+      '     t.dat between :BeginDate and :EndDate'
+      ''
+      ''
+      ''
+      'order by'
+      '     :Title'
+      ''
+      ' '
+      ' ')
+    Optimize = False
+    Variables.Data = {
+      0400000003000000140000003A0042004500470049004E004400410054004500
+      0C0000000000000000000000100000003A0045004E0044004400410054004500
+      0C00000000000000000000000C0000003A005400490054004C00450001000000
+      06000000742E6461740000000000}
+    QueryAllRecords = False
+    Session = sboapiDataModule.SBSession
+    Left = 120
+    Top = 256
+    object DateTimeField2: TDateTimeField
+      DisplayLabel = #1058#1072#1088#1080#1093
+      FieldName = 'DAT'
+    end
+    object WideStringField7: TWideStringField
+      DisplayLabel = 'Debet'
+      FieldName = 'DEBTACC'
+      Size = 28
+    end
+    object WideStringField8: TWideStringField
+      DisplayLabel = '$'
+      FieldName = 'DVALNAME'
+      Size = 10
+    end
+    object WideStringField9: TWideStringField
+      DisplayLabel = 'Kredit'
+      FieldName = 'CREDITACC'
+      Size = 28
+    end
+    object WideStringField10: TWideStringField
+      DisplayLabel = '$'
+      FieldName = 'CVALNAME'
+      Size = 10
+    end
+    object FloatField8: TFloatField
+      DisplayLabel = #1044#1077#1073#1077#1090' '#1052#1103#1073#1083#1103#1100
+      FieldName = 'AMMOUNT'
+      DisplayFormat = '#,##0.00'
+    end
+    object FloatField9: TFloatField
+      DisplayLabel = #1050#1088#1077#1076#1080#1090' '#1052#1103#1073#1083#1103#1100
+      FieldName = 'AMMOUNT_C'
+      DisplayFormat = '#,##0.00'
+    end
+    object FloatField10: TFloatField
+      DisplayLabel = #1045#1082#1074#1080#1074#1072#1083#1077#1085#1090
+      FieldName = 'LAMMOUNT'
+      DisplayFormat = '#,##0.00'
+    end
+    object WideStringField11: TWideStringField
+      DisplayLabel = #1058#1103#1081#1080#1085#1072#1090#1099
+      FieldName = 'NAME'
+      Size = 255
+    end
+    object FloatField11: TFloatField
+      DisplayLabel = #8470
+      FieldName = 'ID'
+      Required = True
+    end
+    object FloatField12: TFloatField
+      FieldName = 'OPERATORID'
+    end
+    object IntegerField2: TIntegerField
+      FieldName = 'OPERATIONTYPE'
+    end
+    object FloatField13: TFloatField
+      FieldName = 'DEBT'
+    end
+    object FloatField14: TFloatField
+      FieldName = 'KREDIT'
+    end
+    object WideStringField12: TWideStringField
+      FieldName = 'USERNAME'
+      Size = 4000
+    end
+  end
+  object Datacredbal_acc: TDataSource
+    DataSet = credbal_acc
+    Left = 40
+    Top = 320
+  end
+  object credbal_acc: TOracleDataSet
+    SQL.Strings = (
+      ''
+      
+        'select sum(t.ammount) cem,d.bal_cn1 debetbalans ,c.bal_cn1 kredi' +
+        'tbalans'
+      'from'
+      '      provarch t,'
+      '      account d,'
+      '      account c'
+      '   '
+      'where'
+      '     t.DEBT = d.ID and'
+      '     t.KREDIT = c.ID and     '
+      ' t.dat between  :BeginDate and :EndDate and'
+      't.kredit= :Kredits'
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      '    group by d.bal_cn1  ,c.bal_cn1 '
+      ' ')
+    Optimize = False
+    Variables.Data = {
+      0400000003000000140000003A0042004500470049004E004400410054004500
+      0C0000000000000000000000100000003A0045004E0044004400410054004500
+      0C0000000000000000000000100000003A004B00520045004400490054005300
+      030000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000300000006000000430045004D000100000000001600000044004500
+      420045005400420041004C0041004E005300010000000000180000004B005200
+      4500440049005400420041004C0041004E005300010000000000}
+    QueryAllRecords = False
+    Session = sboapiDataModule.SBSession
+    Left = 120
+    Top = 320
+    object credbal_accCEM: TFloatField
+      FieldName = 'CEM'
+    end
+    object credbal_accDEBETBALANS: TFloatField
+      FieldName = 'DEBETBALANS'
+    end
+    object credbal_accKREDITBALANS: TFloatField
+      FieldName = 'KREDITBALANS'
+    end
+  end
+  object Datacdebtbal_acc: TDataSource
+    DataSet = debtbal_acc
+    Left = 40
+    Top = 384
+  end
+  object debtbal_acc: TOracleDataSet
+    SQL.Strings = (
+      ''
+      
+        'select sum(t.ammount) cem,d.bal_cn1 debetbalans ,c.bal_cn1 kredi' +
+        'tbalans'
+      'from'
+      '      provarch t,'
+      '      account d,'
+      '      account c'
+      '   '
+      'where'
+      '     t.DEBT = d.ID and'
+      '     t.KREDIT = c.ID and     '
+      ' t.dat between  :BeginDate and :EndDate and'
+      't.debt= :debts'
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      '    group by d.bal_cn1  ,c.bal_cn1 '
+      ' ')
+    Optimize = False
+    Variables.Data = {
+      0400000003000000140000003A0042004500470049004E004400410054004500
+      0C0000000000000000000000100000003A0045004E0044004400410054004500
+      0C00000000000000000000000C0000003A004400450042005400530003000000
+      0000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000300000006000000430045004D000100000000001600000044004500
+      420045005400420041004C0041004E005300010000000000180000004B005200
+      4500440049005400420041004C0041004E005300010000000000}
+    QueryAllRecords = False
+    Session = sboapiDataModule.SBSession
+    Left = 120
+    Top = 384
+    object FloatField15: TFloatField
+      FieldName = 'CEM'
+    end
+    object FloatField16: TFloatField
+      FieldName = 'DEBETBALANS'
+    end
+    object FloatField17: TFloatField
+      FieldName = 'KREDITBALANS'
+    end
+  end
+end

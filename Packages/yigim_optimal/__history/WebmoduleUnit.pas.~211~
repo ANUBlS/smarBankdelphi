@@ -1,0 +1,3576 @@
+unit WebmoduleUnit;
+
+interface
+
+uses
+  SysUtils, Classes, HTTPApp,dbxjson, Oracle, DB, OracleData, xmldom,  IniFiles,
+  XMLIntf, msxmldom,IOUtils,XMLDoc, IdGlobal, IdHash, IdHashMessageDigest;
+
+type
+  TWebModules = class(TWebModule)
+    Connection: TOracleSession;
+    Queries: TOracleDataSet;
+    Insertquery: TOracleQuery;
+    PaymentCr: TOracleDataSet;
+    searchpay: TOracleDataSet;
+    oneclient: TOracleDataSet;
+    query2: TOracleDataSet;
+    creditamount: TOracleDataSet;
+    azkredmillion: TOracleDataSet;
+    Finexfpay: TOracleDataSet;
+    Dinexfpaycredamount: TOracleDataSet;
+    Nasfpay: TOracleDataSet;
+    nasfpaycredamount: TOracleDataSet;
+    azkredit_custno: TOracleDataSet;
+    azkred_dda: TOracleDataSet;
+    ins_pay: TOracleQuery;
+    procedure WebModule1DefaultHandlerAction(Sender: TObject;
+      Request: TWebRequest; Response: TWebResponse; var Handled: Boolean);
+    procedure WebModule1InformationAction(Sender: TObject; Request: TWebRequest;
+      Response: TWebResponse; var Handled: Boolean);
+    procedure WebModule1CredtPaymentAction(Sender: TObject;
+      Request: TWebRequest; Response: TWebResponse; var Handled: Boolean);
+    procedure WebModule1CheckPaymentAction(Sender: TObject;
+      Request: TWebRequest; Response: TWebResponse; var Handled: Boolean);
+    procedure WebModulesOneclientCreditAction(Sender: TObject;
+      Request: TWebRequest; Response: TWebResponse; var Handled: Boolean);
+    procedure WebModulesClientCreditOPTAction(Sender: TObject;
+      Request: TWebRequest; Response: TWebResponse; var Handled: Boolean);
+    procedure WebModulesClientCreditinfoDetailsAction(Sender: TObject;
+      Request: TWebRequest; Response: TWebResponse; var Handled: Boolean);
+    procedure test(Sender: TObject; Request: TWebRequest;
+      Response: TWebResponse; var Handled: Boolean);
+    procedure WebModulesEmanatAction(Sender: TObject; Request: TWebRequest;
+      Response: TWebResponse; var Handled: Boolean);
+    procedure WebModulesEmanatpayAction(Sender: TObject; Request: TWebRequest;
+      Response: TWebResponse; var Handled: Boolean);
+    procedure WebModulesEmanatCheckAction(Sender: TObject; Request: TWebRequest;
+      Response: TWebResponse; var Handled: Boolean);
+    procedure WebModulesAzkredit_millionAction(Sender: TObject;
+      Request: TWebRequest; Response: TWebResponse; var Handled: Boolean);
+    procedure WebModulesAzkreditpayAction(Sender: TObject; Request: TWebRequest;
+      Response: TWebResponse; var Handled: Boolean);
+    procedure WebModulesFinexclieninfoAction(Sender: TObject;
+      Request: TWebRequest; Response: TWebResponse; var Handled: Boolean);
+    procedure WebModulesNasclientinfoAction(Sender: TObject;
+      Request: TWebRequest; Response: TWebResponse; var Handled: Boolean);
+    procedure WebModulesWebActionItem1Action(Sender: TObject;
+      Request: TWebRequest; Response: TWebResponse; var Handled: Boolean);
+    procedure WebModulesAzkredit_dd_kodAction(Sender: TObject;
+      Request: TWebRequest; Response: TWebResponse; var Handled: Boolean);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  WebModuleClass: TComponentClass = TWebModules;
+ dbname,dbuser,dbpass,dbport,dbadr,dbdriver:string;
+ duser,dpass,Output,ki,jrec_id:string;
+
+
+implementation
+
+{$R *.dfm}
+
+procedure TWebModules.test(Sender: TObject; Request: TWebRequest;
+  Response: TWebResponse; var Handled: Boolean);
+ var
+i,j,k,tr,a,sr:Integer;
+st,st2,uname,upass,conffile:string;
+
+   JSonObject,JSonObject2:TJSonObject;
+   JSonValue,JsonValue2:TJSonValue;
+   JsonArray,JsonArray2: TJSONArray;
+   ArrayElement: TJSonValue;
+   FoundValue: TJSonValue;
+ clname,clcreditnumber,claccount,clvalu,clnum,clbirthday:string;
+clpayamount,clcreditamount:real;
+credid,ib,kr,m :integer;
+  resp,resparr:string;
+  clrest,clinterest,clpenalty,clduerest:real;
+
+   md5hash : TIdHashMessageDigest5;
+   secretkey:string;
+
+  begin
+ md5hash := nil;
+  Response.ContentType := 'application/xml';
+   secretkey:='E5zPYVN73dTgRSLY';
+
+JsonValue:=JSonObject.ParseJSONValue((TFile.ReadAllText('C:/xampp/apache/modules/conf.json')));
+   //smartbank/webservice /conf
+   JsonArray := JsonValue as TJSONArray;
+   if (JSONValue is TJSONArray) then
+    begin
+     for a:=0 to (JSONValue as TJSONArray).Size-1  do
+         begin
+         dbname:=((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbname').JSONValue.Value;
+         uname  :=((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbuser').JSONValue.Value;
+         upass  := ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbpass').JSONValue.Value;
+         dbadr  := ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbadrs').JSONValue.Value;
+         dbport :=  ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbport').JSONValue.Value;
+         dbdriver  := ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbdriver').JSONValue.Value;
+         end;
+      end;
+
+
+              connection.Connected:=False;
+              Connection.LogonDatabase:=dbname;
+              Connection.LogonUsername:=uname;
+              Connection.LogonPassword:=upass;
+              Connection.Connected:=true;
+
+
+         if not Connection.Connected then
+         begin
+         Response.Content :='<Response>'+#13#10
+                                  +'<StatusCode>1</StatusCode>'+#13#10
+                                  +'<StatusDetail>Undefined error</StatusDetail>' +#13#10
+                                  +'<DateTime>'+FormatDateTime('yyyy-mm-dd', now)+'T'+FormatDateTime('hh:nn:ss', now)+'</DateTime>'+#13#10
+                                  +'</Response>';
+                                  exit;
+              connection.Connected:=False;
+          exit;
+         end;
+
+
+
+
+    try
+        md5hash := TIdHashMessageDigest5.Create;
+        resp := IdGlobal.IndyLowerCase( md5hash.HashStringAsHex (request.QueryFields.values['customer_id']
+      + request.QueryFields.values['transaction_id']+secretkey) );
+    finally
+        md5hash.Free;
+    end;
+
+
+        if   request.QueryFields.values['key']   <> resp then
+        begin
+
+             Response.Content :='<Response>'+#13#10
+                                  +'<StatusCode>6</StatusCode>'+#13#10
+                                  +'<StatusDetail>Verify sign error</StatusDetail>' +#13#10
+                                  +'<DateTime>'+FormatDateTime('yyyy-mm-dd', now)+'T'+FormatDateTime('hh:nn:ss', now)+'</DateTime>'+#13#10
+                                  +'</Response>';
+                                  exit;
+        end;
+
+
+
+
+    Response.Content := resp+'-  -'+request.QueryFields.values['customer_id']
+      +request.QueryFields.values['transaction_id']+request.QueryFields.values['key']+'- - '+request.QueryFields.values['key'];
+
+end;
+
+procedure TWebModules.WebModule1CheckPaymentAction(Sender: TObject;
+  Request: TWebRequest; Response: TWebResponse; var Handled: Boolean);
+ var
+i,j,k,tr,a,sr:Integer;
+st,st2,uname,upass,conffile:string;
+
+   JSonObject,JSonObject2:TJSonObject;
+   JSonValue,JsonValue2,JsonValue3,JsonValue4:TJSonValue;
+   JsonArray,JsonArray2: TJSONArray;
+   ArrayElement: TJSonValue;
+   FoundValue: TJSonValue;
+ clname,clcreditnumber,claccount,clvalu,clnum:string;
+clpayamount,payammount,clcreditamount:real;
+credid,ib,kr,m :integer;
+  resp,resparr,rrn:string;
+
+  begin
+
+
+
+
+JsonValue:=JSonObject.ParseJSONValue((TFile.ReadAllText('C:/xampp/apache/modules/conf.json')));
+   //smartbank/webservice /conf
+   JsonArray := JsonValue as TJSONArray;
+   if (JSONValue is TJSONArray) then
+    begin
+     for a:=0 to (JSONValue as TJSONArray).Size-1  do
+         begin
+         dbname:=((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbname').JSONValue.Value;
+         uname  :=((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbuser').JSONValue.Value;
+         upass  := ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbpass').JSONValue.Value;
+         dbadr  := ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbadrs').JSONValue.Value;
+         dbport :=  ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbport').JSONValue.Value;
+         dbdriver  := ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbdriver').JSONValue.Value;
+         end;
+      end;
+
+
+              connection.Connected:=False;
+              Connection.LogonDatabase:=dbname;
+              Connection.LogonUsername:=uname;
+              Connection.LogonPassword:=upass;
+              Connection.Connected:=true;
+              Connection.Connected:=true;
+
+         if not Connection.Connected then
+         begin
+         Response.Content := '{"ErrorText": "Could not connect to database",'+
+                           ' "ErrorCode": "02" }';
+          exit;
+         end;
+
+
+   st:=Request.Content;
+JsonValue2:=JSonObject.ParseJSONValue(st);
+JsonValue2:=(JsonValue2 as TJSONObject).Get('CheckPayment').JSONValue;
+JsonArray2 := JsonValue2 as TJSONArray;
+
+
+
+  if (JSONValue2 is TJSONArray) then
+    begin
+           //val:='1';
+     for a:=0 to (JSONValue2 as TJSONArray).Size-1  do
+         begin
+          rrn:=((JSONValue2 as TJSONArray).get(a) as TJSonObject).Get('Cheque').JSONValue.Value;
+
+           searchpay.Close;
+           searchpay.SetVariable('vrrn',rrn);
+           searchpay.Open;
+           if searchpay.RecordCount>=1 then
+            begin
+
+           resparr:=resparr+'{ "RRN": "'+rrn+'",'+
+            '"ClientName": "'+Utf8Encode(searchpay.FieldByName('customer').AsString) +'",'+
+                '"ClientCreditNumber": "'+searchpay.FieldByName('crednumber').AsString+'",'+
+                '"ClientAccNo": "'+searchpay.FieldByName('account').AsString+'",'+
+                '"PaidValute": "'+searchpay.FieldByName('currency').AsString+'",'+
+               '"CreditPaidAmount":'+floattostr(searchpay.FieldByName('ammount').AsFloat)+ ','+
+               '"Status": "Ok"'+'},';
+            end
+             else
+             begin
+                 Response.ContentType := 'application/json';
+
+         resparr := resparr+'{ "ErrorText": "Cheque not found in system rrn='+rrn+'",'+
+                           ' "ErrorCode": "05" },';
+
+             end;
+
+        end;
+
+    end;
+
+     SetLength(resparr,LENGTH(resparr)-1);
+
+      resp:=resp+' ['+resparr+'] ' ;
+      Response.ContentType := 'application/json';
+          connection.Connected:=False;
+      Response.Content :=resp;
+end;
+
+procedure TWebModules.WebModule1CredtPaymentAction(Sender: TObject;
+  Request: TWebRequest; Response: TWebResponse; var Handled: Boolean);
+   var
+i,j,k,tr,a,sr:Integer;
+st,st2,uname,upass,conffile:string;
+
+   JSonObject,JSonObject2:TJSonObject;
+   JSonValue,JsonValue2,JsonValue3,JsonValue4:TJSonValue;
+   JsonArray,JsonArray2: TJSONArray;
+   ArrayElement: TJSonValue;
+   FoundValue: TJSonValue;
+ clname,clcreditnumber,claccount,clvalu,clnum:string;
+clpayamount,payammount,clcreditamount:real;
+credid,ib,kr,m :integer;
+  resp,resparr,nwdt,v_subrrn,v_rrn:string;
+
+  begin
+
+
+
+
+JsonValue:=JSonObject.ParseJSONValue((TFile.ReadAllText('C:/xampp/apache/modules/conf.json')));
+   //smartbank/webservice /conf
+   JsonArray := JsonValue as TJSONArray;
+   if (JSONValue is TJSONArray) then
+    begin
+     for a:=0 to (JSONValue as TJSONArray).Size-1  do
+         begin
+         dbname:=((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbname').JSONValue.Value;
+         uname  :=((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbuser').JSONValue.Value;
+         upass  := ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbpass').JSONValue.Value;
+         dbadr  := ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbadrs').JSONValue.Value;
+         dbport :=  ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbport').JSONValue.Value;
+         dbdriver  := ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbdriver').JSONValue.Value;
+         end;
+      end;
+
+
+              connection.Connected:=False;
+              Connection.LogonDatabase:=dbname;
+              Connection.LogonUsername:=uname;
+              Connection.LogonPassword:=upass;
+              Connection.Connected:=true;
+              Connection.Connected:=true;
+
+         if not Connection.Connected then
+         begin
+         Response.ContentType := 'application/json';
+         connection.Connected:=False;
+         Response.Content := '{"ErrorText": "Could not connect to database",'+
+                           ' "ErrorCode": "02" }';
+          exit;
+         end;
+
+
+          if  (request.QueryFields.values['aggr']='') then
+           begin
+        Response.ContentType := 'application/json';
+         connection.Connected:=False;
+         Response.Content := '{"ErrorText": "Could not detect payment aggregator  ",'+
+                           ' "ErrorCode": "07" }';
+          exit;
+
+
+          end;
+
+
+   st:=Request.Content;
+JsonValue2:=JSonObject.ParseJSONValue(st);
+JsonValue2:=(JsonValue2 as TJSONObject).Get('CreditPay').JSONValue;
+JsonArray2 := JsonValue2 as TJSONArray;
+
+
+
+  if (JSONValue2 is TJSONArray) then
+    begin
+           //val:='1';
+     for a:=0 to (JSONValue2 as TJSONArray).Size-1  do
+         begin
+          credid:=strtoint(((JSONValue2 as TJSONArray).get(a) as TJSonObject).Get('CreditId').JSONValue.Value);
+          payammount:=strtofloat(((JSONValue2 as TJSONArray).get(a) as TJSonObject).Get('PaymentAmount').JSONValue.Value);
+          clvalu:=((JSONValue2 as TJSONArray).get(a) as TJSonObject).Get('PaymentValute').JSONValue.Value;
+          v_rrn:=request.QueryFields.values['paymentrrn']
+          //((JSONValue2 as TJSONArray).get(a) as TJSonObject).Get('RRN').JSONValue.Value;
+
+
+        end;
+
+    end;
+
+   // try
+
+  // begin
+
+    st2:='select * from ws_yigim where rrn=:cln ';
+
+       Response.Content:=st2;
+
+     oneclient.Close;
+     oneclient.SQL.Clear;
+     oneclient.SQL.Add(st2);
+     oneclient.SetVariable('cln',v_rrn);
+   //  Queries.SetVariable('CLBIRTH',clbirthday);
+     oneclient.Open;
+
+       if oneclient.RecordCount=1 then
+       begin
+
+            resp:='{ "ErrorText":"Transaction exists Double Pay", "ErrorCode": "06"   }';
+
+             Response.ContentType := 'application/json';
+             Response.Content :=resp;
+                connection.Connected:=False;
+
+       end
+       else
+       begin
+               PaymentCr.Close;
+               PaymentCr.SetVariable('crid',credid);
+               PaymentCr.Open;
+
+
+       v_subrrn:=request.QueryFields.values['aggr'];
+
+    nwdt :=FormatDateTime('YYYYMMDDHHMMSS',now)+clvalu+inttostr(credid) ;
+    ins_pay.Close;
+    ins_pay.SetVariable('v_accno',PaymentCr.FieldByName('accno').AsString);
+    ins_pay.SetVariable('v_ammount',payammount);
+    ins_pay.SetVariable('v_curr',clvalu);
+    ins_pay.SetVariable('v_cust',PaymentCr.FieldByName('name').AsString);
+    ins_pay.SetVariable('v_rrn',v_rrn);
+    ins_pay.SetVariable('v_cred',PaymentCr.FieldByName('numberofcredit').AsString);
+    ins_pay.SetVariable('v_subrrn',v_subrrn);
+    ins_pay.Execute;
+    Connection.Commit;
+
+    resp:='{"PaymentSucces": {"CreditId": '+inttostr(credid)+',"RRN": "'+v_rrn+'","Status": "Ok"'+ ' }}';
+
+   Response.ContentType := 'application/json';
+   Response.Content :=resp;
+      connection.Connected:=False;
+       end;
+   //end;
+   { except
+   Response.ContentType := 'application/json';
+   connection.Connected:=False;
+   Response.Content :='{"ErrorText": "Could not create payment",'+
+                           ' "ErrorCode": "04" ';;
+    end;           }
+
+
+
+end;
+
+procedure TWebModules.WebModule1DefaultHandlerAction(Sender: TObject;
+  Request: TWebRequest; Response: TWebResponse; var Handled: Boolean);
+begin
+  Response.Content := '<html><heading/><body>Web Server Application</body></html>';
+end;
+
+
+
+
+
+procedure TWebModules.WebModule1InformationAction(Sender: TObject;
+  Request: TWebRequest; Response: TWebResponse; var Handled: Boolean);
+   var
+i,j,k,tr,a,sr:Integer;
+st,st2,uname,upass,conffile:string;
+
+   JSonObject,JSonObject2:TJSonObject;
+   JSonValue,JsonValue2:TJSonValue;
+   JsonArray,JsonArray2: TJSONArray;
+   ArrayElement: TJSonValue;
+   FoundValue: TJSonValue;
+ clname,clcreditnumber,claccount,clvalu,clnum,clbirthday:string;
+clpayamount,clcreditamount:real;
+credid,ib,kr,m :integer;
+  resp,resparr:string;
+  clrest,clinterest,clpenalty,clduerest:real  ;
+
+
+begin
+// try
+   JsonValue:=JSonObject.ParseJSONValue((TFile.ReadAllText('C:/xampp/apache/modules/conf.json')));
+   //smartbank/webservice /conf
+   JsonArray := JsonValue as TJSONArray;
+   if (JSONValue is TJSONArray) then
+    begin
+     for a:=0 to (JSONValue as TJSONArray).Size-1  do
+         begin
+         dbname:=((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbname').JSONValue.Value;
+         uname  :=((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbuser').JSONValue.Value;
+         upass  := ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbpass').JSONValue.Value;
+         dbadr  := ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbadrs').JSONValue.Value;
+         dbport :=  ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbport').JSONValue.Value;
+         dbdriver  := ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbdriver').JSONValue.Value;
+         end;
+      end;
+
+
+
+       st:=Request.Content;
+
+JsonValue2:=JSonObject.ParseJSONValue(st);
+JsonValue2:=(JsonValue2 as TJSONObject).Get('Client').JSONValue;
+JsonArray2 := JsonValue2 as TJSONArray;
+
+
+
+  if (JSONValue2 is TJSONArray) then
+    begin
+           //val:='1';
+     for a:=0 to (JSONValue2 as TJSONArray).Size-1  do
+         begin
+          clnum:=((JSONValue2 as TJSONArray).get(a) as TJSonObject).Get('CreditNumber').JSONValue.Value;
+          clbirthday:=((JSONValue2 as TJSONArray).get(a) as TJSonObject).Get('ClientPin').JSONValue.Value;
+        end;
+
+    end;
+   //connection := TFDConnection.Create(nil);
+   // query:=TFDquery.Create(nil);
+
+
+              connection.Connected:=False;
+              Connection.LogonDatabase:=dbname;
+              Connection.LogonUsername:=uname;
+              Connection.LogonPassword:=upass;
+              Connection.Connected:=true;
+
+
+         if not Connection.Connected then
+         begin
+         Response.Content := '{"ErrorText": "Could not connect to database",'+
+                           ' "ErrorCode": "02" }';
+
+              connection.Connected:=False;
+          exit;
+         end;
+
+
+   st2:='select rownum,c.id,c.numberofcredit, a.name,b.passpin,get_accno( d.booroweraccid) accno,suBstr(get_accno( d.booroweraccid),9,3) val'
++' from customers a, custinfo b,cm_active_credits c ,cm_accounts d where c.numberofcredit=:cln and b.passpin=:CLBIRTH'
++' and a.id=b.idcust and a.id=c.boorowerid and c.id=d.creditid ';
+
+      // Response.Content:=st2;
+
+     Queries.Close;
+     Queries.SQL.Clear;
+     Queries.SQL.Add(st2);
+     Queries.SetVariable('cln',clnum);
+     Queries.SetVariable('CLBIRTH',clbirthday);
+     Queries.Open;
+
+
+
+    if Queries.RecordCount<1 then
+         begin
+            Response.ContentType := 'application/json';
+            Response.Content := '{"ErrorText": "Customer or Credit Not Found", "ErrorCode": "03" }';
+
+              connection.Connected:=False;
+         exit;
+        end
+        else
+        begin
+
+      if Queries.RecordCount=1 then
+       begin
+
+       credid:=Queries.FieldByName('id').AsInteger;
+       creditamount.Close;
+       creditamount.SetVariable('cid',credid);
+       creditamount.Open;
+
+        clname:=Utf8Encode (Queries.FieldByName('name').AsString);
+        clcreditnumber:=Utf8Encode( Queries.FieldByName('numberofcredit').AsString);
+        claccount:=Queries.FieldByName('accno').AsString;
+        clvalu:=Queries.FieldByName('val').AsString;
+        clpayamount:=creditamount.FieldByName('payment').AsFloat;
+
+       resp:='{ "CreditLine": [{"ClientName": "'+clname +'",'+
+      '"ClientCreditNumber": "'+clcreditnumber+'",'+
+      '"ClientAccNo": "'+claccount+'",'+
+      '"CreditId": "'+inttostr(credid)+'",'+
+      '"CreditValute": "'+clvalu+'",'+
+     '"CreditPayAmmount":'+floattostr(clpayamount)+' }]} ' ;
+        Response.ContentType := 'application/json';
+            connection.Connected:=False;
+        Response.Content :=resp;
+
+
+
+       end
+       else
+       begin
+       Queries.First;
+           for i := 0 to Queries.RecordCount-1 do
+           begin
+               credid:=Queries.FieldByName('id').AsInteger;
+               creditamount.Close;
+               creditamount.SetVariable('cid',credid);
+               creditamount.Open;
+
+               clname:= Utf8Encode(Queries.FieldByName('name').AsString);
+               clcreditnumber:= Utf8Encode(Queries.FieldByName('numberofcredit').AsString);
+               claccount:=Queries.FieldByName('accno').AsString;
+               clvalu:=Queries.FieldByName('val').AsString;
+               clpayamount:=creditamount.FieldByName('payment').AsFloat;
+
+
+               resparr:=resparr+'{"ClientName": "'+clname +'",'+
+                '"ClientCreditNumber": "'+clcreditnumber+'",'+
+                '"ClientAccNo": "'+claccount+'",'+
+                '"CreditId": "'+inttostr(credid)+'",'+
+                '"CreditValute": "'+clvalu+'",'+
+               '"CreditPayAmmount":'+floattostr(clpayamount)+'},';
+
+
+               Queries.Next;
+
+           end;
+           SetLength(resparr,LENGTH(resparr)-1);
+                resp:=resp+'{ "CreditLine": ['+resparr+']} ' ;
+               Response.ContentType := 'application/json';
+
+              connection.Connected:=False;
+               Response.Content :=resp;
+
+
+       end;
+
+        end;
+
+
+
+end;
+
+procedure TWebModules.WebModulesAzkreditpayAction(Sender: TObject;
+  Request: TWebRequest; Response: TWebResponse; var Handled: Boolean);
+var
+i,j,k,tr,a,sr:Integer;
+v_id,v_id1,v_dda,v_dda1,stsql,st,st2,uname,upass,conffile:string;
+
+   JSonObject,JSonObject2:TJSonObject;
+   JSonValue,JsonValue2:TJSonValue;
+   JsonArray,JsonArray2: TJSONArray;
+   ArrayElement: TJSonValue;
+   FoundValue: TJSonValue;
+ clname,clcreditnumber,claccount,clvalu,clnum,clbirthday:string;
+clpayamount,clcreditamount,  payammount:real;
+credid,ib,kr,m :integer;
+  resp,resparr,v_subrrn,paymeth:string;
+
+
+md5hash : TIdHashMessageDigest5;
+   secretkey:string;
+
+  begin
+ md5hash := nil;
+  Response.ContentType := 'application/xml';
+  secretkey:='E5zPY';
+
+JsonValue:=JSonObject.ParseJSONValue((TFile.ReadAllText('C:/xampp/apache/modules/conf.json')));
+   //smartbank/webservice /conf
+   JsonArray := JsonValue as TJSONArray;
+   if (JSONValue is TJSONArray) then
+    begin
+     for a:=0 to (JSONValue as TJSONArray).Size-1  do
+         begin
+         dbname:=((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbname').JSONValue.Value;
+         uname  :=((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbuser').JSONValue.Value;
+         upass  := ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbpass').JSONValue.Value;
+         dbadr  := ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbadrs').JSONValue.Value;
+         dbport :=  ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbport').JSONValue.Value;
+         dbdriver  := ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbdriver').JSONValue.Value;
+         end;
+      end;
+
+
+              connection.Connected:=False;
+              Connection.LogonDatabase:=dbname;
+              Connection.LogonUsername:=uname;
+              Connection.LogonPassword:=upass;
+              Connection.Connected:=true;
+
+
+         if not Connection.Connected then
+         begin
+          if request.QueryFields.values['rtn']='' then
+          begin
+         Response.Content :='<Response>'+#13#10
+                                  +'<StatusCode>ER008</StatusCode>'+#13#10
+                                  +'<StatusDetail>Database connection</StatusDetail>' +#13#10
+                                  +'</Response>';
+          end
+          else
+          begin
+               Response.Content := '{"ErrorText": "Could not connect to database",'+' "ErrorCode": "08" }';
+                                   Response.ContentType := 'application/json';
+                                   connection.Connected:=False;
+          end;
+                                  exit;
+              connection.Connected:=False;
+          exit;
+         end;
+
+             {  if (request.QueryFields.Values['custno']='' and
+               request.QueryFields.values['pin']<>'')  then
+                begin
+      Response.Content :='<Response>'+#13#10
+                                  +'<StatusCode>ER001</StatusCode>'+#13#10
+                                  +'<StatusDetail>Required custno parameter is missing</StatusDetail>' +#13#10
+                                 +'</Response>';
+                                  exit;
+              connection.Connected:=False;
+         exit;
+      end;
+         }
+         if (request.QueryFields.values['creditnumber']='')
+       then
+     begin
+       if request.QueryFields.values['rtn']='' then
+       begin
+      Response.Content :='<Response>'+#13#10
+                                  +'<StatusCode>ER001</StatusCode>'+#13#10
+                                  +'<StatusDetail>Required creditnumber parameter is missing</StatusDetail>' +#13#10
+                                 +'</Response>';
+       end
+       else
+       begin
+      Response.Content := '{"ErrorText": "Required creditnumber parameter is missing",'+' "ErrorCode": "01" }';
+                                   Response.ContentType := 'application/json';
+                                   connection.Connected:=False;
+       end;
+                                  exit;
+              connection.Connected:=False;
+         exit;
+      end;
+
+
+
+       if (request.QueryFields.values['aggr']='')
+       then
+     begin
+       if request.QueryFields.values['rtn']='' then
+       begin
+      Response.Content :='<Response>'+#13#10
+                                  +'<StatusCode>ER011</StatusCode>'+#13#10
+                                  +'<StatusDetail>Required aggr parameter is missing</StatusDetail>' +#13#10
+                                 +'</Response>';
+       end
+       else
+       begin
+      Response.Content := '{"ErrorText": "Required aggr parameter is missing",'+' "ErrorCode": "11" }';
+                                   Response.ContentType := 'application/json';
+                                   connection.Connected:=False;
+       end;
+                                  exit;
+              connection.Connected:=False;
+         exit;
+      end;
+
+
+
+
+
+
+//select id v_id1 ,dda_kod v_dda2 from cm_portfolio where  id=ddakod;
+
+
+
+  if   request.QueryFields.Values['pin']<>'' then
+  begin
+    st2:= request.QueryFields.values['pin'];
+    paymeth:=request.QueryFields.Values['pin'];
+  end;
+
+
+     if   request.QueryFields.Values['dda']<>'' then
+     begin
+    st2:= request.QueryFields.values['dda'];
+    paymeth:=request.QueryFields.Values['dda'];
+     end;
+
+     if request.QueryFields.Values['custno']<>'' then
+     begin
+      st2:=request.QueryFields.values['custno'];
+      paymeth:=request.QueryFields.Values['custno'];
+     end;
+
+
+
+
+    try
+        md5hash := TIdHashMessageDigest5.Create;
+        resp := IdGlobal.IndyLowerCase( md5hash.HashStringAsHex (
+
+
+        st2
+        +request.QueryFields.values['rrn']
+        +request.QueryFields.values['amount']
+        +request.QueryFields.values['curr']
+        +request.QueryFields.values['creditnumber']
+
+        +secretkey) );
+    finally
+        md5hash.Free;
+    end;
+
+
+ {      if   request.QueryFields.values['hash']   <> resp then
+        begin
+
+             Response.Content :='<Response>'+#13#10
+                                  +'<StatusCode>ER003</StatusCode>'+#13#10
+                                  +'<StatusDetail>Verify sign error</StatusDetail>' +#13#10
+                                  +'</Response>';
+                                  exit;
+        end;
+}
+
+
+
+   st2:='select * from webservispkg.Cheque_search(:cln) ';
+
+
+      // Response.Content:=st2;
+
+     oneclient.Close;
+     oneclient.SQL.Clear;
+     oneclient.SQL.Add(st2);
+     oneclient.SetVariable('cln',request.QueryFields.values['rrn']);
+   //  Queries.SetVariable('CLBIRTH',clbirthday);
+     oneclient.Open;
+
+       if oneclient.RecordCount=1 then
+       begin
+        if request.QueryFields.values['rtn']='' then
+        begin
+           Response.Content :='<Response>'+#13#10
+                                  +'<StatusCode>ER004 </StatusCode>'+#13#10
+                                  +'<StatusDetail>Transaction Exist (Double)</StatusDetail>' +#13#10
+                                  +'</Response>';
+        end
+        else
+        begin
+        Response.Content := '{"ErrorText": "Transaction Exist (DoublePay)",'+' "ErrorCode": "04" }';
+                                   Response.ContentType := 'application/json';
+                                   connection.Connected:=False;
+        end;
+                                  exit;
+
+       end
+       else
+       begin
+
+  if   request.QueryFields.Values['pin']<>'' then
+st2:='select * from webservispkg.Payment_search(:DDAK)' ;
+
+
+  if   request.QueryFields.Values['dda']<>'' then
+st2:='select * from webservispkg.Payment_search_dda(:DDAK)' ;
+
+
+     if request.QueryFields.Values['custno']<>'' then
+st2:='select * from webservispkg.Payment_search_custno(:DDAK)' ;
+
+
+
+     azkredmillion.Close;
+     azkredmillion.SQL.Clear;
+     azkredmillion.SQL.Add(st2);
+
+     if request.QueryFields.Values['custno']<>'' then
+     azkredmillion.SetVariable('DDAK',request.QueryFields.values['custno']);
+
+      if request.QueryFields.Values['pin']<>'' then
+      azkredmillion.SetVariable('DDAK',request.QueryFields.values['pin']);
+
+       if   request.QueryFields.Values['dda']<>'' then
+        azkredmillion.SetVariable('DDAK',request.QueryFields.values['dda']);
+
+     azkredmillion.Open;
+
+     if azkredmillion.RecordCount<1 then
+         begin
+          if request.QueryFields.values['rtn']='' then
+          begin
+            Response.Content :='<Response>'+#13#10
+                                  +'<StatusCode>ER002</StatusCode>'+#13#10
+                                  +'<StatusDetail>Wrong customer account</StatusDetail>' +#13#10
+                                  +'</Response>';
+          end
+          else
+          begin
+            Response.Content := '{"ErrorText": "Wrong customer account",'+' "ErrorCode": "02" }';
+                                   Response.ContentType := 'application/json';
+                                   connection.Connected:=False;
+          end;
+
+                                  exit;
+              connection.Connected:=False;
+         exit;
+        end;
+
+        v_subrrn:=request.QueryFields.values['aggr'];
+    payammount:=strtofloat( request.QueryFields.values['amount']);
+    Insertquery.Close;
+    Insertquery.SetVariable('v_accno',azkredmillion.FieldByName('accno').AsString);
+    Insertquery.SetVariable('v_ammount',payammount);
+    Insertquery.SetVariable('v_curr','AZN');
+    Insertquery.SetVariable('v_cust',azkredmillion.FieldByName('name').AsString);
+    Insertquery.SetVariable('v_rrn',request.QueryFields.values['rrn']);
+    Insertquery.SetVariable('v_cred',request.QueryFields.values['creditnumber']);
+    Insertquery.SetVariable('v_subrrn',v_subrrn);
+    Insertquery.SetVariable('PAYMETH',paymeth);
+
+    Insertquery.Execute;
+    Connection.Commit;
+
+     if request.QueryFields.values['rtn']='' then
+     begin
+
+
+
+            Response.Content :='<Response>'+#13#10
+                                  +'<StatusCode>0</StatusCode>'+#13#10
+                                  +'<StatusDetail>OK</StatusDetail>' +#13#10
+                                  +'<PaymentID>'+request.QueryFields.values['rrn']+'</PaymentID> '  +#13#10
+                                  +'<OrderDate>'+FormatDateTime('yyyy-mm-dd', now)+'T'+FormatDateTime('hh:nn:ss', now)+'</OrderDate>'  +#13#10
+                                  +'</Response>';
+                                  exit;
+                                  exit;
+          end
+          else
+          begin
+
+           resp:='{"PaymentSucces": {"PaymentID": "'+request.QueryFields.values['rrn']+'","OrderDate": "'+FormatDateTime('yyyy-mm-dd', now)+'T'+FormatDateTime('hh:nn:ss', now)+'"   }}';
+           Response.ContentType := 'application/json';
+                                                  connection.Connected:=False;
+                                              Response.Content :=resp;
+
+          end;
+
+       end;
+
+
+
+
+end;
+
+procedure TWebModules.WebModulesAzkredit_dd_kodAction(Sender: TObject;
+  Request: TWebRequest; Response: TWebResponse; var Handled: Boolean);
+var
+i,j,k,tr,a,sr:Integer;
+st,st2,uname,upass,conffile:string;
+
+   JSonObject,JSonObject2:TJSonObject;
+   JSonValue,JsonValue2:TJSonValue;
+   JsonArray,JsonArray2: TJSONArray;
+   ArrayElement: TJSonValue;
+   FoundValue: TJSonValue;
+ clname,clcreditnumber,claccount,clvalu,clnum,clbirthday:string;
+clpayamount,clcreditamount,cramt1,cramt2,cramt3,clprpayamount:real;
+credid,ib,kr,m :integer;
+  resp,resparr:string;
+  clrest,clinterest,clpenalty,clduerest:real;
+
+   md5hash : TIdHashMessageDigest5;
+   secretkey,datas:string;
+
+  begin
+ md5hash := nil;
+  Response.ContentType := 'application/xml';
+  secretkey:='E5zPY';
+
+JsonValue:=JSonObject.ParseJSONValue((TFile.ReadAllText('C:/xampp/apache/modules/conf.json')));
+   //smartbank/webservice /conf
+   JsonArray := JsonValue as TJSONArray;
+   if (JSONValue is TJSONArray) then
+    begin
+     for a:=0 to (JSONValue as TJSONArray).Size-1  do
+         begin
+         dbname:=((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbname').JSONValue.Value;
+         uname  :=((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbuser').JSONValue.Value;
+         upass  := ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbpass').JSONValue.Value;
+         dbadr  := ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbadrs').JSONValue.Value;
+         dbport :=  ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbport').JSONValue.Value;
+         dbdriver  := ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbdriver').JSONValue.Value;
+         end;
+      end;
+
+
+              connection.Connected:=False;
+              Connection.LogonDatabase:=dbname;
+              Connection.LogonUsername:=uname;
+              Connection.LogonPassword:=upass;
+              Connection.Connected:=true;
+
+
+         if not Connection.Connected then
+         begin
+          if request.QueryFields.values['rtn']='' then
+          begin
+                Response.Content :='<Response>'+#13#10
+                                  +'<StatusCode>ER008</StatusCode>'+#13#10
+                                  +'<StatusDetail>Database connection</StatusDetail>' +#13#10
+                                  +'</Response>';
+                                  end
+                                  else
+                                  begin
+
+                                   Response.Content := '{"ErrorText": "Could not connect to database",'+' "ErrorCode": "08" }';
+                                   Response.ContentType := 'application/json';
+                                   connection.Connected:=False;
+
+                                  end;
+               exit;
+              connection.Connected:=False;
+          exit;
+         end;
+
+
+         if (request.QueryFields.values['dda']='')
+       then
+     begin
+      if request.QueryFields.values['rtn']='' then
+      begin
+      Response.Content :='<Response>'+#13#10
+                                  +'<StatusCode>ER001</StatusCode>'+#13#10
+                                  +'<StatusDetail>Required dda parameter is missing</StatusDetail>' +#13#10
+                                 +'</Response>';
+      end
+      else
+      begin
+          Response.Content := '{"ErrorText": "Required custno parameter is missing",'+' "ErrorCode": "01" }';
+          Response.ContentType := 'application/json';
+          connection.Connected:=False;
+
+      end;
+                                  exit;
+              connection.Connected:=False;
+         exit;
+      end;
+
+
+
+
+
+    try
+        md5hash := TIdHashMessageDigest5.Create;
+        resp := IdGlobal.IndyLowerCase( md5hash.HashStringAsHex (request.QueryFields.values['dda']+request.QueryFields.values['transaction_id']
+        +secretkey) );
+    finally
+        md5hash.Free;
+    end;
+
+
+        if   request.QueryFields.values['hash']   <> resp then
+        begin
+          if request.QueryFields.values['rtn']='' then
+          begin
+             Response.Content :='<Response>'+#13#10
+                                  +'<StatusCode>ER003</StatusCode>'+#13#10
+                                  +'<StatusDetail>Verify sign error</StatusDetail>' +#13#10
+                                  +'</Response>';
+                                  exit;
+          end
+          else
+          begin
+                Response.Content := '{"ErrorText": "Verify sign error",'+' "ErrorCode": "03" }';
+                Response.ContentType := 'application/json';
+          connection.Connected:=False;
+          end;
+        end;
+
+
+
+st2:='select * from webservispkg.Payment_search_dda(:DDAK)' ;
+
+
+
+
+     azkred_dda.Close;
+     azkred_dda.SQL.Clear;
+     azkred_dda.SQL.Add(st2);
+     azkred_dda.SetVariable('DDAK',request.QueryFields.values['dda']);
+     azkred_dda.Open;
+
+
+
+
+    if azkred_dda.RecordCount<1 then
+         begin
+           if request.QueryFields.values['rtn']='' then
+          begin
+            Response.Content :='<Response>'+#13#10
+                                  +'<StatusCode>ER002</StatusCode>'+#13#10
+                                  +'<StatusDetail>Wrong Customer account</StatusDetail>' +#13#10
+                                  +'</Response>';
+
+                                  exit;
+          end
+          else
+          begin
+                 Response.Content := '{"ErrorText": "Wrong Customer account",'+' "ErrorCode": "02" }';
+                 Response.ContentType := 'application/json';
+          connection.Connected:=False;
+          end;
+              connection.Connected:=False;
+         exit;
+        end;
+
+
+      if azkred_dda.RecordCount=1 then
+       begin
+
+       credid:=azkred_dda.FieldByName('id').AsInteger;
+       creditamount.Close;
+       creditamount.SetVariable('cid',credid);
+       creditamount.Open;
+
+        clname:=Utf8Encode (azkred_dda.FieldByName('name').AsString);
+        clcreditnumber:=Utf8Encode( azkred_dda.FieldByName('numberofcredit').AsString);
+        claccount:=azkred_dda.FieldByName('accno').AsString;
+        clvalu:=azkred_dda.FieldByName('val').AsString;
+        clpayamount:=creditamount.FieldByName('nxdaypayment').AsFloat;
+        clprpayamount:=creditamount.FieldByName('prdaypayment').AsFloat;
+        clrest   :=creditamount.FieldByName('rest').AsFloat;
+      //  clduerest   :=creditamount.FieldByName('duerest').AsFloat;
+     //   clinterest:= creditamount.FieldByName('interest').AsFloat   ;
+    //    clpenalty:=creditamount.FieldByName('penalty').AsFloat ;
+    //    jrec_id :=  azkredmillion.FieldByName('jrec_id').AsString;
+
+
+
+
+         cramt1:=0;
+         cramt2:=0;
+         cramt3:=0;
+
+     //   if  azkredmillion.FieldByName('typesofcred').AsString = '10000' then cramt1:=creditamount.FieldByName('payment').AsFloat;
+   //     if  azkredmillion.FieldByName('typesofcred').AsString = '20000' then cramt2:=creditamount.FieldByName('payment').AsFloat;
+   //     if  azkredmillion.FieldByName('typesofcred').AsString = '21000' then cramt3:=creditamount.FieldByName('payment').AsFloat;
+
+
+        datas:=FormatDateTime('yyyy-mm-dd', now)+' '+FormatDateTime('hh:nn:ss', now);
+
+
+        if request.QueryFields.values['rtn']='' then
+           begin
+             resp:=              '<Response>'+#13#10
+                                  +' <AccountInfo>  '+#13#10
+                                  +'  <NumberOfCredit>'+clcreditnumber+'</NumberOfCredit>'+#13#10
+                                  +'<CreditId>'+inttostr(credid)+'</CreditId>' +#13#10
+                                  +'  <Currency >'+clvalu+'</Currency>'+#13#10
+                                  +'  <Name>'+clname+'</Name>'+#13#10
+                                  +'  <Currency_Rate_Usd>1.7</Currency_Rate_Usd>'+#13#10
+                                  +'  <dateofgrant>'+azkred_dda.FieldByName('dateofgrant').AsString +'</dateofgrant>'+#13#10
+                                  +'  <creditlineamount>'+azkred_dda.FieldByName('creditlineamount').AsString +' </creditlineamount>' +#13#10
+
+                              //    +'  <balance_AZN>0</balance_AZN>'+#13#10
+                           //       +'  <product1_payment_amount_AZN>'+floattostr(cramt1)+'</product1_payment_amount_AZN>'+#13#10
+                          //        +'  <product2_payment_amount_AZN>'+floattostr(cramt2)+'</product2_payment_amount_AZN>'+#13#10
+                         //         +'  <product3_payment_amount_AZN>'+floattostr(cramt3)+'</product3_payment_amount_AZN>'+#13#10
+                                  +'  <Next_Payment_Amount>'+floattostr(clpayamount)+'</Next_Payment_Amount>'+#13#10
+                                  +'  <Rest>'+floattostr(clrest)+'</Rest>'+#13#10
+                                  +'  <Present_Payment_Amount>'+floattostr(clprpayamount)+'</Present_Payment_Amount>'+#13#10
+                                //  +'  <jrec_id>'+jrec_id+'</jrec_id>'+#13#10
+                                  +'  <auth_date>'+datas+'</auth_date>'+#13#10
+                       //           +'  <txt>0</txt>'+#13#10
+                                  +' </AccountInfo>'+#13#10
+                                  +'</Response>';
+                                   Response.Content  :=resp;
+                                  exit;
+             end
+             else
+             begin
+                 resp:='{ "CreditLine": [{"ClientName": "'+clname +'",'+
+                                            '"ClientCreditNumber": "'+clcreditnumber+'",'+
+                                            '"ClientAccNo": "'+claccount+'",'+
+                                            '"CreditId": "'+inttostr(credid)+'",'+
+                                            '"CreditValute": "'+clvalu+'",'+
+                                            '"dateofgrant": "'+azkred_dda.FieldByName('dateofgrant').AsString+'",'+
+                                            '"Currency_Rate_Usd": "'+'1.7'+'",'+
+                                            '"creditlineamount":'+azkred_dda.FieldByName('creditlineamount').AsString+','+
+                                            '"Next_Payment_Amount": '+floattostr(clpayamount)+','+
+                                            '"Rest": '+floattostr(clrest)+','+
+                                         //   '"CreditPenalty": '+floattostr(clpenalty)+','+
+                                            '"auth_date": "'+datas+'",'+
+                                           '"Present_Payment_Amount":'+floattostr(clprpayamount)+' }]} ' ;
+                                              Response.ContentType := 'application/json';
+                                                  connection.Connected:=False;
+                                              Response.Content :=resp;
+                                              exit;
+             end;
+       end
+       else
+       begin
+       azkred_dda.First;
+
+
+
+        datas:=FormatDateTime('yyyy-mm-dd', now)+' '+FormatDateTime('hh:nn:ss', now);
+
+        if request.QueryFields.values['rtn']='' then
+       begin
+           for i := 0 to azkred_dda.RecordCount-1 do
+           begin
+               credid:=azkred_dda.FieldByName('id').AsInteger;
+               creditamount.Close;
+               creditamount.SetVariable('cid',credid);
+               creditamount.Open;
+
+        clname:=Utf8Encode (azkred_dda.FieldByName('name').AsString);
+        clcreditnumber:=Utf8Encode( azkred_dda.FieldByName('numberofcredit').AsString);
+        claccount:=azkredit_custno.FieldByName('accno').AsString;
+        clvalu:=azkred_dda.FieldByName('val').AsString;
+        clpayamount:=creditamount.FieldByName('nxdaypayment').AsFloat;
+        clprpayamount:=creditamount.FieldByName('prdaypayment').AsFloat;
+        clrest   :=creditamount.FieldByName('rest').AsFloat;
+
+        if clrest=0 then
+        begin
+           clprpayamount :=  clpayamount ;
+            clrest:=  clpayamount;
+        end;
+
+
+               resparr:=resparr+  ' <AccountInfo>  '+#13#10
+                                  +'  <NumberOfCredit>'+clcreditnumber+'</NumberOfCredit>'+#13#10
+                                  +'<CreditId>'+inttostr(credid)+'</CreditId>' +#13#10
+                                  +'  <Currency >'+clvalu+'</Currency>'+#13#10
+                                  +'  <Name>'+clname+'</Name>'+#13#10
+                                  +'  <Currency_Rate_Usd>1.7</Currency_Rate_Usd>'+#13#10
+                                  +'  <dateofgrant>'+azkred_dda.FieldByName('dateofgrant').AsString +'</dateofgrant>'+#13#10
+                                  +'  <creditlineamount>'+azkred_dda.FieldByName('creditlineamount').AsString +' </creditlineamount>' +#13#10
+
+                              //    +'  <balance_AZN>0</balance_AZN>'+#13#10
+                           //       +'  <product1_payment_amount_AZN>'+floattostr(cramt1)+'</product1_payment_amount_AZN>'+#13#10
+                          //        +'  <product2_payment_amount_AZN>'+floattostr(cramt2)+'</product2_payment_amount_AZN>'+#13#10
+                         //         +'  <product3_payment_amount_AZN>'+floattostr(cramt3)+'</product3_payment_amount_AZN>'+#13#10
+                                  +'  <Next_Payment_Amount>'+floattostr(clpayamount)+'</Next_Payment_Amount>'+#13#10
+                                  +'  <Rest>'+floattostr(clrest)+'</Rest>'+#13#10
+                                  +'  <Present_Payment_Amount>'+floattostr(clprpayamount)+'</Present_Payment_Amount>'+#13#10
+                                //  +'  <jrec_id>'+jrec_id+'</jrec_id>'+#13#10
+                                  +'  <auth_date>'+datas+'</auth_date>'+#13#10
+                       //           +'  <txt>0</txt>'+#13#10
+                                  +' </AccountInfo>'+#13#10;
+
+
+               azkred_dda.Next;
+
+           end;
+           SetLength(resparr,LENGTH(resparr)-1);
+                resp:=  '<Response>'+#13#10
+                                   + resparr
+                                  +'</Response>';
+
+
+              connection.Connected:=False;
+               Response.Content :=resp;
+             end
+             else
+             begin
+
+              for i := 0 to azkred_dda.RecordCount-1 do
+           begin
+               credid:=azkred_dda.FieldByName('id').AsInteger;
+               creditamount.Close;
+               creditamount.SetVariable('cid',credid);
+               creditamount.Open;
+
+        clname:=Utf8Encode (azkred_dda.FieldByName('name').AsString);
+        clcreditnumber:=Utf8Encode( azkred_dda.FieldByName('numberofcredit').AsString);
+        claccount:=azkred_dda.FieldByName('accno').AsString;
+        clvalu:=azkredit_custno.FieldByName('val').AsString;
+        clpayamount:=creditamount.FieldByName('nxdaypayment').AsFloat;
+        clprpayamount:=creditamount.FieldByName('prdaypayment').AsFloat;
+        clrest   :=creditamount.FieldByName('rest').AsFloat;
+
+        if clrest=0 then
+        begin
+           clprpayamount :=  clpayamount ;
+            clrest:=  clpayamount;
+        end;
+
+                    resparr:=resparr+'{ "CreditLine": [{"ClientName": "'+clname +'",'+
+                                            '"ClientCreditNumber": "'+clcreditnumber+'",'+
+                                            '"ClientAccNo": "'+claccount+'",'+
+                                            '"CreditId": "'+inttostr(credid)+'",'+
+                                            '"CreditValute": "'+clvalu+'",'+
+                                            '"dateofgrant": "'+azkred_dda.FieldByName('dateofgrant').AsString+'",'+
+                                            '"Currency_Rate_Usd": "'+'1.7'+'",'+
+                                            '"creditlineamount":'+azkred_dda.FieldByName('creditlineamount').AsString+','+
+                                            '"Next_Payment_Amount": '+floattostr(clpayamount)+','+
+                                            '"Rest": '+floattostr(clrest)+','+
+                                           // '"CreditPenalty": '+floattostr(clpenalty)+','+
+                                            '"auth_date": '+datas+','+
+                                           '"Present_Payment_Amount":'+floattostr(clprpayamount)+' }]} ' ;
+           end;
+       SetLength(resparr,LENGTH(resparr)-1);
+                resp:=resp+'{ "CreditLine": ['+resparr+']} ' ;
+               Response.ContentType := 'application/json';
+             end;
+
+       end;
+
+
+
+
+end;
+
+procedure TWebModules.WebModulesAzkredit_millionAction(Sender: TObject;
+  Request: TWebRequest; Response: TWebResponse; var Handled: Boolean);
+var
+i,j,k,tr,a,sr:Integer;
+st,st2,uname,upass,conffile:string;
+
+   JSonObject,JSonObject2:TJSonObject;
+   JSonValue,JsonValue2:TJSonValue;
+   JsonArray,JsonArray2: TJSONArray;
+   ArrayElement: TJSonValue;
+   FoundValue: TJSonValue;
+ clname,clcreditnumber,claccount,clvalu,clnum,clbirthday:string;
+clpayamount,clcreditamount,cramt1,cramt2,cramt3,clprpayamount:real;
+credid,ib,kr,m :integer;
+  resp,resparr:string;
+  clrest,clinterest,clpenalty,clduerest:real;
+
+   md5hash : TIdHashMessageDigest5;
+   secretkey,datas:string;
+
+  begin
+ md5hash := nil;
+  Response.ContentType := 'application/xml';
+  secretkey:='E5zPY';
+
+JsonValue:=JSonObject.ParseJSONValue((TFile.ReadAllText('C:/xampp/apache/modules/conf.json')));
+   //smartbank/webservice /conf
+   JsonArray := JsonValue as TJSONArray;
+   if (JSONValue is TJSONArray) then
+    begin
+     for a:=0 to (JSONValue as TJSONArray).Size-1  do
+         begin
+         dbname:=((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbname').JSONValue.Value;
+         uname  :=((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbuser').JSONValue.Value;
+         upass  := ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbpass').JSONValue.Value;
+         dbadr  := ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbadrs').JSONValue.Value;
+         dbport :=  ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbport').JSONValue.Value;
+         dbdriver  := ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbdriver').JSONValue.Value;
+         end;
+      end;
+
+
+              connection.Connected:=False;
+              Connection.LogonDatabase:=dbname;
+              Connection.LogonUsername:=uname;
+              Connection.LogonPassword:=upass;
+              Connection.Connected:=true;
+
+
+         if not Connection.Connected then
+         begin
+           if request.QueryFields.values['rtn']=''  then
+           begin
+           Response.Content :='<Response>'+#13#10
+                                    +'<StatusCode>ER008</StatusCode>'+#13#10
+                                    +'<StatusDetail>Database connection</StatusDetail>' +#13#10
+                                    +'</Response>';
+           end
+           else
+           begin
+
+            Response.Content := '{"ErrorText": "Database connection Error",'+' "ErrorCode": "08" }';
+            Response.ContentType := 'application/json';
+             connection.Connected:=False;
+
+           end;
+                                  exit;
+              connection.Connected:=False;
+          exit;
+         end;
+
+
+         if (request.QueryFields.values['pin']='')
+       then
+     begin
+     if request.QueryFields.values['rtn']=''  then
+         begin
+      Response.Content :='<Response>'+#13#10
+                                  +'<StatusCode>ER001</StatusCode>'+#13#10
+                                  +'<StatusDetail>Required pin parameter is missing</StatusDetail>' +#13#10
+                                 +'</Response>';
+                                  exit;
+         end
+         else
+         begin
+
+                                   Response.Content := '{"ErrorText": "Required pin parameter is missing",'+' "ErrorCode": "01" }';
+                                   Response.ContentType := 'application/json';
+                                   connection.Connected:=False;
+         end;
+              connection.Connected:=False;
+         exit;
+      end;
+
+
+
+
+
+    try
+        md5hash := TIdHashMessageDigest5.Create;
+        resp := IdGlobal.IndyLowerCase( md5hash.HashStringAsHex (request.QueryFields.values['pin']+request.QueryFields.values['transaction_id']
+        +secretkey) );
+    finally
+        md5hash.Free;
+    end;
+
+
+        if   request.QueryFields.values['hash']   <> resp then
+        begin
+               if request.QueryFields.values['rtn']=''  then
+               begin
+             Response.Content :='<Response>'+#13#10
+                                  +'<StatusCode>ER003</StatusCode>'+#13#10
+                                  +'<StatusDetail>Verify sign error</StatusDetail>' +#13#10
+                                  +'</Response>';
+               end
+               else
+               begin
+                Response.Content := '{"ErrorText": "Verify sign error",'+' "ErrorCode": "03" }';
+                                   Response.ContentType := 'application/json';
+                                   connection.Connected:=False;
+
+               end;
+                                  exit;
+        end;
+
+
+
+st2:='select * from webservispkg.Payment_search(:DDAK)' ;
+
+
+
+
+     azkredmillion.Close;
+     azkredmillion.SQL.Clear;
+     azkredmillion.SQL.Add(st2);
+     azkredmillion.SetVariable('DDAK',request.QueryFields.values['pin']);
+     azkredmillion.Open;
+
+
+
+    if azkredmillion.RecordCount<1 then
+         begin
+          if request.QueryFields.values['rtn']=''  then
+          begin
+            Response.Content :='<Response>'+#13#10
+                                  +'<StatusCode>ER002</StatusCode>'+#13#10
+                                  +'<StatusDetail>Wrong Customer account</StatusDetail>' +#13#10
+                                  +'</Response>';
+                                  exit;
+          end
+          else
+          begin
+                Response.Content := '{"ErrorText": "Wrong Customer account",'+' "ErrorCode": "02" }';
+                                   Response.ContentType := 'application/json';
+                                   connection.Connected:=False;
+          end;
+              connection.Connected:=False;
+         exit;
+        end;
+
+
+      if azkredmillion.RecordCount=1 then
+       begin
+
+       credid:=azkredmillion.FieldByName('id').AsInteger;
+       creditamount.Close;
+       creditamount.SetVariable('cid',credid);
+       creditamount.Open;
+
+        clname:=Utf8Encode (azkredmillion.FieldByName('name').AsString);
+        clcreditnumber:=Utf8Encode( azkredmillion.FieldByName('numberofcredit').AsString);
+        claccount:=azkredmillion.FieldByName('accno').AsString;
+        clvalu:=azkredmillion.FieldByName('val').AsString;
+        clpayamount:=creditamount.FieldByName('nxdaypayment').AsFloat;
+        clprpayamount:=creditamount.FieldByName('prdaypayment').AsFloat;
+        clrest   :=creditamount.FieldByName('rest').AsFloat;
+      //  clduerest   :=creditamount.FieldByName('duerest').AsFloat;
+     //   clinterest:= creditamount.FieldByName('interest').AsFloat   ;
+    //    clpenalty:=creditamount.FieldByName('penalty').AsFloat ;
+    //    jrec_id :=  azkredmillion.FieldByName('jrec_id').AsString;
+
+
+
+
+         cramt1:=0;
+         cramt2:=0;
+         cramt3:=0;
+
+     //   if  azkredmillion.FieldByName('typesofcred').AsString = '10000' then cramt1:=creditamount.FieldByName('payment').AsFloat;
+   //     if  azkredmillion.FieldByName('typesofcred').AsString = '20000' then cramt2:=creditamount.FieldByName('payment').AsFloat;
+   //     if  azkredmillion.FieldByName('typesofcred').AsString = '21000' then cramt3:=creditamount.FieldByName('payment').AsFloat;
+
+
+        datas:=FormatDateTime('yyyy-mm-dd', now)+' '+FormatDateTime('hh:nn:ss', now);
+
+        if request.QueryFields.values['rtn']='' then
+
+                   begin
+               datas:=FormatDateTime('yyyy-mm-dd', now)+' '+FormatDateTime('hh:nn:ss', now);
+             resp:= '<Response>'+#13#10
+                                  +' <AccountInfo>  '+#13#10
+                                  +'  <NumberOfCredit>'+clcreditnumber+'</NumberOfCredit>'+#13#10
+                                   +'<CreditId>'+inttostr(credid)+'</CreditId>' +#13#10
+                                  +'  <Currency >'+clvalu+'</Currency>'+#13#10
+                                  +'  <Name>'+clname+'</Name>'+#13#10
+                                  +'  <Currency_Rate_Usd>1.7</Currency_Rate_Usd>'+#13#10
+                                  +'  <dateofgrant>'+azkredmillion.FieldByName('dateofgrant').AsString +'</dateofgrant>'+#13#10
+                                  +'  <creditlineamount>'+azkredmillion.FieldByName('creditlineamount').AsString +' </creditlineamount>' +#13#10
+
+                              //    +'  <balance_AZN>0</balance_AZN>'+#13#10
+                           //       +'  <product1_payment_amount_AZN>'+floattostr(cramt1)+'</product1_payment_amount_AZN>'+#13#10
+                          //        +'  <product2_payment_amount_AZN>'+floattostr(cramt2)+'</product2_payment_amount_AZN>'+#13#10
+                         //         +'  <product3_payment_amount_AZN>'+floattostr(cramt3)+'</product3_payment_amount_AZN>'+#13#10
+                                  +'  <Next_Payment_Amount>'+floattostr(clpayamount)+'</Next_Payment_Amount>'+#13#10
+                                  +'  <Rest>'+floattostr(clrest)+'</Rest>'+#13#10
+                                  +'  <Present_Payment_Amount>'+floattostr(clprpayamount)+'</Present_Payment_Amount>'+#13#10
+                                //  +'  <jrec_id>'+jrec_id+'</jrec_id>'+#13#10
+                                  +'  <auth_date>'+datas+'</auth_date>'+#13#10
+                       //           +'  <txt>0</txt>'+#13#10
+                                  +' </AccountInfo>'+#13#10
+                                  +'</Response>';
+                                   Response.Content  :=resp;
+                                  exit;
+                           end
+                                  else
+                                  begin
+
+                                   resp:='{ "CreditLine": [{"ClientName": "'+clname +'",'+
+                                            '"ClientCreditNumber": "'+clcreditnumber+'",'+
+                                            '"ClientAccNo": "'+claccount+'",'+
+                                            '"CreditId": "'+inttostr(credid)+'",'+
+                                            '"CreditValute": "'+clvalu+'",'+
+                                            '"dateofgrant": "'+azkredmillion.FieldByName('dateofgrant').AsString+'",'+
+                                            '"Currency_Rate_Usd": "'+'1.7'+'",'+
+                                            '"creditlineamount":'+azkredmillion.FieldByName('creditlineamount').AsString+','+
+                                            '"Next_Payment_Amount": '+floattostr(clpayamount)+','+
+                                            '"Rest": '+floattostr(clrest)+','+
+                                           // '"CreditPenalty": '+floattostr(clpenalty)+','+
+                                            '"auth_date": "'+datas+'",'+
+                                           '"Present_Payment_Amount":'+floattostr(clprpayamount)+' }]} ' ;
+                                              Response.ContentType := 'application/json';
+                                                  connection.Connected:=False;
+                                              Response.Content :=resp;
+
+                                  end;
+
+       end
+       else
+       begin
+       azkredmillion.First;
+
+         if request.QueryFields.values['rtn']='' then
+       begin
+               for i := 0 to azkredmillion.RecordCount-1 do
+           begin
+               credid:=azkredmillion.FieldByName('id').AsInteger;
+               creditamount.Close;
+               creditamount.SetVariable('cid',credid);
+               creditamount.Open;
+
+        clname:=Utf8Encode (azkredmillion.FieldByName('name').AsString);
+        clcreditnumber:=Utf8Encode( azkredmillion.FieldByName('numberofcredit').AsString);
+        claccount:=azkredmillion.FieldByName('accno').AsString;
+        clvalu:=azkredmillion.FieldByName('val').AsString;
+        clpayamount:=creditamount.FieldByName('nxdaypayment').AsFloat;
+        clprpayamount:=creditamount.FieldByName('prdaypayment').AsFloat;
+        clrest   :=creditamount.FieldByName('rest').AsFloat;
+
+        if clrest=0 then
+        begin
+           clprpayamount :=  clpayamount ;
+            clrest:=  clpayamount;
+        end;
+
+             datas:=FormatDateTime('yyyy-mm-dd', now)+' '+FormatDateTime('hh:nn:ss', now);
+               resparr:=resparr+  ' <AccountInfo>  '+#13#10
+                                  +'  <NumberOfCredit>'+clcreditnumber+'</NumberOfCredit>'+#13#10
+                                  +'<CreditId>'+inttostr(credid)+'</CreditId>' +#13#10
+                                  +'  <Currency >'+clvalu+'</Currency>'+#13#10
+                                  +'  <Name>'+clname+'</Name>'+#13#10
+                                  +'  <Currency_Rate_Usd>1.7</Currency_Rate_Usd>'+#13#10
+                                  +'  <dateofgrant>'+azkredmillion.FieldByName('dateofgrant').AsString +'</dateofgrant>'+#13#10
+                                  +'  <creditlineamount>'+azkredmillion.FieldByName('creditlineamount').AsString +' </creditlineamount>' +#13#10
+
+                              //    +'  <balance_AZN>0</balance_AZN>'+#13#10
+                           //       +'  <product1_payment_amount_AZN>'+floattostr(cramt1)+'</product1_payment_amount_AZN>'+#13#10
+                          //        +'  <product2_payment_amount_AZN>'+floattostr(cramt2)+'</product2_payment_amount_AZN>'+#13#10
+                         //         +'  <product3_payment_amount_AZN>'+floattostr(cramt3)+'</product3_payment_amount_AZN>'+#13#10
+                                  +'  <Next_Payment_Amount>'+floattostr(clpayamount)+'</Next_Payment_Amount>'+#13#10
+                                  +'  <Rest>'+floattostr(clrest)+'</Rest>'+#13#10
+                                  +'  <Present_Payment_Amount>'+floattostr(clprpayamount)+'</Present_Payment_Amount>'+#13#10
+                                //  +'  <jrec_id>'+jrec_id+'</jrec_id>'+#13#10
+                                  +'  <auth_date>'+datas+'</auth_date>'+#13#10
+                       //           +'  <txt>0</txt>'+#13#10
+                                  +' </AccountInfo>'+#13#10;
+
+
+               azkredmillion.Next;
+
+           end;
+
+           SetLength(resparr,LENGTH(resparr)-1);
+                resp:=  '<Response>'+#13#10
+                                   + resparr
+                                  +'</Response>';
+
+
+              connection.Connected:=False;
+               Response.Content :=resp;
+            end
+            else
+            begin
+               azkredmillion.First;
+                for i := 0 to azkredmillion.RecordCount-1 do
+           begin
+               credid:=azkredmillion.FieldByName('id').AsInteger;
+               creditamount.Close;
+               creditamount.SetVariable('cid',credid);
+               creditamount.Open;
+
+        clname:=Utf8Encode (azkredmillion.FieldByName('name').AsString);
+        clcreditnumber:=Utf8Encode( azkredmillion.FieldByName('numberofcredit').AsString);
+        claccount:=azkredmillion.FieldByName('accno').AsString;
+        clvalu:=azkredmillion.FieldByName('val').AsString;
+        clpayamount:=creditamount.FieldByName('nxdaypayment').AsFloat;
+        clprpayamount:=creditamount.FieldByName('prdaypayment').AsFloat;
+        clrest   :=creditamount.FieldByName('rest').AsFloat;
+
+        if clrest=0 then
+        begin
+           clprpayamount :=  clpayamount ;
+            clrest:=  clpayamount;
+        end;
+
+   
+              datas:=FormatDateTime('yyyy-mm-dd', now)+' '+FormatDateTime('hh:nn:ss', now);
+
+             resparr:=resparr+' {"ClientName": "'+clname +'",'+
+                                            '"ClientCreditNumber": "'+clcreditnumber+'",'+
+                                            '"ClientAccNo": "'+claccount+'",'+
+                                            '"CreditId": "'+inttostr(credid)+'",'+
+                                            '"CreditValute": "'+clvalu+'",'+
+                                            '"dateofgrant": "'+azkredmillion.FieldByName('dateofgrant').AsString+'",'+
+                                            '"Currency_Rate_Usd": "'+'1.7'+'",'+
+                                            '"creditlineamount":'+azkredmillion.FieldByName('creditlineamount').AsString+','+
+                                            '"Next_Payment_Amount": '+floattostr(clpayamount)+','+
+                                            '"Rest": '+floattostr(clrest)+','+
+                                          //  '"CreditPenalty": '+floattostr(clpenalty)+','+
+                                            '"auth_date": "'+datas+'",'+
+                                           '"Present_Payment_Amount":'+floattostr(clprpayamount)+' },' ;
+
+                                            azkredmillion.Next;
+           end;
+       SetLength(resparr,LENGTH(resparr)-1);
+                resp:='{ "CreditLine": ['+resparr+']} ' ;
+               Response.ContentType := 'application/json';
+                                   Response.Content  :=resp;
+            end;
+
+       end;
+
+
+end;
+
+
+
+
+procedure TWebModules.WebModulesClientCreditinfoDetailsAction(Sender: TObject;
+  Request: TWebRequest; Response: TWebResponse; var Handled: Boolean);
+     var
+i,j,k,tr,a,sr:Integer;
+st,st2,uname,upass,conffile:string;
+
+   JSonObject,JSonObject2:TJSonObject;
+   JSonValue,JsonValue2:TJSonValue;
+   JsonArray,JsonArray2: TJSONArray;
+   ArrayElement: TJSonValue;
+   FoundValue: TJSonValue;
+ clname,clcreditnumber,claccount,clvalu,clnum,clbirthday:string;
+clpayamount,clcreditamount:real;
+credid,ib,kr,m :integer;
+  resp,resparr:string;
+  clrest,clinterest,clpenalty,clduerest:real;
+
+  begin
+// try
+   JsonValue:=JSonObject.ParseJSONValue((TFile.ReadAllText('C:/xampp/apache/modules/conf.json')));
+   //smartbank/webservice /conf
+   JsonArray := JsonValue as TJSONArray;
+   if (JSONValue is TJSONArray) then
+    begin
+     for a:=0 to (JSONValue as TJSONArray).Size-1  do
+         begin
+         dbname:=((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbname').JSONValue.Value;
+         uname  :=((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbuser').JSONValue.Value;
+         upass  := ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbpass').JSONValue.Value;
+         dbadr  := ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbadrs').JSONValue.Value;
+         dbport :=  ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbport').JSONValue.Value;
+         dbdriver  := ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbdriver').JSONValue.Value;
+         end;
+      end;
+
+
+
+       st:=Request.Content;
+
+JsonValue2:=JSonObject.ParseJSONValue(st);
+JsonValue2:=(JsonValue2 as TJSONObject).Get('Client').JSONValue;
+JsonArray2 := JsonValue2 as TJSONArray;
+
+
+
+  if (JSONValue2 is TJSONArray) then
+    begin
+           //val:='1';
+     for a:=0 to (JSONValue2 as TJSONArray).Size-1  do
+         begin
+
+        // clnum:=((JSONValue2 as TJSONArray).get(a) as TJSonObject).Get('ClientNumber').JSONValue.Value;  // --for falcon  caspian
+          clnum:=((JSONValue2 as TJSONArray).get(a) as TJSonObject).Get('ClientPin').JSONValue.Value;    // --for optimal
+         // clbirthday:=((JSONValue2 as TJSONArray).get(a) as TJSonObject).Get('ClientBirthday').JSONValue.Value;
+         // --for kredex
+        end;
+
+    end;
+   //connection := TFDConnection.Create(nil);
+   // query:=TFDquery.Create(nil);
+
+
+              connection.Connected:=False;
+              Connection.LogonDatabase:=dbname;
+              Connection.LogonUsername:=uname;
+              Connection.LogonPassword:=upass;
+              Connection.Connected:=true;
+
+
+         if not Connection.Connected then
+         begin
+         Response.Content := '{"ErrorText": "Could not connect to database",'+
+                           ' "ErrorCode": "02" }';
+
+              connection.Connected:=False;
+          exit;
+         end;
+
+
+  { st2:='select rownum,c.id,c.numberofcredit, a.name,b.birthday,get_accno( d.booroweraccid) accno,suBstr(get_accno( d.booroweraccid),9,3) val'
++' from customers a, custinfo b,cm_active_credits c ,cm_accounts d where c.numberofcredit=:cln and b.passpin=:CLBIRTH'
++' and a.id=b.idcust and a.id=c.boorowerid and c.id=d.creditid and d.creditid>36285';
+    }
+
+//st2:='select * from webservispkg.Payment_search(:cln,:CLBIRTH)' ;
+
+st2:='select * from webservispkg.Payment_search(:cln)' ;
+
+
+
+     Queries.Close;
+     Queries.SQL.Clear;
+     Queries.SQL.Add(st2);
+     Queries.SetVariable('cln',clnum);
+     Queries.SetVariable('CLBIRTH',clbirthday);
+     Queries.Open;
+
+
+
+    if Queries.RecordCount<1 then
+         begin
+            Response.ContentType := 'application/json';
+            Response.Content := '{"ErrorText": "Customer or Credit Not Found", "ErrorCode": "03" }';
+
+              connection.Connected:=False;
+         exit;
+        end
+        else
+        begin
+
+      if Queries.RecordCount=1 then
+       begin
+
+       credid:=Queries.FieldByName('id').AsInteger;
+       creditamount.Close;
+       creditamount.SetVariable('cid',credid);
+       creditamount.Open;
+
+        clname:=Utf8Encode (Queries.FieldByName('name').AsString);
+        clcreditnumber:=Utf8Encode( Queries.FieldByName('numberofcredit').AsString);
+        claccount:=Queries.FieldByName('accno').AsString;
+        clvalu:=Queries.FieldByName('val').AsString;
+        clpayamount:=creditamount.FieldByName('payment').AsFloat;
+        clrest   :=creditamount.FieldByName('rest').AsFloat;
+        clduerest   :=creditamount.FieldByName('duerest').AsFloat;
+        clinterest:=creditamount.FieldByName('interest').AsFloat   ;
+        clpenalty:=creditamount.FieldByName('penalty').AsFloat ;
+
+       resp:='{ "CreditLine": [{"ClientName": "'+clname +'",'+
+      '"ClientCreditNumber": "'+clcreditnumber+'",'+
+      '"ClientAccNo": "'+claccount+'",'+
+      '"CreditId": "'+inttostr(credid)+'",'+
+      '"CreditValute": "'+clvalu+'",'+
+      '"CreditRest":'+floattostr(clrest)+','+
+      '"CreditDueRest": '+floattostr(clduerest)+','+
+      '"CreditInterest": '+floattostr(clinterest)+','+
+      '"CreditPenalty": '+floattostr(clpenalty)+','+
+
+     '"CreditPayAmount":'+floattostr(clpayamount)+','+
+     '"Status": "Ok"'+ ' }]} ' ;
+        Response.ContentType := 'application/json';
+            connection.Connected:=False;
+        Response.Content :=resp;
+
+
+
+       end
+       else
+       begin
+       Queries.First;
+           for i := 0 to Queries.RecordCount-1 do
+           begin
+               credid:=Queries.FieldByName('id').AsInteger;
+               creditamount.Close;
+               creditamount.SetVariable('cid',credid);
+               creditamount.Open;
+
+               clname:= Utf8Encode(Queries.FieldByName('name').AsString);
+               clcreditnumber:= Utf8Encode(Queries.FieldByName('numberofcredit').AsString);
+               claccount:=Queries.FieldByName('accno').AsString;
+               clvalu:=Queries.FieldByName('val').AsString;
+               clpayamount:=creditamount.FieldByName('payment').AsFloat;
+
+
+
+               resparr:=resparr+'{"ClientName": "'+clname +'",'+
+                '"ClientCreditNumber": "'+clcreditnumber+'",'+
+                '"ClientAccNo": "'+claccount+'",'+
+                '"CreditId": "'+inttostr(credid)+'",'+
+                '"CreditValute": "'+clvalu+'",'+
+                      '"CreditRest":'+floattostr(clrest)+','+
+                      '"CreditDueRest": '+floattostr(clduerest)+','+
+      '"CreditInterest": '+floattostr(clinterest)+','+
+      '"CreditPenalty": '+floattostr(clpenalty)+','+
+
+               '"CreditPayAmount":'+floattostr(clpayamount)+ ','+
+               '"Status": "Ok"'+ '},';
+
+
+               Queries.Next;
+
+           end;
+           SetLength(resparr,LENGTH(resparr)-1);
+                resp:=resp+'{ "CreditLine": ['+resparr+']} ' ;
+               Response.ContentType := 'application/json';
+
+              connection.Connected:=False;
+               Response.Content :=resp;
+
+
+       end;
+     end;
+
+end;
+
+procedure TWebModules.WebModulesClientCreditOPTAction(Sender: TObject;
+  Request: TWebRequest; Response: TWebResponse; var Handled: Boolean);
+ var
+i,j,k,tr,a,sr:Integer;
+st,st2,uname,upass,conffile:string;
+
+   JSonObject,JSonObject2:TJSonObject;
+   JSonValue,JsonValue2:TJSonValue;
+   JsonArray,JsonArray2: TJSONArray;
+   ArrayElement: TJSonValue;
+   FoundValue: TJSonValue;
+ clname,clcreditnumber,claccount,clvalu,clnum,clbirthday,clcntnum,clpin:string;
+clpayamount,clcreditamount:real;
+credid,ib,kr,m :integer;
+  resp,resparr:string;
+
+
+begin
+// try
+   JsonValue:=JSonObject.ParseJSONValue((TFile.ReadAllText('C:/xampp/apache/modules/conf.json')));
+   //smartbank/webservice /conf
+   JsonArray := JsonValue as TJSONArray;
+   if (JSONValue is TJSONArray) then
+    begin
+     for a:=0 to (JSONValue as TJSONArray).Size-1  do
+         begin
+         dbname:=((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbname').JSONValue.Value;
+         uname  :=((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbuser').JSONValue.Value;
+         upass  := ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbpass').JSONValue.Value;
+         dbadr  := ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbadrs').JSONValue.Value;
+         dbport :=  ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbport').JSONValue.Value;
+         dbdriver  := ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbdriver').JSONValue.Value;
+         end;
+      end;
+
+
+
+       st:=Request.Content;
+
+JsonValue2:=JSonObject.ParseJSONValue(st);
+JsonValue2:=(JsonValue2 as TJSONObject).Get('Client').JSONValue;
+JsonArray2 := JsonValue2 as TJSONArray;
+
+
+
+  if (JSONValue2 is TJSONArray) then
+    begin
+           //val:='1';
+     for a:=0 to (JSONValue2 as TJSONArray).Size-1  do
+         begin
+          clcntnum:=((JSONValue2 as TJSONArray).get(a) as TJSonObject).Get('ClientContractNumber').JSONValue.Value;
+          clpin:=((JSONValue2 as TJSONArray).get(a) as TJSonObject).Get('ClientPin').JSONValue.Value;
+        end;
+
+    end;
+   //connection := TFDConnection.Create(nil);
+   // query:=TFDquery.Create(nil);
+
+
+              connection.Connected:=False;
+              Connection.LogonDatabase:=dbname;
+              Connection.LogonUsername:=uname;
+              Connection.LogonPassword:=upass;
+              Connection.Connected:=true;
+
+
+         if not Connection.Connected then
+         begin
+         Response.Content := '{"ErrorText": "Could not connect to database",'+
+                           ' "ErrorCode": "02" }';
+
+              connection.Connected:=False;
+          exit;
+         end;
+   st2:='select rownum,c.id,c.numberofcredit, a.name,b.birthday,get_accno( d.booroweraccid) accno,suBstr(get_accno( d.booroweraccid),8,3) val'
++' from customers a, custinfo b,cm_active_credits c ,cm_accounts d where c.numberofcredit=:cln and b.passpin=:CLBIRTH'
++' and a.id=b.idcust and a.id=c.boorowerid and c.id=d.creditid ';
+
+
+  
+      // Response.Content:=st2;
+
+     query2.Close;
+     query2.SQL.Clear;
+     query2.SQL.Add(st2);
+     query2.SetVariable('cln',clcntnum);
+     query2.SetVariable('CLBIRTH',clpin);
+     query2.Open;
+
+
+
+    if query2.RecordCount<1 then
+         begin
+            Response.ContentType := 'application/json';
+            Response.Content := '{"ErrorText": "Customer or Credit Not Found", "ErrorCode": "03" }';
+
+              connection.Connected:=False;
+         exit;
+        end
+        else
+        begin
+
+      if query2.RecordCount=1 then
+       begin
+
+       credid:=query2.FieldByName('id').AsInteger;
+       creditamount.Close;
+       creditamount.SetVariable('cid',credid);
+       creditamount.Open;
+
+        clname:=Utf8Encode (query2.FieldByName('name').AsString);
+        clcreditnumber:=Utf8Encode( query2.FieldByName('numberofcredit').AsString);
+        claccount:=query2.FieldByName('accno').AsString;
+        clvalu:=query2.FieldByName('val').AsString;
+        clpayamount:=creditamount.FieldByName('payment').AsFloat;
+
+       resp:='{ "CreditLine": [{"ClientName": "'+clname +'",'+
+      '"ClientCreditNumber": "'+clcreditnumber+'",'+
+      '"ClientAccNo": "'+claccount+'",'+
+      '"CreditId": "'+inttostr(credid)+'",'+
+      '"CreditValute": "'+clvalu+'",'+
+     '"CreditPayAmmount":'+floattostr(clpayamount)+' }]} ' ;
+        Response.ContentType := 'application/json';
+            connection.Connected:=False;
+        Response.Content :=resp;
+
+
+
+       end
+       else
+       begin
+       query2.First;
+           for i := 0 to query2.RecordCount-1 do
+           begin
+               credid:=query2.FieldByName('id').AsInteger;
+               creditamount.Close;
+               creditamount.SetVariable('cid',credid);
+               creditamount.Open;
+
+               clname:= Utf8Encode(Queries.FieldByName('name').AsString);
+               clcreditnumber:= Utf8Encode(query2.FieldByName('numberofcredit').AsString);
+               claccount:=query2.FieldByName('accno').AsString;
+               clvalu:=query2.FieldByName('val').AsString;
+               clpayamount:=creditamount.FieldByName('payment').AsFloat;
+
+
+               resparr:=resparr+'{"ClientName": "'+clname +'",'+
+                '"ClientCreditNumber": "'+clcreditnumber+'",'+
+                '"ClientAccNo": "'+claccount+'",'+
+                '"CreditId": "'+inttostr(credid)+'",'+
+                '"CreditValute": "'+clvalu+'",'+
+               '"CreditPayAmmount":'+floattostr(clpayamount)+'},';
+
+
+               Queries.Next;
+
+           end;
+           SetLength(resparr,LENGTH(resparr)-1);
+                resp:=resp+'{ "CreditLine": ['+resparr+']} ' ;
+               Response.ContentType := 'application/json';
+
+              connection.Connected:=False;
+               Response.Content :=resp;
+
+
+       end;
+
+        end;
+
+
+end;
+
+procedure TWebModules.WebModulesEmanatAction(Sender: TObject;
+  Request: TWebRequest; Response: TWebResponse; var Handled: Boolean);
+
+ var
+i,j,k,tr,a,sr:Integer;
+st,st2,uname,upass,conffile:string;
+
+   JSonObject,JSonObject2:TJSonObject;
+   JSonValue,JsonValue2:TJSonValue;
+   JsonArray,JsonArray2: TJSONArray;
+   ArrayElement: TJSonValue;
+   FoundValue: TJSonValue;
+ clname,clcreditnumber,claccount,clvalu,clnum,clbirthday:string;
+clpayamount,clcreditamount,CreditNextPay:real;
+credid,ib,kr,m :integer;
+  resp,resparr:string;
+  clrest,clinterest,clpenalty,clduerest:real;
+
+   md5hash : TIdHashMessageDigest5;
+   secretkey:string;
+
+  begin
+ md5hash := nil;
+  Response.ContentType := 'application/xml';
+  secretkey:='E5zPYVN73dTgRSLY';
+
+JsonValue:=JSonObject.ParseJSONValue((TFile.ReadAllText('C:/xampp/apache/modules/conf.json')));
+   //smartbank/webservice /conf
+   JsonArray := JsonValue as TJSONArray;
+   if (JSONValue is TJSONArray) then
+    begin
+     for a:=0 to (JSONValue as TJSONArray).Size-1  do
+         begin
+         dbname:=((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbname').JSONValue.Value;
+         uname  :=((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbuser').JSONValue.Value;
+         upass  := ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbpass').JSONValue.Value;
+         dbadr  := ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbadrs').JSONValue.Value;
+         dbport :=  ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbport').JSONValue.Value;
+         dbdriver  := ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbdriver').JSONValue.Value;
+         end;
+      end;
+
+
+              connection.Connected:=False;
+              Connection.LogonDatabase:=dbname;
+              Connection.LogonUsername:=uname;
+              Connection.LogonPassword:=upass;
+              Connection.Connected:=true;
+
+
+         if not Connection.Connected then
+         begin
+         Response.Content :='<Response>'+#13#10
+                                  +'<StatusCode>1</StatusCode>'+#13#10
+                                  +'<StatusDetail>Undefined error</StatusDetail>' +#13#10
+                                  +'<DateTime>'+FormatDateTime('yyyy-mm-dd', now)+'T'+FormatDateTime('hh:nn:ss', now)+'</DateTime>'+#13#10
+                                  +'</Response>';
+                                  exit;
+              connection.Connected:=False;
+          exit;
+         end;
+
+
+
+
+
+     if (request.QueryFields.values['customer_pin']='') or (request.QueryFields.values['customer_id']='')
+     or (request.QueryFields.values['transaction_id']='')  then
+     begin
+      Response.Content :='<Response>'+#13#10
+                                  +'<StatusCode>4</StatusCode>'+#13#10
+                                  +'<StatusDetail>Required parameters is missing</StatusDetail>' +#13#10
+                                  +'<DateTime>'+FormatDateTime('yyyy-mm-dd', now)+'T'+FormatDateTime('hh:nn:ss', now)+'</DateTime>'+#13#10
+                                  +'</Response>';
+                                  exit;
+              connection.Connected:=False;
+         exit;
+
+     end;
+
+    try
+        md5hash := TIdHashMessageDigest5.Create;
+        resp := IdGlobal.IndyLowerCase( md5hash.HashStringAsHex (request.QueryFields.values['customer_id']  +request.QueryFields.values['customer_pin']
+      + request.QueryFields.values['transaction_id']+secretkey) );
+    finally
+        md5hash.Free;
+    end;
+
+
+        if   request.QueryFields.values['key']   <> resp then
+        begin
+
+             Response.Content :='<Response>'+#13#10
+                                  +'<StatusCode>6</StatusCode>'+#13#10
+                                  +'<StatusDetail>Verify sign error</StatusDetail>' +#13#10
+                                  +'<DateTime>'+FormatDateTime('yyyy-mm-dd', now)+'T'+FormatDateTime('hh:nn:ss', now)+'</DateTime>'+#13#10
+                                  +'</Response>';
+                                  exit;
+        end;
+
+
+
+st2:='select * from webservispkg.Payment_search(:cln,:CLBIRTH)' ;
+
+
+
+
+     Queries.Close;
+     Queries.SQL.Clear;
+     Queries.SQL.Add(st2);
+     Queries.SetVariable('cln',request.QueryFields.values['customer_id']);
+     Queries.SetVariable('CLBIRTH',request.QueryFields.values['customer_pin']);
+     Queries.Open;
+
+
+
+    if Queries.RecordCount<1 then
+         begin
+            Response.Content :='<Response>'+#13#10
+                                  +'<StatusCode>2</StatusCode>'+#13#10
+                                  +'<StatusDetail>Wrong account</StatusDetail>' +#13#10
+                                  +'<DateTime>'+FormatDateTime('yyyy-mm-dd', now)+'T'+FormatDateTime('hh:nn:ss', now)+'</DateTime>'+#13#10
+                                  +'</Response>';
+                                  exit;
+              connection.Connected:=False;
+         exit;
+        end;
+
+
+      if Queries.RecordCount=1 then
+       begin
+
+       credid:=Queries.FieldByName('id').AsInteger;
+       creditamount.Close;
+       creditamount.SetVariable('cid',credid);
+       creditamount.Open;
+
+        clname:=Utf8Encode (Queries.FieldByName('name').AsString);
+        clcreditnumber:=Utf8Encode( Queries.FieldByName('numberofcredit').AsString);
+        claccount:=Queries.FieldByName('accno').AsString;
+        clvalu:=Queries.FieldByName('val').AsString;
+        clpayamount:=creditamount.FieldByName('payment').AsFloat;
+        clrest   :=creditamount.FieldByName('rest').AsFloat;
+        clduerest   :=creditamount.FieldByName('duerest').AsFloat;
+        clinterest:= creditamount.FieldByName('interest').AsFloat   ;
+        clpenalty:=creditamount.FieldByName('penalty').AsFloat ;
+         CreditNextPay:=creditamount.FieldByName('CreditNextPay').AsFloat;
+
+
+
+             resp:=              '<Response>'+#13#10
+                                  +' <StatusCode>0</StatusCode>'+#13#10
+                                  +' <StatusDetail>OK</StatusDetail>' +#13#10
+                                  +' <DateTime>'+FormatDateTime('yyyy-mm-dd', now)+'T'+FormatDateTime('hh:nn:ss', now)+'</DateTime>'+#13#10
+                                  +' <AccountInfo>  '+#13#10
+                                  +'  <ClientCreditNumber>'+clcreditnumber+'</ClientCreditNumber>'+#13#10
+                                  +'  <ClientName>'+clname+'</ClientName>'+#13#10
+                                  +'  <CreditId>'+inttostr(credid)+'</CreditId>'+#13#10
+                                  +'  <CreditValute>'+clvalu+'</CreditValute>'+#13#10
+                                  +'  <CreditRest>'+floattostr(clrest)+'</CreditRest>'+#13#10
+                               //   +'  <CreditDueRest>'+floattostr(clduerest)+'</CreditDueRest>'+#13#10
+                              //    +'  <CreditInterest>'+floattostr(clinterest)+'</CreditInterest>'+#13#10
+                              //    +'  <CreditPenalty>'+floattostr(clrest)+'</CreditPenalty>'+#13#10
+                                  +'  <CreditNextPay>'+floattostr(CreditNextPay)+'</CreditNextPay>'+#13#10
+                                  +'  <CreditPayAmmount>'+floattostr(clpayamount)+'</CreditPayAmmount>'+#13#10
+                                  +' </AccountInfo>'+#13#10
+                                  +'</Response>';
+                                   Response.Content  :=resp;
+                                  exit;
+
+       end
+       else
+       begin
+       Queries.First;
+           for i := 0 to Queries.RecordCount-1 do
+           begin
+               credid:=Queries.FieldByName('id').AsInteger;
+               creditamount.Close;
+               creditamount.SetVariable('cid',credid);
+               creditamount.Open;
+
+               clname:= Utf8Encode(Queries.FieldByName('name').AsString);
+               clcreditnumber:= Utf8Encode(Queries.FieldByName('numberofcredit').AsString);
+               claccount:=Queries.FieldByName('accno').AsString;
+               clvalu:=Queries.FieldByName('val').AsString;
+               clpayamount:=creditamount.FieldByName('payment').AsFloat;
+               CreditNextPay:=creditamount.FieldByName('CreditNextPay').AsFloat;
+
+
+
+
+
+               resparr:=resparr+ ' <AccountInfo>  '+#13#10
+                                  +'  <ClientCreditNumber>'+clcreditnumber+'</ClientCreditNumber>'+#13#10
+                                  +'  <ClientName>'+clname+'</ClientName>'+#13#10
+                                  +'  <CreditId>'+inttostr(credid)+'</CreditId>'+#13#10
+                                  +'  <CreditValute>'+clvalu+'</CreditValute>'+#13#10
+                                  +'  <CreditRest>'+floattostr(clrest)+'</CreditRest>'+#13#10
+                              //    +'  <CreditDueRest>'+floattostr(clduerest)+'</CreditDueRest>'+#13#10
+                              //   +'  <CreditInterest>'+floattostr(clinterest)+'</CreditInterest>'+#13#10
+                             //     +'  <CreditPenalty>'+floattostr(clrest)+'</CreditPenalty>'+#13#10
+                                  +'  <CreditNextPay>'+floattostr(CreditNextPay)+'</CreditNextPay>'+#13#10
+                                  +'  <CreditPayAmmount>'+floattostr(clpayamount)+'</CreditPayAmmount>'+#13#10
+                                  +' </AccountInfo>'+#13#10;
+
+
+               Queries.Next;
+
+           end;
+           SetLength(resparr,LENGTH(resparr)-1);
+                resp:=  '<Response>'+#13#10
+                                  +' <StatusCode>0</StatusCode>'+#13#10
+                                  +' <StatusDetail>OK</StatusDetail>' +#13#10
+                                  +' <DateTime>'+FormatDateTime('yyyy-mm-dd', now)+'T'+FormatDateTime('hh:nn:ss', now)+'</DateTime>'+#13#10
+                                  + resparr
+                                  +'</Response>';
+
+
+              connection.Connected:=False;
+               Response.Content :=resp;
+
+
+       end;
+
+
+
+
+
+
+
+   // Response.Content := resp+'-  -'+request.QueryFields.values['customer_id']
+    //  +request.QueryFields.values['transaction_id']+request.QueryFields.values['key']+'- - '+request.QueryFields.values['key'];
+
+end;
+
+procedure TWebModules.WebModulesEmanatCheckAction(Sender: TObject;
+  Request: TWebRequest; Response: TWebResponse; var Handled: Boolean);
+var
+i,j,k,tr,a,sr:Integer;
+st,st2,uname,upass,conffile:string;
+
+   JSonObject,JSonObject2:TJSonObject;
+   JSonValue,JsonValue2:TJSonValue;
+   JsonArray,JsonArray2: TJSONArray;
+   ArrayElement: TJSonValue;
+   FoundValue: TJSonValue;
+ clname,clcreditnumber,claccount,clvalu,clnum,clbirthday:string;
+clpayamount,clcreditamount:real;
+credid,ib,kr,m :integer;
+  resp,resparr:string;
+  clrest,clinterest,clpenalty,clduerest:real;
+
+   md5hash : TIdHashMessageDigest5;
+   secretkey:string;
+
+  begin
+ md5hash := nil;
+  Response.ContentType := 'application/xml';
+  secretkey:='E5zPY';
+
+JsonValue:=JSonObject.ParseJSONValue((TFile.ReadAllText('C:/xampp/apache/modules/conf.json')));
+   //smartbank/webservice /conf
+   JsonArray := JsonValue as TJSONArray;
+   if (JSONValue is TJSONArray) then
+    begin
+     for a:=0 to (JSONValue as TJSONArray).Size-1  do
+         begin
+         dbname:=((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbname').JSONValue.Value;
+         uname  :=((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbuser').JSONValue.Value;
+         upass  := ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbpass').JSONValue.Value;
+         dbadr  := ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbadrs').JSONValue.Value;
+         dbport :=  ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbport').JSONValue.Value;
+         dbdriver  := ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbdriver').JSONValue.Value;
+         end;
+      end;
+
+
+              connection.Connected:=False;
+              Connection.LogonDatabase:=dbname;
+              Connection.LogonUsername:=uname;
+              Connection.LogonPassword:=upass;
+              Connection.Connected:=true;
+
+
+         if not Connection.Connected then
+         begin
+         if request.QueryFields.values['rtn']=''  then
+           begin
+         Response.Content :='<Response>'+#13#10
+                                  +'<StatusCode>1</StatusCode>'+#13#10
+                                  +'<StatusDetail>Undefined error</StatusDetail>' +#13#10
+                                  +'<DateTime>'+FormatDateTime('yyyy-mm-dd', now)+'T'+FormatDateTime('hh:nn:ss', now)+'</DateTime>'+#13#10
+                                  +'</Response>';
+                                  exit;
+           end
+           else
+           begin
+
+            Response.Content := '{"ErrorText": "Database connection Error",'+' "ErrorCode": "08" }';
+            Response.ContentType := 'application/json';
+             connection.Connected:=False;
+           end;
+              connection.Connected:=False;
+          exit;
+         end;
+
+
+
+
+
+     if  (request.QueryFields.values['transaction_id']='')  then
+     begin
+     if request.QueryFields.values['rtn']=''  then
+           begin
+      Response.Content :='<Response>'+#13#10
+                                  +'<StatusCode>4</StatusCode>'+#13#10
+                                  +'<StatusDetail>Required parameters is missing</StatusDetail>' +#13#10
+                                  +'<DateTime>'+FormatDateTime('yyyy-mm-dd', now)+'T'+FormatDateTime('hh:nn:ss', now)+'</DateTime>'+#13#10
+                                  +'</Response>';
+                                  exit;
+           end
+           else
+           begin
+                Response.Content := '{"ErrorText": "Required transaction_id parameters is missing",'+' "ErrorCode": "04" }';
+            Response.ContentType := 'application/json';
+             connection.Connected:=False;
+           end;
+              connection.Connected:=False;
+         exit;
+
+     end;
+
+    try
+        md5hash := TIdHashMessageDigest5.Create;
+        resp := IdGlobal.IndyLowerCase( md5hash.HashStringAsHex (request.QueryFields.values['transaction_id']+secretkey) );
+    finally
+        md5hash.Free;
+    end;
+
+
+        if   request.QueryFields.values['hash']   <> resp then
+        begin
+        if request.QueryFields.values['rtn']=''  then
+           begin
+
+             Response.Content :='<Response>'+#13#10
+                                  +'<StatusCode>6</StatusCode>'+#13#10
+                                  +'<StatusDetail>Verify sign error</StatusDetail>' +#13#10
+                                  +'<DateTime>'+FormatDateTime('yyyy-mm-dd', now)+'T'+FormatDateTime('hh:nn:ss', now)+'</DateTime>'+#13#10
+                                  +'</Response>';
+                                  exit;
+           end
+           else
+           begin
+                   Response.Content := '{"ErrorText": "Verify sign error",'+' "ErrorCode": "06" }';
+            Response.ContentType := 'application/json';
+             connection.Connected:=False;
+             exit;
+           end;
+        end;
+
+
+
+   st2:='select * from webservispkg.Cheque_search(:cln) ';
+
+      // Response.Content:=st2;
+
+     oneclient.Close;
+     oneclient.SQL.Clear;
+     oneclient.SQL.Add(st2);
+     oneclient.SetVariable('cln',request.QueryFields.values['transaction_id']);
+   //  Queries.SetVariable('CLBIRTH',clbirthday);
+     oneclient.Open;
+
+       if oneclient.RecordCount=1 then
+       begin
+         if request.QueryFields.values['rtn']=''  then
+           begin
+           Response.Content :='<Response>'+#13#10
+                                  +'<StatusCode>0</StatusCode>'+#13#10
+                                  +'<StatusDetail>OK</StatusDetail>' +#13#10
+                                  +'<PaymentID>'+oneclient.FieldByName('rrn').AsString+'</PaymentID>'+#13#10
+                                  +'<Amount>'+oneclient.FieldByName('ammount').AsString+'</Amount> '+ #13#10
+                                  +'<OrderDate>'+FormatDateTime('yyyy-mm-dd', now)+'T'+FormatDateTime('hh:nn:ss', now)+'</OrderDate>'+#13#10
+                                  +'</Response>';
+                                  exit;
+           end
+           else
+           begin
+                if oneclient.RecordCount>=1 then
+            begin
+
+           resparr:='{ "RRN": "'+request.QueryFields.values['transaction_id']+'",'+
+            '"ClientName": "'+Utf8Encode(oneclient.FieldByName('customer').AsString) +'",'+
+                '"ClientCreditNumber": "'+oneclient.FieldByName('crednumber').AsString+'",'+
+                '"ClientAccNo": "'+oneclient.FieldByName('account').AsString+'",'+
+                '"PaidValute": "'+oneclient.FieldByName('currency').AsString+'",'+
+               '"CreditPaidAmmount":'+floattostr(oneclient.FieldByName('ammount').AsFloat)+'},';
+          {  end
+             else
+             begin
+                 Response.ContentType := 'application/json';
+
+         resparr := resparr+'{ "RRN": "'+request.QueryFields.values['transaction_id'] +'",'+
+                           ' "ErrorText": "Cheque not found in system ",'+
+                           ' "ErrorCode": "09" ,'; }
+
+
+             connection.Connected:=False;
+
+           SetLength(resparr,LENGTH(resparr)-1);
+
+      resp:='{ "CheckedCheque": ['+resparr+']} ' ;
+      Response.ContentType := 'application/json';
+          connection.Connected:=False;
+      Response.Content :=resp;
+             exit;
+                end;
+
+           end;
+
+
+       end
+
+       else
+                begin
+                 if request.QueryFields.values['rtn']=''  then
+                 begin
+                              Response.Content :='<Response>'+#13#10
+                                  +'<StatusCode>20</StatusCode>'+#13#10
+                                  +'<StatusDetail>Cheque not found in system</StatusDetail>' +#13#10
+                                  +'<DateTime>'+FormatDateTime('yyyy-mm-dd', now)+'T'+FormatDateTime('hh:nn:ss', now)+'</DateTime>'+#13#10
+                                  +'</Response>';
+                                  exit;
+
+                 end
+                 else
+                 begin
+                     Response.Content := '{"CheckedCheque": "Cheque not found in system",'+' "ErrorCode": "20" }';
+            Response.ContentType := 'application/json';
+             connection.Connected:=False;
+                 end;
+                end;
+
+
+
+end;
+
+procedure TWebModules.WebModulesEmanatpayAction(Sender: TObject;
+  Request: TWebRequest; Response: TWebResponse; var Handled: Boolean);
+var
+i,j,k,tr,a,sr:Integer;
+st,st2,uname,upass,conffile:string;
+
+   JSonObject,JSonObject2:TJSonObject;
+   JSonValue,JsonValue2:TJSonValue;
+   JsonArray,JsonArray2: TJSONArray;
+   ArrayElement: TJSonValue;
+   FoundValue: TJSonValue;
+ clname,clcreditnumber,claccount,clvalu,clnum,clbirthday:string;
+clpayamount,clcreditamount,  payammount:real;
+credid,ib,kr,m :integer;
+  resp,resparr:string;
+
+
+md5hash : TIdHashMessageDigest5;
+   secretkey:string;
+
+  begin
+ md5hash := nil;
+  Response.ContentType := 'application/xml';
+  secretkey:='E5zPYVN73dTgRSLY';
+
+JsonValue:=JSonObject.ParseJSONValue((TFile.ReadAllText('C:/xampp/apache/modules/conf.json')));
+   //smartbank/webservice /conf
+   JsonArray := JsonValue as TJSONArray;
+   if (JSONValue is TJSONArray) then
+    begin
+     for a:=0 to (JSONValue as TJSONArray).Size-1  do
+         begin
+         dbname:=((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbname').JSONValue.Value;
+         uname  :=((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbuser').JSONValue.Value;
+         upass  := ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbpass').JSONValue.Value;
+         dbadr  := ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbadrs').JSONValue.Value;
+         dbport :=  ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbport').JSONValue.Value;
+         dbdriver  := ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbdriver').JSONValue.Value;
+         end;
+      end;
+
+
+              connection.Connected:=False;
+              Connection.LogonDatabase:=dbname;
+              Connection.LogonUsername:=uname;
+              Connection.LogonPassword:=upass;
+              Connection.Connected:=true;
+
+
+         if not Connection.Connected then
+         begin
+         Response.Content :='<Response>'+#13#10
+                                  +'<StatusCode>1</StatusCode>'+#13#10
+                                  +'<StatusDetail>Undefined error</StatusDetail>' +#13#10
+                                  +'<DateTime>'+FormatDateTime('yyyy-mm-dd', now)+'T'+FormatDateTime('hh:nn:ss', now)+'</DateTime>'+#13#10
+                                  +'</Response>';
+                                  exit;
+              connection.Connected:=False;
+          exit;
+         end;
+
+
+
+
+
+     if (request.QueryFields.values['credit_id']='')
+     or (request.QueryFields.values['transaction_id']='') or (request.QueryFields.values['amount']='')  then
+     begin
+      Response.Content :='<Response>'+#13#10
+                                  +'<StatusCode>4</StatusCode>'+#13#10
+                                  +'<StatusDetail>Required parameters is missing</StatusDetail>' +#13#10
+                                  +'<DateTime>'+FormatDateTime('yyyy-mm-dd', now)+'T'+FormatDateTime('hh:nn:ss', now)+'</DateTime>'+#13#10
+                                  +'</Response>';
+                                  exit;
+              connection.Connected:=False;
+         exit;
+
+     end;
+
+    try
+        md5hash := TIdHashMessageDigest5.Create;
+        resp := IdGlobal.IndyLowerCase( md5hash.HashStringAsHex (request.QueryFields.values['credit_id']
+      + request.QueryFields.values['transaction_id']+request.QueryFields.values['amount']+secretkey) );
+    finally
+        md5hash.Free;
+    end;
+
+
+        if   request.QueryFields.values['key']   <> resp then
+        begin
+
+             Response.Content :='<Response>'+#13#10
+                                  +'<StatusCode>6</StatusCode>'+#13#10
+                                  +'<StatusDetail>Verify sign error</StatusDetail>' +#13#10
+                                  +'<DateTime>'+FormatDateTime('yyyy-mm-dd', now)+'T'+FormatDateTime('hh:nn:ss', now)+'</DateTime>'+#13#10
+                                  +'</Response>';
+                                  exit;
+        end;
+
+
+   st2:='select * from webservispkg.Cheque_search(:cln) ';
+
+      // Response.Content:=st2;
+
+     oneclient.Close;
+     oneclient.SQL.Clear;
+     oneclient.SQL.Add(st2);
+     oneclient.SetVariable('cln',request.QueryFields.values['transaction_id']);
+   //  Queries.SetVariable('CLBIRTH',clbirthday);
+     oneclient.Open;
+
+       if oneclient.RecordCount=1 then
+       begin
+           Response.Content :='<Response>'+#13#10
+                                  +'<StatusCode>3</StatusCode>'+#13#10
+                                  +'<StatusDetail>Transaction Exist (Double)</StatusDetail>' +#13#10
+                                  +'<DateTime>'+FormatDateTime('yyyy-mm-dd', now)+'T'+FormatDateTime('hh:nn:ss', now)+'</DateTime>'+#13#10
+                                  +'</Response>';
+                                  exit;
+
+       end
+       else
+       begin
+
+           PaymentCr.Close;
+           PaymentCr.SetVariable('crid',request.QueryFields.values['credit_id']);
+           PaymentCr.Open;
+
+    payammount:=strtofloat( request.QueryFields.values['amount']);
+    Insertquery.Close;
+    Insertquery.SetVariable('v_accno',PaymentCr.FieldByName('accno').AsString);
+    Insertquery.SetVariable('v_ammount',payammount);
+    Insertquery.SetVariable('v_curr','AZN');
+    Insertquery.SetVariable('v_cust',PaymentCr.FieldByName('name').AsString);
+    Insertquery.SetVariable('v_rrn',request.QueryFields.values['transaction_id']);
+    Insertquery.SetVariable('v_cred',PaymentCr.FieldByName('numberofcredit').AsString);
+     Insertquery.SetVariable('v_subrrn','Emanat');
+    Insertquery.Execute;
+    Connection.Commit;
+
+           Response.Content :='<Response>'+#13#10
+                                  +'<StatusCode>0</StatusCode>'+#13#10
+                                  +'<StatusDetail>OK</StatusDetail>' +#13#10
+                                  +'<PaymentID>'+floattostr(payammount)+copy(request.QueryFields.values['transaction_id'],0,5)+'</PaymentID> '  +#13#10
+                                  +'<OrderDate>'+FormatDateTime('yyyy-mm-dd', now)+'T'+FormatDateTime('hh:nn:ss', now)+'</OrderDate>'  +#13#10
+                                  +'</Response>';
+                                  exit;
+
+
+       end;
+
+
+end;
+
+
+
+
+
+procedure TWebModules.WebModulesFinexclieninfoAction(Sender: TObject;
+  Request: TWebRequest; Response: TWebResponse; var Handled: Boolean);
+  var
+i,j,k,tr,a,sr:Integer;
+st,st2,uname,upass,conffile:string;
+
+   JSonObject,JSonObject2:TJSonObject;
+   JSonValue,JsonValue2:TJSonValue;
+   JsonArray,JsonArray2: TJSONArray;
+   ArrayElement: TJSonValue;
+   FoundValue: TJSonValue;
+ clname,clcreditnumber,claccount,clvalu,clnum,clbirthday:string;
+clpayamount,clcreditamount:real;
+credid,ib,kr,m :integer;
+  resp,resparr:string;
+  clrest,clinterest,clpenalty,clduerest:real;
+
+  begin
+// try
+   JsonValue:=JSonObject.ParseJSONValue((TFile.ReadAllText('C:/xampp/apache/modules/conf.json')));
+   //smartbank/webservice /conf
+   JsonArray := JsonValue as TJSONArray;
+   if (JSONValue is TJSONArray) then
+    begin
+     for a:=0 to (JSONValue as TJSONArray).Size-1  do
+         begin
+         dbname:=((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbname').JSONValue.Value;
+         uname  :=((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbuser').JSONValue.Value;
+         upass  := ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbpass').JSONValue.Value;
+         dbadr  := ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbadrs').JSONValue.Value;
+         dbport :=  ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbport').JSONValue.Value;
+         dbdriver  := ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbdriver').JSONValue.Value;
+         end;
+      end;
+
+
+
+       st:=Request.Content;
+
+JsonValue2:=JSonObject.ParseJSONValue(st);
+JsonValue2:=(JsonValue2 as TJSONObject).Get('Client').JSONValue;
+JsonArray2 := JsonValue2 as TJSONArray;
+
+
+
+  if (JSONValue2 is TJSONArray) then
+    begin
+           //val:='1';
+     for a:=0 to (JSONValue2 as TJSONArray).Size-1  do
+         begin
+
+          //clnum:=((JSONValue2 as TJSONArray).get(a) as TJSonObject).Get('CreditNumber').JSONValue.Value;   --for optimal
+          clnum:=((JSONValue2 as TJSONArray).get(a) as TJSonObject).Get('ClientPin').JSONValue.Value;
+        //  clbirthday:=((JSONValue2 as TJSONArray).get(a) as TJSonObject).Get('ClientPin').JSONValue.Value;
+        end;
+
+    end;
+   //connection := TFDConnection.Create(nil);
+   // query:=TFDquery.Create(nil);
+
+
+              connection.Connected:=False;
+              Connection.LogonDatabase:=dbname;
+              Connection.LogonUsername:=uname;
+              Connection.LogonPassword:=upass;
+              Connection.Connected:=true;
+
+
+         if not Connection.Connected then
+         begin
+         Response.Content := '{"ErrorText": "Could not connect to database",'+
+                           ' "ErrorCode": "02" }';
+
+              connection.Connected:=False;
+          exit;
+         end;
+
+
+  { st2:='select rownum,c.id,c.numberofcredit, a.name,b.birthday,get_accno( d.booroweraccid) accno,suBstr(get_accno( d.booroweraccid),9,3) val'
++' from customers a, custinfo b,cm_active_credits c ,cm_accounts d where c.numberofcredit=:cln and b.passpin=:CLBIRTH'
++' and a.id=b.idcust and a.id=c.boorowerid and c.id=d.creditid and d.creditid>36285';
+    }
+
+st2:='select * from webservispkg.Payment_search(:clnum)' ;
+
+
+
+
+     Finexfpay.Close;
+     Finexfpay.SQL.Clear;
+     Finexfpay.SQL.Add(st2);
+     Finexfpay.SetVariable('clnum',clnum);
+    // Queries.SetVariable('CLBIRTH',clbirthday);
+     Finexfpay.Open;
+
+
+
+    if Finexfpay.RecordCount<1 then
+         begin
+            Response.ContentType := 'application/json';
+            Response.Content := '{"ErrorText": "Customer or Credit Not Found", "ErrorCode": "03" }';
+
+              connection.Connected:=False;
+         exit;
+        end
+        else
+        begin
+
+      if Finexfpay.RecordCount=1 then
+       begin
+
+       credid:=Finexfpay.FieldByName('id').AsInteger;
+       Dinexfpaycredamount.Close;
+       Dinexfpaycredamount.SetVariable('cid',credid);
+       Dinexfpaycredamount.Open;
+
+        clname:=Utf8Encode (Finexfpay.FieldByName('name').AsString);
+        clcreditnumber:=Utf8Encode( Finexfpay.FieldByName('numberofcredit').AsString);
+      //  claccount:=Finexfpay.FieldByName('accno').AsString;
+       // clvalu:=Finexfpay.FieldByName('val').AsString;
+        clpayamount:=Dinexfpaycredamount.FieldByName('payment').AsFloat;
+        {clrest   :=Dinexfpaycredamount.FieldByName('rest').AsFloat;
+        clduerest   :=Dinexfpaycredamount.FieldByName('duerest').AsFloat;
+        clinterest:= Dinexfpaycredamount.FieldByName('interest').AsFloat   ;
+        clpenalty:=Dinexfpaycredamount.FieldByName('penalty').AsFloat ;  }
+
+       resp:='{ "CreditLine": [{"ClientName": "'+clname +'",'+
+      '"ClientCreditNumber": "'+clcreditnumber+'",'+
+   //   '"ClientAccNo": "'+claccount+'",'+
+      '"CreditId": "'+inttostr(credid)+'",'+
+     // '"CreditValute": "'+clvalu+'",'+
+
+      '"CreditOpened": "'+Finexfpay.FieldByName('opencred').AsString +'",'+
+      '"CreditClosed": "'+Finexfpay.FieldByName('closecred').AsString +'",'+
+
+      {'"CreditRest":'+floattostr(clrest)+','+
+      '"CreditDueRest": '+floattostr(clduerest)+','+
+      '"CreditInterest": '+floattostr(clinterest)+','+
+      '"CreditPenalty": '+floattostr(clpenalty)+','+  }
+
+     '"CreditPayAmmount":'+floattostr(clpayamount)+' }]} ' ;
+        Response.ContentType := 'application/json';
+            connection.Connected:=False;
+        Response.Content :=resp;
+
+
+
+       end
+       else
+       begin
+       Finexfpay.First;
+           for i := 0 to Finexfpay.RecordCount-1 do
+           begin
+               credid:=Finexfpay.FieldByName('id').AsInteger;
+               Dinexfpaycredamount.Close;
+               Dinexfpaycredamount.SetVariable('cid',credid);
+               Dinexfpaycredamount.Open;
+
+               clname:= Utf8Encode(Finexfpay.FieldByName('name').AsString);
+               clcreditnumber:= Utf8Encode(Finexfpay.FieldByName('numberofcredit').AsString);
+            //   claccount:=Queries.FieldByName('accno').AsString;
+            //   clvalu:=Queries.FieldByName('val').AsString;
+               clpayamount:=Dinexfpaycredamount.FieldByName('payment').AsFloat;
+
+
+
+               resparr:=resparr+'{"ClientName": "'+clname +'",'+
+                '"ClientCreditNumber": "'+clcreditnumber+'",'+
+              //  '"ClientAccNo": "'+claccount+'",'+
+                '"CreditId": "'+inttostr(credid)+'",'+
+             //   '"CreditValute": "'+clvalu+'",'+
+
+
+      '"CreditOpened": "'+Finexfpay.FieldByName('opencred').AsString +'",'+
+      '"CreditClosed": "'+Finexfpay.FieldByName('closecred').AsString +'",'+
+                     { '"CreditRest":'+floattostr(clrest)+','+
+                      '"CreditDueRest": '+floattostr(clduerest)+','+
+      '"CreditInterest": '+floattostr(clinterest)+','+
+      '"CreditPenalty": '+floattostr(clpenalty)+','+  }
+
+               '"CreditPayAmmount":'+floattostr(clpayamount)+'},';
+
+
+               Finexfpay.Next;
+
+           end;
+           SetLength(resparr,LENGTH(resparr)-1);
+                resp:=resp+'{ "CreditLine": ['+resparr+']} ' ;
+               Response.ContentType := 'application/json';
+
+              connection.Connected:=False;
+               Response.Content :=resp;
+
+
+       end;
+     end;
+
+
+end;
+
+procedure TWebModules.WebModulesNasclientinfoAction(Sender: TObject;
+  Request: TWebRequest; Response: TWebResponse; var Handled: Boolean);
+ var
+i,j,k,tr,a,sr:Integer;
+st,st2,uname,upass,conffile:string;
+
+   JSonObject,JSonObject2:TJSonObject;
+   JSonValue,JsonValue2:TJSonValue;
+   JsonArray,JsonArray2: TJSONArray;
+   ArrayElement: TJSonValue;
+   FoundValue: TJSonValue;
+ clname,clcreditnumber,claccount,clvalu,clnum,clbirthday:string;
+clpayamount,clcreditamount:real;
+credid,ib,kr,m :integer;
+  resp,resparr:string;
+  clrest,clinterest,clpenalty,clduerest:real;
+
+  begin
+// try
+   JsonValue:=JSonObject.ParseJSONValue((TFile.ReadAllText('C:/xampp/apache/modules/conf.json')));
+   //smartbank/webservice /conf
+   JsonArray := JsonValue as TJSONArray;
+   if (JSONValue is TJSONArray) then
+    begin
+     for a:=0 to (JSONValue as TJSONArray).Size-1  do
+         begin
+         dbname:=((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbname').JSONValue.Value;
+         uname  :=((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbuser').JSONValue.Value;
+         upass  := ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbpass').JSONValue.Value;
+         dbadr  := ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbadrs').JSONValue.Value;
+         dbport :=  ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbport').JSONValue.Value;
+         dbdriver  := ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbdriver').JSONValue.Value;
+         end;
+      end;
+
+
+
+       st:=Request.Content;
+
+JsonValue2:=JSonObject.ParseJSONValue(st);
+JsonValue2:=(JsonValue2 as TJSONObject).Get('Client').JSONValue;
+JsonArray2 := JsonValue2 as TJSONArray;
+
+
+
+  if (JSONValue2 is TJSONArray) then
+    begin
+           //val:='1';
+     for a:=0 to (JSONValue2 as TJSONArray).Size-1  do
+         begin
+
+          //clnum:=((JSONValue2 as TJSONArray).get(a) as TJSonObject).Get('CreditNumber').JSONValue.Value;   --for optimal
+          clnum:=((JSONValue2 as TJSONArray).get(a) as TJSonObject).Get('ClientNum').JSONValue.Value;
+        //  clbirthday:=((JSONValue2 as TJSONArray).get(a) as TJSonObject).Get('ClientPin').JSONValue.Value;
+        end;
+
+    end;
+   //connection := TFDConnection.Create(nil);
+   // query:=TFDquery.Create(nil);
+
+
+              connection.Connected:=False;
+              Connection.LogonDatabase:=dbname;
+              Connection.LogonUsername:=uname;
+              Connection.LogonPassword:=upass;
+              Connection.Connected:=true;
+
+
+         if not Connection.Connected then
+         begin
+         Response.Content := '{"ErrorText": "Could not connect to database",'+
+                           ' "ErrorCode": "02" }';
+
+              connection.Connected:=False;
+          exit;
+         end;
+
+
+  { st2:='select rownum,c.id,c.numberofcredit, a.name,b.birthday,get_accno( d.booroweraccid) accno,suBstr(get_accno( d.booroweraccid),9,3) val'
++' from customers a, custinfo b,cm_active_credits c ,cm_accounts d where c.numberofcredit=:cln and b.passpin=:CLBIRTH'
++' and a.id=b.idcust and a.id=c.boorowerid and c.id=d.creditid and d.creditid>36285';
+    }
+
+st2:='select * from webservispkg.Payment_search(:clnum)' ;
+
+
+
+
+     Nasfpay.Close;
+     Nasfpay.SQL.Clear;
+     Nasfpay.SQL.Add(st2);
+     Nasfpay.SetVariable('clnum',clnum);
+    // Queries.SetVariable('CLBIRTH',clbirthday);
+     nasfpay.Open;
+
+
+
+    if Nasfpay.RecordCount<1 then
+         begin
+            Response.ContentType := 'application/json';
+            Response.Content := '{"ErrorText": "Customer or Credit Not Found", "ErrorCode": "03" }';
+
+              connection.Connected:=False;
+         exit;
+        end
+        else
+        begin
+
+      if Nasfpay.RecordCount=1 then
+       begin
+
+       credid:=Nasfpay.FieldByName('id').AsInteger;
+       nasfpaycredamount.Close;
+       nasfpaycredamount.SetVariable('cid',credid);
+       nasfpaycredamount.Open;
+
+        clname:=Utf8Encode (Nasfpay.FieldByName('name').AsString);
+        clcreditnumber:=Utf8Encode( Nasfpay.FieldByName('numberofcredit').AsString);
+      //  claccount:=Finexfpay.FieldByName('accno').AsString;
+       // clvalu:=Finexfpay.FieldByName('val').AsString;
+        clpayamount:=nasfpaycredamount.FieldByName('payment').AsFloat;
+        {clrest   :=Dinexfpaycredamount.FieldByName('rest').AsFloat;
+        clduerest   :=Dinexfpaycredamount.FieldByName('duerest').AsFloat;
+        clinterest:= Dinexfpaycredamount.FieldByName('interest').AsFloat   ;
+        clpenalty:=Dinexfpaycredamount.FieldByName('penalty').AsFloat ;  }
+
+       resp:='{ "CreditLine": [{"ClientName": "'+clname +'",'+
+      '"ClientCreditNumber": "'+clcreditnumber+'",'+
+   //   '"ClientAccNo": "'+claccount+'",'+
+      '"CreditId": "'+inttostr(credid)+'",'+
+     // '"CreditValute": "'+clvalu+'",'+
+
+      '"CreditOpened": "'+Nasfpay.FieldByName('opencred').AsString +'",'+
+      '"CreditClosed": "'+Nasfpay.FieldByName('closecred').AsString +'",'+
+
+      {'"CreditRest":'+floattostr(clrest)+','+
+      '"CreditDueRest": '+floattostr(clduerest)+','+
+      '"CreditInterest": '+floattostr(clinterest)+','+
+      '"CreditPenalty": '+floattostr(clpenalty)+','+  }
+
+     '"CreditPayAmmount":'+floattostr(clpayamount)+' }]} ' ;
+        Response.ContentType := 'application/json';
+            connection.Connected:=False;
+        Response.Content :=resp;
+
+
+
+       end
+       else
+       begin
+       Nasfpay.First;
+           for i := 0 to Nasfpay.RecordCount-1 do
+           begin
+               credid:=Nasfpay.FieldByName('id').AsInteger;
+               nasfpaycredamount.Close;
+               nasfpaycredamount.SetVariable('cid',credid);
+               nasfpaycredamount.Open;
+
+               clname:= Utf8Encode(Nasfpay.FieldByName('name').AsString);
+               clcreditnumber:= Utf8Encode(Nasfpay.FieldByName('numberofcredit').AsString);
+            //   claccount:=Queries.FieldByName('accno').AsString;
+            //   clvalu:=Queries.FieldByName('val').AsString;
+               clpayamount:=nasfpaycredamount.FieldByName('payment').AsFloat;
+
+
+
+               resparr:=resparr+'{"ClientName": "'+clname +'",'+
+                '"ClientCreditNumber": "'+clcreditnumber+'",'+
+              //  '"ClientAccNo": "'+claccount+'",'+
+                '"CreditId": "'+inttostr(credid)+'",'+
+             //   '"CreditValute": "'+clvalu+'",'+
+
+
+      '"CreditOpened": "'+Nasfpay.FieldByName('opencred').AsString +'",'+
+      '"CreditClosed": "'+Nasfpay.FieldByName('closecred').AsString +'",'+
+                     { '"CreditRest":'+floattostr(clrest)+','+
+                      '"CreditDueRest": '+floattostr(clduerest)+','+
+      '"CreditInterest": '+floattostr(clinterest)+','+
+      '"CreditPenalty": '+floattostr(clpenalty)+','+  }
+
+               '"CreditPayAmmount":'+floattostr(clpayamount)+'},';
+
+
+               Nasfpay.Next;
+
+           end;
+           SetLength(resparr,LENGTH(resparr)-1);
+                resp:=resp+'{ "CreditLine": ['+resparr+']} ' ;
+               Response.ContentType := 'application/json';
+
+              connection.Connected:=False;
+               Response.Content :=resp;
+
+
+       end;
+     end;
+
+
+
+end;
+
+procedure TWebModules.WebModulesOneclientCreditAction(Sender: TObject;
+  Request: TWebRequest; Response: TWebResponse; var Handled: Boolean);
+ var
+i,j,k,tr,a,sr:Integer;
+st,st2,uname,upass,conffile:string;
+
+   JSonObject,JSonObject2:TJSonObject;
+   JSonValue,JsonValue2:TJSonValue;
+   JsonArray,JsonArray2: TJSONArray;
+   ArrayElement: TJSonValue;
+   FoundValue: TJSonValue;
+ clname,clcreditnumber,claccount,clvalu,clnum,clbirthday:string;
+clpayamount,clcreditamount:real;
+credid,ib,kr,m :integer;
+  resp,resparr:string;
+
+
+begin
+// try
+   JsonValue:=JSonObject.ParseJSONValue((TFile.ReadAllText('C:/xampp/apache/modules/conf.json')));
+   //smartbank/webservice /conf
+   JsonArray := JsonValue as TJSONArray;
+   if (JSONValue is TJSONArray) then
+    begin
+     for a:=0 to (JSONValue as TJSONArray).Size-1  do
+         begin
+         dbname:=((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbname').JSONValue.Value;
+         uname  :=((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbuser').JSONValue.Value;
+         upass  := ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbpass').JSONValue.Value;
+         dbadr  := ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbadrs').JSONValue.Value;
+         dbport :=  ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbport').JSONValue.Value;
+         dbdriver  := ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbdriver').JSONValue.Value;
+         end;
+      end;
+
+
+
+       st:=Request.Content;
+
+JsonValue2:=JSonObject.ParseJSONValue(st);
+JsonValue2:=(JsonValue2 as TJSONObject).Get('Client').JSONValue;
+JsonArray2 := JsonValue2 as TJSONArray;
+
+
+
+  if (JSONValue2 is TJSONArray) then
+    begin
+           //val:='1';
+     for a:=0 to (JSONValue2 as TJSONArray).Size-1  do
+         begin
+         // clnum:=((JSONValue2 as TJSONArray).get(a) as TJSonObject).Get('CreditNumber').JSONValue.Value;
+         //clnum:=((JSONValue2 as TJSONArray).get(a) as TJSonObject).Get('CustomerPin').JSONValue.Value;
+         // clbirthday:=((JSONValue2 as TJSONArray).get(a) as TJSonObject).Get('ClientBirthday').JSONValue.Value;
+        end;
+
+    end;
+   //connection := TFDConnection.Create(nil);
+   // query:=TFDquery.Create(nil);
+
+
+              connection.Connected:=False;
+              Connection.LogonDatabase:=dbname;
+              Connection.LogonUsername:=uname;
+              Connection.LogonPassword:=upass;
+              Connection.Connected:=true;
+
+
+         if not Connection.Connected then
+         begin
+         Response.Content := '{"ErrorText": "Could not connect to database",'+
+                           ' "ErrorCode": "02" }';
+
+              connection.Connected:=False;
+          exit;
+         end;
+
+
+   st2:='select rownum,c.id,c.numberofcredit, a.name,b.birthday,get_accno( d.booroweraccid) accno,suBstr(get_accno( d.booroweraccid),8,3) val'
++' from customers a, custinfo b,cm_active_credits c ,cm_accounts d where c.numberofcredit=:cln '
++' and a.id=b.idcust and a.id=c.boorowerid and c.id=d.creditid ';
+
+      // Response.Content:=st2;
+
+     oneclient.Close;
+     oneclient.SQL.Clear;
+     oneclient.SQL.Add(st2);
+     oneclient.SetVariable('cln',clnum);
+   //  Queries.SetVariable('CLBIRTH',clbirthday);
+     oneclient.Open;
+
+
+
+    if oneclient.RecordCount<1 then
+         begin
+            Response.ContentType := 'application/json';
+            Response.Content := '{"ErrorText": "Customer or Credit Not Found", "ErrorCode": "03" }';
+
+              connection.Connected:=False;
+         exit;
+        end
+        else
+        begin
+
+      if oneclient.RecordCount=1 then
+       begin
+
+       credid:=oneclient.FieldByName('id').AsInteger;
+       creditamount.Close;
+       creditamount.SetVariable('cid',credid);
+       creditamount.Open;
+
+        clname:= Utf8Encode( oneclient.FieldByName('name').AsString);
+        clcreditnumber:= Utf8Encode (oneclient.FieldByName('numberofcredit').AsAnsiString );
+        claccount:=oneclient.FieldByName('accno').AsString;
+        clvalu:=oneclient.FieldByName('val').AsString;
+        clpayamount:=creditamount.FieldByName('payment').AsFloat;
+
+       resp:='{ "CreditLine": [{"ClientName": "'+clname +'",'+
+      '"ClientCreditNumber": "'+clcreditnumber+'",'+
+      '"ClientAccNo": "'+claccount+'",'+
+      '"CreditId": "'+inttostr(credid)+'",'+
+      '"CreditValute": "'+clvalu+'",'+
+     '"CreditPayAmmount":'+floattostr(clpayamount)+' }]} ' ;
+        Response.ContentType := 'application/json';
+            connection.Connected:=False;
+       // Response.Content :=resp;
+
+           end;
+
+
+               Response.Content :=resp;
+
+
+
+        end;
+
+
+
+end;
+
+procedure TWebModules.WebModulesWebActionItem1Action(Sender: TObject;
+  Request: TWebRequest; Response: TWebResponse; var Handled: Boolean);
+var
+i,j,k,tr,a,sr:Integer;
+v_id,v_id1,v_dda,v_dda1,stsql,st,st2,uname,upass,conffile:string;
+
+   JSonObject,JSonObject2:TJSonObject;
+   JSonValue,JsonValue2:TJSonValue;
+   JsonArray,JsonArray2: TJSONArray;
+   ArrayElement: TJSonValue;
+   FoundValue: TJSonValue;
+ clname,clcreditnumber,claccount,clvalu,clnum,clbirthday:string;
+clpayamount,clcreditamount,cramt1,cramt2,cramt3,clprpayamount:real;
+credid,ib,kr,m :integer;
+  resp,resparr:string;
+  clrest,clinterest,clpenalty,clduerest:real;
+
+   md5hash : TIdHashMessageDigest5;
+   secretkey,datas:string;
+
+  begin
+ md5hash := nil;
+  Response.ContentType := 'application/xml';
+  secretkey:='E5zPY';
+
+JsonValue:=JSonObject.ParseJSONValue((TFile.ReadAllText('C:/xampp/apache/modules/conf.json')));
+   //smartbank/webservice /conf
+   JsonArray := JsonValue as TJSONArray;
+   if (JSONValue is TJSONArray) then
+    begin
+     for a:=0 to (JSONValue as TJSONArray).Size-1  do
+         begin
+         dbname:=((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbname').JSONValue.Value;
+         uname  :=((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbuser').JSONValue.Value;
+         upass  := ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbpass').JSONValue.Value;
+         dbadr  := ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbadrs').JSONValue.Value;
+         dbport :=  ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbport').JSONValue.Value;
+         dbdriver  := ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbdriver').JSONValue.Value;
+         end;
+      end;
+
+
+              connection.Connected:=False;
+              Connection.LogonDatabase:=dbname;
+              Connection.LogonUsername:=uname;
+              Connection.LogonPassword:=upass;
+              Connection.Connected:=true;
+
+
+         if not Connection.Connected then
+         begin
+          if request.QueryFields.values['rtn']='' then
+          begin
+                Response.Content :='<Response>'+#13#10
+                                  +'<StatusCode>ER008</StatusCode>'+#13#10
+                                  +'<StatusDetail>Database connection</StatusDetail>' +#13#10
+                                  +'</Response>';
+                                  end
+                                  else
+                                  begin
+
+                                   Response.Content := '{"ErrorText": "Could not connect to database",'+' "ErrorCode": "08" }';
+                                   Response.ContentType := 'application/json';
+                                   connection.Connected:=False;
+
+                                  end;
+               exit;
+              connection.Connected:=False;
+          exit;
+         end;
+
+
+         if (request.QueryFields.values['custno']='')
+       then
+     begin
+      if request.QueryFields.values['rtn']='' then
+      begin
+      Response.Content :='<Response>'+#13#10
+                                  +'<StatusCode>ER001</StatusCode>'+#13#10
+                                  +'<StatusDetail>Required custno parameter is missing</StatusDetail>' +#13#10
+                                 +'</Response>';
+      end
+      else
+      begin
+          Response.Content := '{"ErrorText": "Required custno parameter is missing",'+' "ErrorCode": "01" }';
+          Response.ContentType := 'application/json';
+          connection.Connected:=False;
+
+      end;
+                                  exit;
+              connection.Connected:=False;
+         exit;
+      end;
+
+
+
+
+
+    try
+        md5hash := TIdHashMessageDigest5.Create;
+        resp := IdGlobal.IndyLowerCase( md5hash.HashStringAsHex (request.QueryFields.values['custno']+request.QueryFields.values['transaction_id']
+        +secretkey) );
+    finally
+        md5hash.Free;
+    end;
+
+
+        if   request.QueryFields.values['hash']   <> resp then
+        begin
+          if request.QueryFields.values['rtn']='' then
+          begin
+             Response.Content :='<Response>'+#13#10
+                                  +'<StatusCode>ER003</StatusCode>'+#13#10
+                                  +'<StatusDetail>Verify sign error</StatusDetail>' +#13#10
+                                  +'</Response>';
+                                  exit;
+          end
+          else
+          begin
+                Response.Content := '{"ErrorText": "Verify sign error",'+' "ErrorCode": "03" }';
+                Response.ContentType := 'application/json';
+          connection.Connected:=False;
+          end;
+        end;
+
+
+
+
+
+
+
+  { stsql:= 'select id ,dda_kod   from cm_portfolio where  dda_kod=:cln';
+     oneclient.Close;
+     oneclient.SQL.Clear;
+     oneclient.SQL.Add(stsql);
+     oneclient.SetVariable('cln',request.QueryFields.values['custno']);
+   //  Queries.SetVariable('CLBIRTH',clbirthday);
+     oneclient.Open;
+
+     v_id:= oneclient.FieldByName('id').AsString;
+     v_dda:= oneclient.FieldByName('dda_kod').AsString;
+
+
+     stsql:= 'select id v_id1 ,dda_kod v_dda2 from cm_portfolio where  id=:cln';
+     oneclient.Close;
+     oneclient.SQL.Clear;
+     oneclient.SQL.Add(stsql);
+     oneclient.SetVariable('cln',request.QueryFields.values['custno']);
+   //  Queries.SetVariable('CLBIRTH',clbirthday);
+     oneclient.Open;
+
+     v_id1:= oneclient.FieldByName('v_id1').AsString;
+     v_dda1:= oneclient.FieldByName('v_dda2').AsString;
+
+       if  v_dda= v_id1  then
+       begin
+         if request.QueryFields.values['rtn']='' then
+        begin
+           Response.Content :='<Response>'+#13#10
+                                  +'<StatusCode>ER004 </StatusCode>'+#13#10
+                                  +'<StatusDetail>This customer must be searched only with PIN</StatusDetail>' +#13#10
+                                  +'</Response>';
+                                  exit;
+        end
+        else
+        begin
+        Response.Content := '{"ErrorText": "This customer must be searched only with PIN)",'+' "ErrorCode": "33" ';
+                                   Response.ContentType := 'application/json';
+                                   connection.Connected:=False;
+        end;
+                                  exit;
+
+
+       end;     }
+
+
+
+
+st2:='select * from webservispkg.Payment_search_custno(:DDAK)' ;
+
+     azkredit_custno.Close;
+     azkredit_custno.SQL.Clear;
+     azkredit_custno.SQL.Add(st2);
+     azkredit_custno.SetVariable('DDAK',request.QueryFields.values['custno']);
+     azkredit_custno.Open;
+
+
+
+
+    if azkredit_custno.RecordCount<1 then
+         begin
+           if request.QueryFields.values['rtn']='' then
+          begin
+            Response.Content :='<Response>'+#13#10
+                                  +'<StatusCode>ER002</StatusCode>'+#13#10
+                                  +'<StatusDetail>Wrong Customer account</StatusDetail>' +#13#10
+                                  +'</Response>';
+
+                                  exit;
+          end
+          else
+          begin
+                 Response.Content := '{"ErrorText": "Wrong Customer account",'+' "ErrorCode": "02" }';
+                 Response.ContentType := 'application/json';
+          connection.Connected:=False;
+          end;
+              connection.Connected:=False;
+         exit;
+        end;
+
+
+      if azkredit_custno.RecordCount=1 then
+       begin
+
+       credid:=//strtoint(request.QueryFields.values['custno']);
+       azkredit_custno.FieldByName('id').AsInteger;
+       creditamount.Close;
+       creditamount.SetVariable('cid',credid);
+       creditamount.Open;
+
+        clname:=Utf8Encode (azkredit_custno.FieldByName('name').AsString);
+        clcreditnumber:=Utf8Encode( azkredit_custno.FieldByName('numberofcredit').AsString);
+        claccount:=azkredit_custno.FieldByName('accno').AsString;
+        clvalu:=azkredit_custno.FieldByName('val').AsString;
+        clpayamount:=creditamount.FieldByName('nxdaypayment').AsFloat;
+        clprpayamount:=creditamount.FieldByName('prdaypayment').AsFloat;
+        clrest   :=creditamount.FieldByName('rest').AsFloat;
+      //  clduerest   :=creditamount.FieldByName('duerest').AsFloat;
+     //   clinterest:= creditamount.FieldByName('interest').AsFloat   ;
+    //    clpenalty:=creditamount.FieldByName('penalty').AsFloat ;
+    //    jrec_id :=  azkredmillion.FieldByName('jrec_id').AsString;
+
+
+
+
+         cramt1:=0;
+         cramt2:=0;
+         cramt3:=0;
+
+     //   if  azkredmillion.FieldByName('typesofcred').AsString = '10000' then cramt1:=creditamount.FieldByName('payment').AsFloat;
+   //     if  azkredmillion.FieldByName('typesofcred').AsString = '20000' then cramt2:=creditamount.FieldByName('payment').AsFloat;
+   //     if  azkredmillion.FieldByName('typesofcred').AsString = '21000' then cramt3:=creditamount.FieldByName('payment').AsFloat;
+
+
+        datas:=FormatDateTime('yyyy-mm-dd', now)+' '+FormatDateTime('hh:nn:ss', now);
+
+
+        if request.QueryFields.values['rtn']='' then
+           begin
+             resp:=              '<Response>'+#13#10
+                                  +' <AccountInfo>  '+#13#10
+                                  +'  <NumberOfCredit>'+clcreditnumber+'</NumberOfCredit>'+#13#10
+                                  +'<CreditId>'+inttostr(credid)+'</CreditId>' +#13#10
+                                  +'  <Currency >'+clvalu+'</Currency>'+#13#10
+                                  +'  <Name>'+clname+'</Name>'+#13#10
+                                  +'  <Currency_Rate_Usd>1.7</Currency_Rate_Usd>'+#13#10
+                                  +'  <dateofgrant>'+azkredit_custno.FieldByName('dateofgrant').AsString +'</dateofgrant>'+#13#10
+                                  +'  <creditlineamount>'+azkredit_custno.FieldByName('creditlineamount').AsString +' </creditlineamount>' +#13#10
+
+                              //    +'  <balance_AZN>0</balance_AZN>'+#13#10
+                           //       +'  <product1_payment_amount_AZN>'+floattostr(cramt1)+'</product1_payment_amount_AZN>'+#13#10
+                          //        +'  <product2_payment_amount_AZN>'+floattostr(cramt2)+'</product2_payment_amount_AZN>'+#13#10
+                         //         +'  <product3_payment_amount_AZN>'+floattostr(cramt3)+'</product3_payment_amount_AZN>'+#13#10
+                                  +'  <Next_Payment_Amount>'+floattostr(clpayamount)+'</Next_Payment_Amount>'+#13#10
+                                  +'  <Rest>'+floattostr(clrest)+'</Rest>'+#13#10
+                                  +'  <Present_Payment_Amount>'+floattostr(clprpayamount)+'</Present_Payment_Amount>'+#13#10
+                                //  +'  <jrec_id>'+jrec_id+'</jrec_id>'+#13#10
+                                  +'  <auth_date>'+datas+'</auth_date>'+#13#10
+                       //           +'  <txt>0</txt>'+#13#10
+                                  +' </AccountInfo>'+#13#10
+                                  +'</Response>';
+                                   Response.Content  :=resp;
+                                  exit;
+             end
+             else
+             begin
+                 resp:='{ "CreditLine": [{"ClientName": "'+clname +'",'+
+                                            '"ClientCreditNumber": "'+clcreditnumber+'",'+
+                                            '"ClientAccNo": "'+claccount+'",'+
+                                            '"CreditId": "'+inttostr(credid)+'",'+
+                                            '"CreditValute": "'+clvalu+'",'+
+                                            '"dateofgrant": "'+azkredit_custno.FieldByName('dateofgrant').AsString+'",'+
+                                            '"Currency_Rate_Usd": "'+'1.7'+'",'+
+                                            '"creditlineamount":'+azkredit_custno.FieldByName('creditlineamount').AsString+','+
+                                            '"Next_Payment_Amount": '+floattostr(clpayamount)+','+
+                                            '"Rest": '+floattostr(clrest)+','+
+                                         //   '"CreditPenalty": '+floattostr(clpenalty)+','+
+                                            '"auth_date": "'+datas+'",'+
+                                           '"Present_Payment_Amount":'+floattostr(clprpayamount)+' }]} ' ;
+                                              Response.ContentType := 'application/json';
+                                                  connection.Connected:=False;
+                                              Response.Content :=resp;
+                                              exit;
+             end;
+       end
+       else
+       begin
+       azkredit_custno.First;
+
+
+
+        datas:=FormatDateTime('yyyy-mm-dd', now)+' '+FormatDateTime('hh:nn:ss', now);
+
+        if request.QueryFields.values['rtn']='' then
+       begin
+           for i := 0 to azkredit_custno.RecordCount-1 do
+           begin
+               credid:=azkredit_custno.FieldByName('id').AsInteger;
+               creditamount.Close;
+               creditamount.SetVariable('cid',credid);
+               creditamount.Open;
+
+        clname:=Utf8Encode (azkredit_custno.FieldByName('name').AsString);
+        clcreditnumber:=Utf8Encode( azkredit_custno.FieldByName('numberofcredit').AsString);
+        claccount:=azkredit_custno.FieldByName('accno').AsString;
+        clvalu:=azkredit_custno.FieldByName('val').AsString;
+        clpayamount:=creditamount.FieldByName('nxdaypayment').AsFloat;
+        clprpayamount:=creditamount.FieldByName('prdaypayment').AsFloat;
+        clrest   :=creditamount.FieldByName('rest').AsFloat;
+
+        if clrest=0 then
+        begin
+           clprpayamount :=  clpayamount ;
+            clrest:=  clpayamount;
+        end;
+
+
+               resparr:=resparr+  ' <AccountInfo>  '+#13#10
+                                  +'  <NumberOfCredit>'+clcreditnumber+'</NumberOfCredit>'+#13#10
+                                  +'<CreditId>'+inttostr(credid)+'</CreditId>' +#13#10
+                                  +'  <Currency >'+clvalu+'</Currency>'+#13#10
+                                  +'  <Name>'+clname+'</Name>'+#13#10
+                                  +'  <Currency_Rate_Usd>1.7</Currency_Rate_Usd>'+#13#10
+                                  +'  <dateofgrant>'+azkredit_custno.FieldByName('dateofgrant').AsString +'</dateofgrant>'+#13#10
+                                  +'  <creditlineamount>'+azkredit_custno.FieldByName('creditlineamount').AsString +' </creditlineamount>' +#13#10
+
+                              //    +'  <balance_AZN>0</balance_AZN>'+#13#10
+                           //       +'  <product1_payment_amount_AZN>'+floattostr(cramt1)+'</product1_payment_amount_AZN>'+#13#10
+                          //        +'  <product2_payment_amount_AZN>'+floattostr(cramt2)+'</product2_payment_amount_AZN>'+#13#10
+                         //         +'  <product3_payment_amount_AZN>'+floattostr(cramt3)+'</product3_payment_amount_AZN>'+#13#10
+                                  +'  <Next_Payment_Amount>'+floattostr(clpayamount)+'</Next_Payment_Amount>'+#13#10
+                                  +'  <Rest>'+floattostr(clrest)+'</Rest>'+#13#10
+                                  +'  <Present_Payment_Amount>'+floattostr(clprpayamount)+'</Present_Payment_Amount>'+#13#10
+                                //  +'  <jrec_id>'+jrec_id+'</jrec_id>'+#13#10
+                                  +'  <auth_date>'+datas+'</auth_date>'+#13#10
+                       //           +'  <txt>0</txt>'+#13#10
+                                  +' </AccountInfo>'+#13#10;
+
+
+               azkredit_custno.Next;
+
+           end;
+           SetLength(resparr,LENGTH(resparr)-1);
+                resp:=  '<Response>'+#13#10
+                                   + resparr
+                                  +'</Response>';
+
+
+              connection.Connected:=False;
+               Response.Content :=resp;
+             end
+             else
+             begin
+
+              for i := 0 to azkredit_custno.RecordCount-1 do
+           begin
+               credid:=azkredit_custno.FieldByName('id').AsInteger;
+               creditamount.Close;
+               creditamount.SetVariable('cid',credid);
+               creditamount.Open;
+
+        clname:=Utf8Encode (azkredit_custno.FieldByName('name').AsString);
+        clcreditnumber:=Utf8Encode( azkredit_custno.FieldByName('numberofcredit').AsString);
+        claccount:=azkredit_custno.FieldByName('accno').AsString;
+        clvalu:=azkredit_custno.FieldByName('val').AsString;
+        clpayamount:=creditamount.FieldByName('nxdaypayment').AsFloat;
+        clprpayamount:=creditamount.FieldByName('prdaypayment').AsFloat;
+        clrest   :=creditamount.FieldByName('rest').AsFloat;
+
+        if clrest=0 then
+        begin
+           clprpayamount :=  clpayamount ;
+            clrest:=  clpayamount;
+        end;
+
+                    resparr:=resparr+'{ "CreditLine": [{"ClientName": "'+clname +'",'+
+                                            '"ClientCreditNumber": "'+clcreditnumber+'",'+
+                                            '"ClientAccNo": "'+claccount+'",'+
+                                            '"CreditId": "'+inttostr(credid)+'",'+
+                                            '"CreditValute": "'+clvalu+'",'+
+                                            '"dateofgrant": "'+azkredit_custno.FieldByName('dateofgrant').AsString+'",'+
+                                            '"Currency_Rate_Usd": "'+'1.7'+'",'+
+                                            '"creditlineamount":'+azkredit_custno.FieldByName('creditlineamount').AsString+','+
+                                            '"Next_Payment_Amount": '+floattostr(clpayamount)+','+
+                                            '"Rest": '+floattostr(clrest)+','+
+                                           // '"CreditPenalty": '+floattostr(clpenalty)+','+
+                                            '"auth_date": '+datas+','+
+                                           '"Present_Payment_Amount":'+floattostr(clprpayamount)+' }]} ' ;
+           end;
+       SetLength(resparr,LENGTH(resparr)-1);
+                resp:=resp+'{ "CreditLine": ['+resparr+']} ' ;
+               Response.ContentType := 'application/json';
+             end;
+
+       end;
+
+
+end;
+
+end.

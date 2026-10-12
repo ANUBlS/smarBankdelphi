@@ -1,0 +1,54 @@
+unit P_Interval_Unit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ComCtrls, StdCtrls;
+
+type
+  TP_Interval = class(TForm)
+    OkButton: TButton;
+    CancelButton: TButton;
+    GroupBox1: TGroupBox;
+    Label1: TLabel;
+    Label2: TLabel;
+    StartDateEdit: TDateTimePicker;
+    EndDateEdit: TDateTimePicker;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+      procedure WMNCPaint(var message: TWMNCPaint);
+    procedure WMNCACTIVATE(var message:TWMNCActivate);
+ 
+  end;
+
+var
+  P_Interval: TP_Interval;
+
+implementation
+
+{$R *.DFM}
+  
+procedure TP_Interval.WMNCACTIVATE(var message:TWMNCActivate);
+var
+ S:TWMNCPaint;
+begin
+inherited;
+WMNCPaint(s);
+end;
+
+procedure TP_Interval.WMNCPaint(var message: TWMNCPaint);
+const Capt = 'Ñÿנÿםזאלכאנ';
+var dc : hDc;
+begin
+inherited;
+Caption:='';
+dc := GetWindowDC(Handle);
+        SetBkMode(dc,Transparent);
+        SetTextColor(dc,clWhite);
+        SelectObject(dc, Font.Handle);
+        TextOut(dc, 23,6,Capt,Length(Capt));
+end;
+end.

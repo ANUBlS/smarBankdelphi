@@ -1,0 +1,31 @@
+library PBF_Transactions;
+
+uses
+  ComServ,
+  PBF_Transactions_TLB in 'PBF_Transactions_TLB.pas',
+  frmpbf_transactionImpl in 'frmpbf_transactionImpl.pas' {frmpbf_transaction: TActiveForm} {frmpbf_transaction: CoClass},
+  dmpbf_transactionimpl in 'dmpbf_transactionimpl.pas' {dmpbf_transaction: TDataModule},
+  frmAddEditTrImpl in 'frmAddEditTrImpl.pas' {frmAddEditTr},
+  frmpbffilialsaccsImpl in 'frmpbffilialsaccsImpl.pas' {FrmpbfFilialsaccs},
+  frmpbfTransactionSettImpl in 'frmpbfTransactionSettImpl.pas' {frmpbfTransactionSett},
+  FrmpbfFilialsUsersImpl in 'FrmpbfFilialsUsersImpl.pas' {FrmpbfFilialsUsers},
+  frmOtherOperationsImpl in 'frmOtherOperationsImpl.pas' {frmOtherOperations},
+  pbfCurrencyToHR_Azeri_Impl in 'pbfCurrencyToHR_Azeri_Impl.pas',
+  frmpbfReportImpl in 'frmpbfReportImpl.pas' {frmpbfReport: TQuickRep},
+  frmpbfPayRepNumImpl in 'frmpbfPayRepNumImpl.pas' {frmpbfPayRepNum},
+  frmkindaccsimpl in 'frmkindaccsimpl.pas' {frmkindaccs};
+
+{$E ocx}
+
+exports
+  DllGetClassObject,
+  DllCanUnloadNow,
+  DllRegisterServer,
+  DllUnregisterServer;
+
+{$R *.TLB}
+
+{$R *.RES}
+
+begin
+end.

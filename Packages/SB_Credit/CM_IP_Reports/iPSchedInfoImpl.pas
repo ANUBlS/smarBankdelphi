@@ -1,0 +1,51 @@
+unit iPSchedInfoImpl;
+
+interface
+
+uses Windows, SysUtils, Messages, Classes, Graphics, Controls,
+  StdCtrls, ExtCtrls, Forms, Quickrpt, QRCtrls;
+
+type
+  TqrpPSchedInfo = class(TQuickRep)
+    QRBand1: TQRBand;
+    QRGroup1: TQRGroup;
+    QRDBText1: TQRDBText;
+    QRGroup2: TQRGroup;
+    QRDBText2: TQRDBText;
+    QRBand2: TQRBand;
+    QRDBText4: TQRDBText;
+    QRDBText6: TQRDBText;
+    QRDBText7: TQRDBText;
+    QRDBText3: TQRDBText;
+    QRLabel1: TQRLabel;
+    QRLabel2: TQRLabel;
+    QRLabel3: TQRLabel;
+    QRLabel4: TQRLabel;
+    QRLabel6: TQRLabel;
+    QRLabel7: TQRLabel;
+    QRLabel8: TQRLabel;
+    QRBand3: TQRBand;
+    QRSysData1: TQRSysData;
+    QRDBText5: TQRDBText;
+    QRLabel5: TQRLabel;
+    QRLabel9: TQRLabel;
+    QRLabel10: TQRLabel;
+    QRDBText8: TQRExpr;
+    QRDBText9: TQRDBText;
+    QRLabel11: TQRLabel;
+  private
+
+  public
+
+  end;
+
+var
+  qrpPSchedInfo: TqrpPSchedInfo;
+
+implementation
+
+uses uIprepFilter;
+
+{$R *.DFM}
+
+end.

@@ -1,0 +1,74 @@
+unit OrderDataModuleUnit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, OracleData;
+
+type
+  TDataModOrder = class(TDataModule)
+    SYSDAT: TOracleDataSet;
+    CurrencyData: TOracleDataSet;
+    DataSrcCurrency: TDataSource;
+    SYSDATTEK_DAT: TDateTimeField;
+    CurrencyDataVALUTE: TIntegerField;
+    CurrencyDataVAL_NAME: TStringField;
+    CurrencyDataVALU_NAME: TStringField;
+    CurrencyDataVALU_BALA: TStringField;
+    ContractAccs: TOracleDataSet;
+    ClientAccs: TOracleDataSet;
+    ReserveAccs: TOracleDataSet;
+    DataSrcContractAccs: TDataSource;
+    DataSrcClientAccs: TDataSource;
+    DataSrcReserveAccs: TDataSource;
+    BankInfoData: TOracleDataSet;
+    ContractAccsVAL_ACC: TIntegerField;
+    ContractAccsACC_NO: TStringField;
+    ContractAccsNAME: TStringField;
+    ContractAccsKLI_ID: TFloatField;
+    ReserveAccsVAL_ACC: TIntegerField;
+    ReserveAccsACC_NO: TStringField;
+    ReserveAccsNAME: TStringField;
+    ClientAccsVAL_ACC: TIntegerField;
+    ClientAccsACC_NO: TStringField;
+    ClientAccsNAME: TStringField;
+    ClientAccsKLI_ID: TFloatField;
+    ReserveAccsKLI_ID: TFloatField;
+    procedure DataModuleCreate(Sender: TObject);
+    procedure DataModuleDestroy(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  DataModOrder: TDataModOrder;
+
+implementation
+
+{$R *.DFM}
+uses
+   sboapiDataModuleImpl, OrderImpl;
+procedure TDataModOrder.DataModuleCreate(Sender: TObject);
+begin
+  SYSDAT.Open;
+  CurrencyData.Open;
+  ContractAccs.Open;
+  ClientAccs.Open;
+  ReserveAccs.Open;
+  BankInfoData.Open;
+end;
+
+procedure TDataModOrder.DataModuleDestroy(Sender: TObject);
+begin
+  SYSDAT.CloseAll;
+  CurrencyData.CloseAll;
+  ContractAccs.CloseAll;
+  ClientAccs.CloseAll;
+  ReserveAccs.CloseAll;
+  BankInfoData.CloseAll;
+end;
+
+end.

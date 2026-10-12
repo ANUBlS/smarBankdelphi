@@ -1,0 +1,158 @@
+object OBSDatMod: TOBSDatMod
+  OldCreateOrder = False
+  Height = 422
+  Width = 726
+  object OutInterestsAccounts: TOracleDataSet
+    SQL.Strings = (
+      'select id ,acc_no from sbout_account'
+      
+        'where id = (select outinterestaccid from cm_accounts where credi' +
+        'tid=:CrdID)')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000C0000003A00430052004400490044000300000000000000
+      00000000}
+    RefreshOptions = [roAllFields]
+    Left = 56
+    Top = 16
+    object OutInterestsAccountsID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object OutInterestsAccountsACC_NO: TStringField
+      FieldName = 'ACC_NO'
+    end
+  end
+  object OutIntIncomeAccounts: TOracleDataSet
+    SQL.Strings = (
+      'select id ,acc_no from sbout_account')
+    Optimize = False
+    Left = 184
+    Top = 16
+  end
+  object OutInterestsDatSrc: TDataSource
+    DataSet = OutInterestsAccounts
+    Left = 40
+    Top = 88
+  end
+  object OutIntIncomeDatSrc: TDataSource
+    DataSet = OutIntIncomeAccounts
+    Left = 184
+    Top = 88
+  end
+  object Customers: TOracleDataSet
+    SQL.Strings = (
+      'select name from cm_sb_customers'
+      'where id=:CliID ')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000C0000003A0043004C004900490044000300000000000000
+      00000000}
+    Left = 40
+    Top = 160
+  end
+  object Interestrests: TOracleDataSet
+    SQL.Strings = (
+      'select interestrest from cm_curr_state'
+      'where creditid= :Ac_ID')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000C0000003A00410043005F00490044000300000000000000
+      00000000}
+    Left = 184
+    Top = 160
+  end
+  object CustomersDatSrc: TDataSource
+    DataSet = Customers
+    Left = 48
+    Top = 232
+  end
+  object InterestrestsDatSrc: TDataSource
+    DataSet = Interestrests
+    Left = 192
+    Top = 232
+  end
+  object CreditInfo: TOracleDataSet
+    SQL.Strings = (
+      'select boorowerid ,'
+      '       currency ,'
+      '       branchid ,'
+      '       customertype'
+      '   from cm_active_credits'
+      'where id =:B_ID')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000A0000003A0042005F004900440003000000000000000000
+      0000}
+    Left = 304
+    Top = 88
+  end
+  object InterestInfo: TOracleDataSet
+    SQL.Strings = (
+      'select stopcalcdate from cm_curr_state'
+      'where creditid =:Crdid')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000C0000003A00430052004400490044000300000000000000
+      00000000}
+    Left = 304
+    Top = 160
+  end
+  object InterestsAccounts: TOracleDataSet
+    SQL.Strings = (
+      'select id, acc_no from sb_account'
+      
+        'where id in (select accountid from cm_link_values where  currenc' +
+        'yid=:CurrID and branchid=:BrID '
+      
+        'and linkid in (select id from cm_links where categoryid=:CatID a' +
+        'nd link='#39'lnkInterestAccount'#39')  )')
+    Optimize = False
+    Variables.Data = {
+      04000000030000000E0000003A00430055005200520049004400030000000000
+      0000000000000A0000003A004200520049004400030000000000000000000000
+      0C0000003A0043004100540049004400030000000000000000000000}
+    Left = 304
+    Top = 224
+  end
+  object IntAccDatSrc: TDataSource
+    DataSet = InterestsAccounts
+    Left = 312
+    Top = 280
+  end
+  object CustIntAccounts: TOracleDataSet
+    SQL.Strings = (
+      'select id,acc_no from sb_account'
+      
+        'where id = (select interestaccid from cm_accounts where creditid' +
+        '=:CrdID)')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000C0000003A00430052004400490044000300000000000000
+      00000000}
+    Left = 40
+    Top = 288
+  end
+  object CustIntAccDatSrc: TDataSource
+    DataSet = CustIntAccounts
+    Left = 176
+    Top = 288
+  end
+  object Avalute: TOracleDataSet
+    SQL.Strings = (
+      'select val_name from sb_avalute'
+      'where valute =:val_id')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000E0000003A00560041004C005F0049004400030000000000
+      000000000000}
+    Left = 384
+    Top = 16
+  end
+  object CM_INT_PLACEOUTBALANCE: TOraclePackage
+    PackageName = 'CM_INT_PLACEOUTBALANCE'
+    ParameterMode = pmNamed
+    Left = 416
+    Top = 120
+  end
+end

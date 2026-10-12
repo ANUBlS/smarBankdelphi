@@ -1,0 +1,224 @@
+unit GB_Setting;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, ExtCtrls, CheckLst, Evanescence, Grids, DBGrids, DBCtrls;
+
+type
+  TFormSettingsGBReport = class(TForm)
+    Panel3: TPanel;
+    Panel1: TPanel;
+    Label1: TLabel;
+    Edit_Name: TEdit;
+    Panel2: TPanel;
+    Label4: TLabel;
+    Edit_Mebleg: TEdit;
+    GroupBox1: TGroupBox;
+    Label2: TLabel;
+    Label3: TLabel;
+    Edit_Debit: TEdit;
+    Edit_Kredit: TEdit;
+    GB_Multi_valyuta: TGroupBox;
+    CB_Multi_Val: TCheckBox;
+    GB_Emeliyyat_Novleri: TGroupBox;
+    Evanescence1: TEvanescence;
+    Panel4: TPanel;
+    Button_OK: TButton;
+    Panel5: TPanel;
+    DBNavigator1: TDBNavigator;
+    DBGridReport_SQL: TDBGrid;
+    procedure Button_OKClick(Sender: TObject);
+    Function  Select_Debit(STR : String)        : string;
+    function  Emelyat_novleri  : String;
+    function  Multi_Valyut                      : String;
+    procedure FormCreate(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormSettingsGBReport: TFormSettingsGBReport;
+
+implementation
+uses GB_Datamod;
+var  SQL_Text                  : String;
+{$R *.DFM}
+
+procedure TFormSettingsGBReport.Button_OKClick(Sender: TObject);
+begin
+
+   if Edit_Mebleg.Text='' then Edit_Mebleg.Text:='0';
+{*****************************************************}
+   if Edit_Name.Text<>'' then
+   begin
+
+      SQL_Text:='';
+      SQL_Text:=SQL_Text+' select id_, name_, Debet_sum from ';
+      SQL_Text:=SQL_Text+' (Select c.id id_, c.name name_, sum(pr.LAMMOUNT) Debet_sum';
+      SQL_Text:=SQL_Text+' from customers c, account a, provarch pr';
+      SQL_Text:=SQL_Text+' where (pr.dat between :BEGDATE and :ENDDATE)';
+      SQL_Text:=SQL_Text+'      and pr.debt=a.id';
+
+      SQL_Text:=SQL_Text+' and pr.debt in (select id from account where '+Select_Debit(Edit_Debit.Text)+' ) ';
+      SQL_Text:=SQL_Text+' and pr.kredit in (select id from account where '+Select_Debit(Edit_Kredit.Text)+' ) ';
+      SQL_Text:=SQL_Text+'      and a.kli_id=c.id';
+
+      SQL_Text:=SQL_Text+Multi_Valyut+Emelyat_novleri;
+   {  SQL_Text:=SQL_Text+' and (pr.val_acc<>pr.CURRENCYID_C) and (pr.vid_op not in (1,2,3))';}
+
+      SQL_Text:=SQL_Text+' group by c.id, c.name';
+      SQL_Text:=SQL_Text+' order by Debet_Sum)';
+      SQL_Text:=SQL_Text+' where (debet_sum>'+Edit_Mebleg.Text+')';
+      SQL_Text:=SQL_Text+' order by Debet_sum';
+
+      DataMod_GBReport.OP_GB_Report.CallProcedure('add_SQL',[Edit_Name.Text
+                                                    ,SQL_Text
+                                                    ]);
+      DataMod_GBReport.OracleDataSet_SQL.Close;
+      DataMod_GBReport.OracleDataSet_SQL.Open;
+      Edit_Name.Clear;
+      Edit_Debit.Clear;
+      Edit_Kredit.Clear;
+      FormSettingsGBReport.Close;
+   end else ShowMessage('Emeliyyatin adini daxil edin!');
+end;
+
+Function TFormSettingsGBReport.Select_Debit(STR : String) : string;
+var
+   VER_IN_STR   : String;
+   OR_LIKE_STR  : String;
+   Temp_STR     : String;
+   Self_STR     : String;
+   Selo_STR     : String;
+   Delo_STR     : String;
+   Dirnaq       : string;
+   say          : Integer;
+begin
+   DataMod_GBReport.OracleDataSet_Setting.Open;
+   Dirnaq:=DataMod_GBReport.OracleDataSet_Setting.Fields[1].AsString;
+   DataMod_GBReport.OracleDataSet_Setting.Close;
+   VER_IN_STR:='';
+   OR_LIKE_STR:='';
+   Self_STR:='';
+   Selo_STR:='';
+   Delo_STR:='';
+   for say:=1 to Length(STR) do
+   begin
+      Temp_STR:=copy(STR,say,1);
+      if Temp_STR<>',' then
+      begin
+         Self_STR:=Self_STR+Temp_STR;
+      end else
+      begin
+         if Length(Self_STR)=4 then
+         begin
+            Selo_STR:=Selo_STR+VER_IN_STR+Self_STR;
+            Self_STR:='';
+            VER_IN_STR:=Temp_STR;
+            {OR_LIKE_STR:=' OR ';}
+         end;
+         if (Length(Self_STR)<>4) and (Self_STR<>'') then
+         begin
+            Delo_STR:=Delo_STR+OR_LIKE_STR+' (bal_cn1 like '+Dirnaq+ Self_STR +'%'+Dirnaq+' ) ';
+            Self_STR:='';
+            OR_LIKE_STR:=' OR ';
+         end;
+      end;
+
+   end;
+   {**************************************}
+      if Length(Self_STR)=4 then
+      begin
+         Selo_STR:=Selo_STR+VER_IN_STR+Self_STR;
+         Self_STR:='';
+         {OR_LIKE_STR:=' OR ';}
+      end;
+      if (Length(Self_STR)<>4) and (Self_STR<>'') then
+      begin
+         Delo_STR:=Delo_STR+OR_LIKE_STR+' (bal_cn1 like '+Dirnaq+ Self_STR +'%'+Dirnaq+' ) ';
+         Self_STR:='';
+         OR_LIKE_STR:=' OR ';
+      end;
+{**************************************}
+{--------------------------------------}
+      if (Length(Selo_STR)>=4) then
+      begin
+         Selo_STR:=' (bal_cn1 in ( '+Selo_STR+' ) )';
+      end;
+      if (Length(Selo_STR)>=4) and (OR_LIKE_STR=' OR ') then
+      begin
+         Selo_STR:=Selo_STR+OR_LIKE_STR;
+      end;
+{--------------------------------------}
+      Select_Debit:=Selo_STR+Delo_STR;
+      if Length(Selo_STR+Delo_STR)=0 then Select_Debit:=' (bal_cn1 like '+Dirnaq+ '%' +Dirnaq+' ) ';
+end;
+
+function TFormSettingsGBReport.Emelyat_novleri         : String;
+var
+   sayi         : Integer;
+   STR_         : String;
+   Vergul       : string;
+begin
+   STR_:='';
+   for sayi:=0 to Evanescence1.GetCheckedKeyList.Count-1 do
+   begin
+      STR_:=STR_+Vergul+Evanescence1.GetCheckedKeyList[sayi];
+      Vergul:=',';
+   end;
+   if Length(STR_)>0 then
+   begin
+      Emelyat_novleri:=' and (pr.vid_op not in ( '+STR_+') )';
+   end else
+   begin
+      Emelyat_novleri:='';
+   end;
+end;
+
+function TFormSettingsGBReport.Multi_Valyut            : String;
+begin
+   if CB_Multi_Val.Checked = True then
+   begin
+      Multi_Valyut:=' and (pr.val_acc<>pr.CURRENCYID_C) '
+   end else
+   begin
+      Multi_Valyut:='';
+   end;
+end;
+
+procedure TFormSettingsGBReport.FormCreate(Sender: TObject);
+begin
+  Evanescence1.Open;
+end;
+
+procedure TFormSettingsGBReport.Button1Click(Sender: TObject);
+var
+   Componentin_Sayi : integer;
+begin
+  for Componentin_Sayi:=0 to  ComponentCount-1 do
+  if (Components[Componentin_Sayi] is TButton) then
+   DataMod_GBReport.OP_GB_Report.CallProcedure('Unicode_change',[{(Components[Componentin_Sayi] as TButton).Caption,}'',
+                                                           'Azl Sans Serif',
+                                                           8,
+                                                           204,
+                                                           (Components[Componentin_Sayi] as TButton).caption,
+                                                           'LitNusx',
+                                                           8,
+                                                           0,
+                                                           (Components[Componentin_Sayi] as TButton).tag,
+                                                           (Components[Componentin_Sayi] as TButton).Name,
+                                                           'TButton',
+                                                           'TButton',
+                                                           'TFormSettingsGBReport'
+
+                                                                ]);
+
+
+end;
+
+end.

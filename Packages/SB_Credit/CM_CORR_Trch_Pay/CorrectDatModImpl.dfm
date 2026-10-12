@@ -1,0 +1,96 @@
+object CorrectDatMod: TCorrectDatMod
+  OldCreateOrder = False
+  OnCreate = DataModuleCreate
+  Height = 480
+  Width = 696
+  object Tranches: TOracleDataSet
+    SQL.Strings = (
+      'select '
+      '       tranchedate , '
+      '       trancheamount'
+      'from cm_tranches'
+      'where creditid =:CrdID ')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000C0000003A00430052004400490044000300000000000000
+      00000000}
+    OnApplyRecord = TranchesApplyRecord
+    Session = sboapiDataModule.SBSession
+    Left = 32
+    Top = 32
+    object TranchesTRANCHEDATE: TDateTimeField
+      FieldName = 'TRANCHEDATE'
+      LookupCache = True
+      Required = True
+    end
+    object TranchesTRANCHEAMOUNT: TFloatField
+      FieldName = 'TRANCHEAMOUNT'
+      Required = True
+    end
+  end
+  object Payments: TOracleDataSet
+    SQL.Strings = (
+      'select  id,'
+      '        paydate , '
+      '        payedamt , '
+      '        payedintamt , '
+      '        payeddueamt ,'
+      '        payeddueintamt'
+      'from cm_payments'
+      'where creditid =:CrdID')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000C0000003A00430052004400490044000300000000000000
+      00000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000600000004000000490044000100000000000E000000500041005900
+      4400410054004500010000000000100000005000410059004500440041004D00
+      5400010000000000160000005000410059004500440049004E00540041004D00
+      5400010000000000160000005000410059004500440044005500450041004D00
+      54000100000000001C0000005000410059004500440044005500450049004E00
+      540041004D005400010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 32
+    Top = 128
+    object PaymentsPAYDATE: TDateTimeField
+      FieldName = 'PAYDATE'
+      Required = True
+    end
+    object PaymentsPAYEDAMT: TFloatField
+      FieldName = 'PAYEDAMT'
+      Required = True
+    end
+    object PaymentsPAYEDINTAMT: TFloatField
+      FieldName = 'PAYEDINTAMT'
+      Required = True
+    end
+    object PaymentsPAYEDDUEINTAMT: TFloatField
+      FieldName = 'PAYEDDUEINTAMT'
+      Required = True
+    end
+    object PaymentsPAYEDDUEAMT: TFloatField
+      FieldName = 'PAYEDDUEAMT'
+      Required = True
+    end
+    object PaymentsID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+  end
+  object TranchesDatSrc: TDataSource
+    DataSet = Tranches
+    Left = 112
+    Top = 32
+  end
+  object PaymentsDatSrc: TDataSource
+    DataSet = Payments
+    Left = 120
+    Top = 128
+  end
+  object CM_CORR_TRCH_PAY: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'CM_CORR_TRCH_PAY'
+    Left = 224
+    Top = 40
+  end
+end

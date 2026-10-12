@@ -1,0 +1,193 @@
+unit MKSuggestionImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, INSWordExporter, PlgModalContainer, Grids, DBGrids, DBCtrls,
+  StdCtrls, XFSCtrls, Mask, Oracle, DB, OracleData, Buttons, ExtCtrls;
+
+type
+  TfmMKSuggestion = class(TForm)
+    XFPanel1: TXFPanel;
+    btPrint: TBitBtn;
+    btApply: TBitBtn;
+    btOk: TBitBtn;
+    btPolicy: TBitBtn;
+    BitBtn2: TBitBtn;
+    lbNonUnicode: TListBox;
+    ODSActivity: TOracleDataSet;
+    ODSActivityID: TFloatField;
+    ODSActivityNAME: TWideStringField;
+    ODSAvalute: TOracleDataSet;
+    ODSAvaluteVALUTE: TIntegerField;
+    ODSAvaluteVAL_NAME: TWideStringField;
+    ODSAvaluteVALU_NAME: TWideStringField;
+    ODSAvaluteVALU_SHORT: TWideStringField;
+    ODSBankinfo: TOracleDataSet;
+    ODSBankinfoBANK: TWideStringField;
+    ODSBankinfoAZ_NAME: TWideStringField;
+    ODSBankinfoSEHER: TWideStringField;
+    ODSBankinfoADRESS: TWideStringField;
+    ODSBankinfoTEL: TWideStringField;
+    ODSBankinfoFAX: TWideStringField;
+    ODSBankinfoEMAIL: TWideStringField;
+    ODSContracts: TOracleDataSet;
+    ODSContractsID: TFloatField;
+    ODSContractsTYPE_ID: TFloatField;
+    ODSContractsINS_DATE: TDateTimeField;
+    ODSContractsBEGIN_DATE: TDateTimeField;
+    ODSContractsEND_DATE: TDateTimeField;
+    ODSContractsVALUTE_ID: TFloatField;
+    ODSContractsAMMOUNT: TFloatField;
+    ODSContractsCLOSE_PREFIX: TIntegerField;
+    ODSContractsKLI_ID: TFloatField;
+    ODSContractsLOANACC_ID: TFloatField;
+    ODSContractsCURRACC_ID: TFloatField;
+    ODSContractsPOLICY_NUM: TWideStringField;
+    ODSContractsINSSUMM: TFloatField;
+    ODSContractsFRANSHIZ: TFloatField;
+    ODSContractsTARIFF: TFloatField;
+    ODSContractsSTATE: TIntegerField;
+    ODSCusts: TOracleDataSet;
+    ODSCustsID: TIntegerField;
+    ODSCustsNAME: TWideStringField;
+    ODSCustsADDRESS: TWideStringField;
+    ODSCustsACT_ID: TIntegerField;
+    ODSFranshiz: TOracleDataSet;
+    ODSFranshizID: TFloatField;
+    ODSFranshizNAME: TWideStringField;
+    ODSMotorKasko: TOracleDataSet;
+    ODSMotorKaskoID: TFloatField;
+    ODSMotorKaskoINSUREDTYPE: TWideStringField;
+    ODSMotorKaskoINSUREDCOLOR: TWideStringField;
+    ODSMotorKaskoINSUREDOUTPUTYEAR: TIntegerField;
+    ODSMotorKaskoINSUREDSTATENUM: TWideStringField;
+    ODSMotorKaskoUNDERFRAMENUM: TWideStringField;
+    ODSMotorKaskoINSUREDBANNUM: TWideStringField;
+    ODSMotorKaskoINSUREDENGINENUM: TWideStringField;
+    ODSMotorKaskoDRIVEINTENDED: TWideStringField;
+    ODSMotorKaskoDRIVECOST: TFloatField;
+    ODSMotorKaskoBEGINDATE: TDateTimeField;
+    ODSMotorKaskoENDDATE: TDateTimeField;
+    ODSMotorKaskoTYPEID: TIntegerField;
+    ODSMotorKaskoCLOSE_PREFIX: TIntegerField;
+    ODSMotorKaskoBANK_ID: TFloatField;
+    ODSMotorKaskoMONTH_ID: TFloatField;
+    ODSMotorKaskoINSOBJECT: TWideStringField;
+    ODSMotorKaskoINSUREDMARK: TWideStringField;
+    ODSMotorKaskoINSUREDMODEL: TWideStringField;
+    ODSMotorKaskoFRANSHIZ: TFloatField;
+    ODSMotorKaskoTARIFF: TFloatField;
+    ODSMotorKaskoINSSUMM: TFloatField;
+    ODSMotorKaskoAMMOUNT: TFloatField;
+    ODSPolicy: TOracleDataSet;
+    ODSPolicyID: TFloatField;
+    ODSPolicyTHEFT: TFloatField;
+    ODSPolicyFIRE: TFloatField;
+    ODSPolicyEXPLOSION: TFloatField;
+    ODSPolicyTRAFFICACCIDENT: TFloatField;
+    ODSPolicyIMPACTANYOBJECT: TFloatField;
+    ODSPolicyNATCATASTROPHE: TFloatField;
+    ODSPolicyPOLICYNUM: TWideStringField;
+    ODSPolicyUNDERTABLE: TBlobField;
+    ODSPolicyCID: TFloatField;
+    ODSPolicyRISKS: TFloatField;
+    ODSPolicyNAME: TWideStringField;
+    ODSPolicyRISKADDRESS: TWideStringField;
+    ODSPolicyrisk: TWideStringField;
+    ODSReport: TOracleDataSet;
+    ODSReportNAME: TWideStringField;
+    ODSReportINSUREDTYPE: TWideStringField;
+    ODSReportINSUREDCOLOR: TWideStringField;
+    ODSReportINSUREDOUTPUTYEAR: TIntegerField;
+    ODSReportINSUREDMODEL: TWideStringField;
+    ODSReportINSUREDSTATENUM: TWideStringField;
+    ODSReportUNDERFRAMENUM: TWideStringField;
+    ODSReportINSUREDBANNUM: TWideStringField;
+    ODSReportDRIVEACCESSPIOPLE: TWideStringField;
+    ODSReportINSUREDENGINENUM: TWideStringField;
+    ODSReportACCESSORIESNAME: TWideStringField;
+    ODSReportBEGINDATE: TWideStringField;
+    ODSReportINSDATE: TWideStringField;
+    ODSReportPOLICYNUM: TWideStringField;
+    ODSReportENDDATE: TWideStringField;
+    ODSReportTHEFT: TFloatField;
+    ODSReportFIRE: TFloatField;
+    ODSReportTRAFFICACCIDENT: TFloatField;
+    ODSReportIMPACTANYOBJECT: TFloatField;
+    ODSReportEXPLOSION: TFloatField;
+    ODSReportAGENT: TWideStringField;
+    ODSReportVALUTE: TWideStringField;
+    ODSReportBENEFICIARY: TWideStringField;
+    ODSReportLOANACC_ID: TFloatField;
+    ODSReportCURRACC_ID: TFloatField;
+    ODSReportDRIVEINTENDED: TWideStringField;
+    ODSReportSEX: TIntegerField;
+    ODSReportNUMSEATS: TWideStringField;
+    ODSReportFRANSHIZ: TFloatField;
+    ODSReportEXTRAFRANSHIZ: TWideStringField;
+    ODSReportAVTOCOST: TFloatField;
+    ODSReportINSSUMM: TFloatField;
+    ODSReportAMMOUNT: TFloatField;
+    ODSReportINSUREDADDRESS: TWideStringField;
+    ODSReportMOBILEPHONE: TWideStringField;
+    ODSReportHOMEPHONE: TWideStringField;
+    ODSReportTARIFF: TFloatField;
+    ODSReportACTIVITY: TWideStringField;
+    ODSReportSUGNUM: TWideStringField;
+    ODSRisk: TOracleDataSet;
+    ODSRiskID: TFloatField;
+    ODSRiskNAME: TWideStringField;
+    ODSTemplates: TOracleDataSet;
+    ODSTemplatesID: TFloatField;
+    ODSTemplatesNAME: TWideStringField;
+    ODSTemplatesTEMPLATE: TBlobField;
+    OPCOMMON: TOraclePackage;
+    OPKASKO: TOraclePackage;
+    OPSBMSG: TOraclePackage;
+    Panel2: TXFPanel;
+    XFPanel3: TXFPanel;
+    XFLabel1: TXFLabel;
+    XFLabel2: TXFLabel;
+    DBEdit1: TDBEdit;
+    Edit1: TEdit;
+    XFGroupBox1: TXFGroupBox;
+    XFLabel3: TXFLabel;
+    XFLabel4: TXFLabel;
+    DBEdit2: TDBEdit;
+    DBEdit3: TDBEdit;
+    XFGroupBox2: TXFGroupBox;
+    cbRisk: TCheckBox;
+    cbDifRisk: TCheckBox;
+    gbGrid: TXFPanel;
+    DBNavigator1: TDBNavigator;
+    DBGrid1: TDBGrid;
+    gbSame: TXFGroupBox;
+    XFLabel5: TXFLabel;
+    XFLabel6: TXFLabel;
+    XFLabel7: TXFLabel;
+    XFLabel8: TXFLabel;
+    XFLabel9: TXFLabel;
+    XFLabel10: TXFLabel;
+    DBEdit9: TDBEdit;
+    DBEdit8: TDBEdit;
+    DBEdit7: TDBEdit;
+    DBEdit6: TDBEdit;
+    DBEdit5: TDBEdit;
+    pmcPolicy: TPlgModalContainer;
+    SuggestionReport: TINSWordExporter;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  fmMKSuggestion: TfmMKSuggestion;
+
+implementation
+
+{$R *.dfm}
+
+end.

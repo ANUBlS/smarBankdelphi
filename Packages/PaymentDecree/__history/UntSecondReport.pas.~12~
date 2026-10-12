@@ -1,0 +1,117 @@
+unit UntSecondReport;
+
+interface
+
+uses Windows, SysUtils, Messages, Classes, Graphics, Controls,
+  StdCtrls, ExtCtrls, Forms, Quickrpt, QRCtrls,SBTranslateProc;
+
+type
+  TQRCommonReport = class(TQuickRep)
+    QRBand8: TQRBand;
+    QRShape92: TQRShape;
+    QRShape93: TQRShape;
+    QRShape94: TQRShape;
+    QRShape95: TQRShape;
+    QRShape100: TQRShape;
+    QRLabel85: TQRLabel;
+    QRLabel86: TQRLabel;
+    QRShape102: TQRShape;
+    QRShape103: TQRShape;
+    QRLabel87: TQRLabel;
+    QRLabel88: TQRLabel;
+    QRLabel89: TQRLabel;
+    QRLabel90: TQRLabel;
+    QRLabel91: TQRLabel;
+    QRShape104: TQRShape;
+    QRShape1: TQRShape;
+    QRLabel8: TQRLabel;
+    QRLabel36: TQRLabel;
+    QRLabel16: TQRLabel;
+    QRLabel17: TQRLabel;
+    QRLabel18: TQRLabel;
+    QRLabel28: TQRLabel;
+    QRLabel29: TQRLabel;
+    QRShape7: TQRShape;
+    QRShape8: TQRShape;
+    QRLabel30: TQRLabel;
+    QRLabel31: TQRLabel;
+    QRLabel32: TQRLabel;
+    QRLabel33: TQRLabel;
+    QRLabel34: TQRLabel;
+    QRLabel35: TQRLabel;
+    QRShape9: TQRShape;
+    QRShape10: TQRShape;
+    QRLabel38: TQRLabel;
+    QRLabel39: TQRLabel;
+    QRLabel40: TQRLabel;
+    QRLabel41: TQRLabel;
+    QRLabel42: TQRLabel;
+    QRDBText1: TQRDBText;
+    QRDBText3: TQRDBText;
+    QRDBText4: TQRDBText;
+    QRDBText5: TQRDBText;
+    QRDBText6: TQRDBText;
+    QRDBACCINN: TQRDBText;
+    QRAmmountW: TQRLabel;
+    QRDBText38: TQRDBText;
+    QRDBText23: TQRDBText;
+    QRShape15: TQRShape;
+    QRLabel59: TQRLabel;
+    QRLabel19: TQRLabel;
+    QRDBText28: TQRDBText;
+    QRLabel20: TQRLabel;
+    QRDBText29: TQRDBText;
+    QRLabel21: TQRLabel;
+    QRDBText30: TQRDBText;
+    QRLabel92: TQRLabel;
+    QRLabel93: TQRLabel;
+    QRLabel94: TQRLabel;
+    QRLabel95: TQRLabel;
+    QRLabel96: TQRLabel;
+    QRDBText7: TQRDBText;
+    QRDBText8: TQRDBText;
+    QRDBText9: TQRDBText;
+    QRDBText10: TQRDBText;
+    QRDBText11: TQRDBText;
+    QRNum: TQRLabel;
+    QRDate: TQRLabel;
+    QRLabel37: TQRLabel;
+    QRLabel43: TQRLabel;
+    QRShape22: TQRShape;
+    QRAmmount: TQRLabel;
+    QRLabel1: TQRLabel;
+    QRDBText2: TQRDBText;
+    QRShape2: TQRShape;
+    QRLabel2: TQRLabel;
+    QRShape3: TQRShape;
+    QRLabel3: TQRLabel;
+    QRDBText12: TQRDBText;
+    QRDBText13: TQRDBText;
+    QRDBACC_NO: TQRLabel;
+    QRDBText14: TQRDBText;
+    QRDBACCNAME: TQRDBText;
+    procedure QuickRepBeforePrint(Sender: TCustomQuickRep;
+      var PrintReport: Boolean);
+  private
+
+  public
+
+  end;
+
+var
+  QRCommonReport: TQRCommonReport;
+
+implementation
+
+uses PaymentDataModul,sboapiDataModuleImpl, UntMainReport,PaymentDecreeImpl;
+
+{$R *.DFM}
+
+procedure TQRCommonReport.QuickRepBeforePrint(Sender: TCustomQuickRep;
+  var PrintReport: Boolean);
+begin
+  //QRLabel4.Caption:=val_name;
+  SBTranslateProc.TranslateAllCompQuickRep(Self,sboapiDataModule.OrPack_SL);
+end;
+
+end.

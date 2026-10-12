@@ -1,0 +1,157 @@
+object frmkindaccs: Tfrmkindaccs
+  Left = 512
+  Top = 212
+  Width = 469
+  Height = 380
+  BorderIcons = [biSystemMenu]
+  Caption = 'frmkindaccs'
+  Color = clBtnFace
+  Font.Charset = RUSSIAN_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poOwnerFormCenter
+  OnCreate = FormCreate
+  PixelsPerInch = 96
+  TextHeight = 13
+  object StatusBar1: TStatusBar
+    Left = 0
+    Top = 334
+    Width = 461
+    Height = 19
+    Panels = <>
+    SimplePanel = False
+  end
+  object PageControl1: TPageControl
+    Left = 0
+    Top = 0
+    Width = 461
+    Height = 334
+    ActivePage = TabSheet1
+    Align = alClient
+    TabOrder = 1
+    object TabSheet1: TTabSheet
+      Caption = 'ўесаблар'
+      object DBGrid1: TDBGrid
+        Left = 0
+        Top = 25
+        Width = 453
+        Height = 281
+        Align = alClient
+        DataSource = DataSource1
+        TabOrder = 0
+        TitleFont.Charset = RUSSIAN_CHARSET
+        TitleFont.Color = clWindowText
+        TitleFont.Height = -11
+        TitleFont.Name = 'Azl Sans Serif'
+        TitleFont.Style = []
+      end
+      object DBNavigator1: TDBNavigator
+        Left = 0
+        Top = 0
+        Width = 453
+        Height = 25
+        DataSource = DataSource1
+        VisibleButtons = [nbInsert, nbDelete, nbEdit, nbPost, nbCancel, nbRefresh]
+        Align = alTop
+        TabOrder = 1
+      end
+    end
+    object TabSheet2: TTabSheet
+      Caption = 'ям€лиййатлар'
+      ImageIndex = 1
+      object DBGrid2: TDBGrid
+        Left = 0
+        Top = 25
+        Width = 453
+        Height = 281
+        Align = alClient
+        DataSource = DataSource2
+        TabOrder = 0
+        TitleFont.Charset = RUSSIAN_CHARSET
+        TitleFont.Color = clWindowText
+        TitleFont.Height = -11
+        TitleFont.Name = 'Azl Sans Serif'
+        TitleFont.Style = []
+        Columns = <
+          item
+            Expanded = False
+            FieldName = 'ID'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'NAME'
+            Width = 108
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'DESCRIPTION'
+            Width = 237
+            Visible = True
+          end>
+      end
+      object DBNavigator2: TDBNavigator
+        Left = 0
+        Top = 0
+        Width = 453
+        Height = 25
+        DataSource = DataSource2
+        VisibleButtons = [nbInsert, nbDelete, nbEdit, nbPost, nbCancel, nbRefresh]
+        Align = alTop
+        TabOrder = 1
+      end
+    end
+  end
+  object OracleDataSet1: TOracleDataSet
+    SQL.Strings = (
+      'SELECT a.rowid,a.acc_no'
+      '  FROM pbf_kindofaccs a'
+      '')
+    QBEDefinition.QBEFieldDefs = {0400000001000000060000004143435F4E4F010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 48
+    Top = 80
+    object OracleDataSet1ACC_NO: TStringField
+      FieldName = 'ACC_NO'
+      Required = True
+      Size = 40
+    end
+  end
+  object DataSource1: TDataSource
+    DataSet = OracleDataSet1
+    Left = 88
+    Top = 80
+  end
+  object OracleDataSet2: TOracleDataSet
+    SQL.Strings = (
+      'SELECT a.rowid ,a.id, a.name,a.description'
+      '  FROM pbf_otheroptypes a')
+    QBEDefinition.QBEFieldDefs = {
+      0400000003000000020000004944010000000000040000004E414D4501000000
+      00000B0000004445534352495054494F4E010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 52
+    Top = 128
+    object OracleDataSet2ID: TFloatField
+      FieldName = 'ID'
+    end
+    object OracleDataSet2NAME: TStringField
+      FieldName = 'NAME'
+      Size = 23
+    end
+    object OracleDataSet2DESCRIPTION: TStringField
+      FieldName = 'DESCRIPTION'
+      Size = 50
+    end
+  end
+  object DataSource2: TDataSource
+    DataSet = OracleDataSet2
+    Left = 100
+    Top = 128
+  end
+end

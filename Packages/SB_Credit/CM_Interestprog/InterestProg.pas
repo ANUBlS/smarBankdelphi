@@ -1,0 +1,91 @@
+﻿unit InterestProg;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ComCtrls, Db, OracleData, Grids, DBGrids, ExtCtrls, StdCtrls, Buttons;
+
+type
+  TForm6 = class(TForm)
+    GroupBox1: TGroupBox;
+    DBGrid1: TDBGrid;
+    Panel2: TPanel;
+    DataSource1: TDataSource;
+    OracleDataSet1: TOracleDataSet;
+    BitBtn1: TBitBtn;
+    BitBtn2: TBitBtn;
+    OracleDataSet1ID: TFloatField;
+    OracleDataSet1NAME: TWideStringField;
+    OracleDataSet1RESTPR: TFloatField;
+    OracleDataSet1INTERESTPR: TFloatField;
+    procedure FormCreate(Sender: TObject);
+    procedure BitBtn1Click(Sender: TObject);
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+    procedure BitBtn2Click(Sender: TObject);
+    procedure OracleDataSet1AfterInsert(DataSet: TDataSet);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+
+   var
+  Form6: TForm6;
+  procedure InitPlugin(s:string);export;
+implementation
+uses   CommonDecls ,SboAPIDataModuleImpl, ReportImpl,SBTranslateProc;
+{$R *.DFM}
+
+ procedure InitPlugin(s:string);export;
+begin
+if s='Rep' then
+  report.showmodal
+else
+   Form6.ShowModal;
+end;
+exports
+     InitPlugin;
+
+procedure TForm6.FormCreate(Sender: TObject);
+begin
+Report:=TReport.Create(Self);
+OracleDataSet1.open;
+ { with  OracleDataSet1 do
+  begin ;
+DateTimePicker1.DateTime:=fieldbyname('tek_dat').AsDateTime; }
+SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+
+end;
+
+procedure TForm6.OracleDataSet1AfterInsert(DataSet: TDataSet);
+begin
+ShowMessage('Əlavə etmək olmaz');
+
+OracleDataSet1.Session.Rollback;
+OracleDataSet1.Refresh;
+exit;
+end;
+
+procedure TForm6.BitBtn1Click(Sender: TObject);
+begin
+OracleDataSet1.edit;
+OracleDataSet1.Post
+end;
+
+procedure TForm6.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+resize:=false
+end;
+
+procedure TForm6.BitBtn2Click(Sender: TObject);
+begin
+close
+end;
+
+initialization
+ Form6 := TForm6.Create(CommonApplication);
+end.

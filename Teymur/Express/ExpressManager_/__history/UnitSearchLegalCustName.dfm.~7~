@@ -1,0 +1,254 @@
+object FormSearchLegalCustName: TFormSearchLegalCustName
+  Left = 0
+  Top = 0
+  Caption = 'H'#252'quqi '#351#601'xsin axtar'#305#351#305
+  ClientHeight = 467
+  ClientWidth = 525
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poScreenCenter
+  OnClose = FormClose
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object DBGrid1: TDBGrid
+    Left = 0
+    Top = 0
+    Width = 525
+    Height = 428
+    Align = alClient
+    Color = clWhite
+    DataSource = LegalDataSource
+    DrawingStyle = gdsGradient
+    GradientEndColor = clMedGray
+    Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit, dgTitleClick, dgTitleHotTrack]
+    TabOrder = 0
+    TitleFont.Charset = DEFAULT_CHARSET
+    TitleFont.Color = clWindowText
+    TitleFont.Height = -11
+    TitleFont.Name = 'Tahoma'
+    TitleFont.Style = []
+    Columns = <
+      item
+        Expanded = False
+        FieldName = 'ID'
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'NAME'
+        Title.Caption = 'Ad'#305
+        Width = 200
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'CUST_TYPE'
+        Title.Alignment = taCenter
+        Title.Caption = 'Tipi'
+        Width = 90
+        Visible = True
+      end>
+  end
+  object Panel1: TPanel
+    Left = 0
+    Top = 428
+    Width = 525
+    Height = 39
+    Align = alBottom
+    TabOrder = 1
+    object EditName: TEdit
+      Left = 106
+      Top = 6
+      Width = 239
+      Height = 21
+      TabOrder = 0
+      OnExit = EditIDExit
+      OnKeyPress = EditIDKeyPress
+    end
+    object EditCust_Type: TEdit
+      Left = 346
+      Top = 6
+      Width = 94
+      Height = 21
+      TabOrder = 1
+      OnExit = EditIDExit
+      OnKeyPress = EditIDKeyPress
+    end
+    object Button1: TButton
+      Left = 446
+      Top = 6
+      Width = 75
+      Height = 25
+      Caption = 'Q'#601'bul'
+      TabOrder = 2
+    end
+    object EditID: TEdit
+      Left = 13
+      Top = 6
+      Width = 93
+      Height = 21
+      TabOrder = 3
+      OnExit = EditIDExit
+      OnKeyPress = EditIDKeyPress
+    end
+  end
+  object LegalDataSource: TDataSource
+    DataSet = LegalDataSet
+    Left = 255
+    Top = 83
+  end
+  object LegalDataSet: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      
+        '       c.id, b.doc_type, b.passpin, b.passer, b.paspnum, b.birth' +
+        'place,'
+      '       b.paspplace, b.paspdate, b.passexpire, b.citizenship,'
+      '       b.citizenship2, b.citizenship3,'
+      '       c.inn, b.sex, b.fam_status, b.adrs_state, b.birth_state,'
+      
+        '       b.birthday, b.doc_country, b.city, b.reg_zip, b.address, ' +
+        'b.phone_m,'
+      '       b.phone_h, b.e_mail,c.nerezident,c.cust_type,c.name'
+      'from'
+      '   CUSTINFO b,customers c'
+      'where'
+      '   b.idcust(+)=c.id and'
+      '   c.cust_type=0'
+      '')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000001C00000004000000490044000100000000001000000044004F004300
+      5F0054005900500045000100000000000E000000500041005300530050004900
+      4E000100000000000C0000005000410053005300450052000100000000000E00
+      000050004100530050004E0055004D0001000000000014000000420049005200
+      5400480050004C00410043004500010000000000120000005000410053005000
+      50004C0041004300450001000000000010000000500041005300500044004100
+      5400450001000000000014000000500041005300530045005800500049005200
+      45000100000000001600000043004900540049005A0045004E00530048004900
+      50000100000000001800000043004900540049005A0045004E00530048004900
+      500032000100000000001800000043004900540049005A0045004E0053004800
+      4900500033000100000000000600000049004E004E0001000000000006000000
+      53004500580001000000000014000000460041004D005F005300540041005400
+      550053000100000000001400000041004400520053005F005300540041005400
+      450001000000000016000000420049005200540048005F005300540041005400
+      4500010000000000100000004200490052005400480044004100590001000000
+      00001600000044004F0043005F0043004F0055004E0054005200590001000000
+      00000800000043004900540059000100000000000E0000005200450047005F00
+      5A00490050000100000000000E00000041004400440052004500530053000100
+      000000000E000000500048004F004E0045005F004D000100000000000E000000
+      500048004F004E0045005F0048000100000000000C00000045005F004D004100
+      49004C00010000000000140000004E004500520045005A004900440045004E00
+      54000100000000001200000043005500530054005F0054005900500045000100
+      00000000080000004E0041004D004500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 80
+    Top = 80
+    object LegalDataSetID: TIntegerField
+      FieldName = 'ID'
+      Required = True
+    end
+    object LegalDataSetDOC_TYPE: TFloatField
+      FieldName = 'DOC_TYPE'
+    end
+    object LegalDataSetPASSPIN: TWideStringField
+      FieldName = 'PASSPIN'
+      Size = 40
+    end
+    object LegalDataSetPASSER: TWideStringField
+      FieldName = 'PASSER'
+      Size = 120
+    end
+    object LegalDataSetPASPNUM: TWideStringField
+      FieldName = 'PASPNUM'
+      Size = 120
+    end
+    object LegalDataSetBIRTHPLACE: TWideStringField
+      FieldName = 'BIRTHPLACE'
+      Size = 120
+    end
+    object LegalDataSetPASPPLACE: TWideStringField
+      FieldName = 'PASPPLACE'
+      Size = 400
+    end
+    object LegalDataSetPASPDATE: TDateTimeField
+      FieldName = 'PASPDATE'
+    end
+    object LegalDataSetPASSEXPIRE: TDateTimeField
+      FieldName = 'PASSEXPIRE'
+    end
+    object LegalDataSetCITIZENSHIP: TFloatField
+      FieldName = 'CITIZENSHIP'
+    end
+    object LegalDataSetCITIZENSHIP2: TFloatField
+      FieldName = 'CITIZENSHIP2'
+    end
+    object LegalDataSetCITIZENSHIP3: TFloatField
+      FieldName = 'CITIZENSHIP3'
+    end
+    object LegalDataSetINN: TWideStringField
+      FieldName = 'INN'
+      Size = 80
+    end
+    object LegalDataSetSEX: TIntegerField
+      FieldName = 'SEX'
+    end
+    object LegalDataSetFAM_STATUS: TIntegerField
+      FieldName = 'FAM_STATUS'
+    end
+    object LegalDataSetADRS_STATE: TWideStringField
+      FieldName = 'ADRS_STATE'
+      Size = 120
+    end
+    object LegalDataSetBIRTH_STATE: TWideStringField
+      FieldName = 'BIRTH_STATE'
+      Size = 120
+    end
+    object LegalDataSetBIRTHDAY: TDateTimeField
+      FieldName = 'BIRTHDAY'
+    end
+    object LegalDataSetDOC_COUNTRY: TFloatField
+      FieldName = 'DOC_COUNTRY'
+    end
+    object LegalDataSetCITY: TWideStringField
+      FieldName = 'CITY'
+      Size = 240
+    end
+    object LegalDataSetREG_ZIP: TWideStringField
+      FieldName = 'REG_ZIP'
+      Size = 40
+    end
+    object LegalDataSetADDRESS: TWideStringField
+      FieldName = 'ADDRESS'
+      Size = 400
+    end
+    object LegalDataSetPHONE_M: TWideStringField
+      FieldName = 'PHONE_M'
+      Size = 120
+    end
+    object LegalDataSetPHONE_H: TWideStringField
+      FieldName = 'PHONE_H'
+      Size = 120
+    end
+    object LegalDataSetE_MAIL: TWideStringField
+      FieldName = 'E_MAIL'
+      Size = 120
+    end
+    object LegalDataSetNEREZIDENT: TFloatField
+      FieldName = 'NEREZIDENT'
+    end
+    object LegalDataSetCUST_TYPE: TIntegerField
+      FieldName = 'CUST_TYPE'
+    end
+    object LegalDataSetNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 360
+    end
+  end
+end

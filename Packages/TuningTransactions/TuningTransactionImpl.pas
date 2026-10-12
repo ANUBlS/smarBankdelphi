@@ -1,0 +1,602 @@
+unit TuningTransactionImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActiveX, AxCtrls, TuningTransactions_TLB, StdVcl, ExtCtrls, StdCtrls,
+  Grids, DBGrids, Menus, ActnList, ImgList, ComCtrls, ToolWin,db, Mask,
+  DBCtrls;
+
+type
+
+  TOperationMode = (omInsert ,omUpdate);
+
+  TSettings =record
+     ID : longint;
+     name : string;
+     debt  : longint;
+     credit : longint;
+     additionalDebt : longint;
+     additionalCredit : longint;
+     assignment : string;
+     commisionassignment : string;
+     maxvalue : real;
+     isCommonSetting : boolean;
+   end;
+
+  TTuningTransaction = class(TActiveForm, ITuningTransaction)
+    GroupBoxSettings: TGroupBox;
+    SettingsBrowser: TDBGrid;
+    ActionList: TActionList;
+    PopupMenu: TPopupMenu;
+    ActionInsert: TAction;
+    ImageList: TImageList;
+    ActionUpdate: TAction;
+    N1: TMenuItem;
+    N2: TMenuItem;
+    ActionDelete: TAction;
+    N3: TMenuItem;
+    Panel2: TPanel;
+    ToolBar1: TToolBar;
+    ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
+    ToolButton3: TToolButton;
+    ToolButton4: TToolButton;
+    ToolButton5: TToolButton;
+    ToolButton6: TToolButton;
+    ToolButton7: TToolButton;
+    ToolButton8: TToolButton;
+    ActionRefresh: TAction;
+    N4: TMenuItem;
+    N5: TMenuItem;
+    ToolButton9: TToolButton;
+    ActionSetTariffScale: TAction;
+    Panel3: TPanel;
+    ASSIGNMENT: TDBEdit;
+    Panel4: TPanel;
+    COMMISIONASSIGNMENT: TDBEdit;
+    Label1: TLabel;
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure ActionInsertExecute(Sender: TObject);
+    procedure N1DrawItem(Sender: TObject; ACanvas: TCanvas; ARect: TRect;
+      Selected: Boolean);
+    procedure ActionUpdateExecute(Sender: TObject);
+    procedure ActionDeleteExecute(Sender: TObject);
+    procedure ActionRefreshExecute(Sender: TObject);
+    procedure ActiveFormDestroy(Sender: TObject);
+    procedure ActionSetTariffScaleExecute(Sender: TObject);
+  private
+    { Private declarations }
+    FEvents: ITuningTransactionEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+  public
+    { Public declarations }
+    OperationMode :TOperationMode;
+    procedure CheckDataModule;
+    procedure PrepareOperation(OperMode :TOperationMode);
+    procedure Delete_Commision_Trans;
+    procedure SafelyRefresh;
+    procedure Initialize; override;
+  end;
+
+  var
+     TuningTransaction : TTuningTransaction;
+
+implementation
+
+uses ComObj, ComServ, DataModuleImpl, UnitFormOperations, UntTariffScale,
+  sboapiDataModuleImpl, SBTranslateProc;
+
+{$R *.DFM}
+
+{ TTuningTransaction }
+
+procedure TTuningTransaction.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_TuningTransactionPage); }
+end;
+
+procedure TTuningTransaction.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as ITuningTransactionEvents;
+end;
+
+procedure TTuningTransaction.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TTuningTransaction.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TTuningTransaction.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TTuningTransaction.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TTuningTransaction.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TTuningTransaction.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TTuningTransaction.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TTuningTransaction.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TTuningTransaction.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TTuningTransaction.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TTuningTransaction.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TTuningTransaction.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TTuningTransaction.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TTuningTransaction.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TTuningTransaction.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TTuningTransaction.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TTuningTransaction.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TTuningTransaction.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TTuningTransaction.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TTuningTransaction._Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TTuningTransaction.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TTuningTransaction.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TTuningTransaction.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TTuningTransaction.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TTuningTransaction.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TTuningTransaction.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TTuningTransaction.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TTuningTransaction.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TTuningTransaction.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TTuningTransaction.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TTuningTransaction.Set_AxBorderStyle(
+  Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TTuningTransaction.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TTuningTransaction.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TTuningTransaction.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TTuningTransaction.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TTuningTransaction.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TTuningTransaction.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TTuningTransaction.Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TTuningTransaction.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TTuningTransaction.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TTuningTransaction.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TTuningTransaction.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TTuningTransaction.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TTuningTransaction.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+//------------------------------------------{- Main -}---------------------------------------------
+
+procedure TTuningTransaction.CheckDataModule;
+begin
+ if not Assigned(TuningDataModule) then
+  TuningDataModule :=TTuningDataModule.Create(self);
+end;
+
+procedure TTuningTransaction.PrepareOperation(OperMode :TOperationMode);
+begin
+ case OperMode of
+  omInsert :
+            TuningDataModule.ODSSettings.Insert;
+  omUpdate :
+            TuningDataModule.ODSSettings.Edit;
+ end;
+
+ FormOperations.ShowModal;
+
+ end;
+
+procedure TTuningTransaction.Delete_Commision_Trans;
+const
+    csDelete = 'Delete_Commision_Trans';
+var
+   SettingID :longint;
+begin
+ if MessageDlg('Are you sure to delete this setting?',mtConfirmation,mbYesNoCancel,0)=mrYes then
+   with TuningDataModule,ODSSettings,OPMainSettings do
+    begin
+     SettingID :=FieldbyName('ID').AsInteger;
+     CallProcedure(csDelete,[SettingID]);
+     Refresh;
+    end;
+end;
+
+procedure TTuningTransaction.SafelyRefresh;
+var
+ SavePlace :Pointer;
+begin
+ with SettingsBrowser.DataSource.DataSet do
+  begin
+   SavePlace :=GetBookmark;
+   try
+    DisableControls;
+    Refresh;
+   finally
+    GotoBookmark(SavePlace);
+    FreeBookmark(SavePlace);
+    EnableControls;
+   end;
+  end;
+end;
+
+
+procedure TTuningTransaction.ActiveFormCreate(Sender: TObject);
+begin
+  TuningTransaction :=Self;
+  CheckDataModule;
+  FormOperations :=TFormOperations.Create(Self);
+
+  SBTranslateProc.TranslateAllComponents(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TTuningTransaction.ActionInsertExecute(Sender: TObject);
+begin
+ OperationMode :=omInsert;
+ PrepareOperation(OperationMode);
+end;
+
+procedure TTuningTransaction.N1DrawItem(Sender: TObject; ACanvas: TCanvas;
+  ARect: TRect; Selected: Boolean);
+var
+  LineBottom: Integer;
+  SText: String;
+  Bar: TRect;
+begin
+  with ACanvas, Sender as TMenuItem do
+  begin
+    with ACanvas.Font do
+    begin
+      Charset := DEFAULT_CHARSET;
+      Name := 'Azl Sans Serif';
+      if Default then
+        Style := [fsBold];
+    end;
+    if Caption = '-' then
+    begin
+      Pen.Color := clBlack;
+      LineBottom := (ARect.Top + (ARect.Bottom - ARect.Top) div 2)-1;
+      MoveTo(ARect.Left, LineBottom);
+      LineTo(ARect.Right, LineBottom);
+      inc(LineBottom);
+      Pen.Color := clWhite;
+      MoveTo(ARect.Left, LineBottom);
+      LineTo(ARect.Right, LineBottom);
+    end
+    else
+    begin
+      if Selected then
+      begin
+        Brush.Color := clNavy;
+        if Enabled then
+          Font.Color := clWhite
+        else
+          Font.Color := clSilver;
+      end
+      else
+      begin
+        Brush.Color := clBtnFace;
+        if Enabled then
+          Font.Color := clBlack
+        else
+          Font.Color := clGrayText;
+      end;
+      Bar := ARect;
+      Inc(Bar.Left, 22);
+      FillRect(Bar);
+      TextOut(ARect.Left+{17}22, ARect.Top+1, Caption);
+    end;
+    // draw shortcut
+    SText := ShortCutToText(ShortCut);
+    TextOut(ARect.Right-TextWidth(SText)-7, ARect.Top+1, SText);
+    if ImageIndex <> -1 then
+      with GetParentMenu do
+        if Assigned(Images) then
+        begin
+          if Checked then
+          begin
+            Bar.Left := ARect.Left + 1;
+            Bar.Right := Bar.Left + 16;
+            Bar.Top := ARect.Top + 1;
+            Bar.Bottom := Bar.Top + 16;
+
+            ACanvas.Brush.Color := clBtnShadow;
+            ACanvas.FrameRect(Bar);
+
+            Inc(Bar.Left, 2);
+            Inc(Bar.Right, 2);
+            Inc(Bar.Top, 2);
+            Inc(Bar.Bottom, 2);
+
+            ACanvas.Brush.Color := clBtnHighlight;
+            ACanvas.FrameRect(Bar);
+
+            Dec(Bar.Left, 1);
+            Dec(Bar.Right, 1);
+            Dec(Bar.Top, 1);
+            Dec(Bar.Bottom, 1);
+
+            if Selected then
+              ACanvas.Brush.Color := clBtnFace
+            else
+              ACanvas.Brush.Color := clBtnHighlight;
+            ACanvas.FillRect(Bar);
+          end;
+
+          Images.Draw(ACanvas, ARect.Left, ARect.Top, ImageIndex, Enabled);
+        end;
+  end;
+end;
+
+procedure TTuningTransaction.ActionUpdateExecute(Sender: TObject);
+begin
+ OperationMode :=omUpdate;
+ PrepareOperation(OperationMode);
+end;
+
+procedure TTuningTransaction.ActionDeleteExecute(Sender: TObject);
+begin
+ Delete_Commision_Trans;
+end;
+
+procedure TTuningTransaction.ActionRefreshExecute(Sender: TObject);
+begin
+  Refresh;
+  TuningDataModule.ODSSettings.Refresh;
+// SafelyRefresh;
+end;
+
+procedure TTuningTransaction.ActiveFormDestroy(Sender: TObject);
+begin
+ TuningTransaction.Free;
+ TuningTransaction :=Nil;
+end;
+
+procedure TTuningTransaction.ActionSetTariffScaleExecute(Sender: TObject);
+begin
+ //FormReferences :=TFormReferences.Create(Self);
+ with TFormReferences.Create(Self),TuningDataModule do
+  try
+   ODSCustomerGroups.Open;
+   with ODSTariffScale do
+    begin
+     Close;
+     SetVariable('CommisionID',ODSSettings.FieldByName('ID').Value);
+     Open;
+    end;
+   ShowModal;
+  finally
+   ODSCustomerGroups.Close;
+   ODSTariffScale.Close;
+   Release;
+  end;
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TTuningTransaction,
+    Class_TuningTransaction,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

@@ -1,0 +1,423 @@
+object PolicyDModule: TPolicyDModule
+  OldCreateOrder = False
+  Left = 192
+  Top = 107
+  Height = 461
+  Width = 624
+  object OPCOMMON: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'INS_COMMON'
+    Left = 24
+    Top = 8
+  end
+  object ODSPAccident: TOracleDataSet
+    SQL.Strings = (
+      
+        'select pacc.rowid,pacc.* from ins_grouppersonalaccident pacc whe' +
+        're id=:id')
+    Variables.Data = {0300000001000000030000003A4944010000000300000069640000000000}
+    QBEDefinition.QBEFieldDefs = {
+      040000001F000000020000004944010000000000060000004B4C495F49440100
+      000000000E000000434F4E544143545F504552534F4E0100000000000F000000
+      42414E4B494E475F44455441494C530100000000000F000000544F54414C454D
+      505F4E554D42455201000000000003000000414F470100000000000300000041
+      4F5001000000000003000000534D4701000000000003000000534D5001000000
+      000003000000424347010000000000030000004243500100000000000E000000
+      444543495245445F414D4F554E54010000000000020000004144010000000000
+      02000000504401000000000003000000504C5501000000000003000000454D45
+      0100000000000200000048430100000000000200000048530100000000000300
+      0000425242010000000000040000004255524E01000000000003000000545444
+      010000000000110000004E4F545F434F5645524544504552494F440100000000
+      000C0000004F5554534944454F46415A450100000000000700000052454E4557
+      414C0100000000000700000054524156454C5301000000000006000000545950
+      454944010000000000060000005249534B4944010000000000110000004E4F54
+      5F434F56455245504552494F4431010000000000080000004D41585745454B53
+      0100000000000800000050524F4649544944010000000000070000004147454E
+      544944010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 36
+    Top = 136
+    object ODSPAccidentID: TFloatField
+      FieldName = 'ID'
+    end
+    object ODSPAccidentKLI_ID: TFloatField
+      FieldName = 'KLI_ID'
+    end
+    object ODSPAccidentCONTACT_PERSON: TStringField
+      FieldName = 'CONTACT_PERSON'
+      Size = 128
+    end
+    object ODSPAccidentBANKING_DETAILS: TStringField
+      FieldName = 'BANKING_DETAILS'
+      Size = 128
+    end
+    object ODSPAccidentTOTALEMP_NUMBER: TFloatField
+      FieldName = 'TOTALEMP_NUMBER'
+    end
+    object ODSPAccidentAOG: TFloatField
+      FieldName = 'AOG'
+    end
+    object ODSPAccidentAOP: TFloatField
+      FieldName = 'AOP'
+    end
+    object ODSPAccidentSMG: TFloatField
+      FieldName = 'SMG'
+    end
+    object ODSPAccidentSMP: TFloatField
+      FieldName = 'SMP'
+    end
+    object ODSPAccidentBCG: TFloatField
+      FieldName = 'BCG'
+    end
+    object ODSPAccidentBCP: TFloatField
+      FieldName = 'BCP'
+    end
+    object ODSPAccidentDECIRED_AMOUNT: TFloatField
+      FieldName = 'DECIRED_AMOUNT'
+    end
+    object ODSPAccidentAD: TFloatField
+      FieldName = 'AD'
+    end
+    object ODSPAccidentPD: TFloatField
+      FieldName = 'PD'
+    end
+    object ODSPAccidentPLU: TFloatField
+      FieldName = 'PLU'
+    end
+    object ODSPAccidentEME: TFloatField
+      FieldName = 'EME'
+    end
+    object ODSPAccidentHC: TFloatField
+      FieldName = 'HC'
+    end
+    object ODSPAccidentHS: TFloatField
+      FieldName = 'HS'
+    end
+    object ODSPAccidentBRB: TFloatField
+      FieldName = 'BRB'
+    end
+    object ODSPAccidentBURN: TFloatField
+      FieldName = 'BURN'
+    end
+    object ODSPAccidentTTD: TFloatField
+      FieldName = 'TTD'
+    end
+    object ODSPAccidentNOT_COVEREDPERIOD: TStringField
+      FieldName = 'NOT_COVEREDPERIOD'
+      Size = 32
+    end
+    object ODSPAccidentNOT_COVEREPERIOD1: TStringField
+      FieldName = 'NOT_COVEREPERIOD1'
+      Size = 32
+    end
+    object ODSPAccidentOUTSIDEOFAZE: TStringField
+      FieldName = 'OUTSIDEOFAZE'
+      Size = 1024
+    end
+    object ODSPAccidentRENEWAL: TStringField
+      FieldName = 'RENEWAL'
+      Size = 1024
+    end
+    object ODSPAccidentTRAVELS: TStringField
+      FieldName = 'TRAVELS'
+      Size = 1024
+    end
+    object ODSPAccidentTYPEID: TIntegerField
+      FieldName = 'TYPEID'
+    end
+    object ODSPAccidentRISKID: TFloatField
+      FieldName = 'RISKID'
+    end
+    object ODSPAccidentMAXWEEKS: TIntegerField
+      FieldName = 'MAXWEEKS'
+    end
+    object ODSPAccidentPROFITID: TFloatField
+      FieldName = 'PROFITID'
+    end
+    object ODSPAccidentAGENTID: TFloatField
+      FieldName = 'AGENTID'
+    end
+  end
+  object ODSPAccidentSource: TDataSource
+    DataSet = ODSPAccident
+    Left = 140
+    Top = 136
+  end
+  object ODSCustomers: TOracleDataSet
+    SQL.Strings = (
+      
+        'select c.rowid,c.id,c.name||'#39' '#39'||c.surname||'#39' '#39'||c.fathername as' +
+        ' name,c.address,c.mobilephone,c.fax from ins_customers c where i' +
+        'd=:id')
+    Variables.Data = {0300000001000000030000003A4944040000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      0400000005000000020000004944010000000000040000004E414D4501000000
+      000007000000414444524553530100000000000B0000004D4F42494C4550484F
+      4E4501000000000003000000464158010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 28
+    Top = 72
+    object ODSCustomersID: TIntegerField
+      FieldName = 'ID'
+      Required = True
+    end
+    object ODSCustomersNAME: TStringField
+      FieldName = 'NAME'
+      Size = 386
+    end
+    object ODSCustomersADDRESS: TStringField
+      FieldName = 'ADDRESS'
+      Size = 1024
+    end
+    object ODSCustomersMOBILEPHONE: TStringField
+      FieldName = 'MOBILEPHONE'
+      Size = 32
+    end
+    object ODSCustomersFAX: TStringField
+      FieldName = 'FAX'
+      Size = 32
+    end
+  end
+  object ODSCustomersSource: TDataSource
+    DataSet = ODSCustomers
+    Left = 132
+    Top = 72
+  end
+  object ODSPAccSuggest: TOracleDataSet
+    SQL.Strings = (
+      'select  s.rowid,s.* from ins_pacc_suggestion s'
+      'where paid = :paid')
+    Variables.Data = {0300000001000000050000003A50414944040000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      0400000009000000020000004944010000000000040000005041494401000000
+      000007000000434E44545F49440100000000000C000000494E535552414E4345
+      53554D0100000000000D000000494E535552414E434554494D45010000000000
+      0B0000004D45444943414C434F53540100000000000E000000414C4C5F494E53
+      414D4D4F554E540100000000000300000047454F010000000000060000004652
+      5A5F4944010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 128
+    Top = 8
+    object ODSPAccSuggestID: TFloatField
+      FieldName = 'ID'
+    end
+    object ODSPAccSuggestPAID: TFloatField
+      FieldName = 'PAID'
+    end
+    object ODSPAccSuggestCNDT_ID: TFloatField
+      FieldName = 'CNDT_ID'
+    end
+    object ODSPAccSuggestINSURANCESUM: TFloatField
+      FieldName = 'INSURANCESUM'
+    end
+    object ODSPAccSuggestINSURANCETIME: TDateTimeField
+      FieldName = 'INSURANCETIME'
+    end
+    object ODSPAccSuggestMEDICALCOST: TFloatField
+      FieldName = 'MEDICALCOST'
+    end
+    object ODSPAccSuggestALL_INSAMMOUNT: TFloatField
+      FieldName = 'ALL_INSAMMOUNT'
+    end
+    object ODSPAccSuggestGEO: TStringField
+      FieldName = 'GEO'
+      Size = 128
+    end
+    object ODSPAccSuggestFRZ_ID: TFloatField
+      FieldName = 'FRZ_ID'
+    end
+  end
+  object PAccSugestSource: TDataSource
+    DataSet = ODSPAccSuggest
+    Left = 240
+    Top = 8
+  end
+  object ODSContracts: TOracleDataSet
+    SQL.Strings = (
+      'select ic.rowid, ic.* from ins_contracts ic'
+      'where blank_id = :blankid'
+      'and type_id = 3')
+    Variables.Data = {
+      0300000001000000080000003A424C414E4B4944040000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      040000000F00000002000000494401000000000007000000545950455F494401
+      000000000008000000424C414E4B5F494401000000000007000000535547475F
+      494401000000000009000000504F4C4943595F49440100000000000800000049
+      4E535F444154450100000000000A000000424547494E5F444154450100000000
+      0008000000454E445F444154450100000000000900000056414C5554455F4944
+      01000000000007000000414D4D4F554E540100000000000C000000434C4F5345
+      5F505245464958010000000000060000004B4C495F49440100000000000A0000
+      004C4F414E4143435F49440100000000000A000000435552524143435F494401
+      00000000000A000000504F4C4943595F4E554D010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 32
+    Top = 216
+    object ODSContractsID: TFloatField
+      FieldName = 'ID'
+    end
+    object ODSContractsTYPE_ID: TFloatField
+      FieldName = 'TYPE_ID'
+    end
+    object ODSContractsBLANK_ID: TFloatField
+      FieldName = 'BLANK_ID'
+    end
+    object ODSContractsSUGG_ID: TFloatField
+      FieldName = 'SUGG_ID'
+    end
+    object ODSContractsPOLICY_ID: TFloatField
+      FieldName = 'POLICY_ID'
+    end
+    object ODSContractsINS_DATE: TDateTimeField
+      FieldName = 'INS_DATE'
+    end
+    object ODSContractsBEGIN_DATE: TDateTimeField
+      FieldName = 'BEGIN_DATE'
+    end
+    object ODSContractsEND_DATE: TDateTimeField
+      FieldName = 'END_DATE'
+    end
+    object ODSContractsVALUTE_ID: TFloatField
+      FieldName = 'VALUTE_ID'
+    end
+    object ODSContractsAMMOUNT: TFloatField
+      FieldName = 'AMMOUNT'
+    end
+    object ODSContractsCLOSE_PREFIX: TIntegerField
+      FieldName = 'CLOSE_PREFIX'
+    end
+    object ODSContractsKLI_ID: TFloatField
+      FieldName = 'KLI_ID'
+    end
+    object ODSContractsLOANACC_ID: TFloatField
+      FieldName = 'LOANACC_ID'
+    end
+    object ODSContractsCURRACC_ID: TFloatField
+      FieldName = 'CURRACC_ID'
+    end
+    object ODSContractsPOLICY_NUM: TStringField
+      FieldName = 'POLICY_NUM'
+      Size = 32
+    end
+  end
+  object ODSAgent: TOracleDataSet
+    SQL.Strings = (
+      
+        'select id,(name||'#39' '#39'||surname||'#39' '#39'||fathername) as name from ins' +
+        '_agents')
+    QBEDefinition.QBEFieldDefs = {
+      0400000002000000040000004E414D4501000000000002000000494401000000
+      0000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 24
+    Top = 288
+    object ODSAgentID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object ODSAgentNAME: TStringField
+      FieldName = 'NAME'
+      Size = 386
+    end
+  end
+  object AgentSource: TDataSource
+    DataSet = ODSAgent
+    Left = 96
+    Top = 285
+  end
+  object DSContracts: TDataSource
+    DataSet = ODSContracts
+    Left = 120
+    Top = 213
+  end
+  object ODSBeneficiary: TOracleDataSet
+    SQL.Strings = (
+      'select ib.rowid,ib.* from ins_beneficiary ib')
+    QBEDefinition.QBEFieldDefs = {
+      0400000005000000020000004944010000000000040000004E414D4501000000
+      000007000000414444524553530100000000000500000050484F4E4501000000
+      00000F00000042414E4B494E475F44455441494C53010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 236
+    Top = 72
+    object ODSBeneficiaryID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object ODSBeneficiaryNAME: TStringField
+      FieldName = 'NAME'
+      Size = 128
+    end
+    object ODSBeneficiaryADDRESS: TStringField
+      FieldName = 'ADDRESS'
+      Size = 128
+    end
+    object ODSBeneficiaryPHONE: TStringField
+      FieldName = 'PHONE'
+      Size = 64
+    end
+    object ODSBeneficiaryBANKING_DETAILS: TStringField
+      FieldName = 'BANKING_DETAILS'
+      Size = 128
+    end
+  end
+  object BeneficiarySource: TDataSource
+    DataSet = ODSBeneficiary
+    Left = 332
+    Top = 72
+  end
+  object ODSCondition: TOracleDataSet
+    SQL.Strings = (
+      
+        'select idr.rowid, idr.* from ins_dict_conditions idr where id=:v' +
+        'id')
+    Variables.Data = {0300000001000000040000003A564944040000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      0400000002000000020000004944010000000000040000004E414D4501000000
+      0000}
+    Session = sboapiDataModule.SBSession
+    Left = 240
+    Top = 136
+    object ODSConditionID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object ODSConditionNAME: TStringField
+      FieldName = 'NAME'
+      Size = 1024
+    end
+  end
+  object ConditionSource: TDataSource
+    DataSet = ODSCondition
+    Left = 336
+    Top = 136
+  end
+  object Franshiz: TOracleDataSet
+    SQL.Strings = (
+      'select idr.rowid, idr.* from ins_dict_franshiz idr where id=:fid')
+    Variables.Data = {0300000001000000040000003A464944040000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      0400000002000000020000004944010000000000040000004E414D4501000000
+      0000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 200
+    Top = 213
+    object FranshizID: TFloatField
+      FieldName = 'ID'
+    end
+    object FranshizNAME: TStringField
+      FieldName = 'NAME'
+      Size = 1024
+    end
+  end
+  object FranshizData: TDataSource
+    DataSet = Franshiz
+    Left = 264
+    Top = 213
+  end
+end

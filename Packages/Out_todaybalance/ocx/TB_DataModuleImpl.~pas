@@ -1,0 +1,93 @@
+unit TB_DataModuleImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, OracleData;
+
+type
+  Tout_balancedatamodule = class(TDataModule)
+    BalanceData: TOracleDataSet;
+    BalanceDataACCOUNTNUMBER: TFloatField;
+    BalanceDataACTIVE: TFloatField;
+    BalanceDataPASSIVE: TFloatField;
+    BalanceDataDTURNOVER: TFloatField;
+    BalanceDataCTURNOVER: TFloatField;
+    BalanceDataACCOUNTNAME: TStringField;
+    AccountData: TOracleDataSet;
+    AccountDataACCNUMBER: TStringField;
+    AccountDataACCOUNTNAME: TStringField;
+    AccountDataACCCURRENCY: TStringField;
+    AccountDataACTIVE: TFloatField;
+    AccountDataPASSIVE: TFloatField;
+    AccountDataDTURNOVER: TFloatField;
+    AccountDataCTURNOVER: TFloatField;
+    AccountDataACCOUNTNUMBER: TFloatField;
+    AccountDataACCID: TFloatField;
+    DataSrcBalanceData: TDataSource;
+    DataSrcAccountData: TDataSource;
+    SYSDAT: TOracleDataSet;
+    SYSDATCURRENTDATE: TDateTimeField;
+    BankInfo: TOracleDataSet;
+    BankInfoBANK: TStringField;
+    BankInfoINN: TStringField;
+    BankInfoSEDR: TStringField;
+    BankInfoBUHALTR: TStringField;
+    BankInfoMANAGERTITLE: TStringField;
+    BankInfoACCOUNTANTTITLE: TStringField;
+    BankInfoLOGO: TBlobField;
+    CurrencyInfo: TOracleDataSet;
+    CurrencyInfoCURRENCY: TIntegerField;
+    CurrencyInfoCURRLNAME: TStringField;
+    DataSrcCurrencyInfo: TDataSource;
+    BranchesInfo: TOracleDataSet;
+    BranchesInfoBRANCHID: TFloatField;
+    BranchesInfoBRANCHNAME: TStringField;
+    DataSrcBranchesInfo: TDataSource;
+    TransactionsData: TOracleDataSet;
+    TransactionsDataID: TFloatField;
+    TransactionsDataDEBITACCID: TFloatField;
+    TransactionsDataCREDITACCID: TFloatField;
+    TransactionsDataOPERATORID: TStringField;
+    TransactionsDataTRANSACTIONDATE: TDateTimeField;
+    TransactionsDataDEBITACCNO: TStringField;
+    TransactionsDataDEBITCURRENCYSNAME: TStringField;
+    TransactionsDataCREDITACCNO: TStringField;
+    TransactionsDataCREDITCURRENCYSNAME: TStringField;
+    TransactionsDataDEBITAMOUNT: TFloatField;
+    TransactionsDataCREDITAMOUNT: TFloatField;
+    TransactionsDataLAMOUNT: TFloatField;
+    TransactionsDataTRDESCRIPTION: TStringField;
+    DataSrcTransactionsData: TDataSource;
+    WorkDateData: TOracleDataSet;
+    WorkDateDataWORKDATE: TDateTimeField;
+    procedure AccountDataAfterScroll(DataSet: TDataSet);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  out_balancedatamodule: Tout_balancedatamodule;
+
+implementation
+
+{$R *.DFM}
+uses  sboapidatamoduleimpl;
+procedure Tout_balancedatamodule.AccountDataAfterScroll(DataSet: TDataSet);
+var
+  AccID : Integer;
+begin
+  with DataSet do
+  if not FieldByName('AccID').IsNull then
+    AccID := FieldByName('AccID').AsInteger else
+    AccID := -1;
+  TransactionsData.Filtered := False;
+  TransactionsData.Filter := Format('(DebitAccID = %d) or (CreditAccID = %d)',[AccID ,AccID]);
+  TransactionsData.Filtered := True;
+end;
+
+
+end.

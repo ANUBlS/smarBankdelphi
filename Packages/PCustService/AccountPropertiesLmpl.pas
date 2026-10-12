@@ -1,0 +1,469 @@
+﻿unit AccountPropertiesLmpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, DBCtrls, ExtCtrls, Buttons, XFSCtrls, Mask, Db, DBCtrlsEh,
+  DBLookupEh;
+
+type
+  TAccountProperties = class(TForm)
+    Panel1: TPanel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    Label6: TLabel;
+    Label7: TLabel;
+    Label_Symbols: TLabel;
+    Label8: TLabel;
+    Label9: TLabel;
+    Label11: TLabel;
+    Label12: TLabel;
+    Acc_nuber: TSpeedButton;
+    Label15: TLabel;
+    Label13: TLabel;
+    Label16: TLabel;
+    Label1: TLabel;
+    Label10: TLabel;
+    DBEdit1: TDBEdit;
+    DBLookupComboboxEh3: TDBLookupComboboxEh;
+    Edit3: TEdit;
+    Edit4: TEdit;
+    Edit5: TEdit;
+    DBLookupComboboxEh2: TDBLookupComboboxEh;
+    DBLookupComboboxEh4: TDBLookupComboboxEh;
+    DBEdit2: TDBEdit;
+    DBEdit3: TDBEdit;
+    Edit_AccName: TEdit;
+    Button1: TButton;
+    EditAccNo: TEdit;
+    DBLookupComboboxEh5: TDBLookupComboboxEh;
+    DBLookupComboboxEh6: TDBLookupComboboxEh;
+    Edit1: TEdit;
+    Edit6: TEdit;
+    Panel2: TPanel;
+    XFBitBtn1: TXFBitBtn;
+    XFBitBtn2: TXFBitBtn;
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormCreate(Sender: TObject);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormShow(Sender: TObject);
+    procedure Edit1Exit(Sender: TObject);
+    procedure Edit1KeyPress(Sender: TObject; var Key: Char);
+    procedure Edit3Exit(Sender: TObject);
+    procedure Edit3KeyPress(Sender: TObject; var Key: Char);
+    procedure Edit4Exit(Sender: TObject);
+    procedure Edit4KeyPress(Sender: TObject; var Key: Char);
+    procedure Edit5Exit(Sender: TObject);
+    procedure Edit5KeyPress(Sender: TObject; var Key: Char);
+    procedure Edit6Exit(Sender: TObject);
+    procedure Edit6KeyPress(Sender: TObject; var Key: Char);
+    procedure DBLookupComboboxEh5Change(Sender: TObject);
+    procedure DBLookupComboboxEh2Change(Sender: TObject);
+    procedure DBLookupComboboxEh2CloseUp(Sender: TObject; Accept: Boolean);
+    procedure DBLookupComboboxEh3Change(Sender: TObject);
+    procedure DBLookupComboboxEh4Change(Sender: TObject);
+    procedure DBLookupComboboxEh6Change(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure Acc_nuberClick(Sender: TObject);
+    procedure XFBitBtn1Click(Sender: TObject);
+    procedure XFBitBtn2Click(Sender: TObject);
+    procedure DBLookupComboboxEh5CloseUp(Sender: TObject; Accept: Boolean);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  AccountProperties: TAccountProperties;
+  cust_id, val_id, fil_id, bal_cn, sim_otcet: integer;
+
+implementation
+
+uses
+  UnitDataModPCustService, AccounFlagsLmpl, PCustServiceFormImpl1,SBTranslateProc, sboapiDataModuleImpl;
+
+{$R *.dfm}
+
+procedure TAccountProperties.Button1Click(Sender: TObject);
+begin
+  FormAccounFlags := TFormAccounFlags.Create(Self);
+  try
+    with FormAccounFlags, DataModPCustService.Accflags do
+      if (ShowModal = mrOk) and (State in [dsInsert, dsEdit]) then
+        FieldByName('Tipacc').AsString := FlagMap;
+
+  finally
+    if Assigned(FormAccounFlags) then
+      FormAccounFlags.Release;
+  end;
+end;
+
+procedure TAccountProperties.DBLookupComboboxEh2Change(Sender: TObject);
+begin
+  if not(DBLookupComboboxEh2.KeyValue = null) then
+  begin
+    Edit3.Text := DBLookupComboboxEh2.KeyValue;
+
+    DataModPCustService.ODS_Bal_spr.close;
+    if DBLookupComboboxEh2.KeyValue = 0 then
+      DataModPCustService.ODS_Bal_spr.SetVariable('int_val', 0)
+    else
+      DataModPCustService.ODS_Bal_spr.SetVariable('int_val', 1);
+    DataModPCustService.ODS_Bal_spr.Open;
+
+  end;
+  // edit4.Clear;
+  // DBLookupComboboxEh3.KeyValue:=-1;
+end;
+
+procedure TAccountProperties.DBLookupComboboxEh2CloseUp(Sender: TObject;
+  Accept: Boolean);
+begin
+  with DataModPCustService, ODS_Bal_spr do
+  begin
+    // showmessage(edit4.text)   ;
+    if RecordCount = 1 then
+    begin
+      Edit4.Text := FieldByName('bal_cn').AsString;
+      DBLookupComboboxEh3.Text := FieldByName('balname').AsString;
+
+       end
+        else
+        begin
+        edit4.Text:='';
+      //  DBLookupComboboxEh3.text:=''; }
+    end;
+  end;
+end;
+
+procedure TAccountProperties.DBLookupComboboxEh3Change(Sender: TObject);
+begin
+  if not(DBLookupComboboxEh3.KeyValue = null) then
+    Edit4.Text := DBLookupComboboxEh3.KeyValue;
+end;
+
+procedure TAccountProperties.DBLookupComboboxEh4Change(Sender: TObject);
+begin
+  if not(DBLookupComboboxEh4.KeyValue = null) then
+    Edit5.Text := DBLookupComboboxEh4.KeyValue;
+  if DBLookupComboboxEh4.Text <> '' then
+    Edit_AccName.Text := DataModPCustService.ODS_CUSTOMERS_PHYS_FS.FieldByName
+      ('cust_name').AsString + '/' + DBLookupComboboxEh4.Text
+  else
+    Edit_AccName.Text := DataModPCustService.ODS_CUSTOMERS_PHYS_FS.FieldByName
+      ('cust_name').AsString;
+  { DataModPCustService.ODS_Bal_spr.close;
+    DataModPCustService.ODS_Bal_spr.SetVariable('SYM',DBLookupComboboxEh4.KeyValue);
+    DataModPCustService.ODS_Bal_spr.Open;
+  }
+
+end;
+
+procedure TAccountProperties.DBLookupComboboxEh5Change(Sender: TObject);
+begin
+  if not(DBLookupComboboxEh5.KeyValue = null) then
+    Edit1.Text := DBLookupComboboxEh5.KeyValue;
+
+  DataModPCustService.ODS_Bal_spr.close;
+  // showmessage(inttostr(DBLookupComboboxEh5.KeyValue));
+  DataModPCustService.ODS_Bal_spr.SetVariable('ACCTYPE',
+    DataModPCustService.Ods_acc_types.FieldByName('id').AsInteger);
+  // showmessage(DataModPCustService.ODS_Bal_spr.SQL.Text);
+  DataModPCustService.ODS_Bal_spr.Open;
+  // edit4.Clear;
+  // DBLookupComboboxEh3.KeyValue:=-1;
+end;
+
+procedure TAccountProperties.DBLookupComboboxEh5CloseUp(Sender: TObject;
+  Accept: Boolean);
+begin
+{  with DataModPCustService, ODS_Bal_spr do
+  begin
+    // showmessage(edit4.text)   ;
+    if RecordCount = 1 then
+    begin
+      Edit4.Text := FieldByName('bal_cn').AsString;
+      DBLookupComboboxEh3.Text := FieldByName('balname').AsString;
+
+       end
+        else
+        begin
+        edit4.Text:='';
+        end;
+  end;   }
+end;
+
+procedure TAccountProperties.DBLookupComboboxEh6Change(Sender: TObject);
+begin
+  if not(DBLookupComboboxEh6.KeyValue = null) then
+    Edit6.Text := DBLookupComboboxEh6.KeyValue;
+end;
+
+procedure TAccountProperties.Edit1Exit(Sender: TObject);
+begin
+  if Edit1.Text <> '' then
+    DBLookupComboboxEh5.KeyValue := Edit1.Text;
+end;
+
+procedure TAccountProperties.Edit1KeyPress(Sender: TObject; var Key: Char);
+begin
+  if Key = #13 then
+  begin
+    DBLookupComboboxEh5.KeyValue := Edit1.Text;
+  end;
+end;
+
+procedure TAccountProperties.Edit3Exit(Sender: TObject);
+begin
+  if Edit3.Text <> '' then
+    DBLookupComboboxEh2.KeyValue := Edit3.Text;
+end;
+
+procedure TAccountProperties.Edit3KeyPress(Sender: TObject; var Key: Char);
+begin
+  if Key = #13 then
+  begin
+
+    DBLookupComboboxEh2.KeyValue := Edit3.Text;
+  end;
+end;
+
+procedure TAccountProperties.Edit4Exit(Sender: TObject);
+begin
+  if Edit4.Text <> '' then
+    DBLookupComboboxEh3.KeyValue := Edit4.Text;
+end;
+
+procedure TAccountProperties.Edit4KeyPress(Sender: TObject; var Key: Char);
+begin
+  if Key = #13 then
+  begin
+    DBLookupComboboxEh3.KeyValue := Edit4.Text;
+  end;
+end;
+
+procedure TAccountProperties.Edit5Exit(Sender: TObject);
+begin
+  if Edit5.Text <> '' then
+    DBLookupComboboxEh4.KeyValue := Edit5.Text;
+end;
+
+procedure TAccountProperties.Edit5KeyPress(Sender: TObject; var Key: Char);
+begin
+  if Key = #13 then
+  begin
+    DBLookupComboboxEh4.KeyValue := Edit5.Text;
+  end;
+end;
+
+procedure TAccountProperties.Edit6Exit(Sender: TObject);
+begin
+  if Edit6.Text <> '' then
+    DBLookupComboboxEh6.KeyValue := Edit6.Text;
+end;
+
+procedure TAccountProperties.Edit6KeyPress(Sender: TObject; var Key: Char);
+begin
+  if Key = #13 then
+  begin
+    DBLookupComboboxEh6.KeyValue := Edit6.Text;
+  end;
+end;
+
+procedure TAccountProperties.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+  Label_Symbols.Caption := '';
+  DBLookupComboboxEh5.KeyValue := -1;
+  DBLookupComboboxEh2.KeyValue := -1;
+  DBLookupComboboxEh3.KeyValue := -1;
+  DBLookupComboboxEh4.KeyValue := '';
+  EditAccNo.Clear;
+  Edit1.Clear;
+  Edit3.Clear;
+  Edit4.Clear;
+  Edit5.Clear;
+end;
+
+procedure TAccountProperties.FormCreate(Sender: TObject);
+begin
+  FormAccounFlags := TFormAccounFlags.Create(Self);
+  DataModPCustService.ODS_Bal_spr_parts.Open;
+  DataModPCustService.ODS_Bal_spr.Open;
+  DataModPCustService.CurrentUserFilial.Open;
+  DataModPCustService.ODS_account_symbols1.Open;
+  DataModPCustService.Ods_closAccount.Open;
+   SBTranslateProc.TranslateAllCompForms(Self, sboapiDataModule.OrPack_SL);
+end;
+
+procedure TAccountProperties.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+  if ord(Key) = 27 then
+    close;
+end;
+
+procedure TAccountProperties.FormShow(Sender: TObject);
+begin
+
+  if Acc_bal_cn = 0 then
+  begin
+    Edit_AccName.Text := DBEdit3.Text;
+    DBLookupComboboxEh6.KeyValue := 0;
+
+  end;
+
+  if Acc_bal_cn = 1 then
+  begin
+    DBLookupComboboxEh5.Enabled := false;
+    Edit1.Enabled := false;
+    DBLookupComboboxEh2.Enabled := false;
+    Edit3.Enabled := false;
+    DBLookupComboboxEh3.Enabled := false;
+    Edit4.Enabled := false;
+    DBLookupComboboxEh6.Enabled := false;
+    Edit6.Enabled := false;
+    Acc_nuber.Enabled := false;
+    //EditAccNo.Enabled := false;
+
+    DBLookupComboboxEh5.KeyValue := DataModPCustService.Ods_closAccount.
+      FieldByName('acc_type').asinteger;
+    DBLookupComboboxEh2.KeyValue := DataModPCustService.Ods_closAccount.
+      FieldByName('VAL_ACC').asinteger;
+    DBLookupComboboxEh3.KeyValue := DataModPCustService.Ods_closAccount.
+      FieldByName('BAL_CN1').AsString;
+    DBLookupComboboxEh4.KeyValue := DataModPCustService.Ods_closAccount.
+      FieldByName('SYMB').AsString;
+    DBLookupComboboxEh6.KeyValue := DataModPCustService.Ods_closAccount.
+      FieldByName('sim_otcet').AsString;
+    Edit_AccName.Text := DataModPCustService.Ods_closAccount.FieldByName
+      ('name').AsString;
+    Label_Symbols.Caption := DataModPCustService.Ods_closAccount.FieldByName
+      ('tipacc').AsString;
+    EditAccNo.Text := DataModPCustService.Ods_closAccount.FieldByName
+      ('acc_no').AsString;
+  end;
+
+end;
+
+procedure TAccountProperties.Acc_nuberClick(Sender: TObject);
+var
+v_id:integer;
+begin
+  if DBLookupComboboxEh5.Text = '' then
+  begin
+    ShowMessage('Hesabın tipi  seçilmeyib !');
+    exit;
+  end;
+
+  if DBLookupComboboxEh2.Text = '' then
+  begin
+    ShowMessage('Hesabın valyutası  seçilmeyib !');
+    exit;
+  end;
+
+  if DBLookupComboboxEh3.Text = '' then
+  begin
+    ShowMessage('Balans hesabı  seçilmeyib!');
+    exit;
+  end;
+
+  if DBLookupComboboxEh4.Text = '' then
+  begin
+    ShowMessage('Hesabın  təyinatı  seçilmeyib !');
+    exit;
+  end;
+    v_id := DataModPCustService.Ods_closAccount.FieldByName('id').AsInteger;
+  cust_id := DataModPCustService.ODS_CUSTOMERS_PHYS_FS.FieldByName('ID')
+    .AsInteger;
+  val_id := DBLookupComboboxEh2.KeyValue;
+  fil_id := DataModPCustService.CurrentUserFilial.FieldByName('ID').AsInteger;
+  bal_cn := DBLookupComboboxEh3.KeyValue;
+  sim_otcet := DBLookupComboboxEh6.KeyValue;
+  EditAccNo.Text := DataModPCustService.SBOP.CallStringFunction
+    ('GenerateAccountNumber', [v_id,bal_cn, val_id, cust_id, fil_id, sim_otcet]);
+end;
+
+procedure TAccountProperties.XFBitBtn1Click(Sender: TObject);
+var
+  v_acc_no, v_tip_acc, v_accName, v_symbol, v_sim_otcet: String;
+  v_open_dat: Tdatetime;
+  v_id: Integer;
+   hesab:string;
+begin
+  if Acc_bal_cn = 0 then
+  begin
+    if DBLookupComboboxEh5.Text = '' then
+    begin
+      ShowMessage('Hesabın tipi  seçilmeyib !');
+      exit;
+    end;
+
+    if DBLookupComboboxEh2.Text = '' then
+    begin
+      ShowMessage('Hesabın valyutası  seçilmeyib !');
+      exit;
+    end;
+
+    if DBLookupComboboxEh3.Text = '' then
+    begin
+      ShowMessage('Balans hesabı  seçilmeyib!');
+      exit;
+    end;
+
+    if DBLookupComboboxEh4.Text = '' then
+    begin
+      ShowMessage('Hesabın  təyinatı  seçilmeyib !');
+      exit;
+    end;
+
+    if EditAccNo.Text = '' then
+    begin
+      ShowMessage('Hesab nömrəsi yaradılmayıb !');
+      exit;
+    end;
+
+    v_tip_acc := Label_Symbols.Caption;
+    v_accName := Edit_AccName.Text;
+    v_symbol := DBLookupComboboxEh4.KeyValue;
+    v_sim_otcet := DBLookupComboboxEh6.KeyValue;
+
+    // ShowMessage((v_acc_no));
+    v_open_dat := DataModPCustService.ODS_SYSDATE.FieldByName('Tek_dat')
+      .AsDateTime;
+    // ShowMessage(datetostr(v_open_dat));
+
+    {v_acc_no := DataModPCustService.SBOP.CallStringFunction
+      ('GenerateAccountNumber', [bal_cn, val_id, cust_id, fil_id, sim_otcet]);}
+    hesab:=EditAccNo.Text;
+    hesab:=StringReplace(hesab,' ','',[rfReplaceAll]);
+    DataModPCustService.SBOP.CallStringFunction('add_account',
+      [cust_id, 0, hesab, val_id, v_accName, v_open_dat, bal_cn, 0, null, 0,
+      0, 0, fil_id, v_sim_otcet, v_tip_acc, '', 0, '', v_symbol]);
+
+  end;
+  if Acc_bal_cn = 1 then
+  begin
+
+
+    v_symbol := Edit5.Text; // DBLookupComboboxEh4.KeyValue;
+    v_tip_acc := Label_Symbols.Caption;
+    v_accName := Edit_AccName.Text;
+
+    DataModPCustService.SBOP.CallProcedure('upd_accountPcustService',
+      [ v_accName, v_tip_acc, v_symbol]);
+    DataModPCustService.Ods_closAccount.Refresh;
+  end;
+  AccountProperties.close;
+
+end;
+
+procedure TAccountProperties.XFBitBtn2Click(Sender: TObject);
+begin
+  AccountProperties.close;
+end;
+
+end.

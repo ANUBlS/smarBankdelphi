@@ -1,0 +1,66 @@
+unit TrCreditCDatModImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, OracleData, Oracle;
+
+type
+  TCreditCardDatMod = class(TDataModule)
+    CreditCards: TOracleDataSet;
+    CreditCardsDatSrc: TDataSource;
+    Transactions: TOracleDataSet;
+    TransactionsDatSrc: TDataSource;
+    TransactionsDEBITACCNO: TStringField;
+    TransactionsDEBITCURRENCY: TStringField;
+    TransactionsCREDITACCNO: TStringField;
+    TransactionsOSTAT: TFloatField;
+    TransactionsCREDITCURRENCY: TStringField;
+    TransactionsTRDATE: TDateTimeField;
+    TransactionsCANPROCESS: TFloatField;
+    TransactionsINBALANCECHAR: TFloatField;
+    TransactionsFLAGS: TFloatField;
+    TransactionsDEBITAMOUNT: TFloatField;
+    TransactionsCREDITAMOUNT: TFloatField;
+    TransactionsNATAMOUNT: TFloatField;
+    TransactionsTRDESCRIPTION: TStringField;
+    Controls: TOracleDataSet;
+    ControlsDatSrc: TDataSource;
+    CreditCardsID: TFloatField;
+    Branches: TOracleDataSet;
+    BranchesDatSrc: TDataSource;
+    BranchesID: TFloatField;
+    BranchesNAME: TStringField;
+    ControlsNUMBEROFCREDIT: TStringField;
+    ControlsCONTRACTNO: TStringField;
+    ControlsCUSTREST: TFloatField;
+    ControlsREST: TFloatField;
+    CM_CARDS: TOraclePackage;
+    procedure DataModuleCreate(Sender: TObject);
+    procedure DataModuleDestroy(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  CreditCardDatMod: TCreditCardDatMod;
+
+implementation
+
+{$R *.DFM}
+uses CMOracleAPIDataModuleImpl;
+
+procedure TCreditCardDatMod.DataModuleCreate(Sender: TObject);
+begin
+   Branches.Open;
+end;
+
+procedure TCreditCardDatMod.DataModuleDestroy(Sender: TObject);
+begin
+   Branches.CloseAll;
+end;
+
+end.

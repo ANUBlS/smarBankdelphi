@@ -1,0 +1,69 @@
+unit FrmMainBusinessPrimpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ExtCtrls, XFSCtrls, StdCtrls, Grids, XDBGrids;
+
+type
+  TFrmMainBusinessPr = class(TForm)
+    XFPanel1: TXFPanel;
+    XFButton1: TXFButton;
+    XFButton2: TXFButton;
+    XFPanel2: TXFPanel;
+    XDBGrid1: TXDBGrid;
+    XFPanel3: TXFPanel;
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure XFButton2Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure XFButton1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    var
+    op_id:integer;
+  end;
+
+var
+  FrmMainBusinessPr: TFrmMainBusinessPr;
+  procedure InitPlugin(s:string);export;
+implementation
+
+uses DMBusinessProcessesPrImpl, FrmAddOperationImpl;
+
+{$R *.dfm}
+
+procedure TFrmMainBusinessPr.FormCreate(Sender: TObject);
+begin
+DMBusinessProcessesPr:=TDMBusinessProcessesPr.Create(self);
+FrmAddOperation:=TFrmAddOperation.create(self);
+end;
+
+procedure TFrmMainBusinessPr.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+if ord(key)=vk_escape then
+             close;
+end;
+
+procedure InitPlugin(s:string);export;
+begin
+   FrmMainBusinessPr.ShowModal;
+end;
+exports
+     InitPlugin;
+
+procedure TFrmMainBusinessPr.XFButton1Click(Sender: TObject);
+begin
+FrmMainBusinessPr.op_id:=FrmMainBusinessPr.XDBGrid1.DataSource.DataSet.FieldByName('id').AsInteger;
+FrmAddOperation.ShowModal;
+end;
+
+procedure TFrmMainBusinessPr.XFButton2Click(Sender: TObject);
+begin
+ FrmMainBusinessPr.Close;
+end;
+   initialization
+ FrmMainBusinessPr := TFrmMainBusinessPr.Create(Application);
+end.

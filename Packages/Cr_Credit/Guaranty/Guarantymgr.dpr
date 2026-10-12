@@ -1,0 +1,22 @@
+library Guarantymgr;
+
+uses
+  ComServ,
+  Guarantymgr_TLB in 'Guarantymgr_TLB.pas',
+  GuarantymgrImpl in 'GuarantymgrImpl.pas' {Guaranty: TActiveForm} {Guaranty: CoClass},
+  GrDmImpl in 'GrDmImpl.pas' {GrDataModule: TDataModule};
+
+{$E ocx}
+
+exports
+  DllGetClassObject,
+  DllCanUnloadNow,
+  DllRegisterServer,
+  DllUnregisterServer;
+
+{$R *.TLB}
+
+{$R *.RES}
+
+begin
+end.

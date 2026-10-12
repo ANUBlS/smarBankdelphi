@@ -1,0 +1,189 @@
+unit FlatMgrUnit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, Buttons, ExtCtrls, Db, OracleData, Grids, DBGrids, ImgList;
+
+type
+  TFlatsMgrForm = class(TForm)
+    Panel1: TPanel;
+    Panel2: TPanel;
+    Panel3: TPanel;
+    Panel4: TPanel;
+    BitBtn1: TBitBtn;
+    BitBtn2: TBitBtn;
+    DBGrid1: TDBGrid;
+    DBGrid2: TDBGrid;
+    DBGrid3: TDBGrid;
+    StatusImages: TImageList;
+    companie: TOracleDataSet;
+    companieID: TIntegerField;
+    building: TOracleDataSet;
+    flat: TOracleDataSet;
+    companiesDatSrc: TDataSource;
+    buildingsDatSrc: TDataSource;
+    flatsDatSrc: TDataSource;
+    buildingID: TFloatField;
+    buildingCOMP_ID: TFloatField;
+    buildingENTRANCES: TFloatField;
+    buildingFLATS: TFloatField;
+    companieCOMP_NAME: TWideStringField;
+    buildingBLD_NAME: TWideStringField;
+    buildingADDRESS: TWideStringField;
+    flatID: TFloatField;
+    flatBLD_ID: TFloatField;
+    flatFLATNUMBER: TWideStringField;
+    flatENTRANCE: TWideStringField;
+    flatROOMS: TFloatField;
+    flatAREA: TFloatField;
+    flatPRICE1: TFloatField;
+    flatPRICEGEN: TFloatField;
+    flatBUYER: TFloatField;
+    flatUSERID: TFloatField;
+    flatBUYER_STATUS: TWideStringField;
+    flatFFLOOR: TWideStringField;
+    flatCODE: TWideStringField;
+    EditFlatCode: TEdit;
+    SpeedButton1: TSpeedButton;
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure BitBtn1Click(Sender: TObject);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure DBGrid3DrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TColumn; State: TGridDrawState);
+    procedure companieAfterScroll(DataSet: TDataSet);
+    procedure buildingAfterScroll(DataSet: TDataSet);
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure DBGrid3TitleClick(Column: TColumn);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FlatsMgrForm: TFlatsMgrForm;
+
+implementation
+
+{$R *.DFM}
+uses sboapiDataModuleImpl,DatModConstructionImpl, ContractAddEditImpl;
+
+procedure TFlatsMgrForm.FormCreate(Sender: TObject);
+begin
+  companie.Open;
+  building.Open;
+  flat.Open;
+end;
+
+procedure TFlatsMgrForm.FormDestroy(Sender: TObject);
+begin
+  companie.CloseAll;
+  building.CloseAll;
+  flat.CloseAll;
+  end;
+
+procedure TFlatsMgrForm.BitBtn1Click(Sender: TObject);
+begin
+  with AddEditContractForm do begin
+    Edit6.text := floattostr(FlatsMgrForm.flat.FieldByName('PRICEGEN').AsFloat);
+    Edit1.text := FlatsMgrForm.building.FieldByName('BLD_NAME').AsString;
+    Edit2.text := FlatsMgrForm.flat.FieldByName('ENTRANCE').AsString ;
+    Edit3.text := FlatsMgrForm.flat.FieldByName('FLATNUMBER').AsString ;
+    Edit4.text := floattostr(FlatsMgrForm.flat.FieldByName('AREA').AsFloat) ;
+    Edit5.text := inttostr(FlatsMgrForm.flat.FieldByName('ROOMS').AsInteger) ;
+    EditPrice1.Text := FloatToStr(FlatsMgrForm.flat.FieldByName('PRICE1').AsFloat);
+    EditFlatCode.Text := FlatsMgrForm.flat.FieldByName('CODE').AsString ;
+  end;
+
+    DatModConstruction.CreditPurpose.FieldByName('area').asfloat:=FlatsMgrForm.flat.FieldByName('area').AsFloat;
+    DatModConstruction.CreditPurpose.FieldByName('FLATID').AsInteger:= FlatsMgrForm.flat.FieldByName('id').AsInteger ;
+    DatModConstruction.CreditPurpose.FieldByName('price1').asfloat:=FlatsMgrForm.flat.FieldByName('price1').AsFloat;
+   close;
+end;
+
+procedure TFlatsMgrForm.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+  if ord(key) = VK_ESCAPE then close
+end;
+
+procedure TFlatsMgrForm.SpeedButton1Click(Sender: TObject);
+begin
+if EditFlatCode.Text='' then
+exit;
+with flat do
+begin
+  Filter:='CODE='+EditFlatCode.Text;
+  Filtered:=False;
+  Filtered:=True;
+end;
+with building do
+begin
+  Filter:='ID='+flat.FieldByName('BLD_ID').AsString;
+  Filtered:=False;
+  Filtered:=True;
+end;
+  companie.Locate('ID', building.FieldByName('COMP_ID').AsString, []);
+  flat.Locate('Code', EditFlatCode.Text,[]);
+
+end;
+
+procedure TFlatsMgrForm.buildingAfterScroll(DataSet: TDataSet);
+begin
+with flat do
+begin
+  Filter:='BLD_ID='+building.FieldByName('ID').AsString;
+  Filtered:=False;
+  Filtered:=True;
+end;
+end;
+
+procedure TFlatsMgrForm.companieAfterScroll(DataSet: TDataSet);
+begin
+  with building do
+  begin
+  Filter:='comp_id='+companie.FieldByName('ID').AsString;
+  Filtered:=False;
+  Filtered:=True;
+  end;
+end;
+
+procedure TFlatsMgrForm.DBGrid3DrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TColumn;
+  State: TGridDrawState);
+const
+    DataColIndex = 1;
+var
+    ImageIndex :Integer;
+begin
+{  ImageIndex :=-1;
+  with Sender as TDBGrid do
+  begin
+    if DataSource.DataSet.RecordCount <> 0 then
+    begin
+      case DataSource.DataSet.FieldByName('FlatStatus').AsInteger of
+      0:
+        ImageIndex := 0;
+      1:
+        ImageIndex := 1;
+        end;   //Case
+      if   (DataCol = 1)   then
+        StatusImages.Draw(Canvas, Rect.Left, Rect.Top, ImageIndex, True)
+      else
+        DefaultDrawColumnCell(Rect, DataCol, Column, State);
+    end;
+  end;  }
+  end;
+procedure TFlatsMgrForm.DBGrid3TitleClick(Column: TColumn);
+var
+Title : string;
+begin
+Title:=Column.FieldName;
+flat.SetVariable('TITLE',Title);
+flat.Refresh;
+
+end;
+
+end.

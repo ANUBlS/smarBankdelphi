@@ -1,0 +1,203 @@
+object AccountStateDModule: TAccountStateDModule
+  OldCreateOrder = False
+  Height = 480
+  Width = 696
+  object AccState: TDataSource
+    DataSet = AccStateData
+    Left = 12
+    Top = 24
+  end
+  object AccStateData: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      '  arc.DATDATE as ArchiveDate,'
+      '  arc.ACC_ID as AccID,'
+      '  abs(arc.OSTAT) as Amount,'
+      '  abs(arc.POK_OSTAT) as LAmount,'
+      '  abs(arc.OBR_D) as DebitTurnover,'
+      '  abs(arc.POK_OBR_D) as DebitLTurnover,'
+      '  abs(arc.OBR_K) as CreditTurnover,'
+      '  abs(arc.POK_OBR_K) as CreditLTurnover'
+      'from archost arc'
+      'where arc.acc_id = :AccID'
+      'order by arc.datdate --desc')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000C0000003A00410043004300490044000300000004000000
+      1F6E030000000000}
+    QBEDefinition.QBEFieldDefs = {
+      0500000008000000160000004100520043004800490056004500440041005400
+      45000100000000000A000000410043004300490044000100000000000C000000
+      41004D004F0055004E0054000100000000000E0000004C0041004D004F005500
+      4E0054000100000000001A000000440045004200490054005400550052004E00
+      4F005600450052000100000000001C000000440045004200490054004C005400
+      550052004E004F005600450052000100000000001C0000004300520045004400
+      490054005400550052004E004F005600450052000100000000001E0000004300
+      520045004400490054004C005400550052004E004F0056004500520001000000
+      0000}
+    MasterFields = 'ACCID'
+    DetailFields = 'ACCID'
+    QueryAllRecords = False
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 84
+    Top = 24
+    object AccStateDataACCID: TFloatField
+      FieldName = 'ACCID'
+    end
+    object AccStateDataAMOUNT: TFloatField
+      DisplayLabel = 'Qal'#305'q'
+      FieldName = 'AMOUNT'
+      currency = True
+    end
+    object AccStateDataLAMOUNT: TFloatField
+      DisplayLabel = 'Qal'#305'q (man)'
+      FieldName = 'LAMOUNT'
+      currency = True
+    end
+    object AccStateDataDEBITTURNOVER: TFloatField
+      DisplayLabel = 'D.D'#246'vriyy'#601
+      FieldName = 'DEBITTURNOVER'
+      currency = True
+    end
+    object AccStateDataDEBITLTURNOVER: TFloatField
+      DisplayLabel = 'D.D'#246'vriyy'#601'(man)'
+      FieldName = 'DEBITLTURNOVER'
+      currency = True
+    end
+    object AccStateDataCREDITTURNOVER: TFloatField
+      DisplayLabel = 'K.D'#246'vriyy'#601
+      FieldName = 'CREDITTURNOVER'
+      currency = True
+    end
+    object AccStateDataCREDITLTURNOVER: TFloatField
+      DisplayLabel = 'K.D'#246'vriyy'#601'(man)'
+      FieldName = 'CREDITLTURNOVER'
+      currency = True
+    end
+    object AccStateDataARCHIVEDATE: TDateTimeField
+      FieldName = 'ARCHIVEDATE'
+    end
+  end
+  object Account: TOracleDataSet
+    Tag = 1
+    SQL.Strings = (
+      'SELECT   '
+      
+        '   ACCOUNT.RowID, ID, kli_id, op_id, acc_no, val_acc, NAME, open' +
+        '_dat, close_dat,'
+      
+        '   DECODE (close_dat, NULL, 1, 2) AS status, bal_cn1, bal_cn2, b' +
+        'al_cn3,'
+      
+        '   bal_cn4, filial, sim_otcet, tipacc, LIMIT, old_acc_no, pair_a' +
+        'cc,'
+      '   insider'
+      'FROM ACCOUNT'
+      'ORDER BY '
+      '   :title')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000C0000003A005400490054004C0045000100000007000000
+      6163635F6E6F0000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000001400000004000000490044000100000000000C0000004B004C004900
+      5F00490044000100000000000A0000004F0050005F0049004400010000000000
+      0C0000004100430043005F004E004F000100000000000E000000560041004C00
+      5F00410043004300010000000000080000004E0041004D004500010000000000
+      100000004F00500045004E005F00440041005400010000000000120000004300
+      4C004F00530045005F004400410054000100000000000C000000530054004100
+      5400550053000100000000000E000000420041004C005F0043004E0031000100
+      000000000E000000420041004C005F0043004E0032000100000000000E000000
+      420041004C005F0043004E0033000100000000000E000000420041004C005F00
+      43004E0034000100000000000C000000460049004C00490041004C0001000000
+      000012000000530049004D005F004F0054004300450054000100000000000C00
+      00005400490050004100430043000100000000000A0000004C0049004D004900
+      5400010000000000140000004F004C0044005F004100430043005F004E004F00
+      0100000000001000000050004100490052005F00410043004300010000000000
+      0E00000049004E0053004900440045005200010000000000}
+    QueryAllRecords = False
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 88
+    Top = 88
+    object AccountID: TFloatField
+      FieldName = 'ID'
+    end
+    object AccountKLI_ID: TFloatField
+      FieldName = 'KLI_ID'
+      Required = True
+    end
+    object AccountOP_ID: TFloatField
+      FieldName = 'OP_ID'
+    end
+    object AccountACC_NO: TWideStringField
+      DisplayLabel = 'Hesab '#8470
+      FieldName = 'ACC_NO'
+      Required = True
+    end
+    object AccountVAL_ACC: TIntegerField
+      DisplayLabel = '$'
+      FieldName = 'VAL_ACC'
+      Required = True
+    end
+    object AccountNAME: TWideStringField
+      DisplayLabel = 'Hesab'#305'n Ad'#305
+      FieldName = 'NAME'
+      Size = 90
+    end
+    object AccountOPEN_DAT: TDateTimeField
+      DisplayLabel = 'A'#231#305'lma tarixi'
+      FieldName = 'OPEN_DAT'
+      Required = True
+    end
+    object AccountCLOSE_DAT: TDateTimeField
+      DisplayLabel = 'Ba'#287'lama tarixi'
+      FieldName = 'CLOSE_DAT'
+    end
+    object AccountSTATUS: TFloatField
+      FieldName = 'STATUS'
+    end
+    object AccountBAL_CN1: TFloatField
+      DisplayLabel = 'Balans '#8470
+      FieldName = 'BAL_CN1'
+      Required = True
+    end
+    object AccountBAL_CN2: TFloatField
+      FieldName = 'BAL_CN2'
+    end
+    object AccountBAL_CN3: TFloatField
+      FieldName = 'BAL_CN3'
+    end
+    object AccountBAL_CN4: TFloatField
+      FieldName = 'BAL_CN4'
+    end
+    object AccountFILIAL: TIntegerField
+      FieldName = 'FILIAL'
+    end
+    object AccountSIM_OTCET: TFloatField
+      FieldName = 'SIM_OTCET'
+    end
+    object AccountTIPACC: TWideStringField
+      FieldName = 'TIPACC'
+    end
+    object AccountLIMIT: TFloatField
+      FieldName = 'LIMIT'
+    end
+    object AccountOLD_ACC_NO: TWideStringField
+      FieldName = 'OLD_ACC_NO'
+    end
+    object AccountPAIR_ACC: TFloatField
+      FieldName = 'PAIR_ACC'
+    end
+    object AccountINSIDER: TWideStringField
+      FieldName = 'INSIDER'
+      Size = 1
+    end
+  end
+  object AccountData: TDataSource
+    DataSet = Account
+    Left = 16
+    Top = 88
+  end
+end

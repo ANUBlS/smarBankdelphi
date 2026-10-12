@@ -1,0 +1,90 @@
+﻿unit Felter;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ExtCtrls, StdCtrls, CheckLst, Evanescence, DBCtrls;
+
+type
+  TFrmReportFilter = class(TForm)
+    Panel1: TPanel;
+    Panel2: TPanel;
+    challValute: TButton;
+    unchallValute: TButton;
+    Even: TEvanescence;
+    Button1: TButton;
+    Button2: TButton;
+    DBLookupComboBox1: TDBLookupComboBox;
+    Label1: TLabel;
+    procedure FormCanResize(Sender: TObject; var NewWidth, NewHeight: Integer;
+      var Resize: Boolean);
+    procedure Button2Click(Sender: TObject);
+    procedure challValuteClick(Sender: TObject);
+    procedure unchallValuteClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmReportFilter: TFrmReportFilter;
+
+implementation
+
+{$R *.dfm}
+ uses DmBudcetImpl,ReportImpl;
+procedure TFrmReportFilter.Button1Click(Sender: TObject);
+begin
+if DBLookupComboBox1.Text='' then
+ begin
+   ShowMessage('Hesabat ilini seçməmisiz!');
+    exit;
+ end;
+
+u:=1  ;
+with  ReportFrm do
+if (even.GetCheckedKeyList.Count<>even.Items.Count) then
+  ADDITIONALPARAMS := ADDITIONALPARAMS + ' and descid in('
+                   +even.GetCheckedKeyList.CommaText+')'
+                   +#13#10;
+close;
+end;
+
+procedure TFrmReportFilter.Button2Click(Sender: TObject);
+begin
+close;
+end;
+
+procedure TFrmReportFilter.challValuteClick(Sender: TObject);
+begin
+Even.CheckAll;
+end;
+
+procedure TFrmReportFilter.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+resize:=false
+end;
+
+procedure TFrmReportFilter.FormCreate(Sender: TObject);
+var
+i:integer;
+begin
+  for i := 0 to ComponentCount - 1 do
+    if Components[i].Tag = 3112 then begin
+      (Components[i] as TEvanescence).Open;
+      (Components[i] as TEvanescence).CheckAll;
+    end;
+
+end;
+
+procedure TFrmReportFilter.unchallValuteClick(Sender: TObject);
+begin
+Even.UncheckAll;
+end;
+
+end.

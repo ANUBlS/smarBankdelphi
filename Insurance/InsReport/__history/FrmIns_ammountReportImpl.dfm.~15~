@@ -1,0 +1,194 @@
+object FrmIns_ammountReport: TFrmIns_ammountReport
+  Left = 0
+  Top = 0
+  BorderIcons = [biSystemMenu]
+  BorderStyle = bsSingle
+  Caption = 'Natamamliq Hesabat'#305
+  ClientHeight = 255
+  ClientWidth = 398
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poDesktopCenter
+  OnCreate = FormCreate
+  OnKeyPress = FormKeyPress
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object XFPanel1: TXFPanel
+    Left = 0
+    Top = 0
+    Width = 398
+    Height = 255
+    Align = alClient
+    TabOrder = 0
+    object XFGroupBox3: TXFGroupBox
+      Left = 1
+      Top = 1
+      Width = 180
+      Height = 96
+      Caption = 'S'#305#287'orta n'#246'v'#252
+      TabOrder = 0
+      object XFCheckBox1: TXFCheckBox
+        Left = 155
+        Top = 0
+        Width = 15
+        Height = 17
+        TabOrder = 0
+        OnClick = XFCheckBox1Click
+      end
+      object DBLookupComboBox1: TDBLookupComboBox
+        Left = 7
+        Top = 21
+        Width = 145
+        Height = 21
+        KeyField = 'ID'
+        ListField = 'NAME'
+        ListSource = DMReport.DSALLRins_type
+        TabOrder = 1
+      end
+    end
+    object XFGroupBox7: TXFGroupBox
+      Left = 196
+      Top = 1
+      Width = 180
+      Height = 96
+      Caption = 'S'#305#287'orta etdir'#601'n'
+      TabOrder = 1
+      object XFCheckBox4: TXFCheckBox
+        Left = 155
+        Top = 0
+        Width = 14
+        Height = 17
+        TabOrder = 0
+        OnClick = XFCheckBox4Click
+      end
+      object DBLookupComboBox3: TDBLookupComboBox
+        Left = 4
+        Top = 21
+        Width = 145
+        Height = 21
+        KeyField = 'ID'
+        ListField = 'NAME'
+        ListSource = DMReport.DSRALLCust
+        TabOrder = 1
+      end
+    end
+    object XFGroupBox1: TXFGroupBox
+      Left = 0
+      Top = 103
+      Width = 180
+      Height = 96
+      Caption = 'M'#252'qavil'#601'nin Ba'#351'lanma Tarixi'
+      TabOrder = 2
+      object XFCheckBox7: TXFCheckBox
+        Left = 156
+        Top = 0
+        Width = 15
+        Height = 17
+        TabOrder = 0
+      end
+      object DateTimePicker1: TDateTimePicker
+        Left = 7
+        Top = 23
+        Width = 145
+        Height = 22
+        Date = 41463.636174444440000000
+        Time = 41463.636174444440000000
+        TabOrder = 1
+      end
+      object DateTimePicker2: TDateTimePicker
+        Left = 7
+        Top = 45
+        Width = 145
+        Height = 22
+        Date = 41464.436277488430000000
+        Time = 41464.436277488430000000
+        TabOrder = 2
+      end
+    end
+    object XFRadioGroup1: TXFRadioGroup
+      Left = 196
+      Top = 103
+      Width = 180
+      Height = 96
+      TabOrder = 3
+    end
+    object XFRadioButton12: TXFRadioButton
+      Left = 209
+      Top = 126
+      Width = 42
+      Height = 22
+      Caption = 'Bank'
+      Ctl3D = True
+      ParentCtl3D = False
+      TabOrder = 4
+    end
+    object XFRadioButton13: TXFRadioButton
+      Left = 209
+      Top = 147
+      Width = 47
+      Height = 23
+      Caption = 'K'#601'nar'
+      TabOrder = 5
+    end
+    object XFCheckBox2: TXFCheckBox
+      Left = 351
+      Top = 103
+      Width = 14
+      Height = 15
+      TabOrder = 6
+      OnClick = XFCheckBox2Click
+    end
+    object Memo1: TMemo
+      Left = 24
+      Top = 224
+      Width = 185
+      Height = 89
+      Lines.Strings = (
+        'Memo1')
+      TabOrder = 7
+      Visible = False
+    end
+    object XFButton1: TXFButton
+      Left = 301
+      Top = 211
+      Width = 75
+      Height = 25
+      Caption = 'OK'
+      DoubleBuffered = True
+      ParentDoubleBuffered = False
+      TabOrder = 8
+      OnClick = XFButton1Click
+    end
+  end
+  object ExcelExport: TCMExcelExport
+    StyleColumnWidth = cwAutoFit
+    ColumnWidth = 0
+    FontTitles.Charset = DEFAULT_CHARSET
+    FontTitles.Color = clWindowText
+    FontTitles.Height = -11
+    FontTitles.Name = 'Tahoma'
+    FontTitles.Style = []
+    OrientationTitles = 0
+    FontData.Charset = DEFAULT_CHARSET
+    FontData.Color = clWindowText
+    FontData.Height = -11
+    FontData.Name = 'Tahoma'
+    FontData.Style = []
+    FontSummary.Charset = DEFAULT_CHARSET
+    FontSummary.Color = clWindowText
+    FontSummary.Height = -11
+    FontSummary.Name = 'Tahoma'
+    FontSummary.Style = []
+    SummarySelection = ssNone
+    SummaryCalculation = scSUM
+    Left = 424
+    Top = 224
+  end
+end

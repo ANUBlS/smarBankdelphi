@@ -1,0 +1,146 @@
+﻿unit AddEditFrmImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, Buttons;
+
+type
+  TAddEditFrm = class(TForm)
+    Label1: TLabel;
+    BitBtn1: TBitBtn;
+    BitBtn2: TBitBtn;
+    Edit2: TEdit;
+    Memo1: TMemo;
+    Label2: TLabel;
+    procedure BitBtn1Click(Sender: TObject);
+    procedure BitBtn2Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure Edit2KeyPress(Sender: TObject; var Key: Char);
+    procedure Memo1KeyPress(Sender: TObject; var Key: Char);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  AddEditFrm: TAddEditFrm;
+
+implementation
+
+{$R *.dfm}
+ uses MainformImpl,DmBudcetImpl;
+procedure TAddEditFrm.BitBtn1Click(Sender: TObject);
+var PrevID:Real;
+r,last_index, id_last_index_node : integer;
+skod:string;
+
+begin
+/////////// Add rejimi////////////////////
+///
+ skod:= edit2.Text;
+if memo1.Text='' then
+begin
+ShowMessage('Adı daxil edin');
+EXIT;
+
+end;
+if edit2.Text='' then
+begin
+ShowMessage('Kodu daxil edin');
+EXIT;
+end;
+if DmBudcet.Kodkotrol.Active then
+DmBudcet.Kodkotrol.close;
+DmBudcet.Kodkotrol.SQL[3]:='and code='+''''+edit2.Text+'''';
+DmBudcet.Kodkotrol.open;
+//ShowMessage(inttostr(a));
+if ss=0 then
+
+if DmBudcet.Kodkotrol.RecordCount>=1 then
+begin
+ShowMessage('Kod təkrarlana bilməz !');
+EXIT;
+end;
+if ss=1 then
+
+if (DmBudcet.Kodkotrol.RecordCount>=1) and (kod<>skod) then
+begin
+ShowMessage('Kod təkrarlana bilməz !');
+EXIT;
+end;
+
+if add then begin
+ with  DmBudcet.StructurDSet do
+   begin
+ //  ShowMessage(inttostr( DmBudcet.StructurDSet.RecordCount ));
+   if DmBudcet.StructurDSet.RecordCount=0 then
+   begin
+    DmBudcet.PackgSubdiv.CallProcedure('add_subdiv',['name', memo1.Text, 'previd', 0, 'index_by_Name', 0,'p_cod',edit2.Text]);
+//   ShowMessage('sa')     ;
+   end
+   else
+   begin
+    Locate('Index_by_name', IndexTN_FOrganStruc, []);
+    PrevID:=Fields[0].AsFloat;
+    DmBudcet.PackgSubdiv.CallProcedure('upd_subdiv',['value',IndexTN_FOrganStruc, 'l_last_index', last_index, 'l_id_last_index_node', id_last_index_node]);
+    last_index:= DmBudcet.PackgSubdiv.GetParameter('l_last_index');
+    id_last_index_node:= DmBudcet.PackgSubdiv.GetParameter('l_id_last_index_node');
+    DmBudcet.PackgSubdiv.CallProcedure('add_subdiv',['p_name', Memo1.Text, 'p_previd', id_last_index_node, 'p_index_by_Name', last_index+1,'p_cod',edit2.Text]);
+  a:=1;
+  end;
+   end;
+
+ end;
+
+ if Edit then
+begin
+  DmBudcet.PackgSubdiv.CallProcedure('rename_subdiv',['name#', Memo1.Text, 'index#',  IndexTN_FOrganStruc,'code#',edit2.Text]);
+   a:=2;
+end;
+/////////son////////////////
+  close;
+end;
+
+procedure TAddEditFrm.BitBtn2Click(Sender: TObject);
+begin
+close
+end;
+
+procedure TAddEditFrm.Edit2KeyPress(Sender: TObject; var Key: Char);
+begin
+If ord(key) = 13 then
+BitBtn1.Click
+end;
+
+procedure TAddEditFrm.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+
+  ad:=Memo1.Text;
+  Memo1.Clear;
+  edit2.Text:='';
+
+end;
+
+procedure TAddEditFrm.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+If ord(key) = 13 then
+BitBtn1.Click
+end;
+
+procedure TAddEditFrm.FormShow(Sender: TObject);
+begin
+  edit2.SetFocus;
+end;
+
+procedure TAddEditFrm.Memo1KeyPress(Sender: TObject; var Key: Char);
+begin
+If ord(key) = 13 then
+BitBtn1.Click
+end;
+
+end.

@@ -1,0 +1,215 @@
+http://www.java2s.com/Code/Java/Swing-JFC/TreeEditTest.htm
+
+select  
+     p.id ,
+     p.numberofcredit,
+     p.creditlineamount,                                  
+     p.annualyinterestrate,                                          
+     p.dateofconclusion ,                                            
+     p.duedatefirstcontract,                                      
+     p.duedatelastcontract,                                       
+     p.purposeofcredit,                                           
+     p.annualypenaltyrate, 
+     p.intcalcmethod ,
+     p.branchid,
+     cat.description, 
+     h.rest,
+     h.rest*o.ostat  AS ekrest,
+     h.interestrest ,
+     h.interestrest*o.ostat AS ekint,
+     h.duerest,
+     h.duerest*o.ostat AS ekduerest,
+     h.dueinterestrest,
+     h.dueinterestrest*o.ostat as ekdueint,
+     h.penaltyrest ,                 
+     h.penaltyrest*o.ostat as ekpen,
+     h.givenamount ,
+     h.givenamount *o.ostat as  ekgivenamount,
+     h.pledgeprice,
+     h.stopcalcdate,
+     e1.percent,
+     e2.percent as duepercent,
+     acc.acc_no as contractaccno,
+     substr(acc.acc_no,0,4) as balaccno,
+     intacc.acc_no as interestaccno,
+     resacc.acc_no as reserveaccno,
+     dueacc.acc_no as duecontractaccno,
+     dueintacc.acc_no as dueinterestaccno,
+     dueresacc.acc_no as duereserveaccno ,
+     booroweracc.acc_no as booroweraccno,
+     boorowerrest.ostat as boorrest,
+     av.val_name,
+     l.name,
+     LastintPaydate.paydat as lastintpaydate ,
+     LastMainPaydate.paydat as lastmainpaydate ,
+    -- cm_common.get_lastintpaydate (p.ID, :hdat) as lastintpaydate,
+    -- cm_common.get_lastmainpaydate (p.ID, :hdat) as lastmainpaydate,
+	 restpr.principal ,
+	 restpr.interest,
+	 Paydat.paymentdate as  paymentdateofReportDat,
+     g.pledgename, 
+	 g.holdername, 
+	   g.registryno,
+       g.anyinfotodisting                
+                         ,
+       g.registryagency                             
+                       ,
+       g.registrydate                                      
+                     ,
+       g.insuranceamount                                 
+                        ,
+       g.insurancedate , 
+       g.insuranceagency,                                   
+       l.boorowerid, 
+       l.address, 
+       l.phonenumber,	 
+       pl.description,
+       ps.name as psname,
+       crdtypes.DESCRIPTION as credittype /*,
+       ins.name as  insuranceagency*/
+from cm_portfolio p,
+     cm_history h,
+     cm_categories cat,
+     cm_boorowerinfo l,
+     cm_guarantee g,
+     --cm_insuranceagency ins,
+     cm_pledges pl,
+     cm_pledgsorts ps,
+     sb_avalute av,
+     sb_operkurs o,
+     cm_credittypes crdtypes, 
+   cm_loanaccounts acc,
+   cm_intaccounts intacc,
+   cm_reserveaccounts resacc,
+   cm_dueloanaccounts dueacc ,
+   cm_dueintaccounts dueintacc ,
+   cm_dueresaccounts dueresacc  ,
+   cm_booroweraccounts booroweracc,
+   cm_boorowerrest boorowerrest,
+   cm_reserve_types e1,
+   cm_reserve_types e2 ,
+
+(SELECT 0 AS principal,0 AS interest, creditid
+  FROM (SELECT ID AS creditid
+          FROM cm_portfolio
+        MINUS
+        SELECT creditid
+          FROM cm_payment_schedule
+         WHERE paymentdate BETWEEN to_date(:bdat)
+                               AND to_date(:edat))
+UNION
+SELECT sum(principal),sum(interest), creditid
+  FROM cm_payment_schedule
+ WHERE paymentdate BETWEEN to_date(:bdat)
+                       AND to_date(:edat)
+					   group by creditid) restpr,
+                       
+      ((select 
+          id as creditid,
+          null as paydat
+        from cm_portfolio
+       minus
+       select 
+       creditid ,
+       null as paydat from cm_payments
+      where PAYEDINTAMT<>0  
+      and PAYDATE <= :hdat
+      group by creditid)
+      union
+      select 
+       creditid ,
+       max(PAYDATE) as paydat from cm_payments
+      where PAYEDINTAMT<>0  
+      and PAYDATE <= :hdat
+      group by creditid) LastintPaydate,
+
+     
+      ((select 
+          id as creditid,
+          null as paydat
+        from cm_portfolio
+       minus
+       select 
+       creditid ,
+       null as paydat from cm_payments
+      where payedamt<>0  
+      and PAYDATE <= :hdat
+      group by creditid)
+      union
+      select 
+       creditid ,
+       max(PAYDATE) as paydat from cm_payments
+      where payedamt<>0  
+      and PAYDATE <= :hdat
+      group by creditid) LastMainPaydate ,
+	  
+
+(SELECT creditid, NULL AS paymentdate
+  FROM (SELECT ID AS creditid
+          FROM cm_portfolio
+        MINUS
+        SELECT   creditid
+            FROM cm_payment_schedule
+           WHERE paymentdate BETWEEN TO_DATE (   '01'
+                                              || '-'
+                                              || TO_CHAR (TO_DATE (:hdat),
+                                                          'MON'
+                                                         )
+                                              || '-'
+                                              || TO_CHAR (TO_DATE (:hdat),
+                                                          'YYYY'
+                                                         )
+                                             )
+                                 AND LAST_DAY (TO_DATE (:hdat))
+        GROUP BY creditid)
+UNION
+SELECT creditid, MIN (paymentdate) AS paymentdate
+  FROM cm_payment_schedule
+ WHERE paymentdate BETWEEN TO_DATE (   '01'
+                                    || '-'
+                                    || TO_CHAR (TO_DATE (:hdat), 'MON')
+                                    || '-'
+                                    || TO_CHAR (TO_DATE (:hdat), 'YYYY')
+                                   )
+                       AND LAST_DAY (TO_DATE (:hdat))
+					   group by creditid) Paydat     
+        
+
+where 
+  h.creditid = p.id 
+  and e1.id = h.reserveid
+  and e2.id = h.duereserveid
+  and h.hdate = :hdat
+  and cat.id = p.customertype
+  and p.id = l.creditid
+  and p.id = g.creditid
+  and pl.id = g.pledgeid
+  --and ins.id = g.insuranceagency
+  and ps.id = p.pledgsorts
+  and crdtypes.id = p.credittype
+  and av.valute = p.currency
+  and o.dat = :hdat
+  and o.val_kod = p.currency
+  and  p.id = acc.creditid 
+  and  p.id = intacc.creditid 
+  and  p.id = resacc.creditid 
+  and  p.id = dueacc.creditid  
+  and  p.id = dueintacc.creditid  
+  and  p.id = dueresacc.creditid 
+  and  p.id = booroweracc.creditid
+  and  p.id = boorowerrest.creditid
+  and restpr.creditid = p.id 
+  and LastintPaydate.creditid = p.id
+  and LastMainPaydate.creditid = p.id
+  and p.id = Paydat.Creditid
+  
+  
+  
+  
+  
+
+
+  
+     
+
+

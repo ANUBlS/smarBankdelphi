@@ -1,0 +1,23 @@
+library ReportAnalysOfPortfel;
+
+uses
+  ComServ,
+  ReportAnalysOfPortfel_TLB in 'ReportAnalysOfPortfel_TLB.pas',
+  frmReportAnalysOfPortfelImpl in 'frmReportAnalysOfPortfelImpl.pas' {frmReportAnalysOfPortfel: TActiveForm} {frmReportAnalysOfPortfel: CoClass},
+  dmReportAnalysOfPortfelImpl in 'dmReportAnalysOfPortfelImpl.pas' {dmReportAnalysOfPortfel: TDataModule},
+  frmDetailRepAnalisOfPortImpl in 'frmDetailRepAnalisOfPortImpl.pas' {frmDetailRepAnalisOfPort};
+
+{$E ocx}
+
+exports
+  DllGetClassObject,
+  DllCanUnloadNow,
+  DllRegisterServer,
+  DllUnregisterServer;
+
+{$R *.TLB}
+
+{$R *.RES}
+
+begin
+end.

@@ -1,0 +1,116 @@
+﻿unit FrmAddOperationImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ExtCtrls, XFSCtrls, StdCtrls, CurrencyEdit;
+
+type
+  TFrmAddOperation = class(TForm)
+    XFPanel1: TXFPanel;
+    XFPanel2: TXFPanel;
+    XFButton1: TXFButton;
+    XFButton2: TXFButton;
+    XFLabel1: TXFLabel;
+    Edit1: TCurrencyEdit;
+    procedure XFButton2Click(Sender: TObject);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure XFButton1Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmAddOperation: TFrmAddOperation;
+
+implementation
+
+uses FrmMainBusinessPrimpl, DMBusinessProcessesPrImpl;
+
+{$R *.dfm}
+
+procedure TFrmAddOperation.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+if ord(key)=vk_escape then
+close;
+end;
+
+procedure TFrmAddOperation.FormShow(Sender: TObject);
+begin
+FrmAddOperation.Edit1.Text:=floattostr(0);
+//FrmAddOperation.Edit2.Text:=floattostr(0);
+end;
+
+procedure TFrmAddOperation.XFButton1Click(Sender: TObject);
+begin
+//showmessage(inttostr(frmMainBusinessPr.op_id));
+
+
+ with DMBusinessProcessesPr, PCp_business_proc,DSins_contracts,DSins_customers do
+   begin
+    DSins_contracts.Close;
+    DSins_contracts.SetVariable('pid',FrmMainBusinessPr.cid);
+    DSins_contracts.Open;
+
+    DSins_customers.Close;
+    DSins_customers.SetVariable('pid',DSins_contracts.FieldByName('kli_id').AsInteger);
+    DSins_customers.Open;
+
+
+       if DSins_contracts.FieldByName('loanacc_id').AsString='' then
+       begin
+         showmessage('Diqqət! Bu müqavilənin uyğun hesabları  açilmayıb!');
+           exit;
+       end;
+
+     if DSins_contracts.FieldByName('curracc_id').AsString='' then
+       begin
+         showmessage('Diqqət! Bu müqavilənin uyğun hesabları  açilmayıb!');
+           exit;
+     end;
+
+    if DSins_contracts.FieldByName('curracc_id').AsString='' then
+       begin
+         showmessage('Diqqət! Bu müqavilənin uyğun hesabları  açilmayıb!');
+           exit;
+     end;
+
+    DSloanacc_id.Close;
+    DSloanacc_id.SetVariable('pid',DSins_contracts.FieldByName('loanacc_id').AsInteger);
+    DSloanacc_id.Close;
+
+
+    DScurracc_id.Close;
+    DScurracc_id.SetVariable('pid',DSins_contracts.FieldByName('curracc_id').AsInteger);
+    DScurracc_id.Close;
+
+   if True then
+    begin
+
+    end;
+
+   if True then
+    begin
+
+    end;
+
+    CallProcedure('execbprocess',[frmMainBusinessPr.ProcID,
+    DSins_customers.FieldByName('cust_id').AsInteger,
+    DSins_contracts.FieldByName('loanacc_id').AsInteger,
+    DSins_contracts.FieldByName('curracc_id').AsInteger,
+    0,strtofloat(edit1.Text),0,0,'',0,'',0,0,0,0,0,0]);
+
+   end;
+   FrmAddOperation.Close;
+end;
+
+procedure TFrmAddOperation.XFButton2Click(Sender: TObject);
+begin
+close;
+end;
+
+end.

@@ -1,0 +1,217 @@
+object frmAddEditClp: TfrmAddEditClp
+  Left = 293
+  Top = 172
+  Width = 294
+  Height = 237
+  BorderIcons = [biSystemMenu]
+  Caption = 'frmAddEditClp'
+  Color = clBtnFace
+  Font.Charset = RUSSIAN_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poScreenCenter
+  OnCanResize = FormCanResize
+  OnClose = FormClose
+  OnKeyPress = FormKeyPress
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 286
+    Height = 168
+    Align = alTop
+    BevelInner = bvRaised
+    BevelOuter = bvLowered
+    TabOrder = 0
+    object Label1: TLabel
+      Left = 9
+      Top = 15
+      Width = 65
+      Height = 13
+      Caption = 'Мцштяринин ады'
+    end
+    object Label2: TLabel
+      Left = 9
+      Top = 38
+      Width = 65
+      Height = 13
+      Caption = 'Ш.Т.С:  Серийа'
+    end
+    object Label3: TLabel
+      Left = 9
+      Top = 64
+      Width = 35
+      Height = 13
+      Caption = 'Мябляь'
+    end
+    object Label4: TLabel
+      Left = 9
+      Top = 93
+      Width = 51
+      Height = 13
+      Caption = 'Кредитин типи'
+    end
+    object Label5: TLabel
+      Left = 9
+      Top = 121
+      Width = 35
+      Height = 13
+      Caption = 'Валйута'
+    end
+    object Label6: TLabel
+      Left = 9
+      Top = 146
+      Width = 20
+      Height = 13
+      Caption = 'Филиал'
+    end
+    object Label7: TLabel
+      Left = 150
+      Top = 38
+      Width = 11
+      Height = 13
+      Caption = '№'
+    end
+    object DBEditEh1: TDBEditEh
+      Left = 85
+      Top = 8
+      Width = 198
+      Height = 21
+      DataField = 'CUSTOMERNAME'
+      DataSource = dmLoanPipeLineReport.CrdPipeLinesds
+      EditButtons = <>
+      TabOrder = 0
+      Visible = True
+      OnKeyPress = DBEditEh1KeyPress
+    end
+    object DBEditEh2: TDBEditEh
+      Left = 165
+      Top = 34
+      Width = 117
+      Height = 21
+      DataField = 'CUSTOMERID'
+      DataSource = dmLoanPipeLineReport.CrdPipeLinesds
+      EditButtons = <>
+      TabOrder = 2
+      Visible = True
+      OnKeyPress = DBEditEh1KeyPress
+    end
+    object DBEditEh3: TDBEditEh
+      Left = 85
+      Top = 60
+      Width = 198
+      Height = 21
+      DataField = 'LOANAMOUNT'
+      DataSource = dmLoanPipeLineReport.CrdPipeLinesds
+      EditButtons = <>
+      TabOrder = 3
+      Visible = True
+      OnKeyPress = DBEditEh1KeyPress
+    end
+    object DBLookupComboboxEh1: TDBLookupComboboxEh
+      Left = 85
+      Top = 88
+      Width = 198
+      Height = 21
+      DataField = 'CREDITTYPE'
+      DataSource = dmLoanPipeLineReport.CrdPipeLinesds
+      DropDownBox.Sizable = True
+      EditButtons = <>
+      KeyField = 'ID'
+      ListField = 'DESCRIPTION'
+      ListSource = dmLoanPipeLineReport.crdClpds
+      TabOrder = 4
+      Visible = True
+      OnKeyPress = DBEditEh1KeyPress
+    end
+    object DBLookupComboboxEh2: TDBLookupComboboxEh
+      Left = 85
+      Top = 113
+      Width = 198
+      Height = 21
+      DataField = 'CURRENCY'
+      DataSource = dmLoanPipeLineReport.CrdPipeLinesds
+      DropDownBox.Sizable = True
+      EditButtons = <>
+      KeyField = 'VALUTE'
+      ListField = 'VALU_NAME'
+      ListSource = dmLoanPipeLineReport.valutesclpds
+      TabOrder = 5
+      Visible = True
+      OnKeyPress = DBEditEh1KeyPress
+    end
+    object DBLookupComboboxEh3: TDBLookupComboboxEh
+      Left = 85
+      Top = 139
+      Width = 198
+      Height = 21
+      DataField = 'BRANCHID'
+      DataSource = dmLoanPipeLineReport.CrdPipeLinesds
+      DropDownBox.Sizable = True
+      EditButtons = <>
+      KeyField = 'ID'
+      ListField = 'NAME'
+      ListSource = dmLoanPipeLineReport.ffilialds
+      TabOrder = 6
+      Visible = True
+      OnKeyPress = DBEditEh1KeyPress
+    end
+    object DBEditEh4: TDBEditEh
+      Left = 86
+      Top = 34
+      Width = 61
+      Height = 21
+      DataField = 'PASS_SER'
+      DataSource = dmLoanPipeLineReport.CrdPipeLinesds
+      EditButtons = <>
+      TabOrder = 1
+      Visible = True
+      OnKeyPress = DBEditEh4KeyPress
+    end
+  end
+  object buttonclose: TButton
+    Left = 211
+    Top = 174
+    Width = 70
+    Height = 25
+    Action = ActionExit
+    TabOrder = 3
+  end
+  object ButtonCancel: TButton
+    Left = 127
+    Top = 174
+    Width = 70
+    Height = 25
+    Action = ActionCancel
+    TabOrder = 2
+  end
+  object ButtonApply: TButton
+    Left = 43
+    Top = 174
+    Width = 70
+    Height = 25
+    Action = ActionInsert
+    TabOrder = 1
+  end
+  object ActionList1: TActionList
+    Left = 49
+    Top = 121
+    object ActionInsert: TAction
+      Caption = '&Гябул'
+      OnExecute = ActionInsertExecute
+    end
+    object ActionCancel: TAction
+      Caption = '&Имтина'
+      OnExecute = ActionCancelExecute
+    end
+    object ActionExit: TAction
+      Caption = 'Чыхыш'
+      OnExecute = ActionExitExecute
+    end
+  end
+end

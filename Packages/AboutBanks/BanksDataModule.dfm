@@ -1,0 +1,92 @@
+object DataModuleBanks: TDataModuleBanks
+  OldCreateOrder = False
+  Height = 480
+  Width = 696
+  object DSBanks: TDataSource
+    DataSet = Banks
+    Left = 200
+    Top = 92
+  end
+  object Banks: TOracleDataSet
+    SQL.Strings = (
+      
+        'SELECT a.rowid,a.id, a.krno, a.name,a.inn, a.swift, a.bankcode,a' +
+        '.subkrno,a.bank_kod, a.license_date,a.tax_regcode, '
+      'a.ours, val_code'
+      '  FROM bankm_t a'
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      'Order By'
+      '     :Title'
+      ''
+      ' ')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000C0000003A005400490054004C0045000100000005000000
+      6E616D650000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000C0000000400000049004400010000000000080000004B0052004E00
+      4F00010000000000080000004E0041004D004500010000000000060000004900
+      4E004E000100000000000A000000530057004900460054000100000000001000
+      0000420041004E004B0043004F00440045000100000000000E00000053005500
+      42004B0052004E004F0001000000000010000000420041004E004B005F004B00
+      4F004400010000000000180000004C004900430045004E00530045005F004400
+      410054004500010000000000160000005400410058005F005200450047004300
+      4F0044004500010000000000080000004F005500520053000100000000001000
+      0000560041004C005F0043004F0044004500010000000000}
+    Session = sboapiDataModule.SBSession
+    AfterPost = BanksAfterPost
+    Left = 120
+    Top = 88
+    object BanksID: TFloatField
+      FieldName = 'ID'
+    end
+    object BanksKRNO: TWideStringField
+      FieldName = 'KRNO'
+      Size = 28
+    end
+    object BanksNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 255
+    end
+    object BanksINN: TWideStringField
+      FieldName = 'INN'
+      Size = 32
+    end
+    object BanksSWIFT: TWideStringField
+      FieldName = 'SWIFT'
+      Size = 128
+    end
+    object BanksBANKCODE: TWideStringField
+      FieldName = 'BANKCODE'
+      Size = 32
+    end
+    object BanksSUBKRNO: TWideStringField
+      FieldName = 'SUBKRNO'
+      Size = 28
+    end
+    object BanksBANK_KOD: TFloatField
+      FieldName = 'BANK_KOD'
+    end
+    object BanksLICENSE_DATE: TDateTimeField
+      FieldName = 'LICENSE_DATE'
+    end
+    object BanksTAX_REGCODE: TWideStringField
+      FieldName = 'TAX_REGCODE'
+    end
+    object BanksOURS: TFloatField
+      FieldName = 'OURS'
+    end
+    object BanksVAL_CODE: TWideStringField
+      FieldName = 'VAL_CODE'
+      Size = 32
+    end
+  end
+end

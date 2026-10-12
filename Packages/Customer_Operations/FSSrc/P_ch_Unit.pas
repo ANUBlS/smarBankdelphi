@@ -1,0 +1,54 @@
+unit P_ch_Unit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, NLSDialogs,
+  StdCtrls, ExtCtrls, NLSLocalizer;
+
+type
+  TP_Ch_Form = class(TForm)
+    Panel1: TPanel;
+    Label1: TLabel;
+    Label2: TLabel;
+    Button1: TButton;
+    ch_1: TCheckBox;
+    ch_2: TCheckBox;
+    NLSLocalizer1: TNLSLocalizer;
+    procedure Button1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  P_Ch_Form: TP_Ch_Form;
+
+implementation
+
+uses P_Co_MemorialRep_Unit, P_CO_MemorialRep1_Unit, P_CO_Memorial_Unit,
+  P_Datamod_Unit;
+
+{$R *.DFM}
+
+procedure TP_Ch_Form.Button1Click(Sender: TObject);
+begin
+if ch_1.checked then
+if not P_DataModuleFS.DebetTransactionsData.IsEmpty then begin
+    P_CO_MemorialRep.preview; end
+    else begin
+    ShowMessage('Ùוק בטנ ÿלÿכטייאע דויהÿ אכûםלאיûב');  END;
+   if ch_2.checked then
+   if not P_DataModuleFS.CreditTransactionsData.IsEmpty then begin
+
+     P_CO_MemorialRep1.preview ; end
+  else  begin
+    ShowMessage('Ùוק בטנ ÿלÿכטייאע דויהÿ אכûםלאיûב');
+
+     P_CO_MemorialForm.Close;
+
+       Close;
+end;
+    end;
+end.

@@ -1,0 +1,55 @@
+﻿unit cardbranch;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Grids, DBGrids, Unitcardarxiv, datclose, Unit18, StdCtrls, DBCtrls,
+  Menus;
+
+type
+  Tcard_branch = class(TForm)
+    DBGrid1: TDBGrid;
+    DBLookupComboBox1: TDBLookupComboBox;
+    Edit1: TEdit;
+    Button1: TButton;
+    Label1: TLabel;
+    Label2: TLabel;
+    PopupMenu1: TPopupMenu;
+    S1: TMenuItem;
+    procedure Button1Click(Sender: TObject);
+    procedure S1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  card_branch: Tcard_branch;
+
+implementation
+
+{$R *.dfm}
+
+procedure Tcard_branch.Button1Click(Sender: TObject);
+begin
+DataMod_CARDS.mainpacket.CallProcedure('addbranchescode',[DBLookupComboBox1.KeyValue,DBLookupComboBox1.Text,Edit1.Text]);
+ShowMessage('Filialın Plastik kart kodu əlavə olundu..');
+DBGrid1.DataSource.DataSet.Refresh;
+edit1.Clear;
+DBLookupComboBox1.KeyValue:='' ;
+end;
+
+procedure Tcard_branch.S1Click(Sender: TObject);
+begin
+ case MessageDlg('Əməliyyat Kodu silinsin ?', mtConfirmation,[mbyes,mbno], 0) of
+                   mryes: begin
+                     DataMod_CARDS.mainpacket.CallProcedure('del_branchescode',[DBGrid1.DataSource.DataSet.fieldbyName('id').asinteger]);
+                   end;
+ end;
+ DBGrid1.DataSource.DataSet.Refresh;
+
+end;
+
+end.

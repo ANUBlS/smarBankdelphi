@@ -1,0 +1,121 @@
+// ************************************************************************ //
+// The types declared in this file were generated from data read from the
+// WSDL File described below:
+// WSDL     : http://192.168.4.175:8080/UFXOnline/UFX?WSDL
+//  >Import : http://192.168.4.175:8080/UFXOnline/UFX?WSDL>0
+//  >Import : http://192.168.4.175:8080/UFXOnline/UFX?xsd=1
+// Encoding : UTF-8
+// Version  : 1.0
+// (03.10.2017 12:31:27 - - $Rev: 34800 $)
+// ************************************************************************ //
+
+unit UFX71;
+
+interface
+
+uses InvokeRegistry, SOAPHTTPClient, Types, XSBuiltIns;
+
+const
+  IS_OPTN = $0001;
+  IS_UNQL = $0008;
+
+
+type
+
+  // ************************************************************************ //
+  // The following types, referred to in the WSDL document are not being represented
+  // in this file. They are either aliases[@] of other types represented or were referred
+  // to but never[!] declared in the document. The types from the latter category
+  // typically map to predefined/known XML or Embarcadero types; however, they could also
+  // indicate incorrect WSDL documents that failed to declare or import a schema type.
+  // ************************************************************************ //
+  // !:string          - "http://www.w3.org/2001/XMLSchema"[Gbl]
+
+
+
+  // ************************************************************************ //
+  // Namespace : http://ws.smart.vsl.az/
+  // transport : http://schemas.xmlsoap.org/soap/http
+  // style     : document
+  // use       : literal
+  // binding   : UFXPortBinding
+  // service   : UFX
+  // port      : UFXPort
+  // URL       : http://192.168.4.175:8080/UFXOnline/UFX
+  // ************************************************************************ //
+
+  UFX7 = interface(IInvokable)
+  ['{C5C02420-9655-0BA2-D250-E885494B7DBD}']
+    function  fundstransfer(const rbsnumber: string; const MsgCode: string; const LocalDt: string; const Description: string; const Currency: string; const Amount: string
+                            ): string; stdcall;
+  end;
+
+function GetUFX7(UseWSDL: Boolean=System.False; Addr: string=''; HTTPRIO: THTTPRIO = nil): UFX7;
+
+
+implementation
+  uses SysUtils;
+
+function GetUFX7(UseWSDL: Boolean; Addr: string; HTTPRIO: THTTPRIO): UFX7;
+const
+  defWSDL = 'http://10.0.0.96:8080/UFXFundsTransfer/UFX7?wsdl';
+  defURL  = 'http://10.0.0.96:8080/UFXFundsTransfer/UFX7';
+  defSvc  = 'UFX7';
+  defPrt  = 'UFX7Port';
+var
+  RIO: THTTPRIO;
+begin
+  Result := nil;
+  if (Addr = '') then
+  begin
+    if UseWSDL then
+      Addr := defWSDL
+    else
+      Addr := defURL;
+  end;
+  if HTTPRIO = nil then
+    RIO := THTTPRIO.Create(nil)
+  else
+    RIO := HTTPRIO;
+  try
+    Result := (RIO as UFX7);
+    if UseWSDL then
+    begin
+      RIO.WSDLLocation := Addr;
+      RIO.Service := defSvc;
+      RIO.Port := defPrt;
+    end else
+      RIO.URL := Addr;
+  finally
+    if (Result = nil) and (HTTPRIO = nil) then
+      RIO.Free;
+  end;
+end;
+
+
+
+initialization
+  { UFX7 }
+  InvRegistry.RegisterInterface(TypeInfo(UFX7), 'http://webser/', 'UTF-8');
+  InvRegistry.RegisterDefaultSOAPAction(TypeInfo(UFX7), '');
+  InvRegistry.RegisterInvokeOptions(TypeInfo(UFX7), ioDocument);
+  { UFX7.fundstransfer }
+  InvRegistry.RegisterMethodInfo(TypeInfo(UFX7), 'fundstransfer', '',
+                                 '[ReturnName="return"]', IS_OPTN or IS_UNQL);
+  InvRegistry.RegisterParamInfo(TypeInfo(UFX7), 'fundstransfer', 'rbsnumber', '',
+                                '', IS_UNQL);
+  InvRegistry.RegisterParamInfo(TypeInfo(UFX7), 'fundstransfer', 'MsgCode', '',
+                                '', IS_UNQL);
+  InvRegistry.RegisterParamInfo(TypeInfo(UFX7), 'fundstransfer', 'LocalDt', '',
+                                '', IS_UNQL);
+  InvRegistry.RegisterParamInfo(TypeInfo(UFX7), 'fundstransfer', 'Description', '',
+                                '', IS_UNQL);
+  InvRegistry.RegisterParamInfo(TypeInfo(UFX7), 'fundstransfer', 'Currency', '',
+                                '', IS_UNQL);
+  InvRegistry.RegisterParamInfo(TypeInfo(UFX7), 'fundstransfer', 'Amount', '',
+                                '', IS_UNQL);
+  InvRegistry.RegisterParamInfo(TypeInfo(UFX7), 'fundstransfer', 'return', '',
+                                '', IS_UNQL);
+
+
+end.

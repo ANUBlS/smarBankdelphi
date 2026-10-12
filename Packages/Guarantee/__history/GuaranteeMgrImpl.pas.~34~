@@ -1,0 +1,776 @@
+﻿
+unit GuaranteeMgrImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActiveX, AxCtrls, GuaranteeMgrdpr_TLB, StdVcl, ComCtrls, StdCtrls,
+  ExtCtrls, ToolWin, CMExcelExport, Menus, ActnList, ImgList, Grids,
+  DBGridEh,db,Oracledata, DBGridEhGrouping, GridsEh;
+
+type
+  TGuaranteeMgr = class(TActiveForm, IGuaranteeMgr)
+    Panel1: TPanel;
+    GroupBox1: TGroupBox;
+    Panel3: TPanel;
+    StaticText5: TStaticText;
+    editCONTRACTNUM: TEdit;
+    Panel4: TPanel;
+    StaticText1: TStaticText;
+    editname: TEdit;
+    Panel5: TPanel;
+    StaticText2: TStaticText;
+    editPROP_COUNT: TEdit;
+    Panel6: TPanel;
+    StaticText3: TStaticText;
+    editvalue: TEdit;
+    Panel7: TPanel;
+    StaticText4: TStaticText;
+    DateTimePicker1: TDateTimePicker;
+    MainGrid: TDBGridEh;
+    accountPopupMenu: TPopupMenu;
+    N13: TMenuItem;
+    N14: TMenuItem;
+    SetingPopupMenu: TPopupMenu;
+    N6: TMenuItem;
+    N8: TMenuItem;
+    PopupMenu1: TPopupMenu;
+    N1: TMenuItem;
+    N2: TMenuItem;
+    N15: TMenuItem;
+    N4: TMenuItem;
+    N5: TMenuItem;
+    ImageList1: TImageList;
+    ExcelExport: TCMExcelExport;
+    CoolBar1: TCoolBar;
+    ToolBar1: TToolBar;
+    isertbtn: TToolButton;
+    ToolButton5: TToolButton;
+    ToolButton1: TToolButton;
+    ToolButton4: TToolButton;
+    ToolButton3: TToolButton;
+    ToolButton6: TToolButton;
+    ToolButton2: TToolButton;
+    ToolButton8: TToolButton;
+    ToolButton7: TToolButton;
+    gfgfgfgfg1: TMenuItem;
+    PopupMenu2: TPopupMenu;
+    Danarmlak1: TMenuItem;
+    Danmazmlak1: TMenuItem;
+    procedure isertbtnClick(Sender: TObject);
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure N1Click(Sender: TObject);
+    procedure ToolButton1Click(Sender: TObject);
+    procedure N2Click(Sender: TObject);
+    procedure N7Click(Sender: TObject);
+    procedure editCONTRACTNUMExit(Sender: TObject);
+    procedure editCONTRACTNUMKeyPress(Sender: TObject; var Key: Char);
+    procedure editnameExit(Sender: TObject);
+    procedure editnameKeyPress(Sender: TObject; var Key: Char);
+    procedure editvalueExit(Sender: TObject);
+    procedure editvalueKeyPress(Sender: TObject; var Key: Char);
+    procedure DateTimePicker1KeyPress(Sender: TObject; var Key: Char);
+    procedure editPROP_COUNTExit(Sender: TObject);
+    procedure editPROP_COUNTKeyPress(Sender: TObject; var Key: Char);
+    procedure ActnSearchExecute(Sender: TObject);
+    procedure N4Click(Sender: TObject);
+    procedure N5Click(Sender: TObject);
+    procedure editCONTRACTNUMChange(Sender: TObject);
+    procedure editnameChange(Sender: TObject);
+    procedure editvalueChange(Sender: TObject);
+    procedure DateTimePicker1Change(Sender: TObject);
+    procedure ToolButton3Click(Sender: TObject);
+    procedure MainGridTitleBtnClick(Sender: TObject; ACol: Integer;
+      Column: TColumnEh);
+    procedure MainGridDblClick(Sender: TObject);
+    procedure ActiveFormDestroy(Sender: TObject);
+    procedure gfgfgfgfg1Click(Sender: TObject);
+    procedure N13Click(Sender: TObject);
+    procedure Danarmlak1Click(Sender: TObject);
+    procedure Danmazmlak1Click(Sender: TObject);
+  private
+    { Private declarations }
+    FEvents: IGuaranteeMgrEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+  public
+    { Public declarations }
+    procedure Initialize; override;
+  end;
+ var xx ,satici_id,mkt_id,sex_satici,birg_borcid,birg_borcid2: integer;
+implementation
+
+uses ComObj, ComServ,DataMGuarantee, FormGuarAddlmpl, FormGinfolmpl,SBTranslateProc,sboapiDataModuleImpl,
+  DashinmazImpl;
+
+{$R *.DFM}
+
+{ TGuaranteeMgr }
+
+procedure TGuaranteeMgr.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_GuaranteeMgrPage); }
+end;
+
+procedure TGuaranteeMgr.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as IGuaranteeMgrEvents;
+end;
+
+procedure TGuaranteeMgr.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TGuaranteeMgr.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TGuaranteeMgr.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TGuaranteeMgr.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TGuaranteeMgr.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TGuaranteeMgr.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TGuaranteeMgr.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TGuaranteeMgr.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TGuaranteeMgr.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TGuaranteeMgr.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TGuaranteeMgr.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TGuaranteeMgr.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TGuaranteeMgr.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TGuaranteeMgr.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TGuaranteeMgr.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TGuaranteeMgr.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TGuaranteeMgr.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TGuaranteeMgr.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TGuaranteeMgr.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TGuaranteeMgr._Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TGuaranteeMgr.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TGuaranteeMgr.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TGuaranteeMgr.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TGuaranteeMgr.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TGuaranteeMgr.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TGuaranteeMgr.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TGuaranteeMgr.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TGuaranteeMgr.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TGuaranteeMgr.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TGuaranteeMgr.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TGuaranteeMgr.Set_AxBorderStyle(Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TGuaranteeMgr.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TGuaranteeMgr.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TGuaranteeMgr.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TGuaranteeMgr.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TGuaranteeMgr.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TGuaranteeMgr.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TGuaranteeMgr.Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TGuaranteeMgr.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TGuaranteeMgr.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TGuaranteeMgr.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TGuaranteeMgr.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TGuaranteeMgr.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TGuaranteeMgr.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+procedure TGuaranteeMgr.isertbtnClick(Sender: TObject);
+begin
+
+//FormGuarAdd.DBEdit1.SetFocus
+end;
+
+procedure TGuaranteeMgr.ActiveFormCreate(Sender: TObject);
+begin
+DataMGuarante:=TDataMGuarante.create(self);
+FrmDashinmaz:=TFrmDashinmaz.create(self);
+FormGuarAdd:=TFormGuarAdd.Create(self);
+SBTranslateProc.TranslateAllComponents(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TGuaranteeMgr.N13Click(Sender: TObject);
+begin
+
+    with ExcelExport do
+  begin
+     Connect;
+     ExportDataset(DataMGuarante.DataSetGuarantee,'Girov',true,false);
+     Disconnect;
+  end;
+end;
+
+procedure TGuaranteeMgr.N1Click(Sender: TObject);
+begin
+FormGuarAdd.Caption:='Girov barədə məlumatın yığılması';
+ with DataMGuarante,DataSetGuarantee do
+  begin
+     //if active then close;
+     // open;
+      insert;
+   end;
+FormGuarAdd.ShowModal
+end;
+
+procedure TGuaranteeMgr.ToolButton1Click(Sender: TObject);
+var
+p_id :integer;
+begin
+if DataMGuarante.DataSetGuarantee.FieldByName('new').AsInteger=1 then
+ begin
+FormGuarAdd.Caption:='Daşınar əmlak barədə məlumatın redaktə olunması id='+DataMGuarante.DataSetGuarantee.FieldByName('id').AsString;
+ with DataMGuarante.MainDSet do
+  begin
+  //p_id:=DMproperties.OracleDataSet1.FieldByname('id').asinteger;
+if Active then
+  close ;
+  SetVariable('id',DataMGuarante.DataSetGuarantee.FieldByName('id').AsInteger );
+  open ;
+ DataMGuarante.MainDSet.edit;
+
+      FormGuarAdd.InUse_rg.ItemIndex := FieldByName('PLEDGEINUSE').AsInteger;
+      FormGuarAdd.MaskEdit2.Text:=FieldByName('AFTONO').Asstring;
+   end;
+FormGuarAdd.ShowModal  ;
+ end;
+
+  if DataMGuarante.DataSetGuarantee.FieldByName('new').AsInteger=2 then
+ begin
+FormGuarAdd.Caption:='Daşınmaz əmlak barədə məlumatın redaktə olunması id='+DataMGuarante.DataSetGuarantee.FieldByName('id').AsString;
+ with DataMGuarante.MainDSet_d do
+  begin
+  //p_id:=DMproperties.OracleDataSet1.FieldByname('id').asinteger;
+if Active then
+  close ;
+  SetVariable('id',DataMGuarante.DataSetGuarantee.FieldByName('id').AsInteger );
+  open ;
+ DataMGuarante.MainDSet_d.edit;
+
+      FormGuarAdd.InUse_rg.ItemIndex := FieldByName('PLEDGEINUSE').AsInteger;
+      FormGuarAdd.MaskEdit2.Text:=FieldByName('AFTONO').Asstring;
+   end;
+   with FrmDashinmaz do
+   begin
+  if DataMGuarante.DataSetGuarantee.FieldByName('mkt').AsInteger=1 then
+     CheckListBox1.Checked[0]:=true ;
+
+  if DataMGuarante.DataSetGuarantee.FieldByName('mkt').AsInteger=2then
+   CheckListBox1.Checked[1]:=true;
+
+  ods_mkt.Close;
+  ods_mkt.SetVariable('v_id',DataMGuarante.DataSetGuarantee.FieldByName('satici').AsInteger);
+  ods_mkt.open;
+  edit1.Text:=ods_mktID.AsString;
+  edit2.Text:=ods_mktNAME.AsString;
+  edit3.Text:=ods_mktINN.AsString;
+
+
+  ods_phys.Close;
+  ods_phys.SetVariable('v_id',DataMGuarante.DataSetGuarantee.FieldByName('sex_satici').AsInteger);
+  ods_phys.open;
+  edit4.Text:=ods_physIDCUST.AsString;
+  edit5.Text:=ods_physFUL_NAME.AsString;
+  edit6.Text:=ods_physPINKO.AsString;
+   end;
+FrmDashinmaz.ShowModal  ;
+ end;
+end;
+
+procedure TGuaranteeMgr.N2Click(Sender: TObject);
+var
+p_id :integer;
+begin
+FormGuarAdd.Caption:='Girov barədə məlumatın redaktə olunması';
+ with DataMGuarante,DataSetGuarantee do
+  begin
+  xx:=2;
+   FormGuarAdd.InUse_rg.ItemIndex := FieldByName('PLEDGEINUSE').AsInteger;
+  //p_id:=DMproperties.OracleDataSet1.FieldByname('id').asinteger;
+   //  if active then close;
+    //  open;
+      edit;
+   end;
+FormGuarAdd.ShowModal
+
+end;
+
+procedure TGuaranteeMgr.N7Click(Sender: TObject);
+begin
+if not assigned(FormGInfo) then
+ with  TFormGInfo.Create(self) do
+  try
+  ShowModal;
+  finally
+    Release;
+end;
+              end;
+procedure TGuaranteeMgr.editCONTRACTNUMExit(Sender: TObject);
+begin
+(Sender as TEdit).Text := '';
+end;
+
+procedure TGuaranteeMgr.editCONTRACTNUMKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if ord(Key) = VK_RETURN
+ then  ActnSearchExecute(Sender)
+end;
+
+procedure TGuaranteeMgr.editnameExit(Sender: TObject);
+begin
+(Sender as TEdit).Text := '';
+end;
+ procedure TGuaranteeMgr.ActnSearchExecute(Sender: TObject);
+var
+  SearchField : string;
+  SearchOptions : TSearchRecordOptions;
+begin
+  SearchOptions := [srIgnoreCase ,srPartialMatch];
+
+  with Sender as TEdit  do
+  begin
+    SearchField := copy(Name,5,length(Name));
+    MainGrid.SelectedRows.Clear;
+    with  TOracleDataSet(MainGrid.DataSource.DataSet) do
+    if  not SearchRecord(
+                  SearchField
+                 ,Text
+                 ,SearchOptions + [srFromCurrent , srForward ]
+                 ) then
+    if MessageDlg(
+              'Ахтарыш сона чатыб.'+#13+'яввялдян башламаг истяйирсиниэми?'
+             ,mtInformation
+             ,[mbNo , mbYes]
+             ,0
+             ) = mrYes  then
+    if  not SearchRecord(
+                 SearchField
+                ,Text
+                ,SearchOptions + [ srFromBeginning ]
+                )  then
+    MessageDlg('Йазы тапылмады!',mtInformation,[mbOK],0);
+  end;
+   end;
+
+procedure TGuaranteeMgr.editnameKeyPress(Sender: TObject; var Key: Char);
+begin
+   if ord(Key) = VK_RETURN
+  then  ActnSearchExecute(Sender)
+end;
+
+procedure TGuaranteeMgr.editvalueExit(Sender: TObject);
+begin
+(Sender as TEdit).Text := '';
+end;
+
+procedure TGuaranteeMgr.editvalueKeyPress(Sender: TObject; var Key: Char);
+begin
+  if ord(Key) = VK_RETURN
+  then  ActnSearchExecute(Sender);
+ if not (key in ['0'..'9',#8]) then
+begin Key:=#0;
+Beep;
+end;
+end;
+
+procedure TGuaranteeMgr.DateTimePicker1KeyPress(Sender: TObject;
+  var Key: Char);
+ VAR
+ a:boolean;
+ begin
+ if key=#13 then
+ begin
+ a:=DataMGuarante.DataSetGuarantee.locate('BDATE',datetimepicker1.Date,[locaseinsensitive]);
+ if a=false then
+ showmessage('Тарих тапылмады');
+    end;
+end;
+
+procedure TGuaranteeMgr.editPROP_COUNTExit(Sender: TObject);
+begin
+//Sender as TEdit).Text := '';
+end;
+
+procedure TGuaranteeMgr.editPROP_COUNTKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if ord(Key) = VK_RETURN
+  then  ActnSearchExecute(Sender);
+ if not (key in ['0'..'9',#8]) then
+begin Key:=#0;
+Beep;
+end;
+ end;
+procedure TGuaranteeMgr.N4Click(Sender: TObject);
+begin
+panel1.Visible:=true ;
+N4.Visible:=false;
+N5.Visible:=true;
+end;
+
+procedure TGuaranteeMgr.N5Click(Sender: TObject);
+begin
+panel1.Visible:=false;
+N4.Visible:=true;
+N5.Visible:=false;
+end;
+
+procedure TGuaranteeMgr.editCONTRACTNUMChange(Sender: TObject);
+begin
+With editCONTRACTNUM do
+if Text <> '' then
+DataMGuarante.DataSorcGuaranttee.DataSet.Locate('NUMBEROFGUR',editCONTRACTNUM.Text,[loPartialKey]);
+end;
+
+procedure TGuaranteeMgr.editnameChange(Sender: TObject);
+begin
+  With editname do
+if Text <> '' then
+DataMGuarante.DataSorcGuaranttee.DataSet.Locate('PLEDGENAME',editname.Text,[loPartialKey]);
+
+end;
+
+procedure TGuaranteeMgr.editvalueChange(Sender: TObject);
+begin
+  With editvalue do
+if Text <> '' then
+DataMGuarante.DataSorcGuaranttee.DataSet.Locate('PLEDGEPRICE',editvalue.Text,[loPartialKey]);
+
+end;
+
+procedure TGuaranteeMgr.Danarmlak1Click(Sender: TObject);
+begin
+FormGuarAdd.Caption:='Daşınar əmlak barədə məlumatın yığılması';
+ with DataMGuarante,MainDSet do
+  begin
+  xx:=1;
+if Active then
+  close ;
+  SetVariable('id',0);
+  open ;
+   end;
+FormGuarAdd.ShowModal ;
+end;
+
+procedure TGuaranteeMgr.Danmazmlak1Click(Sender: TObject);
+begin
+FrmDashinmaz.Caption:='Daşınmaz əmlak barədə məlumatın yığılması';
+ with DataMGuarante,MainDset_d do
+  begin
+  xx:=1;
+if Active then
+  close ;
+  SetVariable('id',0);
+  open ;
+   end;
+FrmDashinmaz.ShowModal;
+end;
+
+procedure TGuaranteeMgr.DateTimePicker1Change(Sender: TObject);
+begin
+   With DateTimePicker1 do
+if Text <> '' then
+DataMGuarante.DataSorcGuaranttee.DataSet.Locate('DAT',DateTimePicker1.datetime,[loPartialKey]);
+
+end;
+
+procedure TGuaranteeMgr.ToolButton3Click(Sender: TObject);
+begin
+DataMGuarante.DataSetGuarantee.Refresh;
+end;
+
+procedure TGuaranteeMgr.MainGridTitleBtnClick(Sender: TObject;
+  ACol: Integer; Column: TColumnEh);
+var
+  SortField : String;
+begin
+  SortField := Column.FieldName;
+  if Column.Title.SortMarker = smDownEh then
+    SortField := SortField + ' DESC';
+  with Sender as TDBGridEh , TOracleDataSet(DataSource.DataSet) do
+  begin
+   // ClearVariables;
+    Screen.Cursor := crSQLWait;
+    SetVariable('OrderField',SortField);
+    RefResh;
+    Screen.Cursor := crDefault;
+   end;
+
+
+end;
+
+procedure TGuaranteeMgr.MainGridDblClick(Sender: TObject);
+
+var
+p_id :integer;
+begin
+FormGuarAdd.Caption:='Girov barədə məlumatın redaktə olunması';
+ with DataMGuarante.MainDSet do
+  begin
+if DataMGuarante.DataSetGuarantee.FieldByName('new').AsInteger =1 then
+begin
+
+if Active then
+  close ;
+  SetVariable('id',DataMGuarante.DataSetGuarantee.FieldByName('id').AsInteger );
+  open ;
+ DataMGuarante.MainDSet.edit;
+
+      FormGuarAdd.InUse_rg.ItemIndex := FieldByName('PLEDGEINUSE').AsInteger;
+      FormGuarAdd.MaskEdit2.Text:=FieldByName('AFTONO').Asstring;
+      FormGuarAdd.ShowModal ;
+   end;
+  end;
+
+end;
+
+procedure TGuaranteeMgr.ActiveFormDestroy(Sender: TObject);
+begin
+DataMGuarante.free;
+FormGuarAdd.free;
+end;
+
+procedure TGuaranteeMgr.gfgfgfgfg1Click(Sender: TObject);
+begin
+if not assigned(FormGinfo) then
+ with  TFormGinfo.Create(self) do
+  try
+  ShowModal;
+  finally
+    Release;
+  end;
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TGuaranteeMgr,
+    Class_GuaranteeMgr,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

@@ -1,0 +1,119 @@
+﻿unit UnitEmbasyTrans;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ExtCtrls, XFSCtrls, DB, OracleData, Grids, XDBGrids, StdCtrls,
+  Buttons;
+
+type
+  TForm_embasTrans = class(TForm)
+    XFPanel1: TXFPanel;
+    XFPanel2: TXFPanel;
+    XDBGrid1: TXDBGrid;
+    ods_embstrans: TOracleDataSet;
+    Dsrc_embstrans: TDataSource;
+    ods_embstransNAME: TWideStringField;
+    ods_embstransBAL_CN1: TFloatField;
+    ods_embstransACC_NO: TWideStringField;
+    XFBitBtn1: TXFBitBtn;
+    XFBitBtn2: TXFBitBtn;
+    ods_embstransCUSTID: TIntegerField;
+    ods_embstransACC_ID: TFloatField;
+    ods_embstransCUSTNAME: TWideStringField;
+    ods_embstransSEX: TWideStringField;
+    ods_embstransCUST_NAME: TWideStringField;
+    procedure XFBitBtn1Click(Sender: TObject);
+    procedure XFBitBtn2Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+
+    { Public declarations }
+  end;
+
+var
+  Form_embasTrans: TForm_embasTrans;
+
+implementation
+  uses
+  sboapiDataModuleImpl, Unitembassy,PCustServiceFormImpl1, UnitDataModPCustService,
+  UntQRReceiptSefr;
+{$R *.dfm}
+
+procedure TForm_embasTrans.XFBitBtn1Click(Sender: TObject);
+ var
+ f:BOOL;
+ ac_id:integer;
+begin
+
+f:=DataModPCustService.SB_ACA.CallBooleanFunction('checkadvancedobjectaccess',['SEFRSTATUS']);
+ if  f =false then
+ begin
+  showmessage('Sizin bu  məktubu yığmaq hüquqnuz  yoxdur  !');
+ exit;
+ end;
+ ac_id:=Form_embassy.XDBGrid2.DataSource.DataSet.FieldByName('id').AsInteger;
+ transid_sefrlik:=DataModPCustService.PG_PCustService.CallIntegerFunction('sefr_trans',
+                                                                          [ac_id,strtoint(tacc),ods_embstransACC_ID.AsInteger]);
+
+
+
+ with Form_embassy, ods_embassytrans_info do
+ begin
+  close;
+  SetVariable('trid',transid_sefrlik);
+  SetVariable('dat',sysdatTEK_DAT.AsDateTime);
+  open;
+  end;
+
+ if transid_sefrlik>0 then
+  begin
+with QRPTReceiptSefr do
+begin
+         if Form_embasTrans.ods_embstransBAL_CN1.AsString='1001' then
+          begin
+        QRMain.Enabled:=true;
+        QRChildFirst.Enabled:=true;
+        QRChildSecond.Enabled:=true;
+          end
+          else
+          begin
+        QRMain.Enabled:=false;
+        QRChildFirst.Enabled:=false;
+        QRChildSecond.Enabled:=false;
+          end;
+
+       QRLBankName.Caption :=Form_embassy.ods_bankinfBANK.AsString;
+       QRLBankName1.Caption :=Form_embassy.ods_bankinfBANK.AsString;
+       QRLBankName2.Caption :=Form_embassy.ods_bankinfBANK.AsString;
+       QRLBankInn.Caption :=Form_embassy.ods_bankinfINN.AsString;
+       QRLBankInn1.Caption :=Form_embassy.ods_bankinfINN.AsString;
+       QRLBankInn2.Caption :=Form_embassy.ods_bankinfINN.AsString;
+       QRLAmount.Caption:=Form_embassy.ods_embassytrans_infoAMMOUNT_YAZ.AsString;
+       QRLAmount1.Caption:=Form_embassy.ods_embassytrans_infoAMMOUNT_YAZ.AsString;
+       QRLAmount2.Caption:=Form_embassy.ods_embassytrans_infoAMMOUNT_YAZ.AsString;
+       QRDBText1.dataset:=Form_embassy.ods_embassytrans_info;
+       QRDBText3.dataset:=Form_embassy.ods_embassytrans_info;
+       QRDBText21.dataset:=Form_embassy.ods_embassytrans_info;
+       QRDBText23.dataset:=Form_embassy.ods_embassytrans_info;
+       QRDBText41.dataset:=Form_embassy.ods_embassytrans_info;
+       QRDBText39.dataset:=Form_embassy.ods_embassytrans_info;
+       QRDBText6.dataset:=Form_embasTrans.ods_embstrans;
+       QRDBText20.dataset:=Form_embasTrans.ods_embstrans;
+       QRDBText36.dataset:=Form_embasTrans.ods_embstrans;
+        Preview
+end;
+  end;
+sboapiDataModule.SBSession.Commit;
+Form_embasTrans.Close;
+Form_embassy.Close;
+end;
+
+procedure TForm_embasTrans.XFBitBtn2Click(Sender: TObject);
+begin
+Form_embasTrans.Close;
+end;
+
+end.

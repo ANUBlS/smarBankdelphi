@@ -1,0 +1,604 @@
+object PaymentsForm: TPaymentsForm
+  Left = 206
+  Top = 179
+  BorderIcons = [biSystemMenu]
+  ClientHeight = 428
+  ClientWidth = 707
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'MS Sans Serif'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poOwnerFormCenter
+  OnCanResize = FormCanResize
+  OnCreate = FormCreate
+  OnKeyPress = FormKeyPress
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 707
+    Height = 428
+    Align = alClient
+    BevelOuter = bvNone
+    TabOrder = 0
+    object PageControl1: TPageControl
+      Left = 0
+      Top = 0
+      Width = 707
+      Height = 428
+      ActivePage = TabSheet1
+      Align = alClient
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 0
+      TabPosition = tpBottom
+      object TabSheet1: TTabSheet
+        Caption = #1071#1084#1103#1083#1080#1081#1072#1090#1083#1072#1088
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ParentFont = False
+        object Panel4: TPanel
+          Left = 0
+          Top = 0
+          Width = 311
+          Height = 401
+          Align = alLeft
+          BevelInner = bvLowered
+          TabOrder = 0
+          object GroupBox1: TGroupBox
+            Left = 2
+            Top = 2
+            Width = 307
+            Height = 397
+            Align = alClient
+            Caption = #1070#1076#1103#1084#1103#1083#1080#1076#1080#1088'('#1070#1076#1103#1084#1103' '#1043#1088#1072#1092#1080#1082#1080')'
+            TabOrder = 0
+            object DBGridEh3: TDBGridEh
+              Left = 2
+              Top = 16
+              Width = 303
+              Height = 316
+              Align = alClient
+              DataGrouping.GroupLevels = <>
+              DataSource = CustAnalysDataModule.ScheduleDataSource
+              Flat = True
+              Font.Charset = DEFAULT_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Azl Sans Serif'
+              Font.Style = []
+              FooterColor = clWindow
+              FooterFont.Charset = DEFAULT_CHARSET
+              FooterFont.Color = clWindowText
+              FooterFont.Height = -11
+              FooterFont.Name = 'Azl Sans Serif'
+              FooterFont.Style = []
+              Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit]
+              ParentFont = False
+              RowDetailPanel.Color = clBtnFace
+              TabOrder = 0
+              TitleFont.Charset = DEFAULT_CHARSET
+              TitleFont.Color = clWhite
+              TitleFont.Height = -11
+              TitleFont.Name = 'Azl Sans Serif'
+              TitleFont.Style = []
+              VertScrollBar.VisibleMode = sbNeverShowEh
+              Columns = <
+                item
+                  EditButtons = <>
+                  FieldName = 'PAYMENTDATE'
+                  Footers = <>
+                  Title.Color = clHighlight
+                  Width = 83
+                end
+                item
+                  EditButtons = <>
+                  FieldName = 'PRINCIPAL'
+                  Footers = <>
+                  Title.Color = clHighlight
+                  Width = 82
+                end
+                item
+                  EditButtons = <>
+                  FieldName = 'INTEREST'
+                  Footers = <>
+                  Title.Color = clHighlight
+                  Width = 70
+                end>
+              object RowDetailData: TRowDetailPanelControlEh
+              end
+            end
+            object Panel6: TPanel
+              Left = 2
+              Top = 332
+              Width = 303
+              Height = 63
+              Align = alBottom
+              BevelInner = bvLowered
+              TabOrder = 1
+              object GroupBox5: TGroupBox
+                Left = 2
+                Top = 2
+                Width = 299
+                Height = 59
+                Align = alClient
+                Caption = 'C'#1103#1084#1080
+                Font.Charset = DEFAULT_CHARSET
+                Font.Color = clWindowText
+                Font.Height = -11
+                Font.Name = 'Azl Sans Serif'
+                Font.Style = []
+                ParentFont = False
+                TabOrder = 0
+                object GroupBox7: TGroupBox
+                  Left = 127
+                  Top = 16
+                  Width = 170
+                  Height = 41
+                  Align = alClient
+                  Caption = #1065'. '#1060#1072#1080#1079' - '#1076#1103#1085
+                  TabOrder = 0
+                  object DBEdit2: TDBEdit
+                    Left = 2
+                    Top = 18
+                    Width = 117
+                    Height = 22
+                    Color = clScrollBar
+                    DataField = 'SUM(INTEREST)'
+                    DataSource = CustAnalysDataModule.SumSheDataSource
+                    Font.Charset = DEFAULT_CHARSET
+                    Font.Color = clNavy
+                    Font.Height = -11
+                    Font.Name = 'Azl Sans Serif'
+                    Font.Style = []
+                    ParentFont = False
+                    TabOrder = 0
+                  end
+                end
+                object GroupBox8: TGroupBox
+                  Left = 2
+                  Top = 16
+                  Width = 125
+                  Height = 41
+                  Align = alLeft
+                  Caption = #1071#1089#1072#1089' '#1041#1086#1088#1078'-'#1076#1072#1085
+                  TabOrder = 1
+                  object DBEdit1: TDBEdit
+                    Left = 3
+                    Top = 18
+                    Width = 117
+                    Height = 22
+                    Color = clScrollBar
+                    DataField = 'SUM(PRINCIPAL)'
+                    DataSource = CustAnalysDataModule.SumSheDataSource
+                    Font.Charset = DEFAULT_CHARSET
+                    Font.Color = clNavy
+                    Font.Height = -11
+                    Font.Name = 'Azl Sans Serif'
+                    Font.Style = []
+                    ParentFont = False
+                    TabOrder = 0
+                  end
+                end
+              end
+            end
+          end
+        end
+        object Panel5: TPanel
+          Left = 309
+          Top = 0
+          Width = 395
+          Height = 407
+          BevelInner = bvLowered
+          TabOrder = 1
+          object GroupBox4: TGroupBox
+            Left = 2
+            Top = 2
+            Width = 391
+            Height = 403
+            Align = alClient
+            Caption = #1070#1076#1103#1084#1080#1096#1076#1080#1088'('#1102#1076#1103#1085#1080#1096' '#1078#1103#1076#1074#1103#1083#1080')'
+            TabOrder = 0
+            object DBGridEh4: TDBGridEh
+              Left = 2
+              Top = 16
+              Width = 387
+              Height = 322
+              Align = alClient
+              DataGrouping.GroupLevels = <>
+              DataSource = CustAnalysDataModule.PaymentsDataSource
+              Flat = True
+              Font.Charset = DEFAULT_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Azl Sans Serif'
+              Font.Style = []
+              FooterColor = clWindow
+              FooterFont.Charset = DEFAULT_CHARSET
+              FooterFont.Color = clWindowText
+              FooterFont.Height = -11
+              FooterFont.Name = 'Azl Sans Serif'
+              FooterFont.Style = []
+              Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit]
+              ParentFont = False
+              PopupMenu = PopupMenuPay
+              RowDetailPanel.Color = clBtnFace
+              TabOrder = 0
+              TitleFont.Charset = DEFAULT_CHARSET
+              TitleFont.Color = clWhite
+              TitleFont.Height = -11
+              TitleFont.Name = 'Azl Sans Serif'
+              TitleFont.Style = []
+              Columns = <
+                item
+                  EditButtons = <>
+                  FieldName = 'PAYDATE'
+                  Footers = <>
+                  Title.Color = clHighlight
+                  Width = 70
+                end
+                item
+                  EditButtons = <>
+                  FieldName = 'PAYEDAMT'
+                  Footers = <>
+                  Title.Color = clHighlight
+                  Width = 92
+                end
+                item
+                  EditButtons = <>
+                  FieldName = 'PAYEDINTAMT'
+                  Footers = <>
+                  Title.Color = clHighlight
+                  Width = 72
+                end
+                item
+                  EditButtons = <>
+                  FieldName = 'PAYEDDUEAMT'
+                  Footers = <>
+                  Title.Color = clHighlight
+                  Width = 92
+                end
+                item
+                  EditButtons = <>
+                  FieldName = 'PAYEDDUEINTAMT'
+                  Footers = <>
+                  Title.Color = clHighlight
+                  Width = 72
+                end>
+              object RowDetailData: TRowDetailPanelControlEh
+              end
+            end
+            object Panel7: TPanel
+              Left = 2
+              Top = 338
+              Width = 387
+              Height = 63
+              Align = alBottom
+              BevelInner = bvLowered
+              TabOrder = 1
+              object GroupBox6: TGroupBox
+                Left = 2
+                Top = 2
+                Width = 383
+                Height = 59
+                Align = alClient
+                Caption = 'C'#1103#1084#1080
+                Font.Charset = DEFAULT_CHARSET
+                Font.Color = clWindowText
+                Font.Height = -11
+                Font.Name = 'Azl Sans Serif'
+                Font.Style = []
+                ParentFont = False
+                TabOrder = 0
+                object GroupBox10: TGroupBox
+                  Left = 314
+                  Top = 16
+                  Width = 67
+                  Height = 41
+                  Align = alClient
+                  Caption = #1069'.'#1041'. '#1092#1072#1080#1079'-'#1076#1103#1085
+                  TabOrder = 0
+                  object DBEdit4: TDBEdit
+                    Left = 3
+                    Top = 18
+                    Width = 96
+                    Height = 22
+                    Color = clScrollBar
+                    DataField = 'SUM(PAYEDDUEINTAMT)'
+                    DataSource = CustAnalysDataModule.SumPayDataSource
+                    Font.Charset = DEFAULT_CHARSET
+                    Font.Color = clNavy
+                    Font.Height = -11
+                    Font.Name = 'Azl Sans Serif'
+                    Font.Style = []
+                    ParentFont = False
+                    TabOrder = 0
+                  end
+                end
+                object GroupBox9: TGroupBox
+                  Left = 210
+                  Top = 16
+                  Width = 104
+                  Height = 41
+                  Align = alLeft
+                  Caption = #1069#1077#1078#1080#1082'. '#1041#1086#1088#1078'-'#1076#1072#1085
+                  TabOrder = 1
+                  object DBEdit3: TDBEdit
+                    Left = 2
+                    Top = 18
+                    Width = 98
+                    Height = 22
+                    Color = clScrollBar
+                    DataField = 'SUM(PAYEDDUEINTAMT)'
+                    DataSource = CustAnalysDataModule.SumPayDataSource
+                    Font.Charset = DEFAULT_CHARSET
+                    Font.Color = clNavy
+                    Font.Height = -11
+                    Font.Name = 'Azl Sans Serif'
+                    Font.Style = []
+                    ParentFont = False
+                    TabOrder = 0
+                  end
+                end
+                object GroupBox11: TGroupBox
+                  Left = 106
+                  Top = 16
+                  Width = 104
+                  Height = 41
+                  Align = alLeft
+                  Caption = #1071'.'#1041'. '#1092#1072#1080#1079' - '#1076#1103#1085
+                  TabOrder = 2
+                  object DBEdit5: TDBEdit
+                    Left = 2
+                    Top = 18
+                    Width = 98
+                    Height = 22
+                    Color = clScrollBar
+                    DataField = 'SUM(PAYEDINTAMT)'
+                    DataSource = CustAnalysDataModule.SumPayDataSource
+                    Font.Charset = DEFAULT_CHARSET
+                    Font.Color = clNavy
+                    Font.Height = -11
+                    Font.Name = 'Azl Sans Serif'
+                    Font.Style = []
+                    ParentFont = False
+                    TabOrder = 0
+                  end
+                end
+                object GroupBox12: TGroupBox
+                  Left = 2
+                  Top = 16
+                  Width = 104
+                  Height = 41
+                  Align = alLeft
+                  Caption = #1071#1089#1072#1089' '#1041#1086#1088#1078'-'#1076#1072#1085
+                  TabOrder = 3
+                  object DBEdit6: TDBEdit
+                    Left = 2
+                    Top = 18
+                    Width = 98
+                    Height = 22
+                    Color = clScrollBar
+                    DataField = 'SUM(PAYEDAMT)'
+                    DataSource = CustAnalysDataModule.SumPayDataSource
+                    Font.Charset = DEFAULT_CHARSET
+                    Font.Color = clNavy
+                    Font.Height = -11
+                    Font.Name = 'Azl Sans Serif'
+                    Font.Style = []
+                    ParentFont = False
+                    TabOrder = 0
+                  end
+                end
+              end
+            end
+          end
+        end
+      end
+      object TabSheet2: TTabSheet
+        Caption = #1062#1084#1091#1084#1080
+        ImageIndex = 1
+        ExplicitLeft = 0
+        ExplicitTop = 0
+        ExplicitWidth = 0
+        ExplicitHeight = 0
+        object Panel2: TPanel
+          Left = 249
+          Top = 0
+          Width = 450
+          Height = 401
+          Align = alClient
+          BevelInner = bvLowered
+          TabOrder = 0
+          object GroupBox3: TGroupBox
+            Left = 2
+            Top = 2
+            Width = 446
+            Height = 397
+            Align = alClient
+            Caption = 'Prolonqasiya'
+            TabOrder = 0
+            object DBGridEh2: TDBGridEh
+              Left = 2
+              Top = 16
+              Width = 442
+              Height = 379
+              Align = alClient
+              DataGrouping.GroupLevels = <>
+              DataSource = CustAnalysDataModule.ProlongationDataSource
+              Flat = False
+              FooterColor = clWindow
+              FooterFont.Charset = DEFAULT_CHARSET
+              FooterFont.Color = clWindowText
+              FooterFont.Height = -11
+              FooterFont.Name = 'Azl Sans Serif'
+              FooterFont.Style = []
+              Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit]
+              RowDetailPanel.Color = clBtnFace
+              TabOrder = 0
+              TitleFont.Charset = DEFAULT_CHARSET
+              TitleFont.Color = clWindowText
+              TitleFont.Height = -11
+              TitleFont.Name = 'Azl Sans Serif'
+              TitleFont.Style = []
+              VertScrollBar.VisibleMode = sbNeverShowEh
+              Columns = <
+                item
+                  Color = clInactiveCaption
+                  EditButtons = <>
+                  FieldName = 'PROLONGDATE'
+                  Footers = <>
+                  Title.Color = clNavy
+                  Title.Font.Charset = DEFAULT_CHARSET
+                  Title.Font.Color = clWhite
+                  Title.Font.Height = -11
+                  Title.Font.Name = 'Azl Sans Serif'
+                  Title.Font.Style = []
+                end
+                item
+                  Color = clInactiveCaption
+                  EditButtons = <>
+                  FieldName = 'NEWCLOSEDATE'
+                  Footers = <>
+                  Title.Color = clNavy
+                  Title.Font.Charset = DEFAULT_CHARSET
+                  Title.Font.Color = clWhite
+                  Title.Font.Height = -11
+                  Title.Font.Name = 'Azl Sans Serif'
+                  Title.Font.Style = []
+                  Width = 140
+                end>
+              object RowDetailData: TRowDetailPanelControlEh
+              end
+            end
+          end
+        end
+        object Panel3: TPanel
+          Left = 0
+          Top = 0
+          Width = 249
+          Height = 401
+          Align = alLeft
+          BevelInner = bvLowered
+          TabOrder = 1
+          object GroupBox2: TGroupBox
+            Left = 2
+            Top = 2
+            Width = 245
+            Height = 397
+            Align = alClient
+            Caption = #1058#1088#1072#1085#1096
+            TabOrder = 0
+            object DBGridEh1: TDBGridEh
+              Left = 2
+              Top = 16
+              Width = 241
+              Height = 379
+              Align = alClient
+              DataGrouping.GroupLevels = <>
+              DataSource = CustAnalysDataModule.TrancheDataSource
+              Flat = False
+              FooterColor = clWindow
+              FooterFont.Charset = DEFAULT_CHARSET
+              FooterFont.Color = clWindowText
+              FooterFont.Height = -11
+              FooterFont.Name = 'Azl Sans Serif'
+              FooterFont.Style = []
+              Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit]
+              PopupMenu = PopupMenuTr
+              RowDetailPanel.Color = clBtnFace
+              TabOrder = 0
+              TitleFont.Charset = DEFAULT_CHARSET
+              TitleFont.Color = clWindowText
+              TitleFont.Height = -11
+              TitleFont.Name = 'Azl Sans Serif'
+              TitleFont.Style = []
+              VertScrollBar.VisibleMode = sbNeverShowEh
+              Columns = <
+                item
+                  Color = clInactiveCaption
+                  EditButtons = <>
+                  FieldName = 'TRANCHEDATE'
+                  Footers = <>
+                  Title.Color = clNavy
+                  Title.Font.Charset = DEFAULT_CHARSET
+                  Title.Font.Color = clWhite
+                  Title.Font.Height = -11
+                  Title.Font.Name = 'Azl Sans Serif'
+                  Title.Font.Style = []
+                  Width = 116
+                end
+                item
+                  Color = clInactiveCaption
+                  EditButtons = <>
+                  FieldName = 'TRANCHEAMOUNT'
+                  Footers = <>
+                  Title.Color = clNavy
+                  Title.Font.Charset = DEFAULT_CHARSET
+                  Title.Font.Color = clWhite
+                  Title.Font.Height = -11
+                  Title.Font.Name = 'Azl Sans Serif'
+                  Title.Font.Style = []
+                  Width = 82
+                end>
+              object RowDetailData: TRowDetailPanelControlEh
+              end
+            end
+          end
+        end
+      end
+    end
+  end
+  object ExcelExportPT: TCMExcelExport
+    StyleColumnWidth = cwDefault
+    ColumnWidth = 0
+    FontTitles.Charset = DEFAULT_CHARSET
+    FontTitles.Color = clWindowText
+    FontTitles.Height = -11
+    FontTitles.Name = 'MS Sans Serif'
+    FontTitles.Style = []
+    OrientationTitles = 0
+    FontData.Charset = DEFAULT_CHARSET
+    FontData.Color = clWindowText
+    FontData.Height = -11
+    FontData.Name = 'MS Sans Serif'
+    FontData.Style = []
+    FontSummary.Charset = DEFAULT_CHARSET
+    FontSummary.Color = clWindowText
+    FontSummary.Height = -11
+    FontSummary.Name = 'MS Sans Serif'
+    FontSummary.Style = []
+    SummarySelection = ssNone
+    SummaryCalculation = scSUM
+    Left = 126
+    Top = 264
+  end
+  object PopupMenuPay: TPopupMenu
+    Left = 403
+    Top = 112
+    object N1: TMenuItem
+      Caption = '      '#1063#1072#1087'        '
+      OnClick = N1Click
+    end
+  end
+  object PopupMenuTr: TPopupMenu
+    Left = 118
+    Top = 192
+    object N2: TMenuItem
+      Caption = '      '#1063#1072#1087'        '
+      OnClick = N2Click
+    end
+  end
+end

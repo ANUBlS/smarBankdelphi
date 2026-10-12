@@ -1,0 +1,50 @@
+unit Unit1;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, ICEOralogon, ICECrypt, Oracle, Db, OracleData, uLogonImpl,
+  Grids, DBGrids;
+
+type
+  TForm1 = class(TForm)
+    Button1: TButton;
+    ICEOralogon1: TICEOralogon;
+    ICECrypt1: TICECrypt;
+    OracleDataSet1: TOracleDataSet;
+    OracleSession1: TOracleSession;
+    DataSource1: TDataSource;
+    DBGrid1: TDBGrid;
+    procedure Button1Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form1: TForm1;
+
+implementation
+
+{$R *.DFM}
+      
+
+procedure TForm1.Button1Click(Sender: TObject);
+begin
+  OracleDataSet1.Open;
+end;
+
+procedure TForm1.FormCreate(Sender: TObject);
+begin
+ICEOralogon1.IniSource := ExtractFilePath(ParamStr(0))+'ICELogon.ini';
+if ICEOralogon1.Execute<>1 then begin
+    ShowMessage(ICEOralogon1.GetErrorStr);
+    Application.Terminate;
+end;
+end;
+
+end.
+ 

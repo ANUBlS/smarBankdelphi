@@ -1,0 +1,66 @@
+﻿unit UnitPercentImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, CMCurrencyEdit, ExtCtrls;
+
+type
+  TFormPercent = class(TForm)
+    Panel1: TPanel;
+    Edittranches: TEdit;
+    EditPercent: TEdit;
+    Label2: TLabel;
+    Label1: TLabel;
+    CMCurrencyEdit1: TCMCurrencyEdit;
+    Label3: TLabel;
+    Button1: TButton;
+    Button2: TButton;
+    procedure Button2Click(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormPercent: TFormPercent;
+
+implementation
+
+uses DMApplyMoneyImpl;
+
+{$R *.dfm}
+
+procedure TFormPercent.Button1Click(Sender: TObject);
+var S:real;
+begin
+   if MessageDlg('Faizin dəyişdirilməsinə əminsiniz?',
+             mtConfirmation, [mbYes, mbNo], 0) = mrNo
+    then Exit;
+  s:=CMCurrencyEdit1.Value;
+  with DMApplyMoney,Tranches,sbcm_tranches do begin
+         CallProcedure('UpdatePercentTranches',['v_id#',    0,
+                                                'v_id',       FieldByName('ID').AsInteger,
+                                                'v_percent',s]);
+          FormPercent.Close;
+          refresh;
+         end;
+
+end;
+
+procedure TFormPercent.Button2Click(Sender: TObject);
+begin
+  close;
+end;
+
+procedure TFormPercent.FormShow(Sender: TObject);
+begin
+  CMCurrencyEdit1.Clear;
+  CMCurrencyEdit1.Text:='0.00';
+end;
+
+end.

@@ -1,0 +1,243 @@
+﻿unit FlReCalculationDataModuleImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, NLSDialogs,
+  Oracle, Db, OracleData, Grids;
+
+type
+  TPRDataModule = class(TDataModule)
+    CalculatorPackage: TOraclePackage;
+    IntCache: TOracleDataSet;
+    DataSrcIntCache: TDataSource;
+    cm_autoexp: TOraclePackage;
+    IntCacheNUMBEROFCREDIT: TWideStringField;
+    IntCacheVAL_NAME: TWideStringField;
+    IntCacheNAME: TWideStringField;
+    IntCacheREST: TFloatField;
+    IntCacheDUEREST: TFloatField;
+    IntCacheINTERESTREST: TFloatField;
+    IntCacheDUEINTERESTREST: TFloatField;
+    IntCacheDUEDAY: TFloatField;
+    IntCacheID: TFloatField;
+    IntCacheQOVLUQ: TWideStringField;
+    IntCacheFILIAL: TWideStringField;
+    IntCacheFULLREST: TFloatField;
+    OracleDataSet1: TOracleDataSet;
+    DataSource1: TDataSource;
+    IntCacheQOVID: TFloatField;
+    IntCacheTRPROCESSED: TFloatField;
+    IntCacheSTATUS: TFloatField;
+    OracleDataSet2: TOracleDataSet;
+    DataSource2: TDataSource;
+    IntCacheCURRENCY: TFloatField;
+    IntCacheBRANCHID: TFloatField;
+    IntCacheCREDITTYPE: TFloatField;
+    IntCacheDUE: TFloatField;
+    OracleDataSet3: TOracleDataSet;
+    DataSource3: TDataSource;
+    OracleDataSet3ID: TFloatField;
+    OracleDataSet3CREDITID: TFloatField;
+    OracleDataSet3NUMBEROFCREDIT: TWideStringField;
+    OracleDataSet3NAME: TWideStringField;
+    OracleDataSet3DAT: TDateTimeField;
+    OracleDataSet3QOVIDSENDER: TWideStringField;
+    OracleDataSet3QOVIDRECIVER: TWideStringField;
+    OracleDataSet3RECIVERIID: TFloatField;
+    OracleDataSet3SENDERID: TFloatField;
+    OracleDataSet3VEZIYYET: TWideStringField;
+    OracleDataSet3SENDUSER: TWideStringField;
+    OracleDataSet3RECIVEUSER: TWideStringField;
+    DataSource4: TDataSource;
+    OracleDataSet4: TOracleDataSet;
+    IntCacheCREDITLINEAMOUNT: TFloatField;
+    IntCacheQEYDSAYI: TFloatField;
+    IntCacheDATEOFCONCLUSION: TDateTimeField;
+    IntCacheDUEDATEFIRSTCONTRACT: TDateTimeField;
+    IntCacheCRTYPE: TWideStringField;
+    IntCachePHONENUMBER: TWideStringField;
+    IntCacheANYINFOTODISTING: TWideStringField;
+    IntCachePLEDGEPRICE: TFloatField;
+    IntCache_ex: TOracleDataSet;
+    FloatField1: TFloatField;
+    WideStringField1: TWideStringField;
+    WideStringField2: TWideStringField;
+    FloatField2: TFloatField;
+    WideStringField3: TWideStringField;
+    WideStringField4: TWideStringField;
+    DateTimeField1: TDateTimeField;
+    DateTimeField2: TDateTimeField;
+    FloatField3: TFloatField;
+    FloatField4: TFloatField;
+    FloatField5: TFloatField;
+    FloatField6: TFloatField;
+    FloatField7: TFloatField;
+    WideStringField5: TWideStringField;
+    WideStringField6: TWideStringField;
+    FloatField8: TFloatField;
+    FloatField9: TFloatField;
+    FloatField10: TFloatField;
+    FloatField11: TFloatField;
+    FloatField12: TFloatField;
+    FloatField13: TFloatField;
+    FloatField14: TFloatField;
+    FloatField15: TFloatField;
+    DateTimeField3: TDateTimeField;
+    FloatField16: TFloatField;
+    DateTimeField4: TDateTimeField;
+    FloatField17: TFloatField;
+    DateTimeField5: TDateTimeField;
+    FloatField18: TFloatField;
+    DateTimeField6: TDateTimeField;
+    FloatField19: TFloatField;
+    WideStringField7: TWideStringField;
+    WideStringField8: TWideStringField;
+    FloatField20: TFloatField;
+    WideStringField9: TWideStringField;
+    WideStringField10: TWideStringField;
+    WideStringField11: TWideStringField;
+    WideStringField12: TWideStringField;
+    WideStringField13: TWideStringField;
+    WideStringField14: TWideStringField;
+    WideStringField15: TWideStringField;
+    WideStringField16: TWideStringField;
+    WideStringField17: TWideStringField;
+    FloatField21: TFloatField;
+    IntCacheSTOP: TWideStringField;
+    OracleQuery1: TOracleQuery;
+    adm: TOraclePackage;
+    DataSource5: TDataSource;
+    OracleDataSet5: TOracleDataSet;
+    OracleDataSet2ID: TFloatField;
+    OracleDataSet2CREDITID: TFloatField;
+    OracleDataSet2SENDUSER: TWideStringField;
+    OracleDataSet2NUMBEROFCREDIT: TWideStringField;
+    OracleDataSet2NAME: TWideStringField;
+    OracleDataSet2DAT: TDateTimeField;
+    OracleDataSet2QOVIDSENDER: TWideStringField;
+    OracleDataSet2QOVIDRECIVER: TWideStringField;
+    OracleDataSet2RECIVERIID: TFloatField;
+    OracleDataSet2SENDERID: TFloatField;
+    IntCacheMEH: TWideStringField;
+    OracleDataSet6: TOracleDataSet;
+    DataSource6: TDataSource;
+    OracleDataSet7: TOracleDataSet;
+    DataSource7: TDataSource;
+    OracleDataSet8: TOracleDataSet;
+    DataSource8: TDataSource;
+    OracleDataSet9: TOracleDataSet;
+    DataSource9: TDataSource;
+    OracleDataSet7SYSUSERID: TFloatField;
+    OracleDataSet7NAME: TWideStringField;
+    OracleDataSet8ID: TFloatField;
+    OracleDataSet8PR_ID: TFloatField;
+    OracleDataSet8NAME: TWideStringField;
+    OracleDataSet8USID: TFloatField;
+    OracleDataSet8users: TWideStringField;
+    OracleDataSet9ID: TFloatField;
+    OracleDataSet9USID: TFloatField;
+    OracleDataSet9ICRA_ID: TFloatField;
+    OracleDataSet9FILIAL: TFloatField;
+    OracleDataSet9name: TWideStringField;
+    OracleDataSet10: TOracleDataSet;
+    FloatField22: TFloatField;
+    FloatField23: TFloatField;
+    FloatField24: TFloatField;
+    FloatField25: TFloatField;
+    DataSource10: TDataSource;
+    DataSource11: TDataSource;
+    OracleDataSet11: TOracleDataSet;
+    OracleDataSet10name: TWideStringField;
+    OracleDataSet3STATUS: TFloatField;
+    OracleDataSet8PLAN: TFloatField;
+    OracleDataSet12: TOracleDataSet;
+    DataSource12: TDataSource;
+    OracleDataSet12USERS: TWideStringField;
+    OracleDataSet12PLANS: TFloatField;
+    OracleDataSet12YGIM_ESAS: TFloatField;
+    OracleDataSet12BONS_ESAS: TFloatField;
+    OracleDataSet13: TOracleDataSet;
+    DataSource13: TDataSource;
+    OracleDataSet14: TOracleDataSet;
+    DataSource14: TDataSource;
+    OracleDataSet13ICRA_ID: TFloatField;
+    OracleDataSet13MEHSUL_ID: TFloatField;
+    OracleDataSet13mehsul: TWideStringField;
+    DataSource15: TDataSource;
+    OracleDataSet15: TOracleDataSet;
+    OracleDataSet12USID: TFloatField;
+    OracleDataSet15ID: TFloatField;
+    OracleDataSet15NUMBEROFCREDIT: TWideStringField;
+    OracleDataSet15NAME: TWideStringField;
+    OracleDataSet15PAYDATE: TDateTimeField;
+    OracleDataSet15PAYEDAMT: TFloatField;
+    OracleDataSet15PAYEDINTAMT: TFloatField;
+    OracleDataSet15PAYEDDUEAMT: TFloatField;
+    OracleDataSet15PAYEDPENALTYAMT: TFloatField;
+    OracleDataSet15SUMPAY: TFloatField;
+    IntCacheDSTATUS: TFloatField;
+    OracleDataSet15NAME_1: TWideStringField;
+    OracleDataSet8BDAY: TFloatField;
+    OracleDataSet8EDAY: TFloatField;
+    OracleDataSet8E_FAIZ: TFloatField;
+    OracleDataSet8F_FAIZ: TFloatField;
+    OracleDataSet12BONS_FAIZ: TFloatField;
+    OracleDataSet12YGIM_FAIZ: TFloatField;
+    OracleDataSet12CEMB: TFloatField;
+    DataSource16: TDataSource;
+    OracleDataSet16: TOracleDataSet;
+    FloatField26: TFloatField;
+    WideStringField19: TWideStringField;
+    WideStringField20: TWideStringField;
+    DateTimeField7: TDateTimeField;
+    FloatField27: TFloatField;
+    FloatField28: TFloatField;
+    FloatField29: TFloatField;
+    FloatField30: TFloatField;
+    FloatField31: TFloatField;
+    OracleDataSet16DUEDAY: TFloatField;
+    OracleDataSet16NAME1: TWideStringField;
+    procedure DataModuleCreate(Sender: TObject);
+    procedure IntCacheCalcFields(DataSet: TDataSet);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  PRDataModule: TPRDataModule;
+
+implementation
+
+{$R *.DFM}
+
+uses sboapiDataModuleImpl;
+
+procedure TPRDataModule.DataModuleCreate(Sender: TObject);
+begin
+  IntCache.Open;
+  OracleDataSet1.Open;
+  OracleDataSet5.Open;
+  OracleDataSet4.Open;
+  OracleDataSet14.Open;
+  OracleDataSet13.Open;
+end;
+
+procedure TPRDataModule.IntCacheCalcFields(DataSet: TDataSet);
+begin
+{if IntCacheSTATUS.AsInteger=1 then
+ IntCacheestatus.AsString:='Hesablama tam dayandırılıb ';
+
+ if (IntCacheINT.AsInteger=1)and (IntCacheDUEINT.AsInteger=1) then
+    IntCacheestatus.AsString:='Hər ikisi dayandırılıb ';
+
+     if (IntCacheINT.AsInteger=1)and (IntCacheDUEINT.AsInteger=0)then
+    IntCacheestatus.AsString:='Faiz hesablaması dayandırılıb ';
+
+     if  (IntCacheDUEINT.AsInteger=1)and (IntCacheINT.AsInteger=0) then
+    IntCacheestatus.AsString:='Penya hesablaması  dayandırılıb ';  }
+end;
+
+end.

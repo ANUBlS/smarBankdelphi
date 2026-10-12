@@ -1,0 +1,301 @@
+﻿unit DmBudcetImpl;
+
+interface
+
+uses
+  SysUtils, Classes, DB, OracleData, Oracle,Messages,Dialogs;
+
+type
+  TDmBudcet = class(TDataModule)
+    StructurDSet: TOracleDataSet;
+    StructurDSrc: TDataSource;
+    PackgSubdiv: TOraclePackage;
+    StatusDSet: TOracleDataSet;
+    StatusDSrc: TDataSource;
+    MaddeDSet: TOracleDataSet;
+    MaddSrc: TDataSource;
+    MaddeDSetsname: TWideStringField;
+    MaddeDSetNAME: TWideStringField;
+    MaddeDSetSTATUS: TFloatField;
+    DelControl: TOracleDataSet;
+    OracleDataSet1: TOracleDataSet;
+    DataSource1: TDataSource;
+    Axtar: TOracleDataSet;
+    MaddeDSetID: TFloatField;
+    OracleDataSet2: TOracleDataSet;
+    FloatField1: TFloatField;
+    WideStringField1: TWideStringField;
+    FloatField2: TFloatField;
+    FloatField3: TFloatField;
+    FloatField4: TFloatField;
+    WideStringField2: TWideStringField;
+    FloatField5: TFloatField;
+    FloatField6: TFloatField;
+    FloatField7: TFloatField;
+    FloatField8: TFloatField;
+    WideStringField3: TWideStringField;
+    MaddeDSetCODE: TWideStringField;
+    AccControl: TOracleDataSet;
+    StructurDSetID: TFloatField;
+    StructurDSetNAME: TWideStringField;
+    StructurDSetPREVID: TFloatField;
+    StructurDSetINDEX_BY_NAME: TFloatField;
+    StructurDSetINDEX_BY_POSITION: TFloatField;
+    StructurDSetCODE: TWideStringField;
+    StructurDSetAYLIQ: TFloatField;
+    StructurDSetRUBLUK: TFloatField;
+    StructurDSetYARIMILLIK: TFloatField;
+    StructurDSetILLIK: TFloatField;
+    StructurDSetACCOUNT: TWideStringField;
+    StructurDSetFAKTAYLIQ: TFloatField;
+    StructurDSetFAKTRUBLUK: TFloatField;
+    StructurDSetFAKTYARIMILLIK: TFloatField;
+    StructurDSetFAKTILLIK: TFloatField;
+    Sil: TOracleDataSet;
+    Kodkotrol: TOracleDataSet;
+    OracleDataSet3: TOracleDataSet;
+    DataSource2: TDataSource;
+    accountcontrol: TOracleDataSet;
+    ReportSrc: TDataSource;
+    ReportSet: TOracleDataSet;
+    Report_id1: TOracleDataSet;
+    Report_id1NAM: TWideStringField;
+    Report_id1CODE: TWideStringField;
+    Report_id1Y1: TFloatField;
+    Report_id1ILLIK: TFloatField;
+    Report_id1QALIQ: TFloatField;
+    Report_id1FA1: TFloatField;
+    Report_id1FA2: TFloatField;
+    Report_id1FA3: TFloatField;
+    Report_id1FA4: TFloatField;
+    Report_id1FA5: TFloatField;
+    Report_id1FA6: TFloatField;
+    Report_id1FA7: TFloatField;
+    Report_id1FA8: TFloatField;
+    Report_id1FA9: TFloatField;
+    Report_id1FA10: TFloatField;
+    Report_id1FA11: TFloatField;
+    Report_id1FA12: TFloatField;
+    SettingSet: TOracleDataSet;
+    SettingSrc: TDataSource;
+    BalSet: TOracleDataSet;
+    BalSrc: TDataSource;
+    BalSetID: TFloatField;
+    BalSetSTAT_ID: TFloatField;
+    BalSetBAL_CN: TFloatField;
+    OracleDataSet4: TOracleDataSet;
+    MaddeDSetINDEX_BY_NAME: TFloatField;
+    adm: TOraclePackage;
+    FIXINGDSet: TOracleDataSet;
+    FIXINGSrc: TDataSource;
+    FIXINGDSetID: TFloatField;
+    FIXINGDSetNAME: TWideStringField;
+    FIXINGDSetCOLORCODE: TWideStringField;
+    OracleDataSet5: TOracleDataSet;
+    FloatField9: TFloatField;
+    WideStringField4: TWideStringField;
+    WideStringField5: TWideStringField;
+    DataSource3: TDataSource;
+    Report_id2: TOracleDataSet;
+    Report_id2NAM: TWideStringField;
+    Report_id2INF: TWideStringField;
+    Report_id2CODE: TWideStringField;
+    Report_id2Y1: TFloatField;
+    Report_id2FAKTILLIK: TFloatField;
+    Report_id2QALIQ: TFloatField;
+    Report_id2AYLIM: TFloatField;
+    Report_id2ORTAAYLIM: TFloatField;
+    Report_id2RESTAYLIM: TFloatField;
+    Report_id2FA1: TFloatField;
+    Report_id2FA2: TFloatField;
+    Report_id2FA3: TFloatField;
+    Report_id2FA4: TFloatField;
+    Report_id2FA5: TFloatField;
+    Report_id2FA6: TFloatField;
+    Report_id2FA7: TFloatField;
+    Report_id2FA8: TFloatField;
+    Report_id2FA9: TFloatField;
+    Report_id2FA10: TFloatField;
+    Report_id2FA11: TFloatField;
+    Report_id2FA12: TFloatField;
+    Report_id2RENG: TWideStringField;
+    Report_id2NAME: TWideStringField;
+    StructurDSetDESCID: TFloatField;
+    Report_id2PREVID: TFloatField;
+    OracleDataSet6: TOracleDataSet;
+    DataSource4: TDataSource;
+    OracleDataSet7: TOracleDataSet;
+    DataSource5: TDataSource;
+    Report_id1AYLIM: TFloatField;
+    Report_id1ORTAAYLIM: TFloatField;
+    Report_id1RESTAYLIM: TFloatField;
+    EvenenceSet: TOracleDataSet;
+    EvenenceSrc: TDataSource;
+    Evenence1: TOracleDataSet;
+    CodeExcelSet: TOracleDataSet;
+    CodeExcelSetCODE: TWideStringField;
+    CodeExcelSetNAME: TWideStringField;
+    CodeExcelSetACC_NO: TWideStringField;
+    TrDataSet: TOracleDataSet;
+    TrDataSource: TDataSource;
+    OracleDataSet8: TOracleDataSet;
+    DataSource6: TDataSource;
+    Closeyear: TOracleDataSet;
+    CloseyearIL: TFloatField;
+    CloseyearIL1: TFloatField;
+    procedure DataModuleCreate(Sender: TObject);
+    procedure DataModuleDestroy(Sender: TObject);
+    procedure MaddeDSetApplyRecord(Sender: TOracleDataSet; Action: Char;
+      var Applied: Boolean; var NewRowId: string);
+    procedure MaddeDSetPostError(DataSet: TDataSet; E: EDatabaseError;
+      var Action: TDataAction);
+    procedure OracleDataSet1PostError(DataSet: TDataSet; E: EDatabaseError;
+      var Action: TDataAction);
+    procedure BalSetPostError(DataSet: TDataSet; E: EDatabaseError;
+      var Action: TDataAction);
+    procedure OracleDataSet6PostError(DataSet: TDataSet; E: EDatabaseError;
+      var Action: TDataAction);
+    procedure OracleDataSet7PostError(DataSet: TDataSet; E: EDatabaseError;
+      var Action: TDataAction);
+    procedure OracleDataSet6DeleteError(DataSet: TDataSet; E: EDatabaseError;
+      var Action: TDataAction);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  DmBudcet: TDmBudcet;
+   pcode,pname:string;
+ id, pstatus:integer;
+implementation
+
+{$R *.dfm}
+uses sboapiDataModuleImpl,MainformImpl;
+procedure TDmBudcet.BalSetPostError(DataSet: TDataSet; E: EDatabaseError;
+  var Action: TDataAction);
+begin
+if (E is EDatabaseError) then
+  if Copy(E.Message,0,12)='ORA-20009: b' then
+       ShowMessage(Copy(E.Message,13,6)+'-Bu balans hesabı düzgün deyil!')
+       else
+       ShowMessage(e.Message);
+       Abort;
+end;
+
+procedure TDmBudcet.DataModuleCreate(Sender: TObject);
+begin
+StructurDSet.Open;
+StatusDSet.Open;
+OracleDataSet5.Open ;
+OracleDataSet8.Open
+end;
+
+procedure TDmBudcet.DataModuleDestroy(Sender: TObject);
+begin
+StructurDSet.CloseAll;
+StatusDSet.CloseAll;
+OracleDataSet5.CloseAll;
+end;
+
+procedure TDmBudcet.MaddeDSetApplyRecord(Sender: TOracleDataSet; Action: Char;
+  var Applied: Boolean; var NewRowId: string);
+
+begin
+//  ShowMessage('sdas');
+  with MaddeDSet do
+    begin
+       id:= FieldbyName('id').asinteger;
+       pname := FieldbyName('name').AsString;
+       pstatus:= FieldbyName('status').Asinteger;
+       pcode:= FieldbyName('code').AsString;
+    end;
+     Applied := true;
+  case Action of
+      'I':  PackgSubdiv.CallProcedure('madde_add',['p_name',pname,'p_stat',pstatus,'p_cod',pcode]);
+      'U':  PackgSubdiv.CallProcedure('madde_edit',['p_id',id,'p_name',pname,'p_stat',pstatus,'p_cod',pcode]);
+      'D': begin
+       PackgSubdiv.CallProcedure('madde_del',['p_id',id]);
+       st:=2;
+      end;
+       else  Applied := false
+  end ;
+
+end;
+
+procedure TDmBudcet.MaddeDSetPostError(DataSet: TDataSet; E: EDatabaseError;
+  var Action: TDataAction);
+begin
+if (E is EDatabaseError) then
+       if e.Message='ORA-20009: rz' then
+       ShowMessage('Bu maddə üzrə əməliyyat aparılıb, dəyişmək olmaz!')
+       else
+       ShowMessage('Adı,Kod,Statusu xanaları doldurulmalıdır !');
+       Abort;
+  end;
+
+
+
+
+procedure TDmBudcet.OracleDataSet1PostError(DataSet: TDataSet;
+  E: EDatabaseError; var Action: TDataAction);
+begin
+{if (E is EDatabaseError) then
+//ShowMessage(e.Message);
+       if e.Message='ORA-20009: y' then
+       ShowMessage('Siz illik proqnozu aşırsız !') ;
+       if e.Message='ORA-20009: h' then
+       ShowMessage('Siz yarım illik proqnozu aşırsız !')  ;
+        if e.Message='ORA-20009: r' then
+       ShowMessage('Siz rüblük proqnozu aşırsız !') ;
+        if e.Message='ORA-20009: a' then
+       ShowMessage('Siz aylıq proqnozu aşırsız !') ;
+       Abort;    }
+end;
+
+procedure TDmBudcet.OracleDataSet6DeleteError(DataSet: TDataSet;
+  E: EDatabaseError; var Action: TDataAction);
+begin
+if (E is EDatabaseError) then
+
+if Copy(E.Message,0,12)='ORA-20009: d' then
+begin
+  ShowMessage('Bu hesaba bağlı büdcə maddələri sazlanıb. Öncə  büdcə maddələrini silin!');
+  abort;
+end;
+end;
+
+procedure TDmBudcet.OracleDataSet6PostError(DataSet: TDataSet;
+  E: EDatabaseError; var Action: TDataAction);
+begin
+if (E is EDatabaseError) then
+
+if Copy(E.Message,0,12)='ORA-20009: x' then
+begin
+  ShowMessage('Hesab düzgün deyil, zəhmət olmasa düzgün olan hesabı daxil edin!');
+  abort;
+end;
+
+end;
+
+procedure TDmBudcet.OracleDataSet7PostError(DataSet: TDataSet;
+  E: EDatabaseError; var Action: TDataAction);
+begin
+if (E is EDatabaseError) then
+ begin
+if Copy(E.Message,0,12)='ORA-20009: n' then
+begin
+  ShowMessage('Kod düzgün deyil, zəhmət olmasa düzgün olan kodu daxil edin !');
+  abort;
+end;
+ if Copy(E.Message,0,12)='ORA-20009: v' then
+begin
+  ShowMessage('Siz ancaq ən son budağa sazlanmış kodu seçə bilərsiz !');
+  abort;
+end;
+ end;
+
+end;
+
+end.

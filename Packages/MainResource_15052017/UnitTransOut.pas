@@ -1,0 +1,94 @@
+unit UnitTransOut;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
+   Grids, DBGridEh, StdCtrls, Buttons, ComCtrls, DBGridEhGrouping, GridsEh;
+
+type
+  TFormTransOut = class(TForm)
+    ProgressBar: TProgressBar;
+    BtnTrans: TBitBtn;
+    DBGridEhShowTrans: TDBGridEh;
+    BtnTransShow: TBitBtn;
+    procedure BtnTransShowClick(Sender: TObject);
+    procedure BtnTransClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormTransOut: TFormTransOut;
+
+implementation
+      uses unitdata,sboapiDataModuleImpl, SBTranslateProc;
+{$R *.DFM}
+
+
+
+procedure TFormTransOut.BtnTransShowClick(Sender: TObject);
+begin
+{           DataModWares.SB_MAIN_RESOURCE.CallProcedure('wares_all_transaction_out',[]);
+ with DataModWares do begin
+        ODSTrans.Close;
+           ODSTrans.SQL.Clear;
+           ODSTrans.SQL.Add('select W.*,'+
+            'SB_MAIN_RESOURCE.GetAccountNumber(W.debt_acc) as DebtAccNo,'+
+            'SB_MAIN_RESOURCE.GetAccountNumber(W.cred_acc) as CredAccNo '+
+               ' from wares_all_trans_out W');
+   ODSTrans.Open;
+   end;  }
+end;
+
+procedure TFormTransOut.FormCreate(Sender: TObject);
+begin
+SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TFormTransOut.BtnTransClick(Sender: TObject);
+{var
+    i:integer;
+      v_debitid    :real;
+      v_creditid   :real;
+      v_amount     :real;
+      v_trname     :string;}
+begin
+         {   if not DataModWares.ODSTrans.IsEmpty then begin
+
+                       ProgressBar.Position:=0;
+              DataModWares.ODSTrans.First;
+              for i:=1 to DataModWares.ODSTrans.RecordCount do begin
+                  v_debitid:=DataModWares.ODSTrans.fieldbyname('debt_acc').AsFloat;
+                  v_creditid:=DataModWares.ODSTrans.fieldbyname('cred_acc').AsFloat;
+                   v_amount:=DataModWares.ODSTrans.fieldbyname('debt_amount').AsFloat;
+                   v_trname:=DataModWares.ODSTrans.fieldbyname('group_name').AsString;
+
+                       ProgressBar.Position:=i*100 div DataModWares.ODSTrans.RecordCount;
+                  DataModWares.SB_MAIN_RESOURCE.CallProcedure('settrans_out',[
+                        v_debitid,
+                        v_creditid,
+                        v_amount,
+                        v_trname
+                  ]);
+
+              DataModWares.ODSTrans.Next;
+              end;
+
+                    DataModWares.ODSTrans.Close;
+                    DataModWares.ODSTrans.SQL.Clear;
+                    DataModWares.ODSTrans.SQL.Add('delete from wares_all_trans');
+                    DataModWares.ODSTrans.ExecSQL;
+            ProgressBar.Position:=0;
+            ShowMessage('Ямялиййатлар эцнцн сянядляриня эюндярилди!');
+            end
+         else
+              ShowMessage('Щеч бир сяняд йохдур!');      }
+
+
+end;
+
+end.

@@ -1,0 +1,2437 @@
+﻿object ExpFormNew: TExpFormNew
+  Left = 0
+  Top = 0
+  BorderStyle = bsDialog
+  ClientHeight = 468
+  ClientWidth = 539
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  PopupMenu = PopupMenu1
+  Position = poScreenCenter
+  OnClose = FormClose
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Label8: TLabel
+    Left = 33
+    Top = 52
+    Width = 6
+    Height = 19
+    Caption = '*'
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clRed
+    Font.Height = -16
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = [fsBold]
+    ParentFont = False
+  end
+  object Label10: TLabel
+    Left = 14
+    Top = 56
+    Width = 19
+    Height = 13
+    Caption = 'Ad'#305':'
+  end
+  object Label13: TLabel
+    Left = 32
+    Top = 76
+    Width = 6
+    Height = 19
+    Caption = '*'
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clRed
+    Font.Height = -16
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = [fsBold]
+    ParentFont = False
+  end
+  object Label14: TLabel
+    Left = 13
+    Top = 80
+    Width = 19
+    Height = 13
+    Caption = 'Ad'#305':'
+  end
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 539
+    Height = 465
+    Align = alTop
+    TabOrder = 0
+    object PageControl1: TPageControl
+      Left = 1
+      Top = 1
+      Width = 537
+      Height = 459
+      ActivePage = TabSheet1
+      Align = alTop
+      BiDiMode = bdLeftToRight
+      MultiLine = True
+      ParentBiDiMode = False
+      TabOrder = 0
+      OnChanging = PageControl1Changing
+      object TabSheet1: TTabSheet
+        Caption = 'G'#246'nd'#601'r'#601'n '#350#601'xs'
+        object Panel2: TPanel
+          Left = 0
+          Top = 0
+          Width = 529
+          Height = 43
+          Align = alTop
+          Enabled = False
+          TabOrder = 0
+          object RadioGroup1: TRadioGroup
+            Left = 1
+            Top = 1
+            Width = 527
+            Height = 40
+            Align = alTop
+            Caption = 'M'#252#351't'#601'rinin tipi'
+            Columns = 5
+            Items.Strings = (
+              'Nominal '#351#601'xs'
+              'Fiziki  '#351#601'xs'
+              'Fiziki  sahibkar'
+              'H'#252'quqi  '#351#601'xs'
+              'Fiziki  '#351#601'xs v'#601' sahibkar')
+            TabOrder = 0
+            WordWrap = True
+            OnClick = RadioGroup1Click
+          end
+        end
+        object Panel3: TPanel
+          Left = 0
+          Top = 43
+          Width = 529
+          Height = 66
+          Align = alTop
+          TabOrder = 1
+          object GroupBox1: TGroupBox
+            Left = 4
+            Top = 2
+            Width = 527
+            Height = 61
+            Caption = 'Axtar'#305#351
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+            TabOrder = 0
+            object Label22: TLabel
+              Left = 4
+              Top = 14
+              Width = 38
+              Height = 13
+              Caption = 'Pin kod:'
+              Font.Charset = DEFAULT_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Tahoma'
+              Font.Style = []
+              ParentFont = False
+            end
+            object Label76: TLabel
+              Left = 4
+              Top = 36
+              Width = 51
+              Height = 13
+              Caption = 'Seriya/'#8470':'
+              Font.Charset = DEFAULT_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Tahoma'
+              Font.Style = []
+              ParentFont = False
+            end
+            object Label102: TLabel
+              Left = 271
+              Top = 14
+              Width = 73
+              Height = 13
+              Caption = 'M'#252#351't'#601'rini kodu:'
+              Font.Charset = DEFAULT_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Tahoma'
+              Font.Style = []
+              ParentFont = False
+            end
+            object Label103: TLabel
+              Left = 271
+              Top = 36
+              Width = 31
+              Height = 13
+              Caption = 'V'#214'EN:'
+              Font.Charset = RUSSIAN_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Tahoma'
+              Font.Style = []
+              ParentFont = False
+            end
+            object Searchpaspnum: TEdit
+              Left = 87
+              Top = 35
+              Width = 164
+              Height = 21
+              Font.Charset = DEFAULT_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Tahoma'
+              Font.Style = []
+              ParentFont = False
+              TabOrder = 0
+              OnChange = SearchpasspinChange
+              OnKeyPress = SearchpasspinKeyPress
+            end
+            object Searchinn: TEdit
+              Left = 352
+              Top = 35
+              Width = 164
+              Height = 21
+              Color = clWhite
+              Font.Charset = DEFAULT_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Tahoma'
+              Font.Style = []
+              MaxLength = 10
+              ParentFont = False
+              TabOrder = 1
+              OnChange = SearchpasspinChange
+              OnKeyPress = SearchpasspinKeyPress
+            end
+            object Searchpasspin: TEdit
+              Left = 87
+              Top = 13
+              Width = 164
+              Height = 21
+              Font.Charset = DEFAULT_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Tahoma'
+              Font.Style = []
+              ParentFont = False
+              TabOrder = 2
+              OnChange = SearchpasspinChange
+              OnKeyPress = SearchpasspinKeyPress
+            end
+            object Searchid: TEdit
+              Left = 352
+              Top = 13
+              Width = 164
+              Height = 21
+              Font.Charset = DEFAULT_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Tahoma'
+              Font.Style = []
+              ParentFont = False
+              TabOrder = 3
+              OnChange = SearchpasspinChange
+              OnKeyPress = SearchpasspinKeyPress
+            end
+          end
+        end
+        object Panel4: TPanel
+          Left = 0
+          Top = 109
+          Width = 529
+          Height = 140
+          Align = alTop
+          TabOrder = 2
+          object GroupBox2: TGroupBox
+            Left = 266
+            Top = 1
+            Width = 262
+            Height = 138
+            Align = alLeft
+            Caption = 'Pasport'
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+            TabOrder = 0
+            object Label9: TLabel
+              Left = 54
+              Top = 82
+              Width = 6
+              Height = 19
+              Caption = '*'
+              Font.Charset = RUSSIAN_CHARSET
+              Font.Color = clRed
+              Font.Height = -16
+              Font.Name = 'Azl Sans Serif'
+              Font.Style = [fsBold]
+              ParentFont = False
+            end
+            object Label15: TLabel
+              Left = 3
+              Top = 80
+              Width = 51
+              Height = 13
+              Caption = 'Seriya/'#8470':'
+            end
+            object TLabel
+              Left = 16
+              Top = 19
+              Width = 3
+              Height = 13
+            end
+            object Label32: TLabel
+              Left = 4
+              Top = 55
+              Width = 69
+              Height = 13
+              Caption = 'S'#601'n'#601'din n'#246'v'#252':'
+              Font.Charset = RUSSIAN_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Tahoma'
+              Font.Style = []
+              ParentFont = False
+            end
+            object Label1: TLabel
+              Left = 3
+              Top = 32
+              Width = 38
+              Height = 13
+              Caption = 'Pin kod:'
+            end
+            object Label2: TLabel
+              Left = 43
+              Top = 32
+              Width = 6
+              Height = 19
+              Caption = '*'
+              Font.Charset = RUSSIAN_CHARSET
+              Font.Color = clRed
+              Font.Height = -16
+              Font.Name = 'Azl Sans Serif'
+              Font.Style = [fsBold]
+              ParentFont = False
+            end
+            object Label3: TLabel
+              Left = 73
+              Top = 58
+              Width = 6
+              Height = 19
+              Caption = '*'
+              Font.Charset = RUSSIAN_CHARSET
+              Font.Color = clRed
+              Font.Height = -16
+              Font.Name = 'Azl Sans Serif'
+              Font.Style = [fsBold]
+              ParentFont = False
+            end
+            object EditPINCodeI: TEdit
+              Left = 90
+              Top = 28
+              Width = 164
+              Height = 21
+              CharCase = ecUpperCase
+              Font.Charset = RUSSIAN_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Tahoma'
+              Font.Style = []
+              MaxLength = 7
+              ParentFont = False
+              TabOrder = 0
+            end
+            object EditSerialI: TEdit
+              Left = 90
+              Top = 76
+              Width = 43
+              Height = 21
+              Font.Charset = RUSSIAN_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Tahoma'
+              Font.Style = []
+              ParentFont = False
+              TabOrder = 1
+            end
+            object EditPassportI: TEdit
+              Left = 133
+              Top = 76
+              Width = 121
+              Height = 21
+              Font.Charset = RUSSIAN_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Tahoma'
+              Font.Style = []
+              MaxLength = 8
+              ParentFont = False
+              TabOrder = 2
+            end
+            object CBoxPassPlaceI: TDBLookupComboBox
+              Left = 90
+              Top = 52
+              Width = 164
+              Height = 21
+              KeyField = 'ID'
+              ListField = 'NAME'
+              ListSource = ExpDataModule.DocTypesDataSource
+              TabOrder = 3
+              OnCloseUp = CBoxPassPlaceICloseUp
+            end
+            object ButtonNominal: TButton
+              Left = 90
+              Top = 103
+              Width = 164
+              Height = 26
+              Caption = 'Nominal '#351#601'xs'
+              DoubleBuffered = False
+              Enabled = False
+              ParentDoubleBuffered = False
+              TabOrder = 4
+              OnClick = ButtonNominalClick
+            end
+          end
+          object GroupBox3: TGroupBox
+            Left = 1
+            Top = 1
+            Width = 265
+            Height = 138
+            Align = alLeft
+            Caption = 'M'#252#351't'#601'ri'
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+            TabOrder = 1
+            object Label4: TLabel
+              Left = 3
+              Top = 57
+              Width = 36
+              Height = 13
+              Caption = 'Soyad'#305':'
+            end
+            object Label21: TLabel
+              Left = 42
+              Top = 60
+              Width = 6
+              Height = 19
+              Caption = '*'
+              Font.Charset = RUSSIAN_CHARSET
+              Font.Color = clRed
+              Font.Height = -16
+              Font.Name = 'Azl Sans Serif'
+              Font.Style = [fsBold]
+              ParentFont = False
+            end
+            object Label7: TLabel
+              Left = 3
+              Top = 32
+              Width = 73
+              Height = 13
+              Caption = 'M'#252#351't'#601'rini kodu:'
+            end
+            object Label11: TLabel
+              Left = 26
+              Top = 84
+              Width = 6
+              Height = 19
+              Caption = '*'
+              Font.Charset = RUSSIAN_CHARSET
+              Font.Color = clRed
+              Font.Height = -16
+              Font.Name = 'Azl Sans Serif'
+              Font.Style = [fsBold]
+              ParentFont = False
+            end
+            object Label12: TLabel
+              Left = 3
+              Top = 81
+              Width = 19
+              Height = 13
+              Caption = 'Ad'#305':'
+            end
+            object Label17: TLabel
+              Left = 66
+              Top = 107
+              Width = 6
+              Height = 19
+              Caption = '*'
+              Font.Charset = RUSSIAN_CHARSET
+              Font.Color = clRed
+              Font.Height = -16
+              Font.Name = 'Azl Sans Serif'
+              Font.Style = [fsBold]
+              ParentFont = False
+            end
+            object Label18: TLabel
+              Left = 3
+              Top = 105
+              Width = 60
+              Height = 13
+              Caption = 'Atas'#305'n'#305'n Ad'#305':'
+            end
+            object RadioButton1: TRadioButton
+              Left = 90
+              Top = 9
+              Width = 66
+              Height = 17
+              Caption = 'Rezident'
+              Checked = True
+              DoubleBuffered = False
+              ParentDoubleBuffered = False
+              TabOrder = 0
+              TabStop = True
+            end
+            object RadioButton2: TRadioButton
+              Left = 160
+              Top = 9
+              Width = 94
+              Height = 17
+              Caption = 'Qeyri Rezident'
+              TabOrder = 1
+            end
+            object EditLastNameI: TEdit
+              Left = 90
+              Top = 52
+              Width = 164
+              Height = 21
+              Font.Charset = RUSSIAN_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Tahoma'
+              Font.Style = []
+              ParentFont = False
+              TabOrder = 2
+            end
+            object EditNameI: TEdit
+              Left = 90
+              Top = 76
+              Width = 164
+              Height = 21
+              Font.Charset = RUSSIAN_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Tahoma'
+              Font.Style = []
+              ParentFont = False
+              TabOrder = 3
+            end
+            object EditSonameI: TEdit
+              Left = 90
+              Top = 100
+              Width = 164
+              Height = 21
+              Font.Charset = RUSSIAN_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Tahoma'
+              Font.Style = []
+              ParentFont = False
+              TabOrder = 4
+            end
+            object EditCustid: TEdit
+              Left = 90
+              Top = 28
+              Width = 164
+              Height = 21
+              Color = clSilver
+              Enabled = False
+              Font.Charset = RUSSIAN_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Tahoma'
+              Font.Style = []
+              ParentFont = False
+              TabOrder = 5
+            end
+          end
+        end
+        object Panel7: TPanel
+          Left = 0
+          Top = 249
+          Width = 529
+          Height = 131
+          Align = alTop
+          TabOrder = 3
+          object GroupBox6: TGroupBox
+            Left = 1
+            Top = 1
+            Width = 265
+            Height = 129
+            Align = alLeft
+            Caption = 'M'#601'bl'#601#287
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+            TabOrder = 0
+            object Label43: TLabel
+              Left = 4
+              Top = 16
+              Width = 37
+              Height = 14
+              Caption = 'Valyuta'
+              Font.Charset = RUSSIAN_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Azl Sans Serif'
+              Font.Style = []
+              ParentFont = False
+            end
+            object Label44: TLabel
+              Left = 7
+              Top = 87
+              Width = 75
+              Height = 14
+              Caption = 'M'#601'bl'#601#287'(yaz'#305' il'#601')'
+              Font.Charset = RUSSIAN_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Azl Sans Serif'
+              Font.Style = []
+              ParentFont = False
+            end
+            object Label45: TLabel
+              Left = 99
+              Top = 16
+              Width = 80
+              Height = 14
+              Caption = 'M'#601'bl'#601#287'(r'#601'q'#601'ml'#601')'
+              Font.Charset = RUSSIAN_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Azl Sans Serif'
+              Font.Style = []
+              ParentFont = False
+            end
+            object Label46: TLabel
+              Left = 12
+              Top = 51
+              Width = 88
+              Height = 14
+              Caption = 'Komissiya M'#601'bl'#601#287'i'
+              Font.Charset = RUSSIAN_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Azl Sans Serif'
+              Font.Style = []
+              ParentFont = False
+            end
+            object Label47: TLabel
+              Left = 176
+              Top = 52
+              Width = 68
+              Height = 14
+              Caption = #220'mumi M'#601'bl'#601#287
+              Font.Charset = RUSSIAN_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Azl Sans Serif'
+              Font.Style = []
+              ParentFont = False
+            end
+            object Label147: TLabel
+              Left = 45
+              Top = 18
+              Width = 6
+              Height = 19
+              Caption = '*'
+              Font.Charset = RUSSIAN_CHARSET
+              Font.Color = clRed
+              Font.Height = -16
+              Font.Name = 'Azl Sans Serif'
+              Font.Style = [fsBold]
+              ParentFont = False
+            end
+            object Label149: TLabel
+              Left = 184
+              Top = 17
+              Width = 6
+              Height = 19
+              Caption = '*'
+              Font.Charset = RUSSIAN_CHARSET
+              Font.Color = clRed
+              Font.Height = -16
+              Font.Name = 'Azl Sans Serif'
+              Font.Style = [fsBold]
+              ParentFont = False
+            end
+            object Edit15: TEdit
+              Left = 3
+              Top = 101
+              Width = 257
+              Height = 21
+              Color = cl3DLight
+              Font.Charset = RUSSIAN_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Tahoma'
+              Font.Style = []
+              ParentFont = False
+              ReadOnly = True
+              TabOrder = 2
+            end
+            object CMCurrencyEdit2: TCMCurrencyEdit
+              Left = 3
+              Top = 65
+              Width = 140
+              Height = 21
+              Color = cl3DLight
+              Font.Charset = RUSSIAN_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Tahoma'
+              Font.Style = []
+              ParentFont = False
+              ReadOnly = True
+              TabOrder = 0
+              Text = ' 0.00'
+            end
+            object CMCurrencyEdit3: TCMCurrencyEdit
+              Left = 143
+              Top = 65
+              Width = 116
+              Height = 21
+              Color = cl3DLight
+              Font.Charset = RUSSIAN_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Tahoma'
+              Font.Style = []
+              ParentFont = False
+              ReadOnly = True
+              TabOrder = 1
+              Text = ' 0.00'
+            end
+            object ValuteName: TDBLookupComboBox
+              Left = 3
+              Top = 30
+              Width = 88
+              Height = 21
+              Font.Charset = RUSSIAN_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Tahoma'
+              Font.Style = []
+              KeyField = 'VALUTE'
+              ListField = 'VAL_NAME'
+              ListSource = ExpDataModule.ValyutaDataSource
+              ParentFont = False
+              TabOrder = 3
+              OnClick = ValuteNameClick
+            end
+            object CMCurrencyEdit: TEdit
+              Left = 89
+              Top = 30
+              Width = 170
+              Height = 21
+              Enabled = False
+              TabOrder = 4
+              Text = '0.00'
+              OnChange = CMCurrencyEditChange
+              OnExit = CMCurrencyEditExit
+              OnKeyPress = CMCurrencyEditKeyPress
+              OnMouseActivate = CMCurrencyEditMouseActivate
+            end
+          end
+          object GroupBox7: TGroupBox
+            Left = 266
+            Top = 1
+            Width = 262
+            Height = 129
+            Align = alLeft
+            Caption = 'Filial     '
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = []
+            ParentFont = False
+            TabOrder = 1
+            object Label48: TLabel
+              Left = 5
+              Top = 52
+              Width = 90
+              Height = 14
+              Caption = 'Qeydiyyat n'#246'mr'#601'si'
+              Font.Charset = RUSSIAN_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Azl Sans Serif'
+              Font.Style = []
+              ParentFont = False
+            end
+            object Label24: TLabel
+              Left = 4
+              Top = 88
+              Width = 80
+              Height = 14
+              Caption = 'Hesab'#305'n n'#246'mr'#601'si'
+              Font.Charset = RUSSIAN_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Azl Sans Serif'
+              Font.Style = []
+              ParentFont = False
+            end
+            object Label151: TLabel
+              Left = 32
+              Top = 0
+              Width = 6
+              Height = 19
+              Caption = '*'
+              Font.Charset = RUSSIAN_CHARSET
+              Font.Color = clRed
+              Font.Height = -16
+              Font.Name = 'Azl Sans Serif'
+              Font.Style = [fsBold]
+              ParentFont = False
+            end
+            object Label153: TLabel
+              Left = 90
+              Top = 91
+              Width = 6
+              Height = 19
+              Caption = '*'
+              Font.Charset = RUSSIAN_CHARSET
+              Font.Color = clRed
+              Font.Height = -16
+              Font.Name = 'Azl Sans Serif'
+              Font.Style = [fsBold]
+              ParentFont = False
+            end
+            object TransRefEdit: TEdit
+              Left = 3
+              Top = 66
+              Width = 255
+              Height = 21
+              Color = cl3DLight
+              Font.Charset = RUSSIAN_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Tahoma'
+              Font.Style = []
+              ParentFont = False
+              ReadOnly = True
+              TabOrder = 0
+            end
+            object SenderAccNo: TDBLookupComboBox
+              Left = 4
+              Top = 102
+              Width = 254
+              Height = 21
+              Font.Charset = RUSSIAN_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Tahoma'
+              Font.Style = []
+              KeyField = 'ID'
+              ListField = 'ACC_NO'
+              ListSource = ExpDataModule.AccountDataSource
+              ParentFont = False
+              TabOrder = 1
+            end
+            object DBEdit1: TDBEdit
+              Left = 4
+              Top = 30
+              Width = 254
+              Height = 22
+              Color = cl3DLight
+              DataField = 'ID'
+              DataSource = ExpDataModule.FilialDataSource
+              TabOrder = 2
+            end
+            object FilialNameI: TDBEdit
+              Left = 4
+              Top = 30
+              Width = 254
+              Height = 21
+              Color = cl3DLight
+              DataField = 'NAME'
+              DataSource = ExpDataModule.FilialDataSource
+              Font.Charset = RUSSIAN_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Tahoma'
+              Font.Style = []
+              ParentFont = False
+              TabOrder = 3
+            end
+          end
+        end
+        object Panel8: TPanel
+          Left = 1
+          Top = 389
+          Width = 529
+          Height = 39
+          TabOrder = 4
+          object GroupBox8: TGroupBox
+            Left = 5
+            Top = 1
+            Width = 450
+            Height = 37
+            Caption = 'T'#601'yinat'#305'     '
+            TabOrder = 0
+            object Label152: TLabel
+              Left = 52
+              Top = 1
+              Width = 6
+              Height = 19
+              Caption = '*'
+              Font.Charset = RUSSIAN_CHARSET
+              Font.Color = clRed
+              Font.Height = -16
+              Font.Name = 'Azl Sans Serif'
+              Font.Style = [fsBold]
+              ParentFont = False
+            end
+            object RemitİnfEdit: TEdit
+              Left = 5
+              Top = 12
+              Width = 438
+              Height = 21
+              Font.Charset = RUSSIAN_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Tahoma'
+              Font.Style = []
+              ParentFont = False
+              TabOrder = 0
+            end
+          end
+          object BitBtn1: TBitBtn
+            Left = 456
+            Top = 9
+            Width = 72
+            Height = 25
+            Caption = '>>>'
+            DoubleBuffered = True
+            ParentDoubleBuffered = False
+            TabOrder = 1
+            OnClick = BitBtn1Click
+          end
+        end
+        object CMHintBox3: TCMHintBox
+          Left = 70
+          Top = 375
+          Width = 381
+          Height = 22
+          AutoSize = True
+          BevelOuter = bvNone
+          Caption = 'CMHintBox1'
+          TabOrder = 5
+          Visible = False
+          HintStyle = hsAlert
+          Timeout = 4000
+          BeepOnMessage = False
+        end
+      end
+      object TabSheet2: TTabSheet
+        Caption = 'Alan '#350#601'xs'
+        ImageIndex = 1
+        object Panel9: TPanel
+          Left = 0
+          Top = 0
+          Width = 529
+          Height = 43
+          Align = alTop
+          Enabled = False
+          TabOrder = 0
+          object RadioGroup2: TRadioGroup
+            Left = 1
+            Top = 1
+            Width = 527
+            Height = 40
+            Align = alTop
+            BiDiMode = bdLeftToRight
+            Caption = 'M'#252#351't'#601'rinin tipi'
+            Columns = 5
+            DoubleBuffered = False
+            Items.Strings = (
+              'Nominal '#351#601'xs'
+              'Fiziki  '#351#601'xs'
+              'Fiziki  sahibkar'
+              'H'#252'quqi  '#351#601'xs'
+              'Fiziki  '#351#601'xs v'#601' sahibkar')
+            ParentBiDiMode = False
+            ParentDoubleBuffered = False
+            TabOrder = 0
+            Touch.InteractiveGestureOptions = []
+            Touch.ParentTabletOptions = False
+            Touch.TabletOptions = [toPressAndHold]
+            WordWrap = True
+            OnClick = RadioGroup2Click
+          end
+        end
+        object Panel10: TPanel
+          Left = 0
+          Top = 43
+          Width = 529
+          Height = 66
+          Align = alTop
+          TabOrder = 1
+          object GroupBox4: TGroupBox
+            Left = 1
+            Top = 1
+            Width = 527
+            Height = 61
+            Align = alTop
+            Caption = 'Axtar'#305#351
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+            TabOrder = 0
+            object Label5: TLabel
+              Left = 4
+              Top = 14
+              Width = 38
+              Height = 13
+              Caption = 'Pin kod:'
+              Font.Charset = DEFAULT_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Tahoma'
+              Font.Style = []
+              ParentFont = False
+            end
+            object Label6: TLabel
+              Left = 4
+              Top = 36
+              Width = 51
+              Height = 13
+              Caption = 'Seriya/'#8470':'
+              Font.Charset = DEFAULT_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Tahoma'
+              Font.Style = []
+              ParentFont = False
+            end
+            object Label16: TLabel
+              Left = 271
+              Top = 14
+              Width = 73
+              Height = 13
+              Caption = 'M'#252#351't'#601'rini kodu:'
+              Font.Charset = DEFAULT_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Tahoma'
+              Font.Style = []
+              ParentFont = False
+            end
+            object Label19: TLabel
+              Left = 271
+              Top = 36
+              Width = 31
+              Height = 13
+              Caption = 'V'#214'EN:'
+              Font.Charset = RUSSIAN_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Tahoma'
+              Font.Style = []
+              ParentFont = False
+            end
+            object Search1paspnum: TEdit
+              Left = 90
+              Top = 35
+              Width = 164
+              Height = 21
+              Font.Charset = DEFAULT_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Tahoma'
+              Font.Style = []
+              ParentFont = False
+              TabOrder = 0
+              OnChange = Search1passpinChange
+              OnKeyPress = Search1passpinKeyPress
+            end
+            object Search1inn: TEdit
+              Left = 355
+              Top = 36
+              Width = 164
+              Height = 21
+              Color = clWhite
+              Font.Charset = DEFAULT_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Tahoma'
+              Font.Style = []
+              MaxLength = 10
+              ParentFont = False
+              TabOrder = 1
+              OnChange = Search1passpinChange
+              OnKeyPress = Search1passpinKeyPress
+            end
+            object Search1passpin: TEdit
+              Left = 90
+              Top = 13
+              Width = 164
+              Height = 21
+              Font.Charset = DEFAULT_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Tahoma'
+              Font.Style = []
+              ParentFont = False
+              TabOrder = 2
+              OnChange = Search1passpinChange
+              OnKeyPress = Search1passpinKeyPress
+            end
+            object Search1id: TEdit
+              Left = 355
+              Top = 13
+              Width = 164
+              Height = 21
+              Font.Charset = DEFAULT_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Tahoma'
+              Font.Style = []
+              ParentFont = False
+              TabOrder = 3
+              OnChange = Search1passpinChange
+              OnKeyPress = Search1passpinKeyPress
+            end
+          end
+        end
+        object Panel11: TPanel
+          Left = 0
+          Top = 109
+          Width = 529
+          Height = 140
+          Align = alTop
+          TabOrder = 2
+          object GroupBox5: TGroupBox
+            Left = 1
+            Top = 1
+            Width = 265
+            Height = 138
+            Align = alLeft
+            Caption = 'M'#252#351't'#601'ri'
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+            TabOrder = 0
+            object Label20: TLabel
+              Left = 3
+              Top = 57
+              Width = 36
+              Height = 13
+              Caption = 'Soyad'#305':'
+            end
+            object Label23: TLabel
+              Left = 42
+              Top = 60
+              Width = 6
+              Height = 19
+              Caption = '*'
+              Font.Charset = RUSSIAN_CHARSET
+              Font.Color = clRed
+              Font.Height = -16
+              Font.Name = 'Azl Sans Serif'
+              Font.Style = [fsBold]
+              ParentFont = False
+            end
+            object Label25: TLabel
+              Left = 3
+              Top = 32
+              Width = 73
+              Height = 13
+              Caption = 'M'#252#351't'#601'rini kodu:'
+            end
+            object Label26: TLabel
+              Left = 26
+              Top = 84
+              Width = 6
+              Height = 19
+              Caption = '*'
+              Font.Charset = RUSSIAN_CHARSET
+              Font.Color = clRed
+              Font.Height = -16
+              Font.Name = 'Azl Sans Serif'
+              Font.Style = [fsBold]
+              ParentFont = False
+            end
+            object Label27: TLabel
+              Left = 3
+              Top = 81
+              Width = 19
+              Height = 13
+              Caption = 'Ad'#305':'
+            end
+            object Label28: TLabel
+              Left = 66
+              Top = 107
+              Width = 6
+              Height = 19
+              Caption = '*'
+              Font.Charset = RUSSIAN_CHARSET
+              Font.Color = clRed
+              Font.Height = -16
+              Font.Name = 'Azl Sans Serif'
+              Font.Style = [fsBold]
+              ParentFont = False
+            end
+            object Label29: TLabel
+              Left = 3
+              Top = 105
+              Width = 60
+              Height = 13
+              Caption = 'Atas'#305'n'#305'n Ad'#305':'
+            end
+            object RadioButton3: TRadioButton
+              Left = 90
+              Top = 9
+              Width = 66
+              Height = 17
+              Caption = 'Rezident'
+              Checked = True
+              DoubleBuffered = False
+              ParentDoubleBuffered = False
+              TabOrder = 0
+              TabStop = True
+            end
+            object RadioButton4: TRadioButton
+              Left = 160
+              Top = 9
+              Width = 94
+              Height = 17
+              Caption = 'Qeyri Rezident'
+              TabOrder = 1
+            end
+            object EditLastNameII: TEdit
+              Left = 90
+              Top = 52
+              Width = 164
+              Height = 21
+              Font.Charset = RUSSIAN_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Tahoma'
+              Font.Style = []
+              ParentFont = False
+              TabOrder = 2
+            end
+            object EditNameII: TEdit
+              Left = 90
+              Top = 76
+              Width = 164
+              Height = 21
+              Font.Charset = RUSSIAN_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Tahoma'
+              Font.Style = []
+              ParentFont = False
+              TabOrder = 3
+            end
+            object EditSoNameII: TEdit
+              Left = 90
+              Top = 100
+              Width = 164
+              Height = 21
+              Font.Charset = RUSSIAN_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Tahoma'
+              Font.Style = []
+              ParentFont = False
+              TabOrder = 4
+            end
+            object EditCustidII: TEdit
+              Left = 90
+              Top = 28
+              Width = 164
+              Height = 21
+              Color = clSilver
+              Enabled = False
+              Font.Charset = RUSSIAN_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Tahoma'
+              Font.Style = []
+              ParentFont = False
+              TabOrder = 5
+            end
+          end
+          object GroupBox9: TGroupBox
+            Left = 266
+            Top = 1
+            Width = 262
+            Height = 138
+            Align = alLeft
+            Caption = 'Pasport'
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+            TabOrder = 1
+            object Label30: TLabel
+              Left = 54
+              Top = 82
+              Width = 6
+              Height = 19
+              Caption = '*'
+              Font.Charset = RUSSIAN_CHARSET
+              Font.Color = clRed
+              Font.Height = -16
+              Font.Name = 'Azl Sans Serif'
+              Font.Style = [fsBold]
+              ParentFont = False
+            end
+            object Label31: TLabel
+              Left = 3
+              Top = 80
+              Width = 51
+              Height = 13
+              Caption = 'Seriya/'#8470':'
+            end
+            object TLabel
+              Left = 16
+              Top = 19
+              Width = 3
+              Height = 13
+            end
+            object Label33: TLabel
+              Left = 4
+              Top = 55
+              Width = 69
+              Height = 13
+              Caption = 'S'#601'n'#601'din n'#246'v'#252':'
+              Font.Charset = RUSSIAN_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Tahoma'
+              Font.Style = []
+              ParentFont = False
+            end
+            object Label34: TLabel
+              Left = 3
+              Top = 32
+              Width = 38
+              Height = 13
+              Caption = 'Pin kod:'
+            end
+            object Label35: TLabel
+              Left = 43
+              Top = 32
+              Width = 6
+              Height = 19
+              Caption = '*'
+              Font.Charset = RUSSIAN_CHARSET
+              Font.Color = clRed
+              Font.Height = -16
+              Font.Name = 'Azl Sans Serif'
+              Font.Style = [fsBold]
+              ParentFont = False
+            end
+            object Label36: TLabel
+              Left = 73
+              Top = 58
+              Width = 6
+              Height = 19
+              Caption = '*'
+              Font.Charset = RUSSIAN_CHARSET
+              Font.Color = clRed
+              Font.Height = -16
+              Font.Name = 'Azl Sans Serif'
+              Font.Style = [fsBold]
+              ParentFont = False
+            end
+            object EditPINCodeII: TEdit
+              Left = 90
+              Top = 28
+              Width = 164
+              Height = 21
+              CharCase = ecUpperCase
+              Font.Charset = RUSSIAN_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Tahoma'
+              Font.Style = []
+              MaxLength = 7
+              ParentFont = False
+              TabOrder = 0
+            end
+            object EditSerialII: TEdit
+              Left = 90
+              Top = 76
+              Width = 43
+              Height = 21
+              Font.Charset = RUSSIAN_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Tahoma'
+              Font.Style = []
+              ParentFont = False
+              TabOrder = 1
+            end
+            object EditPassportII: TEdit
+              Left = 134
+              Top = 76
+              Width = 120
+              Height = 21
+              Font.Charset = RUSSIAN_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Tahoma'
+              Font.Style = []
+              ParentFont = False
+              TabOrder = 2
+            end
+            object CBoxPassPlaceII: TDBLookupComboBox
+              Left = 90
+              Top = 52
+              Width = 164
+              Height = 21
+              KeyField = 'ID'
+              ListField = 'NAME'
+              ListSource = ExpDataModule.DocTypesDataSource1
+              TabOrder = 3
+              OnCloseUp = CBoxPassPlaceIICloseUp
+            end
+            object Button7: TButton
+              Left = 90
+              Top = 103
+              Width = 164
+              Height = 26
+              Caption = 'Nominal '#351#601'xs'
+              DoubleBuffered = False
+              ParentDoubleBuffered = False
+              TabOrder = 4
+              Visible = False
+              OnClick = ButtonNominalClick
+            end
+          end
+        end
+        object Panel14: TPanel
+          Left = 0
+          Top = 249
+          Width = 529
+          Height = 92
+          Align = alTop
+          TabOrder = 3
+          object GroupBox14: TGroupBox
+            Left = 1
+            Top = 1
+            Width = 263
+            Height = 90
+            Align = alLeft
+            Caption = 'Filial'
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+            TabOrder = 0
+            object Label89: TLabel
+              Left = 4
+              Top = 48
+              Width = 80
+              Height = 14
+              Caption = 'Hesab'#305'n n'#246'mr'#601'si'
+              Font.Charset = RUSSIAN_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Azl Sans Serif'
+              Font.Style = []
+              ParentFont = False
+            end
+            object Label88: TLabel
+              Left = 6
+              Top = 14
+              Width = 19
+              Height = 13
+              Caption = 'Ad'#305':'
+            end
+            object FilialNameII: TDBLookupComboBox
+              Left = 4
+              Top = 28
+              Width = 250
+              Height = 21
+              Font.Charset = RUSSIAN_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Tahoma'
+              Font.Style = []
+              KeyField = 'ID'
+              ListField = 'NAME'
+              ListSource = ExpDataModule.AllFilialDataSource
+              ParentFont = False
+              TabOrder = 0
+            end
+            object SenderAccNoII: TDBLookupComboBox
+              Left = 4
+              Top = 64
+              Width = 250
+              Height = 21
+              Enabled = False
+              Font.Charset = RUSSIAN_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Tahoma'
+              Font.Style = []
+              KeyField = 'ID'
+              ListField = 'ACC_NO'
+              ListSource = ExpDataModule.AccountDataSource1
+              ParentFont = False
+              TabOrder = 1
+            end
+          end
+          object GroupBox15: TGroupBox
+            Left = 264
+            Top = 1
+            Width = 263
+            Height = 90
+            Align = alLeft
+            Caption = #350'ifr'#601'l'#601'm'#601'k'
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+            TabOrder = 1
+            object Label90: TLabel
+              Left = 16
+              Top = 16
+              Width = 27
+              Height = 14
+              Caption = 'Tarix:'
+              Font.Charset = RUSSIAN_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Azl Sans Serif'
+              Font.Style = []
+              ParentFont = False
+            end
+            object Label91: TLabel
+              Left = 18
+              Top = 39
+              Width = 26
+              Height = 14
+              Caption = 'Vaxt:'
+              Font.Charset = RUSSIAN_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Azl Sans Serif'
+              Font.Style = []
+              ParentFont = False
+            end
+            object Label92: TLabel
+              Left = 18
+              Top = 64
+              Width = 26
+              Height = 14
+              Caption = #350'ifr'#601':'
+              Font.Charset = RUSSIAN_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Azl Sans Serif'
+              Font.Style = []
+              ParentFont = False
+            end
+            object Edit25: TEdit
+              Left = 90
+              Top = 63
+              Width = 164
+              Height = 21
+              Color = clSilver
+              Enabled = False
+              Font.Charset = RUSSIAN_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Tahoma'
+              Font.Style = []
+              ParentFont = False
+              TabOrder = 0
+            end
+            object EditDate: TEdit
+              Left = 90
+              Top = 15
+              Width = 164
+              Height = 21
+              Color = cl3DLight
+              Enabled = False
+              Font.Charset = RUSSIAN_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Tahoma'
+              Font.Style = []
+              ParentFont = False
+              ReadOnly = True
+              TabOrder = 1
+            end
+            object EditTime: TEdit
+              Left = 90
+              Top = 39
+              Width = 164
+              Height = 21
+              Color = cl3DLight
+              Enabled = False
+              Font.Charset = RUSSIAN_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Tahoma'
+              Font.Style = []
+              ParentFont = False
+              ReadOnly = True
+              TabOrder = 2
+            end
+          end
+        end
+        object Panel15: TPanel
+          Left = 0
+          Top = 341
+          Width = 529
+          Height = 89
+          Align = alTop
+          TabOrder = 4
+          object GroupBox16: TGroupBox
+            Left = 1
+            Top = 1
+            Width = 263
+            Height = 87
+            Align = alLeft
+            Caption = #399'lav'#601' informasiya'
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+            TabOrder = 0
+            object Memo1: TMemo
+              Left = 2
+              Top = 14
+              Width = 255
+              Height = 68
+              Font.Charset = RUSSIAN_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Tahoma'
+              Font.Style = []
+              ParentFont = False
+              TabOrder = 0
+            end
+          end
+          object Button5: TButton
+            Left = 444
+            Top = 35
+            Width = 75
+            Height = 25
+            Caption = '<<<'
+            TabOrder = 1
+            OnClick = Button5Click
+          end
+          object Button1: TButton
+            Left = 282
+            Top = 35
+            Width = 75
+            Height = 25
+            Caption = 'Yadda'#351'a yaz'
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+            TabOrder = 2
+            OnClick = Button1Click
+          end
+          object CMHintBox1: TCMHintBox
+            Left = 266
+            Top = 3
+            Width = 257
+            Height = 21
+            AutoSize = True
+            BevelOuter = bvNone
+            Caption = 'CMHintBox1'
+            TabOrder = 3
+            Visible = False
+            HintStyle = hsAlert
+            Timeout = 4000
+            BeepOnMessage = False
+          end
+          object Button2: TButton
+            Left = 363
+            Top = 35
+            Width = 75
+            Height = 25
+            Caption = #304'mtina'
+            TabOrder = 4
+            OnClick = Button2Click
+          end
+        end
+      end
+      object TabSheet3: TTabSheet
+        Caption = #220#231#252'nc'#252' '#350#601'xs'
+        ImageIndex = 2
+        object Panel16: TPanel
+          Left = 0
+          Top = 0
+          Width = 529
+          Height = 43
+          Align = alTop
+          Enabled = False
+          TabOrder = 0
+          object RadioGroup3: TRadioGroup
+            Left = 1
+            Top = 1
+            Width = 527
+            Height = 40
+            Align = alTop
+            BiDiMode = bdLeftToRight
+            Caption = 'M'#252#351't'#601'rinin tipi'
+            Columns = 5
+            DoubleBuffered = False
+            Items.Strings = (
+              'Nominal '#351#601'xs'
+              'Fiziki  '#351#601'xs'
+              'Fiziki  sahibkar'
+              'H'#252'quqi  '#351#601'xs'
+              'Fiziki  '#351#601'xs v'#601' sahibkar')
+            ParentBiDiMode = False
+            ParentDoubleBuffered = False
+            TabOrder = 0
+            Touch.InteractiveGestureOptions = []
+            Touch.ParentTabletOptions = False
+            Touch.TabletOptions = [toPressAndHold]
+            WordWrap = True
+            OnClick = RadioGroup3Click
+          end
+        end
+        object Panel17: TPanel
+          Left = 0
+          Top = 43
+          Width = 529
+          Height = 66
+          Align = alTop
+          TabOrder = 1
+          object GroupBox10: TGroupBox
+            Left = 1
+            Top = 1
+            Width = 527
+            Height = 61
+            Align = alTop
+            Caption = 'Axtar'#305#351
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+            TabOrder = 0
+            object Label37: TLabel
+              Left = 4
+              Top = 14
+              Width = 38
+              Height = 13
+              Caption = 'Pin kod:'
+              Font.Charset = DEFAULT_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Tahoma'
+              Font.Style = []
+              ParentFont = False
+            end
+            object Label38: TLabel
+              Left = 4
+              Top = 36
+              Width = 51
+              Height = 13
+              Caption = 'Seriya/'#8470':'
+              Font.Charset = DEFAULT_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Tahoma'
+              Font.Style = []
+              ParentFont = False
+            end
+            object Label39: TLabel
+              Left = 271
+              Top = 14
+              Width = 73
+              Height = 13
+              Caption = 'M'#252#351't'#601'rini kodu:'
+              Font.Charset = DEFAULT_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Tahoma'
+              Font.Style = []
+              ParentFont = False
+            end
+            object Label40: TLabel
+              Left = 271
+              Top = 36
+              Width = 31
+              Height = 13
+              Caption = 'V'#214'EN:'
+              Font.Charset = RUSSIAN_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Tahoma'
+              Font.Style = []
+              ParentFont = False
+            end
+            object Search2paspnum: TEdit
+              Left = 90
+              Top = 35
+              Width = 164
+              Height = 21
+              Font.Charset = DEFAULT_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Tahoma'
+              Font.Style = []
+              ParentFont = False
+              TabOrder = 0
+              OnChange = SearchpasspinChange
+              OnKeyPress = SearchpasspinKeyPress
+            end
+            object Search2inn: TEdit
+              Left = 355
+              Top = 35
+              Width = 164
+              Height = 21
+              Color = clWhite
+              Font.Charset = DEFAULT_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Tahoma'
+              Font.Style = []
+              MaxLength = 10
+              ParentFont = False
+              TabOrder = 1
+              OnChange = SearchpasspinChange
+              OnKeyPress = SearchpasspinKeyPress
+            end
+            object Search2passpin: TEdit
+              Left = 90
+              Top = 13
+              Width = 164
+              Height = 21
+              Font.Charset = DEFAULT_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Tahoma'
+              Font.Style = []
+              ParentFont = False
+              TabOrder = 2
+              OnChange = SearchpasspinChange
+              OnKeyPress = SearchpasspinKeyPress
+            end
+            object Search2id: TEdit
+              Left = 355
+              Top = 13
+              Width = 164
+              Height = 21
+              Font.Charset = DEFAULT_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Tahoma'
+              Font.Style = []
+              ParentFont = False
+              TabOrder = 3
+              OnChange = SearchpasspinChange
+              OnKeyPress = SearchpasspinKeyPress
+            end
+          end
+        end
+        object Panel18: TPanel
+          Left = 0
+          Top = 109
+          Width = 529
+          Height = 140
+          Align = alTop
+          TabOrder = 2
+          object GroupBox12: TGroupBox
+            Left = 1
+            Top = 1
+            Width = 265
+            Height = 138
+            Align = alLeft
+            Caption = 'M'#252#351't'#601'ri'
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+            TabOrder = 0
+            object Label54: TLabel
+              Left = 3
+              Top = 57
+              Width = 36
+              Height = 13
+              Caption = 'Soyad'#305':'
+            end
+            object Label55: TLabel
+              Left = 42
+              Top = 60
+              Width = 6
+              Height = 19
+              Caption = '*'
+              Font.Charset = RUSSIAN_CHARSET
+              Font.Color = clRed
+              Font.Height = -16
+              Font.Name = 'Azl Sans Serif'
+              Font.Style = [fsBold]
+              ParentFont = False
+            end
+            object Label56: TLabel
+              Left = 3
+              Top = 32
+              Width = 73
+              Height = 13
+              Caption = 'M'#252#351't'#601'rini kodu:'
+            end
+            object Label57: TLabel
+              Left = 26
+              Top = 84
+              Width = 6
+              Height = 19
+              Caption = '*'
+              Font.Charset = RUSSIAN_CHARSET
+              Font.Color = clRed
+              Font.Height = -16
+              Font.Name = 'Azl Sans Serif'
+              Font.Style = [fsBold]
+              ParentFont = False
+            end
+            object Label58: TLabel
+              Left = 3
+              Top = 81
+              Width = 19
+              Height = 13
+              Caption = 'Ad'#305':'
+            end
+            object Label59: TLabel
+              Left = 66
+              Top = 107
+              Width = 6
+              Height = 19
+              Caption = '*'
+              Font.Charset = RUSSIAN_CHARSET
+              Font.Color = clRed
+              Font.Height = -16
+              Font.Name = 'Azl Sans Serif'
+              Font.Style = [fsBold]
+              ParentFont = False
+            end
+            object Label60: TLabel
+              Left = 3
+              Top = 105
+              Width = 60
+              Height = 13
+              Caption = 'Atas'#305'n'#305'n Ad'#305':'
+            end
+            object RadioButton5: TRadioButton
+              Left = 90
+              Top = 9
+              Width = 66
+              Height = 17
+              Caption = 'Rezident'
+              Checked = True
+              DoubleBuffered = False
+              ParentDoubleBuffered = False
+              TabOrder = 0
+              TabStop = True
+            end
+            object RadioButton6: TRadioButton
+              Left = 160
+              Top = 9
+              Width = 94
+              Height = 17
+              Caption = 'Qeyri Rezident'
+              TabOrder = 1
+            end
+            object EditLastName2: TEdit
+              Left = 90
+              Top = 52
+              Width = 164
+              Height = 21
+              Font.Charset = RUSSIAN_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Tahoma'
+              Font.Style = []
+              ParentFont = False
+              TabOrder = 2
+            end
+            object EditName2: TEdit
+              Left = 90
+              Top = 76
+              Width = 164
+              Height = 21
+              Font.Charset = RUSSIAN_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Tahoma'
+              Font.Style = []
+              ParentFont = False
+              TabOrder = 3
+            end
+            object EditSoName2: TEdit
+              Left = 90
+              Top = 100
+              Width = 164
+              Height = 21
+              Font.Charset = RUSSIAN_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Tahoma'
+              Font.Style = []
+              ParentFont = False
+              TabOrder = 4
+            end
+            object EditCustid2: TEdit
+              Left = 90
+              Top = 28
+              Width = 164
+              Height = 21
+              Color = clSilver
+              Enabled = False
+              Font.Charset = RUSSIAN_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Tahoma'
+              Font.Style = []
+              ParentFont = False
+              TabOrder = 5
+            end
+          end
+          object GroupBox13: TGroupBox
+            Left = 266
+            Top = 1
+            Width = 262
+            Height = 138
+            Align = alLeft
+            Caption = 'Pasport'
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+            TabOrder = 1
+            object Label61: TLabel
+              Left = 54
+              Top = 82
+              Width = 6
+              Height = 19
+              Caption = '*'
+              Font.Charset = RUSSIAN_CHARSET
+              Font.Color = clRed
+              Font.Height = -16
+              Font.Name = 'Azl Sans Serif'
+              Font.Style = [fsBold]
+              ParentFont = False
+            end
+            object Label62: TLabel
+              Left = 3
+              Top = 80
+              Width = 51
+              Height = 13
+              Caption = 'Seriya/'#8470':'
+            end
+            object TLabel
+              Left = 16
+              Top = 19
+              Width = 3
+              Height = 13
+            end
+            object Label63: TLabel
+              Left = 4
+              Top = 55
+              Width = 69
+              Height = 13
+              Caption = 'S'#601'n'#601'din n'#246'v'#252':'
+              Font.Charset = RUSSIAN_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Tahoma'
+              Font.Style = []
+              ParentFont = False
+            end
+            object Label64: TLabel
+              Left = 3
+              Top = 32
+              Width = 38
+              Height = 13
+              Caption = 'Pin kod:'
+            end
+            object Label65: TLabel
+              Left = 43
+              Top = 32
+              Width = 6
+              Height = 19
+              Caption = '*'
+              Font.Charset = RUSSIAN_CHARSET
+              Font.Color = clRed
+              Font.Height = -16
+              Font.Name = 'Azl Sans Serif'
+              Font.Style = [fsBold]
+              ParentFont = False
+            end
+            object Label66: TLabel
+              Left = 73
+              Top = 58
+              Width = 6
+              Height = 19
+              Caption = '*'
+              Font.Charset = RUSSIAN_CHARSET
+              Font.Color = clRed
+              Font.Height = -16
+              Font.Name = 'Azl Sans Serif'
+              Font.Style = [fsBold]
+              ParentFont = False
+            end
+            object EditPINCode2: TEdit
+              Left = 90
+              Top = 28
+              Width = 164
+              Height = 21
+              CharCase = ecUpperCase
+              Font.Charset = RUSSIAN_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Tahoma'
+              Font.Style = []
+              ParentFont = False
+              TabOrder = 0
+            end
+            object EditSerial2: TEdit
+              Left = 90
+              Top = 76
+              Width = 43
+              Height = 21
+              Font.Charset = RUSSIAN_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Tahoma'
+              Font.Style = []
+              ParentFont = False
+              TabOrder = 1
+            end
+            object EditPassport2: TEdit
+              Left = 134
+              Top = 76
+              Width = 120
+              Height = 21
+              Font.Charset = RUSSIAN_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Tahoma'
+              Font.Style = []
+              ParentFont = False
+              TabOrder = 2
+            end
+            object CBoxPassPlace2: TDBLookupComboBox
+              Left = 90
+              Top = 52
+              Width = 164
+              Height = 21
+              KeyField = 'ID'
+              ListField = 'NAME'
+              ListSource = ExpDataModule.DocTypesDataSource2
+              TabOrder = 3
+            end
+            object Button8: TButton
+              Left = 90
+              Top = 103
+              Width = 164
+              Height = 26
+              Caption = 'Nominal '#351#601'xs'
+              DoubleBuffered = False
+              ParentDoubleBuffered = False
+              TabOrder = 4
+              OnClick = ButtonNominalClick
+            end
+          end
+        end
+        object Panel21: TPanel
+          Left = 0
+          Top = 341
+          Width = 529
+          Height = 89
+          Align = alTop
+          TabOrder = 3
+          object GroupBox23: TGroupBox
+            Left = 0
+            Top = -1
+            Width = 263
+            Height = 87
+            Caption = #399'lav'#601' informasiya'
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = []
+            ParentFont = False
+            TabOrder = 0
+            object Memo2: TMemo
+              Left = 3
+              Top = 14
+              Width = 255
+              Height = 68
+              Font.Charset = RUSSIAN_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Tahoma'
+              Font.Style = []
+              ParentFont = False
+              TabOrder = 0
+            end
+          end
+          object CMHintBox2: TCMHintBox
+            Left = 267
+            Top = 5
+            Width = 257
+            Height = 21
+            AutoSize = True
+            BevelOuter = bvNone
+            Caption = 'CMHintBox1'
+            TabOrder = 1
+            Visible = False
+            HintStyle = hsAlert
+            Timeout = 4000
+            BeepOnMessage = False
+          end
+          object Button3: TButton
+            Left = 313
+            Top = 34
+            Width = 75
+            Height = 25
+            Caption = 'Q'#601'bul et'
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = []
+            ParentFont = False
+            TabOrder = 2
+            OnClick = Button3Click
+          end
+          object Button4: TButton
+            Left = 394
+            Top = 34
+            Width = 75
+            Height = 25
+            Caption = #304'mtina'
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = []
+            ParentFont = False
+            TabOrder = 3
+            OnClick = Button4Click
+          end
+        end
+        object Panel22: TPanel
+          Left = 0
+          Top = 249
+          Width = 529
+          Height = 92
+          Align = alTop
+          TabOrder = 4
+          object GroupBox21: TGroupBox
+            Left = 1
+            Top = 1
+            Width = 264
+            Height = 90
+            Align = alLeft
+            Caption = 'Filial'
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+            TabOrder = 0
+            object Label136: TLabel
+              Left = 4
+              Top = 49
+              Width = 80
+              Height = 14
+              Caption = 'Hesab'#305'n n'#246'mr'#601'si'
+              Font.Charset = RUSSIAN_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Azl Sans Serif'
+              Font.Style = []
+              ParentFont = False
+            end
+            object Label137: TLabel
+              Left = 6
+              Top = 13
+              Width = 19
+              Height = 13
+              Caption = 'Ad'#305':'
+            end
+            object FilialName2: TDBLookupComboBox
+              Left = 3
+              Top = 28
+              Width = 250
+              Height = 21
+              Font.Charset = RUSSIAN_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Tahoma'
+              Font.Style = []
+              KeyField = 'ID'
+              ListField = 'NAME'
+              ListSource = ExpDataModule.AllFilialDataSource
+              ParentFont = False
+              TabOrder = 0
+            end
+            object SenderAccNo2: TDBLookupComboBox
+              Left = 3
+              Top = 63
+              Width = 250
+              Height = 21
+              Enabled = False
+              Font.Charset = RUSSIAN_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Tahoma'
+              Font.Style = []
+              KeyField = 'ID'
+              ListField = 'ACC_NO'
+              ListSource = ExpDataModule.AccountDataSource2
+              ParentFont = False
+              TabOrder = 1
+            end
+          end
+          object GroupBox22: TGroupBox
+            Left = 265
+            Top = 1
+            Width = 263
+            Height = 90
+            Align = alLeft
+            Caption = 'Etibarnam'#601
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+            TabOrder = 1
+            object Label148: TLabel
+              Left = 6
+              Top = 42
+              Width = 61
+              Height = 13
+              Caption = 'Verildiyi tarix'
+            end
+            object Label150: TLabel
+              Left = 10
+              Top = 18
+              Width = 51
+              Height = 13
+              Caption = 'Seriya/'#8470':'
+            end
+            object Label146: TLabel
+              Left = 6
+              Top = 64
+              Width = 83
+              Height = 13
+              Caption = 'Etibarl'#305'q m'#252'dd'#601'ti:'
+            end
+            object WarrantSerial: TEdit
+              Left = 96
+              Top = 15
+              Width = 56
+              Height = 21
+              Font.Charset = RUSSIAN_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Tahoma'
+              Font.Style = []
+              ParentFont = False
+              TabOrder = 0
+            end
+            object WarrantPassport: TEdit
+              Left = 151
+              Top = 15
+              Width = 108
+              Height = 22
+              Font.Charset = RUSSIAN_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Azl Sans Serif'
+              Font.Style = []
+              ParentFont = False
+              TabOrder = 1
+            end
+            object WarrantOpenDate: TDBDateTimeEditEh
+              Left = 96
+              Top = 39
+              Width = 164
+              Height = 21
+              EditButtons = <>
+              Font.Charset = RUSSIAN_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Tahoma'
+              Font.Style = []
+              ParentFont = False
+              TabOrder = 2
+              Visible = True
+              EditFormat = 'DD/MM/YY'
+            end
+            object WarrantCloseDate: TDBDateTimeEditEh
+              Left = 96
+              Top = 63
+              Width = 164
+              Height = 21
+              EditButtons = <>
+              Font.Charset = RUSSIAN_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Tahoma'
+              Font.Style = []
+              ParentFont = False
+              TabOrder = 3
+              Visible = True
+              EditFormat = ''
+            end
+          end
+        end
+      end
+    end
+  end
+  object PopupMenu1: TPopupMenu
+    Left = 312
+    object mizk1: TMenuItem
+      Caption = 'T'#601'mizl'#601
+      OnClick = mizk1Click
+    end
+  end
+end

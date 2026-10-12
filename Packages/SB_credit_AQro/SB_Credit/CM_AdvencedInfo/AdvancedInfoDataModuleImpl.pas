@@ -1,0 +1,144 @@
+unit AdvancedInfoDataModuleImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, OracleData, Oracle;
+
+type
+
+  TAdvInfo = packed record
+    ID : Integer;
+    BOOROWERID : String;
+    NAME: String;
+    COUNTRYCODE: String;
+    BANKRUPTEYSTATUS: String;
+    PHONENUMBER: String;
+    ADDRESS: String;
+    FIRSTOWNERID: String;
+    FIRSTOWNERNAME: String;
+    SECONDOWNERID: String;
+    SECONDOWNERNAME: String;
+    THIRDOWNERID: String;
+    THIRDOWNERNAME: String;
+    PLEDGENAME: String;
+    HOLDERNAME: String;
+    HOLDERADDRESS: String;
+    ANYINFOTODISTING: String;
+    REGISTRYNO: String;
+    REGISTRYAGENCY: String;
+    REGISTRYDATE: TDateTime;
+    PLEDGEINUSE: Integer;
+    PLEDGEINSURANT: Integer;
+    INSURANCEAGENCY: String;
+    INSURANCEAMOUNT: Integer;
+    INSURANCEDATE: TDateTime;
+  end;
+
+  TAdvInfoDataModule = class(TDataModule)
+    AddInfo: TOracleDataSet;
+    DataSrcAddInfo: TDataSource;
+    AddInfoID: TFloatField;
+    AddInfoCURRENCY: TFloatField;
+    AddInfoDESCRIPTION: TStringField;
+    AddInfoBOOROWERID: TStringField;
+    AddInfoNAME: TStringField;
+    AddInfoCOUNTRYCODE: TStringField;
+    AddInfoPHONENUMBER: TStringField;
+    AddInfoADDRESS: TStringField;
+    AddInfoFIRSTOWNERID: TStringField;
+    AddInfoFIRSTOWNERNAME: TStringField;
+    AddInfoSECONDOWNERID: TStringField;
+    AddInfoSECONDOWNERNAME: TStringField;
+    AddInfoTHIRDOWNERID: TStringField;
+    AddInfoTHIRDOWNERNAME: TStringField;
+    AddInfoPLEDGENAME: TStringField;
+    AddInfoHOLDERNAME: TStringField;
+    AddInfoHOLDERADDRESS: TStringField;
+    AddInfoANYINFOTODISTING: TStringField;
+    AddInfoREGISTRYNO: TStringField;
+    AddInfoREGISTRYAGENCY: TStringField;
+    AddInfoREGISTRYDATE: TDateTimeField;
+    AddInfoPLEDGEINUSE: TFloatField;
+    AddInfoPLEDGEINSURANT: TFloatField;
+    AddInfoINSURANCEAGENCY: TStringField;
+    AddInfoINSURANCEAMOUNT: TFloatField;
+    AddInfoINSURANCEDATE: TDateTimeField;
+    AddInfoPLEDGEID: TFloatField;
+    AddInfoVAL_NAME: TStringField;
+    Countrys: TOracleDataSet;
+    DataSrcContrys: TDataSource;
+    AddInfoPackage: TOraclePackage;
+    AddInfoBANKRUPTEYSTATUS: TFloatField;
+    procedure DataModuleCreate(Sender: TObject);
+    procedure DataModuleDestroy(Sender: TObject);
+    procedure AddInfoApplyRecord(Sender: TOracleDataSet; Action: Char;
+      var Applied: Boolean; var NewRowId: String);
+  private
+    { Private declarations }
+  public
+    AdvInfo : TAdvInfo;
+    { Public declarations }
+  end;
+
+var
+  AdvInfoDataModule: TAdvInfoDataModule;
+
+implementation
+
+{$R *.DFM}
+
+uses
+  CommonDecls ,CMOracleAPIDataModuleImpl;
+
+procedure TAdvInfoDataModule.DataModuleCreate(Sender: TObject);
+begin
+  Countrys.Open;
+end;
+
+procedure TAdvInfoDataModule.DataModuleDestroy(Sender: TObject);
+begin
+  Countrys.CloseAll;
+end;
+
+procedure TAdvInfoDataModule.AddInfoApplyRecord(Sender: TOracleDataSet;
+  Action: Char; var Applied: Boolean; var NewRowId: String);
+begin
+  Applied := True;
+  case Action of
+  'U' :
+    begin
+      with AddInfoPackage ,AdvInfo do
+      CallProcedure('ContractAddInfo_Edit',[
+        'p_CreditID',ID,
+        'p_BOOROWERID',BOOROWERID,
+        'p_NAME',NAME,
+        'p_COUNTRYCODE',COUNTRYCODE,
+        'p_BANKRUPTEYSTATUS',BANKRUPTEYSTATUS,
+        'p_PHONENUMBER',PHONENUMBER,
+        'p_ADDRESS',ADDRESS,
+        'p_FIRSTOWNERID',FIRSTOWNERID,
+        'p_FIRSTOWNERNAME',FIRSTOWNERNAME,
+        'p_SECONDOWNERID',SECONDOWNERID,
+        'p_SECONDOWNERNAME',SECONDOWNERNAME,
+        'p_THIRDOWNERID',THIRDOWNERID,
+        'p_THIRDOWNERNAME',THIRDOWNERNAME,
+        'p_PLEDGENAME',PLEDGENAME,
+        'p_HOLDERNAME',HOLDERNAME,
+        'p_HOLDERADDRESS',HOLDERADDRESS,
+        'p_ANYINFOTODISTING',ANYINFOTODISTING,
+        'p_REGISTRYNO',REGISTRYNO,
+        'p_REGISTRYAGENCY',REGISTRYAGENCY,
+        'p_REGISTRYDATE',REGISTRYDATE,
+        'p_PLEDGEINUSE',PLEDGEINUSE,
+        'p_PLEDGEINSURANT',PLEDGEINSURANT,
+        'p_INSURANCEAGENCY',INSURANCEAGENCY,
+        'p_INSURANCEAMOUNT',INSURANCEAMOUNT,
+        'p_INSURANCEDATE',INSURANCEDATE
+      ]);
+    end;
+  end; // Case
+end;
+
+end.

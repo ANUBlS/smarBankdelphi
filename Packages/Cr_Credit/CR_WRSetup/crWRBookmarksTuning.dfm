@@ -1,0 +1,614 @@
+object WRBookmarkSetup: TWRBookmarkSetup
+  Left = 371
+  Top = 132
+  BorderIcons = [biSystemMenu]
+  ClientHeight = 545
+  ClientWidth = 826
+  Color = clBtnFace
+  DockSite = True
+  Font.Charset = TURKISH_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -5
+  Font.Name = 'Tahoma'
+  Font.Style = [fsBold]
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poOwnerFormCenter
+  OnCanResize = FormCanResize
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  OnKeyPress = FormKeyPress
+  PixelsPerInch = 96
+  TextHeight = 6
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 826
+    Height = 39
+    Margins.Left = 1
+    Margins.Top = 1
+    Margins.Right = 1
+    Margins.Bottom = 1
+    Align = alTop
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -3
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 0
+    object PluginToolBar1: TPluginToolBar
+      Left = 1
+      Top = 1
+      Width = 824
+      Height = 57
+      ButtonHeight = 36
+      ButtonWidth = 83
+      Caption = 'PluginToolBar1'
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      Images = ImageList1
+      ParentFont = False
+      ShowCaptions = True
+      TabOrder = 0
+      Active = False
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      object ToolButton1: TToolButton
+        Left = 0
+        Top = 0
+        Action = ActionAddTemplare
+        Caption = '     Yeni'
+      end
+      object ToolButton2: TToolButton
+        Left = 83
+        Top = 0
+        Width = 8
+        Caption = 'ToolButton2'
+        ImageIndex = 1
+        Style = tbsSeparator
+      end
+      object ToolButton3: TToolButton
+        Left = 91
+        Top = 0
+        Action = ActionEditTemplate
+        Caption = '     Redakt'#601'       '
+      end
+      object ToolButton4: TToolButton
+        Left = 174
+        Top = 0
+        Width = 8
+        Caption = 'ToolButton4'
+        ImageIndex = 2
+        Style = tbsSeparator
+      end
+      object ToolButton5: TToolButton
+        Left = 182
+        Top = 0
+        Action = ActionDeleteTemplate
+        Caption = '   Silm'#601'k     '
+      end
+      object ToolButton6: TToolButton
+        Left = 265
+        Top = 0
+        Width = 8
+        Caption = 'ToolButton6'
+        ImageIndex = 3
+        Style = tbsSeparator
+      end
+      object ToolButton7: TToolButton
+        Left = 273
+        Top = 0
+        Action = ActionRfreshTemplate
+        Caption = '   Yenil'#601' '
+      end
+      object ToolButton8: TToolButton
+        Left = 356
+        Top = 0
+        Width = 8
+        Caption = 'ToolButton8'
+        ImageIndex = 4
+        Style = tbsSeparator
+      end
+      object ToolButton9: TToolButton
+        Left = 364
+        Top = 0
+        Caption = #399'lav'#601' sazlama'
+        ImageIndex = 6
+        OnClick = ToolButton9Click
+      end
+    end
+  end
+  object Panel2: TPanel
+    Left = 0
+    Top = 160
+    Width = 826
+    Height = 41
+    Margins.Left = 1
+    Margins.Top = 1
+    Margins.Right = 1
+    Margins.Bottom = 1
+    Align = alTop
+    Font.Charset = TURKISH_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 1
+    object PluginToolBar2: TPluginToolBar
+      Left = 1
+      Top = 1
+      Width = 824
+      Height = 40
+      ButtonHeight = 36
+      ButtonWidth = 77
+      Caption = 'PluginToolBar2'
+      Images = ImageList1
+      ShowCaptions = True
+      TabOrder = 0
+      Active = False
+      object ToolButton10: TToolButton
+        Left = 0
+        Top = 0
+        Action = ActnAddBookmark
+        Caption = '      Yeni   '
+      end
+      object ToolButton11: TToolButton
+        Left = 77
+        Top = 0
+        Width = 8
+        Caption = 'ToolButton11'
+        ImageIndex = 1
+        Style = tbsSeparator
+      end
+      object ToolButton12: TToolButton
+        Left = 85
+        Top = 0
+        Action = ActnEditBookmark
+        Caption = '   Redakt'#601'       '
+      end
+      object ToolButton13: TToolButton
+        Left = 162
+        Top = 0
+        Width = 8
+        Caption = 'ToolButton13'
+        ImageIndex = 2
+        Style = tbsSeparator
+      end
+      object ToolButton14: TToolButton
+        Left = 170
+        Top = 0
+        Action = ActnDeleteBookmark
+        Caption = '    Silm'#601'k    '
+      end
+      object ToolButton15: TToolButton
+        Left = 247
+        Top = 0
+        Width = 8
+        Caption = 'ToolButton15'
+        ImageIndex = 3
+        Style = tbsSeparator
+      end
+      object ToolButton16: TToolButton
+        Left = 255
+        Top = 0
+        Action = ActnNewBookmark
+        Caption = '   Yenil'#601'  '
+      end
+      object ToolButton17: TToolButton
+        Left = 332
+        Top = 0
+        Width = 8
+        Caption = 'ToolButton17'
+        ImageIndex = 4
+        Style = tbsSeparator
+      end
+      object ToolButton18: TToolButton
+        Left = 340
+        Top = 0
+        Action = ActnClose
+        Caption = '     Ba'#287'la   '
+      end
+    end
+  end
+  object DBGridEh1: TDBGridEh
+    Left = 0
+    Top = 39
+    Width = 826
+    Height = 78
+    Margins.Left = 1
+    Margins.Top = 1
+    Margins.Right = 1
+    Margins.Bottom = 1
+    Align = alTop
+    DataSource = WRSetupDataMod.WRTemplatesDataSrc
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -5
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    FooterColor = clWindow
+    FooterFont.Charset = TURKISH_CHARSET
+    FooterFont.Color = clWindowText
+    FooterFont.Height = -11
+    FooterFont.Name = 'Tahoma'
+    FooterFont.Style = [fsBold]
+    Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgCancelOnExit]
+    ParentFont = False
+    TabOrder = 2
+    TitleFont.Charset = TURKISH_CHARSET
+    TitleFont.Color = clWindowText
+    TitleFont.Height = -12
+    TitleFont.Name = 'Tahoma'
+    TitleFont.Style = [fsBold]
+    VertScrollBar.VisibleMode = sbNeverShowEh
+    Columns = <
+      item
+        EditButtons = <>
+        FieldName = 'ID'
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -5
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        Footers = <>
+        Title.Caption = 'N'
+        Title.Color = clNavy
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clWhite
+        Title.Font.Height = -11
+        Title.Font.Name = 'Tahoma'
+        Title.Font.Style = []
+        Width = 44
+      end
+      item
+        EditButtons = <>
+        FieldName = 'NAME'
+        Footers = <>
+        Title.Caption = 'Ad'
+        Title.Color = clNavy
+        Title.Font.Charset = TURKISH_CHARSET
+        Title.Font.Color = clWhite
+        Title.Font.Height = -11
+        Title.Font.Name = 'Tahoma'
+        Title.Font.Style = []
+        Width = 153
+      end>
+  end
+  object DBGridEh2: TDBGridEh
+    Left = 0
+    Top = 201
+    Width = 826
+    Height = 344
+    Margins.Left = 1
+    Margins.Top = 1
+    Margins.Right = 1
+    Margins.Bottom = 1
+    Align = alClient
+    DataSource = WRSetupDataMod.WRBookmarksDataSrc
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -5
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    FooterColor = clWindow
+    FooterFont.Charset = TURKISH_CHARSET
+    FooterFont.Color = clWindowText
+    FooterFont.Height = -11
+    FooterFont.Name = 'Tahoma'
+    FooterFont.Style = [fsBold]
+    Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgCancelOnExit]
+    ParentFont = False
+    TabOrder = 3
+    TitleFont.Charset = TURKISH_CHARSET
+    TitleFont.Color = clWindowText
+    TitleFont.Height = -11
+    TitleFont.Name = 'Tahoma'
+    TitleFont.Style = [fsBold]
+    VertScrollBar.VisibleMode = sbNeverShowEh
+    Columns = <
+      item
+        EditButtons = <>
+        FieldName = 'ID'
+        Footers = <>
+        Title.Caption = 'N'
+        Title.Color = clNavy
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clWhite
+        Title.Font.Height = -12
+        Title.Font.Name = 'Tahoma'
+        Title.Font.Style = []
+        Width = 30
+      end
+      item
+        EditButtons = <>
+        FieldName = 'TEMPLATEID'
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -5
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        Footers = <>
+        Title.Caption = #350'ablonun n'#246'mr'#601'si'
+        Title.Color = clNavy
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clWhite
+        Title.Font.Height = -12
+        Title.Font.Name = 'Tahoma'
+        Title.Font.Style = []
+        Width = 99
+      end
+      item
+        EditButtons = <>
+        FieldName = 'FIELDID'
+        Footers = <>
+        Title.Caption = 'Sah'#601'nin n'#246'mr'#601'si'
+        Title.Color = clNavy
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clWhite
+        Title.Font.Height = -12
+        Title.Font.Name = 'Tahoma'
+        Title.Font.Style = []
+        Width = 94
+      end
+      item
+        EditButtons = <>
+        FieldName = 'BOOKMARKNAME'
+        Footers = <>
+        Title.Caption = 'Bukmark'#305'n ad'#305
+        Title.Color = clNavy
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clWhite
+        Title.Font.Height = -12
+        Title.Font.Name = 'Tahoma'
+        Title.Font.Style = []
+        Width = 168
+      end>
+  end
+  object GroupBox1: TGroupBox
+    Left = 0
+    Top = 117
+    Width = 826
+    Height = 43
+    Margins.Left = 1
+    Margins.Top = 1
+    Margins.Right = 1
+    Margins.Bottom = 1
+    Align = alTop
+    Caption = #350'ablon fayl'#305
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 4
+    object DBEdit1: TDBEdit
+      Left = 4
+      Top = 15
+      Width = 260
+      Height = 21
+      Margins.Left = 1
+      Margins.Top = 1
+      Margins.Right = 1
+      Margins.Bottom = 1
+      Color = clInfoBk
+      DataField = 'PATH'
+      DataSource = WRSetupDataMod.WRTemplatesDataSrc
+      TabOrder = 0
+    end
+  end
+  object ActionList1: TActionList
+    Images = ImageList1
+    Left = 48
+    Top = 440
+    object ActnAddBookmark: TAction
+      Caption = '      '#201'e'#237#232'     '
+      ImageIndex = 4
+      OnExecute = ActnAddBookmarkExecute
+    end
+    object ActnDeleteBookmark: TAction
+      Caption = '     '#209#232#235#236#255#234'      '
+      ImageIndex = 1
+      OnExecute = ActnDeleteBookmarkExecute
+      OnUpdate = ActnDeleteBookmarkUpdate
+    end
+    object ActnEditBookmark: TAction
+      Caption = '     '#286'e'#228#224#234#242#255'       '
+      ImageIndex = 0
+      OnExecute = ActnEditBookmarkExecute
+      OnUpdate = ActnEditBookmarkUpdate
+    end
+    object ActnNewBookmark: TAction
+      Caption = '    '#201'e'#237#232#235#255#236#255#234'  '
+      ImageIndex = 3
+      OnExecute = ActnNewBookmarkExecute
+    end
+    object ActnClose: TAction
+      Caption = '     '#193#224#252#235#224'    '
+      ImageIndex = 5
+      OnExecute = ActnCloseExecute
+    end
+  end
+  object ImageList1: TImageList
+    Left = 176
+    Top = 448
+    Bitmap = {
+      494C010107000900040010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      0000000000003600000028000000400000002000000001001000000000000010
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000596B596B596B596B596B596B596B
+      596B596B596B596B596B596B596B596B596B0000000000000000000000000000
+      00000000000039678C314A291042000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000596B596B596B1042596B1042596B
+      596B10420000FF03596B596B1042596B596B0000000000000000000000000000
+      0000000029258C312925CE390000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000001042596B1042596B596B1042596B
+      1042596B0000FF0310021042596B596B10420000000000000000000000000000
+      0000B556CE39EF3D4A297B6F00000000524A0000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000596B596B1042596B1042596B596B
+      1042596B0000FF031002100200001042596B0000000000000000000000000000
+      0000AD358C318C314A29396739676B2D29250000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000596B596B596B596B596B596B1042
+      596B596B0000FF031002100200001042596B0000000000000000000000000000
+      00008C318C318C31082129252925292508210000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000596B596B596B596B596B596B0000
+      000000000000FF031002100200001042596B0000000000000000000000000000
+      29258C318C318C318C318C318C318C3110420000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000596B596B596B596B000010421042
+      104210420000FF031002100200001042596B000000000000000000000000734E
+      AD35CE39AD358C318C318C318C314A295A6B0000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000596B596B596B596B000010021042
+      104210420000FF030000100200001042596B000000000000000000004A291042
+      734E734E945231468C31CE39D65ABD7700000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000596B1042104210420000FF031002
+      104210420000FF03FF7F100200001042596B0000000000000000F75EEF3D524A
+      734E734E31466B2D000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000000000000000000000001002100210021002FF03FF03
+      100210420000FF031002100200001042596B39676B2DAD35CE39EF3D3146524A
+      524A104294520000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000FF03FF7FFF7FFF7FFF7FFF7F
+      FF0300000000FF031002100200001042596B1042EF3D10421042104231463146
+      EF3D4A2900000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000596B0000000000000000FF7FFF03
+      000010420000FF031002100200001042596B4A296B2D292529254A291042EF3D
+      F75E000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000596B596B596B596B0000FF030000
+      104210420000FF031002100200001042596B4A294A29F75ED65A4A291042CE39
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000596B596B596B596B000000001042
+      104210421042FF031002100200001042596BEF3D000000005A6B4A2910428C31
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000596B596B596B596B596B596B1042
+      1042104210421042FF03100200001042596B000000000000AD354A29EF3D4A29
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000596B596B596B596B596B596B1042
+      10421042104210421042FF030000596B596B00000000AD3508210821EF3D7B6F
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000010001000100010001000
+      1000100010001000100000000000000000000000000010421042104210421042
+      1042000000000000104210421042104210420000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000010001042104210421042
+      1042104210421042104200000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000001042
+      1000104200000000000000000000000000000000000010001863000018630000
+      0000186300000000000000000000000000000000000010421042104210420000
+      0000000000000000000000001042104210420000000000000000FF7FFF7FFF7F
+      FF7FFF7FFF7FFF7FFF7F00000000000000000000000000000000104210001000
+      1042000000000000000000000000000000000000000010001863186318631863
+      1863186318630000000000000000000000000000000000000000000000000000
+      0000000000400040000000000000000000000000000000000000FF7FFF7FFF7F
+      FF7FFF7FFF7FFF7FFF7F00000000000000000000000000000000100010001042
+      0000000000000000000000000000000000000000000010001863000018630000
+      0000186300000000E07F00000000000000000000000010421042104200000000
+      0000007C007C007C004000000000000010420000000000000000FF7FFF7FFF7F
+      FF7FFF7FFF7FFF7FFF7F00000000000000000000000000001042100010420000
+      0000000000000000000000000000000000000000000010001863186318631863
+      1863186318630000E07F00000000000000000000000000000000000000000000
+      0000007C007C007C007C00400000000000000000000000000000FF7FFF7FFF7F
+      FF7FFF7FFF7FFF7FFF7F00000000000000000000000000001000100000000000
+      0000000000000000000000000000000000000000000010001000100010001000
+      1000100010001000000010420000000000000000000010421042104210420000
+      00000000007C007C007C00000042000010420000000000000000FF7FFF7FFF7F
+      FF7FFF7FFF7FFF7FFF7F00000000000000000000000000001000100000000000
+      0000100010001000100010000000000000000000000010001000100010001000
+      1000100010001000000018630000000000000000000000000000000000000000
+      000000000000007C0000E07F0000004200000000000000000000FF7FFF7FFF7F
+      FF7FFF7FFF7FFF7FFF7F00000000000000000000000000001000100010420000
+      0000000010421000100010000000000000000000000010001000100010001000
+      10001000100010001000E07F1042000000000000000000000000000000000000
+      0000000000000000E07F0000E07F000000420000000000000000FF7FFF7FFF7F
+      FF7FFF7F10421042104200000000000000000000000000001042100010001042
+      0000104210001000100010000000000000000000000000000000000000000000
+      00000000000000000000E07F1042000000000000000000000000000000000000
+      00000000000000000000E07F0000E07F00420000000000000000FF7FFF7FFF7F
+      FF7FFF7F1042FF7F000000000000000000000000000000000000100010001000
+      1000100010001000104210000000000000000000000000000000000000000000
+      0000000000000000000000001040104000000000000000000000000000000000
+      000000000000000000000000E07FE07FE07F0000000000000000104210421042
+      1042104210420000000000000000000000000000000000000000000010421000
+      1000100010420000000010000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000E07FE07F0000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000000000000000E07F0000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000424D3E000000000000003E000000
+      2800000040000000200000000100010000000000000100000000000000000000
+      000000000000000000000000FFFFFF00FFFF0000FFC30000FFFF0000FF870000
+      FFFF0000FF060000FFFF0000FF000000FC7F0000FF000000FC7F0000FE000000
+      FC7F0000FC000000E00F0000F8010000E00F0000F01F0000E00F0000003F0000
+      FC7F0000007F0000FC7F000000FF0000FC7F000001FF0000FFFF000061FF0000
+      FFFF0000E1FF0000FFFF0000C1FF0000FFFF8000FEFFFFFFFFFFBFFFBEFDFFFF
+      C00F80E0DFFBFFFFC00FBFFFFFFFFC7FC00F8398F00FF0FFC00FBF0FF00FF1FF
+      C0078606F00FE3FFC007BE03F00FE7FFC0038300300CE707C003BF80F00FE387
+      C001BFC0F00FE107FFF183E0F00FF007FFF0BBF0F03FF837FFF9DBF8FFFFFFFF
+      FFFFEBFCDEFBFFFFFFFFF000BEFDFFFF00000000000000000000000000000000
+      000000000000}
+  end
+  object ActionList2: TActionList
+    Images = ImageList1
+    Left = 224
+    Top = 424
+    object ActionAddTemplare: TAction
+      Caption = '      '#201'e'#237#232'     '
+      ImageIndex = 4
+      OnExecute = ActionAddTemplareExecute
+    end
+    object ActionEditTemplate: TAction
+      Caption = '     '#286'e'#228#224#234#242#255'       '
+      ImageIndex = 0
+      OnExecute = ActionEditTemplateExecute
+      OnUpdate = ActionEditTemplateUpdate
+    end
+    object ActionDeleteTemplate: TAction
+      Caption = '     '#209#232#235#236#255#234'      '
+      ImageIndex = 1
+      OnExecute = ActionDeleteTemplateExecute
+      OnUpdate = ActionDeleteTemplateUpdate
+    end
+    object ActionRfreshTemplate: TAction
+      Caption = '    '#201'e'#237#232#235#255#236#255#234'  '
+      ImageIndex = 3
+      OnExecute = ActionRfreshTemplateExecute
+    end
+    object ActionClose: TAction
+      Caption = 'ActionClose'
+    end
+  end
+end

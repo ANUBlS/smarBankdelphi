@@ -1,0 +1,128 @@
+unit NewDepositsFrmAddCapitalizeImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
+  StdCtrls, ExtCtrls, CMCurrencyEdit, Mask, DBCtrlsEh, ComCtrls, ActnList;
+
+type
+  TNewDepositsFrmAddCapitalize = class(TForm)
+    ActionList1: TActionList;
+    ActnTrans: TAction;
+    Button1: TButton;
+    Button2: TButton;
+    Panel1: TPanel;
+    Label1: TLabel;
+    Label2: TLabel;
+    EdCapital: TCMCurrencyEdit;
+    DTPCapital: TDateTimePicker;
+    Panel2: TPanel;
+    GroupBox5: TGroupBox;
+    Panel4: TPanel;
+    StaticText2: TStaticText;
+    DBEditEh3: TDBEditEh;
+    Panel5: TPanel;
+    StaticText1: TStaticText;
+    DBEditEh4: TDBEditEh;
+    GroupBox1: TGroupBox;
+    Panel3: TPanel;
+    StaticText5: TStaticText;
+    DBEditEh2: TDBEditEh;
+    Panel7: TPanel;
+    StaticText6: TStaticText;
+    DBEditEh5: TDBEditEh;
+    procedure FormCanResize(Sender: TObject; var NewWidth, NewHeight: Integer;
+      var Resize: Boolean);
+    procedure FormCreate(Sender: TObject);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure ActnTransExecute(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+    procedure ActnTransUpdate(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  NewDepositsFrmAddCapitalize: TNewDepositsFrmAddCapitalize;
+
+implementation
+
+{$R *.dfm}
+uses NewDepositsFrmCapitalizeImpl,NewCommonDeclsImpl,SBTranslateProc,sboapiDataModuleimpl;
+procedure TNewDepositsFrmAddCapitalize.Button2Click(Sender: TObject);
+begin
+   Close
+end;
+
+procedure TNewDepositsFrmAddCapitalize.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+  Resize := False
+end;
+
+procedure TNewDepositsFrmAddCapitalize.FormCreate(Sender: TObject);
+begin
+SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TNewDepositsFrmAddCapitalize.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+  if Ord(Key) = VK_ESCAPE then Close
+end;
+
+procedure TNewDepositsFrmAddCapitalize.FormShow(Sender: TObject);
+begin
+   DTPCapital.DateTime := Get_BankDate;
+   EdCapital.Value := 0;
+end;
+
+procedure TNewDepositsFrmAddCapitalize.ActnTransExecute(Sender: TObject);
+
+resourcestring
+  rsTransactionsWillProcessed = 'Äåïîçèòèí êàğèòàëëàøäûğûëìàñû ...';
+var
+    CommitCapitalize :Boolean;
+
+begin
+
+    with NewDepositsFrmCapitalize,sbcm_payment do
+     CallProcedure('Capitalization',['ContractID',Get_SelectedContID,
+                                    'HDate',Get_BankDate,
+                                    'Total',EdCapital.Value,
+                                    'UseTransactions',True]);
+
+    try
+    CommitCapitalize := TrDelayed_Show(Self,rsTransactionsWillProcessed);
+
+    Update;
+
+    NewDepositsFrmCapitalize.SBCM_PAYMENT.CallProcedure('CommitWithDrawMoney',[
+       'DoCommit',CommitCapitalize
+    ]);
+
+    if CommitCapitalize then
+    Self.ModalResult := mrOk;
+    Self.Update;
+  except
+
+
+    NewDepositsFrmCapitalize.SBCM_PAYMENT.CallProcedure('CommitWithDrawMoney',['DoCommit',
+        False
+    ]);
+
+    raise;
+
+  end;
+
+
+end;
+  procedure TNewDepositsFrmAddCapitalize.ActnTransUpdate(Sender: TObject);
+begin
+   with (Sender as TAction) do
+         Enabled := EdCapital.Value > 0
+end;
+end.

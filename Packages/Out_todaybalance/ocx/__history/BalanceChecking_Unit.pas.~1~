@@ -1,0 +1,82 @@
+unit BalanceChecking_Unit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  DBCtrls, StdCtrls, Mask, Grids, DBGrids, ExtCtrls;
+
+type
+  TFrmBalanceChecking = class(TForm)
+    Panel1: TPanel;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    STTargetDate: TStaticText;
+    STCurrency: TStaticText;
+    STBranch: TStaticText;
+    Panel2: TPanel;
+    BtnOk: TButton;
+    STCurrFormat: TStaticText;
+    BalanceViewer: TDBGrid;
+    Panel4: TPanel;
+    EditAccountNumber: TEdit;
+    AccountViewer: TDBGrid;
+    Panel6: TPanel;
+    EditAccNumber: TEdit;
+    DBEdit2: TDBEdit;
+    TransactionsViewer: TDBGrid;
+    GroupBox1: TGroupBox;
+    DBText1: TDBText;
+    DBEdit1: TDBEdit;
+    procedure EditAccountNumberExit(Sender: TObject);
+    procedure EditAccountNumberKeyPress(Sender: TObject; var Key: Char);
+    procedure EditAccNumberExit(Sender: TObject);
+    procedure EditAccNumberKeyPress(Sender: TObject; var Key: Char);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmBalanceChecking: TFrmBalanceChecking;
+
+implementation
+
+{$R *.DFM}
+uses sboapidatamoduleimpl,TB_DataModuleImpl;
+procedure TFrmBalanceChecking.EditAccountNumberExit(Sender: TObject);
+begin
+  (Sender as TEdit).Text := '';
+
+end;
+
+procedure TFrmBalanceChecking.EditAccountNumberKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if  Key = #13  then
+  begin
+    with BalanceViewer.DataSource.DataSet do
+    Locate('AccountNumber',EditAccountNumber.Text ,[]);
+
+end;
+  END;
+procedure TFrmBalanceChecking.EditAccNumberExit(Sender: TObject);
+begin
+  (Sender as TEdit).Text := '';
+
+end;
+
+procedure TFrmBalanceChecking.EditAccNumberKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if  Key = #13  then
+  begin
+    with AccountViewer.DataSource.DataSet do
+    Locate('AccNumber',EditAccNumber.Text ,[]);
+  end;
+
+end;
+
+end.

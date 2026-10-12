@@ -1,0 +1,721 @@
+object FormContractAccounts: TFormContractAccounts
+  Left = 273
+  Top = 180
+  BorderIcons = [biSystemMenu]
+  Caption = 'FormContractAccounts'
+  ClientHeight = 541
+  ClientWidth = 574
+  Color = clBtnFace
+  Font.Charset = RUSSIAN_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poDesktopCenter
+  OnClose = FormClose
+  OnKeyPress = FormKeyPress
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object XFPanel1: TXFPanel
+    Left = 0
+    Top = 0
+    Width = 574
+    Height = 36
+    Align = alTop
+    TabOrder = 0
+    object XFLabel1: TXFLabel
+      Left = 12
+      Top = 11
+      Width = 39
+      Height = 13
+      Caption = 'M'#252#351't'#601'ri:'
+    end
+    object XFCheckBox1: TXFCheckBox
+      Left = 492
+      Top = 10
+      Width = 16
+      Height = 17
+      TabOrder = 0
+    end
+    object DBEdit1: TDBEdit
+      Left = 168
+      Top = 9
+      Width = 302
+      Height = 21
+      DataField = 'NAME'
+      DataSource = CCDataMod.AccountsDatSrc
+      TabOrder = 1
+    end
+  end
+  object XFPanel2: TXFPanel
+    Left = 0
+    Top = 36
+    Width = 574
+    Height = 36
+    Align = alTop
+    BevelKind = bkFlat
+    TabOrder = 1
+    object XFLabel2: TXFLabel
+      Left = 7
+      Top = 9
+      Width = 57
+      Height = 13
+      Caption = 'Cari hesab'#305':'
+    end
+    object XFLabel11: TXFLabel
+      Left = 423
+      Top = 9
+      Width = 28
+      Height = 13
+      Caption = 'Qaliq:'
+    end
+    object XFCheckBox2: TXFCheckBox
+      Left = 550
+      Top = 7
+      Width = 16
+      Height = 17
+      TabOrder = 0
+    end
+    object DBEdit2: TDBEdit
+      Left = 166
+      Top = 5
+      Width = 250
+      Height = 21
+      DataField = 'BOOROWERACCNO'
+      DataSource = CCDataMod.AccountsDatSrc
+      TabOrder = 1
+    end
+    object DBEdit11: TDBEdit
+      Left = 456
+      Top = 5
+      Width = 82
+      Height = 21
+      DataField = 'BOOROWERREST'
+      DataSource = CCDataMod.AccountsDatSrc
+      TabOrder = 2
+    end
+  end
+  object XFPanel3: TXFPanel
+    Left = 0
+    Top = 72
+    Width = 574
+    Height = 36
+    Align = alTop
+    BevelKind = bkFlat
+    TabOrder = 2
+    object XFLabel3: TXFLabel
+      Left = 7
+      Top = 9
+      Width = 62
+      Height = 13
+      Caption = 'Suda hesab'#305':'
+    end
+    object XFLabel12: TXFLabel
+      Left = 423
+      Top = 9
+      Width = 28
+      Height = 13
+      Caption = 'Qaliq:'
+    end
+    object XFCheckBox3: TXFCheckBox
+      Left = 550
+      Top = 9
+      Width = 16
+      Height = 17
+      TabOrder = 0
+    end
+    object DBEdit3: TDBEdit
+      Left = 167
+      Top = 4
+      Width = 250
+      Height = 21
+      DataField = 'LOANACCNO'
+      DataSource = CCDataMod.AccountsDatSrc
+      TabOrder = 1
+    end
+    object DBEdit12: TDBEdit
+      Left = 456
+      Top = 6
+      Width = 82
+      Height = 21
+      DataField = 'LOANREST'
+      DataSource = CCDataMod.AccountsDatSrc
+      TabOrder = 2
+    end
+  end
+  object XFPanel4: TXFPanel
+    Left = 0
+    Top = 108
+    Width = 574
+    Height = 36
+    Align = alTop
+    BevelKind = bkFlat
+    TabOrder = 3
+    object XFLabel4: TXFLabel
+      Left = 7
+      Top = 9
+      Width = 98
+      Height = 13
+      Caption = 'Gecikmi'#351' suda hesd'#305':'
+    end
+    object XFLabel13: TXFLabel
+      Left = 423
+      Top = 9
+      Width = 28
+      Height = 13
+      Caption = 'Qaliq:'
+    end
+    object XFCheckBox4: TXFCheckBox
+      Left = 550
+      Top = 8
+      Width = 16
+      Height = 17
+      TabOrder = 0
+    end
+    object DBEdit4: TDBEdit
+      Left = 166
+      Top = 6
+      Width = 250
+      Height = 21
+      DataField = 'DUELOANACCNO'
+      DataSource = CCDataMod.AccountsDatSrc
+      TabOrder = 1
+    end
+    object DBEdit13: TDBEdit
+      Left = 456
+      Top = 6
+      Width = 82
+      Height = 21
+      DataField = 'DUELOANREST'
+      DataSource = CCDataMod.AccountsDatSrc
+      TabOrder = 2
+    end
+  end
+  object XFPanel5: TXFPanel
+    Left = 0
+    Top = 144
+    Width = 574
+    Height = 36
+    Align = alTop
+    BevelKind = bkFlat
+    TabOrder = 4
+    object XFLabel5: TXFLabel
+      Left = 7
+      Top = 9
+      Width = 57
+      Height = 13
+      Caption = 'Faiz hesab'#305':'
+    end
+    object XFLabel14: TXFLabel
+      Left = 422
+      Top = 9
+      Width = 28
+      Height = 13
+      Caption = 'Qaliq:'
+    end
+    object XFCheckBox5: TXFCheckBox
+      Left = 550
+      Top = 8
+      Width = 15
+      Height = 17
+      TabOrder = 0
+    end
+    object DBEdit5: TDBEdit
+      Left = 166
+      Top = 6
+      Width = 250
+      Height = 21
+      DataField = 'INTERESTACCNO'
+      DataSource = CCDataMod.AccountsDatSrc
+      TabOrder = 1
+    end
+    object DBEdit14: TDBEdit
+      Left = 456
+      Top = 6
+      Width = 82
+      Height = 21
+      DataField = 'INTERESTREST'
+      DataSource = CCDataMod.AccountsDatSrc
+      TabOrder = 2
+    end
+  end
+  object XFPanel6: TXFPanel
+    Left = 0
+    Top = 180
+    Width = 574
+    Height = 36
+    Align = alTop
+    BevelKind = bkFlat
+    TabOrder = 5
+    object XFLabel6: TXFLabel
+      Left = 7
+      Top = 9
+      Width = 92
+      Height = 13
+      Caption = 'Gecikmi'#351' faiz hesb'#305':'
+    end
+    object XFLabel15: TXFLabel
+      Left = 422
+      Top = 9
+      Width = 28
+      Height = 13
+      Caption = 'Qaliq:'
+    end
+    object XFCheckBox6: TXFCheckBox
+      Left = 550
+      Top = 9
+      Width = 16
+      Height = 17
+      TabOrder = 0
+    end
+    object DBEdit6: TDBEdit
+      Left = 166
+      Top = 5
+      Width = 250
+      Height = 21
+      DataField = 'DUEINTERESTACCNO'
+      DataSource = CCDataMod.AccountsDatSrc
+      TabOrder = 1
+    end
+    object DBEdit15: TDBEdit
+      Left = 456
+      Top = 5
+      Width = 82
+      Height = 21
+      DataField = 'DUEINTERESTREST'
+      DataSource = CCDataMod.AccountsDatSrc
+      TabOrder = 2
+    end
+  end
+  object XFPanel7: TXFPanel
+    Left = 0
+    Top = 216
+    Width = 574
+    Height = 36
+    Align = alTop
+    BevelKind = bkFlat
+    TabOrder = 6
+    object XFLabel7: TXFLabel
+      Left = 7
+      Top = 8
+      Width = 90
+      Height = 13
+      Caption = 'Adi ehtiyat hesab'#305':'
+    end
+    object XFLabel16: TXFLabel
+      Left = 422
+      Top = 8
+      Width = 28
+      Height = 13
+      Caption = 'Qaliq:'
+    end
+    object XFCheckBox7: TXFCheckBox
+      Left = 550
+      Top = 8
+      Width = 16
+      Height = 17
+      TabOrder = 0
+    end
+    object DBEdit7: TDBEdit
+      Left = 166
+      Top = 5
+      Width = 250
+      Height = 21
+      DataField = 'PRIMARYRESACCNO'
+      DataSource = CCDataMod.AccountsDatSrc
+      TabOrder = 1
+    end
+    object DBEdit16: TDBEdit
+      Left = 456
+      Top = 5
+      Width = 82
+      Height = 21
+      DataField = 'PRIMARYRESREST'
+      DataSource = CCDataMod.AccountsDatSrc
+      TabOrder = 2
+    end
+  end
+  object XFPanel8: TXFPanel
+    Left = 0
+    Top = 252
+    Width = 574
+    Height = 36
+    Align = alTop
+    BevelKind = bkFlat
+    TabOrder = 7
+    object XFLabel8: TXFLabel
+      Left = 7
+      Top = 8
+      Width = 133
+      Height = 13
+      Caption = 'Gecikmi'#351' Adi ehtiyat hesab'#305':'
+    end
+    object XFLabel17: TXFLabel
+      Left = 423
+      Top = 8
+      Width = 28
+      Height = 13
+      Caption = 'Qaliq:'
+    end
+    object XFCheckBox8: TXFCheckBox
+      Left = 550
+      Top = 7
+      Width = 16
+      Height = 17
+      TabOrder = 0
+    end
+    object DBEdit8: TDBEdit
+      Left = 166
+      Top = 5
+      Width = 250
+      Height = 21
+      DataField = 'SECONDARYRESACCNO'
+      DataSource = CCDataMod.AccountsDatSrc
+      TabOrder = 1
+    end
+    object DBEdit17: TDBEdit
+      Left = 456
+      Top = 5
+      Width = 82
+      Height = 21
+      DataField = 'SECONDARYRESREST'
+      DataSource = CCDataMod.AccountsDatSrc
+      TabOrder = 2
+    end
+  end
+  object XFPanel9: TXFPanel
+    Left = 0
+    Top = 288
+    Width = 574
+    Height = 36
+    Align = alTop
+    BevelKind = bkFlat
+    TabOrder = 8
+    object XFLabel9: TXFLabel
+      Left = 7
+      Top = 9
+      Width = 116
+      Height = 13
+      Caption = 'M'#601'qs'#601'dli ehtiyat hesab'#305':'
+    end
+    object XFLabel18: TXFLabel
+      Left = 423
+      Top = 9
+      Width = 28
+      Height = 13
+      Caption = 'Qaliq:'
+    end
+    object XFCheckBox9: TXFCheckBox
+      Left = 550
+      Top = 9
+      Width = 16
+      Height = 17
+      TabOrder = 0
+    end
+    object DBEdit9: TDBEdit
+      Left = 166
+      Top = 6
+      Width = 250
+      Height = 21
+      DataField = 'PRIMARYPURRESERVEACCNO'
+      DataSource = CCDataMod.AccountsDatSrc
+      TabOrder = 1
+    end
+    object DBEdit18: TDBEdit
+      Left = 456
+      Top = 6
+      Width = 82
+      Height = 21
+      DataField = 'PRIMARYPURRESERVEREST'
+      DataSource = CCDataMod.AccountsDatSrc
+      TabOrder = 2
+    end
+  end
+  object XFPanel10: TXFPanel
+    Left = 0
+    Top = 324
+    Width = 574
+    Height = 36
+    Align = alTop
+    BevelKind = bkFlat
+    TabOrder = 9
+    ExplicitLeft = 96
+    ExplicitTop = 340
+    object XFLabel10: TXFLabel
+      Left = 7
+      Top = 8
+      Width = 159
+      Height = 13
+      Caption = 'Gecikmi'#351' m'#601'qs'#601'dli ehtiyat hesab'#305':'
+    end
+    object XFLabel19: TXFLabel
+      Left = 423
+      Top = 8
+      Width = 28
+      Height = 13
+      AutoSize = False
+      Caption = 'Qaliq:'
+    end
+    object XFCheckBox10: TXFCheckBox
+      Left = 550
+      Top = 8
+      Width = 16
+      Height = 17
+      TabOrder = 0
+    end
+    object DBEdit10: TDBEdit
+      Left = 167
+      Top = 4
+      Width = 250
+      Height = 21
+      DataField = 'SECONDARYPURRESERVEACCNO'
+      DataSource = CCDataMod.AccountsDatSrc
+      TabOrder = 1
+    end
+    object DBEdit19: TDBEdit
+      Left = 457
+      Top = 5
+      Width = 82
+      Height = 21
+      DataField = 'SECONDARYPURRESERVEREST'
+      DataSource = CCDataMod.AccountsDatSrc
+      TabOrder = 2
+    end
+  end
+  object XFPanel11: TXFPanel
+    Left = 0
+    Top = 504
+    Width = 574
+    Height = 37
+    Align = alBottom
+    BevelKind = bkFlat
+    TabOrder = 10
+    ExplicitTop = 472
+    object XFBitBtn1: TXFBitBtn
+      Left = 380
+      Top = 4
+      Width = 75
+      Height = 25
+      DoubleBuffered = True
+      Kind = bkOK
+      NumGlyphs = 2
+      ParentDoubleBuffered = False
+      TabOrder = 0
+      OnClick = XFBitBtn1Click
+    end
+    object XFBitBtn2: TXFBitBtn
+      Left = 461
+      Top = 4
+      Width = 76
+      Height = 24
+      DoubleBuffered = True
+      Kind = bkCancel
+      NumGlyphs = 2
+      ParentDoubleBuffered = False
+      TabOrder = 1
+    end
+  end
+  object XFPanel12: TXFPanel
+    Left = 0
+    Top = 468
+    Width = 574
+    Height = 36
+    Align = alTop
+    BevelKind = bkFlat
+    TabOrder = 11
+    ExplicitTop = 332
+    object XFLabel20: TXFLabel
+      Left = 7
+      Top = 8
+      Width = 68
+      Height = 13
+      Caption = 'Aral'#305'q  hesab'#305':'
+    end
+    object XFLabel21: TXFLabel
+      Left = 423
+      Top = 8
+      Width = 28
+      Height = 13
+      AutoSize = False
+      Caption = 'Qaliq:'
+    end
+    object XFCheckBox11: TXFCheckBox
+      Left = 550
+      Top = 8
+      Width = 16
+      Height = 17
+      TabOrder = 0
+    end
+    object DBEdit20: TDBEdit
+      Left = 167
+      Top = 4
+      Width = 250
+      Height = 21
+      DataField = 'TRANZITACCIDACCNO'
+      DataSource = CCDataMod.AccountsDatSrc
+      TabOrder = 1
+    end
+    object DBEdit21: TDBEdit
+      Left = 457
+      Top = 4
+      Width = 82
+      Height = 21
+      DataField = 'TRANZITACCIDREST'
+      DataSource = CCDataMod.AccountsDatSrc
+      TabOrder = 2
+    end
+  end
+  object XFPanel13: TXFPanel
+    Left = 0
+    Top = 432
+    Width = 574
+    Height = 36
+    Align = alTop
+    BevelKind = bkFlat
+    TabOrder = 12
+    ExplicitTop = 332
+    object XFLabel22: TXFLabel
+      Left = 7
+      Top = 8
+      Width = 87
+      Height = 13
+      Caption = 'Komissiya  hesab'#305':'
+    end
+    object XFLabel23: TXFLabel
+      Left = 423
+      Top = 8
+      Width = 28
+      Height = 13
+      AutoSize = False
+      Caption = 'Qaliq:'
+    end
+    object XFCheckBox12: TXFCheckBox
+      Left = 550
+      Top = 8
+      Width = 16
+      Height = 17
+      TabOrder = 0
+    end
+    object DBEdit22: TDBEdit
+      Left = 167
+      Top = 4
+      Width = 250
+      Height = 21
+      DataField = 'COMMISSIONOBLIGATIONACCIDACCNO'
+      DataSource = CCDataMod.AccountsDatSrc
+      TabOrder = 1
+    end
+    object DBEdit23: TDBEdit
+      Left = 457
+      Top = 5
+      Width = 82
+      Height = 21
+      DataField = 'COMMISSIONOBLIGATIONACCIDREST'
+      DataSource = CCDataMod.AccountsDatSrc
+      TabOrder = 2
+    end
+  end
+  object XFPanel14: TXFPanel
+    Left = 0
+    Top = 396
+    Width = 574
+    Height = 36
+    Align = alTop
+    BevelKind = bkFlat
+    TabOrder = 13
+    ExplicitTop = 332
+    object XFLabel24: TXFLabel
+      Left = 7
+      Top = 8
+      Width = 76
+      Height = 13
+      Caption = 'S'#601#287'orta hesab'#305':'
+    end
+    object XFLabel25: TXFLabel
+      Left = 423
+      Top = 8
+      Width = 28
+      Height = 13
+      AutoSize = False
+      Caption = 'Qaliq:'
+    end
+    object XFCheckBox13: TXFCheckBox
+      Left = 550
+      Top = 8
+      Width = 16
+      Height = 17
+      TabOrder = 0
+    end
+    object DBEdit24: TDBEdit
+      Left = 167
+      Top = 4
+      Width = 250
+      Height = 21
+      DataField = 'INSURANCEACCIDACCNO'
+      DataSource = CCDataMod.AccountsDatSrc
+      TabOrder = 1
+    end
+    object DBEdit25: TDBEdit
+      Left = 457
+      Top = 5
+      Width = 82
+      Height = 21
+      DataField = 'INSURANCEACCIDREST'
+      DataSource = CCDataMod.AccountsDatSrc
+      TabOrder = 2
+    end
+  end
+  object XFPanel15: TXFPanel
+    Left = 0
+    Top = 360
+    Width = 574
+    Height = 36
+    Align = alTop
+    BevelKind = bkFlat
+    TabOrder = 14
+    ExplicitTop = 332
+    object XFLabel26: TXFLabel
+      Left = 7
+      Top = 8
+      Width = 91
+      Height = 13
+      Caption = #304'lkin '#246'd'#601'ni'#351' hesab'#305':'
+    end
+    object XFLabel27: TXFLabel
+      Left = 423
+      Top = 8
+      Width = 28
+      Height = 13
+      AutoSize = False
+      Caption = 'Qaliq:'
+    end
+    object XFCheckBox14: TXFCheckBox
+      Left = 550
+      Top = 8
+      Width = 16
+      Height = 17
+      TabOrder = 0
+    end
+    object DBEdit26: TDBEdit
+      Left = 167
+      Top = 4
+      Width = 250
+      Height = 21
+      DataField = 'DOUBLEPAYMENTACCIDACCNO'
+      DataSource = CCDataMod.AccountsDatSrc
+      TabOrder = 1
+    end
+    object DBEdit27: TDBEdit
+      Left = 457
+      Top = 5
+      Width = 82
+      Height = 21
+      DataField = 'DOUBLEPAYMENTACCIDREST'
+      DataSource = CCDataMod.AccountsDatSrc
+      TabOrder = 2
+    end
+  end
+end

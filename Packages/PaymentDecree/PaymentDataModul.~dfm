@@ -1,0 +1,181 @@
+object PaymentDataMod: TPaymentDataMod
+  OldCreateOrder = False
+  OnDestroy = DataModuleDestroy
+  Left = 192
+  Top = 106
+  Height = 480
+  Width = 696
+  object ODSAccounts: TOracleDataSet
+    SQL.Strings = (
+      'Select'
+      '   *'
+      'From '
+      '    Account'
+      ''
+      'Order by acc_no')
+    Session = sboapiDataModule.SBSession
+    Left = 80
+    Top = 24
+  end
+  object ODSBankInfo: TOracleDataSet
+    SQL.Strings = (
+      'Select'
+      '   *'
+      'From'
+      '    BankInfoes'
+      'Order by KOD_B')
+    QBEDefinition.QBEFieldDefs = {
+      0400000028000000050000004B4F445F420100000000000400000042414E4B01
+      000000000007000000415A5F4E414D45010000000000040000004B524E4F0100
+      0000000003000000494E4E010000000000050000005345484552010000000000
+      0600000041445245535301000000000004000000534544520100000000000700
+      0000425548414C54520100000000000300000054454C01000000000003000000
+      4641580100000000000500000053574946540100000000000500000054454C45
+      5801000000000005000000454D41494C01000000000007000000504F53545F49
+      4E010000000000070000004B4F445F46494C0100000000000600000046494C49
+      414C0100000000000900000041445245535F46494C0100000000000700000054
+      454C5F46494C010000000000070000004641585F46494C010000000000090000
+      0053574946545F46494C0100000000000900000054454C45585F46494C010000
+      0000000A000000504F5354494E5F46494C010000000000090000005345484552
+      5F46494C01000000000007000000494E4E5F46494C010000000000080000004B
+      524E4F5F46494C010000000000070000005345445246494C0100000000000900
+      0000425548414C5F46494C010000000000080000004B4F445F4246494C010000
+      000000020000004E420100000000000700000056414C5F4D4F56010000000000
+      040000004C4F474F000000000000040000004C494E4B01000000000003000000
+      5344560100000000000300000053564D01000000000002000000424601000000
+      00000C0000004D414E414745525449544C450100000000000F0000004143434F
+      554E54414E545449544C450100000000000E00000053564D5F43555252454E43
+      594944010000000000070000004341504954414C010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 80
+    Top = 88
+    object ODSBankInfoKOD_B: TFloatField
+      FieldName = 'KOD_B'
+    end
+    object ODSBankInfoBANK: TStringField
+      FieldName = 'BANK'
+      Size = 80
+    end
+    object ODSBankInfoKRNO: TStringField
+      FieldName = 'KRNO'
+      Size = 80
+    end
+    object ODSBankInfoINN: TStringField
+      FieldName = 'INN'
+      Size = 15
+    end
+    object ODSBankInfoSWIFT: TStringField
+      FieldName = 'SWIFT'
+    end
+  end
+  object ODSBankM: TOracleDataSet
+    SQL.Strings = (
+      'Select'
+      '    *'
+      'From'
+      '  BankM'
+      'Order by ID')
+    QBEDefinition.QBEFieldDefs = {
+      0400000007000000020000004944010000000000040000004B524E4F01000000
+      0000040000004E414D4501000000000003000000494E4E010000000000050000
+      0053574946540100000000000800000042414E4B434F44450100000000000700
+      00005355424B524E4F010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 112
+    Top = 248
+    object ODSBankMID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object ODSBankMKRNO: TStringField
+      FieldName = 'KRNO'
+      Size = 17
+    end
+    object ODSBankMNAME: TStringField
+      FieldName = 'NAME'
+      Size = 255
+    end
+    object ODSBankMINN: TStringField
+      FieldName = 'INN'
+      Size = 32
+    end
+    object ODSBankMSWIFT: TStringField
+      FieldName = 'SWIFT'
+      Size = 128
+    end
+    object ODSBankMBANKCODE: TStringField
+      FieldName = 'BANKCODE'
+      Size = 32
+    end
+    object ODSBankMSUBKRNO: TStringField
+      FieldName = 'SUBKRNO'
+      Size = 17
+    end
+  end
+  object DSAccounts: TDataSource
+    DataSet = ODSAccounts
+    Left = 24
+    Top = 24
+  end
+  object DSBankInfo: TDataSource
+    DataSet = ODSBankInfo
+    Left = 24
+    Top = 88
+  end
+  object OPPayment: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'sb_PaymentDecree'
+    Left = 336
+    Top = 16
+  end
+  object ODSArchive: TOracleDataSet
+    SQL.Strings = (
+      'Select'
+      '  id'
+      ' ,pdate'
+      ' ,pnum'
+      ' ,dbname'
+      ' ,dbcod'
+      ' ,dbinn'
+      ' ,dbcoracc'
+      ' ,dbswift'
+      ' ,dacc_no'
+      ' ,daccname'
+      ' ,daccinn'
+      ' ,kbname'
+      ' ,kbcod'
+      ' ,kbinn'
+      ' ,kbcoracc'
+      ' ,kbswift'
+      ' ,kacc_no'
+      ' ,kaccname'
+      ' ,kaccinn'
+      ' ,to_number(ammount) as ammount'
+      ' ,assignment'
+      ' ,extra'
+      ',MOD_BANK'
+      'From'
+      ' PaymentDecree'
+      ''
+      'Order by'
+      '  :Title'
+      ' ')
+    Variables.Data = {
+      0300000001000000060000003A5449544C450100000005000000504E554D0000
+      000000}
+    QueryAllRecords = False
+    Session = sboapiDataModule.SBSession
+    Left = 80
+    Top = 144
+  end
+  object DSArchive: TDataSource
+    DataSet = ODSArchive
+    Left = 24
+    Top = 144
+  end
+  object DSBankM: TDataSource
+    DataSet = ODSBankM
+    Left = 40
+    Top = 248
+  end
+end

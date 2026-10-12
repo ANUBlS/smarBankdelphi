@@ -1,0 +1,54 @@
+unit Dm_invstimpl;
+
+interface
+
+uses
+  SysUtils, Classes, DB, OracleData, Oracle;
+
+type
+  TDm_invst = class(TDataModule)
+    DsSysdat: TOracleDataSet;
+    DsSysdatTEK_DAT: TDateTimeField;
+    DsSysdatPRED_DAT: TDateTimeField;
+    DsSysdatARC_DAY: TDateTimeField;
+    DsSysdatCLOSE: TIntegerField;
+    Dscontracts: TOracleDataSet;
+    DsRcontracts: TDataSource;
+    DscontractsID: TFloatField;
+    DscontractsAMMOUNT: TFloatField;
+    DscontractsMUSTERI: TWideStringField;
+    DscontractsCONTRACT_NAME: TWideStringField;
+    DscontractsSTATUS: TIntegerField;
+    DsRInvest: TDataSource;
+    DsInvest: TOracleDataSet;
+    DsInvestID: TFloatField;
+    DsInvestCID: TFloatField;
+    DsInvestAMMOUNT: TFloatField;
+    DsInvestOSTAT: TFloatField;
+    DsInvestDAT: TDateTimeField;
+    DsMain: TOracleDataSet;
+    DsRMain: TDataSource;
+    DsMainID: TFloatField;
+    DsMainCID: TFloatField;
+    DsMainAMMOUNT: TFloatField;
+    DsMainOSTAT: TFloatField;
+    DsMainDAT: TDateTimeField;
+    DsMainCONTRACT_NAME: TWideStringField;
+    pk_ins_investment: TOraclePackage;
+    ds_sum: TOracleDataSet;
+    ds_sumCEM: TFloatField;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Dm_invst: TDm_invst;
+
+implementation
+
+{$R *.dfm}
+uses  CommanParametrs,sboapiDataModuleImpl;
+
+end.

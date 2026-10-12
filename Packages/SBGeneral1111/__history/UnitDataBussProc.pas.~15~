@@ -1,0 +1,351 @@
+﻿unit UnitDataBussProc;
+
+interface
+
+uses
+  SysUtils, Classes, Oracle, DB, OracleData,Dialogs;
+
+type
+  TDataModule_bussProc = class(TDataModule)
+    OPG_BusProc: TOraclePackage;
+    Ods_contrs3: TOracleDataSet;
+    Ods_contrs3ID: TFloatField;
+    Ods_contrs3CNTR_NAME: TWideStringField;
+    Ods_contrs3CNTR_CODE: TIntegerField;
+    Ods_contrs3SYMB: TWideStringField;
+    Ods_contrs3ALFA1: TWideStringField;
+    Ods_contrs3ALFA2: TWideStringField;
+    Ods_contrs3PHONE_CODE: TIntegerField;
+    Dsrc_contrs3: TDataSource;
+    ODS_val: TOracleDataSet;
+    ODS_valVALUTE: TIntegerField;
+    ODS_valVALU_NAME: TWideStringField;
+    Dsrc_Val: TDataSource;
+    ODS_BussProc: TOracleDataSet;
+    ODS_BussProcID: TFloatField;
+    ODS_BussProcNAME: TWideStringField;
+    ODS_BussProcACCBALCN_A: TWideStringField;
+    ODS_BussProcACCSYMB_A: TWideStringField;
+    ODS_BussProcACCCURR_A: TWideStringField;
+    ODS_BussProcACCBALCN_B: TWideStringField;
+    ODS_BussProcACCSYMB_B: TWideStringField;
+    ODS_BussProcACCCURR_B: TWideStringField;
+    ODS_BussProcACCBALCN_C: TWideStringField;
+    ODS_BussProcACCSYMB_C: TWideStringField;
+    ODS_BussProcACCCURR_C: TWideStringField;
+    ODS_BussProcFORMNUM: TIntegerField;
+    ODS_BussProcCLASSID: TIntegerField;
+    ODS_BussProcCUST_TYPE: TIntegerField;
+    ODS_BussProcCUST_IDS: TWideStringField;
+    DS_BusProc: TDataSource;
+    ODS_AccNO_A: TOracleDataSet;
+    DS_AccNO_A: TDataSource;
+    PG_PCustService: TOraclePackage;
+    Ods_Tenostat_A: TOracleDataSet;
+    Ods_Tenostat_AOSTAT: TFloatField;
+    ODS_account_symbols_A: TOracleDataSet;
+    ODS_account_symbols_ASYMBOL: TWideStringField;
+    ODS_account_symbols_ANAME: TWideStringField;
+    Dsrc_account_symbols_A: TDataSource;
+    ODS_account_symbols_B: TOracleDataSet;
+    Dsrc_account_symbols_B: TDataSource;
+    ODS_account_symbols_C: TOracleDataSet;
+    Dsrc_account_symbols_C: TDataSource;
+    Ods_Tenostat_B: TOracleDataSet;
+    Ods_Tenostat_BOSTAT: TFloatField;
+    Ods_Tenostat_C: TOracleDataSet;
+    FloatField11: TFloatField;
+    ODS_CustomersPhys_FS: TOracleDataSet;
+    DS_CUSTOMERS_PHYS_FS: TDataSource;
+    SBOP: TOraclePackage;
+    OraclePackage1: TOraclePackage;
+    ODS_AccNO_B: TOracleDataSet;
+    DS_AccNO_B: TDataSource;
+    ODS_AccNO_C: TOracleDataSet;
+    DS_AccNO_C: TDataSource;
+    ODS_CUSTOMERS_PHYS_FS1: TOracleDataSet;
+    ODS_CUSTOMERS_PHYS_FS1ID: TIntegerField;
+    ODS_CUSTOMERS_PHYS_FS1CUST_NAME: TWideStringField;
+    ODS_CUSTOMERS_PHYS_FS1FIRSTNAME: TWideStringField;
+    ODS_CUSTOMERS_PHYS_FS1PATRONYMIC: TWideStringField;
+    ODS_CUSTOMERS_PHYS_FS1LASTNAME: TWideStringField;
+    ODS_CUSTOMERS_PHYS_FS1PASSPORT: TWideStringField;
+    ODS_CUSTOMERS_PHYS_FS1BIRTHDATE: TDateTimeField;
+    ODS_CUSTOMERS_PHYS_FS1BIRTHPLACE: TWideStringField;
+    ODS_CUSTOMERS_PHYS_FS1FAM_STATUS: TIntegerField;
+    ODS_CUSTOMERS_PHYS_FS1ADRESS: TWideStringField;
+    ODS_CUSTOMERS_PHYS_FS1FAKT_ADRESS: TWideStringField;
+    ODS_CUSTOMERS_PHYS_FS1PHONE: TWideStringField;
+    ODS_CUSTOMERS_PHYS_FS1EMAIL: TWideStringField;
+    ODS_CUSTOMERS_PHYS_FS1OPENDATE: TDateTimeField;
+    ODS_CUSTOMERS_PHYS_FS1SEX: TIntegerField;
+    ODS_CUSTOMERS_PHYS_FS1USERID: TFloatField;
+    ODS_CUSTOMERS_PHYS_FS1PASSP_NUMBER: TWideStringField;
+    ODS_CUSTOMERS_PHYS_FS1ADRS_STATE: TWideStringField;
+    ODS_CUSTOMERS_PHYS_FS1ADRS_CITY: TWideStringField;
+    ODS_CUSTOMERS_PHYS_FS1DOC_TYPE: TFloatField;
+    ODS_CUSTOMERS_PHYS_FS1SFERA_DEY: TFloatField;
+    ODS_CUSTOMERS_PHYS_FS1OTRASL: TFloatField;
+    ODS_CUSTOMERS_PHYS_FS1NALOG_KOD: TFloatField;
+    ODS_CUSTOMERS_PHYS_FS1ORG_SOB: TFloatField;
+    ODS_CUSTOMERS_PHYS_FS1BIRTH_STATE: TWideStringField;
+    ODS_CUSTOMERS_PHYS_FS1PHONE_MOB: TWideStringField;
+    ODS_CUSTOMERS_PHYS_FS1INN: TWideStringField;
+    ODS_CUSTOMERS_PHYS_FS1GROUP_KLIE: TFloatField;
+    ODS_CUSTOMERS_PHYS_FS1PASPDATE: TDateTimeField;
+    ODS_CUSTOMERS_PHYS_FS1CLOSE_DAT: TDateTimeField;
+    ODS_CUSTOMERS_PHYS_FS1NEREZIDENT: TFloatField;
+    ODS_CUSTOMERS_PHYS_FS1VID_SOB: TFloatField;
+    ODS_CUSTOMERS_PHYS_FS1PRINAD_KOD: TFloatField;
+    ODS_CUSTOMERS_PHYS_FS1PASPPLACE: TWideStringField;
+    ODS_CUSTOMERS_PHYS_FS1PASSPIN: TWideStringField;
+    ODS_CUSTOMERS_PHYS_FS1CUST_TYPE: TIntegerField;
+    ODS_CUSTOMERS_PHYS_FS1CATEGORY: TFloatField;
+    ODS_CUSTOMERS_PHYS_FS1CITIZENSHIP: TFloatField;
+    ODS_CUSTOMERS_PHYS_FS1PASSEXPIRE: TDateTimeField;
+    ODS_CUSTOMERS_PHYS_FS1IDCUSTINFO: TFloatField;
+    ConvertationSymbols: TOracleDataSet;
+    ConvertationSymbolsData: TDataSource;
+    CreditDSet: TOracleDataSet;
+    CreditDSrc: TDataSource;
+    DepozDSrc: TDataSource;
+    DepozDset: TOracleDataSet;
+    DepozDsetID: TFloatField;
+    DepozDsetCONTRACTNO: TWideStringField;
+    DepozDsetCONTRACTACCNO: TWideStringField;
+    DepozDsetINTERESTACCNO: TWideStringField;
+    DepozDsetVAL_NAME: TWideStringField;
+    DepozDsetCUSTOMERNAME: TWideStringField;
+    DepozDsetOPENDATE: TDateTimeField;
+    DepozDsetCLOSEDATE: TDateTimeField;
+    DepozDsetAMOUNT: TFloatField;
+    DepozDsetEKAMOUNT: TFloatField;
+    DepozDsetINTEREST: TFloatField;
+    DepozDsetFACTICALDEBT: TFloatField;
+    DepozDsetEKFACTICALDEBT: TFloatField;
+    DepozDsetFACTICALINTERESTDEBT: TFloatField;
+    DepozDsetEKFACTICALINTERESTDEBT: TFloatField;
+    DepozDsetSTOPCALCULATIONDATE: TDateTimeField;
+    DepozDsetCURRENCY: TFloatField;
+    DepozDsetPERSONALTYPE: TFloatField;
+    DepozDsetCLIENTTYPE: TFloatField;
+    DepozDsetBRANCHID: TFloatField;
+    DepozDsetCONTRACTTYPE: TIntegerField;
+    DepozDsetSTATUS: TFloatField;
+    DepozDsetCUSTOMERID: TFloatField;
+    DepozDsetUSID: TFloatField;
+    Destinations: TOracleDataSet;
+    DestinationsData: TDataSource;
+    DsrcFilial_A: TDataSource;
+    ODSFilial_A: TOracleDataSet;
+    ODSFilial_AID: TFloatField;
+    ODSFilial_ANAME: TWideStringField;
+    ODSFilial_AKOD_FILIAL: TWideStringField;
+    Ods_cust_proc: TOracleDataSet;
+    Ods_USerFILID: TOracleDataSet;
+    Ods_USerFILIDFILIALID: TFloatField;
+    ODS_CustomersPhys_FSID: TIntegerField;
+    ODS_CustomersPhys_FSINFO_ID: TFloatField;
+    ODS_CustomersPhys_FSCUST_NAME: TWideStringField;
+    ODS_CustomersPhys_FSINCORPORATION_NUMBER: TWideStringField;
+    ODS_CustomersPhys_FSTPH_CONTACT_TYPE: TWideStringField;
+    ODS_CustomersPhys_FSTPH_COMMUNICATION_TYPE: TWideStringField;
+    ODS_CustomersPhys_FSTPH_NUMBER: TWideStringField;
+    ODS_CustomersPhys_FSADDRESS_TYPE: TWideStringField;
+    ODS_CustomersPhys_FSADDRESS_CUST: TWideStringField;
+    ODS_CustomersPhys_FSCITY_CUST: TWideStringField;
+    ODS_CustomersPhys_FSCOUNTRY_CODE_CUST: TWideStringField;
+    ODS_CustomersPhys_FSDIRECTOR_ID: TFloatField;
+    ODS_CustomersPhys_FSDAT_USTAV: TDateTimeField;
+    ODS_CustomersPhys_FSDAT_NAL: TDateTimeField;
+    ODS_CustomersPhys_FSEMAIL_CUST: TWideStringField;
+    ODS_CustomersPhys_FSURL_CUST: TWideStringField;
+    ODS_CustomersPhys_FSINCORPORATION_STATE: TWideStringField;
+    ODS_CustomersPhys_FSINCORPORATION_CNTR: TWideStringField;
+    ODS_CustomersPhys_FSTPH_EXTENSION: TWideStringField;
+    ODS_CustomersPhys_FSTPH_ZIP: TWideStringField;
+    ODS_CustomersPhys_FSTPH_COUNTRY_PREFIX: TWideStringField;
+    ODS_CustomersPhys_FSTPH_STATE: TWideStringField;
+    ODS_CustomersPhys_FSFIRSTNAME: TWideStringField;
+    ODS_CustomersPhys_FSPATRONYMIC: TWideStringField;
+    ODS_CustomersPhys_FSLASTNAME: TWideStringField;
+    ODS_CustomersPhys_FSINFO_TPH_CONTACT_TYPE: TWideStringField;
+    ODS_CustomersPhys_FSINFO_TPH_COUNTRY: TFloatField;
+    ODS_CustomersPhys_FSINFO_TPH_COUNTRY_CODE: TWideStringField;
+    ODS_CustomersPhys_FSINFO_TPH_CITY: TFloatField;
+    ODS_CustomersPhys_FSINFO_TPH_STATE: TWideStringField;
+    ODS_CustomersPhys_FSINFO_TPH_ZIP: TWideStringField;
+    ODS_CustomersPhys_FSINFO_TPH_COUNTRY_PREFIX: TFloatField;
+    ODS_CustomersPhys_FSINFO_TPH_ADRESS: TWideStringField;
+    ODS_CustomersPhys_FSINFO_TPH_COMMUNICATION_TYPE: TWideStringField;
+    ODS_CustomersPhys_FSINFO_TPH_NUMBER: TWideStringField;
+    ODS_CustomersPhys_FSINFO_TPH_EXTENSION: TWideStringField;
+    ODS_CustomersPhys_FSINFO_CONTACT_TYPE: TWideStringField;
+    ODS_CustomersPhys_FSURL: TWideStringField;
+    ODS_CustomersPhys_FSPASSPORT: TWideStringField;
+    ODS_CustomersPhys_FSBIRTHDATE: TDateTimeField;
+    ODS_CustomersPhys_FSBIRTHPLACE: TWideStringField;
+    ODS_CustomersPhys_FSFAM_STATUS: TIntegerField;
+    ODS_CustomersPhys_FSDOC_COUNTRY: TFloatField;
+    ODS_CustomersPhys_FSCITIZENSHIP2: TFloatField;
+    ODS_CustomersPhys_FSCITIZENSHIP3: TFloatField;
+    ODS_CustomersPhys_FSFAKT_COUNTRY: TFloatField;
+    ODS_CustomersPhys_FSFAKT_CITY: TFloatField;
+    ODS_CustomersPhys_FSFAKT_ZIP: TWideStringField;
+    ODS_CustomersPhys_FSWORK_PLACE: TWideStringField;
+    ODS_CustomersPhys_FSWORK_POST: TWideStringField;
+    ODS_CustomersPhys_FSWORK_ADRESS: TWideStringField;
+    ODS_CustomersPhys_FSWORK_PHONE: TWideStringField;
+    ODS_CustomersPhys_FSADRESS: TWideStringField;
+    ODS_CustomersPhys_FSFAKT_ADRESS: TWideStringField;
+    ODS_CustomersPhys_FSPHONE: TWideStringField;
+    ODS_CustomersPhys_FSEMAIL: TWideStringField;
+    ODS_CustomersPhys_FSOPENDATE: TDateTimeField;
+    ODS_CustomersPhys_FSSEX: TIntegerField;
+    ODS_CustomersPhys_FSUSERID: TFloatField;
+    ODS_CustomersPhys_FSPASSP_NUMBER: TWideStringField;
+    ODS_CustomersPhys_FSADRS_STATE: TWideStringField;
+    ODS_CustomersPhys_FSADRS_CITY: TWideStringField;
+    ODS_CustomersPhys_FSDOC_TYPE: TFloatField;
+    ODS_CustomersPhys_FSSFERA_DEY: TFloatField;
+    ODS_CustomersPhys_FSOTRASL: TFloatField;
+    ODS_CustomersPhys_FSNALOG_KOD: TFloatField;
+    ODS_CustomersPhys_FSORG_SOB: TFloatField;
+    ODS_CustomersPhys_FSBIRTH_STATE: TWideStringField;
+    ODS_CustomersPhys_FSPHONE_MOB: TWideStringField;
+    ODS_CustomersPhys_FSNOTE: TWideStringField;
+    ODS_CustomersPhys_FSINN: TWideStringField;
+    ODS_CustomersPhys_FSSHORT_NAME: TWideStringField;
+    ODS_CustomersPhys_FSGROUP_KLIE: TFloatField;
+    ODS_CustomersPhys_FSPASPDATE: TDateTimeField;
+    ODS_CustomersPhys_FSCLOSE_DAT: TDateTimeField;
+    ODS_CustomersPhys_FSNEREZIDENT: TFloatField;
+    ODS_CustomersPhys_FSVID_SOB: TFloatField;
+    ODS_CustomersPhys_FSPRINAD_KOD: TFloatField;
+    ODS_CustomersPhys_FSPASPPLACE: TWideStringField;
+    ODS_CustomersPhys_FSPASSPIN: TWideStringField;
+    ODS_CustomersPhys_FSCUST_TYPE: TFloatField;
+    ODS_CustomersPhys_FSCUST_JUR: TIntegerField;
+    ODS_CustomersPhys_FSCUST_PHYS: TIntegerField;
+    ODS_CustomersPhys_FSCUST_FS: TIntegerField;
+    ODS_CustomersPhys_FSBIK: TWideStringField;
+    ODS_CustomersPhys_FSRISK_CATEG: TFloatField;
+    ODS_CustomersPhys_FSRISKDESCID: TFloatField;
+    ODS_CustomersPhys_FSCUST_RISK_CATEG: TFloatField;
+    ODS_CustomersPhys_FSCATEGORY: TFloatField;
+    ODS_CustomersPhys_FSCITIZENSHIP: TFloatField;
+    ODS_CustomersPhys_FSPASSEXPIRE: TDateTimeField;
+    ODS_CustomersPhys_FSIDCUSTINFO: TFloatField;
+    ODS_CustomersPhys_FSSAMELYDATE: TDateTimeField;
+    ODS_CustomersPhys_FSWORK_OTRASLI: TFloatField;
+    ODS_CustomersPhys_FSWORK_VID_SOB: TFloatField;
+    ODS_CustomersPhys_FSMONTHLYPROFIT: TWideStringField;
+    ODS_CustomersPhys_FSQUALITY_ID: TFloatField;
+    ODS_CustomersPhys_FSCOMPANI: TFloatField;
+    ODS_CustomersPhys_FSFAKT_ADRESS_OWNER: TFloatField;
+    ODS_CustomersPhys_FSIDCUST: TFloatField;
+    ODS_CustomersPhys_FSUSNAM: TWideStringField;
+    Ods_Tenostat_BACC_ID: TFloatField;
+    Ods_Tenostat_BPOK_OSTAT: TFloatField;
+    Ods_Tenostat_BDATDATE: TDateTimeField;
+    Ods_Tenostat_BOBR_D: TFloatField;
+    Ods_Tenostat_BOBR_K: TFloatField;
+    Ods_Tenostat_BPOK_OBR_D: TFloatField;
+    Ods_Tenostat_BPOK_OBR_K: TFloatField;
+    Ods_Tenostat_BLASTOPDATE: TDateTimeField;
+    ODS_AccNO_AID: TFloatField;
+    ODS_AccNO_AACC_NO: TWideStringField;
+    ODS_AccNO_AACC_NO1: TWideStringField;
+    ODS_AccNO_ANAME: TWideStringField;
+    ODS_AccNO_ATIPACC: TWideStringField;
+    ODS_AccNO_ASYMB: TWideStringField;
+    ODS_AccNO_AOSTAT: TFloatField;
+    ODS_AccNO_AFILIAL: TIntegerField;
+    ODS_AccNO_AFILIAL_NAME: TWideStringField;
+    ODS_AccNO_AVAL_ACC: TIntegerField;
+    ODS_AccNO_AVAL_NAME: TWideStringField;
+    ODS_AccNO_ABAL_CN1: TFloatField;
+    procedure BusProcFilter(Dset: TOracleDataSet);
+    procedure DataModuleDestroy(Sender: TObject);
+    procedure DataModuleCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  DataModule_bussProc: TDataModule_bussProc;
+
+implementation
+
+{$R *.dfm}
+ uses OpenAccountImpl;
+
+
+procedure TDataModule_bussProc.BusProcFilter(Dset: TOracleDataSet);
+var
+  x:integer;
+  xy,n:string;
+begin
+ if  Ods_cust_proc.FieldByName('cust_type').AsInteger=4 then
+ begin
+   showmessage('Nominal müştərinin hesablarına baxmaq olmaz     !');
+   exit;
+ end;
+
+ case Ods_cust_proc.FieldByName('cust_type').AsInteger
+ {PCustServiceForm.XFRadioGroupCust_type.ItemIndex} of
+ 0,1,2:begin
+  with Dset do
+  begin
+  //showmessage(inttostr(Ods_cust_proc.RecordCount) );
+       xy:='in ' + inttostr(Ods_cust_proc.FieldByName('cust_type').AsInteger);
+       SetVariable('custtype',xy);
+      end;
+  end;
+
+  3:begin
+   with Dset do
+  begin
+
+    case Ods_cust_proc.FieldByName('cust_type').AsInteger of
+     -1:x:=10 ;
+      0:a:= 'in 1';
+      1:a:= 'in 2' ;
+
+    end;
+     if x=10 then
+      begin
+      n:='0,1,2,3,4'  ;
+      xy:='in ('+n+')';
+        SetVariable('custtype',xy);
+       end else
+       begin
+      SetVariable('custtype',xy);
+        end;
+       end
+      end;
+      end;
+       end;
+
+
+procedure TDataModule_bussProc.DataModuleCreate(Sender: TObject);
+begin
+ ODS_account_symbols_A.Open;
+  ODS_account_symbols_B.Open;
+  ODS_account_symbols_C.Open;
+  ODSFilial_A.Open;
+end;
+
+procedure TDataModule_bussProc.DataModuleDestroy(Sender: TObject);
+begin
+  ODS_account_symbols_A.close;
+  ODS_account_symbols_B.close;
+  ODS_account_symbols_C.close;
+  ODSFilial_A.Close;
+  ODS_val.close;
+  Ods_contrs3.close;
+end;
+
+end.

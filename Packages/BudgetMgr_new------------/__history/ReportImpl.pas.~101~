@@ -1,0 +1,267 @@
+﻿unit ReportImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, Grids, DBGrids, Buttons, CMExcelExport,ComObj;
+
+type
+  TReportFrm = class(TForm)
+    SpeedButton1: TSpeedButton;
+    DBGrid1: TDBGrid;
+    Edit1: TEdit;
+    Edit2: TEdit;
+    ExcelExport: TCMExcelExport;
+    procedure FormCanResize(Sender: TObject; var NewWidth, NewHeight: Integer;
+      var Resize: Boolean);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure DBGrid1DblClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  ReportFrm: TReportFrm;
+  Exl, Sheet: Variant;
+u,s :integer;
+ADDITIONALPARAMS:string;
+implementation
+
+{$R *.dfm}
+ uses DmBudcetImpl, ProgresImpl, ReportSettingImpl, Felter;
+procedure TReportFrm.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+resize:=false
+end;
+
+procedure TReportFrm.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+  if ORD(Key) = VK_ESCAPE then
+    Close else
+end;
+
+   procedure DestroySheet;
+begin
+  try
+   Finalize(Sheet);
+   Finalize(Exl);
+  except
+
+  end;
+end;
+procedure ShowSheet;
+begin
+  try
+     Exl.Visible := True;
+  except
+     DestroySheet;
+   end;
+end;
+procedure ExportExcel;
+ const
+number_format='#,##0.00';
+number_format_r='#,##0.00%';
+n='yyy';
+d=2;
+f=3;
+
+
+procedure CreateSheet;
+begin
+  try
+   Exl := CreateOleObject('Excel.Application');
+   Exl.WorkBooks.add;
+   Sheet := Exl.Application.Worksheets.Item[1];
+  except
+  end;
+end;
+
+
+var
+z,l,t,a, cell, row,i , j , k :Integer;
+
+fild,son,bash: string;
+begin
+     FrmReportFilter.ShowModal;
+  if FrmReportFilter.Even.GetCheckedKeyList.Count=0 then
+  begin
+  ShowMessage('Ən azı bir təyinat seçilməlidir!');
+  exit;
+  end;
+
+    if u=0 then
+     exit;
+     FrmRepSetting.ShowModal;
+     if s=0 then
+     exit;
+     ProgresFrm.Show ;
+     DmBudcet.PackgSubdiv.CallProcedure('report_year',['p_year',FrmReportFilter.DBLookupComboBox1.KeyValue]);
+ProgresFrm.Gauge1.Progress :=10;
+ with DmBudcet.Report_id2  do
+ begin
+ if Active then close;
+    SetVariable('year',FrmReportFilter.DBLookupComboBox1.KeyValue);
+ if ADDITIONALPARAMS <> '' then
+   SQL[12] := ADDITIONALPARAMS  else
+   SQL[12] :='';
+   open;
+   First;
+try
+
+   DisableControls;
+     CreateSheet;
+     Sheet.Range['A1:A60000'].ColumnWidth:=7;
+     Sheet.Range['B1:B60000'].ColumnWidth:=35;
+     Sheet.Range['C1:C60000'].ColumnWidth:=10;
+     Sheet.Range['D1:D60000'].ColumnWidth:=10;
+     sheet.Range['D1:D60000'].NumberFormat := AnsiChar('@'); //Text
+     Sheet.Range['E1:E60000'].ColumnWidth:=10;
+     Sheet.Range['E1:F60000'].NumberFormat:=number_format;
+     Sheet.Range['F1:F60000'].ColumnWidth:=8;
+     Sheet.Range['F1:F60000'].NumberFormat:=number_format;
+     Sheet.Range['G1:G60000'].ColumnWidth:=10;
+     Sheet.Range['G1:G60000'].NumberFormat:=number_format;
+     Sheet.Range['H1:H60000'].ColumnWidth:=10;
+     Sheet.Range['H1:H60000'].NumberFormat:=number_format;
+     Sheet.Range['I1:I60000'].ColumnWidth:=10;
+     Sheet.Range['I1:I60000'].NumberFormat:=number_format;
+     Sheet.Range['J1:J60000'].ColumnWidth:=10;
+     Sheet.Range['J1:J60000'].NumberFormat:=number_format;
+     Sheet.Range['K1:K60000'].NumberFormat:=number_format;
+     Sheet.Range['L1:L60000'].NumberFormat:=number_format;
+     Sheet.Range['M1:M60000'].NumberFormat:=number_format;
+     Sheet.Range['N1:N60000'].NumberFormat:=number_format;
+     Sheet.Range['O1:O60000'].NumberFormat:=number_format;
+     Sheet.Range['P1:P60000'].NumberFormat:=number_format;
+     Sheet.Range['Q1:Q60000'].NumberFormat:=number_format;
+     Sheet.Range['R1:R60000'].NumberFormat:=number_format;
+     Sheet.Range['S1:S60000'].NumberFormat:=number_format;
+     Sheet.Range['T1:T60000'].NumberFormat:=number_format;
+     Sheet.Range['U1:U60000'].NumberFormat:=number_format;
+     Sheet.Range['V1:V60000'].NumberFormat:=number_format;
+     k:=1;
+     a:=0;
+     l:=1;
+           Sheet.Cells[i+k,3].Font.Bold :=true;
+           Sheet.Cells[i+k,3].Font.size :=16;
+           Sheet.Cells[i+k,3]:= 'Azərbaycan Respublikası Dövlət Neft Fondunun '+inttostr(FrmReportFilter.DBLookupComboBox1.KeyValue)
+           +'-cü ildə idarə edilməsi ilə bağlı xərclər smetası ';
+          i:=1;
+        for t:= 0 to FrmRepSetting.even.Items.Count-1 do
+         begin
+           if FrmRepSetting.even.Checked[t] then begin
+             Sheet.Cells[i+k+1,l+1]:=FrmRepSetting.even.Items[t];
+             Sheet.Cells[i+k+1,l+1].Font.Bold :=true;
+             Sheet.Cells[i+k+1,l+1].Interior.ColorIndex:=34;
+             Sheet.Cells[i+k+1,l+1].WrapText := true;
+             Sheet.Cells[i+k+1,l+1].HorizontalAlignment := 3;
+             Sheet.Cells[i+k+1,l+1].Borders.Color :=clBlack;
+          l:=l+1;
+          end;
+        end;
+          for i:=1 to  RecordCount do
+          begin
+                  l:=1;
+           bash:=inttostr(i+k+1);
+           ProgresFrm.Gauge1.Progress := Trunc(i * 100 / RecordCount)+10;
+       for t:= 0 to FrmRepSetting.even.Items.Count-1 do
+         begin
+         if FrmRepSetting.even.Checked[t] then begin
+           DmBudcet.Evenence1.close ;
+           DmBudcet.Evenence1.SetVariable('id',FrmRepSetting.even.KeyItems[t]);
+           DmBudcet.Evenence1.open;
+          fild:=DmBudcet.Evenence1.FieldByName('polya').AsString;
+           Sheet.Cells[i+k+2,l+1]:=FieldByName(fild).AsString;
+           Sheet.Cells[i+k+2,l+1].WrapText := true;
+           Sheet.Cells[i+k+2,l+1].Interior.COLOR:=StringToColor(FieldByName('reng').AsString);
+           Sheet.Cells[i+k+2,l+1].Borders.Color :=clBlack;
+          l:=l+1;
+           end ;
+           end;
+           if FieldByName('previd').asinteger=0 then
+           son:=son+'X'+inttostr(i+k+2)+'+';
+          // Sheet.Range['B'+bash+':V'+inttostr(i+k+2)].Borders.Color:=clBlack;
+          next;
+          end;
+          son:=( Copy(son,0,Length(son)-1));
+          Sheet.Cells[i+k+3,2].Font.Bold :=true;
+          Sheet.Cells[i+k+3,2]:='CƏMİ';
+          l:=2;  z:=1;
+        for t:= 0 to FrmRepSetting.even.Items.Count-1 do
+         begin
+         if FrmRepSetting.even.Checked[t] then
+         begin
+          if strtoint(FrmRepSetting.even.KeyItems[t])<4 then
+             l:=l+1;
+         if strtoint(FrmRepSetting.even.KeyItems[t])>=4 then
+         begin
+           DmBudcet.Evenence1.close ;
+           DmBudcet.Evenence1.SetVariable('id',l-1);
+           DmBudcet.Evenence1.open;
+          fild:=DmBudcet.Evenence1.FieldByName('alfa').AsString;
+          Sheet.Cells[i+k+3,l].Font.Bold :=true;
+          Sheet.Cells[i+k+3,l]:='='+(StringReplace(son, 'X', fild,
+                          [rfReplaceAll, rfIgnoreCase]));
+                  l:=l+1;
+
+         end;
+          Sheet.Cells[i+k+3,z+1].Borders.Color :=clBlack;
+          Sheet.Cells[i+k+3,z+1].Interior.COLOR:= clSilver;
+          z:=z+1;
+          end;
+         end;
+          ProgresFrm.Close;
+          exl.ActiveSheet.Range['B4','V4'].Select;
+          exl.ActiveWindow.FreezePanes := True;
+          ShowSheet;
+
+
+ finally
+
+   Exl.Range['A1:A1'].Select;
+   Screen.Cursor := crDefault;
+   DestroySheet;
+   EnableControls;
+  end;
+end
+end;
+procedure TReportFrm.SpeedButton1Click(Sender: TObject);
+begin
+if DBGrid1.DataSource.DataSet.FieldByName('id').AsInteger=2 then
+begin
+    s:=0; u:=0;
+      DmBudcet.EvenenceSet.Open;
+      if not Assigned(FrmRepSetting) then
+      FrmRepSetting:= TFrmRepSetting.Create(application);
+      if not Assigned(ProgresFrm) then
+      ProgresFrm:= TProgresFrm.Create(application);
+     if not Assigned(FrmReportFilter) then
+      FrmReportFilter:= TFrmReportFilter.Create(application);
+
+     ExportExcel ;
+end;
+
+end;
+procedure TReportFrm.DBGrid1DblClick(Sender: TObject);
+begin
+if DBGrid1.DataSource.DataSet.FieldByName('id').AsInteger=2 then
+begin
+    s:=0; u:=0;
+      DmBudcet.EvenenceSet.Open;
+      if not Assigned(FrmRepSetting) then
+      FrmRepSetting:= TFrmRepSetting.Create(application);
+      if not Assigned(ProgresFrm) then
+      ProgresFrm:= TProgresFrm.Create(application);
+     if not Assigned(FrmReportFilter) then
+      FrmReportFilter:= TFrmReportFilter.Create(application);
+
+     ExportExcel ;
+end;
+
+end;
+end.

@@ -1,0 +1,220 @@
+unit Fingerprint;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, OracleData, ExtCtrls, StdCtrls, Mask, DBCtrlsEh, DBLookupEh;
+
+type
+  TFinger = class(TForm)
+    Image1: TImage;
+    OracleDataSet1: TOracleDataSet;
+    DataSource1: TDataSource;
+    DBLookupComboboxEh1: TDBLookupComboboxEh;
+    DBLookupComboboxEh2: TDBLookupComboboxEh;
+    TakeSampleButton: TButton;
+    Save2DbButton: TButton;
+    SearchInDbButton: TButton;
+    LogMemo: TMemo;
+    OracleDataSet2: TOracleDataSet;
+
+    procedure FormActivate(Sender: TObject);
+    procedure TakeSampleButtonClick(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure Save2DbButtonClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+  private
+    { Private declarations }
+
+  public
+    { Public declarations }
+        pScanner: Pointer;
+    pLastScannedImpression: Pointer;
+    FLastTemplate: Pointer;
+    FDBDir: String;
+  end;
+
+var
+  Finger: TFinger;
+
+implementation
+
+{$R *.DFM}
+ uses
+ sboapiDataModuleImpl,BsdkDllSbTranslateProc;
+
+
+ function ScanImage(pScanner : pointer) : pointer;
+var
+  pImage : pointer;
+  expressQuality : integer;
+  res : integer;
+begin
+  expressQuality := 0;
+  pImage := nil;
+  while (expressQuality < 20) do begin
+      if (pImage <> nil) then
+          Bsdk_Destroy_Object(pImage);
+
+      //acquiring image from the scanner
+      res := Bsdk_Scanner_AcquireImage(pScanner, pImage);
+      CheckResult(res);
+
+      //getting image quality
+      expressQuality := Bsdk_Image_GetExpressQuality(pImage, 8);
+  end;
+
+  Result := pImage;
+end;
+
+function Initialize(): Pointer;
+var
+  res: integer;
+  pDeviceList: pointer;
+  pDeviceDescriptorPtr: pointer;
+  pScanner: pointer;
+begin
+  //creating License object
+  res := Bsdk_License_Create(BSDK_LICENSE_TYPE_ALL);
+  CheckResult(res);
+
+  //creating the list of devices
+  res := Bsdk_DeviceList_Create(pDeviceList, Bsdk_Device_Type_Scanner_Any);
+  CheckResult(res);
+  if (Bsdk_DeviceList_GetSize(pDeviceList)= 0) then
+    raise Exception.Create('Scanner was not found');
+
+  //selecting first found device
+  pDeviceDescriptorPtr := Bsdk_DeviceList_GetDeviceDescriptor(pDeviceList, 0);
+  //creating Scanner object
+  res := Bsdk_Scanner_Create(pScanner, pDeviceDescriptorPtr);
+  CheckResult(res);
+
+  Result := pScanner;
+end;
+
+
+ procedure LogMessage(const Msg: String);
+begin
+  finger.LogMemo.Lines.Add(Msg);
+end;
+
+
+
+procedure TFinger.FormActivate(Sender: TObject);
+begin
+  pScanner := nil;
+
+  LogMessage('Initializing...');
+  Repaint();
+
+  FDBDir := GetCurrentDir()+'\DB';
+  pScanner := Initialize();
+
+  LogMessage('Ready!');
+
+end;
+
+procedure FreeTemplate();
+var
+FLastTemplate:Pointer;
+begin
+  if (FLastTemplate <> nil) then
+  begin
+    Bsdk_Destroy_Object(FLastTemplate);
+    FLastTemplate := nil;
+  end;
+end;
+
+
+procedure TFinger.TakeSampleButtonClick(Sender: TObject);
+var
+  res: Integer;
+  Bmp: PChar;
+  BmpSize: Integer;
+const
+  pImageSet: Pointer = nil;
+  pImageProcessor: Pointer = nil;
+  pTemp: Pointer = nil;
+begin
+  LogMessage('Acquiring fingerprint...');
+  pLastScannedImpression := ScanImage(pScanner);
+
+  GetMem(Bmp, 500*500);
+  CheckResult(Bsdk_Image_Save(pLastScannedImpression, Bmp, 500*500, BmpSize));
+  with TFileStream.Create(getcurrentdir+'\db\123.bmp', fmCreate) do
+  try
+    WriteBuffer(PChar(Bmp)^, BmpSize);
+  finally
+    Free;
+  end;
+  Image1.Picture.Bitmap.LoadFromFile('D:\123.bmp');
+
+  FreeTemplate();
+
+  //creating ImageSet object to hold Image objects
+  res := Bsdk_ImageSet_Create(pImageSet);
+  CheckResult(res);
+  //adding Image objects to ImageSet with some FingerCode
+  res := Bsdk_ImageSet_AddImage(pImageSet, pLastScannedImpression, 0);
+  CheckResult(res);
+
+  //creating ImageProcessor object to create template
+  //You can specify math type when creating ImageProcessor, Template, TemplateSet or Matcher objects.
+  //The math type should be the same for all these objects.
+  res := Bsdk_ImageProcessor_Create(pImageProcessor, 0);
+  CheckResult(res);
+
+  res := Bsdk_ImageProcessor_CreateTemplateFromImageSet(pImageProcessor, pImageSet, pTemp);
+  CheckResult(res);
+
+  Bsdk_Destroy_Object(pImageProcessor);
+  Bsdk_Destroy_Object(pImageSet);
+
+  FLastTemplate := pTemp;
+   DeleteFile(getcurrentdir+'\db\123.bmp');
+  LogMessage('Done!');
+end;
+
+
+procedure TFinger.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  FreeTemplate();
+  if (pScanner <> nil) then
+    Bsdk_Destroy_Object(pScanner);
+end;
+
+procedure TFinger.FormCreate(Sender: TObject);
+begin
+SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TFinger.Save2DbButtonClick(Sender: TObject);
+var
+  res: Integer;
+  templateLength: Cardinal;
+  bufferTemplate: PChar;
+  FileName: String;
+  pTransfered: Integer;
+begin
+  LogMessage('Storing to database...');
+  //saving template to bufferTemplate1 byte array
+  templateLength := Bsdk_Template_GetSize(FLastTemplate);
+  GetMem(bufferTemplate, templateLength);
+  res := Bsdk_Template_Save(FLastTemplate, bufferTemplate, templateLength, pTransfered);
+  CheckResult(res);
+
+  // save template
+  if InputQuery('', 'Enter file name: ', FileName) then
+    with TFileStream.Create(FDBDir+'\'+FileName+'.bin', fmCreate) do
+    try
+      WriteBuffer(PChar(bufferTemplate)^, templateLength);
+    finally
+      Free;
+    end;
+
+  //LogMessage('Succesfully stored to: '+FileName);
+end;
+
+end.

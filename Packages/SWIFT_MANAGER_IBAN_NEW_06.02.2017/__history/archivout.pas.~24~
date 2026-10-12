@@ -1,0 +1,548 @@
+﻿unit archivout;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ImgList, StdCtrls, SearchEdit, Grids, DBGrids, ORACLEDATA,
+  ComCtrls,Menus, ExtCtrls, DBCtrls;
+
+type
+  Tarchive_out = class(TForm)
+    Label4: TLabel;
+    Gridin: TDBGrid;
+    Button2: TButton;
+    Button1: TButton;
+    SearchEdit1: TSearchEdit;
+    SearchEdit2: TSearchEdit;
+    SearchEdit3: TSearchEdit;
+    SearchEdit4: TSearchEdit;
+    swImageList2: TImageList;
+    DateTimePicker1: TDateTimePicker;
+    DateTimePicker2: TDateTimePicker;
+    Panel1: TPanel;
+    Panel2: TPanel;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label5: TLabel;
+    ComboBox1: TComboBox;
+    SearchEdit5: TSearchEdit;
+    Label6: TLabel;
+    PopupMenu1: TPopupMenu;
+    Hesabat1: TMenuItem;
+    DBLookupComboBox1: TDBLookupComboBox;
+    procedure FormActivate(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+    procedure GridinDrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TColumn; State: TGridDrawState);
+    procedure GridinTitleClick(Column: TColumn);
+    procedure Button1Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure SearchEdit1KeyPress(Sender: TObject; var Key: Char);
+    procedure SearchEdit1Change(Sender: TObject);
+    procedure SearchEdit2Change(Sender: TObject);
+    procedure SearchEdit3Change(Sender: TObject);
+    procedure SearchEdit4Change(Sender: TObject);
+    procedure SearchEdit2KeyPress(Sender: TObject; var Key: Char);
+    procedure SearchEdit3KeyPress(Sender: TObject; var Key: Char);
+    procedure SearchEdit4KeyPress(Sender: TObject; var Key: Char);
+    procedure ComboBox1Change(Sender: TObject);
+    procedure SearchEdit5Change(Sender: TObject);
+    procedure SearchEdit5KeyPress(Sender: TObject; var Key: Char);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  archive_out: Tarchive_out;
+  SearchOptions : TSearchRecordOptions;
+  SearchField : string;
+
+implementation
+
+uses Unit2, qrp1, qrp5,SBTranslateproc,sboapidatamoduleimpl;
+
+{$R *.DFM}
+  const
+  Notcreate =1;
+  Created =2;
+  Commited =5;
+  Problemed =8;
+  Problemed2 =7;
+  new=10;
+  edits=11;
+procedure Tarchive_out.FormActivate(Sender: TObject);
+ var
+
+dat11:Tdatetime;
+dat22:Tdatetime;
+
+begin
+     //OracleDataSet1.Session:=sboapidatamodule.sbsession;
+//
+DateTimePicker1.DateTime:=date;
+DateTimePicker2.DateTime:=date;
+DBLookupComboBox1.KeyValue := DBLookupComboBox1.ListSource.DataSet.FieldByName(DBLookupComboBox1.KeyField).Value;
+
+//  SWDataModule.out_archive.close;
+// dat11:=integer(trunc(DateTimePicker1.datetime));
+// dat22:=integer(trunc(DateTimePicker2.datetime));
+// SWDataModule.out_archive.SetVariable('dat1', dat11);
+// SWDataModule.out_archive.SetVariable('dat2' , dat22);
+// SWDataModule.out_archive.open;
+end;
+
+procedure Tarchive_out.FormCreate(Sender: TObject);
+begin
+
+SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure Tarchive_out.Button2Click(Sender: TObject);
+ var
+
+dat11:Tdatetime;
+dat22:Tdatetime;
+
+begin
+
+  SWDataModule.out_archive.close;
+ dat11:=integer(trunc(DateTimePicker1.datetime));
+ dat22:=integer(trunc(DateTimePicker2.datetime));
+ SWDataModule.out_archive.SetVariable('dat1', dat11);
+ SWDataModule.out_archive.SetVariable('dat2' , dat22);
+ SWDataModule.out_archive.SetVariable('title' , 'id');
+  if DBLookupComboBox1.Text<>'Butun operatorlar' then   begin
+
+
+SWDataModule.out_archive.SQL[5]:=' and fcreate_opid=:oper';
+      SWDataModule.out_archive.DeclareVariable('oper',3);
+
+      SWDataModule.out_archive.SetVariable('oper' ,SWDataModule.Operators.FieldByName('id').AsInteger );
+  end else begin
+
+      SWDataModule.out_archive.DeclareVariable('oper',3);
+  SWDataModule.out_archive.DeleteVariable('oper');
+      SWDataModule.out_archive.SQL[5]:='';
+
+  end;
+
+
+
+
+   {
+ if swdatamodule.userfil.FieldByName('filialid').AsInteger<>0 then   begin
+    SWDataModule.out_archive.Close;
+
+    SWDataModule.out_archive.SQL[10]:='and branch  = (SELECT filialid FROM sba_objinf WHERE obj = (SELECT USER FROM DUAL))';
+    //SWDataModule.sw_in2.SQL[10]:='and branch  = (SELECT filialid FROM sba_objinf WHERE obj = (SELECT USER FROM DUAL))';
+
+    SWDataModule.out_archive.open;
+
+  end;  }
+ SWDataModule.out_archive.open;
+ SWDataModule.Operators.Open;
+
+end;
+
+procedure Tarchive_out.ComboBox1Change(Sender: TObject);
+begin
+
+  SWDataModule.out_archive.close;
+        if combobox1.ItemIndex=0 then
+         SWDataModule.out_archive.sql[6]:='and messagetype<>'+  ''' '''
+
+    else
+    SWDataModule.out_archive.sql[6]:='and messagetype='+ ''''+combobox1.Text+'''';
+
+ SWDataModule.out_archive.open;
+
+
+
+end;
+
+procedure Tarchive_out.GridinDrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TColumn;
+  State: TGridDrawState);
+var
+  ImageIndex: Integer;
+
+begin
+//SWDataModule.SB_ACA.CallProcedure('CheckAdvancedObjectAccess', ['SW_OUT_CREATEDVIEW']);
+ ImageIndex := -1;
+  with Sender as TDBGrid do
+  begin
+    if DataSource.DataSet.RecordCount <> 0 then
+    begin
+      case DataSource.DataSet.FieldByName('STATUS').AsInteger of
+     notcreate :
+        ImageIndex := 25;
+      created :
+        ImageIndex := 4;
+      commited :
+        ImageIndex := 5;
+      7:
+        ImageIndex :=16;
+      20:
+        ImageIndex :=10;
+      15:
+        ImageIndex :=7;
+      10:
+        ImageIndex :=44;
+      8:
+        ImageIndex :=16;
+      else
+      end;
+      if (DataCol = 1) and (ImageIndex <> -1) then
+        swImageList2.Draw(Canvas, Rect.Left, Rect.Top, ImageIndex, True)
+      else
+        DefaultDrawColumnCell(Rect, DataCol, Column, State);
+    end;
+
+    //if (DataSource.DataSet.FieldByName('id').asinteger<>722) and (DataCol  =2)  then
+
+     //(
+    //Column.Font.Color:=clred
+         // else
+          //Column.Font.Color:=clblack ;
+        //DefaultDrawColumnCell(Rect, DataCol, Column, State);
+    //DefaultDrawColumnCell
+
+
+  end;
+end;
+
+procedure Tarchive_out.GridinTitleClick(Column: TColumn);
+var
+   TitleName :string;
+   SortPosition: word;
+begin
+{ SortPosition :=100;
+ //OrderedTitle :=Column.FieldName; //H.R. 24.06.2008
+ if (gridin.DataSource.DataSet.IsEmpty) or (Column.FieldName = EmptyStr) then Exit;
+ Screen.Cursor :=crHourGlass;
+ TitleName :=Column.FieldName;
+ with TOracleDataSet(Gridin.DataSource.DataSet) do
+  try
+
+   SortPosition :=SQL.Add('ORDER BY '+ TitleName);
+   Refresh;
+  finally
+   SQL[SortPosition] :=EmptyStr;
+   Screen.Cursor :=crDefault;
+  end;}
+//showmessage(     TitleName);
+  if Column.Field.Calculated then Exit;
+  Screen.Cursor := crSQLWait;
+  TitleName :=Column.FieldName;
+  try
+   with SWDataModule.out_archive do
+    begin
+     SetVariable('Title',TitleName);
+     Refresh;
+     open;
+    end;
+  finally
+   Screen.Cursor := crDefault;
+  end;
+
+end;
+
+procedure Tarchive_out.SearchEdit1Change(Sender: TObject);
+begin
+{ with Gridin.DataSource.DataSet do begin
+  Filter := 'id = '''+SearchEdit1.Text+('*')+'''';
+end;    }
+end;
+
+procedure Tarchive_out.SearchEdit1KeyPress(Sender: TObject; var Key: Char);
+begin
+
+  if Key = #13  then
+ begin
+  SearchOptions := [srIgnoreCase ,srPartialMatch ];
+
+  with Sender as TEdit  do
+  begin
+    SearchField :='ID';
+
+
+    with  TOracleDataSet(Gridin.DataSource.DataSet) do
+    if  not SearchRecord(
+                  SearchField
+                 ,Text
+                 ,SearchOptions + [srFromCurrent , srForward ]
+                 ) then
+
+    if MessageDlg(
+              'Axtarış sona çatdı.'+#13+'Əvvəldən başlansın?'
+             ,mtInformation
+             ,[mbNo , mbYes]
+             ,0
+             ) = mrYes  then
+
+    if not SearchRecord(
+                 SearchField
+                ,Text
+                ,SearchOptions + [ srFromBeginning ]
+                )  then
+    MessageDlg('Yazı tapılmadı!',mtInformation,[mbOK],0);
+  end;
+ end;
+
+
+end;
+
+procedure Tarchive_out.SearchEdit2Change(Sender: TObject);
+begin
+{with Gridin.DataSource.DataSet do begin
+  Filter := 'mf20_reference = '''+SearchEdit2.Text+('*')+'''';
+end; }
+end;
+
+procedure Tarchive_out.SearchEdit2KeyPress(Sender: TObject; var Key: Char);
+begin
+
+
+
+  if Key = #13  then
+ begin
+  SearchOptions := [srIgnoreCase ,srPartialMatch ];
+
+  with Sender as TEdit  do
+  begin
+    SearchField :='mf20_reference';
+
+
+    with  TOracleDataSet(Gridin.DataSource.DataSet) do
+    if  not SearchRecord(
+                  SearchField
+                 ,Text
+                 ,SearchOptions + [srFromCurrent , srForward ]
+                 ) then
+
+    if MessageDlg(
+              'Axtarış sona çatdı.'+#13+'Əvvəldən başlansın?'
+             ,mtInformation
+             ,[mbNo , mbYes]
+             ,0
+             ) = mrYes  then
+
+    if not SearchRecord(
+                 SearchField
+                ,Text
+                ,SearchOptions + [ srFromBeginning ]
+                )  then
+    MessageDlg('Yazı tapılmadı!',mtInformation,[mbOK],0);
+  end;
+ end;
+
+
+end;
+
+procedure Tarchive_out.SearchEdit3Change(Sender: TObject);
+begin
+{with Gridin.DataSource.DataSet do begin
+  Filter := 'mf50_account = '''+SearchEdit3.Text+('*')+'''';
+end;  }
+end;
+
+procedure Tarchive_out.SearchEdit3KeyPress(Sender: TObject; var Key: Char);
+begin
+
+  if Key = #13  then
+ begin
+  SearchOptions := [srIgnoreCase ,srPartialMatch ];
+
+  with Sender as TEdit  do
+  begin
+    SearchField :='mf50_account';
+
+
+    with  TOracleDataSet(Gridin.DataSource.DataSet) do
+    if  not SearchRecord(
+                  SearchField
+                 ,Text
+                 ,SearchOptions + [srFromCurrent , srForward ]
+                 ) then
+
+    if MessageDlg(
+              'Axtarış sona çatdı.'+#13+'Əvvəldən başlansın?'
+             ,mtInformation
+             ,[mbNo , mbYes]
+             ,0
+             ) = mrYes  then
+
+    if not SearchRecord(
+                 SearchField
+                ,Text
+                ,SearchOptions + [ srFromBeginning ]
+                )  then
+    MessageDlg('Yazı tapılmadı!',mtInformation,[mbOK],0);
+  end;
+ end;
+
+
+end;
+
+procedure Tarchive_out.SearchEdit4Change(Sender: TObject);
+begin
+{with Gridin.DataSource.DataSet do begin
+  Filter := 'mf32a_amount = '''+SearchEdit4.Text+('*')+'''';
+end;   }
+end;
+
+procedure Tarchive_out.SearchEdit4KeyPress(Sender: TObject; var Key: Char);
+begin
+
+
+  if Key = #13  then
+ begin
+  SearchOptions := [srIgnoreCase ,srPartialMatch ];
+
+  with Sender as TEdit  do
+  begin
+    SearchField :='mf32a_amount';
+
+
+    with  TOracleDataSet(Gridin.DataSource.DataSet) do
+    if  not SearchRecord(
+                  SearchField
+                 ,Text
+                 ,SearchOptions + [srFromCurrent , srForward ]
+                 ) then
+
+    if MessageDlg(
+              'Axtarış sona çatdı.'+#13+'Əvvəldən başlansın?'
+             ,mtInformation
+             ,[mbNo , mbYes]
+             ,0
+             ) = mrYes  then
+
+    if not SearchRecord(
+                 SearchField
+                ,Text
+                ,SearchOptions + [ srFromBeginning ]
+                )  then
+    MessageDlg('Yazı tapılmadı!',mtInformation,[mbOK],0);
+  end;
+ end;
+
+
+end;
+
+procedure Tarchive_out.SearchEdit5Change(Sender: TObject);
+begin
+{with Gridin.DataSource.DataSet do begin
+  Filter := 'receiverbic = '''+SearchEdit5.Text+('*')+'''';
+end;
+ }
+end;
+
+procedure Tarchive_out.SearchEdit5KeyPress(Sender: TObject; var Key: Char);
+begin
+
+
+  if Key = #13  then
+ begin
+  SearchOptions := [srIgnoreCase ,srPartialMatch ];
+
+  with Sender as TEdit  do
+  begin
+    SearchField :='receiverbic';
+
+
+    with  TOracleDataSet(Gridin.DataSource.DataSet) do
+    if  not SearchRecord(
+                  SearchField
+                 ,Text
+                 ,SearchOptions + [srFromCurrent , srForward ]
+                 ) then
+
+    if MessageDlg(
+              'Axtarış sona çatdı.'+#13+'Əvvəldən başlansın?'
+             ,mtInformation
+             ,[mbNo , mbYes]
+             ,0
+             ) = mrYes  then
+
+    if not SearchRecord(
+                 SearchField
+                ,Text
+                ,SearchOptions + [ srFromBeginning ]
+                )  then
+    MessageDlg('Yazı tapılmadı!',mtInformation,[mbOK],0);
+  end;
+ end;
+
+
+end;
+
+procedure Tarchive_out.Button1Click(Sender: TObject);
+
+var
+a:string;
+
+begin
+if gridin.DataSource.DataSet.fieldbyname('hesabat').asstring<>'' then
+    begin
+a:= gridin.DataSource.DataSet.fieldbyname('hesabat').asstring ;
+a := Trim(Copy(a, 1, Pos('}{5:', a)));
+    end
+else begin
+a:=gridin.DataSource.DataSet.fieldbyname('MF20_REFERENCE').asstring+#13+#13
++gridin.DataSource.DataSet.fieldbyname('M23B').asstring+' '+gridin.DataSource.DataSet.fieldbyname('mf23b').asstring
++#13+#13+gridin.DataSource.DataSet.fieldbyname('M32A').asstring+' '+gridin.DataSource.DataSet.fieldbyname('MF32A_DATE').asstring+' '+gridin.DataSource.DataSet.fieldbyname('MF32A_CURR').asstring+gridin.DataSource.DataSet.fieldbyname('MF32A_AMOUNT').asstring
++#13+#13+gridin.DataSource.DataSet.fieldbyname('M50').asstring+' '+gridin.DataSource.DataSet.fieldbyname('MF50_ACCOUNT').asstring
++#13+gridin.DataSource.DataSet.fieldbyname('MF50_NAME$ADRESS').asstring
++#13+#13+gridin.DataSource.DataSet.fieldbyname('M59').asstring+' '+gridin.DataSource.DataSet.fieldbyname('MF59_ACCOUNT').asstring
++#13+gridin.DataSource.DataSet.fieldbyname('MF59_NAME$ADRESS').asstring
++#13+#13+gridin.DataSource.DataSet.fieldbyname('M70').asstring+' '+gridin.DataSource.DataSet.fieldbyname('MF70').asstring
++#13+gridin.DataSource.DataSet.fieldbyname('M72').asstring+' '+gridin.DataSource.DataSet.fieldbyname('MF72').asstring;
+
+   if gridin.DataSource.DataSet.fieldbyname('messagetype').asstring='MT103' then
+      begin
+
+a:= gridin.DataSource.DataSet.fieldbyname('MF20').asstring+' '+
+gridin.DataSource.DataSet.fieldbyname('MF20_REFERENCE').asstring+#13+#13
++gridin.DataSource.DataSet.fieldbyname('M23B').asstring+' '+gridin.DataSource.DataSet.fieldbyname('mf23b').asstring
++#13+#13+gridin.DataSource.DataSet.fieldbyname('M32A').asstring+' '+gridin.DataSource.DataSet.fieldbyname('MF32A_DATE').asstring+' '+gridin.DataSource.DataSet.fieldbyname('MF32A_CURR').asstring+gridin.DataSource.DataSet.fieldbyname('MF32A_AMOUNT').asstring
++#13+#13+gridin.DataSource.DataSet.fieldbyname('M50').asstring+' '+gridin.DataSource.DataSet.fieldbyname('MF50_NAME$ADRESS').asstring
++#13{gridin.DataSource.DataSet.fieldbyname('MF50_NAME$ADRESS').asstring
++#13+#13+gridin.DataSource.DataSet.fieldbyname('M59').asstring+' '+gridin.DataSource.DataSet.fieldbyname('MF59_NAME$ADRESS').asstring
++#13{gridin.DataSource.DataSet.fieldbyname('MF59_NAME$ADRESS').asstring }
++#13+#13+gridin.DataSource.DataSet.fieldbyname('M70').asstring+' '+gridin.DataSource.DataSet.fieldbyname('MF70').asstring
++#13+gridin.DataSource.DataSet.fieldbyname('M72').asstring+' '+gridin.DataSource.DataSet.fieldbyname('MF72').asstring;
+
+      end
+      else begin
+a:= gridin.DataSource.DataSet.fieldbyname('MF20').asstring+' '+ gridin.DataSource.DataSet.fieldbyname('MF20_REFERENCE').asstring+#13+#13
++gridin.DataSource.DataSet.fieldbyname('M21').asstring+' '+gridin.DataSource.DataSet.fieldbyname('mf21').asstring
++#13+#13+gridin.DataSource.DataSet.fieldbyname('M32A').asstring+' '+gridin.DataSource.DataSet.fieldbyname('MF32A_DATE').asstring+' '+gridin.DataSource.DataSet.fieldbyname('MF32A_CURR').asstring+gridin.DataSource.DataSet.fieldbyname('MF32A_AMOUNT').asstring
++#13+#13+gridin.DataSource.DataSet.fieldbyname('M52').asstring+' '+gridin.DataSource.DataSet.fieldbyname('MF52_NAME$ADRESS').asstring
++#13{gridin.DataSource.DataSet.fieldbyname('MF50_NAME$ADRESS').asstring
++#13+#13+gridin.DataSource.DataSet.fieldbyname('M58').asstring+' '+gridin.DataSource.DataSet.fieldbyname('mf58_name$location').asstring
++#13{gridin.DataSource.DataSet.fieldbyname('MF59_NAME$ADRESS').asstring  }
++#13
++#13+gridin.DataSource.DataSet.fieldbyname('M72').asstring+' '+gridin.DataSource.DataSet.fieldbyname('MF72').asstring;
+
+      end;
+
+
+end;
+
+
+
+
+ if not assigned(QuickReport5) then
+ QuickReport5:=TQuickReport5.Create(application);
+ QuickReport5.qrrichtext1.lines.Text:=a;
+ //\ShowMessage(a);
+ QuickReport5.Preview;
+end;
+
+end.
+

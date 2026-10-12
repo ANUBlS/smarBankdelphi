@@ -1,0 +1,302 @@
+unit WebDataInserter;
+
+
+interface
+
+uses
+  SysUtils, Classes, HTTPApp,
+   DB, dbxjson,ioutils, Oracle, OracleData, IdBaseComponent, IdComponent,
+  IdTCPConnection, IdTCPClient, IdHTTP;
+
+type
+  TWebModule1 = class(TWebModule)
+    connection: TOracleSession;
+    Queries: TOracleDataSet;
+    Insertquery: TOracleDataSet;
+    IdHTTP1: TIdHTTP;
+    pack: TOraclePackage;
+    get_crednum: TOracleDataSet;
+    Pay_order: TOracleDataSet;
+    procedure WebModule1DefaultHandlerAction(Sender: TObject;
+      Request: TWebRequest; Response: TWebResponse; var Handled: Boolean);
+    procedure WebModule1InsertDataAction(Sender: TObject; Request: TWebRequest;
+      Response: TWebResponse; var Handled: Boolean);
+    procedure WebModule1WebActionItem1Action(Sender: TObject;
+      Request: TWebRequest; Response: TWebResponse; var Handled: Boolean);
+    procedure WebModule1Insert_Payment_decreeAction(Sender: TObject;
+      Request: TWebRequest; Response: TWebResponse; var Handled: Boolean);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  WebModuleClass: TComponentClass = TWebModule1;
+
+ dbname,dbuser,dbpass,dbport,dbadr,dbdriver:string;
+ duser,dpass,Output,ki:string;
+
+implementation
+
+{%CLASSGROUP 'System.Classes.TPersistent'}
+
+{$R *.dfm}
+
+procedure TWebModule1.WebModule1DefaultHandlerAction(Sender: TObject;
+  Request: TWebRequest; Response: TWebResponse; var Handled: Boolean);
+begin
+  Response.Content :=
+    '<html>' +
+    '<head><title>All Right  Application</title></head>' +
+    '<body>Web Server Applicatio55n</body>' +
+    '</html>';
+end;
+
+procedure TWebModule1.WebModule1InsertDataAction(Sender: TObject;
+  Request: TWebRequest; Response: TWebResponse; var Handled: Boolean);
+var
+i,j,k,tr,a,sr:Integer;
+st,st2,uname,upass,conffile:string;
+
+   JSonObject,JSonObject2:TJSonObject;
+   JSonValue,JsonValue2,JsonValue3,JsonValue4:TJSonValue;
+   JsonArray,JsonArray2: TJSONArray;
+   ArrayElement: TJSonValue;
+   FoundValue: TJSonValue;
+ clname,clcreditnumber,claccount,clvalu,clnum:string;
+clpayamount,payammount,clcreditamount:real;
+credid,ib,kr,m :integer;
+  resp,resparr,rrn,out_creditno,creditno:string;
+
+  clientno, out_clientno:integer;
+
+  begin
+
+JsonValue:=JSonObject.ParseJSONValue((TFile.ReadAllText('C:/xampp/apache/modules/conf.json')));
+   //smartbank/webservice /conf
+   JsonArray := JsonValue as TJSONArray;
+   if (JSONValue is TJSONArray) then
+    begin
+     for a:=0 to (JSONValue as TJSONArray).Size-1  do
+         begin
+         dbname:=((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbname').JSONValue.Value;
+         uname  :=((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbuser').JSONValue.Value;
+         upass  := ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbpass').JSONValue.Value;
+         dbadr  := ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbadrs').JSONValue.Value;
+         dbport :=  ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbport').JSONValue.Value;
+         dbdriver  := ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbdriver').JSONValue.Value;
+         end;
+      end;
+
+
+              connection.Connected:=False;
+              Connection.LogonDatabase:=dbname;
+              Connection.LogonUsername:=uname;
+              Connection.LogonPassword:=upass;
+              Connection.Connected:=true;
+
+         if not Connection.Connected then
+         begin
+         Response.Content := '{"ErrorText": "Could not connect to database",'+
+                           ' "ErrorCode": "02" }';
+          //connection.Connected:=False;
+          exit;
+         end;
+
+          st:= UTF8ToUnicodeString( Request.RawContent);
+    try
+   begin
+
+   Insertquery.Close;
+   Insertquery.SetVariable('clb',st);
+   Insertquery.Open;
+   Connection.Commit;
+
+
+    pack.CallProcedure('web_srv_clientinfos',[clientno,creditno]) ;
+             out_clientno:=pack.GetParameter(0);
+             out_creditno:= pack.GetParameter(1);
+     resp:='{"succes":"Credit or Client created", "clientNo":'+inttostr(out_clientno)+', "creditNo":'+'"'+out_creditno+'"'+' } ';
+
+   Response.ContentType := 'application/json';
+   Response.Content :=resp;
+   connection.Connected:=False;
+   end;
+  except
+   Response.ContentType := 'application/json';
+   connection.Connected:=False;
+   Response.Content :='{"ErrorText": "Could not create client or Credit  ",'+ inttostr(out_clientno)+  '---'+out_creditno+
+                             ' "ErrorCode": "04" }';
+    end;
+
+
+
+end;
+
+procedure TWebModule1.WebModule1Insert_Payment_decreeAction(Sender: TObject;
+  Request: TWebRequest; Response: TWebResponse; var Handled: Boolean);
+var i,j,k,tr,a,sr:Integer;
+st,st2,uname,upass,conffile:string;
+
+   JSonObject,JSonObject2:TJSonObject;
+   JSonValue,JsonValue2,JsonValue3,JsonValue4:TJSonValue;
+   JsonArray,JsonArray2: TJSONArray;
+   ArrayElement: TJSonValue;
+   FoundValue: TJSonValue;
+ clname,clcreditnumber,claccount,clvalu,clnum:string;
+clpayamount,payammount,clcreditamount:real;
+credid,ib,kr,m :integer;
+  resp,resparr,rrn,out_creditno,creditno:string;
+
+  clientno, out_clientno:string;
+  begin
+
+     creditno:='0';
+JsonValue:=JSonObject.ParseJSONValue((TFile.ReadAllText('C:/xampp/apache/modules/conf.json')));
+   //smartbank/webservice /conf
+   JsonArray := JsonValue as TJSONArray;
+   if (JSONValue is TJSONArray) then
+    begin
+     for a:=0 to (JSONValue as TJSONArray).Size-1  do
+         begin
+         dbname:=((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbname').JSONValue.Value;
+         uname  :=((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbuser').JSONValue.Value;
+         upass  := ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbpass').JSONValue.Value;
+         dbadr  := ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbadrs').JSONValue.Value;
+         dbport :=  ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbport').JSONValue.Value;
+         dbdriver  := ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbdriver').JSONValue.Value;
+         end;
+      end;
+
+
+              connection.Connected:=False;
+              Connection.LogonDatabase:=dbname;
+              Connection.LogonUsername:=uname;
+              Connection.LogonPassword:=upass;
+              Connection.Connected:=true;
+
+         if not Connection.Connected then
+         begin
+         Response.Content := '{"ErrorText": "Could not connect to database",'+
+                           ' "ErrorCode": "02" }';
+          //connection.Connected:=False;
+          exit;
+         end;
+
+          st:=  Request.Content;
+
+           try
+   begin
+
+   Pay_order.Close;
+   Pay_order.SetVariable('clb',st);
+   Pay_order.Open;
+   Connection.Commit;
+
+
+    pack.CallProcedure('Ins_Payment_decree',[clientno]) ;
+             out_clientno:=pack.GetParameter(0);
+            // out_creditno:= pack.GetParameter(1);
+
+
+
+   resp:='{"Succes":"Payment Order created", "OrderNumber":'+out_clientno+' } ';
+
+   Response.ContentType := 'application/json';
+   Response.Content :=resp;
+   connection.Connected:=False;
+   end;
+  except
+   Response.ContentType := 'application/json';
+   connection.Connected:=False;
+   Response.Content :='{"ErrorText": "Could not create Payment Order  ",'+
+                             ' "ErrorCode": "08" }';
+    end;
+
+
+end;
+
+procedure TWebModule1.WebModule1WebActionItem1Action(Sender: TObject;
+  Request: TWebRequest; Response: TWebResponse; var Handled: Boolean);
+ var i,j,k,tr,a,sr:Integer;
+st,st2,uname,upass,conffile:string;
+
+   JSonObject,JSonObject2:TJSonObject;
+   JSonValue,JsonValue2,JsonValue3,JsonValue4:TJSonValue;
+   JsonArray,JsonArray2: TJSONArray;
+   ArrayElement: TJSonValue;
+   FoundValue: TJSonValue;
+ clname,clcreditnumber,claccount,clvalu,clnum:string;
+clpayamount,payammount,clcreditamount:real;
+credid,ib,kr,m :integer;
+  resp,resparr,rrn,out_creditno,creditno:string;
+
+  clientno, out_clientno:integer;
+  begin
+
+     creditno:='0';
+JsonValue:=JSonObject.ParseJSONValue((TFile.ReadAllText('C:/xampp/apache/modules/conf.json')));
+   //smartbank/webservice /conf
+   JsonArray := JsonValue as TJSONArray;
+   if (JSONValue is TJSONArray) then
+    begin
+     for a:=0 to (JSONValue as TJSONArray).Size-1  do
+         begin
+         dbname:=((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbname').JSONValue.Value;
+         uname  :=((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbuser').JSONValue.Value;
+         upass  := ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbpass').JSONValue.Value;
+         dbadr  := ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbadrs').JSONValue.Value;
+         dbport :=  ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbport').JSONValue.Value;
+         dbdriver  := ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbdriver').JSONValue.Value;
+         end;
+      end;
+
+
+              connection.Connected:=False;
+              Connection.LogonDatabase:=dbname;
+              Connection.LogonUsername:=uname;
+              Connection.LogonPassword:=upass;
+              Connection.Connected:=true;
+
+         if not Connection.Connected then
+         begin
+         Response.Content := '{"ErrorText": "Could not connect to database",'+
+                           ' "ErrorCode": "02" }';
+          //connection.Connected:=False;
+          exit;
+         end;
+
+          st:=  Request.Content;
+
+           try
+   begin
+
+   get_crednum.Close;
+   get_crednum.SetVariable('clb',st);
+   get_crednum.Open;
+   Connection.Commit;
+
+
+    pack.CallProcedure('get_cred_number',[creditno]) ;
+             out_creditno:=pack.GetParameter(0);
+
+
+   resp:='{"succes":"Credit Number Generated ", "creditNo":'+'"'+out_creditno+'"'+' } ';
+
+   Response.ContentType := 'application/json';
+   Response.Content :=resp;
+    connection.Connected:=False;
+   end;
+  except
+   Response.ContentType := 'application/json';
+   connection.Connected:=False;
+   Response.Content :='{"ErrorText": "Could not create client or Credit  ",'+
+                             ' "ErrorCode": "04" }';
+    end;
+
+
+
+end;
+
+end.

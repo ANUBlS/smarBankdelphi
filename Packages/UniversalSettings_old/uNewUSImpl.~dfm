@@ -1,0 +1,215 @@
+object frmNewUS: TfrmNewUS
+  Left = 286
+  Top = 191
+  Width = 870
+  Height = 640
+  BorderIcons = [biSystemMenu]
+  Caption = 'Yeni'
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poMainFormCenter
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Splitter1: TSplitter
+    Left = 0
+    Top = 178
+    Width = 862
+    Height = 3
+    Cursor = crVSplit
+    Align = alTop
+  end
+  object DBGrid1: TDBGrid
+    Left = 0
+    Top = 0
+    Width = 862
+    Height = 153
+    Align = alTop
+    DataSource = Tables
+    FixedColor = clNavy
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 0
+    TitleFont.Charset = DEFAULT_CHARSET
+    TitleFont.Color = clWindow
+    TitleFont.Height = -11
+    TitleFont.Name = 'Azl Sans Serif'
+    TitleFont.Style = []
+    Columns = <
+      item
+        Expanded = False
+        FieldName = 'NAME'
+        Title.Caption = 'Æÿäâÿë'
+        Width = 98
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'DESCRT'
+        Title.Caption = 'Òÿéèíàòû'
+        Width = 173
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'QUERYST'
+        Title.Caption = 'Ñöòóíëàð'
+        Width = 414
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'ORDERCOL'
+        Title.Caption = 'Ñûðàëàìà'
+        Width = 78
+        Visible = True
+      end>
+  end
+  object DBGrid2: TDBGrid
+    Left = 0
+    Top = 181
+    Width = 862
+    Height = 407
+    Align = alClient
+    DataSource = Columns
+    FixedColor = clNavy
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 1
+    TitleFont.Charset = DEFAULT_CHARSET
+    TitleFont.Color = clWindow
+    TitleFont.Height = -11
+    TitleFont.Name = 'Azl Sans Serif'
+    TitleFont.Style = []
+    Columns = <
+      item
+        Expanded = False
+        FieldName = 'COLUMNID'
+        Title.Caption = 'Ñöòöí ¹'
+        Width = 87
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'COLUMNTITLE'
+        Title.Caption = 'Àäû'
+        Width = 420
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'COLUMNWIDTH'
+        Title.Caption = 'Óçóíëóüó'
+        Width = 156
+        Visible = True
+      end>
+  end
+  object DBNavigator1: TDBNavigator
+    Left = 0
+    Top = 153
+    Width = 862
+    Height = 25
+    DataSource = Tables
+    Align = alTop
+    Flat = True
+    TabOrder = 2
+  end
+  object DBNavigator2: TDBNavigator
+    Left = 0
+    Top = 588
+    Width = 862
+    Height = 25
+    DataSource = Columns
+    Align = alBottom
+    Flat = True
+    TabOrder = 3
+  end
+  object uTables: TOracleDataSet
+    SQL.Strings = (
+      'select rowid, id, name, queryst, descrt, ordercol'
+      '  from sb_settings_tables')
+    QBEDefinition.QBEFieldDefs = {
+      0400000005000000020000004944010000000000040000004E414D4501000000
+      0000070000005155455259535401000000000006000000444553435254010000
+      000000080000004F52444552434F4C010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 536
+    Top = 88
+    object uTablesID: TFloatField
+      FieldName = 'ID'
+    end
+    object uTablesNAME: TStringField
+      FieldName = 'NAME'
+      Size = 100
+    end
+    object uTablesQUERYST: TStringField
+      FieldName = 'QUERYST'
+      Size = 255
+    end
+    object uTablesDESCRT: TStringField
+      FieldName = 'DESCRT'
+      Size = 100
+    end
+    object uTablesORDERCOL: TStringField
+      FieldName = 'ORDERCOL'
+      Required = True
+      Size = 30
+    end
+  end
+  object uColumns: TOracleDataSet
+    SQL.Strings = (
+      'select rowid, tableid, columnid, columntitle, columnwidth'
+      '  from sb_settings_columns'
+      'where tableid = :tableid')
+    Variables.Data = {
+      0300000001000000080000003A5441424C454944040000000800000000000000
+      0000F03F00000000}
+    QBEDefinition.QBEFieldDefs = {
+      040000000400000008000000434F4C554D4E49440100000000000B000000434F
+      4C554D4E5449544C450100000000000B000000434F4C554D4E57494454480100
+      00000000070000005441424C454944010000000000}
+    Master = uTables
+    MasterFields = 'ID'
+    DetailFields = 'TABLEID'
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 576
+    Top = 208
+    object uColumnsCOLUMNID: TFloatField
+      FieldName = 'COLUMNID'
+    end
+    object uColumnsCOLUMNTITLE: TStringField
+      FieldName = 'COLUMNTITLE'
+      Size = 50
+    end
+    object uColumnsCOLUMNWIDTH: TFloatField
+      FieldName = 'COLUMNWIDTH'
+    end
+    object uColumnsTABLEID: TFloatField
+      FieldName = 'TABLEID'
+    end
+  end
+  object Columns: TDataSource
+    DataSet = uColumns
+    Left = 608
+    Top = 208
+  end
+  object Tables: TDataSource
+    DataSet = uTables
+    Left = 568
+    Top = 88
+  end
+end

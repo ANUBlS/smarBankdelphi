@@ -1,0 +1,80 @@
+unit ArchiveCredUnit;
+
+interface
+
+uses
+  SysUtils, Classes, DB, OracleData, Oracle;
+
+type
+  TDataMArchiveCr = class(TDataModule)
+    Ods_ArchiveCred: TOracleDataSet;
+    Dsrc_ArchiveCred: TDataSource;
+    Ods_ArchiveCredID: TFloatField;
+    Ods_ArchiveCredCURRENCY: TFloatField;
+    Ods_ArchiveCredBOOROWERID: TFloatField;
+    Ods_ArchiveCredCREDITLINEAMOUNT: TFloatField;
+    Ods_ArchiveCredANNUALYINTERESTRATE: TFloatField;
+    Ods_ArchiveCredINITIALAMOUNT: TFloatField;
+    Ods_ArchiveCredANNUALYOVERDUERATE: TFloatField;
+    Ods_ArchiveCredANNUALYPENALTYRATE: TFloatField;
+    Ods_ArchiveCredDATEOFCONCLUSION: TDateTimeField;
+    Ods_ArchiveCredDUEDATEFIRSTCONTRACT: TDateTimeField;
+    Ods_ArchiveCredDUEDATELASTCONTRACT: TDateTimeField;
+    Ods_ArchiveCredNUMBEROFCREDIT: TWideStringField;
+    Ods_ArchiveCredPURPOSEOFCREDIT: TWideStringField;
+    Ods_ArchiveCredUSRGROUP: TFloatField;
+    Ods_ArchiveCredBRANCHID: TFloatField;
+    Ods_ArchiveCredUSID: TFloatField;
+    Ods_ArchiveCredSTATUS: TFloatField;
+    Ods_ArchiveCredCUSTOMERTYPE: TFloatField;
+    Ods_ArchiveCredCREDITTYPE: TFloatField;
+    Ods_ArchiveCredPERSONALTYPE: TFloatField;
+    Ods_ArchiveCredSTOPCALCDATE: TDateTimeField;
+    Ods_ArchiveCredREST: TFloatField;
+    Ods_ArchiveCredINTERESTREST: TFloatField;
+    Ods_ArchiveCredDUEREST: TFloatField;
+    Ods_ArchiveCredDUEINTERESTREST: TFloatField;
+    Ods_ArchiveCredPENALTYREST: TFloatField;
+    Ods_ArchiveCredRESERVEID: TFloatField;
+    Ods_ArchiveCredDUERESERVEID: TFloatField;
+    Ods_ArchiveCredOBLIGATION: TFloatField;
+    Ods_ArchiveCredPLEDGEPRICE: TFloatField;
+    Ods_ArchiveCredPLEDGEID: TFloatField;
+    Ods_ArchiveCredCONTRACTACCNO: TWideStringField;
+    Ods_ArchiveCredINTERESTACCNO: TWideStringField;
+    Ods_ArchiveCredDUELOANACCNO: TWideStringField;
+    Ods_ArchiveCredLOANACCNO: TWideStringField;
+    Ods_ArchiveCredBOOROWERREST: TFloatField;
+    Ods_ArchiveCredVAL_NAME: TWideStringField;
+    Ods_ArchiveCredNAME: TWideStringField;
+    Ods_ArchiveCredREGISTRYNO: TWideStringField;
+    Ods_ArchiveCredINAME: TWideStringField;
+    CRAr_ADMIN: TOraclePackage;
+    Ods_ArchiveCredTMNUS_PORTFSTATUS: TWideStringField;
+    Ods_ArchiveCredCLOSEDATE: TDateTimeField;
+    Ods_ArchiveCredOUTSTATUS: TWideStringField;
+    Ods_ArchiveCredOUT_SUDAACC_NO: TWideStringField;
+    Ods_ArchiveCredOUT_SUDA: TFloatField;
+    Ods_ArchiveCredOUT_PERCNTACC_NO: TWideStringField;
+    Ods_ArchiveCredOUT_PERCNT: TFloatField;
+    Ods_ArchiveCredOUT_RUSUMACC_NO: TWideStringField;
+    Ods_ArchiveCredOUT_RUSUM: TFloatField;
+    Ods_ArchiveCredOUT_CERMECC_NO: TWideStringField;
+    Ods_ArchiveCredOUT_CERME: TFloatField;
+    Ods_ArchiveCredOUT_SGORTACC_NO: TWideStringField;
+    Ods_ArchiveCredOUT_SGORTA: TFloatField;
+    cm_bad_loans: TOraclePackage;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  DataMArchiveCr: TDataMArchiveCr;
+
+implementation
+ uses sboapiDataModuleImpl;
+{$R *.dfm}
+
+end.

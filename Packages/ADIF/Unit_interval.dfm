@@ -1,0 +1,92 @@
+object Form_Interval: TForm_Interval
+  Left = 0
+  Top = 0
+  BorderIcons = [biSystemMenu]
+  ClientHeight = 103
+  ClientWidth = 257
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poDesktopCenter
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object XFPanel1: TXFPanel
+    Left = 0
+    Top = 0
+    Width = 257
+    Height = 103
+    Align = alClient
+    BevelInner = bvLowered
+    BevelKind = bkSoft
+    BevelOuter = bvLowered
+    TabOrder = 0
+    ExplicitWidth = 275
+    ExplicitHeight = 94
+    object XFLabel1: TXFLabel
+      Left = 12
+      Top = 9
+      Width = 53
+      Height = 13
+      Caption = 'Ba'#351'lan'#287'c:'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+    end
+    object XFLabel2: TXFLabel
+      Left = 12
+      Top = 38
+      Width = 27
+      Height = 13
+      Caption = 'Son :'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+    end
+    object DateTim_begin: TDateTimePicker
+      Left = 88
+      Top = 8
+      Width = 153
+      Height = 21
+      Date = 42593.431149629630000000
+      Time = 42593.431149629630000000
+      TabOrder = 0
+    end
+    object DateTim_end: TDateTimePicker
+      Left = 88
+      Top = 36
+      Width = 153
+      Height = 21
+      Date = 42593.431195196760000000
+      Time = 42593.431195196760000000
+      TabOrder = 1
+    end
+    object XFBitBtn1: TXFBitBtn
+      Left = 170
+      Top = 64
+      Width = 71
+      Height = 29
+      Caption = 'Q'#601'bul'
+      DoubleBuffered = True
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentDoubleBuffered = False
+      ParentFont = False
+      TabOrder = 2
+      OnClick = XFBitBtn1Click
+    end
+  end
+end

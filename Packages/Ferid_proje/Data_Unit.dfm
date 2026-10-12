@@ -1,0 +1,11 @@
+object DataModule1: TDataModule1
+  OldCreateOrder = False
+  Height = 337
+  Width = 641
+  object OracleDataSet1: TOracleDataSet
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 56
+    Top = 48
+  end
+end

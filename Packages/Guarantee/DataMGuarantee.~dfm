@@ -1,0 +1,584 @@
+object DataMGuarante: TDataMGuarante
+  OldCreateOrder = False
+  OnCreate = DataModuleCreate
+  OnDestroy = DataModuleDestroy
+  Left = 357
+  Top = 161
+  Height = 640
+  Width = 870
+  object DataSetGuarantee: TOracleDataSet
+    SQL.Strings = (
+      
+        'SELECT p.rowid,p.PLEDGEPRICE, p.id, p.creditid, p.numberofgur, p' +
+        '.pledgeid, p.pledgename,'
+      
+        '       p.holdername, p.holderaddress, p.anyinfotodisting, p.regi' +
+        'stryno,'
+      '       p.registryagency, p.registrydate, p.pledgeinuse,'
+      '       p.pledgeinsurant, p.insuranceagency, p.insuranceamount,'
+      '       p.insuranceright, p.insurancedate, p.insuranceid,'
+      
+        '       p.pledgepricetorpaqha, p.pledgepriceevkv, p.gqname, p.gqp' +
+        'aspnum,'
+      
+        '       p.gqpaspyer, p.gqpaspdate, p.gqcity, p.gqvillage, p.gqadr' +
+        'es,'
+      
+        '       p.gqtelmob, p.gqtelhome, p.gqtelwork, p.tesviri, p.reyste' +
+        'r,'
+      '       p.seryamh,  p.pledgsorts, p.company, p.companydat,'
+      
+        '       p.companyexpert, p.brance, p.dat,s.description as girovti' +
+        'p,'
+      'PG_GUAR.get_credit(p.id) as kreditstatus,F.NAME,'
+      
+        ' i.generalarea, i.livingarea, i.buildingsoilarea,i.soilarea, i.a' +
+        'dress, i.inforegion, i.infovilg'
+      ''
+      
+        ' FROM Guarantee p,creditsmgr.cm_pledges s,Gua_pldginfo i,filial ' +
+        'f'
+      ''
+      'where p.pledgeid=s.id and'
+      'p.id=i.propid and p.brance=f.id'
+      ''
+      'order by :OrderField')
+    Variables.Data = {
+      03000000010000000B0000003A4F524445524649454C44010000000300000069
+      640000000000}
+    QBEDefinition.QBEFieldDefs = {
+      04000000320000000B000000504C454447455052494345010000000000020000
+      0049440100000000000800000043524544495449440100000000000B0000004E
+      554D4245524F4647555201000000000008000000504C45444745494401000000
+      00000A000000504C454447454E414D450100000000000A000000484F4C444552
+      4E414D450100000000000D000000484F4C444552414444524553530100000000
+      0010000000414E59494E464F544F44495354494E470100000000000A00000052
+      454749535452594E4F0100000000000E00000052454749535452594147454E43
+      590100000000000C0000005245474953545259444154450100000000000B0000
+      00504C45444745494E5553450100000000000E000000504C45444745494E5355
+      52414E540100000000000F000000494E535552414E43454147454E4359010000
+      0000000F000000494E535552414E4345414D4F554E540100000000000E000000
+      494E535552414E434552494748540100000000000D000000494E535552414E43
+      45444154450100000000000B000000494E535552414E43454944010000000000
+      13000000504C454447455052494345544F5250415148410100000000000F0000
+      00504C45444745505249434545564B560100000000000600000047514E414D45
+      010000000000090000004751504153504E554D01000000000009000000475150
+      4153505945520100000000000A00000047515041535044415445010000000000
+      0600000047514349545901000000000009000000475156494C4C414745010000
+      000000070000004751414452455301000000000008000000475154454C4D4F42
+      01000000000009000000475154454C484F4D4501000000000009000000475154
+      454C574F524B0100000000000700000054455356495249010000000000070000
+      00524559535445520100000000000700000053455259414D480100000000000A
+      000000504C454447534F52545301000000000007000000434F4D50414E590100
+      000000000A000000434F4D50414E594441540100000000000D000000434F4D50
+      414E59455850455254010000000000060000004252414E434501000000000003
+      000000444154010000000000080000004749524F565449500100000000000C00
+      00004B52454449545354415455530100000000000B00000047454E4552414C41
+      5245410100000000000A0000004C4956494E4741524541010000000000100000
+      004255494C44494E47534F494C4152454101000000000008000000534F494C41
+      524541010000000000060000004144524553530100000000000A000000494E46
+      4F524547494F4E01000000000008000000494E464F56494C4701000000000004
+      0000004E414D45010000000000}
+    OnApplyRecord = DataSetGuaranteeApplyRecord
+    Session = sboapiDataModule.SBSession
+    Left = 48
+    Top = 24
+    object DataSetGuaranteePLEDGEPRICE: TFloatField
+      FieldName = 'PLEDGEPRICE'
+    end
+    object DataSetGuaranteeID: TFloatField
+      FieldName = 'ID'
+    end
+    object DataSetGuaranteeCREDITID: TFloatField
+      FieldName = 'CREDITID'
+    end
+    object DataSetGuaranteeNUMBEROFGUR: TStringField
+      FieldName = 'NUMBEROFGUR'
+    end
+    object DataSetGuaranteePLEDGEID: TFloatField
+      FieldName = 'PLEDGEID'
+    end
+    object DataSetGuaranteePLEDGENAME: TStringField
+      FieldName = 'PLEDGENAME'
+      Size = 128
+    end
+    object DataSetGuaranteeHOLDERNAME: TStringField
+      FieldName = 'HOLDERNAME'
+      Size = 128
+    end
+    object DataSetGuaranteeHOLDERADDRESS: TStringField
+      FieldName = 'HOLDERADDRESS'
+      Size = 128
+    end
+    object DataSetGuaranteeANYINFOTODISTING: TStringField
+      FieldName = 'ANYINFOTODISTING'
+      Size = 500
+    end
+    object DataSetGuaranteeREGISTRYNO: TStringField
+      FieldName = 'REGISTRYNO'
+      Size = 32
+    end
+    object DataSetGuaranteeREGISTRYAGENCY: TStringField
+      FieldName = 'REGISTRYAGENCY'
+      Size = 64
+    end
+    object DataSetGuaranteeREGISTRYDATE: TDateTimeField
+      FieldName = 'REGISTRYDATE'
+    end
+    object DataSetGuaranteePLEDGEINUSE: TFloatField
+      FieldName = 'PLEDGEINUSE'
+    end
+    object DataSetGuaranteePLEDGEINSURANT: TFloatField
+      FieldName = 'PLEDGEINSURANT'
+    end
+    object DataSetGuaranteeINSURANCEAGENCY: TFloatField
+      FieldName = 'INSURANCEAGENCY'
+    end
+    object DataSetGuaranteeINSURANCEAMOUNT: TFloatField
+      FieldName = 'INSURANCEAMOUNT'
+    end
+    object DataSetGuaranteeINSURANCERIGHT: TFloatField
+      FieldName = 'INSURANCERIGHT'
+    end
+    object DataSetGuaranteeINSURANCEDATE: TDateTimeField
+      FieldName = 'INSURANCEDATE'
+    end
+    object DataSetGuaranteeINSURANCEID: TFloatField
+      FieldName = 'INSURANCEID'
+    end
+    object DataSetGuaranteePLEDGEPRICETORPAQHA: TFloatField
+      FieldName = 'PLEDGEPRICETORPAQHA'
+    end
+    object DataSetGuaranteePLEDGEPRICEEVKV: TFloatField
+      FieldName = 'PLEDGEPRICEEVKV'
+    end
+    object DataSetGuaranteeGQNAME: TStringField
+      FieldName = 'GQNAME'
+      Size = 30
+    end
+    object DataSetGuaranteeGQPASPNUM: TStringField
+      FieldName = 'GQPASPNUM'
+      Size = 12
+    end
+    object DataSetGuaranteeGQPASPYER: TStringField
+      FieldName = 'GQPASPYER'
+      Size = 60
+    end
+    object DataSetGuaranteeGQPASPDATE: TDateTimeField
+      FieldName = 'GQPASPDATE'
+    end
+    object DataSetGuaranteeGQCITY: TFloatField
+      FieldName = 'GQCITY'
+    end
+    object DataSetGuaranteeGQVILLAGE: TFloatField
+      FieldName = 'GQVILLAGE'
+    end
+    object DataSetGuaranteeGQADRES: TStringField
+      FieldName = 'GQADRES'
+      Size = 100
+    end
+    object DataSetGuaranteeGQTELMOB: TStringField
+      FieldName = 'GQTELMOB'
+      Size = 25
+    end
+    object DataSetGuaranteeGQTELHOME: TStringField
+      FieldName = 'GQTELHOME'
+      Size = 25
+    end
+    object DataSetGuaranteeGQTELWORK: TStringField
+      FieldName = 'GQTELWORK'
+      Size = 25
+    end
+    object DataSetGuaranteeTESVIRI: TStringField
+      FieldName = 'TESVIRI'
+      Size = 15
+    end
+    object DataSetGuaranteeREYSTER: TStringField
+      FieldName = 'REYSTER'
+      Size = 15
+    end
+    object DataSetGuaranteeSERYAMH: TStringField
+      FieldName = 'SERYAMH'
+      Size = 15
+    end
+    object DataSetGuaranteePLEDGSORTS: TFloatField
+      FieldName = 'PLEDGSORTS'
+    end
+    object DataSetGuaranteeCOMPANY: TFloatField
+      FieldName = 'COMPANY'
+    end
+    object DataSetGuaranteeCOMPANYDAT: TDateTimeField
+      FieldName = 'COMPANYDAT'
+    end
+    object DataSetGuaranteeCOMPANYEXPERT: TStringField
+      FieldName = 'COMPANYEXPERT'
+      Size = 100
+    end
+    object DataSetGuaranteeBRANCE: TFloatField
+      FieldName = 'BRANCE'
+    end
+    object DataSetGuaranteeDAT: TDateTimeField
+      FieldName = 'DAT'
+    end
+    object DataSetGuaranteeGIROVTIP: TStringField
+      FieldName = 'GIROVTIP'
+      Size = 64
+    end
+    object DataSetGuaranteeKREDITSTATUS: TStringField
+      FieldName = 'KREDITSTATUS'
+      Size = 4000
+    end
+    object DataSetGuaranteeGENERALAREA: TFloatField
+      FieldName = 'GENERALAREA'
+    end
+    object DataSetGuaranteeLIVINGAREA: TFloatField
+      FieldName = 'LIVINGAREA'
+    end
+    object DataSetGuaranteeBUILDINGSOILAREA: TFloatField
+      FieldName = 'BUILDINGSOILAREA'
+    end
+    object DataSetGuaranteeSOILAREA: TFloatField
+      FieldName = 'SOILAREA'
+    end
+    object DataSetGuaranteeADRESS: TStringField
+      FieldName = 'ADRESS'
+      Size = 45
+    end
+    object DataSetGuaranteeINFOREGION: TFloatField
+      FieldName = 'INFOREGION'
+    end
+    object DataSetGuaranteeINFOVILG: TFloatField
+      FieldName = 'INFOVILG'
+    end
+    object DataSetGuaranteeNAME: TStringField
+      FieldName = 'NAME'
+      Size = 90
+    end
+  end
+  object DataSorcGuaranttee: TDataSource
+    DataSet = DataSetGuarantee
+    Left = 160
+    Top = 24
+  end
+  object OracleDataSet: TOracleDataSet
+    SQL.Strings = (
+      'select * from sysdat')
+    Session = sboapiDataModule.SBSession
+    Left = 40
+    Top = 88
+  end
+  object DataSource: TDataSource
+    DataSet = OracleDataSet
+    Left = 128
+    Top = 88
+  end
+  object Gura_taypcal: TOracleDataSet
+    SQL.Strings = (
+      'SELECT rowid,id, typical'
+      '  FROM proptypical '
+      'order by id')
+    Session = sboapiDataModule.SBSession
+    Left = 40
+    Top = 152
+  end
+  object DataSourctaypcal: TDataSource
+    DataSet = Gura_taypcal
+    Left = 136
+    Top = 144
+  end
+  object GuaraClientAccs: TOracleDataSet
+    SQL.Strings = (
+      'SELECT   ac.id AS id, ac.kli_id AS custid, ac.acc_no AS accno,'
+      '         ac.NAME AS clientname, ac.val_acc'
+      '    FROM account ac'
+      '   WHERE'
+      ' --   kli_id = :CustID and'
+      '   (ac.bal_cn1 IN (SELECT accgroup'
+      '                           FROM sbcm_acc_zone_info'
+      '                          WHERE zoneid = (SELECT g.zoneid'
+      
+        '                                             FROM sbcm_acc_zones' +
+        ' g'
+      
+        '                                            WHERE g.name = '#39'Acco' +
+        'unt'#39'))'
+      ''
+      '         )'
+      'and close_dat is null'
+      'ORDER BY kli_id,accno'
+      ''
+      '')
+    QBEDefinition.QBEFieldDefs = {
+      0400000005000000020000004944010000000000060000004355535449440100
+      00000000050000004143434E4F0100000000000A000000434C49454E544E414D
+      450100000000000700000056414C5F414343010000000000}
+    Cursor = crHourGlass
+    Session = sboapiDataModule.SBSession
+    Left = 56
+    Top = 232
+    object GuaraClientAccsID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object GuaraClientAccsCUSTID: TFloatField
+      FieldName = 'CUSTID'
+      Required = True
+    end
+    object GuaraClientAccsACCNO: TStringField
+      FieldName = 'ACCNO'
+      Required = True
+    end
+    object GuaraClientAccsCLIENTNAME: TStringField
+      FieldName = 'CLIENTNAME'
+      Size = 90
+    end
+    object GuaraClientAccsVAL_ACC: TIntegerField
+      FieldName = 'VAL_ACC'
+      Required = True
+    end
+  end
+  object ClientaccsDatSrc: TDataSource
+    DataSet = GuaraClientAccs
+    Left = 144
+    Top = 224
+  end
+  object GuaraCreditAccs: TOracleDataSet
+    SQL.Strings = (
+      'SELECT   ac.id AS id, ac.kli_id AS custid, ac.acc_no AS accno,'
+      '         ac.NAME AS clientname, ac.val_acc'
+      '    FROM account ac'
+      '   WHERE'
+      '   (ac.bal_cn1 IN (SELECT accgroup'
+      '                           FROM sbcm_acc_zone_info'
+      '                          WHERE zoneid = (SELECT g.zoneid'
+      
+        '                                             FROM sbcm_acc_zones' +
+        ' g'
+      
+        '                                            WHERE g.name = '#39'Acco' +
+        'unt'#39'))'
+      '         )'
+      'and close_dat is null'
+      'ORDER BY kli_id,accno'
+      '')
+    QBEDefinition.QBEFieldDefs = {
+      0400000005000000020000004944010000000000060000004355535449440100
+      00000000050000004143434E4F0100000000000A000000434C49454E544E414D
+      450100000000000700000056414C5F414343010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 56
+    Top = 296
+  end
+  object CreditAccsDatSrc: TDataSource
+    DataSet = GuaraCreditAccs
+    Left = 144
+    Top = 304
+  end
+  object DataS_Gua_credit: TOracleDataSet
+    SQL.Strings = (
+      'select propid, numberofcredit'
+      ' from properties_credit'
+      'where propid=:id')
+    Variables.Data = {0300000001000000030000003A4944030000000000000000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 40
+    Top = 368
+  end
+  object DataSGuacredit: TOracleDataSet
+    SQL.Strings = (
+      'select id, numberofcredit'
+      '  FROM creditsmgr.cm_active_credits'
+      'where '
+      
+        '/*numberofcredit not in ( select numberofcredit from properties_' +
+        'credit)'
+      'and*/ id  in('
+      ' select creditid'
+      ' from creditsmgr.cm_curr_state where /*STOPCALCDATE is not null'
+      ' and*/ (DUEREST<>0 or dUEINTERESTREST<>0))'
+      ''
+      '/* [10] axtarish*/'
+      ' '
+      'order by numberofcredit')
+    Session = sboapiDataModule.SBSession
+    Left = 32
+    Top = 424
+  end
+  object DataSorcGua_credit: TDataSource
+    DataSet = DataS_Gua_credit
+    Left = 152
+    Top = 368
+  end
+  object DataSorcGuacredit: TDataSource
+    DataSet = DataSGuacredit
+    Left = 120
+    Top = 432
+  end
+  object Pledges: TOracleDataSet
+    SQL.Strings = (
+      'SELECT id,  description'
+      '  FROM creditsmgr.cm_pledges')
+    QBEDefinition.QBEFieldDefs = {
+      04000000020000000200000049440100000000000B0000004445534352495054
+      494F4E010000000000}
+    Cursor = crHourGlass
+    Session = sboapiDataModule.SBSession
+    Left = 424
+    Top = 344
+  end
+  object DataSrcPledges: TDataSource
+    DataSet = Pledges
+    Left = 424
+    Top = 400
+  end
+  object pledgsortsDatSrc: TDataSource
+    DataSet = pledgsorts
+    Left = 304
+    Top = 400
+  end
+  object pledgsorts: TOracleDataSet
+    SQL.Strings = (
+      'SELECT id, name'
+      '  FROM creditsmgr.cm_pledgsorts')
+    Session = sboapiDataModule.SBSession
+    Left = 304
+    Top = 352
+    object pledgsortsID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object pledgsortsNAME: TStringField
+      FieldName = 'NAME'
+      Required = True
+      Size = 80
+    end
+  end
+  object Filals: TOracleDataSet
+    SQL.Strings = (
+      'select id,name from filial')
+    Session = sboapiDataModule.SBSession
+    Left = 392
+    Top = 200
+    object FilalsID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object FilalsNAME: TStringField
+      FieldName = 'NAME'
+      Size = 90
+    end
+  end
+  object FilalsDatSrc: TDataSource
+    DataSet = Filals
+    Left = 488
+    Top = 192
+  end
+  object DistrictsDataSet: TOracleDataSet
+    Tag = 20
+    SQL.Strings = (
+      'SELECT id, name, name_eng'
+      '  FROM creditsmgr.agro_region')
+    QBEDefinition.QBEFieldDefs = {
+      0400000003000000020000004944010000000000040000004E414D4501000000
+      0000080000004E414D455F454E47010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 280
+    Top = 272
+    object DistrictsDataSetID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object DistrictsDataSetNAME: TStringField
+      FieldName = 'NAME'
+      Size = 128
+    end
+    object DistrictsDataSetNAME_ENG: TStringField
+      FieldName = 'NAME_ENG'
+      Size = 128
+    end
+  end
+  object DistrictsDataSrc: TDataSource
+    DataSet = DistrictsDataSet
+    Left = 384
+    Top = 272
+  end
+  object VillagesDataSet: TOracleDataSet
+    Tag = 21
+    SQL.Strings = (
+      'SELECT id, name, depend_id'
+      '  FROM creditsmgr.agro_village'
+      ''
+      'where depend_id = :depend_id')
+    Variables.Data = {
+      03000000010000000A0000003A444550454E445F494404000000000000000000
+      0000}
+    QBEDefinition.QBEFieldDefs = {
+      0400000003000000020000004944010000000000040000004E414D4501000000
+      000009000000444550454E445F4944010000000000}
+    Master = DistrictsDataSet
+    MasterFields = 'ID'
+    DetailFields = 'DEPEND_ID'
+    Session = sboapiDataModule.SBSession
+    Left = 530
+    Top = 336
+  end
+  object VillagesDataSrc: TDataSource
+    DataSet = VillagesDataSet
+    Left = 544
+    Top = 408
+  end
+  object OraclePackage1: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'PG_Guar'
+    Left = 288
+    Top = 32
+  end
+  object proSorts: TOracleDataSet
+    SQL.Strings = (
+      'select id,name from cm_insuranceagency')
+    QBEDefinition.QBEFieldDefs = {
+      0400000002000000020000004944010000000000040000004E414D4501000000
+      0000}
+    Session = sboapiDataModule.SBSession
+    Left = 397
+    Top = 42
+    object proSortsID: TIntegerField
+      FieldName = 'ID'
+      Required = True
+    end
+    object proSortsNAME: TStringField
+      FieldName = 'NAME'
+      Required = True
+      Size = 90
+    end
+  end
+  object ProSortsDatSrc: TDataSource
+    DataSet = proSorts
+    Left = 477
+    Top = 37
+  end
+  object OracleDataSet1: TOracleDataSet
+    SQL.Strings = (
+      'select id,name from cm_insuranceagency')
+    QBEDefinition.QBEFieldDefs = {
+      0400000002000000020000004944010000000000040000004E414D4501000000
+      0000}
+    Session = sboapiDataModule.SBSession
+    Left = 261
+    Top = 482
+    object IntegerField1: TIntegerField
+      FieldName = 'ID'
+      Required = True
+    end
+    object StringField1: TStringField
+      FieldName = 'NAME'
+      Required = True
+      Size = 90
+    end
+  end
+  object DataSource1: TDataSource
+    DataSet = OracleDataSet1
+    Left = 341
+    Top = 485
+  end
+end

@@ -1,0 +1,128 @@
+unit DecaDataModuleImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, OracleData, DBTables;
+
+type
+  TDecaDataModule = class(TDataModule)
+    DecaData: TOracleDataSet;
+    DataSrcDecaData: TDataSource;
+    DecaTable: TTable;
+    SaveDlg: TSaveDialog;
+    DecaDataNAME: TWideStringField;
+    DecaDataCOUNTRCODE: TWideStringField;
+    DecaDataBNKSTATUS: TFloatField;
+    DecaDataDATOFBIRTH: TDateTimeField;
+    DecaDataPLACEBIRTH: TWideStringField;
+    DecaDataPINCODE: TWideStringField;
+    DecaDataGID: TWideStringField;
+    DecaDataGNAME: TWideStringField;
+    DecaDataGID2: TWideStringField;
+    DecaDataGNAME2: TWideStringField;
+    DecaDataGID3: TWideStringField;
+    DecaDataGNAME3: TWideStringField;
+    DecaDataCREDITTYPE: TWideStringField;
+    DecaDataLASTPAYDAT: TDateTimeField;
+    DecaDataMPAYAMOUNT: TFloatField;
+    DecaDataPROVISION: TFloatField;
+    DecaDataID2: TWideStringField;
+    DecaDataNAME2: TWideStringField;
+    DecaDataID3: TWideStringField;
+    DecaDataNAME3: TWideStringField;
+    DecaDataID4: TWideStringField;
+    DecaDataNAME4: TWideStringField;
+    DecaDataINTERNALID: TFloatField;
+    DecaDataACCOUNTNO: TWideStringField;
+    DecaDataCURRENCY: TWideStringField;
+    DecaDataINITIALSUM: TFloatField;
+    DecaDataCRDLINESUM: TFloatField;
+    DecaDataDISOUSUM: TFloatField;
+    DecaDataRATE: TFloatField;
+    DecaDataPURPOSE: TWideStringField;
+    DecaDataPERIODMONT: TFloatField;
+    DecaDataDATEGRANT: TDateTimeField;
+    DecaDataFIRSTCONTR: TDateTimeField;
+    DecaDataLASTCONTR: TDateTimeField;
+    DecaDataDAYSMAIN: TFloatField;
+    DecaDataDAYSINTRST: TFloatField;
+    DecaDataOIAPERIOD: TFloatField;
+    DecaDataOIATHREE: TFloatField;
+    DecaDataPROLONGS: TFloatField;
+    DecaDataCLASSCODE: TWideStringField;
+    DecaDataSTATUSCODE: TWideStringField;
+    DecaDataCOLLCODE: TWideStringField;
+    DecaDataINFDISTING: TWideStringField;
+    DecaDataMARKETSUM: TFloatField;
+    DecaDataREGNO: TWideStringField;
+    DecaDataREGDATE: TDateTimeField;
+    DecaDataREGAGENCY: TWideStringField;
+    DecaDataID: TWideStringField;
+    OracleDataSet1: TOracleDataSet;
+    StringField1: TWideStringField;
+    StringField3: TWideStringField;
+    FloatField1: TFloatField;
+    DateTimeField1: TDateTimeField;
+    StringField4: TWideStringField;
+    StringField5: TWideStringField;
+    StringField6: TWideStringField;
+    StringField7: TWideStringField;
+    StringField8: TWideStringField;
+    StringField9: TWideStringField;
+    StringField10: TWideStringField;
+    StringField11: TWideStringField;
+    StringField12: TWideStringField;
+    DateTimeField2: TDateTimeField;
+    FloatField2: TFloatField;
+    FloatField3: TFloatField;
+    StringField13: TWideStringField;
+    StringField14: TWideStringField;
+    StringField15: TWideStringField;
+    StringField16: TWideStringField;
+    StringField17: TWideStringField;
+    StringField18: TWideStringField;
+    FloatField4: TFloatField;
+    StringField19: TWideStringField;
+    StringField20: TWideStringField;
+    FloatField5: TFloatField;
+    FloatField6: TFloatField;
+    FloatField7: TFloatField;
+    FloatField8: TFloatField;
+    StringField21: TWideStringField;
+    FloatField9: TFloatField;
+    DateTimeField3: TDateTimeField;
+    DateTimeField4: TDateTimeField;
+    DateTimeField5: TDateTimeField;
+    FloatField10: TFloatField;
+    FloatField11: TFloatField;
+    FloatField12: TFloatField;
+    FloatField13: TFloatField;
+    FloatField14: TFloatField;
+    StringField22: TWideStringField;
+    StringField23: TWideStringField;
+    StringField24: TWideStringField;
+    StringField25: TWideStringField;
+    FloatField15: TFloatField;
+    StringField26: TWideStringField;
+    DateTimeField6: TDateTimeField;
+    StringField27: TWideStringField;
+    OracleDataSet1NAME: TWideStringField;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  DecaDataModule: TDecaDataModule;
+
+implementation
+
+{$R *.DFM}
+
+uses
+  sboapiDataModuleImpl;
+
+end.

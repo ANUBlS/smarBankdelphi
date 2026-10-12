@@ -1,0 +1,46 @@
+unit frm_amartizatorimpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ComCtrls, ExtCtrls, Grids, XDBGrids, XFSCtrls, DBGrids, StdCtrls;
+
+type
+  Tfrm_amartizator = class(TForm)
+    PageControl1: TPageControl;
+    TabSheet1: TTabSheet;
+    TabSheet2: TTabSheet;
+    XFGroupBox1: TXFGroupBox;
+    XFGroupBox2: TXFGroupBox;
+    XFPanel1: TXFPanel;
+    DBGrid1: TDBGrid;
+    DBGrid2: TDBGrid;
+    XFGroupBox3: TXFGroupBox;
+    DBGrid3: TDBGrid;
+    XFPanel2: TXFPanel;
+    XFGroupBox4: TXFGroupBox;
+    DBGrid4: TDBGrid;
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  frm_amartizator: Tfrm_amartizator;
+
+implementation
+
+{$R *.dfm}
+        uses CommanParametrs,sboapiDataModuleImpl,SBTranslateProc,DMMainImpl,FrmMainImpl;
+
+
+
+procedure Tfrm_amartizator.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+if ord(key)=vk_escape then close
+end;
+
+end.

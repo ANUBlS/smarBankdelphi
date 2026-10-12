@@ -1,0 +1,505 @@
+﻿unit UntMore;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ExtCtrls, Db, OracleData, StdCtrls, ComCtrls, ImgList, ToolWin, Mask,
+  DBCtrls, Grids, DBGrids, Buttons, OleServer, ExcelXP, CMExcelExport,Comobj;
+
+type
+  TFrmTuning = class(TForm)
+    Panel1: TPanel;
+    ImageList1: TImageList;
+    GroupBox2: TGroupBox;
+    GroupBox1: TGroupBox;
+    Label3: TLabel;
+    ToolBar1: TToolBar;
+    TBReport: TToolButton;
+    ComBoxPresentDates: TComboBox;
+    StaticText1: TStaticText;
+    StaticText2: TStaticText;
+    StaticText3: TStaticText;
+    STCurrentDate: TStaticText;
+    DBEdit1: TDBEdit;
+    DBEdit3: TDBEdit;
+    OracleDataSet1: TOracleDataSet;
+    DataSource1: TDataSource;
+    EManager: TEdit;
+    ToolButton1: TToolButton;
+    TBCancel: TToolButton;
+    ODSSdv: TOracleDataSet;
+    DataSrcSDV: TDataSource;
+    OracleDataSet1BANK: TWideStringField;
+    OracleDataSet1SVM: TFloatField;
+    OracleDataSet1TEL: TWideStringField;
+    ODSSdvSDVSUM: TFloatField;
+    CBCalcCapital: TCheckBox;
+    ECapital: TDBEdit;
+    OracleDataSet1CAPITAL: TFloatField;
+    SpeedButtonCommit: TSpeedButton;
+    TBExcel: TToolButton;
+    ToolButton3: TToolButton;
+    CMExcelExport: TCMExcelExport;
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormShow(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure TBReportClick(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure ECapitalKeyPress(Sender: TObject; var Key: Char);
+    procedure TBCancelClick(Sender: TObject);
+    procedure  OpenDataSet(DataSet :ToracleDataSet;VariableNames :array of const;VariableValues :array of const);overload;
+    procedure ComBoxPresentDatesClick(Sender: TObject);
+    procedure DataSource1DataChange(Sender: TObject; Field: TField);
+    procedure SpeedButtonCommitClick(Sender: TObject);
+    procedure CBCalcCapitalClick(Sender: TObject);
+    procedure TBExcelClick(Sender: TObject);
+    procedure To_Excel;
+  private
+    { Private declarations }
+   IsClosed :Boolean;
+   IsEmpty :Boolean;
+   procedure  InitialReport;
+   procedure  OpenDataSet(DataSet :TOracleDataSet;VarabName:String;VarabValue:TDateTime);overload;
+  public
+   function   CalcLimit(Active,Passive,Capital:Extended):Extended;
+    { Public declarations }
+  end;
+
+var
+  FrmTuning: TFrmTuning;
+  PrintExcel: Boolean;
+implementation
+
+uses CurrencyPositionImpl, DataModCurrPositin, UntCPReport,sboapiDataModuleImpl, SBTranslateProc;
+
+{$R *.DFM}
+
+function  TFrmTuning.CalcLimit(Active,Passive,Capital:Extended):Extended;
+begin
+  Result :=(Active-Passive)*100/Capital;//;(Abs(Active-Passive)*100)/Capital;
+end;
+
+procedure  TFrmTuning.OpenDataSet(DataSet :TOracleDataSet;VarabName:String;VarabValue:TDateTime);
+begin
+   with  DataSet  do
+   begin
+     if  Active  then Close;
+     SetVariable(VarabName,VarabValue);
+     Open;
+   end;
+end;
+procedure  TFrmTuning.OpenDataSet(DataSet :ToracleDataSet;VariableNames :array of const;VariableValues :array of const);
+var
+   NameIndex  :0..255;
+   NamesCount :0..255;
+   TempruaryVName :string;
+   TempruaryVValue :Variant;
+begin
+  NamesCount :=High(VariableNames);
+  with   DataSet  do
+  if  Active  then  Close;
+  for   NameIndex :=0   to  NamesCount  do
+  begin
+    TempruaryVName :=VariableNames[NameIndex].VPWideChar;
+    case  VariableValues[NameIndex].VType  of
+        vtVariant :TempruaryVValue :=VariableValues[NameIndex].VVariant^;
+        vtInteger :TempruaryVValue :=Integer(VariableValues[NameIndex].VInteger);
+      end;// case
+    with   DataSet   do
+    begin
+      SetVariable(TempruaryVName,TempruaryVValue);
+    end;
+  end;
+  with   DataSet  do  Open
+end;
+procedure  TFrmTuning.InitialReport;
+var
+    Delta :Extended;
+    V :Integer;
+    Using :Integer;
+    SVMCovering :Extended;
+begin
+   V :=Integer(Trunc(FrmCurrencyPosition.Dates[ComBoxPresentDates.ItemIndex]));
+    with   CPReport,OracleDataSet1   do
+    begin
+      QRLBank.Caption :='Bankın adı:'+FieldByName('Bank').AsString;
+      QRLManagerName.Caption :='Məsul şəxs:   '+EManager.Text;
+      QRLTelephon.Caption :='Telefon:'+FieldByName('Tel').AsString;
+      QRLDate.Caption :=FormatDateTime('dd/mm/yyy',FrmCurrencyPosition.Dates[ComBoxPresentDates.ItemIndex]);
+      Using  :=0;
+      OpenDataSet(ODSSdv,['ADate','AUsing'],[V,Using]);
+      Delta  :=ODSSdv.FieldByName('SDVSum').AsFloat;
+          if   Delta>0  then
+          begin
+            OLong.Caption :=FormatFloat('#0',Delta);
+            OShort.Caption :='0';
+          end  else
+          begin
+            OLong.Caption :='0';
+            OShort.Caption :=FormatFloat('#0',(Delta)); //Abs(Delta));  ***Modified by Hesen R. 23.08.06
+          end;
+          QMLong.Caption :=OLong.Caption;
+          QMShort.Caption :=OShort.Caption;
+          try
+          Limit2.Caption :=FormatFloat('0.00',Abs(CalcLimit(0,Delta,StrToFloat(ECapital.Text))));
+           except
+             on E:EConvertError  do
+             Limit2.Caption :='Invalid Capital';
+           end;
+           //SDV  - ye  Daxil olanlar
+           Using :=1;
+           OpenDataSet(FrmCurrencyPosition.ODSFillFile,['CurrentDate','Currency'],[V,1]);
+           OpenDataSet(ODSSdv,['ADate','AUsing'],[V,Using]);
+           Delta  :=ODSSdv.FieldByName('SDVSum').AsFloat
+                    -OracleDataSet1.FieldByName('SVM').AsFloat*FrmCurrencyPosition.ODSFillFile.FieldByName('Rate').AsFloat;
+
+          if   Delta>0  then
+          begin
+            SLong.Caption :=FormatFloat('#0',Delta);
+            SShort.Caption :='0';
+          end  else
+          begin
+            SLong.Caption :='0';
+            SShort.Caption :=FormatFloat('#0',Delta); //Abs(Delta));  ***Modified by Hesen R. 23.08.06
+          end;
+          SMLong.Caption :=SLong.Caption;
+          SMShort.Caption :=SShort.Caption;
+           try
+          Limit1.Caption :=FormatFloat('0.00'
+                           ,Abs(CalcLimit(0,Delta,StrToFloat(ECapital.Text))));
+           except
+             on E:EConvertError  do
+             Limit1.Caption :='Invalid Capital';
+           end;
+     QRLKapital.Caption :='Hesabat tarixinə bankın kapitalı  '+ECapital.Text+' manat təşkil edir';
+     SVMCovering :=(OracleDataSet1.FieldByName('SVM').AsFloat*FrmCurrencyPosition.ODSFillFile.FieldByName('Rate').AsFloat)/1000000;
+     QRLQeyd.Caption :='Mərkəzi Bankın 16/03/2001 tarixli razılığına əsasən '+FormatFloat('#0.0',SVMCovering)
+                        +' mln manat məbləği passivlərdə əlavə olunur.';
+     if PrintExcel=False then Preview
+     else
+     begin
+     to_excel;
+     printExcel:=False;
+     end;
+    end;
+end;
+
+procedure TFrmTuning.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+  if  Key=#27  then
+   Close;
+end;
+
+procedure TFrmTuning.FormShow(Sender: TObject);
+begin
+  if   IsClosed   then
+    with ComBoxPresentDates do
+    begin
+      Style :=csDropDown;
+      Items.Clear;
+      Items :=FrmCurrencyPosition.CmbBoxDate.Items;
+      Items.Delete(0);
+      ItemIndex :=0;
+      Style :=csDropDownList;
+    end;
+    OracleDataSet1.Open;
+
+ printExcel:=False;
+ ComBoxPresentDatesClick(self);
+end;
+
+procedure TFrmTuning.FormCreate(Sender: TObject);
+begin
+   IsClosed :=True;
+   IsEmpty  :=True;
+  SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TFrmTuning.FormDestroy(Sender: TObject);
+begin
+   OracleDataSet1.Close
+end;
+
+procedure TFrmTuning.TBReportClick(Sender: TObject);
+var
+   V :Variant;
+   TableName :String;
+   SqlStr :WideString;
+   SqlStrSdv :WideString;
+begin
+
+if ComBoxPresentDates.Items.Count>0 then
+ begin
+ if   IsEmpty  then
+ begin
+   TableName :=' CurrencyPosition_'+FrmCurrencyPosition.sb_GetUserName;
+   SqlStr :='Select'
++' ActiveSet.ShortName as ShortName'
++',ActiveSet.Currency as Currency'
++',ActiveSet.Rate  as Rate'
++',ActiveSet.Actives as Actives'
++',ActiveSet.Pok_Actives as Pok_Actives'
++',PassiveSet.Passives as Passives'
++',PassiveSet.Pok_Passives as Pok_Passives'
++',OUTactiveset.OUTactives,OUTactiveset.OUTpok_actives'
++',OUTpassiveset.OUTpassives,OUTpassiveset.OUTpok_passives'
++',(activeset.actives + OUTactiveset.OUTactives) as SumActives'
++',(activeset.pok_actives + OUTactiveset.OUTpok_actives) as SumPokActives'
++',(passiveset.passives + OUTpassiveset.OUTpassives) as SumPassives'
++',(passiveset.pok_passives + OUTpassiveset.OUTpok_passives) as SumPokPassives '
++'From '
++'(Select '
++'Currency'
++',Max(Shortname) as ShortName'
++',Max(Rate) as Rate'
++',Round(Sum(Active)) as Actives'
++',Round(Sum(Active))*Max(Rate) as Pok_Actives '
++'From' + TableName
++' Where'
++' Currency<>0 and extra=0 and '
++' ((Incoming=1)or(Incoming=3)) and '
++' PresentDate=:ADate'
++' Group by'
++' Currency) ActiveSet,'
++'(Select'
++' Currency'
++',Max(Shortname) as ShortName'
++',Max(Rate) as Rate'
++',Round(Sum(Passive)) as Passives'
++',Round(Sum(Passive))*Max(Rate) as Pok_Passives'
++' From' + TableName
++' Where '
++'Currency<>0 and extra=0 and '
++'((Incoming=1)or(Incoming=3)) and '
++'PresentDate=:ADate '
++'Group by '
++'Currency) PassiveSet, '
+
+//TNariman
+
++'(Select '
++'Currency'
++',Max(Shortname) as ShortName'
++',Max(Rate) as Rate'
++',Round(Sum(Active)) as OUTActives'
++',Round(Sum(Active))*Max(Rate) as OUTPok_Actives '
++'From' + TableName
++' Where'
++' Currency<>0 and extra=1 and '
++' ((Incoming=1)or(Incoming=3)) and '
++' PresentDate=:ADate'
++' Group by'
++' Currency) OUTActiveSet,'
+
++'(Select'
++' Currency'
++',Max(Shortname) as ShortName'
++',Max(Rate) as Rate'
++',Round(Sum(Passive)) as OUTPassives'
++',Round(Sum(Passive))*Max(Rate) as OUTPok_Passives'
++' From' + TableName
++' Where '
++'Currency<>0 and extra=1 and '
++'((Incoming=1)or(Incoming=3)) and '
++'PresentDate=:ADate '
++'Group by '
++'Currency) OUTPassiveSet '
+
+//TNariman
+
++'Where '
++' (ActiveSet.Currency=PassiveSet.Currency)'
++' and (activeset.currency = OUTactiveset.currency(+)) '
++' and (activeset.currency = OUTpassiveset.currency(+)) ';
+
+
+SqlStrSdv :=
+'Select '
++'(Select Sum(A) from ('
++'Select Currency, Rate*Round(Sum(Active)) as A from '
++TableName
++' Where '
++'(PresentDate=:ADate) and (Using = :AUsing)and(Currency<>0) and (Incoming in (1,3)) '
++'Group by Currency, Rate '
++')) '
++'- '
++'(Select Sum(A) From ( '
++'Select Currency, Rate*Round(Sum(Passive)) as A from '+TableName+' Where '
++'(PresentDate=:ADate) and (Using = :AUsing)and(Currency<>0) and (Incoming in (1,3)) '
++'Group by Currency, Rate '
++')) as  SDVSum From Dual ';
+//  //CPReport.ODSReport.SQL.SaveToFile('C:\cp1.txt');
+  FrmCurrencyPosition.InputQueryToDataSet(CPReport.ODSReport,SqlStr);
+  FrmCurrencyPosition.InputQueryToDataSet(FrmTuning.ODSSdv,SqlStrSdv);
+  IsEmpty  :=False;
+ end;
+
+   try
+   V :=Integer(Trunc(FrmCurrencyPosition.Dates[ComBoxPresentDates.ItemIndex]));
+   OpenDataSet(CPReport.ODSReport,'ADate',V);
+   IsClosed :=False;
+   InitialReport;
+   finally
+     CPReport.ODSReport.Close;
+     ODSSdv.Close;
+     FrmCurrencyPosition.ODSFillFile.Close;
+   end;
+ end;
+end;
+
+procedure TFrmTuning.TBExcelClick(Sender: TObject);
+begin
+printExcel:=True;
+TBReport.Click;
+End;
+
+procedure TFrmTuning.To_Excel;
+Var
+ excel,sh   :Variant;
+  i:Integer;
+begin
+   excel:=CreateOleObject('Excel.application');
+   sh:=excel.workbooks.open(GetCurrentDir+'\VALYUTA_MOVQE.xlsx');
+   with CPReport.ODSReport do begin
+     for i:=1 to RecordCount do
+     begin
+      excel.cells[I+15,2]:=FieldByName('SHORTNAME').asString;
+      excel.cells[I+15,3]:=FieldByName('RATE').asString;
+
+      excel.cells[I+15,4]:=FieldByName('ACTIVES').asString;
+
+      if not FieldByName('OUTACTIVES').IsNull then
+      excel.cells[I+15,5]:=FieldByName('OUTACTIVES').asString
+      else
+      excel.cells[I+15,5]:=0;
+
+      excel.cells[I+15,6]:=FieldByName('ACTIVES').AsFloat+FieldByName('OUTACTIVES').asFloat;
+
+      excel.cells[I+15,7]:=FieldByName('PASSIVES').asString;
+
+       if not FieldByName('OUTPASSIVES').IsNull then
+      excel.cells[I+15,8]:=FieldByName('OUTPASSIVES').asString
+      else
+      excel.cells[I+15,8]:=0;
+
+      excel.cells[I+15,9]:=FieldByName('PASSIVES').AsFloat+FieldByName('OUTPASSIVES').asFloat;
+
+      excel.cells[I+15,10]:=FieldByName('POK_ACTIVES').asString;
+      excel.cells[I+15,11]:=FieldByName('POK_PASSIVES').asString;
+
+      IF ((FieldByName('ACTIVES').AsFloat + FieldByName('OUTACTIVES').AsFloat)-(FieldByName('SdvPassiv').AsFloat + FieldByName('OUTPASSIVES').AsFloat)) > 0
+      then
+      excel.cells[I+15,12]:=((FieldByName('ACTIVES').AsFloat + FieldByName('OUTACTIVES').AsFloat) - (FieldByName('SdvPassiv').AsFloat + FieldByName('OUTPASSIVES').AsFloat))
+      else
+      excel.cells[I+15,12]:=0;
+
+      IF ((FieldByName('POK_ACTIVES').AsFloat + FieldByName('OUTPOK_ACTIVES').AsFloat)-(FieldByName('SdvPokPassiv').AsFloat + FieldByName('OUTPOK_PASSIVES').AsFloat)) > 0
+      then
+      excel.cells[I+15,13]:=((FieldByName('POK_ACTIVES').AsFloat + FieldByName('OUTPOK_ACTIVES').AsFloat) - (FieldByName('SdvPokPassiv').AsFloat + FieldByName('OUTPOK_PASSIVES').AsFloat))
+      else
+      excel.cells[I+15,13]:=0;
+
+      IF ((FieldByName('SdvPassiv').AsFloat + FieldByName('OUTPASSIVES').AsFloat)-(FieldByName('ACTIVES').AsFloat + FieldByName('OUTACTIVES').AsFloat)) > 0
+      then
+      excel.cells[I+15,14]:=((FieldByName('SdvPassiv').AsFloat + FieldByName('OUTPASSIVES').AsFloat) - (FieldByName('ACTIVES').AsFloat + FieldByName('OUTACTIVES').AsFloat))
+      else
+      excel.cells[I+15,14]:=0;
+
+      IF ((FieldByName('SdvPokPassiv').AsFloat + FieldByName('OUTPOK_PASSIVES').AsFloat)-(FieldByName('POK_ACTIVES').AsFloat + FieldByName('OUTPOK_ACTIVES').AsFloat)) > 0
+      then
+      excel.cells[I+15,15]:=((FieldByName('SdvPokPassiv').AsFloat + FieldByName('OUTPOK_PASSIVES').AsFloat) - (FieldByName('POK_ACTIVES').AsFloat + FieldByName('OUTPOK_ACTIVES').AsFloat))
+      else
+      excel.cells[I+15,15]:=0;
+
+      excel.cells[I+15,16]:=FormatFloat('0.00',
+                                 FrmTuning.CalcLimit(FieldByName('POK_Actives').Value + FieldByName('OUTPOK_Actives').AsFloat,
+                                 FieldByName('SdvPokPASSIV').Value + FieldByName('OUTPOK_passives').AsFloat,
+                                 StrToFloat(FrmTuning.ECapital.Text)));
+      next;
+     end;
+      excel.cells[21,13]:=CPReport.SLong.Caption;
+      excel.cells[22,13]:=CPReport.OLong.Caption;
+      excel.cells[23,13]:=CPReport.QRLabel36.Caption;
+
+      excel.cells[21,15]:=CPReport.SShort.Caption;
+      excel.cells[22,15]:=CPReport.OShort.Caption;
+      excel.cells[23,15]:=CPReport.QRLabel37.Caption;
+
+      excel.cells[24,13]:=CPReport.SMLong.Caption;
+      excel.cells[25,13]:=CPReport.QMLong.Caption;
+      excel.cells[24,15]:=CPReport.SMShort.Caption;
+      excel.cells[25,15]:=CPReport.QMShort.Caption;
+      excel.cells[24,16]:=CPReport.
+      excel.cells[25,16]:=CPReport.
+
+      excel.cells[10,9]:='TARIX';
+      excel.cells[12,2]:='Bankın adı: '+OracleDataSet1.FieldByName('Bank').AsString;
+      excel.cells[12,6]:='Məsul şəxs: '+EManager.Text;
+      excel.cells[12,10]:='Telefon: '+OracleDataSet1.FieldByName('Tel').AsString;
+      excel.cells[24,2]:= 'Hesabat tarixinə bankın kapitalı '+ECapital.Text+' təşkil edir';
+      excel.cells[25,2]:='Mərkəzi Bankın 16/03/2001 tarixli razılığına əsasən '+
+      ECapital.Text+' mln manat məbləği passivlərdə əlavə olunur';
+
+     // excel.cells[I+11,11]:=FormatFloat('#0.0',SVMCovering);
+     excel.visible:=true;
+ end;
+end;
+
+procedure TFrmTuning.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  IsClosed :=True;
+ // OracleDataSet1.Close;
+end;
+
+procedure TFrmTuning.ECapitalKeyPress(Sender: TObject; var Key: Char);
+begin
+    if  Key = #13  then
+     TBReport.Click;
+end;
+
+procedure TFrmTuning.TBCancelClick(Sender: TObject);
+begin
+    Close;
+end;
+
+procedure TFrmTuning.ComBoxPresentDatesClick(Sender: TObject);
+var
+  // CapitalDate: Variant;
+  CapitalDate: TDateTime;
+begin
+if ComBoxPresentDates.Items.Count>0 then
+ if CBCalcCapital.Checked then
+ begin
+ // ShowMessage(DateToStr(Trunc(FrmCurrencyPosition.Dates[ComBoxPresentDates.ItemIndex])));
+
+
+  CapitalDate:=Trunc(FrmCurrencyPosition.Dates[ComBoxPresentDates.ItemIndex]);
+//  CapitalDate :=Integer(Trunc(FrmCurrencyPosition.Dates[ComBoxPresentDates.ItemIndex]));
+   with ECapital do
+    DataSource.DataSet.FieldByName(DataField).Value :=FrmCurrencyPosition.GetCapital(CapitalDate);
+ end;
+end;
+
+procedure TFrmTuning.DataSource1DataChange(Sender: TObject; Field: TField);
+begin
+ SpeedButtonCommit.Enabled :=(Sender as TDataSource).DataSet.Modified;
+end;
+
+procedure TFrmTuning.SpeedButtonCommitClick(Sender: TObject);
+begin
+ with ECapital.DataSource do
+ begin
+  //if State in [dsInsert, dsEdit] then
+  DataSet.Edit;
+  DataSet.Post;
+ end;
+end;
+
+procedure TFrmTuning.CBCalcCapitalClick(Sender: TObject);
+begin
+  ComBoxPresentDatesClick(self);
+end;
+
+end.

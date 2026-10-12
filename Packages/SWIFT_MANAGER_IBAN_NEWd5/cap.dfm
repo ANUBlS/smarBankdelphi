@@ -1,0 +1,59 @@
+object Printform: TPrintform
+  Left = 230
+  Top = 2
+  Width = 807
+  Height = 738
+  BorderIcons = [biSystemMenu, biMaximize]
+  Caption = 'Cap'
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'MS Sans Serif'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poDesktopCenter
+  OnActivate = FormActivate
+  PixelsPerInch = 96
+  TextHeight = 13
+  object ButtonPrint: TButton
+    Left = 552
+    Top = 664
+    Width = 86
+    Height = 26
+    Caption = 'Χΰο ες'
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 0
+    OnClick = ButtonPrintClick
+  end
+  object prt: TRichEdit
+    Left = 8
+    Top = 8
+    Width = 777
+    Height = 641
+    HideScrollBars = False
+    ReadOnly = True
+    ScrollBars = ssVertical
+    TabOrder = 1
+  end
+  object cls: TButton
+    Left = 672
+    Top = 664
+    Width = 79
+    Height = 25
+    Caption = 'Αΰόλΰ'
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 2
+    OnClick = clsClick
+  end
+end

@@ -1,0 +1,52 @@
+unit qr5;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, DBTables, QuickRpt, Qrctrls, ExtCtrls;
+
+type
+  TQRMDForm = class(TForm)
+    QuickRep1: TQuickRep;
+    DetailBand1: TQRBand;
+    QRLabel2: TQRLabel;
+    PageFooterBand1: TQRBand;
+    QRSysData2: TQRSysData;
+    TitleBand1: TQRBand;
+    QRSysData1: TQRSysData;
+    ColumnHeaderBand1: TQRBand;
+    QRLabel1: TQRLabel;
+    QRSubDetail1: TQRSubDetail;
+    QRLabel3: TQRLabel;
+    MasterTable: TTable;
+    DetailTable: TTable;
+    MasterDS: TDataSource;
+    procedure FormCreate(Sender: TObject);
+    procedure QuickRep1BeforePrint(Sender: TCustomQuickRep;
+      var PrintReport: Boolean);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  QRMDForm: TQRMDForm;
+
+implementation
+
+{$R *.DFM}
+
+procedure TQRMDForm.FormCreate(Sender: TObject);
+begin
+SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TQRMDForm.QuickRep1BeforePrint(Sender: TCustomQuickRep;
+  var PrintReport: Boolean);
+begin
+SBTranslateProc.TranslateAllCompQuickRep(Self,sboapiDataModule.OrPack_SL);
+end;
+
+end.

@@ -1,0 +1,735 @@
+unit UPAccidentSuggest;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActiveX, AxCtrls, PPAccidentSuggest_TLB, StdVcl, Db, OracleData, Mask, DBCtrls,
+  StdCtrls, ExtCtrls,SBPlgAx50_TLB, Buttons, ComCtrls, PlgModalContainer,
+  INSWordExporter;
+
+const
+   WM_ModalResult = WM_USER+139;
+   fmCaption = 'Teklifname formasi: (%s)';
+
+
+type
+  TPAccidentSuggest = class(TActiveForm, IPAccidentSuggest,IUIObject,
+                          IParamInput,
+                          ISBPlgAc50BufferForm)
+    Panel1: TPanel;
+    Panel2: TPanel;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    Label11: TLabel;
+    DBLookupComboBoxCondition: TDBLookupComboBox;
+    memConditions: TMemo;
+    cbConditions: TCheckBox;
+    Label6: TLabel;
+    DBEdit1: TDBEdit;
+    DBEdit3: TDBEdit;
+    DBEdit4: TDBEdit;
+    DBEdit5: TDBEdit;
+    DBEdit6: TDBEdit;
+    AccidentSource: TDataSource;
+    PAccSugestSource: TDataSource;
+    ConditionSource: TDataSource;
+    ODSPAccident: TOracleDataSet;
+    ODSPAccSuggest: TOracleDataSet;
+    ODSCondition: TOracleDataSet;
+    btPolicy: TBitBtn;
+    btPrint: TBitBtn;
+    btApply: TBitBtn;
+    BitBtn1: TBitBtn;
+    BitBtn2: TBitBtn;
+    ODSPAccSuggestID: TFloatField;
+    ODSPAccSuggestPAID: TFloatField;
+    ODSPAccSuggestCNDT_ID: TFloatField;
+    ODSPAccSuggestINSURANCESUM: TFloatField;
+    ODSPAccSuggestINSURANCETIME: TDateTimeField;
+    ODSPAccSuggestMEDICALCOST: TFloatField;
+    ODSPAccSuggestALL_INSAMMOUNT: TFloatField;
+    ODSPAccSuggestGEO: TStringField;
+    Label12: TLabel;
+    DTPContractDate: TDateTimePicker;
+    ODSPAccidentID: TFloatField;
+    ODSPAccidentKLI_ID: TFloatField;
+    ODSPAccidentCONTACT_PERSON: TStringField;
+    ODSPAccidentBANKING_DETAILS: TStringField;
+    ODSPAccidentTOTALEMP_NUMBER: TFloatField;
+    ODSPAccidentAOG: TFloatField;
+    ODSPAccidentAOP: TFloatField;
+    ODSPAccidentSMG: TFloatField;
+    ODSPAccidentSMP: TFloatField;
+    ODSPAccidentBCG: TFloatField;
+    ODSPAccidentBCP: TFloatField;
+    ODSPAccidentDECIRED_AMOUNT: TFloatField;
+    ODSPAccidentAD: TFloatField;
+    ODSPAccidentPD: TFloatField;
+    ODSPAccidentPLU: TFloatField;
+    ODSPAccidentEME: TFloatField;
+    ODSPAccidentHC: TFloatField;
+    ODSPAccidentHS: TFloatField;
+    ODSPAccidentBRB: TFloatField;
+    ODSPAccidentBURN: TFloatField;
+    ODSPAccidentTTD: TFloatField;
+    ODSPAccidentNOT_COVEREDPERIOD: TStringField;
+    ODSPAccidentOUTSIDEOFAZE: TStringField;
+    ODSPAccidentRENEWAL: TStringField;
+    ODSPAccidentTRAVELS: TStringField;
+    ODSPAccidentTYPEID: TIntegerField;
+    ODSPAccidentRISKID: TFloatField;
+    ODSPAccidentNOT_COVEREPERIOD1: TStringField;
+    ODSPAccidentMAXWEEKS: TIntegerField;
+    ODSPAccidentPROFITID: TFloatField;
+    ODSContracts: TOracleDataSet;
+    ODSContractsTYPE_ID: TFloatField;
+    ODSContractsBLANK_ID: TFloatField;
+    ODSContractsSUGG_ID: TFloatField;
+    ODSContractsPOLICY_ID: TFloatField;
+    ODSContractsINS_DATE: TDateTimeField;
+    ODSContractsBEGIN_DATE: TDateTimeField;
+    ODSContractsEND_DATE: TDateTimeField;
+    ODSContractsVALUTE_ID: TFloatField;
+    ODSContractsAMMOUNT: TFloatField;
+    ODSContractsCLOSE_PREFIX: TIntegerField;
+    ODSContractsKLI_ID: TFloatField;
+    ODSContractsLOANACC_ID: TFloatField;
+    ODSContractsCURRACC_ID: TFloatField;
+    ODSContractsPOLICY_NUM: TStringField;
+    DSContracts: TDataSource;
+    Label7: TLabel;
+    DBLookupComboBox3: TDBLookupComboBox;
+    AValute: TOracleDataSet;
+    AValuteVALU_NAME: TStringField;
+    AValuteVALUTE: TIntegerField;
+    AValuteVAL_NAME: TStringField;
+    AValuteVALU_SHORT: TStringField;
+    AValuteData: TDataSource;
+    ODSContractsID: TFloatField;
+    ODSPAccidentAGENTID: TFloatField;
+    PolicyContainer: TPlgModalContainer;
+    SuggestExporter: TINSWordExporter;
+    Customers: TOracleDataSet;
+    CustomersID: TIntegerField;
+    CustomersNAME: TStringField;
+    CustomersADDRESS: TStringField;
+    CustomersMOBILEPHONE: TStringField;
+    CustomersFAX: TStringField;
+    CustomersData: TDataSource;
+    ODSConditionID: TFloatField;
+    ODSConditionNAME: TStringField;
+    RisksData: TDataSource;
+    Risks: TOracleDataSet;
+    RisksID: TFloatField;
+    RisksNAME: TStringField;
+    ODSBeneficiary: TOracleDataSet;
+    ODSBeneficiaryID: TFloatField;
+    ODSBeneficiaryNAME: TStringField;
+    ODSBeneficiaryADDRESS: TStringField;
+    ODSBeneficiaryPHONE: TStringField;
+    ODSBeneficiaryBANKING_DETAILS: TStringField;
+    BeneficiarySource: TDataSource;
+    ODSPAccSuggestFRZ_ID: TFloatField;
+    Franshiz: TOracleDataSet;
+    FranshizID: TFloatField;
+    FranshizNAME: TStringField;
+    FranshizData: TDataSource;
+    memFrashize: TMemo;
+    cbFranshiz: TCheckBox;
+    Label9: TLabel;
+    DBLookupComboBoxFranshiz: TDBLookupComboBox;
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure DBEdit1KeyPress(Sender: TObject; var Key: Char);
+    procedure DBEdit1Change(Sender: TObject);
+    procedure BitBtn1Click(Sender: TObject);
+    procedure btApplyClick(Sender: TObject);
+    procedure BitBtn2Click(Sender: TObject);
+    procedure DBLookupComboBox3Click(Sender: TObject);
+    procedure btPolicyClick(Sender: TObject);
+    procedure btPrintClick(Sender: TObject);
+  private
+    { Private declarations }
+    FParams : TStrings;
+    FOwnerHandle : Integer;
+    id : integer;
+    f:boolean;
+    FEvents: IPAccidentSuggestEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+   
+    function SaveData():boolean;
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+
+    {}
+    function  Get_Owner:Integer; safecall;
+    procedure Set_Owner(val : Integer);  safecall;
+    {IParamInput}
+    function  Get_Params(const Name: WideString): OleVariant; safecall;
+    procedure Set_Params(const Name: WideString; Value: OleVariant); safecall;
+    property Params[const Name: WideString]: OleVariant read Get_Params write Set_Params;
+    {IInstance}
+    function InstanceInitialize: HResult; safecall;
+    function IUIObject.Initialize = InstanceInitialize;
+    function Cleanup: HResult; safecall;
+    {IUIObject}
+//    function  Get_Icon: OLE_HANDLE; safecall;
+    function UIObjectActivate: HResult; safecall;
+    function IUIObject.Activate = UIObjectActivate;
+    function QueryDeactivate: HResult; safecall;
+    function UIObjectDeactivate: HResult; safecall;
+    function IUIObject.Deactivate = UIObjectDeactivate;
+    function SaveState: HResult; safecall;
+    function  Get_Height : Integer; safecall;
+    function  Get_Width  : Integer; safecall;
+  public
+    { Public declarations }
+    procedure Initialize; override;
+  end;
+
+var
+   PAccidentSuggest:TPAccidentSuggest;
+
+implementation
+
+uses ComObj, ComServ,sboapiDataModuleImpl;
+
+{$R *.DFM}
+
+{ TPAccidentSuggest }
+
+procedure TPAccidentSuggest.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_PAccidentSuggestPage); }
+end;
+
+procedure TPAccidentSuggest.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as IPAccidentSuggestEvents;
+end;
+
+procedure TPAccidentSuggest.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TPAccidentSuggest.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TPAccidentSuggest.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TPAccidentSuggest.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TPAccidentSuggest.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TPAccidentSuggest.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TPAccidentSuggest.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TPAccidentSuggest.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TPAccidentSuggest.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TPAccidentSuggest.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TPAccidentSuggest.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TPAccidentSuggest.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TPAccidentSuggest.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TPAccidentSuggest.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TPAccidentSuggest.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TPAccidentSuggest.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TPAccidentSuggest.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TPAccidentSuggest.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TPAccidentSuggest.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TPAccidentSuggest._Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TPAccidentSuggest.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TPAccidentSuggest.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TPAccidentSuggest.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TPAccidentSuggest.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TPAccidentSuggest.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TPAccidentSuggest.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TPAccidentSuggest.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TPAccidentSuggest.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TPAccidentSuggest.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TPAccidentSuggest.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TPAccidentSuggest.Set_AxBorderStyle(
+  Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TPAccidentSuggest.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TPAccidentSuggest.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TPAccidentSuggest.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TPAccidentSuggest.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TPAccidentSuggest.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TPAccidentSuggest.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TPAccidentSuggest.Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TPAccidentSuggest.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TPAccidentSuggest.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TPAccidentSuggest.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TPAccidentSuggest.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TPAccidentSuggest.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TPAccidentSuggest.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+
+procedure TPAccidentSuggest.ActiveFormCreate(Sender: TObject);
+begin
+      PAccidentSuggest:=Self;
+      FParams := TStringList.Create;
+      ODSCondition.Open;
+end;
+
+function  TPAccidentSuggest.Get_Owner:Integer;
+begin
+  Result := handle;
+end;
+
+procedure TPAccidentSuggest.Set_Owner(val : Integer);
+begin
+  if val > 0 then
+     FOwnerHandle := val;
+end;
+
+
+function  TPAccidentSuggest.Get_Params(const Name: WideString): OleVariant;
+begin
+  Result := FParams.Values[Name];
+end;
+
+procedure TPAccidentSuggest.Set_Params(const Name: WideString; Value: OleVariant);
+begin
+  FParams.Values[Name] := Value;
+end;
+
+function TPAccidentSuggest.InstanceInitialize: HResult;
+begin
+  Result := S_OK;
+end;
+
+function TPAccidentSuggest.Cleanup: HResult;
+begin
+  Result := S_OK;
+end;
+
+function TPAccidentSuggest.UIObjectActivate: HResult;
+begin    
+       id := StrToInt(Get_Params('MK_ID'));
+       f:=true;
+       ODSPAccident.Close;
+       ODSPAccident.SetVariable('ID',id);
+       ODSPaccident.Open;
+       ODSContracts.Close;
+       ODSContracts.SetVariable('blankid', id);
+       ODSContracts.Open;
+       if Get_Params('Mod') = 'Insert' then
+       begin
+          ODSPAccSuggest.Insert;
+          Caption := format(fmCaption, ['Elave']);
+          ODSPAccSuggest.SetVariable('paid',id);
+          ODSPAccSuggest.Open;
+          DTPContractDate.DateTime:=Now;
+       end
+       else
+          begin  //-----Edit mode
+              ODSPAccSuggest.Close;
+              ODSPAccSuggest.SetVariable('paid',id);
+              ODSPAccSuggest.Open;
+              ODSPAccSuggest.Edit;     
+              DTPContractDate.DateTime := ODSPAccSuggestInsurancetime.value;
+              memConditions.Text:='';
+              Caption := format(fmCaption, ['Redakte']);
+              btPrint.Enabled := True;
+              btPolicy.Enabled := True;
+           end;
+         //    end;
+  Result := S_OK;
+end;
+
+function TPAccidentSuggest.QueryDeactivate: HResult;
+begin
+  Result := S_OK;
+end;
+
+function TPAccidentSuggest.UIObjectDeactivate: HResult;
+begin
+  Result := S_OK;
+end;
+
+function TPAccidentSuggest.SaveState: HResult;
+begin
+  Result := S_OK;
+end;
+
+function  TPAccidentSuggest.Get_Height : Integer;
+begin
+  Result := Height;
+end;
+
+function  TPAccidentSuggest.Get_Width  : Integer;
+begin
+  Result := Width;
+end;
+
+
+procedure TPAccidentSuggest.DBEdit1KeyPress(Sender: TObject;
+  var Key: Char);
+begin
+     if Key = #13 then
+     begin
+        if HiWord(GetKeyState(VK_Shift))<>0 then
+           with Sender as TControl do
+           SelectNext(ActiveControl,False, True)
+        else
+           with Sender as TControl do
+           SelectNext(ActiveControl,True, True);
+        key:=#0;
+     end;
+end;
+
+procedure TPAccidentSuggest.DBEdit1Change(Sender: TObject);
+begin
+     with ODSCondition do
+          memConditions.Text := FieldByName('name').asString;
+     btApply.Enabled:=true;
+end;
+
+procedure TPAccidentSuggest.BitBtn1Click(Sender: TObject);
+begin
+     if SaveData() then
+     PostMessage(FOwnerHandle, WM_ModalResult, mrOk, 0);
+end;
+
+procedure TPAccidentSuggest.btApplyClick(Sender: TObject);
+begin    
+   if SaveData() then
+   begin
+      btPolicy.Enabled:=true;
+      btPrint.Enabled:=true;
+      btApply.Enabled:=false;
+   end;
+end;
+
+procedure TPAccidentSuggest.BitBtn2Click(Sender: TObject);
+begin
+     PostMessage(FOwnerHandle, WM_ModalResult, mrCancel, 0);
+end;
+
+function TPAccidentSuggest.SaveData: boolean;
+begin
+        Result := False;  
+    if   cbConditions.State = cbChecked then
+    with ODSCondition do
+    begin
+         Insert;
+         FieldByName('name').asString := memConditions.Text;
+         Post;
+         RefreshRecord;
+    end;
+
+    if   cbFranshiz.State = cbChecked then
+    with Franshiz do
+    begin
+         Insert;
+         FieldByName('name').asString := memFrashize.Text;
+         Post;
+         RefreshRecord;
+    end;
+
+    with ODSPAccSuggest do
+    begin
+         FieldByName('paid').AsFloat := id;
+         FieldByName('cndt_id').AsFloat := ODSCondition.FieldByName('id').asFloat;
+         FieldByName('insurancetime').AsDateTime := DTPContractDate.DateTime;
+         if State in [dsInsert,dsEdit] then Post;
+         RefreshRecord();
+         if f then begin
+         ODSContracts.Edit;
+         ODSContracts.FieldByName('sugg_id').AsFloat := FieldByName('id').asFloat;
+         ODSContracts.FieldByName('ins_date').AsDateTime := DTPContractDate.DateTime;
+         if ODSContracts.State in [dsInsert,dsEdit] then ODSContracts.Post;
+         end;
+         f:=false;
+         result := True;
+    end;
+end;
+
+procedure TPAccidentSuggest.DBLookupComboBox3Click(Sender: TObject);
+begin
+     btApply.Enabled:=true;
+end;
+
+procedure TPAccidentSuggest.btPolicyClick(Sender: TObject);
+var
+   p : TStringList;
+begin
+   p:= TStringList.Create;
+   p.Values['ID']:=FloatToStr(ODSPAccidentId.value);
+   with PolicyContainer do begin
+     ShowModal(StringToGuid('{DF05FA85-2A5E-472D-8506-3C31DF75BDD8}'),p );
+   end;
+   p.Free;
+
+end;
+
+procedure TPAccidentSuggest.btPrintClick(Sender: TObject);
+begin
+      AValute.Locate('valute',ODSCOntractsValute_ID.Value,[]);
+      Risks.Locate('id',ODSPAccidentRISKid.Value,[]);
+      ODSBeneficiary.Locate('id',ODSPAccidentPROFITID.Value,[]);
+      ODSCondition.Locate('id',ODSPaccSuggestCNDT_ID.Value,[]);
+      Franshiz.Locate('id',ODSPaccSuggestFRZ_ID.Value,[]);
+      try
+        with SuggestExporter do
+        begin
+             FileName:=ExtractFilePath(Application.ExeName)+ '\Ferdi Qeza Teklif.doc';
+             Open(False);
+             SetBookmark('Insured',CustomersName.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Insperiod',DateToStr(ODSContractsBegin_date.value)+' - '+DateToStr(ODSContractsEnd_date.value), false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Valute',AValuteValu_name.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Insrisks',RisksName.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Beneficiary',ODSBeneficiaryName.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Inssum',FloatToStr(ODSPAccSuggestInsurancesum.value), false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Franshiz',FranshizName.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Insammount',CurrToStr(ODSCONtractsAmmount.value), false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Medicalcost',CurrToStr(ODSPAccSuggestMedicalcost.value), false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('AInsammount',FloatToStr(ODSPAccSuggestAll_InsAmmount.value), false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Geo',ODSPaccSuggestGeo.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Instime',DateToStr(ODSPAccSuggestInsuranceTime.value), false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Cond',ODSConditionName.value, false, false, False, false, 8, 'Arial AzLat', False);
+             
+        end;
+    finally
+        SuggestExporter.Show;
+    end;
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TPAccidentSuggest,
+    Class_PAccidentSuggest,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

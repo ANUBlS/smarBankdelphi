@@ -1,0 +1,51 @@
+unit FPAccountsDataModuleImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, OracleData;
+
+type
+  TFPADataMod = class(TDataModule)
+    DataSrcAccounts: TDataSource;
+    AccountsData: TOracleDataSet;
+    Branches: TOracleDataSet;
+    DataSrcBranches: TDataSource;
+    BranchesID: TFloatField;
+    BranchesNAME: TStringField;
+    AccountsDataACCNO: TStringField;
+    AccountsDataACCCURRENCY: TStringField;
+    AccountsDataACCNAME: TStringField;
+    AccountsDataOPENDATE: TDateTimeField;
+    AccountsDataCLOSEDATE: TDateTimeField;
+    AccountsDataBALANCENO: TFloatField;
+    SYSDAT: TOracleDataSet;
+    SYSDATTEK_DAT: TDateTimeField;
+    AccountsDataOPERATORID: TStringField;
+    SysUsers: TOracleDataSet;
+    DataSrcSysUsers: TDataSource;
+    AccountsDataADI: TStringField;
+    AccountsDataDOGUM: TDateTimeField;
+    AccountsDataSEXSIYYETID: TStringField;
+    AccountsDataREZ: TStringField;
+    AccountsDataPHONE: TStringField;
+    AccountsDataADRESS: TStringField;
+    AccountsDataTAXID: TStringField;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FPADataMod: TFPADataMod;
+
+implementation
+
+{$R *.DFM}
+
+uses
+  sboapiDataModuleImpl;
+
+end.

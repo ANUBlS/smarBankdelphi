@@ -1,0 +1,52 @@
+object DataMod: TDataMod
+  OldCreateOrder = False
+  Height = 233
+  Width = 548
+  object addgroup: TOracleDataSet
+    SQL.Strings = (
+      'select id,acc_no from account where bal_cn1=:a')
+    Optimize = False
+    Variables.Data = {0400000001000000040000003A004100050000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      05000000030000000800000043004F0044004500010000000000080000004E00
+      41004D0045000100000000000E000000500045005200430045004E0054000100
+      00000000}
+    Session = sboapiDataModule.SBSession
+    Left = 16
+    Top = 72
+  end
+  object Groupdata: TDataSource
+    DataSet = AddName
+    Left = 16
+    Top = 16
+  end
+  object AddName: TOracleDataSet
+    SQL.Strings = (
+      'select a.rowid ,a.* from groupvesait a ')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 352
+    Top = 48
+  end
+  object groupv: TOracleDataSet
+    SQL.Strings = (
+      'SELECT rowid,code_id, accno'
+      '  FROM groupv'
+      ''
+      'where code_id = :code')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 432
+    Top = 168
+  end
+  object DataSource1: TDataSource
+    Left = 448
+    Top = 112
+  end
+  object mainresoursce: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'mainresoursce'
+    Left = 16
+    Top = 120
+  end
+end

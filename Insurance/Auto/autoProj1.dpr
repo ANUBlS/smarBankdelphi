@@ -1,0 +1,22 @@
+library autoProj1;
+
+uses
+  ComServ,
+  autoProj1_TLB in 'autoProj1_TLB.pas',
+  autoImpl1 in 'autoImpl1.pas' {auto: TActiveForm} {auto: CoClass},
+  DMautoImpl in 'DMautoImpl.pas' {DMauto: TDataModule};
+
+{$E ocx}
+
+exports
+  DllGetClassObject,
+  DllCanUnloadNow,
+  DllRegisterServer,
+  DllUnregisterServer;
+
+{$R *.TLB}
+
+{$R *.RES}
+
+begin
+end.

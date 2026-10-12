@@ -1,0 +1,16 @@
+-- Start of DDL Script for Trigger SMART.XS_INCOMING_USERID
+-- Generated 20-May-2006 14:24:48 from SMART@SB
+
+CREATE OR REPLACE TRIGGER "SMART".xs_incoming_userid
+ BEFORE
+  INSERT
+ ON xs_incoming
+REFERENCING NEW AS NEW OLD AS OLD
+ FOR EACH ROW
+BEGIN
+   :NEW.USERID:=SBLOGIN.USERID;
+END;
+/
+
+-- End of DDL Script for Trigger SMART.XS_INCOMING_USERID
+

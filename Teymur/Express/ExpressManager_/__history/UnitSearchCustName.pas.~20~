@@ -1,0 +1,243 @@
+﻿unit UnitSearchCustName;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Grids, DBGrids, StdCtrls, ExtCtrls,OracleData;
+
+type
+  TFormSearchCustName = class(TForm)
+    DBGrid1: TDBGrid;
+    Panel1: TPanel;
+    EditLastName: TEdit;
+    EditName: TEdit;
+    EditSoName: TEdit;
+    Edit4: TEdit;
+    Button1: TButton;
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure EditLastNameExit(Sender: TObject);
+    procedure EditLastNameKeyPress(Sender: TObject; var Key: Char);
+    procedure ActionSearchExecute(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormSearchCustName: TFormSearchCustName;
+
+implementation
+uses ExpDataModuleUnit,ExpUnitNewImpl;
+
+{$R *.dfm}
+
+procedure TFormSearchCustName.Button1Click(Sender: TObject);
+begin
+  with ExpFormNew do
+  begin
+    with DBGrid1.DataSource.DataSet do
+    begin
+      case FieldByName('cust_type').AsInteger of
+      1:begin
+          RadioGroup1.ItemIndex:=1;
+          if FieldByName('nerezident').AsInteger=1 then RadioButton1.Checked :=true
+                                                   else RadioButton2.Checked :=true;
+
+
+          EditPINCode.Text            :=FieldByName('passpin').AsString;
+          CBoxPassPlace.KeyValue      :=FieldByName('doc_type').AsInteger;
+          EditSerial.Text             :=FieldByName('passer').AsString;
+          EditPassport.Text           :=FieldByName('paspnum').AsString;
+          Issue_country.KeyValue      :=FieldByName('doc_country').AsInteger;
+          DBCBox_DocTYPE.KeyValue     :=FieldByName('paspplace').AsString;
+
+          if VarIsNull(FieldByName('paspdate').AsVariant)then DateEdit.Value:=varNull
+                                                         else DateEdit.Text:=FieldByName('paspdate').AsVariant;
+
+          if VarIsNull(FieldByName('passexpire').AsVariant)then DateEdit.Value:=varNull
+                                                            else DateEdit.Text:=FieldByName('passexpire').AsVariant;
+
+          DBCBox_Citizenship.KeyValue  :=FieldByName('citizenship').AsInteger;
+          DBCBox_Citizenship2.KeyValue :=FieldByName('citizenship2').AsInteger;
+          DBCBox_Citizenship3.KeyValue :=FieldByName('citizenship2').AsInteger;
+          EditLastName.Text            :=FieldByName('lastname').AsString;
+          EditName.Text                :=FieldByName('name').AsString;
+          EditSoname.Text              :=FieldByName('soname').AsString;
+          CBoxSex.KeyValue             :=FieldByName('sex').AsString;
+          CBoxFamStatus.KeyValue       :=FieldByName('fam_status').AsString;
+          BirthPlace.KeyValue          :=FieldByName('birthplace').AsString;
+          EditBirthCity.KeyValue       :=FieldByName('birth_state').AsString;
+          if varisnull(FieldByName('birthday').AsVariant)  then DateEdit.Value:=null
+                                                           else DateEdit.Text:=FieldByName('birthday').AsVariant;
+
+          Adrs_State.KeyValue        :=FieldByName('adrs_state').AsString;
+          Adrs_City.KeyValue         :=FieldByName('city').AsString;
+          ZipQ.Text                  :=FieldByName('reg_zip').AsString;
+          EditMobil.Text             :=FieldByName('phone_m').AsString;
+          EditPhone.Text             :=FieldByName('phone_h').AsString;
+          EditEmail.Text             :=FieldByName('e_mail').AsString;
+          AdressEdit.Text            :=FieldByName('address').AsString;
+
+        end;
+      2:begin
+          RadioGroup1.ItemIndex:=2;
+           if FieldByName('nerezident').AsInteger=1 then RadioButton1.Checked :=true
+                                                    else RadioButton2.Checked :=true;
+
+
+
+           EditPINCode.Text            :=FieldByName('passpin').AsString;
+           CBoxPassPlace.KeyValue      :=FieldByName('doc_type').AsInteger;
+           EditSerial.Text             :=FieldByName('passer').AsString;
+           EditPassport.Text           :=FieldByName('paspnum').AsString;
+           Issue_country.KeyValue      :=FieldByName('doc_country').AsInteger;
+           DBCBox_DocTYPE.KeyValue     :=FieldByName('paspplace').AsString;
+
+           if VarIsNull(FieldByName('paspdate').AsVariant)then DateEdit.Value:=Null
+                                                          else DateEdit.Value:=FieldByName('paspdate').AsVariant;
+
+           if VarIsNull(FieldByName('passexpire').AsVariant)then DateEdit.Value:=Null
+                                                            else DateEdit.Value:=FieldByName('passexpire').AsVariant;
+
+           DBCBox_Citizenship.KeyValue  :=FieldByName('citizenship').AsInteger;
+           DBCBox_Citizenship2.KeyValue :=FieldByName('citizenship2').AsInteger;
+           DBCBox_Citizenship3.KeyValue :=FieldByName('citizenship2').AsInteger;
+           EditLastName.Text            :=FieldByName('lastname').AsString;
+           EditName.Text                :=FieldByName('name').AsString;
+           EditSoname.Text              :=FieldByName('soname').AsString;
+           EditVoin.Text                :=FieldByName('inn').AsString;
+           CBoxSex.KeyValue             :=FieldByName('sex').AsString;
+           CBoxFamStatus.KeyValue       :=FieldByName('fam_status').AsString;
+           BirthPlace.KeyValue          :=FieldByName('birthplace').AsString;
+           EditBirthCity.KeyValue       :=FieldByName('birth_state').AsString;
+           if VarIsNull(FieldByName('birthday').AsVariant) then DateEdit.Value:=null
+                                                           else DateEdit.Value:=FieldByName('birthday').AsVariant;
+
+           Adrs_State.KeyValue        :=FieldByName('adrs_state').AsString;
+           Adrs_City.KeyValue         :=FieldByName('city').AsString;
+           ZipQ.Text                  :=FieldByName('reg_zip').AsString;
+           EditMobil.Text             :=FieldByName('phone_m').AsString;
+           EditPhone.Text             :=FieldByName('phone_h').AsString;
+           EditEmail.Text             :=FieldByName('e_mail').AsString;
+           AdressEdit.Text            :=FieldByName('address').AsString;
+        end;
+      4:begin
+          RadioGroup1.ItemIndex:=0;
+          if FieldByName('nerezident').AsInteger=1 then RadioButton1.Checked :=true
+                                                   else RadioButton2.Checked :=true;
+
+
+          EditPINCode.Text            :=FieldByName('passpin').AsString;
+          CBoxPassPlace.KeyValue      :=FieldByName('doc_type').AsInteger;
+          EditSerial.Text             :=FieldByName('passer').AsString;
+          EditPassport.Text           :=FieldByName('paspnum').AsString;
+          Issue_country.KeyValue      :=FieldByName('doc_country').AsInteger;
+          DBCBox_DocTYPE.KeyValue     :=FieldByName('paspplace').AsString;
+
+          DateEdit.Value:=FieldByName('paspdate').AsVariant;
+          DateEdit1.Value:=FieldByName('passexpire').AsVariant;
+
+          DBCBox_Citizenship.KeyValue  :=FieldByName('citizenship').AsInteger;
+          DBCBox_Citizenship2.KeyValue :=FieldByName('citizenship2').AsInteger;
+          DBCBox_Citizenship3.KeyValue :=FieldByName('citizenship2').AsInteger;
+          EditLastName.Text            :=FieldByName('lastname').AsString;
+          EditName.Text                :=FieldByName('name').AsString;
+          EditSoname.Text              :=FieldByName('soname').AsString;
+          CBoxSex.KeyValue             :=FieldByName('sex').AsString;
+          CBoxFamStatus.KeyValue       :=FieldByName('fam_status').AsString;
+          BirthPlace.KeyValue          :=FieldByName('birthplace').AsString;
+          EditBirthCity.KeyValue       :=FieldByName('birth_state').AsString;
+          DateEdit2.Value:=FieldByName('birthday').AsVariant;
+
+          Adrs_State.KeyValue        :=FieldByName('adrs_state').AsString;
+          Adrs_City.KeyValue         :=FieldByName('city').AsString;
+          ZipQ.Text                  :=FieldByName('reg_zip').AsString;
+          EditMobil.Text             :=FieldByName('phone_m').AsString;
+          EditPhone.Text             :=FieldByName('phone_h').AsString;
+          EditEmail.Text             :=FieldByName('e_mail').AsString;
+          AdressEdit.Text            :=FieldByName('address').AsString;
+
+        end;
+
+    end;
+  end;
+end;
+ Close;
+end;
+procedure TFormSearchCustName.EditLastNameExit(Sender: TObject);
+begin
+  TEdit(Sender).Text :=EmptyStr;
+end;
+
+
+
+
+procedure TFormSearchCustName.EditLastNameKeyPress(Sender: TObject; var Key: Char);
+begin
+  if Key = #13  then
+  ActionSearchExecute(Sender);
+end;
+
+procedure TFormSearchCustName.ActionSearchExecute(Sender: TObject);
+var
+  SearchField : string;
+  SearchOptions : TSearchRecordOptions;
+begin
+  SearchOptions := [srIgnoreCase ,srPartialMatch ];
+
+  with Sender as TEdit  do
+  begin
+    ShowMessage(Name);
+    SearchField := copy(Name,5,length(Name));
+    ShowMessage(SearchField);
+    with  TOracleDataSet(DBGrid1.DataSource.DataSet) do
+
+    if  not SearchRecord(
+                  SearchField
+                 ,Text
+                 ,SearchOptions + [srFromCurrent , srForward ]
+                 ) then
+
+    if MessageDlg(
+              'Axtarış sona çatdı.'+#13+'Əvvəldən başlasın?'
+             ,mtInformation
+             ,[mbNo , mbYes]
+             ,0
+             ) = mrYes  then
+
+    if not SearchRecord(
+                 SearchField
+                ,Text
+                ,SearchOptions + [ srFromBeginning ]
+                )  then
+    MessageDlg('Yazı tapılmayıb!',mtInformation,[mbOK],0);
+ end;
+end;
+
+
+
+
+
+procedure TFormSearchCustName.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+  with ExpDataModule,SendDataSet do
+  begin
+    Close;
+    SQL.Clear;
+    SQL.Add('SELECT * FROM EXP_CUSTSEND');
+    Open;
+  end;
+  with ExpDataModule,SendToDataSet do
+  begin
+    Close;
+    SQL.Clear;
+    SQL.Add('SELECT * FROM EXP_CUSTSEND');
+    Open;
+  end;
+end;
+
+end.

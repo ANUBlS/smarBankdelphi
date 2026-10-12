@@ -1,0 +1,1179 @@
+object ConstructionPolicy: TConstructionPolicy
+  Left = 192
+  Top = 107
+  Width = 399
+  Height = 183
+  Caption = 'Policy'
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  OldCreateOrder = False
+  OnCreate = ActiveFormCreate
+  PixelsPerInch = 96
+  TextHeight = 14
+  object XFPanel3: TXFPanel
+    Left = 0
+    Top = 0
+    Width = 399
+    Height = 177
+    Align = alTop
+    BevelInner = bvLowered
+    TabOrder = 0
+    object XFPanel1: TXFPanel
+      Left = 2
+      Top = 2
+      Width = 395
+      Height = 116
+      Align = alTop
+      BevelInner = bvLowered
+      TabOrder = 0
+      object XFLabel1: TXFLabel
+        Left = 9
+        Top = 26
+        Width = 96
+        Height = 14
+        Caption = #350#601'had'#601'tnam'#601'nin '#8470
+      end
+      object XFLabel2: TXFLabel
+        Left = 9
+        Top = 56
+        Width = 29
+        Height = 14
+        Caption = 'Agent'
+      end
+      object XFLabel3: TXFLabel
+        Left = 9
+        Top = 81
+        Width = 61
+        Height = 14
+        Caption = 'S'#305#287'orta n'#246'v'#252
+      end
+      object Edit1: TEdit
+        Left = 146
+        Top = 78
+        Width = 226
+        Height = 22
+        ReadOnly = True
+        TabOrder = 0
+        Text = #304'n'#351'aat s'#305#287'ortas'#305
+        OnChange = ENumChange
+        OnKeyPress = ENumKeyPress
+      end
+      object DBLookupComboBox2: TDBLookupComboBox
+        Left = 146
+        Top = 52
+        Width = 226
+        Height = 22
+        DataField = 'AGENTID'
+        DataSource = ConstPolicyData
+        KeyField = 'ID'
+        ListField = 'NAME'
+        ListSource = AgentSource
+        TabOrder = 1
+        OnClick = ENumChange
+        OnKeyPress = ENumKeyPress
+      end
+      object ENum: TDBEdit
+        Left = 146
+        Top = 23
+        Width = 226
+        Height = 22
+        DataField = 'POLICY_NUM'
+        DataSource = DSContracts
+        TabOrder = 2
+        OnChange = ENumChange
+        OnKeyPress = ENumKeyPress
+      end
+    end
+    object XFPanel2: TXFPanel
+      Left = 2
+      Top = 118
+      Width = 395
+      Height = 52
+      Align = alTop
+      BevelKind = bkSoft
+      TabOrder = 1
+      DesignSize = (
+        391
+        48)
+      object btPrint: TBitBtn
+        Left = 30
+        Top = -2
+        Width = 81
+        Height = 26
+        Anchors = []
+        Caption = #1063#1072#1087
+        DoubleBuffered = True
+        DragCursor = crArrow
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -12
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        Glyph.Data = {
+          76010000424D7601000000000000760000002800000020000000100000000100
+          04000000000000010000130B0000130B00001000000000000000000000000000
+          800000800000008080008000000080008000808000007F7F7F00BFBFBF000000
+          FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00300000000000
+          00033FFFFFFFFFFFFFFF0888888888888880777777777777777F088888888888
+          8880777777777777777F0000000000000000FFFFFFFFFFFFFFFF0F8F8F8F8F8F
+          8F80777777777777777F08F8F8F8F8F8F9F0777777777777777F0F8F8F8F8F8F
+          8F807777777777777F7F0000000000000000777777777777777F3330FFFFFFFF
+          03333337F3FFFF3F7F333330F0000F0F03333337F77773737F333330FFFFFFFF
+          03333337F3FF3FFF7F333330F00F000003333337F773777773333330FFFF0FF0
+          33333337F3FF7F3733333330F08F0F0333333337F7737F7333333330FFFF0033
+          33333337FFFF7733333333300000033333333337777773333333}
+        NumGlyphs = 2
+        ParentDoubleBuffered = False
+        ParentFont = False
+        TabOrder = 0
+        OnClick = btPrintClick
+      end
+      object btApply: TBitBtn
+        Left = 111
+        Top = -2
+        Width = 81
+        Height = 26
+        Anchors = []
+        Caption = 'Apply'
+        DoubleBuffered = True
+        DragCursor = crArrow
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -12
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        Glyph.Data = {
+          F2010000424DF201000000000000760000002800000024000000130000000100
+          0400000000007C01000000000000000000001000000000000000000000000000
+          80000080000000808000800000008000800080800000C0C0C000808080000000
+          FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00333334433333
+          3333333333388F3333333333000033334224333333333333338338F333333333
+          0000333422224333333333333833338F33333333000033422222243333333333
+          83333338F3333333000034222A22224333333338F33F33338F33333300003222
+          A2A2224333333338F383F3338F33333300003A2A222A222433333338F8333F33
+          38F33333000034A22222A22243333338833333F3338F333300004222A2222A22
+          2433338F338F333F3338F3330000222A3A2224A22243338F3838F338F3338F33
+          0000A2A333A2224A2224338F83338F338F3338F300003A33333A2224A2224338
+          333338F338F3338F000033333333A2224A2243333333338F338F338F00003333
+          33333A2224A2233333333338F338F83300003333333333A2224A333333333333
+          8F338F33000033333333333A222433333333333338F338F30000333333333333
+          A224333333333333338F38F300003333333333333A223333333333333338F8F3
+          000033333333333333A3333333333333333383330000}
+        NumGlyphs = 2
+        ParentDoubleBuffered = False
+        ParentFont = False
+        TabOrder = 1
+        OnClick = btApplyClick
+      end
+      object BitBtn2: TBitBtn
+        Left = 196
+        Top = -2
+        Width = 85
+        Height = 26
+        Anchors = []
+        Caption = 'Ok'
+        DoubleBuffered = True
+        DragCursor = crArrow
+        Glyph.Data = {
+          F6000000424DF600000000000000760000002800000010000000100000000100
+          0400000000008000000000000000000000001000000000000000000000000000
+          8000008000000080800080000000800080008080000080808000C0C0C0000000
+          FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00888888888888
+          8888800000000008888803300008030888880330000803000888033000000303
+          0888033333333303000803300000330303080308888803030308030888880303
+          0308030888880003030803088888080303080000000000000308880308888808
+          0308880000000000000888880308888808088888000000000008}
+        ParentDoubleBuffered = False
+        TabOrder = 2
+        OnClick = BitBtn2Click
+      end
+      object BitBtn3: TBitBtn
+        Left = 280
+        Top = -2
+        Width = 81
+        Height = 26
+        Anchors = []
+        Cancel = True
+        Caption = #1048#1084#1090#1080#1085#1072
+        DoubleBuffered = True
+        DragCursor = crArrow
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -12
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        Glyph.Data = {
+          DE010000424DDE01000000000000760000002800000024000000120000000100
+          0400000000006801000000000000000000001000000000000000000000000000
+          80000080000000808000800000008000800080800000C0C0C000808080000000
+          FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00333333333333
+          333333333333333333333333000033338833333333333333333F333333333333
+          0000333911833333983333333388F333333F3333000033391118333911833333
+          38F38F333F88F33300003339111183911118333338F338F3F8338F3300003333
+          911118111118333338F3338F833338F3000033333911111111833333338F3338
+          3333F8330000333333911111183333333338F333333F83330000333333311111
+          8333333333338F3333383333000033333339111183333333333338F333833333
+          00003333339111118333333333333833338F3333000033333911181118333333
+          33338333338F333300003333911183911183333333383338F338F33300003333
+          9118333911183333338F33838F338F33000033333913333391113333338FF833
+          38F338F300003333333333333919333333388333338FFF830000333333333333
+          3333333333333333333888330000333333333333333333333333333333333333
+          0000}
+        NumGlyphs = 2
+        ParentDoubleBuffered = False
+        ParentFont = False
+        TabOrder = 3
+        OnClick = BitBtn3Click
+      end
+    end
+  end
+  object ODSConstPolicy: TOracleDataSet
+    SQL.Strings = (
+      'select icp.rowid, icp.* from ins_constructionpolicy icp'
+      'where icp.cs_id= :cs_id')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000C0000003A00430053005F00490044000400000000000000
+      00000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000400000004000000490044000100000000000A000000430053005F00
+      490044000100000000001200000050004F004C004900430059004E0055004D00
+      0100000000000E0000004100470045004E00540049004400010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    OnNewRecord = ODSConstPolicyNewRecord
+    Left = 320
+    Top = 56
+    object ODSConstPolicyID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object ODSConstPolicyCS_ID: TFloatField
+      FieldName = 'CS_ID'
+      Required = True
+    end
+    object ODSConstPolicyPOLICYNUM: TWideStringField
+      FieldName = 'POLICYNUM'
+      Size = 32
+    end
+    object ODSConstPolicyAGENTID: TFloatField
+      FieldName = 'AGENTID'
+    end
+  end
+  object ConstPolicyData: TDataSource
+    DataSet = ODSConstPolicy
+    Left = 288
+    Top = 56
+  end
+  object ODSCONSTSUGGEST: TOracleDataSet
+    SQL.Strings = (
+      'SELECT  S.ROWID,S.* FROM INS_CONSTRUCTIONSUGGEST S '
+      'WHERE CID=:CID')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000080000003A00430049004400040000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000D000000040000004900440001000000000006000000430049004400
+      0100000000000C000000460052005A005F00490044000100000000000E000000
+      43004E00440054005F00490044000100000000000C0000004D004C0049004D00
+      490054000100000000000E00000052004D004C0049004D004900540001000000
+      0000140000004900560041004C00550045004D00410049004E00010000000000
+      0E000000520050004500520049004F0044000100000000000E00000052004900
+      560041004C00550045000100000000000E00000045004E004400440041005400
+      45000100000000000E0000005200460052005A005F0049004400010000000000
+      0C000000560041004C005F00490044000100000000001000000049004E005400
+      450052005F0049004400010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 325
+    Top = 88
+    object ODSCONSTSUGGESTID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object ODSCONSTSUGGESTCID: TFloatField
+      FieldName = 'CID'
+      Required = True
+    end
+    object ODSCONSTSUGGESTFRZ_ID: TFloatField
+      FieldName = 'FRZ_ID'
+      Required = True
+    end
+    object ODSCONSTSUGGESTCNDT_ID: TFloatField
+      FieldName = 'CNDT_ID'
+      Required = True
+    end
+    object ODSCONSTSUGGESTMLIMIT: TFloatField
+      FieldName = 'MLIMIT'
+    end
+    object ODSCONSTSUGGESTRMLIMIT: TFloatField
+      FieldName = 'RMLIMIT'
+    end
+    object ODSCONSTSUGGESTIVALUEMAIN: TFloatField
+      FieldName = 'IVALUEMAIN'
+    end
+    object ODSCONSTSUGGESTRPERIOD: TWideStringField
+      FieldName = 'RPERIOD'
+      Size = 10
+    end
+    object ODSCONSTSUGGESTRIVALUE: TFloatField
+      FieldName = 'RIVALUE'
+    end
+    object ODSCONSTSUGGESTENDDATE: TDateTimeField
+      FieldName = 'ENDDATE'
+    end
+    object ODSCONSTSUGGESTRFRZ_ID: TFloatField
+      FieldName = 'RFRZ_ID'
+    end
+    object ODSCONSTSUGGESTVAL_ID: TFloatField
+      FieldName = 'VAL_ID'
+    end
+    object ODSCONSTSUGGESTINTER_ID: TFloatField
+      FieldName = 'INTER_ID'
+    end
+  end
+  object CONSTSUGGESTData: TDataSource
+    DataSet = ODSCONSTSUGGEST
+    Left = 293
+    Top = 88
+  end
+  object PolicyExporter: TINSWordExporter
+    Left = 32
+    Top = 108
+  end
+  object PINS_CONSTRUCTION: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'PINS_CONSTRUCTION'
+    ParameterMode = pmNamed
+    Left = 24
+    Top = 78
+  end
+  object ODSConstruction: TOracleDataSet
+    SQL.Strings = (
+      'select c.rowid,c.*from ins_construction c where c.id=:id')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000060000003A00490044000400000008000000000000000030
+      724000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000002F00000004000000490044000100000000000C0000004B004C004900
+      5F00490044000100000000001E000000460055004C004C004400450053004300
+      520049005000540049004F004E00010000000000160000004C004F0043004100
+      540049004F004E004F0042004A000100000000001E0000005900450041005200
+      530049004E0042005500530049004E004500530053000100000000001A000000
+      4200550049004C00440049004E00470055005300410047004500010000000000
+      1200000043004F004E0053005400590045004100520001000000000012000000
+      46004C004F004F00520053004E0055004D000100000000000C00000057004100
+      4C004C0053004D00010000000000120000004300450049004C0049004E004700
+      53004D000100000000000A00000052004F004F0046004D000100000000000800
+      000041005200450041000100000000001C0000004100500050004C0049004300
+      41004E0054005300500041004300450001000000000022000000450041005200
+      540048005100550041004B004500440045005400410049004C00530001000000
+      00001000000046004C0041004D00410042004C00450001000000000024000000
+      53005500520052004F0049004E00440049004E00470044004500540041004900
+      4C00530001000000000010000000530049005400550045005400450044000100
+      000000000A000000470055004100520044000100000000000A00000041004C00
+      410052004D000100000000000A0000004C004F0043004B005300010000000000
+      1A000000530045004300550052004900540059004C004F0043004B0053000100
+      000000000800000042004100520053000100000000000A0000004F0054004800
+      4500520001000000000010000000530045005400540049004E00470053000100
+      000000000C0000005200450050004100490052000100000000000C0000004800
+      450041005400450044000100000000000C0000005200490053004B0049004400
+      0100000000000C00000041004E004E00550041004C000100000000000A000000
+      5700410047004500530001000000000008000000520045004E00540001000000
+      00001000000045004D0050004C004F0059004500530001000000000010000000
+      45005800500049005200490054005900010000000000160000004C004F005300
+      530048004900530054004F00520059000100000000000E000000520045004E00
+      4500570041004C00010000000000140000005400480049005200440050004100
+      520054005900010000000000100000004F00540048004500520049004E004600
+      0100000000001400000049004E00440045004D0049004E004900540059000100
+      0000000012000000560041004C00550045005400590050004500010000000000
+      120000004200550049004C00440049004E004700530001000000000010000000
+      45004E00470049004E004500450052000100000000000C000000450058004400
+      450043004F000100000000000C00000049004E004400450043004F0001000000
+      00000E00000046004900520045005300590053000100000000000C0000005400
+      5900500045004900440001000000000010000000500052004F00460049005400
+      490044000100000000001800000043004C004F00530045005F00500052004500
+      46004900580001000000000006000000430049004400010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 248
+    object ODSConstructionID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object ODSConstructionKLI_ID: TFloatField
+      FieldName = 'KLI_ID'
+    end
+    object ODSConstructionFULLDESCRIPTION: TWideStringField
+      FieldName = 'FULLDESCRIPTION'
+      Size = 1024
+    end
+    object ODSConstructionLOCATIONOBJ: TWideStringField
+      FieldName = 'LOCATIONOBJ'
+      Size = 1024
+    end
+    object ODSConstructionYEARSINBUSINESS: TWideStringField
+      FieldName = 'YEARSINBUSINESS'
+      Size = 32
+    end
+    object ODSConstructionBUILDINGUSAGE: TWideStringField
+      FieldName = 'BUILDINGUSAGE'
+      Size = 128
+    end
+    object ODSConstructionCONSTYEAR: TDateTimeField
+      FieldName = 'CONSTYEAR'
+    end
+    object ODSConstructionFLOORSNUM: TIntegerField
+      FieldName = 'FLOORSNUM'
+    end
+    object ODSConstructionWALLSM: TWideStringField
+      FieldName = 'WALLSM'
+      Size = 128
+    end
+    object ODSConstructionCEILINGSM: TWideStringField
+      FieldName = 'CEILINGSM'
+      Size = 128
+    end
+    object ODSConstructionROOFM: TWideStringField
+      FieldName = 'ROOFM'
+      Size = 128
+    end
+    object ODSConstructionAREA: TFloatField
+      FieldName = 'AREA'
+    end
+    object ODSConstructionAPPLICANTSPACE: TFloatField
+      FieldName = 'APPLICANTSPACE'
+    end
+    object ODSConstructionEARTHQUAKEDETAILS: TWideStringField
+      FieldName = 'EARTHQUAKEDETAILS'
+      Size = 128
+    end
+    object ODSConstructionFLAMABLE: TWideStringField
+      FieldName = 'FLAMABLE'
+      Size = 1024
+    end
+    object ODSConstructionSURROINDINGDETAILS: TWideStringField
+      FieldName = 'SURROINDINGDETAILS'
+      Size = 1024
+    end
+    object ODSConstructionSITUETED: TWideStringField
+      FieldName = 'SITUETED'
+      Size = 32
+    end
+    object ODSConstructionGUARD: TWideStringField
+      FieldName = 'GUARD'
+      Size = 32
+    end
+    object ODSConstructionALARM: TWideStringField
+      FieldName = 'ALARM'
+      Size = 32
+    end
+    object ODSConstructionLOCKS: TWideStringField
+      FieldName = 'LOCKS'
+      Size = 32
+    end
+    object ODSConstructionSECURITYLOCKS: TWideStringField
+      FieldName = 'SECURITYLOCKS'
+      Size = 32
+    end
+    object ODSConstructionBARS: TWideStringField
+      FieldName = 'BARS'
+      Size = 32
+    end
+    object ODSConstructionOTHER: TWideStringField
+      FieldName = 'OTHER'
+      Size = 128
+    end
+    object ODSConstructionSETTINGS: TWideStringField
+      FieldName = 'SETTINGS'
+      Size = 1024
+    end
+    object ODSConstructionREPAIR: TWideStringField
+      FieldName = 'REPAIR'
+      Size = 1024
+    end
+    object ODSConstructionHEATED: TWideStringField
+      FieldName = 'HEATED'
+      Size = 128
+    end
+    object ODSConstructionRISKID: TFloatField
+      FieldName = 'RISKID'
+    end
+    object ODSConstructionANNUAL: TFloatField
+      FieldName = 'ANNUAL'
+    end
+    object ODSConstructionWAGES: TFloatField
+      FieldName = 'WAGES'
+    end
+    object ODSConstructionRENT: TFloatField
+      FieldName = 'RENT'
+    end
+    object ODSConstructionEMPLOYES: TFloatField
+      FieldName = 'EMPLOYES'
+    end
+    object ODSConstructionEXPIRITY: TDateTimeField
+      FieldName = 'EXPIRITY'
+    end
+    object ODSConstructionLOSSHISTORY: TWideStringField
+      FieldName = 'LOSSHISTORY'
+      Size = 1024
+    end
+    object ODSConstructionRENEWAL: TWideStringField
+      FieldName = 'RENEWAL'
+      Size = 1024
+    end
+    object ODSConstructionTHIRDPARTY: TWideStringField
+      FieldName = 'THIRDPARTY'
+      Size = 32
+    end
+    object ODSConstructionOTHERINF: TWideStringField
+      FieldName = 'OTHERINF'
+      Size = 32
+    end
+    object ODSConstructionINDEMINITY: TWideStringField
+      FieldName = 'INDEMINITY'
+      Size = 10
+    end
+    object ODSConstructionVALUETYPE: TWideStringField
+      FieldName = 'VALUETYPE'
+      Size = 128
+    end
+    object ODSConstructionBUILDINGS: TFloatField
+      FieldName = 'BUILDINGS'
+    end
+    object ODSConstructionENGINEER: TFloatField
+      FieldName = 'ENGINEER'
+    end
+    object ODSConstructionEXDECO: TFloatField
+      FieldName = 'EXDECO'
+    end
+    object ODSConstructionINDECO: TFloatField
+      FieldName = 'INDECO'
+    end
+    object ODSConstructionFIRESYS: TFloatField
+      FieldName = 'FIRESYS'
+    end
+    object ODSConstructionTYPEID: TIntegerField
+      FieldName = 'TYPEID'
+    end
+    object ODSConstructionPROFITID: TFloatField
+      FieldName = 'PROFITID'
+    end
+    object ODSConstructionCLOSE_PREFIX: TIntegerField
+      FieldName = 'CLOSE_PREFIX'
+    end
+    object ODSConstructionCID: TFloatField
+      FieldName = 'CID'
+    end
+  end
+  object ConstData: TDataSource
+    DataSet = ODSConstruction
+    Left = 320
+  end
+  object Customers: TOracleDataSet
+    SQL.Strings = (
+      
+        'select c.rowid,c.id,c.name||'#39' '#39'||c.surname||'#39' '#39'||c.fathername as' +
+        ' name,c.address,c.mobilephone,c.fax,c.contactperson,c.contactper' +
+        'sonphone from ins_customers c')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000070000000400000049004400010000000000080000004E0041004D00
+      4500010000000000160000004D004F00420049004C004500500048004F004E00
+      45000100000000000E0000004100440044005200450053005300010000000000
+      060000004600410058000100000000001A00000043004F004E00540041004300
+      540050004500520053004F004E000100000000002400000043004F004E005400
+      41004300540050004500520053004F004E00500048004F004E00450001000000
+      0000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 256
+    Top = 56
+    object CustomersID: TIntegerField
+      FieldName = 'ID'
+      Required = True
+    end
+    object CustomersNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 386
+    end
+    object CustomersADDRESS: TWideStringField
+      FieldName = 'ADDRESS'
+      Size = 1024
+    end
+    object CustomersMOBILEPHONE: TWideStringField
+      FieldName = 'MOBILEPHONE'
+      Size = 32
+    end
+    object CustomersFAX: TWideStringField
+      FieldName = 'FAX'
+      Size = 32
+    end
+    object CustomersCONTACTPERSON: TWideStringField
+      FieldName = 'CONTACTPERSON'
+      Size = 256
+    end
+    object CustomersCONTACTPERSONPHONE: TWideStringField
+      FieldName = 'CONTACTPERSONPHONE'
+      Size = 32
+    end
+  end
+  object CustomersData: TDataSource
+    DataSet = Customers
+    Left = 224
+    Top = 56
+  end
+  object ODSRisks: TOracleDataSet
+    SQL.Strings = (
+      'select idr.rowid, idr.* from ins_dict_risks idr')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000400000049004400010000000000080000004E0041004D00
+      4500010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 188
+    Top = 4
+    object ODSRisksID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object ODSRisksNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 256
+    end
+  end
+  object RisksData: TDataSource
+    DataSet = ODSRisks
+    Left = 188
+    Top = 52
+  end
+  object Franshiz: TOracleDataSet
+    SQL.Strings = (
+      'select idr.rowid, idr.* from ins_dict_franshiz idr')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000400000049004400010000000000080000004E0041004D00
+      4500010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 256
+    Top = 85
+    object FranshizID: TFloatField
+      FieldName = 'ID'
+    end
+    object FranshizNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 1024
+    end
+  end
+  object FranshizData: TDataSource
+    DataSet = Franshiz
+    Left = 224
+    Top = 85
+  end
+  object Conditions: TOracleDataSet
+    SQL.Strings = (
+      'select idr.rowid, idr.* from ins_dict_conditions idr')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000400000049004400010000000000080000004E0041004D00
+      4500010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 144
+    Top = 65525
+    object ConditionsID: TFloatField
+      FieldName = 'ID'
+    end
+    object ConditionsNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 1024
+    end
+  end
+  object ConditionsData: TDataSource
+    DataSet = Conditions
+    Left = 152
+    Top = 53
+  end
+  object ODSConstructionR: TOracleDataSet
+    SQL.Strings = (
+      
+        'select PINS_FullMotor.returnName(kli_id) as name,Pins_FullMotor.' +
+        'returnAddress(kli_id) as Address,Pins_FullMotor.returnPhone(kli_' +
+        'id) as phone,pins_fullmotor.returnFax(kli_id) as fax,c.*from ins' +
+        '_construction c where c.id=:id'
+      '')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000060000003A004900440003000000040000006A0100000000
+      0000}
+    QBEDefinition.QBEFieldDefs = {
+      05000000330000000400000049004400010000000000080000004E0041004D00
+      45000100000000000E0000004100440044005200450053005300010000000000
+      0A000000500048004F004E004500010000000000060000004600410058000100
+      000000000C0000004B004C0049005F00490044000100000000001E0000004600
+      55004C004C004400450053004300520049005000540049004F004E0001000000
+      0000160000004C004F0043004100540049004F004E004F0042004A0001000000
+      00001E0000005900450041005200530049004E0042005500530049004E004500
+      530053000100000000001A0000004200550049004C00440049004E0047005500
+      53004100470045000100000000001200000043004F004E005300540059004500
+      410052000100000000001200000046004C004F004F00520053004E0055004D00
+      0100000000000C000000570041004C004C0053004D0001000000000012000000
+      4300450049004C0049004E00470053004D000100000000000A00000052004F00
+      4F0046004D000100000000000800000041005200450041000100000000001C00
+      00004100500050004C004900430041004E005400530050004100430045000100
+      0000000022000000450041005200540048005100550041004B00450044004500
+      5400410049004C0053000100000000001000000046004C0041004D0041004200
+      4C0045000100000000002400000053005500520052004F0049004E0044004900
+      4E004700440045005400410049004C0053000100000000001000000053004900
+      5400550045005400450044000100000000000A00000047005500410052004400
+      0100000000000A00000041004C00410052004D000100000000000A0000004C00
+      4F0043004B0053000100000000001A0000005300450043005500520049005400
+      59004C004F0043004B0053000100000000000800000042004100520053000100
+      000000000A0000004F0054004800450052000100000000001000000053004500
+      5400540049004E00470053000100000000000C00000052004500500041004900
+      52000100000000000C0000004800450041005400450044000100000000000C00
+      00005200490053004B00490044000100000000000C00000041004E004E005500
+      41004C000100000000000A000000570041004700450053000100000000000800
+      0000520045004E0054000100000000001000000045004D0050004C004F005900
+      4500530001000000000010000000450058005000490052004900540059000100
+      00000000160000004C004F005300530048004900530054004F00520059000100
+      000000000E000000520045004E004500570041004C0001000000000014000000
+      5400480049005200440050004100520054005900010000000000100000004F00
+      540048004500520049004E0046000100000000001400000049004E0044004500
+      4D0049004E0049005400590001000000000012000000560041004C0055004500
+      5400590050004500010000000000120000004200550049004C00440049004E00
+      470053000100000000001000000045004E00470049004E004500450052000100
+      000000000C000000450058004400450043004F000100000000000C0000004900
+      4E004400450043004F000100000000000E000000460049005200450053005900
+      53000100000000000C0000005400590050004500490044000100000000001000
+      0000500052004F00460049005400490044000100000000001800000043004C00
+      4F00530045005F00500052004500460049005800010000000000060000004300
+      49004400010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 76
+    Top = 65532
+    object ODSConstructionRNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 4000
+    end
+    object ODSConstructionRADDRESS: TWideStringField
+      FieldName = 'ADDRESS'
+      Size = 4000
+    end
+    object ODSConstructionRPHONE: TWideStringField
+      FieldName = 'PHONE'
+      Size = 4000
+    end
+    object ODSConstructionRFAX: TWideStringField
+      FieldName = 'FAX'
+      Size = 4000
+    end
+    object ODSConstructionRID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object ODSConstructionRKLI_ID: TFloatField
+      FieldName = 'KLI_ID'
+    end
+    object ODSConstructionRFULLDESCRIPTION: TWideStringField
+      FieldName = 'FULLDESCRIPTION'
+      Size = 1024
+    end
+    object ODSConstructionRLOCATIONOBJ: TWideStringField
+      FieldName = 'LOCATIONOBJ'
+      Size = 1024
+    end
+    object ODSConstructionRYEARSINBUSINESS: TWideStringField
+      FieldName = 'YEARSINBUSINESS'
+      Size = 32
+    end
+    object ODSConstructionRBUILDINGUSAGE: TWideStringField
+      FieldName = 'BUILDINGUSAGE'
+      Size = 128
+    end
+    object ODSConstructionRCONSTYEAR: TDateTimeField
+      FieldName = 'CONSTYEAR'
+    end
+    object ODSConstructionRFLOORSNUM: TIntegerField
+      FieldName = 'FLOORSNUM'
+    end
+    object ODSConstructionRWALLSM: TWideStringField
+      FieldName = 'WALLSM'
+      Size = 128
+    end
+    object ODSConstructionRCEILINGSM: TWideStringField
+      FieldName = 'CEILINGSM'
+      Size = 128
+    end
+    object ODSConstructionRROOFM: TWideStringField
+      FieldName = 'ROOFM'
+      Size = 128
+    end
+    object ODSConstructionRAREA: TFloatField
+      FieldName = 'AREA'
+    end
+    object ODSConstructionRAPPLICANTSPACE: TFloatField
+      FieldName = 'APPLICANTSPACE'
+    end
+    object ODSConstructionREARTHQUAKEDETAILS: TWideStringField
+      FieldName = 'EARTHQUAKEDETAILS'
+      Size = 128
+    end
+    object ODSConstructionRFLAMABLE: TWideStringField
+      FieldName = 'FLAMABLE'
+      Size = 1024
+    end
+    object ODSConstructionRSURROINDINGDETAILS: TWideStringField
+      FieldName = 'SURROINDINGDETAILS'
+      Size = 1024
+    end
+    object ODSConstructionRSITUETED: TWideStringField
+      FieldName = 'SITUETED'
+      Size = 32
+    end
+    object ODSConstructionRGUARD: TWideStringField
+      FieldName = 'GUARD'
+      Size = 32
+    end
+    object ODSConstructionRALARM: TWideStringField
+      FieldName = 'ALARM'
+      Size = 32
+    end
+    object ODSConstructionRLOCKS: TWideStringField
+      FieldName = 'LOCKS'
+      Size = 32
+    end
+    object ODSConstructionRSECURITYLOCKS: TWideStringField
+      FieldName = 'SECURITYLOCKS'
+      Size = 32
+    end
+    object ODSConstructionRBARS: TWideStringField
+      FieldName = 'BARS'
+      Size = 32
+    end
+    object ODSConstructionROTHER: TWideStringField
+      FieldName = 'OTHER'
+      Size = 128
+    end
+    object ODSConstructionRSETTINGS: TWideStringField
+      FieldName = 'SETTINGS'
+      Size = 1024
+    end
+    object ODSConstructionRREPAIR: TWideStringField
+      FieldName = 'REPAIR'
+      Size = 1024
+    end
+    object ODSConstructionRHEATED: TWideStringField
+      FieldName = 'HEATED'
+      Size = 128
+    end
+    object ODSConstructionRRISKID: TFloatField
+      FieldName = 'RISKID'
+    end
+    object ODSConstructionRANNUAL: TFloatField
+      FieldName = 'ANNUAL'
+    end
+    object ODSConstructionRWAGES: TFloatField
+      FieldName = 'WAGES'
+    end
+    object ODSConstructionRRENT: TFloatField
+      FieldName = 'RENT'
+    end
+    object ODSConstructionREMPLOYES: TFloatField
+      FieldName = 'EMPLOYES'
+    end
+    object ODSConstructionREXPIRITY: TDateTimeField
+      FieldName = 'EXPIRITY'
+    end
+    object ODSConstructionRLOSSHISTORY: TWideStringField
+      FieldName = 'LOSSHISTORY'
+      Size = 1024
+    end
+    object ODSConstructionRRENEWAL: TWideStringField
+      FieldName = 'RENEWAL'
+      Size = 1024
+    end
+    object ODSConstructionRTHIRDPARTY: TWideStringField
+      FieldName = 'THIRDPARTY'
+      Size = 32
+    end
+    object ODSConstructionROTHERINF: TWideStringField
+      FieldName = 'OTHERINF'
+      Size = 32
+    end
+    object ODSConstructionRINDEMINITY: TWideStringField
+      FieldName = 'INDEMINITY'
+      Size = 10
+    end
+    object ODSConstructionRVALUETYPE: TWideStringField
+      FieldName = 'VALUETYPE'
+      Size = 128
+    end
+    object ODSConstructionRBUILDINGS: TFloatField
+      FieldName = 'BUILDINGS'
+    end
+    object ODSConstructionRENGINEER: TFloatField
+      FieldName = 'ENGINEER'
+    end
+    object ODSConstructionREXDECO: TFloatField
+      FieldName = 'EXDECO'
+    end
+    object ODSConstructionRINDECO: TFloatField
+      FieldName = 'INDECO'
+    end
+    object ODSConstructionRFIRESYS: TFloatField
+      FieldName = 'FIRESYS'
+    end
+    object ODSConstructionRTYPEID: TIntegerField
+      FieldName = 'TYPEID'
+    end
+    object ODSConstructionRPROFITID: TFloatField
+      FieldName = 'PROFITID'
+    end
+    object ODSConstructionRCLOSE_PREFIX: TIntegerField
+      FieldName = 'CLOSE_PREFIX'
+    end
+    object ODSConstructionRCID: TFloatField
+      FieldName = 'CID'
+    end
+  end
+  object ConstReportSource: TDataSource
+    DataSet = ODSConstructionR
+    Left = 52
+    Top = 44
+  end
+  object ODSBeneficiary: TOracleDataSet
+    SQL.Strings = (
+      'select ib.rowid,ib.* from ins_beneficiary ib')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000050000000400000049004400010000000000080000004E0041004D00
+      45000100000000000E0000004100440044005200450053005300010000000000
+      0A000000500048004F004E0045000100000000001E000000420041004E004B00
+      49004E0047005F00440045005400410049004C005300010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 112
+    Top = 32
+    object ODSBeneficiaryID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object ODSBeneficiaryNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 128
+    end
+    object ODSBeneficiaryADDRESS: TWideStringField
+      FieldName = 'ADDRESS'
+      Size = 128
+    end
+    object ODSBeneficiaryPHONE: TWideStringField
+      FieldName = 'PHONE'
+      Size = 64
+    end
+    object ODSBeneficiaryBANKING_DETAILS: TWideStringField
+      FieldName = 'BANKING_DETAILS'
+      Size = 128
+    end
+  end
+  object BeneficiarySource: TDataSource
+    DataSet = ODSBeneficiary
+    Left = 72
+    Top = 56
+  end
+  object AgentSource: TDataSource
+    DataSet = ODSAgent
+    Left = 72
+    Top = 88
+  end
+  object ODSAgent: TOracleDataSet
+    SQL.Strings = (
+      
+        'select ia.rowid,ia.id,ia.name||'#39' '#39'||ia.surname||'#39' '#39'||ia.fatherna' +
+        'me as name from ins_agents ia')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      0500000002000000080000004E0041004D004500010000000000040000004900
+      4400010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 112
+    Top = 88
+    object ODSAgentID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object ODSAgentNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 386
+    end
+  end
+  object ODSContracts: TOracleDataSet
+    SQL.Strings = (
+      'select ic.rowid, ic.* from ins_contracts ic'
+      'where id = :cid'
+      '')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000080000003A00430049004400030000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000001700000004000000490044000100000000000E000000540059005000
+      45005F00490044000100000000001000000042004C0041004E004B005F004900
+      44000100000000001000000049004E0053005F00440041005400450001000000
+      00001400000042004500470049004E005F004400410054004500010000000000
+      1000000045004E0044005F004400410054004500010000000000120000005600
+      41004C005500540045005F00490044000100000000000E00000041004D004D00
+      4F0055004E0054000100000000001800000043004C004F00530045005F005000
+      520045004600490058000100000000000C0000004B004C0049005F0049004400
+      010000000000140000004C004F0041004E004100430043005F00490044000100
+      000000001400000043005500520052004100430043005F004900440001000000
+      00001400000050004F004C004900430059005F004E0055004D00010000000000
+      0E00000049004E005300530055004D004D000100000000001000000046005200
+      41004E005300480049005A000100000000000C00000054004100520049004600
+      46000100000000000A0000005300540041005400450001000000000010000000
+      4100470045004E0054005F00490044000100000000000800000050004E005500
+      4D000100000000000C000000420045004E005F00490044000100000000001600
+      0000420045004E00450046004900430049004100520059000100000000001400
+      000043004F004E0044004900540049004F004E0053000100000000000C000000
+      5300550047004E0055004D00010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 144
+    Top = 88
+    object ODSContractsID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object ODSContractsTYPE_ID: TFloatField
+      FieldName = 'TYPE_ID'
+    end
+    object ODSContractsBLANK_ID: TFloatField
+      FieldName = 'BLANK_ID'
+    end
+    object ODSContractsINS_DATE: TDateTimeField
+      FieldName = 'INS_DATE'
+    end
+    object ODSContractsBEGIN_DATE: TDateTimeField
+      FieldName = 'BEGIN_DATE'
+    end
+    object ODSContractsEND_DATE: TDateTimeField
+      FieldName = 'END_DATE'
+    end
+    object ODSContractsVALUTE_ID: TFloatField
+      FieldName = 'VALUTE_ID'
+    end
+    object ODSContractsAMMOUNT: TFloatField
+      FieldName = 'AMMOUNT'
+    end
+    object ODSContractsCLOSE_PREFIX: TIntegerField
+      FieldName = 'CLOSE_PREFIX'
+      Required = True
+    end
+    object ODSContractsKLI_ID: TFloatField
+      FieldName = 'KLI_ID'
+    end
+    object ODSContractsLOANACC_ID: TFloatField
+      FieldName = 'LOANACC_ID'
+    end
+    object ODSContractsCURRACC_ID: TFloatField
+      FieldName = 'CURRACC_ID'
+    end
+    object ODSContractsPOLICY_NUM: TWideStringField
+      FieldName = 'POLICY_NUM'
+      Size = 128
+    end
+    object ODSContractsINSSUMM: TFloatField
+      FieldName = 'INSSUMM'
+    end
+    object ODSContractsFRANSHIZ: TFloatField
+      FieldName = 'FRANSHIZ'
+    end
+    object ODSContractsTARIFF: TFloatField
+      FieldName = 'TARIFF'
+    end
+    object ODSContractsSTATE: TIntegerField
+      FieldName = 'STATE'
+    end
+    object ODSContractsAGENT_ID: TFloatField
+      FieldName = 'AGENT_ID'
+    end
+    object ODSContractsPNUM: TFloatField
+      FieldName = 'PNUM'
+    end
+    object ODSContractsBEN_ID: TFloatField
+      FieldName = 'BEN_ID'
+    end
+    object ODSContractsBENEFICIARY: TWideStringField
+      FieldName = 'BENEFICIARY'
+      Size = 4000
+    end
+    object ODSContractsCONDITIONS: TWideStringField
+      FieldName = 'CONDITIONS'
+      Size = 4000
+    end
+    object ODSContractsSUGNUM: TWideStringField
+      FieldName = 'SUGNUM'
+      Size = 128
+    end
+  end
+  object DSContracts: TDataSource
+    DataSet = ODSContracts
+    Left = 184
+    Top = 85
+  end
+  object AValute: TOracleDataSet
+    SQL.Strings = (
+      'select valute, val_name, valu_name, valu_short from avalute')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000040000000C000000560041004C005500540045000100000000001000
+      0000560041004C005F004E0041004D0045000100000000001200000056004100
+      4C0055005F004E0041004D00450001000000000014000000560041004C005500
+      5F00530048004F0052005400010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 320
+    Top = 24
+    object AValuteVALU_NAME: TWideStringField
+      FieldName = 'VALU_NAME'
+      Size = 25
+    end
+    object AValuteVALUTE: TIntegerField
+      FieldName = 'VALUTE'
+      Required = True
+    end
+    object AValuteVAL_NAME: TWideStringField
+      FieldName = 'VAL_NAME'
+      Size = 10
+    end
+    object AValuteVALU_SHORT: TWideStringField
+      FieldName = 'VALU_SHORT'
+      Size = 10
+    end
+  end
+  object AValuteData: TDataSource
+    DataSet = AValute
+    Left = 288
+    Top = 24
+  end
+  object OPCOMMON: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'INS_COMMON'
+    Left = 24
+    Top = 16
+  end
+  object sb_aca: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'sb_aca'
+    Left = 368
+    Top = 8
+  end
+end

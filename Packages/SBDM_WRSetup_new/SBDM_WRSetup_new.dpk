@@ -1,0 +1,46 @@
+package SBDM_WRSetup_new;
+
+{$R *.res}
+{$ALIGN 8}
+{$ASSERTIONS ON}
+{$BOOLEVAL OFF}
+{$DEBUGINFO ON}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LOCALSYMBOLS ON}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION ON}
+{$OVERFLOWCHECKS OFF}
+{$RANGECHECKS OFF}
+{$REFERENCEINFO ON}
+{$SAFEDIVIDE OFF}
+{$STACKFRAMES OFF}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS ON}
+{$WRITEABLECONST OFF}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
+{$IMPLICITBUILD ON}
+
+requires
+  vcl,
+  DOA41dxe,
+  Ehlib50,
+  sboapi50,
+  CMVCL50,
+  DclEhlib50,
+  SBTranslate,
+  SBDM_Common_new,
+  rtl;
+
+contains
+  SBBookmarkAddEditunt_new in 'SBBookmarkAddEditunt_new.pas' {SBBookmarkAddEditForm_new},
+  SBTemplateAddEditUnt_new in 'SBTemplateAddEditUnt_new.pas' {SBTemplAddEditForm_new},
+  SBWRBookmarksTuning_new in 'SBWRBookmarksTuning_new.pas' {SBWRBookmarkSetup_new},
+  SBWRSetupDataModImpl_new in 'SBWRSetupDataModImpl_new.pas' {SBWRSetupDataMod_new: TDataModule},
+  SBWRSetupLoader_new in 'SBWRSetupLoader_new.pas',
+  SBWRTemplatesTuning_new in 'SBWRTemplatesTuning_new.pas' {SBWRTemplateSetup_new};
+
+end.

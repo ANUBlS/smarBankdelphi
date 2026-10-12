@@ -1,0 +1,149 @@
+﻿unit TrancheCreditCardsUnit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, Buttons, ComCtrls, Mask, DBCtrlsEh, DBLookupEh,
+  CMExcelExport;
+
+type
+  TMainTrForm = class(TForm)
+    BitBtn1: TBitBtn;
+    BitBtn2: TBitBtn;
+    TrDTP: TDateTimePicker;
+    Label1: TLabel;
+    DBCFilial: TDBLookupComboboxEh;
+    Label2: TLabel;
+    BitBtn3: TBitBtn;
+    CMExcelExport: TCMExcelExport;
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure BitBtn1Click(Sender: TObject);
+    procedure BitBtn3Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  MainTrForm: TMainTrForm;
+
+  procedure InitPlugin(s:string);export;
+
+implementation
+
+{$R *.DFM}
+uses CommonDecls,TrCTransactionUnit,
+     TrCreditCDatModImpl,TrProgressUnit,sbsystem;
+
+procedure InitPlugin(s:string);export;
+begin
+   MainTrForm.ShowModal;
+end;
+
+exports
+  InitPlugin;
+
+procedure TMainTrForm.FormCreate(Sender: TObject);
+begin
+  CreditCardDatMod := TCreditCardDatMod.Create(Self);
+  CreditCartdsForm := TCreditCartdsForm.Create(Self);
+  TrProgressForm := TTrProgressForm.Create(Self);
+  TrDTP.DateTime := Get_CurrentDate;
+  DBCFilial.KeyValue := Get_BranchID;
+  end;
+
+procedure TMainTrForm.FormDestroy(Sender: TObject);
+begin
+   CreditCardDatMod.Free;
+   CreditCartdsForm.Free;
+   TrProgressForm.Free;
+end;
+
+procedure TMainTrForm.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+   Resize := False;
+end;
+
+procedure TMainTrForm.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+   if ord(Key) = VK_ESCAPE then Close;
+end;
+
+procedure TMainTrForm.BitBtn1Click(Sender: TObject);
+var    TrDate :TDateTime;
+       CredID,CredCount :integer;
+begin
+   TrDate := Integer(Trunc(TrDTP.DateTime));
+   with CreditCardDatMod,CM_CARDS do
+   begin
+      Session.Commit;
+      CreditCards.CloseAll;
+      CreditCards.SQL.Text := CallStringFunction('Get_CreditCards',[DBCFilial.KeyValue]);
+//     memo1.text :=CallStringFunction('Get_CreditCards',[DBCFilial.KeyValue]);
+   //    exit;
+      CreditCards.open;
+      CreditCards.First;
+      CredCount := CreditCards.RecordCount;
+
+      with TrProgressForm, TrPrB do
+      begin
+         Max:= CredCount;
+         Position:=0;
+         Step := 1;
+      end;
+
+     TrProgressForm.Show;
+
+      while not CreditCards.Eof do
+      begin
+
+         CredID := CreditCards.FieldByName('ID').AsInteger;
+         CallProcedure('Tranche_CreditCards',[CredID,TrDate]);
+         TrProgressForm.TrPrB.Position := CreditCards.RecNo;
+         CreditCards.Next;
+         CommonApplication.ProcessMessages;
+
+      end;
+      TrProgressForm.Close;
+      if Transactions.Active then
+         Transactions.Refresh ;
+      Transactions.Open;
+      CreditCartdsForm.ShowModal;
+   end;
+end;
+
+procedure TMainTrForm.BitBtn3Click(Sender: TObject);
+var BrID :Integer;
+begin
+  BrID := DBCFilial.KeyValue;
+   with CreditCardDatMod,Controls do
+   begin
+      CloseAll;
+      SQL.Text:= CM_CARDS.callStringFunction('Control_CreditCards',[BrID]);
+      Open;
+      if RecordCount=0then
+      begin
+      ShowMessage('Heç bir əməliyyat aparılmayıb');
+     exit;
+      end;
+
+   end;
+
+   with CMExcelExport do
+   begin
+      Connect;
+      ExportDataset(CreditCardDatMod.Controls,'Yoxlama',true);
+   end;
+end;
+
+initialization
+ MainTrForm := TMainTrForm.Create(CommonApplication);
+
+end.

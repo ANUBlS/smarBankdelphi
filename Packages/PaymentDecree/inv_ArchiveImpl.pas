@@ -1,0 +1,387 @@
+﻿unit inv_ArchiveImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Menus, ImgList, StdCtrls, Mask, DBCtrls, ComCtrls, ToolWin, Grids,
+  DBGrids, ExtCtrls,OracleData, OleServer,comobj, ExcelXP;
+
+type
+  Tinv_Archive = class(TForm)
+    Panel1: TPanel;
+    DBArchiveGrid: TDBGrid;
+    ToolBar1: TToolBar;
+    ToolButton6: TToolButton;
+    ToolButton4: TToolButton;
+    ToolButton1: TToolButton;
+    ToolButton7: TToolButton;
+    ToolButton8: TToolButton;
+    Panel2: TPanel;
+    Assignment: TDBEdit;
+    GroupBox1: TGroupBox;
+    EditPNUM: TEdit;
+    EditDACC_NO: TEdit;
+    EditKACC_NO: TEdit;
+    EditAMMOUNT: TEdit;
+    EditKACCNAME: TEdit;
+    EditKBNAME: TEdit;
+    ImageList: TImageList;
+    procedure FormCreate(Sender: TObject);
+    procedure ToolButton6Click(Sender: TObject);
+    procedure ToolButton1Click(Sender: TObject);
+    procedure ToolButton8Click(Sender: TObject);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure EditPNUMKeyPress(Sender: TObject; var Key: Char);
+    procedure ActionSpeedSearchExecute(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  inv_Archive: Tinv_Archive;
+
+implementation
+
+ uses PaymentDataModul, PaymentDecreeImpl,CurrencyToHR_Azeri_Impl,
+ UntMainReport, UntSecondReport, sboapiDataModuleImpl, SBTranslateProc;
+{$R *.dfm}
+
+procedure Tinv_Archive.EditPNUMKeyPress(Sender: TObject; var Key: Char);
+begin
+ if Key = #13  then
+  begin
+   ActionSpeedSearchExecute(Sender);
+  end;
+end;
+
+procedure Tinv_Archive.ActionSpeedSearchExecute(
+  Sender: TObject);
+var
+  SearchField : string;
+  SearchOptions : TSearchRecordOptions;
+begin
+  SearchOptions := [srIgnoreCase ,srPartialMatch ];
+
+  with Sender as TEdit  do
+  begin
+    SearchField := copy(Name,5,length(Name));
+    with  TOracleDataSet(DBArchiveGrid.DataSource.DataSet) do
+    if  not SearchRecord(
+                  SearchField
+                 ,Text
+                 ,SearchOptions + [srFromCurrent , srForward ]
+                 ) then
+    if MessageDlg(
+              'Axtarış sona çatdı.'+#13+'Əvvəldən başlansın?'
+             ,mtInformation
+             ,[mbNo , mbYes]
+             ,0
+             ) = mrYes  then
+    if not SearchRecord(
+                 SearchField
+                ,Text
+                ,SearchOptions + [ srFromBeginning ]
+                )  then
+    MessageDlg('Yazı tapılmayıb!',mtInformation,[mbOK],0);
+ end;
+end;
+
+procedure Tinv_Archive.FormCreate(Sender: TObject);
+begin
+  SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure Tinv_Archive.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+if ord(key)=vk_escape then  close;
+end;
+
+procedure Tinv_Archive.ToolButton1Click(Sender: TObject);
+var
+PaymentNumber: String;
+deleteID :Integer;
+begin
+
+   PaymentDataMod.Ds_Inv_child.close;
+   PaymentDataMod.Ds_Inv_child.SetVariable('INV_ID',PaymentDataMod.Ds_Inv_Archive.FieldByName('id').AsInteger);
+   PaymentDataMod.Ds_Inv_child.open;
+
+
+   if PaymentDataMod.Ds_Inv_child.RecordCount>0 then
+   begin
+     ShowMessage('Müqavilə ilə bağlı məlumatlar tam silinməmiş silinmə etmək olmaz!!!');
+     exit;
+   end;
+
+PaymentNumber :=PaymentDataMod.Ds_Inv_Archive.FieldByName('NUM').AsString;
+ if MessageDlg(Format('Do you want to delete Invoices №%s?  ',[PaymentNumber]),mtConfirmation,mbYesNoCancel,0)=mrYes then
+ with PaymentDataMod.Ds_Inv_Archive,PaymentDataMod.OPPayment do
+  begin
+   deleteID :=FieldByName('ID').AsInteger;
+   CallProcedure('delete_invoices',[deleteID]);
+   Refresh;
+  end;
+end;
+
+procedure Tinv_Archive.ToolButton6Click(Sender: TObject);
+begin
+ PaymentDecree.isUpdate :=true;
+
+ PaymentDecree.cid:=DBArchiveGrid.DataSource.DataSet.FieldByName('ID').AsInteger;
+ //ShowMessage(IntToStr(PaymentDecree.cid));
+  with PaymentDataMod.Ds_Inv_Archive,PaymentDecree do
+  if IsEmpty then
+    begin
+     ShowMessage('Cədvəldə Məlumat Yoxdur!!!');
+     Exit;
+    end
+    else
+    begin
+GroupBox5.Visible:=false;
+ToolButton12.Enabled:=true;
+Panel25.Visible:=false;
+GroupBox4.Visible:=false;
+GroupBox6.Visible:=false;
+Panel26.Visible:=false;
+GroupBox7.Visible:=true;
+GroupBox8.Visible:=true;
+edPrescription.Text:='';
+EDAInn.Visible:=false;
+CheckBox.Visible:=false;
+Col1.Text:='';
+Col2.Text:='';
+Col3.Text:='';
+Col4.Text:='';
+
+    PaymentDataMod.Ds_Inv_child.Close;
+    PaymentDataMod.Ds_Inv_child.SetVariable('INV_ID',cid);
+    PaymentDataMod.Ds_Inv_child.Open;
+
+   DateTimePicker1.DateTime :=  FieldByName('pdate').AsDateTime;
+   DBName.Text:=    FieldByName('dbname').AsString  ;
+   DBCod.Text:=   FieldByName('dbcod').AsString   ;
+   dbinn.Text:=   FieldByName('dbinn').AsString  ;
+   DBCorAcc.Text:=   FieldByName('dacc_no').AsString   ;
+   DBSwift.Text:=   FieldByName('dbswift').AsString    ;
+   CBKBName.text :=FieldByName('kbname').AsString;
+   EKBInn.text :=FieldByName('kbinn').AsString;
+   DBLookupComboBox2.KeyValue :=FieldByName('kacc_no').AsString;
+   EdNum.Text :=FieldByName('num').AsString;
+   edPrescription.text :=FieldByName('prescription').AsString;
+   Col1.Text :=FieldByName('col1').AsString;
+   Col2.text :=FieldByName('col2').AsString;
+   Col3.text :=FieldByName('col3').AsString;
+   Col4.Text :=FieldByName('col4').AsString;
+   EDAName.Text:=PaymentDataMod.Ds_Acoount.FieldByName('name').AsString;
+
+    DBGrid1.Columns.Items[1].Title.Caption:=FieldByName('col1').AsString;
+    DBGrid1.Columns.Items[2].Title.Caption:=FieldByName('col2').AsString;
+    DBGrid1.Columns.Items[3].Title.Caption:=FieldByName('col3').AsString;
+    DBGrid1.Columns.Items[4].Title.Caption:=FieldByName('col4').AsString;
+    DBGrid1.Refresh
+    end;
+     close;
+end;
+
+
+
+procedure Tinv_Archive.ToolButton8Click(Sender: TObject);
+var
+
+
+   V,Sheet,Sheets,excel  :Variant;
+   cell,row,l,m    :Integer;
+   i,j,ids : integer;
+   formats,debet,kredit,summa,destination,vbic:string;
+   output:TextFile;
+   FileName,Swmessage,dir,edit_ref,BeginMessage,Endmesage,valu:String;
+   Index :Integer;
+   WaitNextConfirm, WillRefresh: Boolean;
+   TransactionID :Integer;
+begin
+PaymentDataMod.Ds.Close;
+PaymentDataMod.Ds.SetVariable('pid',PaymentDataMod.Ds_Inv_Archive.FieldByName('id').AsInteger);
+PaymentDataMod.Ds.open;
+
+PaymentDataMod.Ds2.Close;
+PaymentDataMod.Ds2.SetVariable('pid',PaymentDataMod.Ds_Inv_Archive.FieldByName('id').AsInteger);
+PaymentDataMod.Ds2.open;
+
+
+    Excel := CreateOleObject('Excel.Application');
+
+    Excel.Workbooks.Add;
+
+excel.range['B1','B8'].Borders.weight:=2;
+excel.range['D1','D8'].Borders.weight:=2;
+excel.range['C1','C8'].Borders.weight:=2;
+excel.Range['C1', 'C8'].Mergecells := True;
+//excel.Range['C1:C8', 'D1:D8'].Mergecells := True;
+//excel.Range['D4', 'D8'].Mergecells := True;
+
+             excel.Cells[1,2]:=PaymentDataMod.Ds.FieldByName('dbname').AsString;
+             excel.Cells[2,2]:='VÖEN '+ PaymentDataMod.Ds.FieldByName('dbinn').AsString;
+             excel.Cells[3,2]:=PaymentDataMod.Ds.FieldByName('kbname').AsString;
+             excel.Cells[4,2]:='H/h - '+PaymentDataMod.Ds.FieldByName('dacc_no').AsString;
+             excel.Cells[5,2]:='VÖEN '+PaymentDataMod.Ds.FieldByName('kbinn').AsString;
+             excel.Cells[6,2]:='M/h '+PaymentDataMod.Ds.FieldByName('kacc_no').AsString;
+             excel.Cells[7,2]:='Kod '+PaymentDataMod.Ds.FieldByName('dbcod').AsString;
+             excel.Cells[8,2]:='SWIFT Bik   '+PaymentDataMod.Ds.FieldByName('dbswift').AsString;
+             excel.range['B1','B8'].Font.BOLD:=true;
+
+             excel.Cells[3,4]:=PaymentDataMod.Ds.FieldByName('kbname').AsString;
+             excel.Cells[4,4]:=PaymentDataMod.Ds.FieldByName('kbinn').AsString;
+             excel.range['D3','D4'].Font.BOLD:=true;
+
+             excel.Cells[9,3]:='HESAB '+PaymentDataMod.Ds.FieldByName('num').AsString;
+             excel.Cells[9,3].Font.BOLD:=true;
+
+             excel.Cells[11,3]:='Əsas: '+PaymentDataMod.Ds.FieldByName('prescription').AsString;
+             excel.Cells[11,3].wraptext:=true;
+             excel.Cells[11,3].Font.BOLD:=true;
+            excel.range['A13','E13'].Borders.weight:=2;
+            excel.Cells[13,1]:='No';
+            excel.Cells[13,2]:=PaymentDataMod.Ds.FieldByName('col1').AsString;
+            excel.Cells[13,3]:=PaymentDataMod.Ds.FieldByName('col2').AsString;
+            excel.Cells[13,4]:=PaymentDataMod.Ds.FieldByName('col3').AsString;
+            excel.Cells[13,5]:=PaymentDataMod.Ds.FieldByName('col4').AsString;
+            excel.range['A13','F13'].wraptext:=true;
+            excel.range['A13','F13'].Font.BOLD:=true;
+
+
+
+
+      //------------------------------------------------------------------------------------create prows
+
+      PaymentDataMod.Ds_Inv_child.Close;
+      PaymentDataMod.Ds_Inv_child.SetVariable('INV_ID',PaymentDataMod.Ds_Inv_Archive.FieldByName('id').AsInteger);
+      PaymentDataMod.Ds_Inv_child.open;
+
+
+
+      PaymentDataMod.Ds_Inv_child.First;
+           for index:=0 to PaymentDataMod.Ds_Inv_child.RecordCount-1 {DBGrid2.DataSource.DataSet.RecordCount-1} do
+               begin
+
+
+             excel.range['A13','F13'].wraptext:=true;
+             excel.Cells[index+14,1].NUMBERFORMAT:=AnsiChar('@');
+             excel.Cells[index+14,1]:=PaymentDataMod.Ds_Inv_child.FieldByName('id').asstring;
+             excel.Cells[index+14,1].ColumnWidth:=20;
+             excel.Cells[index+14,1].Borders.weight:=2;
+
+
+ 
+
+
+             excel.Cells[index+14,2]:=PaymentDataMod.Ds_Inv_child.FieldByName('col1').asstring;
+             excel.Cells[index+14,2].ColumnWidth:=20;
+             excel.Cells[index+14,2].Borders.weight:=2;
+
+
+              ///////////////////////////////////////// COl2/////////////////////////////////
+             excel.Cells[index+14,3]:=PaymentDataMod.Ds_Inv_child.FieldByName('col2').asstring;
+             excel.Cells[index+14,3].ColumnWidth:=20;
+             excel.Cells[index+14,3].Borders.weight:=2;
+              ///////////////////////////////////////// COl2/////////////////////////////////
+
+
+              ///////////////////////////////////////// COl3/////////////////////////////////
+
+             excel.Cells[index+14,4]:=PaymentDataMod.Ds_Inv_child.FieldByName('col3').asstring;
+             excel.Cells[index+14,4].ColumnWidth:=20;
+             excel.Cells[index+14,4].Borders.weight:=2;
+             ///////////////////////////////////////// COl3/////////////////////////////////
+
+
+             ///////////////////////////////////////// COl4/////////////////////////////////
+             excel.Cells[index+14,5]:=PaymentDataMod.Ds_Inv_child.FieldByName('col4').asstring;
+             excel.Cells[index+14,5].ColumnWidth:=20;
+             excel.Cells[index+14,5].Borders.weight:=2;
+             ///////////////////////////////////////// COl4/////////////////////////////////
+
+            { excel.Cells[index+18,4]:=PaymentDataMod.Ds2.FieldByName('sum_all_yekun').asstring;
+             excel.Cells[index+18,4].Borders.weight:=2;
+             excel.Cells[index+18,4].Font.BOLD:=true;        }
+
+
+
+
+
+                PaymentDataMod.Ds_Inv_child.Next;
+              end;
+
+             excel.Cells[index+14,2]:='CƏMİ:';
+             excel.Cells[index+14,2].Font.BOLD:=true;
+             excel.Cells[index+14,2].Borders.weight:=2;
+             excel.Cells[index+14,1].Borders.weight:=2;
+
+             excel.Cells[index+15,2]:='ƏDV 18%:';
+             excel.Cells[index+15,2].Font.BOLD:=true;
+             excel.Cells[index+15,2].Borders.weight:=2;
+             excel.Cells[index+15,1].Borders.weight:=2;
+
+             excel.Cells[index+16,2]:='YEKUN:';
+             excel.Cells[index+16,2].Borders.weight:=2;
+             excel.Cells[index+16,2].Font.BOLD:=true;
+             excel.Cells[index+16,1].Borders.weight:=2;
+
+               ///////////////////////////////////////// COl2/////////////////////////////////
+             excel.Cells[index+14,3]:=PaymentDataMod.Ds2.FieldByName('CEMI_COL2').asstring;
+             excel.Cells[index+14,3].Borders.weight:=2;
+             excel.Cells[index+14,3].Font.BOLD:=true;
+
+             excel.Cells[index+15,3]:=PaymentDataMod.Ds2.FieldByName('edv_col2').asstring;
+             excel.Cells[index+15,3].Borders.weight:=2;
+             excel.Cells[index+15,3].Font.BOLD:=true;
+
+             excel.Cells[index+16,3]:=PaymentDataMod.Ds2.FieldByName('yekun_col2').asstring;
+             excel.Cells[index+16,3].Borders.weight:=2;
+             excel.Cells[index+16,3].Font.BOLD:=true;
+              ///////////////////////////////////////// COl2/////////////////////////////////
+
+              ///////////////////////////////////////// COl3/////////////////////////////////
+             excel.Cells[index+14,4]:=PaymentDataMod.Ds2.FieldByName('CEMI_COL3').asstring;
+             excel.Cells[index+14,4].Borders.weight:=2;
+             excel.Cells[index+14,4].Font.BOLD:=true;
+
+             excel.Cells[index+15,4]:=PaymentDataMod.Ds2.FieldByName('edv_col3').asstring;
+             excel.Cells[index+15,4].Borders.weight:=2;
+             excel.Cells[index+15,4].Font.BOLD:=true;
+
+             excel.Cells[index+16,4]:=PaymentDataMod.Ds2.FieldByName('yekun_col3').asstring;
+             excel.Cells[index+16,4].Borders.weight:=2;
+             excel.Cells[index+16,4].Font.BOLD:=true;
+             ///////////////////////////////////////// COl3/////////////////////////////////
+
+             ///////////////////////////////////////// COl4/////////////////////////////////
+             excel.Cells[index+14,5]:=PaymentDataMod.Ds2.FieldByName('CEMI_COL4').asstring;
+             excel.Cells[index+14,5].Borders.weight:=2;
+             excel.Cells[index+14,5].Font.BOLD:=true;
+
+             excel.Cells[index+15,5]:=PaymentDataMod.Ds2.FieldByName('edv_col4').asstring;
+             excel.Cells[index+15,5].Borders.weight:=2;
+             excel.Cells[index+15,5].Font.BOLD:=true;
+
+             excel.Cells[index+16,5]:=PaymentDataMod.Ds2.FieldByName('yekun_col4').asstring;
+             excel.Cells[index+16,5].Borders.weight:=2;
+             excel.Cells[index+16,5].Font.BOLD:=true;
+            ///////////////////////////////////////// COl4/////////////////////////////////
+      //--------------------------------------------end create prows
+
+
+
+      Excel.columns.AutoFit;
+      excel.visible:=true;
+
+
+
+
+
+
+end;
+
+end.

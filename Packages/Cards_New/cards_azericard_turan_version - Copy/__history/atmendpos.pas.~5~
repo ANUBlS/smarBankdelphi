@@ -1,0 +1,124 @@
+﻿unit atmendpos;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, LDialogs,
+  NLSLocalizer, StdCtrls, SearchEdit, DBCtrls, Grids, DBGrids,oracledata,
+  CMExcelExport, ExtCtrls;
+
+type
+  Tatmpos = class(TForm)
+    Label3: TLabel;
+    Panel1: TPanel;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    Label6: TLabel;
+    Label7: TLabel;
+    Label8: TLabel;
+    Label9: TLabel;
+    Label10: TLabel;
+    Button1: TButton;
+    Button2: TButton;
+    DBLookupComboBox1: TDBLookupComboBox;
+    DBLookupComboBox2: TDBLookupComboBox;
+    SearchEdit1: TSearchEdit;
+    SearchEdit2: TSearchEdit;
+    SearchEdit3: TSearchEdit;
+    ComboBox1: TComboBox;
+    Edit1: TEdit;
+    Edit2: TEdit;
+    Button3: TButton;
+    Edit3: TEdit;
+    CMExcelExport1: TCMExcelExport;
+    Panel2: TPanel;
+    DBGrid1: TDBGrid;
+    procedure Button1Click(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+    procedure DBGrid1TitleClick(Column: TColumn);
+    procedure Button3Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  atmpos: Tatmpos;
+
+implementation
+
+uses Unit18,SBTranslateProc,sboapiDataModuleImpl;
+
+{$R *.DFM}
+
+procedure Tatmpos.Button1Click(Sender: TObject);
+begin
+DataMod_CARDS.SB_ACA.CallProcedure('CheckAdvancedObjectAccess', ['card_atmpossave']);
+if (ComboBox1.Text<>'') and  (Edit1.Text<>'') and (Edit2.Text<>'') and (DBLookupComboBox2.Text<>'') and (DBLookupComboBox1.Text<>'') and (SearchEdit1.Text<>'') then
+
+if MessageDlg('Yadda saxlanılsın?',mtinformation,[mbyes,mbno],0)=mryes then
+DataMod_CARDS.mainpacket.CallProcedure('new_BANKOMAT',[ComboBox1.text,
+                                                       edit1.text,
+                                                       edit2.text,
+                                                       DBLookupComboBox2.text,
+                                                       DBLookupComboBox1.text,
+                                                       SearchEdit3.text,
+                                                       SearchEdit2.text,
+                                                       SearchEdit1.text,
+                                                       edit3.text]) ;
+
+ DBGrid1.DataSource.DataSet.close;
+ DBGrid1.DataSource.DataSet.open;
+
+end;
+
+procedure Tatmpos.Button2Click(Sender: TObject);
+begin
+DataMod_CARDS.SB_ACA.CallProcedure('CheckAdvancedObjectAccess', ['card_atmposdelete']);
+if MessageDlg('Secilmiş sətir silinsin?',mtinformation,[mbyes,mbno],0)=mryes then
+DataMod_CARDS.mainpacket.CallProcedure('atm_delete',[DataMod_CARDS.bankomats.fieldbyname('id').asinteger]) ;
+
+//DataMod_CARDS.bankomats.Delete;
+//DataMod_CARDS.bankomats.Session.commit;
+DataMod_CARDS.bankomats.Refresh;
+end;
+
+procedure Tatmpos.DBGrid1TitleClick(Column: TColumn);
+var
+   TitleName :string;
+   SortPosition: word;
+begin
+ SortPosition :=100;
+ //OrderedTitle :=Column.FieldName; //H.R. 24.06.2008
+ if (DBGrid1.DataSource.DataSet.IsEmpty) or (Column.FieldName = EmptyStr) then Exit;
+ Screen.Cursor :=crHourGlass;
+ TitleName :=Column.FieldName;
+ with TOracleDataSet(DBGrid1.DataSource.DataSet) do
+  try
+  
+   SortPosition :=SQL.Add('ORDER BY '+ TitleName);
+   Refresh;
+  finally
+   SQL[SortPosition] :=EmptyStr;
+   Screen.Cursor :=crDefault;
+  end;
+end;
+
+procedure Tatmpos.FormCreate(Sender: TObject);
+begin
+  SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure Tatmpos.Button3Click(Sender: TObject);
+begin
+DataMod_CARDS.SB_ACA.CallProcedure('CheckAdvancedObjectAccess', ['card_atmposexcel']);
+  if not CMExcelExport1.Connected then CMExcelExport1.Connect;
+  CMExcelExport1.ExportDataset(DataMod_CARDS.bankomats,'CARDS',true);
+  CMExcelExport1.Disconnect;
+end;
+
+end.

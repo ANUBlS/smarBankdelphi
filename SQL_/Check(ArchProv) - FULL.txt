@@ -1,0 +1,32 @@
+select acc_id, datdate, side, arch, prov
+from (
+    /* DEBIT */
+    select
+        a.acc_id,
+        a.datdate,
+        'D' as side,
+        a.pok_obr_d as arch,
+        nvl(sum(p.lammount), 0) as prov
+    from archost a
+    left join provarch p
+        on a.acc_id = p.debt
+       and a.datdate = p.dat
+    group by a.acc_id, a.datdate, a.pok_obr_d
+
+    union all
+
+    /* CREDIT */
+    select
+        a.acc_id,
+        a.datdate,
+        'K' as side,
+        a.pok_obr_k as arch,
+        nvl(sum(p.lammount), 0) as prov
+    from archost a
+    left join provarch p
+        on a.acc_id = p.kredit
+       and a.datdate = p.dat
+    group by a.acc_id, a.datdate, a.pok_obr_k
+)
+where arch <> prov
+  and arch <> 0;

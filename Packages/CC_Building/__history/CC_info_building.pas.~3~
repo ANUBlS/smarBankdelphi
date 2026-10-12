@@ -1,0 +1,1187 @@
+                                   {------------------------------------}
+                                   {(c) Smart Systems Technology Ltd.   }
+                                   {            2006                    }
+                                   {           }
+                                   {------------------------------------}
+
+
+
+
+
+
+unit CC_info_building;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActiveX, AxCtrls,Db, CC_Building_PR_TLB, StdVcl, Grids, DBGrids, StdCtrls,
+  ExtCtrls, Buttons, Mask, DBCtrls, NLSLocalizer, ComCtrls;
+
+type
+  TCC_Building = class(TActiveForm, ICC_Building)
+    Panel1: TPanel;
+    GroupBox1: TGroupBox;
+    DBGrid1: TDBGrid;
+    GroupBox2: TGroupBox;
+    DBGrid2: TDBGrid;
+    GroupBox3: TGroupBox;
+    DBGrid3: TDBGrid;
+    C_Searchbox: TGroupBox;
+    Editno: TEdit;
+    Editname: TEdit;
+    C_Searchbox_: TGroupBox;
+    SpeedButton9: TSpeedButton;
+    SpeedButton10: TSpeedButton;
+    SpeedButton11: TSpeedButton;
+    B_Searchbox: TGroupBox;
+    Edit_name: TEdit;
+    Edit_adress: TEdit;
+    Edit_entrance: TEdit;
+    Edit_flats: TEdit;
+    F_Searchbox: TGroupBox;
+    Edit_code: TEdit;
+    EditFlatnumber: TEdit;
+    editentrance: TEdit;
+    Editfloor: TEdit;
+    Editroom: TEdit;
+    Editarea: TEdit;
+    Editprice1: TEdit;
+    editpricegen: TEdit;
+    SpeedButton13: TSpeedButton;
+    Groupbox: TGroupBox;
+    SpeedButton5: TSpeedButton;
+    SpeedButton6: TSpeedButton;
+    SpeedButton7: TSpeedButton;
+    SpeedButton14: TSpeedButton;
+    F_Searchbox_: TGroupBox;
+    SpeedButton1: TSpeedButton;
+    SpeedButton2: TSpeedButton;
+    SpeedButton3: TSpeedButton;
+    SpeedButton15: TSpeedButton;
+    SpeedButton4: TSpeedButton;
+    SpeedButton12: TSpeedButton;
+    SpeedButton8: TSpeedButton;
+    DBEdit1: TDBEdit;
+    NLSLocalizer1: TNLSLocalizer;
+    DBEdit2: TDBEdit;
+    SpeedButton16: TSpeedButton;
+    SpeedButton17: TSpeedButton;
+    SpeedButton18: TSpeedButton;
+    Editid: TEdit;
+    SpeedButton19: TSpeedButton;
+    BitBtn1: TBitBtn;
+    procedure SpeedButton8Click(Sender: TObject);
+    procedure SpeedButton4Click(Sender: TObject);
+    procedure SpeedButton12Click(Sender: TObject);
+    procedure SpeedButton9Click(Sender: TObject);
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure SpeedButton5Click(Sender: TObject);
+    procedure DBGrid1TitleClick(Column: TColumn);
+    procedure DBGrid1CellClick(Column: TColumn);
+    procedure DBGrid2TitleClick(Column: TColumn);
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure DBGrid2CellClick(Column: TColumn);
+    procedure SpeedButton11Click(Sender: TObject);
+    procedure SpeedButton10Click(Sender: TObject);
+    procedure EditnoChange(Sender: TObject);
+    procedure EditnameChange(Sender: TObject);
+    procedure EditnoExit(Sender: TObject);
+    procedure EditnameExit(Sender: TObject);
+    procedure SpeedButton7Click(Sender: TObject);
+    procedure SpeedButton3Click(Sender: TObject);
+    procedure Edit_nameChange(Sender: TObject);
+    procedure Edit_adressChange(Sender: TObject);
+    procedure Edit_entranceChange(Sender: TObject);
+    procedure Edit_flatsChange(Sender: TObject);
+    procedure Edit_nameExit(Sender: TObject);
+    procedure Edit_adressExit(Sender: TObject);
+    procedure Edit_entranceExit(Sender: TObject);
+    procedure Edit_flatsExit(Sender: TObject);
+    procedure Edit3Change(Sender: TObject);
+    procedure CheckBox1Click(Sender: TObject);
+    procedure SpeedButton16Click(Sender: TObject);
+    procedure SpeedButton17Click(Sender: TObject);
+    procedure SpeedButton18Click(Sender: TObject);
+    procedure SpeedButton6Click(Sender: TObject);
+    procedure SpeedButton2Click(Sender: TObject);
+    procedure SpeedButton15Click(Sender: TObject);
+    procedure SpeedButton13Click(Sender: TObject);
+    procedure EditidChange(Sender: TObject);
+    procedure DBGrid1DblClick(Sender: TObject);
+    procedure DBGrid2DblClick(Sender: TObject);
+    procedure DBGrid3DblClick(Sender: TObject);
+    procedure EditidExit(Sender: TObject);
+    procedure DBGrid3TitleClick(Column: TColumn);
+    procedure Edit_codeChange(Sender: TObject);
+    procedure EditFlatnumberChange(Sender: TObject);
+    procedure editentranceChange(Sender: TObject);
+    procedure EditfloorChange(Sender: TObject);
+    procedure EditroomChange(Sender: TObject);
+    procedure EditareaChange(Sender: TObject);
+    procedure Editprice1Change(Sender: TObject);
+    procedure editpricegenChange(Sender: TObject);
+    procedure SpeedButton19Click(Sender: TObject);
+    procedure BitBtn1Click(Sender: TObject);
+  private
+    { Private declarations }
+    FEvents: ICC_BuildingEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+  public
+    { Public declarations }
+    procedure Initialize; override;
+    procedure indata;
+  end;
+
+implementation
+
+uses ComObj, ComServ, CC_Company, CC_Datamodule, CC_info_house, CC_Flat,
+  CC_Edit_Company, CC_Edit_House, CC_Edit_Flat;
+
+{$R *.DFM}
+
+{ TCC_Building }
+
+procedure TCC_Building.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_CC_BuildingPage); }
+end;
+
+procedure TCC_Building.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as ICC_BuildingEvents;
+end;
+
+procedure TCC_Building.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TCC_Building.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TCC_Building.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TCC_Building.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TCC_Building.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TCC_Building.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TCC_Building.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TCC_Building.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TCC_Building.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TCC_Building.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TCC_Building.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TCC_Building.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TCC_Building.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TCC_Building.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TCC_Building.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TCC_Building.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TCC_Building.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TCC_Building.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TCC_Building.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TCC_Building._Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TCC_Building.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TCC_Building.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TCC_Building.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TCC_Building.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TCC_Building.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TCC_Building.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TCC_Building.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TCC_Building.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TCC_Building.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TCC_Building.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TCC_Building.Set_AxBorderStyle(Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TCC_Building.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TCC_Building.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TCC_Building.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TCC_Building.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TCC_Building.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TCC_Building.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TCC_Building.Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TCC_Building.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TCC_Building.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TCC_Building.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TCC_Building.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TCC_Building.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TCC_Building.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+procedure TCC_Building.SpeedButton8Click(Sender: TObject);
+begin
+with CC_DataMod.CC_building do
+ if IsEmpty then
+    begin
+     ShowMessage('ўеч бир бина гейд олунмайыб!');
+     Exit;
+    end
+  else begin
+if B_Searchbox.Visible=false then
+   B_Searchbox.Visible :=true
+   else
+   B_Searchbox.Visible :=false;
+
+end;
+ end;
+procedure TCC_Building.SpeedButton4Click(Sender: TObject);
+begin
+Edit_code.Text:='';
+EditFlatnumber.Text:='';
+editentrance.Text:='';
+Editfloor.Text:='';
+Editroom.Text:='';
+Editarea.Text:='';
+Editprice1.Text:='';
+editpricegen.Text:='';
+{with CC_DataMod.CC_Buyer_Flat do
+ if IsEmpty then
+    begin
+     ShowMessage('ўеч бир м€нзил гейд олунмайыб!');
+     Exit;
+    end
+  else begin}
+if F_Searchbox.Visible=false then
+   F_Searchbox.Visible :=true
+   else
+   F_Searchbox.Visible :=false;
+
+end;
+      
+procedure TCC_Building.SpeedButton12Click(Sender: TObject);
+begin
+with CC_DataMod.CC_Company do
+ if IsEmpty then
+    begin
+     ShowMessage('ўеч бир ширк€т гейд олунмайыб!');
+     Exit;
+    end
+  else begin
+  if C_Searchbox.Visible=false then
+   C_Searchbox.Visible :=true
+   else
+   C_Searchbox.Visible :=false;
+
+end;  end;
+ procedure TCC_Building.InData;
+const
+   c_err_message = ' Table or View in Dataset "%s" does not exist! ';
+var
+   i: Word;
+begin
+ with CC_Datamod do
+  for i :=0 to ComponentCount -1 do
+  if (Components[i] is TDataSet) then
+   if (Components[i] as TDataSet).Tag = 1 then
+   try
+     (Components[i] as TDataSet).Open;
+   except
+     raise Exception.Create(Format(c_err_message, [(Components[i] as TDataSet).Name]));
+   end;
+end;
+procedure TCC_Building.SpeedButton9Click(Sender: TObject);
+begin
+//  try
+  ShowMessage('ozzun');
+   //CC_Add_Company :=TCC_Add_Company.Create(self);
+   //CC_Add_Company.Showmodal;
+  //finally
+   //CC_Add_Company.Release;
+  //end;
+end;
+
+procedure TCC_Building.ActiveFormCreate(Sender: TObject);
+begin
+CC_Datamod :=TCC_Datamod.Create(Self);
+Indata;
+DBGrid1CellClick(DBGrid1.Columns[0]);
+end;
+
+procedure TCC_Building.BitBtn1Click(Sender: TObject);
+begin
+  ShowMessage('ozzun');
+end;
+
+procedure TCC_Building.SpeedButton5Click(Sender: TObject);
+begin
+  with CC_DataMod.CC_Company do
+   if IsEmpty then begin
+    ShowMessage('ўеч бир ширк€т гейд олунмайыб!');
+    Exit;
+   end
+   else begin
+    try
+     CC_Add_House :=TCC_Add_House.Create(self);
+     CC_Add_House.Showmodal;
+    finally
+     CC_Add_House.Release;
+   end;
+  end;
+end;
+
+procedure TCC_Building.DBGrid1TitleClick(Column: TColumn);
+var
+   TitleName :string;
+begin
+ TitleName :=Column.FieldName;
+  with CC_DataMod.CC_Company do
+   begin
+    SetVariable('Title',TitleName);
+    Refresh;
+   end;
+
+end;
+
+procedure TCC_Building.DBGrid1CellClick(Column: TColumn);
+begin
+{  with CC_DataMod.CC_building do begin
+   Close;
+   SQL.Clear;
+   SQL.Add('Select * from cc_buildings where comp_id='''+dbedit1.text+''' ');
+   Open;
+  end;
+
+  {with CC_DataMod.cc_buyer_flat do begin
+   Close;
+   SQL.Clear;
+   SQL.Add('Select * from CC_FLAT_BUY where bld_id='''+dbedit2.text+''' ');
+   Open;
+  end;}
+  DBGrid2CellClick(DBGrid2.Columns[0]);
+end;
+
+procedure TCC_Building.DBGrid2TitleClick(Column: TColumn);
+
+var
+   TitleName :string;
+begin
+ TitleName :=Column.FieldName;
+  with CC_DataMod.CC_building do
+   begin
+    SetVariable('Title',TitleName);
+    Refresh;
+   end;
+
+end;
+
+procedure TCC_Building.SpeedButton1Click(Sender: TObject);
+begin
+with CC_DataMod.CC_building do
+ if IsEmpty then
+    begin
+     ShowMessage('ўеч бир бина гейд олунмайыб!');
+     Exit;
+    end
+  else begin
+  try
+CC_Add_flats :=TCC_Add_flats.Create(self);
+  CC_Add_flats.Showmodal;
+  finally
+  CC_Add_flats.Release;
+     end;
+
+end;
+      end;
+procedure TCC_Building.DBGrid2CellClick(Column: TColumn);
+begin
+{with CC_DataMod.cc_buyer_flat do begin
+Close;
+   SetVariable('p_bld',strtoint(DBEdit2.text));
+Open;
+  end;
+      }
+      CC_DataMod.CC_Buyer_Flat.Close;
+      CC_DataMod.CC_Buyer_Flat.sql[3]:='';
+      CC_DataMod.CC_Buyer_Flat.sql[4]:='';
+      CC_DataMod.CC_Buyer_Flat.sql[5]:='';
+      CC_DataMod.CC_Buyer_Flat.sql[6]:='';
+      CC_DataMod.CC_Buyer_Flat.sql[7]:='';
+      CC_DataMod.CC_Buyer_Flat.sql[8]:='';
+      CC_DataMod.CC_Buyer_Flat.sql[9]:='';
+      CC_DataMod.CC_Buyer_Flat.sql[10]:='';
+      CC_DataMod.CC_Buyer_Flat.sql[11]:='';
+      CC_DataMod.CC_Buyer_Flat.Open;
+end;
+
+
+
+procedure TCC_Building.SpeedButton11Click(Sender: TObject);
+var
+  p_ID :integer;
+  p_Table_Name :string;
+begin
+  with CC_DataMod.CC_Company do
+   if IsEmpty then begin
+    ShowMessage('ўеч бир ширк€т гейд олунмайыб!');
+    Exit;
+   end
+   else begin
+    p_ID :=CC_DataMod.CC_Company.FieldByName('ID').AsInteger;
+    p_Table_Name :='CC_Companies';
+    if  MessageDlg(Format('Ўирк€т силинсин?',[p_id]),mtConfirmation,mbYesNoCancel,0)=mrYes then begin
+     CC_DataMod.CC_OP.CallProcedure('del_fromTable',[p_Table_Name,p_ID]);
+     CC_DataMod.CC_Company.Refresh;
+    end;
+   end;
+end;
+
+procedure TCC_Building.SpeedButton10Click(Sender: TObject);
+begin
+with CC_DataMod.CC_Company do
+ if IsEmpty then
+    begin
+     ShowMessage('ўеч бир ширк€т гейд олунмайыб!');
+     Exit;
+    end
+  else begin
+try
+CC_Update_Company :=TCC_Update_Company.Create(self);
+  CC_Update_Company.Showmodal;
+  finally
+  CC_Update_Company.Release;
+     end;
+
+end;
+         end;
+procedure TCC_Building.EditnoChange(Sender: TObject);
+begin
+if Editno.Text<>'' then
+   CC_DataMod.CC_Company.Locate
+   ('id',Editno.Text,[loCaseInsensitive, loPartialKey]);
+     DBGrid1.Options:=[dgRowSelect,dgAlwaysShowEditor,dgTitles,dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs,dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit, dgMultiSelect];
+{with CC_DataMod.CC_building do begin
+Close;
+   SQL.clear;
+Sql.add('Select * from cc_buildings where comp_id='''+dbedit1.text+''' ');
+Open;  }
+with CC_DataMod.CC_Flat do begin
+Close;
+   SQL.clear;
+Sql.add('Select * from CC_FLATS where bld_id='''+dbedit2.text+''' ');
+Open;
+
+//end;
+  end;  end;
+procedure TCC_Building.EditnameChange(Sender: TObject);
+begin
+if Editname.Text<>'' then
+   CC_DataMod.CC_Company.Locate
+   ('comp_name',Editname.Text,[loCaseInsensitive, loPartialKey]);
+     DBGrid1.Options:=[dgRowSelect,dgAlwaysShowEditor,dgTitles,dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs,dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit, dgMultiSelect];
+ {with CC_DataMod.CC_building do begin
+Close;
+   SQL.clear;
+Sql.add('Select * from cc_buildings where comp_id='''+dbedit1.text+''' ');
+Open;
+with CC_DataMod.cc_buyer_flat do begin
+Close;
+   SQL.clear;
+Sql.add('Select * from CC_FLATS where bld_id='''+dbedit2.text+''' ');
+Open;
+  end; }
+
+  end; // end;
+
+
+procedure TCC_Building.EditnoExit(Sender: TObject);
+begin
+(Sender as Tedit).Text :='';
+end;
+
+procedure TCC_Building.EditnameExit(Sender: TObject);
+begin
+(Sender as Tedit).Text :='';
+end;
+
+procedure TCC_Building.SpeedButton7Click(Sender: TObject);
+var
+p_id :integer;
+p_table_name: string;
+begin
+with CC_DataMod.CC_building do
+ if IsEmpty then
+    begin
+     ShowMessage('ўеч бир бина гейд олунмайыб!');
+     Exit;
+    end
+  else begin
+p_id :=CC_DataMod.CC_building.fieldbyname('id').asinteger;
+p_table_name :='cc_buildings';
+  if  MessageDlg(Format('Ѕина силинсин?',[p_id]),mtConfirmation,mbYesNoCancel,0)=mrYes then
+ begin
+ CC_DataMod.CC_OP.CallProcedure('del_fromTable',[p_table_name,p_id]);
+CC_DataMod.CC_building.close;
+CC_DataMod.CC_building.open;
+
+end;
+         end;  end;
+procedure  TCC_Building.SpeedButton3Click(Sender: TObject);
+var
+p_id :integer;
+p_table_name: string;
+begin
+with CC_DataMod.CC_Buyer_Flat do
+ if IsEmpty then
+    begin
+     ShowMessage('ўеч бир м€нзил гейд олунмайыб!');
+     Exit;
+    end
+  else begin
+p_id :=CC_DataMod.CC_Buyer_Flat.fieldbyname('id').asinteger;
+p_table_name:='cc_flats';
+  if  MessageDlg(Format('ћ€нзил силинсин?',[p_id]),mtConfirmation,mbYesNoCancel,0)=mrYes then
+    begin
+CC_DataMod.CC_OP.CallProcedure('del_fromTable',[p_table_name,p_id]);
+CC_DataMod.CC_Buyer_Flat.close;
+CC_DataMod.CC_Buyer_Flat.open;
+end;
+     end;  end;
+procedure TCC_Building.Edit_nameChange(Sender: TObject);
+begin
+if Edit_name.Text<>'' then
+   CC_DataMod.CC_building.Locate
+   ('bld_name',Edit_name.Text,[loCaseInsensitive, loPartialKey]);
+     DBGrid2.Options:=[dgRowSelect,dgAlwaysShowEditor,dgTitles,dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs,dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit, dgMultiSelect];
+  {with CC_DataMod.cc_buyer_flat do begin
+Close;
+   SQL.clear;
+Sql.add('Select * from CC_FLAT_BUY where bld_id='''+dbedit2.text+''' ');
+Open;
+  end;  }
+
+     end;
+
+procedure TCC_Building.Edit_adressChange(Sender: TObject);
+begin
+if Edit_adress.Text<>'' then
+   CC_DataMod.CC_building.Locate
+   ('address',Edit_adress.Text,[loCaseInsensitive, loPartialKey]);
+     DBGrid2.Options:=[dgRowSelect,dgAlwaysShowEditor,dgTitles,dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs,dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit, dgMultiSelect];
+ {  with CC_DataMod.cc_buyer_flat do begin
+Close;
+   SQL.clear;
+Sql.add('Select * from CC_FLAT_BUY where bld_id='''+dbedit2.text+''' ');
+Open;
+  end;   }
+
+   end;
+procedure TCC_Building.Edit_entranceChange(Sender: TObject);
+begin
+if Edit_entrance.Text<>'' then
+   CC_DataMod.CC_building.Locate
+   ('entrances',Edit_entrance.Text,[loCaseInsensitive, loPartialKey]);
+     DBGrid2.Options:=[dgRowSelect,dgAlwaysShowEditor,dgTitles,dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs,dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit, dgMultiSelect];
+  {with CC_DataMod.cc_buyer_flat do begin
+Close;
+   SQL.clear;
+Sql.add('Select * from CC_FLAT_BUY where bld_id='''+dbedit2.text+''' ');
+Open;
+  end;  }
+
+         end;
+procedure TCC_Building.Edit_flatsChange(Sender: TObject);
+begin
+if Edit_flats.Text<>'' then
+   CC_DataMod.CC_building.Locate
+   ('flats',Edit_flats.Text,[loCaseInsensitive, loPartialKey]);
+     DBGrid2.Options:=[dgRowSelect,dgAlwaysShowEditor,dgTitles,dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs,dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit, dgMultiSelect];
+ {  with CC_DataMod.cc_buyer_flat do begin
+Close;
+   SQL.clear;
+Sql.add('Select * from CC_FLAT_BUY where bld_id='''+dbedit2.text+''' ');
+Open;
+  end;   }
+
+         end;
+procedure TCC_Building.Edit_nameExit(Sender: TObject);
+begin
+(Sender as Tedit).text :='';
+end;
+
+procedure TCC_Building.Edit_adressExit(Sender: TObject);
+begin
+(Sender as Tedit).text :='';
+end;
+
+procedure TCC_Building.Edit_entranceExit(Sender: TObject);
+begin
+(Sender as Tedit).text :='';
+end;
+
+procedure TCC_Building.Edit_flatsExit(Sender: TObject);
+begin
+(Sender as Tedit).text :='';
+end;
+
+procedure TCC_Building.Edit3Change(Sender: TObject);
+begin
+with CC_DataMod.CC_Flat do begin
+Close;
+   SQL.clear;
+Sql.add('Select * from cc_flats where bld_id='''+dbedit2.text+''' ');
+Open;
+
+end;
+   end;
+
+procedure TCC_Building.CheckBox1Click(Sender: TObject);
+begin
+with CC_DataMod.CC_building do begin
+Close;
+   SQL.clear;
+Sql.add('Select * from cc_buildings where entrances>0 and entrances<10 ');
+Open;
+
+end;
+   end;
+procedure TCC_Building.SpeedButton16Click(Sender: TObject);
+begin
+with CC_DataMod.CC_Company do
+ if IsEmpty then
+    begin
+     ShowMessage('ўеч бир ширк€т гейд олунмайыб!');
+     Exit;
+    end
+  else begin
+  CC_DataMod.CC_Company.close;
+    CC_DataMod.CC_Company.open;
+end;
+    end;
+procedure TCC_Building.SpeedButton17Click(Sender: TObject);
+begin
+with CC_DataMod.CC_building do
+ if IsEmpty then
+    begin
+     ShowMessage('ўеч бир бина гейд олунмайыб!');
+     Exit;
+    end
+  else begin
+CC_DataMod.CC_building.close;
+CC_DataMod.CC_building.open;
+end;
+    end;
+procedure TCC_Building.SpeedButton18Click(Sender: TObject);
+begin
+with CC_DataMod.CC_Buyer_Flat do
+ if IsEmpty then
+    begin
+     ShowMessage('ўеч бир м€нзил гейд олунмайыб!');
+     Exit;
+    end
+  else begin
+CC_DataMod.CC_Buyer_Flat.close;
+CC_DataMod.CC_Buyer_Flat.open;
+end;
+         end;
+procedure TCC_Building.SpeedButton19Click(Sender: TObject);
+begin
+  ShowMessage('ozzun');
+end;
+
+procedure TCC_Building.SpeedButton6Click(Sender: TObject);
+begin
+with CC_DataMod.CC_building do
+ if IsEmpty then
+    begin
+     ShowMessage('ўеч бир бина гейд олунмайыб!');
+     Exit;
+    end
+  else begin
+try
+CC_Update_House :=TCC_Update_House.Create(self);
+  CC_Update_House.Showmodal;
+  finally
+  CC_Update_House.Release;
+     end;
+
+end;
+    end;
+procedure TCC_Building.SpeedButton2Click(Sender: TObject);
+begin
+with CC_DataMod.CC_Buyer_Flat do
+ if IsEmpty then
+    begin
+     ShowMessage('ўеч бир м€нзил гейд олунмайыб!');
+     Exit;
+    end
+  else begin
+try
+CC_Update_flats :=TCC_Update_flats.Create(self);
+  CC_Update_flats.Showmodal;
+  finally
+  CC_Update_flats.Release;
+     end;
+
+end;
+     end;
+procedure TCC_Building.SpeedButton15Click(Sender: TObject);
+begin
+with CC_DataMod.CC_Flat do
+ if IsEmpty then
+    begin
+     ShowMessage('ўеч бир м€нзил гейд олунмайыб!');
+     Exit;
+    end
+  else begin
+
+end;
+              end;
+procedure TCC_Building.SpeedButton13Click(Sender: TObject);
+begin
+with CC_DataMod.CC_Company do
+ if IsEmpty then
+    begin
+     ShowMessage('ўеч бир ширк€т гейд олунмайыб!');
+     Exit;
+    end
+  else begin
+end;
+              end;
+procedure TCC_Building.EditidChange(Sender: TObject);
+begin
+if Editid.Text<>'' then
+   CC_DataMod.CC_building.Locate
+   ('id',Editid.Text,[loCaseInsensitive, loPartialKey]);
+     DBGrid2.Options:=[dgRowSelect,dgAlwaysShowEditor,dgTitles,dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs,dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit, dgMultiSelect];
+{ with CC_DataMod.cc_buyer_flat do begin
+Close;
+   SQL.clear;
+Sql.add('Select * from CC_FLAT_BUY where bld_id='''+dbedit2.text+''' ');
+Open;
+  end;    }
+
+     end;
+procedure TCC_Building.DBGrid1DblClick(Sender: TObject);
+begin
+with CC_DataMod.CC_Company do
+ if IsEmpty then
+    begin
+     ShowMessage('ўеч бир ширк€т гейд олунмайыб!');
+     Exit;
+    end
+  else begin
+try
+CC_Update_Company :=TCC_Update_Company.Create(self);
+  CC_Update_Company.Showmodal;
+  finally
+  CC_Update_Company.Release;
+     end;
+
+end;
+
+end;
+
+procedure TCC_Building.DBGrid2DblClick(Sender: TObject);
+begin
+with CC_DataMod.CC_building do
+ if IsEmpty then
+    begin
+     ShowMessage('ўеч бир бина гейд олунмайыб!');
+     Exit;
+    end
+  else begin
+try
+CC_Update_House :=TCC_Update_House.Create(self);
+  CC_Update_House.Showmodal;
+  finally
+  CC_Update_House.Release;
+     end;
+
+end;
+
+end;
+
+procedure TCC_Building.DBGrid3DblClick(Sender: TObject);
+begin
+with CC_DataMod.CC_Buyer_Flat do
+ if IsEmpty then
+    begin
+     ShowMessage('ўеч бир м€нзил гейд олунмайыб!');
+     Exit;
+    end
+  else begin
+try
+CC_Update_flats :=TCC_Update_flats.Create(self);
+  CC_Update_flats.Showmodal;
+  finally
+  CC_Update_flats.Release;
+     end;
+
+end;
+
+end;
+
+procedure TCC_Building.EditidExit(Sender: TObject);
+begin
+(Sender as Tedit).Text :='';
+end;
+
+procedure TCC_Building.DBGrid3TitleClick(Column: TColumn);
+
+var
+   TitleName :string;
+begin
+ TitleName :=Column.FieldName;
+  with CC_DataMod.CC_Buyer_Flat do
+   begin
+    SetVariable('Title',TitleName);
+    Refresh;
+   end;
+end;
+
+procedure TCC_Building.Edit_codeChange(Sender: TObject);
+begin
+CC_DataMod.CC_Buyer_Flat.Close;
+CC_DataMod.CC_Buyer_Flat.Sql[5]:='';
+CC_DataMod.CC_Buyer_Flat.Sql[5]:='and nvl(code,0) like '+''''+Edit_code.Text+'%'+''''
+                                +'and nvl(flatnumber,0) like '+''''+EditFlatnumber.Text+'%'+''''
+                                +'and nvl(entrance,0) like '+''''+editentrance.Text+'%'+''''
+                                +'and nvl(ffloor,0) like '+''''+Editfloor.Text+'%'+''''
+                                +'and nvl(rooms,0) like '+''''+Editroom.Text+'%'+''''
+                                +'and nvl(area,0) like '+''''+Editarea.Text+'%'+''''
+                                +'and nvl(price1,0) like '+''''+Editprice1.Text+'%'+''''
+                                +'and nvl(pricegen,0) like '+''''+editpricegen.Text+'%'+'''';
+CC_DataMod.CC_Buyer_Flat.Open;
+end;
+
+procedure TCC_Building.EditFlatnumberChange(Sender: TObject);
+begin
+CC_DataMod.CC_Buyer_Flat.Close;
+CC_DataMod.CC_Buyer_Flat.Sql[5]:='';
+CC_DataMod.CC_Buyer_Flat.Sql[5]:='and nvl(code,0) like '+''''+Edit_code.Text+'%'+''''
+                                +'and nvl(flatnumber,0) like '+''''+EditFlatnumber.Text+'%'+''''
+                                +'and nvl(entrance,0) like '+''''+editentrance.Text+'%'+''''
+                                +'and nvl(ffloor,0) like '+''''+Editfloor.Text+'%'+''''
+                                +'and nvl(rooms,0) like '+''''+Editroom.Text+'%'+''''
+                                +'and nvl(area,0) like '+''''+Editarea.Text+'%'+''''
+                                +'and nvl(price1,0) like '+''''+Editprice1.Text+'%'+''''
+                                +'and nvl(pricegen,0) like '+''''+editpricegen.Text+'%'+'''';
+CC_DataMod.CC_Buyer_Flat.Open;
+
+end;
+
+procedure TCC_Building.editentranceChange(Sender: TObject);
+begin
+CC_DataMod.CC_Buyer_Flat.Close;
+CC_DataMod.CC_Buyer_Flat.Sql[5]:='';
+CC_DataMod.CC_Buyer_Flat.Sql[5]:='and nvl(code,0) like '+''''+Edit_code.Text+'%'+''''
+                                +'and nvl(flatnumber,0) like '+''''+EditFlatnumber.Text+'%'+''''
+                                +'and nvl(entrance,0) like '+''''+editentrance.Text+'%'+''''
+                                +'and nvl(ffloor,0) like '+''''+Editfloor.Text+'%'+''''
+                                +'and nvl(rooms,0) like '+''''+Editroom.Text+'%'+''''
+                                +'and nvl(area,0) like '+''''+Editarea.Text+'%'+''''
+                                +'and nvl(price1,0) like '+''''+Editprice1.Text+'%'+''''
+                                +'and nvl(pricegen,0) like '+''''+editpricegen.Text+'%'+'''';
+CC_DataMod.CC_Buyer_Flat.Open;
+end;
+
+procedure TCC_Building.EditfloorChange(Sender: TObject);
+begin
+CC_DataMod.CC_Buyer_Flat.Close;
+CC_DataMod.CC_Buyer_Flat.Sql[5]:='';
+CC_DataMod.CC_Buyer_Flat.Sql[5]:='and nvl(code,0) like '+''''+Edit_code.Text+'%'+''''
+                                +'and nvl(flatnumber,0) like '+''''+EditFlatnumber.Text+'%'+''''
+                                +'and nvl(entrance,0) like '+''''+editentrance.Text+'%'+''''
+                                +'and nvl(ffloor,0) like '+''''+Editfloor.Text+'%'+''''
+                                +'and nvl(rooms,0) like '+''''+Editroom.Text+'%'+''''
+                                +'and nvl(area,0) like '+''''+Editarea.Text+'%'+''''
+                                +'and nvl(price1,0) like '+''''+Editprice1.Text+'%'+''''
+                                +'and nvl(pricegen,0) like '+''''+editpricegen.Text+'%'+'''';
+CC_DataMod.CC_Buyer_Flat.Open;
+end;
+
+procedure TCC_Building.EditroomChange(Sender: TObject);
+begin
+CC_DataMod.CC_Buyer_Flat.Close;
+CC_DataMod.CC_Buyer_Flat.Sql[5]:='';
+CC_DataMod.CC_Buyer_Flat.Sql[5]:='and nvl(code,0) like '+''''+Edit_code.Text+'%'+''''
+                                +'and nvl(flatnumber,0) like '+''''+EditFlatnumber.Text+'%'+''''
+                                +'and nvl(entrance,0) like '+''''+editentrance.Text+'%'+''''
+                                +'and nvl(ffloor,0) like '+''''+Editfloor.Text+'%'+''''
+                                +'and nvl(rooms,0) like '+''''+Editroom.Text+'%'+''''
+                                +'and nvl(area,0) like '+''''+Editarea.Text+'%'+''''
+                                +'and nvl(price1,0) like '+''''+Editprice1.Text+'%'+''''
+                                +'and nvl(pricegen,0) like '+''''+editpricegen.Text+'%'+'''';
+CC_DataMod.CC_Buyer_Flat.Open;
+end;
+
+procedure TCC_Building.EditareaChange(Sender: TObject);
+begin
+CC_DataMod.CC_Buyer_Flat.Close;
+CC_DataMod.CC_Buyer_Flat.Sql[5]:='';
+CC_DataMod.CC_Buyer_Flat.Sql[5]:='and nvl(code,0) like '+''''+Edit_code.Text+'%'+''''
+                                +'and nvl(flatnumber,0) like '+''''+EditFlatnumber.Text+'%'+''''
+                                +'and nvl(entrance,0) like '+''''+editentrance.Text+'%'+''''
+                                +'and nvl(ffloor,0) like '+''''+Editfloor.Text+'%'+''''
+                                +'and nvl(rooms,0) like '+''''+Editroom.Text+'%'+''''
+                                +'and nvl(area,0) like '+''''+Editarea.Text+'%'+''''
+                                +'and nvl(price1,0) like '+''''+Editprice1.Text+'%'+''''
+                                +'and nvl(pricegen,0) like '+''''+editpricegen.Text+'%'+'''';
+CC_DataMod.CC_Buyer_Flat.Open;
+end;
+
+procedure TCC_Building.Editprice1Change(Sender: TObject);
+begin
+CC_DataMod.CC_Buyer_Flat.Close;
+CC_DataMod.CC_Buyer_Flat.Sql[5]:='';
+CC_DataMod.CC_Buyer_Flat.Sql[5]:='and nvl(code,0) like '+''''+Edit_code.Text+'%'+''''
+                                +'and nvl(flatnumber,0) like '+''''+EditFlatnumber.Text+'%'+''''
+                                +'and nvl(entrance,0) like '+''''+editentrance.Text+'%'+''''
+                                +'and nvl(ffloor,0) like '+''''+Editfloor.Text+'%'+''''
+                                +'and nvl(rooms,0) like '+''''+Editroom.Text+'%'+''''
+                                +'and nvl(area,0) like '+''''+Editarea.Text+'%'+''''
+                                +'and nvl(price1,0) like '+''''+Editprice1.Text+'%'+''''
+                                +'and nvl(pricegen,0) like '+''''+editpricegen.Text+'%'+'''';
+CC_DataMod.CC_Buyer_Flat.Open;
+end;
+
+procedure TCC_Building.editpricegenChange(Sender: TObject);
+begin
+CC_DataMod.CC_Buyer_Flat.Close;
+CC_DataMod.CC_Buyer_Flat.Sql[5]:='';
+CC_DataMod.CC_Buyer_Flat.Sql[5]:='and nvl(code,0) like '+''''+Edit_code.Text+'%'+''''
+                                +'and nvl(flatnumber,0) like '+''''+EditFlatnumber.Text+'%'+''''
+                                +'and nvl(entrance,0) like '+''''+editentrance.Text+'%'+''''
+                                +'and nvl(ffloor,0) like '+''''+Editfloor.Text+'%'+''''
+                                +'and nvl(rooms,0) like '+''''+Editroom.Text+'%'+''''
+                                +'and nvl(area,0) like '+''''+Editarea.Text+'%'+''''
+                                +'and nvl(price1,0) like '+''''+Editprice1.Text+'%'+''''
+                                +'and nvl(pricegen,0) like '+''''+editpricegen.Text+'%'+'''';
+CC_DataMod.CC_Buyer_Flat.Open;
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TCC_Building,
+    Class_CC_Building,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

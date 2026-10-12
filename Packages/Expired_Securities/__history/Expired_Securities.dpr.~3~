@@ -1,0 +1,24 @@
+library Expired_Securities;
+
+uses
+  ComServ,
+  Newocx_TLB in 'Newocx_TLB.pas',
+  Unit1 in 'Unit1.pas' {new: TActiveForm} {new: CoClass},
+  AddUnit2 in 'AddUnit2.pas' {Form2},
+  DMSec in 'DMSec.pas' {Dmexpired_sec: TDataModule};
+
+{$E ocx}
+
+exports
+  DllGetClassObject,
+  DllCanUnloadNow,
+  DllRegisterServer,
+  DllUnregisterServer,
+  DllInstall;
+
+{$R *.TLB}
+
+{$R *.RES}
+
+begin
+end.

@@ -1,0 +1,163 @@
+﻿	<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+		<PropertyGroup>
+			<ProjectGuid>{F17A1E1A-8C2D-481F-AD65-D05441AA1B37}</ProjectGuid>
+			<MainSource>SBCommon50.dpk</MainSource>
+			<Config Condition="'$(Config)'==''">Release</Config>
+			<DCC_DCCCompiler>DCC32</DCC_DCCCompiler>
+			<ProjectVersion>12.3</ProjectVersion>
+			<Base>True</Base>
+			<Platform>Win32</Platform>
+			<AppType>Package</AppType>
+			<FrameworkType>VCL</FrameworkType>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Config)'=='Base' or '$(Base)'!=''">
+			<Base>true</Base>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Config)'=='Release' or '$(Cfg_1)'!=''">
+			<Cfg_1>true</Cfg_1>
+			<CfgParent>Base</CfgParent>
+			<Base>true</Base>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Config)'=='Debug' or '$(Cfg_2)'!=''">
+			<Cfg_2>true</Cfg_2>
+			<CfgParent>Base</CfgParent>
+			<Base>true</Base>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Base)'!=''">
+			<DCC_OutputNeverBuildDcps>true</DCC_OutputNeverBuildDcps>
+			<DCC_DependencyCheckOutputName>..\..\..\Bin\SBCommon50.bpl</DCC_DependencyCheckOutputName>
+			<DCC_UnitSearchPath>$(DELPHI)\Source\Toolsapi;$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
+			<DCC_WriteableConstants>true</DCC_WriteableConstants>
+			<DCC_ImageBase>00400000</DCC_ImageBase>
+			<DCC_UnitAlias>WinTypes=Windows;WinProcs=Windows;DbiTypes=BDE;DbiProcs=BDE;DbiErrs=BDE;WinTypes=Windows;WinProcs=Windows;$(DCC_UnitAlias)</DCC_UnitAlias>
+			<DCC_BplOutput>\Smart-Bank\Bin</DCC_BplOutput>
+			<DCC_Description>Smart - Common Components, Functions and Classes</DCC_Description>
+			<DCC_Platform>x86</DCC_Platform>
+			<GenPackage>true</GenPackage>
+			<DCC_S>false</DCC_S>
+			<DCC_N>true</DCC_N>
+			<GenDll>true</GenDll>
+			<DCC_E>false</DCC_E>
+			<DCC_DcuOutput>$(DELPHI)\lib</DCC_DcuOutput>
+			<DCC_K>false</DCC_K>
+			<DCC_F>false</DCC_F>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Cfg_1)'!=''">
+			<DCC_LocalDebugSymbols>false</DCC_LocalDebugSymbols>
+			<DCC_Define>RELEASE;$(DCC_Define)</DCC_Define>
+			<DCC_SymbolReferenceInfo>0</DCC_SymbolReferenceInfo>
+			<DCC_DebugInformation>false</DCC_DebugInformation>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Cfg_2)'!=''">
+			<BRCC_IncludePath>$(DELPHI)\Source\Toolsapi;$(DELPHI)\Source\Toolsapi;$(BRCC_IncludePath)</BRCC_IncludePath>
+			<DCC_BplOutput>C:\Program Files (x86)\Embarcadero\RAD Studio\8.0\bin</DCC_BplOutput>
+			<DCC_Define>DEBUG;$(DCC_Define)</DCC_Define>
+		</PropertyGroup>
+		<ItemGroup>
+			<DelphiCompile Include="SBCommon50.dpk">
+				<MainSource>MainSource</MainSource>
+			</DelphiCompile>
+			<DCCReference Include="SBOracleLogOn.dcr"/>
+			<DCCReference Include="vcl.dcp"/>
+			<DCCReference Include="Vcldb.dcp"/>
+			<DCCReference Include="Vclx.dcp"/>
+			<DCCReference Include="doa41dXE.dcp"/>
+			<DCCReference Include="bdertl.dcp"/>
+			<DCCReference Include="IniSource.pas"/>
+			<DCCReference Include="CustomInst.pas"/>
+			<DCCReference Include="SBDecls.pas"/>
+			<DCCReference Include="SBCommonReg.pas"/>
+			<DCCReference Include="SBUtils.pas"/>
+			<DCCReference Include="ObjectEventManager.pas"/>
+			<DCCReference Include="CurrencyEdit.pas"/>
+			<DCCReference Include="LogSrv.pas"/>
+			<DCCReference Include="ProductVersion.pas"/>
+			<DCCReference Include="Version.pas"/>
+			<DCCReference Include="CommonClasses.pas"/>
+			<DCCReference Include="RegUtils.pas"/>
+			<DCCReference Include="HintBox.pas"/>
+			<DCCReference Include="ProgressFormImpl.pas">
+				<Form>ProgressForm</Form>
+			</DCCReference>
+			<DCCReference Include="ActiveX\SBAxCommon50_TLB.pas"/>
+			<DCCReference Include="TreeViewIni.pas"/>
+			<DCCReference Include="DBViewComboBox.pas"/>
+			<DCCReference Include="CommandManagement.pas"/>
+			<DCCReference Include="Jobs.pas"/>
+			<DCCReference Include="CurrencyToHRImpl.pas"/>
+			<DCCReference Include="CurrencyToHR_Azeri_Impl.pas"/>
+			<DCCReference Include="Task.pas"/>
+			<DCCReference Include="TaskManager.pas"/>
+			<DCCReference Include="UnitChangePasswordForm.pas">
+				<Form>fmPassChange</Form>
+			</DCCReference>
+			<DCCReference Include="OraVariables.pas"/>
+			<DCCReference Include="UnitSBOraLogOn.pas">
+				<Form>fmOraSBLogOn</Form>
+			</DCCReference>
+			<DCCReference Include="SBOracleLogOn.pas"/>
+			<DCCReference Include="bsdkdll.pas"/>
+			<BuildConfiguration Include="Debug">
+				<Key>Cfg_2</Key>
+				<CfgParent>Base</CfgParent>
+			</BuildConfiguration>
+			<BuildConfiguration Include="Base">
+				<Key>Base</Key>
+			</BuildConfiguration>
+			<BuildConfiguration Include="Release">
+				<Key>Cfg_1</Key>
+				<CfgParent>Base</CfgParent>
+			</BuildConfiguration>
+		</ItemGroup>
+		<Import Condition="Exists('$(BDS)\Bin\CodeGear.Delphi.Targets')" Project="$(BDS)\Bin\CodeGear.Delphi.Targets"/>
+		<Import Condition="Exists('$(APPDATA)\Embarcadero\$(BDSAPPDATABASEDIR)\$(PRODUCTVERSION)\UserTools.proj')" Project="$(APPDATA)\Embarcadero\$(BDSAPPDATABASEDIR)\$(PRODUCTVERSION)\UserTools.proj"/>
+		<ProjectExtensions>
+			<Borland.Personality>Delphi.Personality.12</Borland.Personality>
+			<Borland.ProjectType>Package</Borland.ProjectType>
+			<BorlandProject>
+				<Delphi.Personality>
+					<Source>
+						<Source Name="MainSource">SBCommon50.dpk</Source>
+					</Source>
+					<Parameters/>
+					<Language>
+						<Language Name="ProjectLang">$00000419</Language>
+					</Language>
+					<VersionInfo>
+						<VersionInfo Name="IncludeVerInfo">True</VersionInfo>
+						<VersionInfo Name="AutoIncBuild">True</VersionInfo>
+						<VersionInfo Name="MajorVer">1</VersionInfo>
+						<VersionInfo Name="MinorVer">0</VersionInfo>
+						<VersionInfo Name="Release">0</VersionInfo>
+						<VersionInfo Name="Build">169</VersionInfo>
+						<VersionInfo Name="Debug">False</VersionInfo>
+						<VersionInfo Name="PreRelease">False</VersionInfo>
+						<VersionInfo Name="Special">False</VersionInfo>
+						<VersionInfo Name="Private">False</VersionInfo>
+						<VersionInfo Name="DLL">False</VersionInfo>
+						<VersionInfo Name="Locale">1049</VersionInfo>
+						<VersionInfo Name="CodePage">1251</VersionInfo>
+					</VersionInfo>
+					<VersionInfoKeys>
+						<VersionInfoKeys Name="CompanyName"/>
+						<VersionInfoKeys Name="FileDescription"/>
+						<VersionInfoKeys Name="FileVersion">1.0.0.169</VersionInfoKeys>
+						<VersionInfoKeys Name="InternalName"/>
+						<VersionInfoKeys Name="LegalCopyright"/>
+						<VersionInfoKeys Name="LegalTrademarks"/>
+						<VersionInfoKeys Name="OriginalFilename"/>
+						<VersionInfoKeys Name="ProductName"/>
+						<VersionInfoKeys Name="ProductVersion">1.0.0.0</VersionInfoKeys>
+						<VersionInfoKeys Name="Comments"/>
+					</VersionInfoKeys>
+					<Excluded_Packages>
+						<Excluded_Packages Name="$(BDSBIN)\dcloffice2k150.bpl">Microsoft Office 2000 Sample Automation Server Wrapper Components</Excluded_Packages>
+					</Excluded_Packages>
+				</Delphi.Personality>
+				<Platforms>
+					<Platform value="Win32">True</Platform>
+				</Platforms>
+			</BorlandProject>
+			<ProjectFileVersion>12</ProjectFileVersion>
+		</ProjectExtensions>
+	</Project>

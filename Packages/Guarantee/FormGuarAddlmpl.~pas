@@ -1,0 +1,407 @@
+unit FormGuarAddlmpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, nlsDialogs,
+  NLSLocalizer, DBCtrls, DBCtrlsEh, ExtCtrls, StdCtrls, DBLookupEh, Mask,
+  Buttons, jpeg, Db, OracleData, Oracle, HintBox;
+
+type
+  TFormGuarAdd = class(TForm)
+    Panel8: TPanel;
+    Label18: TLabel;
+    Image1: TImage;
+    SpeedButton37: TSpeedButton;
+    SpeedButton38: TSpeedButton;
+    SpeedButton39: TSpeedButton;
+    Panel2: TPanel;
+    SpeedButton1: TSpeedButton;
+    SpeedButton2: TSpeedButton;
+    Label16: TLabel;
+    Label2: TLabel;
+    DBEditEh13: TDBEditEh;
+    Panel4: TPanel;
+    SpeedButton5: TSpeedButton;
+    SpeedButton6: TSpeedButton;
+    Label29: TLabel;
+    Label28: TLabel;
+    DBNumberEditEh5: TDBNumberEditEh;
+    Panel3: TPanel;
+    SpeedButton3: TSpeedButton;
+    SpeedButton4: TSpeedButton;
+    Label155: TLabel;
+    Label1: TLabel;
+    DBEditEh8: TDBEditEh;
+    Panel5: TPanel;
+    SpeedButton7: TSpeedButton;
+    SpeedButton8: TSpeedButton;
+    Label157: TLabel;
+    Label154: TLabel;
+    CBPledgsorts: TDBLookupComboboxEh;
+    Panel6: TPanel;
+    SpeedButton9: TSpeedButton;
+    SpeedButton10: TSpeedButton;
+    Label24: TLabel;
+    Label25: TLabel;
+    DBLookupComboboxEh1: TDBLookupComboboxEh;
+    Panel7: TPanel;
+    SpeedButton11: TSpeedButton;
+    SpeedButton12: TSpeedButton;
+    Label3: TLabel;
+    SpeedButton40: TSpeedButton;
+    GroupBox7: TGroupBox;
+    DBEditEh9: TDBEditEh;
+    InUse_rg: TRadioGroup;
+    Panel9: TPanel;
+    SpeedButton15: TSpeedButton;
+    SpeedButton16: TSpeedButton;
+    Label4: TLabel;
+    DBDateTimeEditEh3: TDBDateTimeEditEh;
+    Panel1: TPanel;
+    SpeedButton13: TSpeedButton;
+    SpeedButton14: TSpeedButton;
+    Label5: TLabel;
+    DBEditEh2: TDBEditEh;
+    Panel10: TPanel;
+    SpeedButton17: TSpeedButton;
+    SpeedButton18: TSpeedButton;
+    Label6: TLabel;
+    DBEditEh3: TDBEditEh;
+    Panel11: TPanel;
+    SpeedButton19: TSpeedButton;
+    SpeedButton20: TSpeedButton;
+    Label7: TLabel;
+    DBEditEh4: TDBEditEh;
+    GroupBox1: TGroupBox;
+    Label11: TLabel;
+    DBEditEh10: TDBEditEh;
+    GroupBox2: TGroupBox;
+    Panel12: TPanel;
+    SpeedButton21: TSpeedButton;
+    SpeedButton22: TSpeedButton;
+    Label8: TLabel;
+    DBEditEh5: TDBEditEh;
+    Panel13: TPanel;
+    SpeedButton23: TSpeedButton;
+    SpeedButton24: TSpeedButton;
+    Label10: TLabel;
+    DBEditEh6: TDBEditEh;
+    Panel14: TPanel;
+    SpeedButton25: TSpeedButton;
+    SpeedButton26: TSpeedButton;
+    Label12: TLabel;
+    DBEditEh7: TDBEditEh;
+    Panel15: TPanel;
+    SpeedButton27: TSpeedButton;
+    SpeedButton28: TSpeedButton;
+    Label9: TLabel;
+    DBDateTimeEditEh1: TDBDateTimeEditEh;
+    GroupBox3: TGroupBox;
+    Label26: TLabel;
+    Label27: TLabel;
+    Label30: TLabel;
+    DBLookupComboboxEh3: TDBLookupComboboxEh;
+    DBLookupComboboxEh4: TDBLookupComboboxEh;
+    DBEditEh16: TDBEditEh;
+    GroupBox4: TGroupBox;
+    Label13: TLabel;
+    Label14: TLabel;
+    Label15: TLabel;
+    DBEditEh11: TDBEditEh;
+    DBEditEh14: TDBEditEh;
+    DBEditEh15: TDBEditEh;
+    GroupBox5: TGroupBox;
+    Panel16: TPanel;
+    Label17: TLabel;
+    spcompany: TSpeedButton;
+    DBEdit8: TDBLookupComboboxEh;
+    Panel19: TPanel;
+    SpeedButton33: TSpeedButton;
+    SpeedButton34: TSpeedButton;
+    Label22: TLabel;
+    DBEditEh12: TDBEditEh;
+    Panel20: TPanel;
+    SpeedButton35: TSpeedButton;
+    SpeedButton36: TSpeedButton;
+    Label23: TLabel;
+    DBDateTimeEditEh4: TDBDateTimeEditEh;
+    Panel17: TPanel;
+    SpeedButton29: TSpeedButton;
+    SpeedButton30: TSpeedButton;
+    Label19: TLabel;
+    Label20: TLabel;
+    DBLookupComboboxEh2: TDBLookupComboboxEh;
+    Panel18: TPanel;
+    SpeedButton31: TSpeedButton;
+    SpeedButton32: TSpeedButton;
+    Label21: TLabel;
+    DBDateTimeEditEh2: TDBDateTimeEditEh;
+    GroupBox6: TGroupBox;
+    Label116: TLabel;
+    Label152: TLabel;
+    Label117: TLabel;
+    Label118: TLabel;
+    DBEdit13: TDBEdit;
+    DBEdit32: TDBEdit;
+    DBDateTimeEditEh5: TDBDateTimeEditEh;
+    DBLookupComboboxEh26: TDBLookupComboboxEh;
+    NLSLocalizer1: TNLSLocalizer;
+    CompanySrc: TDataSource;
+    CompanySet: TOracleDataSet;
+    PgCompany: TOraclePackage;
+    HintBox1: THintBox;
+    DBLookupComboboxEh5: TDBLookupComboboxEh;
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormShow(Sender: TObject);
+    procedure SpeedButton40Click(Sender: TObject);
+    procedure spcompanyClick(Sender: TObject);
+    procedure SpeedButton38Click(Sender: TObject);
+    procedure SpeedButton39Click(Sender: TObject);
+  private
+   edNewName: TEdit;
+    procedure edNewNameClick(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormGuarAdd: TFormGuarAdd;
+
+implementation
+
+uses DataMGuarantee,sboapiDataModuleImpl, FormGuarpldginfolmpl,GuaranteeMgrImpl;
+
+{$R *.DFM}
+
+procedure TFormGuarAdd.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+ resize := false
+end;
+
+procedure TFormGuarAdd.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+  with DataMGuarante.DataSetGuarantee do
+//    if State = dsCancel then
+    begin
+      Cancel;
+      CancelUpdates;
+end;
+    end;
+procedure TFormGuarAdd.FormCreate(Sender: TObject);
+begin
+
+with DataMGuarante do
+  begin
+   Gura_taypcal.open;
+  //GuaraClientAccs.open;
+  // GuaraCreditAccs.open
+   end ;
+   CompanySet.open;
+end;
+
+procedure TFormGuarAdd.FormDestroy(Sender: TObject);
+begin
+ with DataMGuarante do
+  begin
+   Gura_taypcal.close;
+
+end;
+    end;
+procedure TFormGuarAdd.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+ if ord(key) = VK_ESCAPE then close;
+end;
+
+procedure TFormGuarAdd.FormShow(Sender: TObject);
+begin
+ with DataMGuarante,DataSetGuarantee do
+ begin
+ open;
+//fieldbyname('REGISTRYDATE').AsDateTime:= OracleDataSet1.FieldbyName('TEK_DAT').asDateTime;
+//fieldbyname('GQPASPDATE').AsDateTime:= OracleDataSet1.FieldbyName('TEK_DAT').asDateTime;
+ end;
+    if not assigned(edNewName) then
+     edNewName := TEdit.Create(Self);
+   //  ShowMessage('fdfdf');
+ with edNewName do begin
+    Parent := Panel16;
+    OnKeyDown := edNewNameClick;
+    Visible := False;
+  end;  
+end;
+procedure TFormGuarAdd.edNewNameClick;
+var
+  ProcName: String;
+  i: Integer;
+begin
+  if (Trim((Sender as TEdit).Text)<>'') and (ord(key)=VK_RETURN) then begin
+   // if (Sender as TEdit).Left>200 then
+      ProcName := 'AddComp' ;
+
+      PgCompany.CallProcedure(ProcName,[(Sender as TEdit).Text]);
+
+      CompanySet.Refresh;
+    (Sender as TEdit).Visible := False;
+    for i:= 0 to ComponentCount-1 do
+      if Components[i] is TSpeedButton then
+        (Components[i] as TSpeedButton).Enabled := True;
+  end;
+  if  (ord(key)=VK_RETURN) then begin
+    (Sender as TEdit).Visible := False;
+    for i:= 0 to ComponentCount-1 do
+      if Components[i] is TSpeedButton then
+        (Components[i] as TSpeedButton).Enabled := True;
+  end;
+end;
+procedure TFormGuarAdd.SpeedButton40Click(Sender: TObject);
+begin
+if not assigned(FormGuarpldginfo) then
+ with  TFormGuarpldginfo.Create(self) do
+  try
+  ShowModal;
+  finally
+    Release;
+  end;
+end;
+
+procedure TFormGuarAdd.spcompanyClick(Sender: TObject);
+var
+  DataSetName: String[30];
+  i: Integer;
+begin
+  DataSetName :=Copy((Sender as TComponent).Name,4,length((Sender as TComponent).Name)-3);
+ with edNewName do begin
+    Text := '';
+    width := 216;
+        Left := 31;
+     top :=4{(Sender as TSpeedButton).Top};
+    Visible := True;
+  end;
+  for i:= 0 to ComponentCount-1 do
+    if Components[i] is TSpeedButton then
+      (Components[i] as TSpeedButton).Enabled := False;
+end;
+
+procedure TFormGuarAdd.SpeedButton38Click(Sender: TObject);
+
+ var
+  str_field : string;
+  cnt : integer;
+begin
+
+ cnt:= 0;
+
+if  DBEditEh13.text='' then
+  begin
+
+    cnt:= cnt+1;
+    str_field:=str_field + 'є,'
+  end;
+  cnt:= 0;
+if  DBEditEh8.text='' then
+  begin
+    cnt:= cnt+1;
+    str_field:=str_field + 'Ёировун ады,'
+  end;
+   cnt:= 0;
+ if   CBPledgsorts.text='' then
+ begin
+
+ cnt:=cnt+1;
+ str_field:=str_field+'„ещиди,'
+end;
+cnt:= 0;
+if DBNumberEditEh5.text='' then
+begin
+cnt:=cnt+1;
+str_field:=str_field+'Ёировун базар д€й€ри,'
+end;
+cnt:= 0;
+if DBEditEh10.text='' then
+begin
+cnt:=cnt+1;
+str_field:=str_field+'Ёирову ф€ригл€ндир€н ист€нил€н м€лумат,'
+end;
+cnt:= 0;
+if DBLookupComboboxEh2.text='' then
+begin
+cnt:=cnt+1;
+str_field:=str_field+'‘илиал,'
+end;
+{if  DBEditDESCRIPTION.text='' then
+  begin
+    cnt:= cnt+1;
+    str_field:=str_field + '“€свири,'
+  end;
+
+if  DBEditNAME.text='' then
+  begin
+    cnt:= cnt+1;
+    str_field:= str_field+ 'јды,'
+      end;
+if  DBEditPROP_COUNT.text='' then
+  begin
+    cnt:= cnt+1;
+    str_field:= str_field+ '—айы,'
+      end;
+
+if  DBLCBFilial.keyvalue=null then
+  begin
+    cnt:= cnt+1;
+    str_field:= str_field+ '‘илиал,'
+      end;
+
+ if  DBLookupComboboxEh7.keyvalue=null then
+  begin
+    cnt:= cnt+1;
+    str_field:= str_field+ '“ипи,'
+      end ;
+
+{if  DBLookupComboboxEh4.keyvalue=null then
+  begin
+    cnt:= cnt+1;
+    str_field:= str_field+ 'ћцшт€ри щесабы,'
+      end ;   }
+{if  DBLookupComboboxEh5.keyvalue=null then
+  begin
+    cnt:= cnt+1;
+    str_field:= str_field+ 'щесаб,'      
+      end ;                                }
+
+str_field:= str_field+ ' —ечилм€йиб! ';
+
+if cnt=0  then
+  begin
+with DataMGuarante,DataSetGuarantee do
+  begin
+   post;
+   end;
+    close;
+  if xx=1 then
+  DataMGuarante.DataSetGuarantee.refresh
+  else
+  //RefreshWithSavely(True);
+  close;
+   end
+   else
+         HintBox1.ShowMessage('¬ерил€нл€р  '+#13' '+str_field)  ;
+
+
+end;
+
+procedure TFormGuarAdd.SpeedButton39Click(Sender: TObject);
+begin
+close;
+end;
+
+end.

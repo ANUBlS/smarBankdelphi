@@ -1,0 +1,931 @@
+unit CreditsManagerForConstructionImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, NLSDialogs,
+  ActiveX, AxCtrls, CreditManagerConstructions_TLB, StdVcl, ExtCtrls,
+  ComCtrls, ToolWin, Grids, DBGrids, ActnList, Menus, ImgList,OracleData,oracle,db,
+  Buttons, StdCtrls, DBViewComboBox,DBCtrlsEh, DBLookupEh;
+
+type
+  TCreditsManagerForConstruction = class(TActiveForm, ICreditsManagerForConstruction)
+    Panel3: TPanel;
+    ImageList1: TImageList;
+    PopupMenu1: TPopupMenu;
+    ActionList1: TActionList;
+    ToolBar1: TToolBar;
+    ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
+    ToolButton3: TToolButton;
+    ToolButton4: TToolButton;
+    ToolButton5: TToolButton;
+    ToolButton6: TToolButton;
+    ToolButton7: TToolButton;
+    ToolButton8: TToolButton;
+    ToolButton9: TToolButton;
+    ActnAddContract: TAction;
+    ActnEditContract: TAction;
+    ActnCloseContract: TAction;
+    ActnRefresh: TAction;
+    ToolButton10: TToolButton;
+    ToolButton11: TToolButton;
+    ActnSettings: TAction;
+    ActnOperations: TAction;
+    StatusImages: TImageList;
+    FilterPanel: TPanel;
+    Panel2: TPanel;
+    GroupBox1: TGroupBox;
+    CurrencyViewer: TDBViewComboBox;
+    CheckboxUsers: TCheckBox;
+    GroupBox2: TGroupBox;
+    DBViewComboBox1: TDBViewComboBox;
+    CheckBoxBuilding: TCheckBox;
+    GroupBox3: TGroupBox;
+    CoBCompany: TDBViewComboBox;
+    CheckBoxCompany: TCheckBox;
+    GroupBox4: TGroupBox;
+    DBViewComboBox3: TDBViewComboBox;
+    CheckBoxFlats: TCheckBox;
+    GroupBox5: TGroupBox;
+    DBViewComboBox4: TDBViewComboBox;
+    CheckBoxFilials: TCheckBox;
+    Panel1: TPanel;
+    Panel4: TPanel;
+    Panelsearch: TGroupBox;
+    Panel5: TPanel;
+    StaticText1: TStaticText;
+    Editcontnum: TEdit;
+    Panel7: TPanel;
+    StaticText2: TStaticText;
+    EditACCNO: TEdit;
+    Panel8: TPanel;
+    StaticText3: TStaticText;
+    EditCUSTNAME: TEdit;
+    Panel9: TPanel;
+    StaticText4: TStaticText;
+    EditCreditsCREDITAMOUNT: TEdit;
+    Panel10: TPanel;
+    StaticText5: TStaticText;
+    EditClosedate: TEdit;
+    Panel11: TPanel;
+    StaticText6: TStaticText;
+    Editopendate: TEdit;
+    ActionList2: TActionList;
+    ActnFilter: TAction;
+    N1: TMenuItem;
+    N2: TMenuItem;
+    N3: TMenuItem;
+    N4: TMenuItem;
+    ActnFilter1: TMenuItem;
+    ActnPaymentPlane: TAction;
+    N5: TMenuItem;
+    N6: TMenuItem;
+    N7: TMenuItem;
+    N8: TMenuItem;
+    ActnSearchPanel: TAction;
+    N9: TMenuItem;
+    N10: TMenuItem;
+    ActnSearch: TAction;
+    N11: TMenuItem;
+    CommonGrid: TDBGrid;
+    N12: TMenuItem;
+    procedure strtr1Click(Sender: TObject);
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure ActnAddContractExecute(Sender: TObject);
+    procedure ActnEditContractExecute(Sender: TObject);
+    procedure CommonGridTitleClick(Column: TColumn);
+    procedure ActnRefreshExecute(Sender: TObject);
+    procedure ActnCloseContractExecute(Sender: TObject);
+    procedure ActnSettingsExecute(Sender: TObject);
+    procedure CommonGridDrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TColumn; State: TGridDrawState);
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure ToolButton9Click(Sender: TObject);
+    procedure ActnFilterExecute(Sender: TObject);
+    procedure ActnPaymentPlaneExecute(Sender: TObject);
+    procedure N1DrawItem(Sender: TObject; ACanvas: TCanvas; ARect: TRect;
+      Selected: Boolean);
+    procedure N6Click(Sender: TObject);
+    procedure ActnSearchPanelExecute(Sender: TObject);
+    procedure ActnSearchExecute(Sender: TObject);
+    procedure EditcontnumKeyPress(Sender: TObject; var Key: Char);
+    procedure EditcontnumExit(Sender: TObject);
+    procedure ActiveFormDestroy(Sender: TObject);
+    procedure N11Click(Sender: TObject);
+    procedure N12Click(Sender: TObject);
+  private
+    { Private declarations }
+    FEvents: ICreditsManagerForConstructionEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+
+  public
+    procedure SafeRefresh;
+    Function Get_CreditID:LongInt;
+    { Public declarations }
+    procedure Initialize; override;
+  end;
+
+implementation
+
+uses ComObj, ComServ,DatModConstructionImpl,ContractAddEditImpl,
+             SettingsUnit,PaymentPlaneMgrUnit,OrderMgrUnit,CloseContractUnit,ExpiresPaymentsReportUnit,
+  Interestimpl;
+
+{$R *.DFM}
+
+
+
+{ TCreditsManagerForConstruction }
+
+procedure TCreditsManagerForConstruction.SafeRefresh;
+var
+   SavePlace :TBookmark;
+begin
+  with DatModConstruction.Credits do
+  begin
+    SavePlace :=GetBookmark;
+    Refresh;
+    try
+      GotoBookmark(SavePlace);
+     except
+       //Null
+     end;
+  end;
+
+end;
+Function TCreditsManagerForConstruction.Get_CreditID:LongInt;
+begin
+   Result := DatModConstruction.Credits.FieldByName('ID').AsInteger;
+end;
+
+
+procedure TCreditsManagerForConstruction.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_CreditsManagerForConstructionPage); }
+end;
+
+procedure TCreditsManagerForConstruction.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as ICreditsManagerForConstructionEvents;
+end;
+
+procedure TCreditsManagerForConstruction.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TCreditsManagerForConstruction.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TCreditsManagerForConstruction.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TCreditsManagerForConstruction.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TCreditsManagerForConstruction.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TCreditsManagerForConstruction.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TCreditsManagerForConstruction.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TCreditsManagerForConstruction.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TCreditsManagerForConstruction.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TCreditsManagerForConstruction.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TCreditsManagerForConstruction.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TCreditsManagerForConstruction.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TCreditsManagerForConstruction.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TCreditsManagerForConstruction.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TCreditsManagerForConstruction.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TCreditsManagerForConstruction.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TCreditsManagerForConstruction.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TCreditsManagerForConstruction.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TCreditsManagerForConstruction.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TCreditsManagerForConstruction._Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TCreditsManagerForConstruction.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TCreditsManagerForConstruction.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TCreditsManagerForConstruction.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TCreditsManagerForConstruction.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TCreditsManagerForConstruction.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TCreditsManagerForConstruction.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TCreditsManagerForConstruction.KeyPressEvent(Sender: TObject;
+  var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TCreditsManagerForConstruction.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TCreditsManagerForConstruction.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TCreditsManagerForConstruction.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TCreditsManagerForConstruction.Set_AxBorderStyle(
+  Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TCreditsManagerForConstruction.Set_Caption(
+  const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TCreditsManagerForConstruction.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TCreditsManagerForConstruction.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TCreditsManagerForConstruction.Set_DoubleBuffered(
+  Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TCreditsManagerForConstruction.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TCreditsManagerForConstruction.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TCreditsManagerForConstruction.Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TCreditsManagerForConstruction.Set_HelpFile(
+  const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TCreditsManagerForConstruction.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TCreditsManagerForConstruction.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TCreditsManagerForConstruction.Set_PrintScale(
+  Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TCreditsManagerForConstruction.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TCreditsManagerForConstruction.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+procedure TCreditsManagerForConstruction.strtr1Click(Sender: TObject);
+begin
+  Panelsearch.Visible := not Panelsearch.Visible;
+end;
+
+procedure TCreditsManagerForConstruction.ActiveFormCreate(Sender: TObject);
+begin
+   DatModConstruction := TDatModConstruction.Create(self);
+   AddEditContractForm := TAddEditContractForm.Create(Self);
+   OrderForm := TOrderForm.Create(Self);
+   ExpiresPaymentsForm :=TExpiresPaymentsForm. create(Self);
+end;
+
+procedure TCreditsManagerForConstruction.ActnAddContractExecute(
+  Sender: TObject);
+begin
+   with DatModConstruction,AddEditContractForm do
+   begin
+      with CreditPurpose do begin
+           if Active then CloseAll;
+           SetVariable('CRDID',0);
+           
+           Open;
+           FieldByname('INTERESTRATE').AsFloat := 0;
+           Insert;
+      end;
+      BranchCBEh.KeyValue := 0;
+      DBLookupComboboxEh5.KeyValue := 0;
+
+      DTPOpenDate.DateTime:=DatModConstruction.sysdat.fieldbyname('tek_dat').asdatetime;
+      DTPCloseDate.DateTime:=DatModConstruction.sysdat.fieldbyname('tek_dat').asdatetime;
+    Edit6.text := '';
+    Edit1.text := '';
+    Edit2.text := '';
+    Edit3.text := '' ;
+    Edit4.text := '' ;
+    Edit5.text := '' ;
+
+
+     // DTPOpenDate.Date := Date;
+     // DTPCloseDate.Date:=IncMonth(Date,180);
+     // DBEdit6.DataSource.DataSet.FieldByName('INTERESTRATE').AsFloat:=0;
+      DBEdit7.DataSource.DataSet.FieldByName('INITIALAMOUNT').AsFloat:=0;
+
+
+      ShowModal;
+   end;
+
+end;
+
+procedure TCreditsManagerForConstruction.ActnEditContractExecute(
+  Sender: TObject);
+
+
+begin
+   with DatModConstruction,CreditPurpose do
+   begin
+      if active then CloseAll;
+      ClearVariables;
+      SetVariable('CRDID',Get_CreditID);
+      Open;
+      Edit;
+      with AddEditContractForm do begin
+      DTPOpenDate.DateTime := FieldByName('opendate').asdatetime;
+      DTPCloseDate.DateTime := FieldByName('expdate').asdatetime;
+
+      BldeditDataSet.CloseAll;
+      BldeditDataSet.SetVariable('id',fieldbyname('FLATID').asinteger);
+      BldeditDataSet.open;
+
+    AddEditContractForm.Edit6.text := floattostr(BldeditDataSet.FieldByName('PRICEGEN').AsFloat);
+    AddEditContractForm.Edit1.text := BldeditDataSet.FieldByName('BLD_NAME').AsString;
+    AddEditContractForm.Edit2.text := BldeditDataSet.FieldByName('ENTRANCE').AsString ;
+    AddEditContractForm.Edit3.text := BldeditDataSet.FieldByName('FLATNUMBER').AsString ;
+    AddEditContractForm.Edit4.text := floattostr(BldeditDataSet.FieldByName('AREA').AsFloat) ;
+    AddEditContractForm.Edit5.text := inttostr(BldeditDataSet.FieldByName('ROOMS').AsInteger) ;
+
+
+      
+      Accounts.CloseAll;
+      //Accounts.SetVariable('val',BranchCBEh.KeyValue);
+      Accounts.SetVariable('BID',DBLookupComboboxEh6.KeyValue);
+      Accounts.open;
+  
+      DBLookupComboboxEh2.KeyValue := DBLookupComboboxEh2.ListSource.DataSet.FieldByName(DBLookupComboboxEh2.KeyField).AsInteger;
+      ShowModal;
+      end;
+   end;
+end;
+
+procedure TCreditsManagerForConstruction.CommonGridTitleClick(
+  Column: TColumn);
+var OrderKind:String;
+begin
+   if Column.Index = 1 then Exit;
+   OrderKind := Copy(Column.Field.Name,8,Length(Column.Field.Name));
+   Screen.Cursor := crHourGlass;
+   try
+       with TOracleDataSet(CommonGrid.DataSource.DataSet) do
+       begin
+         if  Active  then  CloseAll;
+         SetVariable('title',OrderKind);
+         Open
+       end;
+    finally
+      Screen.Cursor := crDefault;
+    end;
+
+end;
+
+procedure TCreditsManagerForConstruction.ActnRefreshExecute(
+  Sender: TObject);
+begin
+SafeRefresh;
+end;
+
+procedure TCreditsManagerForConstruction.ActnCloseContractExecute(
+  Sender: TObject);
+begin
+
+// CloseContractForm := TCloseContractForm.Create(Self);
+// with CloseContractForm do
+//  if   ShowModal = MrOk then   begin
+  if  MessageDlg(
+       'ћцгавил€ баьланыр €минсинизми ?'
+       ,mtConfirmation
+       ,[mbYes, mbNo ]
+       ,0
+       )=
+        mrYes then begin
+    with DatModConstruction,sbcm_construction do
+         CallProcedure('Close_Contract',['p_ID',Get_CreditID{,
+                                         'p_desc',CloseContractForm.EditDescription.Text}]);
+
+    SafeRefresh;
+   end;
+end;
+
+procedure TCreditsManagerForConstruction.ActnSettingsExecute(
+  Sender: TObject);
+begin
+  SettingsForm := TSettingsForm.Create(Self);
+  SettingsForm.showmodal;
+end;
+
+procedure TCreditsManagerForConstruction.CommonGridDrawColumnCell(
+  Sender: TObject; const Rect: TRect; DataCol: Integer; Column: TColumn;
+  State: TGridDrawState);
+const
+    DataColIndex = 1;
+var
+    ImageIndex :Integer;
+begin
+{  ImageIndex :=-1;
+  with Sender as TDBGrid do
+  begin
+    if DataSource.DataSet.RecordCount <> 0 then
+    begin
+      case DataSource.DataSet.FieldByName('Status').AsInteger of
+      0:
+        ImageIndex := 0;
+      1:
+        ImageIndex := 1;
+        end;   //Case
+      if   (DataCol = 1)   then
+        StatusImages.Draw(Canvas, Rect.Left, Rect.Top, ImageIndex, True)
+      else
+        DefaultDrawColumnCell(Rect, DataCol, Column, State);
+    end;
+  end; }
+
+end;
+
+procedure TCreditsManagerForConstruction.SpeedButton1Click(
+  Sender: TObject);
+begin
+  FilterPanel.Visible := False;
+  ToolButton9.Down := FilterPanel.Visible;
+end;
+
+procedure TCreditsManagerForConstruction.ToolButton9Click(Sender: TObject);
+begin
+  FilterPanel.Visible := not FilterPanel.Visible;
+  ToolButton9.Down := FilterPanel.Visible;
+  //ToolButton9.Indeterminate :=  FilterPanel.Visible;
+end;
+
+procedure TCreditsManagerForConstruction.ActnFilterExecute(
+  Sender: TObject);
+  function  CheckFiltred(IsChecked :Boolean;const FilterStr :String;Args :array of const):String;
+  begin
+     Result :='';
+     if  IsChecked  then
+      Result :=Format(FilterStr,Args);
+  end;
+
+const
+    CompanyFilter = '(COMPANYID=%d)';
+    BuildingFilter = '(BUILDINGID=%d)';
+    FlatsFilter = '(FLATID=%d)';
+    FilialFilter = '(Branchid=%d)';
+    UsersFilter = '(userid=%d)';
+var
+
+  CompanyF :string;
+  BuildingF :string;
+  FlatsF :string;
+  UsersF   :string;
+  FilialF   :string;
+
+  FilterStr :string;
+begin
+  FilterStr :='';
+
+  with  DatModConstruction do
+  begin
+    CompanyF :=CheckFiltred(
+                     CheckBoxCompany.Checked
+                    ,CompanyFilter
+                    ,[Componies.FieldByName('ID').AsInteger]
+                    );
+    BuildingF :=CheckFiltred(
+                     CheckBoxBuilding.Checked
+                    ,BuildingFilter
+                    ,[buildings.FieldByName('ID').AsInteger]
+                    );
+    FlatsF :=CheckFiltred(
+                     CheckBoxFlats.Checked
+                    ,FlatsFilter
+                    ,[Flats.FieldByName('ID').AsInteger]
+                    );
+
+    UsersF :=CheckFiltred(
+                     CheckboxUsers.Checked
+                    ,UsersFilter
+                    ,[Users.FieldByName('ID').AsInteger]
+                    );
+
+    FilialF :=CheckFiltred(
+                     CheckBoxFilials.Checked
+                    ,FilialFilter
+                    ,[Filials.FieldByName('ID').AsInteger]
+                    );
+
+
+    FilterStr :=CompanyF;
+
+    if  BuildingF<>'' then
+    if  FilterStr=''  then
+      FilterStr :=BuildingF
+    else
+      FilterStr :=FilterStr + 'AND' + BuildingF;
+
+    if  FlatsF<>'' then
+    if  FilterStr=''  then
+      FilterStr :=FlatsF
+    else
+      FilterStr :=FilterStr + 'AND' +FlatsF;
+
+    if  UsersF<>'' then
+    if  FilterStr=''  then
+      FilterStr :=UsersF
+    else
+      FilterStr :=FilterStr + 'AND' +UsersF;
+
+    if  FilialF<>'' then
+    if  FilterStr=''  then
+      FilterStr :=FilialF
+    else
+      FilterStr :=FilterStr + 'AND' +FilialF;
+
+
+    end;
+  
+  with  CommonGrid.DataSource.DataSet  do
+  begin
+    Filtered :=False;
+    Filter :=FilterStr;
+    Filtered :=True;
+  end;
+
+
+end;
+
+procedure TCreditsManagerForConstruction.ActnPaymentPlaneExecute(
+  Sender: TObject);
+begin
+   PaymentPlaneForm :=TPaymentPlaneForm.Create(Self);
+   PaymentPlaneForm.ShowModal;
+end;
+
+procedure TCreditsManagerForConstruction.N1DrawItem(Sender: TObject;
+  ACanvas: TCanvas; ARect: TRect; Selected: Boolean);
+var
+  LineBottom: Integer;
+  SText: String;
+  Bar: TRect;
+
+begin
+  with ACanvas, Sender as TMenuItem do
+  begin
+    with Font do
+    begin
+      Name := 'Azl Sans Serif';
+      Charset := RUSSIAN_CHARSET;
+      if Default then
+        Style := [fsBold];
+    end;
+    if Caption = '-' then
+    begin
+      Pen.Color := clBlack;
+      LineBottom := (ARect.Top + (ARect.Bottom - ARect.Top) div 2)-1;
+      MoveTo(ARect.Left, LineBottom);
+      LineTo(ARect.Right, LineBottom);
+      inc(LineBottom);
+      Pen.Color := clWhite;
+      MoveTo(ARect.Left, LineBottom);
+      LineTo(ARect.Right, LineBottom);
+    end
+    else
+    begin
+      if Selected then
+      begin
+        Brush.Color := clNavy;
+        if Enabled then
+          Font.Color := clWhite
+        else
+          Font.Color := clSilver;
+      end
+      else
+      begin
+        Brush.Color := clBtnFace;
+        if Enabled then
+          Font.Color := clBlack
+        else
+          Font.Color := clGrayText;
+      end;
+      Bar := ARect;
+     // Inc(Bar.Left, 22);
+      FillRect(Bar);
+      TextOut(ARect.Left+2, ARect.Top+1, Caption);
+    end;
+    SText :=ShortCutToText(ShortCut);
+    TextOut(ARect.Right-TextWidth(SText)-2, ARect.Top+1, SText);
+    if ImageIndex <> -1 then
+      with GetParentMenu do
+        if Assigned(Images) then
+        begin
+          if Checked then
+          begin
+            Bar.Left := ARect.Left + 1;
+            Bar.Right := Bar.Left + 16;
+            Bar.Top := ARect.Top + 1;
+            Bar.Bottom := Bar.Top + 16;
+
+            ACanvas.Brush.Color := clBtnShadow;
+            ACanvas.FrameRect(Bar);
+
+            Inc(Bar.Left, 2);
+            Inc(Bar.Right, 2);
+            Inc(Bar.Top, 2);
+            Inc(Bar.Bottom, 2);
+
+            ACanvas.Brush.Color := clBtnHighlight;
+            ACanvas.FrameRect(Bar);
+
+            Dec(Bar.Left, 1);
+            Dec(Bar.Right, 1);
+            Dec(Bar.Top, 1);
+            Dec(Bar.Bottom, 1);
+
+            if Selected then
+              ACanvas.Brush.Color := clBtnFace
+            else
+              ACanvas.Brush.Color := clBtnHighlight;
+            ACanvas.FillRect(Bar);
+          end;
+
+          Images.Draw(ACanvas, ARect.Left, ARect.Top, ImageIndex, Enabled);
+        end;
+  end;
+end;
+
+procedure TCreditsManagerForConstruction.N6Click(Sender: TObject);
+begin
+   OrderForm.ShowModal;
+end;
+
+procedure TCreditsManagerForConstruction.ActnSearchPanelExecute(
+  Sender: TObject);
+begin
+   Panelsearch.Visible := not Panelsearch.Visible; 
+end;
+
+procedure TCreditsManagerForConstruction.ActnSearchExecute(Sender: TObject);
+
+var
+  SearchField : string;
+  SearchOptions : TSearchRecordOptions;
+begin
+  SearchOptions := [srIgnoreCase ,srPartialMatch];
+
+  with Sender as TEdit  do
+  begin
+    SearchField := copy(Name,5,length(Name));
+    CommonGrid.SelectedRows.Clear;
+    with  TOracleDataSet(CommonGrid.DataSource.DataSet) do
+    if  not SearchRecord(
+                  SearchField
+                 ,Text
+                 ,SearchOptions + [srFromCurrent , srForward ]
+                 ) then
+    if MessageDlg(
+              'јхтарыш сона чатды '+#13+'давам етм€к ист€йирсинизми?'
+             ,mtInformation
+             ,[mbNo , mbYes]
+             ,0
+             ) = mrYes  then
+    if  not SearchRecord(
+                 SearchField
+                ,Text
+                ,SearchOptions + [ srFromBeginning ]
+                )  then
+    MessageDlg('…азы тапылмады!',mtInformation,[mbOK],0);
+    CommonGrid.SelectedRows.CurrentRowSelected := True;
+  end;
+
+end;
+
+procedure TCreditsManagerForConstruction.EditcontnumKeyPress(
+  Sender: TObject; var Key: Char);
+begin
+  if Key = #13  then
+  ActnSearchExecute(Sender);
+
+end;
+
+procedure TCreditsManagerForConstruction.EditcontnumExit(
+  Sender: TObject);
+begin
+  with Sender as TEdit do
+  Text := '';
+
+end;
+
+procedure TCreditsManagerForConstruction.ActiveFormDestroy(
+  Sender: TObject);
+begin
+ExpiresPaymentsForm.Free;
+end;
+
+procedure TCreditsManagerForConstruction.N11Click(Sender: TObject);
+begin
+ExpiresPaymentsForm.ShowModal;
+end;
+
+procedure TCreditsManagerForConstruction.N12Click(Sender: TObject);
+begin
+FrmInterest :=TFrmInterest. create(Self);
+FrmInterest.showmodal
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TCreditsManagerForConstruction,
+    Class_CreditsManagerForConstruction,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

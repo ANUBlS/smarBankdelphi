@@ -1,0 +1,641 @@
+object DM: TDM
+  OldCreateOrder = False
+  Left = 220
+  Top = 242
+  Height = 501
+  Width = 741
+  object ODSPayments: TOracleDataSet
+    SQL.Strings = (
+      '   select'
+      '  m.id'
+      '  ,m.dateplt ,m.querytime ,m.p099, m.nazntext, m.nazntextadd'
+      
+        '  ,m.name    ,m.n_plt  , m.taxcode, m.taxlevelcode, m.signuid1, ' +
+        'm.signdatetime1'
+      '  ,m.acc     ,m.p013     ,m.signuid2, m.signdatetime2'
+      '  ,m.korname ,m.mfo1'
+      '  ,m.koracc  ,m.inn1'
+      '  ,m.korinn  ,m.korbankacc1 ,m.korbankacc2'
+      '  ,m.p004    ,m.bic1 ,m.bic2'
+      '  ,v.val_naME ,m.p018'
+      '  ,m.nazntext ,m.mfo2'
+      
+        '  ,m.status   ,m.inn2 ,m.transbank ,m.inn  ,m.iso ,m.transfertyp' +
+        'e transfertypeold'
+      
+        '  ,decode(m.transfertype,3,'#39'X.O.H.K.S'#39',2,'#39'AZIPS'#39',4,'#39'Bank daxili'#39 +
+        ',m.transfertype)  transfertype'
+      '  from'
+      ''
+      '  mailpayments m'
+      '  join'
+      '  account a on (m.acc=a.acc_no)'
+      '  join'
+      '  avalute v on(a.val_acc=v.valute)'
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ' '
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      'order by :sort'
+      ''
+      ''
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' ')
+    Variables.Data = {
+      0300000001000000050000003A534F5254010000000D0000007472616E736665
+      72747970650000000000}
+    QBEDefinition.QBEFieldDefs = {
+      04000000250000000200000049440100000000000700000044415445504C5401
+      0000000000040000004E414D4501000000000003000000414343010000000000
+      070000004B4F524E414D45010000000000060000004B4F524143430100000000
+      00060000004B4F52494E4E010000000000040000005030303401000000000008
+      0000004E415A4E54455854010000000000060000005354415455530100000000
+      000C0000005452414E53464552545950450100000000000800000056414C5F4E
+      414D4501000000000009000000515545525954494D4501000000000005000000
+      4E5F504C540100000000000400000050303133010000000000040000004D464F
+      3101000000000004000000494E4E310100000000000B0000004B4F5242414E4B
+      4143433101000000000004000000424943310100000000000400000050303138
+      010000000000040000004D464F3201000000000004000000494E4E3201000000
+      000004000000424943320100000000000B0000004B4F5242414E4B4143433201
+      0000000000090000005452414E5342414E4B01000000000003000000494E4E01
+      000000000004000000503039390100000000000B0000004E415A4E5445585441
+      444401000000000007000000544158434F44450100000000000C000000544158
+      4C4556454C434F4445010000000000080000005349474E554944310100000000
+      000D0000005349474E4441544554494D4531010000000000080000005349474E
+      554944320100000000000D0000005349474E4441544554494D45320100000000
+      000A0000004E415A4E544558545F310100000000000300000049534F01000000
+      00000F0000005452414E53464552545950454F4C44010000000000}
+    Cursor = crSQLWait
+    QueryAllRecords = False
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 128
+    Top = 152
+    object ODSPaymentsID: TFloatField
+      FieldName = 'ID'
+    end
+    object ODSPaymentsDATEPLT: TDateTimeField
+      FieldName = 'DATEPLT'
+    end
+    object ODSPaymentsQUERYTIME: TDateTimeField
+      FieldName = 'QUERYTIME'
+    end
+    object ODSPaymentsP099: TStringField
+      FieldName = 'P099'
+      Size = 180
+    end
+    object ODSPaymentsNAZNTEXT: TStringField
+      FieldName = 'NAZNTEXT'
+      Size = 250
+    end
+    object ODSPaymentsNAZNTEXTADD: TStringField
+      FieldName = 'NAZNTEXTADD'
+      Size = 105
+    end
+    object ODSPaymentsNAME: TStringField
+      FieldName = 'NAME'
+      Size = 70
+    end
+    object ODSPaymentsN_PLT: TStringField
+      FieldName = 'N_PLT'
+      Size = 10
+    end
+    object ODSPaymentsTAXCODE: TFloatField
+      FieldName = 'TAXCODE'
+    end
+    object ODSPaymentsTAXLEVELCODE: TFloatField
+      FieldName = 'TAXLEVELCODE'
+    end
+    object ODSPaymentsSIGNUID1: TStringField
+      FieldName = 'SIGNUID1'
+      Size = 100
+    end
+    object ODSPaymentsSIGNDATETIME1: TDateTimeField
+      FieldName = 'SIGNDATETIME1'
+    end
+    object ODSPaymentsACC: TStringField
+      FieldName = 'ACC'
+      Size = 34
+    end
+    object ODSPaymentsP013: TStringField
+      FieldName = 'P013'
+      Size = 50
+    end
+    object ODSPaymentsSIGNUID2: TStringField
+      FieldName = 'SIGNUID2'
+      Size = 100
+    end
+    object ODSPaymentsSIGNDATETIME2: TDateTimeField
+      FieldName = 'SIGNDATETIME2'
+    end
+    object ODSPaymentsKORNAME: TStringField
+      FieldName = 'KORNAME'
+      Size = 70
+    end
+    object ODSPaymentsMFO1: TFloatField
+      FieldName = 'MFO1'
+    end
+    object ODSPaymentsKORACC: TStringField
+      FieldName = 'KORACC'
+      Size = 34
+    end
+    object ODSPaymentsINN1: TStringField
+      FieldName = 'INN1'
+    end
+    object ODSPaymentsKORINN: TStringField
+      FieldName = 'KORINN'
+      Size = 35
+    end
+    object ODSPaymentsKORBANKACC1: TStringField
+      FieldName = 'KORBANKACC1'
+    end
+    object ODSPaymentsKORBANKACC2: TStringField
+      FieldName = 'KORBANKACC2'
+    end
+    object ODSPaymentsP004: TFloatField
+      FieldName = 'P004'
+    end
+    object ODSPaymentsBIC1: TStringField
+      FieldName = 'BIC1'
+      Size = 50
+    end
+    object ODSPaymentsBIC2: TStringField
+      FieldName = 'BIC2'
+      Size = 50
+    end
+    object ODSPaymentsVAL_NAME: TStringField
+      FieldName = 'VAL_NAME'
+      Size = 10
+    end
+    object ODSPaymentsP018: TStringField
+      FieldName = 'P018'
+      Size = 70
+    end
+    object ODSPaymentsNAZNTEXT_1: TStringField
+      FieldName = 'NAZNTEXT_1'
+      Size = 250
+    end
+    object ODSPaymentsMFO2: TFloatField
+      FieldName = 'MFO2'
+    end
+    object ODSPaymentsSTATUS: TFloatField
+      FieldName = 'STATUS'
+    end
+    object ODSPaymentsINN2: TStringField
+      FieldName = 'INN2'
+    end
+    object ODSPaymentsTRANSBANK: TStringField
+      FieldName = 'TRANSBANK'
+      Size = 50
+    end
+    object ODSPaymentsINN: TStringField
+      FieldName = 'INN'
+      Size = 35
+    end
+    object ODSPaymentsISO: TStringField
+      FieldName = 'ISO'
+      Size = 5
+    end
+    object ODSPaymentsTRANSFERTYPE: TStringField
+      FieldName = 'TRANSFERTYPE'
+      Size = 40
+    end
+    object ODSPaymentsTRANSFERTYPEOLD: TIntegerField
+      FieldName = 'TRANSFERTYPEOLD'
+    end
+  end
+  object DSPayments: TDataSource
+    DataSet = ODSPayments
+    Left = 56
+    Top = 144
+  end
+  object dsfilials: TOracleDataSet
+    SQL.Strings = (
+      'select * from Filial')
+    QBEDefinition.QBEFieldDefs = {
+      0400000003000000020000004944010000000000040000004E414D4501000000
+      00000A0000004B4F445F46494C49414C010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 101
+    Top = 266
+    object dsfilialsID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object dsfilialsNAME: TStringField
+      FieldName = 'NAME'
+      Size = 90
+    end
+    object dsfilialsKOD_FILIAL: TStringField
+      FieldName = 'KOD_FILIAL'
+      Size = 6
+    end
+  end
+  object dtfilials: TDataSource
+    DataSet = dsfilials
+    Left = 101
+    Top = 322
+  end
+  object defds: TOracleDataSet
+    SQL.Strings = (
+      '   select'
+      '  m.id'
+      '  ,m.dateplt ,m.querytime ,m.p099, m.nazntext, m.nazntextadd'
+      
+        '  ,m.name    ,m.n_plt     , m.taxcode, m.taxlevelcode, m.signuid' +
+        '1, m.signdatetime1'
+      '  ,m.acc     ,m.p013   ,m.signuid2, m.signdatetime2'
+      '  ,m.korname ,m.mfo1 ,m.iso'
+      '  ,m.koracc  ,m.inn1'
+      '  ,m.korinn  ,m.korbankacc1 ,m.korbankacc2'
+      '  ,m.p004    ,m.bic1 ,m.bic2'
+      '  ,v.val_naME ,m.p018'
+      '  ,m.nazntext ,m.mfo2'
+      
+        '  ,m.status   ,m.inn2 ,m.transbank ,m.inn ,m.transfertype transf' +
+        'ertypeold'
+      
+        '  ,decode(m.transfertype,3,'#39'X.O.H.K.S'#39',2,'#39'AZIPS'#39',4,'#39'Bank daxili'#39 +
+        ',m.transfertype)  transfertype'
+      '   -- decode(m.status,1,'#39'X.O.H.K.S'#39',2,'#39'AZIPS'#39',m.status)'
+      '  from'
+      ''
+      '  mailpayments m'
+      '  join'
+      '  account a on (m.acc=a.acc_no)'
+      '  join'
+      '  avalute v on(a.val_acc=v.valute)'
+      '  where 1=1'
+      '  and upper(m.status) in'
+      '   ('
+      '   '#39'G'#39
+      '   ,'#39'N'#39
+      '   ,'#39'L'#39
+      '   )'
+      '   '
+      '  and   transfertype in'
+      '  ('
+      '  1'
+      '  ,2'
+      '  ,0'
+      '  )'
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      '  AND    (DATEPLT >=:DAT1 AND  DATEPLT <=:DAT2)'
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ' order by :sort'
+      ''
+      ''
+      ''
+      ''
+      ''
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' ')
+    Variables.Data = {
+      0300000003000000050000003A444154310C0000000000000000000000050000
+      003A444154320C0000000000000000000000050000003A534F5254010000000D
+      0000007472616E73666572747970650000000000}
+    QBEDefinition.QBEFieldDefs = {
+      04000000240000000200000049440100000000000700000044415445504C5401
+      0000000000040000004E414D4501000000000003000000414343010000000000
+      070000004B4F524E414D45010000000000060000004B4F524143430100000000
+      00060000004B4F52494E4E010000000000040000005030303401000000000008
+      00000056414C5F4E414D45010000000000080000004E415A4E54455854010000
+      000000060000005354415455530100000000000C0000005452414E5346455254
+      59504501000000000009000000515545525954494D4501000000000005000000
+      4E5F504C540100000000000400000050303133010000000000040000004D464F
+      3101000000000004000000494E4E310100000000000B0000004B4F5242414E4B
+      4143433101000000000004000000424943310100000000000400000050303138
+      010000000000040000004D464F3201000000000004000000494E4E3201000000
+      000004000000424943320100000000000B0000004B4F5242414E4B4143433201
+      0000000000090000005452414E5342414E4B01000000000003000000494E4E01
+      000000000004000000503039390100000000000B0000004E415A4E5445585441
+      444401000000000007000000544158434F44450100000000000C000000544158
+      4C4556454C434F4445010000000000080000005349474E554944310100000000
+      000D0000005349474E4441544554494D4531010000000000080000005349474E
+      554944320100000000000D0000005349474E4441544554494D45320100000000
+      000A0000004E415A4E544558545F310100000000000300000049534F01000000
+      0000}
+    Session = sboapiDataModule.SBSession
+    Left = 285
+    Top = 138
+    object defdsID: TFloatField
+      FieldName = 'ID'
+    end
+    object defdsDATEPLT: TDateTimeField
+      FieldName = 'DATEPLT'
+    end
+    object defdsNAME: TStringField
+      FieldName = 'NAME'
+      Size = 70
+    end
+    object defdsACC: TStringField
+      FieldName = 'ACC'
+      Size = 34
+    end
+    object defdsKORNAME: TStringField
+      FieldName = 'KORNAME'
+      Size = 70
+    end
+    object defdsKORACC: TStringField
+      FieldName = 'KORACC'
+      Size = 34
+    end
+    object defdsKORINN: TStringField
+      FieldName = 'KORINN'
+      Size = 35
+    end
+    object defdsP004: TFloatField
+      FieldName = 'P004'
+    end
+    object defdsVAL_NAME: TStringField
+      FieldName = 'VAL_NAME'
+      Size = 10
+    end
+    object defdsNAZNTEXT: TStringField
+      FieldName = 'NAZNTEXT'
+      Size = 250
+    end
+    object defdsSTATUS: TFloatField
+      FieldName = 'STATUS'
+    end
+    object defdsTRANSFERTYPE: TStringField
+      FieldName = 'TRANSFERTYPE'
+      Size = 40
+    end
+    object defdsQUERYTIME: TDateTimeField
+      FieldName = 'QUERYTIME'
+    end
+    object defdsN_PLT: TStringField
+      FieldName = 'N_PLT'
+      Size = 10
+    end
+    object defdsP013: TStringField
+      FieldName = 'P013'
+      Size = 50
+    end
+    object defdsMFO1: TFloatField
+      FieldName = 'MFO1'
+    end
+    object defdsINN1: TStringField
+      FieldName = 'INN1'
+    end
+    object defdsKORBANKACC1: TStringField
+      FieldName = 'KORBANKACC1'
+    end
+    object defdsBIC1: TStringField
+      FieldName = 'BIC1'
+      Size = 50
+    end
+    object defdsP018: TStringField
+      FieldName = 'P018'
+      Size = 70
+    end
+    object defdsMFO2: TFloatField
+      FieldName = 'MFO2'
+    end
+    object defdsINN2: TStringField
+      FieldName = 'INN2'
+    end
+    object defdsBIC2: TStringField
+      FieldName = 'BIC2'
+      Size = 50
+    end
+    object defdsKORBANKACC2: TStringField
+      FieldName = 'KORBANKACC2'
+    end
+    object defdsTRANSBANK: TStringField
+      FieldName = 'TRANSBANK'
+      Size = 50
+    end
+    object defdsINN: TStringField
+      FieldName = 'INN'
+      Size = 35
+    end
+    object defdsP099: TStringField
+      FieldName = 'P099'
+      Size = 180
+    end
+    object defdsNAZNTEXTADD: TStringField
+      FieldName = 'NAZNTEXTADD'
+      Size = 105
+    end
+    object defdsTAXCODE: TFloatField
+      FieldName = 'TAXCODE'
+    end
+    object defdsTAXLEVELCODE: TFloatField
+      FieldName = 'TAXLEVELCODE'
+    end
+    object defdsSIGNUID1: TStringField
+      FieldName = 'SIGNUID1'
+      Size = 100
+    end
+    object defdsSIGNDATETIME1: TDateTimeField
+      FieldName = 'SIGNDATETIME1'
+    end
+    object defdsSIGNUID2: TStringField
+      FieldName = 'SIGNUID2'
+      Size = 100
+    end
+    object defdsSIGNDATETIME2: TDateTimeField
+      FieldName = 'SIGNDATETIME2'
+    end
+    object defdsNAZNTEXT_1: TStringField
+      FieldName = 'NAZNTEXT_1'
+      Size = 250
+    end
+    object defdsISO: TStringField
+      FieldName = 'ISO'
+      Size = 5
+    end
+  end
+  object Dat: TOracleDataSet
+    SQL.Strings = (
+      'select tek_dat from sysdat')
+    QBEDefinition.QBEFieldDefs = {04000000010000000700000054454B5F444154010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 237
+    Top = 74
+    object DatTEK_DAT: TDateTimeField
+      FieldName = 'TEK_DAT'
+      Required = True
+    end
+  end
+  object OracleDataSet1: TOracleDataSet
+    Left = 405
+    Top = 90
+  end
+  object sb_trans: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'mailbanking'
+    Left = 365
+    Top = 26
+  end
+  object OraclePackage1: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'SB_ADM'
+    Left = 381
+    Top = 170
+  end
+  object XOHKS: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'MAILBANKING'
+    Cursor = crSQLWait
+    Left = 144
+    Top = 40
+  end
+  object Sb_aca: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'Sb_ACA'
+    Left = 232
+    Top = 272
+  end
+end

@@ -1,0 +1,445 @@
+object AccMgrForm: TAccMgrForm
+  Left = 358
+  Top = 107
+  Width = 502
+  Height = 277
+  BorderIcons = [biSystemMenu]
+  Caption = 'AccMgrForm'
+  Color = clBtnFace
+  Font.Charset = RUSSIAN_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poOwnerFormCenter
+  OnCanResize = FormCanResize
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  OnKeyPress = FormKeyPress
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object AccountGB: TGroupBox
+    Left = 0
+    Top = 0
+    Width = 494
+    Height = 212
+    Align = alTop
+    Caption = 'ўесаб'
+    TabOrder = 0
+    object Label1: TLabel
+      Left = 8
+      Top = 20
+      Width = 34
+      Height = 13
+      Caption = 'ўесаб:'
+    end
+    object Label2: TLabel
+      Left = 256
+      Top = 16
+      Width = 38
+      Height = 13
+      Caption = '¬алйута:'
+    end
+    object Label3: TLabel
+      Left = 8
+      Top = 44
+      Width = 69
+      Height = 13
+      Caption = 'Ѕаланс щесабы:'
+    end
+    object Label4: TLabel
+      Left = 8
+      Top = 68
+      Width = 37
+      Height = 13
+      Caption = 'ћцшт€ри:'
+    end
+    object Label5: TLabel
+      Left = 8
+      Top = 92
+      Width = 58
+      Height = 13
+      Caption = 'јчылма тарихи:'
+    end
+    object Label6: TLabel
+      Left = 8
+      Top = 185
+      Width = 59
+      Height = 13
+      Caption = 'ўесабын ады:'
+    end
+    object Label13: TLabel
+      Left = 8
+      Top = 116
+      Width = 81
+      Height = 13
+      Caption = 'ўесабат символу:'
+    end
+    object Label14: TLabel
+      Left = 8
+      Top = 139
+      Width = 23
+      Height = 13
+      Caption = '‘илиал:'
+    end
+    object Label15: TLabel
+      Left = 8
+      Top = 163
+      Width = 44
+      Height = 13
+      Caption = '—имволлары'
+    end
+    object Label12: TLabel
+      Left = 312
+      Top = 106
+      Width = 24
+      Height = 13
+      Caption = 'Ћимит:'
+    end
+    object DBText1: TDBText
+      Left = 120
+      Top = 161
+      Width = 65
+      Height = 17
+      Color = clBtnFace
+      DataField = 'TIPACC'
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = [fsBold]
+      ParentColor = False
+      ParentFont = False
+    end
+    object DBLookupCurr: TDBLookupComboBox
+      Tag = 1
+      Left = 350
+      Top = 14
+      Width = 138
+      Height = 21
+      KeyField = 'VALUTE'
+      ListField = 'VALU_NAME'
+      ListSource = AvaluteDatSrc
+      TabOrder = 2
+      OnClick = DBLookupCurrClick
+      OnKeyPress = DBLookupCurrKeyPress
+    end
+    object DBLookupCust: TDBLookupComboBox
+      Tag = 1
+      Left = 166
+      Top = 64
+      Width = 323
+      Height = 21
+      KeyField = 'ID'
+      ListField = 'NAME'
+      ListSource = CustomersDatSrc
+      TabOrder = 6
+      OnClick = DBLookupCustClick
+      OnKeyPress = DBLookupCustKeyPress
+    end
+    object DTPOpenDate: TDateTimePicker
+      Tag = 1
+      Left = 120
+      Top = 88
+      Width = 145
+      Height = 21
+      CalAlignment = dtaLeft
+      Date = 37357.6183236921
+      Time = 37357.6183236921
+      DateFormat = dfShort
+      DateMode = dmComboBox
+      Kind = dtkDate
+      ParseInput = False
+      TabOrder = 7
+      OnKeyPress = DTPOpenDateKeyPress
+    end
+    object DBLookupSimotchet: TDBLookupComboBox
+      Tag = 1
+      Left = 120
+      Top = 112
+      Width = 145
+      Height = 21
+      KeyField = 'ID'
+      ListField = 'NAME'
+      ListSource = RepSymbolsDatSrc
+      TabOrder = 8
+      OnKeyPress = DBLookupSimotchetKeyPress
+    end
+    object DBLookupComboBox4: TDBLookupComboBox
+      Tag = 1
+      Left = 167
+      Top = 135
+      Width = 179
+      Height = 21
+      KeyField = 'ID'
+      ListField = 'NAME'
+      ListSource = FilialsDatSrc
+      TabOrder = 10
+      OnClick = DBLookupComboBox4Click
+      OnKeyPress = DBLookupComboBox4KeyPress
+    end
+    object AccountFlagsGB: TGroupBox
+      Left = 399
+      Top = 133
+      Width = 89
+      Height = 43
+      TabOrder = 12
+      Visible = False
+      object Button3: TButton
+        Left = 9
+        Top = 13
+        Width = 71
+        Height = 22
+        Caption = '—имволлар ...'
+        TabOrder = 0
+      end
+    end
+    object DBLookupBalance1: TDBLookupComboBox
+      Tag = 1
+      Left = 164
+      Top = 39
+      Width = 325
+      Height = 21
+      KeyField = 'BAL_CN'
+      ListField = 'BALNAME'
+      ListSource = BalAccDatSrc
+      TabOrder = 4
+      OnClick = DBLookupBalance1Click
+      OnKeyPress = DBLookupBalance1KeyPress
+    end
+    object EditBall: TEdit
+      Tag = 1
+      Left = 119
+      Top = 40
+      Width = 44
+      Height = 21
+      TabOrder = 3
+      OnChange = EditBallChange
+      OnKeyPress = EditBallKeyPress
+    end
+    object EditAcc: TEdit
+      Tag = 1
+      Left = 119
+      Top = 13
+      Width = 134
+      Height = 21
+      TabOrder = 0
+      OnKeyPress = EditAccKeyPress
+    end
+    object EditCust: TEdit
+      Tag = 1
+      Left = 119
+      Top = 64
+      Width = 44
+      Height = 21
+      TabOrder = 5
+      OnChange = EditCustChange
+      OnKeyPress = EditCustKeyPress
+    end
+    object EditFil: TEdit
+      Tag = 1
+      Left = 120
+      Top = 136
+      Width = 44
+      Height = 21
+      TabOrder = 9
+      OnChange = EditFilChange
+      OnKeyPress = EditBallKeyPress
+    end
+    object EditAccName: TEdit
+      Tag = 1
+      Left = 120
+      Top = 180
+      Width = 279
+      Height = 21
+      TabOrder = 11
+      OnKeyPress = EditAccNameKeyPress
+    end
+    object EditValute: TEdit
+      Tag = 1
+      Left = 302
+      Top = 15
+      Width = 44
+      Height = 21
+      TabOrder = 1
+      OnChange = EditValuteChange
+      OnKeyPress = EditBallKeyPress
+    end
+    object DBEditLimit: TEdit
+      Left = 343
+      Top = 104
+      Width = 140
+      Height = 21
+      TabOrder = 13
+      Text = '0'
+    end
+  end
+  object ButtonCommit: TButton
+    Left = 336
+    Top = 217
+    Width = 75
+    Height = 25
+    Caption = '…аддаша йаз'
+    TabOrder = 1
+    OnClick = ButtonCommitClick
+  end
+  object ButtonCancel: TButton
+    Left = 416
+    Top = 217
+    Width = 75
+    Height = 25
+    Caption = '»мтина'
+    ModalResult = 2
+    TabOrder = 2
+  end
+  object Customers: TOracleDataSet
+    SQL.Strings = (
+      'select id,name from customers')
+    Session = sboapiDataModule.SBSession
+    Left = 134
+    Top = 220
+    object CustomersID: TIntegerField
+      FieldName = 'ID'
+      Required = True
+    end
+    object CustomersNAME: TStringField
+      FieldName = 'NAME'
+      Size = 90
+    end
+  end
+  object BalAcc: TOracleDataSet
+    SQL.Strings = (
+      'SELECT bal_cn,'
+      '        balname'
+      '  FROM bal_spr1')
+    Session = sboapiDataModule.SBSession
+    Left = 72
+    Top = 220
+    object BalAccBAL_CN: TFloatField
+      FieldName = 'BAL_CN'
+      Required = True
+    end
+    object BalAccBALNAME: TStringField
+      FieldName = 'BALNAME'
+      Size = 181
+    end
+  end
+  object Avalute: TOracleDataSet
+    SQL.Strings = (
+      'select valute,valu_name from avalute')
+    Session = sboapiDataModule.SBSession
+    Left = 103
+    Top = 220
+    object AvaluteVALUTE: TIntegerField
+      FieldName = 'VALUTE'
+      Required = True
+    end
+    object AvaluteVALU_NAME: TStringField
+      FieldName = 'VALU_NAME'
+      Size = 25
+    end
+  end
+  object CustomersDatSrc: TDataSource
+    DataSet = Customers
+    Left = 148
+    Top = 252
+  end
+  object BalAccDatSrc: TDataSource
+    DataSet = BalAcc
+    Left = 72
+    Top = 252
+  end
+  object AvaluteDatSrc: TDataSource
+    DataSet = Avalute
+    Left = 111
+    Top = 252
+  end
+  object Filials: TOracleDataSet
+    SQL.Strings = (
+      'SELECT id,name'
+      '  FROM filial')
+    Session = sboapiDataModule.SBSession
+    Left = 166
+    Top = 220
+    object FilialsID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object FilialsNAME: TStringField
+      FieldName = 'NAME'
+      Size = 90
+    end
+  end
+  object FilialsDatSrc: TDataSource
+    DataSet = Filials
+    Left = 186
+    Top = 252
+  end
+  object ReportSymbol: TOracleDataSet
+    Tag = 1
+    SQL.Strings = (
+      'select * from REPORT_SYMBOL')
+    Session = sboapiDataModule.SBSession
+    Left = 496
+    Top = 328
+  end
+  object ReportSymbolData: TDataSource
+    DataSet = ReportSymbol
+    Left = 496
+    Top = 376
+  end
+  object OracleDataSet3: TOracleDataSet
+    Tag = 1
+    SQL.Strings = (
+      'select * from REPORT_SYMBOL')
+    Session = sboapiDataModule.SBSession
+    Left = 496
+    Top = 328
+  end
+  object DataSource6: TDataSource
+    DataSet = OracleDataSet3
+    Left = 496
+    Top = 376
+  end
+  object OracleDataSet6: TOracleDataSet
+    Tag = 1
+    SQL.Strings = (
+      'select * from REPORT_SYMBOL')
+    Session = sboapiDataModule.SBSession
+    Left = 496
+    Top = 328
+  end
+  object RepSymbols: TOracleDataSet
+    SQL.Strings = (
+      'select * from REPORT_SYMBOL'
+      '')
+    Session = sboapiDataModule.SBSession
+    Left = 198
+    Top = 214
+    object RepSymbolsID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object RepSymbolsNAME: TStringField
+      FieldName = 'NAME'
+      Required = True
+      Size = 256
+    end
+  end
+  object RepSymbolsDatSrc: TDataSource
+    DataSet = RepSymbols
+    Left = 225
+    Top = 255
+  end
+  object CC_GENERAL: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'CC_GENERAL'
+    ParameterMode = pmNamed
+    Cursor = crSQLWait
+    Left = 235
+    Top = 216
+  end
+end

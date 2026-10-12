@@ -1,0 +1,449 @@
+unit cm_Payandshd_repimpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Buttons, Oracle, Db, OracleData, StdCtrls, CheckLst, Evanescence,
+  ExtCtrls, CMExcelExport, Gauges, ComCtrls;
+
+type
+  TRepFrm = class(TForm)
+    OracleDataSet9: TOracleDataSet;
+    OracleDataSet10: TOracleDataSet;
+    OracleDataSet10MONTH: TFloatField;
+    OracleDataSet11: TOracleDataSet;
+    OraclePackage1: TOraclePackage;
+    OracleDataSet8: TOracleDataSet;
+    Panel1: TPanel;
+    SpeedButton1: TSpeedButton;
+    SpeedButton2: TSpeedButton;
+    GroupBox1: TGroupBox;
+    LookUsrGrp: TEvanescence;
+    CheckBox2: TCheckBox;
+    GroupBox3: TGroupBox;
+    LookPersonelType: TEvanescence;
+    CheckBox1: TCheckBox;
+    srcUsrGrp: TDataSource;
+    UsrGrpDataSet: TOracleDataSet;
+    PersonelTypeDataSet: TOracleDataSet;
+    srcPersonelType: TDataSource;
+    SpeedButton3: TSpeedButton;
+    OracleDataSet1: TOracleDataSet;
+    OracleDataSet1NUMBEROFCREDIT: TStringField;
+    OracleDataSet1DESCRIPTION: TStringField;
+    OracleDataSet1NAME: TStringField;
+    OracleDataSet1CREDITLINEAMOUNT: TFloatField;
+    OracleDataSet1NEWFINANCEAMOUNT: TFloatField;
+    OracleDataSet1DATEOFCONCLUSION: TDateTimeField;
+    OracleDataSet1DUEDATEFIRSTCONTRACT: TDateTimeField;
+    OracleDataSet1DOVR: TFloatField;
+    OracleDataSet1ANNUALYINTERESTRATE: TFloatField;
+    OracleDataSet1REST: TFloatField;
+    OracleDataSet1INTERESTREST: TFloatField;
+    OracleDataSet1ANNUTIET: TFloatField;
+    OracleDataSet1MONTHLYPROFIT: TFloatField;
+    OracleDataSet1ALEVPREDCOST: TFloatField;
+    OracleDataSet1PREDCOST: TFloatField;
+    OracleDataSet1krev: TFloatField;
+    OracleDataSet1krip: TFloatField;
+    OracleDataSet1anngelir: TFloatField;
+    ExcelExport: TCMExcelExport;
+    Gauge1: TGauge;
+    OracleDataSet1YMDATE: TDateTimeField;
+    OracleDataSet1ANNUALBANKRATE: TFloatField;
+    Panel2: TPanel;
+    DateTimePicker1: TDateTimePicker;
+    DateTimePicker2: TDateTimePicker;
+    Label1: TLabel;
+    Label2: TLabel;
+    sysdat: TOracleDataSet;
+    OracleDataSet11DAT: TDateTimeField;
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure SpeedButton2Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure CheckBox2Click(Sender: TObject);
+    procedure CheckBox1Click(Sender: TObject);
+    procedure OracleDataSet1CalcFields(DataSet: TDataSet);
+    procedure SpeedButton3Click(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  RepFrm: TRepFrm;
+  Exl, Sheet: Variant;
+  procedure InitPlugin(s:string);export;
+implementation
+uses CommonDecls,systemstate,CMOracleApiDataModuleImpl,ComObj;
+{$R *.DFM}
+procedure InitPlugin(s:string);export;
+begin
+   RepFrm.ShowModal;
+end;
+exports
+     InitPlugin;
+
+procedure TRepFrm.SpeedButton1Click(Sender: TObject);
+ const
+number_format='#,##0.00';
+number_format_r='#,##0.00%';
+n='yyy';
+d=2;
+f=3;
+
+
+procedure CreateSheet;
+begin
+  try
+   Exl := CreateOleObject('Excel.Application');
+   Exl.WorkBooks.add;
+   Sheet := Exl.Application.Worksheets.Item[1];
+  except
+  end;
+end;
+ procedure DestroySheet;
+begin
+  try
+   Finalize(Sheet);
+   Finalize(Exl);
+  except
+
+  end;
+end;
+procedure ShowSheet;
+begin
+  try
+     Exl.Visible := True;
+  except
+     DestroySheet;
+   end;
+  end;
+
+var
+s,l,cell, r,i , j , k ,m ,w :Integer;
+bdat,edat,tt,dat,dd :Tdatetime;
+var dY, dM, ddD: Word;
+t_val :integer;
+ //a:real;
+ RestsStr,chpayStr: String;
+ ADDITIONALPARAMS,FilterStr,CheckStr:String;
+//bash: string;
+
+begin
+bdat:=integer(trunc(DateTimePicker1.DateTime));
+edat:=integer(trunc(DateTimePicker2.DateTime));
+    with OracleDataSet10 do  begin
+    if Active then CloseAll;
+      SetVariable('bdat',bdat);
+      SetVariable('edat',edat);
+      open;
+      end;
+    with OracleDataSet11 do  begin
+     if Active then CloseAll;
+      SetVariable('bdat',bdat);
+      SetVariable('edat',edat);
+      open;
+      end;
+
+
+ Gauge1.Visible:=true;
+ FilterStr:='';
+  CheckStr := '';
+  chpayStr := '';
+
+  if (CheckStr<>'') and (FilterStr<>'') then
+  FilterStr := FilterStr+' AND '+CheckStr;
+
+ { if (CheckStr<>'') and (FilterStr='') then
+  FilterStr := CheckStr;
+   FilterStr := FilterStr+ chpayStr;
+  if FilterStr<>'' then ADDITIONALPARAMS:=' AND '+FilterStr
+  else ADDITIONALPARAMS:='';
+  }
+  if (LookUsrGrp.GetCheckedKeyList.Count<>LookUsrGrp.Items.Count) then
+  ADDITIONALPARAMS := ADDITIONALPARAMS + ' and p.USRGROUP in('
+                   +LookUsrGrp.GetCheckedKeyList.CommaText+')'
+                   +#13#10;
+
+  if (LookPersonelType.GetCheckedKeyList.Count<>LookPersonelType.Items.Count) then
+  ADDITIONALPARAMS := ADDITIONALPARAMS + ' and p.CUSTOMERTYPE in('
+                   +LookPersonelType.GetCheckedKeyList.CommaText+')'
+                   +#13#10;
+  // ShowMessage(ADDITIONALPARAMS);
+  // exit;
+ // if RestsStr <> ''  then ADDITIONALPARAMS := ADDITIONALPARAMS+' and '+RestsStr ;
+  with OracleDataSet9  do
+   begin
+         if Active then CloseAll;
+              if ADDITIONALPARAMS <> '' then
+            SQL[3] := ADDITIONALPARAMS
+            else
+            SQL[3] :='';
+         // Memo1.Text := SQL.Text;
+         open;
+    end;
+ CreateSheet;
+ try
+
+     Sheet.Range['A1:A60000'].ColumnWidth:=20;
+    // Sheet.Range['B1:A60000'].ColumnWidth:=15;
+    // Sheet.Range['C1:A60000'].ColumnWidth:=20;
+    // Sheet.Range['D1:A60000'].ColumnWidth:=20;
+      j:=0 ;  k:=0 ; i:=0;     s:=1;
+          Sheet.Cells[i+k+1,1]:='           Мцгавилянин №'                    ;
+          Sheet.Cells[i+k+1,1].Font.Name:='Azl Sans Serif';
+          Sheet.Cells[i+k+1,1].Font.Bold :=true;
+          Sheet.Cells[i+k+1,1].Font.Color:=clBlue;
+         // Sheet.Cells[i+k+1,1].ColumnWidth:=80;
+
+
+      for i:=1 to OracleDataSet10.FieldByName('month').asinteger  do begin
+      // Sheet.range['B1:G1'].select;
+       // Sheet.range[1,6].merge ;
+       Sheet.Cells[1,1+s].Font.Name:='Azl Sans Serif';
+       Sheet.Cells[1,1+s].Font.Bold :=true;
+       Sheet.Cells[1,1+s]:=OracleDataSet10.FieldByName('month').AsString;
+       Sheet.Cells[1,1+s].ColumnWidth:=15;
+       dat:=(OracleDataSet11.FieldByName('dat').AsDateTime+j);
+       Sheet.Cells[1,1+s]:= (FormatDateTime('01',dat)+'-'+FormatDateTime('MMM',dat)+'-'+FormatDateTime('YYYY',dat))+'=>';
+
+       Sheet.Cells[1,2+s].Font.Name:='Azl Sans Serif';
+       Sheet.Cells[1,2+s].ColumnWidth:=14;
+       Sheet.Cells[1,2+s]:='Юдямяли Я.Б '  ;
+
+       Sheet.Cells[1,3+s].Font.Name:='Azl Sans Serif';
+       Sheet.Cells[1,3+s].ColumnWidth:=14;
+       Sheet.Cells[1,3+s]:='Юдямяли Ф.Б '  ;
+
+       Sheet.Cells[1,4+s].Font.Name:='Azl Sans Serif';
+       Sheet.Cells[1,4+s].ColumnWidth:=20;
+       Sheet.Cells[1,4+s]:='Жями юдянилмялидир Ф.Б |'  ;
+
+        Sheet.Cells[1,5+s].Font.Name:='Azl Sans Serif';
+       Sheet.Cells[1,5+s].ColumnWidth:=14;
+       Sheet.Cells[1,5+s]:='Юдямялмиш Я.Б '  ;
+
+       Sheet.Cells[1,6+s].Font.Name:='Azl Sans Serif';
+       Sheet.Cells[1,6+s].ColumnWidth:=14;
+       Sheet.Cells[1,6+s]:='Юдямялмиш Ф.Б '  ;
+
+       Sheet.Cells[1,7+s].Font.Name:='Azl Sans Serif';
+       Sheet.Cells[1,7+s].ColumnWidth:=20;
+       Sheet.Cells[1,7+s]:='Жями юдянилмишдир Ф.Б |'  ;
+
+         s:=s+7;
+         j:=j+31;
+        end;
+
+  for r:=1 to OracleDataSet9.RecordCount do
+  begin
+
+    Sheet.Cells[r+1,1]:=OracleDataSet9.fieldbyname('numberofcredit').asstring;
+    Sheet.Cells[r+1,1].Font.Name:='Azl Sans Serif';
+    Sheet.Cells[r+1,1].Font.Bold :=true;
+    Sheet.Cells[r+1,1].Font.Color:=clBlue;
+    s:=1;
+    j:=0;
+    for l:=1 to OracleDataSet10.FieldByName('month').asinteger  do
+      begin
+        
+        tt:=(OracleDataSet11.FieldByName('dat').AsDateTime+j);
+        //dd:= StrToDate((FormatDateTime('01',tt)+'-'+FormatDateTime('MMM',tt)+'-'+FormatDateTime('YYYY',tt)));
+        DecodeDate(tt, dY, dM,ddD);
+     if dM-1=0 then begin
+      dM := 12;
+      dY := dY
+     end else begin
+       dM := dM
+       end;
+     dd := EncodeDate(dY, dM, 1);
+
+      // ShowMessage(datetostr(dd));
+        Sheet.Cells[1+r,1+s].Font.Name:='Azl Sans Serif';
+       Sheet.Cells[1+r,1+s].Font.Bold :=true;
+        Sheet.Cells[1+r,1+s].Font.Color :=clRed;
+       Sheet.Cells[1+r,1+s]:='           --   ';
+
+       Sheet.Cells[1+r,2+s].Font.Name:='Azl Sans Serif';
+       Sheet.Cells[1+r,2+s].ColumnWidth:=14;
+       Sheet.Cells[1+r,2+s]:=
+       OraclePackage1.CallFloatFunction('get_PRINCIPAL',[
+                                                  OracleDataSet9.FieldByName('ID').AsInteger,
+                                                  dd]);
+
+
+       Sheet.Cells[1+r,3+s].Font.Name:='Azl Sans Serif';
+       Sheet.Cells[1+r,3+s]:=OraclePackage1.CallFloatFunction('get_she_int',[
+                                                  OracleDataSet9.FieldByName('ID').AsInteger,
+                                                  dd]);
+
+       Sheet.Cells[1+r,4+s].Font.Name:='Azl Sans Serif';
+       Sheet.Cells[1+r,4+s]:= OraclePackage1.CallFloatFunction('get_PRINCIPAL',[
+                                                  OracleDataSet9.FieldByName('ID').AsInteger,
+                                                  dd]) +
+                              OraclePackage1.CallFloatFunction('get_she_int',[
+                                                  OracleDataSet9.FieldByName('ID').AsInteger,
+                                                  dd]) ;
+
+       Sheet.Cells[1+r,5+s].Font.Name:='Azl Sans Serif';
+       Sheet.Cells[1+r,5+s]:= OraclePackage1.CallFloatFunction('get_Payrest',[
+                                                  OracleDataSet9.FieldByName('ID').AsInteger,
+                                                  dd]);
+
+       Sheet.Cells[1+r,6+s].Font.Name:='Azl Sans Serif';
+       Sheet.Cells[1+r,6+s]:= OraclePackage1.CallFloatFunction('get_PayInt',[
+                                                  OracleDataSet9.FieldByName('ID').AsInteger,
+                                                  dd]);
+
+       Sheet.Cells[1+r,7+s].Font.Name:='Azl Sans Serif';
+       Sheet.Cells[1+r,7+s]:=  OraclePackage1.CallFloatFunction('get_Payrest',[
+                                                  OracleDataSet9.FieldByName('ID').AsInteger,
+                                                  dd])+
+                             OraclePackage1.CallFloatFunction('get_PayInt',[
+                                                  OracleDataSet9.FieldByName('ID').AsInteger,
+                                                  dd]);
+         s:=s+7;
+
+      j:=j+31;
+     end;
+     Gauge1.Progress:=trunc(r*100/OracleDataSet9.RecordCount);
+ // Sheet.Range['A'+bash+':WX'+inttostr(OracleDataSet9.RecordCount)].Borders.Color:=clRead;
+  OracleDataSet9.next;
+  end;
+   Gauge1.Visible:=false;
+  ShowSheet;
+  finally
+
+   Exl.Range['A1:A1'].Select;
+
+   Screen.Cursor := crDefault;
+   DestroySheet;
+ // OracleDataSet1.EnableControls;
+  end;
+  // OracleDataSet1.close;
+
+end;
+
+procedure TRepFrm.FormCreate(Sender: TObject);
+var i:integer;
+begin
+  for i := 0 to ComponentCount - 1 do
+    if Components[i].Tag = 3112 then begin
+      (Components[i] as TEvanescence).Open;
+      (Components[i] as TEvanescence).CheckAll;
+    end;
+UsrGrpDataSet.open;
+PersonelTypeDataSet.open;
+OracleDataSet8.open;
+ sysdat.open;
+ DateTimePicker1.DateTime:= sysdat.fieldbyname('tek_dat').AsDateTime;
+ DateTimePicker2.DateTime:= sysdat.fieldbyname('tek_dat').AsDateTime;
+
+end;
+
+procedure TRepFrm.SpeedButton2Click(Sender: TObject);
+begin
+close
+end;
+
+procedure TRepFrm.FormShow(Sender: TObject);
+var i:integer;
+begin
+ { for i := 0 to ComponentCount - 1 do
+    if Components[i].Tag = 3112 then begin
+      (Components[i] as TEvanescence).Open;
+      (Components[i] as TEvanescence).CheckAll;
+    end;   }
+end;
+
+procedure TRepFrm.CheckBox2Click(Sender: TObject);
+begin
+if CheckBox2.Checked=true then
+LookUsrGrp.CheckAll
+else
+LookUsrGrp.UncheckAll
+
+end;
+
+procedure TRepFrm.CheckBox1Click(Sender: TObject);
+begin
+if CheckBox1.Checked=true then
+LookPersonelType.CheckAll
+else
+LookPersonelType.UncheckAll
+end;
+
+procedure TRepFrm.OracleDataSet1CalcFields(DataSet: TDataSet);
+   const
+number_format='0.0000';
+begin
+if OracleDataSet1.FieldByName('alevpredcost').asFloat =0 then
+OracleDataSet1.FieldByName('kr/ev').asFloat:=0
+else
+OracleDataSet1.FieldByName('kr/ev').asFloat:=
+StrToFloat(FormatFloat(number_format,OracleDataSet1.FieldByName('NEWFINANCEAMOUNT').asFloat/OracleDataSet1.FieldByName('alevpredcost').asfloat))   ;
+
+if OracleDataSet1.FieldByName('predcost').asFloat =0 then
+OracleDataSet1.FieldByName('kr/ip').asFloat:=0
+else
+OracleDataSet1.FieldByName('kr/ip').asFloat:=
+StrToFloat(FormatFloat(number_format,OracleDataSet1.FieldByName('NEWFINANCEAMOUNT').asFloat/OracleDataSet1.FieldByName('predcost').asFloat))    ;
+
+
+if OracleDataSet1.FieldByName('MONTHLYPROFIT').asFloat =0 then
+OracleDataSet1.FieldByName('ann/gelir').asFloat:=0
+else
+OracleDataSet1.FieldByName('ann/gelir').asFloat:=
+StrToFloat(FormatFloat(number_format,OracleDataSet1.FieldByName('ANNUTIET').asFloat/OracleDataSet1.FieldByName('MONTHLYPROFIT').asFloat))
+
+
+end;
+
+procedure TRepFrm.SpeedButton3Click(Sender: TObject);
+var
+ RestsStr,chpayStr: String;
+ ADDITIONALPARAMS,FilterStr,CheckStr:String;
+begin
+if (LookUsrGrp.GetCheckedKeyList.Count<>LookUsrGrp.Items.Count) then
+  ADDITIONALPARAMS := ADDITIONALPARAMS + ' and p.USRGROUP in('
+                   +LookUsrGrp.GetCheckedKeyList.CommaText+')'
+                   +#13#10;
+
+  if (LookPersonelType.GetCheckedKeyList.Count<>LookPersonelType.Items.Count) then
+  ADDITIONALPARAMS := ADDITIONALPARAMS + ' and p.CUSTOMERTYPE in('
+                   +LookPersonelType.GetCheckedKeyList.CommaText+')'
+                   +#13#10;
+
+ //  exit;
+ // if RestsStr <> ''  then ADDITIONALPARAMS := ADDITIONALPARAMS+' and '+RestsStr ;
+  with OracleDataSet1  do
+   begin
+         if Active then CloseAll;
+              if ADDITIONALPARAMS <> '' then
+            SQL[13] := ADDITIONALPARAMS
+            else
+            SQL[13] :='';
+         // Memo1.Text := SQL.Text;
+         open;
+end;
+  with ExcelExport do
+   begin
+     Connect;
+      ExportDataset(OracleDataSet1,'------------',True,false);
+     Disconnect;
+   end;
+ end;
+procedure TRepFrm.FormDestroy(Sender: TObject);
+begin
+UsrGrpDataSet.close;
+PersonelTypeDataSet.close;
+end;
+
+initialization
+   RepFrm := TRepFrm.Create(CommonApplication);
+end.

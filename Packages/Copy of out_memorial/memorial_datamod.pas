@@ -1,0 +1,85 @@
+unit memorial_datamod;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, OracleData, Oracle;
+
+type
+  Tmemorial_DataModule = class(TDataModule)
+    OraclePackage: TOraclePackage;
+    DataSrcMain: TDataSource;
+    ODSMain: TOracleDataSet;
+    ODSRate: TOracleDataSet;
+    DataSrcRate: TDataSource;
+    BankInfo: TOracleDataSet;
+    ReferDataSet: TOracleDataSet;
+    DataSrcRefer: TDataSource;
+    UsersList: TOracleDataSet;
+    DataSrcUsersList: TDataSource;
+    Branches: TOracleDataSet;
+    DataSrcBranches: TDataSource;
+    ODSMainDBAL_CN: TFloatField;
+    ODSMainKBAL_CN: TFloatField;
+    ODSMainDAT: TDateTimeField;
+    ODSMainDIFFRATE: TFloatField;
+    ODSMainNAME: TWideStringField;
+    ODSMainID: TFloatField;
+    ODSMainSHIFR: TIntegerField;
+    ODSMainVAL_ACC: TWideStringField;
+    ODSMainCURRENCYID_C: TWideStringField;
+    ODSMainAMMOUNT: TFloatField;
+    ODSMainAMMOUNT_C: TFloatField;
+    ODSMainLAMMOUNT: TFloatField;
+    ODSMainOP_ID: TFloatField;
+    ODSMainDEBITOR: TWideStringField;
+    ODSMainDEBTINN: TFloatField;
+    ODSMainDNAME: TWideStringField;
+    ODSMainKREDITOR: TWideStringField;
+    ODSMainKREDINN: TFloatField;
+    ODSMainKNAME: TWideStringField;
+    ODSMainDEBT: TFloatField;
+    ODSMainKREDIT: TFloatField;
+    ODSRateVALUTE: TIntegerField;
+    ODSRateVALU_NAME: TWideStringField;
+    BankInfoBANK: TWideStringField;
+    BankInfoINN: TWideStringField;
+    BankInfoLOGO: TBlobField;
+    BranchesID: TFloatField;
+    BranchesNAME: TWideStringField;
+    BranchesKOD_FILIAL: TWideStringField;
+    ReferDataSetBALANCE: TFloatField;
+    UsersListID: TFloatField;
+    UsersListNAME: TWideStringField;
+    procedure DataModuleCreate(Sender: TObject);
+    procedure DataModuleDestroy(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  memorial_DataModule: Tmemorial_DataModule;
+
+implementation
+
+uses sboapiDataModuleImpl;
+{$R *.DFM}
+
+procedure Tmemorial_DataModule.DataModuleCreate(Sender: TObject);
+begin
+BankInfo.Open;
+UsersList.Open;
+Branches.Open;
+end;
+
+procedure Tmemorial_DataModule.DataModuleDestroy(Sender: TObject);
+begin
+BankInfo.CloseAll;
+UsersList.CloseAll;
+Branches.CloseAll;
+end;
+
+end.

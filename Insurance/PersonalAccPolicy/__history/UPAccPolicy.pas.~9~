@@ -1,0 +1,588 @@
+﻿unit UPAccPolicy;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActiveX, AxCtrls, PPAccPolicy_TLB, StdVcl, ExtCtrls, StdCtrls, Buttons,
+  Oracle, Mask, DBCtrls,SBPlgAx50_TLB,DB, INSWordExporter, XFSCtrls;
+
+const
+     WM_ModalResult = WM_USER+139;
+     fmCaption = 'Policy: (%s)';
+
+type
+  TPAccPolicy = class(TActiveForm, IPAccPolicy,IUIObject,
+             IParamInput)
+    PolicyExporter: TINSWordExporter;
+    XFPanel1: TXFPanel;
+    XFPanel2: TXFPanel;
+    XFLabel1: TXFLabel;
+    ENum: TDBEdit;
+    BitBtn2: TBitBtn;
+    BitBtn1: TBitBtn;
+    btApply: TBitBtn;
+    btPrint: TBitBtn;
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure BitBtn2Click(Sender: TObject);
+    procedure BitBtn1Click(Sender: TObject);
+    procedure btApplyClick(Sender: TObject);
+    procedure ENumChange(Sender: TObject);
+    procedure ENumKeyPress(Sender: TObject; var Key: Char);
+    procedure btPrintClick(Sender: TObject);
+  private
+    { Private declarations }
+    id,tid : Integer;
+    FParams: TStrings;
+    FOwnerHandle : Integer;
+    FEvents: IPAccPolicyEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+    procedure AddTransh;
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+
+     function  Get_Owner:Integer; safecall;
+    procedure Set_Owner(val : Integer);  safecall;
+    {IParamInput}
+    function  Get_Params(const Name: WideString): OleVariant; safecall;
+    procedure Set_Params(const Name: WideString; Value: OleVariant); safecall;
+    property Params[const Name: WideString]: OleVariant read Get_Params write Set_Params;
+    {IInstance}
+    function InstanceInitialize: HResult; safecall;
+    function IUIObject.Initialize = InstanceInitialize;
+    function Cleanup: HResult; safecall;
+    {IUIObject}
+//    function  Get_Icon: OLE_HANDLE; safecall;
+    function UIObjectActivate: HResult; safecall;
+    function IUIObject.Activate = UIObjectActivate;
+    function QueryDeactivate: HResult; safecall;
+    function UIObjectDeactivate: HResult; safecall;
+    function IUIObject.Deactivate = UIObjectDeactivate;
+    function SaveState: HResult; safecall;
+    function  Get_Height : Integer; safecall;
+    function  Get_Width  : Integer; safecall;
+  public
+    { Public declarations }
+    procedure Initialize; override;
+  end;
+
+var
+    PAccPolicy:TPAccPolicy;
+
+implementation
+
+uses ComObj, ComServ, UDataMod,SBTranslateProc,sboapiDataModuleImpl;
+
+{$R *.DFM}
+
+{ TPAccPolicy }
+
+procedure TPAccPolicy.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_PAccPolicyPage); }
+end;
+
+procedure TPAccPolicy.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as IPAccPolicyEvents;
+end;
+
+procedure TPAccPolicy.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TPAccPolicy.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TPAccPolicy.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TPAccPolicy.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TPAccPolicy.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TPAccPolicy.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TPAccPolicy.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TPAccPolicy.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TPAccPolicy.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TPAccPolicy.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TPAccPolicy.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TPAccPolicy.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TPAccPolicy.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TPAccPolicy.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TPAccPolicy.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TPAccPolicy.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TPAccPolicy.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TPAccPolicy.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TPAccPolicy.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TPAccPolicy._Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TPAccPolicy.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TPAccPolicy.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TPAccPolicy.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TPAccPolicy.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TPAccPolicy.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TPAccPolicy.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TPAccPolicy.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TPAccPolicy.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TPAccPolicy.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TPAccPolicy.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TPAccPolicy.Set_AxBorderStyle(Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TPAccPolicy.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TPAccPolicy.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TPAccPolicy.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TPAccPolicy.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TPAccPolicy.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TPAccPolicy.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TPAccPolicy.Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TPAccPolicy.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TPAccPolicy.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TPAccPolicy.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TPAccPolicy.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TPAccPolicy.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TPAccPolicy.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+function  TPAccPolicy.Get_Owner:Integer;
+begin
+  Result := handle;
+end;
+
+procedure TPAccPolicy.Set_Owner(val : Integer);
+begin
+  if val > 0 then
+     FOwnerHandle := val;
+end;
+
+
+function  TPAccPolicy.Get_Params(const Name: WideString): OleVariant;
+begin
+  Result := FParams.Values[Name];
+end;
+
+procedure TPAccPolicy.Set_Params(const Name: WideString; Value: OleVariant);
+begin
+  FParams.Values[Name] := Value;
+end;
+
+function TPAccPolicy.InstanceInitialize: HResult;
+begin
+  Result := S_OK;
+end;
+
+function TPAccPolicy.Cleanup: HResult;
+begin
+  Result := S_OK;
+end;
+
+function TPAccPolicy.UIObjectActivate: HResult;
+begin
+      id := StrToInt(Get_Params('id'));
+      showmessage(Get_Params('id'));
+      with PolicyDModule do
+      begin
+           ODSPAccident.Close;
+           ODSPAccident.SetVariable('id',id);
+           ODSPAccident.Open;
+
+           ODSCustomers.Close;
+           ODSCustomers.SetVariable('id',ODSPAccidentkli_id.Value);
+           ODSCustomers.Open;
+
+           ODSContracts.Close;
+           ODSContracts.SetVariable('blankid',ODSPAccidentId.value);
+           ODSContracts.Open;
+
+           ODSPAccSuggest.Close;
+           ODSPAccSuggest.SetVariable('PAID',StrToInt(Get_Params('id')));
+           ODSPAccSuggest.Open;
+           tid:=ODSPAccidentTypeID.Value;
+           if ODSContractsPolicy_Num.IsNull then
+           begin
+              ODSContracts.Close;
+              ODSContracts.SetVariable('blankid',ODSPAccidentId.value);
+              ODSContracts.Open;
+              ODSContracts.Edit;
+              Caption := format(fmCaption, ['Elave']);
+              btPrint.Enabled:=false;
+           end
+           else
+           begin
+              ODSContracts.Edit;
+              Caption := format(fmCaption, ['Redakte']);
+              btPrint.Enabled:=true;
+           end;
+      end;
+      Result := S_OK;
+end;
+
+function TPAccPolicy.QueryDeactivate: HResult;
+begin
+  Result := S_OK;
+end;
+
+function TPAccPolicy.UIObjectDeactivate: HResult;
+begin
+  Result := S_OK;
+end;
+
+function TPAccPolicy.SaveState: HResult;
+begin
+  Result := S_OK;
+end;
+
+function TPAccPolicy.Get_Height : Integer;
+begin
+  Result := Height;
+end;
+
+function TPAccPolicy.Get_Width  : Integer;
+begin
+  Result := Width;
+end;
+
+procedure TPAccPolicy.ActiveFormCreate(Sender: TObject);
+begin
+     PAccPolicy:=Self;
+     FParams := TStringList.Create;
+     PolicyDModule:=TPolicyDModule.Create(Self);
+     SBTranslateProc.TranslateAllComponents(Self,sboapiDataModule.OrPack_SL);
+
+end;
+
+procedure TPAccPolicy.BitBtn2Click(Sender: TObject);
+begin
+     PostMessage(FOwnerHandle, WM_ModalResult, mrCancel, 0);
+end;
+
+procedure TPAccPolicy.BitBtn1Click(Sender: TObject);
+begin
+     with PolicyDModule,ODSContracts do
+     if State in [dsEdit, dsInsert] then
+     begin
+        if ODSContractsPolicy_Num.IsNull then
+        FieldByName('POLICY_NUM').AsString:=OPCommon.callStringFunction('generatePolicy_Num',[tid]);
+        Post;
+     end;
+     PostMessage(FOwnerHandle, WM_ModalResult, mrOk, 0);
+end;
+
+procedure TPAccPolicy.btApplyClick(Sender: TObject);
+begin
+     with PolicyDModule,ODSContracts do
+     if State in [dsEdit, dsInsert] then
+     begin
+        if ODSContractsPolicy_Num.IsNull then
+        FieldByName('POLICY_NUM').AsString:=OPCommon.callStringFunction('generatePolicy_Num',[tid]);
+        Post;
+        RefreshRecord();
+     end;
+     btApply.Enabled:=false;
+     btPrint.Enabled:=true;
+end;
+
+procedure TPAccPolicy.ENumChange(Sender: TObject);
+begin
+     btApply.Enabled:=true;
+end;
+
+procedure TPAccPolicy.ENumKeyPress(Sender: TObject; var Key: Char);
+begin
+     if Key = #13 then
+     begin
+        if HiWord(GetKeyState(VK_Shift))<>0 then
+           with Sender as TControl do
+           SelectNext(ActiveControl,False, True)
+        else
+           with Sender as TControl do
+           SelectNext(ActiveControl,True, True);
+        key:=#0;
+     end;
+end;
+
+procedure TPAccPolicy.btPrintClick(Sender: TObject);
+begin
+     if  MessageDlg('Əməliyyat aparılsın?', mtConfirmation	, [mbYes, mbNo], 0) = mrYes then
+     AddTransh();
+     with PolicyDModule do
+     begin
+       ODSCondition.Close;
+       ODSCondition.SetVariable('vid',ODSPAccSuggestCNDT_ID.Value);
+       ODSCondition.Open;
+       Franshiz.Close;
+       Franshiz.SetVariable('fid',ODSPAccSuggestFRZ_ID.Value);
+       Franshiz.Open;
+       ODSBeneficiary.Locate('id',ODSPAccidentPROFITID.Value,[]);
+       ODSAgent.Locate('id',ODSPAccidentAgentid.Value,[]);
+       try
+          with PolicyExporter do
+          begin
+               FileName:=ExtractFilePath(Application.ExeName)+ '\ferdi qeza polis.doc';
+               Open(False);
+               SetBookmark('Policynum',ODSContractsPolicy_num.value, false, false, False, false, 8, 'Arial AzLat', False);
+               SetBookmark('Agent',ODSAgentName.value, false, false, False, false, 8, 'Arial AzLat', False);
+               SetBookmark('Insured',ODSCustomersName.value, false, false, False, false, 8, 'Arial AzLat', False);
+               SetBookmark('AInsured',ODSCustomersAddress.value, false, false, False, false, 8, 'Arial AzLat', False);
+               SetBookmark('Insperiod',DateToStr(ODSContractsBegin_date.value)+' - '+DateToStr(ODSContractsEnd_date.value), false, false, False, false, 8, 'Arial AzLat', False);
+               SetBookmark('Beneficiary',ODSBeneficiaryName.value, false, false, False, false, 8, 'Arial AzLat', False);
+               SetBookmark('Inssum',FloatToStr(ODSPAccSuggestInsurancesum.value), false, false, False, false, 8, 'Arial AzLat', False);
+               SetBookmark('Insammount',CurrToStr(ODSCONtractsAmmount.value), false, false, False, false, 8, 'Arial AzLat', False);
+               SetBookmark('Inst',DateToStr(ODSPAccSuggestInsuranceTime.value), false, false, False, false, 8, 'Arial AzLat', False);
+               SetBookmark('Franshiz',FranshizName.value, false, false, False, false, 8, 'Arial AzLat', False);
+               SetBookmark('Cond',ODSConditionName.value, false, false, False, false, 8, 'Arial AzLat', False);
+               SetBookmark('Insured1',ODSCustomersName.value, false, false, False, false, 9, 'Arial AzLat', False);
+        end;
+    finally
+        PolicyExporter.Show;
+    end;
+    end;
+end;
+
+procedure TPAccPolicy.AddTransh;
+begin
+      with PolicyDModule do begin
+      ODSContracts.Close;
+      ODSContracts.SetVariable('blankid',ODSPAccidentID.Value);
+      ODSContracts.Open;
+      if OPCOMMON.CallIntegerFunction('addtransaction', [
+                      ODSContracts.FieldByName('LOANACC_ID').asFloat,
+                      ODSContracts.FieldByName('CURRACC_ID').asFloat,
+                      ODSContracts.FieldByName('AMMOUNT').asFloat]) > 0 then
+      MessageDlg('Əməliyyat keçirildi.', mtInformation, [mbOK], 0);
+      Close;
+    end;
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TPAccPolicy,
+    Class_PAccPolicy,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

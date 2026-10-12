@@ -1,0 +1,174 @@
+unit frmDepositTypesImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, NLSDialogs,
+  ComCtrls, ToolWin, ExtCtrls, ImgList, Grids, DBGridEh, NLSLocalizer,
+  StdCtrls, Buttons, Db, OracleData, ActnList, Oracle;
+
+
+type
+  TfrmDepositTypes = class(TForm)
+    NLSLocalizer1: TNLSLocalizer;
+    ImageList1: TImageList;
+    Panel1: TPanel;
+    ToolBar1: TToolBar;
+    ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
+    ToolButton3: TToolButton;
+    ToolButton4: TToolButton;
+    ToolButton5: TToolButton;
+    ToolButton7: TToolButton;
+    ToolButton8: TToolButton;
+    Panel2: TPanel;
+    DBGridEh1: TDBGridEh;
+    BitBtn1: TBitBtn;
+    ToolButton6: TToolButton;
+    DepositTypes: TOracleDataSet;
+    DepositTypesDatSrc: TDataSource;
+    DepositTypesID: TFloatField;
+    DepositTypesTYPE: TStringField;
+    DepositTypesADDITIONALTYPE: TStringField;
+    DepositTypesWITHDRAWTYPE: TStringField;
+    DepositTypesDATEINTERVAL: TIntegerField;
+    ActionList1: TActionList;
+    AddTypesForColl: TOracleDataSet;
+    AddTypesForcollDatSrc: TDataSource;
+    AddTypesForCollID: TFloatField;
+    AddTypesForCollADDTYPENAME: TStringField;
+    AddTypesForCollADDTYPEDESC: TStringField;
+    AddTypesForCollWITHDRTYPE: TStringField;
+    AddTypesForCollWITHDRTYPEDESC: TStringField;
+    AddTypesForWith: TOracleDataSet;
+    FloatField1: TFloatField;
+    StringField1: TStringField;
+    StringField2: TStringField;
+    StringField3: TStringField;
+    StringField4: TStringField;
+    AddTypesForWithDatSrc: TDataSource;
+    SBCM_RPDEPOSITORY: TOraclePackage;
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure ToolButton1Click(Sender: TObject);
+    procedure DepositTypesApplyRecord(Sender: TOracleDataSet; Action: Char;
+      var Applied: Boolean; var NewRowId: String);
+    procedure ToolButton5Click(Sender: TObject);
+    procedure ToolButton7Click(Sender: TObject);
+    procedure ToolButton3Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    FAdditionalType :String;
+    FWithdrawtype :String;
+  end;
+
+var
+  frmDepositTypes: TfrmDepositTypes;
+
+implementation
+
+{$R *.DFM}
+uses  sboapiDataModuleImpl,frmAddEditDepositTypesImpl;
+
+procedure TfrmDepositTypes.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+   Resize := False;
+end;
+
+procedure TfrmDepositTypes.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+   if Ord(Key) = VK_ESCAPE then Close;
+end;
+
+procedure TfrmDepositTypes.FormCreate(Sender: TObject);
+begin
+   DepositTypes.Open;
+   AddTypesForColl.Open;
+   AddTypesForWith.Open;
+   frmAddEditDepositTypes := TfrmAddEditDepositTypes.Create(Self);
+end;
+
+procedure TfrmDepositTypes.FormDestroy(Sender: TObject);
+begin
+   DepositTypes.CloseAll;
+   AddTypesForColl.CloseAll;
+   AddTypesForWith.CloseAll;
+   frmAddEditDepositTypes.Free;
+end;
+
+procedure TfrmDepositTypes.ToolButton1Click(Sender: TObject);
+begin
+   DepositTypes.Insert;
+   with frmAddEditDepositTypes do begin
+      NLSLOperation.Caption := 'Йени';
+      ShowModal;
+   end;
+   DepositTypes.Refresh;
+end;
+
+procedure TfrmDepositTypes.DepositTypesApplyRecord(Sender: TOracleDataSet;
+  Action: Char; var Applied: Boolean; var NewRowId: String);
+var
+  DepType :String;
+  DateInt :Integer;
+  DepID :Integer;
+begin
+
+   with (Sender as TOracleDataSet) do
+   begin
+      DepType := FieldByName('type').AsString;
+      DateInt := FieldByName('DateInterval').AsInteger;
+      DepID := FieldByName('ID').AsInteger;
+   end;
+
+
+   {with SBCM_RPDEPOSITORY do
+   begin
+      case Action of
+        'I' : CallProcedure('AddDepositTypes',[DepType,FAdditionalType,FWithdrawtype,DateInt]);
+        'U' : CallProcedure('updDepositTypes',[DepID,DepType,FAdditionalType,FWithdrawtype,DateInt]);
+      end;
+
+   end;}
+end;
+
+procedure TfrmDepositTypes.ToolButton5Click(Sender: TObject);
+begin
+      if   MessageDlg('Силинмясиня  яминсинизми?'
+              ,mtConfirmation
+              ,[mbYes,mbNo],0
+              )<>mrYes then Exit;
+
+    with SBCM_RPDEPOSITORY do
+         CallProcedure('delDepositTypes',[DepositTypes.FieldByName('ID').AsInteger]) ;
+
+    DepositTypes.Refresh;
+end;
+
+procedure TfrmDepositTypes.ToolButton7Click(Sender: TObject);
+begin
+   DepositTypes.Refresh
+end;
+
+procedure TfrmDepositTypes.ToolButton3Click(Sender: TObject);
+begin
+   with frmAddEditDepositTypes,DepositTypes do
+   begin
+      DBLookupComboboxEh1.KeyValue := FieldByName('additionaltype').AsString;
+      DBLookupComboboxEh2.KeyValue := FieldByName('withdrawtype').AsString;
+      Edit;
+   end;
+
+   with frmAddEditDepositTypes do begin
+      NLSLOperation.Caption := 'Редактя';
+      ShowModal;
+   end;
+   DepositTypes.Refresh;
+end;
+
+end.

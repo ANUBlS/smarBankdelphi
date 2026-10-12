@@ -1,0 +1,523 @@
+object fmMEDPolicy: TfmMEDPolicy
+  Left = 368
+  Top = 203
+  Width = 430
+  Height = 226
+  Caption = 'fmMEDPolicy'
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  OldCreateOrder = False
+  OnCreate = ActiveFormCreate
+  PixelsPerInch = 96
+  TextHeight = 13
+  object GroupBox1: TGroupBox
+    Left = 0
+    Top = 0
+    Width = 422
+    Height = 161
+    Align = alClient
+    Caption = 'Тибби сыьорта шящадятнамяси'
+    TabOrder = 0
+    object Label4: TLabel
+      Left = 8
+      Top = 37
+      Width = 39
+      Height = 13
+      Caption = 'Франшиза'
+    end
+    object Label10: TLabel
+      Left = 8
+      Top = 16
+      Width = 105
+      Height = 13
+      Caption = 'Шящадятнамя нюмряси'
+    end
+    object Label2: TLabel
+      Left = 8
+      Top = 67
+      Width = 88
+      Height = 13
+      Caption = 'Сыьорта мцгавиляси '
+    end
+    object Label7: TLabel
+      Left = 8
+      Top = 88
+      Width = 62
+      Height = 13
+      Caption = 'Хцсуси шяртляр'
+    end
+    object Label3: TLabel
+      Left = 8
+      Top = 112
+      Width = 25
+      Height = 13
+      Caption = 'Диэяр'
+    end
+    object DBEdit1: TDBEdit
+      Left = 120
+      Top = 42
+      Width = 201
+      Height = 21
+      DataField = 'FRANSHIZ'
+      DataSource = DSPolicy
+      TabOrder = 1
+      OnKeyPress = DBEdit7KeyPress
+    end
+    object DBEdit7: TDBEdit
+      Left = 120
+      Top = 16
+      Width = 201
+      Height = 21
+      DataField = 'POLICY_NUM'
+      DataSource = DSContracts
+      Enabled = False
+      TabOrder = 0
+      OnKeyPress = DBEdit7KeyPress
+    end
+    object DBEdit2: TDBEdit
+      Left = 120
+      Top = 64
+      Width = 297
+      Height = 21
+      DataField = 'INSCONTRACT'
+      DataSource = DSPolicy
+      TabOrder = 2
+      OnKeyPress = DBEdit7KeyPress
+    end
+    object DBLookupComboBox2: TDBLookupComboBox
+      Left = 91
+      Top = 88
+      Width = 326
+      Height = 21
+      DataField = 'SC_ID'
+      DataSource = DSPolicy
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      KeyField = 'ID'
+      ListField = 'NAME'
+      ListSource = DSSpecCond
+      ParentFont = False
+      TabOrder = 3
+      OnClick = DBLookupComboBox2Click
+      OnKeyPress = DBEdit7KeyPress
+    end
+    object memSpecCond: TMemo
+      Left = 91
+      Top = 112
+      Width = 326
+      Height = 45
+      Color = clInfoBk
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+      ScrollBars = ssVertical
+      TabOrder = 4
+      OnKeyPress = DBEdit7KeyPress
+    end
+  end
+  object Panel1: TPanel
+    Left = 0
+    Top = 161
+    Width = 422
+    Height = 38
+    Align = alBottom
+    BevelInner = bvRaised
+    BevelOuter = bvLowered
+    TabOrder = 1
+    object btOk: TBitBtn
+      Left = 261
+      Top = 8
+      Width = 75
+      Height = 25
+      Anchors = [akRight, akBottom]
+      Caption = 'OK'
+      TabOrder = 1
+      OnClick = btOkClick
+      Glyph.Data = {
+        DE010000424DDE01000000000000760000002800000024000000120000000100
+        0400000000006801000000000000000000001000000000000000000000000000
+        80000080000000808000800000008000800080800000C0C0C000808080000000
+        FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00333333333333
+        3333333333333333333333330000333333333333333333333333F33333333333
+        00003333344333333333333333388F3333333333000033334224333333333333
+        338338F3333333330000333422224333333333333833338F3333333300003342
+        222224333333333383333338F3333333000034222A22224333333338F338F333
+        8F33333300003222A3A2224333333338F3838F338F33333300003A2A333A2224
+        33333338F83338F338F33333000033A33333A222433333338333338F338F3333
+        0000333333333A222433333333333338F338F33300003333333333A222433333
+        333333338F338F33000033333333333A222433333333333338F338F300003333
+        33333333A222433333333333338F338F00003333333333333A22433333333333
+        3338F38F000033333333333333A223333333333333338F830000333333333333
+        333A333333333333333338330000333333333333333333333333333333333333
+        0000}
+      NumGlyphs = 2
+    end
+    object btCancel: TBitBtn
+      Left = 341
+      Top = 8
+      Width = 75
+      Height = 25
+      Anchors = [akRight, akBottom]
+      Cancel = True
+      Caption = 'Cancel'
+      TabOrder = 2
+      OnClick = btCancelClick
+      Glyph.Data = {
+        DE010000424DDE01000000000000760000002800000024000000120000000100
+        0400000000006801000000000000000000001000000000000000000000000000
+        80000080000000808000800000008000800080800000C0C0C000808080000000
+        FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00333333333333
+        333333333333333333333333000033338833333333333333333F333333333333
+        0000333911833333983333333388F333333F3333000033391118333911833333
+        38F38F333F88F33300003339111183911118333338F338F3F8338F3300003333
+        911118111118333338F3338F833338F3000033333911111111833333338F3338
+        3333F8330000333333911111183333333338F333333F83330000333333311111
+        8333333333338F3333383333000033333339111183333333333338F333833333
+        00003333339111118333333333333833338F3333000033333911181118333333
+        33338333338F333300003333911183911183333333383338F338F33300003333
+        9118333911183333338F33838F338F33000033333913333391113333338FF833
+        38F338F300003333333333333919333333388333338FFF830000333333333333
+        3333333333333333333888330000333333333333333333333333333333333333
+        0000}
+      NumGlyphs = 2
+    end
+    object btPrint: TBitBtn
+      Left = 13
+      Top = 8
+      Width = 75
+      Height = 25
+      Caption = 'Чап'
+      Enabled = False
+      TabOrder = 3
+      OnClick = btPrintClick
+      Glyph.Data = {
+        76010000424D7601000000000000760000002800000020000000100000000100
+        04000000000000010000130B0000130B00001000000000000000000000000000
+        800000800000008080008000000080008000808000007F7F7F00BFBFBF000000
+        FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00300000000000
+        00033FFFFFFFFFFFFFFF0888888888888880777777777777777F088888888888
+        8880777777777777777F0000000000000000FFFFFFFFFFFFFFFF0F8F8F8F8F8F
+        8F80777777777777777F08F8F8F8F8F8F9F0777777777777777F0F8F8F8F8F8F
+        8F807777777777777F7F0000000000000000777777777777777F3330FFFFFFFF
+        03333337F3FFFF3F7F333330F0000F0F03333337F77773737F333330FFFFFFFF
+        03333337F3FF3FFF7F333330F00F000003333337F773777773333330FFFF0FF0
+        33333337F3FF7F3733333330F08F0F0333333337F7737F7333333330FFFF0033
+        33333337FFFF7733333333300000033333333337777773333333}
+      NumGlyphs = 2
+    end
+    object btApply: TBitBtn
+      Left = 181
+      Top = 8
+      Width = 75
+      Height = 25
+      Anchors = [akRight, akBottom]
+      Caption = '&Apply'
+      Enabled = False
+      TabOrder = 0
+      OnClick = btApplyClick
+      Glyph.Data = {
+        F2010000424DF201000000000000760000002800000024000000130000000100
+        0400000000007C01000000000000000000001000000000000000000000000000
+        80000080000000808000800000008000800080800000C0C0C000808080000000
+        FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00333334433333
+        3333333333388F3333333333000033334224333333333333338338F333333333
+        0000333422224333333333333833338F33333333000033422222243333333333
+        83333338F3333333000034222A22224333333338F33F33338F33333300003222
+        A2A2224333333338F383F3338F33333300003A2A222A222433333338F8333F33
+        38F33333000034A22222A22243333338833333F3338F333300004222A2222A22
+        2433338F338F333F3338F3330000222A3A2224A22243338F3838F338F3338F33
+        0000A2A333A2224A2224338F83338F338F3338F300003A33333A2224A2224338
+        333338F338F3338F000033333333A2224A2243333333338F338F338F00003333
+        33333A2224A2233333333338F338F83300003333333333A2224A333333333333
+        8F338F33000033333333333A222433333333333338F338F30000333333333333
+        A224333333333333338F38F300003333333333333A223333333333333338F8F3
+        000033333333333333A3333333333333333383330000}
+      NumGlyphs = 2
+    end
+  end
+  object hbErrMsg: THintBox
+    Left = 8
+    Top = 136
+    Width = 249
+    Height = 18
+    AutoSize = True
+    BevelOuter = bvNone
+    Caption = 'hbErrMsg'
+    TabOrder = 2
+    Visible = False
+    HintStyle = hsError
+    Timeout = 4000
+    BeepOnMessage = False
+  end
+  object ODSPolicy: TOracleDataSet
+    SQL.Strings = (
+      'select imp.rowid, imp.* from ins_med_policy imp'
+      'where '
+      'imp.meds_id = :meds_id')
+    Variables.Data = {
+      0300000001000000080000003A4D4544535F4944040000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      04000000070000000200000049440100000000000600000056414C5F49440100
+      0000000009000000504F4C4943594E554D010000000000070000004D4544535F
+      49440100000000000B000000494E53434F4E5452414354010000000000080000
+      004652414E5348495A0100000000000500000053435F4944010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 272
+    Top = 8
+    object ODSPolicyID: TFloatField
+      FieldName = 'ID'
+    end
+    object ODSPolicyMEDS_ID: TFloatField
+      FieldName = 'MEDS_ID'
+      Required = True
+    end
+    object ODSPolicyVAL_ID: TFloatField
+      FieldName = 'VAL_ID'
+    end
+    object ODSPolicyPOLICYNUM: TStringField
+      FieldName = 'POLICYNUM'
+    end
+    object ODSPolicyINSCONTRACT: TStringField
+      FieldName = 'INSCONTRACT'
+      Size = 1024
+    end
+    object ODSPolicyFRANSHIZ: TFloatField
+      FieldName = 'FRANSHIZ'
+    end
+    object ODSPolicySC_ID: TFloatField
+      FieldName = 'SC_ID'
+    end
+  end
+  object DSPolicy: TDataSource
+    DataSet = ODSPolicy
+    Left = 272
+    Top = 56
+  end
+  object INSWordExporter: TINSWordExporter
+    Left = 272
+    Top = 88
+  end
+  object ODSReport: TOracleDataSet
+    SQL.Strings = (
+      
+        'SELECT ic.surname || '#39' '#39' || ic.NAME || '#39' '#39' || ic.fathername AS N' +
+        'AME,'
+      '       ic.address, '
+      '       to_char(im.begindate, '#39'dd/mm/yyyy'#39') begindate, '
+      '       to_char(im.enddate, '#39'dd/mm/yyyy'#39') enddate,       '
+      '       im.empnum,'
+      
+        '       LTRIM(TO_CHAR (ABS(ims.inssum), '#39'99G999G999G999G999G999D9' +
+        '9MI'#39')||'#39' '#39'||v.val_name) as inssum,'
+      
+        '       LTRIM(TO_CHAR (ABS(ics.ammount), '#39'99G999G999G999G999G999D' +
+        '99MI'#39')||'#39' '#39'||v.val_name) as insammountall,'
+      
+        '       ims.insurancetime ||decode(ims.itspec, '#39'M'#39', '#39' ай'#39', '#39'Y'#39', '#39 +
+        ' ил'#39')  as period,'
+      '       ics.ins_date as contractdate,'
+      '       imp.inscontract,'
+      '       ics.policy_num,'
+      
+        '       LTRIM(TO_CHAR (ABS(imp.franshiz), '#39'99G999G999G999G999G999' +
+        'D99MI'#39')||'#39' '#39'||v.val_name) as franshiz,'
+      '       v.valu_name,'
+      '       sc.name as scname,'
+      '       ics.loanacc_id, ics.curracc_id, ics.ammount '
+      '  FROM ins_med_policy imp,'
+      '       ins_med_suggestion ims,'
+      '       ins_customers ic,'
+      '       ins_medical im,'
+      '       ins_contracts ics,'
+      '       avalute v,'
+      '       ins_dict_spec_conditions sc'
+      
+        ' WHERE ic.ID = im.kli_id AND im.ID = ims.med_id AND ims.ID = imp' +
+        '.meds_id'
+      ' and v.valute = ics.valute_id'
+      ' and ics.blank_id = im.id'
+      ' and imp.sc_id = sc.id(+)'
+      ' and imp.id = :mp_id')
+    Variables.Data = {0300000001000000060000003A4D505F4944040000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      0400000011000000040000004E414D4501000000000007000000414444524553
+      5301000000000009000000424547494E4441544501000000000007000000454E
+      444441544501000000000006000000454D504E554D0100000000000600000050
+      4552494F440100000000000B000000494E53434F4E5452414354010000000000
+      080000004652414E5348495A0100000000000900000056414C555F4E414D4501
+      00000000000600000053434E414D450100000000000C000000434F4E54524143
+      544441544501000000000006000000494E5353554D0100000000000D00000049
+      4E53414D4D4F554E54414C4C0100000000000A000000504F4C4943595F4E554D
+      0100000000000A0000004C4F414E4143435F49440100000000000A0000004355
+      52524143435F494401000000000007000000414D4D4F554E54010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 240
+    Top = 88
+    object ODSReportNAME: TStringField
+      FieldName = 'NAME'
+      Size = 386
+    end
+    object ODSReportADDRESS: TStringField
+      FieldName = 'ADDRESS'
+      Size = 1024
+    end
+    object ODSReportEMPNUM: TIntegerField
+      FieldName = 'EMPNUM'
+    end
+    object ODSReportINSSUM: TStringField
+      FieldName = 'INSSUM'
+      Size = 37
+    end
+    object ODSReportINSAMMOUNTALL: TStringField
+      FieldName = 'INSAMMOUNTALL'
+      Size = 37
+    end
+    object ODSReportPERIOD: TStringField
+      FieldName = 'PERIOD'
+      Size = 43
+    end
+    object ODSReportINSCONTRACT: TStringField
+      FieldName = 'INSCONTRACT'
+      Size = 1024
+    end
+    object ODSReportFRANSHIZ: TStringField
+      FieldName = 'FRANSHIZ'
+      Size = 37
+    end
+    object ODSReportVALU_NAME: TStringField
+      FieldName = 'VALU_NAME'
+      Size = 25
+    end
+    object ODSReportSCNAME: TStringField
+      FieldName = 'SCNAME'
+      Size = 1024
+    end
+    object ODSReportPOLICY_NUM: TStringField
+      FieldName = 'POLICY_NUM'
+      Size = 32
+    end
+    object ODSReportCONTRACTDATE: TDateTimeField
+      FieldName = 'CONTRACTDATE'
+    end
+    object ODSReportLOANACC_ID: TFloatField
+      FieldName = 'LOANACC_ID'
+    end
+    object ODSReportCURRACC_ID: TFloatField
+      FieldName = 'CURRACC_ID'
+    end
+    object ODSReportAMMOUNT: TFloatField
+      FieldName = 'AMMOUNT'
+    end
+  end
+  object ODSSpecCond: TOracleDataSet
+    SQL.Strings = (
+      'select idr.rowid, idr.* from INS_DICT_SPEC_CONDITIONS idr')
+    QBEDefinition.QBEFieldDefs = {
+      0400000002000000020000004944010000000000040000004E414D4501000000
+      0000}
+    Session = sboapiDataModule.SBSession
+    Left = 328
+    Top = 8
+    object ODSSpecCondID: TFloatField
+      FieldName = 'ID'
+    end
+    object ODSSpecCondNAME: TStringField
+      FieldName = 'NAME'
+      Size = 1024
+    end
+  end
+  object DSSpecCond: TDataSource
+    DataSet = ODSSpecCond
+    Left = 328
+    Top = 40
+  end
+  object ODSContracts: TOracleDataSet
+    SQL.Strings = (
+      'select ic.rowid, ic.* from ins_contracts ic'
+      'where ic.sugg_id =:suggid'
+      'and type_id = 9')
+    Variables.Data = {0300000001000000070000003A535547474944040000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      040000000F00000002000000494401000000000007000000545950455F494401
+      000000000008000000424C414E4B5F494401000000000007000000535547475F
+      494401000000000009000000504F4C4943595F49440100000000000800000049
+      4E535F444154450100000000000A000000424547494E5F444154450100000000
+      0008000000454E445F444154450100000000000900000056414C5554455F4944
+      01000000000007000000414D4D4F554E540100000000000C000000434C4F5345
+      5F505245464958010000000000060000004B4C495F49440100000000000A0000
+      004C4F414E4143435F49440100000000000A000000435552524143435F494401
+      00000000000A000000504F4C4943595F4E554D010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 184
+    Top = 8
+    object ODSContractsID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object ODSContractsTYPE_ID: TFloatField
+      FieldName = 'TYPE_ID'
+    end
+    object ODSContractsBLANK_ID: TFloatField
+      FieldName = 'BLANK_ID'
+    end
+    object ODSContractsSUGG_ID: TFloatField
+      FieldName = 'SUGG_ID'
+    end
+    object ODSContractsPOLICY_ID: TFloatField
+      FieldName = 'POLICY_ID'
+    end
+    object ODSContractsINS_DATE: TDateTimeField
+      FieldName = 'INS_DATE'
+    end
+    object ODSContractsBEGIN_DATE: TDateTimeField
+      FieldName = 'BEGIN_DATE'
+    end
+    object ODSContractsEND_DATE: TDateTimeField
+      FieldName = 'END_DATE'
+    end
+    object ODSContractsVALUTE_ID: TFloatField
+      FieldName = 'VALUTE_ID'
+    end
+    object ODSContractsAMMOUNT: TFloatField
+      FieldName = 'AMMOUNT'
+    end
+    object ODSContractsCLOSE_PREFIX: TIntegerField
+      FieldName = 'CLOSE_PREFIX'
+      Required = True
+    end
+    object ODSContractsKLI_ID: TFloatField
+      FieldName = 'KLI_ID'
+    end
+    object ODSContractsLOANACC_ID: TFloatField
+      FieldName = 'LOANACC_ID'
+    end
+    object ODSContractsCURRACC_ID: TFloatField
+      FieldName = 'CURRACC_ID'
+    end
+    object ODSContractsPOLICY_NUM: TStringField
+      FieldName = 'POLICY_NUM'
+      Size = 128
+    end
+  end
+  object DSContracts: TDataSource
+    DataSet = ODSContracts
+    Left = 184
+    Top = 40
+  end
+  object OPCOMMON: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'INS_COMMON'
+    Left = 184
+    Top = 80
+  end
+end

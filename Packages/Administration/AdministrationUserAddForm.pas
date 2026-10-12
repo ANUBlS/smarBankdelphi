@@ -1,0 +1,554 @@
+﻿unit AdministrationUserAddForm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ExtCtrls, StdCtrls, ComCtrls, Buttons, ImgList, Mask, HintBox,
+  SearchCombo, DBCtrls;
+
+type
+  ECheckOperation = class(Exception);
+
+
+  TUserInfo = record
+   UserName: string;
+   Passw: string;
+   Fullname: string;
+   Description: string;
+   Phone: string;
+   AcClass: string;
+   AcFilial: string;
+   AcLang : string;
+   AcAdm: Boolean;
+  end;
+
+  TfmUserSetup = class(TForm)
+    pcAddUser: TPageControl;
+    tbsUsInf: TTabSheet;
+    tbsUsPass: TTabSheet;
+    tbsFinish: TTabSheet;
+    GroupBox1: TGroupBox;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    edUsName: TEdit;
+    edUsFullName: TEdit;
+    edDescr: TEdit;
+    Panel1: TPanel;
+    Panel2: TPanel;
+    Image1: TImage;
+    ImageList1: TImageList;
+    btCancel: TBitBtn;
+    btNext: TBitBtn;
+    btBack: TBitBtn;
+    edPhone: TMaskEdit;
+    GroupBox2: TGroupBox;
+    edPass1: TEdit;
+    edPass2: TEdit;
+    lbPass: TLabel;
+    lbConfirm: TLabel;
+    cbHidePass: TCheckBox;
+    GroupBox3: TGroupBox;
+    Memo1: TMemo;
+    hbErrorBx: THintBox;
+    tbClose: TTabSheet;
+    GroupBox4: TGroupBox;
+    lbClose: TLabel;
+    Label6: TLabel;
+    tbsDropUser: TTabSheet;
+    GroupBox5: TGroupBox;
+    cbCascade: TCheckBox;
+    Label7: TLabel;
+    Label8: TLabel;
+    tbsClassadd: TTabSheet;
+    GroupBox6: TGroupBox;
+    Label5: TLabel;
+    Label9: TLabel;
+    edClassName: TEdit;
+    edClassDescr: TEdit;
+    tbsClassdrop: TTabSheet;
+    GroupBox7: TGroupBox;
+    Label10: TLabel;
+    tbsUserclass: TTabSheet;
+    GroupBox8: TGroupBox;
+    Memo2: TMemo;
+    cbClass: TSearchCombo;
+    Label11: TLabel;
+    Button1: TButton;
+    Label12: TLabel;
+    edDrop: TSearchCombo;
+    edDropclass: TSearchCombo;
+    tbsGroupCreate: TTabSheet;
+    GroupBox9: TGroupBox;
+    edGroupCr: TEdit;
+    edGroupDesc: TEdit;
+    Label13: TLabel;
+    Label14: TLabel;
+    tbsGroupDrop: TTabSheet;
+    GroupBox10: TGroupBox;
+    scbGroupName: TSearchCombo;
+    Label15: TLabel;
+    Label16: TLabel;
+    cbFilial: TSearchCombo;
+    Label17: TLabel;
+    cbAdmRights: TCheckBox;
+    dbGroupType: TDBLookupComboBox;
+    Label18: TLabel;
+    Label19: TLabel;
+    cbLang: TSearchCombo;
+    Lang3: TSearchCombo;
+    procedure btNextClick(Sender: TObject);
+    procedure btCancelClick(Sender: TObject);
+    procedure cbHidePassClick(Sender: TObject);
+    procedure edUsNameKeyPress(Sender: TObject; var Key: Char);
+    procedure cbClassChange(Sender: TObject);
+    procedure edClassNameKeyPress(Sender: TObject; var Key: Char);
+    procedure Lang3Change(Sender: TObject);
+  private
+   function CheckForActions(Tab: TTabSheet): Boolean;
+  public
+   procedure AddUser(Inf: TUserInfo);
+   procedure DropUser(UserName: string;Cascade: Boolean);
+   procedure ClassCreate(ClassNam,Description: string);
+   procedure ClassDrop(ClassNam: string);
+   procedure GroupCreate(GroupName,descrp: string;GrType: integer);
+   procedure GroupDrop(GroupName: string);
+  end;
+
+var
+  fmUserSetup: TfmUserSetup;
+
+
+
+implementation
+
+uses AdministrationDataModule, AdmBarForm, AdministrationMainForm;
+
+{$R *.DFM}
+
+procedure SendMsg(Comp: TWinControl);
+begin
+ if Assigned(Comp) then
+  SendMessage(Comp.Handle,WM_USER,0,0);
+  Application.ProcessMessages;
+end;
+
+procedure TfmUserSetup.btNextClick(Sender: TObject);
+
+function VerifyPassword( passwd : string) : Boolean;
+begin
+  Result := false;
+  with AdministrationData.pcADM do
+    if CallBooleanFunction('verify_password', [ trim('KLs'+passwd+'#1$')]) then Result := true;
+end;
+
+procedure CheckForChange;
+begin
+ with pcAddUser do
+   case ActivePageIndex of
+   0:
+    begin
+     if edUsName.Text=EmptyStr then
+      raise ECheckOperation.Create(' İstifadəçi adını daxil edin');
+    end;
+   1:
+    begin
+     if (edPass1.Text=EmptyStr)then
+       raise ECheckOperation.Create(' Şifrəni daxil edin');
+      if (cbHidePass.Checked)and(edPass1.Text<>edPass2.Text) then
+       raise ECheckOperation.Create(' Şifrə düzgün deyil');
+     if not VerifyPassword(edPass1.text) then
+       raise ECheckOperation.Create(' Şifrə mürəkkəb olmalıdır');
+    end;
+   end;
+end;
+
+procedure NewChng(Pc: Integer);
+begin
+ btBack.Enabled:=not(Pc=0);
+ with pcAddUser do
+ begin
+  if ActivePage=tbsFinish then btNext.Caption:='Qəbul'
+  else btNext.Caption:='Növbəti >'
+ end;
+end;
+
+var
+i: Integer;
+begin
+ with pcAddUser do
+  begin
+   hbErrorBx.Visible:=False;
+   try
+   if (Sender as TBitBtn)=btNext then
+    begin
+      if CheckForActions(ActivePage) then exit;
+    end;
+
+   i:=ActivePageIndex+(Sender as TBitBtn).Tag;
+   if (i>=0)and(i<=PageCount-1) then
+      if (Sender as TBitBtn).Tag=1 then
+      CheckForChange;
+      ActivePageIndex:=i;
+      NewChng(i);
+     except
+       on E:ECheckOperation do
+        begin
+           hbErrorBx.ShowMessage(E.Message);
+        end;
+     end;
+  end;
+end;
+
+procedure TfmUserSetup.btCancelClick(Sender: TObject);
+begin
+ Close;
+end;
+
+procedure TfmUserSetup.cbHidePassClick(Sender: TObject);
+begin
+ if (Sender as TCheckBox).Checked then
+  begin
+   edPass1.PasswordChar:='*';
+   lbConfirm.Enabled:=True;
+   edPass2.Enabled:=True;
+  end
+  else
+   begin
+    edPass1.PasswordChar:=#0;
+    lbConfirm.Enabled:=False;
+    edPass2.Enabled:=False;
+   end;
+end;
+
+procedure TfmUserSetup.AddUser(Inf: TUserInfo);
+var
+BrForm: TBarForm;
+pswd: String;
+begin
+ BrForm:=TBarForm.Create(self);
+ try
+ with AdministrationData.pcADM,Inf do
+ begin
+  BrForm.Position:=poOwnerFormCenter;
+  AdministrationData.pcACA.CallBooleanFunction('checkforuser',[UserName,True]);
+
+  BrForm.Execute('User creating','User creating','Creating user...',
+  10,110);
+  with BrForm.BarCaption do
+   begin
+   SendMsg(BrForm);
+   //AdministrationForm.ICECrypt.Text := passw;
+   //pswd :='s'+AdministrationForm.ICECrypt.GetCrypted;
+   CallProcedure('create_user',[UserName,passw]); //Pswd]);
+
+   SendMsg(BrForm);
+   CallProcedure('insertuserinf',[username,description,fullname,phone,AcClass,AcFilial,AcLang]);
+
+   {Caption:='Creating synonyms for tables...';
+   SendMsg(BrForm);
+   CallProcedure('create_synonyms',['TABLE',Sm_Own,UserName,TRUE]);
+
+   Caption:='Creating synonyms for views...';
+   SendMsg(BrForm);
+   CallProcedure('create_synonyms',['VIEW',Sm_Own,UserName,TRUE]);
+
+   Caption:='Creating synonyms for packages...';
+   SendMsg(BrForm);
+   CallProcedure('create_synonyms',['PACKAGE',Sm_Own,UserName,TRUE]);
+
+   Caption:='Creating synonyms for procedures...';
+   SendMsg(BrForm);
+   CallProcedure('create_synonyms',['PROCEDURE',Sm_Own,UserName,TRUE]);
+
+   Caption:='Creating synonyms for functions...';
+   SendMsg(BrForm);
+   CallProcedure('create_synonyms',['FUNCTION',Sm_Own,UserName,TRUE]);
+
+   Caption:='Creating synonyms for synonyms...';
+   SendMsg(BrForm);
+   CallProcedure('create_synonyms',['SYNONYM',Sm_Own,UserName,TRUE]);   }
+
+   Caption:='Give basic grants...';
+   SendMsg(BrForm);
+   CallBooleanFunction('grrole',['STANDART',UserName]);
+
+   if AcAdm then
+    begin
+     CallProcedure('grantprivtorole',[UserName,'ROLE','ALL PRIVILEGES','']);
+     CallProcedure('grantprivtorole',[UserName,'ROLE','DBA','']);
+    end;
+
+   SendMsg(BrForm);
+   if AcClass<>'' then
+    begin
+    Caption:='Activating class...';
+    CallProcedure('grantclass',[USERNAME,AcClass]);
+
+    end;
+
+   SendMsg(BrForm);
+   end;
+ end;
+ finally
+  if Assigned(BrForm) then
+   BrForm.Release;
+ end;
+end;
+
+
+procedure TfmUserSetup.Dropuser(UserName: string;Cascade: Boolean);
+var
+BrForm: TBarForm;
+begin
+  BrForm:=TBarForm.Create(self);
+ with AdministrationData,AdministrationData.pcADM do
+  try
+   BrForm.Position:=poOwnerFormCenter;
+
+   if  UserName=Session.LogonUsername then
+    raise ECheckOperation.Create('Özünü ləğv etmək mümkün deyil');
+
+   if not(pcACA.CallBooleanFunction('checkforuser',[UserName])) then
+    raise ECheckOperation.Create('İstifadəçi tapılmadı');
+
+  if (pcACA.CallBooleanFunction('isadm',[UserName]))and not(Session.LogonUsername=sm_own) then
+    raise ECheckOperation.Create('Administratoru ləğv etmək olmaz');
+
+     BrForm.Execute('User dropping','User dropping','Dropping user...',
+    10,20);
+   SendMsg(BrForm);
+   CallProcedure('create_user',[UserName,'',False,Cascade]);
+   SendMsg(BrForm);
+  finally
+   if Assigned(BrForm) then
+    BrForm.Release;
+  end;
+end;
+
+procedure TfmUserSetup.ClassCreate(ClassNam,Description: string);
+var
+BrForm: TBarForm;
+begin
+  BrForm:=TBarForm.Create(self);
+ with AdministrationData,AdministrationData.pcADM do
+  try
+    BrForm.Position:=poOwnerFormCenter;
+   if ClassNam=Emptystr then raise ECheckOperation.Create('Sinfi daxil edin');
+   if pcACA.CallBooleanFunction('checkclass',[ClassNam]) then
+    raise ECheckOperation.Create('Sinif artıq mövcuddur');
+    
+    BrForm.Execute('Class creating','Class creating','Creating class...',
+   10,20);
+   SendMsg(BrForm);
+   CallProcedure('createclass',[ClassNam,Description]);
+   SendMsg(BrForm);
+  finally
+   if Assigned(BrForm) then
+    BrForm.Release;
+  end;
+end;
+
+procedure TfmUserSetup.ClassDrop(ClassNam: string);
+var
+BrForm: TBarForm;
+begin
+  BrForm:=TBarForm.Create(self);
+ with AdministrationData,AdministrationData.pcADM do
+  try
+   BrForm.Position:=poOwnerFormCenter;
+   if not(pcACA.CallBooleanFunction('checkclass',[ClassNam])) then
+    raise ECheckOperation.Create('Sinif mövcud deyil');
+   BrForm.Execute('Class dropping','Class dropping','Dropping class...',
+   10,30);
+   SendMsg(BrForm);
+   CallProcedure('dropclass',[ClassNam]);
+   SendMsg(BrForm);
+  finally
+   if Assigned(BrForm) then
+    BrForm.Release;
+  end;
+end;
+
+
+
+procedure TfmUserSetup.GroupCreate(GroupName,descrp: string;GrType: integer);
+var
+BrForm: TBarForm;
+begin
+ BrForm:=TBarForm.Create(self);
+ with AdministrationData,AdministrationData.pcADM do
+  try
+   BrForm.Position:=poOwnerFormCenter;
+   if GroupName=Emptystr then raise ECheckOperation.Create('Qrupu daxil edin');
+   if pcACA.CallBooleanFunction('checkgroup',[GroupName]) then
+    raise ECheckOperation.Create('Qrup artıq mövcuddur');
+   BrForm.Execute('Group creating','Group creating','Creating group...',
+   10,30);
+   SendMsg(BrForm);
+   CallProcedure('creategroup',[GroupName,descrp,GrType]);
+   SendMsg(BrForm);
+  finally
+   if Assigned(BrForm) then
+    BrForm.Release;
+  end;
+end;
+
+procedure TfmUserSetup.GroupDrop(GroupName: string);
+var
+BrForm: TBarForm;
+begin
+ BrForm:=TBarForm.Create(self);
+ with AdministrationData,AdministrationData.pcADM do
+  try
+   BrForm.Position:=poOwnerFormCenter;
+   if not(pcACA.CallBooleanFunction('checkgroup',[GroupName])) then
+    raise ECheckOperation.Create('Qrup mövcud deyil');
+   BrForm.Execute('Group dropping','Group dropping','Dropping group...',
+   10,20);
+   SendMsg(BrForm);
+   CallProcedure('dropgroup',[GroupName]);
+   SendMsg(BrForm);
+  finally
+   if Assigned(BrForm) then
+    BrForm.Release;
+  end;
+end;
+
+procedure TfmUserSetup.Lang3Change(Sender: TObject);
+begin
+cbLang.ItemIndex:=Lang3.ItemIndex;
+end;
+
+function TfmUserSetup.CheckForActions(Tab: TTabSheet): Boolean;
+
+procedure ShowClose(CloseString: string);
+begin
+ pcAddUser.ActivePage:=tbClose;
+ lbClose.Caption:=CloseString;
+ btNext.Enabled:=False;
+ btBack.Enabled:=False;
+ btCancel.Caption:='Bağla';
+end;
+
+procedure PrepareDropUs;
+begin
+ Dropuser(edDrop.Text,cbCascade.Checked);
+ ShowClose('İstifadəçi ləğv olundu');
+end;
+
+procedure PrepareCreateUS;
+var
+Inf: TUserInfo;
+begin
+ with inf do
+ begin
+  UserName:=edUsName.Text;
+  Passw:='KLs'+edPass1.Text+'#1$';
+  Fullname:=edUsFullName.Text;
+  Description:=edDescr.Text;
+  Phone:=edPhone.EditText;
+  if cbClass.ItemIndex<>0 then AcClass:=cbClass.Text;
+  AcAdm:=cbAdmRights.Checked;
+ with AdministrationData do
+ begin
+ AcFilial:=FilialData.FieldByName('ID').AsString;
+ AcLang:=SlLang.FieldByName('NAME').AsString;
+  AddUser(Inf);
+  ShowClose('İstifadəçi yaradıldı');
+ end;
+  end;
+  end;
+
+procedure PrepareClassCreate;
+begin
+ ClassCreate(Trim(edClassName.Text),edClassDescr.Text);
+ ShowClose('Sinif yaradıldı ');
+end;
+
+procedure PrepareClassDrop;
+begin
+ ClassDrop(edDropclass.Text);
+ ShowClose('Sinif ləğv olundu');
+end;
+
+procedure PrepareGroupCreate;
+var
+ TempInt: Integer;
+begin
+ with dbGroupType,ListSource.DataSet do
+  if Active then TempInt:=KeyValue else TempInt:=0;
+ GroupCreate(Trim(edGroupCr.Text),edGroupDesc.Text,TempInt);
+ ShowClose('Qrup yaradıldı');
+end;
+
+procedure PrepareGroupDrop;
+begin
+ GroupDrop(scbGroupName.Text);
+ ShowClose('Qrup ləğv olundu');
+end;
+
+begin
+Result:=False;
+if (Tab=tbsFinish)then
+  begin
+   PrepareCreateUs;
+   Result:=True;
+  end;
+if (Tab=tbsDropUser)then
+ begin
+  PrepareDropUs;
+  Result:=True;
+ end;
+if (Tab=tbsClassadd) then
+  begin
+   PrepareClassCreate;
+   Result:=True;
+  end;
+if (Tab=tbsClassdrop) then
+  begin
+   PrepareClassDrop;
+   Result:=True;
+  end;
+if (Tab=tbsGroupCreate) then
+  begin
+   PrepareGroupCreate;
+   Result:=True;
+  end;
+if (Tab=tbsGroupDrop) then
+  begin
+   PrepareGroupDrop;
+   Result:=True;
+  end;
+end;
+
+procedure TfmUserSetup.edClassNameKeyPress(Sender: TObject; var Key: Char);
+begin
+//if key in ['ə','Ə','ö','Ö','ü','Ü','ğ','Ğ','ş','Ş','ç','Ç','ı','I','','',''] then
+if not (key in ['a'..'z','A'..'Z','0'..'9',#8]) then key:=#0;
+
+end;
+
+procedure TfmUserSetup.edUsNameKeyPress(Sender: TObject; var Key: Char);
+var
+ Layout: array[0.. KL_NAMELENGTH] of char;
+begin
+GetKeyboardLayoutName(Layout);
+ if  (Layout<>'00000409') then
+  key:=#0;
+if (Length((Sender As TEdit).Text)=0) and ( key in ['0'..'9']) then
+ key:=#0;
+if ((Sender As TEdit).SelLength>0) and ( key in ['0'..'9']) then
+ key:=#0
+end;
+
+procedure TfmUserSetup.cbClassChange(Sender: TObject);
+begin
+ cbAdmRights.Enabled:=cbClass.ItemIndex=0;
+ if cbAdmRights.Checked then
+  cbAdmRights.Checked:=cbClass.ItemIndex=0;
+end;
+
+end.

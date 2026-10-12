@@ -1,0 +1,141 @@
+﻿unit UnitExchAccount;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, DBGridEhGrouping, GridsEh, DBGridEh, ComCtrls, ToolWin, ExtCtrls,
+  ShellApi, ImgList;
+
+type
+  TFormAccount = class(TForm)
+    Panel1: TPanel;
+    ToolBarBottom: TToolBar;
+    TBH: TToolButton;
+    ToolBtnAddChild: TToolButton;
+    TBJ: TToolButton;
+    ToolBtnEditChild: TToolButton;
+    TBK: TToolButton;
+    ToolBtnDeleteCh: TToolButton;
+    ToolButton16: TToolButton;
+    ToolButton17: TToolButton;
+    ToolButton18: TToolButton;
+    ToolButton19: TToolButton;
+    ToolButton20: TToolButton;
+    TBGB: TToolButton;
+    ToolButton22: TToolButton;
+    GridDetail: TDBGridEh;
+    ImageList: TImageList;
+    procedure FormShow(Sender: TObject);
+    procedure ToolButton17Click(Sender: TObject);
+    procedure ToolButton19Click(Sender: TObject);
+    procedure TBGBClick(Sender: TObject);
+    procedure ToolBtnAddChildClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormAccount: TFormAccount;
+  EditOrInsert       : byte;  {2-edit,1-insert}
+
+implementation
+uses UnitDateExch, UnitExAccModify;
+{$R *.dfm}
+
+procedure TFormAccount.FormShow(Sender: TObject);
+begin
+  with DataModExch do
+  begin
+    ODSExchAcc.Close;
+    ODSExchAcc.Open;
+  end;
+end;
+
+procedure TFormAccount.TBGBClick(Sender: TObject);
+var
+   usrname :string;
+begin
+   usrname :=uppercase(DataModExch.OPExchMgr.Session.LogonUsername);
+   if usrname= 'SMART' then
+   begin
+     if DataModExch.OPExchMgr.CallBooleanFunction('Check_UserRole',[usrname]) then
+     begin
+       ShellExecute(0, nil, PChar(ExtractFilePath(paramstr(0))+'ExchangeBalance.ini'), nil, nil, SW_SHOWNORMAL);
+     end;
+   end
+   else
+   begin
+     Application.MessageBox('Hüququnuz Yoxdur!','FormExAccModify',0);
+    end;
+
+
+
+   {if DataModExch.OPExchMgr.CallBooleanFunction('Check_UserRole',[usrname])=FALSE then
+   begin
+      ShowMessage('Giriş hüququ yoxdur!!!');
+   end; }
+end;
+
+
+procedure TFormAccount.ToolBtnAddChildClick(Sender: TObject);
+var
+   usrname :string;
+begin
+   usrname :=uppercase(DataModExch.OPExchMgr.Session.LogonUsername);
+   if usrname= 'SMART' then
+   begin
+     if DataModExch.OPExchMgr.CallBooleanFunction('Check_UserRole',[usrname])=true then
+     begin
+       if not DataModExch.ODSExchOffice.IsEmpty then
+       begin
+         EditOrInsert:=1;
+         FormExAccModify      :=      TFormExAccModify.Create(Self);
+         FormExAccModify.ShowModal;
+       end;
+     end;
+   end
+   else
+     begin
+       Application.MessageBox('Hüququnuz Yoxdur!','FormExAccModify',0);
+     end;
+  { if DataModExch.OPExchMgr.CallBooleanFunction('Check_UserRole',[usrname])=FALSE then
+   begin
+      ShowMessage('Giriş hüququ yoxdur!!!');
+   end; }
+end;
+
+
+procedure TFormAccount.ToolButton17Click(Sender: TObject);
+begin
+   With DataModExch,ODSExchOffice do
+      begin
+        if UpperCase(Session.LogonUsername) = 'SMART' then
+        begin
+          ODSExchAcc.Cancel;
+        end
+        else
+        begin
+          Application.MessageBox('Hüququnuz Yoxdur!','FormAddExch',0);
+        end;
+    end;
+end;
+
+procedure TFormAccount.ToolButton19Click(Sender: TObject);
+begin
+   With DataModExch,ODSExchOffice do
+      begin
+        if UpperCase(Session.LogonUsername) = 'SMART' then
+        begin
+          ODSExchAcc.Refresh;
+        end
+        else
+        begin
+          Application.MessageBox('Hüququnuz Yoxdur!','FormAddExch',0);
+        end;
+    end;
+end;
+
+end.

@@ -1,0 +1,554 @@
+object admDM: TadmDM
+  OldCreateOrder = False
+  OnCreate = DataModuleCreate
+  Left = 396
+  Top = 240
+  Height = 479
+  Width = 830
+  object PluginsDataSet: TOracleDataSet
+    Tag = 1
+    SQL.Strings = (
+      'SELECT p.id, pluginname, paramname, description, typeid, name'
+      '  FROM cm_adm_plugins p, cm_adm_plugintypes t'
+      ' WHERE typeid=t.id'
+      'ORDER BY pluginname')
+    Session = CMDataModule.CMSession
+    DesignActivation = True
+    Left = 32
+    Top = 24
+    object PluginsDataSetID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object PluginsDataSetPLUGINNAME: TStringField
+      FieldName = 'PLUGINNAME'
+      Required = True
+      Size = 255
+    end
+    object PluginsDataSetPARAMNAME: TStringField
+      FieldName = 'PARAMNAME'
+      Size = 255
+    end
+    object PluginsDataSetDESCRIPTION: TStringField
+      FieldName = 'DESCRIPTION'
+      Size = 255
+    end
+    object PluginsDataSetTYPEID: TFloatField
+      FieldName = 'TYPEID'
+      Required = True
+    end
+    object PluginsDataSetNAME: TStringField
+      FieldName = 'NAME'
+      Required = True
+      Size = 255
+    end
+  end
+  object PluginsDataSrc: TDataSource
+    DataSet = PluginsDataSet
+    Left = 136
+    Top = 24
+  end
+  object CM_ADMIN: TOraclePackage
+    Session = CMDataModule.CMSession
+    PackageName = 'CM_ADMINISTRATION'
+    Left = 512
+    Top = 312
+  end
+  object CredUsersDataSet: TOracleDataSet
+    Tag = 1
+    SQL.Strings = (
+      
+        'SELECT   c.ID, cm_administration.getuserid (c.NAME) systemid, c.' +
+        'NAME,'
+      
+        '         o.createdate, o.description, o.fullname, f.name filial,' +
+        ' c.typeid'
+      '    FROM cm_adm_users c, sb_usersinfo o, sb_filial f'
+      '   WHERE c.NAME = o.obj'
+      '     and o.filialid = f.id'
+      'ORDER BY c.NAME')
+    Session = CMDataModule.CMSession
+    DesignActivation = True
+    Left = 32
+    Top = 72
+    object CredUsersDataSetID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object CredUsersDataSetSYSTEMID: TFloatField
+      FieldName = 'SYSTEMID'
+    end
+    object CredUsersDataSetNAME: TStringField
+      FieldName = 'NAME'
+      Size = 255
+    end
+    object CredUsersDataSetCREATEDATE: TDateTimeField
+      FieldName = 'CREATEDATE'
+    end
+    object CredUsersDataSetDESCRIPTION: TStringField
+      FieldName = 'DESCRIPTION'
+      Size = 96
+    end
+    object CredUsersDataSetFULLNAME: TStringField
+      FieldName = 'FULLNAME'
+      Size = 96
+    end
+    object CredUsersDataSetFILIAL: TStringField
+      FieldName = 'FILIAL'
+      Size = 90
+    end
+    object CredUsersDataSetTYPEID: TFloatField
+      FieldName = 'TYPEID'
+      Required = True
+    end
+  end
+  object CredUsersDataSrc: TDataSource
+    DataSet = CredUsersDataSet
+    Left = 136
+    Top = 72
+  end
+  object SmartUsersDataSet: TOracleDataSet
+    Tag = 1
+    SQL.Strings = (
+      'SELECT   ID, NAME'
+      '    FROM cm_all_users'
+      '   WHERE NAME NOT IN (SELECT NAME'
+      
+        '                        FROM cm_adm_users) AND NAME NOT IN (SELE' +
+        'CT NAME'
+      
+        '                                                              FR' +
+        'OM cm_adm_roots)'
+      'ORDER BY NAME')
+    Session = CMDataModule.CMSession
+    DesignActivation = True
+    Left = 32
+    Top = 120
+    object SmartUsersDataSetID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object SmartUsersDataSetNAME: TStringField
+      FieldName = 'NAME'
+      Required = True
+      Size = 30
+    end
+  end
+  object SmartUsersDataSrc: TDataSource
+    DataSet = SmartUsersDataSet
+    Left = 136
+    Top = 120
+  end
+  object LAZIM: TOracleDataSet
+    Tag = 1
+    SQL.Strings = (
+      
+        'SELECT description, pluginname, paramname, decode(userid, null, ' +
+        '0, 1) as granthav'
+      '  FROM cm_adm_plugins p, (SELECT userid, pluginid'
+      '                            FROM cm_adm_usergrants'
+      '                           WHERE userid = :userid) g'
+      ' WHERE p.ID = g.pluginid(+)')
+    Variables.Data = {0300000001000000070000003A555345524944030000000000000000000000}
+    Session = CMDataModule.CMSession
+    DesignActivation = True
+    Left = 568
+    Top = 312
+    object LAZIMDESCRIPTION: TStringField
+      FieldName = 'DESCRIPTION'
+      Size = 255
+    end
+    object LAZIMPLUGINNAME: TStringField
+      FieldName = 'PLUGINNAME'
+      Required = True
+      Size = 255
+    end
+    object LAZIMPARAMNAME: TStringField
+      FieldName = 'PARAMNAME'
+      Size = 255
+    end
+    object LAZIMGRANTHAV: TFloatField
+      FieldName = 'GRANTHAV'
+    end
+  end
+  object UserGrantsDataSrc: TDataSource
+    DataSet = UserGrantsDataSet
+    Left = 136
+    Top = 176
+  end
+  object OtherGrantsDataSet: TOracleDataSet
+    SQL.Strings = (
+      'SELECT  id, description'
+      '    FROM cm_adm_plugins'
+      '   WHERE ID NOT IN (SELECT pluginid'
+      '                      FROM cm_adm_usergrants'
+      '                     WHERE userid = :USID)'
+      'ORDER BY description')
+    Variables.Data = {0300000001000000050000003A55534944030000000000000000000000}
+    Session = CMDataModule.CMSession
+    DesignActivation = True
+    Left = 32
+    Top = 232
+    object OtherGrantsDataSetID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object OtherGrantsDataSetDESCRIPTION: TStringField
+      FieldName = 'DESCRIPTION'
+      Size = 255
+    end
+  end
+  object OtherGrantsDataSrc: TDataSource
+    DataSet = OtherGrantsDataSet
+    Left = 136
+    Top = 232
+  end
+  object UserGrantsDataSet: TOracleDataSet
+    SQL.Strings = (
+      'SELECT   ID, description'
+      '    FROM cm_adm_usergrants g, cm_adm_plugins p'
+      '   WHERE g.pluginid = p.ID AND userid = :usid'
+      'ORDER BY description')
+    Variables.Data = {0300000001000000050000003A55534944030000000000000000000000}
+    Session = CMDataModule.CMSession
+    DesignActivation = True
+    Left = 32
+    Top = 176
+    object UserGrantsDataSetID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object UserGrantsDataSetDESCRIPTION: TStringField
+      FieldName = 'DESCRIPTION'
+      Size = 255
+    end
+  end
+  object GroupsDataSet: TOracleDataSet
+    Tag = 1
+    SQL.Strings = (
+      'SELECT   g.ID, g.NAME, t.NAME grouptype, g.description'
+      '    FROM cm_adm_groups g, cm_adm_grouptypes t'
+      '   WHERE g.typeid = t.ID'
+      'ORDER BY g.NAME')
+    Session = CMDataModule.CMSession
+    DesignActivation = True
+    Left = 32
+    Top = 288
+    object GroupsDataSetID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object GroupsDataSetNAME: TStringField
+      FieldName = 'NAME'
+      Required = True
+      Size = 255
+    end
+    object GroupsDataSetGROUPTYPE: TStringField
+      FieldName = 'GROUPTYPE'
+      Required = True
+      Size = 255
+    end
+    object GroupsDataSetDESCRIPTION: TStringField
+      FieldName = 'DESCRIPTION'
+      Size = 255
+    end
+  end
+  object GroupsDataSrc: TDataSource
+    DataSet = GroupsDataSet
+    Left = 136
+    Top = 288
+  end
+  object GroupManagerDataSet: TOracleDataSet
+    SQL.Strings = (
+      'SELECT userid, groupid, usertype'
+      '  FROM cm_adm_groupmanager')
+    Session = CMDataModule.CMSession
+    Left = 32
+    Top = 344
+  end
+  object GroupManagerDataSrc: TDataSource
+    DataSet = GroupManagerDataSet
+    Left = 136
+    Top = 344
+  end
+  object UserInGroupDataSet: TOracleDataSet
+    Tag = 1
+    SQL.Strings = (
+      
+        'SELECT t.description usertype, g.NAME groupname, gt.NAME groupty' +
+        'pe,'
+      '       g.description groupdesc, userid'
+      '  FROM cm_adm_groupmanager m,'
+      '       cm_adm_groups g,'
+      '       cm_adm_groupusertypes t,'
+      '       cm_adm_grouptypes gt'
+      ' WHERE userid = :userid'
+      '   AND m.groupid = g.ID'
+      '   AND m.usertype = t.ID'
+      '   AND g.typeid = gt.ID')
+    Variables.Data = {
+      0300000001000000070000003A55534552494403000000040000006400000000
+      000000}
+    Master = CredUsersDataSet
+    MasterFields = 'SYSTEMID'
+    DetailFields = 'USERID'
+    Session = CMDataModule.CMSession
+    DesignActivation = True
+    Left = 248
+    Top = 24
+    object UserInGroupDataSetUSERTYPE: TStringField
+      FieldName = 'USERTYPE'
+      Size = 255
+    end
+    object UserInGroupDataSetGROUPNAME: TStringField
+      FieldName = 'GROUPNAME'
+      Required = True
+      Size = 255
+    end
+    object UserInGroupDataSetGROUPTYPE: TStringField
+      FieldName = 'GROUPTYPE'
+      Required = True
+      Size = 255
+    end
+    object UserInGroupDataSetGROUPDESC: TStringField
+      FieldName = 'GROUPDESC'
+      Size = 255
+    end
+    object UserInGroupDataSetUSERID: TFloatField
+      FieldName = 'USERID'
+      Required = True
+    end
+  end
+  object UserInGroupDataSrc: TDataSource
+    DataSet = UserInGroupDataSet
+    Left = 344
+    Top = 24
+  end
+  object GroupTypeDataSet: TOracleDataSet
+    Tag = 1
+    SQL.Strings = (
+      'SELECT   ID, NAME'
+      '    FROM cm_adm_grouptypes'
+      'ORDER BY ID')
+    Session = CMDataModule.CMSession
+    Left = 248
+    Top = 72
+    object GroupTypeDataSetID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object GroupTypeDataSetNAME: TStringField
+      FieldName = 'NAME'
+      Required = True
+      Size = 255
+    end
+  end
+  object GroupTypeDataSrc: TDataSource
+    DataSet = GroupTypeDataSet
+    Left = 344
+    Top = 72
+  end
+  object GroupUsersDataSet: TOracleDataSet
+    Tag = 1
+    SQL.Strings = (
+      'SELECT   u.NAME, t.description, m.groupid'
+      
+        '    FROM cm_adm_groupmanager m, cm_adm_users u, cm_adm_groupuser' +
+        'types t'
+      '   WHERE m.groupid = :GROUPID'
+      '     AND m.userid = cm_administration.getuserid (u.NAME)'
+      '     AND t.ID = m.usertype'
+      'ORDER BY m.usertype')
+    Variables.Data = {
+      0300000001000000080000003A47524F55504944030000000400000005000000
+      00000000}
+    Master = GroupsDataSet
+    MasterFields = 'ID'
+    DetailFields = 'GROUPID'
+    Session = CMDataModule.CMSession
+    DesignActivation = True
+    Left = 248
+    Top = 120
+    object GroupUsersDataSetNAME: TStringField
+      FieldName = 'NAME'
+      Size = 255
+    end
+    object GroupUsersDataSetDESCRIPTION: TStringField
+      FieldName = 'DESCRIPTION'
+      Size = 255
+    end
+    object GroupUsersDataSetGROUPID: TFloatField
+      FieldName = 'GROUPID'
+      Required = True
+    end
+  end
+  object GroupUsersDataSrc: TDataSource
+    DataSet = GroupUsersDataSet
+    Left = 344
+    Top = 120
+  end
+  object GrMasterUsers: TOracleDataSet
+    Tag = 1
+    SQL.Strings = (
+      'SELECT u.NAME, m.groupid'
+      '  FROM cm_adm_groupmanager m, cm_all_users u'
+      ' WHERE m.usertype = 1 AND m.userid = u.ID AND groupid = :groupid')
+    Variables.Data = {
+      0300000001000000080000003A47524F55504944030000000400000005000000
+      00000000}
+    Master = GroupsDataSet
+    MasterFields = 'ID'
+    DetailFields = 'GROUPID'
+    Session = CMDataModule.CMSession
+    DesignActivation = True
+    Left = 248
+    Top = 176
+    object GrMasterUsersNAME: TStringField
+      FieldName = 'NAME'
+      Required = True
+      Size = 30
+    end
+    object GrMasterUsersGROUPID: TFloatField
+      FieldName = 'GROUPID'
+      Required = True
+    end
+  end
+  object GrSlaveUsers: TOracleDataSet
+    Tag = 1
+    SQL.Strings = (
+      'SELECT u.NAME, m.groupid'
+      '  FROM cm_adm_groupmanager m, cm_all_users u'
+      ' WHERE m.usertype = 2 AND m.userid = u.ID AND groupid = :groupid')
+    Variables.Data = {
+      0300000001000000080000003A47524F55504944030000000400000005000000
+      00000000}
+    Master = GroupsDataSet
+    MasterFields = 'ID'
+    DetailFields = 'GROUPID'
+    Session = CMDataModule.CMSession
+    DesignActivation = True
+    Left = 248
+    Top = 232
+    object GrSlaveUsersNAME: TStringField
+      FieldName = 'NAME'
+      Required = True
+      Size = 30
+    end
+    object GrSlaveUsersGROUPID: TFloatField
+      FieldName = 'GROUPID'
+      Required = True
+    end
+  end
+  object GrNeutralUsers: TOracleDataSet
+    Tag = 1
+    SQL.Strings = (
+      'SELECT u.NAME, m.groupid'
+      '  FROM cm_adm_groupmanager m, cm_all_users u'
+      ' WHERE m.usertype = 3 AND m.userid = u.ID AND groupid = :groupid')
+    Variables.Data = {
+      0300000001000000080000003A47524F55504944030000000400000005000000
+      00000000}
+    Master = GroupsDataSet
+    MasterFields = 'ID'
+    DetailFields = 'GROUPID'
+    Session = CMDataModule.CMSession
+    DesignActivation = True
+    Left = 248
+    Top = 289
+    object GrNeutralUsersNAME: TStringField
+      FieldName = 'NAME'
+      Required = True
+      Size = 30
+    end
+    object GrNeutralUsersGROUPID: TFloatField
+      FieldName = 'GROUPID'
+      Required = True
+    end
+  end
+  object PluginTypesDataSet: TOracleDataSet
+    Tag = 1
+    SQL.Strings = (
+      'select id, name'
+      '  from cm_adm_plugintypes')
+    Session = CMDataModule.CMSession
+    Left = 448
+    Top = 24
+    object PluginTypesDataSetID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object PluginTypesDataSetNAME: TStringField
+      FieldName = 'NAME'
+      Required = True
+      Size = 255
+    end
+  end
+  object PluginTypesDataSrc: TDataSource
+    DataSet = PluginTypesDataSet
+    Left = 520
+    Top = 24
+  end
+  object UserTypeDataSet: TOracleDataSet
+    Tag = 1
+    SQL.Strings = (
+      'select typeid, name'
+      '  from cm_adm_users'
+      ' where name = :name')
+    Variables.Data = {0300000001000000050000003A4E414D45050000000000000000000000}
+    Master = CredUsersDataSet
+    MasterFields = 'NAME'
+    DetailFields = 'NAME'
+    Session = CMDataModule.CMSession
+    Left = 448
+    Top = 72
+    object UserTypeDataSetTYPEID: TFloatField
+      FieldName = 'TYPEID'
+      Required = True
+    end
+    object UserTypeDataSetNAME: TStringField
+      FieldName = 'NAME'
+      Size = 255
+    end
+  end
+  object UserTypeDataSrc: TDataSource
+    DataSet = UserTypeDataSet
+    Left = 520
+    Top = 72
+  end
+  object AdditionSrcGr: TDataSource
+    DataSet = AdditionSrcGRDSet
+    Left = 456
+    Top = 160
+  end
+  object AdditionSrcGRDSet: TOracleDataSet
+    SQL.Strings = (
+      'SELECT a.id, a.name'
+      '  FROM cm_adm_addition a ,cm_adm_additiongr g'
+      '  where a.id=g.additionid '
+      ' and g.userid = :USID')
+    Variables.Data = {0300000001000000050000003A55534944030000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      0400000003000000020000004944010000000000060000005553455249440100
+      00000000040000004E414D45010000000000}
+    Session = CMDataModule.CMSession
+    Left = 552
+    Top = 160
+  end
+  object AdditionDSet: TOracleDataSet
+    SQL.Strings = (
+      'SELECT id, name'
+      '  FROM creditsmgr.cm_adm_addition '
+      '  WHERE ID NOT IN (SELECT userid'
+      '                  FROM cm_adm_additiongr  WHERE userid = :USID)'
+      ' order by id        ')
+    Variables.Data = {0300000001000000050000003A55534944030000000000000000000000}
+    Session = CMDataModule.CMSession
+    Left = 544
+    Top = 216
+  end
+  object AdditionSrc: TDataSource
+    DataSet = AdditionDSet
+    Left = 456
+    Top = 224
+  end
+end

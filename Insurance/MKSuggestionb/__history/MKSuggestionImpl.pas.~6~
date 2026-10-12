@@ -1,0 +1,54 @@
+unit MKSuggestionImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, INSWordExporter, PlgModalContainer, Grids, DBGrids, DBCtrls,
+  StdCtrls, XFSCtrls, Mask, Oracle, DB, OracleData, Buttons, ExtCtrls;
+
+type
+  TfmMKSuggestion = class(TForm)
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  fmMKSuggestion: TfmMKSuggestion;
+     procedure exportproc(s:String);export;
+implementation
+
+{$R *.dfm}
+   procedure exportproc(s:String);export;
+var ContID :Integer;
+begin
+  { ContID := Get_SelectedContID;
+  with frmProlongation do
+  begin
+   with prolongations do
+   begin
+      if Active then CloseAll;
+      SetVariable('ContractID',ContID);
+      Open;
+   end;
+
+
+   with DepositInf do
+   begin
+      if Active then CloseAll;
+      SetVariable('ContractID',ContID);
+      Open;
+   end;
+  end; }
+
+   fmMKSuggestion.ShowModal;
+end;
+
+exports
+   exportproc;
+
+   //initialization
+   //fmMKSuggestion := TfmMKSuggestion.Create(CommonApplication);
+end.

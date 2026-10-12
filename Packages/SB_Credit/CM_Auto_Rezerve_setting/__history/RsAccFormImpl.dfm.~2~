@@ -1,0 +1,216 @@
+object RsAccForm: TRsAccForm
+  Left = 0
+  Top = 0
+  ClientHeight = 635
+  ClientWidth = 675
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  OnCreate = FormCreate
+  PixelsPerInch = 96
+  TextHeight = 13
+  object GroupBox1: TGroupBox
+    Left = 0
+    Top = 0
+    Width = 675
+    Height = 348
+    Align = alTop
+    Caption = 'Filiallar'
+    TabOrder = 0
+    ExplicitLeft = -96
+    ExplicitTop = 205
+    ExplicitWidth = 709
+    object DBGrid1: TDBGrid
+      Left = 2
+      Top = 15
+      Width = 671
+      Height = 331
+      Align = alClient
+      DataSource = DmRt.DataSource2
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit, dgTitleClick, dgTitleHotTrack]
+      ParentFont = False
+      TabOrder = 0
+      TitleFont.Charset = DEFAULT_CHARSET
+      TitleFont.Color = clWindowText
+      TitleFont.Height = -11
+      TitleFont.Name = 'Tahoma'
+      TitleFont.Style = []
+      Columns = <
+        item
+          Expanded = False
+          FieldName = 'fil_name'
+          Title.Caption = 'Filial'#305'n ad'#305
+          Width = 557
+          Visible = True
+        end>
+    end
+  end
+  object GroupBox2: TGroupBox
+    Left = 0
+    Top = 348
+    Width = 675
+    Height = 257
+    Align = alTop
+    Caption = 'Filiallar '#252'zr'#601' ehtiyyat hesablar'#305
+    TabOrder = 1
+    ExplicitLeft = -34
+    ExplicitTop = 0
+    ExplicitWidth = 709
+    object DBGridEh1: TDBGridEh
+      Left = 2
+      Top = 15
+      Width = 671
+      Height = 240
+      Align = alClient
+      DataGrouping.GroupLevels = <>
+      DataSource = DataSource3
+      Flat = False
+      FooterColor = clWindow
+      FooterFont.Charset = DEFAULT_CHARSET
+      FooterFont.Color = clWindowText
+      FooterFont.Height = -11
+      FooterFont.Name = 'Tahoma'
+      FooterFont.Style = []
+      RowDetailPanel.Color = clBtnFace
+      TabOrder = 0
+      TitleFont.Charset = DEFAULT_CHARSET
+      TitleFont.Color = clWindowText
+      TitleFont.Height = -11
+      TitleFont.Name = 'Tahoma'
+      TitleFont.Style = []
+      Columns = <
+        item
+          EditButtons = <>
+          FieldName = 'RESERVENAME'
+          Footers = <>
+          ReadOnly = True
+          Title.Caption = 'Ehtiyyat '
+          Width = 181
+        end
+        item
+          EditButtons = <>
+          FieldName = 'esashes'
+          Footers = <>
+          Title.Caption = #399'sas '#252'zr'#601' ehtiyyat hesab'#305
+        end
+        item
+          EditButtons = <>
+          FieldName = 'faishes'
+          Footers = <>
+          Title.Caption = 'Faiz '#252'zr'#601' ehtiyat hesab'#305
+        end>
+      object RowDetailData: TRowDetailPanelControlEh
+      end
+    end
+  end
+  object Button1: TButton
+    Left = 600
+    Top = 610
+    Width = 75
+    Height = 25
+    Caption = 'Ba'#287'la'
+    TabOrder = 2
+  end
+  object DataSource3: TDataSource
+    DataSet = OracleDataSet3
+    Left = 152
+    Top = 136
+  end
+  object OracleDataSet3: TOracleDataSet
+    SQL.Strings = (
+      'select rowid,a.* from CM_RESERVE_ACCOUNT  a'
+      'where fil_id=:fil_id'
+      'order by reserveid'
+      ''
+      '')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000E0000003A00460049004C005F0049004400030000000000
+      000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      0500000006000000040000004900440001000000000012000000520045005300
+      4500520056004500490044000100000000001600000052004500530045005200
+      560045004E0041004D0045000100000000000C000000460049004C005F004900
+      44000100000000001400000052004500530054005F0041004300430049004400
+      0100000000001C00000049004E005400450052004500530054005F0041004300
+      430049004400010000000000}
+    MasterFields = 'id'
+    DetailFields = 'fil_id'
+    Session = sboapiDataModule.SBSession
+    Left = 264
+    Top = 136
+    object OracleDataSet3ID: TFloatField
+      FieldName = 'ID'
+    end
+    object OracleDataSet3RESERVEID: TFloatField
+      FieldName = 'RESERVEID'
+    end
+    object OracleDataSet3RESERVENAME: TWideStringField
+      FieldName = 'RESERVENAME'
+      Size = 80
+    end
+    object OracleDataSet3FIL_ID: TFloatField
+      FieldName = 'FIL_ID'
+    end
+    object OracleDataSet3REST_ACCID: TFloatField
+      FieldName = 'REST_ACCID'
+    end
+    object OracleDataSet3INTEREST_ACCID: TFloatField
+      FieldName = 'INTEREST_ACCID'
+    end
+    object OracleDataSet3esashes: TWideStringField
+      FieldKind = fkLookup
+      FieldName = 'esashes'
+      LookupKeyFields = 'ID'
+      LookupResultField = 'ACCNO'
+      KeyFields = 'REST_ACCID'
+      Size = 35
+      Lookup = True
+    end
+    object OracleDataSet3faishes: TWideStringField
+      FieldKind = fkLookup
+      FieldName = 'faishes'
+      LookupKeyFields = 'ID'
+      LookupResultField = 'ACCNO'
+      KeyFields = 'INTEREST_ACCID'
+      Size = 35
+      Lookup = True
+    end
+  end
+  object OracleDataSet2: TOracleDataSet
+    SQL.Strings = (
+      'select a.* from CM_RESERVE_FILIAL a '
+      'where mehsul_id=:mehsul_id'
+      ''
+      'order by fil_id'
+      ''
+      '')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000140000003A004D0045004800530055004C005F0049004400
+      030000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      0500000004000000040000004900440001000000000010000000500045005200
+      53004F004E00490044000100000000000E000000520045005A00440045004E00
+      54000100000000000C00000044004F0056004C0045005400010000000000}
+    MasterFields = 'id'
+    DetailFields = 'MEHSUL_ID'
+    Session = sboapiDataModule.SBSession
+    Left = 336
+    Top = 224
+  end
+  object DataSource2: TDataSource
+    DataSet = OracleDataSet2
+    Left = 224
+    Top = 224
+  end
+end

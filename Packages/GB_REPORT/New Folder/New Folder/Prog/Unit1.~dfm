@@ -1,0 +1,430 @@
+object Form1: TForm1
+  Left = 192
+  Top = 107
+  Width = 696
+  Height = 480
+  Caption = 'Form1'
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'MS Sans Serif'
+  Font.Style = []
+  OldCreateOrder = False
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Button1: TButton
+    Left = 56
+    Top = 176
+    Width = 75
+    Height = 25
+    Caption = '1'
+    TabOrder = 0
+    OnClick = Button1Click
+  end
+  object Button2: TButton
+    Left = 152
+    Top = 176
+    Width = 75
+    Height = 25
+    Caption = '2'
+    TabOrder = 1
+    Visible = False
+    OnClick = Button2Click
+  end
+  object Memo1: TMemo
+    Left = 24
+    Top = 200
+    Width = 201
+    Height = 193
+    Lines.Strings = (
+      'CREATE OR REPLACE '
+      'PACKAGE p_gb_report'
+      '  IS'
+      ''
+      'procedure add_SQL(Q_name varchar2'
+      '                 ,Q_sql  varchar2);'
+      'PROCEDURE Unicode_change (V_az     '
+      '                     VARCHAR2,'
+      '                          V_az_font                        '
+      'VARCHAR2,'
+      '                          V_az_font_size                '
+      '   NUMBER,'
+      '                          V_az_charset                  '
+      '   NUMBER,'
+      '                          V_q_az                           '
+      'VARCHAR2,'
+      '                          V_q_az_font                    '
+      '  VARCHAR2,'
+      '                          V_q_az_font_size            '
+      '     NUMBER,'
+      '                          V_q_az_charset              '
+      '     NUMBER,'
+      '                          V_id                             '
+      'NUMBER,'
+      '                          V_component                  '
+      '    VARCHAR2,'
+      '                          V_component_type         '
+      '        VARCHAR2,'
+      '                          V_component_type_c     '
+      '          VARCHAR2,'
+      '                          V_comp                           '
+      'VARCHAR2);'
+      '               '
+      ''
+      'END; -- Package spec')
+    TabOrder = 2
+    Visible = False
+  end
+  object Memo2: TMemo
+    Left = 240
+    Top = 200
+    Width = 225
+    Height = 193
+    Lines.Strings = (
+      'CREATE OR REPLACE '
+      'PACKAGE BODY p_gb_report'
+      'IS'
+      'procedure add_SQL(Q_name varchar2'
+      '                 ,Q_sql  varchar2)'
+      'is'
+      'begin'
+      '   insert into REPORT_SQL values(Q_name'
+      '                                ,Q_sql);'
+      '   commit;'
+      'end;'
+      ''
+      ''
+      '--*******************************************'
+      'PROCEDURE Unicode_change (V_az             '
+      '             VARCHAR2,'
+      '                          V_az_font                        '
+      'VARCHAR2,'
+      '                          V_az_font_size                   '
+      'NUMBER,'
+      '                          V_az_charset                     '
+      'NUMBER,'
+      '                          V_q_az                           '
+      'VARCHAR2,'
+      '                          V_q_az_font                      '
+      'VARCHAR2,'
+      '                          V_q_az_font_size                 '
+      'NUMBER,'
+      '                          V_q_az_charset                   '
+      'NUMBER,'
+      '                          V_id                             '
+      'NUMBER,'
+      '                          V_component                      '
+      'VARCHAR2,'
+      '                          V_component_type                 '
+      'VARCHAR2,'
+      '                          V_component_type_c             '
+      '  VARCHAR2,'
+      '                          V_comp                           '
+      'VARCHAR2)'
+      ''
+      '   IS'
+      ''
+      'BEGIN'
+      '   insert into REPORT_UNICODE values '
+      '(V_az,'
+      '                                      V_az_font,'
+      '                                      V_az_font_size,'
+      '                                      V_az_charset,'
+      '                                      V_q_az,'
+      '                                      V_q_az_font,'
+      '                                      V_q_az_font_size,'
+      '                                      V_q_az_charset,'
+      '                                      V_id,'
+      '                                      V_component,'
+      '                                      V_component_type,'
+      '                                      '
+      'V_component_type_c,'
+      '                                      V_comp'
+      '                                      );'
+      'commit;                                                '
+      ''
+      'END; -- Procedure'
+      ''
+      'END;')
+    TabOrder = 3
+    Visible = False
+  end
+  object Button3: TButton
+    Left = 72
+    Top = 32
+    Width = 75
+    Height = 25
+    Caption = 'OK'
+    TabOrder = 4
+    Visible = False
+    OnClick = Button3Click
+  end
+  object Memo3: TMemo
+    Left = 392
+    Top = 32
+    Width = 225
+    Height = 97
+    Enabled = False
+    Lines.Strings = (
+      'alter table CASHINFO rename to '
+      'CASHINFO_1')
+    TabOrder = 5
+    Visible = False
+  end
+  object Memo4: TMemo
+    Left = 392
+    Top = 136
+    Width = 225
+    Height = 89
+    Enabled = False
+    Lines.Strings = (
+      'CREATE TABLE CASHINFO'
+      '    (id                            NUMBER '
+      'NOT NULL,'
+      '    person_doc                     '
+      'VARCHAR2(40),'
+      '    issuedby                       '
+      'VARCHAR2(40),'
+      '    seria                          '
+      'VARCHAR2(40),'
+      '    docnumber                      '
+      'VARCHAR2(40),'
+      '    fromwhen                       '
+      'VARCHAR2(100),'
+      '    cash_code                      '
+      'VARCHAR2(100))')
+    TabOrder = 6
+    Visible = False
+  end
+  object ProgressBar1: TProgressBar
+    Left = 72
+    Top = 8
+    Width = 150
+    Height = 16
+    Min = 0
+    Max = 100
+    TabOrder = 7
+  end
+  object Button4: TButton
+    Left = 240
+    Top = 176
+    Width = 75
+    Height = 25
+    Caption = '3'
+    TabOrder = 8
+    Visible = False
+    OnClick = Button4Click
+  end
+  object Memo5: TMemo
+    Left = 480
+    Top = 264
+    Width = 185
+    Height = 89
+    Lines.Strings = (
+      'CREATE OR REPLACE '
+      'procedure l_chin'
+      'is'
+      'begin'
+      'INSERT INTO report_setting '
+      'VALUES (1,'#39#39#39#39');'
+      'INSERT INTO report_unicode '
+      'VALUES ('#39'Emeliyyat Novu'#39','#39'Azl Sans '
+      'Serif'#39',8,204,'#39'Emeliyyat '
+      'Novu'#39','#39'LitNusx'#39',8,0,0,'#39'GroupBox1'#39','#39'TG'
+      'roupBox'#39','#39'TGroupBox'#39','#39'TGB_Report'#39');'
+      'INSERT INTO report_unicode '
+      'VALUES ('#39'Excel'#39','#39'Azl Sans '
+      'Serif'#39',8,204,'#39'Excel'#39','#39'LitNusx'#39',8,0,0,'#39'Too'
+      'lButton2'#39','#39'TToolButton'#39','#39'TToolButton'#39','#39
+      'TGB_Report'#39');'
+      'INSERT INTO report_unicode '
+      'VALUES ('#39'Dil'#39','#39'Azl Sans '
+      'Serif'#39',8,204,'#39'Dil'#39','#39'LitNusx'#39',8,0,5,'#39'GB_Dil'
+      #39','#39'TGroupBox'#39','#39'TGroupBox'#39','#39'TGB_Rep'
+      'ort'#39');'
+      'INSERT INTO report_unicode '
+      'VALUES ('#39'Emeliyyat'#39','#39'Azl Sans '
+      'Serif'#39',8,204,'#39'Emeliyyat'#39','#39'LitNusx'#39',8,0,0,'#39
+      'ToolButton7'#39','#39'TToolButton'#39','#39'TToolButt'
+      'on'#39','#39'TGB_Report'#39');'
+      'INSERT INTO report_unicode '
+      'VALUES ('#39'AZE'#39','#39'Azl Sans '
+      'Serif'#39',8,204,'#39'AZE'#39','#39'LitNusx'#39',8,0,51,'#39'RB'
+      '_AZE'#39','#39'TRadioButton'#39','#39'TRadioButton'#39','
+      #39'TGB_Report'#39');'
+      'INSERT INTO report_unicode '
+      'VALUES ('#39'    Sazla     '#39','#39'Azl Sans '
+      'Serif'#39',8,204,'#39'    Sazla     '
+      #39','#39'LitNusx'#39',8,0,0,'#39'ToolButton3'#39','#39'TToolB'
+      'utton'#39','#39'TToolButton'#39','#39'TGB_Report'#39');'
+      'INSERT INTO report_unicode '
+      'VALUES ('#39'GEO'#39','#39'Azl Sans '
+      'Serif'#39',8,204,'#39'GEO'#39','#39'LitNusx'#39',8,0,52,'#39'RB'
+      '_Q_AZE'#39','#39'TRadioButton'#39','#39'TRadioButt'
+      'on'#39','#39'TGB_Report'#39');'
+      'INSERT INTO report_unicode '
+      'VALUES ('#39'Tarix araligi'#39','#39'Azl Sans '
+      'Serif'#39',8,204,'#39'Tarix '
+      'araligi'#39','#39'LitNusx'#39',8,0,1,'#39'GB_Tarix'#39','#39'TGro'
+      'upBox'#39','#39'TGroupBox'#39','#39'TGB_Report'#39');'
+      'INSERT INTO report_unicode '
+      'VALUES ('#39'Emeliyat'#39','#39'Azl Sans '
+      'Serif'#39',8,204,'#39'Emeliyat'#39','#39'LitNusx'#39',8,0,0,'#39
+      'TabSheet1'#39','#39'TTabSheet'#39','#39'TTabSheet'#39
+      ','#39'TGB_Report'#39');'
+      'INSERT INTO report_unicode '
+      'VALUES (NULL,'#39'Azl Sans '
+      'Serif'#39',8,204,NULL,'#39'LitNusx'#39',8,0,0,'#39'Tool'
+      'Bar1'#39','#39'TToolBar'#39','#39'TToolBar'#39','#39'TGB_Rep'
+      'ort'#39');'
+      'INSERT INTO report_unicode '
+      'VALUES (NULL,'#39'Azl Sans '
+      'Serif'#39',8,204,NULL,'#39'LitNusx'#39',8,0,10000'
+      ','#39'DBGrid1'#39','#39'TDBGrid'#39','#39'TDBGrid'#39','#39'TGB_'
+      'Report'#39');'
+      'INSERT INTO report_unicode '
+      'VALUES ('#39'Adi:'#39','#39'Azl Sans '
+      'Serif'#39',8,204,'#39'Adi:'#39','#39'LitNusx'#39',8,0,0,'#39'Label'
+      '1'#39','#39'TLabel'#39','#39'TLabel'#39','#39'TForm1'#39');'
+      'INSERT INTO report_unicode '
+      'VALUES ('#39'Mebleg >'#39','#39'Azl Sans '
+      'Serif'#39',8,204,'#39'Mebleg '
+      '>'#39','#39'LitNusx'#39',8,0,0,'#39'Label4'#39','#39'TLabel'#39','#39'TL'
+      'abel'#39','#39'TForm1'#39');'
+      'INSERT INTO report_unicode '
+      'VALUES ('#39'Debet:'#39','#39'Azl Sans '
+      'Serif'#39',8,204,'#39'Debet:'#39','#39'LitNusx'#39',8,0,0,'#39'La'
+      'bel2'#39','#39'TLabel'#39','#39'TLabel'#39','#39'TForm1'#39');'
+      'INSERT INTO report_unicode '
+      'VALUES ('#39'Kredit:'#39','#39'Azl Sans '
+      'Serif'#39',8,204,'#39'Kredit:'#39','#39'LitNusx'#39',8,0,0,'#39'La'
+      'bel3'#39','#39'TLabel'#39','#39'TLabel'#39','#39'TForm1'#39');'
+      'INSERT INTO report_unicode '
+      'VALUES (NULL,'#39'Azl Sans '
+      'Serif'#39',8,204,NULL,'#39'LitNusx'#39',8,0,0,'#39'Edit'
+      '_Name'#39','#39'TEdit'#39','#39'TEdit'#39','#39'TForm1'#39');'
+      'INSERT INTO report_unicode '
+      'VALUES (NULL,'#39'Azl Sans '
+      'Serif'#39',8,204,NULL,'#39'LitNusx'#39',8,0,0,'#39'Edit'
+      '_Mebleg'#39','#39'TEdit'#39','#39'TEdit'#39','#39'TForm1'#39');'
+      'INSERT INTO report_unicode '
+      'VALUES (NULL,'#39'Azl Sans '
+      'Serif'#39',8,204,NULL,'#39'LitNusx'#39',8,0,0,'#39'Edit'
+      '_Debit'#39','#39'TEdit'#39','#39'TEdit'#39','#39'TForm1'#39');'
+      'INSERT INTO report_unicode '
+      'VALUES (NULL,'#39'Azl Sans '
+      'Serif'#39',8,204,NULL,'#39'LitNusx'#39',8,0,0,'#39'Edit'
+      '_Kredit'#39','#39'TEdit'#39','#39'TEdit'#39','#39'TForm1'#39');'
+      'INSERT INTO report_unicode '
+      'VALUES ('#39'Balans heasablari'#39','#39'Azl '
+      'Sans Serif'#39',8,204,'#39'Balans '
+      'heasablari'#39','#39'LitNusx'#39',8,0,0,'#39'GroupBox1'#39
+      ','#39'TGroupBox'#39','#39'TGroupBox'#39','#39'TForm1'#39');'
+      'INSERT INTO report_unicode '
+      'VALUES ('#39'Multi Valyuta'#39','#39'Azl Sans '
+      'Serif'#39',8,204,'#39'Multi '
+      'Valyuta'#39','#39'LitNusx'#39',8,0,0,'#39'GB_Multi_valy'
+      'uta'#39','#39'TGroupBox'#39','#39'TGroupBox'#39','#39'TForm'
+      '1'#39');'
+      'INSERT INTO report_unicode '
+      'VALUES ('#39'Emeliyyat Novleri'#39','#39'Azl Sans '
+      'Serif'#39',8,204,'#39'Emeliyyat '
+      'Novleri'#39','#39'LitNusx'#39',8,0,0,'#39'GB_Emeliyyat'
+      '_Novleri'#39','#39'TGroupBox'#39','#39'TGroupBox'#39','#39'T'
+      'Form1'#39');'
+      'INSERT INTO report_unicode '
+      'VALUES ('#39'Multi Valyuta '
+      'emeliyyatlari'#39','#39'Azl Sans '
+      'Serif'#39',8,204,'#39'Multi Valyuta '
+      'emeliyyatlari'#39','#39'LitNusx'#39',8,0,0,'#39'CB_Multi'
+      '_Val'#39','#39'TCheckBox'#39','#39'TCheckBox'#39','#39'TFor'
+      'm1'#39');'
+      'INSERT INTO report_unicode '
+      'VALUES (NULL,'#39'Azl Sans '
+      'Serif'#39',8,204,NULL,'#39'LitNusx'#39',8,0,0,'#39'Eva'
+      'nescence1'#39','#39'TEvanescence'#39','#39'TEvane'
+      'scence'#39','#39'TForm1'#39');'
+      'INSERT INTO report_unicode '
+      'VALUES (NULL,'#39'Azl Sans '
+      'Serif'#39',8,204,'#39'OK'#39','#39'LitNusx'#39',8,0,0,'#39'Butto'
+      'n_OK'#39','#39'TButton'#39','#39'TButton'#39','#39'TForm1'#39');'
+      ''
+      'end;')
+    TabOrder = 9
+  end
+  object Button5: TButton
+    Left = 328
+    Top = 176
+    Width = 75
+    Height = 25
+    Caption = '4'
+    TabOrder = 10
+    Visible = False
+    OnClick = Button5Click
+  end
+  object OracleSession1: TOracleSession
+    Cursor = crHourGlass
+    DesignConnection = False
+    LogonUsername = 'smart'
+    LogonPassword = 'tdb55'
+    LogonDatabase = 'SB'
+    ThreadSafe = False
+    Preferences.FloatPrecision = 0
+    Preferences.IntegerPrecision = 0
+    Preferences.SmallIntPrecision = -1
+    Preferences.UseOCI7 = False
+    Preferences.ConvertCRLF = True
+    Preferences.TrimStringFields = True
+    Preferences.MaxStringFieldSize = 0
+    Preferences.ZeroDateIsNull = True
+    Connected = True
+    RollbackOnDisconnect = False
+    NullValue = nvUnAssigned
+    SQLTrace = stUnchanged
+    OptimizerGoal = ogUnchanged
+    IsolationLevel = ilUnchanged
+    BytesPerCharacter = bc1Byte
+    Left = 96
+    Top = 56
+  end
+  object OracleDataSet1: TOracleDataSet
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = OracleSession1
+    DesignActivation = False
+    Active = False
+    Left = 136
+    Top = 56
+  end
+  object OraclePackage1: TOraclePackage
+    Session = OracleSession1
+    Debug = False
+    ParameterMode = pmPositional
+    Cursor = crDefault
+    Optimize = True
+    Left = 176
+    Top = 56
+  end
+end

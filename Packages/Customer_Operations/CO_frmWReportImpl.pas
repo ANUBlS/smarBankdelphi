@@ -1,0 +1,155 @@
+﻿unit CO_frmWReportImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Buttons, ActnList, ImgList, OleServer, StdCtrls,Shlobj,
+  Mask, DBCtrls, DBLookup, WordXP, Variants;
+
+type
+  TCO_frmWReport = class(TForm)
+    WordDocument: TWordDocument;
+    ImageList1: TImageList;
+    ActionList1: TActionList;
+    ActinPrint: TAction;
+    ActnClose: TAction;
+    SpeedButton1: TSpeedButton;
+    SpeedButton2: TSpeedButton;
+    WordApplication: TWordApplication;
+    DBLookupComboBox1: TDBLookupComboBox;
+    procedure ActinPrintExecute(Sender: TObject);
+    procedure ActnCloseExecute(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    TemplID: Integer;
+    { Public declarations }
+  end;
+
+var
+  CO_frmWReport: TCO_frmWReport;
+
+implementation
+
+uses CO_datamod_impl, customers_operation_impl, SBTranslateProc,
+  sboapiDataModuleImpl;
+
+{$R *.DFM}
+
+procedure TCO_frmWReport.ActinPrintExecute(Sender: TObject);
+resourcestring
+  FilenotFound = 'Fayl tapılmadı';
+var
+  Template, Templatebool, FTemplatePath, Itemindex, OBookmarkCount, What,
+    oBookMarkName: Olevariant;
+  IbookmarkCount: Integer;
+  tFieldName: String;
+  SaveChanges, OriginalFormat, RouteDocument: Olevariant;
+         v_pozt:integer;
+         v_filename, v_paziton:string;
+         v_filePas:Olevariant;
+////////-----------------//////////////////////////////////////
+    function DesktopPath:string;
+var zpath: array [0..MAX_PATH] of char;
+ begin
+ SHGetFolderPath(0, CSIDL_DESKTOP, 0, SHGFP_TYPE_CURRENT, @zpath);
+ result:=   (zpath);
+ end;
+ begin
+
+ v_filename:= CO_DataMod.Templates.FieldByName('Path').AsString;
+ v_pozt:= lastdelimiter('\',v_filename);
+ v_paziton:=Copy(v_filename, v_pozt + 1, Length(v_filename));
+
+ DeleteFile(DesktopPath+'\'+v_paziton);
+   CopyFile(PChar(v_filename),PChar(DesktopPath+'\'+v_paziton),false);
+ v_filePas:=DesktopPath+'\'+v_paziton;
+ ////////////////////---------------/////////////////////////////////
+
+
+  What := Olevariant(wdGoToBookmark);
+  FTemplatePath := CO_DataMod.Templates.FieldByName('Path').AsString;
+  TemplID := CO_DataMod.Templates.FieldByName('ID').AsInteger;
+
+  Template := EmptyParam;
+  Templatebool := False;
+  Itemindex := 1;
+
+  WordApplication.Connect;
+
+  WordApplication.Visible := True;
+  WordApplication.Documents.Application.Caption := DBLookupComboBox1.Text;
+
+  WordApplication.Options.CheckSpellingAsYouType := False;
+  WordApplication.Options.CheckGrammarAsYouType := False;
+
+  if FileExists(FTemplatePath) then
+  begin
+
+    WordApplication.Documents.Open(v_filePas, Template, Templatebool,
+      Template, Template, Template, Template, Template, Template, Template,
+      Template, Template, Template, Template, Template);
+
+  end
+  else
+  begin
+
+    SaveChanges := WdDoNotSaveChanges;
+    OriginalFormat := UnAssigned;
+    RouteDocument := UnAssigned;
+    WordApplication.Quit(SaveChanges, OriginalFormat, RouteDocument);
+    WordApplication.Disconnect;
+    ShowMessage(FilenotFound);
+
+  end;
+
+  WordDocument.ConnectTo(WordApplication.Documents.Item(Itemindex));
+  // WordDocument.Application.Get_ActiveWindow.Caption:=NLSLocalizer1.Caption;
+
+  try
+
+    with CO_DataMod, ReplaceCustDataSet, WordDocument do
+      For IbookmarkCount := 1 to Bookmarks.Count do
+      begin
+
+        OBookmarkCount := IbookmarkCount;
+        oBookMarkName := Bookmarks.Item(OBookmarkCount).Get_Name;
+        WordApplication.Selection.GoTo_(What, EmptyParam, EmptyParam,
+          oBookMarkName);
+        ReplaceCustDataSet.Close;
+        SetVariable('tid', TemplID);
+        SetVariable('bname', oBookMarkName);
+        ReplaceCustDataSet.Open;
+        tFieldName := FieldByName('FIELDNAME').AsString;
+        WordApplication.Selection.InsertAfter
+          (CustomerInfoDataSet.FieldByName(tFieldName).AsString);
+
+      end;
+
+    WordDocument.Disconnect;
+    WordApplication.Disconnect;
+
+  except
+    SaveChanges := WdDoNotSaveChanges;
+    OriginalFormat := UnAssigned;
+    RouteDocument := UnAssigned;
+    WordApplication.Quit(SaveChanges, OriginalFormat, RouteDocument);
+    WordApplication.Disconnect;
+    ShowMessage('Bukmarklar daxil edilmeyib ');
+  end;
+
+end;
+
+procedure TCO_frmWReport.ActnCloseExecute(Sender: TObject);
+begin
+  Close;
+end;
+
+procedure TCO_frmWReport.FormCreate(Sender: TObject);
+begin
+  SBTranslateProc.TranslateAllCompForms(Self, sboapiDataModule.OrPack_SL);
+end;
+
+end.

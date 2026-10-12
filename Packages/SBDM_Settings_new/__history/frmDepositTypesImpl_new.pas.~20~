@@ -1,0 +1,187 @@
+﻿unit frmDepositTypesImpl_new;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, NLSDialogs,
+  ComCtrls, ToolWin, ExtCtrls, ImgList, Grids, DBGridEh, NLSLocalizer,
+  StdCtrls, Buttons, Db, OracleData, ActnList, Oracle;
+
+type
+  TfrmDepositTypes_new = class(TForm)
+    ActionList1: TActionList;
+    AddTypesForColl: TOracleDataSet;
+    AddTypesForCollID: TFloatField;
+    AddTypesForCollADDTYPENAME: TWideStringField;
+    AddTypesForCollADDTYPEDESC: TWideStringField;
+    AddTypesForCollWITHDRTYPE: TWideStringField;
+    AddTypesForCollWITHDRTYPEDESC: TWideStringField;
+    AddTypesForWith: TOracleDataSet;
+    FloatField1: TFloatField;
+    StringField1: TWideStringField;
+    StringField2: TWideStringField;
+    StringField3: TWideStringField;
+    StringField4: TWideStringField;
+    BitBtn1: TBitBtn;
+    DepositTypes: TOracleDataSet;
+    DepositTypesID: TFloatField;
+    DepositTypesTYPE: TWideStringField;
+    DepositTypesADDITIONALTYPE: TWideStringField;
+    DepositTypesWITHDRAWTYPE: TWideStringField;
+    DepositTypesDATEINTERVAL: TIntegerField;
+    ImageList1: TImageList;
+    Panel1: TPanel;
+    ToolBar1: TToolBar;
+    ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
+    ToolButton3: TToolButton;
+    ToolButton4: TToolButton;
+    ToolButton5: TToolButton;
+    ToolButton8: TToolButton;
+    ToolButton7: TToolButton;
+    ToolButton6: TToolButton;
+    Panel2: TPanel;
+    DBGridEh1: TDBGridEh;
+    SBCM_RPDEPOSITORY: TOraclePackage;
+    DepositTypesDatSrc: TDataSource;
+    AddTypesForcollDatSrc: TDataSource;
+    AddTypesForWithDatSrc: TDataSource;
+    DepositTypesPERCENT_RULE: TFloatField;
+    procedure FormCanResize(Sender: TObject; var NewWidth, NewHeight: Integer;
+      var Resize: Boolean);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure ToolButton1Click(Sender: TObject);
+    procedure DepositTypesApplyRecord(Sender: TOracleDataSet; Action: Char;
+      var Applied: Boolean; var NewRowId: string);
+    procedure ToolButton5Click(Sender: TObject);
+    procedure ToolButton7Click(Sender: TObject);
+    procedure ToolButton3Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+   FAdditionalType :String;
+    FWithdrawtype :String;
+  end;
+
+var
+  frmDepositTypes_new: TfrmDepositTypes_new;
+
+implementation
+
+{$R *.dfm}
+   uses  sboapiDataModuleImpl,frmAddEditDepositTypesImpl_new,SBTranslateProc;
+procedure TfrmDepositTypes_new.DepositTypesApplyRecord(Sender: TOracleDataSet;
+  Action: Char; var Applied: Boolean; var NewRowId: string);
+
+var
+  DepType :String;
+  DateInt :Integer;
+  DepID :Integer;
+begin
+
+ {  with (Sender as TOracleDataSet) do
+   begin
+      DepType := FieldByName('type').AsString;
+      DateInt := FieldByName('DateInterval').AsInteger;
+      DepID := FieldByName('ID').AsInteger;
+   end;    }
+
+
+   {with SBCM_RPDEPOSITORY do
+   begin
+      case Action of
+        'I' : CallProcedure('AddDepositTypes',[DepType,FAdditionalType,FWithdrawtype,DateInt]);
+        'U' : CallProcedure('updDepositTypes',[DepID,DepType,FAdditionalType,FWithdrawtype,DateInt]);
+      end;
+
+   end;}
+end;
+
+procedure TfrmDepositTypes_new.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+  Resize := False;
+end;
+
+procedure TfrmDepositTypes_new.FormCreate(Sender: TObject);
+begin
+   DepositTypes.Open;
+   AddTypesForColl.Open;
+   AddTypesForWith.Open;
+   frmAddEditDepositTypes_new := TfrmAddEditDepositTypes_new.Create(Self);
+   SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TfrmDepositTypes_new.FormDestroy(Sender: TObject);
+begin
+   DepositTypes.CloseAll;
+   AddTypesForColl.CloseAll;
+   AddTypesForWith.CloseAll;
+   frmAddEditDepositTypes_new.Free;
+end;
+
+procedure TfrmDepositTypes_new.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+   if Ord(Key) = VK_ESCAPE then Close;
+end;
+
+procedure TfrmDepositTypes_new.ToolButton1Click(Sender: TObject);
+begin
+   DepositTypes.Insert;
+   with frmAddEditDepositTypes_new do begin
+      Caption := 'Yeni';
+      ShowModal;
+   end;
+   DepositTypes.Refresh;
+end;
+
+procedure TfrmDepositTypes_new.ToolButton3Click(Sender: TObject);
+begin
+   with frmAddEditDepositTypes_new,DepositTypes do
+   begin
+      DBLookupComboboxEh1.KeyValue := FieldByName('additionaltype').AsString;
+      DBLookupComboboxEh2.KeyValue := FieldByName('withdrawtype').AsString;
+
+
+ if FieldByName('PERCENT_RULE').AsInteger=0 then
+begin
+ CheckBox1.Checked:=false;
+end;
+
+ if FieldByName('PERCENT_RULE').AsInteger=1 then
+begin
+ CheckBox1.Checked:=true;
+   end;
+    Edit;
+   end;
+
+
+
+   with frmAddEditDepositTypes_new do begin
+      Caption := 'Redaktə';
+      ShowModal;
+   end;
+   DepositTypes.Refresh;
+end;
+
+procedure TfrmDepositTypes_new.ToolButton5Click(Sender: TObject);
+begin
+      if   MessageDlg('Silinməsinə əminsinizmi?'
+              ,mtConfirmation
+              ,[mbYes,mbNo],0
+              )<>mrYes then Exit;
+
+    with SBCM_RPDEPOSITORY do
+         CallProcedure('delDepositTypes',[DepositTypes.FieldByName('ID').AsInteger]) ;
+
+    DepositTypes.Refresh;
+end;
+
+procedure TfrmDepositTypes_new.ToolButton7Click(Sender: TObject);
+begin
+  DepositTypes.Refresh
+end;
+
+end.

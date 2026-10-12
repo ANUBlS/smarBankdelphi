@@ -1,0 +1,242 @@
+unit InstallationTaskEditFrameImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActnList, ImgList, ComCtrls, ToolWin, StdCtrls, DBCtrls, Mask, DBCGrids,
+  Db, OracleData, Grids, DBGrids, ExtCtrls, Oracle;
+
+type
+  TInstallationTaskEditFrame = class(TFrame)
+    GroupBox1: TGroupBox;
+    ToolBar1: TToolBar;
+    ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
+    ToolButton3: TToolButton;
+    ImageList1: TImageList;
+    ActionList1: TActionList;
+    AddQuery: TAction;
+    DropQuery: TAction;
+    ImportSQLFile: TAction;
+    SQLData: TOracleDataSet;
+    SQL: TDataSource;
+    DBGrid1: TDBGrid;
+    DBMemo1: TDBMemo;
+    Splitter1: TSplitter;
+    OpenDialog: TOpenDialog;
+    SQLDataID: TFloatField;
+    SQLDataTASK_ID: TFloatField;
+    SQLDataENABLED: TFloatField;
+    SQLDataMETRICA: TFloatField;
+    SQLDataOPERATIONCODE: TFloatField;
+    ToolButton4: TToolButton;
+    DropTaskActions: TAction;
+    SQLDataNAME: TWideStringField;
+    SQLDataCODE: TWideStringField;
+    procedure AddQueryExecute(Sender: TObject);
+    procedure SQLDataApplyRecord(Sender: TOracleDataSet; Action: Char;
+      var Applied: Boolean; var NewRowId: String);
+    procedure DropQueryExecute(Sender: TObject);
+    procedure ImportSQLFileExecute(Sender: TObject);
+    procedure SQLDataAfterInsert(DataSet: TDataSet);
+    procedure DropTaskActionsExecute(Sender: TObject);
+  private
+    { Private declarations }
+    FTaskName: String;
+    FModifiedEvent: TNotifyEvent;
+    FTaskID: Integer;
+    procedure SetTaskName(const Value: String);
+    procedure DoImportSQLFile(const FileName: String);
+    procedure DoRemoveInstallActions();
+  public
+    { Public declarations }
+    procedure Apply;
+    procedure OpenTask;
+    procedure CloseTask;
+    procedure Cancel;
+  published
+    property TaskName: String read FTaskName write SetTaskName;
+    property OnModified: TNotifyEvent read FModifiedEvent write FModifiedEvent;
+  end;
+
+implementation
+
+{$R *.DFM}
+
+uses sboapiDataModuleImpl, SBInstallation, ProgressFormImpl;
+
+const
+  QuerySeparator = ';';
+
+procedure TInstallationTaskEditFrame.SetTaskName(const Value: String);
+begin
+  FTaskName := Value;
+  if not (csDesigning in ComponentState) then
+    FTaskID := Sb_GetTaskID(TaskName);
+end;
+
+procedure TInstallationTaskEditFrame.Apply;
+begin
+  with SQLData do
+  begin
+    ApplyUpdates([aaInsert, aaUpdate, aaDelete]);
+    CommitUpdates;
+  end;
+end;
+
+procedure TInstallationTaskEditFrame.AddQueryExecute(Sender: TObject);
+begin
+  if SQLData.State in [dsInsert, dsEdit] then
+    SQLData.Post;
+  SQLData.Insert;
+end;
+
+procedure TInstallationTaskEditFrame.OpenTask;
+begin
+  with SQLData do
+  begin
+    Close;
+    SetVariable('TaskName', TaskName);
+    Open;
+  end;
+end;
+
+procedure TInstallationTaskEditFrame.CloseTask;
+begin
+  with SQLData do
+    Close;
+end;
+
+procedure TInstallationTaskEditFrame.SQLDataApplyRecord(
+  Sender: TOracleDataSet; Action: Char; var Applied: Boolean;
+  var NewRowId: String);
+begin
+  Applied := True;
+  case Action of
+  'I':
+    Sb_AddTaskAction(
+      FTaskID,
+      Sender.FieldByName('Name').AsString,
+      Sender.FieldByName('Metrica').AsInteger,
+      Sender.FieldByName('Code').AsString,
+      Sender.FieldByName('OperationCode').AsInteger);
+  'U':
+    Sb_UpdateTaskAction(
+      Sender.FieldByName('ID').AsInteger,
+      Sender.FieldByName('Name').AsString,
+      Sender.FieldByName('Metrica').AsInteger,
+      Sender.FieldByName('Code').AsString,
+      Sender.FieldByName('OperationCode').AsInteger);
+  'D':
+    Sb_DeleteTaskAction(Sender.FieldByName('ID').AsInteger);
+  else
+    Applied := False;
+  end;
+end;
+
+procedure TInstallationTaskEditFrame.DropQueryExecute(Sender: TObject);
+begin
+  with SQLData do
+    Delete;
+end;
+
+procedure TInstallationTaskEditFrame.ImportSQLFileExecute(Sender: TObject);
+begin
+  with OpenDialog do
+    if Execute then
+      DoImportSQLFile(FileName);
+end;
+
+procedure TInstallationTaskEditFrame.DoImportSQLFile(const FileName: String);
+var
+  Ss: TStrings;
+  S: String;
+  SQuery: String;
+  NamePrefix: String;
+  MetricaCounter: Integer;
+
+  function Truncate: String;
+  var
+    P: Integer;
+  begin
+    P := Pos(QuerySeparator, S);
+    if P = 0 then
+      P := Length(S)+1;
+    Result := Trim(Copy(S, 1, P-1));
+    System.Delete(S, 1, P);
+  end;
+
+  procedure ImportQuery(const S: String);
+  begin
+    with SQLData do
+    begin
+      Insert;
+      FieldByName('CODE').AsString := S;
+      FieldByName('Metrica').AsInteger := MetricaCounter;
+      FieldByName('Name').AsString := Format('%s%d', [NamePrefix, MetricaCounter]);
+      Post;
+    end;
+  end;
+
+begin
+  NamePrefix := ChangeFileExt(ExtractFileName(FileName), '');
+  SQLData.Last;
+  MetricaCounter := SQLData.FieldByName('Metrica').AsInteger+1;
+
+  with TProgressForm.Create(Self) do
+  try
+    StartDialog('Importing SQL file', 'Loading...');
+
+    Ss := TStringList.Create;
+    try
+      Ss.LoadFromFile(FileName);
+      S := Ss.Text;
+      StatusMessage('Importing...');
+      while True do
+      begin
+        SQuery := Truncate;
+        if SQuery = '' then
+          break;
+        ImportQuery(SQuery);
+        Inc(MetricaCounter);
+      end;
+
+    finally
+      Ss.Free;
+    end;
+
+  finally
+    Release;
+  end;
+end;
+
+procedure TInstallationTaskEditFrame.DoRemoveInstallActions();
+begin
+  Sb_DeleteTaskActions(FTaskID);
+  with SQLData do
+  begin
+    Close;
+    Open;
+  end;
+end;
+
+procedure TInstallationTaskEditFrame.Cancel;
+begin
+  with SQLData do
+    if UpdatesPending then
+      CancelUpdates;
+end;
+
+procedure TInstallationTaskEditFrame.SQLDataAfterInsert(DataSet: TDataSet);
+begin
+  DataSet.FieldByName('OperationCode').AsInteger := opcExecSQL;
+end;
+
+procedure TInstallationTaskEditFrame.DropTaskActionsExecute(
+  Sender: TObject);
+begin
+  DoRemoveInstallActions();
+end;
+
+end.

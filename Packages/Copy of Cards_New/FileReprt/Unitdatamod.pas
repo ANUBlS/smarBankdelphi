@@ -1,0 +1,153 @@
+unit Unitdatamod;
+
+interface
+
+uses
+  SysUtils, Classes, DB, OracleData, Oracle;
+
+type
+  TDataModbpl = class(TDataModule)
+    acount: TOracleDataSet;
+    banks: TOracleDataSet;
+    acountsource: TDataSource;
+    bankssource: TDataSource;
+    referans: TOracleDataSet;
+    referansREFE: TWideStringField;
+    pack: TOraclePackage;
+    templates: TOracleDataSet;
+    templatessource: TDataSource;
+    acountID: TFloatField;
+    acountKLI_ID: TFloatField;
+    acountOP_ID: TFloatField;
+    acountACC_NO: TWideStringField;
+    acountVAL_ACC: TIntegerField;
+    acountNAME: TWideStringField;
+    acountOPEN_DAT: TDateTimeField;
+    acountCLOSE_DAT: TDateTimeField;
+    acountBAL_CN1: TFloatField;
+    acountBAL_CN2: TFloatField;
+    acountBAL_CN3: TFloatField;
+    acountBAL_CN4: TFloatField;
+    acountFILIAL: TIntegerField;
+    acountSIM_OTCET: TFloatField;
+    acountTIPACC: TWideStringField;
+    acountLIMIT: TFloatField;
+    acountOLD_ACC_NO: TWideStringField;
+    acountPAIR_ACC: TFloatField;
+    acountINSIDER: TWideStringField;
+    acountSID: TFloatField;
+    acountTEMPID: TFloatField;
+    acountOWNID: TFloatField;
+    acountP_CUSTID: TFloatField;
+    acountSYMB: TWideStringField;
+    azips: TOracleDataSet;
+    Azipssource: TDataSource;
+    azipsMF20: TWideStringField;
+    azipsMF23B: TWideStringField;
+    azipsMF26T: TWideStringField;
+    azipsMF27: TWideStringField;
+    azipsMF32A: TWideStringField;
+    azipsMF36: TWideStringField;
+    azipsSENDERTYPE: TWideStringField;
+    azipsSENDERBIC: TWideStringField;
+    azipsSENDERLT: TWideStringField;
+    azipsAPPLICATION: TWideStringField;
+    azipsFINCOPY: TWideStringField;
+    azipsMESSAGETYPE: TWideStringField;
+    azipsPRIORITY: TWideStringField;
+    azipsMONITORING: TWideStringField;
+    azipsRECEIVERTYPE: TWideStringField;
+    azipsRECEIVERBIC: TWideStringField;
+    azipsMF32A_DATE: TDateTimeField;
+    azipsMF32A_CURR: TWideStringField;
+    azipsMF32A_AMOUNT: TFloatField;
+    azipsMF50_ACCOUNT: TWideStringField;
+    azipsMF50_BIC: TWideStringField;
+    azipsMF50_NAMEADRESS: TWideStringField;
+    azipsMF52_ACCOUNT: TWideStringField;
+    azipsMF52_BIC: TWideStringField;
+    azipsMF52_NAMEADRESS: TWideStringField;
+    azipsMF53_ACCOUNT: TWideStringField;
+    azipsMF53_BIC: TWideStringField;
+    azipsMF53_NAMELOCATION: TWideStringField;
+    azipsMF54_ACCOUNT: TWideStringField;
+    azipsMF54_BIC: TWideStringField;
+    azipsMF54_NAMELOCATION: TWideStringField;
+    azipsMF55_ACCOUNT: TWideStringField;
+    azipsMF55_BIC: TWideStringField;
+    azipsMF55_NAMELOCATION: TWideStringField;
+    azipsMF56_ACCOUNT: TWideStringField;
+    azipsMF56_BIC: TWideStringField;
+    azipsMF56_NAMELOCATION: TWideStringField;
+    azipsMF57_ACCOUNT: TWideStringField;
+    azipsMF57_BIC: TWideStringField;
+    azipsMF57_NAMELOCATION: TWideStringField;
+    azipsMF59_ACCOUNT: TWideStringField;
+    azipsMF59_NAMEADRESS: TWideStringField;
+    azipsSTATUS: TIntegerField;
+    azipsID: TFloatField;
+    azipsMF71F_CHILD: TWideStringField;
+    azipsMF71G_CHILD: TWideStringField;
+    azipsM20: TWideStringField;
+    azipsM23B: TWideStringField;
+    azipsM26T: TWideStringField;
+    azipsM32A: TWideStringField;
+    azipsM36: TWideStringField;
+    azipsM50: TWideStringField;
+    azipsM52: TWideStringField;
+    azipsM53: TWideStringField;
+    azipsM54: TWideStringField;
+    azipsM55: TWideStringField;
+    azipsM56: TWideStringField;
+    azipsM57: TWideStringField;
+    azipsM59: TWideStringField;
+    azipsM70: TWideStringField;
+    azipsM71A: TWideStringField;
+    azipsM71F: TWideStringField;
+    azipsM71G: TWideStringField;
+    azipsM72: TWideStringField;
+    azipsM77B: TWideStringField;
+    azipsMF20_REFERENCE: TWideStringField;
+    azipsOP_ID: TFloatField;
+    azipsDEL_STATUS: TIntegerField;
+    azipsCOMMIT_OPID: TFloatField;
+    azipsFCREATE_OPID: TFloatField;
+    azipsDELETE_OPID: TFloatField;
+    azipsMF70: TWideStringField;
+    azipsSHIFR: TIntegerField;
+    azipsMF71A: TWideStringField;
+    azipsMF72: TWideStringField;
+    azipsMF77B: TWideStringField;
+    azipsEDITED_OPID: TFloatField;
+    azipsTR_ID: TFloatField;
+    azipsTR_ID2: TFloatField;
+    azipsINFO: TWideStringField;
+    azipsTAX: TWideStringField;
+    azipsCOUNTRY: TWideStringField;
+    azipsHESABAT: TWideStringField;
+    azipsMF59_BIC: TWideStringField;
+    azipsCOM_ACCID: TFloatField;
+    alanm: TOracleDataSet;
+    gonderen: TOracleDataSet;
+    azipsCDAT: TDateTimeField;
+    azipsTDAT: TDateTimeField;
+    azipsFDAT: TDateTimeField;
+    azipsSAAT: TWideStringField;
+    azipsYSAAT: TWideStringField;
+    azipsGSAAT: TWideStringField;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  DataModbpl: TDataModbpl;
+
+implementation
+
+{$R *.dfm}
+uses
+sboapidatamoduleimpl, Filereportform;
+
+end.

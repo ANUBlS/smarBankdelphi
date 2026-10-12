@@ -1,0 +1,162 @@
+unit UCPropertyPolicy;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, OracleData, Oracle;
+
+type
+  TPolicyDataModule = class(TDataModule)
+    OPCOMMON: TOraclePackage;
+    ODSCustomers: TOracleDataSet;
+    ODSCustomersID: TIntegerField;
+    ODSCustomersNAME: TWideStringField;
+    ODSCustomersADDRESS: TWideStringField;
+    ODSCustomersMOBILEPHONE: TWideStringField;
+    ODSCustomersFAX: TWideStringField;
+    ODSCustomersSource: TDataSource;
+    ODSBeneficiary: TOracleDataSet;
+    ODSBeneficiaryID: TFloatField;
+    ODSBeneficiaryNAME: TWideStringField;
+    ODSBeneficiaryADDRESS: TWideStringField;
+    ODSBeneficiaryPHONE: TWideStringField;
+    ODSBeneficiaryBANKING_DETAILS: TWideStringField;
+    BeneficiarySource: TDataSource;
+    ODSCondition: TOracleDataSet;
+    ODSConditionID: TFloatField;
+    ODSConditionNAME: TWideStringField;
+    ConditionSource: TDataSource;
+    DSContracts: TDataSource;
+    ODSContracts: TOracleDataSet;
+    ODSContractsID: TFloatField;
+    ODSContractsTYPE_ID: TFloatField;
+    ODSContractsINS_DATE: TDateTimeField;
+    ODSContractsBEGIN_DATE: TDateTimeField;
+    ODSContractsEND_DATE: TDateTimeField;
+    ODSContractsVALUTE_ID: TFloatField;
+    ODSContractsAMMOUNT: TFloatField;
+    ODSContractsCLOSE_PREFIX: TIntegerField;
+    ODSContractsKLI_ID: TFloatField;
+    ODSContractsLOANACC_ID: TFloatField;
+    ODSContractsCURRACC_ID: TFloatField;
+    ODSContractsPOLICY_NUM: TWideStringField;
+    ODSAgent: TOracleDataSet;
+    ODSAgentID: TFloatField;
+    ODSAgentNAME: TWideStringField;
+    AgentSource: TDataSource;
+    ODSCPropertySuggest: TOracleDataSet;
+    ODSCPropertySuggestID: TFloatField;
+    ODSCPropertySuggestBID: TFloatField;
+    ODSCPropertySuggestRISKADDRESS: TWideStringField;
+    ODSCPropertySuggestINSURANCEAMMOUNT: TFloatField;
+    ODSCPropertySuggestENDDATE: TDateTimeField;
+    ODSCPropertySuggestRISK_ID: TFloatField;
+    ODSCPropertySuggestFRZ_ID: TFloatField;
+    ODSCPropertySuggestCNDT_ID: TFloatField;
+    ODSCPropertySuggestVAL_ID: TFloatField;
+    ODSCPropertySuggestINSURANCESUM: TFloatField;
+    CPSuggestSource: TDataSource;
+    ODSCProperty: TOracleDataSet;
+    ODSCPropertyID: TFloatField;
+    ODSCPropertyFULLDESCRIPTION: TWideStringField;
+    ODSCPropertyLOCATIONOBJ: TWideStringField;
+    ODSCPropertyYEARSINBUSINESS: TWideStringField;
+    ODSCPropertyBUILDINGUSAGE: TWideStringField;
+    ODSCPropertyCONSTYEAR: TDateTimeField;
+    ODSCPropertyFLOORSNUM: TIntegerField;
+    ODSCPropertyWALLSM: TWideStringField;
+    ODSCPropertyCEILINGSM: TWideStringField;
+    ODSCPropertyROOFM: TWideStringField;
+    ODSCPropertyAREA: TFloatField;
+    ODSCPropertyAPPLICANTSPACE: TFloatField;
+    ODSCPropertyEARTHQUAKEDETAILS: TWideStringField;
+    ODSCPropertyFLAMABLE: TWideStringField;
+    ODSCPropertySURROINDINGDETAILS: TWideStringField;
+    ODSCPropertySITUETED: TWideStringField;
+    ODSCPropertyGUARD: TWideStringField;
+    ODSCPropertyALARM: TWideStringField;
+    ODSCPropertyLOCKS: TWideStringField;
+    ODSCPropertySECURITYLOCKS: TWideStringField;
+    ODSCPropertyBARS: TWideStringField;
+    ODSCPropertyOTHER: TWideStringField;
+    ODSCPropertySETTINGS: TWideStringField;
+    ODSCPropertyREPAIR: TWideStringField;
+    ODSCPropertyHEATED: TWideStringField;
+    ODSCPropertyRISKID: TFloatField;
+    ODSCPropertyANNUAL: TFloatField;
+    ODSCPropertyWAGES: TFloatField;
+    ODSCPropertyRENT: TFloatField;
+    ODSCPropertyEMPLOYES: TFloatField;
+    ODSCPropertyEXPIRITY: TDateTimeField;
+    ODSCPropertyLOSSHISTORY: TWideStringField;
+    ODSCPropertyRENEWAL: TWideStringField;
+    ODSCPropertyTHIRDPARTY: TWideStringField;
+    ODSCPropertyOTHERINF: TWideStringField;
+    ODSCPropertyINDEMINITY: TWideStringField;
+    ODSCPropertyVALUETYPE: TWideStringField;
+    ODSCPropertyBUILDINGS: TFloatField;
+    ODSCPropertyCONTENT: TFloatField;
+    ODSCPropertyEQUIPMENT: TFloatField;
+    ODSCPropertyGLASS: TFloatField;
+    ODSCPropertyCASH: TFloatField;
+    ODSCPropertyWAREHOUSE: TFloatField;
+    ODSCPropertySTOCK: TFloatField;
+    ODSCPropertyPRODUCTS: TFloatField;
+    ODSCPropertyWORKINPROGRESS: TFloatField;
+    ODSCPropertyRAWMATERIALS: TFloatField;
+    ODSCPropertyCLOSE_PREFIX: TIntegerField;
+    ODSCPropertyTYPEID: TIntegerField;
+    ODSCPropertyPROFITID: TFloatField;
+    CPropertySource: TDataSource;
+    ODSRisks: TOracleDataSet;
+    RiskSource: TDataSource;
+    ODSRisksID: TFloatField;
+    ODSRisksNAME: TWideStringField;
+    ODSCPropertyAGENTID: TFloatField;
+    ODSContractsINSSUMM: TFloatField;
+    ODSContractsFRANSHIZ: TFloatField;
+    ODSContractsTARIFF: TFloatField;
+    ODSContractsSTATE: TIntegerField;
+    ODSContractsAGENT_ID: TFloatField;
+    ODSContractsPNUM: TFloatField;
+    ODSContractsBEN_ID: TFloatField;
+    ODSContractsBENEFICIARY: TWideStringField;
+    ODSReport: TOracleDataSet;
+    ODSReportNAME: TWideStringField;
+    ODSReportNAME2: TWideStringField;
+    ODSReportADDRESS: TWideStringField;
+    ODSReportINSSUMM: TFloatField;
+    ODSReportBEGINDATE: TWideStringField;
+    ODSReportBEGINDATE2: TWideStringField;
+    ODSReportINSDATE: TWideStringField;
+    ODSReportENDDATE: TWideStringField;
+    ODSReportPOLICYNUM: TWideStringField;
+    ODSReportBENEFICIARY: TWideStringField;
+    ODSReportAMMOUNT: TFloatField;
+    ODSReportVALUTE: TWideStringField;
+    ODSReportAGENT: TWideStringField;
+    ODSReportLOANACC_ID: TFloatField;
+    ODSReportCURRACC_ID: TFloatField;
+    ODSReportFRANSHIZ: TFloatField;
+    ODSReportPHONE: TWideStringField;
+    ODSReportLOCATIONOBJ: TWideStringField;
+    ODSReportINSURED_OBJ: TWideStringField;
+    ODSReportCOST: TFloatField;
+    sb_aca: TOraclePackage;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  PolicyDataModule: TPolicyDataModule;
+
+implementation
+
+uses UCPPolicyDataModule,sboapidatamoduleimpl;
+
+{$R *.DFM}
+
+end.

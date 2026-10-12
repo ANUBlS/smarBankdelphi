@@ -1,0 +1,82 @@
+unit SdNewDatModImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Oracle, Db, OracleData;
+
+type
+  TDatModSdNew = class(TDataModule)
+    Rests: TOracleDataSet;
+    CM_SD: TOraclePackage;
+    CrdInfo: TOracleDataSet;
+    Tranches: TOracleDataSet;
+    payments: TOracleDataSet;
+    Obligations: TOracleDataSet;
+    DueRests: TOracleDataSet;
+    Filial: TOracleDataSet;
+    FilialDatSrc: TDataSource;
+    RestsID: TFloatField;
+    RestsDATEOFCREDIT: TStringField;
+    RestsSUMNAMOUNT: TFloatField;
+    RestsSUMNAVGINTAMOUNT: TFloatField;
+    RestsSUMFAMOUNT: TFloatField;
+    RestsSUMFAVGINTAMOUNT: TFloatField;
+    RestsSUMFNAMOUNT: TFloatField;
+    RestsSUMFNAVGINTAMOUNT: TFloatField;
+    TranchesID: TFloatField;
+    TranchesDATEOFCREDIT: TStringField;
+    TranchesSUMNAMOUNT: TFloatField;
+    TranchesSUMNAVGINTAMOUNT: TFloatField;
+    TranchesSUMFAMOUNT: TFloatField;
+    TranchesSUMFAVGINTAMOUNT: TFloatField;
+    TranchesSUMFNAMOUNT: TFloatField;
+    TranchesSUMFNAVGINTAMOUNT: TFloatField;
+    paymentsID: TFloatField;
+    paymentsDATEOFCREDIT: TStringField;
+    paymentsSUMNAMOUNT: TFloatField;
+    paymentsSUMNAVGINTAMOUNT: TFloatField;
+    paymentsSUMFAMOUNT: TFloatField;
+    paymentsSUMFAVGINTAMOUNT: TFloatField;
+    paymentsSUMFNAMOUNT: TFloatField;
+    paymentsSUMFNAVGINTAMOUNT: TFloatField;
+    ObligationsID: TFloatField;
+    ObligationsDATEOFCREDIT: TStringField;
+    ObligationsSUMNAMOUNT: TFloatField;
+    ObligationsSUMNAVGINTAMOUNT: TFloatField;
+    ObligationsSUMFAMOUNT: TFloatField;
+    ObligationsSUMFAVGINTAMOUNT: TFloatField;
+    ObligationsSUMFNAMOUNT: TFloatField;
+    ObligationsSUMFNAVGINTAMOUNT: TFloatField;
+    DueRestsID: TFloatField;
+    DueRestsDATEOFCREDIT: TStringField;
+    DueRestsSUMNAMOUNT: TFloatField;
+    DueRestsSUMNAVGINTAMOUNT: TFloatField;
+    DueRestsSUMFAMOUNT: TFloatField;
+    DueRestsSUMFAVGINTAMOUNT: TFloatField;
+    DueRestsSUMFNAMOUNT: TFloatField;
+    DueRestsSUMFNAVGINTAMOUNT: TFloatField;
+    DataSetSD: TOracleDataSet;
+    DataSetSDDSDesigner1: TFloatField;
+    DataSetSDYYY: TStringField;
+    DataSetSDSUMNAMOUNT: TFloatField;
+    DataSetSDSUMFAMOUNT: TFloatField;
+    DataSetSDSUMFNAMOUNT: TFloatField;
+    DataSetSDSUMNAVGINTAMOUNTCM_SDGET_D: TFloatField;
+    DataSetSDSUMFAVGINTAMOUNTCM_SDGET_D: TFloatField;
+    DataSetSDSUMFNAVGINTAMOUNTCM_SDGET_: TFloatField;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  DatModSdNew: TDatModSdNew;
+
+implementation
+{$R *.DFM}
+uses CMOracleApiDataModuleImpl;
+
+end.

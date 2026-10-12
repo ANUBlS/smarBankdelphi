@@ -1,0 +1,291 @@
+object DMPenaltySett: TDMPenaltySett
+  OldCreateOrder = False
+  OnCreate = DataModuleCreate
+  OnDestroy = DataModuleDestroy
+  Left = 179
+  Top = 159
+  Height = 480
+  Width = 696
+  object Valutes: TOracleDataSet
+    SQL.Strings = (
+      'select valute,val_name ,valu_name from sb_avalute')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = CMDataModule.CMSession
+    DesignActivation = False
+    Active = False
+    Left = 56
+    Top = 32
+    object ValutesVALUTE: TIntegerField
+      FieldName = 'VALUTE'
+      Required = True
+    end
+    object ValutesVAL_NAME: TStringField
+      FieldName = 'VAL_NAME'
+      Size = 10
+    end
+    object ValutesVALU_NAME: TStringField
+      FieldName = 'VALU_NAME'
+      Size = 25
+    end
+  end
+  object ValutesDatSrc: TDataSource
+    DataSet = Valutes
+    Left = 136
+    Top = 32
+  end
+  object Accounts: TOracleDataSet
+    SQL.Strings = (
+      'select id,acc_no from sb_account'
+      'where bal_cn1 in (SELECT  accountnumber'
+      '  FROM cm_aginfo where groupid = ('
+      
+        'select id from cm_accountgroups where iname = '#39'InternalBankAccs'#39 +
+        '))')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = CMDataModule.CMSession
+    DesignActivation = False
+    Active = False
+    Left = 248
+    Top = 32
+    object AccountsID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object AccountsACC_NO: TStringField
+      FieldName = 'ACC_NO'
+      Required = True
+    end
+  end
+  object AccountsDatSrc: TDataSource
+    DataSet = Accounts
+    Left = 328
+    Top = 32
+  end
+  object Branches: TOracleDataSet
+    SQL.Strings = (
+      'select id,name from sb_filial ')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = CMDataModule.CMSession
+    DesignActivation = False
+    Active = False
+    Left = 64
+    Top = 104
+    object BranchesID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object BranchesNAME: TStringField
+      FieldName = 'NAME'
+      Size = 90
+    end
+  end
+  object BranchesDatSrc: TDataSource
+    DataSet = Branches
+    Left = 144
+    Top = 104
+  end
+  object PenaltySettings: TOracleDataSet
+    SQL.Strings = (
+      'SELECT id, branchid, currencyid, accid'
+      '  FROM cm_penaltysettings'
+      'where currencyid = :currencyid ')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    Variables.Data = {
+      03000000010000000B0000003A43555252454E43594944030000000000000000
+      000000}
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    Master = Valutes
+    MasterFields = 'valute'
+    DetailFields = 'currencyid '
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    OnApplyRecord = PenaltySettingsApplyRecord
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = CMDataModule.CMSession
+    DesignActivation = False
+    Active = False
+    Left = 256
+    Top = 104
+    object PenaltySettingsID: TFloatField
+      FieldName = 'ID'
+    end
+    object PenaltySettingsBRANCHID: TFloatField
+      FieldName = 'BRANCHID'
+      Required = True
+    end
+    object PenaltySettingsCURRENCYID: TFloatField
+      FieldName = 'CURRENCYID'
+      Required = True
+    end
+    object PenaltySettingsACCID: TFloatField
+      FieldName = 'ACCID'
+      Required = True
+    end
+    object PenaltySettingsAccno: TStringField
+      FieldKind = fkLookup
+      FieldName = 'Accno'
+      LookupDataSet = Accounts
+      LookupKeyFields = 'ID'
+      LookupResultField = 'ACC_NO'
+      KeyFields = 'ACCID'
+      Lookup = True
+    end
+    object PenaltySettingsFilial: TStringField
+      FieldKind = fkLookup
+      FieldName = 'Filial'
+      LookupDataSet = Branches
+      LookupKeyFields = 'ID'
+      LookupResultField = 'NAME'
+      KeyFields = 'BRANCHID'
+      Lookup = True
+    end
+  end
+  object PenaltySettingsDatSrc: TDataSource
+    DataSet = PenaltySettings
+    Left = 352
+    Top = 105
+  end
+  object cm_setup: TOraclePackage
+    Session = CMDataModule.CMSession
+    Debug = False
+    PackageName = 'cm_setup'
+    ParameterMode = pmPositional
+    Cursor = crDefault
+    Optimize = True
+    Left = 64
+    Top = 200
+  end
+  object avalutes: TOracleDataSet
+    SQL.Strings = (
+      'select valute,val_name ,valu_name from sb_avalute')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = CMDataModule.CMSession
+    DesignActivation = False
+    Active = False
+    Left = 344
+    Top = 183
+    object IntegerField1: TIntegerField
+      FieldName = 'VALUTE'
+      Required = True
+    end
+    object StringField1: TStringField
+      FieldName = 'VAL_NAME'
+      Size = 10
+    end
+    object StringField2: TStringField
+      FieldName = 'VALU_NAME'
+      Size = 25
+    end
+  end
+  object avalutesDatSourc: TDataSource
+    DataSet = avalutes
+    Left = 272
+    Top = 184
+  end
+end

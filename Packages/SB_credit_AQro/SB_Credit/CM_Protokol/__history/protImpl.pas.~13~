@@ -1,0 +1,92 @@
+unit protImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, DB, OracleData, ComCtrls, StdCtrls, DBCtrls, Mask, Buttons, ExtCtrls;
+
+type
+  TProtFrm = class(TForm)
+    PageControl1: TPageControl;
+    TabSheet1: TTabSheet;
+    TabSheet2: TTabSheet;
+    prot1: TOracleDataSet;
+    prot2: TOracleDataSet;
+    DataSource1: TDataSource;
+    DataSource2: TDataSource;
+    Label1: TLabel;
+    DBMemo1: TDBMemo;
+    Label2: TLabel;
+    DBEdit1: TDBEdit;
+    Label3: TLabel;
+    DBMemo2: TDBMemo;
+    Label4: TLabel;
+    DBEdit2: TDBEdit;
+    Label5: TLabel;
+    DBMemo3: TDBMemo;
+    Label6: TLabel;
+    DBMemo4: TDBMemo;
+    DBNavigator1: TDBNavigator;
+    SpeedButton1: TSpeedButton;
+    SpeedButton2: TSpeedButton;
+    Label7: TLabel;
+    DBMemo5: TDBMemo;
+    Label8: TLabel;
+    DBEdit3: TDBEdit;
+    Label9: TLabel;
+    DBMemo6: TDBMemo;
+    Label10: TLabel;
+    DBMemo7: TDBMemo;
+    DBNavigator2: TDBNavigator;
+    SpeedButton3: TSpeedButton;
+    SpeedButton4: TSpeedButton;
+    procedure FormCanResize(Sender: TObject; var NewWidth, NewHeight: Integer;
+      var Resize: Boolean);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure SpeedButton2Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  ProtFrm: TProtFrm;
+
+implementation
+uses CommonDecls,CMOracleAPIDataModuleImpl, Reportimpl;
+{$R *.dfm}
+
+procedure TProtFrm.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+resize:=false
+end;
+
+procedure TProtFrm.FormCreate(Sender: TObject);
+begin
+prot1.Open;
+prot2.Open;
+Report:=Treport.Create(self);
+end;
+
+procedure TProtFrm.FormDestroy(Sender: TObject);
+begin
+prot1.Close;
+prot2.close;
+end;
+
+procedure TProtFrm.SpeedButton1Click(Sender: TObject);
+begin
+close
+end;
+
+procedure TProtFrm.SpeedButton2Click(Sender: TObject);
+begin
+Report.ProtRep.Preview
+end;
+
+end.

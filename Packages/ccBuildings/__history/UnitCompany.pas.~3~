@@ -1,0 +1,62 @@
+﻿unit UnitCompany;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, ExtCtrls;
+
+type
+  TFormCompany = class(TForm)
+    Panel1: TPanel;
+    GroupBox1: TGroupBox;
+    Label1: TLabel;
+    EditCompany: TEdit;
+    GroupBox2: TGroupBox;
+    Button1: TButton;
+    AddUpd: TEdit;
+    procedure Button1Click(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormCompany: TFormCompany;
+
+implementation
+
+uses UnitDataModccBuildings;
+
+{$R *.DFM}
+
+procedure TFormCompany.Button1Click(Sender: TObject);
+var
+  p_Name :string;
+  p_ID :integer;
+begin
+  if EditCompany.Text ='' then ShowMessage('Şirkətin adını daxil edin!');
+  if EditCompany.Text <>'' then begin
+   if AddUpd.Text='1' then begin
+    DataModccBuildings.CC_OP.CallProcedure('add_Companies', [EditCompany.Text]);
+    EditCompany.Text :='';
+    EditCompany.SetFocus;
+   end;
+   if AddUpd.Text='2' then begin
+    p_ID :=DatamodccBuildings.CC_Company.FieldByName('ID').AsInteger;
+    p_Name :=EditCompany.Text;
+    DataModccBuildings.CC_OP.CallProcedure('upd_Companies', [p_ID, p_Name]);
+   end;
+   Datamodccbuildings.CC_Company.Close;
+   Datamodccbuildings.CC_Company.Open;
+ end;
+end;
+
+procedure TFormCompany.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  FormCompany.Release;
+end;
+
+end.

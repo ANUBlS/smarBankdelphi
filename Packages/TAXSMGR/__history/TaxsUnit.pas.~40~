@@ -1,0 +1,743 @@
+﻿unit TaxsUnit;
+
+{$WARN SYMBOL_PLATFORM OFF}
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActiveX, AxCtrls, TAXS_TLB, StdVcl, Mask, DBCtrlsEh, Grids, XDBGrids,
+  StdCtrls, CurrencyEdit, XFSCtrls, ComCtrls, ToolWin, ExtCtrls, DB, OracleData,
+  ImgList, Oracle,Quickrpt,QRCtrls, Menus, PluginPopupMenu;
+
+type
+  TTAXS = class(TActiveForm, ITAXS)
+    PageControl1: TPageControl;
+    TabSheet1: TTabSheet;
+    XFPanel2: TXFPanel;
+    XDBGrid1: TXDBGrid;
+    XFPanel1: TXFPanel;
+    ods_in: TOracleDataSet;
+    dsrc_in: TDataSource;
+    CBSearch: TComboBox;
+    EditSearch: TEdit;
+    ods_inCUST_ID: TIntegerField;
+    ods_inACC_ID: TFloatField;
+    ods_inCUST_NAME: TWideStringField;
+    ods_inACC_NO: TWideStringField;
+    ods_inACC_NAME: TWideStringField;
+    ods_inLIMIT: TFloatField;
+    ods_inSYS_DATE: TDateTimeField;
+    ods_inFLEG: TWideStringField;
+    ods_inFLEG_TXT: TWideStringField;
+    ImageList1: TImageList;
+    OraclePackage1: TOraclePackage;
+    ods_inCOLL_NUM: TWideStringField;
+    ods_inBANK_TEXT: TWideMemoField;
+    ods_inLIMIT_TESXT: TWideMemoField;
+    OraclePackage2: TOraclePackage;
+    ods_inCOLL_DATE: TDateTimeField;
+    DateTimePicker1: TDateTimePicker;
+    XFLabel2: TXFLabel;
+    XFLabel3: TXFLabel;
+    DateTimePicker3: TDateTimePicker;
+    XFCheckBox1: TXFCheckBox;
+    XFCheckBox2: TXFCheckBox;
+    XFCheckBox3: TXFCheckBox;
+    XFCheckBox4: TXFCheckBox;
+    ToolBar1: TToolBar;
+    DateTimePicker2: TDateTimePicker;
+    ToolButton1: TToolButton;
+    PluginPopupMenu1: TPluginPopupMenu;
+    ap1: TMenuItem;
+    ods_inSYS_DATETIM: TDateTimeField;
+    ods_inBLOCK_TEXT: TWideMemoField;
+    OracleDataSet1: TOracleDataSet;
+    OracleDataSet1COLL_NUM: TWideStringField;
+    OracleDataSet1TEXT: TWideStringField;
+    OracleDataSet1COLUM: TWideStringField;
+    ods_sys: TOracleDataSet;
+    ods_sysDAT: TDateTimeField;
+    ods_inAMMOUNT: TFloatField;
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure ToolButton2Click(Sender: TObject);
+    procedure DateTimePicker3CloseUp(Sender: TObject);
+    procedure DateTimePicker2CloseUp(Sender: TObject);
+    procedure ToolButton1Click(Sender: TObject);
+    procedure ap1Click(Sender: TObject);
+    procedure XDBGrid1DblClick(Sender: TObject);
+    procedure EditSearchKeyPress(Sender: TObject; var Key: Char);
+    procedure XFCheckBox1Click(Sender: TObject);
+  private
+    { Private declarations }
+    FEvents: ITAXSEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure MouseEnterEvent(Sender: TObject);
+    procedure MouseLeaveEvent(Sender: TObject);
+    procedure PaintEvent(Sender: TObject);
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AlignDisabled: WordBool; safecall;
+    function Get_AlignWithMargins: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_BorderWidth: Integer; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_DockSite: WordBool; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_ExplicitHeight: Integer; safecall;
+    function Get_ExplicitLeft: Integer; safecall;
+    function Get_ExplicitTop: Integer; safecall;
+    function Get_ExplicitWidth: Integer; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_MouseInClient: WordBool; safecall;
+    function Get_ParentCustomHint: WordBool; safecall;
+    function Get_ParentDoubleBuffered: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PopupMode: TxPopupMode; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_ScreenSnap: WordBool; safecall;
+    function Get_SnapBuffer: Integer; safecall;
+    function Get_UseDockManager: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_AlignWithMargins(Value: WordBool); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_BorderWidth(Value: Integer); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_DockSite(Value: WordBool); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_ParentCustomHint(Value: WordBool); safecall;
+    procedure Set_ParentDoubleBuffered(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PopupMode(Value: TxPopupMode); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_ScreenSnap(Value: WordBool); safecall;
+    procedure Set_SnapBuffer(Value: Integer); safecall;
+    procedure Set_UseDockManager(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+  public
+    { Public declarations }
+    procedure Initialize; override;
+  end;
+  var
+  TAXS:TTAXS;
+
+implementation
+
+uses ComObj, ComServ,sboapiDataModuleImpl, Unit1, Unit3;
+
+{$R *.DFM}
+
+{ TTAXS }
+
+procedure TTAXS.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_TAXSPage); }
+end;
+
+procedure TTAXS.EditSearchKeyPress(Sender: TObject; var Key: Char);
+begin
+if Length(EditSearch.Text)<>0 then
+  begin
+  ods_in.Close;
+  case CBSearch.ItemIndex of
+  0:ods_in.SQL[12]:='and c.id like '''+EditSearch.Text+'%''';
+  1:ods_in.SQL[12]:='and t.coll_num  like '''+EditSearch.Text+'%''';
+  2:ods_in.SQL[12]:='and upper(c.name) like upper(''%'+EditSearch.Text+'%'')';
+  3:ods_in.SQL[12]:='and upper(a.acc_no) like upper(''%'+EditSearch.Text+'%'')';
+
+   end;
+  //SHOWMESSAGE(ods_main.Fields[CBSearch.ItemIndex].FieldName+'---'+EditSearch.Text);
+  ods_in.Open;
+  end
+  else
+  begin
+  ods_in.Close;
+  ods_in.SQL[12]:='';
+  ods_in.Open;
+  end;
+end;
+
+procedure TTAXS.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as ITAXSEvents;
+  inherited EventSinkChanged(EventSink);
+end;
+
+procedure TTAXS.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnMouseEnter := MouseEnterEvent;
+  OnMouseLeave := MouseLeaveEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TTAXS.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TTAXS.Get_AlignDisabled: WordBool;
+begin
+  Result := AlignDisabled;
+end;
+
+function TTAXS.Get_AlignWithMargins: WordBool;
+begin
+  Result := AlignWithMargins;
+end;
+
+function TTAXS.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TTAXS.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TTAXS.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TTAXS.Get_BorderWidth: Integer;
+begin
+  Result := Integer(BorderWidth);
+end;
+
+function TTAXS.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TTAXS.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TTAXS.Get_DockSite: WordBool;
+begin
+  Result := DockSite;
+end;
+
+function TTAXS.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TTAXS.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TTAXS.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TTAXS.Get_ExplicitHeight: Integer;
+begin
+  Result := ExplicitHeight;
+end;
+
+function TTAXS.Get_ExplicitLeft: Integer;
+begin
+  Result := ExplicitLeft;
+end;
+
+function TTAXS.Get_ExplicitTop: Integer;
+begin
+  Result := ExplicitTop;
+end;
+
+function TTAXS.Get_ExplicitWidth: Integer;
+begin
+  Result := ExplicitWidth;
+end;
+
+function TTAXS.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TTAXS.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TTAXS.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TTAXS.Get_MouseInClient: WordBool;
+begin
+  Result := MouseInClient;
+end;
+
+function TTAXS.Get_ParentCustomHint: WordBool;
+begin
+  Result := ParentCustomHint;
+end;
+
+function TTAXS.Get_ParentDoubleBuffered: WordBool;
+begin
+  Result := ParentDoubleBuffered;
+end;
+
+function TTAXS.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TTAXS.Get_PopupMode: TxPopupMode;
+begin
+  Result := Ord(PopupMode);
+end;
+
+function TTAXS.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TTAXS.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TTAXS.Get_ScreenSnap: WordBool;
+begin
+  Result := ScreenSnap;
+end;
+
+function TTAXS.Get_SnapBuffer: Integer;
+begin
+  Result := SnapBuffer;
+end;
+
+function TTAXS.Get_UseDockManager: WordBool;
+begin
+  Result := UseDockManager;
+end;
+
+function TTAXS.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TTAXS.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TTAXS._Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TTAXS.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TTAXS.ActiveFormCreate(Sender: TObject);
+var
+a,b:string;
+begin
+TAXS:=self;
+Form3:=TForm3.Create(self);
+XFCheckBox1.Checked:=true;
+XFCheckBox2.Checked:=true;
+XFCheckBox3.Checked:=true;
+XFCheckBox4.Checked:=true;
+DateTimePicker3.DateTime:=ods_sysDAT.AsDateTime;
+DateTimePicker2.DateTime:=ods_sysDAT.AsDateTime;
+a:= formatdatetime('DD/MM/YYYY',DateTimePicker3.DateTime);
+b:= formatdatetime('DD/MM/YYYY',DateTimePicker2.DateTime);
+
+with ods_in do
+begin
+  close;
+ SetVariable('begin_dat',a);
+ SetVariable('end_dat',b);
+  open;
+end;
+   CBSearch.Clear;
+CBSearch.Items.Add(XDBGrid1.Columns[0].Title.Caption);
+CBSearch.Items.Add(XDBGrid1.Columns[1].Title.Caption);
+CBSearch.Items.Add(XDBGrid1.Columns[3].Title.Caption);
+CBSearch.Items.Add(XDBGrid1.Columns[4].Title.Caption);
+ CBSearch.ItemIndex:=0;
+end;
+
+procedure TTAXS.ap1Click(Sender: TObject);
+var
+a,i:integer;
+v_coll_num,v_bank_text,v_limit_text :string;
+begin
+//OracleDataSet1.Refresh;
+if (ods_inFLEG.AsString='GA')or (ods_inFLEG.AsString='GD') then
+ begin
+
+ showmessage('  Geriçağrılma olanlrı çapa vermək olmaz  ! ');
+    Exit
+    end
+    else
+  begin
+
+v_coll_num:=ods_inCOLL_NUM.AsString;
+v_bank_text:=ods_inBANK_TEXT.AsString+'/';
+v_limit_text:=ods_inLIMIT_TESXT.AsString;
+
+OraclePackage2.CallProcedure('report_tax',[v_coll_num,v_bank_text]) ;
+OracleDataSet1.Open;
+OracleDataSet1.Refresh;
+OraclePackage1.CallProcedure('get_vergul_tax',[v_coll_num,v_limit_text]) ;
+
+
+if not assigned(rep) then rep:=trep.Create(self);
+   with rep do
+   begin
+for I := 0 to OracleDataSet1.RecordCount do
+  begin
+        for a :=0 to rep.ComponentCount- 1 do begin
+          if (rep.Components[a].ClassType = TQRLabel) then
+            begin
+          if rep.Components[a].Name=OracleDataSet1COLUM.AsString then
+            (rep.Components[a] as TQRLabel).Caption:= OracleDataSet1TEXT.AsString
+
+        end;
+        end;
+    OracleDataSet1.Next;
+
+  end;
+   end;
+   rep.ods_a.Refresh;
+   rep.QRLabel30.Caption:=  v_coll_num;
+   rep.Preview;
+
+  end;
+end;
+
+procedure TTAXS.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TTAXS.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TTAXS.DateTimePicker2CloseUp(Sender: TObject);
+var
+a,b:string;
+begin
+a:= formatdatetime('DD/MM/YYYY',DateTimePicker3.DateTime);
+b:= formatdatetime('DD/MM/YYYY',DateTimePicker2.DateTime);
+showmessage((a));
+with ods_in do
+begin
+  close;
+ SetVariable('begin_dat',a);
+ SetVariable('end_dat',b);
+  open;
+end;
+
+end;
+
+procedure TTAXS.DateTimePicker3CloseUp(Sender: TObject);
+var
+a,b:string;
+begin
+ToolButton1Click(Sender);
+{a:= formatdatetime('DD/MM/YYYY',DateTimePicker3.DateTime);
+b:= formatdatetime('DD/MM/YYYY',DateTimePicker2.DateTime);
+showmessage((a));
+with ods_in do
+begin
+  close;
+ SetVariable('begin_dat',a);
+ SetVariable('end_dat',b);
+  open;
+end;   }
+
+end;
+
+procedure TTAXS.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TTAXS.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TTAXS.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TTAXS.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TTAXS.MouseEnterEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnMouseEnter;
+end;
+
+procedure TTAXS.MouseLeaveEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnMouseLeave;
+end;
+
+procedure TTAXS.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TTAXS.Set_AlignWithMargins(Value: WordBool);
+begin
+  AlignWithMargins := Value;
+end;
+
+procedure TTAXS.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TTAXS.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TTAXS.Set_AxBorderStyle(Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TTAXS.Set_BorderWidth(Value: Integer);
+begin
+  BorderWidth := TBorderWidth(Value);
+end;
+
+procedure TTAXS.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TTAXS.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TTAXS.Set_DockSite(Value: WordBool);
+begin
+  DockSite := Value;
+end;
+
+procedure TTAXS.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TTAXS.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TTAXS.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TTAXS.Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TTAXS.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := string(Value);
+end;
+
+procedure TTAXS.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TTAXS.Set_ParentCustomHint(Value: WordBool);
+begin
+  ParentCustomHint := Value;
+end;
+
+procedure TTAXS.Set_ParentDoubleBuffered(Value: WordBool);
+begin
+  ParentDoubleBuffered := Value;
+end;
+
+procedure TTAXS.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TTAXS.Set_PopupMode(Value: TxPopupMode);
+begin
+  PopupMode := TPopupMode(Value);
+end;
+
+procedure TTAXS.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TTAXS.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TTAXS.Set_ScreenSnap(Value: WordBool);
+begin
+  ScreenSnap := Value;
+end;
+
+procedure TTAXS.Set_SnapBuffer(Value: Integer);
+begin
+  SnapBuffer := Value;
+end;
+
+procedure TTAXS.Set_UseDockManager(Value: WordBool);
+begin
+  UseDockManager := Value;
+end;
+
+procedure TTAXS.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+procedure TTAXS.ToolButton1Click(Sender: TObject);
+var
+begin_dat,end_dat,text_net,text,text1,text2,text3,sqt_text,sert:string;
+begin
+begin_dat:= formatdatetime('DD/MM/YYYY',DateTimePicker3.DateTime);
+end_dat:= formatdatetime('DD/MM/YYYY',DateTimePicker2.DateTime);
+ sert:='and';
+with ods_in do
+begin
+  close;
+ SetVariable('begin_dat',begin_dat);
+ SetVariable('end_dat',end_dat);
+
+ if XFCheckBox1.Checked then
+ text:=' fleg like'+'''A'''
+ else
+ text:='';
+
+ if XFCheckBox2.Checked then
+ text1:='or fleg like'+'''D'''
+ else
+ text1:='';
+
+ if XFCheckBox3.Checked then
+ text2:='or fleg like'+'''GA'''
+ else
+ text2:='';
+
+ if XFCheckBox4.Checked then
+ text3:='or fleg like'+'''GD'''
+ else
+ text3:='';
+  if (text='') and (text1='') and (text2='') and (text3='') then
+    begin
+    showmessage('  Heç bir tip seçilməyib    !');
+    exit
+    end
+    else begin
+ if text<>'' then
+   begin
+ sqt_text:= text+ ' '+text1+' '+text2+' '+text3;
+    end
+   else
+   begin
+   text_net:=text1+''+text2+''+text3;
+   sqt_text:=copy(text_net,ansipos('or',text_net)+length('or'),length(text_net) );
+   end;
+  ods_in.SQL[12]:=sert+' ' +'('+sqt_text+')';
+  open;
+ end;
+end;
+
+end;
+
+procedure TTAXS.ToolButton2Click(Sender: TObject);
+begin
+ods_in.Refresh;
+end;
+
+procedure TTAXS.XDBGrid1DblClick(Sender: TObject);
+begin
+Form3.ShowModal;
+end;
+
+procedure TTAXS.XFCheckBox1Click(Sender: TObject);
+begin
+ToolButton1Click(Sender);
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TTAXS,
+    Class_TAXS,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

@@ -1,0 +1,193 @@
+unit addimpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, CMCurrencyEdit, Mask, DBCtrls, Buttons, ExtCtrls, Oracle, Db,
+  OracleData;
+
+type
+  TAddForm = class(TForm)
+    InterestsAccounts: TOracleDataSet;
+    CustIntAccounts: TOracleDataSet;
+    OracleDataSet1: TOracleDataSet;
+    IntAccDatSrc: TDataSource;
+    CustIntAccDatSrc: TDataSource;
+    OraclePackage1: TOraclePackage;
+    Panel2: TPanel;
+    Label2: TLabel;
+    Label1: TLabel;
+    Label3: TLabel;
+    SpeedButton1: TSpeedButton;
+    SpeedButton2: TSpeedButton;
+    SpeedButton3: TSpeedButton;
+    DBEdit1: TDBEdit;
+    DBEdit2: TDBEdit;
+    CMCurrencyEdit1: TCMCurrencyEdit;
+    OutInterestsAccounts: TOracleDataSet;
+    OutIntIncomeAccounts: TOracleDataSet;
+    InterestInfo: TOracleDataSet;
+    OutInterestsDatSrc: TDataSource;
+    OutIntIncomeDatSrc: TDataSource;
+    InterestsAccountsID: TFloatField;
+    InterestsAccountsACC_NO: TWideStringField;
+    OutInterestsAccountsID: TFloatField;
+    OutInterestsAccountsACC_NO: TWideStringField;
+    CheckBox1: TCheckBox;
+    CheckBox2: TCheckBox;
+    CustDIntAccounts: TOracleDataSet;
+    CustDIntAccDatSrc: TDataSource;
+    CheckBox3: TCheckBox;
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure SpeedButton2Click(Sender: TObject);
+    procedure SpeedButton3Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  AddForm: TAddForm;
+
+implementation
+
+{$R *.DFM}
+  uses   CommonDecls ,sboapiDataModuleImpl, mainImpl;
+procedure TAddForm.SpeedButton1Click(Sender: TObject);
+resourcestring
+  rsTransactionsWillProcessed = 'Фаизлярин Б.К-да отуздурмаг ...';
+var
+  CommitTr : Boolean;
+  e,m ,b :integer;
+begin
+m :=0;b:=0;
+if CheckBox1.Checked then
+m :=1 else
+m :=0;
+if CheckBox2.Checked then
+b :=1 else
+b :=0;
+
+if CheckBox3.Checked then
+begin
+e :=1;
+SpeedButton1.Enabled:=false;
+end
+else
+begin
+e :=0;
+SpeedButton1.Enabled:=true;
+end;
+
+ if dd=1 then
+OraclePackage1.CallProcedure('AdditionTrance',[
+     'p_ID' ,Get_SelectedCrdID ,
+     'p_ammount' ,CMCurrencyEdit1.value,
+     'p_debidid' ,CustIntAccounts.fieldbyname('id').asinteger,
+     'p_creditid',InterestsAccounts.fieldbyname('id').asinteger,
+     'p_status',0,
+     'p_modl', m,
+     'p_balans',b,
+     'p_eh',e])
+
+ else
+ OraclePackage1.CallProcedure('AdditionTranceout',[
+     'p_ID' ,Get_SelectedCrdID ,
+     'p_ammount' ,CMCurrencyEdit1.value,
+     'p_debidid' ,OutInterestsAccounts.fieldbyname('id').asinteger,
+     'p_creditid',OutIntIncomeAccounts.fieldbyname('id').asinteger,
+     'p_status',0,
+     'p_modl', m,
+     'p_balans',b,
+     'p_eh',e]);
+  try
+
+    CommitTr := TrDelayed_Show(Self,rsTransactionsWillProcessed);
+
+    Update;
+
+
+    OraclePackage1.CallProcedure('CommitTr',[
+       'DefCommit' , CommitTr
+    ]);
+
+  except
+
+
+    OraclePackage1.CallProcedure('CommitTr',[
+       'DefCommit' , False
+    ]);
+
+    raise;
+   end;
+Mainforum.OracleDataSet1.refresh;
+   close
+
+
+end;
+
+procedure TAddForm.SpeedButton2Click(Sender: TObject);
+resourcestring
+  rsTransactionsWillProcessed = 'Faiz  ...';
+var
+  CommitTr : Boolean;
+  m ,b :integer;
+begin
+m :=0;b:=0;
+if CheckBox1.Checked then
+m :=1 else
+m :=0;
+if CheckBox2.Checked then
+b :=1 else
+b :=0;
+ if dd=1 then
+OraclePackage1.CallProcedure('AdditionTrance',[
+     'p_ID' ,Get_SelectedCrdID ,
+     'p_ammount' ,CMCurrencyEdit1.value,
+     'p_debidid' ,CustIntAccounts.fieldbyname('id').asinteger,
+     'p_creditid',InterestsAccounts.fieldbyname('id').asinteger,
+     'p_status',1,
+     'p_modl', m,
+     'p_balans',b])
+  else
+ OraclePackage1.CallProcedure('AdditionTranceout',[
+     'p_ID' ,Get_SelectedCrdID ,
+     'p_ammount' ,CMCurrencyEdit1.value,
+     'p_debidid' ,OutInterestsAccounts.fieldbyname('id').asinteger,
+     'p_creditid',OutIntIncomeAccounts.fieldbyname('id').asinteger,
+     'p_status',1,
+     'p_modl', m,
+     'p_balans',b]);
+  try
+
+    CommitTr := TrDelayed_Show(Self,rsTransactionsWillProcessed);
+
+    Update;
+
+
+    OraclePackage1.CallProcedure('CommitTr',[
+       'DefCommit' , CommitTr
+    ]);
+
+  except
+
+
+    OraclePackage1.CallProcedure('CommitTr',[
+       'DefCommit' , False
+    ]);
+    raise;
+  end;
+   Mainforum.OracleDataSet1.Refresh;
+  close
+
+
+end;
+
+procedure TAddForm.SpeedButton3Click(Sender: TObject);
+begin
+close
+end;
+
+end.

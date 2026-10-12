@@ -1,0 +1,663 @@
+﻿unit Unitintfile;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ImgList, ComCtrls, Grids, DBGrids, StdCtrls, FileCtrl, ToolWin, Buttons,
+  ExtCtrls,oracledata, CMExcelExport, Menus;
+
+type
+  Tintfile = class(TForm)
+    Panel1: TPanel;
+    RefwithSel: TSpeedButton;
+    CoolBar1: TCoolBar;
+    ToolBar1: TToolBar;
+    ToolButton3: TToolButton;
+    isertbtn: TToolButton;
+    ToolButton1: TToolButton;
+    ToolButton7: TToolButton;
+    REFiles: TRichEdit;
+    FileListBox1: TFileListBox;
+    DBGrid1: TDBGrid;
+    Animate1: TAnimate;
+    ImageList1: TImageList;
+    FileListIntRetailFiles: TFileListBox;
+    CMExcelExport1: TCMExcelExport;
+    DBGrid2: TDBGrid;
+    PopupMenu1: TPopupMenu;
+    selectall1: TMenuItem;
+    ToolButton2: TToolButton;
+    Label1: TLabel;
+    procedure ToolButton3Click(Sender: TObject);
+    procedure isertbtnClick(Sender: TObject);
+    procedure DBGrid1TitleClick(Column: TColumn);
+    procedure ToolButton7Click(Sender: TObject);
+    procedure ToolButton1Click(Sender: TObject);
+    procedure DBGrid1DrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TColumn; State: TGridDrawState);
+    procedure selectall1Click(Sender: TObject);
+    procedure DBGrid2TitleClick(Column: TColumn);
+    procedure FormPaint(Sender: TObject);
+    procedure ToolButton2Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  intfile: Tintfile;
+
+implementation
+
+uses Unit18,SBTranslateProc,sboapiDataModuleImpl;
+
+{$R *.DFM}
+
+
+
+function CheckFileExt(fname : string) : boolean;
+    var i, checkFileExtLen: integer;
+        fileExt : String;
+
+begin
+      checkFileExtLen:=0;
+      fileExt:='';
+      fileExt:= trim(ExtractFileExt(fname));
+      for i:=0 to length(fileExt) do
+        begin
+        if fileExt[i] in ['0'..'9','.'] then inc(checkFileExtLen);
+        end;
+      {check for file extention}
+      if checkFileExtLen <> length(fileext) then result:=false else result:=true;
+end;
+
+procedure Tintfile.ToolButton3Click(Sender: TObject);
+ var channel, tr_type, outwardstatus, tr_currency, acc_currency, merchant, cardnumber :string;
+     tr_date, auth, tr_amount, acc_amount, fee, clear_amount, terminal, SysSim, Stmessage :string;
+     Test :real;
+     i, MSGCount, File_Count, RowCount, selst, selstF :integer;
+     f:textfile;
+     v_dir:string;
+begin
+
+v_dir:=GetCurrentDir;
+  REFiles.Lines.Clear;
+  try
+   if not DirectoryExists('C:\AZCARD\IN') then MkDir('C:\AZCARD\IN');
+   FileListIntRetailFiles.Directory:='C:\AZCARD\IN';
+   FileListIntRetailFiles.Update;
+   if FileListIntRetailFiles.Items.Count = 0 then exit;
+   FileListIntRetailFiles.Mask:='*.*';
+   FileListIntRetailFiles.Update;
+   Test:=122 / 10;
+   if pos('.',FloatToStr(Test))>0 then SysSim:='.' else
+   if pos(',',FloatToStr(Test))>0 then SysSim:=',';
+   File_Count :=0;
+   for i:=0 to FileListIntRetailFiles.Items.Count-1 do
+   begin
+    Application.ProcessMessages;
+    MSGCount:=0;
+    if (uppercase(copy(FileListIntRetailFiles.Items[i],0,6)) <> 'INT_I_') then Continue;
+    File_Count:=File_Count+1;
+    if CheckFileExt(FileListIntRetailFiles.Directory+FileListIntRetailFiles.items[i])=false then continue;
+    AssignFile(F,'C:\AZCARD\IN\'+FileListIntRetailFiles.Items[i]);
+    Reset(F);
+    RowCount:=0;
+    while not Eof(F) do
+    begin
+      Readln(F,Stmessage);
+      RowCount:=RowCount+1;
+      if   ((Length(Trim(StMessage))>100)
+       and (Copy(trim(STmessage),1,3) <> '---')
+       and (Copy(trim(STmessage),1,8) <> 'Merchant'))
+       then MSGCount:=MSGCount+1;
+    end; {while}
+
+    STmessage:='';
+    Reset(F);
+
+    {VIEW FILE NAME}
+    REFiles.Lines.Add('FILE NAME: < '+FileListIntRetailFiles.Items[i]+' >    '+'Message count: '+IntToStr(MSGCount));
+
+    {VIEW FILE MESSAGE}
+    while not Eof(F) do
+    begin
+     Application.ProcessMessages;
+     Readln(F,Stmessage);
+     if Copy(trim(STmessage),1,7)='Channel' then
+     begin
+      channel              :=trim(Copy(trim(STmessage),25,15));
+      tr_currency          :=trim(Copy(trim(STmessage),63,3 ));
+      Readln(F,STmessage);
+      tr_type              :=trim(Copy(trim(STmessage),25,15));
+      acc_currency         :=trim(Copy(trim(STmessage),63,3 ));
+      Readln(F,STmessage);
+      outwardstatus        :=trim(Copy(trim(STmessage),25,15));
+     end;    //if Copy(trim(STmessage),1,7)='Channel' then
+
+     if Copy(trim(STmessage),1,8)='Merchant' then
+     begin
+      Readln(F,STmessage);
+      Readln(F,STmessage);
+      //ShowMessage(STmessage);
+      while (Copy(trim(STmessage),1,3)<>'---') and (length(trim(STmessage))<>0) do
+      begin
+       merchant            :=trim(Copy(trim(STmessage),1,23));
+       cardnumber          :=trim(Copy(trim(STmessage),24,16));
+       tr_date             :=trim(Copy(trim(STmessage),41,8 ));
+       auth                :=trim(Copy(trim(STmessage),50,6 ));
+       tr_amount           :=trim(Copy(trim(STmessage),57,14));
+       acc_amount          :=trim(Copy(trim(STmessage),71,14));
+       fee                 :=trim(Copy(trim(STmessage),85,11));
+       clear_amount        :=trim(Copy(trim(STmessage),96,14));
+       terminal            :=trim(Copy(trim(STmessage),116,8));
+
+       with REFiles.Lines do
+       begin
+        ADD('CHANNEL               : ' + channel);
+        ADD('TRANSACTION TYPE      : ' + tr_type);
+        ADD('OUTWARDSTATUS         : ' + outwardstatus);
+        ADD('TRANSACTION CURRENCY  : ' + tr_currency);
+        ADD('ACCOUNT CURRENCY      : ' + acc_currency);
+        ADD('MERCHANT              : ' + merchant);
+        ADD('CARDNUMBER            : ' + cardnumber);
+        ADD('TRANSACTION DATE      : ' + tr_date);
+        ADD('TRANSACTION TYPE      : ' + tr_type);
+        ADD('AUTH                  : ' + auth);
+        ADD('TRANSACTION AMOUNT    : ' + tr_amount);
+        ADD('ACCOUNT AMOUNT        : ' + acc_amount);
+        ADD('FEE                   : ' + fee);
+        ADD('CLEAR AMOUNT          : ' + clear_amount);
+        ADD('TERMINAL              : ' + terminal);
+        ADD('----------------------------------------------------------------');
+
+       end; //with REFiles.Lines do
+       Readln(F,STmessage);
+      end;   //while Copy(trim(STmessage),1,3)<>'---' do
+     end;   //if Copy(trim(STmessage),1,8)='Merchant' then
+
+    end;    //while not Eof(F) do
+      REFiles.SelStart:=REFiles.FindText('Message count:',selst,LENGTH(REFiles.Text),[stMatchCase]);
+      REFiles.SelLength:=18;
+      REFiles.SelAttributes.Color:=clBlue;
+      REFiles.SelAttributes.Style:=[];
+      selst:=REFiles.FindText('Message count:',selst,LENGTH(REFiles.Text),[stMatchCase])+1;
+      REFiles.SelLength:=-1;
+      REFiles.SelStart:=REFiles.FindText('FILE NAME',selstF,LENGTH(REFiles.Text),[stMatchCase]);
+      REFiles.SelLength:=35;
+      REFiles.SelAttributes.Color:=clred;
+      selstF:=REFiles.FindText('FILE NAME',selstF,LENGTH(REFiles.Text),[stMatchCase])+1;
+      REFiles.SelLength:=-1;
+    CloseFile(F);
+
+    end; //for i:=0 to FileListIntRetailFiles.Items.Count-1 do
+    REFiles.SelStart:=0;
+ finally
+    SendMessage(REFiles.Handle, EM_LINESCROLL, 0,(-1)*(REFiles.Lines.Count-1));
+ end;//try
+
+ FileListIntRetailFiles.Directory:=v_dir;
+
+end;
+
+
+
+
+
+procedure Tintfile.isertbtnClick(Sender: TObject);
+   var channel, tr_type, outwardstatus, tr_currency, acc_currency, merchant, cardnumber, tr_date, auth, terminal, TempStr :string;
+        tr_amount, acc_amount, fee, clear_amount :real;
+        i ,Lcount :integer;
+        
+begin
+DataMod_CARDS.mainpacket.CallProcedure('empty_intretail',[]);
+
+ToolButton2.Click;
+{   DataMod_CARDS.mainpacket.CallProcedure('empty_intretail',[]);
+   i:=-1;
+   Lcount :=REFiles.Lines.Count;
+   while not( i = Lcount) do
+   begin
+    i :=i +1;
+    if ((Copy(Trim(REFiles.Lines[i]),1,7))='CHANNEL') then begin
+    channel :=Trim(Copy(Trim(REFiles.Lines[i]),25,50)); i :=i+1; end;
+
+    if ((Copy(Trim(REFiles.Lines[i]),1,16))='TRANSACTION TYPE') then begin
+    tr_type :=Trim(Copy(Trim(REFiles.Lines[i]),25,50)); i :=i+1; end;
+
+    if ((Copy(Trim(REFiles.Lines[i]),1,13))='OUTWARDSTATUS') then begin
+    outwardstatus :=Trim(Copy(Trim(REFiles.Lines[i]),25,50)); i :=i+1; end;
+
+    if ((Copy(Trim(REFiles.Lines[i]),1,20))='TRANSACTION CURRENCY') then
+    begin
+     tr_currency :=Trim(Copy(Trim(REFiles.Lines[i]),25,50)); i :=i+1;
+     if tr_currency='AZN' then tr_currency :='944' else
+         if tr_currency='USD' then tr_currency :='840' else
+            if tr_currency='EUR' then tr_currency :='978';
+    end;
+
+    if ((Copy(Trim(REFiles.Lines[i]),1,16))='ACCOUNT CURRENCY') then
+    begin
+     acc_currency :=Trim(Copy(Trim(REFiles.Lines[i]),25,50)); i :=i+1;
+     if acc_currency='AZN' then acc_currency :='944' else
+         if acc_currency='USD' then acc_currency :='840' else
+            if acc_currency='EUR' then acc_currency :='978';
+    end;
+
+    if ((Copy(Trim(REFiles.Lines[i]),1,8))='MERCHANT') then begin
+     merchant :=Trim(Copy(Trim(REFiles.Lines[i]),25,50)); i :=i+1; end;
+
+    if ((Copy(Trim(REFiles.Lines[i]),1,10))='CARDNUMBER') then begin
+     cardnumber :=Trim(Copy(Trim(REFiles.Lines[i]),25,50)); i :=i+1; end;
+
+    if ((Copy(Trim(REFiles.Lines[i]),1,16))='TRANSACTION DATE') then begin
+     tr_date :=Trim(Copy(Trim(REFiles.Lines[i]),25,50)); i :=i+1; end;
+
+    if ((Copy(Trim(REFiles.Lines[i]),1,16))='TRANSACTION TYPE') then begin
+     tr_type :=Trim(Copy(Trim(REFiles.Lines[i]),25,50)); i :=i+1; end;
+
+    if ((Copy(Trim(REFiles.Lines[i]),1,4))='AUTH') then begin
+     auth :=Trim(Copy(Trim(REFiles.Lines[i]),25,50)); i :=i+1; end;
+
+    if ((Copy(Trim(REFiles.Lines[i]),1,18))='TRANSACTION AMOUNT') then
+    begin
+     TempStr :=Trim(Copy(Trim(REFiles.Lines[i]),25,50)); i :=i+1;
+     TempStr :=StringReplace(TempStr,',','',[rfReplaceAll, rfIgnoreCase]);
+     TempStr :=StringReplace(TempStr,'.',DecimalSeparator,[rfReplaceAll, rfIgnoreCase]);
+     tr_amount :=StrToFloat(TempStr);
+    end;
+
+    if ((Copy(Trim(REFiles.Lines[i]),1,14))='ACCOUNT AMOUNT') then
+    begin
+     TempStr:=Trim(Copy(Trim(REFiles.Lines[i]),25,50)); i :=i+1;
+     TempStr :=StringReplace(TempStr,',','',[rfReplaceAll, rfIgnoreCase]);
+     TempStr :=StringReplace(TempStr,'.',DecimalSeparator,[rfReplaceAll, rfIgnoreCase]);
+     acc_amount :=StrToFloat(TempStr);
+    end;
+
+    if ((Copy(Trim(REFiles.Lines[i]),1,3))='FEE') then
+    begin
+     TempStr:=Trim(Copy(Trim(REFiles.Lines[i]),25,50)); i :=i+1;
+     TempStr :=StringReplace(TempStr,',','',[rfReplaceAll, rfIgnoreCase]);
+     TempStr :=StringReplace(TempStr,'.',DecimalSeparator,[rfReplaceAll, rfIgnoreCase]);
+     fee :=StrToFloat(TempStr);
+    end;
+
+    if ((Copy(Trim(REFiles.Lines[i]),1,12))='CLEAR AMOUNT') then
+    begin
+     TempStr:=Trim(Copy(Trim(REFiles.Lines[i]),25,50)); i :=i+1;
+     TempStr :=StringReplace(TempStr,',','',[rfReplaceAll, rfIgnoreCase]);
+     TempStr :=StringReplace(TempStr,'.',DecimalSeparator,[rfReplaceAll, rfIgnoreCase]);
+     clear_amount :=StrToFloat(TempStr);
+    end;
+
+    if ((Copy(Trim(REFiles.Lines[i]),1,8))='TERMINAL') then
+    begin
+     terminal :=Trim(Copy(Trim(REFiles.Lines[i]),25,50)); i :=i+1;
+
+     DataMod_CARDS.mainpacket.CallProcedure('Insert_IntRetail',[ channel, tr_type, outwardstatus, tr_currency,
+                                                                       acc_currency, merchant, cardnumber, tr_date, auth,
+                                                                       tr_amount, acc_amount, fee, clear_amount, terminal ]);
+    end;
+
+   end; //while not( i = Lcount) do
+
+   ShowMessage('All messages have sent into base');
+   DataMod_CARDS.intfiles.Refresh;
+   DataMod_CARDS.intfile2.Refresh;   }
+   end;
+
+procedure Tintfile.DBGrid1TitleClick(Column: TColumn);
+var
+   TitleName :string;
+   SortPosition: word;
+begin
+ SortPosition :=100;
+ //OrderedTitle :=Column.FieldName; //H.R. 24.06.2008
+ if (DBGrid1.DataSource.DataSet.IsEmpty) or (Column.FieldName = EmptyStr) then Exit;
+ Screen.Cursor :=crHourGlass;
+ TitleName :=Column.FieldName;
+ with TOracleDataSet(DBGrid1.DataSource.DataSet) do
+  try
+  
+   SortPosition :=SQL.Add('ORDER BY '+ TitleName);
+   Refresh;
+  finally
+   SQL[SortPosition] :=EmptyStr;
+   Screen.Cursor :=crDefault;
+  end;
+end;
+
+procedure Tintfile.ToolButton7Click(Sender: TObject);
+begin
+  if not CMExcelExport1.Connected then CMExcelExport1.Connect;
+  CMExcelExport1.ExportDataset(DataMod_CARDS.intfiles,'INTFILES',true);
+  CMExcelExport1.Disconnect;
+end;
+
+procedure Tintfile.ToolButton1Click(Sender: TObject);
+var
+
+
+   V,Sheet,Sheets,excel  :Variant;
+   cell,row,l,m    :Integer;
+   i,j,ids : integer;
+   formats,debet,kredit,summa,destination,vbic:string;
+   output:TextFile;
+   FileName,Swmessage,dir,edit_ref,BeginMessage,Endmesage,valu:String;
+   Index :Integer;
+   WaitNextConfirm, WillRefresh: Boolean;
+   TransactionID :Integer;
+begin
+
+
+  WaitNextConfirm :=True;
+  WillRefresh :=False;
+  if DBGrid1.CanFocus then
+  DBGrid1.SetFocus;
+
+  //Focus;
+  with  DBGrid1, SelectedRows, DataSource.DataSet, DataMod_CARDS do
+  try
+    if Count = 0 then CurrentRowSelected := True;
+
+
+
+    for  Index :=0 to  Count - 1 do
+    begin
+      GotoBookmark(Pointer(Items[Index]));
+      TransactionID :=FieldbyName('ID').AsInteger;
+
+      if  WaitNextConfirm  then
+      case MessageDlg(
+        Format('əməliyyat təsdiq edilsin? №',[TransactionID])
+       ,mtConfirmation
+       ,[mbYes, mbNo ,mbCancel ,mbYesToAll]
+       ,0
+       )   of
+        mrNo       : begin Continue;  end;
+        mrCancel   : begin Break; end;
+        mrYesToAll :
+          if MessageDlg(Format('%d  sayda əməliyyat təsdiq edilsin?', [Count - Index]), mtConfirmation, [mbYes, mbCancel], 0) = mrYes then
+           WaitNextConfirm :=False
+          else
+           Continue;
+      end;
+      Application.ProcessMessages;
+      //------------------------------------------------------------------------------------create prows
+
+                DataMod_CARDS.mainpacket.CallProcedure('transaction_int',[TransactionID]) ;
+                //DataMod_CARDS.smsfiles2.Close;
+                //DataMod_CARDS.smsfiles2.Open;
+               // DataMod_CARDS.messages.Open;
+               // DataMod_CARDS.messages2.Open;
+      //--------------------------------------------end create prows
+
+
+
+      WillRefresh :=True;
+
+
+    end;
+  finally
+   if WillRefresh then
+
+
+   begin
+
+
+
+
+                            // Excel.Range[Excel.Cells[1, 1], Excel.Cells[index+1,27]].Select;
+                            // excel.Cells[index+1,27].SELECT;
+                           // Excel.Selection.Borders.LineStyle:=1;
+                           // excel.Selection.HorizontalAlignment:=2;
+
+
+                            // Excel.Visible := True;
+
+                          DBGrid1.DataSource.DataSet.Refresh;
+                          DBGrid2.DataSource.DataSet.Refresh;
+                          ShowMessage('Əməliyyatlar günün sənədlərinə göndərildi!!');
+
+
+
+
+   end; //else Excel.Workbooks.close;
+
+  end;
+end;
+
+procedure Tintfile.DBGrid1DrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TColumn;
+  State: TGridDrawState);
+var
+  ImageIndex: Integer;
+
+begin
+
+ ImageIndex := -1;
+  with Sender as TDBGrid do
+  begin
+    if DataSource.DataSet.RecordCount <> 0 then
+    begin
+      case DataSource.DataSet.FieldByName('STATUS').AsInteger of
+
+      1:
+        ImageIndex :=25;
+      2:
+        ImageIndex :=3 ;
+      3:
+        ImageIndex :=26;
+
+      else
+      end;
+      if (DataCol = 1) and (ImageIndex <> -1) then
+        ImageList1.Draw(Canvas, Rect.Left, Rect.Top, ImageIndex, True)
+      else
+        DefaultDrawColumnCell(Rect, DataCol, Column, State);
+    end;
+
+
+
+
+  end;
+end;
+
+procedure Tintfile.selectall1Click(Sender: TObject);
+begin
+ with dbgrid1, SelectedRows, DataSource.DataSet do
+  begin
+    DisableControls;
+    try
+      First;
+      while not Eof do
+       begin
+        CurrentRowSelected := True;
+        Next;
+       end;
+    finally
+      EnableControls;
+    end;
+  end;   
+end;
+
+procedure Tintfile.DBGrid2TitleClick(Column: TColumn);
+var
+   TitleName :string;
+   SortPosition: word;
+begin
+ SortPosition :=100;
+ //OrderedTitle :=Column.FieldName; //H.R. 24.06.2008
+ if (DBGrid2.DataSource.DataSet.IsEmpty) or (Column.FieldName = EmptyStr) then Exit;
+ Screen.Cursor :=crHourGlass;
+ TitleName :=Column.FieldName;
+ with TOracleDataSet(DBGrid2.DataSource.DataSet) do
+  try
+  
+   SortPosition :=SQL.Add('ORDER BY '+ TitleName);
+   Refresh;
+  finally
+   SQL[SortPosition] :=EmptyStr;
+   Screen.Cursor :=crDefault;
+  end;
+end;
+
+procedure Tintfile.FormCreate(Sender: TObject);
+begin
+SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure Tintfile.FormPaint(Sender: TObject);
+begin
+//DataMod_CARDS.mainpacket.CallProcedure('empty_intretail',[]);
+//REFiles.Clear;
+//DBGrid1.DataSource.DataSet.Refresh;
+//DBGrid2.DataSource.DataSet.Refresh;
+end;
+
+procedure Tintfile.ToolButton2Click(Sender: TObject);
+ var channel, tr_type, outwardstatus, tr_currency, acc_currency, merchant, cardnumber :string;
+     tr_date, auth, tr_amount, acc_amount, fee, clear_amount, terminal, SysSim, Stmessage :string;
+     Test :real;
+     i, MSGCount, File_Count, RowCount, selst, selstF :integer;
+     f:textfile;
+     v_dir:string;
+begin
+
+v_dir:=GetCurrentDir;
+ // REFiles.Lines.Clear;
+  try
+   if not DirectoryExists('C:\AZCARD\IN') then MkDir('C:\AZCARD\IN');
+   FileListIntRetailFiles.Directory:='C:\AZCARD\IN';
+   FileListIntRetailFiles.Update;
+   if FileListIntRetailFiles.Items.Count = 0 then exit;
+   FileListIntRetailFiles.Mask:='*.*';
+   FileListIntRetailFiles.Update;
+   Test:=122 / 10;
+   if pos('.',FloatToStr(Test))>0 then SysSim:='.' else
+   if pos(',',FloatToStr(Test))>0 then SysSim:=',';
+   File_Count :=0;
+   for i:=0 to FileListIntRetailFiles.Items.Count-1 do
+   begin
+    Application.ProcessMessages;
+    MSGCount:=0;
+    if (uppercase(copy(FileListIntRetailFiles.Items[i],0,6)) <> 'INT_I_') then Continue;
+    File_Count:=File_Count+1;
+    if CheckFileExt(FileListIntRetailFiles.Directory+FileListIntRetailFiles.items[i])=false then continue;
+    AssignFile(F,'C:\AZCARD\IN\'+FileListIntRetailFiles.Items[i]);
+    Reset(F);
+    RowCount:=0;
+    while not Eof(F) do
+    begin
+      Readln(F,Stmessage);
+      RowCount:=RowCount+1;
+      if   ((Length(Trim(StMessage))>100)
+       and (Copy(trim(STmessage),1,3) <> '---')
+       and (Copy(trim(STmessage),1,8) <> 'Merchant'))
+       then MSGCount:=MSGCount+1;
+    end; {while}
+
+    STmessage:='';
+    Reset(F);
+
+    {VIEW FILE NAME}
+  //  REFiles.Lines.Add('FILE NAME: < '+FileListIntRetailFiles.Items[i]+' >    '+'Message count: '+IntToStr(MSGCount));
+
+    {VIEW FILE MESSAGE}
+    while not Eof(F) do
+    begin
+     Application.ProcessMessages;
+     Readln(F,Stmessage);
+     if Copy(trim(STmessage),1,7)='Channel' then
+     begin
+      channel              :=trim(Copy(trim(STmessage),25,15));
+      tr_currency          :=trim(Copy(trim(STmessage),63,3 ));
+      Readln(F,STmessage);
+      tr_type              :=trim(Copy(trim(STmessage),25,15));
+      acc_currency         :=trim(Copy(trim(STmessage),63,3 ));
+      Readln(F,STmessage);
+      outwardstatus        :=trim(Copy(trim(STmessage),25,15));
+     end;    //if Copy(trim(STmessage),1,7)='Channel' then
+
+     if Copy(trim(STmessage),1,8)='Merchant' then
+     begin
+      Readln(F,STmessage);
+      Readln(F,STmessage);
+      while (Copy(trim(STmessage),1,3)<>'---') and (length(trim(STmessage))<>0) do
+      begin
+       merchant            :=trim(Copy(trim(STmessage),1,23));
+       cardnumber          :=trim(Copy(trim(STmessage),24,16));
+       tr_date             :=trim(Copy(trim(STmessage),41,8 ));
+       auth                :=trim(Copy(trim(STmessage),50,6 ));
+       tr_amount           :=trim(Copy(trim(STmessage),57,14));
+       acc_amount          :=trim(Copy(trim(STmessage),71,14));
+       fee                 :=trim(Copy(trim(STmessage),85,11));
+       clear_amount        :=trim(Copy(trim(STmessage),96,14));
+       terminal            :=trim(Copy(trim(STmessage),116,8));
+
+       with REFiles.Lines do
+       begin
+
+            DataMod_CARDS.mainpacket.CallProcedure('Insert_IntRetail',[ channel, tr_type, outwardstatus, tr_currency,
+                                                                       acc_currency, merchant, cardnumber, tr_date, auth,
+                                                                       tr_amount, acc_amount, fee, clear_amount, terminal,FileListIntRetailFiles.Items[i] ]);
+
+
+      {  ADD('CHANNEL               : ' + channel);
+        ADD('TRANSACTION TYPE      : ' + tr_type);
+        ADD('OUTWARDSTATUS         : ' + outwardstatus);
+        ADD('TRANSACTION CURRENCY  : ' + tr_currency);
+        ADD('ACCOUNT CURRENCY      : ' + acc_currency);
+        ADD('MERCHANT              : ' + merchant);
+        ADD('CARDNUMBER            : ' + cardnumber);
+        ADD('TRANSACTION DATE      : ' + tr_date);
+        ADD('TRANSACTION TYPE      : ' + tr_type);
+        ADD('AUTH                  : ' + auth);
+        ADD('TRANSACTION AMOUNT    : ' + tr_amount);
+        ADD('ACCOUNT AMOUNT        : ' + acc_amount);
+        ADD('FEE                   : ' + fee);
+        ADD('CLEAR AMOUNT          : ' + clear_amount);
+        ADD('TERMINAL              : ' + terminal);
+        ADD('----------------------------------------------------------------');  }
+
+       end; //with REFiles.Lines do
+       Readln(F,STmessage);
+      end;   //while Copy(trim(STmessage),1,3)<>'---' do
+     end;   //if Copy(trim(STmessage),1,8)='Merchant' then
+
+    end;    //while not Eof(F) do
+   {   REFiles.SelStart:=REFiles.FindText('Message count:',selst,LENGTH(REFiles.Text),[stMatchCase]);
+      REFiles.SelLength:=18;
+      REFiles.SelAttributes.Color:=clBlue;
+      REFiles.SelAttributes.Style:=[];
+      selst:=REFiles.FindText('Message count:',selst,LENGTH(REFiles.Text),[stMatchCase])+1;
+      REFiles.SelLength:=-1;
+      REFiles.SelStart:=REFiles.FindText('FILE NAME',selstF,LENGTH(REFiles.Text),[stMatchCase]);
+      REFiles.SelLength:=35;
+      REFiles.SelAttributes.Color:=clred;
+      selstF:=REFiles.FindText('FILE NAME',selstF,LENGTH(REFiles.Text),[stMatchCase])+1;
+      REFiles.SelLength:=-1; }
+
+      DataMod_CARDS.mainpacket.CallProcedure('intarxiv',[FileListBox1.Items[i]]);
+    CloseFile(F);
+
+    end; //for i:=0 to FileListIntRetailFiles.Items.Count-1 do
+    //REFiles.SelStart:=0;
+ finally
+    //SendMessage(REFiles.Handle, EM_LINESCROLL, 0,(-1)*(REFiles.Lines.Count-1));
+ end;//try
+     ShowMessage('All messages have sent into base');
+   DataMod_CARDS.intfiles.Refresh;
+   DataMod_CARDS.intfile2.Refresh;
+ FileListIntRetailFiles.Directory:=v_dir;
+
+end;
+
+
+
+
+end.

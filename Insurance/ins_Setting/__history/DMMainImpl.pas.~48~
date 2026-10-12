@@ -1,0 +1,186 @@
+unit DMMainImpl;
+
+interface
+
+uses
+  SysUtils, Classes, DB, OracleData;
+
+type
+  TDMMain = class(TDataModule)
+    DSRins_insurances: TDataSource;
+    DSRins_acc_types: TDataSource;
+    DSRins_acc_type_id: TDataSource;
+    DSins_insurances: TOracleDataSet;
+    DSins_acc_types: TOracleDataSet;
+    DSins_acc_type_id: TOracleDataSet;
+    DSins_insurancesID: TIntegerField;
+    DSins_insurancesNAME: TWideStringField;
+    DSins_acc_typesID: TFloatField;
+    DSins_acc_typesNAME: TWideStringField;
+    DSins_acc_type_idID: TFloatField;
+    DSins_acc_type_idTYPE_ID: TFloatField;
+    DSins_acc_type_idACC_TYPE_ID: TFloatField;
+    DSins_acc_type_idACC_ID: TFloatField;
+    DSins_acc_type_idACC_NO: TWideStringField;
+    DSRAccount: TDataSource;
+    DSAccount: TOracleDataSet;
+    DSAccountID: TFloatField;
+    DSAccountACC_NO: TWideStringField;
+    DSRins_acc_typesB: TDataSource;
+    DSRins_acc_bal_cn: TDataSource;
+    DSins_acc_typesB: TOracleDataSet;
+    DSins_acc_bal_cn: TOracleDataSet;
+    DSins_acc_typesBID: TFloatField;
+    DSins_acc_typesBNAME: TWideStringField;
+    DSins_acc_bal_cnDICT_ID: TFloatField;
+    DSins_acc_bal_cnBAL_CN: TFloatField;
+    Ds_motor_capacity: TOracleDataSet;
+    Ds_motor_capacityID: TFloatField;
+    Ds_motor_capacityNAME: TWideStringField;
+    Ds_motor_capacityTYPE_MOTOR: TFloatField;
+    Dsr_motor_capacity: TDataSource;
+    dsr_ins_motor_capacity_tarif: TDataSource;
+    ds_ins_motor_capacity_tarif: TOracleDataSet;
+    ds_ins_motor_capacity_tarifID: TFloatField;
+    ds_ins_motor_capacity_tarifCAPACITY_ID: TFloatField;
+    ds_ins_motor_capacity_tarifTARIF: TFloatField;
+    Ds_motor_type: TOracleDataSet;
+    Dsr_motor_type: TDataSource;
+    Ds_motor_typeID: TFloatField;
+    Ds_motor_typeNAME: TWideStringField;
+    ds_ins_dict_year_distanc_travel: TOracleDataSet;
+    dsr_ins_dict_year_distanc_travel: TDataSource;
+    ds_ins_dict_year_distanc_travelID: TFloatField;
+    ds_ins_dict_year_distanc_travelVALUE1: TFloatField;
+    ds_ins_dict_year_distanc_travelVALUE2: TFloatField;
+    dsr_ins_dict_all_for_year: TDataSource;
+    ds_ins_dict_all_for_year: TOracleDataSet;
+    ds_ins_dict_all_for_yearID: TFloatField;
+    ds_ins_dict_all_for_yearVALUE_ID: TFloatField;
+    ds_ins_dict_all_for_yearTARIF: TFloatField;
+    DSins_travel_programs: TOracleDataSet;
+    FloatField1: TFloatField;
+    DSRins_travel_programs: TDataSource;
+    DSins_travel_programsNAME: TWideStringField;
+    DSins_travel_limit: TOracleDataSet;
+    FloatField2: TFloatField;
+    DSRins_travel_limit: TDataSource;
+    DSins_travel_day: TOracleDataSet;
+    FloatField3: TFloatField;
+    DSRins_travel_day: TDataSource;
+    DSins_travel_limitAMMOUNT_LIMIT: TFloatField;
+    DSins_travel_dayVAL1: TFloatField;
+    DSins_travel_dayVAL2: TFloatField;
+    DSins_travel_dayNAME: TWideStringField;
+    DSins_travel_limit1: TOracleDataSet;
+    FloatField4: TFloatField;
+    FloatField5: TFloatField;
+    DSRins_travel_limit1: TDataSource;
+    DSins_travel_day1: TOracleDataSet;
+    FloatField6: TFloatField;
+    FloatField7: TFloatField;
+    FloatField8: TFloatField;
+    WideStringField1: TWideStringField;
+    DSRins_travel_day1: TDataSource;
+    DSins_travel_setting: TOracleDataSet;
+    DSRins_travel_setting: TDataSource;
+    DSins_travel_settingID: TFloatField;
+    DSins_travel_settingDAY_ID: TFloatField;
+    DSins_travel_settingLIMIT_ID: TFloatField;
+    DSins_travel_settingPROGRAM_ID: TFloatField;
+    DSins_travel_settingAMOUNT: TFloatField;
+    DSins_travel_programsFARNSIZA: TFloatField;
+    Ds_coverage_area: TOracleDataSet;
+    Ds_coverage_areaID: TFloatField;
+    Ds_coverage_areaNAME: TWideStringField;
+    Dsr_coverage_area: TDataSource;
+    DSins_travel_settingCOVERAGE_ID: TFloatField;
+    procedure DataModuleCreate(Sender: TObject);
+    procedure DataModuleDestroy(Sender: TObject);
+    procedure DSins_insurancesAfterScroll(DataSet: TDataSet);
+    procedure DSins_acc_typesAfterScroll(DataSet: TDataSet);
+    procedure DSins_travel_settingAfterPost(DataSet: TDataSet);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  DMMain: TDMMain;
+
+implementation
+
+{$R *.dfm}
+   uses CommanParametrs,sboapiDataModuleImpl,SBTranslateProc, FrmMainImpl,
+  Frmtravel_programimpl;
+procedure TDMMain.DataModuleCreate(Sender: TObject);
+begin
+DSins_insurances.Open;
+DSins_acc_types.Open;
+//DSAccount.Open;
+DSins_acc_typesB.Open;
+DSins_acc_bal_cn.Open;
+Ds_motor_capacity.Open;
+ds_ins_motor_capacity_tarif.Open;
+Ds_motor_type.Open;
+ds_ins_dict_year_distanc_travel.Open;
+ds_ins_dict_all_for_year.Open;
+DSins_travel_programs.Open;
+DSins_travel_limit.Open;
+DSins_travel_day.Open;
+DSins_travel_limit1.Open;
+DSins_travel_day1.Open;
+Ds_coverage_area.Open;
+end;
+
+procedure TDMMain.DataModuleDestroy(Sender: TObject);
+begin
+DSins_insurances.close;
+DSins_acc_types.close;
+DSAccount.close;
+DSins_acc_typesB.close;
+DSins_acc_bal_cn.close;
+Ds_motor_capacity.Close;
+ds_ins_motor_capacity_tarif.Close;
+Ds_motor_type.Close;
+ds_ins_dict_year_distanc_travel.Close;
+ds_ins_dict_all_for_year.Close;
+DSins_travel_programs.Close;
+DSins_travel_limit.Close;
+DSins_travel_day.Close;
+DSins_travel_limit1.Close;
+DSins_travel_day1.Close;
+Ds_coverage_area.Close;
+end;
+
+procedure TDMMain.DSins_acc_typesAfterScroll(DataSet: TDataSet);
+begin
+{DSins_insurances.Open;
+DSins_acc_types.Open;
+DMMain.DSins_acc_type_id.Close;
+DMMain.DSins_acc_type_id.SetVariable('ptype_id',FrmMain.DBGrid1.DataSource.DataSet.FieldByName('id').AsInteger);
+DMMain.DSins_acc_type_id.SetVariable('pacc_type_id',FrmMain.DBGrid2.DataSource.DataSet.FieldByName('id').AsInteger);
+DMMain.DSins_acc_type_id.open;}
+end;
+
+procedure TDMMain.DSins_insurancesAfterScroll(DataSet: TDataSet);
+begin
+{DSins_insurances.Open;
+DSins_acc_types.Open;
+DMMain.DSins_acc_type_id.Close;
+DMMain.DSins_acc_type_id.SetVariable('ptype_id',FrmMain.DBGrid1.DataSource.DataSet.FieldByName('id').AsInteger);
+DMMain.DSins_acc_type_id.SetVariable('pacc_type_id',FrmMain.DBGrid2.DataSource.DataSet.FieldByName('id').AsInteger);
+DMMain.DSins_acc_type_id.open; }
+end;
+
+procedure TDMMain.DSins_travel_settingAfterPost(DataSet: TDataSet);
+begin
+
+
+DSins_travel_setting.FieldByName('day_id').AsInteger:= Frmtravel_program.DBGrid2.DataSource.DataSet.FieldByName('id').AsInteger;
+DSins_travel_setting.FieldByName('limit_id').AsInteger:=Frmtravel_program.DBGrid3.DataSource.DataSet.FieldByName('id').AsInteger;
+DSins_travel_setting.FieldByName('program_id').AsInteger:=Frmtravel_program.DBGrid1.DataSource.DataSet.FieldByName('id').AsInteger;
+end;
+
+end.

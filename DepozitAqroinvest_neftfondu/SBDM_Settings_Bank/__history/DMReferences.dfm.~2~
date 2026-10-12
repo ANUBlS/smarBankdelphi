@@ -1,0 +1,98 @@
+object DataModReferences: TDataModReferences
+  OldCreateOrder = False
+  OnCreate = DataModuleCreate
+  OnDestroy = DataModuleDestroy
+  Height = 484
+  Width = 637
+  object TVSubItems: TOracleDataSet
+    SQL.Strings = (
+      'Select'
+      '   *'
+      '  From'
+      '     SBCM_References'
+      '   Where'
+      '    ParentID =:ParentID')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000120000003A0050004100520045004E005400490044000300
+      00000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      05000000060000000400000049004400010000000000080000004E0041004D00
+      45000100000000000A0000004C004E0041004D00450001000000000010000000
+      50004100520045004E005400490044000100000000000A000000560041004C00
+      550045000100000000001400000053004F0055005200430045004C0049005300
+      5400010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 16
+    Top = 8
+    object TVSubItemsID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object TVSubItemsNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 64
+    end
+    object TVSubItemsLNAME: TWideStringField
+      FieldName = 'LNAME'
+      Size = 128
+    end
+    object TVSubItemsPARENTID: TFloatField
+      FieldName = 'PARENTID'
+      Required = True
+    end
+    object TVSubItemsVALUE: TWideStringField
+      FieldName = 'VALUE'
+      Size = 556
+    end
+    object TVSubItemsSOURCELIST: TWideStringField
+      FieldName = 'SOURCELIST'
+      Size = 2048
+    end
+  end
+  object ReferLink: TOracleDataSet
+    SQL.Strings = (
+      'Select * From  SBCM_References')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000060000000400000049004400010000000000080000004E0041004D00
+      45000100000000000A0000004C004E0041004D00450001000000000010000000
+      50004100520045004E005400490044000100000000000A000000560041004C00
+      550045000100000000001400000053004F0055005200430045004C0049005300
+      5400010000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 72
+    Top = 8
+    object ReferLinkID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object ReferLinkNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 64
+    end
+    object ReferLinkLNAME: TWideStringField
+      FieldName = 'LNAME'
+      Size = 128
+    end
+    object ReferLinkPARENTID: TFloatField
+      FieldName = 'PARENTID'
+      Required = True
+    end
+    object ReferLinkVALUE: TWideStringField
+      FieldName = 'VALUE'
+      Size = 556
+    end
+    object ReferLinkSOURCELIST: TWideStringField
+      FieldName = 'SOURCELIST'
+      Size = 2048
+    end
+  end
+  object ReferPackage: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'sbcm_rpdepository'
+    Left = 24
+    Top = 80
+  end
+end

@@ -1,0 +1,1699 @@
+object DataMod: TDataMod
+  OldCreateOrder = False
+  Left = 65532
+  Top = 65532
+  Height = 746
+  Width = 1032
+  object DataAccount: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      'a.id,a.acc_no,a.name,a.val_acc,a.filial,c.inn'
+      'from'
+      'account a,customers c'
+      'where'
+      '(a.kli_ID=c.id)and'
+      '(a.close_dat is null)'
+      'order by a.acc_no')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = False
+    Active = False
+    Left = 40
+    Top = 269
+  end
+  object Account_Source: TDataSource
+    DataSet = DataAccount
+    Left = 152
+    Top = 269
+  end
+  object DataAccountView: TOracleDataSet
+    SQL.Strings = (
+      'select * from account')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = False
+    Active = False
+    Left = 40
+    Top = 317
+  end
+  object DS_View: TDataSource
+    DataSet = DataAccountView
+    Left = 152
+    Top = 317
+  end
+  object DS_BankInfo: TDataSource
+    DataSet = DataBankInfo
+    Left = 152
+    Top = 365
+  end
+  object DataBankInfo: TOracleDataSet
+    SQL.Strings = (
+      'select * from bankinfo')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = False
+    Active = False
+    Left = 40
+    Top = 365
+  end
+  object DataBankM: TOracleDataSet
+    SQL.Strings = (
+      'select * from bankm')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = False
+    Active = False
+    Left = 40
+    Top = 413
+  end
+  object DS_BankM: TDataSource
+    DataSet = DataBankM
+    Left = 152
+    Top = 413
+  end
+  object DataValute: TOracleDataSet
+    SQL.Strings = (
+      'select '
+      '   * '
+      'from '
+      '  Avalute')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = False
+    Active = False
+    Left = 264
+    Top = 195
+  end
+  object XS_BATCHS: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      '  x.*, x.rowid,'
+      '  a.acc_no,'
+      '  a.name,'
+      '  v.val_name'
+      'from'
+      '  XS_BATCHS x ,'
+      '  account a, '
+      '  avalute v'
+      'where'
+      '  x.acc_id = a.id and'
+      '  v.valute=a.val_acc and'
+      '  (x.transdate>=:BeginDate and x.transdate<=:EndDate)'
+      ' order by'
+      '  :Title'
+      ''
+      ''
+      ''
+      ' '
+      ''
+      ' '
+      ' '
+      ' ')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    Variables.Data = {
+      03000000030000000A0000003A424547494E444154450C000000000000000000
+      0000080000003A454E44444154450C0000000000000000000000060000003A54
+      49544C450100000005000000782E69640000000000}
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = False
+    Active = False
+    AfterScroll = XS_BATCHSAfterScroll
+    Left = 40
+    Top = 5
+    object XS_BATCHSID: TFloatField
+      FieldName = 'ID'
+    end
+    object XS_BATCHSF_ID: TFloatField
+      FieldName = 'F_ID'
+    end
+    object XS_BATCHSOPERCODE: TStringField
+      FieldName = 'OPERCODE'
+      Size = 6
+    end
+    object XS_BATCHSACC_ID: TFloatField
+      FieldName = 'ACC_ID'
+    end
+    object XS_BATCHSCLIENT_NAME: TStringField
+      FieldName = 'CLIENT_NAME'
+      Size = 70
+    end
+    object XS_BATCHSCLIENT_CODE: TStringField
+      FieldName = 'CLIENT_CODE'
+      Size = 70
+    end
+    object XS_BATCHSTRANS_REF: TStringField
+      FieldName = 'TRANS_REF'
+      Size = 16
+    end
+    object XS_BATCHSAMOUNT: TFloatField
+      FieldName = 'AMOUNT'
+      currency = True
+    end
+    object XS_BATCHSVAL_ACC: TIntegerField
+      FieldName = 'VAL_ACC'
+    end
+    object XS_BATCHSTRANSDATE: TDateTimeField
+      FieldName = 'TRANSDATE'
+    end
+    object XS_BATCHSSEND: TIntegerField
+      FieldName = 'SEND'
+    end
+    object XS_BATCHSSTATUS: TIntegerField
+      FieldName = 'STATUS'
+    end
+    object XS_BATCHSFILIAL: TFloatField
+      FieldName = 'FILIAL'
+    end
+    object XS_BATCHSTRANSACTION_ID: TFloatField
+      FieldName = 'TRANSACTION_ID'
+    end
+    object XS_BATCHSCLIENT_INN: TStringField
+      FieldName = 'CLIENT_INN'
+      Size = 30
+    end
+    object XS_BATCHSUSERID: TFloatField
+      FieldName = 'USERID'
+    end
+    object XS_BATCHSACC_NO: TStringField
+      FieldName = 'ACC_NO'
+    end
+    object XS_BATCHSNAME: TStringField
+      FieldName = 'NAME'
+      Size = 90
+    end
+    object XS_BATCHSVAL_NAME: TStringField
+      FieldName = 'VAL_NAME'
+      Size = 10
+    end
+  end
+  object DS_BATCHS: TDataSource
+    DataSet = XS_BATCHS
+    Left = 152
+    Top = 5
+  end
+  object Ins: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    Debug = False
+    PackageName = 'XS_CONTROL'
+    ParameterMode = pmPositional
+    Cursor = crDefault
+    Optimize = True
+    Left = 200
+    Top = 563
+  end
+  object DataCheck: TOracleDataSet
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = False
+    Active = False
+    Left = 264
+    Top = 99
+  end
+  object XS_BENEFICIARY: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      '    x.rowid,'
+      '    x.*,'
+      '    v.val_name,'
+      '    b.name as BankName'
+      'from'
+      '    XS_BENEFICIARY X,'
+      '    avalute v,'
+      '    BankM b'
+      'where'
+      '   (x.batchID=:id)and'
+      '   (x.val_cod=v.valute)'
+      '  and (x.rec_bank_id=b.id)')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    Variables.Data = {0300000001000000030000003A494405000000040000003232390000000000}
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    Master = XS_BATCHS
+    MasterFields = 'ID'
+    DetailFields = 'ID'
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = False
+    Active = False
+    AfterScroll = XS_BENEFICIARYAfterScroll
+    Left = 40
+    Top = 45
+    object XS_BENEFICIARYID: TFloatField
+      FieldName = 'ID'
+    end
+    object XS_BENEFICIARYBATCHID: TFloatField
+      FieldName = 'BATCHID'
+    end
+    object XS_BENEFICIARYREC_BANK_ID: TFloatField
+      FieldName = 'REC_BANK_ID'
+    end
+    object XS_BENEFICIARYREC_BANK_SUB_ACC: TFloatField
+      FieldName = 'REC_BANK_SUB_ACC'
+    end
+    object XS_BENEFICIARYCLIENT_ACC_NO: TStringField
+      FieldName = 'CLIENT_ACC_NO'
+      Size = 34
+    end
+    object XS_BENEFICIARYCLIENT_NAME: TStringField
+      FieldName = 'CLIENT_NAME'
+      Size = 70
+    end
+    object XS_BENEFICIARYCLIENT_CODE: TStringField
+      FieldName = 'CLIENT_CODE'
+      Size = 70
+    end
+    object XS_BENEFICIARYREMIT_INF: TStringField
+      FieldName = 'REMIT_INF'
+      Size = 145
+    end
+    object XS_BENEFICIARYTRANS_COD: TIntegerField
+      FieldName = 'TRANS_COD'
+    end
+    object XS_BENEFICIARYADD_INF: TStringField
+      FieldName = 'ADD_INF'
+      Size = 108
+    end
+    object XS_BENEFICIARYVAL_DATE: TDateTimeField
+      FieldName = 'VAL_DATE'
+    end
+    object XS_BENEFICIARYVAL_COD: TIntegerField
+      FieldName = 'VAL_COD'
+    end
+    object XS_BENEFICIARYMESS_REFERENCE: TStringField
+      FieldName = 'MESS_REFERENCE'
+      Size = 16
+    end
+    object XS_BENEFICIARYAMOUNT: TFloatField
+      FieldName = 'AMOUNT'
+      currency = True
+    end
+    object XS_BENEFICIARYBNFCOUNT: TIntegerField
+      FieldName = 'BNFCOUNT'
+    end
+    object XS_BENEFICIARYSTATUS: TIntegerField
+      FieldName = 'STATUS'
+    end
+    object XS_BENEFICIARYTRANSACTION_ID: TFloatField
+      FieldName = 'TRANSACTION_ID'
+    end
+    object XS_BENEFICIARYVAL_NAME: TStringField
+      FieldName = 'VAL_NAME'
+      Size = 10
+    end
+    object XS_BENEFICIARYCLIENT_INN: TStringField
+      FieldName = 'CLIENT_INN'
+      Size = 30
+    end
+    object XS_BENEFICIARYBANKNAME: TStringField
+      FieldName = 'BANKNAME'
+      Size = 256
+    end
+  end
+  object DS_BENEFICIARY: TDataSource
+    DataSet = XS_BENEFICIARY
+    Left = 152
+    Top = 45
+  end
+  object Del: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    Debug = False
+    PackageName = 'XS_CONTROL'
+    ParameterMode = pmPositional
+    Cursor = crDefault
+    Optimize = True
+    Left = 240
+    Top = 563
+  end
+  object GetReference: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    Debug = False
+    PackageName = 'XS_CONTROL'
+    ParameterMode = pmPositional
+    Cursor = crDefault
+    Optimize = True
+    Left = 80
+    Top = 563
+  end
+  object XS_CONFIG: TOracleDataSet
+    SQL.Strings = (
+      'select x.rowid,'
+      '    x.*'
+      'from'
+      '    XS_CONFIG x'
+      ' ')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = False
+    Active = False
+    Left = 264
+    Top = 62
+    object XS_CONFIGID: TFloatField
+      FieldName = 'ID'
+    end
+    object XS_CONFIGIN_DIR: TStringField
+      FieldName = 'IN_DIR'
+      Size = 250
+    end
+    object XS_CONFIGOUT_DIR: TStringField
+      FieldName = 'OUT_DIR'
+      Size = 250
+    end
+    object XS_CONFIGAMOUNT_LIMIT: TFloatField
+      FieldName = 'AMOUNT_LIMIT'
+    end
+    object XS_CONFIGACCOUNT: TStringField
+      FieldName = 'ACCOUNT'
+      Size = 13
+    end
+    object XS_CONFIGARCHIVE_DIR: TStringField
+      FieldName = 'ARCHIVE_DIR'
+      Size = 250
+    end
+    object XS_CONFIGUSEBANKDATE: TFloatField
+      FieldName = 'USEBANKDATE'
+    end
+    object XS_CONFIGCOMMISIONID: TFloatField
+      FieldName = 'COMMISIONID'
+    end
+    object XS_CONFIGNB_SWIFT: TStringField
+      FieldName = 'NB_SWIFT'
+      Size = 15
+    end
+    object XS_CONFIGCORACCOUNT: TStringField
+      FieldName = 'CORACCOUNT'
+    end
+    object XS_CONFIGNEW_DATE: TDateTimeField
+      FieldName = 'NEW_DATE'
+    end
+  end
+  object DSTransTypeCode: TDataSource
+    DataSet = TransTypeCode
+    Left = 152
+    Top = 130
+  end
+  object PackTemp: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    Debug = False
+    PackageName = 'XS_CONTROL'
+    ParameterMode = pmPositional
+    Cursor = crDefault
+    Optimize = True
+    Left = 16
+    Top = 563
+  end
+  object DataTemp: TOracleDataSet
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = False
+    Active = False
+    Left = 264
+    Top = 147
+  end
+  object XS_INCOMING: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      '   x.*,'
+      '   x.rowid'
+      'from'
+      '   XS_INCOMING x'
+      ' ')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = False
+    Active = False
+    Left = 264
+    Top = 6
+  end
+  object XS_IncomingView: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      '   x.*,x.rowid,'
+      '   v.val_name,'
+      '   b.name'
+      'from'
+      '    XS_INCOMING x,'
+      '    avalute v,'
+      '    bankm b,'
+      '    xs_admin_in y'
+      'where'
+      '   (x.val_cod=v.valute)and'
+      '   (x.sen_bank_id=b.id) and'
+      '   (x.trans_date>=:BeginDate'
+      '    and trans_date<=:EndDate)'
+      
+        '    and ((Rec_Client_Acc_ID is null) or (Rec_Client_Acc_ID in (s' +
+        'elect ID from Account)))'
+      '    and (y.FILIAL_ID in X.filial)'
+      '    and (y.USER_ID = uid)'
+      'union all'
+      'select'
+      '   x.*,x.rowid,'
+      '   Null,'
+      '   Null'
+      'from'
+      '    XS_INCOMING x,'
+      '    xs_admin_in y'
+      'where'
+      '   (x.sen_bank_id=0) and'
+      '   (x.trans_date>=:BeginDate'
+      '    and trans_date<=:EndDate)'
+      
+        '    and ((Rec_Client_Acc_ID is null) or (Rec_Client_Acc_ID in (s' +
+        'elect ID from Account)))'
+      '    and (y.FILIAL_ID in X.filial)'
+      '    and (y.USER_ID = uid)'
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' ')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    Variables.Data = {
+      03000000020000000A0000003A424547494E444154450C000000000000000000
+      0000080000003A454E44444154450C0000000000000000000000}
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = False
+    Active = True
+    AfterScroll = XS_IncomingViewAfterScroll
+    Left = 40
+    Top = 85
+  end
+  object DS_XS_IncomingView: TDataSource
+    DataSet = XS_IncomingView
+    Left = 152
+    Top = 85
+  end
+  object GetSysDate: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    Debug = False
+    PackageName = 'SBOP'
+    ParameterMode = pmPositional
+    Cursor = crDefault
+    Optimize = True
+    Left = 152
+    Top = 563
+  end
+  object DataSetFilial: TOracleDataSet
+    SQL.Strings = (
+      'select * from Filial where id =:filialID')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    Variables.Data = {
+      0300000001000000090000003A46494C49414C49440300000000000000000000
+      00}
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = False
+    Active = False
+    Left = 40
+    Top = 461
+    object DataSetFilialID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object DataSetFilialNAME: TStringField
+      FieldName = 'NAME'
+      Size = 90
+    end
+  end
+  object DataSourceFilial: TDataSource
+    DataSet = DataSetFilial
+    Left = 152
+    Top = 461
+  end
+  object DataBatchFilialView: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      '   f.name'
+      'from'
+      '  Filial f,'
+      '  xs_batchs x'
+      'where'
+      '  (f.id =x.filial)and'
+      '  (x.filial>0)'
+      ' ')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = False
+    Active = False
+    Left = 40
+    Top = 221
+  end
+  object DS_FilialView: TDataSource
+    DataSet = DataBatchFilialView
+    Left = 152
+    Top = 221
+  end
+  object TransTypeName: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      '   *'
+      'from'
+      '    XS_transtype_name'
+      ' order by id')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = False
+    Active = False
+    Left = 40
+    Top = 181
+  end
+  object DSTransTypeName: TDataSource
+    DataSet = TransTypeName
+    Left = 152
+    Top = 173
+  end
+  object TransTypeCode: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      '   *'
+      'From'
+      '  xs_transtype_code x'
+      'where '
+      '  x.nameID=:ID'
+      ' ')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    Variables.Data = {0300000001000000030000003A4944050000000000000000000000}
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    Master = TransTypeName
+    MasterFields = 'ID'
+    DetailFields = 'ID'
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = False
+    Active = False
+    Left = 40
+    Top = 131
+    object TransTypeCodeCODE: TIntegerField
+      FieldName = 'CODE'
+    end
+    object TransTypeCodeNAME: TStringField
+      FieldName = 'NAME'
+      Size = 40
+    end
+    object TransTypeCodeNAMEID: TFloatField
+      FieldName = 'NAMEID'
+    end
+    object TransTypeCodeID: TFloatField
+      FieldName = 'ID'
+    end
+  end
+  object SB_ACA: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    Debug = False
+    PackageName = 'SB_ACA'
+    ParameterMode = pmPositional
+    Cursor = crDefault
+    Optimize = True
+    Left = 280
+    Top = 563
+  end
+  object XS_BatchsArchive: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      '  x.*, x.rowid,'
+      '  a.acc_no,'
+      '  a.name,'
+      '  v.val_name'
+      'from'
+      '  XS_BATCHS_Archive x ,'
+      '  account a, '
+      '  avalute v'
+      'where'
+      '  x.acc_id = a.id and'
+      '  v.valute=a.val_acc and'
+      '  (x.transdate>=:BeginDate and x.transdate<=:EndDate)'
+      ''
+      ''
+      ''
+      ''
+      ' '
+      ''
+      ' '
+      ' '
+      ' ')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    Variables.Data = {
+      03000000020000000A0000003A424547494E444154450C000000000000000000
+      0000080000003A454E44444154450C0000000000000000000000}
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = False
+    Active = False
+    AfterScroll = XS_BatchsArchiveAfterScroll
+    Left = 376
+    Top = 5
+    object FloatField1: TFloatField
+      FieldName = 'ID'
+    end
+    object FloatField2: TFloatField
+      FieldName = 'F_ID'
+    end
+    object StringField1: TStringField
+      FieldName = 'OPERCODE'
+      Size = 6
+    end
+    object FloatField3: TFloatField
+      FieldName = 'ACC_ID'
+    end
+    object StringField2: TStringField
+      FieldName = 'CLIENT_NAME'
+      Size = 70
+    end
+    object StringField3: TStringField
+      FieldName = 'CLIENT_CODE'
+      Size = 70
+    end
+    object StringField4: TStringField
+      FieldName = 'TRANS_REF'
+      Size = 16
+    end
+    object FloatField4: TFloatField
+      FieldName = 'AMOUNT'
+      currency = True
+    end
+    object IntegerField1: TIntegerField
+      FieldName = 'VAL_ACC'
+    end
+    object DateTimeField1: TDateTimeField
+      FieldName = 'TRANSDATE'
+    end
+    object IntegerField2: TIntegerField
+      FieldName = 'SEND'
+    end
+    object IntegerField3: TIntegerField
+      FieldName = 'STATUS'
+    end
+    object FloatField5: TFloatField
+      FieldName = 'FILIAL'
+    end
+    object FloatField6: TFloatField
+      FieldName = 'TRANSACTION_ID'
+    end
+    object StringField5: TStringField
+      FieldName = 'CLIENT_INN'
+      Size = 30
+    end
+    object FloatField7: TFloatField
+      FieldName = 'USERID'
+    end
+    object StringField6: TStringField
+      FieldName = 'ACC_NO'
+    end
+    object StringField7: TStringField
+      FieldName = 'NAME'
+      Size = 90
+    end
+    object StringField8: TStringField
+      FieldName = 'VAL_NAME'
+      Size = 10
+    end
+  end
+  object DS_BatchsArchive: TDataSource
+    DataSet = XS_BatchsArchive
+    Left = 480
+    Top = 5
+  end
+  object DS_BeneficiaryArchive: TDataSource
+    DataSet = XS_BeneficiaryArchive
+    Left = 496
+    Top = 53
+  end
+  object XS_BeneficiaryArchive: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      '    x.rowid,'
+      '    x.*,'
+      '    v.val_name,'
+      '    b.name as BankName'
+      'from'
+      '    XS_BENEFICIARY_Archive X,'
+      '    avalute v,'
+      '    BankM b'
+      'where'
+      '   (x.batchID=:id)and'
+      '   (x.val_cod=v.valute)'
+      '  and (x.rec_bank_id=b.id)')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    Variables.Data = {0300000001000000030000003A494405000000040000003232390000000000}
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    Master = XS_BatchsArchive
+    MasterFields = 'ID'
+    DetailFields = 'ID'
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = False
+    Active = False
+    Left = 376
+    Top = 53
+    object FloatField8: TFloatField
+      FieldName = 'ID'
+    end
+    object FloatField9: TFloatField
+      FieldName = 'BATCHID'
+    end
+    object FloatField10: TFloatField
+      FieldName = 'REC_BANK_ID'
+    end
+    object FloatField11: TFloatField
+      FieldName = 'REC_BANK_SUB_ACC'
+    end
+    object StringField9: TStringField
+      FieldName = 'CLIENT_ACC_NO'
+      Size = 34
+    end
+    object StringField10: TStringField
+      FieldName = 'CLIENT_NAME'
+      Size = 70
+    end
+    object StringField11: TStringField
+      FieldName = 'CLIENT_CODE'
+      Size = 70
+    end
+    object StringField12: TStringField
+      FieldName = 'REMIT_INF'
+      Size = 145
+    end
+    object IntegerField4: TIntegerField
+      FieldName = 'TRANS_COD'
+    end
+    object StringField13: TStringField
+      FieldName = 'ADD_INF'
+      Size = 108
+    end
+    object DateTimeField2: TDateTimeField
+      FieldName = 'VAL_DATE'
+    end
+    object IntegerField5: TIntegerField
+      FieldName = 'VAL_COD'
+    end
+    object StringField14: TStringField
+      FieldName = 'MESS_REFERENCE'
+      Size = 16
+    end
+    object FloatField12: TFloatField
+      FieldName = 'AMOUNT'
+      currency = True
+    end
+    object IntegerField6: TIntegerField
+      FieldName = 'BNFCOUNT'
+    end
+    object IntegerField7: TIntegerField
+      FieldName = 'STATUS'
+    end
+    object FloatField13: TFloatField
+      FieldName = 'TRANSACTION_ID'
+    end
+    object StringField15: TStringField
+      FieldName = 'VAL_NAME'
+      Size = 10
+    end
+    object StringField16: TStringField
+      FieldName = 'CLIENT_INN'
+      Size = 30
+    end
+    object StringField17: TStringField
+      FieldName = 'BANKNAME'
+      Size = 256
+    end
+  end
+  object ODS_shablon: TOracleDataSet
+    SQL.Strings = (
+      
+        'SELECT mebleg, odenish_kod, bankin_kodu, hesab_no, adi, kodu, vo' +
+        'en,'
+      
+        '       od_tey1, od_tey2, od_tey3, od_tey4, elave_mel1, elave_mel' +
+        '2,'
+      '       elave_mel3, shablonun_adi, bankin_adi, odenish'
+      '  FROM xs_beneficiary_shablon'
+      'order by odenish')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = False
+    Active = False
+    Left = 376
+    Top = 533
+    object ODS_shablonMEBLEG: TStringField
+      FieldName = 'MEBLEG'
+      Size = 25
+    end
+    object ODS_shablonODENISH_KOD: TStringField
+      FieldName = 'ODENISH_KOD'
+      Size = 25
+    end
+    object ODS_shablonBANKIN_KODU: TStringField
+      FieldName = 'BANKIN_KODU'
+      Size = 50
+    end
+    object ODS_shablonHESAB_NO: TStringField
+      FieldName = 'HESAB_NO'
+      Size = 25
+    end
+    object ODS_shablonADI: TStringField
+      FieldName = 'ADI'
+      Size = 25
+    end
+    object ODS_shablonKODU: TStringField
+      FieldName = 'KODU'
+      Size = 25
+    end
+    object ODS_shablonVOEN: TStringField
+      FieldName = 'VOEN'
+      Size = 25
+    end
+    object ODS_shablonOD_TEY1: TStringField
+      FieldName = 'OD_TEY1'
+      Size = 50
+    end
+    object ODS_shablonOD_TEY2: TStringField
+      FieldName = 'OD_TEY2'
+      Size = 50
+    end
+    object ODS_shablonOD_TEY3: TStringField
+      FieldName = 'OD_TEY3'
+      Size = 50
+    end
+    object ODS_shablonOD_TEY4: TStringField
+      FieldName = 'OD_TEY4'
+      Size = 50
+    end
+    object ODS_shablonELAVE_MEL1: TStringField
+      FieldName = 'ELAVE_MEL1'
+      Size = 50
+    end
+    object ODS_shablonELAVE_MEL2: TStringField
+      FieldName = 'ELAVE_MEL2'
+      Size = 50
+    end
+    object ODS_shablonELAVE_MEL3: TStringField
+      FieldName = 'ELAVE_MEL3'
+      Size = 50
+    end
+    object ODS_shablonSHABLONUN_ADI: TStringField
+      FieldName = 'SHABLONUN_ADI'
+      Size = 25
+    end
+    object ODS_shablonBANKIN_ADI: TStringField
+      FieldName = 'BANKIN_ADI'
+      Size = 25
+    end
+    object ODS_shablonODENISH: TStringField
+      FieldName = 'ODENISH'
+      Size = 100
+    end
+  end
+  object DS_shablon: TDataSource
+    DataSet = ODS_shablon
+    Left = 464
+    Top = 533
+  end
+  object ODS_XS_Filter: TOracleDataSet
+    SQL.Strings = (
+      'select * from XS_FILTER')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = False
+    Active = False
+    Left = 376
+    Top = 485
+  end
+  object DS_XS_Filter: TDataSource
+    DataSet = ODS_XS_Filter
+    Left = 464
+    Top = 485
+  end
+  object ODS_Institution: TOracleDataSet
+    SQL.Strings = (
+      'SELECT a.rowid,a.*'
+      '  FROM xs_institution a')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = False
+    Active = False
+    AfterScroll = ODS_InstitutionAfterScroll
+    Left = 376
+    Top = 139
+  end
+  object ODS_BudgetLevel: TOracleDataSet
+    SQL.Strings = (
+      'SELECT b.rowid,b.*'
+      '  FROM xs_budgetlevel b')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = False
+    Active = False
+    AfterScroll = ODS_BudgetLevelAfterScroll
+    Left = 376
+    Top = 99
+  end
+  object ODS_Destination: TOracleDataSet
+    SQL.Strings = (
+      'SELECT c.rowid,c.*'
+      '  FROM xs_destination c')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = False
+    Active = False
+    AfterScroll = ODS_DestinationAfterScroll
+    Left = 376
+    Top = 187
+  end
+  object DS_Institution: TDataSource
+    DataSet = ODS_Institution
+    Left = 464
+    Top = 99
+  end
+  object DS_BudgetLevel: TDataSource
+    DataSet = ODS_BudgetLevel
+    Left = 464
+    Top = 147
+  end
+  object DS_Destination: TDataSource
+    DataSet = ODS_Destination
+    Left = 464
+    Top = 195
+  end
+  object ODS_Report: TOracleDataSet
+    SQL.Strings = (
+      'select * from xs_beneficiary')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = False
+    Active = False
+    Left = 376
+    Top = 243
+  end
+  object DS_Report: TDataSource
+    DataSet = ODS_Report
+    Left = 464
+    Top = 243
+  end
+  object ODS_Report_Temp: TOracleDataSet
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = False
+    Active = False
+    Left = 376
+    Top = 291
+  end
+  object ODS_Admin_Setting: TOracleDataSet
+    SQL.Strings = (
+      'select id,NAME from user$'
+      'where SB_ACA.checkmodaccess_int('#39'LVPCSSMANAGER'#39',name)=1'
+      'order by name')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    DetailFields = 'ID'
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = False
+    Active = False
+    Left = 376
+    Top = 347
+  end
+  object DS_Admin_Setting: TDataSource
+    DataSet = ODS_Admin_Setting
+    Left = 464
+    Top = 339
+  end
+  object ODS_Ad_Sett_Fili: TOracleDataSet
+    SQL.Strings = (
+      'select fi.id,fi.name from filial fi'
+      
+        '--where  (fi.id not in (select xs.filial_id from xs_admin_in xs ' +
+        'where xs.user_id=:USER_ID))'
+      '--   and (x.FILIAL_ID <> fi.id)'
+      '--   and (x.user_id=:USER_ID)'
+      '--group by fi.id,fi.name,x.user_id '
+      'order by fi.id'
+      '')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = False
+    Active = False
+    Left = 376
+    Top = 387
+  end
+  object DS_Ad_Sett_Fili: TDataSource
+    DataSet = ODS_Ad_Sett_Fili
+    Left = 464
+    Top = 387
+  end
+  object ODS_Admin_in: TOracleDataSet
+    SQL.Strings = (
+      'select XS_A_I.* from xs_admin_in XS_A_I'
+      'where XS_A_I.USER_ID=:USER_ID')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    Variables.Data = {
+      0300000001000000080000003A555345525F4944040000000000000000000000}
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    Master = ODS_Admin_Setting
+    MasterFields = 'ID'
+    DetailFields = 'USER_ID'
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = False
+    Active = False
+    Left = 376
+    Top = 435
+  end
+  object DS_Admin_in: TDataSource
+    DataSet = ODS_Admin_in
+    Left = 464
+    Top = 435
+  end
+  object Ab: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    Debug = False
+    PackageName = 'XS_control'
+    ParameterMode = pmPositional
+    Cursor = crDefault
+    Optimize = True
+    Left = 360
+    Top = 584
+  end
+end

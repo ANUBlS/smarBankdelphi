@@ -1,0 +1,219 @@
+﻿unit KretitXmlExpImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, Buttons, Gauges,DB;
+
+type
+  TBankInfo = record
+    BankName: WideString;
+    BankID: WideString;
+  end;
+  TKredit = class(TForm)
+    GroupBox1: TGroupBox;
+    SpeedButton1: TSpeedButton;
+    SBSave: TSpeedButton;
+    EditDest: TEdit;
+    SaveDlg: TSaveDialog;
+    Gauge1: TGauge;
+    BitBtn1: TBitBtn;
+    procedure FormCanResize(Sender: TObject; var NewWidth, NewHeight: Integer;
+      var Resize: Boolean);
+    procedure SBSaveClick(Sender: TObject);
+    procedure BitBtn1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+   function Get_BankInfo: TBankInfo;
+    { Public declarations }
+  end;
+
+var
+  Kredit: TKredit;
+   f: TextFile;
+   UnusableGrops: Set Of Byte;
+implementation
+
+{$R *.dfm}
+uses IniFiles,sboapiDataModuleImpl, UnitAdifData;
+const
+  SIniLocation = 'BankInfo.ini';
+  SSection = 'BankInfo';
+  SBankID = 'BankID';
+  SBankName = 'BankName';
+
+function TKredit.Get_BankInfo: TBankInfo;
+var
+  INI: TIniFile;
+  BankID, BankName: String;
+  Path: String;
+begin
+  Path := ExtractFilePath(Application.ExeName) + SIniLocation;
+  INI := TIniFile.Create(Path);
+  with INI do
+    try
+      BankID := ReadString(SSection, SBankID, '');
+      BankName := ReadString(SSection, SBankName, '');
+      Result.BankName := Utf8Decode(BankName);
+      Result.BankID := Utf8Decode(BankID);
+    finally
+      Free;
+    end;
+end;
+
+procedure TKredit.BitBtn1Click(Sender: TObject);
+  procedure WriteString(S: string);
+  begin
+
+     AssignFile(f, EditDest.Text); { Assigns the Filename }
+     Append(f);
+      Write(f, UTF8Encode(S));
+     Closefile(f);
+
+  end;
+ procedure WriteData(Field: WideString; value: WideString);
+
+    procedure GetSpecimenSettings(FieldName: WideString;
+      var TagFirst, TagLast, TagPrefix, TagSuffix: WideString;
+      var FieldGroup: Byte; var CanContainUTF8, ParentGroup: Integer);
+    begin
+      // ShowMessage(FieldName);
+      with Adif_Data.KreditXmlstruct do
+      begin
+        if Locate('FieldName', FieldName, [loCaseInsensitive]) then
+        begin
+          TagFirst := FieldByName('TagFirst').AsString;
+          TagLast := FieldByName('TagLast').AsString;
+          TagPrefix := FieldByName('TagPrefix').AsString;
+          TagSuffix := FieldByName('TagSuffix').AsString;
+          FieldGroup := FieldByName('FieldGroup').AsInteger;
+          CanContainUTF8 := FieldByName('AlphaField').AsInteger;
+          ParentGroup := FieldByName('ParentGroup').AsInteger
+        end
+        else
+          ShowMessage('TagSettings Table : Field Not Found!');
+      end;
+    end;
+
+  var
+    S: string;
+    FieldValue: WideString;
+    TagFirst, TagLast, TagPrefix, TagSuffix: WideString;
+    CanContainUTF8: Integer;
+    ParentGroup: Integer;
+    FieldGroup: Byte;
+    AAnsiStr: WideString;
+  begin
+
+    S := '';
+
+    GetSpecimenSettings(Field, TagFirst, TagLast, TagPrefix, TagSuffix,
+      FieldGroup, CanContainUTF8, ParentGroup);
+
+    if (FieldGroup in UnusableGrops) or (ParentGroup in UnusableGrops) then
+    begin
+      if (TagSuffix <> '') and (not(ParentGroup in UnusableGrops)) then
+        WriteString(TagSuffix);
+      // This is not usable group but we must close opened tag of parent group
+
+      Exit; // Do not EXPORT this field group
+    end;
+
+    FieldValue := value { value };
+  //  ShowMessage(FieldValue);
+    if (FieldValue = '') then
+    begin
+      if (TagPrefix <> '') and (not(ParentGroup in UnusableGrops)) and
+        (ParentGroup <> -1) then
+        WriteString(TagPrefix);
+
+      if (TagSuffix <> '') and (not(ParentGroup in UnusableGrops)) and
+        ((ParentGroup <> -1)) then
+        WriteString(TagSuffix);
+
+      if (ParentGroup = -2) then
+        WriteString(TagFirst + TagLast);
+
+      if (FieldGroup <> 0) and (ParentGroup <> 0) and (ParentGroup <> -2) then
+        UnusableGrops := UnusableGrops + [FieldGroup];
+
+      Exit // This Group can not be EXPORTED
+
+    end;
+
+    S := TagPrefix + TagFirst + FieldValue + TagLast + TagSuffix;
+//   Memolog.Lines.Add(s);
+    AAnsiStr := UTF8Encode(S);
+
+    // Writting Data To Stream
+
+    WriteString(AAnsiStr);
+
+  end;
+
+  var
+   sr, r,S, i, a: integer;
+  BankID, BankName: String;
+  StrDate, fvalue, fname: WideString;
+  ABankInfo: TBankInfo;
+begin
+  if EditDest.Text = '' then
+  begin
+    ShowMessage('      Faylı seçməmisiz!     ');
+    Exit;
+  end;
+  r:=Adif_Data.KreditDSet.recordcount;
+  Adif_Data.KreditXmlstruct.Open;
+  sr:= Adif_Data.KreditXmlstruct.recordcount;
+
+    ABankInfo := Get_BankInfo;
+    BankID := ABankInfo.BankID;
+    BankName := ABankInfo.BankName;
+    WriteString('<?xml version="1.0" encoding="UTF-8" ?> ');
+    WriteString('<BANK_CODE>');
+    WriteString(BankID);
+    WriteString('</BANK_CODE>');
+    WriteString('<BANK_NAME>');
+    WriteString(BankName);
+    WriteString('</BANK_NAME>');
+    WriteString('<ROWCOUNT>');
+    WriteString(inttostr(r));
+    WriteString('</ROWCOUNT>');
+
+    for I := 1 to r do
+      begin
+      Adif_Data.KreditXmlstruct.First;
+       for a := 0 to sr - 1 do
+        begin
+          fname := Adif_Data.KreditXmlstruct.FieldByName('fieldname').AsString;
+
+         if (fname='COLLETRALS1')or (fname='KREDIT1') or (fname='KREDIT') then
+            fvalue := '' else
+            fvalue := Adif_Data.KreditDSet.FieldByName(fname).AsString;
+          WriteData( Adif_Data.KreditXmlstruct.FieldByName('fieldname').AsString, fvalue);
+           Adif_Data.KreditXmlstruct.next;
+        end;
+      end;
+
+end;
+
+procedure TKredit.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+Resize:=false;
+end;
+
+procedure TKredit.SBSaveClick(Sender: TObject);
+begin
+  with SaveDlg do
+    if Execute then
+      EditDest.Text := FileName;
+  AssignFile(f, EditDest.Text);
+  Rewrite(f);
+  Closefile(f);
+end;
+
+
+end.

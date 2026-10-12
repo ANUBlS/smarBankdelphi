@@ -1,0 +1,64 @@
+unit OtherSetupImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ComCtrls, NLSLocalizer, Db, OracleData, StdCtrls, Grids, DBGridEh,
+  ExtCtrls, DBCtrls;
+
+type
+  TfrmOtherSetup = class(TForm)
+    StatusBar1: TStatusBar;
+    NLSLocalizer1: TNLSLocalizer;
+    Countries: TOracleDataSet;
+    CountriesCODE: TStringField;
+    CountriesNAME: TStringField;
+    insagency: TOracleDataSet;
+    Countriesds: TDataSource;
+    insagencyds: TDataSource;
+    insagencyID: TIntegerField;
+    insagencyNAME: TStringField;
+    GroupBox1: TGroupBox;
+    GroupBox2: TGroupBox;
+    DBGridEh1: TDBGridEh;
+    DBGridEh2: TDBGridEh;
+    DBNavigator1: TDBNavigator;
+    DBNavigator2: TDBNavigator;
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  frmOtherSetup: TfrmOtherSetup;
+
+implementation
+
+{$R *.DFM}
+uses sboapiDataModuleImpl;
+
+procedure TfrmOtherSetup.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+Resize := false;
+end;
+
+procedure TfrmOtherSetup.FormCreate(Sender: TObject);
+begin
+   Countries.Open;
+   insagency.Open;
+end;
+
+procedure TfrmOtherSetup.FormDestroy(Sender: TObject);
+begin
+   Countries.CloseAll;
+   insagency.CloseAll;
+end;
+
+end.

@@ -1,0 +1,798 @@
+object CableMan: TCableMan
+  Left = 186
+  Top = 0
+  Width = 870
+  Height = 811
+  Caption = 'CableMan'
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  OldCreateOrder = False
+  OnCreate = ActiveFormCreate
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 862
+    Height = 784
+    Align = alClient
+    BevelInner = bvRaised
+    BevelOuter = bvLowered
+    TabOrder = 0
+    object Splitter1: TSplitter
+      Left = 2
+      Top = 457
+      Width = 858
+      Height = 2
+      Cursor = crVSplit
+      Align = alTop
+    end
+    object Panel2: TPanel
+      Left = 2
+      Top = 459
+      Width = 858
+      Height = 323
+      Align = alClient
+      BevelInner = bvRaised
+      BevelOuter = bvLowered
+      TabOrder = 0
+      object Splitter2: TSplitter
+        Left = 2
+        Top = 113
+        Width = 854
+        Height = 2
+        Cursor = crVSplit
+        Align = alTop
+      end
+      object Panel6: TGroupBox
+        Left = 2
+        Top = 2
+        Width = 854
+        Height = 111
+        Align = alTop
+        Caption = 'Мцгавиляляр'
+        TabOrder = 0
+        object DBGrid3: TDBGrid
+          Left = 2
+          Top = 15
+          Width = 850
+          Height = 94
+          Align = alClient
+          DataSource = DataModCable.dsContacts
+          Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit]
+          PopupMenu = pmContract
+          TabOrder = 0
+          TitleFont.Charset = DEFAULT_CHARSET
+          TitleFont.Color = clWindowText
+          TitleFont.Height = -11
+          TitleFont.Name = 'Azl Sans Serif'
+          TitleFont.Style = []
+          OnCellClick = DBGrid3CellClick
+          OnDblClick = actEditContactExecute
+          OnTitleClick = DBGrid1TitleClick
+          Columns = <
+            item
+              Expanded = False
+              FieldName = 'ID'
+              Title.Caption = 'Код'
+              Title.Color = clNavy
+              Title.Font.Charset = DEFAULT_CHARSET
+              Title.Font.Color = clWhite
+              Title.Font.Height = -11
+              Title.Font.Name = 'Azl Sans Serif'
+              Title.Font.Style = []
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'CONTRACT_NUM'
+              Title.Caption = 'Мцгавиля №'
+              Title.Color = clNavy
+              Title.Font.Charset = DEFAULT_CHARSET
+              Title.Font.Color = clWhite
+              Title.Font.Height = -11
+              Title.Font.Name = 'Azl Sans Serif'
+              Title.Font.Style = []
+              Width = 70
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'INSTPLACE'
+              Title.Caption = 'Гурашдырылыб'
+              Title.Color = clNavy
+              Title.Font.Charset = DEFAULT_CHARSET
+              Title.Font.Color = clWhite
+              Title.Font.Height = -11
+              Title.Font.Name = 'Azl Sans Serif'
+              Title.Font.Style = []
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'PACKNAME'
+              Title.Caption = 'Пакет'
+              Title.Color = clNavy
+              Title.Font.Charset = DEFAULT_CHARSET
+              Title.Font.Color = clWhite
+              Title.Font.Height = -11
+              Title.Font.Name = 'Azl Sans Serif'
+              Title.Font.Style = []
+              Width = 91
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'REST_R'
+              Title.Caption = 'Галыг'
+              Title.Color = clNavy
+              Title.Font.Charset = DEFAULT_CHARSET
+              Title.Font.Color = clWhite
+              Title.Font.Height = -11
+              Title.Font.Name = 'Azl Sans Serif'
+              Title.Font.Style = []
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'CALCAGS'
+              Title.Caption = 'Щесабланыр'
+              Title.Color = clNavy
+              Title.Font.Charset = DEFAULT_CHARSET
+              Title.Font.Color = clWhite
+              Title.Font.Height = -11
+              Title.Font.Name = 'Azl Sans Serif'
+              Title.Font.Style = []
+              Width = 70
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'LASTCALCDATE'
+              Title.Caption = 'Сон щес. тарихи'
+              Title.Color = clNavy
+              Title.Font.Charset = DEFAULT_CHARSET
+              Title.Font.Color = clWhite
+              Title.Font.Height = -11
+              Title.Font.Name = 'Azl Sans Serif'
+              Title.Font.Style = []
+              Width = 84
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'ACC_NO'
+              Title.Caption = 'Hesab'
+              Title.Color = clNavy
+              Title.Font.Charset = DEFAULT_CHARSET
+              Title.Font.Color = clWhite
+              Title.Font.Height = -11
+              Title.Font.Name = 'Azl Sans Serif'
+              Title.Font.Style = []
+              Width = 119
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'USNAME'
+              Title.Caption = 'Дахил едян'
+              Title.Color = clNavy
+              Title.Font.Charset = DEFAULT_CHARSET
+              Title.Font.Color = clWhite
+              Title.Font.Height = -11
+              Title.Font.Name = 'Azl Sans Serif'
+              Title.Font.Style = []
+              Visible = True
+            end>
+        end
+      end
+      object Panel5: TGroupBox
+        Left = 2
+        Top = 115
+        Width = 854
+        Height = 206
+        Align = alClient
+        Caption = 'Юдямяляр'
+        TabOrder = 1
+        object DBGrid2: TDBGrid
+          Left = 2
+          Top = 15
+          Width = 850
+          Height = 149
+          Align = alClient
+          DataSource = DataModCable.dsServs
+          Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit]
+          TabOrder = 0
+          TitleFont.Charset = DEFAULT_CHARSET
+          TitleFont.Color = clWindowText
+          TitleFont.Height = -11
+          TitleFont.Name = 'Azl Sans Serif'
+          TitleFont.Style = []
+          OnDblClick = BitBtn6Click
+          OnTitleClick = DBGrid1TitleClick
+          Columns = <
+            item
+              Expanded = False
+              FieldName = 'ID'
+              Title.Caption = 'Код'
+              Title.Color = clNavy
+              Title.Font.Charset = DEFAULT_CHARSET
+              Title.Font.Color = clWhite
+              Title.Font.Height = -11
+              Title.Font.Name = 'Azl Sans Serif'
+              Title.Font.Style = []
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'SERVICENAME'
+              Title.Caption = 'Сервис'
+              Title.Color = clNavy
+              Title.Font.Charset = DEFAULT_CHARSET
+              Title.Font.Color = clWhite
+              Title.Font.Height = -11
+              Title.Font.Name = 'Azl Sans Serif'
+              Title.Font.Style = []
+              Width = 120
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'AMOUNT_EQV'
+              Title.Caption = 'Мябляь'
+              Title.Color = clNavy
+              Title.Font.Charset = DEFAULT_CHARSET
+              Title.Font.Color = clWhite
+              Title.Font.Height = -11
+              Title.Font.Name = 'Azl Sans Serif'
+              Title.Font.Style = []
+              Width = 76
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'REG_TIME'
+              Title.Caption = 'Чаьырыш тарихи'
+              Title.Color = clNavy
+              Title.Font.Charset = DEFAULT_CHARSET
+              Title.Font.Color = clWhite
+              Title.Font.Height = -11
+              Title.Font.Name = 'Azl Sans Serif'
+              Title.Font.Style = []
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'DONE_TIME'
+              Title.Caption = 'Юдямя тарихи'
+              Title.Color = clNavy
+              Title.Font.Charset = DEFAULT_CHARSET
+              Title.Font.Color = clWhite
+              Title.Font.Height = -11
+              Title.Font.Name = 'Azl Sans Serif'
+              Title.Font.Style = []
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'USNAME'
+              Title.Caption = 'Дахил едян'
+              Title.Color = clNavy
+              Title.Font.Charset = DEFAULT_CHARSET
+              Title.Font.Color = clWhite
+              Title.Font.Height = -11
+              Title.Font.Name = 'Azl Sans Serif'
+              Title.Font.Style = []
+              Visible = True
+            end>
+        end
+        object Panel7: TPanel
+          Left = 2
+          Top = 164
+          Width = 850
+          Height = 40
+          Align = alBottom
+          BevelInner = bvRaised
+          BevelOuter = bvLowered
+          TabOrder = 1
+          object BitBtn4: TBitBtn
+            Left = 592
+            Top = 8
+            Width = 75
+            Height = 25
+            Action = actSAdd
+            Anchors = [akTop, akRight]
+            Caption = 'Ялавя'
+            TabOrder = 0
+          end
+          object BitBtn5: TBitBtn
+            Left = 768
+            Top = 8
+            Width = 75
+            Height = 25
+            Action = actSDel
+            Anchors = [akTop, akRight]
+            Caption = 'Ляьв'
+            TabOrder = 1
+          end
+          object BitBtn6: TBitBtn
+            Left = 680
+            Top = 8
+            Width = 75
+            Height = 25
+            Action = actSEdit
+            Anchors = [akTop, akRight]
+            Caption = 'Редактя'
+            TabOrder = 2
+          end
+          object Button1: TButton
+            Left = 8
+            Top = 8
+            Width = 75
+            Height = 25
+            Action = actCommit
+            TabOrder = 3
+          end
+          object Button2: TButton
+            Left = 400
+            Top = 8
+            Width = 75
+            Height = 25
+            Caption = 'Гябз'
+            TabOrder = 4
+            OnClick = Button2Click
+          end
+        end
+      end
+    end
+    object Panel3: TGroupBox
+      Left = 2
+      Top = 2
+      Width = 858
+      Height = 455
+      Align = alTop
+      Caption = 'Abunячilяr'
+      TabOrder = 1
+      object DBGrid1: TDBGrid
+        Left = 2
+        Top = 15
+        Width = 854
+        Height = 383
+        Align = alClient
+        DataSource = DataModCable.dsAbonents
+        Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit]
+        PopupMenu = pmAbonent
+        TabOrder = 0
+        TitleFont.Charset = DEFAULT_CHARSET
+        TitleFont.Color = clWindowText
+        TitleFont.Height = -11
+        TitleFont.Name = 'Azl Sans Serif'
+        TitleFont.Style = []
+        OnDblClick = BitBtn3Click
+        OnTitleClick = DBGrid1TitleClick
+        Columns = <
+          item
+            Expanded = False
+            FieldName = 'ID'
+            Title.Caption = 'Код'
+            Title.Color = clNavy
+            Title.Font.Charset = DEFAULT_CHARSET
+            Title.Font.Color = clWhite
+            Title.Font.Height = -11
+            Title.Font.Name = 'Azl Sans Serif'
+            Title.Font.Style = []
+            Width = 42
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'NAME'
+            Title.Caption = 'Ады'
+            Title.Color = clNavy
+            Title.Font.Charset = DEFAULT_CHARSET
+            Title.Font.Color = clWhite
+            Title.Font.Height = -11
+            Title.Font.Name = 'Azl Sans Serif'
+            Title.Font.Style = []
+            Width = 150
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'REG_TIME'
+            Title.Caption = 'Гейдиййат тарихи'
+            Title.Color = clNavy
+            Title.Font.Charset = DEFAULT_CHARSET
+            Title.Font.Color = clWhite
+            Title.Font.Height = -11
+            Title.Font.Name = 'Azl Sans Serif'
+            Title.Font.Style = []
+            Width = 82
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'DOC_TYPE'
+            Title.Caption = 'Сяняд типи'
+            Title.Color = clNavy
+            Title.Font.Charset = DEFAULT_CHARSET
+            Title.Font.Color = clWhite
+            Title.Font.Height = -11
+            Title.Font.Name = 'Azl Sans Serif'
+            Title.Font.Style = []
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'DOC_NUM'
+            Title.Caption = 'Сянядин №'
+            Title.Color = clNavy
+            Title.Font.Charset = DEFAULT_CHARSET
+            Title.Font.Color = clWhite
+            Title.Font.Height = -11
+            Title.Font.Name = 'Azl Sans Serif'
+            Title.Font.Style = []
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'PHONE'
+            Title.Caption = 'Телефон'
+            Title.Color = clNavy
+            Title.Font.Charset = DEFAULT_CHARSET
+            Title.Font.Color = clWhite
+            Title.Font.Height = -11
+            Title.Font.Name = 'Azl Sans Serif'
+            Title.Font.Style = []
+            Width = 70
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'RECEIVER_NUM'
+            Title.Caption = 'Гябуледижилярин сайы'
+            Title.Color = clNavy
+            Title.Font.Charset = DEFAULT_CHARSET
+            Title.Font.Color = clWhite
+            Title.Font.Height = -11
+            Title.Font.Name = 'Azl Sans Serif'
+            Title.Font.Style = []
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'ENGINEER'
+            Title.Caption = 'Мцщяндис'
+            Title.Color = clNavy
+            Title.Font.Charset = DEFAULT_CHARSET
+            Title.Font.Color = clWhite
+            Title.Font.Height = -11
+            Title.Font.Name = 'Azl Sans Serif'
+            Title.Font.Style = []
+            Width = 150
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'STATUS'
+            Title.Caption = 'Sтатус'
+            Title.Color = clNavy
+            Title.Font.Charset = DEFAULT_CHARSET
+            Title.Font.Color = clWhite
+            Title.Font.Height = -11
+            Title.Font.Name = 'Azl Sans Serif'
+            Title.Font.Style = []
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'USNAME'
+            Title.Caption = 'Дахил едян'
+            Title.Color = clNavy
+            Title.Font.Charset = DEFAULT_CHARSET
+            Title.Font.Color = clWhite
+            Title.Font.Height = -11
+            Title.Font.Name = 'Azl Sans Serif'
+            Title.Font.Style = []
+            Width = 80
+            Visible = True
+          end>
+      end
+      object Panel4: TPanel
+        Left = 2
+        Top = 398
+        Width = 854
+        Height = 55
+        Align = alBottom
+        BevelInner = bvRaised
+        BevelOuter = bvLowered
+        TabOrder = 1
+        object Label1: TLabel
+          Left = 8
+          Top = 12
+          Width = 19
+          Height = 13
+          Caption = 'Kod'
+        end
+        object Label2: TLabel
+          Left = 88
+          Top = 12
+          Width = 13
+          Height = 13
+          Caption = 'Ad'
+        end
+        object Label3: TLabel
+          Left = 240
+          Top = 12
+          Width = 31
+          Height = 13
+          Caption = 'Sяnяd'
+        end
+        object Label4: TLabel
+          Left = 368
+          Top = 12
+          Width = 36
+          Height = 13
+          Caption = 'Telefon'
+        end
+        object Label5: TLabel
+          Left = 480
+          Top = 12
+          Width = 43
+          Height = 13
+          Caption = 'Мцгавиля'
+        end
+        object lbR1: TLabel
+          Left = 600
+          Top = 11
+          Width = 16
+          Height = 13
+          Caption = 'say'
+        end
+        object lbR: TLabel
+          Left = 624
+          Top = 12
+          Width = 33
+          Height = 13
+          AutoSize = False
+        end
+        object Label6: TLabel
+          Left = 68
+          Top = 34
+          Width = 40
+          Height = 13
+          Caption = 'Fabrik N'
+        end
+        object BitBtn1: TBitBtn
+          Left = 666
+          Top = 8
+          Width = 59
+          Height = 25
+          Action = actAbAdd
+          Anchors = [akTop, akRight]
+          Caption = 'Ялавя'
+          TabOrder = 0
+        end
+        object BitBtn2: TBitBtn
+          Left = 784
+          Top = 8
+          Width = 59
+          Height = 25
+          Action = actAbDel
+          Anchors = [akTop, akRight]
+          Caption = 'Ляьв'
+          TabOrder = 1
+        end
+        object BitBtn3: TBitBtn
+          Left = 725
+          Top = 8
+          Width = 59
+          Height = 25
+          Action = actAbEd
+          Anchors = [akTop, akRight]
+          Caption = 'Редактя'
+          TabOrder = 2
+        end
+        object edSrcID: TEdit
+          Left = 32
+          Top = 8
+          Width = 49
+          Height = 21
+          TabOrder = 3
+          OnExit = edSrcIDExit
+          OnKeyUp = edSrcIDKeyUp
+        end
+        object edSrcNAME: TEdit
+          Left = 112
+          Top = 8
+          Width = 121
+          Height = 21
+          TabOrder = 4
+          OnExit = edSrcIDExit
+          OnKeyUp = edSrcIDKeyUp
+        end
+        object edSrcDOC_NUM: TEdit
+          Left = 280
+          Top = 8
+          Width = 81
+          Height = 21
+          TabOrder = 5
+          OnExit = edSrcIDExit
+          OnKeyUp = edSrcIDKeyUp
+        end
+        object edSrcPHONE: TEdit
+          Left = 408
+          Top = 8
+          Width = 65
+          Height = 21
+          TabOrder = 6
+          OnExit = edSrcIDExit
+          OnKeyUp = edSrcIDKeyUp
+        end
+        object Edit1: TEdit
+          Left = 528
+          Top = 8
+          Width = 49
+          Height = 21
+          TabOrder = 7
+          OnExit = edSrcIDExit
+          OnKeyUp = Edit1KeyUp
+        end
+        object CheckBox1: TCheckBox
+          Left = 577
+          Top = 11
+          Width = 12
+          Height = 17
+          TabOrder = 8
+          OnClick = CheckBox1Click
+        end
+        object EditSrchWorksNum: TEdit
+          Left = 112
+          Top = 30
+          Width = 82
+          Height = 21
+          TabOrder = 9
+          OnExit = edSrcIDExit
+          OnKeyUp = EditSrchWorksNumKeyUp
+        end
+      end
+    end
+  end
+  object pmAbonent: TPopupMenu
+    OwnerDraw = True
+    Left = 170
+    Top = 106
+    object N1: TMenuItem
+      Action = actAbAdd
+      OnDrawItem = N4DrawItem
+    end
+    object N2: TMenuItem
+      Action = actAbEd
+      Default = True
+      OnDrawItem = N4DrawItem
+    end
+    object N3: TMenuItem
+      Action = actAbDel
+      OnDrawItem = N4DrawItem
+    end
+    object N4: TMenuItem
+      Caption = '-'
+      OnDrawItem = N4DrawItem
+    end
+    object N5: TMenuItem
+      Action = actAbNewCon
+      OnDrawItem = N4DrawItem
+    end
+    object N9: TMenuItem
+      Caption = '-'
+    end
+    object N10: TMenuItem
+      Action = actRefresh
+      OnDrawItem = N4DrawItem
+    end
+  end
+  object ActionList1: TActionList
+    Left = 394
+    Top = 122
+    object actAbAdd: TAction
+      Category = 'Абуня'
+      Caption = 'Ялавя'
+      OnExecute = BitBtn1Click
+    end
+    object actAbEd: TAction
+      Category = 'Абуня'
+      Caption = 'Редактя'
+      OnExecute = BitBtn3Click
+    end
+    object actAbDel: TAction
+      Category = 'Абуня'
+      Caption = 'Ляьв'
+      OnExecute = BitBtn2Click
+    end
+    object actAbNewCon: TAction
+      Category = 'Абуня'
+      Caption = 'Йени мцгавиля'
+      OnExecute = actAbNewConExecute
+    end
+    object actEditContact: TAction
+      Category = 'Абуня'
+      Caption = 'Редактя'
+      OnExecute = actEditContactExecute
+    end
+    object actContDel: TAction
+      Category = 'Абуня'
+      Caption = 'Ляьв'
+      OnExecute = actContDelExecute
+    end
+    object actSAdd: TAction
+      Category = 'Серв'
+      Caption = 'Ялавя'
+      OnExecute = actSAddExecute
+    end
+    object actSEdit: TAction
+      Category = 'Серв'
+      Caption = 'Редактя'
+      OnExecute = BitBtn6Click
+    end
+    object actSDel: TAction
+      Category = 'Серв'
+      Caption = 'Ляьв'
+      OnExecute = actSDelExecute
+    end
+    object actCommit: TAction
+      Category = 'Серв'
+      Caption = 'Тясдиг ет'
+      OnExecute = actCommitExecute
+    end
+    object actRefresh: TAction
+      Caption = 'Там йенилямяк'
+      OnExecute = actRefreshExecute
+    end
+    object actAdtToContact: TAction
+      Category = 'Абуня'
+      Caption = 'Мцгавиляйя ялавя'
+      OnExecute = actAdtToContactExecute
+    end
+    object actSetNewCalcDate: TAction
+      Category = 'Абуня'
+      Caption = 'Гурашдырылды'
+      OnExecute = actSetNewCalcDateExecute
+    end
+  end
+  object pmContract: TPopupMenu
+    OwnerDraw = True
+    Left = 380
+    Top = 261
+    object N7: TMenuItem
+      Action = actAbNewCon
+      OnDrawItem = N4DrawItem
+    end
+    object N8: TMenuItem
+      Action = actEditContact
+      Default = True
+      OnDrawItem = N4DrawItem
+    end
+    object N6: TMenuItem
+      Action = actContDel
+      OnDrawItem = N4DrawItem
+    end
+    object N11: TMenuItem
+      Action = actSetNewCalcDate
+      OnDrawItem = N4DrawItem
+    end
+    object NAddt: TMenuItem
+      Action = actSetNewCalcDate
+      Caption = 'Ялавя'
+      OnDrawItem = N4DrawItem
+    end
+  end
+  object ApplicationEvents1: TApplicationEvents
+    OnException = ApplicationEvents1Exception
+    Left = 404
+    Top = 525
+  end
+end

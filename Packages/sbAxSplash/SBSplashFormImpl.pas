@@ -1,0 +1,414 @@
+unit SBSplashFormImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActiveX, AxCtrls, sbAxSplash_TLB, StdVcl, OleCtrls, SHDocVw, SBPlgAx50_TLB,
+  CustomInst, IniSource, ImgList;
+
+type
+  TSBSplashForm = class(TActiveForm, ISBSplashForm, IParamInput, IIconExporter)
+    IniSource: TIniSource;
+    ImageList1: TImageList;
+  private
+    { Private declarations }
+    FSplashTarget: String;
+    FIconFile: String;
+    FEvents: ISBSplashFormEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+    procedure SetSplashTarget(const Value: String);
+    procedure SetIconFile(const Value: String);
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+    function ISBSplashForm.Get_Color = ISBSplashForm_Get_Color;
+    function ISBSplashForm.Get_Font = ISBSplashForm_Get_Font;
+    procedure ISBSplashForm._Set_Font = ISBSplashForm__Set_Font;
+    procedure ISBSplashForm.Set_Color = ISBSplashForm_Set_Color;
+    procedure ISBSplashForm.Set_Font = ISBSplashForm_Set_Font;
+    function ISBSplashForm_Get_Color: OLE_COLOR; safecall;
+    function ISBSplashForm_Get_Font: IFontDisp; safecall;
+    procedure ISBSplashForm__Set_Font(var Value: IFontDisp); safecall;
+    procedure ISBSplashForm_Set_Color(Value: OLE_COLOR); safecall;
+    procedure ISBSplashForm_Set_Font(const Value: IFontDisp); safecall;
+    {IIconExporter}
+    function Get_Icon: OLE_HANDLE; safecall;
+    {IParamInput support}
+    procedure Set_Params(const Name: WideString; Value: OleVariant); safecall;
+  public
+    { Public declarations }
+    procedure Initialize; override;
+    property SplashTarget: String read FSplashTarget write SetSplashTarget;
+    property IconFile: String read FIconFile write SetIconFile;
+  end;
+
+implementation
+
+uses ComObj, ComServ;
+
+{$R *.DFM}
+
+{ TSBSplashForm }
+
+procedure TSBSplashForm.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_SBSplashFormPage); }
+end;
+
+procedure TSBSplashForm.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as ISBSplashFormEvents;
+end;
+
+procedure TSBSplashForm.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TSBSplashForm.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TSBSplashForm.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TSBSplashForm.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TSBSplashForm.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TSBSplashForm.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TSBSplashForm.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TSBSplashForm.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TSBSplashForm.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TSBSplashForm.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TSBSplashForm.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TSBSplashForm.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TSBSplashForm.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TSBSplashForm.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TSBSplashForm.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TSBSplashForm.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TSBSplashForm.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TSBSplashForm.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TSBSplashForm.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TSBSplashForm._Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TSBSplashForm.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TSBSplashForm.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TSBSplashForm.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TSBSplashForm.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TSBSplashForm.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TSBSplashForm.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TSBSplashForm.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TSBSplashForm.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TSBSplashForm.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TSBSplashForm.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TSBSplashForm.Set_AxBorderStyle(Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TSBSplashForm.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TSBSplashForm.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TSBSplashForm.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TSBSplashForm.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TSBSplashForm.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TSBSplashForm.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TSBSplashForm.Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TSBSplashForm.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TSBSplashForm.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TSBSplashForm.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TSBSplashForm.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TSBSplashForm.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TSBSplashForm.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+procedure TSBSplashForm.Set_Params(const Name: WideString; Value: OleVariant);
+begin
+  if Name = 'SplashTarget' then
+    SplashTarget := Value
+  else
+  if Name = 'ConfigFile' then
+    with IniSource do
+    begin
+      Close;
+      Location := Value;
+      Open;
+    end
+  else
+  if Name = 'IconFile' then
+    IconFile := Value;
+end;
+
+procedure TSBSplashForm.SetSplashTarget(const Value: String);
+var
+  Url: OleVariant;
+begin
+  FSplashTarget := Value;
+  Url := Format('file://%s\..\Env\Splash\%s.html', [GetCurrentDir, FSplashTarget]);
+  IconFile := Format('%s\..\Env\Splash\Icons\%s.ico', [GetCurrentDir, FSplashTarget]);
+ // WebBrowser.Navigate2(Url);
+end;
+
+procedure TSBSplashForm.SetIconFile(const Value: String);
+begin
+  Icon.LoadFromFile(Value);
+  FIconFile := Value;
+end;
+
+function TSBSplashForm.ISBSplashForm_Get_Color: OLE_COLOR;
+begin
+
+end;
+
+function TSBSplashForm.ISBSplashForm_Get_Font: IFontDisp;
+begin
+
+end;
+
+procedure TSBSplashForm.ISBSplashForm__Set_Font(var Value: IFontDisp);
+begin
+
+end;
+
+procedure TSBSplashForm.ISBSplashForm_Set_Color(Value: OLE_COLOR);
+begin
+
+end;
+
+procedure TSBSplashForm.ISBSplashForm_Set_Font(const Value: IFontDisp);
+begin
+
+end;
+
+function TSBSplashForm.Get_Icon: OLE_HANDLE;
+begin
+  Result := Icon.Handle;
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TSBSplashForm,
+    Class_SBSplashForm,
+    3,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

@@ -1,0 +1,148 @@
+﻿unit ArTemporaryTransactionsViewFormImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+   ExtCtrls, Grids, DBGrids, StdCtrls, Db, OracleData, Mask,
+  DBCtrls, ImgList, DBGridEh, DBCtrlsEh, DBGridEhGrouping, GridsEh;
+
+type
+  TTrViewForm = class(TForm)
+    Panel1: TPanel;
+    ButtonCommit: TButton;
+    ButtonDismis: TButton;
+    Transactions: TOracleDataSet;
+    DataSrcTransactions: TDataSource;
+    Panel2: TPanel;
+    TransactionsTrAmount: TFloatField;
+    StatusImages: TImageList;
+    TransactionsCANPROCESS: TFloatField;
+    DBEditEh1: TDBEditEh;
+    TransactionsDEBITACCNO: TWideStringField;
+    TransactionsDEBITCURRENCY: TWideStringField;
+    TransactionsCREDITACCNO: TWideStringField;
+    TransactionsCREDITCURRENCY: TWideStringField;
+    TransactionsTRDATE: TDateTimeField;
+    TransactionsFLAGS: TFloatField;
+    TransactionsDEBITAMOUNT: TFloatField;
+    TransactionsCREDITAMOUNT: TFloatField;
+    TransactionsNATAMOUNT: TFloatField;
+    TransactionsTRDESCRIPTION: TWideStringField;
+    TransactionsINBALANCECHAR: TWideStringField;
+    DBEditEh2: TDBEditEh;
+    DBEditEh3: TDBEditEh;
+    Label1: TLabel;
+    Label2: TLabel;
+    DBGridTransactions: TDBGridEh;
+    procedure FormDestroy(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
+    procedure ButtonCommitClick(Sender: TObject);
+    procedure TransactionsCalcFields(DataSet: TDataSet);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure DBGridTransactionsDrawColumnCell(Sender: TObject;
+      const Rect: TRect; DataCol: Integer; Column: TColumnEh;
+      State: TGridDrawState);
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+  private
+    FCommitTransactions : Boolean;
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  TrViewForm: TTrViewForm;
+
+implementation
+
+{$R *.DFM}
+
+uses
+  sboapiDataModuleImpl;
+
+
+procedure TTrViewForm.FormDestroy(Sender: TObject);
+begin
+  Transactions.CloseAll;
+end;
+
+procedure TTrViewForm.FormShow(Sender: TObject);
+begin
+  Transactions.Open;
+  FCommitTransactions := False;
+end;
+
+procedure TTrViewForm.FormCloseQuery(Sender: TObject; var CanClose: Boolean);
+resourcestring
+  SCancelTransactions = 'Əməliyyat aparılmayacaq! Əminsiniz?';
+begin
+  CanClose := FCommitTransactions or
+    (MessageDlg(
+       SCancelTransactions
+      ,mtWarning
+      ,[mbYes,mbNo]
+      ,0) = mrYes)
+end;
+
+procedure TTrViewForm.ButtonCommitClick(Sender: TObject);
+begin
+  FCommitTransactions := True;
+  ModalResult := mrOk;
+end;
+
+procedure TTrViewForm.TransactionsCalcFields(DataSet: TDataSet);
+begin
+  with DataSet do
+  if not FieldByName('DEBITAMOUNT').IsNull then
+    FieldByName('TrAmount').AsFloat := FieldByName('DEBITAMOUNT').AsFloat
+  else
+    FieldByName('TrAmount').AsFloat := FieldByName('CREDITAMOUNT').AsFloat
+end;
+
+procedure TTrViewForm.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  Update
+end;
+
+procedure TTrViewForm.DBGridTransactionsDrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TColumnEh;
+  State: TGridDrawState);
+const
+  DataColIndex = 1;
+begin
+  // Drawing Transaction Status Image
+  with Sender as TDBGridEh do
+  begin
+    if DataSource.DataSet.RecordCount <> 0 then
+    begin
+      if (DataCol = DataColIndex) then
+      begin
+       Canvas.Brush.Color := clSilver; 
+       StatusImages.Draw(Canvas, Rect.Left, Rect.Top, DataSource.DataSet.FieldByName('CANPROCESS').AsInteger , True)
+      end
+      else
+       DefaultDrawColumnCell(Rect, DataCol, Column, State);
+    end;
+  end;
+end;
+
+procedure TTrViewForm.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+  Resize := False
+end;
+
+procedure TTrViewForm.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+  if Ord(Key) = VK_ESCAPE then
+  begin
+    Key :=#0;
+    Close
+  end;
+end;
+
+end.

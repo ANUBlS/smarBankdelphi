@@ -1,0 +1,606 @@
+unit NewDepositsManagerArchiveForm;
+
+{$WARN SYMBOL_PLATFORM OFF}
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActiveX, AxCtrls, NewDepositsManagerArchive_TLB, StdVcl, DBGridEh, ImgList,
+  Menus, Grids, XDBGrids, StdCtrls, Buttons, ComCtrls, Mask, DBCtrlsEh,
+  DBLookupEh, ExtCtrls, ToolWin, CMExcelExport;
+
+type
+  TNewDepositsManagerArchiveFormImpl = class(TActiveForm, INewDepositsManagerArchiveFormImpl)
+    ToolBar: TToolBar;
+    ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
+    ToolButton3: TToolButton;
+    ToolButton4: TToolButton;
+    ToolButton7: TToolButton;
+    ToolButton8: TToolButton;
+    ToolButton14: TToolButton;
+    ToolButton6: TToolButton;
+    ToolButton9: TToolButton;
+    ToolButton10: TToolButton;
+    ToolButton5: TToolButton;
+    ToolButton11: TToolButton;
+    TBFilteration: TToolButton;
+    Panel1: TPanel;
+    FilterPanel: TPanel;
+    Panel2: TPanel;
+    SpeedButton1: TSpeedButton;
+    GroupBox1: TGroupBox;
+    CBCurrency: TCheckBox;
+    DBLookupComboboxEh1: TDBLookupComboboxEh;
+    GroupBox2: TGroupBox;
+    CBpersons: TCheckBox;
+    DBLookupComboboxEh4: TDBLookupComboboxEh;
+    GroupBox3: TGroupBox;
+    CBClientType: TCheckBox;
+    DBLookupComboboxEh5: TDBLookupComboboxEh;
+    GroupBox4: TGroupBox;
+    CBFilial: TCheckBox;
+    DBLookupComboboxEh2: TDBLookupComboboxEh;
+    GroupBox5: TGroupBox;
+    CBContractType: TCheckBox;
+    DBLookupComboboxEh3: TDBLookupComboboxEh;
+    GroupBox9: TGroupBox;
+    LCBStatus: TComboBox;
+    CBStatus: TCheckBox;
+    GroupBox7: TGroupBox;
+    Label1: TLabel;
+    DTPOpenDate: TDateTimePicker;
+    DTPCloseDate: TDateTimePicker;
+    CBOpendat: TCheckBox;
+    GroupBox6: TGroupBox;
+    BitBtnexp: TBitBtn;
+    Panel3: TPanel;
+    SearchPanel: TGroupBox;
+    Panel4: TPanel;
+    StaticText1: TStaticText;
+    EditContractNo: TEdit;
+    Panel7: TPanel;
+    StaticText2: TStaticText;
+    EditID: TEdit;
+    Panel8: TPanel;
+    StaticText3: TStaticText;
+    EditCustomerid: TEdit;
+    Panel10: TPanel;
+    StaticText5: TStaticText;
+    EditFacticalDebt: TEdit;
+    Panel11: TPanel;
+    StaticText6: TStaticText;
+    EditCustomerName: TEdit;
+    Panel6: TPanel;
+    StaticText7: TStaticText;
+    EditFACTICALINTERESTDEBT: TEdit;
+    Panel9: TPanel;
+    StaticText4: TStaticText;
+    EditAgentid: TEdit;
+    Panel12: TPanel;
+    StaticText8: TStaticText;
+    EditOstat: TEdit;
+    MainGrid: TXDBGrid;
+    ImageList: TImageList;
+    ActionArcName: TPopupMenu;
+    MenuItem1: TMenuItem;
+    MenuItem2: TMenuItem;
+    MenuItem3: TMenuItem;
+    MenuItem4: TMenuItem;
+    MenuItem5: TMenuItem;
+    MenuItem6: TMenuItem;
+    MenuItem7: TMenuItem;
+    MenuItem8: TMenuItem;
+    EExport: TCMExcelExport;
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure PrepareFilter;
+  private
+    { Private declarations }
+    FEvents: INewDepositsManagerArchiveFormImplEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure MouseEnterEvent(Sender: TObject);
+    procedure MouseLeaveEvent(Sender: TObject);
+    procedure PaintEvent(Sender: TObject);
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AlignDisabled: WordBool; safecall;
+    function Get_AlignWithMargins: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_BorderWidth: Integer; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_DockSite: WordBool; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_ExplicitHeight: Integer; safecall;
+    function Get_ExplicitLeft: Integer; safecall;
+    function Get_ExplicitTop: Integer; safecall;
+    function Get_ExplicitWidth: Integer; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_MouseInClient: WordBool; safecall;
+    function Get_ParentCustomHint: WordBool; safecall;
+    function Get_ParentDoubleBuffered: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PopupMode: TxPopupMode; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_ScreenSnap: WordBool; safecall;
+    function Get_SnapBuffer: Integer; safecall;
+    function Get_UseDockManager: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_AlignWithMargins(Value: WordBool); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_BorderWidth(Value: Integer); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_DockSite(Value: WordBool); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_ParentCustomHint(Value: WordBool); safecall;
+    procedure Set_ParentDoubleBuffered(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PopupMode(Value: TxPopupMode); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_ScreenSnap(Value: WordBool); safecall;
+    procedure Set_SnapBuffer(Value: Integer); safecall;
+    procedure Set_UseDockManager(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+  public
+    { Public declarations }
+    procedure Initialize; override;
+  end;
+
+implementation
+
+uses ComObj, ComServ, NewDepositsDataModule,NewCommonDeclsImpl,SBTranslateProc,sboapiDataModuleimpl;
+
+{$R *.DFM}
+
+{ TNewDepositsManagerArchiveFormImpl }
+
+procedure TNewDepositsManagerArchiveFormImpl.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_NewDepositsManagerArchiveFormImplPage); }
+end;
+
+procedure TNewDepositsManagerArchiveFormImpl.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as INewDepositsManagerArchiveFormImplEvents;
+  inherited EventSinkChanged(EventSink);
+end;
+
+procedure TNewDepositsManagerArchiveFormImpl.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnMouseEnter := MouseEnterEvent;
+  OnMouseLeave := MouseLeaveEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TNewDepositsManagerArchiveFormImpl.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TNewDepositsManagerArchiveFormImpl.Get_AlignDisabled: WordBool;
+begin
+  Result := AlignDisabled;
+end;
+
+function TNewDepositsManagerArchiveFormImpl.Get_AlignWithMargins: WordBool;
+begin
+  Result := AlignWithMargins;
+end;
+
+function TNewDepositsManagerArchiveFormImpl.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TNewDepositsManagerArchiveFormImpl.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TNewDepositsManagerArchiveFormImpl.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TNewDepositsManagerArchiveFormImpl.Get_BorderWidth: Integer;
+begin
+  Result := Integer(BorderWidth);
+end;
+
+function TNewDepositsManagerArchiveFormImpl.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TNewDepositsManagerArchiveFormImpl.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TNewDepositsManagerArchiveFormImpl.Get_DockSite: WordBool;
+begin
+  Result := DockSite;
+end;
+
+function TNewDepositsManagerArchiveFormImpl.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TNewDepositsManagerArchiveFormImpl.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TNewDepositsManagerArchiveFormImpl.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TNewDepositsManagerArchiveFormImpl.Get_ExplicitHeight: Integer;
+begin
+  Result := ExplicitHeight;
+end;
+
+function TNewDepositsManagerArchiveFormImpl.Get_ExplicitLeft: Integer;
+begin
+  Result := ExplicitLeft;
+end;
+
+function TNewDepositsManagerArchiveFormImpl.Get_ExplicitTop: Integer;
+begin
+  Result := ExplicitTop;
+end;
+
+function TNewDepositsManagerArchiveFormImpl.Get_ExplicitWidth: Integer;
+begin
+  Result := ExplicitWidth;
+end;
+
+function TNewDepositsManagerArchiveFormImpl.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TNewDepositsManagerArchiveFormImpl.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TNewDepositsManagerArchiveFormImpl.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TNewDepositsManagerArchiveFormImpl.Get_MouseInClient: WordBool;
+begin
+  Result := MouseInClient;
+end;
+
+function TNewDepositsManagerArchiveFormImpl.Get_ParentCustomHint: WordBool;
+begin
+  Result := ParentCustomHint;
+end;
+
+function TNewDepositsManagerArchiveFormImpl.Get_ParentDoubleBuffered: WordBool;
+begin
+  Result := ParentDoubleBuffered;
+end;
+
+function TNewDepositsManagerArchiveFormImpl.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TNewDepositsManagerArchiveFormImpl.Get_PopupMode: TxPopupMode;
+begin
+  Result := Ord(PopupMode);
+end;
+
+function TNewDepositsManagerArchiveFormImpl.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TNewDepositsManagerArchiveFormImpl.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TNewDepositsManagerArchiveFormImpl.Get_ScreenSnap: WordBool;
+begin
+  Result := ScreenSnap;
+end;
+
+function TNewDepositsManagerArchiveFormImpl.Get_SnapBuffer: Integer;
+begin
+  Result := SnapBuffer;
+end;
+
+function TNewDepositsManagerArchiveFormImpl.Get_UseDockManager: WordBool;
+begin
+  Result := UseDockManager;
+end;
+
+function TNewDepositsManagerArchiveFormImpl.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TNewDepositsManagerArchiveFormImpl.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TNewDepositsManagerArchiveFormImpl._Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TNewDepositsManagerArchiveFormImpl.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+
+procedure TNewDepositsManagerArchiveFormImpl.PrepareFilter;
+begin
+   with NewDepositDataModule do
+   begin
+      DBLookupComboboxEh1.KeyValue := Valutes.fieldByName('Valute').AsInteger;
+      DBLookupComboboxEh2.KeyValue := Filials.fieldByName('id').AsInteger;
+      DBLookupComboboxEh3.KeyValue := dm_types.fieldByName('id').AsInteger;
+      DBLookupComboboxEh4.KeyValue := dm_categories.fieldByName('id').AsInteger;
+      DBLookupComboboxEh5.KeyValue := dm_persons.fieldByName('id').AsInteger;
+      //LCBUsers.KeyValue := users.fieldByName('id').AsInteger;
+      LCBStatus.ItemIndex := 0;
+   end;
+end;
+
+procedure TNewDepositsManagerArchiveFormImpl.ActiveFormCreate(Sender: TObject);
+begin
+   NewDepositDataModule := TNewDepositDataModule.Create(Self);
+   PrepareFilter;
+   ApplicationPath := ExtractFilePath(Application.ExeName);
+   CommonApplication := Application;
+   CommonGrid := MainGrid;
+
+   with NewDepositDataModule do
+   begin
+      Get_FilialID := FilialID.FieldByname('kod_fil').AsInteger;
+      Get_BankDate := BankDate.FieldByname('Tek_Dat').AsDateTime;
+   end;
+
+   DTPOpenDate.DateTime := Get_BankDate ;
+   DTPCloseDate.DateTime := Get_BankDate;
+   SBTranslateProc.TranslateAllComponents(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TNewDepositsManagerArchiveFormImpl.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TNewDepositsManagerArchiveFormImpl.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TNewDepositsManagerArchiveFormImpl.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TNewDepositsManagerArchiveFormImpl.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TNewDepositsManagerArchiveFormImpl.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TNewDepositsManagerArchiveFormImpl.KeyPressEvent(Sender: TObject; var Key: Char);
+
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TNewDepositsManagerArchiveFormImpl.MouseEnterEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnMouseEnter;
+end;
+
+procedure TNewDepositsManagerArchiveFormImpl.MouseLeaveEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnMouseLeave;
+end;
+
+procedure TNewDepositsManagerArchiveFormImpl.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TNewDepositsManagerArchiveFormImpl.Set_AlignWithMargins(Value: WordBool);
+
+begin
+  AlignWithMargins := Value;
+end;
+
+procedure TNewDepositsManagerArchiveFormImpl.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TNewDepositsManagerArchiveFormImpl.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TNewDepositsManagerArchiveFormImpl.Set_AxBorderStyle(Value: TxActiveFormBorderStyle);
+
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TNewDepositsManagerArchiveFormImpl.Set_BorderWidth(Value: Integer);
+begin
+  BorderWidth := TBorderWidth(Value);
+end;
+
+procedure TNewDepositsManagerArchiveFormImpl.Set_Caption(const Value: WideString);
+
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TNewDepositsManagerArchiveFormImpl.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TNewDepositsManagerArchiveFormImpl.Set_DockSite(Value: WordBool);
+begin
+  DockSite := Value;
+end;
+
+procedure TNewDepositsManagerArchiveFormImpl.Set_DoubleBuffered(Value: WordBool);
+
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TNewDepositsManagerArchiveFormImpl.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TNewDepositsManagerArchiveFormImpl.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TNewDepositsManagerArchiveFormImpl.Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TNewDepositsManagerArchiveFormImpl.Set_HelpFile(const Value: WideString);
+
+begin
+  HelpFile := string(Value);
+end;
+
+procedure TNewDepositsManagerArchiveFormImpl.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TNewDepositsManagerArchiveFormImpl.Set_ParentCustomHint(Value: WordBool);
+
+begin
+  ParentCustomHint := Value;
+end;
+
+procedure TNewDepositsManagerArchiveFormImpl.Set_ParentDoubleBuffered(Value: WordBool);
+
+begin
+  ParentDoubleBuffered := Value;
+end;
+
+procedure TNewDepositsManagerArchiveFormImpl.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TNewDepositsManagerArchiveFormImpl.Set_PopupMode(Value: TxPopupMode);
+begin
+  PopupMode := TPopupMode(Value);
+end;
+
+procedure TNewDepositsManagerArchiveFormImpl.Set_PrintScale(Value: TxPrintScale);
+
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TNewDepositsManagerArchiveFormImpl.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TNewDepositsManagerArchiveFormImpl.Set_ScreenSnap(Value: WordBool);
+begin
+  ScreenSnap := Value;
+end;
+
+procedure TNewDepositsManagerArchiveFormImpl.Set_SnapBuffer(Value: Integer);
+begin
+  SnapBuffer := Value;
+end;
+
+procedure TNewDepositsManagerArchiveFormImpl.Set_UseDockManager(Value: WordBool);
+
+begin
+  UseDockManager := Value;
+end;
+
+procedure TNewDepositsManagerArchiveFormImpl.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TNewDepositsManagerArchiveFormImpl,
+    Class_NewDepositsManagerArchiveFormImpl,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

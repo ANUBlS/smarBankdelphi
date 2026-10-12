@@ -1,0 +1,201 @@
+object FrmObl: TFrmObl
+  Left = 357
+  Top = 135
+  Caption = 'FrmObl'
+  ClientHeight = 468
+  ClientWidth = 713
+  Color = clBtnFace
+  Font.Charset = RUSSIAN_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poScreenCenter
+  OnClose = FormClose
+  OnCreate = FormCreate
+  PixelsPerInch = 96
+  TextHeight = 13
+  object SpeedButton1: TSpeedButton
+    Left = 505
+    Top = 438
+    Width = 80
+    Height = 29
+    Caption = #399'm'#601'liyyat'
+    OnClick = SpeedButton1Click
+  end
+  object SpeedButton2: TSpeedButton
+    Left = 601
+    Top = 438
+    Width = 76
+    Height = 29
+    Caption = 'Ba'#287'la'
+    OnClick = SpeedButton2Click
+  end
+  object SpeedButton3: TSpeedButton
+    Left = 412
+    Top = 438
+    Width = 75
+    Height = 29
+    Caption = 'Yoxlamaq'
+    OnClick = SpeedButton3Click
+  end
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 713
+    Height = 36
+    Align = alTop
+    BevelOuter = bvLowered
+    TabOrder = 0
+    object Label1: TLabel
+      Left = 5
+      Top = 11
+      Width = 24
+      Height = 13
+      Caption = 'Tarix'
+    end
+    object DateTimePicker1: TDateTimePicker
+      Left = 37
+      Top = 5
+      Width = 169
+      Height = 21
+      Date = 40441.451133888900000000
+      Time = 40441.451133888900000000
+      TabOrder = 0
+    end
+  end
+  object Panel2: TPanel
+    Left = 0
+    Top = 36
+    Width = 713
+    Height = 396
+    Align = alTop
+    BevelOuter = bvLowered
+    TabOrder = 1
+    object DBGridEh1: TDBGridEh
+      Left = 1
+      Top = 1
+      Width = 711
+      Height = 394
+      Align = alClient
+      DataSource = DataSource1
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      FooterColor = clWindow
+      FooterFont.Charset = RUSSIAN_CHARSET
+      FooterFont.Color = clWindowText
+      FooterFont.Height = -12
+      FooterFont.Name = 'Azl Sans Serif'
+      FooterFont.Style = []
+      Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit, dgMultiSelect]
+      OptionsEh = [dghFixed3D, dghHighlightFocus, dghClearSelection, dghFitRowHeightToText, dghDblClickOptimizeColWidth, dghDialogFind]
+      ParentFont = False
+      RowHeight = 4
+      RowLines = 1
+      TabOrder = 0
+      TitleFont.Charset = RUSSIAN_CHARSET
+      TitleFont.Color = clWindowText
+      TitleFont.Height = -12
+      TitleFont.Name = 'Tahoma'
+      TitleFont.Style = []
+      OnColumnMoved = DBGridEh1ColumnMoved
+      Columns = <
+        item
+          EditButtons = <>
+          FieldName = 'NUMBEROFCREDIT'
+          Footers = <>
+          Title.Caption = 'M'#252'qavil'#601'nin '#8470
+          Title.Color = clNavy
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -12
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 99
+        end
+        item
+          EditButtons = <>
+          FieldName = 'NAME'
+          Footers = <>
+          Title.Caption = 'Borcalan'#305'n ad'#305
+          Title.Color = clNavy
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -12
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 228
+        end
+        item
+          EditButtons = <>
+          FieldName = 'PLOR'
+          Footers = <>
+          Title.Caption = 'M'#252'qavil'#601'nin bitm'#601' tarixi'
+          Title.Color = clNavy
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -12
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 163
+        end
+        item
+          EditButtons = <>
+          FieldName = 'REST'
+          Footers = <>
+          Title.Caption = 'Kreditin qal'#305#287#305
+          Title.Color = clNavy
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -12
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 100
+        end>
+    end
+  end
+  object OracleDataSet1: TOracleDataSet
+    SQL.Strings = (
+      'select * from cm_obl_tur'
+      ''
+      'where hdate=:dat and'
+      'plor<:dat '
+      '')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000080000003A004400410054000C0000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      05000000060000000A0000004800440041005400450001000000000004000000
+      490044000100000000001C0000004E0055004D004200450052004F0046004300
+      52004500440049005400010000000000080000004E0041004D00450001000000
+      00000800000050004C004F005200010000000000080000005200450053005400
+      010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 264
+    Top = 105
+  end
+  object DataSource1: TDataSource
+    DataSet = OracleDataSet1
+    Left = 136
+    Top = 105
+  end
+  object OracleDataSet2: TOracleDataSet
+    SQL.Strings = (
+      'select * from smart.sysdat')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 256
+    Top = 193
+  end
+  object OraclePackage1: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'cm_obl'
+    ParameterMode = pmNamed
+    Left = 136
+    Top = 185
+  end
+end

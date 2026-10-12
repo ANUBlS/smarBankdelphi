@@ -1,0 +1,141 @@
+unit NewDepositDataModule;
+
+interface
+
+uses
+  SysUtils, Classes, Oracle, DB, OracleData;
+
+type
+  TNewDepsitDataModule = class(TDataModule)
+    DepositsDataSrc: TDataSource;
+    Valutes: TOracleDataSet;
+    ValutesVALUTE: TIntegerField;
+    ValutesVALU_NAME: TWideStringField;
+    ValutesDatSrc: TDataSource;
+    Filials: TOracleDataSet;
+    FilialsID: TFloatField;
+    FilialsNAME: TWideStringField;
+    FilialsDatSrc: TDataSource;
+    DepositTypes: TOracleDataSet;
+    DepositTypesID: TFloatField;
+    DepositTypesTYPE: TWideStringField;
+    DepositTypesDatSrc: TDataSource;
+    Categories: TOracleDataSet;
+    CategoriesID: TFloatField;
+    CategoriesCATEGORY: TWideStringField;
+    CategoriesDatSrc: TDataSource;
+    persons: TOracleDataSet;
+    personsID: TFloatField;
+    personsNAME: TWideStringField;
+    personsDatSrc: TDataSource;
+    BankDate: TOracleDataSet;
+    BankDateTEK_DAT: TDateTimeField;
+    BankDateDatSrc: TDataSource;
+    FilialID: TOracleDataSet;
+    FilialIDKOD_FIL: TIntegerField;
+    FilialIDDatSrc: TDataSource;
+    Stored_Programs: TOraclePackage;
+    users: TOracleDataSet;
+    usersID: TFloatField;
+    usersNAME: TWideStringField;
+    usersDatSrc: TDataSource;
+    Tranches: TOracleDataSet;
+    TranchesTOTAL: TFloatField;
+    TranchesHDATE: TDateTimeField;
+    TranchesRESERVE: TFloatField;
+    DepositsData: TOracleDataSet;
+    DepositsDataID: TFloatField;
+    DepositsDataCONTRACTNO: TWideStringField;
+    DepositsDataCONTRACTACCNO: TWideStringField;
+    DepositsDataVAL_NAME: TWideStringField;
+    DepositsDataCUSTOMERNAME: TWideStringField;
+    DepositsDataINTERESTACCNO: TWideStringField;
+    DepositsDataOPENDATE: TDateTimeField;
+    DepositsDataCLOSEDATE: TDateTimeField;
+    DepositsDataAMOUNT: TFloatField;
+    DepositsDataEKAMOUNT: TFloatField;
+    DepositsDataINTEREST: TWideStringField;
+    DepositsDataFACTICALDEBT: TFloatField;
+    DepositsDataEKFACTICALDEBT: TFloatField;
+    DepositsDataFACTICALINTERESTDEBT: TFloatField;
+    DepositsDataEKFACTICALINTERESTDEBT: TFloatField;
+    DepositsDataSTOPCALCULATIONDATE: TDateTimeField;
+    DepositsDataCURRENCY: TFloatField;
+    DepositsDataPERSONALTYPE: TFloatField;
+    DepositsDataCLIENTTYPE: TFloatField;
+    DepositsDataBRANCHID: TFloatField;
+    DepositsDataCONTRACTTYPE: TIntegerField;
+    DepositsDataSTATUS: TFloatField;
+    DepositsDataCUSTOMERID: TFloatField;
+    DepositsDataUSID: TFloatField;
+    sb_aca: TOraclePackage;
+    DMDataSrc: TDataSource;
+    DmDataSet: TOracleDataSet;
+    DmDataSetID: TFloatField;
+    DmDataSetCONTRACTNO: TWideStringField;
+    DmDataSetVAL_NAME: TWideStringField;
+    DmDataSetCUSTOMERNAME: TWideStringField;
+    DmDataSetOPENDATE: TDateTimeField;
+    DmDataSetCLOSEDATE: TDateTimeField;
+    DmDataSetAMOUNT: TFloatField;
+    DmDataSetINTEREST: TFloatField;
+    DmDataSetFACTICALDEBT: TFloatField;
+    DmDataSetFACTICALINTERESTDEBT: TFloatField;
+    DmDataSetCURRENCY: TFloatField;
+    DmDataSetPERSONALTYPE: TFloatField;
+    DmDataSetCLIENTTYPE: TFloatField;
+    DmDataSetBRANCHID: TFloatField;
+    DmDataSetCONTRACTTYPE: TIntegerField;
+    DmDataSetCUSTOMERID: TFloatField;
+    DmDataSetUSID: TFloatField;
+    DmDataSetFilial: TStringField;
+    DmDataSetOSTAT: TFloatField;
+    procedure DataModuleCreate(Sender: TObject);
+    procedure DataModuleDestroy(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  NewDepsitDataModule: TNewDepsitDataModule;
+
+implementation
+
+{$R *.dfm}
+
+uses sboapiDataModuleImpl;
+
+procedure TNewDepsitDataModule.DataModuleCreate(Sender: TObject);
+begin
+  with  DmDataSet do
+  begin
+    SetVariable('OrderField','cont.id');
+    Open;
+  end;
+
+   BankDate.Open;
+   FilialID.Open;
+   Valutes.Open;
+   Filials.Open;
+   DepositTypes.Open;
+   Categories.Open;
+   persons.Open;
+   users.Open;
+end;
+
+procedure TNewDepsitDataModule.DataModuleDestroy(Sender: TObject);
+begin
+  DmDataSet.CloseAll;
+  BankDate.Open;
+  FilialID.Open;
+  Valutes.CloseAll;
+  Filials.CloseAll;
+  DepositTypes.CloseAll;
+  Categories.CloseAll;
+  persons.CloseAll;
+  users.CloseAll;
+end;
+
+end.

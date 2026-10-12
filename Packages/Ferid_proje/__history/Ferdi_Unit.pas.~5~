@@ -1,0 +1,42 @@
+unit Ferdi_Unit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ExtCtrls, XFSCtrls, StdCtrls;
+
+type
+  TForm1 = class(TForm)
+    XFPanel1: TXFPanel;
+    XFPanel2: TXFPanel;
+    Memo1: TMemo;
+    Memo2: TMemo;
+    XFButton1: TXFButton;
+    OpenDialog1: TOpenDialog;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form1: TForm1;
+
+
+
+implementation
+uses Data_Unit;
+{$R *.DFM}
+
+   procedure InitPlugin(s:string);export;
+begin
+   Form1.ShowModal;
+end;
+exports
+     InitPlugin;
+
+initialization
+ Form1 := TForm1.Create(Application);
+
+end.

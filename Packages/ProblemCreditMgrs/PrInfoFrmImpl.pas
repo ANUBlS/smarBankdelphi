@@ -1,0 +1,63 @@
+﻿unit PrInfoFrmImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, Buttons, DBCtrls;
+
+type
+  TPrInfoFrm = class(TForm)
+    DBMemo1: TDBMemo;
+    BitBtn1: TBitBtn;
+    BitBtn2: TBitBtn;
+    procedure FormCanResize(Sender: TObject; var NewWidth, NewHeight: Integer;
+      var Resize: Boolean);
+    procedure BitBtn1Click(Sender: TObject);
+    procedure BitBtn2Click(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  PrInfoFrm: TPrInfoFrm;
+
+implementation
+ uses PrCmDMImpl;
+{$R *.dfm}
+
+procedure TPrInfoFrm.BitBtn1Click(Sender: TObject);
+begin
+    if DBMemo1.Text='' then
+begin
+ShowMessage('Məlumat sahəsi boşdur!');
+exit;
+end;
+
+PrCmDM.OracleDataSet4.post;
+PrCmDM.OracleDataSet4.refresh;
+close;
+
+end;
+
+procedure TPrInfoFrm.BitBtn2Click(Sender: TObject);
+begin
+close
+end;
+
+procedure TPrInfoFrm.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+resize:=false;
+end;
+
+procedure TPrInfoFrm.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+PrCmDM.OracleDataSet4.close;
+PrCmDM.OracleDataSet4.open;
+end;
+
+end.

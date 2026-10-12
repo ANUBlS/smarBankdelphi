@@ -1,0 +1,62 @@
+unit kassa;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls, Grids, DBGrids;
+
+type
+  Tkassa1 = class(TForm)
+    GridAccount1: TDBGrid;
+    Panel1: TPanel;
+    Edit1: TEdit;
+    Edit2: TEdit;
+    procedure Edit1Change(Sender: TObject);
+    procedure Edit2Change(Sender: TObject);
+    procedure GridAccount1DblClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+   v_kassa: String;
+   { Public declarations }
+  end;
+
+var
+  kassa1: Tkassa1;
+
+implementation
+
+uses DMBusProcSetimpl,BusinessProcessSetupImpl;
+
+{$R *.dfm}
+
+procedure Tkassa1.Edit1Change(Sender: TObject);
+begin
+ if Edit1.Text <> '' then
+
+   DMBusProcSet.ODS_kassa_b.SQL[2] := ' where symbol like (''%' +
+   Edit1.Text + '%'')'
+
+  else
+    DMBusProcSet.ODS_kassa_b.SQL[2] := '';
+   DMBusProcSet.ODS_kassa_b.Refresh;
+end;
+
+procedure Tkassa1.Edit2Change(Sender: TObject);
+begin
+  if Edit2.Text <> '' then
+     DMBusProcSet.ODS_kassa_b.SQL[3] := ' where name like (''%' +
+      Edit2.Text + '%'')'
+   else
+    DMBusProcSet.ODS_kassa_b.SQL[3] := '';
+     DMBusProcSet.ODS_kassa_b.Refresh;
+end;
+
+procedure Tkassa1.GridAccount1DblClick(Sender: TObject);
+begin
+ v_kassa := DMBusProcSet.ODS_kassa_bSYMBOL.asstring;
+ kassa1.Close;
+end;
+
+end.

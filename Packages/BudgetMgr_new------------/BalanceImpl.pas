@@ -1,0 +1,48 @@
+unit BalanceImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Grids, DBGrids, ExtCtrls, DBCtrls;
+
+type
+  TBalanceFrm = class(TForm)
+    DBGrid1: TDBGrid;
+    DBGrid2: TDBGrid;
+    DBNavigator1: TDBNavigator;
+    procedure FormCanResize(Sender: TObject; var NewWidth, NewHeight: Integer;
+      var Resize: Boolean);
+    procedure FormDestroy(Sender: TObject);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  BalanceFrm: TBalanceFrm;
+
+implementation
+
+{$R *.dfm}
+  uses DmBudcetImpl;
+procedure TBalanceFrm.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+resize:=false
+end;
+
+procedure TBalanceFrm.FormDestroy(Sender: TObject);
+begin
+DmBudcet.BalSet.close;
+end;
+
+procedure TBalanceFrm.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+  if ORD(Key) = VK_ESCAPE then
+    Close else
+end;
+
+end.

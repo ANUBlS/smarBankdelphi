@@ -1,0 +1,2174 @@
+﻿unit P_CO_Cust;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  DBCtrls, StdCtrls, Mask, ComCtrls, ExtCtrls, dblookup, Buttons,Variants,
+  DBCtrlsEh, DBGridEh, XFSCtrls,db, DBLookupEh;
+
+type
+  TP_CO_Cust_Form = class(TForm)
+    PanelMain: TPanel;
+    Label24: TLabel;
+    Label27: TLabel;
+    BtnOK: TButton;
+    BtnCancel: TButton;
+    GroupBox3: TGroupBox;
+    Label9: TLabel;
+    Label15: TLabel;
+    EditSerial: TEdit;
+    EditPassport: TEdit;
+    Label29: TLabel;
+    GroupBox4: TGroupBox;
+    Label10: TLabel;
+    Label17: TLabel;
+    EditMobil: TMaskEdit;
+    Label28: TLabel;
+    EditPhone: TMaskEdit;
+    Label18: TLabel;
+    GroupBox5: TGroupBox;
+    Label1: TLabel;
+    EditByrName: TEdit;
+    Label8: TLabel;
+    Label6: TLabel;
+    CBoxSex: TComboBox;
+    Label4: TLabel;
+    CBoxFamStatus: TComboBox;
+    GroupBox6: TGroupBox;
+    Label11: TLabel;
+    Label14: TLabel;
+    Label2: TLabel;
+    Label5: TLabel;
+    DBLCBoxVidSob: TDBLookupComboBox;
+    dblGroup: TDBLookupComboBox;
+    EditEmail: TEdit;
+    Label16: TLabel;
+    Label22: TLabel;
+    DBLCBoxPrinad: TDBLookupComboBox;
+    Label26: TLabel;
+    Label30: TLabel;
+    CBoxPassPlace: TComboBox;
+    EditPINCode: TEdit;
+    CheckBox_Phys: TCheckBox;
+    CheckBox_FS: TCheckBox;
+    Edit_voen: TEdit;
+    Label25: TLabel;
+    RadioButton_Rez: TRadioButton;
+    RadioButton_NeRez: TRadioButton;
+    Cust_Inform: TButton;
+    Label31: TLabel;
+    DB_CATEGORY: TDBLookupComboBox;
+    Label32: TLabel;
+    Label33: TLabel;
+    Note_Memo: TMemo;
+    Label34: TLabel;
+    Label35: TLabel;
+    DBCBox_Citizenship: TDBLookupComboBox;
+    DBCBox_DocTYPE: TDBLookupComboBox;
+    PanelAdditional: TPanel;
+    GroupBox7: TGroupBox;
+    Label36: TLabel;
+    Label37: TLabel;
+    Label39: TLabel;
+    Label41: TLabel;
+    Fakt_Adrs_City: TDBLookupComboBox;
+    ZipFakt: TEdit;
+    FaktAdress: TEdit;
+    BitBtn1: TBitBtn;
+    Label40: TLabel;
+    DBCBox_Citizenship2: TDBLookupComboBox;
+    Label42: TLabel;
+    DBCBox_Citizenship3: TDBLookupComboBox;
+    GroupBox8: TGroupBox;
+    c: TLabel;
+    Label44: TLabel;
+    Label45: TLabel;
+    Label46: TLabel;
+    GroupBox9: TGroupBox;
+    Address_type: TDBLookupComboBox;
+    Label47: TLabel;
+    Label48: TLabel;
+    Label49: TLabel;
+    Label50: TLabel;
+    Label52: TLabel;
+    Label53: TLabel;
+    Work_Place: TEdit;
+    Work_Post: TEdit;
+    Work_Address: TEdit;
+    Work_Phone: TEdit;
+    CountryByConctType: TDBLookupComboBox;
+    CityByConctType: TDBLookupComboBox;
+    Label54: TLabel;
+    tph_zip: TEdit;
+    tph_state: TEdit;
+    tph_adress: TEdit;
+    Label51: TLabel;
+    Label55: TLabel;
+    tph_contact_type: TDBLookupComboBox;
+    tph_communication_type: TDBLookupComboBox;
+    Label56: TLabel;
+    tph_country_prefix: TDBLookupComboBox;
+    Label57: TLabel;
+    tph_number: TEdit;
+    Label58: TLabel;
+    tph_extension: TEdit;
+    Label59: TLabel;
+    issue_country: TDBLookupComboBox;
+    DBEdit_CountryCode: TDBEdit;
+    Edit1: TEdit;
+    GroupBox1: TGroupBox;
+    Label12: TLabel;
+    Label13: TLabel;
+    Label3: TLabel;
+    EditBirthCity: TDBLookupComboBox;
+    GroupBox2: TGroupBox;
+    Label7: TLabel;
+    Label19: TLabel;
+    Label20: TLabel;
+    Label23: TLabel;
+    Label38: TLabel;
+    Adrs_City: TDBLookupComboBox;
+    Adrs_State: TDBLookupComboBox;
+    EditAdress: TEdit;
+    ZipQ: TEdit;
+    Label60: TLabel;
+    Label61: TLabel;
+    Label62: TLabel;
+    Label63: TLabel;
+    Label64: TLabel;
+    Label65: TLabel;
+    Label66: TLabel;
+    Label67: TLabel;
+    Label68: TLabel;
+    Label69: TLabel;
+    Label70: TLabel;
+    Label71: TLabel;
+    Label72: TLabel;
+    Label73: TLabel;
+    Edit_FirstName: TEdit;
+    Edit_LastName: TEdit;
+    Edit_MiddleName: TEdit;
+    Label74: TLabel;
+    Label75: TLabel;
+    Label76: TLabel;
+    Label21: TLabel;
+    Label77: TLabel;
+    Label78: TLabel;
+    Label79: TLabel;
+    Label80: TLabel;
+    Label81: TLabel;
+    Label82: TLabel;
+    Label83: TLabel;
+    Label84: TLabel;
+    GroupBox10: TGroupBox;
+    DBLC_RiskCateg: TDBLookupComboBox;
+    Label85: TLabel;
+    DTPickPassp: TDBDateTimeEditEh;
+    DTPickDocEnd: TDBDateTimeEditEh;
+    DTPBirthDate: TDBDateTimeEditEh;
+    Label86: TLabel;
+    Label88: TLabel;
+    Label89: TLabel;
+    DBLC_WorkContactType: TDBLookupComboBox;
+    Label43: TLabel;
+    DBLC_workCountry: TDBLookupComboBox;
+    DBLC_WorkCity: TDBLookupComboBox;
+    Label90: TLabel;
+    Label91: TLabel;
+    Label92: TLabel;
+    EditWorkState: TEdit;
+    EditWorkZip: TEdit;
+    Label93: TLabel;
+    DBLC_WorkPhContType: TDBLookupComboBox;
+    Label94: TLabel;
+    Label95: TLabel;
+    DBLC_WorkComnType: TDBLookupComboBox;
+    Label96: TLabel;
+    Label97: TLabel;
+    EditWorkExt: TEdit;
+    DBLC_WorkPhoneCode: TDBLookupComboBox;
+    EditWorkPhOpCode: TEdit;
+    Label98: TLabel;
+    EditWebAdrs: TEdit;
+    DBLC_CustRiskDesc: TDBLookupComboBox;
+    Label99: TLabel;
+    Label1000: TLabel;
+    DBDateTimeSamelyDate: TDBDateTimeEditEh;
+    SBtnCheckPasp: TSpeedButton;
+    LabelSamelyDate: TLabel;
+    Timer1: TTimer;
+    Label101: TLabel;
+    BirthPlace: TDBLookupComboBox;
+    Fakt_Adrs_State: TDBLookupComboBox;
+    XFGroupBox6: TXFGroupBox;
+    id_quality_DBLookupComboboxEh: TDBLookupComboboxEh;
+    ButtonMeyar: TXFButton;
+    procedure BtnOKClick(Sender: TObject);
+    procedure BirthPlaceKeyPress(Sender: TObject; var Key: Char);
+    procedure EditBirthCityKeyPress(Sender: TObject; var Key: Char);
+    procedure DBEdit1Change(Sender: TObject);
+    procedure DBEdit2Change(Sender: TObject);
+    // procedure ChBoxRezidentClick(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
+    procedure EditByrNameKeyPress(Sender: TObject; var Key: Char);
+    procedure DTPBirthDateKeyPress(Sender: TObject; var Key: Char);
+    procedure CBoxSexKeyPress(Sender: TObject; var Key: Char);
+    procedure CBoxFamStatusKeyPress(Sender: TObject; var Key: Char);
+    procedure EditAdressKeyPress(Sender: TObject; var Key: Char);
+    procedure EditEmailKeyPress(Sender: TObject; var Key: Char);
+    procedure EditSerialKeyPress(Sender: TObject; var Key: Char);
+    procedure EditPassportKeyPress(Sender: TObject; var Key: Char);
+    procedure BtnOKKeyPress(Sender: TObject; var Key: Char);
+    procedure EditMobilKeyPress(Sender: TObject; var Key: Char);
+    procedure BtnCancelClick(Sender: TObject);
+    procedure CheckBox_FSClick(Sender: TObject);
+    procedure RadioButton_RezClick(Sender: TObject);
+    procedure RadioButton_NeRezClick(Sender: TObject);
+    procedure Cust_InformClick(Sender: TObject);
+    procedure BitBtn1Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure OpenAdditional;
+    procedure Edit_LastNameChange(Sender: TObject);
+    procedure EditPassportExit(Sender: TObject);
+    procedure Timer1Timer(Sender: TObject);
+    procedure ChechPasp;
+    procedure SBtnCheckPaspClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure DBCBox_DocTYPECloseUp(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure ButtonMeyarClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    procedure SelectSettings;
+
+  end;
+
+var
+  P_CO_Cust_Form: TP_CO_Cust_Form;
+  AddUpd: Boolean; { Add customer - true, Edit customer - false }
+  p_cust_type: integer;
+
+var
+  form_is_full: Boolean;
+
+implementation
+
+uses P_Datamod_Unit, sboapiDataModuleImpl, SBTranslateProc, phy_cust_Unit,FSCustInfoFormImpl,
+  addcombobox, Unit_id_quality;
+{$R *.DFM}
+
+procedure  TP_CO_Cust_Form.ChechPasp;
+var
+v_custtype:String;
+begin
+
+   if label9.Visible=true then
+   begin
+   if (RadioButton_Rez.Checked = true) and
+    ((EditSerial.Text = '') or (EditPassport.Text = '')) then
+  begin
+
+    EditSerial.Color:=clRed;
+    EditPassport.Color:=clRed;
+    ShowMessage('Pasport məlumatlarını daxil edin!');
+    Exit;
+
+  end;
+ end
+ else
+  if label9.Visible=true then
+  begin
+  if EditPassport.Text = '' then
+  begin
+
+    EditPassport.Color:=clRed;
+    ShowMessage('Pasport məlumatlarını daxil edin!');
+    Exit;
+  end
+  end
+  else
+  begin
+
+   EditSerial.Color:=clLime;
+   EditPassport.Color:=clLime;
+   end;
+
+    with P_Datamodule.Pasp do
+    begin
+    SetVariable('pNum', EditSerial.Text + EditPassport.Text);
+    if not Active then
+      Open
+    else
+      Refresh;
+    end;
+  case P_Datamodule.Pasp.FieldByName('CUST_TYPE').AsInteger of
+  1:v_custtype:='Fiziki';
+  3:v_custtype:='Fiziki və sahibkar';
+  4:v_custtype:='Nominal';
+  end;
+
+  if (AddUpd = true) and (P_Datamodule.Pasp.RecordCount<>0) then
+  begin
+    EditSerial.Color:=clRed;
+    EditPassport.Color:=clRed;
+    ShowMessage('Pasport №-si '+P_Datamodule.Pasp.FieldByName('ID').AsString+' ID-li '+
+    v_custtype+ ' müştəri üçün qeydiyyatdan keçmişdir!');
+    Exit;
+  end
+  else
+  begin
+    EditSerial.Color:=clLime;
+    EditPassport.Color:=clLime;
+  end;
+
+  if (AddUpd = False) and (P_Datamodule.Pasp.RecordCount<>0) and
+    (P_Datamodule.Pasp.FieldByName('ID').AsString <> P_Datamodule.P_Customers.FieldByName('ID').AsString) then
+  begin
+    EditSerial.Color:=clRed;
+    EditPassport.Color:=clRed;
+    ShowMessage('Pasport №-si '+P_Datamodule.Pasp.FieldByName('ID').AsString+' ID-li '+
+    v_custtype+' müştəri üçün qeydiyyatdan keçmişdir!');
+    Exit;
+  end
+  else
+  begin
+    EditSerial.Color:=clLime;
+    EditPassport.Color:=clLime;
+  end;
+end;
+
+procedure TP_CO_Cust_Form.SBtnCheckPaspClick(Sender: TObject);
+begin
+ChechPasp;
+end;
+
+procedure TP_CO_Cust_Form.SelectSettings;
+var
+risk_descPERIOD:Integer;
+begin
+  with P_Datamodule.P_Customers do
+  begin
+
+    EditByrName.Text := FieldByName('CUST_NAME').AsString;
+    if FieldByName('NEREZIDENT').AsInteger = 1 then
+      RadioButton_Rez.Checked := true
+    else
+      RadioButton_NeRez.Checked := true;
+
+    BirthPlace.keyvalue := FieldByName('BIRTHPLACE').AsString;
+
+   if not (FieldByName('BIRTHDATE').isNUll) then
+    DTPBirthDate.Value := int(FieldByName('BIRTHDATE').AsVariant)
+    else
+    DTPBirthDate.Value := null;
+
+
+    EditBirthCity.keyvalue := FieldByName('BIRTH_STATE').AsString;
+    EditAdress.Text := FieldByName('ADRESS').AsString;
+    Fakt_Adrs_State.KeyValue:=FieldByName('fakt_country').AsString;
+    Fakt_Adrs_City.KeyValue:= FieldByName('fakt_city').AsString;
+    FaktAdress.Text := FieldByName('fakt_adress').AsString;
+    EditEmail.Text := FieldByName('EMAIL').AsString;
+    EditPassport.Text := FieldByName('passp_number').AsString;
+    EditSerial.Text := FieldByName('PASSPORT').AsString;
+    EditMobil.Text := FieldByName('phone_mob').AsString;
+    EditPhone.Text := FieldByName('PHONE').AsString;
+    CBoxFamStatus.ItemIndex := FieldByName('FAM_STATUS').AsInteger - 1;
+    CBoxSex.ItemIndex := FieldByName('SEX').AsInteger - 1;
+    EditEmail.Text := FieldByName('email').AsString;
+    dblGroup.keyvalue := FieldByName('group_klie').AsVariant;
+    Adrs_State.keyvalue := FieldByName('ADRS_STATE').AsWideString;
+    Adrs_City.keyvalue := FieldByName('ADRS_CITY').AsWideString;
+
+    if not (FieldByName('Passp_date').isNUll) then
+    DTPickPassp.Value :=FieldByName('Passp_date').AsVariant
+    else
+    DTPickPassp.Value := null;
+
+
+    DBLCBoxVidSob.keyvalue := FieldByName('Vid_Sob').AsVariant;
+    DBLCBoxPrinad.keyvalue := FieldByName('Prinad').AsVariant;
+
+    DBCBox_DocTYPE.keyvalue := FieldByName('Doc_Type').AsInteger;
+    CBoxPassPlace.Text := FieldByName('PaspPlace').AsString;
+    EditPINCode.Text := FieldByName('PassPIN').AsString;
+    Edit_voen.Text := FieldByName('INN').AsString;
+    DB_CATEGORY.keyvalue := FieldByName('Category').AsInteger;
+    DBCBox_Citizenship.keyvalue := FieldByName('Citizenship').AsInteger;
+
+    if not (FieldByName('PASSEXPIRE').isNUll) then
+    DTPickDocEnd.Value := FieldByName('PASSEXPIRE').AsVariant
+    else
+    DTPickDocEnd.Value := null;
+
+
+    Note_Memo.Text := FieldByName('NOTE').AsString;
+    DBCBox_Citizenship2.keyvalue := FieldByName('citizenship2').AsInteger;
+    DBCBox_Citizenship3.keyvalue := FieldByName('citizenship3').AsInteger;
+    issue_country.keyvalue := FieldByName('doc_country').AsInteger;
+    ZipQ.Text := FieldByName('reg_zip').AsString;
+    ZipFakt.Text := FieldByName('fakt_zip').AsString;
+    Work_Place.Text := FieldByName('work_place').AsString;
+    Work_Post.Text := FieldByName('work_post').AsString;
+    Work_Address.Text := FieldByName('work_adress').AsString;
+    Work_Phone.Text := FieldByName('work_phone').AsString;
+    Address_type.keyvalue := FieldByName('contact_type').AsString;
+    CountryByConctType.keyvalue := FieldByName('tph_country').AsInteger;
+    CityByConctType.keyvalue := FieldByName('tph_city').AsInteger;
+    tph_state.Text := FieldByName('tph_state').AsString;
+    tph_zip.Text := FieldByName('tph_zip').AsString;
+    tph_adress.Text := FieldByName('tph_adress').AsString;
+    tph_contact_type.keyvalue := FieldByName('tph_contact_type').AsString;
+    tph_communication_type.keyvalue :=
+      FieldByName('tph_communication_type').AsString;
+    tph_country_prefix.keyvalue := FieldByName('tph_country_prefix').AsInteger;
+    tph_number.Text := FieldByName('tph_number').AsString;
+    tph_extension.Text := FieldByName('tph_extension').AsString;
+    Edit_FirstName.Text:= FieldByName('name').AsString;
+    Edit_LastName.Text:=FieldByName('lastname').AsString;
+    Edit_MiddleName.text:=FieldByName('soname').AsString;
+    DBLC_RiskCateg.KeyValue:=FieldByName('risk_categ').AsInteger;
+    DBLC_CustRiskDesc.KeyValue:=FieldByName('RISKDESCID').AsInteger;
+    risk_descPERIOD:=P_DataModule.cust_risk_descDATE_PERIOD.AsInteger;
+
+    if not (FieldByName('SAMELYDATE').isNUll) then
+    DBDateTimeSamelyDate.Value := FieldByName('SAMELYDATE').AsVariant
+    else
+    DBDateTimeSamelyDate.Value := null;
+
+
+    if not (FieldByName('SAMELYDATE').isNUll) then
+    begin
+
+    if
+    P_Datamodule.SysdatTEK_DAT.AsDateTime=
+    IncMonth(FieldByName('SAMELYDATE').AsDatetime,risk_descPERIOD)
+     then
+    begin
+    LabelSamelyDate.Caption:='Diqqət: Bugün bu müştərinin eyniləşdirmə tarixidir!';
+    LabelSamelyDate.Visible:=True;
+    Timer1.Enabled:=True;
+    OpenAdditional;
+    end
+    else
+
+    if
+    P_Datamodule.SysdatTEK_DAT.AsDateTime>
+    IncMonth(FieldByName('SAMELYDATE').AsDatetime,risk_descPERIOD) then
+    begin
+    LabelSamelyDate.Caption:='Diqqət: Müştərinin eyniləşdirmə tarixi bitmişdir!';
+    LabelSamelyDate.Visible:=True;
+    Timer1.Enabled:=True;
+    OpenAdditional;
+    end
+    else
+    begin
+    LabelSamelyDate.Visible:=False;
+    Timer1.Enabled:=False;
+    end;
+
+    end
+    else
+    begin
+    LabelSamelyDate.Visible:=False;
+    Timer1.Enabled:=False;
+    end;
+     if not (FieldByName('quality_id').isNUll) then
+    id_quality_DBLookupComboboxEh.KeyValue := FieldByName('quality_id').AsInteger;
+
+    //if not (FieldByName('WORK_ADRS_SPEC').isNUll) then
+    DBLC_WorkContactType.KeyValue := 'A';//FieldByName('WORK_ADRS_SPEC').AsString
+   // else   DBLC_WorkContactType.KeyValue := '';
+
+    if not (FieldByName('WORK_CNTR').isNUll) then
+    DBLC_workCountry.KeyValue := FieldByName('WORK_CNTR').AsInteger
+    else
+    DBLC_workCountry.KeyValue := null;
+
+    if not (FieldByName('WORK_CITY').isNUll) then
+    DBLC_WorkCity.KeyValue := FieldByName('WORK_CITY').AsInteger
+    else
+    DBLC_WorkCity.KeyValue := null;
+
+    EditWorkState.Text:=FieldByName('WORK_STATE').AsString;
+    EditWorkZip.Text:=FieldByName('WORK_ZIP').AsString;
+
+     //if not (FieldByName('WORK_PHCONTTYPE').isNUll) then
+    DBLC_WorkPhContType.KeyValue := 'A';//FieldByName('WORK_PHCONTTYPE').AsString
+    //else DBLC_WorkPhContType.KeyValue := '';
+
+     if not (FieldByName('WORK_PHONE_SPEC').isNUll) then
+    DBLC_WorkComnType.KeyValue := FieldByName('WORK_PHONE_SPEC').AsString
+    else
+    DBLC_WorkComnType.KeyValue := '';
+
+     if not (FieldByName('WORK_PHCODE').isNUll) then
+    DBLC_WorkPhoneCode.KeyValue := FieldByName('WORK_PHCODE').AsInteger
+    else
+    DBLC_WorkPhoneCode.KeyValue := 0;
+
+     EditWorkPhOpCode.Text:=FieldByName('WORK_PHOPPREF').AsString;
+     EditWorkExt.Text:=FieldByName('WORK_PHEXT').AsString;
+
+
+    if FieldByName('CUST_TYPE').AsInteger = 1 then
+    begin
+      CheckBox_Phys.Checked := true;
+      CheckBox_FS.Checked := False;
+    end;
+
+    if FieldByName('CUST_TYPE').AsInteger = 2 then
+    begin
+      CheckBox_Phys.Checked := False;
+      CheckBox_FS.Checked := true;
+    end;
+
+    if FieldByName('CUST_TYPE').AsInteger = 3 then
+    begin
+      CheckBox_Phys.Checked := true;
+      CheckBox_FS.Checked := true;
+    end;
+  end;
+end;
+
+procedure TP_CO_Cust_Form.Timer1Timer(Sender: TObject);
+begin
+if LabelSamelyDate.Font.Color=clGreen then
+LabelSamelyDate.Font.Color:=clRed
+else
+LabelSamelyDate.Font.Color:=clGreen;
+end;
+
+procedure TP_CO_Cust_Form.BtnOKClick(Sender: TObject);
+var
+  p_ID: integer;
+  p_cust_name: string;
+  p_passport: string;
+  p_birthdate: variant;
+  p_birthplace: variant;
+  p_fam_status: integer;
+  p_adress: string;
+  p_faktAdress: string;
+  p_phone: string;
+  p_email: string;
+  p_sex: integer;
+  p_passp_number: string;
+  p_adrs_state: Variant;
+  p_adrs_city: Variant;
+  p_birthCity:variant;
+  p_phone_mob: string;
+  p_passp_date: variant;
+  p_nerezident: integer;
+  p_PassPlace: string;
+  p_PINCode: string;
+  p_category: integer;
+  p_Citizenship: variant;
+  p_PASSEXPIRE: Variant;
+  p_DocType: Variant;
+  p_Note: WideString;
+  p_reg_zip: string;
+  p_doc_country: Variant;
+  p_citizenship2: integer;
+  p_citizenship3: Variant;
+  p_fakt_country: Variant;
+  p_fakt_city: Variant;
+  p_fakt_zip: String;
+  p_work_place: String;
+  p_work_post: String;
+  p_work_adress: String;
+  p_work_phone: String;
+  p_tph_contact_type: Variant;
+  p_tph_country: Variant;
+  p_tph_country_code: String;
+  p_tph_city: Variant;
+  p_tph_state: String;
+  p_tph_zip: String;
+  p_tph_country_prefix: integer;
+  p_tph_adress: String;
+  p_tph_communication_type: variant;
+  p_tph_number: String;
+  p_tph_extension: String;
+  p_Contact_type: Variant;
+  p_Lastname:String;
+  p_FirstName:String;
+  p_MiddleName:String;
+  p_risk_categ:Variant;
+  p_RISKDESCID:Variant;
+  p_samelydate:Variant;
+  p_work_adrs_spec:String;
+  p_work_city:Integer;
+  p_work_state:String;
+  p_work_zip:String;
+  p_work_cntr:Integer;
+  p_work_phone_spec:String;
+  p_work_phconttype:String;
+  p_work_phoppref:String;
+  p_work_phext:String;
+  p_work_phcode:Integer;
+  p_quality_id:integer;
+  v_custtype:String;
+begin
+   if Label76.Visible=true then
+   begin
+    if (Trim(Edit_LastName.Text) ='') then
+    begin
+    ShowMessage('Müştərinin soyadı daxil edilməlidir!');
+    Exit;
+    end;
+    end;
+
+   if Label75.Visible=true then
+   begin
+   if (Trim(Edit_FirstName.Text) = '') then
+    begin
+    ShowMessage('Müştərinin adı daxil edilməlidir!');
+    Exit;
+    end;
+    end;
+   if RadioButton_NeRez.Checked=false then
+   if Label74.Visible=true then
+   begin
+   if (Trim(Edit_MiddleName.Text) = '') then
+    begin
+    ShowMessage('Müştərinin ata adı daxil edilməlidir!');
+    Exit;
+    end;
+    end;
+
+   // ChechPasp;
+   if Label9.Visible=true then
+  begin
+  if (RadioButton_Rez.Checked = true) and
+    ((EditSerial.Text ='') or (EditPassport.Text ='')) then
+  begin
+    ShowMessage('Pasport məlumatlarını daxil edin');
+    Exit;
+  end
+  else if EditPassport.Text = '' then
+  begin
+    ShowMessage('Pasport məlumatlarını daxil edin');
+    Exit;
+  end;
+
+ end;
+
+
+    with P_Datamodule.Pasp do
+    begin
+    Close;
+    SetVariable('pNum', EditSerial.Text + EditPassport.Text);
+    Open;
+    end;
+
+   case P_Datamodule.Pasp.FieldByName('CUST_TYPE').AsInteger of
+  1:v_custtype:='Fiziki';
+  3:v_custtype:='Fiziki və sahibkar';
+  4:v_custtype:='Nominal';
+  end;
+
+  if (AddUpd = true) and (P_Datamodule.Pasp.RecordCount<>0) then
+  begin
+    EditSerial.Color:=clRed;
+    EditPassport.Color:=clRed;
+    ShowMessage('Pasport №-si '+P_Datamodule.Pasp.FieldByName('ID').AsString+' ID-li '+
+    v_custtype+ ' müştəri üçün qeydiyyatdan keçmişdir!');
+    Exit;
+  end
+  else
+  begin
+    EditSerial.Color:=clLime;
+    EditPassport.Color:=clLime;
+  end;
+
+  if (AddUpd = False) and (P_Datamodule.Pasp.RecordCount<>0) and
+    (P_Datamodule.Pasp.FieldByName('ID').AsString <> P_Datamodule.P_Customers.FieldByName('ID').AsString) then
+  begin
+    EditSerial.Color:=clRed;
+    EditPassport.Color:=clRed;
+    ShowMessage('Pasport №-si '+P_Datamodule.Pasp.FieldByName('ID').AsString+' ID-li '+
+    v_custtype+' müştəri üçün qeydiyyatdan keçmişdir!');
+    Exit;
+  end
+  else
+  begin
+    EditSerial.Color:=clLime;
+    EditPassport.Color:=clLime;
+  end;
+
+  if label86.Visible=true then
+   begin
+  if DTPickPassp.Value=null then
+  begin
+    ShowMessage('Sənədin verildiyi tarixi daxil edin!');
+    Exit;
+  end;
+  end;
+
+  if label101.Visible=true then
+    begin
+  if (DTPickDocEnd.Value=null) and (DBCBox_DocTYPE.KeyValue=1) then
+  begin
+    ShowMessage('Sənədin etibarlıq tarixin daxil edin!');
+    Exit;
+  end;
+  end;
+
+  if label88.Visible=true then
+  begin
+  if DTPBirthDate.Value=null then
+  begin
+    ShowMessage('Müştərinin doğum tarixin daxil edin');
+    Exit;
+  end;
+  end;
+
+  if label5.Visible=true then
+  begin
+  if DBLCBoxVidSob.Text = '' then
+  begin
+    ShowMessage('Mülkiyyət növünü daxil edin');
+    Exit;
+  end;
+  end;
+
+  if label60.Visible=true then
+  begin
+  if (CheckBox_FS.Checked) and (trim(Edit_voen.Text)='') then
+  begin
+    ShowMessage('VÖEN daxil edilməlidir!');
+    Exit;
+  end;
+  end;
+
+  if not((CheckBox_Phys.Checked) or (CheckBox_FS.Checked)) then
+  begin
+    ShowMessage('Müştərinin tipi seçilməyib');
+    Exit;
+  end;
+       ///if label75.Visible=true then
+       //                       begin
+   // if (Trim(EditByrName.Text) = '') then
+//    begin
+ //   ShowMessage('Müştərinin adı daxil edilməlidir!');
+ //   Exit;
+ //   end;
+   //                           end;
+    if Label16.Visible=true then
+    begin
+    if (trim(CBoxSex.Text) = '') then
+    begin
+    ShowMessage('Müştərinin cinsi daxil edilməlidir!');
+    Exit;
+    end;
+    end;
+
+    if label82.Visible=true then
+    begin
+    if (trim(CBoxPassPlace.Text) = '') then
+    begin
+    ShowMessage('Pasportun verildiyi yer daxil edilməlidir!');
+    Exit;
+    end;
+    end;
+
+    if label70.Visible=true then
+    begin
+    if (trim(EditPINCode.Text) = '')
+    and (P_DataModule.Doc_Types.FieldByName('PinCodForced').asInteger=1)  then
+    begin
+    ShowMessage('Pasportun Pin kodu daxil edilməlidir!');
+    Exit;
+    end;
+    end;
+
+    if label23.Visible=true then
+    begin
+    if (Trim(EditAdress.Text) = '') then
+    begin
+    ShowMessage('Müştərinin qeydiyyat ünvanı daxil edilməlidir!');
+    Exit;
+    end ;
+    end;
+
+    if label10.Visible=true then
+    begin
+    if (Trim(EditMobil.Text) = '') then
+    begin
+    ShowMessage('Müştərinin mobil telefon nömrəsi daxil edilməlidir!');
+    Exit;
+    end;
+    end;
+
+
+    if label28.Visible=true then
+    begin
+    if Trim(EditPhone.Text) = '' then
+    begin
+    ShowMessage('Müştərinin şəhər telefon nömrəsi daxil edilməlidir!');
+    Exit;
+    end;
+    end;
+      p_cust_name := EditByrName.Text;
+      p_passport := EditPassport.Text;
+      p_birthdate := DTPBirthDate.Value;
+
+      if LABEL80.Visible=TRUE then
+      BEGIN
+      if BirthPlace.keyvalue =null then
+      begin
+      showmessage('Müştərinin doğulduğu ölkə daxil edilməlidir!');
+      Exit;
+//        p_Citizenship := 0;
+      end;
+      END;
+
+      if label81.Visible=true then
+       begin
+      if  (EditBirthCity.keyvalue = '') then
+       begin
+      showmessage('Müştərinin doğulduğu şəhər daxil edilməlidir!');
+      Exit;
+//        p_Citizenship := 0;
+      end;
+      end;
+
+      if label83.Visible=true then
+      begin
+      if (trim(FaktAdress.Text) = '') then
+      begin
+      ShowMessage('Müştərinin faktiki ünvanı daxil edilməlidir!');
+      Exit;
+      end
+      end;
+
+      p_birthCity:=EditBirthCity.keyvalue;
+      p_birthplace := BirthPlace.keyvalue ;
+      p_faktAdress := FaktAdress.Text;
+
+      p_adress := EditAdress.Text;
+      p_phone := EditPhone.Text;
+      p_email := EditEmail.Text;
+      p_passp_number := EditSerial.Text;
+      p_birthCity := EditBirthCity.Text;
+      p_phone_mob := EditMobil.Text;
+      p_passp_date :=DTPickPassp.Value;
+      p_PassPlace := CBoxPassPlace.Text;
+      p_Lastname := Edit_LastName.Text;
+      p_FirstName := Edit_FirstName.Text;
+      p_MiddleName:= Edit_MiddleName.Text;
+
+
+//      if not (trim(EditPINCode.Text)='') then
+      p_PINCode := EditPINCode.Text;
+   {   else
+      begin
+      showmessage('Sənədin pin kodu daxil edilməlidir!');
+      Exit;
+      end;
+    }
+      p_category := DB_CATEGORY.keyvalue;
+      p_fam_status := CBoxFamStatus.ItemIndex + 1;
+      p_sex := CBoxSex.ItemIndex + 1;
+
+      if Label62.Visible=true then
+      begin
+      if (DBCBox_Citizenship.keyvalue = null) then
+      begin
+      showmessage('Müştərinin vətəndaşlığı daxil edilməlidir!');
+      Exit;
+//        p_Citizenship := 0;
+      end;
+      end;
+
+      if  label63.Visible=true then
+        begin
+      if  (DBCBox_DocTYPE.keyvalue = null) then
+      begin
+      showmessage('Sənədin növü daxil edilməlidir!');
+      Exit;
+//        p_DocType := 0;
+      end;
+      end;
+
+
+
+        p_Citizenship := DBCBox_Citizenship.keyvalue ;
+        p_DocType := DBCBox_DocTYPE.keyvalue ;
+      {if DTPickDocEnd.Value=null then
+      p_PASSEXPIRE := null
+      else }
+       p_PASSEXPIRE :=DTPickDocEnd.Value;
+
+      p_Note := Note_Memo.Text;
+      p_reg_zip := ZipQ.Text;
+
+      if label64.Visible=true then
+      begin
+      if  (issue_country.keyvalue = null) then
+
+       begin
+      showmessage('Sənədin verildiyi ölkə daxil edilməlidir!');
+      Exit;
+//        p_doc_country := 0;
+      end;
+     end;
+
+       if label21.Visible=true then
+       begin
+       if  (Adrs_State.keyvalue = null) then
+       begin
+       showmessage('Müştərinin qeydiyyatda olduğu ölkə daxil edilməlidir!');
+       Exit;
+       end;
+       end;
+
+      if label77.Visible=true then
+      begin
+       if  (Adrs_City.keyvalue = null) then
+       begin
+     showmessage('Müştərinin qeydiyyatda olduğu şəhər daxil edilməlidir!');
+      Exit;
+      end;
+      end;
+
+      p_doc_country := issue_country.keyvalue;
+      p_adrs_state := Adrs_State.KeyValue ;
+      p_adrs_city := Adrs_City.KeyValue;
+
+
+      if not (DBCBox_Citizenship2.keyvalue = null) then
+        p_citizenship2 := DBCBox_Citizenship2.keyvalue
+      else
+        p_citizenship2 := 0;
+
+      if not (DBCBox_Citizenship3.keyvalue = null) then
+        p_citizenship3 := DBCBox_Citizenship3.keyvalue
+      else
+        p_citizenship3 := 0;
+
+
+      if LABEL78.Visible=TRUE then
+       begin
+      if (Fakt_Adrs_State.keyvalue = null) then
+      begin
+      showmessage('Müştərinin faktiki yaşadığı ölkə daxil edilməlidir!');
+      Exit;
+      end;
+      end;
+
+     if label79.Visible=true then
+     begin
+      if  (Fakt_Adrs_City.keyvalue = null) then
+
+      begin
+      showmessage('Müştərinin faktiki yaşadığı şəhər daxil edilməlidir!');
+      Exit;
+      end;
+      end;
+
+      p_fakt_country := Fakt_Adrs_State.keyvalue  ;
+      p_fakt_city := Fakt_Adrs_City.keyvalue ;
+      p_fakt_zip := ZipFakt.Text;
+      p_work_place := Work_Place.Text;
+      p_work_post := Work_Post.Text;
+      p_work_adress := Work_Address.Text;
+      p_work_phone := Work_Phone.Text;
+
+   if label61.Visible=true then
+     begin
+    if Address_type.keyvalue =null then       //String
+    begin
+    OpenAdditional;
+
+    showmessage('Əlaqə növü daxil edilməlidir!');
+    Exit;
+    //p_tph_contact_type := '';
+    end;
+    end;
+
+
+    if label65.Visible=true then
+    begin
+      if  (CountryByConctType.keyvalue = null) then
+
+
+      begin
+      OpenAdditional;
+      showmessage('Əlaqə növünə görə ölkə daxil edilməlidir!');
+      Exit;
+//       p_tph_country := 0;
+      end;
+      end;
+
+
+       p_Contact_type := Address_type.keyvalue;
+       p_tph_country := CountryByConctType.keyvalue  ;
+       p_tph_country_code :=DBEdit_CountryCode.Text;
+
+      if label66.Visible=true then
+      begin
+      if  (CityByConctType.keyvalue = null) then
+      begin
+      OpenAdditional;
+      showmessage('Əlaqə növünə görə şəhər daxil edilməlidir!');
+      Exit;
+//        p_tph_city := 0;
+      end;
+      end;
+      p_tph_city := CityByConctType.keyvalue ;
+      p_tph_state := tph_state.Text;
+      p_tph_zip := tph_zip.Text;
+
+      if not (tph_country_prefix.keyvalue = null) then
+        p_tph_country_prefix := tph_country_prefix.keyvalue
+      else
+        p_tph_country_prefix := 0;
+
+      if label84.Visible=true then
+      begin
+      if (trim(tph_adress.Text) = '') then
+      begin
+      OpenAdditional;
+      ShowMessage('Müştərinin əlaqə növünə görə ünvanı daxil edilməlidir!');
+      Exit;
+      end;
+      end;
+       p_tph_adress := tph_adress.Text;
+
+      if label68.Visible=true then
+      begin
+      if  (tph_communication_type.keyvalue = null) then       //String
+
+       begin
+      OpenAdditional;
+      showmessage('Rabitə növünə görə telefon nömrəsinin tipi daxil edilməlidir!');
+      Exit;
+//      p_tph_communication_type := '';
+      end;
+      end;
+       p_tph_communication_type := tph_communication_type.keyvalue;
+
+      if label69.Visible=true then
+      begin
+      if  (trim(tph_number.Text)='') then
+      begin
+      OpenAdditional;
+      showmessage('Əlaqə növünə görə nömrə daxil edilməlidir!');
+      Exit;
+      end;
+      end;
+       p_tph_number := tph_number.Text;
+      p_tph_extension := tph_extension.Text;
+
+      if label67.Visible=true then
+      begin
+      if  (tph_contact_type.keyvalue = null) then          //String
+            begin
+      OpenAdditional;
+      showmessage('Əlaqə növünə görə telefon nömrəsinin tipi daxil edilməlidir!');
+      Exit;
+//      p_Contact_type := '';
+      end;
+      end;
+       p_tph_contact_type := tph_contact_type.keyvalue;
+      if RadioButton_Rez.Checked = true then
+        p_nerezident := 1;
+      if RadioButton_NeRez.Checked = true then
+        p_nerezident := 0;
+
+      if (CheckBox_Phys.Checked) and not(CheckBox_FS.Checked) then
+        p_cust_type := 1;
+      if not(CheckBox_Phys.Checked) and (CheckBox_FS.Checked) then
+        p_cust_type := 2;
+      if (CheckBox_Phys.Checked) and (CheckBox_FS.Checked) then
+        p_cust_type := 3;
+
+
+       if label89.Visible=true then
+       begin
+      if trim(DBLC_RiskCateg.text) ='' then          //Integer
+        begin
+        OpenAdditional;
+        showmessage('Müştərinin risk kateqoriyası daxil edilməlidir!');
+
+        Exit;
+        end;
+        end;
+
+
+         p_risk_categ := DBLC_RiskCateg.KeyValue;
+      { if ChBoxRezident.Checked = true then p_nerezident :=1
+        else p_nerezident :=0;
+        }
+       if label1000.Visible=true then
+       begin
+       if  (DBDateTimeSamelyDate.value = null) then          //Integer
+       begin
+        OpenAdditional;
+        showmessage('Müştərinin eyniləşdirmə tarixi daxil edilməlidir!');
+        Exit;
+        end;
+        end;
+        p_samelydate := DBDateTimeSamelyDate.Value;
+
+       if not  (DBLC_CustRiskDesc.keyvalue = null) then          //Integer
+        p_RISKDESCID := DBLC_CustRiskDesc.KeyValue;
+
+
+       //if not (DBLC_WorkContactType.KeyValue = null) then          //String
+       p_work_adrs_spec :='A';// DBLC_WorkContactType.KeyValue
+       {else
+        begin
+       OpenAdditional;
+       showmessage('İş yerinin ünvanın təyinatı daxil edilməlidir!');
+       Exit;
+       end;
+        }
+
+        if not (DBLC_WorkCity.KeyValue = null) then          //Integer
+        p_work_city := DBLC_WorkCity.KeyValue;
+       // else p_work_city := null;
+
+        p_work_state:=EditWorkState.Text;
+        p_work_zip:=EditWorkZip.Text;
+
+        if not (DBLC_workCountry.KeyValue = null) then          //Integer
+        p_work_cntr := DBLC_workCountry.KeyValue;
+        //else p_work_cntr := null;
+
+         if not (trim(DBLC_WorkComnType.KeyValue) = '') then          //String
+        p_work_phone_spec := DBLC_WorkComnType.KeyValue
+        else
+        p_work_phone_spec := '';
+
+        // if not (DBLC_WorkPhContType.KeyValue = null) then          //String
+        p_work_phconttype :='A';// DBLC_WorkPhContType.KeyValue
+       // else p_work_phconttype := null;
+
+        p_work_phoppref:=EditWorkPhOpCode.Text;
+        p_work_phext:=EditWorkExt.Text;
+
+          if not (DBLC_WorkPhoneCode.KeyValue = null) then          //Integer
+        p_work_phcode := DBLC_WorkPhoneCode.KeyValue
+        else p_work_phcode := null;
+
+      if not (id_quality_DBLookupComboboxEh.KeyValue = null) then          //Integer
+        p_quality_id := id_quality_DBLookupComboboxEh.KeyValue;
+
+      if AddUpd = true then
+      begin
+        with P_Datamodule do
+        begin
+
+            p_ID:=phys_fs_customers.CallIntegerFunction('add_p_customers',
+            [p_cust_name,p_quality_id, p_passp_number, p_birthdate, p_birthplace,
+            p_fam_status, p_adress, p_faktAdress, p_phone, p_email, p_sex,
+            p_passport, p_adrs_state, p_adrs_city, p_birthCity, p_phone_mob,
+            Edit_voen.Text, dblGroup.keyvalue, p_passp_date, p_nerezident,
+            DBLCBoxVidSob.keyvalue, DBLCBoxPrinad.keyvalue, p_PassPlace,
+            p_PINCode, p_Citizenship, p_PASSEXPIRE, p_DocType, p_Note,
+            p_cust_type, p_category, p_reg_zip, p_doc_country, p_citizenship2,
+            p_citizenship3, p_fakt_country, p_fakt_city, p_fakt_zip,
+            p_work_place, p_work_post, p_work_adress, p_work_phone,
+            p_Contact_type, p_tph_country, p_tph_country_code, p_tph_city,
+            p_tph_state, p_tph_zip, p_tph_country_prefix, p_tph_adress,
+            p_tph_communication_type, p_tph_number, p_tph_extension,
+            p_tph_contact_type,p_Lastname,p_FirstName,p_MiddleName,
+            p_risk_categ,p_RISKDESCID,p_samelydate,p_work_adrs_spec,
+            p_work_city,p_work_state,p_work_zip,p_work_cntr,
+            p_work_phone_spec,p_work_phconttype,p_work_phoppref,
+            p_work_phext,p_work_phcode]);
+
+          Edit_LastName.Text:='';
+          Edit_FirstName.Text:='';
+          Edit_MiddleName.Text:='';
+          EditByrName.Text := '';
+          EditPassport.Text := '';
+          EditMobil.Text := '';
+          EditPhone.Text := '';
+          EditEmail.Text := '';
+          Edit_voen.Text := '';
+          CheckBox_Phys.Checked := False;
+          CheckBox_FS.Checked := False;
+          RadioButton_Rez.Checked := true;
+         // EditByrName.SetFocus;
+        end; { with P_DataModule }
+
+            P_Datamodule.P_Customers.Close;
+            P_Datamodule.P_Customers.Open;
+            P_Datamodule.P_Customers.Last;
+       end;
+
+      if AddUpd = False then
+ begin
+        with P_Datamodule do
+        begin
+
+          p_ID := P_Customers.FieldByName('ID').AsInteger;
+          p_ID:=phys_fs_customers.CallIntegerFunction('upd_p_customes',
+            [p_ID, p_cust_name,p_quality_id, p_passp_number, p_birthdate, p_birthplace,
+            p_fam_status, p_adress, p_faktAdress, p_phone, p_email, p_sex,
+            p_passport, p_adrs_state, p_adrs_city, p_birthCity, p_phone_mob,
+            Edit_voen.Text, dblGroup.keyvalue, DBLCBoxVidSob.keyvalue,
+            DBLCBoxPrinad.keyvalue, p_nerezident, p_passp_date, p_PassPlace,
+            p_PINCode, p_Citizenship, p_PASSEXPIRE, p_DocType, p_Note,
+            p_cust_type, p_category, p_reg_zip, p_doc_country, p_citizenship2,
+            p_citizenship3, p_fakt_country, p_fakt_city, p_fakt_zip,
+            p_work_place, p_work_post, p_work_adress, p_work_phone,
+            p_Contact_type, p_tph_country, p_tph_country_code, p_tph_city,
+            p_tph_state, p_tph_zip, p_tph_country_prefix, p_tph_adress,
+            p_tph_communication_type, p_tph_number, p_tph_extension,
+            p_tph_contact_type,p_Lastname,p_FirstName,p_MiddleName,
+            p_risk_categ,p_RISKDESCID,p_samelydate,p_work_adrs_spec,
+            p_work_city,p_work_state,p_work_zip,p_work_cntr,
+            p_work_phone_spec,p_work_phconttype,p_work_phoppref,
+            p_work_phext,p_work_phcode]);
+            P_Datamodule.P_Customers.Close;
+        end;
+         P_Datamodule.P_Customers.Open;
+         P_Datamodule.P_Customers.Locate('id',p_ID,[]);
+ end;
+    P_CO_Cust_Form.Close;
+end;
+
+procedure TP_CO_Cust_Form.BirthPlaceKeyPress(Sender: TObject; var Key: Char);
+begin
+  {
+    if ORD(Key) = VK_RETURN then
+    begin
+    if Sender is TWinControl then
+    with Sender as TWinControl do
+    case Tag of
+    1 : SelectNext(Sender as TWinControl ,True ,True);
+    end;
+    Key := #0;
+
+    end;
+    if not (key in ['0'..'9','.',#8]) then
+    key :=#0;
+    //if not (key in ['а'..'я','А'..'Я','A'..'Z','а'..'z']) then
+    if not (key in ['A'..'Z','а'..'z']) then
+    key :=#0;
+
+  }
+end;
+
+procedure TP_CO_Cust_Form.BitBtn1Click(Sender: TObject);
+begin
+  if form_is_full then
+  begin
+    form_is_full := False;
+    BitBtn1.Caption := '>>>';
+    P_CO_Cust_Form.Width := 537;
+  end
+  else
+  begin
+    BitBtn1.Caption := '<<<';
+    P_CO_Cust_Form.Width := 1069;
+    form_is_full := true;
+  end;
+end;
+ procedure TP_CO_Cust_Form.OpenAdditional;
+ begin
+    BitBtn1.Caption := '<<<';
+    P_CO_Cust_Form.Width := 1069;
+    form_is_full := true;
+ end;
+
+procedure TP_CO_Cust_Form.EditBirthCityKeyPress(Sender: TObject; var Key: Char);
+begin
+  { if ORD(Key) = VK_RETURN then
+    begin
+    if Sender is TWinControl then
+    with Sender as TWinControl do
+    case Tag of
+    1 : SelectNext(Sender as TWinControl ,True ,True);
+    end;
+    Key := #0;
+    end;
+    if not (key in ['0'..'9','.',#8]) then
+    key :=#0;
+    //if not (key in ['а'..'я','А'..'Я','A'..'Z','а'..'z']) then
+    if not (key in ['A'..'Z','а'..'z']) then
+    key :=#0;
+
+  }
+end;
+
+procedure TP_CO_Cust_Form.DBCBox_DocTYPECloseUp(Sender: TObject);
+begin
+
+  if DBCBox_DocTYPE.text =P_Datamodule.Doc_Types.FieldByName('name').AsString then
+  begin
+    EditSerial.Text := P_Datamodule.Doc_Types.FieldByName
+      ('series').AsString;
+  end;
+  if EditSerial.Text='' then
+  issue_country.KeyValue:=-1;
+end;
+
+procedure TP_CO_Cust_Form.DBEdit1Change(Sender: TObject);
+begin
+  { with P_Datamodule.Cities do
+    begin
+    SetVariable('CID', DBEdit1.Text);
+    if not Active then
+    Open
+    else
+    Refresh;
+    EditBirthCity.keyvalue := FieldByName('city_name').AsString;
+    end; }
+end;
+
+procedure TP_CO_Cust_Form.DBEdit2Change(Sender: TObject);
+var
+  pCID: integer;
+begin
+  { with P_Datamodule.Ad_Cities do
+    begin
+    if DBEdit2.Text = '' then
+    pCID := 0
+    else
+    pCID := StrToInt(DBEdit2.Text);
+    SetVariable('CID', pCID);
+    if not Active then
+    Open
+    else
+    Refresh;
+    Adrs_City.keyvalue := FieldByName('city_name').AsString;
+    end; }
+end;
+
+{
+  procedure TP_CO_Cust_Form.ChBoxRezidentClick(Sender: TObject);
+  begin
+  if ChBoxRezident.Checked = false then Edit1.Text := 'Azərbaycan';
+  with  P_DataModule.ad_country do begin
+  Close;
+  SQL.Clear;
+  SQL.Add('Select * from countries where cntr_name<>''' + Edit1.Text + ''' ');
+  Open;
+  Adrs_State.KeyValue :=FieldByName('cntr_name').AsString;
+  EditSerial.Text :=' ';
+  end;
+
+  if ChBoxRezident.Checked = true then
+  with  P_DataModule.ad_country do begin
+  Close;
+  SQL.Clear;
+  SQL.Add('Select * from countries  ');
+  Open;
+  //EditAdress.KeyValue :=fieldbyname('cntr_name').asstring;
+  Adrs_State.KeyValue := 'Azərbaycan';
+  Adrs_City.KeyValue :='Bakı';
+  EditSerial.Text :='AZE';
+  end;
+  end;
+}
+
+procedure TP_CO_Cust_Form.CheckBox_FSClick(Sender: TObject);
+begin
+  if CheckBox_FS.Checked then
+  begin
+    Edit_voen.Enabled := true;
+    Edit_voen.Color := clWhite;
+    Cust_Inform.Enabled := true;
+   // Label60.Visible:=True;
+  end
+  else
+  begin
+    Edit_voen.Clear;
+    Edit_voen.Enabled := False;
+    Edit_voen.Color := clScrollBar;
+    Cust_Inform.Enabled := False;
+  //  Label60.Visible:=False;
+  end;
+
+end;
+
+procedure TP_CO_Cust_Form.Cust_InformClick(Sender: TObject);
+begin
+  if not assigned(CustomerInfoForm) then
+    CustomerInfoForm := TCustomerInfoForm.Create(Self);
+  with CustomerInfoForm, CustInfoData do
+  begin
+    ClearVariables;
+    Close;
+    // showmessage(P_DataModule.Customers.fields[0].AsVariant);
+    // SetVariable('customerid', P_DataModule.Customers.Fields[0].AsVariant);
+    SetVariable('customerid', P_Datamodule.P_Customers.FieldByName('ID')
+      .AsInteger);
+    Open;
+    // if recordcount=0 then ToolButton2Click(Sender);
+    ShowModal;
+  end;
+end;
+
+procedure TP_CO_Cust_Form.FormActivate(Sender: TObject);
+var
+  i: integer;
+begin
+
+  with P_Datamodule do
+  begin
+    Sysdat.Open;
+    Cities.Open;
+    Ad_Cities.Open;
+    ODS_PasspDeps.Open;
+    P_Categ.Open;
+    DS_issue_country.Open;
+    Doc_Types.Open;
+    Citizenship.Open;
+    Citizenship2.Open;
+    Citizenship3.Open;
+    combobox_add(ODS_PasspDeps, CBoxPassPlace, 'NAME');
+    ODS_VidSob.Open;
+    ODS_Prinad.Open;
+    ODSCustGroup.Open;
+    Cities.Open;
+    DSFakt_Adrs_City.Open;
+    ds_mmx_communication_type.Open;
+    ds_mmx_contact_type.Open;
+    ds_tph_contact_type.Open;
+    DSCityByConctType.Open;
+    ds_tph_country_prefix.Open;
+    CUST_RISK_CATEG.Open;
+    work_contact_type.Open;
+    WorkCity.Open;
+    WorkPhContactType.Open;
+    WorkPhComnType.Open;
+    WorkCntrPrefix.Open;
+
+    { with P_DataModule do
+      begin
+      ODS_PasspDeps.Close;
+      doc_type_id:=Doc_Types.FieldByName('ID').asInteger;
+      ODS_PasspDeps.SetVariable('doc_type_id',doc_type_id);
+      ODS_PasspDeps.Open;
+      end; }
+
+    { with CBoxPassPlace do begin
+      Items.Clear;
+      ODS_PasspDeps.First;
+      for i:=0 to ODS_PasspDeps.RecordCount-1 do begin
+      Items.Add(ODS_PasspDeps.FieldByName('Name').AsString);
+      ODS_PasspDeps.Next;
+      end;
+      end; }
+
+    if AddUpd = true then
+    begin
+     //--- DBCBox_Citizenship.KeyValue:=null;
+     //DBCBox_Citizenship2.KeyValue:=null;
+    //--  DBCBox_Citizenship3.KeyValue:=null;
+      DBCBox_DocTYPE.KeyValue:=null;
+      issue_country.KeyValue:=null;
+      //---- Adrs_State.KeyValue:=null;
+      Adrs_City.KeyValue:=null;
+      //----  BirthPlace.KeyValue:=null;
+      EditBirthCity.KeyValue:=null;
+      //--- Fakt_Adrs_State.KeyValue:=null;
+      Fakt_Adrs_City.KeyValue:=null;
+      Address_type.KeyValue:=null;
+      //--- CountryByConctType.KeyValue:=null;
+      CityByConctType.KeyValue:= null;
+      tph_contact_type.KeyValue := null;
+      tph_communication_type.KeyValue:=null;
+      Adrs_City.KeyValue:=null;
+      DBLC_RiskCateg.KeyValue:=null;
+
+      EditByrName.Clear;
+      CBoxSex.Text := '';
+      CBoxSex.ItemIndex := -1;
+      CBoxFamStatus.Text := '';
+      CBoxFamStatus.ItemIndex := -1;
+      DB_CATEGORY.keyvalue := 0;
+      EditPassport.Clear;
+      CBoxPassPlace.Text := '';
+      EditPINCode.Clear;
+      DTPBirthDate.Value := null;
+      DTPickPassp.Value := null;
+      DTPickDocEnd.Value := null;
+    //--  Country.First;
+      Cities.First;
+     //--- Ad_Country.First;
+      Ad_Cities.First;
+      EditAdress.Clear;
+      FaktAdress.Clear;
+      EditMobil.Clear;
+      EditPhone.Clear;
+      EditEmail.Clear;
+      dblGroup.keyvalue := 0;
+      DBLCBoxVidSob.keyvalue := 0;
+      if ABB_kod=false then
+      begin
+      DBLCBoxPrinad.keyvalue := 0;
+      end;
+
+      RadioButton_Rez.Checked := true;
+      CheckBox_Phys.Checked := true;
+      CheckBox_FS.Checked := False;
+      Edit_voen.Enabled := False;
+      ZipQ.Clear;
+      ZipFakt.Clear;
+      Work_Place.Clear;
+      Work_Post.Clear;
+      Work_Address.Clear;
+      Work_Phone.Clear;
+      tph_state.Clear;
+      tph_zip.Clear;
+      tph_adress.Clear;
+      tph_number.Clear;
+      tph_extension.Clear;
+      Edit_FirstName.Clear;
+      Edit_LastName.Clear;
+      Edit_MiddleName.Clear;
+      Note_Memo.Clear;
+      DBDateTimeSamelyDate.Value:=null;
+      DBLC_CustRiskDesc.KeyValue:=null;
+      DBLC_WorkContactType.KeyValue:='A';
+      //---DBLC_workCountry.KeyValue:=null;
+      DBLC_WorkCity.KeyValue:=null;
+      EditWorkState.Clear;
+      EditWorkZip.Clear;
+      DBLC_WorkPhContType.KeyValue:='A';
+      DBLC_WorkComnType.KeyValue:='A';
+      DBLC_WorkPhoneCode.KeyValue:=994;
+      EditWorkPhOpCode.Clear;
+      EditWorkExt.Clear;
+      EditSerial.Color:=clWindow;
+      EditPassport.Color:=clWindow;
+
+      LabelSamelyDate.Visible:=False;
+      Timer1.Enabled:=False;
+      end;
+
+    if AddUpd = False then
+    begin
+      SelectSettings;
+    end;
+  end;
+
+  SBTranslateProc.TranslateAllCompForms(Self, sboapiDataModule.OrPack_SL);
+end;
+
+procedure TP_CO_Cust_Form.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+ abb_kod:=false;
+//id_quality_DBLookupComboboxEh.Enabled:=true;
+//id_quality_DBLookupComboboxEh.KeyValue:=-1;
+end;
+
+procedure TP_CO_Cust_Form.FormCreate(Sender: TObject);
+var
+ j:integer;
+ aa : string;
+begin
+j:=P_DataModule.phys_fs_customers.CallIntegerFunction('get_Messaj',['custinfo','LastName']);
+   if j=0 then Label76.Visible:=false
+          else
+                Label76.Visible:=true;
+
+j:=P_DataModule.phys_fs_customers.CallIntegerFunction('get_Messaj',['custinfo','firstname']);
+   if j=0 then Label75.Visible:=false
+          else
+                Label75.Visible:=true;
+
+
+                j:=P_DataModule.phys_fs_customers.CallIntegerFunction('get_Messaj',['custinfo','soname']);
+   if j=0 then Label74.Visible:=false
+          else
+                Label74.Visible:=true;
+
+
+                j:=P_DataModule.phys_fs_customers.CallIntegerFunction('get_Messaj',['custinfo','sex']);
+   if j=0 then Label16.Visible:=false
+          else
+                Label16.Visible:=true;
+
+
+
+                j:=P_DataModule.phys_fs_customers.CallIntegerFunction('get_Messaj',['custinfo','Citizenship']);
+   if j=0 then Label62.Visible:=false
+          else
+                Label62.Visible:=true;
+
+
+
+
+                j:=P_DataModule.phys_fs_customers.CallIntegerFunction('get_Messaj',['custinfo','Doc_Type']);
+   if j=0 then Label63.Visible:=false
+          else
+                Label63.Visible:=true;
+
+
+if 'PASSPORT'=P_DataModule.P_Customers.FieldByName('passport').FieldName then
+     begin
+      aa:='passer';
+   j:=P_DataModule.phys_fs_customers.CallIntegerFunction('get_Messaj',['custinfo',aa]);
+       if j=0 then Label9.Visible:=false
+          else
+          Label9.Visible:=true;
+     end;
+
+
+
+   if 'PASSP_DATE'=P_DataModule.P_Customers.FieldByName('passp_date').FieldName then
+     begin
+      aa:='paspdate';
+   j:=P_DataModule.phys_fs_customers.CallIntegerFunction('get_Messaj',['custinfo',aa]);
+       if j=0 then Label86.Visible:=false
+          else
+          Label86.Visible:=true;
+     end;
+
+  j:=P_DataModule.phys_fs_customers.CallIntegerFunction('get_Messaj',['custinfo','passexpire']);
+   if j=0
+   then Label101.Visible:=False
+          else
+        Label101.Visible:=True;
+
+
+
+        j:=P_DataModule.phys_fs_customers.CallIntegerFunction('get_Messaj',['custinfo','doc_country']);
+   if j=0
+   then Label64.Visible:=False
+          else
+        Label64.Visible:=True;
+
+
+         j:=P_DataModule.phys_fs_customers.CallIntegerFunction('get_Messaj',['custinfo','PaspPlace']);
+   if j=0
+   then Label82.Visible:=False
+          else
+        Label82.Visible:=True;
+
+
+
+         j:=P_DataModule.phys_fs_customers.CallIntegerFunction('get_Messaj',['custinfo','passpin']);
+   if j=0
+   then Label70.Visible:=False
+          else
+        Label70.Visible:=True;
+
+
+
+
+         j:=P_DataModule.phys_fs_customers.CallIntegerFunction('get_Messaj',['custinfo','fakt_country']);
+   if j=0
+   then Label21.Visible:=False
+          else
+        Label21.Visible:=True;
+
+
+
+
+if 'ADRS_CITY'=P_DataModule.P_Customers.FieldByName('adrs_city').FieldName then
+     begin
+      aa:='city';
+  j:=P_DataModule.phys_fs_customers.CallIntegerFunction('get_Messaj',['custinfo',aa]);
+       if j=0 then Label77.Visible:=false
+          else
+          Label77.Visible:=true;
+     end;
+
+
+
+if 'ADRESS'=P_DataModule.P_Customers.FieldByName('adress').FieldName then
+     begin
+      aa:='address';
+   j:=P_DataModule.phys_fs_customers.CallIntegerFunction('get_Messaj',['custinfo',aa]);
+       if j=0 then Label23.Visible:=false
+          else
+          Label23.Visible:=true;
+     end;
+
+
+
+if 'PHONE_MOB'=P_DataModule.P_Customers.FieldByName('phone_mob').FieldName then
+     begin
+      aa:='phone';
+   j:=P_DataModule.phys_fs_customers.CallIntegerFunction('get_Messaj',['custinfo',aa]);
+       if j=0 then Label10.Visible:=false
+          else
+          Label10.Visible:=true;
+     end;
+
+
+if 'PHONE'=P_DataModule.P_Customers.FieldByName('phone').FieldName then
+     begin
+      aa:='phone_h';
+   j:=P_DataModule.phys_fs_customers.CallIntegerFunction('get_Messaj',['custinfo',aa]);
+       if j=0 then Label28.Visible:=false
+          else
+          Label28.Visible:=true;
+     end;
+
+
+
+
+      j:=P_DataModule.phys_fs_customers.CallIntegerFunction('get_Messaj',['customers','vid_sob']);
+   if j=0
+   then Label5.Visible:=False
+          else
+        Label5.Visible:=True;
+
+
+
+
+      j:=P_DataModule.phys_fs_customers.CallIntegerFunction('get_Messaj',['custinfo','BIRTHPLACE']);
+   if j=0
+   then LabeL80.Visible:=False
+          else
+        LabeL80.Visible:=True;
+
+
+
+      j:=P_DataModule.phys_fs_customers.CallIntegerFunction('get_Messaj',['custinfo','BIRTH_STATE']);
+   if j=0
+   then LabeL81.Visible:=False
+          else
+        LabeL81.Visible:=True;
+
+
+         if 'BIRTHDATE'=P_DataModule.P_Customers.FieldByName('BIRTHDATE').FieldName then
+     begin
+      aa:='birthday';
+   j:=P_DataModule.phys_fs_customers.CallIntegerFunction('get_Messaj',['custinfo',aa]);
+       if j=0 then Label88.Visible:=false
+          else
+          Label88.Visible:=true;
+     end;
+
+
+
+
+
+         j:=P_DataModule.phys_fs_customers.CallIntegerFunction('get_Messaj',['custinfo','fakt_country']);
+   if j=0
+   then Label78.Visible:=False
+          else
+        Label78.Visible:=True;
+
+
+
+
+
+         j:=P_DataModule.phys_fs_customers.CallIntegerFunction('get_Messaj',['custinfo','fakt_city']);
+   if j=0
+   then Label79.Visible:=False
+          else
+        Label79.Visible:=True;
+
+
+
+
+
+         j:=P_DataModule.phys_fs_customers.CallIntegerFunction('get_Messaj',['custinfo','fakt_adress']);
+   if j=0
+   then Label83.Visible:=False
+          else
+        Label83.Visible:=True;
+
+
+
+   j:=P_DataModule.phys_fs_customers.CallIntegerFunction('get_Messaj',['custinfo','tph_contact_type']);
+   if j=0
+   then Label61.Visible:=False
+          else
+        Label61.Visible:=True;
+
+
+
+         j:=P_DataModule.phys_fs_customers.CallIntegerFunction('get_Messaj',['custinfo','tph_country']);
+   if j=0
+   then Label65.Visible:=False
+          else
+        Label65.Visible:=True;
+
+
+
+
+         j:=P_DataModule.phys_fs_customers.CallIntegerFunction('get_Messaj',['custinfo','tph_city']);
+   if j=0
+   then Label66.Visible:=False
+          else
+        Label66.Visible:=True;
+
+
+
+         j:=P_DataModule.phys_fs_customers.CallIntegerFunction('get_Messaj',['custinfo','tph_adress']);
+   if j=0
+   then Label84.Visible:=False
+          else
+        Label84.Visible:=True;
+
+
+
+         j:=P_DataModule.phys_fs_customers.CallIntegerFunction('get_Messaj',['custinfo','contact_type']);
+   if j=0
+   then Label67.Visible:=False
+          else
+        Label67.Visible:=True;
+
+
+
+         j:=P_DataModule.phys_fs_customers.CallIntegerFunction('get_Messaj',['custinfo','tph_communication_type']);
+   if j=0
+   then Label68.Visible:=False
+          else
+        Label68.Visible:=True;
+
+
+
+         j:=P_DataModule.phys_fs_customers.CallIntegerFunction('get_Messaj',['custinfo','tph_number']);
+   if j=0
+   then Label69.Visible:=False
+          else
+        Label69.Visible:=True;
+
+
+    j:=P_DataModule.phys_fs_customers.CallIntegerFunction('get_Messaj',['customers','risk_categ']);
+   if j=0
+   then Label89.Visible:=False
+          else
+   Label89.Visible:=True;
+
+
+         j:=P_DataModule.phys_fs_customers.CallIntegerFunction('get_Messaj',['customers','SAMELYDATE']);
+   if j=0
+   then Label1000.Visible:=False
+          else
+        Label1000.Visible:=True;
+
+
+
+   j:=P_DataModule.phys_fs_customers.CallIntegerFunction('get_Messaj',['customers','inn']);
+   if j=0
+   then Label60.Visible:=False
+   else
+   Label60.Visible:=True;
+
+
+
+   end;
+
+
+
+
+procedure TP_CO_Cust_Form.FormShow(Sender: TObject);
+begin
+
+  form_is_full := False;
+  P_CO_Cust_Form.Width := 537;
+  BitBtn1.Caption := '>>>';
+
+    P_DataModule. Country.Open;
+    P_DataModule.Ad_Country.Open;
+    P_DataModule.DSFakt_Adrs_Country.Open;
+    P_DataModule.WorkCountry.Open;
+    P_DataModule.DSCountryByConctType.Open;
+    P_DataModule.Citizenship.Open;
+    P_DataModule.Citizenship2.Open;
+    P_DataModule.Citizenship3.Open;
+
+DBCBox_Citizenship.KeyValue:=P_DataModule.Citizenship.Lookup('cntr_name','Azərbaycan','id');
+DBCBox_Citizenship2.KeyValue:=P_DataModule.Citizenship2.Lookup('cntr_name','Azərbaycan','id');
+DBCBox_Citizenship3.KeyValue:=P_DataModule.Citizenship3.Lookup('cntr_name','Azərbaycan','id');
+Adrs_State.KeyValue:=P_DataModule.Ad_Country.Lookup('cntr_name','Azərbaycan','cntr_name');
+BirthPlace.KeyValue:=P_DataModule.Country.Lookup('cntr_name','Azərbaycan','cntr_name');
+Fakt_Adrs_State.KeyValue:=P_DataModule.DSFakt_Adrs_Country.Lookup('cntr_name','Azərbaycan','id');
+DBLC_workCountry.KeyValue:=P_DataModule.WorkCountry.Lookup('cntr_name','Azərbaycan','id');
+CountryByConctType.KeyValue:=P_DataModule.DSCountryByConctType.Lookup('cntr_name','Azərbaycan','id');
+ {P_DataModule.Ad_Country.Locate('cntr_name','Azərbaycan',[]);
+ Adrs_State.KeyValue:= 'Azərbaycan';}
+
+ if abb_kod =true then
+begin
+   P_DataModule.ODS_Prinad.Open;
+   P_DataModule.ODS_Prinad.Locate('ID',41,[loCaseInsensitive, loPartialKey]) ;
+   DBLCBoxPrinad.KeyValue:=P_DataModule.ODS_Prinad.FieldByName('id').AsInteger;
+end ;
+
+end;
+
+procedure TP_CO_Cust_Form.RadioButton_NeRezClick(Sender: TObject);
+begin
+if RadioButton_NeRez.Checked = true then
+ Label75.Visible:=false;
+  if RadioButton_NeRez.Checked = true then
+    Edit1.Text := 'Azərbaycan';
+
+  with P_Datamodule.Ad_Country do
+  begin
+    Close;
+    SQL.Clear;
+    SQL.Add('Select * from countries where cntr_name<>''' + Edit1.Text + ''' order by cntr_name');
+    Open;
+    Adrs_State.keyvalue := FieldByName('cntr_name').AsString;
+    EditSerial.Text := ' ';
+    DBCBox_DocTYPE.KeyValue:=-1;
+
+  end;
+
+  if RadioButton_NeRez.Checked = False then
+    with P_Datamodule.Ad_Country do
+    begin
+      Close;
+      SQL.Clear;
+      SQL.Add('Select * from countries  ');
+      Open;
+      // EditAdress.KeyValue :=fieldbyname('cntr_name').asstring;
+      Adrs_State.keyvalue := 'Azərbaycan';
+      Adrs_City.keyvalue := 'Bakı';
+      EditSerial.Text := 'AZE';
+    end;
+end;
+
+procedure TP_CO_Cust_Form.RadioButton_RezClick(Sender: TObject);
+begin
+  if RadioButton_Rez.Checked = False then
+    Edit1.Text := 'Azərbaycan';
+  with P_Datamodule.Ad_Country do
+  begin
+    Close;
+    SQL.Clear;
+    SQL.Add('Select c.* from countries c where lower(c.cntr_name)<>lower(''yox'') and c.cntr_name<>''Azərbaycan'' order by c.cntr_name ');
+    Open;
+    Adrs_State.keyvalue := FieldByName('cntr_name').AsString;
+    EditSerial.Text := ' ';
+  end;
+
+  if RadioButton_Rez.Checked = true then
+    with P_Datamodule.Ad_Country do
+    begin
+      Close;
+      SQL.Clear;
+      SQL.Add('select c.rowid,c.* from  countries c where lower(c.cntr_name)<>lower(''yox'') order by c.cntr_name ');
+      Open;
+      // EditAdress.KeyValue :=fieldbyname('cntr_name').asstring;
+      Adrs_State.keyvalue := 'Azərbaycan';
+      Adrs_City.keyvalue := 'Bakı';
+      EditSerial.Text := 'AZE';
+    end;
+end;
+
+procedure TP_CO_Cust_Form.EditByrNameKeyPress(Sender: TObject; var Key: Char);
+begin
+  if ORD(Key) = VK_RETURN then
+  begin
+    if Sender is TWinControl then
+      with Sender as TWinControl do
+        case Tag of
+          1:
+            SelectNext(Sender as TWinControl, true, true);
+        end;
+    Key := #0;
+
+  end;
+end;
+
+procedure TP_CO_Cust_Form.DTPBirthDateKeyPress(Sender: TObject; var Key: Char);
+begin
+  if ORD(Key) = VK_RETURN then
+  begin
+    if Sender is TWinControl then
+      with Sender as TWinControl do
+        case Tag of
+          1:
+            SelectNext(Sender as TWinControl, true, true);
+        end;
+    Key := #0;
+
+  end;
+end;
+
+procedure TP_CO_Cust_Form.CBoxSexKeyPress(Sender: TObject; var Key: Char);
+begin
+  if ORD(Key) = VK_RETURN then
+  begin
+    if Sender is TWinControl then
+      with Sender as TWinControl do
+        case Tag of
+          1:
+            SelectNext(Sender as TWinControl, true, true);
+        end;
+    Key := #0;
+
+  end;
+  if not(Key in ['0' .. '9', '.', #8]) then
+    Key := #0;
+  // if not (key in ['а'..'я','А'..'Я','A'..'Z','а'..'z']) then
+  if not(Key in ['A' .. 'Z', 'а' .. 'z']) then
+    Key := #0;
+end;
+
+procedure TP_CO_Cust_Form.CBoxFamStatusKeyPress(Sender: TObject; var Key: Char);
+begin
+  if ORD(Key) = VK_RETURN then
+  begin
+    if Sender is TWinControl then
+      with Sender as TWinControl do
+        case Tag of
+          1:
+            SelectNext(Sender as TWinControl, true, true);
+        end;
+    Key := #0;
+
+  end;
+  if not(Key in ['0' .. '9', '.', #8]) then
+    Key := #0;
+  // if not (key in ['а'..'я','А'..'Я','A'..'Z','а'..'z']) then
+  if not(Key in ['A' .. 'Z', 'а' .. 'z']) then
+    Key := #0;
+end;
+
+procedure TP_CO_Cust_Form.EditAdressKeyPress(Sender: TObject; var Key: Char);
+begin
+  if ORD(Key) = VK_RETURN then
+  begin
+    if Sender is TWinControl then
+      with Sender as TWinControl do
+        case Tag of
+          1:
+            SelectNext(Sender as TWinControl, true, true);
+        end;
+    Key := #0;
+
+  end;
+
+end;
+
+procedure TP_CO_Cust_Form.EditEmailKeyPress(Sender: TObject; var Key: Char);
+begin
+  if ORD(Key) = VK_RETURN then
+  begin
+    if Sender is TWinControl then
+      with Sender as TWinControl do
+        case Tag of
+          1:
+            SelectNext(Sender as TWinControl, true, true);
+        end;
+    Key := #0;
+
+  end;
+
+end;
+
+procedure TP_CO_Cust_Form.EditSerialKeyPress(Sender: TObject; var Key: Char);
+begin
+  Key := UpCase(Key);
+  if ORD(Key) = VK_RETURN then
+  begin
+    if Sender is TWinControl then
+      with Sender as TWinControl do
+        case Tag of
+          1:
+            SelectNext(Sender as TWinControl, true, true);
+        end;
+    Key := #0;
+
+  end;
+  { if not (key in ['а'..'я','А'..'Я','A'..'Z','а'..'z']) then
+    key :=#0; }
+end;
+
+procedure TP_CO_Cust_Form.Edit_LastNameChange(Sender: TObject);
+begin
+EditByrName.Text:=Edit_LastName.Text+' '+Edit_FirstName.Text+' '+Edit_MiddleName.Text;
+end;
+
+procedure TP_CO_Cust_Form.EditPassportExit(Sender: TObject);
+begin
+ChechPasp;
+end;
+
+procedure TP_CO_Cust_Form.EditPassportKeyPress(Sender: TObject; var Key: Char);
+begin
+  if ORD(Key) = VK_RETURN then
+  begin
+    if Sender is TWinControl then
+      with Sender as TWinControl do
+        case Tag of
+          1:
+            SelectNext(Sender as TWinControl, true, true);
+        end;
+    Key := #0;
+
+  end;
+  { if not (key in ['0'..'9','.',#8]) then
+    key :=#0;
+  }
+end;
+
+procedure TP_CO_Cust_Form.BtnOKKeyPress(Sender: TObject; var Key: Char);
+begin
+  if ORD(Key) = VK_RETURN then
+  begin
+    if Sender is TWinControl then
+      with Sender as TWinControl do
+        case Tag of
+          1:
+            SelectNext(Sender as TWinControl, true, true);
+        end;
+    Key := #0;
+
+  end;
+  if not(Key in ['0' .. '9', '.', #8]) then
+    Key := #0;
+
+end;
+
+procedure TP_CO_Cust_Form.ButtonMeyarClick(Sender: TObject);
+var
+
+cust_quality,id:Integer;
+custid:integer;
+begin
+Formid_quality:=TFormid_quality.create(self);
+
+with P_DataModule   do
+begin
+
+//showmessage(inttostr(P_Customers.FieldByName('id').AsInteger));
+///Ods_cust_id_quality.ClearVariables;
+Ods_cust_id_quality1.close;
+Ods_custid_quality.close;
+Ods_custid_quality.SetVariable('custid',p_Customers.FieldByName('id').AsInteger);
+
+Ods_cust_id_quality1.SetVariable('custid',p_Customers.FieldByName('id').AsInteger);
+Ods_custid_quality.open;
+Ods_cust_id_quality1.open;
+ end;
+
+
+ Formid_quality.ShowModal ;
+end;
+
+procedure TP_CO_Cust_Form.EditMobilKeyPress(Sender: TObject; var Key: Char);
+begin
+  if ORD(Key) = VK_RETURN then
+  begin
+    if Sender is TWinControl then
+      with Sender as TWinControl do
+        case Tag of
+          1:
+            SelectNext(Sender as TWinControl, true, true);
+        end;
+    Key := #0;
+
+  end;
+  if not(Key in ['0' .. '9', '.', #8]) then
+    Key := #0;
+
+end;
+
+procedure TP_CO_Cust_Form.BtnCancelClick(Sender: TObject);
+begin
+  Close;
+end;
+
+end.

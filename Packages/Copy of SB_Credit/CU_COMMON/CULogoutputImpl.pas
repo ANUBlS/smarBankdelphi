@@ -1,0 +1,132 @@
+unit cuLogoutputImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+   ComCtrls, ImgList, StdCtrls, Menus;
+
+type
+  TLogMessage = (lmWarning, lmError, lmInformation);
+
+  TCufrmLogOutput = class(TForm)
+    LogImages: TImageList;
+    LogMenu: TPopupMenu;
+    LogListBox: TListBox;
+    ddd1: TMenuItem;
+    save1: TMenuItem;
+    OD1: TOpenDialog;
+    procedure LogListBoxDrawItem(Control: TWinControl; Index: Integer;
+      Rect: TRect; State: TOwnerDrawState);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure ddd1Click(Sender: TObject);
+    procedure save1Click(Sender: TObject);
+  private
+    FWarningBitmap : TBitmap;
+    FErrorBitmap : TBitmap;
+    FInformationBitmap : TBitmap;
+    procedure AddOutput(OutputMsg : String; Msgtype : TLogMessage; MakeVisible : Boolean);
+    { Private declarations }
+  public
+    procedure LogWarning(OutputMsg : String);
+    procedure LogError(OutputMsg : String);
+    procedure LogInformation(OutputMsg : String; MakeVisible : Boolean = False);
+    { Public declarations }
+  end;
+
+var
+  CufrmLogOutput: TCufrmLogOutput;
+
+implementation
+
+{$R *.DFM}
+
+procedure TCufrmLogOutput.LogListBoxDrawItem(Control: TWinControl; Index: Integer;
+  Rect: TRect; State: TOwnerDrawState);
+var
+	Bitmap: TBitmap;
+	Offset: Integer;
+begin
+  with (Control as TListBox).Canvas do
+  begin
+    FillRect(Rect);
+    Offset := 2;
+    Bitmap := TBitmap((Control as TListBox).Items.Objects[Index]);  { get the bitmap }
+
+    if Bitmap <> nil then
+    begin
+       BrushCopy(Bounds(Rect.Left + 2, Rect.Top, Bitmap.Width, Bitmap.Height),
+        Bitmap, Bounds(0, 0, Bitmap.Width, Bitmap.Height), clRed);
+      Offset := Bitmap.width + 6;    { add four pixels between bitmap and text}
+    end;
+    TextOut(Rect.Left + Offset, Rect.Top, (Control as TListBox).Items[Index])  { display the text }
+  end;
+end;
+
+procedure TCufrmLogOutput.ddd1Click(Sender: TObject);
+begin
+LogListBox.Clear;
+end;
+
+procedure TCufrmLogOutput.FormCreate(Sender: TObject);
+begin
+    FWarningBitmap := TBitmap.Create;
+    LogImages.GetBitmap(0,FWarningBitmap);
+    FErrorBitmap := TBitmap.Create;
+    LogImages.GetBitmap(1,FErrorBitmap);
+    FInformationBitmap := TBitmap.Create;
+    LogImages.GetBitmap(2,FInformationBitmap);
+end;
+
+procedure TCufrmLogOutput.FormDestroy(Sender: TObject);
+begin
+    FWarningBitmap.Free;
+    FErrorBitmap.Free;
+    FInformationBitmap.Free;
+end;
+
+procedure TCufrmLogOutput.AddOutput(OutputMsg : String; Msgtype : TLogMessage; MakeVisible : Boolean);
+var
+  Message : String;
+begin
+  Message := '*** '+TimeToStr(Now)+' - '+OutputMsg;
+  with LogListBox,Items do
+  begin
+  case Msgtype of
+    lmWarning : ItemIndex := AddObject(Message,
+      FWarningBitmap);
+    lmError:ItemIndex := AddObject(Message,
+      FErrorBitmap);
+    lmInformation:ItemIndex := AddObject(Message,
+      FInformationBitmap);
+  end; // case
+  end;
+  if MakeVisible and
+     not Visible
+  then
+    Show
+end;
+
+procedure TCufrmLogOutput.LogWarning(OutputMsg : String);
+begin
+  AddOutput(OutputMsg,lmWarning,True)
+end;
+
+procedure TCufrmLogOutput.save1Click(Sender: TObject);
+begin
+OD1.Execute();
+ LogListBox.Items.SaveToFile(OD1.FileName);
+end;
+
+procedure TCufrmLogOutput.LogError(OutputMsg : String);
+begin
+  AddOutput(OutputMsg,lmError,True)
+end;
+
+procedure TCufrmLogOutput.LogInformation(OutputMsg : String; MakeVisible : Boolean = False);
+begin
+  AddOutput(OutputMsg,lmInformation,MakeVisible)
+end;
+
+end.

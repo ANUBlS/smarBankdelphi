@@ -1,0 +1,29 @@
+library StatementPr;
+
+uses
+  ComServ,
+  StatementPr_TLB in 'StatementPr_TLB.pas',
+  StatementFrmImpl in 'StatementFrmImpl.pas' {StatementFrm: TActiveForm} {StatementFrm: CoClass},
+  UnitReportR in 'UnitReportR.pas' {FormRepR},
+  UnitData in 'UnitData.pas' {DataModSTX: TDataModule},
+  UnitTransView in 'UnitTransView.pas' {FormTransView},
+  UnitReport in 'UnitReport.pas' {FormRep},
+  Unit7 in 'Unit7.pas' {Form7},
+  Unit8 in 'Unit8.pas' {Formonline},
+  UnitHesab in 'UnitHesab.pas' {FormAccount};
+
+{$E ocx}
+
+exports
+  DllGetClassObject,
+  DllCanUnloadNow,
+  DllRegisterServer,
+  DllUnregisterServer;
+
+{$R *.TLB}
+
+
+{$R *.RES}
+
+begin
+end.

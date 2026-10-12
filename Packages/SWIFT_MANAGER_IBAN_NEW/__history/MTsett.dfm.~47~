@@ -1,0 +1,663 @@
+object AzpSettings: TAzpSettings
+  Left = 0
+  Top = 0
+  Caption = 'OUT_Setting'
+  ClientHeight = 408
+  ClientWidth = 800
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poMainFormCenter
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object PageControl1: TPageControl
+    Left = 0
+    Top = 0
+    Width = 800
+    Height = 408
+    ActivePage = TabSheet4
+    Align = alClient
+    TabOrder = 0
+    object TabSheet1: TTabSheet
+      Caption = 'MT 103'
+      object Panel2: TPanel
+        Left = 0
+        Top = 265
+        Width = 789
+        Height = 112
+        TabOrder = 0
+        Visible = False
+        object Label1: TLabel
+          Left = 214
+          Top = 21
+          Width = 79
+          Height = 13
+          Caption = 'Komissiya Hesab'
+        end
+        object Label2: TLabel
+          Left = 6
+          Top = 21
+          Width = 65
+          Height = 13
+          Caption = 'Muxbir Hesab'
+        end
+        object Label3: TLabel
+          Left = 408
+          Top = 21
+          Width = 20
+          Height = 13
+          Caption = 'Filial'
+        end
+        object Label4: TLabel
+          Left = 657
+          Top = 21
+          Width = 36
+          Height = 13
+          Caption = 'Valyuta'
+        end
+        object DBLookupComboBox1: TDBLookupComboBox
+          Left = 6
+          Top = 40
+          Width = 195
+          Height = 21
+          KeyField = 'ID'
+          ListField = 'ACC_NO'
+          ListSource = SWDataModule.mbacc_dt
+          TabOrder = 0
+        end
+        object DBLookupComboBox2: TDBLookupComboBox
+          Left = 207
+          Top = 40
+          Width = 195
+          Height = 21
+          KeyField = 'ID'
+          ListField = 'ACC_NO'
+          ListSource = SWDataModule.comaacc_dt
+          TabOrder = 1
+        end
+        object DBLookupComboBox3: TDBLookupComboBox
+          Left = 408
+          Top = 40
+          Width = 195
+          Height = 21
+          KeyField = 'ID'
+          ListField = 'NAME'
+          ListSource = SWDataModule.azpfil
+          TabOrder = 2
+          OnCloseUp = DBLookupComboBox3CloseUp
+        end
+        object DBLookupComboBox4: TDBLookupComboBox
+          Left = 620
+          Top = 40
+          Width = 157
+          Height = 21
+          KeyField = 'VALUTE'
+          ListField = 'VAL_NAME'
+          ListSource = SWDataModule.azpval_dt
+          TabOrder = 3
+          OnCloseUp = DBLookupComboBox4CloseUp
+        end
+        object BTnsave: TButton
+          Left = 6
+          Top = 80
+          Width = 75
+          Height = 25
+          Caption = 'Yadda Saxla'
+          TabOrder = 4
+          OnClick = BTnsaveClick
+        end
+      end
+      object DBGrid1: TDBGrid
+        Left = 0
+        Top = 0
+        Width = 792
+        Height = 342
+        Align = alTop
+        DataSource = SWDataModule.azpsett_dt
+        Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit, dgTitleClick, dgTitleHotTrack]
+        PopupMenu = PopupMenu1
+        TabOrder = 1
+        TitleFont.Charset = DEFAULT_CHARSET
+        TitleFont.Color = clWindowText
+        TitleFont.Height = -11
+        TitleFont.Name = 'Tahoma'
+        TitleFont.Style = []
+        Columns = <
+          item
+            Expanded = False
+            FieldName = 'ACCOUNT_BACC'
+            Title.Caption = 'MUXBIR HESAB'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'ACCOUNT_CACC'
+            Title.Caption = 'KOMISSIYA HESAB'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'BRANCH_NAME'
+            Title.Caption = 'FILIAL'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'VALUTE_NAME'
+            Title.Caption = 'VALUTA'
+            Visible = True
+          end>
+      end
+      object BTNadd: TButton
+        Left = 6
+        Top = 348
+        Width = 75
+        Height = 25
+        Caption = #399'lav'#601' Et'
+        TabOrder = 2
+        OnClick = BTNaddClick
+      end
+      object Button1: TButton
+        Left = 702
+        Top = 348
+        Width = 75
+        Height = 25
+        Caption = 'Bagla'
+        TabOrder = 3
+        Visible = False
+        OnClick = Button1Click
+      end
+    end
+    object TabSheet2: TTabSheet
+      Caption = 'MT 205'
+      ImageIndex = 1
+      object DBGrid2: TDBGrid
+        Left = 0
+        Top = 0
+        Width = 792
+        Height = 337
+        Align = alTop
+        DataSource = SWDataModule.azpdatasett
+        Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit, dgTitleClick, dgTitleHotTrack]
+        PopupMenu = PopupMenu2
+        TabOrder = 0
+        TitleFont.Charset = DEFAULT_CHARSET
+        TitleFont.Color = clWindowText
+        TitleFont.Height = -11
+        TitleFont.Name = 'Tahoma'
+        TitleFont.Style = []
+        Columns = <
+          item
+            Expanded = False
+            FieldName = 'SENDCODE_NAME'
+            Title.Caption = #399'm'#601'lyiyat Ad'#305
+            Width = 180
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'ACCOUNT_A'
+            Title.Caption = 'Debet Hesab'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'ACCOUNT_B'
+            Title.Caption = 'Kredit Hesab'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'BRANCH_NAME'
+            Title.Caption = 'Filial'
+            Width = 109
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'VALUTE_NAME'
+            Title.Caption = 'VALYUTA'
+            Width = 63
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'BANKNAME'
+            Title.Caption = 'Bank Ad'#305
+            Width = 200
+            Visible = True
+          end>
+      end
+      object Panel1: TPanel
+        Left = 0
+        Top = 198
+        Width = 793
+        Height = 179
+        TabOrder = 1
+        Visible = False
+        object Label5: TLabel
+          Left = 4
+          Top = 13
+          Width = 78
+          Height = 13
+          Caption = 'Dt Balans Hesab'
+        end
+        object Label6: TLabel
+          Left = 118
+          Top = 13
+          Width = 62
+          Height = 13
+          Caption = 'Debet Hesab'
+        end
+        object Label7: TLabel
+          Left = 326
+          Top = 13
+          Width = 20
+          Height = 13
+          Caption = 'Filial'
+        end
+        object Label8: TLabel
+          Left = 326
+          Top = 60
+          Width = 36
+          Height = 13
+          Caption = 'Valyuta'
+        end
+        object Label9: TLabel
+          Left = 118
+          Top = 59
+          Width = 61
+          Height = 13
+          Caption = 'Kredit Hesab'
+        end
+        object Label10: TLabel
+          Left = 4
+          Top = 59
+          Width = 77
+          Height = 13
+          Caption = 'Kt Balans Hesab'
+        end
+        object Label11: TLabel
+          Left = 550
+          Top = 13
+          Width = 35
+          Height = 13
+          Caption = 'MT205 '
+        end
+        object Label12: TLabel
+          Left = 519
+          Top = 105
+          Width = 50
+          Height = 13
+          Caption = 'Bank Kodu'
+          Visible = False
+        end
+        object Label13: TLabel
+          Left = 566
+          Top = 59
+          Width = 41
+          Height = 13
+          Caption = 'Bank Ad'#305
+        end
+        object Btsave: TButton
+          Left = 3
+          Top = 144
+          Width = 75
+          Height = 25
+          Caption = 'Yadda Saxla'
+          TabOrder = 0
+          OnClick = BtsaveClick
+        end
+        object Btclose: TButton
+          Left = 712
+          Top = 144
+          Width = 75
+          Height = 25
+          Caption = 'Bagla'
+          TabOrder = 1
+          OnClick = BtcloseClick
+        end
+        object Edit1: TEdit
+          Left = 3
+          Top = 32
+          Width = 102
+          Height = 21
+          TabOrder = 2
+          OnKeyPress = Edit1KeyPress
+        end
+        object DBLookupComboBox5: TDBLookupComboBox
+          Left = 324
+          Top = 32
+          Width = 195
+          Height = 21
+          KeyField = 'ID'
+          ListField = 'NAME'
+          ListSource = SWDataModule.azpfil
+          TabOrder = 3
+        end
+        object DBLookupComboBox6: TDBLookupComboBox
+          Left = 324
+          Top = 78
+          Width = 195
+          Height = 21
+          KeyField = 'VALUTE'
+          ListField = 'VAL_NAME'
+          ListSource = SWDataModule.azpval_dt
+          TabOrder = 4
+          OnCloseUp = DBLookupComboBox6CloseUp
+        end
+        object ComboBox3: TComboBox
+          Left = 536
+          Top = 32
+          Width = 213
+          Height = 21
+          TabOrder = 5
+          Items.Strings = (
+            'Subhesab'#305'n Mohk'#601'ml'#601'ndirm'#601'si'
+            'M'#601'rk'#601'zi Bankdan na'#287'd pul al'#305'nmas'#305
+            'Dig'#601'r banklardan na'#287'd pul al'#305'nmas'#305
+            'V'#601'saitin yerl'#601#351'dirilm'#601'si'
+            'Xarici Valyuta sat'#305#351#305
+            'Muxbir Hesabin Mohk'#601'ml'#601'ndirm'#601'si'
+            'MB '#399'razi '#304'dar'#601'l'#601'rind'#601'n na'#287'd pul al'#305'nmas'#305
+            'Xarici Valyuta Al'#305#351#305)
+        end
+        object DBLookupComboBox7: TDBLookupComboBox
+          Left = 114
+          Top = 32
+          Width = 204
+          Height = 21
+          KeyField = 'ID'
+          ListField = 'ACC_NO'
+          ListSource = SWDataModule.mainacc_data
+          TabOrder = 6
+        end
+        object DBLookupComboBox8: TDBLookupComboBox
+          Left = 114
+          Top = 78
+          Width = 204
+          Height = 21
+          KeyField = 'ID'
+          ListField = 'ACC_NO'
+          ListSource = SWDataModule.alteracc_data
+          TabOrder = 7
+        end
+        object Edit2: TEdit
+          Left = 4
+          Top = 78
+          Width = 101
+          Height = 21
+          TabOrder = 8
+          OnKeyPress = Edit2KeyPress
+        end
+        object Edit3: TEdit
+          Left = 575
+          Top = 105
+          Width = 121
+          Height = 21
+          NumbersOnly = True
+          TabOrder = 9
+          Visible = False
+          OnKeyPress = Edit3KeyPress
+        end
+        object DBLookupComboBox9: TDBLookupComboBox
+          Left = 536
+          Top = 78
+          Width = 213
+          Height = 21
+          KeyField = 'BANKCODE'
+          ListField = 'NAME'
+          ListSource = SWDataModule.Allbanks_dt
+          TabOrder = 10
+          OnCloseUp = DBLookupComboBox9CloseUp
+        end
+      end
+      object Btadd: TButton
+        Left = 3
+        Top = 342
+        Width = 75
+        Height = 25
+        Caption = #399'lav'#601' et'
+        TabOrder = 2
+        OnClick = BtaddClick
+      end
+    end
+    object TabSheet3: TTabSheet
+      Caption = 'Biznes process'
+      ImageIndex = 2
+      object DBGrid3: TDBGrid
+        Left = 0
+        Top = 0
+        Width = 792
+        Height = 345
+        DataSource = SWDataModule.Dt_bproc
+        Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit, dgTitleClick, dgTitleHotTrack]
+        PopupMenu = PopupMenu3
+        TabOrder = 0
+        TitleFont.Charset = DEFAULT_CHARSET
+        TitleFont.Color = clWindowText
+        TitleFont.Height = -11
+        TitleFont.Name = 'Tahoma'
+        TitleFont.Style = []
+        Columns = <
+          item
+            Expanded = False
+            FieldName = 'BUS_PROC'
+            Title.Caption = 'Biznes prossesin ad'#305
+            Width = 250
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'VALUTE'
+            Title.Caption = 'Valyuta'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'MT'
+            Visible = True
+          end>
+      end
+      object Panel3: TPanel
+        Left = 0
+        Top = 344
+        Width = 792
+        Height = 36
+        Align = alBottom
+        TabOrder = 1
+        object Label14: TLabel
+          Left = 47
+          Top = 43
+          Width = 70
+          Height = 13
+          Caption = 'Biznes prosess'
+          Visible = False
+        end
+        object Label15: TLabel
+          Left = 253
+          Top = 40
+          Width = 36
+          Height = 13
+          Caption = 'Valyuta'
+          Visible = False
+        end
+        object Label16: TLabel
+          Left = 461
+          Top = 40
+          Width = 14
+          Height = 13
+          Caption = 'MT'
+          Visible = False
+        end
+        object Label17: TLabel
+          Left = 661
+          Top = 40
+          Width = 20
+          Height = 13
+          Caption = 'Filial'
+          Visible = False
+        end
+        object Button2: TButton
+          Left = 7
+          Top = 7
+          Width = 75
+          Height = 25
+          Caption = #399'lav'#601' et'
+          TabOrder = 0
+          OnClick = Button2Click
+        end
+        object Button3: TButton
+          Left = 712
+          Top = 96
+          Width = 75
+          Height = 25
+          Caption = 'Bagla'
+          TabOrder = 1
+          OnClick = Button3Click
+        end
+        object Button4: TButton
+          Left = 7
+          Top = 96
+          Width = 75
+          Height = 25
+          Caption = 'Yadda saxla'
+          TabOrder = 2
+          OnClick = Button4Click
+        end
+        object DBLookupComboBox10: TDBLookupComboBox
+          Left = 12
+          Top = 59
+          Width = 145
+          Height = 21
+          KeyField = 'ID'
+          ListField = 'NAME'
+          ListSource = SWDataModule.dtbproc
+          TabOrder = 3
+          Visible = False
+        end
+        object ComboBox1: TComboBox
+          Left = 216
+          Top = 59
+          Width = 145
+          Height = 21
+          ItemIndex = 0
+          TabOrder = 4
+          Text = 'AZN'
+          Visible = False
+          Items.Strings = (
+            'AZN'
+            'USD'
+            'EUR'
+            'RUR'
+            'TRY'
+            'GBP')
+        end
+        object ComboBox2: TComboBox
+          Left = 416
+          Top = 59
+          Width = 145
+          Height = 21
+          ItemIndex = 0
+          TabOrder = 5
+          Text = 'MT103'
+          Visible = False
+          Items.Strings = (
+            'MT103'
+            'MT102'
+            'MT205')
+        end
+        object ComboBox4: TComboBox
+          Left = 614
+          Top = 59
+          Width = 145
+          Height = 21
+          TabOrder = 6
+          Text = 'Ba'#351' ofis'
+          Visible = False
+          Items.Strings = (
+            'Ba'#351' ofis'
+            'Filial')
+        end
+      end
+    end
+    object TabSheet4: TTabSheet
+      Caption = 'MT205 Names'
+      ImageIndex = 3
+      object DBGrid4: TDBGrid
+        Left = 0
+        Top = 0
+        Width = 792
+        Height = 380
+        Align = alClient
+        DataSource = SWDataModule.rb_data
+        TabOrder = 0
+        TitleFont.Charset = DEFAULT_CHARSET
+        TitleFont.Color = clWindowText
+        TitleFont.Height = -11
+        TitleFont.Name = 'Tahoma'
+        TitleFont.Style = []
+        Columns = <
+          item
+            Expanded = False
+            FieldName = 'ID'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'RBNAME'
+            Title.Caption = '205 Name'
+            Title.Color = clBlack
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'VALUTE'
+            PickList.Strings = (
+              'AZN'
+              'USD'
+              'EUR'
+              'RUR'
+              'TRY'
+              'GBP')
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'BPCODE'
+            Title.Caption = 'Biznes proses kod'
+            Visible = True
+          end>
+      end
+    end
+  end
+  object PopupMenu1: TPopupMenu
+    Left = 184
+    Top = 72
+    object S1: TMenuItem
+      Caption = 'Sil'
+      OnClick = S1Click
+    end
+  end
+  object PopupMenu2: TPopupMenu
+    Left = 184
+    Top = 128
+    object S2: TMenuItem
+      Caption = 'Sil'
+      OnClick = S2Click
+    end
+  end
+  object PopupMenu3: TPopupMenu
+    Left = 184
+    Top = 184
+    object S3: TMenuItem
+      Caption = 'Sil'
+      OnClick = S3Click
+    end
+  end
+end

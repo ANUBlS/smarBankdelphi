@@ -1,0 +1,292 @@
+object Pcust_ServiceForm: TPcust_ServiceForm
+  Left = 0
+  Top = 0
+  Width = 1028
+  Height = 611
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  OnCreate = ActiveFormCreate
+  PixelsPerInch = 96
+  TextHeight = 13
+  object XFPanel1: TXFPanel
+    Left = 0
+    Top = 0
+    Width = 1028
+    Height = 57
+    Align = alTop
+    BevelKind = bkFlat
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentColor = True
+    ParentFont = False
+    TabOrder = 0
+    object ToolBar1: TToolBar
+      Left = 1
+      Top = 1
+      Width = 1022
+      Height = 42
+      ButtonHeight = 24
+      ButtonWidth = 80
+      Caption = 'ToolBar'
+      Color = clScrollBar
+      DrawingStyle = dsGradient
+      EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clDefault
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentColor = False
+      ParentFont = False
+      ShowCaptions = True
+      TabOrder = 0
+      object BtnCust: TToolButton
+        Left = 0
+        Top = 0
+        Caption = '  M'#252#351't'#601'ril'#601'r  '
+        ImageIndex = 0
+        Style = tbsDropDown
+        OnClick = BtnCustClick
+      end
+      object ToolButton2: TToolButton
+        Left = 93
+        Top = 0
+        Width = 4
+        Caption = 'ToolButton2'
+        ImageIndex = 0
+        Style = tbsSeparator
+      end
+      object ToolButton1: TToolButton
+        Left = 97
+        Top = 0
+        Caption = 'Search'
+        ImageIndex = 0
+        OnClick = ToolButton1Click
+      end
+    end
+  end
+  object Panle_search: TXFPanel
+    Left = 0
+    Top = 57
+    Width = 1028
+    Height = 554
+    Align = alClient
+    BevelKind = bkFlat
+    TabOrder = 1
+    Visible = False
+    ExplicitLeft = 98
+    ExplicitTop = 41
+    object XFPanelTeyp: TXFPanel
+      Left = 1
+      Top = 1
+      Width = 1022
+      Height = 35
+      Align = alTop
+      BevelKind = bkFlat
+      TabOrder = 0
+      ExplicitLeft = 17
+      object XFLabel7: TXFLabel
+        Left = 23
+        Top = 9
+        Width = 34
+        Height = 13
+        Caption = 'Axtaris'
+      end
+      object CBSearch: TComboBox
+        Left = 79
+        Top = 4
+        Width = 145
+        Height = 21
+        Style = csDropDownList
+        TabOrder = 0
+      end
+      object EditSearch: TEdit
+        Left = 230
+        Top = 4
+        Width = 269
+        Height = 21
+        TabOrder = 1
+        OnChange = EditSearchChange
+      end
+    end
+    object XFPanel12: TXFPanel
+      Left = 1
+      Top = 197
+      Width = 1022
+      Height = 161
+      Align = alTop
+      BevelKind = bkFlat
+      TabOrder = 1
+      ExplicitTop = 264
+      object XDBGrid2: TXDBGrid
+        Left = 1
+        Top = 1
+        Width = 1016
+        Height = 155
+        Align = alClient
+        GridStyle.VisualStyle = vsXPStyle
+        TabOrder = 0
+      end
+    end
+    object XFPanel2: TXFPanel
+      Left = 1
+      Top = 36
+      Width = 1022
+      Height = 161
+      Align = alTop
+      BevelKind = bkFlat
+      TabOrder = 2
+      ExplicitTop = 264
+      object XDBGrid1: TXDBGrid
+        Left = 1
+        Top = 1
+        Width = 1016
+        Height = 155
+        Align = alClient
+        GridStyle.VisualStyle = vsXPStyle
+        TabOrder = 0
+      end
+    end
+  end
+  object OpenPictureDialog1: TOpenPictureDialog
+    FileName = 'D:\Smart-Bank\Source\Images\bmp108.bmp'
+    Filter = 'Bitmaps (*.bmp)|*.bmp'
+    Left = 37
+    Top = 232
+  end
+  object ODS_CUSTOMERS: TOracleDataSet
+    SQL.Strings = (
+      
+        'SELECT id ,cust_name,lastname,firstname,patronymic  from pcust_v' +
+        'iew  where  close_dat is  null and cust_type in(1,2,3,4)'
+      ''
+      ''
+      ''
+      ''
+      ''
+      'order by id'
+      ''
+      ''
+      ''
+      ''
+      '')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000050000000400000049004400010000000000100000004C0041005300
+      54004E0041004D0045000100000000001200000043005500530054005F004E00
+      41004D00450001000000000012000000460049005200530054004E0041004D00
+      45000100000000001400000050004100540052004F004E0059004D0049004300
+      010000000000}
+    Session = sboapiDataModule.SBSession
+    FilterOptions = [foCaseInsensitive, foNoPartialCompare]
+    Left = 312
+    Top = 320
+    object ODS_CUSTOMERSID: TIntegerField
+      FieldName = 'ID'
+    end
+    object ODS_CUSTOMERSCUST_NAME: TWideStringField
+      FieldName = 'CUST_NAME'
+      Size = 360
+    end
+    object ODS_CUSTOMERSLASTNAME: TWideStringField
+      FieldName = 'LASTNAME'
+      Size = 120
+    end
+    object ODS_CUSTOMERSFIRSTNAME: TWideStringField
+      FieldName = 'FIRSTNAME'
+      Size = 120
+    end
+    object ODS_CUSTOMERSPATRONYMIC: TWideStringField
+      FieldName = 'PATRONYMIC'
+      Size = 120
+    end
+  end
+  object DS_CUSTOMERS: TDataSource
+    DataSet = ODS_CUSTOMERS
+    Left = 304
+    Top = 376
+  end
+  object DS_CUSTOMERS_tr: TDataSource
+    DataSet = ODS_CUSTOMERS_tr
+    Left = 440
+    Top = 376
+  end
+  object ODS_CUSTOMERS_tr: TOracleDataSet
+    SQL.Strings = (
+      
+        'SELECT p.id ,p.cust_name,p.lastname,p.firstname,p.patronymic,p.c' +
+        'ust_type,p.inn ,p.passport,p.passp_number from pcust_view p '
+      'where close_dat is null '
+      ':p_valu'
+      ''
+      ''
+      ''
+      ''
+      ''
+      'order by id'
+      ''
+      ''
+      ''
+      ''
+      '')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000E0000003A0050005F00560041004C005500010000000000
+      000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      05000000090000000400000049004400010000000000100000004C0041005300
+      54004E0041004D0045000100000000001200000043005500530054005F004E00
+      41004D00450001000000000012000000460049005200530054004E0041004D00
+      45000100000000001400000050004100540052004F004E0059004D0049004300
+      0100000000001200000043005500530054005F00540059005000450001000000
+      00000600000049004E004E000100000000001000000050004100530053005000
+      4F005200540001000000000018000000500041005300530050005F004E005500
+      4D00420045005200010000000000}
+    Session = sboapiDataModule.SBSession
+    FilterOptions = [foCaseInsensitive, foNoPartialCompare]
+    Left = 440
+    Top = 320
+    object ODS_CUSTOMERS_trID: TIntegerField
+      FieldName = 'ID'
+    end
+    object ODS_CUSTOMERS_trCUST_NAME: TWideStringField
+      FieldName = 'CUST_NAME'
+      Size = 360
+    end
+    object ODS_CUSTOMERS_trLASTNAME: TWideStringField
+      FieldName = 'LASTNAME'
+      Size = 120
+    end
+    object ODS_CUSTOMERS_trFIRSTNAME: TWideStringField
+      FieldName = 'FIRSTNAME'
+      Size = 120
+    end
+    object ODS_CUSTOMERS_trPATRONYMIC: TWideStringField
+      FieldName = 'PATRONYMIC'
+      Size = 120
+    end
+    object ODS_CUSTOMERS_trCUST_TYPE: TFloatField
+      FieldName = 'CUST_TYPE'
+    end
+    object ODS_CUSTOMERS_trINN: TWideStringField
+      FieldName = 'INN'
+      Size = 80
+    end
+    object ODS_CUSTOMERS_trPASSPORT: TWideStringField
+      FieldName = 'PASSPORT'
+      Size = 120
+    end
+    object ODS_CUSTOMERS_trPASSP_NUMBER: TWideStringField
+      FieldName = 'PASSP_NUMBER'
+      Size = 120
+    end
+  end
+end

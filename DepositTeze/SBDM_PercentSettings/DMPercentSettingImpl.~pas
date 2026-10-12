@@ -1,0 +1,85 @@
+unit DMPercentSettingImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, OracleData;
+
+type
+  TDMPercentSetting = class(TDataModule)
+    DepositPerSetting: TOracleDataSet;
+    PerSettingDatSrc: TDataSource;
+    DepositPerSettingID: TFloatField;
+    DepositPerSettingDEPOSITID: TFloatField;
+    DepositPerSettingCURRENCYID: TFloatField;
+    DepositPerSettingINTERESTRATE: TFloatField;
+    DepositTypes: TOracleDataSet;
+    DepositTypesDatSrc: TDataSource;
+    DepositTypesID: TFloatField;
+    DepositTypesTYPE: TStringField;
+    Valutes: TOracleDataSet;
+    ValutesDatSrc: TDataSource;
+    ValutesVAL_NAME: TStringField;
+    ValutesVALU_NAME: TStringField;
+    DepositPerSettingFIRSTAMOUNT: TFloatField;
+    DepositPerSettingLASTAMOUNT: TFloatField;
+    ValutesVALUTE: TIntegerField;
+    procedure DataModuleCreate(Sender: TObject);
+    procedure DataModuleDestroy(Sender: TObject);
+    procedure DepositTypesDatSrcDataChange(Sender: TObject; Field: TField);
+  private
+    { Private declarations }
+  public
+    procedure WaitForOp;
+  end;
+
+var
+  DMPercentSetting: TDMPercentSetting;
+
+implementation
+
+{$R *.DFM}
+uses sboapiDataModuleImpl;
+
+procedure TDMPercentSetting.WaitForOp;
+var P_DepositID,P_CurrencyID :Integer;
+begin
+   with DMPercentSetting do
+   begin
+      with DepositTypes do
+           P_DepositID := FieldByName('ID').AsInteger;
+
+      with Valutes do
+           P_CurrencyID := FieldByName('Valute').AsInteger;
+
+   with DepositPerSetting do
+   begin
+      close;
+      setVariable('DepID',P_DepositID);
+      setVariable('CurrID',P_CurrencyID);
+      open;
+   end;
+
+   end;
+end;
+
+procedure TDMPercentSetting.DataModuleCreate(Sender: TObject);
+begin
+   DepositTypes.Open;
+   Valutes.Open;
+end;
+
+procedure TDMPercentSetting.DataModuleDestroy(Sender: TObject);
+begin
+   DepositTypes.CloseAll;
+   Valutes.CloseAll;
+end;
+
+procedure TDMPercentSetting.DepositTypesDatSrcDataChange(Sender: TObject;
+  Field: TField);
+begin
+//WaitForOp
+end;
+
+end.

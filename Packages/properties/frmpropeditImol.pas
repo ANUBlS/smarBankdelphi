@@ -1,0 +1,58 @@
+unit frmpropeditImol;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ComCtrls, ExtCtrls, DBCtrls, Grids, DBGridEh,  Db,
+  OracleData;
+
+type
+  TFrmSeting = class(TForm)
+    DBGridEh2: TDBGridEh;
+    DBNavigator1: TDBNavigator;
+    StatusBar1: TStatusBar;
+    DBGridEh1: TDBGridEh;
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmSeting: TFrmSeting;
+
+implementation
+uses DMprop,sboapiDataModuleImpl,SBTranslateProc;
+{$R *.DFM}
+
+procedure TFrmSeting.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+ resize := false
+end;
+
+procedure TFrmSeting.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+   if ord(key) = VK_ESCAPE then close
+end;
+
+procedure TFrmSeting.FormCreate(Sender: TObject);
+begin
+DMproperties.acc_zones.Open;
+   DMproperties.acc_zone_info.Open;
+   SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TFrmSeting.FormDestroy(Sender: TObject);
+begin
+DMproperties.acc_zones.close;
+   DMproperties.acc_zone_info.close
+end;
+
+end.

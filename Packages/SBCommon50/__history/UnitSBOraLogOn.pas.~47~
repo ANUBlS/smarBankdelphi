@@ -1,0 +1,528 @@
+﻿unit UnitSBOraLogOn;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, Buttons, Oracle, ExtCtrls, HintBox, Registry, DB, OracleData,variants;
+
+
+type
+  TCheckDataErr = class(Exception);
+
+  TfmOraSBLogOn = class(TForm)
+    GroupBox1: TGroupBox;
+    btOk: TBitBtn;
+    btCancel: TBitBtn;
+    edUserName: TEdit;
+    edPassword: TEdit;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    cbDatabase: TComboBox;
+    hbError: THintBox;
+    OracleSession1: TOracleSession;
+    OracleDataSet1: TOracleDataSet;
+    Label4: TLabel;
+    OracleDataSet2: TOracleDataSet;
+    OracleDataSet2TEST: TFloatField;
+    OracleDataSet3: TOracleDataSet;
+    tr: TBitBtn;
+    OracleDataSet4: TOracleDataSet;
+    procedure btOkClick(Sender: TObject);
+    function  CheckData(value : String):boolean;
+    function  CheckControls():boolean;
+    procedure btCancelClick(Sender: TObject);
+    procedure GetTNSNames;
+    procedure FormCreate(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure trClick(Sender: TObject);
+  private
+    { Private declarations }
+        pScanner: Pointer;
+    pLastScannedImpression: Pointer;
+    FLastTemplate: Pointer;
+    FDBDir: String;
+    say1:integer;
+  public
+    LogonUsername : String;
+    LogonPassword : String;
+    LogonDatabase : String;
+    filename:String;
+    say:integer;
+    { Public declarations }
+  end;
+
+var
+  fmOraSBLogOn: TfmOraSBLogOn;
+
+implementation
+
+{$R *.DFM}
+  // uses sboapiDataModuleImpl, SBTranslateProc;
+
+     uses bsdkdll, UnitChangePasswordForm;
+
+
+     function CheckFingerPrint(const SRec: TSearchRec; pTargetTemplate: Pointer) :integer;
+var
+  res: Integer;
+  pTemplate: Pointer;
+  bufferTemplate: PChar;
+  pTransfered: Integer;
+  pMatcher: Pointer;
+  score: Integer;
+begin
+  GetMem(bufferTemplate, SRec.Size);
+  try
+
+   // LogMessage(Format('Loading template: %s', [SRec.Name]));
+
+    // load buffer from file
+    with TFileStream.Create(GetCurrentDir()+'\DB\'+SRec.Name, fmOpenRead) do
+    try
+      ReadBuffer(PChar(bufferTemplate)^, SRec.Size);
+    finally
+      Free;
+    end;
+
+    //loading first template from buffer
+    res := Bsdk_Template_Create(pTemplate, 0);
+    CheckResult(res);
+    try
+      res := Bsdk_Template_Load(pTemplate, bufferTemplate, SRec.Size, pTransfered);
+      CheckResult(res);
+
+      //matching template1 with template2
+      res := Bsdk_Matcher_Create(pMatcher, 0, 0);
+      CheckResult(res);
+      try
+        res := Bsdk_Matcher_Compare(pMatcher, pTemplate, pTargetTemplate, score);
+        CheckResult(res);
+      finally
+        // free matcher
+       BSDK_Destroy_Object(pMatcher);
+      end;
+
+     // LogMessage(Format('Matching score: %d', [score]));
+
+      if score <> 0 then
+      // !!!
+      //say:=score;
+       // ShowMessage(SRec.Name)
+
+
+         begin
+         CheckFingerPrint:=1;
+            //ShowMessage(SRec.Name);
+  // fmOraSBLogOn.LogonUsername := fmOraSBLogOn.edUserName.Text;
+ // fmOraSBLogOn.LogonPassword := fmOraSBLogOn.edPassword.Text;
+  //fmOraSBLogOn.LogonDatabase := fmOraSBLogOn.cbDatabase.Text;
+  //fmOraSBLogOn.ModalResult := mrOk;
+
+
+
+           //fmOraSBLogOn.tr.Click;
+         end
+
+
+          else
+          begin
+          CheckFingerPrint:=0;
+          if MessageDlg('Fingerprint is incorrect! Check again?',mtconfirmation,[mbyes,mbno],0)=mrno then
+            begin
+        //      FreeTemplate();
+  //if (pScanner <> nil) then
+  //  BSDK_Destroy_Object(pScanner);
+         Application.Terminate
+          end
+           else //fmOraSBLogOn.btOk.Click;
+
+
+         end;
+    finally
+      // free template
+      BSDK_Destroy_Object(pTemplate);
+    end;
+  finally
+    FreeMem(bufferTemplate);
+    DeleteFile(GetCurrentDir()+'\DB\'+SRec.Name);
+  end;
+end;
+
+
+
+
+
+      procedure FreeTemplate();
+ var
+ FLastTemplate: Pointer;
+begin
+  if (FLastTemplate <> nil) then
+  begin
+    BSDK_Destroy_Object(FLastTemplate);
+    FLastTemplate := nil;
+  end;
+end;
+
+
+  function ScanImage(pScanner : pointer) : pointer;
+var
+  pImage : pointer;
+  expressQuality : integer;
+  res : integer;
+begin
+  expressQuality := 0;
+  pImage := nil;
+  while (expressQuality < 20) do begin
+      if (pImage <> nil) then
+          BSDK_Destroy_Object(pImage);
+
+      //acquiring image from the scanner
+      res := Bsdk_Scanner_AcquireImage(pScanner, pImage);
+      CheckResult(res);
+
+      //getting image quality
+      expressQuality := Bsdk_Image_GetExpressQuality(pImage, 8);
+  end;
+
+  Result := pImage;
+end;
+
+function Initialize(): Pointer;
+var
+  res: integer;
+  pDeviceList: pointer;
+  pDeviceDescriptorPtr: pointer;
+  pScanner: pointer;
+begin
+  //creating License object
+  res := bsdk_License_Create(BSDK_LICENSE_TYPE_ALL);
+  CheckResult(res);
+
+  //creating the list of devices
+  res := BSDK_DeviceList_Create(pDeviceList, Bsdk_Device_Type_Scanner_Any);
+  CheckResult(res);
+  if (BSDK_DeviceList_GetSize(pDeviceList)= 0) then
+    raise Exception.Create('Scanner was not found');
+
+  //selecting first found device
+  pDeviceDescriptorPtr := BSDK_DeviceList_GetDeviceDescriptor(pDeviceList, 0);
+  //creating Scanner object
+  res := Bsdk_Scanner_Create(pScanner, pDeviceDescriptorPtr);
+  CheckResult(res);
+
+  Result := pScanner;
+end;
+
+
+procedure TfmOraSBLogOn.GetTNSNames;
+var
+  i,k: integer;
+  n:Pchar;
+  Mem : TStringList;
+
+    procedure GetTNSFile;
+     const
+       Cval = '\NETWORK\ADMIN\tnsnames.ora';
+    var
+      Reg : TRegistry;
+      Value : String;
+    begin
+      reg := TRegistry.Create;
+      Reg.Access := KEY_READ;
+      with reg do
+        begin
+          RootKey := HKEY_LOCAL_MACHINE;
+          OpenKey('SOFTWARE\ORACLE\KEY_OraDb11g_home1',False);
+          value := ReadString('ORACLE_HOME');
+          if FileExists(value+cval) then
+          Mem.LoadFromFile(value+cval)// Add(value+cval)
+        else
+          ShowMessage('File Not Exists!');
+        end;
+    end;
+
+begin
+ mem :=  TStringList.Create;
+ GetTNSFile;
+
+  with Mem do
+    begin
+     for i:=0 to  Count-1 do
+        begin
+          n:= PChar(mem[i]);
+          if (n[0] <> '#') and (n[0]<>'') and (n[0]<>' ') then
+           begin
+             k:= Pos('=',mem[i]);
+             cbDatabase.items.add(copy(mem[i],0,k-2));
+           end;
+        end;
+    end;
+
+end;
+
+
+function TfmOraSBLogOn.CheckData(value : String):boolean;
+begin
+  result := value = '';
+end;
+
+
+function TfmOraSBLogOn.CheckControls():boolean;
+begin
+  result := false;
+  try
+   if CheckData( edUserName.Text ) then raise TCheckDataErr.Create('Enter your username!');
+   if CheckData( edPassword.Text ) then raise TCheckDataErr.Create('Enter your password');
+   if CheckData( cbDatabase.Text ) then raise TCheckDataErr.Create('Enter database!');
+   result := true;
+  except
+   on E:TCheckDataErr do
+      hbError.ShowMessage(E.Message);
+  end;
+end;
+
+procedure TfmOraSBLogOn.btOkClick(Sender: TObject);
+var
+  q,z:integer;
+  res: Integer;
+  Bmp: PChar;
+  BmpSize: Integer;
+  SRec: TSearchRec;
+  expire,expire1 :string;
+  const
+  pImageSet: Pointer = nil;
+  pImageProcessor: Pointer = nil;
+  pTemp: Pointer = nil;
+
+begin
+expire   :='ORA-28001' ;
+  fmPassChange:=TfmPassChange.Create(Self);
+  if fmPassChange.edNewPass.Text<>'' then
+  begin
+   edPassword.Text:=fmPassChange.edNewPass.Text;
+  end;
+  FreeTemplate();
+  if (pScanner <> nil) then
+    BSDK_Destroy_Object(pScanner);
+
+  with OracleSession1 do
+    try   begin
+   LogonDatabase:=cbDatabase.Text;
+   LogonUsername:=edUserName.Text;
+   LogonPassword:=edPassword.Text;
+   LogOn;
+
+  end;
+   except
+     on E:EOracleError do begin
+        expire1:=copy(E.Message,0,9);
+         ShowMessage(E.Message);
+         //ShowMessage(inttostr(E.ErrorCode));
+        // ShowMessage(expire);
+
+       if expire=expire1 then
+         begin
+        // ShowMessage(E.Message);
+              fmPassChange:=TfmPassChange.Create(Self);
+               fmPassChange.ShowModal;
+               if fmPassChange.ModalResult = mrOk  then
+                SetPassword(fmPassChange.edNewPass.Text);
+                LogOn;
+         end;
+     end;
+    end;
+
+ {  if ExpirationMessage <> '' then ShowMessage(ExpirationMessage);
+  except on E:EOracleError do begin
+   if E.ErrorCode <> 28001 then ShowMessage(E.Message)
+    else try // ORA-28001, The account has expired
+    begin
+     fmPassChange:=TfmPassChange.Create(Self);
+     fmPassChange.ShowModal;
+     if fmPassChange.ModalResult = mrOk  then
+      SetPassword(fmPassChange.edNewPass.Text);
+     Logon;
+    end;
+    except
+     on E:EOracleError do ShowMessage(E.Message);
+    end;
+   end;
+  end;   }
+    OracleDataSet1.Open;
+    OracleDataSet4.Open;
+  { if (OracleDataSet4.FieldByName('ex').asinteger<=1)
+    or (OracleDataSet4.FieldByName('ex').asvariant<>null)
+    then
+    //---------------------------
+    begin
+               fmPassChange:=TfmPassChange.Create(Self);
+               fmPassChange.ShowModal;
+    end
+    //--------------------------
+   else  }
+
+   ///Sabuhi M 13.01.2020
+    if (OracleDataSet4.FieldByName('ex').asinteger<100)
+    and (OracleDataSet4.FieldByName('ex').asstring<>'')
+     then
+    ShowMessage('Şifrənizin bitməsinə '+OracleDataSet4.FieldByName('ex').asstring+
+    ' gün qalıb ! Şifrənizin yeniləyin! ');
+
+   {   ShowMessage('Your password will expire in '+OracleDataSet4.FieldByName('ex').asstring+
+    ' days! Please change your password! ');    }
+    //ShowMessage(OracleDataSet4.FieldByName('ex').asstring);
+
+    if OracleDataSet1.FieldByName('finger3').asinteger=1 then
+    q:=0 else q:=1;
+
+
+   //ShowMessage(OracleDataSet1.FieldByName('obj').asstring);
+   //OracleSession1.Connected:=False;
+
+
+    //q:=2;
+
+  if q=1 then
+   begin
+   Label4.Visible:=False;
+  if not CheckControls() then Exit;
+  OracleSession1.Connected:=False;
+  if fmPassChange.edNewPass.Text<>'' then
+begin
+ edPassword.Text:=fmPassChange.edNewPass.Text;
+end;
+  LogonUsername := edUserName.Text;
+  LogonPassword := edPassword.Text;
+  LogonDatabase := cbDatabase.Text;
+  ModalResult := mrOk;
+   end else
+   begin
+
+   //-------------------------------   open divace
+       paint();
+         pScanner := nil;
+       Label4.Visible:=True;
+       label4.Caption:='Device is checking';
+ // LogMessage('Initializing...');
+ paint();
+
+  FDBDir := GetCurrentDir()+'\DB';
+  pScanner := Initialize();
+
+  //LogMessage('Ready!');
+
+   //-------------------------------- open divace
+
+   //----------------------------------- scan finger
+      label4.Caption:='barmağınızı yaxınlaşdırın';
+      repaint();
+filename:=FDBDir+'\';
+
+//filename:='D:\123.bmp';
+  //LogMessage('Acquiring fingerprint...');
+  pLastScannedImpression := ScanImage(pScanner);
+
+  GetMem(Bmp, 500*500);
+  CheckResult(Bsdk_Image_Save(pLastScannedImpression, Bmp, 500*500, BmpSize));
+ // with TFileStream.Create(filename, fmCreate) do
+ // try
+  //  WriteBuffer(PChar(Bmp)^, BmpSize);
+ // finally
+  //  Free;
+  //end;
+  //Image1.Picture.Bitmap.LoadFromFile(filename);
+
+  FreeTemplate();
+
+  //creating ImageSet object to hold Image objects
+  res := Bsdk_ImageSet_Create(pImageSet);
+  CheckResult(res);
+  //adding Image objects to ImageSet with some FingerCode
+  res := Bsdk_ImageSet_AddImage(pImageSet, pLastScannedImpression, 0);
+  CheckResult(res);
+
+  //creating ImageProcessor object to create template
+  //You can specify math type when creating ImageProcessor, Template, TemplateSet or Matcher objects.
+  //The math type should be the same for all these objects.
+  res := Bsdk_ImageProcessor_Create(pImageProcessor, 0);
+  CheckResult(res);
+
+  res := Bsdk_ImageProcessor_CreateTemplateFromImageSet(pImageProcessor, pImageSet, pTemp);
+  CheckResult(res);
+
+  BSDK_Destroy_Object(pImageProcessor);
+  BSDK_Destroy_Object(pImageSet);
+
+  FLastTemplate := pTemp;
+
+  //LogMessage('Done!');
+    //DeleteFile(filename);
+//------------------------------------ scan finger
+
+   //--------------------------------------- check finger
+        label4.Caption:='Checking with database';
+       // if OracleDataSet1.FieldByName('finger').AsVariant <1 then
+        // begin
+         //  ShowMessage('ko');
+          // Application.Terminate;
+         //end;
+         OracleDataSet2.Open;
+         OracleDataSet3.Open;
+        (OracleDataSet3.FieldByName('finger2') as TBLOBField).SaveTofile(filename+OracleDataSet2.FieldByName('test').AsString+'.bin');
+
+if FindFirst(filename+OracleDataSet2.FieldByName('test').AsString+'.bin', faAnyFile, SRec) <> 0 then
+    raise EReadError.Create('Failed to read database');
+  try
+    repeat
+     z:= CheckFingerPrint(SRec, FLastTemplate);
+   until FindNext(SRec) > 0;
+  finally
+    FindClose(SRec);
+  end;
+       //ShowMessage(score);
+        if z=1 then tr.Click;
+
+     DeleteFile(filename+OracleDataSet2.FieldByName('test').AsString+'.bin') ;
+         FreeTemplate();
+  if (pScanner <> nil) then
+    BSDK_Destroy_Object(pScanner);
+   //---------------------------------------- check finger
+
+
+
+   end;
+   end;
+
+
+
+procedure TfmOraSBLogOn.trClick(Sender: TObject);
+begin
+//  if not CheckControls() then Exit;
+//  OracleSession1.Connected:=False;
+  LogonUsername := edUserName.Text;
+  LogonPassword := edPassword.Text;
+  LogonDatabase := cbDatabase.Text;
+  ModalResult := mrOk;
+end;
+
+procedure TfmOraSBLogOn.btCancelClick(Sender: TObject);
+begin
+  ModalResult := mrCancel;
+end;
+
+procedure TfmOraSBLogOn.FormCreate(Sender: TObject);
+begin
+  GetTNSNames();
+  //SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TfmOraSBLogOn.FormShow(Sender: TObject);
+begin
+ edUserName.Text := LogonUsername ;
+ edPassword.Text := LogonPassword ;
+ cbDatabase.Text := LogonDatabase ;
+end;
+
+end.

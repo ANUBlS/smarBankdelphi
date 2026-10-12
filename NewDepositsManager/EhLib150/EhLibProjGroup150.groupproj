@@ -1,0 +1,36 @@
+﻿	<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+		<PropertyGroup>
+			<ProjectGuid>{CBC4C881-ACD1-460D-B5F6-DD969EFABDED}</ProjectGuid>
+		</PropertyGroup>
+		<ItemGroup>
+			<Projects Include="..\Expired_Securities\Expired_Securities.dproj">
+				<Dependencies/>
+			</Projects>
+		</ItemGroup>
+		<ProjectExtensions>
+			<Borland.Personality>Default.Personality.12</Borland.Personality>
+			<Borland.ProjectType/>
+			<BorlandProject>
+				<Default.Personality/>
+			</BorlandProject>
+		</ProjectExtensions>
+		<Target Name="Expired_Securities">
+			<MSBuild Projects="..\Expired_Securities\Expired_Securities.dproj"/>
+		</Target>
+		<Target Name="Expired_Securities:Clean">
+			<MSBuild Projects="..\Expired_Securities\Expired_Securities.dproj" Targets="Clean"/>
+		</Target>
+		<Target Name="Expired_Securities:Make">
+			<MSBuild Projects="..\Expired_Securities\Expired_Securities.dproj" Targets="Make"/>
+		</Target>
+		<Target Name="Build">
+			<CallTarget Targets="Expired_Securities"/>
+		</Target>
+		<Target Name="Clean">
+			<CallTarget Targets="Expired_Securities:Clean"/>
+		</Target>
+		<Target Name="Make">
+			<CallTarget Targets="Expired_Securities:Make"/>
+		</Target>
+		<Import Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')" Project="$(BDS)\Bin\CodeGear.Group.Targets"/>
+	</Project>

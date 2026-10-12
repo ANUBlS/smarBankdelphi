@@ -1,0 +1,68 @@
+﻿unit CourtPayments;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, DBGridEhGrouping, CMExcelExport, GridsEh, DBGridEh, StdCtrls,
+  ComCtrls;
+
+type
+  TFormPayments = class(TForm)
+    GroupBox1: TGroupBox;
+    Label1: TLabel;
+    DTPBegin: TDateTimePicker;
+    DTPend: TDateTimePicker;
+    Button1: TButton;
+    Button2: TButton;
+    DBGridEh1: TDBGridEh;
+    ExcelExport: TCMExcelExport;
+    procedure Button2Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormPayments: TFormPayments;
+
+implementation
+
+uses UnitDataModuleCourt;
+
+{$R *.dfm}
+
+procedure TFormPayments.Button1Click(Sender: TObject);
+var
+Bdat,Edat :TDateTime;
+begin
+   Bdat := Integer(Trunc(DTPBegin.DateTime));
+   Edat := Integer(Trunc(DTPend.DateTime));
+   with DataModuleCourt.PaymentReport do
+   begin
+    if Active then close;
+    SetVariable('bdat',Bdat);
+    SetVariable('edat',Edat);
+    open;
+   end;
+end;
+
+procedure TFormPayments.Button2Click(Sender: TObject);
+begin
+with ExcelExport do
+  begin
+    Connect;
+    ExportDataset(DBGridEh1.DataSource.DataSet,'Ödənişlər',True);
+  end;
+end;
+
+procedure TFormPayments.FormShow(Sender: TObject);
+begin
+  DTPBegin.DateTime:=now-30;
+  DTPend.DateTime:=now;
+end;
+
+end.

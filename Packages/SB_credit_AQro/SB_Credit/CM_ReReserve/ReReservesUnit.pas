@@ -1,0 +1,135 @@
+unit ReReservesUnit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, NLSDialogs,
+  NLSLocalizer, StdCtrls;
+
+type
+  TReReservesForm = class(TForm)
+    Button1: TButton;
+    NLSLocalizer1: TNLSLocalizer;
+    procedure Button1Click(Sender: TObject);
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  ReReservesForm: TReReservesForm;
+  procedure InitPlugin(s:String);export;
+
+implementation
+      uses ReReservesDatModImpl,CommonDecls,ProgressUnit;
+{$R *.DFM}
+
+ procedure InitPlugin(s:String);export;
+ begin
+   ReReservesForm.ShowModal;
+ end;
+
+procedure TReReservesForm.Button1Click(Sender: TObject);
+Resourcestring Can_ReReserveInf = 'Сечилмиш ещтийатларын гиймятляндирилмясиня яминсинизми?';
+var i ,
+    SlectedRowCnt,
+    CrdId :Integer;
+begin
+    with ProgressForm.ProgressBar do
+    begin
+      Position := 0;
+      Max := CommonDBGrid.SelectedRows.Count;
+      Step := 1;
+    end;
+
+   if MessageDlg(Can_ReReserveInf,
+              mtInformation,
+              [mbYes,mbNo],
+               0) <> mrYes
+               then exit ;
+
+  ProgressForm.Show;
+  ProgressForm.Update;
+  Self.Update;
+
+  if   CommonDBGrid.SelectedRows.Count>1 then
+  begin
+
+   with CommonDBGrid, DataSource.DataSet do
+   begin
+      SlectedRowCnt := SelectedRows.Count;
+      for i:=0 to SlectedRowCnt-1 do
+      begin
+         GotoBookmark(Pointer(SelectedRows[I]));
+         CrdId :=FieldByName('ID').AsInteger;
+
+        // try
+         with ReReservesDatMod do
+              cm_reserve_contr.CallProcedure('CorrectReserve',[CrdId]);
+          ProgressForm.ProgressBar.Position := i + 1;
+      // except
+     //   ShowMessage('Гиймятляндирилмя апарыла бильяди !')
+     // end;
+   end;
+   end;
+   end
+   else
+   begin
+   with CommonDBGrid, DataSource.DataSet do
+   begin
+         CrdId :=FieldByName('ID').AsInteger;
+  //    ShowMessage(IntToStr(CrdId));
+      //   try
+         with ReReservesDatMod do
+              cm_reserve_contr.CallProcedure('CorrectReserve',[CrdId]);
+//          ProgressForm.ProgressBar.Position := i + 1;
+   //    except
+     //   ShowMessage('Гиймятляндирилмя апарыла бильяди !')
+      //end;
+
+   end;
+
+   end;
+
+   ProgressForm.Close;
+   ShowMessage('Гиймятляндирилмя битди !');
+
+end;
+
+
+exports
+ InitPlugin;
+
+procedure TReReservesForm.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+  Resize := False;
+end;
+
+procedure TReReservesForm.FormCreate(Sender: TObject);
+begin
+   ReReservesDatMod :=TReReservesDatMod.Create(self);
+   ProgressForm :=TProgressForm.Create(Self);
+end;
+
+procedure TReReservesForm.FormDestroy(Sender: TObject);
+begin
+  ReReservesDatMod.Free;
+  ProgressForm.Free;
+end;
+
+procedure TReReservesForm.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+  if ord(Key) = VK_ESCAPE then close;
+end;
+
+Initialization
+  ReReservesForm := TReReservesForm.Create(CommonApplication);
+
+end.

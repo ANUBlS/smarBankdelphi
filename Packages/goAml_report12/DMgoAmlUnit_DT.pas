@@ -1,0 +1,92 @@
+unit DMgoAmlUnit_DT;
+
+interface
+
+uses
+  SysUtils, Classes, DB, OracleData;
+
+type
+  TDMgoAml_DT = class(TDataModule)
+    ODS_MainDT: TOracleDataSet;
+    ODS_MainDTID: TFloatField;
+    ODS_MainDTREPORT_CODE: TWideStringField;
+    ODS_MainDTDEBITID: TFloatField;
+    ODS_MainDTDEBITACCNO: TWideStringField;
+    ODS_MainDTDEBITCURRENCYSNAME: TWideStringField;
+    ODS_MainDTCREDITID: TFloatField;
+    ODS_MainDTCREDITACCNO: TWideStringField;
+    ODS_MainDTCREDITCURRENCYSNAME: TWideStringField;
+    ODS_MainDTD_FOREIGN_AMOUNT: TFloatField;
+    ODS_MainDTC_FOREIGN_AMOUNT: TFloatField;
+    ODS_MainDTAMOUNT_LOCAL: TFloatField;
+    ODS_MainDTD_FOREIGN_EXCHANGE_RATE: TFloatField;
+    ODS_MainDTDEBITBALANCE: TFloatField;
+    ODS_MainDTC_FOREIGN_EXCHANGE_RATE: TFloatField;
+    ODS_MainDTCREDITBALANCE: TFloatField;
+    ODS_MainDTTRANSACTION_DESCRIPTION: TWideStringField;
+    ODS_MainDTACTION: TWideStringField;
+    ODS_MainDTDATE_TRANSACTION: TWideStringField;
+    ODS_MainDTTRANSMODE_CODE: TIntegerField;
+    ODS_MainDTDEBTCUSTNAME: TWideStringField;
+    ODS_MainDTCREDCUSTNAME: TWideStringField;
+    ODS_MainDTDCUSTID: TFloatField;
+    ODS_MainDTKCUSTID: TFloatField;
+    ODS_MainDTTRANSACTIONDATE: TDateTimeField;
+    ODS_MainDTTRANSACTIONNUMBER: TFloatField;
+    DS_MainDT: TDataSource;
+    ODS_MainReportDT: TOracleDataSet;
+    ODS_MainReportDTID: TFloatField;
+    ODS_MainReportDTRENTITY_ID: TWideStringField;
+    ODS_MainReportDTSUBMISSION_CODE: TWideStringField;
+    ODS_MainReportDTREPORT_CODE: TWideStringField;
+    ODS_MainReportDTENTITY_REFERENCE: TWideStringField;
+    ODS_MainReportDTFIU_REF_NUMBER: TWideStringField;
+    ODS_MainReportDTRENTITY_BRANCH: TIntegerField;
+    ODS_MainReportDTSUBMISSION_DATE: TWideStringField;
+    ODS_MainReportDTCURRENCY_CODE_LOCAL: TWideStringField;
+    ODS_MainReportDTACTION: TWideStringField;
+    ODS_MainReportDTTRANSACTIONNUMBER: TWideStringField;
+    ODS_MainReportDTINTERNAL_REF_NUMBER: TWideStringField;
+    ODS_MainReportDTTRANSACTION_DESCRIPTION: TWideStringField;
+    ODS_MainReportDTDATE_TRANSACTION: TWideStringField;
+    ODS_MainReportDTLATE_DEPOSIT: TWideStringField;
+    ODS_MainReportDTTRANSMODE_CODE: TIntegerField;
+    ODS_MainReportDTAMOUNT_LOCAL: TFloatField;
+    ODS_MainReportDTFROM_FUNDS_CODE: TWideStringField;
+    ODS_MainReportDTDEBITID: TFloatField;
+    ODS_MainReportDTCREDITID: TFloatField;
+    ODS_MainReportDTFROM_COUNTRY: TWideStringField;
+    ODS_MainReportDTTO_FUNDS_CODE: TWideStringField;
+    ODS_MainReportDTTO_COUNTRY: TWideStringField;
+    ODS_MainReportDTD_FOREIGN_CURRENCY_CODE: TWideStringField;
+    ODS_MainReportDTD_FOREIGN_AMOUNT: TFloatField;
+    ODS_MainReportDTD_FOREIGN_EXCHANGE_RATE: TFloatField;
+    ODS_MainReportDTDEBITBALANCE: TFloatField;
+    ODS_MainReportDTC_FOREIGN_CURRENCY_CODE: TWideStringField;
+    ODS_MainReportDTC_FOREIGN_AMOUNT: TFloatField;
+    ODS_MainReportDTC_FOREIGN_EXCHANGE_RATE: TFloatField;
+    ODS_MainReportDTCREDITBALANCE: TFloatField;
+    ODS_MainReportDTKASSANOVU: TWideStringField;
+    ODS_RepDT: TOracleDataSet;
+    ODS_RepDTTRANSMODE_CODE: TIntegerField;
+    ODS_RepDTCUSTID: TFloatField;
+    ODS_RepDTLAMMOUNT: TFloatField;
+    ODS_RepDTNAME: TWideStringField;
+    DS_RepDT: TDataSource;
+    ODS_FilesPathDt: TOracleDataSet;
+    ODS_FilesPathDtDESCRIPTION: TWideStringField;
+    ods_jeson_credit: TOracleDataSet;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+ sboapiDataModuleImpl, DMgoAml_DT: TDMgoAml_DT;
+
+implementation
+
+{$R *.dfm}
+
+end.

@@ -1,0 +1,56 @@
+unit OrderImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Grids, DBGridEh, DB, OracleData, ComCtrls, ToolWin, StdCtrls, Mask,
+  DBCtrls, ImgList;
+
+type
+  TFrmOrder = class(TForm)
+    ImageList1: TImageList;
+    GroupBox1: TGroupBox;
+    DBEdit1: TDBEdit;
+    ToolBar1: TToolBar;
+    ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
+    ToolButton3: TToolButton;
+    ToolButton4: TToolButton;
+    ToolButton5: TToolButton;
+    PaymentsDatSrc: TDataSource;
+    Payments: TOracleDataSet;
+    PaymentsID: TFloatField;
+    PaymentsDDD: TWideStringField;
+    PaymentsPAYDATE: TDateTimeField;
+    PaymentsID2: TFloatField;
+    PaymentsPAYAMT: TFloatField;
+    PaymentsNAME: TWideStringField;
+    DBGridEh1: TDBGridEh;
+    procedure ToolButton1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmOrder: TFrmOrder;
+
+implementation
+
+uses PayForm, cc_DataMod;
+
+{$R *.dfm}
+
+procedure TFrmOrder.ToolButton1Click(Sender: TObject);
+begin
+  Pay := TPay.Create(Self);
+  //ShowMessage(inttostr(DataModule1.cc_contracts.FieldByName('ID').asinteger));
+
+ // pay.memo1.Clear;
+ // pay.Memo1.Lines.Add(main.SQL.Text);
+  Pay.ShowModal;
+end;
+
+end.

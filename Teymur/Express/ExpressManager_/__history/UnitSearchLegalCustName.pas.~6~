@@ -1,0 +1,68 @@
+unit UnitSearchLegalCustName;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls, Grids, DBGrids, DB, OracleData,sboapiDataModuleImpl;
+
+type
+  TFormSearchLegalCustName = class(TForm)
+    DBGrid1: TDBGrid;
+    Panel1: TPanel;
+    EditName: TEdit;
+    EditCust_Type: TEdit;
+    Button1: TButton;
+    EditID: TEdit;
+    LegalDataSource: TDataSource;
+    LegalDataSet: TOracleDataSet;
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure EditIDKeyPress(Sender: TObject; var Key: Char);
+    procedure EditIDExit(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormSearchLegalCustName: TFormSearchLegalCustName;
+
+implementation
+
+uses UnitSearchCustName;
+
+
+{$R *.dfm}
+
+procedure TFormSearchLegalCustName.EditIDExit(Sender: TObject);
+begin
+   TEdit(Sender).Text :=EmptyStr;
+end;
+
+procedure TFormSearchLegalCustName.EditIDKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if Key = #13  then
+  FormSearchCustName.ActionSearchExecute(Sender);
+end;
+
+procedure TFormSearchLegalCustName.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+  with LegalDataSet do
+  begin
+    Filter:='';
+    Filtered:=false;
+  end;
+end;
+
+procedure TFormSearchLegalCustName.FormShow(Sender: TObject);
+begin
+  LegalDataSet.Filtered:=false;
+  LegalDataSet.Filter:='name='''+EditName.Text+ ('*')+'''' ;
+  LegalDataSet.Filtered:=True;
+end;
+
+end.

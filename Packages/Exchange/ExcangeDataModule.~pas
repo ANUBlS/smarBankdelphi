@@ -1,0 +1,151 @@
+unit ExcangeDataModule;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, OracleData, Oracle;
+
+type
+  TExchangeDataMod = class(TDataModule)
+
+    OPacExchange: TOraclePackage;
+    ForMoney: TOracleDataSet;
+    ExAccount: TOracleDataSet;
+    ExAccountACC_NO: TStringField;
+    TakeAccountID: TOracleDataSet;
+    DTakeAccountID: TDataSource;
+    ViewGrid: TOracleDataSet;
+    DViewGrid: TDataSource;
+    DGrid2: TDataSource;
+    ViewGridID: TFloatField;
+    ViewGridNAME: TStringField;
+    ViewGridEXNUM: TFloatField;
+    Grid2: TOracleDataSet;
+    Grid2VAL_NAME: TStringField;
+    Grid2ACC_NO: TStringField;
+    Grid2ID: TFloatField;
+    Grid2EXNUM: TFloatField;
+    Grid2ACCOUNTID: TFloatField;
+    ExchangeData: TDataSource;
+    OPacCurrentBankDay: TOraclePackage;
+    ODSConvertation: TOracleDataSet;
+    DSConvertation: TDataSource;
+    ODSTooling: TOracleDataSet;
+    DSTooling: TDataSource;
+    ODSConvertDetail: TOracleDataSet;
+    ODSConvertBuy: TOracleDataSet;
+    ODSConvertDetailCURRENCYID_C: TIntegerField;
+    ODSConvertDetailDAT: TDateTimeField;
+    ODSConvertDetailVAL_NAME: TStringField;
+    ODSConvertDetailINFB: TFloatField;
+    ODSConvertDetailSUPB: TFloatField;
+    ODSConvertDetailAVERAGEB: TFloatField;
+    ODSConvertDetailSUMB: TFloatField;
+    ODSConvertDetailCOUNTB: TFloatField;
+    ODSConvertDetailVAL_ACC: TFloatField;
+    ODSConvertDetailDAT_1: TDateTimeField;
+    ODSConvertDetailVAL_NAME_1: TStringField;
+    ODSConvertDetailINFS: TFloatField;
+    ODSConvertDetailSUPS: TFloatField;
+    ODSConvertDetailAVERAGES: TFloatField;
+    ODSConvertDetailSUMS: TFloatField;
+    ODSConvertDetailCOUNTS: TFloatField;
+    ODSBankCode: TOracleDataSet;
+    Avalute: TOracleDataSet;
+    DataExcel: TDataSource;
+    ODSConvertSell: TOracleDataSet;
+    Exchange: TOracleDataSet;
+    ExchangeDAT: TDateTimeField;
+    ExchangeCURRENCY: TFloatField;
+    ExchangeCURRENCYNAME: TStringField;
+    ExchangeINTERCODE: TStringField;
+    ExchangeBUYRATE: TFloatField;
+    ExchangeBUYAMMOUNT: TFloatField;
+    ExchangeBUYEQUIVALENT: TFloatField;
+    ExchangeMINBUYRATE: TFloatField;
+    ExchangeMAXBUYRATE: TFloatField;
+    ExchangeBUYCOUNT: TFloatField;
+    ExchangeSELLRATE: TFloatField;
+    ExchangeSELLAMMOUNT: TFloatField;
+    ExchangeSELLEQUIVALENT: TFloatField;
+    ExchangeMINSELLRATE: TFloatField;
+    ExchangeMAXSELLRATE: TFloatField;
+    ExchangeSELLCOUNT: TFloatField;
+    TotalExchangeReport: TOracleDataSet;
+    TotalExchangeReportCURRENCY: TFloatField;
+    TotalExchangeReportCURRENCYNAME: TStringField;
+    TotalExchangeReportBUYCOUNT: TFloatField;
+    TotalExchangeReportSELLCOUNT: TFloatField;
+    TotalExchangeReportBUYAMMOUNT: TFloatField;
+    TotalExchangeReportSELLAMMOUNT: TFloatField;
+    TotalExchangeReportAVERAGEBUYRATE: TFloatField;
+    TotalExchangeReportAVERAGESELLRATE: TFloatField;
+    TotalExchangeReportMINBUYRATE: TFloatField;
+    TotalExchangeReportMINSELLRATE: TFloatField;
+    TotalExchangeReportMAXBUYRATE: TFloatField;
+    TotalExchangeReportMAXSELLRATE: TFloatField;
+    Convertation: TOracleDataSet;
+    ConvertationDAT: TDateTimeField;
+    ConvertationFULLPATH: TStringField;
+    ConvertationAVERAGERATE: TFloatField;
+    ConvertationAVERAGEAMOUNT: TFloatField;
+    ConvertationSTATUS: TStringField;
+    ConvertationCURRENCY: TIntegerField;
+    ConvertationCID: TIntegerField;
+    Fullexcel: TOracleDataSet;
+    ds_fullexcel: TDataSource;
+    FullexcelR1: TFloatField;
+    FullexcelORTA: TStringField;
+    FullexcelAVERAGERATE: TFloatField;
+    FullexcelAVERAGEAMOUNT: TFloatField;
+    FullexcelFULLPATH: TStringField;
+    FullexcelEKV: TFloatField;
+    ODSConvertationDAT: TDateTimeField;
+    ODSConvertationDOFFICAL: TStringField;
+    ODSConvertationAMMOUNT: TFloatField;
+    ODSConvertationAMMOUNT_C: TFloatField;
+    ODSConvertationLAMMOUNT: TFloatField;
+    ODSConvertationRATE_D: TFloatField;
+    ODSConvertationRATE_C: TFloatField;
+    ODSConvertationDACC_NO: TStringField;
+    ODSConvertationKACC_NO: TStringField;
+    ODSConvertationFULLPATH: TStringField;
+    ODSConvertationKCURRENCY: TStringField;
+    ODSConvertationMBANKKURS: TFloatField;
+    FullexcelSAY1: TFloatField;
+    FullexcelVALNAME1: TStringField;
+    procedure ViewGridAfterScroll(DataSet: TDataSet);
+    procedure ODSConvertationAfterScroll(DataSet: TDataSet);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  ExchangeDataMod: TExchangeDataMod;
+
+implementation
+
+{$R *.DFM}
+uses sboapiDataModuleImpl, UntExchangeImpl;
+
+procedure TExchangeDataMod.ViewGridAfterScroll(DataSet: TDataSet);
+begin
+   with  Grid2  do
+   begin
+     Filtered :=False;
+     Filter :='ID='+ViewGrid.FieldByName('ID').AsString;
+     Filtered :=True;
+   end;
+end;
+
+
+procedure TExchangeDataMod.ODSConvertationAfterScroll(DataSet: TDataSet);
+begin
+ FrmExchange.EAssignment.Text :=ODSConvertation.FieldByName('FULLPATH').AsString;
+end;
+
+end.
+

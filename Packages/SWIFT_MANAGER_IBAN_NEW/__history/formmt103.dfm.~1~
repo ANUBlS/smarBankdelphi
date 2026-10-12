@@ -1,0 +1,1000 @@
+object MT103AZN: TMT103AZN
+  Left = 525
+  Top = -4
+  Width = 618
+  Height = 743
+  BorderIcons = [biSystemMenu]
+  Caption = 'MT103AZN'
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'MS Sans Serif'
+  Font.Style = []
+  OldCreateOrder = False
+  PopupMenu = PopupMenu1
+  Position = poDesktopCenter
+  OnActivate = FormActivate
+  OnClose = FormClose
+  PixelsPerInch = 96
+  TextHeight = 13
+  object PageControl1: TPageControl
+    Left = -3
+    Top = -3
+    Width = 612
+    Height = 708
+    ActivePage = Header
+    MultiLine = True
+    ScrollOpposite = True
+    TabOrder = 0
+    OnChange = PageControl1Change
+    object Header: TTabSheet
+      Caption = 'Header'
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Arial AzLat'
+      Font.Style = []
+      ParentFont = False
+      object GroupBox1: TGroupBox
+        Left = 8
+        Top = 32
+        Width = 265
+        Height = 145
+        Caption = 'Эюндярян/Sender'
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -12
+        Font.Name = 'Arial AzLat'
+        Font.Style = [fsBold]
+        ParentFont = False
+        TabOrder = 0
+        object Label1: TLabel
+          Left = 31
+          Top = 48
+          Width = 33
+          Height = 14
+          Caption = 'Type :'
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Arial AzLat'
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
+        object Label2: TLabel
+          Left = 8
+          Top = 104
+          Width = 60
+          Height = 14
+          Caption = 'Insisution :'
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Arial AzLat'
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
+      end
+      object GroupBox2: TGroupBox
+        Left = 8
+        Top = 192
+        Width = 585
+        Height = 161
+        Caption = 'Алан/Receiver'
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -12
+        Font.Name = 'Arial AzLat'
+        Font.Style = [fsBold]
+        ParentFont = False
+        TabOrder = 1
+        object Label7: TLabel
+          Left = 39
+          Top = 38
+          Width = 33
+          Height = 14
+          Caption = 'Type :'
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Arial AzLat'
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
+        object Label8: TLabel
+          Left = 15
+          Top = 86
+          Width = 60
+          Height = 14
+          Caption = 'Insisution :'
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Arial AzLat'
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
+        object GroupBox3: TGroupBox
+          Left = 280
+          Top = 8
+          Width = 305
+          Height = 148
+          Caption = 'Адрес ачыгламасы/Address Expansion'
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clTeal
+          Font.Height = -12
+          Font.Name = 'Arial AzLat'
+          Font.Style = [fsBold]
+          ParentFont = False
+          TabOrder = 0
+        end
+        object DBEdit1: TDBEdit
+          Left = 82
+          Top = 121
+          Width = 146
+          Height = 24
+          DataField = 'RECEIVERBIC'
+          DataSource = SWDataModule.Sw_out_datasource
+          TabOrder = 1
+          Visible = False
+        end
+        object reciverbic: TSearchEdit
+          Left = 79
+          Top = 84
+          Width = 149
+          Height = 24
+          TabOrder = 2
+          Visible = False
+          OnChange = reciverbicChange
+          DataSource = SWDataModule.sw_banks
+          SearchField = 'BIC'
+        end
+        object DBLookupComboBox3: TDBLookupComboBox
+          Left = 80
+          Top = 85
+          Width = 152
+          Height = 24
+          DataField = 'RECEIVERBIC'
+          DataSource = SWDataModule.Sw_out_datasource
+          KeyField = 'BIC'
+          ListField = 'BIC'
+          ListSource = SWDataModule.sw_banks
+          TabOrder = 3
+          OnClick = DBLookupComboBox3Click
+          OnEnter = DBLookupComboBox3Enter
+        end
+      end
+      object GroupBox4: TGroupBox
+        Left = 288
+        Top = 32
+        Width = 305
+        Height = 145
+        Caption = 'Спесифик формат/Format Specific'
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clTeal
+        Font.Height = -12
+        Font.Name = 'Arial AzLat'
+        Font.Style = [fsBold]
+        ParentFont = False
+        TabOrder = 2
+        object Label3: TLabel
+          Left = 16
+          Top = 29
+          Width = 61
+          Height = 14
+          Caption = 'Sender LT :'
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clTeal
+          Font.Height = -11
+          Font.Name = 'Arial AzLat'
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
+        object Label4: TLabel
+          Left = 161
+          Top = 61
+          Width = 57
+          Height = 14
+          Caption = 'FIN-Copy :'
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clTeal
+          Font.Height = -11
+          Font.Name = 'Arial AzLat'
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
+        object Label5: TLabel
+          Left = 13
+          Top = 62
+          Width = 68
+          Height = 14
+          Caption = 'Application :'
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clTeal
+          Font.Height = -11
+          Font.Name = 'Arial AzLat'
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
+        object Label6: TLabel
+          Left = 136
+          Top = 96
+          Width = 82
+          Height = 14
+          Caption = 'Message Type :'
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clTeal
+          Font.Height = -11
+          Font.Name = 'Arial AzLat'
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
+        object DBEdit2: TDBEdit
+          Left = 223
+          Top = 56
+          Width = 75
+          Height = 24
+          DataField = 'FINCOPY'
+          DataSource = SWDataModule.Sw_out_datasource
+          Enabled = False
+          ReadOnly = True
+          TabOrder = 0
+        end
+        object DBEdit3: TDBEdit
+          Left = 223
+          Top = 95
+          Width = 74
+          Height = 24
+          DataField = 'MESSAGETYPE'
+          DataSource = SWDataModule.Sw_out_datasource
+          Enabled = False
+          ReadOnly = True
+          TabOrder = 1
+        end
+      end
+      object sendertype: TComboBox
+        Left = 88
+        Top = 72
+        Width = 145
+        Height = 20
+        Enabled = False
+        ItemHeight = 12
+        TabOrder = 3
+        Text = 'Institution'
+        Items.Strings = (
+          'Institution')
+      end
+      object ComboBox2: TComboBox
+        Left = 88
+        Top = 128
+        Width = 145
+        Height = 20
+        Enabled = False
+        ItemHeight = 12
+        TabOrder = 4
+        Items.Strings = (
+          'ATLTAZ22XXX')
+      end
+      object recivertype: TComboBox
+        Left = 96
+        Top = 228
+        Width = 145
+        Height = 20
+        Enabled = False
+        ItemHeight = 12
+        TabOrder = 5
+        Text = 'Institution'
+      end
+      object senderlt: TComboBox
+        Left = 376
+        Top = 56
+        Width = 154
+        Height = 20
+        Enabled = False
+        ItemHeight = 12
+        TabOrder = 6
+        Text = 'ATLTAZ22A'
+        Items.Strings = (
+          'ATLTAZ22A')
+      end
+      object monitoring: TComboBox
+        Left = 364
+        Top = 152
+        Width = 49
+        Height = 20
+        Enabled = False
+        ItemHeight = 12
+        TabOrder = 7
+        Text = 'N'
+        Items.Strings = (
+          'N')
+      end
+      object Application: TComboBox
+        Left = 376
+        Top = 91
+        Width = 60
+        Height = 20
+        Enabled = False
+        ItemHeight = 12
+        TabOrder = 8
+        Text = 'FIN'
+      end
+      object priority: TComboBox
+        Left = 364
+        Top = 126
+        Width = 49
+        Height = 20
+        Enabled = False
+        ItemHeight = 12
+        TabOrder = 9
+        Text = 'N'
+        Items.Strings = (
+          'N')
+      end
+      object Edit2: TEdit
+        Left = 440
+        Top = 224
+        Width = 121
+        Height = 22
+        Enabled = False
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Arial AzLat'
+        Font.Style = [fsBold]
+        ParentFont = False
+        TabOrder = 10
+      end
+      object Edit3: TEdit
+        Left = 440
+        Top = 256
+        Width = 121
+        Height = 22
+        Enabled = False
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Arial AzLat'
+        Font.Style = [fsBold]
+        ParentFont = False
+        TabOrder = 11
+      end
+      object Edit4: TEdit
+        Left = 440
+        Top = 288
+        Width = 121
+        Height = 22
+        Enabled = False
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Arial AzLat'
+        Font.Style = [fsBold]
+        ParentFont = False
+        TabOrder = 12
+      end
+      object Edit5: TEdit
+        Left = 440
+        Top = 320
+        Width = 121
+        Height = 22
+        Enabled = False
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Arial AzLat'
+        Font.Style = [fsBold]
+        ParentFont = False
+        TabOrder = 13
+      end
+      object GroupBox5: TGroupBox
+        Left = 8
+        Top = 360
+        Width = 585
+        Height = 148
+        Caption = 'Юлкя вя щесабат тяйинаты'
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clTeal
+        Font.Height = -12
+        Font.Name = 'Arial AzLat'
+        Font.Style = [fsBold]
+        ParentFont = False
+        TabOrder = 14
+        Visible = False
+        object Label40: TLabel
+          Left = 23
+          Top = 78
+          Width = 50
+          Height = 14
+          Caption = 'Country :'
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Arial AzLat'
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
+        object Label41: TLabel
+          Left = 271
+          Top = 78
+          Width = 54
+          Height = 14
+          Caption = 'H.Teyinat:'
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Arial AzLat'
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
+        object DBEdit4: TDBEdit
+          Left = 88
+          Top = 72
+          Width = 128
+          Height = 24
+          DataField = 'COUNTRY'
+          DataSource = SWDataModule.Sw_out_datasource
+          TabOrder = 0
+        end
+        object DBEdit5: TDBEdit
+          Left = 336
+          Top = 72
+          Width = 137
+          Height = 24
+          DataField = 'HESABAT'
+          DataSource = SWDataModule.Sw_out_datasource
+          TabOrder = 1
+        end
+      end
+    end
+    object TabSheet1: TTabSheet
+      Caption = 'Text'
+      ImageIndex = 1
+      OnShow = TabSheet1Show
+      object ScrollBox1: TScrollBox
+        Left = 0
+        Top = 0
+        Width = 604
+        Height = 679
+        BorderStyle = bsNone
+        TabOrder = 0
+        object MainPanel: TPanel
+          Left = 0
+          Top = 0
+          Width = 587
+          Height = 993
+          Align = alTop
+          AutoSize = True
+          TabOrder = 0
+          object MF20: TPanel
+            Left = 1
+            Top = 1
+            Width = 585
+            Height = 39
+            Align = alTop
+            BevelOuter = bvNone
+            TabOrder = 0
+            object Label9: TLabel
+              Left = 20
+              Top = 17
+              Width = 27
+              Height = 13
+              Caption = 'MF20'
+            end
+            object Label10: TLabel
+              Left = 216
+              Top = 25
+              Width = 194
+              Height = 14
+              Caption = 'Гейдиййат №-ыш/Sender'#39's Reference'
+              Font.Charset = RUSSIAN_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -12
+              Font.Name = 'Arial AzLat'
+              Font.Style = []
+              ParentFont = False
+            end
+            object DBEdit6: TDBEdit
+              Left = 71
+              Top = 17
+              Width = 121
+              Height = 21
+              DataField = 'MF20_REFERENCE'
+              DataSource = SWDataModule.Sw_out_datasource
+              Enabled = False
+              TabOrder = 0
+            end
+          end
+          object MF23B: TPanel
+            Left = 1
+            Top = 40
+            Width = 585
+            Height = 40
+            Align = alTop
+            BevelOuter = bvNone
+            TabOrder = 1
+            object Label11: TLabel
+              Left = 19
+              Top = 13
+              Width = 34
+              Height = 13
+              Caption = 'MF23B'
+            end
+            object Label12: TLabel
+              Left = 216
+              Top = 16
+              Width = 240
+              Height = 14
+              Caption = 'Банк Ямялиййаты Коду/Bank Operation Code'
+              Font.Charset = RUSSIAN_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -12
+              Font.Name = 'Arial AzLat'
+              Font.Style = []
+              ParentFont = False
+            end
+            object DBEdit7: TDBEdit
+              Left = 71
+              Top = 10
+              Width = 81
+              Height = 21
+              DataField = 'MF23B'
+              DataSource = SWDataModule.Sw_out_datasource
+              Enabled = False
+              TabOrder = 0
+            end
+          end
+          object MF32A: TPanel
+            Left = 1
+            Top = 80
+            Width = 585
+            Height = 85
+            Align = alTop
+            BevelOuter = bvNone
+            TabOrder = 2
+            object Label15: TLabel
+              Left = 320
+              Top = 56
+              Width = 25
+              Height = 13
+              Caption = '[Curr]'
+            end
+            object Label16: TLabel
+              Left = 21
+              Top = 16
+              Width = 34
+              Height = 13
+              Caption = 'MF32A'
+            end
+            object Label17: TLabel
+              Left = 172
+              Top = 13
+              Width = 154
+              Height = 13
+              Caption = 'Val Dte/Curr/Interbnk Settld Amt'
+            end
+            object mf32_date: TDateTimePicker
+              Left = 72
+              Top = 16
+              Width = 84
+              Height = 21
+              CalAlignment = dtaLeft
+              Date = 39832.3683109028
+              Time = 39832.3683109028
+              Color = clAqua
+              DateFormat = dfShort
+              DateMode = dmComboBox
+              Kind = dtkDate
+              ParseInput = False
+              TabOrder = 0
+            end
+            object DBLookupComboBox1: TDBLookupComboBox
+              Left = 72
+              Top = 48
+              Width = 81
+              Height = 21
+              TabOrder = 2
+            end
+            object mf32a_val: TDBViewComboBox
+              Tag = 5
+              Left = 71
+              Top = 48
+              Width = 83
+              Height = 21
+              Color = clAqua
+              Enabled = False
+              ItemHeight = 13
+              TabOrder = 1
+              ListSource = SWDataModule.val_DataSource
+              ListFields = 'VAL_NAME'
+              FieldInterval = 5
+              DropDownOnEnter = False
+            end
+            object DBEdit8: TDBEdit
+              Left = 176
+              Top = 48
+              Width = 121
+              Height = 21
+              DataField = 'MF32A_AMOUNT'
+              DataSource = SWDataModule.Sw_out_datasource
+              TabOrder = 3
+            end
+            object DBDateTimeEditEh1: TDBDateTimeEditEh
+              Left = 71
+              Top = 15
+              Width = 84
+              Height = 21
+              Color = clAqua
+              DataField = 'MF32A_DATE'
+              DataSource = SWDataModule.Sw_out_datasource
+              EditButtons = <>
+              Kind = dtkDateEh
+              TabOrder = 4
+              Visible = True
+            end
+          end
+          object MF50: TPanel
+            Left = 1
+            Top = 165
+            Width = 585
+            Height = 188
+            Align = alTop
+            AutoSize = True
+            BevelOuter = bvNone
+            TabOrder = 3
+            object MF50_main: TPanel
+              Left = 0
+              Top = 0
+              Width = 585
+              Height = 30
+              Align = alTop
+              BevelOuter = bvNone
+              TabOrder = 0
+              object Label20: TLabel
+                Left = 28
+                Top = 5
+                Width = 27
+                Height = 13
+                Caption = 'MF50'
+              end
+              object Edit1: TEdit
+                Left = 71
+                Top = 1
+                Width = 262
+                Height = 21
+                TabOrder = 0
+                Text = 'K-Ordering Customer-Name $ Address'
+              end
+            end
+            object MF50K: TPanel
+              Left = 0
+              Top = 30
+              Width = 585
+              Height = 158
+              Align = alTop
+              BevelOuter = bvNone
+              TabOrder = 1
+              object Edit3_MF50: TSearchEdit
+                Left = 71
+                Top = 8
+                Width = 265
+                Height = 21
+                TabOrder = 0
+                OnChange = Edit3_MF50Change
+                DataSource = SWDataModule.Account_sw
+                SearchField = 'acc_no'
+              end
+              object DBMemo1: TDBMemo
+                Left = 71
+                Top = 64
+                Width = 273
+                Height = 89
+                DataField = 'MF50_NAME$ADRESS'
+                DataSource = SWDataModule.Sw_out_datasource
+                TabOrder = 1
+                OnKeyPress = DBMemo3KeyPress
+              end
+              object DBEdit12: TDBEdit
+                Left = 71
+                Top = 40
+                Width = 257
+                Height = 21
+                DataField = 'MF50_ACCOUNT'
+                DataSource = SWDataModule.Sw_out_datasource
+                TabOrder = 2
+                Visible = False
+              end
+            end
+          end
+          object MF70: TPanel
+            Left = 1
+            Top = 642
+            Width = 585
+            Height = 127
+            Align = alTop
+            BevelOuter = bvNone
+            TabOrder = 5
+            object Label27: TLabel
+              Left = 25
+              Top = 17
+              Width = 26
+              Height = 13
+              Caption = 'OF70'
+            end
+            object DBMemo2: TDBMemo
+              Left = 352
+              Top = 11
+              Width = 281
+              Height = 107
+              DataField = 'MF70'
+              DataSource = SWDataModule.Sw_out_datasource
+              TabOrder = 0
+              Visible = False
+            end
+            object OF70_RichEdit: TRichEdit
+              Left = 71
+              Top = 11
+              Width = 273
+              Height = 105
+              Font.Charset = RUSSIAN_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Courier New'
+              Font.Style = []
+              MaxLength = 148
+              ParentFont = False
+              TabOrder = 1
+              OnChange = OF70_RichEditChange
+              OnKeyDown = OF70_RichEditKeyDown
+              OnKeyPress = OF70_RichEditKeyPress
+            end
+          end
+          object MF71A: TPanel
+            Left = 1
+            Top = 769
+            Width = 585
+            Height = 41
+            Align = alTop
+            BevelOuter = bvNone
+            TabOrder = 6
+            object Label28: TLabel
+              Left = 25
+              Top = 14
+              Width = 34
+              Height = 13
+              Caption = 'MF71A'
+            end
+            object Label29: TLabel
+              Left = 168
+              Top = 12
+              Width = 86
+              Height = 13
+              Caption = 'Details of Charges'
+            end
+            object Edit1_MF71A: TEdit
+              Left = 71
+              Top = 9
+              Width = 77
+              Height = 21
+              Color = clAqua
+              Enabled = False
+              TabOrder = 0
+              Text = 'OUR'
+            end
+          end
+          object MF72: TPanel
+            Left = 1
+            Top = 857
+            Width = 585
+            Height = 135
+            Align = alTop
+            BevelOuter = bvNone
+            TabOrder = 8
+            object Label34: TLabel
+              Left = 17
+              Top = 6
+              Width = 26
+              Height = 13
+              Caption = 'OF72'
+            end
+            object Label37: TLabel
+              Left = 376
+              Top = 114
+              Width = 141
+              Height = 13
+              Caption = 'Sender to Reciver Information'
+            end
+            object DBMemo4: TDBMemo
+              Left = 312
+              Top = 8
+              Width = 271
+              Height = 91
+              DataField = 'MF72'
+              DataSource = SWDataModule.Sw_out_datasource
+              TabOrder = 0
+              Visible = False
+            end
+            object RichEdit3: TRichEdit
+              Left = 71
+              Top = 8
+              Width = 273
+              Height = 113
+              Font.Charset = RUSSIAN_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Courier New'
+              Font.Style = []
+              ParentFont = False
+              TabOrder = 1
+              OnChange = RichEdit3Change
+              OnKeyDown = RichEdit3KeyDown
+              OnKeyPress = RichEdit3KeyPress
+            end
+          end
+          object MF71G: TPanel
+            Left = 1
+            Top = 810
+            Width = 585
+            Height = 47
+            Align = alTop
+            BevelOuter = bvNone
+            TabOrder = 7
+            Visible = False
+            object Label38: TLabel
+              Left = 25
+              Top = 14
+              Width = 34
+              Height = 13
+              Caption = 'OF71G'
+            end
+            object Edit1_MF71G: TEdit
+              Left = 71
+              Top = 16
+              Width = 105
+              Height = 21
+              TabOrder = 0
+            end
+            object Edit2_MF71G: TEdit
+              Left = 182
+              Top = 16
+              Width = 192
+              Height = 21
+              TabOrder = 1
+            end
+          end
+          object MF59_59A: TPanel
+            Left = 1
+            Top = 353
+            Width = 585
+            Height = 289
+            Align = alTop
+            AutoSize = True
+            BevelOuter = bvNone
+            TabOrder = 4
+            object MF59_main: TPanel
+              Left = 0
+              Top = 0
+              Width = 585
+              Height = 49
+              Align = alTop
+              BevelOuter = bvNone
+              TabOrder = 0
+              object Label33: TLabel
+                Left = 18
+                Top = 20
+                Width = 45
+                Height = 13
+                Caption = 'M59/59A'
+              end
+              object CMF59: TComboBox
+                Left = 71
+                Top = 16
+                Width = 265
+                Height = 21
+                Style = csDropDownList
+                Color = clAqua
+                ItemHeight = 13
+                TabOrder = 0
+                OnChange = CMF59Change
+                Items.Strings = (
+                  ''
+                  'Field - 59'
+                  'Field - 59A')
+              end
+            end
+            object MF59: TPanel
+              Left = 0
+              Top = 171
+              Width = 585
+              Height = 118
+              Align = alTop
+              AutoSize = True
+              BevelOuter = bvNone
+              TabOrder = 2
+              Visible = False
+              object DBEdit11: TDBEdit
+                Left = 71
+                Top = 0
+                Width = 261
+                Height = 21
+                DataField = 'MF59_ACCOUNT'
+                DataSource = SWDataModule.Sw_out_datasource
+                TabOrder = 0
+              end
+              object DBMemo3: TDBMemo
+                Left = 71
+                Top = 29
+                Width = 273
+                Height = 89
+                DataField = 'MF59_NAME$ADRESS'
+                DataSource = SWDataModule.Sw_out_datasource
+                TabOrder = 1
+                OnKeyPress = DBMemo3KeyPress
+              end
+            end
+            object MF59A: TPanel
+              Left = 0
+              Top = 49
+              Width = 585
+              Height = 122
+              Align = alTop
+              AutoSize = True
+              BevelOuter = bvNone
+              TabOrder = 1
+              Visible = False
+              object DBEdit9: TDBEdit
+                Left = 71
+                Top = 0
+                Width = 263
+                Height = 21
+                DataField = 'MF59_ACCOUNT'
+                DataSource = SWDataModule.Sw_out_datasource
+                TabOrder = 0
+              end
+              object DBMemo5: TDBMemo
+                Left = 222
+                Top = 27
+                Width = 268
+                Height = 89
+                DataField = 'MF59_NAME$ADRESS'
+                DataSource = SWDataModule.Sw_out_datasource
+                Enabled = False
+                TabOrder = 1
+              end
+              object DBLookupComboBox2: TDBLookupComboBox
+                Left = 71
+                Top = 28
+                Width = 145
+                Height = 21
+                DataField = 'MF59_BIC'
+                DataSource = SWDataModule.Sw_out_datasource
+                KeyField = 'BIC'
+                ListField = 'BIC'
+                ListSource = SWDataModule.sw_banks
+                TabOrder = 2
+                OnClick = DBLookupComboBox2Click
+              end
+              object RichEdit1: TRichEdit
+                Left = 222
+                Top = 27
+                Width = 265
+                Height = 95
+                TabOrder = 3
+                Visible = False
+              end
+            end
+          end
+        end
+      end
+    end
+  end
+  object PopupMenu1: TPopupMenu
+    Left = 488
+    Top = 223
+    object Change1: TMenuItem
+      Caption = 'Change!'
+      OnClick = Change1Click
+    end
+  end
+end

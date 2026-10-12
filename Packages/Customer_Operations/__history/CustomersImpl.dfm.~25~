@@ -1,0 +1,163 @@
+object FormCustomers: TFormCustomers
+  Left = 0
+  Top = 0
+  BorderIcons = [biSystemMenu]
+  Caption = 'M'#252#351't'#305'rinin '#601'laq'#601'l'#601'ndirilm'#601'si'
+  ClientHeight = 254
+  ClientWidth = 764
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poDesktopCenter
+  OnCanResize = FormCanResize
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 764
+    Height = 225
+    Align = alClient
+    BevelInner = bvLowered
+    TabOrder = 0
+    object DBGrid1: TDBGrid
+      Left = 2
+      Top = 2
+      Width = 760
+      Height = 221
+      Align = alClient
+      DataSource = DS_CUSTOMERS
+      DrawingStyle = gdsGradient
+      Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit, dgTitleClick, dgTitleHotTrack]
+      TabOrder = 0
+      TitleFont.Charset = DEFAULT_CHARSET
+      TitleFont.Color = clWindowText
+      TitleFont.Height = -11
+      TitleFont.Name = 'Tahoma'
+      TitleFont.Style = []
+      OnDblClick = DBGrid1DblClick
+      Columns = <
+        item
+          Expanded = False
+          FieldName = 'ID'
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'FULLNAME'
+          Title.Caption = 'M'#252#351't'#601'rinin tam ad'#305
+          Width = 200
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'SONAME'
+          Title.Caption = 'Soyad'#305
+          Width = 150
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'NAME'
+          Title.Caption = 'Ad'#305
+          Width = 150
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'LASTNAME'
+          Title.Caption = 'Ata ad'#305
+          Width = 150
+          Visible = True
+        end>
+    end
+  end
+  object Panel2: TPanel
+    Left = 0
+    Top = 225
+    Width = 764
+    Height = 29
+    Align = alBottom
+    BevelInner = bvLowered
+    TabOrder = 1
+    object ToolBar1: TToolBar
+      Left = 608
+      Top = 2
+      Width = 154
+      Height = 25
+      Align = alRight
+      ButtonHeight = 24
+      ButtonWidth = 75
+      Caption = 'ToolBar1'
+      DrawingStyle = dsGradient
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+      ShowCaptions = True
+      TabOrder = 0
+      object ToolButton1: TToolButton
+        Left = 0
+        Top = 0
+        Caption = '    Q'#601'bul    '
+        ImageIndex = 0
+        OnClick = ToolButton1Click
+      end
+      object ToolButton2: TToolButton
+        Left = 75
+        Top = 0
+        Caption = #304'mtina'
+        ImageIndex = 1
+        OnClick = ToolButton2Click
+      end
+    end
+  end
+  object ODS_CUSTOMERS: TOracleDataSet
+    SQL.Strings = (
+      
+        'select c.id,c.name fullname,ci.soname,ci.name,ci.lastname from c' +
+        'ustomers c,custinfo ci where c.cust_type in (1,2,3,4) and c.clos' +
+        'e_dat is null and c.id=ci.idcust'
+      'order by c.id')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000050000000400000049004400010000000000080000004E0041004D00
+      450001000000000010000000460055004C004C004E0041004D00450001000000
+      00000C00000053004F004E0041004D004500010000000000100000004C004100
+      530054004E0041004D004500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 328
+    Top = 80
+    object ODS_CUSTOMERSID: TIntegerField
+      FieldName = 'ID'
+    end
+    object ODS_CUSTOMERSFULLNAME: TWideStringField
+      FieldName = 'FULLNAME'
+      Size = 360
+    end
+    object ODS_CUSTOMERSSONAME: TWideStringField
+      FieldName = 'SONAME'
+      Size = 120
+    end
+    object ODS_CUSTOMERSNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 120
+    end
+    object ODS_CUSTOMERSLASTNAME: TWideStringField
+      FieldName = 'LASTNAME'
+      Size = 120
+    end
+  end
+  object DS_CUSTOMERS: TDataSource
+    DataSet = ODS_CUSTOMERS
+    Left = 328
+    Top = 128
+  end
+end

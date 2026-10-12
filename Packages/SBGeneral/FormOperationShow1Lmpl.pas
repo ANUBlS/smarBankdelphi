@@ -1,0 +1,103 @@
+unit FormOperationShow1Lmpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, XFSCtrls, ExtCtrls, Buttons;
+
+type
+  TFormOperationShow1 = class(TForm)
+    XFPanel1: TXFPanel;
+    XFPanel2: TXFPanel;
+    XFLabel2: TXFLabel;
+    XFLabel9: TXFLabel;
+    XFLabel10: TXFLabel;
+    Edit2: TEdit;
+    Edit9: TEdit;
+    Edit10: TEdit;
+    XFPanel4: TXFPanel;
+    XFLabel6: TXFLabel;
+    XFLabel5: TXFLabel;
+    XFLabel8: TXFLabel;
+    Edit6: TEdit;
+    Edit5: TEdit;
+    Edit8: TEdit;
+    XFPanel3: TXFPanel;
+    XFLabel3: TXFLabel;
+    XFLabel4: TXFLabel;
+    XFLabel7: TXFLabel;
+    Edit3: TEdit;
+    Edit4: TEdit;
+    Edit7: TEdit;
+    XFPanel5: TXFPanel;
+    XFLabel1: TXFLabel;
+    Edit1: TEdit;
+    XFBitBtn1: TXFBitBtn;
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormShow(Sender: TObject);
+    procedure FormCanResize(Sender: TObject; var NewWidth, NewHeight: Integer;
+      var Resize: Boolean);
+    procedure XFBitBtn1Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormOperationShow1: TFormOperationShow1;
+
+implementation
+
+uses DataCustNomImpl,SBTranslateProc, sboapiDataModuleImpl;
+{$R *.dfm}
+
+procedure TFormOperationShow1.FormCanResize(Sender: TObject;
+  var NewWidth, NewHeight: Integer; var Resize: Boolean);
+begin
+  Resize := false;
+end;
+
+procedure TFormOperationShow1.FormCreate(Sender: TObject);
+begin
+ SBTranslateProc.TranslateAllCompForms(Self, sboapiDataModule.OrPack_SL);
+end;
+
+procedure TFormOperationShow1.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+  if ord(Key) = 27 then
+    close;
+end;
+
+procedure TFormOperationShow1.FormShow(Sender: TObject);
+begin
+  Edit1.Text := inttostr(DataCustNom.ODS_trancation1.FieldByName('id')
+    .AsInteger);
+  Edit2.Text := DataCustNom.ODS_trancation1.FieldByName('name').AsString;
+  Edit3.Text := DataCustNom.ODS_trancation1.FieldByName
+    ('debitaccno').AsString;
+  Edit4.Text := DataCustNom.ODS_trancation1.FieldByName
+    ('debitcurrencysname').AsString;
+  Edit5.Text := DataCustNom.ODS_trancation1.FieldByName
+    ('creditaccno').AsString;
+  Edit6.Text := DataCustNom.ODS_trancation1.FieldByName
+    ('creditcurrencysname').AsString;
+  Edit7.Text := DataCustNom.ODS_trancation1.FieldByName
+    ('debitamount').AsString;
+  Edit8.Text := DataCustNom.ODS_trancation1.FieldByName
+    ('creditamount').AsString;
+  Edit9.Text := DataCustNom.ODS_trancation1.FieldByName
+    ('lamount').AsString;
+  Edit10.Text := DataCustNom.ODS_trancation1.FieldByName
+    ('status').AsString;
+
+end;
+
+procedure TFormOperationShow1.XFBitBtn1Click(Sender: TObject);
+begin
+  close;
+end;
+
+end.

@@ -1,0 +1,335 @@
+object Transacfrm: TTransacfrm
+  Left = 0
+  Top = 0
+  Caption = 'Transactions'
+  ClientHeight = 402
+  ClientWidth = 701
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poMainFormCenter
+  OnCreate = FormCreate
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Label10: TLabel
+    Left = 139
+    Top = 421
+    Width = 52
+    Height = 13
+    Caption = 'Faiz Hesab'
+  end
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 701
+    Height = 402
+    Align = alClient
+    TabOrder = 0
+    ExplicitLeft = -8
+    ExplicitTop = 8
+    ExplicitWidth = 914
+    ExplicitHeight = 737
+    object Label1: TLabel
+      Left = 7
+      Top = 152
+      Width = 79
+      Height = 13
+      Caption = #399'sas '#214'd.M'#601'bl'#601#287
+    end
+    object Label2: TLabel
+      Left = 502
+      Top = 31
+      Width = 57
+      Height = 13
+      Caption = #399'sas Hesab'
+    end
+    object Label3: TLabel
+      Left = 502
+      Top = 155
+      Width = 52
+      Height = 13
+      Caption = 'Faiz Hesab'
+    end
+    object Label5: TLabel
+      Left = 123
+      Top = 152
+      Width = 77
+      Height = 13
+      Caption = 'Faiz '#214'd. M'#601'bl'#601#287
+    end
+    object Label6: TLabel
+      Left = 145
+      Top = 253
+      Width = 36
+      Height = 13
+      Caption = 'T'#601'yinat'
+    end
+    object Label4: TLabel
+      Left = 246
+      Top = 28
+      Width = 64
+      Height = 13
+      Caption = 'Balans Hesab'
+    end
+    object Label7: TLabel
+      Left = 24
+      Top = 31
+      Width = 36
+      Height = 13
+      Caption = 'Valyuta'
+    end
+    object Label8: TLabel
+      Left = 145
+      Top = 294
+      Width = 26
+      Height = 13
+      Caption = 'Qeyd'
+    end
+    object Label9: TLabel
+      Left = 232
+      Top = 152
+      Width = 104
+      Height = 13
+      Caption = 'Xidm'#601't H. '#214'd. M'#601'bl'#601#287
+    end
+    object Label11: TLabel
+      Left = 467
+      Top = 247
+      Width = 96
+      Height = 13
+      Caption = 'Xidm'#601't Haqq'#305' hesabi'
+    end
+    object Label12: TLabel
+      Left = 144
+      Top = 201
+      Width = 24
+      Height = 13
+      Caption = 'Tarix'
+    end
+    object Button1: TButton
+      Left = 312
+      Top = 379
+      Width = 75
+      Height = 23
+      Caption = 'T'#601'sdiq Et'
+      TabOrder = 0
+      OnClick = Button1Click
+    end
+    object DBLookupComboBox1: TDBLookupComboBox
+      Left = 366
+      Top = 169
+      Width = 330
+      Height = 21
+      KeyField = 'ID'
+      ListField = 'QALIQ'
+      ListSource = DataMod.datasrcpercentacc
+      TabOrder = 1
+      OnCloseUp = DBLookupComboBox1CloseUp
+    end
+    object Main: TEdit
+      Left = 15
+      Top = 171
+      Width = 54
+      Height = 21
+      TabOrder = 2
+      Text = '0'
+      OnKeyPress = MainKeyPress
+    end
+    object Perc: TEdit
+      Left = 138
+      Top = 171
+      Width = 54
+      Height = 21
+      TabOrder = 3
+      Text = '0'
+      OnKeyPress = PercKeyPress
+    end
+    object DBLookupComboBox3: TDBLookupComboBox
+      Left = 15
+      Top = 267
+      Width = 321
+      Height = 21
+      KeyField = 'ID'
+      ListField = 'DESCP'
+      ListSource = DataMod.DataDescrpts
+      TabOrder = 4
+      OnCloseUp = DBLookupComboBox3CloseUp
+    end
+    object Description: TEdit
+      Left = 11
+      Top = 267
+      Width = 302
+      Height = 21
+      BevelInner = bvLowered
+      Enabled = False
+      TabOrder = 5
+    end
+    object Memo1: TMemo
+      Left = 367
+      Top = 196
+      Width = 329
+      Height = 45
+      Color = clMenu
+      Enabled = False
+      TabOrder = 6
+    end
+    object Memo2: TMemo
+      Left = 367
+      Top = 75
+      Width = 329
+      Height = 74
+      Color = clMenu
+      Enabled = False
+      TabOrder = 7
+    end
+    object RadioButton1: TRadioButton
+      Left = 8
+      Top = 8
+      Width = 124
+      Height = 17
+      Caption = 'Kassadan  '#246'd'#601'ni'#351
+      TabOrder = 8
+      OnClick = RadioButton1Click
+    end
+    object RadioButton2: TRadioButton
+      Left = 123
+      Top = 8
+      Width = 141
+      Height = 17
+      Caption = 'M'#252'xbir Hesabdan  '#246'd'#601'ni'#351
+      TabOrder = 9
+      OnClick = RadioButton2Click
+    end
+    object Memo3: TMemo
+      Left = 9
+      Top = 106
+      Width = 327
+      Height = 40
+      Color = clMenu
+      Enabled = False
+      TabOrder = 10
+    end
+    object RadioButton3: TRadioButton
+      Left = 569
+      Top = 8
+      Width = 124
+      Height = 17
+      Caption = 'Cari Hesabdan '#246'd'#601'ni'#351
+      TabOrder = 11
+      OnClick = RadioButton3Click
+    end
+    object RadioButton4: TRadioButton
+      Left = 422
+      Top = 8
+      Width = 141
+      Height = 17
+      Caption = 'Tranzit Hesabdan  '#246'd'#601'ni'#351
+      TabOrder = 12
+      OnClick = RadioButton4Click
+    end
+    object DBLookupComboboxEh1: TDBLookupComboboxEh
+      Left = 8
+      Top = 79
+      Width = 328
+      Height = 21
+      DropDownBox.Rows = 30
+      DropDownBox.Sizable = True
+      EditButtons = <>
+      KeyField = 'ID'
+      ListField = 'ACC_NO'
+      ListSource = DataMod.DataSourc_cashorsub
+      TabOrder = 13
+      Visible = True
+      OnCloseUp = DBLookupComboboxEh1CloseUp
+      OnEnter = DBLookupComboboxEh1Enter
+    end
+    object Edit1: TEdit
+      Left = 220
+      Top = 47
+      Width = 116
+      Height = 21
+      TabOrder = 14
+      OnKeyPress = Edit1KeyPress
+    end
+    object DBLookupComboBox4: TDBLookupComboBox
+      Left = 8
+      Top = 47
+      Width = 153
+      Height = 21
+      KeyField = 'VALUTE'
+      ListField = 'VAL_NAME'
+      ListSource = DataMod.DataSource_valuta
+      TabOrder = 15
+      OnCloseUp = DBLookupComboBox4CloseUp
+    end
+    object Memo4: TMemo
+      Left = 9
+      Top = 313
+      Width = 327
+      Height = 50
+      TabOrder = 16
+    end
+    object service: TEdit
+      Left = 256
+      Top = 171
+      Width = 54
+      Height = 21
+      TabOrder = 17
+      Text = '0'
+      OnKeyPress = PercKeyPress
+    end
+    object RadioButton5: TRadioButton
+      Left = 270
+      Top = 8
+      Width = 141
+      Height = 17
+      Caption = #214'hd'#601'lik Hesabdan  '#246'd'#601'ni'#351
+      TabOrder = 18
+      OnClick = RadioButton5Click
+    end
+    object DateTimePicker1: TDateTimePicker
+      Left = 11
+      Top = 220
+      Width = 325
+      Height = 21
+      Date = 44362.455002847220000000
+      Time = 44362.455002847220000000
+      TabOrder = 19
+    end
+  end
+  object DBLookupComboBox2: TDBLookupComboBox
+    Left = 368
+    Top = 47
+    Width = 328
+    Height = 21
+    KeyField = 'ID'
+    ListField = 'QALIQ'
+    ListSource = DataMod.DataSourcemainloan
+    TabOrder = 1
+    OnCloseUp = DBLookupComboBox2CloseUp
+  end
+  object DBLookupComboBox5: TDBLookupComboBox
+    Left = 367
+    Top = 269
+    Width = 330
+    Height = 21
+    KeyField = 'ID'
+    ListField = 'QALIQ'
+    ListSource = DataMod.DataSource_xidmetacc
+    TabOrder = 2
+    OnCloseUp = DBLookupComboBox5CloseUp
+  end
+  object Memo5: TMemo
+    Left = 368
+    Top = 296
+    Width = 329
+    Height = 67
+    Color = clMenu
+    Enabled = False
+    TabOrder = 3
+  end
+end

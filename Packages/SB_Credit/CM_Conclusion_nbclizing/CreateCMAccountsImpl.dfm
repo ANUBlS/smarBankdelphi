@@ -1,0 +1,746 @@
+object FormCreateCMAccounts: TFormCreateCMAccounts
+  Left = 344
+  Top = 346
+  BorderIcons = [biSystemMenu]
+  ClientHeight = 185
+  ClientWidth = 378
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poScreenCenter
+  OnCanResize = FormCanResize
+  OnCreate = FormCreate
+  OnKeyPress = FormKeyPress
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 14
+  object Panel2: TPanel
+    Left = -1
+    Top = -11
+    Width = 754
+    Height = 145
+    BevelInner = bvLowered
+    TabOrder = 0
+    object Panel3: TPanel
+      Left = 2
+      Top = 11
+      Width = 375
+      Height = 131
+      BevelInner = bvLowered
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 0
+      object Panel1: TPanel
+        Left = 2
+        Top = 2
+        Width = 371
+        Height = 31
+        Align = alTop
+        BevelInner = bvRaised
+        BevelOuter = bvLowered
+        TabOrder = 0
+        ExplicitWidth = 355
+        object Label1: TLabel
+          Left = 4
+          Top = 9
+          Width = 74
+          Height = 13
+          Caption = #1057#1089#1091#1076#1072' '#1097#1077#1089#1072#1073#1099
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+        end
+        object EditLoanAcc: TEdit
+          Left = 150
+          Top = 6
+          Width = 200
+          Height = 22
+          TabOrder = 0
+          Text = 'EditCustAcc'
+        end
+        object ChLoan: TCheckBox
+          Left = 353
+          Top = 7
+          Width = 15
+          Height = 19
+          Caption = 'ChBoxCust'
+          Checked = True
+          State = cbChecked
+          TabOrder = 1
+        end
+      end
+      object Panel5: TPanel
+        Left = 2
+        Top = 33
+        Width = 371
+        Height = 31
+        Align = alTop
+        BevelInner = bvRaised
+        BevelOuter = bvLowered
+        TabOrder = 1
+        ExplicitTop = 36
+        ExplicitWidth = 355
+        object Label43: TLabel
+          Left = 4
+          Top = 7
+          Width = 74
+          Height = 13
+          Caption = #1046#1072#1088#1080'  '#1097#1077#1089#1072#1073#1099
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+        end
+        object EditCustAcc: TEdit
+          Left = 150
+          Top = 3
+          Width = 200
+          Height = 22
+          TabOrder = 0
+          Text = 'EditCustAcc'
+        end
+        object ChCust: TCheckBox
+          Left = 353
+          Top = 6
+          Width = 15
+          Height = 19
+          Caption = 'ChCust'
+          Checked = True
+          State = cbChecked
+          TabOrder = 1
+        end
+      end
+      object Panel6: TPanel
+        Left = 2
+        Top = 95
+        Width = 371
+        Height = 31
+        Align = alTop
+        BevelInner = bvRaised
+        BevelOuter = bvLowered
+        TabOrder = 2
+        ExplicitLeft = 4
+        ExplicitTop = 64
+        ExplicitWidth = 355
+        object Label47: TLabel
+          Left = 4
+          Top = 7
+          Width = 76
+          Height = 13
+          Caption = 'C'#601'rim'#601' '#1097#1077#1089#1072#1073#1099
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+        end
+        object EditResresveAcc: TEdit
+          Left = 150
+          Top = 4
+          Width = 200
+          Height = 22
+          TabOrder = 0
+          Text = 'EditResresveAcc'
+        end
+        object CHPrRes: TCheckBox
+          Left = 353
+          Top = 7
+          Width = 15
+          Height = 18
+          Caption = 'CHPrRes'
+          Checked = True
+          State = cbChecked
+          TabOrder = 1
+        end
+      end
+      object Panel7: TPanel
+        Left = 2
+        Top = 126
+        Width = 371
+        Height = 48
+        Align = alTop
+        BevelInner = bvRaised
+        BevelOuter = bvLowered
+        TabOrder = 3
+        Visible = False
+        object Label2: TLabel
+          Left = 4
+          Top = 11
+          Width = 140
+          Height = 13
+          Caption = #1052#1103#1075#1089#1103#1076#1083#1080' '#1077#1097#1090#1080#1081#1072#1090' '#1097#1077#1089#1072#1073#1099
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+        end
+        object EditPrPurResAcc: TEdit
+          Left = 150
+          Top = 6
+          Width = 200
+          Height = 22
+          TabOrder = 0
+          Text = 'EditResresveAcc'
+        end
+        object ChPurRes: TCheckBox
+          Left = 353
+          Top = 10
+          Width = 15
+          Height = 18
+          Caption = 'ChBoxRes'
+          TabOrder = 1
+        end
+      end
+      object Panel8: TPanel
+        Left = 2
+        Top = 64
+        Width = 371
+        Height = 31
+        Align = alTop
+        BevelInner = bvRaised
+        BevelOuter = bvLowered
+        TabOrder = 4
+        ExplicitLeft = 6
+        object Label51: TLabel
+          Left = 4
+          Top = 6
+          Width = 68
+          Height = 13
+          Caption = #1060#1072#1080#1079' '#1097#1077#1089#1072#1073#1099
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+        end
+        object EditInterestAcc: TEdit
+          Left = 150
+          Top = 3
+          Width = 200
+          Height = 22
+          TabOrder = 0
+          Text = 'EditInterestAcc'
+        end
+        object CHInt: TCheckBox
+          Left = 353
+          Top = 7
+          Width = 15
+          Height = 18
+          Caption = 'CHInt'
+          Checked = True
+          State = cbChecked
+          TabOrder = 1
+        end
+      end
+      object Panel9: TPanel
+        Left = 2
+        Top = 174
+        Width = 371
+        Height = 31
+        Align = alTop
+        BevelInner = bvRaised
+        BevelOuter = bvLowered
+        TabOrder = 5
+        Visible = False
+        ExplicitTop = 157
+        ExplicitWidth = 395
+        object Label3: TLabel
+          Left = 4
+          Top = 9
+          Width = 152
+          Height = 13
+          Caption = #1048'.'#1054'.'#1050'.'#1052' '#1072#1076#1080' '#1077#1085#1090#1080#1081#1072#1090' '#1097#1077#1089#1072#1073#1099
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+        end
+        object Edit1: TEdit
+          Left = 150
+          Top = 4
+          Width = 200
+          Height = 22
+          TabOrder = 0
+          Text = 'EditIResresveAcc'
+        end
+        object CheckBox1: TCheckBox
+          Left = 353
+          Top = 6
+          Width = 15
+          Height = 18
+          Caption = 'CHPrRes'
+          TabOrder = 1
+        end
+      end
+      object TPanel
+        Left = 2
+        Top = 205
+        Width = 371
+        Height = 31
+        Align = alTop
+        BevelInner = bvRaised
+        BevelOuter = bvLowered
+        TabOrder = 6
+        Visible = False
+        ExplicitLeft = -2
+        ExplicitTop = 187
+        object Label4: TLabel
+          Left = 6
+          Top = 10
+          Width = 140
+          Height = 13
+          Caption = #1048'.'#1054'.'#1050'.'#1052' '#1084#1103#1075#1089#1103#1076#1083#1080' '#1077#1085#1090#1080#1081#1072#1090' '
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+        end
+        object edit2: TEdit
+          Left = 150
+          Top = 4
+          Width = 200
+          Height = 22
+          TabOrder = 0
+          Text = 'edit2'
+        end
+        object CheckBox2: TCheckBox
+          Left = 353
+          Top = 6
+          Width = 15
+          Height = 18
+          Caption = 'ChBoxRes'
+          TabOrder = 1
+        end
+      end
+      object Panel10: TPanel
+        Left = 2
+        Top = 236
+        Width = 371
+        Height = 31
+        Align = alTop
+        BevelInner = bvRaised
+        BevelOuter = bvLowered
+        TabOrder = 7
+        Visible = False
+        ExplicitTop = 219
+        object Label55: TLabel
+          Left = 4
+          Top = 11
+          Width = 128
+          Height = 13
+          Caption = #1069#1077#1078#1080#1082#1084#1080#1096' '#1089#1089#1091#1076#1072' '#1097#1077#1089#1072#1073#1099
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+        end
+        object EditDueLoanAcc: TEdit
+          Left = 150
+          Top = 2
+          Width = 200
+          Height = 22
+          TabOrder = 0
+          Text = 'EditDueLoanAcc'
+        end
+        object ChDueLoan: TCheckBox
+          Left = 353
+          Top = 6
+          Width = 15
+          Height = 18
+          Caption = 'ChDueLoan'
+          TabOrder = 1
+        end
+      end
+    end
+    object Panel4: TPanel
+      Left = 377
+      Top = 2
+      Width = 375
+      Height = 252
+      AutoSize = True
+      BevelInner = bvLowered
+      TabOrder = 1
+      Visible = False
+      object TPanel
+        Left = 2
+        Top = 2
+        Width = 371
+        Height = 31
+        Align = alTop
+        BevelInner = bvRaised
+        BevelOuter = bvLowered
+        TabOrder = 0
+        Visible = False
+        object Label59: TLabel
+          Left = 8
+          Top = 17
+          Width = 139
+          Height = 13
+          Caption = #1069#1077#1078'. '#1040#1076#1080' '#1077#1097#1090#1080#1081#1072#1090' '#1097#1077#1089#1072#1073#1099
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+        end
+        object EditDueReserveAcc: TEdit
+          Left = 134
+          Top = 9
+          Width = 200
+          Height = 22
+          TabOrder = 0
+          Text = 'EditDueReserveAcc'
+        end
+        object ChSecRes: TCheckBox
+          Left = 336
+          Top = 13
+          Width = 15
+          Height = 18
+          Caption = 'ChSecRes'
+          TabOrder = 1
+        end
+      end
+      object TPanel
+        Left = 2
+        Top = 33
+        Width = 371
+        Height = 31
+        Align = alTop
+        BevelInner = bvRaised
+        BevelOuter = bvLowered
+        TabOrder = 1
+        Visible = False
+        object Label5: TLabel
+          Left = 6
+          Top = 18
+          Width = 136
+          Height = 13
+          Caption = #1069#1077#1078'.'#1052#1103#1075'.'#1077#1097#1090#1080#1081#1072#1090' '#1097#1077#1089#1072#1073#1099
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+        end
+        object EditSecresAcc: TEdit
+          Left = 135
+          Top = 9
+          Width = 200
+          Height = 22
+          TabOrder = 0
+          Text = 'EditDueReserveAcc'
+        end
+        object ChSecPurRes: TCheckBox
+          Left = 336
+          Top = 12
+          Width = 15
+          Height = 19
+          Caption = 'ChBoxDueRes'
+          TabOrder = 1
+        end
+      end
+      object TPanel
+        Left = 2
+        Top = 64
+        Width = 371
+        Height = 31
+        Align = alTop
+        BevelInner = bvRaised
+        BevelOuter = bvLowered
+        TabOrder = 2
+        Visible = False
+        object Label6: TLabel
+          Left = 6
+          Top = 18
+          Width = 124
+          Height = 13
+          Caption = #1069#1077#1078#1080#1082#1084#1080#1096' '#1092#1072#1080#1079' '#1097#1077#1089#1072#1073#1099
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+        end
+        object EditDueIntAcc: TEdit
+          Left = 135
+          Top = 9
+          Width = 200
+          Height = 22
+          TabOrder = 0
+          Text = 'EditDueInterestAcc'
+        end
+        object CHDueint: TCheckBox
+          Left = 336
+          Top = 13
+          Width = 15
+          Height = 18
+          Caption = 'ChBoxDueInt'
+          TabOrder = 1
+        end
+      end
+      object TPanel
+        Left = 2
+        Top = 95
+        Width = 371
+        Height = 31
+        Align = alTop
+        BevelInner = bvRaised
+        BevelOuter = bvLowered
+        TabOrder = 3
+        Visible = False
+        object Label8: TLabel
+          Left = 6
+          Top = 18
+          Width = 119
+          Height = 13
+          Caption = #1041'.'#1050'. '#1070#1097#1076#1103#1083#1080#1082' '#1065#1077#1089#1072#1073#1099
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+        end
+        object EditOutOblAcc: TEdit
+          Left = 134
+          Top = 9
+          Width = 200
+          Height = 22
+          TabOrder = 0
+          Text = 'EditOutOblAcc'
+        end
+        object ChObl: TCheckBox
+          Left = 336
+          Top = 13
+          Width = 15
+          Height = 18
+          Caption = 'ChBoxOutObl'
+          TabOrder = 1
+        end
+      end
+      object TPanel
+        Left = 2
+        Top = 126
+        Width = 371
+        Height = 31
+        Align = alTop
+        BevelInner = bvRaised
+        BevelOuter = bvLowered
+        TabOrder = 4
+        Visible = False
+        object Label9: TLabel
+          Left = 6
+          Top = 18
+          Width = 98
+          Height = 13
+          Caption = #1041'.'#1050'. '#1057#1089#1091#1076#1072' '#1097#1077#1089#1072#1073#1099
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+        end
+        object EditOutLoanAcc: TEdit
+          Left = 134
+          Top = 9
+          Width = 200
+          Height = 22
+          TabOrder = 0
+          Text = 'EditOutInterestAcc'
+        end
+        object ChOutLoan: TCheckBox
+          Left = 336
+          Top = 13
+          Width = 15
+          Height = 18
+          Caption = 'CheckBox1'
+          TabOrder = 1
+        end
+      end
+      object TPanel
+        Left = 2
+        Top = 157
+        Width = 371
+        Height = 31
+        Align = alTop
+        BevelInner = bvRaised
+        BevelOuter = bvLowered
+        TabOrder = 5
+        Visible = False
+        object Label10: TLabel
+          Left = 9
+          Top = 18
+          Width = 92
+          Height = 13
+          Caption = #1041'.'#1050'. '#1060#1072#1080#1079' '#1097#1077#1089#1072#1073#1099
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+        end
+        object EditOutIntAcc: TEdit
+          Left = 134
+          Top = 9
+          Width = 200
+          Height = 22
+          TabOrder = 0
+          Text = 'EditOutInterestAcc'
+        end
+        object ChOutInt: TCheckBox
+          Left = 335
+          Top = 12
+          Width = 15
+          Height = 19
+          Caption = 'CheckBox1'
+          TabOrder = 1
+        end
+      end
+      object TPanel
+        Left = 2
+        Top = 188
+        Width = 371
+        Height = 31
+        Align = alTop
+        BevelInner = bvRaised
+        BevelOuter = bvLowered
+        TabOrder = 6
+        Visible = False
+        object Label11: TLabel
+          Left = 9
+          Top = 18
+          Width = 91
+          Height = 13
+          Caption = #1050'.'#1061'.'#1070'.'#1052' '#1045#1097#1090#1080#1081#1072#1090
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+        end
+        object EditCrdLineoblAcc: TEdit
+          Left = 134
+          Top = 9
+          Width = 200
+          Height = 22
+          TabOrder = 0
+          Text = 'EditCrdLineOblAcc'
+        end
+        object ChCrdLineObl: TCheckBox
+          Left = 336
+          Top = 13
+          Width = 15
+          Height = 18
+          Caption = 'CheckBox1'
+          TabOrder = 1
+        end
+      end
+      object TPanel
+        Left = 2
+        Top = 219
+        Width = 371
+        Height = 31
+        Align = alTop
+        BevelInner = bvRaised
+        BevelOuter = bvLowered
+        TabOrder = 7
+        Visible = False
+        object Label7: TLabel
+          Left = 8
+          Top = 18
+          Width = 100
+          Height = 13
+          Caption = #1041'.'#1050'. '#1069#1080#1088#1086#1074' '#1065#1077#1089#1072#1073#1099
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+          Visible = False
+        end
+        object EditOutPledgAcc: TEdit
+          Left = 135
+          Top = 9
+          Width = 200
+          Height = 22
+          TabOrder = 0
+          Text = 'EditPledgAcc'
+          Visible = False
+        end
+        object ChPledg: TCheckBox
+          Left = 336
+          Top = 14
+          Width = 15
+          Height = 17
+          Caption = 'ChBoxOutPlg'
+          TabOrder = 1
+          Visible = False
+        end
+      end
+    end
+  end
+  object BitBtnOk: TBitBtn
+    Left = 202
+    Top = 151
+    Width = 81
+    Height = 26
+    Caption = #1043#1103#1073#1091#1083
+    Default = True
+    DoubleBuffered = True
+    ModalResult = 1
+    NumGlyphs = 2
+    ParentDoubleBuffered = False
+    TabOrder = 1
+    OnClick = BitBtnOkClick
+  end
+  object BitBtnCancel: TBitBtn
+    Left = 283
+    Top = 151
+    Width = 81
+    Height = 26
+    Cancel = True
+    Caption = #1048#1084#1090#1080#1085#1072
+    DoubleBuffered = True
+    ModalResult = 2
+    NumGlyphs = 2
+    ParentDoubleBuffered = False
+    TabOrder = 2
+  end
+  object CM_CREDIT: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'CM_CREDIT'
+    Left = 8
+    Top = 149
+  end
+end

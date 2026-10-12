@@ -1,0 +1,120 @@
+object FrmChangeSchedule: TFrmChangeSchedule
+  Left = 223
+  Top = 225
+  Width = 213
+  Height = 156
+  BorderIcons = [biSystemMenu]
+  Color = clBtnFace
+  Font.Charset = RUSSIAN_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poMainFormCenter
+  OnCanResize = FormCanResize
+  OnKeyPress = FormKeyPress
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Label1: TLabel
+    Left = 12
+    Top = 12
+    Width = 37
+    Height = 13
+    Caption = 'Тарих :'
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = [fsBold]
+    ParentFont = False
+  end
+  object Label2: TLabel
+    Left = 13
+    Top = 71
+    Width = 87
+    Height = 13
+    Caption = 'Периодларын сайы'
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = [fsBold]
+    ParentFont = False
+  end
+  object Label3: TLabel
+    Left = 16
+    Top = 42
+    Width = 30
+    Height = 13
+    Caption = 'Галыг'
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = [fsBold]
+    ParentFont = False
+  end
+  object BitBtnChenge: TBitBtn
+    Left = 36
+    Top = 96
+    Width = 75
+    Height = 25
+    Caption = 'Гябул'
+    TabOrder = 0
+    OnClick = BitBtnChengeClick
+  end
+  object BitBtnAbort: TBitBtn
+    Left = 123
+    Top = 96
+    Width = 75
+    Height = 25
+    Caption = 'Имтина'
+    TabOrder = 1
+    OnClick = BitBtnAbortClick
+  end
+  object DTPChngSchedule: TDateTimePicker
+    Left = 55
+    Top = 6
+    Width = 140
+    Height = 21
+    CalAlignment = dtaLeft
+    Date = 39100.4725746875
+    Time = 39100.4725746875
+    DateFormat = dfShort
+    DateMode = dmComboBox
+    Kind = dtkDate
+    ParseInput = False
+    TabOrder = 2
+    OnChange = DTPChngScheduleChange
+  end
+  object NPeriodsEdit: TEdit
+    Left = 106
+    Top = 66
+    Width = 87
+    Height = 21
+    TabOrder = 3
+    Text = '0'
+  end
+  object EdRest: TEdit
+    Left = 55
+    Top = 38
+    Width = 138
+    Height = 21
+    ReadOnly = True
+    TabOrder = 4
+    Text = '0'
+  end
+  object NLSLocalizer1: TNLSLocalizer
+    Caption = 'Планын дяйишилмяси'
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = [fsBold]
+    Left = 240
+    Top = 16
+  end
+end

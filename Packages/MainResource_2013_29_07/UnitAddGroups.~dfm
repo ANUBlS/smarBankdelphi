@@ -1,0 +1,198 @@
+object FormAddGroups: TFormAddGroups
+  Left = 756
+  Top = 435
+  BorderStyle = bsDialog
+  Caption = 'AddGroups'
+  ClientHeight = 205
+  ClientWidth = 310
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'MS Sans Serif'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poScreenCenter
+  OnActivate = FormActivate
+  OnKeyPress = FormKeyPress
+  PixelsPerInch = 96
+  TextHeight = 13
+  object PanelM: TPanel
+    Left = 0
+    Top = 0
+    Width = 310
+    Height = 205
+    Align = alClient
+    BevelInner = bvRaised
+    BevelOuter = bvLowered
+    TabOrder = 0
+    object GroupBoxName: TGroupBox
+      Left = 2
+      Top = 2
+      Width = 306
+      Height = 39
+      Align = alTop
+      Caption = '√рупун ады'
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clBlack
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 0
+      object EditGroupName: TEdit
+        Left = 1
+        Top = 16
+        Width = 304
+        Height = 21
+        TabOrder = 0
+      end
+    end
+    object GroupBoxNBPercent: TGroupBox
+      Left = 2
+      Top = 40
+      Width = 154
+      Height = 37
+      Caption = 'Faiz(ћалийй€)'
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 1
+      object EditPercentNB: TEdit
+        Left = 2
+        Top = 14
+        Width = 148
+        Height = 21
+        TabOrder = 0
+      end
+    end
+    object GroupBoxNLPercent: TGroupBox
+      Left = 157
+      Top = 40
+      Width = 151
+      Height = 37
+      Caption = 'Faiz(Vergi)'
+      TabOrder = 2
+      object EditPercentNL: TEdit
+        Left = 2
+        Top = 14
+        Width = 145
+        Height = 21
+        TabOrder = 0
+      end
+    end
+    object GroupBoxDebtAcc: TGroupBox
+      Left = 2
+      Top = 82
+      Width = 154
+      Height = 47
+      Caption = '’€рж/ƒебит щесаб'
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 3
+      object CBoxDebtAcc: TComboBox
+        Left = 2
+        Top = 22
+        Width = 149
+        Height = 21
+        ItemHeight = 13
+        TabOrder = 0
+        OnChange = CBoxDebtAccChange
+      end
+    end
+    object GroupBoxCredAcc: TGroupBox
+      Left = 2
+      Top = 129
+      Width = 154
+      Height = 47
+      Caption = 'јмортизасийа/ редит щесаб'
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 4
+      object CBoxCredAcc: TComboBox
+        Left = 3
+        Top = 23
+        Width = 147
+        Height = 21
+        ItemHeight = 13
+        TabOrder = 0
+        OnChange = CBoxDebtAccChange
+      end
+    end
+    object BtnAdd: TBitBtn
+      Left = 4
+      Top = 177
+      Width = 303
+      Height = 29
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 5
+      OnClick = BtnAddClick
+      Kind = bkOK
+    end
+    object GroupBox_main_acc: TGroupBox
+      Left = 157
+      Top = 82
+      Width = 151
+      Height = 47
+      Caption = 'ясас в€саит щесабы'
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 6
+      object CB_main_acc: TDBLookupComboBox
+        Left = 3
+        Top = 22
+        Width = 145
+        Height = 21
+        KeyField = 'ID'
+        ListField = 'ACC_NO'
+        ListSource = DataModWares.DSViewGr
+        TabOrder = 0
+      end
+    end
+    object GroupBox_sale_acc: TGroupBox
+      Left = 157
+      Top = 129
+      Width = 151
+      Height = 47
+      Caption = 'јлгы - —атгы / «€р€р'
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 7
+      object CB_sale_acc: TDBLookupComboBox
+        Left = 2
+        Top = 23
+        Width = 145
+        Height = 21
+        KeyField = 'ID'
+        ListField = 'ACC_NO'
+        ListSource = DataModWares.DSViewGr
+        TabOrder = 0
+      end
+    end
+  end
+end

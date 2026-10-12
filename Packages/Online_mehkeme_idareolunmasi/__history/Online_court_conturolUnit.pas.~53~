@@ -1,0 +1,1105 @@
+﻿unit Online_court_conturolUnit;
+
+{$WARN SYMBOL_PLATFORM OFF}
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActiveX, AxCtrls, Online_court_conturol_TLB, StdVcl, StdCtrls, Buttons,
+  XFSCtrls, ExtCtrls, Oracle, IdTCPConnection, IdTCPClient, IdHTTP,
+  IdBaseComponent, IdComponent, IdIOHandler, IdIOHandlerSocket,
+  IdIOHandlerStack, IdSSL, IdSSLOpenSSL,dbxjson,encddecd, DB, OracleData, Grids,
+  XDBGrids, Mask, DBCtrlsEh, ComCtrls;
+
+  {
+  IdBaseComponent, IdComponent, IdTCPConnection, IdTCPClient,
+  IdHTTP, IdIOHandler, IdIOHandlerSocket, IdIOHandlerStack, IdSSL,dbxjson,encddecd,
+  ExtCtrls,XFSCtrls, IdSSLOpenSSL, Oracle; }
+
+type
+  TOnline_court_conturolImpl = class(TActiveForm, IOnline_court_conturolImpl)
+    ssl: TIdSSLIOHandlerSocketOpenSSL;
+    IdHTTP1: TIdHTTP;
+    pg_court: TOraclePackage;
+    ods_court: TOracleDataSet;
+    ods_accountpasspin: TOracleDataSet;
+    ods_accountInn: TOracleDataSet;
+    ods_accountInnID: TIntegerField;
+    ods_accountInnSERVC_ID: TFloatField;
+    ods_accountInnTEXT: TWideStringField;
+    ods_accountInnINN: TWideStringField;
+    ods_girovpasspin: TOracleDataSet;
+    ods_girovinn: TOracleDataSet;
+    ods_compespasspin: TOracleDataSet;
+    ods_compesinn: TOracleDataSet;
+    ods_custpasspin: TOracleDataSet;
+    ods_custinn: TOracleDataSet;
+    ods_custpasspinTEXT: TWideStringField;
+    ods_custinnTEXT: TWideStringField;
+    ods_custinnCHECKED: TWideStringField;
+    ods_custpasspinCHECKED: TWideStringField;
+    ods_custinnSERVC_ID: TFloatField;
+    ods_depositinn: TOracleDataSet;
+    ods_depositinnTEXT: TWideStringField;
+    dsrc_court: TDataSource;
+    ods_courtCHECKED: TWideStringField;
+    ods_courtID: TFloatField;
+    ods_courtPERSON: TWideStringField;
+    ods_courtNAME: TWideStringField;
+    ods_courtCHECKED_ID: TFloatField;
+    ods_courtSERVC_ID: TFloatField;
+    OracleQuery1: TOracleQuery;
+    query_inn: TOracleQuery;
+    PageControl1: TPageControl;
+    TabSheet1: TTabSheet;
+    TabSheet2: TTabSheet;
+    XFPanel2: TXFPanel;
+    Memo1: TMemo;
+    XDBGrid1: TXDBGrid;
+    XFPanel1: TXFPanel;
+    XFBitBtn1: TXFBitBtn;
+    XFBitBtn2: TXFBitBtn;
+    Button1: TButton;
+    XFPanel3: TXFPanel;
+    XFPanel4: TXFPanel;
+    XDBGrid2: TXDBGrid;
+    XFLabel1: TXFLabel;
+    date: TDBDateTimeEditEh;
+    XFButton1: TXFButton;
+    ods_courtarxiv: TOracleDataSet;
+    dsrc_courtarxiv: TDataSource;
+    XFButton2: TXFButton;
+    ods_accountpasspinID: TFloatField;
+    ods_accountpasspinSERVC_ID: TFloatField;
+    ods_accountpasspinPASSPIN: TWideStringField;
+    ods_accountpasspinTEXT: TWideStringField;
+    ods_custpasspinSERVC_ID: TFloatField;
+    ods_depositpasspin: TOracleDataSet;
+    ods_depositpasspinTEXT: TWideStringField;
+    XFButton3: TXFButton;
+    ods_courtPERSONTYPE: TWideStringField;
+    procedure XFBitBtn1Click(Sender: TObject);
+    procedure XFBitBtn2Click(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure XDBGrid1DrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TXColumn; State: TGridDrawState);
+    procedure XFButton1Click(Sender: TObject);
+    procedure XFButton2Click(Sender: TObject);
+    procedure XFButton3Click(Sender: TObject);
+  private
+    { Private declarations }
+    FEvents: IOnline_court_conturolImplEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure MouseEnterEvent(Sender: TObject);
+    procedure MouseLeaveEvent(Sender: TObject);
+    procedure PaintEvent(Sender: TObject);
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AlignDisabled: WordBool; safecall;
+    function Get_AlignWithMargins: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_BorderWidth: Integer; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_DockSite: WordBool; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_ExplicitHeight: Integer; safecall;
+    function Get_ExplicitLeft: Integer; safecall;
+    function Get_ExplicitTop: Integer; safecall;
+    function Get_ExplicitWidth: Integer; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_MouseInClient: WordBool; safecall;
+    function Get_ParentCustomHint: WordBool; safecall;
+    function Get_ParentDoubleBuffered: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PopupMode: TxPopupMode; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_ScreenSnap: WordBool; safecall;
+    function Get_SnapBuffer: Integer; safecall;
+    function Get_UseDockManager: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_AlignWithMargins(Value: WordBool); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_BorderWidth(Value: Integer); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_DockSite(Value: WordBool); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_ParentCustomHint(Value: WordBool); safecall;
+    procedure Set_ParentDoubleBuffered(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PopupMode(Value: TxPopupMode); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_ScreenSnap(Value: WordBool); safecall;
+    procedure Set_SnapBuffer(Value: Integer); safecall;
+    procedure Set_UseDockManager(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+  public
+    { Public declarations }
+    procedure Initialize; override;
+    function post_(v_http :string;v_jeson :TStringStream):TJSONArray;
+       function postt_(v_http :string;v_jeson :TStringStream):TJSONArray;
+
+  end;
+
+  var  v_value:string;
+      c_servc_id:string;
+       v_servc_id:string;
+implementation
+
+uses ComObj, ComServ,sboapiDataModuleImpl;
+
+{$R *.DFM}
+
+{ TOnline_court_conturolImpl }
+
+procedure TOnline_court_conturolImpl.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_Online_court_conturolImplPage); }
+end;
+
+
+function  TOnline_court_conturolImpl.postt_(v_http :string;v_jeson :TStringStream): TJSONArray;
+var
+        http:TIDHttp;
+        JsonToSend: TStringStream;
+        s:string;
+        LJsonObj: TJSONObject;
+        LResult:TJSONArray;
+        v_Result:TJSONArray;
+  begin
+try
+ Screen.Cursor:= crHourGlass;
+    http := TIDHttp.Create(nil);
+   // IdHTTP1.IOHandler := ssl;
+//    ssl := ssl.Create(nil);
+    http.HandleRedirects := true;
+    http.ReadTimeout := 3000;
+    http.Request.BasicAuthentication := false;
+    http.Request.ContentType := 'application/json; charset=utf-8';
+    http.Request.CustomHeaders.AddValue('Authorization',v_value);
+   /// showmessage(v_value);
+//    http.Request.CustomHeaders.AddValue('','"ClientId": "aqrarkreditasc", "ClientSecret": "xQg4zDy3"');
+//      s:='{ "ClientId":  "aqrarkreditasctest", "ClientSecret": "xQg4zDy3" }' ;
+//
+//       JsonToSend := TStringStream.Create( s );
+//       Memo1.Clear;
+//    Memo1.Lines.Text:=http.Post('http://10.168.172.76:1111/login',JsonToSend);
+
+   Memo1.Lines.Text:=http.Post(v_http,v_jeson);
+    http.Destroy;
+    Screen.Cursor:= crDefault;
+
+
+ except on E: Exception do
+  begin
+    http.Destroy;
+    Screen.Cursor:= crDefault;
+    ShowMessage('Aqrar qoşulmada problem var qosmaaaaa: ' + E.Message);
+    exit
+  end;
+
+end;
+// LJsonObj := TJSONObject.ParseJSONValue(TEncoding.UTF8.GetBytes(Memo1.Text), 0) as TJSONObject;
+// v_value:=(LJsonObj.Get('value').JsonValue.Value);
+
+      Result:=v_Result;
+end;
+
+
+
+
+function  TOnline_court_conturolImpl.post_(v_http :string;v_jeson :TStringStream): TJSONArray;
+var
+        http:TIDHttp;
+        JsonToSend: TStringStream;
+        aa,s:string;
+       Json, LJsonObj: TJSONObject;
+        LResult:TJSONArray;
+        v_Result:TJSONArray;
+  begin
+//try
+ Screen.Cursor:= crHourGlass;
+    http := TIDHttp.Create(nil);
+   // IdHTTP1.IOHandler := ssl;
+//    ssl := ssl.Create(nil);
+    http.HandleRedirects := true;
+    http.ReadTimeout := 3000;
+    http.Request.BasicAuthentication := false;
+    http.Request.ContentType := 'application/json; charset=utf-8';
+    http.Request.CustomHeaders.AddValue('Authorization',v_value);
+//     showmessage('va'+v_value);
+//     showmessage('htpp'+v_http);
+//      ShowMessage('so'+inttostr(v_jeson.Size));
+   Memo1.Lines.Text:=http.Post(v_http,v_jeson);
+
+   Json := TJSONObject.ParseJSONValue(memo1.Text) as TJSONObject;
+
+   aa:=  Json.get('value').JsonValue.ToString  ;
+
+     // showmessage((v_servc_id));
+          pg_court.CallProcedure ( 'update_court',
+                   [
+                      v_servc_id,
+                      aa
+                      ]);
+
+
+    http.Destroy;
+    Screen.Cursor:= crDefault;
+
+{
+ except on E: Exception do
+  begin
+    http.Destroy;
+    Screen.Cursor:= crDefault;
+    ShowMessage('Aqrar qoşulmada problem var ssssss: ' + E.Message);
+    exit
+  end;
+
+end;   }
+{ LJsonObj := TJSONObject.ParseJSONValue(TEncoding.UTF8.GetBytes(Memo1.Text), 0) as TJSONObject;
+ v_value:=(LJsonObj.Get('value').JsonValue.Value);
+   }
+      Result:=v_Result;
+end;
+
+
+
+
+
+procedure TOnline_court_conturolImpl.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as IOnline_court_conturolImplEvents;
+  inherited EventSinkChanged(EventSink);
+end;
+
+procedure TOnline_court_conturolImpl.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnMouseEnter := MouseEnterEvent;
+  OnMouseLeave := MouseLeaveEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TOnline_court_conturolImpl.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TOnline_court_conturolImpl.Get_AlignDisabled: WordBool;
+begin
+  Result := AlignDisabled;
+end;
+
+function TOnline_court_conturolImpl.Get_AlignWithMargins: WordBool;
+begin
+  Result := AlignWithMargins;
+end;
+
+function TOnline_court_conturolImpl.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TOnline_court_conturolImpl.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TOnline_court_conturolImpl.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TOnline_court_conturolImpl.Get_BorderWidth: Integer;
+begin
+  Result := Integer(BorderWidth);
+end;
+
+function TOnline_court_conturolImpl.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TOnline_court_conturolImpl.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TOnline_court_conturolImpl.Get_DockSite: WordBool;
+begin
+  Result := DockSite;
+end;
+
+function TOnline_court_conturolImpl.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TOnline_court_conturolImpl.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TOnline_court_conturolImpl.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TOnline_court_conturolImpl.Get_ExplicitHeight: Integer;
+begin
+  Result := ExplicitHeight;
+end;
+
+function TOnline_court_conturolImpl.Get_ExplicitLeft: Integer;
+begin
+  Result := ExplicitLeft;
+end;
+
+function TOnline_court_conturolImpl.Get_ExplicitTop: Integer;
+begin
+  Result := ExplicitTop;
+end;
+
+function TOnline_court_conturolImpl.Get_ExplicitWidth: Integer;
+begin
+  Result := ExplicitWidth;
+end;
+
+function TOnline_court_conturolImpl.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TOnline_court_conturolImpl.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TOnline_court_conturolImpl.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TOnline_court_conturolImpl.Get_MouseInClient: WordBool;
+begin
+  Result := MouseInClient;
+end;
+
+function TOnline_court_conturolImpl.Get_ParentCustomHint: WordBool;
+begin
+  Result := ParentCustomHint;
+end;
+
+function TOnline_court_conturolImpl.Get_ParentDoubleBuffered: WordBool;
+begin
+  Result := ParentDoubleBuffered;
+end;
+
+function TOnline_court_conturolImpl.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TOnline_court_conturolImpl.Get_PopupMode: TxPopupMode;
+begin
+  Result := Ord(PopupMode);
+end;
+
+function TOnline_court_conturolImpl.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TOnline_court_conturolImpl.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TOnline_court_conturolImpl.Get_ScreenSnap: WordBool;
+begin
+  Result := ScreenSnap;
+end;
+
+function TOnline_court_conturolImpl.Get_SnapBuffer: Integer;
+begin
+  Result := SnapBuffer;
+end;
+
+function TOnline_court_conturolImpl.Get_UseDockManager: WordBool;
+begin
+  Result := UseDockManager;
+end;
+
+function TOnline_court_conturolImpl.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TOnline_court_conturolImpl.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TOnline_court_conturolImpl._Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TOnline_court_conturolImpl.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TOnline_court_conturolImpl.Button1Click(Sender: TObject);
+var
+JsonToSend: TStringStream;
+cek,cek1,sqltext:string;
+I,ii:integer;
+JsonToSend1,JsonToSend2: TStringStream;
+begin
+
+       ods_court.first;
+
+
+
+    for I := 0 to ods_court.RecordCount-1 do
+     begin
+
+//     pg_court.CallProcedure( 'court_cust',[ods_courtSERVC_ID.AsInteger,
+//                                          ods_courtPERSON.AsString]);
+//                                          showmessage('son');
+
+   if ods_courtPERSONTYPE.AsString='0' then
+      begin
+
+      if ods_courtID.AsInteger >0 then
+             begin
+      cek1:=ods_courtCHECKED.AsString;
+      v_servc_id:= ods_courtSERVC_ID.AsString;
+
+     JsonToSend2 := TStringStream.Create(cek1);
+     post_('http://10.168.172.76:1111/bank/checked',JsonToSend2);
+
+
+     ods_custinn.Close;
+     ods_custinn.SetVariable('v_inn',ods_courtPERSON.AsString);
+     ods_custinn.Open;
+
+        ods_custinn.First;
+      for ii := 0 to ods_custinn.RecordCount-1 do
+      begin
+
+      // showmessage('reco'+inttostr(ods_custinn.RecordCount-1));
+     cek:= ods_custinnTEXT.AsString;
+     JsonToSend1 := TStringStream.Create(cek);
+     postt_('http://10.168.172.76:1111/bank/SendCustomerInfo',JsonToSend1);
+    //showmessage('kk');
+     end;
+        ods_custinn.Next;
+
+
+     ods_accountInn.close;
+     ods_accountInn.SetVariable('v_inn',ods_courtPERSON.AsString);
+     ods_accountInn.Open;
+
+        ods_accountInn.first;
+
+   for ii := 0 to ods_accountInn.RecordCount-1 do
+      begin
+
+     cek:= ods_accountInnTEXT.AsString;
+     JsonToSend1 := TStringStream.Create(cek);
+     //showmessage('account'+ods_courtPERSON.AsString);
+     postt_('http://10.168.172.76:1111/bank/SendAccountInfo',JsonToSend1);
+
+     end;
+     ods_accountInn.Next;
+
+      {
+     ods_girovinn.Close;
+     ods_girovinn.SetVariable('',ods_courtPERSON.AsString);
+     ods_girovinn.Open;
+
+     ods_girovinn.First;
+      for ii := 0 to ods_girovinn.RecordCount-1 do
+      begin
+    // cek:= ods_girovinnTEXT.AsString;
+
+     JsonToSend1 := TStringStream.Create(cek);
+    showmessage(ods_courtPERSON.AsString);
+    postt_('http://10.168.172.76:2020/bank/SendCollateralInfo',JsonToSend1);
+    showmessage('cc');
+     end;
+     ods_girovinn.Next ;
+
+
+     ods_depositinn.Close;
+     ods_depositinn.SetVariable('',ods_courtPERSON.AsString);
+     ods_depositinn.Open;
+
+     ods_depositinn.First;
+      for ii := 0 to ods_depositinn.RecordCount-1 do
+      begin
+    cek:=ods_depositinnTEXT.AsString;
+     JsonToSend1 := TStringStream.Create(cek);
+    showmessage(ods_courtPERSON.AsString);
+    postt_('http://10.168.172.76:2020/bank/SendDepositInfo',JsonToSend1);
+    showmessage('cc');
+     end;
+     ods_depositinn.Next ;  }
+     end;
+
+     if ods_courtID.AsInteger>0 then
+      begin
+
+      query_inn.SQL.Text:='';
+    sqltext:='insert into court_online_arxive  select*from court_online where servc_id=' ;
+      query_inn.SQL.Text:=sqltext +''''+ods_courtSERVC_ID.AsString +  '''';
+
+      query_inn.Execute;
+
+      query_inn.SQL.Text:='';
+
+      query_inn.SQL.Text:='delete court_online where servc_id='''+ods_courtSERVC_ID.AsString +  '''' ;
+      query_inn.Execute;
+      query_inn.Session.Commit;
+
+      end;
+      end;
+
+               ods_court.Next;
+             end;
+
+          ods_court.Refresh;
+end;
+
+procedure TOnline_court_conturolImpl.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TOnline_court_conturolImpl.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TOnline_court_conturolImpl.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TOnline_court_conturolImpl.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TOnline_court_conturolImpl.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TOnline_court_conturolImpl.KeyPressEvent(Sender: TObject; var Key: Char);
+
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TOnline_court_conturolImpl.MouseEnterEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnMouseEnter;
+end;
+
+procedure TOnline_court_conturolImpl.MouseLeaveEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnMouseLeave;
+end;
+
+procedure TOnline_court_conturolImpl.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TOnline_court_conturolImpl.Set_AlignWithMargins(Value: WordBool);
+begin
+  AlignWithMargins := Value;
+end;
+
+procedure TOnline_court_conturolImpl.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TOnline_court_conturolImpl.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TOnline_court_conturolImpl.Set_AxBorderStyle(Value: TxActiveFormBorderStyle);
+
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TOnline_court_conturolImpl.Set_BorderWidth(Value: Integer);
+begin
+  BorderWidth := TBorderWidth(Value);
+end;
+
+procedure TOnline_court_conturolImpl.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TOnline_court_conturolImpl.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TOnline_court_conturolImpl.Set_DockSite(Value: WordBool);
+begin
+  DockSite := Value;
+end;
+
+procedure TOnline_court_conturolImpl.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TOnline_court_conturolImpl.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TOnline_court_conturolImpl.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TOnline_court_conturolImpl.Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TOnline_court_conturolImpl.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := string(Value);
+end;
+
+procedure TOnline_court_conturolImpl.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TOnline_court_conturolImpl.Set_ParentCustomHint(Value: WordBool);
+begin
+  ParentCustomHint := Value;
+end;
+
+procedure TOnline_court_conturolImpl.Set_ParentDoubleBuffered(Value: WordBool);
+begin
+  ParentDoubleBuffered := Value;
+end;
+
+procedure TOnline_court_conturolImpl.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TOnline_court_conturolImpl.Set_PopupMode(Value: TxPopupMode);
+begin
+  PopupMode := TPopupMode(Value);
+end;
+
+procedure TOnline_court_conturolImpl.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TOnline_court_conturolImpl.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TOnline_court_conturolImpl.Set_ScreenSnap(Value: WordBool);
+begin
+  ScreenSnap := Value;
+end;
+
+procedure TOnline_court_conturolImpl.Set_SnapBuffer(Value: Integer);
+begin
+  SnapBuffer := Value;
+end;
+
+procedure TOnline_court_conturolImpl.Set_UseDockManager(Value: WordBool);
+begin
+  UseDockManager := Value;
+end;
+
+procedure TOnline_court_conturolImpl.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+procedure TOnline_court_conturolImpl.XDBGrid1DrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TXColumn; State: TGridDrawState);
+  var
+  i:integer;
+begin
+ for I := 0 to ods_court.RecordCount-1 do
+            begin
+         if XDBGrid1.DataSource.DataSet.FieldByName('id').AsInteger<0 then
+         //showmessage('ss');
+                XDBGrid1.Canvas.Brush.Color:=clFuchsia;
+         XDBGrid1.DefaultDrawColumnCell(rect,datacol,column,state);
+            end;
+end;
+
+procedure TOnline_court_conturolImpl.XFBitBtn1Click(Sender: TObject);
+var    jsonToSend:TStringList;
+         http:TIDHttp;
+      Jobj,   Json,json_cust: TJSONObject;
+  resarr,Jarr, JinArr,jarr_cust: TJSONArray;
+  v_checkd,cour_id,re,a,i, ix, Row: Integer;
+ c_decisionnumber,c_decisionnumber1,c_servc_id1: variant;
+ v_cust,sss ,s ,s1:string;
+
+
+  begin
+try
+   Screen.Cursor:= crHourGlass;
+    http := TIDHttp.Create(nil);
+    IdHTTP1.IOHandler := ssl;
+    ssl := ssl.Create(nil);
+    http.HandleRedirects := true;
+    http.ReadTimeout := 3000;
+    http.Request.BasicAuthentication := False;
+    http.Request.ContentType := 'application/json';
+    http.Request.CustomHeaders.AddValue('Authorization',v_value);
+     memo1.Clear;
+     Memo1.Lines:= http.Request.CustomHeaders;
+     //ShowMessage(v_value);
+    Memo1.Lines.Text:=http.get('http://10.168.172.76:1111/bank/check');
+
+     http.Destroy;
+   Screen.Cursor:= crDefault;
+   //ShowMessage(memo1.Text);
+   Json := TJSONObject.ParseJSONValue(memo1.Text) as TJSONObject;
+//   showmessage(Json.get('response').JsonValue.ToString);
+   if Json.get('response').JsonValue.ToString='3' then
+    begin
+
+    Showmessage('  Heç bir məlumat tapilmad .....!') ;
+    ods_court.Close;
+    ods_court.Open;
+    exit;
+    end;
+   Jarr := (Json.Get('value').JsonValue ) as TJSONArray;
+
+
+      //Row := 1;
+   // ShowMessage(inttostr(Jarr.Size));
+
+  except on E: Exception do
+  begin
+    http.Destroy;
+    Screen.Cursor:= crDefault;
+    ShowMessage('Asan fiansa qoşulmada problem var  esas: ' + E.Message);
+    exit
+
+  end;
+end;
+
+
+    OracleQuery1.SQL.Text:='truncate table court_online';
+    OracleQuery1.Execute;
+
+  for ix := 0 To Jarr.Size - 1 do
+  begin
+      Jobj := Jarr.Get(ix) as TJSONObject;
+          resarr:=(Jobj.Get('responseData').JsonValue) as TJSONArray;
+         //   showmessage(Jobj.Get('endDate').JsonValue.Value);
+
+        c_decisionnumber:=  Jobj.Get('decisionNumber').JsonValue.Value;
+              if c_decisionnumber<>'' then
+            c_decisionnumber1:=c_decisionnumber
+            else
+            c_decisionnumber1:=-1;
+
+         c_servc_id:= Jobj.Get('id').JsonValue.Value;
+
+
+            if c_servc_id<>'' then
+                 c_servc_id1:=c_servc_id
+                 else
+                 c_servc_id1:=-1;
+     try
+         cour_id:= pg_court.CallIntegerFunction ( 'add_court',
+                   [
+                       Jobj.Get('person').JsonValue.Value,
+                       Jobj.Get('personType').JsonValue.Value,
+                       Jobj.Get('filePath').JsonValue.Value ,
+                       Jobj.Get('beginDate').JsonValue.Value ,
+                       Jobj.Get('endDate').JsonValue.Value ,
+                       Jobj.Get('courtName').JsonValue.Value ,
+                       Jobj.Get('judgeName').JsonValue.Value ,
+                       Jobj.Get('decisionNumber').JsonValue.Value,//StrToInt(c_decisionnumber1),
+                       Jobj.Get('decisionDate').JsonValue.Value ,
+                       Jobj.Get('note').JsonValue.Value ,
+                       Strtoint(c_servc_id1)
+             ]);  pg_court.Session.Commit;
+       except on E: Exception do begin  pg_court.Session.Commit;
+       end;
+         end;
+
+
+
+ ods_court.Close;
+ ods_court.Open;
+
+
+
+  end;
+
+
+
+  {    for re := 0 To resarr.Size - 1 do
+       begin
+        pg_court.CallProcedure('add_courtpersoninfo',[cour_id,resarr.Get(re).Value]);
+       //sss:=(resarr.Get(re).Value);
+     end;
+       Except ods_court.Session.Commit;
+      end;
+      end;    }
+
+
+end;
+
+procedure TOnline_court_conturolImpl.XFBitBtn2Click(Sender: TObject);
+var
+        http:TIDHttp;
+        JsonToSend: TStringStream;
+        s:string;
+        LJsonObj: TJSONObject;
+         LResult:TJSONArray;
+  begin
+try
+ Screen.Cursor:= crHourGlass;
+    http := TIDHttp.Create(nil);
+   // IdHTTP1.IOHandler := ssl;
+//    ssl := ssl.Create(nil);
+    http.HandleRedirects := true;
+    http.ReadTimeout := 3000;
+    http.Request.BasicAuthentication := false;
+    http.Request.ContentType := 'application/json; charset=utf-8';
+//    http.Request.CustomHeaders.AddValue('','"ClientId": "aqrarkreditasc", "ClientSecret": "xQg4zJ7y3"');
+
+     s:='{ "ClientId":  "aqrarkreditasctest", "ClientSecret": "xQg4zDy3" }' ;
+   // ShowMessage(s);
+       JsonToSend := TStringStream.Create( s );
+       Memo1.Clear;
+   //real Memo1.Lines.Text:=http.Post('http://10.168.172.76:2020/login',JsonToSend);
+     memo1.lines.text:=http.Post('http://10.168.172.76:1111/login',JsonToSend);
+    http.Destroy;
+    Screen.Cursor:= crDefault;
+
+ except on E: Exception do
+  begin
+    http.Destroy;
+    Screen.Cursor:= crDefault;
+    ShowMessage('Aqrar qoşulmada problem var login: ' + E.Message);
+    exit
+  end;
+
+end;
+ LJsonObj := TJSONObject.ParseJSONValue(TEncoding.UTF8.GetBytes(Memo1.Text), 0) as TJSONObject;
+ v_value:=(LJsonObj.Get('value').JsonValue.Value);
+
+end;
+
+procedure TOnline_court_conturolImpl.XFButton1Click(Sender: TObject);
+begin
+ods_courtarxiv.Close;
+ods_courtarxiv.SetVariable('v_dat',date.Value);
+ods_courtarxiv.Open;
+end;
+
+procedure TOnline_court_conturolImpl.XFButton2Click(Sender: TObject);
+begin
+XFBitBtn2.Click;
+XFBitBtn1.Click;
+Button1.Click;
+XFButton3.Click;
+end;
+
+procedure TOnline_court_conturolImpl.XFButton3Click(Sender: TObject);
+var
+JsonToSend: TStringStream;
+cek,cek1,sqltext:string;
+I,ii:integer;
+JsonToSend1,JsonToSend2: TStringStream;
+begin
+
+       Ods_court.first;
+
+    for I := 0 to Ods_court.RecordCount-1 do
+     begin
+
+     if ods_courtPERSONTYPE.AsString='1' then
+      begin
+
+      if Ods_courtid.AsInteger >0 then
+             begin
+      cek1:=Ods_courtCHECKED.AsString;
+      v_servc_id:= Ods_courtSERVC_ID.AsString;
+
+     JsonToSend2 := TStringStream.Create(cek1);
+     post_('http://10.168.172.76:1111/bank/checked',JsonToSend2);
+
+
+     ods_custpasspin.Close;
+     ods_custpasspin.SetVariable('v_passpin',Ods_courtPERSON.AsString);
+     ods_custpasspin.Open;
+
+        ods_custpasspin.First;
+      for ii := 0 to ods_custpasspin.RecordCount-1 do
+      begin
+
+       showmessage('reco'+inttostr(ods_custinn.RecordCount-1));
+     cek:= ods_custpasspinTEXT.AsString;
+     JsonToSend1 := TStringStream.Create(cek);
+     postt_('http://10.168.172.76:1111/bank/SendCustomerInfo',JsonToSend1);
+
+     end;
+        ods_custpasspin.Next;
+
+
+     ods_accountpasspin.close;
+     ods_accountpasspin.SetVariable('v_passpin',ods_courtPERSON.AsString);
+     ods_accountpasspin.Open;
+
+        ods_accountpasspin.first;
+
+   for ii := 0 to ods_accountpasspin.RecordCount-1 do
+      begin
+
+     cek:= ods_accountpasspinTEXT.AsString;
+     JsonToSend1 := TStringStream.Create(cek);
+     //showmessage('account'+ods_courtPERSON.AsString);
+     postt_('http://10.168.172.76:1111/bank/SendAccountInfo',JsonToSend1);
+
+     end;
+     ods_accountpasspin.Next;
+
+      {
+     ods_girovinn.Close;
+     ods_girovinn.SetVariable('',ods_courtPERSON.AsString);
+     ods_girovinn.Open;
+
+     ods_girovinn.First;
+      for ii := 0 to ods_girovinn.RecordCount-1 do
+      begin
+    // cek:= ods_girovinnTEXT.AsString;
+
+     JsonToSend1 := TStringStream.Create(cek);
+    showmessage(ods_courtPERSON.AsString);
+    postt_('http://10.168.172.76:2020/bank/SendCollateralInfo',JsonToSend1);
+    showmessage('cc');
+     end;
+     ods_girovinn.Next ;
+
+
+     ods_depositinn.Close;
+     ods_depositinn.SetVariable('',ods_courtPERSON.AsString);
+     ods_depositinn.Open;
+
+     ods_depositinn.First;
+      for ii := 0 to ods_depositinn.RecordCount-1 do
+      begin
+    cek:=ods_depositinnTEXT.AsString;
+     JsonToSend1 := TStringStream.Create(cek);
+    showmessage(ods_courtPERSON.AsString);
+    postt_('http://10.168.172.76:2020/bank/SendDepositInfo',JsonToSend1);
+    showmessage('cc');
+     end;
+     ods_depositinn.Next ;  }
+     end;
+
+     if ods_courtID.AsInteger>0 then
+      begin
+
+      query_inn.SQL.Text:='';
+    sqltext:='insert into court_online_arxive  select*from court_online where servc_id=' ;
+      query_inn.SQL.Text:=sqltext +''''+ods_courtSERVC_ID.AsString +  '''';
+
+      query_inn.Execute;
+
+      query_inn.SQL.Text:='';
+
+      query_inn.SQL.Text:='delete court_online where servc_id='''+ods_courtSERVC_ID.AsString +  '''' ;
+      query_inn.Execute;
+      query_inn.Session.Commit;
+
+      end;
+
+      end;
+          Ods_court.Next;
+             end;
+
+          Ods_court.Refresh;
+
+
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TOnline_court_conturolImpl,
+    Class_Online_court_conturolImpl,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

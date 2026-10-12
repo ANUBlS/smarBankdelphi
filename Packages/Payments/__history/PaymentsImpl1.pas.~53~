@@ -1,0 +1,1236 @@
+﻿unit PaymentsImpl1;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, nlsDialogs,
+  ActiveX, AxCtrls, Payments_TLB, StdVcl, Db, OracleData, Grids, DBGrids,
+  ExtCtrls, StdCtrls, Buttons, DBCtrls, ComCtrls, Menus, Oracle,Dialogs,
+  ImgList, Mask, Variants,CheckLst;
+  const
+  BooleanPrefix = ' AND ';
+
+type
+  TPaymentsForm = class(TActiveForm, IPaymentsForm)
+    p: TPopupMenu;
+    Timer: TTimer;
+    ImageList: TImageList;
+    Print1: TMenuItem;
+    PageControl1: TPageControl;
+    TabSheet2: TTabSheet;
+    Panel1: TPanel;
+    SpeedButton1: TSpeedButton;
+    SpeedButton3: TSpeedButton;
+    BtnRefresh: TBitBtn;
+    Panel2: TPanel;
+    filtergroup: TGroupBox;
+    filterrefreshbutton: TSpeedButton;
+    Label5: TLabel;
+    DTPBEGIN: TDateTimePicker;
+    DTPEND: TDateTimePicker;
+    CHECKXOKS: TCheckBox;
+    CHECKAZIPS: TCheckBox;
+    CHECKBD: TCheckBox;
+    CheckBox4: TCheckBox;
+    CheckBox5: TCheckBox;
+    CheckBox6: TCheckBox;
+    CheckBox7: TCheckBox;
+    GroupBox1: TGroupBox;
+    DBGridPayments: TDBGrid;
+    Memo1: TMemo;
+    Panel3: TPanel;
+    Label6: TLabel;
+    Label7: TLabel;
+    Label8: TLabel;
+    Label9: TLabel;
+    Label10: TLabel;
+    Label11: TLabel;
+    searchid: TEdit;
+    searchGONDEREN_NAME: TEdit;
+    searchGONDEREN_ACC: TEdit;
+    searchALAN_NAME: TEdit;
+    searchALAN_ACC: TEdit;
+    searchAMOUNT: TEdit;
+    TabSheet1: TTabSheet;
+    allcheck: TCheckBox;
+    A1: TMenuItem;
+    P1: TMenuItem;
+    DBLookupComboBox1: TDBLookupComboBox;
+    Label3: TLabel;
+    CheckBox1: TCheckBox;
+    CheckBox8: TCheckBox;
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure BtnRefreshClick(Sender: TObject);
+    procedure DBGridPaymentsDblClick(Sender: TObject);
+    procedure DBGridPaymentsTitleClick(Column: TColumn);
+    procedure N1DrawItem(Sender: TObject; ACanvas: TCanvas; ARect: TRect;
+      Selected: Boolean);
+    procedure capClick(Sender: TObject);
+    procedure SpeedButton1Click(Sender: TObject);
+
+    procedure  NOTHINGCHECK(first: boolean;second:boolean;third :boolean;typeof:byte);
+    procedure DBGridPaymentsDrawColumnCell(Sender: TObject;
+      const Rect: TRect; DataCol: Integer; Column: TColumn;
+      State: TGridDrawState);
+    procedure Button2Click(Sender: TObject);
+    procedure searchidChange(Sender: TObject);
+    procedure searchidExit(Sender: TObject);
+    procedure SpeedButton3Click(Sender: TObject);
+    procedure Print1Click(Sender: TObject);
+    procedure ActiveFormActivate(Sender: TObject);
+    procedure searchidKeyPress(Sender: TObject; var Key: Char);
+    procedure CHECKXOKSClick(Sender: TObject);
+    procedure CheckBox6Click(Sender: TObject);
+    procedure CHECKAZIPSClick(Sender: TObject);
+    procedure CHECKBDClick(Sender: TObject);
+    procedure CheckBox4Click(Sender: TObject);
+    procedure CheckBox5Click(Sender: TObject);
+    procedure CheckBox7Click(Sender: TObject);
+    procedure allcheckClick(Sender: TObject);
+    procedure A1Click(Sender: TObject);
+    procedure P1Click(Sender: TObject);
+    procedure CheckBox1Click(Sender: TObject);
+    procedure DBLookupComboBox1CloseUp(Sender: TObject);
+    procedure CheckBox8Click(Sender: TObject);
+
+  private
+    { Private declarations }
+    FEvents: IPaymentsFormEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+  public
+  procedure ActionFilterExecute(Sender: TObject);
+    { Public declarations }
+    procedure Initialize; override;
+  end;
+    const n=3;
+    type mas=array[1..n]of integer;
+    var
+    ss:mas;
+
+implementation
+
+uses ComObj, ComServ, sboapiDataModuleImpl, UnitPaymentsProperties, Unit1,
+  Unit4, SBTranslateProc,ShellApi;
+
+{$R *.DFM}
+
+{ TPaymentsForm }
+
+
+procedure TPaymentsForm.A1Click(Sender: TObject);
+var a: string;
+
+begin
+
+  dm.ods_rep.close;
+  dm.ods_rep.SetVariable('v_id',DBGridPayments.DataSource.DataSet.fieldbyname('id').AsInteger);
+  dm.ods_rep.open;
+
+
+{turanbank}
+//a:= PChar('\\10.0.11.90\adocs\'+dm.ods_rep.FieldByName('cli_id').AsString+'-'+dm.ods_rep.FieldByName('id').AsString+'.adoc');
+{NBC}
+a:= PChar('\\192.168.1.145\d$\NBCADOCS'+dm.ods_rep.FieldByName('cli_id').AsString+'-'+dm.ods_rep.FieldByName('id').AsString+'.adoc');
+//a:= PChar('\\192.168.2.228\d$\adocs\'+dm.ods_rep.FieldByName('cli_id').AsString+'-'+dm.ods_rep.FieldByName('id').AsString+'.adoc');
+//ShowMessage(a);
+
+ShellExecute(Handle, 'open',PChar(a),nil,nil,SW_SHOWNORMAL);
+
+end;
+
+procedure TPaymentsForm.ActionFilterExecute(Sender: TObject);
+
+   function  CheckFiltred(IsChecked: Boolean; const FilterStr: String; Args: array of const): String;
+   begin
+    Result :='';
+    if  IsChecked  then
+     Result :=Format(FilterStr, Args);
+   end;
+
+   function AddBoolPrefix(WillAdd: boolean): string;
+   begin
+    Result :=' ';
+    if WillAdd then Result :=BooleanPrefix;
+   end;
+
+
+  function GenerateFilter(CheckListBox: TCheckListBox; const FilterConst: string; ICount: word): string;
+  var
+     Position, i: word;
+     Filter: string;
+  begin
+  Result :='';
+   with CheckListBox,Items do
+    begin
+     Position :=0;
+     if not(Count>0) then Exit;
+     if not Checked[0] then
+      if ICount= 1 then
+       Filter :=Format(FilterConst,[StrToInt(TStringList(Pointer(Tag)^).Strings[0])])
+      else
+       Filter :=Format(FilterConst,[StrToInt(TStringList(Pointer(Tag)^).Strings[0]),StrToInt(TStringList(Pointer(Tag)^).Strings[0])])
+     else
+      Filter :='';
+
+     for i :=1 to Items.Count -1 do
+      if not Checked[i] then
+       begin
+
+        if ICount= 1 then
+         Filter :=Filter + AddBoolPrefix(not Checked[Position]) + Format(FilterConst,[StrToInt(TStringList(Pointer(Tag)^).Strings[i])])
+        else
+         Filter :=Filter + AddBoolPrefix(not Checked[Position]) + Format(FilterConst,[StrToInt(TStringList(Pointer(Tag)^).Strings[i]),StrToInt(TStringList(Pointer(Tag)^).Strings[i])]);
+
+        Position :=i;
+       end;
+    end;
+    Result :=Filter;
+  end;
+
+
+const
+   CurrencyFilter ='((DebitCurrencyID<>%d)AND(CreditCurrencyID<>%d))';
+   DebetFilialFilter = '(DebitBranch=%d)';
+   CreditFilialFilter = '(CreditBranch=%d)';
+   OperatorFilter = '(OperatorID=%d)';
+   OperationTypeFilter = '(OperationCode<>%d)';
+   OperationStatus = '((transaction_type=%d)OR(transaction_type=%d) OR (transaction_type=%d)OR (transaction_type=%d)OR (transaction_type=%d)OR(transaction_type=%d)OR (transaction_type=%d))';
+
+var
+
+   T_chekd1: Word;
+   T_chekd2: Word;
+   T_chekd3: Word;
+   T_chekd4: Word;
+   T_chekd5: Word;
+   T_chekd6: Word;
+   T_chekd7: Word;
+   T_chekd8: Word;
+
+   dat1:             String;
+   dat2:             String;
+   CreditFilialF:    String;
+   OperatorF:        String;
+   OperationTypeF:   String;
+   OperationStatusF: String;
+   FilterStr:        String;
+   dateF:            string;
+begin
+ FilterStr :='';
+ T_chekd1 :=Word(CheckBox6.Checked)*CheckBox6.Tag;
+ T_chekd2 :=Word(CHECKAZIPS.Checked)*CHECKAZIPS.Tag;
+ T_chekd3 :=Word(CHECKXOKS.Checked)*CHECKXOKS.Tag;
+ T_chekd4 :=Word(CHECKBD.Checked)*CHECKBD.Tag;
+ T_chekd5 :=Word(CheckBox4.Checked)*CheckBox4.Tag;
+ T_chekd6 :=Word(CheckBox5.Checked)*CheckBox5.Tag;
+ T_chekd7 :=Word(CheckBox7.Checked)*CheckBox7.Tag;
+ T_chekd8 :=Word(CheckBox8.Checked)*CheckBox8.Tag;
+
+//ShowMessage(inttostr(Word(CHECKXOKS.Checked)));
+
+     OperationStatusF :=CheckFiltred(
+                      True
+                     ,OperationStatus
+                     ,[T_chekd1, T_chekd2, T_chekd3,T_chekd4,T_chekd5,T_chekd6,T_chekd7]);
+
+ {  DebetFilialF :=CheckFiltred(
+                      CBDebetFilial.Checked
+                     ,DebetFilialFilter
+                     ,[DBLookup2.ListSource.DataSet.FieldByName('ID').AsInteger]
+                     );
+
+   CreditFilialF :=CheckFiltred(
+                      CBCreditFilial.Checked
+                     ,CreditFilialFilter
+                     ,[DBLookup1.ListSource.DataSet.FieldByName('ID').AsInteger]
+                     );
+
+   OperatorF :=CheckFiltred(
+                      CBOperator.Checked
+                     ,OperatorFilter
+                     ,[DBLookup3.ListSource.DataSet.FieldByName('ID').AsInteger]
+                     );
+
+   OperationStatusF :=CheckFiltred(
+                      True
+                     ,OperationStatus
+                     ,[T_Delayed, T_Commited, T_Rejected]);
+
+   CurrencyF :=GenerateFilter(CLBCurrency,CurrencyFilter,2);
+   OperationTypeF :=GenerateFilter(CLBOperationTypes,OperationTypeFilter,1);
+
+     }
+ {  FilterStr :=CurrencyF;
+
+    if  DebetFilialF <> '' then
+    if  FilterStr=''  then
+      FilterStr :=DebetFilialF
+    else
+      FilterStr :=FilterStr + BooleanPrefix + DebetFilialF;
+
+    if  CreditFilialF <> '' then
+    if  FilterStr=''  then
+      FilterStr :=CreditFilialF
+    else
+      FilterStr :=FilterStr + BooleanPrefix + CreditFilialF;
+
+    if  OperatorF <> '' then
+    if  FilterStr=''  then
+      FilterStr :=OperatorF
+    else
+      FilterStr :=FilterStr + BooleanPrefix +OperatorF;
+
+    if  OperationTypeF <> '' then
+    if  FilterStr=''  then
+      FilterStr :=OperationTypeF
+    else
+      FilterStr :=FilterStr + BooleanPrefix +OperationTypeF;
+              }
+
+    if  OperationStatusF <> '' then
+    if  FilterStr=''  then
+      FilterStr :=OperationStatusF
+    else
+      FilterStr :=FilterStr + BooleanPrefix +OperationStatusF;
+   with DBGridPayments.DataSource.DataSet do
+
+   begin
+    Filtered :=False;
+    Filter :=FilterStr;
+    Filtered :=True;
+   end;
+
+   //ShowMessage(FilterStr);
+end;
+
+
+
+
+procedure  TPaymentsForm.NOTHINGCHECK(first: boolean;second:boolean;third :boolean;typeof:byte);
+var
+i:byte;
+begin
+ if not(first) and not(second) and not(third) then
+case typeof of
+   {29---34}
+  1: for i:=37 to 60 do
+     Dm.odspayments.SQL[i]:='';
+
+     {22--27}
+  2: for i:=30 to 35 do
+     Dm.odspayments.SQL[i]:='';
+
+end;
+
+  end;
+
+
+ procedure TPaymentsForm.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_PaymentsFormPage); }
+end;
+
+procedure TPaymentsForm.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as IPaymentsFormEvents;
+end;
+
+procedure TPaymentsForm.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TPaymentsForm.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TPaymentsForm.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TPaymentsForm.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TPaymentsForm.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TPaymentsForm.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TPaymentsForm.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TPaymentsForm.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TPaymentsForm.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TPaymentsForm.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TPaymentsForm.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TPaymentsForm.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TPaymentsForm.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TPaymentsForm.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TPaymentsForm.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TPaymentsForm.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TPaymentsForm.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TPaymentsForm.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TPaymentsForm.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TPaymentsForm._Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TPaymentsForm.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TPaymentsForm.CHECKXOKSClick(Sender: TObject);
+begin
+ActionFilterExecute(SENDER);
+//filterrefreshbutton.Click;
+end;
+
+procedure TPaymentsForm.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TPaymentsForm.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TPaymentsForm.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TPaymentsForm.DBLookupComboBox1CloseUp(Sender: TObject);
+var a :integer;
+begin
+//a:= DBLookupComboBox1.KeyValue;
+//ShowMessage(DBLookupComboBox1.KeyValue);
+with dm.ODSPayments do begin
+
+ sql[39]:='where filial = '''+inttostr(DBLookupComboBox1.KeyValue)+'''';
+
+  end;
+  BtnRefresh.Click;
+//  ShowMessage(dm.ODSPayments.SQL.Text);
+
+end;
+
+procedure TPaymentsForm.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TPaymentsForm.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TPaymentsForm.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TPaymentsForm.P1Click(Sender: TObject);
+
+var a: string;
+
+begin
+
+  dm.ods_rep.close;
+  dm.ods_rep.SetVariable('v_id',DBGridPayments.DataSource.DataSet.fieldbyname('id').AsInteger);
+  dm.ods_rep.open;
+
+a:= PChar('\\10.0.11.90\adocs\'+dm.ods_rep.FieldByName('cli_id').AsString+'-'+dm.ods_rep.FieldByName('id').AsString+'.pdf');
+//ShowMessage(a);
+
+ShellExecute(Handle, 'open',PChar(a),nil,nil,SW_SHOWNORMAL);
+end;
+
+procedure TPaymentsForm.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TPaymentsForm.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TPaymentsForm.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TPaymentsForm.Set_AxBorderStyle(Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TPaymentsForm.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TPaymentsForm.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TPaymentsForm.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TPaymentsForm.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TPaymentsForm.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TPaymentsForm.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TPaymentsForm.Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TPaymentsForm.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TPaymentsForm.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TPaymentsForm.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TPaymentsForm.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TPaymentsForm.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TPaymentsForm.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+procedure TPaymentsForm.ActiveFormCreate(Sender: TObject);
+ var dat1,dat2:Tdate;
+begin
+  dm:=tdm.Create(self);
+  //filtergroup.Visible:=false;
+  dtpbegin.DateTime:=dm.Dat.fieldbyname('tek_dat').asdatetime;
+  dtpend.DateTime:=dm.Dat.fieldbyname('tek_dat').asdatetime;
+
+with dm do
+begin
+
+  odspayments.close;
+    odspayments.setvariable('sort','1');
+     odspayments.setvariable('DAT1',trunc(dtpbegin.DateTime));
+    odspayments.setvariable('DAT2',trunc(dtpend.DateTime));
+  odspayments.open ;
+    end;
+
+SBTranslateProc.TranslateAllComponents(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TPaymentsForm.BtnRefreshClick(Sender: TObject);
+begin
+with dm do
+begin
+
+  odspayments.close;
+    odspayments.setvariable('sort','1');
+    odspayments.setvariable('DAT1',trunc(dtpbegin.DateTime));
+    odspayments.setvariable('DAT2',trunc(dtpend.DateTime));
+  odspayments.open ;
+  memo1.Text:=  odspayments.SQL.Text;
+    end;
+
+  SpeedButton3.Click;
+
+
+ end;
+
+procedure TPaymentsForm.DBGridPaymentsDblClick(Sender: TObject);
+   begin
+{ if not Assigned (FormPaymentProperties) then FormPaymentProperties := TFormPaymentProperties.Create(Self);
+
+
+  with FormPaymentProperties do
+  begin
+   with dm do begin
+  Edit1.Text:=odspayments.fieldbyname('bic1').asstring;
+  Edit2.Text:=odspayments.fieldbyname('bic2').asstring;
+
+  Edit5.Text:=odspayments.fieldbyname('p013').asstring;
+  Edit6.Text:=odspayments.fieldbyname('MFO1').asstring;
+  Edit7.Text:=odspayments.fieldbyname('INN1').asstring;
+  edit8.Text:=odspayments.fieldbyname('KORBANKACC1').asstring;
+
+
+  Edit10.Text:=odspayments.fieldbyname('p018').asstring;
+  Edit11.Text:=odspayments.fieldbyname('MFO2').asstring;
+  Edit12.Text:=odspayments.fieldbyname('INN2').asstring;
+  edit13.Text:=odspayments.fieldbyname('KORBANKACC2').asstring;
+  Edit14.Text:=odspayments.fieldbyname('transbank').asstring;
+
+
+  Edit16.Text:=odspayments.fieldbyname('name').asstring;
+  Edit17.Text:=odspayments.fieldbyname('acc').asstring;
+  Edit18.Text:=odspayments.fieldbyname('inn').asstring;
+  Edit19.Text:=odspayments.fieldbyname('korname').asstring;
+  Edit20.Text:=odspayments.fieldbyname('koracc').asstring;
+  Edit21.Text:=odspayments.fieldbyname('korinn').asstring;
+
+
+
+  Edit3.Text:=odspayments.fieldbyname('taxlevelcode').asstring;
+  Edit4.Text:=odspayments.fieldbyname('taxcode').asstring;
+
+
+  Edit23.Text:=odspayments.fieldbyname('p004').asstring;
+  Edit31.Text:=odspayments.fieldbyname('p099').asstring;
+
+
+
+  Edit32.Text:=odspayments.fieldbyname('nazntext').asstring;
+  Edit33.Text:=odspayments.fieldbyname('nazntextadd').asstring;
+
+  Edit30.Text:=odspayments.fieldbyname('status').asstring;
+
+  Edit26.Text:=odspayments.fieldbyname('signuid1').asstring;
+  Edit27.Text:=odspayments.fieldbyname('signdatetime1').asstring;
+  Edit28.Text:=odspayments.fieldbyname('signuid2').asstring;
+  Edit29.Text:=odspayments.fieldbyname('signdatetime2').asstring;
+
+   Edit22.Text:=odspayments.fieldbyname('ISO').asstring;
+
+   Edit9.Text:=odspayments.fieldbyname('n_plt').asstring;
+   Edit15.Text:=odspayments.fieldbyname('dateplt').asstring;
+
+    end;
+   end;
+  FormPaymentProperties.ShowModal;    }
+  P1.Click;
+
+end;
+
+procedure TPaymentsForm.DBGridPaymentsTitleClick(Column: TColumn);
+var
+titlename:string;
+begin
+  if  Column.FieldName='' then  TitleName:='STATUS'
+  else
+ TitleName :=Column.FieldName;
+ //if Column.Field.Calculated then Exit;
+ with dm.odspayments do
+ begin
+  Screen.Cursor :=crSQLWait;
+  SetVariable('sort',TitleName);
+  Open;
+  refresh;
+  Screen.Cursor :=crDefault;
+ end;
+                
+end;
+
+procedure TPaymentsForm.N1DrawItem(Sender: TObject; ACanvas: TCanvas;
+  ARect: TRect; Selected: Boolean);
+
+var
+  LineBottom: Integer;
+  SText: String;
+  Bar: TRect;
+begin
+{  with ACanvas, Sender as TMenuItem do
+  begin
+    with Font do
+    begin
+      Name := 'Azl Sans Serif';
+      Charset := RUSSIAN_CHARSET;
+      if Default then
+        Style := [fsBold];
+    end;
+    if Caption = '-' then
+    begin
+      Pen.Color := clBlack;
+      LineBottom := (ARect.Top + (ARect.Bottom - ARect.Top) div 2)-1;
+      MoveTo(ARect.Left, LineBottom);
+      LineTo(ARect.Right, LineBottom);
+      inc(LineBottom);
+      Pen.Color := clWhite;
+      MoveTo(ARect.Left, LineBottom);
+      LineTo(ARect.Right, LineBottom);
+    end
+    else
+    begin
+      if Selected then
+      begin
+        Brush.Color := clNavy;
+        if Enabled then
+          Font.Color := clWhite
+        else
+          Font.Color := clSilver;
+      end
+      else
+      begin
+        Brush.Color := clBtnFace;
+        if Enabled then
+          Font.Color := clBlack
+        else
+          Font.Color := clGrayText;
+      end;
+      Bar := ARect;
+      Inc(Bar.Left, 22);
+      FillRect(Bar);
+      TextOut(ARect.Left+1722, ARect.Top+1, Caption);
+    end;
+    // draw shortcut
+    SText := ShortCutToText(ShortCut);
+    TextOut(ARect.Right-TextWidth(SText)-2, ARect.Top+1, SText);
+    if ImageIndex <> -1 then
+      with GetParentMenu do
+        if Assigned(Images) then
+        begin
+          if Checked then
+          begin
+            Bar.Left := ARect.Left + 1;
+            Bar.Right := Bar.Left + 16;
+            Bar.Top := ARect.Top + 1;
+            Bar.Bottom := Bar.Top + 16;
+
+            ACanvas.Brush.Color := clBtnShadow;
+            ACanvas.FrameRect(Bar);
+
+            Inc(Bar.Left, 2);
+            Inc(Bar.Right, 2);
+            Inc(Bar.Top, 2);
+            Inc(Bar.Bottom, 2);
+            
+            ACanvas.Brush.Color := clBtnHighlight;
+            ACanvas.FrameRect(Bar);
+
+            Dec(Bar.Left, 1);
+            Dec(Bar.Right, 1);
+            Dec(Bar.Top, 1);
+            Dec(Bar.Bottom, 1);
+
+            if Selected then
+              ACanvas.Brush.Color := clBtnFace
+            else
+              ACanvas.Brush.Color := clBtnHighlight;
+            ACanvas.FillRect(Bar);
+          end;
+
+          Images.Draw(ACanvas, ARect.Left, ARect.Top, ImageIndex, Enabled);
+        end;
+  end; }
+  end;
+procedure TPaymentsForm.capClick(Sender: TObject);
+begin
+if not assigned(rep) then rep:=trep.Create(self);
+   with rep do
+   begin
+    {QRDBText1.dataset:=odspayments;
+    QRDBText2.dataset:=odspayments;
+    QRDBText3.dataset:=odspayments;
+    QRDBText4.dataset:=odspayments;
+    QRDBText5.dataset:=odspayments;
+    QRDBText6.dataset:=odspayments;
+    QRDBText7.dataset:=odspayments;
+    QRDBText14.dataset:=odspayments;
+    QRDBText15.dataset:=odspayments;
+    QRDBText16.dataset:=odspayments;
+    QRDBText20.dataset:=odspayments;
+    QRDBText21.dataset:=odspayments;
+    QRDBText22.dataset:=odspayments;
+    QRDBText23.dataset:=odspayments;
+    QRDBText24.dataset:=odspayments;
+    QRDBText25.dataset:=odspayments;
+    QRDBText26.dataset:=odspayments;
+    QRDBText8.dataset:=odspayments;
+    QRDBText9.dataset:=odspayments;
+    QRDBText10.dataset:=odspayments;
+    QRDBText11.dataset:=odspayments;
+    QRDBText12.dataset:=odspayments;
+    QRDBText13.dataset:=odspayments;
+    QRDBText17.dataset:=odspayments;
+    QRDBText18.dataset:=odspayments;
+    QRDBText19.dataset:=odspayments;   }
+    end;
+//rep.QRDBText3.DataField:='p013';
+//rep.DataSet:=odspayments;
+rep.Preview;
+end;
+
+procedure TPaymentsForm.SpeedButton1Click(Sender: TObject);
+begin
+    // dat.RefreshRecord;
+    if dm.dat.Active=false then dm.dat.Open;
+     filtergroup.Visible:=not filtergroup.Visible;
+     if filtergroup.Visible then
+     begin
+      dtpbegin.Date:=strtodate(dm.dat.fieldbyname('tek_dat').asstring);
+      dtpend.Date:= dtpbegin.Date;
+     end;
+end;
+
+
+
+procedure TPaymentsForm.DBGridPaymentsDrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TColumn;
+  State: TGridDrawState);
+
+  var
+  ImageIndex: Integer;
+begin
+
+ ImageIndex := -1;
+  with Sender as TdBGrid do
+  begin
+    if DataSource.DataSet.RecordCount <> 0 then
+    begin
+      case DataSource.DataSet.FieldByName('Status').Asinteger of
+      1 :
+        ImageIndex := 1;
+
+      2:
+        ImageIndex := 0;
+
+      4:ImageIndex := 5;
+
+
+
+      3:  ImageIndex := 2;
+
+      9:  ImageIndex := 2;
+
+      10:  ImageIndex := 2;
+      end;
+      if (DataCol = 1) and (ImageIndex <> -1) then
+        ImageList.Draw(Canvas, Rect.Left, Rect.Top, ImageIndex, True)
+      else
+        DefaultDrawColumnCell(Rect, DataCol, Column, State);
+    end;
+
+      end;
+      end;
+
+
+
+
+
+
+
+procedure TPaymentsForm.Button2Click(Sender: TObject);
+begin
+ Dm.odspayments.Open;
+ Dm.odspayments.refresh
+end;
+
+procedure TPaymentsForm.searchidChange(Sender: TObject);
+begin
+   with Sender as TEdit do
+    if Text <> '' then
+      dm.odspayments.Locate(
+        Copy(Name,7, Length(Name)),
+        Text,
+        [loCaseInsensitive, loPartialKey]);
+        
+        dbgridpayments.SelectedRows.Clear;
+        dbgridpayments.SelectedRows.CurrentRowSelected:=true;
+
+end;
+
+procedure TPaymentsForm.searchidExit(Sender: TObject);
+begin
+  (Sender as TEdit).Text := '';
+end;
+
+procedure TPaymentsForm.SpeedButton3Click(Sender: TObject);
+var i,j,k:integer;
+begin
+
+
+
+// dm.sb_trans.CallProcedure('actualstatus',[]);
+ //filterrefreshbutton.click;
+ if  DBGridPayments.DataSource.DataSet.RecordCount>0 then
+  begin
+  DBGridPayments.DataSource.DataSet.last;
+ DBGridPayments.DataSource.DataSet.First;
+     for i:=0 to DBGridPayments.DataSource.DataSet.RecordCount do
+      begin
+      if DBGridPayments.DataSource.DataSet.FieldByName('transaction_type').Asinteger=2 then
+         j:=1;        //Azips
+      if (DBGridPayments.DataSource.DataSet.FieldByName('transaction_type').Asinteger=4 )or (DBGridPayments.DataSource.DataSet.FieldByName('transaction_type').Asinteger=5) then
+         j:=2;        //xohks
+      if (DBGridPayments.DataSource.DataSet.FieldByName('transaction_type').Asinteger<>4)
+      or (DBGridPayments.DataSource.DataSet.FieldByName('transaction_type').Asinteger<>2)
+      or (DBGridPayments.DataSource.DataSet.FieldByName('transaction_type').Asinteger<>5)     then
+       j:=3 ;
+
+         dm.pack.CallProcedure('Ibank_change_status',[DBGridPayments.DataSource.DataSet.FieldByName('TRANS_ID').AsString,j]);
+         DBGridPayments.DataSource.DataSet.Next;
+      end;
+
+  end;
+end;
+
+procedure TPaymentsForm.Print1Click(Sender: TObject);
+begin
+with dm do begin
+if not assigned(rep) then rep:=trep.Create(self);
+   with rep do
+   begin
+//showmessage(DBGridPayments.DataSource.DataSet.fieldbyname('id').asstring);
+  ods_rep.close;
+  ods_rep.SetVariable('v_id',DBGridPayments.DataSource.DataSet.fieldbyname('id').AsInteger);
+  ods_rep.open;
+ case ods_rep.FieldByName('transaction_type').AsInteger of
+  3,7,88:begin
+
+ P013.caption:=ods_rep.fieldbyname('bank_name').asstring;
+ MFO1.caption:=ods_rep.fieldbyname('bank_code').asstring;
+ INN1.caption:=ods_rep.fieldbyname('bank_tin').asstring;
+ KORBANKACC1.caption:=ods_rep.fieldbyname('bank_acc').asstring;
+ BIC1.caption:=ods_rep.fieldbyname('bank_bic').asstring;
+
+ P018.caption:=ods_rep.fieldbyname('bank_name').asstring;
+ MFO2.caption:=ods_rep.fieldbyname('bank_code').asstring;
+ INN2.caption:=ods_rep.fieldbyname('bank_tin').asstring;
+ KORBANKACC2.caption:=ods_rep.fieldbyname('bank_acc').asstring;
+ BIC2.caption:=ods_rep.fieldbyname('bank_bic').asstring;
+
+ end
+ else
+ begin
+ P013.caption:=ods_rep.fieldbyname('bank_name').asstring;
+ MFO1.caption:=ods_rep.fieldbyname('bank_code').asstring;
+ INN1.caption:=ods_rep.fieldbyname('bank_tin').asstring;
+ KORBANKACC1.caption:=ods_rep.fieldbyname('bank_acc').asstring;
+ BIC1.caption:=ods_rep.fieldbyname('bank_bic').asstring;
+
+ P018.caption:=ods_rep.fieldbyname('receiver_bank_name').asstring;
+ MFO2.caption:=ods_rep.fieldbyname('receiver_bank_code').asstring;
+ INN2.caption:=ods_rep.fieldbyname('receiver_bank_tin').asstring;
+ KORBANKACC2.caption:=ods_rep.fieldbyname('receiver_bank_acc').asstring;
+ BIC2.caption:=ods_rep.fieldbyname('receiver_bank_bic').asstring;
+ end;
+ end;
+
+
+ NAME.caption:=ods_rep.fieldbyname('gonderen_name').asstring;
+ acc.caption:=ods_rep.fieldbyname('gonderen_acc').asstring;
+ inn.caption:=ods_rep.fieldbyname('gonderen_inn').asstring;
+
+ korNAME.caption:=ods_rep.fieldbyname('alan_name').asstring;
+ koracc.caption:=ods_rep.fieldbyname('alan_acc').asstring;
+ korinn.caption:=ods_rep.fieldbyname('alan_inn').asstring;
+
+
+
+ iso.caption:=ods_rep.fieldbyname('currency').asstring;
+ nazntext.caption:=ods_rep.fieldbyname('teynat').asstring;
+ nazntextadd.caption:=ods_rep.fieldbyname('note').asstring;
+
+
+
+taxcode.caption:='-';
+taxlevelcode.caption:='-';
+
+
+
+
+
+
+
+ p004.caption:=ods_rep.fieldbyname('amount').asstring;
+ P099.caption:=ods_rep.fieldbyname('AMOUNT_YAZI').asstring;
+
+
+
+
+
+ rep.Preview;
+ end;
+end;
+end;
+
+procedure TPaymentsForm.ActiveFormActivate(Sender: TObject);
+begin
+  
+   dbgridpayments.SetFocus;
+end;
+
+procedure TPaymentsForm.searchidKeyPress(Sender: TObject; var Key: Char);
+var
+  SearchField : string;
+  SearchOptions : TSearchRecordOptions;
+begin
+ if key=#13 then
+
+   begin
+
+  SearchOptions := [srIgnoreCase ,srPartialMatch ];
+  
+  with Sender as TEdit  do
+  begin
+    SearchField := copy(Name,7,length(Name));
+    with  TOracleDataSet(DBGridpayments.DataSource.DataSet) do
+    if  not SearchRecord(
+                  SearchField
+                 ,Text
+                 ,SearchOptions + [srFromCurrent , srForward ]
+                 ) then
+    if MessageDlg(
+              'Axtarış sona çatdı.'+#13+'yenidən başlamaq istəyirsinizmi  ?'
+             ,mtInformation
+             ,[mbNo , mbYes]
+             ,0
+             ) = mrYes  then
+    if not SearchRecord(
+                 SearchField
+                ,Text
+                ,SearchOptions + [ srFromBeginning ]
+                )  then
+    MessageDlg('Yazı Tapılmadı !',mtInformation,[mbOK],0);
+  end;
+end;
+
+end;
+procedure TPaymentsForm.CHECKAZIPSClick(Sender: TObject);
+begin
+ActionFilterExecute(SENDER);
+end;
+
+procedure TPaymentsForm.CHECKBDClick(Sender: TObject);
+begin
+ActionFilterExecute(SENDER);
+end;
+
+procedure TPaymentsForm.allcheckClick(Sender: TObject);
+begin
+if allcheck.Checked then
+begin
+CheckBox4.Checked:=True;
+CheckBox6.Checked:=True;
+CheckBox5.Checked:=True;
+CheckBox7.Checked:=True;
+CHECKAZIPS.Checked:=True;
+CHECKBD.Checked:=True;
+CHECKXOKS.Checked:=True;
+
+
+end ELSE
+BEGIN
+CheckBox4.Checked:=False;
+CheckBox6.Checked:=False;
+CheckBox5.Checked:=False;
+CheckBox7.Checked:=False;
+CHECKAZIPS.Checked:=False;;
+CHECKBD.Checked:=False;
+CHECKXOKS.Checked:=False;
+END;
+
+end;
+
+procedure TPaymentsForm.CheckBox1Click(Sender: TObject);
+begin
+if CheckBox1.Checked then
+begin
+//DataMod_CARDS.payment.Filtered:=True;
+
+DBLookupComboBox1.Enabled:=True;
+DBLookupComboBox1.KeyValue:=0;
+
+
+end
+else
+begin
+DM.ODSPayments.sql[39]:=''  ;
+DBLookupComboBox1.Enabled:=false;
+DBLookupComboBox1.KeyValue:=0;
+
+BtnRefresh.Click;
+
+end;
+
+end;
+
+procedure TPaymentsForm.CheckBox8Click(Sender: TObject);
+begin
+ActionFilterExecute(SENDER);
+end;
+
+procedure TPaymentsForm.CheckBox4Click(Sender: TObject);
+begin
+ActionFilterExecute(SENDER);
+end;
+
+procedure TPaymentsForm.CheckBox5Click(Sender: TObject);
+begin
+ActionFilterExecute(SENDER);
+end;
+
+procedure TPaymentsForm.CheckBox6Click(Sender: TObject);
+begin
+ActionFilterExecute(SENDER);
+end;
+
+procedure TPaymentsForm.CheckBox7Click(Sender: TObject);
+begin
+ActionFilterExecute(SENDER);
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TPaymentsForm,
+    Class_PaymentsForm,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

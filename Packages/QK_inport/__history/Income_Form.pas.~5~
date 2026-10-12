@@ -1,0 +1,133 @@
+﻿unit Income_Form;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, XFSCtrls, Grids, XDBGrids, ExtCtrls,ActnList, OracleData, DB
+  ,SearchEdit,dblookup,Designer;
+
+  // DBCtrls, Grids,
+ // DBGrids, ExtCtrls, Designer, ActnList;
+
+
+
+type
+  TIncomeForm = class(TForm)
+    XFPanel1: TXFPanel;
+    XFPanel2: TXFPanel;
+    XFButton1: TXFButton;
+    XDBGridAccounts: TXDBGrid;
+    EditBal_Cn: TEdit;
+    EditACC_NO: TEdit;
+    EditName: TEdit;
+    XFButton2: TXFButton;
+    ActionList1: TActionList;
+    Action_Src: TAction;
+    procedure Action_SrcExecute(Sender: TObject);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure XFButton1Click(Sender: TObject);
+    procedure XFButton2Click(Sender: TObject);
+    procedure EditBal_CnChange(Sender: TObject);
+    procedure EditACC_NOChange(Sender: TObject);
+    procedure EditNameChange(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+
+  end;
+
+var
+  IncomeForm: TIncomeForm;
+
+implementation
+ uses QK_İmpotDataMod, FormReport;
+{$R *.dfm}
+procedure TIncomeForm.Action_SrcExecute(Sender: TObject);
+begin
+ with QKİmportDataMod,Ods_FormIncomeAcc do
+ begin
+   if EditBal_Cn.Text<>'' then
+   SQL[10] := 'and b.bal_cn like (''%' +
+      EditBal_Cn.Text + '%'')'
+      else
+   SQL[10] := '';
+
+  if EditAcc_No.Text <> '' then
+    SQL[11] := 'and  nvl(upper(a.ACC_NO),0) like upper(''%' +
+      EditAcc_No.Text + '%'')'
+  else
+    SQL[11] := '';
+
+  if EditName.Text <> '' then
+    SQL[12] := 'and nvl(upper(a.name),0) like upper(''%' +
+      EditName.Text + '%'')'
+  else
+    SQL[12] := '';
+   //nvl(upper(Cust_Name),0) like upper
+ Refresh;
+
+ end;
+end;
+
+
+
+
+
+procedure TIncomeForm.EditACC_NOChange(Sender: TObject);
+begin
+if QKİmportDataMod.Ods_FormIncomeAcc.Active=false then
+
+QKİmportDataMod.Ods_FormIncomeAcc.open;
+Action_Src.Execute;
+if(EditBal_Cn.Text='')and( EditACC_NO.Text='')and(EditName.Text='') then
+ QKİmportDataMod.Ods_FormIncomeAcc.close;
+end;
+
+procedure TIncomeForm.EditBal_CnChange(Sender: TObject);
+begin
+if QKİmportDataMod.Ods_FormIncomeAcc.Active=false then
+
+QKİmportDataMod.Ods_FormIncomeAcc.open;
+Action_Src.Execute;
+ if (EditBal_Cn.Text='')and( EditACC_NO.Text='')and(EditName.Text='') then
+ QKİmportDataMod.Ods_FormIncomeAcc.close;
+end;
+
+procedure TIncomeForm.EditNameChange(Sender: TObject);
+begin
+if QKİmportDataMod.Ods_FormIncomeAcc.Active=false then
+
+QKİmportDataMod.Ods_FormIncomeAcc.open;
+Action_Src.Execute;
+if (EditBal_Cn.Text='')and( EditACC_NO.Text='')and(EditName.Text='') then
+
+ QKİmportDataMod.Ods_FormIncomeAcc.close;
+end;
+
+procedure TIncomeForm.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+QKİmportDataMod.Ods_FormIncomeAcc.close;
+
+end;
+
+procedure TIncomeForm.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+//if key=#27 then IncomeForm.Close;
+end;
+
+procedure TIncomeForm.XFButton1Click(Sender: TObject);
+begin
+Form_Report.edit1.Text:=QKİmportDataMod.Ods_FormIncomeAcc.FieldByName('acc_no').AsString;
+IncomeForm.Close;
+end;
+
+procedure TIncomeForm.XFButton2Click(Sender: TObject);
+begin
+QKİmportDataMod.Ods_FormIncomeAcc.open;
+Action_Src.Execute;
+end;
+
+end.

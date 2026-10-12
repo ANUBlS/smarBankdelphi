@@ -1,0 +1,294 @@
+unit NewDepositsContractImpl;
+       {ClientTypes}
+interface
+
+uses
+   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, OracleData, Oracle;
+
+type
+  TNewDataModDepositsContract = class(TDataModule)
+    ClientTypes: TOracleDataSet;
+    ClientTypesDatSrc: TDataSource;
+    Filals: TOracleDataSet;
+    FilalsID: TFloatField;
+    FilalsNAME: TWideStringField;
+    FilalsDatSrc: TDataSource;
+    persons: TOracleDataSet;
+    personsDatSrc: TDataSource;
+    valutes: TOracleDataSet;
+    valutesVALUTE: TIntegerField;
+    valutesVALU_NAME: TWideStringField;
+    valutesDatSrc: TDataSource;
+    Customers: TOracleDataSet;
+    CustomersID: TIntegerField;
+    CustomersNAME: TWideStringField;
+    CustomersDatSrc: TDataSource;
+    DepositPorpsDatSrc: TDataSource;
+    DepositTypes: TOracleDataSet;
+    DepositTypesID: TFloatField;
+    DepositTypesTYPE: TWideStringField;
+    DepositTypesDatSrc: TDataSource;
+    dm_contract: TOraclePackage;
+    DepCapperiod: TOracleDataSet;
+    DepCapperiodID: TFloatField;
+    DepCapperiodPERIOD: TFloatField;
+    DepCapperiodDESCRIPTION: TWideStringField;
+    DepCapperiodPERIODID: TFloatField;
+    DepPeriods: TOracleDataSet;
+    DepPeriodsID: TFloatField;
+    DepPeriodsPERIOD: TFloatField;
+    DepPeriodsDESCRIPTION: TWideStringField;
+    DepPeriodsDEPID: TFloatField;
+    DepPeriodsds: TDataSource;
+    DepCapperiodds: TDataSource;
+    usrs: TOracleDataSet;
+    usrsID: TFloatField;
+    usrsNAME: TWideStringField;
+    personsID: TFloatField;
+    personsNAME: TWideStringField;
+    DepPeriodsPERIOD_TYPE: TWideStringField;
+    ODSAccno: TOracleDataSet;
+    DSAccno: TDataSource;
+    CustomersCUSTTYPE_NAME: TWideStringField;
+    DmDepositPerSettings: TOracleDataSet;
+    DmDepositPerSettingsDatSrc: TDataSource;
+    ClientTypesID: TFloatField;
+    ClientTypesCATEGORY: TWideStringField;
+    ClientTypesCUSTATEGORY: TFloatField;
+    ClientTypesREZCATEGORY: TFloatField;
+    ClientTypesVALCATEGORY: TFloatField;
+    CustomersNEREZIDENT: TFloatField;
+    CustomersCUST_TYPE: TIntegerField;
+    DmProlanqasiya: TOracleDataSet;
+    ProlanqasiyaDatSrc: TDataSource;
+    ODSAccnoID: TFloatField;
+    ODSAccnoNAME: TWideStringField;
+    ODSAccnoCUSTOMERID: TFloatField;
+    ODSAccnoNAMEACCNO: TWideStringField;
+    ODSAccnoACCNO: TWideStringField;
+    ODSAccnoOLD_BALCN: TFloatField;
+    ODSAccnoNEW_BALCN: TFloatField;
+    ODSAccnoVAL_ID: TFloatField;
+    ODSAccnoFILIAL: TFloatField;
+    ODSAccnoOPENDAT: TDateTimeField;
+    ODSAccnoDEPOSITFIELDACCNO: TWideStringField;
+    DepositPorps: TOracleDataSet;
+    DepositPorpsOPENDATE: TDateTimeField;
+    DepositPorpsCLOSEDATE: TDateTimeField;
+    DepositPorpsAMOUNT: TFloatField;
+    DepositPorpsCONTRACTNO: TWideStringField;
+    DepositPorpsCONTRACTTYPE: TIntegerField;
+    DepositPorpsCLIENTTYPE: TFloatField;
+    DepositPorpsSID: TFloatField;
+    DepositPorpsBRANCHID: TFloatField;
+    DepositPorpsCURRENCY: TFloatField;
+    DepositPorpsPERSONALTYPE: TFloatField;
+    DepositPorpsCUSTOMERID: TFloatField;
+    DepositPorpsCAPITALPERID: TFloatField;
+    DepositPorpsPERIODID: TFloatField;
+    DepositPorpsINTEREST: TFloatField;
+    DepositPorpsOVERDUEINTEREST: TFloatField;
+    DepositPorpsDUEINTEREST: TFloatField;
+    DepositPorpsFIRSTINTERESTPAYDAT: TDateTimeField;
+    DepositPorpsPROLANID: TFloatField;
+    DepositPorpsPeriodContracts: TIntegerField;
+    DepositPorpsUSERNAME: TStringField;
+    CreditContractnoDS: TDataSource;
+    CreditContractno: TOracleDataSet;
+    CreditContractnoCREDITID: TFloatField;
+    CreditContractnoNUMBEROFCREDIT: TWideStringField;
+    CreditContractnoBOOROWERID: TFloatField;
+    CreditContractnoDATEOFCONCLUSION: TDateTimeField;
+    CreditContractnoDUEDATEFIRSTCONTRACT: TDateTimeField;
+    CreditContractnoCREDITLINEAMOUNT: TFloatField;
+    CreditContractnoANNUALYINTERESTRATE: TFloatField;
+    CreditContractnoREST: TFloatField;
+    CreditContractnoINTERESTREST: TFloatField;
+    CreditContractnoBRANCHID: TFloatField;
+    CreditContractnoName: TStringField;
+    CreditContractnoFilialName: TStringField;
+    DepositPorpsTOCARD: TIntegerField;
+    DmContractType: TOracleDataSet;
+    DmContractTypeID: TFloatField;
+    DmContractTypeNAME: TWideStringField;
+    DmContractTypePANELTYPE: TFloatField;
+    DmContractTypeLABELTYPE: TFloatField;
+    DmContractTypeDESCIPTION: TWideStringField;
+    DmContractTypeTOPID: TIntegerField;
+    DepositPorpsAGENTID: TFloatField;
+    DepositPorpsID: TFloatField;
+    ODSAccnoSIMVOLTYPE: TFloatField;
+    DmDepositPerSettingsCURRENCYID: TFloatField;
+    DmDepositPerSettingsINTERESTRATE: TFloatField;
+    DmDepositPerSettingsHDATE: TDateTimeField;
+    DmDepositPerSettingsDUEINTRATE: TFloatField;
+    DmDepositPerSettingsFIRSTAMOUNT: TFloatField;
+    DmDepositPerSettingsLASTAMOUNT: TFloatField;
+    DmDepositPerSettingsDEPID: TFloatField;
+    DmDepositPerSettingsPERIODID: TFloatField;
+    DmDepositPerSettingsCAPITALID: TFloatField;
+    DmDepositPerSettingsBEFOINTRATE: TFloatField;
+    DmDepositPerSettingsFIRST_DAY: TFloatField;
+    DmDepositPerSettingsPERCENTAGE_GROWTH_STEP: TFloatField;
+    DmDepositPerSettingsLAST_DAY: TFloatField;
+    DmDepositPerSettingsAMOUNT_SETTING_ID: TFloatField;
+    DmDepositPerSettingsAMOUNT_GROWTH_FIRST: TFloatField;
+    DmDepositPerSettingsAMOUNT_GROWTH_LAST: TFloatField;
+    DmDepositPerSettingsWRITE_MEMORY: TFloatField;
+    DmDepositPerSettingsCONFIRMATION: TFloatField;
+    DmDepositPerSettingsPROLONGATION: TFloatField;
+    DmProlanqasiyaID: TFloatField;
+    DmProlanqasiyaNAME: TWideStringField;
+    DepositPorpsPERSONSID: TFloatField;
+    DepositPorpsPRIZEID: TIntegerField;
+    DepositPorpsDEPPERSETID: TIntegerField;
+    DepositPorpsBONUSSTATUS: TIntegerField;
+    DmDepositPerSettingsID: TFloatField;
+    procedure DataModuleCreate(Sender: TObject);
+    procedure DataModuleDestroy(Sender: TObject);
+    procedure DepositPorpsApplyRecord(Sender: TOracleDataSet; Action: Char;
+      var Applied: Boolean; var NewRowId: string);
+    procedure DepositPorpsCalcFields(DataSet: TDataSet);
+    procedure DepositPorpsCUSTOMERIDChange(Sender: TField);
+  private
+    { Private declarations }
+  public
+  procedure RefreshDataSets;
+  end;
+
+var
+  NewDataModDepositsContract: TNewDataModDepositsContract;
+implementation
+
+{$R *.dfm}
+  uses sboapiDataModuleImpl,NewContractCommonDecls,
+      NewCommonDeclsImpl,NewFormDepositContractImpl;
+
+procedure TNewDataModDepositsContract.RefreshDataSets;
+begin
+  Valutes.Refresh;
+  Filals.Refresh;
+  DepositTypes.Refresh;
+  ClientTypes.Refresh;
+  persons.Refresh;
+  Customers.Refresh;
+  ODSAccno.Refresh;
+end;
+procedure TNewDataModDepositsContract.DataModuleCreate(Sender: TObject);
+begin
+  Valutes.Open;
+  Filals.Open;
+  DepositTypes.Open;
+  ClientTypes.Open;
+  Persons.Open;
+  Customers.Open;
+  DmContractType.Open;
+  ODSAccno.Open;
+end;
+
+procedure TNewDataModDepositsContract.DataModuleDestroy(Sender: TObject);
+begin
+  Valutes.CloseAll;
+  Filals.CloseAll;
+  DepositTypes.CloseAll;
+  ClientTypes.CloseAll;
+  Persons.CloseAll;
+  Customers.CloseAll;
+  DmContractType.CloseAll;
+  ODSAccno.CloseAll;
+end;
+
+procedure TNewDataModDepositsContract.DepositPorpsApplyRecord(Sender: TOracleDataSet;
+  Action: Char; var Applied: Boolean; var NewRowId: string);
+begin
+ with SaveDeposit,dm_contract do
+   begin
+      case Action of
+      'I': begin
+            CallProcedure('dmaddcontract',[
+            'p_ContractID',contractid
+           ,'p_Type',TypeD
+           ,'p_OpenDate',OpenDate
+           ,'p_CloseDate' ,CloseDate
+           ,'p_Amount',Amount
+           ,'p_ContractNo',ContractNo
+           ,'p_ContractType', ContractType
+           ,'p_ClientType' ,ClientType
+           ,'p_Percent',Interest
+           ,'p_OverduePercent',overdueinterest
+           ,'p_DuePercent',dueinterest
+           ,'p_personaltype',personaltype
+           ,'p_currency',currency
+           ,'p_branchid',branchid
+           ,'p_customerid',Customerid
+           ,'p_stopCalcdate',FirstPayDateforInt
+           ,'p_PeriodID',PeriodID
+           ,'p_capitalperid',capitalperid
+           ,'p_autopr',autopr
+           ,'p_tocard',tocard
+           ,'p_agentid',agentid
+           ,'p_personsid',personsid
+           ,'p_prizeid',prizeid
+           ,'p_deppersetid',deppersetid
+           ,'p_bonusstatus',bonusstatus
+           ]);
+        Applied := True;
+        end;
+
+      'U': begin
+            CallProcedure('dmupdatecontract',[
+            'p_ContractID',Get_SelectedContID
+           ,'p_Type',TypeD
+           ,'p_OpenDate',OpenDate
+           ,'p_CloseDate' ,CloseDate
+           ,'p_Amount',Amount
+           ,'p_ContractNo',ContractNo
+           ,'p_ContractType', ContractType
+           ,'p_ClientType' ,ClientType
+           ,'p_Percent',Interest
+           ,'p_OverduePercent',overdueinterest
+           ,'p_DuePercent',dueinterest
+           ,'p_personaltype',personaltype
+           ,'p_currency',currency
+           ,'p_branchid',branchid
+           ,'p_customerid',Customerid
+           ,'p_stopCalcdate',FirstPayDateforInt
+           ,'p_PeriodID',PeriodID
+           ,'p_capitalperid',capitalperid
+           ,'p_autopr',autopr
+           ,'p_tocard',tocard
+           ,'p_agentid',agentid
+           ,'p_personsid',personsid
+           ,'p_prizeid',prizeid
+           ,'p_deppersetid',deppersetid
+           ,'p_bonusstatus',bonusstatus
+            ]);
+
+        Applied := True;
+
+        end;
+      end;
+   end;
+
+           end;
+
+procedure TNewDataModDepositsContract.DepositPorpsCalcFields(DataSet: TDataSet);
+begin
+   {with DataSet do
+        FieldByName('PeriodContracts').AsInteger
+          := dm_contract.CallIntegerFunction('GetPeriod',
+          ['bdat',FieldByname('opendate').AsDateTime,
+           'edat',FieldByname('closedate').AsDateTime ]);  }
+end;
+
+procedure TNewDataModDepositsContract.DepositPorpsCUSTOMERIDChange(
+  Sender: TField);
+begin
+   with NewFormDepositContract do
+        ShowAccounts;
+end;
+
+
+
+end.

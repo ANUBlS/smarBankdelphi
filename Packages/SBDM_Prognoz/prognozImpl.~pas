@@ -1,0 +1,174 @@
+unit prognozImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, OracleData, ComCtrls, StdCtrls, Mask, DBCtrlsEh, DBLookupEh, Buttons,
+  CMExcelExport, NLSLocalizer, Gauges, ExtCtrls;
+
+type
+  TPrognoz = class(TForm)
+    GroupBox1: TGroupBox;
+    GroupBox2: TGroupBox;
+    GroupBox3: TGroupBox;
+    LCBFilials: TDBLookupComboboxEh;
+    CBFilial: TCheckBox;
+    GroupBox4: TGroupBox;
+    CBAvalute: TCheckBox;
+    LCBValutes: TDBLookupComboboxEh;
+    DateTimePicker1: TDateTimePicker;
+    DateTimePicker2: TDateTimePicker;
+    valutes: TOracleDataSet;
+    valutesVALUTE: TIntegerField;
+    valutesVALU_NAME: TStringField;
+    Filials: TOracleDataSet;
+    FilialsID: TFloatField;
+    FilialsNAME: TStringField;
+    FilialsDatSrc: TDataSource;
+    valutesDatSrc: TDataSource;
+    Sysdat: TOracleDataSet;
+    CheckBox1: TCheckBox;
+    CheckBox2: TCheckBox;
+    prognoz: TOracleDataSet;
+    SpeedButton2: TSpeedButton;
+    prognozCONTRACTNO: TStringField;
+    prognozVAL_NAME: TStringField;
+    prognozFILNAME: TStringField;
+    prognozCUSTNAME: TStringField;
+    prognozFACTICALDEBT: TFloatField;
+    prognozSUMPROGNOZ: TFloatField;
+    ExcelExport: TCMExcelExport;
+    NLSLocalizer1: TNLSLocalizer;
+    Animate1: TAnimate;
+    SpeedButton1: TSpeedButton;
+    prognozOPENDATE: TDateTimeField;
+    prognozCLOSEDATE: TDateTimeField;
+    prognozINTRES: TStringField;
+    prognozINTERESTACCNO: TStringField;
+    prognozPOK_OSTAT: TFloatField;
+    prognozPROGNOZ: TFloatField;
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure SpeedButton2Click(Sender: TObject);
+
+  private
+   function BuildFilterString : String;
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Prognoz: TPrognoz;
+ procedure exportproc(S:String);export;
+implementation
+
+uses sboapiDataModuleImpl,CommonDeclsImpl;
+{$R *.DFM}
+ procedure exportproc(S:String);export;
+begin
+   Prognoz.ShowModal;
+end;
+
+exports
+   exportproc;
+procedure TPrognoz.FormCreate(Sender: TObject);
+begin
+valutes.Open;
+Filials.open;
+Sysdat.open;
+DateTimePicker1.DateTime:=sysdat.fieldbyname('tek_dat').AsDateTime;
+DateTimePicker2.DateTime:=sysdat.fieldbyname('tek_dat').AsDateTime;
+end;
+function TPrognoz.BuildFilterString : String;
+procedure ConcatFilter(var S: String; const Prefix : String; Checked : Boolean; KeyValue : Variant);
+  const
+     csFormat = '(%s=%s)';
+  var
+    Temp : String;
+  begin
+
+    if Checked then
+    begin
+      Temp := Format(csFormat,[Prefix,Keyvalue]);
+      if S = '' then
+        S := 'and'+Temp
+      else
+        S := S + 'and ' + Temp;
+    end;
+    
+  end;
+
+begin
+
+  Result   := '';
+
+  ConcatFilter(Result,'cont.CURRENCY',CBaValute.Checked,LCBValutes.KeyValue);
+  ConcatFilter(Result,'cont.BRANCHID',CBFilial.Checked,LCBFilials.KeyValue);
+  // ShowMessage(Result)
+
+end;
+
+
+
+procedure TPrognoz.FormDestroy(Sender: TObject);
+begin
+valutes.close;
+Filials.close;
+Sysdat.close;
+prognoz.Closeall
+end;
+
+procedure TPrognoz.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+ if Ord(Key) = VK_ESCAPE then Close;
+end;
+
+procedure TPrognoz.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+   Resize := False
+end;
+
+procedure TPrognoz.SpeedButton1Click(Sender: TObject);
+var
+dat : Tdatetime;
+begin
+ dat:= integer(trunc(DateTimePicker2.DateTime));
+  Animate1.Visible:=True;
+  Animate1.Active:=True;
+ with prognoz do
+  begin
+    if Active then CloseAll;
+     SQL[14]:=BuildFilterString;
+     SetVariable('dat',dat);
+     open;
+  end;
+
+    with ExcelExport do
+   begin
+       Connect;
+       ExportDataset(prognoz,'Report',true);
+       Disconnect;
+     end;
+  // close;
+   Animate1.Visible:=false;
+  Animate1.Active :=false;
+end;
+
+procedure TPrognoz.SpeedButton2Click(Sender: TObject);
+begin
+close
+end;
+
+
+
+initialization
+
+    Prognoz := TPrognoz.Create(CommonApplication)
+end.

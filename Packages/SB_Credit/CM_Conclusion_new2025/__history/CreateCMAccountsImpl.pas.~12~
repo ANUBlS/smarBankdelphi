@@ -1,0 +1,189 @@
+﻿unit CreateCMAccountsImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Grids, DBGrids,  Buttons, StdCtrls, ExtCtrls, Mask,
+  DBCtrlsEh, DBLookupEh, Oracle, DB, OracleData, ComCtrls, CMExcelExport;
+
+type
+  TFormCreateCMAccounts = class(TForm)
+    PageControl1: TPageControl;
+    TabSheet1: TTabSheet;
+    TabSheet2: TTabSheet;
+    TabSheet3: TTabSheet;
+    Panel1: TPanel;
+    Panel2: TPanel;
+    Panel4: TPanel;
+    Panel5: TPanel;
+    Panel6: TPanel;
+    Panel7: TPanel;
+    Label1: TLabel;
+    DatekreditBegin: TDateTimePicker;
+    Label2: TLabel;
+    DatekreditEnd: TDateTimePicker;
+    Button1: TButton;
+    SpeedButton1: TSpeedButton;
+    Label3: TLabel;
+    DatedebtBegin: TDateTimePicker;
+    Label4: TLabel;
+    DatedebtEnd: TDateTimePicker;
+    Button2: TButton;
+    SpeedButton2: TSpeedButton;
+    Label5: TLabel;
+    DateqaliqBegin: TDateTimePicker;
+    Label6: TLabel;
+    DateqaliqEnd: TDateTimePicker;
+    Button3: TButton;
+    SpeedButton3: TSpeedButton;
+    AccState: TDataSource;
+    AccStateData: TOracleDataSet;
+    DBGrid1: TDBGrid;
+    DebetTransactions: TDataSource;
+    DebetTransactionsData: TOracleDataSet;
+    DebetTransactionsDataID: TFloatField;
+    DebetTransactionsDataDEBITACCID: TFloatField;
+    DebetTransactionsDataOPERATIONDATE: TDateTimeField;
+    DebetTransactionsDataDEBITAMOUNT: TFloatField;
+    DebetTransactionsDataCREDITAMOUNT: TFloatField;
+    DebetTransactionsDataLAMOUNT: TFloatField;
+    DebetTransactionsDataCREDITACCNO: TWideStringField;
+    DebetTransactionsDataDESTINATION: TWideStringField;
+    DebetTransactionsDataRowNumber: TIntegerField;
+    DebetTransactionsDataDebitAccNo: TStringField;
+    DebitTransactionsGrid: TDBGrid;
+    DBGrid2: TDBGrid;
+    CreditTransactions: TDataSource;
+    CreditTransactionsData: TOracleDataSet;
+    CreditTransactionsDataID: TFloatField;
+    IntegerField1: TIntegerField;
+    CreditTransactionsDataCREDITACCID: TFloatField;
+    CreditTransactionsDataOPERATIONDATE: TDateTimeField;
+    CreditTransactionsDataDEBITAMOUNT: TFloatField;
+    CreditTransactionsDataCREDITAMOUNT: TFloatField;
+    CreditTransactionsDataLAMOUNT: TFloatField;
+    CreditTransactionsDataDEBITACCNO: TWideStringField;
+    CreditTransactionsDataDESTINATION: TWideStringField;
+    CreditTransactionsDataCreditAccNo: TStringField;
+    AccStateDataDATDATE: TDateTimeField;
+    AccStateDataOSTAT: TFloatField;
+    AccStateDataPOK_OSTAT: TFloatField;
+    AccStateDataOBR_D: TFloatField;
+    AccStateDataPOK_OBR_D: TFloatField;
+    AccStateDataOBR_K: TFloatField;
+    AccStateDataPOK_OBR_K: TFloatField;
+    CMExcelExport: TCMExcelExport;
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+    procedure FormCreate(Sender: TObject);
+    procedure Button3Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure SpeedButton3Click(Sender: TObject);
+    procedure SpeedButton2Click(Sender: TObject);
+    procedure SpeedButton1Click(Sender: TObject);
+
+
+  private
+    CustID :Integer;
+    CustName :String;
+  public
+    { Public declarations }
+  end;
+
+var
+  FormCreateCMAccounts: TFormCreateCMAccounts;
+
+implementation
+
+uses DataModuleConclusion,ConclusionMainUnitImpl,LoanBalAccsUnit,
+   SBTranslateProc,sboapiDataModuleImpl,CommonDecls;
+
+{$R *.DFM}
+
+procedure TFormCreateCMAccounts.Button1Click(Sender: TObject);
+begin
+CreditTransactionsData.Close;
+CreditTransactionsData.SetVariable('AccountID',ConclusionForm.Hesab_ID);
+CreditTransactionsData.SetVariable('StartDate',Int(DatekreditBegin.DateTime));
+CreditTransactionsData.SetVariable('EndDate',Int(DatekreditEnd.DateTime));
+CreditTransactionsData.Open;
+end;
+
+procedure TFormCreateCMAccounts.Button2Click(Sender: TObject);
+begin
+
+DebetTransactionsData.Close;
+DebetTransactionsData.SetVariable('AccountID',ConclusionForm.Hesab_ID);
+DebetTransactionsData.SetVariable('StartDate',Int(DatedebtBegin.DateTime));
+DebetTransactionsData.SetVariable('EndDate',Int(DatedebtEnd.DateTime));
+DebetTransactionsData.Open;
+end;
+
+procedure TFormCreateCMAccounts.Button3Click(Sender: TObject);
+begin
+
+AccStateData.Close;
+AccStateData.SetVariable('v_ACCID',ConclusionForm.Hesab_ID);
+AccStateData.SetVariable('dat1',Int(DateqaliqBegin.DateTime));
+AccStateData.SetVariable('dat2',Int(DateqaliqEnd.DateTime));
+AccStateData.Open;
+end;
+
+procedure TFormCreateCMAccounts.FormCanResize(Sender: TObject;
+  var NewWidth, NewHeight: Integer; var Resize: Boolean);
+begin
+   Resize := False;
+end;
+
+
+
+procedure TFormCreateCMAccounts.FormCreate(Sender: TObject);
+begin
+SBTranslateProc.TranslateAllCompForms(Self, sboapiDataModule.OrPack_SL);
+ end;
+
+procedure TFormCreateCMAccounts.FormShow(Sender: TObject);
+begin
+ DateqaliqBegin.DateTime :=DataModuleConcl.Sysdat.FieldByName('Tek_dat').AsDateTime;
+ DateqaliqEnd.DateTime :=DataModuleConcl.Sysdat.FieldByName('Tek_dat').AsDateTime;
+ DatedebtBegin.DateTime :=DataModuleConcl.Sysdat.FieldByName('Tek_dat').AsDateTime;
+ DatedebtEnd.DateTime :=DataModuleConcl.Sysdat.FieldByName('Tek_dat').AsDateTime;
+ DatekreditBegin.DateTime :=DataModuleConcl.Sysdat.FieldByName('Tek_dat').AsDateTime;
+ DatekreditEnd.DateTime :=DataModuleConcl.Sysdat.FieldByName('Tek_dat').AsDateTime;
+end;
+
+procedure TFormCreateCMAccounts.SpeedButton1Click(Sender: TObject);
+begin
+ with CMExcelExport do
+   begin
+   connect;
+   ExportDataset(CreditTransactionsData,'Debt',true,false);
+   Disconnect;
+   end;
+end;
+
+procedure TFormCreateCMAccounts.SpeedButton2Click(Sender: TObject);
+begin
+ with CMExcelExport do
+   begin
+   connect;
+   ExportDataset(DebetTransactionsData,'Debt',true,false);
+   Disconnect;
+   end;
+end;
+
+procedure TFormCreateCMAccounts.SpeedButton3Click(Sender: TObject);
+begin
+
+   with CMExcelExport do
+   begin
+   connect;
+   ExportDataset(AccStateData,'Qqalıq',true,false);
+   Disconnect;
+   end;
+end;
+
+end.

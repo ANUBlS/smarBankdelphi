@@ -1,0 +1,129 @@
+unit DataModDonrimpl;
+
+interface
+
+uses
+  SysUtils, Classes, DB, OracleData;
+
+type
+  TDataModDonr = class(TDataModule)
+    SysDset: TOracleDataSet;
+    FilDset: TOracleDataSet;
+    ValDset: TOracleDataSet;
+    SysDsetSrc: TDataSource;
+    FilDsetSrc: TDataSource;
+    ValDsetSrc: TDataSource;
+    DonrDset: TOracleDataSet;
+    DonrDsetSrc: TDataSource;
+    DonrDsetCONTRACTNO: TWideStringField;
+    DonrDsetCONTRACTACCNO: TWideStringField;
+    DonrDsetINTERESTACCNO: TWideStringField;
+    DonrDsetVAL_NAME: TWideStringField;
+    DonrDsetCUSTOMERNAME: TWideStringField;
+    DonrDsetOPENDATE: TDateTimeField;
+    DonrDsetCLOSEDATE: TDateTimeField;
+    DonrDsetAMOUNT: TFloatField;
+    DonrDsetEKAMOUNT: TFloatField;
+    DonrDsetINTEREST: TFloatField;
+    DonrDsetFACTICALDEBT: TFloatField;
+    DonrDsetEKFACTICALDEBT: TFloatField;
+    DonrDsetFACTICALINTERESTDEBT: TFloatField;
+    DonrDsetEKFACTICALINTERESTDEBT: TFloatField;
+    DonrDsetSTOPCALCULATIONDATE: TDateTimeField;
+    DonrDsetCURRENCY: TFloatField;
+    DonrDsetPERSONALTYPE: TFloatField;
+    DonrDsetCLIENTTYPE: TFloatField;
+    DonrDsetBRANCHID: TFloatField;
+    DonrDsetCONTRACTTYPE: TIntegerField;
+    DonrDsetSTATUS: TFloatField;
+    DonrDsetCUSTOMERID: TFloatField;
+    DonrDsetUSID: TFloatField;
+    DonrDsetID: TFloatField;
+    CredDset: TOracleDataSet;
+    CredDsetSrc: TDataSource;
+    FilDsetID: TFloatField;
+    FilDsetNAME: TWideStringField;
+    FilDsetKOD_FILIAL: TWideStringField;
+    ValDsetVALUTE: TIntegerField;
+    ValDsetVAL_NAME: TWideStringField;
+    ValDsetVALU_NAME: TWideStringField;
+    ValDsetVALU_SHORT: TWideStringField;
+    ValDsetUSTORG: TFloatField;
+    ValDsetUSTPOK: TFloatField;
+    ValDsetVALU_GEN: TWideStringField;
+    ValDsetVALU_AZ: TWideStringField;
+    ValDsetUSING: TIntegerField;
+    ValDsetVALU_OTHER: TWideStringField;
+    ValDsetVALU_INTER: TWideStringField;
+    ValDsetVALU_BALA: TWideStringField;
+    ValDsetPRISTAVKA: TFloatField;
+    ValDsetCOUNTRY: TWideStringField;
+    ValDsetUST_POK1: TFloatField;
+    ValDsetOFFICAL: TWideStringField;
+    ValDsetLIMIT: TFloatField;
+    CredDsetNUMBEROFCREDIT: TWideStringField;
+    CredDsetVAL_NAME: TWideStringField;
+    CredDsetDONRNAME: TWideStringField;
+    CredDsetNAME: TWideStringField;
+    CredDsetCUSTOMER: TWideStringField;
+    CredDsetDATEOFCONCLUSION: TDateTimeField;
+    CredDsetDUEDATEFIRSTCONTRACT: TDateTimeField;
+    CredDsetDUEDATELASTCONTRACT: TDateTimeField;
+    CredDsetDESCRIPION: TWideStringField;
+    CredDsetMNOVU: TWideStringField;
+    CredDsetBSEKTOR: TWideStringField;
+    CredDsetBFALIYYET: TWideStringField;
+    CredDsetBFALIYETNOVU: TWideStringField;
+    CredDsetTIP: TWideStringField;
+    CredDsetCREDITLINEAMOUNT: TFloatField;
+    CredDsetAMOUNTEK: TFloatField;
+    CredDsetADI: TFloatField;
+    CredDsetMEQ: TFloatField;
+    CredDsetDONVES: TFloatField;
+    CredDsetDONVESEK: TFloatField;
+    CredDsetREST: TFloatField;
+    CredDsetRESTEK: TFloatField;
+    CredDsetINTERESTREST: TFloatField;
+    CredDsetINTERESTRESTEK: TFloatField;
+    CredDsetADIMEB: TFloatField;
+    CredDsetMEQMEB: TFloatField;
+    CredDsetDUEREST: TFloatField;
+    CredDsetDUERESTEK: TFloatField;
+    CredDsetDUEINTERESTREST: TFloatField;
+    CredDsetDUEINTERESTRESTEK: TFloatField;
+    CredDsetMUTEXESIS: TWideStringField;
+    CredDsetDONID: TFloatField;
+    procedure DataModuleDestroy(Sender: TObject);
+    procedure DataModuleCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  DataModDonr: TDataModDonr;
+
+implementation
+
+{$R *.dfm}
+ uses sboapiDataModuleImpl;
+procedure TDataModDonr.DataModuleCreate(Sender: TObject);
+begin
+DonrDset.Open;
+CredDset.Open;
+FilDset.Open;
+ValDset.Open;
+SysDset.Open;
+end;
+
+procedure TDataModDonr.DataModuleDestroy(Sender: TObject);
+begin
+DonrDset.Close;
+CredDset.Close;
+FilDset.Close;
+ValDset.Close;
+SysDset.Close;
+end;
+
+end.

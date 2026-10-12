@@ -1,0 +1,62 @@
+﻿unit P_Interval;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ComCtrls, StdCtrls;
+
+type
+  TFormInterval = class(TForm)
+    OkButton: TButton;
+    CancelButton: TButton;
+    GroupBox1: TGroupBox;
+    Label1: TLabel;
+    Label2: TLabel;
+    StartDateEdit: TDateTimePicker;
+    EndDateEdit: TDateTimePicker;
+    procedure FormCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    procedure WMNCPaint(var message: TWMNCPaint);
+    procedure WMNCACTIVATE(var message: TWMNCActivate);
+  end;
+
+var
+  FormInterval: TFormInterval;
+
+implementation
+         uses  sboapiDataModuleImpl, SBTranslateProc;
+{$R *.DFM}
+
+procedure TFormInterval.FormCreate(Sender: TObject);
+begin
+ SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TFormInterval.WMNCACTIVATE(var message: TWMNCActivate);
+var
+  S: TWMNCPaint;
+begin
+  inherited;
+  WMNCPaint(S);
+end;
+
+procedure TFormInterval.WMNCPaint(var message: TWMNCPaint);
+const
+  Capt = 'Sərəncamlar';
+var
+  dc: hDc;
+begin
+  inherited;
+  Caption := '';
+  dc := GetWindowDC(Handle);
+  SetBkMode(dc, Transparent);
+  SetTextColor(dc, clWhite);
+  SelectObject(dc, Font.Handle);
+  TextOut(dc, 23, 6, Capt, Length(Capt));
+end;
+
+end.

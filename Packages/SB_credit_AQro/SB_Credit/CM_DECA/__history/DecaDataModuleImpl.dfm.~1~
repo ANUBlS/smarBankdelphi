@@ -1,0 +1,722 @@
+object DecaDataModule: TDecaDataModule
+  OldCreateOrder = False
+  Left = 367
+  Top = 204
+  Height = 297
+  Width = 696
+  object DecaData: TOracleDataSet
+    SQL.Strings = (
+      'SELECT'
+      '   A.BOOROWERID AS ID,'
+      '   A.NAME AS NAME,'
+      '   A.COUNTRYCODE AS COUNTRCODE,'
+      '   A.BANKRUPTEYSTATUS AS BNKSTATUS,'
+      
+        '   cm_deca.get_custdateofbirth(b.boorowerid) AS DATOFBIRTH, --do' +
+        'gum tarixi'
+      
+        '   cm_deca.get_custplaceofbirth(b.boorowerid) AS PLACEBIRTH, --d' +
+        'ogum yeri'
+      '   A.pincode AS PINCODE,'#9#9#9'--pin kod'
+      '   A.guarantorid AS GID,'#9'--zamin id'
+      '   a.guarantorname AS GNAME,'#9'--zamin ad'
+      '   A.guarantorid2 AS GID2,'#9'--zamin id2'
+      '   A.guarantorname2 AS GNAME2,'#9'--zamin ad2'
+      '   A.guarantorid3 AS GID3,'#9'--zamin id3'
+      '   A.guarantorname3 AS GNAME3,'#9'--zamin ad3'
+      '   cm_deca.get_credittypes(b.id) CREDITTYPE,'#9'--kreditin tipi'
+      
+        '   cm_deca.get_lastcreditpayment(b.id) LASTPAYDAT,'#9'--sonuncu ode' +
+        'nish tarixi'
+      
+        '   cm_deca.get_creditpaymentamount(b.id) MPAYAMOUNT,'#9'--ayliq ode' +
+        'nish'
+      
+        '   cm_deca.get_reserveaccountostat(b.id) PROVISION,'#9'--ehtiyyat m' +
+        'iqdari'
+      '   A.FIRSTOWNERID AS ID2,'
+      '   A.FIRSTOWNERNAME AS NAME2,'
+      '   A.SECONDOWNERID AS ID3,'
+      '   A.SECONDOWNERNAME AS NAME3,'
+      '   A.THIRDOWNERID AS ID4,'
+      '   A.THIRDOWNERNAME AS NAME4,'
+      '   B.ID as InternalID, -- INTERNAL FIELD'
+      '   CM_COMMON.AccountNumber_Get(c.LOANACCID) AS ACCOUNTNO ,'
+      '   V.VAL_NAME AS CURRENCY,'
+      '   cm_deca.get_creditinitialamount(b.id) AS INITIALSUM,'
+      '   cm_deca.get_creditlineamount(b.id) AS CRDLINESUM,'
+      '   D.REST + D.DUEREST AS DISOUSUM ,'
+      '   B.ANNUALYINTERESTRATE AS RATE,'
+      '   P.CODE AS PURPOSE,'
+      
+        '   TRUNC(MONTHS_BETWEEN(B.DUEDATEFIRSTCONTRACT,B.DATEOFCONCLUSIO' +
+        'N)) AS PERIODMONT ,'
+      '   B.DATEOFCONCLUSION AS DATEGRANT,'
+      '   B.DUEDATEFIRSTCONTRACT AS FIRSTCONTR,'
+      
+        '   DECODE(B.DUEDATELASTCONTRACT,null,B.DUEDATEFIRSTCONTRACT,B.DU' +
+        'EDATELASTCONTRACT) AS LASTCONTR,'
+      
+        '   CM_DECA.DueDaysCount(:HDATE , B.DUEDATEFIRSTCONTRACT,b.id) AS' +
+        ' DAYSMAIN ,'
+      
+        '   CM_DECA.DueDaysCount(:HDATE , B.DUEDATEFIRSTCONTRACT,b.id) AS' +
+        ' DAYSINTRST ,'
+      '   D.DUEINTERESTREST+D.interestrest AS OIAPERIOD ,'
+      
+        '   CM_DECA.OiaForLastThreeMonths(:HDATE , B.DUEDATEFIRSTCONTRACT' +
+        ',D.DUEINTERESTREST) AS OIATHREE ,'
+      '   0 AS PROLONGS ,'
+      '   E.CODE AS CLASSCODE,'
+      '   CM_DECA.Get_CreditStatus(B.ID,:HDATE) AS STATUSCODE ,'
+      '   DECODE(G.TYPECODE,'#39'000'#39',null,G.TYPECODE) AS COLLCODE,'
+      '   F.ANYINFOTODISTING AS INFDISTING,'
+      '   D.PLEDGEPRICE * O.OSTAT AS MARKETSUM ,'
+      '   F.REGISTRYNO AS REGNO,'
+      '   F.REGISTRYDATE AS REGDATE,'
+      '   F.REGISTRYAGENCY AS REGAGENCY'
+      'FROM'
+      '   CM_BOOROWERINFO A'
+      ' , CM_ACCOUNTS C'
+      ' , CM_RESERVE_TYPES E'
+      ' , CM_GUARANTEE F'
+      ' , CM_PORTFOLIO B'
+      ' , CM_PLEDGES G'
+      ' , CM_HISTORY D'
+      ' , SB_OPERKURS O'
+      ' , SB_AVALUTE V'
+      ' , CM_CATEGORIES P'
+      'WHERE'
+      '     (A.CREDITID = B.ID)'
+      ' AND (C.CREDITID = B.ID)'
+      ' AND (D.CREDITID = B.ID)'
+      ' AND (E.ID = D.RESERVEID)'
+      ' AND (F.CREDITID = B.ID)'
+      ' AND (G.ID = F.PLEDGEID)'
+      ' AND (D.HDATE=:HDATE)'
+      
+        ' AND ((B.CLOSEDATE IS NULL) or (B.CLOSEDATE between :EDATE and :' +
+        'HDATE) /*(B.CLOSEDATE >=:HDATE)*/)'
+      ' AND (O.DAT=:HDATE)'
+      ' AND (O.VAL_KOD=B.CURRENCY)'
+      '--AND (O.OSTAT * B.CREDITLINEAMOUNT >= 1000)'
+      ' AND (V.VALUTE=B.CURRENCY)'
+      ' AND (B.DATEOFCONCLUSION<=:HDATE)'
+      '-- AND (B.CLOSEDATE is not null)'
+      
+        ' AND (P.ID = B.CUSTOMERTYPE) --and cm_deca.get_creditinitialamou' +
+        'nt(b.id)>0'
+      '')
+    Variables.Data = {
+      0300000002000000060000003A48444154450C00000000000000000000000600
+      00003A45444154450C0000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      0400000030000000020000004944010000000000040000004E414D4501000000
+      00000A000000434F554E5452434F444501000000000009000000424E4B535441
+      5455530100000000000A0000004441544F4642495254480100000000000A0000
+      00504C41434542495254480100000000000700000050494E434F444501000000
+      00000300000047494401000000000005000000474E414D450100000000000400
+      00004749443201000000000006000000474E414D453201000000000004000000
+      4749443301000000000006000000474E414D45330100000000000A0000004352
+      45444954545950450100000000000A0000004C41535450415944415401000000
+      00000A0000004D504159414D4F554E540100000000000900000050524F564953
+      494F4E01000000000003000000494432010000000000050000004E414D453201
+      000000000003000000494433010000000000050000004E414D45330100000000
+      0003000000494434010000000000050000004E414D45340100000000000A0000
+      00494E5445524E414C4944010000000000090000004143434F554E544E4F0100
+      000000000800000043555252454E43590100000000000A000000494E49544941
+      4C53554D0100000000000A0000004352444C494E4553554D0100000000000800
+      00004449534F5553554D01000000000004000000524154450100000000000700
+      0000505552504F53450100000000000A000000504552494F444D4F4E54010000
+      00000009000000444154454752414E540100000000000A000000464952535443
+      4F4E5452010000000000090000004C415354434F4E5452010000000000080000
+      00444159534D41494E0100000000000A00000044415953494E54525354010000
+      000000090000004F4941504552494F44010000000000080000004F4941544852
+      45450100000000000800000050524F4C4F4E475301000000000009000000434C
+      415353434F44450100000000000A000000535441545553434F44450100000000
+      0008000000434F4C4C434F44450100000000000A000000494E4644495354494E
+      47010000000000090000004D41524B455453554D010000000000050000005245
+      474E4F0100000000000700000052454744415445010000000000090000005245
+      474147454E4359010000000000}
+    Cursor = crSQLWait
+    Session = CMDataModule.CMSession
+    Left = 48
+    Top = 96
+    object DecaDataID: TWideStringField
+      FieldName = 'ID'
+      Size = 100
+    end
+    object DecaDataNAME: TWideStringField
+      DisplayLabel = 'Боржаланын ады'
+      FieldName = 'NAME'
+      Size = 120
+    end
+    object DecaDataCOUNTRCODE: TWideStringField
+      DisplayLabel = 'Юлкянин коду '
+      FieldName = 'COUNTRCODE'
+      Size = 8
+    end
+    object DecaDataBNKSTATUS: TFloatField
+      DisplayLabel = 'Мцфлцс олма статусу'
+      FieldName = 'BNKSTATUS'
+    end
+    object DecaDataDATOFBIRTH: TDateTimeField
+      DisplayLabel = 'Доьум тарихи'
+      FieldName = 'DATOFBIRTH'
+    end
+    object DecaDataPLACEBIRTH: TWideStringField
+      DisplayLabel = 'Доьум йери'
+      FieldName = 'PLACEBIRTH'
+      Size = 4000
+    end
+    object DecaDataPINCODE: TWideStringField
+      DisplayLabel = 'Пинкоду'
+      FieldName = 'PINCODE'
+      Size = 7
+    end
+    object DecaDataGID: TWideStringField
+      DisplayLabel = '1 Замин ид'
+      FieldName = 'GID'
+    end
+    object DecaDataGNAME: TWideStringField
+      DisplayLabel = '1 Замин ады'
+      FieldName = 'GNAME'
+      Size = 64
+    end
+    object DecaDataGID2: TWideStringField
+      DisplayLabel = '2 Замин'
+      FieldName = 'GID2'
+    end
+    object DecaDataGNAME2: TWideStringField
+      DisplayLabel = '2 Замин ады'
+      FieldName = 'GNAME2'
+      Size = 64
+    end
+    object DecaDataGID3: TWideStringField
+      DisplayLabel = '3 Замин'
+      FieldName = 'GID3'
+    end
+    object DecaDataGNAME3: TWideStringField
+      DisplayLabel = '3 Замин ады'
+      FieldName = 'GNAME3'
+      Size = 64
+    end
+    object DecaDataCREDITTYPE: TWideStringField
+      DisplayLabel = 'Кредитн типи'
+      FieldName = 'CREDITTYPE'
+      Size = 4000
+    end
+    object DecaDataLASTPAYDAT: TDateTimeField
+      DisplayLabel = 'Сонунжу  юдяниш тар'
+      FieldName = 'LASTPAYDAT'
+    end
+    object DecaDataMPAYAMOUNT: TFloatField
+      DisplayLabel = 'Айлыг юдяниш'
+      FieldName = 'MPAYAMOUNT'
+    end
+    object DecaDataPROVISION: TFloatField
+      DisplayLabel = 'Ещтиййатын мигдары'
+      FieldName = 'PROVISION'
+    end
+    object DecaDataID2: TWideStringField
+      DisplayLabel = '1 Тясисчи ЫД'
+      FieldName = 'ID2'
+      Size = 12
+    end
+    object DecaDataNAME2: TWideStringField
+      DisplayLabel = '1 Тясисчи ады'
+      FieldName = 'NAME2'
+      Size = 64
+    end
+    object DecaDataID3: TWideStringField
+      DisplayLabel = '2 Тясисчи ЫД'
+      FieldName = 'ID3'
+      Size = 12
+    end
+    object DecaDataNAME3: TWideStringField
+      DisplayLabel = '2 Тясисчи ады'
+      FieldName = 'NAME3'
+      Size = 64
+    end
+    object DecaDataID4: TWideStringField
+      DisplayLabel = '3Тясисчи ЫД'
+      FieldName = 'ID4'
+      Size = 12
+    end
+    object DecaDataNAME4: TWideStringField
+      DisplayLabel = '3 Тясисчи ады'
+      FieldName = 'NAME4'
+      Size = 64
+    end
+    object DecaDataINTERNALID: TFloatField
+      DisplayLabel = 'Кредитин ЫД'
+      FieldName = 'INTERNALID'
+      Required = True
+    end
+    object DecaDataACCOUNTNO: TWideStringField
+      DisplayLabel = 'Щесаб'
+      FieldName = 'ACCOUNTNO'
+      Size = 4000
+    end
+    object DecaDataCURRENCY: TWideStringField
+      DisplayLabel = 'Валуте'
+      FieldName = 'CURRENCY'
+      Size = 10
+    end
+    object DecaDataINITIALSUM: TFloatField
+      DisplayLabel = 'Илк мябляь'
+      FieldName = 'INITIALSUM'
+    end
+    object DecaDataCRDLINESUM: TFloatField
+      DisplayLabel = 'Кредитин мябляьи'
+      FieldName = 'CRDLINESUM'
+    end
+    object DecaDataDISOUSUM: TFloatField
+      DisplayLabel = 'Галыг'
+      FieldName = 'DISOUSUM'
+    end
+    object DecaDataRATE: TFloatField
+      DisplayLabel = '% дяряжяси'
+      FieldName = 'RATE'
+      Required = True
+    end
+    object DecaDataPURPOSE: TWideStringField
+      DisplayLabel = 'Код'
+      FieldName = 'PURPOSE'
+      Size = 8
+    end
+    object DecaDataPERIODMONT: TFloatField
+      DisplayLabel = 'Перид ай'
+      FieldName = 'PERIODMONT'
+    end
+    object DecaDataDATEGRANT: TDateTimeField
+      DisplayLabel = 'Мцгавилянин ачылма тар'
+      FieldName = 'DATEGRANT'
+      Required = True
+    end
+    object DecaDataFIRSTCONTR: TDateTimeField
+      DisplayLabel = 'Баьланма тарихи'
+      FieldName = 'FIRSTCONTR'
+      Required = True
+    end
+    object DecaDataLASTCONTR: TDateTimeField
+      DisplayLabel = 'узадыма тар'
+      FieldName = 'LASTCONTR'
+    end
+    object DecaDataDAYSMAIN: TFloatField
+      DisplayLabel = 'Ясас борж эеж эцн'
+      FieldName = 'DAYSMAIN'
+    end
+    object DecaDataDAYSINTRST: TFloatField
+      DisplayLabel = '% борж эеж эцн '
+      FieldName = 'DAYSINTRST'
+    end
+    object DecaDataOIAPERIOD: TFloatField
+      DisplayLabel = '% боржу '
+      FieldName = 'OIAPERIOD'
+    end
+    object DecaDataOIATHREE: TFloatField
+      DisplayLabel = 'Эеж % боржу'
+      FieldName = 'OIATHREE'
+    end
+    object DecaDataPROLONGS: TFloatField
+      FieldName = 'PROLONGS'
+    end
+    object DecaDataCLASSCODE: TWideStringField
+      DisplayLabel = 'Ещтиййатын коду '
+      FieldName = 'CLASSCODE'
+      Size = 8
+    end
+    object DecaDataSTATUSCODE: TWideStringField
+      FieldName = 'STATUSCODE'
+      Size = 4000
+    end
+    object DecaDataCOLLCODE: TWideStringField
+      FieldName = 'COLLCODE'
+      Size = 8
+    end
+    object DecaDataINFDISTING: TWideStringField
+      FieldName = 'INFDISTING'
+      Size = 128
+    end
+    object DecaDataMARKETSUM: TFloatField
+      FieldName = 'MARKETSUM'
+    end
+    object DecaDataREGNO: TWideStringField
+      FieldName = 'REGNO'
+      Size = 32
+    end
+    object DecaDataREGDATE: TDateTimeField
+      FieldName = 'REGDATE'
+    end
+    object DecaDataREGAGENCY: TWideStringField
+      FieldName = 'REGAGENCY'
+      Size = 64
+    end
+  end
+  object DataSrcDecaData: TDataSource
+    DataSet = DecaData
+    Left = 80
+    Top = 32
+  end
+  object DecaTable: TTable
+    Left = 208
+    Top = 48
+  end
+  object SaveDlg: TSaveDialog
+    DefaultExt = 'dbf'
+    Filter = '*.dbf,*.db|*.dbf;*.db'
+    Left = 360
+    Top = 48
+  end
+  object OracleDataSet1: TOracleDataSet
+    SQL.Strings = (
+      'SELECT'
+      '   A.BOOROWERID AS ID,'
+      '   A.NAME AS NAME,'
+      '   A.COUNTRYCODE AS COUNTRCODE,'
+      '   A.BANKRUPTEYSTATUS AS BNKSTATUS,'
+      
+        '   cm_deca.get_custdateofbirth(b.boorowerid) AS DATOFBIRTH, --do' +
+        'gum tarixi'
+      
+        '   cm_deca.get_custplaceofbirth(b.boorowerid) AS PLACEBIRTH, --d' +
+        'ogum yeri'
+      '   A.pincode AS PINCODE,'#9#9#9'--pin kod'
+      '   A.guarantorid AS GID,'#9'--zamin id'
+      '   a.guarantorname AS GNAME,'#9'--zamin ad'
+      '   A.guarantorid2 AS GID2,'#9'--zamin id2'
+      '   A.guarantorname2 AS GNAME2,'#9'--zamin ad2'
+      '   A.guarantorid3 AS GID3,'#9'--zamin id3'
+      '   A.guarantorname3 AS GNAME3,'#9'--zamin ad3'
+      '   cm_deca.get_credittypes(b.id) CREDITTYPE,'#9'--kreditin tipi'
+      
+        '   cm_deca.get_lastcreditpayment(b.id) LASTPAYDAT,'#9'--sonuncu ode' +
+        'nish tarixi'
+      
+        '   cm_deca.get_creditpaymentamount(b.id) MPAYAMOUNT,'#9'--ayliq ode' +
+        'nish'
+      
+        '   cm_deca.get_reserveaccountostat(b.id) PROVISION,'#9'--ehtiyyat m' +
+        'iqdari'
+      '   A.FIRSTOWNERID AS ID2,'
+      '   A.FIRSTOWNERNAME AS NAME2,'
+      '   A.SECONDOWNERID AS ID3,'
+      '   A.SECONDOWNERNAME AS NAME3,'
+      '   A.THIRDOWNERID AS ID4,'
+      '   A.THIRDOWNERNAME AS NAME4,'
+      '   B.ID as InternalID, -- INTERNAL FIELD'
+      '   CM_COMMON.AccountNumber_Get(c.LOANACCID) AS ACCOUNTNO ,'
+      '   V.VAL_NAME AS CURRENCY,'
+      '   cm_deca.get_creditinitialamount(b.id) AS INITIALSUM,'
+      '   cm_deca.get_creditlineamount(b.id) AS CRDLINESUM,'
+      '   D.REST + D.DUEREST AS DISOUSUM ,'
+      '   B.ANNUALYINTERESTRATE AS RATE,'
+      '   P.CODE AS PURPOSE,'
+      
+        '   TRUNC(MONTHS_BETWEEN(B.DUEDATEFIRSTCONTRACT,B.DATEOFCONCLUSIO' +
+        'N)) AS PERIODMONT ,'
+      '   B.DATEOFCONCLUSION AS DATEGRANT,'
+      '   B.DUEDATEFIRSTCONTRACT AS FIRSTCONTR,'
+      
+        '   DECODE(B.DUEDATELASTCONTRACT,null,B.DUEDATEFIRSTCONTRACT,B.DU' +
+        'EDATELASTCONTRACT) AS LASTCONTR,'
+      
+        '   CM_DECA.DueDaysCount(:HDATE , B.DUEDATEFIRSTCONTRACT,b.id) AS' +
+        ' DAYSMAIN ,'
+      
+        '   CM_DECA.DueDaysCount(:HDATE , B.DUEDATEFIRSTCONTRACT,b.id) AS' +
+        ' DAYSINTRST ,'
+      '   D.DUEINTERESTREST+D.interestrest AS OIAPERIOD ,'
+      
+        '   CM_DECA.OiaForLastThreeMonths(:HDATE , B.DUEDATEFIRSTCONTRACT' +
+        ',D.DUEINTERESTREST) AS OIATHREE ,'
+      '   0 AS PROLONGS ,'
+      '   E.CODE AS CLASSCODE,'
+      '   CM_DECA.Get_CreditStatus(B.ID,:HDATE) AS STATUSCODE ,'
+      '   DECODE(G.TYPECODE,'#39'000'#39',null,G.TYPECODE) AS COLLCODE,'
+      '   F.ANYINFOTODISTING AS INFDISTING,'
+      '   D.PLEDGEPRICE * O.OSTAT AS MARKETSUM ,'
+      '   F.REGISTRYNO AS REGNO,'
+      '   F.REGISTRYDATE AS REGDATE,'
+      '   F.REGISTRYAGENCY AS REGAGENCY'
+      'FROM'
+      '   CM_BOOROWERINFO A'
+      ' , CM_ACCOUNTS C'
+      ' , CM_RESERVE_TYPES E'
+      ' , CM_GUARANTEE F'
+      ' , CM_PORTFOLIO B'
+      ' , CM_PLEDGES G'
+      ' , CM_HISTORY D'
+      ' , SB_OPERKURS O'
+      ' , SB_AVALUTE V'
+      ' , CM_CATEGORIES P'
+      'WHERE'
+      '     (A.CREDITID = B.ID)'
+      ' AND (C.CREDITID = B.ID)'
+      ' AND (D.CREDITID = B.ID)'
+      ' AND (E.ID = D.RESERVEID)'
+      ' AND (F.CREDITID = B.ID)'
+      ' AND (G.ID = F.PLEDGEID)'
+      ' AND (D.HDATE=:HDATE)'
+      
+        ' AND ((B.CLOSEDATE IS NULL) or (B.CLOSEDATE between :EDATE and :' +
+        'HDATE) /*(B.CLOSEDATE >=:HDATE)*/)'
+      ' AND (O.DAT=:HDATE)'
+      ' AND (O.VAL_KOD=B.CURRENCY)'
+      '--AND (O.OSTAT * B.CREDITLINEAMOUNT >= 1000)'
+      ' AND (V.VALUTE=B.CURRENCY)'
+      ' AND (B.DATEOFCONCLUSION<=:HDATE)'
+      '-- AND (B.CLOSEDATE is not null)'
+      
+        ' AND (P.ID = B.CUSTOMERTYPE) --and cm_deca.get_creditinitialamou' +
+        'nt(b.id)>0'
+      '')
+    Variables.Data = {
+      0300000002000000060000003A48444154450C00000000000000000000000600
+      00003A45444154450C0000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      0400000030000000020000004944010000000000040000004E414D4501000000
+      00000A000000434F554E5452434F444501000000000009000000424E4B535441
+      5455530100000000000A0000004441544F4642495254480100000000000A0000
+      00504C41434542495254480100000000000700000050494E434F444501000000
+      00000300000047494401000000000005000000474E414D450100000000000400
+      00004749443201000000000006000000474E414D453201000000000004000000
+      4749443301000000000006000000474E414D45330100000000000A0000004352
+      45444954545950450100000000000A0000004C41535450415944415401000000
+      00000A0000004D504159414D4F554E540100000000000900000050524F564953
+      494F4E01000000000003000000494432010000000000050000004E414D453201
+      000000000003000000494433010000000000050000004E414D45330100000000
+      0003000000494434010000000000050000004E414D45340100000000000A0000
+      00494E5445524E414C4944010000000000090000004143434F554E544E4F0100
+      000000000800000043555252454E43590100000000000A000000494E49544941
+      4C53554D0100000000000A0000004352444C494E4553554D0100000000000800
+      00004449534F5553554D01000000000004000000524154450100000000000700
+      0000505552504F53450100000000000A000000504552494F444D4F4E54010000
+      00000009000000444154454752414E540100000000000A000000464952535443
+      4F4E5452010000000000090000004C415354434F4E5452010000000000080000
+      00444159534D41494E0100000000000A00000044415953494E54525354010000
+      000000090000004F4941504552494F44010000000000080000004F4941544852
+      45450100000000000800000050524F4C4F4E475301000000000009000000434C
+      415353434F44450100000000000A000000535441545553434F44450100000000
+      0008000000434F4C4C434F44450100000000000A000000494E4644495354494E
+      47010000000000090000004D41524B455453554D010000000000050000005245
+      474E4F0100000000000700000052454744415445010000000000090000005245
+      474147454E4359010000000000}
+    Cursor = crSQLWait
+    Session = CMDataModule.CMSession
+    Left = 56
+    Top = 176
+    object StringField1: TWideStringField
+      FieldName = 'ID'
+      Size = 100
+    end
+    object StringField2: TWideStringField
+      DisplayLabel = 'Боржаланын ады'
+      FieldName = 'NAME'
+      Size = 120
+    end
+    object StringField3: TWideStringField
+      DisplayLabel = 'Юлкянин коду '
+      FieldName = 'COUNTRCODE'
+      Size = 8
+    end
+    object FloatField1: TFloatField
+      DisplayLabel = 'Мцфлцс олма статусу'
+      FieldName = 'BNKSTATUS'
+    end
+    object DateTimeField1: TDateTimeField
+      DisplayLabel = 'Доьум тарихи'
+      FieldName = 'DATOFBIRTH'
+    end
+    object StringField4: TWideStringField
+      DisplayLabel = 'Доьум йери'
+      FieldName = 'PLACEBIRTH'
+      Size = 4000
+    end
+    object StringField5: TWideStringField
+      DisplayLabel = 'Пинкоду'
+      FieldName = 'PINCODE'
+      Size = 7
+    end
+    object StringField6: TWideStringField
+      DisplayLabel = '1 Замин ид'
+      FieldName = 'GID'
+    end
+    object StringField7: TWideStringField
+      DisplayLabel = '1 Замин ады'
+      FieldName = 'GNAME'
+      Size = 64
+    end
+    object StringField8: TWideStringField
+      DisplayLabel = '2 Замин'
+      FieldName = 'GID2'
+    end
+    object StringField9: TWideStringField
+      DisplayLabel = '2 Замин ады'
+      FieldName = 'GNAME2'
+      Size = 64
+    end
+    object StringField10: TWideStringField
+      DisplayLabel = '3 Замин'
+      FieldName = 'GID3'
+    end
+    object StringField11: TWideStringField
+      DisplayLabel = '3 Замин ады'
+      FieldName = 'GNAME3'
+      Size = 64
+    end
+    object StringField12: TWideStringField
+      DisplayLabel = 'Кредитн типи'
+      FieldName = 'CREDITTYPE'
+      Size = 4000
+    end
+    object DateTimeField2: TDateTimeField
+      DisplayLabel = 'Сонунжу  юдяниш тар'
+      FieldName = 'LASTPAYDAT'
+    end
+    object FloatField2: TFloatField
+      DisplayLabel = 'Айлыг юдяниш'
+      FieldName = 'MPAYAMOUNT'
+    end
+    object FloatField3: TFloatField
+      DisplayLabel = 'Ещтиййатын мигдары'
+      FieldName = 'PROVISION'
+    end
+    object StringField13: TWideStringField
+      DisplayLabel = '1 Тясисчи ЫД'
+      FieldName = 'ID2'
+      Size = 12
+    end
+    object StringField14: TWideStringField
+      DisplayLabel = '1 Тясисчи ады'
+      FieldName = 'NAME2'
+      Size = 64
+    end
+    object StringField15: TWideStringField
+      DisplayLabel = '2 Тясисчи ЫД'
+      FieldName = 'ID3'
+      Size = 12
+    end
+    object StringField16: TWideStringField
+      DisplayLabel = '2 Тясисчи ады'
+      FieldName = 'NAME3'
+      Size = 64
+    end
+    object StringField17: TWideStringField
+      DisplayLabel = '3Тясисчи ЫД'
+      FieldName = 'ID4'
+      Size = 12
+    end
+    object StringField18: TWideStringField
+      DisplayLabel = '3 Тясисчи ады'
+      FieldName = 'NAME4'
+      Size = 64
+    end
+    object FloatField4: TFloatField
+      DisplayLabel = 'Кредитин ЫД'
+      FieldName = 'INTERNALID'
+      Required = True
+    end
+    object StringField19: TWideStringField
+      DisplayLabel = 'Щесаб'
+      FieldName = 'ACCOUNTNO'
+      Size = 4000
+    end
+    object StringField20: TWideStringField
+      DisplayLabel = 'Валуте'
+      FieldName = 'CURRENCY'
+      Size = 10
+    end
+    object FloatField5: TFloatField
+      DisplayLabel = 'Илк мябляь'
+      FieldName = 'INITIALSUM'
+    end
+    object FloatField6: TFloatField
+      DisplayLabel = 'Кредитин мябляьи'
+      FieldName = 'CRDLINESUM'
+    end
+    object FloatField7: TFloatField
+      DisplayLabel = 'Галыг'
+      FieldName = 'DISOUSUM'
+    end
+    object FloatField8: TFloatField
+      DisplayLabel = '% дяряжяси'
+      FieldName = 'RATE'
+      Required = True
+    end
+    object StringField21: TWideStringField
+      DisplayLabel = 'Код'
+      FieldName = 'PURPOSE'
+      Size = 8
+    end
+    object FloatField9: TFloatField
+      DisplayLabel = 'Перид ай'
+      FieldName = 'PERIODMONT'
+    end
+    object DateTimeField3: TDateTimeField
+      DisplayLabel = 'Мцгавилянин ачылма тар'
+      FieldName = 'DATEGRANT'
+      Required = True
+    end
+    object DateTimeField4: TDateTimeField
+      DisplayLabel = 'Баьланма тарихи'
+      FieldName = 'FIRSTCONTR'
+      Required = True
+    end
+    object DateTimeField5: TDateTimeField
+      DisplayLabel = 'узадыма тар'
+      FieldName = 'LASTCONTR'
+    end
+    object FloatField10: TFloatField
+      DisplayLabel = 'Ясас борж эеж эцн'
+      FieldName = 'DAYSMAIN'
+    end
+    object FloatField11: TFloatField
+      DisplayLabel = '% борж эеж эцн '
+      FieldName = 'DAYSINTRST'
+    end
+    object FloatField12: TFloatField
+      DisplayLabel = '% боржу '
+      FieldName = 'OIAPERIOD'
+    end
+    object FloatField13: TFloatField
+      DisplayLabel = 'Эеж % боржу'
+      FieldName = 'OIATHREE'
+    end
+    object FloatField14: TFloatField
+      FieldName = 'PROLONGS'
+    end
+    object StringField22: TWideStringField
+      DisplayLabel = 'Ещтиййатын коду '
+      FieldName = 'CLASSCODE'
+      Size = 8
+    end
+    object StringField23: TWideStringField
+      FieldName = 'STATUSCODE'
+      Size = 4000
+    end
+    object StringField24: TWideStringField
+      FieldName = 'COLLCODE'
+      Size = 8
+    end
+    object StringField25: TWideStringField
+      FieldName = 'INFDISTING'
+      Size = 128
+    end
+    object FloatField15: TFloatField
+      FieldName = 'MARKETSUM'
+    end
+    object StringField26: TWideStringField
+      FieldName = 'REGNO'
+      Size = 32
+    end
+    object DateTimeField6: TDateTimeField
+      FieldName = 'REGDATE'
+    end
+    object StringField27: TWideStringField
+      FieldName = 'REGAGENCY'
+      Size = 64
+    end
+  end
+end

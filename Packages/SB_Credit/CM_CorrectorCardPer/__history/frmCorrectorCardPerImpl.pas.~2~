@@ -1,0 +1,132 @@
+unit frmCorrectorCardPerImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  NLSLocalizer, StdCtrls, ComCtrls, Grids, DBGridEh, ImgList, ToolWin;
+
+type
+  TfrmCorrectorCardPer = class(TForm)
+    NLSLocalizer1: TNLSLocalizer;
+    StatusBar1: TStatusBar;
+    ToolBar1: TToolBar;
+    ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
+    ToolButton3: TToolButton;
+    ToolButton5: TToolButton;
+    ToolButton7: TToolButton;
+    ImageList1: TImageList;
+    DBGridEh1: TDBGridEh;
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure ToolButton1Click(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure ToolButton3Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure ToolButton7Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  frmCorrectorCardPer: TfrmCorrectorCardPer;
+
+  procedure InitPlugin(S:String);export;
+
+implementation
+
+{$R *.DFM}
+
+uses DMCorrectorCardPerImpl,
+     FrmCardTrRestsImpl,FrmCardInterestsImpl,
+     CommonDecls,sbsystem;
+
+procedure InitPlugin(S:String);export;
+begin
+   frmCorrectorCardPer.ShowModal;
+end;
+  exports
+    InitPlugin;
+
+procedure TfrmCorrectorCardPer.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+   Resize := False;
+end;
+
+procedure TfrmCorrectorCardPer.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+   if ord(Key) = VK_ESCAPE then close
+end;
+
+procedure TfrmCorrectorCardPer.FormCreate(Sender: TObject);
+begin
+   DMCorrectorCardPer := TDMCorrectorCardPer.Create(Self);
+   FrmCardTrRests  := TFrmCardTrRests.Create(Self);
+   FrmCardInterests := TFrmCardInterests.Create(Self);
+end;
+
+procedure TfrmCorrectorCardPer.FormDestroy(Sender: TObject);
+begin
+  DMCorrectorCardPer.Free;
+  FrmCardTrRests.Free;
+  FrmCardInterests.Free;
+end;
+
+procedure TfrmCorrectorCardPer.ToolButton1Click(Sender: TObject);
+var TrID :Integer;
+begin
+   with DMCorrectorCardPer,Rests do
+   begin
+      TrID := Tranches.FieldByName('ID').ASInteger;
+      if Active then Close;
+      SetVariable('TrID',TrID);
+      Open;
+   end;
+   FrmCardTrRests.ShowModal;
+end;
+
+procedure TfrmCorrectorCardPer.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+   with DMCorrectorCardPer,Tranches do
+        CloseAll;
+end;
+
+procedure TfrmCorrectorCardPer.ToolButton3Click(Sender: TObject);
+var TrID :Integer;
+begin
+   with DMCorrectorCardPer,Int do
+   begin
+      TrID := Tranches.FieldByName('ID').ASInteger;
+      if Active then Close;
+      SetVariable('TrID',TrID);
+      Open;
+   end;
+   FrmCardInterests.ShowModal;
+end;
+
+procedure TfrmCorrectorCardPer.FormShow(Sender: TObject);
+begin
+   with DMCorrectorCardPer,Tranches do
+   begin
+      if Active then CloseAll;
+      SetVariable('CrdID',Get_SelectedCrdID);
+      Open;
+   end;
+end;
+
+procedure TfrmCorrectorCardPer.ToolButton7Click(Sender: TObject);
+begin
+   Close;
+end;
+
+initialization
+ frmCorrectorCardPer := TfrmCorrectorCardPer.Create(CommonApplication);
+
+end.

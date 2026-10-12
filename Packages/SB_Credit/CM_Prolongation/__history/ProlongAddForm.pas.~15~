@@ -1,0 +1,222 @@
+﻿unit ProlongAddForm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, NLSDialogs,
+  NLSLocalizer, ComCtrls, StdCtrls, Mask, DBCtrlsEh, CMCurrencyEdit, Buttons;
+
+type
+  TfrmProlongAdd = class(TForm)
+    GroupBox1: TGroupBox;
+    DTPProlongDate: TDateTimePicker;
+    GroupBox2: TGroupBox;
+    DBDateTimeEditEh1: TDBDateTimeEditEh;
+    GroupBox3: TGroupBox;
+    CheckBox1: TCheckBox;
+    Label1: TLabel;
+    ButtonOK: TButton;
+    GroupBox4: TGroupBox;
+    Label2: TLabel;
+    CheckBox2: TCheckBox;
+    GroupBox5: TGroupBox;
+    Label3: TLabel;
+    Label4: TLabel;
+    TrancheSumEdit: TCMCurrencyEdit;
+    CMCurrencyEdit1: TCMCurrencyEdit;
+    BitBtn1: TBitBtn;
+    BitBtn2: TBitBtn;
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+    procedure FormShow(Sender: TObject);
+    procedure CheckBox1Click(Sender: TObject);
+    procedure CheckBox2Click(Sender: TObject);
+    procedure BitBtn1Click(Sender: TObject);
+    procedure BitBtn2Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  frmProlongAdd: TfrmProlongAdd;
+
+implementation
+
+uses ProlongDataModuleImpl, SbSystem, CommonDecls;
+
+{$R *.DFM}
+
+procedure TfrmProlongAdd.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+  if Ord(Key) = VK_ESCAPE then
+    ModalResult := mrCancel
+end;
+
+procedure TfrmProlongAdd.BitBtn2Click(Sender: TObject);
+begin
+close
+end;
+
+procedure TfrmProlongAdd.CheckBox1Click(Sender: TObject);
+begin
+if CheckBox1.Checked then
+ DTPProlongDate.Enabled:=true
+ else
+ DTPProlongDate.Enabled:=false
+end;
+
+procedure TfrmProlongAdd.CheckBox2Click(Sender: TObject);
+begin
+if CheckBox2.Checked then
+begin
+ CMCurrencyEdit1.Enabled:=true  ;
+ TrancheSumEdit.Enabled:=true ;
+end
+ else
+ begin
+ CMCurrencyEdit1.Enabled:=false  ;
+ TrancheSumEdit.Enabled:=false ;
+ end;
+end;
+
+procedure TfrmProlongAdd.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+  Resize := False;
+end;
+
+procedure TfrmProlongAdd.FormShow(Sender: TObject);
+begin
+  DTPProlongDate.DateTime := ProlongDataMod.CreditInfo.FieldByName('DUEDATE').AsDateTime;
+end;
+
+procedure TfrmProlongAdd.BitBtn1Click(Sender: TObject);
+resourcestring
+  rsTransactionsWillProcessed = 'Kredit tranşı ...';
+  rsInvalidDate = 'Düzgün tarixi daxil edin !';
+var
+  OpDate, CrdCloseDate, ProlongDate : TDateTime;
+  CrdID : Integer;
+  CustID : Integer;
+ hes, CustAccID : Integer;
+    TrchDate : TDateTime;
+    TrchAmount : Real;
+    CommitTranche : Boolean;
+begin
+
+  OpDate := Get_CurrentDate;
+  ProlongDate := Integer(Trunc(DTPProlongDate.DateTime));
+  CrdCloseDate := ProlongDataMod.CreditInfo.FieldByName('DUEDATE').AsDateTime;
+  CrdID := Get_SelectedCrdID;
+if CheckBox1.Checked then
+ begin
+  if ProlongDate <= CrdCloseDate then
+  exit;
+
+ end;
+  if CheckBox2.Checked then
+ begin
+ if (CMCurrencyEdit1.Value=0) or (TrancheSumEdit.Value=0) then
+   begin
+   showmessage('Öhdəlik məbləği və tranş məbləği mütləq olmalıdir!');
+   exit;
+   end;
+  if (CMCurrencyEdit1.Value<TrancheSumEdit.Value) then
+   begin
+   showmessage('Tranş məbləği öhdəlik məbləğindən böyük ola bilməz!!');
+   exit;
+   end;
+
+   with ProlongDataMod.OracleDataSet1 do
+   begin
+   if Active then
+   close;
+    SetVariable('OBLIGATION',CMCurrencyEdit1.Value);
+    SetVariable('creditid',CrdID);
+   Open;
+    Session.Commit;
+    with ProlongDataMod do
+  begin
+    with CreditInfo do
+    begin
+      SetVariable('ID',CrdID);
+      Open;
+      CustID := FieldByName('BoorowerID').AsInteger;
+    end;
+
+    with CustAccount do
+    begin
+      SetVariable('CreditID',CrdID);
+      Open;
+      CustAccID := FieldByName('BOOROWERACCID').AsInteger;
+    end;
+
+    with TrancheAccounts do
+    begin
+      SetVariable('KLI_ID',CustID);
+      Open;
+      if Locate('AccID',CustAccID,[]) then
+        hes := CustAccID
+    end;
+    end;
+  TrchDate :=ProlongDataMod.OracleDataSet2.FieldByName('tek_dat').AsDateTime;
+  CustAccID := hes ;
+  TrchAmount := TrancheSumEdit.Value;
+
+  with ProlongDataMod do
+  CM_TRANCHE.CallProcedure('Tranche_Add',[
+     'p_CreditID' ,CrdID ,
+     'p_TrchDate' ,TrchDate ,
+     'p_CustAccID' ,CustAccID ,
+     'p_TrchAmount' ,TrchAmount ,
+     'p_ProcessTransactions' ,true
+
+  ]);
+
+  try
+
+    CommitTranche := TrDelayed_Show(Self,rsTransactionsWillProcessed);
+
+    Update;
+
+    with ProlongDataMod do
+    CM_TRANCHE.CallProcedure('CommitTranche',[
+       'DoCommit' , CommitTranche
+    ]);
+
+    if CommitTranche then
+    Self.ModalResult := mrOk;
+    Self.Update;
+
+  except
+
+    with ProlongDataMod do
+    CM_TRANCHE.CallProcedure('CommitTranche',[
+       'DoCommit' , False
+    ]);
+
+    raise;
+
+  end;
+   end;
+ end;
+  with ProlongDataMod.CM_PROLONGATION do
+      CallProcedure('Prolongation_Add',[
+       CrdID ,
+       OpDate ,
+       ProlongDate ,
+       CMCurrencyEdit1.Value,
+       TrchAmount
+      ]);
+      with ProlongDataMod do
+      begin
+        ProlongsData.Refresh;
+        CreditInfo.Refresh;
+      end;
+close;
+end;
+
+end.

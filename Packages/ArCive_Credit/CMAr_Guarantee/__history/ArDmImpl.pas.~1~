@@ -1,0 +1,231 @@
+Unit DmImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, nlsDialogs,
+  Db, OracleData, Oracle;
+
+type
+  TGurDm = class(TDataModule)
+    MainDSrc: TDataSource;
+    Pledges: TOracleDataSet;
+    DataSrcPledges: TDataSource;
+    pledgsortsDatSrc: TDataSource;
+    Guarante: TOraclePackage;
+    CompanyDSet: TOracleDataSet;
+    CompanySrc: TDataSource;
+    OracleQuery1: TOracleQuery;
+    maxid: TOracleDataSet;
+    maxidMID: TFloatField;
+    BaliSrc: TDataSource;
+    BAliDSet: TOracleDataSet;
+    BAliDSetCREDITID: TFloatField;
+    BAliDSetCARDID: TFloatField;
+    BAliDSetGUARANTORNAME: TWideStringField;
+    BAliDSetGUARANTORID: TWideStringField;
+    BAliDSetGUARANTORSALARY: TWideStringField;
+    BAliDSetZAMINWORK1: TWideStringField;
+    BAliDSetZAMINADRES1: TWideStringField;
+    BAliDSetZAMINTEL1: TWideStringField;
+    BAliDSetZMPASPYER1: TWideStringField;
+    BAliDSetZMPASPDAT1: TDateTimeField;
+    BAliDSetZMTELMOB1: TWideStringField;
+    Credit: TOracleDataSet;
+    CreditCREDITID: TFloatField;
+    InsSrc: TDataSource;
+    MainDSet: TOracleDataSet;
+    OracleDataSet1: TOracleDataSet;
+    MainDSetCREDITID: TFloatField;
+    MainDSetPLEDGEID: TFloatField;
+    MainDSetPLEDGENAME: TWideStringField;
+    MainDSetHOLDERNAME: TWideStringField;
+    MainDSetHOLDERADDRESS: TWideStringField;
+    MainDSetANYINFOTODISTING: TWideStringField;
+    MainDSetREGISTRYNO: TWideStringField;
+    MainDSetREGISTRYAGENCY: TWideStringField;
+    MainDSetREGISTRYDATE: TDateTimeField;
+    MainDSetPLEDGEINUSE: TFloatField;
+    MainDSetPLEDGEINSURANT: TFloatField;
+    MainDSetINSURANCEAGENCY: TFloatField;
+    MainDSetINSURANCEAMOUNT: TFloatField;
+    MainDSetINSURANCEDATE: TDateTimeField;
+    MainDSetPLEDGEPRICETORPAQHA: TFloatField;
+    MainDSetPLEDGEPRICEEVKV: TFloatField;
+    MainDSetINSURANCERIGHT: TFloatField;
+    MainDSetINSURANCEID: TWideStringField;
+    MainDSetPLEDGEID_P: TFloatField;
+    MainDSetGQNAME: TWideStringField;
+    MainDSetGQPASPNUM: TWideStringField;
+    MainDSetGQPASPYER: TWideStringField;
+    MainDSetGQPASPDATE: TDateTimeField;
+    MainDSetGQADRESS: TWideStringField;
+    MainDSetREYSTER: TWideStringField;
+    MainDSetSERYAMH: TWideStringField;
+    MainDSetGQTEL: TWideStringField;
+    MainDSetPLEDGEPRICE: TFloatField;
+    MainDSetPLEDGSORTS: TFloatField;
+    MainDSetCOMPANY: TFloatField;
+    MainDSetCOMPANYDAT: TDateTimeField;
+    MainDSetCOMPANYEXPERT: TWideStringField;
+    MainDSetCARDID: TFloatField;
+    DataSrcOUTCollatralAccs: TDataSource;
+    OUTCollatralAccs: TOracleDataSet;
+    MainDSetOUTCOLLATERALACCID: TFloatField;
+    MainDSetDECASTATUS: TFloatField;
+    DSetPLd: TOracleDataSet;
+    PledgesID: TFloatField;
+    PledgesTYPECODE: TWideStringField;
+    PledgesDESCRIPTION: TWideStringField;
+    PledgesNEEDPLACEOUT: TFloatField;
+    PledgesTEMID: TFloatField;
+    PledgesPURCODE: TWideStringField;
+    PledgesOUTBAL_CIN: TWideStringField;
+    VillagesDataSet: TOracleDataSet;
+    DistrictsDataSet: TOracleDataSet;
+    DistrictsDataSetID: TFloatField;
+    DistrictsDataSetNAME: TWideStringField;
+    DistrictsDataSetNAME_ENG: TWideStringField;
+    DistrictsDataSrc: TDataSource;
+    VillagesDataSrc: TDataSource;
+    MainDSetBRANCE: TFloatField;
+    MainDSetID: TFloatField;
+    MainDSetCUSTID: TFloatField;
+    MainDSetDAT: TDateTimeField;
+    MainDSetTESVIRI: TWideStringField;
+    MainDSetGQTELWORK: TWideStringField;
+    MainDSetGQTELHOME: TWideStringField;
+    MainDSetGQTELMOB: TWideStringField;
+    MainDSetGQVILLAGE: TFloatField;
+    MainDSetGQCITY: TFloatField;
+    MainDSetNUMBEROFGUR: TWideStringField;
+    GurSrc: TDataSource;
+    GurOracleData: TOracleDataSet;
+    BAliDSetPINCODE: TWideStringField;
+    DataSrcPersonTypes: TDataSource;
+    PersonTypes: TOracleDataSet;
+    BAliDSetPERSONALTYPE: TFloatField;
+    BAliDSetDATEOFBIRTH: TDateTimeField;
+    BAliDSetCUNTRY: TWideStringField;
+    BAliDSetCITY: TWideStringField;
+    CountrySet: TOracleDataSet;
+    CountrySrc: TDataSource;
+    CitySet: TOracleDataSet;
+    CitySrc: TDataSource;
+    BAliDSetFACTADRES: TWideStringField;
+    pledgsorts: TOracleDataSet;
+    pledgsortsID: TFloatField;
+    pledgsortsNAME: TWideStringField;
+    pledgsortsPLDID: TFloatField;
+    pledgsortsHESABKOD: TWideStringField;
+    pledgsortsOUTBAL_CIN: TWideStringField;
+    procedure oracMainDSet1AfterOpen(DataSet: TDataSet);
+    procedure DataModuleCreate(Sender: TObject);
+    procedure DataModuleDestroy(Sender: TObject);
+    procedure BAliDSetAfterOpen(DataSet: TDataSet);
+    procedure MainDSetAfterOpen(DataSet: TDataSet);
+    procedure MainDSetAfterScroll(DataSet: TDataSet);
+    procedure MainDSetCalcFields(DataSet: TDataSet);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  GurDm: TGurDm;
+
+implementation
+
+uses GuaranteImpl,sboapiDataModuleImpl;
+
+{$R *.DFM}
+
+
+procedure TGurDm.BAliDSetAfterOpen(DataSet: TDataSet);
+var index: integer;
+begin
+   with DataSet, FrmGuarante.Panel do
+begin
+    Tabs.Clear;
+    for Index := 0 to RecordCount-1 do
+      Tabs.Add(Format('Zamin ¹%d ', [Index]));
+    if recordcount=0 then tabs.Add ((Format('Zamin ¹%d ', [0]))) ;
+    First;
+  end;
+
+
+end;
+
+procedure TGurDm.DataModuleCreate(Sender: TObject);
+begin
+   Pledges.Open;
+   pledgsorts.Open ;
+   CompanyDSet.Open;
+  OracleDataSet1.Open ;
+  DistrictsDataSet.open;
+  VillagesDataSet.Open;
+  GurOracleData.Open;
+  PersonTypes.Open;
+  CountrySet.Open;
+  CitySet.Open;
+  end;
+
+procedure TGurDm.DataModuleDestroy(Sender: TObject);
+begin
+  Pledges.close;
+  pledgsorts.Close ;
+  CompanyDSet.CloseAll;
+  OracleDataSet1.CloseAll;
+  DistrictsDataSet.CloseAll;
+  VillagesDataSet.CloseAll;
+  GurOracleData.CloseAll;
+  PersonTypes.Close  ;
+  CountrySet.close;
+  CitySet.close;
+end;
+
+procedure TGurDm.oracMainDSet1AfterOpen(DataSet: TDataSet);
+var index: integer;
+begin
+   with DataSet, FrmGuarante.Panel2 do
+begin
+    Tabs.Clear;
+    for Index := 0 to RecordCount-1 do
+      Tabs.Add(Format('Girov ¹%d ', [Index]));
+    if recordcount=0 then tabs.Add ((Format('Girov  ¹%d ', [0]))) ;
+    First;
+  end;
+end;
+
+procedure TGurDm.MainDSetAfterOpen(DataSet: TDataSet);
+var index: integer;
+begin
+   with DataSet, FrmGuarante.Panel2 do
+begin
+    Tabs.Clear;
+    for Index := 0 to RecordCount-1 do
+  //  ShowMessage(tabs.);
+      Tabs.Add(Format('Girov  ¹%d ', [Index]));
+    if recordcount=0 then tabs.Add ((Format('Girov ¹%d ', [0]))) ;
+    First;
+  end;
+end;
+
+procedure TGurDm.MainDSetAfterScroll(DataSet: TDataSet);
+begin
+//FrmGuarante.savechg;
+
+if MainDSet.fieldbyname('DECASTATUS').asinteger=1 then
+ FrmGuarante.CheckBox1.Checked:=true
+ else
+  FrmGuarante.CheckBox1.Checked:=false;
+  FrmGuarante.InUse_rg.ItemIndex:=MainDSet.FieldByName('PLEDGEINUSE').AsInteger;
+end;
+
+procedure TGurDm.MainDSetCalcFields(DataSet: TDataSet);
+begin
+// ShowMessage('asas1');
+end;
+
+end.

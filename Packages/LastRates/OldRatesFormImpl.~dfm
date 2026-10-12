@@ -1,0 +1,440 @@
+object FrmOldCourses: TFrmOldCourses
+  Left = 265
+  Top = 126
+  Width = 775
+  Height = 375
+  Caption = 'Old Courses'
+  Color = clBtnFace
+  Font.Charset = RUSSIAN_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Arial AzLat'
+  Font.Style = []
+  OldCreateOrder = False
+  OnCreate = ActiveFormCreate
+  OnDestroy = ActiveFormDestroy
+  PixelsPerInch = 96
+  TextHeight = 12
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 767
+    Height = 348
+    Align = alClient
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 0
+    object DBGrid1: TDBGrid
+      Left = 1
+      Top = 1
+      Width = 765
+      Height = 295
+      Align = alClient
+      DataSource = DSCourses
+      Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit]
+      TabOrder = 0
+      TitleFont.Charset = RUSSIAN_CHARSET
+      TitleFont.Color = clWindowText
+      TitleFont.Height = -11
+      TitleFont.Name = 'Azl Sans Serif'
+      TitleFont.Style = []
+      Columns = <
+        item
+          Expanded = False
+          FieldName = 'DAT'
+          Title.Caption = 'Тарих'
+          Title.Color = clNavy
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -13
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = []
+          Width = 80
+          Visible = True
+        end
+        item
+          Alignment = taCenter
+          Color = clSilver
+          Expanded = False
+          FieldName = 'VAL_NAME'
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clNavy
+          Font.Height = -11
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = []
+          Title.Alignment = taCenter
+          Title.Caption = '$'
+          Title.Color = clNavy
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -13
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = []
+          Width = 30
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'VAL_KOD'
+          Title.Caption = 'Валйутанын коду'
+          Title.Color = clNavy
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -13
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = []
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'OSTAT'
+          Title.Caption = 'Рясми мязяння'
+          Title.Color = clNavy
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -13
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = []
+          Width = 100
+          Visible = True
+        end>
+    end
+    object Panel2: TPanel
+      Left = 1
+      Top = 296
+      Width = 765
+      Height = 51
+      Align = alBottom
+      TabOrder = 1
+      object GroupBox1: TGroupBox
+        Left = 1
+        Top = 2
+        Width = 265
+        Height = 44
+        Caption = 'Сцрятли ахтарыш'
+        TabOrder = 0
+        object EOstat: TEdit
+          Left = 186
+          Top = 16
+          Width = 54
+          Height = 21
+          TabOrder = 0
+          OnChange = EOstatChange
+        end
+        object EDat: TEdit
+          Left = 8
+          Top = 16
+          Width = 54
+          Height = 21
+          TabOrder = 1
+          OnChange = EDatChange
+        end
+        object EVal_kod: TEdit
+          Left = 127
+          Top = 16
+          Width = 54
+          Height = 21
+          TabOrder = 2
+          OnChange = EVal_kodChange
+        end
+        object EVal_name: TEdit
+          Left = 67
+          Top = 16
+          Width = 54
+          Height = 21
+          TabOrder = 3
+          OnChange = EVal_nameChange
+        end
+      end
+      object GroupBox2: TGroupBox
+        Left = 271
+        Top = 3
+        Width = 112
+        Height = 43
+        Caption = 'Сыраламаг'
+        TabOrder = 1
+        object ComboBox1: TComboBox
+          Left = 6
+          Top = 15
+          Width = 101
+          Height = 21
+          ItemHeight = 13
+          TabOrder = 0
+          OnChange = ComboBox1Change
+          Items.Strings = (
+            'Валйутанын ады'
+            'Валйутанын коду'
+            'Валйутанын мязянняси'
+            'Тарих')
+        end
+      end
+      object GroupBox3: TGroupBox
+        Left = 387
+        Top = 3
+        Width = 193
+        Height = 43
+        Caption = 'Филтрасийа'
+        TabOrder = 2
+        object DateTimePicker: TDateTimePicker
+          Left = 8
+          Top = 14
+          Width = 88
+          Height = 21
+          CalAlignment = dtaLeft
+          Date = 37557.4270553009
+          Time = 37557.4270553009
+          DateFormat = dfShort
+          DateMode = dmComboBox
+          Kind = dtkDate
+          ParseInput = False
+          TabOrder = 0
+          OnChange = DateTimePickerChange
+        end
+        object ComboBox3: TComboBox
+          Left = 101
+          Top = 13
+          Width = 85
+          Height = 21
+          ItemHeight = 13
+          TabOrder = 1
+          Text = ' '
+          OnChange = ComboBox3Change
+        end
+      end
+      object BitBtn1: TBitBtn
+        Left = 587
+        Top = 6
+        Width = 85
+        Height = 42
+        Caption = 'Там мялумат'
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -13
+        Font.Name = 'Arial AzLat'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 3
+        OnClick = BitBtn1Click
+        Glyph.Data = {
+          42010000424D4201000000000000760000002800000011000000110000000100
+          040000000000CC00000000000000000000001000000010000000000000000000
+          BF0000BF000000BFBF00BF000000BF00BF00BFBF0000C0C0C000808080000000
+          FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00777777777777
+          7777700000007777777777777777700000007777777774F77777700000007777
+          7777444F77777000000077777774444F777770000000700000444F44F7777000
+          000070FFF444F0744F777000000070F8884FF0774F777000000070FFFFFFF077
+          74F77000000070F88888F077774F7000000070FFFFFFF0777774F000000070F8
+          8777F07777774000000070FFFF00007777777000000070F88707077777777000
+          000070FFFF007777777770000000700000077777777770000000777777777777
+          777770000000}
+        Layout = blGlyphTop
+      end
+    end
+  end
+  object ODSCourses: TOracleDataSet
+    SQL.Strings = (
+      'Select '
+      '    O.val_kod,'
+      '    O.ostat,'
+      '    O.dat,'
+      '    A.val_name '
+      'From '
+      '   Operkurs O,'
+      '   Avalute A'
+      'Where O.val_kod=A.valute'
+      'Order by O.dat,A.Valute')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = False
+    Active = False
+    Left = 424
+    Top = 64
+    object ODSCoursesVAL_KOD: TIntegerField
+      FieldName = 'VAL_KOD'
+      Required = True
+    end
+    object ODSCoursesOSTAT: TFloatField
+      FieldName = 'OSTAT'
+      DisplayFormat = '#,##.00'
+    end
+    object ODSCoursesDAT: TDateTimeField
+      FieldName = 'DAT'
+      Required = True
+    end
+    object ODSCoursesVAL_NAME: TStringField
+      FieldName = 'VAL_NAME'
+      Size = 10
+    end
+  end
+  object DSCourses: TDataSource
+    DataSet = ODSCourses
+    Left = 392
+    Top = 64
+  end
+  object ODSFiltr: TOracleDataSet
+    SQL.Strings = (
+      'Select'
+      '    O.val_kod,'
+      '    O.ostat,'
+      '    O.dat,'
+      '    A.val_name '
+      'From '
+      '   Operkurs O,'
+      '   Avalute A'
+      'Where O.val_kod=A.valute and O.dat=:VDate'
+      'Order by O.ostat'
+      ' ')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    Variables.Data = {0300000001000000060000003A56444154450C0000000000000000000000}
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = False
+    Active = False
+    Left = 464
+    Top = 64
+  end
+  object DSFiltr: TDataSource
+    DataSet = ODSFiltr
+    Left = 504
+    Top = 64
+  end
+  object ODSValute: TOracleDataSet
+    SQL.Strings = (
+      'Select '
+      '     *'
+      'From'
+      '   Avalute ')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = False
+    Active = False
+    Left = 544
+    Top = 64
+  end
+  object ODSMoney: TOracleDataSet
+    SQL.Strings = (
+      'Select'
+      '    O.val_kod,'
+      '    O.ostat,'
+      '    O.dat,'
+      '    A.val_name '
+      'From '
+      '   Operkurs O,'
+      '   Avalute A'
+      'Where O.val_kod=A.valute and A.Val_name=:Money'
+      ' ')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    Variables.Data = {0300000001000000060000003A4D4F4E4559050000000000000000000000}
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = False
+    Active = False
+    Left = 392
+    Top = 104
+  end
+  object DSMoney: TDataSource
+    DataSet = ODSMoney
+    Left = 432
+    Top = 104
+  end
+  object OraclePackage: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    Debug = False
+    PackageName = 'SB_MAIN_FACILITIES'
+    ParameterMode = pmPositional
+    Cursor = crDefault
+    Optimize = True
+    Left = 296
+    Top = 72
+  end
+end

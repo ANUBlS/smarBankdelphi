@@ -1,0 +1,118 @@
+unit DataModuleBalance;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, OracleData, Oracle;
+
+type
+  TDataModulBalance = class(TDataModule)
+    DataBalance: TDataSource;
+    Balance: TOracleDataSet;
+    DataAccount: TDataSource;
+    Account: TOracleDataSet;
+    DataTransaction: TDataSource;
+    Transaction: TOracleDataSet;
+    DataOperator: TDataSource;
+    Operator: TOracleDataSet;
+    DataCurrency: TDataSource;
+    OperationType: TOracleQuery;
+    BalanceBALANCEACCOUNT: TFloatField;
+    BalanceFIRSTACTIVE: TFloatField;
+    BalanceFIRSTPASSIVE: TFloatField;
+    BalanceDTURNOVER: TFloatField;
+    BalanceCTURNOVER: TFloatField;
+    BalanceLASTACTIVE: TFloatField;
+    BalanceLASTPASSIVE: TFloatField;
+    PeriodData: TOracleDataSet;
+    SysDat: TOracleDataSet;
+    Currency: TOracleDataSet;
+    AccountACCOUNTID: TFloatField;
+    AccountACCNO: TWideStringField;
+    AccountCURRENCYID: TIntegerField;
+    AccountBRANCHID: TIntegerField;
+    AccountBALANCENO: TFloatField;
+    AccountBEGINACTIVE: TFloatField;
+    AccountBEGINPASSIVE: TFloatField;
+    AccountDTURNOVER: TFloatField;
+    AccountCTURNOVER: TFloatField;
+    AccountENDACTIVE: TFloatField;
+    AccountENDPASSIVE: TFloatField;
+    TransactionID: TFloatField;
+    TransactionOPERATORID: TFloatField;
+    TransactionOPERATIONTYPE: TIntegerField;
+    TransactionDAT: TDateTimeField;
+    TransactionDEBT: TFloatField;
+    TransactionDEBTACC: TWideStringField;
+    TransactionDVALNAME: TWideStringField;
+    TransactionKREDIT: TFloatField;
+    TransactionCREDITACC: TWideStringField;
+    TransactionCVALNAME: TWideStringField;
+    TransactionAMMOUNT: TFloatField;
+    TransactionAMMOUNT_C: TFloatField;
+    TransactionLAMMOUNT: TFloatField;
+    TransactionNAME: TWideStringField;
+    AccountNAME: TWideStringField;
+    TransactionUSERNAME: TWideStringField;
+    procedure OperationTypeThreadRecord(Sender: TOracleQuery);
+    procedure BalanceAfterScroll(DataSet: TDataSet);
+    procedure AccountAfterScroll(DataSet: TDataSet);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  DataModulBalance: TDataModulBalance;
+
+implementation
+
+uses sboapiDataModuleImpl, BalanceAnalysImpl;
+
+{$R *.DFM}
+
+procedure TDataModulBalance.OperationTypeThreadRecord(
+  Sender: TOracleQuery);
+begin
+ with FormBalanceAnalys, CBBranches, Items do
+  begin
+   Add(Sender.Field('name'));
+   Checked[Count-1]:=True;
+   TStringList(Pointer(CBBranches.Tag)^).Add(Sender.Field('ID'));
+  end;
+end;
+
+procedure TDataModulBalance.BalanceAfterScroll(DataSet: TDataSet);
+var
+   BalanceNo: string;
+begin
+ BalanceNo:=DataSet.FieldByName('BalanceAccount').AsString;
+ with Account do
+  begin
+   Filtered :=False;
+   Filter :='BalanceNo = '+BalanceNo;
+   Filtered :=True;
+  end;
+end;
+
+procedure TDataModulBalance.AccountAfterScroll(DataSet: TDataSet);
+var
+   AccountID: string;
+begin
+ with DataSet.FieldByName('AccountID') do
+  if IsNull then
+   AccountID :='-1'
+  else
+   AccountID :=AsString; 
+
+ with Transaction do
+  begin
+   Filtered :=False;
+   Filter :='(Debt = ' + AccountID + ') OR (' + 'Kredit = ' + AccountID + ')';
+   Filtered :=True;
+  end;
+end;
+
+end.

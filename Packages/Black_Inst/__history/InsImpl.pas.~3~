@@ -1,0 +1,203 @@
+unit InsImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, nlsDialogs,
+  StdCtrls, ExtCtrls, Buttons, ComCtrls, DBCtrls, Mask, CMDBSearchEdit,
+  DBCtrlsEh, DBLookupEh;
+
+type
+  TInsForm = class(TForm)
+    Panel1: TPanel;
+    GroupBox1: TGroupBox;
+    Panel2: TPanel;
+    Panel3: TPanel;
+    Panel4: TPanel;
+    Label1: TLabel;
+    Edit1: TEdit;
+    Label2: TLabel;
+    Edit2: TEdit;
+    Label3: TLabel;
+    GroupBox2: TGroupBox;
+    Panel5: TPanel;
+    Label4: TLabel;
+    DBLookupComboBox1: TDBLookupComboBox;
+    Panel6: TPanel;
+    Label5: TLabel;
+    Panel7: TPanel;
+    Label6: TLabel;
+    Edit5: TEdit;
+    Panel8: TPanel;
+    Label7: TLabel;
+    Edit6: TEdit;
+    Panel9: TPanel;
+    Label8: TLabel;
+    Edit7: TEdit;
+    DateTimePicker1: TDateTimePicker;
+    Panel10: TPanel;
+    Label9: TLabel;
+    Edit4: TEdit;
+    GroupBox3: TGroupBox;
+    Panel11: TPanel;
+    Label11: TLabel;
+    DBLookupComboBox2: TDBLookupComboBox;
+    Panel12: TPanel;
+    Label12: TLabel;
+    Panel13: TPanel;
+    Label13: TLabel;
+    Edit8: TEdit;
+    BitBtn1: TBitBtn;
+    BitBtn2: TBitBtn;
+    Label14: TLabel;
+    Label15: TLabel;
+    DBLookupComboBox3: TDBLookupComboBox;
+    DBEdit1: TDBEdit;
+    DBLookupComboBox4: TDBLookupComboBox;
+    Panel14: TPanel;
+    Edit3: TEdit;
+    Label10: TLabel;
+    Label16: TLabel;
+    Label17: TLabel;
+    Label18: TLabel;
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+    procedure BitBtn1Click(Sender: TObject);
+    procedure DBEdit1Enter(Sender: TObject);
+    procedure BitBtn2Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  InsForm: TInsForm;
+
+implementation
+uses DmBlackImpl,SBTranslateProc;
+{$R *.DFM}
+
+procedure TInsForm.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+resize:=false
+end;
+
+procedure TInsForm.FormCreate(Sender: TObject);
+begin
+SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TInsForm.BitBtn1Click(Sender: TObject);
+var
+//name:integer;
+dat:Tdatetime;
+ doc_type:string;
+begin
+ //name:=DmBlack.Doctype.fieldbyname('ID').asinteger;
+dat:= integer(trunc(DateTimePicker1.DateTime));
+ //ShowMessage(inttostr(name));
+ if Edit1.text='' then
+ begin
+ ShowMessage('ћцшт€ринин адыны дахил един!');
+ exit;
+ end else
+ if edit2.Text='' then
+ begin
+ showMessage('ћцшт€ринин сойадыны дахил един!');
+ exit;
+ end else
+ if edit3.text='' then
+ begin
+ showmessage('ћцшт€ринин пинкодуну дахил един! ');
+ exit;
+ end;
+
+ if x=1 then begin
+ with DmBlack   do
+
+OraclePackage1.CallProcedure('add_cust_black',[
+                                                      'p_name',edit1.text,
+                                                      'p_lastname',edit2.text,
+                                                      'p_middlename',edit4.text,
+                                                      'p_doc_type',Doctype.fieldbyname('ID').asinteger,
+                                                      'p_doc_serie',edit7.text,
+                                                      'p_doc_num',edit6.text,
+                                                      'p_citizenship',Contry.fieldbyname('ID').asinteger,
+                                                      'p_adrs_state',Contry.fieldbyname('ID').asinteger,
+                                                      'p_adrs_city',CITIES.fieldbyname('ID').asinteger,
+                                                      'p_address',edit8.text,
+                                                      'p_doc_date',dat,
+                                                      'p_doc_organ',edit5.text,
+                                                      'p_gender',Sex.fieldbyname('ID').asinteger,
+                                                      'p_doc_pin',edit3.text
+                                                       ]);
+
+
+
+ DmBlack.MainDSet.Refresh;
+ edit1.text:='';
+ edit2.text:='';
+ edit3.text:='';
+ edit4.text:='';
+ edit5.text:='';
+ edit6.text:='';
+ edit7.text:='';
+ edit8.text:='';
+ DBLookupComboBox3.KeyValue:='';
+ DBLookupComboBox2.KeyValue:='';
+ DBLookupComboBox1.KeyValue:='';
+ DBLookupComboBox4.KeyValue:='';
+ DBEdit1.Text:='';
+ close;
+end else
+begin
+
+   with DmBlack   do
+     OraclePackage1.CallProcedure('upd_cust_black',['p_id',DmBlack.MainDSet.fieldbyname('id').asinteger,
+                                                      'p_name',edit1.text,
+                                                      'p_lastname',edit2.text,
+                                                      'p_middlename',edit4.text,
+                                                      'p_doc_type',Doctype.fieldbyname('ID').asinteger,
+                                                      'p_doc_serie',edit7.text,
+                                                      'p_doc_num',edit6.text,
+                                                      'p_citizenship',Contry.fieldbyname('ID').asinteger,
+                                                      'p_adrs_state',Contry.fieldbyname('ID').asinteger,
+                                                      'p_adrs_city',CITIES.fieldbyname('ID').asinteger,
+                                                      'p_address',edit8.text,
+                                                      'p_doc_date',dat,
+                                                      'p_doc_organ',edit5.text,
+                                                      'p_gender',Sex.fieldbyname('ID').asinteger,
+                                                      'p_doc_pin',edit3.text
+                                                       ]);
+
+
+
+ DmBlack.MainDSet.Refresh;
+ close;
+ end;
+    end;
+procedure TInsForm.DBEdit1Enter(Sender: TObject);
+begin
+// if DBEdit1.text<>'' then
+//DBLookupComboBox3.text:=DmBlack.Contry.fieldbyname('cntr_name').asstring ;
+end;
+
+procedure TInsForm.BitBtn2Click(Sender: TObject);
+begin
+close;
+end;
+
+procedure TInsForm.FormShow(Sender: TObject);
+begin
+if x=1 then
+begin
+DBEdit1.text:='';
+ DateTimePicker1.DateTime:=DmBlack.Sysdat.fieldbyname('tek_dat').asdatetime;
+ end;
+end;
+
+end.

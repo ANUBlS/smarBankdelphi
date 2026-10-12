@@ -1,0 +1,162 @@
+﻿unit UnitAvtoAdd;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, DBCtrlsEh, Mask, ExtCtrls, DB, OracleData, Grids, DBGrids;
+
+type
+  TFormAfto = class(TForm)
+    Panel1: TPanel;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    Label6: TLabel;
+    Label7: TLabel;
+    Label8: TLabel;
+    Label9: TLabel;
+    Label10: TLabel;
+    DBEditEh1: TDBEditEh;
+    DBEditEh2: TDBEditEh;
+    DBEditEh3: TDBEditEh;
+    DBEditEh4: TDBEditEh;
+    DBEditEh5: TDBEditEh;
+    DBEditEh7: TDBEditEh;
+    DBEditEh8: TDBEditEh;
+    DBEditEh10: TDBEditEh;
+    DBDateTimeEditEh5: TDBDateTimeEditEh;
+    DBDateTimeEditEh1: TDBDateTimeEditEh;
+    Panel2: TPanel;
+    Button1: TButton;
+    Button2: TButton;
+    DBGrid1: TDBGrid;
+    ods_avto: TOracleDataSet;
+    dsrc_avto: TDataSource;
+    ods_avtoID: TFloatField;
+    ods_avtoGUAR_ID: TFloatField;
+    ods_avtoAVTO_MODEL: TWideStringField;
+    ods_avtoAVTO_MAKA: TWideStringField;
+    ods_avtoAVTO_TIP: TWideStringField;
+    ods_avtoAVTO_NO: TWideStringField;
+    ods_avtoAVTO_RENG: TWideStringField;
+    ods_avtoAVTO_IL: TDateTimeField;
+    ods_avtoAVTO_MUHER_NO: TWideStringField;
+    ods_avtoAVTO_MUHER_HECM: TWideStringField;
+    ods_avtoAVTO_REGSTR_DAT: TDateTimeField;
+    ods_avtoAVTO_BAN: TWideStringField;
+    Label41: TLabel;
+    Label11: TLabel;
+    procedure Button1Click(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+  private
+
+procedure form_clear;
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormAfto: TFormAfto;
+
+implementation
+  uses DataMGuarantee,sboapiDataModuleImpl,GuaranteeMgrImpl,FormGuarAddlmpl,SBTranslateProc;
+{$R *.dfm}
+
+procedure TFormAfto.Button2Click(Sender: TObject);
+begin
+form_clear;
+close;
+FormGuarAdd.Close;
+
+
+end;
+
+procedure TFormAfto.form_clear;
+begin
+
+DBEditEh1.Clear;
+DBEditEh2.Clear;
+DBEditEh3.Clear;
+DBEditEh4.Clear;
+DBEditEh5.Clear;
+DBEditEh7.Clear;
+DBEditEh8.Clear;
+DBEditEh10.Clear;
+DBDateTimeEditEh5.Clear;
+DBDateTimeEditEh1.Clear;
+end;
+
+
+procedure TFormAfto.Button1Click(Sender: TObject);
+begin
+ if VarIsNull(DBEditEh1.Value) or VarIsEmpty(DBEditEh1.Value) or (Trim(VarToStr(DBEditEh1.Value)) = '') then
+  begin
+  showmessage('Avtomobilin markasını daxil edin  !');
+  exit;
+  end
+ else
+  p_avto_maka := DBEditEh1.Value;
+
+ if VarIsNull(DBEditEh2.Value) or VarIsEmpty(DBEditEh2.Value) or (Trim(VarToStr(DBEditEh2.Value)) = '') then
+  begin
+  showmessage('Avtomobilin modelni daxil edin  !') ;
+  exit;
+  end
+ else
+  p_avto_q_s_no := DBEditEh2.Value;
+
+  p_avto_tip         := VarToStr(DBEditEh3.Value);
+  p_avto_no          := VarToStr(DBEditEh4.Value);
+  p_avto_reng        := VarToStr(DBEditEh5.Value);
+  p_avto_muher_no    := VarToStr(DBEditEh8.Value);
+  p_avto_muher_hecm  := VarToStr(DBEditEh10.Value);
+  p_avto_ban         := VarToStr(DBEditEh7.Value);
+
+ if VarIsNull(DBDateTimeEditEh5.Value) or VarIsEmpty(DBDateTimeEditEh5.Value) then
+    p_avto_il := Null
+  else
+    p_avto_il := DBDateTimeEditEh5.Value;
+
+  if VarIsNull(DBDateTimeEditEh1.Value) or VarIsEmpty(DBDateTimeEditEh1.Value) then
+    p_AVTO_REGSTR_DAT := Null
+  else
+    p_AVTO_REGSTR_DAT := DBDateTimeEditEh1.Value;
+
+
+
+    DataMGuarante.OraclePackage1.CallProcedure(
+      'add_guarantee_avto',
+      [ guarid ,
+        p_avto_q_s_no,      p_avto_maka,
+        p_avto_tip,         p_avto_no,
+        p_avto_reng,        p_avto_il,
+        p_avto_muher_no,    p_avto_muher_hecm,
+        p_AVTO_REGSTR_DAT,  p_avto_ban
+      ]
+    );
+
+     if guarid > 0 then
+  begin
+    with ods_avto do
+    begin
+      DisableControls;
+      try
+        Close;
+         SetVariable('v_id',guarid);
+        Open;
+        Locate('ID', guarid, []);
+      finally
+        EnableControls;
+      end;
+    end;
+    ShowMessage('Əməliyyat uğurla tamamlandı!');
+
+  end;
+  form_clear;
+end;
+
+end.

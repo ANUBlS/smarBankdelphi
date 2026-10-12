@@ -1,0 +1,43 @@
+unit MainUnit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, DBGridEhGrouping, GridsEh, DBGridEh, StdCtrls, ExtCtrls;
+
+type
+  TMainForm = class(TForm)
+    Panel1: TPanel;
+    Panel2: TPanel;
+    Panel3: TPanel;
+    Memo1: TMemo;
+    DBGridEh1: TDBGridEh;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  MainForm: TMainForm;
+   procedure InitPlugin(s:string);export;
+
+implementation
+   uses  sboapiDataModuleImpl,CommonDecls;
+
+
+procedure InitPlugin(s:string);export;
+begin
+   MainForm.ShowModal;
+end;
+exports
+     InitPlugin;
+
+
+initialization
+
+ MainForm := TMainForm.Create(Application);
+{$R *.dfm}
+
+end.

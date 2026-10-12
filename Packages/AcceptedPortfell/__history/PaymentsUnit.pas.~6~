@@ -1,0 +1,78 @@
+﻿unit PaymentsUnit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Menus, ImgList, ComCtrls, StdCtrls, Grids, DBGrids, ExtCtrls;
+
+type
+  TPayments = class(TForm)
+    Label4: TLabel;
+    Panel2: TPanel;
+    Gridin: TDBGrid;
+    Button2: TButton;
+    DateTimePicker1: TDateTimePicker;
+    DateTimePicker2: TDateTimePicker;
+    swImageList2: TImageList;
+    PopupMenu1: TPopupMenu;
+    paymentdeleter: TMenuItem;
+    procedure Button2Click(Sender: TObject);
+    procedure paymentdeleterClick(Sender: TObject);
+    procedure DateTimePicker1Enter(Sender: TObject);
+    procedure DateTimePicker2Enter(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Payments: TPayments;
+
+implementation
+
+uses Datamodunit,SBTranslateProc;
+
+{$R *.dfm}
+
+procedure TPayments.Button2Click(Sender: TObject);
+begin
+DataMod.Amountpays.CloseAll;
+DataMod.Amountpays.SetVariable('dat1',trunc(DateTimePicker1.DateTime));
+DataMod.Amountpays.SetVariable('dat2',trunc(DateTimePicker2.DateTime));
+DataMod.Amountpays.open;
+end;
+
+procedure TPayments.DateTimePicker1Enter(Sender: TObject);
+begin
+DateTimePicker1.MaxDate:=DateTimePicker2.DateTime;
+DateTimePicker2.MinDate:=DateTimePicker1.DateTime;
+end;
+
+procedure TPayments.DateTimePicker2Enter(Sender: TObject);
+begin
+DateTimePicker1.MaxDate:=DateTimePicker2.DateTime;
+DateTimePicker2.MinDate:=DateTimePicker1.DateTime;
+end;
+
+procedure TPayments.FormCreate(Sender: TObject);
+begin
+DateTimePicker1.DateTime:=now;
+DateTimePicker2.DateTime:=now;
+end;
+
+procedure TPayments.paymentdeleterClick(Sender: TObject);
+begin
+ if MessageDlg('Seçilmiş ödəniş silins ?', mtConfirmation, [mbYes, mbCancel], 0) = mrYes
+  then
+ begin
+   DataMod.OraclePackage1.CallProcedure('del_transaction',[Gridin.DataSource.DataSet.FieldByName('id').AsInteger]);
+
+ datamod.maincrprt.Refresh;
+ end;
+
+end;
+
+end.

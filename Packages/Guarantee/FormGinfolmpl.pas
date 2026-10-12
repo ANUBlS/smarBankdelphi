@@ -1,0 +1,91 @@
+unit FormGinfolmpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+   ImgList, Grids, DBGrids, Buttons, ExtCtrls, StdCtrls,
+  ComCtrls, ToolWin;
+
+type
+  TFormGinfo = class(TForm)
+    ToolBar1: TToolBar;
+    ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
+    ToolButton3: TToolButton;
+    GroupBox1: TGroupBox;
+    Panel2: TPanel;
+    SpeedButton2: TSpeedButton;
+    DBGrid1: TDBGrid;
+    ImageList1: TImageList;
+    procedure ToolButton1Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormShow(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormGinfo: TFormGinfo;
+
+implementation
+
+uses FormGua_Creditlmpl, DataMGuarantee, Unit16;
+
+{$R *.DFM}
+
+procedure TFormGinfo.ToolButton1Click(Sender: TObject);
+begin
+  with FormGua_credit , DatamGuarante do
+   begin
+ if DataSGuacredit.RecordCount > 0 then
+ begin
+ AddOtherPAPERNO.RefreshList;
+ showmodal  ;
+// DataSGuacredit.Refresh;
+end;
+    end;
+
+
+end;
+procedure TFormGinfo.FormCreate(Sender: TObject);
+var id:integer;
+begin
+FormGua_credit:=TFormGua_credit.Create(self);
+FormGua_creditDel:=TFormGua_creditDel.Create(self);
+DataMGuarante.DataS_Gua_credit.open ;
+//DataMGuarante.DataSorcGuar_credit.open ;
+end;
+
+procedure TFormGinfo.FormDestroy(Sender: TObject);
+begin
+DataMGuarante.DataS_Gua_credit.closeall ;
+//Frmproperties_credit.Free;
+//Frmproperties_creditDel.Free;
+end;
+
+procedure TFormGinfo.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+ if ord(key) = VK_ESCAPE then close
+end;
+
+procedure TFormGinfo.FormShow(Sender: TObject);
+
+var
+propid:integer;
+begin
+propid:=DataMGuarante.DataSetGuarantee.FieldByname('id').asinteger;
+with DataMGuarante.DataS_Gua_credit do
+begin
+ close ;
+   SetVariable('id',propid);
+ open   ;
+ refresh
+ end;
+end;
+
+end.

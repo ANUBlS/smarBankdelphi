@@ -1,0 +1,126 @@
+unit Unitembassy;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Grids, XDBGrids, ExtCtrls, XFSCtrls, DB, OracleData, StdCtrls;
+
+type
+  TForm_embassy = class(TForm)
+    XDBGrid1: TXDBGrid;
+    ods_embassy: TOracleDataSet;
+    XFPanel1: TXFPanel;
+    dsrc_embassy: TDataSource;
+    ods_embassyID: TFloatField;
+    ods_embassyAZ_NAME: TWideStringField;
+    ods_embassyENG_NAME: TWideStringField;
+    XFButton1: TXFButton;
+    XFButton2: TXFButton;
+    ods_embassytrans_info: TOracleDataSet;
+    ods_bankinf: TOracleDataSet;
+    ods_bankinfBANK: TWideStringField;
+    ods_bankinfINN: TWideStringField;
+    ods_embassytrans_infoAMMOUNT: TFloatField;
+    ods_embassytrans_infoACC_NO: TWideStringField;
+    ods_embassytrans_infoTEYINAT: TWideStringField;
+    ods_embassytrans_infoKASS: TWideStringField;
+    ods_embassytrans_infoAMMOUNT_YAZ: TWideStringField;
+    sysdat: TOracleDataSet;
+    sysdatTEK_DAT: TDateTimeField;
+    ods_embassytrans_infoOSTAT: TFloatField;
+    ods_embassytrans_infoVAL_NAME: TWideStringField;
+    ods_bankinfSEDRFIL: TWideStringField;
+    ods_embassytrans_infoOSTAT_YAZ: TWideStringField;
+    ods_bankinfASSISTANT: TWideStringField;
+    procedure XFButton2Click(Sender: TObject);
+    procedure XFButton1Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form_embassy: TForm_embassy;
+
+implementation
+uses sboapiDataModuleImpl,PCustServiceFormImpl1, UnitDataModPCustService,
+  UntQRReceiptSefr, UnitEmbasyTrans;
+{$R *.dfm}
+
+procedure TForm_embassy.FormCreate(Sender: TObject);
+begin
+QRPTReceiptSefr:=TQRPTReceiptSefr.Create(self);
+end;
+
+procedure TForm_embassy.XFButton1Click(Sender: TObject);
+begin
+// Form_embasTrans.Close;
+ sysdat.Close;
+ sysdat.open;
+
+ with ods_embassytrans_info do
+ begin
+  close;
+  SetVariable('trid',transid_sefrlik);
+  SetVariable('dat',sysdatTEK_DAT.AsDateTime);
+  open;
+  showmessage(FieldByName('acc_no').asstring)
+ end;
+
+// ShowMessage(ods_embassytrans_infoACC_NO.AsString);
+
+with QRPTReceiptSefr do
+begin
+
+        QRMain.Enabled:=false;
+        QRChildFirst.Enabled:=false;
+        QRChildSecond.Enabled:=false;
+
+       QRLBankName.Caption :=ods_bankinfBANK.AsString;
+       QRLBankName1.Caption :=ods_bankinfBANK.AsString;
+       QRLBankName2.Caption :=ods_bankinfBANK.AsString;
+       QRLBankInn.Caption :=ods_bankinfINN.AsString;
+       QRLBankInn1.Caption :=ods_bankinfINN.AsString;
+       QRLBankInn2.Caption :=ods_bankinfINN.AsString;
+       QRLAmount.Caption:=ods_embassytrans_infoAMMOUNT_YAZ.AsString;
+       QRLAmount1.Caption:=ods_embassytrans_infoAMMOUNT_YAZ.AsString;
+       QRLAmount2.Caption:=ods_embassytrans_infoAMMOUNT_YAZ.AsString;
+       QRDBText1.dataset:=ods_embassytrans_info;
+       QRDBText3.dataset:=ods_embassytrans_info;
+       QRDBText21.dataset:=ods_embassytrans_info;
+       QRDBText23.dataset:=ods_embassytrans_info;
+       QRDBText41.dataset:=ods_embassytrans_info;
+       QRDBText39.dataset:=ods_embassytrans_info;
+      /// QRDBText3.DataField:=ods_embassytrans_infoACC_NO.AsString;
+        Preview
+end;
+
+{If DataModPCustService.Ods_HesabCap.IsEmpty then
+  begin
+    ShowMessage(no_selected_account);
+    Exit;
+  end
+  else
+  begin
+    ods_embassy_info.Close;
+    ods_embassy_info.SetVariable('Acc_ID',
+    Cust_Account.XDBGrid_hesab.DataSource.DataSet.FieldByName('id').asInteger);
+    ods_embassy_info.SetVariable('Emb_id',
+   XDBGrid1.DataSource.DataSet.FieldByName('id').AsInteger );
+    ods_embassy_info.Open;
+    DataModPCustService.Templates.Close;
+    DataModPCustService.Templates.Open;
+    Pcust_CO_frmWReportUnit.Ph_CO_frmWReport.ShowModal;
+  end; }
+end;
+
+procedure TForm_embassy.XFButton2Click(Sender: TObject);
+begin
+Form_embassy.Close;
+
+end;
+
+end.

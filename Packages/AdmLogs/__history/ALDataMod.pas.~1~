@@ -1,0 +1,150 @@
+unit ALDataMod;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, OracleData, Oracle;
+
+type
+  TDataModAL = class(TDataModule)
+    ODSLogs: TOracleDataSet;
+    ODSLogsID: TFloatField;
+    ODSLogsLOGTYPE: TFloatField;
+    ODSLogsLOGTP: TStringField;
+    ODSLogsUSNAME: TStringField;
+    ODSLogsMODTIME: TDateTimeField;
+    ODSLogsMODUSER: TStringField;
+    ODSLogsMODUL: TStringField;
+    ODSLogsCINS: TIntegerField;
+    ODSLogsCUPD: TIntegerField;
+    ODSLogsCDEL: TIntegerField;
+    ODSLogsOPER: TIntegerField;
+    ODSLogsOPERAT: TStringField;
+    ODSLogsDESCRIPTION: TStringField;
+    ODSLogsTRVDESC: TStringField;
+    ODSLogsADVANCED_GRANTS: TIntegerField;
+    ODSLogsOTYPE: TStringField;
+    ODSLogsOFULLNAME: TStringField;
+    ODSLogsOPHONE: TStringField;
+    ODSLogsOCLASSID: TFloatField;
+    ODSLogsOFILIALID: TFloatField;
+    ODSLogsOADVTYPE: TFloatField;
+    ODSLogsOSYSUSERID: TFloatField;
+    ODSModuleLogs: TOracleDataSet;
+    ODSUsersLogs: TOracleDataSet;
+    ODSClassesLogs: TOracleDataSet;
+    OdsGroupsLogs: TOracleDataSet;
+    ODSUserGrantsLogs: TOracleDataSet;
+    ODSGroupManLogs: TOracleDataSet;
+    UserGrants: TDataSource;
+    Module: TDataSource;
+    Users: TDataSource;
+    Classes: TDataSource;
+    Groups: TDataSource;
+    GroupMan: TDataSource;
+    ODSGroupManLogsID: TFloatField;
+    ODSGroupManLogsLOGTYPE: TFloatField;
+    ODSGroupManLogsLOGTP: TStringField;
+    ODSGroupManLogsUSNAME: TStringField;
+    ODSGroupManLogsMODTIME: TDateTimeField;
+    ODSGroupManLogsMODUSER: TStringField;
+    ODSGroupManLogsOPER: TIntegerField;
+    ODSGroupManLogsOPERAT: TStringField;
+    ODSGroupManLogsADVANCED_GRANTS: TIntegerField;
+    ODSClassesLogsID: TFloatField;
+    ODSClassesLogsLOGTYPE: TFloatField;
+    ODSClassesLogsLOGTP: TStringField;
+    ODSClassesLogsUSNAME: TStringField;
+    ODSClassesLogsMODTIME: TDateTimeField;
+    ODSClassesLogsMODUSER: TStringField;
+    ODSClassesLogsOPER: TIntegerField;
+    ODSClassesLogsOPERAT: TStringField;
+    ODSClassesLogsOTYPE: TStringField;
+    OdsGroupsLogsID: TFloatField;
+    OdsGroupsLogsLOGTYPE: TFloatField;
+    OdsGroupsLogsLOGTP: TStringField;
+    OdsGroupsLogsUSNAME: TStringField;
+    OdsGroupsLogsMODTIME: TDateTimeField;
+    OdsGroupsLogsMODUSER: TStringField;
+    OdsGroupsLogsOPER: TIntegerField;
+    OdsGroupsLogsOPERAT: TStringField;
+    OdsGroupsLogsDESCRIPTION: TStringField;
+    OdsGroupsLogsOTYPE: TStringField;
+    ODSUsersLogsID: TFloatField;
+    ODSUsersLogsLOGTYPE: TFloatField;
+    ODSUsersLogsLOGTP: TStringField;
+    ODSUsersLogsUSNAME: TStringField;
+    ODSUsersLogsMODTIME: TDateTimeField;
+    ODSUsersLogsMODUSER: TStringField;
+    ODSUsersLogsOPER: TIntegerField;
+    ODSUsersLogsOPERAT: TStringField;
+    ODSUsersLogsDESCRIPTION: TStringField;
+    ODSUsersLogsOTYPE: TStringField;
+    ODSUsersLogsOFULLNAME: TStringField;
+    ODSUsersLogsOPHONE: TStringField;
+    ODSModuleLogsID: TFloatField;
+    ODSModuleLogsLOGTYPE: TFloatField;
+    ODSModuleLogsLOGTP: TStringField;
+    ODSModuleLogsUSNAME: TStringField;
+    ODSModuleLogsMODTIME: TDateTimeField;
+    ODSModuleLogsMODUL: TStringField;
+    ODSModuleLogsOPER: TIntegerField;
+    ODSModuleLogsOPERAT: TStringField;
+    ODSModuleLogsDESCRIPTION: TStringField;
+    ODSModuleLogsTRVDESC: TStringField;
+    ODSModuleLogsADVANCED_GRANTS: TIntegerField;
+    ODSUserGrantsLogsID: TFloatField;
+    ODSUserGrantsLogsLOGTYPE: TFloatField;
+    ODSUserGrantsLogsLOGTP: TStringField;
+    ODSUserGrantsLogsUSNAME: TStringField;
+    ODSUserGrantsLogsMODTIME: TDateTimeField;
+    ODSUserGrantsLogsMODUSER: TStringField;
+    ODSUserGrantsLogsMODUL: TStringField;
+    ODSUserGrantsLogsOPER: TIntegerField;
+    ODSUserGrantsLogsOPERAT: TStringField;
+    ODSLockedUsers: TOracleDataSet;
+    ODSLockedUsersID: TFloatField;
+    ODSLockedUsersNAME: TStringField;
+    LockedUsers: TDataSource;
+    ODSGroupManLogsOCLASSID: TStringField;
+    ODSGroupManLogsOADVTYPE: TStringField;
+    OdsGroupsLogsOADVTYPE: TStringField;
+    ODSUsersLogsOCLASSID: TStringField;
+    ODSUsersLogsOFILIALID: TStringField;
+    ODSUsersLogsOADVTYPE: TFloatField;
+    ODSUsersLogsOSYSUSERID: TFloatField;
+    ODSUserGrantsLogsCINS: TStringField;
+    ODSUserGrantsLogsCUPD: TStringField;
+    ODSUserGrantsLogsCDEL: TStringField;
+    ODSModuleLogsCINS: TStringField;
+    ODSModuleLogsCUPD: TStringField;
+    ODSModuleLogsCDEL: TStringField;
+    SB_ADM: TOraclePackage;
+    ODSSLLogs: TOracleDataSet;
+    ODSSLLogsLOGTP: TStringField;
+    ODSSLLogsUSNAME: TStringField;
+    ODSSLLogsMODTIME: TDateTimeField;
+    ODSSLLogsOPERAT: TStringField;
+    SLLog: TDataSource;
+    ODSSLLogsID: TFloatField;
+    ODSClasNames: TOracleDataSet;
+    Classnames: TDataSource;
+    ODSClasNamesID: TFloatField;
+    ODSClasNamesOBJ: TStringField;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  DataModAL: TDataModAL;
+
+implementation
+
+uses sboapidatamoduleimpl;
+
+{$R *.DFM}
+
+end.

@@ -1,0 +1,714 @@
+﻿unit AIFPAYMENTImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils,DateUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActiveX, AxCtrls, AIFPAYMENTS_TLB, StdVcl, StdCtrls, XFSCtrls, DBCtrls,
+  ComCtrls, ToolWin, ExtCtrls, Grids, DBGrids, XDBGrids, ImgList, Menus,sboapiDataModuleImpl,DB;
+
+type
+  TAIFPAYMENT = class(TActiveForm, IAIFPAYMENT)
+    Panel11: TPanel;
+    Panel12: TPanel;
+    RichEdit1: TRichEdit;
+    Panel25: TPanel;
+    ControlBar3: TControlBar;
+    ToolBar1: TToolBar;
+    Panel53: TPanel;
+    ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
+    ToolButton3: TToolButton;
+    ToolButton4: TToolButton;
+    ToolButton5: TToolButton;
+    ToolButton6: TToolButton;
+    XDBGrid1: TXDBGrid;
+    OpenDialogIn: TOpenDialog;
+    ImageList: TImageList;
+    ToolButton7: TToolButton;
+    ToolButton8: TToolButton;
+    ToolButton9: TToolButton;
+    ToolButton10: TToolButton;
+    ToolButton11: TToolButton;
+    ToolButton12: TToolButton;
+    DateTimePicker1: TDateTimePicker;
+    ImageList1: TImageList;
+    ToolButton13: TToolButton;
+    ToolButton14: TToolButton;
+    ToolButton15: TToolButton;
+    PopupMenu1: TPopupMenu;
+    FilePath: TMenuItem;
+    Adminparametr1: TMenuItem;
+    MxAccount: TMenuItem;
+    mliyyathesablar1: TMenuItem;
+    Panel_info: TPanel;
+    Info_ListBox: TListBox;
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure ToolButton1Click(Sender: TObject);
+    procedure ConvertToBase;
+    procedure ToolButton2Click(Sender: TObject);
+    procedure ToolButton3Click(Sender: TObject);
+    procedure ToolButton6Click(Sender: TObject);
+    procedure FilePathClick(Sender: TObject);
+    procedure XDBGrid1TitleClick(Column: TXColumn);
+    procedure Adminparametr1Click(Sender: TObject);
+    procedure ToolButton13Click(Sender: TObject);
+    procedure MxAccountClick(Sender: TObject);
+    procedure mliyyathesablar1Click(Sender: TObject);
+    procedure ToolButton4Click(Sender: TObject);
+  private
+    { Private declarations }
+    FEvents: IAIFPAYMENTEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+  public
+    { Public declarations }
+    procedure Initialize; override;
+  end;
+
+var AIFPAYMENTForm:TAIFPAYMENT;
+    fields:array[0..15]of string=('<PAY_DATE>','<FULL_NAME>','<CLIENT_ID>','<CREDIT_ID>','<CR>',
+                 '<BANK_INT>','<FOND_INT>','<OD_CR>','<OD_BANK_INT>','<OD_FOND_INT>','<OD_PENALTY_INT>',
+                 '<PAY_TYPE>','<M_PAYM>','<MATURITY>','<CR_BAL>','<PAY_ID>');
+
+implementation
+
+uses ComObj, ComServ,DataAIFUnit,AIFSearchUnit,AIFDirektoryUnit, UnitAifAdmin,
+  UnitAIFArchive, UnitAifMxAccount, UnitAccountTrans;
+
+{$R *.DFM}
+
+{ TAIFPAYMENT }
+
+procedure TAIFPAYMENT.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_AIFPAYMENTPage); }
+end;
+
+procedure TAIFPAYMENT.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as IAIFPAYMENTEvents;
+end;
+
+procedure TAIFPAYMENT.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TAIFPAYMENT.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TAIFPAYMENT.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TAIFPAYMENT.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TAIFPAYMENT.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TAIFPAYMENT.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TAIFPAYMENT.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TAIFPAYMENT.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TAIFPAYMENT.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TAIFPAYMENT.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TAIFPAYMENT.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TAIFPAYMENT.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TAIFPAYMENT.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TAIFPAYMENT.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TAIFPAYMENT.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TAIFPAYMENT.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TAIFPAYMENT.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TAIFPAYMENT.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TAIFPAYMENT.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TAIFPAYMENT.FilePathClick(Sender: TObject);
+begin
+  with DataModuleAIF.AIFADMIN do
+   begin
+      Open;
+      if UpperCase(Session.LogonUsername) = 'SMART' then
+      begin
+        FormAIFDirectory.ShowModal;
+      end else
+      begin
+         Application.MessageBox('Giriş qadağandır!','Administrotara müraciət edin',0);
+      end;
+   end;
+end;
+
+procedure TAIFPAYMENT._Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TAIFPAYMENT.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TAIFPAYMENT.ActiveFormCreate(Sender: TObject);
+begin
+  AIFPAYMENTForm:=Self;
+  DataModuleAIF:=TDataModuleAIF.Create(Self);
+  FormAifSearch:=TFormAifSearch.Create(Self);
+  FormAIFDirectory:=TFormAIFDirectory.Create(Self);
+  FormAdmin:=TFormAdmin.Create(Self);
+  FormAifArchive:=TFormAifArchive.Create(Self);
+  FormAifMxAccount:=TFormAifMxAccount.Create(Self);
+  FormAccountTrans:=TFormAccountTrans.Create(Self);
+  DataModuleAIF.AIFPAYMENTS.Open;
+  DataModuleAIF.AifFieldSearch.Open;
+  DataModuleAIF.AifConfig.Open;
+  DateTimePicker1.DateTime:=Date;
+end;
+
+procedure TAIFPAYMENT.Adminparametr1Click(Sender: TObject);
+begin
+   DataModuleAIF.AifFilial.Active:=True;
+   DataModuleAIF.AifUsers.Active:=True;
+   with DataModuleAIF.AIFADMIN do
+   begin
+      Open;
+      if UpperCase(Session.LogonUsername) = 'SMART' then
+      begin
+         FormAdmin.ShowModal;
+      end else
+      begin
+         Application.MessageBox('Giriş qadağandır!','Administrotara müraciət edin',0);
+      end;
+   end;
+end;
+
+
+procedure TAIFPAYMENT.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TAIFPAYMENT.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TAIFPAYMENT.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TAIFPAYMENT.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TAIFPAYMENT.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TAIFPAYMENT.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TAIFPAYMENT.mliyyathesablar1Click(Sender: TObject);
+begin
+   with DataModuleAIF.AIFADMIN do
+   begin
+      Open;
+      if UpperCase(Session.LogonUsername) = 'SMART' then
+      begin
+        FormAccountTrans.ShowModal;
+      end else
+      begin
+         Application.MessageBox('Giriş qadağandır!','Administrotara müraciət edin',0);
+      end;
+   end;
+end;
+
+procedure TAIFPAYMENT.MxAccountClick(Sender: TObject);
+begin
+  with DataModuleAIF.AIFADMIN do
+   begin
+      Open;
+      if UpperCase(Session.LogonUsername) = 'SMART' then
+      begin
+        FormAifMxAccount.ShowModal;
+      end else
+      begin
+         Application.MessageBox('Giriş qadağandır!','Administrotara müraciət edin',0);
+      end;
+   end;
+end;
+
+procedure TAIFPAYMENT.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TAIFPAYMENT.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TAIFPAYMENT.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TAIFPAYMENT.Set_AxBorderStyle(Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TAIFPAYMENT.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TAIFPAYMENT.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TAIFPAYMENT.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TAIFPAYMENT.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TAIFPAYMENT.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TAIFPAYMENT.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TAIFPAYMENT.Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TAIFPAYMENT.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TAIFPAYMENT.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TAIFPAYMENT.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TAIFPAYMENT.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TAIFPAYMENT.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TAIFPAYMENT.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+procedure TAIFPAYMENT.ToolButton13Click(Sender: TObject);
+begin
+  FormAifArchive.ShowModal;
+end;
+
+procedure TAIFPAYMENT.ToolButton1Click(Sender: TObject);
+var
+   mas:array[0..14]of integer;
+begin
+  DataModuleAIF.SB_ACA.CallProcedure('CheckAdvancedObjectAccess',['AIF_ADD']);
+  OpenDialogIn.FileName:=DataModuleAIF.AifConfig.FieldByName('in_dir').AsString;
+  OpenDialogIn.Execute(0);
+  IF fileexists(OpenDialogIn.FileName)THEN
+  begin
+    RichEdit1.Clear;
+    RichEdit1.Lines.LoadFromFile(OpenDialogIn.FileName,TEncoding.UTF8);
+    ConvertToBase ;
+    DataModuleAIF.AIFPAYMENTS.Refresh;
+  end;
+end;
+
+procedure TAIFPAYMENT.ToolButton2Click(Sender: TObject);
+begin
+  with DataModuleAIF do
+  begin
+    AIFPAYMENTS.Close;
+    AIFPAYMENTS.Open;
+  end;
+end;
+
+procedure TAIFPAYMENT.ToolButton3Click(Sender: TObject);
+ var i,j,k,S : integer;
+     GridBookMark:TBookMark;
+
+begin
+   k:=0;
+   DataModuleAIF.SB_ACA.CallProcedure('CheckAdvancedObjectAccess',['AIF_DELETE']);
+   if XDBGrid1.DataSource.DataSet.RecordCount = 0 then Exit;
+   //XDBGrid1.SetFocus;
+   //XDBGrid1.SelectedRows.CurrentRowSelected:=XDBGrid1.DataSource.DataSet.RecordCount<>0;
+
+   With XDBGrid1.SelectedRows do
+   begin
+     GridBookMark:=XDBGrid1.DataSource.DataSet.GetBookmark;
+     for i:=0 to Count-1 do
+     begin
+       if IndexOf(Items[i]) > -1 then
+       begin
+         XDBGrid1.Datasource.Dataset.Bookmark:= Items[i];
+         S:=XDBGrid1.DataSource.DataSet.fieldbyname('id').asinteger;
+       end;
+       case
+         MessageDlg(format('Əməliyyat silinsinmi #%d ?',[S]), mtConfirmation,[mbyes,mbno,mbcancel,mball], 0) of
+           mryes : begin
+                     DataModuleAIF.DEL.CallProcedure('aifpaymentsdelete',[S]);
+                     XDBGrid1.DataSource.DataSet.GotoBookmark(GridBookMark);
+                   end;
+           mrno  : begin
+                     XDBGrid1.DataSource.DataSet.Refresh;
+                     XDBGrid1.SelectedRows.Clear;
+                     exit;
+                   end;
+           mrcancel : begin
+                        XDBGrid1.DataSource.DataSet.Refresh;
+                        XDBGrid1.SelectedRows.Clear;
+                        Break;
+                      end;
+           mrall : begin
+                     With XDBGrid1.SelectedRows do
+                     begin
+                       GridBookMark:=XDBGrid1.DataSource.DataSet.GetBookmark;
+                       case MessageDlg(inttostr(Count)+' sayda əməliyyat silinsinmi ?', mtConfirmation,[mbyes,mbno], 0) of
+                         mryes: begin
+                                for j:=0 to Count-1 do
+                                begin
+                                  if IndexOf(Items[j]) > -1 then
+                                  begin
+                                    XDBGrid1.Datasource.Dataset.Bookmark:= Items[j];
+                                    S:=XDBGrid1.DataSource.DataSet.fieldbyname('id').asinteger;
+                                  end;
+                                  DataModuleAIF.DEL.CallProcedure('aifpaymentsdelete',[S]);
+                                  XDBGrid1.DataSource.DataSet.GotoBookmark(GridBookMark);
+                                end;
+                                XDBGrid1.DataSource.DataSet.Refresh;
+                                XDBGrid1.SelectedRows.Clear;
+                                break;
+                              end;
+                         mrno : exit;
+                       end;
+                     end;
+                   end;
+       end;
+     end;
+   end;
+   XDBGrid1.DataSource.DataSet.Refresh;
+   XDBGrid1.SelectedRows.Clear;
+end;
+
+procedure TAIFPAYMENT.ToolButton4Click(Sender: TObject);
+var id,i,j,status:integer;
+    F:boolean;
+begin
+  if XDBGrid1.DataSource.DataSet.RecordCount=0 then exit;
+  XDBGrid1.SetFocus;
+  XDBGrid1.SelectedRows.CurrentRowSelected:=XDBGrid1.DataSource.DataSet.RecordCount<>0;
+   for i:=0 to XDBGrid1.SelectedRows.Count-1 do
+   begin
+      XDBGrid1.DataSource.DataSet.GotoBookmark(pointer(XDBGrid1.SelectedRows.items[i]));
+      id:=XDBGrid1.DataSource.DataSet.fieldbyname('ID').asinteger;
+      case MessageDlg(format('Əməliyyat təsdiqlənsinmi #%d ?',[id]), mtConfirmation,[mbyes,mbno,mbcancel,mball], 0) of
+           mryes :begin
+                    status:=XDBGrid1.DataSource.DataSet.fieldbyname('status').asinteger;
+                    if status=0 then
+                    begin
+                      F:=DataModuleAIF.DEL.CallBooleanFunction('AifPayments_Transactions',[id]);
+                      if F then sboapiDataModule.SBSession.Commit
+                           else begin
+                                  sboapiDataModule.SBSession.Rollback;
+                                  DataModuleAIF.DEL.CallProcedure('aifupdatestatus',[id]);
+                                end;
+                      XDBGrid1.DataSource.DataSet.Refresh;
+                      if XDBGrid1.SelectedRows.Count=1 then XDBGrid1.SelectedRows.Clear;
+                    end;
+                  end;
+           mrno  : exit;
+           mrcancel : Break;
+           mrall : begin
+                     case MessageDlg(inttostr(XDBGrid1.SelectedRows.Count)+' sayda əməliyyat təsdiqlənsinmi ?', mtConfirmation,[mbyes,mbno], 0) of
+                     mryes: begin
+                              for j:=0 to XDBGrid1.SelectedRows.Count-1 do
+                              begin
+                                XDBGrid1.DataSource.DataSet.GotoBookmark(pointer(XDBGrid1.SelectedRows.items[j]));
+                                id:=XDBGrid1.DataSource.DataSet.fieldbyname('ID').asinteger;
+                                status:=XDBGrid1.DataSource.DataSet.fieldbyname('status').asinteger;
+                                if status=0 then
+                                begin
+                                  F:=DataModuleAIF.DEL.CallBooleanFunction('AifPayments_Transactions',[id]);
+                                  if F then sboapiDataModule.SBSession.Commit
+                                       else begin
+                                              sboapiDataModule.SBSession.Rollback;
+                                              DataModuleAIF.DEL.CallProcedure('aifupdatestatus',[id]);
+                                            end;
+                                end;
+                              end;
+                              XDBGrid1.DataSource.DataSet.Refresh;
+                              XDBGrid1.SelectedRows.Clear;
+                              break;
+                            end;
+                     mrno : exit;
+                     end;
+                   end;
+      end;
+
+   end;
+end;
+
+procedure TAIFPAYMENT.ToolButton6Click(Sender: TObject);
+begin
+  if DataModuleAIF.AIFPAYMENTS.RecordCount = 0 then
+    exit;
+  FormAifSearch.DbGr := XDBGrid1;
+  FormAifSearch.ShowModal;
+end;
+
+procedure TAIFPAYMENT.XDBGrid1TitleClick(Column: TXColumn);
+begin
+ IF Column.FieldName = '' THEN
+    exit;
+  with DataModuleAIF, AIFPAYMENTS do
+  begin
+    close;
+    if Column.Title.MarkerIndex = 2 then
+      SetVariable('title', Column.FieldName + ' ' + 'ASC')
+    else
+      SetVariable('title', Column.FieldName + ' ' + 'DESC');
+    open;
+  end;
+
+end;
+
+Function ChekPayid(S:string):boolean;
+begin
+  with DataModuleAIF do
+  begin
+    AifDataCheck.Close;
+    AifDataCheck.SQL.Clear;
+    AifDataCheck.SQL.Add('Select pay_id from aifpayments where pay_id='''+S+'''');
+    AifDataCheck.Open;
+  end;
+  if DataModuleAIF.AifDataCheck.RecordCount > 0 then Result:=False
+                                                else Result:=True;
+end;
+
+
+procedure TAIFPAYMENT.ConvertToBase;
+var X,Y,I,K,ToEnd: Integer;
+    oldCursor: TCursor;
+    Tx:array[0..15]of String;
+    ErrStr:string;
+
+begin
+  oldCursor:= Screen.Cursor;
+  Screen.Cursor:= crHourglass;
+  Info_ListBox.Clear;
+  Panel_info.Hide;
+  with RichEdit1 do begin
+                      X:=0;
+                      Y:=0;
+                      i:=0;
+                      ToEnd:=length(Text);
+                      while X <> -1 do begin
+                                         X:=FindText(fields[i], X, ToEnd, []);
+                                         SetFocus;
+                                         SelStart:=X;
+                                         SelLength:=length(fields[i]);
+                                         Y:=CaretPos.Y;
+                                         Tx[i]:=Trim(copy(Lines[Y],length(fields[i])+1,length(Lines[Y])-length(fields[i])-length('/'+fields[i])));
+                                         inc(i);
+                                         if (X< ToEnd) and (i=16) then
+                                         begin
+                                           i:=0;
+                                           if ChekPayid(Tx[15]) then
+                                           DataModuleAIF.aif_payments.CallProcedure('aifpaymentsinsert',
+                                                                                    ['v_PAYDATE'      ,Tx[0],
+                                                                                     'v_FULLNAME'     ,Tx[1],
+                                                                                     'v_CLIENTID'     ,Tx[2],
+                                                                                     'v_CREDITID'     ,Tx[3],
+                                                                                     'v_CR'           ,Tx[4],
+                                                                                     'v_BANKINT'      ,Tx[5],
+                                                                                     'v_FONDINT'      ,Tx[6],
+                                                                                     'v_ODCR'         ,Tx[7],
+                                                                                     'v_ODBANKINT'    ,Tx[8],
+                                                                                     'v_ODFONDINT'    ,Tx[9],
+                                                                                     'v_ODPENALTYINT' ,Tx[10],
+                                                                                     'v_PAYTYPE'      ,Tx[11],
+                                                                                     'v_MPAYM'        ,Tx[12],
+                                                                                     'v_MATURITY'     ,Tx[13],
+                                                                                     'v_CRBAL'        ,Tx[14],
+                                                                                     'v_PAYID'        ,Tx[15]
+                                                                                     ]
+                                                                                     )
+                                          else  begin
+                                                  ErrStr := ErrStr + 'Xəbərdarlıq:  <'+Tx[15]+'>   Artıq konvert olunub !'+#13;
+                                                  Info_ListBox.Items.Text := ErrStr;
+                                                  Panel_Info.Show;
+                                                end;
+                                        end;
+                                       end;
+                   end;
+  Screen.Cursor:= oldCursor;
+end;
+
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TAIFPAYMENT,
+    Class_AIFPAYMENT,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

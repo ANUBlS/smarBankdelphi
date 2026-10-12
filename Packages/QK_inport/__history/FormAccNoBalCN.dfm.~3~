@@ -1,0 +1,110 @@
+﻿object FormAccNo_BalCN: TFormAccNo_BalCN
+  Left = 0
+  Top = 0
+  ClientHeight = 270
+  ClientWidth = 628
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poDesktopCenter
+  OnClose = FormClose
+  PixelsPerInch = 96
+  TextHeight = 13
+  object XFPanel1: TXFPanel
+    Left = 0
+    Top = 0
+    Width = 628
+    Height = 229
+    Align = alClient
+    BevelInner = bvSpace
+    BevelKind = bkFlat
+    BevelOuter = bvSpace
+    TabOrder = 0
+    object XDBGrid1: TXDBGrid
+      Left = 2
+      Top = 2
+      Width = 620
+      Height = 221
+      Align = alClient
+      DataSource = QKİmportDataMod.DSRC_ACCOUNT
+      GridStyle.VisualStyle = vsXPStyle
+      TabOrder = 0
+      Columns = <
+        item
+          Expanded = False
+          FieldName = 'ACC_NO'
+          Title.Caption = 'Hesab '#8470
+          Visible = True
+          Width = 180
+        end
+        item
+          Expanded = False
+          FieldName = 'NAME'
+          Title.Caption = 'Hesab'#305'n ad'#305
+          Visible = True
+          Width = 410
+        end>
+    end
+  end
+  object XFPanel2: TXFPanel
+    Left = 0
+    Top = 229
+    Width = 628
+    Height = 41
+    Align = alBottom
+    BevelInner = bvSpace
+    BevelKind = bkFlat
+    BevelOuter = bvSpace
+    TabOrder = 1
+    object XFButton1: TXFButton
+      Left = 550
+      Top = 6
+      Width = 70
+      Height = 25
+      Caption = 'Q'#601'bul'
+      DoubleBuffered = True
+      ParentDoubleBuffered = False
+      TabOrder = 0
+      OnClick = XFButton1Click
+    end
+    object EditAcc_no: TEdit
+      Left = 4
+      Top = 8
+      Width = 180
+      Height = 21
+      TabOrder = 1
+      OnChange = EditAcc_noChange
+    end
+    object EditAcc_name: TEdit
+      Left = 187
+      Top = 8
+      Width = 280
+      Height = 21
+      TabOrder = 2
+      OnChange = EditAcc_nameChange
+    end
+    object XFButton2: TXFButton
+      Left = 475
+      Top = 6
+      Width = 71
+      Height = 25
+      Caption = 'Axtar'#305#351
+      DoubleBuffered = True
+      ParentDoubleBuffered = False
+      TabOrder = 3
+      OnClick = XFButton2Click
+    end
+  end
+  object ActionList_acc: TActionList
+    Left = 392
+    Top = 104
+    object Action_Src: TAction
+      Caption = 'Action_Src'
+      OnExecute = Action_SrcExecute
+    end
+  end
+end

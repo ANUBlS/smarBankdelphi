@@ -1,0 +1,42 @@
+#------------------------------------------------------------------------------
+VERSION = BWS.01
+#------------------------------------------------------------------------------
+!ifndef ROOT
+ROOT = $(MAKEDIR)\..
+!endif
+#------------------------------------------------------------------------------
+MAKE = $(ROOT)\bin\make.exe -$(MAKEFLAGS) -f$**
+DCC = $(ROOT)\bin\dcc32.exe $**
+BRCC = $(ROOT)\bin\brcc32.exe $**
+#------------------------------------------------------------------------------
+PROJECTS = sboapi50.bpl CR_COMMON.bpl CRSYSTEM.bpl cr_activits.bpl CR_SETUP.bpl \
+  CR_Conclusion.bpl Creditsmgr.ocx SmartBank.exe
+#------------------------------------------------------------------------------
+default: $(PROJECTS)
+#------------------------------------------------------------------------------
+
+Creditsmgr.ocx: Packages\SB_Credit\Sm_creditsmgr\Creditsmgr.dpr
+  $(DCC)
+
+sboapi50.bpl: Packages\sboapi50\sboapi50.dpk
+  $(DCC)
+
+CR_COMMON.bpl: Packages\SB_Credit\CR_COMMON\CR_COMMON.dpk
+  $(DCC)
+
+CRSYSTEM.bpl: Packages\SB_Credit\CRSystem\CRSYSTEM.dpk
+  $(DCC)
+
+CR_Conclusion.bpl: Packages\SB_Credit\CR_Conclusion\CR_Conclusion.dpk
+  $(DCC)
+
+cr_activits.bpl: Packages\SB_Credit\cr_activites\cr_activits.dpk
+  $(DCC)
+
+CR_SETUP.bpl: Packages\SB_Credit\CR_Setup\CR_SETUP.dpk
+  $(DCC)
+
+SmartBank.exe: Programs\SmartBank\SmartBank.dpr
+  $(DCC)
+
+

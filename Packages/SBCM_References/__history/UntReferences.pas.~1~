@@ -1,0 +1,231 @@
+unit UntReferences;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,OracleData,
+  Db, ComCtrls,Oracle, StdCtrls, Grids, DBGrids, DBCtrls, ExtCtrls;
+
+type
+  TFrmReferences = class(TForm)
+    MainPageController: TPageControl;
+    TabSheetTree: TTabSheet;
+    SelectionsTabSheet: TTabSheet;
+    ReferTabSheet: TTabSheet;
+    StatusBar: TStatusBar;
+    GroupBox1: TGroupBox;
+    GroupBox2: TGroupBox;
+    TV: TTreeView;
+    GroupBox3: TGroupBox;
+    GroupBox4: TGroupBox;
+    AccZonesGrid: TDBGrid;
+    AccZoneInfoGrid: TDBGrid;
+    Panel1: TPanel;
+    DBNavigator: TDBNavigator;
+    ValuesComboBox: TComboBox;
+    ValuesEdit: TEdit;
+    BtnApply: TButton;
+    GroupBox5: TGroupBox;
+    CreditTypesGrid: TDBGrid;
+    TabSheet1: TTabSheet;
+    GroupBox6: TGroupBox;
+    GroupBox7: TGroupBox;
+    PledgeGrid: TDBGrid;
+    DBGrid2: TDBGrid;
+    GroupBox8: TGroupBox;
+    DBGridCtegory: TDBGrid;
+    GroupBox9: TGroupBox;
+    DBGridMovies: TDBGrid;
+    GroupBox10: TGroupBox;
+    DBGridAccounts: TDBGrid;
+    Panel2: TPanel;
+    DBNavigator1: TDBNavigator;
+    TabSheetReliability: TTabSheet;
+    GroupBox11: TGroupBox;
+    Panel3: TPanel;
+    DBNavigator2: TDBNavigator;
+    Panel4: TPanel;
+    Panel5: TPanel;
+    DBGridReliability: TDBGrid;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    TabSheet2: TTabSheet;
+    DBGrid1: TDBGrid;
+    Panel6: TPanel;
+    DBNavigator3: TDBNavigator;
+    TabSheet3: TTabSheet;
+    DBGrid3: TDBGrid;
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure TVChange(Sender: TObject; Node: TTreeNode);
+    procedure BtnApplyClick(Sender: TObject);
+    procedure MainPageControllerChange(Sender: TObject);
+    procedure DBGrid1EditButtonClick(Sender: TObject);
+  private
+    procedure TVBuild;
+    procedure TVAddNode(Node :TTreeNode;ID :Integer);
+    { Private declarations }
+  public
+    TreeItems :TList;
+    { Public declarations }
+  end;
+
+var
+  FrmReferences: TFrmReferences;
+
+implementation
+
+uses UntReferencesDataMod, DateIntervalUnit;
+
+{$R *.DFM}
+procedure TFrmReferences.TVBuild;
+begin
+   TV.Items.Clear;
+   TVAddNode(nil,-1);
+   DataModReferences.ReferLink.Refresh;
+end;
+procedure TFrmReferences.TVAddNode(Node :TTreeNode;ID :Integer);
+begin
+    with  TOracleDataSet.Create(nil)  do
+    try
+      Session :=DataModReferences.TVSubItems.Session;
+      SQL.Assign(DataModReferences.TVSubItems.SQL);
+      DeclareVariable('ParentID',otInteger);
+      SetVariable('ParentID',ID);
+      Open;
+      First;
+      while  not EOF  do
+      begin
+        TreeItems.Add(Pointer(FieldByName('ID').AsInteger));
+        TVAddNode(TV.Items.AddChild(Node,FieldByName('LName').AsString),FieldByName('ID').AsInteger);
+        Next;
+      end;
+    finally
+      Free;
+    end;
+end;
+procedure TFrmReferences.FormCreate(Sender: TObject);
+begin
+   DataModReferences :=TDataModReferences.Create(Self);
+   FrmDateInterval := TFrmDateInterval.Create(Self);
+   TreeItems :=TList.Create;
+   with  DataModReferences.BalanceLink do
+   try
+     Execute;
+     AccZoneInfoGrid.Columns[1].PickList.Clear;
+     while not EOF do
+     begin
+       AccZoneInfoGrid.Columns[1].PickList.Add(FieldAsString('Bal_Cn'));
+       Next;
+     end;
+   finally
+     Close;
+   end;
+end;
+procedure TFrmReferences.FormDestroy(Sender: TObject);
+begin
+  TreeItems.Free;
+end;
+procedure TFrmReferences.FormShow(Sender: TObject);
+begin
+   TVBuild;
+   ValuesComboBox.Enabled :=False;
+   ValuesEdit.Enabled :=False;
+end;
+
+procedure TFrmReferences.TVChange(Sender: TObject; Node: TTreeNode);
+  procedure  ExpandItems(SourceList :TStrings;const Value :WideString);
+  var
+     Index :Integer;
+     Data :WideString;
+  begin
+     SourceList.Clear;
+     Data :=Value;
+     Index :=Pos(';',Data);
+     while  Index <> 0  do
+     begin
+        SourceList.Add(Copy(Data,1,Index-1));
+        Delete(Data,1,Index);
+        Index :=Pos(';',Data);
+     end;
+     SourceList.Add(Data);
+  end;
+var
+  TargetItemID :Integer;
+begin
+  TargetItemID :=Integer(TreeItems.Items[Node.AbsoluteIndex]);
+  with  DataModReferences do
+  with  ReferLink  do
+  begin
+    Locate('ID',TargetItemID,[]);
+    if not FieldByName('Value').IsNull then
+    begin
+      if FieldByName('SourceList').IsNull then
+      begin
+         ValuesComboBox.Enabled :=False;
+         ValuesEdit.Enabled :=True;
+         ValuesEdit.Text :=FieldByName('Value').AsString;
+      end
+      else
+      begin
+        ValuesComboBox.Enabled :=True;
+        ValuesEdit.Enabled :=False;
+        ExpandItems(ValuesComboBox.Items,FieldByName('SourceList').AsString);
+        ValuesComboBox.ItemIndex :=ValuesComboBox.Items.IndexOf(FieldByName('Value').AsString);
+      end;
+    end else
+    begin
+      ValuesComboBox.Enabled :=False;
+      ValuesEdit.Enabled :=False;
+    end;
+  end;
+  BtnApply.Enabled :=ValuesComboBox.Enabled or ValuesEdit.Enabled;
+end;
+
+procedure TFrmReferences.BtnApplyClick(Sender: TObject);
+var
+  NewValue :String;
+begin
+   if ValuesComboBox.Enabled then
+     NewValue :=ValuesComboBox.Items.Strings[ValuesComboBox.ItemIndex]
+   else
+     NewValue :=ValuesEdit.Text;
+
+      with DataModReferences do
+      with ReferLink,ReferPackage do
+      begin
+      CallProcedure('UPD_SBCM_REFERENCES',[
+                      FieldByName('ID').Value,
+                      FieldByName('Name').Value,
+                      FieldByName('LName').Value,
+                      FieldByName('ParentID').Value,
+                      NewValue,
+                      FieldByName('SourceList').Value
+                    ]);
+        Refresh;
+      end;
+
+end;
+
+procedure TFrmReferences.MainPageControllerChange(Sender: TObject);
+begin
+  if  MainPageController.ActivePageIndex = 3 then
+    DataModReferences.CategoriesMaster.Refresh;
+end;
+
+procedure TFrmReferences.DBGrid1EditButtonClick(Sender: TObject);
+begin
+  with FrmDateInterval ,(Sender as TDBGrid).DataSource.DataSet do
+  begin
+    DateTrack.Position := FieldByName('DateInterval').AsInteger;
+    if ShowModal = mrOk then
+    begin
+      Edit;
+      FieldByName('DateInterval').AsInteger := DateTrack.Position;
+    end;
+  end;
+end;
+
+end.

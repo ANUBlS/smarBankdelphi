@@ -1,0 +1,1630 @@
+﻿unit IncExpensesImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActiveX, AxCtrls, IncExpensesProj_TLB, StdVcl, Db, OracleData, StdCtrls,
+  ComCtrls, Buttons, Oracle, ExtCtrls, OleServer,
+  Grids, DBGrids, {SBPlgAx50_TLB,} ImgList, CheckLst, ExcelXP, Variants, Mask,
+  DBCtrls;
+
+type
+  TMainIncExpenses = class(TActiveForm, IIncExpenses) //, IIconExporter)
+    ExcelWorksheet1: TExcelWorksheet;
+    ExcelWorkbook1: TExcelWorkbook;
+    ExcelApplication1: TExcelApplication;
+    ImageList: TImageList;
+    PageControl1: TPageControl;
+    TabSheetIncExp: TTabSheet;
+    PanelAlTop: TPanel;
+    Panel1: TPanel;
+    LabelInfo: TLabel;
+    OKBtn: TSpeedButton;
+    ExcelBtn: TSpeedButton;
+    Label8: TLabel;
+    Label9: TLabel;
+    GrBoxDate: TGroupBox;
+    Label1: TLabel;
+    Label2: TLabel;
+    DTPickerBeg: TDateTimePicker;
+    DTPickerEnd: TDateTimePicker;
+    RGroupReportForm: TRadioGroup;
+    GrBoxFilial: TGroupBox;
+    LabelTime: TLabel;
+    CBoxFilial: TComboBox;
+    ProgBar: TProgressBar;
+    GBoxExcel: TGroupBox;
+    ChBoxMinuses: TCheckBox;
+    ChBoxBegEndOstats: TCheckBox;
+    ChBoxOtherFilials: TCheckBox;
+    ChBoxZeroes: TCheckBox;
+    EditSeprAccs: TEdit;
+    Panel2: TPanel;
+    Panel3: TPanel;
+    GBoxResults: TGroupBox;
+    Label7: TLabel;
+    Label5: TLabel;
+    Label6: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    StTextEndOstat: TStaticText;
+    StTextResult: TStaticText;
+    StTextBegOstat: TStaticText;
+    StTextIncome: TStaticText;
+    StTextExpense: TStaticText;
+    PanelFilial: TPanel;
+    ChListFilial: TCheckListBox;
+    GBoxFilial: TGroupBox;
+    ChBoxAllFilials: TCheckBox;
+    LBoxFilial: TListBox;
+    Panel4: TPanel;
+    DBGridIncomes: TDBGrid;
+    DBGridExpenses: TDBGrid;
+    TabSheetIncomes: TTabSheet;
+    GroupBox1: TGroupBox;
+    Label11: TLabel;
+    Label10: TLabel;
+    DBLCBoxCurrency: TDBLookupComboBox;
+    DBGrid1: TDBGrid;
+    BtnExcel: TSpeedButton;
+    BtnOK: TSpeedButton;
+    CBoxYears: TComboBox;
+    ChBoxTurn: TCheckBox;
+    RGroupAmountCurr: TRadioGroup;
+    CBoxBMonth: TComboBox;
+    CBoxEMonth: TComboBox;
+    EditBalCN: TEdit;
+    Label12: TLabel;
+    Label13: TLabel;
+    Label14: TLabel;
+    Button1: TButton;
+    Timer1: TTimer;
+    OracleQuery1: TOracleQuery;
+    Button2: TButton;
+    Button3: TButton;
+    Memo1: TMemo;
+    GrBoxReportSymb: TGroupBox;
+    DBLCBoxRepSymb: TDBLookupComboBox;
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure OKBtnClick(Sender: TObject);
+    procedure ExcelBtnClick(Sender: TObject);
+    procedure ChBoxAllFilialsClick(Sender: TObject);
+    procedure ChListFilialClickCheck(Sender: TObject);
+    procedure ActiveFormDestroy(Sender: TObject);
+    procedure SpeedButton2Click(Sender: TObject);
+    procedure BtnExcelClick(Sender: TObject);
+    procedure CBoxYearsChange(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure Timer1Timer(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+    procedure Button3Click(Sender: TObject);
+
+  private
+    { Private declarations }
+    FEvents: IIncExpensesEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_Icon: OLE_HANDLE; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+    procedure AddFilials;
+    procedure CrFilialStr;
+    procedure AddZeroesFilter;
+
+  public
+    { Public declarations }
+    Branch :array of Integer;
+    procedure Initialize; override;
+
+  end;
+implementation
+
+uses ComObj, ComServ , SboapiDataModuleImpl, UnitDataMod, SBTranslateProc, WorldCheckProc;
+var
+//  TimeIndicator: TTime;
+  BranchStr  :String;
+  AllBranchesChecked :Boolean;
+  //function SignData(inputdata :string; //a :string; b :string; c:integer; d:integer; e:string;
+  //cer_id :string) :string; external 'D:\Smart-Bank\Bin\AzTrustCrypto.dll';
+{$R *.DFM}
+
+{ TIncExpenses }
+
+function TMainIncExpenses.Get_Icon: OLE_HANDLE;
+const
+  ImageIndex =0;
+begin
+  ImageList.GetIcon(ImageIndex,Icon);
+  Result := Icon.Handle;
+end;
+
+procedure TMainIncExpenses.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_IncExpensesPage); }
+end;
+
+procedure TMainIncExpenses.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as IIncExpensesEvents;
+end;
+
+procedure TMainIncExpenses.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TMainIncExpenses.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TMainIncExpenses.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TMainIncExpenses.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TMainIncExpenses.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TMainIncExpenses.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TMainIncExpenses.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TMainIncExpenses.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TMainIncExpenses.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TMainIncExpenses.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TMainIncExpenses.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TMainIncExpenses.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TMainIncExpenses.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TMainIncExpenses.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TMainIncExpenses.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TMainIncExpenses.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TMainIncExpenses.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TMainIncExpenses.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TMainIncExpenses.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TMainIncExpenses._Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TMainIncExpenses.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TMainIncExpenses.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TMainIncExpenses.CBoxYearsChange(Sender: TObject);
+begin
+  CBoxYears.Style:=csDropDownList
+end;
+
+procedure TMainIncExpenses.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TMainIncExpenses.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TMainIncExpenses.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TMainIncExpenses.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TMainIncExpenses.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TMainIncExpenses.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TMainIncExpenses.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TMainIncExpenses.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TMainIncExpenses.Set_AxBorderStyle(Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TMainIncExpenses.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TMainIncExpenses.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TMainIncExpenses.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TMainIncExpenses.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TMainIncExpenses.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TMainIncExpenses.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TMainIncExpenses.Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TMainIncExpenses.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TMainIncExpenses.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TMainIncExpenses.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TMainIncExpenses.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TMainIncExpenses.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TMainIncExpenses.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+procedure TMainIncExpenses.SpeedButton2Click(Sender: TObject);
+var
+  v_cnd: string;
+begin
+  DataMod.OrPackIncomes.CallProcedure('get_report',
+   [DataMod.ODSCurrencyVALUTE.AsInteger
+   ,StrToInt(CBoxYears.Text)
+   ,RGroupAmountCurr.ItemIndex
+   ,EditBalCN.Text
+   ,CBoxBMonth.ItemIndex+1
+   ,CBoxEMonth.ItemIndex+1]);
+
+  v_cnd :=' where jan<>0 or feb<>0 or mar<>0 or apr<>0 or may<>0 or jun<>0';
+  v_cnd :=v_cnd + ' or jul<>0 or aug<>0 or sep<>0 or oct<>0 or nov<>0 or dek<>0';
+
+  with DataMod.ODSIncome do begin
+   SetVariable('condition', '');
+   if ChBoxTurn.Checked then SetVariable('condition', v_cnd);
+   DataMod.ODSIncome.CloseAll;
+   DataMod.ODSIncome.Open;
+  end;
+end;
+
+procedure TMainIncExpenses.Timer1Timer(Sender: TObject);
+begin
+  with DataMod.ODS_IncExpSet do begin
+   if active=false then active:=true;
+
+   Refresh;
+    if FieldByName('ttt').AsInteger=333 then   begin
+     Button1.Caption := IntToStr(StrToInt(Button1.Caption)+1);
+     ShowMessage('The table has been modified');
+    end;
+  end;
+
+ { with OracleQuery1 do begin
+   SetVariable('text1', 0);
+   Execute; }
+   with DataMod.OrPackIncomes do begin
+   CallProcedure('testupd', [0]);
+   sboapiDataModule.SBSession.Commit;
+  end;
+end;
+
+//********************************{ - Main - }**************************************
+
+procedure TMainIncExpenses.AddFilials;
+var
+  BranchIndex :Integer;
+begin
+  with  DataMod.OrDSFilial do
+  try
+    Open;
+    SetLength(Branch,RecordCount+1);
+    First;
+    BranchIndex :=0;
+    ChListFilial.Items.Clear;
+    Branch[BranchIndex] :=-1;
+    while not EOF do
+    begin
+      BranchIndex :=BranchIndex + 1;
+      ChListFilial.Items.Add(FieldByName('Name').AsString);
+      LBoxFilial.Items.Add(FieldByName('ID').AsString);
+      ChListFilial.Checked[BranchIndex-1]:=True;
+      Branch[BranchIndex] :=FieldByName('ID').AsInteger;
+      Next;
+    end;
+  finally
+  end;
+end;
+
+procedure TMainIncExpenses.ActiveFormCreate(Sender: TObject);
+var i :integer;
+k:integer;
+
+begin
+  Application.CreateForm(TDataMod, DataMod);
+  DataMod.OrDSSysDat.Close;
+  DataMod.OrDSSysDat.Open;
+  DTPickerBeg.Date :=DataMod.OrDSSysDatTEK_DAT.AsDateTime;
+  DTPickerEnd.Date :=DataMod.OrDSSysDatTEK_DAT.AsDateTime;
+  with DataMod.OrDSFilial do begin
+   Close;
+   Open;
+   First;
+  end;{with DataMod.OrDSFilial}
+  AddFilials;
+  {CBoxFilial.Items.Clear;
+  CBoxFilial.Items.Add('Ümumi bank üzrə');
+  for i :=1 to DataMod.OrDSFilial.RecordCount do begin
+      CBoxFilial.Items.Add(DataMod.OrDSFilialNAME.AsString);
+      DataMod.OrDSFilial.Next;
+  end;}{for i :=1 to DataMod.OrDSFilial.RecordCount}
+
+  with DataMod.ODS_Report_Symbol do begin
+   Close;
+   Open;
+   First;
+  end;
+  DBLCBoxRepSymb.KeyValue:=-1;
+
+  CBoxFilial.ItemIndex :=0;
+  AllBranchesChecked :=True;
+  DataMod.ODSCurrency.Open;
+  DBLCBoxCurrency.KeyValue :=DataMod.ODSCurrencyVALUTE.AsInteger;
+
+  for k := 2000 to StrToInt(DataMod.OrDSSysDatVYEAR.AsString) do begin
+   CBoxYears.Items.Add(IntToStr(k));
+  end;
+  CBoxYears.ItemIndex :=k-2001;
+  CBoxBMonth.ItemIndex :=0;
+  CBoxEMonth.ItemIndex :=11;
+
+  //combobox1.:='qw';//DataMod.OrDSSysDatVYEAR.AsString;
+  PageControl1.ActivePageIndex :=0;
+
+  {TabSheetIncomes.Caption:='';
+  TabSheetIncomes.Visible:=False;
+  GroupBox1.Visible:=False;
+  DBGrid1.Visible:=False;}
+
+  TranslateAllComponents(Self, DataMod.OPack_SL);
+
+end;
+
+procedure TMainIncExpenses.OKBtnClick(Sender: TObject);
+var
+  i :Integer;
+  SumInc, SumExp, SumRes :Real;
+begin
+
+  DBGridIncomes.DataSource:=nil;
+  DBGridExpenses.DataSource:=nil;
+  StTextIncome.Caption:='';
+  StTextExpense.Caption:='';
+  StTextBegOstat.Caption:='';
+  StTextResult.Caption:='';
+  StTextEndOstat.Caption:='';
+  {with DataMod.OrDSFilialCode do begin
+   Close;
+   SetVariable('FilialName',CBoxFilial.Text);
+   Open;
+  end;}{with DataMod.OrDSFilialCode}
+  CrFilialStr;
+  AddZeroesFilter;
+  DataMod.ODS_IncExpSet.Open;
+
+IF RGroupReportForm.ItemIndex = 1 THEN BEGIN
+//*******************
+//                    B Y   A C C O U N T S
+//                                            *********************
+
+ IF AllBranchesChecked = False THEN BEGIN
+  //*****************B Y   F I L I A L S********************
+  //***************************************************************
+  LabelInfo.Caption :='Gəlir hesablanır...';
+  ProgBar.Position  :=30;
+  Application.ProcessMessages;
+  with DataMod.OrDSIncomes do begin
+   CloseAll;
+   SetVariable('BegDate',FormatDateTime('dd/mm/yyyy', DTPickerBeg.Date));
+   SetVariable('EndDate',FormatDateTime('dd/mm/yyyy', DTPickerEnd.Date));
+   SetVariable('FilialCode',BranchStr);//DataMod.OrDSFilialCodeID.AsInteger);
+   //SetVariable('RepSymb', DataMod.ODS_Report_Symbol.FieldByName('ID').AsInteger);
+   SetVariable('SeprAccs',EditSeprAccs.Text);   //ShowMessage('z');
+   SetVariable('IEBal', DataMod.ODS_IncExpSet.FieldByName('IncExpBal').AsString);
+   SetVariable('IEMin', DataMod.ODS_IncExpSet.FieldByName('IncExp_Min').AsInteger);
+   SetVariable('IEMax', DataMod.ODS_IncExpSet.FieldByName('IncExp_Max').AsInteger);
+   SetVariable('IMax', DataMod.ODS_IncExpSet.FieldByName('Inc_Max').AsInteger);
+   SetVariable('IBals', DataMod.ODS_IncExpSet.FieldByName('Inc_Bals').AsString);
+   Open;
+   DataMod.DSIncomes.DataSet:=DataMod.OrDSIncomes;
+   DBGridIncomes.DataSource:=DataMod.DSIncomes;
+  end;{with DataMod.OrDSIncomes}
+  if ChBoxBegEndOstats.Checked=true then begin
+   with DataMod.OrDSBegOstat do begin
+    CloseAll;
+    SetVariable('BegDate',FormatDateTime('dd/mm/yyyy',DTPickerBeg.Date));
+    SetVariable('FilialCode',BranchStr);// DataMod.OrDSFilialCodeID.AsInteger);
+    SetVariable('IEBal', DataMod.ODS_IncExpSet.FieldByName('IncExpBal').AsString);
+    Open;
+    StTextBegOstat.Caption:=DataMod.OrDSBegOstatSUMER.AsString;
+   end;{with DataMod.OrDSBegOstat}
+  end;{if ChBoxBegEndOstats.Checked=true}
+
+
+  LabelInfo.Caption :='Xərc hesablanır...';
+  ProgBar.Position  :=60;
+  Application.ProcessMessages;
+  with DataMod.OrDSExpenses do begin
+   CloseAll;
+   SetVariable('BegDate',FormatDateTime('dd/mm/yyyy', DTPickerBeg.Date));
+   SetVariable('EndDate',FormatDateTime('dd/mm/yyyy', DTPickerEnd.Date));
+   SetVariable('FilialCode',BranchStr);// DataMod.OrDSFilialCodeID.AsInteger);
+   SetVariable('SeprAccs',EditSeprAccs.Text);
+   SetVariable('IEBal', DataMod.ODS_IncExpSet.FieldByName('IncExpBal').AsString);
+   SetVariable('IEMin', DataMod.ODS_IncExpSet.FieldByName('IncExp_Min').AsInteger);
+   SetVariable('IEMax', DataMod.ODS_IncExpSet.FieldByName('IncExp_Max').AsInteger);
+   SetVariable('EMin', DataMod.ODS_IncExpSet.FieldByName('Exp_Min').AsInteger);
+   SetVariable('EBals', DataMod.ODS_IncExpSet.FieldByName('Exp_Bals').AsString);
+   Open;
+   DataMod.DSExpenses.DataSet:=DataMod.OrDSExpenses;
+   DBGridExpenses.DataSource:=DataMod.DSExpenses;
+  end;{with OrDSExpenses}
+  if ChBoxBegEndOstats.Checked=true then begin
+   with DataMod.OrDSEndOstat do begin
+    CloseAll;
+    SetVariable('EndDate',FormatDateTime('dd/mm/yyyy',DTPickerEnd.Date));
+    SetVariable('FilialCode',BranchStr);// DataMod.OrDSFilialCodeID.AsInteger);
+    SetVariable('IEBal', DataMod.ODS_IncExpSet.FieldByName('IncExpBal').AsString);
+    Open;
+    StTextEndOstat.Caption:=DataMod.OrDSEndOstatSUMER.AsString;
+   end;{with DataMod.OrDSEndOstat}
+  end;{if ChBoxBegEndOstats.Checked=true}
+
+  LabelInfo.Caption :='...';
+  ProgBar.Position  :=0;
+
+  END {IF AllBranchesChecked = False}
+
+
+  ELSE BEGIN
+  //**********G E N E R A L   R E P O R T*************
+  //***********************************************
+  DataMod.OrDSBankInfo.Close;
+  DataMod.OrDSBankInfo.Open;
+  LabelInfo.Caption :='Gəlir hesablanır...';
+  ProgBar.Position  :=30;
+ // Application.ProcessMessages;
+  with DataMod.OrDSIncomesGeneral do begin
+   CloseAll;
+   SetVariable('BegDate',FormatDateTime('dd/mm/yyyy', DTPickerBeg.Date));
+   SetVariable('EndDate',FormatDateTime('dd/mm/yyyy', DTPickerEnd.Date));
+   SetVariable('SeprAccs',EditSeprAccs.Text);
+   SetVariable('IEBal', DataMod.ODS_IncExpSet.FieldByName('IncExpBal').AsString);
+   SetVariable('IEMin', DataMod.ODS_IncExpSet.FieldByName('IncExp_Min').AsInteger);
+   SetVariable('IEMax', DataMod.ODS_IncExpSet.FieldByName('IncExp_Max').AsInteger);
+   SetVariable('IMax', DataMod.ODS_IncExpSet.FieldByName('Inc_Max').AsInteger);
+   SetVariable('IBals', DataMod.ODS_IncExpSet.FieldByName('Inc_Bals').AsString);
+   Open;
+   DataMod.DSIncomes.DataSet:=DataMod.OrDSIncomesGeneral;
+   DBGridIncomes.DataSource:=DataMod.DSIncomes;
+  end;{with DataMod.OrDSIncomesGeneral}
+  if ChBoxBegEndOstats.Checked=true then begin
+   with DataMod.OrDSBegOstatGen do begin
+    CloseAll;
+    SetVariable('BegDate',FormatDateTime('dd/mm/yyyy',DTPickerBeg.Date));
+    SetVariable('IEBal', DataMod.ODS_IncExpSet.FieldByName('IncExpBal').AsString);
+    Open;
+    StTextBegOstat.Caption:=DataMod.OrDSBegOstatGenSUMER.AsString;
+   end;{with DataMod.OrDSBegOstatGen}
+  end;{if ChBoxBegEndOstats.Checked=true}
+
+  LabelInfo.Caption :='Xərc hesablanır...';
+  ProgBar.Position  :=60;
+ // Application.ProcessMessages;
+  with DataMod.OrDSExpensesGeneral do begin
+   CloseAll;
+   SetVariable('BegDate',FormatDateTime('dd/mm/yyyy', DTPickerBeg.Date));
+   SetVariable('EndDate',FormatDateTime('dd/mm/yyyy', DTPickerEnd.Date));
+   SetVariable('SeprAccs',EditSeprAccs.Text);
+   SetVariable('IEBal', DataMod.ODS_IncExpSet.FieldByName('IncExpBal').AsString);
+   SetVariable('IEMin', DataMod.ODS_IncExpSet.FieldByName('IncExp_Min').AsInteger);
+   SetVariable('IEMax', DataMod.ODS_IncExpSet.FieldByName('IncExp_Max').AsInteger);
+   SetVariable('EMin', DataMod.ODS_IncExpSet.FieldByName('Exp_Min').AsInteger);
+   SetVariable('EBals', DataMod.ODS_IncExpSet.FieldByName('Exp_Bals').AsString);
+   Open;
+   DataMod.DSExpenses.DataSet:=DataMod.OrDSExpensesGeneral;
+   DBGridExpenses.DataSource:=DataMod.DSExpenses;
+  end;{with DataMod.OrDSExpensesGeneral}
+  if ChBoxBegEndOstats.Checked=true then begin
+   with DataMod.OrDSEndOstatGen do begin
+    CloseAll;
+    SetVariable('EndDate',FormatDateTime('dd/mm/yyyy',DTPickerEnd.Date));
+    SetVariable('IEBal', DataMod.ODS_IncExpSet.FieldByName('IncExpBal').AsString);
+    Open;
+    StTextEndOstat.Caption:=DataMod.OrDSEndOstatGenSUMER.AsString;
+   end;{with DataMod.OrDSBegOstatGen}
+  end;{if ChBoxBegEndOstats.Checked=true}
+
+  LabelInfo.Caption :='...';
+  ProgBar.Position  :=0;
+
+  END; {ELSE}
+END; {IF RGroupReportForm.ItemIndex = 1}
+
+IF RGroupReportForm.ItemIndex = 0 THEN BEGIN
+
+
+//*******************
+//                    B Y   B A L A N C E
+//                                            *********************
+
+ IF AllBranchesChecked = False THEN BEGIN
+  //*****************B Y   F I L I A L S********************
+  //***************************************************************
+  LabelInfo.Caption :='Gəlir hesablanır...';
+  ProgBar.Position  :=30;
+  Application.ProcessMessages;
+  with DataMod.OrDSIncomesBal do begin
+   CloseAll;
+   SetVariable('BegDate',FormatDateTime('dd/mmm/yyyy', DTPickerBeg.Date));
+   SetVariable('EndDate',FormatDateTime('dd/mmm/yyyy', DTPickerEnd.Date));
+   SetVariable('FilialCode',BranchStr);// DataMod.OrDSFilialCodeID.AsInteger);
+   SetVariable('SeprAccs',EditSeprAccs.Text);
+   SetVariable('IEBal', DataMod.ODS_IncExpSet.FieldByName('IncExpBal').AsString);
+   SetVariable('IEMin', DataMod.ODS_IncExpSet.FieldByName('IncExp_Min').AsInteger);
+   SetVariable('IEMax', DataMod.ODS_IncExpSet.FieldByName('IncExp_Max').AsInteger);
+   SetVariable('IMax', DataMod.ODS_IncExpSet.FieldByName('Inc_Max').AsInteger);
+   SetVariable('IBals', DataMod.ODS_IncExpSet.FieldByName('Inc_Bals').AsString);
+   Open;
+   DataMod.DSIncomes.DataSet:=DataMod.OrDSIncomesBal;
+   DBGridIncomes.DataSource:=DataMod.DSIncomes;
+  end;{with DataMod.OrDSIncomesBal}
+    //DataMod.OrDSIncomesBal.SQL.GetText;
+  if ChBoxBegEndOstats.Checked=true then begin
+   with DataMod.OrDSBegOstat do begin
+    CloseAll;
+    SetVariable('BegDate',FormatDateTime('dd/mm/yyyy',DTPickerBeg.Date));
+    SetVariable('FilialCode',BranchStr);// DataMod.OrDSFilialCodeID.AsInteger);
+    SetVariable('IEBal', DataMod.ODS_IncExpSet.FieldByName('IncExpBal').AsString);
+    Open;
+    StTextBegOstat.Caption:=DataMod.OrDSBegOstatSUMER.AsString;
+   end;{with DataMod.OrDSBegOstat}
+  end;{if ChBoxBegEndOstats.Checked=true}
+
+
+  LabelInfo.Caption :='Xərc hesablanır...';
+  ProgBar.Position  :=60;
+  Application.ProcessMessages;
+  with DataMod.OrDSExpensesBal do begin
+   CloseAll;
+   SetVariable('BegDate',FormatDateTime('dd/mmm/yyyy', DTPickerBeg.Date));
+   SetVariable('EndDate',FormatDateTime('dd/mmm/yyyy', DTPickerEnd.Date));
+   SetVariable('FilialCode',BranchStr);// DataMod.OrDSFilialCodeID.AsInteger);
+   SetVariable('SeprAccs',EditSeprAccs.Text);
+   SetVariable('IEBal', DataMod.ODS_IncExpSet.FieldByName('IncExpBal').AsString);
+   SetVariable('IEMin', DataMod.ODS_IncExpSet.FieldByName('IncExp_Min').AsInteger);
+   SetVariable('IEMax', DataMod.ODS_IncExpSet.FieldByName('IncExp_Max').AsInteger);
+   SetVariable('EMin', DataMod.ODS_IncExpSet.FieldByName('Exp_Min').AsInteger);
+   SetVariable('EBals', DataMod.ODS_IncExpSet.FieldByName('Exp_Bals').AsString);
+   Open;
+   DataMod.DSExpenses.DataSet:=DataMod.OrDSExpensesBal;
+   DBGridExpenses.DataSource:=DataMod.DSExpenses;
+  end;{with DataMod.OrDSExpensesBal}
+  if ChBoxBegEndOstats.Checked=true then begin
+   with DataMod.OrDSEndOstat do begin
+    CloseAll;
+    SetVariable('EndDate',FormatDateTime('dd/mm/yyyy',DTPickerEnd.Date));
+    SetVariable('FilialCode',BranchStr);// DataMod.OrDSFilialCodeID.AsInteger);
+    SetVariable('IEBal', DataMod.ODS_IncExpSet.FieldByName('IncExpBal').AsString);
+    Open;
+    StTextEndOstat.Caption:=DataMod.OrDSEndOstatSUMER.AsString;
+   end;{with DataMod.OrDSEndOstat}
+  end;{if ChBoxBegEndOstats.Checked=true}
+
+
+  LabelInfo.Caption :='...';
+  ProgBar.Position  :=0;
+
+  END {IF AllBranchesChecked = False}
+
+
+  ELSE BEGIN
+  //**********G E N E R A L   R E P O R T*************
+  //***********************************************
+  DataMod.OrDSBankInfo.Close;
+  DataMod.OrDSBankInfo.Open;
+  LabelInfo.Caption :='Gəlir hesablanır...';
+  ProgBar.Position  :=30;
+  Application.ProcessMessages;
+  with DataMod.OrDSIncGenBal do begin
+   CloseAll;
+   SetVariable('BegDate',FormatDateTime('dd/mm/yyyy', DTPickerBeg.Date));
+   SetVariable('EndDate',FormatDateTime('dd/mm/yyyy', DTPickerEnd.Date));
+   SetVariable('SeprAccs',EditSeprAccs.Text);
+   SetVariable('IEBal', DataMod.ODS_IncExpSet.FieldByName('IncExpBal').AsString);
+   SetVariable('IEMin', DataMod.ODS_IncExpSet.FieldByName('IncExp_Min').AsInteger);
+   SetVariable('IEMax', DataMod.ODS_IncExpSet.FieldByName('IncExp_Max').AsInteger);
+   SetVariable('IMax', DataMod.ODS_IncExpSet.FieldByName('Inc_Max').AsInteger);
+   SetVariable('IBals', DataMod.ODS_IncExpSet.FieldByName('Inc_Bals').AsString);
+   Open;
+   DataMod.DSIncomes.DataSet:=DataMod.OrDSIncGenBal;
+   DBGridIncomes.DataSource:=DataMod.DSIncomes;
+  end;{with OrDSIncGenBal}
+  if ChBoxBegEndOstats.Checked=true then begin
+   with DataMod.OrDSBegOstatGen do begin
+    CloseAll;
+    SetVariable('BegDate',FormatDateTime('dd/mm/yyyy',DTPickerBeg.Date));
+    SetVariable('IEBal', DataMod.ODS_IncExpSet.FieldByName('IncExpBal').AsString);
+    Open;
+    StTextBegOstat.Caption:=DataMod.OrDSBegOstatGenSUMER.AsString;
+   end;{with DataMod.OrDSBegOstatGen}
+  end;{if ChBoxBegEndOstats.Checked=true}
+
+
+  LabelInfo.Caption :='Xərc hesablanır...';
+  ProgBar.Position  :=60;
+  Application.ProcessMessages;
+  with DataMod.OrDSExpGenBal do begin
+   CloseAll;
+   SetVariable('BegDate',FormatDateTime('dd/mm/yyyy', DTPickerBeg.Date));
+   SetVariable('EndDate',FormatDateTime('dd/mm/yyyy', DTPickerEnd.Date));
+   SetVariable('SeprAccs',EditSeprAccs.Text);
+   SetVariable('IEBal', DataMod.ODS_IncExpSet.FieldByName('IncExpBal').AsString);
+   SetVariable('IEMin', DataMod.ODS_IncExpSet.FieldByName('IncExp_Min').AsInteger);
+   SetVariable('IEMax', DataMod.ODS_IncExpSet.FieldByName('IncExp_Max').AsInteger);
+   SetVariable('EMin', DataMod.ODS_IncExpSet.FieldByName('Exp_Min').AsInteger);
+   SetVariable('EBals', DataMod.ODS_IncExpSet.FieldByName('Exp_Bals').AsString);
+   Open;
+   DataMod.DSExpenses.DataSet:=DataMod.OrDSExpGenBal;
+   DBGridExpenses.DataSource:=DataMod.DSExpenses;
+  end;{with OrDSExpGenBal}
+  if ChBoxBegEndOstats.Checked=true then begin
+   with DataMod.OrDSEndOstatGen do begin
+    CloseAll;
+    SetVariable('EndDate',FormatDateTime('dd/mm/yyyy',DTPickerEnd.Date));
+    SetVariable('IEBal', DataMod.ODS_IncExpSet.FieldByName('IncExpBal').AsString);
+    Open;
+    StTextEndOstat.Caption:=DataMod.OrDSEndOstatGenSUMER.AsString;
+   end;{with DataMod.OrDSEndOstatGen}
+  end;{if ChBoxBegEndOstats.Checked=true}
+
+
+  LabelInfo.Caption :='...';
+  ProgBar.Position  :=0;
+
+  END; {ELSE}
+
+END; {IF RGroupReportForm.ItemIndex = 2 THEN BEGIN}
+
+//***** StaticText
+  SumInc:=0;
+  DBGridIncomes.DataSource.DataSet.First;
+  for i:=1 to DBGridIncomes.DataSource.DataSet.RecordCount do
+  begin
+   SumInc:=SumInc+DBGridIncomes.DataSource.DataSet.FieldByName('Rest').AsFloat;
+   DBGridIncomes.DataSource.DataSet.Next;
+  end;{for i:=1 to DBGridIncomes.DataSource.DataSet.RecordCount}
+  StTextIncome.Caption:=FloatToStr(SumInc);
+
+  SumExp:=0;
+  DBGridExpenses.DataSource.DataSet.First;
+  for i:=1 to DBGridExpenses.DataSource.DataSet.RecordCount do
+  begin
+   SumExp:=SumExp+DBGridExpenses.DataSource.DataSet.FieldByName('Rest').AsFloat;
+   DBGridExpenses.DataSource.DataSet.Next;
+  end;{for i:=1 to DBGridExpenses.DataSource.DataSet.RecordCount}
+  StTextExpense.Caption:=FloatToStr(SumExp);
+
+  SumRes :=SumInc-SumExp;
+  StTextResult.Caption:=FloatToStr(SumRes);
+  ChBoxMinuses.Enabled:=True;
+end;
+
+procedure TMainIncExpenses.ExcelBtnClick(Sender: TObject);
+var
+  V, Sheet, Sheets   :Variant;
+  cell, row, i, j    :Integer;
+  E_Row1,OpenedXlsCnt:Integer;
+begin
+  try
+  if (DBGridIncomes.DataSource.DataSet.RecordCount =0)
+   and (DBGridExpenses.DataSource.DataSet.RecordCount =0)
+    then Exit;
+  except
+   Exit;
+  end;   
+
+  DataMod.OrDSBankInfo.Close;
+  DataMod.OrDSBankInfo.Open;
+
+//********************** Other filials ****************************
+  if ChBoxOtherFilials.Checked = true then begin
+  LabelInfo.Caption :='Filiallar üzrə gəlir hesablanır...';
+  ProgBar.Position  :=30;
+  Application.ProcessMessages;
+  with DataMod.OrDSIncOtherFilials do begin
+    CloseAll;
+    SetVariable('BegDate',FormatDateTime('dd/mm/yyyy',DTPickerBeg.Date));
+    SetVariable('EndDate',FormatDateTime('dd/mm/yyyy',DTPickerEnd.Date));
+    SetVariable('FilialCode',BranchStr);// DataMod.OrDSFilialCodeID.AsInteger);
+    SetVariable('IEBal', DataMod.ODS_IncExpSet.FieldByName('IncExpBal').AsString);
+    SetVariable('IMin', DataMod.ODS_IncExpSet.FieldByName('Inc_Min').AsInteger);
+    SetVariable('IMax', DataMod.ODS_IncExpSet.FieldByName('Inc_Max').AsInteger);
+
+    if AllBranchesChecked = True then SetVariable('FilialCode','-1');
+    Open;
+  end;{with DataMod.OrDSIncOtherFilials}
+  LabelInfo.Caption :='Filiallar üzrə xərc hesablanır...';
+  ProgBar.Position  :=60;
+  Application.ProcessMessages;
+  with DataMod.OrDSExpOtherFilials do begin
+    CloseAll;
+    SetVariable('BegDate',FormatDateTime('dd/mm/yyyy',DTPickerBeg.Date));
+    SetVariable('EndDate',FormatDateTime('dd/mm/yyyy',DTPickerEnd.Date));
+    SetVariable('FilialCode',BranchStr); //DataMod.OrDSFilialCodeID.AsInteger);
+    SetVariable('IEBal', DataMod.ODS_IncExpSet.FieldByName('IncExpBal').AsString);
+    SetVariable('EMin', DataMod.ODS_IncExpSet.FieldByName('Exp_Min').AsInteger);
+    SetVariable('EMax', DataMod.ODS_IncExpSet.FieldByName('Exp_Max').AsInteger);
+
+    if ChBoxAllFilials.Checked=true then SetVariable('FilialCode',-1);
+    Open;
+  end;{with DataMod.OrDSExpOtherFilials}
+  LabelInfo.Caption :='';
+  ProgBar.Position  :=0;
+  Application.ProcessMessages;
+  end;{if ChBoxOtherFilials.Checked = true}
+//
+
+IF RGroupReportForm.ItemIndex = 1 THEN BEGIN
+//*******************
+//                    B Y   A C C O U N T S
+//                                            *********************
+
+  //***************************************************************
+  //**********Excel Application**********
+  ExcelApplication1.Disconnect;
+  V :=ExcelApplication1.Application;
+  ExcelApplication1.Connect;
+  ExcelApplication1.Visible[0] :=True;
+
+  V.Workbooks.Open(ExtractFilePath(ExtractFilePath(ParamStr(0)))+ 'IncExp.xls');
+  for OpenedXlsCnt :=1 to 100 do
+  try
+   Sheet := V.Workbooks[OpenedXlsCnt].Worksheets['IncExp'];
+   Break;
+  except
+  end;
+  Sheets := V.Sheets;
+  Sheets.Item['IncExp'].Activate;
+  Sheets.Item['IncExp'].Range['A1:CA1000'].Delete;
+  Sheets.Item['IncExp'].Range['A1:CA1000'].AutoFormat(1, 0, true, 0, 0, 0, 1);
+  //Sheets.Item['IncExp'].Range['B1:B1000'].NumberFormat := '!@';
+  Sheets.Item['IncExp'].Range['A1:CA1000'].Font.Name := 'Tahoma';
+  Sheets.Item['IncExp'].Range['A1:CA1000'].Font.Size := 8;
+  Sheets.Item['IncExp'].Range['D1:D1000'].NumberFormat := '# ### ###.00';
+  Sheet.cells[1,3].Font.Bold:=true;
+  Sheet.cells[1,3]:='';//DataMod.OrDSFilialCodeNAME.AsString;
+  Sheet.cells[2,3].Font.Bold:=true;
+  Sheet.cells[2,3]:='GƏLİR-XƏRC HESABATI';
+  Sheet.cells[3,3].Font.Bold:=true;
+  Sheet.cells[3,3]:=DateToStr(DTPickerBeg.Date)+'-'+DateToStr(DTPickerEnd.Date);
+
+  //****** I N C O M E   R E P O R T **********
+  //**********Caption of Income report**************
+  Sheet.cells[5,3].Font.Bold:=true;
+  Sheet.cells[5,3]:='Gəlir hesabatı';
+  Sheet.cells[6,1].Font.Bold:=true;
+  Sheet.cells[6,1].Borders.weight:=2;
+  Sheet.cells[6,1]:='Balans';
+  Sheet.cells[6,2].Font.Bold:=true;
+  Sheet.cells[6,2].Borders.weight:=2;
+  Sheet.cells[6,2]:='Hesab';
+  Sheet.cells[6,3].Font.Bold:=true;
+  Sheet.cells[6,3].Borders.weight:=2;
+  Sheet.cells[6,3]:='Hesabın adı';
+  Sheet.cells[6,4].Font.Bold:=true;
+  Sheet.cells[6,4].Borders.weight:=2;
+  Sheet.cells[6,4]:='Məbləğ';
+  row:=7;
+  cell:=1;
+  //********DBGridIncomes.DataSource.DataSet************
+  DBGridIncomes.DataSource.DataSet.First;
+  for j :=1 to DBGridIncomes.DataSource.DataSet.RecordCount do begin
+  cell:=1;
+
+  if ChBoxMinuses.Checked=false then begin
+  if DBGridIncomes.DataSource.DataSet.FieldByName('REST').AsFloat>=0 then begin
+  for i :=0 to DBGridIncomes.DataSource.DataSet.FieldCount-1 do begin
+    Sheet.cells[row,cell].Borders.weight:=2;
+    Sheet.cells[row,cell]:=DBGridIncomes.DataSource.DataSet.Fields[i].AsString;
+    if cell=4 then Sheet.cells[row,cell]:=DBGridIncomes.DataSource.DataSet.FieldByName('REST').AsFloat;
+    cell:=cell+1;
+   end;{for i :=0 to DBGridIncomes.DataSource.DataSet.FieldCount-1}
+   row:=row+1;
+   end;{if DBGridIncomes.DataSource.DataSet.FieldByName('REST').AsFloat>=0 then begin}
+  end{if ChBoxMinuses.Checked=false}
+  else begin
+  for i :=0 to DBGridIncomes.DataSource.DataSet.FieldCount-1 do begin
+    Sheet.cells[row,cell].Borders.weight:=2;
+    Sheet.cells[row,cell]:=DBGridIncomes.DataSource.DataSet.Fields[i].AsString;
+    if cell=4 then Sheet.cells[row,cell]:=DBGridIncomes.DataSource.DataSet.FieldByName('REST').AsFloat;
+    cell:=cell+1;
+   end;{for i :=0 to DBGridIncomes.DataSource.DataSet.FieldCount-1}
+   row:=row+1;
+  end;{else}
+   DBGridIncomes.DataSource.DataSet.Next;
+  end;{for j :=1 to DBGridIncomes.DataSource.DataSet.RecordCount}
+
+  //********DBGridExpenses.DataSource.DataSet************
+  if ChBoxMinuses.Checked=false then begin
+  DBGridExpenses.DataSource.DataSet.First;
+  for j :=1 to DBGridExpenses.DataSource.DataSet.RecordCount do begin
+  cell:=1;
+  if DBGridExpenses.DataSource.DataSet.FieldByName('REST').AsFloat<0 then begin
+  for i :=0 to DBGridExpenses.DataSource.DataSet.FieldCount-1 do begin
+    Sheet.cells[row,cell].Borders.weight:=2;
+    Sheet.cells[row,cell]:=DBGridExpenses.DataSource.DataSet.Fields[i].AsString;
+    if cell=4 then Sheet.cells[row,cell]:=(-1)*DBGridExpenses.DataSource.DataSet.FieldByName('REST').AsFloat;
+    cell:=cell+1;
+   end;{for i :=0 to DBGridExpenses.DataSource.DataSet.FieldCount-1}
+   row:=row+1;
+   end;{if DBGridExpenses.DataSource.DataSet.FieldByName('REST').AsFloat<0 then begin}
+   DBGridExpenses.DataSource.DataSet.Next;
+  end;{for j :=1 to DBGridExpenses.DataSource.DataSet.RecordCount}
+  end;{if ChBoxMinuses.Checked=false}
+
+  Sheet.cells[row,3].Font.Bold:=true;
+  Sheet.cells[row,3]:='                                                   CƏMİ';
+  Sheet.cells[row,4].Font.Bold:=true;
+  if {(DBGridIncomes.DataSource.DataSet.RecordCount<>0) or
+     (DBGridExpenses.DataSource.DataSet.RecordCount<>0)}
+     (row-1)>=7 then
+     Sheet.cells[row,4]:='=SUM(D7:D'+IntToStr(row-1)+')'
+  else Sheet.cells[row,4]:=0;
+
+  //********* E X P E N S E   R E P O R T ************
+  //***********Caption of Expense report*******
+  row:=row+2;
+  Sheet.cells[row,3].Font.Bold:=true;
+  Sheet.cells[row,3]:='Xərc hesabatı';
+  row:=row+1;
+  Sheet.cells[row,1].Font.Bold:=true;
+  Sheet.cells[row,1].Borders.weight:=2;
+  Sheet.cells[row,1]:='Balans';
+  Sheet.cells[row,2].Font.Bold:=true;
+  Sheet.cells[row,2].Borders.weight:=2;
+  Sheet.cells[row,2]:='Hesab';
+  Sheet.cells[row,3].Font.Bold:=true;
+  Sheet.cells[row,3].Borders.weight:=2;
+  Sheet.cells[row,3]:='Hesabın adı';
+  Sheet.cells[row,4].Font.Bold:=true;
+  Sheet.cells[row,4].Borders.weight:=2;
+  Sheet.cells[row,4]:='Məbləğ';
+
+  //**********DBGridExpenses.DataSource.DataSet**********
+  row:=row+1;
+  E_Row1:=row;
+  DBGridExpenses.DataSource.DataSet.First;
+  for j :=1 to DBGridExpenses.DataSource.DataSet.RecordCount do begin
+   cell:=1;
+
+  if ChBoxMinuses.Checked=false then begin
+   if DBGridExpenses.DataSource.DataSet.FieldByName('REST').AsFloat>=0 then begin
+   for i :=0 to DBGridExpenses.DataSource.DataSet.FieldCount-1 do begin
+    Sheet.cells[row,cell].Borders.weight:=2;
+    Sheet.cells[row,cell]:=DBGridExpenses.DataSource.DataSet.Fields[i].AsString;
+    if cell=4 then Sheet.cells[row,cell]:=DBGridExpenses.DataSource.DataSet.FieldByName('REST').AsFloat;
+    cell:=cell+1;
+   end;{for i :=0 to DBGridExpenses.DataSource.DataSet.FieldCount-1}
+   row:=row+1;
+   end;{if DBGridExpenses.DataSource.DataSet.FieldByName('REST').AsFloat>=0}
+  end {if ChBoxMinuses.Checked=false}
+  else begin
+  for i :=0 to DBGridExpenses.DataSource.DataSet.FieldCount-1 do begin
+    Sheet.cells[row,cell].Borders.weight:=2;
+    Sheet.cells[row,cell]:=DBGridExpenses.DataSource.DataSet.Fields[i].AsString;
+    if cell=4 then Sheet.cells[row,cell]:=DBGridExpenses.DataSource.DataSet.FieldByName('REST').AsFloat;
+    cell:=cell+1;
+   end;{for i :=0 to DBGridExpenses.DataSource.DataSet.FieldCount-1}
+   row:=row+1;
+  end;{else}
+   DBGridExpenses.DataSource.DataSet.Next;
+  end;{for j :=1 to DBGridExpenses.DataSource.DataSet.RecordCount}
+
+  //********DBGridIncomes.DataSource.DataSet************
+  if ChBoxMinuses.Checked=false then begin
+  DBGridIncomes.DataSource.DataSet.First;
+  for j :=1 to DBGridIncomes.DataSource.DataSet.RecordCount do begin
+  cell:=1;
+  if DBGridIncomes.DataSource.DataSet.FieldByName('REST').AsFloat<0 then begin
+  for i :=0 to DBGridIncomes.DataSource.DataSet.FieldCount-1 do begin
+    Sheet.cells[row,cell].Borders.weight:=2;
+    Sheet.cells[row,cell]:=DBGridIncomes.DataSource.DataSet.Fields[i].AsString;
+    if cell=4 then Sheet.cells[row,cell]:=(-1)*DBGridIncomes.DataSource.DataSet.FieldByName('REST').AsFloat;
+    cell:=cell+1;
+   end;{for i :=0 to DBGridIncomes.DataSource.DataSet.FieldCount-1}
+   row:=row+1;
+   end;{if DBGridIncomes.DataSource.DataSet.FieldByName('REST').AsFloat<0 then begin}
+   DBGridIncomes.DataSource.DataSet.Next;
+  end;{for j :=1 to DBGridIncomes.DataSource.DataSet.RecordCount}
+  end;{if ChBoxMinuses.Checked=false}
+
+  Sheet.cells[row,3].Font.Bold:=true;
+  Sheet.cells[row,3]:='                                                   CƏMİ';
+  Sheet.cells[row,4].Font.Bold:=true;
+  if {(DBGridIncomes.DataSource.DataSet.RecordCount<>0) or
+     (DBGridExpenses.DataSource.DataSet.RecordCount<>0)}
+     (row-1)>=E_Row1 then
+  Sheet.cells[row,4]:='=SUM(D'+IntToStr(E_Row1)+':D'+IntToStr((row-1))+')'
+  else Sheet.cells[row,4]:=0;
+
+  //******** Incomes-expenses difference*******
+  row:=row+3;
+  Sheet.cells[row,3].Font.Bold:=true;
+  Sheet.cells[row,3]:='                         Gəlir və xərc arasında fərq';
+  Sheet.cells[row,4].Font.Bold:=true;
+  Sheet.cells[row,4]:='=SUM(D'+IntToStr(E_Row1-4)+')-SUM(D'+IntToStr(row-3)+')';
+  if ChBoxBegEndOstats.Checked=true then begin
+   Sheet.cells[row-1,3].Font.Bold:=true;
+   Sheet.cells[row-1,3]:='                         Dövrün əvvəlinə qalıq';
+   Sheet.cells[row-1,4].Font.Bold:=true;
+   Sheet.cells[row-1,4]:=StTextBegOstat.Caption;
+   Sheet.cells[row+1,3].Font.Bold:=true;
+   Sheet.cells[row+1,3]:='                         Dövrün sonuna qalıq';
+   Sheet.cells[row+1,4].Font.Bold:=true;
+   Sheet.cells[row+1,4]:=StTextEndOstat.Caption;
+  end;{if ChBoxBegEndOstats.Checked=true}
+
+  //******* Other filials**********************
+  row:=row+5;
+  if ChBoxOtherFilials.Checked=true then begin
+  with DataMod do begin
+   for i:=1 to OrDSIncOtherFilials.RecordCount do begin
+    Sheet.cells[row,1]:=OrDSIncOtherFilialsFILIALNo.AsString;
+    Sheet.cells[row,3].Font.Bold:=true;
+    Sheet.cells[row,3]:='                         '+OrDSIncOtherFilialsFILIAL.AsString;
+    Sheet.cells[row,4]:=OrDSIncOtherFilialsREST.AsString;
+    row:=row+1;
+    Sheet.cells[row,4]:=OrDSExpOtherFilialsREST.AsString;
+    row:=row+1;
+    Sheet.cells[row,3].Font.Bold:=true;
+    Sheet.cells[row,3]:='                         Gəlir-xərc fərqi';
+    Sheet.cells[row,4]:='=SUM(D'+IntToStr(row-2)+')-SUM(D'+IntToStr(row-1)+')';
+    row:=row+2;
+    OrDSIncOtherFilials.Next;
+    OrDSExpOtherFilials.Next;
+   end;{for i:=1 to OrDSIncOtherFilials.RecordCount}
+  end;{with DataMod}
+  end;{if ChBoxOtherFilials.Checked=true}
+
+  V :=null;
+  ExcelApplication1.Disconnect;
+
+
+END {IF RGroupReportForm.ItemIndex = 1}
+
+ELSE BEGIN
+
+
+//*******************
+//                    B Y   B A L A N C E
+//                                            *********************
+
+
+  //***************************************************************
+  //**********Excel Application**********
+  ExcelApplication1.Disconnect;
+  V :=ExcelApplication1.Application;
+  ExcelApplication1.Connect;
+  ExcelApplication1.Visible[0] :=True;
+  V.Workbooks.Open(ExtractFilePath(ExtractFilePath(ParamStr(0)))+ 'IncExpBal.xls');
+
+  for OpenedXlsCnt :=1 to 100 do
+  try
+   Sheet := V.Workbooks[OpenedXlsCnt].Worksheets['IncExp'];
+   Break;
+  except
+  end;
+  Sheets := V.Sheets;
+  Sheets.Item['IncExp'].Activate;
+  Sheets.Item['IncExp'].Range['A1:CA1000'].Delete;
+  Sheets.Item['IncExp'].Range['A1:CA1000'].AutoFormat(1, 0, true, 0, 0, 0, 1);
+  Sheets.Item['IncExp'].Range['A1:CA1000'].Font.Name := 'Tahoma';
+  Sheets.Item['IncExp'].Range['A1:CA1000'].Font.Size := 8;
+  Sheets.Item['IncExp'].Range['C1:C1000'].NumberFormat := '# ### ###.00';
+  Sheet.cells[1,2].Font.Bold:=true;
+  Sheet.cells[1,2]:='';//DataMod.OrDSFilialCodeNAME.AsString;
+  Sheet.cells[2,2].Font.Bold:=true;
+  Sheet.cells[2,2]:='GƏLİR-XƏRC HESABATI';
+  Sheet.cells[3,2].Font.Bold:=true;
+  Sheet.cells[3,2]:=DateToStr(DTPickerBeg.Date)+'-'+DateToStr(DTPickerEnd.Date);
+
+  //****** I N C O M E   R E P O R T **********
+  //**********Caption of Income report**************
+  Sheet.cells[5,2].Font.Bold:=true;
+  Sheet.cells[5,2]:='Gəlir hesabatı';
+  Sheet.cells[6,1].Font.Bold:=true;
+  Sheet.cells[6,1].Borders.weight:=2;
+  Sheet.cells[6,1]:='Balans';
+  Sheet.cells[6,2].Font.Bold:=true;
+  Sheet.cells[6,2].Borders.weight:=2;
+  Sheet.cells[6,2]:='Hesabın adı';
+  Sheet.cells[6,3].Font.Bold:=true;
+  Sheet.cells[6,3].Borders.weight:=2;
+  Sheet.cells[6,3]:='Məbləğ';
+  row:=7;
+  cell:=1;
+  //********DBGridIncomes.DataSource.DataSet************
+
+  DBGridIncomes.DataSource.DataSet.First;
+  for j :=1 to DBGridIncomes.DataSource.DataSet.RecordCount do begin
+  cell:=1;
+
+  if ChBoxMinuses.Checked=false then begin
+  if DBGridIncomes.DataSource.DataSet.FieldByName('REST').AsFloat>=0 then begin
+  for i :=0 to DBGridIncomes.DataSource.DataSet.FieldCount-1 do begin
+    Sheet.cells[row,cell].Borders.weight:=2;
+    Sheet.cells[row,cell]:=DBGridIncomes.DataSource.DataSet.Fields[i].AsString;
+    if cell=3 then Sheet.cells[row,cell]:=DBGridIncomes.DataSource.DataSet.FieldByName('REST').AsFloat;
+    cell:=cell+1;
+   end;{for i :=0 to DBGridIncomes.DataSource.DataSet.FieldCount-1}
+   row:=row+1;
+   end;{if DBGridIncomes.DataSource.DataSet.FieldByName('REST').AsFloat>=0 then begin}
+  end {if ChBoxMinuses.Checked=false}
+  else begin
+  for i :=0 to DBGridIncomes.DataSource.DataSet.FieldCount-1 do begin
+    Sheet.cells[row,cell].Borders.weight:=2;
+    Sheet.cells[row,cell]:=DBGridIncomes.DataSource.DataSet.Fields[i].AsString;
+    if cell=3 then Sheet.cells[row,cell]:=DBGridIncomes.DataSource.DataSet.FieldByName('REST').AsFloat;
+    cell:=cell+1;
+   end;{for i :=0 to DBGridIncomes.DataSource.DataSet.FieldCount-1}
+   row:=row+1;
+  end; {else}
+   DBGridIncomes.DataSource.DataSet.Next;
+  end;{for j :=1 to DBGridIncomes.DataSource.DataSet.RecordCount}
+
+
+
+  //********DBGridExpenses.DataSource.DataSet************
+  if ChBoxMinuses.Checked=false then begin
+  DBGridExpenses.DataSource.DataSet.First;
+  for j :=1 to DBGridExpenses.DataSource.DataSet.RecordCount do begin
+  cell:=1;
+  if DBGridExpenses.DataSource.DataSet.FieldByName('REST').AsFloat<0 then begin
+  for i :=0 to DBGridExpenses.DataSource.DataSet.FieldCount-1 do begin
+    Sheet.cells[row,cell].Borders.weight:=2;
+    Sheet.cells[row,cell]:=DBGridExpenses.DataSource.DataSet.Fields[i].AsString;
+    if cell=3 then Sheet.cells[row,cell]:=(-1)*DBGridExpenses.DataSource.DataSet.FieldByName('REST').AsFloat;
+    cell:=cell+1;
+   end;{for i :=0 to DBGridExpenses.DataSource.DataSet.FieldCount-1}
+   row:=row+1;
+   end;{if DBGridExpenses.DataSource.DataSet.FieldByName('REST').AsFloat<0 then begin}
+   DBGridExpenses.DataSource.DataSet.Next;
+  end;{for j :=1 to DBGridExpenses.DataSource.DataSet.RecordCount}
+  end; {if ChBoxMinuses.Checked=false}
+
+  Sheet.cells[row,2].Font.Bold:=true;
+  Sheet.cells[row,2]:='                                                   CƏMİ';
+  Sheet.cells[row,3].Font.Bold:=true;
+  if {(DBGridIncomes.DataSource.DataSet.RecordCount<>0) or
+     (DBGridExpenses.DataSource.DataSet.RecordCount<>0)}
+      (row-1)>=7 then
+      Sheet.cells[row,3]:='=SUM(C7:C'+IntToStr(row-1)+')'
+  else Sheet.cells[row,3]:=0;
+
+  //********* E X P E N S E   R E P O R T ************
+  //***********Caption of Expense report*******
+  row:=row+2;
+  Sheet.cells[row,2].Font.Bold:=true;
+  Sheet.cells[row,2]:='Xərc hesabatı';
+  row:=row+1;
+  Sheet.cells[row,1].Font.Bold:=true;
+  Sheet.cells[row,1].Borders.weight:=2;
+  Sheet.cells[row,1]:='Balans';
+  Sheet.cells[row,2].Font.Bold:=true;
+  Sheet.cells[row,2].Borders.weight:=2;
+  Sheet.cells[row,2]:='Hesabın adı';
+  Sheet.cells[row,3].Font.Bold:=true;
+  Sheet.cells[row,3].Borders.weight:=2;
+  Sheet.cells[row,3]:='Məbləğ';
+
+  //**********DBGridExpenses.DataSource.DataSet**********
+  row:=row+1;
+  E_Row1:=row;
+  DBGridExpenses.DataSource.DataSet.First;
+  for j :=1 to DBGridExpenses.DataSource.DataSet.RecordCount do begin
+   cell:=1;
+
+  if ChBoxMinuses.Checked=false then begin
+   if DBGridExpenses.DataSource.DataSet.FieldByName('REST').AsFloat>=0 then begin
+   for i :=0 to DBGridExpenses.DataSource.DataSet.FieldCount-1 do begin
+    Sheet.cells[row,cell].Borders.weight:=2;
+    Sheet.cells[row,cell]:=DBGridExpenses.DataSource.DataSet.Fields[i].AsString;
+    if cell=3 then Sheet.cells[row,cell]:=DBGridExpenses.DataSource.DataSet.FieldByName('REST').AsFloat;
+    cell:=cell+1;
+   end;{for i :=0 to DBGridExpenses.DataSource.DataSet.FieldCount-1}
+   row:=row+1;
+   end;{if DBGridExpenses.DataSource.DataSet.FieldByName('REST').AsFloat>=0}
+  end {if ChBoxMinuses.Checked=false}
+  else begin
+  for i :=0 to DBGridExpenses.DataSource.DataSet.FieldCount-1 do begin
+    Sheet.cells[row,cell].Borders.weight:=2;
+    Sheet.cells[row,cell]:=DBGridExpenses.DataSource.DataSet.Fields[i].AsString;
+    if cell=3 then Sheet.cells[row,cell]:=DBGridExpenses.DataSource.DataSet.FieldByName('REST').AsFloat;
+    cell:=cell+1;
+   end;{for i :=0 to DBGridExpenses.DataSource.DataSet.FieldCount-1}
+   row:=row+1;
+  end; {else}
+   DBGridExpenses.DataSource.DataSet.Next;
+  end;{for j :=1 to DBGridExpenses.DataSource.DataSet.RecordCount}
+
+  //********DBGridIncomes.DataSource.DataSet************
+  if ChBoxMinuses.Checked=false then begin
+  DBGridIncomes.DataSource.DataSet.First;
+  for j :=1 to DBGridIncomes.DataSource.DataSet.RecordCount do begin
+  cell:=1;
+  if DBGridIncomes.DataSource.DataSet.FieldByName('REST').AsFloat<0 then begin
+  for i :=0 to DBGridIncomes.DataSource.DataSet.FieldCount-1 do begin
+    Sheet.cells[row,cell].Borders.weight:=2;
+    Sheet.cells[row,cell]:=DBGridIncomes.DataSource.DataSet.Fields[i].AsString;
+    if cell=3 then Sheet.cells[row,cell]:=(-1)*DBGridIncomes.DataSource.DataSet.FieldByName('REST').AsFloat;
+    cell:=cell+1;
+   end;{for i :=0 to DBGridIncomes.DataSource.DataSet.FieldCount-1}
+   row:=row+1;
+   end;{if DBGridIncomes.DataSource.DataSet.FieldByName('REST').AsFloat<0 then begin}
+   DBGridIncomes.DataSource.DataSet.Next;
+  end;{for j :=1 to DBGridIncomes.DataSource.DataSet.RecordCount}
+  end; {if ChBoxMinuses.Checked=false}
+
+  Sheet.cells[row,2].Font.Bold:=true;
+  Sheet.cells[row,2]:='                                                   CƏMİ';
+  Sheet.cells[row,3].Font.Bold:=true;
+  if {(DBGridIncomes.DataSource.DataSet.RecordCount<>0) or
+     (DBGridExpenses.DataSource.DataSet.RecordCount<>0)}
+     (row-1)>=E_Row1 then
+     Sheet.cells[row,3]:='=SUM(C'+IntToStr(E_Row1)+':C'+IntToStr((row-1))+')'
+  else Sheet.cells[row,3]:=0;
+
+  //********Incomes-expenses difference*******
+  row:=row+3;
+  Sheet.cells[row,2].Font.Bold:=true;
+  Sheet.cells[row,2]:='                         Gəlir və xərc arasında fərq';
+  Sheet.cells[row,3].Font.Bold:=true;
+  Sheet.cells[row+1,2].Font.Bold:=true;
+  Sheet.cells[row+1,3].Font.Bold:=true;
+  Sheet.cells[row,3]:='=SUM(C'+IntToStr(E_Row1-4)+')-SUM(C'+IntToStr(row-3)+')';
+  if ChBoxBegEndOstats.Checked=true then begin
+   Sheet.cells[row-1,2].Font.Bold:=true;
+   Sheet.cells[row-1,2]:='                         Dövrün əvvəlinə qalıq';
+   Sheet.cells[row-1,3].Font.Bold:=true;
+   Sheet.cells[row-1,3]:=StTextBegOstat.Caption;
+   Sheet.cells[row+1,2].Font.Bold:=true;
+   Sheet.cells[row+1,2]:='                         Dövrün sonuna qalıq';
+   Sheet.cells[row+1,3].Font.Bold:=true;
+   Sheet.cells[row+1,3]:=StTextEndOstat.Caption;
+  end;{if ChBoxBegEndOstats.Checked=true}
+
+//******* Other filials**********************
+  row:=row+5;
+  if ChBoxOtherFilials.Checked=true then begin
+  with DataMod do begin
+   for i:=1 to OrDSIncOtherFilials.RecordCount do begin
+    Sheet.cells[row,1]:=OrDSIncOtherFilialsFILIALNo.AsString;
+    Sheet.cells[row,2].Font.Bold:=true;
+    Sheet.cells[row,2]:='                         '+OrDSIncOtherFilialsFILIAL.AsString;
+    Sheet.cells[row,3]:=OrDSIncOtherFilialsREST.AsString;
+    row:=row+1;
+    Sheet.cells[row,3]:=OrDSExpOtherFilialsREST.AsString;
+    row:=row+1;
+    Sheet.cells[row,2].Font.Bold:=true;
+    Sheet.cells[row,2]:='                         Gəlir-xərc fərqi';
+    Sheet.cells[row,3]:='=SUM(C'+IntToStr(row-2)+')-SUM(C'+IntToStr(row-1)+')';
+    row:=row+2;
+    OrDSIncOtherFilials.Next;
+    OrDSExpOtherFilials.Next;
+   end;{for i:=1 to OrDSIncOtherFilials.RecordCount}
+  end;{with DataMod}
+  end;{if ChBoxOtherFilials.Checked=true}
+
+  V :=null;
+  ExcelApplication1.Disconnect;
+end;
+end;
+
+procedure TMainIncExpenses.ChBoxAllFilialsClick(Sender: TObject);
+var
+  i :Integer;
+begin
+  DataMod.OrDSFilialCode.Open;
+  if ChBoxAllFilials.Checked=true then begin
+  for i:=0 to DataMod.OrDSFilialCode.RecordCount-1 do
+      ChListFilial.Checked[i]:=true;
+  end else begin
+  for i:=0 to DataMod.OrDSFilialCode.RecordCount-1 do
+      ChListFilial.Checked[i]:=false;
+  end;
+  ChListFilialClickCheck(Sender);
+end;
+
+procedure TMainIncExpenses.ChListFilialClickCheck(Sender: TObject);
+var  i :Integer;
+begin
+//ChBoxAllFilials.Checked:=False;
+  OKBtn.Enabled :=False;
+  AllBranchesChecked :=True;
+  for i :=0 to (ChListFilial.Items.Count-1) do
+  begin
+   if ChListFilial.Checked[i]=True then OKBtn.Enabled :=True;
+   if ChListFilial.Checked[i]=False then AllBranchesChecked:=False;     //ShowMessage(IntToStr(i));
+  end;{for}
+end;
+
+procedure TMainIncExpenses.CrFilialStr;
+var
+  i :Integer;
+  k :Boolean;
+begin
+  BranchStr:=' ';
+  k :=True;
+  for i:=0 to (ChListFilial.Items.Count-1) do begin
+  if ChListFilial.Checked[i]=true then
+     begin
+     if k=True then BranchStr:=BranchStr+LBoxFilial.Items[i]
+               else BranchStr:=BranchStr+','+LBoxFilial.Items[i];
+     k :=False;
+     end;
+  end;
+end;
+
+procedure TMainIncExpenses.AddZeroesFilter;
+var FilterStr :string;
+begin
+  if ChBoxZeroes.Checked =false then FilterStr :=' Rest<>0 '
+   else FilterStr :=' ';
+  with DataMod do begin
+   OrDSIncomes.Filter :=FilterStr;
+   OrDSExpenses.Filter :=FilterStr;
+   OrDSIncomesGeneral.Filter :=FilterStr;
+   OrDSExpensesGeneral.Filter :=FilterStr;
+   OrDSIncGenBal.Filter :=FilterStr;
+   OrDSExpGenBal.Filter :=FilterStr;
+   OrDSIncomesBal.Filter :=FilterStr;
+   OrDSExpensesBal.Filter :=FilterStr;
+  end; {with DataMod}
+end;
+
+procedure TMainIncExpenses.BtnExcelClick(Sender: TObject);
+var i,j,index: Integer;
+ExcelApp,sheet: Variant;
+
+begin
+ ExcelApp := CreateOleObject('Excel.Application');
+ ExcelApp.Visible := False;
+ ExcelApp.WorkBooks.Add(-4167);
+ ExcelApp.WorkBooks[1].WorkSheets[1].name := 'Export';
+ sheet:=ExcelApp.WorkBooks[1].WorkSheets['Export'];
+
+  excelapp.WorkBooks[1].WorkSheets[1].Rows[1].Borders.color:=clGray;
+ index:=1;
+ DataMod.DSIncome.DataSet.First ;
+
+              //excelapp.selection.Interior.color:=clgreen;
+
+ //DBGrid1.DataSource.DataSet.First;
+
+      for i:=1 to   datamod.ODSIncome.RecordCount do
+      begin
+          //Sheet.Cells[1,1].Value:=datamod.ODSIncome.FieldByName('Curr').AsString;
+        Sheet.Cells[1,1].Value:=DBLCBoxCurrency.Text ;
+          Sheet.Cells[1,1].Font.Name:='Tahoma';
+          Sheet.Cells[1,1].Font.Bold :=true;
+
+          Sheet.Cells[1,2].orientation:=90;
+          Sheet.Cells[1,2].Value:='Yanvar';
+          Sheet.Cells[1,2].Font.Name:='Tahoma';
+          Sheet.Cells[1,2].Font.Bold :=true;
+
+          Sheet.Cells[1,3].Value:='Fevral';
+          Sheet.Cells[1,3].orientation:=90;
+          Sheet.Cells[1,3].Font.Name:='Tahoma';
+          Sheet.Cells[1,3].Font.Bold :=true;
+
+          Sheet.Cells[1,4].Value:='Mart';
+          Sheet.Cells[1,4].orientation:=90;
+          Sheet.Cells[1,4].Font.Name:='Tahoma';
+          Sheet.Cells[1,4].Font.Bold :=true;
+
+          Sheet.Cells[1,5].Value:='Aprel';
+          Sheet.Cells[1,5].orientation:=90;
+          Sheet.Cells[1,5].Font.Name:='Tahoma';
+          Sheet.Cells[1,5].Font.Bold :=true;
+
+          Sheet.Cells[1,6].Value:='May';
+          Sheet.Cells[1,6].orientation:=90;
+          Sheet.Cells[1,6].Font.Name:='Tahoma';
+          Sheet.Cells[1,6].Font.Bold :=true;
+
+          Sheet.Cells[1,7].Value:='Iyun';
+          Sheet.Cells[1,7].orientation:=90;
+          Sheet.Cells[1,7].Font.Name:='Tahoma';
+          Sheet.Cells[1,7].Font.Bold :=true;
+
+          Sheet.Cells[1,8].Value:='Iyul';
+          Sheet.Cells[1,8].orientation:=90;
+          Sheet.Cells[1,8].Font.Name:='Tahoma';
+          Sheet.Cells[1,8].Font.Bold :=true;
+
+          Sheet.Cells[1,9].Value:='Avqust';
+          Sheet.Cells[1,9].orientation:=90;
+          Sheet.Cells[1,9].Font.Name:='Tahoma';
+          Sheet.Cells[1,9].Font.Bold :=true;
+
+          Sheet.Cells[1,10].Value:='Sentyabr';
+          Sheet.Cells[1,10].orientation:=90;
+          Sheet.Cells[1,10].Font.Name:='Tahoma';
+          Sheet.Cells[1,10].Font.Bold :=true;
+
+          Sheet.Cells[1,11].Value:='Oktyabr';
+          Sheet.Cells[1,11].orientation:=90;
+          Sheet.Cells[1,11].Font.Name:='Tahoma';
+          Sheet.Cells[1,11].Font.Bold :=true;
+
+          Sheet.Cells[1,12].Value:='Noyabr';
+          Sheet.Cells[1,12].orientation:=90;
+          Sheet.Cells[1,12].Font.Name:='Tahoma';
+          Sheet.Cells[1,12].Font.Bold :=true;
+
+          Sheet.Cells[1,13].Value:='Dekabr';
+          Sheet.Cells[1,13].orientation:=90;
+          Sheet.Cells[1,13].Font.Name:='Tahoma';
+          Sheet.Cells[1,13].Font.Bold :=true;
+
+          Sheet.Cells[1,14].Value:='Cəmi';
+          Sheet.Cells[1,14].orientation:=90;
+          Sheet.Cells[1,14].Font.Name:='Tahoma';
+          Sheet.Cells[1,14].Font.Bold :=true;
+
+
+        // Sheet.Cells[1,].Value:='as';
+
+      for j:=1 to DBGrid1.FieldCount do
+
+      //sheet.cells[index+1,1].NumberFormat := '# ### ###.00';
+      Sheet.Range['B2:N1000'].NumberFormat := '# ### ### ###.00';
+
+     sheet.cells[index+1,1]:=datamod.ODSIncome.FieldByName('Balans').AsString;
+      sheet.cells[index+1,2]:=datamod.ODSIncome.FieldByName('Jan').AsString;;
+       sheet.cells[index+1,3]:=datamod.ODSIncome.FieldByName('Feb').AsString;;
+        sheet.cells[index+1,4]:=datamod.ODSIncome.FieldByName('Mar').AsString;
+         sheet.cells[index+1,5]:=datamod.ODSIncome.FieldByName('Apr').AsString;
+          sheet.cells[index+1,6]:=datamod.ODSIncome.FieldByName('May').AsString;
+           sheet.cells[index+1,7]:=datamod.ODSIncome.FieldByName('Jun').AsString;
+            sheet.cells[index+1,8]:=datamod.ODSIncome.FieldByName('Jul').AsString;
+             sheet.cells[index+1,9]:=datamod.ODSIncome.FieldByName('Aug').AsString;
+              sheet.cells[index+1,10]:=datamod.ODSIncome.FieldByName('Sep').AsString;
+               sheet.cells[index+1,11]:=datamod.ODSIncome.FieldByName('Oct').AsString;
+                sheet.cells[index+1,12]:=datamod.ODSIncome.FieldByName('Nov').AsString;
+                 sheet.cells[index+1,13]:=datamod.ODSIncome.FieldByName('Dek').AsString;
+                  sheet.cells[index+1,14]:=datamod.ODSIncome.FieldByName('Total').AsString;
+
+      Sheet.Range['B2:N1000'].EntireColumn.AutoFit;
+      inc(index);
+      DBGrid1.DataSource.DataSet.Next;
+
+      end;
+      Excelapp.Range['A'+Inttostr(1)+':N'+Inttostr(1)].Select;
+       Excelapp.Selection.Interior.Color :=clSkyBlue;
+        ExcelApp.Visible := true;
+
+
+end;
+
+procedure TMainIncExpenses.Button1Click(Sender: TObject);
+var
+  str :string;
+begin
+//    Timer1.Enabled :=  not Timer1.Enabled;
+ShowMessage(IntToStr(DataMod.ODS_Report_Symbol.FieldByName('ID').AsInteger));
+end;
+
+procedure TMainIncExpenses.Button2Click(Sender: TObject);
+begin
+{  with OracleQuery1 do begin
+   SetVariable('text1', StrToInt(EditSeprAccs.Text));
+   Execute; }
+   with DataMod.OrPackIncomes do begin
+   CallProcedure('testupd', [StrToInt(EditSeprAccs.Text)]);
+   sboapiDataModule.SBSession.Commit;
+  end;
+end;
+
+procedure TMainIncExpenses.Button3Click(Sender: TObject);
+var k: integer;
+begin
+  k := WorldCheck(Memo1.Lines[0],Memo1.Lines[1],StrToInt(Memo1.Lines[2]),StrToInt(Memo1.Lines[3]), 'AS589POYTRE');
+  EditSeprAccs.Text := IntToStr(k);
+end;
+
+procedure TMainIncExpenses.ActiveFormDestroy(Sender: TObject);
+begin
+  Free;
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TMainIncExpenses,
+    CLASS_IncExpenses,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

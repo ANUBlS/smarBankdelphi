@@ -1,0 +1,198 @@
+unit frmImpPaymentsImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, NLSDialogs,
+  NLSLocalizer, Excel97, OleServer, StdCtrls, Buttons, ComCtrls, ExtCtrls,
+  Oracle,OracleData, Dialogs;
+
+type
+  TfrmImpPayments = class(TForm)
+    NLSLocalizer1: TNLSLocalizer;
+    SaveDlg: TOpenDialog;
+    ExcelWorksheet1: TExcelWorksheet;
+    ExcelWorkbook1: TExcelWorkbook;
+    ExcelApplication1: TExcelApplication;
+    GroupBox1: TGroupBox;
+    SpeedButton1: TSpeedButton;
+    SavePathEdit: TEdit;
+    Panel1: TPanel;
+    DTPImpDate: TDateTimePicker;
+    Label1: TLabel;
+    ProgressShower: TProgressBar;
+    BitBtn1: TBitBtn;
+    BitBtn2: TBitBtn;
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure BitBtn2Click(Sender: TObject);
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure BitBtn1Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  frmImpPayments: TfrmImpPayments;
+
+  Procedure InitPlugin(S:String);export;
+implementation
+
+{$R *.DFM}
+uses DMImpPaymentsImpl,CommonDecls,SystemState;
+
+Procedure InitPlugin(S:String);export;
+begin
+   frmImpPayments.ShowModal;
+end;
+
+exports
+   InitPlugin;
+
+procedure TfrmImpPayments.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+   Resize := False;
+end;
+
+procedure TfrmImpPayments.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+   if Ord(Key) = VK_ESCAPE then close
+end;
+
+procedure TfrmImpPayments.BitBtn2Click(Sender: TObject);
+begin
+   Close
+end;
+
+procedure TfrmImpPayments.SpeedButton1Click(Sender: TObject);
+begin
+  with SaveDlg do
+   if Execute then
+      SavePathEdit.Text := FileName;
+end;
+
+procedure TfrmImpPayments.BitBtn1Click(Sender: TObject);
+const
+  StartRow = 7;
+  RootCell = 2;
+var
+    V, Sheet, Sheets  :Variant;
+    Row : Integer;
+    CellStr : String;
+
+      variable ,
+      p_debitaccid : Integer;
+      p_debitamt : Real;
+      p_debitamt1 : Real;
+      p_debitamt2 : Real;
+      p_trdate :TDateTime;
+      LoanAccNo,IntAccNo,ErrMessage,CustName : String;
+      CheckResults : Boolean;
+      CountOperaions : Integer;
+
+begin
+
+   p_trdate := Integer(Trunc(DTPImpDate.DateTime));
+   CountOperaions := 0;
+   Row := StartRow;
+   ProgressShower.Position := 1;
+   ProgressShower.Max := 100;
+
+   V:=ExcelApplication1.Application;
+   ExcelApplication1.Connect;
+   try
+     V.Workbooks.Open(SavePathEdit.Text);
+     Sheet := V.Workbooks[1].Worksheets['MIS']; //
+     Sheets := V.Sheets;
+     CellStr := Sheet.cells[Row,RootCell];
+
+     with  DMImpPayments,cm_common do
+       p_debitaccid := callIntegerFunction('Get_correspondentAccID',[]);
+
+
+     while CellStr <> '' do
+     try
+       CustName :=  Sheet.cells[Row,2];
+       LoanAccno := Sheet.cells[Row,3];
+       IntAccNo :=  Sheet.cells[Row,4];
+
+       ProgressShower.Position := 50;
+       with  DMImpPayments do begin
+
+       {------------------------------------MainDebit----------------------------------}
+
+         variable :=  cm_common.callIntegerFunction('Get_AccIDByNumber',[LoanAccno]);
+         p_debitamt1 := Sheet.cells[Row,5];
+         p_debitamt2 := Sheet.cells[Row,7];
+         p_debitamt := p_debitamt1 + p_debitamt2;
+         
+         CheckResults := cm_dif_trans.CallBooleanFunction('check_credittransaction',[
+                                       'p_variable',variable,
+                                       'debitaccid',p_debitaccid,
+                                       'debitamt',p_debitamt,
+                                       'trdate',p_trdate]);
+
+        if CheckResults then CountOperaions := CountOperaions+1;
+       {------------------------------------End MainDebit-----------------------------}
+
+
+       {------------------------------------IntDebit--------------------------------}
+         variable :=  cm_common.callIntegerFunction('Get_AccIDByNumber',[IntAccNo]);
+         p_debitamt := Sheet.cells[Row,6];
+         CheckResults := cm_dif_trans.CallBooleanFunction('check_credittransaction',[
+                                       'p_variable',variable,
+                                       'debitaccid',p_debitaccid,
+                                       'debitamt',p_debitamt,
+                                       'trdate',p_trdate]);
+        if CheckResults then CountOperaions := CountOperaions+1;
+
+       {------------------------------------EndIntDebit-----------------------------}
+
+       Inc(Row);
+       CellStr := Sheet.cells[Row,RootCell];
+    end;
+   except
+        on E:EOracleError do
+        begin
+          ErrMessage := E.Message;
+          ShowMessage(ErrMessage+'---'+CustName);
+          Continue;
+         end;
+   end;
+
+   finally
+     ExcelApplication1.Quit;
+     ExcelApplication1.Disconnect;
+     ProgressShower.Position := 100;
+     ProgressShower.Position := 0;
+     ShowMessage(IntToStr(CountOperaions)+' - сайда ямялиййат апарылды');
+   end;
+
+end;
+
+procedure TfrmImpPayments.FormCreate(Sender: TObject);
+begin
+   DMImpPayments := TDMImpPayments.Create(Self);
+end;
+
+procedure TfrmImpPayments.FormDestroy(Sender: TObject);
+begin
+   DMImpPayments.Free;
+end;
+
+  procedure TfrmImpPayments.FormShow(Sender: TObject);
+begin
+   DTPImpDate.DateTime := Get_CurrentDate;
+end;
+
+Initialization
+     frmImpPayments := TfrmImpPayments.Create(CommonApplication);
+
+end.

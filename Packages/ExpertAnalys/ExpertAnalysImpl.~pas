@@ -1,0 +1,825 @@
+unit ExpertAnalysImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActiveX, AxCtrls, ExpertAnalys_TLB, StdVcl, ExtCtrls, Grids, DBGrids,
+  StdCtrls, DBCtrls, Buttons, ComCtrls, CurrencyEdit, ImgList, ToolWin,
+  Menus, OracleData, Db;
+
+type
+  TReportKind = (rkForm, rkExcel);
+
+type
+  TExpertAnalysX = class(TActiveForm, IExpertAnalysX)
+    StatusBar1: TStatusBar;
+    GroupBox1: TGroupBox;
+    PanelDecimal: TPanel;
+    StaticText1: TStaticText;
+    CEDecimal: TCurrencyEdit;
+    PanelCurrency: TPanel;
+    StaticText2: TStaticText;
+    CBCurrency: TComboBox;
+    PanelAmmount: TPanel;
+    StaticText3: TStaticText;
+    CELimit: TCurrencyEdit;
+    ImageList: TImageList;
+    PopupOperations: TPopupMenu;
+    ExportOperation: TMenuItem;
+    Panel1: TPanel;
+    StaticText4: TStaticText;
+    RadioButton1: TRadioButton;
+    RadioButton2: TRadioButton;
+    Panel4: TPanel;
+    StaticText5: TStaticText;
+    DTPSysdat: TDateTimePicker;
+    RBOstat: TRadioButton;
+    RBPok_ostat: TRadioButton;
+    GroupBoxCommon: TGroupBox;
+    Splitter2: TSplitter;
+    Splitter3: TSplitter;
+    PanelSchemas: TPanel;
+    Panel6: TPanel;
+    DBNavigator3: TDBNavigator;
+    GridSchemas: TDBGrid;
+    PanelOperations: TPanel;
+    Panel2: TPanel;
+    DBNavigator1: TDBNavigator;
+    GridOperations: TDBGrid;
+    PanelSettings: TPanel;
+    Panel8: TPanel;
+    SpeedButton2: TSpeedButton;
+    DBNavigator2: TDBNavigator;
+    SettingsGrid: TDBGrid;
+    PopupBalances: TPopupMenu;
+    PopupSchemas: TPopupMenu;
+    Aanaliz1: TMenuItem;
+    ExportBalance: TMenuItem;
+    SBOperationReport: TSpeedButton;
+    SBSchemaReport: TSpeedButton;
+    Panel9: TPanel;
+    StaticText6: TStaticText;
+    RBExpand: TRadioButton;
+    RBTotal: TRadioButton;
+    CheckBox1: TCheckBox;
+    CheckBox2: TCheckBox;
+    Panel10: TPanel;
+    PanelSchema: TCheckBox;
+    PanelOperation: TCheckBox;
+    PanelSetting: TCheckBox;
+    N1: TMenuItem;
+    TMExcellReport: TMenuItem;
+    N2: TMenuItem;
+    TMExcellRep: TMenuItem;
+    CheckBox3: TCheckBox;
+    Panel3: TPanel;
+    StaticText7: TStaticText;
+    DBLookupBranch: TDBLookupComboBox;
+    DTPLastDate: TDateTimePicker;
+    procedure ELimitKeyPress(Sender: TObject; var Key: Char);
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure ToolButton1Click(Sender: TObject);
+    procedure ExportOperationClick(Sender: TObject);
+    procedure RadioButton1Click(Sender: TObject);
+    procedure DTPSysdatChange(Sender: TObject);
+    procedure RBOstatClick(Sender: TObject);
+    procedure SBSchemaReportClick(Sender: TObject);
+    procedure Aanaliz1Click(Sender: TObject);
+    procedure CBCurrencyChange(Sender: TObject);
+    procedure CheckBox1Click(Sender: TObject);
+    procedure CheckBox2Click(Sender: TObject);
+    procedure PanelSchemaClick(Sender: TObject);
+    procedure RBExpandClick(Sender: TObject);
+    procedure CheckBox3Click(Sender: TObject);
+    procedure DTPLastDateChange(Sender: TObject);
+  private
+    { Private declarations }
+    FEvents: IExpertAnalysXEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+  protected
+    { Protected declarations }
+    FOperationDate :TDateTime;
+    FLastDate :TDateTime;
+
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+
+    procedure SetOperationDate(Value: TDateTime);
+    procedure SetLastDate(Value: TDateTime);
+  public
+    { Public declarations }
+    Rate: array of integer;
+    CurrencyField: String;
+    DefaultTotalTrafficsSQL: WideString;
+    DefaultSchemaTrafficsSQL: WideString;
+    ReportKind: TReportKind;
+
+    property OperationDate: TDateTime read FOperationDate write SetOperationDate;
+    property LastDate: TDateTime read FLastDate write SetLastDate;
+
+    procedure FillCurrency;
+    procedure CheckDataModule;
+    procedure CheckReport;
+    function CheckCurrency: string;
+    function GenerateCurrencyFilter: string;
+    function BuildAmmountCondition: string;
+    function BuildBranchCondition: string;
+    function IntToBool(Value: integer): boolean;
+    function BuildOperationCondition(OperationKind: word): string;
+    function GetBeginPeriod(BeginDate: TDateTime): TDateTime;
+    procedure Initialize; override;
+  end;
+
+var
+   ExpertAnalysX :TExpertAnalysX;
+
+implementation
+
+uses ComObj, ComServ, ExpertDataModule, MainReportUnit, TrafficsFormImpl,
+  MainTrafficsForm, SchemaTrafficsFormImpl, TurnOverReport, ExportFormUnit;
+
+{$R *.DFM}
+
+{ TExpertAnalysX }
+
+procedure TExpertAnalysX.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_ExpertAnalysXPage); }
+end;
+
+procedure TExpertAnalysX.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as IExpertAnalysXEvents;
+end;
+
+procedure TExpertAnalysX.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TExpertAnalysX.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TExpertAnalysX.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TExpertAnalysX.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TExpertAnalysX.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TExpertAnalysX.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TExpertAnalysX.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TExpertAnalysX.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TExpertAnalysX.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TExpertAnalysX.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TExpertAnalysX.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TExpertAnalysX.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TExpertAnalysX.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TExpertAnalysX.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TExpertAnalysX.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TExpertAnalysX.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TExpertAnalysX.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TExpertAnalysX.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TExpertAnalysX.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TExpertAnalysX._Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TExpertAnalysX.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TExpertAnalysX.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TExpertAnalysX.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TExpertAnalysX.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TExpertAnalysX.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TExpertAnalysX.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TExpertAnalysX.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TExpertAnalysX.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TExpertAnalysX.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TExpertAnalysX.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TExpertAnalysX.Set_AxBorderStyle(Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TExpertAnalysX.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TExpertAnalysX.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TExpertAnalysX.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TExpertAnalysX.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TExpertAnalysX.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TExpertAnalysX.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TExpertAnalysX.Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TExpertAnalysX.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TExpertAnalysX.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TExpertAnalysX.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TExpertAnalysX.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TExpertAnalysX.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TExpertAnalysX.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+//----------------------------------------------------------------------------------------------------------------------
+
+function TExpertAnalysX.IntToBool(Value: integer): boolean;
+begin
+ Result :=not(Value = 0);
+end;
+
+procedure TExpertAnalysX.FillCurrency;
+var
+    RateIndex :Integer;
+begin
+  RateIndex:=0;
+   with   CBCurrency.Items  do
+   begin
+     Clear;
+     Add('¡ˆÚˆÌ ‚‡ÎÈÛÚ‡Î‡');
+     Add('’‡ËÊË ‚‡ÎÈÛÚ‡‰‡');
+   end;
+  with  ExpertDataModul.Currency  do
+  begin
+    Open;
+    SetLength(Rate,RecordCount);
+    First;
+    while  not EOF  do
+    begin
+      Rate[RateIndex] :=FieldByName('Valute').AsInteger;
+      CBCurrency.Items.Add(FieldByName('Valu_Name').AsString);
+      Inc(RateIndex);
+      Next;
+    end;
+  end;
+end;
+
+function TExpertAnalysX.CheckCurrency :string;
+begin
+ case CBCurrency.ItemIndex of
+  0 :  Result :='';
+  1 :  Result :=' and (val_acc <> 0)';
+  else
+   Result :=' and (val_acc = '+ IntToStr(rate[CBCurrency.ItemIndex-2])+')';
+ end;
+end;
+
+procedure TExpertAnalysX.SetOperationDate(Value: TDateTime);
+begin
+  FOperationDate := Value;
+  DTPSysdat.DateTime := Int(Value);
+end;
+
+procedure TExpertAnalysX.SetLastDate(Value: TDateTime);
+begin
+  FLastDate := Value;
+  DTPLastDate.DateTime := Int(Value);
+end;
+
+function TExpertAnalysX.BuildAmmountCondition :string;
+begin
+ if RBOstat.Checked then
+  Result :='and abs(ar.ostat) >=%f'
+ else
+  Result :='and abs(ar.pok_ostat) >=%f'
+end;
+
+function TExpertAnalysX.BuildOperationCondition(OperationKind: word): string;
+begin
+ case OperationKind of
+  0: Result :=' AND (schemaID = '+ ExpertDataModul.Schemas.FieldByName('ID').AsString+')';
+  1: Result :=' AND (operationID = '+ ExpertDataModul.Operations.FieldByName('ID').AsString+')';
+ end
+end;
+
+function TExpertAnalysX.BuildBranchCondition: string;
+begin
+ with DBLookupBranch  do
+  if KeyValue =-1 then
+   Result :=' '
+  else
+   Result :=' AND Ac.filial = ' + IntToStr(KeyValue);
+end;
+
+function TExpertAnalysX.GenerateCurrencyFilter: string;
+begin
+ case CBCurrency.ItemIndex of
+  0: Result :='';
+  1: Result :=' and ac.val_acc <> 0';
+ else
+  Result :=Format(ExpertDataModul.TotalTraffics.SQL[23],[rate[CBCurrency.ItemIndex-2]]);
+ end;
+end;
+
+procedure TExpertAnalysX.CheckDataModule;
+begin
+ if not Assigned(ExpertDataModul) then
+  ExpertDataModul :=TExpertDataModul.Create(Self);
+end;
+
+procedure TExpertAnalysX.CheckReport;
+begin
+ if not Assigned(MainReport) then
+  MainReport :=TMainReport.Create(Self);
+ if not Assigned(ReportTurnOver) then
+  ReportTurnOver :=TReportTurnOver(Self);
+end;
+
+procedure TExpertAnalysX.ELimitKeyPress(Sender: TObject; var Key: Char);
+begin
+ if not (key in ['0'..'9','.',',',#8,CHR(VK_DELETE)]) then
+   key :=#0;
+end;
+
+
+procedure TExpertAnalysX.ActiveFormCreate(Sender: TObject);
+const
+  PickListCount = 5;
+var
+  PickListIndex: word;
+begin
+ ExpertAnalysX :=Self;
+
+ CheckDataModule;
+ FillCurrency;
+ CheckReport;
+ TrafficsForm :=TTrafficsForm.Create(Self);
+ MainTraffics :=TMainTraffics.Create(Self);
+ ExportForm :=TExportForm.Create(Self);
+ SchemaTrafficsForm :=TSchemaTrafficsForm.Create(Self);
+
+ CBCurrency.ItemIndex :=0;
+ DBLookupBranch.KeyValue :=-1; 
+ DTPSysdat.DateTime :=ExpertDataModul.Sysdat.FieldByName('tek_dat').AsDateTime;
+ OperationDate :=DTPSysdat.DateTime;
+ LastDate :=OperationDate;
+ CurrencyField :='LastRest';
+ DefaultTotalTrafficsSQL :=ExpertDataModul.TotalTraffics.SQL.CommaText;
+ DefaultSchemaTrafficsSQL :=ExpertDataModul.SchemaTraffics.SQL.CommaText;
+
+ with ExpertDataModul, SettingsGrid do
+ begin
+
+   for PickListIndex :=0 to PickListCount -1 do
+    Columns[PickListIndex].PickList.Clear;
+
+   while not Accounts.EOF do
+   begin
+     Columns[0].PickList.Add(Accounts.FieldByName('acc_no').AsString);
+     Accounts.Next;
+   end;
+
+   while not Balances.EOF do
+   begin
+     Columns[1].PickList.Add(Balances.FieldByName('bal_cn').AsString);
+     Columns[2].PickList.Add(Balances.FieldByName('accgroup').AsString);
+     Columns[3].PickList.Add(Balances.FieldByName('part').AsString);
+     Balances.Next;
+   end;
+
+   while not AccFlags.EOF do
+   begin
+     Columns[4].PickList.Add(AccFlags.FieldByName('symbol').AsString);
+     AccFlags.Next;
+   end;
+
+ end;
+end;
+
+procedure TExpertAnalysX.ToolButton1Click(Sender: TObject);
+begin
+ GroupBoxCommon.Visible :=not GroupBoxCommon.Visible;
+ PanelCurrency.Visible :=not PanelCurrency.Visible;
+ PanelAmmount.Visible :=not PanelAmmount.Visible;
+ PanelDecimal.Visible := not PanelDecimal.Visible;
+end;
+
+procedure TExpertAnalysX.ExportOperationClick(Sender: TObject);
+begin
+ if RBExpand.Checked then
+   with ExpertDataModul, TrafficsForm do
+    begin
+     Traffics.CloseAll;
+     if (Sender as TMenuItem).Tag = 1 then
+      begin
+       Traffics.SetVariable('operationID', Operations.FieldByName('ID').AsInteger);
+       Traffics.SetVariable('balanceID', -1);
+       Traffics.SetVariable('BeginDate', operationDate);
+       Traffics.SetVariable('BeginPeriod', GetBeginPeriod(operationDate));
+       Traffics.SetVariable('LastDate', LastDate);
+      end
+     else
+      if (Sender as TMenuItem).Tag = 2 then
+       begin
+        Traffics.SetVariable('operationID', -1);
+        Traffics.SetVariable('balanceID', Operations_balance.FieldByName('ID').AsInteger);
+        Traffics.SetVariable('BeginDate', operationDate);
+        Traffics.SetVariable('BeginPeriod', GetBeginPeriod(operationDate));
+        Traffics.SetVariable('LastDate', LastDate);
+       end;
+     Traffics.Filtered :=False;
+     Traffics.Filter :='(abs(' + CurrencyField + ') >='+ FloatToStr(CELimit.value)+')' + CheckCurrency;
+     Traffics.Filtered :=True;
+     Traffics.SQL[45] :=BuildBranchCondition;
+     Traffics.SQL[72] :=BuildBranchCondition;
+     Traffics.SQL[107] :=BuildBranchCondition;
+
+     Traffics.Open;
+     if Copy((Sender as TMenuItem).Name, 1, 7) = 'TMExcel' then
+      ExportForm.ShowModal
+     else
+      ShowModal;
+    end
+ else
+  with ExpertDataModul, MainTraffics do
+   begin
+    TotalTraffics.CloseAll;
+    TotalTraffics.SQL.CommaText :=DefaultTotalTrafficsSQL;
+
+      TotalTraffics.SQL[23] :=GenerateCurrencyFilter;
+
+      TotalTraffics.SQL[24] :=Format(BuildAmmountCondition, [CELimit.value]);
+
+     if (Sender as TMenuItem).Tag = 1 then
+      begin
+       TotalTraffics.SetVariable('operationID', Operations.FieldByName('ID').AsInteger);
+       TotalTraffics.SetVariable('balanceID', -1);
+       TotalTraffics.SetVariable('schemaID', -1);
+       TotalTraffics.SetVariable('operationDate', operationDate);
+      end
+     else
+      begin
+       TotalTraffics.SetVariable('operationID', -1);
+       TotalTraffics.SetVariable('balanceID', Operations_balance.FieldByName('ID').AsInteger);
+       TotalTraffics.SetVariable('schemaID', -1);
+       TotalTraffics.SetVariable('operationDate', operationDate);
+      end;
+    TotalTraffics.SQL[26] :=BuildBranchCondition;
+    TotalTraffics.Open;
+    ShowModal;
+   end;
+end;
+
+procedure TExpertAnalysX.RadioButton1Click(Sender: TObject);
+begin
+ if (Sender as TRadioButton).Tag = 1 then
+  MainReport.QRGroupOperation.ForceNewPage :=False
+ else
+  MainReport.QRGroupOperation.ForceNewPage :=True;
+end;
+
+procedure TExpertAnalysX.DTPSysdatChange(Sender: TObject);
+begin
+  OperationDate :=Int((Sender as TDateTimePicker).DateTime);
+end;
+
+procedure TExpertAnalysX.RBOstatClick(Sender: TObject);
+begin
+ if (Sender as TRadioButton).Tag = 1 then
+   CurrencyField :='LastRest'
+ else
+   CurrencyField :='LastLRest';
+end;
+
+procedure TExpertAnalysX.SBSchemaReportClick(Sender: TObject);
+var
+  OperationKind: word;
+begin
+ OperationKind :=(Sender as TSpeedButton).Tag;
+ with MainReport ,TOracleDataSet(DataSet) do
+  begin
+   Close;
+   SetVariable('OperationDate',OperationDate);
+   Filtered :=False;
+   Filter :='(abs(' + CurrencyField + ') >='+ FloatToStr(CELimit.value)+')' + CheckCurrency + BuildOperationCondition(OperationKind);
+   Filtered :=True;
+   SQL[29] :=BuildBranchCondition;
+   Open;
+   if DTPSysdat.Date = DTPLastDate.Date then
+    QRLabelDate.Caption :=FormatDateTime('dd/mm/yyyy',DTPSysdat.DateTime)
+   else
+    QRLabelDate.Caption :=FormatDateTime('dd/mm/yyyy',DTPSysdat.DateTime)+'-'+FormatDateTime('dd/mm/yyyy',DTPLastDate.DateTime);
+   Preview;
+  end;
+end;
+
+procedure TExpertAnalysX.Aanaliz1Click(Sender: TObject);
+begin
+ if RBTotal.Checked then
+   with ExpertDataModul, SchemaTrafficsForm do
+    begin
+     SchemaTraffics.CloseAll;
+     SchemaTraffics.SQL.CommaText:= DefaultSchemaTrafficsSQL;
+
+      if CBCurrency.ItemIndex > 1 then
+       SchemaTraffics.SQL[22] :=Format(SchemaTraffics.SQL[22],[rate[CBCurrency.ItemIndex-2]])
+      else
+       SchemaTraffics.SQL[22] :='';
+
+       SchemaTraffics.SQL[23] :=Format(BuildAmmountCondition,[CELimit.value]);
+
+     SchemaTraffics.SetVariable('schemaID',Schemas.FieldByName('ID').AsInteger);
+     SchemaTraffics.SetVariable('operationDate',operationDate);
+     SchemaTraffics.SQL[25] :=BuildBranchCondition;
+     SchemaTraffics.Open;
+     ShowModal;
+    end
+ else
+  with ExpertDataModul, MainTraffics do
+   begin
+    TotalTraffics.CloseAll;
+    TotalTraffics.SQL.CommaText :=DefaultTotalTrafficsSQL;
+
+    TotalTraffics.SQL[23] :=GenerateCurrencyFilter;
+
+    TotalTraffics.SQL[24] :=Format(BuildAmmountCondition,[CELimit.value]);
+
+    TotalTraffics.SetVariable('operationID',-1);
+    TotalTraffics.SetVariable('balanceID',-1);
+    TotalTraffics.SetVariable('schemaID',Schemas.FieldByName('ID').AsInteger);
+    TotalTraffics.SetVariable('operationDate',operationDate);
+    TotalTraffics.SQL[26] :=BuildBranchCondition;
+    TotalTraffics.Open;
+    ShowModal;
+   end;
+end;
+
+procedure TExpertAnalysX.CBCurrencyChange(Sender: TObject);
+begin
+ with MainReport do
+  begin
+   QRExprSumOstat.Enabled :=(Sender as TComboBox).ItemIndex >2;
+   QRExprTotal.Enabled :=(Sender as TComboBox).ItemIndex >2;
+  end;
+end;
+
+procedure TExpertAnalysX.CheckBox1Click(Sender: TObject);
+begin
+ with MainReport do
+  QRDBName.Enabled :=(Sender as TCheckBox).Checked;
+end;
+
+procedure TExpertAnalysX.CheckBox2Click(Sender: TObject);
+begin
+ with MainReport do
+  QRDBCurrencyName.Enabled :=(Sender as TCheckBox).Checked;
+end;
+
+procedure TExpertAnalysX.PanelSchemaClick(Sender: TObject);
+var
+  GridName: string;
+begin
+ with TCheckBox(Sender) do
+  GridName :=Name+'s';
+ TDBGrid(FindComponent(GridName)).Visible :=TCheckBox(Sender).Checked;
+end;
+
+procedure TExpertAnalysX.RBExpandClick(Sender: TObject);
+begin
+ TMExcellReport.Enabled :=IntToBool((Sender as TRadioButton).Tag);
+ TMExcellRep.Enabled :=TMExcellReport.Enabled;
+end;
+
+procedure TExpertAnalysX.CheckBox3Click(Sender: TObject);
+begin
+ MainReport.QRGroupBalance.Enabled :=TCheckBox(Sender).Checked;
+end;
+
+procedure TExpertAnalysX.DTPLastDateChange(Sender: TObject);
+begin
+  LastDate :=Int((Sender as TDateTimePicker).DateTime);
+end;
+
+function TExpertAnalysX.GetBeginPeriod(BeginDate: TDateTime): TDateTime;
+begin
+ with ExpertDataModul, PeriodData do
+  begin
+   CloseAll;
+   SetVariable('BeginDate',BeginDate);
+   Open;
+   if FieldByName('BeginPeriod').IsNull then
+    Result :=BeginDate
+   else
+    Result :=FieldByName('BeginPeriod').AsDateTime;
+  end;
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TExpertAnalysX,
+    Class_ExpertAnalysX,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

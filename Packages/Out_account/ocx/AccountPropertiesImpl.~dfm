@@ -1,0 +1,522 @@
+object AccountPropertiesForm: TAccountPropertiesForm
+  Left = 225
+  Top = 233
+  Width = 502
+  Height = 325
+  Caption = 'AccountPropertiesForm'
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'MS Sans Serif'
+  Font.Style = []
+  OldCreateOrder = False
+  OnClose = FormClose
+  OnKeyDown = FormKeyDown
+  OnKeyPress = FormKeyPress
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object AccountGB: TGroupBox
+    Left = 0
+    Top = 0
+    Width = 494
+    Height = 212
+    Align = alTop
+    Caption = 'Щесаб'
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 0
+    object Label1: TLabel
+      Left = 8
+      Top = 20
+      Width = 34
+      Height = 13
+      Caption = 'Щесаб:'
+    end
+    object Label2: TLabel
+      Left = 256
+      Top = 16
+      Width = 38
+      Height = 13
+      Caption = 'Валйута:'
+    end
+    object Label3: TLabel
+      Left = 8
+      Top = 44
+      Width = 69
+      Height = 13
+      Caption = 'Баланс щесабы:'
+    end
+    object Label4: TLabel
+      Left = 8
+      Top = 68
+      Width = 37
+      Height = 13
+      Caption = 'Мцштяри:'
+    end
+    object Label5: TLabel
+      Left = 8
+      Top = 92
+      Width = 58
+      Height = 13
+      Caption = 'Ачылма тарихи:'
+    end
+    object Label6: TLabel
+      Left = 8
+      Top = 185
+      Width = 59
+      Height = 13
+      Caption = 'Щесабын ады:'
+    end
+    object Label13: TLabel
+      Left = 8
+      Top = 116
+      Width = 81
+      Height = 13
+      Caption = 'Щесабат символу:'
+    end
+    object Label14: TLabel
+      Left = 8
+      Top = 139
+      Width = 23
+      Height = 13
+      Caption = 'Филиал:'
+    end
+    object Label15: TLabel
+      Left = 8
+      Top = 163
+      Width = 44
+      Height = 13
+      Caption = 'Символлары'
+    end
+    object Label7: TLabel
+      Left = 280
+      Top = 91
+      Width = 53
+      Height = 13
+      Caption = 'Жцт щесабы:'
+    end
+    object Label12: TLabel
+      Left = 312
+      Top = 116
+      Width = 24
+      Height = 13
+      Caption = 'Лимит:'
+    end
+    object DBText1: TDBText
+      Left = 120
+      Top = 161
+      Width = 65
+      Height = 17
+      Color = clBtnFace
+      DataField = 'TIPACC'
+      DataSource = out_accdatamodule.AccountData
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = [fsBold]
+      ParentColor = False
+      ParentFont = False
+    end
+    object DBEditAccNo: TDBEdit
+      Left = 120
+      Top = 16
+      Width = 121
+      Height = 21
+      DataField = 'ACC_NO'
+      DataSource = out_accdatamodule.AccountData
+      TabOrder = 0
+      OnKeyDown = DBEditAccNoKeyDown
+    end
+    object DBEditCurrID: TDBEdit
+      Left = 304
+      Top = 16
+      Width = 40
+      Height = 21
+      DataField = 'VAL_ACC'
+      DataSource = out_accdatamodule.AccountData
+      TabOrder = 1
+    end
+    object DBLookupCurr: TDBLookupComboBox
+      Left = 351
+      Top = 16
+      Width = 138
+      Height = 21
+      DataField = 'VAL_ACC'
+      DataSource = out_accdatamodule.AccountData
+      KeyField = 'VALUTE'
+      ListField = 'VALU_NAME'
+      ListSource = out_accdatamodule.CurrencyData
+      TabOrder = 2
+    end
+    object DBEditBalance1: TDBEdit
+      Left = 120
+      Top = 40
+      Width = 41
+      Height = 21
+      DataField = 'BAL_CN1'
+      DataSource = out_accdatamodule.AccountData
+      TabOrder = 3
+    end
+    object DBLookupBalance1: TDBLookupComboBox
+      Left = 161
+      Top = 40
+      Width = 253
+      Height = 21
+      DataField = 'BAL_CN1'
+      DataSource = out_accdatamodule.AccountData
+      KeyField = 'BAL_CN'
+      ListField = 'BALNAME'
+      ListSource = out_accdatamodule.BalAccData
+      TabOrder = 4
+    end
+    object DBEditCustID: TDBEdit
+      Left = 120
+      Top = 64
+      Width = 41
+      Height = 21
+      DataField = 'KLI_ID'
+      DataSource = out_accdatamodule.AccountData
+      TabOrder = 5
+    end
+    object DBLookupCust: TDBLookupComboBox
+      Left = 161
+      Top = 64
+      Width = 328
+      Height = 21
+      DataField = 'KLI_ID'
+      DataSource = out_accdatamodule.AccountData
+      KeyField = 'ID'
+      ListField = 'NAME'
+      ListSource = out_accdatamodule.CustomersData
+      TabOrder = 6
+    end
+    object DTPOpenDate: TDateTimePicker
+      Left = 120
+      Top = 88
+      Width = 145
+      Height = 21
+      CalAlignment = dtaLeft
+      Date = 37357.6183236921
+      Time = 37357.6183236921
+      DateFormat = dfShort
+      DateMode = dmComboBox
+      Kind = dtkDate
+      ParseInput = False
+      TabOrder = 7
+    end
+    object DBLookupPairAcc: TDBLookupComboBox
+      Left = 352
+      Top = 88
+      Width = 137
+      Height = 21
+      DataField = 'PAIR_ACC'
+      DataSource = out_accdatamodule.AccountData
+      KeyField = 'ID'
+      ListField = 'ACC_NO'
+      ListSource = out_accdatamodule.PairAccountData
+      TabOrder = 8
+    end
+    object DBEditLimit: TDBEdit
+      Left = 352
+      Top = 112
+      Width = 136
+      Height = 21
+      DataField = 'LIMIT'
+      DataSource = out_accdatamodule.AccountData
+      TabOrder = 10
+    end
+    object DBLookupSimotchet: TDBLookupComboBox
+      Left = 120
+      Top = 112
+      Width = 145
+      Height = 21
+      DataField = 'SIM_OTCET'
+      DataSource = out_accdatamodule.AccountData
+      KeyField = 'ID'
+      ListField = 'NAME'
+      ListSource = out_accdatamodule.ReportSymbolData
+      TabOrder = 9
+    end
+    object DBEdit4: TDBEdit
+      Left = 120
+      Top = 135
+      Width = 57
+      Height = 21
+      DataField = 'FILIAL'
+      DataSource = out_accdatamodule.AccountData
+      TabOrder = 11
+    end
+    object DBLookupComboBox4: TDBLookupComboBox
+      Left = 178
+      Top = 135
+      Width = 166
+      Height = 21
+      DataField = 'FILIAL'
+      DataSource = out_accdatamodule.AccountData
+      KeyField = 'ID'
+      ListField = 'NAME'
+      ListSource = out_accdatamodule.BranchesData
+      TabOrder = 12
+    end
+    object DBEditAccName: TDBEdit
+      Left = 120
+      Top = 181
+      Width = 368
+      Height = 21
+      DataField = 'NAME'
+      DataSource = out_accdatamodule.AccountData
+      TabOrder = 13
+    end
+    object AccountFlagsGB: TGroupBox
+      Left = 399
+      Top = 133
+      Width = 89
+      Height = 43
+      TabOrder = 14
+      object Button3: TButton
+        Left = 9
+        Top = 13
+        Width = 71
+        Height = 22
+        Caption = 'Символлар ...'
+        TabOrder = 0
+        OnClick = Button3Click
+      end
+    end
+  end
+  object ButtonCommit: TButton
+    Left = 336
+    Top = 269
+    Width = 75
+    Height = 25
+    Caption = 'Йаддаша йаз'
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 1
+    OnClick = ButtonCommitClick
+  end
+  object ButtonCancel: TButton
+    Left = 416
+    Top = 269
+    Width = 75
+    Height = 25
+    Caption = 'Имтина'
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 2
+    OnClick = ButtonCancelClick
+  end
+  object DayStartStateGB: TGroupBox
+    Left = 0
+    Top = 212
+    Width = 494
+    Height = 49
+    Align = alTop
+    Caption = 'Жари галыг'
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 3
+    object Label8: TLabel
+      Left = 16
+      Top = 21
+      Width = 27
+      Height = 13
+      Caption = 'Галыг:'
+    end
+    object Label9: TLabel
+      Left = 272
+      Top = 21
+      Width = 53
+      Height = 13
+      Caption = 'Еквивалент:'
+    end
+    object DBEdit6: TDBEdit
+      Left = 56
+      Top = 17
+      Width = 121
+      Height = 21
+      TabStop = False
+      Color = clSilver
+      DataField = 'OSTAT'
+      DataSource = out_accdatamodule.DataTenostat
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clNavy
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+      ReadOnly = True
+      TabOrder = 0
+    end
+    object DBEdit7: TDBEdit
+      Left = 344
+      Top = 17
+      Width = 121
+      Height = 21
+      TabStop = False
+      Color = clSilver
+      DataField = 'POK_OSTAT'
+      DataSource = out_accdatamodule.DataTenostat
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clNavy
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+      ReadOnly = True
+      TabOrder = 1
+    end
+  end
+  object Panel1: TPanel
+    Left = 1
+    Top = 268
+    Width = 185
+    Height = 23
+    Alignment = taLeftJustify
+    BevelInner = bvLowered
+    Caption = '         Там йенилямяк'
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 4
+    object SpeedButton3: TSpeedButton
+      Left = 2
+      Top = 2
+      Width = 19
+      Height = 19
+      Flat = True
+      Glyph.Data = {
+        36050000424D3605000000000000360400002800000010000000100000000100
+        0800000000000001000000000000000000000001000000000000000000000000
+        80000080000000808000800000008000800080800000C0C0C000C0DCC000F0CA
+        A600000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        000000000000000000000000000000000000F0FBFF00A4A0A000808080000000
+        FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00FFFFFFFFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF804F8FFFFFFFFFFFFFFFFFFFFFFF804
+        04F8FFFFFFFFFFFFFFFFFFFFFFFF0404F8FFFFFFFFFFFFFFFFFFFFFFFFF804F8
+        FFFFFFFFFFFFFFFFFFFFFFFFFF0404FFFFFFFFFFFFFFFFFFFFFFFFFFFF0404FF
+        FFFF0404040404FFFFFFFFFFFF0404F8FFFFFFF8040404FFFFFFFFFFFFF80404
+        F8FFF804040404FFFFFFFFFFFFFF04040404040404F804FFFFFFFFFFFFFFFFF8
+        040404F8FFFF04FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF}
+      OnClick = SpeedButton3Click
+    end
+  end
+  object Panel2: TPanel
+    Left = 192
+    Top = 268
+    Width = 107
+    Height = 23
+    BevelInner = bvLowered
+    Caption = 'Авто щесаб'
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 5
+    object SpeedButton1: TSpeedButton
+      Left = 2
+      Top = 2
+      Width = 19
+      Height = 19
+      Flat = True
+      Glyph.Data = {
+        36050000424D3605000000000000360400002800000010000000100000000100
+        0800000000000001000000000000000000000001000000000000000000000000
+        80000080000000808000800000008000800080800000C0C0C000C0DCC000F0CA
+        A600000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        000000000000000000000000000000000000F0FBFF00A4A0A000808080000000
+        FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00FFFFFFFFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF804F8FFFFFFFFFFFFFFFFFFFFFFF804
+        04F8FFFFFFFFFFFFFFFFFFFFFFFF0404F8FFFFFFFFFFFFFFFFFFFFFFFFF804F8
+        FFFFFFFFFFFFFFFFFFFFFFFFFF0404FFFFFFFFFFFFFFFFFFFFFFFFFFFF0404FF
+        FFFF0404040404FFFFFFFFFFFF0404F8FFFFFFF8040404FFFFFFFFFFFFF80404
+        F8FFF804040404FFFFFFFFFFFFFF04040404040404F804FFFFFFFFFFFFFFFFF8
+        040404F8FFFF04FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF}
+      OnClick = SpeedButton1Click
+    end
+  end
+end

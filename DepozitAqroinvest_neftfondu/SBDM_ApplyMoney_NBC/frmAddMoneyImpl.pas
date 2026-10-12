@@ -1,0 +1,156 @@
+﻿unit frmAddMoneyImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ExtCtrls, StdCtrls, Mask, DBCtrlsEh, DBLookupEh, CMCurrencyEdit, ComCtrls,
+  NLSLocalizer, ActnList, DBGridEh;
+
+type
+  TfrmAddMoney = class(TForm)
+    Panel1: TPanel;
+    Panel4: TPanel;
+    StaticText3: TStaticText;
+    AccountListCB: TDBLookupComboboxEh;
+    ButtonCommit: TButton;
+    ButtonCancel: TButton;
+    ActionList1: TActionList;
+    ActnTransaction: TAction;
+    AccnameListCB: TDBLookupComboboxEh;
+    Panel2: TPanel;
+    Label1: TLabel;
+    Label4: TLabel;
+    DBEditEh1: TDBEditEh;
+    PercentEdit: TEdit;
+    Label2: TLabel;
+    Label3: TLabel;
+    OperationDatePckr: TDateTimePicker;
+    MoneySumEdit: TCMCurrencyEdit;
+    Panel3: TPanel;
+    StaticText1: TStaticText;
+    DBLookupComboboxEh1: TDBLookupComboboxEh;
+    DBLookupComboboxEh2: TDBLookupComboboxEh;
+    Edit1: TEdit;
+    Edit2: TEdit;
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormShow(Sender: TObject);
+    procedure ActnTransactionExecute(Sender: TObject);
+    procedure ActnTransactionUpdate(Sender: TObject);
+    procedure AccountListCBChange(Sender: TObject);
+    procedure AccnameListCBChange(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    
+  end;
+
+var
+  frmAddMoney: TfrmAddMoney;
+
+implementation
+
+{$R *.DFM}
+uses CommonDeclsImpl,DMApplyMoneyImpl,TemporaryTransactionsFormImpl;
+
+procedure TfrmAddMoney.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+  Resize := False
+end;
+
+procedure TfrmAddMoney.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+   if ord(key) = VK_ESCAPE then close
+end;
+
+procedure TfrmAddMoney.ActnTransactionExecute(Sender: TObject);
+resourcestring
+  rsTransactionsWillProcessed = 'Depozit yatrımı ...';
+
+var ClientAccID :Integer;
+    Total : Real;
+    Percent :Real;
+    CommitDepositMoney : Boolean;
+
+begin
+   ClientAccID := AccountListCB.ListSource.DataSet.FieldByName('ID').AsInteger;
+   Total := MoneySumEdit.Value;
+   Percent := StrToFloat(PercentEdit.Text);
+
+   if integer(trunc(OperationDatePckr.DateTime))<integer(trunc(Get_BankDate))
+    then
+      begin
+        ShowMessage('Yatrım tarixi sistem tarixdən kiçik ola bilməz'); {neft fondu}
+        exit;
+      end;
+
+
+   with DMApplyMoney,sbcm_tranches do
+        CallProcedure('depositmoney',[
+                      'P_ClientAccID',ClientAccID,
+                      'contractid',Get_SelectedContID,
+                      'hdate',OperationDatePckr.DateTime,{Get_BankDate,}
+                      'total',Total,
+                      'PERCENT',Percent,
+                      'usetransaction',true]);
+
+  try
+
+    CommitDepositMoney := TrDelayed_Show(Self,rsTransactionsWillProcessed);
+
+    Update;
+    
+    DMApplyMoney.sbcm_tranches.CallProcedure('CommitDepositMoney',['DoCommit',
+       CommitDepositMoney
+    ]);
+
+    if CommitDepositMoney then
+    Self.ModalResult := mrOk;
+    Self.Update;
+  except
+
+   
+    DMApplyMoney.sbcm_tranches.CallProcedure('CommitDepositMoney',['DoCommit',
+        False
+    ]);
+
+    raise;
+  end;
+
+  end;
+                      
+
+
+procedure TfrmAddMoney.FormShow(Sender: TObject);
+begin
+   //ShowMessage(IntToStr(Get_SelectedContID));
+   with DMApplyMoney,DepositInfo do begin
+   Refresh;
+   PercentEdit.Text := FloatToStr(FieldByName('interest').AsFloat);
+   end;
+   OperationDatePckr.DateTime := Get_BankDate;
+   MoneySumEdit.Value := 0;
+
+end;
+
+
+procedure TfrmAddMoney.ActnTransactionUpdate(Sender: TObject);
+begin
+   with (Sender as TAction) do
+         Enabled := MoneySumEdit.Value > 0
+end;
+
+procedure TfrmAddMoney.AccountListCBChange(Sender: TObject);
+begin
+    AccnameListCB.KeyValue := AccountListCB.KeyValue;
+end;
+
+procedure TfrmAddMoney.AccnameListCBChange(Sender: TObject);
+begin
+  AccountListCB.KeyValue :=AccnameListCB.KeyValue;
+end;
+
+end.

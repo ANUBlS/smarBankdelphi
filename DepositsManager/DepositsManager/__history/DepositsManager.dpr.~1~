@@ -1,0 +1,22 @@
+library DepositsManager;
+
+uses
+  ComServ,
+  DepositsManager_TLB in 'DepositsManager_TLB.pas',
+  DepositsManagerImpl in 'DepositsManagerImpl.pas' {frmDepositsManager: TActiveForm} {DepositsManager: CoClass},
+  DMDepositManagerImpl in 'DMDepositManagerImpl.pas' {DMDepositsManager: TDataModule};
+
+{$E ocx}
+
+exports
+  DllGetClassObject,
+  DllCanUnloadNow,
+  DllRegisterServer,
+  DllUnregisterServer;
+
+{$R *.TLB}
+
+{$R *.RES}
+
+begin
+end.

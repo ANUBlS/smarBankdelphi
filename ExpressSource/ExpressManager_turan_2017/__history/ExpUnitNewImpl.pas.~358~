@@ -1,0 +1,4858 @@
+﻿unit ExpUnitNewImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ComCtrls, ExtCtrls, Mask, DBCtrlsEh, DBCtrls, StdCtrls, SearchEdit,
+  CMCurrencyEdit, Buttons, CMHintBox, DB, CurrencyToHR_Azeri_Impl, Grids,
+  DBGrids,
+  Menus, sboapiDataModuleImpl, OracleData;
+
+type
+  TExpFormNew = class(TForm)
+    Panel1: TPanel;
+    PageControl1: TPageControl;
+    TabSheet1: TTabSheet;
+    Panel2: TPanel;
+    TabSheet2: TTabSheet;
+    Label8: TLabel;
+    Label10: TLabel;
+    Label13: TLabel;
+    Label14: TLabel;
+    TabSheet3: TTabSheet;
+    Panel9: TPanel;
+    Panel16: TPanel;
+    RadioGroup2: TRadioGroup;
+    Panel3: TPanel;
+    Panel4: TPanel;
+    GroupBox2: TGroupBox;
+    Panel7: TPanel;
+    GroupBox6: TGroupBox;
+    GroupBox3: TGroupBox;
+    GroupBox7: TGroupBox;
+    Label151: TLabel;
+    PopupMenu1: TPopupMenu;
+    MINominalClear: TMenuItem;
+    Panel10: TPanel;
+    Panel11: TPanel;
+    Panel14: TPanel;
+    GroupBox14: TGroupBox;
+    GroupBox15: TGroupBox;
+    Panel15: TPanel;
+    GroupBox16: TGroupBox;
+    Button5: TButton;
+    Button1: TButton;
+    CMHintBox1: TCMHintBox;
+    RadioGroup1: TRadioGroup;
+    RadioGroup3: TRadioGroup;
+    Panel17: TPanel;
+    Panel18: TPanel;
+    Panel21: TPanel;
+    Button2: TButton;
+    Panel22: TPanel;
+    GroupBox21: TGroupBox;
+    GroupBox22: TGroupBox;
+    GroupBox23: TGroupBox;
+    CMHintBox2: TCMHintBox;
+    Button3: TButton;
+    Button4: TButton;
+    GroupBox4: TGroupBox;
+    GroupBox5: TGroupBox;
+    GroupBox9: TGroupBox;
+    GroupBox10: TGroupBox;
+    GroupBox12: TGroupBox;
+    GroupBox13: TGroupBox;
+    CMHintBox3: TCMHintBox;
+    Panel5: TPanel;
+    Label7: TLabel;
+    EditCustid: TEdit;
+    Panel6: TPanel;
+    RadioButton1: TRadioButton;
+    RadioButton2: TRadioButton;
+    Panel12: TPanel;
+    Label4: TLabel;
+    Label21: TLabel;
+    EditLastNameI: TEdit;
+    Panel13: TPanel;
+    Label12: TLabel;
+    Label11: TLabel;
+    EditNameI: TEdit;
+    Panel19: TPanel;
+    Label18: TLabel;
+    Label17: TLabel;
+    EditSonameI: TEdit;
+    Panel20: TPanel;
+    Label1: TLabel;
+    Label2: TLabel;
+    EditPINCodeI: TEdit;
+    Panel23: TPanel;
+    Label32: TLabel;
+    Label3: TLabel;
+    CBoxPassPlaceI: TDBLookupComboBox;
+    Panel24: TPanel;
+    Label15: TLabel;
+    Label9: TLabel;
+    EditSerialI: TEdit;
+    EditPassportI: TEdit;
+    Panel26: TPanel;
+    GroupBox1: TGroupBox;
+    Panel27: TPanel;
+    DBEdit1: TDBEdit;
+    FilialNameI: TDBEdit;
+    Panel28: TPanel;
+    TransRefEdit: TEdit;
+    Label48: TLabel;
+    Panel29: TPanel;
+    Label24: TLabel;
+    Label153: TLabel;
+    SenderAccNo: TDBLookupComboBox;
+    Panel8: TPanel;
+    Label43: TLabel;
+    Label147: TLabel;
+    Label45: TLabel;
+    Label149: TLabel;
+    ValuteName: TDBLookupComboBox;
+    CMCurrencyEdit: TEdit;
+    Panel30: TPanel;
+    Label46: TLabel;
+    CMCurrencyEdit2: TCMCurrencyEdit;
+    CMCurrencyEdit3: TCMCurrencyEdit;
+    Label47: TLabel;
+    Panel31: TPanel;
+    Edit15: TEdit;
+    Label44: TLabel;
+    Panel32: TPanel;
+    GroupBox8: TGroupBox;
+    Label152: TLabel;
+    Panel33: TPanel;
+    BitBtn1: TBitBtn;
+    Panel34: TPanel;
+    RadioButton3: TRadioButton;
+    RadioButton4: TRadioButton;
+    Panel35: TPanel;
+    Label25: TLabel;
+    EditCustidII: TEdit;
+    Panel36: TPanel;
+    Label20: TLabel;
+    Label23: TLabel;
+    EditLastNameII: TEdit;
+    Panel37: TPanel;
+    Label27: TLabel;
+    Label26: TLabel;
+    EditNameII: TEdit;
+    Panel38: TPanel;
+    Label29: TLabel;
+    Label28: TLabel;
+    EditSoNameII: TEdit;
+    Panel39: TPanel;
+    Panel40: TPanel;
+    Label34: TLabel;
+    Label35: TLabel;
+    EditPINCodeII: TEdit;
+    Panel41: TPanel;
+    Label33: TLabel;
+    CBoxPassPlaceII: TDBLookupComboBox;
+    Label36: TLabel;
+    Panel42: TPanel;
+    Label31: TLabel;
+    Label30: TLabel;
+    EditSerialII: TEdit;
+    EditPassportII: TEdit;
+    Panel44: TPanel;
+    Label88: TLabel;
+    FilialNameII: TDBLookupComboBox;
+    Panel45: TPanel;
+    Label89: TLabel;
+    SenderAccNoII: TDBLookupComboBox;
+    Panel46: TPanel;
+    Label90: TLabel;
+    EditDate: TEdit;
+    Panel47: TPanel;
+    Label91: TLabel;
+    EditTime: TEdit;
+    Panel48: TPanel;
+    Label92: TLabel;
+    Edit25: TEdit;
+    Panel49: TPanel;
+    Memo1: TMemo;
+    Panel50: TPanel;
+    Label5: TLabel;
+    Search1passpin: TEdit;
+    Panel51: TPanel;
+    Label16: TLabel;
+    Search1id: TEdit;
+    Panel52: TPanel;
+    Label6: TLabel;
+    Search1paspnum: TEdit;
+    Panel53: TPanel;
+    Label19: TLabel;
+    Search1inn: TEdit;
+    Label41: TLabel;
+    Panel54: TPanel;
+    Label22: TLabel;
+    Searchpasspin: TEdit;
+    Panel55: TPanel;
+    Label76: TLabel;
+    Searchpaspnum: TEdit;
+    Panel56: TPanel;
+    Label102: TLabel;
+    Searchid: TEdit;
+    Panel57: TPanel;
+    Label103: TLabel;
+    Searchinn: TEdit;
+    ComboBox1: TComboBox;
+    RemitInfEdit: TEdit;
+    Panel58: TPanel;
+    Label37: TLabel;
+    Search2passpin: TEdit;
+    Panel59: TPanel;
+    Search2paspnum: TEdit;
+    Label38: TLabel;
+    Panel60: TPanel;
+    Label39: TLabel;
+    Search2id: TEdit;
+    Panel61: TPanel;
+    Label40: TLabel;
+    Search2inn: TEdit;
+    Panel62: TPanel;
+    RadioButton5: TRadioButton;
+    RadioButton6: TRadioButton;
+    Panel63: TPanel;
+    Label56: TLabel;
+    EditCustidIII: TEdit;
+    Panel64: TPanel;
+    Label54: TLabel;
+    Label55: TLabel;
+    EditLastNameIII: TEdit;
+    Panel65: TPanel;
+    Label58: TLabel;
+    Label57: TLabel;
+    EditNameIII: TEdit;
+    Panel66: TPanel;
+    Label60: TLabel;
+    Label59: TLabel;
+    EditSoNameIII: TEdit;
+    Panel67: TPanel;
+    Panel68: TPanel;
+    Label64: TLabel;
+    Label65: TLabel;
+    EditPINCodeIII: TEdit;
+    Panel69: TPanel;
+    Label63: TLabel;
+    Label66: TLabel;
+    CBoxPassPlaceIII: TDBLookupComboBox;
+    Panel70: TPanel;
+    Label62: TLabel;
+    Label61: TLabel;
+    EditSerialIII: TEdit;
+    EditPassportIII: TEdit;
+    Panel72: TPanel;
+    FilialNameIII: TDBLookupComboBox;
+    Label137: TLabel;
+    Panel73: TPanel;
+    Label136: TLabel;
+    SenderAccNoIII: TDBLookupComboBox;
+    Panel74: TPanel;
+    Label150: TLabel;
+    WarrantSerial: TEdit;
+    WarrantPassport: TEdit;
+    Panel75: TPanel;
+    Label148: TLabel;
+    WarrantOpenDate: TDBDateTimeEditEh;
+    Panel76: TPanel;
+    Label146: TLabel;
+    WarrantCloseDate: TDBDateTimeEditEh;
+    Panel77: TPanel;
+    Memo2: TMemo;
+    SpeedButton1: TSpeedButton;
+    SpeedButton2: TSpeedButton;
+    Panel78: TPanel;
+    ButtonNominal: TButton;
+    Panel25: TPanel;
+    Label42: TLabel;
+    Label49: TLabel;
+    DBCBoxDocTYPEI: TDBLookupComboBox;
+    Panel79: TPanel;
+    Label50: TLabel;
+    Label51: TLabel;
+    DateEditI: TDBDateTimeEditEh;
+    Panel80: TPanel;
+    GroupBox11: TGroupBox;
+    Label52: TLabel;
+    Label53: TLabel;
+    EditMobilI: TEdit;
+    EditPhoneI: TEdit;
+    Panel81: TPanel;
+    Panel82: TPanel;
+    ButtonNominal1: TButton;
+    Panel43: TPanel;
+    Label67: TLabel;
+    Label68: TLabel;
+    DBCBoxDocTYPEII: TDBLookupComboBox;
+    Panel83: TPanel;
+    Label71: TLabel;
+    Label72: TLabel;
+    DateEditII: TDBDateTimeEditEh;
+    Panel84: TPanel;
+    GroupBox17: TGroupBox;
+    Label73: TLabel;
+    Label75: TLabel;
+    Label77: TLabel;
+    EditMobilII: TEdit;
+    EditPhoneII: TEdit;
+    Panel85: TPanel;
+    Panel86: TPanel;
+    ButtonNominal2: TButton;
+    Panel71: TPanel;
+    Label78: TLabel;
+    Label79: TLabel;
+    DBCBoxDocTYPEIII: TDBLookupComboBox;
+    Panel87: TPanel;
+    Label80: TLabel;
+    Label81: TLabel;
+    DateEditIII: TDBDateTimeEditEh;
+    Panel88: TPanel;
+    GroupBox18: TGroupBox;
+    Label82: TLabel;
+    Label84: TLabel;
+    Label85: TLabel;
+    EditMobilIII: TEdit;
+    EditPhoneIII: TEdit;
+    Panel89: TPanel;
+    Label69: TLabel;
+    Button6: TButton;
+    ExpFilialUser: TOracleDataSet;
+    DSExpFilialUser: TDataSource;
+    SendDataSet: TOracleDataSet;
+    SendDataSource: TDataSource;
+    SendToDataSet: TOracleDataSet;
+    SendToDataSource: TDataSource;
+    SpeedButton3: TSpeedButton;
+    DBCBox_DocTYPEI: TEdit;
+    DBCBox_DocTYPEII: TEdit;
+    DBCBox_DocTYPEIII: TEdit;
+    ExpFilialUserID: TFloatField;
+    ExpFilialUserNAME: TWideStringField;
+    ExpFilialUserKOD_FILIAL: TWideStringField;
+    ExpFilialUserC_NAME: TWideStringField;
+    ExpFilialUserDRNAME: TWideStringField;
+    ExpFilialUserDRFULLNAME: TWideStringField;
+    ExpFilialUserNNAME: TWideStringField;
+    ExpFilialUserNFULLNAME: TWideStringField;
+    ExpFilialUserCOUNTRY: TWideStringField;
+    ExpFilialUserRESTPR: TFloatField;
+    ExpFilialUserINTERESTPR: TFloatField;
+    ExpFilialUserCORACCIDSELF: TFloatField;
+    ExpFilialUserCORACCIDHEAD: TFloatField;
+    procedure RadioGroup1Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure BitBtn1Click(Sender: TObject);
+    procedure Button5Click(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure CBoxPassPlaceIICloseUp(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure SearchEditCustidChange(Sender: TObject);
+    procedure SearchEditCustidExit(Sender: TObject);
+    procedure MINominalClearClick(Sender: TObject);
+    procedure SearchpasspinKeyPress(Sender: TObject; var Key: Char);
+    procedure SearchpasspinChange(Sender: TObject);
+    procedure RadioGroup2Click(Sender: TObject);
+    procedure Search1passpinKeyPress(Sender: TObject; var Key: Char);
+    procedure Search1passpinChange(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+    procedure Timer1Timer(Sender: TObject);
+    procedure Search2passpinKeyPress(Sender: TObject; var Key: Char);
+    procedure RadioGroup3Click(Sender: TObject);
+    procedure Button4Click(Sender: TObject);
+    procedure Button3Click(Sender: TObject);
+    procedure Search2passpinChange(Sender: TObject);
+    procedure ButtonNominalClick(Sender: TObject);
+    procedure CMCurrencyEditChange(Sender: TObject);
+    procedure ValuteNameClick(Sender: TObject);
+    procedure CMCurrencyEditKeyPress(Sender: TObject; var Key: Char);
+    procedure CMCurrencyEditMouseActivate(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y, HitTest: Integer;
+      var MouseActivate: TMouseActivate);
+    procedure CMCurrencyEditExit(Sender: TObject);
+    procedure PageControl1Changing(Sender: TObject; var AllowChange: Boolean);
+    procedure CBoxPassPlaceICloseUp(Sender: TObject);
+    procedure ComboBox1Click(Sender: TObject);
+    procedure ComboBox1DropDown(Sender: TObject);
+    procedure RemitInfEditKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure SpeedButton2Click(Sender: TObject);
+    procedure Button6Click(Sender: TObject);
+    procedure SpeedButton3Click(Sender: TObject);
+    procedure CBoxPassPlaceIIICloseUp(Sender: TObject);
+    procedure ButtonNominal1Click(Sender: TObject);
+    procedure ButtonNominal2Click(Sender: TObject);
+    procedure DBCBoxDocTYPEIClick(Sender: TObject);
+    procedure DBCBox_DocTYPEIExit(Sender: TObject);
+    procedure DBCBox_DocTYPEIIExit(Sender: TObject);
+    procedure DBCBox_DocTYPEIIIExit(Sender: TObject);
+    procedure DBCBoxDocTYPEIIClick(Sender: TObject);
+    procedure DBCBoxDocTYPEIIIClick(Sender: TObject);
+    procedure EditPINCodeIKeyPress(Sender: TObject; var Key: Char);
+  private
+    procedure ExtractedMethod;
+  public
+  var
+    FForm: Integer;
+    RFormNew: Boolean;
+    FiledBatchs: Boolean;
+    FiledIncoming: Boolean;
+    FieldBatchsArchive: Boolean;
+    FiledIncomingArchive: Boolean;
+    FTipExp:integer;
+
+    procedure Clear;
+    procedure ClearAll;
+    procedure Expadd;
+    procedure Expedit;
+    procedure ExpUpdate;
+    procedure ExpUpdateIncoming;
+    function Mani(CurrencyEdit: variant): string;
+    procedure TabSheetFirstDisable;
+    procedure TabSheetFirstEnabled;
+    procedure TabSheetSecondEnabled;
+    procedure TabSheetSecondDisable;
+  end;
+
+var
+  ExpFormNew: TExpFormNew;
+  RBoolean: Boolean;
+  id: Integer;
+  transid:integer;
+
+implementation
+
+uses ExpDataModuleUnit, UnitSearchCustName, ExpUnitImpl, ExpCustomersTypeUnit,
+  UnitSearchLegalCustName,
+  UnitNominalCustomers, ExpressDecls, ExpressManagerImpl, ExpPasswordUnit,
+  UnitPaymentsCredit;
+
+{$R *.dfm}
+
+procedure TExpFormNew.TabSheetFirstDisable;
+begin
+  Searchpaspnum.Enabled := False;
+  Searchinn.Enabled := False;
+  Searchpasspin.Enabled := False;
+  Searchid.Enabled := False;
+  Searchpaspnum.Color := clSilver;
+  Searchinn.Color := clSilver;
+  Searchpasspin.Color := clSilver;
+  Searchid.Color := clSilver;
+
+  RadioButton1.Enabled := False;
+  RadioButton2.Enabled := False;
+
+  EditLastNameI.Enabled := False;
+  EditNameI.Enabled := False;
+  EditSonameI.Enabled := False;
+  EditPINCodeI.Enabled := False;
+
+  CBoxPassPlaceI.Enabled := False;
+  EditSerialI.Enabled := False;
+  EditPassportI.Enabled := False;
+  DBCBox_DocTYPEI.Enabled := False;
+  DateEditI.Enabled := False;
+  EditMobilI.Enabled := False;
+  EditPhoneI.Enabled := False;
+  ValuteName.Enabled := False;
+  CMCurrencyEdit.Enabled := False;
+  RemitInfEdit.Enabled := False;
+  ComboBox1.Enabled := False;
+
+  EditLastNameI.Color := clSilver;
+  EditNameI.Color := clSilver;
+  EditSonameI.Color := clSilver;
+  EditPINCodeI.Color := clSilver;
+
+  CBoxPassPlaceI.Color := clSilver;
+  EditSerialI.Color := clSilver;
+  EditPassportI.Color := clSilver;
+  DBCBox_DocTYPEI.Color := clSilver;
+  DateEditI.Color := clSilver;
+  EditMobilI.Color := clSilver;
+  EditPhoneI.Color := clSilver;
+  ValuteName.Color := clSilver;
+  CMCurrencyEdit.Color := clSilver;
+  RemitInfEdit.Color := clSilver;
+
+end;
+
+procedure TExpFormNew.TabSheetFirstEnabled;
+begin
+  Searchpaspnum.Enabled := True;
+  Searchinn.Enabled := True;
+  Searchpasspin.Enabled := True;
+  Searchid.Enabled := True;
+  Searchpaspnum.Color := clWhite;
+  Searchinn.Color := clWhite;
+  Searchpasspin.Color := clWhite;
+  Searchid.Color := clWhite;
+
+  RadioButton1.Enabled := True;
+  RadioButton2.Enabled := True;
+
+  EditLastNameI.Enabled := True;
+  EditNameI.Enabled := True;
+  EditSonameI.Enabled := True;
+  EditPINCodeI.Enabled := True;
+
+  CBoxPassPlaceI.Enabled := True;
+  EditSerialI.Enabled := True;
+  EditPassportI.Enabled := True;
+  DBCBox_DocTYPEI.Enabled := True;
+  DateEditI.Enabled := True;
+  EditMobilI.Enabled := True;
+  EditPhoneI.Enabled := True;
+  ValuteName.Enabled := True;
+  CMCurrencyEdit.Enabled := False;
+  RemitInfEdit.Enabled := True;
+  ComboBox1.Enabled := True;
+
+  EditLastNameI.Color := clWhite;
+  EditNameI.Color := clWhite;
+  EditSonameI.Color := clWhite;
+  EditPINCodeI.Color := clWhite;
+
+  CBoxPassPlaceI.Color := clWhite;
+  EditSerialI.Color := clWhite;
+  EditPassportI.Color := clWhite;
+  DBCBox_DocTYPEI.Color := clWhite;
+  DateEditI.Color := clWhite;
+  EditMobilI.Color := clWhite;
+  EditPhoneI.Color := clWhite;
+  ValuteName.Color := clWhite;
+  CMCurrencyEdit.Color := clSilver;
+  RemitInfEdit.Color := clWhite;
+
+end;
+
+procedure TExpFormNew.TabSheetSecondEnabled;
+begin
+  Search1paspnum.Enabled := True;
+  Search1inn.Enabled := True;
+  Search1passpin.Enabled := True;
+  Search1id.Enabled := True;
+  Search1paspnum.Color := clWhite;
+  Search1inn.Color := clWhite;
+  Search1passpin.Color := clWhite;
+  Search1id.Color := clWhite;
+
+  EditLastNameII.Enabled := True;
+  EditNameII.Enabled := True;
+  EditSoNameII.Enabled := True;
+  EditLastNameII.Color := clWhite;
+  EditNameII.Color := clWhite;
+  EditSoNameII.Color := clWhite;
+
+  EditPINCodeII.Enabled := True;
+  EditPINCodeII.Color := clWhite;
+  CBoxPassPlaceII.Enabled := True;
+  CBoxPassPlaceII.Color := clWhite;
+  EditSerialII.Enabled := True;
+  EditSerialII.Color := clWhite;
+  EditPassportII.Enabled := True;
+  EditPassportII.Color := clWhite;
+  FilialNameII.Enabled := True;
+  FilialNameII.Color := clWhite;
+  EditPhoneII.Enabled := True;
+  EditPhoneII.Color := clWhite;
+  EditMobilII.Enabled := True;
+  EditMobilII.Color := clWhite;
+
+  RadioButton3.Enabled := True;
+  RadioButton4.Enabled := True;
+
+  Label35.Visible := False;
+  Label36.Visible := False;
+  Label30.Visible := False;
+  Label68.Visible := False;
+  Label72.Visible := False;
+  Label77.Visible := False;
+
+  Button6.Visible := False;
+
+end;
+
+procedure TExpFormNew.TabSheetSecondDisable;
+begin
+  Search1paspnum.Enabled := False;
+  Search1inn.Enabled := False;
+  Search1passpin.Enabled := False;
+  Search1id.Enabled := False;
+  Search1paspnum.Color := clSilver;
+  Search1inn.Color := clSilver;
+  Search1passpin.Color := clSilver;
+  Search1id.Color := clSilver;
+
+  EditLastNameII.Enabled := False;
+  EditNameII.Enabled := False;
+  EditSoNameII.Enabled := False;
+  EditLastNameII.Color := clSilver;
+  EditNameII.Color := clSilver;
+  EditSoNameII.Color := clSilver;
+
+  EditPINCodeII.Enabled := False;
+  EditPINCodeII.Color := clSilver;
+  CBoxPassPlaceII.Enabled := False;
+  CBoxPassPlaceII.Color := clSilver;
+  EditSerialII.Enabled := False;
+  EditSerialII.Color := clSilver;
+  EditPassportII.Enabled := False;
+  EditPassportII.Color := clSilver;
+  FilialNameII.Enabled := False;
+  FilialNameII.Color := clSilver;
+  EditPhoneII.Enabled := False;
+  EditPhoneII.Color := clSilver;
+  EditMobilII.Enabled := False;
+  EditMobilII.Color := clSilver;
+
+  RadioButton3.Enabled := False;
+  RadioButton4.Enabled := False;
+
+  Label35.Visible := False;
+  Label36.Visible := False;
+  Label30.Visible := False;
+  Label68.Visible := False;
+  Label72.Visible := False;
+  Label77.Visible := False;
+
+  Button6.Visible := False;
+
+end;
+
+procedure TExpFormNew.ExtractedMethod;
+begin
+
+end;
+
+procedure TExpFormNew.ClearAll;
+var
+  i, j, k, z: Integer;
+BEGIN
+  WITH TabSheet1 DO
+  BEGIN
+    FOR i := 0 TO ControlCount - 1 DO
+    BEGIN
+      IF (Controls[i] is TPanel) THEN
+        WITH (Controls[i] as TPanel) DO
+        BEGIN
+          FOR j := 0 TO ControlCount - 1 DO
+          BEGIN
+            IF (Controls[j] is TGroupBox) THEN
+              WITH (Controls[j] as TGroupBox) DO
+              BEGIN
+                FOR k := 0 TO ControlCount - 1 DO
+                BEGIN
+                  IF (Controls[k] is TPanel) then
+                    WITH (Controls[k] as TPanel) DO
+                    BEGIN
+                      FOR z := 0 TO ControlCount - 1 DO
+                      BEGIN
+                        IF (Controls[z] is TDBLookupComboBox) THEN
+                          IF (Controls[z] as TDBLookupComboBox)
+                            .Name = 'FilialName' THEN
+                            (Controls[z] as TDBLookupComboBox).KeyValue :=
+                              ExpDataModule.FilialDataSet.FieldByName('id')
+                              .AsInteger ELSE (Controls[z] as TDBLookupComboBox)
+                              .KeyValue := -1;
+                        IF (Controls[z] is TEdit) THEN
+                          IF (Controls[z] as TEdit).Name = 'CMCurrencyEdit' THEN
+                            (Controls[z] as TEdit).Text :=
+                              '0.00' ELSE (Controls[z] as TEdit).Clear;
+                        IF (Controls[z] is TDBDateTimeEditEh) THEN
+                          (Controls[z] as TDBDateTimeEditEh).Clear;
+
+                      END;
+                    END;
+                  IF (Controls[k] is TEdit) THEN
+                    (Controls[k] as TEdit).Clear;
+                END;
+              END;
+            IF (Controls[j] is TRadioGroup) THEN
+              (Controls[j] as TRadioGroup).ItemIndex := -1;
+          END;
+        END;
+    END;
+  END;
+  WITH TabSheet2 DO
+  BEGIN
+    FOR i := 0 TO ControlCount - 1 DO
+    BEGIN
+
+      IF (Controls[i] is TPanel) THEN
+        WITH (Controls[i] as TPanel) DO
+        BEGIN
+          FOR j := 0 TO ControlCount - 1 DO
+          BEGIN
+            IF (Controls[j] is TGroupBox) THEN
+              WITH (Controls[j] as TGroupBox) DO
+              BEGIN
+                FOR k := 0 TO ControlCount - 1 DO
+                BEGIN
+                  IF (Controls[k] is TPanel) then
+                    WITH (Controls[k] as TPanel) DO
+                    BEGIN
+                      FOR z := 0 TO ControlCount - 1 DO
+                      BEGIN
+                        IF (Controls[z] is TEdit) THEN
+                          IF ((Controls[z] as TEdit).Name <> 'EditDate') OR
+                            ((Controls[z] as TEdit).Name <> 'EditTime') THEN
+                            (Controls[z] as TEdit).Clear;
+                        IF (Controls[z] is TMaskEdit) THEN
+                          (Controls[z] as TMaskEdit).Clear;
+                        IF (Controls[z] is TDBLookupComboBox) THEN
+                          (Controls[z] as TDBLookupComboBox).KeyValue := -1;
+                        IF (Controls[z] is TDBDateTimeEditEh) THEN
+                          (Controls[z] as TDBDateTimeEditEh).Clear;
+                        IF (Controls[z] is TMemo) THEN
+                          (Controls[z] as TMemo).Clear;
+                      END;
+                    END;
+                  IF (Controls[k] is TEdit) THEN
+                    (Controls[k] as TEdit).Clear;
+                END;
+              END;
+            IF (Controls[j] is TRadioGroup) THEN
+              (Controls[j] as TRadioGroup).ItemIndex := -1;
+          END;
+        END;
+    END;
+  END;
+
+END;
+
+procedure TExpFormNew.CMCurrencyEditChange(Sender: TObject);
+var
+  sum: real;
+  Fsendfilial:integer;
+begin
+
+  //if VarIsNull(ExpDataModule.ExpBatchsDataSet.fieldbyname('id').AsVariant) then Fsendfilial:=ExpFilialUser.FieldByName('id').AsInteger
+                        //                                                    else Fsendfilial:=ExpDataModule.ExpBatchsDataSet.fieldbyname('filial').AsInteger;
+  //ShowMessage(IntToStr(Fsendfilial));
+  //ShowMessage(ExpDataModule.ExpBatchsDataSet.fieldbyname('id').AsVariant);
+
+  if transid=0 then Fsendfilial:=ExpFilialUser.FieldByName('id').AsInteger;
+  if transid=1 then Fsendfilial:=ExpDataModule.ExpBatchsDataSet.fieldbyname('filial').AsInteger;
+  if transid=2 then Fsendfilial:=ExpDataModule.ExpIncomingDataSet.fieldbyname('filial').AsInteger;
+  if transid=3 then Fsendfilial:=ExpDataModule.ExpIncomingDataSet.fieldbyname('filial').AsInteger;
+
+
+
+  //ShowMessage(IntToStr(Length(CMCurrencyEdit.Text)));
+
+  if (transid=1) and (fform=0) then  exit;
+
+
+  sum := 0;
+  if Length(CMCurrencyEdit.Text) = 0 then
+  begin
+    CMCurrencyEdit2.Text := '';
+    CMCurrencyEdit3.Text := '';
+    exit
+  end
+  else
+  begin
+    IF EditCustid.Text <> '' THEN
+      sum := ExpDataModule.Repair.CallFloatFunction('SumNominalid',
+        [StrToInt(EditCustid.Text)]) + StrToFloat(CMCurrencyEdit.Text);
+    if (StrToFloat(CMCurrencyEdit.Text) >= 20000) and
+      ((RadioGroup1.ItemIndex = -1) or (RadioGroup1.ItemIndex = 0)) then
+      ButtonNominal.Enabled := True
+    else
+      ButtonNominal.Enabled := False;
+
+   // if ValuteName.Enabled and CMCurrencyEdit.Enabled then
+  //  begin
+    CMCurrencyEdit2.Value := ExpDataModule.Repair.CallFloatFunction
+      ('Exp_comissionoperation', [1, StrToFloat(CMCurrencyEdit.Text),
+      Fsendfilial,ValuteName.KeyValue]);
+    CMCurrencyEdit3.Value := StrToFloat(CMCurrencyEdit.Text) +
+      CMCurrencyEdit2.Value;
+    Edit15.Text := Mani(StrToFloat(CMCurrencyEdit.Text));
+  //  end;
+  end;
+end;
+
+procedure TExpFormNew.CMCurrencyEditExit(Sender: TObject);
+var
+  s: Integer;
+  Text: string;
+begin
+
+  s := pos('.', CMCurrencyEdit.Text);
+  IF s = 0 THEN
+    CMCurrencyEdit.Text := CMCurrencyEdit.Text + '.00';
+end;
+
+procedure TExpFormNew.CMCurrencyEditKeyPress(Sender: TObject; var Key: Char);
+begin
+  if not(Key in [#8, '0' .. '9', DecimalSeparator]) then
+    Key := #0;
+end;
+
+procedure TExpFormNew.CMCurrencyEditMouseActivate(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y, HitTest: Integer;
+  var MouseActivate: TMouseActivate);
+begin
+  IF CMCurrencyEdit.Text = '0.00' then
+    CMCurrencyEdit.Clear;
+end;
+
+procedure TExpFormNew.ComboBox1Click(Sender: TObject);
+begin
+  RemitInfEdit.Text := (Sender as TComboBox).Text;
+end;
+
+procedure TExpFormNew.ComboBox1DropDown(Sender: TObject);
+begin
+  FormPaymentsCredit.LoadComboData(TComboBox(Sender));
+end;
+
+procedure TExpFormNew.Clear;
+var
+  i, j, k, z: Integer;
+BEGIN
+  CASE PageControl1.ActivePageIndex OF
+    0:
+      BEGIN
+        WITH TabSheet1 DO
+        BEGIN
+          FOR i := 0 TO ControlCount - 1 DO
+          BEGIN
+            IF (Controls[i] is TPanel) THEN
+              WITH (Controls[i] as TPanel) DO
+              BEGIN
+                FOR j := 0 TO ControlCount - 1 DO
+                BEGIN
+                  IF (Controls[j] is TGroupBox) THEN
+                    WITH (Controls[j] as TGroupBox) DO
+                    BEGIN
+                      FOR k := 0 TO ControlCount - 1 DO
+                      BEGIN
+                        IF (Controls[k] is TPanel) then
+                          WITH (Controls[k] as TPanel) DO
+                          BEGIN
+                            FOR z := 0 TO ControlCount - 1 DO
+                            BEGIN
+                              IF (Controls[z] is TEdit) THEN
+                                IF (Controls[z] as TEdit)
+                                  .Name = 'CMCurrencyEdit' THEN
+                                  (Controls[z] as TEdit).Text :=
+                                    '0.00' ELSE (Controls[z] as TEdit).Clear;
+
+                              IF (Controls[z] is TDBLookupComboBox) THEN
+                                IF (Controls[z] as TDBLookupComboBox)
+                                  .Name = 'FilialName' THEN
+                                  (Controls[z] as TDBLookupComboBox).KeyValue :=
+                                    ExpDataModule.FilialDataSet.FieldByName
+                                    ('id').AsInteger ELSE
+                                    (Controls[z] as TDBLookupComboBox)
+                                    .KeyValue := -1;
+                              IF (Controls[z] is TDBDateTimeEditEh) THEN
+                                (Controls[z] as TDBDateTimeEditEh).Clear;
+                            END;
+                          END;
+                        IF (Controls[k] is TEdit) THEN
+                          (Controls[k] as TEdit).Clear;
+                      END;
+                    END;
+                  IF (Controls[j] is TRadioGroup) THEN
+                    (Controls[j] as TRadioGroup).ItemIndex := -1;
+
+                END;
+              END;
+          END;
+        END;
+      END;
+    1:
+      BEGIN
+        WITH TabSheet2 DO
+        BEGIN
+          FOR i := 0 TO ControlCount - 1 DO
+          BEGIN
+            IF (Controls[i] is TPanel) THEN
+              WITH (Controls[i] as TPanel) DO
+              BEGIN
+                FOR j := 0 TO ControlCount - 1 DO
+                BEGIN
+                  IF (Controls[j] is TGroupBox) THEN
+                    WITH (Controls[j] as TGroupBox) DO
+                    BEGIN
+                      FOR k := 0 TO ControlCount - 1 DO
+                      BEGIN
+                        IF (Controls[k] is TPanel) then
+                          WITH (Controls[k] as TPanel) DO
+                          BEGIN
+                            FOR z := 0 TO ControlCount - 1 DO
+                            BEGIN
+                              IF (Controls[z] is TEdit) THEN
+                                IF (Controls[z] as TEdit).Name <>
+                                  'EditDate' THEN
+                                  IF (Controls[z] as TEdit).Name <>
+                                    'EditTime' THEN
+                                    (Controls[z] as TEdit).Clear;
+                              IF (Controls[z] is TMaskEdit) THEN
+                                (Controls[z] as TMaskEdit).Clear;
+                              IF (Controls[z] is TDBLookupComboBox) THEN
+                                (Controls[z] as TDBLookupComboBox)
+                                  .KeyValue := -1;
+                              IF (Controls[z] is TDBDateTimeEditEh) THEN
+                                (Controls[z] as TDBDateTimeEditEh).Clear;
+                              IF (Controls[z] is TMemo) THEN
+                                (Controls[z] as TMemo).Clear;
+                            END;
+                          END;
+                        IF (Controls[k] is TEdit) THEN
+                          (Controls[k] as TEdit).Clear;
+                      END;
+                    END;
+                  IF (Controls[j] is TRadioGroup) THEN
+                    (Controls[j] as TRadioGroup).ItemIndex := -1;
+                END;
+              END;
+          END;
+        END;
+      END;
+
+    2:
+      BEGIN
+
+        WITH TabSheet3 DO
+        BEGIN
+         { Search2passpin.Clear;
+          Search2paspnum.Clear;
+          Search2id.Clear;
+          Search2inn.Clear;
+          EditCustidIII.Clear;
+          EditLastNameIII.Clear;
+          EditNameIII.Clear;
+          EditSoNameIII.Clear;
+          EditPINCodeIII.Clear;
+          CBoxPassPlaceIII.KeyValue:=-1;
+          EditSerialIII.Clear;
+          EditPassportIII.Clear;
+          DBCBox_DocTYPEIII.KeyValue:=-1;
+          DateEditIII.Clear;
+          Edit3.Clear;
+          Edit4.Clear;
+          FilialNameIII.KeyValue:=-1;
+          SenderAccNoIII.KeyValue:=-1;
+          WarrantPassport.Clear;
+          WarrantSerial.Clear;
+          WarrantOpenDate.Clear;
+          WarrantCloseDate.Clear;}
+
+          FOR i := 0 TO ControlCount - 1 DO
+          BEGIN
+            IF (Controls[i] is TPanel) THEN
+              WITH (Controls[i] as TPanel) DO
+              BEGIN
+                FOR j := 0 TO ControlCount - 1 DO
+                BEGIN
+
+                  IF (Controls[j] is TGroupBox) THEN
+                    WITH (Controls[j] as TGroupBox) DO
+                    BEGIN
+                      FOR k := 0 TO ControlCount - 1 DO
+                      BEGIN
+                        IF (Controls[k] is TPanel) then
+                          WITH (Controls[k] as TPanel) DO
+                          BEGIN
+                            FOR z := 0 TO ControlCount - 1 DO
+                            BEGIN
+                              IF (Controls[z] is TEdit) THEN
+                                    (Controls[z] as TEdit).Clear;
+                              IF (Controls[z] is TMaskEdit) THEN
+                                (Controls[z] as TMaskEdit).Clear;
+                              IF (Controls[z] is TDBLookupComboBox) THEN
+                                (Controls[z] as TDBLookupComboBox)
+                                  .KeyValue := -1;
+                              IF (Controls[z] is TDBDateTimeEditEh) THEN
+                                (Controls[z] as TDBDateTimeEditEh).Clear;
+                              IF (Controls[z] is TMemo) THEN
+                                (Controls[z] as TMemo).Clear;
+                            END;
+                          END;
+                        IF (Controls[k] is TEdit) THEN
+                          (Controls[k] as TEdit).Clear;
+                      END;
+                    END;
+                  IF (Controls[j] is TRadioGroup) THEN
+                    (Controls[j] as TRadioGroup).ItemIndex := -1;
+                END;
+              END;
+          END;
+        END;
+      END;
+  END;
+
+END;
+
+function TExpFormNew.Mani(CurrencyEdit: variant): string;
+var
+  sr, ET: string;
+  s: Integer;
+  st: real;
+
+begin
+  with ExpDataModule do
+  begin
+    Exp_avalute.Close;
+    if FiledBatchs then
+      Exp_avalute.SetVariable('valute', ExpBatchsDataSetVAL_COD.AsInteger);
+    if FiledIncoming then
+      Exp_avalute.SetVariable('valute', ExpIncomingDataSetVAL_COD.AsInteger);
+    if FieldBatchsArchive then
+      Exp_avalute.SetVariable('valute',
+        ExpBatchsArchiveDataSetVAL_COD.AsInteger);
+    if FiledIncomingArchive then  Exp_avalute.SetVariable('valute',ExpIncomingarchiveDataSet.FieldByName('VAL_COD').AsInteger)
+                            else  Exp_avalute.SetVariable('valute',ValuteName.KeyValue);
+    Exp_avalute.Open;
+
+  end;
+
+  sr := CurrencyToHR_Azeri(trunc(CurrencyEdit), 0, [0]);
+  s := pos('manat', sr);
+  delete(sr, s, 5);
+  st := round(frac(CurrencyEdit) * 100);
+
+  if CurrencyEdit >= 1 then
+  begin
+    if st > 0 then
+    begin
+      ET := sr + '' + ExpDataModule.Exp_avalute.FieldByName('VALU_NAME')
+        .AsString + ' ' + FloatToStr(st) + ' ' +
+        ExpDataModule.Exp_avalute.FieldByName('Valu_Bala').AsString
+    end
+    else
+      ET := '(' + sr + ')' + '  ' + ExpDataModule.Exp_avalute.FieldByName
+        ('VALU_NAME').AsString;
+  end
+  else
+    ET := '(' + FloatToStr(st) + ')' + '  ' +
+      ExpDataModule.Exp_avalute.FieldByName('Valu_Bala').AsString;
+  Mani := ET;
+
+end;
+
+procedure TExpFormNew.MINominalClearClick(Sender: TObject);
+begin
+  RBoolean := True;
+  Clear;
+  FormNominalCustomers.NominalClear(RFormNew);
+
+  CASE PageControl1.ActivePageIndex OF
+    0:
+      BEGIN
+        RadioGroup1Click(Sender);
+        CBoxPassPlaceICloseUp(Sender);
+      END;
+    1:
+      BEGIN
+        RadioGroup2Click(Sender);
+        CBoxPassPlaceIICloseUp(Sender);
+      END;
+    2:
+      BEGIN
+        RadioGroup3Click(Sender);
+        CBoxPassPlaceIIICloseUp(Sender);
+      END;
+  END;
+end;
+
+procedure TExpFormNew.PageControl1Changing(Sender: TObject;
+  var AllowChange: Boolean);
+begin
+  AllowChange := False;
+end;
+
+procedure TExpFormNew.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  ExpFormNew.Close;
+  FForm := 0;
+  ExpFormNew.FiledBatchs := False;
+  ExpFormNew.FiledIncoming := False;
+  IF CMCurrencyEdit.Enabled THEN
+  begin
+    ValuteName.Enabled:=false;
+    CMCurrencyEdit.Enabled := False;
+  end;
+end;
+
+PROCEDURE TExpFormNew.FormShow(Sender: TObject);
+VAR
+  s: real;
+BEGIN
+  s := 0;
+  CASE FForm OF
+    0:
+      BEGIN
+        ClearAll;
+        RBoolean := False;
+        RFormNew := False;
+        ExpFilialUser.Close;
+        ExpFilialUser.Open;
+        MINominalClear.Enabled := True;
+        TabSheetFirstEnabled;
+        TabSheetSecondEnabled;
+        IF TabSheet3.TabVisible THEN TabSheet3.TabVisible:=False;
+        RadioGroup1Click(Sender);
+        RadioGroup2Click(Sender);
+        SpeedButton1Click(Sender);
+        transid:=0;
+      END;
+    1:
+      BEGIN
+        TabSheet3.TabVisible:=False;
+        TabSheet2.TabVisible:=True;
+        CMCurrencyEdit.Enabled:=true;
+
+        IF RadioGroup1.ItemIndex=0 THEN TabSheetFirstEnabled
+                                   ELSE TabSheetFirstDisable;
+
+        IF RadioGroup2.ItemIndex=0 THEN TabSheetSecondEnabled
+                                   ELSE TabSheetSecondDisable;
+        transid:=1;
+        Expedit;
+
+      END;
+    2:
+     BEGIN
+       MINominalClear.Enabled:=false;
+       Button6.Visible:=True;
+       TabSheet3.TabVisible:=False;
+       TabSheet2.TabVisible:=True;
+       Label35.Visible:=True;
+       Label36.Visible:=True;
+       Label30.Visible:=True;
+       Label68.Visible:=True;
+       Label72.Visible:=True;
+       Label77.Visible:=True;
+       transid:=2;
+       ExpUpdate;
+       S:=ExpDataModule.Repair.CallFloatFunction('SumTakeid',[StrToInt(EditCustidII.Text)]);
+       IF S>=20000 THEN ButtonNominal1.Visible:=true
+       ELSE ButtonNominal1.Visible:=false;
+      //RadioGroup3Add;
+      //clear;
+     END;
+   3:
+     BEGIN
+       MINominalClear.Enabled:=false;
+       Button6.Visible:=True;
+       TabSheet3.TabVisible:=False;
+       TabSheet2.TabVisible:=True;
+       Label35.Visible:=True;
+       Label36.Visible:=True;
+       Label30.Visible:=True;
+       Label68.Visible:=True;
+       Label72.Visible:=True;
+       Label77.Visible:=True;
+       transid:=3;
+       ExpUpdateIncoming;
+       S:=ExpDataModule.Repair.CallFloatFunction('SumTakeid',[StrToInt(EditCustidII.Text)]);
+       IF S>=20000 THEN ButtonNominal1.Visible:=true
+       ELSE ButtonNominal1.Visible:=false;
+     END;
+  END;
+END;
+
+procedure TExpFormNew.RadioGroup1Click(Sender: TObject);
+BEGIN
+
+  Case RadioGroup1.ItemIndex of
+    - 1, 0:
+      BEGIN
+        Searchpasspin.Enabled := True;
+        Searchpasspin.Color := clWhite;
+        Searchpaspnum.Enabled := True;
+        Searchpaspnum.Color := clWhite;
+        Searchid.Enabled := True;
+        Searchid.Color := clWhite;
+        Searchinn.Enabled := True;
+        Searchinn.Color := clWhite;
+
+        EditPINCodeI.Enabled := True;
+        EditPINCodeI.Color := clWhite;
+        CBoxPassPlaceI.Enabled := True;
+        CBoxPassPlaceI.Color := clWhite;
+        EditSerialI.Enabled := True;
+        EditSerialI.Color := clWhite;
+        EditPassportI.Enabled := True;
+        EditPassportI.Color := clWhite;
+        EditCustid.Enabled := False;
+        EditCustid.Color := clSilver;
+        EditNameI.Enabled := True;
+        EditNameI.Color := clWhite;
+        EditLastNameI.Enabled := True;
+        EditLastNameI.Color := clWhite;
+        EditSonameI.Enabled := True;
+        EditSonameI.Color := clWhite;
+        DBCBox_DocTYPEI.Enabled := True;
+        DBCBox_DocTYPEI.Color := clWhite;
+        DateEditI.Enabled := True;
+        DateEditI.Color := clWhite;
+
+        EditMobilI.Enabled := True;
+        EditMobilI.Color := clWhite;
+        EditPhoneI.Enabled := True;
+        EditPhoneI.Color := clWhite;
+        ValuteName.Enabled := True;
+        ValuteName.Color := clWhite;
+       // CMCurrencyEdit.Enabled := True;
+       // CMCurrencyEdit.Color := clWhite;
+        RemitInfEdit.Enabled := True;
+        RemitInfEdit.Color := clWhite;
+
+        RadioButton1.Enabled := True;
+        RadioButton2.Enabled := True;
+
+      END;
+
+    1, 2, 3, 4:
+      BEGIN
+        EditNameI.Enabled := False;
+        EditNameI.Color := clSilver;
+        EditLastNameI.Enabled := False;
+        EditLastNameI.Color := clSilver;
+        EditSonameI.Enabled := False;
+        EditSonameI.Color := clSilver;
+        RadioButton1.Enabled := False;
+        RadioButton2.Enabled := False;
+        EditPINCodeI.Enabled := False;
+        EditPINCodeI.Color := clSilver;
+        CBoxPassPlaceI.Enabled := False;
+        CBoxPassPlaceI.Color := clSilver;
+        EditSerialI.Enabled := False;
+        EditSerialI.Color := clSilver;
+        EditPassportI.Enabled := False;
+        EditPassportI.Color := clSilver;
+        DBCBox_DocTYPEI.Enabled := False;
+        DBCBox_DocTYPEI.Color := clSilver;
+        DateEditI.Enabled := False;
+        DateEditI.Color := clSilver;
+        EditMobilI.Enabled := False;
+        EditMobilI.Color := clSilver;
+        EditPhoneI.Enabled := False;
+        EditPhoneI.Color := clSilver;
+
+      END;
+
+  END;
+
+END;
+
+procedure TExpFormNew.Search1passpinChange(Sender: TObject);
+var
+  Nam: string;
+BEGIN
+  IF ((Sender as TEdit).Name = 'Search1passpin') and
+    ((Sender as TEdit).Text <> '') THEN
+  BEGIN
+    Search1paspnum.Clear;
+    Search1id.Clear;
+    Search1inn.Clear;
+  END;
+  IF ((Sender as TEdit).Name = 'Search1paspnum') and
+    ((Sender as TEdit).Text <> '') THEN
+  BEGIN
+    Search1passpin.Clear;
+    Search1id.Clear;
+    Search1inn.Clear;
+  END;
+  IF ((Sender as TEdit).Name = 'Search1id') and
+    ((Sender as TEdit).Text <> '') THEN
+  BEGIN
+    Search1passpin.Clear;
+    Search1paspnum.Clear;
+    Search1inn.Clear;
+  END;
+  IF ((Sender as TEdit).Name = 'Search1inn') and
+    ((Sender as TEdit).Text <> '') THEN
+  BEGIN
+    Search1passpin.Clear;
+    Search1paspnum.Clear;
+    Search1id.Clear;
+  END;
+
+END;
+
+procedure TExpFormNew.Search1passpinKeyPress(Sender: TObject; var Key: Char);
+var
+  s: string;
+begin
+  s := '';
+  IF Key = #13 THEN
+
+    IF (Sender as TEdit).Text <> '' THEN
+    BEGIN
+      s := copy((Sender as TEdit).Name, 8, Length((Sender as TEdit).Name));
+      // S:='('+S+'='+''''+(Sender as TEdit).text+''''+')';
+      if s = 'passpin' then
+        s := 'upper(' + s + ')';
+      s := '(' + s + '=' + '''' + (Sender as TEdit).Text + '''' + ')';
+
+      WITH SendToDataSet DO
+      BEGIN
+        Close;
+        SQL[1] := '';
+        SQL[1] := 'where ' + s;
+        Open;
+
+        IF RecordCount = 0 THEN
+        BEGIN
+          ShowMessage('Müştəri tapılmadı');
+          Clear;
+          exit;
+        END;
+
+        IF RecordCount = 1 THEN
+        BEGIN
+          CASE FieldByName('cust_type').AsInteger of
+            0:
+              RadioGroup2.ItemIndex := 3;
+            1:
+              RadioGroup2.ItemIndex := 1;
+            2:
+              RadioGroup2.ItemIndex := 2;
+            3:
+              RadioGroup2.ItemIndex := 4;
+            4:
+              RadioGroup2.ItemIndex := 0;
+          END;
+
+          IF FieldByName('nerezident').AsInteger = 1 THEN
+            RadioButton3.Checked := True
+          ELSE
+            RadioButton4.Checked := True;
+
+          WITH ExpDataModule DO
+          BEGIN
+            AccountDataSet1.Close;
+            AccountDataSet1.SQL[2] := '';
+            AccountDataSet1.SetVariable('kli_id', FieldByName('id').AsInteger);
+            AccountDataSet1.Open;
+          END;
+
+          EditCustidII.Text := FieldByName('id').AsString;
+          EditLastNameII.Text := FieldByName('lastname').AsString;
+          IF RadioGroup2.ItemIndex = 3 THEN
+            EditNameII.Text := FieldByName('custname').AsString
+          ELSE
+            EditNameII.Text := FieldByName('name').AsString;
+          EditSoNameII.Text := FieldByName('soname').AsString;
+
+          // IF (RadioGroup2.ItemIndex=0)
+          // THEN
+          // BEGIN
+          EditPINCodeII.Text := FieldByName('passpin').AsString;
+          CBoxPassPlaceII.KeyValue := FieldByName('doc_type').AsInteger;
+          EditSerialII.Text := FieldByName('passer').AsString;
+          EditPassportII.Text := FieldByName('paspnum').AsString;
+
+          DBCBox_DocTYPEII.Text := FieldByName('paspplace').AsString;
+          DateEditII.Value := FieldByName('paspdate').AsVariant;
+          EditMobilII.Text := FieldByName('phone_m').AsString;
+          EditPhoneII.Text := FieldByName('phone_h').AsString;
+          // END;
+
+        END
+
+        // ELSE
+        // IF RecordCount>1 THEN  FormSearchLegalCustName.ShowModal;
+
+      end
+    end;
+
+end;
+
+
+procedure TExpFormNew.Search2passpinChange(Sender: TObject);
+begin
+  IF ((Sender as TEdit).Name = 'Search2passpin') and
+    ((Sender as TEdit).Text <> '') THEN
+  BEGIN
+    Search2paspnum.Clear;
+    Search2id.Clear;
+    Search2inn.Clear;
+  END;
+  IF ((Sender as TEdit).Name = 'Search2paspnum') and
+    ((Sender as TEdit).Text <> '') THEN
+  BEGIN
+    Search2passpin.Clear;
+    Search2id.Clear;
+    Search2inn.Clear;
+  END;
+  IF ((Sender as TEdit).Name = 'Search2id') and
+    ((Sender as TEdit).Text <> '') THEN
+  BEGIN
+    Search2passpin.Clear;
+    Search2paspnum.Clear;
+    Search2inn.Clear;
+  END;
+  IF ((Sender as TEdit).Name = 'Search2inn') and
+    ((Sender as TEdit).Text <> '') THEN
+  BEGIN
+    Search2passpin.Clear;
+    Search2paspnum.Clear;
+    Search2id.Clear;
+  END;
+
+end;
+
+procedure TExpFormNew.Search2passpinKeyPress(Sender: TObject; var Key: Char);
+var
+  s: string;
+begin
+  s := '';
+  IF Key = #13 THEN
+
+    IF (Sender as TEdit).Text <> '' THEN
+    BEGIN
+      s := copy((Sender as TEdit).Name, 8, Length((Sender as TEdit).Name));
+      if s = 'passpin' then
+        s := 'upper(' + s + ')';
+      s := '(' + s + '=' + '''' + (Sender as TEdit).Text + '''' + ')';
+      
+      WITH ExpDataModule, TakeDataSet DO
+      BEGIN
+        Close;
+        SQL[1] := '';
+        SQL[1] := 'where ' + s;
+        Open;
+
+        IF RecordCount = 0 THEN
+        BEGIN
+          ShowMessage('Müştəri tapılmadı');
+          Clear;
+          exit;
+        END;
+        IF RecordCount = 1 THEN
+        BEGIN
+          CASE FieldByName('cust_type').AsInteger of
+            0:
+              RadioGroup3.ItemIndex := 3;
+            1:
+              RadioGroup3.ItemIndex := 1;
+            2:
+              RadioGroup3.ItemIndex := 2;
+            3:
+              RadioGroup3.ItemIndex := 4;
+            4:
+              RadioGroup3.ItemIndex := 0;
+          END;
+          IF FieldByName('nerezident').AsInteger = 1 THEN
+            RadioButton5.Checked := True
+          ELSE
+            RadioButton6.Checked := True;
+
+          AccountDataSet2.Close;
+          AccountDataSet2.SetVariable('kli_id', FieldByName('id').AsInteger);
+          AccountDataSet2.Open;
+
+          EditCustidIII.Text := FieldByName('id').AsString;
+          EditLastNameIII.Text := FieldByName('lastname').AsString;
+          IF RadioGroup3.ItemIndex = 3 THEN
+            EditNameIII.Text := FieldByName('custname').AsString
+          ELSE
+            EditNameIII.Text := FieldByName('name').AsString;
+          EditSoNameIII.Text := FieldByName('soname').AsString;
+
+
+
+          EditPINCodeIII.Text := FieldByName('passpin').AsString;
+          CBoxPassPlaceIII.KeyValue := FieldByName('doc_type').AsInteger;
+          EditSerialIII.Text := FieldByName('passer').AsString;
+          EditPassportIII.Text := FieldByName('paspnum').AsString;
+
+          DBCBox_DocTYPEIII.Text := FieldByName('paspplace').AsString;
+          DateEditIII.Value := FieldByName('paspdate').AsVariant;
+          EditMobilIII.Text := FieldByName('phone_m').AsString;
+          EditPhoneIII.Text := FieldByName('phone_h').AsString;
+
+
+        END
+
+
+
+      end
+    end;
+
+end;
+
+procedure TExpFormNew.SearchEditCustidChange(Sender: TObject);
+var
+  id: Integer;
+begin
+
+end;
+
+procedure TExpFormNew.SearchEditCustidExit(Sender: TObject);
+begin
+  with ExpDataModule, SendToDataSet do
+  begin
+    Filter := '';
+    Filtered := False;
+  end;
+end;
+
+procedure TExpFormNew.SearchpasspinChange(Sender: TObject);
+var
+  Nam: string;
+BEGIN
+  IF ((Sender as TEdit).Name = 'Searchpasspin') and
+    ((Sender as TEdit).Text <> '') THEN
+  BEGIN
+    Searchpaspnum.Clear;
+    Searchid.Clear;
+    Searchinn.Clear;
+  END;
+  IF ((Sender as TEdit).Name = 'Searchpaspnum') and
+    ((Sender as TEdit).Text <> '') THEN
+  BEGIN
+    Searchpasspin.Clear;
+    Searchid.Clear;
+    Searchinn.Clear;
+  END;
+  IF ((Sender as TEdit).Name = 'Searchid') and
+    ((Sender as TEdit).Text <> '') THEN
+  BEGIN
+    Searchpasspin.Clear;
+    Searchpaspnum.Clear;
+    Searchinn.Clear;
+  END;
+  IF ((Sender as TEdit).Name = 'Searchinn') and
+    ((Sender as TEdit).Text <> '') THEN
+  BEGIN
+    Searchpasspin.Clear;
+    Searchpaspnum.Clear;
+    Searchid.Clear;
+  END;
+
+END;
+
+procedure TExpFormNew.SearchpasspinKeyPress(Sender: TObject; var Key: Char);
+var
+  s: string;
+begin
+  s := '';
+  IF Key = #13 THEN
+
+    IF (Sender as TEdit).Text <> '' THEN
+    BEGIN
+      s := copy((Sender as TEdit).Name, 7, Length((Sender as TEdit).Name));
+      if s = 'passpin' then
+        s := 'upper(' + s + ')';
+      s := '(' + s + '=' + '''' + (Sender as TEdit).Text + '''' + ')';
+
+      WITH ExpFormNew, SendDataSet DO
+      BEGIN
+        Close;
+        SQL[1] := '';
+        SQL[1] := 'where ' + s;
+        Open;
+
+        IF RecordCount = 0 THEN
+        BEGIN
+          ShowMessage('Müştəri tapılmadı');
+          Clear;
+          exit;
+        END;
+
+        IF RecordCount = 1 THEN
+        BEGIN
+          CASE FieldByName('cust_type').AsInteger of
+            0:
+              RadioGroup1.ItemIndex := 3;
+            1:
+              RadioGroup1.ItemIndex := 1;
+            2:
+              RadioGroup1.ItemIndex := 2;
+            3:
+              RadioGroup1.ItemIndex := 4;
+            4:
+              RadioGroup1.ItemIndex := 0;
+          END;
+
+          IF FieldByName('nerezident').AsInteger = 1 THEN
+            RadioButton1.Checked := True
+          ELSE
+            RadioButton2.Checked := True;
+
+          WITH ExpDataModule DO
+          BEGIN
+            AccountDataSet.Close;
+            AccountDataSet.SQL[2] := '';
+            AccountDataSet.SetVariable('kli_id', FieldByName('id').AsInteger);
+            AccountDataSet.Open;
+          END;
+
+          EditCustid.Text := FieldByName('id').AsString;
+          EditLastNameI.Text := FieldByName('lastname').AsString;
+
+          IF RadioGroup1.ItemIndex = 3 THEN
+            EditNameI.Text := FieldByName('custname').AsString
+          ELSE
+            EditNameI.Text := FieldByName('name').AsString;
+          EditSonameI.Text := FieldByName('soname').AsString;
+
+          CBoxPassPlaceI.KeyValue := FieldByName('doc_type').AsInteger;
+          CBoxPassPlaceICloseUp(Sender);
+
+          EditPINCodeI.Text := FieldByName('passpin').AsString;
+          EditSerialI.Text := FieldByName('passer').AsString;
+          EditPassportI.Text := FieldByName('paspnum').AsString;
+
+          DBCBox_DocTYPEI.Text :=FieldByName('paspplace').AsString;
+
+          DateEditI.Value := FieldByName('paspdate').AsVariant;
+          EditMobilI.Text := FieldByName('phone_m').AsString;
+          EditPhoneI.Text := FieldByName('phone_h').AsString;
+
+          with ExpDataModule, FormNominalCustomers, ExpressVariables do
+          begin
+            custid := ExpBatchsDataSetKLIID.AsString;
+            Editpasspin.Text := FieldByName('passpin').AsString;
+            if Editpasspin.Text <> '' then
+              FormNominalCustomers.RH := True;
+
+            EditLastName.Text := FieldByName('lastname').AsString;
+            EditName1.Text := FieldByName('name').AsString;
+            EditSoname.Text := FieldByName('soname').AsString;
+
+            CBoxPassPlace.KeyValue := FieldByName('doc_type').AsInteger;
+            EditSerial.Text := FieldByName('passer').AsString;
+            EditPassport.Text := FieldByName('paspnum').AsString;
+            Issue_country.KeyValue := FieldByName('doc_country').AsVariant;
+
+            DBCBox_DocTYPE.Text :=FieldByName('paspplace').AsString;
+            DateEdit.Value := FieldByName('paspdate').AsVariant;
+            DateEdit1.Value := FieldByName('passexpire').AsVariant;
+
+            DBCBox_Citizenship.KeyValue := FieldByName('citizenship').AsInteger;
+
+            CBoxSex.KeyValue := FieldByName('sex').AsString;
+            CBoxFamStatus.KeyValue := FieldByName('fam_status').AsString;
+            BirthPlace.KeyValue := FieldByName('birthplace').AsString;
+            EditBirthCity.KeyValue := FieldByName('birth_state').AsString;
+            DateEdit2.Value := FieldByName('birthday').AsVariant;
+
+            Adrs_State.KeyValue := FieldByName('adrs_state').AsString;
+            Adrs_City.KeyValue := FieldByName('city').AsString;
+            ZipQ.Text := FieldByName('reg_zip').AsString;
+            EditMobil.Text := FieldByName('phone_m').AsString;
+            EditPhone.Text := FieldByName('phone_h').AsString;
+            EditEmail.Text := FieldByName('e_mail').AsString;
+            AdressEdit.Text := FieldByName('address').AsString;
+
+            FormNominalCustomers.Work_Place.Text :=
+              FieldByName('work_place').AsString;
+            FormNominalCustomers.Address_type.KeyValue :=
+              FieldByName('work_adrs_spec').AsVariant;
+            FormNominalCustomers.CountryByConctType.KeyValue :=
+              FieldByName('work_cntr').AsVariant;
+
+            FormNominalCustomers.CityByConctType.KeyValue :=
+              FieldByName('work_city').AsVariant;
+            FormNominalCustomers.db_tph_state.Text :=
+              FieldByName('work_state').AsString;
+            FormNominalCustomers.DB_tph_zip.Text :=
+              FieldByName('work_zip').AsString;
+
+            FormNominalCustomers.db_tph_adress.Text :=
+              FieldByName('work_adress').AsString;
+            FormNominalCustomers.tph_contact_type.KeyValue :=
+              FieldByName('work_phone_spec').AsVariant;
+            FormNominalCustomers.tph_communication_type.KeyValue :=
+              FieldByName('work_phconttype').AsVariant;
+
+            FormNominalCustomers.tph_country_prefix.KeyValue :=
+              FieldByName('work_phoppref').AsVariant;
+            FormNominalCustomers.Db_tph_number.Text :=
+              FieldByName('work_phone').AsString;
+            FormNominalCustomers.Db_tph_extension.Text :=
+              FieldByName('work_phext').AsString;
+            FormNominalCustomers.Db_tph_cod.Text :=
+              FieldByName('work_phcode').AsString;
+          end;
+
+
+
+          // END;
+
+        END
+        // ELSE
+        // IF RecordCount>1 THEN  FormSearchLegalCustName.ShowModal;
+
+      END
+    END;
+
+end;
+
+procedure TExpFormNew.SpeedButton1Click(Sender: TObject);
+begin
+  if RadioGroup1.ItemIndex = -1 then
+  begin
+    SenderAccNo.KeyValue := -1;
+    SenderAccNo.Color := cl3DLight;
+    SenderAccNo.Enabled := False;
+  end;
+
+  Case RadioGroup1.ItemIndex of
+
+    1, 2, 3, 4:
+      BEGIN
+        IF not(SenderAccNo.Enabled) THEN
+        BEGIN
+          SenderAccNo.Enabled := True;
+          SenderAccNo.Color := clWhite;
+        END
+        else
+        begin
+          SenderAccNo.KeyValue := -1;
+          SenderAccNo.Color := cl3DLight;
+          SenderAccNo.Enabled := False;
+        end;
+      END;
+
+  End;
+end;
+
+procedure TExpFormNew.SpeedButton2Click(Sender: TObject);
+begin
+  if RadioGroup2.ItemIndex = -1 then
+  begin
+    SenderAccNoII.KeyValue := -1;
+    SenderAccNoII.Color := cl3DLight;
+    SenderAccNoII.Enabled := False;
+  end;
+
+  Case RadioGroup2.ItemIndex of
+
+    1, 2, 3, 4:
+      BEGIN
+        IF not(SenderAccNoII.Enabled) THEN
+        BEGIN
+          SenderAccNoII.Enabled := True;
+          SenderAccNoII.Color := clWhite;
+        END
+        else
+        begin
+          SenderAccNoII.KeyValue := -1;
+          SenderAccNoII.Color := cl3DLight;
+          SenderAccNoII.Enabled := False;
+
+        end;
+      END;
+  End;
+
+end;
+
+procedure TExpFormNew.SpeedButton3Click(Sender: TObject);
+begin
+   if RadioGroup3.ItemIndex = -1 then
+  begin
+    SenderAccNoIII.KeyValue := -1;
+    SenderAccNoIII.Color := cl3DLight;
+    SenderAccNoIII.Enabled := False;
+  end;
+
+  Case RadioGroup2.ItemIndex of
+
+    1, 2, 3, 4:
+      BEGIN
+        IF not(SenderAccNoIII.Enabled) THEN
+        BEGIN
+          SenderAccNoIII.Enabled := True;
+          SenderAccNoIII.Color := clWhite;
+        END
+        else
+        begin
+          SenderAccNoIII.KeyValue := -1;
+          SenderAccNoIII.Color := cl3DLight;
+          SenderAccNoIII.Enabled := False;
+
+        end;
+      END;
+  End;
+end;
+
+procedure TExpFormNew.Timer1Timer(Sender: TObject);
+var
+  dat: TDateTime;
+begin
+  IF FForm = 0 THEN
+    EditTime.Text := TimeToStr(time);
+end;
+
+procedure TExpFormNew.ValuteNameClick(Sender: TObject);
+begin
+  CMCurrencyEdit.Enabled := True;
+  CMCurrencyEdit.Color:=clWhite;
+end;
+
+PROCEDURE TExpFormNew.BitBtn1Click(Sender: TObject);
+VAR Nametxt:UTF8String;
+BEGIN
+  IF (RadioGroup1.ItemIndex = -1) OR (RadioGroup1.ItemIndex = 0) THEN
+  BEGIN
+    IF (CBoxPassPlaceI.Text = '') THEN
+    BEGIN
+      CMHintBox3.ShowMessage('Göndərən şəxsin sənədin növü sahəsi seçilməyib');
+      exit
+    END;
+    IF CBoxPassPlaceI.KeyValue = 1 THEN
+    BEGIN
+      IF (EditPINCodeI.Text = '') THEN
+      BEGIN
+        CMHintBox3.ShowMessage('Göndərən şəxsin pinkod sahəsi doldurulmayıb ');
+        exit
+      END;
+    END;
+
+    CASE CBoxPassPlaceI.KeyValue OF
+      1, 2, 3, 4, 5, 6, 7, 8:
+        BEGIN
+          IF (EditSerialI.Text = '') THEN
+          BEGIN
+            CMHintBox3.ShowMessage
+              ('Göndərən şəxsin seriya sahəsi doldurulmayıb ');
+            exit
+          END;
+
+          IF (EditPassportI.Text = '') THEN
+          BEGIN
+            CMHintBox3.ShowMessage
+              ('Göndərən şəxsin nömrə sahəsi doldurulmayıb ');
+            exit
+          END;
+
+          IF (DBCBox_DocTYPEI.Text = '') THEN
+          BEGIN
+            CMHintBox3.ShowMessage
+              ('Göndərən şəxsin verən orqan sahəsi doldurulmayıb ');
+            exit
+          END;
+
+          IF VarIsNull(DateEditI.Value) THEN
+          BEGIN
+            CMHintBox3.ShowMessage
+              ('Göndərən şəxsin verildiyi tarix sahəsi seçilməyib');
+            exit
+          END;
+        END;
+    END;
+
+    IF (EditLastNameI.Text = '') THEN
+    BEGIN
+      CMHintBox3.ShowMessage('Göndərən şəxsin soyadı sahəsi doldurulmayıb ');
+      exit
+    END;
+
+    IF (EditNameI.Text = '') THEN
+    BEGIN
+      CMHintBox3.ShowMessage('Göndərən şəxsin adı sahəsi doldurulmayıb ');
+      exit
+    END;
+
+    IF (EditSonameI.Text = '') THEN
+    BEGIN
+      CMHintBox3.ShowMessage
+        ('Göndərən şəxsin atasının adı sahəsi doldurulmayıb ');
+      exit
+    END;
+
+    IF ((EditMobilI.Text = '') AND (EditPhoneI.Text = '')) THEN
+    BEGIN
+      CMHintBox3.ShowMessage
+        ('Göndərən şəxsin mobil və ya şəhər telefon sahəsi doldurulmayıb ');
+      exit
+    END;
+  END;
+
+  IF (ValuteName.Text = '') THEN
+  BEGIN
+    CMHintBox3.ShowMessage('Valyuta sahəsi seçilməyib ');
+    exit
+  END;
+
+  IF (CMCurrencyEdit.Text = '0.00') THEN
+  BEGIN
+    CMHintBox3.ShowMessage('Məbləğ sahəsi doldurulmayıb ');
+    exit
+  END;
+
+  IF SenderAccNo.Enabled AND (SenderAccNo.Text = '') THEN
+  BEGIN
+    CMHintBox3.ShowMessage('Göndərən şəxsin hesab sahəsi seçilməyib ');
+    exit
+  END;
+
+  IF RemitInfEdit.Text = '' THEN
+  BEGIN
+    CMHintBox3.ShowMessage('Təyinat sahəsi doldurulmayıb ');
+    exit
+  END;
+
+  IF ButtonNominal.Enabled AND not(FormNominalCustomers.RH) THEN
+  BEGIN
+    CMHintBox3.ShowMessage('Nominal şəxsin bütün məlumatlar sahəsini doldur!');
+    exit
+  END;
+
+  IF RadioGroup1.ItemIndex = -1 THEN
+  BEGIN
+    WITH FormSearchCustName.SendDataSetName do
+    BEGIN
+      Nametxt := EditLastNameI.Text + EditNameI.Text + EditSonameI.Text;
+      Close;
+      SQL[1] := 'where replace(lower(custname),'' '')=' + 'lower(' +
+        QuotedStr(Nametxt) + ')';
+      Open;
+      if RecordCount > 0 then
+      begin
+        ExpFormNew.RFormNew := True;
+        FormSearchCustName.ShowModal;
+      end;
+    end;
+  end;
+
+  PageControl1.ActivePageIndex := 1;
+
+end;
+
+procedure TExpFormNew.DBCBoxDocTYPEIClick(Sender: TObject);
+begin
+DBCBox_DocTYPEI.Text := (Sender as TDBLookupComboBox).Text;
+end;
+
+procedure TExpFormNew.DBCBoxDocTYPEIIClick(Sender: TObject);
+begin
+  DBCBox_DocTYPEII.Text := (Sender as TDBLookupComboBox).Text;
+end;
+
+procedure TExpFormNew.DBCBoxDocTYPEIIIClick(Sender: TObject);
+begin
+  DBCBox_DocTYPEII.Text := (Sender as TDBLookupComboBox).Text;
+end;
+
+procedure TExpFormNew.DBCBox_DocTYPEIExit(Sender: TObject);
+begin
+  With ExpDataModule do
+  begin
+    PasspDataSet.Insert;
+    PasspDataSet.FieldByName('name').AsString:=DBCBox_DocTYPEI.Text;
+    PasspDataSet.Post;
+    PasspDataSet.Refresh;
+  end;
+end;
+
+procedure TExpFormNew.DBCBox_DocTYPEIIExit(Sender: TObject);
+begin
+  With ExpDataModule do
+  begin
+    PasspDataSet1.Insert;
+    PasspDataSet1.FieldByName('name').AsString:=DBCBox_DocTYPEII.Text;
+    PasspDataSet1.Post;
+    PasspDataSet1.Refresh;
+  end;
+end;
+
+procedure TExpFormNew.DBCBox_DocTYPEIIIExit(Sender: TObject);
+begin
+ With ExpDataModule do
+  begin
+    PasspDataSet2.Insert;
+    PasspDataSet2.FieldByName('name').AsString:=DBCBox_DocTYPEIII.Text;
+    PasspDataSet2.Post;
+    PasspDataSet2.Refresh;
+  end;
+end;
+
+procedure TExpFormNew.EditPINCodeIKeyPress(Sender: TObject; var Key: Char);
+const
+  Separator: set of Char=['0'..'9','a'..'z','A'..'Z',#8];
+begin
+with (Sender as TEdit) do
+  begin
+    if not(Key in Separator)then  Key:=#0;
+  end;
+
+end;
+
+procedure TExpFormNew.Expadd;
+var
+  status: byte;
+  optype: byte;
+  amount: real;
+  val_cod: Word;
+  trans_ref: string;
+  remit_inf: string;
+  add_inf: string;
+  senddate: TDateTime;
+  recdate: TDateTime;
+  senddatetime: TDateTime;
+  recdatetime: TDateTime;
+  password: string;
+  s: string;
+  v_id: Integer;
+begin
+  { Göndərən şəxsin parametrləri }
+
+  with ExpressVariables do
+  begin
+    custid := EditCustid.Text;
+    doc_type := CBoxPassPlaceI.KeyValue;
+    passpin := EditPINCodeI.Text;
+    passer := EditSerialI.Text;
+    paspnum := EditPassportI.Text;
+    paspplace := DBCBox_DocTYPEI.Text;
+    paspdate := DateEditI.Value;
+    lastname := EditLastNameI.Text;
+    soname := EditSonameI.Text;
+    name := EditNameI.Text;
+    phone_m := EditMobilI.Text;
+    phone_h := EditPhoneI.Text;
+    filial := StrToInt(DBEdit1.Text);
+    debetid := SenderAccNo.KeyValue;
+    CASE RadioGroup1.ItemIndex OF
+      - 1:
+        v_cust_type := -1;
+      0:
+        v_cust_type := 4;
+      1:
+        v_cust_type := 1;
+      2:
+        v_cust_type := 2;
+      3:
+        v_cust_type := 0;
+      4:
+        v_cust_type := 3;
+    END;
+
+    if RadioButton1.Checked then
+      v_nerezident := 1
+    else
+      v_nerezident := 0;
+
+    { Alan şəxsin parametrləri }
+
+    custidI := EditCustidII.Text;
+    doc_typeI := CBoxPassPlaceII.KeyValue;
+    passpinI := EditPINCodeII.Text;
+    passerI := EditSerialII.Text;
+    paspnumI := EditPassportII.Text;
+    paspplaceI := DBCBox_DocTYPEII.Text;
+    paspdateI := DateEditII.Value;
+    lastnameI := EditLastNameII.Text;
+    sonameI := EditSoNameII.Text;
+    nameI := EditNameII.Text;
+    phone_mI := EditMobilII.Text;
+    phone_hI := EditPhoneII.Text;
+    filialI := FilialNameII.KeyValue;
+    creditid := SenderAccNoII.KeyValue;
+
+    CASE RadioGroup2.ItemIndex OF
+      - 1:
+        v_cust_typeI := -1;
+      0:
+        v_cust_typeI := 4;
+      1:
+        v_cust_typeI := 1;
+      2:
+        v_cust_typeI := 2;
+      3:
+        v_cust_typeI := 0;
+      4:
+        v_cust_typeI := 3;
+    END;
+
+    if RadioButton3.Checked then
+      v_nerezidentI := 1
+    else
+      v_nerezidentI := 0;
+
+    status := 0;
+    optype := 1;
+    amount := StrToFloat(CMCurrencyEdit.Text);
+    val_cod := ValuteName.KeyValue;
+    trans_ref := ExpDataModule.EXPESSPAC.CallStringFunction
+      ('Getnewexpressreference', []);
+    remit_inf := RemitInfEdit.Text;
+    add_inf := Memo1.Text;
+
+    senddate := StrToDate(ExpressFrom.Edit1.Text);
+    senddatetime := StrToTime(ExpressFrom.Edit2.Text);
+    // ExpDataModule.SysdateDataSet.Refresh;
+    password := IntToStr(DateTimeToFileDate(senddate) +
+      random(DateTimeToFileDate(senddatetime)));
+    password := IntToStr(random(StrToInt(password)));
+    senddatetime := senddate + senddatetime;
+    // ShowMessage(IntToStr(FForm));
+    IF FForm = 0 then
+
+      ExpDataModule.EXPESSPAC.CallProcedure('Exp_batchs_insert',
+        ['v_cust_type', v_cust_type, 'v_nerezident', v_nerezident, 'v_custid',
+        custid, 'v_debetid', debetid, 'v_filialid', filial, 'v_doc_type',
+        doc_type, 'v_passpin', passpin, 'v_passer', passer, 'v_paspnum',
+        paspnum, 'v_doc_country', doc_country, 'v_paspplace', paspplace,
+        'v_paspdate', paspdate, 'v_passexpire', passexpire, 'v_citizenship',
+        citizenship, 'v_lastname', lastname, 'v_soname', soname, 'v_name', name,
+        'v_sex', sex, 'v_fam_status', fam_status, 'v_bbirthplace', bbirthplace,
+        'v_birth_state', birth_state, 'v_birthday', birthday, 'v_aadrs_state',
+        aadrs_state, 'v_city', city, 'v_reg_zip', reg_zip, 'v_address', address,
+        'v_phone_m', phone_m, 'v_phone_h', phone_h, 'v_e_mail', e_mail,
+        'v_work_place', Work_Place, 'v_work_adrs_spec', work_adrs_spec,
+        'v_work_cntr', work_cntr, 'v_work_city', work_city, 'v_work_state',
+        work_state, 'v_work_zip', work_zip, 'v_work_adress', work_adress,
+        'v_work_phone_spec', work_phone_spec, 'v_work_phconttype',
+        work_phconttype, 'v_work_phoppref', work_phoppref, 'v_work_phone',
+        work_phone, 'v_work_phext', work_phext, 'v_work_phcode', work_phcode
+
+        , 'v_cust_type1', v_cust_typeI, 'v_nerezident1', v_nerezidentI,
+        'custid1', custidI, 'creditid', creditid, 'v_filialid1', filialI,
+        'v_doc_type1', doc_typeI, 'v_passpin1', passpinI, 'v_passer1', passerI,
+        'v_paspnum1', paspnumI, 'v_paspplace1', paspplaceI, 'v_lastname1',
+        lastnameI, 'v_soname1', sonameI, 'v_name1', nameI, 'v_phone_m1',
+        phone_mI, 'v_phone_h1', phone_hI, 'v_paspdate1', paspdateI
+
+        , 'batchid', v_id, 'v_exid', exid, 'v_status', status, 'v_optype',
+        optype, 'v_amount', amount, 'v_val_cod', val_cod, 'v_trans_ref',
+        trans_ref, 'v_remit_inf', remit_inf, 'v_add_inf', add_inf, 'v_senddate',
+        senddate, 'v_senddatetime', senddatetime, 'v_password', password])
+
+    ELSE
+    BEGIN
+      v_id := ExpDataModule.ExpBatchsDataSetID.AsInteger;
+      ExpDataModule.EXPESSPAC.CallProcedure('Exp_batchs_update',
+        ['v_id', v_id, 'v_cust_type', v_cust_type, 'v_nerezident', v_nerezident,
+        'v_custid', custid, 'v_debetid', debetid
+
+        , 'v_filialid', filial, 'v_doc_type', doc_type, 'v_passpin', passpin,
+        'v_passer', passer, 'v_paspnum', paspnum, 'v_doc_country', doc_country,
+        'v_paspplace', paspplace, 'v_paspdate', paspdate, 'v_passexpire',
+        passexpire, 'v_citizenship', citizenship, 'v_lastname', lastname,
+        'v_soname', soname, 'v_name', name, 'v_sex', sex, 'v_fam_status',
+        fam_status, 'v_bbirthplace', bbirthplace, 'v_birth_state', birth_state,
+        'v_birthday', birthday, 'v_aadrs_state', aadrs_state, 'v_city', city,
+        'v_reg_zip', reg_zip, 'v_address', address, 'v_phone_m', phone_m,
+        'v_phone_h', phone_h, 'v_e_mail', e_mail, 'v_work_place', Work_Place,
+        'v_work_adrs_spec', work_adrs_spec, 'v_work_cntr', work_cntr,
+        'v_work_city', work_city, 'v_work_state', work_state, 'v_work_zip',
+        work_zip, 'v_work_adress', work_adress, 'v_work_phone_spec',
+        work_phone_spec, 'v_work_phconttype', work_phconttype,
+        'v_work_phoppref', work_phoppref, 'v_work_phone', work_phone,
+        'v_work_phext', work_phext, 'v_work_phcode', work_phcode
+
+        , 'v_cust_type1', v_cust_typeI, 'v_nerezident1', v_nerezidentI,
+        'custid1', custidI, 'creditid', creditid, 'v_filialid1', filialI,
+        'v_doc_type1', doc_typeI, 'v_passpin1', passpinI, 'v_passer1', passerI,
+        'v_paspnum1', paspnumI, 'v_paspplace1', paspplaceI, 'v_lastname1',
+        lastnameI, 'v_soname1', sonameI, 'v_name1', nameI, 'v_phone_m1',
+        phone_mI, 'v_phone_h1', phone_hI, 'v_paspdate1', paspdateI
+
+        , 'batchid', v_id, 'v_exid', exid, 'v_status', status, 'v_optype',
+        optype, 'v_amount', amount, 'v_val_cod', val_cod, 'v_trans_ref',
+        trans_ref, 'v_remit_inf', remit_inf, 'v_add_inf', add_inf, 'v_senddate',
+        senddate, 'v_senddatetime', senddatetime, 'v_password', password]);
+
+    END;
+  END;
+
+end;
+
+procedure TExpFormNew.Expedit;
+begin
+  if ExpFormNew.FiledBatchs then
+  begin
+
+    { ------------------------------Göndərən müştəri------------------------ }
+
+    with ExpDataModule, SendDataSet do
+    begin
+      Close;
+      SQL[1] := '';
+      SQL[1] := 'where id=' + ExpBatchsDataSet.FieldByName('kliid').AsString;
+      Open;
+      case FieldByName('cust_type').AsInteger of
+        4:
+          RadioGroup1.ItemIndex := 0;
+        2:
+          RadioGroup1.ItemIndex := 2;
+        1:
+          RadioGroup1.ItemIndex := 1;
+        0:
+          RadioGroup1.ItemIndex := 3;
+      end;
+
+      case FieldByName('nerezident').AsInteger of
+        1:
+          RadioButton1.Checked := True;
+        0:
+          RadioButton2.Checked := True;
+      end;
+
+      AccountDataSet.Close;
+      AccountDataSet.SetVariable('kli_id', ExpBatchsDataSet.FieldByName('kliid')
+        .AsInteger);
+      AccountDataSet.SQL[5] := '';
+
+      IF (ExpBatchsDataSet.FieldByName('debetaccid').AsVariant <> null) and
+        (ExpBatchsDataSet.FieldByName('debetaccid').AsVariant <> -1) THEN
+        AccountDataSet.SQL[5] := 'and id=' + ExpBatchsDataSet.FieldByName
+          ('debetaccid').AsString;
+
+      AccountDataSet.Open;
+
+      FilialDataSet.Close;
+      FilialDataSet.SQL[1] := '';
+      FilialDataSet.SQL[1] := 'where id=' + ExpBatchsDataSet.FieldByName
+        ('filial').AsString;
+      FilialDataSet.Open;
+
+      IF RadioGroup1.ItemIndex = 4 THEN
+        EditNameI.Text := FieldByName('custname').AsString
+      ELSE
+      BEGIN
+        EditLastNameI.Text := FieldByName('lastname').AsString;
+        EditNameI.Text := FieldByName('name').AsString;
+        EditSonameI.Text := FieldByName('soname').AsString;
+      END;
+      EditCustid.Text := ExpDataModule.ExpBatchsDataSetKLIID.AsString;
+      EditPINCodeI.Text := FieldByName('passpin').AsString;
+      CBoxPassPlaceI.KeyValue := FieldByName('doc_type').AsInteger;
+      EditSerialI.Text := FieldByName('passer').AsString;
+      EditPassportI.Text := FieldByName('paspnum').AsString;
+      DBCBox_DocTYPEI.Text := FieldByName('paspplace').AsString;
+      DateEditI.Value := FieldByName('paspdate').AsVariant;
+      EditMobilI.Text := FieldByName('phone_m').AsString;
+      EditPhoneI.Text := FieldByName('phone_h').AsString;
+
+      ValuteName.KeyValue := ExpBatchsDataSetVAL_COD.AsInteger;
+      CMCurrencyEdit.Text := ExpBatchsDataSetAMOUNT.AsString;
+      TransRefEdit.Text := ExpBatchsDataSetTRANS_REF.AsString;
+
+      IF RadioGroup1.ItemIndex <> 0 THEN
+        SenderAccNo.KeyValue := AccountDataSet.FieldByName('acc_no').AsVariant;
+      RemitInfEdit.Text := ExpBatchsDataSetREMIT_INF.AsString;
+
+      with FormNominalCustomers, ExpressVariables do
+      begin
+        custid := ExpBatchsDataSetKLIID.AsString;
+        Editpasspin.Text := FieldByName('passpin').AsString;
+        if Editpasspin.Text <> '' then
+          FormNominalCustomers.RH := True;
+
+        EditLastName.Text := FieldByName('lastname').AsString;
+        EditName1.Text := FieldByName('name').AsString;
+        EditSoname.Text := FieldByName('soname').AsString;
+
+        CBoxPassPlace.KeyValue := FieldByName('doc_type').AsInteger;
+        EditSerial.Text := FieldByName('passer').AsString;
+        EditPassport.Text := FieldByName('paspnum').AsString;
+        Issue_country.KeyValue := FieldByName('doc_country').AsVariant;
+
+        DBCBox_DocTYPE.Text := FieldByName('paspplace').AsString;
+        DateEdit.Value := FieldByName('paspdate').AsVariant;
+        DateEdit1.Value := FieldByName('passexpire').AsVariant;
+
+        DBCBox_Citizenship.KeyValue := FieldByName('citizenship').AsInteger;
+
+        CBoxSex.KeyValue := FieldByName('sex').AsString;
+        CBoxFamStatus.KeyValue := FieldByName('fam_status').AsString;
+        BirthPlace.KeyValue := FieldByName('birthplace').AsString;
+        EditBirthCity.KeyValue := FieldByName('birth_state').AsString;
+        DateEdit2.Value := FieldByName('birthday').AsVariant;
+
+        Adrs_State.KeyValue := FieldByName('adrs_state').AsString;
+        Adrs_City.KeyValue := FieldByName('city').AsString;
+        ZipQ.Text := FieldByName('reg_zip').AsString;
+        EditMobil.Text := FieldByName('phone_m').AsString;
+        EditPhone.Text := FieldByName('phone_h').AsString;
+        EditEmail.Text := FieldByName('e_mail').AsString;
+        AdressEdit.Text := FieldByName('address').AsString;
+
+        FormNominalCustomers.Work_Place.Text :=
+          FieldByName('work_place').AsString;
+        FormNominalCustomers.Address_type.KeyValue :=
+          FieldByName('work_adrs_spec').AsVariant;
+        FormNominalCustomers.CountryByConctType.KeyValue :=
+          FieldByName('work_cntr').AsVariant;
+
+        FormNominalCustomers.CityByConctType.KeyValue :=
+          FieldByName('work_city').AsVariant;
+        FormNominalCustomers.db_tph_state.Text :=
+          FieldByName('work_state').AsString;
+        FormNominalCustomers.DB_tph_zip.Text := FieldByName('work_zip')
+          .AsString;
+
+        FormNominalCustomers.db_tph_adress.Text :=
+          FieldByName('work_adress').AsString;
+        FormNominalCustomers.tph_contact_type.KeyValue :=
+          FieldByName('work_phone_spec').AsVariant;
+        FormNominalCustomers.tph_communication_type.KeyValue :=
+          FieldByName('work_phconttype').AsVariant;
+
+        FormNominalCustomers.tph_country_prefix.KeyValue :=
+          FieldByName('work_phoppref').AsVariant;
+        FormNominalCustomers.Db_tph_number.Text :=
+          FieldByName('work_phone').AsString;
+        FormNominalCustomers.Db_tph_extension.Text :=
+          FieldByName('work_phext').AsString;
+        FormNominalCustomers.Db_tph_cod.Text :=
+          FieldByName('work_phcode').AsString;
+      end;
+
+    end;
+
+    { ---------------------------------Alan müştəri----------------------------- }
+
+    with ExpDataModule, SendToDataSet do
+    begin
+
+      Close;
+      SQL[1] := '';
+      SQL[1] := 'where id=' + ExpDataModule.ExpBatchsDataSetBKLIID.AsString;
+      Open;
+      case FieldByName('cust_type').AsInteger of
+        4:
+          RadioGroup2.ItemIndex := 0;
+        2:
+          RadioGroup2.ItemIndex := 2;
+        1:
+          RadioGroup2.ItemIndex := 1;
+        0:
+          RadioGroup2.ItemIndex := 3;
+      end;
+      case FieldByName('nerezident').AsInteger of
+        1:
+          RadioButton3.Checked := True;
+        0:
+          RadioButton4.Checked := True;
+      end;
+
+      AccountDataSet1.Close;
+      AccountDataSet1.SetVariable('kli_id',
+        ExpBatchsDataSet.FieldByName('bkliid').AsInteger);
+      AccountDataSet1.SQL[2] := '';
+      IF (ExpBatchsDataSet.FieldByName('kreditaccid').AsVariant <> null) and
+        (ExpBatchsDataSet.FieldByName('debetaccid').AsVariant <> -1) THEN
+        AccountDataSet1.SQL[2] := 'and id=' + ExpBatchsDataSet.FieldByName
+          ('kreditaccid').AsString;
+      AccountDataSet1.Open;
+
+      IF RadioGroup2.ItemIndex = 4 THEN
+        EditNameII.Text := FieldByName('custname').AsString
+      ELSE
+      BEGIN
+        EditLastNameII.Text := FieldByName('lastname').AsString;
+        EditNameII.Text := FieldByName('name').AsString;
+        EditSoNameII.Text := FieldByName('soname').AsString;
+      END;
+
+      EditCustidII.Text := ExpDataModule.ExpBatchsDataSetBKLIID.AsString;
+      EditPINCodeII.Text := FieldByName('passpin').AsString;
+      CBoxPassPlaceII.KeyValue := FieldByName('doc_type').AsInteger;
+      EditSerialII.Text := FieldByName('passer').AsString;
+      EditPassportII.Text := FieldByName('paspnum').AsString;
+      FilialNameII.KeyValue := ExpBatchsDataSet.FieldByName('bfilial').AsString;
+
+      DBCBox_DocTYPEII.Text := FieldByName('paspplace').AsString;
+      DateEditII.Value := FieldByName('paspdate').AsVariant;
+      EditMobilII.Text := FieldByName('phone_m').AsString;
+      EditPhoneII.Text := FieldByName('phone_h').AsString;
+
+      EditDate.Text := ExpBatchsDataSet.FieldByName('senddate').AsString;
+      EditTime.Text := TimeToStr(ExpBatchsDataSet.FieldByName('senddatetime')
+        .AsDateTime);
+      Edit25.Text := ExpBatchsDataSetPASSWORD.AsString;
+
+      IF RadioGroup2.ItemIndex <> 0 THEN
+        SenderAccNoII.KeyValue := AccountDataSet1.FieldByName('acc_no')
+          .AsVariant;
+      Memo1.Text := ExpBatchsDataSet.FieldByName('badd_inf').AsString;
+
+    end;
+
+  end;
+
+  if ExpFormNew.FiledIncoming then
+  begin
+
+    { ------------------------------Göndərən müştəri------------------------ }
+
+    with ExpDataModule, SendDataSet do
+    begin
+      Close;
+      SQL[1] := '';
+      SQL[1] := 'where id=' + ExpIncomingDataSet.FieldByName('kliid').AsString;
+      Open;
+      case FieldByName('cust_type').AsInteger of
+        4:
+          RadioGroup1.ItemIndex := 0;
+        2:
+          RadioGroup1.ItemIndex := 2;
+        1:
+          RadioGroup1.ItemIndex := 1;
+        0:
+          RadioGroup1.ItemIndex := 3;
+      end;
+
+      case FieldByName('nerezident').AsInteger of
+        1:
+          RadioButton1.Checked := True;
+        0:
+          RadioButton2.Checked := True;
+      end;
+
+      AccountDataSet.Close;
+      AccountDataSet.SetVariable('kli_id',
+        ExpIncomingDataSet.FieldByName('kliid').AsInteger);
+      AccountDataSet.SQL[5] := '';
+      IF (ExpIncomingDataSet.FieldByName('debetaccid').AsVariant <> null) and
+        (ExpIncomingDataSet.FieldByName('debetaccid').AsVariant <> -1) THEN
+        AccountDataSet.SQL[5] := 'and id=' + ExpIncomingDataSet.FieldByName
+          ('debetaccid').AsString;
+
+      AccountDataSet.Open;
+
+      FilialDataSet.Close;
+      FilialDataSet.SQL[1] := '';
+      FilialDataSet.SQL[1] := 'where id=' + ExpIncomingDataSet.FieldByName
+        ('filial').AsString;
+      FilialDataSet.Open;
+
+      IF RadioGroup1.ItemIndex = 4 THEN
+        EditNameI.Text := FieldByName('custname').AsString
+      ELSE
+      BEGIN
+        EditLastNameI.Text := FieldByName('lastname').AsString;
+        EditNameI.Text := FieldByName('name').AsString;
+        EditSonameI.Text := FieldByName('soname').AsString;
+      END;
+      EditCustid.Text := ExpDataModule.ExpIncomingDataSetKLIID.AsString;
+      EditPINCodeI.Text := FieldByName('passpin').AsString;
+      CBoxPassPlaceI.KeyValue := FieldByName('doc_type').AsInteger;
+      EditSerialI.Text := FieldByName('passer').AsString;
+      EditPassportI.Text := FieldByName('paspnum').AsString;
+
+      DBCBox_DocTYPEI.Text := FieldByName('paspplace').AsString;
+      DateEditI.Value := FieldByName('paspdate').AsVariant;
+      EditMobilI.Text := FieldByName('phone_m').AsString;
+      EditPhoneI.Text := FieldByName('phone_h').AsString;
+
+      ValuteName.KeyValue := ExpIncomingDataSetVAL_COD.AsInteger;
+      CMCurrencyEdit.Text := ExpIncomingDataSetAMOUNT.AsString;
+      TransRefEdit.Text := ExpIncomingDataSetTRANS_REF.AsString;
+
+      IF RadioGroup1.ItemIndex <> 0 THEN
+        SenderAccNo.KeyValue := AccountDataSet.FieldByName('acc_no').AsVariant;
+      RemitInfEdit.Text := ExpIncomingDataSetREMIT_INF.AsString;
+
+    end;
+
+    { ---------------------------------Alan müştəri----------------------------- }
+
+    with ExpDataModule, SendToDataSet do
+    begin
+
+      Close;
+      SQL[1] := '';
+      SQL[1] := 'where id=' + ExpDataModule.ExpIncomingDataSetBKLIID.AsString;
+      Open;
+      case FieldByName('cust_type').AsInteger of
+        4:
+          RadioGroup2.ItemIndex := 0;
+        2:
+          RadioGroup2.ItemIndex := 2;
+        1:
+          RadioGroup2.ItemIndex := 1;
+        0:
+          RadioGroup2.ItemIndex := 3;
+      end;
+      case FieldByName('nerezident').AsInteger of
+        1:
+          RadioButton3.Checked := True;
+        0:
+          RadioButton4.Checked := True;
+      end;
+
+      AccountDataSet1.Close;
+      AccountDataSet1.SetVariable('kli_id',
+        ExpIncomingDataSet.FieldByName('bkliid').AsInteger);
+      AccountDataSet1.SQL[2] := '';
+      IF (ExpIncomingDataSet.FieldByName('kreditaccid').AsVariant <> null) and
+        (ExpIncomingDataSet.FieldByName('debetaccid').AsVariant <> -1) THEN
+        AccountDataSet1.SQL[2] := 'and id=' + ExpIncomingDataSet.FieldByName
+          ('kreditaccid').AsString;
+      AccountDataSet1.Open;
+
+      IF RadioGroup2.ItemIndex = 4 THEN
+        EditNameII.Text := FieldByName('custname').AsString
+      ELSE
+      BEGIN
+        EditLastNameII.Text := FieldByName('lastname').AsString;
+        EditNameII.Text := FieldByName('name').AsString;
+        EditSoNameII.Text := FieldByName('soname').AsString;
+      END;
+
+      EditCustidII.Text := ExpDataModule.ExpIncomingDataSetBKLIID.AsString;
+      EditPINCodeII.Text := FieldByName('passpin').AsString;
+      CBoxPassPlaceII.KeyValue := FieldByName('doc_type').AsInteger;
+      EditSerialII.Text := FieldByName('passer').AsString;
+      EditPassportII.Text := FieldByName('paspnum').AsString;
+      FilialNameII.KeyValue := ExpIncomingDataSet.FieldByName('bfilial').AsString;
+
+      DBCBox_DocTYPEII.Text := FieldByName('paspplace').AsString;
+      DateEditII.Value := FieldByName('paspdate').AsVariant;
+      EditMobilII.Text := FieldByName('phone_m').AsString;
+      EditPhoneII.Text := FieldByName('phone_h').AsString;
+
+      EditDate.Text := ExpIncomingDataSet.FieldByName('senddate').AsString;
+      EditTime.Text := TimeToStr(ExpIncomingDataSet.FieldByName('senddatetime').AsDateTime);
+      Edit25.Text := ''; // ExpIncomingDataSetPASSWORD.AsString;
+
+      IF RadioGroup2.ItemIndex <> 0 THEN
+        SenderAccNoII.KeyValue := AccountDataSet1.FieldByName('acc_no')
+          .AsVariant;
+      Memo1.Text := ExpIncomingDataSet.FieldByName('badd_inf').AsString;
+
+    end;
+  end;
+  (* --------------------------------------Archive----------------------------------------------------------------- *)
+  if ExpFormNew.FieldBatchsArchive then
+  begin
+
+    { ------------------------------Göndərən müştəri------------------------ }
+
+    with ExpDataModule, SendDataSet do
+    begin
+      Close;
+      SQL[1] := '';
+      SQL[1] := 'where id=' + ExpBatchsArchiveDataSet.FieldByName
+        ('kliid').AsString;
+      Open;
+      case FieldByName('cust_type').AsInteger of
+        4:
+          RadioGroup1.ItemIndex := 0;
+        2:
+          RadioGroup1.ItemIndex := 2;
+        1:
+          RadioGroup1.ItemIndex := 1;
+        0:
+          RadioGroup1.ItemIndex := 3;
+      end;
+
+      case FieldByName('nerezident').AsInteger of
+        1:
+          RadioButton1.Checked := True;
+        0:
+          RadioButton2.Checked := True;
+      end;
+
+      AccountDataSet.Close;
+      AccountDataSet.SetVariable('kli_id',
+        ExpBatchsArchiveDataSet.FieldByName('kliid').AsInteger);
+      AccountDataSet.SQL[5] := '';
+
+      IF (ExpBatchsArchiveDataSet.FieldByName('debetaccid').AsVariant <> null)
+        and (ExpBatchsArchiveDataSet.FieldByName('debetaccid').AsVariant
+        <> -1) THEN
+        AccountDataSet.SQL[5] := 'and id=' + ExpBatchsArchiveDataSet.FieldByName
+          ('debetaccid').AsString;
+
+      AccountDataSet.Open;
+
+      FilialDataSet.Close;
+      FilialDataSet.SQL[1] := '';
+      FilialDataSet.SQL[1] := 'where id=' + ExpBatchsArchiveDataSet.FieldByName
+        ('filial').AsString;
+      FilialDataSet.Open;
+
+      IF RadioGroup1.ItemIndex = 4 THEN
+        EditNameI.Text := FieldByName('custname').AsString
+      ELSE
+      BEGIN
+        EditLastNameI.Text := FieldByName('lastname').AsString;
+        EditNameI.Text := FieldByName('name').AsString;
+        EditSonameI.Text := FieldByName('soname').AsString;
+      END;
+      EditCustid.Text := ExpDataModule.ExpBatchsArchiveDataSetKLIID.AsString;
+      EditPINCodeI.Text := FieldByName('passpin').AsString;
+      CBoxPassPlaceI.KeyValue := FieldByName('doc_type').AsInteger;
+      EditSerialI.Text := FieldByName('passer').AsString;
+      EditPassportI.Text := FieldByName('paspnum').AsString;
+
+      DBCBox_DocTYPEI.Text := FieldByName('paspplace').AsString;
+      DateEditI.Value := FieldByName('paspdate').AsVariant;
+      EditMobilI.Text := FieldByName('phone_m').AsString;
+      EditPhoneI.Text := FieldByName('phone_h').AsString;
+
+      ValuteName.KeyValue := ExpBatchsArchiveDataSetVAL_COD.AsInteger;
+      CMCurrencyEdit.Text := ExpBatchsArchiveDataSetAMOUNT.AsString;
+      TransRefEdit.Text := ExpBatchsArchiveDataSetTRANS_REF.AsString;
+
+      IF RadioGroup1.ItemIndex <> 0 THEN
+        SenderAccNo.KeyValue := AccountDataSet.FieldByName('acc_no').AsVariant;
+      RemitInfEdit.Text := ExpBatchsArchiveDataSetREMIT_INF.AsString;
+
+      with FormNominalCustomers, ExpressVariables do
+      begin
+        custid := ExpBatchsArchiveDataSetKLIID.AsString;
+        Editpasspin.Text := FieldByName('passpin').AsString;
+        if Editpasspin.Text <> '' then
+          FormNominalCustomers.RH := True;
+
+        EditLastName.Text := FieldByName('lastname').AsString;
+        EditName1.Text := FieldByName('name').AsString;
+        EditSoname.Text := FieldByName('soname').AsString;
+
+        CBoxPassPlace.KeyValue := FieldByName('doc_type').AsInteger;
+        EditSerial.Text := FieldByName('passer').AsString;
+        EditPassport.Text := FieldByName('paspnum').AsString;
+        Issue_country.KeyValue := FieldByName('doc_country').AsVariant;
+
+        DBCBox_DocTYPE.Text := FieldByName('paspplace').AsString;
+        DateEdit.Value := FieldByName('paspdate').AsVariant;
+        DateEdit1.Value := FieldByName('passexpire').AsVariant;
+
+        DBCBox_Citizenship.KeyValue := FieldByName('citizenship').AsInteger;
+
+        CBoxSex.KeyValue := FieldByName('sex').AsString;
+        CBoxFamStatus.KeyValue := FieldByName('fam_status').AsString;
+        BirthPlace.KeyValue := FieldByName('birthplace').AsString;
+        EditBirthCity.KeyValue := FieldByName('birth_state').AsString;
+        DateEdit2.Value := FieldByName('birthday').AsVariant;
+
+        Adrs_State.KeyValue := FieldByName('adrs_state').AsString;
+        Adrs_City.KeyValue := FieldByName('city').AsString;
+        ZipQ.Text := FieldByName('reg_zip').AsString;
+        EditMobil.Text := FieldByName('phone_m').AsString;
+        EditPhone.Text := FieldByName('phone_h').AsString;
+        EditEmail.Text := FieldByName('e_mail').AsString;
+        AdressEdit.Text := FieldByName('address').AsString;
+
+        FormNominalCustomers.Work_Place.Text :=
+          FieldByName('work_place').AsString;
+        FormNominalCustomers.Address_type.KeyValue :=
+          FieldByName('work_adrs_spec').AsVariant;
+        FormNominalCustomers.CountryByConctType.KeyValue :=
+          FieldByName('work_cntr').AsVariant;
+
+        FormNominalCustomers.CityByConctType.KeyValue :=
+          FieldByName('work_city').AsVariant;
+        FormNominalCustomers.db_tph_state.Text :=
+          FieldByName('work_state').AsString;
+        FormNominalCustomers.DB_tph_zip.Text := FieldByName('work_zip')
+          .AsString;
+
+        FormNominalCustomers.db_tph_adress.Text :=
+          FieldByName('work_adress').AsString;
+        FormNominalCustomers.tph_contact_type.KeyValue :=
+          FieldByName('work_phone_spec').AsVariant;
+        FormNominalCustomers.tph_communication_type.KeyValue :=
+          FieldByName('work_phconttype').AsVariant;
+
+        FormNominalCustomers.tph_country_prefix.KeyValue :=
+          FieldByName('work_phoppref').AsVariant;
+        FormNominalCustomers.Db_tph_number.Text :=
+          FieldByName('work_phone').AsString;
+        FormNominalCustomers.Db_tph_extension.Text :=
+          FieldByName('work_phext').AsString;
+        FormNominalCustomers.Db_tph_cod.Text :=
+          FieldByName('work_phcode').AsString;
+      end;
+
+    end;
+
+    { ---------------------------------Alan müştəri----------------------------- }
+
+    with ExpDataModule, SendToDataSet do
+    begin
+
+      Close;
+      SQL[1] := '';
+      SQL[1] := 'where id=' +
+        ExpDataModule.ExpBatchsArchiveDataSetBKLIID.AsString;
+      Open;
+      case FieldByName('cust_type').AsInteger of
+        4:
+          RadioGroup2.ItemIndex := 0;
+        2:
+          RadioGroup2.ItemIndex := 2;
+        1:
+          RadioGroup2.ItemIndex := 1;
+        0:
+          RadioGroup2.ItemIndex := 3;
+      end;
+      case FieldByName('nerezident').AsInteger of
+        1:
+          RadioButton3.Checked := True;
+        0:
+          RadioButton4.Checked := True;
+      end;
+
+      AccountDataSet1.Close;
+      AccountDataSet1.SetVariable('kli_id',
+        ExpBatchsArchiveDataSet.FieldByName('bkliid').AsInteger);
+      AccountDataSet1.SQL[2] := '';
+      IF ExpBatchsArchiveDataSet.FieldByName('kreditaccid').AsVariant <>
+        null THEN
+        AccountDataSet1.SQL[2] := 'and id=' +
+          ExpBatchsArchiveDataSet.FieldByName('kreditaccid').AsString;
+      AccountDataSet1.Open;
+
+      IF RadioGroup2.ItemIndex = 4 THEN
+        EditNameII.Text := FieldByName('custname').AsString
+      ELSE
+      BEGIN
+        EditLastNameII.Text := FieldByName('lastname').AsString;
+        EditNameII.Text := FieldByName('name').AsString;
+        EditSoNameII.Text := FieldByName('soname').AsString;
+      END;
+
+      EditCustidII.Text := ExpDataModule.ExpBatchsArchiveDataSetBKLIID.AsString;
+      EditPINCodeII.Text := FieldByName('passpin').AsString;
+      CBoxPassPlaceII.KeyValue := FieldByName('doc_type').AsInteger;
+      EditSerialII.Text := FieldByName('passer').AsString;
+      EditPassportII.Text := FieldByName('paspnum').AsString;
+      FilialNameII.KeyValue := ExpBatchsArchiveDataSet.FieldByName('bfilial').AsString;
+
+      DBCBox_DocTYPEII.Text := FieldByName('paspplace').AsString;
+      DateEditII.Value := FieldByName('paspdate').AsVariant;
+      EditMobilII.Text := FieldByName('phone_m').AsString;
+      EditPhoneII.Text := FieldByName('phone_h').AsString;
+
+      EditDate.Text := ExpBatchsArchiveDataSet.FieldByName('senddate').AsString;
+      EditTime.Text :=
+        TimeToStr(ExpBatchsArchiveDataSet.FieldByName('senddatetime')
+        .AsDateTime);
+      Edit25.Text := ExpBatchsArchiveDataSetPASSWORD.AsString;
+
+      IF RadioGroup2.ItemIndex <> 0 THEN
+        SenderAccNoII.KeyValue := AccountDataSet1.FieldByName('acc_no')
+          .AsVariant;
+      Memo1.Text := ExpBatchsArchiveDataSet.FieldByName('badd_inf').AsString;
+
+    end;
+
+  end;
+
+  if ExpFormNew.FiledIncomingArchive then
+  begin
+
+    { ------------------------------Göndərən müştəri------------------------ }
+
+    with ExpDataModule, SendDataSet do
+    begin
+      Close;
+      SQL[1] := '';
+      SQL[1] := 'where id=' + ExpIncomingarchiveDataSet.FieldByName
+        ('kliid').AsString;
+      Open;
+      case FieldByName('cust_type').AsInteger of
+        4:
+          RadioGroup1.ItemIndex := 0;
+        2:
+          RadioGroup1.ItemIndex := 2;
+        1:
+          RadioGroup1.ItemIndex := 1;
+        0:
+          RadioGroup1.ItemIndex := 3;
+      end;
+
+      case FieldByName('nerezident').AsInteger of
+        1:
+          RadioButton1.Checked := True;
+        0:
+          RadioButton2.Checked := True;
+      end;
+
+      AccountDataSet.Close;
+      AccountDataSet.SetVariable('kli_id',
+        ExpIncomingarchiveDataSet.FieldByName('kliid').AsInteger);
+      AccountDataSet.SQL[2] := '';
+      IF (ExpIncomingarchiveDataSet.FieldByName('debetaccid').AsVariant <> null)
+        and ((ExpIncomingarchiveDataSet.FieldByName('debetaccid').AsVariant
+        <> -1)) THEN
+        AccountDataSet.SQL[2] := 'and id=' +
+          ExpIncomingarchiveDataSet.FieldByName('debetaccid').AsString;
+
+      AccountDataSet.Open;
+
+      FilialDataSet.Close;
+      FilialDataSet.SQL[1] := '';
+      FilialDataSet.SQL[1] := 'where id=' +
+        ExpIncomingarchiveDataSet.FieldByName('filial').AsString;
+      FilialDataSet.Open;
+
+      IF RadioGroup1.ItemIndex = 4 THEN
+        EditNameI.Text := FieldByName('custname').AsString
+      ELSE
+      BEGIN
+        EditLastNameI.Text := FieldByName('lastname').AsString;
+        EditNameI.Text := FieldByName('name').AsString;
+        EditSonameI.Text := FieldByName('soname').AsString;
+      END;
+      EditCustid.Text := ExpDataModule.ExpIncomingarchiveDataSet.FieldByName
+        ('KLIID').AsString;
+      EditPINCodeI.Text := FieldByName('passpin').AsString;
+      CBoxPassPlaceI.KeyValue := FieldByName('doc_type').AsInteger;
+      EditSerialI.Text := FieldByName('passer').AsString;
+      EditPassportI.Text := FieldByName('paspnum').AsString;
+
+      DBCBox_DocTYPEI.Text := FieldByName('paspplace').AsString;
+      DateEditI.Value := FieldByName('paspdate').AsVariant;
+      EditMobilI.Text := FieldByName('phone_m').AsString;
+      EditPhoneI.Text := FieldByName('phone_h').AsString;
+
+      ValuteName.KeyValue := ExpIncomingarchiveDataSet.FieldByName('VAL_COD')
+        .AsInteger;
+      CMCurrencyEdit.Text := ExpIncomingarchiveDataSet.FieldByName
+        ('AMOUNT').AsString;
+      TransRefEdit.Text := ExpIncomingarchiveDataSet.FieldByName
+        ('TRANS_REF').AsString;
+
+      IF RadioGroup1.ItemIndex <> 0 THEN
+        SenderAccNo.KeyValue := AccountDataSet.FieldByName('acc_no').AsVariant;
+      RemitInfEdit.Text := ExpIncomingarchiveDataSet.FieldByName
+        ('REMIT_INF').AsString;
+
+    end;
+
+    { ---------------------------------Alan müştəri----------------------------- }
+
+    with ExpDataModule, SendToDataSet do
+    begin
+
+      Close;
+      SQL[1] := '';
+      SQL[1] := 'where id=' + ExpDataModule.ExpIncomingarchiveDataSet.
+        FieldByName('BKLIID').AsString;
+      Open;
+      case FieldByName('cust_type').AsInteger of
+        4:
+          RadioGroup2.ItemIndex := 0;
+        2:
+          RadioGroup2.ItemIndex := 2;
+        1:
+          RadioGroup2.ItemIndex := 1;
+        0:
+          RadioGroup2.ItemIndex := 3;
+      end;
+      case FieldByName('nerezident').AsInteger of
+        1:
+          RadioButton3.Checked := True;
+        0:
+          RadioButton4.Checked := True;
+      end;
+
+      AccountDataSet1.Close;
+      AccountDataSet1.SetVariable('kli_id',
+        ExpDataModule.ExpIncomingarchiveDataSet.FieldByName('bkliid')
+        .AsInteger);
+      AccountDataSet1.SQL[2] := '';
+      IF (ExpIncomingarchiveDataSet.FieldByName('kreditaccid').AsVariant <>
+        null) and (ExpIncomingarchiveDataSet.FieldByName('debetaccid').AsVariant
+        <> -1) THEN
+        AccountDataSet1.SQL[2] := 'and id=' +
+          ExpDataModule.ExpIncomingarchiveDataSet.FieldByName
+          ('kreditaccid').AsString;
+      AccountDataSet1.Open;
+
+      IF RadioGroup2.ItemIndex = 4 THEN
+        EditNameII.Text := FieldByName('custname').AsString
+      ELSE
+      BEGIN
+        EditLastNameII.Text := FieldByName('lastname').AsString;
+        EditNameII.Text := FieldByName('name').AsString;
+        EditSoNameII.Text := FieldByName('soname').AsString;
+      END;
+
+      EditCustidII.Text := ExpDataModule.ExpIncomingarchiveDataSet.FieldByName
+        ('BKLIID').AsString;
+      EditPINCodeII.Text := FieldByName('passpin').AsString;
+      CBoxPassPlaceII.KeyValue := FieldByName('doc_type').AsInteger;
+      EditSerialII.Text := FieldByName('passer').AsString;
+      EditPassportII.Text := FieldByName('paspnum').AsString;
+      FilialNameII.KeyValue := ExpIncomingDataSet.FieldByName
+        ('bfilial').AsString;
+
+      EditDate.Text := ExpIncomingarchiveDataSet.FieldByName
+        ('senddate').AsString;
+      EditTime.Text :=
+        TimeToStr(ExpIncomingarchiveDataSet.FieldByName('senddatetime')
+        .AsDateTime);
+      Edit25.Text := ''; // ExpIncomingDataSetPASSWORD.AsString;
+
+      DBCBox_DocTYPEII.Text := FieldByName('paspplace').AsString;
+      DateEditII.Value := FieldByName('paspdate').AsVariant;
+      EditMobilII.Text := FieldByName('phone_m').AsString;
+      EditPhoneII.Text := FieldByName('phone_h').AsString;
+
+      IF RadioGroup2.ItemIndex <> 0 THEN
+        SenderAccNoII.KeyValue := AccountDataSet1.FieldByName('acc_no')
+          .AsVariant;
+      Memo1.Text := ExpIncomingarchiveDataSet.FieldByName('badd_inf').AsString;
+
+    end;
+  end;
+
+end;
+
+procedure TExpFormNew.ExpUpdate;
+Var
+  Result: byte;
+begin
+
+  with ExpDataModule, SendDataSet do
+  begin
+    Close;
+    SQL[1] := '';
+    SQL[1] := 'where id=' + ExpIncomingPassword.FieldByName('kliid').AsString;
+    Open;
+    case FieldByName('cust_type').AsInteger of
+      4:
+        RadioGroup1.ItemIndex := 0;
+      2:
+        RadioGroup1.ItemIndex := 2;
+      1:
+        RadioGroup1.ItemIndex := 1;
+      0:
+        RadioGroup1.ItemIndex := 3;
+    end;
+
+    case FieldByName('nerezident').AsInteger of
+      1:
+        RadioButton1.Checked := True;
+      0:
+        RadioButton2.Checked := True;
+    end;
+
+    AccountDataSet.Close;
+    AccountDataSet.SetVariable('kli_id',
+      ExpIncomingPassword.FieldByName('kliid').AsInteger);
+    AccountDataSet.SQL[5] := '';
+
+    IF (ExpIncomingPassword.FieldByName('debetaccid').AsVariant <> null) and
+      (ExpIncomingPassword.FieldByName('debetaccid').AsVariant <> -1) THEN
+      AccountDataSet.SQL[5] := 'and id=' + ExpIncomingPassword.FieldByName
+        ('debetaccid').AsString;
+
+    AccountDataSet.Open;
+
+    FilialDataSet.Close;
+    FilialDataSet.SQL[1] := '';
+    FilialDataSet.SQL[1] := 'where id=' + ExpIncomingPassword.FieldByName
+      ('filial').AsString;
+    FilialDataSet.Open;
+
+    IF RadioGroup1.ItemIndex = 4 THEN
+      EditNameI.Text := FieldByName('custname').AsString
+    ELSE
+    BEGIN
+      EditLastNameI.Text := FieldByName('lastname').AsString;
+      EditNameI.Text := FieldByName('name').AsString;
+      EditSonameI.Text := FieldByName('soname').AsString;
+    END;
+    EditCustid.Text := ExpIncomingPassword.FieldByName('kliid').AsString;
+    EditPINCodeI.Text := FieldByName('passpin').AsString;
+    CBoxPassPlaceI.KeyValue := FieldByName('doc_type').AsInteger;
+    EditSerialI.Text := FieldByName('passer').AsString;
+    EditPassportI.Text := FieldByName('paspnum').AsString;
+    DBCBox_DocTYPEI.Text := FieldByName('paspplace').AsString;
+    DateEditI.Value := FieldByName('paspdate').AsVariant;
+    EditMobilI.Text := FieldByName('phone_m').AsString;
+    EditPhoneI.Text := FieldByName('phone_h').AsString;
+
+    ValuteName.KeyValue := ExpIncomingPassword.FieldByName('VAL_COD').AsInteger;
+    CMCurrencyEdit.Text := ExpIncomingPassword.FieldByName('AMOUNT').AsString;
+    TransRefEdit.Text := ExpIncomingPassword.FieldByName('TRANS_REF').AsString;
+    RemitInfEdit.Text := ExpIncomingPassword.FieldByName('REMIT_INF').AsString;
+
+    IF RadioGroup1.ItemIndex <> 0 THEN
+      SenderAccNo.KeyValue := AccountDataSet.FieldByName('acc_no').AsVariant;
+
+    TabSheetFirstDisable;
+
+    with FormNominalCustomers, ExpressVariables do
+    begin
+      custid := ExpIncomingPassword.FieldByName('kliid').AsString;
+      Editpasspin.Text := FieldByName('passpin').AsString;
+      if Editpasspin.Text <> '' then
+        FormNominalCustomers.RH := True;
+
+      EditLastName.Text := FieldByName('lastname').AsString;
+      EditName1.Text := FieldByName('name').AsString;
+      EditSoname.Text := FieldByName('soname').AsString;
+
+      CBoxPassPlace.KeyValue := FieldByName('doc_type').AsInteger;
+      EditSerial.Text := FieldByName('passer').AsString;
+      EditPassport.Text := FieldByName('paspnum').AsString;
+      Issue_country.KeyValue := FieldByName('doc_country').AsVariant;
+
+      DBCBox_DocTYPE.Text := FieldByName('paspplace').AsString;
+      DateEdit.Value := FieldByName('paspdate').AsVariant;
+      DateEdit1.Value := FieldByName('passexpire').AsVariant;
+
+      DBCBox_Citizenship.KeyValue := FieldByName('citizenship').AsInteger;
+
+      CBoxSex.KeyValue := FieldByName('sex').AsString;
+      CBoxFamStatus.KeyValue := FieldByName('fam_status').AsString;
+      BirthPlace.KeyValue := FieldByName('birthplace').AsString;
+      EditBirthCity.KeyValue := FieldByName('birth_state').AsString;
+      DateEdit2.Value := FieldByName('birthday').AsVariant;
+
+      Adrs_State.KeyValue := FieldByName('adrs_state').AsString;
+      Adrs_City.KeyValue := FieldByName('city').AsString;
+      ZipQ.Text := FieldByName('reg_zip').AsString;
+      EditMobil.Text := FieldByName('phone_m').AsString;
+      EditPhone.Text := FieldByName('phone_h').AsString;
+      EditEmail.Text := FieldByName('e_mail').AsString;
+      AdressEdit.Text := FieldByName('address').AsString;
+
+      FormNominalCustomers.Work_Place.Text := FieldByName('work_place')
+        .AsString;
+      FormNominalCustomers.Address_type.KeyValue :=
+        FieldByName('work_adrs_spec').AsVariant;
+      FormNominalCustomers.CountryByConctType.KeyValue :=
+        FieldByName('work_cntr').AsVariant;
+
+      FormNominalCustomers.CityByConctType.KeyValue := FieldByName('work_city')
+        .AsVariant;
+      FormNominalCustomers.db_tph_state.Text :=
+        FieldByName('work_state').AsString;
+      FormNominalCustomers.DB_tph_zip.Text := FieldByName('work_zip').AsString;
+
+      FormNominalCustomers.db_tph_adress.Text :=
+        FieldByName('work_adress').AsString;
+      FormNominalCustomers.tph_contact_type.KeyValue :=
+        FieldByName('work_phone_spec').AsVariant;
+      FormNominalCustomers.tph_communication_type.KeyValue :=
+        FieldByName('work_phconttype').AsVariant;
+
+      FormNominalCustomers.tph_country_prefix.KeyValue :=
+        FieldByName('work_phoppref').AsVariant;
+      FormNominalCustomers.Db_tph_number.Text :=
+        FieldByName('work_phone').AsString;
+      FormNominalCustomers.Db_tph_extension.Text :=
+        FieldByName('work_phext').AsString;
+      FormNominalCustomers.Db_tph_cod.Text :=
+        FieldByName('work_phcode').AsString;
+    end;
+
+  end;
+
+  with ExpDataModule, SendToDataSet do
+  begin
+    Close;
+    SQL[1] := '';
+    SQL[1] := 'where id=' + ExpIncomingPassword.FieldByName('BKLIID').AsString;
+    Open;
+    case FieldByName('cust_type').AsInteger of
+      4:
+        RadioGroup2.ItemIndex := 0;
+      2:
+        RadioGroup2.ItemIndex := 2;
+      1:
+        RadioGroup2.ItemIndex := 1;
+      0:
+        RadioGroup2.ItemIndex := 3;
+    end;
+    case FieldByName('nerezident').AsInteger of
+      1:
+        RadioButton3.Checked := True;
+      0:
+        RadioButton4.Checked := True;
+    end;
+    AccountDataSet1.Close;
+    AccountDataSet1.SetVariable('kli_id',
+      ExpIncomingPassword.FieldByName('bkliid').AsInteger);
+    AccountDataSet1.SQL[2] := '';
+    IF VarIsNull(ExpIncomingDataSet.FieldByName('kreditaccid').AsVariant) THEN
+      AccountDataSet1.SQL[2] := 'and id=' + ExpIncomingPassword.FieldByName
+        ('kreditaccid').AsString;
+    AccountDataSet1.Open;
+
+    IF RadioGroup2.ItemIndex = 4 THEN
+      EditNameII.Text := FieldByName('custname').AsString
+    ELSE
+    BEGIN
+      EditLastNameII.Text := FieldByName('lastname').AsString;
+      EditNameII.Text := FieldByName('name').AsString;
+      EditSoNameII.Text := FieldByName('soname').AsString;
+    END;
+
+    EditCustidII.Text := ExpIncomingPassword.FieldByName('bkliid').AsString;
+    EditPINCodeII.Text := FieldByName('passpin').AsString;
+    CBoxPassPlaceII.KeyValue := FieldByName('doc_type').AsInteger;
+    EditSerialII.Text := FieldByName('passer').AsString;
+    EditPassportII.Text := FieldByName('paspnum').AsString;
+    FilialNameII.KeyValue := ExpIncomingPassword.FieldByName('bfilial')
+      .AsString;
+
+    DBCBox_DocTYPEII.Text := FieldByName('paspplace').AsString;
+    DateEditII.Value := FieldByName('paspdate').AsVariant;
+    EditMobilII.Text := FieldByName('phone_m').AsString;
+    EditPhoneII.Text := FieldByName('phone_h').AsString;
+
+    EditDate.Text := ExpIncomingPassword.FieldByName('senddate').AsString;
+    EditTime.Text := TimeToStr(ExpIncomingPassword.FieldByName('senddatetime')
+      .AsDateTime);
+    Edit25.Text := '*********'; // ExpIncomingDataSetPASSWORD.AsString;
+
+    With FormNominalCustomers, SendDataSet do
+    begin
+      Editpasspin.Text := FieldByName('passpin').AsString;
+      EditLastName.Text := FieldByName('lastname').AsString;
+      EditName1.Text := FieldByName('name').AsString;
+      EditSoname.Text := FieldByName('soname').AsString;
+
+      CBoxPassPlace.KeyValue := FieldByName('doc_type').AsInteger;
+      EditSerial.Text := FieldByName('passer').AsString;
+      EditPassport.Text := FieldByName('paspnum').AsString;
+
+      Issue_country.KeyValue := FieldByName('doc_country').AsVariant;
+      DBCBox_DocTYPE.Text := FieldByName('paspplace').AsString;
+      DateEdit.Value := FieldByName('paspdate').AsVariant;
+      DateEdit1.Value := FieldByName('passexpire').AsVariant;
+
+      DBCBox_Citizenship.KeyValue := FieldByName('citizenship').AsInteger;
+
+      CBoxSex.KeyValue := FieldByName('sex').AsString;
+      CBoxFamStatus.KeyValue := FieldByName('fam_status').AsString;
+      BirthPlace.KeyValue := FieldByName('birthplace').AsString;
+      EditBirthCity.KeyValue := FieldByName('birth_state').AsString;
+      DateEdit2.Value := FieldByName('birthday').AsVariant;
+
+      Adrs_State.KeyValue := FieldByName('adrs_state').AsString;
+      Adrs_City.KeyValue := FieldByName('city').AsString;
+      ZipQ.Text := FieldByName('reg_zip').AsString;
+      EditMobil.Text := FieldByName('phone_m').AsString;
+      EditPhone.Text := FieldByName('phone_h').AsString;
+      EditEmail.Text := FieldByName('e_mail').AsString;
+      AdressEdit.Text := FieldByName('address').AsString;
+
+      Work_Place.Text := FieldByName('work_place').AsString;
+      Address_type.KeyValue := FieldByName('work_adrs_spec').AsVariant;
+      CountryByConctType.KeyValue := FieldByName('work_cntr').AsVariant;
+
+      CityByConctType.KeyValue := FieldByName('work_city').AsVariant;
+      db_tph_state.Text := FieldByName('work_state').AsString;
+      DB_tph_zip.Text := FieldByName('work_zip').AsString;
+
+      db_tph_adress.Text := FieldByName('work_adress').AsString;
+      tph_contact_type.KeyValue := FieldByName('work_phone_spec').AsVariant;
+      tph_communication_type.KeyValue := FieldByName('work_phconttype')
+        .AsVariant;
+
+      tph_country_prefix.KeyValue := FieldByName('work_phoppref').AsVariant;
+      Db_tph_number.Text := FieldByName('work_phone').AsString;
+      Db_tph_extension.Text := FieldByName('work_phext').AsString;
+      Db_tph_cod.Text := FieldByName('work_phcode').AsString;
+    end;
+
+    IF RadioGroup2.ItemIndex <> 0 THEN
+      SenderAccNoII.KeyValue := AccountDataSet1.FieldByName('acc_no').AsVariant;
+    Memo1.Text := ExpIncomingPassword.FieldByName('badd_inf').AsString;
+
+    Search1paspnum.Enabled := False;
+    Search1inn.Enabled := False;
+    Search1passpin.Enabled := False;
+    Search1id.Enabled := False;
+    Search1paspnum.Color := clSilver;
+    Search1inn.Color := clSilver;
+    Search1passpin.Color := clSilver;
+    Search1id.Color := clSilver;
+
+    RadioButton3.Enabled := False;
+    RadioButton4.Enabled := False;
+
+    EditLastNameII.Enabled := False;
+    EditNameII.Enabled := False;
+    EditSoNameII.Enabled := False;
+    EditLastNameII.Color := clSilver;
+    EditNameII.Color := clSilver;
+    EditSoNameII.Color := clSilver;
+
+    Result := Repair.CallIntegerFunction('RetrunFiledName',
+      [ExpIncomingPassword.FieldByName('BKLIID').AsString, 'passpin']);
+
+    IF RadioGroup2.ItemIndex = 0 THEN
+    BEGIN
+
+      IF Result = 1 THEN
+      BEGIN
+        EditPINCodeII.Enabled := False;
+        EditPINCodeII.Color := clSilver;
+      END
+      ELSE
+      BEGIN
+        EditPINCodeII.Enabled := True;
+        EditPINCodeII.Color := clWhite;
+      END;
+
+      Result := Repair.CallIntegerFunction('RetrunFiledName',
+        [ExpIncomingPassword.FieldByName('BKLIID').AsString, 'paspplace']);
+
+      IF Result = 1 THEN
+      BEGIN
+        CBoxPassPlaceII.Enabled := False;
+        CBoxPassPlaceII.Color := clSilver;
+      END
+      ELSE
+      BEGIN
+        CBoxPassPlaceII.Enabled := True;
+        CBoxPassPlaceII.Color := clWhite;
+      END;
+
+      Result := Repair.CallIntegerFunction('RetrunFiledName',
+        [ExpIncomingPassword.FieldByName('BKLIID').AsString, 'passer']);
+
+      IF Result = 1 THEN
+      BEGIN
+        EditSerialII.Enabled := False;
+        EditSerialII.Color := clSilver;
+      END
+      ELSE
+      BEGIN
+        EditSerialII.Enabled := True;
+        EditSerialII.Color := clWhite;
+      END;
+
+      Result := Repair.CallIntegerFunction('RetrunFiledName',
+        [ExpIncomingPassword.FieldByName('BKLIID').AsString, 'paspnum']);
+
+      IF Result = 1 THEN
+      BEGIN
+        EditPassportII.Enabled := False;
+        EditPassportII.Color := clSilver;
+      END
+      ELSE
+      BEGIN
+        EditPassportII.Enabled := True;
+        EditPassportII.Color := clWhite;
+      END;
+
+      Result := Repair.CallIntegerFunction('RetrunFiledName',
+        [ExpIncomingPassword.FieldByName('BKLIID').AsString, 'doctype']);
+
+      IF Result = 1 THEN
+      BEGIN
+        DBCBox_DocTYPEII.Enabled := False;
+        DBCBox_DocTYPEII.Color := clSilver;
+      END
+      ELSE
+      BEGIN
+        DBCBox_DocTYPEII.Enabled := True;
+        DBCBox_DocTYPEII.Color := clWhite;
+      END;
+
+      Result := Repair.CallIntegerFunction('RetrunFiledName',
+        [ExpIncomingPassword.FieldByName('BKLIID').AsString, 'paspdate']);
+
+      IF Result = 1 THEN
+      BEGIN
+        DateEditII.Enabled := False;
+        DateEditII.Color := clSilver;
+      END
+      ELSE
+      BEGIN
+        DateEditII.Enabled := True;
+        DateEditII.Color := clWhite;
+      END;
+
+      Result := Repair.CallIntegerFunction('RetrunFiledName',
+        [ExpIncomingPassword.FieldByName('BKLIID').AsString, 'phone_m']);
+
+      IF Result = 1 THEN
+      BEGIN
+        EditMobilII.Enabled := False;
+        EditMobilII.Color := clSilver;
+      END
+      ELSE
+      BEGIN
+        EditMobilII.Enabled := True;
+        EditMobilII.Color := clWhite;
+      END;
+
+      Result := Repair.CallIntegerFunction('RetrunFiledName',
+        [ExpIncomingPassword.FieldByName('BKLIID').AsString, 'phone_h']);
+
+      IF Result = 1 THEN
+      BEGIN
+        EditPhoneII.Enabled := False;
+        EditPhoneII.Color := clSilver;
+      END
+      ELSE
+      BEGIN
+        EditPhoneII.Enabled := True;
+        EditPhoneII.Color := clWhite;
+      END;
+
+      Result := Repair.CallIntegerFunction('RetrunFiledName',
+        [ExpIncomingPassword.FieldByName('BKLIID').AsString, 'filial']);
+      if Result = 1 THEN
+      begin
+        FilialNameII.Enabled := False;
+        FilialNameII.Color := clSilver;
+      end
+      ELSE
+      BEGIN
+        FilialNameII.Enabled := True;
+        FilialNameII.Color := clWhite;
+      END;
+
+    END;
+
+    if SenderAccNoII.Enabled then
+    begin
+      SenderAccNoII.Enabled := False;
+      SenderAccNoII.Color := clSilver;
+    end;
+
+    Result := Repair.CallIntegerFunction('RetrunFiledName',
+      [ExpIncomingPassword.FieldByName('BKLIID').AsString, 'badd_inf']);
+
+    if Result = 1 then
+    begin
+      Memo1.Enabled := False;
+      Memo1.Color := clSilver;
+    end
+    ELSE
+    BEGIN
+      Memo1.Enabled := True;
+      Memo1.Color := clWhite;
+    END;
+  END;
+
+end;
+
+procedure TExpFormNew.ExpUpdateIncoming;
+Var
+  Result: byte;
+begin
+
+  with ExpDataModule, SendDataSet do
+  begin
+    Close;
+    SQL[1] := '';
+    SQL[1] := 'where id=' + ExpIncomingDataSet.FieldByName('kliid').AsString;
+    Open;
+    case FieldByName('cust_type').AsInteger of
+      4:
+        RadioGroup1.ItemIndex := 0;
+      2:
+        RadioGroup1.ItemIndex := 2;
+      1:
+        RadioGroup1.ItemIndex := 1;
+      0:
+        RadioGroup1.ItemIndex := 3;
+    end;
+
+    case FieldByName('nerezident').AsInteger of
+      1:
+        RadioButton1.Checked := True;
+      0:
+        RadioButton2.Checked := True;
+    end;
+
+    AccountDataSet.Close;
+    AccountDataSet.SetVariable('kli_id', ExpIncomingDataSet.FieldByName('kliid')
+      .AsInteger);
+    AccountDataSet.SQL[5] := '';
+
+    IF (ExpIncomingDataSet.FieldByName('debetaccid').AsVariant <> null) and
+      (ExpIncomingDataSet.FieldByName('debetaccid').AsVariant <> -1) THEN
+      AccountDataSet.SQL[5] := 'and id=' + ExpIncomingDataSet.FieldByName
+        ('debetaccid').AsString;
+
+    AccountDataSet.Open;
+
+    FilialDataSet.Close;
+    FilialDataSet.SQL[1] := '';
+    FilialDataSet.SQL[1] := 'where id=' + ExpIncomingDataSet.FieldByName
+      ('filial').AsString;
+    FilialDataSet.Open;
+
+    IF RadioGroup1.ItemIndex = 4 THEN
+      EditNameI.Text := FieldByName('custname').AsString
+    ELSE
+    BEGIN
+      EditLastNameI.Text := FieldByName('lastname').AsString;
+      EditNameI.Text := FieldByName('name').AsString;
+      EditSonameI.Text := FieldByName('soname').AsString;
+    END;
+    EditCustid.Text := ExpIncomingDataSet.FieldByName('kliid').AsString;
+    EditPINCodeI.Text := FieldByName('passpin').AsString;
+    CBoxPassPlaceI.KeyValue := FieldByName('doc_type').AsInteger;
+    EditSerialI.Text := FieldByName('passer').AsString;
+    EditPassportI.Text := FieldByName('paspnum').AsString;
+    DBCBox_DocTYPEI.Text := FieldByName('paspplace').AsString;
+    DateEditI.Value := FieldByName('paspdate').AsVariant;
+    EditMobilI.Text := FieldByName('phone_m').AsString;
+    EditPhoneI.Text := FieldByName('phone_h').AsString;
+
+    ValuteName.KeyValue := ExpIncomingDataSet.FieldByName('VAL_COD').AsInteger;
+    CMCurrencyEdit.Text := ExpIncomingDataSet.FieldByName('AMOUNT').AsString;
+    TransRefEdit.Text := ExpIncomingDataSet.FieldByName('TRANS_REF').AsString;
+    RemitInfEdit.Text := ExpIncomingDataSet.FieldByName('REMIT_INF').AsString;
+
+    IF RadioGroup1.ItemIndex <> 0 THEN
+      SenderAccNo.KeyValue := AccountDataSet.FieldByName('acc_no').AsVariant;
+
+    TabSheetFirstDisable;
+
+    with FormNominalCustomers, ExpressVariables do
+    begin
+      custid := ExpIncomingDataSet.FieldByName('kliid').AsString;
+      Editpasspin.Text := FieldByName('passpin').AsString;
+      if Editpasspin.Text <> '' then
+        FormNominalCustomers.RH := True;
+
+      EditLastName.Text := FieldByName('lastname').AsString;
+      EditName1.Text := FieldByName('name').AsString;
+      EditSoname.Text := FieldByName('soname').AsString;
+
+      CBoxPassPlace.KeyValue := FieldByName('doc_type').AsInteger;
+      EditSerial.Text := FieldByName('passer').AsString;
+      EditPassport.Text := FieldByName('paspnum').AsString;
+      Issue_country.KeyValue := FieldByName('doc_country').AsVariant;
+
+      DBCBox_DocTYPE.Text := FieldByName('paspplace').AsString;
+      DateEdit.Value := FieldByName('paspdate').AsVariant;
+      DateEdit1.Value := FieldByName('passexpire').AsVariant;
+
+      DBCBox_Citizenship.KeyValue := FieldByName('citizenship').AsInteger;
+
+      CBoxSex.KeyValue := FieldByName('sex').AsString;
+      CBoxFamStatus.KeyValue := FieldByName('fam_status').AsString;
+      BirthPlace.KeyValue := FieldByName('birthplace').AsString;
+      EditBirthCity.KeyValue := FieldByName('birth_state').AsString;
+      DateEdit2.Value := FieldByName('birthday').AsVariant;
+
+      Adrs_State.KeyValue := FieldByName('adrs_state').AsString;
+      Adrs_City.KeyValue := FieldByName('city').AsString;
+      ZipQ.Text := FieldByName('reg_zip').AsString;
+      EditMobil.Text := FieldByName('phone_m').AsString;
+      EditPhone.Text := FieldByName('phone_h').AsString;
+      EditEmail.Text := FieldByName('e_mail').AsString;
+      AdressEdit.Text := FieldByName('address').AsString;
+     WITH FormNominalCustomers DO
+     BEGIN
+      Work_Place.Text := FieldByName('work_place').AsString;
+      Address_type.KeyValue :=FieldByName('work_adrs_spec').AsVariant;
+      CountryByConctType.KeyValue :=FieldByName('work_cntr').AsVariant;
+      CityByConctType.KeyValue := FieldByName('work_city').AsVariant;
+      Db_tph_state.Text :=FieldByName('work_state').AsString;
+      Db_tph_zip.Text := FieldByName('work_zip').AsString;
+      Db_tph_adress.Text :=FieldByName('work_adress').AsString;
+      Tph_contact_type.KeyValue := FieldByName('work_phone_spec').AsVariant;
+      Tph_communication_type.KeyValue := FieldByName('work_phconttype').AsVariant;
+      Tph_country_prefix.KeyValue := FieldByName('work_phoppref').AsVariant;
+      Db_tph_number.Text :=FieldByName('work_phone').AsString;
+      Db_tph_cod.Text :=FieldByName('work_phcode').AsString;
+     END;
+    end;
+
+  end;
+
+  with ExpDataModule, SendToDataSet do
+  begin
+    Close;
+    SQL[1] := '';
+    SQL[1] := 'where id=' + ExpIncomingDataSet.FieldByName('BKLIID').AsString;
+    Open;
+    case FieldByName('cust_type').AsInteger of
+      4:
+        RadioGroup2.ItemIndex := 0;
+      2:
+        RadioGroup2.ItemIndex := 2;
+      1:
+        RadioGroup2.ItemIndex := 1;
+      0:
+        RadioGroup2.ItemIndex := 3;
+    end;
+    case FieldByName('nerezident').AsInteger of
+      1:
+        RadioButton3.Checked := True;
+      0:
+        RadioButton4.Checked := True;
+    end;
+
+    AccountDataSet1.Close;
+    AccountDataSet1.SetVariable('kli_id',
+      ExpIncomingDataSet.FieldByName('bkliid').AsInteger);
+    AccountDataSet1.SQL[2] := '';
+    IF ExpIncomingDataSet.FieldByName('kreditaccid').AsVariant <> null THEN
+      AccountDataSet1.SQL[2] := 'and id=' + ExpIncomingDataSet.FieldByName
+        ('kreditaccid').AsString;
+    AccountDataSet1.Open;
+
+    IF RadioGroup2.ItemIndex = 4 THEN
+      EditNameII.Text := FieldByName('custname').AsString
+    ELSE
+    BEGIN
+      EditLastNameII.Text := FieldByName('lastname').AsString;
+      EditNameII.Text := FieldByName('name').AsString;
+      EditSoNameII.Text := FieldByName('soname').AsString;
+    END;
+
+    EditCustidII.Text := ExpIncomingDataSet.FieldByName('bkliid').AsString;
+    EditPINCodeII.Text := FieldByName('passpin').AsString;
+    CBoxPassPlaceII.KeyValue := FieldByName('doc_type').AsInteger;
+    EditSerialII.Text := FieldByName('passer').AsString;
+    EditPassportII.Text := FieldByName('paspnum').AsString;
+    FilialNameII.KeyValue := ExpIncomingDataSet.FieldByName('bfilial').AsString;
+
+    DBCBox_DocTYPEII.Text := FieldByName('paspplace').AsString;
+    DateEditII.Value := FieldByName('paspdate').AsVariant;
+
+    EditMobilII.Text := FieldByName('phone_m').AsString;
+    EditPhoneII.Text := FieldByName('phone_h').AsString;
+
+    EditDate.Text := ExpIncomingDataSet.FieldByName('senddate').AsString;
+    EditTime.Text := TimeToStr(ExpIncomingDataSet.FieldByName('senddatetime')
+      .AsDateTime);
+    Edit25.Text := '*********'; // ExpIncomingDataSetPASSWORD.AsString;
+
+    With FormNominalCustomers, SendDataSet do
+    begin
+      Editpasspin.Text := FieldByName('passpin').AsString;
+      EditLastName.Text := FieldByName('lastname').AsString;
+      EditName1.Text := FieldByName('name').AsString;
+      EditSoname.Text := FieldByName('soname').AsString;
+
+      CBoxPassPlace.KeyValue := FieldByName('doc_type').AsInteger;
+      EditSerial.Text := FieldByName('passer').AsString;
+      EditPassport.Text := FieldByName('paspnum').AsString;
+
+      Issue_country.KeyValue := FieldByName('doc_country').AsVariant;
+      DBCBox_DocTYPE.Text := FieldByName('paspplace').AsString;
+      DateEdit.Value := FieldByName('paspdate').AsVariant;
+      DateEdit1.Value := FieldByName('passexpire').AsVariant;
+
+      DBCBox_Citizenship.KeyValue := FieldByName('citizenship').AsInteger;
+
+      CBoxSex.KeyValue := FieldByName('sex').AsString;
+      CBoxFamStatus.KeyValue := FieldByName('fam_status').AsString;
+      BirthPlace.KeyValue := FieldByName('birthplace').AsString;
+      EditBirthCity.KeyValue := FieldByName('birth_state').AsString;
+      DateEdit2.Value := FieldByName('birthday').AsVariant;
+
+      Adrs_State.KeyValue := FieldByName('adrs_state').AsString;
+      Adrs_City.KeyValue := FieldByName('city').AsString;
+      ZipQ.Text := FieldByName('reg_zip').AsString;
+      EditMobil.Text := FieldByName('phone_m').AsString;
+      EditPhone.Text := FieldByName('phone_h').AsString;
+      EditEmail.Text := FieldByName('e_mail').AsString;
+      AdressEdit.Text := FieldByName('address').AsString;
+
+      Work_Place.Text := FieldByName('work_place').AsString;
+      Address_type.KeyValue := FieldByName('work_adrs_spec').AsVariant;
+      CountryByConctType.KeyValue := FieldByName('work_cntr').AsVariant;
+
+      CityByConctType.KeyValue := FieldByName('work_city').AsVariant;
+      db_tph_state.Text := FieldByName('work_state').AsString;
+      DB_tph_zip.Text := FieldByName('work_zip').AsString;
+
+      db_tph_adress.Text := FieldByName('work_adress').AsString;
+      tph_contact_type.KeyValue := FieldByName('work_phone_spec').AsVariant;
+      tph_communication_type.KeyValue := FieldByName('work_phconttype')
+        .AsVariant;
+
+      tph_country_prefix.KeyValue := FieldByName('work_phoppref').AsVariant;
+      Db_tph_number.Text := FieldByName('work_phone').AsString;
+      Db_tph_extension.Text := FieldByName('work_phext').AsString;
+      Db_tph_cod.Text := FieldByName('work_phcode').AsString;
+    end;
+
+    IF RadioGroup2.ItemIndex <> 0 THEN
+      SenderAccNoII.KeyValue := AccountDataSet1.FieldByName('acc_no').AsVariant;
+    Memo1.Text := ExpIncomingDataSet.FieldByName('badd_inf').AsString;
+
+    Search1paspnum.Enabled := False;
+    Search1inn.Enabled := False;
+    Search1passpin.Enabled := False;
+    Search1id.Enabled := False;
+    Search1paspnum.Color := clSilver;
+    Search1inn.Color := clSilver;
+    Search1passpin.Color := clSilver;
+    Search1id.Color := clSilver;
+
+    RadioButton3.Enabled := False;
+    RadioButton4.Enabled := False;
+
+    EditLastNameII.Enabled := False;
+    EditNameII.Enabled := False;
+    EditSoNameII.Enabled := False;
+    EditLastNameII.Color := clSilver;
+    EditNameII.Color := clSilver;
+    EditSoNameII.Color := clSilver;
+
+    Result := Repair.CallIntegerFunction('RetrunFiledName',
+      [ExpIncomingDataSet.FieldByName('BKLIID').AsString, 'passpin']);
+
+    IF RadioGroup2.ItemIndex = 0 then
+    begin
+
+      IF Result = 1 THEN
+      BEGIN
+        EditPINCodeII.Enabled := False;
+        EditPINCodeII.Color := clSilver;
+      END
+      ELSE
+      BEGIN
+        EditPINCodeII.Enabled := True;
+        EditPINCodeII.Color := clWhite;
+      END;
+
+      Result := Repair.CallIntegerFunction('RetrunFiledName',
+        [ExpIncomingDataSet.FieldByName('BKLIID').AsString, 'paspplace']);
+
+      IF Result = 1 THEN
+      BEGIN
+        CBoxPassPlaceII.Enabled := False;
+        CBoxPassPlaceII.Color := clSilver;
+      END
+      ELSE
+      BEGIN
+        CBoxPassPlaceII.Enabled := True;
+        CBoxPassPlaceII.Color := clWhite;
+      END;
+
+      Result := Repair.CallIntegerFunction('RetrunFiledName',
+        [ExpIncomingDataSet.FieldByName('BKLIID').AsString, 'passer']);
+
+      IF Result = 1 THEN
+      BEGIN
+        EditSerialII.Enabled := False;
+        EditSerialII.Color := clSilver;
+      END
+      ELSE
+      BEGIN
+        EditSerialII.Enabled := True;
+        EditSerialII.Color := clWhite;
+      END;
+
+      Result := Repair.CallIntegerFunction('RetrunFiledName',
+        [ExpIncomingDataSet.FieldByName('BKLIID').AsString, 'paspnum']);
+
+      IF Result = 1 THEN
+      BEGIN
+        EditPassportII.Enabled := False;
+        EditPassportII.Color := clSilver;
+      END
+      ELSE
+      BEGIN
+        EditPassportII.Enabled := True;
+        EditPassportII.Color := clWhite;
+      END;
+
+      Result := Repair.CallIntegerFunction('RetrunFiledName',
+        [ExpIncomingDataSet.FieldByName('BKLIID').AsString, 'doctype']);
+
+      IF Result = 1 THEN
+      BEGIN
+        DBCBox_DocTYPEII.Enabled := False;
+        DBCBox_DocTYPEII.Color := clSilver;
+      END
+      ELSE
+      BEGIN
+        DBCBox_DocTYPEII.Enabled := True;
+        DBCBox_DocTYPEII.Color := clWhite;
+      END;
+
+      Result := Repair.CallIntegerFunction('RetrunFiledName',
+        [ExpIncomingDataSet.FieldByName('BKLIID').AsString, 'paspdate']);
+
+      IF Result = 1 THEN
+      BEGIN
+        DateEditII.Enabled := False;
+        DateEditII.Color := clSilver;
+      END
+      ELSE
+      BEGIN
+        DateEditII.Enabled := True;
+        DateEditII.Color := clWhite;
+      END;
+
+      Result := Repair.CallIntegerFunction('RetrunFiledName',
+        [ExpIncomingDataSet.FieldByName('BKLIID').AsString, 'phone_m']);
+
+      IF Result = 1 THEN
+      BEGIN
+        EditMobilII.Enabled := False;
+        EditMobilII.Color := clSilver;
+      END
+      ELSE
+      BEGIN
+        EditMobilII.Enabled := True;
+        EditMobilII.Color := clWhite;
+      END;
+
+      Result := Repair.CallIntegerFunction('RetrunFiledName',
+        [ExpIncomingDataSet.FieldByName('BKLIID').AsString, 'phone_h']);
+
+      IF Result = 1 THEN
+      BEGIN
+        EditPhoneII.Enabled := False;
+        EditPhoneII.Color := clSilver;
+      END
+      ELSE
+      BEGIN
+        EditPhoneII.Enabled := True;
+        EditPhoneII.Color := clWhite;
+      END;
+
+      Result := Repair.CallIntegerFunction('RetrunFiledName',
+        [ExpIncomingDataSet.FieldByName('BKLIID').AsString, 'filial']);
+      if Result = 1 THEN
+      begin
+        FilialNameII.Enabled := False;
+        FilialNameII.Color := clSilver;
+      end
+      ELSE
+      BEGIN
+        FilialNameII.Enabled := True;
+        FilialNameII.Color := clWhite;
+      END;
+    end;
+
+    if SenderAccNoII.Enabled then
+    begin
+      SenderAccNoII.Enabled := False;
+      SenderAccNoII.Color := clSilver;
+    end;
+
+    Result := Repair.CallIntegerFunction('RetrunFiledName',
+      [ExpIncomingDataSet.FieldByName('BKLIID').AsString, 'badd_inf']);
+
+    if Result = 1 then
+    begin
+      Memo1.Enabled := False;
+      Memo1.Color := clSilver;
+    end
+    ELSE
+    BEGIN
+      Memo1.Enabled := True;
+      Memo1.Color := clWhite;
+    END;
+
+  end;
+
+end;
+
+procedure TExpFormNew.RadioGroup2Click(Sender: TObject);
+begin
+  RBoolean := False;
+  // IF FForm=0 THEN Clear;
+
+  case RadioGroup2.ItemIndex of
+    - 1, 0:
+      BEGIN
+        Search1passpin.Enabled := True;
+        Search1passpin.Color := clWhite;
+        Search1paspnum.Enabled := True;
+        Search1paspnum.Color := clWhite;
+        Search1id.Enabled := True;
+        Search1id.Color := clWhite;
+
+        IF RadioGroup2.ItemIndex = -1 THEN
+        BEGIN
+          Search1inn.Enabled := True;
+          Search1inn.Color := clWhite;
+        END
+        ELSE
+        BEGIN
+          Search1inn.Enabled := False;
+          Search1inn.Color := clSilver;
+        END;
+
+        EditPINCodeII.Enabled := True;
+        EditPINCodeII.Color := clWhite;
+        CBoxPassPlaceII.Enabled := True;
+        CBoxPassPlaceII.Color := clWhite;
+        EditSerialII.Enabled := True;
+        EditSerialII.Color := clWhite;
+        EditPassportII.Enabled := True;
+        EditPassportII.Color := clWhite;
+
+        EditCustidII.Enabled := False;
+        EditCustidII.Color := clSilver;
+        EditNameII.Enabled := True;
+        EditNameII.Color := clWhite;
+        EditLastNameII.Enabled := True;
+        EditLastNameII.Color := clWhite;
+        EditSoNameII.Enabled := True;
+        EditSoNameII.Color := clWhite;
+        DBCBox_DocTYPEII.Enabled := True;
+        DBCBox_DocTYPEII.Color := clWhite;
+        DateEditII.Enabled := True;
+        DateEditII.Color := clWhite;
+        EditMobilII.Enabled := True;
+        EditMobilII.Color := clWhite;
+        EditPhoneII.Enabled := True;
+        EditPhoneII.Color := clWhite;
+
+        RadioButton3.Enabled := True;
+        RadioButton4.Enabled := True;
+
+      END;
+
+    1, 2, 3, 4:
+      BEGIN
+
+        EditPINCodeII.Enabled := False;
+        EditPINCodeII.Color := clSilver;
+        CBoxPassPlaceII.Enabled := False;
+        CBoxPassPlaceII.Color := clSilver;
+        EditSerialII.Enabled := False;
+        EditSerialII.Color := clSilver;
+        EditPassportII.Enabled := False;
+        EditPassportII.Color := clSilver;
+
+        EditCustidII.Enabled := False;
+        EditCustidII.Color := clSilver;
+        EditNameII.Enabled := False;
+        EditNameII.Color := clSilver;
+        EditLastNameII.Enabled := False;
+        EditLastNameII.Color := clSilver;
+        EditSoNameII.Enabled := False;
+        EditSoNameII.Color := clSilver;
+        DBCBox_DocTYPEII.Enabled := False;
+        DBCBox_DocTYPEII.Color := clSilver;
+        DateEditII.Enabled := False;
+        DateEditII.Color := clSilver;
+        EditMobilII.Enabled := False;
+        EditMobilII.Color := clSilver;
+        EditPhoneII.Enabled := False;
+        EditPhoneII.Color := clSilver;
+
+        RadioButton3.Enabled := False;
+        RadioButton4.Enabled := False;
+
+      END;
+
+  END;
+
+END;
+
+procedure TExpFormNew.RadioGroup3Click(Sender: TObject);
+begin
+  RBoolean := False;
+  IF FForm = 0 THEN
+    Clear;
+
+  case RadioGroup3.ItemIndex of
+    - 1, 0:
+      BEGIN
+        Search2passpin.Enabled := True;
+        Search2passpin.Color := clWhite;
+        Search2paspnum.Enabled := True;
+        Search2paspnum.Color := clWhite;
+        Search2id.Enabled := True;
+        Search2id.Color := clWhite;
+        IF RadioGroup3.ItemIndex = -1 THEN
+        BEGIN
+          Search2inn.Enabled := True;
+          Search2inn.Color := clWhite;
+        END
+        ELSE
+        BEGIN
+          Search2inn.Enabled := False;
+          Search2inn.Color := clSilver;
+        END;
+
+        EditPINCodeIII.Enabled := True;
+        EditPINCodeIII.Color := clWhite;
+        CBoxPassPlaceIII.Enabled := True;
+        CBoxPassPlaceIII.Color := clWhite;
+        EditSerialIII.Enabled := True;
+        EditSerialIII.Color := clWhite;
+        EditPassportIII.Enabled := True;
+        EditPassportIII.Color := clWhite;
+
+        EditCustidIII.Enabled := False;
+        EditCustidIII.Color := clSilver;
+        EditLastNameIII.Enabled := True;
+        EditLastNameIII.Color := clWhite;
+        EditSoNameIII.Enabled := True;
+        EditSoNameIII.Color := clWhite;
+        SenderAccNoIII.Enabled := False;
+        SenderAccNoIII.Color := clSilver;
+
+        WarrantSerial.Enabled := True;
+        WarrantSerial.Color := clWhite;
+        WarrantPassport.Enabled := True;
+        WarrantPassport.Color := clWhite;
+        WarrantOpenDate.Enabled := True;
+        WarrantOpenDate.Color := clWhite;
+        WarrantCloseDate.Enabled := True;
+        WarrantCloseDate.Color := clWhite;
+      END;
+
+    1, 2, 3, 4:
+      BEGIN
+
+        IF RadioGroup3.ItemIndex = 1 THEN
+        BEGIN
+          Search2passpin.Enabled := True;
+          Search2passpin.Color := clWhite;
+          Search2paspnum.Enabled := True;
+          Search2paspnum.Color := clWhite;
+          Search2id.Enabled := True;
+          Search2id.Color := clWhite;
+          Search2inn.Enabled := False;
+          Search2inn.Color := clSilver;
+          EditLastNameIII.Enabled := True;
+          EditLastNameIII.Color := clWhite;
+          EditSoNameIII.Enabled := True;
+          EditSoNameIII.Color := clWhite;
+        END;
+
+        IF (RadioGroup3.ItemIndex = 2) or (RadioGroup3.ItemIndex = 4) THEN
+        BEGIN
+          Search2passpin.Enabled := True;
+          Search2passpin.Color := clWhite;
+          Search2paspnum.Enabled := True;
+          Search2paspnum.Color := clWhite;
+          Search2id.Enabled := True;
+          Search2id.Color := clWhite;
+          Search2inn.Enabled := True;
+          Search2inn.Color := clWhite;
+          EditLastNameIII.Enabled := True;
+          EditLastNameIII.Color := clWhite;
+          EditSoNameIII.Enabled := True;
+          EditSoNameIII.Color := clWhite;
+        END;
+
+        IF RadioGroup3.ItemIndex = 3 THEN
+        BEGIN
+          Search2passpin.Enabled := False;
+          Search2passpin.Color := clSilver;
+          Search2paspnum.Enabled := False;
+          Search2paspnum.Color := clSilver;
+          Search2id.Enabled := True;
+          Search2id.Color := clWhite;
+          Search2inn.Enabled := True;
+          Search2inn.Color := clWhite;
+          EditLastNameIII.Enabled := False;
+          EditLastNameIII.Color := clSilver;
+          EditSoNameIII.Enabled := False;
+          EditSoNameIII.Color := clSilver;
+        END;
+
+        EditPINCodeIII.Enabled := False;
+        EditPINCodeIII.Color := clSilver;
+        CBoxPassPlaceIII.Enabled := False;
+        CBoxPassPlaceIII.Color := clSilver;
+        EditSerialIII.Enabled := False;
+        EditSerialIII.Color := clSilver;
+        EditPassportIII.Enabled := False;
+        EditPassportIII.Color := clSilver;
+        EditCustidIII.Enabled := False;
+        EditCustidIII.Color := clSilver;
+
+        SenderAccNoIII.Enabled := True;
+        SenderAccNoIII.Color := clWhite;
+
+        WarrantSerial.Enabled := False;
+        WarrantSerial.Color := clSilver;
+        WarrantPassport.Enabled := False;
+        WarrantPassport.Color := clSilver;
+        WarrantOpenDate.Enabled := False;
+        WarrantOpenDate.Color := clSilver;
+        WarrantCloseDate.Enabled := False;
+        WarrantCloseDate.Color := clSilver;
+
+      END;
+
+  END;
+
+END;
+
+procedure TExpFormNew.RemitInfEditKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if Key = VK_F3 then
+    with ExpFormDestination, ExpDataModule do
+    begin
+      ShowModal;
+      if ModalResult = mrOk then
+        RemitInfEdit.Text := Value;
+    end
+  else if Key = VK_ESCAPE then
+    Close;
+end;
+
+procedure TExpFormNew.Button1Click(Sender: TObject);
+VAR Nametxt1:UTF8String;
+begin
+  if (RadioGroup2.ItemIndex = 0) or (RadioGroup2.ItemIndex = -1) then
+  begin
+
+    if EditLastNameII.Text = '' then
+    begin
+      CMHintBox1.ShowMessage('Alan şəxsin soyadı sahəsi doldurulmayıb ');
+      exit
+    end;
+
+    if EditNameII.Text = '' then
+    begin
+      CMHintBox1.ShowMessage('Alan şəxsin adı sahəsi doldurulmayıb ');
+      exit
+    end;
+
+    if EditSoNameII.Text = '' then
+    begin
+      CMHintBox1.ShowMessage('Alan şəxsin atasının adı sahəsi doldurulmayıb ');
+      exit
+    end;
+
+    IF RadioGroup2.ItemIndex = -1 THEN
+    BEGIN
+      WITH FormSearchCustName.SendDataSetName DO
+      BEGIN
+        Nametxt1 := EditLastNameII.Text + EditNameII.Text + EditSoNameII.Text;
+        Close;
+        SQL[1] := 'where replace(lower(custname),'' '')=' + 'lower(' +
+          QuotedStr(Nametxt1) + ')';
+        Open;
+        IF RecordCount > 0 THEN
+        BEGIN
+          ExpFormNew.RFormNew := True;
+          FormSearchCustName.ShowModal;
+        END;
+      END;
+    END;
+
+    if FForm = 2 then
+    begin
+      if not(EditPINCodeII.ReadOnly) then
+      begin
+        if (EditPINCodeII.Text = '') then
+        begin
+          CMHintBox1.ShowMessage('Alan şəxsin pinkod sahəsi doldurulmayıb ');
+          exit
+        end;
+      end;
+
+      if (CBoxPassPlaceII.Text = '') then
+      begin
+        CMHintBox1.ShowMessage('Alan şəxsin sənədin növü sahəsi seçilməyib');
+        exit
+      end;
+
+      if (EditSerialII.Text = '') then
+      begin
+        CMHintBox1.ShowMessage('Alan şəxsin seriya sahəsi doldurulmayıb ');
+        exit
+      end;
+
+      if (EditPassportII.Text = '') then
+      begin
+        CMHintBox1.ShowMessage('Alan şəxsin nömrə sahəsi doldurulmayıb ');
+        exit
+      end;
+
+      if FilialNameII.KeyValue = -1 then
+      begin
+        CMHintBox1.ShowMessage('Alan şəxsin filial sahəsi seçilməyib ');
+        exit
+      end;
+
+      if ButtonNominal1.Visible and not(FormNominalCustomers.RH) then
+      begin
+        CMHintBox1.ShowMessage
+          ('Nominal şəxsin bütün məlumatlar sahəsini doldur!');
+        exit
+      end;
+
+    end;
+
+  end;
+
+  if FilialNameII.Text = '' then
+  begin
+    CMHintBox1.ShowMessage('Alan şəxsin filial sahəsi seçilməyib ');
+    exit
+  end;
+
+  if SenderAccNoII.Enabled and (SenderAccNoII.Text = '') then
+  begin
+    CMHintBox1.ShowMessage('Alan şəxsin hesab sahəsi seçilməyib ');
+    exit
+  end;
+
+  if (TabSheet1.TabVisible) and ((FForm = 0) or (FForm = 1)) then
+  begin
+    Expadd;
+    id := ExpDataModule.EXPESSPAC.GetParameter(0);
+    ExpFormNew.Close;
+    ExpCustomersType.Close;
+    ExpDataModule.ExpBatchsDataSet.Refresh;
+    ExpDataModule.ExpBatchsDataSet.Locate('ID', id, []);
+  end
+  else
+  begin
+    With ExpressVariables do
+    begin
+      custidI := EditCustidII.Text;
+      doc_typeI := CBoxPassPlaceII.KeyValue;
+      passpinI := EditPINCodeII.Text;
+      passerI := EditSerialII.Text;
+      paspnumI := EditPassportII.Text;
+      filialI := FilialNameII.KeyValue;
+      remit_infI := Memo1.Text;
+      paspplaceI := DBCBox_DocTYPEII.Text;
+      paspdateI := DateEditII.Value;
+      phone_mI := EditMobilII.Text;
+      phone_hI := EditPhoneII.Text;
+
+      if ExpDataModule.ExpIncomingPassword.RecordCount > 0 then
+        id := ExpDataModule.ExpIncomingPassword.FieldByName('id').AsInteger
+      else
+      begin
+        if ExpDataModule.ExpIncomingDataSet.RecordCount > 0 then
+          id := ExpDataModule.ExpIncomingDataSet.FieldByName('id').AsInteger;
+      end;
+
+      { ExpDataModule.EXPESSPAC.CallProcedure('ExpTakeUpdate',[ 'v_id',id
+        ,'v_custid'   ,custidI
+        ,'v_doc_type' ,doc_typeI
+        ,'v_passpin'  ,passpinI
+        ,'v_passer'   ,passerI
+        ,'v_paspnum'  ,paspnumI
+        ,'v_filial'   ,filialI
+        ,'v_remit_inf',remit_infI ]); }
+
+      { IF EditPincodeII.Enabled    THEN EditPincodeII.Enabled:=False;
+        IF CBoxPassPlaceII.Enabled   THEN CBoxPassPlaceII.Enabled:=False;
+        IF EditSerialII.Enabled      THEN EditSerialII.Enabled:=False;
+        IF EditPassportII.Enabled    THEN EditPassportII.Enabled:=False;
+        IF DBCBox_DocTYPEII.Enabled  THEN DBCBox_DocTYPEII.Enabled:=False;
+        IF DateEditII.Enabled        THEN DateEditII.Enabled:=False;
+        IF EditMobilII.Enabled       THEN EditMobilII.Enabled:=False;
+        IF EditPhoneII.Enabled       THEN EditPhoneII.Enabled:=False;
+        IF FilialNameII .Enabled     THEN FilialNameII.Enabled:=False;
+        IF Memo1.Enabled             THEN Memo1.Enabled:=false; }
+
+      ExpDataModule.EXPESSPAC.CallProcedure('ExpTakeUpdate',
+        ['batchid', id, 'v_filialid', filialI, 'v_badd_inf', remit_infI,
+        'v_doc_type', doc_typeI, 'v_passpin', passpinI, 'v_passer', passerI,
+        'v_paspnum', paspnumI, 'v_doc_country', doc_country, 'v_paspplace',
+        paspplaceI, 'v_paspdate', paspdateI, 'v_passexpire', passexpire,
+        'v_citizenship', citizenship, 'v_sex', sex, 'v_fam_status', fam_status,
+        'v_bbirthplace', bbirthplace, 'v_birth_state', birth_state,
+        'v_birthday', birthday, 'v_aadrs_state', aadrs_state, 'v_city', city,
+        'v_reg_zip', reg_zip, 'v_address', address, 'v_phone_m', phone_mI,
+        'v_phone_h', phone_hI, 'v_e_mail', e_mail, 'v_work_place', Work_Place,
+        'v_work_adrs_spec', work_adrs_spec, 'v_work_cntr', work_cntr,
+        'v_work_city', work_city, 'v_work_state', work_state, 'v_work_zip',
+        work_zip, 'v_work_adress', work_adress, 'v_work_phone_spec',
+        work_phone_spec, 'v_work_phconttype', work_phconttype,
+        'v_work_phoppref', work_phoppref, 'v_work_phone', work_phone,
+        'v_work_phext', work_phext, 'v_work_phcode', work_phcode]);
+
+      ExpFormNew.Close;
+      ExpPasswordForm.Close;
+    end;
+
+    ExpDataModule.ExpIncomingDataSet.Refresh;
+    ExpDataModule.ExpIncomingDataSet.Locate('ID', id, []);
+  end;
+
+end;
+
+procedure TExpFormNew.Button2Click(Sender: TObject);
+begin
+
+  ExpFormNew.Close;
+end;
+
+procedure TExpFormNew.Button3Click(Sender: TObject);
+var
+  status: Integer;
+  vid: Integer;
+  custid2: variant;
+  doc_type2: variant;
+  passpin2: string;
+  passer2: variant;
+  paspnum2: variant;
+  doc_country2: variant;
+  paspplace2: variant;
+  paspdate2: variant;
+  passexpire2: variant;
+  citizenship7: variant;
+  citizenship8: variant;
+  citizenship9: variant;
+  lastname2: string;
+  soname2: string;
+  name2: string;
+  sex2: variant;
+  fam_status2: variant;
+  bbirthplace2: string;
+  birth_state2: string;
+  birthday2: variant;
+  aadrs_state2: string;
+  city2: variant;
+  reg_zip2: variant;
+  address2: variant;
+  phone_m2: variant;
+  phone_h2: variant;
+  e_mail2: string;
+  filial2: Integer;
+  v_nerezident2: Integer;
+  v_cust_type2: Integer;
+  v_inn2: string;
+  debetid2: variant;
+  pfattorser: string;
+  pfattornum: string;
+  pfattorbdat: variant;
+  pfattoredat: variant;
+  addinf: string;
+  Nametxt2:UTF8String;
+  // recdate      :TDateTime;
+  // recdatetime  :TDatetime;
+
+begin
+  // try
+  with ExpDataModule do
+  begin
+    // SB_ACA.CallProcedure('CheckAdvancedObjectAccess',['EXPRESS_COMMITEDIT']);
+    vid := ExpBatchsDataSet.FieldByName('id').AsInteger;
+    if (RadioGroup3.ItemIndex = -1) or (RadioGroup3.ItemIndex = 0) then
+    begin
+
+      if (EditPINCodeIII.Text = '') then
+      begin
+        CMHintBox2.ShowMessage('Alan şəxsin Pinkod sahəsi doldurulmayıb ');
+        exit
+      end;
+
+      if (CBoxPassPlaceIII.Text = '') then
+      begin
+        CMHintBox2.ShowMessage('Alan şəxsin sənədin növü sahəsi seçilməyib ');
+        exit
+      end;
+
+      if (EditSerialIII.Text = '') then
+      begin
+        CMHintBox2.ShowMessage('Alan şəxsin seriya sahəsi doldurulmayıb ');
+        exit
+      end;
+
+      if (EditPassportIII.Text = '') then
+      begin
+        CMHintBox2.ShowMessage('Alan şəxsin nömrə sahəsi doldurulmayıb ');
+        exit
+      end;
+
+      if (EditLastNameIII.Text = '') then
+      begin
+        CMHintBox2.ShowMessage('Alan şəxsin soyadı sahəsi doldurulmayıb ');
+        exit
+      end;
+
+      if (EditNameIII.Text = '') then
+      begin
+        CMHintBox2.ShowMessage('Alan şəxsin adı sahəsi doldurulmayıb ');
+        exit
+      end;
+
+      if (EditSoNameIII.Text = '') then
+      begin
+        CMHintBox2.ShowMessage
+          ('Alan şəxsin atasının adı sahəsi doldurulmayıb ');
+        exit
+      end;
+
+    end;
+
+    if SenderAccNoIII.Enabled and (SenderAccNoIII.Text = '') then
+    begin
+      CMHintBox2.ShowMessage('Alan şəxsin hesab sahəsi seçilməyib ');
+      exit
+    end;
+
+    if FilialNameIII.KeyValue = -1 then
+    begin
+      CMHintBox2.ShowMessage('Alan şəxsin filial sahəsi seçilməyib ');
+      exit
+    end;
+
+    IF RadioGroup3.ItemIndex = -1 THEN
+    BEGIN
+      WITH FormSearchCustName.SendDataSetName DO
+      BEGIN
+        Nametxt2 := EditLastNameIII.Text + EditNameIII.Text + EditSoNameIII.Text;
+        Close;
+        SQL[1] := 'where replace(lower(custname),'' '')=' + 'lower(' +
+          QuotedStr(Nametxt2) + ')';
+        Open;
+        IF RecordCount > 0 THEN
+        BEGIN
+          ExpFormNew.RFormNew := True;
+          FormSearchCustName.ShowModal;
+        END;
+      END;
+    END;
+
+
+
+    custid2 := EditCustidIII.Text;
+    doc_type2 := CBoxPassPlaceIII.KeyValue;
+    passpin2 := EditPINCodeIII.Text;
+    passer2 := EditSerialIII.Text;
+    paspnum2 := EditPassportIII.Text;
+    paspplace2 := DBCBox_DocTYPEIII.Text;
+    paspdate2 := DateEditIII.Value;
+    lastname2 := EditLastNameIII.Text;
+    soname2 := EditSoNameIII.Text;
+    name2 := EditNameIII.Text;
+    phone_m2 := EditMobilI.Text;
+    phone_h2 := EditPhoneI.Text;
+    filial2 := FilialNameIII.KeyValue;
+    debetid2 := SenderAccNoIII.KeyValue;
+    pfattorser := WarrantSerial.Text;
+    pfattornum := WarrantPassport.Text;
+    addinf := Memo2.Text;
+    // recdate      :=trunc(DateTimePicker3.DateTime);
+    // recdatetime  :=DateTimePicker4.DateTime;
+
+    if VarIsNull(WarrantOpenDate.Value) then
+      pfattorbdat := null
+    else
+      pfattorbdat := WarrantOpenDate.Value;
+
+    if VarIsNull(WarrantOpenDate.Value) then
+      pfattoredat := null
+    else
+      pfattoredat := WarrantCloseDate.Value;
+
+    if RadioButton5.Checked then
+      v_nerezident2 := 0
+    else
+      v_nerezident2 := 1;
+
+    case RadioGroup3.ItemIndex of
+      - 1:
+        v_cust_type2 := -1;
+      0:
+        v_cust_type2 := 4;
+      1:
+        v_cust_type2 := 1;
+      2:
+        begin
+          v_cust_type2 := 2;
+          // v_inn2:=EditVoin.Text;
+        end;
+      3:
+        begin
+          v_cust_type2 := 0;
+          // v_inn2:=EditVoin.Text;
+        end;
+      4:
+        begin
+          v_cust_type2 := 3;
+          // v_inn2:=EditVoin.Text;
+        end;
+    end;
+
+    EXPESSPAC.CallProcedure('Exp_batchs_recupdate', ['v_status', 3, 'v_id', vid,
+      'custid', custid2, 'v_doc_type', doc_type2, 'v_passpin', passpin2,
+      'v_passer', passer2, 'v_paspnum', paspnum2, 'v_doc_country', doc_country2,
+      'v_paspplace', paspplace2, 'v_paspdate', paspdate2, 'v_passexpire',
+      passexpire2, 'v_citizenship', citizenship7, 'v_citizenship2',
+      citizenship8, 'v_citizenship3', citizenship9, 'v_lastname', lastname2,
+      'v_soname', soname2, 'v_name', name2, 'v_sex', sex2, 'v_fam_status',
+      fam_status2, 'v_bbirthplace', bbirthplace2, 'v_birth_state', birth_state2,
+      'v_birthday', birthday2, 'v_aadrs_state', aadrs_state2, 'v_city', city2,
+      'v_reg_zip', reg_zip2, 'v_address', address2, 'v_phone_m', phone_m2,
+      'v_phone_h', phone_h2, 'v_e_mail', e_mail2, 'v_filial', filial2,
+      'v_nerezident', v_nerezident2, 'v_cust_type', v_cust_type2, 'v_inn',
+      v_inn2, 'debetid', debetid2, 'v_pfattorser', pfattorser, 'v_pfattornum',
+      pfattornum, 'v_pfattorbdat', pfattorbdat, 'v_pfattoredat', pfattoredat,
+      'addinf', addinf]);
+
+    // ExpDataModule.Repair.CallProcedure('Exp_batchs_SetTransaction',[ExpBatchsDataSetID.asinteger,filial2]);
+    // ExpDataModule.Repair.CallProcedure('Exp_batchs_archivestatus',[ExpBatchsDataSetID.asinteger]);
+    // sboapiDataModule.SBSession.Commit;
+    ExpIncomingDataSet.Refresh;
+    ExpIncomingDataSet.Locate('id', id, []);
+  end;
+  { Except
+    on E : Exception do
+    begin
+    sboapiDataModule.SBSession.Rollback;
+    ShowMessage( E.Message);
+    end;
+    end; }
+end;
+
+procedure TExpFormNew.Button4Click(Sender: TObject);
+begin
+  IF ExpFormNew.FForm=2 THEN MINominalClearClick(Sender);
+  MINominalClear.Enabled:=False;
+  TabSheet3.TabVisible := False;
+  TabSheet2.TabVisible := True;
+end;
+
+procedure TExpFormNew.Button5Click(Sender: TObject);
+begin
+  IF TabSheet1.TabVisible THEN
+    PageControl1.ActivePageIndex := 0
+    { ELSE
+      begin
+      TabSheet2.TabVisible:=False;
+      TabSheet3.TabVisible:=True;
+      end; }
+end;
+
+procedure TExpFormNew.Button6Click(Sender: TObject);
+begin
+  exit;
+  TabSheet3.TabVisible := True;
+  IF TabSheet3.TabVisible THEN
+  begin
+    if ExpFormNew.FForm=2 then Clear;
+    MINominalClear.Enabled:=True;
+    IF ButtonNominal1.Visible THEN  ButtonNominal2.Visible:=True
+                              ELSE  ButtonNominal2.Visible:=False;
+    PageControl1.ActivePageIndex := 2;
+  end;
+end;
+
+procedure TExpFormNew.ButtonNominal1Click(Sender: TObject);
+begin
+{    RFormNew := True;
+  with FormNominalCustomers do
+  begin
+    Label53.Visible := True;
+    Label54.Visible := True;
+    Label55.Visible := True;
+    Label56.Visible := True;
+    Label57.Visible := True;
+    Label61.Visible := True;
+    Label62.Visible := True;
+    Label63.Visible := True;
+    Label64.Visible := True;
+    Label65.Visible := True;
+    Label66.Visible := True;
+    Label67.Visible := True;
+    Label68.Visible := True;
+    Label69.Visible := True;
+    Label70.Visible := True;
+    Label71.Visible := True;
+    Label72.Visible := True;
+    Label73.Visible := True;
+    Label74.Visible := True;
+    Label75.Visible := True;
+    Label76.Visible := True;
+    Label77.Visible := True;
+    Label78.Visible := True;
+    Label79.Visible := True;
+
+    if ExpFormNew.RadioButton3.Checked then
+    begin
+      FormNominalCustomers.RadioButton1.Checked := True;
+      FormNominalCustomers.RadioButton2.Checked := False;
+    end
+    else
+    begin
+      FormNominalCustomers.RadioButton2.Checked := True;
+      FormNominalCustomers.RadioButton1.Checked := False;
+    end;
+
+    if ExpFormNew.RadioGroup2.ItemIndex = -1 then
+    begin
+      EditLastName.Text := ExpFormNew.EditLastNameI.Text;
+      EditName1.Text := ExpFormNew.EditNameI.Text;
+      EditSoname.Text := ExpFormNew.EditSonameI.Text;
+      CBoxPassPlace.KeyValue := ExpFormNew.CBoxPassPlaceI.KeyValue;
+      Editpasspin.Text := ExpFormNew.EditPINCodeI.Text;
+
+      if CBoxPassPlace.KeyValue <> 1 then
+      begin
+        Editpasspin.Enabled := False;
+        Editpasspin.Color := clSilver;
+      end
+      else
+      begin
+        Editpasspin.Enabled := True;
+        Editpasspin.Color := clWhite;
+      end;
+      EditSerial.Text := ExpFormNew.EditSerialI.Text;
+      EditPassport.Text := ExpFormNew.EditPassportI.Text;
+      DBCBox_DocTYPE.KeyValue := ExpFormNew.DBCBox_DocTYPEI.KeyValue;
+      DateEdit.Value := ExpFormNew.DateEditI.Value;
+      EditMobil.Text := ExpFormNew.EditMobilI.Text;
+      EditPhone.Text := ExpFormNew.EditPhoneI.Text;
+
+    end;   }
+    FormNominalCustomers.ShowModal;
+  end;
+
+procedure TExpFormNew.ButtonNominal2Click(Sender: TObject);
+begin
+  FormNominalCustomers.ShowModal;
+end;
+
+procedure TExpFormNew.ButtonNominalClick(Sender: TObject);
+begin
+  RFormNew := True;
+  with FormNominalCustomers do
+  begin
+    Label53.Visible := True;
+    Label54.Visible := True;
+    Label55.Visible := True;
+    Label56.Visible := True;
+    Label57.Visible := True;
+    Label61.Visible := True;
+    Label62.Visible := True;
+    Label63.Visible := True;
+    Label64.Visible := True;
+    Label65.Visible := True;
+    Label66.Visible := True;
+    Label67.Visible := True;
+    Label68.Visible := True;
+    Label69.Visible := True;
+    Label70.Visible := True;
+    Label71.Visible := True;
+    Label72.Visible := True;
+    Label73.Visible := True;
+    Label74.Visible := True;
+    Label75.Visible := True;
+    Label76.Visible := True;
+    Label77.Visible := True;
+    Label78.Visible := True;
+    Label79.Visible := True;
+
+    if ExpFormNew.RadioButton1.Checked then
+    begin
+      FormNominalCustomers.RadioButton1.Checked := True;
+      FormNominalCustomers.RadioButton2.Checked := False;
+    end
+    else
+    begin
+      FormNominalCustomers.RadioButton2.Checked := True;
+      FormNominalCustomers.RadioButton1.Checked := False;
+    end;
+
+    if ExpFormNew.RadioGroup1.ItemIndex = -1 then
+    begin
+      EditLastName.Text := ExpFormNew.EditLastNameI.Text;
+      EditName1.Text := ExpFormNew.EditNameI.Text;
+      EditSoname.Text := ExpFormNew.EditSonameI.Text;
+      CBoxPassPlace.KeyValue := ExpFormNew.CBoxPassPlaceI.KeyValue;
+      Editpasspin.Text := ExpFormNew.EditPINCodeI.Text;
+
+      if CBoxPassPlace.KeyValue <> 1 then
+      begin
+        Editpasspin.Enabled := False;
+        Editpasspin.Color := clSilver;
+      end
+      else
+      begin
+        Editpasspin.Enabled := True;
+        Editpasspin.Color := clWhite;
+      end;
+      EditSerial.Text := ExpFormNew.EditSerialI.Text;
+      EditPassport.Text := ExpFormNew.EditPassportI.Text;
+      DBCBox_DocTYPE.Text := ExpFormNew.DBCBox_DocTYPEI.Text;
+      DateEdit.Value := ExpFormNew.DateEditI.Value;
+      EditMobil.Text := ExpFormNew.EditMobilI.Text;
+      EditPhone.Text := ExpFormNew.EditPhoneI.Text;
+
+    end;
+    ShowModal;
+  end;
+
+end;
+
+procedure TExpFormNew.CBoxPassPlaceIICloseUp(Sender: TObject);
+begin
+  IF VarIsNull(CBoxPassPlaceII.KeyValue) or (CBoxPassPlaceII.KeyValue = -1) THEN
+  BEGIN
+    EditPINCodeII.ReadOnly := False;
+    EditPINCodeII.Color := clWhite;
+    EditSerialII.ReadOnly := False;
+    EditSerialII.Color := clWhite;
+    EditPassportII.ReadOnly := False;
+    EditPassportII.Color := clWhite;
+    DBCBox_DocTYPEII.ReadOnly := False;
+    DBCBox_DocTYPEII.Color := clWhite;
+    DateEditII.ReadOnly := False;
+    DateEditII.Color := clWhite;
+    Label35.Visible := True;
+    Label30.Visible := True;
+    Label68.Visible := True;
+    Label72.Visible := True;
+    exit;
+  END;
+
+  Case CBoxPassPlaceII.KeyValue of
+    1:
+      begin
+        EditPINCodeII.ReadOnly := False;
+        EditPINCodeII.Color := clWhite;
+        EditSerialII.ReadOnly := False;
+        EditSerialII.Color := clWhite;
+        EditPassportII.ReadOnly := False;
+        EditPassportII.Color := clWhite;
+        DBCBox_DocTYPEII.ReadOnly := False;
+        DBCBox_DocTYPEII.Color := clWhite;
+        DateEditII.ReadOnly := False;
+        DateEditII.Color := clWhite;
+        Label35.Visible := True;
+        Label30.Visible := True;
+        Label68.Visible := True;
+        Label72.Visible := True;
+        EditSerialII.Text := ExpDataModule.DocTypesDataSet1.FieldByName
+          ('series').AsString;
+        EditSerialII.ReadOnly := True;
+        EditPassportII.MaxLength := 8;
+      end;
+    2, 3, 4, 5, 6, 7, 8:
+      begin
+        EditPINCodeII.ReadOnly := True;
+        EditPINCodeII.Color := clSilver;
+        EditPINCodeII.Clear;
+        EditPassportII.Clear;
+        EditSerialII.ReadOnly := False;
+        EditSerialII.Color := clWhite;
+        EditPassportII.ReadOnly := False;
+        EditPassportII.Color := clWhite;
+        DBCBox_DocTYPEII.ReadOnly := False;
+        DBCBox_DocTYPEII.Color := clWhite;
+        DateEditII.ReadOnly := False;
+        DateEditII.Color := clWhite;
+        Label35.Visible := False;
+        Label30.Visible := True;
+        Label68.Visible := False;
+        Label72.Visible := False;
+        EditPassportII.MaxLength := 0;
+        EditSerialII.Text := ExpDataModule.DocTypesDataSet1.FieldByName
+          ('series').AsString;
+      end;
+    9:
+      begin
+        EditPINCodeII.ReadOnly := True;
+        EditPINCodeII.Color := clSilver;
+        EditPINCodeII.Clear;
+        EditSerialII.ReadOnly := True;
+        EditSerialII.Color := clSilver;
+        EditSerialI.Clear;
+        EditPassportII.ReadOnly := True;
+        EditPassportII.Color := clSilver;
+        EditPassportII.Clear;
+        DBCBox_DocTYPEII.ReadOnly := True;
+        DBCBox_DocTYPEII.Color := clSilver;
+        DBCBox_DocTYPEII.Clear;
+        DateEditII.ReadOnly := True;
+        DateEditII.Color := clSilver;
+        DateEditII.Clear;
+        Label35.Visible := False;
+        Label30.Visible := False;
+        Label68.Visible := False;
+        Label72.Visible := False;
+        EditSerialII.Text := ExpDataModule.DocTypesDataSet1.FieldByName
+          ('series').AsString;
+      end;
+  end;
+end;
+
+
+
+procedure TExpFormNew.CBoxPassPlaceIIICloseUp(Sender: TObject);
+begin
+  IF VarIsNull(CBoxPassPlaceIII.KeyValue) or (CBoxPassPlaceIII.KeyValue = -1) THEN
+  BEGIN
+    EditPINCodeIII.ReadOnly := False;
+    EditPINCodeIII.Color := clWhite;
+    EditSerialIII.ReadOnly := False;
+    EditSerialIII.Color := clWhite;
+    EditPassportIII.ReadOnly := False;
+    EditPassportIII.Color := clWhite;
+    DBCBox_DocTYPEIII.ReadOnly := False;
+    DBCBox_DocTYPEIII.Color := clWhite;
+    DateEditIII.ReadOnly := False;
+    DateEditIII.Color := clWhite;
+    Label65.Visible := True;
+    Label61.Visible := True;
+    Label79.Visible := True;
+    Label81.Visible := True;
+    exit;
+  END;
+
+  Case CBoxPassPlaceIII.KeyValue of
+    1:
+      begin
+        EditPINCodeIII.ReadOnly := False;
+        EditPINCodeIII.Color := clWhite;
+        EditSerialIII.ReadOnly := False;
+        EditSerialIII.Color := clWhite;
+        EditPassportIII.ReadOnly := False;
+        EditPassportIII.Color := clWhite;
+        DBCBox_DocTYPEIII.ReadOnly := False;
+        DBCBox_DocTYPEIII.Color := clWhite;
+        DateEditIII.ReadOnly := False;
+        DateEditIII.Color := clWhite;
+        Label65.Visible := True;
+        Label61.Visible := True;
+        Label79.Visible := True;
+        Label81.Visible := True;
+        EditSerialIII.Text := ExpDataModule.DocTypesDataSet2.FieldByName
+          ('series').AsString;
+        EditSerialIII.ReadOnly := True;
+        EditPassportIII.MaxLength := 8;
+      end;
+    2, 3, 4, 5, 6, 7, 8:
+      begin
+        EditPINCodeIII.ReadOnly := True;
+        EditPINCodeIII.Color := clSilver;
+        EditSerialIII.ReadOnly := False;
+        EditSerialIII.Color := clWhite;
+        EditPassportIII.ReadOnly := False;
+        EditPassportIII.Color := clWhite;
+        DBCBox_DocTYPEIII.ReadOnly := False;
+        DBCBox_DocTYPEIII.Color := clWhite;
+        DateEditIII.ReadOnly := False;
+        DateEditIII.Color := clWhite;
+        Label65.Visible := False;
+        Label61.Visible := True;
+        Label79.Visible := True;
+        Label81.Visible := True;
+        EditPassportIII.MaxLength := 0;
+        EditSerialIII.Text := ExpDataModule.DocTypesDataSet2.FieldByName
+          ('series').AsString;
+      end;
+    9:
+      begin
+        EditPINCodeIII.ReadOnly := True;
+        EditPINCodeIII.Color := clSilver;
+        EditSerialIII.ReadOnly := True;
+        EditSerialIII.Color := clSilver;
+        EditPassportIII.ReadOnly := True;
+        EditPassportIII.Color := clSilver;
+        DBCBox_DocTYPEIII.ReadOnly := True;
+        DBCBox_DocTYPEIII.Color := clSilver;
+        DateEditIII.ReadOnly := True;
+        DateEditIII.Color := clSilver;
+        Label65.Visible := False;
+        Label61.Visible := False;
+        Label79.Visible := False;
+        Label81.Visible := False;
+        EditSerialIII.Text := ExpDataModule.DocTypesDataSet2.FieldByName
+          ('series').AsString;
+      end;
+  end;
+end;
+
+procedure TExpFormNew.CBoxPassPlaceICloseUp(Sender: TObject);
+begin
+  IF VarIsNull(CBoxPassPlaceI.KeyValue) or (CBoxPassPlaceI.KeyValue = -1) THEN
+  BEGIN
+    EditPINCodeI.ReadOnly := False;
+    EditPINCodeI.Color := clWhite;
+    EditSerialI.ReadOnly := False;
+    EditSerialI.Color := clWhite;
+    EditPassportI.ReadOnly := False;
+    EditPassportI.Color := clWhite;
+    DBCBox_DocTYPEI.ReadOnly := False;
+    DBCBox_DocTYPEI.Color := clWhite;
+    DateEditI.ReadOnly := False;
+    DateEditI.Color := clWhite;
+    Label2.Visible := True;
+    Label9.Visible := True;
+    Label49.Visible := True;
+    Label51.Visible := True;
+    exit;
+  END;
+
+  { IF FTipExp<>1 THEN BEGIN
+    EditPINCodeI.Clear;
+    EditPassportI.Clear;
+    END;  }
+
+  Case CBoxPassPlaceI.KeyValue of
+    1:
+      begin
+        EditPINCodeI.ReadOnly := False;
+        EditPINCodeI.Color := clWhite;
+        EditSerialI.ReadOnly := False;
+        EditSerialI.Color := clWhite;
+        EditPassportI.ReadOnly := False;
+        EditPassportI.Color := clWhite;
+        DBCBox_DocTYPEI.ReadOnly := False;
+        DBCBox_DocTYPEI.Color := clWhite;
+        DateEditI.ReadOnly := False;
+        DateEditI.Color := clWhite;
+        Label2.Visible := True;
+        Label9.Visible := True;
+        Label49.Visible := True;
+        Label51.Visible := True;
+        EditSerialI.Text := ExpDataModule.DocTypesDataSet.FieldByName
+          ('series').AsString;
+        EditSerialI.ReadOnly := True;
+        EditPassportI.MaxLength := 8;
+      end;
+    2, 3, 4, 5, 6, 7, 8:
+      begin
+        EditPINCodeI.ReadOnly := True;
+        EditPINCodeI.Color := clSilver;
+        EditPINCodeI.Clear;
+        EditPassportI.Clear;
+        EditSerialI.ReadOnly := False;
+        EditSerialI.Color := clWhite;
+        EditPassportI.ReadOnly := False;
+        EditPassportI.Color := clWhite;
+        DBCBox_DocTYPEI.ReadOnly := False;
+        DBCBox_DocTYPEI.Color := clWhite;
+        DateEditI.ReadOnly := False;
+        DateEditI.Color := clWhite;
+        Label2.Visible := False;
+        Label9.Visible := True;
+        Label49.Visible := True;
+        Label51.Visible := True;
+        EditPassportI.MaxLength := 0;
+        EditSerialI.Text := ExpDataModule.DocTypesDataSet.FieldByName
+          ('series').AsString;
+      end;
+    9:
+      begin
+        EditPINCodeI.ReadOnly := True;
+        EditPINCodeI.Color := clSilver;
+        EditPINCodeI.Clear;
+        EditSerialI.ReadOnly := True;
+        EditSerialI.Color := clSilver;
+        EditSerialI.Clear;
+        EditPassportI.ReadOnly := True;
+        EditPassportI.Color := clSilver;
+        EditPassportI.Clear;
+        DBCBox_DocTYPEI.ReadOnly := True;
+        DBCBox_DocTYPEI.Color := clSilver;
+        DBCBox_DocTYPEI.Clear;
+        DateEditI.ReadOnly := True;
+        DateEditI.Color := clSilver;
+        DateEditI.Clear;
+        Label2.Visible := False;
+        Label9.Visible := False;
+        Label49.Visible := False;
+        Label51.Visible := False;
+        EditSerialI.Text := ExpDataModule.DocTypesDataSet.FieldByName
+          ('series').AsString;
+      end;
+  end;
+end;
+
+end.

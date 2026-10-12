@@ -1,0 +1,227 @@
+﻿ unit FrmResponsibilityBlankImpl;
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, XFSCtrls, ExtCtrls, ComCtrls, DBCtrls, Mask, CurrencyEdit,db;
+
+type
+  TFrmResponsibilityBlank = class(TForm)
+    XFPanel1: TXFPanel;
+    XFButton1: TXFButton;
+    XFButton2: TXFButton;
+    PageControl1: TPageControl;
+    TabSheet1: TTabSheet;
+    XFPanel2: TXFPanel;
+    XFPanel3: TXFPanel;
+    DBLookupComboBox2: TDBLookupComboBox;
+    DBLookupComboBox3: TDBLookupComboBox;
+    InsLookupComboBox: TDBLookupComboBox;
+    XFLabel5: TXFLabel;
+    XFLabel4: TXFLabel;
+    XFLabel2: TXFLabel;
+    XFPanel4: TXFPanel;
+    XFLabel1: TXFLabel;
+    XFLabel3: TXFLabel;
+    XFLabel7: TXFLabel;
+    edIns_Date: TDateTimePicker;
+    DateTimePicker1: TDateTimePicker;
+    DateTimePicker2: TDateTimePicker;
+    dblcValute: TDBLookupComboBox;
+    dbcFranshiz: TDBComboBox;
+    XFLabel28: TXFLabel;
+    XFLabel27: TXFLabel;
+    XFLabel31: TXFLabel;
+    XFLabel30: TXFLabel;
+    XFLabel17: TXFLabel;
+    dbeTarif: TCurrencyEdit;
+    dbeAmmount: TCurrencyEdit;
+    dbeSum: TCurrencyEdit;
+    DBEdit1: TDBEdit;
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure XFButton2Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure XFButton1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmResponsibilityBlank: TFrmResponsibilityBlank;
+  CID:integer;
+
+procedure InitPlugin(s:string);export;
+implementation
+
+{$R *.dfm}
+    uses CommanParametrs,DMResponsibilityBlankImpl,sboapiDataModuleImpl;
+
+procedure InitPlugin(s:string);export;
+begin
+
+
+   FrmResponsibilityBlank.ShowModal;
+end;
+exports
+     InitPlugin;
+
+procedure TFrmResponsibilityBlank.FormCreate(Sender: TObject);
+begin
+DMResponsibilityBlank:=TDMResponsibilityBlank.Create(self);
+
+end;
+
+procedure TFrmResponsibilityBlank.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+if ord(key)=vk_escape then close;
+
+end;
+
+procedure TFrmResponsibilityBlank.FormShow(Sender: TObject);
+begin
+ if opetion='ins' then
+begin
+with DMResponsibilityBlank do
+begin
+  DSins_contracts.Close;
+  DSins_contracts.SetVariable('cid',-1);
+  DSins_contracts.Open;
+
+  DSins_contract_responsibility.Close;
+  DSins_contract_responsibility.SetVariable('p_cid',-1);
+  DSins_contract_responsibility.Open;
+end;
+
+if ins_cutsid<>0 then
+begin
+  FrmResponsibilityBlank.InsLookupComboBox.KeyValue:=ins_cutsid;
+  end;
+
+  if ins_cutsid=0 then
+begin
+  FrmResponsibilityBlank.InsLookupComboBox.KeyValue:=null;
+  end;
+
+  FrmResponsibilityBlank.DBLookupComboBox3.KeyValue:=null;
+  FrmResponsibilityBlank.DBLookupComboBox2.KeyValue:=null;
+  edIns_Date.DateTime:=DMResponsibilityBlank.DsSysdat.FieldByName('tek_dat').AsDateTime;
+  DateTimePicker1.DateTime:=DMResponsibilityBlank.DsSysdat.FieldByName('tek_dat').AsDateTime;
+  DateTimePicker2.DateTime:=DMResponsibilityBlank.DsSysdat.FieldByName('tek_dat').AsDateTime;
+  FrmResponsibilityBlank.dblcValute.KeyValue:=0;
+  FrmResponsibilityBlank.dbeSum.Text:=floattostr(0);
+  FrmResponsibilityBlank.dbcFranshiz.Text:=floattostr(0);
+  FrmResponsibilityBlank.dbeTarif.Text:=floattostr(0);
+  FrmResponsibilityBlank.dbeAmmount.Text:=floattostr(0);
+  end;
+
+   if opetion='upd' then
+begin
+
+with DMResponsibilityBlank do
+begin
+  DSins_contracts.Close;
+  DSins_contracts.SetVariable('cid',contactid);
+  DSins_contracts.Open;
+
+  DSins_contract_responsibility.Close;
+  DSins_contract_responsibility.SetVariable('p_cid',contactid);
+  DSins_contract_responsibility.Open;
+end;
+
+  FrmResponsibilityBlank.InsLookupComboBox.KeyValue:=DMResponsibilityBlank.DSins_contracts.FieldByName('kli_id').AsInteger;
+  //FrmResponsibilityBlank.DBLookupComboBox3.KeyValue:=DMResponsibilityBlank.DSins_contracts.FieldByName('kli_id').AsInteger;
+  FrmResponsibilityBlank.DBLookupComboBox2.KeyValue:=DMResponsibilityBlank.DSins_contracts.FieldByName('agent_id').AsInteger;
+  edIns_Date.DateTime:=DMResponsibilityBlank.DSins_contracts.FieldByName('ins_date').AsDateTime;
+  DateTimePicker1.DateTime:=DMResponsibilityBlank.DSins_contracts.FieldByName('begin_date').AsDateTime;
+  DateTimePicker2.DateTime:=DMResponsibilityBlank.DSins_contracts.FieldByName('end_date').AsDateTime;
+  FrmResponsibilityBlank.dblcValute.KeyValue:=DMResponsibilityBlank.DSins_contracts.FieldByName('valute_id').AsInteger;
+  FrmResponsibilityBlank.dbeSum.Value:=DMResponsibilityBlank.DSins_contracts.FieldByName('inssumm').AsFloat;
+  FrmResponsibilityBlank.dbcFranshiz.Text:=DMResponsibilityBlank.DSins_contracts.FieldByName('franshiz').AsString;
+  FrmResponsibilityBlank.dbeTarif.Value:=DMResponsibilityBlank.DSins_contracts.FieldByName('tariff').AsFloat;
+  FrmResponsibilityBlank.dbeAmmount.Value:=DMResponsibilityBlank.DSins_contracts.FieldByName('ammount').AsFloat;
+
+end;
+end;
+
+procedure TFrmResponsibilityBlank.XFButton1Click(Sender: TObject);
+var
+   a,c_acc:integer;
+begin
+
+with DMResponsibilityBlank,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['SAVECONTRACT_RESPONSIBLE']);
+ end;
+
+
+ with DMResponsibilityBlank, ins_common do
+   begin
+     a:=CallIntegerFunction('get_acc_balanc_hesab',[13]);
+
+     if a=0 then
+     begin
+       showmessage('Diqqət ! Bu müqavilə tipində avtomatik hesabların açılası üçün balans hesabları sazlanmayıb!.');
+       exit;
+     end;
+   end;
+
+with   DMResponsibilityBlank,DSins_contracts do
+//
+begin
+  Edit;
+begin
+  FieldByName('kli_id').AsInteger:=FrmResponsibilityBlank.InsLookupComboBox.KeyValue;
+  //FrmResponsibilityBlank.DBLookupComboBox3.KeyValue:=DMResponsibilityBlank.DSins_contracts.FieldByName('kli_id').AsInteger;
+  FieldByName('agent_id').AsInteger:=FrmResponsibilityBlank.DBLookupComboBox2.KeyValue;
+  FieldByName('ins_date').AsDateTime:=edIns_Date.DateTime;
+  FieldByName('begin_date').AsDateTime:=DateTimePicker1.DateTime;
+  FieldByName('end_date').AsDateTime:=DateTimePicker2.DateTime;
+  FieldByName('valute_id').AsInteger:=FrmResponsibilityBlank.dblcValute.KeyValue;
+  FieldByName('inssumm').AsFloat:=FrmResponsibilityBlank.dbeSum.Value;
+  FieldByName('franshiz').AsFloat:=strtofloat(FrmResponsibilityBlank.dbcFranshiz.Text);
+  FieldByName('tariff').AsFloat:=FrmResponsibilityBlank.dbeTarif.Value;
+  FieldByName('ammount').AsFloat:=FrmResponsibilityBlank.dbeAmmount.Value;
+  FieldByName('type_id').AsFloat:=13;
+   Post;
+      RefreshRecord;
+      CID := FieldByName('id').asInteger;
+      //showmessage(FieldByName('id').AsString);
+
+end;
+end;
+
+with   DMResponsibilityBlank,DSins_contract_responsibility do
+//
+begin
+  Edit;
+       begin
+  FieldByName('cid').AsFloat:=CID;
+  FieldByName('close_prefix').AsFloat:=0;
+  FieldByName('TYPEID').AsFloat:=13;
+   Post;
+       end;
+      RefreshRecord;
+       end;
+      with DMResponsibilityBlank, ins_common do
+   begin
+     c_acc:=CallIntegerFunction('get_acc_id',[CID]);
+
+     if c_acc=0 then
+       begin
+    CallProcedure('account_open',[CID]);
+       end;
+end;
+FrmResponsibilityBlank.Close;
+end;
+
+procedure TFrmResponsibilityBlank.XFButton2Click(Sender: TObject);
+begin
+FrmResponsibilityBlank.Close;
+end;
+
+initialization
+ FrmResponsibilityBlank := TFrmResponsibilityBlank.Create(Application);
+end.

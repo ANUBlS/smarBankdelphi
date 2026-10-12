@@ -1,0 +1,50 @@
+unit rbsdostatement;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, DB, OracleData, DBCtrls, StdCtrls, ComCtrls, Menus,SBTranslateProc,sboapiDataModuleImpl,
+  Buttons;
+
+type
+  Trbsdostate = class(TForm)
+    GroupBox1: TGroupBox;
+    DateTimePicker1: TDateTimePicker;
+    Label1: TLabel;
+    Label2: TLabel;
+    DateTimePicker2: TDateTimePicker;
+    Label3: TLabel;
+    GroupBox2: TGroupBox;
+    CBCurrency: TCheckBox;
+    DBLCBavalute: TDBLookupComboBox;
+    avalute: TOracleDataSet;
+    DataSource1: TDataSource;
+    EditCli_Id: TEdit;
+    LabelCli_Id: TLabel;
+    BtnOk: TBitBtn;
+    procedure CBCurrencyClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  rbsdostate: Trbsdostate;
+
+implementation
+
+{$R *.dfm}
+
+procedure Trbsdostate.CBCurrencyClick(Sender: TObject);
+begin
+if CBCurrency.Checked=true then
+  dblcbavalute.KeyValue:=0
+else
+  dblcbavalute.KeyValue:=-1;
+
+
+end;
+
+end.

@@ -1,0 +1,856 @@
+﻿unit ProblemCreditManagers;
+
+{$WARN SYMBOL_PLATFORM OFF}
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActiveX, AxCtrls, ProblemCreditmgrs_TLB, StdVcl, StdCtrls, ExtCtrls, Buttons,
+  Grids, XDBGrids, CheckLst, Evanescence, Menus, DBCtrls, ComCtrls,Oracledata,
+  ImgList, CMExcelExport;
+ resourcestring
+  rsErrorQovluq       = 'Ən azı bir Hərəkət seçilməlidir!';
+  const
+  LoadingFailed : Boolean = True;
+  DataColIndex : Integer = 0;
+type
+  TProblemCreditMgr = class(TActiveForm, IProblemCreditMgr)
+    Panel1: TPanel;
+    SpeedButton2: TSpeedButton;
+    PanelFilter: TPanel;
+    Panel3: TPanel;
+    SpeedButton1: TSpeedButton;
+    Panel8: TPanel;
+    GroupBox1: TGroupBox;
+    MainGrid: TXDBGrid;
+    FilialLukap: TEvanescence;
+    BitBtn1: TBitBtn;
+    SpeedButton3: TSpeedButton;
+    PopupMenu1: TPopupMenu;
+    Stop1: TMenuItem;
+    crabsi1: TMenuItem;
+    InfoPl: TPanel;
+    Panel5: TPanel;
+    SpeedButton4: TSpeedButton;
+    Panel6: TPanel;
+    XDBGrid2: TXDBGrid;
+    SpeedButton5: TSpeedButton;
+    DBMemo1: TDBMemo;
+    Panel2: TPanel;
+    GroupBox2: TGroupBox;
+    Panel4: TPanel;
+    StaticText5: TStaticText;
+    editID: TEdit;
+    Panel7: TPanel;
+    StaticText1: TStaticText;
+    editname: TEdit;
+    Panel10: TPanel;
+    StaticText3: TStaticText;
+    editNUMBEROFCREDIT: TEdit;
+    Panel12: TPanel;
+    StaticText2: TStaticText;
+    editBOOROWERID: TEdit;
+    Kredirmlumatlar1: TMenuItem;
+    ImageList1: TImageList;
+    Yenil1: TMenuItem;
+    SpeedButton6: TSpeedButton;
+    CMExcelExport1: TCMExcelExport;
+    ExcelExport: TCMExcelExport;
+    GroupBox3: TGroupBox;
+    LookQovluq: TEvanescence;
+    BitBtn2: TBitBtn;
+    SpeedButton7: TSpeedButton;
+    SpeedButton8: TSpeedButton;
+    SpeedButton9: TSpeedButton;
+    SpeedButton10: TSpeedButton;
+    SpeedButton11: TSpeedButton;
+    GroupBox4: TGroupBox;
+    Evanescence1: TEvanescence;
+    BitBtn3: TBitBtn;
+    Xbrnam1: TMenuItem;
+    Bildirinam1: TMenuItem;
+    procedure SpeedButton2Click(Sender: TObject);
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure MainGridTitleClick(Column: TXColumn);
+    procedure BitBtn1Click(Sender: TObject);
+    procedure SpeedButton3Click(Sender: TObject);
+    procedure crabsi1Click(Sender: TObject);
+    procedure SpeedButton5Click(Sender: TObject);
+    procedure ActnSearchExecute(Sender: TObject);
+    procedure editIDKeyPress(Sender: TObject; var Key: Char);
+    procedure editIDExit(Sender: TObject);
+    procedure Kredirmlumatlar1Click(Sender: TObject);
+    procedure Stop1Click(Sender: TObject);
+    procedure Yenil1Click(Sender: TObject);
+    procedure SpeedButton6Click(Sender: TObject);
+    procedure BitBtn2Click(Sender: TObject);
+    procedure SpeedButton7Click(Sender: TObject);
+    procedure SpeedButton8Click(Sender: TObject);
+    procedure SpeedButton9Click(Sender: TObject);
+    procedure SpeedButton10Click(Sender: TObject);
+    procedure SpeedButton11Click(Sender: TObject);
+    procedure BitBtn3Click(Sender: TObject);
+  private
+    { Private declarations }
+    FEvents: IProblemCreditMgrEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure MouseEnterEvent(Sender: TObject);
+    procedure MouseLeaveEvent(Sender: TObject);
+    procedure PaintEvent(Sender: TObject);
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AlignDisabled: WordBool; safecall;
+    function Get_AlignWithMargins: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_BorderWidth: Integer; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_DockSite: WordBool; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_ExplicitHeight: Integer; safecall;
+    function Get_ExplicitLeft: Integer; safecall;
+    function Get_ExplicitTop: Integer; safecall;
+    function Get_ExplicitWidth: Integer; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_MouseInClient: WordBool; safecall;
+    function Get_ParentCustomHint: WordBool; safecall;
+    function Get_ParentDoubleBuffered: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PopupMode: TxPopupMode; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_ScreenSnap: WordBool; safecall;
+    function Get_SnapBuffer: Integer; safecall;
+    function Get_UseDockManager: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_AlignWithMargins(Value: WordBool); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_BorderWidth(Value: Integer); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_DockSite(Value: WordBool); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_ParentCustomHint(Value: WordBool); safecall;
+    procedure Set_ParentDoubleBuffered(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PopupMode(Value: TxPopupMode); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_ScreenSnap(Value: WordBool); safecall;
+    procedure Set_SnapBuffer(Value: Integer); safecall;
+    procedure Set_UseDockManager(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+  public
+    { Public declarations }
+    procedure Initialize; override;
+  end;
+
+var ProblemCreditMgr: TProblemCreditMgr;
+
+implementation
+
+uses ComObj, ComServ,PrCmDMImpl, PrPayFrmImpl, PrInfoFrmImpl, KrdInfoFrmImpl,
+  SendFrmİmpl, PrReport,AdminParamaterKredit;
+{$R *.DFM}
+
+
+{ TProblemCreditMgr }
+
+procedure TProblemCreditMgr.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_ProblemCreditMgrPage); }
+end;
+
+procedure TProblemCreditMgr.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as IProblemCreditMgrEvents;
+  inherited EventSinkChanged(EventSink);
+end;
+
+procedure TProblemCreditMgr.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnMouseEnter := MouseEnterEvent;
+  OnMouseLeave := MouseLeaveEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TProblemCreditMgr.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TProblemCreditMgr.Get_AlignDisabled: WordBool;
+begin
+  Result := AlignDisabled;
+end;
+
+function TProblemCreditMgr.Get_AlignWithMargins: WordBool;
+begin
+  Result := AlignWithMargins;
+end;
+
+function TProblemCreditMgr.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TProblemCreditMgr.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TProblemCreditMgr.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TProblemCreditMgr.Get_BorderWidth: Integer;
+begin
+  Result := Integer(BorderWidth);
+end;
+
+function TProblemCreditMgr.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TProblemCreditMgr.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TProblemCreditMgr.Get_DockSite: WordBool;
+begin
+  Result := DockSite;
+end;
+
+function TProblemCreditMgr.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TProblemCreditMgr.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TProblemCreditMgr.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TProblemCreditMgr.Get_ExplicitHeight: Integer;
+begin
+  Result := ExplicitHeight;
+end;
+
+function TProblemCreditMgr.Get_ExplicitLeft: Integer;
+begin
+  Result := ExplicitLeft;
+end;
+
+function TProblemCreditMgr.Get_ExplicitTop: Integer;
+begin
+  Result := ExplicitTop;
+end;
+
+function TProblemCreditMgr.Get_ExplicitWidth: Integer;
+begin
+  Result := ExplicitWidth;
+end;
+
+function TProblemCreditMgr.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TProblemCreditMgr.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TProblemCreditMgr.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TProblemCreditMgr.Get_MouseInClient: WordBool;
+begin
+  Result := MouseInClient;
+end;
+
+function TProblemCreditMgr.Get_ParentCustomHint: WordBool;
+begin
+  Result := ParentCustomHint;
+end;
+
+function TProblemCreditMgr.Get_ParentDoubleBuffered: WordBool;
+begin
+  Result := ParentDoubleBuffered;
+end;
+
+function TProblemCreditMgr.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TProblemCreditMgr.Get_PopupMode: TxPopupMode;
+begin
+  Result := Ord(PopupMode);
+end;
+
+function TProblemCreditMgr.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TProblemCreditMgr.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TProblemCreditMgr.Get_ScreenSnap: WordBool;
+begin
+  Result := ScreenSnap;
+end;
+
+function TProblemCreditMgr.Get_SnapBuffer: Integer;
+begin
+  Result := SnapBuffer;
+end;
+
+function TProblemCreditMgr.Get_UseDockManager: WordBool;
+begin
+  Result := UseDockManager;
+end;
+
+function TProblemCreditMgr.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TProblemCreditMgr.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TProblemCreditMgr._Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TProblemCreditMgr.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TProblemCreditMgr.ActiveFormCreate(Sender: TObject);
+var
+  i: Integer;
+begin
+  ProblemCreditMgr:=Self;
+  PrCmDM := TPrCmDM.Create(Self);
+   with PrCmDM do
+   begin
+     BonsFilterSet.Open;
+
+     if BonsFilterSet.RecordCount>0 then
+     begin
+          PrCmDM.IntCache.SQL[45]:=' and p.bonus_user=user';
+          PrCmDM.IntCache.open;
+     end else
+     begin
+       PrCmDM.IntCache.SQL[45]:='';
+      PrCmDM.IntCache.open;
+     end;
+   end;
+
+
+  PrPayFrm:=TPrPayFrm.Create(Self);
+  KrdInfoFrm:=TKrdInfoFrm.Create(Self);
+  SendFrm:=TSendFrm.Create(Self);
+  FormReport:=TFormReport.Create(Self);
+  FormSettings:=TFormSettings.Create(Self);
+
+  PrInfoFrm:=tPrInfoFrm.Create(Self);
+  for i := 0 to ComponentCount - 1 do
+    if Components[i].Tag = 3112 then begin
+      (Components[i] as TEvanescence).Open;
+      (Components[i] as TEvanescence).CheckAll;
+    end;
+end;
+function ErrorInCheck(Look: TEvanescence; ErrorMsg: String=''):Boolean;
+begin
+  Result := True;
+  if Look.GetCheckedKeyList.Count = 0 then Result := False;
+  if (ErrorMsg <> '') and (not Result)then ShowMessage(ErrorMsg);
+end;
+procedure TProblemCreditMgr.BitBtn1Click(Sender: TObject);
+var
+   ADDITIONALPARAMS: String;
+begin
+ if not ErrorInCheck(LookQovluq,rsErrorQovluq) then Exit;
+
+  if (LookQovluq.GetCheckedKeyList.Count<>LookQovluq.Items.Count) then
+  ADDITIONALPARAMS := ADDITIONALPARAMS + ' AND p.Qovid in('
+                   +LookQovluq.GetCheckedKeyList.CommaText+')'
+                   +#13#10;
+ // ShowMessage(ADDITIONALPARAMS);
+  PrCmDM.IntCache.Close;
+  PrCmDM.IntCache.SQL[42]:=ADDITIONALPARAMS;
+  PrCmDM.IntCache.open;
+end;
+
+procedure TProblemCreditMgr.BitBtn2Click(Sender: TObject);
+var
+   ADDITIONALPARAMS: String;
+begin
+ if not ErrorInCheck(FilialLukap,rsErrorQovluq) then Exit;
+
+  if (FilialLukap.GetCheckedKeyList.Count<>FilialLukap.Items.Count) then
+  ADDITIONALPARAMS := ADDITIONALPARAMS + ' AND p.branchid in('
+                   +FilialLukap.GetCheckedKeyList.CommaText+')'
+                   +#13#10;
+  PrCmDM.IntCache.Close;
+  PrCmDM.IntCache.SQL[43]:=ADDITIONALPARAMS;
+  PrCmDM.IntCache.open;
+end;
+
+procedure TProblemCreditMgr.BitBtn3Click(Sender: TObject);
+var
+   ADDITIONALPARAMS: String;
+begin
+ if not ErrorInCheck(Evanescence1,rsErrorQovluq) then Exit;
+
+  if (Evanescence1.GetCheckedKeyList.Count<>Evanescence1.Items.Count) then
+  ADDITIONALPARAMS := ADDITIONALPARAMS + ' AND p.BONUS_USER in(select name from user$ where  id in   ('
+                   +Evanescence1.GetCheckedKeyList.CommaText+'))'
+                   +#13#10;
+  //ShowMessage(ADDITIONALPARAMS);
+  PrCmDM.IntCache.Close;
+  PrCmDM.IntCache.SQL[44]:=ADDITIONALPARAMS;
+  PrCmDM.IntCache.open;
+end;
+
+procedure TProblemCreditMgr.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TProblemCreditMgr.crabsi1Click(Sender: TObject);
+begin
+PrCmDM.OracleDataSet4.insert;
+PrCmDM.OracleDataSet4.FieldByName('creditid').AsInteger:=PrCmDM.IntCache.FieldByName('id').AsInteger;
+PrInfoFrm.ShowModal;
+end;
+
+procedure TProblemCreditMgr.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TProblemCreditMgr.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TProblemCreditMgr.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TProblemCreditMgr.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TProblemCreditMgr.editIDExit(Sender: TObject);
+begin
+(Sender as TEdit).Text := '';
+end;
+
+procedure TProblemCreditMgr.editIDKeyPress(Sender: TObject; var Key: Char);
+begin
+   if ord(Key) = VK_RETURN
+  then  ActnSearchExecute(Sender)
+end;
+
+procedure TProblemCreditMgr.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TProblemCreditMgr.Kredirmlumatlar1Click(Sender: TObject);
+begin
+with  PrCmDM do
+begin
+ if Schedule.Active then
+   Schedule.close;
+   Schedule.SetVariable('CrdID',IntCache.FieldByName('ID').AsInteger);
+   Schedule.open;
+
+  if Payments.Active then
+   Payments.close;
+   Payments.SetVariable('CrdID',IntCache.FieldByName('ID').AsInteger);
+   Payments.open;
+
+   if ZaminDSet.Active then
+   ZaminDSet.close;
+   ZaminDSet.SetVariable('CrdID',IntCache.FieldByName('ID').AsInteger);
+   ZaminDSet.open;
+
+   if GirovDSet.Active then
+   GirovDSet.close;
+   GirovDSet.SetVariable('CrdID',IntCache.FieldByName('ID').AsInteger);
+   GirovDSet.open;
+
+
+end;
+KrdInfoFrm.ShowModal;
+end;
+
+procedure TProblemCreditMgr.MouseEnterEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnMouseEnter;
+end;
+
+procedure TProblemCreditMgr.MouseLeaveEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnMouseLeave;
+end;
+
+procedure TProblemCreditMgr.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TProblemCreditMgr.Set_AlignWithMargins(Value: WordBool);
+begin
+  AlignWithMargins := Value;
+end;
+
+procedure TProblemCreditMgr.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TProblemCreditMgr.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TProblemCreditMgr.Set_AxBorderStyle(Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TProblemCreditMgr.Set_BorderWidth(Value: Integer);
+begin
+  BorderWidth := TBorderWidth(Value);
+end;
+
+procedure TProblemCreditMgr.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TProblemCreditMgr.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TProblemCreditMgr.Set_DockSite(Value: WordBool);
+begin
+  DockSite := Value;
+end;
+
+procedure TProblemCreditMgr.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TProblemCreditMgr.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TProblemCreditMgr.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TProblemCreditMgr.Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TProblemCreditMgr.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := string(Value);
+end;
+
+procedure TProblemCreditMgr.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TProblemCreditMgr.Set_ParentCustomHint(Value: WordBool);
+begin
+  ParentCustomHint := Value;
+end;
+
+procedure TProblemCreditMgr.Set_ParentDoubleBuffered(Value: WordBool);
+begin
+  ParentDoubleBuffered := Value;
+end;
+
+procedure TProblemCreditMgr.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TProblemCreditMgr.Set_PopupMode(Value: TxPopupMode);
+begin
+  PopupMode := TPopupMode(Value);
+end;
+
+procedure TProblemCreditMgr.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TProblemCreditMgr.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TProblemCreditMgr.Set_ScreenSnap(Value: WordBool);
+begin
+  ScreenSnap := Value;
+end;
+
+procedure TProblemCreditMgr.Set_SnapBuffer(Value: Integer);
+begin
+  SnapBuffer := Value;
+end;
+
+procedure TProblemCreditMgr.Set_UseDockManager(Value: WordBool);
+begin
+  UseDockManager := Value;
+end;
+
+procedure TProblemCreditMgr.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+procedure TProblemCreditMgr.SpeedButton10Click(Sender: TObject);
+var Fn:integer;
+begin
+  Fn:=PrCmDM.PrPackage.CallIntegerFunction('CountCreditUser',[]);
+  IF Fn=0 THEN PrCmDM.PrPackage.CallProcedure('DivideDaysCredit',[])
+          ELSE PrCmDM.PrPackage.CallProcedure('DivideDaysCreditPart',[]);
+
+end;
+
+procedure TProblemCreditMgr.SpeedButton11Click(Sender: TObject);
+begin
+  PrCmDM.OPSbAca.CallProcedure('CheckAdvancedObjectAccess',['CM_SHOW']);
+end;
+
+procedure TProblemCreditMgr.SpeedButton1Click(Sender: TObject);
+begin
+PanelFilter.Visible := not PanelFilter.Visible;
+      if( SpeedButton2.AllowAllUp ) then
+  begin
+    SpeedButton2.AllowAllUp := False;
+    SpeedButton2.Down := True;
+  end else
+  begin
+    SpeedButton2.AllowAllUp := True;
+    SpeedButton2.Down := False;
+  end;
+end;
+
+procedure TProblemCreditMgr.SpeedButton2Click(Sender: TObject);
+begin
+PanelFilter.Visible := not PanelFilter.Visible;
+
+  if( SpeedButton2.AllowAllUp ) then
+  begin
+    SpeedButton2.AllowAllUp := False;
+    SpeedButton2.Down := True;
+  end else
+  begin
+    SpeedButton2.AllowAllUp := True;
+    SpeedButton2.Down := False;
+  end;
+end;
+ procedure TProblemCreditMgr.ActnSearchExecute(Sender: TObject);
+var
+  SearchField : string;
+  SearchOptions : TSearchRecordOptions;
+begin
+  SearchOptions := [srIgnoreCase ,srPartialMatch];
+
+  with Sender as TEdit  do
+  begin
+    SearchField := copy(Name,5,length(Name));
+    MainGrid.SelectedRows.Clear;
+    with  TOracleDataSet(MainGrid.DataSource.DataSet) do
+    if  not SearchRecord(
+                  SearchField
+                 ,Text
+                 ,SearchOptions + [srFromCurrent , srForward ]
+                 ) then
+    if MessageDlg(
+              'Axtarış sona çatıb.'+#13+'əvvəldəb başlamaq istəyirsinizmi?'
+             ,mtInformation
+             ,[mbNo , mbYes]
+             ,0
+             ) = mrYes  then
+    if  not SearchRecord(
+                 SearchField
+                ,Text
+                ,SearchOptions + [ srFromBeginning ]
+                )  then
+    MessageDlg('Yazı Tapılmadı!',mtInformation,[mbOK],0);
+  end;
+   end;
+procedure TProblemCreditMgr.SpeedButton3Click(Sender: TObject);
+begin
+  PrCmDM.OPSbAca.CallProcedure('CheckAdvancedObjectAccess',['PROBLEMPAYMENTS']);
+  PrPayFrm.ShowModal;
+end;
+
+procedure TProblemCreditMgr.SpeedButton5Click(Sender: TObject);
+begin
+InfoPl.Visible := not InfoPl.Visible;
+
+  if( SpeedButton5.AllowAllUp ) then
+  begin
+    SpeedButton5.AllowAllUp := False;
+    SpeedButton5.Down := True;
+  end else
+  begin
+    SpeedButton5.AllowAllUp := True;
+    SpeedButton5.Down := False;
+  end;
+end;
+
+procedure TProblemCreditMgr.SpeedButton6Click(Sender: TObject);
+begin
+with ExcelExport do
+  begin
+    Connect;
+    ExportDataset(PrCmDM.IntCache,'Problemli',True);
+    Disconnect;
+  end;
+end;
+
+procedure TProblemCreditMgr.SpeedButton7Click(Sender: TObject);
+begin
+ PrCmDM.IntCache.Refresh;
+end;
+
+procedure TProblemCreditMgr.SpeedButton8Click(Sender: TObject);
+begin
+  FormReport.DateTimePicker1.DateTime:=trunc(Date);
+  FormReport.DateTimePicker2.DateTime:=trunc(Date);
+  FormReport.ShowModal;
+end;
+
+procedure TProblemCreditMgr.SpeedButton9Click(Sender: TObject);
+begin
+  PrCmDM.AdminGroups.Active:=true;
+  PrCmDM.AdminIn.Active:=true;
+  with PrCmDM.CourtAdmin do
+  begin
+      Open;
+      if (UpperCase(Session.LogonUsername) = 'SMART')  or (UpperCase(Session.LogonUsername) ='ELVIN') then
+      begin
+         FormSettings.ShowModal;
+      end else
+      begin
+         Application.MessageBox('Giriş Qadağandır!','Administratora müraciət edin!!!',0);
+      end;
+   end;
+end;
+
+procedure TProblemCreditMgr.Stop1Click(Sender: TObject);
+begin
+  SendFrm.ShowModal
+end;
+
+procedure TProblemCreditMgr.Yenil1Click(Sender: TObject);
+var
+id:integer;
+begin
+ id:=PrCmDM.IntCache.FieldByName('id').AsInteger;
+ PrCmDM.IntCache.Refresh;
+ PrCmDM.IntCache.Locate('id', id, []);
+
+end;
+
+procedure TProblemCreditMgr.MainGridTitleClick(Column: TXColumn);
+begin
+ with PrCmDM,IntCache do
+  begin
+    Close;
+    if Column.Title.MarkerIndex=2 then SetVariable('title',Column.FieldName+' '+'ASC')
+    else SetVariable('title',Column.FieldName+' '+'DESC');
+    open;
+  end;
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TProblemCreditMgr,
+    Class_ProblemCreditMgr,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

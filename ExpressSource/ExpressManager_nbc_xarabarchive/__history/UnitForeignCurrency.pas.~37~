@@ -1,0 +1,198 @@
+﻿unit UnitForeignCurrency;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ExtCtrls, StdCtrls, CMCurrencyEdit, DBCtrls;
+
+type
+  TFormForeignCurrency = class(TForm)
+    Panel1: TPanel;
+    Panel2: TPanel;
+    DBLCBAccount: TDBLookupComboBox;
+    Label1: TLabel;
+    Panel3: TPanel;
+    CmCurForeginEdit: TCMCurrencyEdit;
+    Label2: TLabel;
+    Button1: TButton;
+    Button2: TButton;
+    Panel4: TPanel;
+    DBLCBCountry: TDBLookupComboBox;
+    Label3: TLabel;
+    Panel5: TPanel;
+    DBLCBReport: TDBLookupComboBox;
+    Panel6: TPanel;
+    procedure Button1Click(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure DBLCBCountryClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormForeignCurrency: TFormForeignCurrency;
+  tip:integer;
+  Hxtip:integer;
+implementation
+uses UnitPaymentsCredit,ExpressDecls, ExpDataModuleUnit;
+
+{$R *.dfm}
+
+procedure TFormForeignCurrency.Button1Click(Sender: TObject);
+begin
+  if FormForeignCurrency.DBLCBCountry.Text=''
+                              then
+                              begin
+                                ShowMessage('Ölkəni seçin');
+                                exit;
+                              end;
+
+
+
+  if DBLCBAccount.Text='' then begin
+                                      ShowMessage('Hesabın adı sahəsi seçilməyib!');
+                                      exit;
+                                    end;
+  if Hxtip=78 then
+  begin
+
+  if CmCurForeginEdit.text='0.00' then begin
+                                       ShowMessage('Komissiya məbləğ sahəsi doldurulmayıb!');
+                                       exit;
+                                     end;
+
+  if DBLCBReport.Text='' then begin
+                                ShowMessage('Təyinat  sahəsi seçilməyib!');
+                                exit;
+                              end;
+  end;
+
+  ExpressVariables.doc_country:=DBLCBCountry.KeyValue;
+  ExpressVariables.Fc_accid:=DBLCBAccount.KeyValue;
+  ExpressVariables.Fc_amount:=CmCurForeginEdit.Value;
+  ExpressVariables.Fc_descipt:=DBLCBReport.KeyValue;
+  Close;
+end;
+
+procedure TFormForeignCurrency.Button2Click(Sender: TObject);
+begin
+  Close;
+end;
+
+procedure TFormForeignCurrency.DBLCBCountryClick(Sender: TObject);
+begin
+  if DBLCBCountry.KeyValue=0
+  then
+  begin
+    ShowMessage('Xarici valyuta köçürməsində və ya xarici ölkədən mədaxildə ölkə "Yox" seçilə bilməz!!!!');
+    DBLCBCountry.KeyValue:=-1;
+  end;
+end;
+
+procedure TFormForeignCurrency.FormShow(Sender: TObject);
+begin
+  WIth FormPaymentsCredit do
+  begin
+    ODSAccNo.Close;
+    ODSAccNo.SQL.Clear;
+
+    if FiledBatchs   then
+    if Hxtip=78
+    then
+      ODSAccNo.SQL.Add('select * from smart.account where bal_cn1 in(1711,1712) and close_dat is null')
+    else
+     if Hxtip=133 then
+      ODSAccNo.SQL.Add('select * from smart.account where id in(select acc_id from exp_report_accounts)');
+
+
+    if FiledIncoming then
+    if Hxtip=133 then
+     ODSAccNo.SQL.Add('select * from smart.account where id in(select acc_id from exp_report_accounts) order by val_acc');
+
+
+    if FieldBatchsArchive or FiledIncomingArchive   then
+    if Hxtip=78
+    then
+      ODSAccNo.SQL.Add('select * from smart.account where bal_cn1 in(1711,1712) and close_dat is null')
+    else
+     if Hxtip=133 then
+      ODSAccNo.SQL.Add('select * from smart.account where id in(select acc_id from exp_report_accounts)');
+
+
+
+
+
+    ODSAccNo.Open;
+    ODSCountry.Close;
+    ODSCountry.Open;
+
+    if (tip=2) or (tip=3) then  tip:=0;
+
+    ExpDataModule.ExpReport.Close;
+    ExpDataModule.ExpReport.SetVariable('typeid',tip);
+    ExpDataModule.ExpReport.SetVariable('setid',Hxtip);
+    ExpDataModule.ExpReport.Open;
+    if FForm=0 then
+    begin
+      DBLCBCountry.KeyValue:=-1;
+      DBLCBAccount.KeyValue:=-1;
+      CmCurForeginEdit.Text:='0.00';
+      DBLCBReport.KeyValue:=-1;
+    end
+    else
+    begin
+      IF FiledIncoming
+      THEN
+      begin
+        DBLCBCountry.ReadOnly:=True;
+        DBLCBAccount.ReadOnly:=True;
+      end;
+      IF FiledBatchs
+      THEN
+      begin
+        DBLCBCountry.ReadOnly:=False;
+        DBLCBAccount.ReadOnly:=False;
+        DBLCBCountry.KeyValue:=ExpDataModule.ExpBatchsDataSetCOUNTRYID.AsInteger;
+        DBLCBAccount.KeyValue:=ExpDataModule.ExpBatchsDataSetDEBETACCID.AsInteger;
+        CmCurForeginEdit.Text:=ExpDataModule.ExpBatchsDataSetCOMISSIONAMOUNT.AsString;
+        DBLCBReport.KeyValue:= ExpDataModule.ExpBatchsDataSetREPORTID.AsInteger;
+      end;
+      IF FieldBatchsArchive
+      THEN
+      begin
+        DBLCBCountry.ReadOnly:=True;
+        DBLCBAccount.ReadOnly:=True;
+        DBLCBCountry.KeyValue:=ExpDataModule.ExpBatchsArchiveDataSetCOUNTRYID.AsInteger;
+        DBLCBAccount.KeyValue:=ExpDataModule.ExpBatchsArchiveDataSetDEBETACCID.AsInteger;
+        CmCurForeginEdit.Text:=ExpDataModule.ExpBatchsArchiveDataSetCOMISSIONAMOUNT.AsString;
+        DBLCBReport.KeyValue:= ExpDataModule.ExpBatchsArchiveDataSetREPORTID.AsInteger;
+      end;
+      IF FiledIncoming
+      THEN
+      begin
+        DBLCBCountry.ReadOnly:=True;
+        DBLCBAccount.ReadOnly:=False;
+        DBLCBCountry.KeyValue:=ExpDataModule.ExpIncomingDataSetCOUNTRYID.AsInteger;
+        DBLCBAccount.KeyValue:=ExpDataModule.ExpIncomingDataSetDEBETACCID.AsInteger;
+        CmCurForeginEdit.Text:=ExpDataModule.ExpIncomingDataSetCOMISSIONAMOUNT.AsString;
+        DBLCBReport.KeyValue:= ExpDataModule.ExpIncomingDataSetREPORTID.AsInteger;
+      end;
+         IF FiledIncomingArchive
+      THEN
+      begin
+        DBLCBCountry.ReadOnly:=True;
+        DBLCBAccount.ReadOnly:=True;
+        DBLCBCountry.KeyValue:=ExpDataModule.ExpIncomingarchiveDataSetCOUNTRYID.AsInteger;
+        DBLCBAccount.KeyValue:=ExpDataModule.ExpIncomingDataSetDEBETACCID.AsInteger;
+        CmCurForeginEdit.Text:=ExpDataModule.ExpIncomingarchiveDataSetCOMISSIONAMOUNT.AsString;
+        DBLCBReport.KeyValue:= ExpDataModule.ExpIncomingarchiveDataSetREPORTID.AsInteger;
+      end;
+    end;
+  end;
+end;
+
+end.

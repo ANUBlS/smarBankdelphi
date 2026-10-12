@@ -1,0 +1,97 @@
+unit frmcollprogImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Grids, DBGridEh, StdCtrls,db;
+
+type
+  Tfrmcollprog = class(TForm)
+    GroupBox2: TGroupBox;
+    DBGridEh2: TDBGridEh;
+    GroupBox3: TGroupBox;
+    Gridpr: TDBGridEh;
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure GridprKeyPress(Sender: TObject; var Key: Char);
+  private
+    { Private declarations }
+  public
+    function get_DepID:Integer;
+    procedure WaitFOp;
+  end;
+
+var
+  frmcollprog: Tfrmcollprog;
+
+implementation
+
+uses dmusaid_prognozImpl;
+
+{$R *.DFM}
+
+procedure Tfrmcollprog.WaitFOp;
+var P_CollID,P_DepID ,p_brID:Integer;
+begin
+  with dmusaid_prognoz do begin
+      with Fcollection do
+           P_CollID := FieldByName('ID').AsInteger;
+
+       with Branches do
+       p_brID := FieldByName('ID').AsInteger;;
+           P_DepID := get_DepID;
+
+   with CollProg do
+   begin
+      close;
+      setVariable('CollID',P_CollID);
+      setVariable('DepID',P_DepID);
+      SetVariable('brid',p_brID);
+      open;
+   end;
+end;
+end;
+
+
+function Tfrmcollprog.get_DepID:Integer;
+begin
+  with dmusaid_prognoz do
+  case Fcollection.FieldByName('ID').AsInteger of
+       1:begin  result := CatP.FieldByName('ID').AsInteger end;
+       2:begin  result := PerP.FieldByName('ID').AsInteger end;
+       3:begin  result := PledgesP.FieldByName('ID').AsInteger end;
+       4:begin  result := valp.FieldByName('ID').AsInteger end;
+       5:begin  result := RegionP.FieldByName('ID').AsInteger end;
+       6:begin  result := ResP.FieldByName('ID').AsInteger end;
+       7:begin  result := AnnIntP.FieldByName('ID').AsInteger end;
+       8:begin  result := PeriodP.FieldByName('ID').AsInteger end;
+  end;
+
+end;
+
+procedure Tfrmcollprog.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+   Resize := false;
+end;
+
+procedure Tfrmcollprog.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+   if ord(Key) = VK_ESCAPE then close;
+end;
+
+procedure Tfrmcollprog.GridprKeyPress(Sender: TObject; var Key: Char);
+begin
+   with dmusaid_prognoz,CollProg do
+   begin
+   if UpdateStatus in [usInserted, usModified] then begin
+     FieldByName('coll_id').AsInteger := Fcollection.FieldByName('ID').AsInteger;
+     FieldByName('dep_id').AsInteger :=get_DepID;
+    //fieldByName('type#').AsInteger := ProgSetInt;
+     end;
+   end;
+end;
+
+end.

@@ -1,0 +1,500 @@
+﻿unit BPMainFormImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  variants, StdCtrls, ExtCtrls, Mask, DBCtrls, DBCtrlsEh, ActnList,
+  DBLookupEh, Grids, DBGrids, Db, OracleData, ComCtrls, CMHintBox;
+
+type
+  TBPMainForm = class(TForm)
+    pcMain: TPageControl;
+    tsBP: TTabSheet;
+    GroupBox1: TGroupBox;
+    GroupBox2: TGroupBox;
+    DBEdit1: TDBEditEh;
+    GroupBox3: TGroupBox;
+    EditCrdNo: TEdit;
+    Panel2: TPanel;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    Label6: TLabel;
+    DBNumberEditEh1: TDBNumberEditEh;
+    DBNumberEditEh2: TDBNumberEditEh;
+    DBNumberEditEh3: TDBNumberEditEh;
+    DBLookupComboboxEh1: TDBLookupComboboxEh;
+    DBLookupComboboxEh2: TDBLookupComboboxEh;
+    GroupBox5: TGroupBox;
+    Label14: TLabel;
+    Label15: TLabel;
+    Label16: TLabel;
+    Label17: TLabel;
+    Label20: TLabel;
+    DBEdit9: TDBEditEh;
+    DBEdit10: TDBEditEh;
+    DBEdit11: TDBEditEh;
+    DBEdit12: TDBEditEh;
+    DBEdit15: TDBEditEh;
+    Panel1: TPanel;
+    Button1: TButton;
+    Button2: TButton;
+    ActionsList: TActionList;
+    ActionSave: TAction;
+    ActionDismis: TAction;
+    GroupBox4: TGroupBox;
+    Label7: TLabel;
+    Label8: TLabel;
+    Label9: TLabel;
+    Label10: TLabel;
+    Label11: TLabel;
+    Label12: TLabel;
+    Label13: TLabel;
+    DBEdit2: TDBEditEh;
+    DBEdit3: TDBEditEh;
+    DBEdit4: TDBEditEh;
+    DBEdit5: TDBEditEh;
+    DBEdit6: TDBEditEh;
+    DBEdit7: TDBEditEh;
+    DBEdit8: TDBEditEh;
+    tsLM: TTabSheet;
+    ActionList1: TActionList;
+    Action1: TAction;
+    Action2: TAction;
+    Action3: TAction;
+    Action4: TAction;
+    Action5: TAction;
+    CreditInfo: TOracleDataSet;
+    DSCreditInfo: TDataSource;
+    DataSource2: TDataSource;
+    OracleDataSet2: TOracleDataSet;
+    OracleDataSet1: TOracleDataSet;
+    OracleDataSet1ID: TFloatField;
+    OracleDataSet1CREDITID: TFloatField;
+    OracleDataSet1PROTOCOL: TFloatField;
+    OracleDataSet1PARAGRAPH: TFloatField;
+    OracleDataSet1GRANTDATE: TDateTimeField;
+    OracleDataSet1GIVEDATE: TDateTimeField;
+    OracleDataSet1MEASURECODE: TFloatField;
+    OracleDataSet1TOTALAMOUNT: TFloatField;
+    OracleDataSet1MAINDEBT: TFloatField;
+    OracleDataSet1NUM: TFloatField;
+    OracleDataSet1MeasureDesc: TWideStringField;
+    DataSource1: TDataSource;
+    GroupBox6: TGroupBox;
+    DBEdit14: TDBEditEh;
+    GroupBox7: TGroupBox;
+    DBGrid1: TDBGrid;
+    Panel4: TPanel;
+    Label18: TLabel;
+    Label19: TLabel;
+    Label21: TLabel;
+    Label22: TLabel;
+    Label23: TLabel;
+    Label24: TLabel;
+    Label25: TLabel;
+    DBEdit16: TDBEditEh;
+    DBDateTimeEditEh1: TDBDateTimeEditEh;
+    DBDateTimeEditEh2: TDBDateTimeEditEh;
+    DBEdit17: TDBEditEh;
+    DBEdit18: TDBEditEh;
+    DBEdit19: TDBEditEh;
+    DBNumberEditEh4: TDBNumberEditEh;
+    DBNumberEditEh5: TDBNumberEditEh;
+    DBLookupComboboxEh3: TDBLookupComboboxEh;
+    Panel3: TPanel;
+    Button3: TButton;
+    Button4: TButton;
+    Button5: TButton;
+    Button6: TButton;
+    Button7: TButton;
+    Label28: TLabel;
+    Label29: TLabel;
+    DBLookupComboboxEh4: TDBLookupComboboxEh;
+    DBLookupComboboxEh5: TDBLookupComboboxEh;
+    DBLookupComboboxEh6: TDBLookupComboboxEh;
+    DBLookupComboboxEh7: TDBLookupComboboxEh;
+    Label30: TLabel;
+    Label31: TLabel;
+    OracleDataSet2ID: TFloatField;
+    OracleDataSet2ACTIVEINDICATOR1: TWideStringField;
+    OracleDataSet2ACTIVEINDICATOR2: TWideStringField;
+    DBText1: TDBText;
+    DBText2: TDBText;
+    Label26: TLabel;
+    Label27: TLabel;
+    tsGrantT: TTabSheet;
+    GroupBox8: TGroupBox;
+    GroupBox9: TGroupBox;
+    DBEdit20: TDBEditEh;
+    GroupBox10: TGroupBox;
+    edCreditNo: TEdit;
+    GTMachinesDataSet: TOracleDataSet;
+    GTMachinesDataSetCREDITID: TFloatField;
+    GTMachinesDataSetMACHINEID: TFloatField;
+    GTMachinesDataSetGRANTYEAR: TIntegerField;
+    GTMachinesDataSetGRANTDATE: TDateTimeField;
+    GTMachinesDataSetMACHINEAMMOUNT: TFloatField;
+    Panel5: TPanel;
+    MachinesDataSet: TOracleDataSet;
+    MachinesDataSrc: TDataSource;
+    MachinesDataSetID: TFloatField;
+    MachinesDataSetMACHINENAME: TWideStringField;
+    MachinesDataSetDESCRIPTION: TWideStringField;
+    GrantDataSrc: TDataSource;
+    GroupBox11: TGroupBox;
+    DBLookupComboboxEh8: TDBLookupComboboxEh;
+    Label32: TLabel;
+    Label33: TLabel;
+    Label34: TLabel;
+    Label35: TLabel;
+    DBDateTimeEditEh3: TDBDateTimeEditEh;
+    DBNumberEditEh6: TDBNumberEditEh;
+    DBNumberEditEh7: TDBNumberEditEh;
+    Button8: TButton;
+    Button9: TButton;
+    Panel6: TPanel;
+    DBEdit13: TDBEditEh;
+    DBLookupComboboxEh9: TDBLookupComboboxEh;
+    CMHintBox1: TCMHintBox;
+    OracleDataSet2DESCRIPTION: TWideStringField;
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure ActionSaveUpdate(Sender: TObject);
+    procedure ActionSaveExecute(Sender: TObject);
+    procedure ActionDismisExecute(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure DBLookupComboboxEh1KeyValueChanged(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure Action1Execute(Sender: TObject);
+    procedure Action2Execute(Sender: TObject);
+    procedure Action3Execute(Sender: TObject);
+    procedure Action4Execute(Sender: TObject);
+    procedure Action5Execute(Sender: TObject);
+    procedure Action2Update(Sender: TObject);
+    procedure Action5Update(Sender: TObject);
+    procedure OracleDataSet1AfterPost(DataSet: TDataSet);
+    procedure pcMainChange(Sender: TObject);
+    procedure OracleDataSet1AfterInsert(DataSet: TDataSet);
+    procedure Button8Click(Sender: TObject);
+    procedure Button9Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  BPMainForm: TBPMainForm;
+
+procedure InitPlugin(S : String);export;
+
+implementation
+
+{$R *.DFM}
+
+uses
+  CommonDecls, CMOracleAPIDataModuleImpl, SystemState, BPDataModuleImpl;
+
+procedure TBPMainForm.FormCreate(Sender: TObject);
+var
+  i : Integer;
+begin
+  BPDataModule := TBPDataModule.Create(Self);
+  for i := 0 to ComponentCount-1 do
+    if Components[i].Tag = 12 then
+      (Components[i] as TDataSet).Open;
+  pcMain.ActivePageIndex := 0;
+end;
+
+procedure TBPMainForm.FormDestroy(Sender: TObject);
+begin
+  BPDataModule.Free;
+end;
+
+procedure InitPlugin(S : String);export;
+begin
+  if S='BP' then
+  BPMainForm.ShowModal
+end;
+
+procedure TBPMainForm.ActionSaveUpdate(Sender: TObject);
+begin
+  (Sender as TAction).Enabled := BPDataModule.BPData.Modified;
+end;
+
+procedure TBPMainForm.ActionSaveExecute(Sender: TObject);
+begin
+if DBLookupComboboxEh1.KeyValue =null then
+begin
+CMHintBox1.ShowMessage('Dövür sahəsi boşdur !') ;
+exit;
+end;
+if DBLookupComboboxEh9.KeyValue =null then
+begin
+CMHintBox1.ShowMessage('Qərar sahəsi boşdur !') ;
+exit;
+end;
+if DBLookupComboboxEh4.KeyValue =null then
+begin
+CMHintBox1.ShowMessage('RAyon sahəsi boşdur !') ;
+exit;
+end;
+if DBLookupComboboxEh5.KeyValue =null then
+begin
+CMHintBox1.ShowMessage('Kənt sahəsi boşdur !') ;
+exit;
+end;
+
+if DBLookupComboboxEh5.KeyValue =null then
+begin
+CMHintBox1.ShowMessage('Məhsulun tipi sahəsi boşdur !') ;
+exit;
+end;
+  with BPDataModule.BPData do
+  Post;
+end;
+
+procedure TBPMainForm.ActionDismisExecute(Sender: TObject);
+begin
+  with BPDataModule.BPData do
+  Cancel;
+  Close;
+end;
+
+procedure TBPMainForm.FormShow(Sender: TObject);
+resourcestring
+  rsFormCaption = '%s Nömrəli kredit haqqında məlumat';
+var
+  CrdID: Integer;
+  Temp : Integer;
+begin
+  Caption := Format(rsFormCaption,[Get_SelectedCrdNo]);
+  EditCrdNo.Text := Get_SelectedCrdNo;
+  edCreditNo.Text := Get_SelectedCrdNo;
+
+  CrdID := Get_SelectedCrdID;
+    {Caption := Localizer.Caption;
+    Localizer.Caption := Format(rsLMCaption,[Get_SelectedCrdNo]);
+    }OracleDataSet2.Open;
+    with OracleDataSet1 do begin
+      if Active then CloseAll;
+      //ClearVariables;
+      SetVariable('CreditID',CrdID);
+      Open;
+    end;
+    with CreditInfo do begin
+      if Active then CloseAll;
+      //ClearVariables;
+      SetVariable('CreditID',CrdID);
+      Open;
+    end;
+
+  with BPDataModule do
+  begin
+
+    with CreditInfo do
+    begin
+      if Active then CloseAll;
+      ClearVariables;
+      SetVariable('CreditID',Get_SelectedCrdID);
+      Open;
+    end;
+
+    with PortInf do
+    begin
+      if Active then CloseAll;
+      ClearVariables;
+      SetVariable('CreditID',Get_SelectedCrdID);
+      Open;
+    end;
+
+    pcMain.Pages[2].Enabled := PortInfPROJECTID.AsInteger = 3;
+//    showmessage(IntTostr(PortInfPROJECTID.AsInteger));
+
+    with GTMachinesDataSet do begin
+      if Active then CloseAll;
+        ClearVariables;
+        SetVariable('CreditID',Get_SelectedCrdID);
+        Open;
+        Edit;
+        if FieldByName('CreditID').IsNull then
+          FieldByName('CreditID').AsInteger := Get_SelectedCrdID;
+    end;
+
+    with BPData do
+    begin
+      if Active then CloseAll;
+      ClearVariables;
+      SetVariable('CreditID',Get_SelectedCrdID);
+      Open;
+      Edit;
+      if FieldByName('CreditID').IsNull then
+        FieldByName('CreditID').AsInteger := Get_SelectedCrdID;
+
+      if not FieldByName('VillageID').IsNull then begin
+        DBLookupComboboxEh4.KeyValue :=
+          CM_AKF.CallIntegerFunction('BPCreditDistrictID', [Get_SelectedCrdID]);
+        Temp :=FieldByName('VILLAGEID').Value;
+        DBLookupComboboxEh5.KeyValue := Null;
+        DBLookupComboboxEh5.KeyValue := Temp;
+      end;
+
+      if not FieldByName('AKPURPOSE').IsNull then begin
+        DBLookupComboboxEh6.KeyValue :=
+          CM_AKF.CallIntegerFunction('BPCreditAKTargetID', [Get_SelectedCrdID]);
+
+        Temp := FieldByName('AKPURPOSE').Value;
+        DBLookupComboboxEh7.KeyValue := Null;
+        DBLookupComboboxEh7.KeyValue := Temp;
+      end;
+    end;
+
+  end;
+end;
+
+exports
+  InitPlugin;
+
+procedure TBPMainForm.DBLookupComboboxEh1KeyValueChanged(Sender: TObject);
+begin
+ with (Sender as TDBLookupComboboxEh) do
+ if DataSource.DataSet.Active then
+ UpdateData;
+end;
+
+procedure TBPMainForm.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  with BPDataModule do
+  begin
+    BPData.CloseAll;
+    CreditInfo.CloseAll;
+  end;
+end;
+
+procedure TBPMainForm.Action1Execute(Sender: TObject);
+begin
+  OracleDataSet1.Insert;
+end;
+
+procedure TBPMainForm.Action2Execute(Sender: TObject);
+begin
+  //OracleDataSet1.SetVariable('CREDITID', Get_SelectedCrdID);
+  OracleDataSet1.Post;
+end;
+
+procedure TBPMainForm.Action3Execute(Sender: TObject);
+begin
+  OracleDataSet1.Cancel;
+end;
+
+procedure TBPMainForm.Action4Execute(Sender: TObject);
+begin
+  Close
+end;
+
+procedure TBPMainForm.Action5Execute(Sender: TObject);
+begin
+  OracleDataSet1.Delete;
+end;
+
+procedure TBPMainForm.Action2Update(Sender: TObject);
+begin
+  if OracleDataSet1.Active then
+  (Sender as TAction).Enabled := OracleDataSet1.Modified;
+end;
+
+procedure TBPMainForm.Action5Update(Sender: TObject);
+begin
+  (Sender as TAction).Enabled := OracleDataSet1.RecordCount > 0
+end;
+
+procedure TBPMainForm.OracleDataSet1AfterPost(DataSet: TDataSet);
+var
+  B : TBookmark;
+begin
+  with DataSet do
+  begin
+    B := GetBookmark;
+    Refresh;
+    GotoBookmark(B);
+  end;
+end;
+
+procedure TBPMainForm.pcMainChange(Sender: TObject);
+resourcestring
+  rsLMCaption = '%s nömrəli müqavilə . Hüquqi tədbirlər';
+  rsBPCaption = '%s nömrəli kredit üçün Biznes - Plan';
+  rsGTCaption = '%s nömrəli kreditin Qrant texnikası';
+var
+  CrdID :Integer;
+begin
+  //ShowMessage(pcMain.ActivePage.Name);
+  if pcMain.ActivePage = tsLM then begin
+    CrdID := Get_SelectedCrdID;
+    {Caption := Localizer.Caption;
+    Localizer.Caption := Format(rsLMCaption,[Get_SelectedCrdNo]);
+    }OracleDataSet2.Open;
+    with OracleDataSet1 do begin
+      if Active then CloseAll;
+      //ClearVariables;
+      SetVariable('CreditID',CrdID);
+      Open;
+    end;
+    with CreditInfo do begin
+      if Active then CloseAll;
+      //ClearVariables;
+      SetVariable('CreditID',CrdID);
+      Open;
+    end;
+  end else
+  if pcMain.ActivePage = tsBP then begin
+    {Caption := Localizer.Caption;
+    Localizer.Caption := Format(rsBPCaption,[Get_SelectedCrdNo]);
+    }EditCrdNo.Text := Get_SelectedCrdNo;
+    with BPDataModule do begin
+      with CreditInfo do begin
+        if Active then CloseAll;
+        ClearVariables;
+        SetVariable('CreditID',Get_SelectedCrdID);
+        Open;
+      end;
+      with BPData do begin
+        if Active then CloseAll;
+        ClearVariables;
+        SetVariable('CreditID',Get_SelectedCrdID);
+        Open;
+        Edit;
+        if FieldByName('CreditID').IsNull then
+          FieldByName('CreditID').AsInteger := Get_SelectedCrdID;
+
+          
+      end;
+    end;
+  end;
+end;
+
+procedure TBPMainForm.OracleDataSet1AfterInsert(DataSet: TDataSet);
+begin
+  OracleDataSet1.FieldByName('CreditID').AsInteger := Get_SelectedCrdID;
+end;
+
+procedure TBPMainForm.Button8Click(Sender: TObject);
+begin
+  GTMachinesDataSet.Post;
+end;
+
+procedure TBPMainForm.Button9Click(Sender: TObject);
+begin
+  GTMachinesDataSet.Cancel;
+  Close;
+end;
+
+initialization
+BPMainForm := TBPMainForm.Create(CommonApplication);
+//LMMainForm := TLMMainForm.Create(CommonApplication);
+
+end.

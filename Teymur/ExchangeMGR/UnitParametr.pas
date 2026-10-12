@@ -1,0 +1,91 @@
+unit UnitParametr;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Grids, DBGrids, StdCtrls, ExtCtrls;
+
+type
+  TFormParametr = class(TForm)
+    Panel1: TPanel;
+    GroupBox1: TGroupBox;
+    DBGrid1: TDBGrid;
+    GroupBox2: TGroupBox;
+    DBGrid2: TDBGrid;
+    DBGrid3: TDBGrid;
+    procedure DBGrid2DblClick(Sender: TObject);
+    procedure DBGrid2KeyPress(Sender: TObject; var Key: Char);
+    procedure DBGrid3DblClick(Sender: TObject);
+    procedure DBGrid3KeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure DBGrid3KeyPress(Sender: TObject; var Key: Char);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormParametr: TFormParametr;
+
+implementation
+uses UnitDateExch;
+
+{$R *.dfm}
+
+procedure TFormParametr.DBGrid2DblClick(Sender: TObject);
+begin
+  With DataModExch do
+  begin
+    OPExchMgr.CallProcedure('Ex_Admin_In_Add',[ODSParametr.FieldByName('ID').AsInteger
+                                              ,ODSExOffice.FieldByName('Filial').AsInteger
+                                              ,ODSParametr.FieldByName('NAME').AsString
+                                              ,ODSExOffice.FieldByName('EX_NO').AsInteger
+                                              ,ODSExOffice.FieldByName('EX_NAME').AsString]);
+    ODSExAdminIn.Refresh;
+  end;
+end;
+
+procedure TFormParametr.DBGrid2KeyPress(Sender: TObject; var Key: Char);
+begin
+  if key=#13 then
+     DBGrid2DblClick(Sender);
+  if key=#27 then
+  begin
+    Close;
+    key:=#0;
+  end;end;
+
+procedure TFormParametr.DBGrid3DblClick(Sender: TObject);
+begin
+  With DataModExch do
+  begin
+    OPExchMgr.CallProcedure('Ex_Admin_in_Del',[ODSExAdminIn.FieldByName('USER_ID').AsInteger
+                                              ,ODSExAdminIn.FieldByName('USER_NAME').AsString
+                                              ,ODSExAdminIn.FieldByName('EX_ID').AsInteger
+                                              ,ODSExAdminIn.FieldByName('EX_NAME').AsString]);
+    ODSExAdminIn.Refresh;
+  end;
+end;
+
+procedure TFormParametr.DBGrid3KeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if Key=46 then
+  begin
+    DBGrid3DblClick(Sender);
+    key:=0;
+  end;
+end;
+
+procedure TFormParametr.DBGrid3KeyPress(Sender: TObject; var Key: Char);
+begin
+  if key=#27 then
+  begin
+    Close;
+    key:=#0;
+  end;
+end;
+
+end.

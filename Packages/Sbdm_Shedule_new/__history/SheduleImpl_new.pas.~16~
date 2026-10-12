@@ -1,0 +1,181 @@
+unit SheduleImpl_new;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, LDialogs,
+  StdCtrls, Mask, DBCtrls,  ComCtrls, ToolWin, ActnList,
+  ImgList, Grids, DBGridEh;
+
+type
+  Tform1 = class(TForm)
+    GroupBox1: TGroupBox;
+    DBEdit5: TDBEdit;
+    GroupBox2: TGroupBox;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label7: TLabel;
+    DBEdit1: TDBEdit;
+    DBEdit2: TDBEdit;
+    DBEdit3: TDBEdit;
+    DBEdit4: TDBEdit;
+    SchduleGrid: TDBGridEh;
+    ScheludeActionList: TActionList;
+    ActionSave: TAction;
+    ActionPrint: TAction;
+    ActionClose: TAction;
+    ActionAdd: TAction;
+    ActionEdit: TAction;
+    ActionDelete: TAction;
+    ActionRefresh: TAction;
+    ActionAnnuty: TAction;
+    ActionChange: TAction;
+    ActionPr: TAction;
+    ToolBar1: TToolBar;
+    ToolButton8: TToolButton;
+    ToolButton1: TToolButton;
+    ToolButton4: TToolButton;
+    ToolButton2: TToolButton;
+    ToolButton5: TToolButton;
+    ToolButton6: TToolButton;
+    ToolButton7: TToolButton;
+    ToolButton9: TToolButton;
+    ToolBar2: TToolBar;
+    ToolButton10: TToolButton;
+    ToolButton11: TToolButton;
+    ToolButton12: TToolButton;
+    ToolButton13: TToolButton;
+    ToolButton14: TToolButton;
+    ToolButton15: TToolButton;
+    ToolButton16: TToolButton;
+    ToolButton17: TToolButton;
+    ToolButton18: TToolButton;
+    ToolButton3: TToolButton;
+    ToolButton19: TToolButton;
+    ToolBarImages: TImageList;
+    procedure FormCanResize(Sender: TObject; var NewWidth, NewHeight: Integer;
+      var Resize: Boolean);
+    procedure ToolButton18Click(Sender: TObject);
+    procedure ToolButton1Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure ToolButton14Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  form1: Tform1;
+   depositid:integer;
+  procedure exportproc(S:String);export;
+
+
+  implementation
+
+ uses CommonDeclsImpl_new,ScheduleDataModuleImpl_new, PaymentSheduleimpl_new,SBTranslateProc,sboapiDataModuleimpl;
+
+{$R *.dfm}
+   procedure exportproc(S:String);export;
+  const
+    rsScheludeCaption = '%s № ли мцгавиля цчцн юдямя планы.';
+  begin
+  form1.Caption := Format(rsScheludeCaption,[Get_SelectedContNo]);
+   depositid:=Get_SelectedContID;
+   with ScheduleDataModule_new.sbdm_customers do
+   begin
+     close;
+     ClearVariables;
+     SetVariable('ID',depositid);
+     Open;
+   end;
+    with ScheduleDataModule_new.OracleDataSet1 do
+    begin
+     close;
+     ClearVariables;
+     SetVariable('ID',depositid);
+     Open;
+   end;
+   with  ScheduleDataModule_new.OracleDataSet2 do
+   begin
+     close;
+     ClearVariables;
+     SetVariable('id',depositid);
+     Open;
+   end;
+   with  ScheduleDataModule_new.OracleDataSet3 do
+   begin
+     close;
+     ClearVariables;
+     SetVariable('v_id',depositid);
+     Open;
+   end;
+   form1.ShowModal;
+end;
+
+exports
+   exportproc;
+procedure Tform1.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+ Resize := False
+end;
+
+procedure Tform1.FormCreate(Sender: TObject);
+begin
+SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure Tform1.ToolButton14Click(Sender: TObject);
+
+resourcestring rs_DelshedulePayments = ' Силинмясиня яминсинизми? ';
+var
+  I : Integer;
+begin
+
+ if MessageDlg(rs_DelshedulePayments,
+      mtConfirmation, [mbYes, mbNo], 0) = mrNO then  Exit;
+
+  with SchduleGrid do
+  for I := SelectedRows.Count - 1 downto 0 do
+  begin
+    DataSource.DataSet.GotoBookmark(Pointer(SelectedRows[I]));
+    DataSource.DataSet.Delete;
+  end;
+end;
+
+procedure Tform1.ToolButton18Click(Sender: TObject);
+
+var interval:variant;
+begin
+  PaymentShedule_new:=TPaymentShedule_new.Create(Self);
+  with PaymentShedule_new,
+       ScheduleDataModule_new,
+       sbcm_percent_converting do
+  begin
+    //DateTimePicker1.DateTime:=Sbcm_date_new.CallDateFunction('get_date',[]);
+    interval:=CallIntegerFunction('getdateinterval',[strtodate(DBEdit3.text),strtodate(DBEdit4.text)]);
+    CMCurrencyEdit1.Value:=CallIntegerFunction('getconverteddebt',[interval,strtofloat(DBEdit1.text),strtofloat(DBEdit2.text)]);
+    Edit1.Text:=OracleDataSet3DATEINTERVAL.AsString;
+    ToolButton1.Enabled:=true;
+    ToolButton14.Enabled:=true;
+    ShowModal;
+  end;
+end;
+
+procedure Tform1.ToolButton1Click(Sender: TObject);
+begin
+   with ScheduleDataModule_new, OracleDataSet2.Session do
+  begin
+    ApplyUpdates([OracleDataSet2],True);
+    Commit;
+    ToolButton1.Enabled:=FALSE;
+  end;
+end;
+
+initialization
+
+    form1 := Tform1.Create(CommonApplication);
+    ScheduleDataModule_new:=TScheduleDataModule_new.Create(CommonApplication);
+end.

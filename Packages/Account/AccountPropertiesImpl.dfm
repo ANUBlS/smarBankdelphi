@@ -1,0 +1,759 @@
+﻿object AccountPropertiesForm: TAccountPropertiesForm
+  Left = 325
+  Top = 174
+  AutoSize = True
+  BorderStyle = bsSizeToolWin
+  Caption = #399'lav'#601' v'#601' redakt'#601
+  ClientHeight = 474
+  ClientWidth = 531
+  Color = clBtnFace
+  Font.Charset = RUSSIAN_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poMainFormCenter
+  OnClose = FormClose
+  OnCreate = FormCreate
+  OnKeyDown = FormKeyDown
+  OnKeyPress = FormKeyPress
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object AccountGB: TGroupBox
+    Left = 0
+    Top = 0
+    Width = 531
+    Height = 305
+    Align = alTop
+    Caption = 'Hesab'
+    TabOrder = 0
+    object Label1: TLabel
+      Left = 8
+      Top = 20
+      Width = 55
+      Height = 13
+      Caption = 'Hesab N-si:'
+    end
+    object Label2: TLabel
+      Left = 297
+      Top = 16
+      Width = 40
+      Height = 13
+      Caption = 'Valyuta:'
+    end
+    object Label3: TLabel
+      Left = 8
+      Top = 71
+      Width = 69
+      Height = 13
+      Caption = 'Balans hesab'#305':'
+    end
+    object Label4: TLabel
+      Left = 8
+      Top = 98
+      Width = 39
+      Height = 13
+      Caption = 'M'#252#351't'#601'ri:'
+    end
+    object Label5: TLabel
+      Left = 8
+      Top = 125
+      Width = 61
+      Height = 13
+      Caption = 'A'#231#305'lma tarixi:'
+    end
+    object Label6: TLabel
+      Left = 8
+      Top = 252
+      Width = 59
+      Height = 13
+      Caption = 'Hesab'#305'n ad'#305':'
+    end
+    object Label13: TLabel
+      Left = 8
+      Top = 149
+      Width = 82
+      Height = 13
+      Caption = 'Hesabat simvolu:'
+    end
+    object Label14: TLabel
+      Left = 8
+      Top = 172
+      Width = 24
+      Height = 13
+      Caption = 'Filial:'
+    end
+    object Label15: TLabel
+      Left = 8
+      Top = 230
+      Width = 46
+      Height = 13
+      Caption = 'Simvollar:'
+    end
+    object Label12: TLabel
+      Left = 213
+      Top = 202
+      Width = 58
+      Height = 13
+      Caption = 'Qal'#305#287'a Limit:'
+    end
+    object DBText1: TDBText
+      Left = 100
+      Top = 228
+      Width = 85
+      Height = 17
+      Color = clBtnFace
+      DataField = 'TIPACC'
+      DataSource = AccDataModule.AccountData
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = [fsBold]
+      ParentColor = False
+      ParentFont = False
+    end
+    object Label7: TLabel
+      Left = 8
+      Top = 203
+      Width = 56
+      Height = 13
+      Caption = 'Qeyd kodu:'
+    end
+    object Label17: TLabel
+      Left = 318
+      Top = 172
+      Width = 85
+      Height = 13
+      Caption = 'Etibarnam'#601' tarixi:'
+    end
+    object Label18: TLabel
+      Left = 8
+      Top = 283
+      Width = 69
+      Height = 13
+      Caption = 'M'#601'hsulun tipi :'
+    end
+    object DBEditAccNo: TDBEdit
+      Left = 100
+      Top = 16
+      Width = 190
+      Height = 21
+      CharCase = ecUpperCase
+      Color = clSilver
+      DataField = 'ACC_NO'
+      DataSource = AccDataModule.AccountData
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+      ReadOnly = True
+      TabOrder = 0
+      OnKeyPress = DBEditAccNoKeyPress
+    end
+    object DBEditCurrID: TDBEdit
+      Left = 341
+      Top = 16
+      Width = 40
+      Height = 21
+      DataField = 'VAL_ACC'
+      DataSource = AccDataModule.AccountData
+      TabOrder = 1
+    end
+    object DBLookupCurr: TDBLookupComboBox
+      Left = 388
+      Top = 16
+      Width = 138
+      Height = 21
+      DataField = 'VAL_ACC'
+      DataSource = AccDataModule.AccountData
+      KeyField = 'VALUTE'
+      ListField = 'VALU_NAME'
+      ListSource = AccDataModule.CurrencyData
+      TabOrder = 2
+    end
+    object DBEditBalance1: TDBEdit
+      Left = 100
+      Top = 68
+      Width = 61
+      Height = 21
+      DataField = 'BAL_CN1'
+      DataSource = AccDataModule.AccountData
+      TabOrder = 3
+    end
+    object DBLookupBalance1: TDBLookupComboBox
+      Left = 161
+      Top = 68
+      Width = 365
+      Height = 21
+      DataField = 'BAL_CN1'
+      DataSource = AccDataModule.AccountData
+      DropDownAlign = daCenter
+      DropDownRows = 10
+      DropDownWidth = 1000
+      KeyField = 'BAL_CN'
+      ListField = 'BALNAME'
+      ListSource = AccDataModule.BalAccData
+      TabOrder = 4
+    end
+    object DBEditCustID: TDBEdit
+      Left = 100
+      Top = 94
+      Width = 61
+      Height = 21
+      DataField = 'KLI_ID'
+      DataSource = AccDataModule.AccountData
+      TabOrder = 5
+      OnExit = DBEditCustIDExit
+    end
+    object DBLookupCust: TDBLookupComboBox
+      Left = 160
+      Top = 94
+      Width = 365
+      Height = 21
+      DataField = 'KLI_ID'
+      DataSource = AccDataModule.AccountData
+      DropDownAlign = daCenter
+      DropDownRows = 10
+      DropDownWidth = 800
+      KeyField = 'ID'
+      ListField = 'NAME'
+      ListSource = AccDataModule.CustomersData
+      TabOrder = 6
+      OnCloseUp = DBLookupCustCloseUp
+    end
+    object DTPOpenDate: TDateTimePicker
+      Left = 100
+      Top = 121
+      Width = 165
+      Height = 21
+      Date = 37357.618323692100000000
+      Time = 37357.618323692100000000
+      TabOrder = 7
+    end
+    object DBLookupPairAcc: TDBLookupComboBox
+      Left = 369
+      Top = 121
+      Width = 157
+      Height = 21
+      DataField = 'PAIR_ACC'
+      DataSource = AccDataModule.AccountData
+      Enabled = False
+      KeyField = 'ID'
+      ListField = 'ACC_NO'
+      ListSource = AccDataModule.PairAccountData
+      TabOrder = 8
+    end
+    object DBEditLimit: TDBEdit
+      Left = 277
+      Top = 199
+      Width = 131
+      Height = 21
+      DataField = 'LIMIT'
+      DataSource = AccDataModule.AccountData
+      TabOrder = 10
+    end
+    object DBLookupSimotchet: TDBLookupComboBox
+      Left = 161
+      Top = 145
+      Width = 365
+      Height = 21
+      DataField = 'SIM_OTCET'
+      DataSource = AccDataModule.AccountData
+      KeyField = 'ID'
+      ListField = 'NAME'
+      ListSource = AccDataModule.ReportSymbolData
+      TabOrder = 9
+    end
+    object DBEditBranchID: TDBEdit
+      Left = 100
+      Top = 168
+      Width = 61
+      Height = 21
+      DataField = 'FILIAL'
+      DataSource = AccDataModule.AccountData
+      TabOrder = 11
+    end
+    object DBLookupComboBoxBranchName: TDBLookupComboBox
+      Left = 161
+      Top = 168
+      Width = 149
+      Height = 21
+      DataField = 'FILIAL'
+      DataSource = AccDataModule.AccountData
+      KeyField = 'ID'
+      ListField = 'NAME'
+      ListSource = AccDataModule.user_BranchesData
+      TabOrder = 12
+    end
+    object DBEditAccName: TDBEdit
+      Left = 100
+      Top = 248
+      Width = 420
+      Height = 21
+      DataField = 'NAME'
+      DataSource = AccDataModule.AccountData
+      TabOrder = 13
+    end
+    object AccountFlagsGB: TGroupBox
+      Left = 414
+      Top = 199
+      Width = 89
+      Height = 43
+      TabOrder = 14
+      object Button3: TButton
+        Left = 9
+        Top = 13
+        Width = 71
+        Height = 22
+        Caption = 'Simvollar ...'
+        TabOrder = 0
+        OnClick = Button3Click
+      end
+    end
+    object CBPairLookUp: TCheckBox
+      Left = 293
+      Top = 123
+      Width = 74
+      Height = 17
+      Caption = 'C'#252't hesab'#305':'
+      TabOrder = 15
+      OnClick = CBPairLookUpClick
+    end
+    object EditNoteCode: TEdit
+      Left = 100
+      Top = 199
+      Width = 85
+      Height = 21
+      TabOrder = 16
+    end
+    object DBEditSimOtcet: TDBEdit
+      Left = 100
+      Top = 146
+      Width = 61
+      Height = 21
+      DataField = 'SIM_OTCET'
+      DataSource = AccDataModule.AccountData
+      TabOrder = 17
+    end
+    object Müxabirləşmə_kodu: TPanel
+      Left = 2
+      Top = 40
+      Width = 528
+      Height = 26
+      BevelInner = bvLowered
+      BevelOuter = bvSpace
+      TabOrder = 18
+      object Label10: TLabel
+        Left = 5
+        Top = 6
+        Width = 95
+        Height = 13
+        Caption = 'M'#252'xabirl'#601#351'm'#601' kodu:'
+      end
+      object DBEdit1: TDBEdit
+        Left = 107
+        Top = 2
+        Width = 416
+        Height = 21
+        DataField = 'OLD_ACC_NO'
+        DataSource = AccDataModule.AccountData
+        TabOrder = 0
+      end
+    end
+    object DBDateTimeEditEh1: TDBDateTimeEditEh
+      Left = 404
+      Top = 168
+      Width = 121
+      Height = 21
+      EditButtons = <>
+      TabOrder = 19
+      Visible = True
+      EditFormat = 'DD/MM/YYYY'
+    end
+    object DBLookupComboBox1: TDBLookupComboBox
+      Left = 100
+      Top = 278
+      Width = 174
+      Height = 21
+      DataField = 'tempid'
+      DataSource = AccDataModule.AccountData
+      DropDownAlign = daCenter
+      DropDownRows = 10
+      DropDownWidth = 350
+      KeyField = 'ID'
+      ListField = 'KO_NA'
+      ListSource = DataSource2
+      TabOrder = 20
+      OnCloseUp = DBLookupCustCloseUp
+    end
+  end
+  object DayStartStateGB: TGroupBox
+    Left = 0
+    Top = 354
+    Width = 531
+    Height = 45
+    Align = alTop
+    Caption = 'Cari qal'#305'q'
+    TabOrder = 1
+    object Label8: TLabel
+      Left = 16
+      Top = 21
+      Width = 28
+      Height = 13
+      Caption = 'Qal'#305'q:'
+    end
+    object Label9: TLabel
+      Left = 311
+      Top = 21
+      Width = 53
+      Height = 13
+      Caption = 'Ekvivalent:'
+    end
+    object DBEdit6: TDBEdit
+      Left = 56
+      Top = 17
+      Width = 121
+      Height = 21
+      TabStop = False
+      Color = clSilver
+      DataField = 'OSTAT'
+      DataSource = AccDataModule.DataTenostat
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clNavy
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+      ReadOnly = True
+      TabOrder = 0
+    end
+    object DBEdit7: TDBEdit
+      Left = 381
+      Top = 17
+      Width = 121
+      Height = 21
+      TabStop = False
+      Color = clSilver
+      DataField = 'POK_OSTAT'
+      DataSource = AccDataModule.DataTenostat
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clNavy
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+      ReadOnly = True
+      TabOrder = 1
+    end
+  end
+  object Panel4: TPanel
+    Left = 0
+    Top = 441
+    Width = 531
+    Height = 33
+    Align = alTop
+    TabOrder = 2
+    object Panel1: TPanel
+      Left = 8
+      Top = 6
+      Width = 185
+      Height = 23
+      Alignment = taLeftJustify
+      BevelInner = bvLowered
+      Caption = '             Tam yenil'#601'm'#601'k (F5)'
+      TabOrder = 0
+      object SpeedButton3: TSpeedButton
+        Left = 2
+        Top = 2
+        Width = 19
+        Height = 19
+        Flat = True
+        Glyph.Data = {
+          36050000424D3605000000000000360400002800000010000000100000000100
+          0800000000000001000000000000000000000001000000000000000000000000
+          80000080000000808000800000008000800080800000C0C0C000C0DCC000F0CA
+          A600000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          000000000000000000000000000000000000F0FBFF00A4A0A000808080000000
+          FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00FFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF804F8FFFFFFFFFFFFFFFFFFFFFFF804
+          04F8FFFFFFFFFFFFFFFFFFFFFFFF0404F8FFFFFFFFFFFFFFFFFFFFFFFFF804F8
+          FFFFFFFFFFFFFFFFFFFFFFFFFF0404FFFFFFFFFFFFFFFFFFFFFFFFFFFF0404FF
+          FFFF0404040404FFFFFFFFFFFF0404F8FFFFFFF8040404FFFFFFFFFFFFF80404
+          F8FFF804040404FFFFFFFFFFFFFF04040404040404F804FFFFFFFFFFFFFFFFF8
+          040404F8FFFF04FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF}
+        OnClick = SpeedButton3Click
+      end
+    end
+    object Panel2: TPanel
+      Left = 199
+      Top = 6
+      Width = 162
+      Height = 23
+      BevelInner = bvLowered
+      Caption = 'Avto hesab ( CTRL+H )'
+      TabOrder = 1
+      object SpeedButton1: TSpeedButton
+        Left = 0
+        Top = 2
+        Width = 21
+        Height = 19
+        Flat = True
+        Glyph.Data = {
+          36050000424D3605000000000000360400002800000010000000100000000100
+          0800000000000001000000000000000000000001000000000000000000000000
+          80000080000000808000800000008000800080800000C0C0C000C0DCC000F0CA
+          A600000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          0000000000000000000000000000000000000000000000000000000000000000
+          000000000000000000000000000000000000F0FBFF00A4A0A000808080000000
+          FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00FFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF804F8FFFFFFFFFFFFFFFFFFFFFFF804
+          04F8FFFFFFFFFFFFFFFFFFFFFFFF0404F8FFFFFFFFFFFFFFFFFFFFFFFFF804F8
+          FFFFFFFFFFFFFFFFFFFFFFFFFF0404FFFFFFFFFFFFFFFFFFFFFFFFFFFF0404FF
+          FFFF0404040404FFFFFFFFFFFF0404F8FFFFFFF8040404FFFFFFFFFFFFF80404
+          F8FFF804040404FFFFFFFFFFFFFF04040404040404F804FFFFFFFFFFFFFFFFF8
+          040404F8FFFF04FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF}
+        OnClick = SpeedButton1Click
+      end
+    end
+    object ButtonCommit: TButton
+      Left = 368
+      Top = 7
+      Width = 75
+      Height = 22
+      Caption = 'Q'#601'bul'
+      TabOrder = 2
+      OnClick = ButtonCommitClick
+    end
+    object ButtonCancel: TButton
+      Left = 448
+      Top = 7
+      Width = 75
+      Height = 22
+      Caption = #304'mtina'
+      TabOrder = 3
+      OnClick = ButtonCancelClick
+    end
+  end
+  object Bal_CN2: TGroupBox
+    Left = 0
+    Top = 305
+    Width = 531
+    Height = 49
+    Align = alTop
+    TabOrder = 3
+    object Label11: TLabel
+      Left = 8
+      Top = 16
+      Width = 92
+      Height = 13
+      Caption = 'Balans hesab'#305' yeni:'
+    end
+    object DBEditBalance2: TDBEdit
+      Left = 100
+      Top = 12
+      Width = 61
+      Height = 21
+      DataField = 'BAL_CN2'
+      DataSource = AccDataModule.AccountData
+      TabOrder = 0
+    end
+    object DBLookupBalance2: TDBLookupComboBox
+      Left = 160
+      Top = 12
+      Width = 365
+      Height = 21
+      DataField = 'BAL_CN2'
+      DataSource = AccDataModule.AccountData
+      DropDownAlign = daCenter
+      DropDownRows = 10
+      DropDownWidth = 1000
+      KeyField = 'BAL_CN'
+      ListField = 'BALNAME'
+      ListSource = AccDataModule.DS_balspr2
+      TabOrder = 1
+    end
+  end
+  object GroupBox1: TGroupBox
+    Left = 0
+    Top = 399
+    Width = 531
+    Height = 42
+    Align = alTop
+    Caption = #399'laq'#601'li '#350'irk'#601't'
+    TabOrder = 4
+    Visible = False
+    object Label16: TLabel
+      Left = 42
+      Top = 19
+      Width = 31
+      Height = 13
+      Caption = #350'irk'#601't:'
+    end
+    object DBEdit_kli_id2: TDBEdit
+      Left = 100
+      Top = 15
+      Width = 61
+      Height = 21
+      DataField = 'KLI_ID2'
+      DataSource = AccDataModule.AccountData
+      TabOrder = 0
+    end
+    object DBLookupComboBox_kli_name: TDBLookupComboBox
+      Left = 160
+      Top = 15
+      Width = 365
+      Height = 21
+      DataField = 'KLI_ID2'
+      DataSource = AccDataModule.AccountData
+      DropDownAlign = daCenter
+      DropDownRows = 10
+      DropDownWidth = 800
+      KeyField = 'ID'
+      ListField = 'NAME'
+      ListSource = DataSource1
+      TabOrder = 1
+    end
+  end
+  object ActionListForHotKey: TActionList
+    Left = 264
+    Top = 192
+    object AccountAvtoCreate: TAction
+      Caption = 'AccountAvtoCreate'
+      ShortCut = 16456
+      OnExecute = AccountAvtoCreateExecute
+    end
+    object FullRefresh: TAction
+      Caption = 'FullRefresh'
+      ShortCut = 116
+      OnExecute = FullRefreshExecute
+    end
+  end
+  object OracleDataSet1: TOracleDataSet
+    SQL.Strings = (
+      
+        'select id ,name from customers where  close_dat is null and cust' +
+        '_type in(0,2)')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000400000049004400010000000000080000004E0041004D00
+      4500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 136
+    Top = 184
+    object OracleDataSet1ID: TIntegerField
+      FieldName = 'ID'
+      Required = True
+    end
+    object OracleDataSet1NAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 250
+    end
+  end
+  object DataSource1: TDataSource
+    DataSet = OracleDataSet1
+    Left = 72
+    Top = 192
+  end
+  object OracleDataSet2: TOracleDataSet
+    SQL.Strings = (
+      'select a.*, (a.code||'#39'  '#39'||a.name) as ko_na from cm_expert a')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000600000004000000490044000100000000000800000043004F004400
+      4500010000000000080000004E0041004D004500010000000000100000004600
+      49004C00490041004C00490044000100000000000A000000500048004F004E00
+      45000100000000000A0000004B004F005F004E004100010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 376
+    Top = 224
+    object OracleDataSet2ID: TFloatField
+      FieldName = 'ID'
+    end
+    object OracleDataSet2CODE: TWideStringField
+      FieldName = 'CODE'
+      Size = 12
+    end
+    object OracleDataSet2NAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 80
+    end
+    object OracleDataSet2FILIALID: TFloatField
+      FieldName = 'FILIALID'
+    end
+    object OracleDataSet2KO_NA: TWideStringField
+      FieldName = 'KO_NA'
+      Size = 124
+    end
+  end
+  object DataSource2: TDataSource
+    DataSet = OracleDataSet2
+    Left = 368
+    Top = 288
+  end
+end

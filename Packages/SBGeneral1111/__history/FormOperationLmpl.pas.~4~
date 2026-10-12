@@ -1,0 +1,442 @@
+unit FormOperationLmpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, XFSCtrls, ExtCtrls, Grids, XDBGrids, ImgList, Menus,
+  ComCtrls, QuickRpt, DBGrids, Buttons;
+
+type
+  TFormOperation = class(TForm)
+
+    ImageList1: TImageList;
+    XFPanel1: TXFPanel;
+    XDBGrid2: TXDBGrid;
+    XFPanel2: TXFPanel;
+    BeginDat: TDateTimePicker;
+    EndDat: TDateTimePicker;
+    XFButton1: TXFButton;
+    XFLabel1: TXFLabel;
+    XFLabel2: TXFLabel;
+    PMTransactions: TPopupMenu;
+    MemorialOrder1: TMenuItem;
+    KassaOrderi1: TMenuItem;
+    Qbz1: TMenuItem;
+    mliyyatlarExcelat1: TMenuItem;
+    XDBGrid1: TXDBGrid;
+    Memo1: TMemo;
+    PopupMenu1: TPopupMenu;
+    tesdiq1: TMenuItem;
+    XFButton2: TXFButton;
+    XFBitBtn1: TXFBitBtn;
+    XFPanel3: TXFPanel;
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure XDBGrid1DrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TXColumn; State: TGridDrawState);
+    procedure FormCanResize(Sender: TObject; var NewWidth, NewHeight: Integer;
+      var Resize: Boolean);
+    procedure FormShow(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure XDBGrid3DrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TXColumn; State: TGridDrawState);
+    procedure XFButton1Click(Sender: TObject);
+    procedure Qbz1Click(Sender: TObject);
+    procedure PMTransactionsPopup(Sender: TObject);
+    procedure GetCustomerInfo(CustID: Integer; CustName: String;
+      CustInn: String);
+    procedure XDBGrid2DblClick(Sender: TObject);
+    procedure XDBGrid1DblClick(Sender: TObject);
+    procedure tesdiq1Click(Sender: TObject);
+    procedure XFButton2Click(Sender: TObject);
+    procedure XFBitBtn1Click(Sender: TObject);
+  private
+    { Private declarations }
+
+  public
+    { Public declarations }
+  end;
+
+function ExtractMonth(DateTime: TDateTime; DecimalSymbol: string): string;
+
+const
+  tsDelayed = 1;
+  tsCommited = 2;
+  tsRejected = 3;
+
+var
+  FormOperation: TFormOperation;
+
+implementation
+
+uses DataCustNomImpl,OpenAccountImpl,
+  CurrencyToHR_Azeri_Impl, UntIntervalRpt, FormOperationShowLmpl,
+  FormOperationShow1Lmpl,SBTranslateProc, sboapiDataModuleImpl;
+{$R *.dfm}
+
+procedure TFormOperation.FormCanResize(Sender: TObject;
+  var NewWidth, NewHeight: Integer; var Resize: Boolean);
+begin
+  // Resize:=False;
+
+  DataCustNom.ODS_sb_business_opers.open;
+  DataCustNom.ODS_trancation.Open;
+end;
+
+procedure TFormOperation.FormCreate(Sender: TObject);
+var
+v_custid:String;
+begin
+ showmessage(a+'aa');
+  with DataCustNom do
+ begin
+
+ if ODS_sb_business_opers.Active=false then
+ begin
+
+  if tacc='' then
+     ODS_sb_business_opers.SQl[2]:='';
+     ODS_trancation.Open;
+
+ end
+ else
+  begin
+  with DataCustNom do
+  begin
+
+  if tacc<>'' then
+   begin
+   v_custid:=tacc;
+
+    ODS_sb_business_opers.Close;
+    ODS_sb_business_opers.SQl[2]:='and b.parentid in (select id   FROM transactions_busnes_pros where (custid_cred ='+v_custid+') or (custid_debt='+v_custid+'))';
+    ODS_sb_business_opers.Open;
+    end
+    else
+    begin
+
+    ODS_sb_business_opers.Close;
+    ODS_sb_business_opers.SQl[2]:='';
+    ODS_sb_business_opers.Open;
+
+    end;
+  end;
+
+     FormOperation.memo1.Text:=ODS_sb_business_opers.sql.text;
+     ODS_trancation.Open;
+
+  end;
+  end;
+
+
+
+  FormOperationShow := TFormOperationShow.Create(self);
+  FormOperationShow1 := TFormOperationShow1.Create(self);
+  With DataCustNom, ODS_SYSDATE do
+  begin
+    BeginDat.DateTime := fieldbyname('tek_dat').asdatetime;
+    EndDat.DateTime := fieldbyname('tek_dat').asdatetime;
+    // Close;
+    // SetVariable('bdat ','BeginDat');
+    // SetVariable('edat ','EndDat');
+    // Open;
+  SBTranslateProc.TranslateAllCompForms(Self, sboapiDataModule.OrPack_SL);
+  end;
+
+end;
+
+function ExtractMonth(DateTime: TDateTime; DecimalSymbol: string): string;
+const
+  Months: array [1 .. 12] of string = ('yanvar', 'fevral', 'mart', 'aprel',
+    'may', 'iyun', 'iyul', 'avqust', 'sentyabr', 'oktyabr', 'noyabr', 'dekabr');
+var
+  Year, Month, Day: Word;
+begin
+  DecodeDate(DateTime, Year, Month, Day);
+  Result := IntToStr(Day) + DecimalSymbol + Months[Month] + DecimalSymbol +
+    IntToStr(Year);
+end;
+
+procedure TFormOperation.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+  if ord(Key) = 27 then
+    Close;
+end;
+
+procedure TFormOperation.FormShow(Sender: TObject);
+var
+  bdat, edat: TDateTime;
+
+begin
+  bdat := Integer(Trunc(BeginDat.DateTime));
+  edat := Integer(Trunc(EndDat.DateTime));
+ //-- ShowMessage(DateTimeToStr(bdat));
+  with DataCustNom, ODS_sb_business_opers do
+  begin
+    // if active = true then
+
+    Close;
+    SetVariable('bdat', bdat);
+    SetVariable('edat', edat);
+    open;
+  end;
+
+  // FormOperation.Caption:=DataModPCustService.ODS_Transaction.FieldByName('name').AsString;
+end;
+
+procedure TFormOperation.PMTransactionsPopup(Sender: TObject);
+begin
+  { if DataModPCustService.ODS_trancation.RecordCount=0 then
+    Qbz1.Enabled:=False
+    else
+    Qbz1.Enabled:=True; }
+
+  DataCustNom.settings.open;
+
+  Qbz1.Enabled := (XDBGrid1.DataSource.DataSet.fieldbyname('DEBITBALANCE')
+    .asstring = IntToStr(DataCustNom.settings.fieldbyname
+    ('CASHBALANCENATIONAL').asInteger)) or
+    (XDBGrid1.DataSource.DataSet.fieldbyname('DEBITBALANCE')
+    .asstring = IntToStr(DataCustNom.settings.fieldbyname
+    ('CASHBALANCEENGLISH').asInteger));
+end;
+
+procedure TFormOperation.GetCustomerInfo(CustID: Integer; CustName: String;
+  CustInn: String);
+begin
+
+  with DataCustNom.OPCash do
+  begin
+    CallProcedure('GetCustomerInfo', [CustID, '', '']);
+    CustInn := GetParameter(1);
+    CustName := GetParameter(2);
+  end;
+end;
+
+procedure TFormOperation.Qbz1Click(Sender: TObject);
+var
+  CustName, CustInn: string;
+  TransactionID: string;
+  WithManat, NoManat, WithCoin: string;
+  ManatPosition, i: integer;
+  ValuteName: string;
+begin
+  if not Assigned(QRptInterval) then
+    QRptInterval := TQRptInterval.Create(self);
+  NoManat := '';
+  try
+    with DataCustNom.ODS_trancation do
+    begin
+      GetCustomerInfo(fieldbyname('CREDITID').asInteger, CustName, CustInn);
+      DataCustNom.ForFizFsVoen.Close;
+      DataCustNom.ForFizFsVoen.SetVariable('v_acc_no',
+        fieldbyname('creditaccno').asstring);
+      DataCustNom.ForFizFsVoen.open;
+      if DataCustNom.ForFizFsVoen.fieldbyname('CUST_TYPE')
+        .asInteger = 1 then
+        CustInn := '';
+
+      TransactionID := fieldbyname('ID').asstring;
+      Filter := ' ID=' + TransactionID;
+      Filtered := True;
+    end;
+
+    with DataCustNom, ODSValuteName do
+    begin
+      Close;
+      SetVariable('valute', ODS_trancation.fieldbyname
+        ('debitcurrencyid').Value);
+      ODSValuteName.open;
+      ValuteName := AnsiLowerCase(fieldbyname('Valu_name').asstring);
+    end;
+
+    WithManat := CurrencyToHR_Azeri
+      (Trunc(DataCustNom.ODS_trancation.fieldbyname('creditamount')
+      .AsFloat), 0, [0]);
+
+    ManatPosition := POS('manat', WithManat);
+    if ManatPosition > 0 then
+      for i := 1 to ManatPosition - 1 do
+        NoManat := NoManat + WithManat[i];
+
+    WithCoin := FloatToStr
+      (Frac(DataCustNom.ODS_trancation.fieldbyname('creditamount')
+      .AsFloat));
+    if WithCoin <> '0' then
+    begin
+      Delete(WithCoin, 1, 2);
+      if length(WithCoin) < 2 then
+        WithCoin := WithCoin + '0'
+      else if length(WithCoin) > 2 then
+        Delete(WithCoin, 3, length(WithCoin));
+      WithCoin := WithCoin + ' ' + DataCustNom.ODSValuteName.fieldbyname
+        ('valu_bala').asstring;
+    end { if WithCoin<>'0' }
+    else
+      WithCoin := '';
+
+    ValuteName := AnsiLowerCase(DataCustNom.ODSValuteName.fieldbyname
+      ('Valu_name').asstring + '  ' + WithCoin);
+
+    if NoManat = EmptyStr then
+      NoManat := '0 ';
+
+    DataCustNom.ODSBank.open;
+    QRptInterval.QRAMMOUNT1.Caption := NoManat + ValuteName;
+    QRptInterval.QRAMMOUNT2.Caption := NoManat + ValuteName;
+    QRptInterval.QRCustInn1.Caption := CustInn;
+    QRptInterval.QRCustInn2.Caption := CustInn;
+    QRptInterval.QRCustInn3.Caption := CustInn;
+    QRptInterval.QRDat1.Caption :=
+      ExtractMonth(QRptInterval.DataSet.fieldbyname('DAT').asdatetime, '-');
+    QRptInterval.QRDat2.Caption :=
+      ExtractMonth(QRptInterval.DataSet.fieldbyname('DAT').asdatetime, '-');
+    QRptInterval.QRDat3.Caption :=
+      ExtractMonth(QRptInterval.DataSet.fieldbyname('DAT').asdatetime, '-');
+    QRptInterval.Preview;
+  finally
+    // ActionFilterExecute(Sender);
+    DataCustNom.ODS_trancation.Locate('ID', TransactionID, []);
+    DataCustNom.ODSBank.Close;
+    DataCustNom.ODS_trancation.Filtered := False;
+  end;
+
+end;
+
+procedure TFormOperation.tesdiq1Click(Sender: TObject);
+var
+  trid, parentid, selectrow, i: integer;
+begin
+  with XDBGrid2, DataSource.DataSet do
+  begin
+
+    selectrow := SelectedRows.Count;
+
+    for i := 0 to selectrow - 1 do
+    begin
+      GotoBookmark(Pointer(SelectedRows[I]));
+      parentid := fieldbyname('parentid').asInteger;
+      //ShowMessage(inttostr(i));
+      trid := DataCustNom.PG_PCustService.CallIntegerFunction
+        ('get_operation_tesdiq', [parentid]);
+    end;
+    DataCustNom.ODS_trancation.Refresh;
+
+  end;
+
+end;
+
+procedure TFormOperation.XDBGrid1DblClick(Sender: TObject);
+begin
+  FormOperationShow1.ShowModal;
+end;
+
+procedure TFormOperation.XDBGrid1DrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TXColumn; State: TGridDrawState);
+
+var
+  ImageIndex: Integer;
+begin
+
+  ImageIndex := -1;
+  with Sender as TXDBGrid do
+  begin
+    if DataSource.DataSet.RecordCount <> 0 then
+    begin
+      case DataSource.DataSet.fieldbyname('Status').asInteger of
+        tsCommited:
+          ImageIndex := 0;
+        tsRejected:
+          ImageIndex := 1;
+        tsDelayed:
+          ImageIndex := 2;
+      else
+      end;
+      if (DataCol = 0) and (ImageIndex <> -1) then
+        ImageList1.Draw(Canvas, Rect.Left, Rect.Top, ImageIndex, True)
+      else
+        DefaultDrawColumnCell(Rect, DataCol, Column, State);
+    end;
+  end;
+end;
+
+procedure TFormOperation.XDBGrid2DblClick(Sender: TObject);
+begin
+  FormOperationShow.ShowModal;
+end;
+
+procedure TFormOperation.XDBGrid3DrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TXColumn; State: TGridDrawState);
+var
+  ImageIndex: Integer;
+begin
+
+  ImageIndex := -1;
+  with Sender as TXDBGrid do
+  begin
+    if DataSource.DataSet.RecordCount <> 0 then
+    begin
+      case DataSource.DataSet.fieldbyname('Status').asInteger of
+        tsCommited:
+          ImageIndex := 0;
+        tsRejected:
+          ImageIndex := 1;
+        tsDelayed:
+          ImageIndex := 2;
+      else
+      end;
+      if (DataCol = 0) and (ImageIndex <> -1) then
+        ImageList1.Draw(Canvas, Rect.Left, Rect.Top, ImageIndex, True)
+      else
+        DefaultDrawColumnCell(Rect, DataCol, Column, State);
+    end;
+  end;
+end;
+
+procedure TFormOperation.XFBitBtn1Click(Sender: TObject);
+var
+  trid, parentid, selectrow, i: integer;
+begin
+  with XDBGrid2, DataSource.DataSet do
+  begin
+
+    selectrow := SelectedRows.Count;
+    ShowMessage(inttostr(selectrow));
+    for i := 0 to selectrow - 1 do
+    begin
+      GotoBookmark(Pointer(SelectedRows[I]));
+      parentid := fieldbyname('parentid').asInteger;
+     // showmessage(inttostr(parentid));
+      //ShowMessage(inttostr(i));
+       DataCustNom.PG_PCustService.Callprocedure
+        ('get_operation_Legv', [parentid]);
+    end;
+     DataCustNom.ODS_sb_business_opers.Refresh;
+    DataCustNom.ODS_trancation.Refresh;
+
+  end;
+
+end;
+
+procedure TFormOperation.XFButton1Click(Sender: TObject);
+var
+  bdat, edat: TDateTime;
+begin
+  bdat := Integer(Trunc(BeginDat.DateTime));
+  edat := Integer(Trunc(EndDat.DateTime));
+  with DataCustNom, ODS_sb_business_opers do
+  begin
+    if active = True then
+      Close;
+    SetVariable('bdat', bdat);
+    SetVariable('edat', edat);
+    open;
+  end;
+end;
+
+procedure TFormOperation.XFButton2Click(Sender: TObject);
+begin
+tesdiq1.Click;
+end;
+
+end.

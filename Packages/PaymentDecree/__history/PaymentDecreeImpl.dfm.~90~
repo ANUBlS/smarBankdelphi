@@ -1,0 +1,1279 @@
+object PaymentDecree: TPaymentDecree
+  Left = 212
+  Top = 126
+  Width = 902
+  Height = 582
+  Caption = 'PaymentDecree'
+  Color = clBtnFace
+  Font.Charset = RUSSIAN_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  OldCreateOrder = False
+  OnCreate = ActiveFormCreate
+  OnDestroy = ActiveFormDestroy
+  PixelsPerInch = 96
+  TextHeight = 14
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 902
+    Height = 582
+    Align = alClient
+    TabOrder = 0
+    object GroupBox1: TGroupBox
+      Left = 448
+      Top = 46
+      Width = 453
+      Height = 190
+      Caption = #1041#1077#1085#1077#1092#1080#1089#1080#1072#1088' ('#1072#1083#1072#1085') '#1073#1072#1085#1082':'
+      TabOrder = 2
+      object Panel2: TPanel
+        Left = 2
+        Top = 124
+        Width = 449
+        Height = 27
+        Align = alTop
+        Alignment = taLeftJustify
+        BevelOuter = bvLowered
+        Caption = ' SWIFT:'
+        TabOrder = 4
+        DesignSize = (
+          449
+          27)
+        object EKBSwift: TEdit
+          Left = 143
+          Top = 2
+          Width = 306
+          Height = 22
+          Anchors = [akLeft, akTop, akRight]
+          TabOrder = 0
+        end
+      end
+      object Panel3: TPanel
+        Left = 2
+        Top = 16
+        Width = 449
+        Height = 27
+        Align = alTop
+        Alignment = taLeftJustify
+        BevelOuter = bvLowered
+        Caption = ' '#1040#1076#1099':'
+        TabOrder = 0
+        DesignSize = (
+          449
+          27)
+        object CBKBName: TComboBox
+          Left = 54
+          Top = 3
+          Width = 395
+          Height = 22
+          Anchors = [akLeft, akTop, akRight]
+          TabOrder = 0
+          OnChange = CBKBNameChange
+        end
+      end
+      object Panel4: TPanel
+        Left = 2
+        Top = 43
+        Width = 449
+        Height = 27
+        Align = alTop
+        Alignment = taLeftJustify
+        BevelOuter = bvLowered
+        Caption = ' '#1050#1086#1076#1091':'
+        TabOrder = 1
+        DesignSize = (
+          449
+          27)
+        object EKBCod: TEdit
+          Left = 185
+          Top = 2
+          Width = 263
+          Height = 22
+          Anchors = [akLeft, akTop, akRight]
+          TabOrder = 0
+          OnKeyPress = EKBCodKeyPress
+        end
+      end
+      object Panel5: TPanel
+        Left = 2
+        Top = 70
+        Width = 449
+        Height = 27
+        Align = alTop
+        Alignment = taLeftJustify
+        BevelOuter = bvLowered
+        Caption = ' '#1042#1070#1045#1053':'
+        TabOrder = 2
+        DesignSize = (
+          449
+          27)
+        object EKBInn: TEdit
+          Left = 224
+          Top = 2
+          Width = 225
+          Height = 22
+          Anchors = [akLeft, akTop, akRight]
+          TabOrder = 0
+        end
+      end
+      object Panel6: TPanel
+        Left = 2
+        Top = 97
+        Width = 449
+        Height = 27
+        Align = alTop
+        Alignment = taLeftJustify
+        BevelOuter = bvLowered
+        Caption = ' '#1052#1094#1093#1073#1080#1088' '#1097#1077#1089#1072#1073'::'
+        TabOrder = 3
+        DesignSize = (
+          449
+          27)
+        object EKBCorAcc: TEdit
+          Left = 172
+          Top = 2
+          Width = 277
+          Height = 22
+          Anchors = [akLeft, akTop, akRight]
+          TabOrder = 0
+        end
+      end
+      object Panel24: TPanel
+        Left = 3
+        Top = 155
+        Width = 446
+        Height = 25
+        Alignment = taLeftJustify
+        BevelOuter = bvLowered
+        Caption = ' '#1042#1072#1089#1080#1090#1103#1095#1080' '#1041#1072#1085#1082' :'
+        TabOrder = 5
+        object mod_bank: TDBLookupComboBox
+          Left = 106
+          Top = 1
+          Width = 340
+          Height = 22
+          KeyField = 'NAME'
+          ListField = 'NAME'
+          ListSource = PaymentDataMod.DSBankM
+          TabOrder = 0
+        end
+      end
+    end
+    object GroupBox4: TGroupBox
+      Left = 448
+      Top = 238
+      Width = 453
+      Height = 102
+      Caption = #1040#1083#1072#1085' '#1097#1077#1089#1072#1073':'
+      TabOrder = 3
+      object Panel15: TPanel
+        Left = 2
+        Top = 16
+        Width = 449
+        Height = 27
+        Align = alTop
+        Alignment = taLeftJustify
+        BevelOuter = bvLowered
+        Caption = ' '#1040#1076#1099':'
+        TabOrder = 0
+        DesignSize = (
+          449
+          27)
+        object EKAName: TEdit
+          Left = 108
+          Top = 2
+          Width = 341
+          Height = 22
+          Anchors = [akLeft, akTop, akRight]
+          TabOrder = 0
+        end
+      end
+      object Panel16: TPanel
+        Left = 2
+        Top = 70
+        Width = 449
+        Height = 27
+        Align = alTop
+        Alignment = taLeftJustify
+        BevelOuter = bvLowered
+        Caption = ' '#1042#1070#1045#1053':'
+        TabOrder = 2
+        DesignSize = (
+          449
+          27)
+        object EKAInn: TEdit
+          Left = 181
+          Top = 2
+          Width = 268
+          Height = 22
+          Anchors = [akLeft, akTop, akRight]
+          TabOrder = 0
+          OnChange = EKAInnChange
+        end
+      end
+      object Panel17: TPanel
+        Left = 2
+        Top = 43
+        Width = 449
+        Height = 27
+        Align = alTop
+        Alignment = taLeftJustify
+        BevelOuter = bvLowered
+        Caption = ' '#1053#1102#1084#1088#1103#1089#1080':'
+        TabOrder = 1
+        DesignSize = (
+          449
+          27)
+        object EKANum: TEdit
+          Left = 142
+          Top = 2
+          Width = 307
+          Height = 22
+          Anchors = [akLeft, akTop, akRight]
+          TabOrder = 0
+        end
+      end
+    end
+    object GroupBox5: TGroupBox
+      Left = 8
+      Top = 363
+      Width = 436
+      Height = 72
+      Caption = #1050#1102#1095#1094#1088#1094#1083#1103#1085' '#1084#1103#1073#1083#1103#1100':'
+      TabOrder = 1
+      object Panel18: TPanel
+        Left = 2
+        Top = 43
+        Width = 432
+        Height = 27
+        Align = alTop
+        Alignment = taLeftJustify
+        BevelOuter = bvLowered
+        Caption = ' '#1049#1072#1079#1099' '#1080#1083#1103':'
+        TabOrder = 1
+        DesignSize = (
+          432
+          27)
+        object EAmmountW: TEdit
+          Left = 47
+          Top = 2
+          Width = 385
+          Height = 22
+          Anchors = [akLeft, akTop, akRight]
+          TabOrder = 0
+        end
+      end
+      object Panel19: TPanel
+        Left = 2
+        Top = 16
+        Width = 432
+        Height = 27
+        Align = alTop
+        Alignment = taLeftJustify
+        BevelOuter = bvLowered
+        Caption = ' '#1056#1103#1075#1103#1084#1083#1103':'
+        TabOrder = 0
+        DesignSize = (
+          432
+          27)
+        object EAmmount: TEdit
+          Left = 197
+          Top = 1
+          Width = 235
+          Height = 22
+          Anchors = [akLeft, akTop, akRight]
+          TabOrder = 0
+          OnExit = EAmmountExit
+          OnKeyPress = EAmmountKeyPress
+        end
+        object DBLookupComboBox1: TDBLookupComboBox
+          Left = 85
+          Top = 1
+          Width = 85
+          Height = 22
+          KeyField = 'VAL_NAME'
+          ListField = 'VAL_NAME'
+          ListSource = PaymentDataMod.Dsr_valute
+          TabOrder = 1
+          Visible = False
+        end
+      end
+    end
+    object GroupBox6: TGroupBox
+      Left = 448
+      Top = 340
+      Width = 451
+      Height = 99
+      Caption = ' '#1071#1083#1072#1074#1103':'
+      TabOrder = 4
+      object Panel20: TPanel
+        Left = 2
+        Top = 43
+        Width = 447
+        Height = 27
+        Align = alTop
+        Alignment = taLeftJustify
+        BevelOuter = bvLowered
+        Caption = ' '#1048#1085#1092#1086#1088#1084#1072#1089#1080#1081#1072':'
+        TabOrder = 1
+        DesignSize = (
+          447
+          27)
+        object EExtra: TEdit
+          Left = 82
+          Top = 2
+          Width = 365
+          Height = 22
+          Anchors = [akLeft, akTop, akRight]
+          TabOrder = 0
+        end
+      end
+      object Panel21: TPanel
+        Left = 2
+        Top = 70
+        Width = 202
+        Height = 27
+        Align = alLeft
+        Alignment = taLeftJustify
+        BevelOuter = bvLowered
+        Caption = #214'd'#601'm'#601' tap'#351#305'r'#305#287#305' '#8470':'
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 2
+        DesignSize = (
+          202
+          27)
+        object Label2: TLabel
+          Left = 93
+          Top = 4
+          Width = 8
+          Height = 16
+          Caption = '*'
+          Color = clBtnFace
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clRed
+          Font.Height = -13
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          ParentColor = False
+          ParentFont = False
+        end
+        object EPNum: TEdit
+          Left = 103
+          Top = 3
+          Width = 93
+          Height = 21
+          Anchors = [akLeft, akTop, akRight]
+          TabOrder = 0
+          OnKeyPress = EAmmountKeyPress
+        end
+      end
+      object Panel22: TPanel
+        Left = 2
+        Top = 16
+        Width = 447
+        Height = 27
+        Align = alTop
+        Alignment = taLeftJustify
+        BevelOuter = bvLowered
+        Caption = ' '#1058#1103#1081#1080#1085#1072#1090':'
+        TabOrder = 0
+        DesignSize = (
+          447
+          27)
+        object EAssignment: TEdit
+          Left = 82
+          Top = 2
+          Width = 364
+          Height = 22
+          Anchors = [akLeft, akTop, akRight]
+          TabOrder = 0
+        end
+      end
+      object Panel23: TPanel
+        Left = 204
+        Top = 70
+        Width = 245
+        Height = 27
+        Align = alClient
+        Alignment = taLeftJustify
+        BevelOuter = bvLowered
+        Caption = ' '#1058#1072#1088#1080#1093':'
+        TabOrder = 3
+        DesignSize = (
+          245
+          27)
+        object DTPayment: TDateTimePicker
+          Left = 43
+          Top = 2
+          Width = 202
+          Height = 21
+          Anchors = [akLeft, akTop, akRight]
+          Date = 37650.568482708300000000
+          Time = 37650.568482708300000000
+          TabOrder = 0
+        end
+      end
+    end
+    object ToolBar1: TToolBar
+      Left = 1
+      Top = 1
+      Width = 900
+      Height = 41
+      ButtonHeight = 37
+      ButtonWidth = 106
+      Caption = 'ToolBar'
+      DrawingStyle = dsGradient
+      EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
+      Images = ImageList
+      ShowCaptions = True
+      TabOrder = 5
+      object ToolButton4: TToolButton
+        Left = 0
+        Top = 0
+        Caption = #1049#1077#1085#1080
+        ImageIndex = 9
+        OnClick = ToolButton4Click
+      end
+      object ToolButton3: TToolButton
+        Left = 106
+        Top = 0
+        Width = 8
+        Caption = 'ToolButton3'
+        ImageIndex = 0
+        Style = tbsSeparator
+      end
+      object ToolButton2: TToolButton
+        Tag = 1
+        Left = 114
+        Top = 0
+        Caption = '     '#1043#1103#1073#1091#1083'       '
+        ImageIndex = 10
+        OnClick = ToolButton2Click
+      end
+      object ToolButton1: TToolButton
+        Left = 220
+        Top = 0
+        Width = 8
+        Caption = 'ToolButton1'
+        ImageIndex = 6
+        Style = tbsSeparator
+      end
+      object ToolButton8: TToolButton
+        Left = 228
+        Top = 0
+        Caption = 'Arxiv'
+        ImageIndex = 5
+        OnClick = ToolButton8Click
+      end
+      object ToolButton5: TToolButton
+        Left = 334
+        Top = 0
+        Width = 8
+        Caption = 'ToolButton5'
+        ImageIndex = 6
+        Style = tbsSeparator
+      end
+      object ToolButton6: TToolButton
+        Left = 342
+        Top = 0
+        Width = 8
+        Caption = 'ToolButton6'
+        ImageIndex = 7
+        Style = tbsSeparator
+      end
+      object ToolButton7: TToolButton
+        Left = 350
+        Top = 0
+        Width = 8
+        Caption = 'ToolButton7'
+        ImageIndex = 8
+        Style = tbsSeparator
+      end
+      object ToolButton9: TToolButton
+        Left = 358
+        Top = 0
+        Width = 8
+        Caption = 'ToolButton9'
+        ImageIndex = 9
+        Style = tbsSeparator
+      end
+      object ToolButton10: TToolButton
+        Left = 366
+        Top = 0
+        Caption = 'Yeni Hesab Faktura'
+        ImageIndex = 9
+        OnClick = ToolButton10Click
+      end
+      object ToolButton11: TToolButton
+        Left = 472
+        Top = 0
+        Width = 8
+        Caption = 'ToolButton11'
+        ImageIndex = 10
+        Style = tbsSeparator
+      end
+      object ToolButton12: TToolButton
+        Left = 480
+        Top = 0
+        Caption = 'Q'#601'bul'
+        ImageIndex = 10
+        OnClick = ToolButton12Click
+      end
+      object ToolButton13: TToolButton
+        Left = 586
+        Top = 0
+        Width = 8
+        Caption = 'ToolButton13'
+        ImageIndex = 11
+        Style = tbsSeparator
+      end
+      object ToolButton14: TToolButton
+        Left = 594
+        Top = 0
+        Caption = 'Arxiv Hesab Faktura'
+        ImageIndex = 5
+        OnClick = ToolButton14Click
+      end
+    end
+    object GroupBox2: TGroupBox
+      Left = 6
+      Top = 45
+      Width = 438
+      Height = 177
+      Caption = #1045#1084#1080#1090#1077#1085#1090' ('#1102#1076#1103#1081#1103#1085') '#1073#1072#1085#1082':'
+      TabOrder = 6
+      object Panel7: TPanel
+        Left = 2
+        Top = 136
+        Width = 434
+        Height = 34
+        Align = alTop
+        Alignment = taLeftJustify
+        BevelOuter = bvLowered
+        Caption = ' SWIFT:'
+        TabOrder = 0
+        object DBSwift: TEdit
+          Left = 198
+          Top = 2
+          Width = 230
+          Height = 22
+          TabOrder = 0
+        end
+      end
+      object Panel8: TPanel
+        Left = 2
+        Top = 16
+        Width = 434
+        Height = 29
+        Align = alTop
+        Alignment = taLeftJustify
+        BevelOuter = bvLowered
+        Caption = ' '#1040#1076#1099':'
+        TabOrder = 1
+        object DBName: TComboBox
+          Left = 113
+          Top = 1
+          Width = 321
+          Height = 22
+          TabOrder = 0
+          OnChange = DBNameChange
+        end
+      end
+      object Panel9: TPanel
+        Left = 2
+        Top = 45
+        Width = 434
+        Height = 27
+        Align = alTop
+        Alignment = taLeftJustify
+        BevelOuter = bvLowered
+        Caption = ' '#1050#1086#1076#1091':'
+        TabOrder = 2
+        object DBCod: TEdit
+          Left = 198
+          Top = 0
+          Width = 231
+          Height = 22
+          TabOrder = 0
+          OnKeyPress = DBCodKeyPress
+        end
+      end
+      object Panel10: TPanel
+        Left = 2
+        Top = 72
+        Width = 434
+        Height = 30
+        Align = alTop
+        Alignment = taLeftJustify
+        BevelOuter = bvLowered
+        Caption = ' '#1042#1070#1045#1053':'
+        TabOrder = 3
+        object DBInn: TEdit
+          Left = 198
+          Top = 1
+          Width = 230
+          Height = 22
+          TabOrder = 0
+        end
+      end
+      object Panel11: TPanel
+        Left = 2
+        Top = 102
+        Width = 434
+        Height = 34
+        Align = alTop
+        Alignment = taLeftJustify
+        BevelOuter = bvLowered
+        Caption = ' '#1052#1094#1093#1073#1080#1088' '#1097#1077#1089#1072#1073'::'
+        TabOrder = 4
+        object DBCorAcc: TEdit
+          Left = 198
+          Top = 2
+          Width = 230
+          Height = 22
+          TabOrder = 0
+        end
+      end
+    end
+    object Panel25: TPanel
+      Left = 7
+      Top = 438
+      Width = 435
+      Height = 45
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 7
+      object Label1: TLabel
+        Left = 9
+        Top = 17
+        Width = 194
+        Height = 14
+        Caption = 'B'#252'dc'#601' t'#601'snifat'#305'n'#305'n kodu:................'
+      end
+      object Edit1: TEdit
+        Left = 224
+        Top = 13
+        Width = 207
+        Height = 22
+        TabOrder = 0
+      end
+    end
+    object Panel26: TPanel
+      Left = 448
+      Top = 439
+      Width = 451
+      Height = 45
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 8
+      object Label4: TLabel
+        Left = 9
+        Top = 15
+        Width = 172
+        Height = 14
+        Caption = 'B'#252'dc'#601' s'#601'viyy'#601'sinin kodu:..........'
+      end
+      object Edit4: TEdit
+        Left = 223
+        Top = 12
+        Width = 216
+        Height = 22
+        TabOrder = 0
+      end
+    end
+    object GroupBox7: TGroupBox
+      Left = 1
+      Top = 360
+      Width = 900
+      Height = 220
+      Caption = 'Hesab Faktura'
+      TabOrder = 9
+      Visible = False
+      object DBNavigator1: TDBNavigator
+        Left = 2
+        Top = 16
+        Width = 896
+        Height = 25
+        DataSource = PaymentDataMod.Dsr_Inv_child
+        VisibleButtons = [nbInsert, nbDelete, nbEdit, nbPost, nbCancel, nbRefresh]
+        Align = alTop
+        TabOrder = 1
+      end
+      object DBGrid1: TDBGrid
+        Left = 2
+        Top = 41
+        Width = 896
+        Height = 177
+        Align = alClient
+        Anchors = [akLeft, akTop, akRight]
+        DataSource = PaymentDataMod.Dsr_Inv_child
+        DrawingStyle = gdsGradient
+        TabOrder = 0
+        TitleFont.Charset = RUSSIAN_CHARSET
+        TitleFont.Color = clWindowText
+        TitleFont.Height = -11
+        TitleFont.Name = 'Azl Sans Serif'
+        TitleFont.Style = []
+        Columns = <
+          item
+            Expanded = False
+            FieldName = 'ID'
+            Width = 35
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'COL1'
+            Width = 210
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'COL2'
+            Width = 210
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'COL3'
+            Width = 210
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'COL4'
+            Width = 210
+            Visible = True
+          end>
+      end
+    end
+    object GroupBox3: TGroupBox
+      Left = 6
+      Top = 237
+      Width = 438
+      Height = 125
+      Caption = #1050#1102#1095#1094#1088#1103#1085' '#1097#1077#1089#1072#1073':'
+      TabOrder = 0
+      object Panel12: TPanel
+        Left = 2
+        Top = 16
+        Width = 434
+        Height = 27
+        Align = alTop
+        Alignment = taLeftJustify
+        BevelOuter = bvLowered
+        Caption = ' '#1040#1076#1099':'
+        TabOrder = 0
+        DesignSize = (
+          434
+          27)
+        object EDAName: TEdit
+          Left = 108
+          Top = 2
+          Width = 326
+          Height = 22
+          Anchors = [akLeft, akTop, akRight]
+          MaxLength = 255
+          TabOrder = 0
+        end
+      end
+      object Panel13: TPanel
+        Left = 2
+        Top = 70
+        Width = 434
+        Height = 27
+        Align = alTop
+        Alignment = taLeftJustify
+        BevelOuter = bvLowered
+        Caption = ' '#1042#1070#1045#1053':'
+        TabOrder = 2
+        DesignSize = (
+          434
+          27)
+        object EDAInn: TEdit
+          Left = 181
+          Top = 2
+          Width = 253
+          Height = 22
+          Anchors = [akLeft, akTop, akRight]
+          TabOrder = 0
+          OnChange = EKAInnChange
+        end
+      end
+      object Panel14: TPanel
+        Left = 2
+        Top = 43
+        Width = 434
+        Height = 27
+        Align = alTop
+        Alignment = taLeftJustify
+        BevelOuter = bvLowered
+        Caption = ' '#1053#1102#1084#1088#1103#1089#1080':'
+        TabOrder = 1
+        DesignSize = (
+          434
+          27)
+        object CBDANum: TComboBox
+          Left = 144
+          Top = 3
+          Width = 292
+          Height = 22
+          Anchors = [akLeft, akTop, akRight]
+          TabOrder = 0
+          Visible = False
+          OnChange = CBDANumChange
+        end
+        object EditDebtAccNo: TEdit
+          Left = 112
+          Top = 1
+          Width = 324
+          Height = 22
+          TabOrder = 1
+          Visible = False
+          OnDblClick = EditDebtAccNoDblClick
+          OnExit = EditDebtAccNoExit
+        end
+        object DBLookupComboBox2: TDBLookupComboBox
+          Left = 109
+          Top = 2
+          Width = 324
+          Height = 22
+          KeyField = 'ID'
+          ListField = 'ACC_NO'
+          ListSource = PaymentDataMod.Dsr_Acoount
+          TabOrder = 2
+          OnClick = DBLookupComboBox2Click
+        end
+      end
+      object CheckBox: TCheckBox
+        Left = 5
+        Top = 99
+        Width = 243
+        Height = 18
+        Caption = #1065#1077#1089#1072#1073#1072#1090#1076#1072' '#1082#1102#1095#1094#1088#1103#1085' '#1097#1077#1089#1072#1073' '#1103#1082#1089' '#1086#1083#1091#1085#1089#1091#1085
+        Checked = True
+        State = cbChecked
+        TabOrder = 3
+        OnClick = CheckBoxClick
+      end
+    end
+    object GroupBox8: TGroupBox
+      Left = 449
+      Top = 229
+      Width = 452
+      Height = 133
+      TabOrder = 10
+      Visible = False
+      object Label3: TLabel
+        Left = 3
+        Top = 11
+        Width = 23
+        Height = 14
+        Caption = 'Tarix'
+      end
+      object Label5: TLabel
+        Left = 194
+        Top = 10
+        Width = 70
+        Height = 14
+        Caption = 'M'#252'qavil'#601' '#8470'-si'
+      end
+      object Label7: TLabel
+        Left = 3
+        Top = 39
+        Width = 34
+        Height = 14
+        Caption = 'S'#252'tun1'
+      end
+      object Label8: TLabel
+        Left = 230
+        Top = 39
+        Width = 34
+        Height = 14
+        Caption = 'S'#252'tun2'
+      end
+      object Label9: TLabel
+        Left = 3
+        Top = 67
+        Width = 34
+        Height = 14
+        Caption = 'S'#252'tun3'
+      end
+      object Label10: TLabel
+        Left = 230
+        Top = 67
+        Width = 34
+        Height = 14
+        Caption = 'S'#252'tun4'
+      end
+      object DateTimePicker1: TDateTimePicker
+        Left = 43
+        Top = 11
+        Width = 145
+        Height = 22
+        Date = 43105.571753692130000000
+        Time = 43105.571753692130000000
+        TabOrder = 0
+      end
+      object EdNum: TEdit
+        Left = 265
+        Top = 9
+        Width = 175
+        Height = 22
+        TabOrder = 1
+      end
+      object GroupBox9: TGroupBox
+        Left = 3
+        Top = 87
+        Width = 446
+        Height = 43
+        Caption = 'T'#601'yinat'
+        TabOrder = 2
+        object edPrescription: TMemo
+          Left = 2
+          Top = 14
+          Width = 443
+          Height = 25
+          Lines.Strings = (
+            'Memo1')
+          TabOrder = 0
+        end
+      end
+      object Col1: TMemo
+        Left = 43
+        Top = 39
+        Width = 180
+        Height = 22
+        Lines.Strings = (
+          'Col1')
+        TabOrder = 3
+      end
+      object Col2: TMemo
+        Left = 268
+        Top = 39
+        Width = 180
+        Height = 22
+        Lines.Strings = (
+          'Memo2')
+        TabOrder = 4
+      end
+      object Col3: TMemo
+        Left = 43
+        Top = 67
+        Width = 180
+        Height = 22
+        Lines.Strings = (
+          'Memo2')
+        TabOrder = 5
+      end
+      object Col4: TMemo
+        Left = 268
+        Top = 67
+        Width = 180
+        Height = 22
+        Lines.Strings = (
+          'Memo2')
+        TabOrder = 6
+      end
+    end
+  end
+  object ImageList: TImageList
+    Left = 858
+    Top = 25
+    Bitmap = {
+      494C01010D003000300010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      0000000000003600000028000000400000004000000001001000000000000020
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000000000000000FF7F0000000000000000000000000000
+      1000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000000000000000000000000000000000000000FF7F0000
+      0000000000000000000000000000000000000000000000000000000000001000
+      0002100000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000000000000000000000000000FF7F
+      0000000000000000000000000000FF7F00000000000000000000000010000002
+      0002000200000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000000000000000000000000000FF7F
+      000000000000000000000000FF7F000000000000000000000000100000020002
+      0002000210000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      FF7F00000000000000000000FF7F00000000000000000000000000020002E003
+      E003000200021000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000FF7F000000000000FF7F00000000000000000000000000000002E0030000
+      0000E00300020002100000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000FF7F00000000000000000000000000000000E00300000000
+      0000000000020002000200000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000FF7F000000000000000000000000000000000000000000000000
+      00000000E0030002000210000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000FF7F00000000000000000000000000000000000000000000
+      0000000000000000E00300020002100000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000FF7F00000000FF7F00000000000000000000000000000000000000000000
+      0000000000000000000000020002000200000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      FF7F00000000000000000000FF7F000000000000000000000000000000000000
+      00000000000000000000E0030002000200000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000000000000000000000000000FF7F
+      0000000000000000000000000000FF7F00000000000000000000000000000000
+      000000000000000000000000E003000200000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000FF7F00000000
+      00000000000000000000000000000000FF7F0000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000000E07F000000000000E05EE05E00000000000000000000000000000000
+      0000000000000000000000000000000000000000000000001863FF7F10420000
+      0000000000000000000000000000000000001042186300000000000000000000
+      0000104218630000000000000000000000000000000000000000000000000000
+      E07FE05E0000E05EE05E00000000000000000000000000000000000000000000
+      0000000000000000000000000000000000001042FF7F1863186318631042FF7F
+      1042000000000000000000000000000000001042E07F00001863000000000000
+      00001042186318631863000000000000000000000000000000000000E07FE05E
+      0000FF7FFF7F18630000E05EE05E000000000000000000000000000000000000
+      0000000000000000000000000000000000000000F70210421042186318630000
+      1042FF7F104200000000000000000000000000001F0017001863000000000000
+      00001042FF7F000000000000000000000000000000000000E07FE05E0000FF7F
+      1042FF7FFF7F1863186318630000E05E00000000000000000000000000000000
+      0000000000000000000000000000000000000000F702F702F702F702FF7F1863
+      104218631042FF7F104200000000000000000000104217000000000000000000
+      00000000E07FE05E000000000000000000000000E07FE05E000010421042FF7F
+      1042FF7FFF7F1863186318631863186300000000000000000000000000000000
+      0000000000000000000000000000000000000000F702F702F7020000F7021042
+      18631863186300001042FF7F104200000000000000001F001700000000000000
+      000000001042E07F00000000000000000000E05E0000FF7FFF7F10421042FF7F
+      1042FF7FFF7F1863186318631863186300000000000000000000000000000000
+      0000000000000000000000000000000000000000F702F7020000F702F7020000
+      F702F702FF7F18631042FF7F1042000000000000000010421700000000000000
+      000000000000E07FE05E000000000000000000001042FF7FFF7F10421042FF7F
+      1042FF7FFF7F1863186318631863186300000000000000000000000000000000
+      0000000000000000000000000000000000001042F702F702F702F702F702F702
+      F702000000001042104200000000000000000000000000001F00170000000000
+      0000000000001042E07F000000000000000000001042FF7FFF7F10421042FF7F
+      10420000FF7F1863000018631863186300000000000000000000000000000000
+      0000000000000000000000000000000000001042F702F702F7020000F702F702
+      0000000000000000000000000000000000000000000000001042170000000000
+      0000000000000000E07FE05E0000000000000000104200001042104210420000
+      10420000FF7F1863000018630000186300000000000000000000000000000000
+      0000000000000000000000000000000000001042F702F702F702FF7FF702F702
+      0000000000000000000000000000000000000000000000000000000017000000
+      00000000000000001042E07F0000000000000000104200001042104210420000
+      10420000FF7F1863186318630000186300000000000000000000000000000000
+      00000000000000000000000000000000000000001042F70200001863F702F702
+      0000000000000000000000000000000000000000000000001042104217000000
+      00000000000000000000E07FE05E00000000000010420000FF7F104210420000
+      10421042FF7F1042186318631863186300000000000000000000000000000000
+      0000000000000000000000000000000000000000000000001042000000000000
+      000000000000000000000000000000000000000000000000000000001F001700
+      000000000000000000001042186300000000000010421042FF7F104210421042
+      FF7F10421863FF7FFF7F10421863186300000000000000000000000000000000
+      00000000000000000000000000000000000000000000E05E0000FF7F18630000
+      0000000000000000000000000000000000000000000000000000104210421700
+      0000000000000000000000001F7C175C0000000000001042FF7F104218631042
+      1863FF7FFF7F10421863FF7FFF7F104200000000000000000000000000000000
+      000000000000000000000000000000000000000000000000FF7F005C005C0000
+      0000000000000000000000000000000000000000000000000000000010420000
+      00000000000000000000000010421042000000000000000000001042FF7F1042
+      186310421863FF7FFF7F10420000000000000000000000000000000000000000
+      00000000000000000000000000000000000000000000E05EE05EE05EE05E0000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000104218631042000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000E05E00000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000001700FF7F000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000F75EF75EF75EF75EF75EF75E
+      F75EF75EF75EF75EF75EF75EF75EF75E00000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000170017001700FF7F00000000000000000000000000420042000010420000
+      0000000000000000000000000000000000000000F75EF75EF75EF75EF75EF75E
+      F75EF75EF75EF75EF75EF75EF75EF75E00000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      1700170017001700FF7F00000000000000000000000018630042004200000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000001700
+      17001700FF7F17001700FF7F0000000000000000000000421863004200421042
+      0000000000000000000000000000000000000000FF7FF75EFF7FF75EFF7FF75E
+      FF7FF75EFF7FF75EFF7FF75EFF7FF75E0000000000000000000000000000F702
+      00000000F70200000000000000000000000000000000FF7FFF7FFF7F17001700
+      1700FF7F0000000017001700FF7F000000000000000000000042186300420000
+      1042104210421042104200000000000000000000F75EFF7FF75EFF7FF75EFF7F
+      F75EFF7FF75EFF7FF75EFF7F007CFF7F0000000000000000000000000000F702
+      F7020000F702F7020000000000000000000000000000FF7F1042104210421700
+      FF7FFF7F0000000000001700FF7F000000000000000000000000000000420042
+      0042104218631863104200001042000000000000FF7FF75EFF7FF75EFF7FF75E
+      FF7FF75EFF7FF75EFF7FF75EFF7FF75E000000000000F702F702F702F702F702
+      F702F7020000F702F702000000000000000000000000FF7FFF7FFF7FFF7FFF7F
+      FF7FFF7F00000000000000001700FF7F00000000000000000000000000000042
+      1042FF7F18631863186310420000000000000000000000000000000000000000
+      00000000000000000000000000000000000000000000F702F702F702F702F702
+      F702F702F7020000F702F70200000000000000000000FF7F1042104210421042
+      1042FF7F000000000000000000001700FF7F0000000000000000000000001042
+      FF7F1F001F001F001F0018631042104200000000000000000000FF7FFF7FFF7F
+      FF7FFF7FFF7FFF7FFF7F000000000000000000000000F702F702F702F702F702
+      F702F7020000F702F702000000000000000000000000FF7FFF7FFF7FFF7FFF7F
+      FF7FFF7F000000000000000000000000170000000000000000001F000000FF7F
+      18631F00186318631F00186318631F0000000000000000000000FF7F00000000
+      00000000FF7F0000FF7F0000000000000000000000000000000000000000F702
+      F7020000F702F7020000000000000000000000000000FF7F1042104200000000
+      0000FF7F000000000000000000000000000000000000000000001F000000FF7F
+      18631F00FF7F1F00FF7F18631863000000000000000000000000FF7FFF7FFF7F
+      FF7FFF7FFF7FFF7FFF7F0000000000000000000000000000000000000000F702
+      00000000F70200000000000000000000000000000000FF7FFF7FFF7FFF7F0000
+      000000000000000000000000000000000000000000000000000000001F001042
+      FF7F1F001F001F001863FF7F10421F0000000000000000000000FF7F00000000
+      FF7F000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000000000000000000000000000FF7F1042104200000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      1042FF7F18631863FF7F10420000000000000000000000000000FF7FFF7FFF7F
+      FF7F0000FF7FFF7F000000000000000000000000000000000000000000000000
+      00000000000000000000000000000000000000000000FF7FFF7FFF7FFF7F0000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00001042FF7FFF7F104200000000000000000000000000000000FF7F0000F75E
+      FF7F0000FF7F0000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000FF7FFF7FFF7F
+      FF7F000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000424D3E000000000000003E000000
+      2800000040000000400000000100010000000000000200000000000000000000
+      000000000000000000000000FFFFFF00FFFF000000000000FFFF000000000000
+      FFFF000000000000FFBF000000000000FE7F000000000000F8FF000000000000
+      E0FF00000000000080000000000000008000000000000000E0FF000000000000
+      F8FF000000000000FE7F000000000000FFBF000000000000FFFF000000000000
+      FFFF000000000000FFFF000000000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFC
+      FEFFFFFFFDFFF3FFFC7FFFFFF8FFE1F9F87FFC7FF0FFE1F3F03FFD7FE67FF0E3
+      F01FFD7FCE7FF847F30FE10FFF3FFC0FF78FEFEFFFBFFE1FFF87E10FFFDFFC0F
+      FFE1FD7FFFDFF84FFFF1FD7FFFEFE0E3FFF1FC7FFFF7C1F1FFF9FFFFFFFBC7F8
+      FFFFFFFFFFFDFFFFFFFFFFFFFFFFFFFFFFFFFFFDFFFFF7FDFFFFFF00FFFFC1F7
+      3F3FFC00FFFF005F0F0FF000FFFF801F8F1FC000FC7F80078F9F0001FC7F8003
+      CF8F0001FC7F8003C7CF8001E00F004FE7C78001E00F00FFE3E78001E00F00FF
+      F3E38001FC7F81FFE1F38001FC7FE3FFF9F18001FC7FC3FFF0F9C001FFFFC3FF
+      F9F9F007FFFFC3FFFFFFFF1FFFFFE7FFFFFFFFFFFFFF8001FFFFFF9FFFFF0000
+      FFFFFF0FC3FF0000FB7FFE0FC3FF0000F93F8007C1FF0000F81F8023E00F0000
+      800F8033F803000080078039FC0300008003803CFC01E0078007803EF401E007
+      800F873FF403E007F81F803FF801E007F93F857FFC03E00FFB7F80FFFE07E01F
+      FFFF81FFFFFFE03FFFFFFFFFFFFFE07F00000000000000000000000000000000
+      000000000000}
+  end
+end

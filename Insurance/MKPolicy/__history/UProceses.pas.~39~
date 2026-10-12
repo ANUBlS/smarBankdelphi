@@ -1,0 +1,159 @@
+﻿unit UProceses;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, Buttons, Oracle, XFSCtrls;
+
+type
+  TfmProceses = class(TForm)
+    BitBtn1: TBitBtn;
+    BitBtn2: TBitBtn;
+    XFGroupBox1: TXFGroupBox;
+    cbPolNum: TXFCheckBox;
+    cbAccounts: TXFCheckBox;
+    cbTransactions: TXFCheckBox;
+    procedure BitBtn1Click(Sender: TObject);
+    procedure BitBtn2Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure cbAccountsClick(Sender: TObject);
+    procedure cbPolNumClick(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  fmProceses: TfmProceses;
+
+implementation
+
+uses UMKPolicyImpl,sboapiDataModuleimpl,SBTranslateProc;
+
+{$R *.DFM}
+
+procedure TfmProceses.BitBtn1Click(Sender: TObject);
+begin
+
+
+
+    with fmMKPolicy, ODSReport, OPMKKASCO do begin
+      ODSReport.SetVariable('CID', CID);
+      Open;
+    //showmessage(inttostr(CID));
+    //exit;
+     try
+        CallBooleanFunction('buildpolice', [CID,
+                                            cbPolNum.Checked,
+                                            cbAccounts.Checked,
+                                            cbTransactions.Checked]);
+      except
+        on E : EOracleError do begin
+           ShowMessage(E.Message);
+          Abort;
+        end;
+      end;
+      MessageDlg('Əməliyyat keçirildi.', mtInformation, [mbOK], 0);
+      Close;
+    end;
+    ModalResult := mrOk
+end;
+
+procedure TfmProceses.BitBtn2Click(Sender: TObject);
+begin
+close;
+end;
+
+procedure TfmProceses.cbAccountsClick(Sender: TObject);
+var
+i:integer;
+begin
+{ with fmMKPolicy, OPCOMMON do begin
+        // showmessage(inttostr(CID));
+        i:=CallIntegerFunction('get_acc_id',[CID]);
+        if i=1 then
+        begin
+         //
+         showmessage('Artıq bu müqavilə üçün müvafiq hesablar açılıb!');
+         cbAccounts.Checked:=false;
+         exit;
+        end;
+
+     end;  }
+
+end;
+
+procedure TfmProceses.cbPolNumClick(Sender: TObject);
+
+var
+i:integer;
+begin
+{ with fmMKPolicy, OPCOMMON do begin
+        // showmessage(inttostr(CID));
+        i:=CallIntegerFunction('get_polis_num',[CID]);
+        if i=1 then
+        begin
+           showmessage('Artıq bu müqavilə üçün Polis nömrəsi daxil edilib!');
+        cbPolNum.Checked:=false;
+         exit;
+
+        end;
+
+     end; }
+
+end;
+
+procedure TfmProceses.FormCreate(Sender: TObject);
+begin
+      {with  OPCOMMON do begin
+
+        i1:=CallIntegerFunction('get_polis_num',[CID]);
+        if i1=1 then
+        begin
+        cbPolNum.Enabled:=false;
+        ENum.Enabled:=false;
+         end;
+
+         i2:=CallIntegerFunction('get_acc_id',[CID]);
+        if i2=1 then
+        begin
+          cbAccounts.Enabled:=false;
+        end;    }
+SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TfmProceses.FormShow(Sender: TObject);
+var
+  i1,i2 :integer;
+begin
+i2:=0;
+i1:=0;
+      with fmMKPolicy, OPCOMMON do begin
+
+        i1:=CallIntegerFunction('get_polis_num',[CID]);
+        if i1=1 then
+        begin
+        cbPolNum.Enabled:=false;
+        //ENum.Enabled:=false;
+         end;
+
+         i2:=CallIntegerFunction('get_acc_id',[CID]);
+        if i2=1 then
+        begin
+        //showmessage(inttostr(CID));
+        //showmessage(inttostr(i2));
+          cbAccounts.Enabled:=false;
+        end;
+     end;
+     if cbAccounts.Enabled=True then
+
+       cbTransactions.Enabled:=false
+       else
+       cbTransactions.Enabled:=true;
+     //end;
+end;
+
+end.

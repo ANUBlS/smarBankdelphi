@@ -1,0 +1,41 @@
+unit FrmCalculationimpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ExtCtrls;
+
+type
+  TFrmCalculation = class(TForm)
+    Panel1: TPanel;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmCalculation: TFrmCalculation;
+
+implementation
+
+{$R *.dfm}
+
+uses CommanParametrs,sboapiDataModuleImpl,DmCalculationimpl;
+  procedure InitPlugin(s:string);export;
+begin
+
+   if s='' then
+   begin
+   FrmCalculation.ShowModal;
+   end;
+
+end;
+exports
+     InitPlugin;
+
+initialization
+ FrmCalculation :=TFrmCalculation.Create(Application);
+
+end.

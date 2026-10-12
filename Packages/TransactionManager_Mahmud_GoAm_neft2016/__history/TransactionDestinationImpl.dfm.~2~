@@ -1,0 +1,114 @@
+object TransactionDestinationForm: TTransactionDestinationForm
+  Left = 192
+  Top = 317
+  Caption = 'Destinations'
+  ClientHeight = 292
+  ClientWidth = 434
+  Color = clBtnFace
+  Font.Charset = RUSSIAN_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  OnKeyDown = FormKeyDown
+  PixelsPerInch = 96
+  TextHeight = 13
+  object GridDest: TDBGrid
+    Left = 0
+    Top = 25
+    Width = 434
+    Height = 240
+    Align = alTop
+    DataSource = TrDestData
+    TabOrder = 0
+    TitleFont.Charset = RUSSIAN_CHARSET
+    TitleFont.Color = clWindowText
+    TitleFont.Height = -11
+    TitleFont.Name = 'Tahoma'
+    TitleFont.Style = []
+    OnDblClick = GridDestDblClick
+    Columns = <
+      item
+        Color = clSilver
+        Expanded = False
+        FieldName = 'ID'
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clNavy
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        Title.Caption = #8470
+        Title.Color = clNavy
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clWhite
+        Title.Font.Height = -11
+        Title.Font.Name = 'Tahoma'
+        Title.Font.Style = []
+        Width = 35
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'NAME'
+        Title.Caption = 'T'#601'yinat'
+        Title.Color = clNavy
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clWhite
+        Title.Font.Height = -11
+        Title.Font.Name = 'Tahoma'
+        Title.Font.Style = []
+        Width = 360
+        Visible = True
+      end>
+  end
+  object ButtonCancel: TButton
+    Left = 358
+    Top = 267
+    Width = 75
+    Height = 25
+    Caption = #304'mtina'
+    TabOrder = 1
+    OnClick = ButtonCancelClick
+  end
+  object ButtonOk: TButton
+    Left = 280
+    Top = 267
+    Width = 75
+    Height = 25
+    Caption = 'Q'#601'bul'
+    Default = True
+    ModalResult = 1
+    TabOrder = 2
+  end
+  object DBNavigator1: TDBNavigator
+    Left = 0
+    Top = 0
+    Width = 434
+    Height = 25
+    DataSource = TrDestData
+    Align = alTop
+    Flat = True
+    TabOrder = 3
+  end
+  object TrDest: TOracleDataSet
+    SQL.Strings = (
+      'select d.*, d.rowid from TRDESTINATION d'
+      'order by ID'
+      '')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000400000049004400010000000000080000004E0041004D00
+      4500010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 240
+    Top = 56
+  end
+  object TrDestData: TDataSource
+    DataSet = TrDest
+    Left = 288
+    Top = 56
+  end
+end

@@ -1,0 +1,279 @@
+object DataMod: TDataMod
+  OldCreateOrder = False
+  Height = 444
+  Width = 881
+  object OracleDataSet1: TOracleDataSet
+    SQL.Strings = (
+      'select * from sif_settings')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 96
+    Top = 48
+  end
+  object dt_jsondoc: TDataSource
+    DataSet = jsondoc
+    Left = 224
+    Top = 56
+  end
+  object jsondoc: TOracleDataSet
+    SQL.Strings = (
+      'select '
+      'regexp_substr(a.data.applications.id,'#39'[^][,]+'#39', 1, level) id,'
+      
+        'regexp_substr(a.data.applications.amount,'#39'[^][,]+'#39', 1, level) am' +
+        'ount,'
+      
+        'regexp_substr(a.data.applications.duration,'#39'[^][,]+'#39', 1, level) ' +
+        'duration,'
+      
+        'regexp_substr(a.data.applications.purpose,'#39'[^][,]+'#39', 1, level) p' +
+        'urpose,'
+      
+        'regexp_substr(a.data.applications.loanType,'#39'[^][,]+'#39', 1, level) ' +
+        'loantype,'
+      
+        'regexp_substr(a.data.applications.status,'#39'[^][,]+'#39', 1, level) st' +
+        'atus,'
+      
+        'regexp_substr(a.data.applications.offerDate,'#39'[^][,]+'#39', 1, level)' +
+        ' offerdate,'
+      
+        'regexp_substr(a.data.applications.taxesStatus,'#39'[^][,]+'#39', 1, leve' +
+        'l) taxesStatus,'
+      
+        'regexp_substr(a.data.applications.bankStatus,'#39'[^][,]+'#39', 1, level' +
+        ') bankStatus,'
+      
+        'regexp_substr(a.data.applications.edfStatus,'#39'[^][,]+'#39', 1, level)' +
+        ' edfStatus,'
+      
+        'regexp_substr(a.data.applications.submittedDate,'#39'[^][,]+'#39', 1, le' +
+        'vel) submittedDate,'
+      
+        'regexp_substr(a.data.applications.gracePeriod,'#39'[^][,]+'#39', 1, leve' +
+        'l) gracePeriod,'
+      
+        'regexp_substr(a.data.applications.company.id,'#39'[^][,]+'#39', 1, level' +
+        ') company_id,'
+      
+        'regexp_substr(a.data.applications.company.tin,'#39'[^][,]+'#39', 1, leve' +
+        'l) company_tin,'
+      
+        'regexp_substr(a.data.applications.company.companyName,'#39'[^][,]+'#39',' +
+        ' 1, level) company_companyName,'
+      
+        'regexp_substr(a.data.applications.company.registrationForm,'#39'[^][' +
+        ',]+'#39', 1, level) company_registrationForm,'
+      
+        'regexp_substr(a.data.applications.company.serialNumber,'#39'[^][,]+'#39 +
+        ', 1, level) company_serialNumber,'
+      
+        'regexp_substr(a.data.applications.company.pin,'#39'[^][,]+'#39', 1, leve' +
+        'l) company_pin,'
+      
+        'regexp_substr(a.data.applications.company.incorporationDate,'#39'[^]' +
+        '[,]+'#39', 1, level) company_incorporationDate,'
+      
+        'regexp_substr(a.data.applications.company.legalAddress,'#39'[^][,]+'#39 +
+        ', 1, level) company_legalAddress,'
+      
+        'regexp_substr(a.data.applications.company.actualAddress,'#39'[^][,]+' +
+        #39', 1, level) company_actualAddress,'
+      
+        'regexp_substr(a.data.applications.stakeholders.id,'#39'[^][,]+'#39', 1, ' +
+        'level) stakeholders_id,'
+      
+        'regexp_substr(a.data.applications.stakeholders.tin,'#39'[^][,]+'#39', 1,' +
+        ' level)stakeholders_tin,'
+      
+        'regexp_substr(a.data.applications.stakeholders.fullName,'#39'[^][,]+' +
+        #39', 1, level) stakeholders_fullName,'
+      
+        'regexp_substr(a.data.applications.stakeholders.contactNumber,'#39'[^' +
+        '][,]+'#39', 1, level) stakeholders_contactNumber,'
+      
+        'regexp_substr(a.data.applications.stakeholders.email,'#39'[^][,]+'#39', ' +
+        '1, level) stakeholders_email,'
+      
+        'regexp_substr(a.data.applications.document.id,'#39'[^][,]+'#39', 1, leve' +
+        'l)document_id,'
+      
+        'regexp_substr(a.data.applications.document.fileName,'#39'[^][,]+'#39', 1' +
+        ', level) document_filename,'
+      'a.data.lastPageNumber lastPageNumber from json_documents a '
+      
+        'connect by regexp_substr(a.data.applications.id, '#39'[^,]+'#39', 1, lev' +
+        'el) is not null'
+      ''
+      ''
+      '')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000001D0000001C0000004C0041005300540050004100470045004E005500
+      4D0042004500520001000000000004000000490044000100000000000C000000
+      41004D004F0055004E0054000100000000001000000044005500520041005400
+      49004F004E000100000000000E00000050005500520050004F00530045000100
+      00000000100000004C004F0041004E0054005900500045000100000000000C00
+      0000530054004100540055005300010000000000120000004F00460046004500
+      5200440041005400450001000000000016000000540041005800450053005300
+      5400410054005500530001000000000014000000420041004E004B0053005400
+      4100540055005300010000000000120000004500440046005300540041005400
+      550053000100000000001A0000005300550042004D0049005400540045004400
+      4400410054004500010000000000160000004700520041004300450050004500
+      520049004F0044000100000000001400000043004F004D00500041004E005900
+      5F00490044000100000000001600000043004F004D00500041004E0059005F00
+      540049004E000100000000002600000043004F004D00500041004E0059005F00
+      43004F004D00500041004E0059004E0041004D00450001000000000030000000
+      43004F004D00500041004E0059005F0052004500470049005300540052004100
+      540049004F004E0046004F0052004D000100000000002800000043004F004D00
+      500041004E0059005F00530045005200490041004C004E0055004D0042004500
+      52000100000000001600000043004F004D00500041004E0059005F0050004900
+      4E000100000000003200000043004F004D00500041004E0059005F0049004E00
+      43004F00520050004F0052004100540049004F004E0044004100540045000100
+      000000002800000043004F004D00500041004E0059005F004C00450047004100
+      4C0041004400440052004500530053000100000000002A00000043004F004D00
+      500041004E0059005F00410043005400550041004C0041004400440052004500
+      530053000100000000001E0000005300540041004B00450048004F004C004400
+      4500520053005F0049004400010000000000200000005300540041004B004500
+      48004F004C0044004500520053005F00540049004E000100000000002A000000
+      5300540041004B00450048004F004C0044004500520053005F00460055004C00
+      4C004E0041004D004500010000000000340000005300540041004B0045004800
+      4F004C0044004500520053005F0043004F004E0054004100430054004E005500
+      4D00420045005200010000000000240000005300540041004B00450048004F00
+      4C0044004500520053005F0045004D00410049004C0001000000000016000000
+      44004F00430055004D0045004E0054005F004900440001000000000022000000
+      44004F00430055004D0045004E0054005F00460049004C0045004E0041004D00
+      4500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 224
+    Top = 144
+    object jsondocID: TWideStringField
+      FieldName = 'ID'
+      Size = 40
+    end
+    object jsondocAMOUNT: TWideStringField
+      FieldName = 'AMOUNT'
+      Size = 120
+    end
+    object jsondocDURATION: TWideStringField
+      FieldName = 'DURATION'
+      Size = 50
+    end
+    object jsondocPURPOSE: TWideStringField
+      FieldName = 'PURPOSE'
+      Size = 150
+    end
+    object jsondocLOANTYPE: TWideStringField
+      FieldName = 'LOANTYPE'
+      Size = 120
+    end
+    object jsondocSTATUS: TWideStringField
+      FieldName = 'STATUS'
+      Size = 50
+    end
+    object jsondocTAXESSTATUS: TWideStringField
+      FieldName = 'TAXESSTATUS'
+      Size = 120
+    end
+    object jsondocOFFERDATE: TWideStringField
+      FieldName = 'OFFERDATE'
+      Size = 65
+    end
+    object jsondocBANKSTATUS: TWideStringField
+      FieldName = 'BANKSTATUS'
+      Size = 65
+    end
+    object jsondocEDFSTATUS: TWideStringField
+      FieldName = 'EDFSTATUS'
+      Size = 65
+    end
+    object jsondocSUBMITTEDDATE: TWideStringField
+      FieldName = 'SUBMITTEDDATE'
+      Size = 65
+    end
+    object jsondocGRACEPERIOD: TWideStringField
+      FieldName = 'GRACEPERIOD'
+      Size = 40
+    end
+    object jsondocCOMPANY_ID: TWideStringField
+      FieldName = 'COMPANY_ID'
+      Size = 120
+    end
+    object jsondocCOMPANY_TIN: TWideStringField
+      FieldName = 'COMPANY_TIN'
+      Size = 120
+    end
+    object jsondocCOMPANY_COMPANYNAME: TWideStringField
+      FieldName = 'COMPANY_COMPANYNAME'
+      Size = 150
+    end
+    object jsondocCOMPANY_SERIALNUMBER: TWideStringField
+      FieldName = 'COMPANY_SERIALNUMBER'
+      Size = 120
+    end
+    object jsondocCOMPANY_REGISTRATIONFORM: TWideStringField
+      FieldName = 'COMPANY_REGISTRATIONFORM'
+      Size = 50
+    end
+    object jsondocCOMPANY_PIN: TWideStringField
+      FieldName = 'COMPANY_PIN'
+      Size = 60
+    end
+    object jsondocCOMPANY_INCORPORATIONDATE: TWideStringField
+      FieldName = 'COMPANY_INCORPORATIONDATE'
+      Size = 65
+    end
+    object jsondocCOMPANY_LEGALADDRESS: TWideStringField
+      FieldName = 'COMPANY_LEGALADDRESS'
+      Size = 150
+    end
+    object jsondocCOMPANY_ACTUALADDRESS: TWideStringField
+      FieldName = 'COMPANY_ACTUALADDRESS'
+      Size = 120
+    end
+    object jsondocSTAKEHOLDERS_ID: TWideStringField
+      FieldName = 'STAKEHOLDERS_ID'
+      Size = 40
+    end
+    object jsondocSTAKEHOLDERS_TIN: TWideStringField
+      FieldName = 'STAKEHOLDERS_TIN'
+      Size = 40
+    end
+    object jsondocSTAKEHOLDERS_FULLNAME: TWideStringField
+      FieldName = 'STAKEHOLDERS_FULLNAME'
+      Size = 120
+    end
+    object jsondocSTAKEHOLDERS_CONTACTNUMBER: TWideStringField
+      FieldName = 'STAKEHOLDERS_CONTACTNUMBER'
+      Size = 50
+    end
+    object jsondocSTAKEHOLDERS_EMAIL: TWideStringField
+      FieldName = 'STAKEHOLDERS_EMAIL'
+      Size = 120
+    end
+    object jsondocDOCUMENT_ID: TWideStringField
+      FieldName = 'DOCUMENT_ID'
+      Size = 40
+    end
+    object jsondocDOCUMENT_FILENAME: TWideStringField
+      FieldName = 'DOCUMENT_FILENAME'
+      Size = 50
+    end
+    object jsondocLASTPAGENUMBER: TWideStringField
+      FieldName = 'LASTPAGENUMBER'
+      Size = 40
+    end
+  end
+  object insquery1: TOracleQuery
+    Session = sboapiDataModule.SBSession
+    Optimize = False
+    Left = 112
+    Top = 272
+  end
+  object insquery: TOracleDataSet
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 216
+    Top = 288
+  end
+end

@@ -1,0 +1,96 @@
+unit InsSettings;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, Buttons, ComCtrls, DBViewComboBox, Mask, DBCtrls, ExtCtrls, DB,
+  Grids, DBGrids, OracleData;
+
+type
+  TfmSettings = class(TForm)
+    PageControl1: TPageControl;
+    Panel1: TPanel;
+    BitBtn1: TBitBtn;
+    BitBtn2: TBitBtn;
+    TabSheet2: TTabSheet;
+    GroupBox1: TGroupBox;
+    DBGrid3: TDBGrid;
+    GroupBox2: TGroupBox;
+    DBGrid4: TDBGrid;
+    DBNavigator3: TDBNavigator;
+    DBNavigator4: TDBNavigator;
+    ODSBankm: TOracleDataSet;
+    ODSBankmID: TFloatField;
+    ODSBankmKRNO: TFloatField;
+    ODSBankmNAME: TWideStringField;
+    ODSBankmINN: TWideStringField;
+    ODSBankmSWIFT: TWideStringField;
+    ODSBankmBANKCODE: TWideStringField;
+    ODSBankmSUBKRNO: TWideStringField;
+    DSBankm: TDataSource;
+    ODSPerRates: TOracleDataSet;
+    ODSPerRatesTARIF_ID: TFloatField;
+    ODSPerRatesMONTHCOUNT: TFloatField;
+    ODSPerRatesPERCENT: TFloatField;
+    DSPerRates: TDataSource;
+    DSTariffs: TDataSource;
+    ODSTariffs: TOracleDataSet;
+    ODSTariffsID: TFloatField;
+    ODSTariffsBANK_ID: TFloatField;
+    ODSTariffsSTATE_ID: TFloatField;
+    ODSTariffsBEGINDATE: TDateTimeField;
+    ODSTariffsENDDATE: TDateTimeField;
+    ODSTariffsFRANSHIZ: TFloatField;
+    ODSTariffsStates: TWideStringField;
+    ODSTariffsBanks: TWideStringField;
+    ODSStates: TOracleDataSet;
+    ODSStatesID: TFloatField;
+    ODSStatesNAME: TWideStringField;
+    DSStates: TDataSource;
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure BitBtn2Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  fmSettings: TfmSettings;
+
+implementation
+
+uses InsMotorKascoImpl,sboapiDataModuleimpl,SBTranslateProc;
+
+{$R *.DFM}
+
+procedure TfmSettings.BitBtn2Click(Sender: TObject);
+begin
+close;
+end;
+
+procedure TfmSettings.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+   if (ModalResult = mrOk) then begin
+     if (ODSTariffs.State = dsEdit) then ODSTariffs.Post;
+     if (ODSStates.State = dsEdit) then ODSStates.Post;
+     if (ODSPerRates.State = dsEdit) then ODSPerRates.Post;
+     if (ODSBankm.State = dsEdit) then ODSBankm.Post;
+   end;
+   ODSTariffs.Close;
+   ODSStates.Close;
+   ODSPerRates.Close;
+   ODSBankm.Close;
+  
+end;
+
+procedure TfmSettings.FormCreate(Sender: TObject);
+begin
+
+SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+end.

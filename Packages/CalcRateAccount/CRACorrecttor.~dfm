@@ -1,0 +1,112 @@
+object FormCorrection: TFormCorrection
+  Left = 303
+  Top = 199
+  Width = 516
+  Height = 580
+  BorderIcons = [biSystemMenu]
+  Caption = 'FormCorrection'
+  Color = clBtnFace
+  Font.Charset = RUSSIAN_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poMainFormCenter
+  OnCanResize = FormCanResize
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  OnKeyPress = FormKeyPress
+  PixelsPerInch = 96
+  TextHeight = 13
+  object GroupBox1: TGroupBox
+    Left = 0
+    Top = 507
+    Width = 508
+    Height = 46
+    Align = alBottom
+    Caption = 'Ахтарыш'
+    TabOrder = 0
+    object EditContractno: TEdit
+      Left = 2
+      Top = 17
+      Width = 186
+      Height = 21
+      TabOrder = 0
+      OnKeyPress = EditContractnoKeyPress
+    end
+    object Button2: TButton
+      Left = 334
+      Top = 17
+      Width = 75
+      Height = 25
+      Caption = 'Имтина'
+      TabOrder = 1
+      OnClick = Button2Click
+    end
+    object Button1: TButton
+      Left = 244
+      Top = 17
+      Width = 75
+      Height = 25
+      Caption = 'Гябул'
+      TabOrder = 2
+      OnClick = Button1Click
+    end
+    object Button3: TButton
+      Left = 426
+      Top = 17
+      Width = 75
+      Height = 25
+      Caption = 'Баьла'
+      TabOrder = 3
+      OnClick = Button3Click
+    end
+  end
+  object DBGridEh1: TDBGridEh
+    Left = 0
+    Top = 0
+    Width = 508
+    Height = 507
+    Align = alClient
+    DataSource = CRADatMod.CorrectorDatSrc
+    Flat = True
+    FooterColor = clWindow
+    FooterFont.Charset = RUSSIAN_CHARSET
+    FooterFont.Color = clWindowText
+    FooterFont.Height = -11
+    FooterFont.Name = 'Azl Sans Serif'
+    FooterFont.Style = []
+    TabOrder = 1
+    TitleFont.Charset = RUSSIAN_CHARSET
+    TitleFont.Color = clWindowText
+    TitleFont.Height = -11
+    TitleFont.Name = 'Azl Sans Serif'
+    TitleFont.Style = []
+    VertScrollBar.VisibleMode = sbNeverShowEh
+    Columns = <
+      item
+        EditButtons = <>
+        FieldName = 'CONTRACTNO'
+        Footers = <>
+        Title.Caption = 'Мцгавилянин №-си'
+        Width = 201
+      end
+      item
+        EditButtons = <>
+        FieldName = 'LASTPROCESSDATE'
+        Footers = <>
+        Title.Caption = 'Сон ямялиййат тарихи'
+        Width = 197
+      end>
+  end
+  object ActionList: TActionList
+    Left = 72
+    Top = 152
+    object ActionSearch: TAction
+      Caption = 'ActionSearch'
+      OnExecute = ActionSearchExecute
+    end
+  end
+end

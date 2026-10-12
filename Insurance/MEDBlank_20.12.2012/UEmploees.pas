@@ -1,0 +1,64 @@
+unit UEmploees;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, Buttons, ExtCtrls, Grids, DBGrids, Db, OracleData, DBCtrls,
+  OracleNavigator;
+
+type
+  TfmEmploees = class(TForm)
+    GroupBox1: TGroupBox;
+    Panel1: TPanel;
+    BitBtn1: TBitBtn;
+    BitBtn2: TBitBtn;
+    DBGrid1: TDBGrid;
+    OracleNavigator1: TOracleNavigator;
+    procedure DBGrid1DrawDataCell(Sender: TObject; const Rect: TRect;
+      Field: TField; State: TGridDrawState);
+    procedure BitBtn2Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  fmEmploees: TfmEmploees;
+
+implementation
+
+uses sboapiDataModuleimpl,SBTranslateProc, UDataMod;
+
+{$R *.DFM}
+
+procedure TfmEmploees.BitBtn2Click(Sender: TObject);
+begin
+close;
+end;
+
+procedure TfmEmploees.DBGrid1DrawDataCell(Sender: TObject;
+  const Rect: TRect; Field: TField; State: TGridDrawState);
+begin
+{  if (gdFocused in State) then  begin
+    if (Field.Index = 5) then  begin
+      DBLookupComboBox1.Left := Rect.Left + DBGrid1.Left;
+      DBLookupComboBox1.Top := Rect.Top + DBGrid1.top;
+      DBLookupComboBox1.Width := Rect.Right - Rect.Left;
+     { DBLookupCombo1.Height := Rect.Bottom - Rect.Top; }
+{      DBLookupComboBox1.Visible := True;
+    end;
+  end; }
+end;
+
+procedure TfmEmploees.FormCreate(Sender: TObject);
+begin
+
+SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+
+
+end;
+
+end.

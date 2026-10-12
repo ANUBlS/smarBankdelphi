@@ -1,0 +1,758 @@
+object FrmCoefficient: TFrmCoefficient
+  Left = 435
+  Top = 191
+  ClientHeight = 341
+  ClientWidth = 452
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'MS Sans Serif'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poMainFormCenter
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 452
+    Height = 339
+    Align = alTop
+    BevelOuter = bvNone
+    BiDiMode = bdLeftToRight
+    BorderStyle = bsSingle
+    Color = clWhite
+    Ctl3D = False
+    ParentBiDiMode = False
+    ParentCtl3D = False
+    TabOrder = 0
+    object SpeedButton1: TSpeedButton
+      Left = 225
+      Top = 304
+      Width = 74
+      Height = 31
+      Caption = '% '#1062#1079#1088#1103
+      Flat = True
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clNavy
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      NumGlyphs = 2
+      ParentFont = False
+      OnClick = SpeedButton1Click
+    end
+    object SpeedButton2: TSpeedButton
+      Left = 377
+      Top = 303
+      Width = 70
+      Height = 32
+      Caption = #1048#1084#1090#1080#1085#1072
+      Flat = True
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clNavy
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      Glyph.Data = {
+        DE010000424DDE01000000000000760000002800000024000000120000000100
+        0400000000006801000000000000000000001000000000000000000000000000
+        80000080000000808000800000008000800080800000C0C0C000808080000000
+        FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00333333333333
+        333333333333333333333333000033338833333333333333333F333333333333
+        0000333C44833333C83333333388F333333F33330000333C4448333C44833333
+        38F38F333F88F3330000333C444483C44448333338F338F3F8338F3300003333
+        C44448444448333338F3338F833338F3000033333C44444444833333338F3338
+        3333F8330000333333C44444483333333338F333333F83330000333333344444
+        8333333333338F333338333300003333333C444483333333333338F333833333
+        0000333333C444448333333333333833338F3333000033333C44484448333333
+        33338333338F333300003333C44483C44483333333383338F338F33300003333
+        C448333C44483333338F33838F338F33000033333C433333C4443333338FF833
+        38F338F300003333333333333C4C333333388333338FFF830000333333333333
+        3333333333333333333888330000333333333333333333333333333333333333
+        0000}
+      NumGlyphs = 2
+      ParentFont = False
+      OnClick = SpeedButton2Click
+    end
+    object SpeedButton3: TSpeedButton
+      Left = 305
+      Top = 304
+      Width = 74
+      Height = 31
+      Caption = #1071#1089#1072#1089' '#1062#1079#1088#1103
+      Flat = True
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clNavy
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      NumGlyphs = 2
+      ParentFont = False
+      OnClick = SpeedButton3Click
+    end
+    object Gauge1: TGauge
+      Left = 4
+      Top = 304
+      Width = 219
+      Height = 31
+      BackColor = clAqua
+      Color = clRed
+      ForeColor = clYellow
+      ParentColor = False
+      Progress = 0
+      Visible = False
+    end
+    object GroupBox6: TGroupBox
+      Left = 2
+      Top = 1
+      Width = 223
+      Height = 65
+      Caption = #1058#1072#1088#1080#1093' '
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clBlue
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 0
+      object CBaValute: TCheckBox
+        Left = 8
+        Top = 40
+        Width = 97
+        Height = 17
+        Caption = 'T'#1103'tbiq et'
+        Checked = True
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clNavy
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ParentFont = False
+        State = cbChecked
+        TabOrder = 0
+      end
+      object DateTimePicker1: TDateTimePicker
+        Left = 5
+        Top = 17
+        Width = 213
+        Height = 22
+        Date = 40113.597305405100000000
+        Time = 40113.597305405100000000
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clNavy
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 1
+      end
+    end
+    object GroupBox1: TGroupBox
+      Left = 4
+      Top = 67
+      Width = 221
+      Height = 233
+      Caption = 'Filial'
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clBlue
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 1
+      object LookUsrGrp: TEvanescence
+        Tag = 3112
+        Left = 3
+        Top = 31
+        Width = 215
+        Height = 200
+        Color = clWhite
+        Flat = False
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clNavy
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ItemHeight = 14
+        ParentFont = False
+        TabOrder = 0
+        DataSource = srcFilial
+        ListField = 'NAME'
+        KeyField = 'ID'
+      end
+      object CheckBox2: TCheckBox
+        Left = 6
+        Top = 14
+        Width = 97
+        Height = 17
+        Caption = #1065#1072#1084#1089#1099#1085#1099' '#1089#1077#1095
+        Checked = True
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clNavy
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ParentFont = False
+        State = cbChecked
+        TabOrder = 1
+        OnClick = CheckBox2Click
+      end
+    end
+    object GroupBox2: TGroupBox
+      Left = 230
+      Top = 1
+      Width = 223
+      Height = 65
+      Caption = #1041#1086#1088#1078#1072#1083#1072#1085#1099#1085' tipi'
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clBlue
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 2
+      object CBPersons: TCheckBox
+        Left = 8
+        Top = 40
+        Width = 97
+        Height = 17
+        Caption = 'T'#1103'tbiq et'
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clNavy
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 0
+      end
+      object LCBPersons: TDBLookupComboBox
+        Left = 5
+        Top = 18
+        Width = 211
+        Height = 20
+        Ctl3D = False
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clNavy
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        KeyField = 'ID'
+        ListField = 'DESCRIPION'
+        ListSource = DataSrcPersonTypes
+        ParentCtl3D = False
+        ParentFont = False
+        TabOrder = 1
+      end
+    end
+    object GroupBox3: TGroupBox
+      Left = 231
+      Top = 67
+      Width = 221
+      Height = 233
+      Caption = 'M'#1094#1096't'#1103'ri tipi'
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clBlue
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 3
+      object LookPersonelType: TEvanescence
+        Tag = 3112
+        Left = 3
+        Top = 31
+        Width = 215
+        Height = 200
+        Color = clWhite
+        Flat = False
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clNavy
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ItemHeight = 14
+        ParentFont = False
+        TabOrder = 0
+        DataSource = srcPersonelType
+        ListField = 'DESCRIPTION'
+        KeyField = 'ID'
+      end
+      object CheckBox1: TCheckBox
+        Left = 6
+        Top = 14
+        Width = 97
+        Height = 17
+        Caption = #1065#1072#1084#1089#1099#1085#1099' '#1089#1077#1095
+        Checked = True
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clNavy
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ParentFont = False
+        State = cbChecked
+        TabOrder = 1
+        OnClick = CheckBox1Click
+      end
+    end
+  end
+  object PersonTypes: TOracleDataSet
+    SQL.Strings = (
+      'select '
+      '  ID,'
+      '  DESCRIPION'
+      'from'
+      '  CM_PERSONS'
+      ''
+      'order by id')
+    Optimize = False
+    Cursor = crHourGlass
+    Session = sboapiDataModule.SBSession
+    Left = 320
+    Top = 40
+  end
+  object DataSrcPersonTypes: TDataSource
+    DataSet = PersonTypes
+    Left = 368
+    Top = 40
+  end
+  object ExcelExport: TCMExcelExport
+    ConnectTo = ctNewInstance
+    StyleColumnWidth = cwAutoFit
+    ColumnWidth = 0
+    FontTitles.Charset = DEFAULT_CHARSET
+    FontTitles.Color = clNavy
+    FontTitles.Height = -13
+    FontTitles.Name = 'Azl Sans Serif'
+    FontTitles.Style = [fsBold]
+    BorderTitles.Weight = bwThin
+    BorderTitles.LineStyle = blLine
+    OrientationTitles = 0
+    FontData.Charset = RUSSIAN_CHARSET
+    FontData.Color = clWindowText
+    FontData.Height = -11
+    FontData.Name = 'Azl Sans Serif'
+    FontData.Style = []
+    FontSummary.Charset = DEFAULT_CHARSET
+    FontSummary.Color = clWindowText
+    FontSummary.Height = -11
+    FontSummary.Name = 'Azl Sans Serif'
+    FontSummary.Style = []
+    SummarySelection = ssNone
+    SummaryCalculation = scSUM
+    Left = 376
+    Top = 152
+  end
+  object srcPersonelType: TDataSource
+    DataSet = PersonelTypeDataSet
+    Left = 275
+    Top = 177
+  end
+  object PersonelTypeDataSet: TOracleDataSet
+    SQL.Strings = (
+      ''
+      'SELECT id, description'
+      '  FROM cm_categories')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      0500000002000000040000004900440001000000000016000000440045005300
+      4300520049005000540049004F004E00010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 280
+    Top = 119
+  end
+  object FilialDataSet: TOracleDataSet
+    SQL.Strings = (
+      '  SELECT id, name'
+      '    FROM sb_filial')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000400000049004400010000000000080000004E0041004D00
+      4500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 184
+    Top = 119
+    object FilialDataSetID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object FilialDataSetNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 90
+    end
+  end
+  object srcFilial: TDataSource
+    DataSet = FilialDataSet
+    Left = 184
+    Top = 167
+  end
+  object sysdate: TOracleDataSet
+    SQL.Strings = (
+      'select * from smart.sysdat')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000040000000E000000540045004B005F00440041005400010000000000
+      1000000050005200450044005F004400410054000100000000000E0000004100
+      520043005F004400410059000100000000000A00000043004C004F0053004500
+      010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 336
+    Top = 236
+    object sysdateTEK_DAT: TDateTimeField
+      FieldName = 'TEK_DAT'
+      Required = True
+    end
+  end
+  object active: TOracleDataSet
+    SQL.Strings = (
+      
+        'select BRANCH name,sum(DEBTMAIN*kurus) portfel,sum(DATEDEBTINT*k' +
+        'urus) odenilmelifaiz,sum(PAYEDINT*kurus) odenilmish,'
+      
+        'sum(DEBTOVERINT*kurus) gecfaizmeb,sum(GECFAIZQALIQ*kurus) gec ,s' +
+        'um(GECFAIZQALIQ*kurus )/sum(DEBTMAIN*kurus) gf'
+      ',sum(PAYEDINT*kurus) /sum(DATEDEBTINT*kurus)f'
+      'from cm_report_f1 '
+      ''
+      ''
+      'group by BRANCH'
+      ''
+      ''
+      ''
+      ''
+      
+        '/*select  f.name,sum(h.rest*o.ostat) portfel,sum(CM_COEFFICIENT.' +
+        'get_payint(p.id,:dat)*o.ostat) odenilmelifaiz,'
+      
+        'sum(CM_COEFFICIENT.get_payment(p.id,:dat)*o.ostat) odenilmish,su' +
+        'm(CM_COEFFICIENT.get_gec(p.id,:dat)*o.ostat) gec '
+      
+        ',sum(CM_COEFFICIENT.get_gec(p.id,:dat)*o.ostat)/sum(h.rest*o.ost' +
+        'at) gf,sum(CM_COEFFICIENT.get_gecfaiz(p.id,:dat)*o.ostat)gecfaiz' +
+        'meb,'
+      
+        'sum(CM_COEFFICIENT.get_payment(p.id,:dat)*o.ostat)/sum(CM_COEFFI' +
+        'CIENT.get_payint(p.id,:dat)*o.ostat) f from '
+      'cm_active_credits p,'
+      'cm_history h,'
+      'filial f,'
+      'smart.OPERKURS o'
+      'where '
+      'p.id=h.creditid and '
+      'h.hdate = :dat and'
+      'p.branchid=f.id and'
+      'o.dat = :dat and  '
+      'p.currency=o.VAL_KOD -- and h.rest>0'
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      'group by f.name*/')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      0500000008000000080000004E0041004D0045000100000000000E0000005000
+      4F0052005400460045004C000100000000001C0000004F00440045004E004900
+      4C004D0045004C0049004600410049005A00010000000000140000004F004400
+      45004E0049004C004D0049005300480001000000000006000000470045004300
+      0100000000000400000047004600010000000000020000004600010000000000
+      140000004700450043004600410049005A004D0045004200010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 133
+    Top = 236
+    object activeNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 90
+    end
+    object activePORTFEL: TFloatField
+      FieldName = 'PORTFEL'
+    end
+    object activeODENILMELIFAIZ: TFloatField
+      FieldName = 'ODENILMELIFAIZ'
+    end
+    object activeODENILMISH: TFloatField
+      FieldName = 'ODENILMISH'
+    end
+    object activeGEC: TFloatField
+      FieldName = 'GEC'
+    end
+    object activeGF: TFloatField
+      FieldName = 'GF'
+    end
+    object activeF: TFloatField
+      FieldName = 'F'
+    end
+    object activeGECFAIZMEB: TFloatField
+      FieldName = 'GECFAIZMEB'
+    end
+  end
+  object OraclePackage1: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'CM_AK_reports'
+    ParameterMode = pmNamed
+    Left = 69
+    Top = 236
+  end
+  object main: TOracleDataSet
+    SQL.Strings = (
+      
+        'select BRANCH name,sum(DEBTMAIN*kurus) portfel,sum(DATEDEBTMAIN*' +
+        'kurus) odenilmeli ,sum(PAYEDMAIN*kurus) odenilmish,'
+      'sum(ARTIQESAS*kurus) artiq,sum(nvl(DEBTOVERMAIN,0)*kurus) geces,'
+      'sum(GECESASQALIQ*kurus) gec'
+      'from cm_report_f1 '
+      ''
+      ''
+      'group by BRANCH'
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      
+        '/*select  f.name,sum(h.rest*o.ostat) portfel ,sum(cm_coefficient' +
+        '.get_odenilmelirest(p.id,:dat)*o.ostat) odenilmeli ,'
+      'sum(cm_coefficient.get_paymain(p.id,:dat)*o.ostat) odenilmish,'
+      
+        'sum(cm_coefficient.get_artiq(p.id,:dat)*o.ostat) artiq,sum(cm_co' +
+        'efficient.get_geces(p.id,:dat)*o.ostat) geces'
+      ',sum(cm_coefficient.get_gecmain(p.id,:dat)*o.ostat) gec'
+      'from '
+      'cm_active_credits p,'
+      'cm_history h,'
+      'filial f,'
+      'smart.OPERKURS o'
+      'where '
+      'p.id=h.creditid and '
+      'h.hdate = :dat and'
+      'p.branchid=f.id and'
+      'o.dat = :dat and'
+      'p.currency=o.VAL_KOD  --and h.rest>0'
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      'group by f.name*/'
+      ''
+      ''
+      ''
+      '')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      0500000007000000080000004E0041004D0045000100000000000E0000005000
+      4F0052005400460045004C00010000000000140000004F00440045004E004900
+      4C004D0045004C004900010000000000140000004F00440045004E0049004C00
+      4D004900530048000100000000000A0000004100520054004900510001000000
+      0000060000004700450043000100000000000A00000047004500430045005300
+      010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 181
+    Top = 236
+    object mainNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 1176
+    end
+    object mainPORTFEL: TFloatField
+      FieldName = 'PORTFEL'
+    end
+    object mainODENILMELI: TFloatField
+      FieldName = 'ODENILMELI'
+    end
+    object mainODENILMISH: TFloatField
+      FieldName = 'ODENILMISH'
+    end
+    object mainARTIQ: TFloatField
+      FieldName = 'ARTIQ'
+    end
+    object mainGECES: TFloatField
+      FieldName = 'GECES'
+    end
+    object mainGEC: TFloatField
+      FieldName = 'GEC'
+    end
+  end
+  object OracleDataSet1: TOracleDataSet
+    SQL.Strings = (
+      
+        'select  f.name,sum(round(h.rest*o.ostat,2)) portfel,sum(round(CM' +
+        '_COEFFICIENT.get_payint(p.id,:dat)*o.ostat,2)) odenilmelifaiz,'
+      
+        'sum(round(CM_COEFFICIENT.get_payment(p.id,:dat)*o.ostat,2)) oden' +
+        'ilmish,sum(round(CM_COEFFICIENT.get_gec(p.id,:dat)*o.ostat,2)) g' +
+        'ec '
+      
+        ',sum(CM_COEFFICIENT.get_gec(p.id,:dat)*o.ostat)/sum(h.rest*o.ost' +
+        'at) gf,sum(CM_COEFFICIENT.get_gecfaiz(p.id,:dat)*o.ostat)gecfaiz' +
+        'meb,'
+      
+        'sum(CM_COEFFICIENT.get_payment(p.id,:dat)*o.ostat)/sum(CM_COEFFI' +
+        'CIENT.get_payint(p.id,:dat)*o.ostat) f from '
+      'cm_active_credits p,'
+      'cm_history h,'
+      'filial f,'
+      'smart.OPERKURS o'
+      'where '
+      'p.id=h.creditid and '
+      'h.hdate = :dat and'
+      'p.branchid=f.id and'
+      'o.dat = :dat and  '
+      'p.currency=o.VAL_KOD -- and h.rest>0'
+      ''
+      '/*15*/'
+      ''
+      ''
+      ''
+      ''
+      ''
+      'group by f.name')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000080000003A004400410054000C0000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      0500000008000000080000004E0041004D0045000100000000000E0000005000
+      4F0052005400460045004C000100000000001C0000004F00440045004E004900
+      4C004D0045004C0049004600410049005A00010000000000140000004F004400
+      45004E0049004C004D0049005300480001000000000006000000470045004300
+      0100000000000400000047004600010000000000020000004600010000000000
+      140000004700450043004600410049005A004D0045004200010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 85
+    Top = 116
+    object WideStringField1: TWideStringField
+      FieldName = 'NAME'
+      Size = 90
+    end
+    object FloatField1: TFloatField
+      FieldName = 'PORTFEL'
+    end
+    object FloatField2: TFloatField
+      FieldName = 'ODENILMELIFAIZ'
+    end
+    object FloatField3: TFloatField
+      FieldName = 'ODENILMISH'
+    end
+    object FloatField4: TFloatField
+      FieldName = 'GEC'
+    end
+    object FloatField5: TFloatField
+      FieldName = 'GF'
+    end
+    object FloatField6: TFloatField
+      FieldName = 'F'
+    end
+    object FloatField7: TFloatField
+      FieldName = 'GECFAIZMEB'
+    end
+  end
+  object OracleDataSet2: TOracleDataSet
+    SQL.Strings = (
+      
+        'select  f.name,sum(round(h.rest*o.ostat,2)) portfel ,sum(round(c' +
+        'm_coefficient.get_odenilmelirest(p.id,:dat)*o.ostat,2)) odenilme' +
+        'li ,'
+      
+        'sum(round(cm_coefficient.get_paymain(p.id,:dat)*o.ostat,2)) oden' +
+        'ilmish,'
+      
+        'sum(round(cm_coefficient.get_paymain(p.id,:dat)*o.ostat,2))-sum(' +
+        'round(cm_coefficient.get_odenilmelirest(p.id,:dat)*o.ostat,2)) a' +
+        'rtiq'
+      ',sum(round(cm_coefficient.get_gecmain(p.id,:dat)*o.ostat,2)) gec'
+      'from '
+      'cm_active_credits p,'
+      'cm_history h,'
+      'sb_filial f,'
+      'smart.OPERKURS o'
+      'where '
+      'p.id=h.creditid and '
+      'h.hdate = :dat and'
+      'p.branchid=f.id and'
+      'o.dat = :dat and'
+      'p.currency=o.VAL_KOD  --and h.rest>0'
+      ''
+      '/*17*/'
+      ''
+      ''
+      'group by f.name'
+      ''
+      ''
+      ''
+      '')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000080000003A004400410054000C0000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      0500000006000000080000004E0041004D0045000100000000000E0000005000
+      4F0052005400460045004C00010000000000140000004F00440045004E004900
+      4C004D0045004C004900010000000000140000004F00440045004E0049004C00
+      4D004900530048000100000000000A0000004100520054004900510001000000
+      000006000000470045004300010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 45
+    Top = 172
+    object WideStringField2: TWideStringField
+      FieldName = 'NAME'
+      Size = 90
+    end
+    object FloatField8: TFloatField
+      FieldName = 'PORTFEL'
+    end
+    object FloatField9: TFloatField
+      FieldName = 'ODENILMELI'
+    end
+    object FloatField10: TFloatField
+      FieldName = 'ODENILMISH'
+    end
+    object FloatField11: TFloatField
+      FieldName = 'ARTIQ'
+    end
+    object FloatField12: TFloatField
+      FieldName = 'GEC'
+    end
+  end
+  object credit: TOracleDataSet
+    SQL.Strings = (
+      'select * from cm_active_credits p where id is not null'
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      '')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 108
+    Top = 57
+  end
+end

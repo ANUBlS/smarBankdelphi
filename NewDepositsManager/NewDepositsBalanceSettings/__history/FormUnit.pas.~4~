@@ -1,0 +1,37 @@
+unit FormUnit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ExtCtrls, XFSCtrls;
+
+type
+  TForm_balace_settings = class(TForm)
+    XFPanel1: TXFPanel;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form_balace_settings: TForm_balace_settings;
+   procedure InitPlugin(s:string);export;
+implementation
+
+{$R *.dfm}
+
+   procedure InitPlugin(s:string);export;
+begin
+   Form_balace_settings.ShowModal;
+end;
+exports
+     InitPlugin;
+
+initialization
+ Form_balace_settings := TForm_balace_settings.Create(Application);
+end.
+
+
+end.

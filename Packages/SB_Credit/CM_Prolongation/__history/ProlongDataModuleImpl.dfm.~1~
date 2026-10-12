@@ -1,0 +1,127 @@
+object ProlongDataMod: TProlongDataMod
+  OldCreateOrder = False
+  Left = 192
+  Top = 107
+  Height = 480
+  Width = 696
+  object ProlongsData: TOracleDataSet
+    SQL.Strings = (
+      'SELECT id, creditid, prolongdate, newclosedate, oldclosedate'
+      '  FROM cm_prolongations'
+      'WHERE CreditID=:CreditID'
+      'Order By ProlongDate Desc')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    Variables.Data = {
+      0300000001000000090000003A43524544495449440300000000000000000000
+      00}
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crSQLWait
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = CMDataModule.CMSession
+    DesignActivation = False
+    Active = False
+    Left = 48
+    Top = 32
+    object ProlongsDataID: TFloatField
+      DisplayLabel = '№'
+      FieldName = 'ID'
+      Required = True
+    end
+    object ProlongsDataCREDITID: TFloatField
+      FieldName = 'CREDITID'
+      Required = True
+      Visible = False
+    end
+    object ProlongsDataPROLONGDATE: TDateTimeField
+      DisplayLabel = 'Пролонгасийа тарихи'
+      FieldName = 'PROLONGDATE'
+      Required = True
+    end
+    object ProlongsDataNEWCLOSEDATE: TDateTimeField
+      DisplayLabel = 'Узадылма тарихи'
+      FieldName = 'NEWCLOSEDATE'
+      Required = True
+    end
+    object ProlongsDataOLDCLOSEDATE: TDateTimeField
+      FieldName = 'OLDCLOSEDATE'
+      Required = True
+      Visible = False
+    end
+  end
+  object DataSrcProlongsData: TDataSource
+    DataSet = ProlongsData
+    Left = 48
+    Top = 80
+  end
+  object CM_PROLONGATION: TOraclePackage
+    Session = CMDataModule.CMSession
+    Debug = False
+    PackageName = 'CM_PROLONGATION'
+    ParameterMode = pmPositional
+    Cursor = crHourGlass
+    Optimize = True
+    Left = 208
+    Top = 64
+  end
+  object CreditInfo: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      '  NVL(DUEDATELASTCONTRACT,DUEDATEFIRSTCONTRACT) as DUEDATE'
+      'from'
+      '  CM_ACTIVE_CREDITS'
+      'where ID =:ID  ')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    Variables.Data = {0300000001000000030000003A4944030000000000000000000000}
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crSQLWait
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = CMDataModule.CMSession
+    DesignActivation = False
+    Active = False
+    Left = 72
+    Top = 176
+  end
+  object DSCreditInfo: TDataSource
+    DataSet = CreditInfo
+    Left = 72
+    Top = 224
+  end
+end

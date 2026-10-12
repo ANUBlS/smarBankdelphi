@@ -1,0 +1,173 @@
+unit NomCustDataImpl;
+
+interface
+
+uses
+  SysUtils, Classes, DB, OracleData;
+
+type
+  TCustNomData = class(TDataModule)
+    DScustimage: TOracleDataSet;
+    DScustimageID: TFloatField;
+    DScustimagePHOTO: TBlobField;
+    DScustimageCUSTSIGN: TBlobField;
+    DScustimageSTAMP: TBlobField;
+    Dsrcustimage: TDataSource;
+    ODS_Customers_Phys_FS: TOracleDataSet;
+    ODS_Customers_Phys_FSID: TIntegerField;
+    ODS_Customers_Phys_FSCUST_NAME: TWideStringField;
+    ODS_Customers_Phys_FSINCORPORATION_NUMBER: TWideStringField;
+    ODS_Customers_Phys_FSTPH_CONTACT_TYPE: TWideStringField;
+    ODS_Customers_Phys_FSTPH_COMMUNICATION_TYPE: TWideStringField;
+    ODS_Customers_Phys_FSTPH_NUMBER: TWideStringField;
+    ODS_Customers_Phys_FSADDRESS_TYPE: TWideStringField;
+    ODS_Customers_Phys_FSADDRESS_CUST: TWideStringField;
+    ODS_Customers_Phys_FSCOUNTRY_CODE_CUST: TWideStringField;
+    r: TFloatField;
+    ODS_Customers_Phys_FSEMAIL_CUST: TWideStringField;
+    ODS_Customers_Phys_FSURL_CUST: TWideStringField;
+    ODS_Customers_Phys_FSINCORPORATION_STATE: TWideStringField;
+    ODS_Customers_Phys_FSINCORPORATION_CNTR: TWideStringField;
+    ODS_Customers_Phys_FSTPH_EXTENSION: TWideStringField;
+    ODS_Customers_Phys_FSTPH_ZIP: TWideStringField;
+    ODS_Customers_Phys_FSTPH_COUNTRY_PREFIX: TWideStringField;
+    ODS_Customers_Phys_FSTPH_STATE: TWideStringField;
+    ODS_Customers_Phys_FSFIRSTNAME: TWideStringField;
+    ODS_Customers_Phys_FSPATRONYMIC: TWideStringField;
+    ODS_Customers_Phys_FSLASTNAME: TWideStringField;
+    ODS_Customers_Phys_FSPASSPORT: TWideStringField;
+    ODS_Customers_Phys_FSBIRTHDATE: TDateTimeField;
+    ODS_Customers_Phys_FSBIRTHPLACE: TWideStringField;
+    ODS_Customers_Phys_FSFAM_STATUS: TIntegerField;
+    ODS_Customers_Phys_FSADRESS: TWideStringField;
+    ODS_Customers_Phys_FSFAKT_ADRESS: TWideStringField;
+    ODS_Customers_Phys_FSPHONE: TWideStringField;
+    ODS_Customers_Phys_FSEMAIL: TWideStringField;
+    ODS_Customers_Phys_FSOPENDATE: TDateTimeField;
+    ODS_Customers_Phys_FSSEX: TIntegerField;
+    ODS_Customers_Phys_FSUSERID: TFloatField;
+    ODS_Customers_Phys_FSPASSP_NUMBER: TWideStringField;
+    ODS_Customers_Phys_FSADRS_STATE: TWideStringField;
+    ODS_Customers_Phys_FSADRS_CITY: TWideStringField;
+    ODS_Customers_Phys_FSDOC_TYPE: TFloatField;
+    ODS_Customers_Phys_FSSFERA_DEY: TFloatField;
+    ODS_Customers_Phys_FSOTRASL: TFloatField;
+    ODS_Customers_Phys_FSNALOG_KOD: TFloatField;
+    ODS_Customers_Phys_FSORG_SOB: TFloatField;
+    ODS_Customers_Phys_FSBIRTH_STATE: TWideStringField;
+    ODS_Customers_Phys_FSPHONE_MOB: TWideStringField;
+    ODS_Customers_Phys_FSNOTE: TWideStringField;
+    ODS_Customers_Phys_FSINN: TWideStringField;
+    ODS_Customers_Phys_FSSHORT_NAME: TWideStringField;
+    ODS_Customers_Phys_FSGROUP_KLIE: TFloatField;
+    ODS_Customers_Phys_FSPASPDATE: TDateTimeField;
+    ODS_Customers_Phys_FSCLOSE_DAT: TDateTimeField;
+    ODS_Customers_Phys_FSNEREZIDENT: TFloatField;
+    ODS_Customers_Phys_FSVID_SOB: TFloatField;
+    ODS_Customers_Phys_FSPRINAD_KOD: TFloatField;
+    ODS_Customers_Phys_FSPASPPLACE: TWideStringField;
+    ODS_Customers_Phys_FSPASSPIN: TWideStringField;
+    ODS_Customers_Phys_FSCUST_TYPE: TFloatField;
+    ODS_Customers_Phys_FSCATEGORY: TFloatField;
+    ODS_Customers_Phys_FSCITIZENSHIP: TFloatField;
+    ODS_Customers_Phys_FSPASSEXPIRE: TDateTimeField;
+    ODS_Customers_Phys_FSIDCUSTINFO: TFloatField;
+    ODS_Customers_Phys_FSIDCUST: TFloatField;
+    ODS_Customers_Phys_FSINFO_TPH_CONTACT_TYPE: TWideStringField;
+    ODS_Customers_Phys_FSINFO_TPH_COUNTRY: TFloatField;
+    ODS_Customers_Phys_FSINFO_TPH_COUNTRY_CODE: TWideStringField;
+    ODS_Customers_Phys_FSINFO_TPH_CITY: TFloatField;
+    ODS_Customers_Phys_FSINFO_TPH_STATE: TWideStringField;
+    ODS_Customers_Phys_FSINFO_TPH_ZIP: TWideStringField;
+    ODS_Customers_Phys_FSINFO_TPH_COUNTRY_PREFIX: TFloatField;
+    ODS_Customers_Phys_FSINFO_TPH_ADRESS: TWideStringField;
+    ODS_Customers_Phys_FSINFO_TPH_COMMUNICATION_TYPE: TWideStringField;
+    ODS_Customers_Phys_FSINFO_TPH_NUMBER: TWideStringField;
+    ODS_Customers_Phys_FSINFO_TPH_EXTENSION: TWideStringField;
+    ODS_Customers_Phys_FSINFO_CONTACT_TYPE: TWideStringField;
+    ODS_Customers_Phys_FSURL: TWideStringField;
+    ODS_Customers_Phys_FSDOC_COUNTRY: TFloatField;
+    ODS_Customers_Phys_FSCITIZENSHIP2: TFloatField;
+    ODS_Customers_Phys_FSCITIZENSHIP3: TFloatField;
+    ODS_Customers_Phys_FSFAKT_COUNTRY: TFloatField;
+    ODS_Customers_Phys_FSFAKT_CITY: TFloatField;
+    ODS_Customers_Phys_FSFAKT_ZIP: TWideStringField;
+    ODS_Customers_Phys_FSWORK_PLACE: TWideStringField;
+    ODS_Customers_Phys_FSWORK_POST: TWideStringField;
+    ODS_Customers_Phys_FSWORK_ADRESS: TWideStringField;
+    ODS_Customers_Phys_FSWORK_PHONE: TWideStringField;
+    ODS_Customers_Phys_FSINFO_ID: TFloatField;
+    ODS_Customers_Phys_FSDAT_USTAV: TDateTimeField;
+    ODS_Customers_Phys_FSCUST_JUR: TIntegerField;
+    ODS_Customers_Phys_FSCUST_PHYS: TIntegerField;
+    ODS_Customers_Phys_FSCUST_FS: TIntegerField;
+    ODS_Customers_Phys_FSRISK_CATEG: TFloatField;
+    ODS_Customers_Phys_FSBIK: TWideStringField;
+    ODS_Customers_Phys_FSSAMELYDATE: TDateTimeField;
+    ODS_Customers_Phys_FSRISKDESCID: TFloatField;
+    DS_CUSTOMERS_PHYS_FS: TDataSource;
+    Odscountries: TOracleDataSet;
+    OdscountriesID: TFloatField;
+    OdscountriesCNTR_NAME: TWideStringField;
+    OdscountriesCNTR_CODE: TIntegerField;
+    OdscountriesSYMB: TWideStringField;
+    Dsrccountries: TDataSource;
+    OdsGender: TOracleDataSet;
+    OdsGenderID: TFloatField;
+    OdsGenderNAME: TWideStringField;
+    OdsFamstatus: TOracleDataSet;
+    OdsFamstatusID: TFloatField;
+    OdsFamstatusNAME: TWideStringField;
+    ClientGroupData: TOracleDataSet;
+    ClientGroupDataID: TFloatField;
+    ClientGroupDataNAME: TWideStringField;
+    ClientGroup: TDataSource;
+    EstateTypeData: TOracleDataSet;
+    EstateTypeDataID: TFloatField;
+    EstateTypeDataNAME: TWideStringField;
+    EstateType: TDataSource;
+    RelationData: TOracleDataSet;
+    RelationDataID: TFloatField;
+    RelationDataNAME: TWideStringField;
+    Relation: TDataSource;
+    OrganizationTypeData: TOracleDataSet;
+    OrganizationTypeDataID: TFloatField;
+    OrganizationTypeDataNAME: TWideStringField;
+    OrganizationType: TDataSource;
+    ActionAreaData: TOracleDataSet;
+    ActionAreaDataID: TFloatField;
+    ActionAreaDataNAME: TWideStringField;
+    ActionArea: TDataSource;
+    BranchData: TOracleDataSet;
+    BranchDataID: TFloatField;
+    BranchDataNAME: TWideStringField;
+    Branch: TDataSource;
+    TaxAreaData: TOracleDataSet;
+    TaxAreaDataID: TFloatField;
+    TaxAreaDataNAME: TWideStringField;
+    TaxArea: TDataSource;
+    ODS_CUST_RISK_DESC: TOracleDataSet;
+    ODS_CUST_RISK_DESCID: TFloatField;
+    ODS_CUST_RISK_DESCRISK_ID: TFloatField;
+    ODS_CUST_RISK_DESCNAME: TWideStringField;
+    ODS_CUST_RISK_DESCDATE_PERIOD: TFloatField;
+    Dsrc_CUST_RISK_DESC: TDataSource;
+    ODS_SYSDATE: TOracleDataSet;
+    ODS_SYSDATETEK_DAT: TDateTimeField;
+    ODS_SYSDATEPRED_DAT: TDateTimeField;
+    ODS_SYSDATEARC_DAY: TDateTimeField;
+    ODS_SYSDATECLOSE: TIntegerField;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  CustNomData: TCustNomData;
+
+implementation
+
+{$R *.dfm}
+
+end.

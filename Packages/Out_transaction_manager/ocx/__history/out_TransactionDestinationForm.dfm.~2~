@@ -1,0 +1,131 @@
+object TransactionDestinationForm: TTransactionDestinationForm
+  Left = 192
+  Top = 107
+  Caption = 'TransactionDestinationForm'
+  ClientHeight = 294
+  ClientWidth = 565
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'MS Sans Serif'
+  Font.Style = []
+  OldCreateOrder = False
+  OnCreate = FormCreate
+  OnKeyDown = FormKeyDown
+  PixelsPerInch = 96
+  TextHeight = 13
+  object GridDest: TDBGrid
+    Left = 0
+    Top = 25
+    Width = 565
+    Height = 240
+    Align = alTop
+    DataSource = TrDestData
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 0
+    TitleFont.Charset = DEFAULT_CHARSET
+    TitleFont.Color = clWindowText
+    TitleFont.Height = -11
+    TitleFont.Name = 'MS Sans Serif'
+    TitleFont.Style = []
+    OnDblClick = GridDestDblClick
+    OnKeyDown = GridDestKeyDown
+    Columns = <
+      item
+        Color = clSilver
+        Expanded = False
+        FieldName = 'ID'
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clNavy
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        Title.Caption = #8470
+        Title.Color = clNavy
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clNavy
+        Title.Font.Height = -11
+        Title.Font.Name = 'Tahoma'
+        Title.Font.Style = []
+        Width = 35
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'NAME'
+        Title.Caption = #1058#1103#1081#1085#1072#1090
+        Title.Color = clNavy
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clNavy
+        Title.Font.Height = -11
+        Title.Font.Name = 'Tahoma'
+        Title.Font.Style = []
+        Width = 360
+        Visible = True
+      end>
+  end
+  object DBNavigator1: TDBNavigator
+    Left = 0
+    Top = 0
+    Width = 565
+    Height = 25
+    DataSource = TrDestData
+    Align = alTop
+    Flat = True
+    TabOrder = 1
+  end
+  object ButtonOk: TButton
+    Left = 400
+    Top = 275
+    Width = 75
+    Height = 25
+    Caption = #1043#1103#1073#1091#1083
+    Default = True
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    ModalResult = 1
+    ParentFont = False
+    TabOrder = 2
+    OnKeyDown = ButtonOkKeyDown
+  end
+  object ButtonCancel: TButton
+    Left = 486
+    Top = 275
+    Width = 75
+    Height = 25
+    Caption = #1048#1084#1090#1080#1085#1072
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 3
+    OnClick = ButtonCancelClick
+    OnKeyDown = ButtonCancelKeyDown
+  end
+  object TrDest: TOracleDataSet
+    SQL.Strings = (
+      'select d.*, d.rowid from OUT_TRDESTINATION d'
+      'order by ID'
+      '')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 240
+    Top = 56
+  end
+  object TrDestData: TDataSource
+    DataSet = TrDest
+    Left = 288
+    Top = 56
+  end
+end

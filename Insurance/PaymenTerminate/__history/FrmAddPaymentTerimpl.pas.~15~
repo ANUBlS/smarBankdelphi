@@ -1,0 +1,96 @@
+﻿unit FrmAddPaymentTerimpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ExtCtrls, XFSCtrls, DBCtrls, CurrencyEdit, StdCtrls;
+
+type
+  TFrmAddPaymentTer = class(TForm)
+    XFPanel1: TXFPanel;
+    XFPanel2: TXFPanel;
+    XFPanel3: TXFPanel;
+    XFButton1: TXFButton;
+    XFButton2: TXFButton;
+    XFLabel1: TXFLabel;
+    XFLabel2: TXFLabel;
+    XFLabel3: TXFLabel;
+    XFLabel4: TXFLabel;
+    Edit1: TEdit;
+    CurrencyEdit1: TCurrencyEdit;
+    CurrencyEdit2: TCurrencyEdit;
+    DBLookupComboBox1: TDBLookupComboBox;
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure XFButton2Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure XFButton1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmAddPaymentTer: TFrmAddPaymentTer;
+
+implementation
+
+          uses dmPaymenTerminateimpl,sboapiDataModuleimpl,SBTranslateProc,CommanParametrs,
+  frmPaymenTerminateimpl;
+{$R *.dfm}
+
+procedure TFrmAddPaymentTer.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+ if ord(key)=vk_escape then close
+end;
+
+procedure TFrmAddPaymentTer.FormShow(Sender: TObject);
+begin
+
+dmPaymentTer.DSqaliq.Close;
+dmPaymentTer.DSqaliq.SetVariable('pcid',contactid);
+dmPaymentTer.DSqaliq.Open;
+DBLookupComboBox1.KeyValue:='';
+//DMPaymentLoss.DSpaymentAcc.Open;
+Edit1.Text:=datetostr(dmPaymentTer.DSSysdat.FieldByName('tek_dat').AsDateTime);
+//CurrencyEdit1.value:=frmPaymentTer.DBGrid2.DataSource.DataSet.FieldByName('mebleg').AsFloat;
+CurrencyEdit2.Value:=0;
+
+  if dmPaymentTer.DSPaymentTerReal.FieldByName('MEBLEG').AsFloat=0 then
+    begin
+     CurrencyEdit1.value:=dmPaymentTer.DSPaymentTer.FieldByName('MEBLEG').AsFloat
+     end
+     else
+           CurrencyEdit1.value:=dmPaymentTer.DSqaliq.FieldByName('qaliq').AsFloat
+
+end;
+
+procedure TFrmAddPaymentTer.XFButton1Click(Sender: TObject);
+begin
+if DBLookupComboBox1.Text='' then
+begin
+  Showmessage('Diqqət! Hesab seçilməyib!');
+  exit;
+end;
+if CurrencyEdit2.Value>CurrencyEdit1.Value then
+begin
+  ShowMessage('Diqqət!!!Sığorta haqqı Sığrta qalığından böyük ola bilməz.');
+  exit;
+end;
+
+
+if  dmPaymentTer.Pins_common.CallBooleanFunction('ins_pay_Ter_contaract',[contactid,CurrencyEdit2.Value,DBLookupComboBox1.KeyValue])=true then
+     showmessage('Xitam ödəndi.');
+     frmPaymentTer.DBGrid1.DataSource.DataSet.Refresh;
+     FrmAddPaymentTer.Close;
+
+
+end;
+
+procedure TFrmAddPaymentTer.XFButton2Click(Sender: TObject);
+begin
+close;
+end;
+
+end.

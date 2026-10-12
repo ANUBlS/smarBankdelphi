@@ -1,0 +1,378 @@
+unit SBTranslateProc;
+
+interface
+
+
+uses
+  AxCtrls, Classes, Forms, Oracle, Buttons, ComCtrls, StdCtrls, ExtCtrls,
+  SearchCombo, ActiveX, Dialogs, SysUtils, IniFiles, Menus, DBGrids;
+
+procedure TranslateAllComponents(FormName :TActiveForm; PackName :TOraclePackage);
+procedure TranslateAllCompForms(FormName :TForm; PackName :TOraclePackage);
+procedure InsertComponentCaptions(FormName :TActiveForm; PackName :TOraclePackage);
+procedure InsertCompFormCaptions(FormName :TForm; PackName :TOraclePackage);
+
+implementation
+
+function TranslateOrNot:String;
+var
+  Ini     :TIniFile;
+  IniFile :String;
+begin
+  IniFile :='\SbLocal.ini';
+  Ini     :=TIniFile.Create(ExtractFilePath(ParamStr(0))+IniFile);
+  Result  :=Ini.ReadString('DefaultConnection','Translate','');
+end;
+
+function TranslatingPeriod:String;
+var
+  Ini     :TIniFile;
+  IniFile :String;
+begin
+  IniFile :='\SbLocal.ini';
+  Ini     :=TIniFile.Create(ExtractFilePath(ParamStr(0))+IniFile);
+  Result  :=Ini.ReadString('DefaultConnection','TranslatingPeriod','');
+end;
+
+function FontNameT:String;
+var
+  Ini     :TIniFile;
+  IniFile :String;
+begin
+  IniFile :='\SbLocal.ini';
+  Ini     :=TIniFile.Create(ExtractFilePath(ParamStr(0))+IniFile);
+  Result  :=Ini.ReadString('DefaultConnection','FontName','');
+end;
+
+procedure TranslateAllComponents(FormName :TActiveForm; PackName :TOraclePackage);
+var i,j :integer;
+begin
+  if TranslateOrNot='1' then begin
+  with FormName, PackName do begin
+
+  InsertComponentCaptions(FormName, PackName);          
+
+  for i := 0 to FormName.ComponentCount - 1  do begin
+   {TLabel}
+   if (FormName.Components[i].ClassType = TLabel) then
+    (FormName.Components[i] as TLabel).Caption :=
+     CallStringFunction('TranslateWords',[(FormName.Components[i] as TLabel).Caption,2]);   {TButton}   if (FormName.Components[i].ClassType = TButton) then
+    (FormName.Components[i] as TButton).Caption :=
+     CallStringFunction('TranslateWords',[(FormName.Components[i] as TButton).Caption,2]);   {TSpeedButton}   if (FormName.Components[i].ClassType = TSpeedButton) then
+    (FormName.Components[i] as TSpeedButton).Caption :=
+     CallStringFunction('TranslateWords',[(FormName.Components[i] as TSpeedButton).Caption,2]);   {TToolButton}   if (FormName.Components[i].ClassType = TToolButton) then
+    (FormName.Components[i] as TToolButton).Caption :=
+     CallStringFunction('TranslateWords',[(FormName.Components[i] as TToolButton).Caption,2]);   {TGroupBox}   if (FormName.Components[i].ClassType = TGroupBox) then
+    (FormName.Components[i] as TGroupBox).Caption :=
+     CallStringFunction('TranslateWords',[(FormName.Components[i] as TGroupBox).Caption,2]);
+   {CheckBox}
+   if (FormName.Components[i].ClassType = TCheckBox) then
+    (FormName.Components[i] as TCheckBox).Caption :=
+     CallStringFunction('TranslateWords',[(FormName.Components[i] as TCheckBox).Caption,2]);
+   {TRadioGroup}
+   if (FormName.Components[i].ClassType = TRadioGroup) then begin
+    (FormName.Components[i] as TRadioGroup).Caption :=
+     CallStringFunction('TranslateWords',[(FormName.Components[i] as TRadioGroup).Caption,2]);    for j :=0 to (FormName.Components[i] as TRadioGroup).Items.Count-1 do begin
+    (FormName.Components[i] as TRadioGroup).Items[j] :=
+     CallStringFunction('TranslateWords',[(FormName.Components[i] as TRadioGroup).Items[j],2]);
+    end;{RadoiGroup.Items.Count}
+   end;{TRadioGroup}
+   {TComboBox}
+   if (FormName.Components[i].ClassType = TComboBox) then begin
+    for j :=0 to (FormName.Components[i] as TComboBox).Items.Count-1 do begin
+    (FormName.Components[i] as TComboBox).Items[j] :=
+     CallStringFunction('TranslateWords',[(FormName.Components[i] as TComboBox).Items[j],2]);    end;{ComboBox.Items.Count}
+    (FormName.Components[i] as TComboBox).ItemIndex:=0;
+    end;{TComboBox}
+    {TSearchCombo}
+    if (FormName.Components[i].ClassType = TSearchCombo) then begin
+    for j :=0 to (FormName.Components[i] as TSearchCombo).Items.Count-1 do begin
+    (FormName.Components[i] as TSearchCombo).Items[j] :=
+     CallStringFunction('TranslateWords',[(FormName.Components[i] as TSearchCombo).Items[j],2]);    end;{SearchCombo.Items.Count}
+    (FormName.Components[i] as TSearchCombo).ItemIndex:=0;
+    end;{TSearchCombo}
+    {TDBGrid}
+    if (FormName.Components[i].ClassType = TDBGrid) then begin
+     for j :=0 to (FormName.Components[i] as TDBGrid).Columns.Count-1 do begin
+      (FormName.Components[i] as TDBGrid).Columns[j].Title.Caption :=
+        CallStringFunction('TranslateWords',[(FormName.Components[i] as TDBGrid).Columns[j].Title.Caption,2]);
+     end;{DBGrid.Columns.Count}
+    end;{TDBGrid}
+    {TStaticText}
+    if (FormName.Components[i].ClassType = TStaticText) then
+    (FormName.Components[i] as TStaticText).Caption :=
+     CallStringFunction('TranslateWords',[(FormName.Components[i] as TStaticText).Caption,2]);
+    {TPanel}
+    if (FormName.Components[i].ClassType = TPanel) then
+    (FormName.Components[i] as TPanel).Caption :=
+     CallStringFunction('TranslateWords',[(FormName.Components[i] as TPanel).Caption,2]);
+    {TBitBtn}
+    if (FormName.Components[i].ClassType = TBitBtn) then
+    (FormName.Components[i] as TBitBtn).Caption :=
+     CallStringFunction('TranslateWords',[(FormName.Components[i] as TBitBtn).Caption,2]);
+    {TMainMenu}
+    if (FormName.Components[i].ClassType = TMainMenu) then begin
+     for j :=0 to (FormName.Components[i] as TMainMenu).Items.Count-1 do begin
+      (FormName.Components[i] as TMainMenu).Items[j].Caption :=
+        CallStringFunction('TranslateWords',[(FormName.Components[i] as TMainMenu).Items[j].Caption,2]);
+     end;{MainMenu.Items.Count}
+    end;{TMainMenu}
+    {TMenuItem}
+    if (FormName.Components[i].ClassType = TMenuItem) then
+    (FormName.Components[i] as TMenuItem).Caption :=
+     CallStringFunction('TranslateWords',[(FormName.Components[i] as TMenuItem).Caption,2]);
+
+   end;{for i := 0 to ComponentCount - 1}
+
+   FormName.Font.Name :=FontNameT;
+   end;{with}
+   end;{if TranslateOrNot='1' then begin}
+end;
+
+procedure TranslateAllCompForms(FormName :TForm; PackName :TOraclePackage);
+var i,j :integer;
+begin
+  if TranslateOrNot='1' then begin
+  with FormName, PackName do begin
+
+  InsertCompFormCaptions(FormName, PackName);           
+  FormName.Font.Name :=FontNameT;
+  for i := 0 to FormName.ComponentCount - 1  do begin
+   {TLabel}
+   if (FormName.Components[i].ClassType = TLabel) then
+    (FormName.Components[i] as TLabel).Caption :=
+     CallStringFunction('TranslateWords',[(FormName.Components[i] as TLabel).Caption,2]);   {TButton}   if (FormName.Components[i].ClassType = TButton) then
+    (FormName.Components[i] as TButton).Caption :=
+     CallStringFunction('TranslateWords',[(FormName.Components[i] as TButton).Caption,2]);   {TSpeedButton}   if (FormName.Components[i].ClassType = TSpeedButton) then
+    (FormName.Components[i] as TSpeedButton).Caption :=
+     CallStringFunction('TranslateWords',[(FormName.Components[i] as TSpeedButton).Caption,2]);   {TToolButton}   if (FormName.Components[i].ClassType = TToolButton) then
+    (FormName.Components[i] as TToolButton).Caption :=
+     CallStringFunction('TranslateWords',[(FormName.Components[i] as TToolButton).Caption,2]);   {TGroupBox}   if (FormName.Components[i].ClassType = TGroupBox) then
+    (FormName.Components[i] as TGroupBox).Caption :=
+     CallStringFunction('TranslateWords',[(FormName.Components[i] as TGroupBox).Caption,2]);
+   {CheckBox}
+   if (FormName.Components[i].ClassType = TCheckBox) then
+    (FormName.Components[i] as TCheckBox).Caption :=
+     CallStringFunction('TranslateWords',[(FormName.Components[i] as TCheckBox).Caption,2]);
+   {TRadioGroup}
+   if (FormName.Components[i].ClassType = TRadioGroup) then begin
+    (FormName.Components[i] as TRadioGroup).Caption :=
+     CallStringFunction('TranslateWords',[(FormName.Components[i] as TRadioGroup).Caption,2]);    for j :=0 to (FormName.Components[i] as TRadioGroup).Items.Count-1 do begin
+    (FormName.Components[i] as TRadioGroup).Items[j] :=
+     CallStringFunction('TranslateWords',[(FormName.Components[i] as TRadioGroup).Items[j],2]);
+    end;{RadoiGroup.Items.Count}
+   end;{TRadioGroup}
+   {TComboBox}
+   if (FormName.Components[i].ClassType = TComboBox) then begin
+    for j :=0 to (FormName.Components[i] as TComboBox).Items.Count-1 do begin
+    (FormName.Components[i] as TComboBox).Items[j] :=
+     CallStringFunction('TranslateWords',[(FormName.Components[i] as TComboBox).Items[j],2]);    end;{ComboBox.Items.Count}
+    (FormName.Components[i] as TComboBox).ItemIndex:=0;
+    end;{TComboBox}
+    {TSearchCombo}
+    if (FormName.Components[i].ClassType = TSearchCombo) then begin
+    for j :=0 to (FormName.Components[i] as TSearchCombo).Items.Count-1 do begin
+    (FormName.Components[i] as TSearchCombo).Items[j] :=
+     CallStringFunction('TranslateWords',[(FormName.Components[i] as TSearchCombo).Items[j],2]);    end;{SearchCombo.Items.Count}
+    (FormName.Components[i] as TSearchCombo).ItemIndex:=0;
+    end;{TSearchCombo}
+    {TDBGrid}
+    if (FormName.Components[i].ClassType = TDBGrid) then begin
+     for j :=0 to (FormName.Components[i] as TDBGrid).Columns.Count-1 do begin
+      (FormName.Components[i] as TDBGrid).Columns[j].Title.Caption :=
+        CallStringFunction('TranslateWords',[(FormName.Components[i] as TDBGrid).Columns[j].Title.Caption,2]);
+     end;{DBGrid.Columns.Count}
+    end;{TDBGrid}
+    {TStaticText}
+    if (FormName.Components[i].ClassType = TStaticText) then
+    (FormName.Components[i] as TStaticText).Caption :=
+     CallStringFunction('TranslateWords',[(FormName.Components[i] as TStaticText).Caption,2]);
+    {TPanel}
+    if (FormName.Components[i].ClassType = TPanel) then
+    (FormName.Components[i] as TPanel).Caption :=
+     CallStringFunction('TranslateWords',[(FormName.Components[i] as TPanel).Caption,2]);
+    {TBitBtn}
+    if (FormName.Components[i].ClassType = TBitBtn) then
+    (FormName.Components[i] as TBitBtn).Caption :=
+     CallStringFunction('TranslateWords',[(FormName.Components[i] as TBitBtn).Caption,2]);
+    {TMainMenu}
+    if (FormName.Components[i].ClassType = TMainMenu) then begin
+     for j :=0 to (FormName.Components[i] as TMainMenu).Items.Count-1 do begin
+      (FormName.Components[i] as TMainMenu).Items[j].Caption :=
+        CallStringFunction('TranslateWords',[(FormName.Components[i] as TMainMenu).Items[j].Caption,2]);
+     end;{MainMenu.Items.Count}
+    end;{TMainMenu}
+   {TMenuItem}
+    if (FormName.Components[i].ClassType = TMenuItem) then
+    (FormName.Components[i] as TMenuItem).Caption :=
+     CallStringFunction('TranslateWords',[(FormName.Components[i] as TMenuItem).Caption,2]);
+
+   end;{for i := 0 to ComponentCount - 1}
+
+   FormName.Font.Name :=FontNameT;
+   end;{with}
+   end;{if TranslateOrNot='1' then begin}
+end;
+
+procedure InsertComponentCaptions(FormName :TActiveForm; PackName :TOraclePackage);
+var
+  i,j :integer;
+begin
+  if TranslatingPeriod='1' then begin
+   with FormName, PackName do begin
+    for i := 0 to FormName.ComponentCount - 1  do begin
+
+    try          
+     {Inserting used component class names;
+       it shall not deleted (only commentered) because it may be used by mine sometimes}
+     CallProcedure('InsertComponentClassName',[(FormName.Components[i].ClassName)]);
+
+     {TLabel}
+     if (FormName.Components[i].ClassType = TLabel) then
+      CallProcedure('InsertComponentCaption',[(FormName.Components[i] as TLabel).Caption]);
+     {TButton}
+     if (FormName.Components[i].ClassType = TButton) then
+      CallProcedure('InsertComponentCaption',[(FormName.Components[i] as TButton).Caption]);
+     {TSpeedButton}
+     if (FormName.Components[i].ClassType = TSpeedButton) then
+      CallProcedure('InsertComponentCaption',[(FormName.Components[i] as TSpeedButton).Caption]);
+     {TToolButton}     if (FormName.Components[i].ClassType = TToolButton) then
+      CallProcedure('InsertComponentCaption',[(FormName.Components[i] as TToolButton).Caption]);
+     {TGroupBox}
+     if (FormName.Components[i].ClassType = TGroupBox) then
+      CallProcedure('InsertComponentCaption',[(FormName.Components[i] as TGroupBox).Caption]);
+     {CheckBox}
+     if (FormName.Components[i].ClassType = TCheckBox) then
+      CallProcedure('InsertComponentCaption',[(FormName.Components[i] as TCheckBox).Caption]);
+     {TRadioGroup}
+     if (FormName.Components[i].ClassType = TRadioGroup) then begin
+      CallProcedure('InsertComponentCaption',[(FormName.Components[i] as TRadioGroup).Caption]);
+     for j :=0 to (FormName.Components[i] as TRadioGroup).Items.Count-1 do begin
+      try CallProcedure('InsertComponentCaption',[(FormName.Components[i] as TRadioGroup).Items[j]]); except end;
+     end;{RadoiGroup.Items.Count}
+     end;{TRadioGroup}
+     {TComboBox}
+     if (FormName.Components[i].ClassType = TComboBox) then begin
+      for j :=0 to (FormName.Components[i] as TComboBox).Items.Count-1 do begin
+       try CallProcedure('InsertComponentCaption',[(FormName.Components[i] as TComboBox).Items[j]]); except end;
+      end;{ComboBox.Items.Count}
+     end;{TComboBox}
+     {TSearchCombo}
+     if (FormName.Components[i].ClassType = TSearchCombo) then begin
+      for j :=0 to (FormName.Components[i] as TSearchCombo).Items.Count-1 do begin
+       try CallProcedure('InsertComponentCaption',[(FormName.Components[i] as TSearchCombo).Items[j]]); except end;
+      end;{SearchCombo.Items.Count}
+     end;{TSearchCombo}
+     {TDBGrid}
+     if (FormName.Components[i].ClassType = TDBGrid) then begin
+      for j :=0 to (FormName.Components[i] as TDBGrid).Columns.Count-1 do begin
+       try CallProcedure('InsertComponentCaption',[(FormName.Components[i] as TDBGrid).Columns[j].Title.Caption]); except end;
+      end;{DBGrid.Columns.Count}
+     end;{TDBGrid}
+     {TStaticText}
+     if (FormName.Components[i].ClassType = TStaticText) then
+      CallProcedure('InsertComponentCaption',[(FormName.Components[i] as TStaticText).Caption]);
+     {TPanel}
+     if (FormName.Components[i].ClassType = TPanel) then
+      CallProcedure('InsertComponentCaption',[(FormName.Components[i] as TPanel).Caption]);
+     {TBitBtn}
+     if (FormName.Components[i].ClassType = TBitBtn) then
+      CallProcedure('InsertComponentCaption',[(FormName.Components[i] as TBitBtn).Caption]);
+     {TMainMenu}
+     if (FormName.Components[i].ClassType = TMainMenu) then begin
+      for j :=0 to (FormName.Components[i] as TMainMenu).Items.Count-1 do begin
+       try CallProcedure('InsertComponentCaption',[(FormName.Components[i] as TMainMenu).Items[j].Caption]); except end;
+     end;{MainMenu.Items.Count}
+    end;{TMainMenu}
+    {TMenuItem}
+    if (FormName.Components[i].ClassType = TMenuItem) then
+      CallProcedure('InsertComponentCaption',[(FormName.Components[i] as TMenuItem).Caption]);
+
+    except end;
+    end; {for i := 0 to FormName.ComponentCount - 1}
+   end; {with FormName, PackName}
+  end; {if TranslatingPeriod='1'}
+end;
+
+procedure InsertCompFormCaptions(FormName :TForm; PackName :TOraclePackage);
+var
+  i,j :integer;
+begin
+  if TranslatingPeriod='1' then begin
+   with FormName, PackName do begin
+    for i := 0 to FormName.ComponentCount - 1  do begin
+
+    try
+     {Inserting used component class names;
+       it shall not deleted (only commentered) because it may be used by mine sometimes}
+     //CallProcedure('InsertComponentClassName',[(FormName.Components[i].ClassName)]);
+
+     {TLabel}
+     if (FormName.Components[i].ClassType = TLabel) then
+      CallProcedure('InsertComponentCaption',[(FormName.Components[i] as TLabel).Caption]);
+     {TButton}
+     if (FormName.Components[i].ClassType = TButton) then
+      CallProcedure('InsertComponentCaption',[(FormName.Components[i] as TButton).Caption]);
+     {TSpeedButton}
+     if (FormName.Components[i].ClassType = TSpeedButton) then
+      CallProcedure('InsertComponentCaption',[(FormName.Components[i] as TSpeedButton).Caption]);
+     {TToolButton}     if (FormName.Components[i].ClassType = TToolButton) then
+      CallProcedure('InsertComponentCaption',[(FormName.Components[i] as TToolButton).Caption]);
+     {TGroupBox}
+     if (FormName.Components[i].ClassType = TGroupBox) then
+      CallProcedure('InsertComponentCaption',[(FormName.Components[i] as TGroupBox).Caption]);
+     {CheckBox}
+     if (FormName.Components[i].ClassType = TCheckBox) then
+      CallProcedure('InsertComponentCaption',[(FormName.Components[i] as TCheckBox).Caption]);
+     {TRadioGroup}
+     if (FormName.Components[i].ClassType = TRadioGroup) then begin
+      CallProcedure('InsertComponentCaption',[(FormName.Components[i] as TRadioGroup).Caption]);
+     for j :=0 to (FormName.Components[i] as TRadioGroup).Items.Count-1 do begin
+      try CallProcedure('InsertComponentCaption',[(FormName.Components[i] as TRadioGroup).Items[j]]); except end;
+     end;{RadoiGroup.Items.Count}
+     end;{TRadioGroup}
+     {TComboBox}
+     if (FormName.Components[i].ClassType = TComboBox) then begin
+      for j :=0 to (FormName.Components[i] as TComboBox).Items.Count-1 do begin
+       try CallProcedure('InsertComponentCaption',[(FormName.Components[i] as TComboBox).Items[j]]); except end;
+      end;{ComboBox.Items.Count}
+     end;{TComboBox}
+     {TSearchCombo}
+     if (FormName.Components[i].ClassType = TSearchCombo) then begin
+      for j :=0 to (FormName.Components[i] as TSearchCombo).Items.Count-1 do begin
+       try CallProcedure('InsertComponentCaption',[(FormName.Components[i] as TSearchCombo).Items[j]]); except end;
+      end;{SearchCombo.Items.Count}
+     end;{TSearchCombo}
+     {TDBGrid}
+     if (FormName.Components[i].ClassType = TDBGrid) then begin
+      for j :=0 to (FormName.Components[i] as TDBGrid).Columns.Count-1 do begin
+       try CallProcedure('InsertComponentCaption',[(FormName.Components[i] as TDBGrid).Columns[j].Title.Caption]); except end;
+      end;{DBGrid.Columns.Count}
+     end;{TDBGrid}
+     {TStaticText}
+     if (FormName.Components[i].ClassType = TStaticText) then
+      CallProcedure('InsertComponentCaption',[(FormName.Components[i] as TStaticText).Caption]);
+     {TPanel}
+     if (FormName.Components[i].ClassType = TPanel) then
+      CallProcedure('InsertComponentCaption',[(FormName.Components[i] as TPanel).Caption]);
+     {TBitBtn}
+     if (FormName.Components[i].ClassType = TBitBtn) then
+      CallProcedure('InsertComponentCaption',[(FormName.Components[i] as TBitBtn).Caption]);
+     {TMainMenu}
+     if (FormName.Components[i].ClassType = TMainMenu) then begin
+      for j :=0 to (FormName.Components[i] as TMainMenu).Items.Count-1 do begin
+       try CallProcedure('InsertComponentCaption',[(FormName.Components[i] as TMainMenu).Items[j].Caption]); except end;
+     end;{MainMenu.Items.Count}
+    end;{TMainMenu}
+    {TMenuItem}
+    if (FormName.Components[i].ClassType = TMenuItem) then
+      CallProcedure('InsertComponentCaption',[(FormName.Components[i] as TMenuItem).Caption]);
+
+
+    except end;
+    end; {for i := 0 to FormName.ComponentCount - 1}
+   end; {with FormName, PackName}
+  end; {if TranslatingPeriod='1'}
+end;
+
+end.

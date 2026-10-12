@@ -1,0 +1,221 @@
+unit NewDepositsFormFilterImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ExtCtrls, StdCtrls, Mask, DBCtrlsEh, DBLookupEh, NLSLocalizer, ComCtrls,
+  CMExcelExport, DBGridEh, XFSCtrls;
+
+type
+  TNewDepositsFormFilter = class(TForm)
+    Panel1: TPanel;
+    Panel3: TPanel;
+    Panel4: TPanel;
+    Panel2: TPanel;
+    NLSLocalizer1: TNLSLocalizer;
+    EExport: TCMExcelExport;
+    XFGroupBox1: TXFGroupBox;
+    LCBValute: TDBLookupComboboxEh;
+    CBValute: TXFCheckBox;
+    XFGroupBox2: TXFGroupBox;
+    LCBFilial: TDBLookupComboboxEh;
+    CBFilial: TXFCheckBox;
+    XFGroupBox3: TXFGroupBox;
+    LCBPersons: TDBLookupComboboxEh;
+    CBPersons: TXFCheckBox;
+    XFGroupBox4: TXFGroupBox;
+    CBCategories: TXFCheckBox;
+    LCBCategories: TDBLookupComboboxEh;
+    XFGroupBox5: TXFGroupBox;
+    CBDepositTypes: TXFCheckBox;
+    LCBDepositTypes: TDBLookupComboboxEh;
+    XFGroupBox6: TXFGroupBox;
+    CBCustomer: TXFCheckBox;
+    LCBCustomer: TDBLookupComboboxEh;
+    XFGroupBox7: TXFGroupBox;
+    LCBUsers: TDBLookupComboboxEh;
+    CBUsers: TXFCheckBox;
+    XFGroupBox8: TXFGroupBox;
+    LCBStatus: TComboBox;
+    CBStatus: TXFCheckBox;
+    XFGroupBox9: TXFGroupBox;
+    DTPOpenDate: TDateTimePicker;
+    DTPCloseDate: TDateTimePicker;
+    CBOpendat: TXFCheckBox;
+    XFLabel1: TXFLabel;
+    XFPanel1: TXFPanel;
+    ButtonOk: TXFButton;
+    ButtonCancel: TXFButton;
+    ButtonExport: TXFButton;
+    ButtonClose: TXFButton;
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure ButtonOkClick(Sender: TObject);
+    procedure ButtonCancelClick(Sender: TObject);
+    procedure ButtonExportClick(Sender: TObject);
+    procedure ButtonCloseClick(Sender: TObject);
+  private
+    function BuildFilterString : String;
+  public
+    { Public declarations }
+  end;
+
+var
+  NewDepositsFormFilter: TNewDepositsFormFilter;
+
+  procedure exportproc(S:String);export;
+implementation
+
+{$R *.DFM}
+
+uses NewCommonDeclsImpl,NewDepositsFilterImpl,sboapiDataModuleImpl;
+
+
+
+procedure exportproc(S:String);export;
+begin
+   NewDepositsFormFilter.ShowModal;
+end;
+
+exports
+  exportproc;
+
+function TNewDepositsFormFilter.BuildFilterString : String;
+
+  procedure ConcatFilter(var S: String; const Prefix : String; Checked : Boolean; KeyValue : Variant);
+  const
+     csFormat = '(%s=%s)';
+  var
+    Temp : String;   
+  begin
+
+    if Checked then
+    begin
+      Temp := Format(csFormat,[Prefix,Keyvalue]);
+      if S = '' then
+        S := Temp
+      else
+        S :=S + 'and ' + Temp;
+    end;
+    
+  end;  // Concat Filter
+
+  procedure  ConcatFilter1(var S: String; var Prefix : String);
+  begin
+     if (S <> '') and (Prefix <> '') then S := S+' and '+Prefix;
+     if (S = '') and (Prefix <> '') then S := Prefix;
+  end;
+
+var
+  FStatus,FopenDat1,FopenDat2,FopenDat : String;
+begin
+
+  Result := '';
+  FStatus := '';
+  FopenDat1 := '';
+  FopenDat2 := '';
+  FopenDat := '';
+  
+  ConcatFilter(Result,'CURRENCY',CBValute.Checked,LCBValute.KeyValue);
+  ConcatFilter(Result,'BRANCHID',CBFilial.Checked,LCBFilial.KeyValue);
+  ConcatFilter(Result,'PERSONALTYPE',CBPersons.Checked,LCBPersons.KeyValue);
+  ConcatFilter(Result,'CLIENTTYPE',CBCategories.Checked,LCBCategories.KeyValue);
+  ConcatFilter(Result,'ContractType',CBDepositTypes.Checked,LCBDepositTypes.KeyValue);
+  ConcatFilter(Result,'CUSTOMERID',CBCustomer.Checked,LCBCustomer.KeyValue);
+  ConcatFilter(Result,'usid',CBUsers.Checked,LCBUsers.KeyValue);
+
+  if CBStatus.Checked then
+     Case LCBStatus.ItemIndex of
+          0: FStatus := '(status = 1)';
+          1: FStatus := '(Status = 0)';
+     end;
+
+  if CBOpendat.Checked then
+  begin
+     FopenDat1 := ' opendate >=  '''+FormatDateTime('dd/MM/yyyy',DTPOpenDate.Date)+'''';
+     FopenDat2 := ' opendate <=  '''+FormatDateTime('dd/MM/yyyy',DTPCloseDate.Date)+'''';
+     FopenDat := '('+'('+FopenDat1+')'+' and '+'('+FopenDat2+')'+')';
+  end;
+
+
+  ConcatFilter1(Result,FStatus);
+  ConcatFilter1(Result,FopenDat);
+
+ // ShowMessage(Result)
+
+end;
+
+
+procedure TNewDepositsFormFilter.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+   Resize := False;
+end;
+
+procedure TNewDepositsFormFilter.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+   if ord(Key) = VK_ESCAPE then close;
+end;
+
+procedure TNewDepositsFormFilter.FormCreate(Sender: TObject);
+begin
+   dmFilter := TdmFilter.Create(Self);
+   //SBTranslateProc.TranslateAllComponents(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TNewDepositsFormFilter.FormDestroy(Sender: TObject);
+begin
+   dmFilter.Free;
+end;
+
+procedure TNewDepositsFormFilter.FormShow(Sender: TObject);
+begin
+   LCBStatus.ItemIndex := 0;
+end;
+
+procedure TNewDepositsFormFilter.ButtonOkClick(Sender: TObject);
+begin
+ with CommonGrid,DataSource.DataSet,SelectedRows do
+   begin
+      Clear;
+      Filtered := False;
+      Filter := BuildFilterString;
+     // ShowMessage(Filter); //
+      Filtered := True;
+   end;
+end;
+
+procedure TNewDepositsFormFilter.ButtonCancelClick(Sender: TObject);
+begin
+ with CommonGrid,DataSource.DataSet do
+   begin
+      Filtered := False;
+      Filter := '';
+   end;
+end;
+
+procedure TNewDepositsFormFilter.ButtonExportClick(Sender: TObject);
+begin
+  with EExport do
+   begin
+      CommonGrid.DataSource.DataSet.Last;
+      Connect;
+      ExportDataset(CommonGrid.DataSource.DataSet,'Депозитляр',True);
+      Disconnect;
+   end;
+end;
+
+procedure TNewDepositsFormFilter.ButtonCloseClick(Sender: TObject);
+begin
+ Close;
+end;
+
+initialization
+   NewDepositsFormFilter := TNewDepositsFormFilter.Create(CommonApplication);
+
+end.

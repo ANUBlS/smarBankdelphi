@@ -1,0 +1,1 @@
+-+D:\CreditsMgr\Source\Packages\cm_activites\FrmIEAddEditImpl.obj -+D:\CreditsMgr\Source\Packages\cm_activites\actImpl.obj -+c:\program files\borland\delphi5\Lib\SysInit.obj 

@@ -1,0 +1,1125 @@
+﻿unit Out_StatementImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActiveX, AxCtrls, Out_Statement_TLB, StdVcl, QRExport, ComCtrls,  OracleData,Oracle,Gauges,
+  ExtCtrls, Db, DBCtrls,DBGrids, StdCtrls, Buttons,QuickRpt;
+
+type
+  TOut_StatementForm = class(TActiveForm, IActiveFormX)
+    GrBoxMain: TGroupBox;
+    GrBoxDate: TGroupBox;
+    LabelBegDate: TLabel;
+    LabelEndDate: TLabel;
+    DTP_Begin: TDateTimePicker;
+    DTP_End: TDateTimePicker;
+    CBTurnOver: TCheckBox;
+    CBRateDiff: TCheckBox;
+    GrBoxChecking: TGroupBox;
+    Label_Acc_No: TLabel;
+    Label_Bal_Cn: TLabel;
+    LabelCli_Id: TLabel;
+    Edit_Acc_No: TEdit;
+    Edit_Bal_Cn: TEdit;
+    BtnOk: TBitBtn;
+    CBoxExtractCheck: TComboBox;
+    EditCli_Id: TEdit;
+    RGroupPrintMode: TRadioGroup;
+    CBCurrency: TCheckBox;
+    DBLCBavalute: TDBLookupComboBox;
+    DBLCBfilial: TDBLookupComboBox;
+    CBFilial: TCheckBox;
+    CBUser: TCheckBox;
+    dblcbUser: TDBLookupComboBox;
+    RGroupSetting: TRadioGroup;
+    RGroupValView: TRadioGroup;
+    PanelProgress: TPanel;
+    PrBarParent: TGauge;
+    PrBarChild: TProgressBar;
+    SaveDialog: TSaveDialog;
+    QRTextFilter: TQRTextFilter;
+
+      procedure PreviewClick;
+    procedure ToExcelClick;
+    procedure PostClick;
+    procedure ShowTransClick;
+    procedure ShowCardState;
+      function UpdateStr(InpStr:string):string;
+
+    procedure BtnOkClick(Sender: TObject);
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure CBCurrencyClick(Sender: TObject);
+    procedure CBFilialClick(Sender: TObject);
+    procedure CBUserClick(Sender: TObject);
+  private
+    { Private declarations }
+    FEvents: IActiveFormXEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+     procedure ShowReport;
+   procedure ShowReportR;
+   procedure ExportDataTable;
+//   function SB_SysDate :TDateTime;
+  public
+    { Public declarations }
+    procedure Initialize; override;
+  end;
+
+Var
+  v_BDate    :TDateTime;
+ v_EDate    :TDateTime;
+notAccId    :string;
+v_filial,
+    v_val,
+     v_user  :integer;
+TurnYesNo,
+   RateDif : Integer;
+   Exl, Sheet: Variant;
+Turn_and_RateDiff :string;
+
+Out_StatementForm: TOut_StatementForm;
+
+implementation
+
+uses ComObj, ComServ, Out_RepR_Unit, Out_Rep_Unit, Out_Stdatamod_Unit,
+  Out_FormTransView_Unit,sboapiDataModuleImpl, SBTranslateProc;
+{$R *.DFM}
+
+{ TActiveFormX }
+
+procedure TOut_StatementForm.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_ActiveFormXPage); }
+end;
+
+procedure TOut_StatementForm.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as IActiveFormXEvents;
+end;
+
+procedure TOut_StatementForm.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TOut_StatementForm.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TOut_StatementForm.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TOut_StatementForm.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TOut_StatementForm.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TOut_StatementForm.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TOut_StatementForm.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TOut_StatementForm.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TOut_StatementForm.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TOut_StatementForm.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TOut_StatementForm.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TOut_StatementForm.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TOut_StatementForm.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TOut_StatementForm.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TOut_StatementForm.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TOut_StatementForm.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TOut_StatementForm.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TOut_StatementForm.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TOut_StatementForm.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TOut_StatementForm._Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TOut_StatementForm.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TOut_StatementForm.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TOut_StatementForm.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TOut_StatementForm.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TOut_StatementForm.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TOut_StatementForm.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TOut_StatementForm.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TOut_StatementForm.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TOut_StatementForm.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TOut_StatementForm.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TOut_StatementForm.Set_AxBorderStyle(Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TOut_StatementForm.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TOut_StatementForm.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TOut_StatementForm.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TOut_StatementForm.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TOut_StatementForm.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TOut_StatementForm.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TOut_StatementForm.Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TOut_StatementForm.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TOut_StatementForm.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TOut_StatementForm.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TOut_StatementForm.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TOut_StatementForm.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TOut_StatementForm.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+
+Function TOut_StatementForm.UpdateStr(InpStr:string):string;
+var
+  TempString, EndString:String;
+  flag,TempCount ,i, Count, Beg_Index, k : Integer;
+const
+  Commas='''';
+  Comma=',';
+  begin
+    Result:= InpStr;
+    if Result<>'' then
+{}    begin
+    TempString:= '';
+    EndString:= '';
+    Beg_Index:= 1;
+    k:= Length(Result);
+    TempCount:=0;
+    flag:=1;
+    for i:=1 to k do
+      if Result[i] <> ' ' then
+        TempString:= TempString + Result[i];
+    InpStr:= TempString;
+    Result:= InpStr;
+    TempString:= '';
+    k:= Length(Result);
+    for i:=1 to k do
+      begin
+        if Result[i] = ',' then
+          begin
+            Count:= (i-1)-TempCount;
+            Result:= Copy(Result, Beg_Index, Count);
+            TempString:= TempString + Result+Commas+Comma+Commas;
+            Result:= InpStr;
+            Beg_Index:= i+1;
+            TempCount:=i;
+            flag:=0;
+          end;
+        if flag=1 then
+          EndString:= EndString+Result[i]
+        else
+          begin
+            EndString:= '';
+            flag:= 1;
+          end;
+      end;
+      Result:= Commas + TempString + EndString + Commas;
+
+{}    end
+    else
+      Result:= ''' ''';
+  end;
+
+
+procedure CreateSheet;
+begin
+  try
+   Exl := CreateOleObject('Excel.Application');
+   Exl.WorkBooks.add;
+   Sheet := Exl.Application.Worksheets.Item[1];
+  except
+  end;
+end;
+
+
+  {  function TOut_StatementForm.SB_SysDate :TDateTime;
+    begin
+             with
+                 Out_StDatamod.SB_STATEMENT
+                                     do
+                             begin
+
+               Result:=CallDateFunction('get_date',[]);
+                          end;
+    end; }
+
+
+
+   procedure TOut_StatementForm.ShowReport;
+   begin
+   FormRep:=TFormRep.Create(Self);
+    with FormRep do
+     begin
+          QRD_Begin.Caption:=DateToStr(v_BDate);
+          QRD_End.Caption:=DateToStr(v_EDate);
+
+
+            case RGroupPrintMode.ItemIndex of
+             0 : QRBandDetail.ForceNewPage := False;
+             1 : QRBandDetail.ForceNewPage := True;
+            end;
+
+         QRep.Preview;
+      end;
+
+   end;
+
+   procedure TOut_StatementForm.ShowReportR;
+   begin
+   FormRepR:=TFormRepR.Create(Self);
+    with FormRepR do
+     begin
+          QRD_Begin.Caption:=DateToStr(v_BDate);
+          QRD_End.Caption:=DateToStr(v_EDate);
+             case RGroupPrintMode.ItemIndex of
+             0 : QRBandDetail.ForceNewPage := False;
+             1 : QRBandDetail.ForceNewPage := True;
+             end;
+             case RGroupValView.ItemIndex of
+             0:QRDBTextCurr.DataField:='PairCurrencyId';
+             1:QRDBTextCurr.DataField:='aValname';
+             end;
+
+
+         QRep.Preview;
+      end;
+
+   end;
+
+procedure DestroySheet;
+begin
+  try
+   Finalize(Sheet);
+   Finalize(Exl);
+  except
+
+  end;
+end;
+
+
+procedure ShowSheet;
+begin
+  try
+     Exl.Visible := True;
+  except
+     DestroySheet;
+   end;
+end;
+
+procedure TOut_StatementForm.ToExcelClick;
+const
+d=6;
+f=3;
+dd=2;
+var
+i , j , k ,m ,www :Integer;
+t_val :integer;
+v_LDebit,v_LKredit,v_Debit,v_Kredit :real;
+bash  : string;
+begin
+ try
+
+    CreateSheet;
+    ExportDataTable;
+      PanelProgress.Visible:=true;
+     PrBarParent.Progress:=0;
+      PrBarChild.Position:=0;
+     Sheet.Range['A1:A60000'].ColumnWidth:=15;
+     Sheet.Range['B1:B60000'].ColumnWidth:=15;
+     Sheet.Range['C1:C60000'].ColumnWidth:=10;
+     Sheet.Range['D1:D60000'].NumberFormat:='#######';
+     Sheet.Range['D1:D60000'].ColumnWidth:=20;
+     Sheet.Range['E1:E60000'].NumberFormat:='#,##0.00';
+     Sheet.Range['E1:E60000'].ColumnWidth:=12;
+     Sheet.Range['F1:F60000'].NumberFormat:='#,##0.00';
+     Sheet.Range['F1:F60000'].ColumnWidth:=12;
+     Sheet.Range['G1:G60000'].ColumnWidth:=100;
+
+         k:=0;
+  with Out_Stdatamod do  begin
+     t_val:= ODSMainState.FieldByName('CurrencyId').AsInteger;
+     if t_val=0 then begin
+
+        for i:=1 to  ODSMainState.RecordCount do begin
+                PrBarParent.Progress:=(100*i) div ODSMainState.RecordCount;
+          bash:=inttostr(i+k);
+          Sheet.Cells[i+k,3]:=' Hesab № :';
+          Sheet.Cells[i+k,3].Font.Name:='Tahoma';
+          Sheet.Cells[i+k,3].Font.Bold :=true;
+
+          Sheet.Cells[i+k,4]:=ODSMainState.FieldByName('AccountNumber').AsString;
+
+          Sheet.Cells[i+k+1,1]:='Hesabın adı :';
+          Sheet.Cells[i+k+1,1].Font.Name:='Tahoma';
+          Sheet.Cells[i+k+1,1].Font.Bold :=true;
+          Sheet.Cells[i+k+1,2].Value:=ODSMainState.FieldByName('AccountName').AsString;
+          Sheet.Cells[i+k+1,2].Font.Name:='Tahoma';
+
+          Sheet.Cells[i+k+2,1]:='Valyuta :';
+          Sheet.Cells[i+k+2,1].Font.Name:='Tahoma';
+          Sheet.Cells[i+k+2,1].Font.Bold :=true;
+
+          Sheet.Cells[i+k+2,2]:=ODSMainState.FieldByName('CurrencyName').AsString;
+
+          Sheet.Cells[i+k+3,1]:='Əməliy. tarixi:';
+          Sheet.Cells[i+k+3,1].Font.Name:='Tahoma';
+          Sheet.Cells[i+k+3,1].Font.Bold :=true;
+
+          Sheet.Cells[i+k+3,2]:=DTP_Begin.DateTime;
+          Sheet.Cells[i+k+3,3]:=DTP_End.DateTime;
+
+          Sheet.Cells[i+k+4,1]:='Əvv əm. tarixi: ';
+          Sheet.Cells[i+k+4,1].Font.Name:='Tahoma';
+          Sheet.Cells[i+k+4,1].Font.Bold :=true;
+
+          Sheet.Cells[i+k+4,2].Value:=ODSMainState.FieldByName('lastopdate').AsDateTime;
+
+          Sheet.Cells[i+k+5,1]:='Günün əvv. qal:';
+          Sheet.Cells[i+k+5,1].Font.Name:='Tahoma';
+          Sheet.Cells[i+k+5,1].Font.Bold :=true;
+          Sheet.Cells[i+k+5,2]:='Manat :';
+          Sheet.Cells[i+k+5,3].Value:=FormatFloat('#,##0.00',ABS(ODSMainState.FieldByName('Ostat').AsFloat));
+
+          
+
+          Sheet.Cells[i+k+6,2]:='Tarix';
+          Sheet.Cells[i+k+6,2].Font.Name:='Tahoma';
+          Sheet.Cells[i+k+6,2].Font.Bold :=true;
+          Sheet.Cells[i+k+6,2].Font.Color:=clBlue;
+
+          Sheet.Cells[i+k+6,3].Value:='Valyuta';
+          Sheet.Cells[i+k+6,3].Font.Name:='Tahoma';
+          Sheet.Cells[i+k+6,3].Font.Bold :=true;
+          Sheet.Cells[i+k+6,3].Font.Color:=clBlue;
+
+          Sheet.Cells[i+k+6,4]:='Qarşı hesab';
+          Sheet.Cells[i+k+6,4].Font.Name:='Tahoma';
+          Sheet.Cells[i+k+6,4].Font.Bold :=true;
+          Sheet.Cells[i+k+6,4].Font.Color:=clBlue;
+
+          Sheet.Cells[i+k+6,5]:='Debet';
+          Sheet.Cells[i+k+6,5].Font.Name:='Tahoma';
+          Sheet.Cells[i+k+6,5].Font.Bold :=true;
+          Sheet.Cells[i+k+6,5].Font.Color:=clBlue;
+
+          Sheet.Cells[i+k+6,6]:='Kredit';
+          Sheet.Cells[i+k+6,6].Font.Name:='Tahoma';
+          Sheet.Cells[i+k+6,6].Font.Bold :=true;
+          Sheet.Cells[i+k+6,6].Font.Color:=clBlue;
+
+          Sheet.Cells[i+k+6,7]:='Təyinatı';
+          Sheet.Cells[i+k+6,7].Font.Name:='Tahoma';
+          Sheet.Cells[i+k+6,7].Font.Bold :=true;
+          Sheet.Cells[i+k+6,7].Font.Color:=clBlue;
+
+                             v_LDebit:=0;
+                             v_LKredit:=0;
+
+         for j:=1 to ODSExtractTrans.RecordCount do begin
+           PrBarChild.Position:=(100*j) div ODSExtractTrans.RecordCount;
+         v_LDebit:=v_LDebit+ODSExtractTrans.FieldByName('LDebit').AsFloat;
+         v_LKredit:=v_LKredit+ODSExtractTrans.FieldByName('LKredit').AsFloat;
+
+          Sheet.Cells[i+k+j+d,2]:=ODSExtractTrans.FieldByName('Dat').AsDateTime;
+          Sheet.Cells[i+k+j+d,3]:=ODSExtractTrans.FieldByName('PairCurrencyid').AsString;
+          Sheet.Cells[i+k+j+d,4]:=ODSExtractTrans.FieldByName('PairAccountName').AsString;
+          Sheet.Cells[i+k+j+d,5]:=FormatFloat('#,##0.00',ODSExtractTrans.FieldByName('LDebit').AsFloat);
+          Sheet.Cells[i+k+j+d,6]:=FormatFloat('#,##0.00',ODSExtractTrans.FieldByName('LKredit').AsFloat);
+          Sheet.Cells[i+k+j+d,7]:=ODSExtractTrans.FieldByName('Name').AsString;
+          Sheet.Cells[i+k+j+d,7].Font.Name:='Tahoma';
+
+             ODSExtractTrans.Next;
+            end;
+             PrBarChild.Position:=0;
+           m:=ODSExtractTrans.RecordCount;
+               Sheet.Cells[i+k+m+d+1,5]:=FormatFloat('#,##0.00',v_LDebit);
+               Sheet.Cells[i+k+m+d+1,6]:=FormatFloat('#,##0.00',v_LKredit);
+               Sheet.Cells[i+k+m+d+2,1]:='Günün son. qal:';
+               Sheet.Cells[i+k+m+d+2,2]:='Manat:';
+               Sheet.Cells[i+k+m+d+2,3]:=FormatFloat('#,##0.00',ABS(ODSMainState.FieldByName('EndOstat').AsFloat));
+               Sheet.Cells[i+k+m+d+2,1].Font.Name:='Tahoma';
+               Sheet.Cells[i+k+m+d+2,1].Font.Bold :=true;
+               Sheet.Cells[i+k+m+d+3,1]:='';
+               Exl.Range['A'+bash+':G'+inttostr(i+k+m+d+2)].select;
+               Exl.Selection.Interior.ColorIndex := 6;
+               Sheet.Range['A'+bash+':G'+inttostr(i+k+m+d+2)].Borders.Color:=clRed;
+
+               Exl.Range['A'+Inttostr(i+k+m+d+3)+':G'+Inttostr(i+k+m+d+3)].Select;
+               Exl.Selection.Interior.ColorIndex := 8;
+
+            k:=k+d+f+m;
+          ODSMainState.Next;
+      end;{for}
+  end  {if}
+  else
+  begin
+
+        for i:=1 to  ODSMainState.RecordCount do begin
+                PrBarParent.Progress:=(100*i) div ODSMainState.RecordCount;
+          bash:=inttostr(i+k);
+          Sheet.Cells[i+k,3]:=' Hesab № :';
+          Sheet.Cells[i+k,3].Font.Name:='Tahoma';
+          Sheet.Cells[i+k,3].Font.Bold :=true;
+
+          Sheet.Cells[i+k,4]:=ODSMainState.FieldByName('AccountNumber').AsString;
+
+          Sheet.Cells[i+k+1,1]:='Hesabın adı:';
+          Sheet.Cells[i+k+1,1].Font.Name:='Tahoma';
+          Sheet.Cells[i+k+1,1].Font.Bold :=true;
+          Sheet.Cells[i+k+1,2].Value:=ODSMainState.FieldByName('AccountName').AsString;
+          Sheet.Cells[i+k+1,2].Font.Name:='Tahoma';
+
+          Sheet.Cells[i+k+2,1]:='Valyuta:';
+          Sheet.Cells[i+k+2,1].Font.Name:='Tahoma';
+          Sheet.Cells[i+k+2,1].Font.Bold :=true;
+
+          Sheet.Cells[i+k+2,2]:=ODSMainState.FieldByName('CurrencyName').AsString;
+
+          Sheet.Cells[i+k+3,1]:='Əməliy. tarixi:';
+          Sheet.Cells[i+k+3,1].Font.Name:='Tahoma';
+          Sheet.Cells[i+k+3,1].Font.Bold :=true;
+
+          Sheet.Cells[i+k+3,2]:=DTP_Begin.DateTime;
+          Sheet.Cells[i+k+3,3]:=DTP_End.DateTime;
+
+          Sheet.Cells[i+k+4,1]:='Əvv əm. tarixi: ';
+          Sheet.Cells[i+k+4,1].Font.Name:='Tahoma';
+          Sheet.Cells[i+k+4,1].Font.Bold :=true;
+
+          Sheet.Cells[i+k+4,2].Value:=ODSMainState.FieldByName('lastopdate').AsDateTime;
+
+          Sheet.Cells[i+k+5,1]:='Günün əvv. qal:';
+          Sheet.Cells[i+k+5,1].Font.Name:='Tahoma';
+          Sheet.Cells[i+k+5,1].Font.Bold :=true;
+          Sheet.Cells[i+k+5,2]:='Valyuta:';
+          Sheet.Cells[i+k+5,2].Font.Name:='Tahoma';
+          Sheet.Cells[i+k+5,3].Value:=FormatFloat('#,##0.00',ABS(ODSMainState.FieldByName('Ostat').AsFloat));
+          Sheet.Cells[i+k+6,2]:='Manat :';
+          Sheet.Cells[i+k+6,3]:=FormatFloat('#,##0.00',ABS(ODSMainState.FieldByName('PokOstat').AsCurrency));
+
+          Sheet.Cells[i+k+6,2].Font.Name:='Tahoma';
+          Sheet.Cells[i+k+7,2]:='Rəsmi məzənnə:';
+          Sheet.Cells[i+k+7,2].Font.Name:='Tahoma';
+          Sheet.Cells[i+k+7,3]:=FormatFloat('#,##0.0000',ABS(RatesDataSetBegin.FieldByName('Ostat').AsCurrency));
+
+
+          Sheet.Cells[i+k+8,2]:='Tarix';
+          Sheet.Cells[i+k+8,2].Font.Name:='Tahoma';
+          Sheet.Cells[i+k+8,2].Font.Bold :=true;
+          Sheet.Cells[i+k+8,2].Font.Color:=clBlue;
+
+          Sheet.Cells[i+k+8,3].Value:='Valyuta';
+          Sheet.Cells[i+k+8,3].Font.Name:='Tahoma';
+          Sheet.Cells[i+k+8,3].Font.Bold :=true;
+          Sheet.Cells[i+k+8,3].Font.Color:=clBlue;
+
+          Sheet.Cells[i+k+8,4]:='Qarşı hesab';
+          Sheet.Cells[i+k+8,4].Font.Name:='Tahoma';
+          Sheet.Cells[i+k+8,4].Font.Bold :=true;
+          Sheet.Cells[i+k+8,4].Font.Color:=clBlue;
+
+          Sheet.Cells[i+k+8,5]:='Debet';
+          Sheet.Cells[i+k+8,5].Font.Name:='Tahoma';
+          Sheet.Cells[i+k+8,5].Font.Bold :=true;
+          Sheet.Cells[i+k+8,5].Font.Color:=clBlue;
+
+          Sheet.Cells[i+k+8,6]:='Kredit';
+          Sheet.Cells[i+k+8,6].Font.Name:='Tahoma';
+          Sheet.Cells[i+k+8,6].Font.Bold :=true;
+          Sheet.Cells[i+k+8,6].Font.Color:=clBlue;
+
+          Sheet.Cells[i+k+8,7]:='Təyinatı';
+          Sheet.Cells[i+k+8,7].Font.Name:='Tahoma';
+          Sheet.Cells[i+k+8,7].Font.Bold :=true;
+          Sheet.Cells[i+k+8,7].Font.Color:=clBlue;
+                             www:=0;
+                             v_LDebit:=0;  v_Debit:=0;
+                             v_LKredit:=0; v_Kredit:=0;
+         for j:=1 to ODSExtractTrans.RecordCount do begin
+           PrBarChild.Position:=(100*j) div ODSExtractTrans.RecordCount;
+           v_Debit:=v_Debit+ODSExtractTrans.FieldByName('Debit').AsFloat;
+           v_Kredit:=v_Kredit+ODSExtractTrans.FieldByName('Kredit').AsFloat;
+         v_LDebit:=v_LDebit+ODSExtractTrans.FieldByName('LDebit').AsFloat;
+         v_LKredit:=v_LKredit+ODSExtractTrans.FieldByName('LKredit').AsFloat;
+          Sheet.Cells[i+k+j+d+dd+www,2]:=ODSExtractTrans.FieldByName('Dat').AsDateTime;
+          Sheet.Cells[i+k+j+d+dd+www,3]:=ODSExtractTrans.FieldByName('PairCurrencyid').AsString;
+          Sheet.Cells[i+k+j+d+dd+www,4]:=ODSExtractTrans.FieldByName('PairAccountName').AsString;
+          Sheet.Cells[i+k+j+d+dd+www,5]:=FormatFloat('#,##0.00',ODSExtractTrans.FieldByName('LDebit').AsFloat);
+          Sheet.Cells[i+k+j+d+dd+www,6]:=FormatFloat('#,##0.00',ODSExtractTrans.FieldByName('LKredit').AsFloat);
+          Sheet.Cells[i+k+j+d+dd+www,7]:=ODSExtractTrans.FieldByName('Name').AsString;
+          Sheet.Cells[i+k+j+d+dd+www,7].Font.Name:='Tahoma';
+
+
+          Sheet.Cells[i+k+j+d+dd+www+1,5]:=FormatFloat('#,##0.00',ODSExtractTrans.FieldByName('Debit').AsFloat);
+          Sheet.Cells[i+k+j+d+dd+www+1,5].Font.Bold:=True;
+          Sheet.Cells[i+k+j+d+dd+www+1,5].Font.Color:=clMaroon;
+
+          Sheet.Cells[i+k+j+d+dd+www+1,6]:=FormatFloat('#,##0.00',ODSExtractTrans.FieldByName('Kredit').AsFloat);
+          Sheet.Cells[i+k+j+d+dd+www+1,6].Font.Bold:=True;
+          Sheet.Cells[i+k+j+d+dd+www+1,6].Font.Color:=clMaroon;
+
+             ODSExtractTrans.Next;
+          if ODSExtractTrans.FieldByName('PairCurrencyid').AsInteger<>0 then
+          begin
+            www:=www+1;
+          if (j=ODSExtractTrans.RecordCount) and (www<>0) then
+            www:=www+1;
+          end; {if}
+
+         end;{for}
+
+             PrBarChild.Position:=0;
+           m:=ODSExtractTrans.RecordCount;
+
+               Sheet.Cells[i+k+m+d+dd+www,5]:=FormatFloat('#,##0.00',v_LDebit);
+               Sheet.Cells[i+k+m+d+dd+www,6]:=FormatFloat('#,##0.00',v_LKredit);
+
+               Sheet.Cells[i+k+m+d+dd+www+1,5]:=FormatFloat('#,##0.00',v_Debit);
+               Sheet.Cells[i+k+m+d+dd+www+1,5].Font.Color:=clMaroon;
+               Sheet.Cells[i+k+m+d+dd+www+1,5].Font.Bold:=True;
+               Sheet.Cells[i+k+m+d+dd+www+1,6]:=FormatFloat('#,##0.00',v_Kredit);
+               Sheet.Cells[i+k+m+d+dd+www+1,6].Font.Color:=clMaroon;
+               Sheet.Cells[i+k+m+d+dd+www+1,6].Font.Bold:=True;
+
+               Sheet.Cells[i+k+m+d+dd+www+2,1]:='Günün son. qal:';
+               Sheet.Cells[i+k+m+d+dd+www+2,2]:='Valyuta:';
+               Sheet.Cells[i+k+m+d+dd+www+2,2].Font.Name:='Tahoma';
+               Sheet.Cells[i+k+m+d+dd+www+2,3]:=FormatFloat('#,##0.00',ABS(ODSMainState.FieldByName('EndOstat').AsFloat));
+               Sheet.Cells[i+k+m+d+dd+www+2,1].Font.Name:='Tahoma';
+               Sheet.Cells[i+k+m+d+dd+www+2,1].Font.Bold :=true;
+               Sheet.Cells[i+k+m+d+dd+www+3,2]:='Manat :';
+               Sheet.Cells[i+k+m+d+dd+www+3,3]:=FormatFloat('#,##0.00',ABS(Out_StDatamod.ODSMainState.FieldByName('EndPokOstat').AsCurrency));
+
+
+               Sheet.Cells[i+k+m+d+dd+www+4,2]:='Rəsmi məzənnə:';
+               Sheet.Cells[i+k+m+d+dd+www+4,2].Font.Name:='Tahoma';
+               Sheet.Cells[i+k+m+d+dd+www+4,3]:=FormatFloat('#,##0.0000',ABS(RatesDataSet.FieldByName('Ostat').AsCurrency));
+
+               Sheet.Cells[i+k+m+d+dd+www+5,1]:='';
+               Exl.Range['A'+bash+':G'+inttostr(i+k+m+d+dd+www+4)].select;
+               Exl.Selection.Interior.ColorIndex := 6;
+               Sheet.Range['A'+bash+':G'+inttostr(i+k+m+d+dd+www+4)].Borders.Color:=clRed;
+               Exl.Range['A'+Inttostr(i+k+m+d+dd+www+5)+':G'+Inttostr(i+k+m+d+dd+www+5)].Select;
+               Exl.Selection.Interior.ColorIndex := 8;
+
+            k:=k+d+2*dd+www+f+m;
+          ODSMainState.Next;
+      end;{for}
+
+  end;  {else}
+end;{with}
+
+    ShowSheet;
+  finally
+
+   Exl.Range['A1:A1'].Select;
+              PanelProgress.Visible:=false;
+   Screen.Cursor := crDefault;
+   DestroySheet;
+  end;
+
+
+end;
+
+procedure TOut_StatementForm.PostClick;
+begin
+
+  ExportDataTable;
+  if not Assigned(FormRep) then
+    FormRep := TFormRep.Create(nil);
+
+  with SaveDialog do
+  begin
+    if Execute then
+    begin
+      FormRep.QRep.ExportToFilter(TQRAsciiExportFilter.Create(FileName));
+    end;
+  end;
+
+end;
+
+
+procedure TOut_StatementForm.PreviewClick;
+begin
+
+   ExportDataTable;
+
+   case RGroupSetting.ItemIndex of
+   0: begin ShowReportR; end;
+   1: begin ShowReport; end;
+   end;
+end;
+
+
+
+
+
+procedure TOut_StatementForm.ShowTransClick;
+begin
+ExportDataTable;
+ FormTransView:=TFormTransView.Create(Self);
+ FormTransView.ShowModal;
+end;
+
+procedure TOut_StatementForm.ShowCardState;
+begin
+ close;
+end;
+
+procedure TOut_StatementForm.ExportDataTable;
+var
+  v_Acc_no  :Widestring;
+  v_Bal_cn  :Widestring;
+  v_Cli_id  :Widestring;
+FilterTrans :Widestring;
+FilterExt   :Widestring;
+ AStrParam  :Widestring;
+ BStrParam  :Widestring;
+ CStrParam  :Widestring;
+i:integer;
+S:string;
+begin
+     Screen.Cursor:=crSQLWait ;
+
+     if CBTurnOver.Checked=true then
+     Turn_and_RateDiff:='ch_turn';
+     if CBRateDiff.Checked=true then
+     Turn_and_RateDiff:='ch_rate';
+     if CBTurnOver.Checked=true and CBRateDiff.Checked=true then
+       Turn_and_RateDiff:='ch_rate_and_turn';
+     if CBTurnOver.Checked=false and CBRateDiff.Checked=true then
+       Turn_and_RateDiff:='ch_nothink';
+
+
+         v_BDate:=Integer(Trunc(DTP_Begin.DateTime));
+         v_EDate:=Integer(Trunc(DTP_End.DateTime));
+
+ v_user:=dblcbUser.KeyValue;
+ v_val:=DBLCBavalute.KeyValue;
+ v_filial:=dblcbfilial.KeyValue;
+
+
+
+
+  if Edit_Bal_Cn.Text = '' then
+    v_Bal_cn:= '-1'
+  else
+    v_Bal_cn:= UpdateStr(Edit_Bal_Cn.Text);
+
+ if Edit_Acc_No.Text = '' then
+    v_Acc_no:= '''-1'''
+  else
+    v_Acc_no:= UpdateStr(Edit_Acc_No.Text);
+
+
+  if EditCli_Id.Text = '' then
+    v_Cli_id:= '-1'
+  else
+    v_Cli_id:= EditCli_Id.Text;
+
+
+    
+              if (CBRateDiff.Checked=false)  then
+                FilterTrans:=' (OperationCode<>1)  '
+               else
+              FilterTrans:='';
+
+
+
+           CStrParam:=Out_Stdatamod.SB_STATEMENT.CallStringFunction('notAccId',
+                                                      [
+                                                      v_BDate,
+                                                      v_EDate,
+                                                      v_Cli_id,
+                                                      v_Acc_no,
+                                                      v_Bal_cn,
+                                                      v_filial,
+                                                      v_val,
+                                                      v_user,
+                                                      Turn_and_RateDiff
+                                                       ]
+                                                      );
+
+
+
+
+                if CBTurnOver.Checked=true then
+                 begin
+                    with Out_Stdatamod.ODSNotAccId do
+                       begin
+                           Close;
+                            SQL.Clear;
+                            SQL.Add(CStrParam);
+                           Open;
+                        for i:=1 to RecordCount do
+                           begin
+                         s:=s+'(accountid<>'+inttostr(fieldbyname('accountid').asinteger)+') and ';
+                        Next;
+                    end;
+               S:=Copy(S,1,length(S)-4);
+                      end;
+                  FilterExt:=S;
+                  end
+                  else
+                  FilterExt:='';
+
+                     //out_Stdatamod.SB_STATEMENT.
+
+          { AStrParam:=Out_Stdatamod.SB_STATEMENT.CallStringFunction('GetExtraction',
+                                                      [
+                                                      v_BDate,
+                                                      v_EDate,
+                                                      v_Cli_id,
+                                                      v_Acc_no,
+                                                      v_Bal_cn,
+                                                      v_filial,
+                                                      v_val,
+                                                      v_user
+                                                      ]
+                                                      );
+
+           showmessage(inttostr(Length(AStrParam))) ;   }
+           with Out_Stdatamod.ODS_GetExtraction do begin
+            Close;
+            SetVariable('bDate', v_BDate);
+            SetVariable('eDate', v_EDate);
+            SetVariable('ClientID', v_Cli_id);
+            SetVariable('AccountNo', v_Acc_no);
+            SetVariable('BalanceNo', v_Bal_cn);
+            SetVariable('BranchID', v_filial);
+            SetVariable('CurrencyID', v_val);
+            SetVariable('UserID', v_user);
+            Open;
+            AStrParam:=FieldByName('str').AsWideString;
+           end;
+
+         {  BStrParam:=Out_Stdatamod.SB_STATEMENT.CallStringFunction('Extraction_Trans',
+                                                      [
+                                                      v_BDate,
+                                                      v_EDate,
+                                                      v_Cli_id,
+                                                      v_Acc_no,
+                                                      v_Bal_cn,
+                                                      v_filial,
+                                                      v_val,
+                                                      v_user
+                                                      ]
+                                                      );   }
+
+
+with Out_Stdatamod do
+         begin
+
+      with ODSMainState do
+       begin
+
+          Close;
+           SQL.Clear;
+         //  showmessage(AStrParam);
+           SQL.Add(AStrParam);
+           Filtered:=false;
+           Filter:=FilterExt;
+           Filtered:=true;
+          Open;
+        end;
+                     with ODSExtractTrans do
+                       begin
+
+                         Close;
+                             SQL.Clear;
+                             DeclareVariable('OwnAccountId',otInteger);
+                             SQL.Add(BStrParam);
+                             Filtered:=false;
+                             Filter:=FilterTrans;
+                             Filtered:=true;
+                         Open;
+                     end;
+
+         Screen.Cursor:=crDefault;
+
+     end;
+
+
+ end;
+procedure TOut_StatementForm.BtnOkClick(Sender: TObject);
+begin
+
+case CBoxExtractCheck.ItemIndex of
+
+          0:PreviewClick;
+          1:PostClick;
+          2:ToExcelClick;
+          3:ShowTransClick;
+          4:ShowCardState;
+        end;
+
+end;
+
+procedure TOut_StatementForm.ActiveFormCreate(Sender: TObject);
+begin
+
+
+ Out_StatementForm := Self;
+
+
+if not Assigned(Out_StDatamod) then
+Out_StDatamod:=TOut_StDatamod.Create(Self);
+
+
+     CBoxExtractCheck.ItemIndex:=0;
+    DTP_Begin.DateTime:=Out_StDatamod.ODSSysdat.fieldbyname('tek_dat').asDateTime;
+    DTP_End.DateTime:=Out_StDatamod.ODSSysdat.fieldbyname('tek_dat').asDateTime;
+
+  dblcbuser.KeyValue:=-1;
+  dblcbfilial.KeyValue:=-1;
+  dblcbavalute.KeyValue:=-1;
+
+
+SBTranslateProc.TranslateAllComponents(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TOut_StatementForm.CBCurrencyClick(Sender: TObject);
+begin
+if CBCurrency.Checked=true then
+  dblcbavalute.KeyValue:=0
+else
+  dblcbavalute.KeyValue:=-1;
+end;
+
+procedure TOut_StatementForm.CBFilialClick(Sender: TObject);
+begin
+if CBFilial.Checked=true then
+  dblcbfilial.KeyValue:=0
+else
+  dblcbfilial.KeyValue:=-1;
+end;
+
+procedure TOut_StatementForm.CBUserClick(Sender: TObject);
+begin
+if CBUser.Checked=true then
+  dblcbUser.KeyValue:=0
+else
+  dblcbUser.KeyValue:=-1;
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TOut_StatementForm,
+    Class_Out_StatementForm,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

@@ -1,0 +1,61 @@
+unit UnitTR;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ComCtrls;
+
+type
+  TFormTr = class(TForm)
+    GroupBox1: TGroupBox;
+    Label1: TLabel;
+    Label2: TLabel;
+    StartDateEdit: TDateTimePicker;
+    EndDateEdit: TDateTimePicker;
+    OkButton: TButton;
+    CancelButton: TButton;
+    procedure CancelButtonClick(Sender: TObject);
+    procedure OkButtonClick(Sender: TObject);
+    procedure StartDateEditChange(Sender: TObject);
+
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormTr: TFormTr;
+    bdat: TDateTime;
+   Edat: TDateTime;
+implementation
+         uses ArchiveCredUnit;
+{$R *.dfm}
+
+procedure TFormTr.CancelButtonClick(Sender: TObject);
+begin
+FormTr.Close;
+end;
+
+procedure TFormTr.OkButtonClick(Sender: TObject);
+  begin
+
+if MessageDlg('Ümidsiz kreditl?rin öd?nilm?sini  ist?yirsinizmi ?',
+   mtConfirmation, mbYesNoCancel, 0) = mrYes then
+
+     begin
+  DataMArchiveCr.cm_bad_loans.CallProcedure('bad_loans_trans',[bdat,Edat]);
+
+  end;
+end;
+
+procedure TFormTr.StartDateEditChange(Sender: TObject);
+begin
+  StartDateEdit.DateTime:=now;
+  EndDateEdit.DateTime:=now;
+bdat:=TRUNC(StartDateEdit.DateTime);
+Edat:=TRUNC(EndDateEdit.DateTime);
+end;
+
+end.

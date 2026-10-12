@@ -1,0 +1,102 @@
+unit DataAIFUnit;
+
+interface
+
+uses
+  SysUtils, Classes,sboapiDataModuleImpl, DB, OracleData, Oracle,Dialogs;
+
+type
+  TDataModuleAIF = class(TDataModule)
+    DSAIFPAYMENTS: TDataSource;
+    AIFPAYMENTS: TOracleDataSet;
+    aif_payments: TOraclePackage;
+    DEL: TOraclePackage;
+    DSAifFieldSearch: TDataSource;
+    AifFieldSearch: TOracleDataSet;
+    AifFieldSearchID: TFloatField;
+    AifFieldSearchFIELDNAME: TWideStringField;
+    AifFieldSearchFIELDDESC: TWideStringField;
+    AifConfig: TOracleDataSet;
+    AifFilial: TOracleDataSet;
+    AifUsers: TOracleDataSet;
+    DSAifUsers: TDataSource;
+    DSAifFilial: TDataSource;
+    DSAIFADMIN: TDataSource;
+    AIFADMIN: TOracleDataSet;
+    AIFPAYMENTSID: TFloatField;
+    AIFPAYMENTSCREDITID: TFloatField;
+    AIFPAYMENTSCLIENTID: TFloatField;
+    AIFPAYMENTSFULLNAME: TWideStringField;
+    AIFPAYMENTSPAYDATE: TDateTimeField;
+    AIFPAYMENTSCR: TFloatField;
+    AIFPAYMENTSBANKINT: TFloatField;
+    AIFPAYMENTSFONDINT: TFloatField;
+    AIFPAYMENTSODCR: TFloatField;
+    AIFPAYMENTSODBANKINT: TFloatField;
+    AIFPAYMENTSODFONDINT: TFloatField;
+    AIFPAYMENTSODPENALTYINT: TFloatField;
+    AIFPAYMENTSPAYTYPE: TIntegerField;
+    AIFPAYMENTSMPAYM: TFloatField;
+    AIFPAYMENTSMATURITY: TIntegerField;
+    AIFPAYMENTSCRBAL: TFloatField;
+    AIFPAYMENTSHDATE: TDateTimeField;
+    AIFPAYMENTSSTATUS: TIntegerField;
+    AIFPAYMENTSPAYMENTID: TFloatField;
+    AIFPAYMENTSBRANCHID: TIntegerField;
+    AIFPAYMENTSFILIALNAME: TWideStringField;
+    AIFPAYMENTSUSERID: TFloatField;
+    AIFPAYMENTSPAY_ID: TFloatField;
+    AifDataCheck: TOracleDataSet;
+    DSAIFPAYMENTSARCHIVE: TDataSource;
+    AIFPAYMENTSARCHIVE: TOracleDataSet;
+    FloatField1: TFloatField;
+    FloatField2: TFloatField;
+    FloatField3: TFloatField;
+    WideStringField1: TWideStringField;
+    DateTimeField1: TDateTimeField;
+    FloatField4: TFloatField;
+    FloatField5: TFloatField;
+    FloatField6: TFloatField;
+    FloatField7: TFloatField;
+    FloatField8: TFloatField;
+    FloatField9: TFloatField;
+    FloatField10: TFloatField;
+    IntegerField1: TIntegerField;
+    FloatField11: TFloatField;
+    IntegerField2: TIntegerField;
+    FloatField12: TFloatField;
+    DateTimeField2: TDateTimeField;
+    IntegerField3: TIntegerField;
+    FloatField13: TFloatField;
+    IntegerField4: TIntegerField;
+    WideStringField2: TWideStringField;
+    FloatField14: TFloatField;
+    FloatField15: TFloatField;
+    DSAifConfig: TDataSource;
+    sb_aca: TOraclePackage;
+    AIFPAYMENTSNEXTMPAYM: TFloatField;
+    AIFPAYMENTSNEXTFONDINT: TFloatField;
+    AIFPAYMENTSNEXTBANKINT: TFloatField;
+    AIFPAYMENTSUSERNAME: TWideStringField;
+    AIFPAYMENTSARCHIVENEXTMPAYM: TFloatField;
+    AIFPAYMENTSARCHIVENEXTFONDINT: TFloatField;
+    AIFPAYMENTSARCHIVENEXTBANKINT: TFloatField;
+    AIFPAYMENTSARCHIVEUSERNAME: TWideStringField;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+  const
+  msDefault = 0;
+  msCommit = 1;
+
+var
+  DataModuleAIF: TDataModuleAIF;
+
+implementation
+uses AIFPAYMENTImpl;
+
+{$R *.dfm}
+
+end.

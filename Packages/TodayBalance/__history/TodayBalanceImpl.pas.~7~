@@ -1,0 +1,669 @@
+unit TodayBalanceImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActiveX, AxCtrls, TodayBalance_TLB, StdVcl, ExtCtrls, StdCtrls, ComCtrls,
+  SearchCombo, Buttons, ExcelExporter;
+
+type
+  TAmountType = (atExsistCurrency , atNationalCurrency);  
+
+type
+  TFrmTodayBalance = class(TActiveForm, IFrmTodayBalance)
+    Panel1: TPanel;
+    Panel2: TPanel;
+    GroupBox1: TGroupBox;
+    DTPTargetDate: TDateTimePicker;
+    GroupBox2: TGroupBox;
+    GroupBox3: TGroupBox;
+    Currencys: TSearchCombo;
+    GroupBox4: TGroupBox;
+    GroupBox5: TGroupBox;
+    GroupBox6: TGroupBox;
+    Branches: TSearchCombo;
+    CBAmountType: TComboBox;
+    CBReportType: TComboBox;
+    GroupBox7: TGroupBox;
+    AccountsListEdit: TEdit;
+    Panel3: TPanel;
+    RGReportFormat: TRadioGroup;
+    SBExecute: TSpeedButton;
+    Panel4: TPanel;
+    BalanceExporter: TExcelExporter;
+    LogMemo: TMemo;
+    Panel5: TPanel;
+    CBRest: TCheckBox;
+    procedure SBExecuteClick(Sender: TObject);
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure DTPTargetDateChange(Sender: TObject);
+    procedure CurrencysChange(Sender: TObject);
+  private
+    { Private declarations }
+    FEvents: IFrmTodayBalanceEvents;
+    FCurrentBankDate : TDateTime;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+  public
+    { Public declarations }
+    FBalanceDataSQL : WideString;
+    FAccountDataSQL : WideString;
+    FTransactionsDataSQL : WideString;
+    FModified : Boolean;
+    FAccountModified : Boolean;
+    property  CurrentBankDate : TDateTime read FCurrentBankDate;
+    property  Modified : Boolean read FModified write FModified default True;
+    procedure Balance_Selections(CurrencyID , BranchID : Integer ; AccountList : WideString ; AmountType : TAmountType);
+    procedure Account_Selections(CurrencyID , BranchID : Integer ;  AmountType : TAmountType);
+    procedure Transaction_Selections;    
+    procedure BalanceData_Open;
+    procedure AccountData_Open;
+    procedure DebitTransactionsData_Open;
+    procedure CreditTransactionsData_Open;
+    procedure ViewReport(Index : Byte);
+    procedure Initialize; override;
+  end;
+
+implementation
+
+uses ComObj, ComServ, TB_DataModuleImpl, TB_DECLS, UntBalanceRpt1,
+  UntBalanceRpt2, UntBalnceRpt3, BalanceChecking_Unit, SBTranslateProc, sboapiDataModuleImpl;
+
+{$R *.DFM}
+
+{ TFrmTodayBalance }
+
+procedure TFrmTodayBalance.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_FrmTodayBalancePage); }
+end;
+
+procedure TFrmTodayBalance.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as IFrmTodayBalanceEvents;
+end;
+
+procedure TFrmTodayBalance.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TFrmTodayBalance.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TFrmTodayBalance.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TFrmTodayBalance.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TFrmTodayBalance.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TFrmTodayBalance.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TFrmTodayBalance.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TFrmTodayBalance.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TFrmTodayBalance.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TFrmTodayBalance.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TFrmTodayBalance.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TFrmTodayBalance.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TFrmTodayBalance.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TFrmTodayBalance.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TFrmTodayBalance.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TFrmTodayBalance.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TFrmTodayBalance.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TFrmTodayBalance.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TFrmTodayBalance.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TFrmTodayBalance._Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TFrmTodayBalance.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TFrmTodayBalance.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TFrmTodayBalance.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TFrmTodayBalance.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TFrmTodayBalance.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TFrmTodayBalance.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TFrmTodayBalance.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TFrmTodayBalance.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TFrmTodayBalance.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TFrmTodayBalance.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TFrmTodayBalance.Set_AxBorderStyle(
+  Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TFrmTodayBalance.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TFrmTodayBalance.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TFrmTodayBalance.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TFrmTodayBalance.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TFrmTodayBalance.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TFrmTodayBalance.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TFrmTodayBalance.Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TFrmTodayBalance.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TFrmTodayBalance.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TFrmTodayBalance.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TFrmTodayBalance.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TFrmTodayBalance.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TFrmTodayBalance.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+procedure TFrmTodayBalance.ViewReport;
+begin
+  case Index of
+  0 :
+
+      with BalanceRpt1 ,DataSet do
+      begin
+        Filter := '(Active <> 0) or (Passive <> 0)';
+        Filtered := True;
+        TargetDate.Caption := FormatDateTime('dd/mm/yyyy',DTPTargetDate.DateTime);
+        QRCurr.Caption :=Currencys.Text;
+        Preview;
+        Filtered := False;
+      end;
+
+  1 :
+
+      with BalanceRpt2 ,DataSet do
+      begin
+        Filter := '(Active <> 0) or (Passive <> 0)';
+        Filtered := True;
+        TargetDate.Caption := FormatDateTime('dd/mm/yyyy',DTPTargetDate.DateTime);
+        QRCurr.Caption :=Currencys.Text;
+        Preview;
+        Filtered := False;
+      end;
+
+  2 :
+
+      with BalanceRpt3 ,DataSet do
+      begin
+        Filter := '(Active <> 0) or (Passive <> 0) or (DTurnOver <> 0) or (CTurnOver <> 0)';
+        Filtered := True;
+        TargetDate.Caption := FormatDateTime('dd/mm/yyyy',DTPTargetDate.DateTime);
+        QRCurr.Caption :=Currencys.Text;
+        Preview;
+
+        Filtered := False;
+      end;
+
+  end; //case
+end;
+
+procedure TFrmTodayBalance.Transaction_Selections;
+begin
+  with DataModTB.TransactionsData do
+  begin
+    SQL.CommaText := FTransactionsDataSQL;
+    if Trunc(DTPTargetDate.DateTime) = CurrentBankDate then
+      SQL[15] := Format(SQL[15] ,['Provdoc']) else
+      SQL[15] := Format(SQL[15] ,['Provarch']);
+   // LogMemo.Lines := SQL;
+  end;
+end;
+
+procedure TFrmTodayBalance.Account_Selections;
+begin
+  with DataModTB.AccountData do
+  begin
+    SQL.CommaText := FAccountDataSQL;
+    if AmountType = atExsistCurrency then
+    begin
+      SQL[4] := Format(SQL[4] ,['']);
+      SQL[10] := Format(SQL[10] ,['']);
+      SQL[17] := Format(SQL[17] ,['']);
+      SQL[18] := Format(SQL[18] ,['']);
+    end  else
+    begin
+      SQL[4] := Format(SQL[4] ,['Pok_']);
+      SQL[10] := Format(SQL[10] ,['Pok_']);
+      SQL[17] := Format(SQL[17] ,['Pok_']);
+      SQL[18] := Format(SQL[18] ,['Pok_']);
+    end;
+    if Trunc(DTPTargetDate.DateTime) = CurrentBankDate then
+      SQL[21] := Format(SQL[21] ,['Tenostat']) else
+      SQL[21] := Format(SQL[21] ,['Archost']);
+    if BranchID = -1 then
+      SQL[26] := '' else
+      SQL[26] := Format(SQL[26] ,[BranchID]);
+    if CurrencyID = -1 then
+      SQL[27] := '' else
+      SQL[27] := Format(SQL[27] ,[CurrencyID]);
+
+
+   // LogMemo.Lines := SQL;
+  end;
+end;
+
+procedure TFrmTodayBalance.Balance_Selections;
+begin
+  with DataModTB.BalanceData do
+  begin
+    SQL.CommaText := FBalanceDataSQL;
+    if AmountType = atExsistCurrency then
+    begin
+      SQL[4] := Format(SQL[4] ,['']);
+      SQL[11] := Format(SQL[11] ,['']);
+      SQL[16] := Format(SQL[16] ,['']);
+      SQL[17] := Format(SQL[17] ,['']);
+    end  else
+    begin
+      SQL[4] := Format(SQL[4] ,['Pok_']);
+      SQL[11] := Format(SQL[11] ,['Pok_']);
+      SQL[16] := Format(SQL[16] ,['Pok_']);
+      SQL[17] := Format(SQL[17] ,['Pok_']);
+    end;
+    if Trunc(DTPTargetDate.DateTime) = CurrentBankDate then
+      SQL[20] := Format(SQL[20] ,['Tenostat']) else
+      SQL[20] := Format(SQL[20] ,['Archost']);
+    if BranchID = -1 then
+      SQL[24] := '' else
+      SQL[24] := Format(SQL[24] ,[BranchID]);
+    if CurrencyID = -1 then
+      SQL[25] := '' else
+      SQL[25] := Format(SQL[25] ,[CurrencyID]);
+    if Trim(AccountList) = '' then
+      SQL[26] := '' else
+      SQL[26] := Format(SQL[26] ,[AccountList]);
+
+   LogMemo.Lines := SQL;
+  end;
+
+end;
+
+
+procedure TFrmTodayBalance.BalanceData_Open;
+begin
+
+end;
+
+procedure TFrmTodayBalance.AccountData_Open;
+begin
+
+end;
+
+procedure TFrmTodayBalance.DebitTransactionsData_Open;
+begin
+
+end;
+
+procedure TFrmTodayBalance.CreditTransactionsData_Open;
+begin
+
+end;
+
+procedure TFrmTodayBalance.SBExecuteClick(Sender: TObject);
+
+function Get_BankWorkDate(RealDate : TDateTime) : TDateTime;
+begin
+  with DataModTB.WorkDateData do
+  begin
+    ClearVariables;
+    SetVariable('RealDate',RealDate);
+    Open;
+    Result := Integer(Trunc(FieldByName('WorkDate').AsDateTime));
+    CloseAll
+  end;
+end;
+
+var
+  CurrencyID , BranchID :Integer;
+  AccountList : WideString;
+  AmountType : TAmountType;
+  BankWorkDate : TDateTime;
+begin
+  with Currencys ,DataSource.DataSet do
+    if ItemIndex > 0 then
+      CurrencyID := FieldByName('Currency').AsInteger else
+      CurrencyID := -1;
+  with Branches ,DataSource.DataSet do
+  if ItemIndex > 0 then
+    BranchID := FieldByName('BranchID').AsInteger else
+    BranchID := -1;
+  if (CurrencyID <> -1) and (CBAmountType.ItemIndex = 0)  then
+    AmountType := atExsistCurrency else
+    AmountType := atNationalCurrency;
+  AccountList := AccountsListEdit.Text;
+  Screen.Cursor := crSQLWait;
+  BankWorkDate :=Get_BankWorkDate(Integer(Trunc(DTPTargetDate.DateTime)));
+  if Self.Modified then
+  with DataModTB.BalanceData do
+  try
+    Balance_Selections(CurrencyID ,BranchID ,AccountList ,AmountType);
+    if Active then CloseAll;
+    SetVariable('TargetDate',BankWorkDate);
+    Open;
+    LogMemo.Text:=DataModTB.BalanceData.sql.text;
+  finally
+    Screen.Cursor := crDefault;
+  end else
+  Screen.Cursor := crDefault;
+
+  case  RGReportFormat.ItemIndex of
+  0 :
+        ViewReport(CBReportType.ItemIndex);
+  1 :
+     begin
+       Screen.Cursor := crSQLWait;
+       with  DataModTB do
+       try
+         if FAccountModified then
+         begin
+         with AccountData do
+         begin
+           Account_Selections(CurrencyID ,BranchID ,AmountType);
+           if Active then CloseAll;
+           SetVariable('TargetDate',BankWorkDate);
+     //      ShowMessage(DateToStr(BankWorkDate));
+           Open;
+
+           if CBRest.Checked then
+           begin
+             Filtered := False;
+             Filter :='(DTurnOver <> 0) or (CTurnOver <> 0) or (Active <> 0) or (Passive <> 0)';
+             Filtered := True;
+           end else
+             Filtered := False;
+         end;
+         with DataModTB.TransactionsData do
+         begin
+           Transaction_Selections;
+           if Active then CloseAll;
+           SetVariable('TargetDate',BankWorkDate);
+           Open;
+         // LogMemo.Text:=LogMemo.Text+'uuuu'+TransactionsData.sql.text;
+         end;
+         end;  // if Modified
+         FAccountModified := False;
+         Screen.Cursor := crDefault;
+         with FrmBalanceChecking do
+         begin
+
+           STTargetDate.Caption := FormatDateTime('dd/mm/yyyy',BankWorkDate);
+           STCurrency.Caption := Currencys.Text;
+           STBranch.Caption := Branches.Text;
+           STCurrFormat.Caption := CBAmountType.Text;
+           ShowModal
+         end;
+       finally
+         Screen.Cursor := crDefault;
+       end;
+     end;
+  2 :
+     BalanceExporter.Report;
+  end; //case
+  Modified := False;
+end;
+
+procedure TFrmTodayBalance.ActiveFormCreate(Sender: TObject);
+begin
+  DataModTB := TDataModTB.Create(Self);
+  FrmBalanceChecking := TFrmBalanceChecking.Create(Self);
+  BalanceRpt1 := TBalanceRpt1.Create(Self);
+  BalanceRpt2 := TBalanceRpt2.Create(Self);
+  BalanceRpt3 := TBalanceRpt3.Create(Self);
+  with DataModTB do
+  begin
+    FBalanceDataSQL := BalanceData.SQL.CommaText;
+    FAccountDataSQL := AccountData.SQL.CommaText;
+    FTransactionsDataSQL := TransactionsData.SQL.CommaText;
+    SYSDAT.Open;
+    CurrencyInfo.Open;
+    BranchesInfo.Open;
+    BankInfo.Open;
+    FCurrentBankDate := Integer(Trunc(SYSDAT.FieldByName('CurrentDate').AsDateTime));
+  end;
+    Currencys.ItemIndex := 0;
+    Branches.ItemIndex := 0;
+    CBAmountType.ItemIndex := 0;
+    CBReportType.ItemIndex := 0;
+    DTPTargetDate.DateTime := CurrentBankDate;
+    Modified := True;
+    FAccountModified := True;
+
+  SBTranslateProc.TranslateAllComponents(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TFrmTodayBalance.DTPTargetDateChange(Sender: TObject);
+begin
+  Modified := True;
+  FAccountModified := True;
+end;
+
+procedure TFrmTodayBalance.CurrencysChange(Sender: TObject);
+begin
+  Modified := True;
+  FAccountModified := True;
+  with (Sender as TSearchCombo) do
+  if (ItemIndex  = -1) or (Itemindex = 0) then
+  DataSource.DataSet.First;
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TFrmTodayBalance,
+    Class_FrmTodayBalance,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

@@ -1,0 +1,106 @@
+unit AlertThread;
+
+interface
+
+uses
+  Classes, SysUtils, Windows;
+
+type
+  TAlertThread = class(TThread)
+  private
+    { Private declarations }
+    FCurrentAlertName: String;
+    FCurrentAlertMessage: String;
+    FMessageEvent: TThreadMethod;
+    FAwaitingAlertName: String;
+    FTimeout: Integer;
+    FAlerts: TStrings;
+    FSleepTimeout: Integer;
+  protected
+    procedure Execute; override;
+    procedure WaitAny;
+    procedure WaitOne;
+    procedure Notify;
+  public
+    property CurrentAlertName: String read FCurrentAlertName;
+    property CurrentAlertMessage: String read FCurrentAlertMessage;
+    property AwaitingAlertName: String read FAwaitingAlertName write FAwaitingAlertName;
+    property OnMessage: TThreadMethod read FMessageEvent write FMessageEvent;
+    constructor Create(CreateSuspended: Boolean);
+  end;
+
+implementation
+
+{ Important: Methods and properties of objects in VCL can only be used in a
+  method called using Synchronize, for example,
+
+      Synchronize(UpdateCaption);
+
+  and UpdateCaption could look like,
+
+    procedure TAlertThread.UpdateCaption;
+    begin
+      Form1.Caption := 'Updated in a thread';
+    end; }
+
+uses SBAlert;
+
+{ TAlertThread }
+
+procedure TAlertThread.Execute;
+begin
+  { Place thread code here }
+  if (FAwaitingAlertName <> '') and (Pos(',', FAwaitingAlertName) = 0) then
+    WaitOne
+  else
+    WaitAny;
+end;
+
+procedure TAlertThread.WaitAny;
+var
+  Status: TAlertRaiseStatus;
+  Index: Integer;
+begin
+  FAlerts.CommaText := FAwaitingAlertName;
+  for Index := 0 to FAlerts.Count-1 do
+    Sb_AlertRegister(FAlerts[Index]);
+  while not Terminated do
+  begin
+    Sb_AlertWaitAny(FCurrentAlertName, FCurrentAlertMessage, Status, FTimeout);
+    if Status = arsRaised then
+      if FAlerts.IndexOf(FCurrentAlertName) <> -1 then
+        Notify;
+    Sleep(FSleepTimeout);
+  end;
+end;
+
+procedure TAlertThread.WaitOne;
+var
+  Status: TAlertRaiseStatus;
+begin
+  FCurrentAlertName := FAwaitingAlertName;
+  Sb_AlertRegister(FCurrentAlertName);
+  while not Terminated do
+  begin
+    Sb_AlertWaitOne(FCurrentAlertName, FCurrentAlertMessage, Status, FTimeout);
+    if Status = arsRaised then
+      Notify;
+    Sleep(FSleepTimeout);
+  end;
+end;
+
+procedure TAlertThread.Notify;
+begin
+  if Assigned(FMessageEvent) then
+    Synchronize(FMessageEvent);
+end;
+
+constructor TAlertThread.Create(CreateSuspended: Boolean);
+begin
+  inherited Create(CreateSuspended);
+  FAlerts := TStringList.Create;
+  FTimeout := 86400000;
+  FSleepTimeout := 2000;
+end;
+
+end.

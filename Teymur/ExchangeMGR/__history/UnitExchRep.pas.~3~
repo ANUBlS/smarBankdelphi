@@ -1,0 +1,40 @@
+unit UnitExchRep;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls;
+
+type
+  TExchRep = class(TForm)
+    RadioButton1: TRadioButton;
+    RadioButton2: TRadioButton;
+    Button1: TButton;
+    procedure FormCreate(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  ExchRep: TExchRep;
+
+implementation
+uses sboapiDataModuleImpl, SBTranslateProc;
+
+{$R *.dfm}
+
+procedure TExchRep.Button1Click(Sender: TObject);
+begin
+  Exit;
+end;
+
+procedure TExchRep.FormCreate(Sender: TObject);
+begin
+  SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+end.

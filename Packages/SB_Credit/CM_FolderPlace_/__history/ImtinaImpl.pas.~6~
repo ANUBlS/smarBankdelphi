@@ -1,0 +1,154 @@
+﻿unit ImtinaImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls;
+
+type
+  TImtinaFrm = class(TForm)
+    GroupBox1: TGroupBox;
+    Button1: TButton;
+    Button2: TButton;
+    Memo1: TMemo;
+    procedure FormCanResize(Sender: TObject; var NewWidth, NewHeight: Integer;
+      var Resize: Boolean);
+    procedure Button1Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+  private
+    function ExcuseMeUser(Question : String) : Boolean;
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  ImtinaFrm: TImtinaFrm;
+
+implementation
+
+uses FlReCalculationDataModuleImpl, ReCalculationMainForm, FrmReciverImpl;
+
+{$R *.dfm}
+function TImtinaFrm.ExcuseMeUser(Question : String) : Boolean;
+begin
+  Result :=
+    MessageDlg(
+      Question
+     ,mtConfirmation
+     ,[mbYes,mbNo]
+     ,0
+     ) = mrYes;
+end;
+procedure TImtinaFrm.Button1Click(Sender: TObject);
+
+
+resourcestring
+  rsConfirmForOne = '%s  - № li kredit dosyesi %s. Əminsiniz?';
+  rsConfirmForAll = '%d - sayda kredit dosyesi %s. Əminsiniz?';
+  rsCalcPercent   = 'imtina olunacaq';
+  rsAlreadyCalced = '%s - № li kredit üçün hələ hesablanmayıb və ya  təstiq olunub !';
+  rsProgressCaption = '                        Faizlər təstiq olunur . gözləyin.   .....';
+
+
+var
+  I : Integer;
+  SelectedRowsCnt : Integer;
+  CrdID : Integer;
+  CrdNo : String;
+  CrdStatus : Integer;
+
+begin
+ if memo1.Text='' then
+ begin
+ ShowMessage('İmtina səbəbini daxil etməmisiz!');
+ Exit;
+ end;
+
+
+  with FrmReciver.DBGridEh1, DataSource.DataSet do
+  begin
+
+    SelectedRowsCnt := SelectedRows.Count;
+
+    if SelectedRowsCnt > 1 then
+    begin
+
+      if not
+        ExcuseMeUser(
+              Format(rsConfirmForAll,[SelectedRowsCnt,rsCalcPercent])
+              ) then
+
+              Exit;
+
+      Self.Update;
+      for I := 0 to SelectedRowsCnt - 1 do
+      begin
+
+        GotoBookmark(Pointer(SelectedRows[I]));
+
+        CrdID := FieldByName('ID').AsInteger;
+         with PRDataModule.CalculatorPackage do
+
+    CallProcedure('decline_folder',[
+    'p_id', CrdID,
+    'p_creditid',FieldByName('creditid').AsInteger ,
+    'p_qovidreciver',FieldByName('senderid').AsInteger,
+    'p_info',Memo1.Text
+
+    ]);
+
+       { if CrdStatus in [0,1] then
+          AcceptCalcedIntForOne(CrdID, CrdNo)
+        else
+          LogWarning(Format(rsAlreadyCalced,[CrdNo]));
+        }
+     //   NewProgressForm.ProgressShower.Position := I + 1;
+      end;
+
+    end else
+    begin
+          CrdNo := FieldByName('NumberOfCredit').AsString;
+         if not
+         ExcuseMeUser(Format(rsConfirmForOne,[CrdNo,rsCalcPercent]))
+         then
+          Exit;
+      CrdID := FieldByName('ID').AsInteger;
+
+   //   CrdStatus := FieldByName('TrProcessed').AsInteger;
+         with PRDataModule.CalculatorPackage do
+
+    CallProcedure('decline_folder',[
+    'p_id', CrdID,
+    'p_creditid',FieldByName('creditid').AsInteger ,
+    'p_qovidreciver',FieldByName('senderid').AsInteger,
+    'p_info',Memo1.Text
+    ]);
+
+   {   if CrdStatus in [0,1] then
+        AcceptCalcedIntForOne(CrdID, CrdNo)
+      else
+        LogWarning(Format(rsAlreadyCalced,[CrdNo]));
+        }
+    end;
+
+   end;
+   FrmReciver.DBGridEh1.DataSource.DataSet.Refresh;
+    PRMainForm.CalcGrid.DataSource.DataSet.Refresh;
+   close;
+  end;
+
+
+procedure TImtinaFrm.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+Resize:=false
+end;
+
+procedure TImtinaFrm.FormShow(Sender: TObject);
+begin
+Memo1.Clear;
+end;
+
+end.

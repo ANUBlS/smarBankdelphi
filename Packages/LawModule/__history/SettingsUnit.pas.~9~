@@ -1,0 +1,224 @@
+﻿unit SettingsUnit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls, Grids, DBGrids, ComCtrls;
+
+type
+  TSettings = class(TForm)
+    PageControl1: TPageControl;
+    TabSheet1: TTabSheet;
+    DBGrid1: TDBGrid;
+    Panel1: TPanel;
+    Button1: TButton;
+    Button2: TButton;
+    TabSheet2: TTabSheet;
+    DBGrid2: TDBGrid;
+    Panel2: TPanel;
+    Button3: TButton;
+    Button4: TButton;
+    TabSheet3: TTabSheet;
+    DBGrid3: TDBGrid;
+    Panel3: TPanel;
+    Button5: TButton;
+    Button6: TButton;
+    save1: TButton;
+    Save2: TButton;
+    Edit2: TEdit;
+    Save3: TButton;
+    Edit3: TEdit;
+    Edit1: TEdit;
+    Button7: TButton;
+    Button8: TButton;
+    Button9: TButton;
+    procedure Button1Click(Sender: TObject);
+    procedure Button3Click(Sender: TObject);
+    procedure Button5Click(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+    procedure DBGrid1DblClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure Button4Click(Sender: TObject);
+    procedure Button6Click(Sender: TObject);
+    procedure save1Click(Sender: TObject);
+    procedure Save2Click(Sender: TObject);
+    procedure Save3Click(Sender: TObject);
+    procedure Button9Click(Sender: TObject);
+    procedure Button8Click(Sender: TObject);
+    procedure Button7Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Settings: TSettings;
+
+implementation
+
+uses Datmodule;
+
+{$R *.dfm}
+
+procedure TSettings.Button1Click(Sender: TObject);
+begin
+if Dialogs.MessageDlg('Silinsin',
+    mtConfirmation, [mbYes, mbNo], 0, mbYes) = mrYes then
+ begin
+     DataMod.pack.CallProcedure('Delstat',[DBGrid1.DataSource.DataSet.FieldByName('id').AsInteger]);
+     ShowMessage('Secilmis Status silindi.');
+
+ end;
+
+ DBGrid1.DataSource.DataSet.Refresh;
+
+end;
+
+procedure TSettings.Button2Click(Sender: TObject);
+begin
+edit1.Visible:=true;
+button7.Visible:=true;
+save1.Visible:=true;
+
+button1.Visible:=false;
+button2.Visible:=false;
+
+
+end;
+
+procedure TSettings.Button3Click(Sender: TObject);
+begin
+if Dialogs.MessageDlg('Silinsin',
+    mtConfirmation, [mbYes, mbNo], 0, mbYes) = mrYes then
+ begin
+    DataMod.pack.CallProcedure('Dellaststat',[DBGrid2.DataSource.DataSet.FieldByName('id').AsInteger]);
+     ShowMessage('Secilmis Icra Vəziyyəti silindi.');
+
+ end;
+
+ DBGrid2.DataSource.DataSet.Refresh;
+
+end;
+
+procedure TSettings.Button4Click(Sender: TObject);
+begin
+edit2.Visible:=true;
+button8.Visible:=true;
+save2.Visible:=true;
+
+
+button3.Visible:=false;
+button4.Visible:=false;
+end;
+
+procedure TSettings.Button5Click(Sender: TObject);
+begin
+if Dialogs.MessageDlg('Silinsin',
+    mtConfirmation, [mbYes, mbNo], 0, mbYes) = mrYes then
+ begin
+    DataMod.pack.CallProcedure('Delcourt',[DBGrid3.DataSource.DataSet.FieldByName('id').AsInteger]);
+     ShowMessage('Secilmis Məhkəmə silindi.');
+
+ end;
+
+ DBGrid3.DataSource.DataSet.Refresh;
+
+end;
+
+procedure TSettings.Button6Click(Sender: TObject);
+begin
+edit3.Visible:=true;
+button9.Visible:=true;
+save3.Visible:=true;
+
+
+button5.Visible:=false;
+button6.Visible:=false;
+end;
+
+procedure TSettings.Button7Click(Sender: TObject);
+begin
+edit1.Visible:=false;
+button2.Visible:=true;
+button1.Visible:=true;
+save1.Visible:=false;
+button7.Visible:=false;
+end;
+
+procedure TSettings.Button8Click(Sender: TObject);
+begin
+edit2.Visible:=false;
+button3.Visible:=true;
+button4.Visible:=true;
+save2.Visible:=false;
+button8.Visible:=false;
+end;
+
+procedure TSettings.Button9Click(Sender: TObject);
+begin
+edit3.Visible:=false;
+button5.Visible:=true;
+button6.Visible:=true;
+save3.Visible:=false;
+button9.Visible:=false;
+end;
+
+procedure TSettings.DBGrid1DblClick(Sender: TObject);
+begin
+DBGrid2.DataSource.DataSet.edit;
+
+DBGrid2.DataSource.DataSet.post;
+end;
+
+procedure TSettings.FormCreate(Sender: TObject);
+begin
+DataMod.court_stat_add.close;
+DataMod.court_stat_add.Open;
+DataMod.court_last_stat_add.Close;
+DataMod.court_last_stat_add.Open;
+DataMod.Court_managers.Close;
+DataMod.Court_managers.Open;
+end;
+
+procedure TSettings.save1Click(Sender: TObject);
+begin
+edit1.Visible:=false;
+button2.Visible:=true;
+button1.Visible:=true;
+save1.Visible:=false;
+button7.Visible:=false;
+
+DataMod.pack.CallProcedure('inscourtstat',[   edit1.Text,1]);
+DBGrid1.DataSource.DataSet.Close;
+DBGrid1.DataSource.DataSet.open;
+end;
+
+procedure TSettings.Save2Click(Sender: TObject);
+begin
+edit2.Visible:=false;
+button3.Visible:=true;
+button4.Visible:=true;
+save2.Visible:=false;
+button8.Visible:=false;
+
+DataMod.pack.CallProcedure('inslastcourtstat',[   edit2.Text,2]);
+DBGrid2.DataSource.DataSet.Close;
+DBGrid2.DataSource.DataSet.open;
+end;
+
+procedure TSettings.Save3Click(Sender: TObject);
+begin
+edit3.Visible:=false;
+button5.Visible:=true;
+button6.Visible:=true;
+save3.Visible:=false;
+button9.Visible:=false;
+
+DataMod.pack.CallProcedure('inscourtmana',[   edit3.Text,3]);
+DBGrid3.DataSource.DataSet.Close;
+DBGrid3.DataSource.DataSet.open;
+end;
+
+end.

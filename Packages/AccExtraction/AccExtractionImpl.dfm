@@ -1,0 +1,250 @@
+object AccExtraction: TAccExtraction
+  Left = 203
+  Top = 107
+  Width = 696
+  Height = 480
+  Caption = 'AccExtraction'
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'MS Sans Serif'
+  Font.Style = []
+  OldCreateOrder = False
+  OnCreate = ActiveFormCreate
+  PixelsPerInch = 96
+  TextHeight = 13
+  object LogInfo: TLabel
+    Left = 8
+    Top = 240
+    Width = 249
+    Height = 49
+    AutoSize = False
+    Caption = 'LogInfo'
+    Color = clInfoBk
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'MS Sans Serif'
+    Font.Style = [fsBold]
+    ParentColor = False
+    ParentFont = False
+    Visible = False
+    WordWrap = True
+  end
+  object GroupBox1: TGroupBox
+    Left = 8
+    Top = 0
+    Width = 249
+    Height = 233
+    Caption = #1058#1072#1088#1080#1093' '#1072#1088#1072#1083#1099#1100#1099#1085#1099' '#1076#1072#1093#1080#1083' '#1077#1076#1080#1085
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 0
+    object Label1: TLabel
+      Left = 29
+      Top = 16
+      Width = 82
+      Height = 14
+      Caption = #1044#1102#1074#1088#1094#1085' '#1103#1074#1074#1103#1083#1080
+    end
+    object Label2: TLabel
+      Left = 31
+      Top = 56
+      Width = 68
+      Height = 14
+      Caption = #1044#1102#1074#1088#1094#1085' '#1089#1086#1085#1091
+    end
+    object Bevel1: TBevel
+      Left = 29
+      Top = 99
+      Width = 185
+      Height = 2
+      Shape = bsBottomLine
+    end
+    object Label3: TLabel
+      Left = 29
+      Top = 155
+      Width = 97
+      Height = 14
+      Caption = #1065#1077#1089#1072#1073#1099#1085' '#1085#1102#1084#1088#1103#1089#1080
+    end
+    object DTPBegin: TDateTimePicker
+      Left = 29
+      Top = 32
+      Width = 186
+      Height = 21
+      Date = 38236.462819895800000000
+      Time = 38236.462819895800000000
+      TabOrder = 0
+    end
+    object DTPEnd: TDateTimePicker
+      Left = 29
+      Top = 72
+      Width = 186
+      Height = 21
+      Date = 38236.462860231500000000
+      Time = 38236.462860231500000000
+      TabOrder = 1
+    end
+    object AccEd: TEdit
+      Left = 29
+      Top = 174
+      Width = 185
+      Height = 22
+      TabOrder = 2
+    end
+    object BitBtn1: TBitBtn
+      Left = 29
+      Top = 203
+      Width = 188
+      Height = 25
+      Caption = 'Export to Excel'
+      DoubleBuffered = True
+      ParentDoubleBuffered = False
+      TabOrder = 3
+      OnClick = BitBtn1Click
+    end
+    object AllBalance: TCheckBox
+      Left = 32
+      Top = 104
+      Width = 121
+      Height = 17
+      Caption = #1044#1102#1074#1088#1080#1081#1081#1103#1089#1080' '#1086#1083#1072#1085#1083#1072#1088
+      Checked = True
+      State = cbChecked
+      TabOrder = 4
+    end
+    object BalCheck: TCheckBox
+      Left = 32
+      Top = 136
+      Width = 137
+      Height = 17
+      Caption = #1041#1072#1083#1072#1085#1089' '#1097#1077#1089#1072#1073#1099' '#1094#1079#1088#1103
+      TabOrder = 5
+    end
+    object CheckBoxVal: TCheckBox
+      Left = 32
+      Top = 120
+      Width = 97
+      Height = 17
+      Caption = #1042#1072#1083#1081#1091#1090#1072#1076#1072
+      TabOrder = 6
+    end
+  end
+  object OraPackVExtraction: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'V_Extraction'
+    Left = 264
+    Top = 72
+  end
+  object OraDataSetMainExell: TOracleDataSet
+    SQL.Strings = (
+      
+        'select sel.acc_no, sel.val_name, TO_Char(sel.dat, '#39'dd/mm/yyyy'#39') ' +
+        'dat, sel.name, '
+      
+        'Round(ABS(decode (sel.Prefix, '#39'D'#39', :ByValD, '#39'K'#39', 0) ),2) AS Debe' +
+        't,  '
+      
+        'Round(ABS(decode (sel.Prefix, '#39'K'#39', :ByValK , '#39'D'#39', 0)),2) AS Kred' +
+        'it, ammount, lammount, ammount_c'
+      'from ('
+      
+        'select acc.acc_no, val.val_name, prov.dat, prov.ammount, prov.la' +
+        'mmount, prov.ammount_c, prov.name, ('#39'D'#39') as Prefix'
+      'from provarch prov, account acc, avalute val'
+      'where prov.debt = :acc_id'
+      'and acc.id = prov.kredit'
+      'and val.valute = acc.val_acc'
+      'and prov.dat >= :BeginDat'
+      'and prov.dat <= :EndDat'
+      'union ALL'
+      
+        'select acc.acc_no, val.val_name, prov.dat,  prov.ammount, prov.l' +
+        'ammount, prov.ammount_c, prov.name , ('#39'K'#39') as Prefix'
+      'from provarch prov, account acc, avalute val'
+      'where prov.kredit = :acc_id'
+      'and acc.id = prov.debt '
+      'and val.valute = prov.val_acc'
+      'and prov.dat >=:BeginDat'
+      'and prov.dat <= :EndDat) sel'
+      'order by sel.dat, sel.prefix, sel.val_name'
+      '')
+    Optimize = False
+    Variables.Data = {
+      04000000050000000E0000003A004100430043005F0049004400040000000000
+      000000000000120000003A0042004500470049004E004400410054000C000000
+      00000000000000000E0000003A0045004E0044004400410054000C0000000000
+      0000000000000E0000003A0042005900560041004C0044000100000000000000
+      000000000E0000003A0042005900560041004C004B0001000000000000000000
+      0000}
+    Session = sboapiDataModule.SBSession
+    Left = 264
+    Top = 160
+    object OraDataSetMainExellDAT: TWideStringField
+      DisplayLabel = 'Tarix'
+      FieldName = 'DAT'
+      Size = 10
+    end
+    object OraDataSetMainExellVAL_NAME: TWideStringField
+      DisplayLabel = 'Val.'
+      FieldName = 'VAL_NAME'
+      Size = 10
+    end
+    object OraDataSetMainExellAcc_NO: TWideStringField
+      DisplayLabel = 'Qar'#351#305' hesab'
+      FieldName = 'Acc_NO'
+    end
+    object OraDataSetMainExellDEBET: TFloatField
+      DisplayLabel = #1044#1077#1073#1077#1090
+      FieldName = 'DEBET'
+    end
+    object OraDataSetMainExellKREDIT: TFloatField
+      DisplayLabel = #1050#1088#1077#1076#1080#1090
+      FieldName = 'KREDIT'
+    end
+    object OraDataSetMainExellNAME: TWideStringField
+      DisplayLabel = 'T'#601'yinat'
+      FieldName = 'NAME'
+      Size = 255
+    end
+    object OraDataSetMainExellAMMOUNT: TFloatField
+      FieldName = 'AMMOUNT'
+    end
+    object OraDataSetMainExellLAMMOUNT: TFloatField
+      FieldName = 'LAMMOUNT'
+    end
+    object OraDataSetMainExellAMMOUNT_C: TFloatField
+      FieldName = 'AMMOUNT_C'
+    end
+  end
+  object OraDataSetBalcns: TOracleDataSet
+    SQL.Strings = (
+      'select acc.acc_no, acc.id from account acc'
+      'where acc.bal_cn1 = :balcn'
+      'order by acc.acc_no')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000C0000003A00420041004C0043004E000500000000000000
+      00000000}
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000C0000004100430043005F004E004F000100000000000400
+      000049004400010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 264
+    Top = 200
+    object OraDataSetBalcnsACC_NO: TWideStringField
+      FieldName = 'ACC_NO'
+      Size = 448
+    end
+    object OraDataSetBalcnsID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+  end
+end

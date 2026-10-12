@@ -1,0 +1,149 @@
+﻿unit NewTemporaryTransactionsFormImpl;
+interface
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
+  StdCtrls, Mask, DBCtrlsEh, ExtCtrls, Db, OracleData,
+  ImgList, Grids, DBGridEh,Dialogs, GridsEh, XFSCtrls,
+  XDBGrids;
+
+type
+  TNewTransactionsViewForm = class(TForm)
+    DBGridTransactions: TDBGridEh;
+    StatusImages: TImageList;
+    Transactions: TOracleDataSet;
+    TransactionsTrAmount: TFloatField;
+    DataSrcTransactions: TDataSource;
+    TransactionsDEBITACCNO: TWideStringField;
+    TransactionsDEBITCURRENCY: TWideStringField;
+    TransactionsCREDITACCNO: TWideStringField;
+    TransactionsCREDITCURRENCY: TWideStringField;
+    TransactionsTRDATE: TDateTimeField;
+    TransactionsINBALANCECHAR: TWideStringField;
+    TransactionsFLAGS: TFloatField;
+    TransactionsDEBITAMOUNT: TFloatField;
+    TransactionsCREDITAMOUNT: TFloatField;
+    TransactionsNATAMOUNT: TFloatField;
+    TransactionsTRDESCRIPTION: TWideStringField;
+    TransactionsCANPROCESS: TFloatField;
+    XFPanel1: TXFPanel;
+    XFPanel2: TXFPanel;
+    DBEditEh1: TDBEditEh;
+    ButtonDismis: TXFButton;
+    ButtonCommit: TXFButton;
+    procedure FormShow(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
+    procedure TransactionsCalcFields(DataSet: TDataSet);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure DBGridTransactionsDrawColumnCell(Sender: TObject;
+      const Rect: TRect; DataCol: Integer; Column: TColumnEh;
+      State: TGridDrawState);
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormCreate(Sender: TObject);
+    procedure ButtonCommitClick(Sender: TObject);
+  private
+     FCommitTransactions : Boolean;
+  public
+    { Public declarations }
+  end;
+
+var
+  NewTransactionsViewForm: TNewTransactionsViewForm;
+
+implementation
+
+{$R *.DFM}
+uses sboapiDataModuleImpl,SBTranslateProc;
+
+procedure TNewTransactionsViewForm.FormShow(Sender: TObject);
+begin
+  Transactions.Open;
+  FCommitTransactions := False;
+
+end;
+
+procedure TNewTransactionsViewForm.FormDestroy(Sender: TObject);
+begin
+Transactions.CloseAll;
+end;
+
+procedure TNewTransactionsViewForm.FormCloseQuery(Sender: TObject; var CanClose: Boolean);
+
+resourcestring
+  SCancelTransactions = 'Əməliyyat aparılmayacaq! Əminsinizmi?';
+begin
+  CanClose := FCommitTransactions or
+    (MessageDlg(
+       SCancelTransactions
+      ,mtWarning
+      ,[mbYes,mbNo]
+      ,0) = mrYes)
+
+end;
+
+procedure TNewTransactionsViewForm.TransactionsCalcFields(DataSet: TDataSet);
+begin
+  with DataSet do
+  if not FieldByName('DEBITAMOUNT').IsNull then
+    FieldByName('TrAmount').AsFloat := FieldByName('DEBITAMOUNT').AsFloat
+  else
+    FieldByName('TrAmount').AsFloat := FieldByName('CREDITAMOUNT').AsFloat
+end;
+
+procedure TNewTransactionsViewForm.ButtonCommitClick(Sender: TObject);
+begin
+ FCommitTransactions := True;
+  ModalResult := mrOk;
+end;
+
+procedure TNewTransactionsViewForm.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  Update
+end;
+
+procedure TNewTransactionsViewForm.DBGridTransactionsDrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TColumnEh;
+  State: TGridDrawState);
+const
+  DataColIndex = 1;
+begin
+  // Drawing Transaction Status Image
+  with Sender as TDBGridEh do
+  begin
+    if DataSource.DataSet.RecordCount <> 0 then
+    begin
+      if (DataCol = DataColIndex) then
+      begin
+       Canvas.Brush.Color := clSilver;
+       StatusImages.Draw(Canvas, Rect.Left, Rect.Top, DataSource.DataSet.FieldByName('CANPROCESS').AsInteger , True)
+      end
+      else
+       DefaultDrawColumnCell(Rect, DataCol, Column, State);
+    end;
+  end;
+
+end;
+
+procedure TNewTransactionsViewForm.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+   Resize :=False;
+end;
+
+procedure TNewTransactionsViewForm.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+ if ord(Key) =VK_ESCAPE then Close;
+end;
+
+
+
+
+
+procedure TNewTransactionsViewForm.FormCreate(Sender: TObject);
+begin
+  SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+end.

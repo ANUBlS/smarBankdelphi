@@ -1,0 +1,1204 @@
+object CashDataMod: TCashDataMod
+  OldCreateOrder = False
+  Left = 226
+  Top = 288
+  Height = 588
+  Width = 769
+  object ODSCurrency: TOracleDataSet
+    SQL.Strings = (
+      'Select Valute ,Valu_Name From AValute')
+    Session = sboapiDataModule.SBSession
+    Left = 280
+    Top = 152
+  end
+  object ODSCashReport: TOracleDataSet
+    SQL.Strings = (
+      'SELECT DISTINCT'
+      '  SUM(PR.LAMMOUNT)  /*/1000 */ AS LAMMOUNTS'
+      ' ,PR.KASSA_B     AS BSYMBOL'
+      ' ,MAX(CASH.NAME) AS NAME'
+      ' ,MIN(CASH.MEDIOCRITY) AS MEDIOCRITY'
+      ' FROM PROVARCH PR,KASSA_B CASH'
+      ' WHERE'
+      '     DAT>=:FIRSTDATE'
+      ' AND DAT<=:LASTDATE'
+      ' AND CASH.SYMBOL=PR.KASSA_B'
+      ''
+      
+        '  AND((debt in (Select ac.Id from account ac,Bal_spr1 b where b.' +
+        'cashincoming=1 and b.Bal_cn=ac.Bal_cn1))'
+      ' OR'
+      
+        ' (Kredit in (Select ac.Id from account ac,Bal_spr1 b where b.cas' +
+        'hincoming=1 and b.Bal_cn=ac.Bal_cn1)))'
+      ''
+      '  GROUP BY PR.KASSA_B'
+      ''
+      'UNION'
+      ''
+      'Select '
+      '  ABS(Sum(Ar.pok_ostat))  /*/1000*/ as LAMMOUNTS'
+      ' ,35 as BSYMBOL'
+      ' ,'#39'Щесабат тарихинин яввялиня кассанын галыьы'#39' as NAME'
+      ' ,0 as MEDIOCRITY'
+      'from '
+      '  ACCOUNT AC'
+      ' ,ARCHOST AR'
+      ''
+      'where'
+      '  AC.ID = AR.ACC_ID '
+      
+        '   and AC.BAL_CN1 in (Select bal_cn from Bal_spr1 where cashinco' +
+        'ming=1)'
+      
+        '   and AR.datdate = (Select max(dat) from operkurs where dat<:Fi' +
+        'rstDate)'
+      '   and ac.val_acc=0'
+      ''
+      'UNION'
+      ''
+      'Select '
+      '  ABS(Sum(Ar.pok_ostat)) /*/1000 */ as LAMMOUNTS'
+      ' ,70 as BSYMBOL'
+      ' ,'#39'Щесабат тарихинин сонуна кассанын галыьы'#39' as NAME'
+      ' ,1 as MEDIOCRITY'
+      'from '
+      '  ACCOUNT AC'
+      ' ,ARCHOST AR'
+      ''
+      'where'
+      '  AC.ID = AR.ACC_ID '
+      
+        '   and AC.BAL_CN1 in (Select bal_cn from Bal_spr1 where cashinco' +
+        'ming=1)'
+      
+        '   and AR.datdate = (Select max(dat) from operkurs where dat<=:L' +
+        'astDate)'
+      '   and ac.val_acc=0'
+      ''
+      ''
+      'ORDER BY'
+      ' MEDIOCRITY'
+      ',BSYMBOL'
+      ''
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' ')
+    Variables.Data = {
+      03000000020000000A0000003A4649525354444154450C000000000000000000
+      0000090000003A4C415354444154450C0000000000000000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 104
+    Top = 120
+    object ODSCashReportLAMMOUNTS: TFloatField
+      FieldName = 'LAMMOUNTS'
+    end
+    object ODSCashReportNAME: TStringField
+      FieldName = 'NAME'
+      Size = 556
+    end
+    object ODSCashReportMEDIOCRITY: TFloatField
+      FieldName = 'MEDIOCRITY'
+    end
+    object ODSCashReportBSYMBOL: TFloatField
+      FieldName = 'BSYMBOL'
+    end
+  end
+  object DataSrcCashReort: TDataSource
+    DataSet = ODSCashReport
+    Left = 24
+    Top = 120
+  end
+  object OPCash: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'SB_CASHREPORT'
+    Left = 280
+  end
+  object ODSIOCome: TOracleDataSet
+    SQL.Strings = (
+      'SELECT'
+      '  PR.LAMMOUNT,PR.AMMOUNT'
+      ' ,PR.KASSA_B AS BSYMBOL'
+      ' ,AC.ACC_NO AS ACCOUNTNUMBER, PR.NO_PROV'
+      ' FROM  ACCOUNT AC,PROVARCH PR'
+      ' WHERE PR.DAT >= :FIRSTDATE AND PR.DAT<=:LASTDATE'
+      '     AND PR.DEBT = AC.ID'
+      
+        '     AND (PR.KREDIT IN (SELECT AC.ID FROM ACCOUNT AC,BAL_SPR1 B ' +
+        'WHERE B.BAL_CN=AC.BAL_CN1 AND B.CASHINCOMING=1))'
+      ''
+      'ORDER BY'
+      '   pr.no_prov, Pr.kassa_b'
+      '  ,Ac.acc_no'
+      '     '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' ')
+    Variables.Data = {
+      03000000020000000A0000003A4649525354444154450C000000000000000000
+      0000090000003A4C415354444154450C0000000000000000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 24
+    Top = 8
+    object ODSIOComeLAMMOUNT: TFloatField
+      FieldName = 'LAMMOUNT'
+    end
+    object ODSIOComeBSYMBOL: TIntegerField
+      FieldName = 'BSYMBOL'
+    end
+    object ODSIOComeACCOUNTNUMBER: TStringField
+      FieldName = 'ACCOUNTNUMBER'
+    end
+    object ODSIOComeAMMOUNT: TFloatField
+      FieldName = 'AMMOUNT'
+    end
+    object ODSIOComeNO_PROV: TStringField
+      FieldName = 'NO_PROV'
+      Size = 8
+    end
+  end
+  object DataSrcViewer: TDataSource
+    DataSet = ODSTransactionsViewer
+    Left = 175
+    Top = 53
+  end
+  object ODSTransactionsViewer: TOracleDataSet
+    SQL.Strings = (
+      'SELECT DISTINCT'
+      '  PR.DAT,PR.ID as ID'
+      
+        ' ,AC1.ACC_NO AS DEBIT,AC1.KLI_ID AS DEBTID,AC1.FILIAL as DebetFi' +
+        'lial'
+      ' ,AC1.NAME AS DNAME,AC2.KLI_ID AS KREDITID'
+      
+        ' ,PR.VAL_ACC AS DCURRENCY, sb_complex_transactions.GetCurrencyNa' +
+        'me(PR.VAL_ACC) as DebtCurName'
+      ' ,AC2.ACC_NO AS KREDIT,AC1.KLI_ID,AC2.FILIAL as CreditFilial'
+      ' ,AC2.NAME  AS  KNAME'
+      ' ,AC1.BAL_CN1 AS DEBTCOME'
+      ' ,AC2.BAL_CN1 AS CREDITCOME'
+      
+        ' ,PR.CURRENCYID_C AS KCURRENCY, sb_complex_transactions.GetCurre' +
+        'ncyName(PR.CURRENCYID_C) as CreditCurName'
+      ' ,PR.AMMOUNT  AS DAMMOUNT'
+      ' ,PR.AMMOUNT_C AS KAMMOUNT'
+      ' ,PR.LAMMOUNT AS LAMMOUNT'
+      ' ,PR.KASSA_B AS BSYMBOL, PR.NO_PROV'
+      ' ,PR.OP_ID AS OperatorID , PR.COMMIT_OPID AS CommitterID'
+      ' ,PR.NAME AS ASSIGNMENT'
+      ' FROM  PROVARCH PR,ACCOUNT AC1,ACCOUNT AC2'
+      '      ,BAL_SPR1 REFERENCE'
+      ' WHERE'
+      '        AC1.ID=PR.DEBT'
+      '    AND AC2.ID=PR.KREDIT'
+      '    AND PR.DAT>=:FIRSTDATE'
+      '    AND PR.DAT<=:LASTDATE'
+      ''
+      '    AND REFERENCE.CASHINCOMING=1'
+      '    and ac1.bal_cn1<>ac2.bal_cn1 --H.R.11.07.2008'
+      '    ORDER BY  :Title'
+      ''
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ''
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' ')
+    Variables.Data = {
+      03000000030000000A0000003A4649525354444154450C000000000000000000
+      0000090000003A4C415354444154450C0000000000000000000000060000003A
+      5449544C45010000000700000050522E4441540000000000}
+    QBEDefinition.QBEFieldDefs = {
+      0400000018000000030000004441540100000000000200000049440100000000
+      0005000000444542495401000000000006000000444542544944010000000000
+      0B000000444542455446494C49414C01000000000005000000444E414D450100
+      00000000080000004B5245444954494401000000000009000000444355525245
+      4E43590100000000000B000000444542544355524E414D450100000000000600
+      00004B5245444954010000000000060000004B4C495F49440100000000000C00
+      000043524544495446494C49414C010000000000050000004B4E414D45010000
+      0000000800000044454254434F4D450100000000000A00000043524544495443
+      4F4D45010000000000090000004B43555252454E43590100000000000D000000
+      4352454449544355524E414D450100000000000800000044414D4D4F554E5401
+      0000000000080000004B414D4D4F554E54010000000000080000004C414D4D4F
+      554E54010000000000070000004253594D424F4C010000000000070000004E4F
+      5F50524F560100000000000A0000004F50455241544F5249440100000000000A
+      00000041535349474E4D454E54010000000000}
+    Session = sboapiDataModule.SBSession
+    AfterScroll = ODSTransactionsViewerAfterScroll
+    Left = 71
+    Top = 53
+    object ODSTransactionsViewerDAT: TDateTimeField
+      FieldName = 'DAT'
+    end
+    object ODSTransactionsViewerID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object ODSTransactionsViewerDEBIT: TStringField
+      FieldName = 'DEBIT'
+    end
+    object ODSTransactionsViewerDNAME: TStringField
+      FieldName = 'DNAME'
+      Size = 90
+    end
+    object ODSTransactionsViewerDEBTID: TFloatField
+      FieldName = 'DEBTID'
+    end
+    object ODSTransactionsViewerKREDITID: TFloatField
+      FieldName = 'KREDITID'
+    end
+    object ODSTransactionsViewerDCURRENCY: TFloatField
+      FieldName = 'DCURRENCY'
+    end
+    object ODSTransactionsViewerKREDIT: TStringField
+      FieldName = 'KREDIT'
+    end
+    object ODSTransactionsViewerKLI_ID: TFloatField
+      FieldName = 'KLI_ID'
+    end
+    object ODSTransactionsViewerKNAME: TStringField
+      FieldName = 'KNAME'
+      Size = 90
+    end
+    object ODSTransactionsViewerDEBTCOME: TFloatField
+      FieldName = 'DEBTCOME'
+    end
+    object ODSTransactionsViewerCREDITCOME: TFloatField
+      FieldName = 'CREDITCOME'
+    end
+    object ODSTransactionsViewerKCURRENCY: TIntegerField
+      FieldName = 'KCURRENCY'
+    end
+    object ODSTransactionsViewerDAMMOUNT: TFloatField
+      FieldName = 'DAMMOUNT'
+      DisplayFormat = '#,##0.00'
+    end
+    object ODSTransactionsViewerKAMMOUNT: TFloatField
+      FieldName = 'KAMMOUNT'
+      DisplayFormat = '#,##0.00'
+    end
+    object ODSTransactionsViewerLAMMOUNT: TFloatField
+      FieldName = 'LAMMOUNT'
+      DisplayFormat = '#,##0.00'
+    end
+    object ODSTransactionsViewerBSYMBOL: TIntegerField
+      FieldName = 'BSYMBOL'
+    end
+    object ODSTransactionsViewerASSIGNMENT: TStringField
+      FieldName = 'ASSIGNMENT'
+      Size = 255
+    end
+    object ODSTransactionsViewerperson_doc: TStringField
+      DisplayWidth = 500
+      FieldKind = fkLookup
+      FieldName = 'person_doc'
+      LookupDataSet = ODSCashInfo
+      LookupKeyFields = 'ID'
+      LookupResultField = 'PERSON_DOC'
+      KeyFields = 'ID'
+      Size = 500
+      Lookup = True
+    end
+    object ODSTransactionsViewerseria: TStringField
+      DisplayWidth = 500
+      FieldKind = fkLookup
+      FieldName = 'seria'
+      LookupDataSet = ODSCashInfo
+      LookupKeyFields = 'ID'
+      LookupResultField = 'SERIA'
+      KeyFields = 'ID'
+      Size = 500
+      Lookup = True
+    end
+    object ODSTransactionsViewerdocnumber: TStringField
+      DisplayWidth = 500
+      FieldKind = fkLookup
+      FieldName = 'docnumber'
+      LookupDataSet = ODSCashInfo
+      LookupKeyFields = 'ID'
+      LookupResultField = 'DOCNUMBER'
+      KeyFields = 'ID'
+      Size = 500
+      Lookup = True
+    end
+    object ODSTransactionsViewerFromWhen: TStringField
+      DisplayWidth = 500
+      FieldKind = fkLookup
+      FieldName = 'FromWhen'
+      LookupDataSet = ODSCashInfo
+      LookupKeyFields = 'ID'
+      LookupResultField = 'FROMWHEN'
+      KeyFields = 'ID'
+      Size = 500
+      Lookup = True
+    end
+    object ODSTransactionsViewerval_name: TStringField
+      DisplayWidth = 20
+      FieldKind = fkLookup
+      FieldName = 'val_name'
+      LookupDataSet = ODSValute
+      LookupKeyFields = 'VALUTE'
+      LookupResultField = 'VAL_NAME'
+      KeyFields = 'DCURRENCY'
+      Lookup = True
+    end
+    object ODSTransactionsViewerissued_by: TStringField
+      DisplayWidth = 500
+      FieldKind = fkLookup
+      FieldName = 'issued_by'
+      LookupDataSet = ODSCashInfo
+      LookupKeyFields = 'ID'
+      LookupResultField = 'ISSUEDBY'
+      KeyFields = 'ID'
+      Size = 500
+      Lookup = True
+    end
+    object ODSTransactionsViewerDEBETFILIAL: TIntegerField
+      FieldName = 'DEBETFILIAL'
+    end
+    object ODSTransactionsViewerCREDITFILIAL: TIntegerField
+      FieldName = 'CREDITFILIAL'
+    end
+    object ODSTransactionsViewerRecordNo: TIntegerField
+      FieldKind = fkCalculated
+      FieldName = 'RecordNo'
+      OnGetText = ODSTransactionsViewerRecordNoGetText
+      Calculated = True
+    end
+    object ODSTransactionsViewerDEBTCURNAME: TStringField
+      FieldName = 'DEBTCURNAME'
+      Size = 4000
+    end
+    object ODSTransactionsViewerCREDITCURNAME: TStringField
+      FieldName = 'CREDITCURNAME'
+      Size = 4000
+    end
+    object ODSTransactionsViewerNO_PROV: TStringField
+      FieldName = 'NO_PROV'
+      Size = 8
+    end
+    object ODSTransactionsViewerOPERATORID: TFloatField
+      FieldName = 'OPERATORID'
+    end
+    object ODSTransactionsViewerCommitterID: TFloatField
+      FieldName = 'CommitterID'
+    end
+  end
+  object ODSLogo: TOracleDataSet
+    SQL.Strings = (
+      'Select '
+      '   logo From BankInfo'
+      ' ')
+    Session = sboapiDataModule.SBSession
+    Left = 280
+    Top = 48
+    object ODSLogoLOGO: TBlobField
+      FieldName = 'LOGO'
+      BlobType = ftBlob
+    end
+  end
+  object ODSCashInfo: TOracleDataSet
+    SQL.Strings = (
+      'Select'
+      '  C.RowID,'
+      '  C.*'
+      'From'
+      '  CashInfo C'
+      'Where'
+      '  ID=:ID')
+    Variables.Data = {0300000001000000030000003A4944030000000000000000000000}
+    Master = ODSTransactionsViewer
+    MasterFields = 'ID'
+    DetailFields = 'ID'
+    Session = sboapiDataModule.SBSession
+    Left = 104
+    Top = 168
+    object ODSCashInfoID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object ODSCashInfoPERSON_DOC: TStringField
+      DisplayWidth = 500
+      FieldName = 'PERSON_DOC'
+      Size = 500
+    end
+    object ODSCashInfoISSUEDBY: TStringField
+      DisplayWidth = 500
+      FieldName = 'ISSUEDBY'
+      Size = 500
+    end
+    object ODSCashInfoSERIA: TStringField
+      DisplayWidth = 500
+      FieldName = 'SERIA'
+      Size = 500
+    end
+    object ODSCashInfoDOCNUMBER: TStringField
+      DisplayWidth = 500
+      FieldName = 'DOCNUMBER'
+      Size = 500
+    end
+    object ODSCashInfoFROMWHEN: TStringField
+      DisplayWidth = 500
+      FieldName = 'FROMWHEN'
+      Size = 500
+    end
+  end
+  object DSCashInfo: TDataSource
+    DataSet = ODSCashInfo
+    Left = 16
+    Top = 168
+  end
+  object ODSCashB: TOracleDataSet
+    SQL.Strings = (
+      'Select'
+      '   symbol'
+      'From'
+      '   Kassa_B'
+      'Order by symbol')
+    Session = sboapiDataModule.SBSession
+    Left = 280
+    Top = 104
+  end
+  object ODSRates: TOracleDataSet
+    SQL.Strings = (
+      'Select'
+      ' Currencys.Val_Name as Currency'
+      ',Rates.Ostat as Rate'
+      ',Rates.Dat  as PresentDate '
+      '  From OperKurs Rates,AValute Currencys'
+      '  Where'
+      '      Currencys.Valute=Rates.VAL_KOD'
+      '  And Rates.Dat =:ADate'
+      '  And Currencys.Valute =:Currency'
+      ''
+      ''
+      ''
+      ' ')
+    Variables.Data = {
+      0300000002000000060000003A41444154450C00000000000000000000000900
+      00003A43555252454E4359030000000000000000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 280
+    Top = 200
+    object ODSRatesRATE: TFloatField
+      FieldName = 'RATE'
+    end
+    object ODSRatesPRESENTDATE: TDateTimeField
+      FieldName = 'PRESENTDATE'
+      Required = True
+    end
+    object ODSRatesCURRENCY: TStringField
+      FieldName = 'CURRENCY'
+      Size = 10
+    end
+  end
+  object ODSValute: TOracleDataSet
+    SQL.Strings = (
+      'Select'
+      '  valute,'
+      '  val_name'
+      'From'
+      '  Avalute ')
+    Session = sboapiDataModule.SBSession
+    Left = 120
+    Top = 232
+    object ODSValuteVALUTE: TIntegerField
+      FieldName = 'VALUTE'
+      Required = True
+    end
+    object ODSValuteVAL_NAME: TStringField
+      FieldName = 'VAL_NAME'
+      Size = 10
+    end
+  end
+  object ODSValuteName: TOracleDataSet
+    SQL.Strings = (
+      'Select'
+      '  valute'
+      '  ,valu_name'
+      '  ,valu_bala '
+      'From'
+      '   Avalute '
+      ''
+      'where valute =:Valute ')
+    Variables.Data = {0300000001000000070000003A56414C555445030000000000000000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 32
+    Top = 240
+    object ODSValuteNameVALUTE: TIntegerField
+      FieldName = 'VALUTE'
+      Required = True
+    end
+    object ODSValuteNameVALU_NAME: TStringField
+      FieldName = 'VALU_NAME'
+      Size = 25
+    end
+    object ODSValuteNameVALU_BALA: TStringField
+      FieldName = 'VALU_BALA'
+      Size = 25
+    end
+  end
+  object Filials: TOracleDataSet
+    SQL.Strings = (
+      'Select * from Filial '
+      'order by id')
+    Session = sboapiDataModule.SBSession
+    Left = 32
+    Top = 304
+  end
+  object CashSymbols: TOracleDataSet
+    SQL.Strings = (
+      'Select * from KAssa_B '
+      'order by symbol')
+    Session = sboapiDataModule.SBSession
+    Left = 128
+    Top = 320
+  end
+  object TotalResult: TOracleDataSet
+    SQL.Strings = (
+      'SELECT'
+      '   DLAMMOUNT'
+      '  ,DAMMOUNT'
+      '  ,DCOUNT'
+      '  ,CLAMMOUNT'
+      '  ,CAMMOUNT'
+      '  ,CCOUNT'
+      '  ,CASHREMAINDER'
+      'FROM'
+      ''
+      '('
+      ' SELECT'
+      '   SUM(PR.LAMMOUNT) as DLAMMOUNT'
+      '  ,SUM(PR.AMMOUNT) as  DAMMOUNT'
+      '  ,COUNT(*) as DCOUNT'
+      ' FROM  ACCOUNT AC,PROVARCH PR'
+      ' WHERE PR.DAT >=:FirstDate AND PR.DAT<=:LastDate'
+      '     AND PR.KREDIT = AC.ID'
+      
+        '     AND (PR.DEBT IN (SELECT AC.ID FROM ACCOUNT AC,BAL_SPR1 B WH' +
+        'ERE B.BAL_CN=AC.BAL_CN1 AND B.CASHINCOMING=1))'
+      '     AND ((PR.val_acc =:CurrencyID) ) AND AC.FILIAL=:BRANCHID'
+      '     AND'
+      '     --NOT PR.KASSA_B IS NULL'
+      '     (Decode(PR.VID_OP,null,1,1,0,1)=1)'
+      '     )'
+      ','
+      '('
+      ' SELECT'
+      '   SUM(PR.LAMMOUNT) as CLAMMOUNT'
+      '  ,SUM(PR.AMMOUNT_C) as CAMMOUNT'
+      '  ,COUNT(*) as CCOUNT'
+      ' FROM  ACCOUNT AC,PROVARCH PR'
+      ' WHERE PR.DAT >=:FirstDate AND PR.DAT<=:LastDate'
+      '     AND PR.DEBT = AC.ID'
+      
+        '     AND (PR.KREDIT IN (SELECT AC.ID FROM ACCOUNT AC,BAL_SPR1 B ' +
+        'WHERE B.BAL_CN=AC.BAL_CN1 AND B.CASHINCOMING=1))'
+      
+        '     AND ((PR.CURRENCYID_C =:CurrencyID)) AND AC.FILIAL=:BRANCHI' +
+        'D'
+      '     AND'
+      '     --NOT PR.KASSA_B IS NULL'
+      '     (Decode(PR.VID_OP,null,1,1,0,1)=1)'
+      '     )'
+      ','
+      '('
+      'Select'
+      '  ABS(Sum(Ar.ostat)) as CASHREMAINDER'
+      'from'
+      '  ACCOUNT AC'
+      ' ,ARCHOST AR'
+      'where'
+      '  AC.ID = AR.ACC_ID'
+      
+        '   and AC.BAL_CN1 in (Select bal_cn from Bal_spr1 where cashinco' +
+        'ming=1)'
+      
+        '   and AR.datdate = (Select max(dat) from operkurs where dat<=:L' +
+        'astDate)'
+      '   and ac.val_acc=:CurrencyID and ac.filial=:BRANCHID'
+      ')'
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ' '
+      ' '
+      ' '
+      ' ')
+    Variables.Data = {
+      03000000040000000A0000003A4649525354444154450C000000000000000000
+      0000090000003A4C415354444154450C00000000000000000000000B0000003A
+      43555252454E43594944030000000000000000000000090000003A4252414E43
+      484944030000000000000000000000}
+    Session = sboapiDataModule.SBSession
+    OnCalcFields = TotalResultCalcFields
+    Left = 280
+    Top = 272
+    object TotalResultDLAMMOUNT: TFloatField
+      FieldName = 'DLAMMOUNT'
+    end
+    object TotalResultDAMMOUNT: TFloatField
+      FieldName = 'DAMMOUNT'
+    end
+    object TotalResultDCOUNT: TFloatField
+      FieldName = 'DCOUNT'
+    end
+    object TotalResultCLAMMOUNT: TFloatField
+      FieldName = 'CLAMMOUNT'
+    end
+    object TotalResultCAMMOUNT: TFloatField
+      FieldName = 'CAMMOUNT'
+    end
+    object TotalResultCCOUNT: TFloatField
+      FieldName = 'CCOUNT'
+    end
+    object TotalResultOperationDate: TDateField
+      FieldKind = fkCalculated
+      FieldName = 'OperationDate'
+      Calculated = True
+    end
+    object TotalResultCASHREMAINDER: TFloatField
+      FieldName = 'CASHREMAINDER'
+    end
+  end
+  object Settings: TOracleDataSet
+    SQL.Strings = (
+      'SELECT a.*,rowid'
+      ''
+      'FROM'
+      '    cash_settings a'
+      ' ')
+    QBEDefinition.QBEFieldDefs = {
+      0400000007000000130000004341534842414C414E43454E4154494F4E414C01
+      0000000000120000004341534842414C414E4345454E474C4953480100000000
+      000E0000004445534352495054494F4E5F415A0100000000000F000000444553
+      4352495054494F4E5F454E47010000000000090000005349474E415459524501
+      000000000012000000524553504F4E5349424C455F504552534F4E0100000000
+      000500000050484F544F000000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 21
+    Top = 433
+    object SettingsCASHBALANCENATIONAL: TFloatField
+      FieldName = 'CASHBALANCENATIONAL'
+    end
+    object SettingsCASHBALANCEENGLISH: TFloatField
+      FieldName = 'CASHBALANCEENGLISH'
+    end
+    object SettingsDESCRIPTION_AZ: TStringField
+      FieldName = 'DESCRIPTION_AZ'
+      Size = 150
+    end
+    object SettingsDESCRIPTION_ENG: TStringField
+      FieldName = 'DESCRIPTION_ENG'
+      Size = 150
+    end
+    object SettingsSIGNATYRE: TStringField
+      FieldName = 'SIGNATYRE'
+      Size = 150
+    end
+    object SettingsRESPONSIBLE_PERSON: TStringField
+      FieldName = 'RESPONSIBLE_PERSON'
+      Size = 150
+    end
+    object SettingsHANDOVER: TStringField
+      FieldName = 'HANDOVER'
+      Size = 10
+    end
+    object SettingsCHIEF: TStringField
+      FieldName = 'CHIEF'
+      Size = 10
+    end
+    object SettingsOPERATOR: TStringField
+      FieldName = 'OPERATOR'
+      Size = 10
+    end
+    object SettingsCASHIER: TStringField
+      FieldName = 'CASHIER'
+      Size = 10
+    end
+    object SettingsAMOUNT: TStringField
+      FieldName = 'AMOUNT'
+      Size = 10
+    end
+    object SettingsCHIEF_OUT: TStringField
+      FieldName = 'CHIEF_OUT'
+      Size = 10
+    end
+    object SettingsOPERATOR_OUT: TStringField
+      FieldName = 'OPERATOR_OUT'
+      Size = 10
+    end
+    object SettingsCASHIER_OUT: TStringField
+      FieldName = 'CASHIER_OUT'
+      Size = 10
+    end
+    object SettingsACCOUNTANT: TStringField
+      FieldName = 'ACCOUNTANT'
+      Size = 10
+    end
+    object SettingsCONTROLLER: TStringField
+      FieldName = 'CONTROLLER'
+      Size = 10
+    end
+    object SettingsCONTROLLER_OUT: TStringField
+      FieldName = 'CONTROLLER_OUT'
+      Size = 10
+    end
+    object SettingsPHOTO: TBlobField
+      FieldName = 'PHOTO'
+      BlobType = ftOraBlob
+    end
+  end
+  object SettingsData: TDataSource
+    DataSet = Settings
+    Left = 88
+    Top = 433
+  end
+  object BrowseCashInfo: TOracleDataSet
+    SQL.Strings = (
+      'SELECT '
+      '       issuedby,'
+      '       max(id) as id, '
+      '       max(person_doc) as person_doc, '
+      '       max(seria) as seria, '
+      '       max(docnumber) as docnumber, '
+      '       max(fromwhen) as fromwhen'
+      'FROM cashinfo '
+      'group by issuedby'
+      'order by issuedby')
+    QBEDefinition.QBEFieldDefs = {
+      0400000006000000080000004953535545444259010000000000020000004944
+      0100000000000A000000504552534F4E5F444F43010000000000050000005345
+      52494101000000000009000000444F434E554D42455201000000000008000000
+      46524F4D5748454E010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 328
+    Top = 392
+  end
+  object DataBrowseCashInfo: TDataSource
+    DataSet = BrowseCashInfo
+    Left = 272
+    Top = 392
+  end
+  object ODSBank: TOracleDataSet
+    SQL.Strings = (
+      'Select'
+      '  Bank,Inn,KOD_B From BankInfo')
+    QBEDefinition.QBEFieldDefs = {
+      04000000030000000400000042414E4B01000000000003000000494E4E010000
+      000000050000004B4F445F42010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 192
+    Top = 368
+    object ODSBankBANK: TStringField
+      FieldName = 'BANK'
+      Size = 80
+    end
+    object ODSBankINN: TStringField
+      FieldName = 'INN'
+      Size = 15
+    end
+    object ODSBankKOD_B: TFloatField
+      FieldName = 'KOD_B'
+    end
+  end
+  object Operator: TOracleDataSet
+    SQL.Strings = (
+      ' select -1 as ID, '#39'Бцтцн операторлар'#39' as Name from Dual'
+      'Union'
+      ' select ID, Name from User$'
+      'Order by ID '
+      ' ')
+    Session = sboapiDataModule.SBSession
+    Left = 392
+    Top = 16
+    object OperatorID: TFloatField
+      FieldName = 'ID'
+    end
+    object OperatorNAME: TStringField
+      FieldName = 'NAME'
+      Size = 30
+    end
+  end
+  object DataOperator: TDataSource
+    DataSet = Operator
+    Left = 448
+    Top = 8
+  end
+  object OrDS_CashBook: TOracleDataSet
+    SQL.Strings = (
+      'SELECT DISTINCT'
+      '  SUM(PR.LAMMOUNT)  /*/1000 */ AS LAMMOUNTS'
+      ' ,PR.KASSA_B     AS BSYMBOL'
+      ' ,MAX(CASH.NAME) AS NAME'
+      ' ,MIN(CASH.MEDIOCRITY) AS MEDIOCRITY'
+      ' FROM PROVARCH PR,KASSA_B CASH'
+      ' WHERE'
+      '     DAT>=:FIRSTDATE'
+      ' AND DAT<=:LASTDATE'
+      ' AND CASH.SYMBOL=PR.KASSA_B'
+      ''
+      
+        '  AND((debt in (Select ac.Id from account ac,Bal_spr1 b where b.' +
+        'cashincoming=1 and b.Bal_cn=ac.Bal_cn1))'
+      ' OR'
+      
+        ' (Kredit in (Select ac.Id from account ac,Bal_spr1 b where b.cas' +
+        'hincoming=1 and b.Bal_cn=ac.Bal_cn1)))'
+      ''
+      '  GROUP BY PR.KASSA_B'
+      ''
+      'UNION'
+      ''
+      'Select '
+      '  ABS(Sum(Ar.pok_ostat))  /*/1000*/ as LAMMOUNTS'
+      ' ,35 as BSYMBOL'
+      ' ,'#39'Щесабат тарихинин яввялиня кассанын галыьы'#39' as NAME'
+      ' ,0 as MEDIOCRITY'
+      'from '
+      '  ACCOUNT AC'
+      ' ,ARCHOST AR'
+      ''
+      'where'
+      '  AC.ID = AR.ACC_ID '
+      
+        '   and AC.BAL_CN1 in (Select bal_cn from Bal_spr1 where cashinco' +
+        'ming=1)'
+      
+        '   and AR.datdate = (Select max(dat) from operkurs where dat<:Fi' +
+        'rstDate)'
+      '   and ac.val_acc=0'
+      ''
+      'UNION'
+      ''
+      'Select '
+      '  ABS(Sum(Ar.pok_ostat)) /*/1000 */ as LAMMOUNTS'
+      ' ,70 as BSYMBOL'
+      ' ,'#39'Щесабат тарихинин сонуна кассанын галыьы'#39' as NAME'
+      ' ,1 as MEDIOCRITY'
+      'from '
+      '  ACCOUNT AC'
+      ' ,ARCHOST AR'
+      ''
+      'where'
+      '  AC.ID = AR.ACC_ID '
+      
+        '   and AC.BAL_CN1 in (Select bal_cn from Bal_spr1 where cashinco' +
+        'ming=1)'
+      
+        '   and AR.datdate = (Select max(dat) from operkurs where dat<=:L' +
+        'astDate)'
+      '   and ac.val_acc=0'
+      ''
+      ''
+      'ORDER BY'
+      ' MEDIOCRITY'
+      ',BSYMBOL'
+      ''
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' ')
+    Variables.Data = {
+      03000000020000000A0000003A4649525354444154450C000000000000000000
+      0000090000003A4C415354444154450C0000000000000000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 264
+    Top = 456
+    object FloatField1: TFloatField
+      FieldName = 'LAMMOUNTS'
+    end
+    object StringField1: TStringField
+      FieldName = 'NAME'
+      Size = 556
+    end
+    object FloatField2: TFloatField
+      FieldName = 'MEDIOCRITY'
+    end
+    object FloatField3: TFloatField
+      FieldName = 'BSYMBOL'
+    end
+  end
+  object ODS_L_CHIN: TOracleDataSet
+    SQL.Strings = (
+      'select rownum, sik_sex.* from (SELECT DISTINCT'
+      '  PR.ID as ID'
+      
+        ' ,decode(AC1.BAL_CN1,'#39'1001'#39',AC2.ACC_NO,'#39'1011'#39',AC2.ACC_NO,AC1.ACC' +
+        '_NO) as hesab'
+      
+        ' ,AC1.ACC_NO AS DEBIT,AC1.KLI_ID AS DEBTID,AC1.FILIAL as DebetFi' +
+        'lial,AC1.NAME AS DNAME,AC2.KLI_ID AS KREDITID'
+      
+        ' ,decode(AC1.BAL_CN1,'#39'1001'#39',AC2.NAME,'#39'1011'#39',AC2.NAME,AC1.NAME) a' +
+        's hesab_adi'
+      
+        ' ,PR.VAL_ACC AS DCURRENCY, sb_complex_transactions.GetCurrencyNa' +
+        'me(PR.VAL_ACC) as DebtCurName,AC2.ACC_NO AS KREDIT,AC1.KLI_ID,AC' +
+        '2.FILIAL as CreditFilial'
+      
+        ' ,AC2.NAME  AS  KNAME ,AC1.BAL_CN1 AS DEBTCOME ,AC2.BAL_CN1 AS C' +
+        'REDITCOME'
+      ' ,decode(AC1.BAL_CN1,'#39'1001'#39',0,'#39'1011'#39',0,PR.AMMOUNT) as medaxil'
+      ' ,decode(AC2.BAL_CN1,'#39'1001'#39',0,'#39'1011'#39',0,PR.AMMOUNT_C) as mexaric'
+      
+        '  ,PR.CURRENCYID_C AS KCURRENCY, sb_complex_transactions.GetCurr' +
+        'encyName(PR.CURRENCYID_C) as CreditCurName'
+      
+        '  ,PR.AMMOUNT  AS DAMMOUNT ,PR.AMMOUNT_C AS KAMMOUNT ,PR.LAMMOUN' +
+        'T AS LAMMOUNT'
+      
+        '  ,PR.KASSA_B AS BSYMBOL, PR.NO_PROV ,PR.OP_ID AS OperatorID, PR' +
+        '.Commit_OpID as CommitterID'
+      ''
+      ''
+      ''
+      ' ,PR.NAME AS ASSIGNMENT'
+      ' FROM  PROVARCH PR,ACCOUNT AC1,ACCOUNT AC2'
+      '      ,BAL_SPR1 REFERENCE'
+      ' WHERE'
+      '        AC1.ID=PR.DEBT'
+      '    AND AC2.ID=PR.KREDIT'
+      
+        '    AND PR.DAT>=:FIRSTDATE and ((decode(AC2.BAL_CN1,'#39'1001'#39',null,' +
+        #39'1011'#39',null,PR.AMMOUNT_C) is not null) or (decode(AC1.BAL_CN1,'#39'1' +
+        '001'#39',null,'#39'1011'#39',null,PR.AMMOUNT) is not null))'
+      '    AND PR.DAT<=:LASTDATE'
+      ''
+      '    AND REFERENCE.CASHINCOMING=1'
+      ''
+      '    ORDER BY mexaric) sik_sex'
+      ' ')
+    Variables.Data = {
+      03000000020000000A0000003A4649525354444154450C000000000000000000
+      0000090000003A4C415354444154450C0000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      040000001D00000006000000524F574E554D0100000000000200000049440100
+      0000000005000000484553414201000000000005000000444542495401000000
+      0000060000004445425449440100000000000B000000444542455446494C4941
+      4C01000000000005000000444E414D45010000000000080000004B5245444954
+      49440100000000000900000048455341425F4144490100000000000900000044
+      43555252454E43590100000000000B000000444542544355524E414D45010000
+      000000060000004B5245444954010000000000060000004B4C495F4944010000
+      0000000C00000043524544495446494C49414C010000000000050000004B4E41
+      4D450100000000000800000044454254434F4D450100000000000A0000004352
+      45444954434F4D45010000000000070000004D45444158494C01000000000007
+      0000004D455841524943010000000000090000004B43555252454E4359010000
+      0000000D0000004352454449544355524E414D45010000000000080000004441
+      4D4D4F554E54010000000000080000004B414D4D4F554E540100000000000800
+      00004C414D4D4F554E54010000000000070000004253594D424F4C0100000000
+      00070000004E4F5F50524F560100000000000A0000004F50455241544F524944
+      0100000000000B000000434F4D4D495454455249440100000000000A00000041
+      535349474E4D454E54010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 480
+    Top = 368
+    object ODS_L_CHINsayi: TIntegerField
+      FieldKind = fkCalculated
+      FieldName = 'sayi'
+      OnGetText = ODS_L_CHINsayiGetText
+      Calculated = True
+    end
+    object ODS_L_CHINROWNUM: TFloatField
+      FieldName = 'ROWNUM'
+    end
+    object ODS_L_CHINID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object ODS_L_CHINHESAB: TStringField
+      FieldName = 'HESAB'
+    end
+    object ODS_L_CHINDEBIT: TStringField
+      FieldName = 'DEBIT'
+    end
+    object ODS_L_CHINDEBTID: TFloatField
+      FieldName = 'DEBTID'
+    end
+    object ODS_L_CHINDEBETFILIAL: TIntegerField
+      FieldName = 'DEBETFILIAL'
+    end
+    object ODS_L_CHINDNAME: TStringField
+      FieldName = 'DNAME'
+      Size = 90
+    end
+    object ODS_L_CHINKREDITID: TFloatField
+      FieldName = 'KREDITID'
+    end
+    object ODS_L_CHINHESAB_ADI: TStringField
+      FieldName = 'HESAB_ADI'
+      Size = 90
+    end
+    object ODS_L_CHINDCURRENCY: TFloatField
+      FieldName = 'DCURRENCY'
+      Required = True
+    end
+    object ODS_L_CHINDEBTCURNAME: TStringField
+      FieldName = 'DEBTCURNAME'
+      Size = 4000
+    end
+    object ODS_L_CHINKREDIT: TStringField
+      FieldName = 'KREDIT'
+    end
+    object ODS_L_CHINKLI_ID: TFloatField
+      FieldName = 'KLI_ID'
+    end
+    object ODS_L_CHINCREDITFILIAL: TIntegerField
+      FieldName = 'CREDITFILIAL'
+    end
+    object ODS_L_CHINKNAME: TStringField
+      FieldName = 'KNAME'
+      Size = 90
+    end
+    object ODS_L_CHINDEBTCOME: TFloatField
+      FieldName = 'DEBTCOME'
+    end
+    object ODS_L_CHINCREDITCOME: TFloatField
+      FieldName = 'CREDITCOME'
+    end
+    object ODS_L_CHINMEDAXIL: TFloatField
+      FieldName = 'MEDAXIL'
+    end
+    object ODS_L_CHINMEXARIC: TFloatField
+      FieldName = 'MEXARIC'
+    end
+    object ODS_L_CHINKCURRENCY: TIntegerField
+      FieldName = 'KCURRENCY'
+      Required = True
+    end
+    object ODS_L_CHINCREDITCURNAME: TStringField
+      FieldName = 'CREDITCURNAME'
+      Size = 4000
+    end
+    object ODS_L_CHINDAMMOUNT: TFloatField
+      FieldName = 'DAMMOUNT'
+      Required = True
+    end
+    object ODS_L_CHINKAMMOUNT: TFloatField
+      FieldName = 'KAMMOUNT'
+      Required = True
+    end
+    object ODS_L_CHINLAMMOUNT: TFloatField
+      FieldName = 'LAMMOUNT'
+      Required = True
+    end
+    object ODS_L_CHINBSYMBOL: TIntegerField
+      FieldName = 'BSYMBOL'
+    end
+    object ODS_L_CHINNO_PROV: TStringField
+      FieldName = 'NO_PROV'
+      Size = 8
+    end
+    object ODS_L_CHINOPERATORID: TFloatField
+      FieldName = 'OPERATORID'
+    end
+    object ODS_L_CHINASSIGNMENT: TStringField
+      FieldName = 'ASSIGNMENT'
+      Size = 255
+    end
+    object ODS_L_CHINCOMMITTERID: TFloatField
+      FieldName = 'COMMITTERID'
+    end
+  end
+  object ODS_EVV_SON_QALIQ: TOracleDataSet
+    SQL.Strings = (
+      'select sel1.Evvele_qaliq,Sel2.Sona_qaliq From'
+      '(select sum(-AR.OSTAT) Evvele_qaliq'
+      'from archost AR, Account AC'
+      'where AC.id=AR.acc_id'
+      '  and AC.BAL_CN1 in ('#39'1001'#39','#39'1011'#39')'
+      ''
+      ''
+      '  and datdate='
+      
+        '              (select max(AR_S.datdate) from archost AR_S where ' +
+        'AR_S.datdate<:FIRSTDATE)) sel1,'
+      ''
+      '(select sum(-AR.OSTAT) Sona_qaliq'
+      'from archost AR, Account AC'
+      'where AC.id=AR.acc_id'
+      '  and AC.BAL_CN1 in ('#39'1001'#39','#39'1011'#39')'
+      ''
+      ''
+      '  and datdate='
+      
+        '              (select max(AR_S.datdate) from archost AR_S where ' +
+        'AR_S.datdate<=:LASTDATE)) sel2'
+      '')
+    Variables.Data = {
+      03000000020000000A0000003A4649525354444154450C000000000000000000
+      0000090000003A4C415354444154450C0000000000000000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 480
+    Top = 424
+  end
+  object OrDS_Comitters: TOracleDataSet
+    SQL.Strings = (
+      ' select -1 as ID, '#39'Бцтцн операторлар'#39' as Name from Dual'
+      'Union'
+      ' select ID, Name from User$'
+      'Order by ID '
+      ' ')
+    Session = sboapiDataModule.SBSession
+    Left = 392
+    Top = 64
+    object FloatField4: TFloatField
+      FieldName = 'ID'
+    end
+    object StringField2: TStringField
+      FieldName = 'NAME'
+      Size = 30
+    end
+  end
+  object DS_Committers: TDataSource
+    DataSet = OrDS_Comitters
+    Left = 448
+    Top = 65
+  end
+end

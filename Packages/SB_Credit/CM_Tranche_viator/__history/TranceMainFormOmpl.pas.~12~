@@ -1,0 +1,240 @@
+﻿unit TranceMainFormOmpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+   StdCtrls, ExtCtrls, Mask, DBCtrls, DBCtrlsEh, DBLookupEh,
+  ComCtrls, CMCurrencyEdit, Oracle, ActnList, Grids, DBGrids, ImgList,
+  ToolWin, CMExcelExport, DBGridEh, DBGridEhGrouping, GridsEh;
+
+type
+  TTrancheMainForm = class(TForm)
+    GroupBox1: TGroupBox;
+    Panel4: TPanel;
+    ToolBar1: TToolBar;
+    ImageList1: TImageList;
+    ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
+    ToolButton3: TToolButton;
+    ToolButton4: TToolButton;
+    ToolButton5: TToolButton;
+    ActionList1: TActionList;
+    ToolButton6: TToolButton;
+    ToolButton7: TToolButton;
+    ActnAddTranche: TAction;
+    ActnDelTranche: TAction;
+    ActnExport: TAction;
+    ActnClose: TAction;
+    CMExcelExport1: TCMExcelExport;
+    Panel3: TPanel;
+    DBEdit2: TDBEdit;
+    StaticText2: TStaticText;
+    StatusBar1: TStatusBar;
+    DBGridEh1: TDBGridEh;
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure ActnAddTrancheExecute(Sender: TObject);
+    procedure ActnCloseExecute(Sender: TObject);
+    procedure ActnExportExecute(Sender: TObject);
+    procedure ActnDelTrancheExecute(Sender: TObject);
+    procedure ActnDelTrancheUpdate(Sender: TObject);
+  private
+    FCreditID : Integer;
+    { Private declarations }
+  public
+    property CreditID : Integer read FCreditID write FCreditID;
+    procedure ShowTrancheForm;
+    { Public declarations }
+  end;
+
+var
+  TrancheMainForm: TTrancheMainForm;
+
+procedure InitPlugin(S : String);export;
+
+implementation
+
+uses TranceDataModuleImpl, CommonDecls, sbsystem, TrancheAddFormImpl;
+
+{$R *.DFM}
+
+var
+  RefreshAfterClose : Boolean;
+
+procedure TTrancheMainForm.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+  Resize := False;
+end;
+
+procedure TTrancheMainForm.FormCreate(Sender: TObject);
+begin
+  TrancheDataModule := TTrancheDataModule.Create(Self);
+  TrchAddForm :=  TTrchAddForm.Create(Self);
+  RefreshAfterClose := False;
+end;
+
+procedure TTrancheMainForm.FormDestroy(Sender: TObject);
+begin
+  TrchAddForm.Free;
+  TrancheDataModule.Free;
+end;
+
+procedure TTrancheMainForm.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+  with TrancheDataModule do
+  begin
+    TrchAddForm.TrancheSumEdit.Value := 0;
+    CreditInfo.CloseAll;
+    TrancheAccounts.CloseAll;
+    CustAccount.CloseAll;
+    TranchesData.CloseAll;
+  end;
+  if RefreshAfterClose then
+    SafeRefresh(True,rmLocateAfterRefresh);
+end;
+
+procedure TTrancheMainForm.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+  if ORD(Key) = VK_ESCAPE then
+  begin
+    ActnCloseExecute(nil);
+    Key := #0;
+  end;
+end;
+
+procedure TTrancheMainForm.ShowTrancheForm;
+resourcestring
+  STrancheCaption = ' %s nömrəli müqavilənin tranşları...';
+
+var
+  CustID : Integer;
+  CustAccID : Integer;
+begin
+
+  CreditID := Get_SelectedCrdID;
+  TrchAddForm.TrancheDatePckr.DateTime := Get_CurrentDate;
+  Caption := Format(STrancheCaption,[Get_SelectedCrdNo]);
+  RefreshAfterClose := False;
+   
+  with TrancheDataModule do
+  begin
+    with CreditInfo do
+    begin
+      SetVariable('ID',CreditID);
+      Open;
+      CustID := FieldByName('BoorowerID').AsInteger;
+    end;
+
+    with CustAccount do
+    begin
+      SetVariable('CreditID',CreditID);
+      Open;
+      CustAccID := FieldByName('BOOROWERACCID').AsInteger;
+    end;
+
+    with TrancheAccounts do
+    begin
+   //   SetVariable('KLI_ID',CustID);
+      Open;
+      if Locate('AccID',CustAccID,[]) then
+        TrchAddForm.AccountListCB.KeyValue := CustAccID
+    end;
+
+    with TranchesData do
+    begin
+      SetVariable('CreditID',CreditID);
+      Open;
+    end;
+
+     with OracleDataSet1 do
+    begin
+      close;
+      SetVariable('CreditID',CreditID);
+      Open;
+    end;
+  end;
+
+  ShowModal
+
+end;
+
+procedure TTrancheMainForm.ActnAddTrancheExecute(Sender: TObject);
+begin
+  if TrchAddForm.ShowModal = mrOk then
+  begin
+    RefreshAfterClose := True;
+    TrancheDataModule.TranchesData.Refresh;
+  end;
+end;
+
+procedure TTrancheMainForm.ActnCloseExecute(Sender: TObject);
+begin
+  Close;
+end;
+
+procedure InitPlugin(S : String);export;
+begin
+  TrancheMainForm.ShowTrancheForm;
+end;
+
+exports
+  InitPlugin;
+
+procedure TTrancheMainForm.ActnExportExecute(Sender: TObject);
+begin
+  with CMExcelExport1 do
+  begin
+    Connect;
+    ExportDataset(TrancheDataModule.TranchesData,'Tranches',True,false);
+    Disconnect;
+  end;
+end;
+
+procedure TTrancheMainForm.ActnDelTrancheExecute(Sender: TObject);
+resourcestring
+  rsConfirmTrancheDelete = 'Seçilmiş tranş ləğv olunacaq !Əminsinizmi?';
+  
+var
+  TrancheID : Integer;
+begin
+
+  if MessageDlg(
+       rsConfirmTrancheDelete,
+       mtConfirmation,
+       [mbYes,mbNo],
+       0) <> mrYes
+     then   Exit;
+     
+  with TrancheDataModule do
+  begin
+    TrancheID := TranchesData.FieldByName('ID').AsInteger;
+    with CM_TRANCHE do
+    CallProcedure('Tranche_Delete',[
+      'p_TrancheID',TrancheID
+    ]);
+    
+    TranchesData.Refresh;
+
+    RefreshAfterClose := True;
+  end;
+
+
+end;
+
+procedure TTrancheMainForm.ActnDelTrancheUpdate(Sender: TObject);
+begin
+  with TrancheDataModule.TranchesData do
+  (Sender as TAction).Enabled := Active and (RecordCount > 0);
+end;
+
+initialization
+   TrancheMainForm := TTrancheMainForm.Create(CommonApplication);
+
+end.

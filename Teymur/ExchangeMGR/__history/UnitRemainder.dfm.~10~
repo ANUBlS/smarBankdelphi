@@ -1,0 +1,191 @@
+object FormRemainder: TFormRemainder
+  Left = 588
+  Top = 551
+  BorderStyle = bsDialog
+  Caption = 'View Current Remainder....'
+  ClientHeight = 365
+  ClientWidth = 972
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'MS Sans Serif'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poScreenCenter
+  OnClose = FormClose
+  OnCreate = FormCreate
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 972
+    Height = 365
+    Align = alClient
+    BevelInner = bvRaised
+    BevelOuter = bvLowered
+    TabOrder = 0
+    ExplicitWidth = 684
+    object Panel2: TPanel
+      Left = 2
+      Top = 2
+      Width = 968
+      Height = 2
+      Align = alTop
+      TabOrder = 0
+      ExplicitWidth = 680
+    end
+    object Panel3: TPanel
+      Left = 2
+      Top = 361
+      Width = 968
+      Height = 2
+      Align = alBottom
+      TabOrder = 1
+      ExplicitWidth = 680
+    end
+    object Panel4: TPanel
+      Left = 2
+      Top = 4
+      Width = 2
+      Height = 357
+      Align = alLeft
+      TabOrder = 2
+    end
+    object Panel5: TPanel
+      Left = 967
+      Top = 4
+      Width = 3
+      Height = 357
+      Align = alRight
+      Caption = 'Panel5'
+      TabOrder = 3
+      ExplicitLeft = 679
+    end
+    object DBGridEh1: TDBGridEh
+      Left = 4
+      Top = 4
+      Width = 963
+      Height = 357
+      Align = alClient
+      DataGrouping.GroupLevels = <>
+      DataSource = DataModExch.DSExRemainder
+      FixedColor = clNavy
+      Flat = True
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      FooterColor = clWindow
+      FooterFont.Charset = DEFAULT_CHARSET
+      FooterFont.Color = clWindowText
+      FooterFont.Height = -11
+      FooterFont.Name = 'MS Sans Serif'
+      FooterFont.Style = []
+      Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit, dgMultiSelect]
+      OptionsEh = [dghFixed3D, dghData3D, dghHighlightFocus, dghClearSelection, dghDialogFind, dghColumnResize, dghColumnMove]
+      ParentFont = False
+      PopupMenu = PopupMenu1
+      RowDetailPanel.Color = clBtnFace
+      TabOrder = 4
+      TitleFont.Charset = RUSSIAN_CHARSET
+      TitleFont.Color = clWhite
+      TitleFont.Height = -11
+      TitleFont.Name = 'Azl Sans Serif'
+      TitleFont.Style = [fsBold]
+      Columns = <
+        item
+          EditButtons = <>
+          FieldName = 'VALNAME'
+          Footers = <>
+          Title.Alignment = taCenter
+          Title.Caption = #1042#1072#1083#1081#1091#1090#1072
+          Width = 50
+        end
+        item
+          EditButtons = <>
+          FieldName = 'FIRST_OSTAT'
+          Footers = <>
+          Title.Alignment = taCenter
+          Title.Caption = #1048#1083#1082#1080#1085' '#1043#1072#1083#1099#1075
+          Width = 124
+        end
+        item
+          EditButtons = <>
+          FieldName = 'FTPE_OSTAT'
+          Footers = <>
+          Title.Alignment = taCenter
+          Title.Caption = #1042#1044#1052'-'#1103' '#1076#1072#1093#1080#1083' '#1086#1083#1072#1085' '#1074#1103#1089#1072#1080#1090
+          Width = 180
+        end
+        item
+          EditButtons = <>
+          FieldName = 'PEFR_OSTAT'
+          Footers = <>
+          Title.Alignment = taCenter
+          Title.Caption = #1042#1044#1052'-'#1076#1103#1085' '#1078#1077#1088#1080' '#1075#1072#1081#1090#1072#1088#1099#1083#1072#1085' '#1074#1103#1089#1072#1080#1090
+          Width = 200
+        end
+        item
+          EditButtons = <>
+          FieldName = 'PURCHASE_TURN'
+          Footers = <>
+          Title.Alignment = taCenter
+          Title.Caption = #1040#1083#1099#1096'('#1076#1102#1074#1088#1080#1081#1081#1101#1089#1080')'
+          Width = 124
+        end
+        item
+          EditButtons = <>
+          FieldName = 'SELLING_TURN'
+          Footers = <>
+          Title.Alignment = taCenter
+          Title.Caption = #1057#1072#1090#1099#1096'('#1076#1102#1074#1088#1080#1081#1081#1101#1089#1080')'
+          Width = 124
+        end
+        item
+          EditButtons = <>
+          FieldName = 'CURRENT_OSTAT'
+          Footers = <>
+          Title.Alignment = taCenter
+          Title.Caption = #1046#1072#1088#1080' '#1043#1072#1083#1099#1075
+          Width = 124
+        end>
+      object RowDetailData: TRowDetailPanelControlEh
+      end
+    end
+  end
+  object PopupMenu1: TPopupMenu
+    Left = 200
+    Top = 96
+    object Excel1: TMenuItem
+      Caption = 'Excel'
+      OnClick = Excel1Click
+    end
+  end
+  object CMExcelExport1: TCMExcelExport
+    StyleColumnWidth = cwDefault
+    ColumnWidth = 0
+    FontTitles.Charset = DEFAULT_CHARSET
+    FontTitles.Color = clWindowText
+    FontTitles.Height = -11
+    FontTitles.Name = 'Tahoma'
+    FontTitles.Style = []
+    OrientationTitles = 0
+    FontData.Charset = DEFAULT_CHARSET
+    FontData.Color = clWindowText
+    FontData.Height = -11
+    FontData.Name = 'Tahoma'
+    FontData.Style = []
+    FontSummary.Charset = DEFAULT_CHARSET
+    FontSummary.Color = clWindowText
+    FontSummary.Height = -11
+    FontSummary.Name = 'Tahoma'
+    FontSummary.Style = []
+    SummarySelection = ssNone
+    SummaryCalculation = scSUM
+    Left = 280
+    Top = 144
+  end
+end

@@ -1,0 +1,1277 @@
+object ExchangeDataMod: TExchangeDataMod
+  OldCreateOrder = False
+  Height = 317
+  Width = 800
+  object OPacExchange: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'SB_Exchange'
+    Left = 725
+    Top = 112
+  end
+  object ForMoney: TOracleDataSet
+    SQL.Strings = (
+      'Select'
+      '       Valute,'
+      '       Valu_Name'
+      'From'
+      '       Avalute'
+      ' ')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 219
+    Top = 22
+  end
+  object ExAccount: TOracleDataSet
+    SQL.Strings = (
+      'Select '
+      '       acc_no  '
+      'From '
+      '       Account'
+      'Where '
+      '       val_acc=:cod and'
+      '           (bal_cn1=1013 or bal_cn1=1003) ')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000080000003A0043004F004400030000000000000000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 153
+    Top = 20
+    object ExAccountACC_NO: TWideStringField
+      FieldName = 'ACC_NO'
+      Size = 28
+    end
+  end
+  object TakeAccountID: TOracleDataSet
+    SQL.Strings = (
+      'Select'
+      '       ID '
+      'From '
+      '       Account'
+      'Where  '
+      '       acc_no=:acc_cod')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000100000003A004100430043005F0043004F00440005000000
+      0000000000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 88
+    Top = 20
+  end
+  object DTakeAccountID: TDataSource
+    DataSet = TakeAccountID
+    Left = 88
+    Top = 72
+  end
+  object ViewGrid: TOracleDataSet
+    SQL.Strings = (
+      'Select '
+      '       Ex.*'
+      'From  '
+      '       Exchanges  Ex'
+      '')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    AfterScroll = ViewGridAfterScroll
+    Left = 31
+    Top = 184
+    object ViewGridID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object ViewGridNAME: TWideStringField
+      FieldName = 'NAME'
+      Required = True
+      Size = 90
+    end
+    object ViewGridEXNUM: TFloatField
+      FieldName = 'EXNUM'
+      Required = True
+    end
+  end
+  object DViewGrid: TDataSource
+    DataSet = ViewGrid
+    Left = 28
+    Top = 136
+  end
+  object Grid2: TOracleDataSet
+    SQL.Strings = (
+      'Select'
+      '    Av.val_name,'
+      '    Ac.acc_no,'
+      '    Exs.ID,'
+      '    Exs.ExNUM,'
+      '    Ex.accountID'
+      'From'
+      '    Account Ac,'
+      '    Avalute Av,'
+      '    ExcAccount Ex,'
+      '    Exchanges Exs'
+      'where'
+      '    (Ac.Id=Ex.accountID) and'
+      '      (Ac.val_acc=Av.valute) and'
+      '        (Exs.ID=Ex.EXCHANGEID)'
+      ''
+      ' ')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 29
+    Top = 19
+    object Grid2VAL_NAME: TWideStringField
+      FieldName = 'VAL_NAME'
+      Size = 10
+    end
+    object Grid2ACC_NO: TWideStringField
+      FieldName = 'ACC_NO'
+      Size = 28
+    end
+    object Grid2ID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object Grid2EXNUM: TFloatField
+      FieldName = 'EXNUM'
+      Required = True
+    end
+    object Grid2ACCOUNTID: TFloatField
+      FieldName = 'ACCOUNTID'
+      Required = True
+    end
+  end
+  object DGrid2: TDataSource
+    DataSet = Grid2
+    Left = 29
+    Top = 72
+  end
+  object ExchangeData: TDataSource
+    DataSet = Exchange
+    Left = 379
+    Top = 71
+  end
+  object OPacCurrentBankDay: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'SB_MTOUTVIEW'
+    Left = 629
+    Top = 112
+  end
+  object ODSConvertation: TOracleDataSet
+    SQL.Strings = (
+      ''
+      ''
+      
+        ' SELECT   CONVERT.DAt,a1.val_name doffical,CONVERT.Ammount,CONVE' +
+        'RT.Ammount_c,CONVERT.lammount,CONVERT.rate_d,CONVERT.rate_c,CONV' +
+        'ERT.dacc_no,CONVERT.kacc_no , assignment.fullpath, '
+      
+        '          a2.val_name kcurrency,CONVERT.val_acc, a2.val_name cof' +
+        'fical, assignment.shortname,  assignment.shortname Extra'
+      
+        '         ,(select ostat from operkurs where dat=:enddate and  va' +
+        'l_kod=coalesce(decode(CONVERT.val_acc,0,null,CONVERT.val_acc),de' +
+        'code(CONVERT.currencyid_c,0,null,CONVERT.currencyid_c))) as Mban' +
+        'kkurs'
+      '    FROM exconvert CONVERT,'
+      '         convert_assignments assignment,'
+      '         avalute a1,'
+      '         avalute a2'
+      ''
+      '   WHERE'
+      '      dat >= :begindate'
+      '     AND dat <= :enddate  and'
+      '     CONVERT.kassa_z = assignment.id'
+      '     AND CONVERT.val_acc = a1.valute'
+      '     AND CONVERT.currencyid_c = a2.valute'
+      ''
+      '    ORDER BY :title'
+      ''
+      ''
+      ' ')
+    Optimize = False
+    Variables.Data = {
+      0400000003000000140000003A0042004500470049004E004400410054004500
+      0C0000000000000000000000100000003A0045004E0044004400410054004500
+      0C00000000000000000000000C0000003A005400490054004C00450001000000
+      1100000041737369676E6D656E742E45787472610000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000F000000060000004400410054000100000000000E00000041004D00
+      4D004F0055004E0054000100000000001200000041004D004D004F0055004E00
+      54005F004300010000000000100000004C0041004D004D004F0055004E005400
+      0100000000000C00000052004100540045005F0044000100000000000C000000
+      52004100540045005F0043000100000000000E00000044004100430043005F00
+      4E004F000100000000000E0000004B004100430043005F004E004F0001000000
+      000010000000460055004C004C00500041005400480001000000000010000000
+      44004F00460046004900430041004C00010000000000120000004B0043005500
+      5200520045004E0043005900010000000000120000004D00420041004E004B00
+      4B005500520053000100000000000E000000560041004C005F00410043004300
+      0100000000001000000043004F00460046004900430041004C00010000000000
+      12000000530048004F00520054004E0041004D004500010000000000}
+    Session = sboapiDataModule.SBSession
+    AfterScroll = ODSConvertationAfterScroll
+    Left = 392
+    Top = 120
+    object ODSConvertationDAT: TDateTimeField
+      DisplayLabel = 'Tarix'
+      FieldName = 'DAT'
+      Required = True
+    end
+    object ODSConvertationDOFFICAL: TWideStringField
+      DisplayLabel = 'Debet valyuta'
+      FieldName = 'DOFFICAL'
+      Size = 25
+    end
+    object ODSConvertationAMMOUNT: TFloatField
+      DisplayLabel = 'Debet m'#601'bl'#601#287
+      FieldName = 'AMMOUNT'
+      Required = True
+    end
+    object ODSConvertationKCURRENCY: TWideStringField
+      DisplayLabel = 'Kredit valyuta'
+      FieldName = 'KCURRENCY'
+      Size = 10
+    end
+    object ODSConvertationAMMOUNT_C: TFloatField
+      DisplayLabel = 'Kredit m'#601'bl'#601#287
+      FieldName = 'AMMOUNT_C'
+      Required = True
+    end
+    object ODSConvertationLAMMOUNT: TFloatField
+      DisplayLabel = 'Ekvivalent'
+      FieldName = 'LAMMOUNT'
+      Required = True
+    end
+    object ODSConvertationDACC_NO: TWideStringField
+      DisplayLabel = 'Debet hesab'
+      FieldName = 'DACC_NO'
+      Size = 28
+    end
+    object ODSConvertationKACC_NO: TWideStringField
+      DisplayLabel = 'Kredit hesab'
+      FieldName = 'KACC_NO'
+      Size = 28
+    end
+    object ODSConvertationRATE_D: TFloatField
+      DisplayLabel = 'S'#246'vd'#601'l'#601#351'm'#601' kursu'
+      FieldName = 'RATE_D'
+    end
+    object ODSConvertationRATE_C: TFloatField
+      DisplayLabel = 'S'#246'vd'#601'l'#601#351'm'#601' kursu'
+      FieldName = 'RATE_C'
+    end
+    object ODSConvertationMBANKKURS: TFloatField
+      DisplayLabel = 'M'#601'rk'#601'zi Bank'#305'n kursu'
+      FieldName = 'MBANKKURS'
+    end
+    object ODSConvertationFULLPATH: TWideStringField
+      DisplayLabel = 'T'#601'yinat'
+      FieldName = 'FULLPATH'
+      Size = 200
+    end
+    object ODSConvertationVAL_ACC: TFloatField
+      FieldName = 'VAL_ACC'
+      Required = True
+    end
+    object ODSConvertationCOFFICAL: TWideStringField
+      FieldName = 'COFFICAL'
+      Size = 10
+    end
+    object ODSConvertationSHORTNAME: TWideStringField
+      FieldName = 'SHORTNAME'
+      Required = True
+      Size = 10
+    end
+  end
+  object DSConvertation: TDataSource
+    DataSet = ODSConvertation
+    Left = 384
+    Top = 176
+  end
+  object ODSTooling: TOracleDataSet
+    SQL.Strings = (
+      'Select'
+      '  SE.RowID,'
+      '  SE.nat_balance,'
+      '  SE.for_balance'
+      'From'
+      '   SetExchange  SE')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 314
+    Top = 127
+  end
+  object DSTooling: TDataSource
+    DataSet = ODSTooling
+    Left = 315
+    Top = 175
+  end
+  object ODSConvertDetail: TOracleDataSet
+    SQL.Strings = (
+      'Select'
+      '   CB.*,'
+      '   CS.*'
+      'From'
+      '  ConvertBuy CB,'
+      '     ConvertSell CS'
+      'Where'
+      '    CB.dat = CS.dat and'
+      '      CB.currencyid_c = CS.Val_acc and'
+      '        ( CB.dat>=:BeginDate and CB.dat<=:EndDate )'
+      'Order by CB.dat'
+      ''
+      ''
+      ''
+      '')
+    Optimize = False
+    Variables.Data = {
+      0400000002000000140000003A0042004500470049004E004400410054004500
+      0C0000000000000000000000100000003A0045004E0044004400410054004500
+      0C0000000000000000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 584
+    Top = 176
+    object ODSConvertDetailCURRENCYID_C: TIntegerField
+      FieldName = 'CURRENCYID_C'
+    end
+    object ODSConvertDetailDAT: TDateTimeField
+      FieldName = 'DAT'
+    end
+    object ODSConvertDetailVAL_NAME: TWideStringField
+      FieldName = 'VAL_NAME'
+      Size = 10
+    end
+    object ODSConvertDetailINFB: TFloatField
+      FieldName = 'INFB'
+    end
+    object ODSConvertDetailSUPB: TFloatField
+      FieldName = 'SUPB'
+    end
+    object ODSConvertDetailAVERAGEB: TFloatField
+      FieldName = 'AVERAGEB'
+    end
+    object ODSConvertDetailSUMB: TFloatField
+      FieldName = 'SUMB'
+    end
+    object ODSConvertDetailCOUNTB: TFloatField
+      FieldName = 'COUNTB'
+    end
+    object ODSConvertDetailVAL_ACC: TFloatField
+      FieldName = 'VAL_ACC'
+    end
+    object ODSConvertDetailDAT_1: TDateTimeField
+      FieldName = 'DAT_1'
+    end
+    object ODSConvertDetailVAL_NAME_1: TWideStringField
+      FieldName = 'VAL_NAME_1'
+      Size = 10
+    end
+    object ODSConvertDetailINFS: TFloatField
+      FieldName = 'INFS'
+    end
+    object ODSConvertDetailSUPS: TFloatField
+      FieldName = 'SUPS'
+    end
+    object ODSConvertDetailAVERAGES: TFloatField
+      FieldName = 'AVERAGES'
+    end
+    object ODSConvertDetailSUMS: TFloatField
+      FieldName = 'SUMS'
+    end
+    object ODSConvertDetailCOUNTS: TFloatField
+      FieldName = 'COUNTS'
+    end
+  end
+  object ODSConvertBuy: TOracleDataSet
+    SQL.Strings = (
+      'Select'
+      '  *'
+      'From'
+      '  ConvertBuy'
+      'Where'
+      '     dat>=:BeginDate and'
+      '        dat<=:EndDate'
+      ''
+      'Order by   dat'
+      '        '
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      '')
+    Optimize = False
+    Variables.Data = {
+      0400000002000000140000003A0042004500470049004E004400410054004500
+      0C0000000000000000000000100000003A0045004E0044004400410054004500
+      0C0000000000000000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 614
+    Top = 16
+  end
+  object ODSBankCode: TOracleDataSet
+    SQL.Strings = (
+      'Select'
+      '   Val_Mov as NB'
+      'From'
+      '   BankInfo')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 526
+    Top = 16
+  end
+  object Avalute: TOracleDataSet
+    SQL.Strings = (
+      'Select valute,val_name  from  Avalute'
+      'order by valute')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000C000000560041004C005500540045000100000000001000
+      0000560041004C005F004E0041004D004500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 463
+    Top = 16
+  end
+  object DataExcel: TDataSource
+    DataSet = TotalExchangeReport
+    Left = 313
+    Top = 71
+  end
+  object ODSConvertSell: TOracleDataSet
+    SQL.Strings = (
+      'Select'
+      '  *'
+      'From'
+      '  ConvertSell'
+      'Where'
+      '     dat>=:BeginDate and'
+      '        dat<=:EndDate'
+      ''
+      'Order by   dat'
+      '        '
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      '')
+    Optimize = False
+    Variables.Data = {
+      0400000002000000140000003A0042004500470049004E004400410054004500
+      0C0000000000000000000000100000003A0045004E0044004400410054004500
+      0C0000000000000000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 488
+    Top = 176
+  end
+  object Exchange: TOracleDataSet
+    SQL.Strings = (
+      'SELECT'
+      
+        '       dat, currency, currencyname, intercode, buyrate, buyammou' +
+        'nt,'
+      
+        '       buyequivalent, minbuyrate, maxbuyrate, buycount, sellrate' +
+        ','
+      
+        '       sellammount, sellequivalent, minsellrate, maxsellrate, se' +
+        'llcount'
+      'FROM'
+      '      exchange'
+      'WHERE'
+      '    Dat>=:BeginDate'
+      '    and'
+      '    Dat<=:EndDate'
+      ''
+      'Order by :Title  ,currency')
+    Optimize = False
+    Variables.Data = {
+      0400000003000000140000003A0042004500470049004E004400410054004500
+      0C0000000000000000000000100000003A0045004E0044004400410054004500
+      0C00000000000000000000000C0000003A005400490054004C00450001000000
+      040000004461740000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 392
+    Top = 16
+    object ExchangeDAT: TDateTimeField
+      DisplayLabel = #1058#1072#1088#1080#1093
+      FieldName = 'DAT'
+    end
+    object ExchangeCURRENCY: TFloatField
+      DisplayLabel = #1042#1072#1083#1081#1091#1090#1072' '#1082#1086#1076#1091
+      FieldName = 'CURRENCY'
+    end
+    object ExchangeCURRENCYNAME: TWideStringField
+      DisplayLabel = #1042#1072#1083#1081#1091#1090#1072' '#1072#1076#1099
+      FieldName = 'CURRENCYNAME'
+      Size = 10
+    end
+    object ExchangeINTERCODE: TWideStringField
+      DisplayLabel = #1042#1072#1083#1081#1091#1090#1072' '#1073#1077#1081#1085#1103#1083#1093#1072#1083#1075' '#1082#1086#1076#1091
+      FieldName = 'INTERCODE'
+      Size = 3
+    end
+    object ExchangeBUYRATE: TFloatField
+      DisplayLabel = #1040#1083#1099#1096' '#1082#1091#1088#1089#1091
+      FieldName = 'BUYRATE'
+      DisplayFormat = '#,####0.0000'
+    end
+    object ExchangeBUYAMMOUNT: TFloatField
+      DisplayLabel = #1040#1083#1099#1085#1084#1099#1096' '#1074#1072#1083#1081#1091#1090#1072
+      FieldName = 'BUYAMMOUNT'
+      DisplayFormat = '#,##0.00'
+    end
+    object ExchangeBUYEQUIVALENT: TFloatField
+      DisplayLabel = #1040#1083#1099#1085#1084#1099#1096' '#1074#1072#1083#1081#1091#1090#1072' '#1077#1082#1074#1080#1074#1072#1083#1077#1085#1090
+      FieldName = 'BUYEQUIVALENT'
+      DisplayFormat = '#,##0.00'
+    end
+    object ExchangeMINBUYRATE: TFloatField
+      DisplayLabel = #1052#1080#1085' '#1072#1083#1099#1096' '#1082#1091#1088#1089#1091
+      FieldName = 'MINBUYRATE'
+      DisplayFormat = '#,####0.0000'
+    end
+    object ExchangeMAXBUYRATE: TFloatField
+      DisplayLabel = #1052#1072#1082#1089' '#1072#1083#1099#1096' '#1082#1091#1088#1089#1091
+      FieldName = 'MAXBUYRATE'
+      DisplayFormat = '#,####0.0000'
+    end
+    object ExchangeBUYCOUNT: TFloatField
+      DisplayLabel = #1040#1083#1099#1096' '#1089#1072#1081#1099
+      FieldName = 'BUYCOUNT'
+    end
+    object ExchangeSELLRATE: TFloatField
+      DisplayLabel = #1057#1072#1090#1099#1096' '#1082#1091#1088#1089#1091
+      FieldName = 'SELLRATE'
+      DisplayFormat = '#,####0.0000'
+    end
+    object ExchangeSELLAMMOUNT: TFloatField
+      DisplayLabel = #1057#1072#1090#1099#1083#1084#1099#1096' '#1074#1072#1083#1081#1091#1090#1072
+      FieldName = 'SELLAMMOUNT'
+      DisplayFormat = '#,##0.00'
+    end
+    object ExchangeSELLEQUIVALENT: TFloatField
+      DisplayLabel = #1057#1072#1090#1099#1083#1084#1099#1096' '#1074#1072#1083#1081#1091#1090#1072' '#1077#1082#1074#1080#1074#1072#1083#1077#1085#1090
+      FieldName = 'SELLEQUIVALENT'
+      DisplayFormat = '#,##0.00'
+    end
+    object ExchangeMINSELLRATE: TFloatField
+      DisplayLabel = #1052#1080#1085' '#1089#1072#1090#1099#1096' '#1082#1091#1088#1089#1091
+      FieldName = 'MINSELLRATE'
+      DisplayFormat = '#,####0.0000'
+    end
+    object ExchangeMAXSELLRATE: TFloatField
+      DisplayLabel = #1052#1072#1082#1089' '#1089#1072#1090#1099#1096' '#1082#1091#1088#1089#1091
+      FieldName = 'MAXSELLRATE'
+      DisplayFormat = '#,####0.0000'
+    end
+    object ExchangeSELLCOUNT: TFloatField
+      DisplayLabel = #1057#1072#1090#1099#1096' '#1089#1072#1081#1099
+      FieldName = 'SELLCOUNT'
+    end
+  end
+  object TotalExchangeReport: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      '  Currency,'
+      '  max(CurrencyName) as CurrencyName,'
+      '  sum(BuyCount) as BuyCount,'
+      '  sum(SellCount) as SellCount,'
+      '  sum(BuyAmmount)/1000 as BuyAmmount,'
+      '  sum(SellAmmount)/1000 as SellAmmount,'
+      
+        '  round(sum(BuyEquivalent)/sum(BuyAmmount), 4) as AverageBuyRate' +
+        ','
+      
+        '  round(sum(SellEquivalent)/sum(SellAmmount), 4) as AverageSellR' +
+        'ate,'
+      '  min(MinBuyRate) as MinBuyRate,'
+      '  min(MinSellRate) as MinSellRate,'
+      '  max(MaxBuyRate) as MaxBuyRate,'
+      '  max(MaxSellRate) as MaxSellRate'
+      'from '
+      '  exchange'
+      'where'
+      '  dat between :BeginDate and :EndDate'
+      'group by'
+      '  currency'
+      'order by'
+      '  currency    '
+      ' '
+      ' ')
+    Optimize = False
+    Variables.Data = {
+      0400000002000000140000003A0042004500470049004E004400410054004500
+      0C0000000000000000000000100000003A0045004E0044004400410054004500
+      0C0000000000000000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 312
+    Top = 16
+    object TotalExchangeReportCURRENCY: TFloatField
+      DisplayLabel = #1042#1072#1083#1081#1091#1090#1072' '#1082#1086#1076#1091
+      FieldName = 'CURRENCY'
+    end
+    object TotalExchangeReportCURRENCYNAME: TWideStringField
+      DisplayLabel = #1042#1072#1083#1081#1091#1090#1072' '#1072#1076#1099
+      FieldName = 'CURRENCYNAME'
+      Size = 10
+    end
+    object TotalExchangeReportBUYCOUNT: TFloatField
+      DisplayLabel = #1040#1083#1099#1096' '#1089#1072#1081#1099
+      FieldName = 'BUYCOUNT'
+    end
+    object TotalExchangeReportSELLCOUNT: TFloatField
+      DisplayLabel = #1057#1072#1090#1099#1096' '#1089#1072#1081#1099
+      FieldName = 'SELLCOUNT'
+    end
+    object TotalExchangeReportBUYAMMOUNT: TFloatField
+      DisplayLabel = #1040#1083#1099#1085#1084#1099#1096' '#1074#1072#1083#1081#1091#1090#1072
+      FieldName = 'BUYAMMOUNT'
+    end
+    object TotalExchangeReportSELLAMMOUNT: TFloatField
+      DisplayLabel = #1057#1072#1090#1099#1083#1084#1099#1096' '#1074#1072#1083#1081#1091#1090#1072
+      FieldName = 'SELLAMMOUNT'
+    end
+    object TotalExchangeReportAVERAGEBUYRATE: TFloatField
+      DisplayLabel = #1054#1088#1090#1072' '#1072#1083#1099#1096' '#1082#1091#1088#1089#1091
+      FieldName = 'AVERAGEBUYRATE'
+    end
+    object TotalExchangeReportAVERAGESELLRATE: TFloatField
+      DisplayLabel = #1054#1088#1090#1072' '#1089#1072#1090#1099#1096' '#1082#1091#1088#1089#1091
+      FieldName = 'AVERAGESELLRATE'
+    end
+    object TotalExchangeReportMINBUYRATE: TFloatField
+      DisplayLabel = #1052#1080#1085' '#1072#1083#1099#1096' '#1082#1091#1088#1089#1091
+      FieldName = 'MINBUYRATE'
+    end
+    object TotalExchangeReportMINSELLRATE: TFloatField
+      DisplayLabel = #1052#1080#1085' '#1089#1072#1090#1099#1096' '#1082#1091#1088#1089#1091
+      FieldName = 'MINSELLRATE'
+    end
+    object TotalExchangeReportMAXBUYRATE: TFloatField
+      DisplayLabel = #1052#1072#1093' '#1072#1083#1099#1096' '#1082#1091#1088#1089#1091
+      FieldName = 'MAXBUYRATE'
+    end
+    object TotalExchangeReportMAXSELLRATE: TFloatField
+      DisplayLabel = #1052#1072#1093' '#1089#1072#1090#1099#1096' '#1082#1091#1088#1089#1091
+      FieldName = 'MAXSELLRATE'
+    end
+  end
+  object Convertation: TOracleDataSet
+    SQL.Strings = (
+      'select * from'
+      '('
+      'select'
+      '   dat'
+      '  ,debitcurrency as currency'
+      '  ,cID'
+      '  ,max(fullpath) as fullpath'
+      '  ,sum(debitrate)/count(*)  as AverageRate'
+      '  ,sum(debitamount) as AverageAmount'
+      '  ,max(status) as status'
+      'from'
+      '  convertation'
+      'where'
+      '  status = '#39'BUY'#39
+      'group by'
+      '   dat, debitcurrency, cID'
+      ''
+      'UNION'
+      ''
+      'select'
+      '   dat'
+      '  ,creditcurrency as currency'
+      '  ,cID'
+      '  ,max(fullpath) as fullpath'
+      '  ,sum(creditrate)/count(*) as AverageRate'
+      '  ,sum(creditamount) as AverageAmount'
+      '  ,max(status) as status'
+      'from'
+      '  convertation'
+      'where'
+      '  status = '#39'SELL'#39
+      'group by'
+      '   dat, creditcurrency, cID'
+      ''
+      'Order by'
+      '  dat, status)'
+      'where'
+      ' dat between :BeginDate and :EndDate'
+      '    and status =:status'
+      'Order by'
+      '  cID,currency,dat'
+      ' '
+      ' '
+      '')
+    Optimize = False
+    Variables.Data = {
+      0400000003000000140000003A0042004500470049004E004400410054004500
+      0C0000000000000000000000100000003A0045004E0044004400410054004500
+      0C00000000000000000000000E0000003A005300540041005400550053000500
+      00000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      0500000007000000060000004400410054000100000000001000000043005500
+      5200520045004E00430059000100000000000600000043004900440001000000
+      000010000000460055004C004C00500041005400480001000000000016000000
+      410056004500520041004700450052004100540045000100000000001A000000
+      410056004500520041004700450041004D004F0055004E005400010000000000
+      0C000000530054004100540055005300010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 488
+    Top = 120
+    object ConvertationDAT: TDateTimeField
+      FieldName = 'DAT'
+    end
+    object ConvertationFULLPATH: TWideStringField
+      FieldName = 'FULLPATH'
+      Size = 200
+    end
+    object ConvertationAVERAGERATE: TFloatField
+      FieldName = 'AVERAGERATE'
+    end
+    object ConvertationAVERAGEAMOUNT: TFloatField
+      FieldName = 'AVERAGEAMOUNT'
+    end
+    object ConvertationSTATUS: TWideStringField
+      FieldName = 'STATUS'
+      Size = 4
+    end
+    object ConvertationCURRENCY: TIntegerField
+      FieldName = 'CURRENCY'
+    end
+    object ConvertationCID: TIntegerField
+      FieldName = 'CID'
+    end
+  end
+  object Fullexcel: TOracleDataSet
+    SQL.Strings = (
+      
+        'select r1,Orta,AverageRate,AverageAmount,z2.fullpath,AverageRate' +
+        '*AverageAmount as ekv,say1,valname1'
+      'from'
+      '(('
+      
+        'select '#39'Orta kurs'#39' Orta ,AverageRate ,AverageAmount,rownum r1,sa' +
+        'y1,valname1 from'
+      '('
+      'select'
+      '   dat'
+      '  ,debitcurrency as currency'
+      '  ,cID'
+      '  ,max(fullpath) as fullpath'
+      '  ,sum (debitrate*debitamount)/sum (debitamount)  as AverageRate'
+      '  ,sum(debitamount) as AverageAmount'
+      '  ,max(status) as status'
+      '  ,count(*) as say1'
+      '  ,DEBITCURRENCYNAME as valname1'
+      'from'
+      '  convertation'
+      'where'
+      '  status = '#39'BUY'#39
+      'group by'
+      '   dat, debitcurrency, cID,DEBITCURRENCYNAME'
+      ''
+      'UNION'
+      ''
+      'select'
+      '   dat'
+      '  ,creditcurrency as currency'
+      '  ,cID'
+      '  ,max(fullpath) as fullpath'
+      
+        '  ,sum (creditrate*creditamount)/sum (creditamount) as AverageRa' +
+        'te'
+      '  ,sum(creditamount) as AverageAmount'
+      '  ,max(status) as status'
+      '  ,count(*) as say1'
+      '  ,CREDITCURRENCYYNAME as valname1'
+      'from'
+      '  convertation'
+      'where'
+      '  status = '#39'SELL'#39
+      'group by'
+      '   dat, creditcurrency, cID,CREDITCURRENCYYNAME'
+      '   Order by'
+      '  dat, status)'
+      'where'
+      ' dat between :BEGINDATE and :ENDDATE'
+      '    and status =:status'
+      'Order by'
+      '  cID,currency,dat   '
+      ')) Z1'
+      ''
+      'join'
+      ''
+      '('
+      'select fullpath,a1,a3,rownum r2,say2,valname2 from'
+      ''
+      '('
+      'select '
+      'fullpath,'
+      'SUM(AVERAGERATE*AVERAGEAMOUNT) / SUM(AVERAGEAMOUNT) a1 ,'
+      'SUM(AVERAGEAMOUNT) a3,'
+      'say2,'
+      'valname2'
+      'from'
+      ''
+      '('
+      ''
+      'select * from'
+      '('
+      'select'
+      '   dat'
+      '  ,debitcurrency as currency'
+      '  ,cID'
+      '  ,max(fullpath) as fullpath'
+      '  ,sum (debitrate*debitamount)/sum (debitamount)  as AverageRate'
+      '  ,sum(debitamount) as AverageAmount'
+      '  ,max(status) as status'
+      '  ,count(*) as say2'
+      '  ,DEBITCURRENCYNAME as valname2'
+      'from'
+      '  convertation'
+      'where'
+      '  status = '#39'BUY'#39
+      'group by'
+      '   dat, debitcurrency, cID,DEBITCURRENCYNAME'
+      ''
+      'UNION'
+      ''
+      'select'
+      '   dat'
+      '  ,creditcurrency as currency'
+      '  ,cID'
+      '  ,max(fullpath) as fullpath'
+      
+        '  ,sum (creditrate*creditamount)/sum (creditamount) as AverageRa' +
+        'te'
+      '  ,sum(creditamount) as AverageAmount'
+      '  ,max(status) as status'
+      '  ,count(*) as say2'
+      '  ,CREDITCURRENCYYNAME as valname2'
+      'from'
+      '  convertation'
+      'where'
+      '  status = '#39'SELL'#39
+      'group by'
+      '   dat, creditcurrency, cID,CREDITCURRENCYYNAME'
+      ''
+      'Order by'
+      '  dat, status)'
+      'where'
+      ' dat between :BEGINDATE and :ENDDATE'
+      '    and status =:status'
+      'Order by'
+      '  cID,currency,dat'
+      ''
+      ''
+      ') group by fullpath,say2,valname2'
+      ' '
+      ' )) Z2'
+      ' '
+      ' on (Z1.r1=Z2.r2)')
+    Optimize = False
+    Variables.Data = {
+      0400000003000000140000003A0042004500470049004E004400410054004500
+      0C0000000000000000000000100000003A0045004E0044004400410054004500
+      0C00000000000000000000000E0000003A005300540041005400550053000500
+      00000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      05000000080000000400000052003100010000000000080000004F0052005400
+      41000100000000001A000000410056004500520041004700450041004D004F00
+      55004E00540001000000000010000000460055004C004C005000410054004800
+      0100000000000600000045004B00560001000000000008000000530041005900
+      3100010000000000160000004100560045005200410047004500520041005400
+      450001000000000010000000560041004C004E0041004D004500310001000000
+      0000}
+    Session = sboapiDataModule.SBSession
+    Left = 208
+    Top = 96
+    object FullexcelR1: TFloatField
+      DisplayLabel = 'S'#305'ra '#8470
+      FieldName = 'R1'
+      Visible = False
+    end
+    object FullexcelSAY1: TFloatField
+      DisplayLabel = #399'qd'
+      FieldName = 'SAY1'
+    end
+    object FullexcelORTA: TWideStringField
+      DisplayLabel = 'Orta'
+      FieldName = 'ORTA'
+      Size = 9
+    end
+    object FullexcelAVERAGERATE: TFloatField
+      DisplayLabel = 'Orta kurs'
+      FieldName = 'AVERAGERATE'
+    end
+    object FullexcelAVERAGEAMOUNT: TFloatField
+      DisplayLabel = 'Valyuta m'#601'bl'#601#287'i'
+      FieldName = 'AVERAGEAMOUNT'
+    end
+    object FullexcelEKV: TFloatField
+      DisplayLabel = 'Ekvivalent'
+      FieldName = 'EKV'
+    end
+    object FullexcelFULLPATH: TWideStringField
+      DisplayLabel = 'Konvertasiyan'#305'n t'#601'yinat'#305
+      FieldName = 'FULLPATH'
+      Size = 200
+    end
+    object FullexcelVALNAME1: TWideStringField
+      DisplayLabel = 'Valyuta'
+      FieldName = 'VALNAME1'
+      Size = 10
+    end
+  end
+  object ds_fullexcel: TDataSource
+    DataSet = Fullexcel
+    Left = 208
+    Top = 160
+  end
+end

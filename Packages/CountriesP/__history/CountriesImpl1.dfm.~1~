@@ -1,0 +1,186 @@
+object Countries: TCountries
+  Left = 494
+  Top = 225
+  Width = 696
+  Height = 480
+  Caption = 'Countries'
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'MS Sans Serif'
+  Font.Style = []
+  OldCreateOrder = False
+  OnCreate = ActiveFormCreate
+  OnDestroy = ActiveFormDestroy
+  PixelsPerInch = 96
+  TextHeight = 13
+  object DBGrid1: TDBGrid
+    Left = 0
+    Top = 26
+    Width = 688
+    Height = 120
+    Align = alTop
+    DataSource = DataSource1
+    FixedColor = clHighlight
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 0
+    TitleFont.Charset = DEFAULT_CHARSET
+    TitleFont.Color = clWindowText
+    TitleFont.Height = -11
+    TitleFont.Name = 'MS Sans Serif'
+    TitleFont.Style = []
+    Columns = <
+      item
+        Expanded = False
+        FieldName = 'ID'
+        Title.Caption = 'ÊÎÄ'
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clWhite
+        Title.Font.Height = -11
+        Title.Font.Name = 'Azl Sans Serif'
+        Title.Font.Style = []
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'CNTR_NAME'
+        Title.Caption = 'ÞËÊßÍÈÍ ÀÄÛ'
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clWhite
+        Title.Font.Height = -11
+        Title.Font.Name = 'Azl Sans Serif'
+        Title.Font.Style = []
+        Visible = True
+      end>
+  end
+  object DBGrid2: TDBGrid
+    Left = 0
+    Top = 172
+    Width = 688
+    Height = 274
+    Align = alClient
+    DataSource = DataSource2
+    FixedColor = clHighlight
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    Options = [dgEditing, dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgConfirmDelete, dgCancelOnExit, dgMultiSelect]
+    ParentFont = False
+    TabOrder = 1
+    TitleFont.Charset = DEFAULT_CHARSET
+    TitleFont.Color = clWindowText
+    TitleFont.Height = -11
+    TitleFont.Name = 'MS Sans Serif'
+    TitleFont.Style = []
+    Columns = <
+      item
+        Expanded = False
+        FieldName = 'CITY_NAME'
+        Title.Caption = 'ØßÙßÐÈÍ ÀÄÛ'
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clWhite
+        Title.Font.Height = -11
+        Title.Font.Name = 'Azl Sans Serif'
+        Title.Font.Style = []
+        Width = 251
+        Visible = True
+      end>
+  end
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 688
+    Height = 26
+    Align = alTop
+    TabOrder = 2
+    object DBNavigator1: TDBNavigator
+      Left = 1
+      Top = 1
+      Width = 240
+      Height = 24
+      DataSource = DataSource1
+      Align = alLeft
+      Flat = True
+      TabOrder = 0
+    end
+  end
+  object Panel2: TPanel
+    Left = 0
+    Top = 146
+    Width = 688
+    Height = 26
+    Align = alTop
+    TabOrder = 3
+    object DBNavigator2: TDBNavigator
+      Left = 1
+      Top = 1
+      Width = 232
+      Height = 24
+      DataSource = DataSource2
+      Align = alLeft
+      Flat = True
+      TabOrder = 0
+    end
+  end
+  object DataSource1: TDataSource
+    DataSet = Contries
+    Left = 280
+  end
+  object Contries: TOracleDataSet
+    SQL.Strings = (
+      'select t.rowid,t.*  from countries t'
+      'order by ID')
+    QBEDefinition.QBEFieldDefs = {
+      040000000300000002000000494401000000000009000000434E54525F4E414D
+      4501000000000009000000434E54525F434F4445010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 248
+    object ContriesID: TFloatField
+      FieldName = 'ID'
+    end
+    object ContriesCNTR_NAME: TStringField
+      FieldName = 'CNTR_NAME'
+      Size = 30
+    end
+  end
+  object cities: TOracleDataSet
+    SQL.Strings = (
+      'select c.rowid,c.* from cities c'
+      ''
+      'where country_id = :country_id'
+      'order by ID')
+    Variables.Data = {
+      03000000010000000B0000003A434F554E5452595F4944040000000000000000
+      000000}
+    Master = Contries
+    MasterFields = 'ID'
+    DetailFields = 'COUNTRY_ID'
+    Session = sboapiDataModule.SBSession
+    Left = 328
+    Top = 144
+    object citiesID: TFloatField
+      FieldName = 'ID'
+    end
+    object citiesCOUNTRY_ID: TFloatField
+      FieldName = 'COUNTRY_ID'
+    end
+    object citiesCITY_NAME: TStringField
+      FieldName = 'CITY_NAME'
+      Size = 80
+    end
+  end
+  object DataSource2: TDataSource
+    DataSet = cities
+    Left = 272
+    Top = 144
+  end
+end

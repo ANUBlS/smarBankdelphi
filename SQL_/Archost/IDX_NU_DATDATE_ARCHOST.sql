@@ -1,0 +1,33 @@
+DROP INDEX idx_nu_datdate_archost
+/
+
+CREATE INDEX idx_nu_datdate_archost ON archost
+  (
+    datdate                         ASC
+  )
+  PCTFREE     10
+  INITRANS    2
+  MAXTRANS    255
+  LOCAL (
+  PARTITION ARCHIVALDAY
+  PCTFREE     10
+  INITRANS    2
+  MAXTRANS    255,
+  PARTITION RESERVE
+  PCTFREE     10
+  INITRANS    2
+  MAXTRANS    255,
+  PARTITION YESTERDAY
+  PCTFREE     10
+  INITRANS    2
+  MAXTRANS    255,
+  PARTITION TODAY
+  PCTFREE     10
+  INITRANS    2
+  MAXTRANS    255,
+  PARTITION UNKNOWNDAY
+  PCTFREE     10
+  INITRANS    2
+  MAXTRANS    255
+  )
+/

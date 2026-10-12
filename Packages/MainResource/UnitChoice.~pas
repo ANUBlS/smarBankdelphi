@@ -1,0 +1,128 @@
+unit UnitChoice;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ComCtrls, StdCtrls, Buttons, CMExcelExport;
+
+type
+  TFormChoice = class(TForm)
+    DateTimePicker1: TDateTimePicker;
+    DateTimePicker2: TDateTimePicker;
+    Label1: TLabel;
+    Tax: TRadioButton;
+    Finance: TRadioButton;
+    ok1: TBitBtn;
+    CMExcelExport1: TCMExcelExport;
+    Label2: TLabel;
+    Label3: TLabel;
+    procedure ok1Click(Sender: TObject);
+    procedure DateTimePicker2Change(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure DateTimePicker1Change(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormChoice: TFormChoice;
+  a,b: TDatetime;
+
+implementation
+
+uses UnitData, MainResourceImpl;
+
+{$R *.DFM}
+
+procedure TFormChoice.ok1Click(Sender: TObject);
+var
+a,b:Tdatetime;
+//a,b : string;
+begin
+  a:=integer(trunc(DateTimePicker1.DateTime));
+  b:=integer(trunc(DateTimePicker2.DateTime));
+// DateTimePicker1.MinDate:=strtodate('31-Jul-2008');
+//DateTimePicker2.MaxDate:=strtodate('date') ;
+
+ // DateTimePicker2.MaxDate:=
+ // a:= ''''+DateToStr(BDATE)+'''' ;
+ // b:= ''''+DateToStr(EDATE)+'''' ;
+
+
+
+       if tax.Checked then
+         begin
+       with DataModWares.OracleDataSet2 do
+       begin
+        close;
+   // sql[7] :=( 'and a. AMORT_DATE between ' + a + ' and ' +  b);
+       SetVariable('BDATE',a);
+       SetVariable('EDATE',b);
+        open;
+      end;
+
+
+         with CMExcelExport1 do
+   begin
+      Connect;
+      ExportDataset( DataModWares.OracleDataSet2,'Maliyye',True);
+      Disconnect;
+
+   end;
+     end else
+   if  Finance.Checked then
+       begin
+       with DataModWares.OracleDataSet3 do
+       begin
+        close;
+        SetVariable('BDATE',a);
+        SetVariable('EDATE',b);
+        open;
+      end;
+
+
+   with CMExcelExport1 do
+   begin
+      Connect;
+      ExportDataset( DataModWares.OracleDataSet3,'Vergi',True);
+      Disconnect;
+   end  ;
+
+       end;
+
+end;
+
+procedure TFormChoice.DateTimePicker2Change(Sender: TObject);
+begin
+  DateTimePicker1.MaxDate:=DateTimePicker2.Date;
+  DateTimePicker2.MinDate:=DateTimePicker1.Date;
+ //ShowMessage(DateToStr(b));
+end;
+
+procedure TFormChoice.FormCreate(Sender: TObject);
+begin
+ with DataModWares.SysdatSet do
+  begin
+  open;
+  DateTimePicker1.DateTime:=fieldbyname('tek_dat').asdatetime  ;
+  DateTimePicker2.DateTime:=fieldbyname('tek_dat').asdatetime  ;
+ end;
+end;
+
+procedure TFormChoice.DateTimePicker1Change(Sender: TObject);
+begin
+  DateTimePicker1.MaxDate:=DateTimePicker2.Date;
+  DateTimePicker2.MinDate:=DateTimePicker1.Date;
+end;
+
+procedure TFormChoice.FormActivate(Sender: TObject);
+begin
+// DateTimePicker1.MaxDate:=Date;
+// DateTimePicker2.MaxDate:=Date;
+end;
+
+end.

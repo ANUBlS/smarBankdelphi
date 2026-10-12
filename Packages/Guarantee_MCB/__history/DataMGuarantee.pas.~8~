@@ -1,0 +1,327 @@
+unit DataMGuarantee;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, OracleData, Oracle;
+
+type
+  TDataMGuarante = class(TDataModule)
+    DataSetGuarantee: TOracleDataSet;
+    DataSorcGuaranttee: TDataSource;
+    OracleDataSet: TOracleDataSet;
+    DataSource: TDataSource;
+    Gura_taypcal: TOracleDataSet;
+    DataSourctaypcal: TDataSource;
+    GuaraClientAccs: TOracleDataSet;
+    GuaraClientAccsID: TFloatField;
+    GuaraClientAccsCUSTID: TFloatField;
+    GuaraClientAccsACCNO: TWideStringField;
+    GuaraClientAccsCLIENTNAME: TWideStringField;
+    GuaraClientAccsVAL_ACC: TIntegerField;
+    ClientaccsDatSrc: TDataSource;
+    GuaraCreditAccs: TOracleDataSet;
+    CreditAccsDatSrc: TDataSource;
+    DataS_Gua_credit: TOracleDataSet;
+    DataSGuacredit: TOracleDataSet;
+    DataSorcGua_credit: TDataSource;
+    DataSorcGuacredit: TDataSource;
+    Pledges: TOracleDataSet;
+    DataSrcPledges: TDataSource;
+    pledgsortsDatSrc: TDataSource;
+    pledgsorts: TOracleDataSet;
+    pledgsortsID: TFloatField;
+    pledgsortsNAME: TWideStringField;
+    Filals: TOracleDataSet;
+    FilalsID: TFloatField;
+    FilalsNAME: TWideStringField;
+    FilalsDatSrc: TDataSource;
+    DistrictsDataSet: TOracleDataSet;
+    DistrictsDataSrc: TDataSource;
+    VillagesDataSet: TOracleDataSet;
+    VillagesDataSrc: TDataSource;
+    DistrictsDataSetID: TFloatField;
+    DistrictsDataSetNAME: TWideStringField;
+    DistrictsDataSetNAME_ENG: TWideStringField;
+    OraclePackage1: TOraclePackage;
+    proSorts: TOracleDataSet;
+    proSortsID: TIntegerField;
+    proSortsNAME: TWideStringField;
+    ProSortsDatSrc: TDataSource;
+    OracleDataSet1: TOracleDataSet;
+    IntegerField1: TIntegerField;
+    StringField1: TWideStringField;
+    DataSource1: TDataSource;
+    Customer: TOracleDataSet;
+    CustomerID: TIntegerField;
+    CustomerNAME: TWideStringField;
+    DataSrcCustomer: TDataSource;
+    DataSetGuaranteePLEDGEPRICE: TFloatField;
+    DataSetGuaranteeID: TFloatField;
+    DataSetGuaranteeCREDITID: TFloatField;
+    DataSetGuaranteeNUMBEROFGUR: TWideStringField;
+    DataSetGuaranteePLEDGEID: TFloatField;
+    DataSetGuaranteePLEDGENAME: TWideStringField;
+    DataSetGuaranteeHOLDERNAME: TWideStringField;
+    DataSetGuaranteeHOLDERADDRESS: TWideStringField;
+    DataSetGuaranteeANYINFOTODISTING: TWideStringField;
+    DataSetGuaranteeREGISTRYNO: TWideStringField;
+    DataSetGuaranteeREGISTRYAGENCY: TWideStringField;
+    DataSetGuaranteeREGISTRYDATE: TDateTimeField;
+    DataSetGuaranteePLEDGEINUSE: TFloatField;
+    DataSetGuaranteePLEDGEINSURANT: TFloatField;
+    DataSetGuaranteeINSURANCEAGENCY: TFloatField;
+    DataSetGuaranteeINSURANCEAMOUNT: TFloatField;
+    DataSetGuaranteeINSURANCERIGHT: TFloatField;
+    DataSetGuaranteeINSURANCEDATE: TDateTimeField;
+    DataSetGuaranteeINSURANCEID: TWideStringField;
+    DataSetGuaranteePLEDGEPRICETORPAQHA: TFloatField;
+    DataSetGuaranteePLEDGEPRICEEVKV: TFloatField;
+    DataSetGuaranteeGQNAME: TWideStringField;
+    DataSetGuaranteeGQPASPNUM: TWideStringField;
+    DataSetGuaranteeGQPASPYER: TWideStringField;
+    DataSetGuaranteeGQPASPDATE: TDateTimeField;
+    DataSetGuaranteeGQCITY: TFloatField;
+    DataSetGuaranteeGQVILLAGE: TFloatField;
+    DataSetGuaranteeGQADRESS: TWideStringField;
+    DataSetGuaranteeGQTELMOB: TWideStringField;
+    DataSetGuaranteeGQTELHOME: TWideStringField;
+    DataSetGuaranteeGQTELWORK: TWideStringField;
+    DataSetGuaranteeTESVIRI: TWideStringField;
+    DataSetGuaranteeREYSTER: TWideStringField;
+    DataSetGuaranteeSERYAMH: TWideStringField;
+    DataSetGuaranteePLEDGSORTS: TFloatField;
+    DataSetGuaranteeCOMPANY: TFloatField;
+    DataSetGuaranteeCOMPANYDAT: TDateTimeField;
+    DataSetGuaranteeCOMPANYEXPERT: TWideStringField;
+    DataSetGuaranteeBRANCE: TFloatField;
+    DataSetGuaranteeDAT: TDateTimeField;
+    DataSetGuaranteeGIROVTIP: TWideStringField;
+    DataSetGuaranteeCUSTID: TFloatField;
+    DataSetGuaranteeKREDITSTATUS: TWideStringField;
+    DataSetGuaranteeNAME: TWideStringField;
+    DataSetGuaranteeGENERALAREA: TFloatField;
+    DataSetGuaranteeLIVINGAREA: TFloatField;
+    DataSetGuaranteeBUILDINGSOILAREA: TFloatField;
+    DataSetGuaranteeSOILAREA: TFloatField;
+    DataSetGuaranteeADRESS: TWideStringField;
+    DataSetGuaranteeINFOREGION: TFloatField;
+    DataSetGuaranteeINFOVILG: TFloatField;
+    procedure DataModuleCreate(Sender: TObject);
+    procedure DataModuleDestroy(Sender: TObject);
+    procedure DataSetGuaranteeApplyRecord(Sender: TOracleDataSet;
+      Action: Char; var Applied: Boolean; var NewRowId: String);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  DataMGuarante: TDataMGuarante;
+
+implementation
+  uses sboapiDataModuleImpl;
+{$R *.DFM}
+
+procedure TDataMGuarante.DataModuleCreate(Sender: TObject);
+begin
+ with  DataSetGuarantee do
+  begin
+    SetVariable('OrderField','id');
+    Open;
+  end;
+  Customer.Open;
+OracleDataSet.open ;
+Pledges.open;
+pledgsorts.open;
+DistrictsDataSet.open;
+Filals.open;
+VillagesDataSet.open;
+proSorts.Open;
+DataSGuacredit.open;
+
+end;
+
+procedure TDataMGuarante.DataModuleDestroy(Sender: TObject);
+begin
+   DataSetGuarantee.closeall;
+   OracleDataSet.closeall ;
+Pledges.closeall;
+pledgsorts.closeall;
+DistrictsDataSet.closeall;
+Filals.closeall;
+VillagesDataSet.closeall;
+proSorts.closeall;
+DataSGuacredit.CloseAll;
+Customer.CloseAll;
+end;
+
+procedure TDataMGuarante.DataSetGuaranteeApplyRecord(
+  Sender: TOracleDataSet; Action: Char; var Applied: Boolean;
+  var NewRowId: String);
+
+var
+ p_company,  p_id, p_creditid,p_inforegion, p_infovilg, p_insuranceagency, p_pledgeid, p_pledgsorts, p_brance, p_gqcity,p_pledgeinuse, p_gqvillage,p_kreditstatus,p_custid :integer;
+ p_insuranceright,  p_pledgeprice, p_insuranceamount,p_pledgeinsurant,p_generalarea,p_livingarea,p_buildingsoilarea,p_soilarea :real;
+ p_companydat, p_dat, p_insurancedate,p_registrydate,p_gqpaspdate :Tdatetime;
+       p_numberofgur,
+       p_pledgename, p_holdername, p_holderaddress, p_anyinfotodisting,
+       p_registryno, p_registryagency,  
+        p_insuranceid,
+       p_gqname, p_gqpaspnum,
+       p_gqpaspyer,  p_gqadres,
+       p_gqtelmob, p_gqtelhome, p_gqtelwork, p_tesviri, p_reyster,
+       p_seryamh,
+       p_companyexpert,
+       p_adress :string;
+begin
+   // Applied := True;
+  with (Sender as TOracleDataSet) do  begin
+       p_custid:=FieldbyName('custid').asinteger;
+       p_id:=FieldbyName('id').asinteger;
+       p_pledgeprice:=FieldbyName('pledgeprice').Asfloat;
+        p_numberofgur:=FieldbyName('numberofgur').asstring;
+        p_pledgeid:=FieldbyName('pledgeid').asinteger;
+        p_pledgename:=FieldbyName('pledgename').asstring;
+        p_holdername:=FieldbyName('holdername').asstring;
+        p_holderaddress:= FieldbyName('holderaddress').asstring;
+        p_anyinfotodisting:=FieldbyName('anyinfotodisting').asstring;
+        p_registryno:=FieldbyName('registryno').asstring;
+        p_registryagency:=FieldbyName('registryagency').asstring;
+        p_registrydate:=FieldbyName('registrydate').asDatetime;
+      //  p_pledgeinuse:=FieldbyName('pledgeinuse').asstring;
+        p_pledgeinsurant:=FieldbyName('pledgeinsurant').asfloat;
+        p_insuranceagency:=FieldbyName('insuranceagency').asinteger;
+        p_insuranceamount:=FieldbyName('insuranceamount').asfloat;
+        p_insuranceright:=FieldbyName('insuranceright').asfloat;
+        p_insurancedate:=FieldbyName('insurancedate').asDatetime;
+        p_gqname:=FieldbyName('gqname').asstring;
+        p_gqpaspnum:=FieldbyName('gqpaspnum').asstring;
+        p_gqpaspyer:=FieldbyName('gqpaspyer').asstring;
+        p_gqpaspdate:=FieldbyName('gqpaspdate').asDatetime;
+        p_gqcity:=FieldbyName('gqcity').asinteger;
+        p_gqvillage:=FieldbyName('gqvillage').asinteger;
+        p_gqadres:=FieldbyName('gqadress').asstring;
+        p_gqtelmob:=FieldbyName('gqtelmob').asstring;
+        p_gqtelhome:=FieldbyName('gqtelhome').asstring;
+        p_gqtelwork:=FieldbyName('gqtelwork').asstring;
+        p_reyster:=FieldbyName('reyster').asstring;
+        p_seryamh:=FieldbyName('seryamh').asstring;
+        p_pledgsorts:=FieldbyName('pledgsorts').asinteger;
+        p_company:=FieldbyName('company').asinteger ;
+        p_companydat:=FieldbyName('companydat').asdatetime ;
+        p_companyexpert :=FieldbyName('companyexpert').asstring ;
+        p_brance:=FieldbyName('brance').asinteger ;
+        p_dat:=FieldbyName('dat').asdatetime ;
+        //p_kreditstatus:=FieldbyName('kreditstatus').asinteger;
+        p_generalarea :=FieldbyName('generalarea').asfloat;
+        p_livingarea :=FieldbyName('livingarea').asfloat;
+        p_buildingsoilarea :=FieldbyName('buildingsoilarea').asfloat;
+        p_soilarea :=FieldbyName('soilarea').asfloat;
+        p_adress:=FieldbyName('adress').asstring;
+        p_inforegion:=FieldbyName('inforegion').asinteger;
+        p_infovilg:=FieldbyName('infovilg').asinteger;
+    //  ShowMessage('dfdfd');
+  end;
+    with OraclePackage1 do
+      case Action of
+       'I': begin
+       CallIntegerFunction('add_Guar',[
+        p_pledgeprice,
+        p_numberofgur,
+        p_pledgeid,
+        p_pledgename,
+        p_holdername,
+        p_holderaddress,
+        p_anyinfotodisting,
+        p_registryno,
+        p_registryagency,
+        p_registrydate,
+        p_pledgeinsurant,
+        p_insuranceagency,
+        p_insuranceamount,
+        p_insuranceright,
+        p_insurancedate, 
+        p_gqname,
+        p_gqpaspnum,
+        p_gqpaspyer,
+        p_gqpaspdate,
+        p_gqcity,
+        p_gqvillage,
+        p_gqadres,
+        p_gqtelmob,
+        p_gqtelhome, 
+        p_gqtelwork,  
+        p_reyster,
+        p_seryamh,
+        p_pledgsorts,
+        p_company, 
+        p_companydat,
+        p_companyexpert, 
+        p_brance, p_dat,
+      //  p_kreditstatus,
+        p_generalarea,
+        p_livingarea, 
+        p_buildingsoilarea,
+        p_soilarea,
+        p_adress,
+        p_inforegion, 
+        p_infovilg ,p_custid
+       ]);
+     Applied := true;
+        end;
+       'U':  begin
+      CallIntegerFunction('edit_Guar',[
+        p_id,
+        p_pledgeprice,
+        p_numberofgur, 
+        p_pledgeid,
+        p_pledgename,
+        p_holdername,
+        p_holderaddress,
+        p_anyinfotodisting,
+        p_registryno,
+        p_registryagency,
+        p_registrydate,
+        p_pledgeinsurant,
+        p_insuranceagency, 
+        p_insuranceamount,
+        p_insuranceright,
+        p_insurancedate, 
+        p_gqname,
+        p_gqpaspnum,
+        p_gqpaspyer,
+        p_gqpaspdate, 
+        p_gqcity,
+        p_gqvillage,
+        p_gqadres,
+        p_gqtelmob,
+        p_gqtelhome, 
+        p_gqtelwork,  
+        p_reyster,
+        p_seryamh,
+        p_pledgsorts,
+        p_company, 
+        p_companydat,
+        p_companyexpert, 
+        p_brance, p_dat,
+      //  p_kreditstatus,
+        p_generalarea,
+        p_livingarea, 
+        p_buildingsoilarea,
+        p_soilarea,
+        p_adress,
+        p_inforegion, 
+        p_infovilg ,p_custid
+       ]);
+        Applied := true;
+         end ;
+   else  Applied := false
+
+end;
+
+end;
+
+end.

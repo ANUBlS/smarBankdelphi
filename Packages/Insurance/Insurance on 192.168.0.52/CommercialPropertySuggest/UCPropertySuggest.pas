@@ -1,0 +1,751 @@
+unit UCPropertySuggest;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActiveX, AxCtrls, PCPropertySuggest_TLB, StdVcl, StdCtrls, ComCtrls, Buttons,
+  ExtCtrls, Mask, DBCtrls,SBPlgAx50_TLB,Db, OracleData, INSWordExporter,
+  PlgModalContainer;
+
+const
+   WM_ModalResult = WM_USER+139;
+   fmCaption = 'Teklifname: (%s)';
+
+type
+  TCPropertySuggest = class(TActiveForm, ICPropertySuggest,IUIObject,
+             IParamInput,
+             ISBPlgAc50BufferForm)
+    GroupBox2: TGroupBox;
+    Label9: TLabel;
+    Label10: TLabel;
+    Label11: TLabel;
+    Label12: TLabel;
+    Label19: TLabel;
+    DBEdit7: TDBEdit;
+    Panel1: TPanel;
+    BitBtn1: TBitBtn;
+    BitBtn2: TBitBtn;
+    btApply: TBitBtn;
+    btPrint: TBitBtn;
+    btPolicy: TBitBtn;
+    DBLookupComboBoxCondition: TDBLookupComboBox;
+    cbFranshiz: TCheckBox;
+    cbConditions: TCheckBox;
+    DBLookupComboBoxFranshiz: TDBLookupComboBox;
+    DTPContractDate: TDateTimePicker;
+    memFrashize: TMemo;
+    memConditions: TMemo;
+    DBLookupComboBox4: TDBLookupComboBox;
+    ODSRisks: TOracleDataSet;
+    ODSRisksID: TFloatField;
+    ODSRisksNAME: TStringField;
+    RiskSource: TDataSource;
+    ODSCustomers: TOracleDataSet;
+    ODSCustomersID: TIntegerField;
+    ODSCustomersNAME: TStringField;
+    ODSCustomersADDRESS: TStringField;
+    ODSCustomersMOBILEPHONE: TStringField;
+    ODSCustomersFAX: TStringField;
+    ODSCustomersCONTACTPERSON: TStringField;
+    ODSCustomersCONTACTPERSONPHONE: TStringField;
+    CustomersSource: TDataSource;
+    ODSCProperty: TOracleDataSet;
+    ODSCPropertyID: TFloatField;
+    ODSCPropertyKLI_ID: TFloatField;
+    ODSCPropertyFULLDESCRIPTION: TStringField;
+    ODSCPropertyLOCATIONOBJ: TStringField;
+    ODSCPropertyYEARSINBUSINESS: TStringField;
+    ODSCPropertyBUILDINGUSAGE: TStringField;
+    ODSCPropertyCONSTYEAR: TDateTimeField;
+    ODSCPropertyFLOORSNUM: TIntegerField;
+    ODSCPropertyWALLSM: TStringField;
+    ODSCPropertyCEILINGSM: TStringField;
+    ODSCPropertyROOFM: TStringField;
+    ODSCPropertyAREA: TFloatField;
+    ODSCPropertyAPPLICANTSPACE: TFloatField;
+    ODSCPropertyEARTHQUAKEDETAILS: TStringField;
+    ODSCPropertyFLAMABLE: TStringField;
+    ODSCPropertySURROINDINGDETAILS: TStringField;
+    ODSCPropertySITUETED: TStringField;
+    ODSCPropertyGUARD: TStringField;
+    ODSCPropertyALARM: TStringField;
+    ODSCPropertyLOCKS: TStringField;
+    ODSCPropertySECURITYLOCKS: TStringField;
+    ODSCPropertyBARS: TStringField;
+    ODSCPropertyOTHER: TStringField;
+    ODSCPropertySETTINGS: TStringField;
+    ODSCPropertyREPAIR: TStringField;
+    ODSCPropertyHEATED: TStringField;
+    ODSCPropertyRISKID: TFloatField;
+    ODSCPropertyANNUAL: TFloatField;
+    ODSCPropertyWAGES: TFloatField;
+    ODSCPropertyRENT: TFloatField;
+    ODSCPropertyEMPLOYES: TFloatField;
+    ODSCPropertyEXPIRITY: TDateTimeField;
+    ODSCPropertyLOSSHISTORY: TStringField;
+    ODSCPropertyRENEWAL: TStringField;
+    ODSCPropertyTHIRDPARTY: TStringField;
+    ODSCPropertyOTHERINF: TStringField;
+    ODSCPropertyINDEMINITY: TStringField;
+    ODSCPropertyVALUETYPE: TStringField;
+    ODSCPropertyBUILDINGS: TFloatField;
+    ODSCPropertyCONTENT: TFloatField;
+    ODSCPropertyEQUIPMENT: TFloatField;
+    ODSCPropertyGLASS: TFloatField;
+    ODSCPropertyCASH: TFloatField;
+    ODSCPropertyWAREHOUSE: TFloatField;
+    ODSCPropertySTOCK: TFloatField;
+    ODSCPropertyPRODUCTS: TFloatField;
+    ODSCPropertyWORKINPROGRESS: TFloatField;
+    ODSCPropertyRAWMATERIALS: TFloatField;
+    ODSCPropertyCLOSE_PREFIX: TIntegerField;
+    ODSCPropertyTYPEID: TIntegerField;
+    ODSCPropertyPROFITID: TFloatField;
+    CPropertySource: TDataSource;
+    ODSContracts: TOracleDataSet;
+    ODSContractsID: TFloatField;
+    ODSContractsTYPE_ID: TFloatField;
+    ODSContractsBLANK_ID: TFloatField;
+    ODSContractsSUGG_ID: TFloatField;
+    ODSContractsPOLICY_ID: TFloatField;
+    ODSContractsINS_DATE: TDateTimeField;
+    ODSContractsBEGIN_DATE: TDateTimeField;
+    ODSContractsEND_DATE: TDateTimeField;
+    ODSContractsVALUTE_ID: TFloatField;
+    ODSContractsAMMOUNT: TFloatField;
+    ODSContractsCLOSE_PREFIX: TIntegerField;
+    ODSContractsKLI_ID: TFloatField;
+    ODSContractsLOANACC_ID: TFloatField;
+    ODSContractsCURRACC_ID: TFloatField;
+    ODSContractsPOLICY_NUM: TStringField;
+    DSContracts: TDataSource;
+    ODSCPropertySuggest: TOracleDataSet;
+    CPSuggestSource: TDataSource;
+    ODSCPropertySuggestID: TFloatField;
+    ODSCPropertySuggestBID: TFloatField;
+    ODSCPropertySuggestRISKADDRESS: TStringField;
+    ODSCPropertySuggestINSURANCEAMMOUNT: TFloatField;
+    ODSCPropertySuggestENDDATE: TDateTimeField;
+    ODSCPropertySuggestRISK_ID: TFloatField;
+    ODSCPropertySuggestFRZ_ID: TFloatField;
+    ODSCPropertySuggestCNDT_ID: TFloatField;
+    ODSCPropertySuggestVAL_ID: TFloatField;
+    ODSCPropertySuggestINSURANCESUM: TFloatField;
+    AValute: TOracleDataSet;
+    AValuteVALU_NAME: TStringField;
+    AValuteVALUTE: TIntegerField;
+    AValuteVAL_NAME: TStringField;
+    AValuteVALU_SHORT: TStringField;
+    AValuteData: TDataSource;
+    ODSConditions: TOracleDataSet;
+    ODSConditionsID: TFloatField;
+    ODSConditionsNAME: TStringField;
+    ConditionsData: TDataSource;
+    Franshiz: TOracleDataSet;
+    FranshizID: TFloatField;
+    FranshizNAME: TStringField;
+    FranshizData: TDataSource;
+    SuggestExporter: TINSWordExporter;
+    Label1: TLabel;
+    DBEdit1: TDBEdit;
+    Label2: TLabel;
+    DBEdit2: TDBEdit;
+    PolicyContainer: TPlgModalContainer;
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure BitBtn2Click(Sender: TObject);
+    procedure BitBtn1Click(Sender: TObject);
+    procedure DBLookupComboBoxFranshizClick(Sender: TObject);
+    procedure DBLookupComboBoxConditionClick(Sender: TObject);
+    procedure DBEdit7Change(Sender: TObject);
+    procedure DBEdit7KeyPress(Sender: TObject; var Key: Char);
+    procedure btApplyClick(Sender: TObject);
+    procedure btPrintClick(Sender: TObject);
+    procedure btPolicyClick(Sender: TObject);
+  private
+    { Private declarations }
+    id : Integer;
+    FParams: TStrings;
+    FOwnerHandle : Integer;
+    f:boolean;
+
+    FEvents: ICPropertySuggestEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+    procedure LoadData;
+    function SaveData():boolean;
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+
+    function  Get_Owner:Integer; safecall;
+    procedure Set_Owner(val : Integer);  safecall;
+    {IParamInput}
+    function  Get_Params(const Name: WideString): OleVariant; safecall;
+    procedure Set_Params(const Name: WideString; Value: OleVariant); safecall;
+    property Params[const Name: WideString]: OleVariant read Get_Params write Set_Params;
+    {IInstance}
+    function InstanceInitialize: HResult; safecall;
+    function IUIObject.Initialize = InstanceInitialize;
+    function Cleanup: HResult; safecall;
+    {IUIObject}
+//    function  Get_Icon: OLE_HANDLE; safecall;
+    function UIObjectActivate: HResult; safecall;
+    function IUIObject.Activate = UIObjectActivate;
+    function QueryDeactivate: HResult; safecall;
+    function UIObjectDeactivate: HResult; safecall;
+    function IUIObject.Deactivate = UIObjectDeactivate;
+    function SaveState: HResult; safecall;
+    function  Get_Height : Integer; safecall;
+    function  Get_Width  : Integer; safecall;
+  public
+    { Public declarations }
+    procedure Initialize; override;
+  end;
+
+var
+    CPropertySuggest:TCPropertySuggest;
+
+implementation
+
+uses ComObj, ComServ,sboapiDataModuleImpl;
+
+{$R *.DFM}
+
+{ TCPropertySuggest }
+
+procedure TCPropertySuggest.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_CPropertySuggestPage); }
+end;
+
+procedure TCPropertySuggest.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as ICPropertySuggestEvents;
+end;
+
+procedure TCPropertySuggest.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TCPropertySuggest.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TCPropertySuggest.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TCPropertySuggest.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TCPropertySuggest.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TCPropertySuggest.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TCPropertySuggest.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TCPropertySuggest.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TCPropertySuggest.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TCPropertySuggest.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TCPropertySuggest.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TCPropertySuggest.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TCPropertySuggest.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TCPropertySuggest.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TCPropertySuggest.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TCPropertySuggest.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TCPropertySuggest.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TCPropertySuggest.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TCPropertySuggest.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TCPropertySuggest._Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TCPropertySuggest.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TCPropertySuggest.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TCPropertySuggest.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TCPropertySuggest.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TCPropertySuggest.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TCPropertySuggest.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TCPropertySuggest.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TCPropertySuggest.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TCPropertySuggest.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TCPropertySuggest.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TCPropertySuggest.Set_AxBorderStyle(
+  Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TCPropertySuggest.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TCPropertySuggest.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TCPropertySuggest.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TCPropertySuggest.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TCPropertySuggest.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TCPropertySuggest.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TCPropertySuggest.Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TCPropertySuggest.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TCPropertySuggest.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TCPropertySuggest.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TCPropertySuggest.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TCPropertySuggest.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TCPropertySuggest.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+
+
+function  TCPropertySuggest.Get_Owner:Integer;
+begin
+  Result := handle;
+end;
+
+procedure TCPropertySuggest.Set_Owner(val : Integer);
+begin
+  if val > 0 then
+     FOwnerHandle := val;
+end;
+
+
+function  TCPropertySuggest.Get_Params(const Name: WideString): OleVariant;
+begin
+  Result := FParams.Values[Name];
+end;
+
+procedure TCPropertySuggest.Set_Params(const Name: WideString; Value: OleVariant);
+begin
+  FParams.Values[Name] := Value;
+end;
+
+function TCPropertySuggest.InstanceInitialize: HResult;
+begin
+  Result := S_OK;
+end;
+
+function TCPropertySuggest.Cleanup: HResult;
+begin
+  Result := S_OK;
+end;
+
+function TCPropertySuggest.UIObjectActivate: HResult;
+begin
+          id:=StrToInt(Get_Params('ID'));
+          f:=true;
+          ODSCProperty.Close;
+          ODSCProperty.SetVariable('id',id);
+          ODSCProperty.Open;
+          ODSContracts.Close;
+          ODSContracts.SetVariable('blankid',ODSCPropertyID.value);
+          ODSContracts.Open;
+          ODSCPropertySUGGEST.CloseAll;
+          ODSCPropertySUGGEST.SetVariable('bid',id);
+          ODSCPropertySUGGEST.Open;
+          if ODSCPropertySUGGEST.RecordCount<1 then
+          begin
+             DTPContractDate.DateTime:=Now;
+             Caption := format(fmCaption, ['Elave']);
+          end
+          else
+             Caption := format(fmCaption, ['Redakte']);
+          if  ODSCPropertySUGGESTID.Value=0 then
+          begin
+              btPrint.Enabled:=false;
+              btPolicy.Enabled:=false;
+          end;
+          LoadData;
+          ODSCPropertySUGGEST.Edit;
+       Result := S_OK;
+end;
+
+function TCPropertySuggest.QueryDeactivate: HResult;
+begin
+  Result := S_OK;
+end;
+
+function TCPropertySuggest.UIObjectDeactivate: HResult;
+begin
+  Result := S_OK;
+end;
+
+function TCPropertySuggest.SaveState: HResult;
+begin
+  Result := S_OK;
+end;
+
+function  TCPropertySuggest.Get_Height : Integer;
+begin
+  Result := Height;
+end;
+
+function  TCPropertySuggest.Get_Width  : Integer;
+begin
+  Result := Width;
+end;
+
+procedure TCPropertySuggest.ActiveFormCreate(Sender: TObject);
+begin
+     CPropertySuggest:=Self;
+     FParams := TStringList.Create;
+end;
+
+procedure TCPropertySuggest.BitBtn2Click(Sender: TObject);
+begin
+     PostMessage(FOwnerHandle, WM_ModalResult, mrCancel, 0);
+end;
+
+procedure TCPropertySuggest.LoadData;
+begin
+     DTPContractDate.DateTime:=ODSCPropertySuggest.FieldByName('enddate').AsDateTime;
+end;
+
+function TCPropertySuggest.SaveData: boolean;
+begin
+   Result := False;
+    if   cbFranshiz.State = cbChecked then
+    with Franshiz do
+    begin
+        Insert;
+        FieldByName('name').asString := memFrashize.Text;
+        Post;
+        RefreshRecord;
+    end;
+
+    if   cbConditions.State = cbChecked then
+    with ODSConditions do
+    begin
+         Insert;
+         FieldByName('name').asString := memConditions.Text;
+         Post;
+         RefreshRecord;
+    end;
+
+    with ODSCPropertySuggest do
+    begin
+         FieldByName('bid').AsFloat := id;
+         FieldByName('frz_id').AsFloat := Franshiz.FieldByName('id').asFloat;
+         FieldByName('cndt_id').AsFloat := ODSConditions.FieldByName('id').asFloat;
+         FieldByName('enddate').AsDateTime := DTPContractDate.DateTime;
+         if State in [dsInsert,dsEdit] then Post;
+         RefreshRecord();
+         if f then begin
+         ODSContracts.Edit;
+         ODSContracts.FieldByName('sugg_id').AsFloat := FieldByName('id').asFloat;
+         ODSContracts.FieldByName('ins_date').AsDateTime := DTPContractDate.DateTime;
+         ODSContracts.Post;
+         end;
+         f:=false;
+         result := True;
+    end;
+end;
+
+procedure TCPropertySuggest.BitBtn1Click(Sender: TObject);
+begin
+    if SaveData() then
+    PostMessage(FOwnerHandle, WM_ModalResult, mrOk, 0);
+end;
+
+procedure TCPropertySuggest.DBLookupComboBoxFranshizClick(Sender: TObject);
+begin
+     with Franshiz do
+     memFrashize.Text := FieldByName('name').asString;
+     btApply.Enabled:=true;
+end;
+
+procedure TCPropertySuggest.DBLookupComboBoxConditionClick(
+  Sender: TObject);
+begin
+     with ODSConditions do
+          memConditions.Text := FieldByName('name').asString;
+     btApply.Enabled:=true;
+end;
+
+procedure TCPropertySuggest.DBEdit7Change(Sender: TObject);
+begin
+     btApply.Enabled:=true;
+end;
+
+procedure TCPropertySuggest.DBEdit7KeyPress(Sender: TObject;
+  var Key: Char);
+begin
+      if Key = #13 then
+     begin
+        if HiWord(GetKeyState(VK_Shift))<>0 then
+           with Sender as TControl do
+           SelectNext(ActiveControl,False, True)
+        else
+           with Sender as TControl do
+           SelectNext(ActiveControl,True, True);
+        key:=#0;
+     end;
+end;
+
+procedure TCPropertySuggest.btApplyClick(Sender: TObject);
+begin
+   if SaveData() then
+   begin
+      btPolicy.Enabled:=true;
+      btPrint.Enabled:=true;
+      btApply.Enabled:=false;
+   end;
+end;
+
+procedure TCPropertySuggest.btPrintClick(Sender: TObject);
+begin
+      ODSCustomers.Locate('id',ODSCPropertyKLI_ID.Value,[]);
+      AValute.Locate('valute',ODSCOntractsValute_ID.Value,[]);
+      ODSRisks.Locate('id',ODSCPropertyRISKid.Value,[]);
+      ODSConditions.Locate('id',ODSCPropertySuggestCNDT_ID.Value,[]);
+      Franshiz.Locate('id',ODSCPropertySuggestFRZ_ID.Value,[]);
+      try
+        with SuggestExporter do
+        begin
+             FileName:=ExtractFilePath(Application.ExeName)+ '\CPropertySuggest.doc';
+             Open(False);
+             SetBookmark('Insured',ODSCustomersName.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('RAddress',ODSCPropertySuggestRiskAddress.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Insperiod',DateToStr(ODSContractsBegin_date.value)+' - '+DateToStr(ODSContractsEnd_date.value), false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Valute',AValuteValu_name.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('IRisks',ODSRisksName.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Franshiz',FranshizName.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Inssum',FloatToStr(ODSCPropertySuggestInsurancesum.value), false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Insammount',CurrToStr(ODSCONtractsAmmount.value), false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Instime',DateToStr(ODSCPropertySuggestEndDate.value), false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Condt',ODSConditionsName.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Insured1',ODSCustomersName.value, false, false, False, false, 8, 'Arial AzLat', False);
+        end;
+    finally
+        SuggestExporter.Show;
+    end;
+end;
+
+procedure TCPropertySuggest.btPolicyClick(Sender: TObject);
+var
+   p : TStringList;
+begin
+   p:= TStringList.Create;
+   p.Values['ID']:=FloatToStr(ODSCPropertyId.value);
+   with PolicyContainer do begin
+     ShowModal(StringToGuid('{0F2A35A4-7A65-4085-BED1-BDCBC55C5836}'),p );
+   end;
+   p.Free;
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TCPropertySuggest,
+    Class_CPropertySuggest,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

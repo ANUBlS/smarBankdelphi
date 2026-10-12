@@ -1,0 +1,559 @@
+unit ExcelimpImpl1;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActiveX, AxCtrls, Excel_import_TLB, StdVcl, Db, Excel97, OleServer,
+  Oracle, OracleData, ImgList, ComCtrls, ToolWin, Grids, DBGrids, StdCtrls;
+
+type
+  TExcelimp = class(TActiveForm, IExcelimp)
+    DBGrid1: TDBGrid;
+    ToolBar1: TToolBar;
+    ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
+    ToolButton3: TToolButton;
+    ToolButton6: TToolButton;
+    ToolButton5: TToolButton;
+    ToolButton4: TToolButton;
+    ImageList1: TImageList;
+    OracleDataSet3: TOracleDataSet;
+    OraclePackage2: TOraclePackage;
+    OraclePackage1: TOraclePackage;
+    OracleDataSet2: TOracleDataSet;
+    ExcelWorkbook1: TExcelWorkbook;
+    ExcelWorksheet1: TExcelWorksheet;
+    ExcelApplication1: TExcelApplication;
+    OpenDialog1: TOpenDialog;
+    DataSource1: TDataSource;
+    OracleDataSet1: TOracleDataSet;
+    OracleDataSet1F1: TStringField;
+    OracleDataSet1F2: TStringField;
+    OracleDataSet1F3: TStringField;
+    OracleDataSet1F4: TStringField;
+    OracleDataSet1F5: TStringField;
+    OracleDataSet1F6: TStringField;
+    OracleDataSet1F7: TStringField;
+    OracleDataSet1F8: TStringField;
+    OracleDataSet1F9: TStringField;
+    OracleDataSet1F10: TStringField;
+    OracleDataSet1F11: TStringField;
+    OracleDataSet1F12: TStringField;
+    OracleDataSet1F13: TStringField;
+    OracleDataSet1F14: TStringField;
+    OracleDataSet1F15: TStringField;
+    OracleDataSet1F16: TStringField;
+    OracleDataSet1F17: TStringField;
+    OracleDataSet1F18: TStringField;
+    OracleDataSet1F19: TStringField;
+    OracleDataSet1F20: TStringField;
+    OracleDataSet1F21: TStringField;
+    OracleDataSet1F22: TStringField;
+    OracleDataSet1F23: TStringField;
+    OracleDataSet1F24: TStringField;
+    OracleDataSet1F25: TStringField;
+    OracleDataSet1F26: TStringField;
+    OracleDataSet1F27: TStringField;
+    OracleDataSet1F28: TStringField;
+    OracleDataSet1F29: TStringField;
+    OracleDataSet1F30: TStringField;
+    OracleDataSet1F31: TStringField;
+    OracleDataSet1F32: TStringField;
+    OracleDataSet1F33: TStringField;
+    OracleDataSet1F34: TStringField;
+    OracleDataSet1F35: TStringField;
+    OracleDataSet1F36: TStringField;
+    OracleDataSet1F37: TStringField;
+    OracleDataSet1F38: TStringField;
+    OracleDataSet1F39: TStringField;
+    OracleDataSet1F40: TStringField;
+    OracleDataSet1F41: TStringField;
+    OracleDataSet1F42: TStringField;
+    OracleDataSet1F43: TStringField;
+    OracleDataSet1F44: TStringField;
+    OracleDataSet1F45: TStringField;
+    OracleDataSet1F46: TStringField;
+    OracleDataSet1F47: TStringField;
+    OracleDataSet1F48: TStringField;
+    OracleDataSet1F49: TStringField;
+    OracleDataSet1F50: TStringField;
+    OracleDataSet1F51: TStringField;
+    OracleDataSet1F52: TStringField;
+    OracleDataSet1F53: TStringField;
+    OracleDataSet1F54: TStringField;
+    OracleDataSet1F55: TStringField;
+    OracleDataSet1F56: TStringField;
+    OracleDataSet1F57: TStringField;
+    OracleDataSet1F58: TStringField;
+    OracleDataSet1F59: TStringField;
+    OracleDataSet1F60: TStringField;
+    OracleDataSet1F61: TStringField;
+    OracleDataSet1F62: TStringField;
+    OracleDataSet1F63: TStringField;
+    OracleDataSet1F64: TStringField;
+    OracleDataSet1F65: TStringField;
+    OracleDataSet1F66: TStringField;
+    OracleDataSet1F67: TStringField;
+    OracleDataSet1F68: TStringField;
+    procedure ToolButton1Click(Sender: TObject);
+    procedure ToolButton5Click(Sender: TObject);
+  private
+    { Private declarations }
+    FEvents: IExcelimpEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+  public
+    { Public declarations }
+    procedure Initialize; override;
+  end;
+
+implementation
+
+uses ComObj, ComServ,sboapiDataModuleImpl;
+
+{$R *.DFM}
+
+{ TExcelimp }
+
+procedure TExcelimp.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_ExcelimpPage); }
+end;
+
+procedure TExcelimp.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as IExcelimpEvents;
+end;
+
+procedure TExcelimp.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TExcelimp.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TExcelimp.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TExcelimp.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TExcelimp.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TExcelimp.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TExcelimp.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TExcelimp.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TExcelimp.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TExcelimp.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TExcelimp.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TExcelimp.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TExcelimp.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TExcelimp.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TExcelimp.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TExcelimp.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TExcelimp.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TExcelimp.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TExcelimp.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TExcelimp._Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TExcelimp.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TExcelimp.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TExcelimp.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TExcelimp.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TExcelimp.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TExcelimp.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TExcelimp.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TExcelimp.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TExcelimp.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TExcelimp.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TExcelimp.Set_AxBorderStyle(Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TExcelimp.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TExcelimp.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TExcelimp.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TExcelimp.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TExcelimp.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TExcelimp.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TExcelimp.Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TExcelimp.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TExcelimp.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TExcelimp.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TExcelimp.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TExcelimp.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TExcelimp.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+procedure TExcelimp.ToolButton1Click(Sender: TObject);
+const RootCell = 2;
+var
+    V, Sheet, Sheets  :Variant;
+    Row: Integer;
+    a,VAL_NAME:string;
+    F:boolean;
+    i:char;
+    say,k:integer;
+begin
+if not OpenDialog1.Execute then Exit;
+  V:=ExcelApplication1.Application;
+  ExcelApplication1.Connect;
+   try
+     V.Workbooks.Open(OpenDialog1.FileName);
+     Sheet := V.Workbooks[1].Worksheets['SL'];
+     Sheets := V.Sheets;
+
+     OracleDataSet2.close;
+     OracleDataSet2.Open;
+     OracleDataSet1.Open;
+     OracleDataSet1.First;
+     with OracleDataSet1 do
+     begin
+       say:=1;
+       for Row:=2 to Sheet.cells.CurrentRegion.Rows.Count do
+       begin
+       //  F:=False;
+       //  a:=Sheet.cells[Row,1];
+        // for i:='0' to '9' do
+         //if a[1]=i then F:=true;
+        // if F then
+         begin
+           Insert;
+           Val_Name:=Sheet.cells[Row,7];
+           FieldByName('f1').AsString                 := Sheet.cells[Row,1];
+           FieldByName('f2').Asstring                 := Sheet.cells[Row,2];
+           FieldByName('f3').AsString                 := Sheet.cells[Row,3];
+           FieldByName('f4').AsString                 := Sheet.cells[Row,4];
+           FieldByName('f5').AsString                 := Sheet.cells[Row,5];
+           FieldByName('f6').AsString                 := Sheet.cells[Row,6];
+           FieldByName('f7').AsString                 := Sheet.cells[Row,7];
+           FieldByName('f8').AsString                 := Sheet.cells[Row,8];
+           FieldByName('f9').AsString                 := Sheet.cells[Row,9];
+           FieldByName('f10').AsString                := Sheet.cells[Row,10];
+           FieldByName('f11').AsString                := Sheet.cells[Row,11];
+           FieldByName('f12').AsString                := Sheet.cells[Row,12];
+           FieldByName('f13').AsString                := Sheet.cells[Row,13];
+           FieldByName('f14').AsString                := Sheet.cells[Row,14];
+           FieldByName('f15').AsString                := Sheet.cells[Row,15];
+           FieldByName('f16').AsString                := Sheet.cells[Row,16];
+           FieldByName('f17').AsString                := Sheet.cells[Row,17];
+           FieldByName('f18').AsString                := Sheet.cells[Row,18];
+           FieldByName('f19').AsString                := Sheet.cells[Row,19];
+           FieldByName('f20').AsString                := Sheet.cells[Row,20];
+           FieldByName('f21').AsString                := Sheet.cells[Row,21];
+           FieldByName('f22').AsString                := Sheet.cells[Row,22];
+           FieldByName('f23').AsString                := Sheet.cells[Row,23];
+           FieldByName('f24').AsString                := Sheet.cells[Row,24];
+           FieldByName('f25').AsString                := Sheet.cells[Row,25];
+           FieldByName('f26').AsString                := Sheet.cells[Row,26];
+           FieldByName('f27').AsString                := Sheet.cells[Row,27];
+           FieldByName('f28').AsString                := Sheet.cells[Row,28];
+           FieldByName('f29').AsString                := Sheet.cells[Row,29];
+           FieldByName('f30').AsString                := Sheet.cells[Row,30];
+           FieldByName('f31').AsString                := Sheet.cells[Row,31];
+           FieldByName('f32').AsString                := Sheet.cells[Row,32];
+           FieldByName('f33').AsString                := Sheet.cells[Row,33];
+           FieldByName('f34').AsString                := Sheet.cells[Row,34];
+           FieldByName('f35').AsString                := Sheet.cells[Row,35];
+           FieldByName('f36').AsString                := Sheet.cells[Row,36];
+
+
+           FieldByName('f37').AsString                := Sheet.cells[Row,37];
+           FieldByName('f38').AsString                := Sheet.cells[Row,38];
+           FieldByName('f39').AsString                := Sheet.cells[Row,39];
+           FieldByName('f40').AsString                := Sheet.cells[Row,40];
+           FieldByName('f41').AsString                := Sheet.cells[Row,41];
+           FieldByName('f42').AsString                := Sheet.cells[Row,42];
+           FieldByName('f43').AsString                := Sheet.cells[Row,43];
+           FieldByName('f44').AsString                := Sheet.cells[Row,44];
+           FieldByName('f45').AsString                := Sheet.cells[Row,45];
+           FieldByName('f46').AsString                := Sheet.cells[Row,46];
+           FieldByName('f47').AsString                := Sheet.cells[Row,47];
+           FieldByName('f48').AsString                := Sheet.cells[Row,48];
+           FieldByName('f49').AsString                := Sheet.cells[Row,49];
+           FieldByName('f50').AsString                := Sheet.cells[Row,50];
+           FieldByName('f51').AsString                := Sheet.cells[Row,51];
+           FieldByName('f52').AsString                := Sheet.cells[Row,52];
+
+
+           FieldByName('f53').AsString                := Sheet.cells[Row,53];
+           FieldByName('f54').AsString                := Sheet.cells[Row,54];
+           FieldByName('f55').AsString                := Sheet.cells[Row,55];
+           FieldByName('f56').AsString                := Sheet.cells[Row,56];
+           FieldByName('f57').AsString                := Sheet.cells[Row,57];
+           FieldByName('f58').AsString                := Sheet.cells[Row,58];
+           FieldByName('f59').AsString                := Sheet.cells[Row,59];
+           FieldByName('f60').AsString                := Sheet.cells[Row,60];
+           FieldByName('f61').AsString                := Sheet.cells[Row,61];
+           FieldByName('f62').AsString                := Sheet.cells[Row,62];
+           FieldByName('f63').AsString                := Sheet.cells[Row,63];
+           FieldByName('f64').AsString                := Sheet.cells[Row,64];
+           FieldByName('f65').AsString                := Sheet.cells[Row,65];
+           FieldByName('f66').AsString                := Sheet.cells[Row,66];
+           FieldByName('f67').AsString                := Sheet.cells[Row,67];
+           FieldByName('f68').AsString                := Sheet.cells[Row,68];
+
+
+
+  
+
+
+
+
+
+           Post;
+          // inc(say);
+         end;
+       end;
+       Next;
+     end;
+     {OracleDataSet3.Close;
+     OracleDataSet3.Open;
+     for k:=1 to OracleDataSet3.RecordCount do
+       begin
+         OraclePackage2.CallProcedure('loops',[OracleDataSet3.FieldByName('TRANS').AsInteger]);
+         OracleDataSet3.Next;
+       end;}
+     oracledataset1.refresh;
+   finally
+     ExcelApplication1.Quit;
+     ExcelApplication1.Disconnect;
+   end;
+end;
+
+procedure TExcelimp.ToolButton5Click(Sender: TObject);
+begin
+OracleDataSet1.Refresh;
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TExcelimp,
+    Class_Excelimp,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

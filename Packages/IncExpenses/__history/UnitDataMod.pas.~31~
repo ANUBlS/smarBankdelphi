@@ -1,0 +1,129 @@
+unit UnitDataMod;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, OracleData, Oracle;
+type
+  TDataMod = class(TDataModule)
+    OrDSSysDat: TOracleDataSet;
+    OrDSSysDatTEK_DAT: TDateTimeField;
+    OrDSFilial: TOracleDataSet;
+    OrDSFilialID: TFloatField;
+    OrDSFilialCode: TOracleDataSet;
+    OrDSFilialCodeID: TFloatField;
+    OrDSBankInfo: TOracleDataSet;
+    OrDSExpenses: TOracleDataSet;
+    OrDSExpensesBAL_CN1: TFloatField;
+    OrDSExpensesREST: TFloatField;
+    OrDSIncomesGeneral: TOracleDataSet;
+    OrDSExpensesGeneral: TOracleDataSet;
+    OrDSExpensesGeneralBAL_CN1: TFloatField;
+    OrDSExpensesGeneralREST: TFloatField;
+    OrDSIncomesBal2: TOracleDataSet;
+    OrDSIncomesBal2BAL_CN1: TFloatField;
+    OrDSIncomesBal2BALNAME: TStringField;
+    OrDSIncomesBal2REST: TFloatField;
+    OrDSExpGenBal: TOracleDataSet;
+    OrDSExpGenBalBAL_CN1: TFloatField;
+    OrDSExpGenBalREST: TFloatField;
+    DSIncomes: TDataSource;
+    DSExpenses: TDataSource;
+    OrDSExpensesBal2: TOracleDataSet;
+    OrDSExpensesBal2BAL_CN1: TFloatField;
+    OrDSExpensesBal2REST: TFloatField;
+    OrDSIncGenBal: TOracleDataSet;
+    OrDSIncGenBalBAL_CN1: TFloatField;
+    OrDSIncGenBalREST: TFloatField;
+    OrDSBegOstatGen: TOracleDataSet;
+    OrDSEndOstatGen: TOracleDataSet;
+    OrDSBegOstat: TOracleDataSet;
+    OrDSEndOstat: TOracleDataSet;
+    OrDSBegOstatGenSUMER: TFloatField;
+    OrDSEndOstatGenSUMER: TFloatField;
+    OrDSBegOstatSUMER: TFloatField;
+    OrDSEndOstatSUMER: TFloatField;
+    OrDSExpOtherFilials: TOracleDataSet;
+    OrDSIncOtherFilials: TOracleDataSet;
+    OrDSExpOtherFilialsREST: TFloatField;
+    OrDSExpOtherFilialsFILIAL: TStringField;
+    OrDSExpOtherFilialsFILIALNO: TFloatField;
+    OPack_SL: TOraclePackage;
+    OrDSIncOtherFilialsFILIALNO: TFloatField;
+    OrDSIncOtherFilialsFILIAL: TStringField;
+    OrDSIncOtherFilialsREST: TFloatField;
+    OrDSFilialNAME: TWideStringField;
+    OrDSBankInfoBANK: TWideStringField;
+    OrDSIncGenBalBALNAME: TWideStringField;
+    OrDSExpGenBalBALNAME: TWideStringField;
+    OrDSExpensesACC_NO: TWideStringField;
+    OrDSExpensesNAME: TWideStringField;
+    OrDSExpensesGeneralACC_NO: TWideStringField;
+    OrDSExpensesGeneralNAME: TWideStringField;
+    OrDSFilialCodeNAME: TWideStringField;
+    OrDSIncomesBal: TOracleDataSet;
+    OrDSIncomesBalBAL_CN1: TFloatField;
+    OrDSIncomesBalBALNAME: TWideStringField;
+    OrDSIncomesBalREST: TFloatField;
+    OrDSExpensesBal: TOracleDataSet;
+    OrDSExpensesBalBAL_CN1: TFloatField;
+    OrDSExpensesBalBALNAME: TWideStringField;
+    OrDSExpensesBalREST: TFloatField;
+    OrDSIncomes: TOracleDataSet;
+    OrDSIncomesBAL_CN1: TFloatField;
+    OrDSIncomesACC_NO: TWideStringField;
+    OrDSIncomesNAME: TWideStringField;
+    OrDSIncomesREST: TFloatField;
+    OrDSIncomesGeneralBAL_CN1: TFloatField;
+    OrDSIncomesGeneralACC_NO: TWideStringField;
+    OrDSIncomesGeneralNAME: TWideStringField;
+    OrDSIncomesGeneralREST: TFloatField;
+    OrDSSysDatVYEAR: TFloatField;
+    ODSCurrency: TOracleDataSet;
+    ODSCurrencyVALUTE: TIntegerField;
+    ODSCurrencyVAL_NAME: TWideStringField;
+    OrPackIncomes: TOraclePackage;
+    DSCurrency: TDataSource;
+    ODSIncome: TOracleDataSet;
+    DSIncome: TDataSource;
+    ODSIncomeBALANS: TFloatField;
+    ODSIncomeCURR: TWideStringField;
+    ODSIncomeJAN: TFloatField;
+    ODSIncomeFEB: TFloatField;
+    ODSIncomeMAR: TFloatField;
+    ODSIncomeAPR: TFloatField;
+    ODSIncomeMAY: TFloatField;
+    ODSIncomeJUN: TFloatField;
+    ODSIncomeJUL: TFloatField;
+    ODSIncomeAUG: TFloatField;
+    ODSIncomeSEP: TFloatField;
+    ODSIncomeOCT: TFloatField;
+    ODSIncomeNOV: TFloatField;
+    ODSIncomeDEK: TFloatField;
+    ODS_IncExpSet: TOracleDataSet;
+    procedure OracleEvent1Event(Sender: TOracleEvent; const ObjectName: string;
+      const Info: Variant);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  DataMod: TDataMod;
+
+
+implementation
+
+uses ComObj, ComServ, SboapiDataModuleImpl, IncExpensesImpl;
+
+{$R *.DFM}
+
+procedure TDataMod.OracleEvent1Event(Sender: TOracleEvent;
+  const ObjectName: string; const Info: Variant);
+begin
+  ShowMessage(info);
+end;
+
+end.

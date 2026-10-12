@@ -1,0 +1,92 @@
+unit Unit_Rekvezit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Grids, XDBGrids, ExtCtrls, StdCtrls;
+
+type
+  TFormRekvezit = class(TForm)
+    XDBGrid1: TXDBGrid;
+    Panel1: TPanel;
+    Button1: TButton;
+    EditBankName: TEdit;
+    EditBankCODE: TEdit;
+    Edit_inn: TEdit;
+    procedure Button1Click(Sender: TObject);
+    procedure EditBankNameChange(Sender: TObject);
+    procedure EditBankCODEChange(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure Edit_innChange(Sender: TObject);
+    procedure XDBGrid1DblClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormRekvezit: TFormRekvezit;
+
+implementation
+uses OpenAccdataImpl, OpenAccountImpl, Account_edit_Unit;
+{$R *.dfm}
+
+procedure TFormRekvezit.Button1Click(Sender: TObject);
+begin
+if accont_id='' then
+  begin
+OpenAccount.Edit_BankCod.text:=DataAcc.Ods_BankM.FieldByName('bankcode').AsString;
+
+  end
+  else
+  Account_edit.Edit_BankCod.text:=DataAcc.Ods_BankM.FieldByName('bankcode').AsString;
+FormRekvezit.Close;
+end;
+
+procedure TFormRekvezit.EditBankCODEChange(Sender: TObject);
+begin
+
+ if EditBankCODE.Text <> '' then
+    DataAcc.Ods_BankM.SQL[3] := 'where bankcode like (''%' +
+      EditBankCODE.Text + '%'')'
+  else
+  DataAcc.Ods_BankM.SQL[3] := '';
+  DataAcc.Ods_BankM.Refresh;
+end;
+
+procedure TFormRekvezit.EditBankNameChange(Sender: TObject);
+begin
+  if EditBankName.Text <> '' then
+    DataAcc.Ods_BankM.SQL[3] := 'where name like (''%' +
+      EditBankName.Text + '%'')'
+  else
+  DataAcc.Ods_BankM.SQL[3] := '';
+  DataAcc.Ods_BankM.Refresh;
+
+end;
+
+procedure TFormRekvezit.Edit_innChange(Sender: TObject);
+begin
+ if Edit_inn.Text <> '' then
+    DataAcc.Ods_BankM.SQL[3] := 'where inn like (''%' +
+      Edit_inn.Text + '%'')'
+  else
+  DataAcc.Ods_BankM.SQL[3] := '';
+  DataAcc.Ods_BankM.Refresh;
+end;
+
+procedure TFormRekvezit.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+EditBankCODE.Clear;
+EditBankName.Clear;
+DataAcc.Ods_BankM.Refresh;
+end;
+
+procedure TFormRekvezit.XDBGrid1DblClick(Sender: TObject);
+begin
+Button1.Click;
+end;
+
+end.

@@ -1,0 +1,108 @@
+object frmaddsub_bardero: Tfrmaddsub_bardero
+  Left = 0
+  Top = 0
+  BorderIcons = [biSystemMenu]
+  BorderStyle = bsSingle
+  Caption = 'Subroqasiya Barderosu'
+  ClientHeight = 157
+  ClientWidth = 361
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poDesktopCenter
+  OnKeyPress = FormKeyPress
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object XFPanel1: TXFPanel
+    Left = 0
+    Top = 0
+    Width = 361
+    Height = 122
+    Align = alClient
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -12
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 0
+    object XFLabel1: TXFLabel
+      Left = 15
+      Top = 28
+      Width = 128
+      Height = 14
+      Caption = 'Subroqasiya Bardero '#8470
+    end
+    object XFLabel2: TXFLabel
+      Left = 177
+      Top = 28
+      Width = 113
+      Height = 14
+      Caption = 'T'#601'krars'#305#287'orta'#231#305'n'#305'n ad'#305
+    end
+    object DBEdit1: TDBEdit
+      Left = 15
+      Top = 48
+      Width = 148
+      Height = 22
+      DataField = 'BARDERO_NO'
+      DataSource = DMreinsurance.DSRins_sub_bardero
+      TabOrder = 0
+      OnKeyPress = DBEdit1KeyPress
+    end
+    object DBLookupComboBox1: TDBLookupComboBox
+      Left = 177
+      Top = 48
+      Width = 145
+      Height = 22
+      DataField = 'CUST_ID'
+      DataSource = DMreinsurance.DSRins_sub_bardero
+      KeyField = 'ID'
+      ListField = 'NAME'
+      ListSource = DMreinsurance.DSRCustReinssub
+      TabOrder = 1
+    end
+  end
+  object XFPanel2: TXFPanel
+    Left = 0
+    Top = 122
+    Width = 361
+    Height = 35
+    Align = alBottom
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -12
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 1
+    object XFButton1: TXFButton
+      Left = 166
+      Top = 6
+      Width = 75
+      Height = 25
+      Caption = 'Q'#601'bul'
+      DoubleBuffered = True
+      ParentDoubleBuffered = False
+      TabOrder = 0
+      OnClick = XFButton1Click
+    end
+    object XFButton2: TXFButton
+      Left = 247
+      Top = 6
+      Width = 75
+      Height = 25
+      Caption = 'Ba'#287'la'
+      DoubleBuffered = True
+      ParentDoubleBuffered = False
+      TabOrder = 1
+      OnClick = XFButton2Click
+    end
+  end
+end

@@ -1,0 +1,298 @@
+object POS_COMMISION: TPOS_COMMISION
+  Left = 559
+  Top = 546
+  BorderIcons = [biSystemMenu]
+  BorderStyle = bsSingle
+  ClientHeight = 414
+  ClientWidth = 760
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'MS Sans Serif'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poScreenCenter
+  OnCreate = FormCreate
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Label1: TLabel
+    Left = 69
+    Top = 10
+    Width = 59
+    Height = 13
+    Caption = 'Merchant ID'
+  end
+  object Label2: TLabel
+    Left = 202
+    Top = 10
+    Width = 50
+    Height = 13
+    Caption = 'MIN Value'
+  end
+  object Label3: TLabel
+    Left = 341
+    Top = 10
+    Width = 53
+    Height = 13
+    Caption = 'MAX Value'
+  end
+  object Label4: TLabel
+    Left = 61
+    Top = 66
+    Width = 84
+    Height = 13
+    Caption = 'Domestic Percent'
+  end
+  object Label5: TLabel
+    Left = 184
+    Top = 66
+    Width = 94
+    Height = 13
+    Caption = 'Int Percent (affiliate)'
+  end
+  object Label6: TLabel
+    Left = 315
+    Top = 66
+    Width = 100
+    Height = 13
+    Caption = 'Int Percent (principal)'
+  end
+  object Label7: TLabel
+    Left = 450
+    Top = 66
+    Width = 72
+    Height = 13
+    Caption = 'On US Percent'
+  end
+  object Edit1: TEdit
+    Left = 39
+    Top = 29
+    Width = 121
+    Height = 21
+    TabOrder = 0
+  end
+  object Edit2: TEdit
+    Left = 303
+    Top = 86
+    Width = 121
+    Height = 21
+    TabOrder = 5
+  end
+  object Edit3: TEdit
+    Left = 304
+    Top = 29
+    Width = 121
+    Height = 21
+    TabOrder = 2
+  end
+  object Edit4: TEdit
+    Left = 37
+    Top = 85
+    Width = 121
+    Height = 21
+    TabOrder = 3
+  end
+  object DBGrid1: TDBGrid
+    Left = 0
+    Top = 168
+    Width = 753
+    Height = 217
+    DataSource = DataMod_CARDS.POSCOMISSIONSOURCE
+    DrawingStyle = gdsGradient
+    Options = [dgEditing, dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgCancelOnExit, dgMultiSelect, dgTitleClick]
+    ReadOnly = True
+    TabOrder = 9
+    TitleFont.Charset = DEFAULT_CHARSET
+    TitleFont.Color = clWindowText
+    TitleFont.Height = -11
+    TitleFont.Name = 'MS Sans Serif'
+    TitleFont.Style = []
+    OnTitleClick = DBGrid1TitleClick
+    Columns = <
+      item
+        Expanded = False
+        FieldName = 'POSID'
+        Title.Alignment = taCenter
+        Title.Caption = 'Merchant ID'
+        Title.Color = clTeal
+        Title.Font.Charset = DEFAULT_CHARSET
+        Title.Font.Color = clNavy
+        Title.Font.Height = -11
+        Title.Font.Name = 'MS Sans Serif'
+        Title.Font.Style = []
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'MINVALUE'
+        Title.Alignment = taCenter
+        Title.Caption = 'MIN Value'
+        Title.Color = clTeal
+        Title.Font.Charset = DEFAULT_CHARSET
+        Title.Font.Color = clNavy
+        Title.Font.Height = -11
+        Title.Font.Name = 'MS Sans Serif'
+        Title.Font.Style = []
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'MAXVALUE'
+        Title.Alignment = taCenter
+        Title.Caption = 'MAX Value'
+        Title.Color = clTeal
+        Title.Font.Charset = DEFAULT_CHARSET
+        Title.Font.Color = clNavy
+        Title.Font.Height = -11
+        Title.Font.Name = 'MS Sans Serif'
+        Title.Font.Style = []
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'DOMESTICPERCENT'
+        Title.Alignment = taCenter
+        Title.Caption = 'Domestic Percent'
+        Title.Color = clTeal
+        Title.Font.Charset = DEFAULT_CHARSET
+        Title.Font.Color = clNavy
+        Title.Font.Height = -11
+        Title.Font.Name = 'MS Sans Serif'
+        Title.Font.Style = []
+        Width = 107
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'INTERPERCENT1'
+        Title.Alignment = taCenter
+        Title.Caption = 'Int Percent (affiliate)'
+        Title.Color = clTeal
+        Title.Font.Charset = DEFAULT_CHARSET
+        Title.Font.Color = clNavy
+        Title.Font.Height = -11
+        Title.Font.Name = 'MS Sans Serif'
+        Title.Font.Style = []
+        Width = 112
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'INTERPERCENT2'
+        Title.Alignment = taCenter
+        Title.Caption = 'Int Percent (principal)'
+        Title.Color = clTeal
+        Title.Font.Charset = DEFAULT_CHARSET
+        Title.Font.Color = clNavy
+        Title.Font.Height = -11
+        Title.Font.Name = 'MS Sans Serif'
+        Title.Font.Style = []
+        Width = 116
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'ONUSPERCENT'
+        Title.Caption = 'On Us Percent'
+        Title.Color = clTeal
+        Title.Font.Charset = DEFAULT_CHARSET
+        Title.Font.Color = clNavy
+        Title.Font.Height = -11
+        Title.Font.Name = 'MS Sans Serif'
+        Title.Font.Style = []
+        Width = 116
+        Visible = True
+      end>
+  end
+  object Button1: TButton
+    Left = 32
+    Top = 128
+    Width = 75
+    Height = 25
+    Caption = #1049#1072#1076#1076#1072' '#1089#1072#1093#1083#1072
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 6
+    OnClick = Button1Click
+  end
+  object Button2: TButton
+    Left = 128
+    Top = 128
+    Width = 75
+    Height = 25
+    Caption = #1057#1080#1083
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 7
+    OnClick = Button2Click
+  end
+  object Button3: TButton
+    Left = 223
+    Top = 128
+    Width = 75
+    Height = 25
+    Caption = #1045#1093#1078#1077#1083
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 8
+    OnClick = Button3Click
+  end
+  object Edit5: TEdit
+    Left = 171
+    Top = 86
+    Width = 121
+    Height = 21
+    TabOrder = 4
+  end
+  object Edit6: TEdit
+    Left = 172
+    Top = 29
+    Width = 121
+    Height = 21
+    TabOrder = 1
+  end
+  object Edit7: TEdit
+    Left = 440
+    Top = 86
+    Width = 121
+    Height = 21
+    TabOrder = 10
+  end
+  object CMExcelExport1: TCMExcelExport
+    StyleColumnWidth = cwDefault
+    ColumnWidth = 0
+    FontTitles.Charset = DEFAULT_CHARSET
+    FontTitles.Color = clWindowText
+    FontTitles.Height = -11
+    FontTitles.Name = 'MS Sans Serif'
+    FontTitles.Style = []
+    OrientationTitles = 0
+    FontData.Charset = DEFAULT_CHARSET
+    FontData.Color = clWindowText
+    FontData.Height = -11
+    FontData.Name = 'MS Sans Serif'
+    FontData.Style = []
+    FontSummary.Charset = DEFAULT_CHARSET
+    FontSummary.Color = clWindowText
+    FontSummary.Height = -11
+    FontSummary.Name = 'MS Sans Serif'
+    FontSummary.Style = []
+    SummarySelection = ssNone
+    SummaryCalculation = scSUM
+    Left = 632
+    Top = 16
+  end
+end

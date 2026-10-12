@@ -1,0 +1,630 @@
+unit InsurancesFormImpl;
+      //InsPluginMgr
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActiveX, AxCtrls, Insurances_TLB, StdVcl, StdCtrls, ComCtrls, AxLoader, olectrls,
+  ExtCtrls, FlatSpeed, IniFiles, ImgList, MDIChildPanel, CheckLst, SHDocVw, SBPlgAx50_TLB,
+  XFSCtrls;
+
+//create
+//   WM_ModalResult = WM_USER+139;
+
+type
+  TInsurensExcption = class(Exception);
+
+  TFIFOArr = class
+  private
+    arr : array of Integer;
+  public
+    function  getCurrVal:Integer;
+    function  Delete:Integer;
+    function  Add(Val : Integer):Integer;
+    procedure SetArrLength(len : Integer);
+    function  GetArrLength():Integer;
+    function isExist(val : integer):Integer;
+  end;
+
+
+  TInsurancesForm = class(TActiveForm, IInsurancesForm)
+    InsPluginMgr: TFlatSpeed;
+    ImageList1: TImageList;
+    MDIChildPanel1: TMDIChildPanel;
+    ListBox1: TListBox;
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure InsPluginMgrButtonsClick(Sender: TObject);
+    procedure ActiveFormDestroy(Sender: TObject);
+    procedure MDIChildPanel1Close(Sender: TObject);
+
+
+  private
+    { Private declarations }
+    WebBrowser : TWebBrowser;
+    FEvents: IInsurancesFormEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+    function  ReadIniFile( FileName :TFileName ):Boolean;
+//    procedure WMMDIPClose(var Message : TMessage);message WM_MDIPClose;
+//    procedure WMModalResult(var Message:TMessage); message WM_ModalResult;
+    function  ChangeMDIState(MDITag : Integer; State:Integer):Integer;
+//    procedure PutParam(const Name: String; Value: Variant);
+//    procedure ObjectActivate();
+    procedure AppMessage(var Msg: TMsg; var Handled: Boolean);
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+  public
+    { Public declarations }
+    procedure Initialize; override;
+  end;
+
+const
+   cMDIHide  = 0;
+   cMDIShow  = 1;
+   cMDICheck = 3;
+   cMDIFree  = 9; //Linux kill -9 :)
+
+var
+    InsurancesForm: TInsurancesForm;
+    MDIFifo : TFIFOArr;
+    FormCount : Integer;
+    plgURL : String;
+implementation
+
+uses ComObj, ComServ,sboapiDataModuleimpl,SBTranslateProc;
+var
+    FOleObject: TOleControl;
+    MDIForms : array of TMDIChildPanel;
+
+
+{$R *.DFM}
+
+{ TInsurancesForm }
+
+procedure TFIFOArr.SetArrLength(len : Integer);
+begin
+ SetLength(arr, len);
+
+end;
+
+function TFIFOArr.isExist(val : integer):Integer;
+var i : Integer;
+begin
+ Result := -1;
+  if arr <> nil then
+  for i := 0 to GetArrLength-1 do
+     if arr[i] = val then begin
+        Result := 1;
+        break;
+      end;
+end;
+
+function TFIFOArr.Add(Val : Integer):Integer;
+var
+  len : Integer;
+begin
+  if isExist(val) = -1 then begin
+    len := GetArrLength()+1;
+    SetArrLength(Len);
+    arr[Len-1] := Val;
+  end;
+
+  Result := getCurrVal();
+
+end;
+
+function  TFIFOArr.GetArrLength():Integer;
+begin
+ Result := 0;
+ if arr <> nil then
+  Result := Length(arr);
+end;
+
+function  TFIFOArr.getCurrVal:Integer;
+begin
+ Result := 0;
+  if arr <> nil then
+    Result := arr[GetArrLength()-1];
+end;
+
+function TFIFOArr.Delete:Integer;
+begin
+ Result := 0;
+  if arr <> nil then begin
+     SetArrLength(GetArrLength-1);
+    Result := getCurrVal;
+  end;
+end;
+
+procedure TInsurancesForm.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_InsurancesFormPage); }
+end;
+
+procedure TInsurancesForm.AppMessage(var Msg: TMsg; var Handled: Boolean);
+begin
+  case Msg.message of
+//    WM_ModalResult :  Showmessage('Result is:'+intToStr(Msg.wparam));
+    WM_MDIPClose :  ChangeMDIState(Msg.WParam, cMDIHide);
+  end;
+end;
+
+{procedure TInsurancesForm.WMModalResult(var Message:TMessage);
+begin
+  inherited;
+  Showmessage(intToStr(Message.wparam));
+end;
+
+procedure TInsurancesForm.WMMDIPClose(var Message: TMessage);
+begin
+
+  inherited;
+  ChangeMDIState(Message.WParam, cMDIHide);
+end; }
+
+procedure TInsurancesForm.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as IInsurancesFormEvents;
+end;
+
+procedure TInsurancesForm.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TInsurancesForm.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TInsurancesForm.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TInsurancesForm.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TInsurancesForm.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TInsurancesForm.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TInsurancesForm.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TInsurancesForm.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TInsurancesForm.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TInsurancesForm.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TInsurancesForm.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TInsurancesForm.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TInsurancesForm.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TInsurancesForm.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TInsurancesForm.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TInsurancesForm.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TInsurancesForm.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TInsurancesForm.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TInsurancesForm.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TInsurancesForm._Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TInsurancesForm.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TInsurancesForm.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TInsurancesForm.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TInsurancesForm.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TInsurancesForm.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TInsurancesForm.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TInsurancesForm.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TInsurancesForm.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TInsurancesForm.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TInsurancesForm.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TInsurancesForm.Set_AxBorderStyle(
+  Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TInsurancesForm.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TInsurancesForm.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TInsurancesForm.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TInsurancesForm.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TInsurancesForm.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TInsurancesForm.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TInsurancesForm.Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TInsurancesForm.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TInsurancesForm.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TInsurancesForm.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TInsurancesForm.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TInsurancesForm.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TInsurancesForm.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+procedure StringToRaw(S: String; var Raw: TMemoryStream);
+  var
+    P: Integer;
+    Ch: Char;
+  begin
+    while S <> '' do
+    begin
+      P := Pos(' ', S);
+      if P = 0 then
+        P := Length(S)+1;
+      Ch := Chr(StrToInt(Copy(S, 1, P-1)));
+      System.Delete(S, 1, P);
+      Raw.Write(Ch, 1);
+    end;
+  end;
+
+function TInsurancesForm.ReadIniFile( FileName : TFileName ):Boolean;
+var
+   InsIni : TIniFile;
+   ModlCount : Integer;
+   pCaption : String;
+   pCLASSID : TGUID;
+   sCLASSID : String;
+   pImage : TBitmap;
+   sImage : String;
+   rImage : TMemoryStream;
+   tImage : TMemoryStream;
+   i : Integer;
+begin
+  result := false;
+  InsIni := TIniFile.Create(FileName);
+  rImage := TMemoryStream.Create;
+  tImage := TMemoryStream.Create;
+  pImage := TBitmap.Create;
+  with InsIni do
+  try
+    ModlCount := ReadInteger('MODULES', 'ModulesCount', -1);
+    i := 0;
+    while ModlCount >= i  do
+    begin
+      pCaption := ReadString('MODULE'+IntToStr(i), 'Caption', '');
+      if pCaption = '' then pCaption := '<No Caption>';
+      sCLASSID := ReadString('MODULE'+IntToStr(i), 'CLASSID', '');
+      if sCLASSID = '' then pCLASSID := IUnknown
+         else pCLASSID := StringToGUID(sCLASSID);
+      sImage := ReadString('MODULE'+IntToStr(i), 'Image', '');
+     { if sImage = '' then  }ImageList1.GetBitmap(0, pImage);{
+         else begin
+          StringToRaw(sImage, rImage);
+          rImage.SaveToStream(timage);
+        //  rImage.Seek(0, soFromBeginning);
+          pImage.LoadFromStream(tImage);
+         end;}
+      with InsPluginMgr do
+        AddButton(pCaption, pImage, pCLASSID);
+      inc(i);
+    end;
+    //plgURL := ReadString('PARAMS', 'URL', 'about:blank');
+    {with InsPluginMgr do
+    begin
+        AddButton(pCaption, pImage, pCLASSID);
+      inc(i);
+    end;}
+
+
+    Result := true;
+  finally
+    timage.free;
+   pImage.Free;
+   rImage.Free;
+   InsIni.Free;
+  end;
+end;
+
+procedure TInsurancesForm.ActiveFormCreate(Sender: TObject);
+begin
+ InsurancesForm := self;
+ ReadIniFile(ExtractFilePath(Application.ExeName)+ '\Insurence.ini');
+ MDIFifo := TFIFOArr.Create;
+ Application.OnMessage := AppMessage;
+
+  //---Web page
+ {WebBrowser := TWebBrowser.Create(MDIChildPanel1.pClient);
+ WebBrowser.Align := alClient;
+ TWinControl(WebBrowser).parent:= MDIChildPanel1.pClient;
+ WebBrowser.Navigate(plgURL); }
+ //-end
+
+ FormCount := 0;
+ SBTranslateProc.TranslateAllComponents(Self,sboapiDataModule.OrPack_SL);
+
+end;
+
+function TInsurancesForm.ChangeMDIState(MDITag : Integer; State:Integer):Integer;
+var
+  i : Integer;
+begin
+   Result := 0;
+   for i:=0 to length(mdiforms)-1 do
+   if Assigned(MDIForms[i]) then
+     case State of
+      0 : if MDIForms[i].tag = MDITag then MDIForms[i].Visible := False;
+      1 : if MDIForms[i].tag = MDITag then MDIForms[i].Visible := True;
+      3 : if MDIForms[i].tag = MDITag then begin
+               MDIForms[i].visible := true;
+               result := 1 ;
+          end else MDIForms[i].visible := false;
+      9 : MDIForms[i].Free;
+     end;
+end;
+
+
+procedure TInsurancesForm.InsPluginMgrButtonsClick(Sender: TObject);
+var
+  SenderTag : Integer;
+  BtnIdx : Integer;
+  a:string;
+begin
+a:='{1478-987}'
+  SenderTag := (Sender as TFlatSpeed).tag;
+  BtnIdx :=  (Sender as TFlatSpeed).getIdBytag(SenderTag);
+
+  MDIFifo.Add(SenderTag);
+
+  
+  if ChangeMDIState(SenderTag, cMDICheck)=1 then exit;
+
+  SetLength(MDIForms, FormCount+1);
+  MDIForms[FormCount] := TMDIChildPanel.Create(Self);
+  with MDIForms[FormCount] do
+  begin
+    Parent := Self;
+    Align := alClient;
+    OnClose := MDIChildPanel1Close;
+    Tag :=  SenderTag;
+  end;
+       //showmessage(Class_InsurancesForm);
+       //showmessage(inttostr(MDIForms[FormCount]));
+       showmessage(guidtostring((Sender as TFlatSpeed).buts[BtnIdx].PluginGuid));
+        if a<>'' then
+        begin
+
+  FOleObject := TActiveFormX.CreateObject(MDIForms[FormCount],
+                                       (Sender as TFlatSpeed).buts[BtnIdx].PluginGuid,
+                                       IUnknown);
+  with FOleObject do
+  begin
+    Tag := SenderTag;
+    Parent := MDIForms[FormCount].pClient;
+    Align := alClient;
+  end;
+  inc(FormCount,1);
+        end;
+end;
+
+procedure TInsurancesForm.ActiveFormDestroy(Sender: TObject);
+begin
+   ChangeMDIState(cMDIFree, cMDIFree);   
+end;
+
+procedure TInsurancesForm.MDIChildPanel1Close(Sender: TObject);
+begin
+  if (Sender as TMDIChildPanel).tag <> 29 then
+  begin (Sender as TMDIChildPanel).Visible := False;
+   ChangeMDIState( MDIFifo.Delete, cMDIShow );
+  end;
+end;
+
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TInsurancesForm,
+    Class_InsurancesForm,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+
+
+
+end.

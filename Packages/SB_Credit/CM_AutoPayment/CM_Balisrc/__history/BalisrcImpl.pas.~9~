@@ -1,0 +1,195 @@
+﻿unit BaliSrcImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, NLSDialogs,
+  StdCtrls, ExtCtrls, Buttons, Db, OracleData;
+
+type
+  TBali = class(TForm)
+    Panel2: TPanel;
+    Edit1: TEdit;
+    SpeedButton1: TSpeedButton;
+    OracleDataSet1: TOracleDataSet;
+    OracleDataSet1ROWNUM: TFloatField;
+    OracleDataSet1NUMBEROFCREDIT: TWideStringField;
+    OracleDataSet1BOOROWERID: TWideStringField;
+    OracleDataSet1NAME: TWideStringField;
+    OracleDataSet1VAL_NAME: TWideStringField;
+    DataSource1: TDataSource;
+    OracleDataSet1CREDITLINEAMOUNT: TFloatField;
+    OracleDataSet2: TOracleDataSet;
+    DataSource2: TDataSource;
+    OracleDataSet2ROWNUM: TFloatField;
+    OracleDataSet2NUMBEROFCREDIT: TWideStringField;
+    OracleDataSet2VAL_NAME: TWideStringField;
+    OracleDataSet2CREDITLINEAMOUNT: TFloatField;
+    OracleDataSet2DATEOFCONCLUSION: TDateTimeField;
+    OracleDataSet2DUEDATEFIRSTCONTRACT: TDateTimeField;
+    OracleDataSet2PHONENUMBER: TWideStringField;
+    OracleDataSet2SALARY: TWideStringField;
+    OracleDataSet1ID: TFloatField;
+    OracleDataSet2ID: TFloatField;
+    OracleDataSet1D: TWideStringField;
+    DataSource3: TDataSource;
+    OracleDataSet3: TOracleDataSet;
+    SpeedButton2: TSpeedButton;
+    OracleDataSet3ROWNUM: TFloatField;
+    OracleDataSet3ID: TFloatField;
+    OracleDataSet3NUMBEROFCREDIT: TWideStringField;
+    OracleDataSet3BOOROWERID: TWideStringField;
+    OracleDataSet3NAME: TWideStringField;
+    OracleDataSet3VAL_NAME: TWideStringField;
+    OracleDataSet3GUARANTORSALARY: TWideStringField;
+    OracleDataSet3GUARANTORNAME: TWideStringField;
+    OracleDataSet3CREDITLINEAMOUNT: TFloatField;
+    OracleDataSet3DATEOFCONCLUSION: TDateTimeField;
+    OracleDataSet3DUEDATEFIRSTCONTRACT: TDateTimeField;
+    OracleDataSet3PHONENUMBER: TWideStringField;
+    OracleDataSet3SALARY: TWideStringField;
+    OracleDataSet3ZAMINWORK1: TWideStringField;
+    OracleDataSet3ZAMINTEL1: TWideStringField;
+    ComboBox1: TComboBox;
+    Label1: TLabel;
+    Label2: TLabel;
+    Edit2: TEdit;
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure Edit2Exit(Sender: TObject);
+    procedure Edit1Exit(Sender: TObject);
+    procedure SpeedButton2Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Bali: TBali;
+
+implementation
+
+{$R *.DFM}
+
+uses sboapiDataModuleImpl,CommonDecls,sbsystem, FrmBaliImpl;
+
+procedure InitPlugin(s:string);export;
+begin
+   Bali.ShowModal;
+end;
+exports
+     InitPlugin;
+
+
+procedure TBali.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+  if ord(Key) = VK_ESCAPE then Close;
+end;
+
+procedure TBali.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+Resize:=false;
+end;
+
+procedure TBali.SpeedButton1Click(Sender: TObject);
+var
+cust,all:string;
+begin
+if Edit1.text='' then    showmessage('Axtarılmalı olanı daxil edin !');
+
+  cust:='';
+if ComboBox1.ItemIndex=0 then
+begin
+
+  Edit2.Text:=Edit1.Text;
+ with Edit2 do
+      begin
+          Text := StringReplace(Text, 'i', '`', [rfReplaceAll]);
+          Text := StringReplace(Text, 'I', '`', [rfReplaceAll]);
+          Text := StringReplace(Text, 'İ', '`', [rfReplaceAll]);
+          Text := StringReplace(Text, 'I', '`', [rfReplaceAll]);
+          Text := StringReplace(Text, 'ı', '`', [rfReplaceAll]);
+      end;
+     cust:='and lower( translate(b.name,'+'''IiİiIı'''+','+'''``````'''+')) like ' +'lower(''%'+ Edit2.text+'%'')';
+     ShowMessage(cust);
+     //translate(a.name, 'IiİiIı', '``````')
+     Edit2.text:=cust;
+end;
+if ComboBox1.ItemIndex=1 then
+       cust:=' and lower(b.boorowerid)='+'lower('''+ Edit1.text+''')';
+
+
+if ComboBox1.ItemIndex=2 then
+       cust:=' and lower(b.pincode)='+'lower('''+ Edit1.text+''')';
+//    ShowMessage(CUST);
+ with OracleDataSet1 do
+   begin
+   closeall ;
+   sql[6]:= cust;
+   open;
+   end;
+   OracleDataSet2.open ;
+ with OracleDataSet3 do
+   begin
+   closeall ;
+   sql[2]:= cust;
+   open;
+   end;
+
+ if OracleDataSet1.RecordCount>0 then
+  begin
+    FrmBali.GroupBox1.visible:=true;
+    FrmBali.GroupBox2.visible:=true;
+  end;
+ // FrmBali.ShowModal;
+ // end
+ //else showmessage('Бел бир мцштяри йохдур');
+
+if OracleDataSet1.RecordCount+OracleDataSet3.RecordCount=0 then
+  showmessage('Bele bir müştəri vəya zamin yoxdur') else
+  FrmBali.ShowModal;
+end;
+procedure TBali.Edit2Exit(Sender: TObject);
+begin
+   (Sender as TEdit).Text := '';
+end;
+
+procedure TBali.Edit1Exit(Sender: TObject);
+begin
+(Sender as TEdit).Text := '';
+end;
+
+procedure TBali.SpeedButton2Click(Sender: TObject);
+begin
+
+close
+end;
+
+procedure TBali.FormCreate(Sender: TObject);
+begin
+    FrmBali := TFrmBali.Create(Self);
+end;
+
+procedure TBali.FormDestroy(Sender: TObject);
+begin
+OracleDataSet1.close;
+OracleDataSet2.close;
+OracleDataSet3.close;
+end;
+
+procedure TBali.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+edit1.clear;
+
+end;
+
+initialization
+   Bali := TBali.Create(CommonApplication);
+end.

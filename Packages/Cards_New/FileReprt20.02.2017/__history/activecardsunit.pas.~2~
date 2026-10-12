@@ -1,0 +1,95 @@
+unit activecardsunit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, CMExcelExport, DB, OracleData, Grids, DBGrids, StdCtrls, ComCtrls,
+  ToolWin, ExtCtrls, ImgList;
+
+type
+  TForm1 = class(TForm)
+    ImageList1: TImageList;
+    Panel3: TPanel;
+    CoolBar1: TCoolBar;
+    ToolBar1: TToolBar;
+    ToolButton1: TToolButton;
+    ToolButton10: TToolButton;
+    ToolButton11: TToolButton;
+    ToolButton20: TToolButton;
+    ToolButton14: TToolButton;
+    ToolButton15: TToolButton;
+    ToolButton17: TToolButton;
+    ToolButton3: TToolButton;
+    ToolButton6: TToolButton;
+    ToolButton2: TToolButton;
+    ToolButton4: TToolButton;
+    ToolButton5: TToolButton;
+    ToolButton7: TToolButton;
+    RadioButton1: TRadioButton;
+    RadioButton2: TRadioButton;
+    Panel1: TPanel;
+    Panel2: TPanel;
+    GroupBox1: TGroupBox;
+    Label1: TLabel;
+    Label2: TLabel;
+    DateTimePicker1: TDateTimePicker;
+    DateTimePicker2: TDateTimePicker;
+    CheckBox1: TCheckBox;
+    CheckBox2: TCheckBox;
+    DBGrid1: TDBGrid;
+    OracleDataSet1: TOracleDataSet;
+    DataSource1: TDataSource;
+    CMExcelExport1: TCMExcelExport;
+    procedure ToolButton1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form1: TForm1;
+
+implementation
+
+{$R *.dfm}
+
+procedure TForm1.ToolButton1Click(Sender: TObject);
+begin
+if (CheckBox1.Checked) and  (CheckBox2.Checked)   then
+begin
+ OracleDataSet1.close;
+ OracleDataSet1.SQL[4]:=' ';
+ OracleDataSet1.SQL[4]:='where expiry between '+''''+Formatdatetime('dd-mmm-yyyy',datetimepicker1.datetime)+''''+' and '+''''+FormatDateTime('dd-mmm-yyyy',datetimepicker2.datetime)+'''';
+ // ShowMessage('where expiry between '+''''+datetostr(datetimepicker1.datetime)+''''+' and '+''''+datetostr(datetimepicker2.datetime)+'''');
+ OracleDataSet1.open;
+ end
+    else
+
+if CheckBox1.Checked then
+begin
+ OracleDataSet1.close;
+ OracleDataSet1.SQL[4]:=' ';
+ OracleDataSet1.SQL[4]:='where expiry >= '+''''+Formatdatetime('dd-mmm-yyyy',datetimepicker1.datetime)+'''';
+ OracleDataSet1.open;
+
+end
+   else
+if  CheckBox2.Checked  then
+begin
+  OracleDataSet1.close;
+ OracleDataSet1.SQL[4]:=' ';
+ OracleDataSet1.SQL[4]:='where expiry <= '+''''+Formatdatetime('dd-mmm-yyyy',datetimepicker2.datetime)+'''';
+ OracleDataSet1.open;
+end
+else
+
+begin
+ ShowMessage('tarixlerin en azi biri secilmelidir!');
+end;
+
+end;
+
+
+end.

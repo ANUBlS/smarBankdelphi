@@ -1,0 +1,1618 @@
+object DModule: TDModule
+  OldCreateOrder = False
+  OnCreate = DataModuleCreate
+  OnDestroy = DataModuleDestroy
+  Height = 602
+  Width = 745
+  object ODSAgent: TOracleDataSet
+    SQL.Strings = (
+      
+        'select a.rowid, a.id, a.name, a.Surname, a.fathername from ins_A' +
+        'gents a'
+      'order by a.surname')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000400000004000000490044000100000000000E000000530055005200
+      4E0041004D004500010000000000140000004600410054004800450052004E00
+      41004D004500010000000000080000004E0041004D004500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 20
+    Top = 64
+    object ODSAgentID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object ODSAgentNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 128
+    end
+    object ODSAgentSURNAME: TWideStringField
+      FieldName = 'SURNAME'
+      Size = 128
+    end
+    object ODSAgentFATHERNAME: TWideStringField
+      FieldName = 'FATHERNAME'
+      Size = 128
+    end
+  end
+  object AgentSource: TDataSource
+    DataSet = ODSAgent
+    Left = 20
+    Top = 8
+  end
+  object DSContracts: TDataSource
+    DataSet = ODSContracts
+    Left = 112
+    Top = 5
+  end
+  object ODSContracts: TOracleDataSet
+    SQL.Strings = (
+      'select ic.rowid,ic.* from ins_contracts ic'
+      'where ic.id = :cid'
+      '')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000080000003A00430049004400040000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000002200000004000000490044000100000000000E000000540059005000
+      45005F00490044000100000000001000000049004E0053005F00440041005400
+      45000100000000001400000042004500470049004E005F004400410054004500
+      0100000000001000000045004E0044005F004400410054004500010000000000
+      12000000560041004C005500540045005F00490044000100000000000E000000
+      41004D004D004F0055004E0054000100000000001800000043004C004F005300
+      45005F005000520045004600490058000100000000000C0000004B004C004900
+      5F0049004400010000000000140000004C004F0041004E004100430043005F00
+      490044000100000000001400000043005500520052004100430043005F004900
+      44000100000000001400000050004F004C004900430059005F004E0055004D00
+      0100000000000E00000049004E005300530055004D004D000100000000001000
+      00004600520041004E005300480049005A000100000000000C00000054004100
+      52004900460046000100000000000A0000005300540041005400450001000000
+      0000100000004100470045004E0054005F004900440001000000000008000000
+      50004E0055004D000100000000000C000000420045004E005F00490044000100
+      0000000016000000420045004E00450046004900430049004100520059000100
+      000000001400000043004F004E0044004900540049004F004E00530001000000
+      00000C0000005300550047004E0055004D000100000000001000000042004C00
+      41004E004B005F00490044000100000000000A0000004F0050005F0049004400
+      0100000000000A0000005200450049004E0053000100000000000E0000004300
+      48004B00410053004B004F0001000000000006000000430048004D0001000000
+      00000800000043004800460051000100000000001600000043004F004D004D00
+      490054004F0050005F00490044000100000000001600000043004F004D004D00
+      490054005F00440041005400450001000000000014000000430041004E004300
+      45004C004F0050004900440001000000000014000000430041004E0043004500
+      4C0044004100540045000100000000000C000000460049004C00490041004C00
+      0100000000001000000042004E0046005F005400590050004500010000000000}
+    Session = sboapiDataModule.SBSession
+    AfterInsert = ODSContractsAfterInsert
+    Left = 104
+    Top = 64
+    object ODSContractsID: TFloatField
+      FieldName = 'ID'
+    end
+    object ODSContractsTYPE_ID: TFloatField
+      FieldName = 'TYPE_ID'
+    end
+    object ODSContractsINS_DATE: TDateTimeField
+      FieldName = 'INS_DATE'
+    end
+    object ODSContractsBEGIN_DATE: TDateTimeField
+      FieldName = 'BEGIN_DATE'
+    end
+    object ODSContractsEND_DATE: TDateTimeField
+      FieldName = 'END_DATE'
+    end
+    object ODSContractsVALUTE_ID: TFloatField
+      FieldName = 'VALUTE_ID'
+    end
+    object ODSContractsAMMOUNT: TFloatField
+      FieldName = 'AMMOUNT'
+      currency = True
+    end
+    object ODSContractsCLOSE_PREFIX: TIntegerField
+      FieldName = 'CLOSE_PREFIX'
+    end
+    object ODSContractsKLI_ID: TFloatField
+      FieldName = 'KLI_ID'
+    end
+    object ODSContractsLOANACC_ID: TFloatField
+      FieldName = 'LOANACC_ID'
+    end
+    object ODSContractsCURRACC_ID: TFloatField
+      FieldName = 'CURRACC_ID'
+    end
+    object ODSContractsPOLICY_NUM: TWideStringField
+      FieldName = 'POLICY_NUM'
+      Size = 128
+    end
+    object ODSContractsINSSUMM: TFloatField
+      FieldName = 'INSSUMM'
+    end
+    object ODSContractsFRANSHIZ: TFloatField
+      FieldName = 'FRANSHIZ'
+    end
+    object ODSContractsTARIFF: TFloatField
+      FieldName = 'TARIFF'
+    end
+    object ODSContractsSTATE: TIntegerField
+      FieldName = 'STATE'
+    end
+    object ODSContractsAGENT_ID: TFloatField
+      FieldName = 'AGENT_ID'
+    end
+    object ODSContractsPNUM: TFloatField
+      FieldName = 'PNUM'
+    end
+    object ODSContractsBEN_ID: TFloatField
+      FieldName = 'BEN_ID'
+    end
+    object ODSContractsBENEFICIARY: TWideStringField
+      FieldName = 'BENEFICIARY'
+      Size = 1024
+    end
+    object ODSContractsCONDITIONS: TWideStringField
+      FieldName = 'CONDITIONS'
+      Visible = False
+      Size = 4000
+    end
+    object ODSContractsSUGNUM: TWideStringField
+      FieldName = 'SUGNUM'
+      Visible = False
+      Size = 128
+    end
+    object ODSContractsBLANK_ID: TFloatField
+      FieldName = 'BLANK_ID'
+      Visible = False
+    end
+    object ODSContractsOP_ID: TFloatField
+      FieldName = 'OP_ID'
+      Visible = False
+    end
+    object ODSContractsREINS: TFloatField
+      FieldName = 'REINS'
+      Visible = False
+    end
+    object ODSContractsCHKASKO: TFloatField
+      FieldName = 'CHKASKO'
+      Visible = False
+    end
+    object ODSContractsCHM: TFloatField
+      FieldName = 'CHM'
+      Visible = False
+    end
+    object ODSContractsCHFQ: TFloatField
+      FieldName = 'CHFQ'
+      Visible = False
+    end
+    object ODSContractsCOMMITOP_ID: TFloatField
+      FieldName = 'COMMITOP_ID'
+      Visible = False
+    end
+    object ODSContractsCOMMIT_DATE: TDateTimeField
+      FieldName = 'COMMIT_DATE'
+      Visible = False
+    end
+    object ODSContractsCANCELOPID: TFloatField
+      FieldName = 'CANCELOPID'
+      Visible = False
+    end
+    object ODSContractsCANCELDATE: TDateTimeField
+      FieldName = 'CANCELDATE'
+      Visible = False
+    end
+    object ODSContractsFILIAL: TFloatField
+      FieldName = 'FILIAL'
+      Visible = False
+    end
+    object ODSContractsBNF_TYPE: TFloatField
+      FieldName = 'BNF_TYPE'
+    end
+  end
+  object ODSCProperty: TOracleDataSet
+    SQL.Strings = (
+      
+        'select icp.rowid,icp.* from ins_commercialproperty icp where icp' +
+        '.cid=:cid')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000080000003A00430049004400040000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000003C00000004000000490044000100000000001E000000460055004C00
+      4C004400450053004300520049005000540049004F004E000100000000001600
+      00004C004F0043004100540049004F004E004F0042004A000100000000001E00
+      00005900450041005200530049004E0042005500530049004E00450053005300
+      0100000000001A0000004200550049004C00440049004E004700550053004100
+      470045000100000000001200000043004F004E00530054005900450041005200
+      0100000000001200000046004C004F004F00520053004E0055004D0001000000
+      00000C000000570041004C004C0053004D000100000000001200000043004500
+      49004C0049004E00470053004D000100000000000A00000052004F004F004600
+      4D000100000000000800000041005200450041000100000000001C0000004100
+      500050004C004900430041004E00540053005000410043004500010000000000
+      22000000450041005200540048005100550041004B0045004400450054004100
+      49004C0053000100000000001000000046004C0041004D00410042004C004500
+      0100000000002400000053005500520052004F0049004E00440049004E004700
+      440045005400410049004C005300010000000000100000005300490054005500
+      45005400450044000100000000000A0000004700550041005200440001000000
+      00000A00000041004C00410052004D000100000000000A0000004C004F004300
+      4B0053000100000000001A000000530045004300550052004900540059004C00
+      4F0043004B005300010000000000080000004200410052005300010000000000
+      0A0000004F005400480045005200010000000000100000005300450054005400
+      49004E00470053000100000000000C0000005200450050004100490052000100
+      000000000C0000004800450041005400450044000100000000000C0000005200
+      490053004B00490044000100000000000C00000041004E004E00550041004C00
+      0100000000000A00000057004100470045005300010000000000080000005200
+      45004E0054000100000000001000000045004D0050004C004F00590045005300
+      0100000000001000000045005800500049005200490054005900010000000000
+      160000004C004F005300530048004900530054004F0052005900010000000000
+      0E000000520045004E004500570041004C000100000000001400000054004800
+      49005200440050004100520054005900010000000000100000004F0054004800
+      4500520049004E0046000100000000001400000049004E00440045004D004900
+      4E0049005400590001000000000012000000560041004C005500450054005900
+      50004500010000000000120000004200550049004C00440049004E0047005300
+      0100000000000E00000043004F004E00540045004E0054000100000000001200
+      0000450051005500490050004D0045004E0054000100000000000A0000004700
+      4C00410053005300010000000000080000004300410053004800010000000000
+      12000000570041005200450048004F005500530045000100000000000A000000
+      530054004F0043004B0001000000000010000000500052004F00440055004300
+      540053000100000000001C00000057004F0052004B0049004E00500052004F00
+      47005200450053005300010000000000180000005200410057004D0041005400
+      45005200490041004C0053000100000000001800000043004C004F0053004500
+      5F005000520045004600490058000100000000000C0000005400590050004500
+      4900440001000000000010000000500052004F00460049005400490044000100
+      000000000E0000004100470045004E0054004900440001000000000006000000
+      430049004400010000000000100000004600520041004E005300480049005A00
+      0100000000000E00000049004E005300530055004D004D000100000000000E00
+      000041004D004D004F0055004E005400010000000000100000004D004F004E00
+      540048005F00490044000100000000000800000043004F005300540001000000
+      00000E000000420041004E004B005F00490044000100000000000C0000005400
+      410052004900460046000100000000001600000049004E005300550052004500
+      44005F004F0042004A00010000000000}
+    Session = sboapiDataModule.SBSession
+    AfterInsert = ODSCPropertyAfterInsert
+    Left = 196
+    Top = 64
+    object ODSCPropertyID: TFloatField
+      FieldName = 'ID'
+    end
+    object ODSCPropertyFULLDESCRIPTION: TWideStringField
+      FieldName = 'FULLDESCRIPTION'
+      Size = 1024
+    end
+    object ODSCPropertyLOCATIONOBJ: TWideStringField
+      FieldName = 'LOCATIONOBJ'
+      Size = 1024
+    end
+    object ODSCPropertyYEARSINBUSINESS: TWideStringField
+      FieldName = 'YEARSINBUSINESS'
+      Size = 32
+    end
+    object ODSCPropertyBUILDINGUSAGE: TWideStringField
+      FieldName = 'BUILDINGUSAGE'
+      Size = 128
+    end
+    object ODSCPropertyCONSTYEAR: TDateTimeField
+      FieldName = 'CONSTYEAR'
+    end
+    object ODSCPropertyFLOORSNUM: TIntegerField
+      FieldName = 'FLOORSNUM'
+    end
+    object ODSCPropertyWALLSM: TWideStringField
+      FieldName = 'WALLSM'
+      Size = 128
+    end
+    object ODSCPropertyCEILINGSM: TWideStringField
+      FieldName = 'CEILINGSM'
+      Size = 128
+    end
+    object ODSCPropertyROOFM: TWideStringField
+      FieldName = 'ROOFM'
+      Size = 128
+    end
+    object ODSCPropertyAREA: TFloatField
+      FieldName = 'AREA'
+    end
+    object ODSCPropertyAPPLICANTSPACE: TFloatField
+      FieldName = 'APPLICANTSPACE'
+    end
+    object ODSCPropertyEARTHQUAKEDETAILS: TWideStringField
+      FieldName = 'EARTHQUAKEDETAILS'
+      Size = 128
+    end
+    object ODSCPropertyFLAMABLE: TWideStringField
+      FieldName = 'FLAMABLE'
+      Size = 1024
+    end
+    object ODSCPropertySURROINDINGDETAILS: TWideStringField
+      FieldName = 'SURROINDINGDETAILS'
+      Size = 1024
+    end
+    object ODSCPropertySITUETED: TWideStringField
+      FieldName = 'SITUETED'
+      Size = 32
+    end
+    object ODSCPropertyGUARD: TWideStringField
+      FieldName = 'GUARD'
+      Size = 32
+    end
+    object ODSCPropertyALARM: TWideStringField
+      FieldName = 'ALARM'
+      Size = 32
+    end
+    object ODSCPropertyLOCKS: TWideStringField
+      FieldName = 'LOCKS'
+      Size = 32
+    end
+    object ODSCPropertySECURITYLOCKS: TWideStringField
+      FieldName = 'SECURITYLOCKS'
+      Size = 32
+    end
+    object ODSCPropertyBARS: TWideStringField
+      FieldName = 'BARS'
+      Size = 32
+    end
+    object ODSCPropertyOTHER: TWideStringField
+      FieldName = 'OTHER'
+      Size = 128
+    end
+    object ODSCPropertySETTINGS: TWideStringField
+      FieldName = 'SETTINGS'
+      Size = 1024
+    end
+    object ODSCPropertyREPAIR: TWideStringField
+      FieldName = 'REPAIR'
+      Size = 1024
+    end
+    object ODSCPropertyHEATED: TWideStringField
+      FieldName = 'HEATED'
+      Size = 128
+    end
+    object ODSCPropertyRISKID: TFloatField
+      FieldName = 'RISKID'
+    end
+    object ODSCPropertyANNUAL: TFloatField
+      FieldName = 'ANNUAL'
+    end
+    object ODSCPropertyWAGES: TFloatField
+      FieldName = 'WAGES'
+    end
+    object ODSCPropertyRENT: TFloatField
+      FieldName = 'RENT'
+    end
+    object ODSCPropertyEMPLOYES: TFloatField
+      FieldName = 'EMPLOYES'
+    end
+    object ODSCPropertyEXPIRITY: TDateTimeField
+      FieldName = 'EXPIRITY'
+    end
+    object ODSCPropertyLOSSHISTORY: TWideStringField
+      FieldName = 'LOSSHISTORY'
+      Size = 1024
+    end
+    object ODSCPropertyRENEWAL: TWideStringField
+      FieldName = 'RENEWAL'
+      Size = 1024
+    end
+    object ODSCPropertyTHIRDPARTY: TWideStringField
+      FieldName = 'THIRDPARTY'
+      Size = 32
+    end
+    object ODSCPropertyOTHERINF: TWideStringField
+      FieldName = 'OTHERINF'
+      Size = 32
+    end
+    object ODSCPropertyINDEMINITY: TWideStringField
+      FieldName = 'INDEMINITY'
+      Size = 10
+    end
+    object ODSCPropertyVALUETYPE: TWideStringField
+      FieldName = 'VALUETYPE'
+      Size = 128
+    end
+    object ODSCPropertyBUILDINGS: TFloatField
+      FieldName = 'BUILDINGS'
+    end
+    object ODSCPropertyCONTENT: TFloatField
+      FieldName = 'CONTENT'
+    end
+    object ODSCPropertyEQUIPMENT: TFloatField
+      FieldName = 'EQUIPMENT'
+    end
+    object ODSCPropertyGLASS: TFloatField
+      FieldName = 'GLASS'
+    end
+    object ODSCPropertyCASH: TFloatField
+      FieldName = 'CASH'
+    end
+    object ODSCPropertyWAREHOUSE: TFloatField
+      FieldName = 'WAREHOUSE'
+    end
+    object ODSCPropertySTOCK: TFloatField
+      FieldName = 'STOCK'
+    end
+    object ODSCPropertyPRODUCTS: TFloatField
+      FieldName = 'PRODUCTS'
+    end
+    object ODSCPropertyWORKINPROGRESS: TFloatField
+      FieldName = 'WORKINPROGRESS'
+    end
+    object ODSCPropertyRAWMATERIALS: TFloatField
+      FieldName = 'RAWMATERIALS'
+    end
+    object ODSCPropertyCLOSE_PREFIX: TIntegerField
+      FieldName = 'CLOSE_PREFIX'
+    end
+    object ODSCPropertyTYPEID: TIntegerField
+      FieldName = 'TYPEID'
+    end
+    object ODSCPropertyPROFITID: TFloatField
+      FieldName = 'PROFITID'
+    end
+    object ODSCPropertyAGENTID: TFloatField
+      FieldName = 'AGENTID'
+    end
+    object ODSCPropertyCID: TFloatField
+      FieldName = 'CID'
+    end
+    object ODSCPropertyFRANSHIZ: TFloatField
+      FieldName = 'FRANSHIZ'
+    end
+    object ODSCPropertyINSSUMM: TFloatField
+      FieldName = 'INSSUMM'
+    end
+    object ODSCPropertyAMMOUNT: TFloatField
+      FieldName = 'AMMOUNT'
+    end
+    object ODSCPropertyMONTH_ID: TFloatField
+      FieldName = 'MONTH_ID'
+    end
+    object ODSCPropertyCOST: TFloatField
+      FieldName = 'COST'
+    end
+    object ODSCPropertyBANK_ID: TFloatField
+      FieldName = 'BANK_ID'
+    end
+    object ODSCPropertyTARIFF: TFloatField
+      FieldName = 'TARIFF'
+    end
+    object ODSCPropertyINSURED_OBJ: TWideStringField
+      FieldName = 'INSURED_OBJ'
+      Size = 32
+    end
+  end
+  object CPropertySource: TDataSource
+    DataSet = ODSCProperty
+    Left = 196
+    Top = 8
+  end
+  object CustomersSource: TDataSource
+    DataSet = ODSCustomers
+    Left = 223
+    Top = 128
+  end
+  object ODSCustomers: TOracleDataSet
+    SQL.Strings = (
+      
+        'select * from (SELECT a.id,a.insured_typeid, trim(a.surname || '#39 +
+        '  '#39' ||a.name) name, a.ADDRESS,a.mobilephone,'
+      'a.fax,a.contactperson,a.contactpersonphone'
+      '  FROM ins_customers a where a.close_prefix=0'
+      '  order by a.surname'
+      ''
+      ')')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000080000000400000049004400010000000000080000004E0041004D00
+      45000100000000000E0000004100440044005200450053005300010000000000
+      1C00000049004E00530055005200450044005F00540059005000450049004400
+      010000000000160000004D004F00420049004C004500500048004F004E004500
+      010000000000060000004600410058000100000000001A00000043004F004E00
+      540041004300540050004500520053004F004E00010000000000240000004300
+      4F004E00540041004300540050004500520053004F004E00500048004F004E00
+      4500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 207
+    Top = 184
+    object ODSCustomersID: TIntegerField
+      FieldName = 'ID'
+      Required = True
+    end
+    object ODSCustomersNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 386
+    end
+    object ODSCustomersADDRESS: TWideStringField
+      FieldName = 'ADDRESS'
+      Size = 1024
+    end
+    object ODSCustomersCONTACTPERSON: TWideStringField
+      FieldName = 'CONTACTPERSON'
+      Size = 256
+    end
+    object ODSCustomersCONTACTPERSONPHONE: TWideStringField
+      FieldName = 'CONTACTPERSONPHONE'
+      Size = 32
+    end
+  end
+  object BeneficiarySource: TDataSource
+    DataSet = ODSBeneficiary
+    Left = 295
+    Top = 8
+  end
+  object ODSBeneficiary: TOracleDataSet
+    SQL.Strings = (
+      'select ib.rowid,ib.* from ins_beneficiary ib')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000050000000400000049004400010000000000080000004E0041004D00
+      45000100000000000E0000004100440044005200450053005300010000000000
+      0A000000500048004F004E0045000100000000001E000000420041004E004B00
+      49004E0047005F00440045005400410049004C005300010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 287
+    Top = 64
+    object ODSBeneficiaryID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object ODSBeneficiaryNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 128
+    end
+    object ODSBeneficiaryADDRESS: TWideStringField
+      FieldName = 'ADDRESS'
+      Size = 128
+    end
+    object ODSBeneficiaryPHONE: TWideStringField
+      FieldName = 'PHONE'
+      Size = 64
+    end
+    object ODSBeneficiaryBANKING_DETAILS: TWideStringField
+      FieldName = 'BANKING_DETAILS'
+      Size = 128
+    end
+  end
+  object RiskSource: TDataSource
+    DataSet = ODSRisks
+    Left = 28
+    Top = 120
+  end
+  object ODSRisks: TOracleDataSet
+    SQL.Strings = (
+      'select idr.rowid, idr.* from ins_dict_risks idr')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000400000049004400010000000000080000004E0041004D00
+      4500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 28
+    Top = 176
+    object ODSRisksID: TFloatField
+      FieldName = 'ID'
+    end
+    object ODSRisksNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 1024
+    end
+  end
+  object RiskTypeData: TDataSource
+    DataSet = ODSRiskType
+    Left = 124
+    Top = 124
+  end
+  object ODSRiskType: TOracleDataSet
+    SQL.Strings = (
+      'select * from ins_dict_risk_types')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000400000049004400010000000000080000004E0041004D00
+      4500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 116
+    Top = 180
+    object ODSRiskTypeID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object ODSRiskTypeNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 256
+    end
+  end
+  object OPCOMMON: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'INS_COMMON'
+    Left = 394
+    Top = 10
+  end
+  object DSSex: TDataSource
+    DataSet = ODSSex
+    Left = 298
+    Top = 308
+  end
+  object ODSSex: TOracleDataSet
+    SQL.Strings = (
+      'select 1 as id , '#39'Ki'#351'i'#39' as name from dual'
+      'union all'
+      'select 0 as id , '#39'Qad'#305'n'#39' as name from dual')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000400000049004400010000000000080000004E0041004D00
+      4500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 298
+    Top = 252
+    object ODSSexID: TFloatField
+      FieldName = 'ID'
+    end
+    object ODSSexNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 5
+    end
+  end
+  object ODSAvalute: TOracleDataSet
+    SQL.Strings = (
+      'select valute, val_name, valu_name, valu_short from avalute'
+      'order by valute')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000040000000C000000560041004C005500540045000100000000001000
+      0000560041004C005F004E0041004D0045000100000000001200000056004100
+      4C0055005F004E0041004D00450001000000000014000000560041004C005500
+      5F00530048004F0052005400010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 312
+    Top = 192
+    object ODSAvaluteVALUTE: TIntegerField
+      FieldName = 'VALUTE'
+      Required = True
+    end
+    object ODSAvaluteVAL_NAME: TWideStringField
+      FieldName = 'VAL_NAME'
+      Size = 10
+    end
+    object ODSAvaluteVALU_NAME: TWideStringField
+      FieldName = 'VALU_NAME'
+      Size = 25
+    end
+    object ODSAvaluteVALU_SHORT: TWideStringField
+      FieldName = 'VALU_SHORT'
+      Size = 10
+    end
+  end
+  object DSAvalute: TDataSource
+    DataSet = ODSAvalute
+    Left = 312
+    Top = 125
+  end
+  object ODSBanks: TOracleDataSet
+    SQL.Strings = (
+      'select * from bankm'
+      'where id in (select BANK_ID from ins_bank_setting)'
+      'order by name')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000080000000400000049004400010000000000080000004E0041004D00
+      4500010000000000080000004B0052004E004F00010000000000060000004900
+      4E004E000100000000000A000000530057004900460054000100000000001000
+      0000420041004E004B0043004F00440045000100000000000E00000053005500
+      42004B0052004E004F0001000000000010000000420041004E004B005F004B00
+      4F004400010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 203
+    Top = 242
+    object ODSBanksID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object ODSBanksNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 255
+    end
+  end
+  object DSBanks: TDataSource
+    DataSet = ODSBanks
+    Left = 203
+    Top = 298
+  end
+  object ODSReliaseDates: TOracleDataSet
+    SQL.Strings = (
+      'select * from ins_release_date'
+      'where to_number(to_char(begindate, '#39'YYYY'#39')) <= :releaseyear'
+      'and to_number(to_char(enddate, '#39'YYYY'#39')) >= :releaseyear'
+      'and state_id in (select its.id from ins_tarif_states its'
+      '                  where its.state_id = :state )')
+    Optimize = False
+    Variables.Data = {
+      0400000002000000180000003A00520045004C00450041005300450059004500
+      410052000300000000000000000000000C0000003A0053005400410054004500
+      030000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      0500000004000000040000004900440001000000000012000000420045004700
+      49004E0044004100540045000100000000000E00000045004E00440044004100
+      5400450001000000000010000000530054004100540045005F00490044000100
+      00000000}
+    Session = sboapiDataModule.SBSession
+    Left = 35
+    Top = 237
+    object ODSReliaseDatesID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object ODSReliaseDatesBEGINDATE: TDateTimeField
+      FieldName = 'BEGINDATE'
+    end
+    object ODSReliaseDatesENDDATE: TDateTimeField
+      FieldName = 'ENDDATE'
+    end
+    object ODSReliaseDatesSTATE_ID: TFloatField
+      FieldName = 'STATE_ID'
+    end
+  end
+  object ODSMonths: TOracleDataSet
+    SQL.Strings = (
+      'select itf.rowid,itf.* from ins_tarif_months itf'
+      ''
+      ''
+      'where release_id = :release_id')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000160000003A00520045004C0045004100530045005F004900
+      4400040000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      05000000030000000A00000043004F0055004E00540001000000000004000000
+      4900440001000000000014000000520045004C0045004100530045005F004900
+      4400010000000000}
+    Master = ODSReliaseDates
+    MasterFields = 'ID'
+    DetailFields = 'RELEASE_ID'
+    Session = sboapiDataModule.SBSession
+    Left = 115
+    Top = 237
+    object ODSMonthsCOUNT: TFloatField
+      FieldName = 'COUNT'
+    end
+    object ODSMonthsID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+  end
+  object DSMonths: TDataSource
+    DataSet = ODSMonths
+    Left = 115
+    Top = 285
+  end
+  object DsSysdat: TOracleDataSet
+    SQL.Strings = (
+      'select * from sysdat')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000050000000E000000540045004B005F00440041005400010000000000
+      1000000050005200450044005F004400410054000100000000000E0000004100
+      520043005F004400410059000100000000000A00000043004C004F0053004500
+      010000000000100000004E004500570052004100540045005300010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 440
+    Top = 96
+    object DsSysdatTEK_DAT: TDateTimeField
+      FieldName = 'TEK_DAT'
+      Required = True
+    end
+    object DsSysdatPRED_DAT: TDateTimeField
+      FieldName = 'PRED_DAT'
+    end
+    object DsSysdatARC_DAY: TDateTimeField
+      FieldName = 'ARC_DAY'
+    end
+    object DsSysdatCLOSE: TIntegerField
+      FieldName = 'CLOSE'
+    end
+  end
+  object ODSContracts2: TOracleDataSet
+    SQL.Strings = (
+      'select ic.rowid,ic.* from ins_contracts ic'
+      'where ic.id =:cid'
+      '')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000080000003A00430049004400040000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000001700000004000000490044000100000000000E000000540059005000
+      45005F00490044000100000000001000000049004E0053005F00440041005400
+      45000100000000001400000042004500470049004E005F004400410054004500
+      0100000000001000000045004E0044005F004400410054004500010000000000
+      12000000560041004C005500540045005F00490044000100000000000E000000
+      41004D004D004F0055004E0054000100000000001800000043004C004F005300
+      45005F005000520045004600490058000100000000000C0000004B004C004900
+      5F0049004400010000000000140000004C004F0041004E004100430043005F00
+      490044000100000000001400000043005500520052004100430043005F004900
+      44000100000000001400000050004F004C004900430059005F004E0055004D00
+      0100000000000E00000049004E005300530055004D004D000100000000001000
+      00004600520041004E005300480049005A000100000000000C00000054004100
+      52004900460046000100000000000A0000005300540041005400450001000000
+      0000100000004100470045004E0054005F004900440001000000000008000000
+      50004E0055004D000100000000000C000000420045004E005F00490044000100
+      0000000016000000420045004E00450046004900430049004100520059000100
+      000000001400000043004F004E0044004900540049004F004E00530001000000
+      00000C0000005300550047004E0055004D000100000000001000000042004C00
+      41004E004B005F0049004400010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 536
+    Top = 80
+    object ODSContracts2ID: TFloatField
+      FieldName = 'ID'
+    end
+    object ODSContracts2TYPE_ID: TFloatField
+      FieldName = 'TYPE_ID'
+    end
+    object ODSContracts2INS_DATE: TDateTimeField
+      FieldName = 'INS_DATE'
+    end
+    object ODSContracts2BEGIN_DATE: TDateTimeField
+      FieldName = 'BEGIN_DATE'
+    end
+    object ODSContracts2END_DATE: TDateTimeField
+      FieldName = 'END_DATE'
+    end
+    object ODSContracts2VALUTE_ID: TFloatField
+      FieldName = 'VALUTE_ID'
+    end
+    object ODSContracts2AMMOUNT: TFloatField
+      FieldName = 'AMMOUNT'
+    end
+    object ODSContracts2CLOSE_PREFIX: TIntegerField
+      FieldName = 'CLOSE_PREFIX'
+    end
+    object ODSContracts2KLI_ID: TFloatField
+      FieldName = 'KLI_ID'
+    end
+    object ODSContracts2LOANACC_ID: TFloatField
+      FieldName = 'LOANACC_ID'
+    end
+    object ODSContracts2CURRACC_ID: TFloatField
+      FieldName = 'CURRACC_ID'
+    end
+    object ODSContracts2POLICY_NUM: TWideStringField
+      FieldName = 'POLICY_NUM'
+      Size = 128
+    end
+    object ODSContracts2INSSUMM: TFloatField
+      FieldName = 'INSSUMM'
+    end
+    object ODSContracts2FRANSHIZ: TFloatField
+      FieldName = 'FRANSHIZ'
+    end
+    object ODSContracts2TARIFF: TFloatField
+      FieldName = 'TARIFF'
+    end
+    object ODSContracts2STATE: TIntegerField
+      FieldName = 'STATE'
+    end
+    object ODSContracts2AGENT_ID: TFloatField
+      FieldName = 'AGENT_ID'
+    end
+    object ODSContracts2PNUM: TFloatField
+      FieldName = 'PNUM'
+    end
+    object ODSContracts2BEN_ID: TFloatField
+      FieldName = 'BEN_ID'
+    end
+    object ODSContracts2BENEFICIARY: TWideStringField
+      FieldName = 'BENEFICIARY'
+      Size = 4000
+    end
+    object ODSContracts2CONDITIONS: TWideStringField
+      FieldName = 'CONDITIONS'
+      Size = 4000
+    end
+    object ODSContracts2SUGNUM: TWideStringField
+      FieldName = 'SUGNUM'
+      Size = 128
+    end
+    object ODSContracts2BLANK_ID: TFloatField
+      FieldName = 'BLANK_ID'
+    end
+  end
+  object Sb_aca: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'Sb_aca'
+    Left = 448
+    Top = 216
+  end
+  object DSRFilial: TDataSource
+    DataSet = DSFilial
+    Left = 672
+    Top = 72
+  end
+  object DSFilial: TOracleDataSet
+    SQL.Strings = (
+      'select * from filial'
+      'order by id')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000030000000400000049004400010000000000080000004E0041004D00
+      4500010000000000140000004B004F0044005F00460049004C00490041004C00
+      010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 672
+    Top = 16
+  end
+  object DSinscust: TOracleDataSet
+    SQL.Strings = (
+      
+        'select c.id,c.cust_id,c.name||'#39' '#39'||c.surname||'#39' '#39'||c.fathername ' +
+        'as ins_name,cus.name as cus_name from ins_customers c, customers' +
+        ' cus'
+      'where cus.id=c.cust_id'
+      'and cus.close_dat is NULL'
+      'and  c.id=:pid')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000080000003A00500049004400030000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000400000004000000490044000100000000000E000000430055005300
+      54005F00490044000100000000001000000049004E0053005F004E0041004D00
+      4500010000000000100000004300550053005F004E0041004D00450001000000
+      0000}
+    Session = sboapiDataModule.SBSession
+    Left = 512
+    Top = 216
+    object DSinscustID: TIntegerField
+      FieldName = 'ID'
+    end
+    object DSinscustCUST_ID: TIntegerField
+      FieldName = 'CUST_ID'
+    end
+    object DSinscustINS_NAME: TWideStringField
+      FieldName = 'INS_NAME'
+      Size = 1538
+    end
+    object DSinscustCUS_NAME: TWideStringField
+      FieldName = 'CUS_NAME'
+      Size = 360
+    end
+  end
+  object DsEmlak_cap: TOracleDataSet
+    SQL.Strings = (
+      
+        'select ic.id,ic.policy_num,ia.id as agent,ics.surname,ics.name,i' +
+        'cs.fathername,ics.dateofbirth,ics.mobilephone,ics.homephone,'
+      
+        'extract(year from icp.constyear) as tikildiyi_il,icp.floorsnum a' +
+        's cem_mertebe_say,icp.area as umumu_s,icp.applicantspace as yasa' +
+        'yis_s,'
+      
+        'icp.cost as obyekt_deyer,ics.surname ||'#39' '#39'|| ics.name ||'#39' '#39'|| ic' +
+        's.fathername as siqortali,'
+      
+        'ics.address,ic.beneficiary,(select address from ins_bnf_type whe' +
+        're id=ic.bnf_type) as benef_adres,icp.fulldescription as fealiyy' +
+        'et_novu,icp.insured_obj as siqorta_obyekt,icp.locationobj obyekt' +
+        'in_unvani,'
+      
+        'ic.begin_date,ic.ins_date,ic.end_date,round((Months_Between(ic.e' +
+        'nd_date, ic.begin_date))) as ay_sayi,icp.cost as siq_obyek_deyer' +
+        'i,ic.inssumm siq_mebleq,'
+      
+        'idr.name as risk,round(nvl(((ic.inssumm/icp.cost))*100,0),2) as ' +
+        'faiz,(case (round(((ic.inssumm/icp.cost)),2)*100) when 100 then ' +
+        #39'Tam Si'#287'orta'#39' else '#39'Qism'#601'n Si'#287'orta'#39' end) as faiz_nisbet,'
+      
+        'ic.ammount siq_haqqi,round((ic.ammount/3),2) as odenilecek_hisse' +
+        ','
+      
+        '( case TO_CHAR(ic.franshiz) when '#39'0'#39' then '#39'T'#601'tbiq olunmur'#39' else ' +
+        'TO_CHAR(ic.franshiz) end) as azadolma ,ic.ins_date as Sehadet_ve' +
+        'rilme_tarixi'
+      ''
+      
+        'from ins_contracts ic ,ins_agents ia,ins_customers ics,ins_comme' +
+        'rcialproperty icp,ins_dict_risks idr'
+      'where ia.id=ic.agent_id'
+      'and ics.id=ic.kli_id'
+      'and ic.id=icp.cid'
+      'and ic.id =:cid'
+      'and idr.id=icp.riskid'
+      ''
+      ''
+      '')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000080000003A00430049004400030000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000002200000004000000490044000100000000001400000050004F004C00
+      4900430059005F004E0055004D000100000000000A0000004100470045004E00
+      5400010000000000120000005300490051004F005200540041004C0049000100
+      0000000016000000420045004E00450046004900430049004100520059000100
+      000000001C0000004600450041004C00490059005900450054005F004E004F00
+      560055000100000000001C0000005300490051004F005200540041005F004F00
+      4200590045004B0054000100000000001E0000004F004200590045004B005400
+      49004E005F0055004E00560041004E0049000100000000001400000042004500
+      470049004E005F0044004100540045000100000000001000000045004E004400
+      5F0044004100540045000100000000000E000000410059005F00530041005900
+      4900010000000000200000005300490051005F004F004200590045004B005F00
+      440045005900450052004900010000000000140000005300490051005F004D00
+      450042004C00450051000100000000001000000041005A00410044004F004C00
+      4D0041000100000000000E000000410044004400520045005300530001000000
+      0000080000005200490053004B00010000000000080000004600410049005A00
+      010000000000120000005300490051005F004800410051005100490001000000
+      00002C00000053004500480041004400450054005F0056004500520049004C00
+      4D0045005F00540041005200490058004900010000000000200000004F004400
+      45004E0049004C004500430045004B005F004800490053005300450001000000
+      00000E0000005300550052004E0041004D004500010000000000080000004E00
+      41004D004500010000000000140000004600410054004800450052004E004100
+      4D0045000100000000001600000044004100540045004F004600420049005200
+      54004800010000000000160000004D004F00420049004C004500500048004F00
+      4E0045000100000000001200000048004F004D004500500048004F004E004500
+      01000000000018000000540049004B0049004C0044004900590049005F004900
+      4C000100000000001E000000430045004D005F004D0045005200540045004200
+      45005F005300410059000100000000000E00000055004D0055004D0055005F00
+      53000100000000001200000059004100530041005900490053005F0053000100
+      00000000180000004F004200590045004B0054005F0044004500590045005200
+      0100000000001000000049004E0053005F004400410054004500010000000000
+      160000004600410049005A005F004E0049005300420045005400010000000000
+      16000000420045004E00450046005F0041004400520045005300010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 664
+    Top = 248
+    object DsEmlak_capID: TFloatField
+      FieldName = 'ID'
+    end
+    object DsEmlak_capPOLICY_NUM: TWideStringField
+      FieldName = 'POLICY_NUM'
+      Size = 128
+    end
+    object DsEmlak_capAGENT: TFloatField
+      FieldName = 'AGENT'
+    end
+    object DsEmlak_capSURNAME: TWideStringField
+      FieldName = 'SURNAME'
+      Size = 512
+    end
+    object DsEmlak_capNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 512
+    end
+    object DsEmlak_capFATHERNAME: TWideStringField
+      FieldName = 'FATHERNAME'
+      Size = 512
+    end
+    object DsEmlak_capDATEOFBIRTH: TDateTimeField
+      FieldName = 'DATEOFBIRTH'
+    end
+    object DsEmlak_capTIKILDIYI_IL: TFloatField
+      FieldName = 'TIKILDIYI_IL'
+    end
+    object DsEmlak_capMOBILEPHONE: TWideStringField
+      FieldName = 'MOBILEPHONE'
+      Size = 512
+    end
+    object DsEmlak_capHOMEPHONE: TWideStringField
+      FieldName = 'HOMEPHONE'
+      Size = 128
+    end
+    object DsEmlak_capCEM_MERTEBE_SAY: TIntegerField
+      FieldName = 'CEM_MERTEBE_SAY'
+    end
+    object DsEmlak_capYASAYIS_S: TFloatField
+      FieldName = 'YASAYIS_S'
+    end
+    object DsEmlak_capUMUMU_S: TFloatField
+      FieldName = 'UMUMU_S'
+    end
+    object DsEmlak_capOBYEKT_DEYER: TFloatField
+      FieldName = 'OBYEKT_DEYER'
+    end
+    object DsEmlak_capSIQORTALI: TWideStringField
+      FieldName = 'SIQORTALI'
+      Size = 1600
+    end
+    object DsEmlak_capADDRESS: TWideStringField
+      FieldName = 'ADDRESS'
+      Size = 4000
+    end
+    object DsEmlak_capBENEFICIARY: TWideStringField
+      FieldName = 'BENEFICIARY'
+      Size = 4000
+    end
+    object DsEmlak_capBENEF_ADRES: TWideStringField
+      FieldName = 'BENEF_ADRES'
+      Size = 512
+    end
+    object DsEmlak_capFEALIYYET_NOVU: TWideStringField
+      FieldName = 'FEALIYYET_NOVU'
+      Size = 4000
+    end
+    object DsEmlak_capSIQORTA_OBYEKT: TWideStringField
+      FieldName = 'SIQORTA_OBYEKT'
+      Size = 4000
+    end
+    object DsEmlak_capOBYEKTIN_UNVANI: TWideStringField
+      FieldName = 'OBYEKTIN_UNVANI'
+      Size = 4000
+    end
+    object DsEmlak_capBEGIN_DATE: TDateTimeField
+      FieldName = 'BEGIN_DATE'
+    end
+    object DsEmlak_capEND_DATE: TDateTimeField
+      FieldName = 'END_DATE'
+    end
+    object DsEmlak_capAY_SAYI: TFloatField
+      FieldName = 'AY_SAYI'
+    end
+    object DsEmlak_capSIQ_OBYEK_DEYERI: TFloatField
+      FieldName = 'SIQ_OBYEK_DEYERI'
+    end
+    object DsEmlak_capSIQ_MEBLEQ: TFloatField
+      FieldName = 'SIQ_MEBLEQ'
+    end
+    object DsEmlak_capRISK: TWideStringField
+      FieldName = 'RISK'
+      Size = 4000
+    end
+    object DsEmlak_capFAIZ: TFloatField
+      FieldName = 'FAIZ'
+    end
+    object DsEmlak_capFAIZ_NISBET: TWideStringField
+      FieldName = 'FAIZ_NISBET'
+      Size = 16
+    end
+    object DsEmlak_capSIQ_HAQQI: TFloatField
+      FieldName = 'SIQ_HAQQI'
+    end
+    object DsEmlak_capODENILECEK_HISSE: TFloatField
+      FieldName = 'ODENILECEK_HISSE'
+    end
+    object DsEmlak_capAZADOLMA: TWideStringField
+      FieldName = 'AZADOLMA'
+      Size = 40
+    end
+    object DsEmlak_capSEHADET_VERILME_TARIXI: TDateTimeField
+      FieldName = 'SEHADET_VERILME_TARIXI'
+    end
+    object DsEmlak_capINS_DATE: TDateTimeField
+      FieldName = 'INS_DATE'
+    end
+  end
+  object ImageList: TImageList
+    Left = 425
+    Top = 346
+    Bitmap = {
+      494C010114002800140010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      0000000000003600000028000000400000006000000001001000000000000030
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000000000000000E71C082107210721
+      0721072107210721072107210721082100000000000000000000010DE51E0000
+      0000000000000000000000000000000000000000332E332E332E332E332E332E
+      332E332E332E332E332E332E332E332E00000000000000000000132E132E132E
+      132E132E132E132E000000000000000000000000000000000821072107210721
+      0821082108210821072107210721082108210000000000000000252F05274316
+      000000000000000000000000000000000000FF7F0000332E332E332E332E332E
+      332E332E332E332E332E332E332E5236FF7F00000000000000000000332E332E
+      332E332E132E000000000000000000000000D711D711D7112A1DD711D711D711
+      D711D711D711D711000000000000071D072100000000000042264737262F0527
+      800400000000000000000000000000000000FF7FFF7F332E332E0000FF7F332E
+      332E332EF331332E332E332E0000FF7FFF7F000000000000000000000000332E
+      332E332E332E000000000000000000000000D711D711D711D711D711D711D711
+      D711D711D711D711000000000000072107210000000000006847673F4737262F
+      052700000000000000000000000000000000FF7FFF7F0000332E332EFF7F332E
+      332E332EFF7FFF7F332E332EFF7FFF7FFF7F332E132E132E132E132E132E132E
+      332E132E132E132E132E132E132E132E332ED711000000000000000000000000
+      00000000D711D71100000000000008210721000000006447894F6847673F4737
+      262F841E0000000000000000000000000000FF7FFF7F0000332E332EFF7F332E
+      332E332EFF7FFF7F332E332EFF7FFF7FFF7F332E132E132E132E132E132E132E
+      132E132E132E132E132E132E132E1332132ED7110000D711D711D80D0000D711
+      D7110000D711D711000000000000E71C07210000E010AC5BAA57884B663F673F
+      4737262FC108000000000000000000000000FF7FFF7F0000332E332EFF7F332E
+      332E332EFF7FFF7F332E332EFF7FFF7FFF7F332E0000332E0000332E332E332E
+      332E332E332E332E332E132E0000332E132ED7110000D711D711D711D711D711
+      D7110000D711D711000000000000292507210000C963CD63A24F831E4209643F
+      673F4737262F000000000000000000000000FF7FFF7F0000332E0000FF7F0000
+      332E332EFF7FFF7F332E332EFF7FFF7FFF7F332E00000000332E132E132E332E
+      332E332E332E332E332E132E0000332E132ED7110000D711D711D711D711D711
+      D7110000D711D7110000000000004A2907212036C35FC05F200400000000A008
+      6343673F4737E42600000000000000000000FF7FFF7F332E332E332EFF7F332E
+      332E332E332E332E332E332E0000FF7FFF7F332E000000000000132EFF03342E
+      3332332E332E332E332E132E0000332E132ED711B611D7110000D711D7110000
+      D711D711D711D711000000000000000007216211A00C00000000000000000000
+      2004824B673F473741110000000000000000332E332E332E332E332E332E332E
+      332E332E332E332E332E332E332E332E0000332E0000000000000000332E132E
+      F529342E332E0000332E132E0000332E132ED711D711D7110000D711D7110000
+      D711D711D711D711000000000000000007210000000000000000000000000000
+      00000000A157473F463700000000000000000000332E332E332E332E332E332E
+      332E332E332E332E332E332E332E0000EF3D332E000000000000000000000000
+      000000000000132E332E33320000332E132ED711000000000000000000000000
+      00000000D711D711000008210721072107210000000000000000000000000000
+      000000000000614F463F242F000000000000FF7F1332332E332E332EFF7FFF7F
+      FF7FFF7FFF7F332E332E332E332EFF7FFF7F332E000000000000000000000000
+      0000000000000000132E332E0000332E132ED711000000000000000000000000
+      00000000D711D711082108210821082108210000000000000000000000000000
+      0000000000000000A136453BA21900000000FF7FFF7FFF7F332E332E332E332E
+      FF7FFF7F0000332E332E332EFF7FFF7FFF7F332E000000000000000000000000
+      00000000000000000000132E132E332E132ED711D711D711D711D711D711D711
+      D711D711D711D711082108210821082100000000000000000000000000000000
+      000000000000000000008115443720000000FF7FFF7FFF7FFF7F0000332E332E
+      0000332E332E332E3332FF7FFF7FFF7FFF7F332E000000000000000000000000
+      0000000000000000000000000000332E132E0000000000000821000000000000
+      0000000000000000082108210821000000000000000000000000000000000000
+      000000000000000000000000A100433B0000FF7FFF7FFF7FFF7FFF7F332E332E
+      332E332E332EFF7FFF7FFF7FFF7FFF7FFF7F332E332E332E332E332E332E332E
+      332E332E332E332E332E332E332E332E332E0000000000000821000000000000
+      0000000000000000082108210000000000000000000000000000000000000000
+      000000000000000000000000000020000000FF7FFF7FFF7FFF7FFF7FFF7F7332
+      332E0000FF7FFF7FFF7FFF7FFF7FFF7FFF7F0000000000000000000000000000
+      0000000000000000000000000000000000000000000000000721082108210821
+      0821082108210821082108210000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000FF7FA52106265E7700009C730000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000450C00000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000A219031E11533153776700000000
+      7B6F514A1863BD77000000000000000000000000000000000000000000000000
+      00000000CE39D4563767BA73BA73BA7300000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000E31D4426EE46505770570000745F
+      7763BA6F000000000000596BEF3D7B6FFF7FE93688326B36D2523663BA73BA73
+      BA73BA73BA73BA73BA73BA73786BBA7300000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000E41D6526CC424E4F2E4FDD77715B
+      2F4FF04A545F51570D47FE7BBA6F000032463967BA73BA73BA73BA73BA73355B
+      D14A8D3A7767D14A8D3A8D3AD042BA7300000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000E421652AAB3E0D470F4FDD7B986B
+      9767996B746351570F4BDC775057AB3E734E3967786BD14A8D3A8D3A7763D046
+      8D3A8D3A345734578D3A8D3A8D3ABA7321040000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000E421652A8936EB3E0F4F00000000
+      00000000000000000000DE7BB96B9867B6565A6BF25677638D3A8D3AF24E565F
+      13537763BB73BB77BB77BB77BB77BB7708210000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000522652A6832AA3A1153FE7B755F
+      1053545B6932E31DAD3E996F755F755FD75A5A6B4836DC7BDC7BDC7BDC7BDC7B
+      DC7B5767DC7BDC77AE42AE42AE42DC7B10420000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000526862A472EAA3A335B0000BB73
+      725F262A04226B3A000097675053EF4639677B6F1357FE7B545BF04EEF4ACE46
+      6419C725DC77FE7BEF4AEF4AEF4AFE7BB5560000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000526862E262AAA3A566300000000
+      072A032249329A6F99670000FE7BBC737B6F9C73D14E00000000535B1053E625
+      6419000000000000000000000000000018630000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000626862E262ACB3E996B00006B36
+      2526282EED46786700007563305331539C739C736D3EDD77000000008B3EE625
+      0F4FBB730000000010531053105300007B6F0000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000262AA62E45260E4BBC777763F14E
+      0F4B0000CD42CD4200007463725B7763BD77BD774B36165F0000786B48361457
+      10531053545F0000105310531053FF7FBD770000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000262AA836A936725BFE7F00000000
+      00000000000000000000000000000000BD77BB734B3A6D3E0000AC46AD460000
+      0000DD7B000000000000000000000000DE7B0000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000000000000000000049328836BA6F9567946351570F4B
+      EE46ED42CB3EAA3A672E0422072A000000002F4B6D3E6D3E0000FF7FBD777A6B
+      165FF456D14E6D3E6D3E6D3EE936000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000E625683251534E4F9667535B314F
+      0F4BEE4ACD42AB3E68320322482E00000000C836DE7B90469046904690469046
+      904690469046904690469046E936000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000007E77272A68367153BA6FEF4ACD42
+      CE42CE46CD42AC426932E4216B3A000000002D31E936DE7BD24ED24ED24ED24E
+      D24ED24ED24ED24ED24ED24EE936000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000000000000000000000007E77E625272E4832672E662A
+      862A862A862EA72E872EA8320A3200000000EB28EB28C8362F4BDB7300000000
+      000000000000000000000000E936000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000004A29000000000000000000000000
+      000000000000000000000000000000006A31000000000000000000000000C618
+      8410000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000CB454208420C0000000000000000
+      000000000000410C085620040000653D0000C6186B2DEF3DEF3DEF3DEF3DEF3D
+      EF3DEF3DEF3DEF3DEF3DEF3DEF3D4A294831000000000000000000000000C618
+      C618A51400000000000000000000000000000000000000000060006800000000
+      0000000000000008007C00080000000000000000492D8C6A6B6A6B664C154A21
+      28216731A6498C6A466A6B62E75500000000AD35B55631463146524A734E9452
+      F75E94521863D64ED64ED562915E734ECB45000000000000000000000000C618
+      A514C618A51400000000000000000000000000000000006C217C217C006C0000
+      000000000010217C217C217C00100000000000004C5E3577905A3042B1154D19
+      0000A83DAD6A466A466A476A6B62E7550000FF7FD65A08210821082108212925
+      CE390821734E311231126D6A48769452FF7F000000000000000000000000C618
+      0000C618C61800000000000000000000000000000010217C427C427C427C0070
+      00000014427C427C427C427C007C00000000000000005677963A5626D219B115
+      0D09AD6A676A476A476A476A47664A620000FF7FF75E724E524A1863524A734E
+      B556524AF75EB54AD54A6D6A4876B556FF7F000000000000000000000000C618
+      0000C618C6180000000000000000000000000000000000402178637863786378
+      00706378637863786378007400000000000000000000D93EFC3E562A5726B215
+      B1156C21686E686E686E686E8C6A285E0000FF7FF75E08210821396708212925
+      EE3D08219452311231128E6E4876B556FF7F000000000000000000000000C618
+      0000C618C6180000000000000000000000000000000000000038427484788478
+      8478847884788478006C000000000000000000000000533AB936FB3A57265726
+      D219B1156C21896E48662A5E285E00000000FF7F18639452734E5A6B734E9452
+      F75E734E1863D64EF752185BD64AD65AFF7F000000000000000000000000C618
+      0000C618C6180000000000000000000000000000000000000000002C6374C674
+      C674C674C6740064000000000000000000000000000000007632BA36FB3A562A
+      5626D219B1156C214A5E295A000000000000FF7F1863082108215A6B08212925
+      EF3D0821B456311231129432310ED65AFF7F00000000000000000000A514C618
+      0000A514C6180000000000000000000000000000000000000000002CE774E774
+      E774E774E77463700000000000000000000000000000000091529152B936FC3E
+      562A5626D219B1154C150000000000000000FF7F18639452734E5A6B734EB456
+      F75E734E3967F64EF752185FD64AD65AFF7F00000000000000000000C618A514
+      00000000C618C618000000000000000000000000000000000034297129712971
+      297129712971297184700000000000000000000000008E62F06EAC6E8F56B932
+      FC3E562A5726D219B1150C09000000000000FF7F1863082108215A6B08212925
+      EF3D0821B456311231129432310ED65AFF7F0000000000000000C618C6180000
+      000000008410C6188410000000000000000000000000003C6B716B716B716B71
+      005CA56C6B716B716B71C66C0000000000000000AD6AF06EAD72AC72AC729056
+      B936FB3A562A5726D215B54E104600000000FF7F18635A6B5A6B5A6B5A6B5A6B
+      5A6B5A6B5A6B5A6B5A6B5A6B5A6BF75EFF7F000000000000A514C61800000000
+      000000000000C618C618000000000000000000000040AD71AD71AD71AD710058
+      00000024A56CAD71AD71AD71086D000000000000F16ECD72F06EAD6ACD72CD72
+      9152B936FB3A57263A6339674C75EA780000FF7FA514A514A514A514A514A514
+      A514A514A514A514A514A514A514A514FF7F000000000000C618C61800000000
+      0000000000000000C618C61800000000000000000004E768EF71EF71005C0000
+      000000000028C668EF71EF7100500000000000001273CE72CF6EAD6A8C6A6C5E
+      8C62753AB9367C6BDE7BD0792C794C750000FF7FE71C9A639A63995F785B7857
+      B2464A25CD31513E8B2D7857B246E71CFF7F00000000C618C618000000000000
+      0000000000000000A514C61800000000000000000000000C4A69006400000000
+      0000000000000030C66800580000000000000000AD6A1173CE72CE72D06E8C66
+      00000000734E1863127A127E6D7900000000FF7F08219A639A639A639A63734A
+      16575146F652785BB34AF44AB2460821FF7F00008410C6188410000000000000
+      00000000000000000000C618C618000000000000000000000014000000000000
+      00000000000000000034000000000000000000000000AD6A12736D628C6A0000
+      000000000000F16D4C796D79000000000000FF7F0821A514A514A514A514A514
+      A514A514A514A514A514A514A5140821FF7F0000C618C6180000000000000000
+      000000000000000000000000C618A51400000000000000000000000000000000
+      000000000000000000000000000000000000000000000000AD6AAC6A00000000
+      000000000000000000000000000000000000FF7F28212925292549254A254A25
+      49254925292529252925282108210821FF7F0000C618C618C618C618C618C618
+      C618C618C618C618C618C618C618C61800000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000002925082100000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000000000000000000000000000000000002004E156C173
+      E27BE277C16F802D000000000000000000000000000000000000A215A41E851A
+      6512450E460A0606400000000000000000000000935E926AB26AB16AEB490000
+      00000000000000000000000000000000000000000000DE7BBD77BD77BE77BE77
+      BE77BE77BE779C739C73524A00000000000000000000000081428563A86FC773
+      C777C773C86FA86B825B4008000000000000000000004004E32EC426860A8706
+      870687068706660A2606A5010000000000000000D56EB36EB26ED272F2766172
+      00000000000000000000000000000000000000000000BE77BD77BD77BD77BD77
+      BD77BD77BD77BD777B6F7B6F00000000000000000000E2426457845F8463D577
+      00000000FE7FA967645B434F400400000000000020000337E426A60EA60E860E
+      BC6FB036A60EA60EA60E2606A5010000000000001673F572B36EA37AC07A8076
+      62720000000000000000000000000000000000000000BE77BD77BD7793569C73
+      BE77BD77BD77BD77BD777B6F420800000000000041192347434F63572B43825F
+      8263434BDD730000D56F434B234300000000000042432337C51AC51AC51A4F43
+      00000000C51AC51AC51AC516260681000000000037731673D36EC07EC17EA07A
+      60768472000000000000000000000000000000000000DE77BD77BD771042A614
+      10429C73BE77BD77BD77BD77C618000000000000043B23438D5F434F62536257
+      625762576257DE770000474F043F42190000A00C6247E422E422E422E4224F47
+      00000000E422E422E422E422460E2606000000005773EC76E07EE07EA07EE17E
+      A07A6076246200000000000000000000000000000000DE7BBD77BD77BE77CE39
+      E71C31469452BD77BD77BD77C618000000004004E436043F00008D5B434B434F
+      434F434F434F25430000FC77043BE5320000A13A614BE42AC42A0F4B0F4B765F
+      000000000F4B0F4BEB3EE42AC422460A000000000000E07EA07AE07EC07EA07E
+      E07EA07A607283450000000000000000000000000000DE7BBD77BD77BE77BE7B
+      CE3908215A6B734E3967BD77C618000000002211E52EFE7B0000000024432447
+      24472447464B6C53000000004C4BC52E00008153814F03330000000000000000
+      000000000000000000000433032F450E0000000000000000C07E8076E07EC07E
+      A07EE07E807640720000000000000000000000000000DE7BBD77BD77DE77DE77
+      DE7BCE390821DE7B7B6B5A6BC6180000000043112E47000000000000FD7B2643
+      26432643263F000000000000544FC52600008153A15723378F57000000000000
+      000000000000000000002337032F65120000000000000000816EC07A8076E07E
+      C07EA07EC07E80766172000000000000000000000000BE77BD77BD77BD77DE7B
+      DE7BDE7BCE390821BD77BD77C61800000000C108C726EA320000DB73083B083F
+      083F083F083FE93600000000E92EA61E0000A236C05B223F223F223F223F8E57
+      00000000223F223F223F223FA422851A00000000000000000000017FC07AA07A
+      E07EC07EA07EC07A8076F56200000000000000000000BD779C73BD77BD77BD77
+      BE77BE77BD77AD35E81C9D73C618000000000000A71EEB32000000000A3B0A3B
+      0A3F0A3F0A3B0A3B5553EB32EB3205120000E300C05FA1574243424342438E5B
+      000000004243424342434243A422841A000000000000000000000000E07EA07A
+      C07AE07EC07EC17E596B396739670000000000000000BD739C739D73BD77BD77
+      BD77BD77BD77BD73AD35E71CC6180000000000004612EE36113F0000FE7B0D3F
+      0D3F0D3F0D3F2F430D3B0E37AA22200000000000614FC05F814F42474247664F
+      00000000424742474247E32EC42664050000000000000000000000000000E07E
+      A07AE07EC17A5A6B5A6B5A6BA54821300000000000009C739C6F9C739C739C73
+      9C739D739C739C739C73AD35630C0000000000000000891A313F113B00000000
+      DC73BA6BBC6B30433143113FC5090000000000002305E063C05FA057414B414B
+      414B414B414B4243033703334416000000000000000000000000000000000000
+      E07EA56EF75E1763396742404248424C0000000000007B6F7B6B7B6F9C6F9C73
+      9C739C739C6F7C6F7B6F7B6BC61884100000000000004100AB1E544B544BF036
+      F0323347544B544B3347060A00000000000000000000C4118157C05FC05BA157
+      814F614B62474243223B641E2000000000000000000000000000000000000000
+      EF6A5A6B5A67D65E21442140424400000000000000005A6B5A6B5A6B7B6F7B6F
+      7B6F7B6F7B6F7B6B5A6B5A67A514A514AD3500000000000000002706F136785B
+      785B785B56538A16030100000000000000000000000000004211A32E8153C05B
+      A157814F614B023B832A00000000000000000000000000000000000000000000
+      00007B6F73664250424C4248000000000000000000003A6739673A675A675A6B
+      5A6B5A6B5A6B5A6739673963A51400000000000000000000000000000000A200
+      2401E3002000000000000000000000000000000000000000000000000015C13E
+      C05F6053012E2000000000000000000000000000000000000000000000000000
+      00000000845C63586354000000000000000000000000744E734E744E944E9452
+      945294529452944E734E734E8510000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000000000000000000000008410A514
+      A514A5148410630C000000000000000000000000000000000000000000000000
+      00000000000000000000C618841000000000000000000000000000002116E016
+      E016A01621160000000000000000000000000000000000000000000000000000
+      62102108000000000E3E2C0D0000000000000000000000008410A514C618C618
+      C618C618C618A514A514630C0000000000000000000000000000C618C618C618
+      C618C618C618C618A514C618C61800000000000000000000000000004116201B
+      201B201B21160000000000000000000000000000000000000000000062082A19
+      FB1E4F0D41084929962AD83A840C0000000000000000A514C618C618C618C618
+      C618C618C618C618C618A51484100000000000000000A514C618C618C618C618
+      C618C618C618C618C618C618C61800000000000000000000000000006116001B
+      201B201B4116000000000000000000000000000000000000000000002004B211
+      840CA50CC60C630CF225E614C70C850800000000A514C618C61810428C31C618
+      C618C618C618C618C618C618C618630C00000000A514C618C618C618C618C618
+      C618C618C618C618C618C618C618A5140000000000000000000000006116001B
+      001B201B41160000000000000000000000000000000000000000630CED39840C
+      C70CC70CC70CA50CC60CC70C0A11901100008410C618C618C6186B2D10420821
+      C618C618C618C618C618C618C618A5140000A514C618C6188410630CA514C618
+      C618C618C618C618C618C618C618C6180000000000000000000000006116052B
+      001B001B4116000000000000000000000000000028258310E61CCC35F225B646
+      C70CC70CC70CC70CC70C09110A0D630C8408A514C618C618C618F75E00000000
+      C618C618C618C618C618C618C618C618630CA514000000000000000000000000
+      0000C618C618C618C618C618C618C618000021166116611661166116811A072F
+      262B001B80164116411641162116211600000000C4185716640C6F11313AC610
+      E70C000000000000A60CE8100911E710A50CC618E71CE71CE71CE71C00000000
+      5A6BE71CE71CE71CE71CE71CE71CC618A5140000000000000000000000000000
+      00000000C618C618C618C618C618C61800004E470E430D430C3F0B3B0A370937
+      0833052B001B001B201B201B201BA01600008410561AAD25A5108408C710C70C
+      0000000000000000F1292D0DE80CC70C0000C618E71CE71CE71CE71CE71C0000
+      00008C31E71CE71CE71CE71CE71CE71CA5140000000000000000000000000000
+      0000A514C618C618A514630C000000000000504B0F4B0E470D430C3F0B3F0A3B
+      09372833262B001B001B201B201BE016000000002D0DE8140915E810C70C0000
+      000000000000C5147822D029A60C00000000C618E71CE71CE71CE71CE71C1042
+      00000000E71CE71CE71CE71CE71CE71CC618000000000000000000000000630C
+      0000000000000000000000000000000000007153114F104B0F470E430D430C3F
+      0B3B2A372937262F001B001B201BE01600000000E7186D212A15E91000000000
+      00000000CD357532F221E810850C00000000E71CE71CE71CE71CE71CE71CE71C
+      BD770000FF7F9452E71CE71CE71CE71CC618630CC618C618C618C618C618C618
+      0000000000000000000000000000000000002116611661166116611680160D43
+      0C3F2B3F80166116611661164116211600006A2DAC31630C4C1DC70C00000000
+      00008B31D9361A4308150811C70C00000000E71CE71CE71CE71CE71CE71CE71C
+      E71C00000000FF7F524AE71CE71CE71CA514C618C618C618C618C618C618C618
+      0000000000000000000000000000000000000000000000000000000061162F47
+      2E472D436116000000000000000000000000752E981609194B19630883146210
+      2A19991E31320911E80C0000000000000000C618E71C08210821082108210821
+      0821000029250821F75E08210821E71C0000A514C618C618C618C618C618C618
+      C618841000000000000000000000C618A514000000000000000000006116304B
+      2F4B2E476116000000000000000000000000C710E7186C1D4B19630CA60C7011
+      0A0D4925090D0000000000000000000000000000E71C08210821082108210821
+      0821F75E3967082108210821E71CC61800000000C618C618C618C618C618C618
+      C618C618C618C618C618C618C618C61800000000000000000000000061163253
+      314F304B61160000000000000000000000000000F02D6D19161A2B11E80CE80C
+      090D0A0DE90C0000000000000000000000000000A514E71C0821082108210821
+      082108210821082108210821E71C000000000000C618C618C618C618C618C618
+      C618C618C618C618C618C618A514000000000000000000000000000061163357
+      3253314F611600000000000000000000000000000000C8080B0D4B150A110000
+      00000000000000000000000000000000000000000000A514E71C082108210821
+      08210821082108210821E71C00000000000000008410C618C618C618C618C618
+      C618C618C618C618C6188410000000000000000000000000000000002116945B
+      93579257211600000000000000000000000000000000000009190A1100000000
+      0000000000000000000000000000000000000000000000000000E71CE71C0821
+      08210821E71CE71CC618000000000000000000000000C618A5140000A514C618
+      C618C618C618630C00000000000000000000424D3E000000000000003E000000
+      2800000040000000600000000100010000000000000300000000000000000000
+      000000000000000000000000FFFFFF0000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000000000000000F3FFFFFFFFFFE001F1FF8001F01FE000
+      E0FF4000F83F001CC0FF0804FC3F001CC07F200000007F9C803F20000000449C
+      803F20005004409C001F2A006004409C000F00047004121E1E0F00017824121E
+      FF0780027FC47F90FF8300007FE47F80FFC100407FF00001FFE109007FFCEFE3
+      FFF000000000EFE3FFFC0080FFFFE007FF3FFFFF0BFFFF00FC3FFFFF061F0000
+      F8BFFCFF04700000F9BFFC3F00020000F9BFFDBF00000000F9BFFDBF07F00000
+      F9BFFDBF00000000F9BFFDBF04100000F9BFF9BF060830FEF01FF39F04101862
+      E3CFE7CF00901020C7C7CFE707FE137ECFE39FF3000310009FF13FF900030000
+      3FF80001000300010000FFFF800307F9FFFFFFFF0000FCFFE7EF00010000FC7F
+      C3C780030000FC3F810181010000FD3F8001C0010000FD3F8003C0010000FD3F
+      C007C0030000FD3FE00FE0070000F93FE00FE00F0000F99FC007C0070000F38F
+      800380030000E7CF000180010000E7E7810180010000CFE7C383818300008FF3
+      C7C7C3C700009FF9FFFFE7FF00008001F83FF81F3FFFC003E00FE00783FF8003
+      C003C00381FF80038183800180FF800300210181807F800300110180803F8003
+      10100180C01F800318181FF0E01F800338380FF0E00F800310180180F0078003
+      18000180F803800308010180FC01800386010001FE01800180038003FE038000
+      C007C007FF078003F00FF00FFF8FC003FFFFF801F81FFFF3F83F0000E007F003
+      F83F0000C003C003F83F000180018001F83FE00100010001F83F800006007F01
+      000180E00600FF81000101E10300FF07000183C30180FDFF00018783008001FF
+      0001070300C001FFF83F000F0081007CF83F003F80018001F83F803F80038003
+      F83FC3FFC0078007F83FE7FFF00FC81F00000000000000000000000000000000
+      000000000000}
+  end
+  object Ods_bnf_type: TDataSource
+    DataSet = Ds_bnf_type
+    Left = 608
+    Top = 160
+  end
+  object Ds_bnf_type: TOracleDataSet
+    SQL.Strings = (
+      'select * from  ins_bnf_type'
+      '')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000400000049004400010000000000080000004E0041004D00
+      4500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 528
+    Top = 160
+    object Ds_bnf_typeID: TFloatField
+      FieldName = 'ID'
+    end
+    object Ds_bnf_typeNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 512
+    end
+  end
+end

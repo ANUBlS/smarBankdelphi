@@ -1,0 +1,50 @@
+unit IpSheduleAddUnt;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  NLSLocalizer, StdCtrls, Mask, DBCtrlsEh;
+
+type
+  TAddEditForm = class(TForm)
+    Localizer: TNLSLocalizer;
+    StaticText1: TStaticText;
+    DBDateTimeEditEh1: TDBDateTimeEditEh;
+    StaticText2: TStaticText;
+    DBEditEh1: TDBEditEh;
+    StaticText3: TStaticText;
+    DBEditEh2: TDBEditEh;
+    Button1: TButton;
+    Button2: TButton;
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  AddEditForm: TAddEditForm;
+
+implementation
+
+uses ScheduleDataModuleImpl;
+
+{$R *.DFM}
+
+procedure TAddEditForm.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+  Resize := False;
+end;
+
+procedure TAddEditForm.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+  if Ord(Key) = VK_ESCAPE then
+  Close; 
+end;
+
+end.

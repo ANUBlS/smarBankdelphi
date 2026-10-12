@@ -1,0 +1,63 @@
+unit FrmDepozitAccSettings_Impl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ExtCtrls, ComCtrls, DBCtrls, XDBCtrls, DB, OracleData, StdCtrls,
+  XDBGrids, Grids, DBGrids;
+
+type
+  TFrmDepozitAccSettings = class(TForm)
+    StatusBar1: TStatusBar;
+    GroupBox1: TGroupBox;
+    GroupBox2: TGroupBox;
+    GroupBox3: TGroupBox;
+    GroupBox4: TGroupBox;
+    GroupBox5: TGroupBox;
+    XDBNavigator2: TXDBNavigator;
+    XDBNavigator3: TXDBNavigator;
+    XDBNavigator4: TXDBNavigator;
+    XDBNavigator5: TXDBNavigator;
+    DBGrid1: TDBGrid;
+    DBGrid2: TDBGrid;
+    DBGrid3: TDBGrid;
+    DBGrid4: TDBGrid;
+    XDBGrid1: TXDBGrid;
+    DSRsbcm_categories_new: TDataSource;
+    DataSource2: TDataSource;
+    DataSource3: TDataSource;
+    DataSource4: TDataSource;
+    DataSource5: TDataSource;
+    DSsbcm_categories_new: TOracleDataSet;
+    OracleDataSet2: TOracleDataSet;
+    OracleDataSet3: TOracleDataSet;
+    OracleDataSet4: TOracleDataSet;
+    OracleDataSet5: TOracleDataSet;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmDepozitAccSettings: TFrmDepozitAccSettings;
+
+
+      procedure exportproc(S:String);export;
+
+implementation
+
+{$R *.dfm}
+uses sboapiDataModuleImpl,CommonDeclsImpl,SBTranslateProc;
+
+procedure exportproc(S:String);export;
+begin
+   FrmDepozitAccSettings.ShowModal;
+end;
+exports
+    exportproc;
+
+    initialization
+   FrmDepozitAccSettings := TFrmDepozitAccSettings.Create(CommonApplication)
+end.

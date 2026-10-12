@@ -1,0 +1,105 @@
+object Form_budce: TForm_budce
+  Left = 0
+  Top = 0
+  ClientHeight = 295
+  ClientWidth = 833
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poDesktopCenter
+  OnClose = FormClose
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Panel1: TPanel
+    Left = 0
+    Top = 259
+    Width = 833
+    Height = 36
+    Align = alBottom
+    BevelInner = bvLowered
+    TabOrder = 0
+    object Button1: TButton
+      Left = 341
+      Top = 5
+      Width = 77
+      Height = 26
+      Caption = 'Q'#601'bul'
+      TabOrder = 0
+      OnClick = Button1Click
+    end
+    object Button2: TButton
+      Left = 430
+      Top = 5
+      Width = 76
+      Height = 26
+      Caption = #199#305'x'#305#351
+      TabOrder = 1
+      OnClick = Button2Click
+    end
+  end
+  object Panel2: TPanel
+    Left = 0
+    Top = 0
+    Width = 833
+    Height = 259
+    Align = alClient
+    TabOrder = 1
+    object XDBGrid1: TXDBGrid
+      Left = 1
+      Top = 1
+      Width = 831
+      Height = 257
+      Align = alClient
+      DataSource = TransactionDataModule.dsrc_budce_copy
+      GridStyle.VisualStyle = vsXPStyle
+      TabOrder = 0
+      Columns = <
+        item
+          Expanded = False
+          FieldName = 'CODE'
+          ReadOnly = True
+          Title.Alignment = taCenter
+          Title.Caption = 'Madd'#601' Kodu'
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clWindowText
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = [fsBold]
+          Visible = True
+          Width = 132
+        end
+        item
+          Expanded = False
+          FieldName = 'AMMOUNT'
+          Title.Alignment = taCenter
+          Title.Caption = 'M'#601'bl'#601#287
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clWindowText
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = [fsBold]
+          Visible = True
+          Width = 107
+        end
+        item
+          Expanded = False
+          FieldName = 'NAME'
+          ReadOnly = True
+          Title.Alignment = taCenter
+          Title.Caption = 'Madd'#601'nin Ad'#305
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clWindowText
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = [fsBold]
+          Visible = True
+          Width = 545
+        end>
+    end
+  end
+end

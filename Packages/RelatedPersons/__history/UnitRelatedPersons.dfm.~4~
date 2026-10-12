@@ -1,0 +1,1379 @@
+object FormRelatedPersons: TFormRelatedPersons
+  Left = 139
+  Top = 196
+  Width = 928
+  Height = 583
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'MS Sans Serif'
+  Font.Style = []
+  OldCreateOrder = False
+  OnCreate = ActiveFormCreate
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 920
+    Height = 337
+    Align = alTop
+    TabOrder = 0
+    object Label1: TLabel
+      Left = 464
+      Top = 80
+      Width = 89
+      Height = 16
+      Caption = 'Banka aidiyyat'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'MS Sans Serif'
+      Font.Style = []
+      ParentFont = False
+    end
+    object GroupBox1: TGroupBox
+      Left = 264
+      Top = 24
+      Width = 497
+      Height = 41
+      TabOrder = 0
+      object Label2: TLabel
+        Left = 216
+        Top = 16
+        Width = 29
+        Height = 15
+        Caption = '- дян'
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -13
+        Font.Name = 'Arial AzLat'
+        Font.Style = []
+        ParentFont = False
+      end
+      object Label3: TLabel
+        Left = 456
+        Top = 16
+        Width = 29
+        Height = 15
+        Caption = '- дяк'
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -13
+        Font.Name = 'Arial AzLat'
+        Font.Style = []
+        ParentFont = False
+      end
+      object date1: TDateTimePicker
+        Left = 17
+        Top = 12
+        Width = 186
+        Height = 21
+        CalAlignment = dtaLeft
+        Date = 40441.6808926505
+        Time = 40441.6808926505
+        DateFormat = dfShort
+        DateMode = dmComboBox
+        Kind = dtkDate
+        ParseInput = False
+        TabOrder = 0
+      end
+      object date2: TDateTimePicker
+        Left = 264
+        Top = 11
+        Width = 186
+        Height = 21
+        CalAlignment = dtaLeft
+        Date = 40441.6810371412
+        Time = 40441.6810371412
+        DateFormat = dfShort
+        DateMode = dmComboBox
+        Kind = dtkDate
+        ParseInput = False
+        TabOrder = 1
+      end
+    end
+    object cb: TComboBox
+      Left = 417
+      Top = 104
+      Width = 180
+      Height = 20
+      Style = csDropDownList
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Arial Az Lat'
+      Font.Style = []
+      ItemHeight = 12
+      ParentFont = False
+      TabOrder = 1
+      OnChange = cbChange
+      Items.Strings = (
+        'butun')
+    end
+    object GroupBox2: TGroupBox
+      Left = 304
+      Top = 144
+      Width = 425
+      Height = 113
+      TabOrder = 2
+      object SpeedButton3: TSpeedButton
+        Left = 157
+        Top = 24
+        Width = 97
+        Height = 33
+        Caption = 'Kredit'
+        OnClick = SpeedButton3Click
+      end
+      object SpeedButton1: TSpeedButton
+        Left = 16
+        Top = 24
+        Width = 105
+        Height = 30
+        Caption = 'Qaliqlar'
+        OnClick = SpeedButton1Click
+      end
+      object SpeedButton2: TSpeedButton
+        Left = 288
+        Top = 24
+        Width = 121
+        Height = 33
+        Caption = 'Ямялиййат'
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Arial AzLat'
+        Font.Style = []
+        ParentFont = False
+        OnClick = SpeedButton2Click
+      end
+      object Shape1: TShape
+        Left = 144
+        Top = 6
+        Width = 1
+        Height = 105
+      end
+      object Shape2: TShape
+        Left = 271
+        Top = 6
+        Width = 1
+        Height = 105
+      end
+      object CheckBox1: TCheckBox
+        Left = 10
+        Top = 64
+        Width = 126
+        Height = 33
+        Caption = 'балансдан кянар иля'
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -12
+        Font.Name = 'Arial AzLat'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 0
+      end
+      object CheckBox2: TCheckBox
+        Left = 285
+        Top = 71
+        Width = 132
+        Height = 17
+        Caption = 'балансдан кянар иля'
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -12
+        Font.Name = 'Arial AzLat'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 1
+      end
+    end
+    object Memo1: TMemo
+      Left = 240
+      Top = 88
+      Width = 41
+      Height = 89
+      TabOrder = 3
+      Visible = False
+    end
+  end
+  object Memo2: TMemo
+    Left = 400
+    Top = 264
+    Width = 441
+    Height = 257
+    Lines.Strings = (
+      'Memo2')
+    TabOrder = 1
+    Visible = False
+  end
+  object krdt: TOracleDataSet
+    SQL.Strings = (
+      
+        'select cu.name ,pri.name,p.dateofconclusion,p.duedatefirstcontra' +
+        'ct,p.creditlineamount,h.rest,p.annualyinterestrate||'#39'%'#39',r.percen' +
+        't||'#39'%'#39',h.duerest,h.pledgeprice from'
+      'customers cu,prinad pri,'
+      'creditsmgr.cm_active_credits p,'
+      'creditsmgr.cm_history h,'
+      'creditsmgr.CM_RESERVE_TYPES r'
+      'where'
+      'p.boorowerid=cu.id and cu.prinad_kod=pri.id and'
+      'p.id=h.creditid   and'
+      'h.hdate=:dd  and'
+      'h.reserveid=r.id'
+      'order by pri.name'
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' ')
+    Variables.Data = {0300000001000000030000003A44440C0000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      040000000A000000040000004E414D4501000000000010000000444154454F46
+      434F4E434C5553494F4E01000000000014000000445545444154454649525354
+      434F4E5452414354010000000000100000004352454449544C494E45414D4F55
+      4E5401000000000004000000524553540100000000001A000000502E414E4E55
+      414C59494E544552455354524154457C7C2725270100000000000E000000522E
+      50455243454E547C7C2725270100000000000700000044554552455354010000
+      0000000B000000504C454447455052494345010000000000060000004E414D45
+      5F31010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 144
+    Top = 360
+    object krdtNAME: TWideStringField
+      DisplayLabel = 'Ады(яэяр физики шяхсдирся ады,сойады,атасынын ады)'
+      DisplayWidth = 300
+      FieldName = 'NAME'
+      Size = 90
+    end
+    object krdtDATEOFCONCLUSION: TDateTimeField
+      DisplayLabel = 'Верилдийи тарих'
+      DisplayWidth = 30
+      FieldName = 'DATEOFCONCLUSION'
+      Required = True
+    end
+    object krdtDUEDATEFIRSTCONTRACT: TDateTimeField
+      DisplayLabel = 'Юдямя тарихи'
+      DisplayWidth = 30
+      FieldName = 'DUEDATEFIRSTCONTRACT'
+      Required = True
+    end
+    object krdtCREDITLINEAMOUNT: TFloatField
+      DisplayLabel = 'Ямялиййатын илкин мябляьи'
+      DisplayWidth = 40
+      FieldName = 'CREDITLINEAMOUNT'
+      Required = True
+    end
+    object krdtREST: TFloatField
+      DisplayLabel = 'Ямялиййатын галыг мябляьи'
+      DisplayWidth = 40
+      FieldName = 'REST'
+      Required = True
+    end
+    object krdtPANNUALYINTERESTRATE: TWideStringField
+      DisplayLabel = 'Фаиз дяряжяси'
+      DisplayWidth = 50
+      FieldName = 'P.ANNUALYINTERESTRATE||'#39'%'#39
+      Size = 41
+    end
+    object krdtRPERCENT: TWideStringField
+      DisplayLabel = 'Риск дяряжяси цзря тяснифаты'
+      DisplayWidth = 50
+      FieldName = 'R.PERCENT||'#39'%'#39
+      Size = 41
+    end
+    object krdtDUEREST: TFloatField
+      DisplayLabel = 'Вахты кечмиш кредитляр'
+      DisplayWidth = 40
+      FieldName = 'DUEREST'
+      Required = True
+    end
+    object krdtPLEDGEPRICE: TFloatField
+      DisplayLabel = 'Тяминатын мябляьи'
+      DisplayWidth = 200
+      FieldName = 'PLEDGEPRICE'
+      Required = True
+    end
+    object krdtNAME_1: TWideStringField
+      DisplayLabel = 'Банкла ялагяси'
+      FieldName = 'NAME_1'
+      Size = 90
+    end
+  end
+  object cmexp: TCMExcelExport
+    StyleColumnWidth = cwAutoFit
+    ColumnWidth = 0
+    FontTitles.Charset = RUSSIAN_CHARSET
+    FontTitles.Color = clWindowText
+    FontTitles.Height = -16
+    FontTitles.Name = 'Arial AzLat'
+    FontTitles.Style = [fsBold]
+    BorderTitles.BackColor = clYellow
+    BorderTitles.Weight = bwThin
+    BorderTitles.LineStyle = blLine
+    OrientationTitles = 0
+    FontData.Charset = RUSSIAN_CHARSET
+    FontData.Color = clBlack
+    FontData.Height = -13
+    FontData.Name = 'Arial AzLat'
+    FontData.Style = []
+    FontSummary.Charset = DEFAULT_CHARSET
+    FontSummary.Color = clWindowText
+    FontSummary.Height = -11
+    FontSummary.Name = 'MS Sans Serif'
+    FontSummary.Style = []
+    SummarySelection = ssNone
+    SummaryCalculation = scSUM
+    Left = 224
+    Top = 352
+  end
+  object emdt: TOracleDataSet
+    SQL.Strings = (
+      'SELECT distinct'
+      ' a1.bal_cn1 dbal_cn ,a1.acc_no'
+      ',a2.bal_cn1 kbal_cn,a2.acc_no'
+      ',pr.dat ,pr.ID'
+      ',pr.NAME, SB_EXPERTANALYSE.GetUserName(pr.op_id) as UserName'
+      
+        ',sb_memorial.getcurrencyshortname(pr.val_acc) val_acc, pr.val_ac' +
+        'c as DCurrency'
+      
+        ',sb_memorial.getcurrencyshortname(pr.currencyid_c) currencyid_c,' +
+        ' pr.currencyid_c as KCurrency'
+      ',pr.ammount'
+      ',pr.ammount_c'
+      ',pr.lammount'
+      
+        ',pr.op_id as Operator, sb_expertanalyse.getoperationtype(pr.vid_' +
+        'op, pr.val_acc, pr.currencyID_c) as OperationType'
+      ',a1.acc_no debitor, a1.filial as DebetFilial'
+      ',a1.NAME dname'
+      ',a2.acc_no kreditor, a2.filial as CreditFilial'
+      ',a2.NAME kname'
+      ',pr.debt'
+      ',pr.kredit'
+      ',con.CNTR_NAME'
+      ',pri.name'
+      
+        'FROM  provarch pr, Account A1, Account A2, customers cu,Prinad p' +
+        'ri'
+      
+        '/*,(select * from Account where kli_id in(select id from Custome' +
+        'rs where prinad_kod<>0)) A1'
+      
+        ',(select * from Account where kli_id in(select id from Customers' +
+        ' where prinad_kod<>0)) A2*/'
+      '     ,countries con'
+      '    WHERE'
+      '       (pr.debt=a1.ID)AND(pr.kredit=a2.ID)'
+      
+        '       AND(pr.Dat between :d1 and :d2) and (nvl(pr.COUNTRID,0)=c' +
+        'on.id)'
+      'and A1.kli_id=cu.id'
+      'and A2.kli_id=cu.id'
+      'and Cu.prinad_kod=pri.id'
+      'and cu.prinad_kod <>0'
+      'ORDER BY  pri.name,pr.dat'
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' ')
+    Variables.Data = {
+      0300000002000000030000003A44310C0000000000000000000000030000003A
+      44320C0000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      040000001B000000070000004442414C5F434E010000000000070000004B4241
+      4C5F434E01000000000003000000444154010000000000020000004944010000
+      000000040000004E414D4501000000000008000000555345524E414D45010000
+      0000000700000056414C5F414343010000000000090000004443555252454E43
+      590100000000000C00000043555252454E435949445F43010000000000090000
+      004B43555252454E435901000000000007000000414D4D4F554E540100000000
+      0009000000414D4D4F554E545F43010000000000080000004C414D4D4F554E54
+      010000000000080000004F50455241544F520100000000000D0000004F504552
+      4154494F4E545950450100000000000700000044454249544F52010000000000
+      0B000000444542455446494C49414C01000000000005000000444E414D450100
+      00000000080000004B52454449544F520100000000000C000000435245444954
+      46494C49414C010000000000050000004B4E414D450100000000000400000044
+      454254010000000000060000004B524544495401000000000009000000434E54
+      525F4E414D45010000000000060000004143435F4E4F01000000000008000000
+      4143435F4E4F5F31010000000000060000004E414D455F31010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 488
+    Top = 344
+    object emdtDBAL_CN: TFloatField
+      DisplayLabel = 'Д/Бал Щес'
+      FieldName = 'DBAL_CN'
+    end
+    object emdtKBAL_CN: TFloatField
+      DisplayLabel = 'К/Бал Щес'
+      FieldName = 'KBAL_CN'
+    end
+    object emdtDAT: TDateTimeField
+      DisplayLabel = 'ТАРИХ'
+      FieldName = 'DAT'
+      Required = True
+    end
+    object emdtID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object emdtNAME: TWideStringField
+      DisplayLabel = 'Тяйинаты'
+      FieldName = 'NAME'
+      Size = 255
+    end
+    object emdtUSERNAME: TWideStringField
+      DisplayLabel = 'Истифадячи'
+      FieldName = 'USERNAME'
+      Size = 4000
+    end
+    object emdtVAL_ACC: TWideStringField
+      DisplayLabel = 'Debt $'
+      FieldName = 'VAL_ACC'
+      Size = 4000
+    end
+    object emdtDCURRENCY: TFloatField
+      DisplayLabel = 'Дебет Валйута Коду'
+      FieldName = 'DCURRENCY'
+      Required = True
+    end
+    object emdtCURRENCYID_C: TWideStringField
+      DisplayLabel = 'Кред $'
+      FieldName = 'CURRENCYID_C'
+      Size = 4000
+    end
+    object emdtKCURRENCY: TIntegerField
+      DisplayLabel = 'Кредит Валйута Коду'
+      FieldName = 'KCURRENCY'
+      Required = True
+    end
+    object emdtAMMOUNT: TFloatField
+      DisplayLabel = 'Д. Мябляь'
+      FieldName = 'AMMOUNT'
+      Required = True
+    end
+    object emdtAMMOUNT_C: TFloatField
+      DisplayLabel = 'К . Мябляь'
+      FieldName = 'AMMOUNT_C'
+      Required = True
+    end
+    object emdtLAMMOUNT: TFloatField
+      DisplayLabel = 'Мябляь (манатла)'
+      FieldName = 'LAMMOUNT'
+      Required = True
+    end
+    object emdtOPERATOR: TFloatField
+      DisplayLabel = 'Оператор Коду'
+      FieldName = 'OPERATOR'
+    end
+    object emdtOPERATIONTYPE: TFloatField
+      DisplayLabel = 'Ямялиййат Типи'
+      FieldName = 'OPERATIONTYPE'
+    end
+    object emdtDEBITOR: TWideStringField
+      DisplayLabel = 'Дебит Щесаб №'
+      FieldName = 'DEBITOR'
+    end
+    object emdtDEBETFILIAL: TIntegerField
+      DisplayLabel = 'Дебет Филиал Коду'
+      FieldName = 'DEBETFILIAL'
+    end
+    object emdtDNAME: TWideStringField
+      DisplayLabel = 'Д.Щесабынын ады'
+      FieldName = 'DNAME'
+      Size = 90
+    end
+    object emdtKREDITOR: TWideStringField
+      DisplayLabel = 'Кредит Щесаб №'
+      FieldName = 'KREDITOR'
+    end
+    object emdtCREDITFILIAL: TIntegerField
+      DisplayLabel = 'Кредит Филиал Коду'
+      FieldName = 'CREDITFILIAL'
+    end
+    object emdtKNAME: TWideStringField
+      DisplayLabel = 'К.Щесабынын ады'
+      FieldName = 'KNAME'
+      Size = 90
+    end
+    object emdtDEBT: TFloatField
+      FieldName = 'DEBT'
+      Required = True
+    end
+    object emdtKREDIT: TFloatField
+      FieldName = 'KREDIT'
+      Required = True
+    end
+    object emdtCNTR_NAME: TWideStringField
+      DisplayLabel = 'Юлкя'
+      FieldName = 'CNTR_NAME'
+      Size = 30
+    end
+    object emdtNAME_1: TWideStringField
+      DisplayLabel = 'Банкла ялагяси'
+      FieldName = 'NAME_1'
+      Size = 90
+    end
+  end
+  object out_emdt: TOracleDataSet
+    SQL.Strings = (
+      'SELECT distinct'
+      ' a1.bal_cn1 dbal_cn ,a1.acc_no'
+      ',a2.bal_cn1 kbal_cn,a2.acc_no'
+      ',pr.dat ,pr.ID'
+      ',pr.NAME, SB_EXPERTANALYSE.GetUserName(pr.op_id) as UserName'
+      
+        ',sb_memorial.getcurrencyshortname(pr.val_acc) val_acc, pr.val_ac' +
+        'c as DCurrency'
+      
+        ',sb_memorial.getcurrencyshortname(pr.currencyid_c) currencyid_c,' +
+        ' pr.currencyid_c as KCurrency'
+      ',pr.ammount'
+      ',pr.ammount_c'
+      ',pr.lammount'
+      
+        ',pr.op_id as Operator, sb_expertanalyse.getoperationtype(pr.vid_' +
+        'op, pr.val_acc, pr.currencyID_c) as OperationType'
+      ',a1.acc_no debitor, a1.filial as DebetFilial'
+      ',a1.NAME dname'
+      ',a2.acc_no kreditor, a2.filial as CreditFilial'
+      ',a2.NAME kname'
+      ',pr.debt'
+      ',pr.kredit'
+      ',pri.name'
+      
+        'FROM  out_provarch pr, out_Account A1, out_Account A2, customers' +
+        ' cu,prinad pri'
+      
+        '/*,(select * from Account where kli_id in(select id from Custome' +
+        'rs where prinad_kod<>0)) A1'
+      
+        ',(select * from Account where kli_id in(select id from Customers' +
+        ' where prinad_kod<>0)) A2*/'
+      '     '
+      '    WHERE'
+      '       (pr.debt=a1.ID)AND(pr.kredit=a2.ID)'
+      '       AND(pr.Dat between :d1 and :d2) '
+      'and A1.kli_id=cu.id'
+      'and A2.kli_id=cu.id'
+      'and cu.prinad_kod=pri.id'
+      'and cu.prinad_kod <>0'
+      'ORDER BY  pr.Dat'
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ' '
+      ''
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' ')
+    Variables.Data = {
+      0300000002000000030000003A44310C0000000000000000000000030000003A
+      44320C0000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      040000001A000000070000004442414C5F434E010000000000070000004B4241
+      4C5F434E01000000000003000000444154010000000000020000004944010000
+      000000040000004E414D4501000000000008000000555345524E414D45010000
+      0000000700000056414C5F414343010000000000090000004443555252454E43
+      590100000000000C00000043555252454E435949445F43010000000000090000
+      004B43555252454E435901000000000007000000414D4D4F554E540100000000
+      0009000000414D4D4F554E545F43010000000000080000004C414D4D4F554E54
+      010000000000080000004F50455241544F520100000000000D0000004F504552
+      4154494F4E545950450100000000000700000044454249544F52010000000000
+      0B000000444542455446494C49414C01000000000005000000444E414D450100
+      00000000080000004B52454449544F520100000000000C000000435245444954
+      46494C49414C010000000000050000004B4E414D450100000000000400000044
+      454254010000000000060000004B524544495401000000000006000000414343
+      5F4E4F010000000000080000004143435F4E4F5F31010000000000060000004E
+      414D455F31010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 536
+    Top = 344
+    object out_emdtDBAL_CN: TFloatField
+      DisplayLabel = 'Д/Бал Щес'
+      FieldName = 'DBAL_CN'
+    end
+    object out_emdtKBAL_CN: TFloatField
+      DisplayLabel = 'К/Бал Щес'
+      FieldName = 'KBAL_CN'
+    end
+    object out_emdtDAT: TDateTimeField
+      DisplayLabel = 'ТАРИХ'
+      FieldName = 'DAT'
+      Required = True
+    end
+    object out_emdtID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object out_emdtNAME: TWideStringField
+      DisplayLabel = 'Тяйинаты'
+      FieldName = 'NAME'
+      Size = 255
+    end
+    object out_emdtUSERNAME: TWideStringField
+      DisplayLabel = 'Истифадячи'
+      FieldName = 'USERNAME'
+      Size = 4000
+    end
+    object out_emdtVAL_ACC: TWideStringField
+      DisplayLabel = 'Debt $'
+      FieldName = 'VAL_ACC'
+      Size = 4000
+    end
+    object out_emdtDCURRENCY: TFloatField
+      DisplayLabel = 'Дебет Валйута Коду'
+      FieldName = 'DCURRENCY'
+      Required = True
+    end
+    object out_emdtCURRENCYID_C: TWideStringField
+      DisplayLabel = 'Кред $'
+      FieldName = 'CURRENCYID_C'
+      Size = 4000
+    end
+    object out_emdtKCURRENCY: TIntegerField
+      DisplayLabel = 'Кредит Валйута Коду'
+      FieldName = 'KCURRENCY'
+      Required = True
+    end
+    object out_emdtAMMOUNT: TFloatField
+      DisplayLabel = 'Д. Мябляь'
+      FieldName = 'AMMOUNT'
+      Required = True
+    end
+    object out_emdtAMMOUNT_C: TFloatField
+      DisplayLabel = 'К . Мябляь'
+      FieldName = 'AMMOUNT_C'
+      Required = True
+    end
+    object out_emdtLAMMOUNT: TFloatField
+      DisplayLabel = 'Мябляь (манатла)'
+      FieldName = 'LAMMOUNT'
+      Required = True
+    end
+    object out_emdtOPERATOR: TFloatField
+      DisplayLabel = 'Оператор Коду'
+      FieldName = 'OPERATOR'
+    end
+    object out_emdtOPERATIONTYPE: TFloatField
+      DisplayLabel = 'Ямялиййат Типи'
+      FieldName = 'OPERATIONTYPE'
+    end
+    object out_emdtDEBITOR: TWideStringField
+      DisplayLabel = 'Дебит Щесаб №'
+      FieldName = 'DEBITOR'
+    end
+    object out_emdtDEBETFILIAL: TIntegerField
+      DisplayLabel = 'Дебет Филиал Коду'
+      FieldName = 'DEBETFILIAL'
+    end
+    object out_emdtDNAME: TWideStringField
+      DisplayLabel = 'Д.Щесабынын ады'
+      FieldName = 'DNAME'
+      Size = 90
+    end
+    object out_emdtKREDITOR: TWideStringField
+      DisplayLabel = 'Кредит Щесаб №'
+      FieldName = 'KREDITOR'
+    end
+    object out_emdtCREDITFILIAL: TIntegerField
+      DisplayLabel = 'Кредит Филиал Коду'
+      FieldName = 'CREDITFILIAL'
+    end
+    object out_emdtKNAME: TWideStringField
+      DisplayLabel = 'К.Щесабынын ады'
+      FieldName = 'KNAME'
+      Size = 90
+    end
+    object out_emdtDEBT: TFloatField
+      FieldName = 'DEBT'
+      Required = True
+    end
+    object out_emdtKREDIT: TFloatField
+      FieldName = 'KREDIT'
+      Required = True
+    end
+    object out_emdtNAME_1: TWideStringField
+      DisplayLabel = 'Банкла ялагяси'
+      FieldName = 'NAME_1'
+      Size = 90
+    end
+  end
+  object qal: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      
+        '  RestForLastPeriod.AccountID ,RestForLastPeriod.name_1 as name_' +
+        '1,'
+      
+        '  RestForLastPeriod.AccNo , RestForLastPeriod.AccName as ACC_NAM' +
+        'E ,'
+      '  RestForLastPeriod.CurrencyID ,'
+      '  RestForLastPeriod.BranchID ,'
+      '  RestForLastPeriod.BalanceNo ,'
+      '  RestForFirstPeriod.Active as BeginActive ,'
+      '  RestForFirstPeriod.Passive as BeginPassive ,'
+      '  RestForFirstPeriod.LActive as LBeginActive ,'
+      '  RestForFirstPeriod.LPassive as LBeginPassive ,'
+      '  TurnOvers.DTurnOver ,'
+      '  TurnOvers.CTurnOver ,'
+      '  TurnOvers.LDTurnOver ,'
+      '  TurnOvers.LCTurnOver ,'
+      '  RestForLastPeriod.Active as EndActive ,'
+      '  RestForLastPeriod.Passive as EndPassive ,'
+      '  RestForLastPeriod.LActive as LEndActive ,'
+      '  RestForLastPeriod.LPassive as LEndPassive'
+      'from'
+      ''
+      '(select'
+      '  ac.ID as AccountID ,'
+      '  ac.acc_no as AccNo ,'
+      '  b.bal_cn  as BalanceNo ,'
+      ''
+      '  sb_mtoutview.active ('
+      '    ar.ostat,'
+      '    b.typeid,'
+      '    b.additionaltypeid'
+      '  ) as Active ,'
+      ''
+      '  sb_mtoutview.passiv ('
+      '     ar.ostat,'
+      '     b.typeid,'
+      '     b.additionaltypeid'
+      '  ) as Passive ,'
+      ''
+      '  sb_mtoutview.active ('
+      '    ar.pok_ostat,'
+      '    b.typeid,'
+      '    b.additionaltypeid'
+      '  ) as LActive ,'
+      ''
+      '  sb_mtoutview.passiv ('
+      '     ar.pok_ostat,'
+      '     b.typeid,'
+      '     b.additionaltypeid'
+      '  ) as LPassive'
+      ''
+      'from'
+      '  account ac ,'
+      '  archost ar ,'
+      '  bal_spr1  b  /*52*/'
+      'where'
+      '  ar.acc_id = ac.id and'
+      '  ac.bal_cn1 = b.bal_cn and     /*55*/'
+      '  ar.DatDate = :BeginPeriod  and'
+      '  ((ac.Close_Dat is null)or(ac.Close_Dat > :BeginPeriod))'
+      ') RestForFirstPeriod ,'
+      ''
+      '(select'
+      '  ac.ID as AccountID , sb_mtoutview.prinadof(ac.id) as name_1,'
+      '  ac.acc_no as AccNo , ac.name as AccName ,'
+      '  ac.val_acc as CurrencyID ,'
+      '  ac.filial as BranchID ,'
+      '  b.bal_cn  as BalanceNo ,'
+      ''
+      '  sb_mtoutview.active ('
+      '    ar.ostat,'
+      '    b.typeid,'
+      '    b.additionaltypeid'
+      '  ) as Active ,'
+      ''
+      '  sb_mtoutview.passiv ('
+      '     ar.ostat,'
+      '     b.typeid,'
+      '     b.additionaltypeid'
+      '  ) as Passive ,'
+      ''
+      '  sb_mtoutview.active ('
+      '    ar.pok_ostat,'
+      '    b.typeid,'
+      '    b.additionaltypeid'
+      '  ) as LActive ,'
+      ''
+      '  sb_mtoutview.passiv ('
+      '     ar.pok_ostat,'
+      '     b.typeid,'
+      '     b.additionaltypeid'
+      '  ) as LPassive'
+      ''
+      'from'
+      '  account ac ,'
+      '  archost ar ,'
+      '  bal_spr1   b  /*94*/'
+      'where'
+      '  ar.acc_id = ac.id and'
+      '  ac.bal_cn1 = b.bal_cn  and  /*97*/'
+      '  ar.DatDate = :EndDate  and'
+      ' ((ac.Close_Dat is null)or(ac.Close_Dat > :BeginPeriod))'
+      ') RestForLastPeriod ,'
+      ''
+      '(select'
+      '  ac.ID as AccountID ,'
+      '  min(ac.acc_no) as AccNo,'
+      '  min(b.bal_cn)  as BalanceNo ,'
+      '  sum(ar.Obr_D) as DTurnOver ,'
+      '  sum(ar.Obr_K) as CTurnOver ,'
+      '  sum(ar.Pok_Obr_D) as LDTurnOver ,'
+      '  sum(ar.Pok_Obr_K) as LCTurnOver'
+      ''
+      'from'
+      '  account ac ,'
+      '  archost ar ,'
+      '  bal_spr1   b  /*114*/'
+      'where'
+      '  ar.acc_id = ac.id and'
+      '  ac.bal_cn1 = b.bal_cn  and /*117*/'
+      '  ar.DatDate between :BeginDate and :EndDate'
+      'group by'
+      '  ac.ID'
+      ') TurnOvers'
+      ''
+      'where'
+      
+        '   RestForLastPeriod.AccountID = RestForFirstPeriod.AccountID  (' +
+        '+) and'
+      '   RestForLastPeriod.AccountID = TurnOvers.AccountID'
+      ''
+      'order by'
+      '  RestForLastPeriod.name_1,RestForLastPeriod.AccName'
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' ')
+    Variables.Data = {
+      03000000030000000A0000003A424547494E444154450C000000000000000000
+      0000080000003A454E44444154450C00000000000000000000000C0000003A42
+      4547494E504552494F440C0000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      0400000013000000090000004143434F554E5449440100000000000500000041
+      43434E4F010000000000080000004143435F4E414D450100000000000A000000
+      43555252454E43594944010000000000080000004252414E4348494401000000
+      00000900000042414C414E43454E4F0100000000000B000000424547494E4143
+      544956450100000000000C000000424547494E50415353495645010000000000
+      0C0000004C424547494E4143544956450100000000000D0000004C424547494E
+      5041535349564501000000000009000000445455524E4F564552010000000000
+      09000000435455524E4F5645520100000000000A0000004C445455524E4F5645
+      520100000000000A0000004C435455524E4F5645520100000000000900000045
+      4E444143544956450100000000000A000000454E445041535349564501000000
+      00000A0000004C454E444143544956450100000000000B0000004C454E445041
+      5353495645010000000000060000004E414D455F31010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 416
+    Top = 368
+    object qalACCOUNTID: TFloatField
+      FieldName = 'ACCOUNTID'
+      Required = True
+    end
+    object qalACCNO: TWideStringField
+      DisplayLabel = 'Щесабын №'
+      FieldName = 'ACCNO'
+    end
+    object qalCURRENCYID: TIntegerField
+      DisplayLabel = 'Валйутанын Коду'
+      FieldName = 'CURRENCYID'
+    end
+    object qalBALANCENO: TFloatField
+      DisplayLabel = 'Баланс Щесабы'
+      FieldName = 'BALANCENO'
+    end
+    object qalBEGINACTIVE: TFloatField
+      DisplayLabel = 'Д.Я. Актив'
+      FieldName = 'BEGINACTIVE'
+    end
+    object qalLBEGINACTIVE: TFloatField
+      DisplayLabel = 'Д.Я. Актив(ман)'
+      FieldName = 'LBEGINACTIVE'
+    end
+    object qalBEGINPASSIVE: TFloatField
+      DisplayLabel = 'Д.Я. Пассив'
+      FieldName = 'BEGINPASSIVE'
+    end
+    object qalLBEGINPASSIVE: TFloatField
+      DisplayLabel = 'Д.Я. Пассив(ман)'
+      FieldName = 'LBEGINPASSIVE'
+    end
+    object qalDTURNOVER: TFloatField
+      DisplayLabel = 'Д. Довриййя'
+      FieldName = 'DTURNOVER'
+    end
+    object qalLDTURNOVER: TFloatField
+      DisplayLabel = 'Д. Довриййя(ман)'
+      FieldName = 'LDTURNOVER'
+    end
+    object qalCTURNOVER: TFloatField
+      DisplayLabel = 'К. Довриййя'
+      FieldName = 'CTURNOVER'
+    end
+    object qalLCTURNOVER: TFloatField
+      DisplayLabel = 'К. Довриййя(ман)'
+      FieldName = 'LCTURNOVER'
+    end
+    object qalENDACTIVE: TFloatField
+      DisplayLabel = 'Д.С. Актив'
+      FieldName = 'ENDACTIVE'
+    end
+    object qalLENDACTIVE: TFloatField
+      DisplayLabel = 'Д.С. Актив(ман)'
+      FieldName = 'LENDACTIVE'
+    end
+    object qalENDPASSIVE: TFloatField
+      DisplayLabel = 'Д.С. Пассив'
+      FieldName = 'ENDPASSIVE'
+    end
+    object qalLENDPASSIVE: TFloatField
+      DisplayLabel = 'Д.С. Пассив(ман)'
+      FieldName = 'LENDPASSIVE'
+    end
+    object qalACC_NAME: TWideStringField
+      DisplayLabel = 'Щесабын Ады'
+      FieldName = 'ACC_NAME'
+      Size = 90
+    end
+    object qalBRANCHID: TIntegerField
+      DisplayLabel = 'Филиал коду'
+      FieldName = 'BRANCHID'
+    end
+    object qalNAME_1: TWideStringField
+      DisplayLabel = 'Банкла ялагяси'
+      FieldName = 'NAME_1'
+      Size = 4000
+    end
+  end
+  object PeriodPrefixData: TOracleDataSet
+    SQL.Strings = (
+      'select '
+      '  MAX(DAT) as PeriodPrefix'
+      'from '
+      '  Operkurs'
+      'where '
+      '  DAT<:ADATE')
+    Variables.Data = {0300000001000000060000003A41444154450C0000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {04000000010000000C000000504552494F44505245464958010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 320
+    Top = 432
+    object PeriodPrefixDataPERIODPREFIX: TDateTimeField
+      FieldName = 'PERIODPREFIX'
+    end
+  end
+  object qal_out: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      
+        '  RestForLastPeriod.AccountID , RestForLastPeriod.name_1 as name' +
+        '_1,'
+      
+        '  RestForLastPeriod.AccNo , RestForLastPeriod.AccName as ACC_NAM' +
+        'E ,'
+      '  RestForLastPeriod.CurrencyID ,'
+      '  RestForLastPeriod.BranchID ,'
+      '  RestForLastPeriod.BalanceNo ,'
+      '  RestForFirstPeriod.Active as BeginActive ,'
+      '  RestForFirstPeriod.Passive as BeginPassive ,'
+      '  RestForFirstPeriod.LActive as LBeginActive ,'
+      '  RestForFirstPeriod.LPassive as LBeginPassive ,'
+      '  TurnOvers.DTurnOver ,'
+      '  TurnOvers.CTurnOver ,'
+      '  TurnOvers.LDTurnOver ,'
+      '  TurnOvers.LCTurnOver ,'
+      '  RestForLastPeriod.Active as EndActive ,'
+      '  RestForLastPeriod.Passive as EndPassive ,'
+      '  RestForLastPeriod.LActive as LEndActive ,'
+      '  RestForLastPeriod.LPassive as LEndPassive'
+      'from'
+      ''
+      '(select'
+      '  ac.ID as AccountID ,'
+      '  ac.acc_no as AccNo ,'
+      '  b.bal_cn  as BalanceNo ,'
+      ''
+      '  sb_mtoutview.active ('
+      '    ar.ostat,'
+      '    b.typeid,'
+      '    b.additionaltypeid'
+      '  ) as Active ,'
+      ''
+      '  sb_mtoutview.passiv ('
+      '     ar.ostat,'
+      '     b.typeid,'
+      '     b.additionaltypeid'
+      '  ) as Passive ,'
+      ''
+      '  sb_mtoutview.active ('
+      '    ar.pok_ostat,'
+      '    b.typeid,'
+      '    b.additionaltypeid'
+      '  ) as LActive ,'
+      ''
+      '  sb_mtoutview.passiv ('
+      '     ar.pok_ostat,'
+      '     b.typeid,'
+      '     b.additionaltypeid'
+      '  ) as LPassive'
+      ''
+      'from'
+      '  out_account ac ,'
+      '  out_archost ar ,'
+      '  out_bal_spr1 b  /*52*/'
+      'where'
+      '  ar.acc_id = ac.id and'
+      '  ac.bal_cn1 = b.bal_cn and     /*55*/'
+      '  ar.DatDate = :BeginPeriod  and'
+      '  ((ac.Close_Dat is null)or(ac.Close_Dat > :BeginPeriod))'
+      ') RestForFirstPeriod ,'
+      ''
+      '(select'
+      '  ac.ID as AccountID , sb_mtoutview.prinadof(ac.id) as name_1,'
+      '  ac.acc_no as AccNo , ac.name as AccName ,'
+      '  ac.val_acc as CurrencyID ,'
+      '  ac.filial as BranchID ,'
+      '  b.bal_cn  as BalanceNo ,'
+      ''
+      '  sb_mtoutview.active ('
+      '    ar.ostat,'
+      '    b.typeid,'
+      '    b.additionaltypeid'
+      '  ) as Active ,'
+      ''
+      '  sb_mtoutview.passiv ('
+      '     ar.ostat,'
+      '     b.typeid,'
+      '     b.additionaltypeid'
+      '  ) as Passive ,'
+      ''
+      '  sb_mtoutview.active ('
+      '    ar.pok_ostat,'
+      '    b.typeid,'
+      '    b.additionaltypeid'
+      '  ) as LActive ,'
+      ''
+      '  sb_mtoutview.passiv ('
+      '     ar.pok_ostat,'
+      '     b.typeid,'
+      '     b.additionaltypeid'
+      '  ) as LPassive'
+      ''
+      'from'
+      '  out_account ac ,'
+      '  out_archost ar ,'
+      '  out_bal_spr1  b  /*94*/'
+      'where'
+      '  ar.acc_id = ac.id and'
+      '  ac.bal_cn1 = b.bal_cn  and  /*97*/'
+      '  ar.DatDate = :EndDate  and'
+      ' ((ac.Close_Dat is null)or(ac.Close_Dat > :BeginPeriod))'
+      ') RestForLastPeriod ,'
+      ''
+      '(select'
+      '  ac.ID as AccountID ,'
+      '  min(ac.acc_no) as AccNo,'
+      '  min(b.bal_cn)  as BalanceNo ,'
+      '  sum(ar.Obr_D) as DTurnOver ,'
+      '  sum(ar.Obr_K) as CTurnOver ,'
+      '  sum(ar.Pok_Obr_D) as LDTurnOver ,'
+      '  sum(ar.Pok_Obr_K) as LCTurnOver'
+      ''
+      'from'
+      '  out_account ac ,                  '
+      '  out_archost ar ,'
+      '  out_bal_spr1  b  /*114*/'
+      'where'
+      '  ar.acc_id = ac.id and'
+      '  ac.bal_cn1 = b.bal_cn  and /*117*/'
+      '  ar.DatDate between :BeginDate and :EndDate'
+      'group by'
+      '  ac.ID'
+      ') TurnOvers'
+      ''
+      'where'
+      
+        '   RestForLastPeriod.AccountID = RestForFirstPeriod.AccountID  (' +
+        '+) and'
+      '   RestForLastPeriod.AccountID = TurnOvers.AccountID'
+      ''
+      'order by'
+      '  RestForLastPeriod.name_1 , RestForLastPeriod.AccName'
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' ')
+    Variables.Data = {
+      03000000030000000A0000003A424547494E444154450C000000000000000000
+      0000080000003A454E44444154450C00000000000000000000000C0000003A42
+      4547494E504552494F440C0000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      0400000013000000090000004143434F554E5449440100000000000500000041
+      43434E4F010000000000080000004143435F4E414D450100000000000A000000
+      43555252454E43594944010000000000080000004252414E4348494401000000
+      00000900000042414C414E43454E4F0100000000000B000000424547494E4143
+      544956450100000000000C000000424547494E50415353495645010000000000
+      0C0000004C424547494E4143544956450100000000000D0000004C424547494E
+      5041535349564501000000000009000000445455524E4F564552010000000000
+      09000000435455524E4F5645520100000000000A0000004C445455524E4F5645
+      520100000000000A0000004C435455524E4F5645520100000000000900000045
+      4E444143544956450100000000000A000000454E445041535349564501000000
+      00000A0000004C454E444143544956450100000000000B0000004C454E445041
+      5353495645010000000000060000004E414D455F31010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 360
+    Top = 368
+    object qal_outACCOUNTID: TFloatField
+      FieldName = 'ACCOUNTID'
+      Required = True
+    end
+    object qal_outACCNO: TWideStringField
+      DisplayLabel = 'Щесабын №'
+      FieldName = 'ACCNO'
+    end
+    object qal_outCURRENCYID: TIntegerField
+      DisplayLabel = 'Валйутанын Коду'
+      FieldName = 'CURRENCYID'
+    end
+    object qal_outBALANCENO: TFloatField
+      DisplayLabel = 'Баланс Щесабы'
+      FieldName = 'BALANCENO'
+    end
+    object qal_outBEGINACTIVE: TFloatField
+      DisplayLabel = 'Д.Я. Актив'
+      FieldName = 'BEGINACTIVE'
+    end
+    object qal_outLBEGINACTIVE: TFloatField
+      DisplayLabel = 'Д.Я. Актив(ман)'
+      FieldName = 'LBEGINACTIVE'
+    end
+    object qal_outBEGINPASSIVE: TFloatField
+      DisplayLabel = 'Д.Я. Пассив'
+      FieldName = 'BEGINPASSIVE'
+    end
+    object qal_outLBEGINPASSIVE: TFloatField
+      DisplayLabel = 'Д.Я. Пассив(ман)'
+      FieldName = 'LBEGINPASSIVE'
+    end
+    object qal_outDTURNOVER: TFloatField
+      DisplayLabel = 'Д. Довриййя'
+      FieldName = 'DTURNOVER'
+    end
+    object qal_outLDTURNOVER: TFloatField
+      DisplayLabel = 'Д. Довриййя(ман)'
+      FieldName = 'LDTURNOVER'
+    end
+    object qal_outCTURNOVER: TFloatField
+      DisplayLabel = 'К. Довриййя'
+      FieldName = 'CTURNOVER'
+    end
+    object qal_outLCTURNOVER: TFloatField
+      DisplayLabel = 'К. Довриййя(ман)'
+      FieldName = 'LCTURNOVER'
+    end
+    object qal_outENDACTIVE: TFloatField
+      DisplayLabel = 'Д.С. Актив'
+      FieldName = 'ENDACTIVE'
+    end
+    object qal_outLENDACTIVE: TFloatField
+      DisplayLabel = 'Д.С. Актив(ман)'
+      FieldName = 'LENDACTIVE'
+    end
+    object qal_outENDPASSIVE: TFloatField
+      DisplayLabel = 'Д.С. Пассив'
+      FieldName = 'ENDPASSIVE'
+    end
+    object qal_outLENDPASSIVE: TFloatField
+      DisplayLabel = 'Д.С. Пассив(ман)'
+      FieldName = 'LENDPASSIVE'
+    end
+    object qal_outACC_NAME: TWideStringField
+      DisplayLabel = 'Щесабын Ады'
+      FieldName = 'ACC_NAME'
+      Size = 90
+    end
+    object qal_outBRANCHID: TIntegerField
+      DisplayLabel = 'Филиал коду'
+      FieldName = 'BRANCHID'
+    end
+    object qal_outNAME_1: TWideStringField
+      DisplayLabel = 'Банкла ялагяси'
+      FieldName = 'NAME_1'
+      Size = 4000
+    end
+  end
+  object prinad: TOracleDataSet
+    SQL.Strings = (
+      'select id,name from prinad where id<>0 order by id')
+    QBEDefinition.QBEFieldDefs = {
+      0400000002000000020000004944010000000000040000004E414D4501000000
+      0000}
+    Session = sboapiDataModule.SBSession
+    Left = 232
+    Top = 416
+    object prinadID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object prinadNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 90
+    end
+  end
+  object sysdat: TOracleDataSet
+    SQL.Strings = (
+      'select tek_dat from sysdat')
+    Session = sboapiDataModule.SBSession
+    Left = 96
+    Top = 416
+  end
+  object CMExcelExport1: TCMExcelExport
+    StyleColumnWidth = cwDefault
+    ColumnWidth = 0
+    FontTitles.Charset = DEFAULT_CHARSET
+    FontTitles.Color = clWindowText
+    FontTitles.Height = -11
+    FontTitles.Name = 'MS Sans Serif'
+    FontTitles.Style = []
+    OrientationTitles = 0
+    FontData.Charset = DEFAULT_CHARSET
+    FontData.Color = clWindowText
+    FontData.Height = -11
+    FontData.Name = 'MS Sans Serif'
+    FontData.Style = []
+    FontSummary.Charset = DEFAULT_CHARSET
+    FontSummary.Color = clWindowText
+    FontSummary.Height = -11
+    FontSummary.Name = 'MS Sans Serif'
+    FontSummary.Style = []
+    SummarySelection = ssNone
+    SummaryCalculation = scSUM
+    Left = 144
+    Top = 456
+  end
+end

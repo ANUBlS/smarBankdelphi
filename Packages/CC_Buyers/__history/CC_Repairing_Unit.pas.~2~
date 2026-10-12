@@ -1,0 +1,68 @@
+unit CC_Repairing_Unit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, NLSDialogs,
+  Buttons, StdCtrls, NLSLocalizer;
+
+type
+  TCC_FormRepairing = class(TForm)
+    GroupBox1: TGroupBox;
+    SpeedButton1: TSpeedButton;
+    SpeedButton2: TSpeedButton;
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure SpeedButton2Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+   procedure WMNCACTIVATE(var message:TWMNCActivate);
+   procedure WMNCPaint(var message: TWMNCPaint);
+
+  end;
+
+var
+  CC_FormRepairing: TCC_FormRepairing;
+
+implementation
+
+uses CC_Settings_Unit, CC_Commision_Trans_Unit, CC_Country_Unit;
+
+{$R *.DFM}
+ procedure TCC_FormRepairing.WMNCACTIVATE(var message:TWMNCActivate);
+var
+ S:TWMNCPaint;
+begin
+inherited;
+WMNCPaint(s);
+end;
+
+procedure TCC_FormRepairing.WMNCPaint(var message: TWMNCPaint);
+const Capt = 'ёлк€л€р';
+var dc : hDc;
+begin
+inherited;
+Caption:='';
+dc := GetWindowDC(Handle);
+        SetBkMode(dc,Transparent);
+        SetTextColor(dc,clWhite);
+        SelectObject(dc, Font.Handle);
+        TextOut(dc, 23,6,Capt,Length(Capt));
+end;
+
+procedure TCC_FormRepairing.SpeedButton1Click(Sender: TObject);
+begin
+CC_Settings:= TCC_Settings.Create(Self);
+CC_Settings.ShowModal;
+close;
+end;
+
+procedure TCC_FormRepairing.SpeedButton2Click(Sender: TObject);
+begin
+CC_Country_ins := TCC_Country_ins.Create(Self);
+CC_Country_ins.ShowModal;
+close;
+end;
+
+end.

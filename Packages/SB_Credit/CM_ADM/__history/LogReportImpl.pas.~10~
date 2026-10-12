@@ -1,0 +1,70 @@
+unit LogReportImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ComCtrls, StdCtrls, Buttons, DBCtrls, CMExcelExport;
+
+type
+  TFrmLogReport = class(TForm)
+    BitBtn1: TBitBtn;
+    BitBtn2: TBitBtn;
+    GroupBox1: TGroupBox;
+    DateTimePicker2: TDateTimePicker;
+    DateTimePicker1: TDateTimePicker;
+    GroupBox2: TGroupBox;
+    DBLookupComboBox1: TDBLookupComboBox;
+    MisExcelExport: TCMExcelExport;
+    procedure FormCanResize(Sender: TObject; var NewWidth, NewHeight: Integer;
+      var Resize: Boolean);
+    procedure FormCreate(Sender: TObject);
+    procedure BitBtn1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmLogReport: TFrmLogReport;
+
+implementation
+
+uses admDataModule;
+
+{$R *.dfm}
+
+procedure TFrmLogReport.BitBtn1Click(Sender: TObject);
+begin
+ with admDM.OracleDataSet2 do
+ begin
+ if Active=true then
+ close;
+ SetVariable('brid',DBLookupComboBox1.KeyValue);
+ SetVariable('bdat',DateTimePicker1.Date);
+ SetVariable('edat',DateTimePicker2.Date)   ;
+ open;
+ end;
+    with MisExcelExport do
+  begin
+     Connect;
+     ExportDataset(admDM.OracleDataSet2,'Loqs',true,true);
+     Disconnect;
+  end;
+end;
+
+procedure TFrmLogReport.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+Resize:=False
+end;
+
+procedure TFrmLogReport.FormCreate(Sender: TObject);
+begin
+  admDM := TadmDM.Create(Self);
+DateTimePicker1.DateTime:=admDM.sysdat.fieldbyname('TEK_DAT').asdatetime;
+DateTimePicker2.DateTime:=admDM.sysdat.fieldbyname('TEK_DAT').asdatetime;
+end;
+
+end.

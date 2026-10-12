@@ -1,0 +1,263 @@
+unit PaymentDataModul;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, OracleData, Oracle;
+
+type
+  TPaymentDataMod = class(TDataModule)
+    ODSAccounts: TOracleDataSet;
+    ODSBankInfo: TOracleDataSet;
+    ODSBankM: TOracleDataSet;
+    DSAccounts: TDataSource;
+    DSBankInfo: TDataSource;
+    OPPayment: TOraclePackage;
+    ODSArchive: TOracleDataSet;
+    DSArchive: TDataSource;
+    DSBankM: TDataSource;
+    ODSBankInfoKRNO: TWideStringField;
+    ODSBankInfoINN: TWideStringField;
+    ODSBankInfoSWIFT: TWideStringField;
+    ODSArchiveID: TFloatField;
+    ODSArchivePDATE: TDateTimeField;
+    ODSArchivePNUM: TFloatField;
+    ODSArchiveDBNAME: TWideStringField;
+    ODSArchiveDBCOD: TWideStringField;
+    ODSArchiveDBINN: TWideStringField;
+    ODSArchiveDBCORACC: TWideStringField;
+    ODSArchiveDBSWIFT: TWideStringField;
+    ODSArchiveDACC_NO: TWideStringField;
+    ODSArchiveDACCNAME: TWideStringField;
+    ODSArchiveDACCINN: TWideStringField;
+    ODSArchiveKBNAME: TWideStringField;
+    ODSArchiveKBCOD: TWideStringField;
+    ODSArchiveKBINN: TWideStringField;
+    ODSArchiveKBCORACC: TWideStringField;
+    ODSArchiveKBSWIFT: TWideStringField;
+    ODSArchiveKACC_NO: TWideStringField;
+    ODSArchiveKACCNAME: TWideStringField;
+    ODSArchiveKACCINN: TWideStringField;
+    ODSArchiveASSIGNMENT: TWideStringField;
+    ODSArchiveEXTRA: TWideStringField;
+    ODSArchiveMOD_BANK: TWideStringField;
+    ODSArchiveBUDGETCLASS: TWideStringField;
+    ODSArchiveBUDGETLEVEL: TWideStringField;
+    ODSBankMID: TFloatField;
+    ODSBankMKRNO: TWideStringField;
+    ODSBankMNAME: TWideStringField;
+    ODSBankMINN: TWideStringField;
+    ODSBankMSWIFT: TWideStringField;
+    ODSBankMBANKCODE: TWideStringField;
+    ODSBankMSUBKRNO: TWideStringField;
+    Ods_Acc_Vall: TOracleDataSet;
+    Ods_Acc_VallID: TFloatField;
+    Ods_Acc_VallVALU_SHORT: TWideStringField;
+    Ods_Acc_VallVALU_BALA: TWideStringField;
+    Ods_Acc_VallVAL_ACC: TIntegerField;
+    Ods_Acc_VallVAL_NAME: TWideStringField;
+    ODS_Acc_symbol: TOracleDataSet;
+    ODS_Acc_symbolACC_NO: TWideStringField;
+    ODS_Acc_symbolOLD: TWideStringField;
+    ODS_Acc_symbolSYMBOL: TWideStringField;
+    ODSBankInfoNAME: TWideStringField;
+    ODSBankInfoBANKCODE: TWideStringField;
+    ODSBankInfoID: TFloatField;
+    ODSBankInfoSUBKRNO: TWideStringField;
+    ODSBankInfoBANK_KOD: TFloatField;
+    ODSBankInfoLICENSE_DATE: TDateTimeField;
+    ODSBankInfoTAX_REGCODE: TWideStringField;
+    ODSBankInfoOURS: TFloatField;
+    Ds_valute: TOracleDataSet;
+    Dsr_valute: TDataSource;
+    Ds_valuteVALUTE: TIntegerField;
+    Ds_valuteVAL_NAME: TWideStringField;
+    Ds_valuteVALU_SHORT: TWideStringField;
+    Ds_valuteVALU_BALA: TWideStringField;
+    Dsr_Acoount: TDataSource;
+    ODSTransferaccount: TOracleDataSet;
+    DS_transferaccount: TDataSource;
+    ODSbank: TOracleDataSet;
+    DSBank: TDataSource;
+    ODSbankKOD_B: TFloatField;
+    ODSbankBANK: TWideStringField;
+    ODSbankAZ_NAME: TWideStringField;
+    ODSbankKRNO: TWideStringField;
+    ODSbankINN: TWideStringField;
+    ODSbankSWIFT: TWideStringField;
+    Ds_Acoount: TOracleDataSet;
+    rezerv: TOracleDataSet;
+    ODSArchiveAMMOUNT: TWideStringField;
+    Ds_Inv_child: TOracleDataSet;
+    Dsr_Inv_child: TDataSource;
+    Ds_Inv_childID: TFloatField;
+    Ds_Inv_childCOL1: TWideStringField;
+    Ds_Inv_childCOL2: TWideStringField;
+    Ds_Inv_childCOL3: TWideStringField;
+    Dsr_Inv_Archive: TDataSource;
+    Ds_Inv_Archive: TOracleDataSet;
+    Ds_Inv_ArchiveID: TFloatField;
+    Ds_Inv_ArchivePDATE: TDateTimeField;
+    Ds_Inv_ArchiveDBNAME: TWideStringField;
+    Ds_Inv_ArchiveDBCOD: TWideStringField;
+    Ds_Inv_ArchiveDBINN: TWideStringField;
+    Ds_Inv_ArchiveDBSWIFT: TWideStringField;
+    Ds_Inv_ArchiveDACC_NO: TWideStringField;
+    Ds_Inv_ArchiveKBNAME: TWideStringField;
+    Ds_Inv_ArchiveKBINN: TWideStringField;
+    Ds_Inv_ArchiveKACC_NO: TWideStringField;
+    Ds_Inv_ArchiveNUM: TWideStringField;
+    Ds_Inv_ArchivePRESCRIPTION: TWideStringField;
+    Ds_Inv_ArchiveCOL1: TWideStringField;
+    Ds_Inv_ArchiveCOL2: TWideStringField;
+    Ds_Inv_ArchiveCOL3: TWideStringField;
+    Ds_Inv_ArchiveCOL4: TWideStringField;
+    Ds_Inv_ArchiveCOL5: TWideStringField;
+    Ds_Inv_ArchiveSUMAMOUNT: TFloatField;
+    Ds_AcoountID: TFloatField;
+    Ds_AcoountKLI_ID: TFloatField;
+    Ds_AcoountOP_ID: TFloatField;
+    Ds_AcoountACC_NO: TWideStringField;
+    Ds_AcoountVAL_ACC: TIntegerField;
+    Ds_AcoountNAME: TWideStringField;
+    Ds_AcoountOPEN_DAT: TDateTimeField;
+    Ds_AcoountCLOSE_DAT: TDateTimeField;
+    Ds_AcoountBAL_CN1: TFloatField;
+    Ds_AcoountBAL_CN2: TFloatField;
+    Ds_AcoountBAL_CN3: TFloatField;
+    Ds_AcoountBAL_CN4: TFloatField;
+    Ds_AcoountFILIAL: TIntegerField;
+    Ds_AcoountSIM_OTCET: TFloatField;
+    Ds_AcoountTIPACC: TWideStringField;
+    Ds_AcoountLIMIT: TFloatField;
+    Ds_AcoountOLD_ACC_NO: TWideStringField;
+    Ds_AcoountPAIR_ACC: TFloatField;
+    Ds_AcoountINSIDER: TWideStringField;
+    Ds_AcoountSID: TFloatField;
+    Ds_AcoountTEMPID: TFloatField;
+    Ds_AcoountOWNID: TFloatField;
+    Ds_AcoountP_CUSTID: TFloatField;
+    Ds_AcoountSYMB: TWideStringField;
+    Ds_AcoountBANK_CODE: TFloatField;
+    Ds_AcoountCURRENCYNAME: TWideStringField;
+    Ds_AcoountID_1: TIntegerField;
+    Ds_AcoountOP_ID_1: TFloatField;
+    Ds_AcoountOPEN_DAT_1: TDateTimeField;
+    Ds_AcoountCLOSE_DAT_1: TDateTimeField;
+    Ds_AcoountNEREZIDENT: TFloatField;
+    Ds_AcoountPRINAD_KOD: TFloatField;
+    Ds_AcoountNAME_1: TWideStringField;
+    Ds_AcoountSHORT_NAME: TWideStringField;
+    Ds_AcoountGROUP_KLIE: TFloatField;
+    Ds_AcoountVID_SOB: TFloatField;
+    Ds_AcoountORG_SOB: TFloatField;
+    Ds_AcoountSFERA_DEY: TFloatField;
+    Ds_AcoountOTRASL: TFloatField;
+    Ds_AcoountNALOG_KOD: TFloatField;
+    Ds_AcoountKOD_OKPRO: TWideStringField;
+    Ds_AcoountINN: TWideStringField;
+    Ds_AcoountDAT_NAL: TDateTimeField;
+    Ds_AcoountDAT_USTAV: TDateTimeField;
+    Ds_AcoountBIK: TWideStringField;
+    Ds_AcoountOTV_LICO: TWideStringField;
+    Ds_AcoountOTV_PASSPORT: TWideStringField;
+    Ds_AcoountOTV_ISSUED: TWideStringField;
+    Ds_AcoountOTV_ISDATE: TDateTimeField;
+    Ds_AcoountOLD_INN: TFloatField;
+    Ds_AcoountCUST_TYPE: TIntegerField;
+    Ds_AcoountCATEGORY: TFloatField;
+    Ds_AcoountINCORPORATION_NUMBER: TWideStringField;
+    Ds_AcoountTPH_CONTACT_TYPE: TWideStringField;
+    Ds_AcoountTPH_COMMUNICATION_TYPE: TWideStringField;
+    Ds_AcoountTPH_NUMBER: TWideStringField;
+    Ds_AcoountADDRESS_TYPE: TWideStringField;
+    Ds_AcoountADDRESS: TWideStringField;
+    Ds_AcoountCITY: TWideStringField;
+    Ds_AcoountCOUNTRY_CODE: TWideStringField;
+    Ds_AcoountDIRECTOR_ID: TFloatField;
+    Ds_AcoountEMAIL: TWideStringField;
+    Ds_AcoountURL: TWideStringField;
+    Ds_AcoountINCORPORATION_STATE: TWideStringField;
+    Ds_AcoountINCORPORATION_CNTR: TWideStringField;
+    Ds_AcoountTPH_EXTENSION: TWideStringField;
+    Ds_AcoountTPH_ZIP: TWideStringField;
+    Ds_AcoountTPH_COUNTRY_PREFIX: TWideStringField;
+    Ds_AcoountTPH_STATE: TWideStringField;
+    Ds_AcoountRISK_CATEG: TFloatField;
+    Ds_AcoountCUST_JUR: TIntegerField;
+    Ds_AcoountCUST_PHYS: TIntegerField;
+    Ds_AcoountCUST_FS: TIntegerField;
+    Ds_AcoountRISKDESCID: TFloatField;
+    Ds_AcoountSAMELYDATE: TDateTimeField;
+    Ds_AcoountQUALITY_ID: TFloatField;
+    Ds_Inv_childINV_ID: TFloatField;
+    Ds_Inv_childCOL4: TWideStringField;
+    Ds_Inv_childCOL5: TWideStringField;
+    ds: TOracleDataSet;
+    dsID: TFloatField;
+    dsPDATE: TDateTimeField;
+    dsDBNAME: TWideStringField;
+    dsDBCOD: TWideStringField;
+    dsDBINN: TWideStringField;
+    dsDBSWIFT: TWideStringField;
+    dsDACC_NO: TWideStringField;
+    dsKBNAME: TWideStringField;
+    dsKBINN: TWideStringField;
+    dsKACC_NO: TWideStringField;
+    dsNUM: TWideStringField;
+    dsPRESCRIPTION: TWideStringField;
+    dsCOL1: TWideStringField;
+    dsCOL2: TWideStringField;
+    dsCOL3: TWideStringField;
+    dsCOL4: TWideStringField;
+    dsCOL5: TWideStringField;
+    dsSUMAMOUNT: TFloatField;
+    ds2: TOracleDataSet;
+    ds2CEMI_COL2: TFloatField;
+    ds2EDV_COL2: TFloatField;
+    ds2YEKUN_COL2: TFloatField;
+    ds2CEMI_COL3: TFloatField;
+    ds2EDV_COL3: TFloatField;
+    ds2YEKUN_COL3: TFloatField;
+    ds2CEMI_COL4: TFloatField;
+    ds2EDV_COL4: TFloatField;
+    ds2YEKUN_COL4: TFloatField;
+    ds2SUM_ALL_YEKUN: TFloatField;
+    ODS_Acc_symbolOLD_ACC_NO: TFloatField;
+    procedure DataModuleDestroy(Sender: TObject);
+    procedure DataModuleCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  PaymentDataMod: TPaymentDataMod;
+
+implementation
+ uses  sboapiDataModuleImpl, UntArchive,PaymentDecreeImpl;
+
+{$R *.DFM}
+
+procedure TPaymentDataMod.DataModuleCreate(Sender: TObject);
+begin
+//Ds_Inv_child.Open;
+//Ds_Inv_Archive.Open;
+end;
+
+procedure TPaymentDataMod.DataModuleDestroy(Sender: TObject);
+var
+  CompCount :word;
+begin
+
+//Ds_Inv_child.close;
+//Ds_Inv_Archive.close;
+
+ for CompCount :=0 to ComponentCount-1 do
+  if(Components[CompCount] is TOracleDataSet) then
+   (Components[CompCount] as TOracleDataSet).CloseAll;
+end;
+
+end.

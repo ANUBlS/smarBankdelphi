@@ -1,0 +1,163 @@
+object FormPercentChange: TFormPercentChange
+  Left = 0
+  Top = 0
+  Caption = 'PercentChange'
+  ClientHeight = 130
+  ClientWidth = 296
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poScreenCenter
+  OnClose = FormClose
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 296
+    Height = 130
+    Align = alClient
+    TabOrder = 0
+    ExplicitHeight = 131
+    object GroupBox1: TGroupBox
+      Left = 1
+      Top = 1
+      Width = 294
+      Height = 48
+      Align = alTop
+      Caption = 'M'#252'qavil'#601'd'#601' b'#252't'#252'n yatr'#305'mlar'#305'n faizini d'#601'yi'#351'm'#601'k '
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clHotLight
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 0
+      object Label1: TLabel
+        Left = 6
+        Top = 23
+        Width = 100
+        Height = 13
+        Alignment = taCenter
+        Caption = 'M'#252'qavil'#601' n'#246'mr'#601'si'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clDefault
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object Panel2: TPanel
+        Left = 120
+        Top = 15
+        Width = 172
+        Height = 31
+        Align = alRight
+        BevelInner = bvLowered
+        TabOrder = 0
+        object Edit1: TEdit
+          Left = 2
+          Top = 2
+          Width = 168
+          Height = 27
+          Align = alClient
+          Color = clInactiveBorder
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clHotLight
+          Font.Height = -13
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          ParentFont = False
+          ReadOnly = True
+          TabOrder = 0
+          ExplicitHeight = 24
+        end
+      end
+    end
+    object Panel3: TPanel
+      Left = 1
+      Top = 49
+      Width = 294
+      Height = 35
+      Align = alTop
+      BevelInner = bvLowered
+      TabOrder = 1
+      object Label2: TLabel
+        Left = 8
+        Top = 8
+        Width = 70
+        Height = 13
+        Caption = 'Faizi daxil et'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object Panel4: TPanel
+        Left = 120
+        Top = 2
+        Width = 172
+        Height = 31
+        Align = alRight
+        BevelInner = bvLowered
+        TabOrder = 0
+        object CMCurrencyEdit1: TCMCurrencyEdit
+          Left = 2
+          Top = 3
+          Width = 168
+          Height = 24
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -13
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 0
+          Text = '0.00'
+        end
+      end
+    end
+    object Button1: TButton
+      Left = 64
+      Top = 96
+      Width = 75
+      Height = 25
+      Caption = 'Q'#601'bul'
+      TabOrder = 2
+      OnClick = Button1Click
+    end
+    object Button2: TButton
+      Left = 155
+      Top = 96
+      Width = 75
+      Height = 25
+      Caption = #304'mtina'
+      TabOrder = 3
+      OnClick = Button2Click
+    end
+  end
+  object OracleDataSet1: TOracleDataSet
+    SQL.Strings = (
+      'select * from sbcm_contracts where id=:contid')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000E0000003A0043004F004E00540049004400030000000000
+      000000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 44
+    Top = 136
+  end
+  object OraclePackage1: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'sbcm_credit_tranches'
+    ParameterMode = pmNamed
+    Left = 152
+    Top = 136
+  end
+end

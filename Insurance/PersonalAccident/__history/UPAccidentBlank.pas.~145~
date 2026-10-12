@@ -1,0 +1,1331 @@
+﻿unit UPAccidentBlank;
+            //DateTP1
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActiveX, AxCtrls, PPAccidentBlank_TLB, StdVcl, StdCtrls, DBCtrls, Mask,
+  ExtCtrls, ComCtrls, Buttons, Db, OracleData,SBPlgAx50_TLB, Oracle,
+  INSWordExporter, PlgModalContainer, XFSCtrls,variants;
+
+const
+     WM_ModalResult = WM_USER+139;
+type
+  TPAccidentBlank = class(TActiveForm, IPAccidentBlank,IUIObject,
+             IParamInput)//,
+             //ISBPlgAc50BufferForm)
+    AccidentPageControl: TPageControl;
+    TabSheet1: TTabSheet;
+    TabSheet2: TTabSheet;
+    Label25: TLabel;
+    Label26: TLabel;
+    Label27: TLabel;
+    Label28: TLabel;
+    Label31: TLabel;
+    Label32: TLabel;
+    TabSheet3: TTabSheet;
+    TabSheet4: TTabSheet;
+    ODSPAccidentSource: TDataSource;
+    ODSCustomersSource: TDataSource;
+    ODSPAccident: TOracleDataSet;
+    ODSCustomers: TOracleDataSet;
+    ODSPAccidentID: TFloatField;
+    ODSPAccidentKLI_ID: TFloatField;
+    ODSPAccidentCONTACT_PERSON: TWideStringField;
+    ODSPAccidentBANKING_DETAILS: TWideStringField;
+    ODSPAccidentTOTALEMP_NUMBER: TFloatField;
+    ODSPAccidentAOG: TFloatField;
+    ODSPAccidentAOP: TFloatField;
+    ODSPAccidentSMG: TFloatField;
+    ODSPAccidentSMP: TFloatField;
+    ODSPAccidentBCG: TFloatField;
+    ODSPAccidentBCP: TFloatField;
+    ODSPAccidentDECIRED_AMOUNT: TFloatField;
+    ODSPAccidentPD: TFloatField;
+    ODSPAccidentPLU: TFloatField;
+    ODSPAccidentEME: TFloatField;
+    ODSPAccidentHC: TFloatField;
+    ODSPAccidentHS: TFloatField;
+    ODSPAccidentBRB: TFloatField;
+    ODSPAccidentBURN: TFloatField;
+    ODSPAccidentTTD: TFloatField;
+    ODSPAccidentOUTSIDEOFAZE: TWideStringField;
+    ODSPAccidentRENEWAL: TWideStringField;
+    ODSPAccidentTRAVELS: TWideStringField;
+    ODSPAccidentTYPEID: TIntegerField;
+    ODSPAccidentRISKID: TFloatField;
+    PINS_PACCIDENT: TOraclePackage;
+    ODSPAccidentAD: TFloatField;
+    ODSCustomersID: TIntegerField;
+    ODSCustomersNAME: TWideStringField;
+    ODSCustomersADDRESS: TWideStringField;
+    ODSCustomersMOBILEPHONE: TWideStringField;
+    ODSCustomersFAX: TWideStringField;
+    RisksData: TDataSource;
+    Risks: TOracleDataSet;
+    RisksID: TFloatField;
+    RisksNAME: TWideStringField;
+    ODSRiskType: TOracleDataSet;
+    ODSRiskTypeID: TFloatField;
+    ODSRiskTypeNAME: TWideStringField;
+    RiskTypeData: TDataSource;
+    ODSPAccidentMAXWEEKS: TIntegerField;
+    ODSPAccidentR: TOracleDataSet;
+    ODSPAccidentRNAME: TWideStringField;
+    ODSPAccidentRADDRESS: TWideStringField;
+    ODSPAccidentRPHONE: TWideStringField;
+    ODSPAccidentRFAX: TWideStringField;
+    ODSPAccidentRCONTACT_PERSON: TWideStringField;
+    ODSPAccidentRBANKING_DETAILS: TWideStringField;
+    ODSPAccidentRTOTALEMP_NUMBER: TFloatField;
+    ODSPAccidentRAOG: TFloatField;
+    ODSPAccidentRAOP: TFloatField;
+    ODSPAccidentRSMG: TFloatField;
+    ODSPAccidentRSMP: TFloatField;
+    ODSPAccidentRBCG: TFloatField;
+    ODSPAccidentRBCP: TFloatField;
+    ODSPAccidentRDECIRED_AMOUNT: TFloatField;
+    ODSPAccidentRAD: TFloatField;
+    ODSPAccidentRPD: TFloatField;
+    ODSPAccidentRPLU: TFloatField;
+    ODSPAccidentREME: TFloatField;
+    ODSPAccidentRHC: TFloatField;
+    ODSPAccidentRHS: TFloatField;
+    ODSPAccidentRBRB: TFloatField;
+    ODSPAccidentRBURN: TFloatField;
+    ODSPAccidentRTTD: TFloatField;
+    ODSPAccidentROUTSIDEOFAZE: TWideStringField;
+    ODSPAccidentRRENEWAL: TWideStringField;
+    ODSPAccidentRTRAVELS: TWideStringField;
+    ODSPAccidentRTYPEID: TIntegerField;
+    ODSPAccidentRRISKID: TFloatField;
+    ODSPAccidentRMAXWEEKS: TIntegerField;
+    AccidentReportSource: TDataSource;
+    AccidentExporter: TINSWordExporter;
+    ODSBeneficiary: TOracleDataSet;
+    ODSBeneficiaryID: TFloatField;
+    ODSBeneficiaryNAME: TWideStringField;
+    ODSBeneficiaryADDRESS: TWideStringField;
+    ODSBeneficiaryPHONE: TWideStringField;
+    ODSBeneficiaryBANKING_DETAILS: TWideStringField;
+    BeneficiarySource: TDataSource;
+    ODSPAccidentPROFITID: TFloatField;
+    OPCOMMON: TOraclePackage;
+    ODSContracts: TOracleDataSet;
+    ODSContractsID: TFloatField;
+    ODSContractsTYPE_ID: TFloatField;
+    ODSContractsBLANK_ID: TFloatField;
+    ODSContractsINS_DATE: TDateTimeField;
+    ODSContractsBEGIN_DATE: TDateTimeField;
+    ODSContractsEND_DATE: TDateTimeField;
+    ODSContractsVALUTE_ID: TFloatField;
+    ODSContractsAMMOUNT: TFloatField;
+    ODSContractsCLOSE_PREFIX: TIntegerField;
+    ODSContractsKLI_ID: TFloatField;
+    ODSContractsLOANACC_ID: TFloatField;
+    ODSContractsCURRACC_ID: TFloatField;
+    ODSContractsPOLICY_NUM: TWideStringField;
+    DSContracts: TDataSource;
+    SuggestContainer: TPlgModalContainer;
+    ODSPAccSuggest: TOracleDataSet;
+    ODSPAccSuggestID: TFloatField;
+    ODSPAccSuggestPAID: TFloatField;
+    ODSPAccSuggestCNDT_ID: TFloatField;
+    ODSPAccSuggestINSURANCESUM: TFloatField;
+    ODSPAccSuggestINSURANCETIME: TDateTimeField;
+    ODSPAccSuggestMEDICALCOST: TFloatField;
+    ODSPAccSuggestALL_INSAMMOUNT: TFloatField;
+    ODSPAccSuggestGEO: TWideStringField;
+    PAccSugestSource: TDataSource;
+    ODSPAccidentAGENTID: TFloatField;
+    AgentSource: TDataSource;
+    ODSAgent: TOracleDataSet;
+    ODSAgentID: TFloatField;
+    ODSAgentNAME: TWideStringField;
+    ODSContractsINSSUMM: TFloatField;
+    ODSContractsFRANSHIZ: TFloatField;
+    ODSContractsTARIFF: TFloatField;
+    ODSContractsSTATE: TIntegerField;
+    ODSContractsAGENT_ID: TFloatField;
+    ODSContractsPNUM: TFloatField;
+    ODSContractsBEN_ID: TFloatField;
+    ODSContractsBENEFICIARY: TWideStringField;
+    ODSContractsCONDITIONS: TWideStringField;
+    ODSContractsSUGNUM: TWideStringField;
+    ODSPAccidentRID: TFloatField;
+    OracleDataSet1: TOracleDataSet;
+    OracleDataSet1ID: TFloatField;
+    Panel1: TXFPanel;
+    InsLookupComboBox: TDBLookupComboBox;
+    DBLookupComboBox2: TDBLookupComboBox;
+    DBLookupComboBox3: TDBLookupComboBox;
+    DBLookupComboBox4: TDBLookupComboBox;
+    DBEdit3: TDBEdit;
+    DBEdit4: TDBEdit;
+    DBLookupComboBox5: TDBLookupComboBox;
+    DBEdit10: TDBEdit;
+    AgentLookupComboBox: TDBLookupComboBox;
+    DBEdit2: TDBEdit;
+    edBeginDate: TDateTimePicker;
+    edEndDate: TDateTimePicker;
+    MonthEdit: TEdit;
+    XFLabel1: TXFLabel;
+    XFLabel2: TXFLabel;
+    XFLabel3: TXFLabel;
+    XFLabel4: TXFLabel;
+    XFLabel5: TXFLabel;
+    XFLabel6: TXFLabel;
+    XFLabel7: TXFLabel;
+    XFLabel8: TXFLabel;
+    XFLabel9: TXFLabel;
+    XFLabel10: TXFLabel;
+    XFLabel11: TXFLabel;
+    XFLabel12: TXFLabel;
+    XFLabel13: TXFLabel;
+    XFLabel14: TXFLabel;
+    XFPanel1: TXFPanel;
+    Suggest: TBitBtn;
+    Report: TBitBtn;
+    Back: TBitBtn;
+    Next: TBitBtn;
+    btApply: TBitBtn;
+    Commit: TBitBtn;
+    BitBtn2: TBitBtn;
+    XFPanel2: TXFPanel;
+    AOGEdit: TDBEdit;
+    SMGEdit: TDBEdit;
+    BCGEdit: TDBEdit;
+    AOPEdit: TDBEdit;
+    SMPEdit: TDBEdit;
+    DBEdit27: TDBEdit;
+    DeciredEdit: TDBEdit;
+    DBEdit28: TDBEdit;
+    DBEdit30: TDBEdit;
+    DBEdit32: TDBEdit;
+    DBEdit33: TDBEdit;
+    DBEdit31: TDBEdit;
+    DBEdit29: TDBEdit;
+    XFLabel15: TXFLabel;
+    XFLabel16: TXFLabel;
+    XFLabel17: TXFLabel;
+    XFLabel18: TXFLabel;
+    XFLabel19: TXFLabel;
+    XFLabel20: TXFLabel;
+    XFLabel21: TXFLabel;
+    XFLabel22: TXFLabel;
+    XFLabel23: TXFLabel;
+    XFLabel24: TXFLabel;
+    XFLabel25: TXFLabel;
+    XFLabel26: TXFLabel;
+    Label1: TLabel;
+    XFLabel27: TXFLabel;
+    XFLabel28: TXFLabel;
+    XFLabel29: TXFLabel;
+    XFPanel3: TXFPanel;
+    DateTP1: TDateTimePicker;
+    DateTP2: TDateTimePicker;
+    Bevel1: TBevel;
+    DBEdit1: TDBEdit;
+    TTDEdit: TDBEdit;
+    BuEdit: TDBEdit;
+    BrBEdit: TDBEdit;
+    HSEdit: TDBEdit;
+    HCEdit: TDBEdit;
+    EMEEdit: TDBEdit;
+    PLUEdit: TDBEdit;
+    PDEdit: TDBEdit;
+    ADEdit: TDBEdit;
+    XFLabel30: TXFLabel;
+    XFLabel31: TXFLabel;
+    XFLabel32: TXFLabel;
+    XFLabel33: TXFLabel;
+    XFLabel34: TXFLabel;
+    XFLabel35: TXFLabel;
+    XFLabel36: TXFLabel;
+    XFLabel37: TXFLabel;
+    XFLabel38: TXFLabel;
+    XFLabel39: TXFLabel;
+    XFLabel40: TXFLabel;
+    XFLabel41: TXFLabel;
+    XFLabel42: TXFLabel;
+    XFLabel43: TXFLabel;
+    XFLabel44: TXFLabel;
+    XFLabel45: TXFLabel;
+    XFLabel46: TXFLabel;
+    XFLabel47: TXFLabel;
+    XFLabel48: TXFLabel;
+    XFLabel49: TXFLabel;
+    XFLabel50: TXFLabel;
+    XFLabel51: TXFLabel;
+    XFLabel52: TXFLabel;
+    XFPanel4: TXFPanel;
+    btRisksAdd: TBitBtn;
+    cbRisks: TCheckBox;
+    DBLookupComboBoxRisk: TDBLookupComboBox;
+    memRisk: TMemo;
+    DBEdit20: TDBEdit;
+    DBEdit21: TDBEdit;
+    XFLabel53: TXFLabel;
+    XFLabel54: TXFLabel;
+    XFLabel55: TXFLabel;
+    XFLabel56: TXFLabel;
+    XFLabel57: TXFLabel;
+    XFLabel58: TXFLabel;
+    ODSPAccidentAOG1: TFloatField;
+    ODSPAccidentAOP1: TFloatField;
+    ODSPAccidentSMG1: TFloatField;
+    ODSPAccidentSMP1: TFloatField;
+    ODSPAccidentBCG1: TFloatField;
+    ODSPAccidentBCP1: TFloatField;
+    DsSysdat: TOracleDataSet;
+    DsSysdatTEK_DAT: TDateTimeField;
+    DsSysdatPRED_DAT: TDateTimeField;
+    DsSysdatARC_DAY: TDateTimeField;
+    DsSysdatCLOSE: TIntegerField;
+    ODSPAccidentCLOSE_PREFIX: TIntegerField;
+    ODSPAccidentCID: TFloatField;
+    DSRIns_cid: TDataSource;
+    DSIns_cid: TOracleDataSet;
+    DSIns_cidCID: TFloatField;
+    DSIns_cidBID: TFloatField;
+    DSIns_cidKLI_ID: TFloatField;
+    DSIns_cidMOD: TWideStringField;
+    Sb_aca: TOraclePackage;
+    ODSPAccidentNOT_COVEREDPERIOD: TDateTimeField;
+    ODSPAccidentNOT_COVEREPERIOD1: TDateTimeField;
+    ODSPAccidentRKLI_ID: TFloatField;
+    ODSPAccidentRNOT_COVEREDPERIOD: TDateTimeField;
+    ODSPAccidentRNOT_COVEREPERIOD1: TDateTimeField;
+    ODSPAccidentRPROFITID: TFloatField;
+    ODSPAccidentRAGENTID: TFloatField;
+    ODSPAccidentRCLOSE_PREFIX: TIntegerField;
+    ODSPAccidentRAOG1: TFloatField;
+    ODSPAccidentRAOP1: TFloatField;
+    ODSPAccidentRBCG1: TFloatField;
+    ODSPAccidentRBCP1: TFloatField;
+    ODSPAccidentRSMG1: TFloatField;
+    ODSPAccidentRSMP1: TFloatField;
+    ODSPAccidentRCID: TFloatField;
+    Button1: TButton;
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure btRisksAddClick(Sender: TObject);
+    procedure BackClick(Sender: TObject);
+    procedure NextClick(Sender: TObject);
+    procedure AccidentPageControlChange(Sender: TObject);
+    procedure BitBtn2Click(Sender: TObject);
+    procedure DBEdit3KeyPress(Sender: TObject; var Key: Char);
+    procedure CommitClick(Sender: TObject);
+    procedure btApplyClick(Sender: TObject);
+    procedure ReportClick(Sender: TObject);
+    procedure DBEdit4Change(Sender: TObject);
+    procedure ODSPAccidentNewRecord(DataSet: TDataSet);
+    procedure edBeginDateChange(Sender: TObject);
+    procedure SuggestClick(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+  private
+    { Private declarations }
+    id : Integer;
+    //resultID:integer;
+    FParams: TStrings;
+    FOwnerHandle : Integer;
+    FEvents: IPAccidentBlankEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+
+    function  Get_Owner:Integer; safecall;
+    procedure Set_Owner(val : Integer);  safecall;
+    {IParamInput}
+    function  Get_Params(const Name: WideString): OleVariant; safecall;
+    procedure Set_Params(const Name: WideString; Value: OleVariant); safecall;
+    property Params[const Name: WideString]: OleVariant read Get_Params write Set_Params;
+    {IInstance}
+    function InstanceInitialize: HResult; safecall;
+    function IUIObject.Initialize = InstanceInitialize;
+    function Cleanup: HResult; safecall;
+    {IUIObject}
+//    function  Get_Icon: OLE_HANDLE; safecall;
+    function UIObjectActivate: HResult; safecall;
+    function IUIObject.Activate = UIObjectActivate;
+    function QueryDeactivate: HResult; safecall;
+    function UIObjectDeactivate: HResult; safecall;
+    function IUIObject.Deactivate = UIObjectDeactivate;
+    function SaveState: HResult; safecall;
+    function  Get_Height : Integer; safecall;
+    function  Get_Width  : Integer; safecall;
+  public
+    { Public declarations }
+p_cid :integer;
+    procedure Initialize; override;
+    //procedure BuildAccidentInfo(PAccidentInfo:TPAccidentInfo);
+    function SaveData():boolean;
+    procedure LoadData;
+    procedure MonthPeriod;
+  end;
+
+var
+    PAccidentBlank:TPAccidentBlank;
+implementation
+
+uses ComObj,SBTranslateProc ,sboapiDataModuleimpl,ComServ, UPAccidentRisks,CommanParametrs;
+
+{$R *.DFM}
+
+{ TPAccidentBlank }
+
+procedure TPAccidentBlank.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_PAccidentBlankPage); }
+end;
+
+procedure TPAccidentBlank.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as IPAccidentBlankEvents;
+end;
+
+procedure TPAccidentBlank.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TPAccidentBlank.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TPAccidentBlank.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TPAccidentBlank.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TPAccidentBlank.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TPAccidentBlank.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TPAccidentBlank.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TPAccidentBlank.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TPAccidentBlank.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TPAccidentBlank.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TPAccidentBlank.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TPAccidentBlank.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TPAccidentBlank.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TPAccidentBlank.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TPAccidentBlank.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TPAccidentBlank.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TPAccidentBlank.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TPAccidentBlank.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TPAccidentBlank.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TPAccidentBlank._Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TPAccidentBlank.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TPAccidentBlank.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TPAccidentBlank.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TPAccidentBlank.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TPAccidentBlank.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TPAccidentBlank.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TPAccidentBlank.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TPAccidentBlank.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TPAccidentBlank.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TPAccidentBlank.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TPAccidentBlank.Set_AxBorderStyle(
+  Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TPAccidentBlank.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TPAccidentBlank.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TPAccidentBlank.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TPAccidentBlank.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TPAccidentBlank.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TPAccidentBlank.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TPAccidentBlank.Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TPAccidentBlank.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TPAccidentBlank.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TPAccidentBlank.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TPAccidentBlank.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TPAccidentBlank.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TPAccidentBlank.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+function  TPAccidentBlank.Get_Owner:Integer;
+begin
+  Result := handle;
+end;
+
+procedure TPAccidentBlank.Set_Owner(val : Integer);
+begin
+  if val > 0 then
+     FOwnerHandle := val;
+end;
+
+
+function  TPAccidentBlank.Get_Params(const Name: WideString): OleVariant;
+begin
+  Result := FParams.Values[Name];
+end;
+
+procedure TPAccidentBlank.Set_Params(const Name: WideString; Value: OleVariant);
+begin
+  FParams.Values[Name] := Value;
+end;
+
+function TPAccidentBlank.InstanceInitialize: HResult;
+begin
+  Result := S_OK;
+end;
+
+function TPAccidentBlank.Cleanup: HResult;
+begin
+  Result := S_OK;
+end;
+
+function TPAccidentBlank.UIObjectActivate: HResult;
+var
+pro_cid,pro_kli_id,pro_bid :integer;
+pro_mod :string;
+begin
+       if Get_Params('Mod') = 'Insert' then
+       begin
+           if not ODSPAccident.Active then
+           ODSPAccident.Open;
+           ODSPAccident.Insert;
+           edBeginDate.DateTime := PAccidentBlank.DsSysdat.FieldByName('tek_dat').AsDateTime;
+           edEndDate.DateTime :=PAccidentBlank.DsSysdat.FieldByName('tek_dat').AsDateTime;
+           DateTP1.DateTime:=PAccidentBlank.DsSysdat.FieldByName('tek_dat').AsDateTime;
+           DateTP2.DateTime:=PAccidentBlank.DsSysdat.FieldByName('tek_dat').AsDateTime;
+           InsLookupComboBox.KeyValue :=  StrToInt(Get_Params('KLI_ID'));
+           MonthPeriod;
+       end;
+       if Get_Params('Mod')='Edit' then
+       begin
+       //pmcCallActiveX.p_id
+          DSIns_cid.Open;
+          pro_cid :=DSIns_cid.FieldByName('CID').AsInteger;
+          pro_kli_id :=DSIns_cid.FieldByName('KLI_ID').AsInteger;
+          pro_bid :=DSIns_cid.FieldByName('bid').AsInteger;
+          pro_mod :=DSIns_cid.FieldByName('mod').AsString;
+       //showmessage(DSIns_cid.FieldByName('CID').AsString);
+       //showmessage(DSIns_cid.FieldByName('bid').AsString);
+       //showmessage(DSIns_cid.FieldByName('mod').AsString);
+       //showmessage(DSIns_cid.FieldByName('KLI_ID').AsString);
+       DSIns_cid.Session.Commit;
+       DSIns_cid.Close;
+        //showmessage(DSIns_cid.FieldByName('CID').AsString);
+
+       //showmessage(inttostr(pmcCallActiveX.cid));
+       //showmessage(Get_Params('KLI_ID'));
+
+       //showmessage(inttostr(pro_cid));
+          Suggest.Enabled:=true;
+          Report.Enabled:=true;
+
+          ODSContracts.Close;
+          ODSContracts.SetVariable('cid',pro_cid);
+          ODSContracts.Open;
+
+          ODSPAccident.Close;
+          ODSPAccident.SetVariable('cid',pro_cid);
+          ODSPAccident.Open;
+
+
+
+          edBeginDate.DateTime :=ODSContractsbegin_date.AsDateTime;
+          edEndDate.DateTime :=ODSContractsEnd_date.AsDateTime;
+          DateTP1.DateTime:=ODSPAccident.FieldByName('NOT_COVEREDPERIOD').AsDateTime;
+          DateTP2.DateTime:=ODSPAccident.FieldByName('NOT_COVEREPERIOD1').AsDateTime;
+         // LoadData;
+          MonthPeriod;
+          ODSPAccident.Edit;
+          ODSContracts.Edit;
+       end;
+       Result := S_OK;
+end;
+
+function TPAccidentBlank.QueryDeactivate: HResult;
+begin
+  Result := S_OK;
+end;
+
+function TPAccidentBlank.UIObjectDeactivate: HResult;
+begin
+  Result := S_OK;
+end;
+
+function TPAccidentBlank.SaveState: HResult;
+begin
+  Result := S_OK;
+end;
+
+function TPAccidentBlank.Get_Height : Integer;
+begin
+  Result := Height;
+end;
+
+function TPAccidentBlank.Get_Width  : Integer;
+begin
+  Result := Width;
+end;
+
+procedure TPAccidentBlank.ActiveFormCreate(Sender: TObject);
+begin
+    PAccidentBlank:=Self;
+    FParams := TStringList.Create;
+    Back.Enabled:=false;
+     AccidentPageControl.ActivePage:=TabSheet1;
+  SBTranslateProc.TranslateAllComponents(Self,sboapiDataModule.OrPack_SL);
+
+
+end;
+
+procedure TPAccidentBlank.btRisksAddClick(Sender: TObject);
+begin
+    ODSRisktype.Open;
+    with TfmRiskTypes.Create(Self) do
+    ShowModal;
+    if memRisk.Text <> '' then
+    cbRisks.State := cbChecked;
+    ODSRisktype.Close;
+end;
+
+procedure TPAccidentBlank.Button1Click(Sender: TObject);
+begin
+
+with sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['SUGGESTIONCONTRACT_PERSACCIDENT']);
+ end;
+
+
+   MK_ID:= ODSPAccSuggest.FieldByName('id').AsInteger;
+
+
+   ODSPaccSuggest.Close;
+   ODSPaccSuggest.SetVariable('paid',ODSPAccidentId.value);
+   ODSPaccSuggest.Open;
+   if ODSPAccSuggest.RecordCount<1 then
+
+       //p.Values['Mod']:='Insert'
+       ins_or_upd:='Insert'
+   else
+      ins_or_upd:='Edit';
+      //p.Values['Mod']:='Edit';
+
+         loadPlugin('MKSuggestionbpl.bpl','');
+
+
+end;
+
+procedure TPAccidentBlank.BackClick(Sender: TObject);
+begin
+      with AccidentPageControl do
+     begin
+          ActivePageIndex:=ActivePageIndex-1;
+          if ActivePageIndex=0 then
+          Back.Enabled:=false;
+          Next.Enabled:=true;
+     end;
+end;
+
+procedure TPAccidentBlank.NextClick(Sender: TObject);
+begin
+      AccidentPageControl.ActivePageIndex:= AccidentPageControl.ActivePageIndex+1;
+      if  AccidentPageControl.ActivePageIndex= AccidentPageControl.PageCount-1 then
+      Next.Enabled:=false;
+      Back.Enabled:=true;
+end;
+
+procedure TPAccidentBlank.AccidentPageControlChange(Sender: TObject);
+begin
+      with AccidentPageControl do
+      begin
+          if ActivePageIndex<>PageCount-1 then Next.Enabled:=true else Next.Enabled:=false;
+          if ActivepageIndex<>0 then Back.Enabled:=true else Back.Enabled:=false;
+      end;
+end;
+
+procedure TPAccidentBlank.BitBtn2Click(Sender: TObject);
+begin
+     PostMessage(FOwnerHandle, WM_ModalResult, mrCancel, 0);
+end;
+
+procedure TPAccidentBlank.DBEdit3KeyPress(Sender: TObject; var Key: Char);
+begin
+      if Key = #13 then
+     begin
+        if HiWord(GetKeyState(VK_Shift))<>0 then
+           with Sender as TControl do
+           SelectNext(ActiveControl,False, True)
+        else
+           with Sender as TControl do
+           SelectNext(ActiveControl,True, True);
+        key:=#0;
+     end;
+end;
+
+
+
+function TPAccidentBlank.SaveData: boolean;
+var
+a:real;
+ a1,c_acc:integer;
+begin
+with sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['SAVECONTRACT_PERSACCIDENT']);
+ end;
+  Result:=false;
+   with  OPCOMMON do
+   begin
+     a1:=CallIntegerFunction('get_acc_balanc_hesab',[1]);
+
+     if a1=0 then
+     begin
+       showmessage('Diqqət ! Bu müqavilə tipində avtomatik hesabların açılası üçün balans hesabları sazlanmayıb!.');
+       exit;
+     end;
+   end;
+
+  if InsLookupComboBox.KeyValue=null then
+  begin
+    showmessage('Şirkətin adı(Sığortalı) sahəsi boşdur!');
+    exit;
+  end;
+
+
+    if DBLookupComboBox2.KeyValue=null then
+  begin
+    showmessage('Şirkətin fəaliyyəti sahəsi boşdur!');
+    exit;
+  end;
+
+    if DBLookupComboBox3.KeyValue=null then
+  begin
+    showmessage('Hüquqi və faktiki ünvan sahəsi boşdur!');
+    exit;
+  end;
+
+      if DBLookupComboBox4.KeyValue=null then
+  begin
+    showmessage('Telefon sahəsi boşdur!');
+    exit;
+  end;
+
+      if DBEdit3.text='' then
+  begin
+    showmessage('Məsul şəxs sahəsi boşdur!');
+    exit;
+  end;
+
+      if DBEdit4.text='' then
+  begin
+    showmessage('Bank rekvizitləri sahəsi boşdur!');
+    exit;
+  end;
+
+      if DBLookupComboBox5.KeyValue=null then
+  begin
+    showmessage('Faydagötürən sahəsi boşdur!');
+    exit;
+  end;
+
+        if DBEdit10.text='' then
+  begin
+    showmessage('Sığorta olunanların ümumi sayı sahəsi boşdur!');
+    exit;
+  end;
+
+
+  if AOGEdit.text='' then
+  begin
+    showmessage('1) İdarə və inzibati persanal(1.Qrup : Onlardan) sahəsi boşdur!');
+    exit;
+  end;
+
+  if AOPEdit.text='' then
+  begin
+    showmessage('1) İdarə və inzibati persanal(1.Qrup : Bir şəxs başına təminat məbləği) sahəsi boşdur!');
+    exit;
+  end;
+
+  if SMGEdit.text='' then
+  begin
+    showmessage('2) Satiş və marketinqlə məşğul olan işçilər(1.Qrup : Onlardan) sahəsi boşdur!');
+    exit;
+  end;
+
+  if SMPEdit.text='' then
+  begin
+   showmessage('2) Satiş və marketinqlə məşğul olan işçilər(1.Qrup : Bir şəxs başına təminat məbləği) sahəsi boşdur!');
+    exit;
+  end;
+
+  if BCGEdit.text='' then
+  begin
+  showmessage('3) Fəhlələr (fabrika,sürücülər,mühafizəçilər,ağır avadanlıq)(1.Qrup : Onlardan) sahəsi boşdur!');
+  exit;
+  end;
+
+  if DBEdit27.text='' then
+  begin
+   showmessage('3) Fəhlələr (fabrika,sürücülər,mühafizəçilər,ağır avadanlıq)(1.Qrup : Bir şəxs başına təminat məbləği) sahəsi boşdur!');
+    exit;
+  end;
+
+   ///---------
+   if DBEdit28.text='' then
+  begin
+    showmessage('1) İdarə və inzibati persanal(Qrup : Onlardan) sahəsi boşdur!');
+    exit;
+  end;
+
+  if DBEdit29.text='' then
+  begin
+    showmessage('1) İdarə və inzibati persanal(Qrup : Bir şəxs başına təminat məbləği) sahəsi boşdur!');
+    exit;
+  end;
+
+  if DBEdit30.text='' then
+  begin
+    showmessage('2) Satiş və marketinqlə məşğul olan işçilər(Qrup : Onlardan) sahəsi boşdur!');
+    exit;
+  end;
+
+  if DBEdit31.text='' then
+  begin
+   showmessage('2) Satiş və marketinqlə məşğul olan işçilər(Qrup : Bir şəxs başına təminat məbləği) sahəsi boşdur!');
+    exit;
+  end;
+
+  if DBEdit32.text='' then
+  begin
+  showmessage('3) Fəhlələr (fabrika,sürücülər,mühafizəçilər,ağır avadanlıq)(Qrup : Onlardan) sahəsi boşdur!');
+  exit;
+  end;
+
+  if DBEdit33.text='' then
+  begin
+   showmessage('3) Fəhlələr (fabrika,sürücülər,mühafizəçilər,ağır avadanlıq)(Qrup : Bir şəxs başına təminat məbləği) sahəsi boşdur!');
+    exit;
+  end;
+
+   if ADEdit.text='' then
+  begin
+   showmessage('Bədbəxt hadisə nəticəsində ölüm(Müəyyən edilmiş məbləğ) sahəsi boşdur!');
+    exit;
+  end;
+
+
+     if PDEdit.text='' then
+  begin
+   showmessage('Daimi əlillik-Cədvəl(A)(Müəyyən edilmiş məbləğ) sahəsi boşdur!');
+    exit;
+  end;
+
+     if PLUEdit.text='' then
+  begin
+   showmessage('Hərəkət qabiliyyətinin daimi itrilməsi - Cədvəl(B)(Müəyyən edilmiş məbləğ) sahəsi boşdur!');
+    exit;
+  end;
+     if EMEEdit.text='' then
+  begin
+   showmessage('Təcili tibbi yardım-yalnız bədbəxt hadisə nəticəsində(Müəyyən edilmiş məbləğ) sahəsi boşdur!');
+    exit;
+  end;
+     if HCEdit.text='' then
+  begin
+   showmessage('Xəstəxanadaxili xərclər(Günlük müəyyən edilmiş məbləğ) sahəsi boşdur!');
+    exit;
+  end;
+     if HSEdit.text='' then
+  begin
+   showmessage('Xəstəxanadaxili əməliyyat(Müəyyən edilmiş məbləğ) sahəsi boşdur!');
+    exit;
+  end;
+     if BrBEdit.text='' then
+  begin
+   showmessage('Sınıqlar(Müəyyən edilmiş məbləğ) sahəsi boşdur!');
+    exit;
+  end;
+     if BuEdit.text='' then
+  begin
+   showmessage('Yanıqlar(Müəyyən edilmiş məbləğ) sahəsi boşdur!');
+    exit;
+  end;
+
+  if TTDEdit.text='' then
+  begin
+   showmessage('Müvəqqəti tam əlillik(Hər tam həftə üçün müəyyən edilmiş məbləğ) sahəsi boşdur!');
+    exit;
+  end;
+
+  if DBEdit1.text='' then
+  begin
+   showmessage('Ödənəcək həftələrin maksimal sayı(52 həftə və ya az) sahəsi boşdur!');
+    exit;
+  end;
+
+     //showmessage('Salam2');
+  if cbRisks.State = cbChecked then
+  with Risks do
+  begin
+       Insert;
+       FieldByName('name').asString := memRisk.Text;
+       Post;
+       RefreshRecord;
+  end;
+      // OracleDataSet1.Open;
+     //showmessage(Inttostr(OracleDataSet1.FieldByName('id').AsInteger));
+     //DataSet.FieldByName('ID').AsInteger:=OracleDataSet1.FieldByName('id').AsInteger;
+     // showmessage(floattostr(ODSPAccidentID.Value));
+  if ODSPAccident.State in [dsInsert] then
+  begin
+   ODSPAccidentKLI_ID.Value:=InsLookupComboBox.KeyValue;
+      ODSPAccident.Post;
+  //OracleDataSet1.Open;
+        //showmessage(inttostr(ODSPAccident.FieldByName('id').AsInteger));
+
+       p_cid:=OPCommon.CallIntegerFunction('newinsurance',[1,ODSPAccidentID.Value,edBeginDate.DateTime,edEndDate.DateTime,ODSPAccidentKLI_ID.Value]);
+
+       ODSContracts.Close;
+       ODSContracts.SetVariable('cid',p_cid);
+       ODSContracts.Open;
+      ODSContractsAGENT_ID.Value:=AgentLookupComboBox.KeyValue;
+      ODSContracts.Post;
+
+  with  OPCOMMON do
+   begin
+     c_acc:=CallIntegerFunction('get_acc_id',[p_cid]);
+       // showmessage(inttostr(c_acc));
+       // exit;
+     if c_acc=0 then
+       begin
+    CallProcedure('account_open',[p_cid]);
+       end;
+   end;
+
+  end;
+
+   if ODSPAccident.State in [dsInsert] then
+  begin
+   ODSPAccidentCID.Value:=p_cid;
+      ODSPAccident.Post;
+  end;
+
+
+
+  if ODSPAccident.State in [dsEdit] then
+  begin
+       OPCommon.CallBooleanFunction('setblankdata',[1,ODSPAccidentID.Value,edBeginDate.DateTime,edEndDate.DateTime,ODSPAccidentKLI_ID.Value]);
+ end;
+
+
+
+  if ODSPAccident.State in [dsInsert,dsEdit] then
+  begin
+  //showmessage(datetostr(DateTP1.DateTime));
+      ODSPAccident.FieldByName('NOT_COVEREDPERIOD').AsDateTime:=DateTP1.DateTime;
+      ODSPAccident.FieldByName('NOT_COVEREPERIOD1').AsDateTime:=DateTP2.DateTime;
+      ODSPAccident.Post;
+      ODSPAccident.RefreshRecord;
+ end;
+
+
+     if ODSContracts.State in [dsEdit] then
+  begin
+     //showmessage(floattostr(AgentLookupComboBox.KeyValue));
+      ODSContractsAGENT_ID.Value:=AgentLookupComboBox.KeyValue;
+      ODSContracts.Post;
+  end;
+     //showmessage(inttostr(ODSPAccident.FieldByName('id').AsInteger));
+     //showmessage(floattostr(a));
+    // showmessage(inttostr(ODSContracts.FieldByName('id').AsInteger));
+
+
+
+    Result:=true;
+end;
+
+procedure TPAccidentBlank.CommitClick(Sender: TObject);
+begin
+    if SaveData then  PostMessage(FOwnerHandle, WM_ModalResult, mrOk, 0);
+    AccidentPageControl.ActivePageIndex:=0;
+end;
+
+procedure TPAccidentBlank.LoadData;
+begin
+     with ODSPAccident do
+     begin
+         // DateTP1.DateTime:=FieldByName('NOT_COVEREDPERIOD').AsDateTime;
+          //DateTP2.DateTime:=FieldByName('NOT_COVEREPERIOD1').AsDateTime;
+     end;
+end;
+
+procedure TPAccidentBlank.btApplyClick(Sender: TObject);
+begin
+     if SaveData() then
+     begin
+        Report.Enabled:=true;
+        Suggest.Enabled:=true;
+        btApply.Enabled:=false;
+        //Commit.Enabled:=false;
+     end;
+end;
+
+procedure TPAccidentBlank.ReportClick(Sender: TObject);
+var
+    idr:double;
+begin
+
+with sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['REPORTCONTRACT_PERSACCIDENT']);
+ end;
+
+    idr:=ODSPAccidentID.Value;
+    ODSPAccidentR.CloseAll;
+    ODSPAccidentR.SetVariable('id',idr);
+    ODSPAccidentR.Open;
+    try
+       with AccidentExporter do
+       begin
+            FileName:=ExtractFilePath(Application.ExeName)+ '\GPAccidentAppl.doc';
+            Open(False);
+            Risks.Locate('id',ODSPAccidentRRiskid.Value,[]);
+            if ODSPAccidentRRiskid.Value<>0 then
+               SetBookmark('RISKS',RISKSNAME.Value, false, false, False, false, 8, 'Arial AzLat', False);
+
+            SetBookmark('Insured',ODSPAccidentRName.value, false, false, False, false, 8, 'Arial AzLat', False);
+            SetBookmark('Address',ODSPAccidentRAddress.value, false, false, False, false, 8, 'Arial AzLat', False);
+            SetBookmark('ITel',ODSPAccidentRPhone.value, false, false, False, false, 8, 'Arial AzLat', False);
+            SetBookmark('fax',ODSPAccidentRfax.value, false, false, False, false, 8, 'Arial AzLat', False);
+            SetBookmark('CPerson',ODSPAccidentRContact_person.value, false, false, False, false, 8, 'Arial AzLat', False);
+            SetBookmark('CPerson1',ODSPAccidentRContact_person.value, false, false, False, false, 8, 'Arial AzLat', False);
+
+            SetBookmark('Banking',ODSPAccidentRBanking_details.value, false, false, False, false, 8, 'Arial AzLat', False);
+            SetBookmark('Beneficiary',ODSBeneficiaryName.value, false, false, False, false, 8, 'Arial AzLat', False);
+            SetBookmark('BAddress',ODSBeneficiaryAddress.value, false, false, False, false, 8, 'Arial AzLat', False);
+            SetBookmark('BTel',ODSBeneficiaryPhone.value, false, false, False, false, 8, 'Arial AzLat', False);
+            SetBookmark('BBanking',ODSBeneficiaryBanking_Details.value, false, false, False, false, 8, 'Arial AzLat', False);
+            //SetBookmark('RPeriod',ODSPAccidentRReqins_period.value, false, false, False, false, 8, 'Arial AzLat', False);
+            SetBookmark('Empnum',FloatToStr(ODSPAccidentRTotalemp_number.value), false, false, False, false, 8, 'Arial AzLat', False);
+            SetBookmark('AOG',FloatToStr(ODSPAccidentRAOG.value), false, false, False, false, 8, 'Arial AzLat', False);
+            SetBookmark('AOP',FloatToStr(ODSPAccidentRAOP.value), false, false, False, false, 8, 'Arial AzLat', False);
+            SetBookmark('SMG',FloatToStr(ODSPAccidentRSMG.value), false, false, False, false, 8, 'Arial AzLat', False);
+            SetBookmark('SMP',FloatToStr(ODSPAccidentRSMP.value), false, false, False, false, 8, 'Arial AzLat', False);
+            SetBookmark('BCG',FloatToStr(ODSPAccidentRBCG.value), false, false, False, false, 8, 'Arial AzLat', False);
+            SetBookmark('BCP',FloatToStr(ODSPAccidentRBCP.value), false, false, False, false, 8, 'Arial AzLat', False);
+            if not ODSPAccidentRDecired_amount.IsNull then
+            begin
+               SetBookmark('ISMultiple','Bəli', false, false, False, false, 8, 'Arial AzLat', False);
+               SetBookmark('ISMultiplesum',FloatToStr(ODSPAccidentRDecired_amount.value), false, false, False, false, 8, 'Arial AzLat', False);
+            end
+            else
+               SetBookmark('ISMultiple','Xeyr', false, false, False, false, 8, 'Arial AzLat', False);
+            SetBookmark('EME',FloatToStr(ODSPAccidentREME.value), false, false, False, false, 8, 'Arial AzLat', False);
+            SetBookmark('HC',FloatToStr(ODSPAccidentRHC.value), false, false, False, false, 8, 'Arial AzLat', False);
+            SetBookmark('HS',FloatToStr(ODSPAccidentRHS.value), false, false, False, false, 8, 'Arial AzLat', False);
+            SetBookmark('BRB',FloatToStr(ODSPAccidentRBRB.value), false, false, False, false, 8, 'Arial AzLat', False);
+            SetBookmark('BURN',FloatToStr(ODSPAccidentRBURN.value), false, false, False, false, 8, 'Arial AzLat', False);
+            SetBookmark('TTD',FloatToStr(ODSPAccidentRTTD.value), false, false, False, false, 8, 'Arial AzLat', False);
+            SetBookmark('WEEKS',FloatToStr(ODSPAccidentMAXWEEKS.value), false, false, False, false, 8, 'Arial AzLat', False);
+           // SetBookmark('NOTCOVERED',ODSPAccidentRNOT_COVEREDPERIOD.value+'  -  '+ODSPAccidentRNOT_COVEREPERIOD1.value, false, false, False, false, 8, 'Arial AzLat', False);
+           SetBookmark('NOTCOVERED',ODSPAccidentR.FieldByName('NOT_COVEREDPERIOD').AsString+'  -  '+ODSPAccidentR.FieldByName('NOT_COVEREPERIOD1').AsString, false, false, False, false, 8, 'Arial AzLat', False);
+
+            SetBookmark('RISKS',RISKSNAME.Value, false, false, False, false, 8, 'Arial AzLat', False);
+            IF (ODSPAccidentROUTSIDEOFAZE.Value='Xeyr') or (ODSPAccidentROUTSIDEOFAZE.Value='Bəli') then
+               SetBookmark('OUTOFAZE',ODSPAccidentROUTSIDEOFAZE.Value, false, false, False, false, 8, 'Arial AzLat', False);
+            IF (ODSPAccidentROUTSIDEOFAZE.Value<>'Xeyr') and (ODSPAccidentROUTSIDEOFAZE.Value<>'Bəli') then
+            begin
+                SetBookmark('OUTOFAZE1',ODSPAccidentROUTSIDEOFAZE.Value, false, false, False, false, 8, 'Arial AzLat', False);
+                SetBookmark('OUTOFAZE','Bəli', false, false, False, false, 8, 'Arial AzLat', False);
+            end;
+            SetBookmark('RENEWAL',ODSPAccidentRRENEWAL.Value, false, false, False, false, 8, 'Arial AzLat', False);
+            SetBookmark('TRAVELS',ODSPAccidentRTRAVELS.Value, false, false, False, false, 8, 'Arial AzLat', False);
+       end
+    finally
+       AccidentExporter.Show;
+    end;
+
+end;
+
+procedure TPAccidentBlank.DBEdit4Change(Sender: TObject);
+begin
+     btApply.Enabled:=true;
+end;
+
+procedure TPAccidentBlank.ODSPAccidentNewRecord(DataSet: TDataSet);
+begin
+     //DataSet.FieldByName('ID').AsInteger:=PINS_Paccident.CallIntegerFunction('generateID1',[]);
+     DataSet.FieldByName('ID').AsInteger:=PINS_Paccident.CallIntegerFunction('generateID1',[]);
+
+
+end;
+
+procedure TPAccidentBlank.edBeginDateChange(Sender: TObject);
+begin
+     MonthPeriod;
+     ODSPAccident.Edit;
+     btApply.Enabled:=true;
+end;
+
+procedure TPAccidentBlank.SuggestClick(Sender: TObject);
+var
+   p : TStringList;
+begin
+
+with sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['SUGGESTIONCONTRACT_PERSACCIDENT']);
+ end;
+
+   p:= TStringList.Create;
+   p.Values['MK_ID'] := FloatToStr(ODSPAccidentId.value);
+   p.Values['PAID'] := FloatToStr(ODSPAccSuggestPAID.value);
+   p.Values['KLI_ID'] := IntToStr(ODSCustomersID.Value);
+   ODSPaccSuggest.Close;
+   ODSPaccSuggest.SetVariable('paid',ODSPAccidentId.value);
+   ODSPaccSuggest.Open;
+   if ODSPAccSuggest.RecordCount<1 then
+       //p.Values['Mod']:='Insert'
+       ins_or_upd:='Insert'
+   else
+      ins_or_upd:='Edit';
+      //p.Values['Mod']:='Edit';
+   with SuggestContainer do begin
+     ShowModal(StringToGuid('{F64B6260-CAB7-4D0A-9149-CF1A4639CD5C}'),p );    //PPAccidentSuggest -bu ocx-i cagirir
+   end;
+   p.Free;
+
+end;
+
+procedure TPAccidentBlank.MonthPeriod;
+begin
+     MonthEdit.Text:=IntToStr(trunc((edEndDate.DateTime - edBeginDate.DateTime)/30))+' ay';
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TPAccidentBlank,
+    Class_PAccidentBlank,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

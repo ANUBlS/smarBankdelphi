@@ -1,0 +1,123 @@
+object MultiCurrency: TMultiCurrency
+  Left = 0
+  Top = 0
+  Caption = 'MultiCurrency'
+  ClientHeight = 108
+  ClientWidth = 406
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  OnCreate = FormCreate
+  PixelsPerInch = 96
+  TextHeight = 13
+  object DBLookupComboBox6: TDBLookupComboboxEh
+    Left = 99
+    Top = 20
+    Width = 258
+    Height = 21
+    Color = clAqua
+    EditButtons = <>
+    KeyField = 'ACC_NO'
+    ListField = 'ACC_NO'
+    ListSource = DataMod_CARDS.hsource
+    TabOrder = 0
+    Visible = True
+    OnChange = DBLookupComboBox6Change
+  end
+  object multi1: TCheckBox
+    Left = 8
+    Top = 22
+    Width = 81
+    Height = 17
+    Caption = 'Multihesab 1'
+    TabOrder = 1
+  end
+  object multi2: TCheckBox
+    Left = 8
+    Top = 49
+    Width = 81
+    Height = 17
+    Caption = 'Multihesab 2'
+    TabOrder = 2
+  end
+  object DBLookupComboboxEh2: TDBLookupComboboxEh
+    Left = 99
+    Top = 47
+    Width = 258
+    Height = 21
+    Color = clAqua
+    EditButtons = <>
+    KeyField = 'ACC_NO'
+    ListField = 'ACC_NO'
+    ListSource = DataMod_CARDS.hsource
+    TabOrder = 3
+    Visible = True
+  end
+  object Edit3: TEdit
+    Left = 120
+    Top = 0
+    Width = 121
+    Height = 21
+    TabOrder = 4
+    Text = 'Edit3'
+    Visible = False
+  end
+  object edit1: TEdit
+    Left = 363
+    Top = 20
+    Width = 41
+    Height = 21
+    Color = clAqua
+    Enabled = False
+    TabOrder = 5
+  end
+  object Edit2: TEdit
+    Left = 363
+    Top = 47
+    Width = 41
+    Height = 21
+    Color = clAqua
+    Enabled = False
+    TabOrder = 6
+  end
+  object Edit4: TEdit
+    Left = 236
+    Top = 74
+    Width = 121
+    Height = 21
+    TabOrder = 7
+    Text = 'Edit4'
+    Visible = False
+  end
+  object Button2: TButton
+    Left = 104
+    Top = 74
+    Width = 89
+    Height = 25
+    Caption = #1049#1040#1044#1044#1040' '#1057#1040#1061#1051#1040
+    TabOrder = 8
+    OnClick = Button1Click
+  end
+  object OracleDataSet1: TOracleDataSet
+    SQL.Strings = (
+      'select *'
+      ' from account  '
+      'where '
+      ''
+      
+        '(close_dat is null) and ((kli_id =:CID) or (Acc_NO like (:p_AccN' +
+        'O))) and (bal_cn1 in (select balans from card_balcn)) order by a' +
+        'cc_no '
+      '')
+    Optimize = False
+    Variables.Data = {
+      0400000002000000080000003A00430049004400030000000000000000000000
+      100000003A0050005F004100430043004E004F00050000000000000000000000}
+    Left = 272
+    Top = 65528
+  end
+end

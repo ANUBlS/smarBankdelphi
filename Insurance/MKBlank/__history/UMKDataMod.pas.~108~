@@ -1,0 +1,542 @@
+unit UMKDataMod;
+        //state
+        //ODSdrAccessPeo
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, Oracle, OracleData;
+
+type
+  TInsMKDataMod = class(TDataModule)
+    DSMarks: TDataSource;
+    ODSMarks: TOracleDataSet;
+    ODSMarksID: TFloatField;
+    ODSMarksNAME: TWideStringField;
+    ODSMarksSTATE_ID: TFloatField;
+    ODSMarksCALCOPTIONS: TIntegerField;
+    ODSModels: TOracleDataSet;
+    ODSModelsID: TFloatField;
+    ODSModelsNAME: TWideStringField;
+    ODSModelsMARK_ID: TFloatField;
+    ODSModelsCALCOPTIONS: TIntegerField;
+    DSModels: TDataSource;
+    ODSBanks: TOracleDataSet;
+    ODSBanksID: TFloatField;
+    ODSBanksNAME: TWideStringField;
+    DSBanks: TDataSource;
+    ODSCusts: TOracleDataSet;
+    ODSCustsID: TIntegerField;
+    ODSCustsNAME: TWideStringField;
+    ODSCustsADDRESS: TWideStringField;
+    DSCusts: TDataSource;
+    pkgMotorKasco: TOraclePackage;
+    OPCOMMON: TOraclePackage;
+    ODSMotorkasko: TOracleDataSet;
+    DSMotorkasco: TDataSource;
+    DSContracts: TDataSource;
+    ODSContracts: TOracleDataSet;
+    DSSex: TDataSource;
+    DSDrAccessPeople: TDataSource;
+    ODSdrAccessPeople: TOracleDataSet;
+    ODSdrAccessPeopleCID: TFloatField;
+    ODSdrAccessPeopleNAME: TWideStringField;
+    ODSdrAccessPeopleSURNAME: TWideStringField;
+    ODSdrAccessPeopleFATHERNAME: TWideStringField;
+    ODSdrAccessPeopleBIRTHDAY: TDateTimeField;
+    ODSdrAccessPeopleDREXPERIENCE: TDateTimeField;
+    ODSSex: TOracleDataSet;
+    ODSSexID: TFloatField;
+    ODSSexNAME: TWideStringField;
+    ODSMonths: TOracleDataSet;
+    ODSMonthsID: TFloatField;
+    ODSMonthsRELEASE_ID: TFloatField;
+    ODSMonthsCOUNT: TFloatField;
+    DSMonths: TDataSource;
+    ODSReliaseDates: TOracleDataSet;
+    ODSReliaseDatesID: TFloatField;
+    ODSReliaseDatesBEGINDATE: TDateTimeField;
+    ODSReliaseDatesENDDATE: TDateTimeField;
+    ODSReliaseDatesSTATE_ID: TFloatField;
+    DSFranshiz: TDataSource;
+    ODSFranshiz: TOracleDataSet;
+    ODSFranshizFRANSHIZ: TFloatField;
+    ODSFranshizTARIFF: TFloatField;
+    ODSMotorkaskoID: TFloatField;
+    ODSMotorkaskoINSUREDTYPE: TWideStringField;
+    ODSMotorkaskoINSUREDCOLOR: TWideStringField;
+    ODSMotorkaskoINSUREDOUTPUTYEAR: TIntegerField;
+    ODSMotorkaskoINSUREDSTATENUM: TWideStringField;
+    ODSMotorkaskoUNDERFRAMENUM: TWideStringField;
+    ODSMotorkaskoINSUREDBANNUM: TWideStringField;
+    ODSMotorkaskoINSUREDENGINENUM: TWideStringField;
+    ODSMotorkaskoDRIVECOST: TFloatField;
+    ODSMotorkaskoBEGINDATE: TDateTimeField;
+    ODSMotorkaskoENDDATE: TDateTimeField;
+    ODSMotorkaskoTYPEID: TIntegerField;
+    ODSMotorkaskoCLOSE_PREFIX: TIntegerField;
+    ODSMotorkaskoBANK_ID: TFloatField;
+    ODSMotorkaskoMONTH_ID: TFloatField;
+    ODSMotorkaskoINSUREDMARK: TWideStringField;
+    ODSMotorkaskoINSUREDMODEL: TWideStringField;
+    ODSContractsID: TFloatField;
+    ODSContractsTYPE_ID: TFloatField;
+    ODSContractsINS_DATE: TDateTimeField;
+    ODSContractsBEGIN_DATE: TDateTimeField;
+    ODSContractsEND_DATE: TDateTimeField;
+    ODSContractsVALUTE_ID: TFloatField;
+    ODSContractsAMMOUNT: TFloatField;
+    ODSContractsCLOSE_PREFIX: TIntegerField;
+    ODSContractsKLI_ID: TFloatField;
+    ODSContractsLOANACC_ID: TFloatField;
+    ODSContractsCURRACC_ID: TFloatField;
+    ODSContractsPOLICY_NUM: TWideStringField;
+    ODSContractsINSSUMM: TFloatField;
+    ODSContractsFRANSHIZ: TFloatField;
+    ODSContractsTARIFF: TFloatField;
+    ODSContractsSTATE: TIntegerField;
+    ODSAvalute: TOracleDataSet;
+    ODSAvaluteVALUTE: TIntegerField;
+    ODSAvaluteVAL_NAME: TWideStringField;
+    ODSAvaluteVALU_NAME: TWideStringField;
+    ODSAvaluteVALU_SHORT: TWideStringField;
+    DSAvalute: TDataSource;
+    ODSAgent: TOracleDataSet;
+    DSAgent: TDataSource;
+    ODSContractsAGENT_ID: TFloatField;
+    DSAccessories: TDataSource;
+    ODSAccessories: TOracleDataSet;
+    ODSAccessoriesID: TFloatField;
+    ODSAccessoriesNAME: TWideStringField;
+    ODSAccessoriesAMMOUNT: TFloatField;
+    ODSAccessoriesCID: TFloatField;
+    ODSAutoTypes: TOracleDataSet;
+    DSAutoTypes: TDataSource;
+    ODSAutoTypesID: TFloatField;
+    ODSAutoTypesNAME: TWideStringField;
+    ODSAgentSURNAME: TWideStringField;
+    ODSAgentFNAME: TWideStringField;
+    ODSAgentFATHERNAME: TWideStringField;
+    ODSAgentName: TWideStringField;
+    ODSAgentID: TFloatField;
+    ODSMotorkaskoCID: TFloatField;
+    ODSAutoColors: TOracleDataSet;
+    DSAutoColors: TDataSource;
+    DSClaimSal: TDataSource;
+    ODSClaimSal: TOracleDataSet;
+    ODSClaimSalID: TFloatField;
+    ODSClaimSalEID: TFloatField;
+    ODSClaimSalNAME: TWideStringField;
+    ODSClaimSalCOST: TFloatField;
+    DSClaims: TDataSource;
+    ODSClaims: TOracleDataSet;
+    ODSClaimsID: TFloatField;
+    ODSClaimsMK_ID: TFloatField;
+    ODSClaimsENAME: TWideStringField;
+    ODSClaimsCOUNT: TFloatField;
+    ODSClaimsCOST: TFloatField;
+    ODSClaimsSTATE: TWideStringField;
+    ODSMotorkaskoCLAIM_DATE: TDateTimeField;
+    ODSMotorkaskoCLAIM_NUM: TWideStringField;
+    ODSClaimReport: TOracleDataSet;
+    ODSClaimReportID: TFloatField;
+    ODSClaimReportMK_ID: TFloatField;
+    ODSClaimReportENAME: TWideStringField;
+    ODSClaimReportCOUNT: TFloatField;
+    ODSClaimReportCOST: TFloatField;
+    ODSClaimReportSTATE: TWideStringField;
+    ODSMotorkaskoavtotypes: TWideStringField;
+    ODSMotorkaskoavtomarks: TWideStringField;
+    ODSMotorkaskoavtomodels: TWideStringField;
+    ODSMotorkaskoavtocolor: TWideStringField;
+    ODSContractsBEN_ID: TFloatField;
+    ODSContractsBENEFICIARY: TWideStringField;
+    DSClaimDescription: TDataSource;
+    ODSClaimDescription: TOracleDataSet;
+    ODSClaimDescriptionID: TFloatField;
+    ODSClaimDescriptionREGION: TWideStringField;
+    ODSClaimDescriptionSTREET: TWideStringField;
+    ODSClaimDescriptionDETAIL: TWideStringField;
+    ODSClaimDescriptionPERSON: TWideStringField;
+    ODSClaimDescriptionMARK: TWideStringField;
+    ODSClaimDescriptionSTATENUM: TWideStringField;
+    ODSClaimDescriptionAVTOSERVIS: TWideStringField;
+    ODSdrAccessPeopleID: TFloatField;
+    ODSCustsINSURED_TYPEID: TIntegerField;
+    ODSClaimDescriptionMODEL: TWideStringField;
+    ODSClaimDescriptionAPPDATE: TDateTimeField;
+    ODSClaimDescriptionLETTERDATE: TDateTimeField;
+    ODSClaimDescriptionLETTERNUM: TWideStringField;
+    ODSClaimDescriptionSPRNUM: TWideStringField;
+    ODSClaimDescriptionPRTNUM: TWideStringField;
+    ODSdrAccessPeopleSEX: TWideStringField;
+    ODSClaimDescriptionACTDATE: TDateTimeField;
+    DSIntends: TDataSource;
+    ODSIntends: TOracleDataSet;
+    ODSIntendsID: TFloatField;
+    ODSIntendsNAME: TWideStringField;
+    DSConditions: TDataSource;
+    ODSConditions: TOracleDataSet;
+    ODSConditionsID: TFloatField;
+    ODSConditionsNAME: TWideStringField;
+    ODSContractsCONDITIONS: TWideStringField;
+    ODSTarifStates: TOracleDataSet;
+    ODSTarifStatesID: TFloatField;
+    ODSTarifStatesBANK_ID: TFloatField;
+    ODSTarifStatesSTATE_ID: TFloatField;
+    ODSTarifStatesStates: TWideStringField;
+    DSTarifStates: TDataSource;
+    ODSTariffs: TOracleDataSet;
+    ODSTariffsID: TFloatField;
+    ODSTariffsFRANSHIZ_ID: TFloatField;
+    ODSTariffsAMMOUNT: TFloatField;
+    DSTariffs: TDataSource;
+    ODSFranshizMONTH_ID: TFloatField;
+    ODSFranshizID: TFloatField;
+    ODSCustTypes: TOracleDataSet;
+    ODSCustTypesID: TFloatField;
+    ODSCustTypesNAME: TWideStringField;
+    ODSReport: TOracleDataSet;
+    ODSReportNAME: TWideStringField;
+    ODSReportINSUREDTYPE: TWideStringField;
+    ODSReportINSUREDCOLOR: TWideStringField;
+    ODSReportINSUREDOUTPUTYEAR: TIntegerField;
+    ODSReportINSUREDMODEL: TWideStringField;
+    ODSReportINSUREDSTATENUM: TWideStringField;
+    ODSReportUNDERFRAMENUM: TWideStringField;
+    ODSReportINSUREDBANNUM: TWideStringField;
+    ODSReportDRIVEACCESSPIOPLE: TWideStringField;
+    ODSReportINSUREDENGINENUM: TWideStringField;
+    ODSReportACCESSORIESNAME: TWideStringField;
+    ODSReportBEGINDATE: TWideStringField;
+    ODSReportINSDATE: TWideStringField;
+    ODSReportENDDATE: TWideStringField;
+    ODSReportPOLICYNUM: TWideStringField;
+    ODSReportTHEFT: TFloatField;
+    ODSReportFIRE: TFloatField;
+    ODSReportTRAFFICACCIDENT: TFloatField;
+    ODSReportIMPACTANYOBJECT: TFloatField;
+    ODSReportEXPLOSION: TFloatField;
+    ODSReportAGENT: TWideStringField;
+    ODSReportVALUTE: TWideStringField;
+    ODSReportBENEFICIARY: TWideStringField;
+    ODSReportLOANACC_ID: TFloatField;
+    ODSReportCURRACC_ID: TFloatField;
+    ODSReportSEX: TIntegerField;
+    ODSReportFRANSHIZ: TFloatField;
+    ODSReportEXTRAFRANSHIZ: TWideStringField;
+    ODSReportAVTOCOST: TFloatField;
+    ODSReportINSSUMM: TFloatField;
+    ODSReportAMMOUNT: TFloatField;
+    ODSReportINSUREDADDRESS: TWideStringField;
+    ODSReportMOBILEPHONE: TWideStringField;
+    ODSReportHOMEPHONE: TWideStringField;
+    ODSReportINSCOLOR: TWideStringField;
+    ODSReportVAL_NAME: TWideStringField;
+    ODSdrAccessPeopleIFEXTRA: TWideStringField;
+    DataSource1: TDataSource;
+    OracleDataSet1: TOracleDataSet;
+    ODSMotorkaskoAREA: TWideStringField;
+    ODSMotorkaskoACT_NUM: TWideStringField;
+    ODSMotorkaskoFRANSHIZ: TFloatField;
+    ODSMotorkaskoTARIFF: TFloatField;
+    ODSMotorkaskoINSSUMM: TFloatField;
+    ODSMotorkaskoAMMOUNT: TFloatField;
+    ODSMotorkaskoNOTES: TWideStringField;
+    ODSMotorkaskoEXTRAFRANSHIZ: TWideStringField;
+    DSRins_production_year: TDataSource;
+    DSins_production_year: TOracleDataSet;
+    DSins_production_yearID: TFloatField;
+    DSins_production_yearNAME: TWideStringField;
+    DSSysdat: TOracleDataSet;
+    DSSysdatTEK_DAT: TDateTimeField;
+    DSSysdatPRED_DAT: TDateTimeField;
+    DSSysdatARC_DAY: TDateTimeField;
+    DSSysdatCLOSE: TIntegerField;
+    DScities: TOracleDataSet;
+    DSRcities: TDataSource;
+    DScitiesID: TFloatField;
+    DScitiesCOUNTRY_ID: TFloatField;
+    DScitiesCITY_NAME: TWideStringField;
+    DScitiesPHONE_CODE: TIntegerField;
+    ODSMotorkaskoMARKA_ID: TFloatField;
+    ODSMotorkaskoMODEL_ID: TFloatField;
+    ODSMotorkaskoCOLOR_ID: TFloatField;
+    ODSMotorkaskoINSUREDTYPE_ID: TFloatField;
+    SB_ACA: TOraclePackage;
+    DSSigortaetdiren: TOracleDataSet;
+    DSRSigortaetdiren: TDataSource;
+    ODSdrAccessPeo: TOracleDataSet;
+    ODSContractsPNUM: TFloatField;
+    ODSContractsSUGNUM: TWideStringField;
+    ODSContractsBLANK_ID: TFloatField;
+    ODSContractsOP_ID: TFloatField;
+    ODSContractsREINS: TFloatField;
+    DSRmesuli: TDataSource;
+    DSRFqeza: TDataSource;
+    DSmesuli: TOracleDataSet;
+    DSFqeza: TOracleDataSet;
+    DSFqezaID: TFloatField;
+    DSFqezaTYPEID: TFloatField;
+    DSFqezaCID: TFloatField;
+    DSFqezaPERSONAL_COUNT: TFloatField;
+    DSFqezaONE_ACCIDENT_AMOUNT: TFloatField;
+    DSFqezaONE_ACCIDENT_EVENT_AMOUNT: TFloatField;
+    DSFqezaONE_MAX_MED_EXPENSES: TFloatField;
+    DSFqezaONEINSEVENT_MAX_MED_EXPENSES: TFloatField;
+    DSFqezaINS_PREMIUM: TFloatField;
+    DSFqezaACCIDENT_POLISNUM: TWideStringField;
+    DSFqezaACCIDENT_CID: TFloatField;
+    DSmesuliID: TFloatField;
+    DSmesuliTYPEID: TFloatField;
+    DSmesuliCID: TFloatField;
+    DSmesuliCLOSE_PREFIX: TFloatField;
+    DSmesuliRESP_AMMOUNT: TFloatField;
+    DSmesuliRESP_PREMIUM: TFloatField;
+    DSmesuliRESP_PILISNUM: TWideStringField;
+    DSmesuliRESP_CID: TFloatField;
+    DSrespon: TOracleDataSet;
+    DSresponID: TFloatField;
+    DSresponTYPEID: TFloatField;
+    DSresponCID: TFloatField;
+    DSresponCLOSE_PREFIX: TFloatField;
+    DSresponRESP_AMMOUNT: TFloatField;
+    DSresponRESP_PREMIUM: TFloatField;
+    DSresponRESP_PILISNUM: TWideStringField;
+    DSresponRESP_CID: TFloatField;
+    DSRrespon: TDataSource;
+    DSRins_contr_per_acc_motor: TDataSource;
+    DSins_contr_per_acc_motor: TOracleDataSet;
+    DSins_contr_per_acc_motorID: TFloatField;
+    DSins_contr_per_acc_motorTYPEID: TFloatField;
+    DSins_contr_per_acc_motorCID: TFloatField;
+    DSins_contr_per_acc_motorPERSONAL_COUNT: TFloatField;
+    DSins_contr_per_acc_motorONE_ACCIDENT_AMOUNT: TFloatField;
+    DSins_contr_per_acc_motorONE_ACCIDENT_EVENT_AMOUNT: TFloatField;
+    DSins_contr_per_acc_motorONE_MAX_MED_EXPENSES: TFloatField;
+    DSins_contr_per_acc_motorONEINSEVENT_MAX_MED_EXPENSES: TFloatField;
+    DSins_contr_per_acc_motorINS_PREMIUM: TFloatField;
+    DSins_contr_per_acc_motorACCIDENT_POLISNUM: TWideStringField;
+    DSins_contr_per_acc_motorACCIDENT_CID: TFloatField;
+    ODSContractsCHKASKO: TFloatField;
+    ODSContractsCHM: TFloatField;
+    ODSContractsCHFQ: TFloatField;
+    ODSClaimDescriptionMK_ID: TFloatField;
+    ODSClaimDescriptionCID: TFloatField;
+    ODSClaimDescriptionMODELID: TFloatField;
+    ODSClaimDescriptionMARKAID: TFloatField;
+    ODSClaimDescriptionCLAIM_NUM: TWideStringField;
+    ODSClaimDescriptionCLAIM_DATE: TDateTimeField;
+    ODSClaimDescriptionSUBRAQASIYA: TFloatField;
+    ODSClaimDescriptionEMPL_ACC: TFloatField;
+    ODSClaimDescriptionPROBEG: TFloatField;
+    ODSClaimDescriptionUTO_TRANSPORTATION_COSTS: TFloatField;
+    ODSClaimDescriptionFINAL_AMOUNT_LOSS: TFloatField;
+    ODSClaimDescriptionAUTO_ASSESS_COSTS: TFloatField;
+    ODSClaimDescriptionVALUE_NEW_SPARE_PARTS: TFloatField;
+    ODSClaimDescriptionOTHER_COSTS: TFloatField;
+    ODSClaimDescriptionMANAGEMENT_RIGHTS: TWideStringField;
+    ODSClaimDescriptionINS_AGAINST_ORGANIZATION: TFloatField;
+    ODSClaimDescriptionINS_AGAINST_POLISN_DAT: TWideStringField;
+    ODSClaimDescriptionEVENT_PUB_AUTHORITY_REG: TWideStringField;
+    ODSClaimDescriptionAUTO_REAL_MARKET_VALUE: TFloatField;
+    ODSClaimDescriptionREMAINS_VALUE: TFloatField;
+    ODSClaimDescriptionBANK_ACCNO: TWideStringField;
+    ODSClaimDescriptionTYPE: TFloatField;
+    ODSClaimDescriptionC_TYPE: TFloatField;
+    ODSClaimDescriptionCLAIM_STATUS: TFloatField;
+    ODSClaimDescriptionDRIVER: TWideStringField;
+    ODSClaimDescriptionFINAL_PAYMENT_AMOUNT_LOSS: TFloatField;
+    ODSContractsCOMMITOP_ID: TFloatField;
+    ODSContractsCOMMIT_DATE: TDateTimeField;
+    ODSContractsCANCELOPID: TFloatField;
+    ODSContractsCANCELDATE: TDateTimeField;
+    ODSContractsFILIAL: TFloatField;
+    DSRFilial: TDataSource;
+    DSFilial: TOracleDataSet;
+    DSRFransiza: TDataSource;
+    DSFransiza: TOracleDataSet;
+    DSFransizaID: TFloatField;
+    DSFransizaMONTH_ID: TFloatField;
+    DSFransizaAMMOUNT: TFloatField;
+    DSbank: TOracleDataSet;
+    DSbankID: TFloatField;
+    DSbankNAME: TWideStringField;
+    DSRtarif: TDataSource;
+    DStarif: TOracleDataSet;
+    DStarifID: TFloatField;
+    DStarifFRANSHIZ_ID: TFloatField;
+    DStarifAMMOUNT: TFloatField;
+    DSRtarif_count: TDataSource;
+    DStarif_count: TOracleDataSet;
+    DStarif_countSAY: TFloatField;
+    ODSMotorkaskoDRIVEINTENDED: TFloatField;
+    DSRDRIVEINTENDED: TDataSource;
+    DSDRIVEINTENDED: TOracleDataSet;
+    ODSdrAccessPeople2: TOracleDataSet;
+    ODSMotorkaskoNUMSEATS: TFloatField;
+    ODSReportNAME2: TWideStringField;
+    ODSReportDRIVEINTENDED: TFloatField;
+    ODSReportNUMSEATS: TFloatField;
+    ODSMotorkaskoENGINE_TYPE: TFloatField;
+    ds_ins_dict_motor_type: TOracleDataSet;
+    ds_ins_dict_motor_typeID: TFloatField;
+    ds_ins_dict_motor_typeNAME: TWideStringField;
+    dsr_ins_dict_motor_type: TDataSource;
+    dsr_ins_dict_motor_capcite: TDataSource;
+    ds_ins_dict_motor_capcite: TOracleDataSet;
+    ds_ins_dict_motor_capciteID: TFloatField;
+    ds_ins_dict_motor_capciteNAME: TWideStringField;
+    ds_ins_dict_motor_capciteTYPE_MOTOR: TFloatField;
+    ODSMotorkaskoENGINE_SIZE: TFloatField;
+    DSFarsiza_count: TOracleDataSet;
+    DSRFarsiza_count: TDataSource;
+    DSFarsiza_countSAY: TFloatField;
+    ODSContractsBNF_TYPE: TFloatField;
+    procedure ODSdrAccessPeopleAfterInsert(DataSet: TDataSet);
+    procedure ODSContractsAfterInsert(DataSet: TDataSet);
+    procedure ODSAccessoriesAfterInsert(DataSet: TDataSet);
+    procedure ODSdrAccessPeopleAfterPost(DataSet: TDataSet);
+    procedure ODSAgentCalcFields(DataSet: TDataSet);
+    procedure ODSAgentAfterScroll(DataSet: TDataSet);
+    procedure ODSClaimsAfterInsert(DataSet: TDataSet);
+    procedure ODSClaimSalAfterInsert(DataSet: TDataSet);
+    procedure ODSMotorkaskoAfterInsert(DataSet: TDataSet);
+    procedure ODSMotorkaskoAfterPost(DataSet: TDataSet);
+    procedure DataModuleCreate(Sender: TObject);
+    procedure ODSdrAccessPeopleBeforeInsert(DataSet: TDataSet);
+    procedure DataModuleDestroy(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  InsMKDataMod: TInsMKDataMod;
+
+implementation
+
+uses  sboapiDataModuleImpl, UMKBlank;
+
+{$R *.DFM}
+
+procedure TInsMKDataMod.ODSdrAccessPeopleAfterInsert(DataSet: TDataSet);
+begin
+
+  DataSet.FieldByName('CID').asInteger := ODSMotorkasko.FieldByName('cid').Asinteger;
+  DataSet.FieldByName('ID').asInteger := ODSMotorkasko.FieldByName('id').Asinteger;
+
+end;
+
+procedure TInsMKDataMod.ODSContractsAfterInsert(DataSet: TDataSet);
+begin
+
+   {DataSet.FieldByName('TYPE_ID').asInteger :=4;
+
+   if (fmMKBlank.XFCheckBox1.Checked=false)
+   and (fmMKBlank.XFCheckBox2.Checked=false)
+   and (fmMKBlank.XFCheckBox3.Checked=true) then
+   begin
+   //showmessage('M');
+   DataSet.FieldByName('TYPE_ID').asInteger :=13;
+   end;
+
+   if (fmMKBlank.XFCheckBox1.Checked=false)
+   and (fmMKBlank.XFCheckBox2.Checked=true)
+   and (fmMKBlank.XFCheckBox3.Checked=false) then
+   begin
+   //showmessage('F');
+   DataSet.FieldByName('TYPE_ID').asInteger :=1;
+   end;  }
+
+
+
+end;
+
+procedure TInsMKDataMod.DataModuleCreate(Sender: TObject);
+begin
+DSins_production_year.Open;
+DSFilial.Open;
+DSSysdat.Open;
+DSDRIVEINTENDED.Open;
+ODSdrAccessPeople.Open;
+ds_ins_dict_motor_type.Open;
+
+
+
+
+end;
+
+procedure TInsMKDataMod.DataModuleDestroy(Sender: TObject);
+begin
+DSFilial.close;
+DSDRIVEINTENDED.Close;
+ds_ins_dict_motor_type.Close;
+
+end;
+
+procedure TInsMKDataMod.ODSAccessoriesAfterInsert(DataSet: TDataSet);
+begin
+//  DataSet.FieldByName('CID').AsInteger:=fmMKBlank.CID;
+end;
+
+procedure TInsMKDataMod.ODSdrAccessPeopleAfterPost(DataSet: TDataSet);
+begin
+  (DataSet as TOracleDataSet).RefreshRecord;
+end;
+
+procedure TInsMKDataMod.ODSdrAccessPeopleBeforeInsert(DataSet: TDataSet);
+begin
+//  showmessage(ODSMotorkasko.FieldByName('id').AsString);
+     if ODSMotorkasko.FieldByName('id').AsString='' then
+     begin
+     ODSMotorkasko.FieldByName('id').AsFloat:=-1 ;
+      DataSet.FieldByName('id').asfloat :=-1;
+     end
+     else
+     begin
+  DataSet.FieldByName('CID').asInteger := ODSMotorkasko.FieldByName('cid').Asinteger;
+  DataSet.FieldByName('ID').asInteger := ODSMotorkasko.FieldByName('id').Asinteger;
+     end;
+
+  //DataSet.FieldByName('id').asfloat :=-1;
+end;
+
+procedure TInsMKDataMod.ODSAgentCalcFields(DataSet: TDataSet);
+begin
+  with DataSet do
+     FieldByName('name').asString := FieldByName('Surname').asString + ' '+
+                                    FieldByName('FName').asString + ' '+
+                                    FieldByName('Fathername').asString;
+end;
+
+procedure TInsMKDataMod.ODSAgentAfterScroll(DataSet: TDataSet);
+begin
+ { with fmMKBlank,  DataSet do
+   edAgents.Text := FieldByName('name').asString;
+  }
+end;
+
+procedure TInsMKDataMod.ODSClaimsAfterInsert(DataSet: TDataSet);
+begin
+      ODSClaimsMk_ID.Value:=ODSMotorkaskoId.Value;
+end;
+
+procedure TInsMKDataMod.ODSClaimSalAfterInsert(DataSet: TDataSet);
+begin
+ODSClaimSalEID.Value:=ODSMotorkaskoId.Value;
+end;
+
+procedure TInsMKDataMod.ODSMotorkaskoAfterInsert(DataSet: TDataSet);
+begin
+      DataSet.FieldByName('CID').asInteger := fmMKBlank.CID;
+
+end;
+
+procedure TInsMKDataMod.ODSMotorkaskoAfterPost(DataSet: TDataSet);
+begin
+     (DataSet as TOracleDataSet).RefreshRecord;
+end;
+
+end.

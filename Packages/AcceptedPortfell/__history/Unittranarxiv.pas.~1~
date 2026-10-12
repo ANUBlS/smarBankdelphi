@@ -1,0 +1,46 @@
+﻿unit Unittranarxiv;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, DBCtrls, StdCtrls, ExtCtrls;
+
+type
+  TArxivTran = class(TForm)
+    Panel1: TPanel;
+    Label1: TLabel;
+    Label5: TLabel;
+    Label6: TLabel;
+    Button1: TButton;
+    Main: TEdit;
+    Perc: TEdit;
+    DBLookupComboBox3: TDBLookupComboBox;
+    procedure Button1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  ArxivTran: TArxivTran;
+
+implementation
+
+uses Datamodunit;
+
+{$R *.dfm}
+
+procedure TArxivTran.Button1Click(Sender: TObject);
+begin
+
+DataMod.OraclePackage1.CallProcedure('add_transaction_arch',[DataMod.maincrprt.FieldByName('prtid').AsInteger,
+strtoint(main.Text),strtoint(perc.Text),' ',DBLookupComboBox3.KeyValue]);
+
+ShowMessage('Ödəniş uğurla yaradıldı...');
+datamod.maincrprt.refresh;
+ close;
+end;
+
+end.

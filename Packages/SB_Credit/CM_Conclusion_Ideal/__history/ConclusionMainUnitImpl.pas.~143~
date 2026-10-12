@@ -1,0 +1,1624 @@
+﻿unit ConclusionMainUnitImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  NLSLocalizer, ExtCtrls, ComCtrls, StdCtrls, DBCtrls,DB, variants,
+  Mask, CMDBSearchEdit, Buttons, ImgList, ActnList, ConclusionCommonDecls,
+  DBCtrlsEh, DBLookupEh, Grids, DBGrids, CMHintBox, CheckLst, Evanescence,
+  DBGridEh;
+
+type
+  TConclusionForm = class(TForm)
+    Panel1: TPanel;
+    PageControlMain: TPageControl;
+    tbCredit: TTabSheet;
+    tbCreditAccounts: TTabSheet;
+    btnSave: TButton;
+    btnCancel: TButton;
+    btnClose: TButton;
+    ActionList1: TActionList;
+    SaveChanges: TAction;
+    DismisChanges: TAction;
+    CloseForm: TAction;
+    LblAvtAcc: TLabel;
+    Panel22: TPanel;
+    Label34: TLabel;
+    Label36: TLabel;
+    Label37: TLabel;
+    Label38: TLabel;
+    LoanAccs: TDBLookupComboboxEh;
+    Panel24: TPanel;
+    Label43: TLabel;
+    Label45: TLabel;
+    Label46: TLabel;
+    Panel25: TPanel;
+    Label47: TLabel;
+    Label49: TLabel;
+    Label50: TLabel;
+    CMSearchEdit3: TCMSearchEdit;
+    PurReserveAccno: TDBLookupComboboxEh;
+    Panel26: TPanel;
+    Label51: TLabel;
+    Label52: TLabel;
+    Label53: TLabel;
+    Label54: TLabel;
+    Panel27: TPanel;
+    Label55: TLabel;
+    Label57: TLabel;
+    Label58: TLabel;
+    CMSearchEdit5: TCMSearchEdit;
+    DueLoanAccno: TDBLookupComboboxEh;
+    Panel28: TPanel;
+    Label59: TLabel;
+    Label61: TLabel;
+    Label62: TLabel;
+    CMSearchEdit6: TCMSearchEdit;
+    DBLookupComboboxEh15: TDBLookupComboboxEh;
+    Panel29: TPanel;
+    Label63: TLabel;
+    Label65: TLabel;
+    Label66: TLabel;
+    CMSearchEdit7: TCMSearchEdit;
+    DueIntAccno: TDBLookupComboboxEh;
+    Panel31: TPanel;
+    Label70: TLabel;
+    Label72: TLabel;
+    Label73: TLabel;
+    CMSearchEdit9: TCMSearchEdit;
+    DBLookupComboboxEh18: TDBLookupComboboxEh;
+    CMSearchEditPercent: TCMSearchEdit;
+    IntAccno: TDBLookupComboboxEh;
+    CMSearchEdit1: TCMSearchEdit;
+    CustAccno: TDBLookupComboboxEh;
+    RefreshListLbl: TLabel;
+    CMSearchEditLoacAccs: TCMSearchEdit;
+    Panel34: TPanel;
+    Label67: TLabel;
+    Label74: TLabel;
+    Label75: TLabel;
+    CMSearchEdit2: TCMSearchEdit;
+    CrdlineoblAccno: TDBLookupComboboxEh;
+    LblAvtSearch: TLabel;
+    Panel40: TPanel;
+    Label87: TLabel;
+    Label88: TLabel;
+    Label89: TLabel;
+    CMSearchEdit10: TCMSearchEdit;
+    DBLookupComboboxEh22: TDBLookupComboboxEh;
+    Panel35: TPanel;
+    Label76: TLabel;
+    Label77: TLabel;
+    Label78: TLabel;
+    CMSearchEdit4: TCMSearchEdit;
+    DBLookupComboboxEh21: TDBLookupComboboxEh;
+    Panel41: TPanel;
+    Label90: TLabel;
+    Label92: TLabel;
+    Label93: TLabel;
+    CMSearchEdit11: TCMSearchEdit;
+    DBLookupComboboxEh23: TDBLookupComboboxEh;
+    Panel42: TPanel;
+    Label94: TLabel;
+    Label95: TLabel;
+    Label96: TLabel;
+    Label97: TLabel;
+    CMSearchEdit12: TCMSearchEdit;
+    ReserveAccno: TDBLookupComboboxEh;
+    HBConclusion: TCMHintBox;
+    tbAdvancedInf: TTabSheet;
+    Panel45: TPanel;
+    GroupBox1: TGroupBox;
+    Panel46: TPanel;
+    GroupBox3: TGroupBox;
+    DBEditEh3: TDBEditEh;
+    GroupBox4: TGroupBox;
+    DBLookupComboboxEh27: TDBLookupComboboxEh;
+    Bancruptey_rg: TRadioGroup;
+    Panel47: TPanel;
+    GroupBox2: TGroupBox;
+    Panel48: TPanel;
+    Label106: TLabel;
+    Label107: TLabel;
+    Label108: TLabel;
+    DBEdit4: TDBEdit;
+    DBEdit5: TDBEdit;
+    Panel49: TPanel;
+    Label109: TLabel;
+    Label110: TLabel;
+    Label111: TLabel;
+    DBEdit6: TDBEdit;
+    DBEdit7: TDBEdit;
+    Panel50: TPanel;
+    Label112: TLabel;
+    Label113: TLabel;
+    Label114: TLabel;
+    DBEdit8: TDBEdit;
+    DBEdit9: TDBEdit;
+    GroupBox8: TGroupBox;
+    GroupBox9: TGroupBox;
+    DBEditEh6: TDBEditEh;
+    DBEditEh4: TDBEditEh;
+    GroupBox10: TGroupBox;
+    DBEditEh2: TDBEditEh;
+    DBEditEh7: TDBEditEh;
+    tbCust: TTabSheet;
+    Panel2: TPanel;
+    Panel3: TPanel;
+    Label1: TLabel;
+    BranchCBEh: TDBLookupComboboxEh;
+    Panel4: TPanel;
+    Label4: TLabel;
+    Label5: TLabel;
+    DBEdit1: TDBEdit;
+    Panel5: TPanel;
+    Label6: TLabel;
+    Label7: TLabel;
+    DBDateTimeEditEh1: TDBDateTimeEditEh;
+    Panel6: TPanel;
+    Label8: TLabel;
+    Label9: TLabel;
+    DBDateTimeEditEh2: TDBDateTimeEditEh;
+    Panel9: TPanel;
+    Label14: TLabel;
+    Label15: TLabel;
+    DBLookupComboboxEh4: TDBLookupComboboxEh;
+    Panel43: TPanel;
+    Label98: TLabel;
+    Label99: TLabel;
+    EditPeriodCredit: TDBEditEh;
+    Panel23: TPanel;
+    Label39: TLabel;
+    Label40: TLabel;
+    Label41: TLabel;
+    Label42: TLabel;
+    CustIDEdit: TDBEdit;
+    DBLookupComboboxEh19: TDBLookupComboboxEh;
+    Panel62: TPanel;
+    Label135: TLabel;
+    Label136: TLabel;
+    DBLookupComboboxEh30: TDBLookupComboboxEh;
+    Panel63: TPanel;
+    Label137: TLabel;
+    Label138: TLabel;
+    DBLookupComboboxEh29: TDBLookupComboboxEh;
+    Panel64: TPanel;
+    Label139: TLabel;
+    Label140: TLabel;
+    Panel8: TPanel;
+    Label12: TLabel;
+    Label13: TLabel;
+    DBLookupComboboxEh2: TDBLookupComboboxEh;
+    Panel65: TPanel;
+    Label141: TLabel;
+    Label142: TLabel;
+    DBLookupComboboxEh31: TDBLookupComboboxEh;
+    DBLookupComboboxEh28: TDBLookupComboboxEh;
+    Label143: TLabel;
+    Label144: TLabel;
+    Label145: TLabel;
+    Label147: TLabel;
+    Label148: TLabel;
+    Label149: TLabel;
+    CMSearchEdit13: TCMSearchEdit;
+    CMSearchEdit14: TCMSearchEdit;
+    CMSearchEdit15: TCMSearchEdit;
+    Panel51: TPanel;
+    Label10: TLabel;
+    Label64: TLabel;
+    DBLookupComboboxEh33: TDBLookupComboboxEh;
+    DBLookupComboboxEh34: TDBLookupComboboxEh;
+    Label91: TLabel;
+    Label153: TLabel;
+    Label158: TLabel;
+    CMSearchEdit16: TCMSearchEdit;
+    Label159: TLabel;
+    Bitpost: TBitBtn;
+    BitCancel: TBitBtn;
+    Label179: TLabel;
+    Label180: TLabel;
+    Panel78: TPanel;
+    Label181: TLabel;
+    Label182: TLabel;
+    Label183: TLabel;
+    CMSearchEdit17: TCMSearchEdit;
+    DBLookupComboboxEh39: TDBLookupComboboxEh;
+    Panel79: TPanel;
+    Label184: TLabel;
+    Label185: TLabel;
+    Label186: TLabel;
+    CMSearchEdit18: TCMSearchEdit;
+    DBLookupComboboxEh40: TDBLookupComboboxEh;
+    Panel30: TPanel;
+    Label44: TLabel;
+    Label68: TLabel;
+    Label69: TLabel;
+    CMSearchEdit8: TCMSearchEdit;
+    DBLookupComboboxEh17: TDBLookupComboboxEh;
+    Panel10: TPanel;
+    Panel11: TPanel;
+    Label16: TLabel;
+    Label17: TLabel;
+    DBLookupComboBox1: TDBLookupComboBox;
+    Panel12: TPanel;
+    Label18: TLabel;
+    Label19: TLabel;
+    DBNumberEditEh1: TDBNumberEditEh;
+    Panel13: TPanel;
+    Label20: TLabel;
+    Label21: TLabel;
+    DBNumberEditEh2: TDBNumberEditEh;
+    Panel14: TPanel;
+    Label22: TLabel;
+    Label23: TLabel;
+    DBNumberEditEh4: TDBNumberEditEh;
+    Panel16: TPanel;
+    Label26: TLabel;
+    Label27: TLabel;
+    DBNumberEditEh3: TDBNumberEditEh;
+    Panel19: TPanel;
+    Label2: TLabel;
+    Label31: TLabel;
+    DBLookupComboboxEh8: TDBLookupComboboxEh;
+    Panel33: TPanel;
+    Label3: TLabel;
+    Label35: TLabel;
+    DBLookupComboboxEh13: TDBLookupComboboxEh;
+    DBLookupComboboxEh7: TDBLookupComboboxEh;
+    Panel18: TPanel;
+    Label30: TLabel;
+    Label32: TLabel;
+    DBLookupComboboxEh5: TDBLookupComboboxEh;
+    Panel66: TPanel;
+    Label150: TLabel;
+    Label151: TLabel;
+    DBLookupComboboxEh32: TDBLookupComboboxEh;
+    Panel56: TPanel;
+    Label160: TLabel;
+    DBLookupComboboxEh35: TDBLookupComboboxEh;
+    Panel77: TPanel;
+    Panel7: TPanel;
+    Label24: TLabel;
+    DBLookupComboboxEh26: TDBLookupComboboxEh;
+    Panel72: TPanel;
+    Label162: TLabel;
+    DBLookupComboboxEh37: TDBLookupComboboxEh;
+    Panel74: TPanel;
+    Label164: TLabel;
+    DBLookupComboboxEh36: TDBLookupComboboxEh;
+    Panel17: TPanel;
+    Label28: TLabel;
+    Label29: TLabel;
+    DBNumberEditEh11: TDBNumberEditEh;
+    Panel69: TPanel;
+    Label11: TLabel;
+    Label156: TLabel;
+    DBLookupComboboxEh3: TDBLookupComboboxEh;
+    Panel39: TPanel;
+    Label83: TLabel;
+    DBNumberEditEh6: TDBNumberEditEh;
+    Panel52: TPanel;
+    Label82: TLabel;
+    DBNumberEditEh5: TDBNumberEditEh;
+    Panel20: TPanel;
+    Label85: TLabel;
+    Label100: TLabel;
+    Label101: TLabel;
+    CMSearchEdit19: TCMSearchEdit;
+    FutureincomeAccno: TDBLookupComboboxEh;
+    Panel15: TPanel;
+    Label25: TLabel;
+    Label79: TLabel;
+    Label80: TLabel;
+    Label48: TLabel;
+    DBNumberEditEh7: TDBNumberEditEh;
+    DBNumberEditEh9: TDBNumberEditEh;
+    DBNumberEditEh10: TDBNumberEditEh;
+    DBNumberEditEh8: TDBNumberEditEh;
+    Panel21: TPanel;
+    Label33: TLabel;
+    Label84: TLabel;
+    DBLookupComboboxEh9: TDBLookupComboboxEh;
+    Panel32: TPanel;
+    Label71: TLabel;
+    Label86: TLabel;
+    DBLookupComboboxEh10: TDBLookupComboboxEh;
+    Panel44: TPanel;
+    Label56: TLabel;
+    Label60: TLabel;
+    DBLookupComboboxEh25: TDBLookupComboboxEh;
+    Panel36: TPanel;
+    Label161: TLabel;
+    DBEdit3: TDBEdit;
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+    procedure FormCreate(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure SaveChangesExecute(Sender: TObject);
+    procedure SaveChangesUpdate(Sender: TObject);
+    procedure DismisChangesExecute(Sender: TObject);
+    procedure CloseFormExecute(Sender: TObject);
+    procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
+    procedure BranchCBEhKeyPress(Sender: TObject; var Key: Char);
+    procedure CMSearchEditLoacAccsExit(Sender: TObject);
+    procedure DBLookupComboboxEh19KeyValueChanged(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure RefreshListLblClick(Sender: TObject);
+    procedure CMSearchEditLoacAccsKeyUp(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure LblAvtAccClick(Sender: TObject);
+    procedure CMSearchEdit2KeyPress(Sender: TObject; var Key: Char);
+    procedure Bancruptey_rgClick(Sender: TObject);
+    procedure DBLookupComboboxEh2Change(Sender: TObject);
+    procedure DBEditEh7KeyPress(Sender: TObject; var Key: Char);
+    procedure DBEditEh3KeyPress(Sender: TObject; var Key: Char);
+    procedure DBLookupComboboxEh31KeyValueChanged(Sender: TObject);
+    procedure DBLookupComboboxEh30KeyValueChanged(Sender: TObject);
+    procedure DBLookupComboboxEh28KeyValueChanged(Sender: TObject);
+    procedure DBLookupComboboxEh31Change(Sender: TObject);
+    procedure DBLookupComboboxEh28Change(Sender: TObject);
+    procedure DBLookupComboboxEh30Change(Sender: TObject);
+    procedure DBEdit29Exit(Sender: TObject);
+    procedure DBEditEh7KeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure DBEditEh7Change(Sender: TObject);
+    procedure DBEditEh3KeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure TabSheet2Enter(Sender: TObject);
+    procedure tbCreditEnter(Sender: TObject);
+    procedure DBLookupComboboxEh30Click(Sender: TObject);
+    procedure DBLookupComboboxEh29Change(Sender: TObject);
+    procedure DBLookupComboboxEh19Change(Sender: TObject);
+    procedure DBLookupComboboxEh4Change(Sender: TObject);
+    procedure BitpostClick(Sender: TObject);
+    procedure BitCancelClick(Sender: TObject);
+    procedure DBLookupComboboxEh7Change(Sender: TObject);
+    procedure EditPeriodCreditChange(Sender: TObject);
+    procedure DBDateTimeEditEh2Change(Sender: TObject);
+    procedure DBLookupComboboxEh19CloseUp(Sender: TObject; Accept: Boolean);
+
+  private
+    { Private declarations }
+        procedure CheckFields;
+  public
+    FInsertCredit : Boolean;
+    function New  : Integer;
+    function Edit : Integer;
+    function Look : Integer;
+    function post : Integer;
+    procedure SaveState(Save : Boolean);
+    procedure DoInsert;
+    procedure DoEdit(FCreditID : Integer);
+    { Public declarations }
+  end;
+
+var
+  ConclusionForm: TConclusionForm;
+   a:integer;
+procedure InitPlugin(P : String);export;
+
+implementation
+
+uses DataModuleConclusion, CommonDecls, sbsystem, CreateCMAccountsImpl,LoanBalAccsUnit,SBTranslateProc,sboapiDataModuleImpl;
+
+{$R *.DFM}
+
+var
+  Processed : Boolean;
+ p_id:integer;
+
+
+procedure TConclusionForm.CheckFields;
+
+resourcestring rs_checkfields = '"%s" - sahəsi boşdur!';
+
+procedure ShowMsg(Message :String);
+begin
+   HBConclusion.ShowMessage(Message);
+   Abort;
+end;
+
+procedure CheckFieldByName(FieldName :TField);
+begin
+   if FieldName.IsNull then
+      ShowMsg(Format(rs_checkfields,[FieldName.DisplayName]))
+end;
+
+procedure CheckFieldByNames;
+begin
+
+
+   with DataModuleConcl,CreditProps do
+   begin
+   if DBLookupComboboxEh29.text='' then
+   begin
+   HBConclusion.ShowMessage('Borc alanın tipi (Mülkiyyət növü) sahəsi boşdur !') ;
+   abort
+   end;
+       CheckFieldByName(CreditPropsCREDITACT);
+       CheckFieldByName(CreditPropsACTIVITIES);
+       CheckFieldByName(CreditPropsCUSTOMERTYPE);
+     //  CheckFieldByName(CreditPropsNUMBEROFCREDIT);
+
+       CheckFieldByName(CreditPropsBRANCHID);
+       CheckFieldByName(CreditPropsCURRENCY);
+
+      CheckFieldByName(CreditPropsPERSONALTYPE);
+      CheckFieldByName(CreditPropsCREDITTYPE);
+  { if DBLookupComboboxEh37.text='' then
+   begin
+   HBConclusion.ShowMessage('Faizdən ödəniş günü sahəsi boşdur !') ;
+   abort
+   end;   }
+      CheckFieldByName(CreditPropsUSRGROUP);
+
+     if DBLookupComboboxEh32.text='' then
+   begin
+   HBConclusion.ShowMessage('Kreditin verilmə məqsədi sahəsi boşdur !') ;
+   abort
+   end;
+
+    //   CheckFieldByName(CreditPropsEXPERTID);
+      CheckFieldByName(CreditPropsCREDITLINEAMOUNT);
+      CheckFieldByName(CreditPropsANNUALYINTERESTRATE);
+      CheckFieldByName(CreditPropsANNUALYOVERDUERATE);
+      CheckFieldByName(CreditPropsANNUALYPENALTYRATE);
+    //sx  CheckFieldByName(CreditPropsRESERVEID);
+      CheckFieldByName(CreditPropsAUTOPAYMENT);
+      CheckFieldByName(CreditPropsAUTOEXPIRE);
+      CheckFieldByName(CreditPropsINTCALCMETHOD);
+      CheckFieldByName(CreditPropsBOOROWERID);
+      CheckFieldByName(CreditPropsLOANACCID);
+//      CheckFieldByName(CreditPropsPRIMARYRESERVEACCID);
+     //  CheckFieldByName(CreditPropsPRIMARYPURRESERVEACCID);
+    //sx  CheckFieldByName(CreditPropsINTERESTACCID);
+     // CheckFieldByName(CreditPropsOUTGUARANTEEACCID);
+ //  girov
+   CheckFieldByName(CreditPropsPLEDGEID_P) ;
+
+///
+      if not DataModuleConcl.IUPackage.CallBooleanFunction('checkPerson',[
+      'P_ID',FieldByName('PERSONALTYPE').AsInteger]) then begin
+       CheckFieldByName(CreditPropsPINCODE);
+      {  CheckFieldByName(CreditPropsGUARANTORID);
+         CheckFieldByName(CreditPropsGUARANTORNAME);
+         CheckFieldByName(CreditPropsGUARANTORSALARY);
+         CheckFieldByName(CreditPropsGUARANTORID3);
+         CheckFieldByName(CreditPropsGUARANTORNAME3);
+         CheckFieldByName(CreditPropsGUARANTORSALARY3); }
+        if length(CreditPropsPINCODE.AsString) <> 7 then begin
+         HBConclusion.ShowMessage('PinKod ən azı 7 sinvol olmalıdır!');
+         abort;
+
+      end;
+      end;
+
+      CheckFieldByName(CreditPropsBOORID);
+      CheckFieldByName(CreditPropsADDRESS);
+         CheckFieldByName(CreditPropsSALARY);
+     { CheckFieldByName(CreditPropsPHONENUMBER)};
+      
+
+   end;
+end;
+
+begin
+   CheckFieldByNames;
+end;
+
+procedure TConclusionForm.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+  Resize := False
+end;
+
+procedure TConclusionForm.FormCreate(Sender: TObject);
+begin
+  DataModuleConcl := TDataModuleConcl.Create(Self);
+  FormLoanBalance := TFormLoanBalance.create(Self);
+  FormCreateCMAccounts := TFormCreateCMAccounts.Create(Self);
+ { DataModuleConcl.EstateTypeData.refresh;
+  DataModuleConcl.creditcatData.refresh;
+  DataModuleConcl.DataSetActivities.refresh;
+  DataModuleConcl.ClientCategories.refresh; }
+  Processed := False;
+    SBTranslateProc.TranslateAllCompForms(Self, sboapiDataModule.OrPack_SL);
+end;
+
+procedure TConclusionForm.FormShow(Sender: TObject);
+
+begin
+  PageControlMain.ActivePageIndex := 0;
+  CustIDEdit.SetFocus;
+ // BranchCBEh.SetFocus;
+  DataModuleConcl.FInsertCredit := FInsertCredit;
+  Processed := False;
+
+
+end;
+
+function TConclusionForm.New : Integer;
+
+resourcestring
+
+  sNewContract = 'Yeni müqavilənin əlavaə olunması.';
+
+begin
+ a:=2;
+  FInsertCredit := True;
+  CloseForm.Enabled := True;
+  DoInsert;
+  Caption := sNewContract;
+    if  btnSave.visible=false then
+    btnSave.visible:=true;
+
+
+ if  btnCancel.visible=false then
+   btnCancel.visible:=true;
+
+  if   btnClose.visible=false then
+    btnClose.visible:=true;
+
+  if BitCancel.visible=true then
+   BitCancel.visible:=false   ;
+
+   if Bitpost.visible=true then
+      Bitpost.visible:=false ;
+  Result := ShowModal;
+end;
+
+function TConclusionForm.Edit : Integer;
+
+resourcestring
+  sEditContract = '%s № li müqavilənin redaktə olunması.';
+  
+var
+ stat,count,p_id, FCreditID : Integer;
+  FCreditNo : String;
+begin
+ a:=2;
+
+  count:=DataModuleConcl.adm.CallIntegerFunction('getadmaddition',['POST']);
+
+  stat:=DataModuleConcl.IUPackage.CallIntegerFunction('get_status',
+                                     ['p_id',Get_SelectedCrdID
+                                     ]);
+ if stat=1 then
+ if count=0 then
+  begin
+ showmessage('Sizin dəyişmək hüququnuz yoxdur!'+#13+'Əlavə məlumat üçün sistem administratoruna müracət edin.');
+ exit;
+  end;
+
+
+
+  FCreditID := Get_SelectedCrdID;
+  FCreditNo := Get_SelectedCrdNo;
+  CloseForm.Enabled := False;
+
+
+DataModuleConcl.EstateTypeData.close;
+DataModuleConcl.EstateTypeData.open;
+
+  DoEdit(FCreditID);
+  FInsertCredit := False;
+  Caption := Format(sEditContract,[FCreditNo]);
+
+  if  btnSave.visible=false then
+    btnSave.visible:=true;
+
+ if  btnCancel.visible=false then
+   btnCancel.visible:=true;
+
+  if   btnClose.visible=false then
+    btnClose.visible:=true;
+   if BitCancel.visible=true then
+   BitCancel.visible:=false   ;
+
+   if Bitpost.visible=true then
+      Bitpost.visible:=false ;
+  Result := ShowModal;
+end;
+function TConclusionForm.post : Integer;
+ resourcestring
+  sEditContract = '%s № li müqavilənin inkar edilməsi.';
+var
+  stat,FCreditID : Integer;
+  FCreditNo : String;
+
+begin
+ a:=1;
+ stat:=DataModuleConcl.IUPackage.CallIntegerFunction('get_status',
+                                     ['p_id',Get_SelectedCrdID
+                                     ]);
+
+  FCreditID := Get_SelectedCrdID;
+  FCreditNo := Get_SelectedCrdNo;
+
+
+  CloseForm.Enabled := False;
+  DoEdit(FCreditID);
+  FInsertCredit := False;
+  Caption := Format(sEditContract,[FCreditNo]);
+
+  {if stat=1 then
+  begin
+   BitCancel.enabled:=false ;
+   Bitpost.enabled:=false ;
+   end
+  else
+ begin
+   BitCancel.enabled:=true ;
+   Bitpost.enabled:=true ;
+ end;
+   if stat=3 then
+    Bitpost.enabled:=false 
+   else
+   Bitpost.enabled:=true ;
+   }
+  if BitCancel.visible=false then
+   BitCancel.visible:=true   ;
+
+   if Bitpost.visible=false then
+      Bitpost.visible:=true ;
+
+  btnSave.visible:=false;
+  btnCancel.visible:=false;
+  btnClose.visible:=false;
+
+
+  Result := ShowModal;
+
+end;
+
+function TConclusionForm.look : Integer;
+resourcestring
+  sEditContract = '%s № li müqaviləyə baxmaq.';
+  
+var
+  FCreditID : Integer;
+  FCreditNo : String;
+begin
+ a:=1;
+  FCreditID := Get_SelectedCrdID;
+  FCreditNo := Get_SelectedCrdNo;
+  CloseForm.Enabled := False;
+  DoEdit(FCreditID);
+  FInsertCredit := False;
+  Caption := Format(sEditContract,[FCreditNo]);
+
+    if  btnSave.visible=false then
+    btnSave.visible:=true;
+
+ if  btnCancel.visible=false then
+   btnCancel.visible:=true;
+
+  if   btnClose.visible=false then
+    btnClose.visible:=true;
+  btnSave.enabled:=false;
+  if BitCancel.visible=true then
+   BitCancel.visible:=false   ;
+
+   if Bitpost.visible=true then
+      Bitpost.visible:=false ;
+
+  Result := ShowModal;
+
+end;
+
+
+procedure SaveCredit;
+begin
+  with DataModuleConcl.CreditProps , SavedCredit do
+  begin
+    Currency := FieldByName('Currency').AsInteger;
+    BoorowerID := FieldByName('BoorowerID').AsInteger;
+    PINCODE := FieldByName('PINCODE').AsString;
+    CreditLineAmount := FieldByName('CreditLineAmount').AsFloat;
+    AnnualyInterestRate := FieldByName('AnnualyInterestRate').AsFloat;
+    AnnualyOverdueRate := FieldByName('AnnualyOverdueRate').AsFloat;
+    AnnualyPenaltyRate := FieldByName('AnnualyPenaltyRate').AsFloat;
+    AnnualBankRate := FieldByName('AnnualBankRate').AsFloat;
+    DateOfConclusion := Int(FieldByName('DateOfConclusion').AsDateTime);
+    DueDateFirstContract := Int(FieldByName('DueDateFirstContract').AsDateTime);
+    NumberOfCredit := FieldByName('NumberOfCredit').AsString;
+    PurposeOfCredit := FieldByName('PurposeOfCredit').AsString;
+    CustomerType := FieldByName('CustomerType').AsInteger;
+    CreditType := FieldByName('CreditType').AsInteger;
+    PersonalType := FieldByName('PersonalType').AsInteger;
+    AutoPayment  := FieldByName('AutoPayment').AsInteger;
+    AutoExpire := FieldByName('AutoExpire').AsInteger;
+    UsrGroup := FieldByName('UsrGroup').AsInteger;
+    BranchID := FieldByName('BranchID').AsInteger;
+    BoorowerAccID := FieldByName('BoorowerAccID').AsInteger;
+    LoanAccID := FieldByName('LoanAccID').AsInteger;
+    DueLoanAccID := FieldByName('DueLoanAccID').AsInteger;
+    InterestAccID := FieldByName('InterestAccID').AsInteger;
+    DueInterestAccID := FieldByName('DueInterestAccID').AsInteger;
+    PrimaryReserveAccID := FieldByName('PrimaryReserveAccID').AsInteger;
+    SecondaryReserveAccID := FieldByName('SecondaryReserveAccID').AsInteger;
+    OutCollateralAccID := FieldByName('OutCollateralAccID').AsInteger;
+    OutGuaranteeAccID := FieldByName('OutGuaranteeAccID').AsInteger;
+    OutInterestAccID := FieldByName('OutInterestAccID').AsInteger;
+    CrdlineOblAccID := FieldByName('CrdlineOblAccID').AsInteger;
+    OUTLoanAccID := FieldByName('OUTLoanAccID').AsInteger;
+    primarypurreserveaccid := FieldByName('primarypurreserveaccid').AsInteger;
+    secondarypurreserveaccid := FieldByName('secondarypurreserveaccid').AsInteger;
+    ReserveID := FieldByName('ReserveID').AsInteger;
+    DueReserveID := FieldByName('DueReserveID').AsInteger;
+    Futureincomeaccid := FieldByName('FUTUREINCOMEACCID').AsInteger;
+     newfinanceamount :=FieldByName('newfinanceamount').AsInteger;
+    numberofBankCredit := FieldByName('numberofBankCredit').AsString;
+    intcalcmethod := FieldByName('intcalcmethod').AsInteger;
+    BOORID := FieldByName('BOORID').AsString;
+    NAME := FieldByName('NAME').AsString;
+    COUNTRYCODE := FieldByName('COUNTRYCODE').AsString;
+    BANKRUPTEYSTATUS := FieldByName('BANKRUPTEYSTATUS').Asinteger;
+    PHONENUMBER := FieldByName('PHONENUMBER').AsString;
+    ADDRESS := FieldByName('ADDRESS').AsString;
+    FIRSTOWNERID := FieldByName('FIRSTOWNERID').AsString;
+    FIRSTOWNERNAME := FieldByName('FIRSTOWNERNAME').AsString;
+    SECONDOWNERID := FieldByName('SECONDOWNERID').AsString;
+    SECONDOWNERNAME := FieldByName('SECONDOWNERNAME').AsString;
+    THIRDOWNERID := FieldByName('THIRDOWNERID').AsString;
+    THIRDOWNERNAME := FieldByName('THIRDOWNERNAME').AsString;
+    salary := FieldByName('salary').AsString;
+    guarantorname :=FieldByName('guarantorname').AsString;
+    guarantorid := FieldByName('guarantorid').AsString;
+    guarantorsalary :=FieldByName('guarantorsalary').AsString;
+    guarantorname2 :=FieldByName('guarantorname2').AsString;
+    guarantorid2 := FieldByName('guarantorid2').AsString;
+    guarantorsalary2 :=FieldByName('guarantorsalary2').AsString;
+    guarantorname3 :=FieldByName('guarantorname3').AsString;
+    guarantorid3 := FieldByName('guarantorid3').AsString;
+    guarantorsalary3 :=FieldByName('guarantorsalary3').AsString;
+    activities:=FieldByName('activities').Asinteger;
+    CREDITACT:=FieldByName('CREDITACT').Asinteger;
+    aim_id:=FieldByName('aim_id').Asinteger;
+    PLEDGEID_P:=FieldByName('PLEDGEID_P').Asinteger;
+    EXPERTID:=FieldByName('EXPERTID').Asinteger;
+    activities_type:=FieldByName('activities_type').Asinteger;
+    payperiod:=FieldByName('payperiod').Asinteger;
+    payintday:= FieldByName('payintday').Asinteger;
+    MEHSULID:=FieldByName('MEHSULID').asinteger;
+    iprimaryreserveaccid:=FieldByName('iprimaryreserveaccid').asinteger;
+    isecondaryreserveaccid:=FieldByName('isecondaryreserveaccid').asinteger;
+    PERIODCONTRACTS:=FieldByName('PERIODCONTRACTS').asinteger;
+    zerger := FieldByName('zerger').AsFloat;
+    kart := FieldByName('kart').AsFloat;
+    insurance :=FieldByName('insurance').AsFloat;
+    trust:= FieldByName('trust').AsFloat;
+    gps:=  FieldByName('gps').AsFloat;
+    other  :=FieldByName('other').AsFloat;
+  //   Region:= FieldByName('REGION').asinteger;
+    // Region_district:= FieldByName('REGION_DISTRICT').asinteger;
+   //  pay_method := FieldByName('pay_method').asinteger;
+     //FieldByName('payintdat').AsDateTime;
+  end;
+end;
+
+procedure TConclusionForm.SaveState(Save : Boolean);
+begin
+  with DataModuleConcl.CreditProps do
+  begin
+    if Save then
+      Post
+    else
+    begin
+       Cancel;
+        DBLookupComboboxEh3.KeyValue:=2;
+    end;
+
+    if FInsertCredit then
+    begin
+      if Save then
+    doInsert
+      else
+      begin
+        Cancel;
+    DBLookupComboboxEh3.KeyValue:=2;
+     PageControlMain.ActivePageIndex := 0;
+    CustIDEdit.SetFocus
+     end;
+    end
+    else
+    Self.Close;
+  end;
+end;
+
+procedure TConclusionForm.SaveChangesExecute(Sender: TObject);
+begin
+  CheckFields;
+  SaveCredit;
+  SaveState(True);
+  Processed := True;
+end;
+
+procedure TConclusionForm.SaveChangesUpdate(Sender: TObject);
+begin
+  (Sender as TAction).Enabled := DataModuleConcl.CreditProps.Modified;
+end;
+
+procedure TConclusionForm.DismisChangesExecute(Sender: TObject);
+begin
+  SaveState(False);
+end;
+
+procedure TConclusionForm.CloseFormExecute(Sender: TObject);
+begin
+  Close
+end;
+
+procedure TConclusionForm.FormCloseQuery(Sender: TObject;
+  var CanClose: Boolean);
+begin
+if a=2 then
+  CanClose :=
+     (not DataModuleConcl.CreditProps.Modified)
+      or (
+     MessageDlg('Dəyşikliklər qeyd olunmayacaq !'+#13+'Əminsiniz?'
+     ,mtConfirmation
+     ,[mbYes,mbNo]
+     ,0
+     ) = mrYes);
+end;
+
+procedure TConclusionForm.BranchCBEhKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+
+  if ORD(Key) = VK_RETURN then
+  begin
+  if Sender is TWinControl then
+  with Sender as TWinControl do
+  case Tag of
+    1 : SelectNext(Sender as TWinControl ,True ,True);
+    2 :
+      with PageControlMain do
+      if ActivePageIndex = 0 then
+      begin
+        ActivePageIndex := 1;
+        //CMSearchEditLoacAccs.SetFocus
+         CustIDEdit.SetFocus
+      end;
+     3 :
+      with PageControlMain do
+      if ActivePageIndex = 1 then
+      begin
+        ActivePageIndex := 2;
+        CMSearchEditLoacAccs.SetFocus
+
+      end;
+ 
+  end;
+    Key := #0;
+
+  end;
+  if DBLookupComboboxEh19.KeyValue=-1 then
+     DBLookupComboboxEh19CloseUp(Sender,True);
+end;
+
+procedure InitPlugin(P : String);export;
+const
+  sEditContract = 'Edit';
+  sInsertContract = 'Insert';
+  sLookContract='look'  ;
+  sPostContract='post'  ;
+begin
+  if P = sInsertContract then
+    ConclusionForm.New
+  else if P = sEditContract then
+    ConclusionForm.Edit ;
+    if P=sLookContract then
+     ConclusionForm.look ;
+   if P=sPostContract then
+     ConclusionForm.post ;
+end;
+
+procedure TConclusionForm.CMSearchEditLoacAccsExit(Sender: TObject);
+begin
+  with Sender as TCMSearchEdit do
+  Color := ColorSave;
+end;
+
+procedure TConclusionForm.DBLookupComboboxEh19KeyValueChanged(
+  Sender: TObject);
+begin
+  with (Sender as TDBLookupComboboxEh) do
+  if DataSource.DataSet.Active then
+   UpdateData;
+end;
+
+procedure TConclusionForm.DoInsert;
+ var dY, dM, dD: Word;
+begin
+  with DataModuleConcl.CreditProps do
+  begin
+    if Active then CloseAll;
+    SetVariable('CREDITID',0);
+    Open;
+    Insert;
+    if  DataModuleConcl.Branches.Active=false then  DataModuleConcl.Branches.open;
+    if DataModuleConcl.Branches.RecordCount=1 then
+      FieldByName('BRANCHID').AsInteger :=DataModuleConcl.Branches.FieldByName('id').AsInteger
+      else
+     FieldByName('BRANCHID').AsInteger := Get_BranchID;
+
+
+    FieldByName('DATEOFCONCLUSION').AsDateTime := Get_CurrentDate;
+    FieldByName('DUEDATEFIRSTCONTRACT').AsDateTime := Get_CurrentDate;
+    FieldByName('CURRENCY').AsInteger := 0;
+    FieldByName('COUNTRYCODE').AsString := 'AZE';
+    DecodeDate(FieldByName('DATEOFCONCLUSION').AsDateTime, dY, dM, dD);
+    FieldByName('PAYINTDAY').asinteger:=dD;
+    FieldByName('PLEDGEID_P').asinteger:=2;
+    //showmessage( FieldByName('PLEDGEID_P').AsString);
+    //  DBLookupComboboxEh3.KeyValue:=2;
+  end;
+end;
+
+procedure TConclusionForm.DoEdit(FCreditID : Integer);
+
+  procedure LocateAccounts(LookupControl : TDBLookupComboboxEh);
+  begin
+
+    with LookupControl do
+    if (not VarIsNull(DataSource.DataSet.FieldByName(DataField).AsVariant))
+     and (DataSource.DataSet.FieldByName(DataField).AsInteger <> 0) then
+    begin
+      KeyValue := Null;
+      KeyValue := ListSource.DataSet.FieldByName(KeyField).AsInteger;
+    {  CMSearchEdit1.text:=DataModuleConcl.CustAccs.FieldByName('accno').Asstring;
+      CMSearchEditLoacAccs.text:=DataModuleConcl.LoanAccs.FieldByName('accno').Asstring;
+      CMSearchEditPercent.text:=DataModuleConcl.Interests.FieldByName('accno').Asstring;
+      CMSearchEdit12.text:=DataModuleConcl.PReserveAccs.FieldByName('accno').Asstring;
+      CMSearchEdit3.text:=DataModuleConcl.SReserveAccs.FieldByName('accno').Asstring;
+
+     { DBLookupComboboxEh11.Text:=DataModuleConcl.CustAccs.FieldByName('clientname').Asstring;
+      DBLookupComboboxEh24.Text:=DataModuleConcl.PReserveAccs.FieldByName('clientname').Asstring;
+      DBLookupComboboxEh12.Text:=DataModuleConcl.SReserveAccs.FieldByName('clientname').Asstring;
+      DBLookupComboboxEh1.Text:=DataModuleConcl.Interests.FieldByName('clientname').Asstring;
+     }
+    end;
+  {  showmessage(inttostr(DataModuleConcl.CreditProps.FieldByName('id').asinteger));
+      DBLookupComboboxEh6.ListSource.DataSet.Locate('id',DataModuleConcl.LoanAccs.FieldByName('id').asinteger,[]);
+         //  keyvalue:=DataModuleConcl.LoanAccs.FieldByName('id').asinteger;
+      //DBLookupComboboxEh11.keyvalue:=DataModuleConcl.CustAccs.FieldByName('id').asinteger;
+      DBLookupComboboxEh11.ListSource.DataSet.Locate('id',DataModuleConcl.CustAccs.FieldByName('id').asinteger,[]);
+      DBLookupComboboxEh24.Text:=DataModuleConcl.PReserveAccs.FieldByName('clientname').Asstring;
+      DBLookupComboboxEh12.Text:=DataModuleConcl.SReserveAccs.FieldByName('clientname').Asstring;
+      DBLookupComboboxEh1.Text:=DataModuleConcl.Interests.FieldByName('clientname').Asstring;
+     }
+   DataModuleConcl.loc.close;
+   DataModuleConcl.loc.SetVariable('CREDITID',FCreditID);
+   DataModuleConcl.loc.open;
+
+  CustAccno.keyvalue:=DataModuleConcl.loc.FieldByName('booroweraccid').asinteger;
+  LoanAccs.keyvalue:=DataModuleConcl.loc.FieldByName('loanaccid').asinteger;
+  ReserveAccno.keyvalue:=DataModuleConcl.loc.FieldByName('PRIMARYRESERVEACCID').asinteger;
+  PurReserveAccno.keyvalue:=DataModuleConcl.loc.FieldByName('PRIMARYPURRESERVEACCID').asinteger;
+  IntAccno.keyvalue:=DataModuleConcl.loc.FieldByName('INTERESTACCID').asinteger;
+  DBLookupComboboxEh18.keyvalue:=DataModuleConcl.loc.FieldByName('OUTGUARANTEEACCID').asinteger;
+  DueLoanAccno.keyvalue:=DataModuleConcl.loc.FieldByName('DUELOANACCID').asinteger;
+  DueIntAccno.keyvalue:=DataModuleConcl.loc.FieldByName('DUEINTERESTACCID').asinteger;
+  DBLookupComboboxEh21.keyvalue:=DataModuleConcl.loc.FieldByName('OUTINTERESTACCID').asinteger;
+  DBLookupComboboxEh15.keyvalue:=DataModuleConcl.loc.FieldByName('SECONDARYRESERVEACCID').asinteger;
+  FutureincomeAccno.keyvalue:=DataModuleConcl.loc.FieldByName('FUTUREINCOMEACCID').asinteger;
+  end;
+
+begin
+  with DataModuleConcl.CreditProps do
+  begin
+    if Active then CloseAll;
+    SetVariable('CREDITID',FCreditID);
+    Open;
+    Bancruptey_rg.ItemIndex := FieldByName('BANKRUPTEYSTATUS').Asinteger;
+    Edit;
+    LocateAccounts(LoanAccs);
+    LocateAccounts(CustAccno);
+    LocateAccounts(ReserveAccno);
+    LocateAccounts(PurReserveAccno);
+
+    LocateAccounts(IntAccno);
+    LocateAccounts(DueLoanAccno);
+    LocateAccounts(DueIntAccno);
+    LocateAccounts(DBLookupComboboxEh25);
+    LocateAccounts(FutureincomeAccno);
+  end;
+  
+end;
+
+procedure TConclusionForm.FormDestroy(Sender: TObject);
+begin
+  DataModuleConcl.Free;
+end;
+
+procedure TConclusionForm.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+  if ORD(Key) = VK_ESCAPE then
+    Close else
+end;
+
+procedure TConclusionForm.FormKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if Key = VK_F5 then
+    RefreshListLbl.OnClick(nil);
+  if Key = VK_F3 then
+    LblAvtAcc.OnClick(nil);
+end;
+
+exports
+  InitPlugin;
+
+procedure TConclusionForm.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+  if Processed then
+  if FInsertCredit then
+  SafeRefresh(True,rmGoBookmarkAfterRefresh) else
+  SafeRefresh(True, rmLocateAfterRefresh);
+   btnSave.enabled:=true;
+
+    if DataModuleConcl.creditcatData.active=true then
+      DataModuleConcl.creditcatData.closeall;
+
+    if DataModuleConcl.DataSetActivities.active=true then
+      DataModuleConcl.DataSetActivities.close;
+
+   if  DataModuleConcl.ClientCategories.active=true then
+       DataModuleConcl.ClientCategories.close;
+
+end;
+
+procedure TConclusionForm.RefreshListLblClick(Sender: TObject);
+const
+  SPostBeforeRefresh = 'Яввялжя жари кредити йа гябул вя йахуд имтина един !';
+begin
+// if FInsertCredit then
+ with DataModuleConcl do
+// if not CreditProps.Modified then
+  begin
+     // CurrencysData.Refresh;
+   // creditcatData.Refresh;
+ // DataSetActivities.Refresh;
+ // ClientCategories.Refresh;
+    Customer.Refresh;
+   EstateTypeData.Refresh  ;
+  Reserves.Refresh;
+  DueReserves.Refresh;
+  ODS_futureincome.Refresh;
+   PersonTypes.Refresh;
+  AutoPayment.Refresh;
+  AutoExpire.Refresh;
+  CalcIntMethod.Refresh;
+  LoanAccs.Refresh;
+  DueLoanAccs.Refresh;
+  CustAccs.Refresh;
+  PReserveAccs.Refresh;
+  SReserveAccs.Refresh;
+  PercentAccounts.Refresh;
+  CrdLineoblAccs.Refresh;
+  Interests.Refresh;
+  DueInterests.Refresh;
+  Countrys.Refresh;
+ BalcnLoan.Refresh;
+   OUTObligationAccs.Refresh;
+ // OUTCollatralAccs.Refresh;
+  OUTInterestAccs.Refresh;
+  OutLoanAccs.Refresh;
+  SexDataSet.Refresh;
+  //custe.Refresh ;
+  PrinadDataSet.Refresh;
+  end //else
+  //MessageDlg(SPostBeforeRefresh,mtError,[mbOK],0);
+end;
+
+procedure TConclusionForm.CMSearchEditLoacAccsKeyUp(Sender: TObject;
+  var Key: Word; Shift: TShiftState);
+var
+  CustID :integer;
+
+begin
+
+ CustID :=LoanAccs.ListSource.DataSet.FieldByName('CustID').AsInteger;
+ if CMSearchEditLoacAccs.Text = '' then
+ begin
+    CustAccno.KeyValue:= null;
+    PurReserveAccno.KeyValue := null;
+    IntAccno.KeyValue := null;
+    DueLoanAccno.KeyValue := null;
+    DBLookupComboboxEh15.KeyValue := null;
+    DueIntAccno.KeyValue := null;
+    DBLookupComboboxEh17.KeyValue := null;
+    DBLookupComboboxEh18.KeyValue := null;
+    DBLookupComboboxEh21.KeyValue := null;
+    CrdlineoblAccno.KeyValue := null;
+     FutureincomeAccno.KeyValue:= null;
+ // DBLookupComboboxEh19.KeyValue := null;
+    end else
+    begin
+  DBLookupComboboxEh19.KeyValue
+   := LoanAccs.ListSource.DataSet.FieldByName('CustID').AsInteger;
+  if Key = VK_F2 then
+  begin
+  with DataModuleConcl do
+  begin
+
+    CustAccno.KeyValue:= CM_COMMON.CallIntegerFunction('Get_AccID',
+                                    [CustID,cm_decls.GetIntegerVariable('AcgCust')]);
+    PurReserveAccno.KeyValue := CM_COMMON.CallIntegerFunction('Get_AccID',[CustID,
+                                     cm_decls.GetIntegerVariable('Acgres')]);
+    IntAccno.KeyValue := CM_COMMON.CallIntegerFunction('Get_AccID',[CustID,
+                                     cm_decls.GetIntegerVariable('AcgInt') ]);
+    DueLoanAccno.KeyValue := CM_COMMON.CallIntegerFunction('Get_AccID',[CustID,
+                                     cm_decls.GetIntegerVariable('AcgDueLoan')]);
+    DBLookupComboboxEh15.KeyValue := CM_COMMON.CallIntegerFunction('Get_AccID',[CustID,
+                                     cm_decls.GetIntegerVariable('AcgDueRes') ]);
+    DueIntAccno.KeyValue := CM_COMMON.CallIntegerFunction('Get_AccID',[CustID,
+                                     cm_decls.GetIntegerVariable('AcgDueInt')]);
+    DBLookupComboboxEh17.KeyValue := CM_COMMON.CallIntegerFunction('Get_AccID',[CustID,
+                                     cm_decls.GetIntegerVariable('AcgPlg'),1]);
+    DBLookupComboboxEh18.KeyValue := CM_COMMON.CallIntegerFunction('Get_AccID',[CustID,
+                                     cm_decls.GetIntegerVariable('AcgObl'),1]);
+    DBLookupComboboxEh21.KeyValue := CM_COMMON.CallIntegerFunction('Get_AccID',[CustID,
+                                     cm_decls.GetIntegerVariable('AcgOutInt'),1]);
+    CrdlineoblAccno.KeyValue := CM_COMMON.CallIntegerFunction('Get_AccID',[CustID,
+                                     cm_decls.GetIntegerVariable('AcgCrdLine')]);
+    FutureincomeAccno.KeyValue := CM_COMMON.CallIntegerFunction('Get_AccID',[CustID,
+                                     cm_decls.GetIntegerVariable('AcgFutureincomeAccsID')]);
+  end;
+  end;
+  end;
+
+end;
+
+procedure TConclusionForm.LblAvtAccClick(Sender: TObject);
+begin
+   if DBLookupComboboxEh26.Text='' then
+   ShowMessage('Kredit məhsulunu seçin !')else
+      FormLoanBalance.showmodal;
+end;
+
+procedure TConclusionForm.CMSearchEdit2KeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if ORD(Key) = VK_RETURN then
+  begin
+  if Sender is TWinControl then
+  with Sender as TWinControl do
+  case Tag of
+    1 : SelectNext(Sender as TWinControl ,True ,True);
+    2 :
+      with PageControlMain do
+      if ActivePageIndex = 0 then
+      begin
+        ActivePageIndex := 1;
+      end;
+     3 :
+      with PageControlMain do
+      if ActivePageIndex = 1 then
+      begin
+        ActivePageIndex := 2;
+      end;
+
+  end;
+    Key := #0;
+  end;
+end;
+
+procedure TConclusionForm.Bancruptey_rgClick(Sender: TObject);
+begin
+  with DataModuleConcl.CreditProps do
+  FieldByName('BANKRUPTEYSTATUS').AsInteger := Bancruptey_rg.ItemIndex;
+end;
+
+procedure TConclusionForm.DBLookupComboboxEh2Change(Sender: TObject);
+begin
+  with DBLookupComboboxEh2.ListSource.DataSet do
+      if  DataModuleConcl.IUPackage.CallBooleanFunction('checkPerson',[
+      'P_ID',FieldByName('ID').AsInteger]) then DBEditEh7.Enabled := false
+       else DBEditEh7.Enabled := true;
+end;
+
+procedure TConclusionForm.DBEditEh7KeyPress(Sender: TObject;
+  var Key: Char);
+begin
+{   if ord(Key) = 32 then key :=#;
+  BranchCBEhKeyPress(Sender,key); }
+  if not (Key in ['A'..'Z','a'..'z','0'..'9',#8] )then
+begin
+ Key:=#0;
+end;
+end;
+
+procedure TConclusionForm.DBEditEh3KeyPress(Sender: TObject;
+  var Key: Char);
+begin
+{   if ord(Key) = 32 then key :=#;
+   BranchCBEhKeyPress(Sender,key); }
+   if not (Key in ['A'..'Z','a'..'z','0'..'9',#8] )then
+begin
+ Key:=#0;
+end;
+end;
+
+procedure TConclusionForm.DBLookupComboboxEh31KeyValueChanged(
+  Sender: TObject);
+begin
+  with (Sender as TDBLookupComboboxEh) do
+  if DataSource.DataSet.Active then
+   UpdateData
+end;
+
+
+procedure TConclusionForm.DBLookupComboboxEh30KeyValueChanged(
+  Sender: TObject);
+begin
+  with (Sender as TDBLookupComboboxEh) do
+  if DataSource.DataSet.Active then
+   UpdateData;
+end;
+
+procedure TConclusionForm.DBLookupComboboxEh28KeyValueChanged(
+  Sender: TObject);
+begin
+  with (Sender as TDBLookupComboboxEh) do
+  if DataSource.DataSet.Active then
+   UpdateData;
+
+end;
+
+procedure TConclusionForm.DBLookupComboboxEh31Change(Sender: TObject);
+var
+id : integer;
+begin
+
+id:=DataModuleConcl.cm_common.CallIntegerFunction ('Get_meqsed',[DBLookupComboboxEh31.text]);
+if id<> 0 then
+DBLookupComboboxEh32.KeyValue:=id;
+
+end;
+
+procedure TConclusionForm.DBLookupComboboxEh28Change(Sender: TObject);
+begin
+//if DBLookupComboboxEh29.keyValue = null then  ShowMessage('ПинКод ян азы 7 символ олмалыдыр!');
+//DBLookupComboboxEh28.keyValue:=DataModuleConcl.DataSetActivities.fieldbyname('DESCRIPTION').asstring ;
+//DBLookupComboboxEh28.listfield:='' ;
+{DataModuleConcl.DataSetActivities.close;
+DataModuleConcl.DataSetActivities.open;
+CMSearchEdit14.text:=''  }
+
+   DataModuleConcl.DataSetActivities.close;
+   DataModuleConcl.DataSetActivities.SetVariable('act_id',DBLookupComboboxEh28.keyValue);
+   DataModuleConcl.DataSetActivities.open;
+end;
+
+procedure TConclusionForm.DBLookupComboboxEh30Change(Sender: TObject);
+begin
+
+//CMSearchEdit15.text:=''
+   DataModuleConcl.ClientCategories.close;
+   DataModuleConcl.ClientCategories.SetVariable('act_id',DBLookupComboboxEh30.keyValue);
+   DataModuleConcl.ClientCategories.open;
+end;
+procedure TConclusionForm.DBDateTimeEditEh2Change(Sender: TObject);
+begin
+begin
+ {  with DataModuleConcl.CreditProps do
+       EditPeriodCredit.Text
+          :=  DataModuleConcl.cm_common.CallIntegerFunction('GetPeriod',
+          [FieldByname('DATEOFCONCLUSION').AsDateTime,
+           FieldByname('DUEDATEFIRSTCONTRACT').AsDateTime ])    }
+end;
+end;
+
+procedure TConclusionForm.DBEdit29Exit(Sender: TObject);
+begin
+  with Sender as TCMSearchEdit do
+  Color := ColorSave;
+end;
+
+procedure TConclusionForm.DBEditEh7KeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+LoadKeyboardLayoutA('00000409',KLF_ACTIVATE);
+end;
+
+procedure TConclusionForm.DBEditEh7Change(Sender: TObject);
+begin
+LoadKeyboardLayoutA('00000409',KLF_ACTIVATE);
+end;
+
+procedure TConclusionForm.DBEditEh3KeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+LoadKeyboardLayoutA('00000409',KLF_ACTIVATE);
+end;
+
+procedure TConclusionForm.TabSheet2Enter(Sender: TObject);
+begin
+///showmessage('sdsd');
+end;
+procedure TConclusionForm.tbCreditEnter(Sender: TObject);
+begin
+ with DataModuleConcl do
+ begin
+ if Branches.active=false then
+   Branches.Open;
+
+ if CreditTypes.active=false then
+       CreditTypes.Open;
+       
+ if UsrGroups.active=false then
+         UsrGroups.Open;
+
+end;
+end;
+
+procedure TConclusionForm.DBLookupComboboxEh30Click(Sender: TObject);
+begin
+ //if CMSearchEdit14.text ='' then  CMSearchEdit15.text:=''
+end;
+
+procedure TConclusionForm.DBLookupComboboxEh29Change(Sender: TObject);
+var i :integer;
+begin
+
+if DBLookupComboboxEh29.text<> '' then
+begin
+   DataModuleConcl.creditcatData.close;
+   DataModuleConcl.creditcatData.SetVariable('vid_sob',DataModuleConcl.EstateTypeData.fieldbyname('id').asinteger);
+   DataModuleConcl.creditcatData.open;
+
+  {if  DBLookupComboboxEh29.keyvalue=105 then
+   i:=1 else i:=2;
+
+   
+   DataModuleConcl.Aim_Set.close;
+   DataModuleConcl.Aim_Set.SetVariable('id',i);
+   DataModuleConcl.Aim_Set.open;
+  }
+ end;
+end;
+
+procedure TConclusionForm.DBLookupComboboxEh19Change(Sender: TObject);
+begin
+ if FInsertCredit=true then
+
+if DataModuleConcl.CreditProps.Active =true then
+ begin
+ DataModuleConcl.PrinadDataSet.Close;
+ DataModuleConcl.PrinadDataSet.SetVariable('custid',DBLookupComboboxEh19.KeyValue);
+ DataModuleConcl.PrinadDataSet.open;
+  // showmessage(DataModuleConcl.PrinadDataSet.FieldByName('passpin').asstring);
+ DBEditEh7.Text:= DataModuleConcl.PrinadDataSet.FieldByName('passpin').asstring;
+ DBEditEh3.Text:= DataModuleConcl.PrinadDataSet.FieldByName('pasnum').asstring;
+ DBEditEh6.Text:= DataModuleConcl.PrinadDataSet.FieldByName('address').asstring;
+ DBEditEh4.Text:= DataModuleConcl.PrinadDataSet.FieldByName('tels').asstring;
+ end;
+//DataModuleConcl.EstateTypeData.close;
+//DataModuleConcl.EstateTypeData.open;
+   DataModuleConcl.LoanAccs.close;
+   DataModuleConcl.LoanAccs.SetVariable('KLI_ID',DBLookupComboboxEh19.KeyValue);
+   DataModuleConcl.LoanAccs.open;
+
+   DataModuleConcl.DueInterests.close;
+   DataModuleConcl.DueInterests.SetVariable('KLI_ID',DBLookupComboboxEh19.KeyValue);
+   DataModuleConcl.DueInterests.open;
+
+   //  DataModuleConcl.CustAccs.close;
+  // DataModuleConcl.CustAccs.SetVariable('KLI_ID',DBLookupComboboxEh19.KeyValue);
+ //  DataModuleConcl.CustAccs.open;
+   if DBLookupComboboxEh19.Text<>'' then
+ begin
+   if DBLookupComboboxEh19.KeyValue=541 then
+   begin
+    DataModuleConcl.CustAccs.close;
+    DataModuleConcl.CustAccs.SQL[14]:='and ac.kli_id in ('+inttostr(DBLookupComboboxEh19.KeyValue)+',502)' ;
+    DataModuleConcl.CustAccs.open;
+   end else begin
+    DataModuleConcl.CustAccs.close;
+    DataModuleConcl.CustAccs.SQL[14]:=' and ac.kli_id='+inttostr(DBLookupComboboxEh19.KeyValue);
+  // DataModuleConcl.CustAccs.SetVariable('KLI_ID',DBLookupComboboxEh19.KeyValue);
+   DataModuleConcl.CustAccs.open;
+     end;
+ end;
+   DataModuleConcl.Interests.close;
+   DataModuleConcl.Interests.SetVariable('KLI_ID',DBLookupComboboxEh19.KeyValue);
+   DataModuleConcl.Interests.open;
+
+   DataModuleConcl.DueLoanAccs.close;
+   DataModuleConcl.DueLoanAccs.SetVariable('KLI_ID',DBLookupComboboxEh19.KeyValue);
+   DataModuleConcl.DueLoanAccs.open;
+
+   DataModuleConcl.PReserveAccs.close;
+   DataModuleConcl.PReserveAccs.SetVariable('KLI_ID',DBLookupComboboxEh19.KeyValue);
+   DataModuleConcl.PReserveAccs.open;
+
+   DataModuleConcl.SReserveAccs.close;
+   DataModuleConcl.SReserveAccs.SetVariable('KLI_ID',DBLookupComboboxEh19.KeyValue);
+   DataModuleConcl.SReserveAccs.open;
+
+   DataModuleConcl.ODS_futureincome.close;
+   DataModuleConcl.ODS_futureincome.SetVariable('KLI_ID',DBLookupComboboxEh19.KeyValue);
+   DataModuleConcl.ODS_futureincome.open;
+end;
+
+procedure TConclusionForm.DBLookupComboboxEh19CloseUp(Sender: TObject;
+  Accept: Boolean);
+  var
+  v_type: string;
+   v_type1: string;
+begin
+{v_type:=DataModuleConcl.Customercust_type.AsString;
+
+if v_type='1' then
+begin
+  v_type1:= 'cust_type  in( 1,3)';
+
+with DataModuleConcl do
+begin
+PersonTypes.SQL[5]:='';
+EstateTypeData.SQL[4]:='';
+PersonTypes.close;
+PersonTypes.SQL[5]:=PersonTypes.SQL[5]+' where ' + v_type1;
+PersonTypes.open;
+
+EstateTypeData.close;
+EstateTypeData.SQL[4]:=EstateTypeData.SQL[4]+' where a.cust_type is null or a.cust_type=1 ';
+EstateTypeData.open;
+
+end;
+end
+else
+begin
+ with DataModuleConcl do
+begin
+PersonTypes.SQL[5]:='';
+EstateTypeData.SQL[4]:='';
+PersonTypes.close;
+PersonTypes.SQL[5]:=PersonTypes.SQL[5]+' where cust_type=' + v_type;
+PersonTypes.open;
+
+EstateTypeData.close;
+EstateTypeData.SQL[4]:=EstateTypeData.SQL[4]+' where a.cust_type is null or a.cust_type='+ v_type;
+EstateTypeData.open;
+end;
+end;  }
+
+end;
+
+procedure TConclusionForm.DBLookupComboboxEh4Change(Sender: TObject);
+var a :integer;
+begin
+
+
+if DBLookupComboboxEh4.text= '' then
+ a:=100
+ else
+   a:=DBLookupComboboxEh4.keyvalue;
+
+if a in [6,8,9] then
+begin
+//showmessage(datetostr(DataModuleConcl.CreditProps.FieldByName('DATEOFCONCLUSION').AsDateTime)) ;
+Panel77.Visible:=true;
+ end
+else
+begin
+Panel77.Visible:=false;
+DBLookupComboboxEh37.keyvalue:=-1;
+DBLookupComboboxEh36.keyvalue:=-1;
+end ;
+
+if DBLookupComboboxEh4.keyvalue=9 then
+DBLookupComboboxEh36.keyvalue:= 20;
+end; 
+
+procedure TConclusionForm.DBLookupComboboxEh7Change(Sender: TObject);
+begin
+   DataModuleConcl.LoanAccs.close;
+   DataModuleConcl.LoanAccs.SetVariable('val_acc',DBLookupComboboxEh7.KeyValue);
+   DataModuleConcl.LoanAccs.open;
+
+   DataModuleConcl.CustAccs.close;
+   DataModuleConcl.CustAccs.SetVariable('val_acc',DBLookupComboboxEh7.KeyValue);
+   DataModuleConcl.CustAccs.open;
+
+   DataModuleConcl.Interests.close;
+   DataModuleConcl.Interests.SetVariable('val_acc',DBLookupComboboxEh7.KeyValue);
+   DataModuleConcl.Interests.open;
+end;
+
+procedure TConclusionForm.BitpostClick(Sender: TObject);
+var
+count :integer;
+status :integer;
+begin
+
+status:=DataModuleConcl.CreditProps.fieldbyname('status').asinteger;
+
+ if status=3 then
+ begin
+   count:=DataModuleConcl.adm.CallIntegerFunction('getadmaddition',['INK']);
+
+   if count=0 then
+   begin
+    showmessage('Sizin inkar olunmuş müqaviləni təstiq etmek hüququnuz yoxdur!'+#13+'Əlavə məlumat üçün sistem administratoruna müracət edin.');
+   exit;
+  end;
+ end;
+
+ if status=2 then
+ begin
+   count:=DataModuleConcl.adm.CallIntegerFunction('getadmaddition',['PLANPOST']);
+
+   if count=0 then
+   begin
+    showmessage('Sizin planlaşdırılmş  müqaviləni təstiq etmek hüququnuz yoxdur!'+#13+'Əlavə məlumat üçün sistem administratoruna müracət edin.');
+   exit;
+  end;
+end;
+
+if MessageDlg(Get_SelectedCrdNo+' № li kredit təsdiq olunacaq  !'+#13+'Əminsiniz?',mtConfirmation,[mbYes,mbNo],0)=mrYes then
+begin
+DataModuleConcl.IUPackage.CallProcedure('get_post',
+                                     ['p_id',Get_SelectedCrdID,
+                                     'p_status',1]);
+SafeRefresh(True,rmLocateAfterRefresh);
+
+ close;
+ end;
+end;
+
+
+procedure TConclusionForm.BitCancelClick(Sender: TObject);
+var
+count:integer;
+begin
+ count:=DataModuleConcl.adm.CallIntegerFunction('getadmaddition',['TES']);
+
+ if count=0 then
+  begin
+ showmessage('Sizin dəyişmək hüququnuz yoxdur!'+#13+'Əlavə məlumat üçün sistem administratoruna müracət edin.');
+ exit;
+  end;
+if MessageDlg(Get_SelectedCrdNo+' № li kredit inkar olunacaq !'+#13+'Əminsiniz?',mtConfirmation,[mbYes,mbNo],0)=mrYes then
+begin
+DataModuleConcl.IUPackage.CallProcedure('get_post',
+                                      ['p_id',Get_SelectedCrdID,
+                                      'p_status',3]);
+
+   SafeRefresh(True,rmLocateAfterRefresh);
+   close;
+   end;
+end;
+
+
+
+
+
+procedure TConclusionForm.EditPeriodCreditChange(Sender: TObject);
+begin
+if EditPeriodCredit.Text='' then
+  a:=0
+ else
+  a:=strtoint(EditPeriodCredit.Text) ;
+
+DataModuleConcl.CreditProps.FieldByName('DUEDATEFIRSTCONTRACT').AsDateTime:=
+DataModuleConcl.cm_common.CallDateFunction('Endcontractdate',[
+           a,DataModuleConcl.CreditProps.FieldByname('DATEOFCONCLUSION').AsDateTime])
+
+
+end;
+
+initialization
+  ConclusionForm := TConclusionForm.Create(CommonApplication);
+
+end.
+

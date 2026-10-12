@@ -1,0 +1,444 @@
+unit PluginTreeView;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ComCtrls,ComObj, TreeViewIni, PluginSrv, IniSource;
+
+type
+  TPluginTreeView = class;
+
+  TPlgInPlaceActivateNotify = procedure(Sender: TPluginTreeView; Plugin: TInPlacePlugin;
+    const ParamsAsString: String) of object;
+   TAccessCheckEvent = procedure(Sender :TObject;Plugin :TInPlacePlugin;var IsAccessed : Boolean)
+    of object;//adm
+
+  EPluginTreeViewError = class(Exception);
+
+  TPluginTreeView = class(TTreeViewIni)
+  private
+    FPluginManager: TPluginManager;
+    FInPlaceTarget: TComponent;
+    FPluginNodeMap: TList;
+    FPluginIniSecion: String;
+    FPluginImages: TImageList;
+    FInPlaceActivateEvent: TPlgInPlaceActivateNotify;
+    FClosing: Boolean;
+    FOpenPlugin: Boolean;
+    FOnAccessCheck : TAccessCheckEvent;
+    procedure SetPluginIniSection(const Value: String);
+    procedure SetInPlaceTarget(Value: TComponent);
+  protected
+    procedure SetIniSource(Value: TIniSource); override;
+    procedure Change(Node: TTreeNode); override;
+    procedure ReadNode(ANode: TTreeNode); override;
+    procedure WriteNode(ANode: TTreeNode); override;
+    procedure DoOpen; override;
+    procedure DoClose; override;
+    function GetActivePluginIcon(Plugin: TPlugin; Icon: TIcon): Boolean; virtual;
+    function GetClosedPluginIcon(Plugin: TPlugin; Icon: TIcon): Boolean; virtual;
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+    function GetNodeIndex(ANode: TTreeNode): Integer;
+    function PluginByNode(ANode: TTreeNode): TPlugin;
+    function ParamsByNode(ANode: TTreeNode; out AParamsAsString: String): Boolean;
+    function NodeByPlugin(APlugin: TPlugin; const ParamStr: String = ''): TTreeNode;
+    procedure RefreshNode(ANode: TTreeNode); virtual;
+  published
+    property InPlaceTarget: TComponent read FInPlaceTarget write SetInPlaceTarget;
+    property PluginManager: TPluginManager read FPluginManager write FPluginManager;
+    property PluginIniSection: String read FPluginIniSecion write SetPluginIniSection;
+    property OnInPlaceExecute: TPlgInPlaceActivateNotify read FInPlaceActivateEvent write FInPlaceActivateEvent;
+    property OpenPlugin: Boolean read FOpenPlugin write FOpenPlugin;
+    property OnAccessCheck :TAccessCheckEvent read FOnAccessCheck write FOnAccessCheck; //adm
+  end;
+
+implementation
+
+uses SBPlgAx50_TLB;
+type
+  TPluginNode = record
+    Plugin: TPlugin;
+    ParamsAsString: ShortString;
+    Node: TTreeNode;
+    AliveIcon: TIcon;
+  end;
+  PPluginNode = ^TPluginNode;
+
+constructor TPluginTreeView.Create(AOwner: TComponent);
+begin
+  FClosing := False;
+  FPluginNodeMap := TList.Create;
+  Images := FPluginImages;
+  inherited;
+  FPluginImages := TImageList.Create(Self);
+  if Images = nil then
+    Images := FPluginImages;
+end;
+
+destructor TPluginTreeView.Destroy;
+begin
+  inherited;
+  FPluginNodeMap.Free;
+end;
+
+procedure TPluginTreeView.Change(Node: TTreeNode);
+var
+  Plugin: TPlugin;
+  AParamsAsString: String;
+  Index : Integer;
+  IsAcc : Boolean;
+begin
+{  if Assigned(PluginManager) then
+    PluginManager.InPlaceTarget := nil;}
+  IsAcc:=True;
+  Repaint;
+  if not FClosing then
+  begin
+    Plugin := PluginByNode(Node);
+   //---- adm
+   if (Plugin is TInPlacePlugin)then
+      begin
+       if Assigned(OnAccessCheck) then OnAccessCheck(self,TInPlacePlugin(Plugin),IsAcc);
+         {if not(IsAcc) then
+          begin
+            Index:=GetNodeIndex(Node);
+            //PPluginNode(FPluginNodeMap[Index])^.Plugin:=PPluginNode(FPluginNodeMap[0])^.Plugin;
+            TInPlacePlugin(PPluginNode(FPluginNodeMap[Index])^.Plugin).ClassId:=
+            TInPlacePlugin(PPluginNode(FPluginNodeMap[0])^.Plugin).ClassId;
+            PPluginNode(FPluginNodeMap[Index])^.ParamsAsString:='SplashTarget=AccessDenied';
+            Plugin := PluginByNode(Node);
+          end; } {Closed by H.R 10.06.2026}
+
+         {added by H.R. 10.06.2026}
+         if not(IsAcc) then begin
+           Index := GetNodeIndex(Node);
+           // Do NOT corrupt the plugin map — just redirect params for this call only
+           PPluginNode(FPluginNodeMap[Index])^.ParamsAsString := 'SplashTarget=AccessDenied';
+           Plugin := PPluginNode(FPluginNodeMap[0])^.Plugin;  // use first plugin directly
+         end;
+         {*** added by H.R. 10.06.2026 ***}
+      end;
+    //---- adm
+    ParamsByNode(Node, AParamsAsString);
+    if
+      Assigned(Plugin)
+      and (Plugin is TInPlacePlugin)
+      and (OpenPlugin or Assigned(FInPlaceActivateEvent) or Assigned(InPlaceTarget))
+    then
+      with Plugin as TInPlacePlugin do
+      begin
+        ParamsAsString := AParamsAsString;
+        if not Active then Open
+         else WriteParams;
+
+        RefreshNode(Node);
+
+        {last chanse to pass an param to plugin or modify an parameter}
+        if Assigned(FInPlaceActivateEvent) then
+          FInPlaceActivateEvent(Self, Plugin as TInPlacePlugin, AParamsAsString)
+        else
+        if Assigned(Self.InPlaceTarget) then
+          InPlaceTarget := TWinControl(Self.InPlaceTarget);
+      end;
+    inherited;
+  end;
+end;
+
+procedure TPluginTreeView.SetInPlaceTarget(Value: TComponent);
+begin
+  if Assigned(PluginManager) then
+    PluginManager.InPlaceTarget := TWinControl(Value);
+  FInPlaceTarget := Value;
+end;
+
+procedure TPluginTreeView.SetPluginIniSection(const Value: String);
+begin
+  if Assigned(PluginManager) then
+    PluginManager.Section := Value;
+  FPluginIniSecion := Value;
+end;
+
+function TPluginTreeView.GetActivePluginIcon(Plugin: TPlugin; Icon: TIcon): Boolean;
+var
+  Exporter: IIconExporter;
+  AHandle: THandle;
+begin
+  AHandle := 0;
+  if IUnknown(TVarData((Plugin as TInPlacePlugin).OleObject.OleObject).VUnknown).QueryInterface(
+    IID_IIconExporter, Exporter) = S_OK
+  then
+    with Exporter do
+      AHandle := Get_Icon;
+  Result := AHandle <> 0;
+  if Result then
+    with Icon do
+      Handle := AHandle;
+end;
+
+function TPluginTreeView.GetClosedPluginIcon(Plugin: TPlugin; Icon: TIcon): Boolean;
+
+  procedure StringToRaw(S: String; Raw: TStream);
+  var
+    P: Integer;
+    Ch: Char;
+  begin
+    while S <> '' do
+    begin
+      P := Pos(' ', S);
+      if P = 0 then
+        P := Length(S)+1;
+      Ch := Chr(StrToInt(Copy(S, 1, P-1)));
+      System.Delete(S, 1, P);
+      Raw.Write(Ch, 1);
+    end;
+  end;
+
+var
+  SIcon: String;
+  IconStream: TMemoryStream;
+  Node: TTreeNode;
+begin
+  Node := NodeByPlugin(Plugin, Plugin.ParamsAsString);
+  SIcon := IniSource.ReadValue(BuildSectionName(Node), 'Icon', '');
+
+  //ShowMessage(Format('%d:%s'#13#10'%s', [Node.AbsoluteIndex, Node.Text, SIcon]));
+
+  Result := SIcon <> '';
+  if Result then
+  begin
+    IconStream := TMemoryStream.Create;
+    try
+      StringToRaw(SIcon, IconStream);
+      IconStream.Seek(0, soFromBeginning);
+      Icon.LoadFromStream(IconStream);
+    finally
+      IconStream.Free;
+    end;
+    if Icon.Empty then
+      raise EPluginTreeViewError.Create('Icon is empty after loading from closed plugin');
+  end;
+end;
+
+procedure TPluginTreeView.RefreshNode(ANode: TTreeNode);
+
+  function GetPluginIcon(Plugin: TPlugin; var Icon: TIcon): Boolean;
+  begin
+    Icon := TIcon.Create;
+    try
+      if Plugin.Active then
+      begin
+        Result := GetActivePluginIcon(Plugin, Icon);
+        if not Result then
+          Result := GetClosedPluginIcon(Plugin, Icon);
+      end
+      else
+        Result := GetClosedPluginIcon(Plugin, Icon);
+      if not Result then
+        Icon.Free;
+    except
+      Icon.Free;
+      raise;
+    end;
+  end;
+
+var
+  AIcon: TIcon;
+
+begin
+  with ANode do
+  begin
+    if GetPluginIcon(PluginByNode(ANode), AIcon) then
+    begin
+      if (ImageIndex = -1) and (not AIcon.Empty) then
+        ImageIndex := Images.AddIcon(AIcon)
+      else
+      begin
+        if (not AIcon.Empty) and (ImageIndex <> -1) then
+          Images.ReplaceIcon(ImageIndex, AIcon);
+      end;
+    end
+    else
+      if ImageIndex <> -1 then
+      begin
+        Images.Delete(ImageIndex);
+        ImageIndex := -1;
+      end;
+    SelectedIndex := ImageIndex;
+  end;
+end;
+
+function TPluginTreeView.NodeByPlugin(APlugin: TPlugin; const ParamStr: String = ''): TTreeNode;
+var
+  Index: Integer;
+begin
+  Result := nil;
+  for Index := 0 to FPluginNodeMap.Count-1 do
+    with PPluginNode(FPluginNodeMap[Index])^ do
+      if (Plugin = APlugin) and (ParamsAsString = ParamStr) then
+      begin
+        Result := Node;
+        break;
+      end;
+end;
+
+function TPluginTreeView.GetNodeIndex(ANode: TTreeNode): Integer;
+var
+  Found: Boolean;
+begin
+  Found := False;
+  for Result := 0 to FPluginNodeMap.Count-1 do
+    with PPluginNode(FPluginNodeMap[Result])^ do
+    begin
+      Found := Node = ANode;
+      if Found then
+        break;
+    end;
+  if not Found then
+    Result := -1;
+end;
+
+function TPluginTreeView.PluginByNode(ANode: TTreeNode): TPlugin;
+var
+  Index: Integer;
+begin
+  Index := GetNodeIndex(ANode);
+  if Index <> -1 then
+    Result := PPluginNode(FPluginNodeMap[Index])^.Plugin
+  else
+    Result := nil;
+end;
+
+function TPluginTreeView.ParamsByNode(ANode: TTreeNode; out AParamsAsString: String): Boolean;
+var
+  Index: Integer;
+begin
+  Index := GetNodeIndex(ANode);
+  Result := Index <> -1;
+  if Result then
+    AParamsAsString := PPluginNode(FPluginNodeMap[Index])^.ParamsAsString
+  else
+    Result := False;
+end;
+
+procedure TPluginTreeView.ReadNode(ANode: TTreeNode);
+
+  procedure PluginByNode(var Plugin: TPlugin; var ParamsAsString: String);
+  var
+    Action: String;
+    Code: Integer;
+    PluginIndex: Integer;
+    P: Integer;
+  resourcestring
+    sNodeSyntaxIncorrectMsg = 'Char #%d in definition of node %d is invalid. '+
+      'Syntax: "Action" + spaces + "=" + spaces + "#" + PluginID. '+
+      'PluginID must be an integer';
+  begin
+    with IniSource do
+      Action := ReadValue(BuildSectionName(ANode), 'Action', '');
+    if Assigned(PluginManager) and (Copy(Action, 1, 1) = '#') then
+    begin
+      P := Pos('@', Action);
+      if P <> 0 then
+      begin
+        ParamsAsString := Copy(Action, P+1, Length(Action));
+        System.Delete(Action, P, Length(Action));
+      end;
+      Val(Copy(Action, 2, Length(Action)), PluginIndex, Code);
+      if Code <> 0 then
+        raise EPluginSyntaxError.CreateFmt(
+          sNodeSyntaxIncorrectMsg,
+          [Code, ANode.AbsoluteIndex]);
+      Plugin := PluginManager.Plugins[PluginIndex];
+    end
+    else
+      Plugin := nil;
+  end;
+
+var
+  NewPluginNode: PPluginNode;
+  APlugin: TPlugin;
+  AParamsAsSrting: String;
+begin
+  GetMem(NewPluginNode, SizeOf(TPluginNode));
+  PluginByNode(APlugin, AParamsAsSrting);
+  if Assigned(APlugin) then
+    APlugin.ParamsAsString := AParamsAsSrting;
+  with NewPluginNode^ do
+  begin
+    Node := ANode;
+    Plugin := APlugin;
+    ParamsAsString := AParamsAsSrting;
+  end;
+  FPluginNodeMap.Add(NewPluginNode);
+  inherited ReadNode(ANode);
+  if Assigned(APlugin) then
+    RefreshNode(ANode);
+end;
+
+procedure TPluginTreeView.WriteNode(ANode: TTreeNode);
+
+  function RawToString(Stream: TStream; Count: Integer): String;
+  var
+    Index: Integer;
+    CH: Byte;
+  begin
+    Result := '';
+    for Index := 0 to Count-1 do
+    begin
+      Stream.Read(Ch, 1);
+      Result := Result + IntToStr(Ch) + ' ';
+    end;
+    System.Delete(Result, Length(Result), 1);
+  end;
+
+var
+  IconStream: TMemoryStream;
+  Icon: TIcon;
+begin
+  inherited WriteNode(ANode);
+  if ANode.ImageIndex <> -1 then
+  begin
+    IconStream := TMemoryStream.Create;
+    try
+      Icon := TIcon.Create;
+      try
+        Images.GetIcon(ANode.ImageIndex, Icon);
+        Icon.SaveToStream(IconStream);
+      finally
+        Icon.Free;
+      end;
+      IconStream.Seek(0, soFromBeginning);
+      IniSource.WriteValue(BuildSectionName(ANode), 'Icon', RawToString(IconStream, IconStream.Size), 0);
+    finally
+      IconStream.Free;
+    end;
+  end;
+end;
+
+procedure TPluginTreeView.DoOpen;
+begin
+  if Assigned(PluginManager) then
+    PluginManager.Open;
+  inherited;
+end;
+
+procedure TPluginTreeView.DoClose;
+begin
+  FClosing := True;
+  inherited;
+  if Assigned(PluginManager) then
+    PluginManager.Close;
+  FClosing := False;
+end;
+
+procedure TPluginTreeView.SetIniSource(Value: TIniSource);
+begin
+  if Assigned(PluginManager) then
+    PluginManager.IniSource := Value;
+  inherited;
+end;
+
+end.

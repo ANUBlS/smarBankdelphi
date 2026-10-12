@@ -1,0 +1,459 @@
+unit AccExtractionImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActiveX, AxCtrls, AccPExtraction_TLB, StdVcl, Db, OracleData, Oracle,
+  ImgList, StdCtrls, Buttons, ComCtrls, ExtCtrls;
+
+type
+  TAccExtraction = class(TActiveForm, IAccExtraction)
+    GroupBox1: TGroupBox;
+    Label1: TLabel;
+    Label2: TLabel;
+    Bevel1: TBevel;
+    Label3: TLabel;
+    DTPBegin: TDateTimePicker;
+    DTPEnd: TDateTimePicker;
+    AccEd: TEdit;
+    BitBtn1: TBitBtn;
+    AllBalance: TCheckBox;
+    OraPackVExtraction: TOraclePackage;
+    OraDataSetMainExell: TOracleDataSet;
+    OraDataSetMainExellDAT: TStringField;
+    OraDataSetMainExellVAL_NAME: TStringField;
+    OraDataSetMainExellACC_NO: TStringField;
+    OraDataSetMainExellDEBET: TFloatField;
+    OraDataSetMainExellKREDIT: TFloatField;
+    OraDataSetMainExellNAME: TStringField;
+    LogInfo: TLabel;
+    BalCheck: TCheckBox;
+    OraDataSetBalcns: TOracleDataSet;
+    CheckBoxVal: TCheckBox;
+    OraDataSetMainExellAMMOUNT_C: TFloatField;
+    OraDataSetMainExellAMMOUNT: TFloatField;
+    OraDataSetMainExellLAMMOUNT: TFloatField;
+    OraDataSetBalcnsACC_NO: TStringField;
+    OraDataSetBalcnsID: TFloatField;
+    procedure BitBtn1Click(Sender: TObject);
+    procedure ActiveFormCreate(Sender: TObject);
+
+  private
+    { Private declarations }
+    FEvents: IAccExtractionEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+  public
+    { Public declarations }
+    procedure Initialize; override;
+    procedure CreateSheet;
+    procedure ShowSheet;
+    procedure DestroySheet;
+    procedure SetLogInfo( Value: String);
+    procedure ClearLogInfo;
+  end;
+
+const
+  Flag : Boolean = True;
+var
+   AccExtraction : TAccExtraction;
+   CurrentDate : TDateTime;
+//   acc_id : real;
+//   BeginDate, EndDate: TDateTime;
+   Exl, Sheet: Variant;
+implementation
+
+uses ComObj, ComServ, sboapiDataModuleImpl, AccGetReport, SBTranslateProc;
+
+{$R *.DFM}
+
+{ TAccExtraction }
+
+procedure TAccExtraction.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_AccExtractionPage); }
+end;
+
+procedure TAccExtraction.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as IAccExtractionEvents;
+end;
+
+procedure TAccExtraction.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TAccExtraction.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TAccExtraction.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TAccExtraction.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TAccExtraction.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TAccExtraction.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TAccExtraction.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TAccExtraction.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TAccExtraction.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TAccExtraction.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TAccExtraction.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TAccExtraction.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TAccExtraction.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TAccExtraction.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TAccExtraction.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TAccExtraction.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TAccExtraction.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TAccExtraction.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TAccExtraction.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TAccExtraction._Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TAccExtraction.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TAccExtraction.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TAccExtraction.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TAccExtraction.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TAccExtraction.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TAccExtraction.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TAccExtraction.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TAccExtraction.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TAccExtraction.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TAccExtraction.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TAccExtraction.Set_AxBorderStyle(Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TAccExtraction.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TAccExtraction.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TAccExtraction.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TAccExtraction.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TAccExtraction.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TAccExtraction.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TAccExtraction.Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TAccExtraction.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TAccExtraction.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TAccExtraction.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TAccExtraction.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TAccExtraction.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TAccExtraction.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+procedure TAccExtraction.BitBtn1Click(Sender: TObject);
+begin
+  try
+   Screen.Cursor := crSQLWait;
+   CreateSheet;
+   if (AccEd.Text  <> '') and (not BalCheck.Checked)
+     then  GetBySubAccout(AccEd.Text, CheckBoxVal.Checked ,DTPBegin.Date, DTPEnd.Date)
+     else
+     if (AccEd.Text  <> '') and (BalCheck.Checked)
+       then
+         GetByBal(AccEd.Text, DTPBegin.Date, DTPEnd.Date)
+       else
+         Flag := False;
+   FinishPosition := 0;
+   ShowSheet;
+  finally
+   Screen.Cursor := crDefault;
+   DestroySheet;
+   if not Flag then ClearLogInfo;
+   Flag := True;
+  end;
+end;
+
+procedure TAccExtraction.ActiveFormCreate(Sender: TObject);
+begin
+  AccExtraction := self;
+  with sboapiDataModule do
+    CurrentDate:= SBOperationDay.CallDateFunction('get_date', []);
+  DTPBegin.DateTime := CurrentDate;
+  DTPEnd.DateTime := CurrentDate;
+
+  SBTranslateProc.TranslateAllComponents(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TAccExtraction.CreateSheet;
+begin
+  try
+   Exl := CreateOleObject('Excel.Application');
+   Exl.WorkBooks.add;
+   Sheet := Exl.Application.Worksheets.Item[1];
+  except
+   SetLogInfo('Error in Create Excel');
+  end;
+end;
+
+procedure TAccExtraction.ShowSheet;
+begin
+  try
+   if Flag then
+     Exl.Visible := True;
+  except
+   SetLogInfo('Error in Show Excel');
+  end;
+end;
+
+procedure TAccExtraction.DestroySheet;
+begin
+  try
+   Finalize(Sheet);
+   Finalize(Exl);
+  except
+   SetLogInfo('Error in destroy Excel sheet');
+  end;
+end;
+
+procedure TAccExtraction.SetLogInfo( Value: String);
+begin
+ with LogInfo do
+  begin
+   Caption := Value;
+   Visible := True;
+  end;
+end;
+
+procedure TAccExtraction.ClearLogInfo;
+begin
+ with LogInfo do
+  begin
+   Caption := '';
+   Visible := False;
+  end;
+end;
+
+
+
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TAccExtraction,
+    Class_AccExtraction,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+
+end.

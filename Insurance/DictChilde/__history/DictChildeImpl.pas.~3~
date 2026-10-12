@@ -1,0 +1,507 @@
+unit DictChildeImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActiveX, AxCtrls, DictChilde_TLB, StdVcl, Db, OracleData, DBCtrls, Grids,
+  DBGrids, ExtCtrls, ComCtrls, SBPlgAx50_TLB, Oracle;
+
+type
+  TfmDictChilde = class(TActiveForm,
+                        IfmDictChilde,
+                        IUIObject,
+                        IParamInput)//,
+                        //ISBPlgAc50BufferForm)
+    PageControl1: TPageControl;
+    TabSheet1: TTabSheet;
+    Splitter1: TSplitter;
+    Panel2: TPanel;
+    dbgMain: TDBGrid;
+    DBNavigator1: TDBNavigator;
+    Panel3: TPanel;
+    dbgChilde: TDBGrid;
+    DBNavigator2: TDBNavigator;
+    DSMain: TDataSource;
+    DSChilde: TDataSource;
+    ODSMain: TOracleDataSet;
+    ODSChilde: TOracleDataSet;
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure ODSMainAfterPost(DataSet: TDataSet);
+  private
+
+    { Private declarations }
+    FParams: TStrings;
+    FOwnerHandle : Integer;    
+    FEvents: IfmDictChildeEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+    {IParamInput}
+    function  Get_Params(const Name: WideString): OleVariant; safecall;
+    procedure Set_Params(const Name: WideString; Value: OleVariant); safecall;
+    property Params[const Name: WideString]: OleVariant read Get_Params write Set_Params;
+    function  Get_Owner:Integer; safecall;
+    procedure Set_Owner(val : Integer);  safecall;    
+    {IInstance}
+    function InstanceInitialize: HResult; safecall;
+    function IUIObject.Initialize = InstanceInitialize;
+    function Cleanup: HResult; safecall;
+    {IUIObject}
+//    function  Get_Icon: OLE_HANDLE; safecall;
+    function UIObjectActivate: HResult; safecall;
+    function IUIObject.Activate = UIObjectActivate;
+    function QueryDeactivate: HResult; safecall;
+    function UIObjectDeactivate: HResult; safecall;
+    function IUIObject.Deactivate = UIObjectDeactivate;
+    function SaveState: HResult; safecall;
+    function  Get_Height : Integer; safecall;
+    function  Get_Width  : Integer; safecall;
+  public
+    { Public declarations }
+    procedure Initialize; override;
+  end;
+
+var
+   fmDictChilde : TfmDictChilde;  
+
+implementation
+
+uses ComObj, ComServ, sboapiDataModuleimpl,SBTranslate;
+
+{$R *.DFM}
+
+{ TfmDictChilde }
+
+procedure TfmDictChilde.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_fmDictChildePage); }
+end;
+
+procedure TfmDictChilde.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as IfmDictChildeEvents;
+end;
+
+procedure TfmDictChilde.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TfmDictChilde.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TfmDictChilde.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TfmDictChilde.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TfmDictChilde.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TfmDictChilde.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TfmDictChilde.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TfmDictChilde.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TfmDictChilde.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TfmDictChilde.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TfmDictChilde.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TfmDictChilde.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TfmDictChilde.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TfmDictChilde.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TfmDictChilde.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TfmDictChilde.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TfmDictChilde.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TfmDictChilde.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TfmDictChilde.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TfmDictChilde._Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TfmDictChilde.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TfmDictChilde.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TfmDictChilde.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TfmDictChilde.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TfmDictChilde.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TfmDictChilde.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TfmDictChilde.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TfmDictChilde.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TfmDictChilde.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TfmDictChilde.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TfmDictChilde.Set_AxBorderStyle(Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TfmDictChilde.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TfmDictChilde.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TfmDictChilde.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TfmDictChilde.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TfmDictChilde.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TfmDictChilde.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TfmDictChilde.Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TfmDictChilde.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TfmDictChilde.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TfmDictChilde.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TfmDictChilde.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TfmDictChilde.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TfmDictChilde.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+function  TfmDictChilde.Get_Owner:Integer;
+begin
+  Result := handle;
+end;
+
+procedure TfmDictChilde.Set_Owner(val : Integer);
+begin
+  if val > 0 then
+     FOwnerHandle := val;
+end;
+
+
+function  TfmDictChilde.Get_Params(const Name: WideString): OleVariant;
+begin
+  Result := FParams.Values[Name];
+end;
+
+procedure TfmDictChilde.Set_Params(const Name: WideString; Value: OleVariant);
+begin
+  FParams.Values[Name] := Value;
+end;
+
+function TfmDictChilde.InstanceInitialize: HResult;
+begin
+  Result := S_OK;
+end;
+
+function TfmDictChilde.Cleanup: HResult;
+begin
+  Result := S_OK;
+end;
+
+function findreplacechar(source : String; from : String; to_ : Char):String;
+var res : String;
+begin
+  res := source;
+
+  while pos(from, res) > 0 do
+    res[pos(from,  res)]:= to_;
+  Result := res;  
+end;
+
+function TfmDictChilde.UIObjectActivate: HResult;
+resourcestring vSQL = 'select c.rowid, c.* from %s c where c.%s=%s ';
+var i : Integer;
+begin
+ TabSheet1.Caption := findreplacechar(Get_Params('Caption'), '_', ' ');
+ with ODSMain do begin
+   Close;
+   SetVariable('maintable', Get_Params('MainTable'));
+
+   Open;
+   FieldByName(Get_Params('MainField')).Required := False;
+ end;
+
+ with dbgMain do begin
+   for i := 1 to Columns.Count
+      do Columns[i-1].Destroy;
+
+   Columns.Add;
+   Columns[0].FieldName := Get_Params('MasterField');
+   Columns[0].Title.Color := clNavy;
+   Columns[0].Title.Font.Color := clWhite;
+   Columns[0].Title.Caption := 'Груплар';
+ end;
+
+
+ with ODSChilde do begin
+   Close;
+   DeleteVariables;
+   SQL.Text:=Format(vSQL, [Get_Params('ChildeTable'),
+                               Get_Params('ChildeField'),
+                               ':'+Get_Params('ChildeField')]);
+   DeclareVariable(Get_Params('ChildeField'), otFloat);
+   MasterFields := Get_Params('MainField');
+   DetailFields := Get_Params('ChildeField');
+   Open;
+   FieldByName(Get_Params('ChildeField')).Required := False;
+ end;
+
+ with dbgChilde do begin
+   for i := 1 to Columns.Count
+      do Columns[i-1].Destroy;
+
+   Columns.Add;
+   Columns[0].FieldName := Get_Params('DetailField');
+   Columns[0].Title.Color := clNavy;
+   Columns[0].Title.Font.Color := clWhite;
+   Columns[0].Title.Caption := 'Табе оланлар';
+ end;
+  Result := S_OK;
+end;
+
+function TfmDictChilde.QueryDeactivate: HResult;
+begin
+  Result := S_OK;
+end;
+
+function TfmDictChilde.UIObjectDeactivate: HResult;
+begin
+  Result := S_OK;
+end;
+
+function TfmDictChilde.SaveState: HResult;
+begin
+  Result := S_OK;
+end;
+
+function  TfmDictChilde.Get_Height : Integer;
+begin
+  Result := Height;
+end;
+
+function  TfmDictChilde.Get_Width  : Integer;
+begin
+  Result := Width;
+end;
+
+
+
+procedure TfmDictChilde.ActiveFormCreate(Sender: TObject);
+begin
+  FParams := TStringList.Create;
+  fmDictChilde := Self;
+  SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+
+end;
+
+procedure TfmDictChilde.ODSMainAfterPost(DataSet: TDataSet);
+begin
+   (DataSet as TOracleDataSet).RefreshRecord;
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TfmDictChilde,
+    Class_fmDictChilde,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

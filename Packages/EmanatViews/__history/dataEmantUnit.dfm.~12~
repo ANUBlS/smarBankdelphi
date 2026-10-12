@@ -1,0 +1,210 @@
+object DataEmanat: TDataEmanat
+  OldCreateOrder = False
+  OnCreate = DataModuleCreate
+  OnDestroy = DataModuleDestroy
+  Height = 350
+  Width = 685
+  object Ods_wspaymentemant: TOracleDataSet
+    SQL.Strings = (
+      'select*from ws_paymentemanat'
+      ''
+      ''
+      ''
+      ''
+      ''
+      'order by status asc')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000F00000004000000490044000100000000000E000000410043004300
+      4F0055004E0054000100000000000C00000041004D004F0055004E0054000100
+      0000000010000000430055005200520045004E00430059000100000000001000
+      000043005500530054004F004D00450052000100000000001800000052004500
+      530050004400410054004500540049004D004500010000000000100000005200
+      4500530050004400410054004500010000000000100000005200450053005000
+      540049004D00450001000000000006000000520052004E000100000000000C00
+      0000530055004200520052004E00010000000000100000005300590053005F00
+      44004100540045000100000000000C0000005400410052004700450054000100
+      00000000100000005400450052004D0049004E0041004C000100000000001400
+      00005000410059004D0045004E0054005F00490044000100000000000C000000
+      530054004100540055005300010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 48
+    Top = 16
+    object Ods_wspaymentemantID: TFloatField
+      FieldName = 'ID'
+    end
+    object Ods_wspaymentemantACCOUNT: TWideStringField
+      FieldName = 'ACCOUNT'
+      Size = 120
+    end
+    object Ods_wspaymentemantAMOUNT: TFloatField
+      FieldName = 'AMOUNT'
+    end
+    object Ods_wspaymentemantCURRENCY: TWideStringField
+      FieldName = 'CURRENCY'
+      Size = 60
+    end
+    object Ods_wspaymentemantCUSTOMER: TWideStringField
+      FieldName = 'CUSTOMER'
+      Size = 200
+    end
+    object Ods_wspaymentemantRESPDATETIME: TDateTimeField
+      FieldName = 'RESPDATETIME'
+    end
+    object Ods_wspaymentemantRESPDATE: TWideStringField
+      FieldName = 'RESPDATE'
+      Size = 60
+    end
+    object Ods_wspaymentemantRESPTIME: TWideStringField
+      FieldName = 'RESPTIME'
+      Size = 60
+    end
+    object Ods_wspaymentemantRRN: TWideStringField
+      FieldName = 'RRN'
+      Size = 60
+    end
+    object Ods_wspaymentemantSUBRRN: TFloatField
+      FieldName = 'SUBRRN'
+    end
+    object Ods_wspaymentemantSYS_DATE: TDateTimeField
+      FieldName = 'SYS_DATE'
+    end
+    object Ods_wspaymentemantTARGET: TWideStringField
+      FieldName = 'TARGET'
+      Size = 60
+    end
+    object Ods_wspaymentemantTERMINAL: TWideStringField
+      FieldName = 'TERMINAL'
+      Size = 60
+    end
+    object Ods_wspaymentemantPAYMENT_ID: TFloatField
+      FieldName = 'PAYMENT_ID'
+    end
+    object Ods_wspaymentemantSTATUS: TWideStringField
+      FieldName = 'STATUS'
+      Size = 1
+    end
+  end
+  object Ods_wssysdate: TOracleDataSet
+    SQL.Strings = (
+      'SELECT TO_CHAR(sysdate, '#39'HH24:MI'#39') AS saat, sysdate'
+      'FROM dual')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000800000053004100410054000100000000000E0000005300
+      590053004400410054004500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 224
+    Top = 16
+    object Ods_wssysdateSAAT: TWideStringField
+      FieldName = 'SAAT'
+      Size = 5
+    end
+    object Ods_wssysdateSYSDATE: TDateTimeField
+      FieldName = 'SYSDATE'
+    end
+  end
+  object dsrc_wspaymentemant: TDataSource
+    DataSet = Ods_wspaymentemant
+    Left = 56
+    Top = 88
+  end
+  object pg_wspayment: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'pg_wspayment'
+    Left = 224
+    Top = 88
+  end
+  object ods_settings_emanat: TOracleDataSet
+    SQL.Strings = (
+      'select*from ws_settings_emanat')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      0500000008000000040000004900440001000000000010000000420041004E00
+      4B004E0041004D00450001000000000010000000430055005200520045004E00
+      430059000100000000000A00000045004D00410049004C000100000000000C00
+      0000460049004C00490041004C0001000000000018000000460052004F004D00
+      5F004100430043004F0055004E00540001000000000010000000480045004100
+      44004F00460049005300010000000000120000004D00410049004C005F005000
+      410053005300010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 336
+    Top = 16
+    object ods_settings_emanatID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object ods_settings_emanatBANKNAME: TWideStringField
+      FieldName = 'BANKNAME'
+      Size = 255
+    end
+    object ods_settings_emanatCURRENCY: TWideStringField
+      FieldName = 'CURRENCY'
+      Size = 255
+    end
+    object ods_settings_emanatEMAIL: TWideStringField
+      FieldName = 'EMAIL'
+      Size = 255
+    end
+    object ods_settings_emanatFILIAL: TFloatField
+      FieldName = 'FILIAL'
+    end
+    object ods_settings_emanatFROM_ACCOUNT: TWideStringField
+      FieldName = 'FROM_ACCOUNT'
+      Size = 255
+    end
+    object ods_settings_emanatHEADOFIS: TFloatField
+      FieldName = 'HEADOFIS'
+    end
+    object ods_settings_emanatMAIL_PASS: TWideStringField
+      FieldName = 'MAIL_PASS'
+      Size = 255
+    end
+  end
+  object ods_wsinfo: TOracleDataSet
+    SQL.Strings = (
+      
+        'select w.id as temid, a.kli_id,a.id as acc_id, a.acc_no,w.amount' +
+        ',a.filial,a.val_acc'
+      'from ws_temppayment_emanat w,account a where w.account=a.acc_no '
+      'and w.id=:w_id')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000A0000003A0057005F004900440003000000000000000000
+      0000}
+    QBEDefinition.QBEFieldDefs = {
+      05000000070000000C0000004B004C0049005F00490044000100000000000C00
+      00004100430043005F00490044000100000000000C00000041004D004F005500
+      4E0054000100000000000C000000460049004C00490041004C00010000000000
+      0E000000560041004C005F004100430043000100000000000C00000041004300
+      43005F004E004F000100000000000A000000540045004D004900440001000000
+      0000}
+    Session = sboapiDataModule.SBSession
+    Left = 456
+    Top = 40
+    object ods_wsinfoTEMID: TFloatField
+      FieldName = 'TEMID'
+      Required = True
+    end
+    object ods_wsinfoKLI_ID: TFloatField
+      FieldName = 'KLI_ID'
+    end
+    object ods_wsinfoACC_ID: TFloatField
+      FieldName = 'ACC_ID'
+      Required = True
+    end
+    object ods_wsinfoACC_NO: TWideStringField
+      FieldName = 'ACC_NO'
+      Size = 28
+    end
+    object ods_wsinfoAMOUNT: TFloatField
+      FieldName = 'AMOUNT'
+    end
+    object ods_wsinfoFILIAL: TIntegerField
+      FieldName = 'FILIAL'
+    end
+    object ods_wsinfoVAL_ACC: TIntegerField
+      FieldName = 'VAL_ACC'
+    end
+  end
+end

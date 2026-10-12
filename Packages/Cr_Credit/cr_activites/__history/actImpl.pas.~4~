@@ -1,0 +1,307 @@
+﻿unit actImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ExtCtrls, DBCtrls, Db, OracleData, StdCtrls, Grids, DBGrids, Oracle,
+  Buttons;
+
+type
+  TActFrom = class(TForm)
+    OracleDataSet1: TOracleDataSet;
+    OracleDataSet2: TOracleDataSet;
+    OracleDataSet3: TOracleDataSet;
+    DataSource1: TDataSource;
+    DataSource2: TDataSource;
+    DataSource3: TDataSource;
+    OracleDataSet1ID: TFloatField;
+    OracleDataSet1NAME: TWideStringField;
+    OracleDataSet2ID: TFloatField;
+    OracleDataSet2DESCRIPTION: TWideStringField;
+    OracleDataSet2ACT_ID: TFloatField;
+    OracleDataSet2NEWID: TFloatField;
+    OracleDataSet1KOD: TWideStringField;
+    OracleDataSet2BANK_KOD: TWideStringField;
+    OracleDataSet4: TOracleDataSet;
+    DataSource4: TDataSource;
+    OracleDataSet4ID: TFloatField;
+    OracleDataSet4NAME: TWideStringField;
+    OracleDataSet1VID_SOB: TFloatField;
+    OracleDataSet3ID: TFloatField;
+    OracleDataSet3CODE: TWideStringField;
+    OracleDataSet3DESCRIPTION: TWideStringField;
+    OracleDataSet3ACT_ID: TFloatField;
+    CR_SETUP: TOraclePackage;
+    DataSrcLinks: TDataSource;
+    LinksData: TOracleDataSet;
+    LinksDataID: TFloatField;
+    LinksDataCATEGORYID: TFloatField;
+    LinksDataDESCRIPTION: TWideStringField;
+    Panel1: TPanel;
+    DataSrcLinkValues: TDataSource;
+    LinkValuesData: TOracleDataSet;
+    LinkValuesDataLINKID: TFloatField;
+    LinkValuesDataBRANCHID: TFloatField;
+    LinkValuesDataCURRENCYID: TFloatField;
+    LinkValuesDataACCOUNTID: TFloatField;
+    LinkValuesDataBrachName: TWideStringField;
+    LinkValuesDataCURRENCYNAME: TWideStringField;
+    LinkValuesDataAccountNumber: TWideStringField;
+    GroupBox6: TGroupBox;
+    SpeedButton1: TSpeedButton;
+    SpeedButton2: TSpeedButton;
+    SpeedButton3: TSpeedButton;
+    SpeedButton4: TSpeedButton;
+    DGridLinkValues: TDBGrid;
+    GroupBox5: TGroupBox;
+    DBGrid5: TDBGrid;
+    Panel2: TPanel;
+    GroupBox4: TGroupBox;
+    DBGrid4: TDBGrid;
+    GroupBox1: TGroupBox;
+    DBNavigator1: TDBNavigator;
+    DBGrid1: TDBGrid;
+    GroupBox2: TGroupBox;
+    DBNavigator2: TDBNavigator;
+    DBGrid2: TDBGrid;
+    GroupBox3: TGroupBox;
+    SpeedButton5: TSpeedButton;
+    DBGrid3: TDBGrid;
+    DBNavigator3: TDBNavigator;
+    SpeedButton6: TSpeedButton;
+    SpeedButton7: TSpeedButton;
+    OracleDataSet4KODU: TWideStringField;
+    OracleDataSet3KODU: TWideStringField;
+    DBNavigator4: TDBNavigator;
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure OracleDataSet3ApplyRecord(Sender: TOracleDataSet;
+      Action: Char; var Applied: Boolean; var NewRowId: String);
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure SpeedButton2Click(Sender: TObject);
+    procedure SpeedButton3Click(Sender: TObject);
+    procedure SpeedButton5Click(Sender: TObject);
+    procedure SpeedButton6Click(Sender: TObject);
+    procedure SpeedButton7Click(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure OracleDataSet3AfterEdit(DataSet: TDataSet);
+    procedure SpeedButton4Click(Sender: TObject);
+    procedure DBNavigator3Click(Sender: TObject; Button: TNavigateBtn);
+    procedure DBNavigator2Click(Sender: TObject; Button: TNavigateBtn);
+    procedure DBNavigator1Click(Sender: TObject; Button: TNavigateBtn);
+
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  ActFrom: TActFrom;
+  procedure InitPlugin(s:string);export;
+
+implementation
+uses sboapiDataModuleImpl,crCommonDecls,sbsystem,FrmIEAddEditImpl;
+{$R *.DFM}
+
+procedure InitPlugin(s:string);export;
+begin
+   ActFrom.ShowModal;
+end;
+exports
+     InitPlugin;
+procedure TActFrom.FormCreate(Sender: TObject);
+begin
+//ActFrom.width:=373;
+//ActFrom.position:=poscreenCenter ;
+
+FrmIEAddEdit := TFrmIEAddEdit.Create(Self);
+//ActFrom.width:=373;
+OracleDataSet1.open;
+OracleDataSet2.open;
+OracleDataSet3.open;
+OracleDataSet4.open;
+LinkValuesData.open;
+LinksData.open;   
+
+//OracleDataSet7.open;
+end;
+
+procedure TActFrom.FormDestroy(Sender: TObject);
+begin
+OracleDataSet1.closeall;
+OracleDataSet2.closeall;
+OracleDataSet3.closeall;
+OracleDataSet4.closeall;
+ //FrmIEAddEdit.Free ;
+LinkValuesData.closeall;
+LinksData.closeall;   
+end;
+
+procedure TActFrom.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+ if ord(key) = VK_ESCAPE then close
+end;
+
+procedure TActFrom.OracleDataSet3ApplyRecord(Sender: TOracleDataSet;
+  Action: Char; var Applied: Boolean; var NewRowId: String);
+var v_id,v_person,v_act_id :integer; v_code,v_description ,v_kodu:String;
+begin
+
+   with Sender do
+   begin
+      v_id := FieldByName('id').AsInteger;
+      v_code :=  FieldByName('code').AsString;
+      v_person := 0 {FieldByName('person').AsInteger};
+      v_description := FieldByName('description').Asstring;
+      v_act_id:=OracleDataSet2.FieldByName('id').AsInteger;
+      v_kodu:=FieldByName('kodu').AsString;
+   end;
+
+   Applied := True;
+   Case Action of
+    'I':CR_SETUP.CallProcedure('CategoriesAdd',[v_person,
+                                                v_code,
+                                                v_description,
+                                                v_act_id,v_kodu]);
+    'U':CR_SETUP.CallProcedure('CategoriesEdit',[v_id,
+                                                 v_person,
+                                                 v_code,
+                                                 v_description,
+                                                 v_act_id,v_kodu]);
+    'D':CR_SETUP.CallProcedure('CategoriesDelete',[v_id])
+    else Applied := False;
+  end;
+ //LinksData.refresh;
+  end;
+procedure TActFrom.SpeedButton1Click(Sender: TObject);
+resourcestring
+  SNLSCaption = 'Гябул.';
+begin LinkValuesData.open;
+  with FrmIEAddEdit ,LinkValuesData do
+  begin
+    Caption := SNLSCaption;
+    Insert;
+    FieldByName('BranchID').AsInteger := Get_BranchID;
+   // FieldByNAme('Acc_no').AsString := IETuningDataMod.IEAccountList.FieldByName('Acc_No').AsString;
+    CBBranch.KeyValue := Get_BranchID;
+    ShowModal;
+  end;
+end;
+procedure TActFrom.SpeedButton2Click(Sender: TObject);
+
+resourcestring
+  SNLSCaption = 'Redaktə.';
+begin
+  with FrmIEAddEdit , LinkValuesData do
+  begin
+    Caption := SNLSCaption;
+    Edit;
+    ShowModal;
+  end;
+end;
+
+procedure TActFrom.SpeedButton3Click(Sender: TObject);
+resourcestring
+  SConfirmDelete = 'Ləğv edim?';
+begin
+  if MessageDlg(SConfirmDelete,mtConfirmation,[mbYes,mbNo],0)=mrYes then
+  with LinkValuesData do
+  Delete;
+end;
+
+
+procedure TActFrom.SpeedButton5Click(Sender: TObject);
+begin
+FrmIEAddEdit.IEAccountList.open;
+FrmIEAddEdit.CurrencyList.open;
+FrmIEAddEdit.BranchList.open;
+if OracleDataSet3.RecordCount<=0 then
+begin
+showmessage('- Мцлкцййят нювц йыбылмайыб -')  ;
+exit;
+end;
+ LinksData.refresh;
+
+ActFrom.width:=774;
+ActFrom.position:=poscreenCenter
+end;
+
+procedure TActFrom.SpeedButton6Click(Sender: TObject);
+begin
+ActFrom.width:=375;
+ActFrom.position:=poscreenCenter
+end;
+
+procedure TActFrom.SpeedButton7Click(Sender: TObject);
+begin
+close;
+ActFrom.width:=375;
+ActFrom.position:=poscreenCenter
+end;
+
+procedure TActFrom.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+ActFrom.width:=375;
+ActFrom.position:=poscreenCenter
+end;
+
+procedure TActFrom.OracleDataSet3AfterEdit(DataSet: TDataSet);
+begin
+//SpeedButton5.enabled:=true
+end;
+
+procedure TActFrom.SpeedButton4Click(Sender: TObject);
+begin
+
+    FrmIEAddEdit.IEAccountList.Refresh;
+ 
+    LinksData.Refresh;
+    LinkValuesData.Refresh;
+
+
+end;
+
+procedure TActFrom.DBNavigator3Click(Sender: TObject;
+  Button: TNavigateBtn);
+
+begin
+case Button of
+nbPost:
+begin
+LinksData.refresh ;
+OracleDataSet3.refresh
+ end;
+end;
+end;
+
+procedure TActFrom.DBNavigator2Click(Sender: TObject;
+  Button: TNavigateBtn);
+
+begin
+case Button of
+nbPost:
+begin
+OracleDataSet2.refresh
+ end;
+end;
+
+end;
+
+procedure TActFrom.DBNavigator1Click(Sender: TObject;
+  Button: TNavigateBtn);
+
+begin
+case Button of
+nbPost:
+begin
+OracleDataSet1.refresh
+ end;
+end;
+end;
+
+initialization
+ ActFrom := TActFrom.Create(CommonApplication);
+end.

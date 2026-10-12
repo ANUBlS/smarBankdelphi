@@ -1,0 +1,3291 @@
+object DecaDataModule: TDecaDataModule
+  OldCreateOrder = False
+  Height = 654
+  Width = 1096
+  object DataSrcDecaData: TDataSource
+    Left = 80
+    Top = 32
+  end
+  object DecaTable_: TTable
+    Left = 192
+    Top = 32
+  end
+  object SaveDlg: TSaveDialog
+    DefaultExt = 'dbf'
+    Filter = '*.dbf,*.db|*.dbf;*.db'
+    Left = 392
+    Top = 56
+  end
+  object OracleDataSet1: TOracleDataSet
+    SQL.Strings = (
+      'SELECT'
+      '   A.BOOROWERID AS ID,'
+      '   A.NAME AS NAME,'
+      '   A.COUNTRYCODE AS COUNTRCODE,'
+      '   A.BANKRUPTEYSTATUS AS BNKSTATUS,'
+      
+        '   cm_deca.get_custdateofbirth(b.boorowerid) AS DATOFBIRTH, --do' +
+        'gum tarixi'
+      
+        '   cm_deca.get_custplaceofbirth(b.boorowerid) AS PLACEBIRTH, --d' +
+        'ogum yeri'
+      '   A.pincode AS PINCODE,'#9#9#9'--pin kod'
+      '   A.guarantorid AS GID,'#9'--zamin id'
+      '   a.guarantorname AS GNAME,'#9'--zamin ad'
+      '   A.guarantorid2 AS GID2,'#9'--zamin id2'
+      '   A.guarantorname2 AS GNAME2,'#9'--zamin ad2'
+      '   A.guarantorid3 AS GID3,'#9'--zamin id3'
+      '   A.guarantorname3 AS GNAME3,'#9'--zamin ad3'
+      '   cm_deca.get_credittypes(b.id) CREDITTYPE,'#9'--kreditin tipi'
+      
+        '   cm_deca.get_lastcreditpayment(b.id) LASTPAYDAT,'#9'--sonuncu ode' +
+        'nish tarixi'
+      
+        '   cm_deca.get_creditpaymentamount(b.id) MPAYAMOUNT,'#9'--ayliq ode' +
+        'nish'
+      
+        '   cm_deca.get_reserveaccountostat(b.id) PROVISION,'#9'--ehtiyyat m' +
+        'iqdari'
+      '   A.FIRSTOWNERID AS ID2,'
+      '   A.FIRSTOWNERNAME AS NAME2,'
+      '   A.SECONDOWNERID AS ID3,'
+      '   A.SECONDOWNERNAME AS NAME3,'
+      '   A.THIRDOWNERID AS ID4,'
+      '   A.THIRDOWNERNAME AS NAME4,'
+      '   B.ID as InternalID, -- INTERNAL FIELD'
+      '   CM_COMMON.AccountNumber_Get(c.LOANACCID) AS ACCOUNTNO ,'
+      '   V.VAL_NAME AS CURRENCY,'
+      '   cm_deca.get_creditinitialamount(b.id) AS INITIALSUM,'
+      '   cm_deca.get_creditlineamount(b.id) AS CRDLINESUM,'
+      '   D.REST + D.DUEREST AS DISOUSUM ,'
+      '   B.ANNUALYINTERESTRATE AS RATE,'
+      '   P.CODE AS PURPOSE,'
+      
+        '   TRUNC(MONTHS_BETWEEN(B.DUEDATEFIRSTCONTRACT,B.DATEOFCONCLUSIO' +
+        'N)) AS PERIODMONT ,'
+      '   B.DATEOFCONCLUSION AS DATEGRANT,'
+      '   B.DUEDATEFIRSTCONTRACT AS FIRSTCONTR,'
+      
+        '   DECODE(B.DUEDATELASTCONTRACT,null,B.DUEDATEFIRSTCONTRACT,B.DU' +
+        'EDATELASTCONTRACT) AS LASTCONTR,'
+      
+        '   CM_DECA.DueDaysCount(:HDATE , B.DUEDATEFIRSTCONTRACT,b.id) AS' +
+        ' DAYSMAIN ,'
+      
+        '   CM_DECA.DueDaysCount(:HDATE , B.DUEDATEFIRSTCONTRACT,b.id) AS' +
+        ' DAYSINTRST ,'
+      '   D.DUEINTERESTREST+D.interestrest AS OIAPERIOD ,'
+      
+        '   CM_DECA.OiaForLastThreeMonths(:HDATE , B.DUEDATEFIRSTCONTRACT' +
+        ',D.DUEINTERESTREST) AS OIATHREE ,'
+      '   0 AS PROLONGS ,'
+      '   E.CODE AS CLASSCODE,'
+      '   CM_DECA.Get_CreditStatus(B.ID,:HDATE) AS STATUSCODE ,'
+      '   DECODE(G.TYPECODE,'#39'000'#39',null,G.TYPECODE) AS COLLCODE,'
+      '   F.ANYINFOTODISTING AS INFDISTING,'
+      '   D.PLEDGEPRICE  AS MARKETSUM ,'
+      '   F.REGISTRYNO AS REGNO,'
+      '   F.REGISTRYDATE AS REGDATE,'
+      '   F.REGISTRYAGENCY AS REGAGENCY'
+      'FROM'
+      '   CM_BOOROWERINFO A'
+      ' , CM_ACCOUNTS C'
+      ' , CM_RESERVE_TYPES E'
+      ' , CM_GUARANTEE F'
+      ' , CM_PORTFOLIO B'
+      ' , CM_PLEDGES G'
+      ' , CM_HISTORY D'
+      ' , SB_OPERKURS O'
+      ' , SB_AVALUTE V'
+      ' , CM_CATEGORIES P'
+      'WHERE'
+      '     (A.CREDITID = B.ID)'
+      ' AND (C.CREDITID = B.ID)'
+      ' AND (D.CREDITID = B.ID)'
+      ' AND (E.ID = D.RESERVEID)'
+      ' AND (F.CREDITID = B.ID)'
+      ' AND (G.ID = F.PLEDGEID)'
+      ' AND (D.HDATE=:HDATE)'
+      
+        ' AND ((B.CLOSEDATE IS NULL) or (B.CLOSEDATE between :EDATE and :' +
+        'HDATE) /*(B.CLOSEDATE >=:HDATE)*/)'
+      ' AND (O.DAT=:HDATE)'
+      ' AND (O.VAL_KOD=B.CURRENCY)'
+      '--AND (O.OSTAT * B.CREDITLINEAMOUNT >= 1000)'
+      ' AND (V.VALUTE=B.CURRENCY)'
+      ' AND (B.DATEOFCONCLUSION<=:HDATE)'
+      '-- AND (B.CLOSEDATE is not null)'
+      
+        ' AND (P.ID = B.CUSTOMERTYPE) --and cm_deca.get_creditinitialamou' +
+        'nt(b.id)>0'
+      '')
+    Optimize = False
+    Variables.Data = {
+      04000000020000000C0000003A00480044004100540045000C00000000000000
+      000000000C0000003A00450044004100540045000C0000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      05000000300000000400000049004400010000000000080000004E0041004D00
+      45000100000000001400000043004F0055004E005400520043004F0044004500
+      0100000000001200000042004E004B0053005400410054005500530001000000
+      0000140000004400410054004F00460042004900520054004800010000000000
+      1400000050004C00410043004500420049005200540048000100000000000E00
+      0000500049004E0043004F004400450001000000000006000000470049004400
+      0100000000000A00000047004E0041004D004500010000000000080000004700
+      4900440032000100000000000C00000047004E0041004D004500320001000000
+      00000800000047004900440033000100000000000C00000047004E0041004D00
+      4500330001000000000014000000430052004500440049005400540059005000
+      4500010000000000140000004C00410053005400500041005900440041005400
+      010000000000140000004D0050004100590041004D004F0055004E0054000100
+      0000000012000000500052004F0056004900530049004F004E00010000000000
+      060000004900440032000100000000000A0000004E0041004D00450032000100
+      00000000060000004900440033000100000000000A0000004E0041004D004500
+      3300010000000000060000004900440034000100000000000A0000004E004100
+      4D00450034000100000000001400000049004E005400450052004E0041004C00
+      49004400010000000000120000004100430043004F0055004E0054004E004F00
+      01000000000010000000430055005200520045004E0043005900010000000000
+      1400000049004E0049005400490041004C00530055004D000100000000001400
+      00004300520044004C0049004E004500530055004D0001000000000010000000
+      4400490053004F005500530055004D0001000000000008000000520041005400
+      45000100000000000E00000050005500520050004F0053004500010000000000
+      1400000050004500520049004F0044004D004F004E0054000100000000001200
+      000044004100540045004700520041004E005400010000000000140000004600
+      490052005300540043004F004E0054005200010000000000120000004C004100
+      5300540043004F004E0054005200010000000000100000004400410059005300
+      4D00410049004E0001000000000014000000440041005900530049004E005400
+      520053005400010000000000120000004F004900410050004500520049004F00
+      4400010000000000100000004F00490041005400480052004500450001000000
+      000010000000500052004F004C004F004E004700530001000000000012000000
+      43004C0041005300530043004F00440045000100000000001400000053005400
+      410054005500530043004F00440045000100000000001000000043004F004C00
+      4C0043004F00440045000100000000001400000049004E004600440049005300
+      540049004E004700010000000000120000004D00410052004B00450054005300
+      55004D000100000000000A0000005200450047004E004F000100000000000E00
+      0000520045004700440041005400450001000000000012000000520045004700
+      4100470045004E0043005900010000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 192
+    Top = 96
+  end
+  object DecaData_tur: TOracleDataSet
+    SQL.Strings = (
+      'SELECT'
+      '   nvl(A.BOOROWERID,0) AS ID,'
+      '   A.NAME AS NAME,'
+      '   A.COUNTRYCODE AS COUNTRCODE,'
+      '   A.BANKRUPTEYSTATUS AS BNKSTATUS,'
+      
+        '   to_char(cm_deca.get_custdateofbirth(b.boorowerid),'#39'dd/mm/yyyy' +
+        #39') AS DATOFBIRTH, --dogum tarixi'
+      
+        '   cm_deca.get_custplaceofbirth(b.boorowerid) AS PLACEBIRTH, --d' +
+        'ogum yeri'
+      '   A.pincode AS PINCODE,'#9#9#9'--pin kod'
+      '   A.guarantorid AS GID,'#9'--zamin id'
+      '   a.guarantorname AS GNAME,'#9'--zamin ad'
+      '   A.guarantorid2 AS GID2,'#9'--zamin id2'
+      '   A.guarantorname2 AS GNAME2,'#9'--zamin ad2'
+      '   A.guarantorid3 AS GID3,'#9'--zamin id3'
+      '   A.guarantorname3 AS GNAME3,'#9'--zamin ad3'
+      '   cm_deca.get_credittypes(b.id) CREDITTYPE,'#9'--kreditin tipi'
+      
+        '   to_char(cm_deca.get_lastcreditpayment(b.id),'#39'dd/mm/yyyy'#39') LAS' +
+        'TPAYDAT,'#9'--sonuncu odenish tarixi'
+      
+        '   cm_deca.get_creditpaymentamount(b.id) MPAYAMOUNT,'#9'--ayliq ode' +
+        'nish'
+      
+        '  -- cm_deca.get_reserveaccountostat(b.id) PROVISION,'#9'--ehtiyyat' +
+        ' miqdari'
+      '   A.FIRSTOWNERID AS ID2,'
+      '   A.FIRSTOWNERNAME AS NAME2,'
+      '   A.SECONDOWNERID AS ID3,'
+      '   A.SECONDOWNERNAME AS NAME3,'
+      '   A.THIRDOWNERID AS ID4,'
+      '   A.THIRDOWNERNAME AS NAME4,'
+      '   B.ID as InternalID, -- INTERNAL FIELD'
+      
+        '   /*CM_COMMON.AccountNumber_Get(c.LOANACCID)*/  B.ID AS ACCOUNT' +
+        'NO ,'
+      '   V.VAL_NAME AS CURRENCY,'
+      '   cm_deca.get_creditinitialamount(b.id) AS INITIALSUM,'
+      '   cm_deca.get_creditlineamount(b.id) AS CRDLINESUM,'
+      '   D.REST + D.DUEREST AS DISOUSUM ,'
+      '   B.ANNUALYINTERESTRATE AS RATE,'
+      '   P.CODE AS PURPOSE,'
+      
+        '    decode(TRUNC(MONTHS_BETWEEN(B.DUEDATEFIRSTCONTRACT,B.DATEOFC' +
+        'ONCLUSION)),0,1,TRUNC(MONTHS_BETWEEN(B.DUEDATEFIRSTCONTRACT,B.DA' +
+        'TEOFCONCLUSION))) AS PERIODMONT ,'
+      '  to_char( B.DATEOFCONCLUSION,'#39'dd/mm/yyyy'#39') AS DATEGRANT,'
+      '  to_char( B.DUEDATEFIRSTCONTRACT,'#39'dd/mm/yyyy'#39') AS FIRSTCONTR,'
+      
+        '  to_char( DECODE(B.DUEDATELASTCONTRACT,null,B.DUEDATEFIRSTCONTR' +
+        'ACT,B.DUEDATELASTCONTRACT),'#39'dd/mm/yyyy'#39') AS LASTCONTR,'
+      
+        '   CM_DECA.DueDaysCount(:RDAT , B.DUEDATEFIRSTCONTRACT,b.id) AS ' +
+        'DAYSMAIN ,'
+      
+        '   CM_DECA.DueDaysCount(:RDAT , B.DUEDATEFIRSTCONTRACT,b.id) AS ' +
+        'DAYSINTRST ,'
+      '   D.DUEINTERESTREST+D.interestrest AS OIAPERIOD ,'
+      
+        ' --  CM_DECA.OiaForLastThreeMonths(:RDAT , B.DUEDATEFIRSTCONTRAC' +
+        'T,D.DUEINTERESTREST) AS OIATHREE ,'
+      '   0 AS PROLONGS ,'
+      '   E.CODE AS CLASSCODE,'
+      '   CM_DECA.Get_CreditStatus(B.ID,:RDAT) AS STATUSCODE ,'
+      
+        '   to_char(DECODE(G.TYPECODE,'#39'000'#39',null,G.TYPECODE)) AS COLLCODE' +
+        ','
+      '   F.ANYINFOTODISTING AS INFDISTING,'
+      '   D.PLEDGEPRICE AS MARKETSUM ,'
+      '   F.REGISTRYNO AS REGNO,'
+      '  to_char( F.REGISTRYDATE,'#39'dd/mm/yyyy'#39') AS REGDATE,'
+      '   F.REGISTRYAGENCY AS REGAGENCY'
+      'FROM'
+      '   CM_BOOROWERINFO A'
+      ' , CM_ACCOUNTS C'
+      ' , CM_RESERVE_TYPES E'
+      ' , CM_GUARANTEE F'
+      ' , CM_PORTFOLIO B'
+      ' , CM_PLEDGES G'
+      ' , CM_HISTORY D'
+      ' , OPERKURS O'
+      ' , AVALUTE V'
+      ' , CM_CATEGORIES P'
+      'WHERE'
+      '     (A.CREDITID = B.ID)'
+      ' AND (C.CREDITID = B.ID)'
+      ' AND (D.CREDITID = B.ID)'
+      ' AND (E.ID = D.RESERVEID)'
+      ' AND (F.CREDITID(+) = B.ID)'
+      ' AND (G.ID(+) = F.PLEDGEID)'
+      ' AND (D.HDATE=:HDATE)'
+      
+        ' AND ((B.CLOSEDATE IS NULL) or (B.CLOSEDATE between :EDATE and :' +
+        'HDATE) /*(B.CLOSEDATE >=:HDATE)*/)'
+      ' AND (O.DAT=:HDATE)'
+      ' AND (O.VAL_KOD=B.CURRENCY)'
+      '--AND (O.OSTAT * B.CREDITLINEAMOUNT >= 1000)'
+      ' AND (V.VALUTE=B.CURRENCY)'
+      ' AND (B.DATEOFCONCLUSION<=:HDATE)'
+      
+        ' AND (P.ID = B.CUSTOMERTYPE) --and cm_deca.get_creditinitialamou' +
+        'nt(b.id)>0'
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      '')
+    Optimize = False
+    Variables.Data = {
+      04000000030000000C0000003A00480044004100540045000C00000000000000
+      000000000C0000003A00450044004100540045000C0000000000000000000000
+      0A0000003A0052004400410054000C0000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      05000000300000000400000049004400010000000000080000004E0041004D00
+      45000100000000001400000043004F0055004E005400520043004F0044004500
+      0100000000001200000042004E004B0053005400410054005500530001000000
+      0000140000004400410054004F00460042004900520054004800010000000000
+      1400000050004C00410043004500420049005200540048000100000000000E00
+      0000500049004E0043004F004400450001000000000006000000470049004400
+      0100000000000A00000047004E0041004D004500010000000000080000004700
+      4900440032000100000000000C00000047004E0041004D004500320001000000
+      00000800000047004900440033000100000000000C00000047004E0041004D00
+      4500330001000000000014000000430052004500440049005400540059005000
+      4500010000000000140000004C00410053005400500041005900440041005400
+      010000000000140000004D0050004100590041004D004F0055004E0054000100
+      0000000012000000500052004F0056004900530049004F004E00010000000000
+      060000004900440032000100000000000A0000004E0041004D00450032000100
+      00000000060000004900440033000100000000000A0000004E0041004D004500
+      3300010000000000060000004900440034000100000000000A0000004E004100
+      4D00450034000100000000001400000049004E005400450052004E0041004C00
+      49004400010000000000120000004100430043004F0055004E0054004E004F00
+      01000000000010000000430055005200520045004E0043005900010000000000
+      1400000049004E0049005400490041004C00530055004D000100000000001400
+      00004300520044004C0049004E004500530055004D0001000000000010000000
+      4400490053004F005500530055004D0001000000000008000000520041005400
+      45000100000000000E00000050005500520050004F0053004500010000000000
+      1400000050004500520049004F0044004D004F004E0054000100000000001200
+      000044004100540045004700520041004E005400010000000000140000004600
+      490052005300540043004F004E0054005200010000000000120000004C004100
+      5300540043004F004E0054005200010000000000100000004400410059005300
+      4D00410049004E0001000000000014000000440041005900530049004E005400
+      520053005400010000000000120000004F004900410050004500520049004F00
+      4400010000000000100000004F00490041005400480052004500450001000000
+      000010000000500052004F004C004F004E004700530001000000000012000000
+      43004C0041005300530043004F00440045000100000000001400000053005400
+      410054005500530043004F00440045000100000000001000000043004F004C00
+      4C0043004F00440045000100000000001400000049004E004600440049005300
+      540049004E004700010000000000120000004D00410052004B00450054005300
+      55004D000100000000000A0000005200450047004E004F000100000000000E00
+      0000520045004700440041005400450001000000000012000000520045004700
+      4100470045004E0043005900010000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 80
+    Top = 200
+  end
+  object TagSettings: TOracleDataSet
+    SQL.Strings = (
+      
+        'SELECT a.rowid, a.fieldname, a.tagfirst, a.taglast, a.tagprefix,' +
+        ' a.tagsuffix,'
+      
+        '       a.alphafield, a.fieldgroup, a.num, a.usefield, a.parentgr' +
+        'oup'
+      '  FROM smart.cm_decasettings a'
+      'order by num')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000A000000120000004600490045004C0044004E0041004D0045000100
+      0000000010000000540041004700460049005200530054000100000000000E00
+      00005400410047004C0041005300540001000000000012000000540041004700
+      5000520045004600490058000100000000001200000054004100470053005500
+      46004600490058000100000000001400000041004C0050004800410046004900
+      45004C004400010000000000140000004600490045004C004400470052004F00
+      55005000010000000000060000004E0055004D00010000000000100000005500
+      530045004600490045004C004400010000000000160000005000410052004500
+      4E005400470052004F0055005000010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 464
+    Top = 200
+    object TagSettingsFIELDNAME: TWideStringField
+      FieldName = 'FIELDNAME'
+      Size = 400
+    end
+    object TagSettingsTAGFIRST: TWideStringField
+      FieldName = 'TAGFIRST'
+      Size = 400
+    end
+    object TagSettingsTAGLAST: TWideStringField
+      FieldName = 'TAGLAST'
+      Size = 400
+    end
+    object TagSettingsTAGPREFIX: TWideStringField
+      FieldName = 'TAGPREFIX'
+      Size = 400
+    end
+    object TagSettingsTAGSUFFIX: TWideStringField
+      FieldName = 'TAGSUFFIX'
+      Size = 400
+    end
+    object TagSettingsALPHAFIELD: TFloatField
+      FieldName = 'ALPHAFIELD'
+    end
+    object TagSettingsFIELDGROUP: TFloatField
+      FieldName = 'FIELDGROUP'
+    end
+    object TagSettingsNUM: TFloatField
+      FieldName = 'NUM'
+    end
+    object TagSettingsUSEFIELD: TFloatField
+      FieldName = 'USEFIELD'
+    end
+    object TagSettingsPARENTGROUP: TFloatField
+      FieldName = 'PARENTGROUP'
+    end
+  end
+  object OracleDataSet2: TOracleDataSet
+    SQL.Strings = (
+      'SELECT'
+      '   A.BOOROWERID AS ID,'
+      '   A.NAME AS NAME,'
+      '   A.COUNTRYCODE AS COUNTRCODE,'
+      '   A.BANKRUPTEYSTATUS AS BNKSTATUS,'
+      
+        '   cm_deca.get_custdateofbirth(b.boorowerid) AS DATOFBIRTH, --do' +
+        'gum tarixi'
+      
+        '   cm_deca.get_custplaceofbirth(b.boorowerid) AS PLACEBIRTH, --d' +
+        'ogum yeri'
+      '   A.pincode AS PINCODE,      --pin   kod'
+      '   A.guarantorid AS GID,      --zamin id'
+      '   a.guarantorname AS GNAME,  --zamin ad'
+      '   A.guarantorid2 AS GID2,    --zamin id2'
+      '   A.guarantorname2 AS GNAME2,--zamin ad2'
+      '   A.guarantorid3 AS GID3,    --zamin id3'
+      '   A.guarantorname3 AS GNAME3,--zamin ad3'
+      '   cm_deca.get_credittypes(b.id) CREDITTYPE,    --kreditin tipi'
+      
+        '   cm_deca.get_lastcreditpayment(b.id) LASTPAYDAT,  --sonuncu od' +
+        'enish tarixi'
+      
+        '   cm_deca.get_creditpaymentamount(b.id) MPAYAMOUNT,    --ayliq ' +
+        'odenish'
+      
+        '   cm_deca.get_reserveaccountostat(b.id) PROVISION, --ehtiyyat m' +
+        'iqdari'
+      '   /*A.FIRSTOWNERID*/'#39#39' AS ID2,'
+      '  /* A.FIRSTOWNERNAME*/'#39#39' AS NAME2,'
+      '   A.SECONDOWNERID AS ID3,'
+      '   A.SECONDOWNERNAME AS NAME3,'
+      '   A.THIRDOWNERID AS ID4,'
+      '   A.THIRDOWNERNAME AS NAME4,'
+      '   B.ID as InternalID, -- INTERNAL FIELD'
+      
+        '  /* CM_COMMON.AccountNumber_Get(c.LOANACCID)*/ b.id AS ACCOUNTN' +
+        'O ,'
+      '   V.VAL_NAME AS CURRENCY,'
+      '   cm_deca.get_creditinitialamount(b.id) AS INITIALSUM,'
+      '   cm_deca.get_creditlineamount(b.id) AS CRDLINESUM,'
+      '   D.REST + D.DUEREST AS DISOUSUM ,'
+      '   B.ANNUALYINTERESTRATE AS RATE,'
+      '   P.CODE AS PURPOSE,'
+      
+        '   TRUNC(MONTHS_BETWEEN(B.DUEDATEFIRSTCONTRACT,B.DATEOFCONCLUSIO' +
+        'N)) AS PERIODMONT ,'
+      '   B.DATEOFCONCLUSION AS DATEGRANT,'
+      '   B.DUEDATEFIRSTCONTRACT AS FIRSTCONTR,'
+      
+        '   DECODE(B.DUEDATELASTCONTRACT,null,B.DUEDATEFIRSTCONTRACT,B.DU' +
+        'EDATELASTCONTRACT) AS LASTCONTR,'
+      
+        '   CM_DECA.DueDaysCount('#39'19-oct-2010'#39' , B.DUEDATEFIRSTCONTRACT,b' +
+        '.id) AS DAYSMAIN ,'
+      
+        '   CM_DECA.DueDaysCount('#39'19-oct-2010'#39' , B.DUEDATEFIRSTCONTRACT,b' +
+        '.id) AS DAYSINTRST ,'
+      '   D.DUEINTERESTREST+D.interestrest AS OIAPERIOD ,'
+      
+        '   CM_DECA.OiaForLastThreeMonths('#39'19-oct-2010'#39' , B.DUEDATEFIRSTC' +
+        'ONTRACT,D.DUEINTERESTREST) AS OIATHREE ,'
+      '   0 AS PROLONGS ,'
+      '   E.CODE AS CLASSCODE,'
+      '   CM_DECA.Get_CreditStatus(B.ID,'#39'19-oct-2010'#39') AS STATUSCODE ,'
+      '   DECODE(G.TYPECODE,'#39'000'#39',null,G.TYPECODE) AS COLLCODE,'
+      '   F.ANYINFOTODISTING AS INFDISTING,'
+      '   D.PLEDGEPRICE * O.OSTAT AS MARKETSUM ,'
+      '   F.REGISTRYNO AS REGNO,'
+      '   F.REGISTRYDATE AS REGDATE,'
+      '   F.REGISTRYAGENCY AS REGAGENCY'
+      'FROM'
+      '   CM_BOOROWERINFO A'
+      ' , CM_ACCOUNTS C'
+      ' , CM_RESERVE_TYPES E'
+      ' , CM_GUARANTEE F'
+      ' , CM_PORTFOLIO B'
+      ' , CM_PLEDGES G'
+      ' , CM_HISTORY D'
+      ' , SB_OPERKURS O'
+      ' , SB_AVALUTE V'
+      ' , CM_CATEGORIES P'
+      'WHERE'
+      '     (A.CREDITID = B.ID)'
+      ' AND (C.CREDITID = B.ID)'
+      ' AND (D.CREDITID = B.ID)'
+      ' AND (E.ID = D.RESERVEID)'
+      ' AND (F.CREDITID = B.ID)'
+      ' AND (G.ID = F.PLEDGEID)'
+      ' AND (D.HDATE='#39'19-oct-2010'#39')'
+      
+        ' AND ((B.CLOSEDATE IS NULL) or (B.CLOSEDATE between '#39'19-oct-2010' +
+        #39' and '#39'19-oct-2010'#39'))'
+      ' AND (O.DAT='#39'19-oct-2010'#39')'
+      ' AND (O.VAL_KOD=B.CURRENCY)'
+      ' AND (V.VALUTE=B.CURRENCY)'
+      ' AND (B.DATEOFCONCLUSION<='#39'19-oct-2010'#39') '
+      ' AND (P.ID = B.CUSTOMERTYPE) and b.id=418')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000300000000400000049004400010000000000080000004E0041004D00
+      45000100000000001400000043004F0055004E005400520043004F0044004500
+      0100000000001200000042004E004B0053005400410054005500530001000000
+      0000140000004400410054004F00460042004900520054004800010000000000
+      1400000050004C00410043004500420049005200540048000100000000000E00
+      0000500049004E0043004F004400450001000000000006000000470049004400
+      0100000000000A00000047004E0041004D004500010000000000080000004700
+      4900440032000100000000000C00000047004E0041004D004500320001000000
+      00000800000047004900440033000100000000000C00000047004E0041004D00
+      4500330001000000000014000000430052004500440049005400540059005000
+      4500010000000000140000004C00410053005400500041005900440041005400
+      010000000000140000004D0050004100590041004D004F0055004E0054000100
+      0000000012000000500052004F0056004900530049004F004E00010000000000
+      060000004900440032000100000000000A0000004E0041004D00450032000100
+      00000000060000004900440033000100000000000A0000004E0041004D004500
+      3300010000000000060000004900440034000100000000000A0000004E004100
+      4D00450034000100000000001400000049004E005400450052004E0041004C00
+      49004400010000000000120000004100430043004F0055004E0054004E004F00
+      01000000000010000000430055005200520045004E0043005900010000000000
+      1400000049004E0049005400490041004C00530055004D000100000000001400
+      00004300520044004C0049004E004500530055004D0001000000000010000000
+      4400490053004F005500530055004D0001000000000008000000520041005400
+      45000100000000000E00000050005500520050004F0053004500010000000000
+      1400000050004500520049004F0044004D004F004E0054000100000000001200
+      000044004100540045004700520041004E005400010000000000140000004600
+      490052005300540043004F004E0054005200010000000000120000004C004100
+      5300540043004F004E0054005200010000000000100000004400410059005300
+      4D00410049004E0001000000000014000000440041005900530049004E005400
+      520053005400010000000000120000004F004900410050004500520049004F00
+      4400010000000000100000004F00490041005400480052004500450001000000
+      000010000000500052004F004C004F004E004700530001000000000012000000
+      43004C0041005300530043004F00440045000100000000001400000053005400
+      410054005500530043004F00440045000100000000001000000043004F004C00
+      4C0043004F00440045000100000000001400000049004E004600440049005300
+      540049004E004700010000000000120000004D00410052004B00450054005300
+      55004D000100000000000A0000005200450047004E004F000100000000000E00
+      0000520045004700440041005400450001000000000012000000520045004700
+      4100470045004E0043005900010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 464
+    Top = 296
+  end
+  object OracleDataSet3: TOracleDataSet
+    SQL.Strings = (
+      
+        'SELECT a.rowid, a.fieldname, a.tagfirst, a.taglast, a.tagprefix,' +
+        ' a.tagsuffix,'
+      
+        '       a.alphafield, a.fieldgroup, a.num, a.usefield, a.parentgr' +
+        'oup'
+      '  FROM smart.cm_decasettings a'
+      ''
+      'where a.fieldname not in('#39'NAME5'#39','#39'REGAGSY1'#39')'
+      'and fieldname=:fname'
+      ''
+      'order by num')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000C0000003A0046004E0041004D0045000500000000000000
+      00000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000A000000120000004600490045004C0044004E0041004D0045000100
+      0000000010000000540041004700460049005200530054000100000000000E00
+      00005400410047004C0041005300540001000000000012000000540041004700
+      5000520045004600490058000100000000001200000054004100470053005500
+      46004600490058000100000000001400000041004C0050004800410046004900
+      45004C004400010000000000140000004600490045004C004400470052004F00
+      55005000010000000000060000004E0055004D00010000000000100000005500
+      530045004600490045004C004400010000000000160000005000410052004500
+      4E005400470052004F0055005000010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 312
+    Top = 208
+  end
+  object OracleDataSet5_aqrar: TOracleDataSet
+    SQL.Strings = (
+      'SELECT'
+      '   nvl(A.BOOROWERID,0) AS ID,'
+      '   DECODE(A.NAME,'#39'&'#39','#39'_'#39',A.NAME)  AS NAME,'
+      '   A.COUNTRYCODE AS COUNTRCODE,'
+      '   A.BANKRUPTEYSTATUS AS BNKSTATUS,'
+      
+        '   to_char(cm_deca.get_custdateofbirth(b.boorowerid),'#39'dd/mm/yyyy' +
+        #39') AS DATOFBIRTH, --dogum tarixi'
+      
+        '   cm_deca.get_custplaceofbirth(b.boorowerid) AS PLACEBIRTH , --' +
+        'dogum yeri'
+      '   A.pincode AS PINCODE,            --pin kod'
+      '   g1.guarantorid AS GID,    --zamin id'
+      
+        '   g1.guarantorname AS GNAME,g1.cuntrycode GCUNTRYCODE,to_char(g' +
+        '1.dateofbirth,'#39'dd/mm/yyyy'#39')   GDATEOFBIRTH,g1.cuntry||'#39' '#39'||g1.ci' +
+        'ty GPLACE,nvl(g1.PINCODE,'#39' '#39') GPINCODE,    --zamin 1'
+      '   g2.guarantorid AS GID2,  --zamin 2'
+      
+        '   g2.guarantorname AS GNAME2, g2.cuntrycode GCUNTRYCODE2,to_cha' +
+        'r(g2.dateofbirth,'#39'dd/mm/yyyy'#39') GDATEOFBIRTH2,g2.cuntry||'#39' '#39'||g2.' +
+        'city GPLACE2,nvl(g2.PINCODE,'#39' '#39') GPINCODE2, --zamin 2'
+      '   g3.guarantorid AS GID3,  --zamin id3'
+      
+        '   g3.guarantorname AS GNAME3, g3.cuntrycode GCUNTRYCODE3,to_cha' +
+        'r(g3.dateofbirth,'#39'dd/mm/yyyy'#39') GDATEOFBIRTH3,g3.cuntry||'#39' '#39'||g3.' +
+        'city GPLACE3,nvl(g3.PINCODE,'#39' '#39') GPINCODE3, --zamin 3'
+      '   cm_deca.get_credittypes(b.id) CREDITTYPE,    --kreditin tipi'
+      
+        '   to_char(cm_deca.get_lastcreditpayment(b.id),'#39'dd/mm/yyyy'#39') LAS' +
+        'TPAYDAT,    --sonuncu odenish tarixi'
+      
+        '   cm_deca.get_creditpaymentamount(b.id) MPAYAMOUNT,    --ayliq ' +
+        'odenish'
+      
+        '   cm_deca.get_reserveaccountostat(b.id) PROVISION, --ehtiyyat m' +
+        'iqdari'
+      '   A.FIRSTOWNERID AS ID2,'
+      '   A.FIRSTOWNERNAME AS NAME2,'
+      '   A.SECONDOWNERID AS ID3,'
+      '   A.SECONDOWNERNAME AS NAME3,'
+      '   A.THIRDOWNERID AS ID4,'
+      '   A.THIRDOWNERNAME AS NAME4,'
+      '   B.ID as InternalID, -- INTERNAL FIELD'
+      
+        '  /* CM_COMMON.AccountNumber_Get(c.LOANACCID)*/b.id AS ACCOUNTNO' +
+        ' ,'
+      '   V.VAL_NAME AS CURRENCY,'
+      '   cm_deca.get_creditinitialamount(b.id) AS INITIALSUM,'
+      '   cm_deca.get_creditlineamount(b.id) AS CRDLINESUM,'
+      '   D.REST + D.DUEREST AS DISOUSUM ,'
+      '   B.ANNUALYINTERESTRATE AS RATE,'
+      '   P.CODE AS PURPOSE,'
+      
+        '   decode(TRUNC(MONTHS_BETWEEN(B.DUEDATEFIRSTCONTRACT,B.DATEOFCO' +
+        'NCLUSION)),0,1,TRUNC(MONTHS_BETWEEN(B.DUEDATEFIRSTCONTRACT,B.DAT' +
+        'EOFCONCLUSION))) AS PERIODMONT ,'
+      '   to_char(B.DATEOFCONCLUSION,'#39'dd/mm/yyyy'#39') AS DATEGRANT,'
+      
+        '   to_char(nvl(b.duedatelastcontract,b.duedatefirstcontract),'#39'dd' +
+        '/mm/yyyy'#39') AS FIRSTCONTR,'
+      
+        '   to_char( DECODE(B.DUEDATELASTCONTRACT,null,B.DUEDATEFIRSTCONT' +
+        'RACT,B.DUEDATELASTCONTRACT),'#39'dd/mm/yyyy'#39') AS LASTCONTR,'
+      
+        '   CM_DECA.DueDaysCount(:RDAT , B.DUEDATEFIRSTCONTRACT,b.id) /*d' +
+        '.dueday*/ AS DAYSMAIN ,'
+      '   cm_utils.Get_Gecgun_Faiz(b.id,:RDAT) AS DAYSINTRST ,'
+      '   D.DUEINTERESTREST+D.interestrest AS OIAPERIOD ,'
+      
+        '   CM_DECA.OiaForLastThreeMonths(:RDAT, B.DUEDATEFIRSTCONTRACT,D' +
+        '.DUEINTERESTREST) AS OIATHREE , '
+      '0 AS PROLONGS ,'
+      
+        '  case when  CM_DECA.DueDaysCount(:RDAT , B.DUEDATEFIRSTCONTRACT' +
+        ',b.id)<361 then E.CODE else '#39'006'#39' end AS CLASSCODE,'
+      '   CM_DECA.Get_CreditStatus(B.ID,:RDAT )AS STATUSCODE ,'
+      '   DECODE(G.TYPECODE,'#39'000'#39',null,G.TYPECODE) AS COLLCODE,'
+      '   F.ANYINFOTODISTING AS INFDISTING,'
+      '   D.PLEDGEPRICE  AS MARKETSUM ,'
+      '   F.REGISTRYNO AS REGNO,'
+      '  to_char( F.REGISTRYDATE,'#39'dd/mm/yyyy'#39') AS REGDATE,'
+      '   F.REGISTRYAGENCY AS REGAGENCY'
+      'FROM'
+      '   CM_BOOROWERINFO A'
+      ' , CM_ACCOUNTS C'
+      ' , CM_RESERVE_TYPES E'
+      ' , CM_GUARANTEE F'
+      ' , CM_PORTFOLIO B'
+      ' , CM_PLEDGES G'
+      ' , CM_HISTORY D'
+      ' , OPERKURS O'
+      ' , AVALUTE V'
+      ' ,CM_GUARANTOR g1,CM_GUARANTOR g2,CM_GUARANTOR g3'
+      ' , CM_CATEGORIES P'
+      'WHERE'
+      '     (A.CREDITID = B.ID)'
+      ' AND (C.CREDITID = B.ID)'
+      ' AND (D.CREDITID = B.ID)'
+      ' AND (E.ID = D.RESERVEID)'
+      ' AND (F.CREDITID(+) = B.ID)'
+      ' AND (G.ID(+) = F.PLEDGEID)'
+      ' AND (D.HDATE=:RDAT)'
+      
+        ' AND ((B.CLOSEDATE IS NULL) or (B.CLOSEDATE between :EDATE and :' +
+        'HDATE) /*(B.CLOSEDATE >=:HDATE)*/)'
+      ' AND (O.DAT=:RDAT)'
+      ' AND (O.VAL_KOD=B.CURRENCY)'
+      
+        ' and b.id=g1.creditid(+) and g1.cardid(+)=1  and b.usrgroup<>2 a' +
+        'nd b.credittype<>15'
+      ' and b.id=g2.creditid(+) and g2.cardid(+)=2'
+      
+        ' and b.id=g3.creditid(+) and g3.cardid(+)=3 and b.dateofgrant '#305's' +
+        ' not null '
+      
+        ' AND (V.VALUTE=B.CURRENCY)  /*and (b.id in(select creditid from ' +
+        'cm_tranches)or (b.credittype in(16,17))) */and b.credittype<>15'
+      ' AND (B.DATEOFCONCLUSION<=:RDAT) '
+      ' AND (P.ID = B.CUSTOMERTYPE) '
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ' '
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      '')
+    Optimize = False
+    Variables.Data = {
+      04000000030000000C0000003A00480044004100540045000C00000000000000
+      000000000C0000003A00450044004100540045000C0000000000000000000000
+      0A0000003A0052004400410054000C0000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      05000000300000000400000049004400010000000000080000004E0041004D00
+      45000100000000001400000043004F0055004E005400520043004F0044004500
+      0100000000001200000042004E004B0053005400410054005500530001000000
+      0000140000004400410054004F00460042004900520054004800010000000000
+      1400000050004C00410043004500420049005200540048000100000000000E00
+      0000500049004E0043004F004400450001000000000006000000470049004400
+      0100000000000A00000047004E0041004D004500010000000000080000004700
+      4900440032000100000000000C00000047004E0041004D004500320001000000
+      00000800000047004900440033000100000000000C00000047004E0041004D00
+      4500330001000000000014000000430052004500440049005400540059005000
+      4500010000000000140000004C00410053005400500041005900440041005400
+      010000000000140000004D0050004100590041004D004F0055004E0054000100
+      0000000012000000500052004F0056004900530049004F004E00010000000000
+      060000004900440032000100000000000A0000004E0041004D00450032000100
+      00000000060000004900440033000100000000000A0000004E0041004D004500
+      3300010000000000060000004900440034000100000000000A0000004E004100
+      4D00450034000100000000001400000049004E005400450052004E0041004C00
+      49004400010000000000120000004100430043004F0055004E0054004E004F00
+      01000000000010000000430055005200520045004E0043005900010000000000
+      1400000049004E0049005400490041004C00530055004D000100000000001400
+      00004300520044004C0049004E004500530055004D0001000000000010000000
+      4400490053004F005500530055004D0001000000000008000000520041005400
+      45000100000000000E00000050005500520050004F0053004500010000000000
+      1400000050004500520049004F0044004D004F004E0054000100000000001200
+      000044004100540045004700520041004E005400010000000000140000004600
+      490052005300540043004F004E0054005200010000000000120000004C004100
+      5300540043004F004E0054005200010000000000100000004400410059005300
+      4D00410049004E0001000000000014000000440041005900530049004E005400
+      520053005400010000000000120000004F004900410050004500520049004F00
+      4400010000000000100000004F00490041005400480052004500450001000000
+      000010000000500052004F004C004F004E004700530001000000000012000000
+      43004C0041005300530043004F00440045000100000000001400000053005400
+      410054005500530043004F00440045000100000000001000000043004F004C00
+      4C0043004F00440045000100000000001400000049004E004600440049005300
+      540049004E004700010000000000120000004D00410052004B00450054005300
+      55004D000100000000000A0000005200450047004E004F000100000000000E00
+      0000520045004700440041005400450001000000000012000000520045004700
+      4100470045004E0043005900010000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 80
+    Top = 288
+  end
+  object DecaData: TOracleDataSet
+    SQL.Strings = (
+      '/* Formatted on 25.12.2023 12:43:05 (QP5 v5.336) */'
+      'SELECT    replace(XMLELEMENT ('
+      '                   "Credit",'
+      '                   XMLELEMENT ('
+      '                       "Borrower",'
+      '                       XMLFOREST ('
+      
+        '                           cm_deca.get_cut_type/*SX*/(p.id) "id"' +
+        ','
+      
+        '                           DECODE (b.name, '#39'&'#39', '#39'_'#39', b.name) AS ' +
+        '"name",'
+      '                           b.countrycode AS "CountryCode",'
+      
+        '                           b.bankrupteystatus AS "BankruptcyStat' +
+        'us",'
+      '                           TO_CHAR ('
+      
+        '                               cm_deca.get_custdateofbirth (p.bo' +
+        'orowerid),'
+      
+        '                               '#39'dd/mm/yyyy'#39') AS "DateOfBirth",  ' +
+        '--dogum tarixi'
+      
+        '                           cm_deca.get_custplaceofbirth (p.booro' +
+        'werid)'
+      
+        '                               AS "PlaceOfBirth",               ' +
+        '  --dogum yeri'
+      '                           b.pincode AS "PinCode"),'
+      '                       (SELECT XMLELEMENT ('
+      '                                   "Guarantees",'
+      '                                   XMLAGG ('
+      '                                       XMLELEMENT ('
+      '                                           "Guarantee",'
+      '                                           XMLFOREST ('
+      
+        '                                               e.guarantorid AS ' +
+        '"id",'
+      
+        '                                               e.guarantorname A' +
+        'S "name",'
+      
+        '                                               e.cuntrycode "Cou' +
+        'ntryCode",'
+      
+        '                                               TO_CHAR (e.dateof' +
+        'birth,'
+      
+        '                                                        '#39'dd/mm/y' +
+        'yyy'#39')'
+      
+        '                                                   "DateOfBirth"' +
+        ','
+      
+        '                                               e.cuntry || '#39' '#39' |' +
+        '| e.city'
+      
+        '                                                   "PlaceOfBirth' +
+        '",'
+      
+        '                                               NVL (e.pincode, '#39 +
+        ' '#39') "PinCode")))) AS zamin'
+      '                        FROM cm_guarantor e'
+      '                        WHERE e.creditid = p.id)),'
+      
+        '                   XMLFOREST (/*azkr case when p.dateofconclusio' +
+        'n<'#39'03-mar-2023'#39' then p.numberofcredit else  to_char(p.id) end AS' +
+        ' "AccountNo",*/'
+      
+        '                             (case when p.tmnus_status is null a' +
+        'nd p.tmnus_portfstatus=1 then p.numberofcredit else  to_char(p.i' +
+        'd) end) AS "AccountNo",'
+      '                       v.val_name AS "CurrencyOfCredit",'
+      
+        '                       cm_deca.get_credittypes (p.id) AS "Credit' +
+        'Type",'
+      '                       cm_deca.get_creditinitialamount (p.id)'
+      '                           AS "InitialAmountOfCredit",'
+      '                       cm_deca.get_creditlineamount (p.id)'
+      '                           AS "CreditLineAmount",'
+      
+        '                       d.rest + d.duerest AS "DisoutAmountOfCred' +
+        'it",'
+      
+        '                       p.annualyinterestrate AS "AnnualInterestR' +
+        'ate",'
+      '                       c.code AS "PurposeOfCredit",'
+      
+        '                       CASE  WHEN p.tmnus_portfstatus = 1   AND ' +
+        'p.tmnus_status IS NULL '
+      '                        THEN '
+      '                        p.periodcontracts'
+      '                         ELSE  '
+      '                       DECODE ('
+      
+        '                           TRUNC ( MONTHS_BETWEEN (p.duedatefirs' +
+        'tcontract, p.dateofconclusion)),'
+      '                           0, 1,'
+      
+        '                           TRUNC ( MONTHS_BETWEEN (p.duedatefirs' +
+        'tcontract, p.dateofconclusion)))'
+      '                          END AS "CreditPeriodInMonths",'
+      
+        '                       TO_CHAR (p.dateofgrant, '#39'dd/mm/yyyy'#39') AS ' +
+        '"DateOfGrant",'
+      '                       TO_CHAR ('
+      '                          '
+      '                                p.duedatefirstcontract,'
+      
+        '                           '#39'dd/mm/yyyy'#39') AS "DueTimeFirstContrac' +
+        't",'
+      '                       TO_CHAR ('
+      '                           DECODE (p.duedatelastcontract,'
+      '                                   NULL, p.duedatefirstcontract,'
+      '                                   p.duedatelastcontract),'
+      
+        '                           '#39'dd/mm/yyyy'#39') AS "DueTimeLastContract' +
+        '",'
+      
+        '                      nvl( TO_CHAR (cm_deca.get_lastcreditpaymen' +
+        't (p.id),'
+      
+        '                                '#39'dd/mm/yyyy'#39'),'#39'@'#39') AS "LastPayme' +
+        'ntDate",'
+      '                       cm_deca.get_creditpaymentamount (p.id)'
+      '                           AS "MonthlyPaymentAmount",'
+      '                       cm_deca.duedayscount (d.hdate,'
+      
+        '                                             p.duedatefirstcontr' +
+        'act,'
+      
+        '                                             p.id) AS "DaysMainS' +
+        'umIsOverdue",'
+      '                       cm_utils.Get_GecgunFaiz (p.id, d.hdate)'
+      '                           AS "DaysInterestIsOverdue",'
+      '                       d.dueinterestrest + d.interestrest'
+      '                           AS "OiaForRepperiod",'
+      
+        '                       CASE  WHEN p.duedatelastcontract IS NOT N' +
+        'ULL THEN 1  ELSE 0 END AS "NumberOfProlongs",'
+      '                       CASE'
+      '                           WHEN cm_deca.duedayscount (d.hdate,'
+      
+        '                                                      p.duedatef' +
+        'irstcontract,'
+      '                                                      p.id) <'
+      '                                361'
+      '                           THEN'
+      '                               e.code'
+      '                           ELSE'
+      '                               '#39'006'#39
+      '                       END AS "CreditClassCode",'
+      '                       cm_deca.get_creditstatus (p.id, d.hdate)'
+      '                           AS "CreditStatusCode"),'
+      '                   (SELECT XMLELEMENT ('
+      '                           "Collateral",'
+      
+        '                           XMLELEMENT ("CollateralTypeCode", gr.' +
+        'typecode),'
+      '                           XMLELEMENT ("AnyInfoToDisting",'
+      '                                       gr.anyinfotodisting),'
+      
+        '                           XMLELEMENT ("MarketValue", gr.pledgep' +
+        'rice),'
+      
+        '                           XMLELEMENT ("RegistryNo", gr.registry' +
+        'no),'
+      
+        '                           XMLELEMENT ("RegistryDate", gr.regist' +
+        'rydate),'
+      
+        '                           XMLELEMENT ("RegistryAgency", gr.regi' +
+        'stryagency))'
+      '                  FROM (SELECT '#39'004'#39' AS typecode,'
+      '                               '#39#39' AS anyinfotodisting,'
+      '                               '#39#39' AS registryno,'
+      '                               0  AS pledgeprice,'
+      '                               '#39#39' AS registrydate,'
+      '                               '#39#39' AS pledgeid,'
+      '                               '#39#39' AS registryagency'
+      '                          FROM cm_guarantor z'
+      '                         WHERE     z.creditid = p.id'
+      
+        '                               AND z.creditid NOT IN (SELECT x.c' +
+        'reditid'
+      
+        '                                                        FROM cm_' +
+        'guarantee_credit x'
+      
+        '                                                       WHERE x.c' +
+        'reditid ='
+      
+        '                                                                ' +
+        ' z.creditid)'
+      '                               AND ROWNUM = 1'
+      '                                 UNION ALL'
+      '                        SELECT '#39'007'#39' AS typecode,'
+      '                               '#39#39' AS anyinfotodisting,'
+      '                               '#39#39' AS registryno,'
+      '                                0 AS pledgeprice,'
+      '                               '#39#39' AS registrydate,'
+      '                               '#39#39' AS pledgeid,'
+      '                               '#39#39' AS registryagency'
+      '                          FROM DUAL'
+      
+        '                          WHERE NOT EXISTS (  SELECT 1  FROM cm_' +
+        'guarantee_credit  WHERE creditid = p.id'
+      
+        '                         )AND NOT EXISTS  (  SELECT 1  FROM cm_g' +
+        'uarantor  WHERE creditid = p.id)'
+      ''
+      '                        UNION ALL'
+      '                        SELECT typecode,'
+      '                               anyinfotodisting,'
+      '                               registryno,'
+      '                               pledgeprice,'
+      
+        '                               TO_CHAR (f.registrydate, '#39'dd/mm/y' +
+        'yyy'#39')'
+      '                                   registrydate,'
+      '                               TO_CHAR (pledgeid) pledgeid,'
+      '                               registryagency'
+      
+        '                          FROM cm_guarantee_credit f, cm_pledges' +
+        ' g'
+      
+        '                         WHERE f.creditid = p.id AND g.id(+) = f' +
+        '.pledgeid'
+      
+        '                         ) gr) AS grov).getClobVal() ,'#39'@'#39','#39#39') AS' +
+        ' credit'
+      ''
+      'FROM cm_portfolio p,'
+      '     cm_boorowerinfo b,'
+      '     avalute v,'
+      '     cm_history d,'
+      '     cm_categories c,'
+      '     cm_reserve_types e'
+      'WHERE     p.id = b.creditid'
+      '      AND p.currency = v.valute'
+      '      AND p.id = d.creditid'
+      '  AND (D.HDATE=:RDAT)'
+      
+        ' AND ((p.CLOSEDATE IS NULL) or (p.CLOSEDATE between :EDATE and :' +
+        'HDATE) )'
+      '      AND c.id = p.customertype'
+      '      AND (e.id = d.reserveid)'
+      'and p.dateofgrant<=:RDAT'
+      ':filter1'
+      ':filter2'
+      ':filter3'
+      ':filter4'
+      ':filter5'
+      ':filter6'
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      '')
+    Optimize = False
+    Variables.Data = {
+      04000000090000000A0000003A0052004400410054000C000000000000000000
+      00000C0000003A00450044004100540045000C00000000000000000000000C00
+      00003A00480044004100540045000C0000000000000000000000100000003A00
+      460049004C005400450052003100010000000000000000000000100000003A00
+      460049004C005400450052003200010000000000000000000000100000003A00
+      460049004C005400450052003300010000000000000000000000100000003A00
+      460049004C005400450052003400010000000000000000000000100000003A00
+      460049004C005400450052003500010000000000000000000000100000003A00
+      460049004C005400450052003600010000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      05000000300000000400000049004400010000000000080000004E0041004D00
+      45000100000000001400000043004F0055004E005400520043004F0044004500
+      0100000000001200000042004E004B0053005400410054005500530001000000
+      0000140000004400410054004F00460042004900520054004800010000000000
+      1400000050004C00410043004500420049005200540048000100000000000E00
+      0000500049004E0043004F004400450001000000000006000000470049004400
+      0100000000000A00000047004E0041004D004500010000000000080000004700
+      4900440032000100000000000C00000047004E0041004D004500320001000000
+      00000800000047004900440033000100000000000C00000047004E0041004D00
+      4500330001000000000014000000430052004500440049005400540059005000
+      4500010000000000140000004C00410053005400500041005900440041005400
+      010000000000140000004D0050004100590041004D004F0055004E0054000100
+      0000000012000000500052004F0056004900530049004F004E00010000000000
+      060000004900440032000100000000000A0000004E0041004D00450032000100
+      00000000060000004900440033000100000000000A0000004E0041004D004500
+      3300010000000000060000004900440034000100000000000A0000004E004100
+      4D00450034000100000000001400000049004E005400450052004E0041004C00
+      49004400010000000000120000004100430043004F0055004E0054004E004F00
+      01000000000010000000430055005200520045004E0043005900010000000000
+      1400000049004E0049005400490041004C00530055004D000100000000001400
+      00004300520044004C0049004E004500530055004D0001000000000010000000
+      4400490053004F005500530055004D0001000000000008000000520041005400
+      45000100000000000E00000050005500520050004F0053004500010000000000
+      1400000050004500520049004F0044004D004F004E0054000100000000001200
+      000044004100540045004700520041004E005400010000000000140000004600
+      490052005300540043004F004E0054005200010000000000120000004C004100
+      5300540043004F004E0054005200010000000000100000004400410059005300
+      4D00410049004E0001000000000014000000440041005900530049004E005400
+      520053005400010000000000120000004F004900410050004500520049004F00
+      4400010000000000100000004F00490041005400480052004500450001000000
+      000010000000500052004F004C004F004E004700530001000000000012000000
+      43004C0041005300530043004F00440045000100000000001400000053005400
+      410054005500530043004F00440045000100000000001000000043004F004C00
+      4C0043004F00440045000100000000001400000049004E004600440049005300
+      540049004E004700010000000000120000004D00410052004B00450054005300
+      55004D000100000000000A0000005200450047004E004F000100000000000E00
+      0000520045004700440041005400450001000000000012000000520045004700
+      4100470045004E0043005900010000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 88
+    Top = 88
+  end
+  object DecaData_clos: TOracleDataSet
+    SQL.Strings = (
+      'SELECT'
+      '   nvl(A.BOOROWERID,0) AS ID,'
+      '   DECODE(A.NAME,'#39'&'#39','#39'_'#39',A.NAME)  AS NAME,'
+      '   A.COUNTRYCODE AS COUNTRCODE,'
+      '   A.BANKRUPTEYSTATUS AS BNKSTATUS,'
+      
+        '   to_char(cm_deca.get_custdateofbirth(b.boorowerid),'#39'dd/mm/yyyy' +
+        #39') AS DATOFBIRTH, --dogum tarixi'
+      
+        '   cm_deca.get_custplaceofbirth(b.boorowerid) AS PLACEBIRTH , --' +
+        'dogum yeri'
+      '   A.pincode AS PINCODE,            --pin kod'
+      '   g1.guarantorid AS GID,    --zamin id'
+      
+        '   g1.guarantorname AS GNAME,g1.cuntrycode GCUNTRYCODE,to_char(g' +
+        '1.dateofbirth,'#39'dd/mm/yyyy'#39')   GDATEOFBIRTH,g1.cuntry||'#39' '#39'||g1.ci' +
+        'ty GPLACE,nvl(g1.PINCODE,'#39' '#39') GPINCODE,    --zamin 1'
+      '   g2.guarantorid AS GID2,  --zamin 2'
+      
+        '   g2.guarantorname AS GNAME2, g2.cuntrycode GCUNTRYCODE2,to_cha' +
+        'r(g2.dateofbirth,'#39'dd/mm/yyyy'#39') GDATEOFBIRTH2,g2.cuntry||'#39' '#39'||g2.' +
+        'city GPLACE2,nvl(g2.PINCODE,'#39' '#39') GPINCODE2, --zamin 2'
+      '   g3.guarantorid AS GID3,  --zamin id3'
+      
+        '   g3.guarantorname AS GNAME3, g3.cuntrycode GCUNTRYCODE3,to_cha' +
+        'r(g3.dateofbirth,'#39'dd/mm/yyyy'#39') GDATEOFBIRTH3,g3.cuntry||'#39' '#39'||g3.' +
+        'city GPLACE3,nvl(g3.PINCODE,'#39' '#39') GPINCODE3, --zamin 3'
+      '   cm_deca.get_credittypes(b.id) CREDITTYPE,    --kreditin tipi'
+      
+        '   to_char(cm_deca.get_lastcreditpayment(b.id),'#39'dd/mm/yyyy'#39') LAS' +
+        'TPAYDAT,    --sonuncu odenish tarixi'
+      
+        '   cm_deca.get_creditpaymentamount(b.id) MPAYAMOUNT,    --ayliq ' +
+        'odenish'
+      
+        '   cm_deca.get_reserveaccountostat(b.id) PROVISION, --ehtiyyat m' +
+        'iqdari'
+      '   A.FIRSTOWNERID AS ID2,'
+      '   A.FIRSTOWNERNAME AS NAME2,'
+      '   A.SECONDOWNERID AS ID3,'
+      '   A.SECONDOWNERNAME AS NAME3,'
+      '   A.THIRDOWNERID AS ID4,'
+      '   A.THIRDOWNERNAME AS NAME4,'
+      '   B.ID as InternalID, -- INTERNAL FIELD'
+      
+        '  /* CM_COMMON.AccountNumber_Get(c.LOANACCID)*/b.id AS ACCOUNTNO' +
+        ' ,'
+      '   V.VAL_NAME AS CURRENCY,'
+      '   cm_deca.get_creditinitialamount(b.id) AS INITIALSUM,'
+      '   cm_deca.get_creditlineamount(b.id) AS CRDLINESUM,'
+      '   D.REST + D.DUEREST AS DISOUSUM ,'
+      '   B.ANNUALYINTERESTRATE AS RATE,'
+      '   P.CODE AS PURPOSE,'
+      
+        '   TRUNC(MONTHS_BETWEEN(B.DUEDATEFIRSTCONTRACT,B.DATEOFCONCLUSIO' +
+        'N)) AS PERIODMONT ,'
+      
+        '   to_char(/*B.DATEOFCONCLUSION*/B.dateofgrant,'#39'dd/mm/yyyy'#39') AS ' +
+        'DATEGRANT,'
+      '   to_char(B.DUEDATEFIRSTCONTRACT,'#39'dd/mm/yyyy'#39') AS FIRSTCONTR,'
+      
+        '   to_char( DECODE(B.DUEDATELASTCONTRACT,null,B.DUEDATEFIRSTCONT' +
+        'RACT,B.DUEDATELASTCONTRACT),'#39'dd/mm/yyyy'#39') AS LASTCONTR,'
+      
+        '  /* CM_DECA.DueDaysCount(:HDATE , B.DUEDATEFIRSTCONTRACT,b.id)*' +
+        '/cm_utils.Get_Gecgun(b.id,:HDATE) AS DAYSMAIN ,'
+      
+        '  /* CM_DECA.DueDaysCount(:HDATE , B.DUEDATEFIRSTCONTRACT,b.id)*' +
+        '/cm_utils.Get_Gecgun(b.id,:HDATE) AS DAYSINTRST ,'
+      '   D.DUEINTERESTREST+D.interestrest AS OIAPERIOD ,'
+      
+        '   CM_DECA.OiaForLastThreeMonths(:HDATE , B.DUEDATEFIRSTCONTRACT' +
+        ',D.DUEINTERESTREST) AS OIATHREE , '
+      '0 AS PROLONGS ,'
+      
+        '  case when   cm_utils.Get_Gecgun (B.ID,:HDATE)<361 then E.CODE ' +
+        'else '#39'006'#39' end AS CLASSCODE,'
+      '   CM_DECA.Get_CreditStatus(B.ID,:HDATE) AS STATUSCODE ,'
+      '   DECODE(G.TYPECODE,'#39'000'#39',null,G.TYPECODE) AS COLLCODE,'
+      '   F.ANYINFOTODISTING AS INFDISTING,'
+      '   D.PLEDGEPRICE  AS MARKETSUM ,'
+      '   F.REGISTRYNO AS REGNO,'
+      '  to_char( F.REGISTRYDATE,'#39'dd/mm/yyyy'#39') AS REGDATE,'
+      '   F.REGISTRYAGENCY AS REGAGENCY'
+      'FROM'
+      '   CM_BOOROWERINFO A'
+      ' , CM_ACCOUNTS C'
+      ' , CM_RESERVE_TYPES E'
+      ' , CM_GUARANTEE F'
+      ' , CM_PORTFOLIO B'
+      ' , CM_PLEDGES G'
+      ' , CM_HISTORY D'
+      ' , OPERKURS O'
+      ' , AVALUTE V'
+      ' ,CM_GUARANTOR g1,CM_GUARANTOR g2,CM_GUARANTOR g3'
+      ' , CM_CATEGORIES P'
+      'WHERE'
+      '     (A.CREDITID = B.ID)'
+      ' AND (C.CREDITID = B.ID)'
+      ' AND (D.CREDITID = B.ID)'
+      ' AND (E.ID = D.RESERVEID)'
+      ' AND (F.CREDITID(+) = B.ID)'
+      ' AND (G.ID(+) = F.PLEDGEID)'
+      ' AND (D.HDATE=:HDATE)'
+      ' AND B.CLOSEDATE between :EDATE and :HDATE'
+      ' AND (O.DAT=:HDATE)'
+      ' AND (O.VAL_KOD=B.CURRENCY)'
+      ' and b.id=g1.creditid(+) and g1.cardid(+)=1'
+      ' and b.id=g2.creditid(+) and g2.cardid(+)=2'
+      ' and b.id=g3.creditid(+) and g3.cardid(+)=3'
+      ' AND (V.VALUTE=B.CURRENCY) and b.credittype<>15'
+      
+        ' AND (B.DATEOFCONCLUSION<=:HDATE) and b.boorowerid not in(50,51,' +
+        '139,101,2841,41200)'
+      
+        ' AND (P.ID = B.CUSTOMERTYPE) --and cm_deca.get_creditinitialamou' +
+        'nt(b.id)>0'
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      '')
+    Optimize = False
+    Variables.Data = {
+      04000000020000000C0000003A00480044004100540045000C00000000000000
+      000000000C0000003A00450044004100540045000C0000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      05000000300000000400000049004400010000000000080000004E0041004D00
+      45000100000000001400000043004F0055004E005400520043004F0044004500
+      0100000000001200000042004E004B0053005400410054005500530001000000
+      0000140000004400410054004F00460042004900520054004800010000000000
+      1400000050004C00410043004500420049005200540048000100000000000E00
+      0000500049004E0043004F004400450001000000000006000000470049004400
+      0100000000000A00000047004E0041004D004500010000000000080000004700
+      4900440032000100000000000C00000047004E0041004D004500320001000000
+      00000800000047004900440033000100000000000C00000047004E0041004D00
+      4500330001000000000014000000430052004500440049005400540059005000
+      4500010000000000140000004C00410053005400500041005900440041005400
+      010000000000140000004D0050004100590041004D004F0055004E0054000100
+      0000000012000000500052004F0056004900530049004F004E00010000000000
+      060000004900440032000100000000000A0000004E0041004D00450032000100
+      00000000060000004900440033000100000000000A0000004E0041004D004500
+      3300010000000000060000004900440034000100000000000A0000004E004100
+      4D00450034000100000000001400000049004E005400450052004E0041004C00
+      49004400010000000000120000004100430043004F0055004E0054004E004F00
+      01000000000010000000430055005200520045004E0043005900010000000000
+      1400000049004E0049005400490041004C00530055004D000100000000001400
+      00004300520044004C0049004E004500530055004D0001000000000010000000
+      4400490053004F005500530055004D0001000000000008000000520041005400
+      45000100000000000E00000050005500520050004F0053004500010000000000
+      1400000050004500520049004F0044004D004F004E0054000100000000001200
+      000044004100540045004700520041004E005400010000000000140000004600
+      490052005300540043004F004E0054005200010000000000120000004C004100
+      5300540043004F004E0054005200010000000000100000004400410059005300
+      4D00410049004E0001000000000014000000440041005900530049004E005400
+      520053005400010000000000120000004F004900410050004500520049004F00
+      4400010000000000100000004F00490041005400480052004500450001000000
+      000010000000500052004F004C004F004E004700530001000000000012000000
+      43004C0041005300530043004F00440045000100000000001400000053005400
+      410054005500530043004F00440045000100000000001000000043004F004C00
+      4C0043004F00440045000100000000001400000049004E004600440049005300
+      540049004E004700010000000000120000004D00410052004B00450054005300
+      55004D000100000000000A0000005200450047004E004F000100000000000E00
+      0000520045004700440041005400450001000000000012000000520045004700
+      4100470045004E0043005900010000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 624
+    Top = 144
+  end
+  object DecaData_aq: TOracleDataSet
+    SQL.Strings = (
+      'SELECT'
+      '   nvl(A.BOOROWERID,0) AS ID,'
+      '   DECODE(A.NAME,'#39'&'#39','#39'_'#39',A.NAME)  AS NAME,'
+      '   A.COUNTRYCODE AS COUNTRCODE,'
+      '   A.BANKRUPTEYSTATUS AS BNKSTATUS,'
+      
+        '   to_char(cm_deca.get_custdateofbirth(b.boorowerid),'#39'dd/mm/yyyy' +
+        #39') AS DATOFBIRTH, --dogum tarixi'
+      
+        '   cm_deca.get_custplaceofbirth(b.boorowerid) AS PLACEBIRTH , --' +
+        'dogum yeri'
+      '   A.pincode AS PINCODE,            --pin kod'
+      '   g1.guarantorid AS GID,    --zamin id'
+      
+        '   g1.guarantorname AS GNAME,g1.cuntrycode GCUNTRYCODE,to_char(g' +
+        '1.dateofbirth,'#39'dd/mm/yyyy'#39') GDATEOFBIRTH,g1.cuntry||'#39' '#39'||g1.city' +
+        ' GPLACE,g1.PINCODE GPINCODE,    --zamin 1'
+      '   g2.guarantorid AS GID2,  --zamin 2'
+      
+        '   g2.guarantorname AS GNAME2, g2.cuntrycode GCUNTRYCODE2,to_cha' +
+        'r(g2.dateofbirth,'#39'dd/mm/yyyy'#39') GDATEOFBIRTH2,g2.cuntry||'#39' '#39'||g2.' +
+        'city GPLACE2,g2.PINCODE GPINCODE2, --zamin 2'
+      '   g3.guarantorid AS GID3,  --zamin id3'
+      
+        '   g3.guarantorname AS GNAME3, g3.cuntrycode GCUNTRYCODE3,to_cha' +
+        'r(g3.dateofbirth,'#39'dd/mm/yyyy'#39') GDATEOFBIRTH3,g3.cuntry||'#39' '#39'||g3.' +
+        'city GPLACE3,g3.PINCODE GPINCODE3, --zamin 3'
+      '   cm_deca.get_credittypes(b.id) CREDITTYPE,    --kreditin tipi'
+      
+        '   to_char(cm_deca.get_lastcreditpayment(b.id),'#39'dd/mm/yyyy'#39') LAS' +
+        'TPAYDAT,    --sonuncu odenish tarixi'
+      
+        '   cm_deca.get_creditpaymentamount(b.id) MPAYAMOUNT,    --ayliq ' +
+        'odenish'
+      
+        '   cm_deca.get_reserveaccountostat(b.id) PROVISION, --ehtiyyat m' +
+        'iqdari'
+      '   A.FIRSTOWNERID AS ID2,'
+      '   A.FIRSTOWNERNAME AS NAME2,'
+      '   A.SECONDOWNERID AS ID3,'
+      '   A.SECONDOWNERNAME AS NAME3,'
+      '   A.THIRDOWNERID AS ID4,'
+      '   A.THIRDOWNERNAME AS NAME4,'
+      '   B.ID as InternalID, -- INTERNAL FIELD'
+      
+        '  /* CM_COMMON.AccountNumber_Get(c.LOANACCID)*/b.id AS ACCOUNTNO' +
+        ' ,'
+      '   V.VAL_NAME AS CURRENCY,'
+      '   cm_deca.get_creditinitialamount(b.id) AS INITIALSUM,'
+      '   cm_deca.get_creditlineamount(b.id) AS CRDLINESUM,'
+      '   D.REST + D.DUEREST AS DISOUSUM ,'
+      '   B.ANNUALYINTERESTRATE AS RATE,'
+      '   P.CODE AS PURPOSE,'
+      
+        '   TRUNC(MONTHS_BETWEEN(B.DUEDATEFIRSTCONTRACT,B.DATEOFCONCLUSIO' +
+        'N)) AS PERIODMONT ,'
+      '   to_char(B.DATEOFCONCLUSION,'#39'dd/mm/yyyy'#39') AS DATEGRANT,'
+      '   to_char(B.DUEDATEFIRSTCONTRACT,'#39'dd/mm/yyyy'#39') AS FIRSTCONTR,'
+      
+        '   to_char( DECODE(B.DUEDATELASTCONTRACT,null,B.DUEDATEFIRSTCONT' +
+        'RACT,B.DUEDATELASTCONTRACT),'#39'dd/mm/yyyy'#39') AS LASTCONTR,'
+      
+        '  /* CM_DECA.DueDaysCount(:HDATE , B.DUEDATEFIRSTCONTRACT,b.id)*' +
+        '/cm_utils.Get_Gecgun(b.id,:HDATE) AS DAYSMAIN ,'
+      
+        '  /* CM_DECA.DueDaysCount(:HDATE , B.DUEDATEFIRSTCONTRACT,b.id)*' +
+        '/cm_utils.Get_Gecgun(b.id,:HDATE) AS DAYSINTRST ,'
+      '   D.DUEINTERESTREST+D.interestrest AS OIAPERIOD ,'
+      
+        '   CM_DECA.OiaForLastThreeMonths(:HDATE , B.DUEDATEFIRSTCONTRACT' +
+        ',D.DUEINTERESTREST) AS OIATHREE , '
+      '0 AS PROLONGS ,'
+      
+        '  case when   cm_utils.Get_Gecgun (B.ID,:HDATE)<361 then E.CODE ' +
+        'else '#39'006'#39' end AS CLASSCODE,'
+      '   CM_DECA.Get_CreditStatus(B.ID,:HDATE) AS STATUSCODE ,'
+      '   DECODE(G.TYPECODE,'#39'000'#39',null,G.TYPECODE) AS COLLCODE,'
+      '   substr(F.ANYINFOTODISTING,0,200) AS INFDISTING,'
+      '   D.PLEDGEPRICE  AS MARKETSUM ,'
+      '   F.REGISTRYNO AS REGNO,'
+      '  to_char( F.REGISTRYDATE,'#39'dd/mm/yyyy'#39') AS REGDATE,'
+      '   F.REGISTRYAGENCY AS REGAGENCY'
+      'FROM'
+      '   CM_BOOROWERINFO A'
+      ' , CM_ACCOUNTS C'
+      ' , CM_RESERVE_TYPES E'
+      ' , CM_GUARANTEE F'
+      ' , CM_PORTFOLIO B'
+      ' , CM_PLEDGES G'
+      ' , smart.cm_history D'
+      ' , OPERKURS O'
+      ' , AVALUTE V'
+      ' ,CM_GUARANTOR g1,CM_GUARANTOR g2,CM_GUARANTOR g3'
+      ' , CM_CATEGORIES P'
+      'WHERE'
+      '     (A.CREDITID = B.ID)'
+      ' AND (C.CREDITID = B.ID)'
+      ' AND (D.CREDITID = B.ID)'
+      ' AND (E.ID = D.RESERVEID)'
+      ' AND (F.CREDITID(+) = B.ID)'
+      ' AND (G.ID(+) = F.PLEDGEID)'
+      ' AND (D.HDATE=:HDATE)'
+      
+        ' AND ((B.CLOSEDATE IS NULL) or (B.CLOSEDATE between :EDATE and :' +
+        'HDATE) /*(B.CLOSEDATE >=:HDATE)*/)'
+      ' AND (O.DAT=:HDATE)'
+      ' AND (O.VAL_KOD=B.CURRENCY)'
+      ' and b.id=g1.creditid(+) and g1.cardid(+)=1'
+      ' and b.id=g2.creditid(+) and g2.cardid(+)=2'
+      ' and b.id=g3.creditid(+) and g3.cardid(+)=3'
+      ' AND (V.VALUTE=B.CURRENCY) and b.usrgroup<>2'
+      ' AND (B.DATEOFCONCLUSION<=:HDATE)'
+      ' AND (P.ID = B.CUSTOMERTYPE) and dateofgrant is not null'
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      '')
+    Optimize = False
+    Variables.Data = {
+      04000000020000000C0000003A00480044004100540045000C00000000000000
+      000000000C0000003A00450044004100540045000C0000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      05000000300000000400000049004400010000000000080000004E0041004D00
+      45000100000000001400000043004F0055004E005400520043004F0044004500
+      0100000000001200000042004E004B0053005400410054005500530001000000
+      0000140000004400410054004F00460042004900520054004800010000000000
+      1400000050004C00410043004500420049005200540048000100000000000E00
+      0000500049004E0043004F004400450001000000000006000000470049004400
+      0100000000000A00000047004E0041004D004500010000000000080000004700
+      4900440032000100000000000C00000047004E0041004D004500320001000000
+      00000800000047004900440033000100000000000C00000047004E0041004D00
+      4500330001000000000014000000430052004500440049005400540059005000
+      4500010000000000140000004C00410053005400500041005900440041005400
+      010000000000140000004D0050004100590041004D004F0055004E0054000100
+      0000000012000000500052004F0056004900530049004F004E00010000000000
+      060000004900440032000100000000000A0000004E0041004D00450032000100
+      00000000060000004900440033000100000000000A0000004E0041004D004500
+      3300010000000000060000004900440034000100000000000A0000004E004100
+      4D00450034000100000000001400000049004E005400450052004E0041004C00
+      49004400010000000000120000004100430043004F0055004E0054004E004F00
+      01000000000010000000430055005200520045004E0043005900010000000000
+      1400000049004E0049005400490041004C00530055004D000100000000001400
+      00004300520044004C0049004E004500530055004D0001000000000010000000
+      4400490053004F005500530055004D0001000000000008000000520041005400
+      45000100000000000E00000050005500520050004F0053004500010000000000
+      1400000050004500520049004F0044004D004F004E0054000100000000001200
+      000044004100540045004700520041004E005400010000000000140000004600
+      490052005300540043004F004E0054005200010000000000120000004C004100
+      5300540043004F004E0054005200010000000000100000004400410059005300
+      4D00410049004E0001000000000014000000440041005900530049004E005400
+      520053005400010000000000120000004F004900410050004500520049004F00
+      4400010000000000100000004F00490041005400480052004500450001000000
+      000010000000500052004F004C004F004E004700530001000000000012000000
+      43004C0041005300530043004F00440045000100000000001400000053005400
+      410054005500530043004F00440045000100000000001000000043004F004C00
+      4C0043004F00440045000100000000001400000049004E004600440049005300
+      540049004E004700010000000000120000004D00410052004B00450054005300
+      55004D000100000000000A0000005200450047004E004F000100000000000E00
+      0000520045004700440041005400450001000000000012000000520045004700
+      4100470045004E0043005900010000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 192
+    Top = 280
+  end
+  object OracleDataSet4old: TOracleDataSet
+    SQL.Strings = (
+      'SELECT'
+      '   nvl(A.BOOROWERID,0) AS ID,'
+      '   DECODE(A.NAME,'#39'&'#39','#39'_'#39',A.NAME)  AS NAME,'
+      '   A.COUNTRYCODE AS COUNTRCODE,'
+      '   A.BANKRUPTEYSTATUS AS BNKSTATUS,'
+      
+        '   to_char(cm_deca.get_custdateofbirth(b.boorowerid),'#39'dd/mm/yyyy' +
+        #39') AS DATOFBIRTH, --dogum tarixi'
+      
+        '   cm_deca.get_custplaceofbirth(b.boorowerid) AS PLACEBIRTH , --' +
+        'dogum yeri'
+      '   A.pincode AS PINCODE,            --pin kod'
+      '   g1.guarantorid AS GID,    --zamin id'
+      
+        '   g1.guarantorname AS GNAME,g1.cuntrycode GCUNTRYCODE,to_char(g' +
+        '1.dateofbirth,'#39'dd/mm/yyyy'#39')   GDATEOFBIRTH,g1.cuntry||'#39' '#39'||g1.ci' +
+        'ty GPLACE,nvl(g1.PINCODE,'#39' '#39') GPINCODE,    --zamin 1'
+      '   g2.guarantorid AS GID2,  --zamin 2'
+      
+        '   g2.guarantorname AS GNAME2, g2.cuntrycode GCUNTRYCODE2,to_cha' +
+        'r(g2.dateofbirth,'#39'dd/mm/yyyy'#39') GDATEOFBIRTH2,g2.cuntry||'#39' '#39'||g2.' +
+        'city GPLACE2,nvl(g2.PINCODE,'#39' '#39') GPINCODE2, --zamin 2'
+      '   g3.guarantorid AS GID3,  --zamin id3'
+      
+        '   g3.guarantorname AS GNAME3, g3.cuntrycode GCUNTRYCODE3,to_cha' +
+        'r(g3.dateofbirth,'#39'dd/mm/yyyy'#39') GDATEOFBIRTH3,g3.cuntry||'#39' '#39'||g3.' +
+        'city GPLACE3,nvl(g3.PINCODE,'#39' '#39') GPINCODE3, --zamin 3'
+      '   cm_deca.get_credittypes(b.id) CREDITTYPE,    --kreditin tipi'
+      
+        '   to_char(cm_deca.get_lastcreditpayment(b.id),'#39'dd/mm/yyyy'#39') LAS' +
+        'TPAYDAT,    --sonuncu odenish tarixi'
+      
+        '   cm_deca.get_creditpaymentamount(b.id) MPAYAMOUNT,    --ayliq ' +
+        'odenish'
+      
+        '   cm_deca.get_reserveaccountostat(b.id) PROVISION, --ehtiyyat m' +
+        'iqdari'
+      '   A.FIRSTOWNERID AS ID2,'
+      '   A.FIRSTOWNERNAME AS NAME2,'
+      '   A.SECONDOWNERID AS ID3,'
+      '   A.SECONDOWNERNAME AS NAME3,'
+      '   A.THIRDOWNERID AS ID4,'
+      '   A.THIRDOWNERNAME AS NAME4,'
+      '   B.ID as InternalID, -- INTERNAL FIELD'
+      
+        '  /* cm_COMMON.AccountNumber_Get(c.LOANACCID)*/b.id AS ACCOUNTNO' +
+        ' ,'
+      '   V.VAL_NAME AS CURRENCY,'
+      '   cm_deca.get_creditinitialamount(b.id) AS INITIALSUM,'
+      '   cm_deca.get_creditlineamount(b.id) AS CRDLINESUM,'
+      '   D.REST + D.DUEREST AS DISOUSUM ,'
+      '   B.ANNUALYINTERESTRATE AS RATE,'
+      '   P.CODE AS PURPOSE,'
+      
+        '   decode(TRUNC(MONTHS_BETWEEN(B.DUEDATEFIRSTCONTRACT,B.DATEOFCO' +
+        'NCLUSION)),0,1,TRUNC(MONTHS_BETWEEN(B.DUEDATEFIRSTCONTRACT,B.DAT' +
+        'EOFCONCLUSION))) AS PERIODMONT ,'
+      '   to_char(B.DATEOFCONCLUSION,'#39'dd/mm/yyyy'#39') AS DATEGRANT,'
+      
+        '   to_char(nvl(b.duedatelastcontract,b.duedatefirstcontract),'#39'dd' +
+        '/mm/yyyy'#39') AS FIRSTCONTR,'
+      
+        '   to_char( DECODE(B.DUEDATELASTCONTRACT,null,B.DUEDATEFIRSTCONT' +
+        'RACT,B.DUEDATELASTCONTRACT),'#39'dd/mm/yyyy'#39') AS LASTCONTR,'
+      
+        '   cm_DECA.DueDaysCount(:RDAT , B.DUEDATEFIRSTCONTRACT,b.id) /*d' +
+        '.dueday*/ AS DAYSMAIN,'
+      
+        '   cm_DECA.DueDaysCount(:RDAT  , B.DUEDATEFIRSTCONTRACT,b.id)/*d' +
+        '.dueday*/ AS DAYSINTRST,'
+      '   D.DUEINTERESTREST+D.interestrest AS OIAPERIOD ,'
+      
+        '   cm_DECA.OiaForLastThreeMonths(:RDAT, B.DUEDATEFIRSTCONTRACT,D' +
+        '.DUEINTERESTREST) AS OIATHREE ,'
+      '0 AS PROLONGS ,'
+      
+        '  case when  cm_DECA.DueDaysCount(:RDAT , B.DUEDATEFIRSTCONTRACT' +
+        ',b.id)<361 then E.CODE else '#39'006'#39' end AS CLASSCODE,'
+      '   cm_DECA.Get_CreditStatus(B.ID,:RDAT )AS STATUSCODE ,'
+      '   --DECODE(G.TYPECODE,'#39'000'#39',null,G.TYPECODE) AS COLLCODE,'
+      '   nvl(G.TYPECODE,'#39'007'#39') AS COLLCODE,'
+      '   F.ANYINFOTODISTING AS INFDISTING,'
+      '   D.PLEDGEPRICE  AS MARKETSUM ,'
+      '   F.REGISTRYNO AS REGNO,'
+      '  to_char( F.REGISTRYDATE,'#39'dd/mm/yyyy'#39') AS REGDATE,'
+      '   F.REGISTRYAGENCY AS REGAGENCY'
+      'FROM'
+      '   cm_BOOROWERINFO A'
+      ' , cm_ACCOUNTS C'
+      ' , cm_RESERVE_TYPES E'
+      ' , cm_GUARANTEE F'
+      ' , cm_PORTFOLIO B'
+      ' , cm_PLEDGES G'
+      ' , cm_HISTORY D'
+      ' , OPERKURS O'
+      ' , AVALUTE V'
+      ' ,cm_GUARANTOR g1,cm_GUARANTOR g2,cm_GUARANTOR g3'
+      ' , cm_CATEGORIES P'
+      'WHERE'
+      '     (A.CREDITID = B.ID)'
+      ' AND (C.CREDITID = B.ID)'
+      ' AND (D.CREDITID = B.ID)'
+      ' AND (E.ID = D.RESERVEID)'
+      ' AND (F.CREDITID(+) = B.ID)'
+      ' AND (G.ID(+) = F.PLEDGEID)'
+      ' AND (D.HDATE=:RDAT)'
+      
+        ' AND ((B.CLOSEDATE IS NULL) or (B.CLOSEDATE between :EDATE and :' +
+        'HDATE) /*(B.CLOSEDATE >=:HDATE)*/)'
+      ' AND (O.DAT=:RDAT)'
+      ' AND (O.VAL_KOD=B.CURRENCY)'
+      ' and b.id=g1.creditid(+) and g1.cardid(+)=1'
+      ' and b.id=g2.creditid(+) and g2.cardid(+)=2'
+      ' and b.id=g3.creditid(+) and g3.cardid(+)=3'
+      ' AND (V.VALUTE=B.CURRENCY) '
+      ' AND (B.DATEOFCONCLUSION<=:RDAT) '
+      ' AND (P.ID = B.CUSTOMERTYPE) '
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      '')
+    Optimize = False
+    Variables.Data = {
+      04000000030000000A0000003A0052004400410054000C000000000000000000
+      00000C0000003A00450044004100540045000C00000000000000000000000C00
+      00003A00480044004100540045000C0000000000000000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 512
+    Top = 64
+  end
+  object OracleDataSet5old: TOracleDataSet
+    SQL.Strings = (
+      'SELECT'
+      '   nvl(A.BOOROWERID,0) AS ID,'
+      '   DECODE(A.NAME,'#39'&'#39','#39'_'#39',A.NAME)  AS NAME,'
+      '   A.COUNTRYCODE AS COUNTRCODE,'
+      '   A.BANKRUPTEYSTATUS AS BNKSTATUS,'
+      
+        '   to_char(cm_deca.get_custdateofbirth(b.boorowerid),'#39'dd/mm/yyyy' +
+        #39') AS DATOFBIRTH, --dogum tarixi'
+      
+        '   cm_deca.get_custplaceofbirth(b.boorowerid) AS PLACEBIRTH , --' +
+        'dogum yeri'
+      '   A.pincode AS PINCODE,            --pin kod'
+      '   g1.guarantorid AS GID,    --zamin id'
+      
+        '   g1.guarantorname AS GNAME,g1.cuntrycode GCUNTRYCODE,to_char(g' +
+        '1.dateofbirth,'#39'dd/mm/yyyy'#39')   GDATEOFBIRTH,g1.cuntry||'#39' '#39'||g1.ci' +
+        'ty GPLACE,nvl(g1.PINCODE,'#39' '#39') GPINCODE,    --zamin 1'
+      '   g2.guarantorid AS GID2,  --zamin 2'
+      
+        '   g2.guarantorname AS GNAME2, g2.cuntrycode GCUNTRYCODE2,to_cha' +
+        'r(g2.dateofbirth,'#39'dd/mm/yyyy'#39') GDATEOFBIRTH2,g2.cuntry||'#39' '#39'||g2.' +
+        'city GPLACE2,nvl(g2.PINCODE,'#39' '#39') GPINCODE2, --zamin 2'
+      '   g3.guarantorid AS GID3,  --zamin id3'
+      
+        '   g3.guarantorname AS GNAME3, g3.cuntrycode GCUNTRYCODE3,to_cha' +
+        'r(g3.dateofbirth,'#39'dd/mm/yyyy'#39') GDATEOFBIRTH3,g3.cuntry||'#39' '#39'||g3.' +
+        'city GPLACE3,nvl(g3.PINCODE,'#39' '#39') GPINCODE3, --zamin 3,'
+      '    g4.guarantorid AS GID4,  --zamin id4'
+      
+        '   g4.guarantorname AS GNAME4, g4.cuntrycode GCUNTRYCODE4,to_cha' +
+        'r(g4.dateofbirth,'#39'dd/mm/yyyy'#39') GDATEOFBIRTH4,g4.cuntry||'#39' '#39'||g4.' +
+        'city GPLACE4,nvl(g4.PINCODE,'#39' '#39') GPINCODE4, --zamin 4'
+      '   cm_deca.get_credittypes(b.id) CREDITTYPE,    --kreditin tipi'
+      
+        '   to_char(cm_deca.get_lastcreditpayment(b.id),'#39'dd/mm/yyyy'#39') LAS' +
+        'TPAYDAT,    --sonuncu odenish tarixi'
+      
+        '   cm_deca.get_creditpaymentamount(b.id) MPAYAMOUNT,    --ayliq ' +
+        'odenish'
+      
+        '   cm_deca.get_reserveaccountostat(b.id) PROVISION, --ehtiyyat m' +
+        'iqdari'
+      '   A.FIRSTOWNERID AS ID2,'
+      '   A.FIRSTOWNERNAME AS NAME2,'
+      '   A.SECONDOWNERID AS ID3,'
+      '   A.SECONDOWNERNAME AS NAME3,'
+      '   A.THIRDOWNERID AS ID4,'
+      '   A.THIRDOWNERNAME AS NAME4,'
+      '   B.ID as InternalID, -- INTERNAL FIELD'
+      
+        '   case when B.DATEOFCONCLUSION<'#39'03-mar-2023'#39' then b.numberofcre' +
+        'dit else to_char(B.ID)/*CM_COMMON.AccountNumber_Get(c.LOANACCID)' +
+        '*/ end AS ACCOUNTNO ,'
+      '   V.VAL_NAME AS CURRENCY,'
+      '   cm_deca.get_creditinitialamount(b.id) AS INITIALSUM,'
+      '   cm_deca.get_creditlineamount(b.id) AS CRDLINESUM,'
+      '   D.REST + D.DUEREST AS DISOUSUM ,'
+      '   B.ANNUALYINTERESTRATE AS RATE,'
+      '   P.CODE AS PURPOSE,'
+      
+        '   decode(TRUNC(MONTHS_BETWEEN(B.DUEDATEFIRSTCONTRACT,B.DATEOFCO' +
+        'NCLUSION)),0,1,TRUNC(MONTHS_BETWEEN(B.DUEDATEFIRSTCONTRACT,B.DAT' +
+        'EOFCONCLUSION))) AS PERIODMONT ,'
+      
+        '   to_char(B.dateofgrant/*B.DATEOFCONCLUSION*/,'#39'dd/mm/yyyy'#39') AS ' +
+        'DATEGRANT,'
+      
+        '   to_char(nvl(b.duedatelastcontract,b.duedatefirstcontract),'#39'dd' +
+        '/mm/yyyy'#39') AS FIRSTCONTR,'
+      
+        '   to_char( DECODE(B.DUEDATELASTCONTRACT,null,B.DUEDATEFIRSTCONT' +
+        'RACT,B.DUEDATELASTCONTRACT),'#39'dd/mm/yyyy'#39') AS LASTCONTR,'
+      
+        '   CM_DECA.DueDaysCount(:RDAT , B.DUEDATEFIRSTCONTRACT,b.id) /*d' +
+        '.dueday*/ AS DAYSMAIN ,'
+      
+        '   CM_DECA.DueDaysCount(:RDAT  , B.DUEDATEFIRSTCONTRACT,b.id)/*d' +
+        '.dueday*/ AS DAYSINTRST ,'
+      '   D.DUEINTERESTREST+D.interestrest AS OIAPERIOD ,'
+      
+        '   CM_DECA.OiaForLastThreeMonths(:RDAT, B.DUEDATEFIRSTCONTRACT,D' +
+        '.DUEINTERESTREST) AS OIATHREE , '
+      '0 AS PROLONGS ,'
+      
+        '  case when  CM_DECA.DueDaysCount(:RDAT , B.DUEDATEFIRSTCONTRACT' +
+        ',b.id)<361 then E.CODE else '#39'006'#39' end AS CLASSCODE,'
+      '   CM_DECA.Get_CreditStatus(B.ID,:RDAT )AS STATUSCODE ,'
+      '   DECODE(G.TYPECODE,'#39'000'#39',null,G.TYPECODE) AS COLLCODE,'
+      '   F.ANYINFOTODISTING AS INFDISTING,'
+      '   F.PLEDGEPRICE  AS MARKETSUM ,'
+      '   F.REGISTRYNO AS REGNO,'
+      '  to_char( F.REGISTRYDATE,'#39'dd/mm/yyyy'#39') AS REGDATE,'
+      '   F.REGISTRYAGENCY AS REGAGENCY'
+      'FROM'
+      '   CM_BOOROWERINFO A'
+      ' , CM_ACCOUNTS C'
+      ' , CM_RESERVE_TYPES E'
+      ' , /*CM_GUARANTEE*/ cm_grov_list F'
+      ' , CM_PORTFOLIO B'
+      ' , CM_PLEDGES G'
+      ' , CM_HISTORY D'
+      ' , OPERKURS O'
+      ' , AVALUTE V'
+      
+        ' ,CM_GUARANTOR g1,CM_GUARANTOR g2,CM_GUARANTOR g3,CM_GUARANTOR g' +
+        '4'
+      ' , CM_CATEGORIES P'
+      'WHERE'
+      '     (A.CREDITID = B.ID)'
+      ' AND (C.CREDITID = B.ID)'
+      ' AND (D.CREDITID = B.ID)'
+      ' AND (E.ID = D.RESERVEID)'
+      ' AND (F.CREDITID(+) = B.ID)'
+      ' AND (G.ID(+) = F.PLEDGEID)'
+      ' AND (D.HDATE=:RDAT)'
+      
+        ' AND ((B.CLOSEDATE IS NULL) or (B.CLOSEDATE between :EDATE and :' +
+        'HDATE) /*(B.CLOSEDATE >=:HDATE)*/)'
+      ' AND (O.DAT=:RDAT)'
+      ' AND (O.VAL_KOD=B.CURRENCY)'
+      ' and b.id=g1.creditid(+) and g1.cardid(+)=1'
+      ' and b.id=g2.creditid(+) and g2.cardid(+)=2   --and b.id>357'
+      
+        ' and b.id=g3.creditid(+) and g3.cardid(+)=3 --and b.dateofgrant ' +
+        #305's not null '
+      ' and b.id=g4.creditid(+) and g4.cardid(+)=4'
+      
+        ' AND (V.VALUTE=B.CURRENCY) --and b.status=1 --and b.mehsulid<>5 ' +
+        'and (b.id in(select creditid from cm_tranches)or (b.credittype i' +
+        'n(16,17))) and b.credittype<>15'
+      
+        ' AND (/*B.DATEOFCONCLUSION*/B.dateofgrant<=:RDAT) --and b.boorow' +
+        'erid not in(50,51,139,101,2841,41200)'
+      
+        ' AND (P.ID = B.CUSTOMERTYPE) --and INSTR(b.numberofcredit,'#39'SPC'#39')' +
+        '=0--and cm_deca.get_creditinitialamount(b.id)>0'
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      '')
+    Optimize = False
+    Variables.Data = {
+      04000000030000000A0000003A0052004400410054000C000000000000000000
+      00000C0000003A00450044004100540045000C00000000000000000000000C00
+      00003A00480044004100540045000C0000000000000000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 640
+    Top = 64
+  end
+  object OracleQuery1: TOracleQuery
+    SQL.Strings = (
+      'declare'
+      ''
+      'cursor c_p is select * from cm_portfolio;'
+      'begin'
+      ' for c in c_p loop'
+      '  update cm_guarantor set cardid=rownum where creditid=c.id;'
+      ' '
+      ' end loop;'
+      ''
+      'end ;')
+    Session = sboapiDataModule.SBSession
+    Optimize = False
+    Left = 200
+    Top = 376
+  end
+  object PG_PCustService: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'PG_PCustService'
+    Left = 624
+    Top = 232
+  end
+  object OracleDataSet4: TOracleDataSet
+    SQL.Strings = (
+      '/* Formatted on 25.12.2023 12:43:05 (QP5 v5.336) */'
+      'SELECT    replace(XMLELEMENT ('
+      '                   "Credit",'
+      '                   XMLELEMENT ('
+      '                       "Borrower",'
+      '                       XMLFOREST ('
+      
+        '                           cm_deca.get_cut_type(p.id)/*SX*/ "id"' +
+        ','
+      
+        '                           DECODE (b.name, '#39'&'#39', '#39'_'#39', b.name) AS ' +
+        '"name",'
+      '                           b.countrycode AS "CountryCode",'
+      
+        '                           b.bankrupteystatus AS "BankruptcyStat' +
+        'us",'
+      '                           TO_CHAR ('
+      
+        '                               cm_deca.get_custdateofbirth (p.bo' +
+        'orowerid),'
+      
+        '                               '#39'dd/mm/yyyy'#39') AS "DateOfBirth",  ' +
+        '--dogum tarixi'
+      
+        '                           cm_deca.get_custplaceofbirth (p.booro' +
+        'werid)'
+      
+        '                               AS "PlaceOfBirth",               ' +
+        '  --dogum yeri'
+      '                           b.pincode AS "PinCode"),'
+      '                       (SELECT XMLELEMENT ('
+      '                                   "Guarantees",'
+      '                                   XMLAGG ('
+      '                                       XMLELEMENT ('
+      '                                           "Guarantee",'
+      '                                           XMLFOREST ('
+      
+        '                                               e.guarantorid AS ' +
+        '"id",'
+      
+        '                                               e.guarantorname A' +
+        'S "name",'
+      
+        '                                               e.cuntrycode "Cou' +
+        'ntryCode",'
+      
+        '                                               TO_CHAR (e.dateof' +
+        'birth,'
+      
+        '                                                        '#39'dd/mm/y' +
+        'yyy'#39')'
+      
+        '                                                   "DateOfBirth"' +
+        ','
+      
+        '                                               e.cuntry || '#39' '#39' |' +
+        '| e.city'
+      
+        '                                                   "PlaceOfBirth' +
+        '",'
+      
+        '                                               NVL (e.pincode, '#39 +
+        ' '#39') "PinCode")))) AS zamin'
+      '                        FROM cm_guarantor e'
+      '                        WHERE e.creditid = p.id)),'
+      
+        '                   XMLFOREST (/*azkr case when p.dateofconclusio' +
+        'n<'#39'03-mar-2023'#39' then p.numberofcredit else  to_char(p.id) end AS' +
+        ' "AccountNo",*/'
+      
+        '                              (case when p.tmnus_portfstatus=1 t' +
+        'hen p.numberofcredit else  to_char(p.id) end) AS "AccountNo",'
+      '                        v.val_name AS "CurrencyOfCredit",'
+      
+        '                       cm_deca.get_credittypes (p.id) AS "Credit' +
+        'Type",'
+      '                       cm_deca.get_creditinitialamount (p.id)'
+      '                           AS "InitialAmountOfCredit",'
+      '                       cm_deca.get_creditlineamount (p.id)'
+      '                           AS "CreditLineAmount",'
+      
+        '                       d.rest + d.duerest AS "DisoutAmountOfCred' +
+        'it",'
+      
+        '                       p.annualyinterestrate AS "AnnualInterestR' +
+        'ate",'
+      '                       c.code AS "PurposeOfCredit",'
+      
+        '                       CASE  WHEN p.tmnus_portfstatus = 1   AND ' +
+        'p.tmnus_status IS NULL '
+      '                        THEN '
+      '                        p.periodcontracts'
+      '                         ELSE  '
+      '                       DECODE ('
+      
+        '                           TRUNC ( MONTHS_BETWEEN (p.duedatefirs' +
+        'tcontract, p.dateofconclusion)),'
+      '                           0, 1,'
+      
+        '                           TRUNC ( MONTHS_BETWEEN (p.duedatefirs' +
+        'tcontract, p.dateofconclusion)))'
+      '                          END AS "CreditPeriodInMonths",'
+      
+        '                       TO_CHAR (p.dateofgrant, '#39'dd/mm/yyyy'#39') AS ' +
+        '"DateOfGrant",'
+      '                       TO_CHAR ('
+      '                           '
+      '                                p.duedatefirstcontract,'
+      
+        '                           '#39'dd/mm/yyyy'#39') AS "DueTimeFirstContrac' +
+        't",'
+      '                       TO_CHAR ('
+      '                           DECODE (p.duedatelastcontract,'
+      '                                   NULL, p.duedatefirstcontract,'
+      '                                   p.duedatelastcontract),'
+      
+        '                           '#39'dd/mm/yyyy'#39') AS "DueTimeLastContract' +
+        '",'
+      
+        '                      nvl( TO_CHAR (cm_deca.get_lastcreditpaymen' +
+        't (p.id),'
+      
+        '                                '#39'dd/mm/yyyy'#39'),'#39'@'#39') AS "LastPayme' +
+        'ntDate",'
+      '                       cm_deca.get_creditpaymentamount (p.id)'
+      '                           AS "MonthlyPaymentAmount",'
+      '                       cm_deca.duedayscount (d.hdate,'
+      
+        '                                             p.duedatefirstcontr' +
+        'act,'
+      
+        '                                             p.id) AS "DaysMainS' +
+        'umIsOverdue",'
+      '                       cm_utils.Get_GecgunFaiz (p.id, d.hdate)'
+      '                           AS "DaysInterestIsOverdue",'
+      '                       d.dueinterestrest + d.interestrest'
+      '                           AS "OiaForRepperiod",'
+      
+        '                        CASE  WHEN p.duedatelastcontract IS NOT ' +
+        'NULL THEN 1  ELSE 0 END AS "NumberOfProlongs",'
+      '                       CASE'
+      '                           WHEN cm_deca.duedayscount (d.hdate,'
+      
+        '                                                      p.duedatef' +
+        'irstcontract,'
+      '                                                      p.id) <'
+      '                                361'
+      '                           THEN'
+      '                               e.code'
+      '                           ELSE'
+      '                               '#39'006'#39
+      '                       END AS "CreditClassCode",'
+      '                       cm_deca.get_creditstatus (p.id, d.hdate)'
+      '                           AS "CreditStatusCode"),'
+      '                   (SELECT XMLELEMENT ('
+      '                           "Collateral",'
+      
+        '                           XMLELEMENT ("CollateralTypeCode", gr.' +
+        'typecode),'
+      '                           XMLELEMENT ("AnyInfoToDisting",'
+      '                                       gr.anyinfotodisting),'
+      
+        '                           XMLELEMENT ("MarketValue", gr.pledgep' +
+        'rice),'
+      
+        '                           XMLELEMENT ("RegistryNo", gr.registry' +
+        'no),'
+      
+        '                           XMLELEMENT ("RegistryDate", gr.regist' +
+        'rydate),'
+      
+        '                           XMLELEMENT ("RegistryAgency", gr.regi' +
+        'stryagency))'
+      '                  FROM (SELECT '#39'004'#39' AS typecode,'
+      '                               '#39#39' AS anyinfotodisting,'
+      '                               '#39#39' AS registryno,'
+      '                               0  AS pledgeprice,'
+      '                               '#39#39' AS registrydate,'
+      '                               '#39#39' AS pledgeid,'
+      '                               '#39#39' AS registryagency'
+      '                          FROM cm_guarantor z'
+      '                         WHERE     z.creditid = p.id'
+      
+        '                               AND z.creditid NOT IN (SELECT x.c' +
+        'reditid'
+      
+        '                                                        FROM cm_' +
+        'guarantee_credit x'
+      
+        '                                                       WHERE x.c' +
+        'reditid ='
+      
+        '                                                                ' +
+        ' z.creditid)'
+      '                               AND ROWNUM = 1'
+      '                                 UNION ALL'
+      '                        SELECT '#39'007'#39' AS typecode,'
+      '                               '#39#39' AS anyinfotodisting,'
+      '                               '#39#39' AS registryno,'
+      '                                0 AS pledgeprice,'
+      '                               '#39#39' AS registrydate,'
+      '                               '#39#39' AS pledgeid,'
+      '                               '#39#39' AS registryagency'
+      '                          FROM DUAL'
+      
+        '                          WHERE NOT EXISTS (  SELECT 1  FROM cm_' +
+        'guarantee_credit  WHERE creditid = p.id'
+      
+        '                         )AND NOT EXISTS  (  SELECT 1  FROM cm_g' +
+        'uarantor  WHERE creditid = p.id)'
+      ''
+      '                        UNION ALL'
+      '                        SELECT typecode,'
+      '                               anyinfotodisting,'
+      '                               registryno,'
+      '                               pledgeprice,'
+      
+        '                               TO_CHAR (f.registrydate, '#39'dd/mm/y' +
+        'yyy'#39')'
+      '                                   registrydate,'
+      '                               TO_CHAR (pledgeid) pledgeid,'
+      '                               registryagency'
+      
+        '                          FROM cm_guarantee_credit f, cm_pledges' +
+        ' g'
+      
+        '                         WHERE f.creditid = p.id AND g.id(+) = f' +
+        '.pledgeid'
+      
+        '                         ) gr) AS grov).getClobVal() ,'#39'@'#39','#39#39') AS' +
+        ' credit'
+      ' '
+      'FROM cm_portfolio p,'
+      '     cm_boorowerinfo b,'
+      '     avalute v,'
+      '     cm_history d,'
+      '     cm_categories c,'
+      '     cm_reserve_types e,'
+      '     cm_accounts a'
+      'WHERE     p.id = b.creditid'
+      '      AND p.currency = v.valute'
+      '      AND p.id = d.creditid'
+      '     AND p.tmnus_status=1 AND tmnus_portfstatus=1'
+      '  AND (D.HDATE=:RDAT)'
+      '  AND c.id = p.customertype'
+      '  AND (e.id = d.reserveid)'
+      '  and p.dateofgrant<=:RDAT'
+      '  and p.id=a.creditid'
+      ':filter1'
+      ':filter2'
+      ':filter3'
+      ':filter4'
+      ':filter5'
+      ':filter6'
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      '')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000A0000003A0052004400410054000C000000000000000000
+      0000}
+    Session = sboapiDataModule.SBSession
+    Left = 760
+    Top = 40
+  end
+  object OracleDataSet5: TOracleDataSet
+    SQL.Strings = (
+      '/* Formatted on 25.12.2023 12:43:05 (QP5 v5.336) */'
+      'SELECT    replace(XMLELEMENT ('
+      '                   "Credit",'
+      '                   XMLELEMENT ('
+      '                       "Borrower",'
+      '                       XMLFOREST ('
+      
+        '                           cm_deca.get_cut_type(p.id)/*SX*/ "id"' +
+        ','
+      
+        '                           DECODE (b.name, '#39'&'#39', '#39'_'#39', b.name) AS ' +
+        '"name",'
+      '                           b.countrycode AS "CountryCode",'
+      
+        '                           b.bankrupteystatus AS "BankruptcyStat' +
+        'us",'
+      '                           TO_CHAR ('
+      
+        '                               cm_deca.get_custdateofbirth (p.bo' +
+        'orowerid),'
+      
+        '                               '#39'dd/mm/yyyy'#39') AS "DateOfBirth",  ' +
+        '--dogum tarixi'
+      
+        '                           cm_deca.get_custplaceofbirth (p.booro' +
+        'werid)'
+      
+        '                               AS "PlaceOfBirth",               ' +
+        '  --dogum yeri'
+      '                           b.pincode AS "PinCode"),'
+      '                       (SELECT XMLELEMENT ('
+      '                                   "Guarantees",'
+      '                                   XMLAGG ('
+      '                                       XMLELEMENT ('
+      '                                           "Guarantee",'
+      '                                           XMLFOREST ('
+      
+        '                                               e.guarantorid AS ' +
+        '"id",'
+      
+        '                                               e.guarantorname A' +
+        'S "name",'
+      
+        '                                               e.cuntrycode "Cou' +
+        'ntryCode",'
+      
+        '                                               TO_CHAR (e.dateof' +
+        'birth,'
+      
+        '                                                        '#39'dd/mm/y' +
+        'yyy'#39')'
+      
+        '                                                   "DateOfBirth"' +
+        ','
+      
+        '                                               e.cuntry || '#39' '#39' |' +
+        '| e.city'
+      
+        '                                                   "PlaceOfBirth' +
+        '",'
+      
+        '                                               NVL (e.pincode, '#39 +
+        ' '#39') "PinCode")))) AS zamin'
+      '                        FROM cm_guarantor e'
+      '                        WHERE e.creditid = p.id)),'
+      
+        '                   XMLFOREST (/*  Azkr case when p.dateofconclus' +
+        'ion<'#39'03-mar-2023'#39' then p.numberofcredit else  to_char(p.id) end ' +
+        'AS*/'
+      
+        '                                (case when p.tmnus_status is nul' +
+        'l and p.tmnus_portfstatus=1 then p.numberofcredit else  to_char(' +
+        'p.id) end) AS "AccountNo",'
+      '                       v.val_name AS "CurrencyOfCredit",'
+      
+        '                       cm_deca.get_credittypes (p.id) AS "Credit' +
+        'Type",'
+      '                       cm_deca.get_creditinitialamount (p.id)'
+      '                           AS "InitialAmountOfCredit",'
+      '                       cm_deca.get_creditlineamount (p.id)'
+      '                           AS "CreditLineAmount",'
+      
+        '                       d.rest + d.duerest AS "DisoutAmountOfCred' +
+        'it",'
+      
+        '                       p.annualyinterestrate AS "AnnualInterestR' +
+        'ate",'
+      '                       c.code AS "PurposeOfCredit",'
+      
+        '                        CASE  WHEN p.tmnus_portfstatus = 1   AND' +
+        ' p.tmnus_status IS NULL '
+      '                        THEN '
+      '                        p.periodcontracts'
+      '                         ELSE  '
+      '                       DECODE ('
+      
+        '                           TRUNC ( MONTHS_BETWEEN (p.duedatefirs' +
+        'tcontract, p.dateofconclusion)),'
+      '                           0, 1,'
+      
+        '                           TRUNC ( MONTHS_BETWEEN (p.duedatefirs' +
+        'tcontract, p.dateofconclusion)))'
+      '                          END AS "CreditPeriodInMonths",'
+      
+        '                       TO_CHAR (p.dateofgrant, '#39'dd/mm/yyyy'#39') AS ' +
+        '"DateOfGrant",'
+      '                       TO_CHAR ('
+      '                           '
+      '                                p.duedatefirstcontract,'
+      
+        '                           '#39'dd/mm/yyyy'#39') AS "DueTimeFirstContrac' +
+        't",'
+      '                       TO_CHAR ('
+      '                           DECODE (p.duedatelastcontract,'
+      '                                   NULL, p.duedatefirstcontract,'
+      '                                   p.duedatelastcontract),'
+      
+        '                           '#39'dd/mm/yyyy'#39') AS "DueTimeLastContract' +
+        '",'
+      
+        '                      nvl( TO_CHAR (cm_deca.get_lastcreditpaymen' +
+        't (p.id),'
+      
+        '                                '#39'dd/mm/yyyy'#39'),'#39'@'#39') AS "LastPayme' +
+        'ntDate",'
+      '                       cm_deca.get_creditpaymentamount (p.id)'
+      '                           AS "MonthlyPaymentAmount",'
+      '                       cm_deca.duedayscount (d.hdate,'
+      
+        '                                             p.duedatefirstcontr' +
+        'act,'
+      
+        '                                             p.id) AS "DaysMainS' +
+        'umIsOverdue",'
+      '                       cm_utils.Get_GecgunFaiz(p.id, d.hdate)'
+      '                           AS "DaysInterestIsOverdue",'
+      '                       d.dueinterestrest + d.interestrest'
+      '                           AS "OiaForRepperiod",'
+      
+        '                        CASE  WHEN p.duedatelastcontract IS NOT ' +
+        'NULL THEN 1  ELSE 0 END AS "NumberOfProlongs",'
+      '                       CASE'
+      '                           WHEN cm_deca.duedayscount (d.hdate,'
+      
+        '                                                      p.duedatef' +
+        'irstcontract,'
+      '                                                      p.id) <'
+      '                                361'
+      '                           THEN'
+      '                               e.code'
+      '                           ELSE'
+      '                               '#39'006'#39
+      '                       END AS "CreditClassCode",'
+      '                       cm_deca.get_creditstatus (p.id, d.hdate)'
+      '                           AS "CreditStatusCode"),'
+      '                   (SELECT XMLELEMENT ('
+      '                           "Collateral",'
+      
+        '                           XMLELEMENT ("CollateralTypeCode", gr.' +
+        'typecode),'
+      '                           XMLELEMENT ("AnyInfoToDisting",'
+      '                                       gr.anyinfotodisting),'
+      
+        '                           XMLELEMENT ("MarketValue", gr.pledgep' +
+        'rice),'
+      
+        '                           XMLELEMENT ("RegistryNo", gr.registry' +
+        'no),'
+      
+        '                           XMLELEMENT ("RegistryDate", gr.regist' +
+        'rydate),'
+      
+        '                           XMLELEMENT ("RegistryAgency", gr.regi' +
+        'stryagency))'
+      '                  FROM (SELECT '#39'004'#39' AS typecode,'
+      '                               '#39#39' AS anyinfotodisting,'
+      '                               '#39#39' AS registryno,'
+      '                               0  AS pledgeprice,'
+      '                               '#39#39' AS registrydate,'
+      '                               '#39#39' AS pledgeid,'
+      '                               '#39#39' AS registryagency'
+      '                          FROM cm_guarantor z'
+      '                         WHERE     z.creditid = p.id'
+      
+        '                               AND z.creditid NOT IN (SELECT x.c' +
+        'reditid'
+      
+        '                                                        FROM cm_' +
+        'guarantee_credit x'
+      
+        '                                                       WHERE x.c' +
+        'reditid ='
+      
+        '                                                                ' +
+        ' z.creditid)'
+      '                               AND ROWNUM = 1'
+      '                                 UNION ALL'
+      '                        SELECT '#39'007'#39' AS typecode,'
+      '                               '#39#39' AS anyinfotodisting,'
+      '                               '#39#39' AS registryno,'
+      '                                0 AS pledgeprice,'
+      '                               '#39#39' AS registrydate,'
+      '                               '#39#39' AS pledgeid,'
+      '                               '#39#39' AS registryagency'
+      '                          FROM DUAL'
+      
+        '                          WHERE NOT EXISTS (  SELECT 1  FROM cm_' +
+        'guarantee_credit  WHERE creditid = p.id'
+      
+        '                         )AND NOT EXISTS  (  SELECT 1  FROM cm_g' +
+        'uarantor  WHERE creditid = p.id)'
+      ''
+      '                        UNION ALL'
+      '                        SELECT typecode,'
+      '                               anyinfotodisting,'
+      '                               registryno,'
+      '                               pledgeprice,'
+      
+        '                               TO_CHAR (f.registrydate, '#39'dd/mm/y' +
+        'yyy'#39')'
+      '                                   registrydate,'
+      '                               TO_CHAR (pledgeid) pledgeid,'
+      '                               registryagency'
+      
+        '                          FROM cm_guarantee_credit f, cm_pledges' +
+        ' g'
+      
+        '                         WHERE f.creditid = p.id AND g.id(+) = f' +
+        '.pledgeid'
+      
+        '                         ) gr) AS grov).getClobVal() ,'#39'@'#39','#39#39') AS' +
+        ' credit'
+      'FROM cm_active_credits p,--cm_portfolio p,'
+      '     cm_boorowerinfo b,'
+      '     avalute v,'
+      '     cm_history d,'
+      '     cm_categories c,'
+      '     cm_reserve_types e'
+      'WHERE     p.id = b.creditid'
+      '      AND p.currency = v.valute'
+      '      AND p.id = d.creditid'
+      '  AND (D.HDATE=:RDAT)'
+      
+        ' AND ((p.CLOSEDATE IS NULL) or (p.CLOSEDATE between :EDATE and :' +
+        'HDATE) )'
+      '      AND c.id = p.customertype'
+      '      AND (e.id = d.reserveid)'
+      'and p.dateofgrant<=:RDAT'
+      ':filter1'
+      ':filter2'
+      ':filter3'
+      ':filter4'
+      ':filter5'
+      ':filter6'
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      '')
+    Optimize = False
+    Variables.Data = {
+      04000000030000000A0000003A0052004400410054000C000000000000000000
+      00000C0000003A00450044004100540045000C00000000000000000000000C00
+      00003A00480044004100540045000C0000000000000000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 768
+    Top = 112
+  end
+  object OracleDataSet6: TOracleDataSet
+    SQL.Strings = (
+      'select * from cm_portfolio p'
+      'where 1=1'
+      ':filter1'
+      ':filter2'
+      ':filter3'
+      ':filter4'
+      ':filter5'
+      ':filter6')
+    Optimize = False
+    Variables.Data = {
+      0400000006000000100000003A00460049004C00540045005200310001000000
+      0000000000000000100000003A00460049004C00540045005200320001000000
+      0000000000000000100000003A00460049004C00540045005200330001000000
+      0000000000000000100000003A00460049004C00540045005200340001000000
+      0000000000000000100000003A00460049004C00540045005200350001000000
+      0000000000000000100000003A00460049004C00540045005200360001000000
+      0000000000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 488
+    Top = 8
+  end
+  object DecaDataModule_umidsiz: TOracleDataSet
+    SQL.Strings = (
+      '/* Formatted on 25.12.2023 12:43:05 (QP5 v5.336) */'
+      'SELECT    replace(XMLELEMENT ('
+      '                   "Credit",'
+      '                   XMLELEMENT ('
+      '                       "Borrower",'
+      '                       XMLFOREST ('
+      
+        '                           cm_deca.get_cut_type/*SX*/(p.id) "id"' +
+        ','
+      
+        '                           DECODE (b.name, '#39'&'#39', '#39'_'#39', b.name) AS ' +
+        '"name",'
+      '                           b.countrycode AS "CountryCode",'
+      
+        '                           b.bankrupteystatus AS "BankruptcyStat' +
+        'us",'
+      '                           TO_CHAR ('
+      
+        '                               cm_deca.get_custdateofbirth (p.bo' +
+        'orowerid),'
+      
+        '                               '#39'dd/mm/yyyy'#39') AS "DateOfBirth",  ' +
+        '--dogum tarixi'
+      
+        '                           cm_deca.get_custplaceofbirth (p.booro' +
+        'werid)'
+      
+        '                               AS "PlaceOfBirth",               ' +
+        '  --dogum yeri'
+      '                           b.pincode AS "PinCode"),'
+      '                       (SELECT XMLELEMENT ('
+      '                                   "Guarantees",'
+      '                                   XMLAGG ('
+      '                                       XMLELEMENT ('
+      '                                           "Guarantee",'
+      '                                           XMLFOREST ('
+      
+        '                                               e.guarantorid AS ' +
+        '"id",'
+      
+        '                                               e.guarantorname A' +
+        'S "name",'
+      
+        '                                               e.cuntrycode "Cou' +
+        'ntryCode",'
+      
+        '                                               TO_CHAR (e.dateof' +
+        'birth,'
+      
+        '                                                        '#39'dd/mm/y' +
+        'yyy'#39')'
+      
+        '                                                   "DateOfBirth"' +
+        ','
+      
+        '                                               e.cuntry || '#39' '#39' |' +
+        '| e.city'
+      
+        '                                                   "PlaceOfBirth' +
+        '",'
+      
+        '                                               NVL (e.pincode, '#39 +
+        ' '#39') "PinCode")))) AS zamin'
+      '                        FROM cm_guarantor e'
+      '                        WHERE e.creditid = p.id)),'
+      
+        '                   XMLFOREST (/*azkr case when p.dateofconclusio' +
+        'n<'#39'03-mar-2023'#39' then p.numberofcredit else  to_char(p.id) end AS' +
+        ' "AccountNo",*/'
+      
+        '                             (case when p.tmnus_status is null a' +
+        'nd p.tmnus_portfstatus=1 then p.numberofcredit else  to_char(p.i' +
+        'd) end) AS "AccountNo",'
+      '                       v.val_name AS "CurrencyOfCredit",'
+      
+        '                       cm_deca.get_credittypes (p.id) AS "Credit' +
+        'Type",'
+      '                       cm_deca.get_creditinitialamount (p.id)'
+      '                           AS "InitialAmountOfCredit",'
+      '                       cm_deca.get_creditlineamount (p.id)'
+      '                           AS "CreditLineAmount",'
+      
+        '                       d.rest + d.duerest AS "DisoutAmountOfCred' +
+        'it",'
+      
+        '                       p.annualyinterestrate AS "AnnualInterestR' +
+        'ate",'
+      '                       c.code AS "PurposeOfCredit",'
+      
+        '                       CASE  WHEN p.tmnus_portfstatus = 1   AND ' +
+        'p.tmnus_status IS NULL '
+      '                        THEN '
+      '                        p.periodcontracts'
+      '                         ELSE  '
+      '                       DECODE ('
+      
+        '                           TRUNC ( MONTHS_BETWEEN (p.duedatefirs' +
+        'tcontract, p.dateofconclusion)),'
+      '                           0, 1,'
+      
+        '                           TRUNC ( MONTHS_BETWEEN (p.duedatefirs' +
+        'tcontract, p.dateofconclusion)))'
+      '                          END AS "CreditPeriodInMonths",'
+      
+        '                       TO_CHAR (p.dateofgrant, '#39'dd/mm/yyyy'#39') AS ' +
+        '"DateOfGrant",'
+      '                       TO_CHAR ('
+      '                          '
+      '                                p.duedatefirstcontract,'
+      
+        '                           '#39'dd/mm/yyyy'#39') AS "DueTimeFirstContrac' +
+        't",'
+      '                       TO_CHAR ('
+      '                           DECODE (p.duedatelastcontract,'
+      '                                   NULL, p.duedatefirstcontract,'
+      '                                   p.duedatelastcontract),'
+      
+        '                           '#39'dd/mm/yyyy'#39') AS "DueTimeLastContract' +
+        '",'
+      
+        '                      nvl( TO_CHAR (cm_deca.get_lastcreditpaymen' +
+        't (p.id),'
+      
+        '                                '#39'dd/mm/yyyy'#39'),'#39'@'#39') AS "LastPayme' +
+        'ntDate",'
+      '                       cm_deca.get_creditpaymentamount (p.id)'
+      '                           AS "MonthlyPaymentAmount",'
+      '                       cm_deca.duedayscount (d.hdate,'
+      
+        '                                             p.duedatefirstcontr' +
+        'act,'
+      
+        '                                             p.id) AS "DaysMainS' +
+        'umIsOverdue",'
+      '                       cm_utils.Get_GecgunFaiz (p.id, d.hdate)'
+      '                           AS "DaysInterestIsOverdue",'
+      '                       d.dueinterestrest + d.interestrest'
+      '                           AS "OiaForRepperiod",'
+      
+        '                       CASE  WHEN p.duedatelastcontract IS NOT N' +
+        'ULL THEN 1  ELSE 0 END AS "NumberOfProlongs",'
+      '                       CASE'
+      '                           WHEN cm_deca.duedayscount (d.hdate,'
+      
+        '                                                      p.duedatef' +
+        'irstcontract,'
+      '                                                      p.id) <'
+      '                                361'
+      '                           THEN'
+      '                               e.code'
+      '                           ELSE'
+      '                               '#39'006'#39
+      '                       END AS "CreditClassCode",'
+      '                       cm_deca.get_creditstatus (p.id, d.hdate)'
+      '                           AS "CreditStatusCode"),'
+      '                   (SELECT XMLELEMENT ('
+      '                           "Collateral",'
+      
+        '                           XMLELEMENT ("CollateralTypeCode", gr.' +
+        'typecode),'
+      '                           XMLELEMENT ("AnyInfoToDisting",'
+      '                                       gr.anyinfotodisting),'
+      
+        '                           XMLELEMENT ("MarketValue", gr.pledgep' +
+        'rice),'
+      
+        '                           XMLELEMENT ("RegistryNo", gr.registry' +
+        'no),'
+      
+        '                           XMLELEMENT ("RegistryDate", gr.regist' +
+        'rydate),'
+      
+        '                           XMLELEMENT ("RegistryAgency", gr.regi' +
+        'stryagency))'
+      '                  FROM (SELECT '#39'004'#39' AS typecode,'
+      '                               '#39#39' AS anyinfotodisting,'
+      '                               '#39#39' AS registryno,'
+      '                               0  AS pledgeprice,'
+      '                               '#39#39' AS registrydate,'
+      '                               '#39#39' AS pledgeid,'
+      '                               '#39#39' AS registryagency'
+      '                          FROM cm_guarantor z'
+      '                         WHERE     z.creditid = p.id'
+      
+        '                               AND z.creditid NOT IN (SELECT x.c' +
+        'reditid'
+      
+        '                                                        FROM cm_' +
+        'guarantee_credit x'
+      
+        '                                                       WHERE x.c' +
+        'reditid ='
+      
+        '                                                                ' +
+        ' z.creditid)'
+      '                               AND ROWNUM = 1'
+      '                                 UNION ALL'
+      '                        SELECT '#39'007'#39' AS typecode,'
+      '                               '#39#39' AS anyinfotodisting,'
+      '                               '#39#39' AS registryno,'
+      '                                0 AS pledgeprice,'
+      '                               '#39#39' AS registrydate,'
+      '                               '#39#39' AS pledgeid,'
+      '                               '#39#39' AS registryagency'
+      '                          FROM DUAL'
+      
+        '                          WHERE NOT EXISTS (  SELECT 1  FROM cm_' +
+        'guarantee_credit  WHERE creditid = p.id'
+      
+        '                         )AND NOT EXISTS  (  SELECT 1  FROM cm_g' +
+        'uarantor  WHERE creditid = p.id)'
+      ''
+      '                        UNION ALL'
+      '                        SELECT typecode,'
+      '                               anyinfotodisting,'
+      '                               registryno,'
+      '                               pledgeprice,'
+      
+        '                               TO_CHAR (f.registrydate, '#39'dd/mm/y' +
+        'yyy'#39')'
+      '                                   registrydate,'
+      '                               TO_CHAR (pledgeid) pledgeid,'
+      '                               registryagency'
+      
+        '                          FROM cm_guarantee_credit f, cm_pledges' +
+        ' g'
+      
+        '                         WHERE f.creditid = p.id AND g.id(+) = f' +
+        '.pledgeid'
+      
+        '                         ) gr) AS grov).getClobVal() ,'#39'@'#39','#39#39') AS' +
+        ' credit'
+      ''
+      'FROM cm_portfolio p,'
+      '     cm_boorowerinfo b,'
+      '     avalute v,'
+      '     cm_history d,'
+      '     cm_categories c,'
+      '     cm_reserve_types e'
+      'WHERE     p.id = b.creditid'
+      '      AND p.currency = v.valute'
+      '      AND p.id = d.creditid'
+      '  AND (D.HDATE=:RDAT)'
+      '  AND c.id = p.customertype'
+      '  AND (e.id = d.reserveid)'
+      'and p.dateofgrant<=:RDAT'
+      ':filter1'
+      ':filter2'
+      ':filter3'
+      ':filter4'
+      ':filter5'
+      ':filter6'
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      '')
+    Optimize = False
+    Variables.Data = {
+      04000000070000000A0000003A0052004400410054000C000000000000000000
+      0000100000003A00460049004C00540045005200310001000000000000000000
+      0000100000003A00460049004C00540045005200320001000000000000000000
+      0000100000003A00460049004C00540045005200330001000000000000000000
+      0000100000003A00460049004C00540045005200340001000000000000000000
+      0000100000003A00460049004C00540045005200350001000000000000000000
+      0000100000003A00460049004C00540045005200360001000000000000000000
+      0000}
+    QBEDefinition.QBEFieldDefs = {
+      05000000300000000400000049004400010000000000080000004E0041004D00
+      45000100000000001400000043004F0055004E005400520043004F0044004500
+      0100000000001200000042004E004B0053005400410054005500530001000000
+      0000140000004400410054004F00460042004900520054004800010000000000
+      1400000050004C00410043004500420049005200540048000100000000000E00
+      0000500049004E0043004F004400450001000000000006000000470049004400
+      0100000000000A00000047004E0041004D004500010000000000080000004700
+      4900440032000100000000000C00000047004E0041004D004500320001000000
+      00000800000047004900440033000100000000000C00000047004E0041004D00
+      4500330001000000000014000000430052004500440049005400540059005000
+      4500010000000000140000004C00410053005400500041005900440041005400
+      010000000000140000004D0050004100590041004D004F0055004E0054000100
+      0000000012000000500052004F0056004900530049004F004E00010000000000
+      060000004900440032000100000000000A0000004E0041004D00450032000100
+      00000000060000004900440033000100000000000A0000004E0041004D004500
+      3300010000000000060000004900440034000100000000000A0000004E004100
+      4D00450034000100000000001400000049004E005400450052004E0041004C00
+      49004400010000000000120000004100430043004F0055004E0054004E004F00
+      01000000000010000000430055005200520045004E0043005900010000000000
+      1400000049004E0049005400490041004C00530055004D000100000000001400
+      00004300520044004C0049004E004500530055004D0001000000000010000000
+      4400490053004F005500530055004D0001000000000008000000520041005400
+      45000100000000000E00000050005500520050004F0053004500010000000000
+      1400000050004500520049004F0044004D004F004E0054000100000000001200
+      000044004100540045004700520041004E005400010000000000140000004600
+      490052005300540043004F004E0054005200010000000000120000004C004100
+      5300540043004F004E0054005200010000000000100000004400410059005300
+      4D00410049004E0001000000000014000000440041005900530049004E005400
+      520053005400010000000000120000004F004900410050004500520049004F00
+      4400010000000000100000004F00490041005400480052004500450001000000
+      000010000000500052004F004C004F004E004700530001000000000012000000
+      43004C0041005300530043004F00440045000100000000001400000053005400
+      410054005500530043004F00440045000100000000001000000043004F004C00
+      4C0043004F00440045000100000000001400000049004E004600440049005300
+      540049004E004700010000000000120000004D00410052004B00450054005300
+      55004D000100000000000A0000005200450047004E004F000100000000000E00
+      0000520045004700440041005400450001000000000012000000520045004700
+      4100470045004E0043005900010000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 80
+    Top = 144
+  end
+end

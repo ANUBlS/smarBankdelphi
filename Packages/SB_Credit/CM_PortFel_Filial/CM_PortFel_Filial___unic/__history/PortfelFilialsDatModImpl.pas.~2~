@@ -1,0 +1,63 @@
+unit PortfelFilialsDatModImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Oracle, Db, OracleData;
+
+type
+  TPFDataMod = class(TDataModule)
+    Branches: TOracleDataSet;
+    CM_AK_REPORTS: TOraclePackage;
+    BranchesDatScr: TDataSource;
+    Persons: TOracleDataSet;
+    PersonsDatSrc: TDataSource;
+    Results: TOracleDataSet;
+    BranchesID: TFloatField;
+    PersonsID: TFloatField;
+    PersonsDESCRIPION: TWideStringField;
+    ResultsPERSONSNAME: TWideStringField;
+    ResultsFILIALNAME: TWideStringField;
+    ResultsFACTICALREST: TFloatField;
+    ResultsREST: TFloatField;
+    ResultsRESTDUE: TFloatField;
+    ResultsTRAMT: TFloatField;
+    ResultsPAYAMT: TFloatField;
+    ResultsPAYDUE: TFloatField;
+    ResultsEXPAMT: TFloatField;
+    ResultsLASTFACTICALREST: TFloatField;
+    ResultsLASTREST: TFloatField;
+    ResultsLASTDUEREST: TFloatField;
+    ResultsPERCENTEXP: TFloatField;
+    ResultsTRANCHPLAMT: TFloatField;
+    ResultsPAYPLAMT: TFloatField;
+    procedure DataModuleCreate(Sender: TObject);
+    procedure DataModuleDestroy(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  PFDataMod: TPFDataMod;
+
+implementation
+
+{$R *.DFM}
+uses CMOracleAPIDataModuleImpl;
+
+procedure TPFDataMod.DataModuleCreate(Sender: TObject);
+begin
+   Branches.Open;
+   Persons.open;
+end;
+
+procedure TPFDataMod.DataModuleDestroy(Sender: TObject);
+begin
+   Branches.CloseAll;
+   Persons.CloseAll;
+end;
+
+end.

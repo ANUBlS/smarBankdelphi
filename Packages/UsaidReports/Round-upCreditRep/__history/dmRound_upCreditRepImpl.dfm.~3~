@@ -1,0 +1,800 @@
+object dmRound_upCreditRep: TdmRound_upCreditRep
+  OldCreateOrder = False
+  OnCreate = DataModuleCreate
+  OnDestroy = DataModuleDestroy
+  Height = 480
+  Width = 694
+  object sysdat: TOracleDataSet
+    SQL.Strings = (
+      'select tek_dat from sysdat')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 32
+    Top = 24
+  end
+  object filials: TOracleDataSet
+    SQL.Strings = (
+      'select id,name from filial'
+      'order by id')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000400000049004400010000000000080000004E0041004D00
+      4500010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 104
+    Top = 24
+  end
+  object CreditTypes: TOracleDataSet
+    SQL.Strings = (
+      'select id,description from cm_credittypes'
+      'order by id')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 184
+    Top = 24
+  end
+  object valutes: TOracleDataSet
+    SQL.Strings = (
+      'select valute,valu_name from avalute')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 280
+    Top = 24
+  end
+  object filialsds: TDataSource
+    DataSet = filials
+    Left = 104
+    Top = 80
+  end
+  object CreditTypesds: TDataSource
+    DataSet = CreditTypes
+    Left = 184
+    Top = 80
+  end
+  object valutesds: TDataSource
+    DataSet = valutes
+    Left = 280
+    Top = 80
+  end
+  object ODSmain: TOracleDataSet
+    SQL.Strings = (
+      'select '
+      '     crdtypes.description,crdtypes.id,'
+      '     creditcounts.countcrd,'
+      '     creditcounts.ceofcountcrd as ceofcountcrd,'
+      '     crdinitialamt.initialamount,'
+      
+        '     round(crdinitialamt.ceofinitialamt,4)*100 as ceofinitialamt' +
+        ','
+      
+        '     round(crdrests.rest,2) as rest, round(crdrests.rest/:grest,' +
+        '4)*100 as ceofrest,'
+      '     round(crdrests.interestrest,2) as interestrest,'
+      '     round(roundannint.roundint/genrest.smrest,4) as roundint,'
+      
+        '     USAID_REPORT.GetProgForR(crdtypes.id,1,:ffilter)  as progno' +
+        'z,'
+      
+        '     round(decode(crdrests.rest/USAID_REPORT.GetProgForR(crdtype' +
+        's.id,1,:ffilter,1),crdrests.rest,0,crdrests.rest/USAID_REPORT.Ge' +
+        'tProgForR(crdtypes.id,1,:ffilter,1)),4)*100 as delta'
+      ''
+      'from '
+      '    cm_credittypes crdtypes ,'
+      '    '
+      '   (select'
+      '   sum(rest*o.ostat+duerest*o.ostat) as rest,'
+      
+        '   sum(interestrest*o.ostat+dueinterestrest*o.ostat) as interest' +
+        'rest,'
+      '   p.credittype'
+      'from cm_history h,'
+      '     cm_portfolio p,'
+      '     operkurs o'
+      'where h.hdate = :dat and'
+      '      h.creditid = p.id and'
+      '      p.currency = o.val_kod and'
+      '      o.dat = :dat'
+      ''
+      'group by p.credittype) crdrests ,'
+      ''
+      ''
+      '    (select '
+      ' count(id) as countcrd,'
+      ' trunc(count(id)*100/:generalcount,2) as ceofcountcrd,'
+      ' p.credittype  from '
+      
+        ' cm_portfolio p where id in (select creditid from cm_history whe' +
+        're hdate =:dat and rest+duerest >0)'
+      ''
+      'group by p.credittype) creditcounts,'
+      ''
+      '(select '
+      ' sum(p.initialamount*o.ostat) as initialamount,'
+      
+        ' sum(p.initialamount*o.ostat/:generalinitialamt) as ceofinitiala' +
+        'mt,'
+      ' p.credittype  from '
+      
+        ' cm_portfolio p,operkurs o where p.id in (select creditid from c' +
+        'm_history where hdate =:dat and rest+duerest >0) and p.currency=' +
+        'o.val_kod and o.dat=:dat'
+      ''
+      'group by p.credittype) crdinitialamt,'
+      ''
+      '(select '
+      
+        ' sum(p.annualyinterestrate*(c.rest*o.ostat)) /*:generelrest */ a' +
+        's roundint,'
+      ' p.credittype  from '
+      'cm_portfolio p,cm_history c ,operkurs o '
+      'where p.id = c.creditid and '
+      'c.hdate =:dat and '
+      'o.dat= :dat and '
+      'p.currency = o.val_kod '
+      ''
+      'group by p.credittype) roundannint,'
+      ''
+      '(select round(sum(h.rest*o.ostat),2) as smrest,'
+      '       p.credittype'
+      'from cm_portfolio p,cm_history h, operkurs o'
+      
+        'where p.id = h.creditid and h.hdate = :dat and p.currency = o.va' +
+        'l_kod and o.dat=:dat'
+      ''
+      'group by p.credittype) genrest'
+      ''
+      'where '
+      '   crdrests.credittype = creditcounts.credittype and'
+      '   crdrests.credittype = crdinitialamt.credittype and'
+      '   crdrests.credittype =roundannint.credittype  and'
+      '   crdrests.credittype = genrest.credittype  and '
+      '   crdtypes.id = crdrests.credittype  '
+      ''
+      ''
+      ''
+      ''
+      'order by :OrderField'
+      ''
+      ''
+      ''
+      '')
+    Optimize = False
+    Variables.Data = {
+      0400000006000000080000003A004400410054000C0000000000000000000000
+      1A0000003A00470045004E004500520041004C0043004F0055004E0054000300
+      00000000000000000000240000003A00470045004E004500520041004C004900
+      4E0049005400490041004C0041004D0054000400000000000000000000001600
+      00003A004F0052004400450052004600490045004C0044000100000000000000
+      000000000C0000003A0047005200450053005400040000000000000000000000
+      100000003A004600460049004C00540045005200050000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000C000000160000004400450053004300520049005000540049004F00
+      4E000100000000001000000043004F0055004E00540043005200440001000000
+      000018000000430045004F00460043004F0055004E0054004300520044000100
+      000000001A00000049004E0049005400490041004C0041004D004F0055004E00
+      54000100000000001C000000430045004F00460049004E004900540049004100
+      4C0041004D005400010000000000080000005200450053005400010000000000
+      1800000049004E00540045005200450053005400520045005300540001000000
+      00001000000052004F0055004E00440049004E0054000100000000000E000000
+      500052004F0047004E004F005A000100000000000A000000440045004C005400
+      4100010000000000040000004900440001000000000010000000430045004F00
+      46005200450053005400010000000000}
+    Session = sboapiDataModule.SBSession
+    OnCalcFields = ODSmainCalcFields
+    Left = 40
+    Top = 88
+    object ODSmainID: TFloatField
+      FieldName = 'ID'
+      Required = True
+      Visible = False
+    end
+    object ODSmainDESCRIPTION: TWideStringField
+      DisplayLabel = #1050#1088#1077#1076#1080#1090#1080#1085' '#1090#1080#1087#1083#1103#1088#1080
+      FieldName = 'DESCRIPTION'
+      Size = 128
+    end
+    object ODSmainCOUNTCRD: TFloatField
+      DisplayLabel = #1050#1088#1077#1076#1080#1090#1080#1085' '#1089#1072#1081#1099
+      FieldName = 'COUNTCRD'
+    end
+    object ODSmainCEOFCOUNTCRD: TFloatField
+      DisplayLabel = #1055#1086#1088#1090'%'
+      FieldName = 'CEOFCOUNTCRD'
+    end
+    object ODSmainINITIALAMOUNT: TFloatField
+      DisplayLabel = #1050#1088#1077#1076#1080#1090'.'#1084#1103#1073#1083'.'
+      FieldName = 'INITIALAMOUNT'
+      DisplayFormat = '#,##0.00'
+    end
+    object ODSmainCEOFINITIALAMT: TFloatField
+      DisplayLabel = #1055#1086#1088#1090'%'
+      FieldName = 'CEOFINITIALAMT'
+      DisplayFormat = '#,##0.00'
+    end
+    object ODSmainCEOFREST: TFloatField
+      DisplayLabel = #1043'.'#1055#1086#1088#1090'%'
+      FieldName = 'CEOFREST'
+      DisplayFormat = '#,##0.00'
+    end
+    object ODSmainREST: TFloatField
+      DisplayLabel = #1071'.'#1041' '
+      FieldName = 'REST'
+      DisplayFormat = '#,##0.00'
+    end
+    object ODSmainINTERESTREST: TFloatField
+      DisplayLabel = #1060'.'#1041
+      FieldName = 'INTERESTREST'
+      DisplayFormat = '#,##0.00'
+    end
+    object ODSmainROUNDINT: TFloatField
+      DisplayLabel = #1054#1088#1090#1072'%'#1076#1103#1088'.'
+      FieldName = 'ROUNDINT'
+      DisplayFormat = '#,##0.00'
+    end
+    object ODSmainPROGNOZ: TFloatField
+      DisplayLabel = #1055#1088#1086#1075#1085#1086#1079
+      FieldName = 'PROGNOZ'
+      DisplayFormat = '#,##0.00'
+    end
+    object ODSmainDELTA: TFloatField
+      DisplayLabel = #1055#1088#1086#1075#1085#1086#1079#1091#1085' '#1080#1078#1088#1072#1089#1099
+      FieldName = 'DELTA'
+      Visible = False
+      DisplayFormat = '#,##0.00'
+    end
+    object ODSmainsmcountcrd: TFloatField
+      FieldKind = fkCalculated
+      FieldName = 'smcountcrd'
+      Visible = False
+      Calculated = True
+    end
+    object ODSmainceofcntcrd: TWideStringField
+      DisplayLabel = #1055#1086#1088#1090'%'
+      FieldKind = fkCalculated
+      FieldName = 'ceofCEOFCOUNTCRD'
+      Visible = False
+      Calculated = True
+    end
+    object ODSmainceofiamt: TWideStringField
+      DisplayLabel = #1055#1086#1088#1090'%'
+      FieldKind = fkCalculated
+      FieldName = 'ceofCEOFINITIALAMT'
+      Visible = False
+      Calculated = True
+    end
+    object ODSmainceofroundint: TWideStringField
+      DisplayLabel = #1054#1088#1090#1072'%'
+      FieldKind = fkCalculated
+      FieldName = 'ceofROUNDINT'
+      Visible = False
+      Calculated = True
+    end
+    object ODSmainceofCEOFREST: TWideStringField
+      DisplayLabel = #1043'.'#1055#1086#1088#1090'%'
+      FieldKind = fkCalculated
+      FieldName = 'ceofCEOFREST'
+      Visible = False
+      Calculated = True
+    end
+    object ODSmainceofdelta: TWideStringField
+      DisplayLabel = #1055#1088#1086#1075#1085#1086#1079#1091#1085' '#1080#1078#1088#1072#1089#1099
+      FieldKind = fkCalculated
+      FieldName = 'ceofdelta'
+      Size = 50
+      Calculated = True
+    end
+  end
+  object ODSmainds: TDataSource
+    DataSet = ODSmain
+    Left = 40
+    Top = 144
+  end
+  object Queries: TOracleDataSet
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 112
+    Top = 144
+  end
+  object ThisMonTranched: TOracleDataSet
+    SQL.Strings = (
+      'select '
+      '   count(*) as cnt,'
+      '   round(sum(t.TRANCHEAMOUNT*o.ostat),2) as tramt,'
+      '   0 as proqnoz,'
+      '   0 as delta'
+      'from cm_tranches t,operkurs o,cm_portfolio p'
+      
+        'where p.id = t.creditid and p.currency = o.val_kod and o.dat = :' +
+        'dat'
+      
+        'and TRANCHEDATE between cm_utils.get_firstmonth(:dat) and last_d' +
+        'ay(:dat)'
+      ''
+      'group by creditid ')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000080000003A004400410054000C0000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      05000000040000000600000043004E0054000100000000000A00000054005200
+      41004D0054000100000000000E000000500052004F0051004E004F005A000100
+      000000000A000000440045004C0054004100010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 208
+    Top = 144
+    object ThisMonTranchedCNT: TFloatField
+      FieldName = 'CNT'
+    end
+    object ThisMonTranchedTRAMT: TFloatField
+      FieldName = 'TRAMT'
+    end
+    object ThisMonTranchedPROQNOZ: TFloatField
+      FieldName = 'PROQNOZ'
+    end
+    object ThisMonTranchedDELTA: TFloatField
+      FieldName = 'DELTA'
+    end
+  end
+  object ThisMonTranchedds: TDataSource
+    DataSet = ThisMonTranched
+    Left = 304
+    Top = 144
+  end
+  object ODSDetailds: TDataSource
+    DataSet = ODSDetail
+    Left = 40
+    Top = 200
+  end
+  object ODSDetail: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      '   f.name as filialname,'
+      '   crdtype.description,'
+      '   av.val_name as valu_name,'
+      '   p.numberofcredit,'
+      '   ac.acc_no,'
+      '   b.name as custname,'
+      '   p.creditlineamount,'
+      '   p.ANNUALYINTERESTRATE,'
+      '   r.percent,'
+      '   round(h.rest*o.ostat,2)+round(h.duerest*o.ostat,2) as rest,'
+      
+        '   round(h.interestrest*o.ostat,2)+round(h.dueinterestrest*o.ost' +
+        'at,2) as interestrest,'
+      '   p.DATEOFCONCLUSION,'
+      '   p.DUEDATEFIRSTCONTRACT'
+      'from'
+      '   cm_portfolio p,'
+      '   filial_t f,'
+      '   avalute av,'
+      '   cm_loanaccounts ac,'
+      '   cm_boorowerinfo b,'
+      '   cm_history h,'
+      '   operkurs o,'
+      '   cm_credittypes crdtype,'
+      '   cm_reserves r'
+      'where '
+      '  p.branchid = f.id and'
+      '  p.currency = av.valute and'
+      '  p.id = ac.creditid and'
+      '  p.id = b.creditid and'
+      '  p.id = h.creditid and'
+      '  h.hdate = :dat and (h.rest + h.duerest)>0 and '
+      '  o.val_kod = p.currency and'
+      '  o.dat = :dat and'
+      '  p.credittype = crdtype.id and'
+      '  h.reserveid = r.id and p.credittype = :crdtype'
+      '  '
+      '  '
+      '  '
+      '  '
+      '  '
+      '  '
+      '  '
+      '  '
+      '  '
+      '  '
+      '  '
+      '  '
+      '  '
+      '  '
+      '  '
+      '  '
+      '  '
+      'order by :OrderField')
+    Optimize = False
+    Variables.Data = {
+      0400000003000000080000003A004400410054000C0000000000000000000000
+      100000003A004300520044005400590050004500030000000000000000000000
+      160000003A004F0052004400450052004600490045004C004400010000000000
+      000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000D00000014000000460049004C00490041004C004E0041004D004500
+      010000000000160000004400450053004300520049005000540049004F004E00
+      01000000000012000000560041004C0055005F004E0041004D00450001000000
+      00001C0000004E0055004D004200450052004F00460043005200450044004900
+      54000100000000000C0000004100430043005F004E004F000100000000001000
+      000043005500530054004E0041004D0045000100000000002000000043005200
+      45004400490054004C0049004E00450041004D004F0055004E00540001000000
+      00002600000041004E004E00550041004C00590049004E005400450052004500
+      5300540052004100540045000100000000000E00000050004500520043004500
+      4E00540001000000000008000000520045005300540001000000000018000000
+      49004E0054004500520045005300540052004500530054000100000000002000
+      000044004100540045004F00460043004F004E0043004C005500530049004F00
+      4E00010000000000280000004400550045004400410054004500460049005200
+      5300540043004F004E0054005200410043005400010000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 112
+    Top = 200
+    object ODSDetailFILIALNAME: TWideStringField
+      DisplayLabel = #1060#1080#1083#1080#1072#1083
+      FieldName = 'FILIALNAME'
+      Size = 90
+    end
+    object ODSDetailDESCRIPTION: TWideStringField
+      DisplayLabel = #1050#1088#1077#1076#1080#1090#1080#1085' '#1090#1080#1087#1080
+      FieldName = 'DESCRIPTION'
+      Size = 128
+    end
+    object ODSDetailVALU_NAME: TWideStringField
+      DisplayLabel = #1042#1072#1083#1081#1091#1090#1072
+      FieldName = 'VALU_NAME'
+      Size = 25
+    end
+    object ODSDetailNUMBEROFCREDIT: TWideStringField
+      DisplayLabel = #1052#1094#1075#1072#1074'.'#8470
+      FieldName = 'NUMBEROFCREDIT'
+      Required = True
+      Size = 32
+    end
+    object ODSDetailACC_NO: TWideStringField
+      DisplayLabel = #1065#1077#1089#1072#1073'.'#8470
+      FieldName = 'ACC_NO'
+    end
+    object ODSDetailCUSTNAME: TWideStringField
+      DisplayLabel = #1052#1094#1096#1090#1103#1088#1080#1085#1080#1085' '#1072#1076#1099
+      FieldName = 'CUSTNAME'
+      Size = 64
+    end
+    object ODSDetailCREDITLINEAMOUNT: TFloatField
+      DisplayLabel = #1050#1088#1077#1076#1080#1090'.'#1084#1103#1073'.'
+      FieldName = 'CREDITLINEAMOUNT'
+      Required = True
+    end
+    object ODSDetailANNUALYINTERESTRATE: TFloatField
+      DisplayLabel = #1050#1088#1077#1076#1080#1090'.%'
+      FieldName = 'ANNUALYINTERESTRATE'
+      Required = True
+    end
+    object ODSDetailPERCENT: TFloatField
+      DisplayLabel = #1045#1097#1090'.%'
+      FieldName = 'PERCENT'
+      Required = True
+    end
+    object ODSDetailREST: TFloatField
+      DisplayLabel = #1071#1041
+      FieldName = 'REST'
+    end
+    object ODSDetailINTERESTREST: TFloatField
+      DisplayLabel = #1060#1041
+      FieldName = 'INTERESTREST'
+    end
+    object ODSDetailDATEOFCONCLUSION: TDateTimeField
+      DisplayLabel = #1042#1077#1088'.'#1090#1072#1088#1080#1093#1080
+      FieldName = 'DATEOFCONCLUSION'
+      Required = True
+    end
+    object ODSDetailDUEDATEFIRSTCONTRACT: TDateTimeField
+      DisplayLabel = #1041#1072#1100#1083'.'#1090#1072#1088#1080#1093#1080
+      FieldName = 'DUEDATEFIRSTCONTRACT'
+      Required = True
+    end
+  end
+  object ODSDetail30ds: TDataSource
+    DataSet = ODSDetail30
+    Left = 312
+    Top = 200
+  end
+  object ODSDetail30: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      '   f.name as filialname,'
+      '   crdtype.description,'
+      '   av.val_name as valu_name,'
+      '   p.numberofcredit,'
+      '   ac.acc_no,'
+      '   b.name as custname,'
+      '   p.creditlineamount,'
+      '   p.ANNUALYINTERESTRATE,'
+      '   r.percent,'
+      '   round(h.rest*o.ostat,2)+round(h.duerest*o.ostat,2) as rest,'
+      
+        '   round(h.interestrest*o.ostat,2)+round(h.dueinterestrest*o.ost' +
+        'at,2) as interestrest,'
+      '   p.DATEOFCONCLUSION,'
+      '   p.DUEDATEFIRSTCONTRACT'
+      'from'
+      '   cm_portfolio p,'
+      '   filial_t f,'
+      '   avalute av,'
+      '   cm_loanaccounts ac,'
+      '   cm_boorowerinfo b,'
+      '   cm_history h,'
+      '   operkurs o,'
+      '   cm_credittypes crdtype,'
+      '   cm_reserves r'
+      'where '
+      '  p.branchid = f.id and'
+      '  p.currency = av.valute and'
+      '  p.id = ac.creditid and'
+      '  p.id = b.creditid and'
+      '  p.id = h.creditid and'
+      '  h.hdate = :dat and'
+      '  o.val_kod = p.currency and'
+      '  o.dat = :dat and'
+      
+        '  p.credittype = crdtype.id and p.id in (select creditid from cm' +
+        '_tranches where TRANCHEDATE between cm_utils.get_firstmonth(:dat' +
+        ') and last_day(:dat)) and '
+      '  h.reserveid = r.id --and p.credittype = :crdtype'
+      '  '
+      '  '
+      '  '
+      '  '
+      '  '
+      '  '
+      '  '
+      '  '
+      '  '
+      '  '
+      '  '
+      '  '
+      '  '
+      '  '
+      '  '
+      '  '
+      '  '
+      'order by :OrderField'
+      '')
+    Optimize = False
+    Variables.Data = {
+      0400000002000000080000003A004400410054000C0000000000000000000000
+      160000003A004F0052004400450052004600490045004C004400010000000000
+      000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000D00000014000000460049004C00490041004C004E0041004D004500
+      010000000000160000004400450053004300520049005000540049004F004E00
+      01000000000012000000560041004C0055005F004E0041004D00450001000000
+      00001C0000004E0055004D004200450052004F00460043005200450044004900
+      54000100000000000C0000004100430043005F004E004F000100000000001000
+      000043005500530054004E0041004D0045000100000000002000000043005200
+      45004400490054004C0049004E00450041004D004F0055004E00540001000000
+      00002600000041004E004E00550041004C00590049004E005400450052004500
+      5300540052004100540045000100000000000E00000050004500520043004500
+      4E00540001000000000008000000520045005300540001000000000018000000
+      49004E0054004500520045005300540052004500530054000100000000002000
+      000044004100540045004F00460043004F004E0043004C005500530049004F00
+      4E00010000000000280000004400550045004400410054004500460049005200
+      5300540043004F004E0054005200410043005400010000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 208
+    Top = 200
+    object ODSDetail30FILIALNAME: TWideStringField
+      DisplayLabel = #1060#1080#1083#1080#1072#1083
+      FieldName = 'FILIALNAME'
+      Size = 90
+    end
+    object ODSDetail30DESCRIPTION: TWideStringField
+      DisplayLabel = #1050#1088#1077#1076#1080#1090#1080#1085' '#1090#1080#1087#1080
+      FieldName = 'DESCRIPTION'
+      Size = 128
+    end
+    object ODSDetail30VALU_NAME: TWideStringField
+      DisplayLabel = #1042#1072#1083#1081#1091#1090#1072
+      FieldName = 'VALU_NAME'
+      Size = 25
+    end
+    object ODSDetail30NUMBEROFCREDIT: TWideStringField
+      DisplayLabel = #1052#1094#1075#1072#1074'.'#8470
+      FieldName = 'NUMBEROFCREDIT'
+      Required = True
+      Size = 32
+    end
+    object ODSDetail30ACC_NO: TWideStringField
+      DisplayLabel = #1065#1077#1089#1072#1073'.'#8470
+      FieldName = 'ACC_NO'
+    end
+    object ODSDetail30CUSTNAME: TWideStringField
+      DisplayLabel = #1052#1094#1096#1090#1103#1088#1080#1085#1080#1085' '#1072#1076#1099
+      FieldName = 'CUSTNAME'
+      Size = 64
+    end
+    object ODSDetail30CREDITLINEAMOUNT: TFloatField
+      DisplayLabel = #1050#1088#1077#1076#1080#1090'.'#1084#1103#1073'.'
+      FieldName = 'CREDITLINEAMOUNT'
+      Required = True
+    end
+    object ODSDetail30ANNUALYINTERESTRATE: TFloatField
+      DisplayLabel = #1050#1088#1077#1076#1080#1090'.%'
+      FieldName = 'ANNUALYINTERESTRATE'
+      Required = True
+    end
+    object ODSDetail30PERCENT: TFloatField
+      DisplayLabel = #1045#1097#1090'.%'
+      FieldName = 'PERCENT'
+      Required = True
+    end
+    object ODSDetail30REST: TFloatField
+      DisplayLabel = #1071#1041
+      FieldName = 'REST'
+    end
+    object ODSDetail30INTERESTREST: TFloatField
+      DisplayLabel = #1060#1041
+      FieldName = 'INTERESTREST'
+    end
+    object ODSDetail30DATEOFCONCLUSION: TDateTimeField
+      DisplayLabel = #1042#1077#1088'.'#1090#1072#1088#1080#1093#1080
+      FieldName = 'DATEOFCONCLUSION'
+      Required = True
+    end
+    object ODSDetail30DUEDATEFIRSTCONTRACT: TDateTimeField
+      DisplayLabel = #1041#1072#1100#1083'.'#1090#1072#1088#1080#1093#1080
+      FieldName = 'DUEDATEFIRSTCONTRACT'
+      Required = True
+    end
+  end
+  object ODSDetailAllds: TDataSource
+    DataSet = ODSDetailAll
+    Left = 416
+    Top = 24
+  end
+  object ODSDetailAll: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      '   f.name as filialname,'
+      '   crdtype.description,'
+      '   av.val_name as valu_name,'
+      '   p.numberofcredit,'
+      '   ac.acc_no,'
+      '   b.name as custname,'
+      '   p.creditlineamount,'
+      '   p.ANNUALYINTERESTRATE,'
+      '   r.percent,'
+      '   round(h.rest*o.ostat,2)+round(h.duerest*o.ostat,2) as rest,'
+      
+        '   round(h.interestrest*o.ostat,2)+round(h.dueinterestrest*o.ost' +
+        'at,2) as interestrest,'
+      '   p.DATEOFCONCLUSION,'
+      '   p.DUEDATEFIRSTCONTRACT'
+      'from'
+      '   cm_portfolio p,'
+      '   filial_t f,'
+      '   avalute av,'
+      '   cm_loanaccounts ac,'
+      '   cm_boorowerinfo b,'
+      '   cm_history h,'
+      '   operkurs o,'
+      '   cm_credittypes crdtype,'
+      '   cm_reserves r'
+      'where '
+      '  p.branchid = f.id and'
+      '  p.currency = av.valute and'
+      '  p.id = ac.creditid and'
+      '  p.id = b.creditid and'
+      '  p.id = h.creditid and'
+      '  h.hdate = :dat and (h.rest + h.duerest)>0 and '
+      '  o.val_kod = p.currency and'
+      '  o.dat = :dat and'
+      '  p.credittype = crdtype.id and'
+      '  h.reserveid = r.id --and p.credittype = :crdtype'
+      '  '
+      '  '
+      '  '
+      '  '
+      '  '
+      '  '
+      '  '
+      '  '
+      '  '
+      '  '
+      '  '
+      '  '
+      '  '
+      '  '
+      '  '
+      '  '
+      '  '
+      'order by :OrderField'
+      '')
+    Optimize = False
+    Variables.Data = {
+      0400000002000000080000003A004400410054000C0000000000000000000000
+      160000003A004F0052004400450052004600490045004C004400010000000000
+      000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000D00000014000000460049004C00490041004C004E0041004D004500
+      010000000000160000004400450053004300520049005000540049004F004E00
+      01000000000012000000560041004C0055005F004E0041004D00450001000000
+      00001C0000004E0055004D004200450052004F00460043005200450044004900
+      54000100000000000C0000004100430043005F004E004F000100000000001000
+      000043005500530054004E0041004D0045000100000000002000000043005200
+      45004400490054004C0049004E00450041004D004F0055004E00540001000000
+      00002600000041004E004E00550041004C00590049004E005400450052004500
+      5300540052004100540045000100000000000E00000050004500520043004500
+      4E00540001000000000008000000520045005300540001000000000018000000
+      49004E0054004500520045005300540052004500530054000100000000002000
+      000044004100540045004F00460043004F004E0043004C005500530049004F00
+      4E00010000000000280000004400550045004400410054004500460049005200
+      5300540043004F004E0054005200410043005400010000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 337
+    Top = 25
+    object ODSDetailAllFILIALNAME: TWideStringField
+      DisplayLabel = #1060#1080#1083#1080#1072#1083
+      FieldName = 'FILIALNAME'
+      Size = 90
+    end
+    object ODSDetailAllDESCRIPTION: TWideStringField
+      DisplayLabel = #1050#1088#1077#1076#1080#1090#1080#1085' '#1090#1080#1087#1080
+      FieldName = 'DESCRIPTION'
+      Size = 128
+    end
+    object ODSDetailAllVALU_NAME: TWideStringField
+      DisplayLabel = #1042#1072#1083#1081#1091#1090#1072
+      FieldName = 'VALU_NAME'
+      Size = 25
+    end
+    object ODSDetailAllNUMBEROFCREDIT: TWideStringField
+      DisplayLabel = #1052#1094#1075#1072#1074'.'#8470
+      FieldName = 'NUMBEROFCREDIT'
+      Required = True
+      Size = 32
+    end
+    object ODSDetailAllACC_NO: TWideStringField
+      DisplayLabel = #1065#1077#1089#1072#1073'.'#8470
+      FieldName = 'ACC_NO'
+    end
+    object ODSDetailAllCUSTNAME: TWideStringField
+      DisplayLabel = #1052#1094#1096#1090#1103#1088#1080#1085#1080#1085' '#1072#1076#1099
+      FieldName = 'CUSTNAME'
+      Size = 64
+    end
+    object ODSDetailAllCREDITLINEAMOUNT: TFloatField
+      DisplayLabel = #1050#1088#1077#1076#1080#1090'.'#1084#1103#1073'.'
+      FieldName = 'CREDITLINEAMOUNT'
+      Required = True
+    end
+    object ODSDetailAllANNUALYINTERESTRATE: TFloatField
+      DisplayLabel = #1050#1088#1077#1076#1080#1090'.%'
+      FieldName = 'ANNUALYINTERESTRATE'
+      Required = True
+    end
+    object ODSDetailAllPERCENT: TFloatField
+      DisplayLabel = #1045#1097#1090'.%'
+      FieldName = 'PERCENT'
+      Required = True
+    end
+    object ODSDetailAllREST: TFloatField
+      DisplayLabel = #1071#1041
+      FieldName = 'REST'
+    end
+    object ODSDetailAllINTERESTREST: TFloatField
+      DisplayLabel = #1060#1041
+      FieldName = 'INTERESTREST'
+    end
+    object ODSDetailAllDATEOFCONCLUSION: TDateTimeField
+      DisplayLabel = #1042#1077#1088'.'#1090#1072#1088#1080#1093#1080
+      FieldName = 'DATEOFCONCLUSION'
+      Required = True
+    end
+    object ODSDetailAllDUEDATEFIRSTCONTRACT: TDateTimeField
+      DisplayLabel = #1041#1072#1100#1083'.'#1090#1072#1088#1080#1093#1080
+      FieldName = 'DUEDATEFIRSTCONTRACT'
+      Required = True
+    end
+  end
+end

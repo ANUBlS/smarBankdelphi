@@ -1,0 +1,55 @@
+﻿object dmsettings: Tdmsettings
+  OldCreateOrder = False
+  Height = 341
+  Width = 413
+  object DsInvestType: TOracleDataSet
+    SQL.Strings = (
+      'select m.rowid, m.* from ins_investment_type m')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000400000049004400010000000000080000004E0041004D00
+      4500010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 16
+    Top = 8
+    object DsInvestTypeID: TFloatField
+      FieldName = 'ID'
+    end
+    object DsInvestTypeNAME: TWideStringField
+      DisplayLabel = #304'nvestisiya n'#246'vl'#601'ri'
+      FieldName = 'NAME'
+      Size = 255
+    end
+  end
+  object Ds_İnvest_time: TOracleDataSet
+    SQL.Strings = (
+      'select m.rowid, m.* from ins_investment_time m')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000400000049004400010000000000080000004E0041004D00
+      4500010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 128
+    Top = 8
+    object Ds_İnvest_timeID: TFloatField
+      FieldName = 'ID'
+    end
+    object Ds_İnvest_timeNAME: TWideStringField
+      DisplayLabel = 'M'#252'dd'#601'tli\M'#252'dd'#601'tsiz'
+      FieldName = 'NAME'
+      Size = 255
+    end
+  end
+  object DsrInvestType: TDataSource
+    DataSet = DsInvestType
+    Left = 24
+    Top = 56
+  end
+  object Dsr_İnvest_time: TDataSource
+    DataSet = Ds_İnvest_time
+    Left = 120
+    Top = 112
+  end
+end

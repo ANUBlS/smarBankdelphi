@@ -1,0 +1,420 @@
+﻿unit UnitCustProps;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActnList, DBCtrls, ExtCtrls, StdCtrls, Mask, ComCtrls, SBCustomer, Db, Variants,
+  DBCtrlsEh, Buttons, ToolWin;
+
+type
+  TFrmCustProps = class(TForm)
+    GroupBox1: TGroupBox;
+    Label3: TLabel;
+    Label5: TLabel;
+    Label7: TLabel;
+    Label9: TLabel;
+    Label10: TLabel;
+    Label11: TLabel;
+    Label12: TLabel;
+    Label13: TLabel;
+    Label15: TLabel;
+    Label16: TLabel;
+    Label17: TLabel;
+    Label18: TLabel;
+    Label19: TLabel;
+    Label6: TLabel;
+    Label8: TLabel;
+    Label1: TLabel;
+    OpenDateEdit: TDateTimePicker;
+    NameEdit: TDBEdit;
+    RelationCB: TDBLookupComboBox;
+    GroupCB: TDBLookupComboBox;
+    EstateTypeCB: TDBLookupComboBox;
+    OrganizationTypeCB: TDBLookupComboBox;
+    ActionAreaCB: TDBLookupComboBox;
+    BranchCB: TDBLookupComboBox;
+    ClientClosedCB: TCheckBox;
+    ClientClosedPanel: TPanel;
+    CloseDateEdit: TDateTimePicker;
+    IsNotResidentCB: TDBCheckBox;
+    OKPOCodeEdit: TDBEdit;
+    TazAreaCB: TDBLookupComboBox;
+    TaxIDEdit: TDBEdit;
+    BankIDEdit: TDBEdit;
+    DBEdit1: TDBEdit;
+    DBEdit3: TDBEdit;
+    DBEdit4: TDBEdit;
+    DBEdit2: TDBEdit;
+    ActionList1: TActionList;
+    InfoView: TAction;
+    IpInfoView: TAction;
+    GroupBox2: TGroupBox;
+    Button1: TButton;
+    OkButton: TButton;
+    CancelButton: TButton;
+    GroupBox9: TGroupBox;
+    Label47: TLabel;
+    Label48: TLabel;
+    Label49: TLabel;
+    Label50: TLabel;
+    Label52: TLabel;
+    Label53: TLabel;
+    Label54: TLabel;
+    Label51: TLabel;
+    Label55: TLabel;
+    Label56: TLabel;
+    Label57: TLabel;
+    Label58: TLabel;
+    Label61: TLabel;
+    Label65: TLabel;
+    Label66: TLabel;
+    Label67: TLabel;
+    Label68: TLabel;
+    Label69: TLabel;
+    Address_type: TDBLookupComboBox;
+    CountryByConctType: TDBLookupComboBox;
+    CityByConctType: TDBLookupComboBox;
+    tph_contact_type: TDBLookupComboBox;
+    tph_communication_type: TDBLookupComboBox;
+    tph_country_prefix: TDBLookupComboBox;
+    DBEdit_CountryCode: TDBEdit;
+    Label2: TLabel;
+    Label4: TLabel;
+    DBEdit6: TDBEdit;
+    Db_tph_number: TDBEdit;
+    Db_tph_extension: TDBEdit;
+    Label14: TLabel;
+    Label20: TLabel;
+    db_tph_state: TDBEdit;
+    DB_tph_zip: TDBEdit;
+    db_tph_adress: TDBEdit;
+    DBEdit5: TDBEdit;
+    DBLC_INCORP_CNTR: TDBLookupComboBox;
+    DB_INCORP_STATE: TDBEdit;
+    Label21: TLabel;
+    Label22: TLabel;
+    Label23: TLabel;
+    Label24: TLabel;
+    Label25: TLabel;
+    Label26: TLabel;
+    Label27: TLabel;
+    Label28: TLabel;
+    DBLC_RiskCateg: TDBLookupComboBox;
+    Dpt_Nal: TDBDateTimeEditEh;
+    Dtp_Ustav: TDBDateTimeEditEh;
+    Label29: TLabel;
+    ToolBar1: TToolBar;
+    ToolButton1: TToolButton;
+    procedure CancelButtonClick(Sender: TObject);
+    procedure OkButtonClick(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure ClientClosedCBClick(Sender: TObject);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure Button1Click(Sender: TObject);
+    procedure Dpt_Nal1Change(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure FormCanResize(Sender: TObject; var NewWidth, NewHeight: Integer;
+      var Resize: Boolean);
+    procedure ToolButton1Click(Sender: TObject);
+  private
+    { Private declarations }
+    FCustomerParams: TCustomer;
+    FClientClosed: Boolean;
+    FChanged: Boolean;
+    procedure SetCustomerParams(Customer: TCustomer);
+    property CustomerParams: TCustomer read FCustomerParams
+      write SetCustomerParams;
+    procedure SetClientClosed(Value: Boolean);
+  public
+    { Public declarations }
+    procedure Reset;
+    function New: Boolean;
+    procedure Edit(ID: Integer);
+    property ClientClosed: Boolean read FClientClosed write SetClientClosed;
+  end;
+
+var
+  FrmCustProps: TFrmCustProps;
+
+implementation
+
+{$R *.DFM}
+
+uses CO_datamod_impl, OracleData, SBCore, CustInfoFormImpl, SBTranslateProc,
+  sboapiDataModuleImpl, CO_PhotoLogo;
+
+function TFrmCustProps.New: Boolean;
+begin
+  Reset;
+  CO_DataMod.Customers.Insert;
+  InfoView.Visible := False;
+  Button1.Visible := False;
+  Dtp_Ustav.Value := null;
+  Dpt_Nal.Value := null;
+  ShowModal;
+  Result := FChanged;
+end;
+
+procedure TFrmCustProps.Edit(ID: Integer);
+var
+  Customer: TCustomer;
+begin
+  Reset;
+  CO_DataMod.Customers.Edit;
+  Sb_GetCustomer(ID, Customer);
+  CustomerParams := Customer;
+  InfoView.Visible := True;
+  if not CO_DataMod.Customers.FieldByName('dat_ustav').IsNull then
+  Dtp_Ustav.Value := CO_DataMod.Customers.FieldByName('dat_ustav').AsDateTime
+  else
+  Dtp_Ustav.Value :=null;
+
+  if not CO_DataMod.Customers.FieldByName('dat_nal').isNull then
+  Dpt_Nal.Value := CO_DataMod.Customers.FieldByName('dat_nal').AsDateTime
+  else
+  Dpt_Nal.Value := Null;
+
+  Button1.Visible := True;
+  Button1.Enabled := True;
+  ShowModal;
+end;
+
+procedure TFrmCustProps.CancelButtonClick(Sender: TObject);
+begin
+  Close;
+end;
+
+procedure TFrmCustProps.OkButtonClick(Sender: TObject);
+begin
+  if NameEdit.Text = '' then
+  begin
+    ShowMessage('Müştərinin adını daxil edin!');
+    Exit;
+  end;
+  if EstateTypeCB.Text = '' then
+  begin
+    ShowMessage('Mülkiyyət növünü daxil edin!');
+    Exit;
+  end;
+
+  if DBEdit2.Text = '' then
+  begin
+    ShowMessage('Müştərinin dövlət qeydiyyat nömrəsini daxil edin!');
+    Exit;
+  end;
+
+  if DBLC_RiskCateg.KeyValue=null then
+  begin
+    ShowMessage('Müştərinin risk kateqoriyasını daxil edin!');
+    Exit;
+  end;
+
+   if TaxIDEdit.Text = '' then
+  begin
+    ShowMessage('Müştərinin vöen-nin daxil edin!');
+    Exit;
+  end;
+
+  if Dpt_Nal.Value=null then
+  begin
+    ShowMessage('Müştərinin DVM-də qeydə alındığı tarixi daxil edin!');
+    Exit;
+  end;
+
+  if Dtp_Ustav.Value=Null then
+  begin
+    ShowMessage('Müştərinin Nizamnaməsi qeydə alındığı tarixi daxil edin!');
+    Exit;
+  end;
+
+   if DBLC_INCORP_CNTR.KeyValue = null then
+  begin
+    ShowMessage('Hüquqi şəxsin mənsub olduğu ölkəni daxil edin!');
+    Exit;
+  end;
+
+     if Address_type.KeyValue = '' then
+  begin
+    ShowMessage('Müştərinin əlaqə növün daxil edin!');
+    Exit;
+  end;
+
+    if CountryByConctType.KeyValue = null then
+  begin
+    ShowMessage('Müştərinin əlaqə növünə görə ölkəni daxil edin!');
+    Exit;
+  end;
+
+    if CityByConctType.KeyValue = null then
+  begin
+    ShowMessage('Müştərinin əlaqə növünə görə şəhəri daxil edin!');
+    Exit;
+  end;
+
+      if db_tph_adress.Text = '' then
+  begin
+    ShowMessage('Müştərinin əlaqə növünə görə adresin daxil edin!');
+    Exit;
+  end;
+
+    if tph_contact_type.KeyValue = '' then
+  begin
+    ShowMessage('Müştərinin Əlaqə növünə görə telefon nömrəsinin tipin daxil edin!');
+    Exit;
+  end;
+
+    if tph_communication_type.KeyValue = '' then
+  begin
+    ShowMessage('Müştərinin Rabitə növünə görə telefon nömrəsinin tipin daxil edin!');
+    Exit;
+  end;
+
+     if Db_tph_number.Text = '' then
+  begin
+    ShowMessage('Müştərinin əlaqə növünə görə telefon nömrəsini daxil edin!');
+    Exit;
+  end;
+
+  with CO_DataMod.Customers do
+  begin
+    FChanged := True;
+    FieldByName('ID').Required := False;
+    FieldByName('OPEN_DAT').AsDateTime := OpenDateEdit.DateTime;
+    FieldByName('Dat_Nal').AsDateTime := Trunc(Dpt_Nal.Value);
+    FieldByName('Dat_Ustav').AsDateTime := Trunc(Dtp_Ustav.Value);
+    Post;
+    ApplyUpdates([aaInsert, aaUpdate]);
+    CommitUpdates;
+  end;
+  Close;
+end;
+
+procedure TFrmCustProps.Reset;
+var
+  CurrentDay: TDateTime;
+begin
+  FChanged := False;
+  CurrentDay := Sb_GetSystemDate();
+  OpenDateEdit.DateTime := CurrentDay;
+  CloseDateEdit.DateTime := CurrentDay;
+  ClientClosed := False;
+end;
+
+procedure TFrmCustProps.SetCustomerParams(Customer: TCustomer);
+begin
+  FCustomerParams := Customer;
+
+  with CustomerParams do
+  begin
+    OpenDateEdit.DateTime := OpenDate;
+    CloseDateEdit.DateTime := CloseDate;
+    ClientClosed := CloseDate <> NullDate;
+
+    CO_DataMod.Relation.DataSet.Locate('ID', RelationID, []);
+  end;
+end;
+
+procedure TFrmCustProps.ToolButton1Click(Sender: TObject);
+begin
+ if not Assigned(FrmLoqo) then
+    FrmLoqo := TFrmLoqo.Create(Self);
+
+if  ToolButton1.Down=False then
+begin
+    FrmLoqo.Show;
+    ToolButton1.Style:=tbsCheck;
+    ToolButton1.Down:=True;
+end
+else
+begin
+  FrmLoqo.Close;
+  ToolButton1.Style:=tbsButton;
+  ToolButton1.Down:=False;
+end;
+
+end;
+
+procedure TFrmCustProps.FormCanResize(Sender: TObject;
+  var NewWidth, NewHeight: Integer; var Resize: Boolean);
+begin
+  Resize := False;
+end;
+
+procedure TFrmCustProps.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  with CO_DataMod.Customers do
+    if State = dsInsert then
+    begin
+      Cancel;
+      CancelUpdates;
+    end;
+end;
+
+procedure TFrmCustProps.FormCreate(Sender: TObject);
+begin
+  with CO_DataMod do
+  begin
+    Customers.Open;
+    RelationData.Open;
+    ClientGroupData.Open;
+    EstateTypeData.Open;
+    OrganizationTypeData.Open;
+    ActionAreaData.Open;
+    BranchData.Open;
+    TaxAreaData.Open;
+  end;
+  SBTranslateProc.TranslateAllCompForms(Self, sboapiDataModule.OrPack_SL);
+end;
+
+procedure TFrmCustProps.SetClientClosed(Value: Boolean);
+begin
+  FClientClosed := Value;
+  // ClientClosedPanel.Visible := Value;
+  CloseDateEdit.Enabled := Value;
+  ClientClosedCB.Checked := Value;
+end;
+
+procedure TFrmCustProps.ClientClosedCBClick(Sender: TObject);
+begin
+  ClientClosed := (Sender as TCheckBox).Checked;
+end;
+
+procedure TFrmCustProps.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+  if Ord(Key) = VK_RETURN then
+    SelectNext(ActiveControl, True, True);
+end;
+
+procedure TFrmCustProps.FormKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if Key = VK_ESCAPE then
+    Close;
+end;
+
+procedure TFrmCustProps.Button1Click(Sender: TObject);
+begin
+  if not assigned(CustomerInfoForm) then
+    CustomerInfoForm := TCustomerInfoForm.Create(Self);
+  with CustomerInfoForm, CustInfoData do
+  begin
+    ClearVariables;
+    Close;
+    SetVariable('customerid', CO_DataMod.Customers.fields[0].AsVariant);
+    Open;
+    if recordcount = 0 then
+      ToolButton2Click(Sender);
+    ShowModal;
+  end;
+end;
+
+procedure TFrmCustProps.Dpt_Nal1Change(Sender: TObject);
+begin
+  with CO_DataMod, Customers do
+    FieldByName('dat' + (copy((Sender as tcomponent).name, 4, 10))).Value :=
+      (Sender as TDateTimePicker).DateTime;
+end;
+
+end.

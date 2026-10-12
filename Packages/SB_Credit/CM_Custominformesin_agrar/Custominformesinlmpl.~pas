@@ -1,0 +1,478 @@
+unit Custominformesinlmpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Buttons, Gauges,  StdCtrls,  ComCtrls, ExtCtrls, Db,
+  DBCtrls, OleServer, Excel97;
+
+
+
+
+type
+  TCustominformesin = class(TForm)
+    Panel1: TPanel;
+    Label1: TLabel;
+    DateTimePicker1: TDateTimePicker;
+    DateTimePicker2: TDateTimePicker;
+    Button1: TButton;
+    ExcelApplication1: TExcelApplication;
+    Button2: TButton;
+    Label2: TLabel;
+    Button3: TButton;
+
+
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure Button2Click(Sender: TObject);
+    procedure Button3Click(Sender: TObject);
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+  private
+    { Private declarations }
+  
+  public
+    { Public declarations }
+  end;
+
+var
+  Custominformesin: TCustominformesin;
+ procedure InitPlugin(s:string);export;
+implementation
+{$R *.DFM}
+
+uses   CommonDecls,CustDataMod,CMOracleApiDataModuleImpl;
+
+
+procedure InitPlugin(s:string);export;
+var
+pesonid :integer;
+begin
+
+ with CustDataModu, person do
+      begin
+         if Active then Close;
+         SetVariable('credid',Get_SelectedCrdID);
+        Open;
+       pesonid:=fieldbyname('personaltype').asinteger
+      end;
+    if pesonid=1 then
+    begin
+    Custominformesin.Button2.enabled:=true;
+    Custominformesin.Button1.enabled:=false
+    end
+      else
+    begin
+     Custominformesin.Button1.enabled:=true;
+     Custominformesin.Button2.enabled:=false;
+    end;
+   Custominformesin.ShowModal;
+end;
+exports
+     InitPlugin;
+
+procedure TCustominformesin.FormCreate(Sender: TObject);
+
+begin
+
+ CustDataModu:=TCustDataModu.create(self);
+ DateTimePicker1.DateTime:= CustDataModu.sysdat.fieldbyname('tek_dat').AsDateTime;
+ DateTimePicker2.DateTime:= CustDataModu.sysdat.fieldbyname('tek_dat').AsDateTime;
+
+  
+ end;
+
+procedure TCustominformesin.FormDestroy(Sender: TObject);
+begin
+CustDataModu.UsrGrpDataSet.close;
+CustDataModu.PersonelTypeDataSet.close;
+end;
+
+procedure TCustominformesin.Button1Click(Sender: TObject);
+var
+edat,dat : Tdatetime;
+ V, Sheet, Sheets   :Variant;
+    a,cell, row, i, j    :Integer;
+    E_Row1,OpenedXlsCnt:Integer;
+ aa,cttype,FilterStr,ADDITIONALPARAMS:String;
+ orta,ostat:real;
+m16,m17,m18,m19,m20,m21,m22,m23,m24,m25 :real;
+begin
+  m16:=0; m17:=0;m18:=0; m19:=0;m20:=0;m22:=0;m21:=0;m23:=0; m24:=0;m25:=0;
+
+   dat:=integer(trunc(DateTimePicker1.DateTime));
+   edat:=integer(trunc(DateTimePicker2.DateTime));
+
+  ExcelApplication1.Disconnect;
+  V :=ExcelApplication1.Application;
+  ExcelApplication1.Connect;
+  ExcelApplication1.Visible[0] :=True;
+  V.Workbooks.Open(ExtractFilePath(ExtractFilePath(ParamStr(0)))+ 'Turan.xls');
+  for OpenedXlsCnt :=1 to 100 do
+  try
+   Sheet := V.Workbooks[OpenedXlsCnt].Worksheets['Sheet1'];
+   Break;
+  except
+  end;
+  Sheets := V.Sheets;
+  Sheets.Item['Sheet1'].Activate;
+  Sheet.cells[3,4]:=edat;
+   Sheet.cells[3,4].Font.Bold :=true;
+  Sheet.cells[3,4].Font.Color:=clBlue;
+  Sheet.cells[3,4].Font.size :=11;
+  CustDataModu.Browerinfo.close ;
+  CustDataModu.Browerinfo.SetVariable('crid',Get_SelectedCrdID);
+  CustDataModu.Browerinfo.open ;
+  
+with CustDataModu, main  do
+ begin
+         if Active then Close;
+         SetVariable('credid',Get_SelectedCrdID);
+         Open;
+         i:=0;
+   while not EOF do
+    begin
+   // showmessage(inttostr(i));
+         OraclePackage1.CallProcedure('insinfof1',[
+                                                  'p_id',FieldByName('ID').AsInteger,
+                                                  'p_bdate',dat,
+                                                  'p_edate',edat
+
+                                                 ]);
+
+       i:=i+1;
+     if i>1 then
+      begin
+       Sheet.Range['A9','A9'].Insert(3);
+       Sheet.Range['B9','AB9'].Borders.Color:=clBlack;
+     end;
+     Next;
+
+ end;
+ end;
+a:=0;     j:=0 ;
+ with    CustDataModu ,ResultDS1  do
+ begin
+ Open;
+ // bashliq
+   Sheet.cells[2,7]:= CustDataModu.Browerinfo.fieldbyname('name').asstring+'  '+'Кредит боржу барядя мялумат';
+   Sheet.cells[2,7].Font.Name:='Arial Az Lat';
+   Sheet.cells[2,7].Font.Bold :=true;
+  orta:=0;
+  for a:=1 to RecordCount do
+   begin
+     ostat:=fieldbyname('KURUS').asfloat;
+
+     Sheet.cells[8+j,1]:=ostat;
+     Sheet.cells[8+j,1].Font.Color:=clwindow;
+
+     Sheet.cells[8+j,2]:=fieldbyname('SIRA').asinteger;
+     Sheet.cells[8+j,2].Font.Color:=clred;
+     Sheet.cells[8+j,3]:=fieldbyname('BOOROWERNAME').asstring;
+     Sheet.cells[8+j,3].Font.Name:='Arial Az Lat';
+     Sheet.cells[8+j,4]:=fieldbyname('SFERADAY').asstring;
+     Sheet.cells[8+j,4].Font.Name:='Arial Az Lat';
+
+     Sheet.cells[8+j,5]:=fieldbyname('CREDPERIOD').asstring;
+     Sheet.cells[8+j,5].Font.Name:='Arial Az Lat';
+
+     Sheet.cells[8+j,6]:=fieldbyname('TIP').asstring;
+     Sheet.cells[8+j,6].Font.Name:='Arial Az Lat';
+
+     Sheet.cells[8+j,7]:=fieldbyname('MUDDET').asinteger;
+     Sheet.cells[8+j,8]:=fieldbyname('DATEOFCONCLUSION').asdatetime;
+     Sheet.cells[8+j,9]:=fieldbyname('DUEDATEFIRSTCONTRACT').asdatetime;
+   
+     if fieldbyname('PLOR').asinteger=0 then
+     Sheet.cells[8+j,10]:=''
+     else
+     Sheet.cells[8+j,10]:=fieldbyname('PLOR').asinteger;
+
+     if fieldbyname('PROLONGDATE').asvariant=null then
+     Sheet.cells[8+j,11]:=''
+     else
+     Sheet.cells[8+j,11]:=fieldbyname('PROLONGDATE').asdatetime;
+
+
+     Sheet.cells[8+j,12]:=fieldbyname('VAL').asstring;
+     Sheet.cells[8+j,13]:=fieldbyname('INTRATE').asfloat;
+     Sheet.cells[8+j,14]:=fieldbyname('KRORAFAIZ').asfloat;
+    
+      Sheet.cells[8+j,16]:=fieldbyname('KRXET').asfloat;
+
+      m16:=m16+ fieldbyname('KRXET').asfloat*ostat;
+      orta:=orta+(fieldbyname('KRXET').asfloat*fieldbyname('INTRATE').asfloat)*ostat/100;
+
+      Sheet.cells[8+j,17]:=fieldbyname('SONMEB').asfloat;
+       m17:=m17+ fieldbyname('SONMEB').asfloat*ostat;
+
+      Sheet.cells[8+j,18]:=fieldbyname('GIVENAMOUNT').asfloat;
+      m18:=m18+fieldbyname('GIVENAMOUNT').asfloat*ostat;
+
+      Sheet.cells[8+j,19]:=fieldbyname('PAYEDMAIN').asfloat;
+      m19:=m19+ fieldbyname('PAYEDMAIN').asfloat*ostat;
+
+      Sheet.cells[8+j,20]:=fieldbyname('PAYEDINT').asfloat;
+      m20:=m20+ fieldbyname('PAYEDINT').asfloat*ostat;
+      Sheet.cells[8+j,21]:=fieldbyname('PAYEDINT').asfloat+fieldbyname('PAYEDMAIN').asfloat;
+      m21:=m21+ (fieldbyname('PAYEDINT').asfloat*ostat+fieldbyname('PAYEDMAIN').asfloat*ostat);
+
+      Sheet.cells[8+j,22]:=fieldbyname('DEBTMAIN').asfloat;
+      m22:=m22+ fieldbyname('DEBTMAIN').asfloat*ostat;
+
+      orta:=orta+(fieldbyname('DEBTMAIN').asfloat*fieldbyname('INTRATE').asfloat)*ostat/100;
+
+      if  fieldbyname('DEBTOVERMAIN').asfloat>0 then
+      begin
+      Sheet.cells[8+j,23]:=fieldbyname('DEBTOVERMAIN').asfloat   ;
+      m23:=m23+fieldbyname('DEBTOVERMAIN').asfloat *ostat;
+      end
+      else
+       Sheet.cells[8+j,23]:=0;
+
+      Sheet.cells[8+j,24]:=fieldbyname('LATEDAY').asfloat;
+
+       if fieldbyname('DEBTOVERINT').asfloat< 0 then
+        Sheet.cells[8+j,25]:=0
+        else
+        begin
+       Sheet.cells[8+j,25]:=fieldbyname('DEBTOVERINT').asfloat;
+       m25:=m25+fieldbyname('DEBTOVERINT').asfloat*ostat;
+       end;
+       Sheet.cells[8+j,26]:=fieldbyname('GECGUNFAIZ').asfloat;
+
+       Sheet.cells[8+j,27]:='=W'+inttostr(8+j)+'+ Y'+inttostr(8+j);
+
+       Sheet.cells[8+j,1]:='= (W'+inttostr(8+j)+'+ Y'+inttostr(8+j)+')*'+floattostr(ostat);
+
+      Sheet.cells[8+j,28]:=fieldbyname('DESCRIPTION').asstring+', '+
+      fieldbyname('PLEDGENAME').asstring+', '+floattostr(fieldbyname('GIROVREST').asfloat)   ;
+      Sheet.cells[8+j,28].Font.Name:='Arial Az Lat';
+ //  Sheet.Cells[2,5].Font.Bold :=true;
+  // Sheet.Cells[2,5].Font.Color:=clBlue;
+  // Sheet.Cells[2,5].Font.size :=22;
+
+       j:=j+1;
+   Next;
+    end;
+  Sheet.cells[8+j,16]:=m16;
+
+   aa:='V'+inttostr(8+j);
+   Sheet.cells[8+j,13]:='= '+floattostr(orta)+'/'+aa;
+
+  Sheet.cells[8+j,17]:=m17;
+  Sheet.cells[8+j,18]:=m18;
+  Sheet.cells[8+j,19]:=m19;
+  Sheet.cells[8+j,20]:=m20;
+  Sheet.cells[8+j,21]:=m21;
+  Sheet.cells[8+j,22]:=m22;
+  Sheet.cells[8+j,23]:=m23;
+  Sheet.cells[8+j,24]:='=SUM(X8:X'+inttostr(8+j-1)+')';
+  Sheet.cells[8+j,25]:=m25;
+  Sheet.cells[8+j,26]:='=SUM(Z8:Z'+inttostr(8+j-1)+')';
+  Sheet.cells[8+j,27]:='=SUM(A8:A'+inttostr(8+j-1)+')';
+ end;
+  CustDataModu.ResultDS1.Session.Commit;
+ CustDataModu.ResultDS1.close   ;
+   ExcelApplication1.Disconnect;
+ end;
+procedure TCustominformesin.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+ CustDataModu.ResultDS1.Session.Commit;
+ CustDataModu.ResultDS1.close
+end;
+
+procedure TCustominformesin.Button2Click(Sender: TObject);
+var
+edat,dat : Tdatetime;
+ V, Sheet, Sheets   :Variant;
+    a,cell, row, i, j    :Integer;
+    E_Row1,OpenedXlsCnt:Integer;
+ aa,cttype,FilterStr,ADDITIONALPARAMS:String;
+ orta,ostat :real;
+m16,m17,m18,m19,m20,m21,m22,m23,m24 :real;
+begin
+  m16:=0; m17:=0;m18:=0; m19:=0;m20:=0;m22:=0;m21:=0;m23:=0; m24:=0;
+
+   dat:=integer(trunc(DateTimePicker1.DateTime));
+   edat:=integer(trunc(DateTimePicker2.DateTime));
+
+  ExcelApplication1.Disconnect;
+  V :=ExcelApplication1.Application;
+  ExcelApplication1.Connect;
+  ExcelApplication1.Visible[0] :=True;
+  V.Workbooks.Open(ExtractFilePath(ExtractFilePath(ParamStr(0)))+ 'Turan1.xls');
+  for OpenedXlsCnt :=1 to 100 do
+  try
+   Sheet := V.Workbooks[OpenedXlsCnt].Worksheets['Sheet1'];
+   Break;
+  except
+  end;
+  Sheets := V.Sheets;
+  Sheets.Item['Sheet1'].Activate;
+ Sheet.cells[3,4]:=edat;
+   Sheet.cells[3,4]:=edat;
+   Sheet.cells[3,4].Font.Bold :=true;
+  Sheet.cells[3,4].Font.Color:=clBlue;
+  Sheet.cells[3,4].Font.size :=11;
+
+  CustDataModu.Browerinfo.close ;
+  CustDataModu.Browerinfo.SetVariable('crid',Get_SelectedCrdID);
+  CustDataModu.Browerinfo.open ;
+with CustDataModu, main  do
+ begin
+         if Active then Close;
+         SetVariable('credid',Get_SelectedCrdID);
+         Open;
+         i:=0;
+   while not EOF do
+    begin
+   // showmessage(inttostr(i));
+         OraclePackage1.CallProcedure('insinfof1',[
+                                                  'p_id',FieldByName('ID').AsInteger,
+                                                  'p_bdate',dat,
+                                                  'p_edate',edat
+
+                                                 ]);
+
+       i:=i+1;
+     if i>1 then
+      begin
+       Sheet.Range['A9','A9'].Insert(3);
+       Sheet.Range['B9','AA9'].Borders.Color:=clBlack;
+     end;
+     Next;
+
+ end;
+ end;
+a:=0;     j:=0 ;
+ with    CustDataModu ,ResultDS2  do
+ begin
+ Open;
+   Sheet.cells[2,7]:= CustDataModu.Browerinfo.fieldbyname('name').asstring+'  '+'Кредит боржу барядя мялумат';
+   Sheet.cells[2,7].Font.Name:='Arial Az Lat';
+   Sheet.cells[2,7].Font.Bold :=true;
+  for a:=1 to RecordCount do
+   begin
+       ostat:=fieldbyname('KURUS').asfloat;
+     Sheet.cells[8+j,2]:=fieldbyname('SIRA').asinteger;
+     Sheet.cells[8+j,2].Font.Color:=clred;
+     Sheet.cells[8+j,3]:=fieldbyname('BOOROWERNAME').asstring;
+     Sheet.cells[8+j,3].Font.Name:='Azl Sans Serif';
+     Sheet.cells[8+j,4]:=fieldbyname('SFERADAY').asstring;
+     Sheet.cells[8+j,4].Font.Name:='Azl Sans Serif';
+     Sheet.cells[8+j,5]:=fieldbyname('CREDPERIOD').asstring;
+     Sheet.cells[8+j,5].Font.Name:='Arial Az Lat';
+     Sheet.cells[8+j,6]:=fieldbyname('TIP').asstring;
+     Sheet.cells[8+j,6].Font.Name:='Arial Az Lat';
+
+     Sheet.cells[8+j,7]:=fieldbyname('MUDDET').asinteger;
+     Sheet.cells[8+j,8]:=fieldbyname('DATEOFCONCLUSION').asdatetime;
+     Sheet.cells[8+j,9]:=fieldbyname('DUEDATEFIRSTCONTRACT').asdatetime;
+    // Sheet.cells[8+j,10]:=fieldbyname('PROLONGCNT').asinteger;
+   //  Sheet.cells[8+j,11]:=fieldbyname('PROLONGDATE').asdatetime;
+
+          if fieldbyname('PLOR').asinteger=0 then
+     Sheet.cells[8+j,10]:=''
+     else
+     Sheet.cells[8+j,10]:=fieldbyname('PLOR').asinteger;
+
+     if fieldbyname('PROLONGDATE').asvariant=null then
+     Sheet.cells[8+j,11]:=''
+     else
+     Sheet.cells[8+j,11]:=fieldbyname('PROLONGDATE').asdatetime;
+
+     Sheet.cells[8+j,12]:=fieldbyname('VAL').asstring;
+     Sheet.cells[8+j,12].Font.Name:='Arial Az Lat';
+     Sheet.cells[8+j,13]:=fieldbyname('INTRATE').asfloat;
+     Sheet.cells[8+j,14]:=fieldbyname('KRORAFAIZ').asfloat;
+
+
+      Sheet.cells[8+j,16]:=fieldbyname('KRXET').asfloat;
+      m16:=m16+ fieldbyname('KRXET').asfloat*ostat;
+
+      Sheet.cells[8+j,17]:=fieldbyname('PRINCIPAL').asfloat;
+      m17:=m17+fieldbyname('PRINCIPAL').asfloat*ostat;
+
+      Sheet.cells[8+j,18]:=fieldbyname('PAYEDMAIN').asfloat;
+      m18:=m18+fieldbyname('PAYEDMAIN').asfloat*ostat;
+
+      Sheet.cells[8+j,19]:=fieldbyname('PAYEDINT').asfloat;
+      m19:=m19+ fieldbyname('PAYEDINT').asfloat*ostat;
+      Sheet.cells[8+j,20]:=fieldbyname('PAYEDINT').asfloat+fieldbyname('PAYEDMAIN').asfloat;
+      m20:=m20+ (fieldbyname('PAYEDINT').asfloat*ostat+ fieldbyname('PAYEDMAIN').asfloat*ostat);
+      Sheet.cells[8+j,21]:=fieldbyname('DEBTMAIN').asfloat;
+      m21:=m21 + fieldbyname('DEBTMAIN').asfloat*ostat;
+
+      if fieldbyname('DEBTOVERMAIN').asfloat> 0 then
+      begin
+        Sheet.cells[8+j,22]:=fieldbyname('DEBTOVERMAIN').asfloat;
+        m22:=m22+fieldbyname('DEBTOVERMAIN').asfloat*ostat;
+        end
+      else  Sheet.cells[8+j,22]:=0;
+
+      Sheet.cells[8+j,23]:=fieldbyname('LATEDAY').asfloat;
+      if fieldbyname('DEBTOVERINT').asfloat>0 then
+      begin
+      Sheet.cells[8+j,24]:=fieldbyname('DEBTOVERINT').asfloat;
+    m24:=m24+ fieldbyname('DEBTOVERINT').asfloat*ostat;
+      end
+       else
+      Sheet.cells[8+j,24]:=0;
+
+      Sheet.cells[8+j,25]:=fieldbyname('GECGUNFAIZ').asfloat;
+
+      Sheet.cells[8+j,1]:='= (V'+inttostr(8+j)+'+ X'+inttostr(8+j)+')*'+floattostr(ostat);
+
+      Sheet.cells[8+j,26]:='=V'+inttostr(8+j)+'+ X'+inttostr(8+j);
+
+      Sheet.cells[8+j,27]:=fieldbyname('DESCRIPTION').asstring+', '+
+      fieldbyname('PLEDGENAME').asstring+', '+floattostr(fieldbyname('GIROVREST').asfloat)   ;
+      Sheet.cells[8+j,27].Font.Name:='Arial Az Lat';
+ //Sheet.Cells[2,5].Font.Bold :=true;
+  // Sheet.Cells[2,5].Font.Color:=clBlue;
+  // Sheet.Cells[2,5].Font.size :=22;
+   orta:=orta+(fieldbyname('KRXET').asfloat*fieldbyname('INTRATE').asfloat)*ostat/100;
+       j:=j+1;
+   Next;
+    end;
+
+    aa:='U'+inttostr(8+j);
+    Sheet.cells[8+j,13]:='= SUM('+floattostr(orta)+'/'+aa+')';
+
+  Sheet.cells[8+j,16]:=m16 ;
+  Sheet.cells[8+j,17]:=m17 ;
+  Sheet.cells[8+j,18]:=m18;
+  Sheet.cells[8+j,19]:=m19 ;
+  Sheet.cells[8+j,20]:=m20;
+  Sheet.cells[8+j,21]:=m21 ;
+  Sheet.cells[8+j,22]:=m22 ;
+  Sheet.cells[8+j,23]:='=SUM(W8:W'+inttostr(8+j-1)+')' ;
+  Sheet.cells[8+j,24]:=m24;
+  Sheet.cells[8+j,25]:='=SUM(Y8:Y'+inttostr(8+j-1)+')' ;
+  Sheet.cells[8+j,26]:='=SUM(A8:A'+inttostr(8+j-1)+')';
+ end;
+ CustDataModu.ResultDS2.Session.Commit;
+ CustDataModu.ResultDS2.close   ;
+   ExcelApplication1.Disconnect;
+ end;
+
+procedure TCustominformesin.Button3Click(Sender: TObject);
+begin
+close
+end;
+
+procedure TCustominformesin.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+resize:=false
+end;
+
+initialization
+ Custominformesin := TCustominformesin.Create(CommonApplication);
+end.
+

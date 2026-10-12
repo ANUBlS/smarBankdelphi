@@ -1,0 +1,85 @@
+object FormLoanBalance: TFormLoanBalance
+  Left = 574
+  Top = 216
+  Width = 285
+  Height = 149
+  Color = clBtnFace
+  Font.Charset = RUSSIAN_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poOwnerFormCenter
+  OnClose = FormClose
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Label2: TLabel
+    Left = 96
+    Top = 34
+    Width = 34
+    Height = 13
+    Caption = 'ћ€щсул'
+  end
+  object BitBtn1: TBitBtn
+    Left = 107
+    Top = 83
+    Width = 75
+    Height = 25
+    Caption = '√€бул'
+    Default = True
+    ModalResult = 1
+    TabOrder = 0
+    OnClick = BitBtn1Click
+    NumGlyphs = 2
+  end
+  object BitBtn2: TBitBtn
+    Left = 194
+    Top = 83
+    Width = 75
+    Height = 25
+    Cancel = True
+    Caption = '»мтина'
+    ModalResult = 2
+    TabOrder = 1
+    NumGlyphs = 2
+  end
+  object LCBLoanBalance: TDBLookupComboboxEh
+    Left = 10
+    Top = 3
+    Width = 266
+    Height = 23
+    AlwaysShowBorder = True
+    AutoSize = False
+    DropDownBox.Options = [dlgColumnResizeEh, dlgColLinesEh]
+    EditButtons = <>
+    KeyField = 'BAL_CN'
+    ListField = 'FULLNAME'
+    ListSource = DataModuleConcl.BalcnLoanDatSrc
+    TabOrder = 2
+    Visible = True
+  end
+  object DBLookupComboboxEh1: TDBLookupComboboxEh
+    Left = 9
+    Top = 53
+    Width = 262
+    Height = 21
+    EditButtons = <>
+    KeyField = 'ID'
+    ListField = 'NAM'
+    ListSource = DataModuleConcl.DataSrcSeynbol
+    TabOrder = 3
+    Visible = True
+  end
+  object NLSLocalizer1: TNLSLocalizer
+    Caption = '—суда баланс щесаблары :'
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    Left = 288
+    Top = 24
+  end
+end

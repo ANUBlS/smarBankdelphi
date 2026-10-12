@@ -1,0 +1,152 @@
+object LazTrDatMod: TLazTrDatMod
+  OldCreateOrder = False
+  OnCreate = DataModuleCreate
+  OnDestroy = DataModuleDestroy
+  Left = 227
+  Top = 199
+  Height = 480
+  Width = 696
+  object TransactionsData: TOracleDataSet
+    SQL.Strings = (
+      'SELECT'
+      '    l.id,'
+      '    cm_common.get_CreditMumber(l.creditid) as NumberOfCredit, '
+      '    B.name as Custname,'
+      '    ad.acc_no as debitAccno,'
+      '    ac.acc_no as CreditAccno,'
+      '    avd.val_name as DebitCurrency,'
+      '    avc.val_name as CreditCurrency,'
+      '    debitamount, '
+      
+        '    CM_AK_REPORTS.Get_PlanPayment(l.creditid,l.creditoperation,l' +
+        '.trdate) as PlanPay,'
+      '    l.trdescription,'
+      '    l.status'
+      '  FROM '
+      '     cm_lazytransactions l,'
+      '     sb_account ad,'
+      '     sb_account ac,'
+      '     sb_avalute avd,'
+      '     sb_avalute avc,'
+      '     cm_boorowerinfo B'
+      '  where'
+      '      l.debitaccid = ad.id'
+      '  and l.creditaccid = ac.id'
+      '  and ad.val_acc = avd.valute'
+      '  and ac.val_acc = avc.valute'
+      '  and l.creditid = B.CreditID'
+      '  and l.trdate = :TransactionDate'
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ' order by :OrderField '
+      '   '
+      '  '
+      ' ')
+    Variables.Data = {
+      0300000002000000100000003A5452414E53414354494F4E444154450C000000
+      00000000000000000B0000003A4F524445524649454C44010000000300000069
+      640000000000}
+    Session = CMDataModule.CMSession
+    Left = 40
+    Top = 64
+    object TransactionsDataID: TFloatField
+      DisplayLabel = 'є'
+      FieldName = 'ID'
+      Required = True
+    end
+    object TransactionsDataNUMBEROFCREDIT: TStringField
+      DisplayLabel = 'ћцгавил€нин є-си'
+      FieldName = 'NUMBEROFCREDIT'
+      Size = 4000
+    end
+    object TransactionsDataCUSTNAME: TStringField
+      DisplayLabel = 'ћцшт€ри'
+      FieldName = 'CUSTNAME'
+      Size = 64
+    end
+    object TransactionsDataDEBITACCNO: TStringField
+      DisplayLabel = 'ƒебит'
+      FieldName = 'DEBITACCNO'
+      Required = True
+    end
+    object TransactionsDataDEBITCURRENCY: TStringField
+      DisplayLabel = '$'
+      FieldName = 'DEBITCURRENCY'
+      Size = 10
+    end
+    object TransactionsDataCREDITACCNO: TStringField
+      DisplayLabel = ' редит'
+      FieldName = 'CREDITACCNO'
+      Required = True
+    end
+    object TransactionsDataCREDITCURRENCY: TStringField
+      DisplayLabel = '$'
+      FieldName = 'CREDITCURRENCY'
+      Size = 10
+    end
+    object TransactionsDataDEBITAMOUNT: TFloatField
+      DisplayLabel = 'ћ€бл€ь'
+      FieldName = 'DEBITAMOUNT'
+    end
+    object TransactionsDataPLANPAY: TFloatField
+      DisplayLabel = 'ёд€й€ж€йи ћ€бл€ь'
+      FieldName = 'PLANPAY'
+    end
+    object TransactionsDataTRDESCRIPTION: TStringField
+      DisplayLabel = 'ям€лийатын т€йинаты'
+      FieldName = 'TRDESCRIPTION'
+      Required = True
+      Size = 255
+    end
+    object TransactionsDataSTATUS: TFloatField
+      DisplayLabel = '—татус'
+      FieldName = 'STATUS'
+      Required = True
+    end
+  end
+  object Transactions: TOraclePackage
+    Session = CMDataModule.CMSession
+    PackageName = 'CM_DIFFERENCE_TRANSACTIONS'
+    ParameterMode = pmNamed
+    Left = 40
+    Top = 8
+  end
+  object TransactionsDatSrc: TDataSource
+    DataSet = TransactionsData
+    Left = 144
+    Top = 65
+  end
+  object OracleDataSet1: TOracleDataSet
+    SQL.Strings = (
+      'select rowid, t.*'
+      'from cm_usergroups  t')
+    QBEDefinition.QBEFieldDefs = {
+      04000000030000000200000049440100000000000B0000004445534352495054
+      494F4E0100000000000800000042414E4B5F4B4F44010000000000}
+    Session = CMDataModule.CMSession
+    Left = 304
+    Top = 24
+    object OracleDataSet1ID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object OracleDataSet1DESCRIPTION: TStringField
+      FieldName = 'DESCRIPTION'
+      Size = 64
+    end
+    object OracleDataSet1BANK_KOD: TStringField
+      FieldName = 'BANK_KOD'
+      Size = 12
+    end
+  end
+  object DataSource1: TDataSource
+    DataSet = OracleDataSet1
+    Left = 304
+    Top = 80
+  end
+end

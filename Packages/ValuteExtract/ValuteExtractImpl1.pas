@@ -1,0 +1,510 @@
+unit ValuteExtractImpl1;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActiveX, AxCtrls, ValuteExtractProj1_TLB, StdVcl, StdCtrls, Buttons,
+  ExtCtrls, ComCtrls, ImgList, SBPlgAx50_TLB, Oracle, Db, OracleData,
+  CMExcelExport;
+
+type
+  TValuteExtract = class(TActiveForm, IValuteExtract, IIconExporter)
+    GroupBox1: TGroupBox;
+    DTPBegin: TDateTimePicker;
+    DTPEnd: TDateTimePicker;
+    Label1: TLabel;
+    Label2: TLabel;
+    Bevel1: TBevel;
+    Label3: TLabel;
+    SubmitBit: TBitBtn;
+    ImageList1: TImageList;
+    AccEd: TEdit;
+    OraPackVExtraction: TOraclePackage;
+    CMExcelExport1: TCMExcelExport;
+    OraDataSetMainExell: TOracleDataSet;
+    BitBtn1: TBitBtn;
+    CheckBox1: TCheckBox;
+    OraDataSetMainExellDEBET: TFloatField;
+    OraDataSetMainExellKREDIT: TFloatField;
+    OraDataSetMainExellDAT: TWideStringField;
+    OraDataSetMainExellACC_NO: TWideStringField;
+    OraDataSetMainExellVAL_NAME: TWideStringField;
+    OraDataSetMainExellNAME: TWideStringField;
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure SubmitBitClick(Sender: TObject);
+    procedure AccEdKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure BitBtn1Click(Sender: TObject);
+  private
+    { Private declarations }
+    FEvents: IValuteExtractEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+
+    function Get_Icon: OLE_HANDLE; safecall;
+  public
+    { Public declarations }
+    procedure Initialize; override;
+  end;
+var
+   ValuteExtract : TValuteExtract;
+   CurrentDate : TdateTime;
+   acc_id : real;
+   BeginDate, EndDate: TDateTime;
+   Val_name : String;
+
+implementation
+
+uses ComObj, ComServ, sboapiDataModuleImpl, UnotQuickRepStatement, SBTranslateProc;
+
+{$R *.DFM}
+
+{ TValuteExtract }
+
+procedure TValuteExtract.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_ValuteExtractPage); }
+end;
+
+procedure TValuteExtract.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as IValuteExtractEvents;
+end;
+
+procedure TValuteExtract.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TValuteExtract.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TValuteExtract.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TValuteExtract.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TValuteExtract.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TValuteExtract.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TValuteExtract.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TValuteExtract.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TValuteExtract.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TValuteExtract.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TValuteExtract.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TValuteExtract.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TValuteExtract.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TValuteExtract.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TValuteExtract.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TValuteExtract.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TValuteExtract.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TValuteExtract.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TValuteExtract.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TValuteExtract._Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TValuteExtract.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TValuteExtract.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TValuteExtract.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TValuteExtract.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TValuteExtract.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TValuteExtract.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TValuteExtract.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TValuteExtract.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TValuteExtract.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TValuteExtract.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TValuteExtract.Set_AxBorderStyle(Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TValuteExtract.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TValuteExtract.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TValuteExtract.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TValuteExtract.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TValuteExtract.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TValuteExtract.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TValuteExtract.Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TValuteExtract.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TValuteExtract.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TValuteExtract.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TValuteExtract.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TValuteExtract.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TValuteExtract.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+function TValuteExtract.Get_Icon: OLE_HANDLE;
+begin
+  ImageList1.GetIcon(0, Icon);
+  Result := Icon.Handle;
+end;
+
+
+procedure TValuteExtract.ActiveFormCreate(Sender: TObject);
+begin
+  ValuteExtract := self;
+  with sboapiDataModule do
+    CurrentDate:= SBOperationDay.CallDateFunction('get_date', []);
+  DTPBegin.DateTime := CurrentDate;
+  DTPEnd.DateTime := CurrentDate;
+
+  SBTranslateProc.TranslateAllComponents(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TValuteExtract.SubmitBitClick(Sender: TObject);
+begin
+
+  with OraPackVExtraction do
+    begin
+     if AccEd.Text <> '' then
+      begin
+       acc_id:= CallFloatFunction('check_account_number',[AccEd.Text, Val_name]);
+       val_name:=GetParameter(1);
+ //      ShowMessage(Val_name);
+{       if acc_id<>0 then
+         ShowMessage('Account is found')
+       else
+         ShowMessage('Account is not found');
+      end
+       else
+        ShowMessage('Enter account number'); }
+    end;
+  BeginDate :=Int(DTPBegin.DateTime);
+  EndDate   :=Int(DTPEnd.DateTime);
+{  with OraPackVExtraction do
+    begin
+     try
+//      FormatDateTime('dd-mmm-yy', DTPBegin.DateTime)
+       ShowMessage(FloatToStr( CallFloatFunction('get_ostat',[acc_id,  BeginDate, 'OLD'])));
+       ShowMessage(FloatToStr( CallFloatFunction('get_ostat',[acc_id,  EndDate, 'CURR'])));
+     except
+      on E:EOracleError do ShowMessage(E.Message);
+     end;
+    end;}
+
+   if not Assigned(QuickRepStatement) then
+     QuickRepStatement := TQuickRepStatement.Create(self);
+
+
+ with  QuickRepStatement, OraDataSetMain do
+   begin
+     try
+      Close;
+      SetVariable('acc_id', acc_id);
+      SetVariable('BeginDat', BeginDate);
+      SetVariable('EndDat', EndDate);
+
+
+      Open;
+      if CheckBox1.Checked then
+        begin
+         Filtered:=False;
+         Filter:= '(debet<>0) or (kredit<>0)';
+         Filtered:=True;
+        end
+      else
+       begin
+        Filter:= '';
+        Filtered:=False;
+       end;
+  
+      ACCNO.Caption := AccEd.Text;
+      ValName.Caption := Val_Name;
+      Begindat.Caption := DateToStr(Begindate);
+      EndDat.Caption := DateToStr(Enddate);
+
+      OldOstat.Caption := FormatFloat('#,##0.00', Abs(CallFloatFunction('get_ostat',[acc_id,  BeginDate, 'OLD'])));
+      NewOstat.Caption := FormatFloat('#,##0.00', Abs(CallFloatFunction('get_ostat',[acc_id,  EndDate, 'CURR'])));
+      Preview;
+     except
+      on E:EOracleError do ShowMessage(E.Message);
+     end;
+   end;
+   end;
+
+
+
+end;
+
+procedure TValuteExtract.AccEdKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if key = 13 then SubmitBitClick(Sender);
+end;
+
+procedure TValuteExtract.BitBtn1Click(Sender: TObject);
+begin
+
+  with OraPackVExtraction do
+    if AccEd.Text <> '' then
+      begin
+       acc_id:= CallFloatFunction('check_account_number',[AccEd.Text, Val_name]);
+       val_name:=GetParameter(1);
+      end;
+  BeginDate :=Int(DTPBegin.DateTime);
+  EndDate   :=Int(DTPEnd.DateTime);
+
+  with  OraDataSetMainExell do
+   begin
+     try
+      Close;
+      SetVariable('acc_id', acc_id);
+      SetVariable('BeginDat', BeginDate);
+      SetVariable('EndDat', EndDate);
+      Open;
+     if OraDataSetMainExell.RecordCount <> 0
+     then
+     begin
+      if CheckBox1.Checked then
+        begin
+         Filtered:=False;
+         Filter:= '(debet<>0) and (kredit<>0)';
+         Filtered:=True;
+        end
+      else
+        begin
+         Filter:= '';
+         Filtered:=False;
+        end;
+
+      CMExcelExport1.Connect;
+      CMExcelExport1.ExportDataset(OraDataSetMainExell,'Export', True);
+      CMExcelExport1.Disconnect;
+      end
+      else
+        ShowMessage('Nothing to export.');
+     except
+      on E:EOracleError do ShowMessage(E.Message);
+     end;
+   end;
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TValuteExtract,
+    Class_ValuteExtract,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

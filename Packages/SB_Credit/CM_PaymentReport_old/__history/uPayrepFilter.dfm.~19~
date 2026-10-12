@@ -1,0 +1,749 @@
+object frmPayRepFilter: TfrmPayRepFilter
+  Left = 243
+  Top = 177
+  BorderStyle = bsSingle
+  Caption = 'frmIpRepFilter'
+  ClientHeight = 341
+  ClientWidth = 735
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poMainFormCenter
+  OnCreate = FormCreate
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 14
+  object XFPanel5: TXFPanel
+    Left = -2
+    Top = 287
+    Width = 737
+    Height = 55
+    BevelKind = bkFlat
+    TabOrder = 0
+    object XFGroupBox12: TXFGroupBox
+      Left = 1
+      Top = 1
+      Width = 227
+      Height = 49
+      Align = alLeft
+      Caption = 'Hesabat tarixi'
+      TabOrder = 0
+      object XFLabel1: TXFLabel
+        Left = 107
+        Top = 16
+        Width = 6
+        Height = 14
+        Caption = '_'
+      end
+      object pick1: TDateTimePicker
+        Left = 6
+        Top = 18
+        Width = 95
+        Height = 21
+        Date = 39128.487653171300000000
+        Time = 39128.487653171300000000
+        TabOrder = 0
+      end
+      object pick2: TDateTimePicker
+        Left = 121
+        Top = 18
+        Width = 96
+        Height = 21
+        Date = 39128.487653171300000000
+        Time = 39128.487653171300000000
+        TabOrder = 1
+      end
+    end
+    object XFGroupBox13: TXFGroupBox
+      Left = 228
+      Top = 1
+      Width = 116
+      Height = 49
+      Align = alLeft
+      Caption = 'Borc tarixi'
+      TabOrder = 1
+      object dtpfi: TDateTimePicker
+        Left = 9
+        Top = 17
+        Width = 95
+        Height = 21
+        Date = 39128.487653171300000000
+        Time = 39128.487653171300000000
+        TabOrder = 0
+      end
+    end
+    object XFRadioGroup1: TXFRadioGroup
+      Left = 349
+      Top = 1
+      Width = 185
+      Height = 48
+      Caption = 'Hesabat tipi'
+      Items.Strings = (
+        'Excel'
+        'QReport')
+      TabOrder = 2
+      Visible = False
+    end
+    object XFButton1: TXFButton
+      Left = 560
+      Top = 22
+      Width = 75
+      Height = 27
+      Caption = 'Q'#601'bul'
+      DoubleBuffered = True
+      ParentDoubleBuffered = False
+      TabOrder = 3
+      OnClick = XFButton1Click
+    end
+    object XFButton2: TXFButton
+      Left = 640
+      Top = 22
+      Width = 75
+      Height = 27
+      Caption = 'Ba'#287'la'
+      DoubleBuffered = True
+      ParentDoubleBuffered = False
+      TabOrder = 4
+      OnClick = XFButton2Click
+    end
+  end
+  object XFPanel4: TXFPanel
+    Left = -2
+    Top = 216
+    Width = 737
+    Height = 71
+    BevelKind = bkFlat
+    TabOrder = 1
+    object XFGroupBox9: TXFGroupBox
+      Left = 1
+      Top = 1
+      Width = 227
+      Height = 65
+      Align = alLeft
+      Caption = 'Valyuta'
+      TabOrder = 0
+      object DBLookupComboboxEh1: TDBLookupComboboxEh
+        Left = 3
+        Top = 15
+        Width = 220
+        Height = 22
+        EditButtons = <>
+        KeyField = 'VALUTE'
+        ListField = 'VALU_NAME'
+        ListSource = Valute
+        TabOrder = 0
+        Visible = True
+      end
+      object XFCheckBox9: TXFCheckBox
+        Left = 5
+        Top = 42
+        Width = 97
+        Height = 17
+        Caption = 'T'#601'tbiq et'
+        TabOrder = 1
+      end
+    end
+    object XFGroupBox10: TXFGroupBox
+      Left = 228
+      Top = 1
+      Width = 233
+      Height = 65
+      Align = alLeft
+      Caption = 'Filial'
+      TabOrder = 1
+      object DBLookupComboboxEh2: TDBLookupComboboxEh
+        Left = 5
+        Top = 15
+        Width = 220
+        Height = 22
+        EditButtons = <>
+        KeyField = 'ID'
+        ListField = 'NAME'
+        ListSource = Branch
+        TabOrder = 0
+        Visible = True
+      end
+      object XFCheckBox10: TXFCheckBox
+        Left = 6
+        Top = 42
+        Width = 97
+        Height = 17
+        Caption = 'T'#601'tbiq et'
+        TabOrder = 1
+      end
+    end
+    object XFGroupBox11: TXFGroupBox
+      Left = 461
+      Top = 1
+      Width = 270
+      Height = 65
+      Align = alLeft
+      Caption = 'MKT'
+      TabOrder = 2
+      object DBLookupComboboxEh3: TDBLookupComboboxEh
+        Left = 5
+        Top = 15
+        Width = 259
+        Height = 22
+        EditButtons = <>
+        KeyField = 'ID'
+        ListField = 'DESCRIPTION'
+        ListSource = UsrGroup
+        TabOrder = 0
+        Visible = True
+      end
+      object XFCheckBox11: TXFCheckBox
+        Left = 5
+        Top = 42
+        Width = 97
+        Height = 17
+        Caption = 'T'#601'tbiq et'
+        TabOrder = 1
+      end
+    end
+  end
+  object XFPanel3: TXFPanel
+    Left = -2
+    Top = 144
+    Width = 737
+    Height = 71
+    BevelKind = bkFlat
+    TabOrder = 2
+    object XFGroupBox6: TXFGroupBox
+      Left = 1
+      Top = 1
+      Width = 227
+      Height = 65
+      Align = alLeft
+      Caption = 'Borcalan'#305'n tipi'
+      TabOrder = 0
+      object DBLookupComboboxEh7: TDBLookupComboboxEh
+        Left = 3
+        Top = 15
+        Width = 220
+        Height = 22
+        EditButtons = <>
+        KeyField = 'ID'
+        ListField = 'DESCRIPION'
+        ListSource = Persons
+        TabOrder = 0
+        Visible = True
+      end
+      object XFCheckBox6: TXFCheckBox
+        Left = 5
+        Top = 42
+        Width = 97
+        Height = 17
+        Caption = 'T'#601'tbiq et'
+        TabOrder = 1
+      end
+    end
+    object XFGroupBox7: TXFGroupBox
+      Left = 228
+      Top = 1
+      Width = 233
+      Height = 65
+      Align = alLeft
+      Caption = 'Borcalan'#305'n kateqoriyas'#305
+      TabOrder = 1
+      object DBLookupComboboxEh8: TDBLookupComboboxEh
+        Left = 5
+        Top = 15
+        Width = 220
+        Height = 22
+        EditButtons = <>
+        KeyField = 'ID'
+        ListField = 'DESCRIPTION'
+        ListSource = Categories
+        TabOrder = 0
+        Visible = True
+      end
+      object XFCheckBox7: TXFCheckBox
+        Left = 6
+        Top = 42
+        Width = 97
+        Height = 17
+        Caption = 'T'#601'tbiq et'
+        TabOrder = 1
+      end
+    end
+    object XFGroupBox8: TXFGroupBox
+      Left = 461
+      Top = 1
+      Width = 270
+      Height = 65
+      Align = alLeft
+      Caption = 'Kreditin n'#246'v'#252
+      TabOrder = 2
+      object DBLookupComboboxEh9: TDBLookupComboboxEh
+        Left = 5
+        Top = 15
+        Width = 259
+        Height = 22
+        EditButtons = <>
+        KeyField = 'ID'
+        ListField = 'DESCRIPTION'
+        ListSource = CrdType
+        TabOrder = 0
+        Visible = True
+      end
+      object XFCheckBox8: TXFCheckBox
+        Left = 5
+        Top = 42
+        Width = 97
+        Height = 17
+        Caption = 'T'#601'tbiq et'
+        TabOrder = 1
+      end
+    end
+  end
+  object XFPanel2: TXFPanel
+    Left = -2
+    Top = 72
+    Width = 737
+    Height = 71
+    BevelKind = bkFlat
+    TabOrder = 3
+    object XFGroupBox3: TXFGroupBox
+      Left = 1
+      Top = 1
+      Width = 227
+      Height = 65
+      Align = alLeft
+      Caption = 'T'#601'snifat'
+      TabOrder = 0
+      object DBLookupComboboxEh4: TDBLookupComboboxEh
+        Left = 5
+        Top = 15
+        Width = 220
+        Height = 22
+        EditButtons = <>
+        KeyField = 'ID'
+        ListField = 'FULLDESC'
+        ListSource = Reserves
+        TabOrder = 0
+        Visible = True
+      end
+      object XFCheckBox3: TXFCheckBox
+        Left = 5
+        Top = 40
+        Width = 97
+        Height = 17
+        Caption = 'T'#601'tbiq et'
+        TabOrder = 1
+      end
+    end
+    object XFGroupBox4: TXFGroupBox
+      Left = 228
+      Top = 1
+      Width = 233
+      Height = 65
+      Align = alLeft
+      Caption = 'Gecikmi'#351' t'#601'snifat'
+      TabOrder = 1
+      object DBLookupComboboxEh5: TDBLookupComboboxEh
+        Left = 6
+        Top = 15
+        Width = 219
+        Height = 22
+        EditButtons = <>
+        KeyField = 'ID'
+        ListField = 'FULLDESC'
+        ListSource = DueReserve
+        TabOrder = 0
+        Visible = True
+      end
+      object XFCheckBox4: TXFCheckBox
+        Left = 5
+        Top = 40
+        Width = 97
+        Height = 17
+        Caption = 'T'#601'tbiq et'
+        TabOrder = 1
+      end
+    end
+    object XFGroupBox5: TXFGroupBox
+      Left = 461
+      Top = 1
+      Width = 270
+      Height = 65
+      Align = alLeft
+      Caption = #304'stifad'#601#231'i'
+      TabOrder = 2
+      object DBLookupComboboxEh6: TDBLookupComboboxEh
+        Left = 5
+        Top = 15
+        Width = 259
+        Height = 22
+        EditButtons = <>
+        KeyField = 'ID'
+        ListField = 'NAME'
+        ListSource = Users
+        TabOrder = 0
+        Visible = True
+      end
+      object XFCheckBox5: TXFCheckBox
+        Left = 5
+        Top = 40
+        Width = 97
+        Height = 17
+        Caption = 'T'#601'tbiq et'
+        TabOrder = 1
+      end
+    end
+  end
+  object XFPanel1: TXFPanel
+    Left = -2
+    Top = 1
+    Width = 737
+    Height = 71
+    BevelKind = bkFlat
+    TabOrder = 4
+    object XFGroupBox1: TXFGroupBox
+      Left = 1
+      Top = 1
+      Width = 227
+      Height = 65
+      Align = alLeft
+      Caption = 'Girov'
+      TabOrder = 0
+      object XFCheckBox1: TXFCheckBox
+        Left = 5
+        Top = 45
+        Width = 97
+        Height = 17
+        Caption = 'T'#601'tbiq et'
+        TabOrder = 0
+      end
+      object DBLookupComboboxEh10: TDBLookupComboboxEh
+        Left = 3
+        Top = 17
+        Width = 221
+        Height = 22
+        EditButtons = <>
+        KeyField = 'ID'
+        ListField = 'DESCRIPTION'
+        ListSource = Pledges
+        TabOrder = 1
+        Visible = True
+      end
+    end
+    object XFGroupBox2: TXFGroupBox
+      Left = 228
+      Top = 1
+      Width = 503
+      Height = 65
+      Align = alLeft
+      Caption = 'M'#252#351't'#601'ri'
+      TabOrder = 1
+      object DBLookupComboboxEh11: TDBLookupComboboxEh
+        Left = 69
+        Top = 17
+        Width = 492
+        Height = 22
+        EditButtons = <>
+        KeyField = 'ID'
+        ListField = 'NAME'
+        ListSource = Customers
+        TabOrder = 0
+        Visible = True
+      end
+      object XFCheckBox2: TXFCheckBox
+        Left = 5
+        Top = 45
+        Width = 97
+        Height = 17
+        Caption = 'T'#601'tbiq et'
+        TabOrder = 1
+      end
+    end
+  end
+  object ODSCredits: TOracleDataSet
+    SQL.Strings = (
+      'select id from cm_active_credits p'
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      '')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {05000000010000000400000049004400010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 416
+    Top = 176
+    object ODSCreditsID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+  end
+  object CM_REPORTS: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'CM_PREPORTS'
+    ParameterMode = pmNamed
+    Left = 496
+    Top = 224
+  end
+  object ODFValute: TOracleDataSet
+    SQL.Strings = (
+      'select * from avalute')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 96
+    Top = 16
+  end
+  object Valute: TDataSource
+    DataSet = ODFValute
+    Left = 64
+  end
+  object ODFBranch: TOracleDataSet
+    SQL.Strings = (
+      'select * from sb_filial')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 232
+    Top = 32
+  end
+  object Branch: TDataSource
+    DataSet = ODFBranch
+    Left = 328
+    Top = 24
+  end
+  object ODFUsrGroup: TOracleDataSet
+    SQL.Strings = (
+      'select * from cm_usergroups')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 472
+    Top = 16
+  end
+  object UsrGroup: TDataSource
+    DataSet = ODFUsrGroup
+    Left = 504
+    Top = 16
+  end
+  object ODFReserves: TOracleDataSet
+    SQL.Strings = (
+      
+        'select id,code,percent,description, percent||'#39'% - '#39'||description' +
+        ' fulldesc from cm_reserves')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 80
+    Top = 80
+  end
+  object Reserves: TDataSource
+    DataSet = ODFReserves
+    Left = 112
+    Top = 80
+  end
+  object DueReserve: TDataSource
+    DataSet = ODFReserves
+    Left = 320
+    Top = 80
+  end
+  object ODFUsers: TOracleDataSet
+    SQL.Strings = (
+      'select * from sb_user$')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 576
+    Top = 102
+  end
+  object Users: TDataSource
+    DataSet = ODFUsers
+    Left = 504
+    Top = 78
+  end
+  object ODFPersons: TOracleDataSet
+    SQL.Strings = (
+      'select * from cm_persons')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 88
+    Top = 142
+  end
+  object Persons: TDataSource
+    DataSet = ODFPersons
+    Left = 144
+    Top = 142
+  end
+  object ODFCategories: TOracleDataSet
+    SQL.Strings = (
+      'select * from cm_categories')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 240
+    Top = 134
+  end
+  object Categories: TDataSource
+    DataSet = ODFCategories
+    Left = 328
+    Top = 134
+  end
+  object ODFCrdTypes: TOracleDataSet
+    SQL.Strings = (
+      'select * from cm_credittypes')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 464
+    Top = 134
+  end
+  object CrdType: TDataSource
+    DataSet = ODFCrdTypes
+    Left = 600
+    Top = 166
+  end
+  object ODFPledges: TOracleDataSet
+    SQL.Strings = (
+      'select * from cm_pledges')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 96
+    Top = 198
+  end
+  object Pledges: TDataSource
+    DataSet = ODFPledges
+    Left = 160
+    Top = 214
+  end
+  object ODFCustomers: TOracleDataSet
+    SQL.Strings = (
+      'select * from customers')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 288
+    Top = 206
+  end
+  object Customers: TDataSource
+    DataSet = ODFCustomers
+    Left = 352
+    Top = 206
+  end
+  object ODSPayInfo: TOracleDataSet
+    SQL.Strings = (
+      
+        '/*SELECT rownum, creditid, groupname, boorower, crdnum, mainsche' +
+        'dule, mainpayed, (-mainschedule+mainpayed) as maindiff   intrsch' +
+        'edule, intrpayed,  (-intrschedule+intrpayed) as intrdiff,irest'
+      
+        ' ,CREDITLINEAMMOUNT,SUMPAY,SUMSHEDULE,rest qaliq,(rest-(CREDITLI' +
+        'NEAMMOUNT-SUMSHEDULE)) maindiff ,'
+      
+        'mainschedule-mainpayed "'#399'.B '#252'zr'#601' az '#246'd'#601'ni'#351'" ,irest-intrpayed "Fa' +
+        'iz az '#246'd'#601'ni'#351'",ESASHES,FAIZHES  FROM cm_report_payments p'
+      'where creditid>0'
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      '*/'
+      'select * FROM cm_report_payments'
+      ' order by groupname')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000A000000100000004300520045004400490054004900440001000000
+      00001000000042004F004F0052004F0057004500520001000000000012000000
+      470052004F00550050004E0041004D0045000100000000000C00000043005200
+      44004E0055004D00010000000000180000004D00410049004E00530043004800
+      4500440055004C004500010000000000120000004D00410049004E0050004100
+      5900450044000100000000001800000049004E00540052005300430048004500
+      440055004C0045000100000000001200000049004E0054005200500041005900
+      450044000100000000000800000052004500530054000100000000000E000000
+      49004E0054005200450053005400010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 640
+    Top = 176
+    object ODSPayInfoCREDITID: TFloatField
+      DisplayLabel = 'Kredit id'
+      FieldName = 'CREDITID'
+    end
+    object ODSPayInfoGROUPNAME: TWideStringField
+      DisplayLabel = 'M'#252't'#601'x'#601'sis'
+      FieldName = 'GROUPNAME'
+      Size = 127
+    end
+    object ODSPayInfoBOOROWER: TWideStringField
+      DisplayLabel = 'M'#252#351't'#601'ri'
+      FieldName = 'BOOROWER'
+      Size = 127
+    end
+    object ODSPayInfoCRDNUM: TWideStringField
+      DisplayLabel = 'M'#252'qavil'#601' No'
+      FieldName = 'CRDNUM'
+      Size = 30
+    end
+    object ODSPayInfoREST: TFloatField
+      DisplayLabel = 'Qal'#305'q'
+      FieldName = 'REST'
+    end
+    object ODSPayInfoINTREST: TFloatField
+      DisplayLabel = '% qal'#305'q'
+      FieldName = 'INTREST'
+    end
+    object ODSPayInfoMAINSCHEDULE: TFloatField
+      DisplayLabel = #399'sasdan '#246'd'#601'm'#601'li'
+      FieldName = 'MAINSCHEDULE'
+    end
+    object ODSPayInfoMAINPAYED: TFloatField
+      DisplayLabel = #399'sasdan '#246'd'#601'nilmi'#351
+      FieldName = 'MAINPAYED'
+    end
+    object ODSPayInfoINTRSCHEDULE: TFloatField
+      DisplayLabel = 'Faizd'#601'n '#246'd'#601'm'#601'li'
+      FieldName = 'INTRSCHEDULE'
+    end
+    object ODSPayInfoINTRPAYED: TFloatField
+      DisplayLabel = 'Faizd'#601'n '#246'd'#601'nilmi'#351
+      FieldName = 'INTRPAYED'
+    end
+  end
+  object Exporter: TCMExcelExport
+    StyleColumnWidth = cwAutoFit
+    ColumnWidth = 0
+    FontTitles.Charset = RUSSIAN_CHARSET
+    FontTitles.Color = clWindowText
+    FontTitles.Height = -13
+    FontTitles.Name = 'Arial Az Lat'
+    FontTitles.Style = []
+    BorderTitles.BorderColor = clNavy
+    BorderTitles.Weight = bwThick
+    BorderTitles.LineStyle = blLine
+    OrientationTitles = 0
+    FontData.Charset = RUSSIAN_CHARSET
+    FontData.Color = clNavy
+    FontData.Height = -11
+    FontData.Name = 'Azl Sans Serif'
+    FontData.Style = [fsBold]
+    BorderData.BorderColor = clNavy
+    BorderData.Weight = bwThin
+    BorderData.LineStyle = blLine
+    FontSummary.Charset = RUSSIAN_CHARSET
+    FontSummary.Color = clWindowText
+    FontSummary.Height = -11
+    FontSummary.Name = 'Azl Sans Serif'
+    FontSummary.Style = []
+    BorderSummary.BorderColor = clGreen
+    SummaryFields.Strings = (
+      #1074#1099#1072#1082#1074#1074#1087#1089#1087#1074#1072#1087)
+    SummarySelection = ssNone
+    SummaryCalculation = scSUM
+    Left = 16
+    Top = 200
+  end
+end

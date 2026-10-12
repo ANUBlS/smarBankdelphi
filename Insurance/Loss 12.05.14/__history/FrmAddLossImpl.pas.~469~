@@ -1,0 +1,2109 @@
+﻿unit FrmAddLossImpl;
+            // lossstatus
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, INSWordExporter, StdCtrls, Buttons, DBCtrls, ComCtrls, Mask,
+  XFSCtrls, ExtCtrls, Grids, DBGrids,Wordxp,ComObj,db, oracle, dblookup,
+  OleServer, CMCurrencyEdit;
+
+type
+  TFrmAddLoss = class(TForm)
+    XFPanel3: TXFPanel;
+    BitBtn1: TBitBtn;
+    Report: TBitBtn;
+    BitBtn2: TBitBtn;
+    BitBtn3: TBitBtn;
+    WordExporter: TINSWordExporter;
+    XFButton2: TXFButton;
+    PageControl1: TPageControl;
+    TabSheet1: TTabSheet;
+    TabSheet2: TTabSheet;
+    XFGroupBox2: TXFGroupBox;
+    XFButton1: TXFButton;
+    XFGroupBox1: TXFGroupBox;
+    DBGrid2: TDBGrid;
+    DBGrid1: TDBGrid;
+    XFPanel1: TXFPanel;
+    DBNavigator2: TDBNavigator;
+    XFPanel2: TXFPanel;
+    DBNavigator1: TDBNavigator;
+    XFGroupBox3: TXFGroupBox;
+    XFLabel10: TXFLabel;
+    XFLabel6: TXFLabel;
+    XFLabel7: TXFLabel;
+    dtApp: TDateTimePicker;
+    DBEdit6: TDBEdit;
+    DBEdit4: TDBEdit;
+    XFLabel11: TXFLabel;
+    XFLabel9: TXFLabel;
+    XFLabel8: TXFLabel;
+    dtActDate: TDateTimePicker;
+    DBLookupComboBox2: TDBLookupComboBox;
+    DBLookupComboBox1: TDBLookupComboBox;
+    XFGroupBox4: TXFGroupBox;
+    XFLabel13: TXFLabel;
+    XFLabel14: TXFLabel;
+    DBEdit7: TDBEdit;
+    dtLetter: TDateTimePicker;
+    XFLabel16: TXFLabel;
+    XFLabel15: TXFLabel;
+    DBEdit8: TDBEdit;
+    DBEdit9: TDBEdit;
+    XFLabel12: TXFLabel;
+    DBEdit10: TDBEdit;
+    XFLabel21: TXFLabel;
+    XFLabel22: TXFLabel;
+    XFLabel23: TXFLabel;
+    DBLookupComboBox5: TDBLookupComboBox;
+    XFPanel5: TXFPanel;
+    DBEdit13: TDBEdit;
+    DBComboBox1: TDBComboBox;
+    XFGroupBox6: TXFGroupBox;
+    DBEdit5: TDBEdit;
+    XFLabel29: TXFLabel;
+    XFLabel30: TXFLabel;
+    DBEdit18: TDBEdit;
+    DBEdit19: TDBEdit;
+    XFLabel31: TXFLabel;
+    BitBtn5: TBitBtn;
+    BitBtn4: TBitBtn;
+    XFPanel6: TXFPanel;
+    XFLabel1: TXFLabel;
+    XFLabel5: TXFLabel;
+    XFLabel4: TXFLabel;
+    DBLookupComboBox3: TDBLookupComboBox;
+    DBLookupComboBox4: TDBLookupComboBox;
+    DBEdit3: TDBEdit;
+    XFLabel2: TXFLabel;
+    XFLabel25: TXFLabel;
+    DBEdit2: TDBEdit;
+    DBLookupComboBox6: TDBLookupComboBox;
+    XFLabel3: TXFLabel;
+    XFLabel24: TXFLabel;
+    DBLookupComboBox7: TDBLookupComboBox;
+    DBEdit14: TDBEdit;
+    XFGroupBox5: TXFGroupBox;
+    XFLabel26: TXFLabel;
+    XFLabel27: TXFLabel;
+    XFLabel20: TXFLabel;
+    XFLabel19: TXFLabel;
+    XFLabel28: TXFLabel;
+    XFLabel32: TXFLabel;
+    XFLabel33: TXFLabel;
+    DBEdit15: TDBEdit;
+    DBEdit16: TDBEdit;
+    DBEdit12: TDBEdit;
+    DBEdit11: TDBEdit;
+    DBEdit17: TDBEdit;
+    DBEdit20: TDBEdit;
+    DBEdit21: TDBEdit;
+    XFLabel18: TXFLabel;
+    XFSpeedButton1: TXFSpeedButton;
+    XFGroupBox7: TXFGroupBox;
+    XFRadioButton2: TXFRadioButton;
+    XFRadioButton1: TXFRadioButton;
+    dtpClaim: TDateTimePicker;
+    XFLabel17: TXFLabel;
+    WordDocument: TWordDocument;
+    WordApplication: TWordApplication;
+    XFLabel34: TXFLabel;
+    DBEdit22: TDBEdit;
+    XFCheckBox2: TXFCheckBox;
+    XFLabel35: TXFLabel;
+    DBEdit23: TDBEdit;
+    XFGroupBox8: TXFGroupBox;
+    XFLabel36: TXFLabel;
+    XFLabel37: TXFLabel;
+    XFLabel38: TXFLabel;
+    DateTimePicker1: TDateTimePicker;
+    DBEdit25: TDBEdit;
+    XFPanel4: TXFPanel;
+    DBEdit24: TDBEdit;
+    DBEdit26: TDBEdit;
+    DBEdit27: TDBEdit;
+    XFLabel39: TXFLabel;
+    XFPanel7: TXFPanel;
+    DBEdit1: TDBEdit;
+    XFSpeedButton2: TXFSpeedButton;
+    DateTimePicker2: TDateTimePicker;
+    XFCheckBox1: TXFCheckBox;
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure DBNavigator2Click(Sender: TObject; Button: TNavigateBtn);
+    procedure BitBtn3Click(Sender: TObject);
+    procedure BitBtn2Click(Sender: TObject);
+    procedure ReportClick(Sender: TObject);
+    procedure BitBtn1Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure XFButton1Click(Sender: TObject);
+    procedure XFButton2Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure DBLookupComboBox1Click(Sender: TObject);
+    procedure PageControl1Change(Sender: TObject);
+    procedure BitBtn5Click(Sender: TObject);
+    procedure BitBtn4Click(Sender: TObject);
+    procedure XFCheckBox2Click(Sender: TObject);
+    procedure XFSpeedButton1Click(Sender: TObject);
+    procedure XFSpeedButton2Click(Sender: TObject);
+  private
+    { Private declarations }
+         a,s,s1,s2,s3,sum:real;
+         sub_id,other_d :integer;
+  public
+    { Public declarations }
+    procedure CalcSum;
+    procedure FillRow(Item:integer;Doc : Variant; Row : Integer;
+                 Text0,Text1,Text2: String);
+     procedure FillRow1(Doc : Variant; Row : Integer;
+                 Text0,Text1,Text2,Text3,Text4 : String);
+  end;
+
+var
+  FrmAddLoss: TFrmAddLoss;
+
+implementation
+
+{$R *.dfm}
+    uses DmLossImpl,CommanParametrs, FrmMainLossImpl,SBTranslateProc,sboapiDataModuleImpl,
+  FrmAllLossImpl, frmstatusimpl;
+procedure TFrmAddLoss.DBLookupComboBox1Click(Sender: TObject);
+begin
+DmLoss.ODSModels.Close;
+DmLoss.ODSModels.SetVariable('PMARK_ID',DBLookupComboBox1.KeyValue);
+DmLoss.ODSModels.Open;
+
+end;
+
+procedure TFrmAddLoss.DBNavigator2Click(Sender: TObject; Button: TNavigateBtn);
+begin
+
+     // InsMKDataMod.ODSClaimReport.RefreshRecord();
+    with DmLoss do
+     begin
+          ODSClaimReport.Close;
+          ODSClaimReport.SetVariable('id',ODSMotorkaskoId.value);
+          ODSClaimReport.Open;
+     end;
+     CalcSum();
+end;
+
+
+procedure TFrmAddLoss.BitBtn1Click(Sender: TObject);
+var
+d_id ,ptype,pother_driver:integer;
+t:Boolean;
+   s:string;
+begin
+// showmessage(datetostr(dtpClaim.Date));
+  //showmessage(Timetostr(DateTimePicker2.Time));
+  s:=datetostr(dtpClaim.Date)+' '+Timetostr(DateTimePicker2.Time);
+  //showmessage(s);
+if DmLoss.ODSContracts.FieldByName('state').AsInteger<>6 then
+begin
+showmessage('Diqqət!Yalnız Təsdiq olunmuş müqavilənin  zərəri redaktə etmək olar!');
+    exit;
+end;
+       t:=false;
+
+
+if XFCheckBox1.Checked=false then
+   sub_id:=0
+   else
+ sub_id:=1;
+
+ if XFCheckBox2.Checked=false then
+   other_d:=0
+   else
+ other_d:=1;
+   // showmessage('Salam5');
+FrmAddLoss.XFButton1Click(self);
+
+if contractstatus=1 then  //CommanParametrs
+ begin
+   showmessage('Diqqət! Bu müqavilə bağlanmış müqavilə olduğundan heç bir deyişiklik oluna bilməz.');
+   Abort;
+ end;
+//----------------------------
+       // showmessage('Salam6');
+
+if DBLookupComboBox3.Text='' then
+begin
+ showmessage('Rayon sahəsi boşdur!');
+  Abort;
+end;
+
+if DBEdit2.Text='' then
+begin
+  showmessage('Küçə sahəsi boşdur!');
+  Abort;
+end;
+
+if DBLookupComboBox7.Text='' then
+begin
+  showmessage('Avtoservis sahəsi boşdur!');
+  Abort;
+end;
+
+
+if DBLookupComboBox4.Text='' then
+begin
+  showmessage('Qəza əmədaşı sahəsi boşdur!');
+  Abort;
+end;
+
+if DBEdit3.Text='' then
+begin
+  showmessage('Hadisənin təsviri sahəsi boşdur!');
+  Abort;
+end;
+
+if DBEdit24.Text='' then
+begin
+  showmessage('Digər sürücü sahəsi boşdur!');
+  Abort;
+end;
+
+if DBEdit14.Text='' then
+begin
+  showmessage('Avto.yürüşü sahəsi boşdur!');
+  Abort;
+end;
+
+
+{if DBEdit27.Text='' then
+begin
+  showmessage('Mülkiyyətçi sahəsi boşdur!');
+  Abort;
+end;
+
+if DBEdit6.Text='' then
+begin
+  showmessage('Dövlət nömrəsi sahəsi boşdur!');
+  Abort;
+end;     }
+
+if DBEdit7.Text='' then
+begin
+  showmessage('Məktubun №-si sahəsi boşdur!');
+  Abort;
+end;
+
+
+{if DBLookupComboBox1.Text='' then
+begin
+  showmessage('Marka sahəsi boşdur!');
+  Abort;
+end;
+
+if DBLookupComboBox2.Text='' then
+begin
+  showmessage('Model sahəsi boşdur!');
+  Abort;
+end;      }
+
+if DBEdit8.Text='' then
+begin
+  showmessage('Arayışın №-si sahəsi boşdur!');
+  Abort;
+end;
+
+if DBEdit9.Text='' then
+begin
+  showmessage('Protokolun №-si sahəsi boşdur!');
+  Abort;
+end;
+            //showmessage('Salam7');
+//------------tesdiq edilirse
+ if lossoperatin=1 then
+ begin
+   losstesdiq:=0;
+   {
+if (DBEdit1.Text='') or (DBEdit1.Text=inttostr(0)) then
+begin
+  showmessage('Zərərin qeydiyyat nömrəsi sahəsi boşdur!');
+  Abort;
+end;          }
+
+if DBEdit15.Text='' then
+begin
+  showmessage('Avto. Daşınmasına çəkilmiş xərclər sahəsi boşdur!');
+  Abort;
+end;
+
+if DBEdit16.Text='' then
+begin
+  showmessage('Avto.Qiymətləndirilməsinə çəkilmiş xərclər sahəsi boşdur!');
+  Abort;
+end;
+
+if DBEdit17.Text='' then
+begin
+  showmessage('Zərərin qarşısının alınmasına və zərərrin azaldılmasına çəkilmiş xərclər sahəsi boşdur!');
+  Abort;
+end;
+
+if DBEdit12.Text='' then
+begin
+  showmessage('Yekun zərər məbləğı sahəsi boşdur!');
+  Abort;
+end;
+
+if DBEdit11.Text='' then
+begin
+  showmessage('Yeni eh.hissələrinin dəyəri sahəsi boşdur!');
+  Abort;
+end;
+
+if DBEdit21.Text='' then
+begin
+  showmessage('Amortizasiya məbləği sahəsi boşdur!');
+  Abort;
+end;
+
+
+if DBEdit20.Text='' then
+begin
+  showmessage('Sığorta ödənişinin məbləği  sahəsi boşdur!');
+  Abort;
+end;
+
+
+// tam mehv halinda
+            //showmessage('Salam8');
+if XFRadioButton2.Checked=true then
+begin
+  if DBEdit5.Text='' then
+  begin
+    showmessage('Avto. real bazar dəyəri sahəsi boşdur!');
+  exit;
+  end;
+
+  begin
+  if DBEdit18.Text='' then
+  begin
+    showmessage('Qalıqların dəyəri sahəsi boşdur!');
+  exit;
+  end;
+
+  begin
+  if DBEdit19.Text='' then
+  begin
+    showmessage('Bank hesab nomrəsi sahəsi boşdur!');
+  exit;
+  end;
+
+
+  end;
+
+
+end;
+// tam mehv halinda son
+
+    losstesdiq:=1;
+end; //------------tesdiq edilirse
+    //showmessage('Salam3');
+        // if frmloss=0 then
+
+    if frmstatus.CheckBox8.Checked=true then
+              begin
+                                                          //FrmMainLoss
+               frmstatus.Tesdiq:=1;
+                frmstatus.CheckBox8.Color:=clGray;
+                //Tesdiqdat:=DSSysdat.FieldByName('tek_dat').AsDateTime;
+                frmstatus.Tesdiqdat:=frmstatus.DateTimePicker4.DateTime;
+
+
+                if DmLoss.ODSClaimDescription.FieldByName('claim_status').AsInteger=1 then
+               begin
+                if (DmLoss.ODSClaimDescription.FieldByName('auto_real_market_value').AsString='') or
+                (DmLoss.ODSClaimDescription.FieldByName('remains_value').AsString='') or
+                (DmLoss.ODSClaimDescription.FieldByName('bank_accno').AsString='')  then
+                begin
+                  showmessage('Diqqət! Tam məvhalına uyğun məlumatlar tam yığılmadığindan təsdiqlənə bilməz!');
+                 frmstatus.Tesdiq:=0;
+                 frmstatus.CheckBox8.Color:=clRed;
+                 frmstatus.Tesdiqdat:=strtodate('30.12.1899');
+                 frmstatus.CheckBox8.Checked:=false;
+                 exit;
+                end   ;
+               end;
+              end
+               else
+               begin
+               frmstatus.Tesdiq:=0;
+               frmstatus.CheckBox8.Color:=clRed;
+               frmstatus.Tesdiqdat:=strtodate('30.12.1899');
+
+               end;
+               if (frmstatus.Tesdiq=1)and (frmstatus.CheckBox8.Checked=true)and (FrmMainLoss.op_type<>'Insert') then
+            begin
+                // pteyinat:= DmLoss.ODSContracts.FieldByName('').
+            if  DmLoss.OPCOMMON.CallIntegerFunction('commitloss',[contactid,FrmMainLoss.XDBGrid1.DataSource.DataSet.FieldByName('ID').AsInteger])=1 then
+             begin
+               showmessage('Zərər təsdiqləndi!');
+             end;
+             end;
+
+             DmLoss.DSclaim_status.RefreshRecord;
+             DmLoss.ODSClaimDescription.RefreshRecord;
+
+
+            //showmessage('Salam1');
+
+
+    t:=true;
+     if t=true then
+    begin
+
+     with DmLoss,ODSMotorKasko do
+     begin
+     ODSMOTORKaskoCLAIM_DATE.Value:=dtpClaim.DateTime;
+     //ODSMotorkaskoCLAIM_NUM.Value:=edit1.text;
+     if State in [dsEdit, dsInsert] then
+     begin
+        Post;
+     end;
+
+
+    if XFCheckBox2.Checked=true then
+pother_driver:=1
+else
+pother_driver:=0;
+
+
+             //showmessage(inttostr(sub_id));
+     with DmLoss,ODSClaimDescription do
+     begin
+     if State in [dsEdit, dsInsert] then
+     begin
+          //ODSClaimDescriptionID.Value:=ODSMotorKaskoID.Value;
+        ODSClaimDescriptionMK_ID.Value:=ODSMotorKaskoID.Value;
+        ODSClaimDescriptionCID.Value:=contactid;
+        ODSClaimDescriptionAppDate.Value:=Integer(trunc(dtApp.Date));
+        ODSClaimDescriptionLetterDate.Value:=Integer(trunc(dtLetter.Date));
+        ODSClaimDescriptionActDate.Value:=Integer(trunc(dtActDate.Date));
+        //ODSClaimDescriptionCLAIM_DATE.Value:=dtpClaim.DateTime;
+        ODSClaimDescription.FieldByName('CLAIM_DATE').AsDateTime:=StrToDateTime(s);
+        ODSClaimDescription.FieldByName('other_driver').AsInteger:=pother_driver;
+        ODSClaimDescriptionREFUSAL_DATE.Value:=DateTimePicker1.DateTime;
+        ODSClaimDescriptionSUBRAQASIYA.Value:=sub_id;
+        ODSClaimDescriptionOTHER_DRIVER.Value:=other_d;
+        ODSClaimDescriptionTYPE.Value:=4;
+        Post;
+        DmLoss.ODSClaimDescription.RefreshRecord;
+        FrmMainLoss.dep_id:=FieldByName('id').asinteger;
+
+       // d_id:=FieldByName('id').asinteger;
+     end;
+     end;
+
+        with DmLoss do
+        begin
+       if FrmAddLoss.XFRadioButton2.Checked=true then
+          ptype:=1
+          else
+          ptype:=0;
+
+       if ODSContracts.FieldByName('type_id').AsInteger=8 then
+       begin
+           ptype:=0;
+           end ;
+
+  ODSClaimDescription.Edit;
+  ODSClaimDescription.FieldByName('CLAIM_STATUS').AsInteger:=ptype;
+  ODSClaimDescription.Post;
+        end;
+
+
+
+      //showmessage(ODSClaimDescription.FieldByName('C_TYPE').AsString);
+     if (FrmMainLoss.dep_id<>-1) and (FrmMainLoss.dep_id<>0) then
+     begin
+     with DmLoss,ODSClaims do
+     begin
+    // if State in [dsEdit, dsInsert] then
+     //begin
+     ODSClaims.RefreshRecord;
+     ODSClaims.Edit;
+     ODSClaimsDESC_ID.Value:=ODSClaimDescriptionID.Value;
+        Post;
+        ODSClaims.RefreshRecord;
+
+
+     //end;
+     end;
+
+     with DmLoss,ODSClaimSal do
+     begin
+     ODSClaimSal.RefreshRecord;
+     ODSClaimSal.Edit;
+     //if State in [dsEdit, dsInsert] then
+     //begin
+      ODSClaimSalDESC_ID.Value:=ODSClaimDescriptionID.Value;
+           Post;
+     //end;
+     end;
+      end;
+
+     end;
+
+     //if FrmAllLoss.XFRadioButton2.Checked=true then
+    { if lossstatus=1 then
+           begin
+
+        FrmAllLoss.XFButton6Click(Sender);
+        DmLoss.DSclaim_status.RefreshRecord;
+        DmLoss.DSclaim_status.Edit;
+        DmLoss.DSclaim_status.FieldByName('STATUS').AsInteger:=1;//status;
+        DmLoss.DSclaim_status.FieldByName('DEP_ID').AsInteger:=FrmAllLoss.XDBGrid1.DataSource.DataSet.FieldByName('ID').AsInteger;
+        DmLoss.DSclaim_status.Post;
+
+           end;   }
+      if lossstatus=1 then
+           begin
+
+           frmstatus.XFButton6Click(Sender);
+           //showmessage(inttostr(FrmMainLoss.status));
+           DmLoss.DSclaim_status.RefreshRecord;
+        DmLoss.DSclaim_status.Edit;
+        DmLoss.DSclaim_status.FieldByName('STATUS').AsInteger:=1;//status;
+        DmLoss.DSclaim_status.FieldByName('DEP_ID').AsInteger:=FrmMainLoss.XDBGrid1.DataSource.DataSet.FieldByName('ID').AsInteger;
+
+        DmLoss.DSclaim_status.Post;
+
+           end;
+
+       end;
+
+end;
+
+     if FrmMainLoss.op_type='Insert' then
+
+      DmLoss.Dsmain.Refresh
+     else
+      DmLoss.Dsmain.RefreshRecord;
+
+      DmLoss.oDSClaimDescription.RefreshRecord;
+
+FrmAddLoss.close;
+FrmAddLoss.close;
+
+end;
+
+procedure TFrmAddLoss.BitBtn2Click(Sender: TObject);
+var
+   WordApp:OleVariant;
+   wrdDataDoc,wrdApp,wrdSelection : Variant;
+   i,n:integer;
+   FileName:String;
+begin
+if contractstatus=1 then  //CommanParametrs
+ begin
+   showmessage('Diqqət! Bu müqavilə bağlanmış müqavilə olduğundan heç bir deyişiklik oluna bilməz.');
+   exit;
+ end;
+      with DmLoss do
+      begin
+           ODSCusts.Open;
+           FileName:=ExtractFilePath(Application.ExeName)+ '\Kasko zerer akti.doc';
+           wrdApp := CreateOleObject('Word.Application');
+           wrdApp.Visible := True;
+           wrdDataDoc := wrdApp.Documents.Open(FileName);
+           wrdSelection:=wrdApp.Selection;
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'insured');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.TypeText(ODSCustsName.Value);
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'insured2');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.TypeText(ODSCustsName.Value);
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'policynum');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.Font.Bold:=false;
+           wrdSelection.TypeText(ODSContractsPolicy_Num.Value);
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'insured1');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.TypeText(ODSCustsName.Value);
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'mark');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.TypeText(ODSMotorKaskoInsuredMark.Value);
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'statenum');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.TypeText(ODSMotorKaskoInsuredStateNum.Value);
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'date');
+           wrdSelection.Font.Bold:=false;
+           wrdSelection.TypeText(DateToStr(ODSMotorKaskoCLAIM_DATE.Value));
+
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'claimnum');
+           wrdSelection.TypeText(ODSMotorKaskoClaim_Num.Value);
+           n:=ODSClaims.RecordCount;
+           ODSClaims.First;
+           for i:= 1 to n do
+           begin
+               wrdDataDoc.Tables.Item(1).Rows.Add;
+               wrdDataDoc.Tables.Item(1).Rows.Item(i+1).Range.Font.Name := 'Arial AzLat';
+               wrdDataDoc.Tables.Item(1).Rows.Item(i+1).Range.Bold:=false;
+               FillRow(1,wrdDataDoc, i+1,IntToStr(i),ODSClaimsEName.Value,ODSClaimsState.value);
+               ODSClaims.Next;
+           end;
+      end;
+
+
+end;
+
+procedure TFrmAddLoss.FillRow(Item:integer;Doc: Variant; Row: Integer; Text0, Text1,
+  Text2: String);
+begin
+     Doc.Tables.Item(Item).Cell(Row,1).Range.InsertAfter(Text0);
+     Doc.Tables.Item(Item).Cell(Row,2).Range.InsertAfter(Text1);
+     Doc.Tables.Item(Item).Cell(Row,3).Range.InsertAfter(Text2);
+end;
+
+procedure TFrmAddLoss.FillRow1(Doc: Variant; Row: Integer; Text0, Text1,
+  Text2, Text3, Text4: String);
+begin
+     Doc.Tables.Item(1).Cell(Row,1).Range.InsertAfter(Text0);
+     Doc.Tables.Item(1).Cell(Row,2).Range.InsertAfter(Text1);
+     Doc.Tables.Item(1).Cell(Row,3).Range.InsertAfter(Text2);
+     Doc.Tables.Item(1).Cell(Row,4).Range.InsertAfter(Text3);
+     Doc.Tables.Item(1).Cell(Row,5).Range.InsertAfter(Text4);
+end;
+
+procedure TFrmAddLoss.BitBtn3Click(Sender: TObject);
+var
+   //j,i:integer;
+   WordApp:OleVariant;
+   wrdDataDoc,wrdApp,wrdSelection : Variant;
+   i,n:integer;
+   FileName:String;
+        //odenmis_s_odenisi
+begin
+if contractstatus=1 then  //CommanParametrs
+ begin
+   showmessage('Diqqət! Bu müqavilə bağlanmış müqavilə olduğundan heç bir deyişiklik oluna bilməz.');
+   exit;
+ end;
+
+
+    //adi zerer
+if  DmLoss.ODSClaimDescription.FieldByName('CLAIM_STATUS').AsInteger=0 then
+begin
+   with DmLoss do
+      begin
+           DSSigortaAkt.Close;
+           DSSigortaAkt.SetVariable('pid',ODSClaimDescription.FieldByName('id').AsInteger);
+           DSSigortaAkt.Open;
+           //showmessage(DSSigortaAkt.FieldByName('TARIX').AsString);
+           FileName:=ExtractFilePath(Application.ExeName)+ '\SigortaAkt.doc';
+           wrdApp := CreateOleObject('Word.Application');
+           wrdApp.Visible := True;
+           wrdDataDoc := wrdApp.Documents.Open(FileName);
+           wrdSelection:=wrdApp.Selection;
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'polisno');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.TypeText(DSSigortaAkt.FieldByName('POLICY_NUM').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'name');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.TypeText(DSSigortaAkt.FieldByName('NAME1').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'namedriver');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.TypeText(DSSigortaAkt.FieldByName('DRIVER').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'marka');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.TypeText(DSSigortaAkt.FieldByName('MARKA').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'autono');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.TypeText(DSSigortaAkt.FieldByName('INSUREDSTATENUM').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'sassino');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.TypeText(DSSigortaAkt.FieldByName('SASSI').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'muherrikno');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.TypeText(DSSigortaAkt.FieldByName('INSUREDENGINENUM').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'qezaEm');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.TypeText(DSSigortaAkt.FieldByName('QEZAEMEKTASI').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'dat');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.TypeText(DSSigortaAkt.FieldByName('TARIX').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'s_meblegi');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.TypeText(DSSigortaAkt.FieldByName('INSSUMM').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'countno');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.TypeText(DSSigortaAkt.FieldByName('SAY').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'countyazi');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.TypeText(DSSigortaAkt.FieldByName('SAYYAZI').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'avto_deyeri');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.TypeText(DSSigortaAkt.FieldByName('AVTODEYER').AsString);
+
+
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'yeni_eh_deyeri');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.TypeText(DSSigortaAkt.FieldByName('YENI_E_DEYERI').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'Fransiza');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.TypeText(DSSigortaAkt.FieldByName('FRANSHIZ').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'Claimdat');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.TypeText(DSSigortaAkt.FieldByName('CLAIM_DATE').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'Unvan');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.TypeText(DSSigortaAkt.FieldByName('UNVAN').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'Teyinat');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.TypeText(DSSigortaAkt.FieldByName('DETAIL').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'namecust');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.TypeText(DSSigortaAkt.FieldByName('name1').AsString);
+
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'namedriver1');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.TypeText(DSSigortaAkt.FieldByName('TEXSIRLISEXS').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'idareetmeH');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.TypeText(DSSigortaAkt.FieldByName('IDAREETMEHUQUQU').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'service');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.TypeText(DSSigortaAkt.FieldByName('SERVIS').AsString);
+
+           if DSSigortaAkt.FieldByName('AUTO_ASSESS_COSTS').AsFloat<>0 then
+           begin
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'Avto_q_c_x');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.TypeText(DSSigortaAkt.FieldByName('AUTO_ASSESS_COSTS').AsString+' AZN');
+
+           end
+           else
+           begin
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'Avto_q_c_x');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.TypeText('--------');
+
+           end;
+           if DSSigortaAkt.FieldByName('UTO_TRANSPORTATION_COSTS').AsFloat<>0 then
+           begin
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'Avto_d_c_x');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.TypeText(DSSigortaAkt.FieldByName('UTO_TRANSPORTATION_COSTS').AsString+' AZN');
+
+           end
+           else
+            begin
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'Avto_d_c_x');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.TypeText('--------');
+
+           end;
+
+           if DSSigortaAkt.FieldByName('OTHER_COSTS').AsFloat<>0 then
+           begin
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'Z_q_a_c_x');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.TypeText(DSSigortaAkt.FieldByName('OTHER_COSTS').AsString+' AZN');
+
+           end
+           else
+           begin
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'Z_q_a_c_x');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.TypeText('--------');
+
+           end;
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'Avto_d_ziyan');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.TypeText(DSSigortaAkt.FieldByName('FINAL_AMOUNT_LOSS').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'odenmis_s_odenisi');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.TypeText(DSSigortaAkt.FieldByName('FINAL_PAYMENT_AMOUNT_LOSS').AsString+' AZN');
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'namecust1');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.TypeText(DSSigortaAkt.FieldByName('CUSTNAME').AsString);
+
+           if ODSClaimDescription.FieldByName('subraqasiya').AsInteger=1 then
+           begin
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'r_meblegi');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.TypeText(DSSigortaAkt.FieldByName('FINAL_AMOUNT_LOSS').AsString+' AZN');
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'q_t_sigorta_teskilat');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.TypeText(DSSigortaAkt.FieldByName('QARSI_TEREF_S_TESKILAT').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'Q_polis');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.TypeText(DSSigortaAkt.FieldByName('INS_AGAINST_POLISN_DAT').AsString);
+           end
+           else
+           begin
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'r_meblegi');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.TypeText('--------');
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'q_t_sigorta_teskilat');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.TypeText('--------');
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'Q_polis');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.TypeText('--------');
+           end;
+
+
+    end;
+
+end;
+  //adi zerer
+
+
+    //tam zerer
+if  DmLoss.ODSClaimDescription.FieldByName('CLAIM_STATUS').AsInteger=1 then
+begin
+with DmLoss do
+      begin
+         DSSigortaAkt.Close;
+           DSSigortaAkt.SetVariable('pid',ODSClaimDescription.FieldByName('id').AsInteger);
+           DSSigortaAkt.Open;
+           FileName:=ExtractFilePath(Application.ExeName)+ '\SigortaAktTam.doc';
+           wrdApp := CreateOleObject('Word.Application');
+           wrdApp.Visible := True;
+           wrdDataDoc := wrdApp.Documents.Open(FileName);
+           wrdSelection:=wrdApp.Selection;
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'polisno');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.TypeText(DSSigortaAkt.FieldByName('POLICY_NUM').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'name');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.TypeText(DSSigortaAkt.FieldByName('NAME1').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'namedriver');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.TypeText(DSSigortaAkt.FieldByName('DRIVER').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'marka');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.TypeText(DSSigortaAkt.FieldByName('MARKA').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'autono');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.TypeText(DSSigortaAkt.FieldByName('INSUREDSTATENUM').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'sassino');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.TypeText(DSSigortaAkt.FieldByName('SASSI').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'muherrikno');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.TypeText(DSSigortaAkt.FieldByName('INSUREDENGINENUM').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'qezaEm');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.TypeText(DSSigortaAkt.FieldByName('QEZAEMEKTASI').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'dat');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.TypeText(DSSigortaAkt.FieldByName('TARIX').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'s_meblegi');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.TypeText(DSSigortaAkt.FieldByName('INSSUMM').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'countno');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.TypeText(DSSigortaAkt.FieldByName('SAY').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'countyazi');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.TypeText(DSSigortaAkt.FieldByName('SAYYAZI').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'avto_realbazardeyeri');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.TypeText(DSSigortaAkt.FieldByName('REALBAZARDEYERI').AsString);
+
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'Claimdat');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.TypeText(DSSigortaAkt.FieldByName('CLAIM_DATE').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'Unvan');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.TypeText(DSSigortaAkt.FieldByName('UNVAN').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'Teyinat');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.TypeText(DSSigortaAkt.FieldByName('DETAIL').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'namecust');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.TypeText(DSSigortaAkt.FieldByName('NAME1').AsString);
+
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'namedriver1');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.TypeText(DSSigortaAkt.FieldByName('TEXSIRLISEXS').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'idareetmeH');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.TypeText(DSSigortaAkt.FieldByName('IDAREETMEHUQUQU').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'service');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.TypeText(DSSigortaAkt.FieldByName('SERVIS').AsString);
+
+           if DSSigortaAkt.FieldByName('UTO_TRANSPORTATION_COSTS').AsInteger<>0 then
+           begin
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'Avto_d_c_x');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.TypeText(DSSigortaAkt.FieldByName('UTO_TRANSPORTATION_COSTS').AsString+' AZN');
+
+           end
+           else
+           begin
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'Avto_d_c_x');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.TypeText('--------');
+
+           end;
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'Avto_d_ziyan');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.TypeText(DSSigortaAkt.FieldByName('FINAL_AMOUNT_LOSS').AsString);
+
+           {wrdSelection.GoTo(-1,unAssigned,unAssigned,'Tammehvfaiz');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.TypeText(DSSigortaAkt.FieldByName('ZERER').AsString);  }
+
+            wrdSelection.GoTo(-1,unAssigned,unAssigned,'yekun_zerer');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.TypeText(DSSigortaAkt.FieldByName('FINAL_AMOUNT_LOSS').AsString);
+
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'realbazardeyeri');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.TypeText(DSSigortaAkt.FieldByName('REALBAZARDEYERI').AsString);
+
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'realbazardeyeri1');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.TypeText(DSSigortaAkt.FieldByName('REALBAZARDEYERI').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'TamMehvFarnsiza');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.TypeText(DSSigortaAkt.FieldByName('ZERER').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'qaliqlarinDeyeri');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.TypeText(DSSigortaAkt.FieldByName('QALIQ').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'realbazardeyeri2');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.TypeText(DSSigortaAkt.FieldByName('REALBAZARDEYERI').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'Tammehvfaiz');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.TypeText(DSSigortaAkt.FieldByName('ZERER').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'qaliqlarinDeyeri1');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.TypeText(DSSigortaAkt.FieldByName('QALIQ').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'odenis');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.TypeText(DSSigortaAkt.FieldByName('ODENISMEBLEGI').AsString);
+
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'hesab');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.TypeText(DSSigortaAkt.FieldByName('HESB').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'faizTam');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.TypeText(DSSigortaAkt.FieldByName('ZERER').AsString);
+
+           if ODSClaimDescription.FieldByName('subraqasiya').AsInteger=1 then
+           begin
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'r_meblegi');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.TypeText(DSSigortaAkt.FieldByName('ODENISMEBLEGI').AsString+' AZN');
+            if DSSigortaAkt.FieldByName('QARSI_TEREF_S_TESKILAT').AsString<>'' then
+              begin
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'q_t_sigorta_teskilat');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.TypeText(DSSigortaAkt.FieldByName('QARSI_TEREF_S_TESKILAT').AsString);
+
+              end
+              else
+              begin
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'q_t_sigorta_teskilat');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.TypeText('--------');
+
+              end;
+              if DSSigortaAkt.FieldByName('INS_AGAINST_POLISN_DAT').AsString='' then
+              begin
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'Q_polis');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.TypeText(DSSigortaAkt.FieldByName('INS_AGAINST_POLISN_DAT').AsString);
+
+              end
+              else
+              begin
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'Q_polis');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.TypeText('--------');
+
+              end;
+           end
+           else
+           begin
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'r_meblegi');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.TypeText('--------');
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'q_t_sigorta_teskilat');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.TypeText('--------');
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'Q_polis');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.TypeText('--------');
+           end;
+
+
+
+
+
+      end;
+end;
+  //tam zerer
+   { try
+       with WordExporter,DmLoss do
+       begin
+            ODSCusts.Locate('id',ODSContractsKli_id.Value,[]);
+            ODSAValute.Locate('valute',ODSContractsValute_ID.Value,[]);
+
+            s:=0; s1:=0; s2:=0;
+            ODSClaimReport.First;
+            for j:=1 to ODSClaimReport.RecordCount do
+            begin
+              s1:=s1+ODSClaimReportCount.value;
+              s2:=s2+ODSClaimReportCost.value;
+              ODSClaimReport.Next;
+            end;
+            ODSClaimSal.First;
+            for i:= 1 to ODSClaimSal.RecordCount do
+            begin
+                s:=s+ODSClaimSalCost.value;
+                ODSClaimSal.Next;
+            end;
+
+
+            sum:=s1*s2+s;
+            FileName := ExtractFilePath(Application.ExeName)+'\SigortaAkti.doc';
+            WordExporter.Open(False);
+
+            SetBookmark('insaktdate',DateToStr(now),False, False, False, False, 10, 'Arial AzLat', False);
+            SetBookmark('actnum',ODSMotorKaskoact_num.Value,False, False, False, False, 10, 'Arial AzLat', False);
+            SetBookmark('actnum1',ODSMotorKaskoact_num.Value,False, False, False, False, 10, 'Arial AzLat', False);
+            SetBookmark('claimdate1',DateToStr(ODSMotorKaskoClaim_Date.Value),False, False, False, False, 10, 'Arial AzLat', False);
+            SetBookmark('insured',ODSCustsName.Value,False, False, False, False, 10, 'Arial AzLat', False);
+            SetBookmark('mark',ODSMotorKaskoInsuredMark.Value,False, False, False, False, 10, 'Arial AzLat', False);
+            SetBookmark('statenum',ODSMotorKaskoInsuredStateNum.Value,False, False, False, False, 10, 'Arial AzLat', False);
+            SetBookmark('insured1',ODSCustsName.Value,False, False, False, False, 10, 'Arial AzLat', False);
+            SetBookmark('mark1',ODSMotorKaskoInsuredMark.Value,False, False, False, False, 10, 'Arial AzLat', False);
+            SetBookmark('begindate',DateToStr(ODSContractsBegin_Date.Value),False, False, False, False, 10, 'Arial AzLat', False);
+            SetBookmark('enddate',DateToStr(ODSContractsEnd_Date.Value),False, False, False, False, 10, 'Arial AzLat', False);
+            SetBookmark('inscost',FloatToStr(ODSContractsAmmount.Value)+' '+ODSAValuteVal_Name.Value,False, False, False, False, 10, 'Arial AzLat', False);
+            SetBookmark('inssum',FloatToStr(ODSContractsInsSumm.Value)+' '+ODSAValuteVal_Name.Value,False, False, False, False, 10, 'Arial AzLat', False);
+            SetBookmark('franshiz',FloatToStr(ODSContractsFranshiz.Value)+' '+ODSAValuteVal_Name.Value,False, False, False, False, 10, 'Arial AzLat', False);
+            SetBookmark('mark2',ODSMotorKaskoInsuredMark.Value,False, False, False, False, 10, 'Arial AzLat', False);
+            SetBookmark('statenum1',ODSMotorKaskoInsuredStateNum.Value,False, False, False, False, 10, 'Arial AzLat', False);
+            SetBookmark('insured2',ODSCustsName.Value,False, False, False, False, 10, 'Arial AzLat', False);
+            SetBookmark('claimdate2',DateToStr(ODSMotorKaskoClaim_Date.Value),False, False, False, False, 10, 'Arial AzLat', False);
+            SetBookmark('region',ODSClaimDescriptionRegion.Value,False, False, False, False, 10, 'Arial AzLat', False);
+            SetBookmark('street',ODSClaimDescriptionStreet.Value,False, False, False, False, 10, 'Arial AzLat', False);
+            SetBookmark('detail',ODSClaimDescriptionDetail.Value,False, False, False, False, 10, 'Arial AzLat', False);
+            SetBookmark('actdate',DateToStr(ODSClaimDescriptionActDate.Value),False, False, False, False, 10, 'Arial AzLat', False);
+            SetBookmark('person',ODSClaimDescriptionPerson.Value,False, False, False, False, 10, 'Arial AzLat', False);
+            SetBookmark('claimmark',ODSClaimDescriptionMark.Value,False, False, False, False, 10, 'Arial AzLat', False);
+            SetBookmark('claimstatenum',ODSClaimDescriptionStateNum.Value,False, False, False, False, 10, 'Arial AzLat', False);
+            SetBookmark('region1',ODSClaimDescriptionRegion.Value,False, False, False, False, 10, 'Arial AzLat', False);
+            SetBookmark('mark3',ODSMotorKaskoInsuredMark.Value,False, False, False, False, 10, 'Arial AzLat', False);
+            SetBookmark('statenum2',ODSMotorKaskoInsuredStateNum.Value,False, False, False, False, 10, 'Arial AzLat', False);
+            SetBookmark('avtoservis',ODSClaimDescriptionAvtoservis.Value,False, False, False, False, 10, 'Arial AzLat', False);
+            SetBookmark('mark4',ODSMotorKaskoInsuredMark.Value,False, False, False, False, 10, 'Arial AzLat', False);
+            SetBookmark('statenum3',ODSMotorKaskoInsuredStateNum.Value,False, False, False, False, 10, 'Arial AzLat', False);
+            SetBookmark('policynum',ODSContractsPolicy_Num.Value,False, False, False, False, 10, 'Arial AzLat', False);
+            SetBookmark('franshiz1',FloatToStr(ODSContractsFranshiz.Value),False, False, False, False, 10, 'Arial AzLat', False);
+            SetBookmark('payment',FloatToStr(sum-ODSContractsFranshiz.Value),False, False, False, False, 10, 'Arial AzLat', False);
+            SetBookmark('valute',ODSAValuteVal_Name.Value,False, False, False, False, 10, 'Arial AzLat', False);
+            SetBookmark('payment1',FloatToStr(sum-ODSContractsFranshiz.Value)+' '+ODSAValuteVal_Name.Value,False, False, False, False, 10, 'Arial AzLat', False);
+            SetBookmark('beneficiary',ODSContractsBeneficiary.Value,False, False, False, False, 10, 'Arial AzLat', False);
+            SetBookmark('claimdate3',DateToStr(ODSMotorKaskoClaim_Date.Value),False, False, False, False, 10, 'Arial AzLat', False);
+            SetBookmark('claimdate4',DateToStr(ODSMotorKaskoClaim_Date.Value),False, False, False, False, 10, 'Arial AzLat', False);
+            SetBookmark('region2',ODSClaimDescriptionRegion.Value,False, False, False, False, 10, 'Arial AzLat', False);
+            SetBookmark('region3',ODSClaimDescriptionRegion.Value,False, False, False, False, 10, 'Arial AzLat', False);
+            SetBookmark('region4',ODSClaimDescriptionRegion.Value,False, False, False, False, 10, 'Arial AzLat', False);
+            SetBookmark('appdate',DateToStr(ODSClaimDescriptionAppDate.Value),False, False, False, False, 10, 'Arial AzLat', False);
+            SetBookmark('letterdate',DateToStr(ODSClaimDescriptionLetterDate.Value),False, False, False, False, 10, 'Arial AzLat', False);
+            SetBookmark('letternum',ODSClaimDescriptionLetterNum.Value,False, False, False, False, 10, 'Arial AzLat', False);
+            SetBookmark('cprnum',ODSClaimDescriptionSPRNum.Value,False, False, False, False, 10, 'Arial AzLat', False);
+            SetBookmark('prtnum',ODSClaimDescriptionPrtNum.Value,False, False, False, False, 10, 'Arial AzLat', False);
+            SetBookmark('policynum1',ODSContractsPolicy_Num.Value,False, False, False, False, 10, 'Arial AzLat', False);
+            Show;
+            WordExporter.Close;
+            Close;
+       end;
+    except
+       raise;
+    end;      }
+
+end;
+
+procedure TFrmAddLoss.BitBtn4Click(Sender: TObject);
+  resourcestring  FilenotFound = 'Fayıl tapılmadı';
+var
+   WordApp:OleVariant;
+   wrdDataDoc,wrdApp,wrdSelection : Variant;
+   i,n:integer;
+   FileName:String;
+
+         Template,Templatebool,
+         FTemplatePath,Itemindex,
+         OBookmarkCount, What, oBookMarkName: Olevariant;
+         IbookmarkCount: Integer;
+         tFieldName:String;
+         SaveChanges,
+         OriginalFormat,
+         RouteDocument: OleVariant;
+begin
+if contractstatus=1 then  //CommanParametrs
+ begin
+   showmessage('Diqqət! Bu müqavilə bağlanmış müqavilə olduğundan heç bir deyişiklik oluna bilməz.');
+   exit;
+ end;
+ What := OleVariant(wdGoToBookmark);
+     //FTemplatePath :=AgreeDataModule.TemplatesDataSet.FieldByName('Path').AsString;
+     //TemplID :=AgreeDataModule.TemplatesDataSet.FieldByName('ID').AsInteger;
+
+     Template := EmptyParam;
+     TemplateBooL:=False;
+     Itemindex:=1;
+
+     Wordapplication.Connect;
+
+     Wordapplication.Visible := True;
+     //WordApplication.Documents.Application.Caption := DBLookupComboboxEh1.Text;
+
+     WordApplication.Options.CheckSpellingAsYouType := False;
+     WordApplication.Options.CheckGrammarAsYouType := False;
+
+     if FileExists(FTemplatePath) then
+     begin
+
+     WordApplication.Documents.Open(FTemplatePath,Template,TemplateBooL,Template,
+     Template,Template,Template,Template,Template,Template,
+     Template,Template,Template,Template,Template);
+
+     end else
+     begin
+        SaveChanges := WdDoNotSaveChanges;
+        OriginalFormat := UnAssigned;
+        RouteDocument := UnAssigned;
+        WordApplication.Quit(SaveChanges, OriginalFormat, RouteDocument);
+        WordApplication.Disconnect;
+        ShowMessage(FilenotFound);
+
+     end;
+
+     WordDocument.ConnectTo(WordApplication.Documents.Item(Itemindex));
+     WordDocument.Application.Get_ActiveWindow.Caption:=Caption;
+
+     try
+
+       with DmLoss, DmLoss, WordDocument do
+           dmLoss.DSSorgu.Close;
+           DmLoss.DSSorgu.SetVariable('pid',DmLoss.ODSClaimDescription.FieldByName('id').AsInteger);
+           DmLoss.DSSorgu.Open;
+           WordApplication.Selection.GoTo_(What, EmptyParam, EmptyParam, oBookMarkName);
+      { For IbookmarkCount := 1 to Bookmarks.Count do
+       begin
+
+         OBookmarkCount := IbookmarkCount ;
+         oBookMarkName := Bookmarks.Item(OBookmarkCount).Get_Name;
+         WordApplication.Selection.GoTo_(What, EmptyParam, EmptyParam, oBookMarkName);
+         ReplaceDataSet.Close;
+         SetVariable('tid', TemplID);
+         SetVariable('bname', oBookMarkName);
+         ReplaceDataSet.Open;
+         tFieldName := FIeldByName('FIELDNAME').AsString;
+
+         WordApplication.Selection.InsertAfter(CreditInfoDataSet.FieldByName(tFieldName).AsString);
+
+       end;   }
+
+           {WordApplication.Selection.GoTo_(What,EmptyParam,EmptyParam,'Autono');
+           WordApplication.Selection.Font.Name := 'Arial AzLat';
+           WordApplication.Selection.Font.Size :=11;
+           WordApplication.Selection.Font.Bold:=true;
+           WordApplication.Selection.TypeText(dmLoss.DSSorgu.FieldByName('INSUREDSTATENUM').AsString);
+
+           WordApplication.Selection.GoTo_(-1,unAssigned,unAssigned,'marka');
+           WordApplication.Selection.Font.Name := 'Arial AzLat';
+           WordApplication.Selection.Font.Size :=11;
+           WordApplication.Selection.Font.Bold:=true;
+           WordApplication.Selection.TypeText(dmLoss.DSSorgu.FieldByName('MARKA').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'Claim_date');
+           WordApplication.Selection.Font.Name := 'Arial AzLat';
+           WordApplication.Selection.Font.Size :=11;
+           WordApplication.Selection.Font.Bold:=true;
+           WordApplication.Selection.TypeText(dmLoss.DSSorgu.FieldByName('CLAIM_DATE').AsString);
+
+           WordApplication.Selection.GoTo_(-1,unAssigned,unAssigned,'Forma4');
+           WordApplication.Selection.Font.Name := 'Arial AzLat';
+           WordApplication.Selection.Font.Size :=14;
+           WordApplication.Selection.Font.Bold:=true;
+           WordApplication.Selection.TypeText(dmLoss.DSSorgu.FieldByName('STAGE_FORMA4_DAT').AsString);
+
+           WordApplication.Selection.GoTo_(-1,unAssigned,unAssigned,'name');
+           WordApplication.Selection.Font.Name := 'Arial AzLat';
+           WordApplication.Selection.Font.Size :=11;
+           WordApplication.Selection.Font.Bold:=true;
+           WordApplication.Selection.TypeText(dmLoss.DSSorgu.FieldByName('NAME1').AsString);
+
+           WordApplication.Selection.GoTo_(-1,unAssigned,unAssigned,'Region');
+           WordApplication.Selection.Font.Name := 'Arial AzLat';
+           WordApplication.Selection.Font.Size :=11;
+           WordApplication.Selection.Font.Bold:=true;
+           WordApplication.Selection.TypeText(dmLoss.DSSorgu.FieldByName('REGION').AsString);
+
+                                 }
+     WordDocument.Disconnect;
+     Wordapplication.Disconnect;
+
+     except
+       SaveChanges := WdDoNotSaveChanges;
+        OriginalFormat := UnAssigned;
+        RouteDocument := UnAssigned;
+        WordApplication.Quit(SaveChanges, OriginalFormat, RouteDocument);
+        WordApplication.Disconnect;
+       ShowMessage('Bukmarklar daxil edilmeyib ');
+     end;
+
+    {  with DmLoss do
+      begin
+           DSSorgu.Close;
+           DSSorgu.SetVariable('pid',ODSClaimDescription.FieldByName('id').AsInteger);
+           DSSorgu.Open;
+           FileName:=ExtractFilePath(Application.ExeName)+ '\BakBasPolisIdarsi.dot';
+           wrdApp := CreateOleObject('Word.Application');
+           wrdApp.Visible := True;
+           wrdDataDoc := wrdApp.Documents.Open(FileName);
+           wrdSelection:=wrdApp.Selection;
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'Autono');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.Font.Bold:=true;
+           wrdSelection.TypeText(DSSorgu.FieldByName('INSUREDSTATENUM').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'marka');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.Font.Bold:=true;
+           wrdSelection.TypeText(DSSorgu.FieldByName('MARKA').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'Claim_date');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.Font.Bold:=true;
+           wrdSelection.TypeText(DSSorgu.FieldByName('CLAIM_DATE').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'Forma4');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=14;
+           wrdSelection.Font.Bold:=true;
+           wrdSelection.TypeText(DSSorgu.FieldByName('STAGE_FORMA4_DAT').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'name');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.Font.Bold:=true;
+           wrdSelection.TypeText(DSSorgu.FieldByName('NAME1').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'Region');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.Font.Bold:=true;
+           wrdSelection.TypeText(DSSorgu.FieldByName('REGION').AsString);
+
+           {wrdSelection.GoTo(-1,unAssigned,unAssigned,'faydag');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.TypeText(DSPrintBank.FieldByName('BENEFICIARY').AsString);
+
+            }
+
+     // end;
+
+
+end;
+
+procedure TFrmAddLoss.BitBtn5Click(Sender: TObject);
+var
+   WordApp:OleVariant;
+   wrdDataDoc,wrdApp,wrdSelection : Variant;
+   i,n:integer;
+   FileName:String;
+begin
+if contractstatus=1 then  //CommanParametrs
+ begin
+   showmessage('Diqqət! Bu müqavilə bağlanmış müqavilə olduğundan heç bir deyişiklik oluna bilməz.');
+   exit;
+ end;
+      with DmLoss do
+      begin
+           DSPrintBank.Close;
+           DSPrintBank.SetVariable('pid',ODSClaimDescription.FieldByName('id').AsInteger);
+           DSPrintBank.Open;
+           FileName:=ExtractFilePath(Application.ExeName)+ '\BankMektubu.doc';
+           wrdApp := CreateOleObject('Word.Application');
+           wrdApp.Visible := True;
+           wrdDataDoc := wrdApp.Documents.Open(FileName);
+           wrdSelection:=wrdApp.Selection;
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'avtono');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.TypeText(DSPrintBank.FieldByName('INSUREDSTATENUM').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'Marka');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.TypeText(DSPrintBank.FieldByName('INSUREDMARK').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'ClaimDate');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.TypeText(DSPrintBank.FieldByName('CLAIM_DATE').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'faydag');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.TypeText(DSPrintBank.FieldByName('BENEFICIARY').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'Bankdate');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=14;
+           wrdSelection.Font.Bold:=true;
+           wrdSelection.TypeText(DSPrintBank.FieldByName('STAGE_BANKIN_CAVABI_DAT').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'name');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.TypeText(DSPrintBank.FieldByName('NAME1').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'name1');
+           wrdSelection.Font.Name := 'Arial AzLat';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.TypeText(DSPrintBank.FieldByName('NAME1').AsString);
+
+
+
+      end;
+
+
+end;
+
+procedure TFrmAddLoss.CalcSum;
+var
+    i:byte;
+begin
+    s:=0; s1:=0;s3:=0;
+    with DmLoss do
+    begin
+    if ODSClaims.RecordCount<>0 then
+    begin
+       ODSClaims.Last;
+       for i:=0 to ODSClaims.RecordCount-1 do
+       begin
+           s:=s+ODSClaimsCount.value;
+           s1:=s1+ODSClaimsCost.value;
+           ODSClaims.Prior;
+       end;
+      { ECount.Text:=FloatToStr(s);
+       ECost.Text:=FloatToStr(s1); }
+     end;
+    if ODSClaimSal.RecordCount<>0 then
+    begin
+       ODSClaimSal.Last;
+       for i:=0 to ODSClaimSal.RecordCount-1 do
+       begin
+           s3:=s3+ODSClaimSalCost.value;
+           ODSClaimSal.Prior;
+       end;
+    end;
+    end;
+end;
+procedure TFrmAddLoss.FormCreate(Sender: TObject);
+begin
+
+SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TFrmAddLoss.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+if ord(key)=vk_escape then
+begin
+if losstesdiq=0 then
+begin
+   if DmLoss.DSclaim_status.FieldByName('STAGE_TESDIQ').AsInteger=0 then
+    begin
+   frmstatus.CheckBox8.Checked:=false;
+
+    end;
+end
+else
+begin
+   frmstatus.CheckBox8.Checked:=true;
+end;
+
+
+close;
+
+end;
+end;
+
+procedure TFrmAddLoss.FormShow(Sender: TObject);
+begin
+
+//BitBtn1
+//ShowMessage(IntToStr(lossstatus));
+//ShowMessage('lossoperatin');
+///ShowMessage(IntToStr(lossoperatin));
+
+ //ShowMessage('lossstatus');
+  //   ShowMessage(IntToStr(lossstatus));
+if lossoperatin=1 then            //lossoperatin
+begin
+     XFGroupBox5.Visible:=true;
+end
+else
+begin
+     XFGroupBox5.Visible:=false;
+end;
+
+if lossoperatin=0 then
+begin
+     XFGroupBox8.Visible:=true;
+     BitBtn1.Enabled:=true;
+     //DBEdit1.Enabled:=true;
+end
+else
+begin
+     XFGroupBox8.Visible:=false;
+     //BitBtn1.Enabled:=true;
+end;
+
+
+
+    with DmLoss do
+    begin
+
+         ODSClaimReport.Close;
+         ODSClaimReport.SetVariable('id',ODSMotorkaskoId.value);
+         ODSClaimReport.Open;
+           end;
+
+       if FrmMainLoss.op_type='Insert' then
+       begin
+       XFRadioButton1.Checked:=true;
+    dtpClaim.DateTime:=DmLoss.DSSysdat.FieldByName('TEK_DAT').AsDateTime;
+    dtLetter.Date:=DmLoss.DSSysdat.FieldByName('TEK_DAT').AsDateTime;
+    dtApp.Date:=DmLoss.DSSysdat.FieldByName('TEK_DAT').AsDateTime;
+    dtActDate.Date:=DmLoss.DSSysdat.FieldByName('TEK_DAT').AsDateTime;
+     DateTimePicker2.Time:=strtotime('00:00:00');
+     FrmAddLoss.XFGroupBox8.Visible:=false;
+     FrmAddLoss.DBGrid1.Enabled:=false;
+     FrmAddLoss.DBGrid2.Enabled:=false;
+     FrmAddLoss.DBNavigator2.Enabled:=false;
+     FrmAddLoss.DBNavigator1.Enabled:=false;
+     FrmAddLoss.XFGroupBox1.Enabled:=false;
+     //BitBtn5.Enabled:=false;
+     DBEdit1.Text:='';
+     XFCheckBox1.Checked:=false;
+     XFCheckBox2.Checked:=false;
+     XFRadioButton1.Checked:=true;
+       end;
+
+         if FrmMainLoss.op_type='Edit' then
+       begin
+     //  showmessage();
+
+     DateTimePicker2.Time:=DmLoss.ODSClaimDescription.FieldByName('CLAIM_DATE').AsDateTime;
+
+     if datetostr(DmLoss.ODSClaimDescriptionCLAIM_DATE.Value)='30.12.1899' then
+
+     dtpClaim.DateTime:=DmLoss.DSSysdat.FieldByName('TEK_DAT').AsDateTime
+     else
+     //dtpClaim.Date:=DmLoss.ODSMotorKaskoCLAIM_DATE.Value;
+     dtpClaim.DateTime:=DmLoss.ODSClaimDescriptionCLAIM_DATE.Value;
+
+     if datetostr(DmLoss.ODSClaimDescriptionLetterDate.Value)='30.12.1899' then
+
+     dtLetter.Date:=DmLoss.DSSysdat.FieldByName('TEK_DAT').AsDateTime
+     else
+     dtLetter.Date:=DmLoss.ODSClaimDescriptionLetterDate.Value;
+
+
+     if datetostr(DmLoss.ODSClaimDescriptionAppDate.Value)='30.12.1899' then
+
+     dtApp.Date:=DmLoss.DSSysdat.FieldByName('TEK_DAT').AsDateTime
+     else
+     dtApp.Date:=DmLoss.ODSClaimDescriptionAppDate.Value;
+
+     if datetostr(DmLoss.ODSClaimDescriptionActDate.Value)='30.12.1899' then
+
+     dtActDate.Date:=DmLoss.DSSysdat.FieldByName('TEK_DAT').AsDateTime
+     else
+     dtActDate.Date:=DmLoss.ODSClaimDescriptionActDate.Value;
+     FrmAddLoss.XFGroupBox1.Enabled:=true;
+
+     FrmAddLoss.DBGrid1.Enabled:=true;
+     FrmAddLoss.DBGrid2.Enabled:=true;
+     FrmAddLoss.DBNavigator2.Enabled:=true;
+     FrmAddLoss.DBNavigator1.Enabled:=true;
+     //SUBRAQASIYA
+    // showmessage(DmLoss.ODSClaimDescription.FieldByName('SUBRAQASIYA').AsString);
+     if DmLoss.ODSClaimDescription.FieldByName('SUBRAQASIYA').AsInteger=1 then
+          XFCheckBox1.Checked:=true
+          else
+            XFCheckBox1.Checked:=false;
+
+                      //showmessage(DmLoss.ODSClaimDescription.FieldByName('OTHER_DRIVER').AsString);
+          if DmLoss.ODSClaimDescription.FieldByName('OTHER_DRIVER').AsInteger=1 then
+          begin
+          //Showmessage('salam');
+          XFCheckBox2.Checked:=true;
+          //DBEdit24.Enabled:=true;
+          XFPanel4.Enabled:=true;
+          DBLookupComboBox6.Enabled:=false;
+          end
+          else
+          begin
+          DBLookupComboBox6.Enabled:=true;
+          //DBEdit24.Enabled:=false;
+          XFPanel4.Enabled:=false;
+          XFCheckBox2.Checked:=false;
+          end;
+
+
+
+    if DmLoss.ODSClaimDescription.FieldByName('claim_status').AsInteger=1 then
+          XFRadioButton2.Checked:=true
+          else
+            XFRadioButton1.Checked:=true;
+
+
+     //edit1.Text:=DmLoss.ODSMotorkaskoCLAIM_NUM.Value;
+     end;
+
+  FrmAddLoss.PageControl1.ActivePageIndex:=0;
+end;
+
+procedure TFrmAddLoss.PageControl1Change(Sender: TObject);
+begin
+if PageControl1.ActivePageIndex=1 then
+begin
+FrmAddLoss.XFButton1Click(self);
+end;
+end;
+
+procedure TFrmAddLoss.ReportClick(Sender: TObject);
+var
+   WordApp:OleVariant;
+   wrdDataDoc,wrdApp,wrdSelection : Variant;
+   i,j,n,m:integer;
+   FileName:String;
+   s,s1,s2:real;
+begin
+if contractstatus=1 then  //CommanParametrs
+ begin
+   showmessage('Diqqət! Bu müqavilə bağlanmış müqavilə olduğundan heç bir deyişiklik oluna bilməz.');
+   exit;
+ end;
+     with DmLoss do
+     begin
+          ODSCusts.Open;
+          s:=0; s1:=0; s2:=0;
+          FileName:=ExtractFilePath(Application.ExeName)+ '\Kasko temir xercleri.doc';
+          wrdApp := CreateOleObject('Word.Application');
+          wrdApp.Visible := True;
+          wrdDataDoc := wrdApp.Documents.Open(FileName);
+          wrdSelection:=wrdApp.Selection;
+          m:=ODSClaimReport.RecordCount;
+          n:=ODSClaimSal.RecordCount;
+          wrdSelection.GoTo(-1,unAssigned,unAssigned,'policynum');
+          wrdSelection.Font.Name := 'Arial AzLat';
+          wrdSelection.Font.Size :=11;
+          wrdSelection.Font.Bold:=false;
+          wrdSelection.TypeText(ODSContractsPolicy_Num.Value);
+          wrdSelection.GoTo(-1,unAssigned,unAssigned,'insured');
+          wrdSelection.Font.Name := 'Arial AzLat';
+          wrdSelection.Font.Size :=11;
+          wrdSelection.TypeText(ODSCustsName.Value);
+          wrdSelection.GoTo(-1,unAssigned,unAssigned,'insured1');
+          wrdSelection.Font.Name := 'Arial AzLat';
+          wrdSelection.Font.Size :=11;
+          wrdSelection.TypeText(ODSCustsName.Value);
+          wrdSelection.GoTo(-1,unAssigned,unAssigned,'mark');
+          wrdSelection.Font.Name := 'Arial AzLat';
+          wrdSelection.Font.Size :=11;
+          wrdSelection.TypeText(ODSMotorKaskoInsuredMark.Value);
+          wrdSelection.GoTo(-1,unAssigned,unAssigned,'statenum');
+          wrdSelection.Font.Name := 'Arial AzLat';
+          wrdSelection.Font.Size :=11;
+          wrdSelection.TypeText(ODSMotorKaskoInsuredStateNum.Value);
+          wrdSelection.GoTo(-1,unAssigned,unAssigned,'date');
+          wrdSelection.TypeText(DateToStr(ODSMotorKaskoCLAIM_DATE.Value));
+         // SetBookmark('avtoservis',ODSClaimDescriptionAvtoservis.Value,False, False, False, False, 10, 'Arial AzLat', False);
+          wrdSelection.Font.Name := 'Arial AzLat';
+          wrdSelection.Font.Size :=11;
+          wrdSelection.Font.Bold:=false;
+          wrdSelection.GoTo(-1,unAssigned,unAssigned,'claimnum');
+          wrdSelection.Font.Bold:=false;
+          wrdSelection.TypeText(ODSMotorKaskoClaim_Num.Value);
+          ODSClaimReport.First;
+          for j:=1 to ODSClaimReport.RecordCount do
+          begin
+            {  if length(ODSClaimsState.Value)<>12 then
+              begin
+                 continue;
+              end;    }
+              s1:=s1+ODSClaimReportCount.value;
+              s2:=s2+ODSClaimReportCost.value;
+              //s3:=s3+ODSClaimsSum.value;
+              wrdDataDoc.Tables.Item(1).Rows.Add;
+              wrdDataDoc.Tables.Item(1).Rows.Item(j+1).Range.Font.Name := 'Arial AzLat';
+              wrdDataDoc.Tables.Item(1).Rows.Item(j+1).Range.Bold:=false;
+              FillRow1(wrdDataDoc, j+1,IntToStr(j),ODSClaimReportEName.Value,FloatToStr(ODSClaimReportCount.value),FloatToStr(ODSClaimReportCost.value),FloatToStr(ODSClaimReportCount.value*ODSClaimReportCost.value));
+
+              if j=m then
+              begin
+                 wrdDataDoc.Tables.Item(1).Rows.Add;
+                 wrdDataDoc.Tables.Item(1).Rows.Item(m+2).Range.Font.Name := 'Arial AzLat';
+                 wrdDataDoc.Tables.Item(1).Cell(m+2,1).Range.Paragraphs.Alignment :=wdAlignParagraphCenter;
+                 wrdDataDoc.Tables.Item(1).Rows.Item(m+2).Range.Bold:=true;
+                 FillRow1(wrdDataDoc,m+2,'','Cəmi :',FloatToStr(s1),FloatToStr(s2),FloatToStr(s1*s2));
+              end;
+              ODSClaimReport.Next;
+         end;
+         ODSClaimSal.First;
+         for i:= 1 to n do
+         begin
+             s:=s+ODSClaimSalCost.value;
+             wrdDataDoc.Tables.Item(2).Rows.Add;
+             wrdDataDoc.Tables.Item(2).Rows.Item(i+1).Range.Font.Name := 'Arial AzLat';
+             wrdDataDoc.Tables.Item(2).Rows.Item(i+1).Range.Bold:=false;
+             FillRow(2,wrdDataDoc, i+1,IntToStr(i),ODSClaimSalName.Value,FloatToStr(ODSClaimSalCost.value));
+             ODSClaimSal.Next;
+         if i=n then
+         begin
+            wrdDataDoc.Tables.Item(2).Rows.Add;
+            wrdDataDoc.Tables.Item(2).Rows.Item(n+2).Range.Font.Name := 'Arial AzLat';
+            wrdDataDoc.Tables.Item(2).Cell(n+2,1).Range.Paragraphs.Alignment :=wdAlignParagraphCenter;
+            wrdDataDoc.Tables.Item(2).Rows.Item(n+2).Range.Bold:=true;
+            FillRow(2,wrdDataDoc,n+2,'', 'Cəmi :',FloatToStr(s));
+
+            wrdDataDoc.Tables.Item(2).Rows.Add;
+            wrdDataDoc.Tables.Item(2).Rows.Item(n+3).Range.Font.Name := 'Arial AzLat';
+            wrdDataDoc.Tables.Item(2).Cell(n+3,1).Range.Paragraphs.Alignment :=wdAlignParagraphCenter;
+            wrdDataDoc.Tables.Item(2).Rows.Item(n+3).Range.Bold:=true;
+            sum:=s1*s2+s;
+            FillRow(2,wrdDataDoc,n+3,'', 'Ümumi yekun :',FloatToStr(sum));
+         end;
+     end;
+   end;
+end;
+
+
+procedure TFrmAddLoss.XFButton1Click(Sender: TObject);
+var
+mk:string;
+md,s:string;
+pother_driver:integer;
+begin
+s:=datetostr(dtpClaim.Date)+' '+Timetostr(DateTimePicker2.Time);
+ //showmessage('salam');
+  //showmessage(s);
+
+      a:=0;
+if contractstatus=1 then  //CommanParametrs
+ begin
+   showmessage('Diqqət! Bu müqavilə bağlanmış müqavilə olduğundan heç bir deyişiklik oluna bilməz.');
+   abort;
+ end;
+//----------------------------
+
+{if DBLookupComboBox3.Text='' then
+begin
+ showmessage('Rayon sahəsi boşdur!');
+  abort;
+end;
+
+if DBEdit2.Text='' then
+begin
+  showmessage('Küçə sahəsi boşdur!');
+  abort;
+end;
+
+if DBLookupComboBox7.Text='' then
+begin
+  showmessage('Avtoservis sahəsi boşdur!');
+  abort;
+end;
+
+if DBEdit3.Text='' then
+begin
+  showmessage('Hadisənin təsviri sahəsi boşdur!');
+  abort;
+end;
+
+{if DBEdit4.Text='' then
+begin
+  showmessage('Sürücü sahəsi boşdur!');
+  abort;
+end;
+
+if DBEdit6.Text='' then
+begin
+  showmessage('Dövlət nömrəsi sahəsi boşdur!');
+  abort;
+end;
+
+if DBEdit7.Text='' then
+begin
+  showmessage('Məktubun №-si sahəsi boşdur!');
+  abort;
+end;
+
+
+{if DBLookupComboBox1.Text='' then
+begin
+  showmessage('Marka sahəsi boşdur!');
+  abort;
+end;
+
+if DBLookupComboBox2.Text='' then
+begin
+  showmessage('Model sahəsi boşdur!');
+  abort;
+end;}
+      {
+if DBEdit8.Text='' then
+begin
+  showmessage('Arayışın №-si sahəsi boşdur!');
+  abort;
+end;
+
+if DBEdit9.Text='' then
+begin
+  showmessage('Protokolun №-si sahəsi boşdur!');
+  abort;
+end;   }
+//----------------------------
+
+
+with DmLoss do
+begin
+  dsmarka.Close;
+  dsmarka.SetVariable('pid',DBLookupComboBox1.KeyValue);
+  dsmarka.Open;
+
+  dsmodel.Close;
+  dsmodel.SetVariable('pid',DBLookupComboBox2.KeyValue);
+  dsmodel.SetVariable('pmark_id',DBLookupComboBox1.KeyValue);
+  dsmodel.Open;
+
+
+end;
+
+     with DmLoss,ODSMotorKasko do
+     begin
+     ODSMOTORKaskoCLAIM_DATE.Value:=dtpClaim.Date;
+     if State in [dsEdit, dsInsert] then
+     begin
+        Post;
+     end;
+
+if XFCheckBox2.Checked=true then
+pother_driver:=1
+else
+pother_driver:=0;
+
+     with DmLoss,ODSClaimDescription do
+     begin
+     if State in [dsEdit, dsInsert] then
+     begin
+        //ODSClaimDescriptionID.Value:=ODSMotorKaskoID.Value;
+        ODSClaimDescriptionMK_ID.Value:=ODSMotorKaskoID.Value;
+        ODSClaimDescriptionCID.Value:=contactid;
+        ODSClaimDescriptionAppDate.Value:=Integer(trunc(dtApp.Date));
+        ODSClaimDescriptionLetterDate.Value:=Integer(trunc(dtLetter.Date));
+        ODSClaimDescriptionActDate.Value:=Integer(trunc(dtActDate.Date));
+        //ODSClaimDescriptionCLAIM_DATE.Value:=Integer(trunc(dtpClaim.Date));
+        //ODSClaimDescriptionCLAIM_DATE.Value:=dtpClaim.DateTime;
+         ODSClaimDescription.FieldByName('CLAIM_DATE').AsDateTime:=StrToDateTime(s);
+         ODSClaimDescription.FieldByName('other_driver').AsInteger:=pother_driver;
+         ODSClaimDescriptionSUBRAQASIYA.Value:=sub_id;
+
+        //mk:=DBLookupComboBox1.KeyValue;
+        //showmessage(DBLookupComboBox2.KeyValue);
+        //showmessage(DBLookupComboBox1.KeyValue);
+        ODSClaimDescription.FieldByName('mark').AsString:=dsmarka.FieldByName('name').AsString;
+        ODSClaimDescription.FieldByName('MODEL').AsString:=dsmodel.FieldByName('name').AsString;;
+        Post;
+        RefreshRecord;
+        FrmMainLoss.dep_id:=FieldByName('id').asinteger;
+        a:=1;
+     end;
+     end;
+     end;
+
+    // DmLoss.Dsmain.RefreshRecord;
+
+if a=1 then
+begin
+with DmLoss do
+begin
+ ODSClaims.Close;
+         ODSClaims.SetVariable('id',ODSMotorkaskoId.value);
+         ODSClaims.SetVariable('p_desc_id',FrmMainLoss.dep_id);
+         ODSClaims.Open;
+         //ODSClaims.Edit;
+
+         ODSClaimSal.Close;
+         ODSClaimSal.SetVariable('eid',ODSMotorkaskoId.value);
+         ODSClaimSal.SetVariable('p_desc_id',FrmMainLoss.dep_id);
+         ODSClaimSal.Open;
+         //ODSClaimSal.Edit;
+
+end;
+
+   FrmAddLoss.XFGroupBox1.Enabled:=true;
+     FrmAddLoss.DBGrid1.Enabled:=true;
+     FrmAddLoss.DBGrid2.Enabled:=true;
+     FrmAddLoss.DBNavigator2.Enabled:=true;
+     FrmAddLoss.DBNavigator1.Enabled:=true;
+end;
+end;
+
+procedure TFrmAddLoss.XFButton2Click(Sender: TObject);
+begin
+if losstesdiq=0 then
+begin
+   if DmLoss.DSclaim_status.FieldByName('STAGE_TESDIQ').AsInteger=0 then
+    begin
+   frmstatus.CheckBox8.Checked:=false;
+
+    end;
+end
+else
+begin
+   frmstatus.CheckBox8.Checked:=true;
+end;
+  close;
+end;
+
+procedure TFrmAddLoss.XFCheckBox2Click(Sender: TObject);
+begin
+if XFCheckBox2.Checked=true then
+ begin
+//DBEdit24.Enabled:=true;
+XFPanel4.Enabled:=true;
+DBLookupComboBox6.Enabled:=false;
+ end
+ else
+ begin
+//DBEdit24.Enabled:=false;
+XFPanel4.Enabled:=false;
+DBLookupComboBox6.Enabled:=true;
+DBEdit24.Text:='';
+ end
+
+end;
+
+procedure TFrmAddLoss.XFSpeedButton1Click(Sender: TObject);
+
+var
+CLAIM_STATUS :integer ;
+begin
+if contractstatus=1 then  //CommanParametrs
+ begin
+   showmessage('Diqqət! Bu müqavilə bağlanmış müqavilə olduğundan heç bir deyişiklik oluna bilməz.');
+   exit;
+ end;
+ if XFRadioButton1.Checked=true then
+ begin
+ CLAIM_STATUS:=0;
+ end;
+  if XFRadioButton2.Checked=true then
+ begin
+ CLAIM_STATUS:=1;
+ end;
+     with DmLoss do
+     begin
+
+
+          DBEdit1.Text:=DmLoss.OPCOMMON.CallStringFunction('GenerateLossNumber',
+                                       [DmLoss.oDSClaimDescription.FieldByName('cid').AsInteger,
+                                       DmLoss.oDSClaimDescription.FieldByName('TYPE').AsInteger,
+                                       DmLoss.oDSClaimDescription.FieldByName('id').AsInteger,
+                                       CLAIM_STATUS]);
+
+
+
+
+     end;
+end;
+
+procedure TFrmAddLoss.XFSpeedButton2Click(Sender: TObject);
+
+begin
+   if DBEdit14.Text='' then
+   begin
+     ShowMessage('Diqqət!!! Avto.yürüşü(km) sahəsi boşdur');
+   end;
+
+ DBEdit21.Text:=floattostr(DmLoss.amartizator.CallFloatFunction('get_Ammount_amartizator',
+ [DmLoss.oDSClaimDescription.FieldByName('id').AsInteger,strtofloat(DBEdit11.Text),StrToFloat(DBEdit14.Text)]));
+
+ DmLoss.DSFarnsiza.Close;
+ DmLoss.DSFarnsiza.SetVariable('pid',DmLoss.oDSClaimDescription.FieldByName('cid').AsInteger);
+ DmLoss.DSFarnsiza.open;
+
+
+   DBEdit20.Text:=floattostr(StrToFloat(DBEdit12.text)- StrToFloat(DBEdit21.Text)-DmLoss.DSFarnsiza.FieldByName('fransiza').AsFloat);
+
+
+end;
+
+end.

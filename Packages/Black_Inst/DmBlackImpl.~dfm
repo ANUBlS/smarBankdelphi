@@ -1,0 +1,232 @@
+object DmBlack: TDmBlack
+  OldCreateOrder = False
+  OnCreate = DataModuleCreate
+  OnDestroy = DataModuleDestroy
+  Left = 293
+  Top = 158
+  Height = 540
+  Width = 783
+  object MainDSet: TOracleDataSet
+    SQL.Strings = (
+      'select a.*, '
+      '(select name from DOC_TYPES where id=a.doc_type) doctip,'
+      '(select cntr_name from COUNTRIES where id=adrs_state) contries,'
+      '(select city_name from CITIES where id=adrs_city) cities'
+      ''
+      'from CUSTOMERS_BLACK a'
+      'where 1=1'
+      ''
+      ''
+      '')
+    QBEDefinition.QBEFieldDefs = {
+      0400000012000000020000004944010000000000040000004E414D4501000000
+      0000080000004C4153544E414D450100000000000A0000004D4944444C454E41
+      4D4501000000000008000000444F435F5459504501000000000009000000444F
+      435F534552494501000000000007000000444F435F4E554D0100000000000B00
+      0000434954495A454E534849500100000000000A000000414452535F53544154
+      4501000000000009000000414452535F43495459010000000000070000004144
+      445245535301000000000008000000444F435F44415445010000000000090000
+      00444F435F4F5247414E0100000000000600000047454E444552010000000000
+      07000000444F435F50494E01000000000006000000444F435449500100000000
+      0008000000434F4E545249455301000000000006000000434954494553010000
+      000000}
+    Session = sboapiDataModule.SBSession
+    Filtered = True
+    Left = 40
+    Top = 32
+    object MainDSetID: TFloatField
+      FieldName = 'ID'
+    end
+    object MainDSetNAME: TStringField
+      FieldName = 'NAME'
+    end
+    object MainDSetLASTNAME: TStringField
+      FieldName = 'LASTNAME'
+      Size = 30
+    end
+    object MainDSetMIDDLENAME: TStringField
+      FieldName = 'MIDDLENAME'
+    end
+    object MainDSetDOC_TYPE: TIntegerField
+      FieldName = 'DOC_TYPE'
+    end
+    object MainDSetDOC_SERIE: TStringField
+      FieldName = 'DOC_SERIE'
+      Size = 10
+    end
+    object MainDSetDOC_NUM: TStringField
+      FieldName = 'DOC_NUM'
+    end
+    object MainDSetCITIZENSHIP: TIntegerField
+      FieldName = 'CITIZENSHIP'
+    end
+    object MainDSetADRS_STATE: TIntegerField
+      FieldName = 'ADRS_STATE'
+    end
+    object MainDSetADRS_CITY: TIntegerField
+      FieldName = 'ADRS_CITY'
+    end
+    object MainDSetADDRESS: TStringField
+      FieldName = 'ADDRESS'
+      Size = 100
+    end
+    object MainDSetDOC_DATE: TDateTimeField
+      FieldName = 'DOC_DATE'
+    end
+    object MainDSetDOC_ORGAN: TStringField
+      FieldName = 'DOC_ORGAN'
+      Size = 50
+    end
+    object MainDSetGENDER: TIntegerField
+      FieldName = 'GENDER'
+    end
+    object MainDSetDOC_PIN: TStringField
+      FieldName = 'DOC_PIN'
+      Size = 10
+    end
+    object MainDSetDOCTIP: TStringField
+      FieldName = 'DOCTIP'
+      Size = 30
+    end
+    object MainDSetCONTRIES: TStringField
+      FieldName = 'CONTRIES'
+      Size = 30
+    end
+    object MainDSetCITIES: TStringField
+      FieldName = 'CITIES'
+      Size = 80
+    end
+  end
+  object MainDSrc: TDataSource
+    DataSet = MainDSet
+    Left = 120
+    Top = 32
+  end
+  object Contry: TOracleDataSet
+    SQL.Strings = (
+      'select rowid,a.* from COUNTRIES a'
+      'order by CNTR_NAME'
+      ''
+      ''
+      '')
+    QBEDefinition.QBEFieldDefs = {
+      040000000400000002000000494401000000000009000000434E54525F4E414D
+      4501000000000009000000434E54525F434F4445010000000000040000005359
+      4D42010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 40
+    Top = 88
+  end
+  object CITIES: TOracleDataSet
+    SQL.Strings = (
+      'select * from CITIES'
+      ''
+      'where country_id = :country_id')
+    Variables.Data = {
+      03000000010000000B0000003A434F554E5452595F4944030000000000000000
+      000000}
+    QBEDefinition.QBEFieldDefs = {
+      04000000030000000200000049440100000000000A000000434F554E5452595F
+      494401000000000009000000434954595F4E414D45010000000000}
+    Master = Contry
+    MasterFields = 'ID'
+    DetailFields = 'COUNTRY_ID'
+    Session = sboapiDataModule.SBSession
+    Left = 40
+    Top = 160
+  end
+  object ContrySrc: TDataSource
+    DataSet = Contry
+    Left = 120
+    Top = 96
+  end
+  object CITIESSrc: TDataSource
+    DataSet = CITIES
+    Left = 120
+    Top = 160
+  end
+  object OraclePackage1: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'PG_CUST_BLACK'
+    ParameterMode = pmNamed
+    Left = 192
+    Top = 40
+  end
+  object Doctype: TOracleDataSet
+    SQL.Strings = (
+      'select * from DOC_TYPES')
+    QBEDefinition.QBEFieldDefs = {
+      0400000002000000020000004944010000000000040000004E414D4501000000
+      0000}
+    Session = sboapiDataModule.SBSession
+    Left = 40
+    Top = 224
+  end
+  object DtypeDataSrc: TDataSource
+    DataSet = Doctype
+    Left = 128
+    Top = 224
+  end
+  object Sex: TOracleDataSet
+    SQL.Strings = (
+      'select 1 id ,'#39'Киши'#39' name from dual'
+      'union'
+      'select 2 id ,'#39'Гадын'#39' name from dual')
+    QBEDefinition.QBEFieldDefs = {
+      0400000002000000020000004944010000000000040000004E414D4501000000
+      0000}
+    Session = sboapiDataModule.SBSession
+    Left = 328
+    Top = 48
+  end
+  object SexSrc: TDataSource
+    DataSet = Sex
+    Left = 416
+    Top = 56
+  end
+  object Sysdat: TOracleDataSet
+    SQL.Strings = (
+      'select*from sysdat')
+    Session = sboapiDataModule.SBSession
+    Left = 296
+    Top = 168
+  end
+  object SysDSrc: TDataSource
+    DataSet = Sysdat
+    Left = 408
+    Top = 160
+  end
+  object DataSource1: TDataSource
+    DataSet = OracleDataSet1
+    Left = 72
+    Top = 320
+  end
+  object OracleDataSet1: TOracleDataSet
+    SQL.Strings = (
+      'select rowid,a.*from black_countries a')
+    QBEDefinition.QBEFieldDefs = {
+      040000000300000002000000494401000000000006000000434F4E5449440100
+      0000000009000000434E54525F434F4445010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 160
+    Top = 320
+    object OracleDataSet1ID: TFloatField
+      FieldName = 'ID'
+    end
+    object OracleDataSet1CONTID: TFloatField
+      FieldName = 'CONTID'
+    end
+    object OracleDataSet1CNTR_CODE: TIntegerField
+      FieldName = 'CNTR_CODE'
+    end
+    object OracleDataSet1count_name: TStringField
+      FieldKind = fkLookup
+      FieldName = 'count_name'
+      LookupDataSet = Contry
+      LookupKeyFields = 'ID'
+      LookupResultField = 'CNTR_NAME'
+      KeyFields = 'CONTID'
+      Lookup = True
+    end
+  end
+end

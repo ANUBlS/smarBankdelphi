@@ -1,0 +1,214 @@
+﻿unit CorrectorMainFormImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+   ComCtrls, StdCtrls, Mask, DBCtrlsEh, Grids, DBGrids,
+  DBGridEh, ActnList, DB,oracle,oracledata, DBGridEhGrouping, GridsEh;
+
+type
+  TCorrectorMainForm = class(TForm)
+    GroupBox1: TGroupBox;
+    Editnum: TEdit;
+    DBGridEh1: TDBGridEh;
+    ActionList1: TActionList;
+    ActnOK: TAction;
+    ACTNnook: TAction;
+    Button1: TButton;
+    Button2: TButton;
+    Button3: TButton;
+    ActnSearch: TAction;
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+    procedure FormCreate(Sender: TObject);
+    procedure ActnOKUpdate(Sender: TObject);
+    procedure ActnOKExecute(Sender: TObject);
+    procedure ACTNnookExecute(Sender: TObject);
+    procedure EditnumberofcreditChange(Sender: TObject);
+    procedure Button3Click(Sender: TObject);
+    procedure ActnSearchExecute(Sender: TObject);
+    procedure EditnumKeyPress(Sender: TObject; var Key: Char);
+    procedure DBGridEh1TitleClick(Column: TColumnEh);
+  private
+    procedure RefreshDS;
+    function FindNextRecord(DataSet : TDataSet;FieldName : String;Value : String) : Boolean;
+    { Private declarations }
+  public
+    procedure ShowCorrectForm; 
+    { Public declarations }
+  end;
+
+var
+  CorrectorMainForm: TCorrectorMainForm;
+
+procedure InitPlugin(const S : String);export;
+  
+implementation
+
+uses CommonDecls, CorrectorDataModule;
+
+{$R *.DFM}
+
+procedure TCorrectorMainForm.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+  if Ord(Key) = VK_ESCAPE then
+    ModalResult := mrCancel
+end;
+
+procedure TCorrectorMainForm.ShowCorrectForm;
+begin
+  with CorrectorDataMod do
+  begin
+
+    CorrectData.SetVariable('OrderField','num');
+    CorrectData.Open;
+  end;
+  ShowModal;
+end;
+
+procedure TCorrectorMainForm.RefreshDS;
+var
+  SavePoint : Pointer;
+begin
+  with CorrectorDataMod.CorrectData do
+  begin
+    SavePoint := GetBookmark;
+    Refresh;
+    GotoBookmark(SavePoint);
+  end;
+end;
+
+procedure TCorrectorMainForm.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+  Resize := False;
+end;
+
+procedure TCorrectorMainForm.FormCreate(Sender: TObject);
+begin
+  CorrectorDataMod := TCorrectorDataMod.Create(Self);
+end;
+
+procedure TCorrectorMainForm.ActnOKUpdate(Sender: TObject);
+begin
+  with CorrectorDataMod.CorrectData do
+  (Sender as TAction).Enabled := Active and UpdatesPending
+end;
+
+procedure TCorrectorMainForm.ActnOKExecute(Sender: TObject);
+begin
+  with CorrectorDataMod.CorrectData.Session do
+    ApplyUpdates([CorrectorDataMod.CorrectData],True);
+  RefreshDS;
+end;
+
+procedure TCorrectorMainForm.ACTNnookExecute(Sender: TObject);
+begin
+  with CorrectorDataMod.CorrectData.Session do
+  CancelUpdates([CorrectorDataMod.CorrectData]);
+  RefreshDS;
+end;
+
+procedure TCorrectorMainForm.EditnumberofcreditChange(Sender: TObject);
+begin
+  with CorrectorDataMod.CorrectData do
+    Locate('NUM',(Sender as TEdit).Text,[loCaseInsensitive, loPartialKey])
+end;
+
+procedure InitPlugin(const S : String);export;
+begin
+  CorrectorMainForm.ShowCorrectForm;
+end;
+
+exports
+  InitPlugin;
+
+procedure TCorrectorMainForm.Button3Click(Sender: TObject);
+begin
+  Close
+end;
+
+procedure TCorrectorMainForm.ActnSearchExecute(Sender: TObject);
+var SearchField,SearchRecord : String;
+begin
+   SearchField := Copy((Sender as TEdit).name,5,length((Sender as TEdit).name));
+   SearchRecord := (Sender as TEdit).Text;
+   FindNextRecord (CorrectorDataMod.CorrectData,SearchField,SearchRecord);
+
+end;
+function TCorrectorMainForm.FindNextRecord(DataSet : TDataSet;FieldName : String;Value : String) : Boolean;
+
+resourcestring
+  rsRecordRecachedEOF = 'Axtarış cərgənin sonuna çatıb .';
+  rsContinueFromTop   = 'Əvvldən axtarmaqla davam etmək istəyirsiniz?';
+  rsRecordNotFound    = 'Yazı tapılmadı.';
+
+var
+  SearchOptions : TSearchRecordOptions;
+
+begin
+  SearchOptions := [srIgnoreCase ,srPartialMatch];
+  with  (DataSet as TOracleDataSet) do
+  begin
+
+    Result := SearchRecord(
+                FieldName,
+                Value,
+                SearchOptions + [srFromCurrent, srForward]
+    );
+    if not Result then
+
+    if MessageDlg(
+              rsRecordRecachedEOF + #10#13 + rsContinueFromTop
+             ,mtInformation
+             ,[mbNo , mbYes]
+             ,0
+             ) = mrYes  then
+    begin
+
+      Result := SearchRecord(
+                  FieldName,
+                  Value,
+                  SearchOptions + [srFromBeginning]
+      );
+
+      if not Result then
+      MessageDlg(rsRecordNotFound,mtInformation,[mbOk],0);
+
+    end;
+  end;
+end;
+
+
+procedure TCorrectorMainForm.EditnumKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+    if (Key = #13)and(Editnum.Text <> '')  then
+     ActnSearchExecute(Sender);
+
+end;
+
+procedure TCorrectorMainForm.DBGridEh1TitleClick(Column: TColumnEh);
+var
+  OrderField :string;
+begin
+   OrderField := Column.Field.FieldName;
+   Screen.Cursor := crSQLWait;
+   try
+       with TOracleDataSet(DBGridEh1.DataSource.DataSet) do
+       begin
+         if  Active  then  CloseAll;
+         SetVariable('OrderField',OrderField);
+         Open
+       end;
+    finally
+     Screen.Cursor := crDefault;
+    end;
+end;
+
+initialization
+  CorrectorMainForm := TCorrectorMainForm.Create(CommonApplication);
+
+end.

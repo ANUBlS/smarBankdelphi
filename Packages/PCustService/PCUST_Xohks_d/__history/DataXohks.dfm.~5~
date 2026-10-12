@@ -1,0 +1,300 @@
+object DataModXhoks: TDataModXhoks
+  OldCreateOrder = False
+  Height = 402
+  Width = 676
+  object DataCheck: TOracleDataSet
+    Optimize = False
+    Cursor = crSQLWait
+    QueryAllRecords = False
+    Session = sboapiDataModule.SBSession
+    Left = 240
+    Top = 91
+  end
+  object DataAccount: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      'a.id,a.acc_no,a.name,a.val_acc,a.filial,c.inn'
+      'from'
+      'account a,customers c'
+      'where'
+      '(a.kli_ID=c.id)and'
+      '(a.close_dat is null)'
+      'order by a.acc_no')
+    Optimize = False
+    Cursor = crSQLWait
+    QueryAllRecords = False
+    Session = sboapiDataModule.SBSession
+    Left = 40
+    Top = 269
+  end
+  object DataBankInfo: TOracleDataSet
+    SQL.Strings = (
+      'select * from bankinfo')
+    Optimize = False
+    Cursor = crSQLWait
+    QueryAllRecords = False
+    Session = sboapiDataModule.SBSession
+    Left = 200
+    Top = 237
+  end
+  object DS_BATCHS: TDataSource
+    DataSet = XS_BATCHS
+    Left = 32
+    Top = 61
+  end
+  object XS_BATCHS: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      '  x.*, x.rowid,'
+      '  a.acc_no,'
+      '  a.name,'
+      '  v.val_name'
+      'from'
+      '  XS_BATCHS x ,'
+      '  account a, '
+      '  avalute v'
+      'where'
+      '  x.acc_id = a.id and'
+      '  v.valute=a.val_acc and'
+      '  (x.transdate>=:BeginDate and x.transdate<=:EndDate)'
+      ' order by'
+      '  :Title'
+      ''
+      ''
+      ''
+      ' '
+      ''
+      ' '
+      ' '
+      ' ')
+    Optimize = False
+    Variables.Data = {
+      0400000003000000140000003A0042004500470049004E004400410054004500
+      0C0000000000000000000000100000003A0045004E0044004400410054004500
+      0C00000000000000000000000C0000003A005400490054004C00450001000000
+      05000000782E69640000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000001900000004000000490044000100000000000800000046005F004900
+      4400010000000000100000004F0050004500520043004F004400450001000000
+      00000C0000004100430043005F00490044000100000000001600000043004C00
+      490045004E0054005F004E0041004D0045000100000000001600000043004C00
+      490045004E0054005F0043004F00440045000100000000001200000054005200
+      41004E0053005F005200450046000100000000000C00000041004D004F005500
+      4E0054000100000000000E000000560041004C005F0041004300430001000000
+      0000120000005400520041004E00530044004100540045000100000000000800
+      0000530045004E0044000100000000000C000000530054004100540055005300
+      0100000000000C000000460049004C00490041004C000100000000001C000000
+      5400520041004E00530041004300540049004F004E005F004900440001000000
+      00001400000043004C00490045004E0054005F0049004E004E00010000000000
+      0C0000005500530045005200490044000100000000000E000000460055005300
+      45005200490044000100000000000E0000005600550053004500520049004400
+      0100000000000E00000041005500530045005200490044000100000000000A00
+      0000530044004100540045000100000000001000000055005300450052004E00
+      41004D0045000100000000000C0000004100430043005F004E004F0001000000
+      0000080000004E0041004D00450001000000000010000000560041004C005F00
+      4E0041004D0045000100000000000C00000046004F0052004D00410054000100
+      00000000}
+    Cursor = crSQLWait
+    QueryAllRecords = False
+    Session = sboapiDataModule.SBSession
+    Left = 40
+    Top = 5
+    object XS_BATCHSID: TFloatField
+      FieldName = 'ID'
+    end
+    object XS_BATCHSF_ID: TFloatField
+      FieldName = 'F_ID'
+    end
+    object XS_BATCHSOPERCODE: TWideStringField
+      FieldName = 'OPERCODE'
+      Size = 6
+    end
+    object XS_BATCHSACC_ID: TFloatField
+      FieldName = 'ACC_ID'
+    end
+    object XS_BATCHSCLIENT_NAME: TWideStringField
+      FieldName = 'CLIENT_NAME'
+      Size = 70
+    end
+    object XS_BATCHSCLIENT_CODE: TWideStringField
+      FieldName = 'CLIENT_CODE'
+      Size = 70
+    end
+    object XS_BATCHSTRANS_REF: TWideStringField
+      FieldName = 'TRANS_REF'
+      Size = 16
+    end
+    object XS_BATCHSAMOUNT: TFloatField
+      FieldName = 'AMOUNT'
+      currency = True
+    end
+    object XS_BATCHSVAL_ACC: TIntegerField
+      FieldName = 'VAL_ACC'
+    end
+    object XS_BATCHSTRANSDATE: TDateTimeField
+      FieldName = 'TRANSDATE'
+    end
+    object XS_BATCHSSEND: TIntegerField
+      FieldName = 'SEND'
+    end
+    object XS_BATCHSSTATUS: TIntegerField
+      FieldName = 'STATUS'
+    end
+    object XS_BATCHSFILIAL: TFloatField
+      FieldName = 'FILIAL'
+    end
+    object XS_BATCHSTRANSACTION_ID: TFloatField
+      FieldName = 'TRANSACTION_ID'
+    end
+    object XS_BATCHSCLIENT_INN: TWideStringField
+      FieldName = 'CLIENT_INN'
+      Size = 30
+    end
+    object XS_BATCHSUSERID: TFloatField
+      FieldName = 'USERID'
+    end
+    object XS_BATCHSACC_NO: TWideStringField
+      FieldName = 'ACC_NO'
+      Size = 28
+    end
+    object XS_BATCHSNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 90
+    end
+    object XS_BATCHSVAL_NAME: TWideStringField
+      FieldName = 'VAL_NAME'
+      Size = 10
+    end
+    object XS_BATCHSFUSERID: TWideStringField
+      FieldName = 'FUSERID'
+      Size = 50
+    end
+    object XS_BATCHSVUSERID: TWideStringField
+      FieldName = 'VUSERID'
+      Size = 50
+    end
+    object XS_BATCHSAUSERID: TWideStringField
+      FieldName = 'AUSERID'
+      Size = 50
+    end
+    object XS_BATCHSUSERNAME: TWideStringField
+      FieldName = 'USERNAME'
+      Size = 50
+    end
+    object XS_BATCHSFORMAT: TWideStringField
+      FieldName = 'FORMAT'
+      Size = 10
+    end
+  end
+  object DataSourceFilial: TDataSource
+    DataSet = DataSetFilial
+    Left = 128
+    Top = 69
+  end
+  object DataSetFilial: TOracleDataSet
+    SQL.Strings = (
+      'select * from Filial where id =:filialID')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000120000003A00460049004C00490041004C00490044000300
+      00000000000000000000}
+    Cursor = crSQLWait
+    QueryAllRecords = False
+    Session = sboapiDataModule.SBSession
+    Left = 128
+    Top = 13
+    object DataSetFilialID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object DataSetFilialNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 90
+    end
+  end
+  object XS_CONFIG: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      '    *'
+      'from'
+      '    XS_CONFIG'
+      ' ')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000C00000004000000490044000100000000000C00000049004E005F00
+      4400490052000100000000000E0000004F00550054005F004400490052000100
+      000000001800000041004D004F0055004E0054005F004C0049004D0049005400
+      0100000000000E0000004100430043004F0055004E0054000100000000001600
+      000041005200430048004900560045005F004400490052000100000000001600
+      0000550053004500420041004E004B0044004100540045000100000000001600
+      000043004F004D004D004900530049004F004E00490044000100000000001000
+      00004E0042005F00530057004900460054000100000000001400000043004F00
+      52004100430043004F0055004E005400010000000000100000004E0045005700
+      5F0044004100540045000100000000000E0000005600450052005F0044004900
+      5200010000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 304
+    Top = 54
+    object XS_CONFIGID: TFloatField
+      FieldName = 'ID'
+    end
+    object XS_CONFIGIN_DIR: TWideStringField
+      FieldName = 'IN_DIR'
+      Size = 250
+    end
+    object XS_CONFIGOUT_DIR: TWideStringField
+      FieldName = 'OUT_DIR'
+      Size = 250
+    end
+    object XS_CONFIGAMOUNT_LIMIT: TFloatField
+      FieldName = 'AMOUNT_LIMIT'
+    end
+    object XS_CONFIGACCOUNT: TWideStringField
+      FieldName = 'ACCOUNT'
+      Size = 13
+    end
+    object XS_CONFIGARCHIVE_DIR: TWideStringField
+      FieldName = 'ARCHIVE_DIR'
+      Size = 250
+    end
+    object XS_CONFIGUSEBANKDATE: TFloatField
+      FieldName = 'USEBANKDATE'
+    end
+    object XS_CONFIGCOMMISIONID: TFloatField
+      FieldName = 'COMMISIONID'
+    end
+    object XS_CONFIGNB_SWIFT: TWideStringField
+      FieldName = 'NB_SWIFT'
+      Size = 15
+    end
+    object XS_CONFIGCORACCOUNT: TWideStringField
+      FieldName = 'CORACCOUNT'
+    end
+    object XS_CONFIGNEW_DATE: TDateTimeField
+      FieldName = 'NEW_DATE'
+    end
+    object XS_CONFIGVER_DIR: TWideStringField
+      FieldName = 'VER_DIR'
+      Size = 250
+    end
+  end
+  object GetSysDate: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'SBOP'
+    Left = 152
+    Top = 291
+  end
+  object Ins: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'XS_CONTROL'
+    Left = 208
+    Top = 291
+  end
+  object SB_ACA: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'SB_ACA'
+    Left = 280
+    Top = 267
+  end
+end

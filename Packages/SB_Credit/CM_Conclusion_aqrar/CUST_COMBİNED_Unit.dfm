@@ -1,0 +1,106 @@
+﻿object FORM_CUST_COMBİNED: TFORM_CUST_COMBİNED
+  Left = 0
+  Top = 0
+  BorderIcons = [biSystemMenu]
+  Caption = 'Birg'#601' borcalan'
+  ClientHeight = 439
+  ClientWidth = 926
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poDesktopCenter
+  OnClose = FormClose
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Panel2: TPanel
+    Left = 0
+    Top = 403
+    Width = 926
+    Height = 36
+    Align = alBottom
+    BevelKind = bkFlat
+    TabOrder = 0
+    object DBNavigator1: TDBNavigator
+      Left = 1
+      Top = 1
+      Width = 920
+      Height = 29
+      DataSource = DataModuleConcl.DSRC_CUST_COMBİNED
+      VisibleButtons = [nbInsert, nbDelete, nbEdit, nbPost, nbCancel, nbRefresh]
+      Align = alTop
+      Anchors = [akLeft, akRight, akBottom]
+      Flat = True
+      TabOrder = 0
+    end
+  end
+  object Panel3: TPanel
+    Left = 0
+    Top = 0
+    Width = 926
+    Height = 403
+    Align = alClient
+    BevelKind = bkFlat
+    TabOrder = 1
+    object b: TDBGrid
+      Left = 1
+      Top = 1
+      Width = 920
+      Height = 397
+      Align = alClient
+      DataSource = DataModuleConcl.DSRC_CUST_COMBİNED
+      TabOrder = 0
+      TitleFont.Charset = DEFAULT_CHARSET
+      TitleFont.Color = clWindowText
+      TitleFont.Height = -11
+      TitleFont.Name = 'Tahoma'
+      TitleFont.Style = []
+      OnTitleClick = bTitleClick
+      Columns = <
+        item
+          Expanded = False
+          FieldName = 'CREDITID'
+          ReadOnly = True
+          Title.Alignment = taCenter
+          Title.Caption = 'Credit'#304'D'
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'NAME'
+          Title.Alignment = taCenter
+          Title.Caption = 'Ad'#305
+          Width = 265
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'CUST_ADRESS'
+          Title.Alignment = taCenter
+          Title.Caption = 'Adres'
+          Width = 276
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'CUST_TEL'
+          Title.Alignment = taCenter
+          Title.Caption = 'Tel'
+          Width = 145
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'AMMOUNT'
+          Title.Alignment = taCenter
+          Title.Caption = 'M'#601'bl'#601#287
+          Width = 107
+          Visible = True
+        end>
+    end
+  end
+end

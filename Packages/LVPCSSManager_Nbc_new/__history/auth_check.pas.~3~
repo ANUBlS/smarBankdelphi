@@ -1,0 +1,50 @@
+unit auth_check;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Grids, DBGrids, StdCtrls, ExtCtrls, XDBGrids;
+
+type
+  TAuth_check_frm = class(TForm)
+    Panel1: TPanel;
+    Button1: TButton;
+    Edit1: TEdit;
+    Memo1: TMemo;
+    XDBGrid1: TXDBGrid;
+    procedure FormActivate(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Auth_check_frm: TAuth_check_frm;
+
+implementation
+
+uses  Data_Unit;
+
+{$R *.dfm}
+
+procedure TAuth_check_frm.Button1Click(Sender: TObject);
+begin
+DataMod.Ins.CallProcedure('xs_Batchs_VerifStatus2',[DataMod.XS_BATCHS.fieldbyname('ID').AsInteger]);
+DataMod.Ins.CallProcedure('xs_beneficiary_VerifStatus2',[DataMod.XS_BATCHS.fieldbyname('ID').AsInteger]);
+  DataMod.XS_BATCHS.Refresh;
+  DataMod.XS_BENEFICIARY.Refresh;
+close;
+end;
+
+procedure TAuth_check_frm.FormActivate(Sender: TObject);
+begin
+    datamod.datamod_auth_check.CloseAll;
+                    datamod.datamod_auth_check.SetVariable('xs_id',edit1.Text);
+                    datamod.datamod_auth_check.Open;
+memo1.Text:=datamod.datamod_auth_check.SQL.Text;
+end;
+
+end.

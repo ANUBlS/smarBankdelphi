@@ -1,0 +1,419 @@
+object FilterMainForm: TFilterMainForm
+  Left = 294
+  Top = 152
+  BorderIcons = [biSystemMenu]
+  ClientHeight = 298
+  ClientWidth = 697
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  FormStyle = fsStayOnTop
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poMainFormCenter
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  OnKeyPress = FormKeyPress
+  PixelsPerInch = 96
+  TextHeight = 14
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 697
+    Height = 65
+    Align = alTop
+    TabOrder = 0
+    object GroupBox1: TGroupBox
+      Left = 1
+      Top = 1
+      Width = 233
+      Height = 63
+      Align = alLeft
+      Caption = #1042#1072#1083#1081#1091#1090#1072
+      TabOrder = 0
+      object CheckBox1: TCheckBox
+        Left = 5
+        Top = 41
+        Width = 105
+        Height = 18
+        Caption = #1058#1103#1090#1073#1080#1075' '#1077#1090
+        TabOrder = 0
+      end
+      object DBLookupComboboxEh1: TDBLookupComboboxEh
+        Left = 5
+        Top = 15
+        Width = 220
+        Height = 22
+        DropDownBox.Sizable = True
+        EditButtons = <>
+        KeyField = 'VALUTE'
+        ListField = 'VALU_NAME'
+        ListSource = ArFilterDataModule.DSCurrencys
+        TabOrder = 1
+        Visible = True
+      end
+    end
+    object GroupBox2: TGroupBox
+      Left = 466
+      Top = 1
+      Width = 230
+      Height = 63
+      Align = alClient
+      Caption = 'M'#252't'#601'x'#601'ssis'
+      TabOrder = 1
+      object DBLookupComboboxEh3: TDBLookupComboboxEh
+        Left = 5
+        Top = 15
+        Width = 220
+        Height = 22
+        DropDownBox.Sizable = True
+        EditButtons = <>
+        KeyField = 'ID'
+        ListField = 'DESCRIPTION'
+        ListSource = ArFilterDataModule.DSUserGroups
+        TabOrder = 0
+        Visible = True
+      end
+      object CheckBox3: TCheckBox
+        Left = 5
+        Top = 41
+        Width = 105
+        Height = 18
+        Caption = #1058#1103#1090#1073#1080#1075' '#1077#1090
+        TabOrder = 1
+      end
+    end
+    object GroupBox3: TGroupBox
+      Left = 234
+      Top = 1
+      Width = 232
+      Height = 63
+      Align = alLeft
+      Caption = #1060#1080#1083#1080#1072#1083
+      TabOrder = 2
+      object DBLookupComboboxEh2: TDBLookupComboboxEh
+        Left = 5
+        Top = 15
+        Width = 220
+        Height = 22
+        DropDownBox.Sizable = True
+        EditButtons = <>
+        KeyField = 'ID'
+        ListField = 'NAME'
+        ListSource = ArFilterDataModule.DSBranches
+        TabOrder = 0
+        Visible = True
+      end
+      object CheckBox2: TCheckBox
+        Left = 6
+        Top = 41
+        Width = 105
+        Height = 18
+        Caption = #1058#1103#1090#1073#1080#1075' '#1077#1090
+        TabOrder = 1
+      end
+    end
+  end
+  object Panel2: TPanel
+    Left = 0
+    Top = 65
+    Width = 697
+    Height = 64
+    Align = alTop
+    TabOrder = 1
+    object GroupBox4: TGroupBox
+      Left = 1
+      Top = 1
+      Width = 233
+      Height = 62
+      Align = alLeft
+      Caption = #1058#1103#1089#1085#1080#1092#1072#1090
+      TabOrder = 0
+      object CheckBox4: TCheckBox
+        Left = 5
+        Top = 41
+        Width = 105
+        Height = 18
+        Caption = #1058#1103#1090#1073#1080#1075' '#1077#1090
+        TabOrder = 0
+      end
+      object DBLookupComboboxEh4: TDBLookupComboboxEh
+        Left = 5
+        Top = 15
+        Width = 220
+        Height = 22
+        DropDownBox.Sizable = True
+        EditButtons = <>
+        KeyField = 'ID'
+        ListField = 'DESCRIPTION'
+        ListSource = ArFilterDataModule.DSPReserves
+        TabOrder = 1
+        Visible = True
+      end
+    end
+    object GroupBox5: TGroupBox
+      Left = 466
+      Top = 1
+      Width = 230
+      Height = 62
+      Align = alClient
+      Caption = #1048#1089#1090#1080#1092#1072#1076#1103#1095#1080
+      TabOrder = 1
+      object DBLookupComboboxEh6: TDBLookupComboboxEh
+        Left = 5
+        Top = 15
+        Width = 220
+        Height = 22
+        DropDownBox.Sizable = True
+        EditButtons = <>
+        KeyField = 'ID'
+        ListField = 'NAME'
+        ListSource = ArFilterDataModule.DSUsers
+        TabOrder = 0
+        Visible = True
+      end
+      object CheckBox6: TCheckBox
+        Left = 5
+        Top = 41
+        Width = 105
+        Height = 18
+        Caption = #1058#1103#1090#1073#1080#1075' '#1077#1090
+        TabOrder = 1
+      end
+    end
+    object GroupBox6: TGroupBox
+      Left = 234
+      Top = 1
+      Width = 232
+      Height = 62
+      Align = alLeft
+      Caption = 'Kreditin verilm'#601' m'#601'qs'#601'di'
+      TabOrder = 2
+      object DBLookupComboboxEh5: TDBLookupComboboxEh
+        Left = 5
+        Top = 15
+        Width = 220
+        Height = 22
+        DropDownBox.Sizable = True
+        EditButtons = <>
+        KeyField = 'ID'
+        ListField = 'NAME'
+        ListSource = ArFilterDataModule.DSSReserves
+        TabOrder = 0
+        Visible = True
+      end
+      object CheckBox5: TCheckBox
+        Left = 8
+        Top = 41
+        Width = 104
+        Height = 18
+        Caption = #1058#1103#1090#1073#1080#1075' '#1077#1090
+        TabOrder = 1
+      end
+    end
+  end
+  object Panel5: TPanel
+    Left = 0
+    Top = 129
+    Width = 697
+    Height = 65
+    Align = alTop
+    TabOrder = 2
+    object GroupBox7: TGroupBox
+      Left = 1
+      Top = 1
+      Width = 233
+      Height = 63
+      Align = alLeft
+      Caption = #1041#1086#1088#1078#1072#1083#1072#1085#1099#1085' '#1090#1080#1087#1080
+      TabOrder = 0
+      object CheckBox7: TCheckBox
+        Left = 5
+        Top = 41
+        Width = 105
+        Height = 18
+        Caption = #1058#1103#1090#1073#1080#1075' '#1077#1090
+        TabOrder = 0
+      end
+      object DBLookupComboboxEh7: TDBLookupComboboxEh
+        Left = 5
+        Top = 15
+        Width = 220
+        Height = 22
+        DropDownBox.Sizable = True
+        EditButtons = <>
+        KeyField = 'ID'
+        ListField = 'DESCRIPION'
+        ListSource = ArFilterDataModule.DSPersons
+        TabOrder = 1
+        Visible = True
+      end
+    end
+    object GroupBox8: TGroupBox
+      Left = 466
+      Top = 1
+      Width = 230
+      Height = 63
+      Align = alClient
+      Caption = #1050#1088#1077#1076#1080#1090#1080#1085' '#1085#1086#1074#1094
+      TabOrder = 1
+      object CheckBox9: TCheckBox
+        Left = 5
+        Top = 41
+        Width = 105
+        Height = 18
+        Caption = #1058#1103#1090#1073#1080#1075' '#1077#1090
+        TabOrder = 0
+      end
+      object DBLookupComboboxEh9: TDBLookupComboboxEh
+        Left = 5
+        Top = 15
+        Width = 220
+        Height = 22
+        DropDownBox.Sizable = True
+        EditButtons = <>
+        KeyField = 'ID'
+        ListField = 'DESCRIPTION'
+        ListSource = ArFilterDataModule.DSCreditTypes
+        TabOrder = 1
+        Visible = True
+      end
+    end
+    object GroupBox9: TGroupBox
+      Left = 234
+      Top = 1
+      Width = 232
+      Height = 63
+      Align = alLeft
+      Caption = #1041#1086#1088#1078#1072#1083#1072#1085#1099#1085' '#1082#1072#1090#1077#1075#1086#1088#1081#1072#1089#1099
+      TabOrder = 2
+      object CheckBox8: TCheckBox
+        Left = 5
+        Top = 41
+        Width = 105
+        Height = 18
+        Caption = #1058#1103#1090#1073#1080#1075' '#1077#1090
+        TabOrder = 0
+      end
+      object DBLookupComboboxEh8: TDBLookupComboboxEh
+        Left = 5
+        Top = 15
+        Width = 220
+        Height = 22
+        DropDownBox.Sizable = True
+        EditButtons = <>
+        KeyField = 'ID'
+        ListField = 'DESCRIPTION'
+        ListSource = ArFilterDataModule.DSCategories
+        TabOrder = 1
+        Visible = True
+      end
+    end
+  end
+  object Panel9: TPanel
+    Left = 0
+    Top = 194
+    Width = 697
+    Height = 64
+    Align = alTop
+    TabOrder = 3
+    object GroupBox10: TGroupBox
+      Left = 1
+      Top = 1
+      Width = 233
+      Height = 62
+      Align = alLeft
+      Caption = #1069#1080#1088#1086#1074
+      TabOrder = 0
+      object CheckBox10: TCheckBox
+        Left = 5
+        Top = 41
+        Width = 105
+        Height = 18
+        Caption = #1058#1103#1090#1073#1080#1075' '#1077#1090
+        TabOrder = 0
+      end
+      object DBLookupComboboxEh10: TDBLookupComboboxEh
+        Left = 5
+        Top = 15
+        Width = 220
+        Height = 22
+        DropDownBox.Sizable = True
+        EditButtons = <>
+        KeyField = 'ID'
+        ListField = 'DESCRIPTION'
+        ListSource = ArFilterDataModule.DSPledges
+        TabOrder = 1
+        Visible = True
+      end
+    end
+    object GroupBox11: TGroupBox
+      Left = 234
+      Top = 1
+      Width = 462
+      Height = 62
+      Align = alClient
+      Caption = #1052#1094#1096#1090#1103#1088#1080
+      TabOrder = 1
+      object CheckBox11: TCheckBox
+        Left = 5
+        Top = 41
+        Width = 105
+        Height = 18
+        Caption = #1058#1103#1090#1073#1080#1075' '#1077#1090
+        TabOrder = 0
+      end
+      object DBLookupComboboxEh11: TDBLookupComboboxEh
+        Left = 8
+        Top = 15
+        Width = 451
+        Height = 22
+        DropDownBox.Sizable = True
+        EditButtons = <>
+        KeyField = 'ID'
+        ListField = 'NAME'
+        ListSource = ArFilterDataModule.DSCustomers
+        TabOrder = 1
+        Visible = True
+      end
+    end
+  end
+  object Button1: TButton
+    Left = 431
+    Top = 267
+    Width = 81
+    Height = 27
+    Caption = #1058#1103#1090#1073#1080#1075' '#1077#1090
+    TabOrder = 4
+    OnClick = Button1Click
+  end
+  object Button2: TButton
+    Left = 517
+    Top = 267
+    Width = 81
+    Height = 27
+    Caption = #1051#1103#1100#1074' '#1077#1090
+    TabOrder = 5
+    OnClick = Button2Click
+  end
+  object Button3: TButton
+    Left = 612
+    Top = 267
+    Width = 80
+    Height = 27
+    Caption = #1041#1072#1100#1083#1072
+    TabOrder = 6
+    OnClick = Button3Click
+  end
+  object CheckBox12: TCheckBox
+    Left = 5
+    Top = 266
+    Width = 148
+    Height = 18
+    Caption = 'Bu g'#252'n '#246'd'#601'ni'#351' ed'#601'nl'#601'r'
+    TabOrder = 7
+  end
+end

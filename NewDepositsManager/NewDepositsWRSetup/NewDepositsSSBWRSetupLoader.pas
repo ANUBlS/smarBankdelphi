@@ -1,0 +1,46 @@
+unit NewDepositsSSBWRSetupLoader;
+
+interface
+
+uses SysUtils,Windows;
+
+procedure exportproc(S:String);export;
+
+implementation
+
+uses NewCommonDeclsImpl,NewDepositsSBWRBookmarksTuning{,SBDMAgreeUnit};
+
+procedure shSBWRBookmarkSetup;
+begin
+  with TNewDepositsSBWRBookmarkSetup.Create(CommonApplication) do
+     try
+       ShowModal;
+     finally
+       Release;
+end;
+end;
+
+{procedure shAgreeForm;
+begin
+   AgreeForm := TAgreeForm.Create(CommonApplication);
+   AgreeForm.ShowModal;
+end; }
+
+
+procedure exportproc(S:String);export;
+const
+   cs_SBWRBookmarkSetup = 'showSBWRBookmarkSetup';
+   cs_AgreeForm = 'showPrintContract';
+begin
+   if S =   cs_SBWRBookmarkSetup then
+      shSBWRBookmarkSetup;
+   {if S  =  cs_AgreeForm then
+      shAgreeForm; }
+
+end;
+
+exports
+   exportproc;
+
+
+end.

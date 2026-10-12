@@ -1,0 +1,136 @@
+object AccessSelectForm: TAccessSelectForm
+  Left = 222
+  Top = 112
+  Width = 317
+  Height = 251
+  Caption = 'AccessSelectForm'
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  OldCreateOrder = False
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Panel1: TPanel
+    Left = 0
+    Top = 198
+    Width = 309
+    Height = 26
+    Align = alBottom
+    BevelOuter = bvNone
+    TabOrder = 0
+    object Button1: TButton
+      Left = 158
+      Top = 1
+      Width = 75
+      Height = 25
+      Action = Accept
+      Anchors = [akTop, akRight]
+      Default = True
+      TabOrder = 0
+    end
+    object Button2: TButton
+      Left = 234
+      Top = 1
+      Width = 75
+      Height = 25
+      Action = Cancel
+      Anchors = [akTop, akRight]
+      TabOrder = 1
+    end
+  end
+  object GroupBox1: TGroupBox
+    Left = 0
+    Top = 0
+    Width = 309
+    Height = 198
+    Align = alClient
+    Caption = 'ўугугларын сечилм€си'
+    TabOrder = 1
+    object AccessCB: TCheckListBox
+      Left = 2
+      Top = 15
+      Width = 305
+      Height = 181
+      Align = alClient
+      ItemHeight = 13
+      TabOrder = 0
+    end
+  end
+  object ActionList1: TActionList
+    Left = 264
+    Top = 8
+    object Accept: TAction
+      Caption = 'ялав€ ет'
+      OnExecute = AcceptExecute
+    end
+    object Cancel: TAction
+      Caption = '»мтина'
+      OnExecute = CancelExecute
+    end
+  end
+  object AccessData: TOracleDataSet
+    SQL.Strings = (
+      'select * from security_access$'
+      'where ID in ('
+      '  select access#'
+      '  from SECURITY_TYPED_ACCESS'
+      '  where Type# = ('
+      '    select type# from security_sid$'
+      '    where ID = :sid'
+      '  )'
+      ')'
+      'and not (ID in ('
+      '    select distinct sla.access#'
+      '    from security_sid_link_access sla'
+      '    where link# = :LinkID'
+      '  ))'
+      ' ')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    Variables.Data = {
+      0300000002000000040000003A53494403000000000000000000000007000000
+      3A4C494E4B4944030000000000000000000000}
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = False
+    Active = False
+    AfterOpen = AccessDataAfterOpen
+    Left = 144
+    Top = 56
+    object AccessDataID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object AccessDataNAME: TStringField
+      FieldName = 'NAME'
+      Size = 32
+    end
+    object AccessDataDESCRIPTION: TStringField
+      FieldName = 'DESCRIPTION'
+      Size = 128
+    end
+  end
+end

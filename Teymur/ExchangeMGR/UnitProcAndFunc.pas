@@ -1,0 +1,431 @@
+﻿unit UnitProcAndFunc;
+
+interface
+
+uses   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+       Menus, ExtCtrls, Grids, StdCtrls, Mask, Buttons,ComCtrls, ImgList;
+
+  procedure MenuShrift(Sender: TObject; ACanvas: TCanvas;ARect: TRect; Selected: Boolean);
+  function RoundEx(X: Double; Precision: Integer ): Double;
+  function SumNumToFullVal(Number :real; val_name, val :string):string;
+  function SumNumToFull(Number:real):string;
+  procedure SetEN;
+  procedure SetRU;
+
+implementation
+
+
+function RoundEx(X: Double; Precision: Integer ): Double;
+
+var
+  ScaledFractPart, Temp: Double;
+begin
+  ScaledFractPart := Frac(X) * Precision;
+  Temp := Frac(ScaledFractPart);
+  ScaledFractPart := Int(ScaledFractPart);
+  if Temp=5 then
+    ScaledFractPart := ScaledFractPart + 1;
+  if Temp=-5 then
+    ScaledFractPart := ScaledFractPart - 1;
+
+
+  RoundEx := Int(X) + ScaledFractPart / Precision;
+end;
+
+
+procedure SetRU;
+var
+  Layout: array [0.. KL_NAMELENGTH] of char;
+begin
+  LoadKeyboardLayout(StrCopy(Layout, '00000419'), KLF_ACTIVATE);
+end;
+
+procedure SetEN;
+var
+  Layout: array [0.. KL_NAMELENGTH] of char;
+begin
+  LoadKeyboardLayout(StrCopy(Layout, '00000409'), KLF_ACTIVATE);
+end;
+
+function SumNumToFullVal(Number :real; val_name, val :string):string;
+var
+  PartNum, TruncNum, NumTMP, D: integer;
+  NumStr : string;
+  i, R : byte;
+  Flag11 : boolean;
+begin
+PartNum:=0;
+  D:=1000000;
+  R:=4;
+
+  TruncNum:=Trunc(Number);
+  if TruncNum<>0 then
+    repeat
+      PartNum:=TruncNum div D;
+      Dec(R);
+      D:=D div 1000;
+    until
+      PartNum<>0
+  else
+    R:=0;
+
+
+  for i:=R downto 1 do
+  begin
+    Flag11:=False;
+
+    NumTMP:=PartNum div 100;
+    case NumTMP of
+      1: NumStr:=NumStr+'YÜZ ';
+      2: NumStr:=NumStr+'İKİ YÜZ ';
+      3: NumStr:=NumStr+'ÜÇ YÜZ ';
+      4: NumStr:=NumStr+'DÖRD YÜZ ';
+      5: NumStr:=NumStr+'BEŞ YÜZ ';
+      6: NumStr:=NumStr+'ALTI YÜZ ';
+      7: NumStr:=NumStr+'YEDDİ YÜZ ';
+      8: NumStr:=NumStr+'SƏKKİZ YÜZ ';
+      9: NumStr:=NumStr+'DOQQUZ YÜZ ';
+    end;
+
+    NumTMP:=(PartNum mod 100) div 10;
+    case NumTMP of
+      1:
+      begin
+        NumTMP:=PartNum mod 100;
+        case NumTMP of
+          10: NumStr:=NumStr+'ON ';
+          11: NumStr:=NumStr+'ON BİR ';
+          12: NumStr:=NumStr+'ON İKİ ';
+          13: NumStr:=NumStr+'ON ÜÇ ';
+          14: NumStr:=NumStr+'ON DÖRD ';
+          15: NumStr:=NumStr+'ON BEŞ ';
+          16: NumStr:=NumStr+'ON ALTI ';
+          17: NumStr:=NumStr+'ON YEDDİ ';
+          18: NumStr:=NumStr+'ON SƏKKİZ ';
+          19: NumStr:=NumStr+'ON DOQQUZ ';
+        end;
+        case i of
+          3: NumStr:=NumStr+'MİLİYON ';
+          2: NumStr:=NumStr+'MİN ';
+          1: NumStr:=NumStr+val_name;
+        end;
+        Flag11:=True;
+      end;
+      2: NumStr:=NumStr+'İYİRMİ ';
+      3: NumStr:=NumStr+'OTUZ ';
+      4: NumStr:=NumStr+'QIRX ';
+      5: NumStr:=NumStr+'ƏLLİ ';
+      6: NumStr:=NumStr+'ALTMIŞ ';
+      7: NumStr:=NumStr+'YETMİŞ ';
+      8: NumStr:=NumStr+'SƏKSƏN ';
+      9: NumStr:=NumStr+'DOXSAN';
+    end;
+
+    NumTMP:=PartNum mod 10;
+    if not Flag11 then
+    begin
+      case NumTMP of
+       1:
+          if i=2 then
+            NumStr:=NumStr+'BİR '
+          else
+            NumStr:=NumStr+'BİR ';
+        2:
+          if i=2 then
+            NumStr:=NumStr+'İKİ '
+          else
+            NumStr:=NumStr+'İKİ ';
+        3: NumStr:=NumStr+'ÜÇ ';
+        4: NumStr:=NumStr+'DÖRD ';
+        5: NumStr:=NumStr+'BEŞ ';
+        6: NumStr:=NumStr+'ALTI ';
+        7: NumStr:=NumStr+'YEDDİ ';
+        8: NumStr:=NumStr+'SƏKKİZ ';
+        9: NumStr:=NumStr+'DOQQUZ ';
+      end;
+      case i of
+        3:
+          case NumTMP of
+            1: NumStr:=NumStr+'MİLİYON ';
+            2,3,4: NumStr:=NumStr+'MİLİYON ';
+            else
+              NumStr:=NumStr+'MİLİYON ';
+          end;
+        2:
+          case NumTMP of
+            1 : NumStr:=NumStr+'MİN ';
+            2,3,4: NumStr:=NumStr+'MİN ';
+            else
+              if PartNum<>0 then
+                NumStr:=NumStr+'MİN ';
+          end;
+        1:
+          case NumTMP of
+            1 : NumStr:=NumStr+val_name;
+            2,3,4: NumStr:=NumStr+val_name;
+            else
+              NumStr:=NumStr+val_name;
+          end;
+      end;
+    end;
+    if i>1 then
+    begin
+      PartNum:=(TruncNum mod (D*1000)) div D;
+      D:=D div 1000;
+    end;
+  end;
+
+
+  PartNum:=Round(Frac(Number)*100);
+  if PartNum=0 then
+  begin
+    SumNumToFullVal:=NumStr;
+    Exit;
+  end;
+
+  NumTMP:=PartNum div 10;
+  if NumTMP=0 then
+    NumStr:=NumStr+'0'+IntToStr(PartNum)+' '
+  else
+    NumStr:=NumStr+IntToStr(PartNum)+' ';
+
+  NumTMP:=PartNum mod 10;
+  case NumTMP of
+    1:
+      if PartNum<>11 then
+        NumStr:=NumStr+val
+      else
+        NumStr:=NumStr+val;
+    2,3,4:
+      if (PartNum<5) or (PartNum>14) then
+        NumStr:=NumStr+val
+      else
+        NumStr:=NumStr+val
+    else
+      NumStr:=NumStr+val;
+  end;
+  SumNumToFullVal:=NumStr;
+end;
+
+
+function SumNumToFull(Number:real):string;
+var
+  PartNum, TruncNum, NumTMP, D: integer;
+  NumStr : string;
+  i, R : byte;
+  Flag11 : boolean;
+begin
+PartNum:=0;
+  D:=1000000;
+  R:=4;
+
+  TruncNum:=Trunc(Number);
+  if TruncNum<>0 then
+    repeat
+      PartNum:=TruncNum div D;
+      Dec(R);
+      D:=D div 1000;
+    until
+      PartNum<>0
+  else
+    R:=0;
+
+
+  for i:=R downto 1 do
+  begin
+    Flag11:=False;
+
+    NumTMP:=PartNum div 100;
+    case NumTMP of
+      1: NumStr:=NumStr+'YÜZ ';
+      2: NumStr:=NumStr+'İKİ YÜZ ';
+      3: NumStr:=NumStr+'ÜÇ YÜZ ';
+      4: NumStr:=NumStr+'DÖRD YÜZ ';
+      5: NumStr:=NumStr+'BEŞ YÜZ ';
+      6: NumStr:=NumStr+'ALTI YÜZ ';
+      7: NumStr:=NumStr+'YEDDİ YÜZ ';
+      8: NumStr:=NumStr+'SƏKKİZ YÜZ ';
+      9: NumStr:=NumStr+'DOQQUZ YÜZ ';
+    end;
+
+    NumTMP:=(PartNum mod 100) div 10;
+    case NumTMP of
+      1:
+      begin
+        NumTMP:=PartNum mod 100;
+        case NumTMP of
+          10: NumStr:=NumStr+'ON ';
+          11: NumStr:=NumStr+'ON BİR ';
+          12: NumStr:=NumStr+'ON İKİ ';
+          13: NumStr:=NumStr+'ON ÜÇ ';
+          14: NumStr:=NumStr+'ON DÖRD ';
+          15: NumStr:=NumStr+'ON BEŞ ';
+          16: NumStr:=NumStr+'ON ALTI ';
+          17: NumStr:=NumStr+'ON YEDDİ ';
+          18: NumStr:=NumStr+'ON SƏKKİZ ';
+          19: NumStr:=NumStr+'ON DOQQUZ ';
+        end;
+        case i of
+          3: NumStr:=NumStr+'MİLİYON ';
+          2: NumStr:=NumStr+'MİN ';
+        end;
+        Flag11:=True;
+      end;
+      2: NumStr:=NumStr+'İYİRMİ ';
+      3: NumStr:=NumStr+'OTUZ ';
+      4: NumStr:=NumStr+'QIRX ';
+      5: NumStr:=NumStr+'ƏLLİ ';
+      6: NumStr:=NumStr+'ALTMIŞ ';
+      7: NumStr:=NumStr+'YETMİŞ ';
+      8: NumStr:=NumStr+'SƏKSƏN ';
+      9: NumStr:=NumStr+'DOXSAN';
+    end;
+
+    NumTMP:=PartNum mod 10;
+    if not Flag11 then
+    begin
+      case NumTMP of
+        1:
+          if i=2 then
+            NumStr:=NumStr+'BİR '
+          else
+            NumStr:=NumStr+'BİR ';
+        2:
+          if i=2 then
+            NumStr:=NumStr+'İKİ '
+          else
+            NumStr:=NumStr+'İKİ ';
+        3: NumStr:=NumStr+'ÜÇ ';
+        4: NumStr:=NumStr+'DÖRD ';
+        5: NumStr:=NumStr+'BEŞ ';
+        6: NumStr:=NumStr+'ALTI ';
+        7: NumStr:=NumStr+'YEDDİ ';
+        8: NumStr:=NumStr+'SƏKKİZ ';
+        9: NumStr:=NumStr+'DOQQUZ ';
+      end;
+      case i of
+        3:
+          case NumTMP of
+            1: NumStr:=NumStr+'MİLİYON ';
+            2,3,4: NumStr:=NumStr+'MİLİYON ';
+            else
+              NumStr:=NumStr+'MİLİYON ';
+          end;
+        2:
+          case NumTMP of
+            1 : NumStr:=NumStr+'MİN ';
+            2,3,4: NumStr:=NumStr+'MİN ';
+            else
+              if PartNum<>0 then
+                NumStr:=NumStr+'MİN ';
+          end;
+
+      end;
+    end;
+    if i>1 then
+    begin
+      PartNum:=(TruncNum mod (D*1000)) div D;
+      D:=D div 1000;
+    end;
+  end;
+
+  SumNumToFull:=NumStr;
+end;
+
+
+
+
+procedure MenuShrift(Sender: TObject; ACanvas: TCanvas;
+  ARect: TRect; Selected: Boolean);
+var
+  LineBottom: Integer;
+  SText: String;
+  Bar: TRect;
+
+begin
+  with ACanvas, Sender as TMenuItem do
+  begin
+    with Font do
+    begin
+      Name := 'Azl Sans Serif';
+      Charset := RUSSIAN_CHARSET;
+      if Default then
+        Style := [fsBold];
+    end;
+    if Caption = '-' then
+    begin
+      Pen.Color := clBlack;
+      LineBottom := (ARect.Top + (ARect.Bottom - ARect.Top) div 2)-1;
+      MoveTo(ARect.Left, LineBottom);
+      LineTo(ARect.Right, LineBottom);
+      inc(LineBottom);
+      Pen.Color := clWhite;
+      MoveTo(ARect.Left, LineBottom);
+      LineTo(ARect.Right, LineBottom);
+    end
+    else
+    begin
+      if Selected then
+      begin
+        Brush.Color := clNavy;
+        if Enabled then
+          Font.Color := clWhite
+        else
+          Font.Color := clSilver;
+      end
+      else
+      begin
+        Brush.Color := clBtnFace;
+        if Enabled then
+          Font.Color := clBlack
+        else
+          Font.Color := clGrayText;
+      end;
+      Bar := ARect;
+
+      FillRect(Bar);
+      TextOut(ARect.Left+2, ARect.Top+1, Caption);
+    end;
+    SText :=ShortCutToText(ShortCut);
+    TextOut(ARect.Right-TextWidth(SText)+2, ARect.Top+1, SText);
+    if ImageIndex <> -1 then
+      with GetParentMenu do
+        if Assigned(Images) then
+        begin
+          if Checked then
+          begin
+            Bar.Left := ARect.Left + 1;
+            Bar.Right := Bar.Left + 1;
+            Bar.Top := ARect.Top + 1;
+            Bar.Bottom := Bar.Top + 1;
+
+            ACanvas.Brush.Color := clBtnShadow;
+            ACanvas.FrameRect(Bar);
+
+            Inc(Bar.Left, 1);
+            Inc(Bar.Right, 1);
+            Inc(Bar.Top, 1);
+            Inc(Bar.Bottom, 1);
+
+            ACanvas.Brush.Color := clBtnHighlight;
+            ACanvas.FrameRect(Bar);
+
+            Dec(Bar.Left, 1);
+            Dec(Bar.Right, 1);
+            Dec(Bar.Top, 1);
+            Dec(Bar.Bottom, 1);
+
+            if Selected then
+              ACanvas.Brush.Color := clBtnFace
+            else
+              ACanvas.Brush.Color := clBtnHighlight;
+            ACanvas.FillRect(Bar);
+          end;
+
+          Images.Draw(ACanvas, ARect.Left, ARect.Top, ImageIndex, Enabled);
+        end;
+  end;
+end;
+
+
+end.

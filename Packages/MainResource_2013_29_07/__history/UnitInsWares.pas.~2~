@@ -1,0 +1,389 @@
+unit UnitInsWares;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, NLSDialogs,
+  NLSLocalizer, ExtCtrls, StdCtrls, ComCtrls, Buttons,Oracle, DBCtrls,
+  Mask, DBCtrlsEh, DBLookupEh;
+
+type
+  TFormInsert = class(TForm)
+    NLSLocalizer: TNLSLocalizer;
+    PanelMain: TPanel;
+    GBoxPublic: TGroupBox;
+    Edit_Wares_Name: TEdit;
+    GroupBoxFXM: TGroupBox;
+    GroupBoxSector: TGroupBox;
+    CBoxFXM: TComboBox;
+    GroupBox_Using_Date: TGroupBox;
+    GroupBoxNB: TGroupBox;
+    GroupBoxNL: TGroupBox;
+    Edit_First_Price: TEdit;
+    Edit_Balance_Price: TEdit;
+    Edit_All_Amort: TEdit;
+    Edit_Amort: TEdit;
+    Edit_Tax_First_Price: TEdit;
+    Edit_Tax_Balance_Price: TEdit;
+    Edit_Tax_All_Amort: TEdit;
+    Edit_Tax_Amort: TEdit;
+    Label_First_Price: TLabel;
+    Label_Balance_Price: TLabel;
+    Label_All_Amort: TLabel;
+    Label_Amort: TLabel;
+    Label_Tax_First_Price: TLabel;
+    Label_Tax_Balance_Price: TLabel;
+    LabelTax_All_Amort: TLabel;
+    LabelTax_Amort: TLabel;
+    GroupBoxAction: TGroupBox;
+    MemoAction: TMemo;
+    Image: TImage;
+    GroupBoxInv_No: TGroupBox;
+    Edit_Inv_No: TEdit;
+    GroupBox1: TGroupBox;
+    GroupBox2: TGroupBox;
+    DTP_Inv_Date: TDateTimePicker;
+    DTP_Using_Date: TDateTimePicker;
+    ChBox1: TCheckBox;
+    DTP_Amort_Date: TDateTimePicker;
+    BitBtn2: TBitBtn;
+    BitBtn1: TBitBtn;
+    BitBtn3: TBitBtn;
+    DBLCBName: TDBLookupComboBox;
+    DBDateTimeEditEh1: TDBDateTimeEditEh;
+    DBDateTimeEditEh2: TDBDateTimeEditEh;
+    DBLCBName2: TDBLookupComboBox;
+    procedure BtnOkClick(Sender: TObject);
+    procedure Edit_First_PriceKeyPress(Sender: TObject; var Key: Char);
+    procedure Edit_Balance_PriceChange(Sender: TObject);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormActivate(Sender: TObject);
+    procedure Edit_Tax_Balance_PriceChange(Sender: TObject);
+    procedure Edit_Wares_NameKeyPress(Sender: TObject; var Key: Char);
+    procedure ChBox1Click(Sender: TObject);
+    procedure DTP_Inv_DateChange(Sender: TObject);
+    procedure BitBtn3Click(Sender: TObject);
+    procedure BitBtn1Click(Sender: TObject);
+    procedure DBDateTimeEditEh1ButtonClick(Sender: TObject;
+      var Handled: Boolean);
+    procedure FormCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormInsert: TFormInsert;
+  
+
+implementation
+            uses UnitData,MainResourceImpl, UnitShowTrans, UnitInsert_t,sboapiDataModuleImpl, SBTranslateProc;
+{$R *.DFM}
+
+procedure TFormInsert.BtnOkClick(Sender: TObject);
+var
+
+   v_wares_name        :string;
+   v_inventar_date     :variant;
+   v_groups_id         :real;
+   v_first_price       :real;
+   v_remainder         :real;
+   v_amort             :real;
+   v_all_amort         :real;
+   v_percent           :real;
+   v_tax_first_price   :real;
+   v_tax_remainder     :real;
+   v_tax_amort         :real;
+   v_tax_all_amort     :real;
+   v_tax_percent       :real;
+   v_amort_date        :variant;
+   v_fxm               :real;
+   v_keeping_sec       :string;
+   v_inventar_no       :string;
+
+   v_debt,v_cred      :integer;
+   v_trans_name       :string;
+   v_user_name        :string;
+   v_enter_date       :TDateTime;
+   v_xarak            :string;
+   v_produc           :string;
+   v_diger            :string;
+   v_wares_id2         :integer;
+    v_uid             :integer;
+   v_uidk            :integer;
+   begin
+
+  v_xarak:=FormInsert_t.Edit2.Text;
+  v_produc:=FormInsert_t.edit3.Text;
+  v_diger:=FormInsert_t.edit7.Text;
+
+   New_Or_Calc_Wares_Trans:=2;
+
+if (Edit_Wares_Name.Text<>'') and (Edit_All_Amort.Text<>'')
+   and (Edit_Amort.Text<>'') and (Edit_Balance_Price.Text<>'')
+   and (Edit_First_Price.Text<>'') and (Edit_Tax_All_Amort.Text<>'')
+   and (Edit_Tax_Amort.Text<>'') and (Edit_Tax_Balance_Price.Text<>'')
+   and (Edit_Tax_First_Price.Text<>'')
+
+    then
+                                 begin
+
+
+  IF (StrToFloat(Edit_Balance_Price.Text) - StrToFloat(Edit_First_Price.Text)<=0) then begin
+  IF (StrToFloat(Edit_Tax_Balance_Price.Text) - StrToFloat(Edit_Tax_First_Price.Text)<=0) then begin
+    v_wares_id2:=DataModWares.ODSWares.fieldbyname('wares_id').AsInteger;
+    v_wares_name:=Edit_Wares_Name.Text;
+    v_user_name:=DBLCBName.text;
+    v_inventar_date:=DBDateTimeEditEh1.Value;
+    v_groups_id:=DataModWares.ODSGroups.fieldbyname('id').AsFloat;
+    v_first_price:=StrToFloat(Edit_First_Price.Text);
+    v_remainder:=StrToFloat(Edit_Balance_Price.Text);
+    v_amort:=StrToFloat(Edit_Amort.Text);;
+    v_all_amort:=StrToFloat(Edit_All_Amort.Text);
+    v_percent:=DataModWares.ODSGroups.fieldbyname('amort').AsFloat;
+
+    v_tax_first_price:=StrToFloat(Edit_Tax_First_Price.Text);
+    v_tax_remainder:=StrToFloat(Edit_Tax_Balance_Price.Text);
+    v_tax_amort:=StrToFloat(Edit_Tax_Amort.Text);
+    v_tax_all_amort:=StrToFloat(Edit_Tax_All_Amort.Text);
+    v_tax_percent:=DataModWares.ODSGroups.fieldbyname('taxamort').AsFloat;
+    v_enter_date:=integer(trunc( DTP_Using_Date.date));
+  //  ShowMessage(DateToStr(v_enter_date))  ;
+
+  //  if DTP_Amort_Date.Checked then v_amort_date:=integer(trunc(DTP_Amort_Date.Date));
+                             // else v_amort_date:=null;
+                 //       ShowMessage(DateToStr(v_amort_date))  ;
+    v_user_name:=DBLCBName.Text;
+    v_uid:= DBLCBName.keyvalue;
+    v_keeping_sec:=DBLCBName2.Text;
+
+    v_uidk:= DBLCBName2.keyvalue;
+   //  ShowMessage(inttostr(v_uidk));
+
+
+
+
+
+    v_fxm:=StrToFloat(CBoxFXM.Text);
+    v_inventar_no:=Edit_Inv_No.Text;
+    v_amort_date:=DBDateTimeEditEh2.Value;
+
+  //  if (DTP_Inv_Date.Enabled and DTP_Amort_Date.Enabled)=true  then           begin
+
+    DataModWares.SB_MAIN_RESOURCE.CallProcedure('add_wares',[
+   v_wares_id2 ,
+   v_wares_name        ,
+   v_inventar_date ,
+   v_groups_id         ,
+   v_first_price       ,
+   v_remainder         ,
+   v_amort             ,
+   v_all_amort         ,
+   v_percent           ,
+   v_tax_first_price   ,
+   v_tax_remainder     ,
+   v_tax_amort         ,
+   v_tax_all_amort     ,
+   v_tax_percent       ,
+   v_amort_date        ,
+   v_fxm               ,
+   v_keeping_sec       ,
+   v_inventar_no       ,
+   v_user_name         ,
+   v_enter_date        ,
+   v_xarak             ,
+   v_produc            ,
+   v_diger             ,
+   v_uid               ,
+   v_uidk   
+
+
+
+    ])     ; //end    else
+
+
+
+
+
+  {  begin
+//ShowMessage(v_xarak);
+   DataModWares.SB_MAIN_RESOURCE.CallProcedure('add_wares',[
+   v_wares_name        ,
+   null                ,
+   v_groups_id         ,
+   v_first_price       ,
+   v_remainder         ,
+   v_amort             ,
+   v_all_amort         ,
+   v_percent           ,
+   v_tax_first_price   ,
+   v_tax_remainder     ,
+   v_tax_amort         ,
+   v_tax_all_amort     ,
+   v_tax_percent       ,
+   null                ,
+   v_fxm               ,
+   v_keeping_sec       ,
+   v_inventar_no       ,
+   v_user_name         ,
+   v_enter_date        ,
+   v_xarak             ,
+   v_produc            ,
+   v_diger
+
+
+    ]);            end;
+
+   }
+
+   FormInsert_t.edit2.Text:='';
+      FormInsert_t.edit3.Text:='';
+     FormInsert_t.edit7.Text:='';
+
+
+      close;
+     DataModWares.ODSWares.Refresh;
+  if MessageDlg('…ени дахил едилмиш в€саитин юд€нишини  '+#13+'    эцнцн с€н€дл€рин€ эюнд€рим?',mtConfirmation,mbYesNoCancel,0)=mrYes then
+           begin
+              with DataModWares.SB_MAIN_RESOURCE do
+               begin
+                CallProcedure('new_wares_trans_acc',[v_groups_id,parInteger,parInteger]);
+                v_debt:=GetParameter(1);
+                v_cred:=GetParameter(2);
+                            v_trans_name:=v_wares_name+' йени в€саитинин алынмасы';
+                CallProcedure('new_wares_transaction',
+                                [v_groups_id  ,
+                                v_first_price ,
+                                v_cred        ,
+                                v_debt        ,
+                                v_trans_name  ]
+                                );
+               end;
+                                 FormShowTrans:=TFormShowTrans.Create(self);
+                                 FormShowTrans.ShowModal;
+
+           end;
+    end
+    else
+         ShowMessage('¬ерэи цзр€ илин €вв€лин€ галыг д€й€р галыг д€й€рд€н < в€ йа = олмалыдыр!');
+
+
+       end
+       else
+             ShowMessage('√алыг д€й€р илкин д€й€рд€н < в€ йа = олмалыдыр!');
+
+   end
+   else
+   ShowMessage('ƒолдурулмамыш ханалар вар!');
+
+Edit_Wares_Name.Text:='';
+Edit_First_Price.Text:='';
+Edit_Balance_Price.Text:='';
+Edit_All_Amort.Text:='';
+Edit_Amort.Text:='';
+
+Edit_Tax_First_Price.Text:='';
+Edit_Tax_Balance_Price.Text:='';
+Edit_Tax_All_Amort.Text:='';
+Edit_Tax_Amort.Text:='';
+
+CBoxFXM.Text:='';
+//Edit_Keeping_Sec.Text:='';
+end;
+
+procedure TFormInsert.Edit_First_PriceKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+ if not (key in ['0'..'9',',','.',#8]) then
+   Key :=#0
+end;
+
+procedure TFormInsert.Edit_Balance_PriceChange(Sender: TObject);
+begin
+if (Edit_First_Price.Text<>'')
+       and (Edit_Balance_Price.Text<>'')
+          and (StrToFloat(Edit_Balance_Price.Text) -
+                    StrToFloat(Edit_First_Price.Text)<=0) then
+               Edit_All_Amort.Text:=
+                     FloatToStr(StrToFloat(Edit_First_Price.Text)
+                                                -StrToFloat(Edit_Balance_Price.Text))
+                                     else
+                                  Edit_All_Amort.Text:='';
+
+end;
+
+procedure TFormInsert.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+ if (ORD(Key) =VK_ESCAPE) then Close;
+
+end;
+
+procedure TFormInsert.FormActivate(Sender: TObject);
+begin
+//DTP_Amort_Date.Date:=DataModWares.SB_MAIN_RESOURCE.CallDateFunction('get_date',[]);;
+//DTP_Inv_Date.Date:=DataModWares.SB_MAIN_RESOURCE.CallDateFunction('get_date',[]);;
+DTP_Using_Date.Date:=DataModWares.SB_MAIN_RESOURCE.CallDateFunction('get_date',[]);;
+  //DBLCBName.keyvalue     := DataModWares.OdsWares.FieldByName('usrid').AsString;
+  //DBLCBName2.keyvalue     := DataModWares.OdsWares.FieldByName('usrid1').AsString;
+end;
+
+procedure TFormInsert.FormCreate(Sender: TObject);
+begin
+SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TFormInsert.Edit_Tax_Balance_PriceChange(Sender: TObject);
+begin
+if (Edit_First_Price.Text<>'')
+       and (Edit_Tax_Balance_Price.Text<>'')
+          then
+               Edit_Tax_All_Amort.Text:=
+                     FloatToStr(StrToFloat(Edit_First_Price.Text)
+                                                -StrToFloat(Edit_Tax_Balance_Price.Text))
+                                     else
+                                  Edit_Tax_All_Amort.Text:='';
+end;
+
+procedure TFormInsert.Edit_Wares_NameKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+ if (key = '''') then
+   Key :=#0
+end;
+
+procedure TFormInsert.ChBox1Click(Sender: TObject);
+begin
+//DTP_Inv_Date.Enabled:=ChBox1.Checked;
+//DTP_Amort_Date.Enabled:=ChBox1.Checked;
+
+end;
+
+procedure TFormInsert.DTP_Inv_DateChange(Sender: TObject);
+begin
+//DTP_Amort_Date.DateTime:=DTP_Inv_Date.DateTime;
+end;
+
+procedure TFormInsert.BitBtn3Click(Sender: TObject);
+begin
+FormInsert.Close;
+end;
+
+procedure TFormInsert.BitBtn1Click(Sender: TObject);
+begin
+gg:=1;
+
+//FormInsert_t:=TFormInsert_t.create(self);
+FormInsert_t.ShowModal;
+  
+
+end;
+
+procedure TFormInsert.DBDateTimeEditEh1ButtonClick(Sender: TObject;
+  var Handled: Boolean);
+begin
+DBDateTimeEditEh2.value:=DBDateTimeEditEh1.Value;
+end;
+
+end.
+

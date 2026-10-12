@@ -1,0 +1,165 @@
+unit DueIntFormImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, DB, OracleData, StdCtrls, CMCurrencyEdit, Mask, DBCtrls, Buttons,
+  ExtCtrls, Oracle;
+
+type
+  TDueIntForm = class(TForm)
+    Panel2: TPanel;
+    Label2: TLabel;
+    Label1: TLabel;
+    Label3: TLabel;
+    SpeedButton1: TSpeedButton;
+    SpeedButton2: TSpeedButton;
+    SpeedButton3: TSpeedButton;
+    DBEdit1: TDBEdit;
+    DBEdit2: TDBEdit;
+    CMCurrencyEdit1: TCMCurrencyEdit;
+    CheckBox1: TCheckBox;
+    CheckBox2: TCheckBox;
+    OraclePackage1: TOraclePackage;
+    CheckBox3: TCheckBox;
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure SpeedButton2Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  DueIntForm: TDueIntForm;
+
+implementation
+
+{$R *.dfm}
+ uses   CommonDecls ,sboapiDataModuleImpl, mainImpl, addimpl;
+procedure TDueIntForm.SpeedButton1Click(Sender: TObject);
+resourcestring
+  rsTransactionsWillProcessed = 'Фаизлярин Б.К-да отуздурмаг ...';
+var
+  CommitTr : Boolean;
+  e,m ,b :integer;
+begin
+m :=0;b:=0;
+if CheckBox1.Checked then
+m :=1 else
+m :=0;
+if CheckBox2.Checked then
+b :=1 else
+b :=0;
+if CheckBox3.Checked then
+e :=1 else
+e :=0;
+
+ //if dd=1 then
+OraclePackage1.CallProcedure('AdditionTrance_due',[
+     'p_ID' ,Get_SelectedCrdID ,
+     'p_ammount' ,CMCurrencyEdit1.value,
+     'p_debidid' ,AddForm.CustDIntAccounts.fieldbyname('id').asinteger,
+     'p_creditid',AddForm.InterestsAccounts.fieldbyname('id').asinteger,
+     'p_status',0,
+     'p_modl', m,
+     'p_balans',b,
+     'p_eh',e]) ;
+
+ {else
+ OraclePackage1.CallProcedure('AdditionTranceout_due',[
+     'p_ID' ,Get_SelectedCrdID ,
+     'p_ammount' ,CMCurrencyEdit1.value,
+     'p_debidid' ,AddForm.OutInterestsAccounts.fieldbyname('id').asinteger,
+     'p_creditid',AddForm.OutIntIncomeAccounts.fieldbyname('id').asinteger,
+     'p_status',0,
+     'p_modl', m,
+     'p_balans',b]);    }
+  try
+
+    CommitTr := TrDelayed_Show(Self,rsTransactionsWillProcessed);
+
+    Update;
+
+
+    OraclePackage1.CallProcedure('CommitTr',[
+       'DefCommit' , CommitTr
+    ]);
+
+  except
+
+
+    OraclePackage1.CallProcedure('CommitTr',[
+       'DefCommit' , False
+    ]);
+
+    raise;
+   end;
+Mainforum.OracleDataSet1.refresh;
+   close
+
+
+
+end;
+
+procedure TDueIntForm.SpeedButton2Click(Sender: TObject);
+resourcestring
+  rsTransactionsWillProcessed = 'Faiz  ...';
+var
+  CommitTr : Boolean;
+  m ,b :integer;
+begin
+m :=0;b:=0;
+if CheckBox1.Checked then
+m :=1 else
+m :=0;
+if CheckBox2.Checked then
+b :=1 else
+b :=0;
+// if dd=1 then
+OraclePackage1.CallProcedure('AdditionTrance_due',[
+     'p_ID' ,Get_SelectedCrdID ,
+     'p_ammount' ,CMCurrencyEdit1.value,
+     'p_debidid' ,AddForm.CustDIntAccounts.fieldbyname('id').asinteger,
+     'p_creditid',AddForm.InterestsAccounts.fieldbyname('id').asinteger,
+     'p_status',1,
+     'p_modl', m,
+     'p_balans',b])
+ { else
+ OraclePackage1.CallProcedure('AdditionTranceout_due',[
+     'p_ID' ,Get_SelectedCrdID ,
+     'p_ammount' ,CMCurrencyEdit1.value,
+     'p_debidid' ,AddForm.OutInterestsAccounts.fieldbyname('id').asinteger,
+     'p_creditid',AddForm.OutIntIncomeAccounts.fieldbyname('id').asinteger,
+     'p_status',1,
+     'p_modl', m,
+     'p_balans',b])};
+  try
+
+    CommitTr := TrDelayed_Show(Self,rsTransactionsWillProcessed);
+
+    Update;
+
+
+    OraclePackage1.CallProcedure('CommitTr',[
+       'DefCommit' , CommitTr
+    ]);
+
+  except
+
+
+    OraclePackage1.CallProcedure('CommitTr',[
+       'DefCommit' , False
+    ]);
+    raise;
+  end;
+   Mainforum.OracleDataSet1.Refresh;
+  close
+
+
+
+
+end;
+
+end.

@@ -1,0 +1,57 @@
+package CR_SETUP;
+
+{$R *.RES}
+{$ALIGN ON}
+{$ASSERTIONS ON}
+{$BOOLEVAL OFF}
+{$DEBUGINFO ON}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LOCALSYMBOLS ON}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION ON}
+{$OVERFLOWCHECKS OFF}
+{$RANGECHECKS OFF}
+{$REFERENCEINFO ON}
+{$SAFEDIVIDE OFF}
+{$STACKFRAMES OFF}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS ON}
+{$WRITEABLECONST ON}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
+{$DESCRIPTION 'Credit Manager Setup package'}
+{$RUNONLY}
+{$IMPLICITBUILD ON}
+
+requires
+  vcl,
+  doa41dxe,
+  sboapi50,
+  CMVCL50,
+  CR_COMMON,sbtranslate,
+  Vclx;
+
+contains
+  crReferencesImpl in 'crReferencesImpl.pas' {MainReferForm},
+  crVilibleFieldsListImpl in 'crVilibleFieldsListImpl.pas' {VFListForm},
+  crSetupLoader in 'crSetupLoader.pas',
+  crAccGroupsImpl in 'crAccGroupsImpl.pas' {AccGrpForm},
+  crIETuningFormImpl in 'crIETuningFormImpl.pas' {IETuningForm},
+  crIEAddEditFormImpl in 'crIEAddEditFormImpl.pas' {FrmIEAddEdit},
+  crIETuningDataModuleImpl in 'crIETuningDataModuleImpl.pas' {IETuningDataMod: TDataModule},
+  crTrDescTuningFormImpl in 'crTrDescTuningFormImpl.pas' {TrDescTuningForm},
+  crCreditTypesReferImpl in 'crCreditTypesReferImpl.pas' {CreditTypeTuning},
+  crCreditTypesAddEditImpl in 'crCreditTypesAddEditImpl.pas' {FrmAddEditCrdType},
+  crUCategories in 'crUCategories.pas' {AddEditCatForm},
+  cruUsrGrAddEditImpl in 'cruUsrGrAddEditImpl.pas' {UsrGrAddEditForm},
+  cruUsrGrCatImpl in 'cruUsrGrCatImpl.pas' {UsrGrMainForm},
+  cruUsrGroupDMImpl in 'cruUsrGroupDMImpl.pas' {UsrGrDataMod: TDataModule},
+  crPledgImpl in 'crPledgImpl.pas' {PledgForm},
+  crOtherSetupImpl in 'crOtherSetupImpl.pas' {frmOtherSetup},
+  crFrmSiqortaimpl in 'crFrmSiqortaimpl.pas' {FrmSiqorta},
+  crexpertImpl in 'crexpertImpl.pas' {Expert};
+
+end.

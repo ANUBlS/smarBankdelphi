@@ -1,0 +1,187 @@
+object FormDailyOper: TFormDailyOper
+  Left = 496
+  Top = 145
+  Width = 389
+  Height = 257
+  Caption = 'FormDailyOper'
+  Color = clBtnFace
+  Font.Charset = RUSSIAN_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poScreenCenter
+  OnCreate = FormCreate
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Label2: TLabel
+    Left = 238
+    Top = 41
+    Width = 63
+    Height = 13
+    Caption = 'Тарих сечмяк'
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -12
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    ParentFont = False
+  end
+  object Label1: TLabel
+    Left = 239
+    Top = 114
+    Width = 75
+    Height = 13
+    Caption = 'Валйута сечмяк'
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -12
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    ParentFont = False
+  end
+  object ChBoxFilial: TCheckListBox
+    Left = 0
+    Top = 42
+    Width = 200
+    Height = 181
+    Align = alLeft
+    ItemHeight = 13
+    ParentShowHint = False
+    ShowHint = False
+    TabOrder = 0
+  end
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 381
+    Height = 42
+    Align = alTop
+    BevelOuter = bvLowered
+    TabOrder = 1
+    object ChBoxSelectAll: TCheckBox
+      Left = 12
+      Top = 15
+      Width = 97
+      Height = 17
+      Caption = 'Щамысыны сечмяк'
+      TabOrder = 0
+      OnClick = ChBoxSelectAllClick
+    end
+  end
+  object BtnOK: TButton
+    Left = 333
+    Top = 104
+    Width = 75
+    Height = 25
+    Caption = 'Гябул'
+    TabOrder = 2
+    Visible = False
+    OnClick = BtnOKClick
+  end
+  object BtnExcel: TButton
+    Left = 210
+    Top = 189
+    Width = 75
+    Height = 25
+    Caption = 'Excel'
+    TabOrder = 3
+    OnClick = BtnExcelClick
+  end
+  object DTPickerPayDate: TDateTimePicker
+    Left = 209
+    Top = 59
+    Width = 145
+    Height = 21
+    CalAlignment = dtaLeft
+    Date = 40273.9617945139
+    Time = 40273.9617945139
+    DateFormat = dfShort
+    DateMode = dmComboBox
+    Kind = dtkDate
+    ParseInput = False
+    TabOrder = 4
+  end
+  object ComboBox1: TComboBox
+    Left = 209
+    Top = 134
+    Width = 145
+    Height = 21
+    Style = csDropDownList
+    ItemHeight = 13
+    TabOrder = 5
+    Items.Strings = (
+      'Щамсыны сеч')
+  end
+  object Button1: TButton
+    Left = 300
+    Top = 188
+    Width = 75
+    Height = 25
+    Caption = 'Imtina'
+    TabOrder = 6
+    OnClick = Button1Click
+  end
+  object excelehtiyat: TButton
+    Left = 328
+    Top = 88
+    Width = 75
+    Height = 20
+    Caption = 'excelehtiyat'
+    TabOrder = 7
+    Visible = False
+    OnClick = excelehtiyatClick
+  end
+  object ExcelExporter: TCMExcelExport
+    StyleColumnWidth = cwDefault
+    ColumnWidth = 0
+    VisibleFieldsOnly = False
+    FontTitles.Charset = DEFAULT_CHARSET
+    FontTitles.Color = clWindowText
+    FontTitles.Height = -11
+    FontTitles.Name = 'MS Sans Serif'
+    FontTitles.Style = []
+    OrientationTitles = 0
+    FontData.Charset = RUSSIAN_CHARSET
+    FontData.Color = clWindowText
+    FontData.Height = -11
+    FontData.Name = 'Azl Sans Serif'
+    FontData.Pitch = fpFixed
+    FontData.Style = []
+    FontSummary.Charset = DEFAULT_CHARSET
+    FontSummary.Color = clWindowText
+    FontSummary.Height = -11
+    FontSummary.Name = 'MS Sans Serif'
+    FontSummary.Style = []
+    SummarySelection = ssNone
+    SummaryCalculation = scSUM
+    Left = 886
+    Top = 10
+  end
+  object CMExcelExport1: TCMExcelExport
+    StyleColumnWidth = cwDefault
+    ColumnWidth = 0
+    VisibleFieldsOnly = False
+    FontTitles.Charset = DEFAULT_CHARSET
+    FontTitles.Color = clWindowText
+    FontTitles.Height = -11
+    FontTitles.Name = 'MS Sans Serif'
+    FontTitles.Style = []
+    OrientationTitles = 0
+    FontData.Charset = DEFAULT_CHARSET
+    FontData.Color = clWindowText
+    FontData.Height = -11
+    FontData.Name = 'MS Sans Serif'
+    FontData.Style = []
+    FontSummary.Charset = DEFAULT_CHARSET
+    FontSummary.Color = clWindowText
+    FontSummary.Height = -11
+    FontSummary.Name = 'MS Sans Serif'
+    FontSummary.Style = []
+    SummarySelection = ssNone
+    SummaryCalculation = scSUM
+    Left = 128
+    Top = 112
+  end
+end

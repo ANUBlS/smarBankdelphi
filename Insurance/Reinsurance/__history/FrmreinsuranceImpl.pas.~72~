@@ -1,0 +1,257 @@
+﻿unit FrmreinsuranceImpl;
+                      //XFButton5
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ExtCtrls, XFSCtrls, StdCtrls, Grids, XDBGrids;
+
+type
+  TFrmreinsurance = class(TForm)
+    XFPanel1: TXFPanel;
+    XFPanel2: TXFPanel;
+    XFButton2: TXFButton;
+    XFGroupBox1: TXFGroupBox;
+    XDBGrid1: TXDBGrid;
+    XFButton4: TXFButton;
+    XFButton5: TXFButton;
+    XFButton3: TXFButton;
+    XFButton1: TXFButton;
+    XFButton6: TXFButton;
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormCreate(Sender: TObject);
+    procedure XFButton2Click(Sender: TObject);
+    procedure XFButton5Click(Sender: TObject);
+    procedure XFButton3Click(Sender: TObject);
+    procedure XFButton4Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure XFButton1Click(Sender: TObject);
+    procedure XFButton6Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+      op:String;
+  end;
+
+var
+  Frmreinsurance: TFrmreinsurance;
+ // procedure InitPlugin(s:string);export;
+
+implementation
+
+{$R *.dfm}
+ uses ComObj,CommanParametrs,sboapiDataModuleImpl,SBTranslateProc,
+  DMreinsuranceImpl, FrmAddCustImpl, Frmreinsoperationimpl, AddaccountImpl,
+ frmaddloss_BarderoImpl, frmlossbarderoImpl, frmterminatebarderoimpl,
+  frmaddterminateimpl, frmsubbarderoimpl;
+procedure InitPlugin(s:string);export;
+begin
+ if s='' then
+ begin
+    Frmreinsurance.ShowModal;
+ end;
+
+   if s='operation' then
+   begin
+     Frmreinsoperation.ShowModal;
+   end;
+
+   if s='loss1' then
+   begin
+   //showmessage('Salam1');
+        frmlossbardero.showmodal;
+   end;
+      if s='terminate' then
+   begin
+   //showmessage('Salam1');
+        frmterminatebardero.showmodal;
+   end;
+         if s='subroqasiya' then
+   begin
+   //showmessage('Salam1');
+        frmsubbardero.showmodal;
+
+   end;
+end;
+exports
+     InitPlugin;
+procedure TFrmreinsurance.FormCreate(Sender: TObject);
+begin
+ //DSins_reinsuranceMain:=TDSins_reinsuranceMain.create(self);
+//Frmreinsoperation:=TFrmreinsoperation.create(self);
+
+DMreinsurance:=TDMreinsurance.create(self);
+frmsubbardero:=Tfrmsubbardero.create(self);
+
+FrmAddCust:=TFrmAddCust.create(self);
+Frmreinsoperation:=TFrmreinsoperation.create(self);
+Addaccount:=TAddaccount.create(self);
+frmlossbardero:=Tfrmlossbardero.create(self);
+frmaddloss_Bardero:=Tfrmaddloss_Bardero.create(self);
+frmterminatebardero:=Tfrmterminatebardero.Create(SELF);
+frmaddterminate:=tfrmaddterminate.Create(SELF);
+
+SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TFrmreinsurance.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+if ord(key)=vk_escape then close;
+
+end;
+    procedure TFrmreinsurance.FormShow(Sender: TObject);
+begin
+//showmessage(inttostr(contactid));
+
+DMreinsurance.DScontract.Close;
+DMreinsurance.DScontract.SetVariable('p_id',contactid);
+DMreinsurance.DScontract.Open;
+
+if (DMreinsurance.DScontract.FieldByName('TYPE_ID').AsInteger=1) or
+(DMreinsurance.DScontract.FieldByName('TYPE_ID').AsInteger=13) then
+begin
+
+XFButton1.Visible:=true;
+XFButton6.Visible:=true;
+end
+else   begin
+
+XFButton1.Visible:=false;
+XFButton6.Visible:=false;
+
+
+end;
+
+
+ {             22.05.18
+DMreinsurance.contract.Close;
+DMreinsurance.contract.SetVariable('pcid',contactid);
+DMreinsurance.contract.Open;
+ }
+
+
+//ShowMessage(DMreinsurance.contract.FieldByName('begin_date').AsString);
+
+
+
+if contractstatus=6  then
+//or (DMreinsurance.contract.FieldByName('begin_date').AsDateTime < StrToDate( '27.12.2013') )
+begin
+  XFButton5.Enabled:=true;
+  XFButton3.Enabled:=true;
+end
+else
+begin
+  XFButton5.Enabled:=false;
+  XFButton3.Enabled:=false;
+end;
+
+DMreinsurance.DSins_reinsurance.Close;
+DMreinsurance.DSins_reinsurance.SetVariable('p_cid',contactid);
+DMreinsurance.DSins_reinsurance.Open;
+
+DMreinsurance.DSins_reinsuranceMain.Close ;
+DMreinsurance.DSins_reinsuranceMain.SetVariable('p_cid',contactid);
+DMreinsurance.DSins_reinsuranceMain.Open;
+
+end;
+
+procedure TFrmreinsurance.XFButton1Click(Sender: TObject);
+begin
+
+ if XDBGrid1.DataSource.DataSet.RecordCount=0
+then
+begin
+showmessage('Məlumat Yoxdu');
+exit;
+end;
+
+    if DMreinsurance.DSins_reinsuranceMain.FieldByName('dat').AsDateTime < StrToDate( '27.12.2013') then
+ begin
+    ShowMessage('Sistem tarixindən fərqli tarixdə yığılmış barderonu ödəmək olmaz!!!');
+    exit;
+    end;
+
+ DMreinsurance.DSRins_reinsuranceMain.Edit;
+DMreinsurance.Dsins_reinsuranceMain.FieldByName('status').AsInteger:=3;
+DMreinsurance.DSins_reinsuranceMain.Post;
+ShowMessage('Ödəndi!!!');
+ end  ;
+
+
+procedure TFrmreinsurance.XFButton2Click(Sender: TObject);
+begin
+Frmreinsurance.Close;
+end;
+
+procedure TFrmreinsurance.XFButton3Click(Sender: TObject);
+begin
+
+op:='update';
+FrmAddCust.ShowModal;
+
+end;
+
+procedure TFrmreinsurance.XFButton4Click(Sender: TObject);
+begin
+with DMreinsurance,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['DELETBARDERO_PREMIYA']);
+ end;
+if
+XDBGrid1.DataSource.DataSet.RecordCount=0
+then
+begin
+showmessage('Məlumat Yoxdu');
+exit;
+end;
+if  XDBGrid1.DataSource.DataSet.FieldByName('STATUS').AsFloat <>0
+then
+begin
+  showmessage('Diqqət!Yalniz redaktə rejimində olan bardero məlumatin silmək olar! ');
+  exit;
+end;
+if MessageDlg('Seçilmiş Təkrarsığortaçının ləğv olunmasına əminsinizmi?!',mtConfirmation,
+ mbYesNoCancel, 0) = mrYes then
+ begin
+With DMreinsurance,ins_common do
+begin
+  CallProcedure('del_reins',[Frmreinsurance.XDBGrid1.DataSource.DataSet.FieldByName('id').AsInteger]);
+end;
+   Frmreinsurance.XDBGrid1.DataSource.DataSet.Refresh;
+end;
+end;
+
+procedure TFrmreinsurance.XFButton5Click(Sender: TObject);
+begin
+with DMreinsurance,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['ADDBARDERO_PREMIYA']);
+ end;
+op:='insert';
+
+FrmAddCust.ShowModal;
+
+
+end;
+
+procedure TFrmreinsurance.XFButton6Click(Sender: TObject);
+begin
+
+if XDBGrid1.DataSource.DataSet.RecordCount=0
+then
+begin
+showmessage('Məlumat Yoxdu');
+exit;
+end;
+
+DMreinsurance.DSRins_reinsuranceMain.Edit;
+DMreinsurance.Dsins_reinsuranceMain.FieldByName('status').AsInteger:=0;
+DMreinsurance.DSins_reinsuranceMain.Post;
+ShowMessage('Redaktə rejiminə keçdi!!!');
+end;
+
+initialization
+ Frmreinsurance := TFrmreinsurance.Create(Application);
+end.

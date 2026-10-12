@@ -1,0 +1,92 @@
+unit UnitDataMod;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, OracleData, Oracle;
+
+type
+  TDataMod = class(TDataModule)
+    OrDSSysDat: TOracleDataSet;
+    OrDSSysDatTEK_DAT: TDateTimeField;
+    OrDSFilial: TOracleDataSet;
+    OrDSFilialID: TFloatField;
+    OrDSFilialNAME: TStringField;
+    OrDSFilialCode: TOracleDataSet;
+    OrDSFilialCodeID: TFloatField;
+    OrDSFilialCodeNAME: TStringField;
+    OrDSBankInfo: TOracleDataSet;
+    OrDSBankInfoBANK: TStringField;
+    OrDSIncomes: TOracleDataSet;
+    OrDSIncomesBAL_CN1: TFloatField;
+    OrDSIncomesACC_NO: TStringField;
+    OrDSIncomesNAME: TStringField;
+    OrDSIncomesREST: TFloatField;
+    OrDSExpenses: TOracleDataSet;
+    OrDSExpensesBAL_CN1: TFloatField;
+    OrDSExpensesACC_NO: TStringField;
+    OrDSExpensesNAME: TStringField;
+    OrDSExpensesREST: TFloatField;
+    OrDSIncomesGeneral: TOracleDataSet;
+    OrDSIncomesGeneralBAL_CN1: TFloatField;
+    OrDSIncomesGeneralACC_NO: TStringField;
+    OrDSIncomesGeneralNAME: TStringField;
+    OrDSIncomesGeneralREST: TFloatField;
+    OrDSExpensesGeneral: TOracleDataSet;
+    OrDSExpensesGeneralBAL_CN1: TFloatField;
+    OrDSExpensesGeneralACC_NO: TStringField;
+    OrDSExpensesGeneralNAME: TStringField;
+    OrDSExpensesGeneralREST: TFloatField;
+    OrDSIncomesBal: TOracleDataSet;
+    OrDSIncomesBalBAL_CN1: TFloatField;
+    OrDSIncomesBalBALNAME: TStringField;
+    OrDSIncomesBalREST: TFloatField;
+    OrDSExpGenBal: TOracleDataSet;
+    OrDSExpGenBalBAL_CN1: TFloatField;
+    OrDSExpGenBalBALNAME: TStringField;
+    OrDSExpGenBalREST: TFloatField;
+    DSIncomes: TDataSource;
+    DSExpenses: TDataSource;
+    OrDSExpensesBal: TOracleDataSet;
+    OrDSExpensesBalBAL_CN1: TFloatField;
+    OrDSExpensesBalBALNAME: TStringField;
+    OrDSExpensesBalREST: TFloatField;
+    OrDSIncGenBal: TOracleDataSet;
+    OrDSIncGenBalBAL_CN1: TFloatField;
+    OrDSIncGenBalBALNAME: TStringField;
+    OrDSIncGenBalREST: TFloatField;
+    OrDSBegOstatGen: TOracleDataSet;
+    OrDSEndOstatGen: TOracleDataSet;
+    OrDSBegOstat: TOracleDataSet;
+    OrDSEndOstat: TOracleDataSet;
+    OrDSBegOstatGenSUMER: TFloatField;
+    OrDSEndOstatGenSUMER: TFloatField;
+    OrDSBegOstatSUMER: TFloatField;
+    OrDSEndOstatSUMER: TFloatField;
+    OrDSExpOtherFilials: TOracleDataSet;
+    OrDSIncOtherFilials: TOracleDataSet;
+    OrDSExpOtherFilialsREST: TFloatField;
+    OrDSExpOtherFilialsFILIAL: TStringField;
+    OrDSExpOtherFilialsFILIALNO: TFloatField;
+    OPack_SL: TOraclePackage;
+    OrDSIncOtherFilialsFILIALNO: TFloatField;
+    OrDSIncOtherFilialsFILIAL: TStringField;
+    OrDSIncOtherFilialsREST: TFloatField;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  DataMod: TDataMod;
+
+
+implementation
+
+uses ComObj, ComServ, SboapiDataModuleImpl, IncExpensesImpl;
+
+{$R *.DFM}
+
+end.

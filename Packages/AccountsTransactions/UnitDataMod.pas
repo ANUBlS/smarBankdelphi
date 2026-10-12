@@ -1,0 +1,31 @@
+unit UnitDataMod;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, OracleData;
+
+type
+  TDataMod = class(TDataModule)
+    OrDSAccount: TOracleDataSet;
+    OrDSACT_TYPES: TOracleDataSet;
+    OrDSACT_ACCOUNTS: TOracleDataSet;
+    DSAccount: TDataSource;
+    DSACT_TYPES: TDataSource;
+    DSACT_ACCOUNTS: TDataSource;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  DataMod: TDataMod;
+
+implementation
+
+uses SboapiDataModuleImpl;
+{$R *.DFM}
+
+end.

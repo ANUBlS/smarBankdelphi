@@ -1,0 +1,235 @@
+object ProlongDataMod: TProlongDataMod
+  OldCreateOrder = False
+  OnCreate = DataModuleCreate
+  Left = 361
+  Top = 155
+  Height = 480
+  Width = 696
+  object ProlongsData: TOracleDataSet
+    SQL.Strings = (
+      
+        'SELECT id, creditid, prolongdate, newclosedate, oldclosedate, ne' +
+        'wtrance, newoblication'
+      '  FROM cm_prolongations'
+      'WHERE CreditID=:CreditID'
+      'Order By ProlongDate Desc')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000120000003A00430052004500440049005400490044000300
+      00000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      0500000007000000040000004900440001000000000010000000430052004500
+      4400490054004900440001000000000016000000500052004F004C004F004E00
+      47004400410054004500010000000000180000004E004500570043004C004F00
+      530045004400410054004500010000000000180000004F004C00440043004C00
+      4F00530045004400410054004500010000000000120000004E00450057005400
+      520041004E00430045000100000000001A0000004E00450057004F0042004C00
+      490043004100540049004F004E00010000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 48
+    Top = 32
+    object ProlongsDataID: TFloatField
+      FieldName = 'ID'
+    end
+    object ProlongsDataCREDITID: TFloatField
+      FieldName = 'CREDITID'
+    end
+    object ProlongsDataPROLONGDATE: TDateTimeField
+      FieldName = 'PROLONGDATE'
+    end
+    object ProlongsDataNEWCLOSEDATE: TDateTimeField
+      FieldName = 'NEWCLOSEDATE'
+    end
+    object ProlongsDataOLDCLOSEDATE: TDateTimeField
+      FieldName = 'OLDCLOSEDATE'
+    end
+    object ProlongsDataNEWTRANCE: TFloatField
+      FieldName = 'NEWTRANCE'
+    end
+    object ProlongsDataNEWOBLICATION: TFloatField
+      FieldName = 'NEWOBLICATION'
+    end
+  end
+  object DataSrcProlongsData: TDataSource
+    DataSet = ProlongsData
+    Left = 48
+    Top = 80
+  end
+  object CM_PROLONGATION: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'CM_PROLONGATION'
+    Cursor = crHourGlass
+    Left = 208
+    Top = 64
+  end
+  object CreditInfo: TOracleDataSet
+    SQL.Strings = (
+      'select BOOROWERID,credittype,'
+      '  NVL(DUEDATELASTCONTRACT,DUEDATEFIRSTCONTRACT) as DUEDATE'
+      'from'
+      '  CM_ACTIVE_CREDITS'
+      'where ID =:ID  ')
+    Optimize = False
+    Variables.Data = {0400000001000000060000003A0049004400030000000000000000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 72
+    Top = 176
+  end
+  object DSCreditInfo: TDataSource
+    DataSet = CreditInfo
+    Left = 72
+    Top = 224
+  end
+  object OracleDataSet1: TOracleDataSet
+    SQL.Strings = (
+      'update cm_curr_state set  OBLIGATION =:OBLIGATION'
+      'where creditid=:creditid')
+    Optimize = False
+    Variables.Data = {
+      0400000002000000160000003A004F0042004C00490047004100540049004F00
+      4E00040000000000000000000000120000003A00430052004500440049005400
+      49004400030000000000000000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 320
+    Top = 184
+  end
+  object TrancheAccounts: TOracleDataSet
+    SQL.Strings = (
+      
+        'SELECT   id AS accid, kli_id, acc_no AS accountnumber, NAME AS a' +
+        'ccountname'
+      '    FROM account'
+      '   WHERE (    kli_id = :kli_id'
+      '          AND bal_cn1 IN (SELECT accountnumber'
+      '                            FROM cm_aginfo'
+      '                           WHERE groupid = (SELECT g.id'
+      
+        '                                              FROM cm_accountgro' +
+        'ups g'
+      
+        '                                             WHERE g.iname = '#39'Cl' +
+        'ientAccs'#39'))'
+      '         )'
+      'UNION ALL'
+      
+        'SELECT   id AS accid, kli_id, acc_no AS accountnumber, NAME AS a' +
+        'ccountname'
+      '    FROM account'
+      '   WHERE ((bal_cn1 IN (SELECT accountnumber'
+      '                         FROM cm_aginfo'
+      '                        WHERE groupid = (SELECT g.id'
+      
+        '                                           FROM cm_accountgroups' +
+        ' g'
+      
+        '                                          WHERE g.iname = '#39'Inter' +
+        'nalBankAccs'#39'))'
+      '          )'
+      '         )'
+      'ORDER BY kli_id, accountnumber'
+      '')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000E0000003A004B004C0049005F0049004400030000000000
+      000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      05000000040000000A000000410043004300490044000100000000000C000000
+      4B004C0049005F00490044000100000000001A0000004100430043004F005500
+      4E0054004E0055004D0042004500520001000000000016000000410043004300
+      4F0055004E0054004E0041004D004500010000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 208
+    Top = 144
+    object TrancheAccountsACCID: TFloatField
+      FieldName = 'ACCID'
+    end
+    object TrancheAccountsKLI_ID: TFloatField
+      FieldName = 'KLI_ID'
+    end
+    object TrancheAccountsACCOUNTNUMBER: TWideStringField
+      FieldName = 'ACCOUNTNUMBER'
+      Size = 28
+    end
+    object TrancheAccountsACCOUNTNAME: TWideStringField
+      FieldName = 'ACCOUNTNAME'
+      Size = 90
+    end
+  end
+  object CustAccount: TOracleDataSet
+    SQL.Strings = (
+      'select '
+      '      BOOROWERACCID '
+      '   from '
+      '      CM_ACCOUNTS'
+      ' where CreditID=:CreditID')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000120000003A00430052004500440049005400490044000300
+      00000000000000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 320
+    Top = 248
+    object CustAccountBOOROWERACCID: TFloatField
+      FieldName = 'BOOROWERACCID'
+    end
+  end
+  object CM_TRANCHE: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'CM_TRANCHE'
+    ParameterMode = pmNamed
+    Cursor = crHourGlass
+    Left = 248
+    Top = 264
+  end
+  object OracleDataSet2: TOracleDataSet
+    SQL.Strings = (
+      'select tek_dat from sysdat')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000010000000E000000540045004B005F00440041005400010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 472
+    Top = 80
+  end
+  object OracleDataSet3: TOracleDataSet
+    SQL.Strings = (
+      'select 3 id,'#39'3-Ay'#39' name from dual'
+      'union'
+      'select 4 id,'#39'4-Ay'#39' name from dual'
+      'union'
+      'select 5 id,'#39'5-Ay'#39' name from dual'
+      'union'
+      'select 6 id,'#39'6-Ay'#39' name from dual'
+      'union'
+      'select 7 id,'#39'7-Ay'#39' name from dual'
+      'union'
+      'select 8 id,'#39'8-Ay'#39' name from dual'
+      'union'
+      'select 9 id,'#39'9-Ay'#39' name from dual'
+      'union'
+      'select 10 id,'#39'10-Ay'#39' name from dual'
+      'union'
+      'select 11 id,'#39'11-Ay'#39' name from dual'
+      'union'
+      'select 12 id,'#39'12-Ay'#39' name from dual')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000400000049004400010000000000080000004E0041004D00
+      4500010000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 520
+    Top = 160
+  end
+  object DataSource1: TDataSource
+    DataSet = OracleDataSet3
+    Left = 520
+    Top = 208
+  end
+end

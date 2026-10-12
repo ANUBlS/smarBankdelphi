@@ -1,0 +1,245 @@
+unit NewFrm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, CurrencyEdit, ComCtrls, DBCtrls;
+
+type
+  TAddingnew = class(TForm)
+    Label1: TLabel;
+    Label2: TLabel;
+    lookupcust: TDBLookupComboBox;
+    akt1DateTimePicker: TDateTimePicker;
+    Label3: TLabel;
+    akt2DateTimePicker: TDateTimePicker;
+    Label4: TLabel;
+    Label5: TLabel;
+    CurrencyEdit1: TCurrencyEdit;
+    CurrencyEdit2: TCurrencyEdit;
+    abbval: TDBLookupComboBox;
+    Label6: TLabel;
+    Button1: TButton;
+    Label7: TLabel;
+    Label8: TLabel;
+    CurrencyEdit3: TCurrencyEdit;
+    CurrencyEdit4: TCurrencyEdit;
+    Acceprtedval: TDBLookupComboBox;
+    Label9: TLabel;
+    CurrencyEdit5: TCurrencyEdit;
+    CurrencyEdit6: TCurrencyEdit;
+    Label10: TLabel;
+    Label11: TLabel;
+    Edit1: TEdit;
+    Edit2: TEdit;
+    CurrencyEdit7: TCurrencyEdit;
+    CurrencyEdit8: TCurrencyEdit;
+    Label13: TLabel;
+    Label14: TLabel;
+    sendDateTimePicker: TDateTimePicker;
+    Label16: TLabel;
+    CurrencyEdit9: TCurrencyEdit;
+    CurrencyEdit10: TCurrencyEdit;
+    Label17: TLabel;
+    Label18: TLabel;
+    reducttip: TDBLookupComboBox;
+    Label19: TLabel;
+    Label20: TLabel;
+    CurrencyEdit11: TCurrencyEdit;
+    CurrencyEdit12: TCurrencyEdit;
+    CurrencyEdit13: TCurrencyEdit;
+    Label21: TLabel;
+    Label22: TLabel;
+    Label23: TLabel;
+    CurrencyEdit14: TCurrencyEdit;
+    Label24: TLabel;
+    DBLookupComboBox1: TDBLookupComboBox;
+    Label25: TLabel;
+    Label26: TLabel;
+    Label27: TLabel;
+    CurrencyEdit16: TCurrencyEdit;
+    CurrencyEdit17: TCurrencyEdit;
+    Label28: TLabel;
+    CurrencyEdit18: TCurrencyEdit;
+    Label29: TLabel;
+    Label30: TLabel;
+    Edit3: TEdit;
+    Label31: TLabel;
+    Edit4: TEdit;
+    Label32: TLabel;
+    Edit5: TEdit;
+    Label33: TLabel;
+    Edit6: TEdit;
+    Label34: TLabel;
+    Label35: TLabel;
+    Edit7: TEdit;
+    Memo1: TMemo;
+    Label36: TLabel;
+    Edit8: TEdit;
+    Label37: TLabel;
+    Edit9: TEdit;
+    Label38: TLabel;
+    Label39: TLabel;
+    Edit10: TEdit;
+    Label40: TLabel;
+    Edit11: TEdit;
+    Label41: TLabel;
+    Edit12: TEdit;
+    Label42: TLabel;
+    DBLookupComboBox4: TDBLookupComboBox;
+    Label43: TLabel;
+    Edit13: TEdit;
+    Label44: TLabel;
+    Edit14: TEdit;
+    Label45: TLabel;
+    Label46: TLabel;
+    Edit15: TEdit;
+    Edit16: TEdit;
+    Label47: TLabel;
+    DBLookupComboBox5: TDBLookupComboBox;
+    DateTimePicker1: TDateTimePicker;
+    Label48: TLabel;
+    Label49: TLabel;
+    Label50: TLabel;
+    Edit17: TEdit;
+    Edit18: TEdit;
+    Label51: TLabel;
+    DBLookupComboBox6: TDBLookupComboBox;
+    DateTimePicker2: TDateTimePicker;
+    Label52: TLabel;
+    Memo2: TMemo;
+    Label53: TLabel;
+    Edit19: TEdit;
+    ComboBox1: TComboBox;
+    DBLookupComboBox2: TDBLookupComboBox;
+    Label12: TLabel;
+    ComboBox2: TComboBox;
+    Label15: TLabel;
+    Edit20: TEdit;
+    Edit21: TEdit;
+    procedure Button1Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure Edit21KeyPress(Sender: TObject; var Key: Char);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Addingnew: TAddingnew;
+
+implementation
+
+uses Datamodunit,SBTranslateProc,sboapiDataModuleIMpl;
+
+{$R *.dfm}
+
+procedure TAddingnew.Button1Click(Sender: TObject);
+var borct :integer;
+begin
+
+if ComboBox2.Text='Yerli' then
+       borct:=1
+       else
+       borct:=2;
+
+
+
+
+
+
+DataMod.OraclePackage1.CallProcedure('Insert_prtf',[
+
+CurrencyEdit14.Value,
+ edit19.Text  ,
+ DataMod.custms.FieldByName('name').AsString,
+ DBLookupComboBox1.KeyValue,   //type
+ 0,//DataMod.custms.FieldByName('op_id').Asinteger,
+ 0,//custtpe,
+ DBLookupComboBox2.KeyValue,//filial,
+ ComboBox1.Text,//managment
+  edit1.Text,
+  akt1DateTimePicker.DateTime,
+  edit2.Text,
+  akt2DateTimePicker.DateTime,
+
+
+     CurrencyEdit1.Value ,
+     CurrencyEdit2.Value,
+     abbval.KeyValue,
+
+     CurrencyEdit3.Value,
+     CurrencyEdit4.Value,
+     Acceprtedval.KeyValue,
+
+     CurrencyEdit6.Value,
+     CurrencyEdit5.Value,
+     sendDateTimePicker.DateTime,
+     CurrencyEdit8.Value,
+     CurrencyEdit7.Value,
+
+     0,
+     0,
+     0,
+     0,
+
+    // reducttip.KeyValue ,
+
+    // CurrencyEdit10.Value,
+   //  CurrencyEdit9.Value,
+     CurrencyEdit13.Value ,
+     CurrencyEdit12.Value,
+     CurrencyEdit11.Value ,
+      CurrencyEdit16.Value,
+     edit5.Text,
+      edit3.Text,
+      edit6.Text,
+      edit4.Text,
+      borct,
+     edit7.Text,
+      edit20.Text,
+      edit9.Text,
+       memo1.Text,
+       edit11.Text,
+       edit8.Text,
+       edit10.Text,
+       DataMod.custms.FieldByName('id').Asinteger,
+        '' ,'' ,'' ,'' ,'' ,
+   // v_court_dec varchar2 ,v_court_date date ,v_decission varchar2,v_dec_date date,
+  ''//  v_manages varchar2,v_laststat varchar2,
+  ,edit15.Text,DateTimePicker1.DateTime,strtoint(edit16.Text),
+    DBLookupComboBox5.KeyValue ,  edit17.Text, DateTimePicker2.DateTime  ,
+     strtoint(edit18.Text)   ,DBLookupComboBox5.KeyValue, memo2.Text ,
+      edit12.Text       ,DBLookupComboBox4.KeyValue, strtoint(edit13.Text) ,
+        edit14.Text
+
+
+
+]);
+sboapiDataModule.SBSession.Commit;
+
+close;
+DataMod.maincrprt.Close;
+DataMod.maincrprt.open;
+end;
+
+procedure TAddingnew.Edit21KeyPress(Sender: TObject; var Key: Char);
+begin
+if key=#13 then
+begin
+    DataMod.custms.Close;
+DataMod.custms.SQL[3]:=' where id='+(edit21.Text);
+//lookupcust.KeyValue:= DataMod.custms.FieldByName(name).ass
+
+DataMod.custms.Open;
+end;
+end;
+
+procedure TAddingnew.FormCreate(Sender: TObject);
+begin
+SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+end.

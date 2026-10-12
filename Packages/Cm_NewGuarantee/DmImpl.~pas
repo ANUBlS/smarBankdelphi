@@ -1,0 +1,40 @@
+unit DmImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, OracleData;
+
+type
+  TGurDm = class(TDataModule)
+    MainDSet: TOracleDataSet;
+    MainDSrc: TDataSource;
+    procedure MainDSetAfterOpen(DataSet: TDataSet);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  GurDm: TGurDm;
+
+implementation
+
+{$R *.DFM}
+uses CMOracleAPIDataModuleImpl,GuaranteImpl;
+procedure TGurDm.MainDSetAfterOpen(DataSet: TDataSet);
+var index: integer;
+begin
+   with DataSet, FrmGuarante.Panel2 do
+  begin
+    Tabs.Clear;
+    for Index := 0 to RecordCount-1 do
+      Tabs.Add(Format('Карт №%d', [Index]));
+    if recordcount=0 then tabs.Add ((Format('Карт №%d', [0]))) ;
+    First;
+  end;
+end;
+
+end.

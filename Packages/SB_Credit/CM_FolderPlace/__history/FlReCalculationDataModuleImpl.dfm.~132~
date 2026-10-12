@@ -1,0 +1,1571 @@
+object PRDataModule: TPRDataModule
+  OldCreateOrder = False
+  OnCreate = DataModuleCreate
+  Height = 602
+  Width = 1082
+  object CalculatorPackage: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'cm_folder'
+    ParameterMode = pmNamed
+    Cursor = crHourGlass
+    Left = 592
+    Top = 64
+  end
+  object IntCache: TOracleDataSet
+    SQL.Strings = (
+      
+        'select p.id,p.numberofcredit,VAL_NAME,b.name,REST,DUEREST, INTER' +
+        'ESTREST,creditlineamount,dateofconclusion,duedatefirstcontract,p' +
+        '.stop,cm_folder.Get_dosyestatus(q.id,h.dueday,p.id) dstatus,'
+      ' case when nvl(fl.status ,0)=1then'
+      '0 else q.id end as'
+      
+        ' TRPROCESSED,(select count(*) from cm_folderplace_info where cre' +
+        'ditid=p.id) qeydsayi,cr.description crtype,q_dat,q_rest,q_intres' +
+        't,q_penya,'
+      ' case '
+      ' when nvl(dueday,0) between 1 and 30 then '
+      ' 1'
+      ' when nvl(dueday,0) between 31 and 300000 then '
+      ' 2'
+      ' else'
+      ' 0'
+      
+        ' end as due, b.phonenumber,gr.anyinfotodisting,gr.pledgeprice,(s' +
+        'elect name from cm_mehkeme s where s.id=fl.mehid)meh,fl.mehid,'
+      
+        'DUEINTERESTREST,REST+DUEREST+INTERESTREST+DUEINTERESTREST fullre' +
+        'st, dueday,q.id qovid,q.name qovluq,f.name filial,nvl(fl.status ' +
+        ',0)status,p.currency,p.BRANCHID,p.credittype from '
+      'cm_active_credits p,cm_credittypes cr,'
+      'cm_curr_state h,cm_guarantee gr,'
+      'cm_boorowerinfo b,'
+      'cm_qovluq q,'
+      'filial_t f,'
+      'avalute_t v,'
+      
+        '(select * from  cm_folderplace s where  senddate= (select max(se' +
+        'nddate) from cm_folderplace where creditid=s.creditid)) fl'
+      ' '
+      'where p.id=h.creditid and'
+      'p.id=b.creditid and'
+      'p.qovid=q.id and'
+      
+        'p.id=gr.creditid(+)  and h.rest+h.duerest+h.interestrest+h.inter' +
+        'estrest>0 and'
+      'p.BRANCHID=f.id and'
+      '(p.id=fl.creditid(+)) and'
+      '--fl.status=1 and '
+      
+        '-- (fl.senddate= (select max(senddate) from cm_folderplace where' +
+        ' creditid=p.id))) and '
+      'p.currency=v.valute  and p.credittype=cr.id --and p.id=43112'
+      '    order by :OrderField')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000160000003A004F0052004400450052004600490045004C00
+      440001000000050000004E414D450000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000002300000004000000490044000100000000001C0000004E0055004D00
+      4200450052004F00460043005200450044004900540001000000000008000000
+      52004500530054000100000000001800000049004E0054004500520045005300
+      540052004500530054000100000000000E000000440055004500520045005300
+      54000100000000001E00000044005500450049004E0054004500520045005300
+      5400520045005300540001000000000010000000560041004C005F004E004100
+      4D004500010000000000080000004E0041004D0045000100000000000C000000
+      4400550045004400410059000100000000000C00000051004F0056004C005500
+      51000100000000000C000000460049004C00490041004C000100000000001000
+      0000460055004C004C0052004500530054000100000000000A00000051004F00
+      5600490044000100000000001600000054005200500052004F00430045005300
+      5300450044000100000000000C00000053005400410054005500530001000000
+      000010000000430055005200520045004E004300590001000000000010000000
+      4200520041004E00430048004900440001000000000014000000430052004500
+      4400490054005400590050004500010000000000060000004400550045000100
+      00000000200000004300520045004400490054004C0049004E00450041004D00
+      4F0055004E005400010000000000100000005100450059004400530041005900
+      49000100000000002000000044004100540045004F00460043004F004E004300
+      4C005500530049004F004E000100000000002800000044005500450044004100
+      540045004600490052005300540043004F004E00540052004100430054000100
+      000000000C000000430052005400590050004500010000000000160000005000
+      48004F004E0045004E0055004D00420045005200010000000000200000004100
+      4E00590049004E0046004F0054004F00440049005300540049004E0047000100
+      000000001600000050004C004500440047004500500052004900430045000100
+      0000000008000000530054004F005000010000000000060000004D0045004800
+      0100000000000E00000044005300540041005400550053000100000000000A00
+      000051005F004400410054000100000000000C00000051005F00520045005300
+      54000100000000001200000051005F0049004E00540052004500530054000100
+      000000000E00000051005F00500045004E00590041000100000000000A000000
+      4D004500480049004400010000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    OnCalcFields = IntCacheCalcFields
+    Left = 40
+    Top = 72
+    object IntCacheID: TFloatField
+      FieldName = 'ID'
+    end
+    object IntCacheNUMBEROFCREDIT: TWideStringField
+      DisplayLabel = 'M'#252'qavile no'
+      FieldName = 'NUMBEROFCREDIT'
+      Size = 32
+    end
+    object IntCacheVAL_NAME: TWideStringField
+      DisplayLabel = 'Valyuta'
+      FieldName = 'VAL_NAME'
+      Size = 160
+    end
+    object IntCacheCREDITLINEAMOUNT: TFloatField
+      DisplayLabel = 'Kreditin m'#601'bl'#601#287'i'
+      FieldName = 'CREDITLINEAMOUNT'
+    end
+    object IntCacheNAME: TWideStringField
+      DisplayLabel = 'Borcalan'
+      FieldName = 'NAME'
+      Size = 256
+    end
+    object IntCacheDATEOFCONCLUSION: TDateTimeField
+      DisplayLabel = 'M'#252'qavil'#601'nin verilm'#601' tarixi'
+      FieldName = 'DATEOFCONCLUSION'
+    end
+    object IntCacheDUEDATEFIRSTCONTRACT: TDateTimeField
+      DisplayLabel = 'M'#252'qavil'#601'nin bitm'#601' tarixi'
+      FieldName = 'DUEDATEFIRSTCONTRACT'
+    end
+    object IntCacheCRTYPE: TWideStringField
+      DisplayLabel = 'Kredit m'#601'hsulu'
+      FieldName = 'CRTYPE'
+      Size = 512
+    end
+    object IntCacheREST: TFloatField
+      DisplayLabel = #399'.B qal'#305'q'
+      FieldName = 'REST'
+    end
+    object IntCacheDUEREST: TFloatField
+      DisplayLabel = 'G.B qal'#305'q'
+      FieldName = 'DUEREST'
+    end
+    object IntCacheINTERESTREST: TFloatField
+      DisplayLabel = 'F.B qal'#305'q'
+      FieldName = 'INTERESTREST'
+    end
+    object IntCacheDUEINTERESTREST: TFloatField
+      DisplayLabel = 'GF.B qal'#305'q'
+      FieldName = 'DUEINTERESTREST'
+    end
+    object IntCacheDUEDAY: TFloatField
+      DisplayLabel = 'Gec g'#252'n'
+      FieldName = 'DUEDAY'
+    end
+    object IntCacheQOVLUQ: TWideStringField
+      DisplayLabel = 'Qovluq'
+      FieldName = 'QOVLUQ'
+      Size = 120
+    end
+    object IntCacheFILIAL: TWideStringField
+      DisplayLabel = 'Filal'
+      FieldName = 'FILIAL'
+      Size = 360
+    end
+    object IntCacheFULLREST: TFloatField
+      FieldName = 'FULLREST'
+    end
+    object IntCacheQOVID: TFloatField
+      FieldName = 'QOVID'
+      Visible = False
+    end
+    object IntCacheTRPROCESSED: TFloatField
+      FieldName = 'TRPROCESSED'
+      Visible = False
+    end
+    object IntCacheSTATUS: TFloatField
+      FieldName = 'STATUS'
+    end
+    object IntCacheCURRENCY: TFloatField
+      FieldName = 'CURRENCY'
+      Visible = False
+    end
+    object IntCacheBRANCHID: TFloatField
+      FieldName = 'BRANCHID'
+      Visible = False
+    end
+    object IntCacheCREDITTYPE: TFloatField
+      FieldName = 'CREDITTYPE'
+      Visible = False
+    end
+    object IntCacheDUE: TFloatField
+      FieldName = 'DUE'
+    end
+    object IntCachePHONENUMBER: TWideStringField
+      DisplayLabel = 'Telefon'
+      FieldName = 'PHONENUMBER'
+      Size = 1020
+    end
+    object IntCacheANYINFOTODISTING: TWideStringField
+      DisplayLabel = 'Girovu f'#601'riql'#601'ndir'#601'n m'#601'lumat'
+      FieldName = 'ANYINFOTODISTING'
+      Size = 512
+    end
+    object IntCachePLEDGEPRICE: TFloatField
+      DisplayLabel = 'Girovun d'#601'y'#601'ri'
+      FieldName = 'PLEDGEPRICE'
+    end
+    object IntCacheQEYDSAYI: TFloatField
+      DisplayLabel = 'Qeyd say'#305
+      FieldName = 'QEYDSAYI'
+    end
+    object IntCacheSTOP: TWideStringField
+      FieldName = 'STOP'
+      Size = 1
+    end
+    object IntCacheMEH: TWideStringField
+      FieldName = 'MEH'
+      Size = 150
+    end
+    object IntCacheDSTATUS: TFloatField
+      FieldName = 'DSTATUS'
+    end
+    object IntCacheQ_DAT: TDateTimeField
+      DisplayLabel = 'Q'#601'tnam'#601' tarixi'
+      FieldName = 'Q_DAT'
+    end
+    object IntCacheQ_REST: TFloatField
+      DisplayLabel = 'Q '#399'sas '
+      FieldName = 'Q_REST'
+    end
+    object IntCacheQ_INTREST: TFloatField
+      DisplayLabel = 'Q fazi'
+      FieldName = 'Q_INTREST'
+    end
+    object IntCacheQ_PENYA: TFloatField
+      DisplayLabel = 'Q c'#601'rim'#601
+      FieldName = 'Q_PENYA'
+    end
+    object IntCacheMEHID: TFloatField
+      FieldName = 'MEHID'
+    end
+  end
+  object DataSrcIntCache: TDataSource
+    DataSet = IntCache
+    Left = 40
+    Top = 160
+  end
+  object cm_autoexp: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'cm_autoexp'
+    Cursor = crSQLWait
+    Left = 592
+    Top = 152
+  end
+  object OracleDataSet1: TOracleDataSet
+    SQL.Strings = (
+      
+        'select * from cm_qovluq where id not in(select qovid from cm_fol' +
+        'derusers where usnam=user and not usnam in('#39'SMART'#39','#39'ZEYNALOV_K'#39',' +
+        #39'SAFAROV_F'#39','#39'QANBAROV_F'#39','#39'HUMBATOV_N'#39') )'
+      '')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000160000003A004F0052004400450052004600490045004C00
+      440001000000050000004E414D450000000000}
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000400000049004400010000000000080000004E0041004D00
+      4500010000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    OnCalcFields = IntCacheCalcFields
+    Left = 120
+    Top = 72
+  end
+  object DataSource1: TDataSource
+    DataSet = OracleDataSet1
+    Left = 128
+    Top = 160
+  end
+  object OracleDataSet2: TOracleDataSet
+    SQL.Strings = (
+      
+        'select fl.id,p.id creditid,fl.senduser, p.numberofcredit,b.name,' +
+        'to_date(senddate) dat,q1.name qovidsender,q2.name qovidreciver,f' +
+        'l.qovidreciver reciveriid ,fl.qovidsender senderid from '
+      
+        'cm_folderplace fl,cm_active_credits p,cm_boorowerinfo b,cm_qovlu' +
+        'q q1,cm_qovluq q2'
+      ' where'
+      ' fl.creditid=p.id and '
+      ' b.creditid=p.id and '
+      ' fl.qovidsender=q1.id and '
+      ' fl.qovidreciver=q2.id and'
+      'fl.status=1 and'
+      ' q2.id in(select qovid from cm_folderusers where usnam=user)'
+      ''
+      'order by :OrderField')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000160000003A004F0052004400450052004600490045004C00
+      440001000000050000004E414D450000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000A0000000400000049004400010000000000080000004E0041004D00
+      45000100000000001C0000004E0055004D004200450052004F00460043005200
+      4500440049005400010000000000060000004400410054000100000000001600
+      000051004F00560049004400530045004E004400450052000100000000001800
+      000051004F005600490044005200450043004900560045005200010000000000
+      1000000043005200450044004900540049004400010000000000100000005300
+      45004E0044005500530045005200010000000000140000005200450043004900
+      56004500520049004900440001000000000010000000530045004E0044004500
+      520049004400010000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    OnCalcFields = IntCacheCalcFields
+    Left = 200
+    Top = 72
+    object OracleDataSet2ID: TFloatField
+      FieldName = 'ID'
+    end
+    object OracleDataSet2CREDITID: TFloatField
+      FieldName = 'CREDITID'
+    end
+    object OracleDataSet2SENDUSER: TWideStringField
+      FieldName = 'SENDUSER'
+      Size = 50
+    end
+    object OracleDataSet2NUMBEROFCREDIT: TWideStringField
+      FieldName = 'NUMBEROFCREDIT'
+      Size = 32
+    end
+    object OracleDataSet2NAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 150
+    end
+    object OracleDataSet2DAT: TDateTimeField
+      FieldName = 'DAT'
+    end
+    object OracleDataSet2QOVIDSENDER: TWideStringField
+      FieldName = 'QOVIDSENDER'
+      Size = 120
+    end
+    object OracleDataSet2QOVIDRECIVER: TWideStringField
+      FieldName = 'QOVIDRECIVER'
+      Size = 120
+    end
+    object OracleDataSet2RECIVERIID: TFloatField
+      FieldName = 'RECIVERIID'
+    end
+    object OracleDataSet2SENDERID: TFloatField
+      FieldName = 'SENDERID'
+    end
+  end
+  object DataSource2: TDataSource
+    DataSet = OracleDataSet2
+    Left = 200
+    Top = 160
+  end
+  object OracleDataSet3: TOracleDataSet
+    SQL.Strings = (
+      
+        'select fl.id,p.id creditid,fl.status,fl.senduser,fl.reciveuser, ' +
+        'p.numberofcredit,b.name,to_date(senddate) dat,q1.name qovidsende' +
+        'r,q2.name qovidreciver,fl.qovidreciver reciveriid ,fl.qovidsende' +
+        'r senderid'
+      ',case when fl.status=2 then'
+      'fl.recivedate||'#39' tarixind'#601' t'#601'stiq olundu '#39'else'
+      'fl.recivedate||'#39' tarixind'#601' imtina olundu '#39
+      'end as veziyyet'
+      ' from '
+      
+        'cm_folderplace fl,cm_active_credits p,cm_boorowerinfo b,cm_qovlu' +
+        'q q1,cm_qovluq q2'
+      ' where'
+      ' fl.creditid=p.id and '
+      ' b.creditid=p.id and '
+      ' fl.qovidsender=q1.id and '
+      ' fl.qovidreciver=q2.id and'
+      'fl.status<>1'
+      'order by :OrderField')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000160000003A004F0052004400450052004600490045004C00
+      440001000000050000004E414D450000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000D0000000400000049004400010000000000080000004E0041004D00
+      45000100000000001C0000004E0055004D004200450052004F00460043005200
+      4500440049005400010000000000060000004400410054000100000000001600
+      000051004F00560049004400530045004E004400450052000100000000001800
+      000051004F005600490044005200450043004900560045005200010000000000
+      1000000043005200450044004900540049004400010000000000140000005200
+      4500430049005600450052004900490044000100000000001000000053004500
+      4E004400450052004900440001000000000010000000560045005A0049005900
+      59004500540001000000000010000000530045004E0044005500530045005200
+      0100000000001400000052004500430049005600450055005300450052000100
+      000000000C000000530054004100540055005300010000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    OnCalcFields = IntCacheCalcFields
+    Left = 288
+    Top = 72
+    object OracleDataSet3ID: TFloatField
+      FieldName = 'ID'
+    end
+    object OracleDataSet3CREDITID: TFloatField
+      FieldName = 'CREDITID'
+    end
+    object OracleDataSet3NUMBEROFCREDIT: TWideStringField
+      FieldName = 'NUMBEROFCREDIT'
+      Size = 32
+    end
+    object OracleDataSet3NAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 256
+    end
+    object OracleDataSet3DAT: TDateTimeField
+      FieldName = 'DAT'
+    end
+    object OracleDataSet3QOVIDSENDER: TWideStringField
+      FieldName = 'QOVIDSENDER'
+      Size = 120
+    end
+    object OracleDataSet3QOVIDRECIVER: TWideStringField
+      FieldName = 'QOVIDRECIVER'
+      Size = 120
+    end
+    object OracleDataSet3RECIVERIID: TFloatField
+      FieldName = 'RECIVERIID'
+    end
+    object OracleDataSet3SENDERID: TFloatField
+      FieldName = 'SENDERID'
+    end
+    object OracleDataSet3VEZIYYET: TWideStringField
+      FieldName = 'VEZIYYET'
+      Size = 42
+    end
+    object OracleDataSet3SENDUSER: TWideStringField
+      FieldName = 'SENDUSER'
+      Size = 50
+    end
+    object OracleDataSet3RECIVEUSER: TWideStringField
+      FieldName = 'RECIVEUSER'
+      Size = 50
+    end
+    object OracleDataSet3STATUS: TFloatField
+      FieldName = 'STATUS'
+    end
+  end
+  object DataSource3: TDataSource
+    DataSet = OracleDataSet3
+    Left = 288
+    Top = 160
+  end
+  object DataSource4: TDataSource
+    DataSet = OracleDataSet4
+    Left = 376
+    Top = 152
+  end
+  object OracleDataSet4: TOracleDataSet
+    SQL.Strings = (
+      
+        'SELECT rownum,a.rowid, a.* FROM cm_folderplace_info a where cred' +
+        'itid=:creditid'
+      'order by rownum,id desc')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000120000003A00430052004500440049005400490044000300
+      00000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      0500000007000000040000004900440001000000000010000000430052004500
+      4400490054004900440001000000000006000000440041005400010000000000
+      04000000550053000100000000000800000049004E0046004F00010000000000
+      0C00000052004F0057004E0055004D0001000000000004000000410041000100
+      00000000}
+    Master = IntCache
+    MasterFields = 'id'
+    DetailFields = 'CREDITID'
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 376
+    Top = 72
+  end
+  object IntCache_ex: TOracleDataSet
+    SQL.Strings = (
+      
+        'select p.id,p.numberofcredit,VAL_NAME,b.name,REST,DUEREST, INTER' +
+        'ESTREST,creditlineamount,dateofconclusion,duedatefirstcontract,'
+      ' case when nvl(fl.status ,0)=1then'
+      '0 else q.id end as'
+      
+        ' TRPROCESSED,(select count(*) from cm_folderplace_info where cre' +
+        'ditid=p.id) qeydsayi,cr.description crtype,q_dat,q_rest,q_intres' +
+        't,q_penya,'
+      ' case '
+      ' when nvl(dueday,0) between 1 and 30 then '
+      ' 1'
+      ' when nvl(dueday,0) between 31 and 300000 then '
+      ' 2'
+      ' else'
+      ' 0'
+      
+        ' end as due, b.phonenumber,gr.anyinfotodisting,gr.pledgeprice,g1' +
+        '.guarantorname z1nam,g1.zaminwork1 z1work,g1.zmtelmob1 z1tel'
+      
+        ' ,g2.guarantorname z2nam,g2.zaminwork1 z2work,g2.zmtelmob1 z2tel' +
+        ',g3.guarantorname z3nam,g3.zaminwork1 z1work,g3.zmtelmob1 z3tel,' +
+        '(select name from cm_mehkeme s where s.id=fl.mehid)meh,'
+      
+        '    LastintPaydate.paydat as lastintpaydate ,dLastintPaydate.pay' +
+        'dat as dlastintpaydate ,'
+      
+        '    LastMainPaydate.paydat as lastmainpaydate , dLastMainPaydate' +
+        '.paydat as dlastmainpaydate ,dLastMainPaydate.payeddueamt,'
+      
+        '    LastintPaydate.payedintamt,LastMainPaydate.payedamt,dLastint' +
+        'Paydate.payeddueintamt,    '
+      
+        'DUEINTERESTREST,REST+DUEREST+INTERESTREST+DUEINTERESTREST fullre' +
+        'st, dueday,q.id qovid,q.name qovluq,f.name filial,nvl(fl.status ' +
+        ',0)status,p.currency,p.BRANCHID,p.credittype from '
+      'cm_active_credits p,cm_credittypes cr,'
+      'cm_curr_state h,cm_guarantee gr,'
+      
+        'cm_boorowerinfo b,CM_GUARANTOR g1,CM_GUARANTOR g2,CM_GUARANTOR g' +
+        '3,'
+      'cm_qovluq q,'
+      'filial_t f,'
+      'avalute_t v,'
+      'cm_folderplace fl,'
+      ' ((select '
+      '          id as creditid,'
+      '          null as paydat ,0 payedintamt'
+      '        from cm_portfolio '
+      '       minus'
+      '       select '
+      '       creditid ,'
+      '       null as paydat,0 payedintamt from cm_payments p'
+      '      where PAYEDINTAMT<>0  '
+      
+        '      and PAYDATE in(select max(paydate) from cm_payments where ' +
+        'paydate<=sbop.get_date and creditid=p.creditid)'
+      '      group by creditid)'
+      '      union all'
+      '      select '
+      '       creditid ,'
+      
+        '       max(PAYDATE) as paydat,sum(payedintamt)payedintamt from c' +
+        'm_payments p'
+      '      where PAYEDINTAMT<>0  '
+      
+        '      and PAYDATE in(select max(paydate) from cm_payments where ' +
+        'paydate<=sbop.get_date and creditid=p.creditid)'
+      '      group by creditid) LastintPaydate,     '
+      '      ((select '
+      '          id as creditid,'
+      '          null as paydat,0 payedamt'
+      '        from cm_portfolio '
+      '       minus'
+      '       select '
+      '       creditid ,'
+      '       null as paydat,0 payedamt from cm_payments p'
+      '      where payedamt<>0  '
+      
+        '      and PAYDATE in(select max(paydate) from cm_payments where ' +
+        'paydate<=sbop.get_date and creditid=p.creditid)'
+      '      group by creditid)'
+      '      union all'
+      '      select '
+      '       creditid ,'
+      
+        '       max(PAYDATE) as paydat,sum(payedamt)payedamt from cm_paym' +
+        'ents p'
+      '      where payedamt<>0  '
+      
+        '      and PAYDATE in(select max(paydate) from cm_payments where ' +
+        'paydate<=sbop.get_date and creditid=p.creditid)'
+      '      group by creditid) LastMainPaydate      '
+      '      ,            '
+      '      ((select '
+      '          id as creditid,'
+      '          null as paydat,0 payeddueintamt'
+      '        from cm_portfolio '
+      '       minus'
+      '       select '
+      '       creditid ,'
+      '       null as paydat, 0 payeddueintamt from cm_payments p'
+      '      where payeddueintamt<>0  '
+      
+        '      and PAYDATE in(select max(paydate) from cm_payments where ' +
+        'paydate<=sbop.get_date and creditid=p.creditid)'
+      '      group by creditid)'
+      '      union all'
+      '      select  '
+      '       creditid ,'
+      
+        '       max(PAYDATE) as paydat,sum(payeddueintamt) payeddueintamt' +
+        ' from cm_payments p'
+      '      where payeddueintamt<>0  '
+      
+        '      and PAYDATE in(select max(paydate) from cm_payments where ' +
+        'paydate<=sbop.get_date and creditid=p.creditid)'
+      '      group by creditid) dLastintPaydate,     '
+      '      ((select '
+      '          id as creditid,'
+      '          null as paydat,0 payeddueamt'
+      '        from cm_portfolio '
+      '       minus'
+      '       select '
+      '       creditid ,'
+      '       null as paydat, 0 payeddueamt from cm_payments p'
+      '      where payeddueamt<>0  '
+      
+        '      and PAYDATE in(select max(paydate) from cm_payments where ' +
+        'paydate<=sbop.get_date and creditid=p.creditid)'
+      '      group by creditid)'
+      '      union all'
+      '      select '
+      '       creditid ,'
+      
+        '       max(PAYDATE) as paydat, sum(payeddueamt) payeddueamt from' +
+        ' cm_payments p'
+      '      where payeddueamt<>0  '
+      
+        '      and PAYDATE in(select max(paydate) from cm_payments where ' +
+        'paydate<=sbop.get_date and creditid=p.creditid)'
+      '      group by creditid) dLastMainPaydate'
+      'where p.id=h.creditid and'
+      'p.id=b.creditid and'
+      'p.qovid=q.id and'
+      
+        'p.id=gr.creditid(+)  and h.rest+h.duerest+h.interestrest+h.inter' +
+        'estrest>0 and'
+      'p.BRANCHID=f.id and'
+      'p.id=fl.creditid(+) and'
+      'fl.status(+)=1 and '
+      'p.currency=v.valute  and p.credittype=cr.id'
+      '  and LastintPaydate.creditid(+) = p.id'
+      
+        '  and LastMainPaydate.creditid(+) = p.id  and dLastintPaydate.cr' +
+        'editid = p.id and dLastMainPaydate.creditid(+) = p.id'
+      '    and p.id=g1.creditid(+) and g1.cardid(+)=1'
+      '    and p.id=g2.creditid(+) and g2.cardid(+)=2'
+      '    and p.id=g3.creditid(+) and g3.cardid(+)=3'
+      'order by :OrderField')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000160000003A004F0052004400450052004600490045004C00
+      440001000000050000004E414D450000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000003100000004000000490044000100000000001C0000004E0055004D00
+      4200450052004F00460043005200450044004900540001000000000008000000
+      52004500530054000100000000001800000049004E0054004500520045005300
+      540052004500530054000100000000000E000000440055004500520045005300
+      54000100000000001E00000044005500450049004E0054004500520045005300
+      5400520045005300540001000000000010000000560041004C005F004E004100
+      4D004500010000000000080000004E0041004D0045000100000000000C000000
+      4400550045004400410059000100000000000C00000051004F0056004C005500
+      51000100000000000C000000460049004C00490041004C000100000000001000
+      0000460055004C004C0052004500530054000100000000000A00000051004F00
+      5600490044000100000000001600000054005200500052004F00430045005300
+      5300450044000100000000000C00000053005400410054005500530001000000
+      000010000000430055005200520045004E004300590001000000000010000000
+      4200520041004E00430048004900440001000000000014000000430052004500
+      4400490054005400590050004500010000000000060000004400550045000100
+      00000000200000004300520045004400490054004C0049004E00450041004D00
+      4F0055004E0054000100000000001C0000004C0041005300540049004E005400
+      50004100590044004100540045000100000000001E00000044004C0041005300
+      540049004E00540050004100590044004100540045000100000000001E000000
+      4C004100530054004D00410049004E0050004100590044004100540045000100
+      000000002000000044004C004100530054004D00410049004E00500041005900
+      4400410054004500010000000000160000005000410059004500440049004E00
+      540041004D005400010000000000100000005000410059004500440041004D00
+      54000100000000001C0000005000410059004500440044005500450049004E00
+      540041004D005400010000000000160000005000410059004500440044005500
+      450041004D005400010000000000100000005100450059004400530041005900
+      49000100000000002000000044004100540045004F00460043004F004E004300
+      4C005500530049004F004E000100000000002800000044005500450044004100
+      540045004600490052005300540043004F004E00540052004100430054000100
+      000000000C000000430052005400590050004500010000000000160000005000
+      48004F004E0045004E0055004D00420045005200010000000000200000004100
+      4E00590049004E0046004F0054004F00440049005300540049004E0047000100
+      000000001600000050004C004500440047004500500052004900430045000100
+      000000000A0000005A0031004E0041004D000100000000000C0000005A003100
+      57004F0052004B000100000000000A0000005A003100540045004C0001000000
+      00000A0000005A0032004E0041004D000100000000000C0000005A0032005700
+      4F0052004B000100000000000A0000005A003200540045004C00010000000000
+      0A0000005A0033004E0041004D00010000000000100000005A00310057004F00
+      52004B005F0031000100000000000A0000005A003300540045004C0001000000
+      00000A00000051005F004400410054000100000000000C00000051005F005200
+      4500530054000100000000001200000051005F0049004E005400520045005300
+      54000100000000000E00000051005F00500045004E0059004100010000000000
+      060000004D0045004800010000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    OnCalcFields = IntCacheCalcFields
+    Left = 56
+    Top = 272
+    object FloatField1: TFloatField
+      FieldName = 'ID'
+    end
+    object WideStringField1: TWideStringField
+      DisplayLabel = 'M'#252'qavile no'
+      FieldName = 'NUMBEROFCREDIT'
+      Size = 32
+    end
+    object WideStringField2: TWideStringField
+      DisplayLabel = 'Valyuta'
+      FieldName = 'VAL_NAME'
+      Size = 160
+    end
+    object FloatField2: TFloatField
+      DisplayLabel = 'Kreditin m'#601'bl'#601#287'i'
+      FieldName = 'CREDITLINEAMOUNT'
+    end
+    object WideStringField3: TWideStringField
+      DisplayLabel = 'Borcalan'
+      FieldName = 'NAME'
+      Size = 256
+    end
+    object WideStringField4: TWideStringField
+      DisplayLabel = 'Kredit m'#601'hsulu'
+      FieldName = 'CRTYPE'
+      Size = 512
+    end
+    object DateTimeField1: TDateTimeField
+      DisplayLabel = 'M'#252'qavil'#601'nin verilm'#601' tarixi'
+      FieldName = 'DATEOFCONCLUSION'
+    end
+    object DateTimeField2: TDateTimeField
+      DisplayLabel = 'M'#252'qavil'#601'nin bitm'#601' tarixi'
+      FieldName = 'DUEDATEFIRSTCONTRACT'
+    end
+    object FloatField3: TFloatField
+      DisplayLabel = #399'.B qal'#305'q'
+      FieldName = 'REST'
+    end
+    object FloatField4: TFloatField
+      DisplayLabel = 'G.B qal'#305'q'
+      FieldName = 'DUEREST'
+    end
+    object FloatField5: TFloatField
+      DisplayLabel = 'F.B qal'#305'q'
+      FieldName = 'INTERESTREST'
+    end
+    object FloatField6: TFloatField
+      DisplayLabel = 'GF.B qal'#305'q'
+      FieldName = 'DUEINTERESTREST'
+    end
+    object FloatField7: TFloatField
+      DisplayLabel = 'Gec g'#252'n'
+      FieldName = 'DUEDAY'
+    end
+    object WideStringField5: TWideStringField
+      DisplayLabel = 'Qovluq'
+      FieldName = 'QOVLUQ'
+      Size = 120
+    end
+    object WideStringField6: TWideStringField
+      DisplayLabel = 'Filal'
+      FieldName = 'FILIAL'
+      Size = 360
+    end
+    object FloatField8: TFloatField
+      FieldName = 'FULLREST'
+    end
+    object FloatField9: TFloatField
+      FieldName = 'QOVID'
+      Visible = False
+    end
+    object IntCache_exMEH: TWideStringField
+      FieldName = 'MEH'
+      Size = 150
+    end
+    object FloatField10: TFloatField
+      FieldName = 'TRPROCESSED'
+      Visible = False
+    end
+    object FloatField11: TFloatField
+      FieldName = 'STATUS'
+    end
+    object FloatField12: TFloatField
+      FieldName = 'CURRENCY'
+      Visible = False
+    end
+    object FloatField13: TFloatField
+      FieldName = 'BRANCHID'
+      Visible = False
+    end
+    object FloatField14: TFloatField
+      FieldName = 'CREDITTYPE'
+      Visible = False
+    end
+    object FloatField15: TFloatField
+      FieldName = 'DUE'
+    end
+    object DateTimeField3: TDateTimeField
+      DisplayLabel = #399'sas borc '#252'zr'#601' son '#601'm'#601'liyyat tarixi'
+      FieldName = 'LASTMAINPAYDATE'
+    end
+    object FloatField16: TFloatField
+      DisplayLabel = 'sas borc '#252'zr'#601' son '#601'm'#601'liyyat m'#601'bl'#601#287'i'
+      FieldName = 'PAYEDAMT'
+    end
+    object DateTimeField4: TDateTimeField
+      DisplayLabel = 'Faiz borcu '#252'zr'#601' son '#601'm'#601'liyyat tarixi'
+      FieldName = 'LASTINTPAYDATE'
+    end
+    object FloatField17: TFloatField
+      DisplayLabel = 'Faiz borcu '#252'zr'#601' son '#601'm'#601'liyyat m'#601'bl'#601#287'i'
+      FieldName = 'PAYEDINTAMT'
+    end
+    object DateTimeField5: TDateTimeField
+      DisplayLabel = 'Gec '#399'sas borc '#252'zr'#601' son '#601'm'#601'liyyat tarixi'
+      FieldName = 'DLASTMAINPAYDATE'
+    end
+    object FloatField18: TFloatField
+      DisplayLabel = 'Faiz borcu '#252'zr'#601' son '#601'm'#601'liyyat m'#601'bl'#601#287'i'
+      FieldName = 'PAYEDDUEAMT'
+    end
+    object DateTimeField6: TDateTimeField
+      DisplayLabel = 'Gec Faiz borcu '#252'zr'#601' son '#601'm'#601'liyyat tarixi '
+      FieldName = 'DLASTINTPAYDATE'
+    end
+    object FloatField19: TFloatField
+      DisplayLabel = 'Gec Faiz borcu '#252'zr'#601' son '#601'm'#601'liyyat m'#601'bl'#601#287'i'
+      FieldName = 'PAYEDDUEINTAMT'
+    end
+    object WideStringField7: TWideStringField
+      DisplayLabel = 'Telefon'
+      FieldName = 'PHONENUMBER'
+      Size = 1020
+    end
+    object WideStringField8: TWideStringField
+      DisplayLabel = 'Girovu f'#601'riql'#601'ndir'#601'n m'#601'lumat'
+      FieldName = 'ANYINFOTODISTING'
+      Size = 512
+    end
+    object FloatField20: TFloatField
+      DisplayLabel = 'Girovun d'#601'y'#601'ri'
+      FieldName = 'PLEDGEPRICE'
+    end
+    object WideStringField9: TWideStringField
+      DisplayLabel = 'Zamin 1 ad'
+      FieldName = 'Z1NAM'
+      Size = 256
+    end
+    object WideStringField10: TWideStringField
+      DisplayLabel = 'Zamin 1 i'#351' yeri'
+      FieldName = 'Z1WORK'
+      Size = 320
+    end
+    object WideStringField11: TWideStringField
+      DisplayLabel = 'Zmin 1tel'
+      FieldName = 'Z1TEL'
+      Size = 60
+    end
+    object WideStringField12: TWideStringField
+      DisplayLabel = 'Zamin 2 ad'
+      FieldName = 'Z2NAM'
+      Size = 256
+    end
+    object WideStringField13: TWideStringField
+      DisplayLabel = 'Zamin 2 i'#351
+      FieldName = 'Z2WORK'
+      Size = 320
+    end
+    object WideStringField14: TWideStringField
+      DisplayLabel = 'Zamin2 tel'
+      FieldName = 'Z2TEL'
+      Size = 60
+    end
+    object WideStringField15: TWideStringField
+      DisplayLabel = 'Zamin 3 ad'
+      FieldName = 'Z3NAM'
+      Size = 256
+    end
+    object WideStringField16: TWideStringField
+      DisplayLabel = 'Zamin 2 i'#351
+      FieldName = 'Z1WORK_1'
+      Size = 320
+    end
+    object WideStringField17: TWideStringField
+      DisplayLabel = 'Zamin 3 tel'
+      FieldName = 'Z3TEL'
+      Size = 60
+    end
+    object FloatField21: TFloatField
+      DisplayLabel = 'Qeyd say'#305
+      FieldName = 'QEYDSAYI'
+    end
+    object IntCache_exQ_DAT: TDateTimeField
+      DisplayLabel = 'Q'#601'tnam'#601' tarixi'
+      FieldName = 'Q_DAT'
+    end
+    object IntCache_exQ_REST: TFloatField
+      DisplayLabel = 'Q '#601'sas'
+      FieldName = 'Q_REST'
+    end
+    object IntCache_exQ_INTREST: TFloatField
+      DisplayLabel = 'Q faiz'
+      FieldName = 'Q_INTREST'
+    end
+    object IntCache_exQ_PENYA: TFloatField
+      DisplayLabel = 'Q c'#601'rim'#601
+      FieldName = 'Q_PENYA'
+    end
+  end
+  object OracleQuery1: TOracleQuery
+    Session = sboapiDataModule.SBSession
+    Optimize = False
+    Left = 680
+    Top = 160
+  end
+  object adm: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'CM_ADMINISTRATION'
+    Left = 944
+    Top = 64
+  end
+  object DataSource5: TDataSource
+    DataSet = OracleDataSet5
+    Left = 800
+    Top = 152
+  end
+  object OracleDataSet5: TOracleDataSet
+    SQL.Strings = (
+      'SELECT * from cm_mehkeme order by name')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000400000049004400010000000000080000004E0041004D00
+      4500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 800
+    Top = 72
+  end
+  object OracleDataSet6: TOracleDataSet
+    SQL.Strings = (
+      'select * from cm_mehkeme'
+      '')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000160000003A004F0052004400450052004600490045004C00
+      440001000000050000004E414D450000000000}
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000400000049004400010000000000080000004E0041004D00
+      4500010000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    OnCalcFields = IntCacheCalcFields
+    Left = 320
+    Top = 248
+  end
+  object DataSource6: TDataSource
+    DataSet = OracleDataSet6
+    Left = 320
+    Top = 312
+  end
+  object OracleDataSet7: TOracleDataSet
+    SQL.Strings = (
+      'select sysuserid,obj||'#39'  /  '#39'||fullname name from sb_objinf'
+      'where obj in(select name from cm_adm_users) order by obj'
+      '')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000160000003A004F0052004400450052004600490045004C00
+      440001000000050000004E414D450000000000}
+    QBEDefinition.QBEFieldDefs = {
+      0500000002000000080000004E0041004D004500010000000000120000005300
+      59005300550053004500520049004400010000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    OnCalcFields = IntCacheCalcFields
+    Left = 424
+    Top = 248
+    object OracleDataSet7SYSUSERID: TFloatField
+      FieldName = 'SYSUSERID'
+    end
+    object OracleDataSet7NAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 325
+    end
+  end
+  object DataSource7: TDataSource
+    DataSet = OracleDataSet7
+    Left = 424
+    Top = 312
+  end
+  object OracleDataSet8: TOracleDataSet
+    SQL.Strings = (
+      
+        'select rowid, a.* from cm_folderbons_users a where pr_id=:prid o' +
+        'rder by id'
+      '')
+    Optimize = False
+    Variables.Data = {
+      0400000002000000160000003A004F0052004400450052004600490045004C00
+      440001000000050000004E414D4500000000000A0000003A0050005200490044
+      00030000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      05000000090000000400000049004400010000000000080000004E0041004D00
+      45000100000000000A000000500052005F004900440001000000000008000000
+      55005300490044000100000000000800000050004C0041004E00010000000000
+      0800000042004400410059000100000000000800000045004400410059000100
+      000000000C00000045005F004600410049005A000100000000000C0000004600
+      5F004600410049005A00010000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    OnCalcFields = IntCacheCalcFields
+    Left = 504
+    Top = 248
+    object OracleDataSet8ID: TFloatField
+      FieldName = 'ID'
+    end
+    object OracleDataSet8PR_ID: TFloatField
+      FieldName = 'PR_ID'
+    end
+    object OracleDataSet8NAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 150
+    end
+    object OracleDataSet8USID: TFloatField
+      FieldName = 'USID'
+    end
+    object OracleDataSet8users: TWideStringField
+      FieldKind = fkLookup
+      FieldName = 'users'
+      LookupDataSet = OracleDataSet7
+      LookupKeyFields = 'SYSUSERID'
+      LookupResultField = 'NAME'
+      KeyFields = 'USID'
+      Size = 100
+      Lookup = True
+    end
+    object OracleDataSet8PLAN: TFloatField
+      FieldName = 'PLAN'
+    end
+    object OracleDataSet8BDAY: TFloatField
+      FieldName = 'BDAY'
+    end
+    object OracleDataSet8EDAY: TFloatField
+      FieldName = 'EDAY'
+    end
+    object OracleDataSet8E_FAIZ: TFloatField
+      FieldName = 'E_FAIZ'
+    end
+    object OracleDataSet8F_FAIZ: TFloatField
+      FieldName = 'F_FAIZ'
+    end
+  end
+  object DataSource8: TDataSource
+    DataSet = OracleDataSet8
+    Left = 504
+    Top = 304
+  end
+  object OracleDataSet9: TOracleDataSet
+    SQL.Strings = (
+      
+        'select rowid,a.* from cm_folder_icra a where usid=:usid order by' +
+        ' id')
+    Optimize = False
+    Variables.Data = {
+      0400000002000000160000003A004F0052004400450052004600490045004C00
+      440001000000050000004E414D4500000000000A0000003A0055005300490044
+      00030000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      0500000004000000040000004900440001000000000008000000550053004900
+      44000100000000000E00000049004300520041005F0049004400010000000000
+      0C000000460049004C00490041004C00010000000000}
+    Cursor = crSQLWait
+    Master = OracleDataSet8
+    MasterFields = 'id'
+    DetailFields = 'usid'
+    Session = sboapiDataModule.SBSession
+    OnCalcFields = IntCacheCalcFields
+    Left = 648
+    Top = 240
+    object OracleDataSet9ID: TFloatField
+      FieldName = 'ID'
+    end
+    object OracleDataSet9USID: TFloatField
+      FieldName = 'USID'
+    end
+    object OracleDataSet9ICRA_ID: TFloatField
+      FieldName = 'ICRA_ID'
+    end
+    object OracleDataSet9FILIAL: TFloatField
+      FieldName = 'FILIAL'
+    end
+    object OracleDataSet9name: TWideStringField
+      DisplayLabel = #304'cra '#351#246'b'#601'l'#601'ri'
+      FieldKind = fkLookup
+      FieldName = 'name'
+      LookupDataSet = OracleDataSet5
+      LookupKeyFields = 'ID'
+      LookupResultField = 'NAME'
+      KeyFields = 'ICRA_ID'
+      Size = 100
+      Lookup = True
+    end
+  end
+  object DataSource9: TDataSource
+    DataSet = OracleDataSet9
+    Left = 648
+    Top = 304
+  end
+  object OracleDataSet10: TOracleDataSet
+    SQL.Strings = (
+      
+        'select rowid,a.* from cm_folder_icra a where usid=:usid order by' +
+        '  id')
+    Optimize = False
+    Variables.Data = {
+      0400000002000000160000003A004F0052004400450052004600490045004C00
+      440001000000050000004E414D4500000000000A0000003A0055005300490044
+      00030000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      0500000006000000040000004900440001000000000008000000550053004900
+      44000100000000000E00000049004300520041005F0049004400010000000000
+      0C000000460049004C00490041004C0001000000000008000000420044004100
+      5900010000000000080000004500440041005900010000000000}
+    Cursor = crSQLWait
+    Master = OracleDataSet8
+    MasterFields = 'id'
+    DetailFields = 'usid'
+    Session = sboapiDataModule.SBSession
+    OnCalcFields = IntCacheCalcFields
+    Left = 792
+    Top = 240
+    object FloatField22: TFloatField
+      FieldName = 'ID'
+    end
+    object FloatField23: TFloatField
+      FieldName = 'USID'
+    end
+    object FloatField24: TFloatField
+      FieldName = 'ICRA_ID'
+    end
+    object FloatField25: TFloatField
+      FieldName = 'FILIAL'
+    end
+    object OracleDataSet10name: TWideStringField
+      DisplayLabel = 'Filiallar'
+      FieldKind = fkLookup
+      FieldName = 'name'
+      LookupDataSet = OracleDataSet11
+      LookupKeyFields = 'ID'
+      LookupResultField = 'NAME'
+      KeyFields = 'FILIAL'
+      Size = 100
+      Lookup = True
+    end
+  end
+  object DataSource10: TDataSource
+    DataSet = OracleDataSet10
+    Left = 800
+    Top = 312
+  end
+  object DataSource11: TDataSource
+    DataSet = OracleDataSet11
+    Left = 944
+    Top = 200
+  end
+  object OracleDataSet11: TOracleDataSet
+    SQL.Strings = (
+      'SELECT * from filial order by name')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000030000000400000049004400010000000000080000004E0041004D00
+      4500010000000000140000004B004F0044005F00460049004C00490041004C00
+      010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 944
+    Top = 120
+  end
+  object OracleDataSet12: TOracleDataSet
+    SQL.Strings = (
+      'select a.*,bons_esas+bons_faiz cemb from cm_folder_report  a'
+      '')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000160000003A004F0052004400450052004600490045004C00
+      440001000000050000004E414D450000000000}
+    QBEDefinition.QBEFieldDefs = {
+      0500000009000000100000004300520045004400490054004900440001000000
+      00000A000000550053004500520053000100000000000A00000050004C004100
+      4E005300010000000000120000005900470049004D005F004500530041005300
+      0100000000001200000042004F004E0053005F00450053004100530001000000
+      0000120000005900470049004D005F004600410049005A000100000000001200
+      000042004F004E0053005F004600410049005A00010000000000080000005500
+      53004900440001000000000008000000430045004D004200010000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    OnCalcFields = IntCacheCalcFields
+    Left = 208
+    Top = 432
+    object OracleDataSet12USID: TFloatField
+      FieldName = 'USID'
+    end
+    object OracleDataSet12USERS: TWideStringField
+      DisplayLabel = 'M'#252't'#601'x'#601'sis'
+      FieldName = 'USERS'
+      Size = 50
+    end
+    object OracleDataSet12PLANS: TFloatField
+      DisplayLabel = 'Plan'
+      FieldName = 'PLANS'
+    end
+    object OracleDataSet12YGIM_ESAS: TFloatField
+      DisplayLabel = 'Y'#305#287#305'm'
+      FieldName = 'YGIM_ESAS'
+    end
+    object OracleDataSet12BONS_ESAS: TFloatField
+      DisplayLabel = 'Bonus'
+      FieldName = 'BONS_ESAS'
+    end
+    object OracleDataSet12BONS_FAIZ: TFloatField
+      FieldName = 'BONS_FAIZ'
+    end
+    object OracleDataSet12YGIM_FAIZ: TFloatField
+      FieldName = 'YGIM_FAIZ'
+    end
+    object OracleDataSet12CEMB: TFloatField
+      FieldName = 'CEMB'
+    end
+  end
+  object DataSource12: TDataSource
+    DataSet = OracleDataSet12
+    Left = 208
+    Top = 504
+  end
+  object OracleDataSet13: TOracleDataSet
+    SQL.Strings = (
+      
+        'select rowid, a.* from CM_FOLDER_MEHSUL a where icra_id=:icra_id' +
+        ' order by mehsul_id'
+      '')
+    Optimize = False
+    Variables.Data = {
+      0400000002000000160000003A004F0052004400450052004600490045004C00
+      440001000000050000004E414D450000000000100000003A0049004300520041
+      005F0049004400030000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000E00000049004300520041005F0049004400010000000000
+      120000004D0045004800530055004C005F0049004400010000000000}
+    Cursor = crSQLWait
+    Master = OracleDataSet10
+    MasterFields = 'id'
+    DetailFields = 'ICRA_ID'
+    Session = sboapiDataModule.SBSession
+    OnCalcFields = IntCacheCalcFields
+    Left = 320
+    Top = 432
+    object OracleDataSet13ICRA_ID: TFloatField
+      FieldName = 'ICRA_ID'
+    end
+    object OracleDataSet13MEHSUL_ID: TFloatField
+      FieldName = 'MEHSUL_ID'
+    end
+    object OracleDataSet13mehsul: TWideStringField
+      FieldKind = fkLookup
+      FieldName = 'mehsul'
+      LookupDataSet = OracleDataSet14
+      LookupKeyFields = 'ID'
+      LookupResultField = 'DESCRIPTION'
+      KeyFields = 'MEHSUL_ID'
+      Size = 50
+      Lookup = True
+    end
+  end
+  object DataSource13: TDataSource
+    DataSet = OracleDataSet13
+    Left = 320
+    Top = 504
+  end
+  object OracleDataSet14: TOracleDataSet
+    SQL.Strings = (
+      'select * from cm_credittypes order by description')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000160000003A004F0052004400450052004600490045004C00
+      440001000000050000004E414D450000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000900000004000000490044000100000000001E000000520045004E00
+      45005700410042004C0045005300540041005400550053000100000000000A00
+      0000490054005900500045000100000000000C000000490043004C0041005300
+      5300010000000000160000004400450053004300520049005000540049004F00
+      4E00010000000000100000004300410052004400540059005000450001000000
+      0000140000004F0055005400420041004C0041004E0043004500010000000000
+      1A000000440055004500500045005200530045004E0054004400410059000100
+      000000000E000000430054005F005400590050004500010000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    OnCalcFields = IntCacheCalcFields
+    Left = 448
+    Top = 440
+  end
+  object DataSource14: TDataSource
+    DataSet = OracleDataSet14
+    Left = 448
+    Top = 512
+  end
+  object DataSource15: TDataSource
+    DataSet = OracleDataSet15
+    Left = 600
+    Top = 512
+  end
+  object OracleDataSet15: TOracleDataSet
+    SQL.Strings = (
+      
+        'select p.id, b.name,v.val_name ,p.numberofcredit,m.name name1, p' +
+        'a.paydate,pa.payedamt*o.ostat payedamt,'
+      
+        'pa.payedintamt*o.ostat payedintamt,pa.payeddueamt*o.ostat payedd' +
+        'ueamt,pa.payedpenaltyamt*o.ostat payedpenaltyamt,pa.dueday'
+      
+        ' ,payedamt*o.ostat+payedintamt*o.ostat+payeddueamt*o.ostat+payed' +
+        'penaltyamt*o.ostat sumpay,o.ostat from '
+      
+        '(select creditid, max(paydate)paydate, sum(payedamt)payedamt,sum' +
+        '(payedintamt)payedintamt,sum(payeddueamt)payeddueamt,'
+      'sum(payeddueintamt) payedpenaltyamt,min(dueday)dueday'
+      ' from cm_payments where paydate between :bdat and :edat '
+      ' '
+      
+        ' group by creditid) pa,cm_folderplace f,cm_mehkeme m, cm_portfol' +
+        'io p,cm_boorowerinfo b,operkurs o,avalute_t v'
+      ' '
+      
+        ' where pa.creditid=f.creditid and p.currency=o.val_kod and o.dat' +
+        '=pa.paydate and p.currency=v.valute'
+      ' and f.qovidreciver=4 and'
+      
+        ' f.senddate =(select max(senddate) from cm_folderplace where cre' +
+        'ditid=p.id ) and'
+      ' f.mehid=m.id and'
+      ' p.id=pa.creditid and p.id=b.creditid and '
+      
+        'f.mehid in ( select icra_id from cm_folder_icra where usid=:usid' +
+        ' )')
+    Optimize = False
+    Variables.Data = {
+      04000000030000000A0000003A0042004400410054000C000000000000000000
+      00000A0000003A0045004400410054000C00000000000000000000000A000000
+      3A005500530049004400030000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000D0000000400000049004400010000000000080000004E0041004D00
+      45000100000000001C0000004E0055004D004200450052004F00460043005200
+      45004400490054000100000000000E0000005000410059004400410054004500
+      010000000000100000005000410059004500440041004D005400010000000000
+      160000005000410059004500440049004E00540041004D005400010000000000
+      160000005000410059004500440044005500450041004D005400010000000000
+      1E00000050004100590045004400500045004E0041004C005400590041004D00
+      54000100000000000C000000530055004D005000410059000100000000000A00
+      00004E0041004D00450031000100000000000A0000004F005300540041005400
+      01000000000010000000560041004C005F004E0041004D004500010000000000
+      0C000000440055004500440041005900010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 600
+    Top = 432
+    object OracleDataSet15ID: TFloatField
+      DisplayLabel = 'Kreditid'
+      FieldName = 'ID'
+    end
+    object OracleDataSet15NUMBEROFCREDIT: TWideStringField
+      DisplayLabel = 'No'
+      FieldName = 'NUMBEROFCREDIT'
+      Size = 32
+    end
+    object OracleDataSet15NAME: TWideStringField
+      DisplayLabel = 'Borcalan'
+      FieldName = 'NAME'
+      Size = 150
+    end
+    object OracleDataSet15VAL_NAME: TWideStringField
+      DisplayLabel = 'Valyuta'
+      FieldName = 'VAL_NAME'
+      Size = 10
+    end
+    object OracleDataSet15NAME1: TWideStringField
+      DisplayLabel = #304'cra '#350#246'b'#601'si'
+      FieldName = 'NAME1'
+      Size = 150
+    end
+    object OracleDataSet15PAYDATE: TDateTimeField
+      DisplayLabel = 'Tarix'
+      FieldName = 'PAYDATE'
+    end
+    object OracleDataSet15PAYEDAMT: TFloatField
+      DisplayLabel = #399'sas'
+      FieldName = 'PAYEDAMT'
+      DisplayFormat = '#,##0.00'
+    end
+    object OracleDataSet15PAYEDINTAMT: TFloatField
+      DisplayLabel = 'Faiz'
+      FieldName = 'PAYEDINTAMT'
+      DisplayFormat = '#,##0.00'
+    end
+    object OracleDataSet15PAYEDDUEAMT: TFloatField
+      DisplayLabel = 'Gec '#399'sas'
+      FieldName = 'PAYEDDUEAMT'
+      DisplayFormat = '#,##0.00'
+    end
+    object OracleDataSet15PAYEDPENALTYAMT: TFloatField
+      DisplayLabel = 'Gec Faiz'
+      FieldName = 'PAYEDPENALTYAMT'
+      DisplayFormat = '#,##0.00'
+    end
+    object OracleDataSet15SUMPAY: TFloatField
+      DisplayLabel = 'C'#601'm'
+      FieldName = 'SUMPAY'
+      DisplayFormat = '#,##0.00'
+    end
+    object OracleDataSet15DUEDAY: TFloatField
+      DisplayLabel = 'Gec g'#252'n'
+      FieldName = 'DUEDAY'
+    end
+    object OracleDataSet15OSTAT: TFloatField
+      DisplayLabel = #214'd'#601'ni'#351' tarixin'#601' kurs'
+      FieldName = 'OSTAT'
+    end
+  end
+  object DataSource16: TDataSource
+    DataSet = OracleDataSet16
+    Left = 720
+    Top = 512
+  end
+  object OracleDataSet16: TOracleDataSet
+    SQL.Strings = (
+      
+        'select p.id, b.name,p.numberofcredit, v.val_name, '#39#39' name1, pa.p' +
+        'aydate,pa.payedamt*o.ostat payedamt,'
+      
+        'pa.payedintamt*o.ostat payedintamt,pa.payeddueamt*o.ostat payedd' +
+        'ueamt,pa.payedpenaltyamt*o.ostat payedpenaltyamt,pa.dueday'
+      
+        ' ,payedamt*o.ostat+payedintamt*o.ostat+payeddueamt*o.ostat+payed' +
+        'penaltyamt*o.ostat sumpay,o.ostat from '
+      
+        '(select creditid, (paydate)paydate, (payedamt)payedamt,(payedint' +
+        'amt)payedintamt,(payeddueamt)payeddueamt,'
+      '(payeddueintamt) payedpenaltyamt,dueday'
+      
+        ' from cm_payments where paydate between :bdat and :edat --and du' +
+        'eday>0'
+      ' '
+      ') pa,cm_portfolio p,cm_boorowerinfo b,operkurs o,avalute_t v'
+      ' '
+      ' where '
+      
+        ' p.id=pa.creditid and p.id=b.creditid and  p.currency=o.val_kod ' +
+        'and o.dat=pa.paydate and p.currency=v.valute  and'
+      
+        'pa.creditid in ( select creditid from cm_folder_pay where usid=:' +
+        'usid )')
+    Optimize = False
+    Variables.Data = {
+      04000000030000000A0000003A0042004400410054000C000000000000000000
+      00000A0000003A0045004400410054000C00000000000000000000000A000000
+      3A005500530049004400030000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000D0000000400000049004400010000000000080000004E0041004D00
+      45000100000000001C0000004E0055004D004200450052004F00460043005200
+      45004400490054000100000000000E0000005000410059004400410054004500
+      010000000000100000005000410059004500440041004D005400010000000000
+      160000005000410059004500440049004E00540041004D005400010000000000
+      160000005000410059004500440044005500450041004D005400010000000000
+      1E00000050004100590045004400500045004E0041004C005400590041004D00
+      54000100000000000C000000530055004D005000410059000100000000000C00
+      00004400550045004400410059000100000000000A0000004E0041004D004500
+      31000100000000000A0000004F00530054004100540001000000000010000000
+      560041004C005F004E0041004D004500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 720
+    Top = 432
+    object FloatField26: TFloatField
+      DisplayLabel = 'Kreditid'
+      FieldName = 'ID'
+    end
+    object OracleDataSet16NAME1: TWideStringField
+      DisplayLabel = #304'cra '#351#246'b'#601'si'
+      FieldName = 'NAME1'
+      Size = 1
+    end
+    object WideStringField19: TWideStringField
+      DisplayLabel = 'No'
+      FieldName = 'NUMBEROFCREDIT'
+      Size = 32
+    end
+    object WideStringField20: TWideStringField
+      DisplayLabel = 'Borcalan'
+      FieldName = 'NAME'
+      Size = 150
+    end
+    object DateTimeField7: TDateTimeField
+      DisplayLabel = 'Tarix'
+      FieldName = 'PAYDATE'
+    end
+    object FloatField27: TFloatField
+      DisplayLabel = #399'sas'
+      FieldName = 'PAYEDAMT'
+      DisplayFormat = '#,##0.00'
+    end
+    object FloatField28: TFloatField
+      DisplayLabel = 'Faiz'
+      FieldName = 'PAYEDINTAMT'
+      DisplayFormat = '#,##0.00'
+    end
+    object FloatField29: TFloatField
+      DisplayLabel = 'Gec '#399'sas'
+      FieldName = 'PAYEDDUEAMT'
+      DisplayFormat = '#,##0.00'
+    end
+    object FloatField30: TFloatField
+      DisplayLabel = 'Gec Faiz'
+      FieldName = 'PAYEDPENALTYAMT'
+      DisplayFormat = '#,##0.00'
+    end
+    object FloatField31: TFloatField
+      DisplayLabel = 'C'#601'm'
+      FieldName = 'SUMPAY'
+      DisplayFormat = '#,##0.00'
+    end
+    object OracleDataSet16DUEDAY: TFloatField
+      DisplayLabel = 'Gec g'#252'n'
+      FieldName = 'DUEDAY'
+    end
+    object OracleDataSet16OSTAT: TFloatField
+      DisplayLabel = #214'd'#601'ni'#351' tarixin'#601' kurs'
+      FieldName = 'OSTAT'
+    end
+    object OracleDataSet16VAL_NAME: TWideStringField
+      DisplayLabel = 'Valyuta'
+      FieldName = 'VAL_NAME'
+      Size = 10
+    end
+  end
+  object OracleDataSet17: TOracleDataSet
+    SQL.Strings = (
+      
+        'select nvl(q_dat,sbop.get_date) q_dat,nvl(q_rest,0)q_rest,nvl(q_' +
+        'intrest,0)q_intrest,nvl(q_penya,0)q_penya from cm_boorowerinfo w' +
+        'here creditid=:creditid')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000120000003A00430052004500440049005400490044000300
+      00000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      05000000040000000A00000051005F004400410054000100000000000C000000
+      51005F0052004500530054000100000000001200000051005F0049004E005400
+      52004500530054000100000000000E00000051005F00500045004E0059004100
+      010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 976
+    Top = 432
+    object OracleDataSet17Q_DAT: TDateTimeField
+      FieldName = 'Q_DAT'
+    end
+    object OracleDataSet17Q_REST: TFloatField
+      FieldName = 'Q_REST'
+    end
+    object OracleDataSet17Q_INTREST: TFloatField
+      FieldName = 'Q_INTREST'
+    end
+    object OracleDataSet17Q_PENYA: TFloatField
+      FieldName = 'Q_PENYA'
+    end
+  end
+end

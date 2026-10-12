@@ -1,0 +1,2909 @@
+﻿unit Unit_ExchangeMGR;
+
+interface
+
+uses
+  Windows, Messages, SysUtils,Db, DBTables,  ExtCtrls,
+  Dialogs, ImgList,Variants, Controls, Menus, DBCtrls, StdCtrls, ComCtrls, Buttons,
+  DBGrids, Mask, Grids, DBGridEh, ToolWin, Classes, Graphics, Forms,
+  ActiveX, AxCtrls, ExchangeMGR_TLB, StdVcl, ShellApi,
+  CMExcelExport, DBGridEhGrouping, GridsEh;
+
+type
+  TExchangeMGR_X = class(TActiveForm, IExchangeMGR_X)
+    PanelMain: TPanel;
+    PageControl: TPageControl;
+    TabShMain: TTabSheet;
+    ToolBar: TToolBar;
+    TBA: TToolButton;
+    ToolBtnAdd: TToolButton;
+    TBS: TToolButton;
+    ToolBtnEdit: TToolButton;
+    TBD: TToolButton;
+    ToolBtnDelete: TToolButton;
+    TBF: TToolButton;
+    ToolButton15: TToolButton;
+    ToolButton23: TToolButton;
+    GridMaster: TDBGridEh;
+    PanelStyle: TPanel;
+    PanelStyleS: TPanel;
+    ToolBarBottom: TToolBar;
+    TBH: TToolButton;
+    ToolBtnAddChild: TToolButton;
+    TBJ: TToolButton;
+    ToolBtnEditChild: TToolButton;
+    TBK: TToolButton;
+    ToolBtnDeleteCh: TToolButton;
+    ToolButton16: TToolButton;
+    ToolButton17: TToolButton;
+    ToolButton18: TToolButton;
+    ToolButton19: TToolButton;
+    ToolButton20: TToolButton;
+    TBGB: TToolButton;
+    ToolButton22: TToolButton;
+    PanelStyleSS: TPanel;
+    GridDetail: TDBGridEh;
+    TabShTrans: TTabSheet;
+    PanelM: TPanel;
+    Label6: TLabel;
+    Label7: TLabel;
+    DTP_System_Date: TDateTimePicker;
+    DTP_System_Time: TDateTimePicker;
+    ToolBarOper: TToolBar;
+    ToolButton2: TToolButton;
+    ToolButton11: TToolButton;
+    ToolBtnAddTrans: TToolButton;
+    TBtnEditTrans: TToolButton;
+    ToolButton6: TToolButton;
+    ToolButton1: TToolButton;
+    ToolBtnFile: TToolButton;
+    TBReturnTransClose: TToolButton;
+    TlBOstat: TToolButton;
+    Panel1: TPanel;
+    DBGridEhTrans: TDBGridEh;
+    PanelSearch: TPanel;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    Label8: TLabel;
+    Edit_Src_Amount: TEdit;
+    Edit_Src_Ekv_Amount: TEdit;
+    Edit_Src_Fee: TEdit;
+    Edit_Src_Course: TEdit;
+    DBEditSum: TDBEdit;
+    TabShRate: TTabSheet;
+    DBGridRate: TDBGrid;
+    Panel2: TPanel;
+    ToolBarRate: TToolBar;
+    ToolButton8: TToolButton;
+    DTP_Rate_Date: TDateTimePicker;
+    ToolButton9: TToolButton;
+    DBNavRate: TDBNavigator;
+    ToolButton13: TToolButton;
+    BitBtn1: TBitBtn;
+    ToolButton14: TToolButton;
+    Panel5: TPanel;
+    Panel6: TPanel;
+    Panel7: TPanel;
+    PopupMenu: TPopupMenu;
+    Purchase: TMenuItem;
+    Selling: TMenuItem;
+    ExchangeCurrency: TMenuItem;
+    ImageList: TImageList;
+    OpenDialog: TOpenDialog;
+    SaveDialog: TSaveDialog;
+    Timer: TTimer;
+    ToolButton25: TToolButton;
+    ToolButton26: TToolButton;
+    TabSheet1: TTabSheet;
+    TabSheet2: TTabSheet;
+    Panel3: TPanel;
+    DBGridEh1: TDBGridEh;
+    PanelTop: TPanel;
+    BtnFile: TBitBtn;
+    BtnTrans: TBitBtn;
+    ProgressBar: TProgressBar;
+    BtnAllTrans: TBitBtn;
+    ChBox_Flags: TCheckBox;
+    QueryTrans: TQuery;
+    DSQueryTrans: TDataSource;
+    OpenDialog1: TOpenDialog;
+    PageControl1: TPageControl;
+    TabSheetTrans: TTabSheet;
+    Panel4: TPanel;
+    PanelLeft: TPanel;
+    GroupBoxDat: TGroupBox;
+    DTP_Begin: TDateTimePicker;
+    DTP_End: TDateTimePicker;
+    GroupBoxStatus: TGroupBox;
+    CBox_Status: TComboBox;
+    PanelFilter: TPanel;
+    GroupBoxCurrency: TGroupBox;
+    DBLC_Currency: TDBLookupComboBox;
+    ChBoxCurrency: TCheckBox;
+    BtnSearch: TBitBtn;
+    BtnPrint: TBitBtn;
+    GroupBoxExchange: TGroupBox;
+    DBLC_Exchange: TDBLookupComboBox;
+    ChBoxExchange: TCheckBox;
+    PanelClient: TPanel;
+    DBGridEh2: TDBGridEh;
+    TabSheetRate: TTabSheet;
+    Panel8: TPanel;
+    Label9: TLabel;
+    Label10: TLabel;
+    DTP_Dat: TDateTimePicker;
+    DBLC_Exch_Rate: TDBLookupComboBox;
+    BitBtn2: TBitBtn;
+    Panel9: TPanel;
+    DBGridEh3: TDBGridEh;
+    ToolButton27: TToolButton;
+    ToolButton29: TToolButton;
+    BitBtn3: TBitBtn;
+    BitBtn4: TBitBtn;
+    TabSheet3: TTabSheet;
+    DBGridEh4: TDBGridEh;
+    Panel10: TPanel;
+    GroupBox1: TGroupBox;
+    DateTimePicker1: TDateTimePicker;
+    DateTimePicker2: TDateTimePicker;
+    GroupBox2: TGroupBox;
+    ComboBox1: TComboBox;
+    Panel11: TPanel;
+    GroupBox3: TGroupBox;
+    DBLookupComboBox1: TDBLookupComboBox;
+    CheckBox1: TCheckBox;
+    BitBtn5: TBitBtn;
+    GroupBox4: TGroupBox;
+    DBLCBDelete: TDBLookupComboBox;
+    CheckBox2: TCheckBox;
+    BitBtn7: TBitBtn;
+    ToolButton30: TToolButton;
+    ToolButton31: TToolButton;
+    Label11: TLabel;
+    BitBtn6: TBitBtn;
+    ToolButton3: TToolButton;
+    ToolButton4: TToolButton;
+    ToolButton5: TToolButton;
+    ToolButton7: TToolButton;
+    ToolButton10: TToolButton;
+    ToolButton12: TToolButton;
+    ToolButton21: TToolButton;
+    ToolButton24: TToolButton;
+    ToolButton28: TToolButton;
+    CMExcelExport1: TCMExcelExport;
+    BitBtn8: TBitBtn;
+    TabSheet4: TTabSheet;
+    Panel12: TPanel;
+    GroupBox5: TGroupBox;
+    DateTimePicker3: TDateTimePicker;
+    DateTimePicker4: TDateTimePicker;
+    Panel13: TPanel;
+    GroupBox7: TGroupBox;
+    DBLookupComboBox3: TDBLookupComboBox;
+    CheckBox3: TCheckBox;
+    BitBtn9: TBitBtn;
+    GroupBox8: TGroupBox;
+    DBCB_Toplam: TDBLookupComboBox;
+    CheckBox4: TCheckBox;
+    BitBtn10: TBitBtn;
+    DBGridReporting: TDBGrid;
+    TabRemainder: TTabSheet;
+    Panel14: TPanel;
+    Panel15: TPanel;
+    ToolBar1: TToolBar;
+    ToolButton32: TToolButton;
+    DTP_Remainder_Date: TDateTimePicker;
+    ToolButton35: TToolButton;
+    BitBtn12: TBitBtn;
+    DBGridRemain: TDBGrid;
+    Memo1: TMemo;
+    TabSheet5: TTabSheet;
+    Panel16: TPanel;
+    GroupBox6: TGroupBox;
+    DTP_DateReestr: TDateTimePicker;
+    Panel17: TPanel;
+    GroupBox9: TGroupBox;
+    DBLookupComboBox5: TDBLookupComboBox;
+    BitBtn11: TBitBtn;
+    GroupBox10: TGroupBox;
+    DBLookupComboBox6: TDBLookupComboBox;
+    BitBtn13: TBitBtn;
+    DBGrid1: TDBGrid;
+    procedure InsertTransaction(Status       :Integer;
+                                ToTable      :TTable;
+                                DebitVal     :String;
+                                KreditVal    :String;
+                                DebitAccno   :String;
+                                KreditAccNo  :String;
+                                DebitAmount  :Real;
+                                LAmount      :Real;
+                                DebitRate    :Real;
+                                KreditRate   :Real;
+                                TrName       :string;
+                                SessionName  :string
+                                );
+
+
+     procedure Insertprovarch( DebitVal     :String;
+                               KreditVal    :String;
+                               DebitAccno   :String;
+                               KreditAccNo  :String;
+                               DebitAmount  :Real;
+                               LAmount      :Real;
+                               DebitRate    :Real;
+                               KreditRate   :Real;
+                               TrName       :string
+                              );
+    procedure BitBtn1Click2(Sender: TObject);
+    procedure DBGridEhTransDrawColumnCell2(Sender: TObject; const Rect: TRect; DataCol: Integer; Column: TColumnEh; State: TGridDrawState);
+    procedure DBGridEhTransMouseDown2(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+    procedure DBGridEhTransTitleClick2(Column: TColumnEh);
+    procedure DBNavRateClick2(Sender: TObject; Button: TNavigateBtn);
+    procedure DTP_System_DateChange2(Sender: TObject);
+    procedure Edit_Src_AmountChange2(Sender: TObject);
+    procedure Edit_Src_AmountExit2(Sender: TObject);
+    procedure Edit_Src_CourseChange2(Sender: TObject);
+    procedure Edit_Src_CourseExit2(Sender: TObject);
+    procedure Edit_Src_Ekv_AmountChange2(Sender: TObject);
+    procedure Edit_Src_Ekv_AmountExit2(Sender: TObject);
+    procedure Edit_Src_FeeChange2(Sender: TObject);
+    procedure Edit_Src_FeeExit2(Sender: TObject);
+    procedure ExchangeCurrencyClick2(Sender: TObject);
+    procedure PurchaseClick2(Sender: TObject);
+    procedure SellingClick2(Sender: TObject);
+    procedure TBGBClick2(Sender: TObject);
+    procedure TBReturnTransCloseClick2(Sender: TObject);
+    procedure TBtnEditTransClick2(Sender: TObject);
+    procedure TimerTimer2(Sender: TObject);
+    procedure TlBOstatClick2(Sender: TObject);
+    procedure ToolBtnAddChildClick2(Sender: TObject);
+    procedure ToolBtnAddClick2(Sender: TObject);
+    procedure ToolBtnDeleteChClick2(Sender: TObject);
+    procedure ToolBtnDeleteClick2(Sender: TObject);
+    procedure ToolBtnEditChildClick2(Sender: TObject);
+    procedure ToolBtnEditClick2(Sender: TObject);
+    procedure ToolBtnFileClick2(Sender: TObject);
+    procedure ToolButton11Click2(Sender: TObject);
+    procedure ToolButton15Click2(Sender: TObject);
+    procedure ToolButton17Click2(Sender: TObject);
+    procedure ToolButton19Click2(Sender: TObject);
+    procedure ToolButton1Click2(Sender: TObject);
+    procedure ToolButton6Click2(Sender: TObject);
+    procedure ActiveFormActivate(Sender: TObject);
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure ToolButton25Click(Sender: TObject);
+    procedure BtnAllTransClick(Sender: TObject);
+    procedure BtnFileClick(Sender: TObject);
+    procedure BtnTransClick(Sender: TObject);
+    procedure BitBtn2Click(Sender: TObject);
+    procedure BtnPrintClick(Sender: TObject);
+    procedure BtnSearchClick(Sender: TObject);
+    procedure ChBoxCurrencyClick(Sender: TObject);
+    procedure ChBoxExchangeClick(Sender: TObject);
+    procedure ToolButton27Click(Sender: TObject);
+    procedure ToolButton29Click(Sender: TObject);
+    procedure BitBtn3Click(Sender: TObject);
+    procedure BitBtn4Click(Sender: TObject);
+    procedure BitBtn5Click(Sender: TObject);
+    procedure CheckBox2Click(Sender: TObject);
+    procedure CheckBox1Click(Sender: TObject);
+    procedure ToolButton31Click(Sender: TObject);
+    procedure BitBtn7Click(Sender: TObject);
+    procedure BitBtn6Click(Sender: TObject);
+    procedure TabShRateShow(Sender: TObject);
+    procedure BitBtn8Click(Sender: TObject);
+    procedure BitBtn9Click(Sender: TObject);
+    procedure BitBtn12Click(Sender: TObject);
+    procedure TabRemainderShow(Sender: TObject);
+    procedure BitBtn13Click(Sender: TObject);
+    procedure BitBtn11Click(Sender: TObject);
+  private
+    { Private declarations }
+    FEvents: IExchangeMGR_XEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+
+  public
+    { Public declarations }
+    procedure Initialize; override;
+  end;
+  
+  Type
+      TTrans=record
+       status              :integer;
+       operator_id         :integer;
+       trans_date          :TDateTime;
+       debit_amount        :real;
+       l_amount            :real;
+       fee_amount          :real;
+       val_course          :real;
+       trans_name          :string;
+       cust_name           :string;
+       cust_lname          :string;
+       cust_passport       :string;
+       exch_name           :string;
+       val_id              :integer;
+       ex_id               :integer;
+       cust_father         :string;
+       cust_date           :string;
+       cust_confirm        :string;
+       cust_giving_member  :string;
+       val_nb_course       :real;
+       op_time             :TDateTime;
+       val_name            :string;
+       val_changed_name    :string;
+       val_changed_id      :integer;
+       val_changed_course  :real;
+       cust_country        :string;
+       country             :string;
+       SessionName         :string;
+  end;
+
+
+  type
+     TStatusExchange =(sePurchaseInsert,sePurchaseEdit,seSellingInsert,seSellingEdit,seExchangeInsert,seExchangeEdit);
+
+  var
+     ExchangeMGR_X      : TExchangeMGR_X;
+     StatusExchange     : TStatusExchange;
+     Trans              : TTrans;
+     EditOrInsert       : byte;  {2-edit,1-insert}
+     procedure open_cust_data_sets;
+implementation
+
+uses ComObj, ComServ, UnitDateExch, UnitRate, UnitExchange, UnitPurchase
+    ,UnitProcAndFunc, UnitSelling, UnitRemainder, UnitExAccModify
+    ,UnitAddExch, UnitEditExch, IniFiles, UnitRep, UnitAdmin, UnitRepTurn,
+  UNITRATEOPEN,sboapiDataModuleImpl, SBTranslateProc, UnitParametr, UnitExchRep,
+  UnitRepX, UnitReestr, UnitFormReester, UnitReestrEnd, UnitFastReport;
+
+{$R *.DFM}
+
+{ TExchangeMGR_X }
+
+procedure open_cust_data_sets;
+begin
+      with DataModExch do
+       begin
+              ODSCust_Confirm.Close;ODSCust_Confirm.Open;
+              ODSCust_Country.Close;ODSCust_Country.Open;
+              ODSCust_Father.Close;ODSCust_Father.Open;
+              ODSCust_LName.Close;ODSCust_LName.Open;
+              ODSCust_Name.Close;ODSCust_Name.Open;
+              ODSGiving_Member.Close;ODSGiving_Member.Open;
+
+       end;
+end;
+
+procedure TExchangeMGR_X.InsertTransaction(
+                                      Status       :Integer;
+                                      ToTable      :TTable;
+                                      DebitVal     :String;
+                                      KreditVal    :String;
+                                      DebitAccno   :String;
+                                      KreditAccNo  :String;
+                                      DebitAmount  :Real;
+                                      LAmount      :Real;
+                                      DebitRate    :Real;
+                                      KreditRate   :Real;
+                                      TrName       :string;
+                                      SessionName : String //KNN
+                                      );
+
+
+
+
+begin
+
+
+   with ToTable do
+     begin
+          Insert;
+               FieldByName('Status').AsInteger:=Status;
+               FieldByName('DebitVal').AsString:=DebitVal;
+               FieldByName('KreditVal').AsString:=KreditVal;
+               FieldByName('DebitAccno').AsString:=DebitAccno;
+               FieldByName('KreditAccNo').AsString:=KreditAccno;
+               FieldByName('DebitAmount').AsFloat:=DebitAmount;
+               FieldByName('LAmount').AsFloat:=LAmount;
+               FieldByName('DebitRate').AsFloat:=DebitRate;
+               FieldByName('KreditRate').AsFloat:=KreditRate;
+               FieldByName('TrName').AsString:=TrName;
+               FieldByName('SessionName').AsString:=UpperCase(DataModExch.OPExchMgr.Session.LogonUsername);
+          Post;
+   end;
+
+end;
+
+procedure TExchangeMGR_X.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_ExchangeMGR_XPage); }
+end;
+
+procedure TExchangeMGR_X.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as IExchangeMGR_XEvents;
+end;
+
+procedure TExchangeMGR_X.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TExchangeMGR_X.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TExchangeMGR_X.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TExchangeMGR_X.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TExchangeMGR_X.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TExchangeMGR_X.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TExchangeMGR_X.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TExchangeMGR_X.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TExchangeMGR_X.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TExchangeMGR_X.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TExchangeMGR_X.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TExchangeMGR_X.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TExchangeMGR_X.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TExchangeMGR_X.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TExchangeMGR_X.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TExchangeMGR_X.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TExchangeMGR_X.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TExchangeMGR_X.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TExchangeMGR_X.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TExchangeMGR_X._Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TExchangeMGR_X.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TExchangeMGR_X.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TExchangeMGR_X.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TExchangeMGR_X.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TExchangeMGR_X.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TExchangeMGR_X.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TExchangeMGR_X.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TExchangeMGR_X.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TExchangeMGR_X.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TExchangeMGR_X.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TExchangeMGR_X.Set_AxBorderStyle(Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TExchangeMGR_X.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TExchangeMGR_X.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TExchangeMGR_X.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TExchangeMGR_X.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TExchangeMGR_X.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TExchangeMGR_X.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TExchangeMGR_X.Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TExchangeMGR_X.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TExchangeMGR_X.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TExchangeMGR_X.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TExchangeMGR_X.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TExchangeMGR_X.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TExchangeMGR_X.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+procedure TExchangeMGR_X.BitBtn11Click(Sender: TObject);
+var
+   v_beg_dat:TDateTime;
+   exch_no,val_id:integer;
+begin
+  with DataModExch do
+   begin
+     try
+      Screen.Cursor:=crSQLWait;
+      v_beg_dat:=Integer(Trunc(DTP_DateReestr.DateTime));
+
+      if  DBLookupComboBox6.KeyValue=null then exch_no:=-1
+                                          else exch_no:=DBLookupComboBox6.KeyValue;
+
+      if  DBLookupComboBox5.KeyValue=null then  val_id:=-1
+                                          else  val_id:=DBLookupComboBox5.KeyValue;
+      ODSReestrReport.Close;
+      ODSReestrReport.SetVariable('dat',v_beg_dat);
+      ODSReestrReport.SetVariable('ex_id',exch_no);
+      if val_id=-1 then  ODSReestrReport.SQL[18]:=''
+                   else  ODSReestrReport.SQL[18]:='and val_id='+IntToStr(val_id);
+      ODSReestrReport.Open;
+     finally
+         Screen.Cursor:=crDefault;
+     end;
+   end;
+end;
+
+procedure TExchangeMGR_X.BitBtn12Click(Sender: TObject);
+begin
+  DataModExch.OPExchMgr.CallProcedure('Ex_Remainder_Change',[DataModExch.ODSExchOfficeEX_NO.AsInteger]);
+  DataModExch.ODSExRemainder.Refresh;
+end;
+
+procedure TExchangeMGR_X.BitBtn13Click(Sender: TObject);
+begin
+  with FormReestrReport,DataModExch do
+  begin
+    QRBankName.Caption:= ODSBankInfoBANK.AsString+' '+QRBankName.Caption+ODSExchOfficeEX_NO.AsString;
+    QRDateReestr.Caption:=DateTimeToStr(trunc(DTP_DateReestr.DateTime));
+    ODSReestrOstat.Close;
+    ODSReestrOstat.SetVariable('dat',trunc(DTP_DateReestr.DateTime));
+    ODSReestrOstat.SetVariable('ex_id',DBLookupComboBox6.KeyValue);
+    ODSReestrOstat.Open;
+    ODSReestrReport.Close;
+    ODSReestrReport.SetVariable('dat',trunc(DTP_DateReestr.DateTime));
+    ODSReestrReport.SetVariable('ex_id',DBLookupComboBox6.KeyValue);
+    ODSReestrReport.Open;
+    ODSReestrEkvOstat.Close;
+    ODSReestrEkvOstat.SetVariable('dat',trunc(DTP_DateReestr.DateTime));
+    ODSReestrEkvOstat.SetVariable('ex_id',DBLookupComboBox6.KeyValue);
+    ODSReestrEkvOstat.Open;
+
+  //  FormReestr.ShowModal;
+
+  end;
+
+
+ // FormFastReport.frxReport1.PrepareReport;
+  //FormFastReport.frxXLSExport1.FileName := 'C:\Ifton.xlsx';
+
+ // FormFastReport.frxReport1.Export(FormFastReport.frxXLSExport1);
+
+    FormFastReport.frxReport1.ShowReport;
+   //FormReestrReport.QRCompositeReport1.Preview;
+ // FormReestr.QRPQuickrep1.Preview;
+ // FormReestrReport.Preview;
+end;
+
+procedure TExchangeMGR_X.BitBtn1Click2(Sender: TObject);
+begin
+  FormRate.ShowModal;
+end;
+
+procedure TExchangeMGR_X.DBGridEhTransDrawColumnCell2(Sender: TObject; const Rect: TRect; DataCol: Integer; Column: TColumnEh; State: TGridDrawState);
+begin
+with DBGridEhTrans,DataModExch do
+    begin
+    IF (DataCol=1) THEN
+      begin
+       case ODSExchProvarch.FieldByName('status').AsInteger of
+        1:
+          begin
+               ImageList.Draw(Canvas,Rect.left+2,Rect.top,23,true);
+          end;
+        2:
+          begin
+              ImageList.Draw(Canvas,Rect.left+2,Rect.top,24,true);
+          end;
+
+        3:
+          begin
+               ImageList.Draw(Canvas,Rect.left+2,Rect.top,25,true);
+          end;
+       end;
+
+
+        END;
+      IF (DataCol=10) THEN
+       BEGIN
+           case ODSExchProvarch.FieldByName('trans_close').AsInteger of
+                 0:
+                   begin
+                    ImageList.Draw(Canvas,Rect.left+2,Rect.top,27,true);
+                   end;
+                 1:
+                   begin
+                    ImageList.Draw(Canvas,Rect.left+2,Rect.top,29,true);
+                   end;
+
+           end;
+       END;
+        if ODSExchProvarch.RecordCount=0 then
+          begin
+             DefaultDrawColumnCell(Rect, DataCol, Column, State);
+          end;
+      end;
+
+
+end;
+
+procedure TExchangeMGR_X.DBGridEhTransMouseDown2(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+begin
+     DataModExch.ODSSumTrans.SetVariable('ex_id',DataModExch.ODSExchOffice.fields[1].AsFloat);
+     DataModExch.ODSSumTrans.Refresh;
+end;
+
+procedure TExchangeMGR_X.DBGridEhTransTitleClick2(Column: TColumnEh);
+var
+   TitleName :string;
+begin
+ if Column.Field.Calculated then Exit;
+  Screen.Cursor := crSQLWait;
+  TitleName :=Column.FieldName;
+  try
+   with DataModExch.ODSExchProvarch do
+    begin
+     SetVariable('Title',TitleName);
+     Refresh;
+    end;
+  finally
+   Screen.Cursor := crDefault;
+  end;
+
+end;
+procedure TExchangeMGR_X.DBNavRateClick2(Sender: TObject; Button: TNavigateBtn);
+
+begin
+  try
+    Screen.Cursor := crSQLWait;
+
+  case Button of
+    nbInsert :begin
+                DataModExch.ODSExchRate.FieldByName('dat').AsDateTime:=integer(trunc(DTP_Rate_Date.DateTime));
+                DataModExch.ODSExchRate.FieldByName('tim').AsDateTime:=DTP_System_Time.DateTime;
+              end;
+  end;
+
+
+  finally
+   Screen.Cursor := crDefault;
+  end;
+
+
+end;
+
+procedure TExchangeMGR_X.DTP_System_DateChange2(Sender: TObject);
+var
+dat :TDateTime;
+begin
+     dat:=Integer(Trunc(DTP_System_Date.DateTime));
+       with DataModExch.ODSExchProvarch do
+        begin
+         Close;
+         SetVariable('dat',dat);
+         Open;
+        end;
+end;
+
+procedure TExchangeMGR_X.Edit_Src_AmountChange2(Sender: TObject);
+begin
+ if Edit_Src_Amount.Text<>'' then
+   DataModExch.ODSExchProvarch.Locate
+   ('debitamount',Edit_Src_Amount.Text,[loCaseInsensitive, loPartialKey]);
+DBGridEhTrans.Options:=[dgRowSelect,dgAlwaysShowEditor,dgTitles,dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs,dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit, dgMultiSelect];
+
+end;
+
+procedure TExchangeMGR_X.Edit_Src_AmountExit2(Sender: TObject);
+begin
+(Sender as Tedit).Text :='';
+end;
+
+procedure TExchangeMGR_X.Edit_Src_CourseChange2(Sender: TObject);
+begin
+if Edit_Src_Course.Text<>'' then
+   DataModExch.ODSExchProvarch.Locate
+   ('op_course',Edit_Src_Course.Text,[loCaseInsensitive, loPartialKey]);
+DBGridEhTrans.Options:=[dgRowSelect,dgAlwaysShowEditor,dgTitles,dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs,dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit, dgMultiSelect];
+
+end;
+
+procedure TExchangeMGR_X.Edit_Src_CourseExit2(Sender: TObject);
+begin
+(Sender as Tedit).Text :='';
+end;
+
+procedure TExchangeMGR_X.Edit_Src_Ekv_AmountChange2(Sender: TObject);
+begin
+if Edit_Src_Ekv_Amount.Text<>'' then
+   DataModExch.ODSExchProvarch.Locate
+   ('Lamount',Edit_Src_Ekv_Amount.Text,[loCaseInsensitive, loPartialKey]);
+DBGridEhTrans.Options:=[dgRowSelect,dgAlwaysShowEditor,dgTitles,dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs,dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit, dgMultiSelect];
+
+end;
+
+procedure TExchangeMGR_X.Edit_Src_Ekv_AmountExit2(Sender: TObject);
+begin
+(Sender as Tedit).Text :='';
+end;
+
+procedure TExchangeMGR_X.Edit_Src_FeeChange2(Sender: TObject);
+begin
+if Edit_Src_Fee.Text<>'' then
+   DataModExch.ODSExchProvarch.Locate
+   ('fee_amount',Edit_Src_Fee.Text,[loCaseInsensitive, loPartialKey]);
+DBGridEhTrans.Options:=[dgRowSelect,dgAlwaysShowEditor,dgTitles,dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs,dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit, dgMultiSelect];
+
+end;
+
+procedure TExchangeMGR_X.Edit_Src_FeeExit2(Sender: TObject);
+begin
+(Sender as Tedit).Text :='';
+end;
+
+procedure TExchangeMGR_X.ExchangeCurrencyClick2(Sender: TObject);
+begin
+ with DataModExch do
+  begin
+          if (not ODSExchRate.IsEmpty) then
+           begin
+         StatusExchange:=seExchangeInsert;
+         FormExchange.ShowModal;
+           end
+        else
+         ShowMessage('Yeni kurslar daxil edin!!!');
+ end;
+end;
+
+procedure TExchangeMGR_X.PurchaseClick2(Sender: TObject);
+begin
+ with DataModExch do
+  begin
+         ODSExchRate.Refresh;
+          if (not ODSExchRate.IsEmpty) then
+           begin
+           StatusExchange:=sePurchaseInsert;
+           FormPurchase.ShowModal;
+           end
+        else
+         ShowMessage('Yeni kurslar daxil edin!!!');
+
+
+  end;
+end;
+
+procedure TExchangeMGR_X.SellingClick2(Sender: TObject);
+begin
+ with DataModExch do
+  begin
+    ODSExchRate.Refresh;
+          if (not ODSExchRate.IsEmpty) then
+           begin
+        StatusExchange:=seSellingInsert;
+        FormSelling.ShowModal;
+           end
+        else
+         ShowMessage('Yeni kurslar daxil edin!!!');
+ end;
+end;
+
+
+
+procedure TExchangeMGR_X.TabRemainderShow(Sender: TObject);
+begin
+  DataModExch.OPExchMgr.CallProcedure('Ex_Remainder_Change',[DataModExch.ODSExchOfficeEX_NO.AsInteger]);
+  DataModExch.ODSExRemainder.Refresh;
+end;
+
+procedure TExchangeMGR_X.TabShRateShow(Sender: TObject);
+Var Delta:boolean;
+begin
+  DataModExch.OPExchMgr.CallProcedure('Ex_CourseDifference',[DataModExch.ODSExchOfficeEX_NO.AsInteger]);
+  DataModExch.ODSExchRate.Refresh;
+
+
+
+
+
+{try
+   DataModExch.SBA_ACA.CallProcedure('checkadvancedobjectaccess',['EXCH_ADDRATES']);
+   DBNavRate.Enabled:=True;
+   BitBtn1.Enabled:=True;
+   DBGridRate.ReadOnly:=false;
+  EXCEPT
+   DBNavRate.Enabled:=False;
+   BitBtn1.Enabled:=False;
+   DBGridRate.ReadOnly:=True;
+end;    }
+end;
+
+procedure TExchangeMGR_X.TBGBClick2(Sender: TObject);
+var
+   usrname :string;
+begin
+   usrname :=uppercase(DataModExch.OPExchMgr.Session.LogonUsername);
+   if usrname= 'SMART' then
+   begin
+     if DataModExch.OPExchMgr.CallBooleanFunction('Check_UserRole',[usrname]) then
+     begin
+       ShellExecute(0, nil, PChar(ExtractFilePath(paramstr(0))+'ExchangeBalance.ini'), nil, nil, SW_SHOWNORMAL);
+     end;
+   end
+   else
+   begin
+     Application.MessageBox('Hüququnuz Yoxdur!','FormExAccModify',0);
+    end;
+
+
+
+   {if DataModExch.OPExchMgr.CallBooleanFunction('Check_UserRole',[usrname])=FALSE then
+   begin
+      ShowMessage('Giriş hüququ yoxdur!!!');
+   end; }
+end;
+
+procedure TExchangeMGR_X.TBReturnTransCloseClick2(Sender: TObject);
+var
+dat :TDateTime;
+begin
+ dat:=Integer(Trunc(DTP_System_Date.DateTime));
+{ with DataModExch do
+  begin
+   if   NLSDialogs.MessageDLG(Pchar('Бцтцн ямялиййатлар тясдиг олунмамыш формайа эяляжяк!!! Яминсиниз ? '),NLSDialogs.mtConfirmation,[NLSDialogs.mbYes, NLSDialogs.mbNo], 0) =mrYes then begin
+   OPExchMgr.CallProcedure('trans_return_closing',[ODSExchOffice.FieldByName('ex_no').AsInteger,dat ]);
+    ODSExchProvarch.Refresh;
+   end
+     else
+   exit;
+ end;       }
+ with DataModExch do
+  begin
+   if   MessageDLG(Pchar('Əməliyyat təsdiq olunmamış formaya gələcək!!! Əminsiniz ? '),mtConfirmation,[mbYes, mbNo], 0) =mrYes then begin
+   OPExchMgr.CallProcedure('trans_return_close',[ODSExchProvarch.FieldByName('id').AsInteger,dat ]);
+    ODSExchProvarch.Refresh;
+   end
+     else
+   exit;
+ end;
+
+end;
+
+procedure TExchangeMGR_X.TBtnEditTransClick2(Sender: TObject);
+begin
+
+
+
+{ with DataModExch.ODSExchProvarch do
+   begin
+     case FieldByName('Status').AsInteger of
+     1:
+       begin
+             StatusExchange:=sePurchaseEdit;
+             FormPurchase.ShowModal;
+       end;
+    2:
+      begin
+             StatusExchange:=seSellingEdit;
+             FormSelling.ShowModal;
+       end;
+    3:
+      begin
+             StatusExchange:=seExchangeEdit;
+             FormExchange.ShowModal;
+       end;
+
+    end;
+ end;   }
+end;
+
+procedure TExchangeMGR_X.TimerTimer2(Sender: TObject);
+begin
+         DTP_System_Time.Time:=Time;
+end;
+
+procedure TExchangeMGR_X.TlBOstatClick2(Sender: TObject);
+begin
+   DataModExch.OPExchMgr.CallProcedure('Ex_Remainder_Change',[DataModExch.ODSExchOfficeEX_NO.AsInteger]);
+   DataModExch.ODSExRemainder.Refresh;
+   FormRemainder.ShowModal;
+end;
+
+procedure TExchangeMGR_X.ToolBtnAddChildClick2(Sender: TObject);
+var
+   usrname :string;
+begin
+   usrname :=uppercase(DataModExch.OPExchMgr.Session.LogonUsername);
+   if usrname= 'SMART' then
+   begin
+     if DataModExch.OPExchMgr.CallBooleanFunction('Check_UserRole',[usrname])=true then
+     begin
+       if not DataModExch.ODSExchOffice.IsEmpty then
+       begin
+         EditOrInsert:=1;
+         FormExAccModify.ShowModal;
+       end;
+     end;
+   end
+   else
+     begin
+       Application.MessageBox('Hüququnuz Yoxdur!','FormExAccModify',0);
+     end;
+  { if DataModExch.OPExchMgr.CallBooleanFunction('Check_UserRole',[usrname])=FALSE then
+   begin
+      ShowMessage('Giriş hüququ yoxdur!!!');
+   end; }
+end;
+
+
+procedure TExchangeMGR_X.ToolBtnAddClick2(Sender: TObject);
+var
+   usrname :string;
+begin
+//   usrname :=uppercase(DataModExch.OPExchMgr.Session.LogonUsername);
+  // if DataModExch.OPExchMgr.CallBooleanFunction('Check_UserRole',[usrname]) then
+  // begin
+      With DataModExch,ODSExchOffice do
+      begin
+        if UpperCase(Session.LogonUsername) = 'SMART' then
+        begin
+          ODSFilial.Close;
+          ODSFilial.Open;
+          FormAddExch.ShowModal;
+        end else
+        begin
+          Application.MessageBox('Hüququnuz Yoxdur!','FormAddExch',0);
+        end;
+      end;
+
+
+  // END;
+   {if DataModExch.OPExchMgr.CallBooleanFunction('Check_UserRole',[usrname])=FALSE then
+   begin
+      ShowMessage('Giriş hüququ yoxdur!!!');
+   end;}
+end;
+
+procedure TExchangeMGR_X.ToolBtnDeleteChClick2(Sender: TObject);
+var
+   usrname :string;
+begin
+  // usrname :=uppercase(DataModExch.OPExchMgr.Session.LogonUsername);
+  // if DataModExch.OPExchMgr.CallBooleanFunction('Check_UserRole',[usrname])=true then
+   //begin
+  // begin
+   usrname :=uppercase(DataModExch.OPExchMgr.Session.LogonUsername);
+   if usrname= 'SMART' then
+   begin
+      if   MessageDLG(Pchar('Silmək istəyirsiniz? '),mtConfirmation,[mbYes, mbNo], 0) =mrYes then
+      begin
+         with DataModExch do
+         begin
+            v_id:=ODSExchAcc.FieldByName('id').AsInteger;
+            OPExchMgr.CallProcedure('ex_accounts_delete',[v_id]);
+            ODSExchAcc.Refresh;
+         end;
+      end
+      else
+         Exit;
+   end
+   else
+     begin
+       Application.MessageBox('Hüququnuz Yoxdur!','FormExAccModify',0);
+     end;
+  // end;
+   //end;
+   {if DataModExch.OPExchMgr.CallBooleanFunction('Check_UserRole',[usrname])=FALSE then
+   begin
+      ShowMessage('Giriş hüququ yoxdur!!!');
+   end;}
+end;
+
+procedure TExchangeMGR_X.ToolBtnDeleteClick2(Sender: TObject);
+var
+   usrname :string;
+begin
+  { usrname :=uppercase(DataModExch.OPExchMgr.Session.LogonUsername);
+   if DataModExch.OPExchMgr.CallBooleanFunction('Check_UserRole',[usrname])=true then
+   begin }
+
+      with DataModExch do
+      begin
+        if UpperCase(ODSExchOffice.Session.LogonUsername) = 'SMART' then
+        begin
+          if MessageDLG(Pchar('Silmək istəyirsiniz? '),mtConfirmation,[mbYes, mbNo], 0) =mrYes then
+          begin
+            OPExchMgr.CallProcedure('ex_office_delete',[ODSExchOffice.FieldByName('id').asinteger]);
+            ODSExchOffice.Refresh;
+          end;
+        end
+        else
+        begin
+          Application.MessageBox('Hüququnuz Yoxdur!','ODSExchOffice',0);
+        end;
+       end;
+       {  if DataModExch.OPExchMgr.CallBooleanFunction('Check_UserRole',[usrname])=FALSE then
+         begin
+            ShowMessage('Giriş hüququ yoxdur!!!');
+         end; }
+
+  { end   else
+      exit;  }
+
+end;
+
+procedure TExchangeMGR_X.ToolBtnEditChildClick2(Sender: TObject);
+var
+   usrname :string;
+begin
+  {usrname :=uppercase(DataModExch.OPExchMgr.Session.LogonUsername);
+   if DataModExch.OPExchMgr.CallBooleanFunction('Check_UserRole',[usrname])=true then
+   begin
+      begin  }
+   usrname :=uppercase(DataModExch.OPExchMgr.Session.LogonUsername);
+   if usrname= 'SMART' then
+   begin
+     with DataModExch.ODSExchAcc do
+     begin
+       Edit;
+     end;
+
+     if not DataModExch.ODSExchOffice.IsEmpty then
+     begin
+       EditOrInsert:=2;
+       FormExAccModify.ShowModal;
+     end;
+   end
+   else
+     begin
+       Application.MessageBox('Hüququnuz Yoxdur!','FormEditExch',0);
+     end;
+
+      //end;
+     { if DataModExch.OPExchMgr.CallBooleanFunction('Check_UserRole',[usrname])=FALSE then
+      begin
+         ShowMessage('Giriş hüququ yoxdur!!!');
+      end;}
+   //end;
+end;
+
+procedure TExchangeMGR_X.ToolBtnEditClick2(Sender: TObject);
+var
+   usrname :string;
+begin
+  { usrname :=uppercase(DataModExch.OPExchMgr.Session.LogonUsername);
+   if DataModExch.OPExchMgr.CallBooleanFunction('Check_UserRole',[usrname])=true then
+   begin }
+ With DataModExch,ODSExchOffice do
+      begin
+        if UpperCase(Session.LogonUsername) = 'SMART' then
+        begin
+          ODSFilial.Close;
+          ODSFilial.Open;
+          FormEditExch.ShowModal;
+        end else
+        begin
+          Application.MessageBox('Hüququnuz Yoxdur!','FormEditExch',0);
+        end;
+      end;
+
+
+  { end;
+   if DataModExch.OPExchMgr.CallBooleanFunction('Check_UserRole',[usrname])=FALSE then
+   begin
+      ShowMessage('Giriş hüququ yoxdur!!!');
+   end; }
+end;
+
+procedure TExchangeMGR_X.ToolBtnFileClick2(Sender: TObject);
+var
+   i  :integer;
+   dat:TDateTime;
+ //    ExternalUsername : string;
+ // Ini:      TIniFile;
+ // IniFile:  String;
+            Status       :Integer;
+            ToTable      :TTable;
+            DebitVal     :String;
+            KreditVal    :String;
+            DebitAccno   :String;
+            KreditAccNo  :String;
+            DebitAmount  :Real;
+            LAmount      :Real;
+            DebitRate    :Real;
+            KreditRate   :Real;
+            TrName       :string;
+            SessionName  :String;
+            feeDebitAccno   :String;
+            feeKreditAccNo  :String;
+            feeDebitAmount  :Real;
+            feeTrName       :string;
+            feeTrName_L     :string;
+
+begin
+
+
+with DataModExch do begin
+ dat:=Integer(Trunc(DTP_System_Date.DateTime));
+ //SessionName :=DataModExch.OSessionExch.LogonUserName;
+  try
+
+    Screen.Cursor:=crSQLWait;
+    SaveDialog.FileName:=ODSExchOffice.FieldByName('ex_no').AsString+'_'+FormatDateTime('dd',dat)+FormatDateTime('mm',dat)+FormatDateTime('yyyy',dat)+'_'+FormatDateTime('hh',DTP_System_Time.Time)+FormatDateTime('mm',DTP_System_Time.Time)+FormatDateTime('ss',DTP_System_Time.Time)+'.db';
+
+ //     IniFile :='\Exchange.ini';
+ // Ini := TIniFile.Create(ExtractFilePath(ParamStr(0))+IniFile);
+ //  Ini.WriteString('Session','ExternalUsername',DataModExch.OSessionExch.LogonUsername);
+
+
+   if SaveDialog.Execute then begin
+    with TableAddFile do begin
+
+     Active := False;
+     DatabaseName := ExtractFilePath(SaveDialog.FileName);
+     TableType := ttParadox;
+     TableName :=  SaveDialog.FileName;
+
+    with FieldDefs do begin
+      Clear;
+
+      with AddFieldDef do begin
+        Name := 'Status';
+        DataType := ftInteger;
+       end;
+
+
+
+      with AddFieldDef do begin
+        Name := 'DebitVal';
+        DataType := ftString;
+        Size := 3;
+       end;
+
+      with AddFieldDef do begin
+        Name := 'KreditVal';
+        DataType := ftString;
+        Size := 3;
+       end;
+
+
+      with AddFieldDef do begin
+        Name := 'DebitAccNo';
+        DataType := ftString;
+        Size := 30;
+       end;
+
+      with AddFieldDef do begin
+        Name := 'KreditAccNo';
+        DataType := ftString;
+        Size := 30;
+       end;
+
+      with AddFieldDef do begin
+        Name := 'DebitAmount';
+        DataType := ftFloat;
+       end;
+
+      with AddFieldDef do begin
+        Name := 'LAmount';
+        DataType := ftFloat;
+       end;
+
+      with AddFieldDef do begin
+        Name := 'DebitRate';
+        DataType := ftFloat;
+       end;
+
+      with AddFieldDef do begin
+        Name := 'KreditRate';
+        DataType := ftFloat;
+       end;
+
+
+
+      with AddFieldDef do begin
+        Name := 'TrName';
+        DataType := ftString;
+        Size := 255;
+       end;
+
+       with AddFieldDef do begin      //--Create by TKenan on 10.01.2007
+        Name := 'SessionName';
+        DataType := ftString;
+        Size := 50;
+       end;
+
+    end;
+    CreateTable;
+  end; {with}
+
+              ToTable:=TableAddFile;
+              ToTable.Close;
+              ToTable.Open;
+              ToTable.First;
+
+           ODSExchProvarchTrans.Close;
+           ODSExchProvarchTrans.SetVariable('dat',dat);
+           ODSExchProvarchTrans.Open;
+
+if  ((ODSExchProvarchTrans.Active=true) and (not ODSExchProvarchTrans.IsEmpty)) then
+ begin
+         ODSExchProvarchTrans.First;
+            for i:=1 to ODSExchProvarchTrans.RecordCount do
+             begin
+             //---------------------------------------------------------------------------------------
+                 Status:=ODSExchProvarchTrans.FieldByName('status').AsInteger;
+
+
+                 DebitAmount:=ODSExchProvarchTrans.FieldByName('debitamount').AsFloat;
+
+                 LAmount:=ODSExchProvarchTrans.FieldByName('debitamount').AsFloat*ODSExchProvarchTrans.FieldByName('val_nb_course').AsFloat;
+
+
+                 TrName:=ODSExchProvarchTrans.FieldByName('oper_name').AsString;
+
+                 feeTrName:='Valyuta dəyişmə əməliyyatından gələn gəlir';
+                 feeTrName_L:='Valyuta dəyişmə əməliyyatından gələn zərər';
+
+                 feeDebitAmount:= ODSExchProvarchTrans.FieldByName('fee_amount').AsFloat;
+
+                // SessionName :=ODSExchProvarchTrans.FieldByName('SessionName').AsString;
+
+                 feeDebitAccno:=OPExchMgr.CallStringFunction('get_profit_no',
+                                                            [ODSExchOffice.FieldByName('ex_no').AsInteger,
+                                                            ODSExchProvarchTrans.FieldByName('val_id').AsInteger]
+                                                          );
+                 feeKreditAccNo:=OPExchMgr.CallStringFunction('get_harm_no',
+                                                            [ODSExchOffice.FieldByName('ex_no').AsInteger,
+                                                            ODSExchProvarchTrans.FieldByName('val_id').AsInteger]
+                                                          );
+
+               //---------------------------------------------------------------------------------------
+
+  Case Status of
+   1,4: begin
+
+
+                 DebitVal:=ODSExchProvarchTrans.FieldByName('val_name').AsString;
+
+                 KreditVal:=ODSExchProvarchTrans.FieldByName('val_changed_name').AsString;
+
+                 DebitRate:=ODSExchProvarchTrans.FieldByName('OP_COURSE').AsFloat;
+
+                 KreditRate:=ODSExchProvarchTrans.FieldByName('VAL_CHANGED_COURSE').AsFloat;
+
+                 KreditAccNo:=OPExchMgr.CallStringFunction('get_purchase_no',
+                                                            [ODSExchOffice.FieldByName('ex_no').AsInteger,
+                                                            ODSExchProvarchTrans.FieldByName('val_id').AsInteger]
+                                                          );
+                 DebitAccno:=OPExchMgr.CallStringFunction('get_selling_no',
+                                                            [ODSExchOffice.FieldByName('ex_no').AsInteger,
+                                                            ODSExchProvarchTrans.FieldByName('val_id').AsInteger]
+                                                          );
+
+
+                   InsertTransaction(
+                                      Status       ,
+                                      ToTable      ,
+                                      DebitVal     ,
+                                      KreditVal    ,
+                                      DebitAccno   ,
+                                      KreditAccNo  ,
+                                      DebitAmount  ,
+                                      LAmount      ,
+                                      DebitRate    ,
+                                      KreditRate   ,
+                                      TrName,
+                                      SessionName
+
+
+
+
+                                     );
+//-------------------------------------------------------------------------------------
+               if (feeDebitAmount<0) then
+                   InsertTransaction(
+                                      Status          ,
+                                      ToTable         ,
+                                      'AZN'           ,
+                                      'AZN'           ,
+                                      feeKreditAccNo  ,
+                                      KreditAccNo     ,
+                                      ABS(feeDebitAmount)  ,
+                                      ABS(feeDebitAmount)  ,
+                                      1               ,
+                                      1               ,
+                                      feeTrName_L,
+                                      SessionName
+
+                                     )
+               else
+                                      InsertTransaction(
+                                      Status          ,
+                                      ToTable         ,
+                                      'AZN'           ,
+                                      'AZN'           ,
+                                      KreditAccNo     ,
+                                      feeDebitAccNo  ,
+                                      feeDebitAmount  ,
+                                      feeDebitAmount  ,
+                                      1               ,
+                                      1               ,
+                                      feeTrName,
+                                      SessionName
+
+                                     );
+//-------------------------------------------------------------------------------------
+
+
+      end;{1}
+   2,5: begin
+
+
+                 DebitVal:=ODSExchProvarchTrans.FieldByName('val_changed_name').AsString;
+
+                 KreditVal:=ODSExchProvarchTrans.FieldByName('val_name').AsString;
+
+                 KreditRate:=ODSExchProvarchTrans.FieldByName('VAL_CHANGED_COURSE').AsFloat;
+
+                 DebitRate:=ODSExchProvarchTrans.FieldByName('OP_COURSE').AsFloat;
+
+
+                 KreditAccNo:=OPExchMgr.CallStringFunction('get_selling_no',
+                                                            [ODSExchOffice.FieldByName('ex_no').AsInteger,
+                                                            ODSExchProvarchTrans.FieldByName('val_id').AsInteger]
+                                                          );
+                 DebitAccno:=OPExchMgr.CallStringFunction('get_purchase_no',
+                                                            [ODSExchOffice.FieldByName('ex_no').AsInteger,
+                                                            ODSExchProvarchTrans.FieldByName('val_id').AsInteger]
+                                                          );
+                   InsertTransaction(
+                                      Status       ,
+                                      ToTable      ,
+                                      DebitVal     ,
+                                      KreditVal    ,
+                                      DebitAccno   ,
+                                      KreditAccNo  ,
+                                      DebitAmount  ,
+                                      LAmount      ,
+                                      DebitRate    ,
+                                      KreditRate   ,
+                                      TrName,
+                                      SessionName
+
+                                     );
+//-------------------------------------------------------------------------------------
+               if (feeDebitAmount<0) then
+                   InsertTransaction(
+                                      Status          ,
+                                      ToTable         ,
+                                      'AZN'           ,
+                                      'AZN'           ,
+                                      feeKreditAccNo  ,
+                                      DebitAccno      ,
+                                      ABS(feeDebitAmount),
+                                      ABS(feeDebitAmount),
+                                      1               ,
+                                      1               ,
+                                      feeTrName_L,
+                                      SessionName
+
+                                     )
+               else
+                                      InsertTransaction(
+                                      Status          ,
+                                      ToTable         ,
+                                      'AZN'           ,
+                                      'AZN'           ,
+                                      DebitAccno      ,
+                                      feeDebitAccno   ,
+                                      feeDebitAmount  ,
+                                      feeDebitAmount  ,
+                                      1               ,
+                                      1               ,
+                                      feeTrName,
+                                      SessionName
+
+                                     );
+//-------------------------------------------------------------------------------------
+      end;{2}
+     end;{case}
+          ODSExchProvarchTrans.Next;
+      end;
+       OPExchMgr.CallProcedure('trans_closing',[ODSExchOffice.FieldByName('ex_no').AsInteger,dat ]);
+
+     end else ShowMessage('Heç bir əməliyyat yoxdur!!!');
+end; {if}
+
+   finally
+       Screen.Cursor:=crDefault;
+       TableAddFile.Close;
+       ODSExchProvarch.Refresh;
+   end;
+
+  end;
+end;
+
+
+procedure TExchangeMGR_X.ToolButton11Click2(Sender: TObject);
+begin
+ try
+     Screen.Cursor:=crSQLWait;
+        with DataModExch.ODSExchProvarch do Refresh;
+  finally
+     Screen.Cursor:=crDefault;
+  end;
+
+end;
+
+procedure TExchangeMGR_X.ToolButton15Click2(Sender: TObject);
+var
+   usrname :string;
+begin
+   usrname :=uppercase(DataModExch.OPExchMgr.Session.LogonUsername);
+   if usrname= 'SMART' then
+   begin
+     if DataModExch.OPExchMgr.CallBooleanFunction('Check_UserRole',[usrname])=true then
+     begin
+       ShellExecute(0, nil, PChar(ExtractFilePath(paramstr(0))+'Exchange.ini'), nil, nil, SW_SHOWNORMAL);
+     end;
+   end
+   else
+     begin
+       Application.MessageBox('Hüququnuz Yoxdur!','Ini',0);
+     end;
+
+
+  { if DataModExch.OPExchMgr.CallBooleanFunction('Check_UserRole',[usrname])=FALSE then
+   begin
+      ShowMessage('Giriş hüququ yoxdur!!!');
+   end;}
+end;
+
+procedure TExchangeMGR_X.ToolButton17Click2(Sender: TObject);
+ begin
+    With DataModExch,ODSExchOffice do
+      begin
+        if UpperCase(Session.LogonUsername) = 'SMART' then
+        begin
+          ODSExchAcc.Cancel;
+        end
+        else
+        begin
+          Application.MessageBox('Hüququnuz Yoxdur!','FormAddExch',0);
+        end;
+     end;
+
+end;
+
+procedure TExchangeMGR_X.ToolButton19Click2(Sender: TObject);
+begin
+   With DataModExch,ODSExchOffice do
+      begin
+        if UpperCase(Session.LogonUsername) = 'SMART' then
+        begin
+          ODSExchAcc.Refresh;
+        end
+        else
+        begin
+          Application.MessageBox('Hüququnuz Yoxdur!','FormAddExch',0);
+        end;
+     end;
+end;
+
+procedure TExchangeMGR_X.ToolButton1Click2(Sender: TObject);
+begin
+  ExchRep.ShowModal;
+end;
+
+procedure TExchangeMGR_X.ToolButton6Click2(Sender: TObject);
+begin
+   with DataModExch do
+   begin
+     DataModExch.SBA_ACA.CallProcedure('checkadvancedobjectaccess',['EXCH_DELETE']);
+
+     if ODSExchProvarch.RecordCount=0 then exit;
+
+      if ((ODSExchProvarch.FieldByName('trans_close').AsInteger=1) or (ODSExchProvarch.FieldByName('trans_close').AsInteger=0))and
+      ( MessageDLG(Pchar('Silmək istəyirsiniz? '),mtConfirmation,[mbYes, mbNo], 0) =mrYes) then
+      begin
+         OPExchMgr.CallProcedure('ex_provarch_delete',[ODSExchProvarch.fieldbyname('status').asinteger,
+                                                       ODSExchProvarch.fieldbyname('id').asinteger]);
+         sboapiDataModule.SBSession.Commit;
+         ODSExchProvarch.Refresh;
+         ODSExchRate.Refresh;
+         ODSExRemainder.Refresh;
+      end else
+         exit;
+   end;
+end;
+
+procedure TExchangeMGR_X.ActiveFormActivate(Sender: TObject);
+begin
+
+   //Control_Task_Button( Find_Button( ( Sender as TForm ).Tag ) , true );
+end;
+
+procedure TExchangeMGR_X.ActiveFormCreate(Sender: TObject);
+var
+   dat  :TDateTime;
+begin
+   ExchangeMGR_X        :=      Self;
+   DataModExch          :=      TDataModExch.Create(Self);
+   FormRep              :=      TFormRep.Create(Self);
+   FormRepX             :=      TFormRepX.Create(Self);
+   FormSelling          :=      TFormSelling.Create(Self);
+   FormEditExch         :=      TFormEditExch.Create(Self);
+   FormExAccModify      :=      TFormExAccModify.Create(Self);
+   FormExchange         :=      TFormExchange.Create(Self);
+   FormPurchase         :=      TFormPurchase.Create(Self);
+   FormRate             :=      TFormRate.Create(Self);
+   FormRemainder        :=      TFormRemainder.Create(Self);
+   FormAddExch          :=      TFormAddExch.Create(Self);
+   FormAdmin            :=      TFormAdmin.Create(Self);
+   FormParametr         :=      TFormParametr.Create(Self);
+   QRepTurn             :=      TQRepTurn.Create(Self);
+   OPENRATE             :=      TOPENRATE.Create(Self);
+   ExchRep              :=      TExchRep.Create(Self);
+   FormReestrReport     :=      TFormReestrReport.Create(Self);
+   FormReestr           :=      TFormReestr.Create(Self);
+   FormReestrEnd        :=      TFormReestrEnd.Create(Self);
+   FormFastReport       :=      TFormFastReport.Create(Self);
+
+         DTP_Begin.Date:=Date;
+         DTP_End.Date:=Date;
+         DTP_Dat.Date:=Date;
+         DateTimePicker1.date:=Date;
+         DateTimePicker2.date:=Date;
+         DateTimePicker3.Date:=Date;
+         DateTimePicker4.Date:=Date;
+         DTP_DateReestr.Date:=Date;
+
+     CBox_Status.ItemIndex:=0;
+     ComboBox1.ItemIndex:=0;
+     DBLC_Exchange.KeyValue:=-1;
+     DBLC_Currency.KeyValue:=-1;
+     DBLC_Exch_Rate.KeyValue:=-1;
+   try
+      Screen.Cursor:=crSQLWait;
+      DTP_System_Date.Date:=Date;
+      OPENRATE.DateTimePicker2.Date:=date;
+      DTP_Rate_Date.Date:=Date;
+      DTP_System_Time.Time:=Time;
+      dat:=Integer(Trunc(DTP_System_Date.DateTime));
+      DTP_Remainder_Date.Date:=Date;
+      with DataModExch do
+      begin
+         open_cust_data_sets;
+         ODSSumTrans.Open;
+
+         ODSExchOffice.Open;
+
+         ODSExchAcc.Close;
+         ODSExchAcc.Open;
+
+         ODSVDMAll.Open;
+         ODSDeleteVDM.Open;
+         ODSToplamVDM.Open;
+
+         ODSExchProvarch.Close;
+         ODSExchProvarch.SetVariable('dat',dat);
+         ODSExchProvarch.Open;
+
+         ODSExchRate.Close;
+         ODSExchRate.SetVariable('dat',dat);
+         ODSExchRate.Open;
+
+         ODSExchRateAll.Close;
+         ODSExchRateAll.SetVariable('dat',dat);
+         ODSExchRateAll.Open;
+
+         ODSExchRateOther.Close;
+         ODSExchRateOther.SetVariable('dat',dat);
+         ODSExchRateOther.Open;
+
+         Kurs.Close;
+         Kurs.SetVariable('datdate',dat);
+         kurs.Open;
+
+         ODSExRemainder.Close;
+         ODSExRemainder.SetVariable('dat',dat);
+         ODSExRemainder.Open;
+
+         //ODSExchRateOther.Open;
+
+
+         ODSExchAcc.Open;
+         ODSAvalute.Open;
+         ODSValute.Open;
+         ODSAvaluteDelete.Open;
+         ODSAvaluteToplam.Open;
+
+         ODSReestrVdm.Open;
+         ODSReestrValyuta.Open;
+
+         DataModExch.ODSSumTrans.SetVariable('ex_id',DataModExch.ODSExchOffice.fields[1].AsFloat);
+         DataModExch.ODSSumTrans.Refresh;
+
+         while not ODSExchOffice.Eof do
+         begin
+           if ODSExchRate.RecordCount=0 then
+           begin
+             FormRate.SetExchangeRate(ODSExchOfficeEX_NO.AsInteger);
+             FormRate.BtnOkClick(Sender);
+           end;
+          ODSExchOffice.Next;
+         end;
+      end;
+      DataModExch.ODSExchOffice.First;
+   finally
+      Screen.Cursor:=crDefault;
+   end;
+
+SBTranslateProc.TranslateExchComponents(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TExchangeMGR_X.ToolButton25Click(Sender: TObject);
+begin
+   FormAdmin.ShowModal;
+end;
+
+procedure TExchangeMGR_X.BtnAllTransClick(Sender: TObject);
+var
+    SelectStr :string;
+    FromStr   :string;
+    GroupStr  :string;
+    QueryStr  :String;
+usrname :string;
+    begin
+       usrname :=uppercase(DataModExch.OPExchMgr.Session.LogonUsername);
+if DataModExch.OPExchMgr.CallBooleanFunction('Check_UserRole',[usrname])=true then begin
+
+begin
+ T:=2;
+    if OpenDialog.Execute then
+        begin
+
+                SelectStr:=' SELECT '+
+                                    'DebitVal,'+
+                                    'KreditVal,'+
+                                    'DebitAccNo,'+
+                                    'KreditAccNo,'+
+                                    'sum(DebitAmount)'+' as ' +' DebitAmount,'+
+                                    'sum(LAmount)    '+' as '+' LAmount,'+
+                                    'DebitRate,'+
+                                    'KreditRate,'+
+                                    'SessionName,'+
+                                    'min(TrName)'+' as '+' TrName ';
+              FromStr:=
+                        ' FROM  '+
+                              '"'+OpenDialog.FileName+'"';
+
+             GroupStr:=
+                        ' GROUP BY  '+
+                                'DebitVal,'+
+                                'KreditVal,'+
+                                'DebitAccNo,'+
+                                'KreditAccNo,'+
+                                'DebitRate,'+
+                                'SessionName,'+
+                                'KreditRate ';
+
+            QueryStr:=SelectStr+FromStr+GroupStr;
+
+              with DataModExch,QueryTrans do
+               begin
+
+                 Close;
+                  SQL.Clear;
+                  SQL.Add(QueryStr);
+                 Open;
+                  DBGridEh1.DataSource:=DSQueryTrans;
+            end;
+       end
+         else
+          Exit;
+end;
+if DataModExch.OPExchMgr.CallBooleanFunction('Check_UserRole',[usrname])=FALSE then begin
+ShowMessage('Giriş hüququ yoxdur!!!');
+    end;end;     end;
+
+ procedure TExchangeMGR_X.BtnFileClick(Sender: TObject);
+
+var
+usrname :string;
+    begin
+       usrname :=uppercase(DataModExch.OPExchMgr.Session.LogonUsername);
+if DataModExch.OPExchMgr.CallBooleanFunction('Check_UserRole',[usrname])=true then begin
+
+ T:=1;
+       if OpenDialog.Execute then
+        begin
+              with DataModExch.TableAddFile do
+               begin
+                     TableName:=OpenDialog.FileName;
+                         Active:=false;
+                         Active:=true;
+                       DBGridEh1.DataSource:=DataModExch.DSAddFile;
+               end;
+        end
+         else
+          Exit;
+end;
+if DataModExch.OPExchMgr.CallBooleanFunction('Check_UserRole',[usrname])=FALSE then begin
+ShowMessage('Giriş hüququ yoxdur!!!');
+         end;
+         end;
+procedure TExchangeMGR_X.BtnTransClick(Sender: TObject);
+var
+           i :integer;
+
+            DebitAccId   :Integer;
+            KreditAccId  :Integer;
+            CashAccId    :Integer;
+            PurAccId     :Integer;
+            DebitAmount  :Real;
+            CreditAmount :Real;
+            LAmount      :Real;
+            Status       :integer;
+            DebitRate    :Real;
+            KreditRate   :Real;
+            TrName       :string;
+            a_Flags      :boolean;
+            usrname :string;
+            SessionName :string;
+            UserID :integer;
+             ExternalUsername : string;
+    Ini:      TIniFile;
+  IniFile:  String;
+    begin
+
+//if DataModExch.OPExchMgr.CallBooleanFunction('Check_UserRole',[usrname])=true then begin
+
+begin
+                          a_Flags       := ChBox_Flags.Checked;
+with DataModExch do begin
+ case T of
+ 1:begin
+   try
+    Screen.Cursor:=crSQLWait;
+     ProgressBar.Position:=0;
+                if (not TableAddFile.IsEmpty) or (TableAddFile.Active=true) then
+                    begin
+                  TableAddFile.First;
+
+     IniFile :='\Exchange.ini';
+  Ini := TIniFile.Create(ExtractFilePath(ParamStr(0))+IniFile);
+   usrname :=Ini.ReadString('Session','ExternalUsername','');
+     //  usrname :=uppercase(DataModExch.OSessionExch.LogonUsername);
+                 ODSExp_Provarch.Open;
+
+                    for i:=1 to TableAddFile.RecordCount do
+                   begin
+
+                          DebitAccId    := sb_transaction.CallIntegerFunction('Get_Acc_Id',[TableAddFile.FieldByName('DebitAccNo').AsString]);
+                          KreditAccId   := sb_transaction.CallIntegerFunction('Get_Acc_Id',[TableAddFile.FieldByName('KreditAccNo').AsString]);
+                          DebitAmount   := TableAddFile.fieldbyname('DebitAmount').AsFloat;
+                          CreditAmount  := DebitAmount;
+                          Status        := TableAddFile.fieldbyname('Status').AsInteger;
+                          LAmount       := TableAddFile.FieldByName('LAmount').AsFloat;
+                          DebitRate     := TableAddFile.FieldByName('DebitRate').AsFloat;
+                          KreditRate    := TableAddFile.FieldByName('KreditRate').AsFloat;
+                          TrName        := TableAddFile.FieldByName('TrName').AsString;
+                          SessionName   := TableAddFile.FieldByName('SessionName').AsString;
+                          UserID :=DataModExch.OPExchMgr.CallIntegerFunction('ReturnUserId',[SessionName]);   //TKenan
+
+                         //------------------------KNN--------------------------//
+                         ODSEXp_Provarch.Insert;
+                         ODSEXp_Provarch.fieldbyname('D_ACC_NO').asstring :=TableAddFile.FieldByName('DebitAccNo').AsString;
+                         ODSEXp_Provarch.fieldbyname('C_ACC_NO').asstring :=TableAddFile.FieldByName('KreditAccNo').AsString;
+                         ODSEXp_Provarch.fieldbyname('D_VAL_NAME').asstring :=TableAddFile.FieldByName('DebitVal').AsString;
+                         ODSEXp_Provarch.fieldbyname('C_VAL_NAME').asstring :=TableAddFile.FieldByName('KreditVal').AsString;
+
+                         ODSEXp_Provarch.fieldbyname('AMMOUNT').AsFloat  :=TableAddFile.FieldByName('DebitAmount').AsFloat;
+                         ODSEXp_Provarch.fieldbyname('LAMMOUNT').AsFloat :=TableAddFile.FieldByName('LAmount').AsFloat;
+                         ODSEXp_Provarch.fieldbyname('D_RATE').AsFloat   := TableAddFile.FieldByName('DebitRate').AsFloat;
+                         ODSEXp_Provarch.fieldbyname('C_RATE').AsFloat   := TableAddFile.FieldByName('KreditRate').AsFloat;
+                         ODSEXp_Provarch.fieldbyname('ASSIGMENT').asstring      := TableAddFile.FieldByName('TrName').AsString;
+                         ODSEXp_Provarch.fieldbyname('SESSIONNAME').asstring    := TableAddFile.FieldByName('SessionName').AsString;
+                         ODSEXp_Provarch.fieldbyname('dat').asDateTime    := Date;
+
+                                ODSEXp_Provarch.Post;       
+                          //----------------------KNN---------------------------//
+                     
+                       // ShowMessage(trim(FloatToStr( DebitRate)));
+                      { if trim(FloatToStr( DebitRate))='1' then
+
+                          r := sb_transaction.CallIntegerFunction('ex_transaction_additional',
+
+                                                                        [
+                                                                          DebitAccId,             { K }
+                                                                         { KreditAccId,
+                                                                          DebitAmount,
+                                                                          CreditAmount,           { N }
+                                                                         { LAmount,
+                                                                          DebitRate,
+                                                                          KreditRate,             { N }
+                                                                          {TrName,
+                                                                          a_Flags,
+                                                                          UserID
+                                                                        ]
+                                                                        )
+                       else               }
+
+
+
+
+
+                         if trim(FloatToStr( DebitRate))<>'1' then
+                         begin
+                           if status=1 then
+                           r := sb_transaction.CallIntegerFunction('ex_transaction_db',
+
+                                                                        [
+                                                                          DebitAccId,             { K }
+                                                                          KreditAccId,
+                                                                          DebitAmount,
+                                                                          CreditAmount,           { N }
+                                                                          LAmount,
+                                                                          DebitRate,
+                                                                          KreditRate,             { N }
+                                                                          TrName,
+                                                                          a_Flags,
+                                                                          UserID
+                                                                        ]
+                                                                        )
+                           else
+                           r := sb_transaction.CallIntegerFunction('ex_transaction_additional_db',
+
+                                                                        [
+                                                                          DebitAccId,             { K }
+                                                                          KreditAccId,
+                                                                          DebitAmount,
+                                                                          CreditAmount,           { N }
+                                                                          LAmount,
+                                                                          DebitRate,
+                                                                          KreditRate,             { N }
+                                                                          TrName,
+                                                                          a_Flags,
+                                                                          UserID
+                                                                        ]
+                                                                        )
+                     end;
+                     ProgressBar.Position:=TableAddFile.RecordCount*100 div i;
+                   TableAddFile.Next;
+              end;
+                  DeleteFile(OpenDialog.FileName);
+                  end else
+                           ShowMessage('Faylı seçin!!');
+
+     finally
+       DataModExch.OPExchMgr.Session.Commit;
+       Screen.Cursor:=crDefault;
+       ProgressBar.Position:=0;
+       TableAddFile.Close;
+    end;
+ end;{1}
+ 2:
+  begin
+   try
+    Screen.Cursor:=crSQLWait;
+     ProgressBar.Position:=0;
+
+                if (not QueryTrans.IsEmpty) or (QueryTrans.Active=true) then
+                    begin
+                  QueryTrans.First;
+                    for i:=1 to QueryTrans.RecordCount do
+                     begin
+                     ODSExp_Provarch.Open;
+                          DebitAccId    := sb_transaction.CallIntegerFunction('Get_Acc_Id',[QueryTrans.FieldByName('DebitAccNo').AsString]);
+                          KreditAccId   := sb_transaction.CallIntegerFunction('Get_Acc_Id',[QueryTrans.FieldByName('KreditAccNo').AsString]);
+                          DebitAmount   := QueryTrans.fieldbyname('DebitAmount').AsFloat;
+                          CreditAmount  := DebitAmount;
+                          LAmount       := QueryTrans.FieldByName('LAmount').AsFloat;
+                          DebitRate     := QueryTrans.FieldByName('DebitRate').AsFloat;
+                          KreditRate    := QueryTrans.FieldByName('KreditRate').AsFloat;
+                          TrName        := QueryTrans.FieldByName('TrName').AsString;
+                          SessionName   := QueryTrans.FieldByName('SessionName').AsString;
+                          UserID :=DataModExch.OPExchMgr.CallIntegerFunction('ReturnUserId',[SessionName]);   //TKenan
+
+                         //------------------------KNN--------------------------//
+                          ODSEXp_Provarch.Insert;
+                         ODSEXp_Provarch.fieldbyname('D_ACC_NO').asstring :=QueryTrans.FieldByName('DebitAccNo').AsString;
+                         ODSEXp_Provarch.fieldbyname('C_ACC_NO').asstring :=QueryTrans.FieldByName('KreditAccNo').AsString;
+                         ODSEXp_Provarch.fieldbyname('D_VAL_NAME').asstring :=QueryTrans.FieldByName('DebitVal').AsString;
+                         ODSEXp_Provarch.fieldbyname('C_VAL_NAME').asstring :=QueryTrans.FieldByName('KreditVal').AsString;
+
+                         ODSEXp_Provarch.fieldbyname('AMMOUNT').AsFloat :=QueryTrans.FieldByName('DebitAmount').AsFloat;
+                         ODSEXp_Provarch.fieldbyname('LAMMOUNT').AsFloat :=QueryTrans.FieldByName('LAmount').AsFloat;
+                         ODSEXp_Provarch.fieldbyname('D_RATE').AsFloat     := QueryTrans.FieldByName('DebitRate').AsFloat;
+                          ODSEXp_Provarch.fieldbyname('C_RATE').AsFloat     := QueryTrans.FieldByName('KreditRate').AsFloat;
+                          ODSEXp_Provarch.fieldbyname('ASSIGMENT').asstring        := QueryTrans.FieldByName('TrName').AsString;
+                          ODSEXp_Provarch.fieldbyname('SESSIONNAME').asstring    := QueryTrans.FieldByName('SessionName').AsString;
+                          ODSEXp_Provarch.fieldbyname('dat').asDateTime    := Date;
+
+                                ODSEXp_Provarch.Post;
+                          //----------------------KNN---------------------------//
+
+
+                       if trim(FloatToStr( DebitRate))='1' then
+                          r := sb_transaction.CallIntegerFunction('ex_transaction_additional_db',
+
+                                                                        [
+                                                                          DebitAccId,
+                                                                          KreditAccId,
+                                                                          DebitAmount,
+                                                                          CreditAmount,
+                                                                          LAmount,
+                                                                          DebitRate,
+                                                                          KreditRate,
+                                                                          TrName,
+                                                                          a_Flags,
+                                                                          UserID
+                                                                        ]
+                                                                        )
+                       else
+                          r := sb_transaction.CallIntegerFunction('ex_transaction_db',
+
+                                                                        [
+                                                                          DebitAccId,
+                                                                          KreditAccId,
+                                                                          DebitAmount,
+                                                                          CreditAmount,
+                                                                          LAmount,
+                                                                          DebitRate,
+                                                                          KreditRate,
+                                                                          TrName,
+                                                                          a_Flags,
+                                                                          UserID
+                                                                        ]
+                                                                        );
+
+                     ProgressBar.Position:=QueryTrans.RecordCount*100 div i;
+                   QueryTrans.Next;
+              end;
+                 DeleteFile(OpenDialog.FileName);
+                  end else
+                           ShowMessage('Faylı seçin!!');
+
+     finally
+       DataModExch.OPExchMgr.Session.Commit;
+       Screen.Cursor:=crDefault;
+       ProgressBar.Position:=0;
+       QueryTrans.Close;
+    end;
+
+  end;  {2}
+
+  end; {case}
+
+
+  end; {with}
+
+end;  //if DataModExch.OPExchMgr.CallBooleanFunction('Check_UserRole',[usrname])=FALSE then begin
+//ShowMessage('Giris huququ yoxdur!');
+    end;
+
+procedure TExchangeMGR_X.BitBtn2Click(Sender: TObject);
+begin
+        with DataModExch do
+         begin
+               ODSRateTurn.Close;
+               ODSRateTurn.SetVariable('dat',Integer(Trunc(DTP_Dat.DateTime)));
+              { IF DBLC_Exch_Rate.KeyValue=-1 THEN begin
+                                                    ODSRateTurn.SQL[5]:='';
+                                                    ODSRateTurn.SQL[14]:='';
+                                                  end
+                                             ELSE begin
+                                                   ODSRateTurn.SQL[5]:='and p.ex_id='+VarToStr(DBLC_Exch_Rate.KeyValue);
+                                                   ODSRateTurn.SQL[14]:='and p.ex_id='+VarToStr(DBLC_Exch_Rate.KeyValue);
+                                                  end;    }
+
+
+               ODSRateTurn.Open;
+         end;
+end;
+
+procedure TExchangeMGR_X.BtnPrintClick(Sender: TObject);
+begin
+      QRepTurn.Preview;
+end;
+
+procedure TExchangeMGR_X.BtnSearchClick(Sender: TObject);
+var
+      v_beg_dat       :TDateTime;
+      v_end_dat       :TDateTime;
+      val_id          :integer;
+      status          :integer;
+      exch_no         :integer;
+      query_str       :string;
+begin
+  with DataModExch do
+   begin
+        try
+        Screen.Cursor:=crSQLWait;
+        v_beg_dat:=Integer(Trunc(DTP_Begin.DateTime));
+        v_end_dat:=Integer(Trunc(DTP_End.DateTime));
+        if  DBLC_Currency.KeyValue=null
+        then
+         val_id:=-1
+        else
+          val_id:=DBLC_Currency.KeyValue;
+
+
+       // val_id:=DBLC_Currency.KeyValue;
+        status:=CBox_Status.ItemIndex;
+
+        if  DBLC_Exchange.KeyValue=null
+        then
+         exch_no:=-1
+        else
+          exch_no:=DBLC_Exchange.KeyValue;
+
+
+        //exch_no:=DBLC_Exchange.KeyValue;
+             query_str:=OPExchMgr.CallStringFunction('Get_Turn_Over_Str',
+                             [v_beg_dat,v_end_dat,val_id,status,exch_no]);
+            ODSTraffics.Close;
+            ODSTraffics.SQL.Clear;
+            ODSTraffics.SQL.Add(query_str);
+            //Memo1.Text:=ODSTraffics.SQL.Text;
+            ODSTraffics.Open;
+
+ finally
+  Screen.Cursor:=crDefault;
+ end;
+end;
+
+end;
+
+procedure TExchangeMGR_X.ChBoxCurrencyClick(Sender: TObject);
+begin
+        if ChBoxCurrency.Checked=false then
+        DBLC_Currency.KeyValue:=-1
+       else
+         DBLC_Currency.KeyValue:=1;
+end;
+
+procedure TExchangeMGR_X.ChBoxExchangeClick(Sender: TObject);
+begin
+     if ChBoxExchange.Checked=false then
+        DBLC_Exchange.KeyValue:=-1
+       else
+         DBLC_Exchange.KeyValue:=1;
+end;
+
+procedure TExchangeMGR_X.Insertprovarch(
+                                      DebitVal     :String;
+                                      KreditVal    :String;
+                                      DebitAccno   :String;
+                                      KreditAccNo  :String;
+                                      DebitAmount  :Real;
+                                      LAmount      :Real;
+                                      DebitRate    :Real;
+                                      KreditRate   :Real;
+                                      TrName       :string
+                                      );
+
+
+
+
+begin
+
+
+   with DataModExch,ODSEXp_Provarch do
+     begin
+          open;
+          Insert;
+               fieldbyname('D_VAL_NAME').asstring  :=DebitVal;
+               fieldbyname('C_VAL_NAME').asstring  :=KreditVal;
+               fieldbyname('D_ACC_NO').asstring    :=DebitAccno;
+               fieldbyname('C_ACC_NO').asstring    :=KreditAccNo;
+               fieldbyname('AMMOUNT').AsFloat      :=DebitAmount;
+               fieldbyname('LAMMOUNT').AsFloat     :=LAmount;
+               fieldbyname('D_RATE').AsFloat       :=DebitRate;
+               fieldbyname('C_RATE').AsFloat       :=KreditRate;
+               fieldbyname('ASSIGMENT').asstring   :=TrName;
+               fieldbyname('SESSIONNAME').asstring := UpperCase(OPExchMgr.Session.LogonUsername);
+               fieldbyname('dat').asDateTime       := Date;
+          Post;
+   end;
+
+end;
+
+
+
+
+
+procedure TExchangeMGR_X.ToolButton27Click(Sender: TObject);
+var s            :integer;
+    dat          :TDateTime;
+    DebitAccId   :Integer;
+    KreditAccId  :Integer;
+    CashAccId    :Integer;
+    PurAccId     :Integer;
+    DebitAmount  :Real;
+    CreditAmount :Real;
+    LAmount      :Real;
+    Status       :integer;
+    DebitRate    :Real;
+    KreditRate   :Real;
+    TrName       :string;
+    a_Flags      :boolean;
+    UserID       :integer;
+    feeTrName    :string;
+    feeTrName_L  :string;
+    feeDebitAmount:real;
+    feeDebitAccno,feeKreditAccNo:string;
+    DebitVal  :string;
+    KreditVal :string;
+    KreditAccNo:string;
+    DebitAccno:string;
+    CashAccno:string;
+    PurAccno:string;
+    id:integer;
+
+begin
+  DataModExch.SBA_ACA.CallProcedure('checkadvancedobjectaccess',['EXCH_TRANS']);
+  IF DataModExch.ODSExchProvarch.RecordCount=0 THEN exit;
+  IF DataModExch.ODSExchProvarch.FieldByName('trans_close').AsInteger =1 THEN exit;
+
+
+  WITH DataModExch DO
+
+            BEGIN
+              resultID                 :=ODSExchProvarch.FieldByName('id').AsInteger;
+              Trans.ex_id              :=ODSExchProvarch.FieldByName('ex_id').AsInteger;
+              Trans.val_id             :=ODSExchProvarch.FieldByName('val_id').AsInteger;
+              Trans.debit_amount       :=ODSExchProvarch.FieldByName('debitamount').AsFloat;
+              Trans.l_amount           :=ODSExchProvarch.FieldByName('lamount').AsFloat;
+
+              Trans.val_course         :=ODSExchProvarch.FieldByName('op_course').AsFloat;
+              Trans.val_changed_course :=ODSExchProvarch.FieldByName('val_changed_course').AsFloat;
+              Trans.val_nb_course      :=ODSExchProvarch.FieldByName('val_nb_course').AsFloat;
+              Trans.trans_name         :=ODSExchProvarch.FieldByName('oper_name').AsString;
+              a_Flags                  :=false;
+              Trans.operator_id        :=OPExchMgr.CallIntegerFunction('UserID',[]);
+              Trans.status             :=ODSExchProvarch.FieldByName('status').AsInteger;
+
+
+              KreditAccId:=OPExchMgr.CallStringFunction('get_purchase_no',
+                                                           [Trans.ex_id,
+                                                            Trans.val_id]
+                                                          );
+              DebitAccId :=OPExchMgr.CallStringFunction('get_selling_no',
+                                                            [Trans.ex_id,
+                                                             Trans.val_id]
+                                                          );
+
+              CashAccId :=OPExchMgr.CallStringFunction('get_cash_acc_no',
+                                                            [Trans.ex_id,
+                                                             Trans.val_id]
+                                                          );
+              PurAccId :=OPExchMgr.CallStringFunction('get_pur_acc_no',
+                                                            [Trans.ex_id,
+                                                             Trans.val_id]
+                                                          );
+
+
+             { DebitAccId  :=sb_transaction.CallIntegerFunction('Get_Acc_Id',[DebitAccno]);
+              KreditAccId :=sb_transaction.CallIntegerFunction('Get_Acc_Id',[KreditAccNo]);
+              CashAccId   :=sb_transaction.CallIntegerFunction('Get_Acc_Id',[CashAccno]);
+              PurAccId    :=sb_transaction.CallIntegerFunction('Get_Acc_Id',[PurAccno]); }
+
+
+              IF  Trans.status=1 THEN
+              s := sb_transaction.CallIntegerFunction('ex_transaction',
+
+                                                                        [ resultID,
+                                                                          DebitAccId,               { K }
+                                                                          KreditAccId,
+                                                                          CashAccId,
+                                                                          PurAccId,
+                                                                          Trans.ex_id,
+                                                                          Trans.debit_amount,
+                                                                          Trans.debit_amount,       { N }
+                                                                          Trans.l_amount,
+                                                                          Trans.val_course,
+                                                                          Trans.val_changed_course, { N }
+                                                                          Trans.val_nb_course,
+                                                                          Trans.trans_name,
+                                                                          a_Flags,
+                                                                          Trans.operator_id
+                                                                        ]
+                                                                        )
+
+              ELSE
+                    s := sb_transaction.CallIntegerFunction('ex_transaction_additional',
+
+                                                                        [
+                                                                          resultID,
+                                                                          KreditAccId,               { K }
+                                                                          DebitAccId,
+                                                                          CashAccId,
+                                                                          PurAccId,
+                                                                          Trans.ex_id,
+                                                                          Trans.debit_amount,
+                                                                          Trans.debit_amount,       { N }
+                                                                          Trans.l_amount,
+                                                                          Trans.val_changed_course,
+                                                                          Trans.val_course, { N }
+                                                                          Trans.val_nb_course,
+                                                                          Trans.trans_name,
+                                                                          a_Flags,
+                                                                          Trans.operator_id
+                                                                        ]
+                                                                        );
+
+
+
+
+     END;
+     sboapiDataModule.SBSession.Commit;
+     DataModExch.ODSExchProvarch.Refresh;
+
+  {if  ((DataModExch.ODSExchProvarchTrans.Active=true) and (not DataModExch.ODSExchProvarchTrans.IsEmpty)) then
+ begin}
+
+{  WITH DataModExch,OPExchMgr DO
+  BEGIN
+    dat:=Integer(Trunc(DTP_System_Date.DateTime));
+    ODSExchProvarchTrans.Close;
+    ODSExchProvarchTrans.SetVariable('dat',dat);
+    ODSExchProvarchTrans.SetVariable('v_id',DBGridEhTrans.Columns[12].field.AsInteger);
+    ODSExchProvarchTrans.Open;
+    Status        :=ODSExchProvarchTrans.FieldByName('status').AsInteger;
+    DebitAmount   :=ODSExchProvarchTrans.FieldByName('debitamount').AsFloat;
+    CreditAmount  :=DebitAmount;
+    LAmount       :=ODSExchProvarchTrans.FieldByName('debitamount').AsFloat*ODSExchProvarchTrans.FieldByName('val_nb_course').AsFloat;
+    TrName        :=ODSExchProvarchTrans.FieldByName('oper_name').AsString;
+    feeTrName     :='Valyuta dəyişmə əməliyyatından gələn gəlir';
+    feeTrName_L   :='Valyuta dəyişmə əməliyyatından gələn zərər';
+    feeDebitAmount:=ODSExchProvarchTrans.FieldByName('fee_amount').AsFloat;
+    feeDebitAccno :=CallStringFunction('get_profit_no',
+                                                      [ODSExchOffice.FieldByName('ex_no').AsInteger,
+                                                       ODSExchProvarchTrans.FieldByName('val_id').AsInteger]
+                                                          );
+    feeKreditAccNo:=CallStringFunction('get_harm_no',
+                                                      [ODSExchOffice.FieldByName('ex_no').AsInteger,
+                                                       ODSExchProvarchTrans.FieldByName('val_id').AsInteger]
+                                                          );
+
+
+     CASE STATUS OF
+
+     1:BEGIN
+         DebitVal   :=ODSExchProvarchTrans.FieldByName('val_name').AsString;
+         KreditVal  :=ODSExchProvarchTrans.FieldByName('val_changed_name').AsString;
+         DebitRate  :=ODSExchProvarchTrans.FieldByName('OP_COURSE').AsFloat;
+         KreditRate :=ODSExchProvarchTrans.FieldByName('VAL_CHANGED_COURSE').AsFloat;
+         KreditAccNo:=OPExchMgr.CallStringFunction('get_purchase_no',
+                                                           [ODSExchOffice.FieldByName('ex_no').AsInteger,
+                                                            ODSExchProvarchTrans.FieldByName('val_id').AsInteger]
+                                                          );
+         DebitAccno :=OPExchMgr.CallStringFunction('get_selling_no',
+                                                            [ODSExchOffice.FieldByName('ex_no').AsInteger,
+                                                            ODSExchProvarchTrans.FieldByName('val_id').AsInteger]
+                                                          );
+
+           Insertprovarch(
+            DebitVal      ,
+            KreditVal     ,
+            DebitAccno    ,
+            KreditAccNo   ,
+            DebitAmount   ,
+            LAmount       ,
+            DebitRate     ,
+            KreditRate    ,
+            TrName
+          );
+
+
+
+
+
+
+          if (feeDebitAmount<0)
+          then
+                    Insertprovarch(
+                    'AZN'               ,
+                    'AZN'               ,
+                    feeKreditAccNo      ,
+                    KreditAccNo         ,
+                    ABS(feeDebitAmount) ,
+                    ABS(feeDebitAmount) ,
+                    1                   ,
+                    1                   ,
+                    feeTrName_L
+                   )
+
+               else
+                   Insertprovarch(
+                   'AZN'           ,
+                   'AZN'           ,
+                   KreditAccNo     ,
+                   feeDebitAccNo   ,
+                   feeDebitAmount  ,
+                   feeDebitAmount  ,
+                   1               ,
+                   1               ,
+                   feeTrName
+                  );
+
+        END;
+        2:BEGIN
+            DebitVal:=ODSExchProvarchTrans.FieldByName('val_changed_name').AsString;
+            KreditVal:=ODSExchProvarchTrans.FieldByName('val_name').AsString;
+            KreditRate:=ODSExchProvarchTrans.FieldByName('VAL_CHANGED_COURSE').AsFloat;
+            DebitRate:=ODSExchProvarchTrans.FieldByName('OP_COURSE').AsFloat;
+            KreditAccNo:=OPExchMgr.CallStringFunction('get_selling_no',
+                                                            [ODSExchOffice.FieldByName('ex_no').AsInteger,
+                                                            ODSExchProvarchTrans.FieldByName('val_id').AsInteger]
+                                                          );
+            DebitAccno:=OPExchMgr.CallStringFunction('get_purchase_no',
+                                                            [ODSExchOffice.FieldByName('ex_no').AsInteger,
+                                                            ODSExchProvarchTrans.FieldByName('val_id').AsInteger]
+                                                          );
+
+           Insertprovarch(
+            DebitVal      ,
+            KreditVal     ,
+            DebitAccno    ,
+            KreditAccNo   ,
+            DebitAmount   ,
+            LAmount       ,
+            DebitRate     ,
+            KreditRate    ,
+            TrName
+          );
+
+
+
+
+//-------------------------------------------------------------------------------------
+               if (feeDebitAmount<0) then
+
+                    Insertprovarch(
+                    'AZN'               ,
+                    'AZN'               ,
+                    feeKreditAccNo      ,
+                    DebitAccno          ,
+                    ABS(feeDebitAmount) ,
+                    ABS(feeDebitAmount) ,
+                    1                   ,
+                    1                   ,
+                    feeTrName_L
+                   )
+
+               else
+                        Insertprovarch(
+                        'AZN'           ,
+                        'AZN'           ,
+                        DebitAccno      ,
+                        feeDebitAccNo   ,
+                        feeDebitAmount  ,
+                        feeDebitAmount  ,
+                        1               ,
+                        1               ,
+                        feeTrName
+                      );
+
+
+
+
+           END;
+       end;
+  DebitAccId  :=sb_transaction.CallIntegerFunction('Get_Acc_Id',[DebitAccno]);
+  KreditAccId :=sb_transaction.CallIntegerFunction('Get_Acc_Id',[KreditAccNo]);
+  a_Flags     :=false;
+  UserID      := OPExchMgr.CallIntegerFunction('ReturnUserId',[UpperCase(OPExchMgr.Session.LogonUsername)]);    }
+
+ { if trim(FloatToStr( DebitRate))<>'1' then
+                         begin
+                           if status=1 then
+                           s := sb_transaction.CallIntegerFunction('ex_transaction',
+
+                                                                        [
+                                                                          DebitAccId,            { K }
+                                                                       {   KreditAccId,
+                                                                          DebitAmount,
+                                                                          CreditAmount,          { N }
+                                                                       {   LAmount,
+                                                                          DebitRate,
+                                                                          KreditRate,            { N }
+                                                                       {   TrName,
+                                                                          a_Flags,
+                                                                          UserID
+                                                                        ]
+                                                                        )
+                           else     begin
+                          { s := sb_transaction.CallIntegerFunction('ex_transaction_additional',
+
+                                                                        [
+                                                                          DebitAccId,             { K }
+                                                                       {   KreditAccId,
+                                                                          DebitAmount,
+                                                                          CreditAmount,           { N }
+                                                                        {  LAmount,
+                                                                          DebitRate,
+                                                                          KreditRate,             { N }
+                                                                        {  TrName,
+                                                                          a_Flags,
+                                                                          UserID
+                                                                        ]
+                                                                        )
+
+                                      end;
+                     end;
+               DataModExch.OPExchMgr.CallProcedure('trans_close',[DataModExch.ODSExchProvarchTrans.FieldByName('id').AsInteger,dat ]);
+               DataModExch.ODSExchProvarch.Refresh; }
+
+
+//end
+ // else ShowMessage('Щеч бир ямялиййат йохдур!!!');
+
+end;
+
+procedure TExchangeMGR_X.ToolButton29Click(Sender: TObject);
+begin
+  OPENRATE.ShowModal;
+end;
+
+procedure TExchangeMGR_X.ToolButton31Click(Sender: TObject);
+begin
+   DataModExch.ODSExOffice.Active:=True;
+   DataModExch.ODSExAdminIn.Active:=True;
+   with DataModExch.ODSParametr do
+   begin
+      Open;
+      if UpperCase(Session.LogonUsername) = 'SMART' then
+      begin
+        FormParametr.ShowModal;
+      end else
+      begin
+         Application.MessageBox('Hüququnuz Yoxdur!','FormParametr',0);
+      end;
+   end;
+end;
+
+procedure TExchangeMGR_X.BitBtn3Click(Sender: TObject);
+begin
+  if DBGridEh2.DataSource.DataSet.RecordCount=0 then begin
+                                                       ShowMessage('Heç bir məlumat tapılmadı!...');
+                                                       exit;
+                                                     end;
+
+  with CMExcelExport1 do
+  begin
+    DBGridEh2.DataSource.DataSet.Last;
+    Connect;
+    ExportDataset(DBGridEh2.DataSource.DataSet,'Əməliyyatlar',true,true);
+    Disconnect;
+  end;
+end;
+
+procedure TExchangeMGR_X.BitBtn4Click(Sender: TObject);
+begin
+  if DBGridEh3.DataSource.DataSet.RecordCount=0 then begin
+                                                       ShowMessage('Heç bir məlumat tapılmadı!...');
+                                                       exit;
+                                                     end;
+  with CMExcelExport1 do
+  begin
+    DBGridEh3.DataSource.DataSet.Last;
+    Connect;
+    ExportDataset(DBGridEh3.DataSource.DataSet,'Kurslar',true,true);
+    Disconnect;
+  end;
+
+end;
+
+procedure TExchangeMGR_X.BitBtn5Click(Sender: TObject);
+var
+  v_beg_dat       :TDateTime;
+  v_end_dat       :TDateTime;
+  val_id          :Integer;
+  status          :Integer;
+  exch_no         :Integer;
+  query_str       :string;
+begin
+  with DataModExch do
+   begin
+     try
+      Screen.Cursor:=crSQLWait;
+      v_beg_dat:=Integer(Trunc(DateTimePicker1.DateTime));
+      v_end_dat:=Integer(Trunc(DateTimePicker2.DateTime));
+     // ShowMessage(IntToStr(DBLookupComboBox1.KeyValue));
+      if  DBLookupComboBox1.KeyValue=null then
+      val_id:=-1
+      else
+      val_id:=DBLookupComboBox1.KeyValue;
+
+      status:=ComboBox1.ItemIndex;
+      if  DBLCBDelete.KeyValue=null then
+      exch_no:=-1
+      else
+      exch_no:=DBLCBDelete.KeyValue;
+
+      query_str:=OPExchMgr.CallStringFunction('Get_Turn_Over_StrDel',
+                             [v_beg_dat,v_end_dat,val_id,status,exch_no]);
+
+     //ShowMessage(query_str);
+      ODSDel_ExProvarch.Close;
+      ODSDel_ExProvarch.SQL.Clear;
+      ODSDel_ExProvarch.SQL.Add(query_str);
+      //Memo1.Text:=ODSDel_ExProvarch.SQL.Text;
+      ODSDel_ExProvarch.Open;
+  finally
+  Screen.Cursor:=crDefault;
+ end;
+end;
+end;
+
+procedure TExchangeMGR_X.BitBtn6Click(Sender: TObject);
+var
+    p_id : integer;
+    Ini  : TIniFile;
+    BankName :string;
+begin
+  Ini:=TIniFile.Create(ExtractFilePath(paramstr(0))+'Exchange.ini');
+  BankName:=Ini.ReadString('BankName','name','');
+
+  p_id:=DataModExch.ODSTraffics.FieldByName('id').AsInteger;
+  with DataModExch.ODSReport do
+  begin
+    Close;
+    SetVariable('p_id',p_id);
+    Open;
+  end;
+
+   with DataModExch.ODSReport,FormRep do
+   begin
+     // QRImageCopy.Picture.Bitmap:=QRImage.Picture.Bitmap;
+      LabelBankName.Caption:=BankName;
+      LabelBankNameCopy.Caption:=BankName;
+      case FieldByName('Status').AsInteger of
+        1:
+                begin
+                   LabelStatus.Caption:='XARİCİ VALYUTANIN ALIŞI';
+                   LabelDate.Caption:=FormatDateTime('dd-mmm-yyyy',fieldbyname('dat').AsDateTime);
+                   LabelTime.Caption:=FormatDateTime('hh:mm:ss',fieldbyname('op_time').AsDateTime);
+                   LabelCustomer.Caption:=fieldbyname('cust_name').AsString+' '+fieldbyname('cust_lname').AsString+' '+fieldbyname('cust_father').AsString;
+                   LabelPassport.Caption:=fieldbyname('country').AsString+' '+fieldbyname('cust_passport').AsString;
+                   LabelCourse.Caption:=fieldbyname('op_course').AsString;
+                   LabelDifference.Caption:='';
+
+                   LabelStatusCopy.Caption:='XARİCİ VALYUTANIN ALIŞI';
+                   LabelDateCopy.Caption:=FormatDateTime('dd-mmm-yyyy',fieldbyname('dat').AsDateTime);
+                   LabelTimeCopy.Caption:=FormatDateTime('hh:mm:ss',fieldbyname('op_time').AsDateTime);
+                   LabelCustomerCopy.Caption:=fieldbyname('cust_name').AsString+' '+fieldbyname('cust_lname').AsString+' '+fieldbyname('cust_father').AsString;
+                   LabelPassportCopy.Caption:=fieldbyname('country').AsString+' '+fieldbyname('cust_passport').AsString;
+                   LabelCourseCopy.Caption:=fieldbyname('op_course').AsString;
+                   LabelDifferenceCopy.Caption:='';
+
+                   QuickRep.Preview;
+                end;
+
+        2:
+                begin
+                   LabelStatus.Caption:='XARİCİ VALYUTANIN SATIŞI';
+                   LabelDate.Caption:=FormatDateTime('dd-mmm-yyyy',DataModExch.ODSExchProvarch.fieldbyname('dat').AsDateTime);
+                   LabelTime.Caption:=FormatDateTime('hh:mm:ss',DataModExch.ODSExchProvarch.fieldbyname('op_time').AsDateTime);
+                   LabelCustomer.Caption:=fieldbyname('cust_name').AsString+' '+fieldbyname('cust_lname').AsString+' '+fieldbyname('cust_father').AsString;
+                   LabelPassport.Caption:=fieldbyname('country').AsString+' '+fieldbyname('cust_passport').AsString;
+                   LabelCourse.Caption:=fieldbyname('op_course').AsString;
+                   LabelDifference.Caption:='';
+
+                   LabelStatusCopy.Caption:='XARİCİ VALYUTANIN SATIŞI';
+                   LabelDateCopy.Caption:=FormatDateTime('dd-mmm-yyyy',DataModExch.ODSExchProvarch.fieldbyname('dat').AsDateTime);
+                   LabelTimeCopy.Caption:=FormatDateTime('hh:mm:ss',DataModExch.ODSExchProvarch.fieldbyname('op_time').AsDateTime);
+                   LabelCustomerCopy.Caption:=fieldbyname('cust_name').AsString+' '+fieldbyname('cust_lname').AsString+' '+fieldbyname('cust_father').AsString;
+                   LabelPassportCopy.Caption:=fieldbyname('country').AsString+' '+fieldbyname('cust_passport').AsString;
+                   LabelCourseCopy.Caption:=fieldbyname('op_course').AsString;
+                   LabelDifferenceCopy.Caption:='';
+
+                   QuickRep.Preview;
+                end;
+
+end;
+   end;
+end;
+
+procedure TExchangeMGR_X.BitBtn7Click(Sender: TObject);
+begin
+  if not(DBGridEh4.DataSource.DataSet.Active) then  DataModExch.ODSDel_ExProvarch.Open;
+  if DBGridEh4.DataSource.DataSet.RecordCount=0 then  begin
+                                                        ShowMessage('Heç bir məlumat tapılmadı!...');
+                                                        exit;
+                                                      end;
+  with CMExcelExport1 do
+  begin
+    DBGridEh4.DataSource.DataSet.Last;
+    Connect;
+    ExportDataset(DBGridEh4.DataSource.DataSet,'Silinmiş Əməliyyatlar',true,true);
+    Disconnect;
+  end;
+end;
+
+procedure TExchangeMGR_X.BitBtn8Click(Sender: TObject);
+Var Delta:boolean;
+begin
+  DataModExch.OPExchMgr.CallProcedure('Ex_CourseDifference',[DataModExch.ODSExchOfficeEX_NO.AsInteger]);
+  DataModExch.ODSExchRate.Refresh;
+end;
+
+procedure TExchangeMGR_X.BitBtn9Click(Sender: TObject);
+var
+  v_beg_dat       :TDateTime;
+  v_end_dat       :TDateTime;
+  val_id          :Integer;
+  status          :Integer;
+  exch_no         :Integer;
+
+  query_str       :string;
+begin
+  with DataModExch do
+   begin
+     try
+      Screen.Cursor:=crSQLWait;
+      v_beg_dat:=Integer(Trunc(DateTimePicker3.DateTime));
+      v_end_dat:=Integer(Trunc(DateTimePicker4.DateTime));
+
+      if CheckBox4.Checked then
+      begin
+        if  DBCB_Toplam.KeyValue=null then exch_no:=-1
+        else exch_no:=DBCB_Toplam.KeyValue;
+      end;
+      if CheckBox3.Checked then
+      begin
+        if  DBLookupComboBox3.KeyValue=null then  val_id:=-1
+        else val_id:=DBLookupComboBox3.KeyValue;
+      end;
+
+      status:=ComboBox1.ItemIndex;
+
+      ODSReporting.Close;
+      ODSReporting.SetVariable('bdat',v_beg_dat);
+      ODSReporting.SetVariable('edat',v_end_dat);
+      ODSReporting.SetVariable('val_id',val_id);
+      ODSReporting.SetVariable('val_name',DBLookupComboBox3.Text);
+      IF exch_no<>-1 THEN  ODSReporting.sql[15]:='where p.ex_no='+ IntToStr(exch_no)
+                     ELSE  ODSReporting.sql[15]:='';
+
+      ODSReporting.Open;
+  finally
+  Screen.Cursor:=crDefault;
+ end;
+end;
+
+end;
+
+procedure TExchangeMGR_X.CheckBox2Click(Sender: TObject);
+begin
+   if CheckBox2.Checked=false then
+        DBLC_Exchange.KeyValue:=-1
+       else
+         DBLC_Exchange.KeyValue:=1;
+end;
+
+procedure TExchangeMGR_X.CheckBox1Click(Sender: TObject);
+begin
+      if CheckBox1.Checked=false then
+        DBLC_Currency.KeyValue:=-1
+       else
+         DBLC_Currency.KeyValue:=1;
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TExchangeMGR_X,
+    Class_ExchangeMGR_X,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

@@ -1,0 +1,1151 @@
+object DataMod: TDataMod
+  OldCreateOrder = False
+  OnCreate = DataModuleCreate
+  Height = 567
+  Width = 1082
+  object Mainscrpt: TOracleDataSet
+    SQL.Strings = (
+      'select id,num,musteriid,pinkod,names,fil,status,branch,source,'
+      
+        '(select VAL_NAME from avalute where valute=ACCEPTED_VALUTE) valu' +
+        'te,lstrest,frest,court_status,COURT_LASTSTAT,court_OPERS,lstd,ls' +
+        'tp,DUEDATEFIRSTCONTRACT,closedate'
+      ' from ('
+      
+        'select prtid id,'#39#39' num,CUST_ID musteriid,INNORPIN pinkod,BORROWE' +
+        'R_NAME names,(select name from filial where id=BRANCH) fil,'
+      
+        'accepted_portfel.status(AC.PRTID) status,ac.branch branch,'#39'ABB'#39' ' +
+        'source,ac.ACCEPTED_VALUTE ACCEPTED_VALUTE,accepted_portfel.lstre' +
+        'st(ac.prtid) lstrest, accepted_portfel.frstrest(ac.prtid,ac.ACCE' +
+        'PTED_VALUTE) frest'
+      
+        ',  court_status,cour.COURT_LASTSTAT,cour.court_OPERS,accepted_po' +
+        'rtfel.lastpaydat(ac.prtid,0)lstd,accepted_portfel.lastpayamt(ac.' +
+        'prtid,0)lstp,'
+      
+        ' TO_DATE('#39#39', '#39'dd-MM-yyyy'#39') DUEDATEFIRSTCONTRACT,TO_DATE('#39#39', '#39'dd-' +
+        'MM-yyyy'#39')  closedate  from accepted_cr_portfels ac,credit_courts' +
+        ' cour where   ac.prtid=cour.id(+)'
+      'union all'
+      
+        'select cr.id id,cr.numberofcredit num,cr.boorowerid musteriid,cv' +
+        '.passpin pinkod, s.name names ,'
+      '(select name from filial where id=cr.branchid) fil,'
+      
+        'accepted_portfel.status(CR.ID) status,cr.branchid branch,'#39'KRD'#39' s' +
+        'ource,cr.currency ACCEPTED_VALUTE,accepted_portfel.cred_lst(cr.i' +
+        'd) lstrest, accepted_portfel.cred_frs(cr.id) frest,'
+      
+        ' cour.court_status,cour.COURT_LASTSTAT,cour.court_OPERS,accepted' +
+        '_portfel.lastpaydat(cr.id,1)lstd,accepted_portfel.lastpayamt(cr.' +
+        'id,1)lstp,'
+      
+        ' cr.DUEDATEFIRSTCONTRACT ,cr.closedate  from cm_portfolio cr,cre' +
+        'dit_courts cour'
+      
+        ' ,customers s,custinfo cv where s.id=cr.boorowerid and idcust=cr' +
+        '.boorowerid and s.id=cv.idcust and cr.id=cour.id(+)'
+      ''
+      ''
+      ' ) where 1=1 '
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      '')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000130000000400000049004400010000000000120000004D0055005300
+      5400450052004900490044000100000000000C000000500049004E004B004F00
+      44000100000000000A0000004E0041004D004500530001000000000006000000
+      460049004C000100000000000C00000053005400410054005500530001000000
+      00000C0000004200520041004E00430048000100000000000C00000053004F00
+      55005200430045000100000000000C000000560041004C005500540045000100
+      000000000E0000004C005300540052004500530054000100000000000A000000
+      460052004500530054000100000000001800000043004F005500520054005F00
+      5300540041005400550053000100000000001C00000043004F00550052005400
+      5F004C0041005300540053005400410054000100000000001600000043004F00
+      5500520054005F004F005000450052005300010000000000080000004C005300
+      54004400010000000000080000004C0053005400500001000000000006000000
+      4E0055004D000100000000002800000044005500450044004100540045004600
+      490052005300540043004F004E00540052004100430054000100000000001200
+      000043004C004F00530045004400410054004500010000000000}
+    QueryAllRecords = False
+    Session = sboapiDataModule.SBSession
+    Left = 56
+    Top = 80
+    object MainscrptID: TFloatField
+      FieldName = 'ID'
+    end
+    object MainscrptMUSTERIID: TFloatField
+      DisplayLabel = 'M'#252#351't'#601'ri '#304'd'
+      FieldName = 'MUSTERIID'
+    end
+    object MainscrptPINKOD: TWideStringField
+      DisplayLabel = 'Pin Kod'
+      FieldName = 'PINKOD'
+      Size = 200
+    end
+    object MainscrptNAMES: TWideStringField
+      DisplayLabel = 'Ad'#305
+      FieldName = 'NAMES'
+      Size = 250
+    end
+    object MainscrptFIL: TWideStringField
+      DisplayLabel = 'Filial'
+      FieldName = 'FIL'
+      Size = 90
+    end
+    object MainscrptSTATUS: TFloatField
+      DisplayLabel = 'Status'
+      FieldName = 'STATUS'
+    end
+    object MainscrptBRANCH: TFloatField
+      FieldName = 'BRANCH'
+    end
+    object MainscrptSOURCE: TWideStringField
+      FieldName = 'SOURCE'
+      Size = 3
+    end
+    object MainscrptVALUTE: TWideStringField
+      FieldName = 'VALUTE'
+      Size = 10
+    end
+    object MainscrptLSTREST: TFloatField
+      FieldName = 'LSTREST'
+    end
+    object MainscrptFREST: TFloatField
+      FieldName = 'FREST'
+    end
+    object MainscrptCOURT_STATUS: TWideStringField
+      DisplayLabel = 'H'#252'quqi Status'
+      FieldName = 'COURT_STATUS'
+      Size = 4000
+    end
+    object MainscrptCOURT_LASTSTAT: TWideStringField
+      DisplayLabel = #304'cra V'#601'ziyy'#601'ti'
+      FieldName = 'COURT_LASTSTAT'
+      Size = 4000
+    end
+    object MainscrptCOURT_OPERS: TWideStringField
+      FieldName = 'COURT_OPERS'
+      Size = 250
+    end
+    object MainscrptLSTD: TDateTimeField
+      DisplayLabel = 'Son '#246'd'#601'ni'#351' Tarixi'
+      FieldName = 'LSTD'
+    end
+    object MainscrptLSTP: TFloatField
+      DisplayLabel = 'Son '#246'd'#601'nil'#601'n M'#601'bl'#601#287
+      FieldName = 'LSTP'
+    end
+    object MainscrptNUM: TWideStringField
+      FieldName = 'NUM'
+      Size = 32
+    end
+  end
+  object Data_main: TDataSource
+    DataSet = Mainscrpt
+    Left = 48
+    Top = 24
+  end
+  object Maincrpt_one_old: TOracleDataSet
+    SQL.Strings = (
+      'select  crts.rowid,crts.* from credit_courts crts'
+      'where crts.id=:prts'
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      '')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000A0000003A00500052005400530004000000000000000000
+      0000}
+    QBEDefinition.QBEFieldDefs = {
+      050000001800000004000000490044000100000000001A00000043004F005500
+      520054005F0041004D004D004F0055004E005400010000000000180000004300
+      4F005500520054005F005300540041005400550053000100000000001C000000
+      43004F005500520054005F0044004100540045005F004E0055004D0001000000
+      00001400000043004F005500520054005F004E0041004D004500010000000000
+      2C00000043004F005500520054005F0041004300430045005000540045004400
+      5F0041004D004D004F0055004E0054000100000000001400000043004F005500
+      520054005F0044004500530043000100000000001800000043004F0055005200
+      54005F004D0041004E004100470045000100000000001C00000043004F005500
+      520054005F004C0041005300540053005400410054000100000000001A000000
+      43004F005500520054005F004D00450041005300550052004500010000000000
+      1A00000043004F005500520054005F005200450050004C004100430045000100
+      00000000220000005200450050004C004100430045004D0045004E0054005F00
+      43004F0055004E0054000100000000002200000049004E005600450053005400
+      490047004100540049004F004E005F004F00520047000100000000000A000000
+      49004E0046004F00530001000000000010000000500052004F00500045005200
+      5400590001000000000012000000500052004F0050005F004400450053004300
+      01000000000018000000500052004F0050005F00410044004400520045005300
+      53000100000000001A00000050004F00520050005F0050004100530053005000
+      4F005200540001000000000014000000500052004F0050005F00500052004900
+      4300450001000000000012000000500052004F0050005F0049004E0046004F00
+      0100000000001600000043004F005500520054005F004F005000450052005300
+      0100000000001C0000004D004500440049004100540049004F004E005F004400
+      4100540045000100000000001A0000004D004500440049004100540049004F00
+      4E005F004E0055004D000100000000001200000043004F005500520054005F00
+      4E0055004D00010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 152
+    Top = 24
+  end
+  object Data_main_one: TDataSource
+    DataSet = Maincrpt_one
+    Left = 232
+    Top = 80
+  end
+  object filials: TOracleDataSet
+    SQL.Strings = (
+      'select * from filial')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000040000000400000049004400010000000000080000004E0041004D00
+      4500010000000000140000004B004F0044005F00460049004C00490041004C00
+      0100000000001400000043004F004D00500041004E0059005F00490044000100
+      00000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 296
+    Top = 17
+  end
+  object DataSource_filial: TDataSource
+    DataSet = filials
+    Left = 296
+    Top = 72
+  end
+  object Data_maincourt: TDataSource
+    DataSet = Main_court
+    Left = 320
+    Top = 144
+  end
+  object Main_court_old: TOracleDataSet
+    SQL.Strings = (
+      
+        'select rownum,credid,custid,pin,names,branch,id, court_ammount, ' +
+        'court_status, court_date_num,'
+      
+        '       court_name, court_accepted_ammount, court_desc,court_mana' +
+        'ge, court_laststat, court_measure,'
+      
+        '       court_replace, replacement_count, investigation_org,infos' +
+        ', property, prop_desc, prop_address,'
+      
+        '       porp_passport, prop_price, prop_info, closedate,DUEDATEFI' +
+        'RSTCONTRACT from('
+      
+        'select  rownum,ac.prtid credid,ac.cust_id custid,ac.innorpin pin' +
+        ' ,ac.borrower_name names,ac.branch branch,cour.id, cour.court_am' +
+        'mount, cour.court_status, cour.court_date_num,'
+      
+        '       cour.court_name, cour.court_accepted_ammount, cour.court_' +
+        'desc, cour.court_manage, cour.court_laststat, cour.court_measure' +
+        ','
+      
+        '       cour.court_replace, cour.replacement_count, cour.investig' +
+        'ation_org,'
+      
+        '       cour.infos, cour.property, cour.prop_desc, cour.prop_addr' +
+        'ess,'
+      
+        '       cour.porp_passport, cour.prop_price, cour.prop_info,to_da' +
+        'te('#39#39') closedate,to_date('#39#39') DUEDATEFIRSTCONTRACT,cour.court_OPE' +
+        'RS,cour.mediation_date,cour.mediation_num  from accepted_cr_port' +
+        'fels ac,credit_courts cour'
+      'where  ac.court_id= cour.id'
+      'union all'
+      
+        'select  rownum,cr.id credid,cr.boorowerid custid,(select passpin' +
+        ' from custinfo where idcust=cr.boorowerid) pin,(select name from' +
+        ' customers where id=cr.boorowerid) names,'
+      'cr.branchid branch,'
+      
+        ' cor.id, cor.court_ammount, cor.court_status, cor.court_date_num' +
+        ','
+      
+        '       cor.court_name, cor.court_accepted_ammount, cor.court_des' +
+        'c,'
+      '       cor.court_manage, cor.court_laststat, cor.court_measure,'
+      
+        '       cor.court_replace, cor.replacement_count, cor.investigati' +
+        'on_org,'
+      '       cor.infos, cor.property, cor.prop_desc, cor.prop_address,'
+      
+        '       cor.porp_passport, cor.prop_price, cor.prop_info,cr.close' +
+        'date closedate,cr.DUEDATEFIRSTCONTRACT,cor.court_OPERS,cor.media' +
+        'tion_date,cor.mediation_num from cm_portfolio cr,credit_courts c' +
+        'or'
+      ''
+      ''
+      ' where cr.id=cor.id'
+      ''
+      ''
+      ''
+      '  ) where 1=1'
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      '')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000001C0000000C00000052004F0057004E0055004D000100000000000C00
+      00004200520041004E0043004800010000000000040000004900440001000000
+      00001A00000043004F005500520054005F0041004D004D004F0055004E005400
+      0100000000001800000043004F005500520054005F0053005400410054005500
+      53000100000000001C00000043004F005500520054005F004400410054004500
+      5F004E0055004D000100000000001400000043004F005500520054005F004E00
+      41004D0045000100000000002C00000043004F005500520054005F0041004300
+      4300450050005400450044005F0041004D004D004F0055004E00540001000000
+      00001400000043004F005500520054005F004400450053004300010000000000
+      1800000043004F005500520054005F004D0041004E0041004700450001000000
+      00001C00000043004F005500520054005F004C00410053005400530054004100
+      54000100000000001A00000043004F005500520054005F004D00450041005300
+      5500520045000100000000001A00000043004F005500520054005F0052004500
+      50004C00410043004500010000000000220000005200450050004C0041004300
+      45004D0045004E0054005F0043004F0055004E00540001000000000022000000
+      49004E005600450053005400490047004100540049004F004E005F004F005200
+      47000100000000000A00000049004E0046004F00530001000000000010000000
+      500052004F005000450052005400590001000000000012000000500052004F00
+      50005F00440045005300430001000000000018000000500052004F0050005F00
+      41004400440052004500530053000100000000001A00000050004F0052005000
+      5F00500041005300530050004F00520054000100000000001400000050005200
+      4F0050005F005000520049004300450001000000000012000000500052004F00
+      50005F0049004E0046004F000100000000000C00000043005200450044004900
+      44000100000000000C0000004300550053005400490044000100000000000600
+      0000500049004E000100000000000A0000004E0041004D004500530001000000
+      00001200000043004C004F005300450044004100540045000100000000002800
+      000044005500450044004100540045004600490052005300540043004F004E00
+      54005200410043005400010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 288
+    Top = 232
+    object Main_court_oldROWNUM: TFloatField
+      FieldName = 'ROWNUM'
+    end
+    object Main_court_oldCREDID: TFloatField
+      FieldName = 'CREDID'
+    end
+    object Main_court_oldCUSTID: TFloatField
+      FieldName = 'CUSTID'
+    end
+    object Main_court_oldPIN: TWideStringField
+      FieldName = 'PIN'
+      Size = 200
+    end
+    object Main_court_oldNAMES: TWideStringField
+      FieldName = 'NAMES'
+      Size = 250
+    end
+    object Main_court_oldBRANCH: TFloatField
+      FieldName = 'BRANCH'
+    end
+    object Main_court_oldID: TFloatField
+      FieldName = 'ID'
+    end
+    object Main_court_oldCOURT_AMMOUNT: TWideStringField
+      FieldName = 'COURT_AMMOUNT'
+      Size = 4000
+    end
+    object Main_court_oldCOURT_STATUS: TWideStringField
+      FieldName = 'COURT_STATUS'
+      Size = 4000
+    end
+    object Main_court_oldCOURT_DATE_NUM: TWideStringField
+      FieldName = 'COURT_DATE_NUM'
+      Size = 4000
+    end
+    object Main_court_oldCOURT_NAME: TWideStringField
+      FieldName = 'COURT_NAME'
+      Size = 4000
+    end
+    object Main_court_oldCOURT_ACCEPTED_AMMOUNT: TWideStringField
+      FieldName = 'COURT_ACCEPTED_AMMOUNT'
+      Size = 4000
+    end
+    object Main_court_oldCOURT_DESC: TWideStringField
+      FieldName = 'COURT_DESC'
+      Size = 4000
+    end
+    object Main_court_oldCOURT_MANAGE: TWideStringField
+      FieldName = 'COURT_MANAGE'
+      Size = 4000
+    end
+    object Main_court_oldCOURT_LASTSTAT: TWideStringField
+      FieldName = 'COURT_LASTSTAT'
+      Size = 4000
+    end
+    object Main_court_oldCOURT_MEASURE: TWideStringField
+      FieldName = 'COURT_MEASURE'
+      Size = 4000
+    end
+    object Main_court_oldCOURT_REPLACE: TWideStringField
+      FieldName = 'COURT_REPLACE'
+      Size = 4000
+    end
+    object Main_court_oldREPLACEMENT_COUNT: TWideStringField
+      FieldName = 'REPLACEMENT_COUNT'
+      Size = 4000
+    end
+    object Main_court_oldINVESTIGATION_ORG: TWideStringField
+      FieldName = 'INVESTIGATION_ORG'
+      Size = 4000
+    end
+    object Main_court_oldINFOS: TWideStringField
+      FieldName = 'INFOS'
+      Size = 4000
+    end
+    object Main_court_oldPROPERTY: TWideStringField
+      FieldName = 'PROPERTY'
+      Size = 4000
+    end
+    object Main_court_oldPROP_DESC: TWideStringField
+      FieldName = 'PROP_DESC'
+      Size = 4000
+    end
+    object Main_court_oldPROP_ADDRESS: TWideStringField
+      FieldName = 'PROP_ADDRESS'
+      Size = 4000
+    end
+    object Main_court_oldPORP_PASSPORT: TWideStringField
+      FieldName = 'PORP_PASSPORT'
+      Size = 4000
+    end
+    object Main_court_oldPROP_PRICE: TWideStringField
+      FieldName = 'PROP_PRICE'
+      Size = 4000
+    end
+    object Main_court_oldPROP_INFO: TWideMemoField
+      FieldName = 'PROP_INFO'
+      BlobType = ftWideMemo
+    end
+    object Main_court_oldCLOSEDATE: TDateTimeField
+      FieldName = 'CLOSEDATE'
+    end
+    object Main_court_oldDUEDATEFIRSTCONTRACT: TDateTimeField
+      FieldName = 'DUEDATEFIRSTCONTRACT'
+    end
+  end
+  object Court_status: TOracleDataSet
+    SQL.Strings = (
+      'select -1 id ,'#39'B'#252't'#252'n statuslar'#39' names'
+      ' from dual'
+      'union'
+      'select cd.id,cd.names from court_settings cd  where cour_id =1')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000200000004000000490044000100000000000A0000004E0041004D00
+      45005300010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 56
+    Top = 161
+    object Court_statusID: TFloatField
+      FieldName = 'ID'
+    end
+    object Court_statusNAMES: TWideStringField
+      FieldName = 'NAMES'
+      Size = 250
+    end
+  end
+  object Data_courtstatus: TDataSource
+    DataSet = Court_status
+    Left = 56
+    Top = 216
+  end
+  object Court_laststat: TOracleDataSet
+    SQL.Strings = (
+      'select -1 id ,'#39'B'#252't'#252'n statuslar'#39' names'
+      ' from dual'
+      'union'
+      'select cd.id,cd.names from court_settings cd  where cour_id =2')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000400000004000000490044000100000000000E00000043004F005500
+      52005F00490044000100000000000C0000005300540041005400550053000100
+      000000000A0000004E0041004D0045005300010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 144
+    Top = 161
+    object Court_laststatID: TFloatField
+      FieldName = 'ID'
+    end
+    object Court_laststatNAMES: TWideStringField
+      FieldName = 'NAMES'
+      Size = 250
+    end
+  end
+  object Data_Court_laststat: TDataSource
+    DataSet = Court_laststat
+    Left = 168
+    Top = 224
+  end
+  object Court_managers: TOracleDataSet
+    SQL.Strings = (
+      'select cd.rowid,cd.* from court_settings cd  where cour_id =3'
+      'and status=0')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000400000004000000490044000100000000000E00000043004F005500
+      52005F00490044000100000000000C0000005300540041005400550053000100
+      000000000A0000004E0041004D0045005300010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 64
+    Top = 289
+    object Court_managersID: TFloatField
+      FieldName = 'ID'
+    end
+    object Court_managersCOUR_ID: TFloatField
+      FieldName = 'COUR_ID'
+    end
+    object Court_managersSTATUS: TFloatField
+      FieldName = 'STATUS'
+    end
+    object Court_managersNAMES: TWideStringField
+      FieldName = 'NAMES'
+      Size = 250
+    end
+  end
+  object Data_courtmanagers: TDataSource
+    DataSet = Court_managers
+    Left = 56
+    Top = 344
+  end
+  object pack: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'accepted_portfel'
+    Left = 232
+    Top = 352
+  end
+  object court_stat_add: TOracleDataSet
+    SQL.Strings = (
+      ''
+      'select cd.id,cd.names from court_settings cd  where cour_id =1')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000200000004000000490044000100000000000A0000004E0041004D00
+      45005300010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 440
+    Top = 17
+    object FloatField1: TFloatField
+      FieldName = 'ID'
+    end
+    object WideStringField1: TWideStringField
+      FieldName = 'NAMES'
+      Size = 250
+    end
+  end
+  object Data_addstat: TDataSource
+    DataSet = court_stat_add
+    Left = 440
+    Top = 72
+  end
+  object court_last_stat_add: TOracleDataSet
+    SQL.Strings = (
+      ''
+      'select cd.id,cd.names from court_settings cd  where cour_id =2')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000400000004000000490044000100000000000E00000043004F005500
+      52005F00490044000100000000000C0000005300540041005400550053000100
+      000000000A0000004E0041004D0045005300010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 528
+    Top = 17
+    object FloatField2: TFloatField
+      FieldName = 'ID'
+    end
+    object WideStringField2: TWideStringField
+      FieldName = 'NAMES'
+      Size = 250
+    end
+  end
+  object Data_addlaststat: TDataSource
+    DataSet = court_last_stat_add
+    Left = 552
+    Top = 80
+  end
+  object court_operates_add: TOracleDataSet
+    SQL.Strings = (
+      'select cd.rowid,cd.* from court_settings cd  where cour_id =4')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000400000004000000490044000100000000000E00000043004F005500
+      52005F00490044000100000000000C0000005300540041005400550053000100
+      000000000A0000004E0041004D0045005300010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 448
+    Top = 153
+    object FloatField3: TFloatField
+      FieldName = 'ID'
+    end
+    object FloatField4: TFloatField
+      FieldName = 'COUR_ID'
+    end
+    object FloatField5: TFloatField
+      FieldName = 'STATUS'
+    end
+    object WideStringField3: TWideStringField
+      FieldName = 'NAMES'
+      Size = 250
+    end
+  end
+  object Data_court_opers: TDataSource
+    DataSet = court_operates_add
+    Left = 552
+    Top = 152
+  end
+  object court_opers: TOracleDataSet
+    SQL.Strings = (
+      'select -1 id ,'#39'B'#252't'#252'n Operatorlar'#39' names'
+      ' from dual'
+      'union'
+      'select cd.id,cd.names from court_settings cd  where cour_id =4')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000200000004000000490044000100000000000A0000004E0041004D00
+      45005300010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 168
+    Top = 297
+    object FloatField6: TFloatField
+      FieldName = 'ID'
+    end
+    object WideStringField4: TWideStringField
+      FieldName = 'NAMES'
+      Size = 250
+    end
+  end
+  object Data_courtopers: TDataSource
+    DataSet = court_opers
+    Left = 168
+    Top = 352
+  end
+  object court_manager_state: TOracleDataSet
+    SQL.Strings = (
+      
+        'select cd.rowid,cd.* from court_settings cd  where cour_id =3 an' +
+        'd status=1')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000400000004000000490044000100000000000E00000043004F005500
+      52005F00490044000100000000000C0000005300540041005400550053000100
+      000000000A0000004E0041004D0045005300010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 64
+    Top = 417
+    object FloatField7: TFloatField
+      FieldName = 'ID'
+    end
+    object FloatField8: TFloatField
+      FieldName = 'COUR_ID'
+    end
+    object FloatField9: TFloatField
+      FieldName = 'STATUS'
+    end
+    object WideStringField5: TWideStringField
+      FieldName = 'NAMES'
+      Size = 250
+    end
+  end
+  object Data_court_manager_state: TDataSource
+    DataSet = court_manager_state
+    Left = 56
+    Top = 472
+  end
+  object court_managers_add: TOracleDataSet
+    SQL.Strings = (
+      'select cd.rowid,cd.* from court_settings cd  where cour_id =3'
+      ''
+      'and status=0')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000400000004000000490044000100000000000E00000043004F005500
+      52005F00490044000100000000000C0000005300540041005400550053000100
+      000000000A0000004E0041004D0045005300010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 448
+    Top = 225
+    object FloatField10: TFloatField
+      FieldName = 'ID'
+    end
+    object FloatField11: TFloatField
+      FieldName = 'COUR_ID'
+    end
+    object FloatField12: TFloatField
+      FieldName = 'STATUS'
+    end
+    object WideStringField6: TWideStringField
+      FieldName = 'NAMES'
+      Size = 250
+    end
+  end
+  object Data_court_manager_add: TDataSource
+    DataSet = court_managers_add
+    Left = 560
+    Top = 232
+  end
+  object court_managers_add_state: TOracleDataSet
+    SQL.Strings = (
+      'select cd.rowid,cd.* from court_settings cd  where cour_id =3'
+      ''
+      'and status=1')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000400000004000000490044000100000000000E00000043004F005500
+      52005F00490044000100000000000C0000005300540041005400550053000100
+      000000000A0000004E0041004D0045005300010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 448
+    Top = 313
+    object FloatField13: TFloatField
+      FieldName = 'ID'
+    end
+    object FloatField14: TFloatField
+      FieldName = 'COUR_ID'
+    end
+    object FloatField15: TFloatField
+      FieldName = 'STATUS'
+    end
+    object WideStringField7: TWideStringField
+      FieldName = 'NAMES'
+      Size = 250
+    end
+  end
+  object Data_court_managers_add_state: TDataSource
+    DataSet = court_managers_add_state
+    Left = 560
+    Top = 328
+  end
+  object Maincrpt_one: TOracleDataSet
+    SQL.Strings = (
+      'select  crts.rowid,crts.* from credit_courts crts'
+      'where crts.id=:prts'
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      '')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000A0000003A00500052005400530004000000000000000000
+      0000}
+    QBEDefinition.QBEFieldDefs = {
+      050000001800000004000000490044000100000000001A00000043004F005500
+      520054005F0041004D004D004F0055004E005400010000000000180000004300
+      4F005500520054005F005300540041005400550053000100000000001C000000
+      43004F005500520054005F0044004100540045005F004E0055004D0001000000
+      00001400000043004F005500520054005F004E0041004D004500010000000000
+      2C00000043004F005500520054005F0041004300430045005000540045004400
+      5F0041004D004D004F0055004E0054000100000000001400000043004F005500
+      520054005F0044004500530043000100000000001800000043004F0055005200
+      54005F004D0041004E004100470045000100000000001C00000043004F005500
+      520054005F004C0041005300540053005400410054000100000000001A000000
+      43004F005500520054005F004D00450041005300550052004500010000000000
+      1A00000043004F005500520054005F005200450050004C004100430045000100
+      00000000220000005200450050004C004100430045004D0045004E0054005F00
+      43004F0055004E0054000100000000002200000049004E005600450053005400
+      490047004100540049004F004E005F004F00520047000100000000000A000000
+      49004E0046004F00530001000000000010000000500052004F00500045005200
+      5400590001000000000012000000500052004F0050005F004400450053004300
+      01000000000018000000500052004F0050005F00410044004400520045005300
+      53000100000000001A00000050004F00520050005F0050004100530053005000
+      4F005200540001000000000014000000500052004F0050005F00500052004900
+      4300450001000000000012000000500052004F0050005F0049004E0046004F00
+      0100000000001600000043004F005500520054005F004F005000450052005300
+      0100000000001C0000004D004500440049004100540049004F004E005F004400
+      4100540045000100000000001A0000004D004500440049004100540049004F00
+      4E005F004E0055004D000100000000001200000043004F005500520054005F00
+      4E0055004D00010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 240
+    Top = 24
+    object Maincrpt_oneID: TFloatField
+      FieldName = 'ID'
+    end
+    object Maincrpt_oneCOURT_AMMOUNT: TWideStringField
+      FieldName = 'COURT_AMMOUNT'
+      Size = 4000
+    end
+    object Maincrpt_oneCOURT_STATUS: TWideStringField
+      FieldName = 'COURT_STATUS'
+      Size = 4000
+    end
+    object Maincrpt_oneCOURT_DATE_NUM: TWideStringField
+      FieldName = 'COURT_DATE_NUM'
+      Size = 4000
+    end
+    object Maincrpt_oneCOURT_NAME: TWideStringField
+      FieldName = 'COURT_NAME'
+      Size = 4000
+    end
+    object Maincrpt_oneCOURT_ACCEPTED_AMMOUNT: TWideStringField
+      FieldName = 'COURT_ACCEPTED_AMMOUNT'
+      Size = 4000
+    end
+    object Maincrpt_oneCOURT_DESC: TWideMemoField
+      FieldName = 'COURT_DESC'
+      BlobType = ftWideMemo
+    end
+    object Maincrpt_oneCOURT_MANAGE: TWideStringField
+      FieldName = 'COURT_MANAGE'
+      Size = 4000
+    end
+    object Maincrpt_oneCOURT_LASTSTAT: TWideStringField
+      FieldName = 'COURT_LASTSTAT'
+      Size = 4000
+    end
+    object Maincrpt_oneCOURT_MEASURE: TWideMemoField
+      FieldName = 'COURT_MEASURE'
+      BlobType = ftWideMemo
+    end
+    object Maincrpt_oneCOURT_REPLACE: TWideMemoField
+      FieldName = 'COURT_REPLACE'
+      BlobType = ftWideMemo
+    end
+    object Maincrpt_oneREPLACEMENT_COUNT: TWideStringField
+      FieldName = 'REPLACEMENT_COUNT'
+      Size = 4000
+    end
+    object Maincrpt_oneINVESTIGATION_ORG: TWideMemoField
+      FieldName = 'INVESTIGATION_ORG'
+      BlobType = ftWideMemo
+    end
+    object Maincrpt_oneINFOS: TWideMemoField
+      FieldName = 'INFOS'
+      BlobType = ftWideMemo
+    end
+    object Maincrpt_onePROPERTY: TWideStringField
+      FieldName = 'PROPERTY'
+      Size = 4000
+    end
+    object Maincrpt_onePROP_DESC: TWideStringField
+      FieldName = 'PROP_DESC'
+      Size = 4000
+    end
+    object Maincrpt_onePROP_ADDRESS: TWideStringField
+      FieldName = 'PROP_ADDRESS'
+      Size = 4000
+    end
+    object Maincrpt_onePORP_PASSPORT: TWideStringField
+      FieldName = 'PORP_PASSPORT'
+      Size = 4000
+    end
+    object Maincrpt_onePROP_PRICE: TWideStringField
+      FieldName = 'PROP_PRICE'
+      Size = 4000
+    end
+    object Maincrpt_onePROP_INFO: TWideMemoField
+      FieldName = 'PROP_INFO'
+      BlobType = ftWideMemo
+    end
+    object Maincrpt_oneCOURT_OPERS: TWideStringField
+      FieldName = 'COURT_OPERS'
+      Size = 250
+    end
+    object Maincrpt_oneMEDIATION_DATE: TWideStringField
+      FieldName = 'MEDIATION_DATE'
+      Size = 250
+    end
+    object Maincrpt_oneMEDIATION_NUM: TWideStringField
+      FieldName = 'MEDIATION_NUM'
+      Size = 250
+    end
+    object Maincrpt_oneCOURT_NUM: TWideStringField
+      FieldName = 'COURT_NUM'
+      Size = 250
+    end
+  end
+  object Main_court: TOracleDataSet
+    SQL.Strings = (
+      
+        'select rownum,credid,custid,pin,names,branch,id, court_ammount, ' +
+        'court_status, court_date_num,'
+      
+        '       court_name, court_accepted_ammount, court_desc,court_mana' +
+        'ge, court_laststat, court_measure,'
+      
+        '       court_replace, replacement_count, investigation_org,infos' +
+        ', property, prop_desc, prop_address,'
+      
+        '       porp_passport, prop_price, prop_info, closedate,DUEDATEFI' +
+        'RSTCONTRACT,lstd,lstp,lstrest,frest from('
+      
+        'select  rownum,ac.prtid credid,ac.cust_id custid,ac.innorpin pin' +
+        ' ,ac.borrower_name names,ac.branch branch,cour.id, cour.court_am' +
+        'mount, cour.court_status, cour.court_date_num,'
+      
+        '       cour.court_name, cour.court_accepted_ammount, cour.court_' +
+        'desc, cour.court_manage, cour.court_laststat, cour.court_measure' +
+        ','
+      
+        '       cour.court_replace, cour.replacement_count, cour.investig' +
+        'ation_org,'
+      
+        '       cour.infos, cour.property, cour.prop_desc, cour.prop_addr' +
+        'ess,'
+      
+        '       cour.porp_passport, cour.prop_price, cour.prop_info,to_da' +
+        'te('#39#39') closedate,to_date('#39#39') DUEDATEFIRSTCONTRACT,cour.court_OPE' +
+        'RS,cour.mediation_date,cour.mediation_num ,'
+      
+        '       accepted_portfel.lastpaydat(ac.prtid,0)lstd,accepted_port' +
+        'fel.lastpayamt(ac.prtid,0)lstp,accepted_portfel.cred_lst(ac.prti' +
+        'd) lstrest, accepted_portfel.cred_frs(ac.prtid) frest'
+      '        from accepted_cr_portfels ac,credit_courts cour'
+      'where  ac.court_id= cour.id'
+      'union all'
+      
+        'select  rownum,cr.id credid,cr.boorowerid custid,(select passpin' +
+        ' from custinfo where idcust=cr.boorowerid) pin,(select name from' +
+        ' customers where id=cr.boorowerid) names,'
+      'cr.branchid branch,'
+      
+        ' cor.id, cor.court_ammount, cor.court_status, cor.court_date_num' +
+        ','
+      
+        '       cor.court_name, cor.court_accepted_ammount, cor.court_des' +
+        'c,'
+      '       cor.court_manage, cor.court_laststat, cor.court_measure,'
+      
+        '       cor.court_replace, cor.replacement_count, cor.investigati' +
+        'on_org,'
+      '       cor.infos, cor.property, cor.prop_desc, cor.prop_address,'
+      
+        '       cor.porp_passport, cor.prop_price, cor.prop_info,cr.close' +
+        'date closedate,cr.DUEDATEFIRSTCONTRACT,cor.court_OPERS,cor.media' +
+        'tion_date,cor.mediation_num,'
+      
+        '       accepted_portfel.lastpaydat(cr.id,0)lstd,accepted_portfel' +
+        '.lastpayamt(cr.id,0)lstp,accepted_portfel.cred_lst(cr.id) lstres' +
+        't, accepted_portfel.cred_frs(cr.id) frest '
+      
+        '       from cm_portfolio cr,credit_courts cor,customers s,custin' +
+        'fo cv where s.id=cr.boorowerid and idcust=cr.boorowerid and s.id' +
+        '=cv.idcust and cr.id=cor.id(+)'
+      ''
+      ''
+      ''
+      ''
+      '  ) where 1=1'
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      '')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000001C0000000C00000052004F0057004E0055004D000100000000000C00
+      00004200520041004E0043004800010000000000040000004900440001000000
+      00001A00000043004F005500520054005F0041004D004D004F0055004E005400
+      0100000000001800000043004F005500520054005F0053005400410054005500
+      53000100000000001C00000043004F005500520054005F004400410054004500
+      5F004E0055004D000100000000001400000043004F005500520054005F004E00
+      41004D0045000100000000002C00000043004F005500520054005F0041004300
+      4300450050005400450044005F0041004D004D004F0055004E00540001000000
+      00001400000043004F005500520054005F004400450053004300010000000000
+      1800000043004F005500520054005F004D0041004E0041004700450001000000
+      00001C00000043004F005500520054005F004C00410053005400530054004100
+      54000100000000001A00000043004F005500520054005F004D00450041005300
+      5500520045000100000000001A00000043004F005500520054005F0052004500
+      50004C00410043004500010000000000220000005200450050004C0041004300
+      45004D0045004E0054005F0043004F0055004E00540001000000000022000000
+      49004E005600450053005400490047004100540049004F004E005F004F005200
+      47000100000000000A00000049004E0046004F00530001000000000010000000
+      500052004F005000450052005400590001000000000012000000500052004F00
+      50005F00440045005300430001000000000018000000500052004F0050005F00
+      41004400440052004500530053000100000000001A00000050004F0052005000
+      5F00500041005300530050004F00520054000100000000001400000050005200
+      4F0050005F005000520049004300450001000000000012000000500052004F00
+      50005F0049004E0046004F000100000000000C00000043005200450044004900
+      44000100000000000C0000004300550053005400490044000100000000000600
+      0000500049004E000100000000000A0000004E0041004D004500530001000000
+      00001200000043004C004F005300450044004100540045000100000000002800
+      000044005500450044004100540045004600490052005300540043004F004E00
+      54005200410043005400010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 256
+    Top = 152
+    object Main_courtROWNUM: TFloatField
+      FieldName = 'ROWNUM'
+    end
+    object Main_courtCREDID: TFloatField
+      FieldName = 'CREDID'
+    end
+    object Main_courtCUSTID: TFloatField
+      FieldName = 'CUSTID'
+    end
+    object Main_courtPIN: TWideStringField
+      FieldName = 'PIN'
+      Size = 200
+    end
+    object Main_courtNAMES: TWideStringField
+      FieldName = 'NAMES'
+      Size = 250
+    end
+    object Main_courtBRANCH: TFloatField
+      FieldName = 'BRANCH'
+    end
+    object Main_courtID: TFloatField
+      FieldName = 'ID'
+    end
+    object Main_courtCOURT_AMMOUNT: TWideStringField
+      FieldName = 'COURT_AMMOUNT'
+      Size = 4000
+    end
+    object Main_courtCOURT_STATUS: TWideStringField
+      FieldName = 'COURT_STATUS'
+      Size = 4000
+    end
+    object Main_courtCOURT_DATE_NUM: TWideStringField
+      FieldName = 'COURT_DATE_NUM'
+      Size = 4000
+    end
+    object Main_courtCOURT_NAME: TWideStringField
+      FieldName = 'COURT_NAME'
+      Size = 4000
+    end
+    object Main_courtCOURT_ACCEPTED_AMMOUNT: TWideStringField
+      FieldName = 'COURT_ACCEPTED_AMMOUNT'
+      Size = 4000
+    end
+    object Main_courtCOURT_DESC: TWideMemoField
+      FieldName = 'COURT_DESC'
+      BlobType = ftWideMemo
+    end
+    object Main_courtCOURT_MANAGE: TWideStringField
+      FieldName = 'COURT_MANAGE'
+      Size = 4000
+    end
+    object Main_courtCOURT_LASTSTAT: TWideStringField
+      FieldName = 'COURT_LASTSTAT'
+      Size = 4000
+    end
+    object Main_courtCOURT_MEASURE: TWideMemoField
+      FieldName = 'COURT_MEASURE'
+      BlobType = ftWideMemo
+    end
+    object Main_courtCOURT_REPLACE: TWideMemoField
+      FieldName = 'COURT_REPLACE'
+      BlobType = ftWideMemo
+    end
+    object Main_courtREPLACEMENT_COUNT: TWideStringField
+      FieldName = 'REPLACEMENT_COUNT'
+      Size = 4000
+    end
+    object Main_courtINVESTIGATION_ORG: TWideMemoField
+      FieldName = 'INVESTIGATION_ORG'
+      BlobType = ftWideMemo
+    end
+    object Main_courtINFOS: TWideMemoField
+      FieldName = 'INFOS'
+      BlobType = ftWideMemo
+    end
+    object Main_courtPROPERTY: TWideStringField
+      FieldName = 'PROPERTY'
+      Size = 4000
+    end
+    object Main_courtPROP_DESC: TWideStringField
+      FieldName = 'PROP_DESC'
+      Size = 4000
+    end
+    object Main_courtPROP_ADDRESS: TWideStringField
+      FieldName = 'PROP_ADDRESS'
+      Size = 4000
+    end
+    object Main_courtPORP_PASSPORT: TWideStringField
+      FieldName = 'PORP_PASSPORT'
+      Size = 4000
+    end
+    object Main_courtPROP_PRICE: TWideStringField
+      FieldName = 'PROP_PRICE'
+      Size = 4000
+    end
+    object Main_courtPROP_INFO: TWideMemoField
+      FieldName = 'PROP_INFO'
+      BlobType = ftWideMemo
+    end
+    object Main_courtCLOSEDATE: TDateTimeField
+      FieldName = 'CLOSEDATE'
+    end
+    object Main_courtDUEDATEFIRSTCONTRACT: TDateTimeField
+      FieldName = 'DUEDATEFIRSTCONTRACT'
+    end
+  end
+  object sb_aca: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'sb_aca'
+    Left = 760
+    Top = 40
+  end
+end

@@ -1,0 +1,205 @@
+  unit CustomerDataModuleImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, DBTables, OracleData, Oracle, sboapiDataModuleImpl;
+
+type
+
+  {Instance of TCustomerDataModule must be created
+   before instance of TCustomerMainFormImpl
+  }
+
+  TCustomerDataModule = class(TDataModule)
+    Customers: TDataSource;
+    RelationData: TOracleDataSet;
+    Relation: TDataSource;
+    ClientGroupData: TOracleDataSet;
+    ClientGroup: TDataSource;
+    EstateTypeData: TOracleDataSet;
+    EstateType: TDataSource;
+    OrganizationTypeData: TOracleDataSet;
+    OrganizationType: TDataSource;
+    ActionAreaData: TOracleDataSet;
+    ActionArea: TDataSource;
+    BranchData: TOracleDataSet;
+    Branch: TDataSource;
+    CurrencyData: TOracleDataSet;
+    TaxAreaData: TOracleDataSet;
+    TaxArea: TDataSource;
+    CurrencyDataVALUTE: TIntegerField;
+    CurrencyDataDEBET: TFloatField;
+    CurrencyDataKREDIT: TFloatField;
+    CurrencyDataUSTORG: TFloatField;
+    CurrencyDataUSTPOK: TFloatField;
+    CurrencyDataUSING: TIntegerField;
+    CurrencyDataPRISTAVKA: TFloatField;
+    CurrencyDataUST_POK1: TFloatField;
+    CurrencyDataF5501P: TFloatField;
+    CurrencyDataF5501V: TFloatField;
+    CurrencyDataSDEBET: TFloatField;
+    CurrencyDataSCREDIT: TFloatField;
+    CurrencyDataLIMIT: TFloatField;
+    RelationDataID: TFloatField;
+    ClientGroupDataID: TFloatField;
+    EstateTypeDataID: TFloatField;
+    OrganizationTypeDataID: TFloatField;
+    ActionAreaDataID: TFloatField;
+    BranchDataID: TFloatField;
+    TaxAreaDataID: TFloatField;
+    ActiveCustomerList: TOracleDataSet;
+    OPCust: TOraclePackage;
+    FilialsData: TOracleDataSet;
+    Filials: TDataSource;
+    CurrencyDataVAL_NAME: TWideStringField;
+    CurrencyDataVALU_NAME: TWideStringField;
+    RelationDataNAME: TWideStringField;
+    ClientGroupDataNAME: TWideStringField;
+    EstateTypeDataNAME: TWideStringField;
+    OrganizationTypeDataNAME: TWideStringField;
+    ActionAreaDataNAME: TWideStringField;
+    BranchDataNAME: TWideStringField;
+    TaxAreaDataNAME: TWideStringField;
+    CurrencyDataVALU_SHORT: TWideStringField;
+    CurrencyDataVALU_GEN: TWideStringField;
+    CurrencyDataVALU_AZ: TWideStringField;
+    CurrencyDataVALU_OTHER: TWideStringField;
+    CurrencyDataVALU_INTER: TWideStringField;
+    CurrencyDataVALU_BALA: TWideStringField;
+    CurrencyDataCOUNTRY: TWideStringField;
+    CurrencyDataOFFICAL: TWideStringField;
+    ActiveCustomerListID: TIntegerField;
+    ActiveCustomerListOP_ID: TFloatField;
+    ActiveCustomerListOPEN_DAT: TDateTimeField;
+    ActiveCustomerListCLOSE_DAT: TDateTimeField;
+    ActiveCustomerListNEREZIDENT: TFloatField;
+    ActiveCustomerListPRINAD_KOD: TFloatField;
+    ActiveCustomerListNAME: TWideStringField;
+    ActiveCustomerListSHORT_NAME: TWideStringField;
+    ActiveCustomerListGROUP_KLIE: TFloatField;
+    ActiveCustomerListVID_SOB: TFloatField;
+    ActiveCustomerListORG_SOB: TFloatField;
+    ActiveCustomerListSFERA_DEY: TFloatField;
+    ActiveCustomerListOTRASL: TFloatField;
+    ActiveCustomerListNALOG_KOD: TFloatField;
+    ActiveCustomerListKOD_OKPRO: TWideStringField;
+    ActiveCustomerListINN: TWideStringField;
+    ActiveCustomerListDAT_NAL: TDateTimeField;
+    ActiveCustomerListDAT_USTAV: TDateTimeField;
+    ActiveCustomerListBIK: TFloatField;
+    ActiveCustomerListTIP: TWideStringField;
+    procedure ActiveCustomerListApplyRecord(Sender: TOracleDataSet;
+      Action: Char; var Applied: Boolean; var NewRowId: String);
+    procedure ActiveCustomerListCalcFields(DataSet: TDataSet);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    function CurrencyIDByIndex(AIndex: Integer): Integer;
+  end;
+
+var
+  CustomerDataModule: TCustomerDataModule;
+
+procedure Initialize;
+procedure Cleanup;
+
+implementation
+
+{$R *.DFM}
+
+uses SBCore, SBCustomer, CustomerPropertiesForm_Unit;
+
+procedure TCustomerDataModule.ActiveCustomerListApplyRecord(
+  Sender: TOracleDataSet; Action: Char; var Applied: Boolean;
+  var NewRowId: String);
+var
+  CustomerInfo: TCustomer;
+begin
+
+  with Sender, CustomerInfo do
+  begin
+    Name := FieldByName('NAME').AsString;
+    ShortName := FieldByName('Short_Name').AsString;
+    OpenDate := FieldByName('OPEN_DAT').AsDateTime;
+    CloseDate := FieldByName('CLOSE_DAT').AsDateTime;
+    RelationID := FieldByName('PRINAD_KOD').AsInteger;
+    GroupID := FieldByName('GROUP_KLIE').AsInteger;
+    EstateType := FieldByName('VID_SOB').AsInteger;
+    OrganizationType := FieldByName('ORG_SOB').AsInteger;
+    ActionArea := FieldByName('SFERA_DEY').AsInteger;
+    BranchID := FieldByName('OTRASL').AsInteger;
+    TaxAreaID := FieldByName('NALOG_KOD').AsInteger;
+    IsResident := FieldByName('NEREZIDENT').AsInteger=1;
+    TaxIDString := FieldByName('INN').AsString;
+    BankIDString := FieldByName('BIK').AsString;
+    OKPRO := FieldByName('KOD_OKPRO').AsString;
+    //GovOfficer := FieldByName('OTV_LICO').AsString;
+    TaxDepartmentRegDate := FieldByName('DAT_NAL').AsDateTime;
+    CapitalRegDate := FieldByName('DAT_USTAV').AsDateTime;
+  end;
+
+  Applied := True;
+
+  case Action of
+  'I':
+      Sb_AddCustomer(CustomerInfo);
+
+  'U':
+    Sb_EditCustomer(
+      Sender.FieldByName('ID').AsInteger,
+      CustomerInfo);
+  else
+    Applied := False;
+  end;
+end;
+
+function TCustomerDataModule.CurrencyIDByIndex(AIndex: Integer): Integer;
+begin
+  with CurrencyData do
+  begin
+    RecNo := AIndex;
+    Result := FieldByName('VALUTE').AsInteger;
+  end;
+end;
+
+procedure Initialize;
+begin
+  CustomerDataModule := TCustomerDataModule.Create(nil);
+end;
+
+procedure Cleanup;
+begin
+  CustomerDataModule.Free;
+end;
+
+procedure TCustomerDataModule.ActiveCustomerListCalcFields(
+  DataSet: TDataSet);
+{var
+   Inn :string;
+   fState    :Integer;
+   fLength   : Integer;}
+begin
+{
+   Inn :='';
+   with  DataSet  do
+   begin
+       fLength := Length(FieldByName('Inn').AsString);
+       if  (FLength < 9) and (FieldByName('Inn').AsString <> '')  then
+        begin
+         for fState :=1 to 9-Length(FieldByName('Inn').AsString) do
+          Inn :=Inn +'0';
+          FieldByName('RealInn').AsString :=Inn +FieldByName('Inn').AsString;
+        end
+       else
+         FieldByName('RealInn').AsString :=FieldByName('Inn').AsString;
+   end;
+   }
+end;
+
+initialization
+finalization
+  Cleanup;
+end.

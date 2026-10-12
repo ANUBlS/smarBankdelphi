@@ -1,0 +1,335 @@
+unit Unit7;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ComCtrls, StdCtrls, ExtCtrls, Grids, DBGrids, Buttons;
+
+type
+  TFormSearch = class(TForm)
+    DBGridMainCard: TDBGrid;
+    PnlAdvSearch: TPanel;
+    Label6: TLabel;
+    Label7: TLabel;
+    Label8: TLabel;
+    Label9: TLabel;
+    Label10: TLabel;
+    Label13: TLabel;
+    Label14: TLabel;
+    Label15: TLabel;
+    Label12: TLabel;
+    Label44: TLabel;
+    Label45: TLabel;
+    Label11: TLabel;
+    Label16: TLabel;
+    EditCardNumber: TEdit;
+    EditMainCard: TEdit;
+    EditRBSNum: TEdit;
+    EditRBSNum2: TEdit;
+    EditReference: TEdit;
+    EditCardHolder: TEdit;
+    EditLastName: TEdit;
+    EditFirstName: TEdit;
+    CBoxCurrencies: TComboBox;
+    ComboCISearch: TComboBox;
+    ComCIType: TComboBox;
+    EditCompany: TEdit;
+    DTPickerOpenDate: TDateTimePicker;
+    Panel49: TPanel;
+    ButtonCICard: TSpeedButton;
+    ButtonCISUB: TSpeedButton;
+    buttonCIother: TSpeedButton;
+    ButtonCISelec: TSpeedButton;
+    PrintButton: TSpeedButton;
+    BtnExcel: TSpeedButton;
+    CheckGridRowSelect: TCheckBox;
+    procedure EditCardNumberEnter(Sender: TObject);
+    procedure FormKeyUp(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure EditCardNumberKeyPress(Sender: TObject; var Key: Char);
+    procedure DBGridMainCardDrawColumnCell(Sender: TObject;
+      const Rect: TRect; DataCol: Integer; Column: TColumn;
+      State: TGridDrawState);
+    procedure EditMainCardKeyPress(Sender: TObject; var Key: Char);
+    procedure EditRBSNumKeyPress(Sender: TObject; var Key: Char);
+    procedure EditRBSNum2KeyPress(Sender: TObject; var Key: Char);
+    procedure EditReferenceKeyPress(Sender: TObject; var Key: Char);
+    procedure EditCardHolderKeyPress(Sender: TObject; var Key: Char);
+    procedure EditLastNameKeyPress(Sender: TObject; var Key: Char);
+    procedure EditFirstNameKeyPress(Sender: TObject; var Key: Char);
+    procedure ComCITypeChange(Sender: TObject);
+    procedure ComboCISearchChange(Sender: TObject);
+    procedure ButtonCICardClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormSearch: TFormSearch;
+
+implementation
+
+uses Unit18, MAINFORMImpl1;
+
+{$R *.DFM}
+
+procedure TFormSearch.EditCardNumberEnter(Sender: TObject);
+begin
+(Sender as TEdit).Clear;
+end;
+
+procedure TFormSearch.FormKeyUp(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+
+
+
+
+  if key = vk_escape then close;
+  if key = vk_f5 then    Datamod_cards.ClienList.Refresh;
+  if key = vk_f3 then    close;
+end;
+
+procedure TFormSearch.EditCardNumberKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+DataMod_cards.ClienList.Filtered:=false;
+  with DataMod_cards.ClienList do begin
+   Filter := 'CardNumber = '''+EditCardNumber.Text+('*')+'''';
+  end;
+  DataMod_cards.ClienList.Filtered:=True;
+  end;
+
+procedure TFormSearch.DBGridMainCardDrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TColumn;
+  State: TGridDrawState);
+begin
+   if buttonCIother.Down = false then
+   begin
+       if (DBGridMainCard.DataSource.DataSet.FieldByName('expiry').AsDateTime < date) then
+       begin
+         DBGridMainCard.Canvas.Brush.Color:=$00C08000;
+         DBGridMainCard.DefaultDrawColumnCell(rect,datacol,column,state);
+       end;
+       if (DBGridMainCard.DataSource.DataSet.FieldByName('dateclose').AsString <> '') then
+       begin
+         DBGridMainCard.Canvas.Brush.Color:=Clsilver;
+         DBGridMainCard.DefaultDrawColumnCell(rect,datacol,column,state);
+       end;
+   end;
+end;
+
+procedure TFormSearch.EditMainCardKeyPress(Sender: TObject; var Key: Char);
+begin
+DataMod_cards.ClienList.Filtered:=false;
+
+  with DataMod_cards.ClienList do begin
+   Filter := 'MainCard = '''+EditMainCard.Text+('*')+'''';
+end;
+DataMod_cards.ClienList.Filtered:=True;
+  end;
+procedure TFormSearch.EditRBSNumKeyPress(Sender: TObject; var Key: Char);
+begin
+  DataMod_cards.ClienList.Filtered:=False;
+  with DataMod_cards.ClienList do begin
+   Filter := 'RBSNumber = '''+EditRBSNum.Text+('*')+'''';
+  end;
+  DataMod_cards.ClienList.Filtered:=True;
+  end;
+
+procedure TFormSearch.EditRBSNum2KeyPress(Sender: TObject; var Key: Char);
+begin
+DataMod_cards.ClienList.Filtered:=False;
+  with DataMod_cards.ClienList do begin
+   Filter := 'RBSNumber = '''+EditRBSNum2.Text+('*')+'''';
+  end;
+  DataMod_cards.ClienList.Filtered:=True;
+  end;
+
+procedure TFormSearch.EditReferenceKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+DataMod_cards.ClienList.Filtered:=false;
+  with DataMod_cards.ClienList do begin
+   Filter := 'Reference = '''+EditReference.Text+('*')+'''';
+  end;
+  DataMod_cards.ClienList.Filtered:=True;
+  end;
+
+procedure TFormSearch.EditCardHolderKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+DataMod_cards.ClienList.Filtered:=False;
+  with DataMod_cards.ClienList do begin
+   Filter := 'CardHolder = '''+EditCardHolder.Text+('*')+'''';
+  end;
+  DataMod_cards.ClienList.Filtered:=True;
+  end;
+
+procedure TFormSearch.EditLastNameKeyPress(Sender: TObject; var Key: Char);
+begin
+DataMod_cards.ClienList.Filtered:=False;
+  with DataMod_cards.ClienList do begin
+   Filter := 'LName = '''+EditLastName.Text+('*')+'''';
+  end;
+  DataMod_cards.ClienList.Filtered:=True;
+  end;
+
+procedure TFormSearch.EditFirstNameKeyPress(Sender: TObject;
+  var Key: Char);
+
+  begin
+DataMod_cards.ClienList.Filtered:=False;
+  with DataMod_cards.ClienList do begin
+   Filter := 'FName = '''+EditFirstName.Text+('*')+'''';
+  end;
+  DataMod_cards.ClienList.Filtered:=True;
+  end;
+
+procedure TFormSearch.ComCITypeChange(Sender: TObject);
+ var
+  sqlstr :string;
+begin
+   if ButtonCICard.down then
+   begin
+       {}
+       if (ComboCISearch.ItemIndex = 0)and(ComCIType.ItemIndex = 0) then
+       SqlStr:='Select clients.rowid,clients.* from cardmanager.clients where (messtype<3)'
+       else
+       if (ComboCISearch.ItemIndex = 0)and(ComCIType.ItemIndex > 0) then
+       SqlStr:='Select clients.rowid, clients.* from cardmanager.clients where (messtype<3)and(cardtype='''+ComCIType.items[ComCIType.itemindex]+''')'
+       else
+       if (ComboCISearch.ItemIndex > 0)and(ComCIType.ItemIndex = 0) then
+       SqlStr:='Select clients.rowid, clients.* from cardmanager.clients where (messtype<3)and(cardstatus='''+ComboCISearch.items[ComboCISearch.itemindex]+''')'
+       else
+       if (ComboCISearch.ItemIndex > 0)and(ComCIType.ItemIndex > 0) then
+       SqlStr:='Select clients.rowid, clients.* from cardmanager.clients where (messtype<3)and(cardtype='''+ComCIType.items[ComCIType.itemindex]+''')and(cardstatus='''+ComboCISearch.items[ComboCISearch.itemindex]+''')';
+   end else
+   {IF SUB CARD SELECT}
+   if ButtonCISUB.down then
+   begin
+       {}
+       if (ComboCISearch.ItemIndex = 0)and(ComCIType.ItemIndex = 0) then
+       sqlstr:='Select clients.rowid,clients.* from cardmanager.clients a where (messtype=2)'
+       else
+       if (ComboCISearch.ItemIndex = 0)and(ComCIType.ItemIndex > 0) then
+       sqlstr:='Select clients.rowid, clients.* from cardmanager.clients where (messtype=2)and(cardtype='''+ComCIType.items[ComCIType.itemindex]+''')'
+       else
+       if (ComboCISearch.ItemIndex > 0)and(ComCIType.ItemIndex = 0) then
+       sqlstr:='Select clients.rowid, clients.* from cardmanager.clients where (messtype=2)and(cardstatus='''+ComboCISearch.items[ComboCISearch.itemindex]+''')'
+       else
+       if (ComboCISearch.ItemIndex > 0)and(ComCIType.ItemIndex > 0) then
+       sqlstr:='Select clients.rowid, clients.* from cardmanager.clients where (messtype=2)and(cardtype='''+ComCIType.items[ComCIType.itemindex]+''')and(cardstatus='''+ComboCISearch.items[ComboCISearch.itemindex]+''')';
+   end
+   else
+   if buttonCIother.Down then
+   begin
+       sqlstr:='Select clients.rowid, clients.* from cardmanager.clients where (messtype=9)and(othtype='''+ComCIType.items[ComCIType.itemindex]+''')';
+   end;
+   {Execute Sql text}
+   Datamod_cards.ClienList.Active:=false;
+   Datamod_cards.ClienList.sql.clear;
+   Datamod_cards.ClienList.sql.Add(SqlStr);
+   Datamod_cards.ClienList.Active:=true;
+end;
+
+procedure TFormSearch.ComboCISearchChange(Sender: TObject);
+ var  SqlStr : String;
+begin
+   if ButtonCICard.down then
+   begin
+       {}
+       if (ComboCISearch.ItemIndex = 0)and(ComCIType.ItemIndex = 0) then
+       SqlStr:='Select clients.rowid,clients.* from cardmanager.clients where (messtype<3)'
+       else
+       if (ComboCISearch.ItemIndex = 0)and(ComCIType.ItemIndex > 0) then
+       SqlStr:='Select clients.rowid, clients.* from cardmanager.clients where (messtype<3)and(cardtype='''+ComCIType.items[ComCIType.itemindex]+''')'
+       else
+       if (ComboCISearch.ItemIndex > 0)and(ComCIType.ItemIndex = 0) then
+       SqlStr:='Select clients.rowid, clients.* from cardmanager.clients where (messtype<3)and(cardstatus='''+ComboCISearch.items[ComboCISearch.itemindex]+''')'
+       else
+       if (ComboCISearch.ItemIndex > 0)and(ComCIType.ItemIndex > 0) then
+       SqlStr:='Select clients.rowid, clients.* from cardmanager.clients where (messtype<3)and(cardtype='''+ComCIType.items[ComCIType.itemindex]+''')and(cardstatus='''+ComboCISearch.items[ComboCISearch.itemindex]+''')';
+   end else
+   {IF SUB CARD SELECT}
+   if ButtonCISUB.down then
+   begin
+       {}
+       if (ComboCISearch.ItemIndex = 0)and(ComCIType.ItemIndex = 0) then
+       sqlstr:='Select clients.rowid,clients.* from cardmanager.clients where (messtype=2)'
+       else
+       if (ComboCISearch.ItemIndex = 0)and(ComCIType.ItemIndex > 0) then
+       sqlstr:='Select clients.rowid, clients.* from cardmanager.clients where (messtype=2)and(cardtype='''+ComCIType.items[ComCIType.itemindex]+''')'
+       else
+       if (ComboCISearch.ItemIndex > 0)and(ComCIType.ItemIndex = 0) then
+       sqlstr:='Select clients.rowid, clients.* from cardmanager.clients where (messtype=2)and(cardstatus='''+ComboCISearch.items[ComboCISearch.itemindex]+''')'
+       else
+       if (ComboCISearch.ItemIndex > 0)and(ComCIType.ItemIndex > 0) then
+       sqlstr:='Select clients.rowid, clients.* from cardmanager.clients where (messtype=2)and(cardtype='''+ComCIType.items[ComCIType.itemindex]+''')and(cardstatus='''+ComboCISearch.items[ComboCISearch.itemindex]+''')';
+   end
+   else
+   if buttonCIother.Down then
+   begin
+       sqlstr:='Select clients.rowid, clients.* from cardmanager.clients where (messtype=9)and(othtype='''+ComCIType.items[ComCIType.itemindex]+''')';
+   end;
+   {Execute Sql text}
+   ShowMessage(SqlStr);
+
+
+   Datamod_cards.ClienList.Active:=false;
+   Datamod_cards.ClienList.sql.clear;
+   Datamod_cards.ClienList.sql.Add(SqlStr);
+   Datamod_cards.ClienList.Active:=true;
+end;
+
+procedure TFormSearch.ButtonCICardClick(Sender: TObject);
+var I:integer;
+    strsql: String;
+begin
+   if ButtonCICard.Down then
+   begin
+     Datamod_cards.ClienList.Active:=false;
+     Datamod_cards.ClienList.sql.clear;
+     strsql:='Select clients.rowid, clients.* from cardmanager.clients where (clients.messtype<3) ORDER BY length(RefInteger),RefInteger';
+     Datamod_cards.ClienList.sql.Add(StrSql);
+     Datamod_cards.ClienList.Active:=true;
+     ComCIType.items.Clear;
+     ComCIType.Items.Add('ALL');
+     Datamod_cards.ClientSearch.Active:=false;
+     Datamod_cards.ClientSearch.sql.Clear;
+     Datamod_cards.ClientSearch.sql.Add('Select distinct(name) from cardmanager.cards');
+     Datamod_cards.ClientSearch.Active:=true;
+     if Datamod_cards.ClientSearch.RecordCount > 0 then
+     begin
+        Datamod_cards.ClientSearch.First;
+        while not Datamod_cards.ClientSearch.Eof do
+        begin
+          ComCIType.Items.Add(Datamod_cards.ClientSearch.fieldbyname('name').AsString);
+          Datamod_cards.ClientSearch.Next;
+        end;
+     end;
+     Datamod_cards.ClientSearch.Active:=false;
+     Datamod_cards.ClientSearch.sql.Clear;
+     Datamod_cards.ClientSearch.sql.Add('Select distinct(cardtype) from cardmanager.clients where (messtype=1)or(messtype=2)');
+     Datamod_cards.ClientSearch.Active:=true;
+     if Datamod_cards.ClientSearch.RecordCount > 0 then
+     begin
+        Datamod_cards.ClientSearch.First;
+        while not Datamod_cards.ClientSearch.Eof do
+        begin
+          if ComCIType.Items.IndexOf(Datamod_cards.ClientSearch.fieldbyname('cardtype').AsString) = -1 then
+          ComCIType.Items.Add(Datamod_cards.ClientSearch.fieldbyname('cardtype').AsString);
+          Datamod_cards.ClientSearch.Next;
+        end;
+     end;
+   ComCIType.ItemIndex:=0;
+   ComboCISearch.ItemIndex:=0;
+   for i:=2 to 27 do  DBGridMainCard.Columns[i].Visible:=true;
+   for i:=28 to 30 do DBGridMainCard.Columns[i].Visible:=false;
+  end;
+end;
+
+end.

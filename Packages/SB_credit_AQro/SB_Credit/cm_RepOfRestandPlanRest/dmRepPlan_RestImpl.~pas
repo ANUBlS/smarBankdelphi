@@ -1,0 +1,85 @@
+unit dmRepPlan_RestImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, OracleData;
+
+type
+  TdmRepPlan_Rest = class(TDataModule)
+    ODFValute: TOracleDataSet;
+    Valute: TDataSource;
+    ODFReserves: TOracleDataSet;
+    Reserves: TDataSource;
+    ODFPersons: TOracleDataSet;
+    Persons: TDataSource;
+    ODFPledges: TOracleDataSet;
+    Pledges: TDataSource;
+    ODFCategories: TOracleDataSet;
+    Categories: TDataSource;
+    ODFBranch: TOracleDataSet;
+    Branch: TDataSource;
+    DueReserve: TDataSource;
+    ODFCustomers: TOracleDataSet;
+    Customers: TDataSource;
+    ODFCrdTypes: TOracleDataSet;
+    CrdType: TDataSource;
+    ODFUsers: TOracleDataSet;
+    Users: TDataSource;
+    ODFUsrGroup: TOracleDataSet;
+    UsrGroup: TDataSource;
+    R: TOracleDataSet;
+    RNUMBEROFCREDIT: TStringField;
+    RREST: TFloatField;
+    RINTERESTREST: TFloatField;
+    RANNUTYAMT: TFloatField;
+    RPLANREST: TFloatField;
+    RDIFREST: TFloatField;
+    RDESCRIPTION: TStringField;
+    RLASTDAT: TDateTimeField;
+    procedure DataModuleCreate(Sender: TObject);
+    procedure DataModuleDestroy(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  dmRepPlan_Rest: TdmRepPlan_Rest;
+
+implementation
+
+{$R *.DFM}
+uses CMOracleApiDataModuleImpl;
+
+procedure TdmRepPlan_Rest.DataModuleCreate(Sender: TObject);
+begin
+ODFValute.open;
+ODFReserves.open;
+ODFPersons.open;
+ODFPledges.open;
+ODFBranch .open;
+ODFCategories .open;
+ODFCustomers.open;
+ODFUsrGroup .open;
+ODFUsers.open;
+ODFCrdTypes  .open;
+end;
+
+procedure TdmRepPlan_Rest.DataModuleDestroy(Sender: TObject);
+begin
+  ODFValute.closeall;
+  ODFReserves.closeall;
+  ODFPersons.closeall;
+  ODFPledges.closeall;
+  ODFBranch.closeall;
+  ODFCategories.closeall;
+  ODFCustomers.closeall;
+  ODFUsrGroup.closeall;
+  ODFUsers.closeall;
+  ODFCrdTypes .closeall;
+end;
+
+end.

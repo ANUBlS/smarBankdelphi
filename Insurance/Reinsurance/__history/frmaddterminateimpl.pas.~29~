@@ -1,0 +1,218 @@
+﻿unit frmaddterminateimpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, XFSCtrls, DBCtrls, ExtCtrls, ComCtrls, Mask;
+
+type
+  Tfrmaddterminate = class(TForm)
+    XFPanel2: TXFPanel;
+    XFButton1: TXFButton;
+    XFButton2: TXFButton;
+    XFPanel1: TXFPanel;
+    XFLabel1: TXFLabel;
+    XFLabel2: TXFLabel;
+    DBEdit1: TDBEdit;
+    DBLookupComboBox1: TDBLookupComboBox;
+    DBLookupComboBox4: TDBLookupComboBox;
+    XFLabel7: TXFLabel;
+    Memo1: TMemo;
+    procedure XFButton2Click(Sender: TObject);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormShow(Sender: TObject);
+    procedure XFButton1Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure DBEdit1KeyPress(Sender: TObject; var Key: Char);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+           filter :string;
+  end;
+
+var
+  frmaddterminate: Tfrmaddterminate;
+
+implementation
+
+{$R *.dfm}
+uses DMreinsuranceImpl,CommanParametrs, FrmreinsuranceImpl,sboapiDataModuleImpl,
+  frmterminatebarderoimpl;
+procedure Tfrmaddterminate.DBEdit1KeyPress(Sender: TObject; var Key: Char);
+begin
+    if not (Key in ['A'..'Z','a'..'z','0'..'9',#8] )then begin Key:=#0; end;
+end;
+
+procedure Tfrmaddterminate.FormCreate(Sender: TObject);
+begin
+filter:=DMreinsurance.DSinsurancesX.SQL.Text;
+end;
+
+procedure Tfrmaddterminate.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+if ord(key)=vk_escape then  close;
+end;
+
+procedure Tfrmaddterminate.FormShow(Sender: TObject);
+var
+t,tm,tfq,t1 :string;
+begin
+DMreinsurance.DScontract.close;
+DMreinsurance.DScontract.SetVariable('p_id',contactid);
+DMreinsurance.DScontract.Open;
+
+
+t:='';
+tm:='';
+tfq:='';
+t1:='';
+
+if (DMreinsurance.DScontract.FieldByName('type_id').AsInteger=4)
+and (DMreinsurance.DScontract.FieldByName('chm').AsInteger=1) then
+begin
+    tm:='(13)';
+end;
+
+if (DMreinsurance.DScontract.FieldByName('type_id').AsInteger=4)
+and (DMreinsurance.DScontract.FieldByName('chfq').AsInteger=1) then
+begin
+    tfq:='(1)';
+end  ;
+
+if (DMreinsurance.DScontract.FieldByName('type_id').AsInteger=4)
+and (DMreinsurance.DScontract.FieldByName('chkasko').AsInteger=1) then
+begin
+    t:='(4)';
+end  ;
+
+if (DMreinsurance.DScontract.FieldByName('type_id').AsInteger=4) then
+
+begin
+    if t1='' then
+    t1:=tm
+    else
+    t1:=t1+','+tm ;
+
+    if t1='' then
+    t1:=tfq
+    else
+    t1:=t1+','+tfq ;
+
+    if t1='' then
+    t1:=t
+    else
+    t1:=t1+','+t ;
+
+end
+else
+begin
+  t1:=DMreinsurance.DScontract.FieldByName('type_id').AsString;
+end;
+
+//showmessage(t1);
+
+
+
+//DMreinsurance.dsinsurance_type.Close;
+             if t1<>'' then
+             begin
+ DMreinsurance.DSinsurancesX.Close;
+ DMreinsurance.DSinsurancesX.SQL.Text:=filter+ ' and id in ('+t1+')';
+ memo1.Text:=DMreinsurance.dsinsurance_type.SQL.Text;
+ DMreinsurance.DSinsurancesX.open;
+
+             end
+             else
+             begin
+  DMreinsurance.DSinsurancesX.Close;
+ DMreinsurance.DSinsurancesX.SQL.Text:=filter;
+ memo1.Text:=DMreinsurance.dsinsurance_type.SQL.Text;
+ DMreinsurance.DSinsurancesX.open;
+             end;
+             //showmessage(inttostr(contactid));
+ DMreinsurance.DScustomersX.Close;
+  DMreinsurance.DScustomersX.SetVariable('pcid',contactid);
+  DMreinsurance.DScustomersX.open;
+
+  if opetion='ins' then
+begin
+  DMreinsurance.DSins_terminated_bardero.Close;
+  DMreinsurance.DSins_terminated_bardero.SetVariable('pid',-1);
+  DMreinsurance.DSins_terminated_bardero.open;
+end;
+
+end;
+
+procedure Tfrmaddterminate.XFButton1Click(Sender: TObject);
+begin
+
+
+
+if DBEdit1.Text='' then
+begin
+  showmessage('Xitam Bardero № Sahəsi boşdur.');
+  exit;
+end;
+if DBLookupComboBox1.KeyValue=null then
+begin
+  showmessage ('Təkrarsığortaçının adı Sahəsi boşdur.');
+  exit;
+end;
+if DBLookupComboBox4.KeyValue=null then
+begin
+  showmessage ('Siğorta növü Sahəsi boşdur.');
+  exit;
+end;
+
+
+///--- fwrid yazib 02122013    begin
+DMreinsurance.DS_Bardero_ter_sogortaci.Close;
+DMreinsurance.DS_Bardero_ter_sogortaci.SetVariable('pid',contactid);
+DMreinsurance.DS_Bardero_ter_sogortaci.SetVariable('p_type_id',DBLookupComboBox4.KeyValue);
+DMreinsurance.DS_Bardero_ter_sogortaci.SetVariable('p_cust_id',DBLookupComboBox1.KeyValue);
+DMreinsurance.DS_Bardero_ter_sogortaci.open;
+
+ if DMreinsurance.DS_Bardero_ter_sogortaci.FieldByName('say').AsInteger>0 then
+    begin
+      showmessage('Bu müqavilə artiq xitam barderosuna göndərilib.');
+      exit;
+    end;
+
+///--- fwrid yazib 02122013 end
+
+if opetion='ins' then
+begin
+//bordero_say:=DBEdit1.Text;
+
+DMreinsurance.DS_Bardero__ter_sayi.Close;
+DMreinsurance.DS_Bardero__ter_sayi.SetVariable('p_bardero_no',DBEdit1.Text);
+DMreinsurance.DS_Bardero__ter_sayi.SetVariable('p_type_id',DBLookupComboBox4.KeyValue);
+DMreinsurance.DS_Bardero__ter_sayi.SetVariable('p_cid',contactid);
+
+DMreinsurance.DS_Bardero__ter_sayi.open;
+
+
+if DMreinsurance.DS_Bardero__ter_sayi.FieldByName('say').AsInteger>0 then
+begin
+   showmessage('Diqqət!Xitam barderosu ucun eyni adda və eyni siğorta növündə Bardero yığıla bilməz.');
+  exit;
+end;
+
+with DMreinsurance do
+begin
+      DSins_terminated_bardero.Edit;
+      DSins_terminated_bardero.post;
+   end;
+end;
+frmaddterminate.Close;
+frmterminatebardero.XDBGrid1.DataSource.DataSet.Refresh;
+end;
+
+procedure Tfrmaddterminate.XFButton2Click(Sender: TObject);
+begin
+close;
+end;
+
+end.

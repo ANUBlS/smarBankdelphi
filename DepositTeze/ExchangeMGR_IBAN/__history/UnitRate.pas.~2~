@@ -1,0 +1,85 @@
+unit UnitRate;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
+    ExtCtrls, Grids, DBGrids, StdCtrls, Buttons, ComCtrls;
+
+type
+  TFormRate = class(TForm)
+    PanelMain: TPanel;
+    DBGridRate: TDBGrid;
+    BtnOk: TBitBtn;
+    Panel2: TPanel;
+    DTP_Rate_Date: TDateTimePicker;
+    Panel1: TPanel;
+    Panel3: TPanel;
+    Panel4: TPanel;
+    Panel5: TPanel;
+    Panel6: TPanel;
+    procedure BtnOkClick(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormRate: TFormRate;
+
+implementation
+
+{$R *.DFM}
+           uses UnitDateExch;
+
+procedure TFormRate.BtnOkClick(Sender: TObject);
+var
+    i:integer;
+begin
+ try
+   Screen.Cursor:=crSQLWait;
+      with DataModExch do
+       begin
+                 ODSRateInsert.First;
+             for i:=1 to ODSRateInsert.RecordCount do
+              begin
+                    ODSExchRate.Insert;
+                    ODSExchRate.FieldByName('val_id').AsInteger:=ODSRateInsert.FieldByName('val_id').AsInteger;
+                    ODSExchRate.FieldByName('val_name').AsString:=ODSRateInsert.FieldByName('val_name').AsString;
+                    ODSExchRate.FieldByName('val_full_name').AsString:=ODSRateInsert.FieldByName('val_full_name').AsString;
+                    ODSExchRate.FieldByName('val_purchase_course').AsFloat:=ODSRateInsert.FieldByName('val_purchase_course').AsFloat;
+                    ODSExchRate.FieldByName('val_selling_course').AsFloat:=ODSRateInsert.FieldByName('val_selling_course').AsFloat;
+                    ODSExchRate.FieldByName('val_nb_course').AsFloat:=ODSRateInsert.FieldByName('val_nb_course').AsFloat;
+                    ODSExchRate.FieldByName('ex_id').AsInteger:=ODSRateInsert.FieldByName('ex_id').AsInteger;
+                    ODSExchRate.FieldByName('dat').AsDateTime:=Integer(Trunc(DTP_Rate_Date.Date));
+                    ODSExchRate.FieldByName('first_ostat').AsFloat:=ODSRateInsert.FieldByName('current_ostat').AsFloat;
+                    ODSExchRate.FieldByName('current_ostat').AsFloat:=ODSRateInsert.FieldByName('current_ostat').AsFloat;
+                    ODSExchRate.FieldByName('purchase_turn').AsFloat:=0;
+                    ODSExchRate.FieldByName('selling_turn').AsFloat:=0;
+                    ODSExchRate.Post;
+                ODSRateInsert.Next;
+              end;
+            ODSExchRate.Refresh;
+            ODSExchRateOther.Refresh;
+       end;
+     finally
+       Screen.Cursor:=crDefault;
+     end;
+end;
+
+procedure TFormRate.FormActivate(Sender: TObject);
+var dat :TDateTime;
+begin
+DTP_Rate_Date.Date:=Date;
+dat:=Integer(Trunc(DTP_Rate_Date.DateTime));
+      with DataModExch.ODSRateInsert do
+        begin
+            Close;
+            SetVariable('dat',Dat);
+            Open;
+       end;
+end;
+
+end.

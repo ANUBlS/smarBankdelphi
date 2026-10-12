@@ -1,0 +1,168 @@
+﻿unit ReplaceImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,Dialogs,
+  StdCtrls, XFSCtrls, ExtCtrls, CMCurrencyEdit, ComCtrls;
+
+type
+  TSheduleReplace = class(TForm)
+    XFGroupBox1: TXFGroupBox;
+    XFButton11: TXFButton;
+    XFButton1: TXFButton;
+    XFRadioGroup1: TXFRadioGroup;
+    Image1: TImage;
+    XFLabel1: TXFLabel;
+    Rest: TCMCurrencyEdit;
+    XFLabel2: TXFLabel;
+    Edit1: TEdit;
+    XFLabel3: TXFLabel;
+    XFGroupBox2: TXFGroupBox;
+    XFCheckBox1: TXFCheckBox;
+    DateTimePicker1: TDateTimePicker;
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+    procedure FormShow(Sender: TObject);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure XFRadioGroup1Click(Sender: TObject);
+    procedure XFCheckBox1Click(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure XFButton1Click(Sender: TObject);
+    procedure XFButton11Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  SheduleReplace: TSheduleReplace;
+
+implementation
+
+{$R *.DFM}
+ uses PaymentDataModuleImpl,sbsystem,CommonDecls, PaymentAddFormImpl;
+procedure TSheduleReplace.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+resize:=false
+end;
+
+procedure TSheduleReplace.FormShow(Sender: TObject);
+begin
+XFRadioGroup1.ItemIndex:=0;
+DateTimePicker1.DateTime:=Get_CurrentDate;
+ end;
+
+procedure TSheduleReplace.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+  if ORD(Key) = VK_ESCAPE then
+    Close;
+end;
+
+procedure TSheduleReplace.XFRadioGroup1Click(Sender: TObject);
+begin
+if XFRadioGroup1.ItemIndex=0 then
+   begin
+    XFGroupBox2.Enabled:=false;
+    XFCheckBox1.Checked:=false;
+     Edit1.text:='0';
+     end else
+     begin
+       XFGroupBox2.Enabled:=true;
+     end;
+
+    if XFRadioGroup1.ItemIndex=1 then
+    begin
+    Edit1.text:=floattostr(PaymentDataModule.cm_utils.CallFloatFunction('get_period',
+    [ Get_SelectedCrdID,Get_CurrentDate]));
+     edit1.readonly:=true;
+    end else edit1.readonly:=false;
+
+   if XFRadioGroup1.ItemIndex=2 then
+    begin
+    Edit1.text:=
+     floattostr(PaymentDataModule.cm_utils.CallFloatFunction('get_period',
+    [ Get_SelectedCrdID,Get_CurrentDate])-
+    PaymentDataModule.CM_SCHEDULE.CallFloatFunction
+    ('annuty_period',
+    [ 'p_creditid',Get_SelectedCrdID,
+      'p_date', Get_CurrentDate,
+      'p_pay',PaymentAddForm.MainAmtEdit.value]));
+     edit1.readonly:=true;
+    end
+end;
+
+procedure TSheduleReplace.XFCheckBox1Click(Sender: TObject);
+begin
+if XFCheckBox1.Checked= true then
+DateTimePicker1.Enabled:=true
+else DateTimePicker1.Enabled:=false
+end;
+
+procedure TSheduleReplace.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+XFRadioGroup1.ItemIndex:=0;
+end;
+
+procedure TSheduleReplace.XFButton1Click(Sender: TObject);
+var
+  BeginDate :TDateTime;
+  CreditID ,period: Integer;
+  CrdRest :Real;
+begin
+if XFRadioGroup1.ItemIndex=1 then
+  begin
+    BeginDate := DateTimePicker1.DateTime;
+    CreditID := Get_SelectedCrdID;
+    period := StrToInt(Edit1.Text);
+    CrdRest := Rest.value;
+    with PaymentDataModule,CM_SCHEDULE do
+
+         CallProcedure ('ChangeSchedule',[
+                        'p_CreditID',CreditID,
+                        'P_Date',BeginDate,
+                        'p_period',period,
+                        'p_rest',CrdRest,
+                        'p_changedate',XFCheckBox1.checked,
+                        'p_status',1]);
+
+  end;
+
+  if XFRadioGroup1.ItemIndex=2 then
+  begin
+    BeginDate := integer(trunc(DateTimePicker1.DateTime));
+    CreditID := Get_SelectedCrdID;
+    period := StrToInt(Edit1.Text);
+    CrdRest := Rest.value;
+    with PaymentDataModule,CM_SCHEDULE do
+
+         CallProcedure ('ChangeSchedule',[
+                        'p_CreditID',CreditID,
+                        'P_Date',BeginDate,
+                        'p_period',period,
+                        'p_rest',CrdRest,
+                        'p_changedate',XFCheckBox1.checked,
+                        'p_status',2,
+                        'p_pay',PaymentAddForm.MainAmtEdit.value]);
+
+  end;
+    Close;
+end;
+
+procedure TSheduleReplace.XFButton11Click(Sender: TObject);
+resourcestring
+  rsConfirmPaymentDelete = 'Siz ödəmə planınin dəyişdirilməsindən imtina edirsiz ! Əminsiniz?';
+begin
+ if MessageDlg(
+       rsConfirmPaymentDelete,
+       mtConfirmation,
+       [mbYes,mbNo],
+       0) <> mrYes
+     then   Exit;
+CLOSE
+end;
+
+end.

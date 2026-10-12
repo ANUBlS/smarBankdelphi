@@ -1,0 +1,101 @@
+unit UnitSearch;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ExtCtrls, XFSCtrls, Grids, XDBGrids, StdCtrls;
+
+type
+  TFormSearch = class(TForm)
+    XFPanel1: TXFPanel;
+    XFPanel2: TXFPanel;
+    XDBGrid1: TXDBGrid;
+    Edit1: TEdit;
+    Edit2: TEdit;
+    procedure XDBGrid1TitleClick(Column: TXColumn);
+    procedure FormShow(Sender: TObject);
+    procedure Edit1Change(Sender: TObject);
+    procedure Edit2Change(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormSearch: TFormSearch;
+
+implementation
+   uses BlackListImpl,DmBlackImpl;
+{$R *.dfm}
+
+procedure TFormSearch.Edit1Change(Sender: TObject);
+begin
+
+if edit1.Text<>'' then
+begin
+edit2.Clear;
+with DmBlack,ods_search  do
+begin
+close;
+SQL[8] := SQL[8] + ' and nvl(upper(nam),0) like upper (''%' +
+        Edit1.Text + '%'')';
+open;
+ end;
+end else
+
+  DmBlack.ods_search.Close;
+  DmBlack.ods_search.SQL[8]:='';
+  DmBlack.ods_search.Open;
+
+end;
+
+procedure TFormSearch.Edit2Change(Sender: TObject);
+begin
+
+if edit2.Text<>'' then
+begin
+edit1.Clear;
+with DmBlack,ods_search  do
+begin
+close;
+SQL[8] := SQL[8] + ' and nvl(upper(nam1),0) like upper (''%' +
+        Edit2.Text + '%'')';
+open;
+ end;
+end else
+
+  DmBlack.ods_search.Close;
+  DmBlack.ods_search.SQL[8]:='';
+  DmBlack.ods_search.Open;
+
+end;
+
+procedure TFormSearch.FormShow(Sender: TObject);
+begin
+with DmBlack,ods_search do begin
+  if not Active then
+     Open
+    else
+      Refresh;
+end;
+end;
+
+procedure TFormSearch.XDBGrid1TitleClick(Column: TXColumn);
+ var
+TitleName:string;
+begin
+if Column.Field.Calculated then Exit;
+ TitleName :=Column.FieldName;
+ with DmBlack,ods_search do
+ begin
+  Screen.Cursor :=crSQLWait;
+  SetVariable('Title',TitleName);
+  Refresh;
+  Screen.Cursor :=crDefault;
+ end;
+
+end;
+
+end.

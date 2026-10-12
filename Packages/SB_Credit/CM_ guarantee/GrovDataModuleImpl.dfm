@@ -1,0 +1,352 @@
+object GrovDataMod: TGrovDataMod
+  OldCreateOrder = False
+  OnCreate = DataModuleCreate
+  OnDestroy = DataModuleDestroy
+  Left = 280
+  Top = 154
+  Height = 559
+  Width = 870
+  object GirovDataSrc: TDataSource
+    DataSet = GirovDataSet
+    Left = 112
+    Top = 24
+  end
+  object GirovDataSet: TOracleDataSet
+    SQL.Strings = (
+      'select * from creditsmgr.Agro_girov'
+      'where '
+      'creditid=:creditid'
+      '')
+    Variables.Data = {
+      0300000001000000090000003A43524544495449440300000000000000000000
+      00}
+    QBEDefinition.QBEFieldDefs = {
+      0400000007000000020000004944010000000000080000004352454449544944
+      010000000000070000004749524F564944010000000000030000004144490100
+      00000000030000004E554D010000000000090000004352454449544E554D0100
+      0000000006000000535441545553010000000000}
+    Session = CMDataModule.CMSession
+    Left = 40
+    Top = 24
+  end
+  object PropDataSet: TOracleDataSet
+    SQL.Strings = (
+      
+        'select * from  smart.guarantee where creditid not in (select  cr' +
+        'editid from Agro_girov  ) '
+      '                     ')
+    QBEDefinition.QBEFieldDefs = {
+      0400000026000000020000004944010000000000080000004352454449544944
+      0100000000000B0000004E554D4245524F464755520100000000000800000050
+      4C4544474549440100000000000A000000504C454447454E414D450100000000
+      000A000000484F4C4445524E414D450100000000000D000000484F4C44455241
+      44445245535301000000000010000000414E59494E464F544F44495354494E47
+      0100000000000A00000052454749535452594E4F0100000000000E0000005245
+      4749535452594147454E43590100000000000C00000052454749535452594441
+      54450100000000000B000000504C45444745494E5553450100000000000E0000
+      00504C45444745494E535552414E540100000000000F000000494E535552414E
+      43454147454E43590100000000000F000000494E535552414E4345414D4F554E
+      540100000000000D000000494E535552414E4345444154450100000000001300
+      0000504C454447455052494345544F5250415148410100000000000F00000050
+      4C45444745505249434545564B560100000000000600000047514E414D450100
+      00000000090000004751504153504E554D010000000000090000004751504153
+      505945520100000000000A000000475150415350444154450100000000000600
+      000047514349545901000000000009000000475156494C4C4147450100000000
+      00070000004751414452455301000000000008000000475154454C4D4F420100
+      0000000009000000475154454C484F4D4501000000000009000000475154454C
+      574F524B01000000000007000000544553564952490100000000000700000052
+      4559535445520100000000000700000053455259414D480100000000000B0000
+      00504C4544474550524943450100000000000A000000504C454447534F525453
+      01000000000007000000434F4D50414E590100000000000A000000434F4D5041
+      4E594441540100000000000D000000434F4D50414E5945585045525401000000
+      0000060000004252414E434501000000000003000000444154010000000000}
+    Session = CMDataModule.CMSession
+    Left = 40
+    Top = 88
+  end
+  object PropSourc: TDataSource
+    DataSet = PropDataSet
+    Left = 112
+    Top = 88
+  end
+  object SbGirovSet: TOracleDataSet
+    SQL.Strings = (
+      'select * from  smart.guarantee '
+      ''
+      'where id=:crid')
+    Variables.Data = {0300000001000000050000003A43524944030000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      040000002A000000020000004944010000000000080000004352454449544944
+      0100000000000B0000004E554D4245524F464755520100000000000800000050
+      4C4544474549440100000000000A000000504C454447454E414D450100000000
+      000A000000484F4C4445524E414D450100000000000D000000484F4C44455241
+      44445245535301000000000010000000414E59494E464F544F44495354494E47
+      0100000000000A00000052454749535452594E4F0100000000000E0000005245
+      4749535452594147454E43590100000000000C00000052454749535452594441
+      54450100000000000B000000504C45444745494E5553450100000000000E0000
+      00504C45444745494E535552414E540100000000000F000000494E535552414E
+      43454147454E43590100000000000F000000494E535552414E4345414D4F554E
+      540100000000000D000000494E535552414E4345444154450100000000001300
+      0000504C454447455052494345544F5250415148410100000000000F00000050
+      4C45444745505249434545564B560100000000000600000047514E414D450100
+      00000000090000004751504153504E554D010000000000090000004751504153
+      505945520100000000000A000000475150415350444154450100000000000600
+      000047514349545901000000000009000000475156494C4C4147450100000000
+      00070000004751414452455301000000000008000000475154454C4D4F420100
+      0000000009000000475154454C484F4D4501000000000009000000475154454C
+      574F524B01000000000007000000544553564952490100000000000700000052
+      4559535445520100000000000700000053455259414D480100000000000B0000
+      00504C4544474550524943450100000000000A000000504C454447534F525453
+      01000000000007000000434F4D50414E590100000000000A000000434F4D5041
+      4E594441540100000000000D000000434F4D50414E5945585045525401000000
+      0000060000004252414E4345010000000000030000004441540100000000000E
+      000000494E535552414E434552494748540100000000000B000000494E535552
+      414E434549440100000000000C000000504152544954494F4E4B455901000000
+      000006000000535441545553010000000000}
+    Master = GirovDataSet
+    MasterFields = 'GIROVID'
+    DetailFields = 'crid'
+    Session = CMDataModule.CMSession
+    Left = 40
+    Top = 160
+    object SbGirovSetID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object SbGirovSetCREDITID: TFloatField
+      FieldName = 'CREDITID'
+    end
+    object SbGirovSetNUMBEROFGUR: TStringField
+      FieldName = 'NUMBEROFGUR'
+      Required = True
+      Size = 10
+    end
+    object SbGirovSetPLEDGEID: TFloatField
+      FieldName = 'PLEDGEID'
+      Required = True
+    end
+    object SbGirovSetPLEDGENAME: TStringField
+      FieldName = 'PLEDGENAME'
+      Size = 128
+    end
+    object SbGirovSetHOLDERNAME: TStringField
+      FieldName = 'HOLDERNAME'
+      Size = 128
+    end
+    object SbGirovSetHOLDERADDRESS: TStringField
+      FieldName = 'HOLDERADDRESS'
+      Size = 128
+    end
+    object SbGirovSetANYINFOTODISTING: TStringField
+      FieldName = 'ANYINFOTODISTING'
+      Size = 500
+    end
+    object SbGirovSetREGISTRYNO: TStringField
+      FieldName = 'REGISTRYNO'
+      Size = 32
+    end
+    object SbGirovSetREGISTRYAGENCY: TStringField
+      FieldName = 'REGISTRYAGENCY'
+      Size = 64
+    end
+    object SbGirovSetREGISTRYDATE: TDateTimeField
+      FieldName = 'REGISTRYDATE'
+    end
+    object SbGirovSetPLEDGEINUSE: TFloatField
+      FieldName = 'PLEDGEINUSE'
+    end
+    object SbGirovSetPLEDGEINSURANT: TFloatField
+      FieldName = 'PLEDGEINSURANT'
+    end
+    object SbGirovSetINSURANCEAGENCY: TFloatField
+      FieldName = 'INSURANCEAGENCY'
+    end
+    object SbGirovSetINSURANCEAMOUNT: TFloatField
+      FieldName = 'INSURANCEAMOUNT'
+    end
+    object SbGirovSetINSURANCEDATE: TDateTimeField
+      FieldName = 'INSURANCEDATE'
+    end
+    object SbGirovSetPLEDGEPRICETORPAQHA: TFloatField
+      FieldName = 'PLEDGEPRICETORPAQHA'
+    end
+    object SbGirovSetPLEDGEPRICEEVKV: TFloatField
+      FieldName = 'PLEDGEPRICEEVKV'
+    end
+    object SbGirovSetGQNAME: TStringField
+      FieldName = 'GQNAME'
+      Size = 30
+    end
+    object SbGirovSetGQPASPNUM: TStringField
+      FieldName = 'GQPASPNUM'
+      Size = 12
+    end
+    object SbGirovSetGQPASPYER: TStringField
+      FieldName = 'GQPASPYER'
+      Size = 60
+    end
+    object SbGirovSetGQPASPDATE: TDateTimeField
+      FieldName = 'GQPASPDATE'
+    end
+    object SbGirovSetGQCITY: TFloatField
+      FieldName = 'GQCITY'
+    end
+    object SbGirovSetGQVILLAGE: TFloatField
+      FieldName = 'GQVILLAGE'
+    end
+    object SbGirovSetGQADRES: TStringField
+      FieldName = 'GQADRES'
+      Size = 100
+    end
+    object SbGirovSetGQTELMOB: TStringField
+      FieldName = 'GQTELMOB'
+      Size = 25
+    end
+    object SbGirovSetGQTELHOME: TStringField
+      FieldName = 'GQTELHOME'
+      Size = 25
+    end
+    object SbGirovSetGQTELWORK: TStringField
+      FieldName = 'GQTELWORK'
+      Size = 25
+    end
+    object SbGirovSetTESVIRI: TStringField
+      FieldName = 'TESVIRI'
+      Size = 15
+    end
+    object SbGirovSetREYSTER: TStringField
+      FieldName = 'REYSTER'
+      Size = 15
+    end
+    object SbGirovSetSERYAMH: TStringField
+      FieldName = 'SERYAMH'
+      Size = 15
+    end
+    object SbGirovSetPLEDGEPRICE: TFloatField
+      FieldName = 'PLEDGEPRICE'
+    end
+    object SbGirovSetPLEDGSORTS: TFloatField
+      FieldName = 'PLEDGSORTS'
+    end
+    object SbGirovSetCOMPANY: TFloatField
+      FieldName = 'COMPANY'
+    end
+    object SbGirovSetCOMPANYDAT: TDateTimeField
+      FieldName = 'COMPANYDAT'
+    end
+    object SbGirovSetCOMPANYEXPERT: TStringField
+      FieldName = 'COMPANYEXPERT'
+      Size = 100
+    end
+    object SbGirovSetBRANCE: TFloatField
+      FieldName = 'BRANCE'
+    end
+    object SbGirovSetDAT: TDateTimeField
+      FieldName = 'DAT'
+    end
+    object SbGirovSetINSURANCERIGHT: TFloatField
+      FieldName = 'INSURANCERIGHT'
+    end
+  end
+  object SBGirovSrc: TDataSource
+    DataSet = SbGirovSet
+    Left = 112
+    Top = 152
+  end
+  object CRackage: TOraclePackage
+    Session = CMDataModule.CMSession
+    PackageName = 'CM_GUARANTE'
+    ParameterMode = pmNamed
+    Left = 448
+    Top = 48
+  end
+  object TeminatDataSet: TOracleDataSet
+    SQL.Strings = (
+      'SELECT a.id, a.typecode, a.description'
+      '  FROM cm_pledges_t a'
+      'order by id')
+    Session = CMDataModule.CMSession
+    Left = 40
+    Top = 224
+  end
+  object TeminatSourc: TDataSource
+    DataSet = TeminatDataSet
+    Left = 112
+    Top = 240
+  end
+  object GPledges: TOracleDataSet
+    SQL.Strings = (
+      'SELECT id,  description'
+      '  FROM creditsmgr.cm_pledges')
+    Cursor = crHourGlass
+    Session = CMDataModule.CMSession
+    Left = 32
+    Top = 288
+  end
+  object DataSrcGPledges: TDataSource
+    DataSet = GPledges
+    Left = 112
+    Top = 304
+  end
+  object proSorts: TOracleDataSet
+    SQL.Strings = (
+      'select id,name from cm_insuranceagency')
+    QBEDefinition.QBEFieldDefs = {
+      0400000002000000020000004944010000000000040000004E414D4501000000
+      0000}
+    Session = CMDataModule.CMSession
+    Left = 29
+    Top = 362
+    object proSortsID: TIntegerField
+      FieldName = 'ID'
+      Required = True
+    end
+    object proSortsNAME: TStringField
+      FieldName = 'NAME'
+      Required = True
+      Size = 90
+    end
+  end
+  object ProSortsDatSrc: TDataSource
+    DataSet = proSorts
+    Left = 117
+    Top = 365
+  end
+  object FilialSrc: TDataSource
+    DataSet = FilialSet
+    Left = 192
+    Top = 24
+  end
+  object FilialSet: TOracleDataSet
+    SQL.Strings = (
+      'select * from sb_filial')
+    Session = CMDataModule.CMSession
+    Left = 264
+    Top = 24
+  end
+  object OracleDataSet1: TOracleDataSet
+    SQL.Strings = (
+      'SELECT a.id, a.name'
+      '  FROM cm_pledgsorts a')
+    QBEDefinition.QBEFieldDefs = {
+      0400000002000000020000004944010000000000040000004E414D4501000000
+      0000}
+    Session = CMDataModule.CMSession
+    Left = 304
+    Top = 208
+    object OracleDataSet1ID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object OracleDataSet1NAME: TStringField
+      FieldName = 'NAME'
+      Required = True
+      Size = 80
+    end
+  end
+  object DataSource1: TDataSource
+    DataSet = OracleDataSet1
+    Left = 408
+    Top = 208
+  end
+end

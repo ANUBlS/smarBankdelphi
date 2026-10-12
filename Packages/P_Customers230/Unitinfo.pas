@@ -1,0 +1,46 @@
+unit Unitinfo;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls;
+
+type
+  TForm_info = class(TForm)
+    Panel1: TPanel;
+    Button1: TButton;
+    GroupBox1: TGroupBox;
+    GroupBox2: TGroupBox;
+    Label1: TLabel;
+    Label2: TLabel;
+    GroupBox3: TGroupBox;
+    Label3: TLabel;
+    Label4: TLabel;
+    GroupBox4: TGroupBox;
+    Label5: TLabel;
+    Label6: TLabel;
+    GroupBox5: TGroupBox;
+    Label7: TLabel;
+    procedure Button1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form_info: TForm_info;
+
+implementation
+
+uses P_CO_Account_Unit;
+
+{$R *.dfm}
+
+procedure TForm_info.Button1Click(Sender: TObject);
+begin
+P_CO_Account_Form.Button3.click;
+end;
+
+end.

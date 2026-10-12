@@ -1,0 +1,95 @@
+object CorrectorDataMod: TCorrectorDataMod
+  OldCreateOrder = False
+  Height = 480
+  Width = 696
+  object CorrectData: TOracleDataSet
+    SQL.Strings = (
+      '/* Formatted on 2007/03/27 15:25 (Formatter Plus v4.7.0) */'
+      'SELECT s.ROWID, cm_correct.crdnumber_get (creditid) AS num,'
+      
+        '       cm_correct.crdborrname_get (creditid) AS NAME, rest, inte' +
+        'restrest,'
+      
+        '       duerest, dueinterestrest, givenamount, obligation, penalt' +
+        'yrest'
+      '  FROM cm_curr_state s'
+      
+        'where creditid in (select id from cm_active_credits where branch' +
+        'id in (select id from sb_filial)) '
+      '--order by  :orderfield')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000160000003A004F0052004400450052004600490045004C00
+      4400010000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      0500000009000000060000004E0055004D00010000000000080000004E004100
+      4D00450001000000000008000000520045005300540001000000000018000000
+      49004E0054004500520045005300540052004500530054000100000000000E00
+      000044005500450052004500530054000100000000001E000000440055004500
+      49004E0054004500520045005300540052004500530054000100000000001600
+      000047004900560045004E0041004D004F0055004E0054000100000000001400
+      00004F0042004C00490047004100540049004F004E0001000000000016000000
+      500045004E0041004C00540059005200450053005400010000000000}
+    Cursor = crHourGlass
+    CachedUpdates = True
+    Session = sboapiDataModule.SBSession
+    Left = 64
+    Top = 136
+    object CorrectDataNUM: TWideStringField
+      DisplayLabel = #8470
+      FieldName = 'NUM'
+      Size = 4000
+    end
+    object CorrectDataNAME: TWideStringField
+      DisplayLabel = 'Borcalan'
+      FieldName = 'NAME'
+      Size = 4000
+    end
+    object CorrectDataREST: TFloatField
+      DisplayLabel = #1071'.'#1041' '#1043#1072#1083#1099#1075
+      FieldName = 'REST'
+      Required = True
+      DisplayFormat = '#,#0.00'
+    end
+    object CorrectDataINTERESTREST: TFloatField
+      DisplayLabel = #1060'.'#1041'. '#1043#1072#1083#1099#1075
+      FieldName = 'INTERESTREST'
+      Required = True
+      DisplayFormat = '#,#0.00'
+    end
+    object CorrectDataDUEREST: TFloatField
+      DisplayLabel = #1069'.'#1041'. '#1043#1072#1083#1099#1075
+      FieldName = 'DUEREST'
+      Required = True
+      DisplayFormat = '#,#0.00'
+    end
+    object CorrectDataDUEINTERESTREST: TFloatField
+      DisplayLabel = #1069'.'#1060'.'#1041'. '#1043#1072#1083#1099#1075
+      FieldName = 'DUEINTERESTREST'
+      Required = True
+      DisplayFormat = '#,#0.00'
+    end
+    object CorrectDataGIVENAMOUNT: TFloatField
+      DisplayLabel = #1042#1077#1088#1080#1083#1084#1080#1096' '#1084#1103#1073#1083#1103#1100
+      FieldName = 'GIVENAMOUNT'
+      Required = True
+      DisplayFormat = '#,#0.00'
+    end
+    object CorrectDataOBLIGATION: TFloatField
+      DisplayLabel = #1070#1097#1090#1103#1083#1080#1082
+      FieldName = 'OBLIGATION'
+      Required = True
+      DisplayFormat = '#,#0.00'
+    end
+    object CorrectDataPENALTYREST: TFloatField
+      DisplayLabel = #1055#1077#1085#1080#1081#1072
+      FieldName = 'PENALTYREST'
+      DisplayFormat = '#,#0.00'
+    end
+  end
+  object DSCorrectData: TDataSource
+    DataSet = CorrectData
+    Left = 64
+    Top = 184
+  end
+end

@@ -1,0 +1,150 @@
+﻿unit UnitResursReturn;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, DBCtrlsEh, CMCurrencyEdit, DBCtrls, Mask, ExtCtrls;
+
+type
+  TFormResursRetrun = class(TForm)
+    Panel1: TPanel;
+    Panel2: TPanel;
+    Panel7: TPanel;
+    Panel8: TPanel;
+    DBEdit1: TDBEdit;
+    Panel3: TPanel;
+    Panel9: TPanel;
+    DBLookupComboBox2: TDBLookupComboBox;
+    Panel10: TPanel;
+    Panel4: TPanel;
+    Panel11: TPanel;
+    Panel12: TPanel;
+    CMCurrencyEdit1: TCMCurrencyEdit;
+    Panel5: TPanel;
+    Label1: TLabel;
+    Panel6: TPanel;
+    Label5: TLabel;
+    Panel13: TPanel;
+    ComboBox1: TComboBox;
+    EditDescription: TEdit;
+    Panel14: TPanel;
+    Button1: TButton;
+    Button2: TButton;
+    procedure Button2Click(Sender: TObject);
+    procedure ComboBox1Click(Sender: TObject);
+    procedure ComboBox1DropDown(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    Var VRetrunInsert:boolean;
+    procedure LoadComboData(Sender: TComboBox);
+  end;
+
+var
+  FormResursRetrun: TFormResursRetrun;
+
+implementation
+uses UnitDateExch,Unit_ExchangeMGR;
+
+{$R *.dfm}
+
+procedure TFormResursRetrun.ComboBox1Click(Sender: TObject);
+begin
+  EditDescription.Text := (Sender as TComboBox).Text;
+end;
+
+procedure TFormResursRetrun.ComboBox1DropDown(Sender: TObject);
+begin
+  FormResursRetrun.LoadComboData(TComboBox(Sender));
+end;
+
+procedure TFormResursRetrun.FormShow(Sender: TObject);
+begin
+if not (VRetrunInsert)
+  then
+  begin
+    EditDescription.Clear;
+    CMCurrencyEdit1.Value:=0;
+    DBLookupComboBox2.KeyValue:=-1;
+  end
+else  begin
+        DBEdit1.Text:=ExchangeMGR_X.DBGrid2.DataSource.DataSet.FieldByName('ex_name').AsVariant;
+        DBLookupComboBox2.KeyValue:=ExchangeMGR_X.DBGrid2.DataSource.DataSet.FieldByName('val_id').AsVariant;
+        CMCurrencyEdit1.Value:=ExchangeMGR_X.DBGrid2.DataSource.DataSet.FieldByName('amount').AsVariant;
+        EditDescription.Text:=ExchangeMGR_X.DBGrid2.DataSource.DataSet.FieldByName('description').AsVariant;
+      end;
+
+end;
+
+
+
+procedure TFormResursRetrun.LoadComboData(Sender: TComboBox);
+begin
+  with DataModExch.ODSRTrdestination, Sender do
+  begin
+    if not(Active) then
+      Open
+    else
+    begin
+      Refresh;
+    end;
+    if Items.Count <> RecordCount then
+    begin
+      Items.Clear;
+      First;
+      while not(EOF) do
+      begin
+        Items.Add(FieldByName('name').AsString);
+        Next;
+      end;
+    end;
+  end;
+end;
+
+procedure TFormResursRetrun.Button1Click(Sender: TObject);
+var
+   FilNumber:integer;
+   FilName  :string;
+   ValNumber:integer;
+   ValName :string;
+   Amount:real;
+   Nextday:Variant;
+   Descript:string;
+   Nextstatus:integer;
+   Daydat:TDateTime;
+begin
+  if VarIsNull(DBLookupComboBox2.KeyValue) then begin ShowMessage('Valyutanı seçin!...'); exit; end;
+  if CMCurrencyEdit1.Value=0 then begin ShowMessage('Məbləği daxil edin !...'); exit; end;
+  if EditDescription.Text='' then begin ShowMessage('Təyinatı daxil edin!...'); exit; end;
+
+  Daydat:=integer(trunc(ExchangeMGR_X.DateTimePicker5.DateTime));
+  FilNumber:=DataModExch.ODSVdmResurs.FieldByName('ex_no').AsInteger;
+  FilName:=DataModExch.ODSExchOffice.FieldByName('ex_name').AsString;
+  ValNumber:=DBLookupComboBox2.KeyValue;
+  ValName:=DBLookupComboBox2.Text;
+  Amount:=CMCurrencyEdit1.Value;
+
+
+  Descript:=EditDescription.Text;
+  if not VRetrunInsert
+  then
+    DataModExch.OPExchMgr.CallProcedure('VDMRetrunResursInsert',[ValNumber,ValName,FilNumber,FilName,Amount,Daydat,2,1,Descript])
+  else
+    DataModExch.OPExchMgr.CallProcedure('VDMRetrunResursUpdate',[DataModExch.ODSResurs.FieldByName('id').AsInteger,ValNumber,ValName,FilNumber,FilName,Amount,Daydat,2,1,Descript]);
+
+
+  DataModExch.ODSResurs.Refresh;
+  FormResursRetrun.Close;
+
+
+end;
+
+procedure TFormResursRetrun.Button2Click(Sender: TObject);
+begin
+  FormResursRetrun.Close;
+end;
+
+end.

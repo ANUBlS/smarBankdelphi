@@ -1,0 +1,176 @@
+unit LegalMeasuresImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, NLSLocalizer, Mask, DBCtrls, Grids, DBGrids, DBCtrlsEh,
+  ExtCtrls, ActnList, Db, OracleData, DBLookupEh;
+
+type
+  TLMMainForm = class(TForm)
+    GroupBox1: TGroupBox;
+    Localizer: TNLSLocalizer;
+    DBEdit1: TDBEdit;
+    GroupBox2: TGroupBox;
+    DBGrid1: TDBGrid;
+    Panel1: TPanel;
+    Panel2: TPanel;
+    Label1: TLabel;
+    DBEdit2: TDBEdit;
+    Label2: TLabel;
+    DBDateTimeEditEh1: TDBDateTimeEditEh;
+    Label3: TLabel;
+    DBDateTimeEditEh2: TDBDateTimeEditEh;
+    Label4: TLabel;
+    Label5: TLabel;
+    DBEdit3: TDBEdit;
+    Label6: TLabel;
+    DBEdit4: TDBEdit;
+    DBEdit5: TDBEdit;
+    Label7: TLabel;
+    Label8: TLabel;
+    Label9: TLabel;
+    DBNumberEditEh1: TDBNumberEditEh;
+    DBNumberEditEh2: TDBNumberEditEh;
+    Button1: TButton;
+    ActionList1: TActionList;
+    Action1: TAction;
+    Action2: TAction;
+    Action3: TAction;
+    Action4: TAction;
+    Button2: TButton;
+    Button3: TButton;
+    Button4: TButton;
+    OracleDataSet1: TOracleDataSet;
+    DataSource1: TDataSource;
+    OracleDataSet1ID: TFloatField;
+    OracleDataSet1CREDITID: TFloatField;
+    OracleDataSet1PROTOCOL: TFloatField;
+    OracleDataSet1PARAGRAPH: TFloatField;
+    OracleDataSet1GRANTDATE: TDateTimeField;
+    OracleDataSet1GIVEDATE: TDateTimeField;
+    OracleDataSet1MEASURECODE: TFloatField;
+    OracleDataSet1TOTALAMOUNT: TFloatField;
+    OracleDataSet1MAINDEBT: TFloatField;
+    OracleDataSet1NUM: TFloatField;
+    OracleDataSet2: TOracleDataSet;
+    OracleDataSet1MeasureDesc: TStringField;
+    DBLookupComboboxEh1: TDBLookupComboboxEh;
+    DataSource2: TDataSource;
+    Button5: TButton;
+    Action5: TAction;
+    CreditInfo: TOracleDataSet;
+    DSCreditInfo: TDataSource;
+    procedure Action4Execute(Sender: TObject);
+    procedure Action2Update(Sender: TObject);
+    procedure Action1Execute(Sender: TObject);
+    procedure Action2Execute(Sender: TObject);
+    procedure Action3Execute(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure FormClick(Sender: TObject);
+    procedure Action5Execute(Sender: TObject);
+    procedure Action5Update(Sender: TObject);
+    procedure OracleDataSet1AfterPost(DataSet: TDataSet);
+    procedure OracleDataSet1AfterInsert(DataSet: TDataSet);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  LMMainForm: TLMMainForm;
+
+implementation
+
+{$R *.DFM}
+uses
+  CMOracleAPIDataModuleImpl ,CommonDecls;
+
+procedure TLMMainForm.Action4Execute(Sender: TObject);
+begin
+  Close
+end;
+
+procedure TLMMainForm.Action2Update(Sender: TObject);
+begin
+   if OracleDataSet1.Active then
+  (Sender as TAction).Enabled := OracleDataSet1.Modified;
+end;
+
+procedure TLMMainForm.Action1Execute(Sender: TObject);
+begin
+  OracleDataSet1.Insert;
+end;
+
+procedure TLMMainForm.Action2Execute(Sender: TObject);
+begin
+  OracleDataSet1.Post;
+end;
+
+procedure TLMMainForm.Action3Execute(Sender: TObject);
+begin
+  OracleDataSet1.Cancel;
+end;
+
+procedure TLMMainForm.FormShow(Sender: TObject);
+resourcestring
+  rsCaption = '%s номряли мцгавиля . Щцгуги тядбирляр';
+var
+  CrdID :Integer;
+begin
+  CrdID := Get_SelectedCrdID;
+  Localizer.Caption := Format(rsCaption,[Get_SelectedCrdNo]);
+  OracleDataSet2.Open;
+  with OracleDataSet1 do
+  begin
+    if Active then CloseAll;
+    ClearVariables;
+    SetVariable('CreditID',CrdID);
+    Open;
+  end;
+  with CreditInfo do
+  begin
+    if Active then CloseAll;
+    ClearVariables;
+    SetVariable('CreditID',CrdID);
+    Open;
+  end;
+
+end;
+
+procedure TLMMainForm.FormClick(Sender: TObject);
+begin
+  OracleDataSet1.CloseAll;
+  OracleDataSet2.CloseAll;
+end;
+
+procedure TLMMainForm.Action5Execute(Sender: TObject);
+begin
+  OracleDataSet1.Delete;
+end;
+
+procedure TLMMainForm.Action5Update(Sender: TObject);
+begin
+  (Sender as TAction).Enabled := OracleDataSet1.RecordCount > 0
+end;
+
+procedure TLMMainForm.OracleDataSet1AfterPost(DataSet: TDataSet);
+var
+  B : TBookmark;
+begin
+  with DataSet do
+  begin
+    B := GetBookmark;
+    Refresh;
+    GotoBookmark(B);
+  end;
+end;
+
+procedure TLMMainForm.OracleDataSet1AfterInsert(DataSet: TDataSet);
+begin
+  OracleDataSet1.FieldByName('CreditID').AsInteger := Get_SelectedCrdID;
+end;
+
+end.

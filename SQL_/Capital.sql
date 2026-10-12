@@ -1,0 +1,429 @@
+ALTER TABLE BANKINFO_T 
+ ADD (
+  CAPITAL NUMBER (20, 2)
+ )
+/
+
+CREATE OR REPLACE VIEW bankinfo (
+   kod_b,
+   bank,
+   az_name,
+   krno,
+   inn,
+   seher,
+   adress,
+   sedr,
+   buhaltr,
+   tel,
+   fax,
+   swift,
+   telex,
+   email,
+   post_in,
+   kod_fil,
+   filial,
+   adres_fil,
+   tel_fil,
+   fax_fil,
+   swift_fil,
+   telex_fil,
+   postin_fil,
+   seher_fil,
+   inn_fil,
+   krno_fil,
+   sedrfil,
+   buhal_fil,
+   kod_bfil,
+   nb,
+   val_mov,
+   logo,
+   link,
+   sdv,
+   svm,
+   bf,
+   managertitle,
+   accountanttitle,
+   svm_currencyid,
+   capital,
+   assistant,
+   assistanttitle )
+AS
+select "KOD_B","BANK","AZ_NAME","KRNO","INN","SEHER","ADRESS","SEDR","BUHALTR","TEL","FAX","SWIFT","TELEX","EMAIL","POST_IN","KOD_FIL","FILIAL","ADRES_FIL","TEL_FIL","FAX_FIL","SWIFT_FIL","TELEX_FIL","POSTIN_FIL","SEHER_FIL","INN_FIL","KRNO_FIL","SEDRFIL","BUHAL_FIL","KOD_BFIL","NB","VAL_MOV","LOGO","LINK","SDV","SVM","BF","MANAGERTITLE","ACCOUNTANTTITLE","SVM_CURRENCYID","CAPITAL","ASSISTANT","ASSISTANTTITLE" from bankinfo_t where kod_fil=
+(select filialid from sba_objinf where obj=(select user from dual))
+/
+
+-- Grants for View
+GRANT SELECT ON bankinfo TO sbr_balance
+/
+GRANT DELETE ON bankinfo TO sbr_bankinfo
+/
+GRANT INSERT ON bankinfo TO sbr_bankinfo
+/
+GRANT SELECT ON bankinfo TO sbr_bankinfo
+/
+GRANT UPDATE ON bankinfo TO sbr_bankinfo
+/
+GRANT SELECT ON bankinfo TO sbr_cashdesk
+/
+GRANT SELECT ON bankinfo TO sbr_controltape
+/
+GRANT SELECT ON bankinfo TO sbr_creditmanager
+/
+GRANT SELECT ON bankinfo TO sbr_currencyposition
+/
+GRANT SELECT ON bankinfo TO sbr_exchange
+/
+GRANT SELECT ON bankinfo TO sbr_incomesandexpenses
+/
+GRANT SELECT ON bankinfo TO sbr_mainfacilities
+/
+GRANT SELECT ON bankinfo TO sbr_memorialproject
+/
+GRANT SELECT ON bankinfo TO sbr_order
+/
+GRANT SELECT ON bankinfo TO sbr_paymentdecreex
+/
+GRANT SELECT ON bankinfo TO sbr_statement
+/
+GRANT SELECT ON bankinfo TO sbr_swift
+/
+GRANT SELECT ON bankinfo TO sbr_todaybalance
+/
+GRANT SELECT ON bankinfo TO sbr_transactionsviewer
+/
+GRANT SELECT ON bankinfo TO sbr_turnoversforperiod
+/
+
+CREATE SEQUENCE seq_capital
+  INCREMENT BY 1
+  START WITH 1
+  MINVALUE 1
+  MAXVALUE 999999999999999999999999999
+  NOCYCLE
+  NOORDER
+  NOCACHE
+/
+
+CREATE TABLE capital
+    (id                             NUMBER NOT NULL,
+    type                           VARCHAR2(5) NOT NULL,
+    bal                            NUMBER,
+    acc                            NUMBER,
+    sum                            NUMBER,
+    percent                        NUMBER,
+    formula                        VARCHAR2(255),
+    op_type                        NUMBER(2,0),
+    bal_type                       NUMBER(2,0))
+  PCTFREE     10
+  INITRANS    1
+  MAXTRANS    255
+  TABLESPACE  smartbank
+  STORAGE   (
+    INITIAL     65536
+    MINEXTENTS  1
+    MAXEXTENTS  2147483645
+  )
+/
+
+CREATE INDEX idx_capital_type ON capital
+  (
+    type                            ASC
+  )
+  PCTFREE     10
+  INITRANS    2
+  MAXTRANS    255
+  TABLESPACE  smartbank
+  STORAGE   (
+    INITIAL     65536
+    MINEXTENTS  1
+    MAXEXTENTS  2147483645
+  )
+/
+-- Constraints for CAPITAL
+
+ALTER TABLE capital
+ADD CONSTRAINT pr_id_capital PRIMARY KEY (id)
+USING INDEX
+  PCTFREE     10
+  INITRANS    2
+  MAXTRANS    255
+  TABLESPACE  smartbank
+  STORAGE   (
+    INITIAL     65536
+    MINEXTENTS  1
+    MAXEXTENTS  2147483645
+  )
+/
+
+
+-- Triggers for CAPITAL
+
+CREATE OR REPLACE TRIGGER id_capital_inc
+ BEFORE
+  INSERT
+ ON capital
+REFERENCING NEW AS NEW OLD AS OLD
+ FOR EACH ROW
+begin
+  select SEQ_CAPITAL.NEXTVAL
+   into :new.ID
+   from dual;
+end;
+/
+
+
+-- Comments for CAPITAL
+
+COMMENT ON COLUMN capital.bal_type IS '1-balance,2-vnebalance'
+/
+COMMENT ON COLUMN capital.op_type IS '1 - Plus, 2 - Minus'
+/
+COMMENT ON COLUMN capital.type IS 'F-formula,I,II,A'
+/
+
+-- End of DDL Script for Table SMART.CAPITAL
+
+
+
+CREATE OR REPLACE VIEW capital_acc_out (
+   id,
+   kli_id,
+   op_id,
+   acc_no,
+   val_acc,
+   name,
+   open_dat,
+   close_dat,
+   bal_cn1,
+   bal_cn2,
+   bal_cn3,
+   bal_cn4,
+   filial,
+   sim_otcet,
+   tipacc,
+   limit,
+   old_acc_no,
+   pair_acc,
+   insider,
+   sid# )
+AS
+select "ID","KLI_ID","OP_ID","ACC_NO","VAL_ACC","NAME","OPEN_DAT","CLOSE_DAT","BAL_CN1","BAL_CN2","BAL_CN3","BAL_CN4","FILIAL","SIM_OTCET","TIPACC","LIMIT","OLD_ACC_NO","PAIR_ACC","INSIDER","SID#" from smart.account
+/
+
+
+-- End of DDL Script for View SMART.CAPITAL_ACC_OUT
+-- Start of DDL Script for View SMART.CAPITAL_ARCH_OUT
+-- Generated 26-Jan-2007 15:13:51 from SMART@SB
+
+CREATE OR REPLACE VIEW capital_arch_out (
+   id_number,
+   acc_id,
+   ostat,
+   pok_ostat,
+   datdate,
+   obr_d,
+   obr_k,
+   pok_obr_d,
+   pok_obr_k,
+   lastopdate )
+AS
+select "ID_NUMBER","ACC_ID","OSTAT","POK_OSTAT","DATDATE","OBR_D","OBR_K","POK_OBR_D","POK_OBR_K","LASTOPDATE" from smart.archost
+/
+
+
+INSERT INTO capital
+(ID,TYPE,BAL,ACC,SUM,PERCENT,FORMULA,OP_TYPE,BAL_TYPE)
+VALUES
+(407,'I',5501,NULL,NULL,NULL,NULL,1,1)
+/
+INSERT INTO capital
+(ID,TYPE,BAL,ACC,SUM,PERCENT,FORMULA,OP_TYPE,BAL_TYPE)
+VALUES
+(115,'F',NULL,NULL,NULL,NULL,'X+Y+Z/100*1.25',NULL,1)
+/
+INSERT INTO capital
+(ID,TYPE,BAL,ACC,SUM,PERCENT,FORMULA,OP_TYPE,BAL_TYPE)
+VALUES
+(226,'A',99121,NULL,NULL,NULL,NULL,1,2)
+/
+INSERT INTO capital
+(ID,TYPE,BAL,ACC,SUM,PERCENT,FORMULA,OP_TYPE,BAL_TYPE)
+VALUES
+(225,'A',99143,NULL,NULL,NULL,NULL,1,2)
+/
+INSERT INTO capital
+(ID,TYPE,BAL,ACC,SUM,PERCENT,FORMULA,OP_TYPE,BAL_TYPE)
+VALUES
+(202,'I',299,NULL,NULL,NULL,NULL,2,1)
+/
+INSERT INTO capital
+(ID,TYPE,BAL,ACC,SUM,PERCENT,FORMULA,OP_TYPE,BAL_TYPE)
+VALUES
+(171,'I',5401,NULL,NULL,NULL,NULL,1,1)
+/
+INSERT INTO capital
+(ID,TYPE,BAL,ACC,SUM,PERCENT,FORMULA,OP_TYPE,BAL_TYPE)
+VALUES
+(173,'A',1711,NULL,NULL,100,NULL,1,1)
+/
+INSERT INTO capital
+(ID,TYPE,BAL,ACC,SUM,PERCENT,FORMULA,OP_TYPE,BAL_TYPE)
+VALUES
+(174,'A',1747,NULL,NULL,20,NULL,1,1)
+/
+INSERT INTO capital
+(ID,TYPE,BAL,ACC,SUM,PERCENT,FORMULA,OP_TYPE,BAL_TYPE)
+VALUES
+(176,'A',24,NULL,NULL,100,NULL,1,1)
+/
+INSERT INTO capital
+(ID,TYPE,BAL,ACC,SUM,PERCENT,FORMULA,OP_TYPE,BAL_TYPE)
+VALUES
+(177,'A',25,NULL,NULL,100,NULL,1,1)
+/
+INSERT INTO capital
+(ID,TYPE,BAL,ACC,SUM,PERCENT,FORMULA,OP_TYPE,BAL_TYPE)
+VALUES
+(178,'A',291,NULL,NULL,100,NULL,1,1)
+/
+INSERT INTO capital
+(ID,TYPE,BAL,ACC,SUM,PERCENT,FORMULA,OP_TYPE,BAL_TYPE)
+VALUES
+(179,'A',292,NULL,NULL,100,NULL,1,1)
+/
+INSERT INTO capital
+(ID,TYPE,BAL,ACC,SUM,PERCENT,FORMULA,OP_TYPE,BAL_TYPE)
+VALUES
+(180,'A',293,NULL,NULL,100,NULL,1,1)
+/
+INSERT INTO capital
+(ID,TYPE,BAL,ACC,SUM,PERCENT,FORMULA,OP_TYPE,BAL_TYPE)
+VALUES
+(181,'A',294,NULL,NULL,100,NULL,1,1)
+/
+INSERT INTO capital
+(ID,TYPE,BAL,ACC,SUM,PERCENT,FORMULA,OP_TYPE,BAL_TYPE)
+VALUES
+(182,'A',295,NULL,NULL,100,NULL,1,1)
+/
+INSERT INTO capital
+(ID,TYPE,BAL,ACC,SUM,PERCENT,FORMULA,OP_TYPE,BAL_TYPE)
+VALUES
+(183,'A',NULL,34457,NULL,20,NULL,1,1)
+/
+INSERT INTO capital
+(ID,TYPE,BAL,ACC,SUM,PERCENT,FORMULA,OP_TYPE,BAL_TYPE)
+VALUES
+(184,'A',NULL,34458,NULL,20,NULL,1,1)
+/
+INSERT INTO capital
+(ID,TYPE,BAL,ACC,SUM,PERCENT,FORMULA,OP_TYPE,BAL_TYPE)
+VALUES
+(185,'A',NULL,34460,NULL,20,NULL,1,1)
+/
+INSERT INTO capital
+(ID,TYPE,BAL,ACC,SUM,PERCENT,FORMULA,OP_TYPE,BAL_TYPE)
+VALUES
+(186,'A',NULL,34461,NULL,20,NULL,1,1)
+/
+INSERT INTO capital
+(ID,TYPE,BAL,ACC,SUM,PERCENT,FORMULA,OP_TYPE,BAL_TYPE)
+VALUES
+(187,'A',NULL,33479,NULL,100,NULL,1,1)
+/
+INSERT INTO capital
+(ID,TYPE,BAL,ACC,SUM,PERCENT,FORMULA,OP_TYPE,BAL_TYPE)
+VALUES
+(188,'A',NULL,33480,NULL,100,NULL,1,1)
+/
+INSERT INTO capital
+(ID,TYPE,BAL,ACC,SUM,PERCENT,FORMULA,OP_TYPE,BAL_TYPE)
+VALUES
+(189,'A',NULL,33481,NULL,100,NULL,1,1)
+/
+INSERT INTO capital
+(ID,TYPE,BAL,ACC,SUM,PERCENT,FORMULA,OP_TYPE,BAL_TYPE)
+VALUES
+(190,'A',NULL,33482,NULL,100,NULL,1,1)
+/
+INSERT INTO capital
+(ID,TYPE,BAL,ACC,SUM,PERCENT,FORMULA,OP_TYPE,BAL_TYPE)
+VALUES
+(191,'A',NULL,33483,NULL,100,NULL,1,1)
+/
+INSERT INTO capital
+(ID,TYPE,BAL,ACC,SUM,PERCENT,FORMULA,OP_TYPE,BAL_TYPE)
+VALUES
+(192,'A',NULL,33484,NULL,100,NULL,1,1)
+/
+INSERT INTO capital
+(ID,TYPE,BAL,ACC,SUM,PERCENT,FORMULA,OP_TYPE,BAL_TYPE)
+VALUES
+(193,'A',NULL,33485,NULL,100,NULL,1,1)
+/
+INSERT INTO capital
+(ID,TYPE,BAL,ACC,SUM,PERCENT,FORMULA,OP_TYPE,BAL_TYPE)
+VALUES
+(194,'A',NULL,33486,NULL,100,NULL,1,1)
+/
+INSERT INTO capital
+(ID,TYPE,BAL,ACC,SUM,PERCENT,FORMULA,OP_TYPE,BAL_TYPE)
+VALUES
+(205,'A',130,NULL,NULL,100,NULL,1,1)
+/
+INSERT INTO capital
+(ID,TYPE,BAL,ACC,SUM,PERCENT,FORMULA,OP_TYPE,BAL_TYPE)
+VALUES
+(196,'A',NULL,35607,NULL,100,NULL,1,1)
+/
+INSERT INTO capital
+(ID,TYPE,BAL,ACC,SUM,PERCENT,FORMULA,OP_TYPE,BAL_TYPE)
+VALUES
+(206,'A',180,NULL,NULL,100,NULL,1,1)
+/
+INSERT INTO capital
+(ID,TYPE,BAL,ACC,SUM,PERCENT,FORMULA,OP_TYPE,BAL_TYPE)
+VALUES
+(207,'A',181,NULL,NULL,100,NULL,1,1)
+/
+INSERT INTO capital
+(ID,TYPE,BAL,ACC,SUM,PERCENT,FORMULA,OP_TYPE,BAL_TYPE)
+VALUES
+(208,'A',182,NULL,NULL,100,NULL,1,1)
+/
+INSERT INTO capital
+(ID,TYPE,BAL,ACC,SUM,PERCENT,FORMULA,OP_TYPE,BAL_TYPE)
+VALUES
+(209,'A',184,NULL,NULL,100,NULL,1,1)
+/
+INSERT INTO capital
+(ID,TYPE,BAL,ACC,SUM,PERCENT,FORMULA,OP_TYPE,BAL_TYPE)
+VALUES
+(210,'A',185,NULL,NULL,100,NULL,1,1)
+/
+INSERT INTO capital
+(ID,TYPE,BAL,ACC,SUM,PERCENT,FORMULA,OP_TYPE,BAL_TYPE)
+VALUES
+(211,'A',220,NULL,NULL,100,NULL,1,1)
+/
+INSERT INTO capital
+(ID,TYPE,BAL,ACC,SUM,PERCENT,FORMULA,OP_TYPE,BAL_TYPE)
+VALUES
+(212,'A',183,NULL,NULL,100,NULL,1,1)
+/
+INSERT INTO capital
+(ID,TYPE,BAL,ACC,SUM,PERCENT,FORMULA,OP_TYPE,BAL_TYPE)
+VALUES
+(216,'II',5501,NULL,NULL,NULL,NULL,1,1)
+/
+INSERT INTO capital
+(ID,TYPE,BAL,ACC,SUM,PERCENT,FORMULA,OP_TYPE,BAL_TYPE)
+VALUES
+(217,'A',186,NULL,NULL,100,NULL,1,1)
+/
+INSERT INTO capital
+(ID,TYPE,BAL,ACC,SUM,PERCENT,FORMULA,OP_TYPE,BAL_TYPE)
+VALUES
+(220,'A',1892,NULL,NULL,100,NULL,1,1)
+/
+

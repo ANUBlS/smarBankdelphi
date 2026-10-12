@@ -1,0 +1,112 @@
+#------------------------------------------------------------------------------
+VERSION = BWS.01
+#------------------------------------------------------------------------------
+!ifndef ROOT
+ROOT = $(MAKEDIR)\..
+!endif
+#------------------------------------------------------------------------------
+MAKE = $(ROOT)\bin\make.exe -$(MAKEFLAGS) -f$**
+DCC = $(ROOT)\bin\dcc32.exe $**
+BRCC = $(ROOT)\bin\brcc32.exe $**
+#------------------------------------------------------------------------------
+PROJECTS = SBAxCommon50.dll sbAxSplash.dll SBCMVcl50.bpl SBCMStorage.bpl \
+  sbcmDataModule.bpl SBCMCreditTranches.bpl SBCMPayments.bpl \
+  SBCMPercentConverting.bpl SBCMConclusion.bpl SBCMExpire.bpl \
+  SBCMProlongations.bpl SBCMContractState.bpl SBCMReferences.bpl \
+  SBDMDataModule.bpl SBDMCollection.bpl SBDMCapitalization.bpl SBDMConclusion.bpl \
+  SBDMDepositMoney.bpl SBDMTraffic.bpl SBDMWithDraw.bpl SBDMUntimelyWithdraw.bpl \
+  SBCM_PaymentsPlane.bpl CreditManager.ocx ContractCorrection.ocx \
+  CreditsArcive.ocx DepositManager.ocx DepositCorrection.ocx DepositsArchive.ocx \
+  SmartBank.exe
+#------------------------------------------------------------------------------
+default: $(PROJECTS)
+#------------------------------------------------------------------------------
+
+sbAxSplash.dll: Packages\sbAxSplash\sbAxSplash.dpr
+  $(DCC)
+
+SBAxCommon50.dll: Packages\SBCommon50\ActiveX\SBAxCommon50.dpr
+  $(DCC)
+
+SmartBank.exe: Programs\SmartBank\SmartBank.dpr
+  $(DCC)
+
+SBCMVcl50.bpl: Packages\SBCM_ComponentsStorage\SBCMVcl50.dpk
+  $(DCC)
+
+SBCMStorage.bpl: Packages\SBCM_StoredPrograms\SBCMStorage.dpk
+  $(DCC)
+
+sbcmDataModule.bpl: Packages\SBCM_DataModule\sbcmDataModule.dpk
+  $(DCC)
+
+SBCMConclusion.bpl: Packages\SBCM_Conclusion\SBCMConclusion.dpk
+  $(DCC)
+
+SBCMContractState.bpl: Packages\SBCM_ContractState\SBCMContractState.dpk
+  $(DCC)
+
+SBCMCreditTranches.bpl: Packages\SBCM_CreditTranches\SBCMCreditTranches.dpk
+  $(DCC)
+
+SBCMExpire.bpl: Packages\SBCM_Expire\SBCMExpire.dpk
+  $(DCC)
+
+SBCMPayments.bpl: Packages\SBCM_Payments\SBCMPayments.dpk
+  $(DCC)
+
+SBCMPercentConverting.bpl: Packages\SBCM_PercentConverting\SBCMPercentConverting.dpk
+  $(DCC)
+
+SBCMProlongations.bpl: Packages\SBCM_Prolongations\SBCMProlongations.dpk
+  $(DCC)
+
+SBCMReferences.bpl: Packages\SBCM_References\SBCMReferences.dpk
+  $(DCC)
+
+ContractCorrection.ocx: Packages\SBCM_ContractCorrection\ContractCorrection.dpr
+  $(DCC)
+
+CreditManager.ocx: Packages\CreditManager\CreditManager.dpr
+  $(DCC)
+
+CreditsArcive.ocx: Packages\SBCM_CreditsArchive\CreditsArcive.dpr
+  $(DCC)
+
+SBDMCapitalization.bpl: Packages\SBDM_Capitalization\SBDMCapitalization.dpk
+  $(DCC)
+
+SBDMCollection.bpl: Packages\SBDM_Collection\SBDMCollection.dpk
+  $(DCC)
+
+SBDMConclusion.bpl: Packages\SBDM_Conclusion\SBDMConclusion.dpk
+  $(DCC)
+
+SBDMDataModule.bpl: Packages\SBDM_DataModue\SBDMDataModule.dpk
+  $(DCC)
+
+DepositCorrection.ocx: Packages\SBDM_DepositCorrection\DepositCorrection.dpr
+  $(DCC)
+
+SBDMDepositMoney.bpl: Packages\SBDM_DepositMoney\SBDMDepositMoney.dpk
+  $(DCC)
+
+DepositsArchive.ocx: Packages\SBDM_DepositsArchive\DepositsArchive.dpr
+  $(DCC)
+
+SBDMTraffic.bpl: Packages\SBDM_Traffic\SBDMTraffic.dpk
+  $(DCC)
+
+SBDMUntimelyWithdraw.bpl: Packages\SBDM_UntimelyWithdraw\SBDMUntimelyWithdraw.dpk
+  $(DCC)
+
+SBDMWithDraw.bpl: Packages\SBDM_WithDraw\SBDMWithDraw.dpk
+  $(DCC)
+
+DepositManager.ocx: Packages\DepositManager\DepositManager.dpr
+  $(DCC)
+
+SBCM_PaymentsPlane.bpl: Packages\SBCM_PaymentsPlane\SBCM_PaymentsPlane.dpk
+  $(DCC)
+
+

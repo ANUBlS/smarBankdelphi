@@ -1,0 +1,88 @@
+unit DepozLmpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ExtCtrls, Grids, DBGridEh, StdCtrls, XFSCtrls, XDBGrids;
+
+type
+  TDepozitFrm = class(TForm)
+    XFPanel1: TXFPanel;
+    TimerButton: TXFButton;
+    XFButton1: TXFButton;
+    XFButton4: TXFButton;
+    XFButton2: TXFButton;
+    MainGrid: TDBGridEh;
+    XFButton3: TXFButton;
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure XFButton4Click(Sender: TObject);
+    procedure XFButton1Click(Sender: TObject);
+    procedure XFButton2Click(Sender: TObject);
+    procedure TimerButtonClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure MainGridTitleClick(Column: TXColumn);
+    procedure XFButton3Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  DepozitFrm: TDepozitFrm;
+
+implementation
+
+uses UnitDataModPCustService, commondeclsimpl;
+{$R *.dfm}
+
+procedure TDepozitFrm.FormCreate(Sender: TObject);
+begin
+  CommonApplication := Application;
+  CommonGrid := MainGrid;
+end;
+
+procedure TDepozitFrm.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+  if ord(Key) = 27 then
+    close;
+end;
+
+procedure TDepozitFrm.MainGridTitleClick(Column: TXColumn);
+begin
+with DataModPCustService,DepozDset do
+  begin
+    Close;
+    if Column.Title.MarkerIndex=2 then SetVariable('OrderField',Column.FieldName+' '+'ASC')
+    else SetVariable('OrderField',Column.FieldName+' '+'DESC');
+    open;
+  end;
+end;
+
+procedure TDepozitFrm.TimerButtonClick(Sender: TObject);
+begin
+  LoadPlugin('SBDM_ExtractMoney.bpl', '');
+end;
+
+procedure TDepozitFrm.XFButton1Click(Sender: TObject);
+begin
+  LoadPlugin('SBDM_Contract.bpl', 'EditContract');
+end;
+
+procedure TDepozitFrm.XFButton2Click(Sender: TObject);
+begin
+  LoadPlugin('SBDM_ApplyMoney.bpl', '');
+end;
+
+procedure TDepozitFrm.XFButton3Click(Sender: TObject);
+begin
+LoadPlugin('SBDM_Wreport.bpl', '');
+end;
+
+procedure TDepozitFrm.XFButton4Click(Sender: TObject);
+begin
+  LoadPlugin('SBDM_Contract.bpl', 'InsertContract');
+end;
+
+end.

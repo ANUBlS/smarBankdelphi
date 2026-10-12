@@ -1,0 +1,113 @@
+unit sboapiDataModuleImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, DBTables, SBOInitPkg, Oracle, OracleData, {ICECrypt,} {ICEOralogon,}
+  SBOracleLogOn;
+
+type
+  TsboapiDataModule = class(TDataModule)
+    SBSession: TOracleSession;
+    SBLogon: TOracleLogon;
+    SBOperationDay: TOraclePackage;
+    GetCustomer: TOracleDataSet;
+    SBSecurity: TOraclePackage;
+    SBReferences: TOraclePackage;
+    SBReport: TOraclePackage;
+    SBRateManagement: TOraclePackage;
+    SBSystem: TOraclePackage;
+    SBUtil: TOraclePackage;
+    SBInstallation: TOraclePackage;
+    SBCorrection: TOraclePackage;
+    SBSettings: TOraclePackage;
+    SBTransaction: TOraclePackage;
+    SBMessage: TOraclePackage;
+    SBSessionMgr: TOraclePackage;
+    SBLogin: TOraclePackage;
+    SBModules: TOraclePackage;
+    SBAca: TOraclePackage;
+    OrPack_SL: TOraclePackage;
+    DSBankDate: TOracleDataSet;
+    Branch: TOracleDataSet;
+    SBOracleLogOn: TSBOracleLogOn;
+    BranchKOD_FIL: TIntegerField;
+    DSBankDateTEK_DAT: TDateTimeField;
+    DSBankDatePRED_DAT: TDateTimeField;
+  private
+    { Private declarations }
+    FCurrentSBData: TSBOData;
+  public
+    { Public declarations }
+    function AskForLogon(var SBData: TSBOData; LogonOptions: TAskForLogonOptions): Boolean;
+    procedure SetSBData(const SBData: TSBOData);
+    procedure GetSBData(var SBData: TSBOData);
+    procedure LogOn;
+    procedure LogOff;
+  end;
+
+var
+  sboapiDataModule: TsboapiDataModule;
+
+implementation
+
+{$R *.DFM}
+
+function TsboapiDataModule.AskForLogon(var SBData: TSBOData; LogonOptions: TAskForLogonOptions): Boolean;
+begin
+  with SBSession, SBData do
+  begin
+    LogonUsername := UserName;
+    LogonPassword := Password;
+    LogonDatabase := Database;
+  end;
+  Result := False;
+  with SBOracleLogOn, SBData do
+  begin
+    LogonUsername := UserName;
+    LogonPassword := Password;
+    LogonDatabase := Database;
+    if Execute = TAskResult(arSuccess) then
+        Result := true;
+  end;
+
+
+  if Result then
+    with SBSession, SBData do
+    begin
+      UserName := LogonUsername;
+      Password := LogonPassword;
+      Database := LogonDatabase;
+    end;     
+end;
+
+procedure TsboapiDataModule.SetSBData(const SBData: TSBOData);
+begin
+  with SBData, SBSession do
+  begin
+    LogonUsername := UserName;
+    LogonPassword := Password;
+    LogonDatabase := Database;
+  end;
+  FCurrentSBData := SBData;
+end;
+
+procedure TsboapiDataModule.GetSBData(var SBData: TSBOData);
+begin
+  SBData := FCurrentSBData;
+end;
+
+procedure TsboapiDataModule.LogOn;
+begin
+  with SBSession do
+    LogOn;
+end;
+
+procedure TsboapiDataModule.LogOff;
+begin
+  with SBSession do
+    LogOff;
+end;
+
+end.

@@ -1,0 +1,87 @@
+unit Controlimpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+   ComCtrls, StdCtrls, Grids, DBGridEh, DBSumLst, ToolWin,
+  ExtCtrls, ImgList, DB, ActnList, Oracle, OracleData, CMExcelExport, Menus,
+  DBGridEhGrouping, GridsEh, Buttons;
+
+type
+  TFrmControl = class(TForm)
+    Panel1: TPanel;
+    DBGridEh1: TDBGridEh;
+    BitBtn1: TBitBtn;
+    BitBtn2: TBitBtn;
+    ExcelExport: TCMExcelExport;
+    procedure BitBtn2Click(Sender: TObject);
+    procedure BitBtn1Click(Sender: TObject);
+    procedure DBGridEh1TitleBtnClick(Sender: TObject; ACol: Integer;
+      Column: TColumnEh);
+  private
+  procedure SafelyRefresh(Safely : Boolean);
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmControl: TFrmControl;
+
+implementation
+
+{$R *.dfm}
+  uses
+ FlReCalculationDataModuleImpl,  ReCalculationMainForm;
+procedure TFrmControl.BitBtn1Click(Sender: TObject);
+begin
+with ExcelExport do
+  begin
+    Connect;
+    ExportDataset(DBGridEh1.DataSource.DataSet,'Interests',True);
+  end;
+end;
+
+procedure TFrmControl.BitBtn2Click(Sender: TObject);
+begin
+close
+end;
+  procedure TFrmControl.SafelyRefresh(Safely : Boolean);
+var
+  SavePlace : TBookmark;
+begin
+  with DBGridEh1, DataSource.DataSet do
+  begin
+    SavePlace := GetBookmark;
+    Refresh;
+    SelectedRows.Clear;
+    if Safely then
+    GotoBookmark(SavePlace);
+  end;
+end;
+procedure TFrmControl.DBGridEh1TitleBtnClick(Sender: TObject; ACol: Integer;
+  Column: TColumnEh);
+ const
+   DataColIndex : Integer = 0;
+var
+  SortField : String;
+
+begin
+ if ACol <> DataColIndex then
+    SortField := Column.FieldName
+  else
+    SortField := 'TRPROCESSED';
+
+  if Column.Title.SortMarker = smDownEh then
+    SortField := SortField + ' DESC';
+
+  with Sender as TDBGridEh , TOracleDataSet(DataSource.DataSet) do
+  begin
+    ClearVariables;
+    SetVariable('OrderField',SortField);
+    SafelyRefresh(True);
+  end;
+end;
+
+end.

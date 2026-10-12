@@ -1,0 +1,47 @@
+﻿unit bn_editing;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Data_Unit, StdCtrls;
+
+type
+  TBN_editform = class(TForm)
+    Button1: TButton;
+    Edit2: TEdit;
+    Edit1: TEdit;
+    Edit3: TEdit;
+    Label1: TLabel;
+    Label2: TLabel;
+    procedure Button1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  BN_editform: TBN_editform;
+
+implementation
+
+{$R *.dfm}
+
+procedure TBN_editform.Button1Click(Sender: TObject);
+begin
+
+IF (DataMod.SBOP.CallIntegerFunction('check_IBAN_acc_num',[Edit1.Text])=0)
+      then
+begin
+ShowMessage('Hesab ibana  uyğun deyil!!!!!!');
+
+end else
+begin
+DataMod.bn_package.CallProcedure('bn_update',[ strtoint(edit3.Text),EDIT1.Text,EDIT2.Text]);
+ DataMod.dt_Benefisiar.Refresh ;
+   CLOSE;
+end;
+end;
+
+end.

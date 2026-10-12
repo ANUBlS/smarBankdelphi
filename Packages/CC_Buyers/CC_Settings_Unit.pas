@@ -1,0 +1,236 @@
+unit CC_Settings_Unit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, Buttons, Mask, DBCtrls, ComCtrls, NLSLocalizer, Variants;
+
+type
+  TCC_Settings = class(TForm)
+    AccountGB: TGroupBox;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    Label6: TLabel;
+    Label13: TLabel;
+    Label14: TLabel;
+    Label15: TLabel;
+    Label12: TLabel;
+    DBText1: TDBText;
+    DBLookupCurr: TDBLookupComboBox;
+    DBLookupCust: TDBLookupComboBox;
+    DTPOpenDate: TDateTimePicker;
+    DBLookupComboBox4: TDBLookupComboBox;
+    DBLookupBalance1: TDBLookupComboBox;
+    EditBall: TEdit;
+    EditAcc: TEdit;
+    EditCust: TEdit;
+    EditFil: TEdit;
+    EditValute: TEdit;
+    DBEditLimit: TEdit;
+    DBEdit1: TDBEdit;
+    DBEdit2: TDBEdit;
+    DBEdit3: TDBEdit;
+    EditAccName: TEdit;
+    symboledit: TEdit;
+    DBEdit5: TDBEdit;
+    Button1: TButton;
+    Button2: TButton;
+    procedure DBLookupCurrClick(Sender: TObject);
+    procedure DBLookupBalance1Click(Sender: TObject);
+    procedure DBLookupCustClick(Sender: TObject);
+    procedure DBLookupComboBox4Click(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
+//    procedure DBEdit3Change(Sender: TObject);
+//    procedure DBLookupCustClick(Sender: TObject);
+
+procedure WMNCACTIVATE(var message:TWMNCActivate);
+procedure WMNCPaint(var message: TWMNCPaint);
+    procedure DBLookupCurrKeyPress(Sender: TObject; var Key: Char);
+    procedure val_codeKeyPress(Sender: TObject; var Key: Char);
+    procedure EditValuteChange(Sender: TObject);
+    procedure EditValuteKeyPress(Sender: TObject; var Key: Char);
+    procedure EditBallChange(Sender: TObject);
+    procedure EditCustChange(Sender: TObject);
+    procedure EditFilChange(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  CC_Settings: TCC_Settings;
+
+implementation
+  uses Unitdata;
+{$R *.DFM}
+
+procedure TCC_Settings.WMNCACTIVATE(var message:TWMNCActivate);
+var
+ S:TWMNCPaint;
+begin
+inherited;
+WMNCPaint(s);
+end;
+
+procedure TCC_Settings.WMNCPaint(var message: TWMNCPaint);
+const Capt = 'ўесабын м€луматлары';
+var dc : hDc;
+begin
+inherited;
+Caption:='';
+dc := GetWindowDC(Handle);
+        SetBkMode(dc,Transparent);
+        SetTextColor(dc,clWhite);
+        SelectObject(dc, Font.Handle);
+        TextOut(dc, 23,6,Capt,Length(Capt));
+end;
+procedure TCC_Settings.DBLookupCurrClick(Sender: TObject);
+begin
+   EditValute.Text := IntToStr(DBLookupCurr.ListSource.DataSet.FieldByName('VALUTE').AsInTeger);
+end;
+
+procedure TCC_Settings.DBLookupBalance1Click(Sender: TObject);
+begin
+  EditBall.Text := IntToStr(DBLookupBalance1.ListSource.DataSet.FieldByName('BAL_CN').AsInTeger);
+
+end;
+
+procedure TCC_Settings.DBLookupCustClick(Sender: TObject);
+begin
+  EditCust.Text := IntToStr(DBLookupCust.ListSource.DataSet.FieldByName('ID').AsInTeger);
+
+end;
+
+procedure TCC_Settings.DBLookupComboBox4Click(Sender: TObject);
+begin
+  EditFil.Text := IntToStr(DBLookupComboBox4.ListSource.DataSet.FieldByName('ID').AsInTeger);
+   end;
+procedure TCC_Settings.FormActivate(Sender: TObject);
+begin
+Dbedit1.Text :='';
+Dbedit2.Text :='';
+Dbedit3.Text :='';
+Dbedit5.Text :='';
+DataMod_Buyers.Sysdat.Open;
+DataMod_Buyers.CC_Settings.Open;
+DTPOpenDate.Date :=DataMod_Buyers.Sysdat.fieldbyname('tek_dat').asdatetime;
+Editvalute.text := Datamod_Buyers.CC_Settings.fieldbyname('val_code').asstring;
+dbedit1.text := Datamod_Buyers.CC_Settings.fieldbyname('val_name').asstring;
+Editball.text := Datamod_Buyers.CC_Settings.fieldbyname('bal_cn1').asstring;
+dbedit2.text := Datamod_Buyers.CC_Settings.fieldbyname('bal_name').asstring;
+editcust.text := Datamod_Buyers.CC_Settings.fieldbyname('cust_id').asstring;
+dbedit3.text := Datamod_Buyers.CC_Settings.fieldbyname('cust_name').asstring;
+//DTPOpenDate.date :=Datamod_Buyers.CC_Settings.fieldbyname('open_date').asdatetime);
+symboledit.text :=Datamod_Buyers.CC_Settings.fieldbyname('acc_symbol').asstring;
+DBEditLimit.text :=Datamod_Buyers.CC_Settings.fieldbyname('limit').asstring;
+Editfil.text :=Datamod_Buyers.CC_Settings.fieldbyname('branch_id').asstring;
+dbedit5.text :=Datamod_Buyers.CC_Settings.fieldbyname('branch_name').asstring;
+
+end;
+
+procedure TCC_Settings.DBLookupCurrKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+if ORD(Key) = VK_RETURN then
+  begin
+  if Sender is TWinControl then
+  with Sender as TWinControl do
+  case Tag of
+    1 : SelectNext(Sender as TWinControl ,True ,True);
+    end;
+    Key := #0;
+end;
+
+end;
+
+procedure TCC_Settings.val_codeKeyPress(Sender: TObject; var Key: Char);
+begin
+SelectNext(Sender as TWinControl ,True ,True);
+end;
+
+procedure TCC_Settings.EditValuteChange(Sender: TObject);
+begin
+ if  (Sender as TEdit).Text <>''  then
+    DBLookupCurr.KeyValue := StrToInt((Sender as TEdit).Text)
+    else DBLookupCurr.KeyValue :=null;
+
+end;
+
+procedure TCC_Settings.EditValuteKeyPress(Sender: TObject; var Key: Char);
+begin
+ if ORD(Key) = VK_RETURN then
+  begin
+  if Sender is TWinControl then
+  with Sender as TWinControl do
+  case Tag of
+    1 : SelectNext(Sender as TWinControl ,True ,True);
+    end;
+    Key := #0;
+  end;
+
+
+end;
+
+procedure TCC_Settings.EditBallChange(Sender: TObject);
+begin
+   if  (Sender as TEdit).Text <>''  then
+   DBLookupBalance1.KeyValue := StrToInt((Sender as TEdit).Text)
+   else DBLookupBalance1.KeyValue := null;
+
+end;
+
+procedure TCC_Settings.EditCustChange(Sender: TObject);
+begin
+   if (EditCust.Text<>'') then begin
+   DBLookupCust.KeyValue := StrToInt((Sender as TEdit).Text);
+//    EditAccName.Text := DBLookupCust.ListSource.DataSet.FIeldByName('Name').AsString;
+ end else begin
+   EditAccName.Text :='';
+   DBLookupCust.KeyValue := null;
+   end;
+
+end;
+
+procedure TCC_Settings.EditFilChange(Sender: TObject);
+begin
+  if  (Sender as TEdit).Text <>''  then 
+   DBLookupComboBox4.KeyValue := StrToInt((Sender as TEdit).Text)
+   else DBLookupComboBox4.KeyValue:=null;
+
+
+end;
+
+procedure TCC_Settings.Button1Click(Sender: TObject);
+var
+   DDate :TDateTime;
+
+begin
+   DDate :=Trunc(DTPOpenDate.DateTime);
+
+DataMod_Buyers.CC_GENERAL.CallProcedure('ins_cc_repairing',[
+                                                        Editvalute.text,
+                                                        dbedit1.text,
+                                                        Editball.text,
+                                                        dbedit2.text,
+                                                        Editcust.text,
+                                                        dbedit3.text,
+                                                        Ddate,
+                                                        0,
+                                                        SymbolEdit.text,
+                                                        DBEditLimit.text,
+                                                        Editfil.text,
+                                                        dbedit5.text
+                                                        ]);
+                                                        DataMod_Buyers.CC_Settings.Close;
+                                                        DataMod_Buyers.CC_Settings.Open;
+
+
+end;
+
+end.

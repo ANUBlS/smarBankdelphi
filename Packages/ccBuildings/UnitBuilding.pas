@@ -1,0 +1,88 @@
+﻿unit UnitBuilding;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls;
+
+type
+  TFormBuilding = class(TForm)
+    GroupBox1: TGroupBox;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    Label3: TLabel;
+    EditName: TEdit;
+    EditAdress: TEdit;
+    EditEntrance: TEdit;
+    EditFlat: TEdit;
+    EditFloor: TEdit;
+    ac_groupbox: TGroupBox;
+    Editid: TEdit;
+    BtnOK: TButton;
+    BtnCancel: TButton;
+    procedure BtnOKClick(Sender: TObject);
+    procedure BtnCancelClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    AddUpd :integer;
+  end;
+
+var
+  FormBuilding: TFormBuilding;
+
+
+implementation
+
+uses UnitDataModccBuildings;
+
+{$R *.DFM}
+
+procedure TFormBuilding.BtnCancelClick(Sender: TObject);
+begin
+  Close;
+end;
+
+procedure TFormBuilding.BtnOKClick(Sender: TObject);
+var
+  p_ID, p_CompID, p_BldName, p_Address,
+  p_Floors, p_Entrances, p_Flats:string;
+begin
+  if (EditName.Text ='') or (EditAdress.Text ='') then
+   ShowMessage('Binanın adı yaxud ünvanı sahəsi boşdur');
+  if (EditName.Text <>'') and (EditAdress.Text <>'') then
+   with DataModccBuildings do begin
+    p_CompID :=CC_Company.FieldByName('ID').AsString;
+    p_BldName :=EditName.Text;
+    p_Address :=EditAdress.Text;
+    p_Floors :=EditFloor.Text;
+    p_Entrances :=EditEntrance.Text;
+    p_Flats :=EditFlat.Text;
+    if AddUpd =1 then begin
+     CC_OP.CallProcedure('add_Buildings',
+      [p_CompID, p_BldName, p_Address,
+       p_Floors, p_Entrances, p_Flats]);
+    end;
+    if AddUpd =2 then begin
+     p_ID :=CC_building.FieldByName('ID').AsString;
+     CC_OP.CallProcedure('upd_Buildings',
+      [p_ID, p_CompID, p_BldName, p_Address,
+       p_Floors, p_Entrances, p_Flats]);
+    end;
+   CC_building.Close;
+   CC_building.Open;
+   EditName.Text :='';
+   EditAdress.Text :='';
+   EditEntrance.Text :='';
+   EditFlat.Text :='';
+   EditFloor.Text :='';
+   EditName.SetFocus;
+  end;
+  if AddUpd =2 then Close;
+end;
+
+end.

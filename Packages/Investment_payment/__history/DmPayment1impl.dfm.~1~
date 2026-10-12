@@ -1,0 +1,347 @@
+object DmPayment1: TDmPayment1
+  OldCreateOrder = False
+  OnCreate = DataModuleCreate
+  OnDestroy = DataModuleDestroy
+  Height = 334
+  Width = 492
+  object DsSysdat: TOracleDataSet
+    SQL.Strings = (
+      'select tek_dat from sysdat')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000010000000E000000540045004B005F00440041005400010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 16
+    object DsSysdatTEK_DAT: TDateTimeField
+      FieldName = 'TEK_DAT'
+      Required = True
+    end
+  end
+  object DsRcontracts: TDataSource
+    DataSet = Dscontracts
+    Left = 336
+    Top = 8
+  end
+  object Dscontracts: TOracleDataSet
+    SQL.Strings = (
+      
+        'select a.rowid,a.id, iit.name contr_type, a.begin_date, a.end_da' +
+        'te, (a.ammount+nvl((select sum(ammount) from ins_invest_payment ' +
+        'where cid=a.id),0)) as ammount,a.percent,'
+      '(select name from filial where id=a.filial)as filial,'
+      
+        '(select acc_no from account where id=a.main_acc_id) as main_acc_' +
+        'id,'
+      
+        '(select acc_no from account where id=a.per_acc_id)  as per_acc_i' +
+        'd,a.per_ammount,round((a.per_ammount/360),2) as Calc_day_per,'
+      
+        'round((a.per_ammount/360)*10/100,2) as omv,(round((a.per_ammount' +
+        '/360),2)-round((a.per_ammount/360)*10/100,2)) as remainder_per_a' +
+        'mmount,'
+      
+        'cust.name as musteri, a.contract_name,ii.name as muddetli,av.val' +
+        '_name,a.status,(select abs(ostat) from tenostat where acc_id=a.m' +
+        'ain_acc_id) as esas_qaliq,'
+      
+        '(select ostat from tenostat where acc_id=a.per_acc_id) as faiz_q' +
+        'aliq'
+      
+        'from ins_investment_contracts a,ins_investment_type iit,ins_inve' +
+        'stment_time ii,customers cust,avalute av'
+      
+        'where a.invest_type_id=iit.id and a.kli_id=cust.id and a.invest_' +
+        'time=ii.id and a.valute_id=av.valute and a.id=:cid'
+      ''
+      ''
+      '')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000080000003A00430049004400030000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000001500000004000000490044000100000000000E00000041004D004D00
+      4F0055004E0054000100000000001A00000043004F004E005400520041004300
+      54005F004E0041004D0045000100000000000C00000053005400410054005500
+      53000100000000000E0000004D00550053005400450052004900010000000000
+      160000004D00410049004E005F004100430043005F0049004400010000000000
+      140000005000450052005F004100430043005F00490044000100000000001400
+      000045005300410053005F00510041004C004900510001000000000014000000
+      4600410049005A005F00510041004C0049005100010000000000140000004300
+      4F004E00540052005F0054005900500045000100000000001400000042004500
+      470049004E005F0044004100540045000100000000001000000045004E004400
+      5F0044004100540045000100000000000E000000500045005200430045004E00
+      54000100000000000C000000460049004C00490041004C000100000000001600
+      00005000450052005F0041004D004D004F0055004E0054000100000000001800
+      0000430041004C0043005F004400410059005F00500045005200010000000000
+      060000004F004D0056000100000000002A000000520045004D00410049004E00
+      4400450052005F005000450052005F0041004D004D004F0055004E0054000100
+      00000000100000004D00550044004400450054004C0049000100000000001000
+      0000560041004C005F004E0041004D0045000100000000001800000043004C00
+      4F00530045005F00500052004500460049005800010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 264
+    Top = 8
+    object DscontractsID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object DscontractsAMMOUNT: TFloatField
+      FieldName = 'AMMOUNT'
+    end
+    object DscontractsMUSTERI: TWideStringField
+      FieldName = 'MUSTERI'
+      Size = 360
+    end
+    object DscontractsCONTRACT_NAME: TWideStringField
+      FieldName = 'CONTRACT_NAME'
+      Size = 128
+    end
+    object DscontractsSTATUS: TIntegerField
+      FieldName = 'STATUS'
+    end
+    object DscontractsMAIN_ACC_ID: TWideStringField
+      FieldName = 'MAIN_ACC_ID'
+      Size = 28
+    end
+    object DscontractsPER_ACC_ID: TWideStringField
+      FieldName = 'PER_ACC_ID'
+      Size = 28
+    end
+    object DscontractsESAS_QALIQ: TFloatField
+      FieldName = 'ESAS_QALIQ'
+    end
+    object DscontractsFAIZ_QALIQ: TFloatField
+      FieldName = 'FAIZ_QALIQ'
+    end
+    object DscontractsCONTR_TYPE: TWideStringField
+      FieldName = 'CONTR_TYPE'
+      Size = 255
+    end
+    object DscontractsBEGIN_DATE: TDateTimeField
+      FieldName = 'BEGIN_DATE'
+    end
+    object DscontractsEND_DATE: TDateTimeField
+      FieldName = 'END_DATE'
+    end
+    object DscontractsPERCENT: TIntegerField
+      FieldName = 'PERCENT'
+    end
+    object DscontractsFILIAL: TWideStringField
+      FieldName = 'FILIAL'
+      Size = 90
+    end
+    object DscontractsPER_AMMOUNT: TFloatField
+      FieldName = 'PER_AMMOUNT'
+    end
+    object DscontractsCALC_DAY_PER: TFloatField
+      FieldName = 'CALC_DAY_PER'
+    end
+    object DscontractsOMV: TFloatField
+      FieldName = 'OMV'
+    end
+    object DscontractsREMAINDER_PER_AMMOUNT: TFloatField
+      FieldName = 'REMAINDER_PER_AMMOUNT'
+    end
+    object DscontractsMUDDETLI: TWideStringField
+      FieldName = 'MUDDETLI'
+      Size = 255
+    end
+    object DscontractsVAL_NAME: TWideStringField
+      FieldName = 'VAL_NAME'
+      Size = 10
+    end
+  end
+  object DsRMain: TDataSource
+    DataSet = DsMain
+    Left = 336
+    Top = 72
+  end
+  object DsMain: TOracleDataSet
+    SQL.Strings = (
+      
+        'select a.id,a.cid,a.ammount,a.dat,ic.contract_name from ins_inve' +
+        'st_trans a,ins_investment_contracts ic '
+      'where a.cid=ic.id '
+      'and a.cid=:pcid'
+      'order by a.id desc')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000A0000003A00500043004900440003000000000000000000
+      0000}
+    QBEDefinition.QBEFieldDefs = {
+      0500000005000000040000004900440001000000000006000000430049004400
+      0100000000000E00000041004D004D004F0055004E0054000100000000000600
+      00004400410054000100000000001A00000043004F004E005400520041004300
+      54005F004E0041004D004500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 272
+    Top = 64
+    object DsMainID: TFloatField
+      FieldName = 'ID'
+      Visible = False
+    end
+    object DsMainCID: TFloatField
+      FieldName = 'CID'
+      Visible = False
+    end
+    object DsMainAMMOUNT: TFloatField
+      DisplayLabel = 'M'#601'bl'#601#287
+      FieldName = 'AMMOUNT'
+    end
+    object DsMainDAT: TDateTimeField
+      DisplayLabel = 'Tarix'
+      FieldName = 'DAT'
+    end
+    object DsMainCONTRACT_NAME: TWideStringField
+      DisplayLabel = 'M'#252'qavil'#601' '#8470'-si'
+      FieldName = 'CONTRACT_NAME'
+      Size = 128
+    end
+  end
+  object ds_kassa: TOracleDataSet
+    SQL.Strings = (
+      'select a.acc_no,a.id from ins_investment_acc_bal_cn ib,account a'
+      'where dict_id=4 and a.bal_cn1=ib.bal_cn and a.acc_no is not null')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000C0000004100430043005F004E004F000100000000000400
+      000049004400010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 272
+    Top = 135
+    object ds_kassaACC_NO: TWideStringField
+      FieldName = 'ACC_NO'
+      Size = 28
+    end
+    object ds_kassaID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+  end
+  object dsr_kassa: TDataSource
+    DataSet = ds_kassa
+    Left = 328
+    Top = 128
+  end
+  object dsr_gelir_acc: TDataSource
+    DataSet = ds_gelir_acc
+    Left = 336
+    Top = 192
+  end
+  object ds_gelir_acc: TOracleDataSet
+    SQL.Strings = (
+      'select a.acc_no,a.id from ins_investment_acc_bal_cn ib,account a'
+      'where dict_id=3 and a.bal_cn1=ib.bal_cn and a.acc_no is not null')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000C0000004100430043005F004E004F000100000000000400
+      000049004400010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 272
+    Top = 191
+    object WideStringField1: TWideStringField
+      FieldName = 'ACC_NO'
+      Size = 28
+    end
+    object FloatField1: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+  end
+  object ds_xerc_acc: TOracleDataSet
+    SQL.Strings = (
+      'select a.acc_no,a.id from ins_investment_acc_bal_cn ib,account a'
+      'where dict_id=6 and a.bal_cn1=ib.bal_cn and a.acc_no is not null')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000C0000004100430043005F004E004F000100000000000400
+      000049004400010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 272
+    Top = 247
+    object WideStringField2: TWideStringField
+      FieldName = 'ACC_NO'
+      Size = 28
+    end
+    object FloatField2: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+  end
+  object dsr_xerc_acc: TDataSource
+    DataSet = ds_xerc_acc
+    Left = 336
+    Top = 248
+  end
+  object pk_ins_investment: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'ins_investment'
+    Left = 440
+    Top = 24
+  end
+  object DsInvest: TOracleDataSet
+    SQL.Strings = (
+      'select c.rowid,c.* from ins_invest_trans c'
+      'where c.id=:pid')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000080000003A00500049004400030000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      0500000005000000040000004900440001000000000006000000430049004400
+      0100000000000E00000041004D004D004F0055004E0054000100000000000600
+      0000440041005400010000000000080000005400520049004400010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 24
+    Top = 64
+    object DsInvestID: TFloatField
+      FieldName = 'ID'
+    end
+    object DsInvestCID: TFloatField
+      FieldName = 'CID'
+    end
+    object DsInvestAMMOUNT: TFloatField
+      FieldName = 'AMMOUNT'
+    end
+    object DsInvestDAT: TDateTimeField
+      FieldName = 'DAT'
+    end
+    object DsInvestTRID: TFloatField
+      FieldName = 'TRID'
+    end
+  end
+  object DsRInvest: TDataSource
+    DataSet = DsInvest
+    Left = 24
+    Top = 112
+  end
+  object ds_kassa1: TOracleDataSet
+    SQL.Strings = (
+      'select a.acc_no,a.id from ins_investment_acc_bal_cn ib,account a'
+      'where dict_id=4 and a.bal_cn1=ib.bal_cn and a.acc_no is not null')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000C0000004100430043005F004E004F000100000000000400
+      000049004400010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 128
+    Top = 183
+    object WideStringField3: TWideStringField
+      FieldName = 'ACC_NO'
+      Size = 28
+    end
+    object FloatField3: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+  end
+  object dsr_kassa1: TDataSource
+    DataSet = ds_kassa1
+    Left = 184
+    Top = 176
+  end
+end

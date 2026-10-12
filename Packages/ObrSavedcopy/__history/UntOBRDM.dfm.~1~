@@ -1,0 +1,137 @@
+object DataModMain: TDataModMain
+  OldCreateOrder = False
+  Left = 182
+  Top = 127
+  Height = 387
+  Width = 503
+  object ODSLocate: TOracleDataSet
+    SQL.Strings = (
+      'Select   *    from  Turn_Smart'
+      ' ')
+    Session = sboapiDataModule.SBSession
+    Left = 93
+    Top = 8
+    object ODSLocateACC_NO: TStringField
+      DisplayLabel = 'ўесабын  є'
+      FieldName = 'ACC_NO'
+    end
+    object ODSLocateBALNAME: TStringField
+      DisplayLabel = 'ўесабын ады'
+      FieldName = 'BALNAME'
+      Size = 90
+    end
+    object ODSLocateVAL_NAME: TStringField
+      DisplayLabel = '¬алйута'
+      FieldName = 'VAL_NAME'
+      Size = 10
+    end
+    object ODSLocateOBR_D: TFloatField
+      DisplayLabel = 'ƒебт ƒюврийй€'
+      FieldName = 'OBR_D'
+    end
+    object ODSLocateOBR_K: TFloatField
+      DisplayLabel = ' редит ƒюврцйй€'
+      FieldName = 'OBR_K'
+    end
+    object ODSLocatePOK_OBR_D: TFloatField
+      DisplayLabel = 'ƒебт ƒюврийй€ ≈кв'
+      FieldName = 'POK_OBR_D'
+    end
+    object ODSLocatePOK_OBR_K: TFloatField
+      DisplayLabel = ' редит ƒюврцйй€ ≈кв'
+      FieldName = 'POK_OBR_K'
+    end
+    object ODSLocateS_ACT: TFloatField
+      DisplayLabel = '√алыг јктив'
+      FieldName = 'S_ACT'
+    end
+    object ODSLocateS_PAS: TFloatField
+      DisplayLabel = '√алыг ѕассив'
+      FieldName = 'S_PAS'
+    end
+    object ODSLocateP_ACT: TFloatField
+      DisplayLabel = '√алыг јктив ≈кв'
+      FieldName = 'P_ACT'
+    end
+    object ODSLocateP_PAS: TFloatField
+      DisplayLabel = '√алыг ѕассив ≈кв'
+      FieldName = 'P_PAS'
+    end
+    object ODSLocateLASTDATE: TDateTimeField
+      FieldName = 'LASTDATE'
+    end
+    object ODSLocateBAL_CN: TFloatField
+      DisplayLabel = 'Ѕаланс ўесабынын є'
+      FieldName = 'BAL_CN'
+    end
+  end
+  object DataSrcLocate: TDataSource
+    DataSet = ODSLocate
+    Left = 19
+    Top = 8
+  end
+  object OpackMain: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'SB_MTOUTVIEW'
+    Left = 248
+    Top = 8
+  end
+  object ODSSysKod: TOracleDataSet
+    SQL.Strings = (
+      'select  valu_name ,valute from avalute')
+    Session = sboapiDataModule.SBSession
+    Left = 77
+    Top = 54
+  end
+  object DataSrcSysKod: TDataSource
+    DataSet = ODSSysKod
+    Left = 19
+    Top = 54
+  end
+  object ODSSum: TOracleDataSet
+    SQL.Strings = (
+      
+        'SELECT  Sum(s_act),Sum(p_act),Sum(s_pas),Sum(p_pas),Sum(Obr_k),S' +
+        'um(Obr_d),Sum(pok_Obr_k),Sum(pok_Obr_d)  from  Turn_Smart')
+    Session = sboapiDataModule.SBSession
+    Left = 74
+    Top = 116
+  end
+  object DataSrcSum: TDataSource
+    DataSet = ODSSum
+    Left = 18
+    Top = 116
+  end
+  object DataSrcValute: TDataSource
+    DataSet = ODSValute
+    Left = 18
+    Top = 161
+  end
+  object ODSValute: TOracleDataSet
+    SQL.Strings = (
+      'Select '
+      '   Currency.Val_Name as Name'
+      '  ,Rate.Ostat as DefaultRate'
+      '  From AValute Currency,Operkurs Rate'
+      '  Where   (Currency.Valute=Rate.Val_Kod)'
+      '         And (Rate.Dat=:ADate)')
+    Variables.Data = {0300000001000000060000003A41444154450C0000000000000000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 76
+    Top = 162
+  end
+  object BranchesData: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      '  ID ,'
+      '  Name'
+      'from'
+      '  Filial'
+      ''
+      '  '
+      ' ')
+    Session = sboapiDataModule.SBSession
+    Left = 160
+    Top = 96
+  end
+end

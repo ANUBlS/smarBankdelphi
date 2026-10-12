@@ -1,0 +1,43 @@
+unit FrmPaymentLossImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ExtCtrls, XFSCtrls, StdCtrls;
+
+type
+  TFrmPaymentLoss = class(TForm)
+    XFPanel1: TXFPanel;
+    XFPanel2: TXFPanel;
+    XFButton1: TXFButton;
+    XFButton2: TXFButton;
+    XFGroupBox1: TXFGroupBox;
+    XFGroupBox2: TXFGroupBox;
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure XFButton1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmPaymentLoss: TFrmPaymentLoss;
+
+implementation
+
+{$R *.dfm}
+
+procedure TFrmPaymentLoss.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+if ord(key)=vk_escape then close
+
+end;
+
+procedure TFrmPaymentLoss.XFButton1Click(Sender: TObject);
+begin
+close;
+end;
+
+end.

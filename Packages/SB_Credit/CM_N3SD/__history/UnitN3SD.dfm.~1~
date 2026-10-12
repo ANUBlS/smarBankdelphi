@@ -1,0 +1,299 @@
+object FormN3SD: TFormN3SD
+  Left = 382
+  Top = 323
+  Width = 568
+  Height = 197
+  BorderIcons = [biSystemMenu]
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poMainFormCenter
+  OnCanResize = FormCanResize
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  OnKeyPress = FormKeyPress
+  PixelsPerInch = 96
+  TextHeight = 13
+  object SpeedButton1: TSpeedButton
+    Left = 380
+    Top = 115
+    Width = 77
+    Height = 25
+    Caption = 'Гябул'
+    OnClick = SpeedButton1Click
+  end
+  object SpeedButton2: TSpeedButton
+    Left = 465
+    Top = 115
+    Width = 77
+    Height = 25
+    Caption = 'Имтина'
+    OnClick = SpeedButton2Click
+  end
+  object SpeedButton3: TSpeedButton
+    Left = 5
+    Top = 111
+    Width = 96
+    Height = 30
+    Caption = 'щес.сазламаг'
+    Flat = True
+    Glyph.Data = {
+      76010000424D7601000000000000760000002800000020000000100000000100
+      04000000000000010000120B0000120B00001000000000000000000000000000
+      800000800000008080008000000080008000808000007F7F7F00BFBFBF000000
+      FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00555555000000
+      000055555F77777777775555000FFFFFFFF0555F777F5FFFF55755000F0F0000
+      FFF05F777F7F77775557000F0F0FFFFFFFF0777F7F7F5FFFFFF70F0F0F0F0000
+      00F07F7F7F7F777777570F0F0F0FFFFFFFF07F7F7F7F5FFFFFF70F0F0F0F0000
+      00F07F7F7F7F777777570F0F0F0FFFFFFFF07F7F7F7F5FFF55570F0F0F0F000F
+      FFF07F7F7F7F77755FF70F0F0F0FFFFF00007F7F7F7F5FF577770F0F0F0F00FF
+      0F057F7F7F7F77557F750F0F0F0FFFFF00557F7F7F7FFFFF77550F0F0F000000
+      05557F7F7F77777775550F0F0000000555557F7F7777777555550F0000000555
+      55557F7777777555555500000005555555557777777555555555}
+    NumGlyphs = 2
+    OnClick = SpeedButton3Click
+  end
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 560
+    Height = 110
+    Align = alTop
+    BevelOuter = bvLowered
+    TabOrder = 0
+    object Panel2: TPanel
+      Left = 194
+      Top = 1
+      Width = 193
+      Height = 108
+      Align = alLeft
+      BevelOuter = bvNone
+      TabOrder = 0
+      object GroupBox1: TGroupBox
+        Left = 0
+        Top = 51
+        Width = 193
+        Height = 55
+        Align = alTop
+        Caption = 'Мцлкиййят нювц'
+        TabOrder = 0
+        object DBLookupComboboxEhVid: TDBLookupComboboxEh
+          Left = 5
+          Top = 13
+          Width = 149
+          Height = 21
+          EditButtons = <>
+          KeyField = 'ID'
+          ListField = 'NAME'
+          ListSource = DatModN3SD.VidDatSrc
+          TabOrder = 0
+          Visible = True
+        end
+        object CheckBoxVid: TCheckBox
+          Left = 160
+          Top = 16
+          Width = 17
+          Height = 17
+          Caption = 'CheckBoxVid'
+          TabOrder = 1
+        end
+      end
+      object GroupBox4: TGroupBox
+        Left = 0
+        Top = 0
+        Width = 193
+        Height = 51
+        Align = alTop
+        Caption = 'Филиаллар'
+        TabOrder = 1
+        object DBLookupComboboxEhBr: TDBLookupComboboxEh
+          Left = 5
+          Top = 13
+          Width = 149
+          Height = 21
+          EditButtons = <>
+          KeyField = 'ID'
+          ListField = 'NAME'
+          ListSource = DatModN3SD.FilialDatSrc
+          TabOrder = 0
+          Visible = True
+        end
+        object CheckBoxBr: TCheckBox
+          Left = 160
+          Top = 16
+          Width = 17
+          Height = 17
+          Caption = 'CheckBox1'
+          TabOrder = 1
+        end
+      end
+    end
+    object Panel3: TPanel
+      Left = 1
+      Top = 1
+      Width = 193
+      Height = 108
+      Align = alLeft
+      BevelOuter = bvNone
+      TabOrder = 1
+      object GroupBox2: TGroupBox
+        Left = 0
+        Top = 51
+        Width = 193
+        Height = 55
+        Align = alTop
+        Caption = 'Реэионлар'
+        TabOrder = 0
+        object DBLookupComboboxEhReg: TDBLookupComboboxEh
+          Left = 5
+          Top = 13
+          Width = 149
+          Height = 21
+          EditButtons = <>
+          KeyField = 'ID'
+          ListField = 'NAME'
+          ListSource = DatModN3SD.RegDatSrc
+          TabOrder = 0
+          Visible = True
+        end
+        object CheckBoxReg: TCheckBox
+          Left = 160
+          Top = 16
+          Width = 17
+          Height = 17
+          Caption = 'CheckBox1'
+          TabOrder = 1
+        end
+      end
+      object GroupBox3: TGroupBox
+        Left = 0
+        Top = 0
+        Width = 193
+        Height = 51
+        Align = alTop
+        Caption = 'Мцштяри катеэорийалары'
+        TabOrder = 1
+        object DBLookupComboboxEhCust: TDBLookupComboboxEh
+          Left = 5
+          Top = 17
+          Width = 149
+          Height = 21
+          EditButtons = <>
+          KeyField = 'ID'
+          ListField = 'DESCRIPTION'
+          ListSource = DatModN3SD.CatDatSrc
+          TabOrder = 0
+          Visible = True
+        end
+        object CheckBoxCust: TCheckBox
+          Left = 160
+          Top = 17
+          Width = 17
+          Height = 17
+          Caption = 'CheckBox1'
+          TabOrder = 1
+        end
+      end
+    end
+    object GroupBox5: TGroupBox
+      Left = 387
+      Top = 1
+      Width = 172
+      Height = 106
+      Caption = 'Тарих аралыэы'
+      TabOrder = 2
+      object Label1: TLabel
+        Left = 8
+        Top = 32
+        Width = 29
+        Height = 13
+        Caption = 'Б.тарих'
+      end
+      object Label2: TLabel
+        Left = 11
+        Top = 65
+        Width = 29
+        Height = 13
+        Caption = 'С.тарих'
+      end
+      object BeginDate: TDateTimePicker
+        Left = 52
+        Top = 27
+        Width = 114
+        Height = 21
+        CalAlignment = dtaLeft
+        Date = 38675.7178271412
+        Time = 38675.7178271412
+        DateFormat = dfShort
+        DateMode = dmComboBox
+        Kind = dtkDate
+        ParseInput = False
+        TabOrder = 0
+      end
+      object EndDate: TDateTimePicker
+        Left = 53
+        Top = 61
+        Width = 114
+        Height = 21
+        CalAlignment = dtaLeft
+        Date = 38675.7178271412
+        Time = 38675.7178271412
+        DateFormat = dfShort
+        DateMode = dmComboBox
+        Kind = dtkDate
+        ParseInput = False
+        TabOrder = 1
+      end
+    end
+  end
+  object ProgressBar: TProgressBar
+    Left = 0
+    Top = 144
+    Width = 560
+    Height = 19
+    Align = alBottom
+    Min = 0
+    Max = 100
+    TabOrder = 1
+    Visible = False
+  end
+  object Localizer: TNLSLocalizer
+    Caption = 'Форма Н3-СД'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    Left = 56
+    Top = 62
+  end
+  object ExcelExport: TCMExcelExport
+    StyleColumnWidth = cwDefault
+    ColumnWidth = 0
+    FontTitles.Charset = RUSSIAN_CHARSET
+    FontTitles.Color = clWindowText
+    FontTitles.Height = -11
+    FontTitles.Name = 'Azl Sans Serif'
+    FontTitles.Style = []
+    OrientationTitles = 0
+    FontData.Charset = RUSSIAN_CHARSET
+    FontData.Color = clWindowText
+    FontData.Height = -11
+    FontData.Name = 'Azl Sans Serif'
+    FontData.Style = []
+    FontSummary.Charset = DEFAULT_CHARSET
+    FontSummary.Color = clWindowText
+    FontSummary.Height = -11
+    FontSummary.Name = 'MS Sans Serif'
+    FontSummary.Style = []
+    SummarySelection = ssNone
+    SummaryCalculation = scSUM
+    Left = 24
+    Top = 48
+  end
+end

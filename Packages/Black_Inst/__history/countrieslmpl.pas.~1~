@@ -1,0 +1,71 @@
+unit countrieslmpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  DBCtrls, ExtCtrls, Grids, DBGrids, StdCtrls, Db, OracleData, Buttons;
+
+type
+  TformCon = class(TForm)
+    GroupBox1: TGroupBox;
+    Panel2: TPanel;
+    DBNavigator1: TDBNavigator;
+    GroupBox2: TGroupBox;
+    Panel1: TPanel;
+    Label1: TLabel;
+    Label2: TLabel;
+    Edit1: TEdit;
+    Edit2: TEdit;
+    DBGrid1: TDBGrid;
+    procedure Edit1Change(Sender: TObject);
+    procedure Edit2Change(Sender: TObject);
+    procedure Edit1Click(Sender: TObject);
+    procedure Edit2Click(Sender: TObject);
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  formCon: TformCon;
+
+implementation
+
+{$R *.DFM}
+ uses sboapiDataModuleImpl,DmBlackImpl;
+procedure TformCon.Edit1Change(Sender: TObject);
+begin
+With Edit1 do
+if Text <> '' then
+DmBlack.DataSource1.DataSet.Locate('CNTR_CODE',Edit1.Text,[loPartialKey]);
+
+end;
+
+procedure TformCon.Edit2Change(Sender: TObject);
+begin
+  With Edit2 do
+if Text <> '' then
+DmBlack.DataSource1.DataSet.Locate('count_name',Edit2.Text,[loPartialKey]);
+end;
+
+procedure TformCon.Edit1Click(Sender: TObject);
+begin
+edit2.text:='';
+end;
+
+procedure TformCon.Edit2Click(Sender: TObject);
+begin
+edit1.text:='';
+end;
+
+procedure TformCon.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+Resize:=false;
+end;
+
+end.

@@ -1,0 +1,307 @@
+﻿unit DataMGuarantee;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, OracleData, Oracle;
+
+type
+  TDataMGuarante = class(TDataModule)
+    DataSetGuarantee: TOracleDataSet;
+    DataSorcGuaranttee: TDataSource;
+    OracleDataSet: TOracleDataSet;
+    DataSource: TDataSource;
+    Gura_taypcal: TOracleDataSet;
+    DataSourctaypcal: TDataSource;
+    GuaraClientAccs: TOracleDataSet;
+    GuaraClientAccsID: TFloatField;
+    GuaraClientAccsCUSTID: TFloatField;
+    GuaraClientAccsACCNO: TWideStringField;
+    GuaraClientAccsCLIENTNAME: TWideStringField;
+    GuaraClientAccsVAL_ACC: TIntegerField;
+    ClientaccsDatSrc: TDataSource;
+    GuaraCreditAccs: TOracleDataSet;
+    CreditAccsDatSrc: TDataSource;
+    DataS_Gua_credit: TOracleDataSet;
+    DataSGuacredit: TOracleDataSet;
+    DataSorcGua_credit: TDataSource;
+    DataSorcGuacredit: TDataSource;
+    Pledges: TOracleDataSet;
+    DataSrcPledges: TDataSource;
+    pledgsortsDatSrc: TDataSource;
+    pledgsorts: TOracleDataSet;
+    pledgsortsID: TFloatField;
+    pledgsortsNAME: TWideStringField;
+    Filals: TOracleDataSet;
+    FilalsID: TFloatField;
+    FilalsNAME: TWideStringField;
+    FilalsDatSrc: TDataSource;
+    DistrictsDataSet: TOracleDataSet;
+    DistrictsDataSrc: TDataSource;
+    VillagesDataSet: TOracleDataSet;
+    VillagesDataSrc: TDataSource;
+    DistrictsDataSetID: TFloatField;
+    DistrictsDataSetNAME: TWideStringField;
+    DistrictsDataSetNAME_ENG: TWideStringField;
+    OraclePackage1: TOraclePackage;
+    proSorts: TOracleDataSet;
+    proSortsID: TIntegerField;
+    proSortsNAME: TWideStringField;
+    ProSortsDatSrc: TDataSource;
+    OracleDataSet1: TOracleDataSet;
+    IntegerField1: TIntegerField;
+    StringField1: TWideStringField;
+    DataSource1: TDataSource;
+    Customer: TOracleDataSet;
+    CustomerID: TIntegerField;
+    CustomerNAME: TWideStringField;
+    DataSrcCustomer: TDataSource;
+    pledgsortsGUR_TYPE: TFloatField;
+    DataSetGuaranteeCREDITID: TFloatField;
+    DataSetGuaranteePLEDGEID: TFloatField;
+    DataSetGuaranteePLEDGENAME: TWideStringField;
+    DataSetGuaranteeHOLDERNAME: TWideStringField;
+    DataSetGuaranteeHOLDERADDRESS: TWideStringField;
+    DataSetGuaranteeANYINFOTODISTING: TWideStringField;
+    DataSetGuaranteeREGISTRYNO: TWideStringField;
+    DataSetGuaranteeREGISTRYAGENCY: TWideStringField;
+    DataSetGuaranteeREGISTRYDATE: TDateTimeField;
+    DataSetGuaranteePLEDGEINUSE: TFloatField;
+    DataSetGuaranteePLEDGEINSURANT: TFloatField;
+    DataSetGuaranteeINSURANCEAGENCY: TFloatField;
+    DataSetGuaranteeINSURANCEAMOUNT: TFloatField;
+    DataSetGuaranteeINSURANCEDATE: TDateTimeField;
+    DataSetGuaranteePLEDGEPRICETORPAQHA: TFloatField;
+    DataSetGuaranteePLEDGEPRICEEVKV: TFloatField;
+    DataSetGuaranteeINSURANCERIGHT: TFloatField;
+    DataSetGuaranteeINSURANCEID: TWideStringField;
+    DataSetGuaranteePLEDGEID_P: TFloatField;
+    DataSetGuaranteeGQNAME: TWideStringField;
+    DataSetGuaranteeGQPASPNUM: TWideStringField;
+    DataSetGuaranteeGQPASPYER: TWideStringField;
+    DataSetGuaranteeGQPASPDATE: TDateTimeField;
+    DataSetGuaranteeGQADRESS: TWideStringField;
+    DataSetGuaranteeREYSTER: TWideStringField;
+    DataSetGuaranteeSERYAMH: TWideStringField;
+    DataSetGuaranteeGQTEL: TWideStringField;
+    DataSetGuaranteePLEDGEPRICE: TFloatField;
+    DataSetGuaranteePLEDGSORTS: TFloatField;
+    DataSetGuaranteeCOMPANY: TFloatField;
+    DataSetGuaranteeCOMPANYDAT: TDateTimeField;
+    DataSetGuaranteeCOMPANYEXPERT: TWideStringField;
+    DataSetGuaranteeCARDID: TFloatField;
+    DataSetGuaranteeOUTCOLLATERALACCID: TFloatField;
+    DataSetGuaranteeDECASTATUS: TFloatField;
+    DataSetGuaranteeUSERID: TFloatField;
+    DataSetGuaranteeOUTSTATUS: TFloatField;
+    DataSetGuaranteeTRID: TFloatField;
+    DataSetGuaranteeBRANCE: TFloatField;
+    DataSetGuaranteeID: TFloatField;
+    DataSetGuaranteeCUSTID: TFloatField;
+    DataSetGuaranteeDAT: TDateTimeField;
+    DataSetGuaranteeTESVIRI: TWideStringField;
+    DataSetGuaranteeGQTELWORK: TWideStringField;
+    DataSetGuaranteeGQTELHOME: TWideStringField;
+    DataSetGuaranteeGQTELMOB: TWideStringField;
+    DataSetGuaranteeGQVILLAGE: TFloatField;
+    DataSetGuaranteeGQCITY: TFloatField;
+    DataSetGuaranteeNUMBEROFGUR: TWideStringField;
+    DataSetGuaranteeAFTONO: TWideStringField;
+    DataSetGuaranteeREZERVEAMMOUNT: TFloatField;
+    DataSetGuaranteeFAIZ: TFloatField;
+    DataSetGuaranteeLIKVID: TFloatField;
+    DataSetGuaranteeAFTIP: TWideStringField;
+    DataSetGuaranteeAFDATE: TDateTimeField;
+    DataSetGuaranteeAFMOTORNO: TWideStringField;
+    DataSetGuaranteeAFTOBANNO: TWideStringField;
+    DataSetGuaranteeAFSASSI: TWideStringField;
+    DataSetGuaranteeAFRENG: TWideStringField;
+    DataSetGuaranteeAFMOTORKUB: TWideStringField;
+    DataSetGuaranteeGUR_VALACC: TFloatField;
+    DataSetGuaranteeAVTO_MODEL: TWideStringField;
+    DataSetGuaranteeAVTO_MAKA: TWideStringField;
+    DataSetGuaranteeAVTO_TIP: TWideStringField;
+    DataSetGuaranteeAVTO_NO: TWideStringField;
+    DataSetGuaranteeAVTO_RENG: TWideStringField;
+    DataSetGuaranteeAVTO_IL: TDateTimeField;
+    DataSetGuaranteeAVTO_MUHER_NO: TWideStringField;
+    DataSetGuaranteeAVTO_MUHER_HECM: TWideStringField;
+    DataSetGuaranteeAVTO_REGSTR_DAT: TDateTimeField;
+    DataSetGuaranteeAVTO_BAN: TWideStringField;
+    DataSetGuaranteeGENERALAREA: TFloatField;
+    DataSetGuaranteeLIVINGAREA: TFloatField;
+    DataSetGuaranteeBUILDINGSOILAREA: TFloatField;
+    DataSetGuaranteeSOILAREA: TFloatField;
+    DataSetGuaranteeADRESS: TWideStringField;
+    DataSetGuaranteeINFOREGION: TFloatField;
+    DataSetGuaranteeINFOVILG: TFloatField;
+    procedure DataModuleCreate(Sender: TObject);
+    procedure DataModuleDestroy(Sender: TObject);
+    procedure DataSetGuaranteeApplyRecord(Sender: TOracleDataSet;
+      Action: Char; var Applied: Boolean; var NewRowId: String);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  DataMGuarante: TDataMGuarante;
+
+implementation
+  uses sboapiDataModuleImpl,FormGuarAddlmpl,GuaranteeMgrImpl;
+{$R *.DFM}
+
+procedure TDataMGuarante.DataModuleCreate(Sender: TObject);
+begin
+ with  DataSetGuarantee do
+  begin
+    SetVariable('OrderField','id');
+    Open;
+  end;
+Customer.Open;
+OracleDataSet.open ;
+Pledges.open;
+pledgsorts.open;
+DistrictsDataSet.open;
+Filals.open;
+VillagesDataSet.open;
+proSorts.Open;
+DataSGuacredit.open;
+
+end;
+
+procedure TDataMGuarante.DataModuleDestroy(Sender: TObject);
+begin
+   DataSetGuarantee.closeall;
+   OracleDataSet.closeall ;
+Pledges.closeall;
+pledgsorts.closeall;
+DistrictsDataSet.closeall;
+Filals.closeall;
+VillagesDataSet.closeall;
+proSorts.closeall;
+DataSGuacredit.CloseAll;
+Customer.CloseAll;
+end;
+
+procedure TDataMGuarante.DataSetGuaranteeApplyRecord(
+  Sender: TOracleDataSet; Action: Char; var Applied: Boolean;
+  var NewRowId: String);
+
+begin
+  with Sender do
+  begin
+    p_custid          := FieldByName('custid').AsInteger;
+    p_id              := FieldByName('id').AsInteger;
+    p_pledgeprice     := FieldByName('pledgeprice').AsFloat;
+    p_numberofgur     := FieldByName('numberofgur').AsString;
+    p_pledgeid        := FieldByName('pledgeid').AsInteger;
+    p_pledgename      := FieldByName('pledgename').AsString;
+    p_holdername      := FieldByName('holdername').AsString;
+    p_holderaddress   := FieldByName('holderaddress').AsString;
+    p_anyinfotodisting:= FieldByName('anyinfotodisting').AsString;
+    p_registryno      := FieldByName('registryno').AsString;
+    p_registryagency  := FieldByName('registryagency').AsString;
+    p_registrydate    := FieldByName('registrydate').AsDateTime;
+    p_pledgeinsurant  := FieldByName('pledgeinsurant').AsFloat;
+    p_insuranceagency := FieldByName('insuranceagency').AsInteger;
+    p_insuranceamount := FieldByName('insuranceamount').AsFloat;
+    p_insuranceright  := FieldByName('insuranceright').AsFloat;
+    p_insurancedate   := FieldByName('insurancedate').AsDateTime;
+    p_gqname          := FieldByName('gqname').AsString;
+    p_gqpaspnum       := FieldByName('gqpaspnum').AsString;
+    p_gqpaspyer       := FieldByName('gqpaspyer').AsString;
+    p_gqpaspdate      := FieldByName('gqpaspdate').AsDateTime;
+    p_gqcity          := FieldByName('gqcity').AsInteger;
+    p_gqvillage       := FieldByName('gqvillage').AsInteger;
+    p_gqadres         := FieldByName('gqadress').AsString;
+    p_gqtelmob        := FieldByName('gqtelmob').AsString;
+    p_gqtelhome       := FieldByName('gqtelhome').AsString;
+    p_gqtelwork       := FieldByName('gqtelwork').AsString;
+    p_reyster         := FieldByName('reyster').AsString;
+    p_seryamh         := FieldByName('seryamh').AsString;
+    p_pledgsorts      := FieldByName('pledgsorts').AsInteger;
+    p_company         := FieldByName('company').AsInteger;
+    p_companydat      := FieldByName('companydat').AsDateTime;
+    p_companyexpert   := FieldByName('companyexpert').AsString;
+    p_brance          := FieldByName('brance').AsInteger;
+    p_dat             := FieldByName('dat').AsDateTime;
+
+    // NULL Yoxlamaları
+    if FieldByName('generalarea').IsNull then p_generalarea := 0
+    else p_generalarea := FieldByName('generalarea').AsFloat;
+
+    if FieldByName('livingarea').IsNull then p_livingarea := 0
+    else p_livingarea := FieldByName('livingarea').AsFloat;
+
+    if FieldByName('buildingsoilarea').IsNull then p_buildingsoilarea := 0
+    else p_buildingsoilarea := FieldByName('buildingsoilarea').AsFloat; // Düzəldildi
+
+    if FieldByName('soilarea').IsNull then p_soilarea := 0
+    else p_soilarea := FieldByName('soilarea').AsFloat;
+
+    p_adress := FieldByName('adress').AsString;
+
+    if FieldByName('inforegion').IsNull then p_inforegion := -1
+    else p_inforegion := FieldByName('inforegion').AsInteger;
+
+    if FieldByName('infovilg').IsNull then p_infovilg := -1
+    else p_infovilg := FieldByName('infovilg').AsInteger;
+
+    p_avto_q_s_no    := FieldByName('AVTO_MODEL').AsString;
+    p_avto_maka      := FieldByName('AVTO_MAKA').AsString;
+    p_avto_tip       := FieldByName('avto_tip').AsString;
+    p_avto_no        := FieldByName('AVTO_NO').AsString;
+    p_avto_reng      := FieldByName('AVTO_RENG').AsString;
+    p_avto_il        := FieldByName('AVTO_Il').AsDateTime;
+    p_avto_muher_no  := FieldByName('AVTO_MUHER_NO').AsString;
+    p_avto_muher_hecm:= FieldByName('AVTO_MUHER_HECM').AsString;
+    p_AVTO_REGSTR_DAT:= FieldByName('AVTO_REGSTR_DAT').AsDateTime;
+    p_avto_ban       := FieldByName('AVTO_BAN').AsString;
+  end;
+
+  // Oracle Package Çağırışı
+  case Action of
+    'I':
+    begin
+      guarid := OraclePackage1.CallIntegerFunction('add_Guar', [
+        p_pledgeprice, p_numberofgur, p_pledgeid, p_pledgename, p_holdername,
+        p_holderaddress, p_anyinfotodisting, p_registryno, p_registryagency,
+        p_registrydate, p_pledgeinsurant, p_insuranceagency, p_insuranceamount,
+        p_insuranceright, p_insurancedate, p_gqname, p_gqpaspnum, p_gqpaspyer,
+        p_gqpaspdate, p_gqcity, p_gqvillage, p_gqadres, p_gqtelmob, p_gqtelhome,
+        p_gqtelwork, p_reyster, p_seryamh, p_pledgsorts, p_company, p_companydat,
+        p_companyexpert, p_brance, p_dat, p_generalarea, p_livingarea,
+        p_buildingsoilarea, p_soilarea, p_adress, p_inforegion, p_infovilg,
+        p_custid, p_avto_q_s_no, p_avto_maka, p_avto_tip, p_avto_no, p_avto_reng,
+        p_avto_il, p_avto_muher_no, p_avto_muher_hecm, p_AVTO_REGSTR_DAT, p_avto_ban
+      ]);
+      Applied := True; // Delphi-yə bildiririk ki, INSERT-i özümüz etdik
+    end;
+
+  {  'U':
+    begin
+      OraclePackage1.CallIntegerFunction('edit_Guar', [
+        p_id, p_pledgeprice, p_numberofgur, p_pledgeid, p_pledgename,
+        p_holdername, p_holderaddress, p_anyinfotodisting, p_registryno,
+        p_registryagency, p_registrydate, p_pledgeinsurant, p_insuranceagency,
+        p_insuranceamount, p_insuranceright, p_insurancedate, p_gqname,
+        p_gqpaspnum, p_gqpaspyer, p_gqpaspdate, p_gqcity, p_gqvillage,
+        p_gqadres, p_gqtelmob, p_gqtelhome, p_gqtelwork, p_reyster, p_seryamh,
+        p_pledgsorts, p_company, p_companydat, p_companyexpert, p_brance,
+        p_dat, p_generalarea, p_livingarea, p_buildingsoilarea, p_soilarea,
+        p_adress, p_inforegion, p_infovilg, p_custid
+      ]);
+      Applied := True; // ƏN VACİB MƏQAM: True edilməlidir ki, standart UPDATE işə düşməsin
+    end;  }
+
+  else
+    Applied := False;
+  end;
+end;
+
+
+
+end.

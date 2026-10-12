@@ -1,0 +1,55 @@
+unit UPAccidentRisks;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, Buttons, Grids, DBGrids;
+
+type
+  TfmRiskTypes = class(TForm)
+    DBGrid1: TDBGrid;
+    btAdd: TBitBtn;
+    btOk: TBitBtn;
+    procedure btOkClick(Sender: TObject);
+    procedure btAddClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  fmRiskTypes: TfmRiskTypes;
+
+implementation
+
+uses UPAccidentBlank,SBTranslateProc ,sboapiDataModuleimpl;
+
+{$R *.DFM}
+
+procedure TfmRiskTypes.btOkClick(Sender: TObject);
+begin
+     ModalResult:=mrOk;
+end;
+
+procedure TfmRiskTypes.btAddClick(Sender: TObject);
+begin
+     with PAccidentBlank, memRisk  do
+     begin
+          if Text <> '' then Text := Text + ', ';
+          Text:= Text+ODSRisktypeNAME.Value;
+     end;
+end;
+
+procedure TfmRiskTypes.FormCreate(Sender: TObject);
+begin
+      if PAccidentBlank.ODSRisktype.IsEmpty then btAdd.Enabled := False;
+      DBGrid1.DataSource := PAccidentBlank.RisktypeData;
+
+SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+
+end;
+
+end.

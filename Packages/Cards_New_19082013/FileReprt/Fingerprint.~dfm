@@ -1,0 +1,106 @@
+object Finger: TFinger
+  Left = 248
+  Top = 190
+  Width = 870
+  Height = 640
+  Caption = 'Finger'
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'MS Sans Serif'
+  Font.Style = []
+  OldCreateOrder = False
+  OnActivate = FormActivate
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Image1: TImage
+    Left = 528
+    Top = 8
+    Width = 296
+    Height = 457
+  end
+  object DBLookupComboboxEh1: TDBLookupComboboxEh
+    Left = 152
+    Top = 80
+    Width = 217
+    Height = 21
+    EditButtons = <>
+    ListField = 'ID'
+    ListSource = DataSource1
+    TabOrder = 0
+    Visible = True
+  end
+  object DBLookupComboboxEh2: TDBLookupComboboxEh
+    Left = 152
+    Top = 120
+    Width = 217
+    Height = 21
+    EditButtons = <>
+    ListField = 'NAME'
+    ListSource = DataSource1
+    TabOrder = 1
+    Visible = True
+  end
+  object TakeSampleButton: TButton
+    Left = 178
+    Top = 171
+    Width = 161
+    Height = 25
+    Caption = 'scan'
+    TabOrder = 2
+    OnClick = TakeSampleButtonClick
+  end
+  object Save2DbButton: TButton
+    Left = 178
+    Top = 203
+    Width = 161
+    Height = 25
+    Caption = 'save'
+    TabOrder = 3
+  end
+  object SearchInDbButton: TButton
+    Left = 178
+    Top = 235
+    Width = 161
+    Height = 25
+    Caption = 'find'
+    TabOrder = 4
+  end
+  object LogMemo: TMemo
+    Left = 56
+    Top = 272
+    Width = 369
+    Height = 113
+    TabOrder = 5
+  end
+  object OracleDataSet1: TOracleDataSet
+    SQL.Strings = (
+      'select * from customers')
+    QBEDefinition.QBEFieldDefs = {
+      0400000019000000020000004944010000000000050000004F505F4944010000
+      000000080000004F50454E5F44415401000000000009000000434C4F53455F44
+      41540100000000000A0000004E4552455A4944454E540100000000000A000000
+      5052494E41445F4B4F44010000000000040000004E414D450100000000000A00
+      000053484F52545F4E414D450100000000000A00000047524F55505F4B4C4945
+      010000000000070000005649445F534F42010000000000070000004F52475F53
+      4F420100000000000900000053464552415F444559010000000000060000004F
+      545241534C010000000000090000004E414C4F475F4B4F440100000000000900
+      00004B4F445F4F4B50524F01000000000003000000494E4E0100000000000700
+      00004441545F4E414C010000000000090000004441545F555354415601000000
+      00000300000042494B010000000000080000004F54565F4C49434F0100000000
+      000C0000004F54565F50415353504F52540100000000000A0000004F54565F49
+      53535545440100000000000A0000004F54565F49534441544501000000000007
+      0000004F4C445F494E4E01000000000009000000435553545F54595045010000
+      000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 408
+    Top = 24
+  end
+  object DataSource1: TDataSource
+    DataSet = OracleDataSet1
+    Left = 456
+    Top = 24
+  end
+end

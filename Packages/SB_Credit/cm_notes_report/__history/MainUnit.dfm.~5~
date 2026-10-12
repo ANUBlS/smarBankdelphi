@@ -1,0 +1,141 @@
+object MainForm: TMainForm
+  Left = 0
+  Top = 0
+  Caption = 'MainForm'
+  ClientHeight = 424
+  ClientWidth = 636
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Panel1: TPanel
+    Left = 0
+    Top = 238
+    Width = 636
+    Height = 186
+    Align = alTop
+    Caption = 'Panel1'
+    TabOrder = 0
+    ExplicitTop = 0
+    ExplicitWidth = 865
+    object Memo1: TMemo
+      Left = 1
+      Top = 1
+      Width = 634
+      Height = 184
+      Align = alClient
+      Lines.Strings = (
+        '')
+      TabOrder = 0
+      ExplicitLeft = 17
+      ExplicitTop = 5
+    end
+  end
+  object Panel2: TPanel
+    Left = 0
+    Top = 48
+    Width = 636
+    Height = 190
+    Align = alTop
+    Caption = 'Panel2'
+    TabOrder = 1
+    ExplicitLeft = -8
+    ExplicitTop = -36
+    object DBGrid1: TDBGrid
+      Left = 1
+      Top = 1
+      Width = 634
+      Height = 188
+      Align = alClient
+      DataSource = DataSource1
+      TabOrder = 0
+      TitleFont.Charset = DEFAULT_CHARSET
+      TitleFont.Color = clWindowText
+      TitleFont.Height = -11
+      TitleFont.Name = 'Tahoma'
+      TitleFont.Style = []
+      OnCellClick = DBGrid1CellClick
+      Columns = <
+        item
+          Expanded = False
+          FieldName = 'ID'
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'CREDITID'
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'USNAME'
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'DAT'
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'TEXT'
+          Visible = True
+        end>
+    end
+  end
+  object Panel3: TPanel
+    Left = 0
+    Top = 0
+    Width = 636
+    Height = 48
+    Align = alTop
+    TabOrder = 2
+    ExplicitLeft = -40
+    ExplicitTop = -10
+    object Button1: TButton
+      Left = 208
+      Top = 16
+      Width = 75
+      Height = 25
+      Caption = 'Button1'
+      TabOrder = 0
+    end
+    object Button2: TButton
+      Left = 296
+      Top = 16
+      Width = 75
+      Height = 25
+      Caption = 'Button2'
+      TabOrder = 1
+    end
+  end
+  object OracleDataSet1: TOracleDataSet
+    SQL.Strings = (
+      'select*from ('
+      
+        'select RowID rid, id,  creditid , (select name from user$ where ' +
+        'id=usid) usname , dat  , text from cm_notes_report where crediti' +
+        'd=1--:v_crid'
+      'order by id)a')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      0500000005000000100000004300520045004400490054004900440001000000
+      00000C000000550053004E0041004D0045000100000000000600000044004100
+      5400010000000000080000005400450058005400010000000000040000004900
+      4400010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 456
+    Top = 64
+  end
+  object DataSource1: TDataSource
+    DataSet = OracleDataSet1
+    Left = 456
+    Top = 112
+  end
+end

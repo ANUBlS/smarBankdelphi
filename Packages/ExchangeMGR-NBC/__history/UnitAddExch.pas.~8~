@@ -1,0 +1,122 @@
+unit UnitAddExch;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ExtCtrls, Buttons, StdCtrls, DBCtrls;
+
+type
+  TFormAddExch = class(TForm)
+    PanelMain: TPanel;
+    Edit_ex_no: TEdit;
+    Edit_ex_name: TEdit;
+    Edit_ex_address: TEdit;
+    SpBtnAbort: TSpeedButton;
+    SpBtnOk: TSpeedButton;
+    Label_ex_no: TLabel;
+    Label_ex_name: TLabel;
+    Label_ex_addres: TLabel;
+    Label_ex_worker_name: TLabel;
+    Edit_ex_worker_name: TEdit;
+    Edit_ex_check_no: TEdit;
+    Label_ex_check_no: TLabel;
+    DBLookupComboBox1: TDBLookupComboBox;
+    Label1: TLabel;
+    procedure SpBtnAbortClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure Edit_ex_noKeyPress(Sender: TObject; var Key: Char);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure SpBtnOkClick(Sender: TObject);
+    procedure FormKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormAddExch: TFormAddExch;
+        T :integer;
+        v_ex_no          :integer;
+        v_ex_name        :string;
+        v_ex_address     :string;
+        v_ex_worker_name :string;
+        v_ex_check_no    :string;
+        v_filial         :integer;
+implementation
+
+uses UnitDateExch,sboapiDataModuleImpl, SBTranslateProc;
+
+{$R *.DFM}
+
+procedure TFormAddExch.SpBtnAbortClick(Sender: TObject);
+begin
+Close;
+end;
+
+procedure TFormAddExch.FormCreate(Sender: TObject);
+
+begin
+      Edit_ex_address.Text:='';
+      Edit_ex_check_no.Text:='';
+      Edit_ex_name.Text:='';
+      Edit_ex_no.Text:='';
+      Edit_ex_worker_name.Text:='';
+     with DataModExch do
+      begin
+       ODSExchOffice.Open;
+       ODSExchAcc.Open;
+      end;
+      DBLookupComboBox1.KeyValue:=DataModExch.ODSFilial.FieldByName('Id').AsInteger;
+  SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TFormAddExch.Edit_ex_noKeyPress(Sender: TObject; var Key: Char);
+begin
+ if not (key in ['0'..'9',',','.',#8]) then
+   Key :=#0
+end;
+
+procedure TFormAddExch.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+ if ( ORD(Key) = VK_ESCAPE ) then Close;
+end;
+
+procedure TFormAddExch.SpBtnOkClick(Sender: TObject);
+
+begin
+
+         v_ex_no:=StrToInt(Edit_ex_no.Text);
+         v_ex_name:=Edit_ex_name.Text;
+         v_ex_address:=Edit_ex_address.Text;
+         v_ex_worker_name:=Edit_ex_worker_name.Text;
+         v_ex_check_no:=Edit_ex_check_no.Text;
+         v_filial:=DBLookupComboBox1.KeyValue;
+
+     if (Trim(Edit_ex_no.Text)<>'0') or (Trim(Edit_ex_no.Text)<>'') then
+      begin
+             With DataModExch,DataModExch.OPExchMgr do
+              begin
+                 T:=CallIntegerFunction('ex_office_add',[
+                                                  v_ex_no,
+                                                  v_ex_name,
+                                                  v_ex_address,
+                                                  v_ex_worker_name,
+                                                  v_ex_check_no,
+                                                  v_filial
+                                               ]);
+                  ODSExchOffice.Refresh;
+              end;
+      end;
+     Close; 
+end;
+
+procedure TFormAddExch.FormKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+ if ( ORD(Key) = VK_ESCAPE ) then Close;
+end;
+
+end.

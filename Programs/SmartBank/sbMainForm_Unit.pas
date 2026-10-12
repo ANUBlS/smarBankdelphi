@@ -1,0 +1,1225 @@
+﻿unit sbMainForm_Unit;
+                //dxSkinController1
+  {Done: Dobit splash - bez zavisaniy!!! Postavit na panel}
+
+  {TODO: Peredavat vsem plugin'am parametri, v chastnosti
+    imya ini fayla - dla etogo organizovat mehanizmi v TPluginManager's}
+
+  {TODO: Sozdat plugin dla splash'a pri zagruzke. dla etogo sozdat spisok sistemnih plugin'ov
+    kotorie budut zagrujatsa nezavisimo ot pogramnih}
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
+  PluginSrv, CustomInst, IniSource, StdCtrls, ExtCtrls, ComCtrls, ActnList,
+  Menus, ImgList, Buttons, PluginTreeView, TreeViewIni, SBOInitPkg, HintBox,
+  ToolWin, PluginViewImpl, DBIniSource, OleCtrls, SHDocVw, Dialogs, Clipbrd,
+  AlertThread, Oracle, Db, ComObj, OracleData, XPMan ,ShellApi;
+
+type
+
+//->adm
+  TAzHint = class(THintWindow)
+  public
+    constructor Create (AOwner: TComponent); override;
+  end;
+//<-adm
+
+  TWorkMode = (modeLoading, modeNormal);
+
+  TsbMainForm = class(TForm, IDispatch)
+    LocalIniSource: TIniSource;
+    PopupMenu1: TPopupMenu;
+    ActionList1: TActionList;
+    NodeAbout: TAction;
+    NodeProperties: TAction;
+    NodeProperties1: TMenuItem;
+    NodeAbout1: TMenuItem;
+    N1: TMenuItem;
+    ImageList: TImageList;
+    StateImages: TImageList;
+    ExpandNode: TAction;
+    CollapseNode: TAction;
+    N2: TMenuItem;
+    N3: TMenuItem;
+    N4: TMenuItem;
+    SwitchEditMode: TAction;
+    N5: TMenuItem;
+    DeleteNode: TAction;
+    DeleteNode1: TMenuItem;
+    IntfPluginManager: TPluginManager;
+    MainMenu1: TMainMenu;
+    FileMenu: TMenuItem;
+    ViewMenu: TMenuItem;
+    HelpMenu: TMenuItem;
+    WindowMenu: TMenuItem;
+    TileVerticallyMenu: TMenuItem;
+    TileHorizontallyMenu: TMenuItem;
+    CascadeMenu: TMenuItem;
+    MinimizeMenu: TMenuItem;
+    CloseMenu: TMenuItem;
+    CloseAllMenu: TMenuItem;
+    TileVerticallyChilds: TAction;
+    TileHorizontallyChild: TAction;
+    CascadeChilds: TAction;
+    MinimizeChilds: TAction;
+    CloseChild: TAction;
+    CloseAllChilds: TAction;
+    VisibilityWorkspace: TAction;
+    TaskBarActions: TActionList;
+    SystemPluginManager: TPluginManager;
+    SystemIniSource: TIniSource;
+    MenuPanel: TPanel;
+    PageControl: TPageControl;
+    TabSheet1: TTabSheet;
+    TV: TPluginTreeView;
+    Workspace1: TMenuItem;
+    Splitter1: TSplitter;
+    TaskBarPanel: TPanel;
+    Panel2: TPanel;
+    SpeedButton1: TSpeedButton;
+    VisibilityTaskBar: TAction;
+    TaskBar1: TMenuItem;
+    Panel4: TPanel;
+    Panel5: TPanel;
+    LoadStatePanel: TPanel;
+    Panel3: TPanel;
+    CoolBar1: TCoolBar;
+    ModeAVI: TAnimate;
+    Panel1: TPanel;
+    Panel6: TPanel;
+    Panel7: TPanel;
+    Panel8: TPanel;
+    SpeedButton2: TSpeedButton;
+    Panel9: TPanel;
+    test1: TMenuItem;
+    Button1: TButton;
+    PageScroller1: TPageScroller;
+    TaskBar: TToolBar;
+    ToolButton1: TToolButton;
+    SessionMenu: TMenuItem;
+    Reconnect1: TMenuItem;
+    Reconnect: TAction;
+    BrowseSecurity: TAction;
+    BrowseSecurity1: TMenuItem;
+    LogPanel: TPanel;
+    PageControl1: TPageControl;
+    LogGeneral: TTabSheet;
+    LogTreeView: TListView;
+    Panel11: TPanel;
+    Splitter2: TSplitter;
+    VisibilityLogPanel: TAction;
+    Panel10: TPanel;
+    VisibilityLogPanel1: TMenuItem;
+    LogTimer: TTimer;
+    LogPopupMenu: TPopupMenu;
+    LogClear: TAction;
+    LogClear1: TMenuItem;
+    LogSaveToFile: TAction;
+    LogCopy: TAction;
+    LogPrint: TAction;
+    LogCopy1: TMenuItem;
+    LogSaveToFile1: TMenuItem;
+    LogPrint1: TMenuItem;
+    ShutdownPanel: TPanel;
+    ShutdownLabel: TLabel;
+    ShutdownTimer: TTimer;
+    SaveDialog1: TSaveDialog;
+    miAbout: TMenuItem;
+    ImageList1: TImageList;
+    N6: TMenuItem;
+    N7: TMenuItem;
+    OPACK_SL2: TOraclePackage;
+    SB_msg: TOraclePackage;
+    ODSMsgs2: TOracleDataSet;
+    ODSMsgs2ID: TFloatField;
+    ODSMsgs2MSG: TWideStringField;
+    ForTerminateApp: TTimer;
+    ODSCheckConnection: TOracleDataSet;
+    sb_adm: TOraclePackage;
+    Companies: TMenuItem;
+    company_list: TOracleDataSet;
+    complist_id: TOracleDataSet;
+    SetCompany: TOracleDataSet;
+    company_listID: TFloatField;
+    company_listCOMPANY_NAME: TWideStringField;
+    complist_idID: TFloatField;
+    complist_idCOMPANYID: TWideStringField;
+    ODS_get_app_header: TOracleDataSet;
+    procedure PluginManagerPluginAfterOpen(Sender: TObject;
+      Plugin: TPlugin);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure DeleteNodeExecute(Sender: TObject);
+    procedure DeleteNodeUpdate(Sender: TObject);
+    procedure TVChange(Sender: TObject; Node: TTreeNode);
+    procedure FormCreate(Sender: TObject);
+    procedure TVInPlaceExecute(Sender: TPluginTreeView; Plugin: TInPlacePlugin;
+      const ParamsAsString: String);
+    procedure VisibilityWorkspaceExecute(Sender: TObject);
+    procedure VisibilityWorkspaceHint(var HintStr: String;
+      var CanShow: Boolean);
+    procedure FormDestroy(Sender: TObject);
+    procedure NodePropertiesExecute(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure VisibilityTaskBarExecute(Sender: TObject);
+    procedure NodeAboutExecute(Sender: TObject);
+    procedure ReconnectExecute(Sender: TObject);
+    procedure TVChanging(Sender: TObject; Node: TTreeNode;
+      var AllowChange: Boolean);
+    procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
+    procedure VisibilityLogPanelExecute(Sender: TObject);
+    procedure Panel10Click(Sender: TObject);
+    procedure LogTimerTimer(Sender: TObject);
+    procedure LogClearExecute(Sender: TObject);
+    procedure LogCopyExecute(Sender: TObject);
+    procedure ShutdownTimerTimer(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure LogSaveToFileExecute(Sender: TObject);
+    procedure HelpMenuDrawItem(Sender: TObject; ACanvas: TCanvas;
+      ARect: TRect; Selected: Boolean);
+    procedure miAboutClick(Sender: TObject);
+    procedure CloseChildExecute(Sender: TObject);
+    procedure CloseAllChildsExecute(Sender: TObject);
+    procedure MinimizeChildsExecute(Sender: TObject);
+    procedure CascadeChildsExecute(Sender: TObject);
+    procedure TileHorizontallyChildExecute(Sender: TObject);
+    procedure TileVerticallyChildsExecute(Sender: TObject);
+    procedure test1Click(Sender: TObject);
+    procedure N7Click(Sender: TObject);
+    procedure ForTerminateAppTimer(Sender: TObject);
+    procedure setup_regionalsettings;
+    procedure Mtrilrweb1Click(Sender: TObject);
+    procedure ItemClick(Sender: TObject);
+    procedure CompaniesClick(Sender: TObject);
+  private
+    { Private declarations }
+    FInPlaceStatus: String;
+    FEditMode: Boolean;
+    FViewers: TList;
+    FMode: TWorkMode;
+    FMessageAlertThread: TAlertThread;
+//    FShutdownAlertThread: TAlertThread;
+    FSecsToShutdown: Word;
+    FSBData: TSBOData;
+    FIgnoreSecurity: Boolean;
+    FFormReady: Boolean;
+    FActivating: Boolean;
+    FSessionDisconnected: Boolean;
+    FReconnectGuardTimer: TTimer;
+
+    procedure WMWTSSessionChange(var Msg: TMessage); message $02B1;
+    procedure ReconnectGuardTimerTimer(Sender: TObject);
+    procedure TaskActionExecute(Sender: TObject);
+    procedure TaskActionUpdate(Sender: TObject);
+    function GetViewerIndex(Viewer: TForm): Integer;
+    procedure SetEditMode(const Value: Boolean);
+    procedure SetInPlaceStatus(const Value: String);
+    procedure PluginAfterInPlaceActivate(Sender: TObject; const Action: String);
+    procedure SetMode(const Value: TWorkMode);
+    procedure ExceptionHandler(Sender: TObject; E: Exception);
+    procedure MessageAlertHandler;
+    procedure InitAlertThread(const AlertName: String; out AlertThread: TAlertThread; Method: TThreadMethod);
+    procedure DisplayMessage(const Message: String);
+    procedure InitiateShutdown(Params: String);
+  public
+    { Public declarations }
+    property InPlaceStatus: String read FInPlaceStatus write SetInPlaceStatus;
+    property EditMode: Boolean read FEditMode write SetEditMode;
+    procedure PluginShow(Viewer: TPluginViewForm);
+    procedure PluginHide(Viewer: TPluginViewForm);
+    procedure PluginBringToFront;
+    property Mode: TWorkMode read FMode write SetMode;
+    procedure AccCheck(Sender: TObject;Plug: TInPlacePlugin;var Acc: Boolean);    //adm
+  end;
+
+var
+  sbMainForm: TsbMainForm;
+
+implementation
+
+{$R *.DFM}
+
+{#R SmartBank.DCR}
+
+uses SBPlgAx50_TLB, AxLoader, SBUtils, SBOutput,sboapiDataModuleImpl, SBCore,
+ ErrorFormImpl,SBSrvIntf, AbountProgrammUnit, PasswordChange_unit,AxCtrls, SBTranslateProc,
+  SmLicense1,Variants,DateUtils, CompanySelection;
+
+function WTSRegisterSessionNotification(hWnd: HWND; dwFlags: DWORD): BOOL;
+  stdcall; external 'wtsapi32.dll';
+function WTSUnRegisterSessionNotification(hWnd: HWND): BOOL;
+  stdcall; external 'wtsapi32.dll';
+
+procedure TsbMainForm.WMWTSSessionChange(var Msg: TMessage);
+begin
+  case Msg.WParam of
+    4, 7:  // WTS_REMOTE_DISCONNECT, WTS_SESSION_LOCK
+      begin
+        FSessionDisconnected := True;
+        FReconnectGuardTimer.Enabled := False;
+        TV.ChangeEnabled    := False;
+        TV.OnInPlaceExecute := nil;
+        TV.OnChange         := nil;
+      end;
+    3, 8:  // WTS_REMOTE_CONNECT, WTS_SESSION_UNLOCK
+      begin
+        FReconnectGuardTimer.Enabled := False;
+        FReconnectGuardTimer.Enabled := True;
+      end;
+  end;
+end;
+
+procedure TsbMainForm.ReconnectGuardTimerTimer(Sender: TObject);
+begin
+  FReconnectGuardTimer.Enabled := False;
+  FSessionDisconnected    := False;
+  TV.ChangeEnabled        := True;
+  TV.OnChange             := TVChange;
+  TV.OnInPlaceExecute     := TVInPlaceExecute;
+  TV.OnAccessCheck        := AccCheck;
+end;
+
+resourcestring
+  TreeSection = 'Tree\Sections';
+  sAction = 'Action';
+
+const
+  siNormal = 1;
+  siWarning = 4;
+  siFolderCollapsed = 8;
+  siFolderExpanded = 9;
+  siAbsent = 7;
+  HintFontName='Tahoma';
+
+//->adm
+Constructor TAzHint.Create (AOwner: TComponent);
+Begin
+Inherited Create (Aowner);
+Canvas.Font.Name := HintFontName;
+end;
+//<-adm
+
+procedure TsbMainForm.PluginManagerPluginAfterOpen(Sender: TObject;
+  Plugin: TPlugin);
+begin
+  if Plugin is TInPlacePlugin then
+    with Plugin as TInPlacePlugin do
+      AfterInPlaceActivate := PluginAfterInPlaceActivate;
+end;
+
+procedure TsbMainForm.SetInPlaceStatus(const Value: String);
+begin
+end;
+
+procedure TsbMainForm.PluginAfterInPlaceActivate(Sender: TObject; const Action: String);
+begin
+end;
+
+procedure TsbMainForm.SetEditMode(const Value: Boolean);
+begin
+  FEditMode := Value;
+end;
+
+procedure TsbMainForm.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  if Assigned(FMessageAlertThread) then
+  begin
+    FMessageAlertThread.Terminate;
+    FMessageAlertThread.Free;
+  end;
+ {  if Assigned(FShutdownAlertThread) then
+  begin
+    FShutdownAlertThread.Terminate;
+    FShutdownAlertThread.Free;
+  end;}
+  try
+    //TV.Close;
+  except
+    {on E: Exception do
+      ShowMessage(E.Message);}
+  end;
+end;
+
+procedure TsbMainForm.DeleteNodeExecute(Sender: TObject);
+begin
+  TV.Items.Delete(TV.Selected);
+end;
+
+procedure TsbMainForm.DeleteNodeUpdate(Sender: TObject);
+begin
+  (sender as TAction).Enabled := TV.Selected <> nil;
+end;
+
+procedure TsbMainForm.TVChange(Sender: TObject; Node: TTreeNode);
+var
+  Plugin: TPlugin;
+begin
+  Plugin := TV.PluginByNode(Node);
+  if Plugin is TInPlacePlugin then
+    with Plugin as TInPlacePlugin do
+     if Assigned(OleObject) then
+      OleObject.Align := alClient;
+end;
+
+procedure TsbMainForm.FormCreate(Sender: TObject);
+var
+ result, IniLocation: String;
+  Service :SmLicense;
+  lisdat: TDateTime;
+  lisday:integer;
+const
+  DefConn = 'DefaultConnection';
+
+  function GetParam(const Name, Default: String): String;
+  begin
+    Result := FindCmdLineParam(Name, ['/'], '=', True);
+    if Result = '' then
+      Result := Default;
+  end;
+
+begin
+  Mode := modeLoading;
+
+  Application.OnException := ExceptionHandler;
+
+  ChDir(ExtractFilePath(ParamStr(0)));
+
+  //sbovcl_Initialize();
+
+  IniLocation := GetParam('LocalIniSourceLocation', Format('winini:%sSmartBank.ini', [ExtractFilePath(ParamStr(0))]));
+  with LocalIniSource do
+  begin
+    Location := IniLocation;
+    Open;
+  end;
+     //Replace
+  IniLocation := GetParam('SystemIniSourceLocation', 'ora:SmartBankIni');
+  //IniLocation := Replace (IniLocation, Copy( IniLocation, Length(IniLocation)-3,4), '_TEST'+Copy( IniLocation, Length(IniLocation)-3,4));
+  //ShowMessage(Copy( IniLocation, Length(IniLocation)-3,4));
+  with SystemIniSource do
+  begin
+    Location := IniLocation;
+    Open;
+  end;
+
+  with FSBData, LocalIniSource do
+  begin
+    UserName := ReadValue(DefConn, 'Username', '');
+    Password := ReadValue(DefConn, 'Password', '');
+    Database := ReadValue(DefConn, 'ServiceName', 'SB-CURRENT');
+  end;
+
+  FIgnoreSecurity := FindCmdLineSwitch('IgnoreSecurity', ['/', '-'], True);
+
+  if not Sb_Initialize(FSBData, True, not LocalIniSource.ReadValue(DefConn, 'AutoLogOn', False)) then
+    begin
+//      ShowMessage(sboapiDataModule.OraLogon.GetErrorStr);
+      Application.Terminate
+    end
+  else
+  begin
+    FViewers := TList.Create;
+    TV.Open;
+    if TV.Items.Count <> 0 then
+      TV.Items[0].Expand(False);
+  end;
+///////////////////Abdulla web service/////////////////
+// try
+//
+// Service := GetSmLicense(true);
+// result := Service.checkLicense('');
+//  except
+//   ShowMessage('Service qoşulmada problem var  !');
+//   Application.Terminate;
+//  end;
+// lisdat:=  StrToDate(FormatDateTime('dd.mm.yyyy', VarToDateTime(result)));
+// lisday:=(DaysBetween(lisdat,Sb_GetSystemDate));
+//
+//
+//ShowMessage('Whole days difference = '+
+//              IntToStr(DaysBetween(lisdat,Sb_GetSystemDate))+' days');
+//  if lisday<=0 then
+//   begin
+//   ShowMessage('Lisenziyanın vaxtı bitmişdir !');
+//   Application.Terminate;
+//   end;
+
+///////////////////////////////////
+///
+  Sb_LogEnable;
+
+  Sb_LogPutLine('SmartBank 4.0, Copyright 1996-2016, Smart Systems Technology, Ltd.');
+
+  VisibilityLogPanel.Checked := FindCmdLineSwitch('ShowLog', ['/','-'], True);
+  LogPanel.Visible := VisibilityLogPanel.Checked;
+
+  LogTimer.Enabled := True;
+
+//  LogTimerTimer(LogTimer);
+
+  VisibilityWorkspace.Checked := not FindCmdLineSwitch('HideWorkspace', ['/','-'], True);
+  MenuPanel.Visible := VisibilityWorkspace.Checked;
+
+  InitAlertThread(
+    Format(
+      'MessageBroadcast,MsgToUser_%d,SessionShutdown,Shutdown_%d',
+      [FSBData.SessionID, FSBData.SessionID]
+    ),
+    FMessageAlertThread,
+    MessageAlertHandler);
+
+     TV.OnAccessCheck:=AccCheck;   //adm
+
+  Application.Title :=LocalIniSource.ReadValue(DefConn, 'ProductName', '');
+  Caption :=LocalIniSource.ReadValue(DefConn, 'ProductName', '');
+  Caption := Caption +' [Date: '+ FormatDateTime('dd-mmm-yyyy]',Sb_GetSystemDate);
+    {with sb_adm do
+   begin
+   sbMainForm.dxSkinController1.SkinName:=CallStringFunction('skin_typ',[sboapiDataModule.sbsession.LogonUsername]);
+   end;  }
+  Setup_RegionalSettings; {Moved from FormActivate to FormCreate 10.06.2026 H.R.}
+  SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+
+  {added by H.R. 300626}
+  WTSRegisterSessionNotification(Handle, 0);
+  FReconnectGuardTimer := TTimer.Create(Self);
+  FReconnectGuardTimer.Enabled := False;
+  FReconnectGuardTimer.Interval := 800;  // wait 800ms for RecreateWnd to settle
+  FReconnectGuardTimer.OnTimer := ReconnectGuardTimerTimer;
+  FFormReady := True; {*** added by H.R. 300626 ***}
+end;
+
+procedure TsbMainForm.TVInPlaceExecute(Sender: TPluginTreeView;
+  Plugin: TInPlacePlugin; const ParamsAsString: String);
+
+  function FindPluginViewer(APlugin: TPlugin): TPluginViewForm;
+  var
+    Index: Integer;
+  begin
+    Result := nil;
+    for Index := 0 to FViewers.Count - 1 do
+      if TObject(FViewers[Index]) is TPluginViewForm then
+        if TPluginViewForm(FViewers[Index]).Plugin = APlugin then
+        begin
+          Result := TPluginViewForm(FViewers[Index]);
+          break;
+        end;
+  end;
+
+var
+  Viewer: TPluginViewForm;
+
+begin
+  Mode := modeLoading;
+  try
+    Viewer := FindPluginViewer(Plugin);
+
+    if Assigned(Viewer) then
+      OutputDebugString(PChar(Format(
+        'TVINPLACE plugin=%p "%s" params="%s" -> REUSED viewer=%p viewerplugin=%p "%s"',
+        [Pointer(Plugin), Plugin.Name, ParamsAsString,
+         Pointer(Viewer), Pointer(Viewer.Plugin), Viewer.Caption])))
+    else
+      OutputDebugString(PChar(Format(
+        'TVINPLACE plugin=%p "%s" params="%s" -> NEW viewer',
+        [Pointer(Plugin), Plugin.Name, ParamsAsString])));
+
+    if Assigned(Viewer) then
+    begin
+      Viewer.ParamsAsString := ParamsAsString;
+      with Sender do
+        RefreshNode(NodeByPlugin(Plugin, ParamsAsString));
+      Viewer.Show;
+      Viewer.FormActivate;
+    end
+    else
+    begin
+      try
+        try
+          Viewer := ViewPlugin(Plugin as TInPlacePlugin,
+                               ParamsAsString, FIgnoreSecurity);
+        finally
+          FViewers.Add(Viewer);
+        end;
+      except
+        PluginHide(Viewer);
+        try
+          Viewer.Release;
+        except
+          on E: Exception do
+            ShowException(E, nil);
+        end;
+        raise;
+      end;
+    end;
+  finally
+    Mode := modeNormal;
+  end;
+end;
+
+procedure TsbMainForm.VisibilityWorkspaceExecute(Sender: TObject);
+begin
+  with Sender as TAction, MenuPanel do
+  begin
+    Checked := not Checked;
+    Visible := Checked;
+  end;
+end;
+
+procedure TsbMainForm.VisibilityWorkspaceHint(var HintStr: String;
+  var CanShow: Boolean);
+const
+  Hints: array[Boolean] of String = (
+    'Show',
+    'Hide'
+  );
+begin
+  HintStr := Format('%s %s', [Hints[TV.Visible], VisibilityWorkspace.Caption]);
+end;
+
+procedure TsbMainForm.PluginShow(Viewer: TPluginViewForm);
+var
+  NewAction: TAction;
+  NewButton: TToolButton;
+begin
+  NewAction := TAction.Create(nil);
+  with NewAction do
+  begin
+    OnExecute := TaskActionExecute;
+    OnUpdate := TaskActionUpdate;
+//    Index := GetViewerIndex(Viewer);
+    ActionList := TaskBarActions;
+  end;
+  NewButton := TToolButton.Create(nil);
+  with NewButton do
+  begin
+    Parent := TaskBar;
+    Action := NewAction;
+    AllowAllUp := True;
+  end;
+end;
+
+procedure TsbMainForm.PluginHide(Viewer: TPluginViewForm);
+var
+  Index: Integer;
+begin
+  Index := GetViewerIndex(Viewer);
+  TaskBarActions.Actions[Index].Free;
+  TaskBar.Buttons[TaskBar.ButtonCount-1-Index-1].Free;
+  FViewers.Delete(Index);
+  if Assigned(Viewer) and Assigned(TV.Selected)
+    and (TV.PluginByNode(TV.Selected) = Viewer.Plugin) then
+    TV.Selected := nil;
+end;
+
+procedure TsbMainForm.PluginBringToFront;
+begin
+end;
+
+procedure TsbMainForm.TaskActionExecute(Sender: TObject);
+var
+  Viewer: TForm;
+begin
+  {TODO: Dorabotat}
+  with Sender as TAction do
+  begin
+    Viewer := FViewers[Index];
+    if Checked then
+    begin
+      Checked := False;
+      Viewer.WindowState := wsMinimized;
+    end
+    else
+    begin
+      Checked := True;
+      Viewer.WindowState := wsMaximized;
+    end;
+  end;
+end;
+
+procedure TsbMainForm.TaskActionUpdate(Sender: TObject);
+var
+  Viewer: TPluginViewForm;
+begin
+  with Sender as TAction do
+  begin
+    Viewer := FViewers[Index];
+    Caption := Viewer.Caption;
+    Checked := (ActiveMDIChild = Viewer) and (Viewer.WindowState <> wsMinimized);
+    ImageIndex := TV.NodeByPlugin(Viewer.Plugin, Viewer.Plugin.ParamsAsString).ImageIndex;
+  end;
+end;
+
+function TsbMainForm.GetViewerIndex(Viewer: TForm): Integer;
+begin
+  for Result := 0 to MDIChildCount-1 do
+    if FViewers[Result] = Viewer then
+      exit;
+  raise EListError.Create('Plugin viewer not found in MDI children list');
+end;
+
+procedure TsbMainForm.FormDestroy(Sender: TObject);
+begin
+  WTSUnRegisterSessionNotification(Handle);
+  FReconnectGuardTimer.Free;
+  FViewers.Free;
+end;
+
+procedure TsbMainForm.NodePropertiesExecute(Sender: TObject);
+begin
+  if TV.Selected <> nil then
+    with TV.PluginByNode(TV.Selected) as TInPlacePlugin do
+      OleObject.BrowseProperties;
+end;
+
+procedure TsbMainForm.FormActivate(Sender: TObject);
+var
+  SavedNode: TTreeNode;
+begin
+  if not FFormReady then Exit;
+  if FActivating then Exit;
+  FActivating := True;
+  try
+    Repaint;
+    if MenuPanel.Visible then
+    begin
+      SavedNode           := TV.Selected;
+      TV.OnAccessCheck    := nil;
+      TV.OnInPlaceExecute := nil;
+      TV.SetFocus;
+      {if SavedNode <> nil then
+        TV.Selected := SavedNode;
+      if not FSessionDisconnected then
+      begin
+        TV.OnInPlaceExecute := TVInPlaceExecute;
+        TV.OnAccessCheck    := AccCheck;
+      end;  } {closed by H.R. 070726}
+      {added by H.R. 070726}
+      if not FSessionDisconnected then
+      begin
+        if SavedNode <> nil then
+          TV.Selected := SavedNode;
+        TV.OnInPlaceExecute := TVInPlaceExecute;
+        TV.OnAccessCheck    := AccCheck;
+      end;
+      {*** added by H.R. 070726 ***}
+    end;
+    Mode := modeNormal;
+    if sboapiDataModule.SBSession.Connected then
+      if not company_list.Active then
+        company_list.Active := True;
+  finally
+    FActivating := False;
+  end;
+end;
+
+procedure TsbMainForm.setup_regionalsettings;
+var
+Locale : LongInt;
+WinLanguage: array [0..50] of char;
+begin
+Locale := GetUserDefaultLCID();
+//showmessage(inttostr(GetUserDefaultLangID));
+//showmessage(StrPas(WinLanguage));
+
+{SetLocaleInfo(Locale, LOCALE_SLANGUAGE, 'English (United States)'); //
+SetLocaleInfo(Locale, LOCALE_IDEFAULTCOUNTRY, 'Azerbaijan');
+SetLocaleInfo(Locale, LOCALE_ICOUNTRY, 'Azerbaijan');   }
+
+//SetLocaleInfo(Locale, LOCALE_IDEFAULTLANGUAGE, 'Russian');
+
+SetLocaleInfo(Locale, LOCALE_ILANGUAGE, 'English');
+SetLocaleInfo(Locale, LOCALE_SThousand, ' ');
+SetLocaleInfo(Locale, LOCALE_SDecimal, '.');
+SetLocaleInfo(Locale, LOCALE_SSHORTDATE, 'dd.MM.yyyy');
+SetLocaleInfo(Locale, LOCALE_SCURRENCY, ' ');
+SetLocaleInfo(Locale, LOCALE_SGROUPING, ' ');
+SetLocaleInfo(Locale, LOCALE_STHOUSAND, ',');
+SetLocaleInfo(Locale, LOCALE_ICURRENCY, ' ');
+SetLocaleInfo(Locale, LOCALE_INEGCURR, '0');
+SetLocaleInfo(Locale, LOCALE_STIMEFORMAT, 'HH:mm:ss');
+SetLocaleInfo(Locale, LOCALE_IFIRSTDAYOFWEEK, '0');
+
+//SendMessage(HWND_BROADCAST,WM_WININICHANGE,0,0); {closed by H.R. 10.06.2026}
+end;
+
+procedure TsbMainForm.SpeedButton1Click(Sender: TObject);
+begin
+  with VisibilityTaskBar do
+    Execute;
+end;
+
+procedure TsbMainForm.VisibilityTaskBarExecute(Sender: TObject);
+begin
+  with Sender as TAction do
+  begin
+    Checked := not Checked;
+    TaskBarPanel.Visible := Checked;
+  end;
+end;
+
+procedure TsbMainForm.SetMode(const Value: TWorkMode);
+var
+  Loading: Boolean;
+begin
+  FMode := Value;
+  //Loading := Mode = modeLoading;
+  Loading := (Value = modeLoading);
+  ModeAVI.Active  := Loading;
+  ModeAVI.Visible := Loading;
+  LoadStatePanel.Visible := Loading;
+  //Application.ProcessMessages; {closed by H.R. 250626}
+  // REMOVED: Application.ProcessMessages  ← this is what causes the re-entrance
+end;
+
+procedure TsbMainForm.NodeAboutExecute(Sender: TObject);
+begin
+  with TV, PluginByNode(Selected) as TInPlacePlugin do
+    OleObject.ShowAboutBox;
+end;
+
+procedure TsbMainForm.ReconnectExecute(Sender: TObject);
+var
+  SBData: TSBOData;
+begin
+  Sb_GetSBData(SBData);
+  Sb_Cleanup;
+  if not Sb_Initialize(SBData, True, True) then
+    Application.Terminate
+end;
+
+procedure TsbMainForm.TVChanging(Sender: TObject; Node: TTreeNode;
+  var AllowChange: Boolean);
+begin
+  if Assigned(Node) then
+    Mode := modeLoading;
+  //Application.ProcessMessages;  {closed by H.R. 290626}
+end;
+
+procedure TsbMainForm.FormCloseQuery(Sender: TObject;
+  var CanClose: Boolean);
+begin
+  CanClose := Mode = modeNormal;
+end;
+
+procedure TsbMainForm.VisibilityLogPanelExecute(Sender: TObject);
+begin
+  with Sender as TAction do
+  begin
+    Checked := not Checked;
+    LogPanel.Visible := Checked;
+    if Checked then
+      Sb_LogEnable;
+  end;
+end;
+
+procedure TsbMainForm.Panel10Click(Sender: TObject);
+begin
+  VisibilityLogPanel.Execute;
+end;
+
+procedure TsbMainForm.LogTimerTimer(Sender: TObject);
+var
+  Line: String;
+begin
+  if sboapiDataModule.SBSession.Connected
+    and (Mode = modeNormal) then
+    with LogTreeView do
+      while Sb_LogGetLine(Line) do
+      begin
+        Selected := LogTreeView.Items.Add;
+        with Selected do
+        begin
+          Caption := TimeToStr(Time);
+          SubItems.Add(Line);
+        end;
+      end;
+end;
+
+procedure TsbMainForm.LogClearExecute(Sender: TObject);
+begin
+  LogTreeView.Items.Clear;
+end;
+
+procedure TsbMainForm.LogCopyExecute(Sender: TObject);
+begin
+  with LogTreeView do
+    if Assigned(Selected) then
+      Clipboard.AsText := Selected.SubItems[0];
+end;
+
+procedure TsbMainForm.ExceptionHandler(Sender: TObject; E: Exception);
+var
+str: string;
+begin
+//--------adm
+    if (E is EOracleError) then
+    begin
+     if ((E as EOracleError).ErrorCode=SError_AccessDeniedInsert)
+     or ((E as EOracleError).ErrorCode=SError_AccessDeniedDelete)
+     or ((E as EOracleError).ErrorCode=SError_AccessDeniedUpdate) then
+      begin
+       str:=E.Message;
+       SetLength(str,Pos('ORA-06512',str)-1);
+       E.Message:=str;
+       end;
+    end;
+
+     if (E is ESmartError) then
+      begin
+       str:=E.Message;
+       if Pos('ORA-06512',str)>0 then
+       begin
+         SetLength(str,Pos('ORA-06512',str)-1);
+         E.Message:=str;
+       end;
+      end;
+
+//--------adm
+
+  if E is ESessionKilled then
+    MessageDlg('Your session has been killed', mtInformation, [mbOk], 0)
+//    Application.Terminate;
+  else
+  begin
+    if E is EOracleError then
+      Sb_CheckFatalError((E as EOracleError).ErrorCode);
+    with TErrorForm.Create(Self) do
+    try
+      ShowException(E{, nil});
+    finally
+      Release;
+    end;
+  end;
+end;
+
+procedure TsbMainForm.MessageAlertHandler;
+begin
+  if
+    (FMessageAlertThread.CurrentAlertName = 'MESSAGEBROADCAST')
+    or (FMessageAlertThread.CurrentAlertName = Format('MSGTOUSER_%d', [FSBData.SessionID]))
+  then
+    DisplayMessage(FMessageAlertThread.CurrentAlertMessage)
+  else
+  if
+    (FMessageAlertThread.CurrentAlertName = 'SESSIONSHUTDOWN')
+    or (FMessageAlertThread.CurrentAlertName = Format('SHUTDOWN_%d', [FSBData.SessionID]))
+  then
+    InitiateShutdown(FMessageAlertThread.CurrentAlertMessage);
+end;
+
+procedure TsbMainForm.InitAlertThread(const AlertName: String; out AlertThread: TAlertThread; Method: TThreadMethod);
+begin
+  AlertThread := TAlertThread.Create(True);
+  with AlertThread do
+  begin
+    AwaitingAlertName := AlertName;
+    OnMessage := Method;
+    FreeOnTerminate := False;
+    Priority := tpLowest;
+    Resume;
+  end;
+end;
+
+procedure TsbMainForm.DisplayMessage(const Message: String);
+begin
+  ShowMessage(Message);
+end;
+
+procedure TsbMainForm.InitiateShutdown(Params: String);
+var
+  List: TStrings;
+begin
+  List := TStringList.Create;
+  try
+    List.CommaText := Params;
+    FSecsToShutdown := StrToInt(List.Values['timeout']);
+    ShutdownPanel.Visible := True;
+    ShutdownTimer.Enabled := True;
+    FMessageAlertThread.Terminate;
+    DisplayMessage(List.Values['message']);
+  finally
+    List.Free;
+  end;
+end;
+
+procedure TsbMainForm.ShutdownTimerTimer(Sender: TObject);
+begin
+  if FSecsToShutdown = 0 then
+  begin
+    ShutdownTimer.Enabled := False;
+    ShutdownLabel.Caption := 'Terminal is shutted down';
+  end
+  else
+  begin
+    ShutdownLabel.Visible := True;
+    ShutdownLabel.Caption := Format('Shutdown within %d seconds', [FSecsToShutdown]);
+    dec(FSecsToShutdown);
+  end;
+end;
+
+procedure TsbMainForm.ItemClick(Sender: TObject);
+var
+  Root: TMenuItem;
+  setCompanya:TOracleQuery  ;
+  a :String;
+
+begin
+complist_id.Close;
+complist_id.SetVariable('COMPNAME',TMenuItem(Sender).Caption);
+complist_id.Open;
+
+if TMenuItem(Sender).Caption='2222' then
+    ShowMessage('---' );
+
+
+setCompany.Close;
+setCompany.SetVariable('COMP_ID',complist_id.FieldByName('id').AsInteger);
+setCompany.open;
+
+ShowMessage(inttostr(complist_id.RecordCount) );
+complist_id.Refresh;
+a:= TMenuItem(Sender).Caption;
+
+
+end;
+
+procedure TsbMainForm.FormShow(Sender: TObject);
+var
+  uName, dName, llt: string;
+  I: Integer;
+  MenuItem: TMenuItem;
+begin
+ //uName:=sboapiDataModule.sbsession.LogonUsername; {closed by H.R. 210726}
+ {added by H.R. 210726}
+ if not ODS_get_app_header.Active then ODS_get_app_header.Open;
+ uName := ODS_get_app_header.FieldByName('get_app_header').AsString;
+ {*** H.R. 270726 ***}
+
+ dName:=sboapiDataModule.sbsession.LogonDatabase;
+ llt:=sboapiDataModule.Sblogin.CallDateFunction('get_lastlogintime', []);
+ caption:=caption+' - ( Connected as '+uName+'@'+dName+' )'  ;
+ caption:=caption+ ' - Last Login Time : '+FormatDateTime('dd-mmm-yyyy hh:mm:ss ',sboapiDataModule.Sblogin.CallDateFunction('get_lastlogintime', []));
+
+//company_list.Active:=true;
+//
+// for I := 0 to company_list.RecordCount-1 do
+//  begin
+//   MenuItem := TMenuItem.Create(nil);
+//   MenuItem.Caption := company_list.FieldByName('company_name').AsString;
+//   Companies.Add(MenuItem);
+//   MenuItem.OnClick:=ItemClick;
+//   company_list.Next;
+//  end;
+
+ end;
+
+procedure TsbMainForm.ForTerminateAppTimer(Sender: TObject);
+begin
+try
+ODSCheckConnection.Close;
+ODSCheckConnection.Open;
+except
+Application.Terminate;
+end;
+end;
+
+procedure TsbMainForm.AccCheck(Sender: TObject;Plug: TInPlacePlugin;var Acc: Boolean);    //adm
+begin
+ Acc:=sboapiDataModule.SBAca.CallBooleanFunction('checkmodright',[GuidToString(Plug.ClassID)]);
+end;
+
+procedure TsbMainForm.LogSaveToFileExecute(Sender: TObject);
+var
+  F2: TextFile;
+  Ch: String;
+  i: integer;
+begin
+   if SaveDialog1.Execute then
+   begin
+    AssignFile(F2, SaveDialog1.Filename);
+    Rewrite(F2);
+    for i:=0 to LogTreeView.Items.Count -1 do
+    begin
+     Ch:=LogTreeView.Items.Item[i].SubItems.Text;
+     Write(F2, Ch);
+    end;
+    CloseFile(F2);
+   end;
+end;
+
+procedure TsbMainForm.HelpMenuDrawItem(Sender: TObject; ACanvas: TCanvas;
+  ARect: TRect; Selected: Boolean);
+var
+  LineBottom: Integer;
+  SText: String;
+  Bar: TRect;
+begin
+{  with ACanvas, Sender as TMenuItem do
+  begin
+    with Font do
+    begin
+      Name := 'Tahoma';
+      Charset := DEFAULT_CHARSET;
+      if Default then
+        Style := [fsBold];
+    end;
+    if Caption = '-' then
+    begin
+      Pen.Color := clBlack;
+      LineBottom := (ARect.Top + (ARect.Bottom - ARect.Top) div 2)-1;
+      MoveTo(ARect.Left, LineBottom);
+      LineTo(ARect.Right, LineBottom);
+      inc(LineBottom);
+      Pen.Color := clWhite;
+      MoveTo(ARect.Left, LineBottom);
+      LineTo(ARect.Right, LineBottom);
+    end
+    else
+    begin
+      if Selected then
+      begin
+        Brush.Color := clNavy;
+        if Enabled then
+          Font.Color := clWhite
+        else
+          Font.Color := clSilver;
+      end
+      else
+      begin
+        Brush.Color := clBtnFace;
+        if Enabled then
+          Font.Color := clBlack
+        else
+          Font.Color := clGrayText;
+      end;
+      Bar := ARect;
+     // Inc(Bar.Left, 22);
+      FillRect(Bar);
+      TextOut(ARect.Left+2, ARect.Top+1, Caption);
+    end;
+    SText :=ShortCutToText(ShortCut);
+    TextOut(ARect.Right-TextWidth(SText)-2, ARect.Top+1, SText);
+    if ImageIndex <> -1 then
+      with GetParentMenu do
+        if Assigned(Images) then
+        begin
+          if Checked then
+          begin
+            Bar.Left := ARect.Left + 1;
+            Bar.Right := Bar.Left + 16;
+            Bar.Top := ARect.Top + 1;
+            Bar.Bottom := Bar.Top + 16;
+
+            ACanvas.Brush.Color := clBtnShadow;
+            ACanvas.FrameRect(Bar);
+
+            Inc(Bar.Left, 2);
+            Inc(Bar.Right, 2);
+            Inc(Bar.Top, 2);
+            Inc(Bar.Bottom, 2);
+
+            ACanvas.Brush.Color := clBtnHighlight;
+            ACanvas.FrameRect(Bar);
+
+            Dec(Bar.Left, 1);
+            Dec(Bar.Right, 1);
+            Dec(Bar.Top, 1);
+            Dec(Bar.Bottom, 1);
+
+            if Selected then
+              ACanvas.Brush.Color := clBtnFace
+            else
+              ACanvas.Brush.Color := clBtnHighlight;
+            ACanvas.FillRect(Bar);
+          end;
+
+          Images.Draw(ACanvas, ARect.Left, ARect.Top, ImageIndex, Enabled);
+        end;
+  end;
+  }
+end;
+procedure TsbMainForm.miAboutClick(Sender: TObject);
+begin
+  with TfrmAbout.Create(Self) do
+  try
+    ShowModal
+  finally
+    Release;
+  end;
+end;
+
+procedure TsbMainForm.CloseChildExecute(Sender: TObject);
+begin
+   ActiveMDIChild.Close
+end;
+
+procedure TsbMainForm.CompaniesClick(Sender: TObject);
+begin
+CompanyForm.ShowModal;
+end;
+
+procedure TsbMainForm.CloseAllChildsExecute(Sender: TObject);
+var
+  i : integer;
+begin
+ for i := MDIChildCount - 1 downto 0 do
+  MDIChildren[i].Close
+end;
+
+procedure TsbMainForm.MinimizeChildsExecute(Sender: TObject);
+var
+  i : integer;
+begin
+ for i := MDIChildCount - 1 downto 0 do
+  MDIChildren[i].WindowState := wsMinimized
+end;
+
+procedure TsbMainForm.Mtrilrweb1Click(Sender: TObject);
+var
+s:string;
+begin
+
+
+s:='http://192.168.2.96:8080/AboCustomers/';
+ShellExecute(Handle,'open',PChar(s),nil,nil,SW_SHOWNORMAL);
+end;
+
+procedure TsbMainForm.CascadeChildsExecute(Sender: TObject);
+begin
+  Cascade
+end;
+
+procedure TsbMainForm.TileHorizontallyChildExecute(Sender: TObject);
+begin
+  TileMode := tbHorizontal;
+  Tile;
+end;
+
+procedure TsbMainForm.TileVerticallyChildsExecute(Sender: TObject);
+begin
+   TileMode := tbVertical;
+   Tile;
+end;
+
+procedure TsbMainForm.test1Click(Sender: TObject);
+begin
+//  Close;
+Application.Terminate;
+end;
+
+procedure TsbMainForm.N7Click(Sender: TObject);
+var
+ ChngPassw : TPasswordChange;
+begin
+  ChngPassw:=TPasswordChange.Create(self);
+  try
+    ChngPassw.ShowModal;
+  finally
+    ChngPassw.Release;
+  end;
+end;
+
+end.

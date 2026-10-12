@@ -1,0 +1,249 @@
+object IETuningDataMod: TIETuningDataMod
+  OldCreateOrder = False
+  Left = 305
+  Top = 156
+  Height = 480
+  Width = 696
+  object LinkValuesData: TOracleDataSet
+    SQL.Strings = (
+      'SELECT l.RowID,'
+      '       l.linkid, '
+      '       l.branchid, '
+      '       l.currencyid, '
+      '       l.accountid'
+      '  FROM cm_link_values l'
+      '  where   l.linkid=:linkid'
+      'ORDER BY l.branchid,l.currencyid'
+      ' ')
+    Variables.Data = {
+      0300000001000000070000003A4C494E4B494403000000040000003D00000000
+      000000}
+    QBEDefinition.QBEFieldDefs = {
+      0400000004000000060000004C494E4B4944010000000000080000004252414E
+      434849440100000000000A00000043555252454E435949440100000000000900
+      00004143434F554E544944010000000000}
+    Cursor = crSQLWait
+    Master = LinksData
+    MasterFields = 'ID'
+    DetailFields = 'LinkID'
+    Session = CMDataModule.CMSession
+    Active = True
+    Left = 298
+    Top = 66
+    object LinkValuesDataLINKID: TFloatField
+      FieldName = 'LINKID'
+      Required = True
+    end
+    object LinkValuesDataBRANCHID: TFloatField
+      DisplayLabel = '‘илиал'
+      FieldName = 'BRANCHID'
+      Required = True
+    end
+    object LinkValuesDataCURRENCYID: TFloatField
+      DisplayLabel = '$'
+      FieldName = 'CURRENCYID'
+      Required = True
+    end
+    object LinkValuesDataACCOUNTID: TFloatField
+      DisplayLabel = 'ўесаб'
+      FieldName = 'ACCOUNTID'
+      Required = True
+    end
+    object LinkValuesDataBrachName: TStringField
+      FieldKind = fkLookup
+      FieldName = 'BRANCHNAME'
+      LookupDataSet = BranchList
+      LookupKeyFields = 'ID'
+      LookupResultField = 'NAME'
+      KeyFields = 'BRANCHID'
+      Size = 255
+      Lookup = True
+    end
+    object LinkValuesDataCURRENCYNAME: TStringField
+      FieldKind = fkLookup
+      FieldName = 'CURRENCYNAME'
+      LookupDataSet = CurrencyList
+      LookupKeyFields = 'VALUTE'
+      LookupResultField = 'VAL_NAME'
+      KeyFields = 'CURRENCYID'
+      Size = 8
+      Lookup = True
+    end
+    object LinkValuesDataAccountNumber: TStringField
+      FieldKind = fkLookup
+      FieldName = 'AccountNumber'
+      LookupDataSet = IEAccountList
+      LookupKeyFields = 'ID'
+      LookupResultField = 'ACC_NO'
+      KeyFields = 'ACCOUNTID'
+      Lookup = True
+    end
+  end
+  object DataSrcLinkValues: TDataSource
+    DataSet = LinkValuesData
+    Left = 306
+    Top = 138
+  end
+  object DataSrcLinks: TDataSource
+    DataSet = LinksData
+    Left = 202
+    Top = 138
+  end
+  object DataSrcCategories: TDataSource
+    DataSet = CategoriesData
+    Left = 106
+    Top = 138
+  end
+  object CategoriesData: TOracleDataSet
+    SQL.Strings = (
+      'SELECT id,description'
+      '  FROM cm_categories')
+    QBEDefinition.QBEFieldDefs = {
+      04000000020000000200000049440100000000000B0000004445534352495054
+      494F4E010000000000}
+    Cursor = crSQLWait
+    Session = CMDataModule.CMSession
+    Active = True
+    Left = 98
+    Top = 66
+    object CategoriesDataID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object CategoriesDataDESCRIPTION: TStringField
+      DisplayLabel = 'ћцшт€ри категорийасы'
+      FieldName = 'DESCRIPTION'
+      Size = 128
+    end
+  end
+  object LinksData: TOracleDataSet
+    SQL.Strings = (
+      'SELECT id, categoryid, description'
+      '   FROM cm_links'
+      ' WHERE  categoryid=:categoryid'
+      'ORDER BY id')
+    Variables.Data = {
+      03000000010000000B0000003A43415445474F52594944030000000400000001
+      00000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      04000000030000000200000049440100000000000A00000043415445474F5259
+      49440100000000000B0000004445534352495054494F4E010000000000}
+    Cursor = crSQLWait
+    Master = CategoriesData
+    MasterFields = 'ID'
+    DetailFields = 'categoryid'
+    Session = CMDataModule.CMSession
+    Active = True
+    Left = 194
+    Top = 66
+    object LinksDataID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object LinksDataCATEGORYID: TFloatField
+      FieldName = 'CATEGORYID'
+      Required = True
+    end
+    object LinksDataDESCRIPTION: TStringField
+      DisplayLabel = 'ўесаб групу'
+      FieldName = 'DESCRIPTION'
+      Size = 128
+    end
+  end
+  object IEAccountList: TOracleDataSet
+    SQL.Strings = (
+      'SELECT'
+      '   id,Acc_No,Val_Acc,Name'
+      '  FROM CM_SB_ALL_ACCOUNTS'
+      ' WHERE (bal_cn1 IN (SELECT accountnumber'
+      '                           FROM cm_aginfo'
+      '                          WHERE groupid = (SELECT g.id'
+      
+        '                                             FROM cm_accountgrou' +
+        'ps g'
+      
+        '                                            WHERE g.iname = '#39'Inc' +
+        'ExpAccounts'#39')))'
+      'and (Close_Dat is Null)'
+      'ORDER BY ACC_NO')
+    QBEDefinition.QBEFieldDefs = {
+      0400000004000000020000004944010000000000060000004143435F4E4F0100
+      000000000700000056414C5F414343010000000000040000004E414D45010000
+      000000}
+    Cursor = crSQLWait
+    Session = CMDataModule.CMSession
+    Active = True
+    Left = 112
+    Top = 264
+    object IEAccountListID: TFloatField
+      FieldName = 'ID'
+    end
+    object IEAccountListACC_NO: TStringField
+      FieldName = 'ACC_NO'
+    end
+    object IEAccountListNAME: TStringField
+      FieldName = 'NAME'
+      Size = 90
+    end
+    object IEAccountListVAL_ACC: TIntegerField
+      FieldName = 'VAL_ACC'
+    end
+  end
+  object BranchList: TOracleDataSet
+    SQL.Strings = (
+      'SELECT id, name'
+      '  FROM SB_filial')
+    QBEDefinition.QBEFieldDefs = {
+      0400000002000000020000004944010000000000040000004E414D4501000000
+      0000}
+    Cursor = crSQLWait
+    Session = CMDataModule.CMSession
+    Active = True
+    Left = 368
+    Top = 264
+    object BranchListID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object BranchListNAME: TStringField
+      FieldName = 'NAME'
+      Size = 90
+    end
+  end
+  object DataSrcIEAccountList: TDataSource
+    DataSet = IEAccountList
+    Left = 112
+    Top = 312
+  end
+  object DataSrcBranchList: TDataSource
+    DataSet = BranchList
+    Left = 368
+    Top = 312
+  end
+  object CurrencyList: TOracleDataSet
+    SQL.Strings = (
+      'SELECT VAlute,Val_Name'
+      '  FROM SB_AVALUTE')
+    QBEDefinition.QBEFieldDefs = {
+      04000000020000000600000056414C5554450100000000000800000056414C5F
+      4E414D45010000000000}
+    Cursor = crSQLWait
+    Session = CMDataModule.CMSession
+    Active = True
+    Left = 232
+    Top = 264
+    object CurrencyListVALUTE: TIntegerField
+      FieldName = 'VALUTE'
+      Required = True
+    end
+    object CurrencyListVAL_NAME: TStringField
+      FieldName = 'VAL_NAME'
+      Size = 10
+    end
+  end
+  object DataSrcCurrencyList: TDataSource
+    DataSet = CurrencyList
+    Left = 232
+    Top = 312
+  end
+end

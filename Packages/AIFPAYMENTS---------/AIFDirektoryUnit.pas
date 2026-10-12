@@ -1,0 +1,66 @@
+﻿unit AIFDirektoryUnit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, Buttons, ExtCtrls,FileCtrl;
+
+type
+  TFormAIFDirectory = class(TForm)
+    GroupBox1: TGroupBox;
+    Panel6: TPanel;
+    But_in: TSpeedButton;
+    Edit_IN_Dir: TEdit;
+    SpeedButton6: TSpeedButton;
+    SpeedButton1: TSpeedButton;
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure But_inClick(Sender: TObject);
+    procedure SpeedButton6Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    Dir : String;
+    { Public declarations }
+  end;
+
+var
+  FormAIFDirectory: TFormAIFDirectory;
+
+implementation
+uses DataAIFUnit;
+
+{$R *.dfm}
+
+procedure TFormAIFDirectory.But_inClick(Sender: TObject);
+begin
+  selectdirectory('Select In directory','',dir);
+   if dir <>'' then
+   Edit_IN_Dir.Text:=dir;
+end;
+
+procedure TFormAIFDirectory.FormShow(Sender: TObject);
+begin
+  Edit_IN_Dir.Text:=DataModuleAIF.AifConfig.FieldByName('in_dir').AsString;
+end;
+
+procedure TFormAIFDirectory.SpeedButton1Click(Sender: TObject);
+begin
+  close;
+end;
+
+procedure TFormAIFDirectory.SpeedButton6Click(Sender: TObject);
+begin
+  if trim(Edit_IN_Dir.text)='' then exit;
+  with DataModuleAIF do
+  begin
+    del.CallProcedure('aifconfiginsert',[AifConfig.RecordCount,Edit_in_dir.Text]);
+    MessageDlg('Qəbul Olundu!',mtInformation,[mbok],0);
+    AifConfig.Refresh;
+    FormAIFDirectory.Close;
+  end;
+
+end;
+
+end.

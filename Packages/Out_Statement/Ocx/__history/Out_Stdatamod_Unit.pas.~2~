@@ -1,0 +1,75 @@
+unit Out_Stdatamod_Unit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, Oracle, OracleData;
+
+type
+  TOut_Stdatamod = class(TDataModule)
+    ODSMainState: TOracleDataSet;
+    SB_STATEMENT: TOraclePackage;
+    ODSExtractTrans: TOracleDataSet;
+    DSExtractTrans: TDataSource;
+    DSMainState: TDataSource;
+    RatesDataSet: TOracleDataSet;
+    RatesDataSetVAL_KOD: TIntegerField;
+    RatesDataSetDAT: TDateTimeField;
+    RatesDataSetOSTAT: TFloatField;
+    RatesDataSetBegin: TOracleDataSet;
+    IntegerField1: TIntegerField;
+    DateTimeField1: TDateTimeField;
+    FloatField1: TFloatField;
+    ODSNotAccId: TOracleDataSet;
+    ODSCurrency: TOracleDataSet;
+    DSCurrency: TDataSource;
+    ODSFilial: TOracleDataSet;
+    DSFilial: TDataSource;
+    ODSUsers: TOracleDataSet;
+    DSUsers: TDataSource;
+    ODSLogo: TOracleDataSet;
+    ODSCardState: TOracleDataSet;
+    ODSSysdat: TOracleDataSet;
+    ODSMainStateACCOUNTID: TFloatField;
+    ODSMainStateCUSTOMERID: TFloatField;
+    ODSMainStateACCOUNTNUMBER: TWideStringField;
+    ODSMainStateOPERATORID: TFloatField;
+    ODSMainStateCURRENCYID: TIntegerField;
+    ODSMainStateACCOUNTNAME: TWideStringField;
+    ODSMainStateCUSTOMERNAME: TWideStringField;
+    ODSMainStateCUSTOMERVOIN: TWideStringField;
+    ODSMainStateBALANCECODE: TFloatField;
+    ODSMainStateCURRENCYNAME: TWideStringField;
+    ODSMainStateOPENDATE: TDateTimeField;
+    ODSMainStateFILIAL: TIntegerField;
+    procedure DataModuleCreate(Sender: TObject);
+    procedure DataModuleDestroy(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Out_Stdatamod: TOut_Stdatamod;
+
+implementation
+  USes sboapiDataModuleImpl;
+{$R *.DFM}
+
+procedure TOut_Stdatamod.DataModuleCreate(Sender: TObject);
+begin
+   RatesDataSet.Open;
+   RatesDataSetBegin.Open;
+end;
+
+procedure TOut_Stdatamod.DataModuleDestroy(Sender: TObject);
+begin
+  RatesDataSet.Close;
+  RatesDataSetBegin.Close;
+  Out_StDatamod:= nil;
+
+end;
+
+end.

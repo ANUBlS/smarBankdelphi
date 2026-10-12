@@ -1,0 +1,237 @@
+object PledgForm: TPledgForm
+  Left = 421
+  Top = 223
+  Width = 323
+  Height = 472
+  BorderIcons = [biSystemMenu]
+  Caption = 'PledgForm'
+  Color = clBtnFace
+  Font.Charset = RUSSIAN_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  OnCanResize = FormCanResize
+  OnClose = FormClose
+  OnKeyPress = FormKeyPress
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Panel1: TPanel
+    Left = -8
+    Top = 168
+    Width = 319
+    Height = 34
+    BevelInner = bvRaised
+    BevelOuter = bvLowered
+    TabOrder = 0
+    object DBNavigator1: TDBNavigator
+      Left = 2
+      Top = 2
+      Width = 315
+      Height = 30
+      DataSource = DataSourcePlegds
+      Align = alClient
+      Flat = True
+      TabOrder = 0
+    end
+  end
+  object DBGridEh1: TDBGridEh
+    Left = 0
+    Top = 204
+    Width = 315
+    Height = 234
+    Align = alBottom
+    DataSource = DataSourcePlegds
+    FooterColor = clWindow
+    FooterFont.Charset = RUSSIAN_CHARSET
+    FooterFont.Color = clWindowText
+    FooterFont.Height = -11
+    FooterFont.Name = 'Azl Sans Serif'
+    FooterFont.Style = []
+    TabOrder = 1
+    TitleFont.Charset = RUSSIAN_CHARSET
+    TitleFont.Color = clWindowText
+    TitleFont.Height = -11
+    TitleFont.Name = 'Azl Sans Serif'
+    TitleFont.Style = []
+    VertScrollBar.VisibleMode = sbNeverShowEh
+    Columns = <
+      item
+        EditButtons = <>
+        FieldName = 'TYPECODE'
+        Footers = <>
+        Title.Caption = 'Коду'
+        Title.Color = clNavy
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clWhite
+        Title.Font.Height = -11
+        Title.Font.Name = 'Azl Sans Serif'
+        Title.Font.Style = []
+        Width = 65
+      end
+      item
+        EditButtons = <>
+        FieldName = 'DESCRIPTION'
+        Footers = <>
+        Title.Caption = 'Тяйинаты'
+        Title.Color = clNavy
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clWhite
+        Title.Font.Height = -11
+        Title.Font.Name = 'Azl Sans Serif'
+        Title.Font.Style = []
+        Width = 226
+      end>
+  end
+  object Panel2: TPanel
+    Left = 0
+    Top = 0
+    Width = 315
+    Height = 34
+    Align = alTop
+    BevelInner = bvRaised
+    BevelOuter = bvLowered
+    TabOrder = 2
+    object DBNavigator2: TDBNavigator
+      Left = 2
+      Top = 2
+      Width = 311
+      Height = 30
+      DataSource = DataSource1
+      Align = alClient
+      Flat = True
+      TabOrder = 0
+    end
+  end
+  object DBGridEh2: TDBGridEh
+    Left = 0
+    Top = 34
+    Width = 315
+    Height = 131
+    Align = alTop
+    DataSource = DataSource1
+    FooterColor = clWindow
+    FooterFont.Charset = RUSSIAN_CHARSET
+    FooterFont.Color = clWindowText
+    FooterFont.Height = -11
+    FooterFont.Name = 'Azl Sans Serif'
+    FooterFont.Style = []
+    TabOrder = 3
+    TitleFont.Charset = RUSSIAN_CHARSET
+    TitleFont.Color = clWindowText
+    TitleFont.Height = -11
+    TitleFont.Name = 'Azl Sans Serif'
+    TitleFont.Style = []
+    VertScrollBar.VisibleMode = sbNeverShowEh
+    Columns = <
+      item
+        EditButtons = <>
+        FieldName = 'TYPECODE'
+        Footers = <>
+        Title.Caption = 'Коду'
+        Title.Color = clNavy
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clWhite
+        Title.Font.Height = -11
+        Title.Font.Name = 'Azl Sans Serif'
+        Title.Font.Style = []
+        Width = 65
+      end
+      item
+        EditButtons = <>
+        FieldName = 'DESCRIPTION'
+        Footers = <>
+        Title.Caption = 'Girovun tяминатлыьы'
+        Title.Color = clNavy
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clWhite
+        Title.Font.Height = -11
+        Title.Font.Name = 'Azl Sans Serif'
+        Title.Font.Style = []
+        Width = 146
+      end>
+  end
+  object NLSLocalizer1: TNLSLocalizer
+    Caption = 'Эировлар'
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    Left = 32
+    Top = 272
+  end
+  object DataSourcePlegds: TDataSource
+    DataSet = Plegds
+    Left = 64
+    Top = 272
+  end
+  object Plegds: TOracleDataSet
+    SQL.Strings = (
+      'SELECT Rowid, typecode, needplaceout,temid'
+      ',description'
+      '  FROM cm_pledges'
+      'where temid=:temid')
+    Variables.Data = {0300000001000000060000003A54454D4944030000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      04000000040000000800000054595045434F44450100000000000C0000004E45
+      4544504C4143454F55540100000000000B0000004445534352495054494F4E01
+      00000000000500000054454D4944010000000000}
+    Master = OracleDataSet1
+    MasterFields = 'id'
+    DetailFields = 'temid'
+    Session = CMDataModule.CMSession
+    Left = 104
+    Top = 272
+    object PlegdsTYPECODE: TStringField
+      FieldName = 'TYPECODE'
+      Required = True
+      Size = 8
+    end
+    object PlegdsDESCRIPTION: TStringField
+      FieldName = 'DESCRIPTION'
+      Size = 64
+    end
+    object PlegdsNEEDPLACEOUT: TFloatField
+      DisplayLabel = 'Б.К-да йерляшдир'
+      FieldName = 'NEEDPLACEOUT'
+    end
+    object PlegdsTEMID: TFloatField
+      FieldName = 'TEMID'
+    end
+  end
+  object DataSource1: TDataSource
+    DataSet = OracleDataSet1
+    Left = 32
+    Top = 80
+  end
+  object OracleDataSet1: TOracleDataSet
+    SQL.Strings = (
+      'SELECT Rowid, id,typecode'
+      ',description'
+      '  FROM cm_pledges_t'
+      'order by id'
+      '')
+    QBEDefinition.QBEFieldDefs = {
+      04000000030000000800000054595045434F44450100000000000B0000004445
+      534352495054494F4E010000000000020000004944010000000000}
+    Session = CMDataModule.CMSession
+    Left = 80
+    Top = 80
+    object OracleDataSet1ID: TFloatField
+      FieldName = 'ID'
+    end
+    object OracleDataSet1DESCRIPTION: TStringField
+      FieldName = 'DESCRIPTION'
+      Size = 64
+    end
+    object OracleDataSet1TYPECODE: TStringField
+      FieldName = 'TYPECODE'
+      Required = True
+      Size = 8
+    end
+  end
+end

@@ -1,0 +1,102 @@
+﻿unit domesticbank;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  NLSLocalizer, DBCtrls, StdCtrls, Grids, DBGrids, SearchEdit,oracledata,
+  ExtCtrls;
+
+type
+  Tdomestic_bank = class(TForm)
+    Panel1: TPanel;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    Label6: TLabel;
+    Button1: TButton;
+    Button2: TButton;
+    Edit1: TEdit;
+    Edit2: TEdit;
+    DBLookupComboBox1: TDBLookupComboBox;
+    SearchEdit1: TSearchEdit;
+    SearchEdit2: TSearchEdit;
+    SearchEdit3: TSearchEdit;
+    Panel2: TPanel;
+    DBGrid1: TDBGrid;
+    procedure Button1Click(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+    procedure DBGrid1TitleClick(Column: TColumn);
+    procedure FormCreate(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  domestic_bank: Tdomestic_bank;
+
+implementation
+
+uses Unit18, setac,SBTranslateProc,sboapiDataModuleImpl;
+
+{$R *.DFM}
+
+procedure Tdomestic_bank.Button1Click(Sender: TObject);
+begin
+if MessageDlg('Dəyişikliklər yadda saxlanılsın?',mtinformation,[mbyes,mbno],0)=mryes then
+DataMod_CARDS.mainpacket.CallProcedure('insert_domestic',[edit1.text,
+                                                          edit2.text,
+                                                          DBLookupComboBox1.text,
+                                                          SearchEdit1.text,
+                                                          SearchEdit2.text,
+                                                          SearchEdit3.text  ]);
+
+                                                         DataMod_CARDS.domestic.Close;
+                                                         DataMod_CARDS.domestic.Open;
+
+end;
+
+procedure Tdomestic_bank.Button2Click(Sender: TObject);
+begin
+if MessageDlg('Seçilmiş sətir silinsin?',mtinformation,[mbyes,mbno],0)=mryes then
+DataMod_CARDS.domestic.Delete;
+DataMod_CARDS.domestic.Session.commit;
+end;
+
+procedure Tdomestic_bank.DBGrid1TitleClick(Column: TColumn);
+var
+   TitleName :string;
+   SortPosition: word;
+begin
+ SortPosition :=100;
+ //OrderedTitle :=Column.FieldName; //H.R. 24.06.2008
+ if (DBGrid1.DataSource.DataSet.IsEmpty) or (Column.FieldName = EmptyStr) then Exit;
+ Screen.Cursor :=crHourGlass;
+ TitleName :=Column.FieldName;
+ with TOracleDataSet(DBGrid1.DataSource.DataSet) do
+  try
+  
+   SortPosition :=SQL.Add('ORDER BY '+ TitleName);
+   Refresh;
+  finally
+   SQL[SortPosition] :=EmptyStr;
+   Screen.Cursor :=crDefault;
+  end;
+end;
+
+procedure Tdomestic_bank.FormActivate(Sender: TObject);
+begin
+DataMod_CARDS.accountdomestic.Open;
+end;
+
+procedure Tdomestic_bank.FormCreate(Sender: TObject);
+begin
+SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+end.

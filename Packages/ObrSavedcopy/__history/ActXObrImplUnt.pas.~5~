@@ -1,0 +1,813 @@
+﻿unit ActXObrImplUnt;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActiveX, AxCtrls, Project1_TLB, StdVcl, StdCtrls, ComCtrls, ExtCtrls,
+  Buttons, Mask, Db, OracleData, Oracle, Grids, DBGrids,SBPlgAx50_TLB,
+  ImgList, ExcelExporter, OleServer, ExcelXP, Variants;
+
+type
+  TActXObr = class(TActiveForm, IActXObr,IIconExporter)
+    Panel1: TPanel;
+    GroupBox1: TGroupBox;
+    Label1: TLabel;
+    Label2: TLabel;
+    ComboBoxKurs: TComboBox;
+    BitBtnOst: TBitBtn;
+    BitBtnObr: TBitBtn;
+    RadioGroup1: TRadioGroup;
+    DateTimePicker1: TDateTimePicker;
+    RadioGroup2: TRadioGroup;
+    RadioGroup3: TRadioGroup;
+    RadioGroup4: TRadioGroup;
+    GroupBox2: TGroupBox;
+    EditBal: TEdit;
+    ComboBox1: TComboBox;
+    ProgressBar1: TProgressBar;
+    ImageList1: TImageList;
+    ButtonExcel: TButton;
+    SaldoExporter: TExcelExporter;
+    GroupBox3: TGroupBox;
+    CBBranch: TComboBox;
+    Button1: TButton;
+    ExcelApplication1: TExcelApplication;
+    ExcelWorksheet1: TExcelWorksheet;
+    ExcelWorkbook1: TExcelWorkbook;
+    procedure EditBalKeyPress(Sender: TObject; var Key: Char);
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure ComboBoxKursChange(Sender: TObject);
+    procedure BitBtnOstClick(Sender: TObject);
+    procedure ActiveFormDestroy(Sender: TObject);
+    procedure ButtonExcelClick(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+  private
+    { Private declarations }
+    FEvents: IActXObrEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+    function  Get_Icon: OLE_HANDLE; safecall;
+  public
+    { Public declarations }
+    Branch : array of integer;
+    procedure Initialize; override;
+    procedure InitializeRpt(BtnTag:Byte);
+    procedure sb_GetBalance(vCurrDate:TDateTime;vCurrValute:Integer;vBalanceType:Byte;vBalanceList:string;vHasMar:integer;BranchID:Integer);
+    procedure GetCurrencyKourse;
+    procedure PrintDefaultRate(BtnTag:Byte);
+    function  GetCurrDate:TDateTime;
+    function  getBankDay:TDateTime;
+    function  getBankName:String;
+    procedure FillBranch;
+
+  end;
+
+var
+  ActXObr: TActXObr;
+
+implementation
+
+uses ComObj, ComServ, sboapiDataModuleImpl,
+  UntOBRDM, UntRep1, UntRep2, SBTranslateProc;
+
+{$R *.DFM}
+
+{ TActXObr }
+
+const
+      pGetBalns='GetMarignAndTurn';
+      cGetBankDate='GetBankDay';
+
+var
+     n:integer;
+     Kk :array[0..10] of integer;
+
+procedure TActXObr.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_ActXObrPage); }
+end;
+
+procedure TActXObr.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as IActXObrEvents;
+end;
+
+procedure TActXObr.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TActXObr.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TActXObr.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TActXObr.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TActXObr.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TActXObr.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TActXObr.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TActXObr.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TActXObr.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TActXObr.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TActXObr.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TActXObr.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TActXObr.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TActXObr.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TActXObr.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TActXObr.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TActXObr.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TActXObr.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TActXObr.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TActXObr._Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TActXObr.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TActXObr.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TActXObr.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TActXObr.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TActXObr.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TActXObr.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TActXObr.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TActXObr.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TActXObr.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TActXObr.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TActXObr.Set_AxBorderStyle(Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TActXObr.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TActXObr.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TActXObr.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TActXObr.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TActXObr.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TActXObr.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TActXObr.Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TActXObr.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TActXObr.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TActXObr.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TActXObr.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TActXObr.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TActXObr.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+function TActXObr.Get_Icon: OLE_HANDLE;
+const
+  ImageIndex = 0;
+begin
+  ImageList1.GetIcon(ImageIndex, Icon);
+  Result := Icon.Handle;
+end;
+///////////////////////////////////////********//////////////////////
+function TActXObr.getBankName:String;
+const cGetBankInfo='getBankInfo';
+var Tmp :String;
+begin
+    Tmp :=DataModMain.OpackMain.CallStringFunction(cGetBankInfo,[]);
+    getBankName:=Tmp;
+end;
+procedure TActXObr.PrintDefaultRate;
+var
+     V:Variant;
+begin
+ V:=Integer(Trunc(DateTimePicker1.DateTime));
+ if    BtnTag=0 then
+  with  QuickRepObr2 do begin
+   ValNames.Lines.Clear;
+   ValRates.Lines.Clear;
+   end else
+  with  QuickRepObr1 do begin
+    ValNames.Lines.Clear;
+    ValRates.Lines.Clear;
+   end;
+  with DataModMain.ODSValute do
+  begin
+  if  Active then Close;
+
+    SetVariable('ADate',V);
+    Open;
+    First;
+  end;
+    while not DataModMain.ODSValute.Eof do
+    begin
+     if  BtnTag = 0 then
+     with QuickRepObr2 do
+     begin
+      with ValNames.Lines do
+        Add(DataModMain.ODSValute.FieldByName('Name').AsString);
+      with ValRates.Lines do
+        Add(FormatFloat('0.0000',DataModMain.ODSValute.FieldByName('DefaultRate').Value));
+     end
+     else
+     with QuickRepObr1 do
+     begin
+      with ValNames.Lines do
+        Add(DataModMain.ODSValute.FieldByName('Name').AsString);
+      with ValRates.Lines do
+        Add(FormatFloat('0.0000',DataModMain.ODSValute.FieldByName('DefaultRate').Value));
+     end;
+      DataModMain.ODSValute.Next
+    end;
+    DataModMain.ODSValute.Close
+end;
+function TActXObr.GetCurrDate:TDateTime;
+begin
+   GetCurrDate :=Trunc(DateTimePicker1.DateTime);
+end;
+procedure TActXObr.GetCurrencyKourse;
+begin
+      DataModMain.ODSSysKod.Open;
+      n := 0;
+      ComboBoxKurs.Style :=csDropDown;
+      ComboBoxKurs.Items.Clear;
+      ComboBoxKurs.Items.Add('Bütün valyutalar ');
+      Kk[n] := -1;
+      DataModMain.ODSSysKod.First;
+      n := 1;
+      While not DataModMain.ODSSysKod.EOF do
+      begin
+       Kk[n] := DataModMain.ODSSysKod.FieldByName('VALUTE').AsInteger;
+       ComboBoxKurs.Items.Add( DataModMain.ODSSysKod.FieldByName('VALU_NAME').AsString);
+       Inc(n);
+       DataModMain.ODSSysKod.Next;
+      end;
+      DataModMain.ODSSysKod.Close;
+      ComboBoxKurs.Style:= csDropDownList;
+end;
+procedure TActXObr.InitializeRpt(BtnTag:Byte);
+begin
+  if  BtnTag=0 then
+  begin
+      PrintDefaultRate(BtnTag);
+      QuickRepObr2.ChildBand1.Enabled:=(RadioGroup4.ItemIndex=1);
+      QuickRepObr2.DetailBand1.ForceNewPage := RadioGroup1.ItemIndex=1;
+      QuickRepObr2.QRLabel8.Caption :=FormatDateTime('dd/mm/yyyy',Trunc(DateTimePicker1.DateTime));
+      QuickRepObr2.QRLabel3.Caption :=ComboBoxKurs.Items[ComboBoxKurs.ItemIndex];
+
+   if   (RadioGroup3.ItemIndex = 0)and(n<>0)  then
+   with  QuickRepObr2 do begin
+       QRDBText4.DataField :='OBR_D';
+       QRExpr9.Expression:='SUM(ODSLocate.OBR_D)';
+       QRDBText5.DataField:='SUM(OBR_D)';
+       QRDBText2.DataField :='OBR_K';
+       QRExpr10.Expression:='SUM(ODSLocate.OBR_K)';
+       QRDBText10.DataField:='SUM(OBR_K)';
+       QRDBText7.DataField :='S_ACT';
+       QRExpr11.Expression:='SUM(ODSLocate.S_ACT)';
+       QRDBText12.DataField:='SUM(S_ACT)';
+       QRDBText9.DataField :='S_PAS';
+       QRExpr12.Expression:='SUM(ODSLocate.S_PAS)';
+       QRDBText13.DataField:='SUM(S_PAS)';
+     end else
+     with  QuickRepObr2 do begin
+       QRDBText4.DataField :='POK_OBR_D';
+       QRExpr9.Expression:='SUM(ODSLocate.POK_OBR_D)';
+       QRDBText5.DataField:='SUM(POK_OBR_D)';
+       QRDBText2.DataField :='POK_OBR_K';
+       QRExpr10.Expression:='SUM(ODSLocate.POK_OBR_K)';
+       QRDBText10.DataField:='SUM(POK_OBR_K)';
+       QRDBText7.DataField :='P_ACT';
+       QRExpr11.Expression:='SUM(ODSLocate.P_ACT)';
+       QRDBText12.DataField:='SUM(P_ACT)';
+       QRDBText9.DataField :='P_PAS';
+       QRExpr12.Expression:='SUM(ODSLocate.P_PAS)';
+       QRDBText13.DataField:='SUM(P_PAS)';
+     end;
+    with QuickRepObr2 do
+      Preview;
+
+   end else begin
+      PrintDefaultRate(BtnTag);
+      QuickRepObr1.QRDBText6.Enabled:=(RadioGroup4.ItemIndex=1);
+      QuickRepObr1.QRLabel10.Enabled :=(RadioGroup4.ItemIndex=1);
+      QuickRepObr1.DetailBand1.ForceNewPage := RadioGroup1.ItemIndex=1;
+      QuickRepObr1.QRLabel8.Caption :=FormatDateTime('dd/mm/yyyy',Trunc(DateTimePicker1.DateTime));
+      QuickRepObr1.QRLabel3.Caption :=ComboBoxKurs.Items[ComboBoxKurs.ItemIndex];;
+
+   if   (RadioGroup3.ItemIndex = 0)and(n<>0)  then
+   with  QuickRepObr1 do begin
+       QRDBText2.DataField :='S_ACT';
+       QRExpr5.Expression:='SUM(ODSLocate.S_ACT)';
+       QRDBText10.DataField:='SUM(S_ACT)';
+       QRDBText4.DataField :='S_PAS';
+       QRExpr6.Expression:='SUM(ODSLocate.S_PAS)';
+       QRDBText11.DataField:='SUM(S_PAS)';
+     end else
+     with  QuickRepObr1 do begin
+        QRDBText2.DataField :='P_ACT';
+        QRExpr5.Expression:='SUM(ODSLocate.P_ACT)';
+        QRDBText10.DataField:='SUM(P_ACT)';
+        QRDBText4.DataField :='P_PAS';
+        QRExpr6.Expression:='SUM(ODSLocate.P_PAS)';
+        QRDBText11.DataField:='SUM(P_PAS)';
+      end;
+     with QuickRepObr1 do
+       Preview;
+   end;
+end;
+//****
+procedure TActXObr.sb_GetBalance(vCurrDate:TDateTime;vCurrValute:Integer;vBalanceType:Byte;vBalanceList:string;vHasMar:integer;BranchID : Integer);
+begin
+    with DataModMain.OPackMain do
+    CallProcedure(pGetBalns,[vCurrDate,vCurrValute,vBalanceType,vBalanceList,vHasMar,BranchID]);
+end;
+function  TActXObr.getBankDay:TDateTime;
+var
+    aResult:TDateTime;
+begin
+  with  DataModMain.OpackMain do
+    aResult :=CallDateFunction(cGetBankDate,[]);
+    getBankDay :=aResult;
+end;
+
+
+
+procedure TActXObr.EditBalKeyPress(Sender: TObject; var Key: Char);
+begin
+    if (not (Key in ['0'..'9',',',' ']))and(Key<>#8)  then
+    begin
+       Beep;
+       Key :=#0;
+    end;
+end;
+
+procedure TActXObr.ActiveFormCreate(Sender: TObject);
+begin
+    ActXObr := Self;
+    DataModMain :=TDataModMain.Create(Self);
+    QuickRepObr1 :=TQuickRepObr1.Create(Self);
+    QuickRepObr2 :=TQuickRepObr2.Create(Self);
+    DateTimePicker1.Date :=getBankDay;
+    ComboBox1.ItemIndex :=0;
+    GetCurrencyKourse;
+    ComboBoxKurs.ItemIndex :=0;
+    n :=ComboBoxKurs.ItemIndex;
+    RadioGroup4.ItemIndex :=0;
+    FillBranch;
+    CBBranch.ItemIndex := 0;
+
+    SBTranslateProc.TranslateAllComponents(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TActXObr.FillBranch;
+var
+  BranchIndex :Integer;
+begin
+  with  DataModMain.BranchesData do
+  try
+    Open;
+    SetLength(Branch,RecordCount+1);
+    First;
+    BranchIndex :=0;
+    CBBranch.Items.Clear;
+    CBBranch.Items.Add('Bütün filiallar');
+    Branch[BranchIndex] :=-1;
+    while not EOF do
+    begin
+      BranchIndex :=BranchIndex + 1;
+      CBBranch.Items.Add(FieldByName('Name').AsString);
+      Branch[BranchIndex] :=FieldByName('ID').AsInteger;
+      Next;
+    end;
+  finally
+    Close;
+  end;
+end;
+
+procedure TActXObr.ComboBoxKursChange(Sender: TObject);
+begin
+    n :=ComboBoxKurs.ItemIndex
+end;
+
+procedure  OpenODS;
+const
+      cGetUserName='GetUserName';
+var
+    aStr :string;
+begin
+  with   DataModMain.OpackMain do
+    aStr :=CallStringFunction(cGetUserName,[]);
+    aStr :='TURN_'+aStr ;
+    with  DatamodMain do
+    begin
+     if   ODSLocate.Active  then  ODSLocate.Close;
+     if   ODSSum.Active   then ODSSum.Close;
+      ODSLocate.SQL.Clear;
+      ODSLocate.SQL.Add('Select * from  '+aStr+' order by Bal_cn,Acc_no');
+      ODSLocate.Open;
+
+      ODSSum.SQL.Clear;
+      ODSSum.SQL.Add('select  Sum(s_act),Sum(p_act),Sum(s_pas),Sum(p_pas),Sum(Obr_k),Sum(Obr_d),Sum(pok_Obr_k),Sum(pok_Obr_d)  from '+aStr+ '  order by Acc_no,Bal_cn');
+      ODSSum.Open;
+    end;
+
+    {with  DataModMain do
+    begin
+      with ODSLocate do Refresh;
+      with ODSSum do    Refresh;
+    end;}
+end;
+procedure TActXObr.BitBtnOstClick(Sender: TObject);
+var
+    strBalList:string;
+begin
+  if  Trunc(DateTimePicker1.DateTime)>getBankday then
+   begin
+     ShowMessage('Daxil etdiyiniz tarix yalnisdir!'#13+'Bankin son is  gunu :'+DateToStr(getBankday));
+     Abort
+   end;
+ //if   (Sender as TBitBtn).Tag=0 then
+  Screen.Cursor:=crHourGlass;
+ try
+ try
+  if  EditBal.Text='' then
+    strBalList :='@' else
+    strBalList :=EditBal.Text;
+    ProgressBar1.Max :=100;
+    sb_GetBalance(GetCurrDate,Kk[n],ComboBox1.ItemIndex+1,strBalList,RadioGroup2.ItemIndex,Branch[CBBranch.ItemIndex]);
+
+    ProgressBar1.StepBy(50);
+    OpenODS;
+    ProgressBar1.StepBy(40);
+    Screen.Cursor:=crDefault;
+    ProgressBar1.StepBy(10);
+    InitializeRpt((Sender as TBitBtn).Tag);
+    with   DataModMain.ODSLocate  do   Close;
+   except
+    raise;
+   end;
+  finally
+    Screen.Cursor:=crDefault;
+    ProgressBar1.Position :=0;
+  end;
+end;
+
+procedure TActXObr.ActiveFormDestroy(Sender: TObject);
+begin
+   with DataModMain.ODSLocate do
+    Close;
+   with DataModMain.ODSSum do
+    Close;
+   SetLength(Branch,0); 
+end;
+
+procedure TActXObr.ButtonExcelClick(Sender: TObject);
+var
+    strBalList:string;
+begin
+  if  Trunc(DateTimePicker1.DateTime)>getBankday then
+   begin
+     ShowMessage('Daxil etdiyiniz tarix yalnisdir!'#13+'Bankin son is  gunu :'+DateToStr(getBankday));
+     Abort
+   end;
+ //if   (Sender as TBitBtn).Tag=0 then
+  Screen.Cursor:=crHourGlass;
+ try
+ try
+  if  EditBal.Text='' then
+    strBalList :='@' else
+    strBalList :=EditBal.Text;
+    ProgressBar1.Max :=100;
+    sb_GetBalance(GetCurrDate,Kk[n],ComboBox1.ItemIndex+1,strBalList,RadioGroup2.ItemIndex,Branch[CBBranch.ItemIndex]);
+
+    ProgressBar1.StepBy(50);
+    OpenODS;
+    ProgressBar1.StepBy(40);
+    Screen.Cursor:=crDefault;
+    ProgressBar1.StepBy(10);
+    SaldoExporter.Report;
+    with   DataModMain.ODSLocate  do   CloseAll;
+   except
+    raise;
+   end;
+  finally
+    Screen.Cursor:=crDefault;
+    ProgressBar1.Position :=0;
+  end;
+
+end;
+
+procedure TActXObr.Button1Click(Sender: TObject);
+var
+  V, Sheet, Sheets   :Variant;
+  cell, row, i, j    :Integer;
+  E_Row1,OpenedXlsCnt:Integer;
+  strBalList:string;
+  sh:_WorkSheet;
+begin
+
+ if  Trunc(DateTimePicker1.DateTime)>getBankday then
+   begin
+     ShowMessage('Daxil etdiyiniz tarix yalnisdir!'#13+'Bankin son is  gunu :'+DateToStr(getBankday));
+     Abort
+   end;
+
+
+     Screen.Cursor:=crHourGlass;
+ try
+ try
+  if  EditBal.Text='' then
+    strBalList :='@' else
+    strBalList :=EditBal.Text;
+    ProgressBar1.Max :=100;
+    sb_GetBalance(GetCurrDate,Kk[n],ComboBox1.ItemIndex+1,strBalList,RadioGroup2.ItemIndex,Branch[CBBranch.ItemIndex]);
+
+    ProgressBar1.StepBy(50);
+    OpenODS;
+    ProgressBar1.StepBy(40);
+    Screen.Cursor:=crDefault;
+    ProgressBar1.StepBy(10);
+
+  //**********Excel Application**********
+
+      ExcelApplication1.Connect;
+ExcelApplication1.Workbooks.Open(ExtractFilePath(ExtractFilePath(ParamStr(0)))+ 'obrsaved.xls',0,true,1,'','',true,xlWindows,',',true,true, 0,false,0,null,null);
+ExcelApplication1.Caption := 'Qaliq dovriyye cedveli';
+ExcelWorkbook1.ConnectTo(ExcelApplication1.Workbooks .Item[1]);
+ExcelWorkbook1.Activate;
+
+
+ExcelWorkbook1.Worksheets.Item[1].QueryInterface(IID__Worksheet,sh);
+
+ExcelWorksheet1.ConnectTo(sh);
+//ExcelWorksheet1.Range['A2:CA1000'].Delete;
+sheets:=ExcelApplication1.Sheets;
+ Sheets.Item[1].range['A2:M60000'].Delete;
+ Sheets.Item[1].range['A2:M60000'].font.size:=8;
+ Sheets.Item[1].range['A2:A60000'].numberformat:='@';
+ Sheets.Item[1].range['B2:B60000'].Font.Name := 'Arial AzLat';
+
+for i:=1 to DataModMain.ODSLocate.RecordCount do begin
+ExcelWorksheet1.Cells.Item[1+i,1] := DataModMain.ODSLocateACC_NO.AsString;
+ExcelWorksheet1.Cells.Item[1+i,2] := DataModMain.ODSLocateBALNAME.AsString;
+ExcelWorksheet1.Cells.Item[1+i,3] := DataModMain.ODSLocateVAL_NAME.AsString;
+ExcelWorksheet1.Cells.Item[1+i,4] := DataModMain.ODSLocateOBR_D.AsFloat;
+ExcelWorksheet1.Cells.Item[1+i,5] := DataModMain.ODSLocateOBR_K.AsFloat;
+ExcelWorksheet1.Cells.Item[1+i,6] := DataModMain.ODSLocatePOK_OBR_D.AsFloat;
+ExcelWorksheet1.Cells.Item[1+i,7] := DataModMain.ODSLocatePOK_OBR_K.AsFloat;
+ExcelWorksheet1.Cells.Item[1+i,8] := DataModMain.ODSLocateS_ACT.AsFloat;
+ExcelWorksheet1.Cells.Item[1+i,9] := DataModMain.ODSLocateS_PAS.AsFloat;
+ExcelWorksheet1.Cells.Item[1+i,10] := DataModMain.ODSLocateP_ACT.AsFloat;
+ExcelWorksheet1.Cells.Item[1+i,11] := DataModMain.ODSLocateP_PAS.AsFloat;
+ExcelWorksheet1.Cells.Item[1+i,12] := DataModMain.ODSLocateLASTDATE.AsDateTime;
+ExcelWorksheet1.Cells.Item[1+i,13] := DataModMain.ODSLocateBAL_CN.AsFloat;
+DataModMain.ODSLocate.Next;
+end;
+
+
+
+
+ExcelWorkbook1.Saved[0] := true;
+
+ExcelApplication1.Visible[0] := true;
+
+ExcelWorksheet1.Disconnect;
+ExcelWorkbook1.Disconnect;
+ExcelApplication1.Disconnect;
+
+
+
+
+    with   DataModMain.ODSLocate  do   CloseAll;
+   except
+    raise;
+   end;
+  finally
+    Screen.Cursor:=crDefault;
+    ProgressBar1.Position :=0;
+  end;
+
+end;
+
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TActXObr,
+    Class_ActXObr,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmSingle);
+end.

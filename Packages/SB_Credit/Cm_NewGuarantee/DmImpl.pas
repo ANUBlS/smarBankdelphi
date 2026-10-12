@@ -1,0 +1,151 @@
+﻿unit DmImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, OracleData, Oracle;
+
+type
+  TGurDm = class(TDataModule)
+    MainDSrc: TDataSource;
+    Pledges: TOracleDataSet;
+    DataSrcPledges: TDataSource;
+    pledgsortsDatSrc: TDataSource;
+    pledgsorts: TOracleDataSet;
+    pledgsortsID: TFloatField;
+    pledgsortsNAME: TWideStringField;
+    Guarante: TOraclePackage;
+    CompanyDSet: TOracleDataSet;
+    CompanySrc: TDataSource;
+    OracleQuery1: TOracleQuery;
+    maxid: TOracleDataSet;
+    maxidMID: TFloatField;
+    BaliSrc: TDataSource;
+    BAliDSet: TOracleDataSet;
+    BAliDSetCREDITID: TFloatField;
+    BAliDSetCARDID: TFloatField;
+    BAliDSetGUARANTORNAME: TWideStringField;
+    BAliDSetGUARANTORID: TWideStringField;
+    BAliDSetGUARANTORSALARY: TWideStringField;
+    BAliDSetZAMINWORK1: TWideStringField;
+    BAliDSetZAMINADRES1: TWideStringField;
+    BAliDSetZAMINTEL1: TWideStringField;
+    BAliDSetZMPASPYER1: TWideStringField;
+    BAliDSetZMPASPDAT1: TDateTimeField;
+    BAliDSetZMTELMOB1: TWideStringField;
+    Credit: TOracleDataSet;
+    CreditCREDITID: TFloatField;
+    InsSrc: TDataSource;
+    MainDSet: TOracleDataSet;
+    MainDSetCREDITID: TFloatField;
+    MainDSetPLEDGEID: TFloatField;
+    MainDSetPLEDGENAME: TWideStringField;
+    MainDSetHOLDERNAME: TWideStringField;
+    MainDSetHOLDERADDRESS: TWideStringField;
+    MainDSetANYINFOTODISTING: TWideStringField;
+    MainDSetREGISTRYNO: TWideStringField;
+    MainDSetREGISTRYAGENCY: TWideStringField;
+    MainDSetREGISTRYDATE: TDateTimeField;
+    MainDSetPLEDGEINUSE: TFloatField;
+    MainDSetPLEDGEINSURANT: TFloatField;
+    MainDSetINSURANCEAGENCY: TFloatField;
+    MainDSetINSURANCEAMOUNT: TFloatField;
+    MainDSetINSURANCEDATE: TDateTimeField;
+    MainDSetPLEDGEPRICEEVKV: TFloatField;
+    MainDSetPLEDGEPRICETORPAQHA: TFloatField;
+    MainDSetTEMP: TWideStringField;
+    MainDSetINSURANCERIGHT: TFloatField;
+    MainDSetINSURANCEID: TWideStringField;
+    MainDSetPLEDGEID_P: TFloatField;
+    MainDSetGQNAME: TWideStringField;
+    MainDSetGQPASPNUM: TWideStringField;
+    MainDSetGQPASPYER: TWideStringField;
+    MainDSetGQPASPDATE: TDateTimeField;
+    MainDSetGQADRESS: TWideStringField;
+    MainDSetREYSTER: TWideStringField;
+    MainDSetSERYAMH: TWideStringField;
+    MainDSetGQTEL: TWideStringField;
+    MainDSetPLEDGEPRICE: TFloatField;
+    MainDSetPLEDGSORTS: TFloatField;
+    MainDSetCOMPANY: TFloatField;
+    MainDSetCOMPANYDAT: TDateTimeField;
+    MainDSetCOMPANYEXPERT: TWideStringField;
+    MainDSetCARDID: TFloatField;
+    OracleDataSet1: TOracleDataSet;
+    procedure oracMainDSet1AfterOpen(DataSet: TDataSet);
+    procedure DataModuleCreate(Sender: TObject);
+    procedure DataModuleDestroy(Sender: TObject);
+    procedure BAliDSetAfterOpen(DataSet: TDataSet);
+    procedure MainDSetAfterOpen(DataSet: TDataSet);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  GurDm: TGurDm;
+
+implementation
+
+{$R *.DFM}
+uses sboapiDataModuleImpl,GuaranteImpl;
+procedure TGurDm.BAliDSetAfterOpen(DataSet: TDataSet);
+var index: integer;
+begin
+   with DataSet, FrmGuarante.Panel do
+begin
+    Tabs.Clear;
+    for Index := 0 to RecordCount-1 do
+      Tabs.Add(Format(' Zamin  №%d ', [Index]));
+    if recordcount=0 then tabs.Add ((Format(' Zamin №%d ', [0]))) ;
+    First;
+  end;
+
+
+end;
+
+procedure TGurDm.DataModuleCreate(Sender: TObject);
+begin
+   Pledges.Open;
+   pledgsorts.Open ;
+   CompanyDSet.Open;
+  OracleDataSet1.Open ;
+end;
+
+procedure TGurDm.DataModuleDestroy(Sender: TObject);
+begin
+  Pledges.close;
+  pledgsorts.Close ;
+  CompanyDSet.CloseAll;
+  OracleDataSet1.CloseAll;
+end;
+
+procedure TGurDm.oracMainDSet1AfterOpen(DataSet: TDataSet);
+var index: integer;
+begin
+   with DataSet, FrmGuarante.Panel2 do
+begin
+    Tabs.Clear;
+    for Index := 0 to RecordCount-1 do
+      Tabs.Add(Format('Girov №%d ', [Index]));
+    if recordcount=0 then tabs.Add ((Format('Girov №%d ', [0]))) ;
+    First;
+  end;
+end;
+
+procedure TGurDm.MainDSetAfterOpen(DataSet: TDataSet);
+var index: integer;
+begin
+   with DataSet, FrmGuarante.Panel2 do
+begin
+    Tabs.Clear;
+    for Index := 0 to RecordCount-1 do
+      Tabs.Add(Format('Girov №%d ', [Index]));
+    if recordcount=0 then tabs.Add ((Format('Girov №%d ', [0]))) ;
+    First;
+  end;
+end;
+
+end.

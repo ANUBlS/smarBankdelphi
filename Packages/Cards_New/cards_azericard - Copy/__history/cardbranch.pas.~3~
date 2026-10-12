@@ -1,0 +1,40 @@
+﻿unit cardbranch;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Grids, DBGrids, Unitcardarxiv, datclose, Unit18, StdCtrls, DBCtrls;
+
+type
+  Tcard_branch = class(TForm)
+    DBGrid1: TDBGrid;
+    DBLookupComboBox1: TDBLookupComboBox;
+    Edit1: TEdit;
+    Button1: TButton;
+    Label1: TLabel;
+    Label2: TLabel;
+    procedure Button1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  card_branch: Tcard_branch;
+
+implementation
+
+{$R *.dfm}
+
+procedure Tcard_branch.Button1Click(Sender: TObject);
+begin
+DataMod_CARDS.mainpacket.CallProcedure('addbranchescode',[DBLookupComboBox1.KeyValue,DBLookupComboBox1.Text,Edit1.Text]);
+ShowMessage('Filialın Plastik kart kodu əlavə olundu..');
+DBGrid1.DataSource.DataSet.Refresh;
+edit1.Clear;
+DBLookupComboBox1.KeyValue:='' ;
+end;
+
+end.

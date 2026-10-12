@@ -1,0 +1,40 @@
+unit ControlDatModImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Oracle, Db, OracleData;
+
+type
+  TControlDatMod = class(TDataModule)
+    CM_CONTROL: TOraclePackage;
+    ResultsDatSet: TOracleDataSet;
+    ResultDatSrc: TDataSource;
+    ResultsDatSetNUMBEROFCREDIT: TWideStringField;
+    ResultsDatSetCUSTNAME: TWideStringField;
+    ResultsDatSetDREST: TFloatField;
+    ResultsDatSetDINTERESTREST: TFloatField;
+    ResultsDatSetDDUEREST: TFloatField;
+    ResultsDatSetDDUEINTERESTREST: TFloatField;
+    Branchs: TOracleDataSet;
+    BranchsDatScr: TDataSource;
+    BranchsID: TFloatField;
+    BranchsNAME: TWideStringField;
+    OracleDataSet1: TOracleDataSet;
+    OracleDataSet1ID: TFloatField;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  ControlDatMod: TControlDatMod;
+
+implementation
+
+{$R *.DFM}
+uses sboapiDataModuleImpl;
+
+end.

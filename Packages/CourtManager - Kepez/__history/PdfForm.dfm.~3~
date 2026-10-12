@@ -1,0 +1,112 @@
+object FormPdf: TFormPdf
+  Left = 0
+  Top = 0
+  Caption = 'FormPdf'
+  ClientHeight = 434
+  ClientWidth = 745
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  PixelsPerInch = 96
+  TextHeight = 13
+  object XFPanel1: TXFPanel
+    Left = 0
+    Top = 0
+    Width = 745
+    Height = 434
+    Align = alClient
+    BevelInner = bvRaised
+    BevelOuter = bvLowered
+    TabOrder = 0
+    ExplicitWidth = 637
+    object XDBGrid1: TXDBGrid
+      Left = 2
+      Top = 41
+      Width = 741
+      Height = 391
+      Align = alClient
+      DataSource = DataModuleCourt.DSPdf
+      GridStyle.VisualStyle = vsXPStyle
+      TabOrder = 0
+      Columns = <
+        item
+          Expanded = False
+          FieldName = 'ID'
+          Visible = True
+          Width = 120
+        end
+        item
+          Expanded = False
+          FieldName = 'DAT'
+          Visible = True
+          Width = 120
+        end
+        item
+          Expanded = False
+          FieldName = 'NAME'
+          Visible = True
+          Width = 250
+        end
+        item
+          Expanded = False
+          FieldName = 'USERID'
+          Visible = True
+          Width = 120
+        end>
+    end
+    object XFPanel2: TXFPanel
+      Left = 2
+      Top = 2
+      Width = 741
+      Height = 39
+      Align = alTop
+      BevelInner = bvRaised
+      BevelOuter = bvLowered
+      TabOrder = 1
+      object XFButton1: TXFButton
+        Left = 4
+        Top = 3
+        Width = 75
+        Height = 32
+        Caption = 'Fayl'#305'n q'#601'bulu'
+        DoubleBuffered = True
+        ParentDoubleBuffered = False
+        TabOrder = 0
+        OnClick = XFButton1Click
+      end
+      object XFButton2: TXFButton
+        Left = 79
+        Top = 3
+        Width = 75
+        Height = 32
+        Caption = 'Fayl'#305'n c'#305'x'#305#351#305
+        DoubleBuffered = True
+        ParentDoubleBuffered = False
+        TabOrder = 1
+        OnClick = XFButton2Click
+      end
+      object XFButton3: TXFButton
+        Left = 154
+        Top = 3
+        Width = 75
+        Height = 32
+        Caption = 'Fay'#305'l'#305' l'#601#287'v et'
+        DoubleBuffered = True
+        ParentDoubleBuffered = False
+        TabOrder = 2
+      end
+    end
+  end
+  object ODExport: TOpenDialog
+    Left = 608
+    Top = 104
+  end
+  object SDImport: TSaveDialog
+    Left = 672
+    Top = 104
+  end
+end

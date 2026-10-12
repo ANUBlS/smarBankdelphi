@@ -1,0 +1,753 @@
+object frmClaims: TfrmClaims
+  Left = 299
+  Top = 85
+  BorderStyle = bsDialog
+  Caption = 'Zererler'
+  ClientHeight = 624
+  ClientWidth = 598
+  Color = clBtnFace
+  Font.Charset = RUSSIAN_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poDesktopCenter
+  OnActivate = FormActivate
+  OnCreate = FormCreate
+  PixelsPerInch = 96
+  TextHeight = 14
+  object XFGroupBox1: TXFGroupBox
+    Left = 0
+    Top = 0
+    Width = 598
+    Height = 289
+    Align = alTop
+    Caption = 'T'#601'mir x'#601'rcl'#601'ri'
+    TabOrder = 0
+    object DBGrid2: TDBGrid
+      Left = 2
+      Top = 193
+      Width = 594
+      Height = 87
+      Align = alTop
+      DataSource = InsMKDataMod.DSClaimSal
+      DrawingStyle = gdsGradient
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      Options = [dgEditing, dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit, dgMultiSelect, dgTitleClick, dgTitleHotTrack]
+      ParentFont = False
+      TabOrder = 0
+      TitleFont.Charset = RUSSIAN_CHARSET
+      TitleFont.Color = clWindowText
+      TitleFont.Height = -11
+      TitleFont.Name = 'Azl Sans Serif'
+      TitleFont.Style = []
+      Columns = <
+        item
+          Expanded = False
+          FieldName = 'NAME'
+          PickList.Strings = (
+            'D'#601'mir'#231'i'
+            'R'#601'ngsaz'
+            #199'iling'#601'r'
+            'Plasmas'#351'ik'
+            'Elektrik')
+          Title.Caption = #1071#1084#1103#1082' '#1097#1072#1075#1075#1099' '#1094#1079#1088#1103
+          Title.Color = clNavy
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clWindowText
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 190
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'COST'
+          Title.Caption = #1043#1080#1081#1084#1103#1090#1080
+          Title.Color = clNavy
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clWindowText
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 100
+          Visible = True
+        end>
+    end
+    object DBGrid1: TDBGrid
+      Left = 2
+      Top = 51
+      Width = 594
+      Height = 105
+      Align = alTop
+      DataSource = InsMKDataMod.DSClaims
+      DrawingStyle = gdsGradient
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      Options = [dgEditing, dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit, dgMultiSelect, dgTitleClick, dgTitleHotTrack]
+      ParentFont = False
+      TabOrder = 1
+      TitleFont.Charset = RUSSIAN_CHARSET
+      TitleFont.Color = clWindowText
+      TitleFont.Height = -11
+      TitleFont.Name = 'Azl Sans Serif'
+      TitleFont.Style = []
+      Columns = <
+        item
+          Expanded = False
+          FieldName = 'ENAME'
+          Title.Caption = #1045#1097#1090#1080#1081#1081#1072#1090' '#1097#1080#1089#1089#1103
+          Title.Color = clNavy
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clWindowText
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 190
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'COUNT'
+          Title.Caption = #1052#1080#1075#1076#1072#1088#1099
+          Title.Color = clNavy
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clWindowText
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 100
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'COST'
+          Title.Caption = #1043#1080#1081#1084#1103#1090#1080
+          Title.Color = clNavy
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clWindowText
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 100
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'STATE'
+          PickList.Strings = (
+            'T'#601'mir olunur'
+            'D'#601'yi'#351'dirilir')
+          Title.Caption = #1065#1080#1089#1089#1103#1085#1080#1085' '#1074#1103#1079#1080#1081#1081#1103#1090#1080
+          Title.Color = clNavy
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clWindowText
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 110
+          Visible = True
+        end>
+    end
+    object XFPanel1: TXFPanel
+      Left = 2
+      Top = 16
+      Width = 594
+      Height = 35
+      Align = alTop
+      BevelInner = bvLowered
+      TabOrder = 2
+      object DBNavigator2: TDBNavigator
+        Left = 6
+        Top = 4
+        Width = 340
+        Height = 27
+        DataSource = InsMKDataMod.DSClaims
+        Flat = True
+        Hints.Strings = (
+          #1041#1080#1088#1080#1085#1078#1080
+          #1071#1074#1074#1103#1083#1082#1080
+          #1057#1086#1085#1088#1072#1082#1099
+          #1040#1093#1099#1088#1099#1085#1078#1099
+          #1071#1083#1072#1074#1103
+          #1051#1103#1100#1074
+          #1056#1077#1076#1072#1082#1090#1103
+          #1058#1103#1089#1076#1080#1075' '#1077#1090#1084#1103#1082
+          #1048#1084#1090#1080#1085#1072
+          #1049#1077#1085#1080#1083#1103#1084#1103#1082)
+        ParentShowHint = False
+        ShowHint = True
+        TabOrder = 0
+        OnClick = DBNavigator2Click
+      end
+    end
+    object XFPanel2: TXFPanel
+      Left = 2
+      Top = 156
+      Width = 594
+      Height = 37
+      Align = alTop
+      BevelInner = bvLowered
+      TabOrder = 3
+      object DBNavigator1: TDBNavigator
+        Left = 6
+        Top = 6
+        Width = 340
+        Height = 27
+        DataSource = InsMKDataMod.DSClaimSal
+        Flat = True
+        Hints.Strings = (
+          #1041#1080#1088#1080#1085#1078#1080
+          #1071#1074#1074#1103#1083#1082#1080
+          #1057#1086#1085#1088#1072#1082#1099
+          #1040#1093#1099#1088#1099#1085#1078#1099
+          #1071#1083#1072#1074#1103
+          #1051#1103#1100#1074
+          #1056#1077#1076#1072#1082#1090#1103
+          #1058#1103#1089#1076#1080#1075' '#1077#1090#1084#1103#1082
+          #1048#1084#1090#1080#1085#1072
+          #1049#1077#1085#1080#1083#1103#1084#1103#1082
+          '')
+        ParentShowHint = False
+        ShowHint = True
+        TabOrder = 0
+        OnClick = DBNavigator2Click
+      end
+    end
+  end
+  object XFGroupBox2: TXFGroupBox
+    Left = 0
+    Top = 289
+    Width = 598
+    Height = 270
+    Align = alTop
+    Caption = 'Hadis'#601' haqq'#305'nda'
+    TabOrder = 1
+    object XFLabel1: TXFLabel
+      Left = 9
+      Top = 29
+      Width = 31
+      Height = 14
+      Caption = 'Rayon'
+    end
+    object XFLabel2: TXFLabel
+      Left = 208
+      Top = 29
+      Width = 25
+      Height = 14
+      Caption = 'K'#252#231#601
+    end
+    object XFLabel3: TXFLabel
+      Left = 399
+      Top = 29
+      Width = 53
+      Height = 14
+      Caption = 'Avtoservis'
+    end
+    object XFLabel4: TXFLabel
+      Left = 8
+      Top = 62
+      Width = 79
+      Height = 14
+      Caption = 'Hadis'#601'nin t'#601'sviri'
+    end
+    object XFLabel5: TXFLabel
+      Left = 8
+      Top = 84
+      Width = 291
+      Height = 14
+      Caption = 'Hadis'#601'd'#601' i'#351'tirak ed'#601'n dig'#601'r avtomobil haqq'#305'nda'
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+    end
+    object XFLabel6: TXFLabel
+      Left = 8
+      Top = 135
+      Width = 71
+      Height = 14
+      Caption = 'D'#246'vl'#601't n'#246'mr'#601'si'
+    end
+    object XFLabel7: TXFLabel
+      Left = 8
+      Top = 108
+      Width = 33
+      Height = 13
+      Caption = 'S'#252'r'#252'c'#252
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+    end
+    object XFLabel8: TXFLabel
+      Left = 320
+      Top = 107
+      Width = 29
+      Height = 14
+      Caption = 'Marka'
+    end
+    object XFLabel9: TXFLabel
+      Left = 320
+      Top = 135
+      Width = 28
+      Height = 14
+      Caption = 'Model'
+    end
+    object XFLabel10: TXFLabel
+      Left = 8
+      Top = 160
+      Width = 66
+      Height = 14
+      Caption = #399'riz'#601'nin tarixi'
+    end
+    object XFLabel11: TXFLabel
+      Left = 320
+      Top = 160
+      Width = 112
+      Height = 14
+      Caption = 'Hesablama akt'#305'n'#305'n tarixi'
+    end
+    object XFLabel12: TXFLabel
+      Left = 8
+      Top = 185
+      Width = 124
+      Height = 14
+      Caption = 'RP'#304'-n'#601' g'#246'nd'#601'rilmi'#351': '
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+    end
+    object XFLabel13: TXFLabel
+      Left = 9
+      Top = 211
+      Width = 72
+      Height = 14
+      Caption = 'M'#601'ktubun tarixi'
+    end
+    object XFLabel14: TXFLabel
+      Left = 8
+      Top = 238
+      Width = 74
+      Height = 14
+      Caption = 'M'#601'ktubun '#8470'-si'
+    end
+    object XFLabel15: TXFLabel
+      Left = 320
+      Top = 211
+      Width = 68
+      Height = 14
+      Caption = 'Aray'#305#351#305'n '#8470'-si'
+    end
+    object XFLabel16: TXFLabel
+      Left = 320
+      Top = 237
+      Width = 78
+      Height = 14
+      Caption = 'Protokolun '#8470'-si'
+    end
+    object DBEdit2: TDBEdit
+      Left = 242
+      Top = 25
+      Width = 130
+      Height = 22
+      DataField = 'STREET'
+      DataSource = InsMKDataMod.DSClaimDescription
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 0
+    end
+    object DBEdit5: TDBEdit
+      Left = 460
+      Top = 25
+      Width = 129
+      Height = 22
+      DataField = 'AVTOSERVIS'
+      DataSource = InsMKDataMod.DSClaimDescription
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 1
+    end
+    object DBEdit3: TDBEdit
+      Left = 149
+      Top = 58
+      Width = 440
+      Height = 22
+      DataField = 'DETAIL'
+      DataSource = InsMKDataMod.DSClaimDescription
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 2
+    end
+    object DBEdit4: TDBEdit
+      Left = 110
+      Top = 103
+      Width = 198
+      Height = 22
+      DataField = 'PERSON'
+      DataSource = InsMKDataMod.DSClaimDescription
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 3
+    end
+    object DBEdit6: TDBEdit
+      Left = 110
+      Top = 129
+      Width = 198
+      Height = 22
+      DataField = 'STATENUM'
+      DataSource = InsMKDataMod.DSClaimDescription
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 4
+    end
+    object dtApp: TDateTimePicker
+      Left = 110
+      Top = 155
+      Width = 200
+      Height = 22
+      Date = 39265.654459085700000000
+      Time = 39265.654459085700000000
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 5
+    end
+    object dtLetter: TDateTimePicker
+      Left = 110
+      Top = 207
+      Width = 198
+      Height = 22
+      Date = 39265.659290717600000000
+      Time = 39265.659290717600000000
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 6
+    end
+    object DBEdit7: TDBEdit
+      Left = 110
+      Top = 233
+      Width = 197
+      Height = 22
+      DataField = 'LETTERNUM'
+      DataSource = InsMKDataMod.DSClaimDescription
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 7
+    end
+    object DBLookupComboBox1: TDBLookupComboBox
+      Left = 460
+      Top = 103
+      Width = 129
+      Height = 22
+      DataField = 'MARK'
+      DataSource = InsMKDataMod.DSClaimDescription
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      KeyField = 'NAME'
+      ListField = 'NAME'
+      ListSource = InsMKDataMod.DSMarks
+      ParentFont = False
+      TabOrder = 8
+    end
+    object DBLookupComboBox2: TDBLookupComboBox
+      Left = 460
+      Top = 127
+      Width = 129
+      Height = 22
+      DataField = 'MODEL'
+      DataSource = InsMKDataMod.DSClaimDescription
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      KeyField = 'NAME'
+      ListField = 'NAME'
+      ListSource = InsMKDataMod.DSModels
+      ParentFont = False
+      TabOrder = 9
+    end
+    object dtActDate: TDateTimePicker
+      Left = 460
+      Top = 152
+      Width = 129
+      Height = 22
+      Date = 39290.476634108810000000
+      Time = 39290.476634108810000000
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 10
+    end
+    object DBEdit8: TDBEdit
+      Left = 460
+      Top = 207
+      Width = 129
+      Height = 22
+      DataField = 'SPRNUM'
+      DataSource = InsMKDataMod.DSClaimDescription
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 11
+    end
+    object DBEdit9: TDBEdit
+      Left = 460
+      Top = 233
+      Width = 129
+      Height = 22
+      DataField = 'PRTNUM'
+      DataSource = InsMKDataMod.DSClaimDescription
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 12
+    end
+    object DBLookupComboBox3: TDBLookupComboBox
+      Left = 59
+      Top = 25
+      Width = 130
+      Height = 22
+      DataField = 'REGION'
+      DataSource = InsMKDataMod.DSClaimDescription
+      KeyField = 'CITY_NAME'
+      ListField = 'CITY_NAME'
+      ListSource = InsMKDataMod.DSRcities
+      TabOrder = 13
+    end
+  end
+  object XFPanel3: TXFPanel
+    Left = 0
+    Top = 559
+    Width = 598
+    Height = 60
+    Align = alTop
+    BevelInner = bvLowered
+    TabOrder = 2
+    object SpeedButton1: TSpeedButton
+      Left = 128
+      Top = 27
+      Width = 24
+      Height = 24
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      Glyph.Data = {
+        F6000000424DF600000000000000760000002800000010000000100000000100
+        0400000000008000000000000000000000001000000000000000000000000000
+        80000080000000808000800000008000800080800000C0C0C000808080000000
+        FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00777777777777
+        7777770000000000000770330000007703077033000000770307703300000077
+        0307703300000000030770333333333333077033000000003307703077777777
+        0307703077777777030770307777777703077030777777770307703077777777
+        0007703077777777070770000000000000077777777777777777}
+      ParentFont = False
+      OnClick = SpeedButton1Click
+    end
+    object XFLabel17: TXFLabel
+      Left = 8
+      Top = 8
+      Width = 203
+      Height = 13
+      Caption = 'S'#305#287'orta hadis'#601'sinin ba'#351' verm'#601' tarixi'
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+    end
+    object BitBtn1: TBitBtn
+      Left = 493
+      Top = 24
+      Width = 81
+      Height = 27
+      DoubleBuffered = True
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      Kind = bkOK
+      NumGlyphs = 2
+      ParentDoubleBuffered = False
+      ParentFont = False
+      TabOrder = 0
+      OnClick = BitBtn1Click
+    end
+    object Report: TBitBtn
+      Left = 373
+      Top = 24
+      Width = 117
+      Height = 27
+      Caption = #1058#1103#1084#1080#1088' '#1093#1103#1088#1078#1083#1103#1088#1080
+      DoubleBuffered = True
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      Glyph.Data = {
+        76010000424D7601000000000000760000002800000020000000100000000100
+        04000000000000010000130B0000130B00001000000000000000000000000000
+        800000800000008080008000000080008000808000007F7F7F00BFBFBF000000
+        FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00300000000000
+        00033FFFFFFFFFFFFFFF0888888888888880777777777777777F088888888888
+        8880777777777777777F0000000000000000FFFFFFFFFFFFFFFF0F8F8F8F8F8F
+        8F80777777777777777F08F8F8F8F8F8F9F0777777777777777F0F8F8F8F8F8F
+        8F807777777777777F7F0000000000000000777777777777777F3330FFFFFFFF
+        03333337F3FFFF3F7F333330F0000F0F03333337F77773737F333330FFFFFFFF
+        03333337F3FF3FFF7F333330F00F000003333337F773777773333330FFFF0FF0
+        33333337F3FF7F3733333330F08F0F0333333337F7737F7333333330FFFF0033
+        33333337FFFF7733333333300000033333333337777773333333}
+      NumGlyphs = 2
+      ParentDoubleBuffered = False
+      ParentFont = False
+      TabOrder = 1
+      OnClick = ReportClick
+    end
+    object BitBtn2: TBitBtn
+      Left = 279
+      Top = 24
+      Width = 88
+      Height = 27
+      Caption = #1047#1103#1088#1103#1088' '#1072#1082#1090#1099
+      DoubleBuffered = True
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      Glyph.Data = {
+        76010000424D7601000000000000760000002800000020000000100000000100
+        04000000000000010000130B0000130B00001000000000000000000000000000
+        800000800000008080008000000080008000808000007F7F7F00BFBFBF000000
+        FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00300000000000
+        00033FFFFFFFFFFFFFFF0888888888888880777777777777777F088888888888
+        8880777777777777777F0000000000000000FFFFFFFFFFFFFFFF0F8F8F8F8F8F
+        8F80777777777777777F08F8F8F8F8F8F9F0777777777777777F0F8F8F8F8F8F
+        8F807777777777777F7F0000000000000000777777777777777F3330FFFFFFFF
+        03333337F3FFFF3F7F333330F0000F0F03333337F77773737F333330FFFFFFFF
+        03333337F3FF3FFF7F333330F00F000003333337F773777773333330FFFF0FF0
+        33333337F3FF7F3733333330F08F0F0333333337F7737F7333333330FFFF0033
+        33333337FFFF7733333333300000033333333337777773333333}
+      NumGlyphs = 2
+      ParentDoubleBuffered = False
+      ParentFont = False
+      TabOrder = 2
+      OnClick = BitBtn2Click
+    end
+    object BitBtn3: TBitBtn
+      Left = 172
+      Top = 24
+      Width = 100
+      Height = 27
+      Caption = #1057#1099#1100#1086#1088#1090#1072' '#1072#1082#1090#1099
+      DoubleBuffered = True
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      Glyph.Data = {
+        76010000424D7601000000000000760000002800000020000000100000000100
+        04000000000000010000130B0000130B00001000000000000000000000000000
+        800000800000008080008000000080008000808000007F7F7F00BFBFBF000000
+        FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00300000000000
+        00033FFFFFFFFFFFFFFF0888888888888880777777777777777F088888888888
+        8880777777777777777F0000000000000000FFFFFFFFFFFFFFFF0F8F8F8F8F8F
+        8F80777777777777777F08F8F8F8F8F8F9F0777777777777777F0F8F8F8F8F8F
+        8F807777777777777F7F0000000000000000777777777777777F3330FFFFFFFF
+        03333337F3FFFF3F7F333330F0000F0F03333337F77773737F333330FFFFFFFF
+        03333337F3FF3FFF7F333330F00F000003333337F773777773333330FFFF0FF0
+        33333337F3FF7F3733333330F08F0F0333333337F7737F7333333330FFFF0033
+        33333337FFFF7733333333300000033333333337777773333333}
+      NumGlyphs = 2
+      ParentDoubleBuffered = False
+      ParentFont = False
+      TabOrder = 3
+      OnClick = BitBtn3Click
+    end
+    object dtpClaim: TDateTimePicker
+      Left = 9
+      Top = 29
+      Width = 113
+      Height = 22
+      Date = 39221.573708946800000000
+      Time = 39221.573708946800000000
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 4
+    end
+  end
+  object WordExporter: TINSWordExporter
+    Left = 352
+    Top = 109
+  end
+end

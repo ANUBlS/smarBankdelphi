@@ -1,0 +1,1022 @@
+object FormPurchase: TFormPurchase
+  Left = 236
+  Top = 203
+  AutoSize = True
+  BorderStyle = bsDialog
+  Caption = 'Purchase of the foreign currency'
+  ClientHeight = 644
+  ClientWidth = 418
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'MS Sans Serif'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poScreenCenter
+  OnActivate = FormActivate
+  OnCreate = FormCreate
+  OnKeyDown = FormKeyDown
+  OnKeyPress = FormKeyPress
+  PixelsPerInch = 96
+  TextHeight = 13
+  object GroupBoxMain: TGroupBox
+    Left = 0
+    Top = 0
+    Width = 418
+    Height = 644
+    Align = alClient
+    Caption = #1042#1072#1083#1081#1091#1090#1072#1085#1099#1085' '#1072#1083#1099#1096#1099
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 0
+    object Panel2: TPanel
+      Left = 4
+      Top = 15
+      Width = 409
+      Height = 624
+      Align = alClient
+      BevelInner = bvRaised
+      BevelOuter = bvLowered
+      TabOrder = 0
+      object Panel1: TPanel
+        Left = 2
+        Top = 2
+        Width = 405
+        Height = 31
+        Align = alTop
+        BevelInner = bvRaised
+        BevelOuter = bvLowered
+        TabOrder = 1
+        object Label1: TLabel
+          Left = 47
+          Top = 8
+          Width = 28
+          Height = 13
+          Caption = 'Tarix:'
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clBlue
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+        end
+        object Label20: TLabel
+          Left = 225
+          Top = 8
+          Width = 26
+          Height = 13
+          Caption = 'Vaxt:'
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clBlue
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+        end
+        object DTP_Date: TDateTimePicker
+          Left = 81
+          Top = 5
+          Width = 121
+          Height = 21
+          Date = 39027.101860532400000000
+          Time = 39027.101860532400000000
+          Enabled = False
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 0
+          TabStop = False
+        end
+        object DTP_System_Time: TDateTimePicker
+          Left = 257
+          Top = 5
+          Width = 103
+          Height = 21
+          Date = 39035.955562789300000000
+          Time = 39035.955562789300000000
+          Enabled = False
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          Kind = dtkTime
+          ParentFont = False
+          TabOrder = 1
+          TabStop = False
+        end
+      end
+      object Panel6: TPanel
+        Left = 2
+        Top = 33
+        Width = 405
+        Height = 30
+        Align = alTop
+        BevelInner = bvRaised
+        BevelOuter = bvLowered
+        TabOrder = 2
+        object Bevel21: TBevel
+          Left = 2
+          Top = 2
+          Width = 401
+          Height = 24
+          Align = alTop
+          ExplicitWidth = 459
+        end
+        object Label2: TLabel
+          Left = 4
+          Top = 7
+          Width = 74
+          Height = 14
+          Caption = #1042'.'#1044'.'#1052' -'#1085#1080' '#1072#1076#1099':'
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clBlue
+          Font.Height = -11
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = []
+          ParentFont = False
+        end
+        object Label15: TLabel
+          Left = 272
+          Top = 8
+          Width = 112
+          Height = 14
+          Caption = #1042#1072#1083#1081#1091#1090#1072#1085#1099#1085' '#1040#1083#1099#1096#1099
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clBlue
+          Font.Height = -11
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
+        object Edit_Exch: TDBEdit
+          Left = 80
+          Top = 7
+          Width = 178
+          Height = 16
+          TabStop = False
+          BorderStyle = bsNone
+          Color = clBtnFace
+          DataField = 'EX_NAME'
+          DataSource = DataModExch.DSExchOffice
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+          ReadOnly = True
+          TabOrder = 0
+        end
+      end
+      object Panel7: TPanel
+        Left = 2
+        Top = 63
+        Width = 405
+        Height = 44
+        Align = alTop
+        BevelInner = bvRaised
+        BevelOuter = bvLowered
+        TabOrder = 3
+        object Panel8: TPanel
+          Left = 2
+          Top = 2
+          Width = 401
+          Height = 39
+          Align = alTop
+          BevelInner = bvRaised
+          BevelOuter = bvLowered
+          TabOrder = 0
+          object RadioButton1: TRadioButton
+            Left = 34
+            Top = 12
+            Width = 113
+            Height = 17
+            Caption = 'Na'#287'd  kurs'
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clRed
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = [fsBold]
+            ParentFont = False
+            TabOrder = 0
+            OnClick = RadioButton1Click
+          end
+          object RadioButton2: TRadioButton
+            Left = 233
+            Top = 13
+            Width = 113
+            Height = 16
+            Caption = 'Na'#287'ds'#305'z  kurs'
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clRed
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = [fsBold]
+            ParentFont = False
+            TabOrder = 1
+            OnClick = RadioButton1Click
+          end
+        end
+      end
+      object Panel9: TPanel
+        Left = 2
+        Top = 232
+        Width = 405
+        Height = 388
+        Align = alTop
+        BevelInner = bvRaised
+        BevelOuter = bvLowered
+        TabOrder = 4
+        object GroupBox1: TGroupBox
+          Left = 2
+          Top = 34
+          Width = 401
+          Height = 351
+          Align = alTop
+          Caption = #1052#1094#1096#1090#1103#1088#1080' '#1097#1072#1075#1075#1099#1085#1076#1072' '#1080#1085#1092#1086#1088#1084#1072#1089#1080#1081#1072
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 1
+          object Bevel7: TBevel
+            Left = 100
+            Top = 13
+            Width = 148
+            Height = 23
+            Shape = bsFrame
+            Style = bsRaised
+          end
+          object Bevel8: TBevel
+            Left = 100
+            Top = 34
+            Width = 148
+            Height = 23
+            Shape = bsFrame
+            Style = bsRaised
+          end
+          object Bevel9: TBevel
+            Left = 100
+            Top = 55
+            Width = 148
+            Height = 23
+            Shape = bsFrame
+            Style = bsRaised
+          end
+          object Bevel10: TBevel
+            Left = 100
+            Top = 81
+            Width = 148
+            Height = 23
+            Shape = bsFrame
+            Style = bsRaised
+          end
+          object Bevel11: TBevel
+            Left = 100
+            Top = 104
+            Width = 148
+            Height = 23
+            Shape = bsFrame
+            Style = bsRaised
+          end
+          object Bevel12: TBevel
+            Left = 100
+            Top = 123
+            Width = 148
+            Height = 23
+            Shape = bsFrame
+            Style = bsRaised
+          end
+          object Bevel13: TBevel
+            Left = 249
+            Top = 13
+            Width = 148
+            Height = 68
+            Shape = bsFrame
+            Style = bsRaised
+          end
+          object Bevel14: TBevel
+            Left = 249
+            Top = 81
+            Width = 148
+            Height = 65
+            Shape = bsFrame
+            Style = bsRaised
+          end
+          object Bevel15: TBevel
+            Left = 147
+            Top = 148
+            Width = 102
+            Height = 23
+            Shape = bsFrame
+            Style = bsRaised
+          end
+          object Bevel16: TBevel
+            Left = 100
+            Top = 148
+            Width = 51
+            Height = 23
+            Shape = bsFrame
+            Style = bsRaised
+          end
+          object Bevel17: TBevel
+            Left = 100
+            Top = 171
+            Width = 149
+            Height = 23
+            Shape = bsFrame
+            Style = bsRaised
+          end
+          object Bevel18: TBevel
+            Left = 249
+            Top = 148
+            Width = 148
+            Height = 69
+            Shape = bsFrame
+            Style = bsRaised
+          end
+          object Label6: TLabel
+            Left = 6
+            Top = 19
+            Width = 88
+            Height = 13
+            Caption = #1052#1094#1096#1090#1103#1088#1080#1085#1080#1085' '#1072#1076#1099
+          end
+          object Label5: TLabel
+            Left = 6
+            Top = 39
+            Width = 40
+            Height = 13
+            Caption = #1057#1086#1081#1072#1076#1099
+          end
+          object Label4: TLabel
+            Left = 6
+            Top = 62
+            Width = 76
+            Height = 13
+            Caption = #1040#1090#1072#1089#1099#1085#1099#1085' '#1072#1076#1099
+          end
+          object Label12: TLabel
+            Left = 6
+            Top = 86
+            Width = 46
+            Height = 13
+            Caption = #1070#1083#1082#1103#1083#1103#1088
+          end
+          object Label10: TLabel
+            Left = 6
+            Top = 109
+            Width = 94
+            Height = 13
+            Caption = #1064#1103#1093'. '#1090#1103#1089'. '#1077#1076'. '#1089#1103#1085'.'
+          end
+          object Label11: TLabel
+            Left = 6
+            Top = 130
+            Width = 77
+            Height = 13
+            Caption = #1058#1103#1075'. '#1077#1076'. '#1086#1088#1075#1072#1085'.'
+          end
+          object Label16: TLabel
+            Left = 6
+            Top = 157
+            Width = 58
+            Height = 13
+            Caption = #1055#1072#1089#1087#1086#1088#1090' '#8470
+          end
+          object Label17: TLabel
+            Left = 6
+            Top = 180
+            Width = 81
+            Height = 13
+            Caption = #1042#1077#1088#1080#1083#1084#1103' '#1090#1072#1088#1080#1093#1080
+          end
+          object Bevel19: TBevel
+            Left = 101
+            Top = 217
+            Width = 149
+            Height = 23
+            Shape = bsFrame
+            Style = bsRaised
+          end
+          object Label18: TLabel
+            Left = 6
+            Top = 226
+            Width = 62
+            Height = 13
+            Caption = #1052#1103#1085#1073#1103' '#1085#1102#1074#1094
+          end
+          object Bevel20: TBevel
+            Left = 250
+            Top = 217
+            Width = 147
+            Height = 23
+            Shape = bsFrame
+            Style = bsRaised
+          end
+          object Bevel27: TBevel
+            Left = 253
+            Top = 153
+            Width = 140
+            Height = 13
+          end
+          object Bevel28: TBevel
+            Left = 253
+            Top = 200
+            Width = 140
+            Height = 13
+          end
+          object Bevel22: TBevel
+            Left = 101
+            Top = 240
+            Width = 297
+            Height = 107
+            Shape = bsFrame
+            Style = bsRaised
+          end
+          object Label19: TLabel
+            Left = 6
+            Top = 203
+            Width = 38
+            Height = 13
+            Caption = 'Pinkod'
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clRed
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = [fsBold]
+            ParentFont = False
+          end
+          object Bevel23: TBevel
+            Left = 100
+            Top = 194
+            Width = 149
+            Height = 23
+            Shape = bsFrame
+            Style = bsRaised
+          end
+          object DBLC_First_Name: TDBLookupComboBox
+            Left = 250
+            Top = 15
+            Width = 145
+            Height = 21
+            KeyField = 'CUST_NAME'
+            ListField = 'CUST_NAME'
+            ListSource = DataModExch.DSCust_Name
+            TabOrder = 0
+            OnClick = DBLC_First_NameClick
+          end
+          object Edit_First_Name: TEdit
+            Left = 102
+            Top = 15
+            Width = 145
+            Height = 21
+            MaxLength = 15
+            TabOrder = 1
+            OnKeyPress = Edit_First_NameKeyPress
+          end
+          object Edit_Last_Name: TEdit
+            Left = 102
+            Top = 36
+            Width = 145
+            Height = 21
+            MaxLength = 15
+            TabOrder = 2
+            OnKeyPress = Edit_First_NameKeyPress
+          end
+          object DBLC_Last_Name: TDBLookupComboBox
+            Left = 250
+            Top = 36
+            Width = 145
+            Height = 21
+            KeyField = 'CUST_LNAME'
+            ListField = 'CUST_LNAME'
+            ListSource = DataModExch.DSCust_LName
+            TabOrder = 3
+            OnClick = DBLC_Last_NameClick
+          end
+          object DBLC_Father: TDBLookupComboBox
+            Left = 250
+            Top = 58
+            Width = 145
+            Height = 21
+            KeyField = 'CUST_FATHER'
+            ListField = 'CUST_FATHER'
+            ListSource = DataModExch.DSCust_Father
+            TabOrder = 4
+            OnClick = DBLC_FatherClick
+          end
+          object Edit_Father: TEdit
+            Left = 102
+            Top = 58
+            Width = 145
+            Height = 21
+            MaxLength = 15
+            TabOrder = 5
+            OnKeyPress = Edit_First_NameKeyPress
+          end
+          object Edit_Country: TEdit
+            Left = 102
+            Top = 82
+            Width = 145
+            Height = 21
+            ReadOnly = True
+            TabOrder = 6
+          end
+          object Edit_Giving_Member: TEdit
+            Left = 102
+            Top = 123
+            Width = 145
+            Height = 21
+            ReadOnly = True
+            TabOrder = 7
+          end
+          object DBLC_Country: TDBLookupComboBox
+            Left = 250
+            Top = 82
+            Width = 145
+            Height = 21
+            KeyField = 'ID'
+            ListField = 'CUST_COUNTRY'
+            ListSource = DataModExch.DSCust_Country
+            TabOrder = 8
+            OnClick = DBLC_CountryClick
+          end
+          object DBLC_Cust_Confirm: TDBLookupComboBox
+            Left = 250
+            Top = 102
+            Width = 145
+            Height = 21
+            KeyField = 'ID'
+            ListField = 'CUST_CONFIRM'
+            ListSource = DataModExch.DSCust_Confirm
+            TabOrder = 9
+            OnClick = DBLC_Cust_ConfirmClick
+          end
+          object Edit_Cust_Confirm: TEdit
+            Left = 102
+            Top = 102
+            Width = 145
+            Height = 21
+            ReadOnly = True
+            TabOrder = 10
+          end
+          object DBLC_Giving_Member: TDBLookupComboBox
+            Left = 250
+            Top = 123
+            Width = 145
+            Height = 21
+            Enabled = False
+            KeyField = 'CUST_GIVING_MEMBER'
+            ListField = 'CUST_GIVING_MEMBER'
+            ListSource = DataModExch.DSGiving_Member
+            TabOrder = 11
+            OnClick = DBLC_Giving_MemberClick
+          end
+          object Edit_Pasport: TEdit
+            Left = 151
+            Top = 149
+            Width = 97
+            Height = 21
+            MaxLength = 8
+            TabOrder = 12
+            OnKeyPress = Edit_PasportKeyPress
+          end
+          object CB_AZE: TComboBox
+            Left = 102
+            Top = 149
+            Width = 51
+            Height = 21
+            Style = csDropDownList
+            TabOrder = 13
+            Visible = False
+            OnChange = CB_AZEChange
+            Items.Strings = (
+              'AZE'
+              'AA')
+          end
+          object Edit_AZE: TEdit
+            Left = 103
+            Top = 149
+            Width = 47
+            Height = 21
+            CharCase = ecUpperCase
+            TabOrder = 14
+          end
+          object Edit_Cust_Date: TDBDateTimeEditEh
+            Left = 102
+            Top = 172
+            Width = 146
+            Height = 21
+            EditButtons = <>
+            Kind = dtkDateEh
+            TabOrder = 15
+            Visible = True
+          end
+          object Edit_Source_Type: TEdit
+            Left = 102
+            Top = 218
+            Width = 146
+            Height = 21
+            Color = clGrayText
+            ReadOnly = True
+            TabOrder = 16
+          end
+          object DBLC_Source_Type: TDBLookupComboBox
+            Left = 250
+            Top = 218
+            Width = 145
+            Height = 21
+            Color = clGrayText
+            Enabled = False
+            KeyField = 'DESCRIPTION'
+            ListField = 'DESCRIPTION'
+            ListSource = DataModExch.DSSourceType
+            TabOrder = 17
+            OnClick = DBLC_Source_TypeClick
+          end
+          object BtnRun: TBitBtn
+            Left = 255
+            Top = 171
+            Width = 67
+            Height = 25
+            Caption = #1043#1103#1073#1091#1083
+            Default = True
+            DoubleBuffered = True
+            Glyph.Data = {
+              DE010000424DDE01000000000000760000002800000024000000120000000100
+              0400000000006801000000000000000000001000000000000000000000000000
+              80000080000000808000800000008000800080800000C0C0C000808080000000
+              FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00333333333333
+              3333333333333333333333330000333333333333333333333333F33333333333
+              00003333344333333333333333388F3333333333000033334224333333333333
+              338338F3333333330000333422224333333333333833338F3333333300003342
+              222224333333333383333338F3333333000034222A22224333333338F338F333
+              8F33333300003222A3A2224333333338F3838F338F33333300003A2A333A2224
+              33333338F83338F338F33333000033A33333A222433333338333338F338F3333
+              0000333333333A222433333333333338F338F33300003333333333A222433333
+              333333338F338F33000033333333333A222433333333333338F338F300003333
+              33333333A222433333333333338F338F00003333333333333A22433333333333
+              3338F38F000033333333333333A223333333333333338F830000333333333333
+              333A333333333333333338330000333333333333333333333333333333333333
+              0000}
+            NumGlyphs = 2
+            ParentDoubleBuffered = False
+            TabOrder = 18
+            OnClick = BtnRunClick
+          end
+          object BtnExit: TBitBtn
+            Left = 322
+            Top = 171
+            Width = 67
+            Height = 25
+            Caption = '&Imtina'
+            DoubleBuffered = True
+            Glyph.Data = {
+              DE010000424DDE01000000000000760000002800000024000000120000000100
+              0400000000006801000000000000000000001000000000000000000000000000
+              80000080000000808000800000008000800080800000C0C0C000808080000000
+              FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00388888888877
+              F7F787F8888888888333333F00004444400888FFF444448888888888F333FF8F
+              000033334D5007FFF4333388888888883338888F0000333345D50FFFF4333333
+              338F888F3338F33F000033334D5D0FFFF43333333388788F3338F33F00003333
+              45D50FEFE4333333338F878F3338F33F000033334D5D0FFFF43333333388788F
+              3338F33F0000333345D50FEFE4333333338F878F3338F33F000033334D5D0FFF
+              F43333333388788F3338F33F0000333345D50FEFE4333333338F878F3338F33F
+              000033334D5D0EFEF43333333388788F3338F33F0000333345D50FEFE4333333
+              338F878F3338F33F000033334D5D0EFEF43333333388788F3338F33F00003333
+              4444444444333333338F8F8FFFF8F33F00003333333333333333333333888888
+              8888333F00003333330000003333333333333FFFFFF3333F00003333330AAAA0
+              333333333333888888F3333F00003333330000003333333333338FFFF8F3333F
+              0000}
+            ModalResult = 3
+            NumGlyphs = 2
+            ParentDoubleBuffered = False
+            TabOrder = 19
+            OnClick = BtnExitClick
+          end
+          object Source_text: TMemo
+            Left = 103
+            Top = 243
+            Width = 293
+            Height = 102
+            Color = clGray
+            Enabled = False
+            MaxLength = 4000
+            TabOrder = 20
+          end
+          object XFStaticText1: TXFStaticText
+            Left = 3
+            Top = 280
+            Width = 93
+            Height = 30
+            Alignment = taCenter
+            AutoSize = False
+            Caption = 'M'#601'nb'#601'y haqq'#305'nda m'#601'lumat'
+            TabOrder = 21
+          end
+          object Edit_Passpin: TEdit
+            Left = 102
+            Top = 195
+            Width = 145
+            Height = 21
+            MaxLength = 7
+            TabOrder = 22
+            OnKeyPress = Edit_PasspinKeyPress
+          end
+        end
+        object Panel13: TPanel
+          Left = 2
+          Top = 2
+          Width = 401
+          Height = 32
+          Align = alTop
+          BevelInner = bvRaised
+          BevelOuter = bvLowered
+          TabOrder = 0
+          object Label22: TLabel
+            Left = 3
+            Top = 11
+            Width = 54
+            Height = 13
+            Caption = #1058#1103#1081#1080#1085#1072#1090#1099':'
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clBlue
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+          end
+          object Edit_Setting: TEdit
+            Left = 58
+            Top = 5
+            Width = 340
+            Height = 21
+            CharCase = ecUpperCase
+            Color = clMenu
+            ReadOnly = True
+            TabOrder = 0
+          end
+        end
+      end
+      object Panel10: TPanel
+        Left = 2
+        Top = 107
+        Width = 405
+        Height = 68
+        Align = alTop
+        BevelInner = bvRaised
+        BevelOuter = bvLowered
+        TabOrder = 0
+        object GroupBox3: TGroupBox
+          Left = 2
+          Top = 3
+          Width = 399
+          Height = 62
+          Caption = #1042#1072#1083#1081#1091#1090#1072' '#1074#1103' '#1097#1077#1089#1072#1073' '#1089#1077#1095#1080#1084#1083#1103#1088#1080
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 0
+          object Label3: TLabel
+            Left = 15
+            Top = 13
+            Width = 46
+            Height = 13
+            Caption = #1042#1072#1083#1081#1091#1090#1072':'
+          end
+          object Label7: TLabel
+            Left = 302
+            Top = 13
+            Width = 58
+            Height = 13
+            Caption = #1052'.'#1041'. '#1082#1091#1088#1089#1091':'
+          end
+          object Label8: TLabel
+            Left = 183
+            Top = 13
+            Width = 65
+            Height = 13
+            Caption = #1040#1083#1099#1096' '#1082#1091#1088#1089#1091':'
+          end
+          object Label21: TLabel
+            Left = 108
+            Top = 32
+            Width = 24
+            Height = 13
+            Caption = '==>'
+          end
+          object Bevel2: TBevel
+            Left = 178
+            Top = 30
+            Width = 90
+            Height = 23
+            Shape = bsFrame
+            Style = bsRaised
+          end
+          object Bevel1: TBevel
+            Left = 297
+            Top = 30
+            Width = 90
+            Height = 23
+            Shape = bsFrame
+            Style = bsRaised
+          end
+          object Bevel3: TBevel
+            Left = 13
+            Top = 30
+            Width = 90
+            Height = 23
+            Shape = bsFrame
+            Style = bsRaised
+          end
+          object DBLC_Currency: TDBLookupComboBox
+            Left = 15
+            Top = 31
+            Width = 87
+            Height = 21
+            KeyField = 'VAL_ID'
+            ListField = 'VAL_NAME'
+            ListSource = DataModExch.DSExchAcc
+            TabOrder = 0
+            OnClick = DBLC_CurrencyClick
+          end
+          object Edit_purchase_course: TEdit
+            Left = 180
+            Top = 31
+            Width = 88
+            Height = 21
+            TabStop = False
+            MaxLength = 8
+            TabOrder = 2
+            OnChange = Edit_purchase_courseChange
+            OnKeyPress = Edit_PasportKeyPress
+          end
+          object Edit_nb_course: TEdit
+            Left = 298
+            Top = 31
+            Width = 87
+            Height = 21
+            TabStop = False
+            MaxLength = 6
+            ReadOnly = True
+            TabOrder = 3
+          end
+          object Edit_Val_Changed: TEdit
+            Left = 134
+            Top = 34
+            Width = 27
+            Height = 20
+            TabStop = False
+            BorderStyle = bsNone
+            Color = clBtnFace
+            ReadOnly = True
+            TabOrder = 1
+            Text = 'AZN'
+          end
+        end
+      end
+      object Panel11: TPanel
+        Left = 2
+        Top = 175
+        Width = 405
+        Height = 57
+        Align = alTop
+        BevelInner = bvRaised
+        BevelOuter = bvLowered
+        TabOrder = 5
+        object Panel12: TPanel
+          Left = 3
+          Top = 2
+          Width = 396
+          Height = 51
+          BevelInner = bvLowered
+          BevelOuter = bvSpace
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 0
+          object Label9: TLabel
+            Left = 12
+            Top = 3
+            Width = 148
+            Height = 13
+            Caption = #1061#1072#1088#1080#1078#1080' '#1074#1072#1083#1081#1091#1090#1072#1085#1099#1085' '#1084#1103#1073#1083#1103#1100#1080
+          end
+          object Label13: TLabel
+            Left = 180
+            Top = 4
+            Width = 71
+            Height = 13
+            Caption = #1052#1072#1085#1072#1090' '#1084#1103#1073#1083#1103#1100
+          end
+          object Label14: TLabel
+            Left = 293
+            Top = 4
+            Width = 70
+            Height = 13
+            Caption = #1069#1103#1083#1080#1088' '#1084#1103#1073#1083#1103#1100
+          end
+          object Bevel4: TBevel
+            Left = 9
+            Top = 20
+            Width = 125
+            Height = 23
+            Shape = bsFrame
+            Style = bsRaised
+          end
+          object Bevel5: TBevel
+            Left = 152
+            Top = 20
+            Width = 125
+            Height = 23
+            Shape = bsFrame
+            Style = bsRaised
+          end
+          object Bevel6: TBevel
+            Left = 291
+            Top = 20
+            Width = 97
+            Height = 23
+            Shape = bsFrame
+            Style = bsRaised
+          end
+          object Edit_Ekv_Amount: TEdit
+            Left = 154
+            Top = 22
+            Width = 122
+            Height = 21
+            TabStop = False
+            ReadOnly = True
+            TabOrder = 2
+          end
+          object Edit_Fee_Amount: TEdit
+            Left = 293
+            Top = 22
+            Width = 94
+            Height = 21
+            TabStop = False
+            ReadOnly = True
+            TabOrder = 1
+          end
+          object Edit_Purchase_Amount: TEdit
+            Left = 10
+            Top = 22
+            Width = 123
+            Height = 21
+            TabOrder = 0
+            OnChange = Edit_Purchase_AmountChange
+            OnKeyPress = Edit_PasportKeyPress
+          end
+        end
+      end
+    end
+    object Panel3: TPanel
+      Left = 2
+      Top = 15
+      Width = 2
+      Height = 624
+      Align = alLeft
+      TabOrder = 1
+    end
+    object Panel4: TPanel
+      Left = 2
+      Top = 639
+      Width = 414
+      Height = 3
+      Align = alBottom
+      TabOrder = 2
+    end
+    object Panel5: TPanel
+      Left = 413
+      Top = 15
+      Width = 3
+      Height = 624
+      Align = alRight
+      TabOrder = 3
+    end
+  end
+  object Timer: TTimer
+    OnTimer = TimerTimer
+    Left = 190
+    Top = 64
+  end
+end

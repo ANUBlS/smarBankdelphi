@@ -1,0 +1,524 @@
+unit MAINUNIT;
+
+{$WARN SYMBOL_PLATFORM OFF}
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActiveX, AxCtrls, INTER_SWIFT_TLB, StdVcl, INTdatamod, StdCtrls, jpeg,
+  ExtCtrls, FileCtrl, ComCtrls, Grids, DBGrids, ToolWin, ImgList, adeditunit;
+
+type
+  TINTERNATIONAL_SWIFT = class(TActiveForm, IINTERNATIONAL_SWIFT)
+    PageControl1: TPageControl;
+    TabSheet1: TTabSheet;
+    ToolBar2: TToolBar;
+    ToolButton3: TToolButton;
+    ToolButton4: TToolButton;
+    ToolButton5: TToolButton;
+    comit: TToolButton;
+    ToolButton6: TToolButton;
+    print: TToolButton;
+    cesking: TToolButton;
+    arxiv: TToolButton;
+    ToolButton7: TToolButton;
+    ToolButton10: TToolButton;
+    GridIN: TDBGrid;
+    RichEdit2: TRichEdit;
+    Memo3: TMemo;
+    sw_out_FileListBox: TFileListBox;
+    RichEdit1: TRichEdit;
+    Memo4: TMemo;
+    DBGrid1: TDBGrid;
+    ImageList1: TImageList;
+    TabSheet2: TTabSheet;
+    Panel1: TPanel;
+    ToolBar1: TToolBar;
+    btnadd: TToolButton;
+    btnedit: TToolButton;
+    btnrefresh: TToolButton;
+    btndel: TToolButton;
+    btnmodi: TToolButton;
+    ToolButton1: TToolButton;
+    btnauth: TToolButton;
+    btncreate: TToolButton;
+    ToolButton2: TToolButton;
+    GroupBox1: TGroupBox;
+    GroupBox2: TGroupBox;
+    gridnew: TDBGrid;
+    createdgrid: TDBGrid;
+    procedure btnaddClick(Sender: TObject);
+  private
+    { Private declarations }
+    FEvents: IINTERNATIONAL_SWIFTEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure MouseEnterEvent(Sender: TObject);
+    procedure MouseLeaveEvent(Sender: TObject);
+    procedure PaintEvent(Sender: TObject);
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AlignDisabled: WordBool; safecall;
+    function Get_AlignWithMargins: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_BorderWidth: Integer; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_DockSite: WordBool; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_ExplicitHeight: Integer; safecall;
+    function Get_ExplicitLeft: Integer; safecall;
+    function Get_ExplicitTop: Integer; safecall;
+    function Get_ExplicitWidth: Integer; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_MouseInClient: WordBool; safecall;
+    function Get_ParentCustomHint: WordBool; safecall;
+    function Get_ParentDoubleBuffered: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PopupMode: TxPopupMode; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_ScreenSnap: WordBool; safecall;
+    function Get_SnapBuffer: Integer; safecall;
+    function Get_UseDockManager: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_AlignWithMargins(Value: WordBool); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_BorderWidth(Value: Integer); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_DockSite(Value: WordBool); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_ParentCustomHint(Value: WordBool); safecall;
+    procedure Set_ParentDoubleBuffered(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PopupMode(Value: TxPopupMode); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_ScreenSnap(Value: WordBool); safecall;
+    procedure Set_SnapBuffer(Value: Integer); safecall;
+    procedure Set_UseDockManager(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+  public
+    { Public declarations }
+    procedure Initialize; override;
+  end;
+
+implementation
+
+uses ComObj, ComServ,sboapiDataModuleImpl,SBTranslateProc;
+
+{$R *.DFM}
+
+{ TINTERNATIONAL_SWIFT }
+
+procedure TINTERNATIONAL_SWIFT.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_INTERNATIONAL_SWIFTPage); }
+end;
+
+procedure TINTERNATIONAL_SWIFT.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as IINTERNATIONAL_SWIFTEvents;
+  inherited EventSinkChanged(EventSink);
+end;
+
+procedure TINTERNATIONAL_SWIFT.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnMouseEnter := MouseEnterEvent;
+  OnMouseLeave := MouseLeaveEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TINTERNATIONAL_SWIFT.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TINTERNATIONAL_SWIFT.Get_AlignDisabled: WordBool;
+begin
+  Result := AlignDisabled;
+end;
+
+function TINTERNATIONAL_SWIFT.Get_AlignWithMargins: WordBool;
+begin
+  Result := AlignWithMargins;
+end;
+
+function TINTERNATIONAL_SWIFT.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TINTERNATIONAL_SWIFT.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TINTERNATIONAL_SWIFT.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TINTERNATIONAL_SWIFT.Get_BorderWidth: Integer;
+begin
+  Result := Integer(BorderWidth);
+end;
+
+function TINTERNATIONAL_SWIFT.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TINTERNATIONAL_SWIFT.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TINTERNATIONAL_SWIFT.Get_DockSite: WordBool;
+begin
+  Result := DockSite;
+end;
+
+function TINTERNATIONAL_SWIFT.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TINTERNATIONAL_SWIFT.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TINTERNATIONAL_SWIFT.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TINTERNATIONAL_SWIFT.Get_ExplicitHeight: Integer;
+begin
+  Result := ExplicitHeight;
+end;
+
+function TINTERNATIONAL_SWIFT.Get_ExplicitLeft: Integer;
+begin
+  Result := ExplicitLeft;
+end;
+
+function TINTERNATIONAL_SWIFT.Get_ExplicitTop: Integer;
+begin
+  Result := ExplicitTop;
+end;
+
+function TINTERNATIONAL_SWIFT.Get_ExplicitWidth: Integer;
+begin
+  Result := ExplicitWidth;
+end;
+
+function TINTERNATIONAL_SWIFT.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TINTERNATIONAL_SWIFT.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TINTERNATIONAL_SWIFT.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TINTERNATIONAL_SWIFT.Get_MouseInClient: WordBool;
+begin
+  Result := MouseInClient;
+end;
+
+function TINTERNATIONAL_SWIFT.Get_ParentCustomHint: WordBool;
+begin
+  Result := ParentCustomHint;
+end;
+
+function TINTERNATIONAL_SWIFT.Get_ParentDoubleBuffered: WordBool;
+begin
+  Result := ParentDoubleBuffered;
+end;
+
+function TINTERNATIONAL_SWIFT.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TINTERNATIONAL_SWIFT.Get_PopupMode: TxPopupMode;
+begin
+  Result := Ord(PopupMode);
+end;
+
+function TINTERNATIONAL_SWIFT.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TINTERNATIONAL_SWIFT.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TINTERNATIONAL_SWIFT.Get_ScreenSnap: WordBool;
+begin
+  Result := ScreenSnap;
+end;
+
+function TINTERNATIONAL_SWIFT.Get_SnapBuffer: Integer;
+begin
+  Result := SnapBuffer;
+end;
+
+function TINTERNATIONAL_SWIFT.Get_UseDockManager: WordBool;
+begin
+  Result := UseDockManager;
+end;
+
+function TINTERNATIONAL_SWIFT.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TINTERNATIONAL_SWIFT.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TINTERNATIONAL_SWIFT._Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TINTERNATIONAL_SWIFT.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TINTERNATIONAL_SWIFT.btnaddClick(Sender: TObject);
+begin
+ addeditfrm:= Taddeditfrm.Create(Self);
+ addeditfrm.ShowModal;
+
+end;
+
+procedure TINTERNATIONAL_SWIFT.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TINTERNATIONAL_SWIFT.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TINTERNATIONAL_SWIFT.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TINTERNATIONAL_SWIFT.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TINTERNATIONAL_SWIFT.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TINTERNATIONAL_SWIFT.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TINTERNATIONAL_SWIFT.MouseEnterEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnMouseEnter;
+end;
+
+procedure TINTERNATIONAL_SWIFT.MouseLeaveEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnMouseLeave;
+end;
+
+procedure TINTERNATIONAL_SWIFT.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TINTERNATIONAL_SWIFT.Set_AlignWithMargins(Value: WordBool);
+begin
+  AlignWithMargins := Value;
+end;
+
+procedure TINTERNATIONAL_SWIFT.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TINTERNATIONAL_SWIFT.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TINTERNATIONAL_SWIFT.Set_AxBorderStyle(Value: TxActiveFormBorderStyle);
+
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TINTERNATIONAL_SWIFT.Set_BorderWidth(Value: Integer);
+begin
+  BorderWidth := TBorderWidth(Value);
+end;
+
+procedure TINTERNATIONAL_SWIFT.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TINTERNATIONAL_SWIFT.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TINTERNATIONAL_SWIFT.Set_DockSite(Value: WordBool);
+begin
+  DockSite := Value;
+end;
+
+procedure TINTERNATIONAL_SWIFT.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TINTERNATIONAL_SWIFT.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TINTERNATIONAL_SWIFT.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TINTERNATIONAL_SWIFT.Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TINTERNATIONAL_SWIFT.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := string(Value);
+end;
+
+procedure TINTERNATIONAL_SWIFT.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TINTERNATIONAL_SWIFT.Set_ParentCustomHint(Value: WordBool);
+begin
+  ParentCustomHint := Value;
+end;
+
+procedure TINTERNATIONAL_SWIFT.Set_ParentDoubleBuffered(Value: WordBool);
+begin
+  ParentDoubleBuffered := Value;
+end;
+
+procedure TINTERNATIONAL_SWIFT.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TINTERNATIONAL_SWIFT.Set_PopupMode(Value: TxPopupMode);
+begin
+  PopupMode := TPopupMode(Value);
+end;
+
+procedure TINTERNATIONAL_SWIFT.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TINTERNATIONAL_SWIFT.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TINTERNATIONAL_SWIFT.Set_ScreenSnap(Value: WordBool);
+begin
+  ScreenSnap := Value;
+end;
+
+procedure TINTERNATIONAL_SWIFT.Set_SnapBuffer(Value: Integer);
+begin
+  SnapBuffer := Value;
+end;
+
+procedure TINTERNATIONAL_SWIFT.Set_UseDockManager(Value: WordBool);
+begin
+  UseDockManager := Value;
+end;
+
+procedure TINTERNATIONAL_SWIFT.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TINTERNATIONAL_SWIFT,
+    Class_INTERNATIONAL_SWIFT,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

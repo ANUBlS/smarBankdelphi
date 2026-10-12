@@ -1,0 +1,45 @@
+package CM_WRSETUP;
+
+{$R *.res}
+{$ALIGN 8}
+{$ASSERTIONS ON}
+{$BOOLEVAL OFF}
+{$DEBUGINFO ON}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LOCALSYMBOLS ON}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION ON}
+{$OVERFLOWCHECKS OFF}
+{$RANGECHECKS OFF}
+{$REFERENCEINFO ON}
+{$SAFEDIVIDE OFF}
+{$STACKFRAMES OFF}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS ON}
+{$WRITEABLECONST ON}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
+{$DESCRIPTION 'Credit Manager WR Setup package'}
+{$RUNONLY}
+{$IMPLICITBUILD ON}
+
+requires
+  vcl,
+  rtl,
+  sboapi50,
+  CMVCL50,
+  CM_COMMON;
+
+contains
+  WRSetupLoader in 'WRSetupLoader.pas',
+  WRSetupDataModImpl in 'WRSetupDataModImpl.pas' {WRSetupDataMod: TDataModule},
+  TemplateAddEditUnt in 'TemplateAddEditUnt.pas' {TemplAddEditForm},
+  BookmarkAddEditunt in 'BookmarkAddEditunt.pas' {BookmarkAddEditForm},
+  WRTemplatesTuning in 'WRTemplatesTuning.pas' {WRTemplateSetup},
+  WRBookmarksTuning in 'WRBookmarksTuning.pas' {WRBookmarkSetup},
+  Filialinfoimpl in 'Filialinfoimpl.pas' {FrmFilial};
+
+end.

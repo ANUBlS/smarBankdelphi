@@ -1,0 +1,129 @@
+unit RAUnit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, NLSDialogs,
+  NLSLocalizer, Buttons, StdCtrls;
+                         
+type
+  TRAForm = class(TForm)
+    SpeedButton1: TSpeedButton;
+    NLSLocalizer1: TNLSLocalizer;
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+                                       
+var
+  RAForm: TRAForm;
+  procedure InitPlugin(s:string);export;
+
+implementation
+
+{$R *.DFM}
+
+uses RADatModImpl,CommonDecls,ReserveProgressFormImplpas;
+
+procedure InitPlugin(s:string);export;
+begin
+ RAForm.ShowModal;
+end;
+
+exports
+ InitPlugin;
+
+ procedure TRAForm.SpeedButton1Click(Sender: TObject);
+  procedure CorrectSingleRow(CrdID : Integer; Num : String);
+  begin
+    with RAllDatMod.CM_RESERVE_COUNT_NEW do
+    try
+      CallProcedure('reserve_contr_new',[
+        'p_CreditID' , CrdID
+      ]);
+    except
+      on  E : EXCEPTION  do
+        LogError(Num + ' -- ' + E.Message);
+    end;
+  end;
+  
+resourcestring
+  CAN_I_DO_IT = 'Йенидян гиймятляндирим?';
+  SDone = 'Йенидян гиймятляндирмя битди !'; 
+
+var
+  R : Integer;
+
+begin
+
+  if MessageDlg(CAN_I_DO_IT
+           , mtConfirmation
+           , [mbYes,mbNo]
+           , 0) <> mrYes
+  then     EXIT;
+
+  with RAllDatMod.CreditsInfo do
+  begin
+    if Active then
+      Refresh
+    else
+      Open;
+
+    R := RecordCount;
+
+    if R <= 0 then    EXIT;
+
+    with ProgressForm.ProgressShower do
+    begin
+      Position := 0;
+      Max := R;
+      Step := 1;
+    end;
+    
+    ProgressForm.Show;
+    
+    ProgressForm.Update;
+    Self.Update;
+    
+    FIRST;
+
+    while not EOF do
+    begin
+    
+      CorrectSingleRow(FieldByName('ID').AsInteger, FieldByName('NUMBEROFCREDIT').AsString);
+
+      ProgressForm.ProgressShower.Position := RecNo + 1;
+
+      NEXT;
+      
+    end;
+
+    CloseAll;
+    
+  end;
+
+  ProgressForm.Close;
+
+  ShowMessage(SDone);
+end;
+
+procedure TRAForm.FormCreate(Sender: TObject);
+begin
+  RAllDatMod := TRAllDatMod.Create(Self);
+  ProgressForm := TProgressForm.Create(Self);
+end;
+
+procedure TRAForm.FormDestroy(Sender: TObject);
+begin
+  RAllDatMod.Free;
+  ProgressForm.Free;
+end;
+
+Initialization
+  RAForm := TRAForm.Create(CommonApplication);
+
+end.

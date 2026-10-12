@@ -1,0 +1,1111 @@
+object FormBalanceAnalys: TFormBalanceAnalys
+  Left = 195
+  Top = 61
+  Width = 898
+  Height = 651
+  Caption = 'BalanceAnalys'
+  Color = clBtnFace
+  Font.Charset = RUSSIAN_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  OldCreateOrder = False
+  OnCreate = ActiveFormCreate
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 177
+    Height = 624
+    Align = alLeft
+    BevelOuter = bvNone
+    TabOrder = 0
+    object PageControl1: TPageControl
+      Left = 0
+      Top = 0
+      Width = 177
+      Height = 624
+      ActivePage = TabSheet1
+      Align = alClient
+      TabOrder = 0
+      object TabSheet1: TTabSheet
+        Caption = 'Филтр'
+        object Panel7: TPanel
+          Left = 0
+          Top = 159
+          Width = 169
+          Height = 158
+          Align = alTop
+          BorderStyle = bsSingle
+          TabOrder = 0
+          object StaticText5: TStaticText
+            Left = 1
+            Top = 1
+            Width = 163
+            Height = 17
+            Align = alTop
+            Alignment = taCenter
+            BorderStyle = sbsSingle
+            Caption = 'Филиал'
+            Color = clSilver
+            ParentColor = False
+            TabOrder = 0
+          end
+          object CBBranches: TCheckListBox
+            Left = 1
+            Top = 18
+            Width = 163
+            Height = 135
+            Align = alClient
+            Color = clBtnFace
+            ItemHeight = 13
+            TabOrder = 1
+          end
+        end
+        object Panel8: TPanel
+          Left = 0
+          Top = 0
+          Width = 169
+          Height = 69
+          Align = alTop
+          BorderStyle = bsSingle
+          TabOrder = 1
+          object StaticText1: TStaticText
+            Left = 1
+            Top = 1
+            Width = 163
+            Height = 18
+            Align = alTop
+            Alignment = taCenter
+            AutoSize = False
+            BorderStyle = sbsSingle
+            Caption = 'Тарих'
+            Color = clSilver
+            ParentColor = False
+            TabOrder = 0
+          end
+          object DTPBeginDate: TDateTimePicker
+            Left = 1
+            Top = 19
+            Width = 163
+            Height = 21
+            Anchors = [akLeft, akTop, akRight]
+            CalAlignment = dtaLeft
+            Date = 37919
+            Time = 37919
+            DateFormat = dfShort
+            DateMode = dmComboBox
+            Kind = dtkDate
+            ParseInput = False
+            TabOrder = 1
+            OnChange = DTPBeginDateChange
+          end
+          object DTPEndDate: TDateTimePicker
+            Left = 1
+            Top = 43
+            Width = 163
+            Height = 21
+            Anchors = [akLeft, akTop, akRight]
+            CalAlignment = dtaLeft
+            Date = 37919
+            Time = 37919
+            DateFormat = dfShort
+            DateMode = dmComboBox
+            Kind = dtkDate
+            ParseInput = False
+            TabOrder = 2
+            OnChange = DTPEndDateChange
+          end
+        end
+        object Panel10: TPanel
+          Left = 0
+          Top = 114
+          Width = 169
+          Height = 45
+          Align = alTop
+          BorderStyle = bsSingle
+          TabOrder = 2
+          object StaticText3: TStaticText
+            Left = 1
+            Top = 1
+            Width = 163
+            Height = 17
+            Align = alTop
+            Alignment = taCenter
+            BorderStyle = sbsSingle
+            Caption = 'Валйута'
+            Color = clSilver
+            ParentColor = False
+            TabOrder = 0
+          end
+          object Panel15: TPanel
+            Left = 143
+            Top = 19
+            Width = 21
+            Height = 21
+            Alignment = taLeftJustify
+            BevelOuter = bvLowered
+            TabOrder = 1
+            object CHBCurrency: TCheckBox
+              Tag = 3
+              Left = 4
+              Top = 2
+              Width = 14
+              Height = 17
+              Caption = 'CHBCurrency'
+              TabOrder = 0
+              OnClick = CBBranchClick
+            end
+          end
+          object DBLookup3: TDBLookupComboBox
+            Left = 1
+            Top = 19
+            Width = 142
+            Height = 21
+            KeyField = 'VALUTE'
+            ListField = 'VALU_NAME'
+            ListSource = DataModulBalance.DataCurrency
+            TabOrder = 2
+          end
+        end
+        object Panel14: TPanel
+          Left = 0
+          Top = 317
+          Width = 169
+          Height = 45
+          Align = alTop
+          AutoSize = True
+          BorderStyle = bsSingle
+          TabOrder = 3
+          object StaticText6: TStaticText
+            Left = 1
+            Top = 1
+            Width = 163
+            Height = 17
+            Align = alTop
+            Alignment = taCenter
+            BorderStyle = sbsSingle
+            Caption = 'Баланс щесаблары'
+            Color = clSilver
+            ParentColor = False
+            TabOrder = 0
+          end
+          object EditBalances: TEdit
+            Left = 1
+            Top = 19
+            Width = 162
+            Height = 21
+            TabOrder = 1
+            OnKeyPress = EditBalancesKeyPress
+          end
+        end
+        object Panel9: TPanel
+          Left = 0
+          Top = 362
+          Width = 169
+          Height = 45
+          Align = alTop
+          BorderStyle = bsSingle
+          TabOrder = 4
+          object StaticText2: TStaticText
+            Left = 1
+            Top = 1
+            Width = 163
+            Height = 17
+            Align = alTop
+            Alignment = taCenter
+            BorderStyle = sbsSingle
+            Caption = 'Оператор ( Ямялиййатлар )'
+            Color = clSilver
+            ParentColor = False
+            TabOrder = 0
+          end
+          object DBLookup2: TDBLookupComboBox
+            Left = 1
+            Top = 19
+            Width = 142
+            Height = 21
+            KeyField = 'ID'
+            ListField = 'NAME'
+            ListSource = DataModulBalance.DataOperator
+            TabOrder = 1
+          end
+          object Panel11: TPanel
+            Left = 143
+            Top = 19
+            Width = 21
+            Height = 21
+            Alignment = taLeftJustify
+            BevelOuter = bvLowered
+            TabOrder = 2
+            object CBOperator: TCheckBox
+              Tag = 2
+              Left = 4
+              Top = 2
+              Width = 14
+              Height = 17
+              Caption = 'CheckBox1'
+              TabOrder = 0
+              OnClick = CBBranchClick
+            end
+          end
+        end
+        object Panel16: TPanel
+          Left = 0
+          Top = 407
+          Width = 169
+          Height = 45
+          Align = alTop
+          BorderStyle = bsSingle
+          TabOrder = 5
+          object StaticText7: TStaticText
+            Left = 1
+            Top = 1
+            Width = 163
+            Height = 17
+            Align = alTop
+            Alignment = taCenter
+            BorderStyle = sbsSingle
+            Caption = 'Баланс формасы'
+            Color = clSilver
+            ParentColor = False
+            TabOrder = 0
+          end
+          object CBBalanceView: TComboBox
+            Left = 1
+            Top = 19
+            Width = 162
+            Height = 21
+            Style = csDropDownList
+            ItemHeight = 13
+            TabOrder = 1
+            Items.Strings = (
+              'Сечилмиш валйутада баланс'
+              'Милли валйутада баланс')
+          end
+        end
+        object Panel17: TPanel
+          Left = 0
+          Top = 69
+          Width = 169
+          Height = 45
+          Align = alTop
+          BorderStyle = bsSingle
+          TabOrder = 6
+          object StaticText8: TStaticText
+            Left = 1
+            Top = 1
+            Width = 163
+            Height = 17
+            Align = alTop
+            Alignment = taCenter
+            BorderStyle = sbsSingle
+            Caption = 'Баланс планы'
+            Color = clSilver
+            ParentColor = False
+            TabOrder = 0
+          end
+          object CBBalanceReference: TComboBox
+            Left = 2
+            Top = 19
+            Width = 162
+            Height = 21
+            Style = csDropDownList
+            ItemHeight = 13
+            TabOrder = 1
+            Items.Strings = (
+              '1 - жи щесаб планы'
+              '2 - жи щесаб планы'
+              '3 - жц щесаб планы'
+              '4 - жц щесаб планы')
+          end
+        end
+        object Panel3: TPanel
+          Left = 0
+          Top = 551
+          Width = 169
+          Height = 45
+          Align = alBottom
+          BevelOuter = bvNone
+          TabOrder = 7
+          object ProgressBar: TProgressBar
+            Left = 0
+            Top = 29
+            Width = 169
+            Height = 16
+            Align = alBottom
+            Min = 0
+            Max = 3
+            TabOrder = 0
+            Visible = False
+          end
+          object Button1: TButton
+            Left = 93
+            Top = 0
+            Width = 75
+            Height = 25
+            Action = ActionFullRefresh
+            Caption = 'Гябул'
+            Default = True
+            TabOrder = 1
+          end
+        end
+        object Panel18: TPanel
+          Left = 0
+          Top = 452
+          Width = 169
+          Height = 43
+          Align = alTop
+          BorderStyle = bsSingle
+          TabOrder = 8
+          object CBAccountName: TCheckBox
+            Tag = 1
+            Left = 2
+            Top = 1
+            Width = 110
+            Height = 17
+            Caption = 'Щесаблар адлары иля'
+            TabOrder = 0
+            OnClick = CBAccountNameClick
+          end
+          object CBTransactionName: TCheckBox
+            Tag = 2
+            Left = 2
+            Top = 19
+            Width = 111
+            Height = 17
+            Caption = 'Ямялиййатлар тяй. иля'
+            TabOrder = 1
+            OnClick = CBAccountNameClick
+          end
+        end
+      end
+    end
+  end
+  object Panel2: TPanel
+    Left = 177
+    Top = 0
+    Width = 713
+    Height = 624
+    Align = alClient
+    TabOrder = 1
+    object Splitter2: TSplitter
+      Left = 1
+      Top = 153
+      Width = 711
+      Height = 2
+      Cursor = crVSplit
+      Align = alTop
+      Color = clNavy
+      ParentColor = False
+    end
+    object Splitter1: TSplitter
+      Left = 1
+      Top = 434
+      Width = 711
+      Height = 2
+      Cursor = crVSplit
+      Align = alBottom
+      Color = clNavy
+      ParentColor = False
+    end
+    object Panel4: TPanel
+      Left = 1
+      Top = 436
+      Width = 711
+      Height = 187
+      Align = alBottom
+      TabOrder = 0
+      object DBGridTransaction: TDBGrid
+        Tag = 3
+        Left = 1
+        Top = 1
+        Width = 709
+        Height = 164
+        Align = alClient
+        DataSource = DataModulBalance.DataTransaction
+        Options = [dgTitles, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit]
+        PopupMenu = PopupMenu
+        TabOrder = 0
+        TitleFont.Charset = RUSSIAN_CHARSET
+        TitleFont.Color = clWindowText
+        TitleFont.Height = -11
+        TitleFont.Name = 'Azl Sans Serif'
+        TitleFont.Style = []
+        OnEnter = DBGridBalanceEnter
+        OnTitleClick = DBGridTransactionTitleClick
+        Columns = <
+          item
+            Expanded = False
+            FieldName = 'DAT'
+            Title.Color = clNavy
+            Title.Font.Charset = RUSSIAN_CHARSET
+            Title.Font.Color = clWhite
+            Title.Font.Height = -11
+            Title.Font.Name = 'Azl Sans Serif'
+            Title.Font.Style = []
+            Width = 80
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'DEBTACC'
+            Title.Color = clNavy
+            Title.Font.Charset = RUSSIAN_CHARSET
+            Title.Font.Color = clWhite
+            Title.Font.Height = -11
+            Title.Font.Name = 'Azl Sans Serif'
+            Title.Font.Style = []
+            Visible = True
+          end
+          item
+            Alignment = taCenter
+            Expanded = False
+            FieldName = 'DVALNAME'
+            Title.Alignment = taCenter
+            Title.Color = clNavy
+            Title.Font.Charset = RUSSIAN_CHARSET
+            Title.Font.Color = clWhite
+            Title.Font.Height = -11
+            Title.Font.Name = 'Azl Sans Serif'
+            Title.Font.Style = []
+            Width = 30
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'CREDITACC'
+            Title.Color = clNavy
+            Title.Font.Charset = RUSSIAN_CHARSET
+            Title.Font.Color = clWhite
+            Title.Font.Height = -11
+            Title.Font.Name = 'Azl Sans Serif'
+            Title.Font.Style = []
+            Width = 130
+            Visible = True
+          end
+          item
+            Alignment = taCenter
+            Expanded = False
+            FieldName = 'CVALNAME'
+            Title.Alignment = taCenter
+            Title.Color = clNavy
+            Title.Font.Charset = RUSSIAN_CHARSET
+            Title.Font.Color = clWhite
+            Title.Font.Height = -11
+            Title.Font.Name = 'Azl Sans Serif'
+            Title.Font.Style = []
+            Width = 30
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'AMMOUNT'
+            Title.Alignment = taRightJustify
+            Title.Caption = 'Мябляь'
+            Title.Color = clNavy
+            Title.Font.Charset = RUSSIAN_CHARSET
+            Title.Font.Color = clWhite
+            Title.Font.Height = -11
+            Title.Font.Name = 'Azl Sans Serif'
+            Title.Font.Style = []
+            Width = 105
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'AMMOUNT_C'
+            Title.Alignment = taRightJustify
+            Title.Caption = 'Мябляь'
+            Title.Color = clNavy
+            Title.Font.Charset = RUSSIAN_CHARSET
+            Title.Font.Color = clWhite
+            Title.Font.Height = -11
+            Title.Font.Name = 'Azl Sans Serif'
+            Title.Font.Style = []
+            Width = 105
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'LAMMOUNT'
+            Title.Alignment = taRightJustify
+            Title.Color = clNavy
+            Title.Font.Charset = RUSSIAN_CHARSET
+            Title.Font.Color = clWhite
+            Title.Font.Height = -11
+            Title.Font.Name = 'Azl Sans Serif'
+            Title.Font.Style = []
+            Width = 105
+            Visible = True
+          end>
+      end
+      object PanelDest: TPanel
+        Left = 1
+        Top = 165
+        Width = 709
+        Height = 21
+        Align = alBottom
+        BevelOuter = bvNone
+        TabOrder = 1
+        Visible = False
+        object DBEdit1: TDBEdit
+          Left = 0
+          Top = 0
+          Width = 621
+          Height = 21
+          Anchors = [akLeft, akTop, akRight]
+          DataField = 'NAME'
+          DataSource = DataModulBalance.DataTransaction
+          TabOrder = 0
+        end
+        object Panel19: TPanel
+          Left = 622
+          Top = 0
+          Width = 87
+          Height = 21
+          Align = alRight
+          BevelOuter = bvNone
+          TabOrder = 1
+          object DBText1: TDBText
+            Left = 1
+            Top = 3
+            Width = 50
+            Height = 13
+            AutoSize = True
+            DataField = 'USERNAME'
+            DataSource = DataModulBalance.DataTransaction
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = [fsBold]
+            ParentFont = False
+          end
+        end
+      end
+    end
+    object Panel5: TPanel
+      Left = 1
+      Top = 1
+      Width = 711
+      Height = 152
+      Align = alTop
+      TabOrder = 1
+      object DBGridBalance: TDBGrid
+        Tag = 1
+        Left = 1
+        Top = 1
+        Width = 709
+        Height = 129
+        Align = alClient
+        DataSource = DataModulBalance.DataBalance
+        Options = [dgTitles, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit]
+        PopupMenu = PopupMenu
+        TabOrder = 0
+        TitleFont.Charset = RUSSIAN_CHARSET
+        TitleFont.Color = clWindowText
+        TitleFont.Height = -11
+        TitleFont.Name = 'Azl Sans Serif'
+        TitleFont.Style = []
+        OnEnter = DBGridBalanceEnter
+        Columns = <
+          item
+            Expanded = False
+            FieldName = 'BALANCEACCOUNT'
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = [fsBold]
+            Title.Alignment = taRightJustify
+            Title.Caption = 'Баланс'
+            Title.Color = clNavy
+            Title.Font.Charset = RUSSIAN_CHARSET
+            Title.Font.Color = clWhite
+            Title.Font.Height = -11
+            Title.Font.Name = 'Azl Sans Serif'
+            Title.Font.Style = []
+            Width = 50
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'FIRSTACTIVE'
+            Title.Alignment = taRightJustify
+            Title.Caption = 'Илкин Галыг Актив'
+            Title.Color = clNavy
+            Title.Font.Charset = RUSSIAN_CHARSET
+            Title.Font.Color = clWhite
+            Title.Font.Height = -11
+            Title.Font.Name = 'Azl Sans Serif'
+            Title.Font.Style = []
+            Width = 105
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'FIRSTPASSIVE'
+            Title.Alignment = taRightJustify
+            Title.Caption = 'Илкин Галыг Пассив'
+            Title.Color = clNavy
+            Title.Font.Charset = RUSSIAN_CHARSET
+            Title.Font.Color = clWhite
+            Title.Font.Height = -11
+            Title.Font.Name = 'Azl Sans Serif'
+            Title.Font.Style = []
+            Width = 105
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'DTURNOVER'
+            Title.Alignment = taRightJustify
+            Title.Caption = 'Дювриййя Дебет'
+            Title.Color = clNavy
+            Title.Font.Charset = RUSSIAN_CHARSET
+            Title.Font.Color = clWhite
+            Title.Font.Height = -11
+            Title.Font.Name = 'Azl Sans Serif'
+            Title.Font.Style = []
+            Width = 105
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'CTURNOVER'
+            Title.Alignment = taRightJustify
+            Title.Caption = 'Дювриййя Кредит'
+            Title.Color = clNavy
+            Title.Font.Charset = RUSSIAN_CHARSET
+            Title.Font.Color = clWhite
+            Title.Font.Height = -11
+            Title.Font.Name = 'Azl Sans Serif'
+            Title.Font.Style = []
+            Width = 105
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'LASTACTIVE'
+            Title.Alignment = taRightJustify
+            Title.Caption = 'Сон Галыг Актив'
+            Title.Color = clNavy
+            Title.Font.Charset = RUSSIAN_CHARSET
+            Title.Font.Color = clWhite
+            Title.Font.Height = -11
+            Title.Font.Name = 'Azl Sans Serif'
+            Title.Font.Style = []
+            Width = 105
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'LASTPASSIVE'
+            Title.Alignment = taRightJustify
+            Title.Caption = 'Сон Галыг Пассив'
+            Title.Color = clNavy
+            Title.Font.Charset = RUSSIAN_CHARSET
+            Title.Font.Color = clWhite
+            Title.Font.Height = -11
+            Title.Font.Name = 'Azl Sans Serif'
+            Title.Font.Style = []
+            Width = 105
+            Visible = True
+          end>
+      end
+      object PanelBalanceSummary: TPanel
+        Left = 1
+        Top = 130
+        Width = 709
+        Height = 21
+        Align = alBottom
+        BevelOuter = bvNone
+        TabOrder = 1
+        object Label1: TLabel
+          Left = 3
+          Top = 3
+          Width = 40
+          Height = 16
+          Caption = 'Жями:'
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -13
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
+        object DBEdit3: TDBEdit
+          Left = 55
+          Top = 0
+          Width = 105
+          Height = 21
+          TabOrder = 0
+        end
+        object DBEdit4: TDBEdit
+          Left = 160
+          Top = 0
+          Width = 105
+          Height = 21
+          TabOrder = 1
+        end
+        object DBEdit5: TDBEdit
+          Left = 265
+          Top = 0
+          Width = 105
+          Height = 21
+          TabOrder = 2
+        end
+        object DBEdit6: TDBEdit
+          Left = 370
+          Top = 0
+          Width = 105
+          Height = 21
+          TabOrder = 3
+        end
+        object DBEdit7: TDBEdit
+          Left = 475
+          Top = 0
+          Width = 105
+          Height = 21
+          TabOrder = 4
+        end
+        object DBEdit8: TDBEdit
+          Left = 580
+          Top = 0
+          Width = 105
+          Height = 21
+          TabOrder = 5
+        end
+      end
+    end
+    object Panel6: TPanel
+      Left = 1
+      Top = 155
+      Width = 711
+      Height = 279
+      Align = alClient
+      TabOrder = 2
+      object DBGridAccount: TDBGrid
+        Tag = 2
+        Left = 1
+        Top = 1
+        Width = 709
+        Height = 256
+        Align = alClient
+        DataSource = DataModulBalance.DataAccount
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = [fsBold]
+        Options = [dgTitles, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit]
+        ParentFont = False
+        PopupMenu = PopupMenu
+        TabOrder = 0
+        TitleFont.Charset = RUSSIAN_CHARSET
+        TitleFont.Color = clWindowText
+        TitleFont.Height = -11
+        TitleFont.Name = 'Azl Sans Serif'
+        TitleFont.Style = []
+        OnEnter = DBGridBalanceEnter
+        Columns = <
+          item
+            Expanded = False
+            FieldName = 'BALANCENO'
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = []
+            Title.Alignment = taRightJustify
+            Title.Caption = 'Баланс'
+            Title.Color = clNavy
+            Title.Font.Charset = RUSSIAN_CHARSET
+            Title.Font.Color = clWhite
+            Title.Font.Height = -11
+            Title.Font.Name = 'Azl Sans Serif'
+            Title.Font.Style = []
+            Width = 50
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'ACCNO'
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = []
+            Title.Color = clNavy
+            Title.Font.Charset = RUSSIAN_CHARSET
+            Title.Font.Color = clWhite
+            Title.Font.Height = -11
+            Title.Font.Name = 'Azl Sans Serif'
+            Title.Font.Style = []
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'BEGINACTIVE'
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = []
+            Title.Alignment = taRightJustify
+            Title.Caption = 'Илкин Галыг Актив'
+            Title.Color = clNavy
+            Title.Font.Charset = RUSSIAN_CHARSET
+            Title.Font.Color = clWhite
+            Title.Font.Height = -11
+            Title.Font.Name = 'Azl Sans Serif'
+            Title.Font.Style = []
+            Width = 105
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'BEGINPASSIVE'
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = []
+            Title.Alignment = taRightJustify
+            Title.Caption = 'Илкин Галыг Пассив'
+            Title.Color = clNavy
+            Title.Font.Charset = RUSSIAN_CHARSET
+            Title.Font.Color = clWhite
+            Title.Font.Height = -11
+            Title.Font.Name = 'Azl Sans Serif'
+            Title.Font.Style = []
+            Width = 105
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'DTURNOVER'
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = []
+            Title.Alignment = taRightJustify
+            Title.Caption = 'Дювриййя Дебет'
+            Title.Color = clNavy
+            Title.Font.Charset = RUSSIAN_CHARSET
+            Title.Font.Color = clWhite
+            Title.Font.Height = -11
+            Title.Font.Name = 'Azl Sans Serif'
+            Title.Font.Style = []
+            Width = 105
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'CTURNOVER'
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = []
+            Title.Alignment = taRightJustify
+            Title.Caption = 'Дювриййя Кредит'
+            Title.Color = clNavy
+            Title.Font.Charset = RUSSIAN_CHARSET
+            Title.Font.Color = clWhite
+            Title.Font.Height = -11
+            Title.Font.Name = 'Azl Sans Serif'
+            Title.Font.Style = []
+            Width = 105
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'ENDACTIVE'
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = []
+            Title.Alignment = taRightJustify
+            Title.Caption = 'Сон Галыг Актив'
+            Title.Color = clNavy
+            Title.Font.Charset = RUSSIAN_CHARSET
+            Title.Font.Color = clWhite
+            Title.Font.Height = -11
+            Title.Font.Name = 'Azl Sans Serif'
+            Title.Font.Style = []
+            Width = 105
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'ENDPASSIVE'
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = []
+            Title.Alignment = taRightJustify
+            Title.Caption = 'Сон Галыг Пассив'
+            Title.Color = clNavy
+            Title.Font.Charset = RUSSIAN_CHARSET
+            Title.Font.Color = clWhite
+            Title.Font.Height = -11
+            Title.Font.Name = 'Azl Sans Serif'
+            Title.Font.Style = []
+            Width = 105
+            Visible = True
+          end>
+      end
+      object PanelAccName: TPanel
+        Left = 1
+        Top = 257
+        Width = 709
+        Height = 21
+        Align = alBottom
+        BevelOuter = bvNone
+        TabOrder = 1
+        Visible = False
+        object DBEdit2: TDBEdit
+          Left = 0
+          Top = 0
+          Width = 709
+          Height = 21
+          Anchors = [akLeft, akTop, akRight]
+          DataField = 'NAME'
+          DataSource = DataModulBalance.DataAccount
+          TabOrder = 0
+        end
+      end
+    end
+  end
+  object PopupMenu: TPopupMenu
+    Images = ImageList
+    Left = 754
+    Top = 201
+    object LocalRefresh: TMenuItem
+      Caption = 'Local Refresh'
+      ShortCut = 115
+      OnClick = LocalRefreshClick
+    end
+    object GlobalRefresh1: TMenuItem
+      Action = ActionFullRefresh
+    end
+    object N1: TMenuItem
+      Caption = '-'
+    end
+    object ExcelExport1: TMenuItem
+      Action = ActionExcelExport
+    end
+  end
+  object ActionList: TActionList
+    Images = ImageList
+    Left = 786
+    Top = 201
+    object ActionFullRefresh: TAction
+      Caption = 'Global Refresh'
+      ShortCut = 116
+      OnExecute = ActionFullRefreshExecute
+    end
+    object ActionExcelExport: TAction
+      Caption = 'Excel Export'
+      ImageIndex = 0
+      ShortCut = 113
+      OnExecute = ActionExcelExportExecute
+    end
+  end
+  object ImageList: TImageList
+    Left = 818
+    Top = 201
+    Bitmap = {
+      494C010101000400040010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      0000000000003600000028000000400000001000000001001000000000000008
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000200020002000200020002
+      0002000200020002000200020002000200000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000200020002000200020002
+      0002000200020002000200020002000200000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000000000000000000000000002FF7FFF7FFF7FFF7FFF7F
+      FF7FFF7FFF7FFF7FFF7FFF7F0002000200000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000000000000000000000000002FF7FFF7FFF7FFF7FFF7F
+      FF7FFF7FFF7FFF7FFF7FFF7F0002000200000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000000000000000000000000002FF7F0002000200020002
+      0002000200020002000200020002000200000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000000000000000000000000002FF7F0002000200020002
+      0002FF7F000200020002FF7F0002000200000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000000000000000000000000002FF7FFF7F000200020002
+      FF7F0002000200020002FF7F0002000200000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000000000000000000000000002FF7FFF7FFF7F0002FF7F
+      000200020002FF7FFF7FFF7F0002000200000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000000000000000000000000002FF7FFF7FFF7FFF7F0002
+      000200020002FF7FFF7FFF7F0002000200000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000000000000000000000000002FF7FFF7FFF7F00020002
+      0002000200020002FF7FFF7F0002000200000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000000000000000000000000002FF7FFF7F000200020002
+      FF7F0002000200020002FF7F0002000200000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000000000000000000000000002FF7FFF7FFF7FFF7FFF7F
+      FF7FFF7FFF7FFF7FFF7FFF7F0002000200000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000000000000000000000000002FF7FFF7FFF7FFF7FFF7F
+      FF7FFF7FFF7FFF7FFF7FFF7F0002000200000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000200020002000200020002
+      0002000200020002000200020002000200000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000424D3E000000000000003E000000
+      2800000040000000100000000100010000000000800000000000000000000000
+      000000000000000000000000FFFFFF00FFFF0000000000008001000000000000
+      8001000000000000800100000000000080010000000000008001000000000000
+      8001000000000000800100000000000080010000000000008001000000000000
+      8001000000000000800100000000000080010000000000008001000000000000
+      8001000000000000FFFF00000000000000000000000000000000000000000000
+      000000000000}
+  end
+  object ExcelExporter: TExcelExporter
+    ShowTitles = True
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    Left = 850
+    Top = 201
+  end
+end

@@ -1,0 +1,196 @@
+unit AftoInfiIpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, Mask, DBCtrlsEh, DB, OracleData, ExtCtrls, DBGridEh,
+  DBLookupEh;
+
+type
+  TAfForm = class(TForm)
+    ods_avto_qizl: TOracleDataSet;
+    ods_avto_qizlGUR_TYPE: TFloatField;
+    ods_avto_qizlPAR1: TWideStringField;
+    ods_avto_qizlPAR2: TWideStringField;
+    ods_avto_qizlPAR3: TWideStringField;
+    ods_avto_qizlPAR4: TWideStringField;
+    ods_avto_qizlPAR5: TWideStringField;
+    ods_avto_qizlPAR6: TWideStringField;
+    ods_avto_qizlPAR7: TWideStringField;
+    ods_avto_qizlPAR8: TWideStringField;
+    ods_avto_qizlPAR9: TWideStringField;
+    ods_avto_qizlPAR10: TWideStringField;
+    ods_avto_qizlPAR11: TWideStringField;
+    ods_avto_qizlPAR12: TWideStringField;
+    Panel1: TPanel;
+    Label10: TLabel;
+    DBEditEh1: TDBEditEh;
+    DBEditEh3: TDBEditEh;
+    Label8: TLabel;
+    DBEditEh5: TDBEditEh;
+    Label6: TLabel;
+    Label3: TLabel;
+    DBEditEh7: TDBEditEh;
+    Label5: TLabel;
+    Label7: TLabel;
+    DBEditEh6: TDBEditEh;
+    DBEditEh8: TDBEditEh;
+    Label4: TLabel;
+    Label2: TLabel;
+    DBDateTimeEditEh1: TDBDateTimeEditEh;
+    DBEditEh10: TDBEditEh;
+    DBEditEh4: TDBEditEh;
+    Label1: TLabel;
+    Label9: TLabel;
+    Panel2: TPanel;
+    Button1: TButton;
+    Panel3: TPanel;
+    DBLookupComboboxEh1: TDBLookupComboboxEh;
+    Ods_goldstandart: TOracleDataSet;
+    DataSource1: TDataSource;
+    Label11: TLabel;
+    Edit1: TEdit;
+    Ods_goldstandartID: TFloatField;
+    Ods_goldstandartSTANDART: TFloatField;
+    Ods_goldstandartDESCRIPTION: TWideStringField;
+    Ods_goldstandartPRICE: TFloatField;
+    Ods_goldstandartPERCENT: TFloatField;
+    Edit2: TEdit;
+    Label12: TLabel;
+    Memo1: TMemo;
+    Label13: TLabel;
+    Edit3: TEdit;
+    ods_gold: TOracleDataSet;
+    dsrc_gold: TDataSource;
+    procedure Button1Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure DBLookupComboboxEh1CloseUp(Sender: TObject; Accept: Boolean);
+    procedure DBEditEh10Change(Sender: TObject);
+    procedure DBEditEh5Change(Sender: TObject);
+    procedure DBEditEh5KeyPress(Sender: TObject; var Key: Char);
+    procedure Edit1KeyPress(Sender: TObject; var Key: Char);
+    procedure DBEditEh7KeyPress(Sender: TObject; var Key: Char);
+    procedure DBEditEh10KeyPress(Sender: TObject; var Key: Char);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  AfForm: TAfForm;
+
+implementation
+
+{$R *.dfm}
+   uses DmImpl,sboapiDataModuleImpl;
+procedure TAfForm.Button1Click(Sender: TObject);
+begin
+close
+end;
+
+procedure TAfForm.DBEditEh10Change(Sender: TObject);
+begin
+if (DBEditEh5.text<>'')and(DBEditEh10.text<>'') then
+  begin
+DBEditEh7.Text:=DBEditEh5.Value-DBEditEh10.Value;
+DBEditEh3.Text:=DBEditEh7.Value*edit2.text;
+DBEditEh8.Text:=inttostr( round((DBEditEh3.Value*edit1.text)/100+((DBEditEh3.Value*edit1.text)/100*0.44)));
+if DBEditEh7.Value<0 then
+   DBEditEh7.Color:=clred
+   else
+   DBEditEh7.Color:=clWhite;
+end;
+end;
+
+procedure TAfForm.DBEditEh10KeyPress(Sender: TObject; var Key: Char);
+begin
+if not (key in['0'..'9',decimalseparator,#8]) then key:=#0;
+end;
+
+procedure TAfForm.DBEditEh5Change(Sender: TObject);
+begin
+if ( DBEditEh10.text<>'') and (DBEditEh5.text<>'')  then
+begin
+DBEditEh7.Text:=DBEditEh5.Value-DBEditEh10.Value;
+DBEditEh3.Text:=DBEditEh7.Value*edit2.text;
+DBEditEh8.Text:=inttostr( round((DBEditEh3.Value*edit1.text)/100+((DBEditEh3.Value*edit1.text)/100*0.44)));
+if DBEditEh7.Value<0 then
+   DBEditEh7.Color:=clred
+   else
+   DBEditEh7.Color:=clWhite;
+end;
+end;
+
+procedure TAfForm.DBEditEh5KeyPress(Sender: TObject; var Key: Char);
+
+begin
+if not (key in['0'..'9',decimalseparator,#8]) then key:=#0;
+end;
+
+procedure TAfForm.DBEditEh7KeyPress(Sender: TObject; var Key: Char);
+begin
+if not (key in['0'..'9',decimalseparator,#8]) then key:=#0;
+end;
+
+procedure TAfForm.DBLookupComboboxEh1CloseUp(Sender: TObject; Accept: Boolean);
+begin
+  Edit1.Text:=Ods_goldstandartPERCENT.AsString;
+  Edit2.Text:=Ods_goldstandartPRICE.AsString;
+
+  if DBEditEh7.Text<>'' then
+  begin
+  DBEditEh3.Text:=DBEditEh7.Value*edit2.text;
+  DBEditEh8.Text:=inttostr( round((DBEditEh3.Value*edit1.text)/100+((DBEditEh3.Value*edit1.text)/100*0.44)));
+  end;
+end;
+
+procedure TAfForm.Edit1KeyPress(Sender: TObject; var Key: Char);
+begin
+if not (key in['0'..'9',decimalseparator,#8]) then key:=#0;
+end;
+
+procedure TAfForm.FormShow(Sender: TObject);
+begin
+
+ods_avto_qizl.Close;
+ods_avto_qizl.SetVariable('v_gur_type',GurDm.pledgsortsGUR_TYPE.AsInteger );
+ods_avto_qizl.Open;
+
+if gurDm.pledgsortsGUR_TYPE.AsInteger=1 then
+begin
+
+Label10.Caption:=ods_avto_qizlPAR1.AsString;
+Label9.Caption:=ods_avto_qizlPAR2.AsString;
+Label8.Caption:=ods_avto_qizlPAR3.AsString;
+Label1.Caption:=ods_avto_qizlPAR4.AsString;
+Label6.Caption:=ods_avto_qizlPAR5.AsString;
+Label2.Caption:=ods_avto_qizlPAR6.AsString;
+DBDateTimeEditEh1.Visible:=true;
+DBEditEh10.Visible:=false;
+Label3.Caption:=ods_avto_qizlPAR7.AsString;
+Label4.Caption:=ods_avto_qizlPAR8.AsString;
+Label5.Caption:=ods_avto_qizlPAR9.AsString;
+Label7.Caption:=ods_avto_qizlPAR10.AsString;
+end    ;
+if gurDm.pledgsortsGUR_TYPE.AsInteger=2 then
+begin
+
+Label10.Caption:=ods_avto_qizlPAR1.AsString;
+Label9.Caption:=ods_avto_qizlPAR2.AsString;
+Label8.Caption:=ods_avto_qizlPAR3.AsString;
+Label1.Caption:=ods_avto_qizlPAR4.AsString;
+Label6.Caption:=ods_avto_qizlPAR5.AsString;
+Label2.Caption:=ods_avto_qizlPAR6.AsString;
+Label3.Caption:=ods_avto_qizlPAR7.AsString;
+Label4.Caption:=ods_avto_qizlPAR8.AsString;
+Label5.Caption:=ods_avto_qizlPAR9.AsString;
+Label7.Caption:=ods_avto_qizlPAR10.AsString;
+DBDateTimeEditEh1.Visible:=false;
+DBEditEh10.Visible:=true;
+end;
+
+end;
+
+end.

@@ -1,0 +1,1 @@
+-+D:\CreditsMgr\Source\Packages\Purdensal_report\PurImpl.obj -+c:\program files\borland\delphi5\Lib\SysInit.obj 

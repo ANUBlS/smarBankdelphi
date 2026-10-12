@@ -1,0 +1,29 @@
+unit AutoPymtDataModuleImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, OracleData, Oracle;
+
+type
+  TAutoPymtDataMod = class(TDataModule)
+    AutoPaymentableLoans: TOracleDataSet;
+    CM_PAYMENT: TOraclePackage;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  AutoPymtDataMod: TAutoPymtDataMod;
+
+implementation
+
+{$R *.DFM}
+
+uses
+  CMOracleApiDataModuleImpl;
+
+end.

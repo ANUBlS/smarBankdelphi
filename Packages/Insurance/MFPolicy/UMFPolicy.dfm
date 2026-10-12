@@ -1,0 +1,1005 @@
+object MFPolicy: TMFPolicy
+  Left = 280
+  Top = 130
+  Width = 361
+  Height = 385
+  Caption = 'Policy'
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  OldCreateOrder = False
+  OnCreate = ActiveFormCreate
+  PixelsPerInch = 96
+  TextHeight = 13
+  object GroupBox3: TGroupBox
+    Left = 0
+    Top = 0
+    Width = 353
+    Height = 70
+    Caption = 'Няглиййат васитяляринин там сыьортасы шящадятнамяси'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 0
+    object Label4: TLabel
+      Left = 8
+      Top = 24
+      Width = 101
+      Height = 13
+      Caption = 'Шящадятнамянин Н-си'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Label1: TLabel
+      Left = 8
+      Top = 48
+      Width = 70
+      Height = 13
+      Caption = 'Шяртсиз франшиза'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+    end
+    object SpeedButton1: TSpeedButton
+      Left = 112
+      Top = 20
+      Width = 23
+      Height = 22
+      Caption = '№'
+      OnClick = SpeedButton1Click
+    end
+    object ENum: TDBEdit
+      Left = 136
+      Top = 21
+      Width = 209
+      Height = 21
+      DataField = 'POLICY_NUM'
+      DataSource = DSContracts
+      Enabled = False
+      TabOrder = 0
+      OnChange = DBEdit8Change
+      OnKeyPress = ENumKeyPress
+    end
+    object DBEdit1: TDBEdit
+      Left = 136
+      Top = 44
+      Width = 209
+      Height = 21
+      DataField = 'NAME'
+      DataSource = FranshizData
+      ReadOnly = True
+      TabOrder = 1
+      OnKeyPress = ENumKeyPress
+    end
+  end
+  object GroupBox2: TGroupBox
+    Left = -1
+    Top = 72
+    Width = 354
+    Height = 97
+    Caption = 'Цчцнжц шяхсляр гаршысында мцлкц мясулиййят'
+    Enabled = False
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 1
+    object Label2: TLabel
+      Left = 8
+      Top = 18
+      Width = 78
+      Height = 13
+      Caption = 'Мясулиййят щядди'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Label11: TLabel
+      Left = 8
+      Top = 41
+      Width = 70
+      Height = 13
+      Caption = 'Шяртсиз франшиза'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Label14: TLabel
+      Left = 8
+      Top = 70
+      Width = 62
+      Height = 13
+      Caption = 'Сыьорта щаггы'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+    end
+    object DBEdit8: TDBEdit
+      Left = 176
+      Top = 18
+      Width = 169
+      Height = 21
+      TabOrder = 0
+      OnChange = DBEdit8Change
+      OnKeyPress = ENumKeyPress
+    end
+    object DBEdit9: TDBEdit
+      Left = 176
+      Top = 40
+      Width = 169
+      Height = 21
+      TabOrder = 1
+      OnChange = DBEdit8Change
+      OnKeyPress = ENumKeyPress
+    end
+    object DBEdit10: TDBEdit
+      Left = 176
+      Top = 64
+      Width = 169
+      Height = 21
+      TabOrder = 2
+      OnChange = DBEdit8Change
+      OnKeyPress = ENumKeyPress
+    end
+  end
+  object GroupBox1: TGroupBox
+    Left = 0
+    Top = 160
+    Width = 353
+    Height = 169
+    Caption = 'Сцрцжц вя Сярнишинлярин Фярди Гяза Сыьортасы'
+    Enabled = False
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 2
+    object Label30: TLabel
+      Left = 8
+      Top = 24
+      Width = 108
+      Height = 13
+      Caption = 'Сыьорта олунанларын сайы'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Label32: TLabel
+      Left = 8
+      Top = 48
+      Width = 133
+      Height = 13
+      Caption = 'Тибби хяржляр цзря цмуми лимит'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Label31: TLabel
+      Left = 8
+      Top = 71
+      Width = 52
+      Height = 13
+      Caption = 'Цмуми лимит'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Label33: TLabel
+      Left = 8
+      Top = 96
+      Width = 128
+      Height = 13
+      Caption = 'Бир сыьорта олунан цчцн лимит'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Label34: TLabel
+      Left = 8
+      Top = 119
+      Width = 164
+      Height = 13
+      Caption = 'Бир сыьорта олунан цчцн тибби хяржляр'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Label27: TLabel
+      Left = 8
+      Top = 142
+      Width = 62
+      Height = 13
+      Caption = 'Сыьорта щаггы'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+    end
+    object ENumberP: TDBEdit
+      Left = 176
+      Top = 20
+      Width = 169
+      Height = 21
+      TabOrder = 0
+      OnChange = DBEdit8Change
+      OnKeyPress = ENumKeyPress
+    end
+    object ETotalMedical: TDBEdit
+      Left = 176
+      Top = 44
+      Width = 169
+      Height = 21
+      TabOrder = 1
+      OnChange = DBEdit8Change
+      OnKeyPress = ENumKeyPress
+    end
+    object ETotalLimit: TDBEdit
+      Left = 176
+      Top = 68
+      Width = 169
+      Height = 21
+      TabOrder = 2
+      OnChange = DBEdit8Change
+      OnKeyPress = ENumKeyPress
+    end
+    object ELimitPer: TDBEdit
+      Left = 176
+      Top = 92
+      Width = 169
+      Height = 21
+      TabOrder = 3
+      OnChange = DBEdit8Change
+      OnKeyPress = ENumKeyPress
+    end
+    object EMedicalExpen: TDBEdit
+      Left = 176
+      Top = 113
+      Width = 169
+      Height = 21
+      TabOrder = 4
+      OnChange = DBEdit8Change
+      OnKeyPress = ENumKeyPress
+    end
+    object EPremiuumIns: TDBEdit
+      Left = 176
+      Top = 136
+      Width = 169
+      Height = 21
+      TabOrder = 5
+      OnChange = DBEdit8Change
+      OnKeyPress = ENumKeyPress
+    end
+  end
+  object Panel1: TPanel
+    Left = 0
+    Top = 322
+    Width = 353
+    Height = 29
+    Align = alBottom
+    BevelInner = bvRaised
+    BevelOuter = bvLowered
+    TabOrder = 3
+    object btPrint: TBitBtn
+      Left = 18
+      Top = 4
+      Width = 75
+      Height = 24
+      Caption = 'Чап'
+      Enabled = False
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 0
+      OnClick = btPrintClick
+      OnKeyPress = ENumKeyPress
+      Glyph.Data = {
+        76010000424D7601000000000000760000002800000020000000100000000100
+        04000000000000010000130B0000130B00001000000000000000000000000000
+        800000800000008080008000000080008000808000007F7F7F00BFBFBF000000
+        FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00300000000000
+        00033FFFFFFFFFFFFFFF0888888888888880777777777777777F088888888888
+        8880777777777777777F0000000000000000FFFFFFFFFFFFFFFF0F8F8F8F8F8F
+        8F80777777777777777F08F8F8F8F8F8F9F0777777777777777F0F8F8F8F8F8F
+        8F807777777777777F7F0000000000000000777777777777777F3330FFFFFFFF
+        03333337F3FFFF3F7F333330F0000F0F03333337F77773737F333330FFFFFFFF
+        03333337F3FF3FFF7F333330F00F000003333337F773777773333330FFFF0FF0
+        33333337F3FF7F3733333330F08F0F0333333337F7737F7333333330FFFF0033
+        33333337FFFF7733333333300000033333333337777773333333}
+      NumGlyphs = 2
+    end
+    object BitBtn2: TBitBtn
+      Left = 170
+      Top = 4
+      Width = 75
+      Height = 24
+      Anchors = [akTop, akRight]
+      Caption = 'OK'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 1
+      OnClick = BitBtn2Click
+      OnKeyPress = ENumKeyPress
+      Glyph.Data = {
+        DE010000424DDE01000000000000760000002800000024000000120000000100
+        0400000000006801000000000000000000001000000000000000000000000000
+        80000080000000808000800000008000800080800000C0C0C000808080000000
+        FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00333333333333
+        3333333333333333333333330000333333333333333333333333F33333333333
+        00003333344333333333333333388F3333333333000033334224333333333333
+        338338F3333333330000333422224333333333333833338F3333333300003342
+        222224333333333383333338F3333333000034222A22224333333338F338F333
+        8F33333300003222A3A2224333333338F3838F338F33333300003A2A333A2224
+        33333338F83338F338F33333000033A33333A222433333338333338F338F3333
+        0000333333333A222433333333333338F338F33300003333333333A222433333
+        333333338F338F33000033333333333A222433333333333338F338F300003333
+        33333333A222433333333333338F338F00003333333333333A22433333333333
+        3338F38F000033333333333333A223333333333333338F830000333333333333
+        333A333333333333333338330000333333333333333333333333333333333333
+        0000}
+      NumGlyphs = 2
+    end
+    object BitBtn3: TBitBtn
+      Left = 246
+      Top = 4
+      Width = 75
+      Height = 24
+      Anchors = [akTop, akRight]
+      Cancel = True
+      Caption = 'Cancel'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 2
+      OnClick = BitBtn3Click
+      OnKeyPress = ENumKeyPress
+      Glyph.Data = {
+        DE010000424DDE01000000000000760000002800000024000000120000000100
+        0400000000006801000000000000000000001000000000000000000000000000
+        80000080000000808000800000008000800080800000C0C0C000808080000000
+        FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00333333333333
+        333333333333333333333333000033338833333333333333333F333333333333
+        0000333911833333983333333388F333333F3333000033391118333911833333
+        38F38F333F88F33300003339111183911118333338F338F3F8338F3300003333
+        911118111118333338F3338F833338F3000033333911111111833333338F3338
+        3333F8330000333333911111183333333338F333333F83330000333333311111
+        8333333333338F3333383333000033333339111183333333333338F333833333
+        00003333339111118333333333333833338F3333000033333911181118333333
+        33338333338F333300003333911183911183333333383338F338F33300003333
+        9118333911183333338F33838F338F33000033333913333391113333338FF833
+        38F338F300003333333333333919333333388333338FFF830000333333333333
+        3333333333333333333888330000333333333333333333333333333333333333
+        0000}
+      NumGlyphs = 2
+    end
+    object btApply: TBitBtn
+      Left = 94
+      Top = 4
+      Width = 75
+      Height = 24
+      Caption = 'Apply'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 3
+      OnClick = btApplyClick
+      Glyph.Data = {
+        F2010000424DF201000000000000760000002800000024000000130000000100
+        0400000000007C01000000000000000000001000000000000000000000000000
+        80000080000000808000800000008000800080800000C0C0C000808080000000
+        FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00333334433333
+        3333333333388F3333333333000033334224333333333333338338F333333333
+        0000333422224333333333333833338F33333333000033422222243333333333
+        83333338F3333333000034222A22224333333338F33F33338F33333300003222
+        A2A2224333333338F383F3338F33333300003A2A222A222433333338F8333F33
+        38F33333000034A22222A22243333338833333F3338F333300004222A2222A22
+        2433338F338F333F3338F3330000222A3A2224A22243338F3838F338F3338F33
+        0000A2A333A2224A2224338F83338F338F3338F300003A33333A2224A2224338
+        333338F338F3338F000033333333A2224A2243333333338F338F338F00003333
+        33333A2224A2233333333338F338F83300003333333333A2224A333333333333
+        8F338F33000033333333333A222433333333333338F338F30000333333333333
+        A224333333333333338F38F300003333333333333A223333333333333338F8F3
+        000033333333333333A3333333333333333383330000}
+      NumGlyphs = 2
+    end
+  end
+  object Ins_MotorFullData: TDataSource
+    DataSet = Ins_MotorFull
+    Left = 280
+    Top = 120
+  end
+  object Ins_MotorFull: TOracleDataSet
+    Tag = 1
+    SQL.Strings = (
+      'select im.rowid,im.* from ins_motorfull im '
+      '')
+    QBEDefinition.QBEFieldDefs = {
+      040000001B000000020000004944010000000000060000004B4C495F49440100
+      000000000E000000434F4E544143545F504552534F4E0100000000000F000000
+      42414E4B494E475F44455441494C530100000000000C000000494E5355524544
+      4D4F44454C0100000000000B000000494E535552454454595045010000000000
+      0F000000494E535552454453544154454E554D0100000000000C000000494E53
+      55524544434F4C4F5201000000000011000000494E53555245444F5554505554
+      594541520100000000000F000000494E53555245444E554D5345415453010000
+      00000010000000494E5355524544454E47494E454E554D010000000000110000
+      00494E5355524544434841535349534E554D01000000000012000000494E5355
+      52454441435455414C56414C5545010000000000110000005452414E534D4953
+      53494F4E5F545950450100000000000E00000050524553454E43455F414C4152
+      4D0100000000000B0000004D4F544F525F555341474501000000000011000000
+      4D4F544F5253544F52414745504C4143450100000000000E0000004558495354
+      494E4744414D4147450100000000001A000000494E535552414E434547454F47
+      524150484943414C4C494D49540100000000000600000042524F4B4552010000
+      0000000B000000494E5355524544424F44590100000000000600000054595045
+      49440100000000000800000050524F46495449440100000000000C000000434C
+      4F53455F5052454649580100000000000B000000494E53555245444D41524B01
+      0000000000080000004D4F4E54485F4944010000000000030000004349440100
+      00000000}
+    CountAllRecords = True
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 312
+    Top = 120
+    object Ins_MotorFullID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object Ins_MotorFullKLI_ID: TFloatField
+      FieldName = 'KLI_ID'
+    end
+    object Ins_MotorFullBANKING_DETAILS: TStringField
+      FieldName = 'BANKING_DETAILS'
+      Size = 32
+    end
+    object Ins_MotorFullINSUREDMODEL: TStringField
+      FieldName = 'INSUREDMODEL'
+      Required = True
+      Size = 32
+    end
+    object Ins_MotorFullINSUREDSTATENUM: TStringField
+      FieldName = 'INSUREDSTATENUM'
+      Size = 32
+    end
+    object Ins_MotorFullINSUREDCOLOR: TStringField
+      FieldName = 'INSUREDCOLOR'
+      Size = 32
+    end
+    object Ins_MotorFullINSUREDOUTPUTYEAR: TIntegerField
+      FieldName = 'INSUREDOUTPUTYEAR'
+    end
+    object Ins_MotorFullINSUREDNUMSEATS: TIntegerField
+      FieldName = 'INSUREDNUMSEATS'
+    end
+    object Ins_MotorFullINSUREDENGINENUM: TStringField
+      FieldName = 'INSUREDENGINENUM'
+      Size = 32
+    end
+    object Ins_MotorFullINSUREDCHASSISNUM: TStringField
+      FieldName = 'INSUREDCHASSISNUM'
+      Size = 32
+    end
+    object Ins_MotorFullINSUREDACTUALVALUE: TFloatField
+      FieldName = 'INSUREDACTUALVALUE'
+    end
+    object Ins_MotorFullTRANSMISSION_TYPE: TStringField
+      FieldName = 'TRANSMISSION_TYPE'
+      Size = 128
+    end
+    object Ins_MotorFullPRESENCE_ALARM: TStringField
+      FieldName = 'PRESENCE_ALARM'
+      Size = 32
+    end
+    object Ins_MotorFullMOTOR_USAGE: TStringField
+      FieldName = 'MOTOR_USAGE'
+      Size = 128
+    end
+    object Ins_MotorFullMOTORSTORAGEPLACE: TStringField
+      FieldName = 'MOTORSTORAGEPLACE'
+      Size = 128
+    end
+    object Ins_MotorFullEXISTINGDAMAGE: TStringField
+      FieldName = 'EXISTINGDAMAGE'
+      Size = 128
+    end
+    object Ins_MotorFullINSURANCEGEOGRAPHICALLIMIT: TStringField
+      FieldName = 'INSURANCEGEOGRAPHICALLIMIT'
+      Size = 128
+    end
+    object Ins_MotorFullBROKER: TFloatField
+      FieldName = 'BROKER'
+    end
+    object Ins_MotorFullINSUREDBODY: TStringField
+      FieldName = 'INSUREDBODY'
+      Size = 32
+    end
+    object Ins_MotorFullPROFITID: TFloatField
+      FieldName = 'PROFITID'
+    end
+    object Ins_MotorFullTYPEID: TIntegerField
+      FieldName = 'TYPEID'
+    end
+    object Ins_MotorFullINSUREDTYPE: TFloatField
+      FieldName = 'INSUREDTYPE'
+    end
+    object Ins_MotorFullINSUREDMARK: TStringField
+      FieldName = 'INSUREDMARK'
+      Size = 32
+    end
+    object Ins_MotorFullCID: TFloatField
+      FieldName = 'CID'
+      Required = True
+    end
+  end
+  object PolicyData: TDataSource
+    DataSet = Policy
+    Left = 280
+    Top = 88
+  end
+  object Policy: TOracleDataSet
+    SQL.Strings = (
+      'select  imp.rowid, imp.* from ins_mf_policy imp'
+      'where imp.ms_id= :ms_id')
+    Variables.Data = {
+      0300000001000000060000003A4D535F494404000000080000000000000000D8
+      9B4000000000}
+    QBEDefinition.QBEFieldDefs = {
+      0400000004000000020000004944010000000000050000004D535F4944010000
+      00000009000000504F4C4943594E554D0100000000000C0000005355424A4543
+      5456414C5545010000000000}
+    MasterFields = 'ID'
+    DetailFields = 'MS_ID'
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 312
+    Top = 88
+    object PolicyID: TFloatField
+      FieldName = 'ID'
+    end
+    object PolicyMS_ID: TFloatField
+      FieldName = 'MS_ID'
+    end
+    object PolicyPOLICYNUM: TStringField
+      FieldName = 'POLICYNUM'
+    end
+    object PolicySUBJECTVALUE: TFloatField
+      FieldName = 'SUBJECTVALUE'
+    end
+  end
+  object Customers: TOracleDataSet
+    SQL.Strings = (
+      
+        'select c.rowid,c.id,c.name||'#39' '#39'||c.surname||'#39' '#39'||c.fathername as' +
+        ' name,c.address,c.mobilephone,c.fax from ins_customers c')
+    QBEDefinition.QBEFieldDefs = {
+      0400000005000000020000004944010000000000040000004E414D4501000000
+      00000B0000004D4F42494C4550484F4E45010000000000070000004144445245
+      535301000000000003000000464158010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 312
+    Top = 56
+    object CustomersID: TIntegerField
+      FieldName = 'ID'
+      Required = True
+    end
+    object CustomersNAME: TStringField
+      FieldName = 'NAME'
+      Size = 386
+    end
+    object CustomersADDRESS: TStringField
+      FieldName = 'ADDRESS'
+      Size = 1024
+    end
+    object CustomersMOBILEPHONE: TStringField
+      FieldName = 'MOBILEPHONE'
+      Size = 32
+    end
+    object CustomersFAX: TStringField
+      FieldName = 'FAX'
+      Size = 32
+    end
+  end
+  object CustomersData: TDataSource
+    DataSet = Customers
+    Left = 280
+    Top = 56
+  end
+  object BankInfoData: TDataSource
+    DataSet = BankInfo
+    Left = 280
+    Top = 24
+  end
+  object BankInfo: TOracleDataSet
+    SQL.Strings = (
+      'select *from BankInfo')
+    QBEDefinition.QBEFieldDefs = {
+      040000002A000000050000004B4F445F420100000000000400000042414E4B01
+      000000000007000000415A5F4E414D45010000000000040000004B524E4F0100
+      0000000003000000494E4E010000000000050000005345484552010000000000
+      0600000041445245535301000000000004000000534544520100000000000700
+      0000425548414C54520100000000000300000054454C01000000000003000000
+      4641580100000000000500000053574946540100000000000500000054454C45
+      5801000000000005000000454D41494C01000000000007000000504F53545F49
+      4E010000000000070000004B4F445F46494C0100000000000600000046494C49
+      414C0100000000000900000041445245535F46494C0100000000000700000054
+      454C5F46494C010000000000070000004641585F46494C010000000000090000
+      0053574946545F46494C0100000000000900000054454C45585F46494C010000
+      0000000A000000504F5354494E5F46494C010000000000090000005345484552
+      5F46494C01000000000007000000494E4E5F46494C010000000000080000004B
+      524E4F5F46494C010000000000070000005345445246494C0100000000000900
+      0000425548414C5F46494C010000000000080000004B4F445F4246494C010000
+      000000020000004E420100000000000700000056414C5F4D4F56010000000000
+      040000004C4F474F000000000000040000004C494E4B01000000000003000000
+      5344560100000000000300000053564D01000000000002000000424601000000
+      00000C0000004D414E414745525449544C450100000000000F0000004143434F
+      554E54414E545449544C450100000000000E00000053564D5F43555252454E43
+      594944010000000000070000004341504954414C010000000000090000004153
+      53495354414E540100000000000E000000415353495354414E545449544C4501
+      0000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 312
+    Top = 24
+  end
+  object AValute: TOracleDataSet
+    SQL.Strings = (
+      'select valute, val_name, valu_name, valu_short from avalute')
+    QBEDefinition.QBEFieldDefs = {
+      04000000040000000600000056414C5554450100000000000800000056414C5F
+      4E414D450100000000000900000056414C555F4E414D450100000000000A0000
+      0056414C555F53484F5254010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 312
+    Top = 152
+    object AValuteVALU_NAME: TStringField
+      FieldName = 'VALU_NAME'
+      Size = 25
+    end
+    object AValuteVALUTE: TIntegerField
+      FieldName = 'VALUTE'
+      Required = True
+    end
+    object AValuteVAL_NAME: TStringField
+      FieldName = 'VAL_NAME'
+      Size = 10
+    end
+    object AValuteVALU_SHORT: TStringField
+      FieldName = 'VALU_SHORT'
+      Size = 10
+    end
+  end
+  object AValuteData: TDataSource
+    DataSet = AValute
+    Left = 280
+    Top = 152
+  end
+  object SuggestionData: TDataSource
+    DataSet = Suggestion
+    Left = 208
+    Top = 144
+  end
+  object Suggestion: TOracleDataSet
+    SQL.Strings = (
+      'select  s.rowid,s.* from ins_mf_suggestion s'
+      'where mk_id = :mk_id')
+    Variables.Data = {
+      0300000001000000060000003A4D4B5F49440400000008000000000000000060
+      6A4000000000}
+    QBEDefinition.QBEFieldDefs = {
+      040000000A000000020000004944010000000000050000004D4B5F4944010000
+      0000000B0000005249534B4144445245535301000000000010000000494E5355
+      52414E4345414D4D4F554E5401000000000007000000454E4444415445010000
+      0000000600000052534B5F49440100000000000600000046525A5F4944010000
+      00000007000000434E44545F49440100000000000600000056414C5F49440100
+      000000000C000000494E535552414E434553554D010000000000}
+    Master = Ins_MotorFull
+    MasterFields = 'ID'
+    DetailFields = 'MK_ID'
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 240
+    Top = 144
+    object SuggestionID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object SuggestionMK_ID: TFloatField
+      FieldName = 'MK_ID'
+      Required = True
+    end
+    object SuggestionRISKADDRESS: TStringField
+      FieldName = 'RISKADDRESS'
+      Size = 1024
+    end
+    object SuggestionINSURANCEAMMOUNT: TFloatField
+      FieldName = 'INSURANCEAMMOUNT'
+    end
+    object SuggestionENDDATE: TDateTimeField
+      FieldName = 'ENDDATE'
+    end
+    object SuggestionRSK_ID: TFloatField
+      FieldName = 'RSK_ID'
+      Required = True
+    end
+    object SuggestionFRZ_ID: TFloatField
+      FieldName = 'FRZ_ID'
+      Required = True
+    end
+    object SuggestionCNDT_ID: TFloatField
+      FieldName = 'CNDT_ID'
+      Required = True
+    end
+    object SuggestionINSURANCESUM: TFloatField
+      FieldName = 'INSURANCESUM'
+    end
+    object SuggestionVAL_ID: TFloatField
+      FieldName = 'VAL_ID'
+    end
+  end
+  object FranshizData: TDataSource
+    DataSet = Franshiz
+    Left = 208
+    Top = 117
+  end
+  object Franshiz: TOracleDataSet
+    SQL.Strings = (
+      'select idr.rowid, idr.* from ins_dict_franshiz idr')
+    QBEDefinition.QBEFieldDefs = {
+      0400000002000000020000004944010000000000040000004E414D4501000000
+      0000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 240
+    Top = 117
+    object FranshizID: TFloatField
+      FieldName = 'ID'
+    end
+    object FranshizNAME: TStringField
+      FieldName = 'NAME'
+      Size = 1024
+    end
+  end
+  object INSWordExporter1: TINSWordExporter
+    Left = 320
+    Top = 348
+  end
+  object MoreThanData: TDataSource
+    DataSet = MoreThan
+    Left = 204
+    Top = 24
+  end
+  object MoreThan: TOracleDataSet
+    SQL.Strings = (
+      
+        'select im.rowid,(im.name||'#39' '#39'||im.surname)name from INS_MOTORMOR' +
+        'ETHANONEDRIVER im'
+      ''
+      'where full_id = :full_id'
+      '')
+    Variables.Data = {
+      0300000001000000080000003A46554C4C5F4944040000000800000000000000
+      00606A4000000000}
+    QBEDefinition.QBEFieldDefs = {0400000001000000040000004E414D45010000000000}
+    Master = Ins_MotorFull
+    MasterFields = 'ID'
+    DetailFields = 'FULL_ID'
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 244
+    Top = 24
+    object MoreThanOneNAME: TStringField
+      FieldName = 'NAME'
+      Size = 256
+    end
+  end
+  object ODSBeneficiary: TOracleDataSet
+    SQL.Strings = (
+      'select ib.rowid,ib.* from ins_beneficiary ib')
+    QBEDefinition.QBEFieldDefs = {
+      0400000005000000020000004944010000000000040000004E414D4501000000
+      000007000000414444524553530100000000000500000050484F4E4501000000
+      00000F00000042414E4B494E475F44455441494C53010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 140
+    Top = 136
+    object ODSBeneficiaryID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object ODSBeneficiaryNAME: TStringField
+      FieldName = 'NAME'
+      Size = 128
+    end
+    object ODSBeneficiaryADDRESS: TStringField
+      FieldName = 'ADDRESS'
+      Size = 128
+    end
+    object ODSBeneficiaryPHONE: TStringField
+      FieldName = 'PHONE'
+      Size = 64
+    end
+    object ODSBeneficiaryBANKING_DETAILS: TStringField
+      FieldName = 'BANKING_DETAILS'
+      Size = 128
+    end
+  end
+  object BeneficiarySource: TDataSource
+    DataSet = ODSBeneficiary
+    Left = 108
+    Top = 136
+  end
+  object ODSContracts: TOracleDataSet
+    SQL.Strings = (
+      'select ic.rowid, ic.* from ins_contracts ic'
+      'where ic.id =:cid'
+      'and type_id = 4')
+    Variables.Data = {0300000001000000040000003A434944040000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      040000000F00000002000000494401000000000007000000545950455F494401
+      000000000008000000424C414E4B5F494401000000000007000000535547475F
+      494401000000000009000000504F4C4943595F49440100000000000800000049
+      4E535F444154450100000000000A000000424547494E5F444154450100000000
+      0008000000454E445F444154450100000000000900000056414C5554455F4944
+      01000000000007000000414D4D4F554E540100000000000C000000434C4F5345
+      5F505245464958010000000000060000004B4C495F49440100000000000A0000
+      004C4F414E4143435F49440100000000000A000000435552524143435F494401
+      00000000000A000000504F4C4943595F4E554D010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 136
+    Top = 184
+    object ODSContractsID: TFloatField
+      FieldName = 'ID'
+    end
+    object ODSContractsTYPE_ID: TFloatField
+      FieldName = 'TYPE_ID'
+    end
+    object ODSContractsINS_DATE: TDateTimeField
+      FieldName = 'INS_DATE'
+    end
+    object ODSContractsBEGIN_DATE: TDateTimeField
+      FieldName = 'BEGIN_DATE'
+    end
+    object ODSContractsEND_DATE: TDateTimeField
+      FieldName = 'END_DATE'
+    end
+    object ODSContractsVALUTE_ID: TFloatField
+      FieldName = 'VALUTE_ID'
+    end
+    object ODSContractsAMMOUNT: TFloatField
+      FieldName = 'AMMOUNT'
+    end
+    object ODSContractsCLOSE_PREFIX: TIntegerField
+      FieldName = 'CLOSE_PREFIX'
+    end
+    object ODSContractsKLI_ID: TFloatField
+      FieldName = 'KLI_ID'
+    end
+    object ODSContractsLOANACC_ID: TFloatField
+      FieldName = 'LOANACC_ID'
+    end
+    object ODSContractsCURRACC_ID: TFloatField
+      FieldName = 'CURRACC_ID'
+    end
+    object ODSContractsPOLICY_NUM: TStringField
+      FieldName = 'POLICY_NUM'
+      Size = 32
+    end
+  end
+  object DSContracts: TDataSource
+    DataSet = ODSContracts
+    Left = 136
+    Top = 216
+  end
+  object ODSAgents: TOracleDataSet
+    SQL.Strings = (
+      
+        'select a.id,a.name||'#39' '#39'||a.surname||'#39' '#39'||a.fathername as name fr' +
+        'om ins_agents a')
+    QBEDefinition.QBEFieldDefs = {
+      0400000002000000020000004944010000000000040000004E414D4501000000
+      0000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 104
+    Top = 88
+    object ODSAgentsNAME: TStringField
+      FieldName = 'NAME'
+      Size = 386
+    end
+    object ODSAgentsID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+  end
+  object AgentsSource: TDataSource
+    DataSet = ODSAgents
+    Left = 144
+    Top = 96
+  end
+  object OPCOMMON: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'INS_COMMON'
+    Left = 240
+    Top = 120
+  end
+  object ODSAutoTypes: TOracleDataSet
+    SQL.Strings = (
+      'select at.rowid,at.* from ins_dict_auto_types at')
+    QBEDefinition.QBEFieldDefs = {
+      0400000002000000020000004944010000000000040000004E414D4501000000
+      0000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 312
+    Top = 200
+    object ODSAutoTypesID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object ODSAutoTypesNAME: TStringField
+      FieldName = 'NAME'
+      Size = 32
+    end
+  end
+  object DSAutoTypes: TDataSource
+    DataSet = ODSAutoTypes
+    Left = 272
+    Top = 200
+  end
+end

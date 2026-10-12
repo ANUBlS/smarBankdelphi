@@ -1,0 +1,73 @@
+unit FrmMainImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+   ExtCtrls, DBCtrls, Grids, DBGridEh, Db, OracleData,
+  ComCtrls;
+
+type
+  TFrmMain = class(TForm)
+    Panel1: TPanel;
+    DBNavigator1: TDBNavigator;
+    DatSrcDates: TDataSource;
+    Dates: TOracleDataSet;
+    StatusBar1: TStatusBar;
+    DBGridEh1: TDBGridEh;
+    DatesSELDATE: TDateTimeField;
+    DatesNAME: TWideStringField;
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmMain: TFrmMain;
+
+  procedure InitPlugin(S:string);export;
+implementation
+
+{$R *.DFM}
+
+uses CommonDecls,sboapiDataModuleImpl;
+
+
+procedure InitPlugin(S:string);export;
+begin
+   FrmMain.ShowModal;
+end;
+
+exports
+  InitPlugin;
+
+procedure TFrmMain.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+  if ord(key) = VK_ESCAPE then close;
+end;
+
+procedure TFrmMain.FormCreate(Sender: TObject);
+begin
+   Dates.Open;
+end;
+
+procedure TFrmMain.FormDestroy(Sender: TObject);
+begin
+  Dates.CloseAll;
+end;
+
+procedure TFrmMain.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+   Resize := False
+end;
+
+initialization
+   FrmMain := TFrmMain.Create(CommonApplication);
+end.

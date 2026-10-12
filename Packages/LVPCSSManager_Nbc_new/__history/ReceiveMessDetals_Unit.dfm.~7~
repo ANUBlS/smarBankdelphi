@@ -1,0 +1,804 @@
+object RecMessDet_Form: TRecMessDet_Form
+  Left = 220
+  Top = 293
+  Caption = 'Receive Message Detals'
+  ClientHeight = 307
+  ClientWidth = 764
+  Color = clBtnFace
+  Font.Charset = RUSSIAN_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poMainFormCenter
+  OnConstrainedResize = FormConstrainedResize
+  OnKeyUp = FormKeyUp
+  OnShow = FormShow
+  DesignSize = (
+    764
+    307)
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Button1: TButton
+    Left = 585
+    Top = 278
+    Width = 78
+    Height = 23
+    Anchors = [akRight, akBottom]
+    Caption = 'Yadda'#351'a yaz'
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 0
+    OnClick = Button1Click
+    ExplicitLeft = 473
+  end
+  object Button2: TButton
+    Left = 664
+    Top = 278
+    Width = 78
+    Height = 23
+    Anchors = [akRight, akBottom]
+    Caption = #199#305'x'#305#351
+    TabOrder = 1
+    OnClick = Button2Click
+    ExplicitLeft = 552
+  end
+  object Panel8: TPanel
+    Left = 0
+    Top = 0
+    Width = 764
+    Height = 221
+    Align = alTop
+    BevelOuter = bvNone
+    TabOrder = 2
+    ExplicitWidth = 652
+    object Panel22: TPanel
+      Left = 389
+      Top = 28
+      Width = 375
+      Height = 135
+      Align = alClient
+      BevelOuter = bvNone
+      TabOrder = 2
+      ExplicitLeft = 346
+      ExplicitWidth = 306
+      object Panel12: TPanel
+        Left = 0
+        Top = 0
+        Width = 375
+        Height = 53
+        Align = alTop
+        Alignment = taLeftJustify
+        BevelInner = bvRaised
+        BevelOuter = bvLowered
+        Caption = 'Alan m'#252#351't'#601'rinin ad'#305
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = 8404992
+        Font.Height = -12
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 0
+        ExplicitWidth = 306
+        object DBRichEdit2: TDBRichEdit
+          Left = 104
+          Top = 2
+          Width = 269
+          Height = 49
+          Align = alRight
+          Anchors = [akLeft, akTop, akRight, akBottom]
+          Color = clSilver
+          DataField = 'REC_CLIENT_NAME'
+          DataSource = DataMod.DS_XS_IncomingView
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -12
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 0
+          ExplicitWidth = 200
+        end
+      end
+      object Panel16: TPanel
+        Left = 0
+        Top = 53
+        Width = 375
+        Height = 27
+        Align = alTop
+        Alignment = taLeftJustify
+        BevelInner = bvRaised
+        BevelOuter = bvLowered
+        Caption = 'Alan m'#252#351't'#601'rinin v'#246'eni'
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = 8404992
+        Font.Height = -12
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 1
+        ExplicitWidth = 306
+        DesignSize = (
+          375
+          27)
+        object DBEdit2: TDBEdit
+          Left = 117
+          Top = 2
+          Width = 256
+          Height = 22
+          Anchors = [akLeft, akTop, akRight, akBottom]
+          Color = clSilver
+          DataField = 'REC_CLIENT_INN'
+          DataSource = DataMod.DS_XS_IncomingView
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -12
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+          ReadOnly = True
+          TabOrder = 0
+        end
+      end
+      object Panel23: TPanel
+        Left = 0
+        Top = 80
+        Width = 375
+        Height = 28
+        Align = alTop
+        Alignment = taLeftJustify
+        BevelInner = bvRaised
+        BevelOuter = bvLowered
+        Caption = 'Alan'#305'n m'#252'xbir hesab'#305
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = 8404992
+        Font.Height = -12
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 2
+        ExplicitWidth = 306
+        DesignSize = (
+          375
+          28)
+        object DBEdit6: TDBEdit
+          Left = 117
+          Top = 2
+          Width = 256
+          Height = 22
+          Anchors = [akLeft, akTop, akRight, akBottom]
+          Color = clSilver
+          DataField = 'REC_CLIENT_ACC'
+          DataSource = DataMod.DS_XS_IncomingView
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -12
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+          ReadOnly = True
+          TabOrder = 0
+        end
+      end
+    end
+    object Panel3: TPanel
+      Left = 0
+      Top = 28
+      Width = 389
+      Height = 135
+      Align = alLeft
+      BevelOuter = bvNone
+      TabOrder = 1
+      object Panel19: TPanel
+        Left = 0
+        Top = 0
+        Width = 389
+        Height = 53
+        Align = alTop
+        Alignment = taLeftJustify
+        BevelInner = bvRaised
+        BevelOuter = bvLowered
+        Caption = 'G'#246'nd'#601'r'#601'n i'#351'trak'#231#305'n'#305'n ad'#305
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = 8404992
+        Font.Height = -12
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 0
+        ExplicitWidth = 346
+        DesignSize = (
+          389
+          53)
+        object DBEdit17: TDBEdit
+          Left = 129
+          Top = 2
+          Width = 256
+          Height = 22
+          Anchors = [akLeft, akTop, akRight, akBottom]
+          Color = clSilver
+          DataField = 'NAME'
+          ReadOnly = True
+          TabOrder = 0
+          ExplicitWidth = 213
+        end
+        object DBRichEdit1: TDBRichEdit
+          Left = 129
+          Top = 2
+          Width = 258
+          Height = 49
+          Align = alRight
+          Anchors = [akLeft, akTop, akRight, akBottom]
+          Color = clSilver
+          DataField = 'NAME'
+          DataSource = DataMod.DS_XS_IncomingView
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -12
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 1
+          ExplicitWidth = 215
+        end
+      end
+      object Panel21: TPanel
+        Left = 0
+        Top = 107
+        Width = 389
+        Height = 28
+        Align = alTop
+        Alignment = taLeftJustify
+        BevelInner = bvRaised
+        BevelOuter = bvLowered
+        Caption = 'G'#246'nd'#601'r'#601'n i'#351'trak'#231#305'n'#305'n M'#252'xbir subhesab'#305
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = 8404992
+        Font.Height = -12
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 1
+        ExplicitWidth = 346
+        DesignSize = (
+          389
+          28)
+        object DBEdit18: TDBEdit
+          Left = 206
+          Top = 2
+          Width = 180
+          Height = 22
+          Anchors = [akLeft, akTop, akRight, akBottom]
+          Color = clSilver
+          DataField = 'SEN_BANK_SUBACC'
+          DataSource = DataMod.DS_XS_IncomingView
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -12
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+          ReadOnly = True
+          TabOrder = 0
+          ExplicitWidth = 137
+        end
+      end
+      object Panel20: TPanel
+        Left = 0
+        Top = 80
+        Width = 389
+        Height = 27
+        Align = alTop
+        Alignment = taLeftJustify
+        BevelInner = bvRaised
+        BevelOuter = bvLowered
+        Caption = 'G'#246'nd'#601'r'#601'n m'#252#351't'#601'rinin hesab'#305
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = 8404992
+        Font.Height = -12
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 2
+        ExplicitWidth = 346
+        DesignSize = (
+          389
+          27)
+        object DBEdit16: TDBEdit
+          Left = 151
+          Top = 0
+          Width = 236
+          Height = 22
+          Anchors = [akLeft, akTop, akRight, akBottom]
+          Color = clSilver
+          DataField = 'SEN_ACC'
+          DataSource = DataMod.DS_XS_IncomingView
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -12
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+          ReadOnly = True
+          TabOrder = 0
+          ExplicitWidth = 193
+        end
+      end
+      object Panel10: TPanel
+        Left = 0
+        Top = 53
+        Width = 389
+        Height = 27
+        Align = alTop
+        Alignment = taLeftJustify
+        BevelInner = bvRaised
+        BevelOuter = bvLowered
+        Caption = 'G'#246'nd'#601'r'#601'n m'#252#351't'#601'rinin v'#246'eni'
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = 8404992
+        Font.Height = -12
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 3
+        ExplicitWidth = 346
+        DesignSize = (
+          389
+          27)
+        object DBEdit7: TDBEdit
+          Left = 151
+          Top = 2
+          Width = 236
+          Height = 22
+          Anchors = [akLeft, akTop, akRight, akBottom]
+          Color = clSilver
+          DataField = 'SEN_INN'
+          DataSource = DataMod.DS_XS_IncomingView
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -12
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+          ReadOnly = True
+          TabOrder = 0
+          ExplicitWidth = 193
+        end
+      end
+    end
+    object Panel9: TPanel
+      Left = 0
+      Top = 0
+      Width = 764
+      Height = 28
+      Align = alTop
+      BevelOuter = bvNone
+      TabOrder = 0
+      ExplicitWidth = 652
+      object Panel14: TPanel
+        Left = 0
+        Top = 0
+        Width = 225
+        Height = 28
+        Align = alLeft
+        Alignment = taLeftJustify
+        BevelInner = bvRaised
+        BevelOuter = bvLowered
+        Caption = ' Qeydiyyat '#8470
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = 8404992
+        Font.Height = -12
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 0
+        DesignSize = (
+          225
+          28)
+        object DBEdit10: TDBEdit
+          Left = 108
+          Top = 2
+          Width = 115
+          Height = 22
+          Anchors = [akRight, akBottom]
+          Color = clBtnFace
+          DataField = 'REFERENCE'
+          DataSource = DataMod.DS_XS_IncomingView
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -12
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+          ReadOnly = True
+          TabOrder = 0
+        end
+      end
+      object Panel2: TPanel
+        Left = 225
+        Top = 0
+        Width = 198
+        Height = 28
+        Align = alLeft
+        Alignment = taLeftJustify
+        BevelInner = bvRaised
+        BevelOuter = bvLowered
+        Caption = 'Tarix:'
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = 8404992
+        Font.Height = -12
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 1
+        DesignSize = (
+          198
+          28)
+        object DBEdit1: TDBEdit
+          Left = 34
+          Top = 2
+          Width = 161
+          Height = 22
+          Anchors = [akRight, akBottom]
+          Color = clSilver
+          DataField = 'TRANS_DATE'
+          DataSource = DataMod.DS_XS_IncomingView
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clBlack
+          Font.Height = -12
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+          ReadOnly = True
+          TabOrder = 0
+        end
+      end
+    end
+    object Panel24: TPanel
+      Left = 0
+      Top = 163
+      Width = 764
+      Height = 58
+      Align = alBottom
+      BevelOuter = bvNone
+      TabOrder = 3
+      ExplicitWidth = 652
+      object Panel5: TPanel
+        Left = 0
+        Top = 0
+        Width = 764
+        Height = 28
+        Align = alTop
+        BevelOuter = bvNone
+        TabOrder = 0
+        ExplicitWidth = 652
+        object Panel7: TPanel
+          Left = 0
+          Top = 0
+          Width = 112
+          Height = 28
+          Align = alLeft
+          Alignment = taLeftJustify
+          BevelInner = bvRaised
+          BevelOuter = bvLowered
+          Caption = #214'd'#601'ni'#351' kodu'
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = 8404992
+          Font.Height = -12
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 0
+          DesignSize = (
+            112
+            28)
+          object DBEdit5: TDBEdit
+            Left = 79
+            Top = 2
+            Width = 30
+            Height = 22
+            Anchors = [akRight, akBottom]
+            Color = clSilver
+            DataField = 'TYPECODE'
+            DataSource = DataMod.DS_XS_IncomingView
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+            ReadOnly = True
+            TabOrder = 0
+          end
+        end
+        object Panel15: TPanel
+          Left = 112
+          Top = 0
+          Width = 652
+          Height = 28
+          Align = alClient
+          Alignment = taLeftJustify
+          BevelInner = bvRaised
+          BevelOuter = bvLowered
+          Caption = #399'lav'#601' m'#601'lumat'
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = 8404992
+          Font.Height = -12
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 1
+          ExplicitWidth = 540
+          DesignSize = (
+            652
+            28)
+          object DBEdit14: TDBEdit
+            Left = 85
+            Top = 2
+            Width = 564
+            Height = 22
+            Anchors = [akLeft, akTop, akRight, akBottom]
+            Color = clSilver
+            DataField = 'ADD_INF'
+            DataSource = DataMod.DS_XS_IncomingView
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+            ReadOnly = True
+            TabOrder = 0
+            ExplicitWidth = 452
+          end
+        end
+      end
+      object Panel18: TPanel
+        Left = 0
+        Top = 28
+        Width = 764
+        Height = 28
+        Align = alTop
+        BevelOuter = bvNone
+        TabOrder = 1
+        ExplicitWidth = 652
+        object Panel6: TPanel
+          Left = 0
+          Top = 0
+          Width = 764
+          Height = 28
+          Align = alClient
+          Alignment = taLeftJustify
+          BevelInner = bvRaised
+          BevelOuter = bvLowered
+          Caption = #214'd'#601'yicid'#601'n v'#601'saiti alana m'#601'lumat'
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = 8404992
+          Font.Height = -12
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 0
+          ExplicitWidth = 652
+          DesignSize = (
+            764
+            28)
+          object DBEdit4: TDBEdit
+            Left = 177
+            Top = 2
+            Width = 584
+            Height = 22
+            Anchors = [akLeft, akTop, akRight, akBottom]
+            Color = clSilver
+            DataField = 'REMIT_INF'
+            DataSource = DataMod.DS_XS_IncomingView
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+            ReadOnly = True
+            TabOrder = 0
+            ExplicitWidth = 472
+          end
+        end
+      end
+    end
+  end
+  object Panel17: TPanel
+    Left = 0
+    Top = 221
+    Width = 764
+    Height = 56
+    Align = alTop
+    BevelOuter = bvNone
+    TabOrder = 3
+    ExplicitWidth = 652
+    object Panel26: TPanel
+      Left = 0
+      Top = 0
+      Width = 350
+      Height = 56
+      Align = alLeft
+      BevelOuter = bvNone
+      TabOrder = 0
+      object Panel4: TPanel
+        Left = 0
+        Top = 0
+        Width = 350
+        Height = 26
+        Align = alTop
+        Alignment = taLeftJustify
+        BevelInner = bvRaised
+        BevelOuter = bvLowered
+        Caption = 'Alan'#305'n faktiki hesab'#305
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = 8404992
+        Font.Height = -12
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 0
+        ExplicitWidth = 303
+        DesignSize = (
+          350
+          26)
+        object SearchEdit1: TSearchEdit
+          Left = 108
+          Top = 2
+          Width = 239
+          Height = 22
+          Anchors = [akLeft, akTop, akRight, akBottom]
+          CharCase = ecUpperCase
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -12
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          MaxLength = 35
+          ParentFont = False
+          TabOrder = 0
+          DataSource = DataMod.Account_Source
+          SearchField = 'acc_no'
+          ExplicitWidth = 192
+        end
+      end
+      object Panel28: TPanel
+        Left = 0
+        Top = 26
+        Width = 350
+        Height = 30
+        Align = alClient
+        Alignment = taLeftJustify
+        BevelInner = bvRaised
+        BevelOuter = bvLowered
+        Caption = 'Alan'#305'n v'#246'en'#305
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = 8404992
+        Font.Height = -12
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 1
+        ExplicitWidth = 303
+        DesignSize = (
+          350
+          30)
+        object SearchEdit2: TSearchEdit
+          Left = 108
+          Top = 3
+          Width = 239
+          Height = 22
+          Anchors = [akLeft, akTop, akRight, akBottom]
+          CharCase = ecUpperCase
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -12
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          MaxLength = 16
+          ParentFont = False
+          TabOrder = 0
+          DataSource = DataMod.Account_Source
+          SearchField = 'inn'
+          ExplicitWidth = 192
+        end
+      end
+    end
+    object Panel11: TPanel
+      Left = 350
+      Top = 0
+      Width = 414
+      Height = 56
+      Align = alClient
+      Alignment = taLeftJustify
+      BevelOuter = bvNone
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clNavy
+      Font.Height = -12
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 1
+      ExplicitLeft = 303
+      ExplicitWidth = 349
+      DesignSize = (
+        414
+        56)
+      object Panel1: TPanel
+        Left = 0
+        Top = 0
+        Width = 414
+        Height = 27
+        Align = alTop
+        BevelInner = bvLowered
+        BevelOuter = bvNone
+        TabOrder = 0
+        ExplicitWidth = 349
+        DesignSize = (
+          414
+          27)
+        object Panel13: TPanel
+          Left = 1
+          Top = 1
+          Width = 46
+          Height = 25
+          Align = alLeft
+          Alignment = taLeftJustify
+          Caption = 'M'#252#351't'#601'ri:'
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = 8404992
+          Font.Height = -12
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 0
+        end
+        object DBEdit3: TDBEdit
+          Left = 47
+          Top = 2
+          Width = 365
+          Height = 23
+          Anchors = [akLeft, akTop, akRight, akBottom]
+          BorderStyle = bsNone
+          Color = clSilver
+          DataField = 'ACC_NO'
+          DataSource = DataMod.Account_Source
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -12
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+          ReadOnly = True
+          TabOrder = 1
+        end
+      end
+      object DBEdit8: TDBEdit
+        Left = 3
+        Top = 28
+        Width = 409
+        Height = 22
+        Anchors = [akLeft, akTop, akRight, akBottom]
+        Color = clSilver
+        DataField = 'NAME'
+        DataSource = DataMod.Account_Source
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -12
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+        ReadOnly = True
+        TabOrder = 1
+      end
+    end
+  end
+end

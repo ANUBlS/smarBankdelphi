@@ -1,0 +1,74 @@
+object CCDataMod: TCCDataMod
+  OldCreateOrder = False
+  Height = 480
+  Width = 696
+  object CR_CREDIT: TOraclePackage
+    PackageName = 'CR_CREDIT'
+    ParameterMode = pmNamed
+    Cursor = crHourGlass
+    Left = 32
+    Top = 24
+  end
+  object Accounts: TOracleDataSet
+    SQL.Strings = (
+      'SELECT p.boorowerid,'
+      '       b.name,'
+      '       a.creditid, '
+      '       a.booroweraccid, '
+      '       a.loanaccid, '
+      '       a.dueloanaccid,'
+      '       a.interestaccid, '
+      '       a.dueinterestaccid, '
+      '       a.primaryreserveaccid,'
+      '       a.secondaryreserveaccid,'
+      '       cr_common.AccountNumber_Get(loanaccid) as LoanAccno,'
+      
+        '       cr_common.AccountNumber_Get(booroweraccid) as BoorowerAcc' +
+        'no,'
+      
+        '       cr_common.AccountNumber_Get(interestaccid) as InterestAcc' +
+        'no,'
+      
+        '       cr_common.AccountNumber_Get(dueloanaccid) as DueloanAccno' +
+        ','
+      
+        '       cr_common.AccountNumber_Get(primaryreserveaccid) as Prima' +
+        'ryresAccno,'
+      
+        '       cr_common.AccountNumber_Get(dueinterestaccid) as Dueinter' +
+        'estAccno,'
+      
+        '       cr_common.AccountNumber_Get(secondaryreserveaccid) as Sec' +
+        'ondaryresAccno,'
+      '       cr_common.AccountRest_Get(booroweraccid) as BoorowerRest,'
+      '      cr_common.AccountRest_Get(loanaccid) as LoanRest,'
+      '      cr_common.AccountRest_Get(interestaccid) as interestRest,'
+      '      cr_common.AccountRest_Get(dueloanaccid) as dueloanRest,'
+      
+        '      cr_common.AccountRest_Get(primaryreserveaccid) as primaryr' +
+        'esRest,'
+      
+        '      cr_common.AccountRest_Get(dueinterestaccid) as dueinterest' +
+        'Rest,'
+      
+        '      cr_common.AccountRest_Get(secondaryreserveaccid) as second' +
+        'aryresRest'
+      '  FROM cr_accounts a,'
+      '       cr_boorowerinfo b,'
+      '       cr_portfolio p'
+      'where a.creditid = :CrdID'
+      'and  b.creditid  = :CrdID'
+      'and p.id = :Crdid')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000C0000003A00430052004400490044000300000000000000
+      00000000}
+    Left = 120
+    Top = 24
+  end
+  object AccountsDatSrc: TDataSource
+    DataSet = Accounts
+    Left = 32
+    Top = 88
+  end
+end

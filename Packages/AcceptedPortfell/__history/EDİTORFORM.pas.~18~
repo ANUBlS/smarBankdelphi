@@ -1,0 +1,171 @@
+﻿unit EDİTORFORM;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, Mask, DBCtrls, ComCtrls, CurrencyEdit, DBCtrlsEh, XFSCtrls;
+
+type
+  TEditform = class(TForm)
+    Label1: TLabel;
+    Button1: TButton;
+    Label4: TLabel;
+    Branchedit: TEdit;
+    custidedit: TEdit;
+    DBLookupComboBox1: TDBLookupComboBox;
+    Label6: TLabel;
+    Label7: TLabel;
+    ABBMAINEDIT: TCurrencyEdit;
+    ABBPERCEDIT: TCurrencyEdit;
+    Label8: TLabel;
+    Label9: TLabel;
+    ACCEPTEDMAINEDIT: TCurrencyEdit;
+    ACCEPTEDPERCEDIT: TCurrencyEdit;
+    Acceprtedval: TDBLookupComboBox;
+    Label10: TLabel;
+    Label12: TLabel;
+    Label13: TLabel;
+    RESTRUCTPERCEDIT: TCurrencyEdit;
+    RESTRUCTMAINEDIT: TCurrencyEdit;
+    Label14: TLabel;
+    Label15: TLabel;
+    SENDEDpercEDIT: TCurrencyEdit;
+    SENDEDMAINEDIT: TCurrencyEdit;
+    Label16: TLabel;
+    REDUCTIONMAINEDIT: TCurrencyEdit;
+    Label17: TLabel;
+    Label18: TLabel;
+    REDUCTIONPERCEDIT: TCurrencyEdit;
+    ASKSENDEDMNAINEDIT: TCurrencyEdit;
+    ASKSENDEDPERCEDIT: TCurrencyEdit;
+    Label22: TLabel;
+    Label26: TLabel;
+    Label27: TLabel;
+    Label28: TLabel;
+    SERVICEPERCENTEDITEDIT: TCurrencyEdit;
+    SERVICEamtedit: TCurrencyEdit;
+    servicecalcedit: TCurrencyEdit;
+    Label21: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    PAidPERCEDit: TCurrencyEdit;
+    PAidmainEDIT: TCurrencyEdit;
+    Label5: TLabel;
+    Label20: TLabel;
+    ABBMAINUSD: TCurrencyEdit;
+    ABBPERCUSD: TCurrencyEdit;
+    Label23: TLabel;
+    Label24: TLabel;
+    ABBMAINEUR: TCurrencyEdit;
+    ABBPERCEUR: TCurrencyEdit;
+    ABBPERCRUB: TCurrencyEdit;
+    ABBMAINRUB: TCurrencyEdit;
+    Label25: TLabel;
+    Label29: TLabel;
+    REDUCTIONmainguz: TCurrencyEdit;
+    REDUCTIONpercguz: TCurrencyEdit;
+    Label11: TLabel;
+    Label30: TLabel;
+    REDUCTIONpercprop: TCurrencyEdit;
+    Label31: TLabel;
+    Label32: TLabel;
+    REDUCTIONMAINprop: TCurrencyEdit;
+    Label33: TLabel;
+    Label34: TLabel;
+    REDUCTIONpercqarant: TCurrencyEdit;
+    REDUCTIONMAINqarant: TCurrencyEdit;
+    Button2: TButton;
+    DBDateTimeEditEh1: TDBDateTimeEditEh;
+    Editprtid: TEdit;
+    Label19: TLabel;
+    Emlakedit: TCurrencyEdit;
+    Label35: TLabel;
+    Isrestruct: TXFCheckBox;
+    procedure Button1Click(Sender: TObject);
+    procedure DBLookupComboBox1CloseUp(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Editform: TEditform;
+
+implementation
+
+uses Datamodunit,SBTranslateProc,sboapiDataModuleIMpl;
+
+{$R *.dfm}
+
+procedure TEditform.Button1Click(Sender: TObject);
+var
+v_restruct: string;
+begin
+
+if Isrestruct.Checked then
+   v_restruct:='Y'
+else
+     v_restruct:='N';
+
+
+
+DataMod.OraclePackage1.CallProcedure('updprt',[
+                  Editprtid.Text ,
+
+                   ABBMAINEDIT.Value ,
+                   ABBPERCEDIT.Value ,
+                   ABBMAINUSD.Value ,
+                   ABBPERCUSD.Value ,
+                   ABBMAINEUR.Value ,
+                   ABBPERCEUR.Value ,
+                   ABBMAINRUB.Value ,
+                   ABBPERCRUB.Value ,
+                   REDUCTIONMAINEDIT.Value ,
+                   REDUCTIONPERCEDIT.Value ,
+                   REDUCTIONMAINqarant.Value ,
+                   REDUCTIONpercqarant.Value ,
+                   REDUCTIONMAINprop.Value ,
+                   REDUCTIONpercprop.Value ,
+                   REDUCTIONmainguz.Value ,
+                   REDUCTIONpercguz.Value ,
+                   ACCEPTEDMAINEDIT.Value ,
+                   ACCEPTEDPERCEDIT.Value ,
+                   Acceprtedval.KeyValue ,
+                   RESTRUCTMAINEDIT.Value ,
+                   RESTRUCTPERCEDIT.Value ,
+                   ASKSENDEDMNAINEDIT.Value ,
+                   ASKSENDEDPERCEDIT.Value ,
+                   SENDEDMAINEDIT.Value ,
+                   SENDEDpercEDIT.Value ,
+                   DBDateTimeEditEh1.Value ,
+                   PAidmainEDIT.Value ,
+                   PAidPERCEDit.Value ,
+                   StrToInt(custidedit.Text) ,
+                   Emlakedit.Value ,
+
+                   servicecalcedit.Value ,
+                   SERVICEamtedit.Value ,
+                   SERVICEPERCENTEDITEDIT.Value,
+                   v_restruct
+]);
+sboapiDataModule.SBSession.Commit;
+  close;
+
+DataMod.maincrprt.Close;
+DataMod.maincrprt.open;
+end;
+
+procedure TEditform.Button2Click(Sender: TObject);
+begin
+close  ;
+end;
+
+procedure TEditform.DBLookupComboBox1CloseUp(Sender: TObject);
+begin
+Branchedit.Text:=DBLookupComboBox1.KeyValue
+end;
+
+end.

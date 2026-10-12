@@ -1,0 +1,585 @@
+object frmFinishPeriodCredits: TfrmFinishPeriodCredits
+  Left = 313
+  Top = 189
+  BorderIcons = [biSystemMenu]
+  BorderStyle = bsSingle
+  ClientHeight = 368
+  ClientWidth = 676
+  Color = clBtnFace
+  UseDockManager = True
+  Font.Charset = RUSSIAN_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poScreenCenter
+  OnCanResize = FormCanResize
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  OnKeyPress = FormKeyPress
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 14
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 676
+    Height = 67
+    Align = alTop
+    BevelInner = bvRaised
+    BevelOuter = bvLowered
+    TabOrder = 0
+    object GroupBox1: TGroupBox
+      Left = 2
+      Top = 2
+      Width = 224
+      Height = 63
+      Align = alLeft
+      Caption = #1042#1072#1083#1081#1091#1090#1072
+      TabOrder = 0
+      object CBaValute: TCheckBox
+        Left = 5
+        Top = 41
+        Width = 105
+        Height = 18
+        Caption = #1058#1103#1090#1073#1080#1075' '#1077#1090
+        TabOrder = 0
+      end
+      object LCBValutes: TDBLookupComboboxEh
+        Left = 5
+        Top = 15
+        Width = 210
+        Height = 22
+        DropDownBox.Sizable = True
+        EditButtons = <>
+        KeyField = 'VALUTE'
+        ListField = 'VALU_NAME'
+        ListSource = dmFinishPeriodCredits.valutesDatSrc
+        TabOrder = 1
+        Visible = True
+      end
+    end
+    object GroupBox2: TGroupBox
+      Left = 450
+      Top = 2
+      Width = 224
+      Height = 63
+      Align = alClient
+      Caption = #1048#1089#1090#1080#1092#1072#1076#1103#1095#1080' '#1075#1088#1091#1087#1091
+      TabOrder = 1
+      object LCBusergroup: TDBLookupComboboxEh
+        Left = 5
+        Top = 15
+        Width = 210
+        Height = 22
+        DropDownBox.Sizable = True
+        EditButtons = <>
+        KeyField = 'ID'
+        ListField = 'DESCRIPTION'
+        ListSource = dmFinishPeriodCredits.usrgroupsDatSrc
+        TabOrder = 0
+        Visible = True
+      end
+      object CBusergroup: TCheckBox
+        Left = 5
+        Top = 41
+        Width = 105
+        Height = 16
+        Caption = #1058#1103#1090#1073#1080#1075' '#1077#1090
+        TabOrder = 1
+      end
+    end
+    object GroupBox3: TGroupBox
+      Left = 226
+      Top = 2
+      Width = 224
+      Height = 63
+      Align = alLeft
+      Caption = #1060#1080#1083#1080#1072#1083
+      TabOrder = 2
+      object LCBFilials: TDBLookupComboboxEh
+        Left = 5
+        Top = 15
+        Width = 210
+        Height = 22
+        DropDownBox.Sizable = True
+        EditButtons = <>
+        KeyField = 'ID'
+        ListField = 'NAME'
+        ListSource = dmFinishPeriodCredits.FilialsDatSrc
+        TabOrder = 0
+        Visible = True
+      end
+      object CBFilial: TCheckBox
+        Left = 6
+        Top = 41
+        Width = 105
+        Height = 18
+        Caption = #1058#1103#1090#1073#1080#1075' '#1077#1090
+        TabOrder = 1
+      end
+    end
+  end
+  object Panel2: TPanel
+    Left = 0
+    Top = 67
+    Width = 676
+    Height = 67
+    Align = alTop
+    BevelInner = bvRaised
+    BevelOuter = bvLowered
+    TabOrder = 1
+    object GroupBox4: TGroupBox
+      Left = 2
+      Top = 2
+      Width = 224
+      Height = 63
+      Align = alLeft
+      Caption = #1052#1094#1096#1090#1103#1088#1080#1085#1080#1085' '#1090#1080#1087#1080
+      TabOrder = 0
+      object CBCategories: TCheckBox
+        Left = 5
+        Top = 41
+        Width = 105
+        Height = 18
+        Caption = #1058#1103#1090#1073#1080#1075' '#1077#1090
+        TabOrder = 0
+      end
+      object LCBCategories: TDBLookupComboboxEh
+        Left = 5
+        Top = 15
+        Width = 210
+        Height = 22
+        DropDownBox.Sizable = True
+        EditButtons = <>
+        KeyField = 'ID'
+        ListField = 'DESCRIPTION'
+        ListSource = dmFinishPeriodCredits.CategoriesDatSrc
+        TabOrder = 1
+        Visible = True
+      end
+    end
+    object GroupBox5: TGroupBox
+      Left = 450
+      Top = 2
+      Width = 224
+      Height = 63
+      Align = alClient
+      Caption = #1050#1088#1077#1076#1080#1090#1080#1085' '#1090#1080#1087#1080
+      TabOrder = 1
+      object LCBCreditType: TDBLookupComboboxEh
+        Left = 5
+        Top = 15
+        Width = 210
+        Height = 22
+        DropDownBox.Sizable = True
+        EditButtons = <>
+        KeyField = 'ID'
+        ListField = 'DESCRIPTION'
+        ListSource = dmFinishPeriodCredits.CreditTypesDatSrc
+        TabOrder = 0
+        Visible = True
+      end
+      object CBCreditType: TCheckBox
+        Left = 5
+        Top = 41
+        Width = 105
+        Height = 16
+        Caption = #1058#1103#1090#1073#1080#1075' '#1077#1090
+        TabOrder = 1
+      end
+    end
+    object GroupBox6: TGroupBox
+      Left = 226
+      Top = 2
+      Width = 224
+      Height = 63
+      Align = alLeft
+      Caption = #1052#1094#1096#1090#1103#1088#1080#1085#1080#1085' '#1082#1072#1090#1077#1101#1086#1088#1080#1081#1072#1089#1099
+      TabOrder = 2
+      object LCBPersons: TDBLookupComboboxEh
+        Left = 5
+        Top = 15
+        Width = 210
+        Height = 22
+        DropDownBox.Sizable = True
+        EditButtons = <>
+        KeyField = 'ID'
+        ListField = 'DESCRIPION'
+        ListSource = dmFinishPeriodCredits.personsDatSrc
+        TabOrder = 0
+        Visible = True
+      end
+      object CBPersons: TCheckBox
+        Left = 6
+        Top = 41
+        Width = 105
+        Height = 18
+        Caption = #1058#1103#1090#1073#1080#1075' '#1077#1090
+        TabOrder = 1
+      end
+    end
+  end
+  object Panel3: TPanel
+    Left = 0
+    Top = 134
+    Width = 676
+    Height = 66
+    Align = alTop
+    BevelInner = bvRaised
+    BevelOuter = bvLowered
+    TabOrder = 2
+    object GroupBox7: TGroupBox
+      Left = 2
+      Top = 2
+      Width = 224
+      Height = 62
+      Align = alLeft
+      Caption = #1058#1103#1089#1085#1080#1092#1072#1090' '
+      TabOrder = 0
+      object CBReserve: TCheckBox
+        Left = 5
+        Top = 41
+        Width = 105
+        Height = 18
+        Caption = #1058#1103#1090#1073#1080#1075' '#1077#1090
+        TabOrder = 0
+      end
+      object LCBReserve: TDBLookupComboboxEh
+        Left = 5
+        Top = 15
+        Width = 210
+        Height = 22
+        DropDownBox.Sizable = True
+        EditButtons = <>
+        KeyField = 'ID'
+        ListField = 'DESCR'
+        ListSource = dmFinishPeriodCredits.ReservesDatSrc
+        TabOrder = 1
+        Visible = True
+      end
+    end
+    object GroupBox8: TGroupBox
+      Left = 450
+      Top = 2
+      Width = 224
+      Height = 62
+      Align = alClient
+      Caption = #1069#1080#1088#1086#1074#1091#1085' '#1090#1080#1087#1080
+      TabOrder = 1
+      object LCBpledgid: TDBLookupComboboxEh
+        Left = 5
+        Top = 15
+        Width = 210
+        Height = 22
+        DropDownBox.Sizable = True
+        EditButtons = <>
+        KeyField = 'ID'
+        ListField = 'DESCRIPTION'
+        ListSource = dmFinishPeriodCredits.pledgsDatSrc
+        TabOrder = 0
+        Visible = True
+      end
+      object CBpledgid: TCheckBox
+        Left = 5
+        Top = 41
+        Width = 105
+        Height = 16
+        Caption = #1058#1103#1090#1073#1080#1075' '#1077#1090
+        TabOrder = 1
+      end
+    end
+    object GroupBox9: TGroupBox
+      Left = 226
+      Top = 2
+      Width = 224
+      Height = 62
+      Align = alLeft
+      Caption = #1069#1077#1078#1080#1082#1084#1080#1096' '#1090#1103#1089#1085#1080#1092#1072#1090' '
+      TabOrder = 2
+      object LCBDueReserve: TDBLookupComboboxEh
+        Left = 5
+        Top = 15
+        Width = 210
+        Height = 22
+        DropDownBox.Sizable = True
+        EditButtons = <>
+        KeyField = 'ID'
+        ListField = 'DESCR'
+        ListSource = dmFinishPeriodCredits.DueReservesDatSrc
+        TabOrder = 0
+        Visible = True
+      end
+      object CBDueReserve: TCheckBox
+        Left = 6
+        Top = 41
+        Width = 105
+        Height = 18
+        Caption = #1058#1103#1090#1073#1080#1075' '#1077#1090
+        TabOrder = 1
+      end
+    end
+  end
+  object Panel4: TPanel
+    Left = 0
+    Top = 200
+    Width = 676
+    Height = 66
+    Align = alTop
+    BevelInner = bvRaised
+    BevelOuter = bvLowered
+    TabOrder = 3
+    object GroupBox12: TGroupBox
+      Left = 2
+      Top = 2
+      Width = 224
+      Height = 62
+      Align = alLeft
+      Caption = #1057#1090#1072#1090#1091#1089#1091
+      TabOrder = 0
+      object CLBStatus: TCheckListBox
+        Left = 2
+        Top = 16
+        Width = 220
+        Height = 44
+        Align = alClient
+        Color = clWhite
+        ItemHeight = 14
+        Items.Strings = (
+          #1065#1077#1089#1072#1073#1083#1072#1085#1072#1085
+          #1065#1077#1089#1072#1073#1083#1072#1085#1084#1072#1089#1099' '#1076#1072#1081#1072#1085#1076#1099#1088#1099#1083#1072#1085)
+        TabOrder = 0
+      end
+    end
+    object GroupBox10: TGroupBox
+      Left = 450
+      Top = 2
+      Width = 224
+      Height = 62
+      Align = alClient
+      Caption = #1042#1072#1093#1090#1099' '#1073#1080#1090#1084#1080#1096'  '#1082#1088#1077#1076#1080#1090#1083#1103#1088
+      TabOrder = 1
+      object Label2: TLabel
+        Left = 98
+        Top = 16
+        Width = 6
+        Height = 19
+        Caption = '-'
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -17
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ParentFont = False
+      end
+      object DTPCls1: TDateTimePicker
+        Left = 5
+        Top = 15
+        Width = 90
+        Height = 21
+        Date = 39328.524244062500000000
+        Time = 39328.524244062500000000
+        TabOrder = 0
+      end
+      object DTPCls2: TDateTimePicker
+        Left = 108
+        Top = 15
+        Width = 89
+        Height = 21
+        Date = 39328.524244062500000000
+        Time = 39328.524244062500000000
+        TabOrder = 1
+      end
+      object CBCloseDep: TCheckBox
+        Left = 5
+        Top = 43
+        Width = 105
+        Height = 18
+        Caption = #1058#1103#1090#1073#1080#1075' '#1077#1090
+        Checked = True
+        Enabled = False
+        State = cbChecked
+        TabOrder = 2
+      end
+    end
+    object GroupBox11: TGroupBox
+      Left = 226
+      Top = 2
+      Width = 224
+      Height = 62
+      Align = alLeft
+      Caption = #1042#1077#1088#1080#1083#1084#1080#1096' '#1082#1088#1077#1076#1080#1090#1083#1103#1088
+      TabOrder = 2
+      object Label1: TLabel
+        Left = 98
+        Top = 16
+        Width = 6
+        Height = 19
+        Caption = '-'
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -17
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ParentFont = False
+      end
+      object CBOpenedDep: TCheckBox
+        Left = 6
+        Top = 41
+        Width = 105
+        Height = 18
+        Caption = #1058#1103#1090#1073#1080#1075' '#1077#1090
+        TabOrder = 0
+      end
+      object DTPO1: TDateTimePicker
+        Left = 5
+        Top = 15
+        Width = 90
+        Height = 21
+        Date = 39328.524244062500000000
+        Time = 39328.524244062500000000
+        TabOrder = 1
+      end
+      object DTPO2: TDateTimePicker
+        Left = 108
+        Top = 15
+        Width = 89
+        Height = 21
+        Date = 39328.524244062500000000
+        Time = 39328.524244062500000000
+        TabOrder = 2
+      end
+    end
+  end
+  object BitBtnOk: TBitBtn
+    Left = 501
+    Top = 338
+    Width = 81
+    Height = 27
+    Caption = #1043#1103#1073#1091#1083
+    DoubleBuffered = True
+    ParentDoubleBuffered = False
+    TabOrder = 4
+    OnClick = BitBtnOkClick
+  end
+  object BitBtnCancel: TBitBtn
+    Left = 592
+    Top = 337
+    Width = 81
+    Height = 27
+    Caption = #1048#1084#1090#1080#1085#1072
+    DoubleBuffered = True
+    ParentDoubleBuffered = False
+    TabOrder = 5
+    OnClick = BitBtnCancelClick
+  end
+  object Panel5: TPanel
+    Left = 0
+    Top = 266
+    Width = 676
+    Height = 68
+    Align = alTop
+    BevelInner = bvRaised
+    BevelOuter = bvLowered
+    TabOrder = 6
+    object GroupBox14: TGroupBox
+      Left = 226
+      Top = 2
+      Width = 224
+      Height = 64
+      Align = alLeft
+      Caption = #1052#1094#1096#1090#1103#1088#1080#1085#1080#1085' '#1082#1086#1076#1091
+      TabOrder = 0
+      object CBCustomerID: TCheckBox
+        Left = 5
+        Top = 41
+        Width = 105
+        Height = 18
+        Caption = #1058#1103#1090#1073#1080#1075' '#1077#1090
+        TabOrder = 0
+      end
+      object LCBCustomerID: TDBLookupComboboxEh
+        Left = 5
+        Top = 15
+        Width = 210
+        Height = 22
+        DropDownBox.Sizable = True
+        EditButtons = <>
+        KeyField = 'ID'
+        ListField = 'KOD'
+        ListSource = dmFinishPeriodCredits.CustomersDatSrc
+        TabOrder = 1
+        Visible = True
+      end
+    end
+    object GroupBox15: TGroupBox
+      Left = 2
+      Top = 2
+      Width = 224
+      Height = 64
+      Align = alLeft
+      Caption = #1052#1094#1096#1090#1103#1088#1080
+      TabOrder = 1
+      object LCBCustomer: TDBLookupComboboxEh
+        Left = 5
+        Top = 15
+        Width = 210
+        Height = 22
+        DropDownBox.Sizable = True
+        EditButtons = <>
+        KeyField = 'ID'
+        ListField = 'NAME'
+        ListSource = dmFinishPeriodCredits.CustomersDatSrc
+        TabOrder = 0
+        Visible = True
+      end
+      object CBCustomer: TCheckBox
+        Left = 5
+        Top = 41
+        Width = 105
+        Height = 18
+        Caption = #1058#1103#1090#1073#1080#1075' '#1077#1090
+        TabOrder = 1
+      end
+    end
+    object RGreport: TRadioGroup
+      Left = 450
+      Top = 2
+      Width = 224
+      Height = 64
+      Align = alClient
+      Caption = #1065#1077#1089#1072#1073#1072#1090
+      ItemIndex = 1
+      Items.Strings = (
+        'Excel'
+        #1065#1077#1089#1072#1073#1072#1090)
+      TabOrder = 2
+    end
+  end
+  object EExport: TCMExcelExport
+    StyleColumnWidth = cwDefault
+    ColumnWidth = 0
+    FontTitles.Charset = RUSSIAN_CHARSET
+    FontTitles.Color = clWindowText
+    FontTitles.Height = -11
+    FontTitles.Name = 'Azl Sans Serif'
+    FontTitles.Style = []
+    OrientationTitles = 0
+    FontData.Charset = RUSSIAN_CHARSET
+    FontData.Color = clWindowText
+    FontData.Height = -11
+    FontData.Name = 'Azl Sans Serif'
+    FontData.Style = []
+    FontSummary.Charset = DEFAULT_CHARSET
+    FontSummary.Color = clWindowText
+    FontSummary.Height = -11
+    FontSummary.Name = 'MS Sans Serif'
+    FontSummary.Style = []
+    SummarySelection = ssNone
+    SummaryCalculation = scSUM
+    Left = 8
+    Top = 312
+  end
+end

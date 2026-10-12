@@ -1,0 +1,81 @@
+unit PaymentDataModul;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, OracleData, Oracle;
+
+type
+  TPaymentDataMod = class(TDataModule)
+    ODSAccounts: TOracleDataSet;
+    ODSBankInfo: TOracleDataSet;
+    ODSBankM: TOracleDataSet;
+    DSAccounts: TDataSource;
+    DSBankInfo: TDataSource;
+    OPPayment: TOraclePackage;
+    ODSArchive: TOracleDataSet;
+    DSArchive: TDataSource;
+    ODSBankInfoKOD_B: TFloatField;
+    DSBankM: TDataSource;
+    ODSBankMID: TFloatField;
+    ODSBankMKRNO: TStringField;
+    ODSBankMNAME: TStringField;
+    ODSBankMINN: TStringField;
+    ODSBankMSWIFT: TStringField;
+    ODSBankMBANKCODE: TStringField;
+    ODSBankMSUBKRNO: TStringField;
+    ODSArchiveID: TFloatField;
+    ODSArchivePDATE: TDateTimeField;
+    ODSArchivePNUM: TFloatField;
+    ODSArchiveDBNAME: TStringField;
+    ODSArchiveDBCOD: TStringField;
+    ODSArchiveDBINN: TStringField;
+    ODSArchiveDBCORACC: TStringField;
+    ODSArchiveDBSWIFT: TStringField;
+    ODSArchiveDACC_NO: TStringField;
+    ODSArchiveDACCNAME: TStringField;
+    ODSArchiveDACCINN: TStringField;
+    ODSArchiveKBNAME: TStringField;
+    ODSArchiveKBCOD: TStringField;
+    ODSArchiveKBINN: TStringField;
+    ODSArchiveKBCORACC: TStringField;
+    ODSArchiveKBSWIFT: TStringField;
+    ODSArchiveKACC_NO: TStringField;
+    ODSArchiveKACCNAME: TStringField;
+    ODSArchiveKACCINN: TStringField;
+    ODSArchiveAMMOUNT: TFloatField;
+    ODSArchiveASSIGNMENT: TStringField;
+    ODSArchiveEXTRA: TStringField;
+    ODSArchiveMOD_BANK: TStringField;
+    ODSArchiveBUDGETCLASS: TStringField;
+    ODSArchiveBUDGETLEVEL: TStringField;
+    ODSBankInfoBANK: TWideStringField;
+    ODSBankInfoKRNO: TWideStringField;
+    ODSBankInfoINN: TWideStringField;
+    ODSBankInfoSWIFT: TWideStringField;
+    procedure DataModuleDestroy(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  PaymentDataMod: TPaymentDataMod;
+
+implementation
+ uses  sboapiDataModuleImpl, UntArchive,PaymentDecreeImpl;
+
+{$R *.DFM}
+
+procedure TPaymentDataMod.DataModuleDestroy(Sender: TObject);
+var
+  CompCount :word;
+begin
+ for CompCount :=0 to ComponentCount-1 do
+  if(Components[CompCount] is TOracleDataSet) then
+   (Components[CompCount] as TOracleDataSet).CloseAll;
+end;
+
+end.

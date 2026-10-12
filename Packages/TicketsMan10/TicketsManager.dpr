@@ -1,0 +1,30 @@
+library TicketsManager;
+
+uses
+  ComServ,
+  TicketsManager_TLB in 'TicketsManager_TLB.pas',
+  TicketsManagerImpl in 'TicketsManagerImpl.pas' {TicketsManager: TActiveForm} {TicketsManager: CoClass},
+  DataModTM in 'DataModTM.pas' {DataModuleTicketMan: TDataModule},
+  TicketsFullViewImpl in 'TicketsFullViewImpl.pas' {frmTicketFullView},
+  TicketsArchiveImpl in 'TicketsArchiveImpl.pas' {frmArchive},
+  TicketsNewImpl in 'TicketsNewImpl.pas' {frmNewTicket},
+  CurrencyToHR_Azeri_Impl in '..\PaymentDecree\CurrencyToHR_Azeri_Impl.pas',
+  TicketsRepImpl in 'TicketsRepImpl.pas' {qrpTicket: TQuickRep},
+  TicketsReportSettings in 'TicketsReportSettings.pas' {frmSettings},
+  UntMainReport in 'UntMainReport.pas' {QRMainReport: TQuickRep},
+  UntSecondReport in 'UntSecondReport.pas' {QRCommonReport: TQuickRep};
+
+{$E ocx}
+
+exports
+  DllGetClassObject,
+  DllCanUnloadNow,
+  DllRegisterServer,
+  DllUnregisterServer;
+
+{$R *.TLB}
+
+{$R *.RES}
+
+begin
+end.

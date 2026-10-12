@@ -1,0 +1,59 @@
+unit DMCardPercentImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, OracleData;
+
+type
+  TDMCardPercent = class(TDataModule)
+    TranchesDatSrc: TDataSource;
+    Tranches: TOracleDataSet;
+    TranchesID: TFloatField;
+    TranchesCREDITID: TFloatField;
+    TranchesTRANCHEDATE: TDateTimeField;
+    TranchesTRANCHEAMOUNT: TFloatField;
+    TranchrestDatSrc: TDataSource;
+    Tranchrest: TOracleDataSet;
+    TranchrestHDATE: TDateTimeField;
+    TranchrestTRANCHID: TFloatField;
+    TranchrestREST: TFloatField;
+    TranchrestINTREST: TFloatField;
+    TranchcalcedPerDatSrc: TDataSource;
+    TranchcalcedPer: TOracleDataSet;
+    TranchcalcedPerHDATE: TDateTimeField;
+    TranchcalcedPerTRANCHID: TFloatField;
+    TranchcalcedPerINTEREST: TFloatField;
+    TranchpaymentsDatSrc: TDataSource;
+    Tranchpayments: TOracleDataSet;
+    TranchpaymentsPAYMENTID: TFloatField;
+    TranchpaymentsPAYMENTDATE: TDateTimeField;
+    TranchpaymentsTRANCHID: TFloatField;
+    TranchpaymentsMAINDEBIT: TFloatField;
+    TranchpaymentsINTDEBIT: TFloatField;
+    procedure DataModuleCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  DMCardPercent: TDMCardPercent;
+
+implementation
+
+{$R *.DFM}
+uses CMOracleAPIDataModuleImpl,CommonDecls;
+
+procedure TDMCardPercent.DataModuleCreate(Sender: TObject);
+begin
+   with Tranches do begin
+        SetVariable('CrdID',Get_SelectedCrdID);
+        Open;
+    end;
+end;
+
+
+end.

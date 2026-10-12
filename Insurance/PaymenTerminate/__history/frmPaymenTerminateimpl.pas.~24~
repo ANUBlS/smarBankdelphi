@@ -1,0 +1,159 @@
+﻿unit frmPaymenTerminateimpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, XFSCtrls, ExtCtrls, Grids, DBGrids,CMExcelExport;
+
+type
+  TfrmPaymentTer = class(TForm)
+    XFPanel1: TXFPanel;
+    XFPanel2: TXFPanel;
+    XFPanel3: TXFPanel;
+    XFButton1: TXFButton;
+    XFButton2: TXFButton;
+    XFButton3: TXFButton;
+    XFButton4: TXFButton;
+    XFGroupBox1: TXFGroupBox;
+    XFGroupBox2: TXFGroupBox;
+    DBGrid1: TDBGrid;
+    DBGrid2: TDBGrid;
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure XFButton4Click(Sender: TObject);
+    procedure XFButton1Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure XFButton2Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure XFButton3Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  frmPaymentTer: TfrmPaymentTer;
+
+implementation
+uses dmPaymenTerminateimpl,sboapiDataModuleimpl,SBTranslateProc,CommanParametrs,
+  FrmAddPaymentTerimpl,frmAddPaymentTerminateimpl;
+
+
+{$R *.dfm}
+ procedure InitPlugin(s:string);export;
+begin
+
+
+   frmPaymentTer.ShowModal;
+end;
+exports
+     InitPlugin;
+
+
+procedure TfrmPaymentTer.FormCreate(Sender: TObject);
+begin
+
+dmPaymentTer:=TdmPaymentTer.Create(self);
+FrmAddPaymentTer:=TFrmAddPaymentTer.Create(self);
+end;
+
+procedure TfrmPaymentTer.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+if ord(key)=vk_escape then close
+end;
+
+procedure TfrmPaymentTer.FormShow(Sender: TObject);
+begin
+{
+if contractstatus=6 then
+begin
+  XFButton2.Enabled:=true;
+  XFButton3.Enabled:=true;
+end
+else
+begin
+  XFButton2.Enabled:=false;
+  XFButton3.Enabled:=false;
+end;                  }
+dmPaymentTer.DSPaymentTer.Close;
+dmPaymentTer.DSPaymentTer.SetVariable('pcid',contactid);
+dmPaymentTer.DSPaymentTer.Open;
+
+{dmPaymentTer.DSTerBarderoSay.Close;
+dmPaymentTer.DSPaymentTer.SetVariable('p_cid',contactid);
+dmPaymentTer.DSTerBarderoSay.Open;
+             }
+dmPaymentTer.DSPaymentTerReal.Close;
+dmPaymentTer.DSPaymentTerReal.SetVariable('dcid',contactid);
+dmPaymentTer.DSPaymentTerReal.Open;
+end;
+
+procedure TfrmPaymentTer.XFButton1Click(Sender: TObject);
+begin
+
+ DBGrid2.DataSource.DataSet.Refresh;
+if DBGrid2.DataSource.DataSet.RecordCount=0 then
+begin
+  showmessage('Diqqət! Tanınmış zərər yoxdur');
+
+  exit;
+
+end;
+frmAddPaymentTer.ShowModal;
+//frmAddPaymentTerminate.ShowModal;
+end;
+
+procedure TfrmPaymentTer.XFButton2Click(Sender: TObject);
+begin
+
+if DBGrid1.DataSource.DataSet.FieldByName('PAYDATE').AsDateTime<dmPaymentTer.DSSysdat.FieldByName('tek_dat').AsDateTime then
+begin
+  showmessage('Diqqət! Köhnə tarixdəki ödənişi silmək olmaz!');
+  exit;
+end;
+
+
+ dmPaymentTer.DSTerBarderoSay.Close;
+ dmPaymentTer.DSTerBarderoSay.SetVariable('pcid',contactid);
+ dmPaymentTer.DSTerBarderoSay.open;
+
+ if  dmPaymentTer.DSTerBarderoSay.FieldByName('say').AsInteger>0 then
+ begin
+ Showmessage('Diqqət! Bu müqavilə üçün xitam barderosu yığıldığı üçün xitamı silmək olmaz!');
+   exit;
+ end;
+    {   if MessageDlg('Seçilmiş ödəniş ləğv olunacaq! Əminsinizmi?',mtConfirmation,
+ mbYesNoCancel, 0) = mrYes then
+ begin
+     if dmPaymentTer.Pins_common.CallIntegerFunction('cancelclaimreal',[contactid,plossid,DBGrid1.DataSource.DataSet.FieldByName('pid').AsInteger])=1 then
+      Showmessage('Ödəniş silindi!');
+     frmPaymentTer.DBGrid1.DataSource.DataSet.Refresh;
+ end;
+      }
+end;
+
+procedure TfrmPaymentTer.XFButton3Click(Sender: TObject);
+begin
+{with dmPaymentTer,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['EXCELPAYMENTTER']);
+ end; }
+{with ExcelExport do
+   begin
+      Connect;
+      ExportDataset(DBGrid1.DataSource.DataSet,'xitam',True,True);
+      Disconnect;
+   end      }
+end;
+
+procedure TfrmPaymentTer.XFButton4Click(Sender: TObject);
+begin
+close;
+end;
+
+initialization
+ frmPaymentTer:=TfrmPaymentTer.Create(Application);
+
+
+end.

@@ -1,0 +1,57 @@
+unit RsAccFormImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, DBGridEhGrouping, DB, OracleData, StdCtrls, GridsEh, DBGridEh, Grids,
+  DBGrids;
+
+type
+  TRsAccForm = class(TForm)
+    GroupBox1: TGroupBox;
+    DBGrid1: TDBGrid;
+    GroupBox2: TGroupBox;
+    DBGridEh1: TDBGridEh;
+    Button1: TButton;
+    DataSource3: TDataSource;
+    OracleDataSet3: TOracleDataSet;
+    OracleDataSet3ID: TFloatField;
+    OracleDataSet3RESERVEID: TFloatField;
+    OracleDataSet3RESERVENAME: TWideStringField;
+    OracleDataSet3FIL_ID: TFloatField;
+    OracleDataSet3REST_ACCID: TFloatField;
+    OracleDataSet3INTEREST_ACCID: TFloatField;
+    OracleDataSet3esashes: TWideStringField;
+    OracleDataSet3faishes: TWideStringField;
+    OracleDataSet2: TOracleDataSet;
+    DataSource2: TDataSource;
+    DataSrcPReserveAccs: TDataSource;
+    PReserveAccs: TOracleDataSet;
+    PReserveAccsID: TFloatField;
+    PReserveAccsCUSTID: TFloatField;
+    PReserveAccsACCNO: TWideStringField;
+    PReserveAccsCLIENTNAME: TWideStringField;
+    PReserveAccsVAL_ACC: TIntegerField;
+    procedure FormCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  RsAccForm: TRsAccForm;
+
+implementation
+
+{$R *.dfm}
+
+procedure TRsAccForm.FormCreate(Sender: TObject);
+begin
+OracleDataSet2.Open;
+OracleDataSet3.Open;
+PReserveAccs.Open
+end;
+
+end.

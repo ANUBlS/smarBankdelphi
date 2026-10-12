@@ -1,0 +1,152 @@
+﻿unit WorldCheckProc;
+
+interface
+
+uses Oracle, OracleData, SboapiDataModuleImpl, Forms, Dialogs, SysUtils;
+function WorldCheck(  Name1 :String;
+                      Name2 :String;
+                      Acc1 :integer;
+                      Acc2 :integer;
+                      PKey :String): integer;
+function WorldCheckCommit
+                    ( TransID :integer;
+                      Name1 :String;
+                      Name2 :String;
+                      Acc1 :integer;
+                      Acc2 :integer;
+                      PKey :String): integer;
+
+implementation
+
+var
+ OQuery: TOracleQuery;
+ ODataSet: TOracleDataSet;
+ ODSCliName: TOracleDataSet;
+ ODSQuery: TOracleQuery;
+
+function CheckName(PName :String) :integer;
+begin
+  if PName = '' then Exit;
+
+  with ODataSet do begin
+    ODataSet := TOracleDataSet.Create(nil);
+    Session :=sboapiDataModule.SBSession;
+    QueryAllRecords :=false;
+    ReadBuffer :=1;
+    {SQL.Text := 'select  a.as1, a.as2, a.as3  from (';
+    SQL.Text := SQL.Text + ' select uid_id, alias,';
+    SQL.Text := SQL.Text +
+      ' 100*( round(UTL_MATCH.jaro_winkler(lower(last_name||first_name),lower('''+PName+''')),2)) as as1,';
+    SQL.Text := SQL.Text +
+      ' 100*( round(UTL_MATCH.jaro_winkler(lower(first_name||last_name),lower('''+PName+''')),2)) as as2,';
+    SQL.Text := SQL.Text +
+      ' 100*( round(UTL_MATCH.jaro_winkler(lower(alias),lower('''+PName+''')),2)) as as3';
+    SQL.Text := SQL.Text +
+      ' from world_chek) a where a.as1>90 or a.as2>90 or a.as3>90';}
+
+    SQL.Text := 'select alias from world_chek where ';
+    SQL.Text := SQL.Text +
+     //' 100*( round(UTL_MATCH.jaro_winkler(lower(alias),lower('''+PName+''')),2))>90' ;
+     'lower(replace(alias, '' '','''')) like ''%'+LowerCase(PName)+'%''';
+
+    Open;
+    //ShowMessage(SQL.Text);
+    Result := 0;
+    //ShowMessage(PName+'---'+FieldByName('alias').AsString);
+    //if ODataSet.RecordCount>0 then with ODSQuery do begin
+    if not ODataSet.IsEmpty then with ODSQuery do begin
+
+     ODSQuery := TOracleQuery.Create(nil);
+     Session :=sboapiDataModule.SBSession;
+     SQL.Text := 'insert into worldcheck_trans (name) values (''' + PName + ''')';
+     Execute;
+     SQL.Text := 'commit';
+     Execute;
+     Result := 1; //ODataSet.RecordCount;
+    end;
+  end;
+end;
+
+function WorldCheck( Name1 :String;
+                      Name2 :String;
+                      Acc1 :integer;
+                      Acc2 :integer;
+                      PKey :String): integer;
+var PName, NameFL, NameLF :string;
+    Res: integer;
+begin
+  Res := 0;
+  if Trim(Name1) <> '' then begin
+   PName := StringReplace(Name1, ' ','', [rfReplaceAll, rfIgnoreCase]);
+   Res := CheckName(PName);
+  end;
+  if Res > 0 then begin Result := 1; Exit; end;
+  if Trim(Name2) <> '' then begin
+   PName := StringReplace(Name2, ' ','', [rfReplaceAll, rfIgnoreCase]);
+   Res := Res + CheckName(PName);
+  end;
+  if Res > 0 then begin Result := 1; Exit; end;
+  if Acc1 > 0 then with ODSCliName do begin
+    ODSCliName := TOracleDataSet.Create(nil);
+    Session :=sboapiDataModule.SBSession;
+    QueryAllRecords :=false;
+    ReadBuffer :=1;
+    SQL.Text := 'select idcust ID, Name||LastName Name from custinfo where idcust = (select kli_id from account where id = '+IntToStr(Acc1)+')';
+    Open;
+    PName := StringReplace(ODSCliName.FieldByName('Name').AsString, ' ','', [rfReplaceAll, rfIgnoreCase]);
+    Res := Res + CheckName(PName);
+  end;
+  if Res > 0 then begin Result := 1; Exit; end;
+  if Acc2 > 0 then with ODSCliName do begin
+   ODSCliName := TOracleDataSet.Create(nil);
+    Session :=sboapiDataModule.SBSession;
+    QueryAllRecords :=false;
+    ReadBuffer :=1;
+    SQL.Text := 'select idcust ID, Name||LastName Name from custinfo where idcust = (select kli_id from account where id = '+IntToStr(Acc2)+')';
+    Open;
+    PName := StringReplace(ODSCliName.FieldByName('Name').AsString, ' ','', [rfReplaceAll, rfIgnoreCase]);
+    Res := Res + CheckName(PName);
+  end;
+  if Res > 0 then Result := 1 else Result := 0;
+end;
+
+function WorldCheckCommit
+                     (TransID :integer;
+                      Name1 :String;
+                      Name2 :String;
+                      Acc1 :integer;
+                      Acc2 :integer;
+                      PKey :String): integer;
+var PName, NameFL, NameLF :string;
+    Res: integer;
+begin
+  Res := 0;
+  if Trim(Name1) <> '' then begin
+   PName := StringReplace(Name1, ' ','', [rfReplaceAll, rfIgnoreCase]);
+   Res := CheckName(PName);
+  end;
+  if Trim(Name2) <> '' then begin
+   PName := StringReplace(Name2, ' ','', [rfReplaceAll, rfIgnoreCase]);
+   Res := Res + CheckName(PName);
+  end;
+  if Acc1 > 0 then with ODSCliName do begin
+    ODSCliName := TOracleDataSet.Create(nil);
+    Session :=sboapiDataModule.SBSession;
+    SQL.Text := 'select id, Name from customers where id = (select kli_id from account where id = '+IntToStr(Acc1)+')';
+    Open;
+    PName := StringReplace(ODSCliName.FieldByName('Name').AsString, ' ','', [rfReplaceAll, rfIgnoreCase]);
+    Res := Res + CheckName(PName);
+  end;
+  if Acc2 > 0 then with ODSCliName do begin
+   ODSCliName := TOracleDataSet.Create(nil);
+    Session :=sboapiDataModule.SBSession;
+    SQL.Text := 'select id, Name from customers where id = (select kli_id from account where id = '+IntToStr(Acc2)+')';
+    Open;
+    PName := StringReplace(ODSCliName.FieldByName('Name').AsString, ' ','', [rfReplaceAll, rfIgnoreCase]);
+    Res := Res + CheckName(PName);
+  end;
+  if Res > 0 then Result := 1 else Result := 0;
+end;
+
+
+end.

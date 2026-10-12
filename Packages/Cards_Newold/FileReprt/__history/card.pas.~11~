@@ -1,0 +1,1264 @@
+unit card;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Menus, DBLookupEh, CurrencyEdit, StdCtrls, DBCtrlsEh, ComCtrls,
+  Grids, DBGrids, Mask, DBCtrls, Oracle, DB, OracleData;
+
+type
+  Tcards = class(TForm)
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    Label6: TLabel;
+    Label7: TLabel;
+    Label8: TLabel;
+    Label10: TLabel;
+    Label11: TLabel;
+    Label12: TLabel;
+    Label13: TLabel;
+    Label14: TLabel;
+    Label15: TLabel;
+    Label16: TLabel;
+    Label17: TLabel;
+    Label18: TLabel;
+    Label19: TLabel;
+    Label20: TLabel;
+    Label21: TLabel;
+    Label22: TLabel;
+    Label23: TLabel;
+    Label24: TLabel;
+    Label25: TLabel;
+    Label26: TLabel;
+    Label27: TLabel;
+    Label28: TLabel;
+    Label29: TLabel;
+    Label30: TLabel;
+    Label31: TLabel;
+    Label32: TLabel;
+    Label33: TLabel;
+    Label34: TLabel;
+    Label9: TLabel;
+    Label35: TLabel;
+    Label36: TLabel;
+    Edit1: TEdit;
+    Button1: TButton;
+    Button2: TButton;
+    Button3: TButton;
+    Button4: TButton;
+    DBEdit1: TDBEdit;
+    DBEdit2: TDBEdit;
+    DBEdit3: TDBEdit;
+    DBEdit4: TDBEdit;
+    DBGrid1: TDBGrid;
+    DBGrid2: TDBGrid;
+    DBGrid3: TDBGrid;
+    Edit3: TEdit;
+    Edit5: TEdit;
+    ComboBox10: TComboBox;
+    Button5: TButton;
+    ComboBox6: TComboBox;
+    ComboBox7: TComboBox;
+    CheckBox1: TCheckBox;
+    ComboBox9: TComboBox;
+    DateTimePicker4: TDateTimePicker;
+    DBGrid4: TDBGrid;
+    ComboBox2: TComboBox;
+    DBEdit5: TDBEdit;
+    DBDateTimeEditEh3: TDBDateTimeEditEh;
+    DBEdit7: TDBEdit;
+    DBEdit10: TDBEdit;
+    Edit16: TEdit;
+    Edit17: TEdit;
+    Edit18: TEdit;
+    Edit19: TEdit;
+    Edit20: TEdit;
+    Edit21: TEdit;
+    Edit22: TEdit;
+    Edit23: TEdit;
+    Edit24: TEdit;
+    Edit25: TEdit;
+    Edit26: TEdit;
+    ComboBox4: TComboBox;
+    ComboBox5: TComboBox;
+    Edit27: TEdit;
+    DBEdit18: TDBEdit;
+    Memo1: TMemo;
+    Edit15: TEdit;
+    ComboBox11: TComboBox;
+    ComboBox12: TComboBox;
+    DateTimePicker5: TDateTimePicker;
+    DateTimePicker6: TDateTimePicker;
+    DateTimePicker7: TDateTimePicker;
+    DateTimePicker8: TDateTimePicker;
+    Edit28: TEdit;
+    DBEdit17: TDBEdit;
+    CheckBox2: TCheckBox;
+    CheckBox3: TCheckBox;
+    Edit29: TEdit;
+    DBGrid5: TDBGrid;
+    DBGrid6: TDBGrid;
+    Edit32: TEdit;
+    Edit33: TEdit;
+    ComboBox1: TComboBox;
+    Edit14: TEdit;
+    CurrencyEdit1: TCurrencyEdit;
+    Edit2: TEdit;
+    Button6: TButton;
+    DateTimePicker1: TDateTimePicker;
+    DBLookupComboBox6: TDBLookupComboboxEh;
+    ComboBox8: TComboBox;
+    DateTimePicker2: TDateTimePicker;
+    PopupMenu1: TPopupMenu;
+    SIL1: TMenuItem;
+    Edit4: TEdit;
+    SB_ACA: TOraclePackage;
+    clients: TOracleDataSet;
+    card: TOracleDataSet;
+    aplication: TOracleDataSet;
+    acount: TOracleDataSet;
+    procedure FormShow(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+    procedure ComboBox9Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  cards: Tcards;
+
+implementation
+
+uses Filereportform;
+
+{$R *.dfm}
+
+
+
+procedure Tcards.Button2Click(Sender: TObject);
+var i,z,urg,kr:integer;
+wt:string;
+begin
+SB_ACA.CallProcedure('CheckAdvancedObjectAccess', ['card_client_save']);
+IF Edit1.Text='NEW' THEN BEGIN
+
+ z:=0;
+
+
+
+
+
+for i :=0 to cards.ComponentCount-1 do
+begin
+if Components[i].ClassType= Tedit then
+if (Components[i] as Tedit).Color=claqua then
+
+begin
+
+
+ if (Components[i] as TEdit).Text='' then z:=1;
+end;
+if Components[i].ClassType= Tcombobox then
+if (cards.Components[i] as Tcombobox).Color=claqua then
+
+begin
+ if (cards.Components[i] as Tcombobox).text='' then z:=1;
+end;
+
+if Components[i].ClassType= TDBLookupComboBox then
+if (cards.Components[i] as TDBLookupComboBox).Color=claqua then
+
+begin
+ if (cards.Components[i] as TDBLookupComboBox).text='' then z:=1;
+end;
+
+end ;
+
+if z=1 then
+begin
+ShowMessage('–€нэли ханалар там долдурулмалыдыр');
+exit;
+end;
+
+//DataMod_CARDS.fcardtype.Close;
+//DataMod_CARDS.fcardtype.SetVariable('cnam',ComboBox1.text);
+//DataMod_CARDS.fcardtype.Open;
+   //ShowMessage(DataMod_CARDS.fcardtype.fieldbyname('CURRENCY').AsString);
+   //ShowMessage(edit29.Text);
+
+
+
+  if DBEdit18.Text= DataMod_CARDS.fcardtype.fieldbyname('CURRENCY').AsString then
+begin
+DataMod_CARDS.referens.close;
+DataMod_CARDS.referens.open;
+edit26.Text:= DataMod_CARDS.referens.fieldbyname('refe').asstring;
+
+     if CheckBox2.Checked then  urg:=1 else urg:=0;
+     if CheckBox3.Checked then  kr:=1 else kr:=0;
+
+  if DateTimePicker8.DateTime>date then
+  begin
+ DataMod_CARDS.mainpacket.CallProcedure('new_card',[edit15.text+' '+edit16.text,
+                                                   edit15.text,
+                                                   edit16.text,
+                                                   edit18.text,
+                                                   datetostr(DateTimePicker7.DateTime),
+                                                   Edit17.Text,
+                                                   Edit27.Text,
+                                                   Edit20.Text,
+                                                   Edit19.Text,
+                                                   Edit22.Text,
+                                                   ComboBox4.text,
+                                                   DBLookupComboBox6.Text,
+                                                   DBEdit18.Text,
+                                                   ComboBox1.text,//DBLookupComboBox10.Text ,
+                                                   ComboBox12.text,
+                                                   Edit28.Text,
+                                                   DateTimePicker5.DateTime,
+                                                   DateTimePicker8.DateTime,
+                                                   Edit26.Text,
+                                                   Edit23.Text,
+                                                   ComboBox2.text,
+                                                   Edit25.Text,
+                                                   1,
+                                                   urg,
+                                                   Edit21.Text,
+                                                   kr,
+                                                   Edit14.Text,
+                                                   ComboBox11.text,
+                                                   ComboBox10.text,
+                                                   DateTimePicker2.datetime]);
+
+                                                   edit15.text:='';
+                                                   edit16.text:='';
+                                                   edit15.text:='';
+                                                   edit16.text:='';
+                                                   edit18.text:='';
+
+                                                   Edit17.Text:='';
+                                                   Edit27.Text:='';
+                                                   Edit20.Text:='';
+                                                   Edit19.Text:='';
+                                                   Edit22.Text:='';
+                                                   ComboBox4.text:='';
+
+                                                   DBEdit18.Text:='';
+
+                                                   ComboBox12.text:='';
+                                                   Edit28.Text:='';
+
+                                                   Edit26.Text:='';
+                                                   Edit23.Text:='';
+                                                   ComboBox2.text:='';
+                                                   Edit25.Text:='';
+
+                                                   Edit21.Text:='';
+
+                                                   Edit14.Text:='';
+                                                   ComboBox11.text:='';
+                                                   ComboBox10.text:='';
+
+                                                   DataMod_CARDS.hesabtap.close;
+                                                   DataMod_CARDS.hesabtap.SetVariable('rbs',DBLookupComboBox6.text);
+                                                   DataMod_CARDS.hesabtap.Open;
+                                                   DataMod_CARDS.findcredit.close;
+                                                   DataMod_CARDS.findcredit.SetVariable('acc',DataMod_CARDS.hesabtap.fieldbyname('id').asinteger);
+                                                   DataMod_CARDS.findcredit.Open;
+                                                   // if StrToFloat(Edit28.Text)<>DataMod_CARDS.findcredit.FieldByName('kredit').asfloat
+                                                   //  then
+                                                   //  begin
+                                                   //  Edit28.Color:=clRed;
+                                                   //  ShowMessage('ƒахил етдийиниз кредит м€бл€ьи —март- редит модулундаки м€бл€ь€ б€раб€р дейилдир!');
+                                                   //  end
+                                                   //  else Edit28.Color:=clWindow;
+
+                                                   ShowMessage('…ени карт €лав€ едилди');
+                                                   end
+                                                   else
+                                                   ShowMessage('Bitme tarix duz secilmeyib!');
+
+                                                   end else
+begin
+ShowMessage('Valyuta sehvdir');
+//exit;
+end;
+
+
+
+
+
+
+
+END;
+
+if Edit1.Text='EDIT' then
+
+begin
+if ComboBox9.Text<>'' then
+begin
+BEGIN
+IF edit2.Text='2' THEN
+BEGIN
+if Edit24.Text<>'' then
+begin
+if CheckBox2.Checked then  urg:=1 else urg:=0;
+     if CheckBox3.Checked then  kr:=1 else kr:=0;
+
+
+     DataMod_CARDS.referens.close;
+DataMod_CARDS.referens.open;
+edit26.Text:= DataMod_CARDS.referens.fieldbyname('refe').asstring;
+  if ComboBox5.Text='WITH' then  wt:='0003' else wt:='0002';
+
+   DataMod_CARDS.fmaincard.Close;
+   DataMod_CARDS.fmaincard.SetVariable('CRD',edit24.text);
+   DataMod_CARDS.fmaincard.Open;
+
+  if DataMod_CARDS.fmaincard.FieldByName('maincard').asstring='' then
+
+  begin
+
+ DataMod_CARDS.mainpacket.CallProcedure('edit_card',[edit15.text+' '+edit16.text,
+                                                   edit15.text,
+                                                   edit16.text,
+                                                   edit18.text,
+                                                   datetostr(DateTimePicker7.DateTime),
+                                                   Edit17.Text,
+                                                   Edit27.Text,
+                                                   Edit20.Text,
+                                                   Edit19.Text,
+                                                   Edit22.Text,
+                                                   ComboBox4.text,
+                                                   DBLookupComboBox6.Text,
+                                                   dbedit18.text,
+                                                   ComboBox1.text,//DBLookupComboBox10.Text ,
+                                                   ComboBox12.text,
+                                                   Edit28.Text,
+                                                   DateTimePicker5.DateTime,
+                                                   DateTimePicker8.DateTime,
+                                                   Edit26.Text,
+                                                   Edit23.Text,
+                                                   ComboBox2.text,
+                                                   Edit25.Text,
+                                                   edit2.text,
+                                                   urg,
+                                                   Edit21.Text,
+                                                   kr,
+                                                   Edit14.Text,
+                                                   ComboBox11.text,
+                                                   ComboBox10.text,
+                                                   edit24.text,
+                                                   wt,
+                                                   DateTimePicker2.datetime]);
+                                                    end
+                                                    else
+                                                    ShowMessage('—убкарта йенид€н —убкарт йаратмаг олмаз');
+
+
+                                                   ShowMessage('…адда сахланылды!');
+                                                   DataMod_CARDS.CARDOPERATION.Close;
+DataMod_CARDS.CARDOPERATION.SetVariable('RBS',DataMod_CARDS.Clients.fieldbyname('RBSNUMBER').ASSTRING) ;
+DataMod_CARDS.CARDOPERATION.Open;
+
+
+       ComboBox9.Text:='';
+       end else  ShowMessage(' арт номр€си дахил едилм€йиб!');
+//SUB CARD
+END;
+
+IF  edit2.Text='3' THEN
+BEGIN
+if Edit24.Text<>'' then
+begin
+
+if MessageDlg(' арты  '+datetostr(DateTimePicker8.DateTime)+' тарихин€ г€д€р пролонгасийа етм€йиниз€ €минсинизми?',mtWarning,[mbyes,mbno],0)=mryes then begin
+
+ if DateTimePicker8.DateTime>DateTimePicker1.DateTime then
+ begin
+if CheckBox2.Checked then  urg:=1 else urg:=0;
+     if CheckBox3.Checked then  kr:=1 else kr:=0;
+
+if ComboBox5.Text='WITH' then  wt:='0003' else wt:='0002';
+
+ DataMod_CARDS.mainpacket.CallProcedure('edit_card',[edit15.text+' '+edit16.text,
+                                                   edit15.text,
+                                                   edit16.text,
+                                                   edit18.text,
+                                                   datetostr(DateTimePicker7.DateTime),
+                                                   Edit17.Text,
+                                                   Edit27.Text,
+                                                   Edit20.Text,
+                                                   Edit19.Text,
+                                                   Edit22.Text,
+                                                   ComboBox4.text,
+                                                   DBLookupComboBox6.Text,
+                                                    dbedit18.text,
+                                                   ComboBox1.text,//DBLookupComboBox10.Text ,
+                                                   ComboBox12.text,
+                                                   Edit28.Text,
+                                                   DateTimePicker5.DateTime,
+                                                   DateTimePicker8.DateTime,
+                                                   Edit26.Text,
+                                                   Edit23.Text,
+                                                   ComboBox2.text,
+                                                   Edit25.Text,
+                                                   edit2.text,
+                                                   urg,
+                                                   Edit21.Text,
+                                                   kr,
+                                                   Edit14.Text,
+                                                   ComboBox11.text,
+                                                   ComboBox10.text,
+                                                   edit24.text,
+                                                   wt,
+                                                   DateTimePicker2.datetime]);
+
+
+                                                   ShowMessage('…адда сахланылды!');
+                                                   DataMod_CARDS.CARDOPERATION.Close;
+DataMod_CARDS.CARDOPERATION.SetVariable('RBS',DataMod_CARDS.Clients.fieldbyname('RBSNUMBER').ASSTRING) ;
+DataMod_CARDS.CARDOPERATION.Open;
+                                                   ComboBox9.Text:='';
+                                                   end else ShowMessage('“арих дцз сечилм€йиб!');
+                                                    end;
+                                                   end else ShowMessage(' арт номр€си дахил едилм€йиб!');
+
+//PROLONGATION
+END;
+
+IF edit2.Text='4' THEN
+BEGIN
+ if Edit24.Text<>'' then
+ begin
+if CheckBox2.Checked then  urg:=1 else urg:=0;
+     if CheckBox3.Checked then  kr:=1 else kr:=0;
+
+   if ComboBox5.Text='WITH' then  wt:='0003' else wt:='0002';
+ DataMod_CARDS.mainpacket.CallProcedure('edit_card',[edit15.text+' '+edit16.text,
+                                                   edit15.text,
+                                                   edit16.text,
+                                                   edit18.text,
+                                                   datetostr(DateTimePicker7.DateTime),
+                                                   Edit17.Text,
+                                                   Edit27.Text,
+                                                   Edit20.Text,
+                                                   Edit19.Text,
+                                                   Edit22.Text,
+                                                   ComboBox4.text,
+                                                   DBLookupComboBox6.Text,
+                                                  dbedit18.text,
+                                                   ComboBox1.text,//DBLookupComboBox10.Text ,
+                                                   ComboBox12.text,
+                                                   Edit28.Text,
+                                                   DateTimePicker5.DateTime,
+                                                   DateTimePicker8.DateTime,
+                                                   Edit26.Text,
+                                                   Edit23.Text,
+                                                   ComboBox2.text,
+                                                   Edit25.Text,
+                                                   edit2.text,
+                                                   urg,
+                                                   Edit21.Text,
+                                                   kr,
+                                                   Edit14.Text,
+                                                   ComboBox11.text,
+                                                   ComboBox10.text,
+                                                   edit24.text,
+                                                   wt,
+                                                   DateTimePicker2.datetime]);
+
+
+                                                   ShowMessage('…адда сахланылды!');
+                                                   DataMod_CARDS.CARDOPERATION.Close;
+DataMod_CARDS.CARDOPERATION.SetVariable('RBS',DataMod_CARDS.Clients.fieldbyname('RBSNUMBER').ASSTRING) ;
+DataMod_CARDS.CARDOPERATION.Open;
+                                                   ComboBox9.Text:='';
+                                                   end else ShowMessage(' арт номр€си дахил едилм€йиб!');
+
+
+
+
+//REPLACE
+END;
+
+IF edit2.Text='12' THEN
+BEGIN
+
+
+if CheckBox2.Checked then  urg:=1 else urg:=0;
+     if CheckBox3.Checked then  kr:=1 else kr:=0;
+   if ComboBox5.Text='WITH' then  wt:='0003' else wt:='0002';
+
+ DataMod_CARDS.mainpacket.CallProcedure('edit_card',[edit15.text+' '+edit16.text,
+                                                   edit15.text,
+                                                   edit16.text,
+                                                   edit18.text,
+                                                   datetostr(DateTimePicker7.DateTime),
+                                                   Edit17.Text,
+                                                   Edit27.Text,
+                                                   Edit20.Text,
+                                                   Edit19.Text,
+                                                   Edit22.Text,
+                                                   ComboBox4.text,
+                                                   DBLookupComboBox6.Text,
+                                                  dbedit18.text,
+                                                   ComboBox1.text,//DBLookupComboBox10.Text ,
+                                                   ComboBox12.text,
+                                                   Edit28.Text,
+                                                   DateTimePicker5.DateTime,
+                                                   DateTimePicker8.DateTime,
+                                                   Edit26.Text,
+                                                   Edit23.Text,
+                                                   ComboBox2.text,
+                                                   Edit25.Text,
+                                                   edit2.text,
+                                                   urg,
+                                                   Edit21.Text,
+                                                   kr,
+                                                   Edit14.Text,
+                                                   ComboBox11.text,
+                                                   ComboBox10.text,
+                                                   edit24.text,
+                                                   wt,
+                                                   DateTimePicker2.datetime]);
+
+
+                                                   ShowMessage('…адда сахланылды!');
+                                                   DataMod_CARDS.CARDOPERATION.Close;
+DataMod_CARDS.CARDOPERATION.SetVariable('RBS',DataMod_CARDS.Clients.fieldbyname('RBSNUMBER').ASSTRING) ;
+DataMod_CARDS.CARDOPERATION.Open;
+                                                   ComboBox9.Text:='';
+
+//PIN ATTEMPTS CLEAR
+END;
+
+IF edit2.Text='6' THEN
+BEGIN
+
+
+if CheckBox2.Checked then  urg:=1 else urg:=0;
+     if CheckBox3.Checked then  kr:=1 else kr:=0;
+
+
+ DataMod_CARDS.mainpacket.CallProcedure('edit_card',[edit15.text+' '+edit16.text,
+                                                   edit15.text,
+                                                   edit16.text,
+                                                   edit18.text,
+                                                   datetostr(DateTimePicker7.DateTime),
+                                                   Edit17.Text,
+                                                   Edit27.Text,
+                                                   Edit20.Text,
+                                                   Edit19.Text,
+                                                   Edit22.Text,
+                                                   ComboBox4.text,
+                                                   DBLookupComboBox6.Text,
+                                                   dbedit18.text,
+                                                   ComboBox1.text,//DBLookupComboBox10.Text ,
+                                                   ComboBox12.text,
+                                                   Edit28.Text,
+                                                   DateTimePicker5.DateTime,
+                                                   DateTimePicker8.DateTime,
+                                                   Edit26.Text,
+                                                   Edit23.Text,
+                                                   ComboBox2.text,
+                                                   Edit25.Text,
+                                                   edit2.text,
+                                                   urg,
+                                                   Edit21.Text,
+                                                   kr,
+                                                   Edit14.Text,
+                                                   ComboBox11.text,
+                                                   ComboBox10.text,
+                                                   edit24.text,
+                                                   null,
+                                                   DateTimePicker2.datetime]);
+
+
+                                                   ShowMessage('…адда сахланылды!');
+                                                   DataMod_CARDS.CARDOPERATION.Close;
+DataMod_CARDS.CARDOPERATION.SetVariable('RBS',DataMod_CARDS.Clients.fieldbyname('RBSNUMBER').ASSTRING) ;
+DataMod_CARDS.CARDOPERATION.Open;
+                                                   ComboBox9.Text:='';
+
+//STATUS CHANGE
+END;
+
+IF edit2.Text='11' THEN
+BEGIN
+
+
+if CheckBox2.Checked then  urg:=1 else urg:=0;
+     if CheckBox3.Checked then  kr:=1 else kr:=0;
+
+
+ DataMod_CARDS.mainpacket.CallProcedure('edit_card',[edit15.text+' '+edit16.text,
+                                                   edit15.text,
+                                                   edit16.text,
+                                                   edit18.text,
+                                                   datetostr(DateTimePicker7.DateTime),
+                                                   Edit17.Text,
+                                                   Edit27.Text,
+                                                   Edit20.Text,
+                                                   Edit19.Text,
+                                                   Edit22.Text,
+                                                   ComboBox4.text,
+                                                   DBLookupComboBox6.Text,
+                                                   dbedit18.text,
+                                                   ComboBox1.text,//DBLookupComboBox10.Text ,
+                                                   ComboBox12.text,
+                                                   Edit28.Text,
+                                                   DateTimePicker5.DateTime,
+                                                   DateTimePicker8.DateTime,
+                                                   Edit26.Text,
+                                                   Edit23.Text,
+                                                   ComboBox2.text,
+                                                   Edit25.Text,
+                                                   edit2.text,
+                                                   urg,
+                                                   Edit21.Text,
+                                                   kr,
+                                                   Edit14.Text,
+                                                   ComboBox11.text,
+                                                   ComboBox10.text,
+                                                   edit24.text,
+                                                   null,
+                                                   DateTimePicker2.datetime]);
+
+
+                                                   ShowMessage('…адда сахланылды!');
+                                                   DataMod_CARDS.CARDOPERATION.Close;
+DataMod_CARDS.CARDOPERATION.SetVariable('RBS',DataMod_CARDS.Clients.fieldbyname('RBSNUMBER').ASSTRING) ;
+DataMod_CARDS.CARDOPERATION.Open;
+                                                   ComboBox9.Text:='';
+
+//RBSNUMBER CHANGE
+END;
+
+IF edit2.Text='7' THEN
+BEGIN
+ DataMod_CARDS.closefind.close;
+ DataMod_CARDS.closefind.setvariable('crdnum',Edit24.Text);
+ DataMod_CARDS.closefind.open;
+
+
+ if DataMod_CARDS.closefind.recordcount=0 then
+ begin
+
+if CheckBox2.Checked then  urg:=1 else urg:=0;
+     if CheckBox3.Checked then  kr:=1 else kr:=0;
+
+
+ DataMod_CARDS.mainpacket.CallProcedure('edit_card',[edit15.text+' '+edit16.text,
+                                                   edit15.text,
+                                                   edit16.text,
+                                                   edit18.text,
+                                                   datetostr(DateTimePicker7.DateTime),
+                                                   Edit17.Text,
+                                                   Edit27.Text,
+                                                   Edit20.Text,
+                                                   Edit19.Text,
+                                                   Edit22.Text,
+                                                   ComboBox4.text,
+                                                   DBLookupComboBox6.Text,
+                                                   dbedit18.text,
+                                                   ComboBox1.text,//DBLookupComboBox10.Text ,
+                                                   ComboBox12.text,
+                                                   Edit28.Text,
+                                                   DateTimePicker5.DateTime,
+                                                   DateTimePicker8.DateTime,
+                                                   Edit26.Text,
+                                                   Edit23.Text,
+                                                   ComboBox2.text,
+                                                   Edit25.Text,
+                                                   edit2.text,
+                                                   urg,
+                                                   Edit21.Text,
+                                                   kr,
+                                                   Edit14.Text,
+                                                   ComboBox11.text,
+                                                   ComboBox10.text,
+                                                   edit24.text,
+                                                   null,
+                                                   DateTimePicker2.datetime]);
+
+
+                                                   ShowMessage('…адда сахланылды!');
+                                                   DataMod_CARDS.CARDOPERATION.Close;
+DataMod_CARDS.CARDOPERATION.SetVariable('RBS',DataMod_CARDS.Clients.fieldbyname('RBSNUMBER').ASSTRING) ;
+DataMod_CARDS.CARDOPERATION.Open;
+                                                   ComboBox9.Text:='';
+
+
+
+                                                   end else ShowMessage('—уппли карты вар!');
+                                                   //CONTRACT CLOSE
+END;
+
+if edit2.Text='5' then
+begin
+
+if CheckBox2.Checked then  urg:=1 else urg:=0;
+     if CheckBox3.Checked then  kr:=1 else kr:=0;
+
+
+ DataMod_CARDS.mainpacket.CallProcedure('edit_card',[edit15.text+' '+edit16.text,
+                                                   edit15.text,
+                                                   edit16.text,
+                                                   edit18.text,
+                                                   datetostr(DateTimePicker7.DateTime),
+                                                   Edit17.Text,
+                                                   Edit27.Text,
+                                                   Edit20.Text,
+                                                   Edit19.Text,
+                                                   Edit22.Text,
+                                                   ComboBox4.text,
+                                                   DBLookupComboBox6.Text,
+                                                   dbedit18.text,
+                                                   ComboBox1.text,//DBLookupComboBox10.Text ,
+                                                   ComboBox12.text,
+                                                   Edit28.Text,
+                                                   DateTimePicker5.DateTime,
+                                                   DateTimePicker8.DateTime,
+                                                   Edit26.Text,
+                                                   Edit23.Text,
+                                                   ComboBox2.text,
+                                                   Edit25.Text,
+                                                   edit2.text,
+                                                   urg,
+                                                   Edit21.Text,
+                                                   kr,
+                                                   Edit14.Text,
+                                                   ComboBox11.text,
+                                                   ComboBox10.text,
+                                                   edit24.text,
+                                                   null,
+                                                   DateTimePicker2.datetime]);
+                                                    DataMod_CARDS.hesabtap.close;
+                                                   DataMod_CARDS.hesabtap.SetVariable('rbs',DBLookupComboBox6.text);
+                                                   DataMod_CARDS.hesabtap.Open;
+                                                   DataMod_CARDS.findcredit.close;
+                                                   DataMod_CARDS.findcredit.SetVariable('acc',DataMod_CARDS.hesabtap.fieldbyname('id').asinteger);
+                                                   DataMod_CARDS.findcredit.Open;
+                                                    if StrToFloat(Edit28.Text)<>DataMod_CARDS.findcredit.FieldByName('kredit').asfloat
+                                                     then
+                                                     begin
+                                                     Edit28.Color:=clRed;
+                                                     ShowMessage('ƒахил етдийиниз кредит м€бл€ьи —март- редит модулундаки м€бл€ь€ б€раб€р дейилдир');
+                                                     end
+                                                     else Edit28.Color:=clWindow;
+
+
+                                                   ShowMessage('…адда сахланылды!');
+                                                   DataMod_CARDS.CARDOPERATION.Close;
+DataMod_CARDS.CARDOPERATION.SetVariable('RBS',DataMod_CARDS.Clients.fieldbyname('RBSNUMBER').ASSTRING) ;
+DataMod_CARDS.CARDOPERATION.Open;
+                                                   ComboBox9.Text:='';
+ //CREDIT LIMIT
+
+end;
+
+
+IF edit2.Text='35' THEN
+BEGIN
+
+
+if CheckBox2.Checked then  urg:=1 else urg:=0;
+     if CheckBox3.Checked then  kr:=1 else kr:=0;
+
+
+ DataMod_CARDS.mainpacket.CallProcedure('edit_card',[edit15.text+' '+edit16.text,
+                                                   edit15.text,
+                                                   edit16.text,
+                                                   edit18.text,
+                                                   datetostr(DateTimePicker7.DateTime),
+                                                   Edit17.Text,
+                                                   Edit27.Text,
+                                                   Edit20.Text,
+                                                   Edit19.Text,
+                                                   Edit22.Text,
+                                                   ComboBox4.text,
+                                                   DBLookupComboBox6.Text,
+                                                   dbedit18.text,
+                                                   ComboBox1.text,//DBLookupComboBox10.Text ,
+                                                   ComboBox12.text,
+                                                   Edit28.Text,
+                                                   DateTimePicker5.DateTime,
+                                                   DateTimePicker8.DateTime,
+                                                   Edit26.Text,
+                                                   Edit23.Text,
+                                                   ComboBox2.text,
+                                                   Edit25.Text,
+                                                   edit2.text,
+                                                   urg,
+                                                   Edit21.Text,
+                                                   kr,
+                                                   Edit14.Text,
+                                                   ComboBox11.text,
+                                                   ComboBox10.text,
+                                                   edit24.text,
+                                                   null,
+                                                   DateTimePicker2.datetime]);
+
+
+                                                   ShowMessage('…адда сахланылды!');
+                                                   DataMod_CARDS.CARDOPERATION.Close;
+DataMod_CARDS.CARDOPERATION.SetVariable('RBS',DataMod_CARDS.Clients.fieldbyname('RBSNUMBER').ASSTRING) ;
+DataMod_CARDS.CARDOPERATION.Open;
+                                                   ComboBox9.Text:='';
+//CARDNAME CHANGE
+END;
+
+if edit2.Text='13' then
+begin
+
+if CheckBox2.Checked then  urg:=1 else urg:=0;
+     if CheckBox3.Checked then  kr:=1 else kr:=0;
+
+
+ DataMod_CARDS.mainpacket.CallProcedure('edit_card',[edit15.text+' '+edit16.text,
+                                                   edit15.text,
+                                                   edit16.text,
+                                                   edit18.text,
+                                                   datetostr(DateTimePicker7.DateTime),
+                                                   Edit17.Text,
+                                                   Edit27.Text,
+                                                   Edit20.Text,
+                                                   Edit19.Text,
+                                                   Edit22.Text,
+                                                   ComboBox4.text,
+                                                   DBLookupComboBox6.Text,
+                                                   dbedit18.text,
+                                                   ComboBox1.text,//DBLookupComboBox10.Text ,
+                                                   ComboBox12.text,
+                                                   floattostr(strtofloat(Edit28.Text)*100),
+                                                   DateTimePicker5.DateTime,
+                                                   DateTimePicker8.DateTime,
+                                                   Edit26.Text,
+                                                   Edit23.Text,
+                                                   ComboBox2.text,
+                                                   Edit25.Text,
+                                                   edit2.text,
+                                                   urg,
+                                                   Edit21.Text,
+                                                   kr,
+                                                   Edit14.Text,
+                                                   ComboBox11.text,
+                                                   ComboBox10.text,
+                                                   edit24.text,
+                                                   null,
+                                                   DateTimePicker2.datetime]);
+
+
+
+                                                   ShowMessage('…адда сахланылды!');
+                                                   DataMod_CARDS.CARDOPERATION.Close;
+DataMod_CARDS.CARDOPERATION.SetVariable('RBS',DataMod_CARDS.Clients.fieldbyname('RBSNUMBER').ASSTRING) ;
+DataMod_CARDS.CARDOPERATION.Open;
+                                                   ComboBox9.Text:='';
+ //security word change
+
+end;
+
+
+
+
+end;
+END;
+end;
+
+
+//DataMod_CARDS.cliencards.close;
+// DataMod_CARDS.cliencards.SetVariable('numb',DBLookupComboBox6.text);
+//DataMod_CARDS.cliencards.Open;
+
+
+
+end;
+
+
+
+procedure Tcards.ComboBox9Click(Sender: TObject);
+begin
+
+IF  ComboBox9.Text='Suppl.Card' THEN
+begin
+edit2.Text:='2';
+
+Edit15.Enabled:=True;
+Edit16.Enabled:=True;
+Edit18.Enabled:=True;
+DateTimePicker7.Enabled:=True;
+Edit17.Enabled:=True;
+Edit27.Enabled:=True;
+Edit20.Enabled:=True;
+Edit19.Enabled:=True;
+Edit22.Enabled:=True;
+ComboBox4.Enabled:=True;
+DBLookupComboBox6.Enabled:=True;
+ComboBox1.Enabled:=True;
+ComboBox12.Enabled:=True;
+Edit28.Enabled:=False;
+DateTimePicker8.Enabled:=True;
+Edit26.Enabled:=False;
+Edit23.Enabled:=True;
+ComboBox2.Enabled:=True;
+Edit25.Enabled:=True;
+Edit21.Enabled:=True;
+CheckBox2.Enabled:=True;
+Edit14.Enabled:=False;
+ComboBox11.Enabled:=True;
+ComboBox10.Enabled:=True;
+Edit33.Enabled:=False;
+ DBLookupComboBox6.Enabled:=False;
+ ComboBox5.Enabled:=TRUE;
+DateTimePicker8.Enabled:=true;
+ComboBox8.Enabled:=True;
+end;
+
+
+
+
+
+IF  ComboBox9.Text='Prolongation' THEN
+begin
+edit2.Text:='3';
+
+Edit15.Enabled:=False;
+Edit16.Enabled:=False;
+Edit18.Enabled:=False;
+DateTimePicker7.Enabled:=False;
+Edit17.Enabled:=False;
+Edit27.Enabled:=False;
+Edit20.Enabled:=False;
+Edit19.Enabled:=False;
+Edit22.Enabled:=False;
+ComboBox4.Enabled:=False;
+DBLookupComboBox6.Enabled:=False;
+ComboBox1.Enabled:=False;
+ComboBox12.Enabled:=False;
+Edit28.Enabled:=False;
+DateTimePicker8.Enabled:=False;
+Edit26.Enabled:=False;
+Edit23.Enabled:=False;
+ComboBox2.Enabled:=False;
+Edit25.Enabled:=False;
+Edit21.Enabled:=False;
+CheckBox2.Enabled:=False;
+Edit14.Enabled:=False;
+ComboBox11.Enabled:=False;
+ComboBox10.Enabled:=False;
+
+CheckBox2.Enabled:=true;
+ComboBox5.Enabled:=true;
+DateTimePicker8.Enabled:=true;
+ ComboBox8.Enabled:=True;
+
+DateTimePicker1.DateTime:=DateTimePicker8.DateTime;
+end;
+
+IF  ComboBox9.Text='Replace Card' THEN
+begin
+edit2.Text:='4';
+
+Edit15.Enabled:=False;
+Edit16.Enabled:=False;
+Edit18.Enabled:=False;
+DateTimePicker7.Enabled:=False;
+Edit17.Enabled:=False;
+Edit27.Enabled:=False;
+Edit20.Enabled:=False;
+Edit19.Enabled:=False;
+Edit22.Enabled:=False;
+ComboBox4.Enabled:=False;
+DBLookupComboBox6.Enabled:=False;
+ComboBox1.Enabled:=False;
+ComboBox12.Enabled:=False;
+Edit28.Enabled:=False;
+DateTimePicker8.Enabled:=False;
+Edit26.Enabled:=False;
+Edit23.Enabled:=False;
+ComboBox2.Enabled:=False;
+Edit25.Enabled:=False;
+Edit21.Enabled:=False;
+CheckBox2.Enabled:=True;
+Edit14.Enabled:=False;
+ComboBox11.Enabled:=False;
+ComboBox10.Enabled:=False;
+
+ComboBox4.Enabled:=False;
+ComboBox5.Enabled:=true;
+DateTimePicker8.Enabled:=true;
+ComboBox8.Enabled:=True;
+DateTimePicker8.Enabled:=False;
+end;
+
+IF  ComboBox9.Text='Credit Limit' THEN
+begin
+edit2.Text:='5';
+
+Edit15.Enabled:=False;
+Edit16.Enabled:=False;
+Edit18.Enabled:=False;
+DateTimePicker7.Enabled:=False;
+Edit17.Enabled:=False;
+Edit27.Enabled:=False;
+Edit20.Enabled:=False;
+Edit19.Enabled:=False;
+Edit22.Enabled:=False;
+ComboBox4.Enabled:=False;
+DBLookupComboBox6.Enabled:=False;
+ComboBox1.Enabled:=False;
+ComboBox12.Enabled:=False;
+Edit28.Enabled:=False;
+DateTimePicker8.Enabled:=False;
+Edit26.Enabled:=False;
+Edit23.Enabled:=False;
+ComboBox2.Enabled:=False;
+Edit25.Enabled:=False;
+Edit21.Enabled:=False;
+CheckBox2.Enabled:=False;
+Edit14.Enabled:=False;
+ComboBox11.Enabled:=False;
+ComboBox10.Enabled:=False;
+
+ComboBox5.Enabled:=false;
+
+edit28.Enabled:=true;
+
+ ComboBox8.Enabled:=True;
+DateTimePicker8.Enabled:=False;
+
+end;
+
+
+IF  ComboBox9.Text='Card Status' THEN
+begin
+edit2.Text:='6';
+
+Edit15.Enabled:=False;
+Edit16.Enabled:=False;
+Edit18.Enabled:=False;
+DateTimePicker7.Enabled:=False;
+Edit17.Enabled:=False;
+Edit27.Enabled:=False;
+Edit20.Enabled:=False;
+Edit19.Enabled:=False;
+Edit22.Enabled:=False;
+ComboBox4.Enabled:=False;
+DBLookupComboBox6.Enabled:=False;
+ComboBox1.Enabled:=False;
+ComboBox12.Enabled:=False;
+Edit28.Enabled:=False;
+DateTimePicker8.Enabled:=False;
+Edit26.Enabled:=False;
+Edit23.Enabled:=False;
+ComboBox2.Enabled:=False;
+Edit25.Enabled:=False;
+Edit21.Enabled:=False;
+CheckBox2.Enabled:=False;
+Edit14.Enabled:=False;
+ComboBox11.Enabled:=False;
+ComboBox10.Enabled:=False;
+
+DateTimePicker8.Enabled:=true;
+
+ ComboBox8.Enabled:=True;
+ComboBox12.Enabled:=true;
+
+DateTimePicker8.Enabled:=False;
+end;
+
+ IF  ComboBox9.Text='Contract Close' THEN
+begin
+edit2.Text:='7';
+
+Edit15.Enabled:=False;
+Edit16.Enabled:=False;
+Edit18.Enabled:=False;
+DateTimePicker7.Enabled:=False;
+Edit17.Enabled:=False;
+Edit27.Enabled:=False;
+Edit20.Enabled:=False;
+Edit19.Enabled:=False;
+Edit22.Enabled:=False;
+ComboBox4.Enabled:=False;
+DBLookupComboBox6.Enabled:=False;
+ComboBox1.Enabled:=False;
+ComboBox12.Enabled:=False;
+Edit28.Enabled:=False;
+DateTimePicker8.Enabled:=False;
+Edit26.Enabled:=False;
+Edit23.Enabled:=False;
+ComboBox2.Enabled:=False;
+Edit25.Enabled:=False;
+Edit21.Enabled:=False;
+CheckBox2.Enabled:=False;
+Edit14.Enabled:=False;
+ComboBox11.Enabled:=False;
+ComboBox10.Enabled:=False;
+
+DateTimePicker8.Enabled:=true;
+ ComboBox8.Enabled:=True;
+ DateTimePicker8.Enabled:=False;
+end;
+
+IF  ComboBox9.Text='PIN Clear' THEN
+begin
+edit2.Text:='12';
+
+Edit15.Enabled:=False;
+Edit16.Enabled:=False;
+Edit18.Enabled:=False;
+DateTimePicker7.Enabled:=False;
+Edit17.Enabled:=False;
+Edit27.Enabled:=False;
+Edit20.Enabled:=False;
+Edit19.Enabled:=False;
+Edit22.Enabled:=False;
+ComboBox4.Enabled:=False;
+DBLookupComboBox6.Enabled:=False;
+ComboBox1.Enabled:=False;
+ComboBox12.Enabled:=False;
+Edit28.Enabled:=False;
+DateTimePicker8.Enabled:=False;
+Edit26.Enabled:=False;
+Edit23.Enabled:=False;
+ComboBox2.Enabled:=False;
+Edit25.Enabled:=False;
+Edit21.Enabled:=False;
+CheckBox2.Enabled:=False;
+Edit14.Enabled:=False;
+ComboBox11.Enabled:=False;
+ComboBox10.Enabled:=False;
+
+DateTimePicker8.Enabled:=true;
+ ComboBox8.Enabled:=True;
+ DateTimePicker8.Enabled:=False;
+end;
+
+IF  ComboBox9.Text='RBS Change' THEN
+begin
+edit2.Text:='11';
+
+Edit15.Enabled:=False;
+Edit16.Enabled:=False;
+Edit18.Enabled:=False;
+DateTimePicker7.Enabled:=False;
+Edit17.Enabled:=False;
+Edit27.Enabled:=False;
+Edit20.Enabled:=False;
+Edit19.Enabled:=False;
+Edit22.Enabled:=False;
+ComboBox4.Enabled:=False;
+DBLookupComboBox6.Enabled:=False;
+ComboBox1.Enabled:=False;
+ComboBox12.Enabled:=False;
+Edit28.Enabled:=False;
+DateTimePicker8.Enabled:=False;
+Edit26.Enabled:=False;
+Edit23.Enabled:=False;
+ComboBox2.Enabled:=False;
+Edit25.Enabled:=False;
+Edit21.Enabled:=False;
+CheckBox2.Enabled:=False;
+Edit14.Enabled:=False;
+ComboBox11.Enabled:=False;
+ComboBox10.Enabled:=False;
+ ComboBox8.Enabled:=True;
+DateTimePicker8.Enabled:=true;
+DBLookupComboBox6.Enabled:=true;
+DateTimePicker8.Enabled:=False;
+end;
+
+IF  ComboBox9.Text='CardName Change' THEN
+begin
+edit2.Text:='35';
+
+Edit15.Enabled:=True;
+Edit16.Enabled:=true;
+Edit18.Enabled:=True;
+DateTimePicker7.Enabled:=False;
+Edit17.Enabled:=False;
+Edit27.Enabled:=False;
+Edit20.Enabled:=False;
+Edit19.Enabled:=False;
+Edit22.Enabled:=False;
+ComboBox4.Enabled:=False;
+DBLookupComboBox6.Enabled:=False;
+ComboBox1.Enabled:=False;
+ComboBox12.Enabled:=False;
+Edit28.Enabled:=False;
+DateTimePicker8.Enabled:=False;
+Edit26.Enabled:=False;
+Edit23.Enabled:=True;
+ComboBox2.Enabled:=False;
+Edit25.Enabled:=False;
+Edit21.Enabled:=False;
+CheckBox2.Enabled:=False;
+Edit14.Enabled:=False;
+ComboBox11.Enabled:=False;
+ComboBox10.Enabled:=False;
+
+ComboBox4.Enabled:=TRUE;
+edit23.Enabled:=true;
+ ComboBox8.Enabled:=True;
+
+DateTimePicker8.Enabled:=true;
+DateTimePicker8.Enabled:=False;
+ComboBox4.Enabled:=false;
+CheckBox1.Enabled:=true;
+end;
+
+IF  ComboBox9.Text='Security Word Change' THEN
+begin
+edit2.Text:='13';
+
+Edit15.Enabled:=False;
+Edit16.Enabled:=False;
+Edit18.Enabled:=False;
+DateTimePicker7.Enabled:=False;
+Edit17.Enabled:=False;
+Edit27.Enabled:=False;
+Edit20.Enabled:=False;
+Edit19.Enabled:=False;
+Edit22.Enabled:=False;
+ComboBox4.Enabled:=False;
+DBLookupComboBox6.Enabled:=False;
+ComboBox1.Enabled:=False;
+ComboBox12.Enabled:=False;
+Edit28.Enabled:=False;
+DateTimePicker8.Enabled:=False;
+Edit26.Enabled:=False;
+Edit23.Enabled:=False;
+ComboBox2.Enabled:=False;
+Edit25.Enabled:=False;
+Edit21.Enabled:=False;
+CheckBox2.Enabled:=False;
+Edit14.Enabled:=False;
+ComboBox11.Enabled:=False;
+ComboBox10.Enabled:=False;
+
+edit25.Enabled:=true;
+
+
+DateTimePicker8.Enabled:=true;
+ComboBox8.Enabled:=True;
+DateTimePicker8.Enabled:=False;
+end;
+end;
+
+
+procedure Tcards.FormShow(Sender: TObject);
+begin
+//ShowMessage(x);
+Edit4.Text:=x;
+end;
+
+end.

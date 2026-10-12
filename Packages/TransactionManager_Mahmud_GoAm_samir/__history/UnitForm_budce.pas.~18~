@@ -1,0 +1,181 @@
+﻿unit UnitForm_budce;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Grids, XDBGrids, StdCtrls, ExtCtrls,db;
+
+type
+  TForm_budce = class(TForm)
+    Panel1: TPanel;
+    Panel2: TPanel;
+    Button1: TButton;
+    XDBGrid1: TXDBGrid;
+    Button2: TButton;
+    procedure Button1Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+
+
+    procedure OperationCancel1;
+
+  end;
+
+var
+  Form_budce: TForm_budce;
+
+implementation
+ uses
+ TransactionDataModuleUnit, TransactionPropertiesImpl;
+{$R *.dfm}
+
+procedure TForm_budce.Button2Click(Sender: TObject);
+begin
+Form_budce.Close
+end;
+
+procedure TForm_budce.FormShow(Sender: TObject);
+begin
+TransactionDataModule.Ods_budce_copy.open;
+TransactionDataModule.Ods_budce_copy.Refresh;
+end;
+
+procedure TForm_budce.OperationCancel1;
+begin
+ with transactionDataModule, Transactions do
+  if State in [dsInsert, dsEdit] then
+  begin
+   Cancel;
+   RefreshRecord; //-->Сменить на что нибудь нормальное!!!
+  end;
+end;
+
+
+procedure TForm_budce.Button1Click(Sender: TObject);
+var
+ a,say,i,x:integer;
+  TransactionID: Integer;
+    TransactionDate: TDateTime;
+    TransactionNo: String;
+    DebitID: Longint;
+    CreditID: Longint;
+    DebitAmount: Currency;
+    CreditAmount: Currency;
+    LAmount: Currency;
+    DebitRate: real;
+    CreditRate: real;
+    CashSymbol: String; // Word;
+    ConvertationSymbol: Word;
+    OperationCode: Variant;
+    Flags: Word;
+    TransactionName: String;
+    ReportID: Integer;
+    CountrID: Integer;
+    trname:string;
+    inbalancechar:string;
+    outbalancechar:integer;
+    operatorid:integer;
+    Budce:string;
+begin
+  with TransactionEditForm,TransactionDataModule, Ods_budce_copy_cum do
+  begin
+  Ods_budce_copy.Refresh;
+ Refresh;
+
+
+/// showmessage(FloatToStr ( FloatToCurr(Ods_budce_copy_cum.FieldByName('AMMOUNT').AsFloat)));
+ if  Ods_budce_copy_cum.FieldByName('AMMOUNT').AsFloat>0 then
+ if  CurrencyEditDebit.Value<>FloatToCurr(Ods_budce_copy_cum.FieldByName('AMMOUNT').AsFloat) then
+  begin
+
+   showmessage('Məbləğlərin cəmi əsas məbləğlə eyni olmalıdır !');
+   exit;
+   end;
+   end;
+
+    with TransactionEditForm,TransactionDataModule ,Ods_budce_copy do
+    begin
+        transactiondate :=  Int(TransDate.DateTime);
+        debitid  :=         DebitAccData.FieldByName('ID').AsInteger;
+        creditid  :=        CreditAccData.FieldByName('ID').AsInteger;
+        debitrate :=       DebitCurrencyData.FieldByName('Rate').asinteger;
+        creditrate:=       CreditCurrencyData.FieldByName('Rate').asinteger;
+        trname :=            DBEditDestination.text;
+        flags    :=0;
+        inbalancechar :=   CashSymbols.FieldByName('SYMBOL').AsString;
+        outbalancechar:=     ConvertationSymbols.FieldByName('id').AsInteger;
+        OperationCode     :=OperationTypes.FieldByName('id').AsString;
+        transactionno     :=DBEditOperationNo.text;
+        ReportID         :=ReportDesc.FieldByName('id').AsInteger;
+        CountrID         := Country.FieldByName('ID').AsVariant;
+
+          Ods_budce_copy.First;
+
+ for i:=1 to Ods_budce_copy.RecordCount do
+  begin
+
+  if TransactionDataModule.Ods_budce_copy.FieldByName('AMMOUNT').AsFloat>0 then
+ begin
+
+ CurrencyEditDebit.Value:=TransactionDataModule.Ods_budce_copy.FieldByName('AMMOUNT').AsFloat;
+ Budce:=TransactionDataModule.Ods_budce_copy.FieldByName('CODE').asstring;
+        debitamount:=CurrencyEditDebit.Value;
+        CurrencyEditDebitChange(sender);
+        creditamount:= CurrencyEditCredit.Value;
+        lamount     := CurrencyEditLammount.Value;
+
+ // showmessage(Budce);
+/// showmessage(inttostr(TransactionDataModule.Ods_budce.FieldByName('AMMOUNT').AsInteger ));
+
+a:=SBTransaction1.CallIntegerFunction('transaction_add',
+       [transactiondate,
+       debitid,
+       creditid  ,
+       debitamount,
+       creditamount,
+       lamount ,
+       debitrate,
+       creditrate,
+       trname ,
+       flags  ,
+       inbalancechar,
+       outbalancechar,
+       NULL,
+       OperationCode,
+       NULL,
+       null,
+       null,
+       transactionno,
+       ReportID  ,
+       CountrID,
+       null,
+       Budce  ]);
+
+      OP_MMX.CallProcedure('ins_mmx_transinfo',[TransactionEditForm.DBLC_MMX_Transmode.Keyvalue, a, ODS_DebtCustomerID.AsInteger,ODS_CredCustomerID.AsInteger]);
+      OP_MMX.CallProcedure('mmx_transaction',[DebitAccData.FieldByName('ID').AsInteger
+                                           ,Sysdat.FieldByName('tek_dat').AsDateTime,
+                                            CurrencyEditLammount.Value,DBLC_MMX_Transmode.KeyValue]);
+
+     OP_MMX.CallProcedure('mmx_transaction',[CreditAccData.FieldByName('ID').AsInteger
+                                           ,Sysdat.FieldByName('tek_dat').AsDateTime,
+                                            CurrencyEditLammount.Value,DBLC_MMX_Transmode.KeyValue]);
+
+      end;
+  Ods_budce_copy.Next;
+
+  end;
+  end;
+//  TransactionDataModule.OracleQuery1.Execute;
+  Form_budce.Close ;
+  OperationCancel1;
+  TransactionEditForm.Close;
+  TransactionDataModule.SBCommit();
+  TransactionDataModule.Transactions.Refresh;
+ end;
+
+end.

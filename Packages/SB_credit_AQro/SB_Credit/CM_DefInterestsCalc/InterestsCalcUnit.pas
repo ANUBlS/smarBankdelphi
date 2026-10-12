@@ -1,0 +1,72 @@
+﻿unit InterestsCalcUnit;
+
+interface
+
+uses  Windows, Messages, SysUtils, Classes, Dialogs, DB, Controls;
+
+procedure InitPlugin(S : String); export;
+
+implementation
+
+uses IntCalcDataModImpl,InfarmatoinImpl, CommonDecls;
+
+procedure ShowStopIntCalc;
+resourcestring
+   rsStopIntCalc = 'Faizlərin balansda hesablanması dayandırılır?';
+   rsSOutIntCalc = 'Faizlərin hesablanması balansdankənarda davam etdirilsin ?';
+var
+  creditid :Integer;
+begin
+  creditid := Get_SelectedCrdID;
+  if MessageDlg(
+            rsStopIntCalc,
+            mtWarning ,
+            [mbYes,mbNo],
+            0
+  ) = mrYes then
+  begin
+    if MessageDlg(
+            rsSOutIntCalc,
+            mtWarning ,
+            [mbYes,mbNo],
+            0
+  ) = mrYes then
+  FrmInfarmatoin.showmodal
+  else
+
+    DefineCalcDatMod.CM_CREDITS.CallProcedure('EnabledInterestCalc',[creditid,1]);
+ end;
+  end;
+
+procedure ShowContinueIntcalc;
+resourcestring
+   rsContinueintCalc = 'Faizlərin hesablanması davam etdirilsin?';
+var
+  creditid :Integer;
+begin
+  creditid := Get_SelectedCrdID;
+  if MessageDlg(
+            rsContinueintCalc,
+            mtWarning ,
+            [mbYes,mbNo],
+            0
+  ) = mrYes then
+  begin
+    DefineCalcDatMod.CM_CREDITS.CallProcedure('DisableInterestCalc',[creditid]);
+  end;
+end;
+
+procedure InitPlugin(S:String); export;
+const
+  cStopIntcalc = 'StopIntCalc';
+  CConIntCalc = 'ConIntCalc';
+begin
+  if s = cStopIntcalc then  ShowStopIntCalc;
+  if s = CConIntCalc then   ShowContinueIntcalc;
+end;
+exports
+  InitPlugin;
+Initialization
+ DefineCalcDatMod := TDefineCalcDatMod.Create(CommonApplication);
+  FrmInfarmatoin:= TFrmInfarmatoin.Create(CommonApplication);
+end.

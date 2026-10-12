@@ -1,0 +1,256 @@
+unit U9;
+
+interface
+
+uses
+
+  StdCtrls, DBCtrlsEh, DBCtrls, Grids,  Mask, db,
+  CurrencyEdit,  Menus, DBLookupEh,Variants, NLSLocalizer, DBGridEh, XDBGrids,
+  Buttons,  XFSCtrls, DBGridEhGrouping, GridsEh,
+
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ImgList, ComCtrls, ToolWin,   DBGrids, ExtCtrls,
+  CMExcelExport;
+
+type
+  TForm9 = class(TForm)
+    Panel1: TPanel;
+    Panel2: TPanel;
+    Panel4: TPanel;
+    EditCARDHOLDER: TEdit;
+    EditRBSNUMBER: TEdit;
+    EditCARDNUMBER: TEdit;
+    EditCREDIT_LIM: TEdit;
+    EditFNAME: TEdit;
+    EditLNAME: TEdit;
+    EditID: TEdit;
+    EditPASSPORT: TEdit;
+    Panel3: TPanel;
+    CoolBar1: TCoolBar;
+    ToolBar1: TToolBar;
+    ToolButton3: TToolButton;
+    ToolButton6: TToolButton;
+    ToolButton8: TToolButton;
+    ToolButton9: TToolButton;
+    ToolButton1: TToolButton;
+    ToolButton10: TToolButton;
+    ToolButton11: TToolButton;
+    ToolButton12: TToolButton;
+    ToolButton7: TToolButton;
+    ToolButton18: TToolButton;
+    ToolButton19: TToolButton;
+    ToolButton20: TToolButton;
+    ToolButton14: TToolButton;
+    ToolButton15: TToolButton;
+    ToolButton17: TToolButton;
+    ToolButton23: TToolButton;
+    ToolButton21: TToolButton;
+    ImageList1: TImageList;
+    DBGrid1: TDBGrid;
+    CMExcelExport1: TCMExcelExport;
+    procedure ToolButton21Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure ToolButton1Click(Sender: TObject);
+    procedure ToolButton14Click(Sender: TObject);
+    procedure ToolButton7Click(Sender: TObject);
+    procedure FormPaint(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
+    procedure ToolButton3Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form9: TForm9;
+
+implementation
+
+uses applicationpas, balans, CARDS_TLB, cfilepas, creditinfopas, customers,
+  dpforms, MAINFORMImpl1, newcard, payment, rezform, Unit18,SBTranslateProc,sboapiDataModuleImpl,
+  Unitclient2, newcardeditfrm;
+
+{$R *.DFM}
+
+procedure TForm9.ToolButton21Click(Sender: TObject);
+begin
+ if   panel4.Visible=false then
+begin
+ToolButton21.Down:=True;
+Panel4.Visible:=True;
+exit;
+end
+else
+
+if panel4.Visible=true then
+begin
+ToolButton21.Down:=false;
+Panel4.Visible:=false;
+end;
+end;
+
+procedure TForm9.ToolButton3Click(Sender: TObject);
+var ke :char;
+begin
+DataMod_CARDS.SB_ACA.CallProcedure('CheckAdvancedObjectAccess', ['CARD_NEW_EDITER']);
+
+  ke:=#13;
+  NewCardEditform:=TNewCardEditform.Create(self);
+
+
+
+
+ NewCardEditform.Edit14.Text:=inttostr(DataMod_CARDS.newcard.FieldByName('kli_id').AsInteger);
+NewCardEditform.ComboBox5.Text:='WITH';
+
+  NewCardEditform.DBLookupComboBox6.KeyValue:= DataMod_CARDS.newcard.fieldbyname('RBSNUMBER').asstring;
+NewCardEditform.DBLookupComboBox6.Visible:=true;
+
+
+
+        DataMod_CARDS.hesab.Close;
+        DataMod_CARDS.hesab.SetVariable('CID', null);
+        DataMod_CARDS.hesab.SetVariable('p_AccNO', DataMod_CARDS.newcard.fieldbyname('RBSNUMBER').asstring);
+        DataMod_CARDS.hesab.open;
+
+ DataMod_CARDS.cliencards.close;
+ DataMod_CARDS.cliencards.SetVariable('numb',DataMod_CARDS.newcard.fieldbyname('RBSNUMBER').ASSTRING);
+ DataMod_CARDS.cliencards.Open;
+
+DataMod_CARDS.CARDOPERATION.Close;
+DataMod_CARDS.CARDOPERATION.SetVariable('RBS',DataMod_CARDS.newcard.fieldbyname('RBSNUMBER').ASSTRING) ;
+DataMod_CARDS.CARDOPERATION.Open;
+
+
+DataMod_CARDS.editval.Close;
+DataMod_CARDS.editval.SetVariable('RBSNUMBER',NewCardEditform.DBLookupComboBox6.Text);
+DataMod_CARDS.editval.Open;
+
+DataMod_CARDS.cariqaliq2.Close;
+DataMod_CARDS.cariqaliq2.SetVariable('acc_id',DataMod_CARDS.newcard.fieldbyname('ACCID').Asinteger);
+DataMod_CARDS.cariqaliq2.Open;
+
+
+NewCardEditform.Edit29.Text:=DataMod_CARDS.editval.fieldbyname('VAL_NAME').asstring;
+
+
+NewCardEditform.Edit15.Text:=DataMod_CARDS.newcard.fieldbyname('FNAME').asstring;
+NewCardEditform.edit15.Visible:=TRUE;
+NewCardEditform.Edit16.Text:=DataMod_CARDS.newcard.fieldbyname('LNAME').asstring;
+NewCardEditform.edit16.Visible:=TRUE;
+NewCardEditform.Edit18.Text:=DataMod_CARDS.newcard.fieldbyname('PASSPORT').asstring;
+NewCardEditform.edit18.Visible:=TRUE;
+NewCardEditform.DateTimePicker7.DateTime:=DataMod_CARDS.newcard.fieldbyname('BIRTHDAY').asdatetime;
+NewCardEditform.DateTimePicker7.Visible:=true;
+NewCardEditform.Edit17.Text:=DataMod_CARDS.newcard.fieldbyname('HOMEPHONE').asstring;
+NewCardEditform.edit17.Visible:=TRUE;
+NewCardEditform.Edit5.Text:=DataMod_CARDS.newcard.fieldbyname('WORKPHONE').asstring;
+NewCardEditform.edit5.Visible:=TRUE;
+NewCardEditform.Edit20.Text:=DataMod_CARDS.newcard.fieldbyname('COUNTRY').asstring;
+NewCardEditform.edit20.Visible:=TRUE;
+NewCardEditform.Edit19.Text:=DataMod_CARDS.newcard.fieldbyname('CITY').asstring;
+NewCardEditform.edit19.Visible:=TRUE;
+NewCardEditform.Edit22.Text:=DataMod_CARDS.newcard.fieldbyname('ADDRESS').asstring;
+NewCardEditform.edit22.Visible:=TRUE;
+NewCardEditform.ComboBox4.Text:=DataMod_CARDS.newcard.fieldbyname('RESIDENT').asstring;
+NewCardEditform.ComboBox4.visible:=true;
+NewCardEditform.ComboBox1.Text:=DataMod_CARDS.newcard.fieldbyname('CARDTYPE').asstring;
+NewCardEditform.ComboBox1.visible:=true;
+NewCardEditform.ComboBox12.Text:=DataMod_CARDS.newcard.fieldbyname('CARDSTATUS').asstring;
+NewCardEditform.ComboBox12.visible:=true;
+NewCardEditform.Edit28.Text:=DataMod_CARDS.newcard.fieldbyname('CREDIT_LIM').asstring;
+NewCardEditform.edit28.Visible:=TRUE;
+NewCardEditform.DateTimePicker5.DateTime:=DataMod_CARDS.newcard.fieldbyname('DATEOPEN').asdatetime;
+NewCardEditform.DateTimePicker6.DateTime:=DataMod_CARDS.newcard.fieldbyname('EXPIRY').asdatetime;
+NewCardEditform.DateTimePicker8.DateTime:=DataMod_CARDS.newcard.fieldbyname('EXPIRY').asdatetime;
+NewCardEditform.Edit26.Text:=DataMod_CARDS.newcard.fieldbyname('REFERENCE').asstring;
+NewCardEditform.edit26.Visible:=TRUE;
+NewCardEditform.Edit23.Text:=DataMod_CARDS.newcard.fieldbyname('EMBOSSNAME').asstring;
+NewCardEditform.edit23.Visible:=TRUE;
+NewCardEditform.ComboBox2.Text:=DataMod_CARDS.newcard.fieldbyname('COMPANY').asstring;
+NewCardEditform.ComboBox2.visible:=true;
+NewCardEditform.Edit25.Text:=DataMod_CARDS.newcard.fieldbyname('SECURITY').asstring;
+NewCardEditform.edit25.Visible:=TRUE;
+NewCardEditform.Edit21.Text:=DataMod_CARDS.newcard.fieldbyname('LANG_CODE').asstring;
+
+
+  NewCardEditform.showmodal;
+
+
+
+end;
+
+procedure TForm9.FormShow(Sender: TObject);
+begin
+
+DataMod_CARDS.newcard.Open;
+end;
+
+procedure TForm9.ToolButton1Click(Sender: TObject);
+begin
+DataMod_CARDS.SB_ACA.CallProcedure('CheckAdvancedObjectAccess', ['CARD_NEW_DELETER']);
+
+if MessageDlg('Kart silinsin?',mtconfirmation,[mbyes,mbno],0)= mryes then
+DataMod_CARDS.mainpacket.CallProcedure('delete_application',[DBGrid1.DataSource.DataSet.fieldbyname('id').asinteger]);
+DBGrid1.DataSource.DataSet.Refresh;
+
+end;
+
+procedure TForm9.ToolButton14Click(Sender: TObject);
+begin
+close;
+end;
+
+procedure TForm9.ToolButton7Click(Sender: TObject);
+begin
+
+  if not CMExcelExport1.Connected then CMExcelExport1.Connect;
+  CMExcelExport1.ExportDataset(DataMod_CARDS.newcard,'CARDS',true);
+  CMExcelExport1.Disconnect;
+end;
+
+procedure TForm9.FormActivate(Sender: TObject);
+var fil :integer;
+begin
+
+fil:= DataMod_CARDS.SB_ACA.CallIntegerFunction('checkadvancedobjectaccess_func', ['CARD_FIL_VIEW']) ;
+
+     if fil=1 then begin
+
+DataMod_CARDS.newcard.Open;
+
+
+
+
+           end else begin
+
+ //   showmessage('tt');
+DataMod_CARDS.newcard.Open;
+
+
+    DataMod_CARDS.newcard.SQL[12]:='and filial  = (SELECT filialid FROM sba_objinf WHERE obj = (SELECT USER FROM DUAL))';
+//  DataMod_CARDS.newcard.SQL[12]:='and filial  = (SELECT filialid FROM sba_objinf WHERE obj = (SELECT USER FROM DUAL))';
+
+
+DataMod_CARDS.newcard.Open;
+
+
+
+
+
+  end;
+end;
+
+procedure TForm9.FormCreate(Sender: TObject);
+begin
+SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TForm9.FormPaint(Sender: TObject);
+begin
+DBGrid1.DataSource.DataSet.Refresh;
+end;
+
+end.

@@ -1,0 +1,32 @@
+unit Protokolimpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs;
+
+type
+  Tmainform = class(TForm)
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  mainform: Tmainform;
+
+implementation
+uses   CommonDecls;
+ procedure InitPlugin(s:string);export;
+{$R *.DFM}
+  procedure InitPlugin(s:string);export;
+begin
+   mainform.ShowModal;
+end;
+exports
+     InitPlugin;
+
+ initialization
+ mainform := Tmainform.Create(CommonApplication);
+end.

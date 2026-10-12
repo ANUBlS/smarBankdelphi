@@ -1,0 +1,221 @@
+﻿unit AnnutyPaymentFormImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, CMCurrencyEdit, ComCtrls, ExtCtrls,  ActnList;
+
+type
+
+  PAnnutyPaymentInfo = ^ TAnnutyPaymentInfo;
+
+  TAnnutyPaymentInfo = record
+    PaymentType : Boolean;
+    FirstPayDate : TDateTime;
+    Amount : Real;
+    PeriodRate : Byte;
+    NPeriods,dovr : integer;
+  end;
+
+  TAnnutyForm = class(TForm)
+    GroupBox1: TGroupBox;
+    RGAnnuty: TRadioGroup;
+    GroupBox2: TGroupBox;
+    DTPStartDate: TDateTimePicker;
+    GroupBox4: TGroupBox;
+    AmountEdit: TCMCurrencyEdit;
+    GroupBox5: TGroupBox;
+    CmbBoxPeriodRate: TComboBox;
+    Panel1: TPanel;
+    Button2: TButton;
+    Button3: TButton;
+    ActionList1: TActionList;
+    GroupBox6: TGroupBox;
+    NPeriodsEdit: TEdit;
+    ActnApply: TAction;
+    ActnCancel: TAction;
+    GroupBox3: TGroupBox;
+    Gdovr: TEdit;
+    procedure ActnApplyExecute(Sender: TObject);
+    procedure ActnCancelExecute(Sender: TObject);
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure GdovrKeyPress(Sender: TObject; var Key: Char);
+    procedure GdovrChange(Sender: TObject);
+    procedure CmbBoxPeriodRateClick(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    function AnnutyPayment_Get(var Payment : PAnnutyPaymentInfo) : Boolean;
+    { Public declarations }
+  end;
+
+var
+  AnnutyForm: TAnnutyForm;
+
+implementation
+
+uses ScheduleDataModuleImpl,sboapiDataModuleImpl, SBTranslateProc;
+
+{$R *.DFM}
+
+function TAnnutyForm.AnnutyPayment_Get(var Payment : PAnnutyPaymentInfo) : Boolean;
+   var met:Integer;
+  procedure InitPaymentInfo;
+
+    function MonthsBeetwean(D1,D2 : TDateTime) : Integer;  //D1<D2
+    var
+      TempDate : TDateTime;
+    begin
+      Result := 1;
+      TempDate := D1;
+      
+      while IncMonth(TempDate,Result) <= D2 do
+        INC(Result);
+
+      if IncMonth(TempDate,Result) > D2 then
+        Result := Result - 1;
+    end;
+    
+  var
+    PeriodCnt : integer;
+    D1,D2 : TDateTime;
+     begin
+    with ScheduleDataModule.CreditInfo do
+    begin
+      DTPStartDate.DateTime := IncMonth(FieldByName('DATEOFCONCLUSION').AsDateTime,1);
+      met:=FieldByName('INTCALCMETHOD').AsInteger;
+      if met=2 then
+       begin
+       AmountEdit.ReadOnly:=false;
+       AmountEdit.Value :=0;
+       end
+       else
+       begin
+      AmountEdit.Value := FieldByName('CREDITLINEAMOUNT').AsCurrency;
+      AmountEdit.ReadOnly:=true;
+       end;
+      CmbBoxPeriodRate.ItemIndex := 0;
+//      D1 := FieldByName('DATEOFCONCLUSION').AsDateTime;
+//      D2 := FieldByName('DUEDATEFIRSTCONTRACT').AsDateTime;
+//      PeriodCnt := MonthsBeetwean(D1,D2);
+      PeriodCnt:=FieldByName('period').AsInteger;
+      NPeriodsEdit.Text := IntToStr(PeriodCnt);
+    end;
+  end;
+
+var
+  P : PAnnutyPaymentInfo;
+  PerRate  : Integer;
+begin
+  //P := nil;
+  InitPaymentInfo;
+  Result := ShowModal = mrOK;
+  if Result then
+  begin
+    case CmbBoxPeriodRate.ItemIndex of
+      0 : PerRate := 1;
+      1 : PerRate := 3;
+      2 : PerRate := 6;
+    else
+      PerRate := 12;
+    end; // Case
+    New(P);
+    with   P^   do
+    begin
+
+      PaymentType := RGAnnuty.ItemIndex = 0;
+      FirstPayDate := Integer(Trunc(DTPStartDate.DateTime));
+      Amount := AmountEdit.Value;
+      PeriodRate := PerRate;
+      NPeriods := StrToInt(NPeriodsEdit.Text);
+      dovr:=StrToInt(Gdovr.text);
+    if  Amount=0 then
+     begin
+      showmessage('Tranşın məbləğini daxil edin!' );
+      exit
+      end;
+   {  if  (dovr>0) and(met=0) then
+     begin
+      showmessage('Plan üzrə seçilmiş kreditə güzəşt müddəti vermək olmaz!' );
+      exit
+      end; }
+    {if  (dovr=0) and(met=1) then
+     begin
+      showmessage('Qalıq üzrə seçilmiş kreditə güzəşt müddəti verilməlidir!' );
+      exit
+      end;  }
+    if  dovr> NPeriods then
+     begin
+      showmessage('Güzəşt dövrlərinin sayı periodların sayından az olmalıdir' );
+      exit
+      end;
+    end;
+    Payment := P;
+  end; //if
+end;
+
+procedure TAnnutyForm.ActnApplyExecute(Sender: TObject);
+begin
+  ModalResult := mrOk;
+end;
+
+procedure TAnnutyForm.ActnCancelExecute(Sender: TObject);
+begin
+  ModalResult := mrCancel
+end;
+
+procedure TAnnutyForm.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+   Resize := False
+end;
+
+procedure TAnnutyForm.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+   if ord(key) = VK_ESCAPE then close;
+end;
+
+procedure TAnnutyForm.GdovrKeyPress(Sender: TObject; var Key: Char);
+begin
+if not (key in ['0'..'9',#8]) then
+begin Key:=#0;
+Beep;
+end;
+{if CmbBoxPeriodRate.ItemIndex>=1 then
+
+CmbBoxPeriodRate.ItemIndex:=0;    }
+end;
+
+procedure TAnnutyForm.GdovrChange(Sender: TObject);
+begin
+{if CmbBoxPeriodRate.ItemIndex>=1 then
+begin
+CmbBoxPeriodRate.ItemIndex:=0;
+//showmessage('Юдямя периоду айлыг сечилмялидир')  ;
+Gdovr.Text:='0';
+exit;
+end;    }
+end;
+
+procedure TAnnutyForm.CmbBoxPeriodRateClick(Sender: TObject);
+begin
+{if CmbBoxPeriodRate.ItemIndex>=1 then
+Gdovr.Text:='0';   }
+end;
+
+procedure TAnnutyForm.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+//Gdovr.text:='0';
+end;
+
+procedure TAnnutyForm.FormCreate(Sender: TObject);
+begin
+SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+end.

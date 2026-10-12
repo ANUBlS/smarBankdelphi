@@ -1,0 +1,780 @@
+unit BlackListImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, NLSDialogs,
+  ActiveX, AxCtrls, BlackInstMgr_TLB, StdVcl, ComCtrls, ToolWin, ImgList,
+  StdCtrls, ExtCtrls, Grids, DBGrids, Menus,DB, DBCtrls,ActnList,
+  DBViewComboBox, CheckLst, Evanescence;
+
+type
+  TBlackInst = class(TActiveForm, IBlackInst)
+    ImageList1: TImageList;
+    CoolBar1: TCoolBar;
+    ToolBar1: TToolBar;
+    isertbtn: TToolButton;
+    ToolButton5: TToolButton;
+    ToolButton1: TToolButton;
+    ToolButton4: TToolButton;
+    ToolButton3: TToolButton;
+    ToolButton6: TToolButton;
+    ToolButton8: TToolButton;
+    ToolButton2: TToolButton;
+    PopupMenu1: TPopupMenu;
+    ToolButton7: TToolButton;
+    Panel2: TPanel;
+    GroupBox1: TGroupBox;
+    GroupBox2: TGroupBox;
+    Panel3: TPanel;
+    CheckBox1: TCheckBox;
+    Evanescence1: TEvanescence;
+    Panel4: TPanel;
+    DBGrid1: TDBGrid;
+    Panel1: TPanel;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    EditNAME: TEdit;
+    Edit2: TEdit;
+    Edit3: TEdit;
+    Edit1: TEdit;
+    N3: TMenuItem;
+    N4: TMenuItem;
+    N5: TMenuItem;
+    N6: TMenuItem;
+    N7: TMenuItem;
+    ToolButton9: TToolButton;
+    N1: TMenuItem;
+    ToolButton10: TToolButton;
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure isertbtnClick(Sender: TObject);
+    procedure ToolButton1Click(Sender: TObject);
+    procedure N1Click(Sender: TObject);
+    procedure EditNAMEChange(Sender: TObject);
+    procedure Edit2Change(Sender: TObject);
+    procedure Edit3Change(Sender: TObject);
+    procedure N1DrawItem(Sender: TObject; ACanvas: TCanvas; ARect: TRect;
+      Selected: Boolean);
+    procedure ToolButton2Click(Sender: TObject);
+    procedure ToolButton3Click(Sender: TObject);
+    procedure Edit1Change(Sender: TObject);
+    procedure EditNAMEClick(Sender: TObject);
+    procedure Edit2Click(Sender: TObject);
+    procedure Edit3Click(Sender: TObject);
+    procedure Edit1Click(Sender: TObject);
+    procedure ToolButton7Click(Sender: TObject);
+    procedure CheckBox1Click(Sender: TObject);
+    procedure Evanescence1ClickCheck(Sender: TObject);
+    procedure N3Click(Sender: TObject);
+    procedure N4Click(Sender: TObject);
+    procedure N5Click(Sender: TObject);
+    procedure N6Click(Sender: TObject);
+    procedure N7Click(Sender: TObject);
+    procedure ToolButton9Click(Sender: TObject);
+    procedure DBGrid1DblClick(Sender: TObject);
+    procedure ToolButton10Click(Sender: TObject);
+  private
+    { Private declarations }
+    FEvents: IBlackInstEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+  public
+    { Public declarations }
+    procedure Initialize; override;
+  end;
+
+var
+ADDITIONALPARAMS : string;
+
+implementation
+
+
+uses ComObj, ComServ, DmBlackImpl, InsImpl, countrieslmpl;
+
+{$R *.DFM}
+
+{ TBlackInst }
+
+procedure TBlackInst.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_BlackInstPage); }
+end;
+
+procedure TBlackInst.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as IBlackInstEvents;
+end;
+
+procedure TBlackInst.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TBlackInst.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TBlackInst.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TBlackInst.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TBlackInst.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TBlackInst.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TBlackInst.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TBlackInst.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TBlackInst.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TBlackInst.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TBlackInst.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TBlackInst.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TBlackInst.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TBlackInst.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TBlackInst.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TBlackInst.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TBlackInst.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TBlackInst.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TBlackInst.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TBlackInst._Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TBlackInst.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TBlackInst.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TBlackInst.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TBlackInst.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TBlackInst.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TBlackInst.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TBlackInst.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TBlackInst.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TBlackInst.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TBlackInst.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TBlackInst.Set_AxBorderStyle(Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TBlackInst.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TBlackInst.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TBlackInst.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TBlackInst.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TBlackInst.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TBlackInst.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TBlackInst.Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TBlackInst.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TBlackInst.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TBlackInst.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TBlackInst.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TBlackInst.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TBlackInst.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+procedure TBlackInst.ActiveFormCreate(Sender: TObject);
+var i:integer;
+begin
+DmBlack:=TDmBlack.Create(self) ;
+InsForm:=TInsForm.Create(self);
+formCon:=TformCon.Create(self);
+
+   for i := 0 to ComponentCount-1  do
+    if Components[i].Tag = 3112 then begin
+      (Components[i] as TEvanescence).Open;
+      (Components[i] as TEvanescence).CheckAll;
+    end;
+ToolButton9.Down :=true;
+end;
+
+procedure TBlackInst.isertbtnClick(Sender: TObject);
+begin
+x:=1;
+with InsForm do begin
+ edit1.text:='';
+ edit2.text:='';
+ edit3.text:='';
+ edit4.text:='';
+ edit5.text:='';
+ edit6.text:='';
+ edit7.text:='';
+ edit8.text:='';
+ DBLookupComboBox3.KeyValue:='';
+ DBLookupComboBox2.KeyValue:='';
+ DBLookupComboBox1.KeyValue:=1;
+ DBLookupComboBox4.KeyValue:='';
+ DBEdit1.Text:='';
+ end;
+InsForm.ShowModal
+end;
+
+procedure TBlackInst.ToolButton1Click(Sender: TObject);
+begin
+ InsForm.edit1.text:=DmBlack.MainDSet.fieldbyname('name').asstring;
+ InsForm.edit2.text:=DmBlack.MainDSet.fieldbyname('lastname').asstring;
+ InsForm.edit4.text:=DmBlack.MainDSet.fieldbyname('middlename').asstring;
+ InsForm.edit3.text:=DmBlack.MainDSet.fieldbyname('doc_pin').asstring;
+ InsForm.edit5.text:=DmBlack.MainDSet.fieldbyname('doc_organ').asstring;
+ InsForm.edit6.text:=DmBlack.MainDSet.fieldbyname('doc_num').asstring;
+ InsForm.edit7.text:=DmBlack.MainDSet.fieldbyname('doc_serie').asstring;
+ InsForm.edit8.text:=DmBlack.MainDSet.fieldbyname('address').asstring;
+ InsForm.DBLookupComboBox1.keyvalue:=DmBlack.MainDSet.fieldbyname('doc_type').asinteger;
+ InsForm.DBLookupComboBox2.keyvalue:=DmBlack.MainDSet.fieldbyname('adrs_city').asinteger;
+ InsForm.DBLookupComboBox3.keyvalue:=DmBlack.MainDSet.fieldbyname('adrs_state').asinteger;
+ InsForm.DBLookupComboBox4.keyvalue:=DmBlack.MainDSet.fieldbyname('gender').asinteger;
+x:=2;
+InsForm.ShowModal;
+end;
+
+procedure TBlackInst.N1Click(Sender: TObject);
+begin
+{panel1.Visible:=true ;
+N1.Visible:=false;
+N2.Visible:=true; }
+Panel1.Visible :=not Panel1.Visible;
+   N1.Checked :=Panel1.Visible;
+
+end;
+
+procedure TBlackInst.EditNAMEChange(Sender: TObject);
+begin
+With EditNAME do
+if Text <> '' then
+DmBlack.MainDSrc.DataSet.Locate('NAME',EditNAME.Text,[loPartialKey]);
+ {DmBlack.MainDSet.filter:='NAME='''+EditNAME.text+('*')+'''';
+  ostenlen seetri axtarir}
+
+end;
+
+procedure TBlackInst.Edit2Change(Sender: TObject);
+begin
+With Edit2 do
+if Text <> '' then
+DmBlack.MainDSrc.DataSet.Locate('lastname',Edit2.Text,[loPartialKey]);
+
+end;
+
+procedure TBlackInst.Edit3Change(Sender: TObject);
+begin
+With Edit3 do
+if Text <> '' then
+DmBlack.MainDSrc.DataSet.Locate('middlename',Edit3.Text,[loPartialKey]);
+
+end;
+
+procedure TBlackInst.N1DrawItem(Sender: TObject; ACanvas: TCanvas;
+  ARect: TRect; Selected: Boolean);
+  var
+  LineBottom: Integer;
+  SText: String;
+  Bar: TRect;
+begin
+  with ACanvas, Sender as TMenuItem do
+  begin
+    with ACanvas.Font do
+    begin
+      Charset := DEFAULT_CHARSET;
+      Name := 'Azl Sans Serif';
+      if Default then
+        Style := [fsBold];
+    end;
+    if Caption = '-' then
+    begin
+      Pen.Color := clBlack;
+      LineBottom := (ARect.Top + (ARect.Bottom - ARect.Top) div 2)-1;
+      MoveTo(ARect.Left, LineBottom);
+      LineTo(ARect.Right, LineBottom);
+      inc(LineBottom);
+      Pen.Color := clWhite;
+      MoveTo(ARect.Left, LineBottom);
+      LineTo(ARect.Right, LineBottom);
+    end
+    else
+    begin
+      if Selected then
+      begin
+        Brush.Color := clNavy;
+        if Enabled then
+          Font.Color := clWhite
+        else
+          Font.Color := clSilver;
+      end
+      else
+      begin
+        Brush.Color := clBtnFace;
+        if Enabled then
+          Font.Color := clBlack
+        else
+          Font.Color := clGrayText;
+      end;
+      Bar := ARect;
+      Inc(Bar.Left, 22);
+      FillRect(Bar);
+      TextOut(ARect.Left+{17}22, ARect.Top+1, Caption);
+    end;
+    // draw shortcut
+    SText := ShortCutToText(ShortCut);
+    TextOut(ARect.Right-TextWidth(SText)-7, ARect.Top+1, SText);
+    if ImageIndex <> -1 then
+      with GetParentMenu do
+        if Assigned(Images) then
+        begin
+          if Checked then
+          begin
+            Bar.Left := ARect.Left + 1;
+            Bar.Right := Bar.Left + 16;
+            Bar.Top := ARect.Top + 1;
+            Bar.Bottom := Bar.Top + 16;
+
+            ACanvas.Brush.Color := clBtnShadow;
+            ACanvas.FrameRect(Bar);
+
+            Inc(Bar.Left, 2);
+            Inc(Bar.Right, 2);
+            Inc(Bar.Top, 2);
+            Inc(Bar.Bottom, 2);
+
+            ACanvas.Brush.Color := clBtnHighlight;
+            ACanvas.FrameRect(Bar);
+
+            Dec(Bar.Left, 1);
+            Dec(Bar.Right, 1);
+            Dec(Bar.Top, 1);
+            Dec(Bar.Bottom, 1);
+
+            if Selected then
+              ACanvas.Brush.Color := clBtnFace
+            else
+              ACanvas.Brush.Color := clBtnHighlight;
+            ACanvas.FillRect(Bar);
+          end;
+
+          Images.Draw(ACanvas, ARect.Left, ARect.Top, ImageIndex, Enabled);
+        end;
+  end;
+
+end;
+
+procedure TBlackInst.ToolButton2Click(Sender: TObject);
+begin
+{  with DmBlack.MainDSet do
+   if IsEmpty then begin
+    ShowMessage('Hecbir Kod qeyd olunmayib!');
+    Exit;
+   end
+   else begin   }
+
+    if  MessageDlg(Format('              Silinsin?',['p_id']),mtConfirmation,mbYesNoCancel,0)=mrYes then begin
+     DmBlack.OraclePackage1.CallProcedure('del_cust_black',
+     ['p_id',DmBlack.MainDSet .FieldByName('id').asinteger]);
+     DmBlack.MainDSet .Refresh;
+end;
+             end;
+
+
+procedure TBlackInst.ToolButton3Click(Sender: TObject);
+begin
+DmBlack.MainDSet.Refresh;
+end;
+
+procedure TBlackInst.Edit1Change(Sender: TObject);
+begin
+ With Edit1 do
+if Text <> '' then
+DmBlack.MainDSrc.DataSet.Locate('DOC_PIN',Edit1.Text,[loPartialKey]);
+end;
+
+procedure TBlackInst.EditNAMEClick(Sender: TObject);
+begin
+
+edit2.text:='';
+edit1.text:='';
+edit3.text:='';
+end;
+
+procedure TBlackInst.Edit2Click(Sender: TObject);
+begin
+EditNAME.text:='';
+edit1.text:='';
+edit3.text:='';
+end;
+
+procedure TBlackInst.Edit3Click(Sender: TObject);
+begin
+EditNAME.text:='';
+edit1.text:='';
+edit2.text:='';
+end;
+
+procedure TBlackInst.Edit1Click(Sender: TObject);
+begin
+ EditNAME.text:='';
+edit3.text:='';
+edit2.text:='';
+end;
+
+procedure TBlackInst.ToolButton7Click(Sender: TObject);
+begin
+   Panel2.Visible :=not Panel2.Visible;
+   ToolButton7.Down :=Panel2.Visible;
+   CheckBox1.Checked:=true;
+
+end;
+
+procedure TBlackInst.CheckBox1Click(Sender: TObject);
+begin
+
+if CheckBox1.Checked=true then
+Evanescence1.CheckAll
+else
+begin
+Evanescence1.UncheckAll;
+ end;
+   if Evanescence1.GetCheckedKeyList.Count=0 then
+  begin
+  ADDITIONALPARAMS:=' and a.adrs_state=0';
+  end
+  else
+  begin
+  ADDITIONALPARAMS:='';
+  end;
+DmBlack.MainDSet.Close;
+DmBlack.MainDSet.SQL[8]:= ADDITIONALPARAMS;
+DmBlack.MainDSet.open;
+end;
+
+procedure TBlackInst.Evanescence1ClickCheck(Sender: TObject);
+var
+ ADDITIONALPARAMS:string;
+begin
+if (Evanescence1.GetCheckedKeyList.Count<>Evanescence1.Items.Count) then
+  ADDITIONALPARAMS := ADDITIONALPARAMS + ' and a.adrs_state in('
+                   +Evanescence1.GetCheckedKeyList.CommaText+')'
+                   +#13#10;
+  if Evanescence1.GetCheckedKeyList.Count=0 then
+  begin
+  ADDITIONALPARAMS:=' and a.adrs_state=0';
+  end;
+
+DmBlack.MainDSet.Close;
+DmBlack.MainDSet.SQL[8]:= ADDITIONALPARAMS;
+DmBlack.MainDSet.open;
+
+end;
+
+procedure TBlackInst.N3Click(Sender: TObject);
+begin
+x:=1;
+with InsForm do begin
+ edit1.text:='';
+ edit2.text:='';
+ edit3.text:='';
+ edit4.text:='';
+ edit5.text:='';
+ edit6.text:='';
+ edit7.text:='';
+ edit8.text:='';
+ DBLookupComboBox3.KeyValue:='';
+ DBLookupComboBox2.KeyValue:='';
+ DBLookupComboBox1.KeyValue:=1;
+ DBLookupComboBox4.KeyValue:='';
+ DBEdit1.Text:='';
+ end;
+InsForm.ShowModal
+end;
+
+procedure TBlackInst.N4Click(Sender: TObject);
+begin
+InsForm.edit1.text:=DmBlack.MainDSet.fieldbyname('name').asstring;
+ InsForm.edit2.text:=DmBlack.MainDSet.fieldbyname('lastname').asstring;
+ InsForm.edit4.text:=DmBlack.MainDSet.fieldbyname('middlename').asstring;
+ InsForm.edit3.text:=DmBlack.MainDSet.fieldbyname('doc_pin').asstring;
+ InsForm.edit5.text:=DmBlack.MainDSet.fieldbyname('doc_organ').asstring;
+ InsForm.edit6.text:=DmBlack.MainDSet.fieldbyname('doc_num').asstring;
+ InsForm.edit7.text:=DmBlack.MainDSet.fieldbyname('doc_serie').asstring;
+ InsForm.edit8.text:=DmBlack.MainDSet.fieldbyname('address').asstring;
+ InsForm.DBLookupComboBox1.keyvalue:=DmBlack.MainDSet.fieldbyname('doc_type').asinteger;
+ InsForm.DBLookupComboBox2.keyvalue:=DmBlack.MainDSet.fieldbyname('adrs_city').asinteger;
+ InsForm.DBLookupComboBox3.keyvalue:=DmBlack.MainDSet.fieldbyname('adrs_state').asinteger;
+ InsForm.DBLookupComboBox4.keyvalue:=DmBlack.MainDSet.fieldbyname('gender').asinteger;
+x:=2;
+InsForm.ShowModal;
+end;
+
+procedure TBlackInst.N5Click(Sender: TObject);
+begin
+
+    if  MessageDlg(Format( '             Silinsin?',['p_id']),mtConfirmation,mbYesNoCancel,0)=mrYes then begin
+     DmBlack.OraclePackage1.CallProcedure('del_cust_black',
+     ['p_id',DmBlack.MainDSet .FieldByName('id').asinteger]);
+     DmBlack.MainDSet .Refresh;
+end;
+end ;
+
+procedure TBlackInst.N6Click(Sender: TObject);
+begin
+DmBlack.MainDSet.Refresh;
+end;
+
+procedure TBlackInst.N7Click(Sender: TObject);
+begin
+ Panel2.Visible :=not Panel2.Visible;
+   ToolButton7.Down :=Panel2.Visible;
+   CheckBox1.Checked:=true;
+end;
+
+procedure TBlackInst.ToolButton9Click(Sender: TObject);
+begin
+Panel1.Visible :=not Panel1.Visible;
+   ToolButton9.Down :=Panel1.Visible;
+
+end;
+
+procedure TBlackInst.DBGrid1DblClick(Sender: TObject);
+begin
+ InsForm.edit1.text:=DmBlack.MainDSet.fieldbyname('name').asstring;
+ InsForm.edit2.text:=DmBlack.MainDSet.fieldbyname('lastname').asstring;
+ InsForm.edit4.text:=DmBlack.MainDSet.fieldbyname('middlename').asstring;
+ InsForm.edit3.text:=DmBlack.MainDSet.fieldbyname('doc_pin').asstring;
+ InsForm.edit5.text:=DmBlack.MainDSet.fieldbyname('doc_organ').asstring;
+ InsForm.edit6.text:=DmBlack.MainDSet.fieldbyname('doc_num').asstring;
+ InsForm.edit7.text:=DmBlack.MainDSet.fieldbyname('doc_serie').asstring;
+ InsForm.edit8.text:=DmBlack.MainDSet.fieldbyname('address').asstring;
+ InsForm.DBLookupComboBox1.keyvalue:=DmBlack.MainDSet.fieldbyname('doc_type').asinteger;
+ InsForm.DBLookupComboBox2.keyvalue:=DmBlack.MainDSet.fieldbyname('adrs_city').asinteger;
+ InsForm.DBLookupComboBox3.keyvalue:=DmBlack.MainDSet.fieldbyname('adrs_state').asinteger;
+ InsForm.DBLookupComboBox4.keyvalue:=DmBlack.MainDSet.fieldbyname('gender').asinteger;
+x:=2;
+InsForm.ShowModal;
+end;
+
+procedure TBlackInst.ToolButton10Click(Sender: TObject);
+begin
+formCon.ShowModal;
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TBlackInst,
+    Class_BlackInst,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

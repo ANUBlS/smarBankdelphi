@@ -1,0 +1,223 @@
+﻿unit FrmReportImpl;     //DSXitam
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ExtCtrls, XFSCtrls, StdCtrls, OleServer, ExcelXP, DBCtrls, ComCtrls,
+  CMExcelExport;
+
+type
+  TFrmReport = class(TForm)
+    XFPanel1: TXFPanel;
+    XFPanel2: TXFPanel;
+    XFButton1: TXFButton;
+    XFButton2: TXFButton;
+    XFGroupBox2: TXFGroupBox;
+    ComboBox1: TComboBox;
+    Edit1: TEdit;
+    ExcelExport: TCMExcelExport;
+    Memo1: TMemo;
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure XFButton2Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure XFButton1Click(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+
+    { Public declarations }
+
+    c:string;
+
+  end;
+
+var
+  FrmReport: TFrmReport;
+ implementation
+
+uses ComObj,CommanParametrs,sboapiDataModuleImpl,SBTranslateProc,DMReportImpl,
+  FrmPortfelImpl, FrmLossReportImpl,FrmIns_ammountReportImpl;
+
+{$R *.dfm}
+   procedure InitPlugin(s:string);export;
+begin
+FrmReport.c:=s;
+      if s='' then
+   begin
+     FrmReport.ShowModal;
+   end;
+      if s='Portfel' then
+   begin
+     FrmPortfel.ShowModal;
+   end;
+         if s='loss' then
+   begin
+     FrmLossReport.ShowModal;
+   end;
+
+            if s='hesabat' then
+   begin
+     FrmIns_ammountReport.ShowModal;
+   end;
+
+
+end;
+exports
+     InitPlugin;
+
+procedure TFrmReport.Button1Click(Sender: TObject);
+begin
+FrmIns_ammountReport.ShowModal;
+end;
+
+procedure TFrmReport.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+DMReport.DScustomers.Close;
+end;
+
+procedure TFrmReport.FormCreate(Sender: TObject);
+begin
+
+FrmPortfel:=TFrmPortfel.Create(self);
+          FrmIns_ammountReport:=TFrmIns_ammountReport.create(self);
+         DMReport:=TDMReport.Create(self);
+
+      FrmLossReport:=TFrmLossReport.create(self);
+
+
+
+end;
+
+procedure TFrmReport.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+if ord(key)=vk_escape then close;
+
+end;
+
+procedure TFrmReport.FormShow(Sender: TObject);
+begin
+DMReport.DScustomers.Close;
+DMReport.DScustomers.open;
+edit1.Text:='';
+ComboBox1.Text:='';
+if BarderoReportType='Xitam verilmis.XLS' then
+       begin
+       ComboBox1.Text:='Xitam verilmis.XLS';
+
+       end;
+
+     if BarderoReportType='Premiya Barderosu.XLS' then
+       begin
+       ComboBox1.Text:='Premiya Barderosu.XLS';
+
+       end;
+
+   if BarderoReportType='Subroqasiya barderosu.xls' then
+       begin
+       ComboBox1.Text:='Subroqasiya barderosu.xls';
+
+       end;
+
+   if BarderoReportType='Zerer Barderosu.xls' then
+       begin
+       ComboBox1.Text:='Zerer Barderosu.xls';
+
+       end;
+
+
+end;
+
+procedure TFrmReport.XFButton1Click(Sender: TObject);
+begin
+
+
+if   ComboBox1.Text='Zerer Barderosu.xls' then
+           begin
+   DMReport.DSZerer.Close;
+   DMReport.DSZerer.SetVariable('pbardero_no',edit1.Text);
+   DMReport.DSZerer.Open;
+if   DMReport.DSZerer.RecordCount=0 then
+begin
+  showmessage('hec bir melumat yoxdur.');
+  exit;
+end;
+ with ExcelExport do
+   begin
+      Connect;
+      ExportDataset(DMReport.DSZerer,'Zerer Barderosu.',True,false);
+      Disconnect;
+   end;
+   end;
+
+
+if   ComboBox1.Text='Premiya Barderosu.XLS' then
+           begin
+   DMReport.DSPremya.Close;
+   DMReport.DSPremya.SetVariable('pbardero_no',edit1.Text);
+   DMReport.DSPremya.Open;
+if   DMReport.DSPremya.RecordCount=0 then
+begin
+  showmessage('hec bir melumat yoxdur.');
+  exit;
+end;
+ with ExcelExport do
+   begin
+      Connect;
+      ExportDataset(DMReport.DSPremya,'Premya Barderosu.',True,false);
+      Disconnect;
+   end;
+
+           end;
+
+
+if   ComboBox1.Text='Subroqasiya barderosu.xls' then
+           begin
+   DMReport.DSSubroqasiya.Close;
+   DMReport.DSSubroqasiya.SetVariable('pbardero_no',edit1.Text);
+   DMReport.DSSubroqasiya.Open;
+if   DMReport.DSSubroqasiya.RecordCount=0 then
+begin
+  showmessage('hec bir melumat yoxdur.');
+  exit;
+end;
+ with ExcelExport do
+   begin
+      Connect;
+      ExportDataset(DMReport.DSSubroqasiya,'Subroqasiya Barderosu',True,false);
+      Disconnect;
+   end;
+   end;
+
+      if   ComboBox1.Text='Xitam verilmis.XLS' then
+           begin
+   DMReport.DSXitam.Close;
+   DMReport.DSXitam.SetVariable('pbardero_no',edit1.Text);
+   DMReport.DSXitam.Open;
+   //memo1.Text:=DMReport.DSXitam.sql.Text;
+if   DMReport.DSXitam.RecordCount=0 then
+begin
+  showmessage('hec bir melumat yoxdur.');
+  exit;
+end;
+ with ExcelExport do
+   begin
+      Connect;
+      ExportDataset(DMReport.DSXitam,'Xitam verilmis',True,false);
+      Disconnect;
+   end;
+   end;
+
+    FrmReport.Close;
+end;
+
+procedure TFrmReport.XFButton2Click(Sender: TObject);
+begin
+close;
+end;
+initialization
+ FrmReport :=TFrmReport.Create(Application);
+end.

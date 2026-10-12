@@ -1,0 +1,97 @@
+object frmCategories_new: TfrmCategories_new
+  Left = 0
+  Top = 0
+  ClientHeight = 326
+  ClientWidth = 269
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poScreenCenter
+  OnCanResize = FormCanResize
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  OnKeyPress = FormKeyPress
+  PixelsPerInch = 96
+  TextHeight = 13
+  object DBGridEh1: TDBGridEh
+    Left = 0
+    Top = 26
+    Width = 269
+    Height = 281
+    Align = alClient
+    DataSource = CategoriesDatSrc
+    Flat = True
+    FooterColor = clWindow
+    FooterFont.Charset = DEFAULT_CHARSET
+    FooterFont.Color = clWindowText
+    FooterFont.Height = -11
+    FooterFont.Name = 'Tahoma'
+    FooterFont.Style = []
+    TabOrder = 0
+    TitleFont.Charset = DEFAULT_CHARSET
+    TitleFont.Color = clWindowText
+    TitleFont.Height = -11
+    TitleFont.Name = 'Tahoma'
+    TitleFont.Style = []
+    VertScrollBar.VisibleMode = sbNeverShowEh
+    OnKeyPress = DBGridEh1KeyPress
+    Columns = <
+      item
+        EditButtons = <>
+        FieldName = 'CATEGORY'
+        Footers = <>
+        Title.Caption = 'M'#252#351't'#601'rinin tipi'
+        Title.Color = clNavy
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clWhite
+        Title.Font.Height = -12
+        Title.Font.Name = 'Tahoma'
+        Title.Font.Style = []
+        Width = 256
+      end>
+  end
+  object DBNavigator1: TDBNavigator
+    Left = 0
+    Top = 0
+    Width = 269
+    Height = 26
+    DataSource = CategoriesDatSrc
+    Align = alTop
+    Flat = True
+    TabOrder = 1
+  end
+  object StatusBar1: TStatusBar
+    Left = 0
+    Top = 307
+    Width = 269
+    Height = 19
+    Panels = <>
+  end
+  object Categories: TOracleDataSet
+    SQL.Strings = (
+      '/* Formatted on 2007/08/31 13:02 (Formatter Plus v4.7.0) */'
+      'SELECT ROWID, ID, CATEGORY'
+      '  FROM sbcm_categories_new')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      0500000002000000040000004900440001000000000010000000430041005400
+      450047004F0052005900010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 8
+    Top = 248
+    object CategoriesCATEGORY: TWideStringField
+      FieldName = 'CATEGORY'
+      Size = 128
+    end
+  end
+  object CategoriesDatSrc: TDataSource
+    DataSet = Categories
+    Left = 40
+    Top = 248
+  end
+end

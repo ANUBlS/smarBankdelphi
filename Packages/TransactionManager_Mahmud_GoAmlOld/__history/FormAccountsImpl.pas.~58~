@@ -1,0 +1,154 @@
+﻿unit FormAccountsImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Grids, XDBGrids, StdCtrls,OracleData, ActnList;
+
+type
+  TFormAccounts = class(TForm)
+    GroupBox1: TGroupBox;
+    XDBGridAccounts: TXDBGrid;
+    Button1: TButton;
+    EditACC_NO_SEARCH: TEdit;
+    EditACC_NO: TEdit;
+    EditName: TEdit;
+    procedure Button1Click(Sender: TObject);
+    procedure ActionSpeedSearchExecute(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure EditACC_NO_SEARCHKeyPress(Sender: TObject; var Key: Char);
+    procedure EditACC_NOKeyPress(Sender: TObject; var Key: Char);
+    procedure EditNameKeyPress(Sender: TObject; var Key: Char);
+    procedure FormShow(Sender: TObject);
+    procedure XDBGridAccountsDblClick(Sender: TObject);
+    procedure CloseFormExecute(Sender: TObject);
+    procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+        v_AccNo: String;
+    DebOrKred: Boolean;
+  end;
+
+var
+  FormAccounts: TFormAccounts;
+
+implementation
+
+uses TransactionDataModuleUnit, TransactionPropertiesImpl;
+
+{$R *.dfm}
+procedure TFormAccounts.CloseFormExecute(Sender: TObject);
+begin
+  FormAccounts.Close;
+end;
+
+procedure TFormAccounts.ActionSpeedSearchExecute(
+  Sender: TObject);
+var
+  SearchField : string;
+  SearchOptions : TSearchRecordOptions;
+begin
+  SearchOptions := [srIgnoreCase ,srPartialMatch ];
+
+  with Sender as TEdit  do
+  begin
+    SearchField := copy(Name,5,length(Name));
+    with  TOracleDataSet(XDBGridAccounts.DataSource.DataSet) do
+    if  not SearchRecord(
+                  SearchField
+                 ,Text
+                 ,SearchOptions + [srFromCurrent , srForward ]
+                 ) then
+  {  if MessageDlg(
+              'Axtarış sona çatdı.'+#13+'Əvvəldən başlansın?'
+             ,mtInformation
+             ,[mbNo , mbYes]
+             ,0
+             ) = mrYes  then   }
+    if not SearchRecord(
+                 SearchField
+                ,Text
+                ,SearchOptions + [ srFromBeginning ]
+                )  then
+    MessageDlg('Yazı tapılmayıb!',mtInformation,[mbOK],0);
+ end;
+
+end;
+
+procedure TFormAccounts.Button1Click(Sender: TObject);
+begin
+v_AccNo:=TransactionDataModule.ODS_Account.FieldByName('ACC_NO').AsString;
+  FormAccounts.Close;
+end;
+
+procedure TFormAccounts.EditACC_NOKeyPress(Sender: TObject; var Key: Char);
+begin
+if key=#13  then ActionSpeedSearchExecute(Sender);
+end;
+
+procedure TFormAccounts.EditACC_NO_SEARCHKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+if key=#13  then ActionSpeedSearchExecute(Sender);
+
+end;
+
+procedure TFormAccounts.EditNameKeyPress(Sender: TObject; var Key: Char);
+begin
+if key=#13  then ActionSpeedSearchExecute(Sender);
+end;
+
+procedure TFormAccounts.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+EditACC_NO_SEARCH.Clear;
+EditACC_NO.Clear;
+EditName.Clear;
+end;
+
+procedure TFormAccounts.FormKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+if (key=VK_INSERT) then
+begin
+v_AccNo:=TransactionDataModule.ODS_Account.FieldByName('ACC_NO').AsString;
+FormAccounts.Close;
+end;
+//then VK_RETURN showmessage('salam');
+     //
+
+end;
+
+procedure TFormAccounts.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+if key=#27 then FormAccounts.Close;
+end;
+
+procedure TFormAccounts.FormShow(Sender: TObject);
+begin
+  if DebOrKred = True then
+  begin
+ //  if strtoint(TransactionEditForm.DebitCurrencyIDEdit.Text)=0 then v_valute:=0 else v_valute:=1;
+ //   TransactionDataModule.ODS_Account.SetVariable('VALUTE',v_valute);
+  end
+  else
+begin
+  // if strtoint(TransactionEditForm.CreditCurrencyIDEdit.Text)=0 then v_valute:=0 else v_valute:=1;
+  //  TransactionDataModule.ODS_Account.SetVariable('VALUTE',v_valute);
+  end;
+
+  if v_AccNO <> '' then
+  TransactionDataModule.ODS_Account.Locate('ACC_NO', v_AccNO, []);
+  EditACC_NO_SEARCH.SetFocus;
+end;
+
+procedure TFormAccounts.XDBGridAccountsDblClick(Sender: TObject);
+begin
+v_AccNo:=TransactionDataModule.ODS_Account.FieldByName('ACC_NO').AsString;
+  FormAccounts.Close;
+end;
+
+end.

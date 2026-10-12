@@ -1,0 +1,156 @@
+unit out_accdatamodule;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, OracleData, Oracle;
+ type
+    TAccount = record
+      ID:          Longint;
+      CustomerID:  Longint;
+      AccNo:       String;
+      OperatorID:  Longint;
+      CurrencyID:  Integer;
+      Name:        String;
+      OpenDate:    TDateTime;
+      Limit:       Currency;
+      CloseDate:   TDateTime; 
+      Balance1:    Longint;
+      Balance2:    Longint;
+      Balance3:    Longint;
+      Balance4:    Longint;
+      FilialID:    Integer;
+      Simotcet:    Integer;
+      Tipacc:      String;
+      OldAccNo:    String;
+      PairAccID:   Integer;
+      Insider:     String;
+    end;
+
+const
+     cs_add_account = 'add_account';
+     cs_upd_account = 'upd_account';
+     cs_close_account = 'close_account';
+     cs_generateID = 'GenerateID';
+     cs_flagexsist = 'FlagExsist';
+
+
+type
+  TDataModule2 = class(TDataModule)
+    Account: TOracleDataSet;
+    AccountData: TDataSource;
+    customers: TOracleDataSet;
+    customersdata: TDataSource;
+    users: TOracleDataSet;
+    usersdata: TDataSource;
+    branches: TOracleDataSet;
+    branchesdata: TDataSource;
+    currency: TOracleDataSet;
+    currencydata: TDataSource;
+    AccFlags: TOracleDataSet;
+    AccFlagsdata: TDataSource;
+    BalAcc: TOracleDataSet;
+    BalAccdata: TDataSource;
+    tenostat: TOracleDataSet;
+    tenostatdata: TDataSource;
+    Lazyrest: TOracleDataSet;
+    Lazyrestdata: TDataSource;
+    PairAccount: TOracleDataSet;
+    PairAccountdata: TDataSource;
+    sysdat: TOracleDataSet;
+    SBUTIL: TOraclePackage;
+    OUT_SBOP: TOraclePackage;
+    ReportSymbol: TOracleDataSet;
+    ReportSymboldata: TDataSource;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  DataModule2: TDataModule2;
+
+implementation
+
+{$R *.DFM}
+uses
+    sboapiDataModuleImpl;
+    function datamodule2.AddAccount(Account: TAccount): Longint;
+begin
+ with OUT_SBOP, Account do
+  Result :=CallIntegerFunction(cs_add_account, [
+              'customerid', CustomerID,
+              'op_id', OperatorID,
+              'accno', AccNo,
+              'currencyid', CurrencyID,
+              'name', Name,
+              'open_dat', OpenDate,
+              'balcn', Balance1,
+              'limit', Limit,
+              'close_dat', CloseDate,
+              'bal_cn2', Balance2,
+              'bal_cn3', Balance3,
+              'bal_cn4', Balance4,
+              'filial', FilialID,
+              'sim_otcet', Simotcet,
+              'typeacc', Tipacc,
+              'old_acc_no', OldAccNo,
+              'pair_acc', PairAccID,
+              'insider', Insider
+           ]);
+end;
+
+procedure TAccDataModule.UpdateAccount(Account: TAccount);
+begin
+ with OUT_SBOP, Account do
+  CallProcedure(cs_upd_account, [
+              'v_id', ID,
+              'v_customerid', CustomerID,
+              'v_op_id', OperatorID,
+              'v_accno', AccNo,
+              'v_currencyid', CurrencyID,
+              'v_name', Name,
+              'v_open_dat', OpenDate,
+              'v_balcn', Balance1,
+              'v_limit', Limit,
+              'v_close_dat', CloseDate,
+              'v_bal_cn2', Balance2,
+              'v_bal_cn3', Balance3,
+              'v_bal_cn4', Balance4,
+              'v_filial', FilialID,
+              'v_sim_otcet', Simotcet,
+              'v_typeacc', Tipacc,
+              'v_old_acc_no', OldAccNo,
+              'v_pair_acc', PairAccID,
+              'v_insider', Insider
+           ]);
+end;
+
+procedure TAccDataModule.CloseAccount(AccountID: Longint);
+begin
+ with OUT_SBOP, Account do
+  CallProcedure(cs_close_account, [
+              'accid', AccountID,
+              'doclose', 1
+           ]);
+end;
+
+function TAccDataModule.GenerateID: Longint;
+begin
+ with OUT_SBOP do
+  Result :=CallIntegerFunction(cs_generateID, []);
+end;
+
+function TAccDataModule.FlagExsist(AccID : Integer;Ch : Char):Boolean;
+begin
+   with SBUTIL do
+    Result :=
+     CallBooleanFunction(cs_flagexsist,[
+       'AccID', AccID ,
+       'FlagChar', ch
+     ]);
+end;
+
+end.

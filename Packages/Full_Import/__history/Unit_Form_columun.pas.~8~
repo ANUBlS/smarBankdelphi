@@ -1,0 +1,69 @@
+unit Unit_Form_columun;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, CheckLst, ExtCtrls, Oracle, OracleNavigator, DB, Grids,
+  XDBGrids, OracleData;
+
+type
+  TForm_column = class(TForm)
+    Panel1: TPanel;
+    Button1: TButton;
+    OraclePackage1: TOraclePackage;
+    CheckListBox: TCheckListBox;
+    OracleDataSet1: TOracleDataSet;
+    DataSource1: TDataSource;
+    Memo1: TMemo;
+    Button2: TButton;
+    procedure Button1Click(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form_column: TForm_column;
+
+implementation
+ uses SboapiDataModuleImpl, Full_ImportForm;
+{$R *.dfm}
+
+procedure TForm_column.Button1Click(Sender: TObject);
+  var
+  i:integer     ;
+  a:string;
+
+  begin
+  Memo1.Clear;
+ NumberOfCheckedItems := 0;
+  for I := 0 to CheckListBox.Count - 1 do begin
+    if CheckListBox.Checked[I] then
+    begin
+      NumberOfCheckedItems := NumberOfCheckedItems + 1;
+      Memo1.Lines.Add(inttostr(i+1));
+    //  ShowMessage(inttostr(i));
+    end;
+
+  end;
+
+ // ShowMessage(IntToStr(NumberOfCheckedItems));
+
+OraclePackage1.CallProcedure('get_create_table',[NumberOfCheckedItems]);
+OracleDataSet1.Active:=true;
+Form_column.OracleDataSet1.Refresh;
+ Form_column.Close;
+
+end;
+
+procedure TForm_column.Button2Click(Sender: TObject);
+begin
+ with CheckListBox do
+    if Checked[ItemIndex] then
+      Memo1.Lines.Add(Items[ItemIndex]);
+end;
+
+end.

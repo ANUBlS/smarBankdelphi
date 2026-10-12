@@ -1,0 +1,317 @@
+object FormOperations: TFormOperations
+  Left = 335
+  Top = 207
+  ActiveControl = ButtonCommit
+  BorderStyle = bsDialog
+  Caption = 'Operations Form'
+  ClientHeight = 251
+  ClientWidth = 379
+  Color = clBtnFace
+  Font.Charset = RUSSIAN_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poMainFormCenter
+  OnActivate = FormActivate
+  OnClose = FormClose
+  OnCreate = FormCreate
+  OnKeyDown = FormKeyDown
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object GroupBox1: TGroupBox
+    Left = 0
+    Top = 0
+    Width = 379
+    Height = 251
+    Align = alClient
+    Caption = #1071#1084#1103#1083#1080#1081#1081#1072#1090#1083#1072#1088
+    TabOrder = 0
+    object Panel1: TPanel
+      Left = 2
+      Top = 15
+      Width = 375
+      Height = 25
+      Align = alTop
+      Alignment = taLeftJustify
+      BevelInner = bvLowered
+      Caption = #1071#1084#1103#1083#1080#1081#1081#1072#1090#1099#1085' '#1072#1076#1099
+      TabOrder = 0
+      DesignSize = (
+        375
+        25)
+      object OperationName: TDBEdit
+        Left = 93
+        Top = 2
+        Width = 280
+        Height = 21
+        Anchors = [akLeft, akTop, akRight]
+        Color = clSilver
+        DataField = 'NAME'
+        DataSource = TuningDataModule.DSSettings
+        TabOrder = 0
+      end
+    end
+    object Panel2: TPanel
+      Left = 2
+      Top = 40
+      Width = 375
+      Height = 25
+      Align = alTop
+      Alignment = taLeftJustify
+      BevelInner = bvLowered
+      Caption = #1044#1077#1073#1077#1090' '#1097#1077#1089#1072#1073
+      TabOrder = 1
+      DesignSize = (
+        375
+        25)
+      object EDebt: TEdit
+        Left = 93
+        Top = 2
+        Width = 124
+        Height = 21
+        Anchors = [akLeft, akTop, akRight]
+        TabOrder = 0
+        OnChange = EDebtChange
+        OnEnter = EDebtEnter
+        OnExit = EDebtExit
+        OnKeyDown = EDebtKeyDown
+      end
+      object DBLookupDebt: TDBLookupComboBox
+        Left = 216
+        Top = 2
+        Width = 157
+        Height = 21
+        DataField = 'DEBT'
+        DataSource = TuningDataModule.DSSettings
+        KeyField = 'ID'
+        ListField = 'ACC_NO'
+        ListSource = TuningDataModule.DSDebtAccount
+        TabOrder = 1
+      end
+    end
+    object Panel3: TPanel
+      Left = 2
+      Top = 115
+      Width = 375
+      Height = 25
+      Align = alTop
+      Alignment = taLeftJustify
+      BevelInner = bvLowered
+      Caption = #1050#1086#1084#1080#1089#1089#1080#1081#1072' '#1050#1088#1077#1076#1080#1090
+      TabOrder = 4
+      DesignSize = (
+        375
+        25)
+      object EAdditionalCredit: TEdit
+        Left = 93
+        Top = 2
+        Width = 124
+        Height = 21
+        Anchors = [akLeft, akTop, akRight]
+        TabOrder = 0
+        OnChange = EDebtChange
+        OnEnter = EDebtEnter
+        OnExit = EDebtExit
+        OnKeyDown = EDebtKeyDown
+      end
+      object DBLookupAdditionalCredit: TDBLookupComboBox
+        Left = 216
+        Top = 2
+        Width = 157
+        Height = 21
+        DataField = 'ADDITIONALCREDIT'
+        DataSource = TuningDataModule.DSSettings
+        KeyField = 'ID'
+        ListField = 'ACC_NO'
+        ListSource = TuningDataModule.DSDebtAccount
+        TabOrder = 1
+      end
+    end
+    object Panel4: TPanel
+      Left = 2
+      Top = 140
+      Width = 375
+      Height = 25
+      Align = alTop
+      Alignment = taLeftJustify
+      BevelInner = bvLowered
+      Caption = #1071#1084#1103#1083#1080#1081#1081#1072#1090#1099#1085' '#1090#1103#1081#1080#1085#1072#1090#1099
+      TabOrder = 5
+      DesignSize = (
+        375
+        25)
+      object Assignment: TDBEdit
+        Left = 96
+        Top = 2
+        Width = 277
+        Height = 21
+        Anchors = [akLeft, akTop, akRight]
+        Color = clSilver
+        DataField = 'ASSIGNMENT'
+        DataSource = TuningDataModule.DSSettings
+        TabOrder = 0
+      end
+    end
+    object Panel5: TPanel
+      Left = 2
+      Top = 165
+      Width = 375
+      Height = 25
+      Align = alTop
+      Alignment = taLeftJustify
+      BevelInner = bvLowered
+      Caption = #1050#1086#1084#1080#1089#1089#1080#1081#1072' '#1103#1084#1103#1083#1080#1081#1081#1072#1090#1099#1085' '#1090#1103#1081#1080#1085#1072#1090#1099
+      TabOrder = 6
+      DesignSize = (
+        375
+        25)
+      object ComAssignment: TDBEdit
+        Left = 144
+        Top = 2
+        Width = 229
+        Height = 21
+        Anchors = [akLeft, akTop, akRight]
+        Color = clSilver
+        DataField = 'COMMISIONASSIGNMENT'
+        DataSource = TuningDataModule.DSSettings
+        TabOrder = 0
+      end
+    end
+    object Panel6: TPanel
+      Left = 2
+      Top = 190
+      Width = 375
+      Height = 25
+      Align = alTop
+      Alignment = taLeftJustify
+      BevelInner = bvLowered
+      TabOrder = 7
+      DesignSize = (
+        375
+        25)
+      object CBCheckUser: TComboBox
+        Left = 1
+        Top = 2
+        Width = 373
+        Height = 21
+        Style = csDropDownList
+        Anchors = [akLeft, akTop, akRight]
+        Color = clSilver
+        TabOrder = 0
+        Items.Strings = (
+          #1057#1072#1079#1083#1072#1084#1072' '#1073#1094#1090#1094#1085' '#1080#1089#1090#1080#1092#1072#1076#1103#1095#1080#1083#1103#1088' '#1094#1095#1094#1085#1076#1094#1088
+          #1057#1072#1079#1083#1072#1084#1072' '#1081#1072#1083#1085#1099#1079' '#1078#1072#1088#1080' '#1080#1089#1090#1080#1092#1072#1076#1103#1095#1080' '#1094#1095#1094#1085#1076#1094#1088)
+      end
+    end
+    object Panel7: TPanel
+      Left = 2
+      Top = 65
+      Width = 375
+      Height = 25
+      Align = alTop
+      Alignment = taLeftJustify
+      BevelInner = bvLowered
+      Caption = #1050#1088#1077#1076#1080#1090' '#1097#1077#1089#1072#1073
+      TabOrder = 2
+      DesignSize = (
+        375
+        25)
+      object ECredit: TEdit
+        Left = 93
+        Top = 2
+        Width = 124
+        Height = 21
+        Anchors = [akLeft, akTop, akRight]
+        TabOrder = 0
+        OnChange = EDebtChange
+        OnEnter = EDebtEnter
+        OnExit = EDebtExit
+        OnKeyDown = EDebtKeyDown
+      end
+      object DBLookupCredit: TDBLookupComboBox
+        Left = 216
+        Top = 2
+        Width = 157
+        Height = 21
+        DataField = 'CREDIT'
+        DataSource = TuningDataModule.DSSettings
+        KeyField = 'ID'
+        ListField = 'ACC_NO'
+        ListSource = TuningDataModule.DSDebtAccount
+        TabOrder = 1
+      end
+    end
+    object Panel8: TPanel
+      Left = 2
+      Top = 90
+      Width = 375
+      Height = 25
+      Align = alTop
+      Alignment = taLeftJustify
+      BevelInner = bvLowered
+      Caption = #1050#1086#1084#1080#1089#1089#1080#1081#1072' '#1044#1077#1073#1077#1090
+      TabOrder = 3
+      DesignSize = (
+        375
+        25)
+      object EAdditionalDebt: TEdit
+        Left = 93
+        Top = 2
+        Width = 124
+        Height = 21
+        Anchors = [akLeft, akTop, akRight]
+        TabOrder = 0
+        OnChange = EDebtChange
+        OnEnter = EDebtEnter
+        OnExit = EDebtExit
+        OnKeyDown = EDebtKeyDown
+      end
+      object DBLookupAdditionalDebt: TDBLookupComboBox
+        Left = 216
+        Top = 2
+        Width = 157
+        Height = 21
+        DataField = 'ADDITIONALDEBT'
+        DataSource = TuningDataModule.DSSettings
+        KeyField = 'ID'
+        ListField = 'ACC_NO'
+        ListSource = TuningDataModule.DSDebtAccount
+        TabOrder = 1
+      end
+    end
+    object ButtonCommit: TButton
+      Left = 223
+      Top = 220
+      Width = 75
+      Height = 25
+      Action = ActionCommit
+      Default = True
+      TabOrder = 8
+    end
+    object ButtonCancel: TButton
+      Left = 300
+      Top = 220
+      Width = 75
+      Height = 25
+      Action = ActionCancel
+      TabOrder = 9
+    end
+  end
+  object ActionList1: TActionList
+    Left = 88
+    Top = 216
+    object ActionCommit: TAction
+      Caption = #1043#1103#1073#1091#1083
+      OnExecute = ActionCommitExecute
+      OnUpdate = ActionCommitUpdate
+    end
+    object ActionCancel: TAction
+      Caption = #1048#1084#1090#1080#1085#1072
+      OnExecute = ActionCancelExecute
+    end
+  end
+end

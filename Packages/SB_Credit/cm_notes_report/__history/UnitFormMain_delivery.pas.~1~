@@ -1,0 +1,41 @@
+unit UnitFormMain_delivery;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, Grids, DBGrids, DBCtrls, ExtCtrls;
+
+type
+  TFormMain_delivery = class(TForm)
+    Panel1: TPanel;
+    DBMemo1: TDBMemo;
+    Panel2: TPanel;
+    DBGrid1: TDBGrid;
+    Panel3: TPanel;
+    Button1: TButton;
+    procedure Button1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormMain_delivery: TFormMain_delivery;
+
+implementation
+
+uses Unit_delivery;
+
+{$R *.dfm}
+
+procedure TFormMain_delivery.Button1Click(Sender: TObject);
+begin
+ if not Assigned(Form_delivery) then
+   Form_delivery:=TForm_delivery.create(self);
+
+   Form_delivery.ShowModal;
+end;
+
+end.

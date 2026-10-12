@@ -1,0 +1,60 @@
+unit InsBalSettings;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, Buttons, ComCtrls, DBViewComboBox, Mask, DBCtrls, ExtCtrls, DB,
+  Grids, DBGrids;
+
+type
+  TfmBalSettings = class(TForm)
+    PageControl1: TPageControl;
+    TabSheet1: TTabSheet;
+    Panel1: TPanel;
+    BitBtn1: TBitBtn;
+    BitBtn2: TBitBtn;
+    Panel2: TPanel;
+    Panel3: TPanel;
+    Splitter1: TSplitter;
+    DBGrid1: TDBGrid;
+    DBGrid2: TDBGrid;
+    DBNavigator1: TDBNavigator;
+    DBNavigator2: TDBNavigator;
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure DBGrid1Exit(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  fmBalSettings: TfmBalSettings;
+
+implementation
+
+uses InsDataModule;
+
+{$R *.DFM}
+
+procedure TfmBalSettings.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+  with InsDataMod do begin
+    if (ModalResult = mrOk) then begin
+     if (ODSAcc_types.State = dsEdit) then ODSAcc_types.Post;
+     if (ODSBal_cn.State = dsEdit) then ODSBal_cn.Post;
+    end;
+   ODSAcc_types.CloseAll;
+   ODSBal_cn.CloseAll;
+  end;
+end;
+
+procedure TfmBalSettings.DBGrid1Exit(Sender: TObject);
+begin
+  with InsDataMod do
+    ODSAcc_types.RefreshRecord;
+end;
+
+end.

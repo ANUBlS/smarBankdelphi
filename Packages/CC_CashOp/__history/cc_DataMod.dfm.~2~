@@ -1,0 +1,43 @@
+object DataModule1: TDataModule1
+  OldCreateOrder = False
+  Height = 405
+  Width = 764
+  object cc_contracts: TOracleDataSet
+    SQL.Strings = (
+      
+        'select rownum,cont.code,cont.id as id,cont.contnum,cont.FIRSTNAM' +
+        'E,cont.lastname,cont.MIDDLENAME,cont.acc_no,'
+      
+        '       av.val_name,cont.contamount as creditamount, cont.bld_nam' +
+        'e, cont.FLATNUMBER,cont.rest, cont.comp_name,'
+      
+        '       cont.entrance, cont.ffloor, cont.area  from  cc_activecon' +
+        'tracts cont , avalute av'
+      'where av.valute = cont.contcur '
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      '')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 536
+    Top = 96
+  end
+  object CC_contractsSrc: TDataSource
+    Left = 536
+    Top = 160
+  end
+  object sboapi: TOracleLogon
+    Session = sboapiDataModule.SBSession
+    Options = [ldDatabase]
+    Left = 472
+    Top = 136
+  end
+end

@@ -1,0 +1,43 @@
+unit CC_Datamodule;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Oracle, Db, OracleData;
+
+type
+  TCC_DataMod = class(TDataModule)
+    CC_OP: TOraclePackage;
+    CC_Company: TOracleDataSet;
+    CC_Com_Data: TDataSource;
+    CC_build_Data: TDataSource;
+    CC_Flat: TOracleDataSet;
+    CC_Flat_Data: TDataSource;
+    CC_Buyer_Flat: TOracleDataSet;
+    CC_Buyer_FlatData: TDataSource;
+    CC_CompanyID: TIntegerField;
+    CC_CompanyCOMP_NAME: TStringField;
+    CC_building: TOracleDataSet;
+    procedure DataModuleCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  CC_DataMod: TCC_DataMod;
+
+implementation
+
+Uses sboapiDataModuleImpl; 
+{$R *.DFM}
+
+procedure TCC_DataMod.DataModuleCreate(Sender: TObject);
+begin
+CC_building.Open;
+  CC_Buyer_Flat.open
+end;
+
+end.

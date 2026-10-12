@@ -1,0 +1,36 @@
+unit frm_amartizatorimpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ComCtrls;
+
+type
+  Tfrm_amartizator = class(TForm)
+    PageControl1: TPageControl;
+    TabSheet1: TTabSheet;
+    TabSheet2: TTabSheet;
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  frm_amartizator: Tfrm_amartizator;
+
+implementation
+
+{$R *.dfm}
+        uses CommanParametrs,sboapiDataModuleImpl,SBTranslateProc,DMMainImpl,FrmMainImpl;
+
+{$R *.dfm}
+
+procedure Tfrm_amartizator.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+if ord(key)=vk_escape then close
+end;
+
+end.

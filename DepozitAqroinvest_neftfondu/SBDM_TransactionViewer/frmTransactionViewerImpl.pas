@@ -1,0 +1,232 @@
+unit frmTransactionViewerImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls,  Mask, DBCtrlsEh, Buttons, ComCtrls, DBCtrls,
+  ExtCtrls, DBLookupEh, NLSLocalizer;
+
+type
+  TfrmTransactionViewer = class(TForm)
+    GroupBox1: TGroupBox;
+    HeaderControl1: THeaderControl;
+    Panel1: TPanel;
+    PanelDebit: TPanel;
+    PanelDebitRest: TPanel;
+    Label1: TLabel;
+    Label2: TLabel;
+    Panel4: TPanel;
+    Panel5: TPanel;
+    Panel6: TPanel;
+    Panel2: TPanel;
+    PanelCredit: TPanel;
+    PanelCreditRest: TPanel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Panel8: TPanel;
+    Panel9: TPanel;
+    Panel10: TPanel;
+    GroupBox4: TGroupBox;
+    Label5: TLabel;
+    Label6: TLabel;
+    Label7: TLabel;
+    GroupBox2: TGroupBox;
+    Panel11: TPanel;
+    Panel12: TPanel;
+    Panel13: TPanel;
+    GroupBox3: TGroupBox;
+    Panel14: TPanel;
+    Panel15: TPanel;
+    Panel16: TPanel;
+    BitBtnOk: TBitBtn;
+    DBEditEh2: TDBEditEh;
+    DBEditEh3: TDBEditEh;
+    DBLookupComboboxEh2: TDBLookupComboboxEh;
+    DBEditEh4: TDBEditEh;
+    DBLookupComboboxEh3: TDBLookupComboboxEh;
+    DBEditEh5: TDBEditEh;
+    DBEditEh6: TDBEditEh;
+    DBLookupComboboxEh4: TDBLookupComboboxEh;
+    DBEditEh7: TDBEditEh;
+    DBEditEh8: TDBEditEh;
+    DBLookupComboboxEh5: TDBLookupComboboxEh;
+    DBEditEh9: TDBEditEh;
+    DBLookupComboboxEh6: TDBLookupComboboxEh;
+    DBLookupComboboxEh7: TDBLookupComboboxEh;
+    DBLookupComboboxEh8: TDBLookupComboboxEh;
+    DBEditEh10: TDBEditEh;
+    DBEditEh11: TDBEditEh;
+    DBEditEh12: TDBEditEh;
+    DBEditEh13: TDBEditEh;
+    DBEditEh14: TDBEditEh;
+    DBLookupComboboxEh9: TDBLookupComboboxEh;
+    DBLookupComboboxEh1: TDBLookupComboboxEh;
+    DBEditEh1: TDBEditEh;
+    DBDateTimeEditEh1: TDBDateTimeEditEh;
+    LblDebitOstat: TLabel;
+    LblDebitpokOstat: TLabel;
+    LblCreditpokOstat: TLabel;
+    LblCreditOstat: TLabel;
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure BitBtnOkClick(Sender: TObject);
+  private
+    procedure SetKeyValues(Lcb : TDBLookupComboboxEh; Fild : String);
+  public
+    { Public declarations }
+  end;
+
+var
+  frmTransactionViewer: TfrmTransactionViewer;
+
+  procedure exportproc(TrID :String); export;
+implementation
+
+{$R *.DFM}
+
+uses CommonDeclsImpl,dmTransactionViewerImpl,SBTranslateProc,sboapiDataModuleImpl;
+
+procedure exportproc(TrID :String); export;
+var  
+    TransDate : TDateTime;
+    TransID,
+    DebitID ,
+    CreditID ,
+    DebitVal,
+    CreditVal :Integer;
+begin
+
+   TransID := StrToInt(TrID);
+
+   with dmTransactionViewer do
+   begin
+
+      with TransactionData do
+      begin
+         if Active then CloseAll;
+         SetVariable('TransactionID',TransID);
+         Open;
+         TransDate := FieldByName('Dat').AsDateTime;
+         {DebitID := FieldByName('Debt').AsInteger;
+         CreditID := FieldByName('Kredit').AsInteger;
+         DebitVal := FieldByName('val_acc').AsInteger;
+         CreditVal := FieldByName('CurencyID_c').AsInteger;}
+      end;
+
+       with  AccDebit do
+        if not Active then Open;
+
+       with  AccCredit do
+        if not Active then Open;
+
+       with  AvaluteDebit do
+        if not Active then Open;
+
+       with  AvaluteCredit do
+        if not Active then Open;
+
+       with  CashSymbols do
+        if not Active then Open;
+
+       with  ConvertationSymbols do
+        if not Active then Open;
+
+       with  operations do
+        if not Active then Open;
+
+
+      with RestDebit do
+      begin
+         if Active then CloseAll;
+         SetVariable('dat',TransDate);
+         Open;
+      end;
+
+
+      with RestCredit do
+      begin
+         if Active then CloseAll;
+         SetVariable('dat',TransDate);
+         Open;
+      end;
+
+   end;
+
+   frmTransactionViewer.ShowModal;
+end;
+
+exports
+  exportproc;
+
+procedure TfrmTransactionViewer.SetKeyValues(Lcb : TDBLookupComboboxEh; Fild : String);
+begin
+   with Lcb do
+        KeyValue := ListSource.DataSet.FieldByName(Fild).AsInteger;
+end;  
+
+procedure TfrmTransactionViewer.FormCanResize(Sender: TObject;
+  var NewWidth, NewHeight: Integer; var Resize: Boolean);
+begin
+   Resize := False;
+end;
+
+procedure TfrmTransactionViewer.FormKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+    if Ord(Key) = VK_ESCAPE then Close
+end;
+
+procedure TfrmTransactionViewer.FormCreate(Sender: TObject);
+begin
+   dmTransactionViewer := TdmTransactionViewer.Create(Self);
+   SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TfrmTransactionViewer.FormDestroy(Sender: TObject);
+begin
+   dmTransactionViewer.Free;
+end;
+
+procedure TfrmTransactionViewer.FormShow(Sender: TObject);
+begin
+   with dmTransactionViewer do
+   begin
+      with RestDebit do
+      begin
+         LblDebitOstat.Caption := FloatToStr(FieldByName('Ostat').AsFloat);
+         LblDebitpokOstat.Caption := FloatToStr(FieldByName('pok_Ostat').AsFloat);
+      end;
+
+      with RestCredit do
+      begin
+         LblCreditOstat.Caption := FloatToStr(FieldByName('Ostat').AsFloat);
+         LblCreditpokOstat.Caption := FloatToStr(FieldByName('pok_Ostat').AsFloat);
+      end;
+
+  end;
+
+   SetKeyValues(DBLookupComboboxEh3,'VALUTE');
+   SetKeyValues(DBLookupComboboxEh5,'ID');
+   SetKeyValues(DBLookupComboboxEh7,'ID');
+   SetKeyValues(DBLookupComboboxEh4,'VALUTE');
+   SetKeyValues(DBLookupComboboxEh6,'ID');
+   SetKeyValues(DBLookupComboboxEh8,'ID');
+   SetKeyValues(DBLookupComboboxEh9,'SYMBOL');
+   SetKeyValues(DBLookupComboboxEh1,'ID');
+   SetKeyValues(DBLookupComboboxEh2,'ID');
+end;
+
+procedure TfrmTransactionViewer.BitBtnOkClick(Sender: TObject);
+begin
+   Close
+end;
+
+initialization
+  frmTransactionViewer := TfrmTransactionViewer.Create(CommonApplication);
+
+end.

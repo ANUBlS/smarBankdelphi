@@ -1,0 +1,314 @@
+﻿unit AdministrationModEdit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, Mask, DBCtrls, Buttons, ExtCtrls, HintBox,ComObj, ComCtrls,
+  Grids, DBGrids, SearchEdit,OracleData;
+
+type
+ TModAction = (maNone,maInsert,maDelete,maUpdate);
+ EModException = class(Exception);
+
+  TfmModEdit = class(TForm)
+    Panel1: TPanel;
+    Panel2: TPanel;
+    btApply: TBitBtn;
+    brCansel: TBitBtn;
+    ErBox: THintBox;
+    pcModules: TPageControl;
+    tbInfo: TTabSheet;
+    tbRights: TTabSheet;
+    GroupBox1: TGroupBox;
+    gbMainMod: TGroupBox;
+    grObjects: TDBGrid;
+    grModules: TDBGrid;
+    SearchEdit1: TSearchEdit;
+    GroupBox3: TGroupBox;
+    BitBtn1: TBitBtn;
+    btRefresh: TBitBtn;
+    gbObjPrivs: TGroupBox;
+    GroupBox5: TGroupBox;
+    cbInsert: TCheckBox;
+    cbDelete: TCheckBox;
+    cbUpdate: TCheckBox;
+    GroupBox6: TGroupBox;
+    edDescr: TEdit;
+    Label3: TLabel;
+    edClassId: TEdit;
+    Label1: TLabel;
+    edModName: TEdit;
+    Label2: TLabel;
+    Label4: TLabel;
+    rbSel: TRadioButton;
+    rbInsert: TRadioButton;
+    rbDelete: TRadioButton;
+    rbUpdate: TRadioButton;
+    procedure btApplyClick(Sender: TObject);
+    procedure pcModulesChange(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure grObjectsDblClick(Sender: TObject);
+    procedure btRefreshClick(Sender: TObject);
+    procedure grModulesKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure grObjectsKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure BitBtn1Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure rbSelClick(Sender: TObject);
+  private
+   function GetInf(index: Integer):string;
+   function getMActions(value: TModAction): Boolean;
+     procedure InitializeModule;
+  public
+  function Execute(Act: TModAction): TModAction;
+  procedure InsertRec;
+  procedure EnableConstrain(Dat: TOracleDataSet);
+  property MClassID: String index 0 read  GetInf;
+  property MName : String index 1 read  GetInf;
+  property MDescription: String index 2 read GetInf;
+  property MActions[value: TModAction] : Boolean read getMActions;
+
+
+  end;
+
+var
+  fmModEdit: TfmModEdit;
+
+implementation
+
+uses AdministrationDataModule, AdministrationMainForm;
+
+{$R *.DFM}
+
+function TfmModEdit.Execute(Act: TModAction): TModAction;
+begin
+with btApply do
+ case Ord(Act) of
+ 1: Caption:='Əlavə';
+ 2: Caption:='Ləğv';
+ 3:
+  begin
+   Caption:='Dəyişmə';
+   InitializeModule;
+   edModName.Enabled:=False;
+  end;
+ end;
+  ShowModal;
+  if ModalResult=mrOk then Result:=Act
+  else Result:=maNone;
+ end;
+
+
+procedure TfmModEdit.btApplyClick(Sender: TObject);
+var
+tmp: TGuid;
+begin
+ try
+  if (edModName.Text=EmptyStr) then raise EModException.Create('Modulun adını daxil edin');
+  if (edClassId.Text=EmptyStr) then raise EModException.Create('ClassID-ni daxil edin');
+  tmp:=StringToGUID(edClassId.Text);
+ except
+   on E: EModException do
+    begin
+      Modalresult:=mrNone;
+      ErBox.ShowMessage(E.Message);
+    end;
+   on E: EOleSysError do
+    begin
+     Modalresult:=mrNone;
+     ErBox.ShowMessage('Wrong Classid');
+    end;
+ end;
+end;
+
+procedure TfmModEdit.InitializeModule;
+begin
+ with AdministrationData.ModulesData do
+  begin
+   edClassId.Text:=FieldByName('NAme').AsString;
+   edModName.Text:=FieldByName('Description').AsString;
+   edDescr.Text:=FieldByName('TrvDesc').AsString;
+   cbInsert.Checked:=IntToBool(FieldByName('CAN_INSERT').AsInteger);
+   cbDelete.Checked:=IntToBool(FieldByName('CAN_DELETE').AsInteger);
+   cbUpdate.Checked:=IntToBool(FieldByName('CAN_UPDATE').AsInteger);
+  end;
+end;
+
+function TfmModEdit.GetInf(index: Integer):string;
+begin
+ case index of
+ 0: Result:=edClassId.Text;
+ 1: Result:=edModName.Text;
+ 2: Result:=edDescr.Text;
+ end;
+end;
+
+function TfmModEdit.getMActions(value: TModAction): Boolean;
+begin
+ case Ord(Value) of
+ 1: Result:=cbInsert.Checked;
+ 2: Result:=cbDelete.Checked;
+ 3: Result:=cbUpdate.Checked;
+ else
+  Result:=False;
+ end;
+end;
+
+procedure TfmModEdit.pcModulesChange(Sender: TObject);
+begin
+with (grObjects.DataSource.DataSet as TOracleDataSet) do
+  if Not(ACTIVE) then
+   begin
+    SetVariable('OWNERNAME',Sm_Own);
+    Open;
+   end;
+ with AdministrationData,(grModules.DataSource.DataSet as TOracleDataSet) do
+  if Not(ACTIVE) then
+   begin
+    SetVariable('MODULE','SBR_'+ModulesData.FieldByName('Description').AsString);
+    Open;
+   end;
+end;
+
+procedure TfmModEdit.FormShow(Sender: TObject);
+begin
+ pcModules.ActivePage:=pcModules.Pages[0];
+end;
+
+procedure TfmModEdit.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+grObjects.DataSource.DataSet.Close;
+grModules.DataSource.DataSet.Close;
+
+end;
+
+procedure TfmModEdit.InsertRec;
+var
+ ObjPriv: string;
+begin
+ with AdministrationData,AdministrationData.ObjectsData,
+ AdministrationData.ObjectsData.FieldByName('OBJECT_TYPE') do
+ begin
+  if (AsString='VIEW')or(AsString='TABLE') then
+  begin
+  ObjPriv:='SELECT';
+  end
+    else
+      if (AsString='PROCEDURE')or(AsString='PACKAGE')or(AsString='FUNCTION') then
+        ObjPriv:='EXECUTE'
+      else ObjPriv:=FieldByName('OBJECT_TYPE').AsString;
+  ModPrivsData.AppendRecord([FieldByName('OBJECT_NAME').AsString,ObjPriv]);
+ end;
+   EnableConstrain(AdministrationData.ModPrivsData);
+end;
+
+procedure TfmModEdit.grObjectsDblClick(Sender: TObject);
+begin
+ InsertRec;
+end;
+
+procedure TfmModEdit.btRefreshClick(Sender: TObject);
+begin
+ with AdministrationData do
+  begin
+   ModPrivsData.Close;
+   ModPrivsData.Open;
+   ObjectsData.Refresh;
+  end;
+end;
+
+procedure TfmModEdit.grModulesKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+with AdministrationData do
+ if Key=vk_delete then
+  begin
+   if MessageDlg('Силинсин?',mtConfirmation,[mbYes,mbNo],0)=mrYes then
+     ModPrivsData.Delete;
+  end;
+end;
+
+procedure TfmModEdit.EnableConstrain(Dat: TOracleDataSet);
+
+ procedure ReEnable(IsEnabled: Boolean);
+  var
+  i: Integer;
+  begin
+    with gbObjPrivs do
+     for i:=0 to ControlCount-1 do
+      if (Controls[i] is TRadioButton) then
+        (Controls[i] as TRadioButton).Enabled:=IsEnabled;
+  end;
+
+var
+ IsEnable : Boolean;
+ i: Integer;
+begin
+  IsEnable:=False;
+  with gbObjPrivs do
+  for i:=0 to ControlCount-1 do
+   if (Controls[i] is TRadioButton)and
+   (UpperCase((Controls[i] as TRadioButton).Caption)=Dat.FieldByName('Privilege').AsString) then
+    begin
+     IsEnable:=true;
+     (Controls[i] as TRadioButton).Checked:=True;
+    end;
+   ReEnable(IsEnable);
+end;
+
+procedure TfmModEdit.grObjectsKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+if Key=vk_Return then
+ InsertRec;
+end;
+
+procedure TfmModEdit.BitBtn1Click(Sender: TObject);
+var
+ RoleName: string;
+begin
+  if MessageDlg('Hüquq dəyişiklikləri qəbul edilsin?',mtConfirmation,[mbYes,mbNo],0)=mrNo then Exit;
+  with AdministrationData.pcADM,AdministrationData do
+   begin
+    RoleName:='SBR_'+ModulesData.FieldByName('description').AsString;
+    CallProcedure('revokeprivsfromtorole',[RoleName,Sm_Own]);
+
+    with ModPrivsData do
+    try
+      DisableControls;
+      First;
+      while not(EOF) do
+       begin
+        CallProcedure('grantprivtorole',[RoleName,FieldByName('PRIVILEGE').AsString,
+           FieldByName('TABLE_NAME').AsString,Sm_own]);
+        Next;
+       end;
+     finally
+      EnableControls;
+     end;
+   end;
+   btRefreshClick(self);
+   MessageDlg('Щцгугларын дейишилди ',mtInformation,[mbOk],0);
+end;
+
+procedure TfmModEdit.FormCreate(Sender: TObject);
+begin
+fmModEdit:=self;
+end;
+
+procedure TfmModEdit.FormDestroy(Sender: TObject);
+begin
+fmModEdit:=nil;
+end;
+
+procedure TfmModEdit.rbSelClick(Sender: TObject);
+begin
+with AdministrationData.ModPrivsData do
+    FieldByName('PRIVILEGE').AsString:=UPPERCASE((sender as TRadioButton).Caption);
+end;
+
+end.

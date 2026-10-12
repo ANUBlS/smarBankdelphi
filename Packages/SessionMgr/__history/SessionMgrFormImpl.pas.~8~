@@ -1,0 +1,655 @@
+unit SessionMgrFormImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, LDialogs,
+  ActiveX, AxCtrls, SessionMgr_TLB, StdVcl, Db, OracleData, Grids, DBGrids, StrUtils,
+  ExtCtrls, DBCtrls, ToolWin, ComCtrls, StdCtrls, ActnList, Menus, Buttons,
+  Oracle, ImgList, XDBGrids, CheckLst, Evanescence;
+
+type
+  TSessionMgrForm = class(TActiveForm, ISessionMgrForm)
+    SessionsData: TOracleDataSet;
+    DataSource1: TDataSource;
+    GroupBox1: TGroupBox;
+    DBGrid1: TDBGrid;
+    RefreshTimer: TTimer;
+    PopupMenu1: TPopupMenu;
+    ActionList1: TActionList;
+    KillUser: TAction;
+    KillAll: TAction;
+    RestrictLogins: TAction;
+    Restrictlogins1: TMenuItem;
+    KillUser1: TMenuItem;
+    Killallactiveusers1: TMenuItem;
+    EnterRestrictedModeQuery: TOracleQuery;
+    LeaveRestrictedModeQuery: TOracleQuery;
+    CoolBar1: TCoolBar;
+    ToolBar1: TToolBar;
+    ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
+    ToolButton3: TToolButton;
+    ImageList1: TImageList;
+    StatusBar1: TStatusBar;
+    SendMessage: TAction;
+    SendMessage1: TMenuItem;
+    ToolButton4: TToolButton;
+    SendMessageToAll: TAction;
+    SendMessageToAll1: TMenuItem;
+    ToolButton5: TToolButton;
+    N1: TMenuItem;
+    N2: TMenuItem;
+    ToolButton6: TToolButton;
+    actSettingsMsg: TAction;
+    SessionsDataSID: TFloatField;
+    SessionsDataSERIAL: TFloatField;
+    SessionsDataAUDSID: TFloatField;
+    SessionsDataUSER: TFloatField;
+    SessionsDataUSERNAME: TWideStringField;
+    SessionsDataSTATUS: TWideStringField;
+    SessionsDataOSUSER: TWideStringField;
+    SessionsDataPROCESS: TWideStringField;
+    SessionsDataMACHINE: TWideStringField;
+    SessionsDataTERMINAL: TWideStringField;
+    SessionsDataPROGRAM: TWideStringField;
+    SessionsDataLOGON_TIME: TDateTimeField;
+    SessionsDataISCURRENTUSER: TFloatField;
+    Restrictions: TOracleQuery;
+    restrict: TOracleDataSet;
+    Datares: TDataSource;
+    swImageList1: TImageList;
+    odsrestrict: TOracleDataSet;
+    ToolButton7: TToolButton;
+    odsrestrictGRANTEE: TWideStringField;
+    restrictNAME: TWideStringField;
+    ToolButton8: TToolButton;
+    Memo1: TMemo;
+    Memo2: TMemo;
+    CheckListBox1: TCheckListBox;
+    procedure RefreshTimerTimer(Sender: TObject);
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure RestrictLoginsExecute(Sender: TObject);
+    procedure KillUserExecute(Sender: TObject);
+    procedure DBGrid1DrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TColumn; State: TGridDrawState);
+    procedure KillUserUpdate(Sender: TObject);
+    procedure KillAllExecute(Sender: TObject);
+    procedure KillUserHint(var HintStr: String; var CanShow: Boolean);
+    procedure SendMessageExecute(Sender: TObject);
+    procedure SendMessageToAllExecute(Sender: TObject);
+    procedure actSettingsMsgExecute(Sender: TObject);
+    procedure XDBGrid1CellClick(Column: TXColumn);
+    procedure ToolButton7Click(Sender: TObject);
+    procedure ToolButton8Click(Sender: TObject);
+  private
+    { Private declarations }
+    FEvents: ISessionMgrFormEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+
+
+  public
+    { Public declarations }
+    procedure Initialize; override;
+  end;
+
+implementation
+
+uses ComObj, ComServ, sboapiDataModuleImpl, SBSessionMgr, SBSrvIntf,
+  uMsgSettings,SBTranslateProc;
+
+{$R *.DFM}
+
+{ TSessionMgrForm }
+
+procedure TSessionMgrForm.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_SessionMgrFormPage); }
+end;
+
+procedure TSessionMgrForm.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as ISessionMgrFormEvents;
+end;
+
+procedure TSessionMgrForm.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TSessionMgrForm.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TSessionMgrForm.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TSessionMgrForm.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TSessionMgrForm.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TSessionMgrForm.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TSessionMgrForm.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TSessionMgrForm.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TSessionMgrForm.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TSessionMgrForm.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TSessionMgrForm.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TSessionMgrForm.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TSessionMgrForm.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TSessionMgrForm.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TSessionMgrForm.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TSessionMgrForm.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TSessionMgrForm.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TSessionMgrForm.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TSessionMgrForm.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TSessionMgrForm._Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TSessionMgrForm.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TSessionMgrForm.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TSessionMgrForm.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TSessionMgrForm.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TSessionMgrForm.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TSessionMgrForm.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TSessionMgrForm.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TSessionMgrForm.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TSessionMgrForm.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TSessionMgrForm.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TSessionMgrForm.Set_AxBorderStyle(
+  Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TSessionMgrForm.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TSessionMgrForm.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TSessionMgrForm.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TSessionMgrForm.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TSessionMgrForm.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TSessionMgrForm.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TSessionMgrForm.Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TSessionMgrForm.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TSessionMgrForm.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TSessionMgrForm.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TSessionMgrForm.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TSessionMgrForm.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TSessionMgrForm.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+
+
+procedure TSessionMgrForm.ToolButton7Click(Sender: TObject);
+var a,b:array of string;
+
+ i, k, l,j,h: Integer;
+begin
+
+SetLength(A,restrict.RecordCount);
+ i := 0;
+ while not restrict.eof
+ do begin
+     a[i] := restrict.FieldValues['name'];
+
+     memo1.Lines.Add(A[i]);
+     restrict.next;
+     Inc(i);
+     end;
+
+
+
+     SetLength(b,odsrestrict.RecordCount);
+ j := 0;
+ while not odsrestrict.eof
+ do begin
+     b[j] := odsrestrict.FieldValues['grantee'];
+     memo2.Lines.ADD(b[j]);
+     odsrestrict.next;
+     Inc(j);
+     end;
+for i:=0 to memo1.Lines.Count-1 do
+if memo2.Lines.IndexOf(memo1.Lines[i])<>-1
+ then  begin showmessage('Eyniler '+memo1.Lines[i]+' v '+memo1.Lines[i]);
+
+
+
+ end;
+
+end;
+
+procedure TSessionMgrForm.ToolButton8Click(Sender: TObject);
+const A: Array[1..10] of Integer = (1,2,8,9,5,6,3,2,4,8);
+      B: Array[1..10] of Integer = (1,2,7,9,5,6,3,4,2,7);
+var i, k, l: Integer;
+begin
+  l := 0;
+  k := 0;
+  for i := 1 to 10 do
+    if A[i] = B[i] then
+      k := k + 1
+    else
+      l := l + 1;
+
+  ShowMessage('Совпадений = '+IntToStr(k)+#10#13+'Отличий = '+IntToStr(l));
+
+end;
+
+procedure TSessionMgrForm.XDBGrid1CellClick(Column: TXColumn);
+var i :integer;
+begin
+
+end;
+
+procedure TSessionMgrForm.RefreshTimerTimer(Sender: TObject);
+var
+  LastSID: Integer;
+begin
+  with SessionsData do
+    if Session.Connected then
+    begin
+      if Active then
+        LastSID := FieldByName('SID').AsInteger
+      else
+        LastSID := -1;
+      Close;
+      Open;
+      if LastSID <> -1 then
+        Locate('SID', LastSID, []);
+    end;
+end;
+
+procedure TSessionMgrForm.ActiveFormCreate(Sender: TObject);
+var a,b:array of string;
+
+ i, k, l,j,h: Integer;
+begin
+  RefreshTimer.OnTimer(RefreshTimer);
+
+SetLength(A,restrict.RecordCount);
+ i := 0;
+ while not restrict.eof
+ do begin
+     a[i] := restrict.FieldValues['name'];
+
+     memo1.Lines.Add(A[i]);
+     CheckListBox1.items.Add(A[i]) ;
+     restrict.next;
+     Inc(i);
+     end;
+     SetLength(b,odsrestrict.RecordCount);
+ j := 0;
+ while not odsrestrict.eof
+ do begin
+     b[j] := odsrestrict.FieldValues['grantee'];
+     memo2.Lines.ADD(b[j]);
+     odsrestrict.next;
+     Inc(j);
+     end;
+
+for i:=0 to memo1.Lines.Count-1 do
+if memo2.Lines.IndexOf(memo1.Lines[i])<>-1
+ then  begin
+//   memo3.Lines.Add(memo1.Lines[i])  ;
+ //showmessage('Eyniler '+memo1.Lines[i]+' v '+memo1.Lines[i]);
+     CheckListBox1.Checked[i]:=true;
+
+
+ end;
+
+
+ for i := 0 to ComponentCount - 1 do
+    if Components[i].Tag = 3112 then begin
+      (Components[i] as TEvanescence).Open;
+      (Components[i] as TEvanescence).CheckAll;
+    end;
+  {for i:=0 to 2 do
+    ListBox1.Checked[i] := True ;
+        }
+
+  SBTranslateProc.TranslateAllComponents(Self,sboapiDataModule.OrPack_SL);
+
+end;
+
+procedure TSessionMgrForm.RestrictLoginsExecute(Sender: TObject);
+begin
+  with Sender as TAction do
+  begin
+    Checked := not Checked;
+//    RestrictModeButton.Down := Checked;
+    if Checked then
+      EnterRestrictedModeQuery.Execute
+    else
+      LeaveRestrictedModeQuery.Execute;
+  end;
+end;
+
+procedure TSessionMgrForm.KillUserExecute(Sender: TObject);
+
+  function Replace(const Text: String; const SourceChar, TargetChar: Char): String;
+  var
+    I: Integer;
+  begin
+    Result := Text;
+    for I := 0 to Length(Result) do
+      if Result[I] = SourceChar then
+        Result[I] := TargetChar;
+  end;
+
+var
+  Message: String;
+const
+  Timeout = 10;
+begin
+  Message := Format('Immediate shutdown in %d seconds. Save your work and exit program', [Timeout]);
+  with SessionsData do
+    if
+      InputQuery(
+        'Confirm user killing',
+        'Enter text message to be sent to user: ',
+        Message)
+    then
+      Sb_KillSession(
+        FieldByName('SID').AsString,
+        FieldByName('Serial#').AsString,
+        Replace(Message, ' ', '_'),
+        Timeout,
+        Timeout + 5);
+end;
+
+procedure TSessionMgrForm.DBGrid1DrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TColumn;
+  State: TGridDrawState);
+begin
+  if DataCol = 1 then
+    if Column.Grid.DataSource.DataSet.FieldByName('IsCurrentUser').AsInteger = 1 then
+      ImageList1.Draw(DBGrid1.Canvas, Rect.Left+1, Rect.Top, 1);
+end;
+
+
+procedure TSessionMgrForm.KillUserUpdate(Sender: TObject);
+begin
+  with Sender as TAction do
+    Enabled := SessionsData.FieldByName('IsCurrentUser').AsInteger = 0;
+end;
+
+procedure TSessionMgrForm.KillAllExecute(Sender: TObject);
+var
+  Message: String;
+begin
+  if
+    MessageDlg(
+      'Kill all users?',
+      mtConfirmation,
+      [mbYes, mbCancel],
+      0
+    ) = mrYes
+  then
+    if InputQuery('Enter message to be sent to users', 'Message:', Message) then
+      Sb_KillAll('%', Message, 15);
+end;
+
+procedure TSessionMgrForm.KillUserHint(var HintStr: String;
+  var CanShow: Boolean);
+ResourceString
+  SKillUserHint = 'Kill current user';
+  SKillHimselfHint = 'You can not kill himself';
+begin
+  with KillUser do
+    if Enabled then
+      HintStr := SKillUserHint
+    else
+      HintStr := SKillHimselfHint;
+end;
+
+procedure TSessionMgrForm.SendMessageExecute(Sender: TObject);
+var
+  Message: String;
+begin
+  if InputQuery('Enter message', 'Text:', Message) then
+    Sb_SendMessage(SessionsData.FieldByName('SID').AsString, Message);
+end;
+
+procedure TSessionMgrForm.SendMessageToAllExecute(Sender: TObject);
+var
+  Message: String;
+begin
+  if InputQuery('Enter message', 'Text:', Message) then
+    Sb_SendMessage(SessionsData.FieldByName('SID').AsString, Message, MsgName_MessageBroadcast);
+end;
+
+procedure TSessionMgrForm.actSettingsMsgExecute(Sender: TObject);
+begin
+  if not assigned(frmMsgSettings) then
+    frmMsgSettings := TfrmMsgSettings.Create(Self);
+  with frmMsgSettings do begin
+    ShowModal;
+  end;
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TSessionMgrForm,
+    Class_SessionMgrForm,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

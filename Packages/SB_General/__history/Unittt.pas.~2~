@@ -1,0 +1,42 @@
+unit Unittt;
+
+interface
+
+uses
+  SysUtils, Classes,Forms;
+
+type
+  TDat = class(TDataModule)
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Dat: TDat;
+  dd:integer;
+implementation
+
+{$R *.dfm}
+
+ procedure InitPlugin(s:string;custid :string;accid:string='0' );export;
+begin
+
+   if s='smsunit' then   begin
+      dd:=1;
+   end;
+end;
+
+
+   exports
+     InitPlugin;
+
+
+
+initialization
+ dat := Tdat.Create(Application);;
+
+
+
+end.

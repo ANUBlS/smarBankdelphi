@@ -1,0 +1,115 @@
+object DMProvisions: TDMProvisions
+  OldCreateOrder = False
+  OnCreate = DataModuleCreate
+  OnDestroy = DataModuleDestroy
+  Height = 369
+  Width = 606
+  object DSRPolisNo1: TDataSource
+    DataSet = DSPolisNo1
+    Left = 136
+    Top = 8
+  end
+  object DSRPolisNo2: TDataSource
+    DataSet = DSPolisNo2
+    Left = 136
+    Top = 57
+  end
+  object DSPolisNo1: TOracleDataSet
+    SQL.Strings = (
+      'select * from ins_polisnum'
+      'where type_id in(1,-1)')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000300000004000000490044000100000000000E000000540059005000
+      45005F00490044000100000000001400000050004F004C004900430059005F00
+      4E0055004D00010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 40
+    Top = 8
+    object DSPolisNo1ID: TFloatField
+      FieldName = 'ID'
+    end
+    object DSPolisNo1TYPE_ID: TFloatField
+      FieldName = 'TYPE_ID'
+    end
+    object DSPolisNo1POLICY_NUM: TWideStringField
+      FieldName = 'POLICY_NUM'
+      Size = 128
+    end
+  end
+  object DSPolisNo2: TOracleDataSet
+    SQL.Strings = (
+      'select * from ins_polisnum'
+      'where type_id in(13,-1)')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000300000004000000490044000100000000000E000000540059005000
+      45005F00490044000100000000001400000050004F004C004900430059005F00
+      4E0055004D00010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 40
+    Top = 63
+    object DSPolisNo2ID: TFloatField
+      FieldName = 'ID'
+    end
+    object DSPolisNo2TYPE_ID: TFloatField
+      FieldName = 'TYPE_ID'
+    end
+    object DSPolisNo2POLICY_NUM: TWideStringField
+      FieldName = 'POLICY_NUM'
+      Size = 128
+    end
+  end
+  object DSContracts: TOracleDataSet
+    SQL.Strings = (
+      'select * from ins_contracts'
+      'WHERE close_prefix=0'
+      'and id=:pid')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000080000003A00500049004400030000000000000000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 40
+    Top = 110
+  end
+  object DSins_motorkasco: TOracleDataSet
+    SQL.Strings = (
+      'select * from ins_motorkasco'
+      'where cid=:pcid')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000A0000003A00500043004900440003000000000000000000
+      0000}
+    Session = sboapiDataModule.SBSession
+    Left = 39
+    Top = 161
+  end
+  object DSRContracts: TDataSource
+    DataSet = DSContracts
+    Left = 136
+    Top = 108
+  end
+  object DSRins_motorkasco: TDataSource
+    DataSet = DSins_motorkasco
+    Left = 136
+    Top = 158
+  end
+  object DSRrespon: TDataSource
+    DataSet = DSrespon
+    Left = 136
+    Top = 233
+  end
+  object DSrespon: TOracleDataSet
+    SQL.Strings = (
+      'SELECT rowid,a.*'
+      '  FROM ins_contract_responsibility a'
+      'where a.cid=:p_cid')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000C0000003A0050005F004300490044000300000000000000
+      00000000}
+    Session = sboapiDataModule.SBSession
+    Left = 40
+    Top = 232
+  end
+end

@@ -1,0 +1,56 @@
+unit AddReserveImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, DBCtrls, DB, OracleData;
+
+type
+  TAddReserve = class(TForm)
+    Button1: TButton;
+    Button2: TButton;
+    Label1: TLabel;
+    Label2: TLabel;
+    DBLookupComboBox1: TDBLookupComboBox;
+    DBLookupComboBox2: TDBLookupComboBox;
+    DataSource1: TDataSource;
+    DataSource2: TDataSource;
+    OracleDataSet1: TOracleDataSet;
+    OracleDataSet2: TOracleDataSet;
+    procedure FormCanResize(Sender: TObject; var NewWidth, NewHeight: Integer;
+      var Resize: Boolean);
+    procedure Button2Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  AddReserve: TAddReserve;
+
+implementation
+
+{$R *.dfm}
+  uses
+  sboapiDataModuleImpl;
+procedure TAddReserve.Button2Click(Sender: TObject);
+begin
+close
+end;
+
+procedure TAddReserve.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+Resize:=false    ;
+end;
+
+procedure TAddReserve.FormShow(Sender: TObject);
+begin
+DBLookupComboBox1.KeyValue:=-1;
+DBLookupComboBox2.KeyValue:=-1;
+end;
+
+end.

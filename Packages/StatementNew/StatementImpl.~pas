@@ -1,0 +1,745 @@
+unit StatementImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActiveX, AxCtrls, StatementNew_TLB, StdVcl, Grids, DBGrids, StdCtrls,
+  ExtCtrls, ImgList, ComCtrls, ToolWin, Menus, QRExport, Buttons, DBCtrls,
+  DBViewComboBox, SBPlgAx50_TLB;
+
+type
+  TStatementX = class(TActiveForm, IStatementNewFormX, IIconExporter)
+    SaveDialog1: TSaveDialog;
+    QRTextFilter1: TQRTextFilter;
+    GroupBox2: TGroupBox;
+    GroupBox1: TGroupBox;
+    Label1: TLabel;
+    Label4: TLabel;
+    Label3: TLabel;
+    Label5: TLabel;
+    EditAcc_no: TEdit;
+    EditClientID: TEdit;
+    Bal_sprEdit: TEdit;
+    PrintMode_RG: TRadioGroup;
+    ComboBoxBalance: TComboBox;
+    GroupBox3: TGroupBox;
+    Label8: TLabel;
+    Label7: TLabel;
+    BeginDTPicker: TDateTimePicker;
+    EndDTPicker: TDateTimePicker;
+    ImageList1: TImageList;
+    DBLCBfilial: TDBLookupComboBox;
+    DBLCBavalute: TDBLookupComboBox;
+    CBCurrency: TCheckBox;
+    CBFilial: TCheckBox;
+    DBLCBUser: TDBLookupComboBox;
+    CBUser: TCheckBox;
+    ComboBoxPrint: TComboBox;
+    SpeedButton1: TSpeedButton;
+    CBTurnOver: TCheckBox;
+    CBRateDiff: TCheckBox;
+    SpeedButton2: TSpeedButton;
+    procedure miPostClick(Sender: TObject);
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure miPreviewClick(Sender: TObject);
+    procedure miPrintClick(Sender: TObject);
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure RBTurnOverFilterClick(Sender: TObject);
+    procedure CBTurnOverClick(Sender: TObject);
+    procedure CBCurrencyClick(Sender: TObject);
+    procedure CBFilialClick(Sender: TObject);
+    procedure CBUserClick(Sender: TObject);
+    procedure CBRateDiffClick(Sender: TObject);
+    procedure SpeedButton2Click(Sender: TObject);
+  private
+    { Private declarations }
+    FEvents: IStatementNewFormXEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    function Get_Icon: OLE_HANDLE; safecall;
+    procedure _Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+    Function  UpdateStr(InpStr:string):string;
+    procedure PrepareReportTable;
+    procedure PrepareReport;
+    procedure PostIntoFile;
+    function IStatementNewFormX.Get_Color = IStatementX_Get_Color;
+    function IStatementNewFormX.Get_Font = IStatementX_Get_Font;
+    procedure IStatementNewFormX._Set_Font = IStatementX__Set_Font;
+    procedure IStatementNewFormX.Set_Color = IStatementX_Set_Color;
+    procedure IStatementNewFormX.Set_Font = IStatementX_Set_Font;
+    function IStatementX_Get_Color: OLE_COLOR; safecall;
+    function IStatementX_Get_Font: IFontDisp; safecall;
+    procedure IStatementX__Set_Font(const Value: IFontDisp); safecall;
+    procedure IStatementX_Set_Color(Value: OLE_COLOR); safecall;
+    procedure IStatementX_Set_Font(var Value: IFontDisp); safecall;
+  public
+    { Public declarations }
+    procedure Initialize; override;
+  end;
+
+var D1, D2 : TDateTime;
+   CurrentDate : TDateTime;
+   Exl, Sheet: Variant;
+   StatementX :TStatementX;
+implementation
+
+uses ComObj, ComServ, StatementDataModule, StatementReportUnit, SBCore, AccGetReport;
+
+{$R *.DFM}
+
+{ TStatementX }
+
+function TStatementX.Get_Icon: OLE_HANDLE;
+const
+  ImageIndex = 0;
+begin
+  ImageList1.GetIcon(ImageIndex, Icon);
+  Result := Icon.Handle;
+end;
+
+
+Function TStatementX.UpdateStr(InpStr:string):string;
+var
+  TempString, EndString:String;
+  flag,TempCount ,i, Count, Beg_Index, k : Integer;
+const
+  Commas='''';
+  Comma=',';
+  begin
+    Result:= InpStr;
+    if Result<>'' then
+{}    begin
+    TempString:= '';
+    EndString:= '';
+    Beg_Index:= 1;
+    k:= Length(Result);
+    TempCount:=0;
+    flag:=1;
+    for i:=1 to k do
+      if Result[i] <> ' ' then
+        TempString:= TempString + Result[i];
+    InpStr:= TempString;
+    Result:= InpStr;
+    TempString:= '';
+    k:= Length(Result);
+    for i:=1 to k do
+      begin
+        if Result[i] = ',' then
+          begin
+            Count:= (i-1)-TempCount;
+            Result:= Copy(Result, Beg_Index, Count);
+            TempString:= TempString + Result+Commas+Comma+Commas;
+            Result:= InpStr;
+            Beg_Index:= i+1;
+            TempCount:=i;
+            flag:=0;
+          end;
+        if flag=1 then
+          EndString:= EndString+Result[i]
+        else
+          begin
+            EndString:= '';
+            flag:= 1;
+          end;
+      end;
+      Result:= Commas + TempString + EndString + Commas;
+
+{}    end
+    else
+      Result:= ''' ''';
+  end;
+
+
+procedure TStatementX.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_StatementXPage); }
+end;
+
+procedure TStatementX.PrepareReportTable;
+var
+  a_name, v_EditClientID, v_EditAcc_no, v_Bal_spr : string;
+  v_EditVal, v_SpeciesBalAccount : integer;
+  d1, d2: TDateTime;
+  v_user, v_filial: integer;
+  TurnYesNo,RateDif : Integer;
+
+  begin
+{}
+ v_user:=dblcbUser.KeyValue;
+ v_filial:=dblcbfilial.KeyValue;
+ v_EditVal:=DBLCBavalute.KeyValue;
+  if ComboBoxBalance.ItemIndex=-1 then
+    v_SpeciesBalAccount:= 1
+  else
+    v_SpeciesBalAccount:= ComboBoxBalance.ItemIndex + 1;
+
+  if EditClientID.Text = '' then
+    v_EditClientID:= '-1'
+  else
+    v_EditClientID:= EditClientID.Text;
+
+  if EditAcc_no.Text = '' then
+    v_EditAcc_no:= '-1'
+  else
+    v_EditAcc_no:= EditAcc_no.Text;
+
+  if Bal_sprEdit.Text = '' then
+    v_Bal_spr:= '-1'
+  else
+    v_Bal_spr:= UpdateStr(Bal_sprEdit.Text);
+
+  d1 := Int(BeginDTPicker.DateTime);
+  d2 := Int(EndDTPicker.DateTime);
+
+{создание таблиц  Extraction_smart}
+
+ TurnYesNo:=CBTurnOver.Tag;
+ RateDif:=CBRateDiff.Tag;
+
+  with StatementDataModNew.P_Extraction_OP do
+    CallProcedure('getextraction', [
+      v_user,
+      v_filial,
+      v_SpeciesBalAccount,
+      v_EditVal,
+      v_EditClientID,
+      UpdateStr(v_EditAcc_no),
+      v_Bal_spr,
+      d1,
+      d2,
+      RateDif,
+      TurnYesNo
+      ]);
+  with StatementDataModNew.P_Extraction_OP do
+    a_name := CallStringFunction('GetUserName', []);
+
+  with StatementDataModNew.Extraction_ODSt do begin
+    Close;
+    with SQL do begin
+      Clear;
+//      Add('select * from EXTRACTION_'+a_name +' order by accountnumber ');
+      Add('select * from SMART.EXTRACTION order by accountnumber ');
+    end;
+    Active:= true;
+  end;
+
+  with StatementDataModNew.ExtractionTrans_ODSt do begin
+    CloseAll;
+    with SQL do begin
+      Clear;
+//      Add('select * from EXTRACTIONTRANS_'+a_name);
+      Add('select * from SMART.EXTRACTIONTRANS');
+      Add(' where (OwnAccountID = :OwnAccountID) ');
+      Add(' order by dat, debit, kredit');
+    end;
+    Active:= true;
+  end;
+end;
+
+
+procedure TStatementX.PrepareReport;
+begin
+  case PrintMode_RG.ItemIndex of
+    0 : StatementReport.DetailBand1.ForceNewPage := False;
+    1 : StatementReport.DetailBand1.ForceNewPage := True;
+  end;
+  if BeginDTPicker.DateTime <> EndDTPicker.DateTime then
+    StatementReport.QRLabel7.Caption:= DateToStr(EndDTPicker.Date);
+end;
+
+procedure TStatementX.PostIntoFile;
+begin
+  with SaveDialog1 do
+  begin
+    if Execute then
+    begin
+      StatementReport.QuickRep1.ExportToFilter(TQRAsciiExportFilter.Create(FileName));
+    end;
+  end;
+end;
+
+procedure TStatementX.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as IStatementNewFormXEvents;
+end;
+
+procedure TStatementX.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TStatementX.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TStatementX.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TStatementX.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TStatementX.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TStatementX.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TStatementX.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TStatementX.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TStatementX.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TStatementX.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TStatementX.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TStatementX.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TStatementX.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TStatementX.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TStatementX.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TStatementX.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TStatementX.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TStatementX.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TStatementX.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TStatementX._Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TStatementX.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TStatementX.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TStatementX.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TStatementX.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TStatementX.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TStatementX.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TStatementX.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TStatementX.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TStatementX.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TStatementX.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TStatementX.Set_AxBorderStyle(Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TStatementX.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TStatementX.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TStatementX.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TStatementX.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TStatementX.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TStatementX.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TStatementX.Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TStatementX.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TStatementX.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TStatementX.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TStatementX.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TStatementX.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TStatementX.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+
+procedure TStatementX.miPostClick(Sender: TObject);
+begin
+  PrepareReportTable;
+  if not Assigned(StatementReport) then
+    StatementReport := TStatementReport.Create(nil);
+  PrepareReport;
+  PostIntoFile;
+end;
+
+procedure TStatementX.ActiveFormCreate(Sender: TObject);
+begin
+// amt
+  StatementX := Self;
+  if not Assigned(StatementDataModNew) Then
+  StatementDataModNew:= TStatementDataModNew.Create(Self);
+  ComboBoxBalance.ItemIndex:= 0;
+  ComboBoxPrint.ItemIndex:= 0;
+//  ComboBoxCurrency.ItemIndex:= 0;
+  BeginDTPicker.DateTime := Sb_GetSystemDate;
+  EndDTPicker.DateTime := BeginDTPicker.DateTime;
+  dblcbuser.KeyValue:=-1;
+  dblcbfilial.KeyValue:=-1;
+  dblcbavalute.KeyValue:=-1;
+
+end;
+
+procedure TStatementX.miPreviewClick(Sender: TObject);
+begin
+  PrepareReportTable;
+  if not Assigned(StatementReport) then
+    StatementReport := TStatementReport.Create(nil);
+  PrepareReport;
+  StatementReport.QuickRep1.Preview;
+end;
+
+procedure TStatementX.miPrintClick(Sender: TObject);
+begin
+  PrepareReportTable;
+  if not Assigned(StatementReport) then
+    StatementReport := TStatementReport.Create(nil);
+  PrepareReport;
+  StatementReport.QuickRep1.Print;
+end;
+
+procedure TStatementX.SpeedButton1Click(Sender: TObject);
+begin
+  D1:= BeginDTPicker.Date;
+  D2:= EndDTPicker.Date;
+  case ComboBoxPrint.ItemIndex of
+    0: miPreviewClick(nil);
+    1: miPrintClick(nil);
+    2: miPostClick(nil);
+  end;
+end;
+
+function TStatementX.IStatementX_Get_Color: OLE_COLOR;
+begin
+
+end;
+
+function TStatementX.IStatementX_Get_Font: IFontDisp;
+begin
+
+end;
+
+procedure TStatementX.IStatementX__Set_Font(const Value: IFontDisp);
+begin
+
+end;
+
+procedure TStatementX.IStatementX_Set_Color(Value: OLE_COLOR);
+begin
+
+end;
+
+procedure TStatementX.IStatementX_Set_Font(var Value: IFontDisp);
+begin
+
+end;
+
+procedure TStatementX.RBTurnOverFilterClick(Sender: TObject);
+begin
+ with (sender as TRadioButton) do
+  if Checked then
+    tag :=0
+  else
+    tag :=1
+end;
+
+procedure TStatementX.CBTurnOverClick(Sender: TObject);
+begin
+ with (Sender as TCheckBox) do
+  if Checked =True then
+      Tag :=0
+  else
+      Tag :=1;
+end;
+
+
+procedure TStatementX.CBCurrencyClick(Sender: TObject);
+begin
+if CBCurrency.Checked=true then
+  dblcbavalute.KeyValue:=0
+else
+  dblcbavalute.KeyValue:=-1;
+end;
+
+procedure TStatementX.CBFilialClick(Sender: TObject);
+begin
+if CBFilial.Checked=true then
+  dblcbfilial.KeyValue:=0
+else
+  dblcbfilial.KeyValue:=-1;
+end;
+
+procedure TStatementX.CBUserClick(Sender: TObject);
+begin
+if CBUser.Checked=true then
+  dblcbUser.KeyValue:=0
+else
+  dblcbUser.KeyValue:=-1;
+end;
+
+procedure TStatementX.CBRateDiffClick(Sender: TObject);
+begin
+ with (Sender as TCheckBox) do
+  if Checked =True then
+      Tag :=0
+  else
+      Tag :=1;
+end;
+
+
+procedure CreateSheet;
+begin
+  try
+   Exl := CreateOleObject('Excel.Application');
+   Exl.WorkBooks.add;
+   Sheet := Exl.Application.Worksheets.Item[1];
+  except
+  // SetLogInfo('Error in Create Excel');
+  end;
+end;
+
+procedure DestroySheet;
+begin
+  try
+   Finalize(Sheet);
+   Finalize(Exl);
+  except
+//   SetLogInfo('Error in destroy Excel sheet');
+  end;
+end;
+
+procedure ShowSheet;
+begin
+  try
+//   if Flag then
+     Exl.Visible := True;
+  except
+     DestroySheet;
+ //  SetLogInfo('Error in Show Excel');
+  end;
+end;
+
+procedure TStatementX.SpeedButton2Click(Sender: TObject);
+begin
+  try
+   Screen.Cursor := crSQLWait;
+   CreateSheet;
+   if Trim(EditAcc_no.Text)  <> '' //and (Bal_sprEdit.Text = '')
+     then  GetBySubAccout(EditAcc_no.Text, True ,BeginDTPicker.Date, EndDTPicker.Date)
+     else
+     if Trim(Bal_sprEdit.Text) <> ''
+       then
+         GetByBal(Bal_sprEdit.Text, BeginDTPicker.Date, EndDTPicker.Date)
+       else
+         GetAll(BeginDTPicker.Date, EndDTPicker.Date);
+//         Flag := False;
+   FinishPosition := 0;
+   ShowSheet;
+  finally
+   Screen.Cursor := crDefault;
+   DestroySheet;
+//   if not Flag then ClearLogInfo;
+//   Flag := True;
+  end;
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TStatementX,
+    Class_StatementNewFormX,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

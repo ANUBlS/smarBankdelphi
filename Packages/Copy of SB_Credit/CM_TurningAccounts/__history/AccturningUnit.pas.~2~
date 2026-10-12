@@ -1,0 +1,141 @@
+unit AccturningUnit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, DBCtrls, Db, OracleData, Grids, DBGridEh, ExtCtrls,
+  NLSLocalizer, ComCtrls, DBGrids;
+
+type
+  TFormAccTurning = class(TForm)
+    OracleDataSet1: TOracleDataSet;
+    OracleDataSet2: TOracleDataSet;
+    DataSource1: TDataSource;
+    DataSource2: TDataSource;
+    OracleDataSet1BAL_ACC: TFloatField;
+    OracleDataSet2ID: TFloatField;
+    OracleDataSet2GENID: TFloatField;
+    OracleDataSet2BAL_ACC: TFloatField;
+    OracleDataSet2NAME: TStringField;
+    OracleDataSet1ID: TFloatField;
+    PageControlMain: TPageControl;
+    TabSheet1: TTabSheet;
+    TabSheet2: TTabSheet;
+    GroupBox1: TGroupBox;
+    DBGridEh1: TDBGridEh;
+    Panel1: TPanel;
+    DBNavigator1: TDBNavigator;
+    GroupBox2: TGroupBox;
+    DBGridEh2: TDBGridEh;
+    Panel2: TPanel;
+    DBNavigator2: TDBNavigator;
+    Panel3: TPanel;
+    Button1: TButton;
+    GroupBox3: TGroupBox;
+    Panel4: TPanel;
+    Button2: TButton;
+    GroupBox4: TGroupBox;
+    DBGridEh3: TDBGridEh;
+    DBGridEh4: TDBGridEh;
+    UserGroups: TOracleDataSet;
+    Filials: TOracleDataSet;
+    UserGroupsDatSrc: TDataSource;
+    FilialsDatSrc: TDataSource;
+    FilialsNAME: TStringField;
+    FilialsKOD_FILIAL: TStringField;
+    UserGroupsBANK_KOD: TStringField;
+    UserGroupsDESCRIPTION: TStringField;
+    OracleDataSet2ACCDESCRIPTION: TStringField;
+    TabSheet3: TTabSheet;
+    DataSource3: TDataSource;
+    OracleDataSet3: TOracleDataSet;
+    DBGrid1: TDBGrid;
+    DBNavigator3: TDBNavigator;
+    procedure DBNavigator1Click(Sender: TObject; Button: TNavigateBtn);
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormAccTurning: TFormAccTurning;
+
+implementation
+
+{$R *.DFM}
+uses CMOracleApiDataModuleImpl,CommonDecls;
+
+procedure InitPlugin(S:String);export;
+begin
+   FormAccTurning.ShowModal;
+end;
+
+exports
+  InitPlugin;
+
+procedure TFormAccTurning.DBNavigator1Click(Sender: TObject;
+  Button: TNavigateBtn);
+begin
+OracleDataSet1.FieldByName('ID').AsInteger:=1;
+end;
+
+procedure TFormAccTurning.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+  Resize := False;
+end;
+
+procedure TFormAccTurning.FormCreate(Sender: TObject);
+begin
+   OracleDataSet2.Open;
+   OracleDataSet1.Open;
+   UserGroups.Open;
+   Filials.Open;
+      OracleDataSet3.Open;
+end;
+
+procedure TFormAccTurning.FormDestroy(Sender: TObject);
+begin
+   OracleDataSet2.CloseAll;
+   UserGroups.CloseAll;
+   Filials.CloseAll;
+   OracleDataSet1.CloseAll;
+      OracleDataSet3.CloseAll;
+end;
+
+
+
+procedure TFormAccTurning.Button2Click(Sender: TObject);
+begin
+  with UserGroups.Session do
+    ApplyUpdates([UserGroups],True);
+  UserGroups.Refresh;
+
+end;
+
+procedure TFormAccTurning.Button1Click(Sender: TObject);
+begin
+  with Filials.Session do
+    ApplyUpdates([Filials],True);
+  Filials.Refresh;
+
+end;
+
+procedure TFormAccTurning.FormShow(Sender: TObject);
+begin
+  PageControlMain.ActivePageIndex := 0;
+end;
+
+initialization
+  FormAccTurning := TFormAccTurning.Create(CommonApplication);
+
+end.

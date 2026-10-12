@@ -1,0 +1,149 @@
+﻿unit ExpComAccUnit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, LDialogs,
+  StdCtrls, DBViewComboBox, SearchEdit, Grids, DBGrids, Buttons, ExtCtrls,
+  DB, OracleData;
+
+type
+  TExpComAccForm = class(TForm)
+    Panel1: TPanel;
+    Panel2: TPanel;
+    Label1: TLabel;
+    DBViewComboBox1: TDBViewComboBox;
+    Label2: TLabel;
+    DBViewComboBox2: TDBViewComboBox;
+    Label3: TLabel;
+    SearchEdit1: TSearchEdit;
+    SpeedButton1: TSpeedButton;
+    Label4: TLabel;
+    SearchEdit2: TSearchEdit;
+    SpeedButton2: TSpeedButton;
+    Label5: TLabel;
+    Panel3: TPanel;
+    Panel4: TPanel;
+    DBGrid1: TDBGrid;
+    DBGrid2: TDBGrid;
+    ExpChequeAccDataSet: TOracleDataSet;
+    ExpChequeAccDataSource: TDataSource;
+    ValyutaDataSet: TOracleDataSet;
+    ValyutaDataSource: TDataSource;
+    FilialDataSet: TOracleDataSet;
+    FilialDataSource: TDataSource;
+    AccountDataSet: TOracleDataSet;
+    AccountDataSource: TDataSource;
+    ExpComissionAccDataSet: TOracleDataSet;
+    ExpComissionAccDataSource: TDataSource;
+    DataSource1: TDataSource;
+    OracleDataSet1: TOracleDataSet;
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure SpeedButton2Click(Sender: TObject);
+    procedure DBGrid1DblClick(Sender: TObject);
+    procedure DBGrid2DblClick(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  ExpComAccForm: TExpComAccForm;
+
+implementation
+
+uses ExpDataModuleUnit;
+{$R *.DFM}
+
+procedure TExpComAccForm.SpeedButton1Click(Sender: TObject);
+begin
+  if SearchEdit1.Text = '' then
+    exit;
+  ExpDataModule.Repair.CallProcedure('Exp_chequeaccount_add',
+    [ValyutaDataSet.fieldbyname('VALUTE').asinteger,
+    AccountDataSet.fieldbyname('id').asinteger, FilialDataSet.fieldbyname('id')
+    .asinteger]);
+  SearchEdit1.clear;
+  ExpChequeAccDataSet.Refresh;
+end;
+
+procedure TExpComAccForm.SpeedButton2Click(Sender: TObject);
+begin
+  if SearchEdit2.Text = '' then
+    exit;
+  ExpDataModule.Repair.CallProcedure('Exp_comissionaccount_add',
+    [ValyutaDataSet.fieldbyname('VALUTE').asinteger,
+    OracleDataSet1.fieldbyname('id').asinteger, FilialDataSet.fieldbyname('id')
+    .asinteger]);
+  SearchEdit2.clear;
+  ExpComissionAccDataSet.Refresh;
+end;
+
+procedure TExpComAccForm.DBGrid1DblClick(Sender: TObject);
+begin
+  Case MessageDlg('Əməliyyatın silinməsinə əminsinizmi?', mtConfirmation,
+    [mbyes, mbno], 0) of
+    mryes:
+      begin
+        ExpDataModule.Repair.CallProcedure('Exp_chequeaccount_del',
+          [ExpChequeAccDataSet.fieldbyname('id').asinteger]);
+        ExpChequeAccDataSet.Refresh;
+      end;
+    mrno:
+      exit;
+
+  end;
+
+end;
+
+procedure TExpComAccForm.DBGrid2DblClick(Sender: TObject);
+begin
+  Case MessageDlg('Əməliyyatın silinməsinə əminsinizmi?', mtConfirmation,
+    [mbyes, mbno], 0) of
+    mryes:
+      begin
+        ExpDataModule.Repair.CallProcedure('Exp_comissionaccount_Del',
+          [ExpComissionAccDataSet.fieldbyname('id').asinteger]);
+        ExpComissionAccDataSet.Refresh;
+      end;
+    mrno:
+      exit;
+  end;
+
+end;
+
+procedure TExpComAccForm.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  ExpChequeAccDataSet.Close;
+  ExpComissionAccDataSet.Close;
+  FilialDataSet.Close;
+  ValyutaDataSet.Close;
+  AccountDataSet.Close;
+  OracleDataSet1.Close;
+end;
+
+procedure TExpComAccForm.FormShow(Sender: TObject);
+begin
+  IF not(ExpChequeAccDataSet.Active) then
+    ExpChequeAccDataSet.Open;
+  IF not(ExpComissionAccDataSet.Active) then
+    ExpComissionAccDataSet.Open;
+  IF not(FilialDataSet.Active) then
+    FilialDataSet.Open;
+  IF not(ValyutaDataSet.Active) then
+    ValyutaDataSet.Open;
+  IF not(AccountDataSet.Active) then
+    AccountDataSet.Open;
+  IF not(OracleDataSet1.Active) then
+    OracleDataSet1.Open;
+  SearchEdit1.clear;
+  SearchEdit2.clear;
+  DBViewComboBox1.ItemIndex := 0;
+  DBViewComboBox2.ItemIndex := 0;
+
+end;
+
+end.

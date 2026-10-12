@@ -1,0 +1,854 @@
+unit RepairNewEdit;
+                 //btSaveClick
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ExtCtrls, StdCtrls, Buttons, ComCtrls, SearchEdit, DBCtrls, CurrencyEdit,db,
+  Mask, HintBox, Variants;
+
+type
+  TAmountOperation = (aoDebet,aoCredit,aoLamount);
+  TInBalanceChar = (ibDebet,ibCredit,ibUnknown);
+  TEditAction = (acInsert,acUpdate,acDelete,acUnknown);
+  EHint = class(Exception);
+
+
+  TTransaction= record
+    Action : TEditAction;
+    Mode : Integer;
+    Id: Variant;
+    Date: TDateTime;
+    DebitId,CreditId : Integer;
+    DebitCurId,CreditCurId: Integer;
+    DebitRate,CreditRate: Real;
+    DebitAmmount,CreditAmmount,LAmmount: real;
+    Name: String;
+    InBalanceChar,OutBalanceChar  : Variant;
+   end;
+
+
+  TRepairEdit = class(TForm)
+    pnActionButtonsPanel: TPanel;
+    pnMain: TPanel;
+    btClear: TBitBtn;
+    btCancel: TBitBtn;
+    pnDebet: TPanel;
+    pnCredit: TPanel;
+    Panel1: TPanel;
+    dtpRepairedit: TDateTimePicker;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Panel2: TPanel;
+    Panel3: TPanel;
+    dblcCurDebet: TDBLookupComboBox;
+    Label4: TLabel;
+    Label5: TLabel;
+    dblcCurKredit: TDBLookupComboBox;
+    Label6: TLabel;
+    Label7: TLabel;
+    Label8: TLabel;
+    Label9: TLabel;
+    dlbcDebitAccNo: TDBLookupComboBox;
+    dlbcKreditAccNo: TDBLookupComboBox;
+    dlbcDebitCustomer: TDBLookupComboBox;
+    dlbcKreditCustomer: TDBLookupComboBox;
+    edKreditAccNo: TSearchEdit;
+    GroupBox1: TGroupBox;
+    Panel4: TPanel;
+    Label10: TLabel;
+    ceDebetAmount: TCurrencyEdit;
+    Panel5: TPanel;
+    Label11: TLabel;
+    ceKreditAmount: TCurrencyEdit;
+    SpeedButton1: TSpeedButton;
+    Panel7: TPanel;
+    Label12: TLabel;
+    ceLamount: TCurrencyEdit;
+    SpeedButton2: TSpeedButton;
+    GroupBox2: TGroupBox;
+    dlbcBalance: TDBLookupComboBox;
+    dlbcConvertation: TDBLookupComboBox;
+    Label13: TLabel;
+    Label14: TLabel;
+    GroupBox3: TGroupBox;
+    edDescription: TComboBox;
+    seCurrenIDDebet: TEdit;
+    seCurrenIDKredit: TEdit;
+    edDebitAccNo: TSearchEdit;
+    seOutBalance: TDBEdit;
+    seInBalance: TDBEdit;
+    ErrorBox: THintBox;
+    chProfit: TCheckBox;
+    chRate: TCheckBox;
+    Bevel1: TBevel;
+    RepAnim: TAnimate;
+    Bevel2: TBevel;
+    btSave: TBitBtn;
+    ceDebetCurrency: TEdit;
+    ceKreditCurrency: TEdit;
+    Button1: TButton;
+    procedure dblcCurDebetCloseUp(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure dblcCurKreditCloseUp(Sender: TObject);
+    procedure dlbcDebitAccNoCloseUp(Sender: TObject);
+    procedure dlbcKreditAccNoCloseUp(Sender: TObject);
+    procedure ceDebetAmountChange(Sender: TObject);
+    procedure ceKreditAmountChange(Sender: TObject);
+    procedure ceLamountChange(Sender: TObject);
+    procedure ceKreditCurrencyChange(Sender: TObject);
+    procedure ceDebetCurrencyChange(Sender: TObject);
+    procedure edDescriptionDropDown(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure edKreditAccNoChange(Sender: TObject);
+    procedure dlbcBalanceDropDown(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure seCurrenIDDebetExit(Sender: TObject);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure edDebitAccNoChange(Sender: TObject);
+    procedure dtpRepaireditChange(Sender: TObject);
+    procedure seInBalanceExit(Sender: TObject);
+    procedure seCurrenIDDebetChange(Sender: TObject);
+    procedure seInBalanceChange(Sender: TObject);
+    procedure btClearClick(Sender: TObject);
+    procedure btSaveClick(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+  private
+    FCashState: TAmountOperation;
+    FTransactionDate : TDateTime;
+    FEditAction: TEditAction;
+    FRefreshOnShow: Boolean;
+    FInBalanceCharState: TInBalanceChar;
+    FCloseQuery: Boolean;
+    procedure SetCloseAction(Value: Boolean);
+    procedure SetEditAction(Value: TEditAction);
+    procedure InitializeEditSheets;
+    procedure InitializeeditForm;
+    procedure ChangeAmounts(Value: TAmountOperation;RateDebet,RateCredit : real);
+    procedure ClearAmounts;
+    procedure CutEditText(Sender: TObject);
+    procedure LoadComboData(Sender: TComboBox);
+    procedure ClearAccInfo(Value:TAmountOperation;EdtClear: Boolean);
+    procedure ClearValInfo(Value:TAmountOperation);
+    function ValuteChange(Sender: TEdit): Boolean;
+    procedure ChangeRates(Value: TAmountOperation);
+    procedure AddInitialize;
+  public
+    function CheckInBalance : Boolean;
+    procedure SetFilter(Value:TAmountOperation);
+    procedure RefreshAccounts(Value: TAmountOperation);
+    procedure PrepareInBalance;
+    property EditAction : TEditAction read FEditAction write SetEditAction default acUnknown;
+    procedure InitializeEditAction(Value: TEditAction);
+    property  CloseAction :Boolean  read FCloseQuery write SetCloseAction default True;
+    function  PrepareTransaction: TTransaction;
+   end;
+
+var
+  RepairEdit: TRepairEdit;
+
+implementation
+
+uses RepairNewDataModule, RepairNewImpl, sboapiDataModuleImpl, SBTranslateProc;
+
+{$R *.DFM}
+{$R MyAvi.RES}
+
+procedure TRepairEdit.InitializeEditSheets;
+var
+ tempInteger: Integer;
+begin
+with RapNewDataModule do
+ begin
+  with  DebetRateData do
+   if FTransactionDate<>dtpRepairedit.DateTime then
+    begin
+      tempInteger:=CurDebetData.FieldByName('VALUTE').AsInteger;
+       SetVariable('dat',dtpRepairedit.DateTime);
+       if not(Active) then Open
+       else Refresh;
+      Locate('ID',tempInteger,[]);
+   end;
+  with  CreditRateData do
+  if FTransactionDate<>dtpRepairedit.DateTime then
+    begin
+       tempInteger:=CurKreditData.FieldByName('VALUTE').AsInteger;
+       SetVariable('dat',dtpRepairedit.DateTime);
+       if not(Active) then Open
+       else Refresh;
+       Locate('ID',tempInteger,[]);
+    end;
+ end;
+FTransactionDate:=dtpRepairedit.DateTime;
+end;
+
+
+procedure TRepairEdit.AddInitialize;
+begin
+ with RapNewDataModule,TransactionData do
+  begin
+   FieldByName('DebitCurrencyID').AsInteger:=0;
+   FieldByName('CreditCurrencyID').AsInteger:=0;
+   FieldByName('DebitRate').AsFloat:=DebetRateData.FieldByName('Rate').AsFloat;
+   FieldByName('CreditRate').AsFloat:=CreditRateData.FieldByName('Rate').AsFloat;
+  end;
+end;
+
+procedure TRepairEdit.InitializeeditForm;
+begin
+ if EditAction=acInsert then AddInitialize;
+
+ with RapNewDataModule.TransactionData do
+  begin
+   if not(FieldByName('TransactionDate').IsNull) then
+   dtpRepairedit.DateTime:=FieldByName('TransactionDate').AsDateTime
+   else  dtpRepairedit.DateTime:=RepairNewMain.dtpOpDat.Date;
+   seCurrenIDDebet.Text:=FieldByName('DebitCurrencyID').AsString;
+   seCurrenIDKredit.Text:=FieldByName('CreditCurrencyID').AsString;
+   edDebitAccNo.Text:=FieldByName('DEBITACCNO').AsString;
+   edKreditAccNo.Text:=FieldByName('CREDITACCNO').AsString;
+   ceDebetCurrency.Text:=FloatToStr(FieldByName('DebitRate').AsFloat);
+   ceKreditCurrency.Text:=FloatToStr(FieldByName('CreditRate').AsFloat);
+   ceDebetAmount.Value:=FieldByName('DEBITAMOUNT').AsFloat;
+   ceKreditAmount.Value:=FieldByName('CREDITAMOUNT').AsFloat;
+   ceLamount.Value:=FieldByName('LAMOUNT').AsFloat;
+   edDescription.Text:=FieldByName('NAME').AsString;
+   //seOutBalance.Text:=FieldByName('OUTBALANCECHAR').AsString;
+   CheckInBalance;
+  end;
+end;
+
+procedure TRepairEdit.RefreshAccounts(Value: TAmountOperation);
+begin
+  case Value of
+   aoDebet :
+   with RapNewDataModule.DebetAccData do
+     begin
+     with dlbcDebitAccNo do
+      if (KeyValue<>FieldByName(KeyField).AsInteger) then
+        KeyValue:=FieldByName(KeyField).AsInteger;
+     with dlbcDebitCustomer do
+      if (KeyValue<>FieldByName(KeyField).AsInteger) then
+        KeyValue:=FieldByName(KeyField).AsInteger;
+     end;
+   aoCredit :
+   with RapNewDataModule.CreditAccData do
+     begin
+     with dlbcKreditAccNo do
+      if (KeyValue<>FieldByName(KeyField).AsInteger) then
+        KeyValue:=FieldByName(KeyField).AsInteger;
+     with dlbcKreditCustomer do
+      if (KeyValue<>FieldByName(KeyField).AsInteger) then
+        KeyValue:=FieldByName(KeyField).AsInteger;
+     end;
+  end;
+end;
+
+procedure TRepairEdit.SetEditAction(Value: TEditAction);
+begin
+  if FEditAction<>Value then
+   begin
+   with RapNewDataModule.TransactionData do
+    RefreshRecord;
+    FEditAction:=Value;
+   end;
+end;
+
+procedure TRepairEdit.SetCloseAction(Value: Boolean);
+var
+i : Integer;
+begin
+ for i:=0 to ComponentCount-1 do
+  if Components[i] is TBitBtn then
+    TBitBtn(Components[i]).Enabled:=Value;
+ FCloseQuery:=Value;
+end;
+
+procedure TRepairEdit.CutEditText(Sender: TObject);
+var
+ X,Sel: Integer;
+begin
+with TCurrencyEdit(Sender) do
+ begin
+ if DecimalSeparator=ThousandSeparator then Exit;
+  if Pos(DecimalSeparator,Text)=0 then Exit;
+  Sel:=SelStart;
+  X:=Length(Text)-Pos(DecimalSeparator,Text)-CurrencyDecimals;
+  if (X>0) then
+   begin
+    Text:=Copy(Text,0,(Length(Text)-X));
+    SelStart:=Sel;
+   end;
+ end;
+end;
+
+procedure TRepairEdit.ClearAmounts;
+begin
+ceDebetAmount.Value:=0;
+ceKreditAmount.Value:=0;
+ceLamount.Value:=0;
+end;
+
+procedure TRepairEdit.ChangeAmounts(Value: TAmountOperation;RateDebet,RateCredit : real);
+
+function RoundNew( X: Double; Precision : Integer ): Double;
+var
+  ScaledFractPart, Temp : Double;
+begin
+  ScaledFractPart := Frac(X)*Precision;
+  Temp := Frac(ScaledFractPart);
+  ScaledFractPart := Int(ScaledFractPart);
+ { if Temp >= 0.5 then ScaledFractPart := ScaledFractPart + 1;
+  if Temp <= -0.5 then ScaledFractPart := ScaledFractPart - 1;}
+  if Round(Temp*100) >= 50 then ScaledFractPart := ScaledFractPart + 1; //***Written by Hesen R.***
+  if Round(Temp*100) <= -50 then ScaledFractPart := ScaledFractPart - 1; //***Written by Hesen R.***
+  RoundNew := Int(X) + ScaledFractPart/Precision;
+end;
+
+const
+ Precision=100000;
+begin
+  case Value of
+   aoDebet:
+    begin
+     ceLamount.Value:=RoundNew(ceDebetAmount.Value * RateDebet,Precision);
+     ceKreditAmount.Value:=RoundNew((ceDebetAmount.Value * RateDebet) / RateCredit,Precision);
+  end;
+   aoCredit :
+   begin
+     ceLamount.Value:=RoundNew(ceKreditAmount.Value * RateCredit,Precision);
+     ceDebetAmount.Value:=RoundNew((ceKreditAmount.Value * RateCredit) / RateDebet,Precision);
+   end;
+   aoLamount :
+    begin
+     ceKreditAmount.Value:=RoundNew(ceLamount.Value / RateCredit,Precision);
+     ceDebetAmount.Value:=RoundNew(ceLamount.Value / RateDebet,Precision);
+    end;
+  end;
+end;
+
+function TRepairEdit.ValuteChange(Sender: TEdit): Boolean;
+begin
+Result:=False;
+with RapNewDataModule,sender do
+if Sender= seCurrenIDDebet then
+ begin
+   if Text=EmptyStr then
+   begin
+     ClearValInfo(aoDebet);
+     Exit;
+   end;
+   if (text<>CurDebetData.FieldByName('valute').AsString) {or (EditAction=acInsert)} then
+    begin
+     Result:=CurDebetData.Locate('valute',text,[loCaseInsensitive]);
+     ceDebetCurrency.Text:=FloatToStr(DebetRateData.FieldByName('RATE').AsFloat);
+     ceDebetCurrencyChange(self);
+     SetFilter(aoDebet);
+    end
+    else Result:=True;
+ end
+else if Sender= seCurrenIDKredit then
+ begin
+  if Text=EmptyStr then
+   begin
+    ClearValInfo(aoCredit);
+    Exit;
+   end;
+   if (text<>CurKreditData.FieldByName('valute').AsString) {or (EditAction=acInsert)} then
+    begin
+     Result:=CurKreditData.Locate('valute',text,[loCaseInsensitive]);
+     ceKreditCurrency.Text:=FloatToStr(CreditRateData.FieldByName('RATE').AsFloat);
+     ceKreditCurrencyChange(self);
+     SetFilter(aoCredit);
+    end
+    else Result:=True;
+ end;
+
+ If not(Result) then
+ begin
+  Sender.Color:=clRed;
+  Beep;
+ end
+ else Sender.Color:=clWindow;
+end;
+
+procedure TRepairEdit.ChangeRates(Value: TAmountOperation);
+begin
+   with  RapNewDataModule do
+     case Value of
+       aoDebet:
+         begin
+          ceDebetCurrency.Text:=FloatToStr(DebetRateData.FieldByName('RATE').AsFloat);
+          ceDebetCurrencyChange(self);
+         end;
+       aoCredit:
+         begin
+          ceKreditCurrency.Text:=FloatToStr(CreditRateData.FieldByName('RATE').AsFloat);
+          ceKreditCurrencyChange(self);
+         end;
+      end;
+end;
+
+procedure TRepairEdit.dblcCurDebetCloseUp(Sender: TObject);
+begin
+with (Sender as TDBLookupComboBox).ListSource.DataSet do
+ begin
+   with seCurrenIDDebet do
+    if Text<>FieldByName('valute').AsString then
+     Text:=FieldByName('valute').AsString;
+     ChangeRates(aoDebet);
+ SetFilter(aoDebet);
+ end;
+end;
+
+procedure TRepairEdit.FormShow(Sender: TObject);
+begin
+  if FRefreshOnShow then begin
+   InitializeEditAction(EditAction);
+   //ShowMessage('zz1');
+  end
+  else FRefreshOnShow:=True;
+  if seCurrenIDDebet.CanFocus then seCurrenIDDebet.SetFocus;
+end;
+
+procedure TRepairEdit.InitializeEditAction(Value: TEditAction);
+begin
+ InitializeeditForm;
+ InitializeEditSheets;
+end;
+
+procedure TRepairEdit.dblcCurKreditCloseUp(Sender: TObject);
+begin
+with (Sender as TDBLookupComboBox).ListSource.DataSet do
+   with seCurrenIDKredit do
+   if Text<>FieldByName('valute').AsString then
+      Text:=FieldByName('valute').AsString;
+   ChangeRates(aoCredit);
+   SetFilter(aoCredit);
+end;
+
+procedure TRepairEdit.dlbcDebitAccNoCloseUp(Sender: TObject);
+begin
+with RapNewDataModule do
+ edDebitAccNo.Text:=DebetAccData.FieldByName('ACC_NO').AsString;
+end;
+
+procedure TRepairEdit.dlbcKreditAccNoCloseUp(Sender: TObject);
+begin
+ edKreditAccNo.Text:=edKreditAccNo.DataSource.DataSet.FieldByName('ACC_NO').AsString;
+end;
+
+procedure TRepairEdit.ceDebetAmountChange(Sender: TObject);
+begin
+ CutEditText(Sender);
+ if TCurrencyEdit(Sender).Text='0' then Exit;
+ with RapNewDataModule do
+ ChangeAmounts(aoDebet,DebetRateData.FieldByName('RATE').AsFloat,CreditRateData.FieldByName('RATE').AsFloat);
+end;
+
+procedure TRepairEdit.ceKreditAmountChange(Sender: TObject);
+begin
+ CutEditText(Sender);
+ if TCurrencyEdit(Sender).Text='0' then Exit;
+ with RapNewDataModule do
+ ChangeAmounts(aoCredit,DebetRateData.FieldByName('RATE').AsFloat,CreditRateData.FieldByName('RATE').AsFloat);
+end;
+
+procedure TRepairEdit.ceLamountChange(Sender: TObject);
+begin
+ CutEditText(Sender);
+ if TCurrencyEdit(Sender).Text='0' then Exit;
+ with RapNewDataModule do
+ ChangeAmounts(aoLamount,DebetRateData.FieldByName('RATE').AsFloat,CreditRateData.FieldByName('RATE').AsFloat);
+end;
+
+procedure TRepairEdit.ceKreditCurrencyChange(Sender: TObject);
+begin
+ ClearAmounts;
+   with RapNewDataModule.TransactionData do
+    FieldByName('CreditRate').AsFloat:=StrToFloat(ceKreditCurrency.Text);
+end;
+
+procedure TRepairEdit.ceDebetCurrencyChange(Sender: TObject);
+begin
+ ClearAmounts;
+  with RapNewDataModule.TransactionData do
+   FieldByName('DebitRate').AsFloat:=StrToFloat(ceDebetCurrency.Text);
+end;
+
+procedure TRepairEdit.LoadComboData(Sender: TComboBox);
+begin
+ with RapNewDataModule.TrDescriptionData,Sender do
+  begin
+    if not(Active) then Open
+    else
+      begin
+       RapNewDataModule.TrDescriptionData.Refresh;
+      end;
+   if Items.Count<>RecordCount then
+     begin
+       Items.Clear;
+       First;
+     while not(EOF) do
+        begin
+         Items.Add(FieldByName('NAME').AsString);
+         Next;
+        end;
+     end;
+  end;
+end;
+
+procedure TRepairEdit.edDescriptionDropDown(Sender: TObject);
+begin
+ LoadComboData(TComboBox(Sender));
+end;
+
+procedure TRepairEdit.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+ if not(FCloseQuery) then
+  begin
+   Action:=caNone;
+   Exit;
+  end;
+with RapNewDataModule.TransactionData do
+ case ModalResult of
+  mrCancel:
+   if EditAction<>acInsert then
+    RefreshRecord
+   else Cancel;
+  mrRetry:
+    begin
+ {    if EditAction<>acInsert then
+     RefreshRecord
+     else
+      begin
+       Cancel;
+       Insert;
+      end;
+}
+     ModalResult:=mrNone;
+     Action:=caNone;
+    end;
+ end;
+end;
+
+procedure TRepairEdit.ClearAccInfo(Value:TAmountOperation;EdtClear: Boolean);
+ begin
+ with RapNewDataModule do
+ case Value of
+  aoDebet:
+   begin
+    TransactionData.FieldByName('DEBITID').Clear;
+    TransactionData.FieldByName('INBALANCECHAR').Clear;
+    if EdtClear then
+    edDebitAccNo.Text:='';
+   end;
+  aoCredit:
+   begin
+    TransactionData.FieldByName('CREDITID').Clear;
+    TransactionData.FieldByName('INBALANCECHAR').Clear;
+    if EdtClear then
+    edKreditAccNo.Text:='';
+   end;
+ end
+end;
+
+procedure TRepairEdit.ClearValInfo(Value:TAmountOperation);
+ begin
+ case Value of
+  aoDebet:
+   begin
+     dblcCurDebet.KeyValue:=-1;
+     ceDebetCurrency.Text:='';
+   end;
+  aoCredit:
+   begin
+     dblcCurKredit.KeyValue:=-1;
+     ceKreditCurrency.Text:='';
+   end;
+ end
+end;
+
+procedure TRepairEdit.edKreditAccNoChange(Sender: TObject);
+begin
+with (Sender as TSearchEdit),(Sender as TSearchEdit).DataSource.DataSet do
+ if Text<>EmptyStr then
+  Locate(SearchField,Text,[loCaseInsensitive,loPartialKey])
+ else
+  ClearAccInfo(aoCredit,false);
+end;
+
+procedure TRepairEdit.dlbcBalanceDropDown(Sender: TObject);
+begin
+CheckInBalance;
+PrepareInBalance;
+end;
+
+procedure TRepairEdit.FormCreate(Sender: TObject);
+begin
+ FCashState:=aoLamount;
+ FInBalanceCharState:=ibUnknown;
+ FEditAction:=acUnknown;
+ FRefreshOnShow:=True;
+ FCloseQuery:=True;
+ SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TRepairEdit.SetFilter(Value:TAmountOperation);
+begin
+with RapNewDataModule do
+ case Value of
+  aoDebet:
+     with DebetAccData do
+      begin
+       ClearAccInfo(Value,true);
+      end;
+  aoCredit:
+     with CreditAccData,TransactionData do
+      begin
+       ClearAccInfo(Value,true);
+      end;
+ end;
+end;
+
+procedure TRepairEdit.seCurrenIDDebetExit(Sender: TObject);
+begin
+ValuteChange(TEdit(Sender));
+end;
+
+procedure TRepairEdit.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+if Ord(Key) = VK_RETURN then
+ with Sender as TControl do
+  begin
+  SelectNext(ActiveControl, True, True);
+  Key:=#0;
+  end;
+end;
+
+procedure TRepairEdit.edDebitAccNoChange(Sender: TObject);
+begin
+with (Sender as TSearchEdit),(Sender as TSearchEdit).DataSource.DataSet do
+ if Text<>EmptyStr then
+  Locate(SearchField,Text,[loCaseInsensitive,loPartialKey])
+ else
+  ClearAccInfo(aoDebet,false);
+end;
+
+procedure TRepairEdit.dtpRepaireditChange(Sender: TObject);
+begin
+With RapNewDataModule do
+ TransactionData.FieldByName('TransactionDate').AsDateTime:=dtpRepairedit.DateTime;
+InitializeEditSheets;
+ChangeRates(aoDebet);
+ChangeRates(aoCredit);
+end;
+
+procedure TRepairEdit.PrepareInBalance;
+var
+ RefreshValue: Integer;
+begin
+RefreshValue:=-10;
+with RapNewDataModule do
+  begin
+     if(not TransactionData.FieldByName('DebitID').IsNull)
+          and (DebetAccData.FieldByName('IsCacheAccount').AsInteger = 1)
+             and (DebetAccData.FieldByName('VAL_ACC').AsInteger = 0)then
+     begin
+      if FInBalanceCharState<>ibDebet then
+       begin
+        RefreshValue:=0;
+        FInBalanceCharState :=ibDebet;
+       end;
+     end
+     else if
+       (not TransactionData.FieldByName('CreditID').IsNull)
+       and (CreditAccData.FieldByName('IsCacheAccount').AsInteger = 1)
+       and (CreditAccData.FieldByName('VAL_ACC').AsInteger = 0) then
+     begin
+      if FInBalanceCharState<>ibCredit then
+       begin
+        RefreshValue:=1;
+        FInBalanceCharState :=ibCredit;
+       end;
+     end
+  else
+     begin
+       if (InBalanceCharData.RecordCount<>0) and (FInBalanceCharState<>ibUnknown) then
+        begin
+         RefreshValue:=-1;
+         FInBalanceCharState:=ibUnknown;
+         dlbcBalance.KeyValue:=-1;
+        end;
+     end;
+
+   if RefreshValue<>-10 then
+    begin
+      InBalanceCharData.Filter:=Format('MedioCrity=%d',[RefreshValue]);
+      InBalanceCharData.Filtered:=True;
+      dlbcBalance.KeyValue:=-1;
+    end;
+  end;
+end;
+
+function TRepairEdit.CheckInBalance : Boolean;
+var
+ TempBalChar: String; //Integer;
+begin
+ with RapNewDataModule do
+  begin
+   TempBalChar:=TransactionData.FieldByName('INBALANCECHAR').AsString; //ASInteger;
+   PrepareInBalance;
+  //if TempBalChar>0 then
+  if TempBalChar<>'' then
+    begin
+     //ShowMessage(TempBalChar);
+     if (InBalanceCharData.Locate('SYMBOL',TempBalChar,[loCaseInsensitive])) or (seInBalance.Text=EmptyStr)  then   begin
+        seInBalance.Color:=clWhite
+        end
+      else
+       seInBalance.Color:=clRed;
+    end;
+  end;
+ Result:=FInBalanceCharState= ibUnknown;
+end;
+
+procedure TRepairEdit.seInBalanceExit(Sender: TObject);
+begin
+  CheckInBalance;
+end;
+
+procedure TRepairEdit.seCurrenIDDebetChange(Sender: TObject);
+begin
+ (Sender as TEdit).Color:=clWindow;
+end;
+
+procedure TRepairEdit.seInBalanceChange(Sender: TObject);
+begin
+ (Sender as TDBEdit).Color:=clWindow;
+end;
+
+procedure TRepairEdit.btClearClick(Sender: TObject);
+begin
+ with RapNewDataModule.TransactionData do
+  case EditAction of
+  acInsert:
+  begin
+   Cancel;
+   Insert;
+   InitializeEditAction(EditAction);
+  end;
+  acUpdate:
+   begin
+    RefreshRecord;
+    InitializeEditAction(EditAction);
+   end;
+ end;
+end;
+
+function TRepairEdit.PrepareTransaction: TTransaction;
+var
+ ActTransaction :TTransaction;
+begin
+with RapNewDataModule,ActTransaction do
+ begin
+  Action:=EditAction;
+  if not(chRate.Checked) then Mode:=2
+  else if chProfit.Checked then Mode:=0
+  else Mode:=1;
+  if EditAction=acInsert then Id:=null
+  else Id:=TransactionData.FieldByName('ID').AsInteger;
+  if not(TransactionData.FieldByName('Transactiondate').IsNull) then
+  Date:=TransactionData.FieldByName('Transactiondate').AsDateTime
+  else Date:=dtpRepairedit.DateTime;
+  DebitId:=DebetAccData.FieldByName('Id').AsInteger;
+  CreditId:=CreditAccData.FieldByName('Id').AsInteger;
+  DebitRate:=TransactionData.FieldByName('DebitRate').AsFloat;
+  CreditRate:=TransactionData.FieldByName('CreditRate').AsFloat;
+  DebitAmmount:=ceDebetAmount.Value;
+  CreditAmmount:=ceKreditAmount.Value;
+  LAmmount:=ceLamount.Value;
+  Name:=edDescription.Text;
+  DebitCurId:= CurDebetData.FieldByName('Valute').AsInteger;
+  CreditCurId:= CurKreditData.FieldByName('Valute').AsInteger;
+  if not(TransactionData.FieldByName('InBalanceChar').IsNull) then
+  InBalanceChar:=TransactionData.FieldByName('InBalanceChar').AsString  //AsInteger
+  else InBalanceChar:=null;
+  if not(TransactionData.FieldByName('OutBalanceChar').IsNull) then
+  OutBalanceChar:=TransactionData.FieldByName('OutBalanceChar').AsInteger
+  else OutBalanceChar:=null;
+  Result:=ActTransaction;
+ end;
+end;
+
+
+procedure TRepairEdit.btSaveClick(Sender: TObject);
+
+function CheckTrans(Value: TTransaction): Boolean;
+begin
+with RapNewDataModule do
+ try
+  Result:=CheckTransaction(Value);
+ except
+   on E: EHint do
+    begin
+    ErrorBox.ShowMessage(E.Message,4000);
+    Result:=False;
+    end;
+ end;
+end;
+
+procedure SaveTran(Value: TTransaction);
+begin
+ with RapNewDataModule,TransactionData do
+  begin
+   SaveTransaction(Value);
+   Refresh;
+   if EditAction =acInsert then
+   Last else Locate('ID',Value.Id,[])
+  end;
+end;
+
+function ShowAvi(Show : Boolean=True): Boolean;
+begin
+  try
+   RepAnim.Active:=Show;
+   RepAnim.Visible:=Show;
+   Application.ProcessMessages;
+   ShowAvi:=True;
+  except
+   ShowAvi:=False
+  end;
+end;
+
+var
+ TempTrans: TTransaction;
+begin
+   TempTrans:=PrepareTransaction;
+   with TTransaction(TempTrans) do
+   if not(CheckTrans(TempTrans)) then
+    ModalResult:=mrRetry
+   else
+     try
+      ShowAvi;
+      CloseAction:=False;
+     try
+      SaveTran(TempTrans);
+     except
+      ModalResult:=mrRetry;
+      raise;
+     end;
+     finally
+      ShowAvi(False);
+      CloseAction:=True;
+     end;
+  sboapiDataModule.SBSession.Commit;
+end;
+
+procedure TRepairEdit.Button1Click(Sender: TObject);
+begin
+//  RapNewDataModule.InBalanceCharData.Locate('Symbol', 'B20', []);
+end;
+
+end.

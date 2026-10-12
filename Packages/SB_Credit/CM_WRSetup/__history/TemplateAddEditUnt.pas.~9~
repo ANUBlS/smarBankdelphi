@@ -1,0 +1,113 @@
+﻿unit TemplateAddEditUnt;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, Buttons, DBCtrls,  Mask, ActnList,db, DBGridEh, DBCtrlsEh,
+  DBLookupEh, OracleData;
+
+type
+  TTemplAddEditForm = class(TForm)
+    DBEdit1: TDBEdit;
+    DBEdit2: TDBEdit;
+    Label1: TLabel;
+    Label2: TLabel;
+    SBOpenDlg: TSpeedButton;
+    Button1: TButton;
+    Button2: TButton;
+    ActionList1: TActionList;
+    ActnAccept: TAction;
+    ActnReject: TAction;
+    DBEdit3: TDBEdit;
+    OracleDataSet1: TOracleDataSet;
+    OracleDataSet1ID: TFloatField;
+    DBLookupComboboxEh1: TDBLookupComboboxEh;
+    Label3: TLabel;
+    DataSource1: TDataSource;
+    OracleDataSet1DESCRIPTION: TWideStringField;
+    Label4: TLabel;
+    DBLookupComboboxEh2: TDBLookupComboboxEh;
+    OracleDataSet2: TOracleDataSet;
+    DataSource2: TDataSource;
+    OracleDataSet2ID: TWideStringField;
+    OracleDataSet2NAME: TWideStringField;
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure ActnAcceptExecute(Sender: TObject);
+    procedure SBOpenDlgClick(Sender: TObject);
+    procedure ActnRejectExecute(Sender: TObject);
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+    procedure FormCreate(Sender: TObject);
+     private
+    { Private declarations }
+     public
+    { Public declarations }
+     end;
+
+     var TemplAddEditForm : TTemplAddEditForm;
+
+    implementation
+
+    uses WRSetupDataModImpl,SBTranslateProc,sboapiDataModuleimpl;
+
+    {$R *.DFM}
+
+    procedure TTemplAddEditForm.FormKeyPress(Sender: TObject; var Key: Char);
+    begin
+
+      if ORD(Key) = VK_ESCAPE then
+      ActnRejectExecute(nil);
+
+    end;
+
+    procedure TTemplAddEditForm.ActnAcceptExecute(Sender: TObject);
+    begin
+
+      if (DBEdit1.Text<>'') and (DBEdit2.Text<>'')and ( DBLookupComboboxEh1.KeyValue<>-1)and ( DBLookupComboboxEh2.KeyValue<>-1)  then
+      begin
+        with WRSetupDataMod.WRTemplatesDataSet do
+             Post;
+             ModalResult := mrOk;
+      end  else
+      begin
+        if DBEdit1.Text='' then  ShowMessage('Şablonun adı daxil edilməyib');
+        if DBEdit2.Text='' then  ShowMessage('Şablon faylı daxil edilməyib');
+         if DBLookupComboboxEh1.KeyValue='' then  ShowMessage('Məhsul daxil edilməyib');
+          if DBLookupComboboxEh2.KeyValue='' then  ShowMessage('Tipi daxil edilməyib');
+        with WRSetupDataMod.WRTemplatesDataSet do
+             Cancel;
+      end;
+
+    end;
+
+    procedure TTemplAddEditForm.SBOpenDlgClick(Sender: TObject);
+    begin
+
+      with WRSetupDataMod, OpenDlg ,WRTemplatesDataSet do
+      if Execute then
+      FieldByName('Path').AsString := FileName;
+
+    end;
+
+   procedure TTemplAddEditForm.ActnRejectExecute(Sender: TObject);
+   begin
+
+     with WRSetupDataMod.WRTemplatesDataSet do
+          Cancel;
+          ModalResult := mrCancel;
+
+   end;
+
+   procedure TTemplAddEditForm.FormCanResize(Sender: TObject; var NewWidth,
+           NewHeight: Integer; var Resize: Boolean);
+   begin
+     Resize := False;
+   end;
+
+procedure TTemplAddEditForm.FormCreate(Sender: TObject);
+begin
+SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+end.

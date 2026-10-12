@@ -1,0 +1,38 @@
+unit fmPlanFormImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs;
+
+type
+  TfmPlanForm = class(TForm)
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  fmPlanForm: TfmPlanForm;
+
+implementation
+
+{$R *.dfm}
+uses sboapiDataModuleimpl,SBTranslateProc;
+
+procedure TfmPlanForm.FormCreate(Sender: TObject);
+begin
+SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TfmPlanForm.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+if ord(key)=vk_escape  then close;
+
+end;
+
+end.

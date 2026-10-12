@@ -1,0 +1,515 @@
+unit DatUnit;
+
+interface
+
+uses
+  SysUtils, Classes, DB, OracleData, dialogs,Oracle;
+
+type
+  TDM_goAml = class(TDataModule)
+    ODS_Rep: TOracleDataSet;
+    DS_Rep: TDataSource;
+    ODS_SYSDAT: TOracleDataSet;
+    ODS_SYSDATTEK_DAT: TDateTimeField;
+    ODS_MainReport: TOracleDataSet;
+    ODS_MainReportID: TFloatField;
+    ODS_MainReportRENTITY_ID: TWideStringField;
+    ODS_MainReportSUBMISSION_CODE: TWideStringField;
+    ODS_MainReportREPORT_CODE: TWideStringField;
+    ODS_MainReportENTITY_REFERENCE: TWideStringField;
+    ODS_MainReportFIU_REF_NUMBER: TWideStringField;
+    ODS_MainReportRENTITY_BRANCH: TWideStringField;
+    ODS_MainReportSUBMISSION_DATE: TWideStringField;
+    ODS_MainReportCURRENCY_CODE_LOCAL: TWideStringField;
+    ODS_MainReportACTION: TWideStringField;
+    ODS_MainReportTRANSACTIONNUMBER: TWideStringField;
+    ODS_MainReportINTERNAL_REF_NUMBER: TWideStringField;
+    ODS_MainReportTRANSACTION_DESCRIPTION: TWideStringField;
+    ODS_MainReportDATE_TRANSACTION: TWideStringField;
+    ODS_MainReportLATE_DEPOSIT: TWideStringField;
+    ODS_MainReportTRANSMODE_CODE: TIntegerField;
+    ODS_MainReportAMOUNT_LOCAL: TFloatField;
+    ODS_MainReportFROM_FUNDS_CODE: TWideStringField;
+    ODS_MainReportDEBITID: TFloatField;
+    ODS_MainReportCREDITID: TFloatField;
+    ODS_MainReportFROM_COUNTRY: TWideStringField;
+    ODS_MainReportTO_FUNDS_CODE: TWideStringField;
+    ODS_MainReportTO_COUNTRY: TWideStringField;
+    ODS_MainReportD_FOREIGN_CURRENCY_CODE: TWideStringField;
+    ODS_MainReportD_FOREIGN_AMOUNT: TFloatField;
+    ODS_MainReportD_FOREIGN_EXCHANGE_RATE: TFloatField;
+    ODS_MainReportDEBITBALANCE: TFloatField;
+    ODS_MainReportC_FOREIGN_CURRENCY_CODE: TWideStringField;
+    ODS_MainReportC_FOREIGN_AMOUNT: TFloatField;
+    ODS_MainReportC_FOREIGN_EXCHANGE_RATE: TFloatField;
+    ODS_MainReportCREDITBALANCE: TFloatField;
+    ODS_MainReportKASSANOVU: TWideStringField;
+    DS_Main: TDataSource;
+    ODS_FilesPath: TOracleDataSet;
+    ODS_FilesPathDESCRIPTION: TWideStringField;
+    ODS_TPERSON: TOracleDataSet;
+    ODS_LOCATION: TOracleDataSet;
+    ODS_TACCOUNT: TOracleDataSet;
+    ODS_CustRelAccOwer: TOracleDataSet;
+    ODS_CustRelSignatory: TOracleDataSet;
+    ODS_ENTITY: TOracleDataSet;
+    ODS_MAIN201: TOracleDataSet;
+    DSRC_MAIN201: TDataSource;
+    ODS_REP201: TOracleDataSet;
+    DSRC_REP201: TDataSource;
+    exch_: TOracleDataSet;
+    dexch: TDataSource;
+    DMexch: TDataSource;
+    Mexch_: TOracleDataSet;
+    exch_TRANSMODE_CODE: TIntegerField;
+    exch_CUSTID: TFloatField;
+    exch_LAMMOUNT: TFloatField;
+    exch_NAME: TWideStringField;
+    OracleDataSet1: TOracleDataSet;
+    OracleDataSet2: TOracleDataSet;
+    Ods_main: TOracleDataSet;
+    ODS_REP201TRANSMODE_CODE: TIntegerField;
+    ODS_REP201REPORT_CODE: TWideStringField;
+    ODS_REP201CUSTID: TFloatField;
+    ODS_REP201CCUSTID: TFloatField;
+    ODS_REP201LAMMOUNT: TFloatField;
+    ODS_REP201DNMAE: TWideStringField;
+    ODS_REP201KNAME: TWideStringField;
+    ODS_RepTRANSMODE_CODE: TIntegerField;
+    ODS_RepREPORT_CODE: TWideStringField;
+    ODS_RepCUSTID: TFloatField;
+    ODS_RepNAME: TWideStringField;
+    ODS_RepLAMMOUNT: TFloatField;
+    Ods_maindbt: TOracleDataSet;
+    DS_MainDbt: TDataSource;
+    ODS_RepDK: TFloatField;
+    Ods_mainID: TFloatField;
+    Ods_mainTRANSACTIONNUMBER: TFloatField;
+    Ods_mainREPORT_CODE: TWideStringField;
+    Ods_mainTRANSMODE_CODE: TIntegerField;
+    Ods_mainDCUSTID: TFloatField;
+    Ods_mainDEBTCUSTNAME: TWideStringField;
+    Ods_mainDEBITID: TFloatField;
+    Ods_mainDEBITACCNO: TWideStringField;
+    Ods_mainDEBITCURRENCYSNAME: TWideStringField;
+    Ods_mainKCUSTID: TFloatField;
+    Ods_mainCREDCUSTNAME: TWideStringField;
+    Ods_mainCREDITID: TFloatField;
+    Ods_mainCREDITACCNO: TWideStringField;
+    Ods_mainCREDITCURRENCYSNAME: TWideStringField;
+    Ods_mainD_FOREIGN_AMOUNT: TFloatField;
+    Ods_mainC_FOREIGN_AMOUNT: TFloatField;
+    Ods_mainAMOUNT_LOCAL: TFloatField;
+    Ods_mainD_FOREIGN_EXCHANGE_RATE: TFloatField;
+    Ods_mainDEBITBALANCE: TFloatField;
+    Ods_mainC_FOREIGN_EXCHANGE_RATE: TFloatField;
+    Ods_mainCREDITBALANCE: TFloatField;
+    Ods_mainTRANSACTION_DESCRIPTION: TWideStringField;
+    Ods_mainACTION: TWideStringField;
+    Ods_mainINTERNAL_REF_NUMBER: TWideStringField;
+    Ods_mainDATE_TRANSACTION: TWideStringField;
+    Ods_mainKASSANOVU: TWideStringField;
+    Ods_mainTRANSACTIONDATE: TDateTimeField;
+    Ods_mainNOMDCUSTID: TFloatField;
+    Ods_maindbtID: TFloatField;
+    Ods_maindbtTRANSACTIONNUMBER: TFloatField;
+    Ods_maindbtREPORT_CODE: TWideStringField;
+    Ods_maindbtTRANSMODE_CODE: TIntegerField;
+    Ods_maindbtDCUSTID: TFloatField;
+    Ods_maindbtDEBTCUSTNAME: TWideStringField;
+    Ods_maindbtDEBITID: TFloatField;
+    Ods_maindbtDEBITACCNO: TWideStringField;
+    Ods_maindbtDEBITCURRENCYSNAME: TWideStringField;
+    Ods_maindbtKCUSTID: TFloatField;
+    Ods_maindbtCREDCUSTNAME: TWideStringField;
+    Ods_maindbtCREDITID: TFloatField;
+    Ods_maindbtCREDITACCNO: TWideStringField;
+    Ods_maindbtCREDITCURRENCYSNAME: TWideStringField;
+    Ods_maindbtD_FOREIGN_AMOUNT: TFloatField;
+    Ods_maindbtC_FOREIGN_AMOUNT: TFloatField;
+    Ods_maindbtAMOUNT_LOCAL: TFloatField;
+    Ods_maindbtD_FOREIGN_EXCHANGE_RATE: TFloatField;
+    Ods_maindbtDEBITBALANCE: TFloatField;
+    Ods_maindbtC_FOREIGN_EXCHANGE_RATE: TFloatField;
+    Ods_maindbtCREDITBALANCE: TFloatField;
+    Ods_maindbtTRANSACTION_DESCRIPTION: TWideStringField;
+    Ods_maindbtACTION: TWideStringField;
+    Ods_maindbtINTERNAL_REF_NUMBER: TWideStringField;
+    Ods_maindbtDATE_TRANSACTION: TWideStringField;
+    Ods_maindbtKASSANOVU: TWideStringField;
+    Ods_maindbtTRANSACTIONDATE: TDateTimeField;
+    Ods_maindbtNOMDCUSTID: TFloatField;
+    ods_incoming: TOracleDataSet;
+    ods_monex: TOracleDataSet;
+    ods_monexID: TFloatField;
+    ods_monexNAME: TWideStringField;
+    ods_monexLAST_NAME: TWideStringField;
+    ods_monexDAT: TDateTimeField;
+    OracleDataSet1ID: TFloatField;
+    OracleDataSet1TRANSID: TFloatField;
+    OracleDataSet1DCUSTID: TFloatField;
+    OracleDataSet1CCUSTID: TFloatField;
+    OracleDataSet1NOMDCUSTID: TFloatField;
+    OracleDataSet1NOMCCUSTID: TFloatField;
+    OracleDataSet1MONEX_ID: TFloatField;
+    PG_PCustService: TOraclePackage;
+    OracleDataSet2CUST_TYPE: TFloatField;
+    ods_incomingID: TFloatField;
+    ods_incomingVID_OP: TFloatField;
+    ods_incomingINOUT: TFloatField;
+    ods_incomingTRID: TFloatField;
+    ods_incomingBANKSWIFT: TWideStringField;
+    ods_incomingFIRSTNAME: TWideStringField;
+    ods_incomingMIDNAME: TWideStringField;
+    ods_incomingLASTNAME: TWideStringField;
+    ods_incomingACCNUM: TWideStringField;
+    ods_cust: TOracleDataSet;
+    ods_custID: TIntegerField;
+    ods_custCUST_TYPE: TIntegerField;
+    ods_custINN: TWideStringField;
+    ods_custSFERA_DEYCOD: TWideStringField;
+    ODS_MAIN201ID: TFloatField;
+    ODS_MAIN201TRANSACTIONNUMBER: TFloatField;
+    ODS_MAIN201REPORT_CODE: TWideStringField;
+    ODS_MAIN201TRANSMODE_CODE: TIntegerField;
+    ODS_MAIN201DCUSTID: TFloatField;
+    ODS_MAIN201DEBTCUSTNAME: TWideStringField;
+    ODS_MAIN201DEBITID: TFloatField;
+    ODS_MAIN201DEBITACCNO: TWideStringField;
+    ODS_MAIN201DBACCNAME: TWideStringField;
+    ODS_MAIN201DEBITCURRENCYSNAME: TWideStringField;
+    ODS_MAIN201KCUSTID: TFloatField;
+    ODS_MAIN201CREDCUSTNAME: TWideStringField;
+    ODS_MAIN201CREDITID: TFloatField;
+    ODS_MAIN201CREDITACCNO: TWideStringField;
+    ODS_MAIN201CRACCNAME: TWideStringField;
+    ODS_MAIN201CREDITCURRENCYSNAME: TWideStringField;
+    ODS_MAIN201D_FOREIGN_AMOUNT: TFloatField;
+    ODS_MAIN201C_FOREIGN_AMOUNT: TFloatField;
+    ODS_MAIN201AMOUNT_LOCAL: TFloatField;
+    ODS_MAIN201D_FOREIGN_EXCHANGE_RATE: TFloatField;
+    ODS_MAIN201DEBITBALANCE: TFloatField;
+    ODS_MAIN201C_FOREIGN_EXCHANGE_RATE: TFloatField;
+    ODS_MAIN201CREDITBALANCE: TFloatField;
+    ODS_MAIN201TRANSACTION_DESCRIPTION: TWideStringField;
+    ODS_MAIN201ACTION: TWideStringField;
+    ODS_MAIN201INTERNAL_REF_NUMBER: TWideStringField;
+    ODS_MAIN201DATE_TRANSACTION: TWideStringField;
+    ODS_MAIN201KASSANOVU: TWideStringField;
+    ODS_MAIN201TRANSACTIONDATE: TDateTimeField;
+    ODS_MAIN201NOMDCUSTID: TFloatField;
+    ODS_MAIN201NOMCCUSTID: TFloatField;
+    ods_custCOMMENTS: TWideStringField;
+    ods_custCOMPANI: TFloatField;
+    odsa_grid: TOracleDataSet;
+    dsrc_grid: TDataSource;
+    odscust4509: TOracleDataSet;
+    odscust4509ID: TIntegerField;
+    odscust4509CUST_TYPE: TIntegerField;
+    ODS_CustConductur: TOracleDataSet;
+    ODS_MainReportDCUSTID: TFloatField;
+    ODS_MainReportKCUSTID: TFloatField;
+    ODS_MainReportVID_OP: TFloatField;
+    ods_sub1: TOracleDataSet;
+    Ods_subheli: TOracleDataSet;
+    ods_sub7: TOracleDataSet;
+    ods_sub2: TOracleDataSet;
+    ods_sub8: TOracleDataSet;
+    ods_sub3: TOracleDataSet;
+    ods_sub5: TOracleDataSet;
+    ods_sub6: TOracleDataSet;
+    ods_sub9: TOracleDataSet;
+    ods_sub4: TOracleDataSet;
+    ods_subtrans: TOracleDataSet;
+    dsrc_subheli: TDataSource;
+    dsrc_subtrans: TDataSource;
+    Ods_subheliCUSTID: TFloatField;
+    Ods_subheliCUST_NAME: TWideStringField;
+    Ods_subheliAMMOUNT: TFloatField;
+    ods_sub1CUSTID: TIntegerField;
+    ods_sub1CUST_NAME: TWideStringField;
+    ods_sub1AMMOUNT: TFloatField;
+    ODS_SYSDATTEK_DAT1: TDateTimeField;
+    ods_sub6ACC_ID: TFloatField;
+    ods_sub6CUSTID: TIntegerField;
+    ods_sub6CUST_NAME: TWideStringField;
+    ods_sub6AMMOUNT: TWideStringField;
+    ods_sub6DAYS: TFloatField;
+    ods_sub6DATDATE: TDateTimeField;
+    ods_sub6LASTOPDATE: TDateTimeField;
+    ods_sub5ACC_ID: TFloatField;
+    ods_sub5CUSTID: TIntegerField;
+    ods_sub5CUST_NAME: TWideStringField;
+    ods_sub5AMMOUNT: TWideStringField;
+    ods_sub5DAYS: TFloatField;
+    ods_sub5DATDATE: TDateTimeField;
+    Ods_subheliDESCRIPTION: TWideStringField;
+    Ods_subheliACC_ID: TFloatField;
+    ods_sub1DESCRIPTION: TWideStringField;
+    ods_sub5DESCRIPTION: TWideStringField;
+    ods_sub6DESCRIPTION: TWideStringField;
+    ods_sub5TYPE: TWideStringField;
+    ods_sub6TYPE: TWideStringField;
+    Ods_subheliTR_TYPE: TFloatField;
+    ods_sub1TYPE: TWideStringField;
+    ods_sub3CUSTID: TIntegerField;
+    ods_sub3CUST_NAME: TWideStringField;
+    ods_sub3AMMOUNT: TFloatField;
+    ods_sub3TYPE: TWideStringField;
+    ods_sub3DESCRIPTION: TWideStringField;
+    ods_sub4CUSTID: TIntegerField;
+    ods_sub4CUST_NAME: TWideStringField;
+    ods_sub4AMMOUNT: TFloatField;
+    ods_sub4TYPE: TWideStringField;
+    ods_sub4DESCRIPTION: TWideStringField;
+    ods_sub7CUSTID: TIntegerField;
+    ods_sub7CUST_NAME: TWideStringField;
+    ods_sub7AMMOUNT: TFloatField;
+    ods_sub7TYPE: TWideStringField;
+    ods_sub7DESCRIPTION: TWideStringField;
+    ods_subtransID: TFloatField;
+    ods_subtransDAT: TDateTimeField;
+    ods_subtransREPORT_CODE: TWideStringField;
+    ods_subtransTRANSMODE_CODE: TIntegerField;
+    ods_subtransLAMMOUNT: TFloatField;
+    ods_subtransDEBT_ACCNO: TWideStringField;
+    ods_subtransKREDIT_ACCNO: TWideStringField;
+    ods_subtransNAME: TWideStringField;
+    ods_subtransDCUSTID: TFloatField;
+    ods_subtransCCUSTID: TFloatField;
+    ods_subtransNOMDCUSTID: TFloatField;
+    ods_sub8CUSTID: TIntegerField;
+    ods_sub8CUST_NAME: TWideStringField;
+    ods_sub8AMMOUNT: TFloatField;
+    ods_sub8TYPE: TWideStringField;
+    ods_sub8DESCRIPTION: TWideStringField;
+    ods_sub9CUSTID: TIntegerField;
+    ods_sub9CUST_NAME: TWideStringField;
+    ods_sub9AMMOUNT: TFloatField;
+    ods_sub9TYPE: TWideStringField;
+    ods_sub9DESCRIPTION: TWideStringField;
+    odsc_custSube: TOracleDataSet;
+    odsc_custSubeCUST_TYPE: TIntegerField;
+    odsc_custSubeINN: TWideStringField;
+    odsc_custSubeNAME: TWideStringField;
+    odsc_custSubeLASTNAME: TWideStringField;
+    odsc_custSubeSONAME: TWideStringField;
+    odsc_custSubeBIRTHDAY: TDateTimeField;
+    odsc_custSubeCNTR: TWideStringField;
+    odsc_custSubeH_NAME: TWideStringField;
+    odsc_custSubeDAT_NAL: TDateTimeField;
+    OP_MMX: TOraclePackage;
+    ODS_MMX_TRANSMODE: TOracleDataSet;
+    ODS_MMX_TRANSMODEID: TIntegerField;
+    ODS_MMX_TRANSMODENAME: TIntegerField;
+    ODS_MMX_TRANSMODEDESCRIPTION: TWideStringField;
+    DS_MMX_TRANSMODE: TDataSource;
+    Ods_mmx_reportcode: TOracleDataSet;
+    Ods_mmx_reportcodeID: TIntegerField;
+    Ods_mmx_reportcodeNAME: TWideStringField;
+    Ods_mmx_reportcodeDESCRIPTION: TWideStringField;
+    Dsrc_mmx_reportcode: TDataSource;
+    Templates: TOracleDataSet;
+    TemplatesID: TFloatField;
+    TemplatesNAME: TWideStringField;
+    TemplatesPATH: TWideStringField;
+    TemplatesCUSTTYPE: TIntegerField;
+    DSTemplates: TDataSource;
+    ReplaceCustDataSet: TOracleDataSet;
+    procedure Ods_subheliAfterScroll(DataSet: TDataSet);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  DM_goAml: TDM_goAml;
+ dat_1,dat_2:TDate;
+implementation
+uses sboapiDataModuleImpl, GoAml_serviceImpl;
+{$R *.dfm}
+
+procedure TDM_goAml.Ods_subheliAfterScroll(DataSet: TDataSet);
+begin
+  dat_1:=v_date1;
+  dat_2:=v_date2;
+ with DM_goAml,ods_subtrans do
+ begin
+
+case  Ods_subheliTR_TYPE.AsInteger of
+
+1:begin
+ close;
+ SQL.Clear;
+ sql.Text:=
+
+ ' select id ,report_code,transmode_code ,amount_local as lamount, debitaccno as DEBT_ACCNO '+
+' , creditaccno as KREDIT_ACCNO ,transaction_description as name ,dcustid, kcustid as ccustid ,nomdcustid from mmx_rep_car_credt p '+
+' and  p.transactiondate   between  ''' +  DateTimeToStr(trunc(dat_1)) + ''' and ''' +  DateTimeToStr(trunc(dat_2))  + ''''  +
+' and  exists (select id from account where id=p.debitid and bal_cn1 like''38%''  and  kli_id= '+ inttostr(DM_goAml.Ods_subheliCUSTID.AsInteger)+')' +
+' and  exists (select id from account where  p.creditid=id and bal_cn1 in(''1001'',''1011'',''2801'',''2811'',''2509'',''2519'',''4509'',''4519''))'+
+' and nvl(p.vid_op,0) not in(1,3)';
+{' select p.id,p.dat,m.report_code,m.transmode_code,p.lammount, '+
+' (select acc_no from account where id =p.debt )debt_accno,(select acc_no from account where id =p.kredit )kredit_accno, '+
+' p.name,m.dcustid,m.ccustid,m.nomdcustid from provarch p,mmx_transinfo m where p.id=m.transid(+)'+
+' and  p.dat   between  ''' +  DateTimeToStr(trunc(dat_1)) + ''' and ''' +  DateTimeToStr(trunc(dat_2))  + ''''  +
+' and  exists (select id from account where id=p.debt and bal_cn1 like''38%''  and  kli_id= '+ inttostr(DM_goAml.Ods_subheliCUSTID.AsInteger)+')' +
+' and  exists (select id from account where  p.kredit=id and bal_cn1 in(''2509'',''2519'',''4509'',''4519''))'+
+' and nvl(p.vid_op,0) not in(1,3)'; }
+ open;
+ //showmessage('ff');
+end;
+ 2:begin
+ close;
+  sql.Clear;
+  sql.Text:=
+ ' select  p.id,p.dat,m.report_code,m.transmode_code,p.lammount,(select acc_no from account where id =p.debt )debt_accno,(select acc_no from account where id =p.kredit )kredit_accno,p.name,m.dcustid,m.ccustid,m.nomdcustid '+
+ ' from customers c,account a, provarch p,mmx_transinfo m where '+
+ ' c.id=a.kli_id  and a.id=p.debt and p.id=m.transid(+) and exists (select id from account where p.debt=id and bal_cn1 like''38%'')'+
+ ' and c.cust_type in(0,1) and p.vid_op=21 and nvl(p.vid_op,0) not in(1,3)  and p.lammount between 10 and 999.99 '+
+ ' and p.dat = ''' +  DateTimeToStr(trunc(dat_2))  + '''' +
+ ' and c.id='+inttostr(DM_goAml.Ods_subheliCUSTID.AsInteger);
+
+ open;
+
+ end;
+ 3:begin
+
+  close;
+  sql.Clear;
+  sql.Text:=
+ ' select p.id,p.dat,m.report_code,m.transmode_code,p.lammount,(select acc_no from account where id =p.debt )debt_accno,(select acc_no from account where id =p.kredit )kredit_accno,p.name,m.dcustid,m.ccustid,m.nomdcustid '+
+ ' from customers c,account a, provarch p,mmx_transinfo m where p.id=m.transid(+) and '+
+ ' c.id=a.kli_id   and a.id=p.kredit  and exists (select id from account where p.kredit=id and  bal_cn1 like''38%'') and nvl(p.vid_op,0) not in(1,3,86)'+
+ ' and c.cust_type in(1)  and p.dat between ''' +  DateTimeToStr(trunc(dat_1)) + ''' and ''' +  DateTimeToStr(trunc(dat_2))  + '''' +
+ ' and c.id='+inttostr(DM_goAml.Ods_subheliCUSTID.AsInteger);
+
+  open;
+ end;
+ 4:begin
+   close;
+   sql.Clear;
+   sql.Text:=
+   ' select  p.id,p.dat,m.report_code,m.transmode_code,p.lammount,'+
+   ' (select acc_no from account where id =p.debt )debt_accno,(select acc_no from account where id =p.kredit )kredit_accno,p.name,m.dcustid,m.ccustid,m.nomdcustid from customers c,account a, provarch p,mmx_transinfo m where '+
+   ' c.id=a.kli_id  and a.id=p.kredit and p.id=m.transid(+) '+
+   ' and exists  (select a.id from account  a ,customers c where p.kredit=a.id and  a.kli_id =c.id and c.cust_type=1 and a.bal_cn1 like''38%'') '+
+   ' and exists  (select a.id from account a,customers c where  p.debt=a.id and a.kli_id=c.id and c.cust_type in(0,2,3)) and c.inn<> '''+'1300016391 '''+
+   ' and nvl(p.vid_op,0) not in(1,3,86)  '+
+   ' and p.dat ='''+ DateTimeToStr(trunc(dat_2))+'''' +
+   ' and c.id='+inttostr(DM_goAml.Ods_subheliCUSTID.AsInteger);
+
+   open;
+ end;
+5:begin
+ close;
+ SQL.clear;
+ sql.text:=
+ ' select p.id,p.dat,m.report_code,m.transmode_code,p.lammount,(select acc_no from account where id =p.debt )debt_accno,(select acc_no from account where id =p.kredit )kredit_accno,p.name,m.dcustid,m.ccustid,m.nomdcustid ' +
+ ' from provarch p,mmx_transinfo m where p.id=m.transid(+) and nvl(p.vid_op,0) not in(1,3) and p.lammount>0 and '+
+ ' p.dat=''' +  DateTimeToStr(trunc(dat_2)) +'''' +
+ ' and p.debt='+inttostr(Ods_subheliACC_ID.AsInteger)   ;
+// showmessage(sql.Text);
+ open;
+end;
+6:begin
+  close;
+ SQL.clear;
+ sql.text:=
+ ' select p.id,p.dat,m.report_code,m.transmode_code,p.lammount,(select acc_no from account where id =p.debt )debt_accno,(select acc_no from account where id =p.kredit )kredit_accno,p.name,m.dcustid,m.ccustid,m.nomdcustid ' +
+ ' from provarch p,mmx_transinfo m where p.id=m.transid(+) and nvl(p.vid_op,0) not in(1,3) and p.lammount>0 and '+
+ ' p.dat=''' +  DateTimeToStr(trunc(dat_2)) +''''+
+ ' and p.kredit='+inttostr(Ods_subheliACC_ID.AsInteger)    ;
+
+  open;
+end;
+ 7:begin
+ close;
+ sql.Clear;
+ sql.Text:=
+ ' select p.id,p.dat,m.report_code,m.transmode_code,p.lammount,(select acc_no from account where id =p.debt )debt_accno,(select acc_no from account where id =p.kredit )kredit_accno,p.name,m.dcustid,m.ccustid,m.nomdcustid from '+
+ ' customers c,account a, provarch p,mmx_transinfo m  where '+
+ ' c.id=a.kli_id and a.id=p.kredit and p.id=m.transid(+) and exists (select id from account where p.kredit=id and  bal_cn1 like''38%'') '+
+ ' and c.cust_type in(0,1) and nvl(p.vid_op,0) not in(1,3,86) and p.lammount>=18000 and p.lammount<=19999  '+
+ ' and p.dat between ''' +  DateTimeToStr(trunc(dat_1)) + ''' and ''' +  DateTimeToStr(trunc(dat_2))  + '''' +
+ ' and c.id='+inttostr(DM_goAml.Ods_subheliCUSTID.AsInteger);
+ open ;
+ end;
+ 8:begin
+   close;
+   sql.Clear;
+
+   sql.Text:=
+ ' select p.id,p.dat,m.report_code,m.transmode_code,p.lammount,(select acc_no from account where id =p.debt )debt_accno,(select acc_no from account where id =p.kredit )kredit_accno,'+
+ ' p.name,m.dcustid,m.ccustid,m.nomdcustid from customers c,account a, provarch p,mmx_transinfo m where '+
+ ' p.id=m.transid(+) and c.id=a.kli_id and  '+
+ ' a.id=p.debt and  p.debt in (select a.id from account  a ,customers c,black_countries b,custinfo i where  a.kli_id =c.id and i.idcust=c.id and b.contid=i.citizenship and a.bal_cn1 like''38%'') '+
+ ' and nvl(p.vid_op,0) not in(1,3) and p.dat =''' +  DateTimeToStr(trunc(dat_2))  + '''' +
+ ' and c.id= '''+inttostr(DM_goAml.Ods_subheliCUSTID.AsInteger)+''''+
+
+' union  '+
+
+' select p.id,p.dat,m.report_code,m.transmode_code,p.lammount,(select acc_no from account where id =p.debt )debt_accno,(select acc_no from account where id =p.kredit )kredit_accno, '+
+' p.name,m.dcustid,m.ccustid,m.nomdcustid  from customers c,account a, provarch p,mmx_transinfo m where '+
+' p.id=m.transid(+) and c.id=a.kli_id and '+
+' a.id=p.kredit and p.kredit in (select a.id from account  a ,customers c,black_countries b,custinfo i where  a.kli_id =c.id and i.idcust=c.id and b.contid=i.citizenship and a.bal_cn1 like''38%'') '+
+' and nvl(p.vid_op,0) not in(1,3) and p.dat =''' +  DateTimeToStr(trunc(dat_2))  + '''' +
+' and c.id= '''+inttostr(DM_goAml.Ods_subheliCUSTID.AsInteger) +''''+
+ ' union '+
+' select p.id,p.dat,m.report_code,m.transmode_code,p.lammount,(select acc_no from account where id =p.debt )debt_accno,(select acc_no from account where id =p.kredit )kredit_accno, '+
+' p.name,m.dcustid,m.ccustid,m.nomdcustid  from customers c,account a, provarch p,mmx_transinfo m where '+
+' p.id=m.transid(+) and c.id=a.kli_id and   a.id=p.debt  and  p.countrid in (select contid from black_countries  )'+
+' and nvl(p.vid_op,0) not in(1,3) and p.dat =''' +  DateTimeToStr(trunc(dat_2))  + '''' +
+' and c.id= '''+inttostr(DM_goAml.Ods_subheliCUSTID.AsInteger)+''''+
+ ' union '+
+' select p.id,p.dat,m.report_code,m.transmode_code,p.lammount,(select acc_no from account where id =p.debt )debt_accno,(select acc_no from account where id =p.kredit )kredit_accno, '+
+' p.name,m.dcustid,m.ccustid,m.nomdcustid  from customers c,account a, provarch p,mmx_transinfo m where '+
+' p.id=m.transid(+) and c.id=a.kli_id and   a.id=p.kredit  and exists (select contid from black_countries where p.countrid =contid )'+
+' and nvl(p.vid_op,0) not in(1,3) and p.dat =''' +  DateTimeToStr(trunc(dat_2))  + '''' +
+' and c.id='+inttostr(DM_goAml.Ods_subheliCUSTID.AsInteger);
+
+   open;
+ end;
+ 9:begin
+   close;
+   sql.Clear;
+
+   sql.Text:=
+ ' select p.id,p.dat,m.report_code,m.transmode_code,p.lammount,(select acc_no from account where id =p.debt )debt_accno,(select acc_no from account where id =p.kredit )kredit_accno,'+
+ ' p.name,m.dcustid,m.ccustid,m.nomdcustid from customers c,account a, provarch p,mmx_transinfo m where '+
+ ' p.id=m.transid(+) and c.id=a.kli_id and  '+
+ ' a.id=p.debt and  exists (select a.id from account  a ,customers c,mmx_ofshor b,custinfo i where p.debt=a.id and  a.kli_id =c.id and i.idcust=c.id and b.contid=i.citizenship) '+
+ ' and nvl(p.vid_op,0) not in(1,3) and p.dat =''' +  DateTimeToStr(trunc(dat_2))  + '''' +
+ ' and c.id='''+inttostr(DM_goAml.Ods_subheliCUSTID.AsInteger)+''''+
+
+' union  '+
+
+' select p.id,p.dat,m.report_code,m.transmode_code,p.lammount,(select acc_no from account where id =p.debt )debt_accno,(select acc_no from account where id =p.kredit )kredit_accno, '+
+' p.name,m.dcustid,m.ccustid,m.nomdcustid  from customers c,account a, provarch p,mmx_transinfo m where '+
+' p.id=m.transid(+) and c.id=a.kli_id and '+
+' a.id=p.kredit and exists (select a.id from account  a ,customers c,mmx_ofshor b,custinfo i where p.kredit=a.id and   a.kli_id =c.id and i.idcust=c.id and b.contid=i.citizenship) '+
+' and nvl(p.vid_op,0) not in(1,3) and p.dat =''' +  DateTimeToStr(trunc(dat_2))  + '''' +
+' and c.id='''+inttostr(DM_goAml.Ods_subheliCUSTID.AsInteger)+''''+
+ ' union '+
+' select p.id,p.dat,m.report_code,m.transmode_code,p.lammount,(select acc_no from account where id =p.debt )debt_accno,(select acc_no from account where id =p.kredit )kredit_accno, '+
+' p.name,m.dcustid,m.ccustid,m.nomdcustid  from customers c,account a, provarch p,mmx_transinfo m where '+
+' p.id=m.transid(+) and c.id=a.kli_id and  a.id=p.debt  and  exists (select contid from mmx_ofshor where p.countrid=contid )'+
+' and nvl(p.vid_op,0) not in(1,3) and p.dat =''' +  DateTimeToStr(trunc(dat_2))  + '''' +
+' and c.id='''+inttostr(DM_goAml.Ods_subheliCUSTID.AsInteger) +''''+
+
+ ' union '+
+' select p.id,p.dat,m.report_code,m.transmode_code,p.lammount,(select acc_no from account where id =p.debt )debt_accno,(select acc_no from account where id =p.kredit )kredit_accno, '+
+' p.name,m.dcustid,m.ccustid,m.nomdcustid  from customers c,account a, provarch p,mmx_transinfo m where '+
+' p.id=m.transid(+) and c.id=a.kli_id and   a.id=p.kredit  and exists (select contid from mmx_ofshor where p.countrid =contid)'+
+' and nvl(p.vid_op,0) not in(1,3) and p.dat =''' +  DateTimeToStr(trunc(dat_2))  + '''' +
+' and c.id='+inttostr(DM_goAml.Ods_subheliCUSTID.AsInteger);
+
+   open;
+ end;
+end;
+end;
+
+end;
+
+end.

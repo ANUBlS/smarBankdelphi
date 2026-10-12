@@ -1,0 +1,720 @@
+﻿unit P_CO_Account_Unit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, NLSDialogs,
+  Db, OracleData, NLSLocalizer, StdCtrls, SearchEdit, Mask, DBCtrls,
+  ComCtrls, Buttons, ExtCtrls, ActnList, Variants, Oracle;
+
+type
+  TP_CO_Account_Form = class(TForm)
+    Currency: TOracleDataSet;
+    CurrencyData: TDataSource;
+    BalAcc: TOracleDataSet;
+    BalAccBAL_CN: TWideStringField;
+    BalAccBALNAME: TWideStringField;
+    BalAccData: TDataSource;
+    Customers: TOracleDataSet;
+    CustomersData: TDataSource;
+    BranchesData: TDataSource;
+    Branches: TOracleDataSet;
+    BranchesID: TFloatField;
+    BranchesNAME: TWideStringField;
+    buyerid: TEdit;
+    AccountGB: TGroupBox;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    Label6: TLabel;
+    Label13: TLabel;
+    Label14: TLabel;
+    Label15: TLabel;
+    Label12: TLabel;
+    DBText8: TDBText;
+    DBLookupCurr: TDBLookupComboBox;
+    DBLookupCust: TDBLookupComboBox;
+    DTPOpenDate: TDateTimePicker;
+    DBLookupComboBox4: TDBLookupComboBox;
+    DBLookupBalance1: TDBLookupComboBox;
+    EditBall: TSearchEdit;
+    EditAcc: TEdit;
+    EditCust: TEdit;
+    EditFil: TEdit;
+    EditValute: TSearchEdit;
+    DBEditLimit: TEdit;
+    DBEdit1: TDBEdit;
+    DBEdit2: TDBEdit;
+    DBEdit3: TDBEdit;
+    EditAccName: TEdit;
+    DBEdit5: TDBEdit;
+    asymboledit_: TEdit;
+    DayStartStateGB: TGroupBox;
+    Label8: TLabel;
+    Label9: TLabel;
+    dbedit6: TEdit;
+    dbedit7: TEdit;
+    AccountFlagsGB: TGroupBox;
+    Button3: TButton;
+    CurrencyVALUTE: TFloatField;
+    CurrencyVALU_NAME: TWideStringField;
+    dbrepsymb: TDBLookupComboBox;
+    symboledit_: TSearchEdit;
+    ActionListForHotKey: TActionList;
+    AccountAvtoCreate: TAction;
+    ballaccdata2: TDataSource;
+    balacc2: TOracleDataSet;
+    Label11: TLabel;
+    EditNoteCode: TEdit;
+    balacc2BAL_CN: TWideStringField;
+    balacc2BALNAME: TWideStringField;
+    BAL_CN2: TGroupBox;
+    Label7: TLabel;
+    editball2: TSearchEdit;
+    DBLookupBalance2: TDBLookupComboBox;
+    DBEdit4: TDBEdit;
+    PG_PCustService: TOraclePackage;
+    GroupBox1: TGroupBox;
+    TipAcc: TEdit;
+    custid: TDBEdit;
+    Panel2: TPanel;
+    SpeedButton1: TSpeedButton;
+    ButtonCommit: TButton;
+    ButtonCancel: TButton;
+    procedure DBLookupCustClick(Sender: TObject);
+    procedure bal_cnChange(Sender: TObject);
+    procedure EditCustChange(Sender: TObject);
+    procedure BrancheditChange(Sender: TObject);
+    procedure ButtonCancelClick(Sender: TObject);
+    procedure DBEditAccNoKeyPress(Sender: TObject; var Key: Char);
+    procedure val_codeKeyPress(Sender: TObject; var Key: Char);
+    procedure DBLookupCurrKeyPress(Sender: TObject; var Key: Char);
+    procedure bal_cnKeyPress(Sender: TObject; var Key: Char);
+    procedure DBLookupBalance1KeyPress(Sender: TObject; var Key: Char);
+    procedure EditCustKeyPress(Sender: TObject; var Key: Char);
+    procedure DBLookupCustKeyPress(Sender: TObject; var Key: Char);
+    procedure DTPOpenDateKeyPress(Sender: TObject; var Key: Char);
+    procedure TweditKeyPress(Sender: TObject; var Key: Char);
+    procedure SymbolEditKeyPress(Sender: TObject; var Key: Char);
+    procedure LimitEditKeyPress(Sender: TObject; var Key: Char);
+    procedure BrancheditKeyPress(Sender: TObject; var Key: Char);
+    procedure DBLookupComboBox4KeyPress(Sender: TObject; var Key: Char);
+    procedure DBEditAccNameKeyPress(Sender: TObject; var Key: Char);
+    procedure DBEdit1KeyPress(Sender: TObject; var Key: Char);
+    procedure EditValuteChange(Sender: TObject);
+    procedure DBLookupCurrClick(Sender: TObject);
+    procedure EditBallChange(Sender: TObject);
+    procedure DBLookupBalance1Click(Sender: TObject);
+    procedure EditFilChange(Sender: TObject);
+    procedure DBLookupComboBox4Click(Sender: TObject);
+    procedure EditAccKeyPress(Sender: TObject; var Key: Char);
+    procedure EditValuteKeyPress(Sender: TObject; var Key: Char);
+    procedure EditBallKeyPress(Sender: TObject; var Key: Char);
+    procedure EditFilKeyPress(Sender: TObject; var Key: Char);
+    procedure ButtonCommitClick(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
+    procedure Button3Click(Sender: TObject);
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure symboledit_Change(Sender: TObject);
+    procedure dbrepsymbCloseUp(Sender: TObject);
+    procedure AccountAvtoCreateExecute(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure DBLookupBalance2Click(Sender: TObject);
+    procedure DBLookupBalance2KeyPress(Sender: TObject; var Key: Char);
+    procedure editball2Change(Sender: TObject);
+    procedure editball2KeyPress(Sender: TObject; var Key: Char);
+    procedure FormShow(Sender: TObject);
+    // procedure EditCustChange(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    function CheckParams(Sender: TObject): Boolean;
+  end;
+
+var
+  P_CO_Account_Form: TP_CO_Account_Form;
+
+implementation
+
+Uses sboapiDataModuleImpl, P_Datamod_Unit, P_AccFlags, SBTranslateProc;
+{$R *.DFM}
+
+procedure TP_CO_Account_Form.DBLookupCustClick(Sender: TObject);
+begin
+  EditCust.Text := IntToStr(DBLookupCust.ListSource.DataSet.FieldByName('ID')
+    .AsInTeger);
+
+end;
+
+procedure TP_CO_Account_Form.bal_cnChange(Sender: TObject);
+begin
+  BalAcc.FieldByName('bal_cn').asstring := TSearchEdit(Sender)
+    .datasource.DataSet.FieldByName('bal_cn').asstring;
+
+end;
+
+procedure TP_CO_Account_Form.EditCustChange(Sender: TObject);
+begin
+  if (EditCust.Text <> '') then
+  begin
+    DBLookupCust.KeyValue := StrToInt((Sender as TEdit).Text);
+    // EditAccName.Text := DBLookupCust.ListSource.DataSet.FIeldByName('Name').AsString;
+  end
+  else
+  begin
+    EditAccName.Text := '';
+    DBLookupCust.KeyValue := null;
+  end;
+
+end;
+
+procedure TP_CO_Account_Form.BrancheditChange(Sender: TObject);
+begin
+  Branches.FieldByName('id').asstring := TSearchEdit(Sender)
+    .datasource.DataSet.FieldByName('id').asstring;
+
+end;
+
+procedure TP_CO_Account_Form.ButtonCancelClick(Sender: TObject);
+begin
+  close;
+end;
+
+procedure TP_CO_Account_Form.DBEditAccNoKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if ORD(Key) = VK_RETURN then
+  begin
+    if Sender is TWinControl then
+      with Sender as TWinControl do
+        case Tag of
+          1:
+            SelectNext(Sender as TWinControl, True, True);
+        end;
+    Key := #0;
+  end;
+
+end;
+
+procedure TP_CO_Account_Form.val_codeKeyPress(Sender: TObject; var Key: Char);
+begin
+  if ORD(Key) = VK_RETURN then
+  begin
+    if Sender is TWinControl then
+      with Sender as TWinControl do
+        case Tag of
+          1:
+            SelectNext(Sender as TWinControl, True, True);
+        end;
+    Key := #0;
+  end;
+
+end;
+
+procedure TP_CO_Account_Form.DBLookupCurrKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if ORD(Key) = VK_RETURN then
+  begin
+    if Sender is TWinControl then
+      with Sender as TWinControl do
+        case Tag of
+          1:
+            SelectNext(Sender as TWinControl, True, True);
+        end;
+    Key := #0;
+  end;
+
+end;
+
+procedure TP_CO_Account_Form.bal_cnKeyPress(Sender: TObject; var Key: Char);
+begin
+  if ORD(Key) = VK_RETURN then
+  begin
+    if Sender is TWinControl then
+      with Sender as TWinControl do
+        case Tag of
+          1:
+            SelectNext(Sender as TWinControl, True, True);
+        end;
+    Key := #0;
+  end;
+
+end;
+
+procedure TP_CO_Account_Form.DBLookupBalance1KeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if ORD(Key) = VK_RETURN then
+  begin
+    if Sender is TWinControl then
+      with Sender as TWinControl do
+        case Tag of
+          1:
+            SelectNext(Sender as TWinControl, True, True);
+        end;
+    Key := #0;
+  end;
+
+end;
+
+procedure TP_CO_Account_Form.DBLookupBalance2Click(Sender: TObject);
+begin
+  editball2.Text := IntToStr(DBLookupBalance2.ListSource.DataSet.FieldByName
+    ('BAL_CN').AsInTeger);
+
+end;
+
+procedure TP_CO_Account_Form.DBLookupBalance2KeyPress(Sender: TObject;
+  var Key: Char);
+begin
+ if ORD(Key) = VK_RETURN then
+  begin
+    if Sender is TWinControl then
+      with Sender as TWinControl do
+        case Tag of
+          1:
+            SelectNext(Sender as TWinControl, True, True);
+        end;
+    Key := #0;
+  end;
+
+end;
+
+procedure TP_CO_Account_Form.EditCustKeyPress(Sender: TObject; var Key: Char);
+begin
+  if ORD(Key) = VK_RETURN then
+  begin
+    if Sender is TWinControl then
+      with Sender as TWinControl do
+        case Tag of
+          1:
+            SelectNext(Sender as TWinControl, True, True);
+        end;
+    Key := #0;
+  end;
+
+end;
+
+procedure TP_CO_Account_Form.DBLookupCustKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if ORD(Key) = VK_RETURN then
+  begin
+    if Sender is TWinControl then
+      with Sender as TWinControl do
+        case Tag of
+          1:
+            SelectNext(Sender as TWinControl, True, True);
+        end;
+    Key := #0;
+  end;
+
+end;
+
+procedure TP_CO_Account_Form.DTPOpenDateKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if ORD(Key) = VK_RETURN then
+  begin
+    if Sender is TWinControl then
+      with Sender as TWinControl do
+        case Tag of
+          1:
+            SelectNext(Sender as TWinControl, True, True);
+        end;
+    Key := #0;
+  end;
+
+end;
+
+procedure TP_CO_Account_Form.TweditKeyPress(Sender: TObject; var Key: Char);
+begin
+  if ORD(Key) = VK_RETURN then
+  begin
+    if Sender is TWinControl then
+      with Sender as TWinControl do
+        case Tag of
+          1:
+            SelectNext(Sender as TWinControl, True, True);
+        end;
+    Key := #0;
+  end;
+
+end;
+
+procedure TP_CO_Account_Form.SymbolEditKeyPress(Sender: TObject; var Key: Char);
+begin
+  if ORD(Key) = VK_RETURN then
+  begin
+    if Sender is TWinControl then
+      with Sender as TWinControl do
+        case Tag of
+          1:
+            SelectNext(Sender as TWinControl, True, True);
+        end;
+    Key := #0;
+  end;
+
+end;
+
+procedure TP_CO_Account_Form.LimitEditKeyPress(Sender: TObject; var Key: Char);
+begin
+  if ORD(Key) = VK_RETURN then
+  begin
+    if Sender is TWinControl then
+      with Sender as TWinControl do
+        case Tag of
+          1:
+            SelectNext(Sender as TWinControl, True, True);
+        end;
+    Key := #0;
+  end;
+
+end;
+
+procedure TP_CO_Account_Form.BrancheditKeyPress(Sender: TObject; var Key: Char);
+begin
+  if ORD(Key) = VK_RETURN then
+  begin
+    if Sender is TWinControl then
+      with Sender as TWinControl do
+        case Tag of
+          1:
+            SelectNext(Sender as TWinControl, True, True);
+        end;
+    Key := #0;
+  end;
+
+end;
+
+procedure TP_CO_Account_Form.DBLookupComboBox4KeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if ORD(Key) = VK_RETURN then
+  begin
+    if Sender is TWinControl then
+      with Sender as TWinControl do
+        case Tag of
+          1:
+            SelectNext(Sender as TWinControl, True, True);
+        end;
+    Key := #0;
+  end;
+
+end;
+
+procedure TP_CO_Account_Form.DBEditAccNameKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if ORD(Key) = VK_RETURN then
+  begin
+    if Sender is TWinControl then
+      with Sender as TWinControl do
+        case Tag of
+          1:
+            SelectNext(Sender as TWinControl, True, True);
+        end;
+    Key := #0;
+  end;
+
+end;
+
+procedure TP_CO_Account_Form.DBEdit1KeyPress(Sender: TObject; var Key: Char);
+begin
+  if ORD(Key) = VK_RETURN then
+  begin
+    if Sender is TWinControl then
+      with Sender as TWinControl do
+        case Tag of
+          1:
+            SelectNext(Sender as TWinControl, True, True);
+        end;
+    Key := #0;
+  end;
+
+end;
+
+procedure TP_CO_Account_Form.EditValuteChange(Sender: TObject);
+begin
+  if (Sender as TEdit).Text <> '' then
+    DBLookupCurr.KeyValue := StrToInt((Sender as TEdit).Text)
+  else
+    DBLookupCurr.KeyValue := null;
+
+end;
+
+procedure TP_CO_Account_Form.DBLookupCurrClick(Sender: TObject);
+begin
+  EditValute.Text := IntToStr(DBLookupCurr.ListSource.DataSet.FieldByName
+    ('VALUTE').AsInTeger);
+
+end;
+
+procedure TP_CO_Account_Form.EditBallChange(Sender: TObject);
+begin
+   if (Sender as TEdit).Text <> '' then
+    DBLookupBalance1.KeyValue := StrToInt((Sender as TEdit).Text)
+  else
+    DBLookupBalance1.KeyValue := null;
+
+end;
+
+procedure TP_CO_Account_Form.DBLookupBalance1Click(Sender: TObject);
+begin
+  EditBall.Text := IntToStr(DBLookupBalance1.ListSource.DataSet.FieldByName
+    ('BAL_CN').AsInTeger);
+
+end;
+
+procedure TP_CO_Account_Form.EditFilChange(Sender: TObject);
+begin
+  if (Sender as TEdit).Text <> '' then
+    DBLookupComboBox4.KeyValue := StrToInt((Sender as TEdit).Text)
+  else
+    DBLookupComboBox4.KeyValue := null;
+
+end;
+
+procedure TP_CO_Account_Form.DBLookupComboBox4Click(Sender: TObject);
+begin
+  EditFil.Text := IntToStr(DBLookupComboBox4.ListSource.DataSet.FieldByName
+    ('ID').AsInTeger);
+
+end;
+
+procedure TP_CO_Account_Form.EditAccKeyPress(Sender: TObject; var Key: Char);
+begin
+  if ORD(Key) = VK_RETURN then
+  begin
+    if Sender is TWinControl then
+      with Sender as TWinControl do
+        case Tag of
+          1:
+            SelectNext(Sender as TWinControl, True, True);
+        end;
+    Key := #0;
+  end;
+
+end;
+
+procedure TP_CO_Account_Form.editball2Change(Sender: TObject);
+begin
+  if (Sender as TEdit).Text <> '' then
+    DBLookupBalance2.KeyValue := StrToInt((Sender as TEdit).Text)
+  else
+    DBLookupBalance2.KeyValue := null;
+
+end;
+
+procedure TP_CO_Account_Form.editball2KeyPress(Sender: TObject; var Key: Char);
+begin
+
+  if ORD(Key) = VK_RETURN then
+  begin
+    if Sender is TWinControl then
+      with Sender as TWinControl do
+        case Tag of
+          1:
+            SelectNext(Sender as TWinControl, True, True);
+        end;
+    Key := #0;
+  end;
+
+end;
+
+procedure TP_CO_Account_Form.EditValuteKeyPress(Sender: TObject; var Key: Char);
+begin
+  if ORD(Key) = VK_RETURN then
+  begin
+    if Sender is TWinControl then
+      with Sender as TWinControl do
+        case Tag of
+          1:
+            SelectNext(Sender as TWinControl, True, True);
+        end;
+    Key := #0;
+  end;
+
+end;
+
+procedure TP_CO_Account_Form.EditBallKeyPress(Sender: TObject; var Key: Char);
+begin
+   if ORD(Key) = VK_RETURN then
+  begin
+    if Sender is TWinControl then
+      with Sender as TWinControl do
+        case Tag of
+          1:
+            SelectNext(Sender as TWinControl, True, True);
+        end;
+    Key := #0;
+  end;
+
+end;
+
+procedure TP_CO_Account_Form.EditFilKeyPress(Sender: TObject; var Key: Char);
+begin
+  if ORD(Key) = VK_RETURN then
+  begin
+    if Sender is TWinControl then
+      with Sender as TWinControl do
+        case Tag of
+          1:
+            SelectNext(Sender as TWinControl, True, True);
+        end;
+    Key := #0;
+  end;
+
+end;
+
+procedure TP_CO_Account_Form.ButtonCommitClick(Sender: TObject);
+
+var
+  DDate: TDateTime;
+
+begin
+  if GroupBox1.Visible=true then
+                           begin
+  if CheckParams(Sender) then
+    showmessage('Melumat tam deyil')
+
+  else
+  begin
+    DDate := Trunc(DTPOpenDate.DateTime);
+    P_DataModule.PHYS_FS_CUSTOMERS.CallIntegerFunction('open_Account',
+      [EditAcc.Text, EditValute.Text, EditBall.Text, EditCust.Text, DDate,
+      DBEditLimit.Text, dbrepsymb.KeyValue, EditFil.Text, TipAcc.Text,
+      EditAccName.Text, custid.Text,editball2.Text]);
+    P_DataModule.Account.close;
+    P_DataModule.Account.Open;
+    close;
+  end;
+                           end;
+
+end;
+
+procedure TP_CO_Account_Form.FormActivate(Sender: TObject);
+begin
+  EditValute.Text := '0';
+  DBEdit1.Text := '';
+  DBEdit2.Text := '';
+  DBEdit3.Text := '';
+  DBEdit4.Text := '';
+  DBEdit5.Text := '';
+  P_DataModule.Sysdat.Open;
+  P_DataModule.AccSettings.Open;
+  DTPOpenDate.Date := P_DataModule.Sysdat.FieldByName('tek_dat').asdatetime;
+  EditValute.Text := P_DataModule.AccSettings.FieldByName('val_code').asstring;
+  DBEdit1.Text := P_DataModule.AccSettings.FieldByName('val_name').asstring;
+  EditBall.Text := P_DataModule.AccSettings.FieldByName('bal_cn1').asstring;
+  DBEdit2.Text := P_DataModule.AccSettings.FieldByName('bal_name').asstring;
+  EditCust.Text := P_DataModule.P_Customers.FieldByName('id').asstring;
+  DBEdit3.Text := P_DataModule.AccSettings.FieldByName('cust_name').asstring;
+  // DTPOpenDate.date :=Datamod_Buyers.CC_Settings.fieldbyname('open_date').asdatetime);
+  DBEditLimit.Text := P_DataModule.AccSettings.FieldByName('limit').asstring;
+  EditFil.Text := P_DataModule.AccSettings.FieldByName('branch_id').asstring;
+  DBEdit5.Text := P_DataModule.AccSettings.FieldByName('branch_name').asstring;
+  EditAccName.Text := P_DataModule.P_Customers.FieldByName('cust_name')
+    .asstring;
+  dbrepsymb.ListSource.DataSet.First;
+  dbrepsymb.KeyValue := dbrepsymb.ListSource.DataSet.Fields[0].AsVariant;
+  symboledit_.Text := dbrepsymb.ListSource.DataSet.Fields[1].asstring;
+end;
+
+procedure TP_CO_Account_Form.FormCreate(Sender: TObject);
+var tt:integer;
+begin
+
+
+  tt:=PG_PCustService.CallIntegerFunction('get_Modle_comp',['P_Customers','P_CO_Account_Form','Bal_CN2']);
+   if tt=0 then
+          Bal_CN2.Visible:=false
+           else
+          Bal_CN2.Visible:=true;
+
+  SBTranslateProc.TranslateAllCompForms(Self, sboapiDataModule.OrPack_SL);
+end;
+
+procedure TP_CO_Account_Form.FormShow(Sender: TObject);
+begin
+if Bal_CN2.Visible=true then
+  begin
+    P_CO_Account_Form.AutoSize:=true ;
+    P_CO_Account_Form.ClientHeight:=380
+  end
+    else
+    begin
+    P_CO_Account_Form.AutoSize:=False;
+    P_CO_Account_Form.ClientHeight:=330;
+    end;
+end;
+
+procedure TP_CO_Account_Form.Button3Click(Sender: TObject);
+begin
+  AccFlags := TAccFlags.Create(Self);
+  // P_DataModule.AccFlags.Open;
+  // P_DataModule.AccFlag.Open;
+  try
+
+    with AccFlags, P_DataModule.AccFlag do
+
+      if (ShowModal = mrOk) then // and (State in [dsInsert, dsEdit]) then
+        // FieldByName('Tipacc').AsString :=FlagMap;
+        TipAcc.Text := FlagMap;
+  finally
+    if Assigned(AccFlags) then
+      AccFlags.Release;
+  end;
+
+end;
+
+procedure TP_CO_Account_Form.SpeedButton1Click(Sender: TObject);
+const
+  c_name = 'GenerateAccountNumber';
+begin
+  if CheckParams(Sender) then
+    showmessage('Məlumat tam deyil!')
+  else
+    {
+      BalCn Bal_spr1.bal_cn%type
+      ,CurrencyID Avalute.valute%type
+      ,CustomerID Customers.id%type
+      ,BranchID Filial.id%type) return Account.acc_no%type
+    }
+    with P_DataModule, SBOP do
+      EditAcc.Text := SBOP.CallStringFunction(c_name,
+        ['BalCn', DBLookupBalance1.KeyValue, 'CurrencyID',
+        DBLookupCurr.KeyValue, 'CustomerID', DBLookupCust.KeyValue, 'BranchID',
+        DBLookupComboBox4.KeyValue, 'AnalitKod', dbrepsymb.KeyValue,
+        'BalCn2', DBLookupBalance2.KeyValue, 'NoteCode', EditNoteCode.Text]);
+end;
+
+function TP_CO_Account_Form.CheckParams;
+begin
+  Result := (trim(symboledit_.Text) = '') or (trim(EditBall.Text) = '') or
+    (trim(EditCust.Text) = '') or (trim(EditFil.Text) = '') or
+    (trim(EditValute.Text) = '');
+  if (Sender as TComponent).Name = 'ButtonCommit' then
+    Result := Result or (trim(EditAcc.Text) = '');
+end;
+
+procedure TP_CO_Account_Form.symboledit_Change(Sender: TObject);
+begin
+  dbrepsymb.KeyValue := dbrepsymb.ListSource.DataSet.Fields[0].AsVariant;
+end;
+
+procedure TP_CO_Account_Form.dbrepsymbCloseUp(Sender: TObject);
+begin
+  symboledit_.Text := (Sender as TDBLookupComboBox).ListSource.DataSet.Fields
+    [0].asstring;
+end;
+
+procedure TP_CO_Account_Form.AccountAvtoCreateExecute(Sender: TObject);
+begin
+  SpeedButton1.Click;
+end;
+
+end.

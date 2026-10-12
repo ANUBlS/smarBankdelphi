@@ -1,0 +1,265 @@
+﻿unit UnitPayments;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls, CMCurrencyEdit, DBCtrls, CMDBSearchEdit,
+  SearchEdit, DB, OracleData;
+
+type
+  TFormPayments = class(TForm)
+    Panel1: TPanel;
+    Button1: TButton;
+    Button2: TButton;
+    Panel2: TPanel;
+    Label6: TLabel;
+    FilialName: TEdit;
+    Panel3: TPanel;
+    Label1: TLabel;
+    EditPayments: TEdit;
+    Panel4: TPanel;
+    Label3: TLabel;
+    DBLookupComboBox1: TDBLookupComboBox;
+    Panel5: TPanel;
+    DBLookupComboBox2: TDBLookupComboBox;
+    Label5: TLabel;
+    Panel6: TPanel;
+    CMCurrencyEdit1: TCMCurrencyEdit;
+    Label4: TLabel;
+    Panel7: TPanel;
+    Label2: TLabel;
+    Label7: TLabel;
+    ComboBox1: TComboBox;
+    EditDescription: TEdit;
+    ExpFilialUser: TOracleDataSet;
+    ExpFilialN: TOracleDataSet;
+    ExpSettings: TOracleDataSet;
+    ExpSettingsType: TOracleDataSet;
+    DSExpSettingsType: TDataSource;
+    DBLookupComboBox3: TDBLookupComboBox;
+    Panel15: TPanel;
+    Label12: TLabel;
+    BankAccountName: TDBLookupComboBox;
+    Panel14: TPanel;
+    Label11: TLabel;
+    BankAccount: TDBLookupComboBox;
+    BAccounts: TOracleDataSet;
+    BAccountsDS: TDataSource;
+    procedure FormShow(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure EditDescriptionKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure ComboBox1Click(Sender: TObject);
+    procedure ComboBox1DropDown(Sender: TObject);
+    procedure DBLookupComboBox1Click(Sender: TObject);
+  private
+
+    { Private declarations }
+  public
+  var
+    exid: integer;
+    optype: integer;
+    FForm: integer;
+    FiledBatchs: boolean;
+    FiledIncoming: boolean;
+    FieldBatchsArchive: boolean;
+    FiledIncomingArchive: boolean;
+    procedure PaymentUpdate(DataSet: TOracleDataSet);
+
+  end;
+
+var
+  FormPayments: TFormPayments;
+
+implementation
+
+uses ExpCustomersTypeUnit, ExpUnitImpl, UnitPaymentsCredit,
+  sboapiDataModuleImpl,
+  ExpDataModuleUnit;
+
+{$R *.dfm}
+
+procedure TFormPayments.PaymentUpdate(DataSet: TOracleDataSet);
+begin
+  with ExpDataModule do
+  begin
+    ExpSettings.Close;
+    ExpSettings.SetVariable('id', DataSet.FieldByName('optype').AsInteger);
+    ExpSettings.Open;
+
+    ExpFilialN.Close;
+    ExpFilialN.SetVariable('id', DataSet.FieldByName('bfilial').AsInteger);
+    ExpFilialN.Open;
+
+    ExpSettingsType.Close;
+    ExpSettingsType.SetVariable('stypeid', DataSet.FieldByName('optype').AsInteger);
+    ExpSettingsType.Open;
+
+    FilialName.Text := ExpFilialN.FieldByName('name').AsString;
+    DBLookupComboBox3.KeyValue:=DataSet.FieldByName('bfilial').AsInteger;
+    EditPayments.Text := ExpSettings.FieldByName('name').AsString;
+    DBLookupComboBox1.KeyValue := DataSet.FieldByName('setid').AsInteger;
+    DBLookupComboBox2.KeyValue := DataSet.FieldByName('val_cod').AsInteger;
+    CMCurrencyEdit1.Value := DataSet.FieldByName('amount').AsFloat;
+    EditDescription.Text := DataSet.FieldByName('remit_inf').AsString;
+  end;
+end;
+
+procedure TFormPayments.Button1Click(Sender: TObject);
+var
+  val_cod: integer;
+  accid: Variant;
+  amount: real;
+  paymentname: string;
+  fillialid: integer;
+  v_id: integer;
+  remit_inf: string;
+  stid: integer;
+
+begin
+  if DBLookupComboBox3.Text='' then
+  Begin
+    ShowMessage('Filial seçilməyib!');
+    exit;
+  End;
+
+  if DBLookupComboBox1.Text = '' then
+  Begin
+    ShowMessage('Köçürmənin növünü seçin!');
+    exit;
+  End;
+
+   IF CMCurrencyEdit1.Value = 0 THEN
+  Begin
+    ShowMessage('Məbləği daxil edin!');
+    exit;
+  End;
+
+  if EditDescription.Text = '' then
+  Begin
+    ShowMessage('Ödənişin təyinatını daxil edin!');
+    exit;
+  End;
+
+  v_id := 0;
+  stid := DBLookupComboBox1.KeyValue;
+  val_cod := DBLookupComboBox2.KeyValue;
+  amount := CMCurrencyEdit1.Value;
+  paymentname := EditPayments.Text;
+  //fillialid := ExpFilialUser.FieldByName('id').AsInteger;
+  fillialid:=DBLookupComboBox3.KeyValue;
+  remit_inf := EditDescription.Text;
+
+  IF FForm = 0 THEN
+  BEGIN
+    ExpDataModule.EXPESSPAC.CallProcedure('Exp_GoldenPayKomiks_insert',
+      ['batchid', v_id, 'v_exid', exid, 'v_optype', optype, 'v_setid', stid,
+      'v_paymentname', paymentname, 'v_val_cod', val_cod, 'v_amount', amount,
+      'fillialid', fillialid, 'v_remit_inf', remit_inf]);
+
+    v_id := ExpDataModule.EXPESSPAC.GetParameter(0);
+  END
+
+  ELSE
+  BEGIN
+    v_id := ExpDataModule.ExpBatchsDataSet.FieldByName('id').AsInteger;
+    ExpDataModule.EXPESSPAC.CallProcedure('Exp_GoldenPayKomiks_update',
+      ['batchid', v_id, 'v_setid', stid, 'v_amount', amount, 'v_remit_inf',
+      remit_inf]);
+
+  END;
+
+  FormPayments.Close;
+  ExpCustomersType.Close;
+
+  ExpDataModule.ExpBatchsDataSet.Refresh;
+  ExpDataModule.ExpBatchsDataSet.Locate('ID', v_id, []);
+end;
+
+procedure TFormPayments.Button2Click(Sender: TObject);
+begin
+  Close;
+end;
+
+procedure TFormPayments.ComboBox1Click(Sender: TObject);
+begin
+  EditDescription.Text := (Sender as TComboBox).Text;
+end;
+
+procedure TFormPayments.ComboBox1DropDown(Sender: TObject);
+begin
+  FormPaymentsCredit.LoadComboData(TComboBox(Sender));
+end;
+
+procedure TFormPayments.DBLookupComboBox1Click(Sender: TObject);
+begin
+  EditDescription.Text := ExpDataModule.Exp_settingstype.FieldByName('description').AsString;
+end;
+
+procedure TFormPayments.EditDescriptionKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if Key = VK_F3 then
+    with ExpFormDestination, ExpDataModule do
+    begin
+      ShowModal;
+      if ModalResult = mrOk then
+        EditDescription.Text := Value;
+    end
+  else if Key = VK_ESCAPE then
+    Close;
+end;
+
+procedure TFormPayments.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  if not(Button1.Visible) then
+    Button1.Visible := True;
+end;
+
+procedure TFormPayments.FormShow(Sender: TObject);
+begin
+  case FForm of
+    0:
+      begin
+        CMCurrencyEdit1.Value := 0.00;
+        DBLookupComboBox3.KeyValue:=-1;
+        //ExpFilialUser.Close;
+        //ExpFilialUser.Open;
+        //FilialName.Text := ExpFilialUser.FieldByName('name').AsString;
+        FilialName.Text:=ExpDataModule.FilialDataSet.FieldByName('name').AsString;
+        EditPayments.Text := ExpCustomersType.typetext;
+        DBLookupComboBox2.KeyValue := 0;
+        ExpSettingsType.Close;
+        ExpSettingsType.SetVariable('stypeid', optype);
+        ExpSettingsType.Open;
+        IF ExpSettingsType.RecordCount = 1 THEN
+        begin
+          DBLookupComboBox1.KeyValue := ExpSettingsType.FieldByName('id').AsInteger;
+          EditDescription.Text := ExpSettingsType.FieldByName('description').AsString;
+        end
+        ELSE
+        begin
+          DBLookupComboBox1.KeyValue := -1;
+          EditDescription.Text := '';
+        end;
+
+      end;
+    1:
+      begin
+        IF FiledIncoming THEN
+          PaymentUpdate(ExpDataModule.ExpIncomingDataSet);
+        IF FiledBatchs THEN
+          PaymentUpdate(ExpDataModule.ExpBatchsDataSet);
+        IF FiledIncomingArchive THEN
+          PaymentUpdate(ExpDataModule.ExpIncomingarchiveDataSet);
+        IF FieldBatchsArchive THEN
+          PaymentUpdate(ExpDataModule.ExpBatchsArchiveDataSet);
+      end;
+
+  end;
+end;
+
+end.

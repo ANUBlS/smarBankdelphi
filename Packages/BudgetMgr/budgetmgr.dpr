@@ -1,0 +1,30 @@
+
+library budgetmgr;
+
+uses
+  ComServ,
+  budgetmgr_TLB in 'budgetmgr_TLB.pas',
+  frmBudgetMgrImpl in 'frmBudgetMgrImpl.pas' {frmBudgetMgr: TActiveForm} {frmBudgetMgr: CoClass},
+  Dmbudgetimpl in 'Dmbudgetimpl.pas' {DMBudget: TDataModule},
+  FrmAddBugcetimpl in 'FrmAddBugcetimpl.pas' {BudgetSetAccaontfr},
+  FrmSetingBudgetImpl in 'FrmSetingBudgetImpl.pas' {BudgetSetingFr},
+  FrmEditBudgetimpl in 'FrmEditBudgetimpl.pas' {FrmeditBudget},
+  FrmAddEditBdImpl in 'FrmAddEditBdImpl.pas' {FrmAddEditBdFr},
+  FrmItemaddImpl in 'FrmItemaddImpl.pas' {FrmItemadd},
+  ReportFrmImpl in 'ReportFrmImpl.pas' {ReportFrm},
+  BalansImpl in 'BalansImpl.pas' {BalansFrm};
+
+{$E ocx}
+
+exports
+  DllGetClassObject,
+  DllCanUnloadNow,
+  DllRegisterServer,
+  DllUnregisterServer;
+
+{$R *.TLB}
+
+{$R *.RES}
+
+begin
+end.

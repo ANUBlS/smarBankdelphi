@@ -1,0 +1,46 @@
+unit Unit_Form_columun;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, CheckLst, ExtCtrls, Oracle;
+
+type
+  TForm_column = class(TForm)
+    Panel1: TPanel;
+    Button1: TButton;
+    OraclePackage1: TOraclePackage;
+    CheckListBox: TCheckListBox;
+    procedure Button1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form_column: TForm_column;
+
+implementation
+ uses SboapiDataModuleImpl;
+{$R *.dfm}
+
+procedure TForm_column.Button1Click(Sender: TObject);
+  var
+  NumberOfCheckedItems,i:integer     ;
+  a:string;
+
+  begin
+ NumberOfCheckedItems := 0;
+  for I := 0 to CheckListBox.Count - 1 do begin
+    if CheckListBox.Checked[I] then NumberOfCheckedItems := NumberOfCheckedItems + 1;
+  end;
+ // ShowMessage(IntToStr(NumberOfCheckedItems));
+
+OraclePackage1.CallProcedure('get_create_table',[NumberOfCheckedItems]);
+ Form_column.Close;
+
+end;
+
+end.

@@ -1,0 +1,43 @@
+package CM_ReestInfo;
+
+{$R *.RES}
+{$ALIGN ON}
+{$ASSERTIONS ON}
+{$BOOLEVAL OFF}
+{$DEBUGINFO ON}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LOCALSYMBOLS ON}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION ON}
+{$OVERFLOWCHECKS OFF}
+{$RANGECHECKS OFF}
+{$REFERENCEINFO ON}
+{$SAFEDIVIDE OFF}
+{$STACKFRAMES OFF}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS ON}
+{$WRITEABLECONST ON}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
+{$DESCRIPTION 'CM MIS'}
+{$DESIGNONLY}
+{$IMPLICITBUILD ON}
+
+requires
+  vcl50,
+  CM_COMMON,
+  CMOracleAPI,
+  doa40d5,
+  Vclbde50,
+  Qrpt50;
+
+contains
+  RILoader in 'RILoader.pas',
+  uRIMain in 'uRIMain.pas' {frmRIMain},
+  uRIDM in 'uRIDM.pas' {RIDataMod: TDataModule},
+  urepRI in 'urepRI.pas' {qrpRIRep: TQuickRep};
+
+end.

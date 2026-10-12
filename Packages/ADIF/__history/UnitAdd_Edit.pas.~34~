@@ -1,0 +1,592 @@
+﻿unit UnitAdd_Edit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ExtCtrls, XFSCtrls, StdCtrls, Mask, DBCtrls, DBCtrlsEh, Gauges,DB,
+  Buttons;
+
+type
+        TBankInfo = record
+    BankName: WideString;
+    BankID: WideString;
+        end;
+  TForm_File = class(TForm)
+    XFPanel1: TXFPanel;
+    XFGroupBox1: TXFGroupBox;
+    EditFile: TEdit;
+    SpeedButton1: TSpeedButton;
+    Gauge_cust: TGauge;
+    SaveDlgCust: TSaveDialog;
+    XFBitBtn2: TXFBitBtn;
+    XFBitBtn1: TXFBitBtn;
+    procedure CreateXmlFile();
+    procedure WriteString(S: string);
+    Procedure   CLENT_PERSON;
+    Procedure   CLENT_JOINT;
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure XFBitBtn1Click(Sender: TObject);
+    procedure XFBitBtn2Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+  function Get_BankInfo: TBankInfo;
+    { Public declarations }
+  end;
+
+var
+    f: TextFile;
+    Form_File: TForm_File;
+    UnusableGrops: Set Of Byte;
+    FilePAth: String;
+implementation
+
+uses IniFiles,UnitAdifData;
+
+{$R *.dfm}
+const
+  SIniLocation ='BankInfo.ini';
+  SSection = 'BankInfo';
+  SBankID = 'BankID';
+  SBankName = 'BankName';
+
+function TForm_File.Get_BankInfo: TBankInfo;
+var
+  INI: TIniFile;
+  BankID, BankName: String;
+  Path: String;
+begin
+  Path := ExtractFilePath(Application.ExeName) + SIniLocation;
+  INI := TIniFile.Create(Path);
+  with INI do
+    try
+      BankID := ReadString(SSection, SBankID, '');
+      BankName := ReadString(SSection, SBankName, '');
+      Result.BankName := Utf8Decode(BankName);
+      Result.BankID := Utf8Decode(BankID);
+    finally
+      Free;
+    end;
+end;
+   procedure TForm_File.CreateXmlFile();
+     begin
+     with Adif_Data,ods_cust do begin
+    WriteString('<BANK_BRANCH_CODE>');
+    WriteString(FieldByName('BANK_BRANCH_CODE').AsString);
+    WriteString('</BANK_BRANCH_CODE>');
+
+    WriteString('<CLIENT_NO>');
+    WriteString(FieldByName('CLIENT_NO').AsString);
+    WriteString('</CLIENT_NO>');
+
+    WriteString('<CLIENT_TYPE>');
+    WriteString(FieldByName('CLIENT_TYPE').AsString);
+    WriteString('</CLIENT_TYPE>');
+
+    WriteString('<CLIENT_NATIONALTY>');
+    WriteString(FieldByName('CLIENT_NATIONALTY').AsString);
+    WriteString('</CLIENT_NATIONALTY>');
+
+
+   if  not(FieldByName('CLIENT_SYMBOL_NO').isNUll)   then
+   begin
+    WriteString('<CLIENT_SYMBOL_NO>');
+    WriteString(FieldByName('CLIENT_SYMBOL_NO').AsString);
+    WriteString('</CLIENT_SYMBOL_NO>');
+   end;
+
+    WriteString('<CLIENT_NAME>');
+    WriteString(FieldByName('CLIENT_NAME').AsString);
+    WriteString('</CLIENT_NAME>');
+
+    WriteString('<CLIENT_SURNAME>');
+    WriteString(FieldByName('CLIENT_SURNAME').AsString);
+    WriteString('</CLIENT_SURNAME>');
+
+    WriteString('<CLIENT_FATHERS_NAME>');
+    WriteString(FieldByName('CLIENT_FATHERS_NAME').AsString);
+    WriteString('</CLIENT_FATHERS_NAME>');
+
+    WriteString('<CLIENT_DATE_BIRTH>');
+    WriteString(FieldByName('CLIENT_DATE_BIRTH').AsString);
+    WriteString('</CLIENT_DATE_BIRTH>');
+
+    WriteString('<CLIENT_PLACE_OF_BIRTH>');
+    WriteString(FieldByName('CLIENT_PLACE_OF_BIRTH').AsString);
+    WriteString('</CLIENT_PLACE_OF_BIRTH>');
+
+    WriteString('<CLIENT_ID_TYPE>');
+    WriteString(FieldByName('CLIENT_ID_TYPE').AsString);
+    WriteString('</CLIENT_ID_TYPE>');
+
+    if  not(FieldByName('CLIENT_ID_COMMENT').isNUll)   then
+    begin
+    WriteString('<CLIENT_ID_COMMENT>');
+    WriteString(FieldByName('CLIENT_ID_COMMENT').AsString);
+    WriteString('</CLIENT_ID_COMMENT>');
+    end;
+
+    WriteString('<CLIENT_ID_SERIAL>');
+    WriteString(FieldByName('CLIENT_ID_SERIAL').AsString);
+    WriteString('</CLIENT_ID_SERIAL>');
+
+    WriteString('<CLIENT_ID_NUMBER>');
+    WriteString(FieldByName('CLIENT_ID_NUMBER').AsString);
+    WriteString('</CLIENT_ID_NUMBER>');
+
+    if  not(FieldByName('CLIENT_ID_PIN').isNUll)   then
+    begin
+    WriteString('<CLIENT_ID_PIN>');
+    WriteString(FieldByName('CLIENT_ID_PIN').AsString);
+    WriteString('</CLIENT_ID_PIN>');
+       end;
+
+    WriteString('<CLIENT_ID_ISSUE_DATE>');
+    WriteString(FieldByName('CLIENT_ID_ISSUE_DATE').AsString);
+    WriteString('</CLIENT_ID_ISSUE_DATE>');
+
+    WriteString('<CLIENT_ID_ISSUE_PLACE>');
+    WriteString(FieldByName('CLIENT_ID_ISSUE_PLACE').AsString);
+    WriteString('</CLIENT_ID_ISSUE_PLACE>');
+
+    WriteString('<CLIENT_ID_ADRESS>');
+    WriteString(FieldByName('CLIENT_ID_ADDRESS').AsString);
+    WriteString('</CLIENT_ID_ADRESS>');
+
+    WriteString('<CLIENT_ID_ADRESS_REAL>');
+    WriteString(FieldByName('CLIENT_ID_ADDRESS_REAL').AsString);
+    WriteString('</CLIENT_ID_ADRESS_REAL>');
+
+   if  not(FieldByName('CLIENT_ID_EMAIL').isNUll)   then
+    begin
+    WriteString('<CLIENT_ID_EMAIL>');
+    WriteString(FieldByName('CLIENT_ID_EMAIL').AsString);
+    WriteString('</CLIENT_ID_EMAIL>');
+    end;
+   if  not(FieldByName('CLIENT_ID_PHONE_MOBILE').isNUll)   then
+    begin
+    WriteString('<CLIENT_ID_PHONE_MOBILE>');
+    WriteString(FieldByName('CLIENT_ID_PHONE_MOBILE').AsString);
+    WriteString('</CLIENT_ID_PHONE_MOBILE>');
+    end;
+   if  not(FieldByName('CLIENT_ID_PHONE_HOME').isNUll)   then
+    begin
+    WriteString('<CLIENT_ID_PHONE_HOME>');
+    WriteString(FieldByName('CLIENT_ID_PHONE_HOME').AsString);
+    WriteString('</CLIENT_ID_PHONE_HOME>');
+    end;
+   if  not(FieldByName('CLIENT_ID_PHONE').isNUll)   then
+    begin
+    WriteString('<CLIENT_ID_WORK_PHONE>');
+    WriteString(FieldByName('CLIENT_ID_PHONE').AsString);
+    WriteString('</CLIENT_ID_WORK_PHONE>');
+    end;
+      end;
+      end;
+
+
+procedure TForm_File.WriteString(S: string);
+begin
+
+  AssignFile(f, FilePAth); { Assigns the Filename }
+  Append(f); { Opens the file for editing }
+  Write(f, UTF8Encode(StringReplace(S, #13 + #10, '', [rfReplaceAll])));
+  Closefile(f);
+end;
+Procedure   TForm_File.CLENT_PERSON;
+var
+x:integer;
+ begin
+ with Adif_Data,Ods_cust_person_joint do
+ begin
+  if Adif_Data.Ods_cust_person_work.RecordCount>0 then
+   begin
+    WriteString('<CLIENT_ID_PERSON_DATA>');
+    WriteString('Y');
+    WriteString('</CLIENT_ID_PERSON_DATA>');
+   end;
+
+   if Adif_Data.Ods_cust_person_work.RecordCount=0 then
+   begin
+    WriteString('<CLIENT_ID_PERSON_DATA>');
+    WriteString('N');
+    WriteString('</CLIENT_ID_PERSON_DATA>');
+   end;
+    if not (Adif_Data.Ods_cust_person_work.FieldByName('PRINAD_NAME')).isnull then
+   begin
+    WriteString('<CLIENT_ID_PERSON_RELATIONSHIP>');
+    WriteString(adif_Data.Ods_cust_person_work.FieldByName('PRINAD_NAME').asstring);
+    WriteString('</CLIENT_ID_PERSON_RELATIONSHIP>');
+   end;
+  {  WriteString('<CLIENT_ID_RELATIONSHIP_1>');
+    WriteString(('yyyy'));
+    WriteString('</CLIENT_ID_RELATIONSHIP_1>');
+   }
+   if not (FieldByName('firstname')).isnull then
+   begin
+    WriteString('<CLIENT_ID_PERSON_NAME>');
+    WriteString(FieldByName('firstname').AsString);
+    WriteString('</CLIENT_ID_PERSON_NAME>');
+     end;
+   if not (FieldByName('lastname')).isnull then
+   begin
+    WriteString('<CLIENT_ID_PERSON_SURNAME>');
+    WriteString(FieldByName('lastname').AsString);
+    WriteString('</CLIENT_ID_PERSON_SURNAME>');
+   end;
+    if not (FieldByName('patronymic')).isnull then
+   begin
+    WriteString('<CLIENT_ID_PERSON_FATHERS_NAME>');
+    WriteString(FieldByName('patronymic').AsString);
+    WriteString('</CLIENT_ID_PERSON_FATHERS_NAME>');
+     end;
+   if not (FieldByName('client_date_birth')).isnull then
+   begin
+    WriteString('<CLIENT_ID_PERSON_DATE_BIRTH>');
+    WriteString(FieldByName('client_date_birth').AsString);
+    WriteString('</CLIENT_ID_PERSON_DATE_BIRTH>');
+
+   end;
+   if not (FieldByName('place_of_birth')).isnull then
+   begin
+    WriteString('<CLIENT_ID_PERSON_PLACE_OF_BIRTH>');
+    WriteString(FieldByName('place_of_birth').AsString);
+    WriteString('</CLIENT_ID_PERSON_PLACE_OF_BIRTH>');
+
+   end;
+   if not (FieldByName('doc_type')).isnull then
+   begin
+    WriteString('<CLIENT_ID_PERSON_ID>');
+    WriteString(FieldByName('doc_type').AsString);
+    WriteString('</CLIENT_ID_PERSON_ID>');
+   end;
+    if not (FieldByName('passport')).isnull then
+   begin
+    WriteString('<CLIENT_ID_PERSON_SERIAL>');
+    WriteString(FieldByName('passport').AsString);
+    WriteString('</CLIENT_ID_PERSON_SERIAL>');
+     end;
+   if not (FieldByName('passp_number')).isnull then
+   begin
+    WriteString('<CLIENT_ID_PERSON_NUMBER>');
+    WriteString(FieldByName('passp_number').AsString);
+    WriteString('</CLIENT_ID_PERSON_NUMBER>');
+      end;
+   if not (FieldByName('passpin')).isnull then
+   begin
+    WriteString('<CLIENT_ID_PERSON_PIN>');
+    WriteString(FieldByName('passpin').AsString);
+    WriteString('</CLIENT_ID_PERSON_PIN>');
+     end;
+   if not (FieldByName('paspdate')).isnull then
+   begin
+    WriteString('<CLIENT_ID_PERSON_ISSUE_DATE>');
+    WriteString(FieldByName('paspdate').AsString);
+    WriteString('</CLIENT_ID_PERSON_ISSUE_DATE>');
+      end;
+   if not (FieldByName('issue_place')).isnull then
+   begin
+    WriteString('<CLIENT_ID_PERSON_ISSUE_PLACE>');
+    WriteString(FieldByName('issue_place').AsString);
+    WriteString('</CLIENT_ID_PERSON_ISSUE_PLACE>');
+     end;
+   if not (FieldByName('adress')).isnull then
+   begin
+    WriteString('<CLIENT_ID_PERSON_ADRESS>');
+    WriteString(FieldByName('adress').AsString);
+    WriteString('</CLIENT_ID_PERSON_ADRESS>');
+     end;
+    if not (FieldByName('fakt_adress')).isnull then
+   begin
+    WriteString('<CLIENT_ID_PERSON_ADRESS_REAL>');
+    WriteString(FieldByName('fakt_adress').AsString);
+    WriteString('</CLIENT_ID_PERSON_ADRESS_REAL>');
+     end;
+    if not (FieldByName('email')).isnull then
+   begin
+    WriteString('<CLIENT_ID_PERSON_EMAIL>');
+    WriteString(FieldByName('email').AsString);
+    WriteString('</CLIENT_ID_PERSON_EMAIL>');
+
+   end;
+   if not (FieldByName('phone_mob')).isnull then
+   begin
+    WriteString('<CLIENT_ID_PERSON_PHONE_MOBILE>');
+    WriteString(FieldByName('phone_mob').AsString);
+    WriteString('</CLIENT_ID_PERSON_PHONE_MOBILE>');
+     end;
+    if not (FieldByName('phone')).isnull then
+   begin
+    WriteString('<CLIENT_ID_PERSON_PHONE_HOME>');
+    WriteString(FieldByName('phone').AsString);
+    WriteString('</CLIENT_ID_PERSON_PHONE_HOME>');
+
+   end;
+  if not (FieldByName('inn')).isnull then
+   begin
+    WriteString('<VOEN>');
+    WriteString(FieldByName('inn').AsString);
+    WriteString('</VOEN>');
+
+   end;
+   if not (FieldByName('info_tph_adress')).isnull then
+   begin
+    WriteString('<CLIENT_FS_ADRESS>');
+    WriteString(FieldByName('info_tph_adress').AsString);
+    WriteString('</CLIENT_FS_ADRESS>');
+    end;
+ end;
+ end;
+
+ Procedure   TForm_File.CLENT_JOINT;
+  var
+  x:integer;
+  I:integer;
+ begin
+
+ with Adif_Data,Ods_cust_person_joint do
+ begin
+    {x:=Adif_Data.Ods_cust_joint_work.RecordCount;
+    WriteString('<JOINT_ACCOUNT_NUMBER>');
+    WriteString(inttostr(x+1));
+    WriteString('</JOINT_ACCOUNT_NUMBER>');
+
+    WriteString('<JOINT_ACCOUNTS>'); JOINT_ACCOUNT_TYPE
+    }
+    WriteString('<JOINT_ACCOUNT_TYPE>');
+    WriteString(FieldByName('cust_type').AsString);
+    WriteString('</JOINT_ACCOUNT_TYPE>');
+
+    WriteString('<JOINT_ACCOUNT_NO>');
+    WriteString(FieldByName('id').AsString);
+    WriteString('</JOINT_ACCOUNT_NO>');
+
+    WriteString('<JOINT_ACCOUNT_SYMBOL_NO>');
+    WriteString(FieldByName('CLIENT_SYMBOL_NO').AsString);
+    WriteString('</JOINT_ACCOUNT_SYMBOL_NO>');
+
+    WriteString('<JOINT_ACCOUNT_NAME>');
+    WriteString(FieldByName('firstname').AsString);
+    WriteString('</JOINT_ACCOUNT_NAME>');
+
+    WriteString('<JOINT_ACCOUNT_SURNAME>');
+    WriteString(FieldByName('lastname').AsString);
+    WriteString('</JOINT_ACCOUNT_SURNAME>');
+
+    WriteString('<JOINT_ACCOUNT_FATHERS_NAME>');
+    WriteString(FieldByName('patronymic').AsString);
+    WriteString('</JOINT_ACCOUNT_FATHERS_NAME>');
+
+    WriteString('<JOINT_ACCOUNT_DATE_BIRTH>');
+    WriteString(FieldByName('client_date_birth').AsString);
+    WriteString('</JOINT_ACCOUNT_DATE_BIRTH>');
+
+    WriteString('<JOINT_ACCOUNT_PLACE_OF_BIRTH>');
+    WriteString(FieldByName('place_of_birth').AsString);
+    WriteString('</JOINT_ACCOUNT_PLACE_OF_BIRTH>');
+
+    WriteString('<JOINT_ACCOUNT_ID_TYPE>');
+    WriteString(FieldByName('cust_type').AsString);
+    WriteString('</JOINT_ACCOUNT_ID_TYPE>');
+
+    WriteString('<JOINT_ACCOUNT_ID_COMMENT>');
+    WriteString(FieldByName('CLIENT_ID_COMMENT').AsString);
+    WriteString('</JOINT_ACCOUNT_ID_COMMENT>');
+       {
+    WriteString('<JOINT_ACCOUNT_ID_SERIAL>');
+    WriteString(FieldByName('doc_type').AsString);
+    WriteString('</JOINT_ACCOUNT_ID_SERIAL>');
+      }
+    WriteString('<JOINT_ACCOUNT_ID_SERIAL>');
+    WriteString(FieldByName('passport').AsString);
+    WriteString('</JOINT_ACCOUNT_ID_SERIAL>');
+
+    WriteString('<JOINT_ACCOUNT_ID_NUMBER>');
+    WriteString(FieldByName('passp_number').AsString);
+    WriteString('</JOINT_ACCOUNT_ID_NUMBER>');
+
+    WriteString('<JOINT_ACCOUNT_ID_PIN>');
+    WriteString(FieldByName('passpin').AsString);
+    WriteString('</JOINT_ACCOUNT_ID_PIN>');
+
+    WriteString('<JOINT_ACCOUNT_ID_ISSUE_DATE>');
+    WriteString(FieldByName('paspdate').AsString);
+    WriteString('</JOINT_ACCOUNT_ID_ISSUE_DATE>');
+
+    WriteString('<JOINT_ACCOUNT_ID_ISSUE_PLACE>');
+    WriteString(FieldByName('issue_place').AsString);
+    WriteString('</JOINT_ACCOUNT_ID_ISSUE_PLACE>');
+
+    WriteString('<JOINT_ACCOUNT_ID_ADRESS>');
+    WriteString(FieldByName('adress').AsString);
+    WriteString('</JOINT_ACCOUNT_ID_ADRESS>');
+
+    WriteString('<JOINT_ACCOUNT_ID_ADRESS_REAL>');
+    WriteString(FieldByName('fakt_adress').AsString);
+    WriteString('</JOINT_ACCOUNT_ID_ADRESS_REAL>');
+
+    WriteString('<JOINT_ACCOUNT_ID_EMAIL>');
+    WriteString(FieldByName('email').AsString);
+    WriteString('</JOINT_ACCOUNT_ID_EMAIL>');
+
+    WriteString('<JOINT_ACCOUNT_ID_PHONE_MOBILE>');
+    WriteString(FieldByName('phone_mob').AsString);
+    WriteString('</JOINT_ACCOUNT_ID_PHONE_MOBILE>');
+
+    WriteString('<JOINT_ACCOUNT_ID_PHONE_HOME>');
+    WriteString(FieldByName('phone').AsString);
+    WriteString('</JOINT_ACCOUNT_ID_PHONE_HOME>');
+
+    WriteString('<JOINT_ACCOUNT_ID_PHONE>');
+    WriteString(FieldByName('work_phone').AsString);
+    WriteString('</JOINT_ACCOUNT_ID_PHONE>');
+
+    WriteString('<JOINT_ACCOUNT_PERCENT>');
+    WriteString(FieldByName('info_tph_adress').AsString);
+    WriteString('</JOINT_ACCOUNT_PERCENT>');
+
+  //  WriteString('</JOINT_ACCOUNTS>');
+
+ end;
+ end;
+
+procedure TForm_File.SpeedButton1Click(Sender: TObject);
+begin
+  with SaveDlgCust do
+    if Execute then
+      EditFile.Text:= FileName;
+      AssignFile(f, EditFile.Text);
+      Rewrite(f);
+      Closefile(f);
+end;
+
+  procedure TForm_File.XFBitBtn1Click(Sender: TObject);
+  var
+    sr, r,j, i,n, a,rec_count: integer;
+    BankID, BankName: String;
+    ABankInfo: TBankInfo;
+      begin
+ if EditFile.Text = '' then
+  begin
+    ShowMessage('      Faylı seçməmisiz!     ');
+    Exit;
+  end;
+  Adif_Data.ods_cust.QueryAllRecords:=true;
+   Adif_Data.ods_cust.refresh;
+  r:=Adif_Data.ods_cust.recordcount;
+ // sr:= Adif_Data.ods_adf_custxml.recordcount;
+
+    ABankInfo := Get_BankInfo;
+    BankID := ABankInfo.BankID;
+    BankName := ABankInfo.BankName;
+
+  FilePAth := EditFile.Text;
+  AssignFile(f, FilePAth);
+  Rewrite(f);
+  Closefile(f);
+
+
+    WriteString('<?xml version="1.0" encoding="UTF-8" ?>');
+    WriteString('<CUSTOMERS>');
+    WriteString('<BANK_CODE>');
+    WriteString(BankID);
+    WriteString('</BANK_CODE>');
+    WriteString('<BANK_NAME>');
+    WriteString(BankName);
+    WriteString('</BANK_NAME>');
+    WriteString('<ROWCOUNT>');
+    WriteString(inttostr(r));
+    WriteString('</ROWCOUNT>');
+
+
+    Adif_Data.ods_cust.First;
+      for I := 0 to r-1 do
+      begin
+      WriteString('<CUSTOMER>');
+             CreateXmlFile  ;
+
+          Adif_Data.Ods_cust_person_work.Close;
+          Adif_Data.Ods_cust_person_work.SetVariable('v_custid',Adif_Data.ods_cust.FieldByName('CLIENT_NO').AsInteger);
+          Adif_Data.Ods_cust_person_work.open;
+
+          Adif_Data.Ods_cust_person_joint.Close;
+          Adif_Data.Ods_cust_person_joint.SetVariable('v_id',Adif_Data.Ods_cust_person_work.FieldByName('custid2').AsInteger);
+          Adif_Data.Ods_cust_person_joint.open;
+
+          CLENT_PERSON;
+
+
+       Adif_Data.Ods_cust_joint_work.Close;
+       Adif_Data.Ods_cust_joint_work.SetVariable('v_custid',Adif_Data.ods_cust.FieldByName('CLIENT_NO').AsInteger);
+       Adif_Data.Ods_cust_joint_work.open;
+
+    rec_count:=Adif_Data.Ods_cust_joint_work.RecordCount;
+    WriteString('<JOINT_ACCOUNT_NUMBER>');
+    WriteString(inttostr(rec_count+1));
+    WriteString('</JOINT_ACCOUNT_NUMBER>');
+   if Adif_Data.Ods_cust_joint_work.RecordCount>0 then
+    begin
+        Adif_Data.Ods_cust_joint_work.First;
+      for n:= 0 to Adif_Data.Ods_cust_joint_work.RecordCount-1 do
+        begin
+       with Adif_Data,Ods_cust_person_joint do
+            begin
+           close;
+            SetVariable('v_id',Adif_Data.Ods_cust_joint_work.FieldByName('custid2').AsInteger);
+           open;
+               end;
+               WriteString('<JOINT_ACCOUNTS>');
+
+             CLENT_JOINT;
+             WriteString('</JOINT_ACCOUNTS>');
+
+          Adif_Data.Ods_cust_joint_work.Next;
+
+        end;
+     end;
+
+          Adif_Data.ods_cust.next;
+          WriteString('</CUSTOMER>');
+
+          Gauge_cust.Progress := Trunc(j*100 / r);
+        j := j + 1;
+       end;
+    WriteString('</CUSTOMERS>');
+    ShowMessage( 'İxrac qurtardı '+inttostr(r)+ '- sayda müştəri ixrac olundu' );
+    MessageDlg('XML file uğurla yaradıldı', mtInformation, [mbOk], 0);
+    Gauge_cust.Progress :=0;
+    EditFile.Text:='';
+
+
+
+
+
+
+
+end;
+
+procedure TForm_File.XFBitBtn2Click(Sender: TObject);
+ var
+ n:integer;
+ a:integer;
+begin
+
+          Adif_Data.Ods_cust_joint_work.Close;
+          Adif_Data.Ods_cust_joint_work.SetVariable('v_custid',Adif_Data.ods_cust.FieldByName('CLIENT_NO').AsInteger);
+          Adif_Data.Ods_cust_joint_work.open;
+
+        Adif_Data.Ods_cust_joint_work.First;
+      for n:= 0 to Adif_Data.Ods_cust_joint_work.RecordCount-1 do
+        begin
+       a:=(Adif_Data.Ods_cust_joint_work.FieldByName('custid2').AsInteger);
+
+          Adif_Data.Ods_cust_joint_work.Next;
+            showmessage(inttostr(a));
+
+        end;
+
+end;
+
+
+end.

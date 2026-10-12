@@ -1,0 +1,171 @@
+object CorrectorMainForm: TCorrectorMainForm
+  Left = 325
+  Top = 241
+  Width = 934
+  Height = 567
+  BorderIcons = [biSystemMenu]
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poMainFormCenter
+  OnCanResize = FormCanResize
+  OnCreate = FormCreate
+  OnKeyPress = FormKeyPress
+  PixelsPerInch = 96
+  TextHeight = 13
+  object GroupBox1: TGroupBox
+    Left = 0
+    Top = 495
+    Width = 926
+    Height = 38
+    Align = alBottom
+    Caption = 'Àõòàðûø'
+    TabOrder = 0
+    object Editnum: TEdit
+      Left = 3
+      Top = 13
+      Width = 121
+      Height = 21
+      TabOrder = 0
+      OnKeyPress = EditnumKeyPress
+    end
+    object Button1: TButton
+      Left = 666
+      Top = 9
+      Width = 75
+      Height = 25
+      Action = ActnOK
+      TabOrder = 1
+    end
+    object Button2: TButton
+      Left = 746
+      Top = 9
+      Width = 75
+      Height = 25
+      Action = ACTNnook
+      TabOrder = 2
+    end
+    object Button3: TButton
+      Left = 837
+      Top = 9
+      Width = 75
+      Height = 25
+      Caption = 'Áàüëà'
+      TabOrder = 3
+      OnClick = Button3Click
+    end
+  end
+  object DBGridEh1: TDBGridEh
+    Left = 0
+    Top = 0
+    Width = 926
+    Height = 495
+    Align = alClient
+    DataSource = CorrectorDataMod.DSCorrectData
+    Flat = True
+    FooterColor = clWindow
+    FooterFont.Charset = DEFAULT_CHARSET
+    FooterFont.Color = clWindowText
+    FooterFont.Height = -11
+    FooterFont.Name = 'Azl Sans Serif'
+    FooterFont.Style = []
+    TabOrder = 1
+    TitleFont.Charset = DEFAULT_CHARSET
+    TitleFont.Color = clWindowText
+    TitleFont.Height = -11
+    TitleFont.Name = 'Azl Sans Serif'
+    TitleFont.Style = []
+    OnTitleClick = DBGridEh1TitleClick
+    Columns = <
+      item
+        Color = clSilver
+        EditButtons = <>
+        FieldName = 'NUM'
+        Footers = <>
+        ReadOnly = True
+        Width = 91
+      end
+      item
+        Color = clSilver
+        EditButtons = <>
+        FieldName = 'NAME'
+        Footers = <>
+        ReadOnly = True
+        Width = 155
+      end
+      item
+        EditButtons = <>
+        FieldName = 'REST'
+        Footers = <>
+        Width = 90
+      end
+      item
+        EditButtons = <>
+        FieldName = 'INTERESTREST'
+        Footers = <>
+        Width = 90
+      end
+      item
+        EditButtons = <>
+        FieldName = 'DUEREST'
+        Footers = <>
+        Width = 90
+      end
+      item
+        EditButtons = <>
+        FieldName = 'DUEINTERESTREST'
+        Footers = <>
+        Width = 90
+      end
+      item
+        EditButtons = <>
+        FieldName = 'GIVENAMOUNT'
+        Footers = <>
+        Width = 90
+      end
+      item
+        EditButtons = <>
+        FieldName = 'OBLIGATION'
+        Footers = <>
+        Width = 90
+      end
+      item
+        EditButtons = <>
+        FieldName = 'PENALTYREST'
+        Footers = <>
+      end>
+  end
+  object Localizer: TNLSLocalizer
+    Caption = 'Äöçÿëèøëÿð'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    Left = 104
+    Top = 56
+  end
+  object ActionList1: TActionList
+    Left = 472
+    Top = 216
+    object ActnOK: TAction
+      Caption = 'Ãÿáóë'
+      OnExecute = ActnOKExecute
+      OnUpdate = ActnOKUpdate
+    end
+    object ACTNnook: TAction
+      Caption = 'Èìòèíà'
+      OnExecute = ACTNnookExecute
+      OnUpdate = ActnOKUpdate
+    end
+    object ActnSearch: TAction
+      Caption = 'ActnSearch'
+      OnExecute = ActnSearchExecute
+    end
+  end
+end

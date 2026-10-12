@@ -1,0 +1,38 @@
+unit PrPayFrmImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ComCtrls, DBGridEhGrouping, GridsEh, DBGridEh;
+
+type
+  TPrPayFrm = class(TForm)
+    GroupBox1: TGroupBox;
+    Label1: TLabel;
+    DateTimePicker1: TDateTimePicker;
+    DateTimePicker2: TDateTimePicker;
+    Button1: TButton;
+    Button2: TButton;
+    DBGridEh1: TDBGridEh;
+    procedure FormShow(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  PrPayFrm: TPrPayFrm;
+
+implementation
+
+{$R *.dfm}
+
+procedure TPrPayFrm.FormShow(Sender: TObject);
+begin
+DateTimePicker1.DateTime:=now-30;
+DateTimePicker2.DateTime:=now;
+end;
+
+end.

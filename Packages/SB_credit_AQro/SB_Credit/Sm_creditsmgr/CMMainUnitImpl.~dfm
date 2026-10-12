@@ -1,0 +1,232 @@
+object MainDataModule: TMainDataModule
+  OldCreateOrder = False
+  OnCreate = DataModuleCreate
+  Left = 309
+  Top = 185
+  Height = 568
+  Width = 870
+  object CR_ACTIVE: TOracleDataSet
+    SQL.Strings = (
+      'select *'
+      '  from'
+      '    creditsmgr.cm_active'
+      'order by :OrderField    '
+      ' ')
+    Variables.Data = {
+      03000000010000000B0000003A4F524445524649454C44010000000000000000
+      000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 56
+    Top = 40
+    object CR_ACTIVEID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object CR_ACTIVECURRENCY: TFloatField
+      Alignment = taCenter
+      FieldName = 'CURRENCY'
+      Required = True
+    end
+    object CR_ACTIVEBOOROWERID: TFloatField
+      DisplayLabel = 'Мцштяринин ID си'
+      FieldName = 'BOOROWERID'
+      Required = True
+    end
+    object CR_ACTIVECREDITLINEAMOUNT: TFloatField
+      DisplayLabel = 'Кредитин мябляьи'
+      FieldName = 'CREDITLINEAMOUNT'
+      Required = True
+      DisplayFormat = '#,##0.00'
+    end
+    object CR_ACTIVEANNUALYINTERESTRATE: TFloatField
+      DisplayLabel = '% дяряжяси'
+      FieldName = 'ANNUALYINTERESTRATE'
+      Required = True
+      DisplayFormat = '#,##0.0000'
+    end
+    object CR_ACTIVEINITIALAMOUNT: TFloatField
+      DisplayLabel = 'Верилмиш мябляь'
+      FieldName = 'INITIALAMOUNT'
+      Required = True
+      DisplayFormat = '#,##0.00'
+    end
+    object CR_ACTIVEANNUALYOVERDUERATE: TFloatField
+      DisplayLabel = 'Эежикмя % '
+      FieldName = 'ANNUALYOVERDUERATE'
+      Required = True
+      DisplayFormat = '#,##0.0000'
+    end
+    object CR_ACTIVEANNUALYPENALTYRATE: TFloatField
+      DisplayLabel = 'Жяримя %'
+      FieldName = 'ANNUALYPENALTYRATE'
+      Required = True
+      DisplayFormat = '#,##0.0000'
+    end
+    object CR_ACTIVEDATEOFCONCLUSION: TDateTimeField
+      DisplayLabel = 'Ачылма тарихи'
+      FieldName = 'DATEOFCONCLUSION'
+      Required = True
+    end
+    object CR_ACTIVEDUEDATEFIRSTCONTRACT: TDateTimeField
+      DisplayLabel = '(И.М)Баьланма тарихи'
+      FieldName = 'DUEDATEFIRSTCONTRACT'
+      Required = True
+    end
+    object CR_ACTIVEDUEDATELASTCONTRACT: TDateTimeField
+      DisplayLabel = '(С.М)Баьланма тарихи'
+      FieldName = 'DUEDATELASTCONTRACT'
+    end
+    object CR_ACTIVENUMBEROFCREDIT: TStringField
+      DisplayLabel = '№'
+      FieldName = 'NUMBEROFCREDIT'
+      Size = 32
+    end
+    object CR_ACTIVEPURPOSEOFCREDIT: TStringField
+      DisplayLabel = 'Тяйинаты'
+      FieldName = 'PURPOSEOFCREDIT'
+      Size = 128
+    end
+    object CR_ACTIVEUSRGROUP: TFloatField
+      FieldName = 'USRGROUP'
+      Required = True
+    end
+    object CR_ACTIVEBRANCHID: TFloatField
+      DisplayLabel = 'Филиал ID си'
+      FieldName = 'BRANCHID'
+      Required = True
+    end
+    object CR_ACTIVEUSID: TFloatField
+      DisplayLabel = 'Истифадячи ID си'
+      FieldName = 'USID'
+      Required = True
+    end
+    object CR_ACTIVESTOPCALCDATE: TDateTimeField
+      DisplayLabel = 'Щесабланманын дайандырылма тарихи'
+      FieldName = 'STOPCALCDATE'
+    end
+    object CR_ACTIVEREST: TFloatField
+      DisplayLabel = '(Я.Б) Галыг'
+      FieldName = 'REST'
+      Required = True
+      DisplayFormat = '#,##0.00'
+    end
+    object CR_ACTIVEINTERESTREST: TFloatField
+      DisplayLabel = '(Ф.Б) Галыг'
+      FieldName = 'INTERESTREST'
+      Required = True
+      DisplayFormat = '#,##0.00'
+    end
+    object CR_ACTIVEDUEREST: TFloatField
+      DisplayLabel = '(Э.Б) Галыг'
+      FieldName = 'DUEREST'
+      Required = True
+      DisplayFormat = '#,##0.00'
+    end
+    object CR_ACTIVEDUEINTERESTREST: TFloatField
+      DisplayLabel = '(Э.Ф.Б) Галыг'
+      FieldName = 'DUEINTERESTREST'
+      Required = True
+      DisplayFormat = '#,##0.00'
+    end
+    object CR_ACTIVERESERVEID: TFloatField
+      DisplayLabel = 'Ещтиййат ID си'
+      FieldName = 'RESERVEID'
+      Required = True
+    end
+    object CR_ACTIVEOBLIGATION: TFloatField
+      DisplayLabel = 'Ющдялик'
+      FieldName = 'OBLIGATION'
+      Required = True
+      DisplayFormat = '#,##0.00'
+    end
+    object CR_ACTIVEPLEDGEPRICE: TFloatField
+      DisplayLabel = 'Эировун дяйяри'
+      FieldName = 'PLEDGEPRICE'
+      Required = True
+      DisplayFormat = '#,##0.00'
+    end
+    object CR_ACTIVEPLEDGEID: TFloatField
+      FieldName = 'PLEDGEID'
+      Required = True
+    end
+    object CR_ACTIVECONTRACTACCNO: TStringField
+      DisplayLabel = 'Щесаб №'
+      FieldName = 'CONTRACTACCNO'
+    end
+    object CR_ACTIVEVAL_NAME: TStringField
+      Alignment = taCenter
+      DisplayLabel = '$'
+      FieldName = 'VAL_NAME'
+      Size = 10
+    end
+    object CR_ACTIVENAME: TStringField
+      DisplayLabel = 'Мцштяри'
+      FieldName = 'NAME'
+      Size = 64
+    end
+    object CR_ACTIVEDUERESERVEID: TFloatField
+      DisplayLabel = 'Эежик.Ещтиййат ID си'
+      FieldName = 'DUERESERVEID'
+    end
+    object CR_ACTIVECUSTOMERTYPE: TFloatField
+      FieldName = 'CUSTOMERTYPE'
+      Required = True
+    end
+    object CR_ACTIVECREDITTYPE: TFloatField
+      FieldName = 'CREDITTYPE'
+      Required = True
+    end
+    object CR_ACTIVEPERSONALTYPE: TFloatField
+      FieldName = 'PERSONALTYPE'
+      Required = True
+    end
+    object CR_ACTIVEBOOROWERREST: TFloatField
+      DisplayLabel = 'Жари Щесабын галыьы'
+      FieldName = 'BOOROWERREST'
+      DisplayFormat = '#,#0.00'
+    end
+  end
+  object DataSrcCR_ACTIVE: TDataSource
+    DataSet = CR_ACTIVE
+    Left = 56
+    Top = 128
+  end
+  object VisibleFieldsData: TOracleDataSet
+    SQL.Strings = (
+      'select seqno, fieldname, frozen, visible,fielddesc'
+      'from cr_visible_fields'
+      ' order by seqno')
+    Session = sboapiDataModule.SBSession
+    Left = 184
+    Top = 40
+    object VisibleFieldsDataSEQNO: TFloatField
+      FieldName = 'SEQNO'
+      Required = True
+    end
+    object VisibleFieldsDataFIELDNAME: TStringField
+      FieldName = 'FIELDNAME'
+      Required = True
+      Size = 64
+    end
+    object VisibleFieldsDataFROZEN: TFloatField
+      FieldName = 'FROZEN'
+      Required = True
+    end
+    object VisibleFieldsDataVISIBLE: TFloatField
+      FieldName = 'VISIBLE'
+      Required = True
+    end
+    object VisibleFieldsDataFIELDDESC: TStringField
+      FieldName = 'FIELDDESC'
+      Required = True
+      Size = 128
+    end
+  end
+  object CR_ADMIN: TOraclePackage
+    Session = CMDataModule.CMSession
+    PackageName = 'CM_ADMINISTRATION'
+    Left = 192
+    Top = 120
+  end
+end

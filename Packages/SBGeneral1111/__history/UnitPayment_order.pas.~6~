@@ -1,0 +1,523 @@
+﻿unit UnitPayment_order;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ImgList,DB, ComCtrls, ToolWin, StdCtrls, DBCtrls, ExtCtrls,OracleData;
+
+type
+
+  TPayment_order = class(TForm)
+    Panel1: TPanel;
+    GroupBox1: TGroupBox;
+    Panel2: TPanel;
+    EKBSwift: TEdit;
+    Panel3: TPanel;
+    CBKBName: TComboBox;
+    Panel4: TPanel;
+    EKBCod: TEdit;
+    Panel5: TPanel;
+    EKBInn: TEdit;
+    Panel6: TPanel;
+    EKBCorAcc: TEdit;
+    Panel24: TPanel;
+    mod_bank: TDBLookupComboBox;
+    GroupBox3: TGroupBox;
+    Panel12: TPanel;
+    EDAName: TEdit;
+    Panel13: TPanel;
+    EDAInn: TEdit;
+    Panel14: TPanel;
+    CBDANum: TComboBox;
+    EditDebtAccNo: TEdit;
+    CheckBox: TCheckBox;
+    GroupBox4: TGroupBox;
+    Panel15: TPanel;
+    EKAName: TEdit;
+    Panel16: TPanel;
+    EKAInn: TEdit;
+    Panel17: TPanel;
+    EKANum: TEdit;
+    GroupBox5: TGroupBox;
+    Panel18: TPanel;
+    EAmmountW: TEdit;
+    Panel19: TPanel;
+    EAmmount: TEdit;
+    GroupBox6: TGroupBox;
+    Panel20: TPanel;
+    EExtra: TEdit;
+    Panel21: TPanel;
+    Label2: TLabel;
+    EPNum: TEdit;
+    Panel22: TPanel;
+    EAssignment: TEdit;
+    Panel23: TPanel;
+    DTPayment: TDateTimePicker;
+    ToolBar1: TToolBar;
+    ToolButton4: TToolButton;
+    ToolButton3: TToolButton;
+    ToolButton2: TToolButton;
+    ToolButton1: TToolButton;
+    ToolButton8: TToolButton;
+    ToolButton5: TToolButton;
+    GroupBox2: TGroupBox;
+    Panel7: TPanel;
+    DBSwift: TEdit;
+    Panel8: TPanel;
+    DBName: TComboBox;
+    Panel9: TPanel;
+    DBCod: TEdit;
+    Panel10: TPanel;
+    DBInn: TEdit;
+    Panel11: TPanel;
+    DBCorAcc: TEdit;
+    Panel25: TPanel;
+    Label1: TLabel;
+    Edit1: TEdit;
+    Panel26: TPanel;
+    Label4: TLabel;
+    Edit4: TEdit;
+    ImageList: TImageList;
+    procedure ToolButton4Click(Sender: TObject);
+    procedure ToolButton2Click(Sender: TObject);
+    procedure ToolButton8Click(Sender: TObject);
+    procedure DBNameChange(Sender: TObject);
+    procedure DBCodKeyPress(Sender: TObject; var Key: Char);
+    procedure EditDebtAccNoDblClick(Sender: TObject);
+    procedure EDAInnChange(Sender: TObject);
+    procedure EAmmountExit(Sender: TObject);
+    procedure EAmmountKeyPress(Sender: TObject; var Key: Char);
+    procedure CBKBNameChange(Sender: TObject);
+    procedure EKBCodKeyPress(Sender: TObject; var Key: Char);
+    procedure EKAInnChange(Sender: TObject);
+    procedure EPNumKeyPress(Sender: TObject; var Key: Char);
+    procedure FormDestroy(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+  private
+    { Private declarations }
+  public
+    Rate:array of integer;
+    Rate1:array of integer;
+    isUpdate :boolean;
+    function ExtractMonth(DateTime: TDateTime; DecimalSymbol: string): string;
+    function WithCoin(Ammount :string):string;
+    procedure CleanUp;
+    procedure PustToComboID(DataSet :TOracleDataSet; Field,IDfield :String; ComboBox :TComboBox);
+    procedure PustToComboKOD(DataSet :TOracleDataSet; Field,IDfield :String; ComboBox :TComboBox);
+
+    { Public declarations }
+  end;
+
+var
+  Payment_order: TPayment_order;
+
+implementation
+ uses CurrencyToHR_Azeri_Impl, Payment_DataModul, Unit_Archive,
+   UntMain_Report, UntSecond_Report,SBTranslateProc, sboapiDataModuleImpl,
+  accserch, Form_AccountsImpl;
+{$R *.dfm}
+procedure TPayment_order.DBCodKeyPress(Sender: TObject; var Key: Char);
+begin
+ if key =#13 then
+ with PaymentOrderDataMod.ODSBankInfo do
+  begin
+   if Locate('KOD_B',DBCod.Text,[loCaseInsensitive, loPartialKey]) then
+    begin
+     DBName.Text :=FieldByName('BANK').AsString;
+    // EKBCod.Text :=FieldByName('BANKCODE').AsString;
+     DBInn.Text :=FieldByName('INN').AsString;
+     DBCorAcc.Text :=FieldByName('KRNO').AsString;
+     DBSwift.Text :=FieldByName('SWIFT').AsString;
+    end;
+  end;
+
+end;
+procedure TPayment_order.PustToComboID(DataSet :TOracleDataSet; Field,IDfield :String; ComboBox :TComboBox);
+var
+   RateIndex :Integer;
+begin
+ RateIndex :=0;
+ if DataSet. Active=false then DataSet.Open;
+  DataSet.First;
+   SetLength(Rate,DataSet.RecordCount);
+   ComboBox.Items.Clear;
+    while not(DataSet.Eof) do
+     begin
+      ComboBox.Items.Add(DataSet. FieldByName(Field).AsString);
+      Rate[RateIndex] :=DataSet. FieldByName(IDfield).AsInteger;
+      DataSet.Next;
+      Inc(RateIndex);
+     end;
+end;
+procedure TPayment_order.PustToComboKOD(DataSet :TOracleDataSet; Field,IDfield :String; ComboBox :TComboBox);
+var
+   RateIndex1 :Integer;
+begin
+ RateIndex1 :=0;
+ if DataSet. Active=false then DataSet.Open;
+  DataSet.First;
+   SetLength(Rate1,DataSet.RecordCount);
+   ComboBox.Items.Clear;
+    while not(DataSet.Eof) do
+     begin
+      ComboBox.Items.Add(DataSet. FieldByName(Field).AsString);
+      Rate1[RateIndex1] :=DataSet. FieldByName(IDfield).AsInteger;
+      DataSet.Next;
+      Inc(RateIndex1);
+     end;
+end;
+procedure TPayment_order.DBNameChange(Sender: TObject);
+begin
+DBCod.Text :='';
+ DBInn.Text :='';
+ DBCorAcc.Text :='';
+ DBSwift.Text :='';
+ try
+  with PaymentOrderDataMod.ODSBankInfo do
+   begin
+    Close;
+     SQL. Clear;
+     SQL.Text :='Select * From BankInfoes Where KOD_B= '+IntToStr(Rate1[DBName.ItemIndex]);
+    Open;
+    DBCod.Text :=FieldByName('KOD_B').AsString;
+    DBInn.Text :=FieldByName('INN').AsString;
+    DBCorAcc.Text :=FieldByName('KRNO').AsString;
+    DBSwift.Text :=FieldByName('SWIFT').AsString;
+   end;
+ finally
+    with PaymentOrderDataMod.ODSBankInfo do
+    begin
+     Close;
+      SQL. Clear;
+      SQL.Text :='Select * From BankInfoes ';
+     Open;
+    end;
+ end;
+
+end;
+
+procedure TPayment_order.EAmmountExit(Sender: TObject);
+begin
+ if EAmmount.text<>'' then
+  EAmmountW.text :=WithCoin(EAmmount.text)
+end;
+
+procedure TPayment_order.EAmmountKeyPress(Sender: TObject; var Key: Char);
+begin
+
+  if (Key=#13) and (Trim(TEdit(Sender).Text)<>'') then
+     EAmmountW.text :=WithCoin(EAmmount.text)
+  else
+   if not (key in ['0'..'9','.',#8]) then
+    key :=#0
+end;
+
+procedure TPayment_order.EDAInnChange(Sender: TObject);
+
+var
+   LengthStr:word;
+   Str :string;
+begin
+ Str :=(Sender as TEdit).text;
+ LengthStr :=Length(Str);
+ if LengthStr>10 then
+ begin
+  ShowMessage('Field inn contains 10 numbers!');
+  Delete(str, 11, LengthStr - 10);
+  (Sender as TEdit).text :=Str;
+ end;
+end;
+
+procedure TPayment_order.EditDebtAccNoDblClick(Sender: TObject);
+begin
+with PaymentOrderDataMod.ODSAccounts_PyaOrder do
+  begin
+   Close;
+    SQL.Clear;
+    SQL.Text :=PaymentOrderDataMod.rezerv.sql.Text;
+   Open;
+   //PaymentDecree.EDAName.Text :=FieldByName('NAME').AsString;
+   //PaymentDecree.EDAInn.Text :=FieldByName('INN').AsString;
+  end;
+
+
+
+
+ FormAccounts_PaymetOreder.DebOrKred:=True;
+ FormAccounts_PaymetOreder.v_AccNo:=EditDebtAccNo.Text;
+ FormAccounts_PaymetOreder.ShowModal;
+ EditDebtAccNo.Text:= FormAccounts_PaymetOreder.v_AccNo;
+
+end;
+
+procedure TPayment_order.EKAInnChange(Sender: TObject);
+var
+   LengthStr:word;
+   Str :string;
+begin
+ Str :=(Sender as TEdit).text;
+ LengthStr :=Length(Str);
+ if LengthStr>10 then
+ begin
+  ShowMessage('Field inn contains 10 numbers!');
+  Delete(str, 11, LengthStr - 10);
+  (Sender as TEdit).text :=Str;
+ end;
+
+end;
+
+procedure TPayment_order.EKBCodKeyPress(Sender: TObject; var Key: Char);
+begin
+if key =#13 then
+ with PaymentOrderDataMod.ODSBankM do
+  begin
+   if Locate('BANKCODE',EKBCod.Text,[loCaseInsensitive, loPartialKey]) then
+    begin
+     CBKBName.Text :=FieldByName('NAME').AsString;
+    // EKBCod.Text :=FieldByName('BANKCODE').AsString;
+     EKBInn.Text :=FieldByName('INN').AsString;
+     EKBCorAcc.Text :=FieldByName('KRNO').AsString;
+     EKBSwift.Text :=FieldByName('SWIFT').AsString;
+    end;
+  end;
+
+end;
+
+procedure TPayment_order.EPNumKeyPress(Sender: TObject; var Key: Char);
+begin
+    if (Key=#13) and (Trim(TEdit(Sender).Text)<>'') then
+     EAmmountW.text :=WithCoin(EAmmount.text)
+  else
+   if not (key in ['0'..'9','.',#8]) then
+    key :=#0
+end;
+
+function TPayment_order.ExtractMonth(DateTime: TDateTime; DecimalSymbol: string): string;
+ const
+    Months: array [1..12] of string =(
+     'yanvar','fevral','mart','aprel','may','iyun','iyul','avqust','sentyabr','oktyabr','noyabr','dekabr'
+      );
+var
+  Year, Month, Day : Word;
+begin
+  DecodeDate(DateTime, Year, Month, Day);
+  Result :=IntToStr(Day) + DecimalSymbol + Months[month] + DecimalSymbol + IntToStr(year);
+end;
+procedure TPayment_order.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+DBName.ItemIndex:=-1;
+CBKBName.ItemIndex:=-1;
+DBCod.Clear;
+EKBCod.Clear;
+DBInn.Clear;
+EKBInn.Clear;
+DBCorAcc.Clear;
+EKBCorAcc.Clear;
+DBSwift.Clear;
+EKBSwift.Clear;
+EDAName.Clear;
+EditDebtAccNo.Clear;
+EDAInn.Clear;
+CheckBox.Checked:=false;
+EAmmount.Clear;
+EAmmountW.Clear;
+Edit1.Clear;
+mod_bank.KeyValue:=-1;
+EKAName.Clear;
+EKANum.Clear;
+EKAInn.Clear;
+EAssignment.Clear;
+EExtra.Clear;
+EPNum.Clear;
+Edit4.Clear;
+ DTPayment.DateTime :=PaymentOrderDataMod.OPPayment.CallDateFunction('GetCurrentDate',[]);
+
+end;
+
+procedure TPayment_order.FormCreate(Sender: TObject);
+begin
+Payment_order :=Self;
+
+ PaymentOrderDataMod :=TPaymentOrderDataMod.Create(Self);
+ QRMainReport :=TQRMainReport.Create(Self);
+ QRCommonReport :=TQRCommonReport.Create(Self);
+FormAccounts_PaymetOreder:=TFormAccounts_PaymetOreder.Create(Self);
+ with PaymentOrderDataMod do
+  begin
+   ODSAccounts_PyaOrder.Open;
+   ODSBankInfo.Open;
+   ODSBankM.Open;
+   Payment_order.PustToComboID(ODSBankM,'NAME','ID',CBKBName);
+   Payment_order.PustToComboKod(ODSBankInfo,'BANK','KOD_B',DBName);
+  // PaymentDecree.PustToCombo(ODSAccounts,'ACC_NO',CBDANum);
+   DTPayment.DateTime :=OPPayment.CallDateFunction('GetCurrentDate',[]);
+   CheckBox.Checked :=OPPayment.CallBooleanFunction('isAccountDetails',[]);
+  end;
+   SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+//    SBTranslateProc.TranslateAllComponents(Self, sboapiDataModule.OrPack_SL);
+end;
+
+procedure TPayment_order.FormDestroy(Sender: TObject);
+begin
+ if Assigned(Rate) then   SetLength(Rate,0);
+   if Assigned(Rate1) then  SetLength(Rate1,0);
+ Payment_order.Free;
+end;
+
+procedure TPayment_order.CBKBNameChange(Sender: TObject);
+begin
+ EKBCod.Text :='';
+ EKBInn.Text :='';
+ EKBCorAcc.Text :='';
+ EKBSwift.Text :='';
+ try
+  with PaymentOrderDataMod.ODSBankM do
+   begin
+    Close;
+     SQL. Clear;
+     SQL.Text :='Select * From BankM Where ID= '+IntToStr(Rate[CBKBName.ItemIndex]);
+    Open;
+    EKBCod.Text :=FieldByName('BANKCODE').AsString;
+    EKBInn.Text :=FieldByName('INN').AsString;
+    EKBCorAcc.Text :=FieldByName('KRNO').AsString;
+    EKBSwift.Text :=FieldByName('SWIFT').AsString;
+   end;
+ finally
+    with PaymentOrderDataMod.ODSBankM do
+    begin
+     Close;
+      SQL. Clear;
+      SQL.Text :='Select * From BankM ';
+     Open;
+    end;
+ end;
+end;
+
+procedure TPayment_order.CleanUp;
+var
+  CompCount: word;
+begin
+ for CompCount :=0 to ComponentCount-1 do
+  if(Components[CompCount] is TEdit) then
+     (Components[CompCount] as TEdit).Text :=''
+  else
+   if(Components[CompCount] is TComboBox) then
+      (Components[CompCount] as TComboBox).Text :=''
+end;
+
+procedure TPayment_order.ToolButton2Click(Sender: TObject);
+var
+   PDate :TDateTime;
+begin
+CBDANum.text:=EditDebtAccNo.Text;
+ PDate :=Trunc(DTPayment.DateTime);
+ //if StrToFloat(EAmmount.Text)=StrToFloat(EAmmount.Text) then begin end; {Hesen R. 08.01.2009}
+ if trim(EPNum.Text)='' then BEGIN SHOWMESSAGE('Ödəmə tapşırığının nömrəsin daxil edin!');Exit; End;
+
+ if isUpdate =false then
+  begin
+
+    if MessageDlg('Do you want to transfer this payment?',mtConfirmation,mbYesNoCancel,0)=mrYes then
+     with PaymentOrderDataMod.OPPayment do
+      CallProcedure('add_payment',[
+                  PDate
+                 ,strtoint(EPNum.text)
+                 ,DBName.text
+                 ,DBCod.text
+                 ,DBInn.text
+                 ,DBCorAcc.text
+                 ,DBSwift.text
+                 ,CBDANum.text
+                 ,EDAName.text
+                 ,EDAInn.text
+                 ,CBKBName.text
+                 ,EKBCod.text
+                 ,EKBInn.text
+                 ,EKBCorAcc.text
+                 ,EKBSwift.text
+                 ,EKANum.text
+                 ,EKAName.text
+                 ,EKAInn.text
+                 //,StringReplace(EAmmount.text,',' , '.', [rfReplaceAll])
+                 ,strtofloat(EAmmount.text)
+                 ,EAssignment.text
+                 ,EExtra.text
+                 ,Mod_Bank.text
+                 ,edit1.text
+                 ,edit4.text                 ]);
+  end
+ else
+  begin
+   if MessageDlg('Do you want to change this payment?',mtConfirmation,mbYesNoCancel,0)=mrYes then
+    begin
+     with PaymentOrderDataMod.OPPayment,PaymentOrderDataMod.ODSArchive do
+      CallProcedure('update_payment',[
+                  FieldByName('ID').AsInteger
+                 ,PDate
+                 ,EPNum.text
+                 ,DBName.text
+                 ,DBCod.text
+                 ,DBInn.text
+                 ,DBCorAcc.text
+                 ,DBSwift.text
+                 ,CBDANum.text
+                 ,EDAName.text
+                 ,EDAInn.text
+                 ,CBKBName.text
+                 ,EKBCod.text
+                 ,EKBInn.text
+                 ,EKBCorAcc.text
+                 ,EKBSwift.text
+                 ,EKANum.text
+                 ,EKAName.text
+                 ,EKAInn.text
+                // ,StringReplace(EAmmount.text,',' , '.', [rfReplaceAll])
+                 ,strtofloat(EAmmount.text)
+                 ,EAssignment.text
+                 ,EExtra.text
+                 ,Mod_Bank.text
+                 ,edit1.text
+                 ,edit4.text                  ]);
+        isUpdate :=false;
+    end;
+  end;
+ CleanUp;
+
+
+end;
+
+procedure TPayment_order.ToolButton4Click(Sender: TObject);
+begin
+CleanUp;
+end;
+
+procedure TPayment_order.ToolButton8Click(Sender: TObject);
+begin
+try
+  FrmArchive :=TFrmArchive.Create(self);
+  with PaymentOrderDataMod.ODSArchive do
+   if Active =false then Open else Refresh;
+  FrmArchive.ShowModal;
+ finally
+  FrmArchive.Release;
+ end;
+end;
+
+function TPayment_order.WithCoin(Ammount :string):string;
+var
+  tTrunc :currency;
+  tDev: Double;
+begin
+   tTrunc :=Trunc(StrToCurr(Ammount));
+   tDev:=(Round(Frac(StrToCurr(Ammount))*100));
+  // Delete(Ammount,Pos(CurrToStr(tTrunc),Ammount),Length(CurrToStr(tTrunc))+1);
+  //  if Ammount ='' then Ammount :='00';
+  // result :=CurrencyToHR_Azeri(tTrunc,0,[0])+' '+'='+' '+Ammount+' гяп';
+
+  result :=CurrencyToHR_Azeri(tTrunc,0,[0])+' '+'='+' '+FloatToStr(tDev)+' qəp';
+end;
+
+
+end.

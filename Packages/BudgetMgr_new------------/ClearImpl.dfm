@@ -1,0 +1,67 @@
+object ClearFrm: TClearFrm
+  Left = 0
+  Top = 0
+  Caption = 'T'#601'mizl'#601
+  ClientHeight = 139
+  ClientWidth = 194
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poOwnerFormCenter
+  OnCanResize = FormCanResize
+  OnClose = FormClose
+  OnKeyPress = FormKeyPress
+  PixelsPerInch = 96
+  TextHeight = 13
+  object GroupBox1: TGroupBox
+    Left = 0
+    Top = 0
+    Width = 194
+    Height = 105
+    Align = alTop
+    Caption = 'T'#601'mizl'#601
+    TabOrder = 0
+    ExplicitLeft = 24
+    ExplicitTop = 8
+    ExplicitWidth = 185
+    object CheckBox1: TCheckBox
+      Left = 16
+      Top = 22
+      Width = 97
+      Height = 17
+      Caption = 'Proqnoz'
+      TabOrder = 0
+    end
+    object CheckBox2: TCheckBox
+      Left = 16
+      Top = 55
+      Width = 97
+      Height = 17
+      Caption = 'Hesablar'
+      TabOrder = 1
+    end
+  end
+  object Button1: TButton
+    Left = 37
+    Top = 109
+    Width = 75
+    Height = 25
+    Caption = 'Q'#601'bul'
+    TabOrder = 1
+    OnClick = Button1Click
+  end
+  object Button2: TButton
+    Left = 116
+    Top = 109
+    Width = 75
+    Height = 25
+    Caption = 'Ba'#287'la'
+    TabOrder = 2
+    OnClick = Button2Click
+  end
+end

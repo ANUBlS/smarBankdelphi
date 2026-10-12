@@ -1,0 +1,119 @@
+unit Cust_contactUnit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Grids, XDBGrids, StdCtrls, Buttons, XFSCtrls, ExtCtrls, DB,
+  OracleData, DBCtrls;
+
+type
+  TCust_contact = class(TForm)
+    XFPanel2: TXFPanel;
+    XFPanel1: TXFPanel;
+    XDBGrid1: TXDBGrid;
+    OracleDataSet1: TOracleDataSet;
+    DataSource1: TDataSource;
+    OracleDataSet1CUST_ID: TFloatField;
+    OracleDataSet1RELATIVE_NAME: TWideStringField;
+    OracleDataSet1RELATIVE_PHONE: TWideStringField;
+    OracleDataSet1RELATIVE_ADDRESS: TWideStringField;
+    OracleDataSet2: TOracleDataSet;
+    XFPanel3: TXFPanel;
+    Ad: TXFLabel;
+    Telfon: TXFLabel;
+    Ünvan: TXFLabel;
+    Edit1: TEdit;
+    Edit2: TEdit;
+    Edit3: TEdit;
+    XFButton1: TXFButton;
+    OracleDataSet3: TOracleDataSet;
+    OracleDataSet4: TOracleDataSet;
+    XFButton2: TXFButton;
+    XFButton3: TXFButton;
+    OracleDataSet1ID: TFloatField;
+    procedure XFButton1Click(Sender: TObject);
+    procedure XFButton2Click(Sender: TObject);
+    procedure XDBGrid1DblClick(Sender: TObject);
+    procedure XFButton3Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Cust_contact: TCust_contact;
+
+implementation
+  uses
+  sboapiDataModuleImpl,OpenAccountImpl;
+{$R *.dfm}
+
+procedure TCust_contact.XDBGrid1DblClick(Sender: TObject);
+begin
+
+ edit1.Text:=OracleDataSet1RELATIVE_PHONE.AsString;
+ edit2.Text:=OracleDataSet1RELATIVE_NAME.AsString;
+ edit3.Text:=OracleDataSet1RELATIVE_ADDRESS.AsString;
+
+end;
+
+procedure TCust_contact.XFButton1Click(Sender: TObject);
+begin
+
+with OracleDataSet2 do
+begin
+ close;
+SetVariable('v_custid', cust_relatives  );
+SetVariable('v_pone', edit1.Text  );
+SetVariable('v_name', edit2.Text  );
+SetVariable('v_address',edit3.Text  );
+     open;
+end;
+OracleDataSet2.Session.Commit;
+  Cust_contact.oracledataset1.Refresh;
+   edit1.Clear;
+   edit2.Clear;
+   edit3.Clear;
+end;
+procedure TCust_contact.XFButton2Click(Sender: TObject);
+begin
+
+with OracleDataSet3 do
+begin
+ close;
+ SetVariable('v_id',OracleDataSet1id.AsString);
+SetVariable('v_custid', cust_relatives  );
+SetVariable('v_pone', edit1.Text  );
+SetVariable('v_name', edit2.Text  );
+SetVariable('v_address',edit3.Text  );
+  open;
+end;
+//showmessage(OracleDataSet1id.AsString);
+OracleDataSet3.Session.Commit;
+  with  oracledataset1 do
+  begin
+    close;
+    SetVariable('v_custid',cust_relatives);
+    open;
+  end;
+   edit1.Clear;
+   edit2.Clear;
+   edit3.Clear;
+end;
+
+
+procedure TCust_contact.XFButton3Click(Sender: TObject);
+begin
+with OracleDataSet4 do
+begin
+  close;
+  SetVariable('v_id',OracleDataSet1id.asinteger);
+  open;
+end;
+  OracleDataSet4.Session.Commit;
+  oracledataset1.Refresh;
+
+end;
+end.

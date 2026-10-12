@@ -1,0 +1,251 @@
+﻿unit AddUnit2;
+                          //dsexp_sec
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ExtCtrls, StdCtrls, ComCtrls, ImgList, DBCtrls, DB, OracleData, Mask,
+  CurrencyEdit, CMCurrencyEdit, DBCtrlsEh;
+
+type
+  TForm2 = class(TForm)
+    Panel1: TPanel;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    Label6: TLabel;
+    Label7: TLabel;
+    Label8: TLabel;
+    Button1: TButton;
+    Button2: TButton;
+    DBLookupComboBox1: TDBLookupComboBox;
+    Edit1: TEdit;
+    Edit2: TEdit;
+    Edit3: TEdit;
+    Edit4: TEdit;
+    DBDateTimeEditEh1: TDBDateTimeEditEh;
+    DBDateTimeEditEh2: TDBDateTimeEditEh;
+    DBDateTimeEditEh3: TDBDateTimeEditEh;
+    Label9: TLabel;
+    Label10: TLabel;
+    Label11: TLabel;
+    Label12: TLabel;
+    Label13: TLabel;
+    Label14: TLabel;
+    Label15: TLabel;
+    Label16: TLabel;
+    Label17: TLabel;
+
+    procedure Button2Click(Sender: TObject);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure Button1Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure Edit4KeyPress(Sender: TObject; var Key: Char);
+  private
+    { Private declarations }
+  public
+  pid : Integer;
+    { Public declarations }
+  end;
+
+var
+
+  Form2: TForm2;
+
+
+implementation
+
+{$R *.dfm}
+uses DMSec, Unit1,Commonimpl;
+
+
+
+
+
+procedure TForm2.Button2Click(Sender: TObject);
+begin
+close;
+
+end;
+
+
+procedure TForm2.Edit4KeyPress(Sender: TObject; var Key: Char);
+begin
+if not (Key in ['0'..'9',#8,#46] )then begin Key:=#0; end;
+end;
+
+procedure TForm2.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+if ord(key)=vk_escape then  close;
+end;
+
+procedure TForm2.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+Edit1.Clear;
+Edit2.Clear;
+Edit3.Clear;
+Edit4.Clear;
+DBLookupComboBox1.KeyValue:=-1;
+DBDateTimeEditEh1.Clear;
+DBDateTimeEditEh2.Clear;
+DBDateTimeEditEh3.Clear;
+
+end;
+
+procedure TForm2.FormCreate(Sender: TObject);
+begin
+//Dmexpired_sec:=TDmexpired_sec.create(self);
+end;
+
+
+procedure TForm2.FormShow(Sender: TObject);
+begin
+
+if edit_insert=false then
+  begin
+
+ with    Dmexpired_sec,dsexp_sec_ins  do
+ begin
+ //if True then
+
+ edit1.Text:=FieldByName('name').AsString;
+ edit2.Text:=FieldByName('acc_bal').AsString ;
+ edit3.Text:=FieldByName('isin').AsString ;
+ DBLookupComboBox1.KeyValue:=FieldByName('val_name').AsString;
+ DBDateTimeEditEh1.Value:=FieldByName('obtain_date').AsVariant;
+ DBDateTimeEditEh2.Value:=FieldByName('return_date').AsVariant;
+ edit4.Text:=FieldByName('nominal_ammount').AsString ;
+ DBDateTimeEditEh3.Value:=FieldByName('erase_date').AsVariant;
+
+   end;
+
+  end;
+end;
+
+ procedure TForm2.Button1Click(Sender: TObject);
+ var
+
+ p_name:string;
+ p_acc_bal:string;
+ p_isin:string;
+ p_val_name:string;
+ p_obtain_date:variant;
+ p_return_date:variant;
+ p_nominal_ammount:variant ;
+ p_erase_date:Variant;
+ begin
+  if trim(Edit1.Text)='' then
+ begin
+   showmessage('Qiymətli Kağızın adı sahəsi boşdur!');
+   exit;
+ end;
+   if trim(Edit2.Text)='' then
+ begin
+   showmessage('Balans hesabi sahəsi boşdur!');
+   exit;
+ end;
+ if trim(Edit3.Text)='' then
+ begin
+   showmessage('İSİN sahəsi boşdur!');
+   exit;
+ end;
+    if DBLookupComboBox1.Text='' then
+ begin
+   showmessage('Valyuta sahəsi boşdur!');
+   exit;
+ end;
+
+ if  DBDateTimeEditEh1.Value=null then
+ begin
+   showmessage('Alinma tarixi sahəsi boşdur!');
+   exit;
+ end;
+
+ if DBDateTimeEditEh2.Value=null then
+ begin
+   showmessage('Qaytarılma tarixi  sahəsi boşdur!');
+   exit;
+ end;
+
+ if Edit4.Text='' then
+ begin
+   showmessage('Nominal məbləğ sahəsi boşdur!');
+   exit;
+ end;
+
+ if DBDateTimeEditEh3.Value=null then
+ begin
+   showmessage('Balansdan silinmə tarixi sahəsi boşdur!');
+   exit;
+ end;
+
+
+
+  if edit_insert=true then
+  begin
+   DBLookupComboBox1.KeyValue:=Dmexpired_sec.Avalute.FieldByName('val_name').AsString;
+
+ p_name:=edit1.Text;
+ p_acc_bal:=edit2.Text;
+ p_isin:=edit3.Text;
+ p_val_name:=DBLookupComboBox1.KeyValue;
+ p_obtain_date:=DBDateTimeEditEh1.Value;
+ p_return_date:=DBDateTimeEditEh2.Value;
+ p_nominal_ammount:=edit4.Text; ;
+ p_erase_date:=DBDateTimeEditEh3.Value;
+
+
+   Dmexpired_sec.PG_EXPIRED_SECURITIES.CallProcedure( 'add_EXPIRED_SECURITIES',
+                                                     [p_name,
+                                                      p_acc_bal,
+                                                      p_isin,
+                                                      p_val_name,
+                                                      p_obtain_date,
+                                                      p_return_date,
+                                                      p_nominal_ammount,
+                                                      p_erase_date
+                                                     ]
+                                                     );
+
+
+
+  end;
+
+   if edit_insert=false then
+  begin
+  DBLookupComboBox1.KeyValue:=Dmexpired_sec.Avalute.FieldByName('val_name').AsString;
+  p_name:=edit1.Text;
+  p_acc_bal:=edit2.Text;
+  p_isin:=edit3.Text;
+  p_val_name:=DBLookupComboBox1.KeyValue;
+  p_obtain_date:=DBDateTimeEditEh1.Value;
+  p_return_date:=DBDateTimeEditEh2.Value;
+  p_nominal_ammount:=edit4.Text; ;
+  p_erase_date:=DBDateTimeEditEh3.Value;
+
+
+   Dmexpired_sec.PG_EXPIRED_SECURITIES.CallProcedure( 'edit_EXPIRED_SECURITIES',
+
+                                                     [ CID,
+                                                     p_name,
+                                                      p_acc_bal,
+                                                      p_isin,
+                                                      p_val_name,
+                                                      p_obtain_date,
+                                                      p_return_date,
+                                                      p_nominal_ammount,
+                                                      p_erase_date
+                                                     ]
+                                                     );
+
+
+
+  end;
+Dmexpired_sec.dsexp_sec_ins.Refresh;
+Form2.close;
+end;
+end.

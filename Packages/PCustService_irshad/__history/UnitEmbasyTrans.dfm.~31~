@@ -1,0 +1,180 @@
+object Form_embasTrans: TForm_embasTrans
+  Left = 0
+  Top = 0
+  BorderIcons = [biSystemMenu]
+  ClientHeight = 353
+  ClientWidth = 864
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poDesktopCenter
+  PixelsPerInch = 96
+  TextHeight = 13
+  object XFPanel1: TXFPanel
+    Left = 0
+    Top = 0
+    Width = 864
+    Height = 309
+    Align = alClient
+    BevelInner = bvLowered
+    BevelKind = bkSoft
+    BevelOuter = bvLowered
+    TabOrder = 0
+    object XDBGrid1: TXDBGrid
+      Left = 2
+      Top = 2
+      Width = 856
+      Height = 301
+      Align = alClient
+      DataSource = Dsrc_embstrans
+      GridStyle.VisualStyle = vsXPStyle
+      Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit, dgMultiSelect, dgExtendedSelect, dgInternalSelect, dgRowResize, dgRowScroll, dgHotButtons, dgTitleButtons, dgTitleHeaders, dgTitleWidthOff, dgMarkerAutoAlign, dgMarkerAutoToggle]
+      TabOrder = 0
+      Columns = <
+        item
+          Expanded = False
+          FieldName = 'CUSTID'
+          Title.Alignment = taCenter
+          Title.Caption = 'ID'
+          Visible = True
+          Width = 77
+        end
+        item
+          Expanded = False
+          FieldName = 'CUST_NAME'
+          Title.Alignment = taCenter
+          Title.Caption = 'M'#252#351't'#601'ri Ad'#305
+          Visible = True
+          Width = 285
+        end
+        item
+          Expanded = False
+          FieldName = 'BAL_CN1'
+          Title.Alignment = taCenter
+          Title.Caption = 'Balans hesab'#305
+          Visible = True
+          Width = 81
+        end
+        item
+          Expanded = False
+          FieldName = 'ACC_NO'
+          Title.Alignment = taCenter
+          Title.Caption = 'Hesab nmr'#601'si'
+          Visible = True
+          Width = 376
+        end>
+    end
+  end
+  object XFPanel2: TXFPanel
+    Left = 0
+    Top = 309
+    Width = 864
+    Height = 44
+    Align = alBottom
+    BevelKind = bkFlat
+    BevelOuter = bvLowered
+    TabOrder = 1
+    object XFBitBtn1: TXFBitBtn
+      Left = 687
+      Top = 8
+      Width = 75
+      Height = 25
+      Caption = 'Q'#601'bul'
+      DoubleBuffered = True
+      ParentDoubleBuffered = False
+      TabOrder = 0
+      OnClick = XFBitBtn1Click
+    end
+    object XFBitBtn2: TXFBitBtn
+      Left = 768
+      Top = 8
+      Width = 75
+      Height = 25
+      Caption = 'Ba'#287'la'
+      DoubleBuffered = True
+      ParentDoubleBuffered = False
+      TabOrder = 1
+      OnClick = XFBitBtn2Click
+    end
+  end
+  object ods_embstrans: TOracleDataSet
+    SQL.Strings = (
+      
+        'select p.id as custid,a.id as acc_id, p.firstname||'#39'  '#39' ||p.patr' +
+        'onymic||'#39'  '#39'||p.lastname as cust_name,a.name ,a.bal_cn1,a.acc_no'
+      ',decode( sex,1,'#39'Mr'#39',2,'#39'Ms'#39')||'#39'.'#39' as sex,'
+      '  p.firstname||'#39'  '#39' ||p.patronymic||'#39'  '#39'||p.lastname as custname'
+      
+        'from pcust_view p,account a where p.id=a.kli_id and substr(a.acc' +
+        '_no,19,1) in('#39'1'#39')'
+      
+        'and a.bal_cn1 like '#39'3%'#39' and a.close_dat is null  and p.id=:custi' +
+        'd'
+      ''
+      'union '
+      ''
+      
+        'select  p.id as custid,a.id as acc_id, p.cust_name as cust_name,' +
+        'a.name ,a.bal_cn1,a.acc_no,'#39#39'sex,'
+      
+        '(select  firstname||'#39'  '#39' ||patronymic||'#39'  '#39'||lastname from pcust' +
+        '_view where id=:custid)as  custname'
+      
+        'from pcust_view p,account a where p.id=a.kli_id and a.bal_cn1 in' +
+        '(1001) and a.close_dat is null  '
+      ''
+      'order by bal_cn1 desc')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000E0000003A00430055005300540049004400030000000000
+      000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      0500000008000000080000004E0041004D0045000100000000000E0000004200
+      41004C005F0043004E0031000100000000000C0000004100430043005F004E00
+      4F000100000000000C0000004300550053005400490044000100000000000C00
+      00004100430043005F0049004400010000000000100000004300550053005400
+      4E0041004D004500010000000000060000005300450058000100000000001200
+      000043005500530054005F004E0041004D004500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 616
+    Top = 72
+    object ods_embstransCUSTNAME: TWideStringField
+      FieldName = 'CUSTNAME'
+      Size = 301
+    end
+    object ods_embstransCUSTID: TIntegerField
+      FieldName = 'CUSTID'
+    end
+    object ods_embstransNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 250
+    end
+    object ods_embstransBAL_CN1: TFloatField
+      FieldName = 'BAL_CN1'
+    end
+    object ods_embstransACC_NO: TWideStringField
+      FieldName = 'ACC_NO'
+      Size = 28
+    end
+    object ods_embstransACC_ID: TFloatField
+      FieldName = 'ACC_ID'
+    end
+    object ods_embstransSEX: TWideStringField
+      FieldName = 'SEX'
+      Size = 2
+    end
+    object ods_embstransCUST_NAME: TWideStringField
+      FieldName = 'CUST_NAME'
+      Size = 304
+    end
+  end
+  object Dsrc_embstrans: TDataSource
+    DataSet = ods_embstrans
+    Left = 624
+    Top = 153
+  end
+end

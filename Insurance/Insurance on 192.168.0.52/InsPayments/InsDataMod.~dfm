@@ -1,0 +1,105 @@
+object PayDataMod: TPayDataMod
+  OldCreateOrder = False
+  Left = 191
+  Top = 103
+  Height = 540
+  Width = 783
+  object ODSPayments: TOracleDataSet
+    SQL.Strings = (
+      'select ip.*, ip.rowid, ii.name '
+      '  from ins_payments ip, ins_contracts ic, INS_INSURANCES ii'
+      'where '
+      '  ic.id = ip.ins_id'
+      'and'
+      '  ii.id = ic.type_id '
+      ''
+      'and ip.ins_id = :insid')
+    Variables.Data = {0300000001000000060000003A494E534944040000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      040000000700000002000000494401000000000006000000504C414E49440100
+      00000000070000005041594441544501000000000007000000414D4D4F554E54
+      01000000000005000000545241494401000000000006000000494E535F494401
+      0000000000040000004E414D45010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 64
+    Top = 24
+    object ODSPaymentsID: TFloatField
+      FieldName = 'ID'
+    end
+    object ODSPaymentsPLANID: TFloatField
+      FieldName = 'PLANID'
+    end
+    object ODSPaymentsPAYDATE: TDateTimeField
+      FieldName = 'PAYDATE'
+    end
+    object ODSPaymentsAMMOUNT: TFloatField
+      FieldName = 'AMMOUNT'
+    end
+    object ODSPaymentsTRAID: TFloatField
+      FieldName = 'TRAID'
+    end
+    object ODSPaymentsINS_ID: TFloatField
+      FieldName = 'INS_ID'
+    end
+    object ODSPaymentsNAME: TStringField
+      FieldName = 'NAME'
+      Size = 1024
+    end
+  end
+  object DSPayments: TDataSource
+    DataSet = ODSPayments
+    Left = 64
+    Top = 80
+  end
+  object ODSPlan: TOracleDataSet
+    SQL.Strings = (
+      
+        'SELECT -1 as ID, '#39'ѕландан к€нар'#39' as paydate, 0 as ammount, 0 as ' +
+        'status'
+      '  FROM DUAL'
+      'UNION ALL'
+      
+        'SELECT a.ID, TO_CHAR (a.pay_date) as paydate, a.ammount, a.statu' +
+        's'
+      '  FROM ins_payment_plan a'
+      'where a.ins_id = :insid')
+    Variables.Data = {0300000001000000060000003A494E534944040000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      040000000400000002000000494401000000000007000000414D4D4F554E5401
+      0000000000060000005354415455530100000000000700000050415944415445
+      010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 160
+    Top = 24
+    object ODSPlanID: TFloatField
+      FieldName = 'ID'
+    end
+    object ODSPlanPAYDATE: TStringField
+      FieldName = 'PAYDATE'
+      Size = 13
+    end
+    object ODSPlanAMMOUNT: TFloatField
+      FieldName = 'AMMOUNT'
+    end
+    object ODSPlanSTATUS: TFloatField
+      FieldName = 'STATUS'
+    end
+  end
+  object DSPlan: TDataSource
+    DataSet = ODSPlan
+    Left = 160
+    Top = 80
+  end
+  object OPSBOP: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'SBOP'
+    Left = 64
+    Top = 152
+  end
+  object OPCOMMON: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'INS_COMMON'
+    Left = 160
+    Top = 152
+  end
+end

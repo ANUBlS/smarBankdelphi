@@ -1,0 +1,2796 @@
+﻿unit BlackListImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,  Dialogs,
+  ActiveX, AxCtrls, BlackInstMgr_TLB, StdVcl, ComCtrls, ToolWin, ImgList,
+  StdCtrls, ExtCtrls, Grids, DBGrids, Menus,DB, DBCtrls,ActnList,
+  DBViewComboBox, CheckLst, Evanescence, XDBGrids, XFSCtrls, OracleData,
+  xmldoc,  XMLIntf, Buttons, Gauges, CMExcelExport,
+     IdHTTP, IdSSLOpenSSL,IdURI, Mask, DBCtrlsEh;
+
+type
+  TBlackInst = class(TActiveForm, IBlackInst)
+    ImageList1: TImageList;
+    PopupMenu1: TPopupMenu;
+    N3: TMenuItem;
+    N4: TMenuItem;
+    N5: TMenuItem;
+    N6: TMenuItem;
+    N7: TMenuItem;
+    N1: TMenuItem;
+    OpenDialog1: TOpenDialog;
+    PageControl1: TPageControl;
+    TabSheet1: TTabSheet;
+    TabSheet2: TTabSheet;
+    CoolBar1: TCoolBar;
+    ToolBar1: TToolBar;
+    isertbtn: TToolButton;
+    ToolButton5: TToolButton;
+    ToolButton1: TToolButton;
+    ToolButton8: TToolButton;
+    ToolButton2: TToolButton;
+    ToolButton4: TToolButton;
+    ToolButton3: TToolButton;
+    ToolButton6: TToolButton;
+    ToolButton7: TToolButton;
+    ToolButton9: TToolButton;
+    ToolButton10: TToolButton;
+    ToolButton11: TToolButton;
+    Panel2: TPanel;
+    GroupBox1: TGroupBox;
+    GroupBox2: TGroupBox;
+    Panel3: TPanel;
+    CheckBox1: TCheckBox;
+    Evanescence1: TEvanescence;
+    Panel4: TPanel;
+    DBGrid1: TDBGrid;
+    Panel1: TPanel;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    EditNAME: TEdit;
+    Edit2: TEdit;
+    Edit3: TEdit;
+    Edit1: TEdit;
+    XFPanel2: TXFPanel;
+    XFPanel4: TXFPanel;
+    XFPanel1: TXFPanel;
+    XFPanel5: TXFPanel;
+    Button3: TButton;
+    RichEdit1: TRichEdit;
+    RichEdit2: TRichEdit;
+    OracleDataSet1: TOracleDataSet;
+    OracleDataSet1ID: TFloatField;
+    OracleDataSet1FILD: TWideStringField;
+    OpenDialog2: TOpenDialog;
+    XFPanel3: TXFPanel;
+    XDBGrid1: TXDBGrid;
+    XDBGrid2: TXDBGrid;
+    XFBitBtn1: TXFBitBtn;
+    XFBitBtn2: TXFBitBtn;
+    XFBitBtn3: TXFBitBtn;
+    panle_Gauge1: TXFPanel;
+    Gauge_cust: TGauge;
+    Excelat1: TMenuItem;
+    ExcelExport: TCMExcelExport;
+    PopupMenu2: TPopupMenu;
+    yerli1: TMenuItem;
+    panle_Gauge: TXFPanel;
+    Gauge: TGauge;
+    OracleDataSet2: TOracleDataSet;
+    PopupMenu3: TPopupMenu;
+    sst1: TMenuItem;
+    TabSheet3: TTabSheet;
+    XFPanel6: TXFPanel;
+    XDBGrid3: TXDBGrid;
+    XFButton2: TXFButton;
+    N1988sanksiyasiyahs1: TMenuItem;
+    N1718sanksiyasiyahs1: TMenuItem;
+    N2231siyahs1: TMenuItem;
+    OracleDataSet3: TOracleDataSet;
+    OracleDataSet3ID: TFloatField;
+    OracleDataSet3NAME: TWideStringField;
+    OracleDataSet3SURNAME: TWideStringField;
+    OracleDataSet3API_RESPONSE: TWideMemoField;
+    OracleDataSet3CREATED_AT: TDateTimeField;
+    OracleDataSet3STATUS: TWideStringField;
+    DataSource1: TDataSource;
+    OracleDataSet2NAME: TWideStringField;
+    OracleDataSet2LASTNAME: TWideStringField;
+    OracleDataSet2E_NAME: TWideStringField;
+    OracleDataSet2E_LASTNAME: TWideStringField;
+    XFLabel1: TXFLabel;
+    XFLabel4: TXFLabel;
+    XFButton1: TXFButton;
+    DateTi_samelydate1: TDBDateTimeEditEh;
+    DateTi_samelydate2: TDBDateTimeEditEh;
+    ods_sysdat: TOracleDataSet;
+    ods_sysdatTEK_DAT: TDateTimeField;
+    Memo1: TMemo;
+    TabSheet4: TTabSheet;
+    Panel5: TPanel;
+    DBGrid2: TDBGrid;
+    XFLabel2: TXFLabel;
+    DBDateTimeEditEh1: TDBDateTimeEditEh;
+    XFLabel3: TXFLabel;
+    DBDateTimeEditEh2: TDBDateTimeEditEh;
+    ods_hms: TOracleDataSet;
+    dsrc_hms: TDataSource;
+    Button1: TButton;
+    Button2: TButton;
+    ods_bankinfo: TOracleDataSet;
+    ods_user: TOracleDataSet;
+    ods_userFULLNAME: TWideStringField;
+    ods_tim: TOracleDataSet;
+    ods_timTARIX: TDateTimeField;
+    ods_timSAAT: TWideStringField;
+    ods_bankinfoAZ_NAME: TWideStringField;
+    DBLookupComboBox2: TDBLookupComboBox;
+    Filtir: TLabel;
+    ods_fltr: TOracleDataSet;
+    dsrc_fltr: TDataSource;
+    ods_fltrID: TWideStringField;
+    ods_fltrNAME: TWideStringField;
+    ods_bankinfoTAX_REGCODE: TWideStringField;
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure isertbtnClick(Sender: TObject);
+    procedure ToolButton1Click(Sender: TObject);
+    procedure N1Click(Sender: TObject);
+    procedure EditNAMEChange(Sender: TObject);
+    procedure Edit2Change(Sender: TObject);
+    procedure Edit3Change(Sender: TObject);
+    procedure ToolButton2Click(Sender: TObject);
+    procedure ToolButton3Click(Sender: TObject);
+    procedure Edit1Change(Sender: TObject);
+    procedure EditNAMEClick(Sender: TObject);
+    procedure Edit2Click(Sender: TObject);
+    procedure Edit3Click(Sender: TObject);
+    procedure Edit1Click(Sender: TObject);
+    procedure ToolButton7Click(Sender: TObject);
+    procedure CheckBox1Click(Sender: TObject);
+    procedure Evanescence1ClickCheck(Sender: TObject);
+    procedure N3Click(Sender: TObject);
+    procedure N4Click(Sender: TObject);
+    procedure N5Click(Sender: TObject);
+    procedure N6Click(Sender: TObject);
+    procedure N7Click(Sender: TObject);
+    procedure ToolButton9Click(Sender: TObject);
+    procedure DBGrid1DblClick(Sender: TObject);
+    procedure ToolButton10Click(Sender: TObject);
+    procedure ToolButton11Click(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure Button3Click(Sender: TObject);
+    procedure XFBitBtn1Click(Sender: TObject);
+    procedure XFBitBtn2Click(Sender: TObject);
+    procedure XFBitBtn3Click(Sender: TObject);
+    procedure Excelat1Click(Sender: TObject);
+    procedure yerli1Click(Sender: TObject);
+    procedure sst1Click(Sender: TObject);
+    procedure XFButton2Click(Sender: TObject);
+    procedure XDBGrid3CellClick(Column: TXColumn);
+    procedure XFButton1Click(Sender: TObject);
+    procedure N1988sanksiyasiyahs1Click(Sender: TObject);
+    procedure N1718sanksiyasiyahs1Click(Sender: TObject);
+    procedure N2231siyahs1Click(Sender: TObject);
+    procedure DBGrid2DrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TColumn; State: TGridDrawState);
+    procedure Button2Click(Sender: TObject);
+    procedure DBLookupComboBox2CloseUp(Sender: TObject);
+
+  private
+    { Private declarations }
+    FEvents: IBlackInstEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+  public
+    { Public declarations }
+    function  ISOToDate(const ISODate: string): TDateTime;
+    procedure ReadRemoteXML_yerli(const AUrl: string);
+    procedure ReadRemoteXML_xarci1(const AUrl: string);
+    procedure ReadRemoteXML_xarci2(const AUrl: string);
+    procedure ReadRemoteXML_xarci3(const AUrl: string);
+    procedure ReadRemoteXML_xarci4(const AUrl: string);
+    procedure Initialize; override;
+    procedure Xml1Click(Sender: TObject);
+    procedure Xml2Click(Sender: TObject);
+    procedure Xml3Click(Sender: TObject);
+
+  end;
+
+var
+true_false:Boolean;
+ADDITIONALPARAMS : string;
+EnableColoring:Boolean;
+   XMLPath:variant;
+   XmlFile : TXMLDocument;
+  MainNode, xmlNode,RootNode,CustomerNode ,CustomerNode1: IXMLNode;
+ d_xml_type, i,j,k,tr,sr:Integer;
+ f,f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f11,f12,f13,f14,f15,f16,f17,f18,f19,f20,f21,f22,f23,f24,f25,f26,f27,f28,f29,f30:Variant;
+implementation
+
+
+uses ComObj, ComServ, DmBlackImpl,Variants, InsImpl, countrieslmpl,sboapiDataModuleImpl,SBTranslateProc,
+  UnitSearch,SynPdf, ShellAPI,Math;
+
+{$R *.DFM}
+
+{ TBlackInst }
+
+procedure TBlackInst.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_BlackInstPage); }
+end;
+function  TBlackInst.ISOToDate(const ISODate: string): TDateTime;
+var
+  y, m, d: Word;
+begin
+  y := StrToInt(Copy(ISODate, 1, 4)); // il
+  m := StrToInt(Copy(ISODate, 6, 2)); // ay
+  d := StrToInt(Copy(ISODate, 9, 2)); // gün
+  Result := EncodeDate(y, m, d);
+end;
+
+
+
+procedure TBlackInst.ReadRemoteXML_yerli(const AUrl: string);
+var
+  http: TIdHTTP;
+  ssl: TIdSSLIOHandlerSocketOpenSSL;
+  xmlDoc: IXMLDocument;
+  xmlRoot, node,nodedat: IXMLNode;
+  z,i: Integer;
+  mem: TMemoryStream;
+  brdat:TDateTime;
+begin
+  http := TIdHTTP.Create(nil);
+  ssl := TIdSSLIOHandlerSocketOpenSSL.Create(nil);
+  mem := TMemoryStream.Create;
+  try
+    http.IOHandler := ssl;
+    http.Request.UserAgent := 'Delphi XE XML Reader';
+
+    // XML yüklə
+    http.Get(AUrl, mem);
+    mem.Position := 0;
+
+    // XML sənədini oxu
+    xmlDoc := TXMLDocument.Create(nil);
+    xmlDoc.LoadFromStream(mem);
+    xmlDoc.Active := True;
+
+    xmlRoot := xmlDoc.DocumentElement;
+    if Assigned(xmlRoot) then
+    begin
+
+    //  Memo1.Lines.Add('Root: ' + xmlRoot.NodeName);
+      panle_Gauge.Visible:=true;
+     for i := 0 to xmlRoot.ChildNodes['INDIVIDUALS'].ChildNodes.Count-1 do
+      begin
+        node := xmlRoot.ChildNodes['INDIVIDUALS'].ChildNodes[i];
+         //   showmessage(node.ChildNodes['INDIVIDUALS'].ChildNodes[i].ChildNodes[j].NodeName);
+
+          for j :=0 to xmlRoot.ChildNodes['INDIVIDUALS'].ChildNodes[i].ChildNodes.Count-1 do
+                            begin
+           if xmlRoot.ChildNodes['INDIVIDUALS'].ChildNodes[i].ChildNodes[j].NodeName='INDIVIDUAL_DATE_OF_BIRTH' then
+                            begin
+              nodedat :=xmlRoot.ChildNodes['INDIVIDUALS'].ChildNodes[i].ChildNodes[j];
+              brdat:=ISOToDate(nodedat.ChildNodes['DATE'].text);
+
+
+                            end;
+
+                     end;
+        DmBlack.OraclePackage1.CallProcedure('add_cust_black',[
+                                                      'p_adtype',1,
+                                                      'p_name',node.ChildNodes['FIRST_NAME'].Text,
+                                                      'p_lastname',node.ChildNodes['SECOND_NAME'].Text,
+                                                      'p_middlename',node.ChildNodes['THIRD_NAME'].Text,
+                                                      'p_fullname',node.ChildNodes['NAME_ORIGINAL_SCRIPT'].Text,
+                                                      'p_doc_type','',
+                                                      'p_doc_serie','',
+                                                      'p_doc_num','',
+                                                      'p_citizenship','',
+                                                      'p_adrs_state','',
+                                                      'p_adrs_city','',
+                                                      'p_address','',
+                                                      'p_doc_date',null,
+                                                      'p_doc_organ','',
+                                                      'p_gender','',
+                                                      'p_doc_pin','' ,
+                                                      'p_birthdate',brdat
+                                                       ]);
+       //  Memo1.Lines.Add(node.ChildNodes['FIRST_NAME'].Text);
+     Application.ProcessMessages;
+     Gauge.Progress := Trunc(z*102 / xmlRoot.ChildNodes['INDIVIDUALS'].ChildNodes.Count+1);
+              z := z + 1;
+      end;
+    end;
+  finally
+    mem.Free;
+    http.Free;
+    ssl.Free;
+  end;
+   MessageDlg('XML fayli uğurla oxundu', mtInformation, [mbOk], 0);
+    Gauge.Progress:=0;
+   panle_Gauge.Visible:=false;
+end;
+procedure TBlackInst.ReadRemoteXML_xarci1(const AUrl: string);
+var
+  http: TIdHTTP;
+  ssl: TIdSSLIOHandlerSocketOpenSSL;
+  xmlDoc: IXMLDocument;
+  xmlRoot,xmlRoot1, node,node1,nodedat: IXMLNode;
+  z,i,i1: Integer;
+  mem: TMemoryStream;
+  brdat:TDateTime;
+begin
+  http := TIdHTTP.Create(nil);
+  ssl := TIdSSLIOHandlerSocketOpenSSL.Create(nil);
+  mem := TMemoryStream.Create;
+  try
+    http.IOHandler := ssl;
+    http.Request.UserAgent := 'Delphi XE XML Reader';
+
+    // XML yüklə
+    http.Get(AUrl, mem);
+    mem.Position := 0;
+
+    // XML sənədini oxu
+    xmlDoc := TXMLDocument.Create(nil);
+    xmlDoc.LoadFromStream(mem);
+    xmlDoc.Active := True;
+
+    xmlRoot := xmlDoc.DocumentElement;
+    if Assigned(xmlRoot) then
+    begin
+    panle_Gauge1.Visible:=true;
+
+     for i:=0 to xmlRoot.ChildNodes['INDIVIDUALS'].ChildNodes.Count-1 do
+    begin
+
+      node := xmlRoot.ChildNodes['INDIVIDUALS'].ChildNodes[i];
+      f1:=1;
+      f2:=node.ChildNodes['DATAID'].Text;
+      f3:=node.ChildNodes['VERSIONNUM'].Text;
+      f4:=node.ChildNodes['FIRST_NAME'].Text;
+      f5:=node.ChildNodes['SECOND_NAME'].Text;
+      f6:=node.ChildNodes['THIRD_NAME'].Text;
+      f7:=node.ChildNodes['FOURTH_NAME'].Text;
+      f8:=node.ChildNodes['UN_LIST_TYPE'].Text;
+      f9:=node.ChildNodes['REFERENCE_NUMBER'].Text;
+      f10:=node.ChildNodes['LISTED_ON'].Text;
+      f11:=node.ChildNodes['NAME_ORIGINAL_SCRIPT'].Text;
+      f12:=node.ChildNodes['COMMENTS1'].Text;
+      {  f13:=Trim(Copy(f12, 1, 800));
+        f14:=Trim(Copy(f12, 801, 800));
+        f15:=Trim(Copy(f12, 1602, 800));
+        f16:=Trim(Copy(f12, 2403, 800));}
+      //  showmessage(f4+'--'+f5) ;
+
+      DmBlack.OraclePackage1.CallProcedure('add_cust_blackXML',['p_Tyepe',          f1,
+                                                                 'p_DATAID',         f2,
+                                                                 'p_VERSIONNUM',     f3,
+                                                                 'p_FIRST_NAME',     f4,
+                                                                 'p_SECOND_NAME',    f5,
+                                                                 'p_THIRD_NAME',     f6,
+                                                                 'p_FOURTH_NAME',    f7,
+                                                                 'p_UN_LIST_TYPE',   f8,
+                                                                 'p_REFERENCE_NUMBER',f9,
+                                                                 'p_LISTED_ON',       f10,
+                                                                 'p_NAME_ORIGINAL_SCRIPT', f11,
+                                                                 'p_COMMENTS1',f13,
+                                                                 'p_COMMENTS2',f14,
+                                                                 'p_COMMENTS3',f15,
+                                                                 'p_COMMENTS4',f16,
+                                                                 'p_NATIONALITY_VALUE',f17,
+                                                                 'p_TYPE_OF_DATE',f18,
+                                                                 'p_YEAR',f19  ,
+                                                                 'p_xml_type', d_xml_type
+                                                                 ]);
+
+     end;
+
+         for i:= 0 to xmlRoot.ChildNodes['INDIVIDUALS'].ChildNodes.Count-1 do
+               begin
+              node1 := xmlRoot.ChildNodes['INDIVIDUALS'].ChildNodes[i];
+
+                  for j :=0 to xmlRoot.ChildNodes['INDIVIDUALS'].ChildNodes[i].ChildNodes.Count-1 do
+                     begin
+                           if xmlRoot.ChildNodes['INDIVIDUALS'].ChildNodes[i].ChildNodes[j].NodeName='INDIVIDUAL_ALIAS' then
+                            begin
+                   node :=xmlRoot.ChildNodes['INDIVIDUALS'].ChildNodes[i].ChildNodes[j];
+                     f13:=node1.ChildNodes['DATAID'].Text;
+                     f14:=node.ChildNodes['QUALITY'].Text;
+                     f15:=node.ChildNodes['ALIAS_NAME'].Text;
+
+                     if f15<>'' then
+                       begin
+                    DmBlack.OraclePackage1.CallProcedure('add_customers_black_namexml',['p_dataid',f13,'p_name',f15,'p_xml_type',d_xml_type]);
+                           end;
+                               Application.ProcessMessages;
+     Gauge_cust.Progress := Trunc(z*19 /   xmlRoot.ChildNodes['INDIVIDUALS'].ChildNodes.Count-1);
+              z := z + 1;
+                     end;
+
+                            end;
+
+      end;
+
+          end;
+
+
+
+   for i:=0 to xmlRoot.ChildNodes['ENTITIES'].ChildNodes.Count-1 do
+    begin
+      node := xmlRoot.ChildNodes['ENTITIES'].ChildNodes[i];
+
+      f2:=node.ChildNodes['DATAID'].Text;
+      f3:=node.ChildNodes['VERSIONNUM'].Text;
+      f4:=node.ChildNodes['FIRST_NAME'].Text;
+      f5:=node.ChildNodes['UN_LIST_TYPE'].Text;
+      f6:=node.ChildNodes['REFERENCE_NUMBER'].Text;
+      f7:=node.ChildNodes['LISTED_ON'].Text;
+      f8:=node.ChildNodes['COMMENTS1'].Text;
+        f9:=Trim(Copy(f8, 1, 800));
+        f10:=Trim(Copy(f8, 801, 800));
+        f11:=Trim(Copy(f8, 1602, 800));
+        f12:=Trim(Copy(f8, 2403, 800));
+
+
+
+
+
+
+
+       DmBlack.OraclePackage1.CallProcedure('add_cust_blackXML',['p_Tyepe',          f1,
+                                                                 'p_DATAID',         f2,
+                                                                 'p_VERSIONNUM',     f3,
+                                                                 'p_FIRST_NAME',     f4,
+                                                                 'p_UN_LIST_TYPE',   f5,
+                                                                 'p_REFERENCE_NUMBER',f6,
+                                                                 'p_LISTED_ON',       f7,
+                                                                 'p_COMMENTS1',f9,
+                                                                 'p_COMMENTS2',f10,
+                                                                 'p_COMMENTS3',f11,
+                                                                 'p_COMMENTS4',f12  ,
+                                                                 'p_xml_type',d_xml_type
+
+
+                                                                 ]);
+    end;
+
+        for i := 0 to xmlRoot.ChildNodes['ENTITIES'].ChildNodes.Count-1 do
+               begin
+              node1 := xmlRoot.ChildNodes['ENTITIES'].ChildNodes[i];
+
+                 for j :=0 to xmlRoot.ChildNodes['ENTITIES'].ChildNodes[i].ChildNodes.Count-1 do
+                     begin
+                        if xmlRoot.ChildNodes['ENTITIES'].ChildNodes[i].ChildNodes[j].NodeName='ENTITY_ALIAS' then
+                         begin
+
+                      node :=xmlRoot.ChildNodes['ENTITIES'].ChildNodes[i].ChildNodes[j];
+                     f13:=node1.ChildNodes['DATAID'].Text;
+                     f14:=node.ChildNodes['QUALITY'].Text;
+                     f15:=node.ChildNodes['ALIAS_NAME'].Text;
+
+                     if f15<>'' then
+
+                      DmBlack.OraclePackage1.CallProcedure('add_customers_black_namexml',['p_dataid',f13,'p_name',f15,'p_xml_type',d_xml_type]);
+
+
+
+                     end;
+
+
+                     end;
+
+               end;
+
+
+
+
+
+
+
+
+  finally
+    mem.Free;
+    http.Free;
+    ssl.Free;
+  end;
+   MessageDlg('XML fayli uğurla oxundu', mtInformation, [mbOk], 0);
+      Gauge_cust.Progress:=0;
+   panle_Gauge1.Visible:=false;
+end;
+
+ procedure TBlackInst.ReadRemoteXML_xarci2(const AUrl: string);
+ var
+   http: TIdHTTP;
+  ssl: TIdSSLIOHandlerSocketOpenSSL;
+  xmlDoc: IXMLDocument;
+  xmlRoot, node,node1,nodedat: IXMLNode;
+  z,i,i1: Integer;
+  mem: TMemoryStream;
+  brdat:TDateTime;
+begin
+  http := TIdHTTP.Create(nil);
+  ssl := TIdSSLIOHandlerSocketOpenSSL.Create(nil);
+  mem := TMemoryStream.Create;
+  try
+    http.IOHandler := ssl;
+    http.Request.UserAgent := 'Delphi XE XML Reader';
+
+    // XML yüklə
+    http.Get(AUrl, mem);
+    mem.Position := 0;
+
+    // XML sənədini oxu
+    xmlDoc := TXMLDocument.Create(nil);
+    xmlDoc.LoadFromStream(mem);
+    xmlDoc.Active := True;
+
+    xmlRoot := xmlDoc.DocumentElement;
+    if Assigned(xmlRoot) then
+    begin
+    panle_Gauge1.Visible:=true;
+
+      for i:=0 to xmlRoot.ChildNodes['INDIVIDUALS'].ChildNodes.Count-1 do
+    begin
+      node := xmlRoot.ChildNodes['INDIVIDUALS'].ChildNodes[i];
+      f1:=2;
+     // d_xml_type:=1;
+      f2:=node.ChildNodes['DATAID'].Text;
+      f3:=node.ChildNodes['VERSIONNUM'].Text;
+      f4:=node.ChildNodes['FIRST_NAME'].Text;
+      f5:=node.ChildNodes['UN_LIST_TYPE'].Text;
+      f6:=node.ChildNodes['REFERENCE_NUMBER'].Text;
+      f7:=node.ChildNodes['LISTED_ON'].Text;
+      f8:=node.ChildNodes['COMMENTS1'].Text;
+        f9:=Trim(Copy(f8, 1, 800));
+        f10:=Trim(Copy(f8, 801, 800));
+        f11:=Trim(Copy(f8, 1602, 800));
+        f12:=Trim(Copy(f8, 2403, 800));
+
+
+       DmBlack.OraclePackage1.CallProcedure('add_cust_blackXML',['p_Tyepe',          f1,
+                                                                 'p_DATAID',         f2,
+                                                                 'p_VERSIONNUM',     f3,
+                                                                 'p_FIRST_NAME',     f4,
+                                                                 'p_UN_LIST_TYPE',   f5,
+                                                                 'p_REFERENCE_NUMBER',f6,
+                                                                 'p_LISTED_ON',       f7,
+                                                                 'p_COMMENTS1',f9,
+                                                                 'p_COMMENTS2',f10,
+                                                                 'p_COMMENTS3',f11,
+                                                                 'p_COMMENTS4',f12  ,
+                                                                 'p_xml_type', d_xml_type
+
+
+                                                                 ]);
+
+
+         end;
+        for i:= 0 to xmlRoot.ChildNodes['INDIVIDUALS'].ChildNodes.Count-1 do
+               begin
+              node1 := xmlRoot.ChildNodes['INDIVIDUALS'].ChildNodes[i];
+
+                  for j :=0 to xmlRoot.ChildNodes['INDIVIDUALS'].ChildNodes[i].ChildNodes.Count-1 do
+                     begin
+                           if xmlRoot.ChildNodes['INDIVIDUALS'].ChildNodes[i].ChildNodes[j].NodeName='INDIVIDUAL_ALIAS' then
+                            begin
+                   node :=xmlRoot.ChildNodes['INDIVIDUALS'].ChildNodes[i].ChildNodes[j];
+                     f13:=node1.ChildNodes['DATAID'].Text;
+                     f14:=node.ChildNodes['QUALITY'].Text;
+                     f15:=node.ChildNodes['ALIAS_NAME'].Text;
+                   //showmessage(f13+'--'+f14+'--'+f15) ;
+                     if f15<>'' then
+                       begin
+                    DmBlack.OraclePackage1.CallProcedure('add_customers_black_namexml',['p_dataid',f13,'p_name',f15,'p_xml_type',d_xml_type]);
+                           end;
+                               Application.ProcessMessages;
+     Gauge_cust.Progress := Trunc(z*40 /   xmlRoot.ChildNodes['INDIVIDUALS'].ChildNodes.Count-1);
+              z := z + 1;
+                     end;
+
+                            end;
+
+      end;
+
+          end;
+
+
+    for i:=0 to xmlRoot.ChildNodes['ENTITIES'].ChildNodes.Count-1 do
+    begin
+      node := xmlRoot.ChildNodes['ENTITIES'].ChildNodes[i];
+
+      f2:=node.ChildNodes['DATAID'].Text;
+      f3:=node.ChildNodes['VERSIONNUM'].Text;
+      f4:=node.ChildNodes['FIRST_NAME'].Text;
+      f5:=node.ChildNodes['UN_LIST_TYPE'].Text;
+      f6:=node.ChildNodes['REFERENCE_NUMBER'].Text;
+      f7:=node.ChildNodes['LISTED_ON'].Text;
+      f8:=node.ChildNodes['COMMENTS1'].Text;
+        f9:=Trim(Copy(f8, 1, 800));
+        f10:=Trim(Copy(f8, 801, 800));
+        f11:=Trim(Copy(f8, 1602, 800));
+        f12:=Trim(Copy(f8, 2403, 800));
+
+
+
+
+
+
+
+       DmBlack.OraclePackage1.CallProcedure('add_cust_blackXML',['p_Tyepe',          f1,
+                                                                 'p_DATAID',         f2,
+                                                                 'p_VERSIONNUM',     f3,
+                                                                 'p_FIRST_NAME',     f4,
+                                                                 'p_UN_LIST_TYPE',   f5,
+                                                                 'p_REFERENCE_NUMBER',f6,
+                                                                 'p_LISTED_ON',       f7,
+                                                                 'p_COMMENTS1',f9,
+                                                                 'p_COMMENTS2',f10,
+                                                                 'p_COMMENTS3',f11,
+                                                                 'p_COMMENTS4',f12  ,
+                                                                 'p_xml_type',d_xml_type
+
+
+                                                                 ]);
+    end;
+
+        for i := 0 to xmlRoot.ChildNodes['ENTITIES'].ChildNodes.Count-1 do
+               begin
+              node1 := xmlRoot.ChildNodes['ENTITIES'].ChildNodes[i];
+
+                 for j :=0 to xmlRoot.ChildNodes['ENTITIES'].ChildNodes[i].ChildNodes.Count-1 do
+                     begin
+                        if xmlRoot.ChildNodes['ENTITIES'].ChildNodes[i].ChildNodes[j].NodeName='ENTITY_ALIAS' then
+                         begin
+
+                      node :=xmlRoot.ChildNodes['ENTITIES'].ChildNodes[i].ChildNodes[j];
+                     f13:=node1.ChildNodes['DATAID'].Text;
+                     f14:=node.ChildNodes['QUALITY'].Text;
+                     f15:=node.ChildNodes['ALIAS_NAME'].Text;
+
+                     if f15<>'' then
+
+                      DmBlack.OraclePackage1.CallProcedure('add_customers_black_namexml',['p_dataid',f13,'p_name',f15,'p_xml_type',d_xml_type]);
+
+
+
+                     end;
+
+
+                     end;
+
+               end;
+
+
+
+  finally
+    mem.Free;
+    http.Free;
+    ssl.Free;
+  end;
+   MessageDlg('XML fayli uğurla oxundu', mtInformation, [mbOk], 0);
+      Gauge_cust.Progress:=0;
+   panle_Gauge1.Visible:=false;
+  end;
+
+  procedure TBlackInst.ReadRemoteXML_xarci3(const AUrl: string);
+ var
+   http: TIdHTTP;
+  ssl: TIdSSLIOHandlerSocketOpenSSL;
+  xmlDoc: IXMLDocument;
+  xmlRoot, node,node1,nodedat: IXMLNode;
+  z,i,i1: Integer;
+  mem: TMemoryStream;
+  brdat:TDateTime;
+begin
+  http := TIdHTTP.Create(nil);
+  ssl := TIdSSLIOHandlerSocketOpenSSL.Create(nil);
+  mem := TMemoryStream.Create;
+  try
+    http.IOHandler := ssl;
+    http.Request.UserAgent := 'Delphi XE XML Reader';
+
+    // XML yüklə
+    http.Get(AUrl, mem);
+    mem.Position := 0;
+
+    // XML sənədini oxu
+    xmlDoc := TXMLDocument.Create(nil);
+    xmlDoc.LoadFromStream(mem);
+    xmlDoc.Active := True;
+
+    xmlRoot := xmlDoc.DocumentElement;
+    if Assigned(xmlRoot) then
+    begin
+    panle_Gauge1.Visible:=true;
+
+      for i:=0 to xmlRoot.ChildNodes['INDIVIDUALS'].ChildNodes.Count-1 do
+    begin
+      node := xmlRoot.ChildNodes['INDIVIDUALS'].ChildNodes[i];
+      f1:=3;
+
+      f2:=node.ChildNodes['DATAID'].Text;
+      f3:=node.ChildNodes['VERSIONNUM'].Text;
+      f4:=node.ChildNodes['FIRST_NAME'].Text;
+      f5:=node.ChildNodes['SECOND_NAME'].Text;
+      f6:=node.ChildNodes['UN_LIST_TYPE'].Text;
+      f7:=node.ChildNodes['LISTED_ON'].Text;
+      f8:=node.ChildNodes['COMMENTS1'].Text;
+        f9:=Trim(Copy(f8, 1, 800));
+        f10:=Trim(Copy(f8, 801, 800));
+        f11:=Trim(Copy(f8, 1602, 800));
+        f12:=Trim(Copy(f8, 2403, 800));
+
+       DmBlack.OraclePackage1.CallProcedure('add_cust_blackXML',['p_Tyepe',          f1,
+                                                                 'p_DATAID',         f2,
+                                                                 'p_VERSIONNUM',     f3,
+                                                                 'p_FIRST_NAME',     f4,
+                                                                 'p_SECOND_NAME',   f5,
+                                                                 'p_UN_LIST_TYPE',f6,
+                                                                 'p_LISTED_ON',       f7,
+                                                                 'p_COMMENTS1',f9,
+                                                                 'p_COMMENTS2',f10,
+                                                                 'p_COMMENTS3',f11,
+                                                                 'p_COMMENTS4',f12  ,
+                                                                 'p_xml_type', d_xml_type
+
+
+                                                                 ]);
+
+
+
+
+
+         end;
+        for i:= 0 to xmlRoot.ChildNodes['INDIVIDUALS'].ChildNodes.Count-1 do
+               begin
+              node1 := xmlRoot.ChildNodes['INDIVIDUALS'].ChildNodes[i];
+
+                  for j :=0 to xmlRoot.ChildNodes['INDIVIDUALS'].ChildNodes[i].ChildNodes.Count-1 do
+                     begin
+                           if xmlRoot.ChildNodes['INDIVIDUALS'].ChildNodes[i].ChildNodes[j].NodeName='INDIVIDUAL_ALIAS' then
+                            begin
+                   node :=xmlRoot.ChildNodes['INDIVIDUALS'].ChildNodes[i].ChildNodes[j];
+                     f13:=node1.ChildNodes['DATAID'].Text;
+                     f14:=node.ChildNodes['QUALITY'].Text;
+                     f15:=node.ChildNodes['ALIAS_NAME'].Text;
+                   //showmessage(f13+'--'+f14+'--'+f15) ;
+                     if f15<>'' then
+                       begin
+                    DmBlack.OraclePackage1.CallProcedure('add_customers_black_namexml',['p_dataid',f13,'p_name',f15,'p_xml_type',d_xml_type]);
+                           end;
+                               Application.ProcessMessages;
+     Gauge_cust.Progress := Trunc(z*80 /   xmlRoot.ChildNodes['INDIVIDUALS'].ChildNodes.Count-1);
+              z := z + 1;
+          end;
+            end;
+          end;
+        end;
+
+           for i:=0 to xmlRoot.ChildNodes['ENTITIES'].ChildNodes.Count-1 do
+    begin
+      node := xmlRoot.ChildNodes['ENTITIES'].ChildNodes[i];
+
+      f2:=node.ChildNodes['DATAID'].Text;
+      f3:=node.ChildNodes['VERSIONNUM'].Text;
+      f4:=node.ChildNodes['FIRST_NAME'].Text;
+      f5:=node.ChildNodes['UN_LIST_TYPE'].Text;
+      f6:=node.ChildNodes['REFERENCE_NUMBER'].Text;
+      f7:=node.ChildNodes['LISTED_ON'].Text;
+      f8:=node.ChildNodes['COMMENTS1'].Text;
+        f9:=Trim(Copy(f8, 1, 800));
+        f10:=Trim(Copy(f8, 801, 800));
+        f11:=Trim(Copy(f8, 1602, 800));
+        f12:=Trim(Copy(f8, 2403, 800));
+
+
+
+
+
+
+
+       DmBlack.OraclePackage1.CallProcedure('add_cust_blackXML',['p_Tyepe',          f1,
+                                                                 'p_DATAID',         f2,
+                                                                 'p_VERSIONNUM',     f3,
+                                                                 'p_FIRST_NAME',     f4,
+                                                                 'p_UN_LIST_TYPE',   f5,
+                                                                 'p_REFERENCE_NUMBER',f6,
+                                                                 'p_LISTED_ON',       f7,
+                                                                 'p_COMMENTS1',f9,
+                                                                 'p_COMMENTS2',f10,
+                                                                 'p_COMMENTS3',f11,
+                                                                 'p_COMMENTS4',f12  ,
+                                                                 'p_xml_type',d_xml_type
+
+
+                                                                 ]);
+    end;
+
+        for i := 0 to xmlRoot.ChildNodes['ENTITIES'].ChildNodes.Count-1 do
+               begin
+              node1 := xmlRoot.ChildNodes['ENTITIES'].ChildNodes[i];
+
+                 for j :=0 to xmlRoot.ChildNodes['ENTITIES'].ChildNodes[i].ChildNodes.Count-1 do
+                     begin
+                        if xmlRoot.ChildNodes['ENTITIES'].ChildNodes[i].ChildNodes[j].NodeName='ENTITY_ALIAS' then
+                         begin
+
+                      node :=xmlRoot.ChildNodes['ENTITIES'].ChildNodes[i].ChildNodes[j];
+                     f13:=node1.ChildNodes['DATAID'].Text;
+                     f14:=node.ChildNodes['QUALITY'].Text;
+                     f15:=node.ChildNodes['ALIAS_NAME'].Text;
+
+                     if f15<>'' then
+
+                      DmBlack.OraclePackage1.CallProcedure('add_customers_black_namexml',['p_dataid',f13,'p_name',f15,'p_xml_type',d_xml_type]);
+
+
+
+                     end;
+
+
+                     end;
+
+               end;
+
+
+
+
+  finally
+    mem.Free;
+    http.Free;
+    ssl.Free;
+  end;
+   MessageDlg('XML fayli uğurla oxundu', mtInformation, [mbOk], 0);
+      Gauge_cust.Progress:=0;
+   panle_Gauge1.Visible:=false;
+  end;
+
+
+
+  procedure TBlackInst.ReadRemoteXML_xarci4(const AUrl: string);
+ var
+   http: TIdHTTP;
+  ssl: TIdSSLIOHandlerSocketOpenSSL;
+  xmlDoc: IXMLDocument;
+  xmlRoot, node,node1,nodedat: IXMLNode;
+  z,i,i1: Integer;
+  mem: TMemoryStream;
+  brdat:TDateTime;
+begin
+  http := TIdHTTP.Create(nil);
+  ssl := TIdSSLIOHandlerSocketOpenSSL.Create(nil);
+  mem := TMemoryStream.Create;
+  try
+    http.IOHandler := ssl;
+    http.Request.UserAgent := 'Delphi XE XML Reader';
+
+    // XML yüklə
+    http.Get(AUrl, mem);
+    mem.Position := 0;
+
+    // XML sənədini oxu
+    xmlDoc := TXMLDocument.Create(nil);
+    xmlDoc.LoadFromStream(mem);
+    xmlDoc.Active := True;
+
+    xmlRoot := xmlDoc.DocumentElement;
+    if Assigned(xmlRoot) then
+    begin
+    panle_Gauge1.Visible:=true;
+
+ for i:=0 to xmlRoot.ChildNodes['INDIVIDUALS'].ChildNodes.Count-1 do
+
+
+     begin
+      node := xmlRoot.ChildNodes['INDIVIDUALS'].ChildNodes[i];
+      f1:=4;
+
+      f2:=node.ChildNodes['DATAID'].Text;
+      f3:=node.ChildNodes['VERSIONNUM'].Text;
+      f4:=node.ChildNodes['FIRST_NAME'].Text;
+      f5:=node.ChildNodes['SECOND_NAME'].Text;
+      f6:=node.ChildNodes['UN_LIST_TYPE'].Text;
+      f7:=node.ChildNodes['LISTED_ON'].Text;
+      f8:=node.ChildNodes['COMMENTS1'].Text;
+        f9:=Trim(Copy(f8, 1, 800));
+        f10:=Trim(Copy(f8, 801, 800));
+        f11:=Trim(Copy(f8, 1602, 800));
+        f12:=Trim(Copy(f8, 2403, 800));
+
+       DmBlack.OraclePackage1.CallProcedure('add_cust_blackXML',['p_Tyepe',          f1,
+                                                                 'p_DATAID',         f2,
+                                                                 'p_VERSIONNUM',     f3,
+                                                                 'p_FIRST_NAME',     f4,
+                                                                 'p_SECOND_NAME',   f5,
+                                                                 'p_UN_LIST_TYPE',f6,
+                                                                 'p_LISTED_ON',       f7,
+                                                                 'p_COMMENTS1',f9,
+                                                                 'p_COMMENTS2',f10,
+                                                                 'p_COMMENTS3',f11,
+                                                                 'p_COMMENTS4',f12  ,
+                                                                 'p_xml_type', d_xml_type
+
+
+                                                                 ]);
+
+                 end;
+
+
+
+
+
+        for i:= 0 to xmlRoot.ChildNodes['INDIVIDUALS'].ChildNodes.Count-1 do
+               begin
+              node1 := xmlRoot.ChildNodes['INDIVIDUALS'].ChildNodes[i];
+
+                  for j :=0 to xmlRoot.ChildNodes['INDIVIDUALS'].ChildNodes[i].ChildNodes.Count-1 do
+                     begin
+                           if xmlRoot.ChildNodes['INDIVIDUALS'].ChildNodes[i].ChildNodes[j].NodeName='INDIVIDUAL_ALIAS' then
+                            begin
+                   node :=xmlRoot.ChildNodes['INDIVIDUALS'].ChildNodes[i].ChildNodes[j];
+                     f13:=node1.ChildNodes['DATAID'].Text;
+                     f14:=node.ChildNodes['QUALITY'].Text;
+                     f15:=node.ChildNodes['ALIAS_NAME'].Text;
+                  // showmessage(f13+'--'+f14+'--'+f15) ;
+                     if f15<>'' then
+                       begin
+                    DmBlack.OraclePackage1.CallProcedure('add_customers_black_namexml',['p_dataid',f13,'p_name',f15,'p_xml_type',d_xml_type]);
+                           end;
+                               Application.ProcessMessages;
+     Gauge_cust.Progress := Trunc(z*80 /   xmlRoot.ChildNodes['INDIVIDUALS'].ChildNodes.Count-1);
+              z := z + 1;
+                     end;
+
+                            end;
+
+      end;
+
+
+    end;
+
+
+
+   for i:=0 to xmlRoot.ChildNodes['ENTITIES'].ChildNodes.Count-1 do
+    begin
+      node := xmlRoot.ChildNodes['ENTITIES'].ChildNodes[i];
+        d_xml_type:=4;
+      f2:=node.ChildNodes['DATAID'].Text;
+      f3:=node.ChildNodes['VERSIONNUM'].Text;
+      f4:=node.ChildNodes['FIRST_NAME'].Text;
+      f5:=node.ChildNodes['UN_LIST_TYPE'].Text;
+      f6:=node.ChildNodes['REFERENCE_NUMBER'].Text;
+      f7:=node.ChildNodes['LISTED_ON'].Text;
+      f8:=node.ChildNodes['COMMENTS1'].Text;
+        f9:=Trim(Copy(f8, 1, 800));
+        f10:=Trim(Copy(f8, 801, 800));
+        f11:=Trim(Copy(f8, 1602, 800));
+        f12:=Trim(Copy(f8, 2403, 800));
+
+
+
+
+
+
+
+       DmBlack.OraclePackage1.CallProcedure('add_cust_blackXML',['p_Tyepe',          5,
+                                                                 'p_DATAID',         f2,
+                                                                 'p_VERSIONNUM',     f3,
+                                                                 'p_FIRST_NAME',     f4,
+                                                                 'p_UN_LIST_TYPE',   f5,
+                                                                 'p_REFERENCE_NUMBER',f6,
+                                                                 'p_LISTED_ON',       f7,
+                                                                 'p_COMMENTS1',f9,
+                                                                 'p_COMMENTS2',f10,
+                                                                 'p_COMMENTS3',f11,
+                                                                 'p_COMMENTS4',f12  ,
+                                                                 'p_xml_type',4
+
+
+                                                                 ]);
+    end;
+
+        for i := 0 to xmlRoot.ChildNodes['ENTITIES'].ChildNodes.Count-1 do
+               begin
+              node1 := xmlRoot.ChildNodes['ENTITIES'].ChildNodes[i];
+
+                 for j :=0 to xmlRoot.ChildNodes['ENTITIES'].ChildNodes[i].ChildNodes.Count-1 do
+                     begin
+                        if xmlRoot.ChildNodes['ENTITIES'].ChildNodes[i].ChildNodes[j].NodeName='ENTITY_ALIAS' then
+                         begin
+
+                      node :=xmlRoot.ChildNodes['ENTITIES'].ChildNodes[i].ChildNodes[j];
+                     f13:=node1.ChildNodes['DATAID'].Text;
+                     f14:=node.ChildNodes['QUALITY'].Text;
+                     f15:=node.ChildNodes['ALIAS_NAME'].Text;
+
+                     if f15<>'' then
+
+                      DmBlack.OraclePackage1.CallProcedure('add_customers_black_namexml',['p_dataid',f13,'p_name',f15,'p_xml_type',d_xml_type]);
+
+
+
+                     end;
+
+
+                     end;
+
+               end;
+
+
+  finally
+    mem.Free;
+    http.Free;
+    ssl.Free;
+  end;
+   MessageDlg('XML fayli uğurla oxundu', mtInformation, [mbOk], 0);
+      Gauge_cust.Progress:=0;
+   panle_Gauge1.Visible:=false;
+  end;
+
+
+
+
+
+procedure TBlackInst.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as IBlackInstEvents;
+end;
+
+procedure TBlackInst.Excelat1Click(Sender: TObject);
+begin
+ with DmBlack do
+ begin
+  with ExcelExport ,MainDSet do
+   begin
+   connect;
+   ExportDataset(MainDSet,'Siyahi',true);
+   end;
+ end;
+end;
+
+procedure TBlackInst.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TBlackInst.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TBlackInst.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TBlackInst.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TBlackInst.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TBlackInst.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TBlackInst.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TBlackInst.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TBlackInst.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TBlackInst.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TBlackInst.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TBlackInst.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TBlackInst.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TBlackInst.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TBlackInst.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TBlackInst.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TBlackInst.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TBlackInst.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TBlackInst.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TBlackInst._Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TBlackInst.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TBlackInst.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TBlackInst.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TBlackInst.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TBlackInst.DBLookupComboBox2CloseUp(Sender: TObject);
+var
+verable:string;
+begin
+ verable:='';
+verable:=DBLookupComboBox2.Text;
+with ods_hms do
+begin
+   close;
+    SQL[16]:='';
+  if verable='Hamsı' then
+    SQL[16]:=''
+    else
+    SQL[16]:=SQL[16]+' where main_status=''' +  verable + '''';
+   open;
+end;
+end;
+
+procedure TBlackInst.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TBlackInst.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TBlackInst.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TBlackInst.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TBlackInst.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TBlackInst.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TBlackInst.Set_AxBorderStyle(Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TBlackInst.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TBlackInst.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TBlackInst.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TBlackInst.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TBlackInst.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TBlackInst.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TBlackInst.Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TBlackInst.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TBlackInst.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TBlackInst.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TBlackInst.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TBlackInst.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TBlackInst.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+procedure TBlackInst.sst1Click(Sender: TObject);
+begin
+ if  MessageDlg(Format('Fayl vasitəsilə yüklənmiş əvvəlki məlumatlar silinəcək. Davam edilsin?',['']),mtConfirmation,mbYesNoCancel,0)=mrYes
+  then
+  begin
+  d_xml_type:=1;
+ DmBlack.OraclePackage1.CallProcedure('delete_xml',['v_id',d_xml_type]);
+ ReadRemoteXML_xarci1('http://hms.gov.az/uploads/list/5/0e857d8520059c9197ec1bb0a80212cf.xml?v=1755868018');
+ DmBlack.ods_blecxml.Close;
+ DmBlack.ods_blecxml.Open;
+  end;
+
+end;
+
+procedure TBlackInst.ActiveFormCreate(Sender: TObject);
+var i:integer;
+begin
+ods_bankinfo.Open;
+ods_user.Open;
+ods_tim.Open;
+ods_fltr.open;
+DmBlack:=TDmBlack.Create(self) ;
+InsForm:=TInsForm.Create(self);
+formCon:=TformCon.Create(self);
+FormSearch:=TFormSearch.create(self);
+
+   for i := 0 to ComponentCount-1  do
+    if Components[i].Tag = 3112 then begin
+      (Components[i] as TEvanescence).Open;
+      (Components[i] as TEvanescence).CheckAll;
+    end;
+ToolButton9.Down :=true;
+ ods_sysdat.Open;
+DateTi_samelydate1.value:=ods_sysdatTEK_DAT.AsDateTime;
+DateTi_samelydate2.value:=ods_sysdatTEK_DAT.AsDateTime;
+DBDateTimeEditEh1.value:=ods_sysdatTEK_DAT.AsDateTime;
+DBDateTimeEditEh2.value:=ods_sysdatTEK_DAT.AsDateTime;
+
+SBTranslateProc.TranslateAllComponents(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TBlackInst.Button1Click(Sender: TObject);
+var
+p_date1:Variant;
+p_date2:Variant;
+statusValue:string;
+begin
+
+p_date1:= DBDateTimeEditEh1.Value;
+p_date2:= DBDateTimeEditEh2.Value;
+EnableColoring := false;
+        with ods_hms do
+       begin
+         close;
+          SetVariable('dat1',p_date1);
+          SetVariable('dat2',p_date2);
+         open;
+       end;
+  EnableColoring := True;
+  DBGrid2.Invalidate;
+
+
+end;
+
+procedure TBlackInst.Button2Click(Sender: TObject);
+var
+  PDF: TPdfDocumentGDI;
+  Y: Integer;
+  TempName: string;
+  IsFirstPage: Boolean;
+
+  function RowColor(const Status: string): TColor;
+  begin
+    if SameText(Status, 'Match') then Result := clRed
+    else if SameText(Status, 'No Match') then Result := clLime
+    else if SameText(Status, 'Close') then Result := clYellow
+    else Result := clWhite;
+  end;
+
+  procedure ApplyFont;
+  begin
+    PDF.VCLCanvas.Font.Name := 'Tahoma';
+    PDF.VCLCanvas.Font.Size := 14;
+  end;
+
+  procedure WriteHeader;
+  begin
+    ApplyFont;
+
+    PDF.VCLCanvas.Font.Style := [fsBold];
+    PDF.VCLCanvas.TextOut(20, 20, 'HMS Skrininq');
+    PDF.VCLCanvas.Font.Style := [];
+
+    PDF.VCLCanvas.Font.Size := 16;
+    PDF.VCLCanvas.TextOut(30, 50, 'Skrininq tarixi: ' + FormatDateTime('dd.mm.yyyy', ods_timTARIX.AsDateTime));
+    PDF.VCLCanvas.TextOut(30, 80, 'Hesabat hazırlayan təşkilat: ' + ods_bankinfoAZ_NAME.AsString);
+    PDF.VCLCanvas.TextOut(30, 110, 'Skrininqi aparan əməkdaş: ' + ods_userFULLNAME.AsString);
+
+    Y := 150;
+
+    PDF.VCLCanvas.Font.Style := [fsBold];
+    PDF.VCLCanvas.TextOut(20, Y, 'TamAdı');
+    PDF.VCLCanvas.TextOut(490, Y, 'Doğum Tarixi');
+    PDF.VCLCanvas.TextOut(650, Y, 'Status');
+    PDF.VCLCanvas.Font.Style := [];
+
+    Inc(Y, 30);
+  end;
+
+  // --- fullname wrap + fon rəngi ---
+  procedure DrawTextWrappedWithColorFixedHeight(X: Integer; Y: Integer; MaxWidth: Integer; const Text: string; RowCol: TColor; out HeightUsed: Integer);
+  var
+    Canvas: TCanvas;
+    Words: TStringList;
+    Line, WordText: string;
+    i, LineHeight, StartY: Integer;
+  begin
+    Canvas := PDF.VCLCanvas;
+    Words := TStringList.Create;
+    try
+      ExtractStrings([' '], [], PChar(Text), Words);
+      Line := '';
+      LineHeight := Canvas.TextHeight('Wg') + 2;
+      HeightUsed := 0;
+
+      for i := 0 to Words.Count - 1 do
+      begin
+        WordText := Words[i];
+        if Canvas.TextWidth(Line + ' ' + WordText) > MaxWidth then
+        begin
+          Canvas.Brush.Color := RowCol;
+          StartY := Y + HeightUsed;
+          Canvas.FillRect(Rect(X-5, StartY, X + MaxWidth + 10, StartY + LineHeight));
+          Canvas.TextOut(X, StartY, Line);
+          Inc(HeightUsed, LineHeight);
+          Line := WordText;
+        end
+        else
+        begin
+          if Line = '' then Line := WordText
+          else Line := Line + ' ' + WordText;
+        end;
+      end;
+
+      if Line <> '' then
+      begin
+        Canvas.Brush.Color := RowCol;
+        StartY := Y + HeightUsed;
+        Canvas.FillRect(Rect(X-5, StartY, X + MaxWidth + 10, StartY + LineHeight));
+        Canvas.TextOut(X, StartY, Line);
+        Inc(HeightUsed, LineHeight);
+      end;
+
+      Canvas.Brush.Color := clWhite;
+    finally
+      Words.Free;
+    end;
+  end;
+
+var
+  RowHeight: Integer;
+begin
+  PDF := TPdfDocumentGDI.Create;
+  try
+    PDF.DefaultPageWidth  := 595;  // A4 width
+    PDF.DefaultPageHeight := 842;  // A4 height
+
+    PDF.AddPage;
+    IsFirstPage := True;
+    WriteHeader;
+
+    ods_hms.First;
+    while not ods_hms.Eof do
+    begin
+      ApplyFont;
+
+      // fullname üçün wrap + fon rəngi və hündürlük ölçülməsi
+      DrawTextWrappedWithColorFixedHeight(20, Y, 500,
+        ods_hms.FieldByName('fullname').AsString,
+        RowColor(ods_hms.FieldByName('main_status').AsString),
+        RowHeight);
+
+      // birthdate və status sabit Y üzərində yazılır, fon rəngi tətbiq edilir
+      PDF.VCLCanvas.Brush.Color := RowColor(ods_hms.FieldByName('main_status').AsString);
+      PDF.VCLCanvas.FillRect(Rect(520-5, Y, 780, Y + RowHeight));
+
+      PDF.VCLCanvas.TextOut(520, Y, ods_hms.FieldByName('birthdate').AsString);
+      PDF.VCLCanvas.TextOut(640, Y, ods_hms.FieldByName('end_status').AsString);
+
+      Inc(Y, RowHeight + 5);
+
+      if Y > 1350 then
+      begin
+        PDF.AddPage;
+        ApplyFont;
+        Y := 40;
+        IsFirstPage := False;
+      end;
+
+      ods_hms.Next;
+    end;
+
+    TempName := GetEnvironmentVariable('TEMP') + '\dataset_export.pdf';
+    PDF.SaveToFile(TempName);
+    ShellExecute(0, 'open', PChar(TempName), nil, nil, SW_SHOWNORMAL);
+
+  finally
+    PDF.Free;
+  end;
+end;
+procedure TBlackInst.XDBGrid3CellClick(Column: TXColumn);
+begin
+memo1.Text:=OracleDataSet3API_RESPONSE.AsVariant;
+
+end;
+
+procedure TBlackInst.XFBitBtn1Click(Sender: TObject);
+begin
+//if not OpenDialog2.Execute then Exit;
+
+
+  OpenDialog2.Execute(0);
+  IF fileexists(OpenDialog2.FileName)THEN
+  begin
+   XMLPath:= OpenDialog2.FileName;
+
+   end;
+
+  if XMLPath ='' then
+  exit else
+   begin
+  XmlFile :=  TXMLDocument.Create(Application);
+  try
+
+    XmlFile.LoadFromFile(XMLPath);
+    XmlFile.Active := True;
+    MainNode   := XmlFile.DocumentElement;
+
+
+     if  MainNode.NodeName='CONSOLIDATED_LIST' then
+       begin
+        DmBlack.OraclePackage1.CallProcedure('delete_xml',['v_id',1]);
+       Xml1Click(sender);
+       DmBlack.ods_blecxml.Close;
+       DmBlack.ods_blecxml.Open;
+       end;
+
+    if  MainNode.NodeName='sdnList' then
+      begin
+      DmBlack.OraclePackage1.CallProcedure('delete_xml',['v_id',2]);
+      Xml2Click(sender);
+      DmBlack.ods_blecxml.Close;
+      DmBlack.ods_blecxml.Open;
+      end;
+
+     if  MainNode.NodeName='export' then
+       begin
+        DmBlack.OraclePackage1.CallProcedure('delete_xml',['v_id',3]);
+        Xml3Click(sender);
+        DmBlack.ods_blecxml.Close;
+        DmBlack.ods_blecxml.Open;
+       end;
+
+
+  finally
+    FreeAndNil(XmlFile);
+  end;
+
+   end;
+end;
+
+procedure TBlackInst.XFBitBtn2Click(Sender: TObject);
+begin
+
+
+with DmBlack,ods_search do begin
+  if not Active then
+     Open
+    else
+      Refresh;
+end;
+if DmBlack.ods_search.RecordCount=0 then
+  begin
+DmBlack.OraclePackage1.CallProcedure('bleck_search',[ ]);
+  end;
+
+  FormSearch.ShowModal;
+
+end;
+
+procedure TBlackInst.XFBitBtn3Click(Sender: TObject);
+begin
+DmBlack.ods_blecxml.Close;
+DmBlack.ods_blecxml.SQL[4]:='';
+DmBlack.ods_blecxml.Open;
+end;
+
+procedure TBlackInst.XFButton1Click(Sender: TObject);
+var
+p_date1:Variant;
+p_date2:Variant;
+begin
+memo1.Clear;
+p_date1:= DateTi_samelydate1.Value;
+p_date2:= DateTi_samelydate2.Value;
+        with OracleDataSet3 do
+       begin
+         close;
+          SetVariable('dat1',p_date1);
+          SetVariable('dat2',p_date2);
+         open;
+       end;
+end;
+
+procedure TBlackInst.XFButton2Click(Sender: TObject);
+var
+  Http: TIdHTTP;
+  ResponseText,URL: string;
+
+begin
+ DmBlack.SB_ACA.CallProcedure('checkadvancedobjectaccess',['PEPINSERT']);
+  if  MessageDlg(Format(' Diqqət PEP Siyahı yüklənəcək. Davam edilsin?',['']),mtConfirmation,mbYesNoCancel,0)=mrYes
+  then
+  begin
+
+ Http := TIdHTTP.Create(nil);
+  try
+    try
+    OracleDataSet2.Open;
+      OracleDataSet2.First;
+
+      for I := 0 to OracleDataSet2.RecordCount-1 do
+
+      begin
+       //URL := 'http://172.16.20.42:5000/api/match?' +
+        URL:=ods_bankinfoTAX_REGCODE.AsString +
+              'name=' + TIdURI.ParamsEncode(OracleDataSet2.FieldByName('E_NAME').AsString) +
+              '&surname=' + TIdURI.ParamsEncode(OracleDataSet2.FieldByName('E_LASTNAME').AsString);
+
+      ResponseText := Http.Get(URL);
+
+
+
+      {  Memo1.Lines.Add(URL);
+        Memo1.Lines.Add('Response: ' + ResponseText);
+        Memo1.Lines.Add('-------------------');
+       }
+        OracleDataSet2.Next;
+      end;
+    except
+      on E: Exception do
+        ShowMessage('Xəta: ' + E.Message);
+    end;
+  finally
+    Http.Free;
+  end;
+  end;
+
+end;
+
+procedure TBlackInst.xml1Click(Sender: TObject);
+var
+z,n,d_xml_type:integer;
+begin
+
+     panle_Gauge1.Visible:=true;
+      CustomerNode := MainNode.ChildNodes['INDIVIDUALS'];
+
+     // showmessage(IntToStr(MainNode.ChildNodes['INDIVIDUALS'].ChildNodes.Count));
+
+        f1:='';
+        f2:='';
+        f3:='';
+        f4:='';
+        f5:='';
+        f6:='';
+        f7:='';
+        f8:='';
+        f9:='';
+        f10:='';
+        f11:='';
+        f12:='';
+        f13:='';
+        f14:='';
+        f15:='';
+        f16:='';
+        f17:='';
+        f18:='';
+        f19:='';
+        f20:='';
+
+
+   // showmessage(inttostr(XmlFile.ChildNodes.Nodes['CONSOLIDATED_LIST'].ChildNodes.Count));
+
+   for i:=0 to MainNode.ChildNodes['INDIVIDUALS'].ChildNodes.Count-1 do
+    begin
+
+      CustomerNode := MainNode.ChildNodes['INDIVIDUALS'].ChildNodes[i];
+      f1:=1;
+      d_xml_type:=1;
+      f2:=CustomerNode.ChildNodes['DATAID'].Text;
+      f3:=CustomerNode.ChildNodes['VERSIONNUM'].Text;
+      f4:=CustomerNode.ChildNodes['FIRST_NAME'].Text;
+      f5:=CustomerNode.ChildNodes['SECOND_NAME'].Text;
+      f6:=CustomerNode.ChildNodes['THIRD_NAME'].Text;
+      f7:=CustomerNode.ChildNodes['FOURTH_NAME'].Text;
+      f8:=CustomerNode.ChildNodes['UN_LIST_TYPE'].Text;
+      f9:=CustomerNode.ChildNodes['REFERENCE_NUMBER'].Text;
+      f10:=CustomerNode.ChildNodes['LISTED_ON'].Text;
+      f11:=CustomerNode.ChildNodes['NAME_ORIGINAL_SCRIPT'].Text;
+      f12:=CustomerNode.ChildNodes['COMMENTS1'].Text;
+        f13:=Trim(Copy(f12, 1, 800));
+        f14:=Trim(Copy(f12, 801, 800));
+        f15:=Trim(Copy(f12, 1602, 800));
+        f16:=Trim(Copy(f12, 2403, 800));
+
+       for j :=0 to MainNode.ChildNodes['INDIVIDUALS'].ChildNodes[i].ChildNodes.Count-1 do
+                     begin
+
+                       if MainNode.ChildNodes['INDIVIDUALS'].ChildNodes[i].ChildNodes[j].NodeName='NATIONALITY' then
+                            begin
+                      //    for k :=0 to MainNode.ChildNodes['INDIVIDUALS'].ChildNodes[i].ChildNodes[j].ChildNodes.Count-1 do
+                         //       begin
+                                 CustomerNode :=MainNode.ChildNodes['INDIVIDUALS'].ChildNodes[i].ChildNodes[j];
+                                f17:=CustomerNode.ChildNodes['VALUE'].Text;
+                          //     end;
+                             end;
+
+
+                          if MainNode.ChildNodes['INDIVIDUALS'].ChildNodes[i].ChildNodes[j].NodeName='INDIVIDUAL_DATE_OF_BIRTH' then
+                            begin
+                          //  for k :=0 to MainNode.ChildNodes['INDIVIDUALS'].ChildNodes[i].ChildNodes[j].ChildNodes.Count-1 do
+                          //      begin
+                                 CustomerNode :=MainNode.ChildNodes['INDIVIDUALS'].ChildNodes[i].ChildNodes[j];
+
+                          f18:=CustomerNode.ChildNodes['TYPE_OF_DATE'].Text;
+                          f19:=CustomerNode.ChildNodes['YEAR'].Text;
+                   //  end;
+                            end;
+
+                     end;
+
+
+       DmBlack.OraclePackage1.CallProcedure('add_cust_blackXML',['p_Tyepe',          f1,
+                                                                 'p_DATAID',         f2,
+                                                                 'p_VERSIONNUM',     f3,
+                                                                 'p_FIRST_NAME',     f4,
+                                                                 'p_SECOND_NAME',    f5,
+                                                                 'p_THIRD_NAME',     f6,
+                                                                 'p_FOURTH_NAME',    f7,
+                                                                 'p_UN_LIST_TYPE',   f8,
+                                                                 'p_REFERENCE_NUMBER',f9,
+                                                                 'p_LISTED_ON',       f10,
+                                                                 'p_NAME_ORIGINAL_SCRIPT', f11,
+                                                                 'p_COMMENTS1',f13,
+                                                                 'p_COMMENTS2',f14,
+                                                                 'p_COMMENTS3',f15,
+                                                                 'p_COMMENTS4',f16,
+                                                                 'p_NATIONALITY_VALUE',f17,
+                                                                 'p_TYPE_OF_DATE',f18,
+                                                                 'p_YEAR',f19  ,
+                                                                 'p_xml_type',  d_xml_type
+                                                                 ]);
+               Application.ProcessMessages;
+     Gauge_cust.Progress := Trunc(z*25 / MainNode.ChildNodes['INDIVIDUALS'].ChildNodes.Count+1);
+              z := z + 1;
+
+     end;
+      { f1:='';
+        f2:='';
+        f3:='';
+
+           for i := 0 to MainNode.ChildNodes['INDIVIDUALS'].ChildNodes.Count-1 do
+               begin
+              CustomerNode := MainNode.ChildNodes['INDIVIDUALS'].ChildNodes[i];
+
+                  for j :=0 to MainNode.ChildNodes['INDIVIDUALS'].ChildNodes[i].ChildNodes.Count-1 do
+                     begin
+
+        if MainNode.ChildNodes['INDIVIDUALS'].ChildNodes[i].ChildNodes[j].NodeName='INDIVIDUAL_PLACE_OF_BIRTH' then
+                            begin
+
+                          xmlNode :=MainNode.ChildNodes['INDIVIDUALS'].ChildNodes[i].ChildNodes[j];
+                          f1:=CustomerNode.ChildNodes['DATAID'].Text;
+                          f2:=xmlNode.ChildNodes['CITY'].Text;
+                          f3:=xmlNode.ChildNodes['STATE_PROVINCE'].Text;
+                          f4:=xmlNode.ChildNodes['COUNTRY'].Text;
+
+                      if (f2<>'')or(f3<>'')or(f4<>'') then
+                       begin
+                      DmBlack.OraclePackage1.CallProcedure('add_customers_black_contryxml',['p_dataid',f1,'p_city',f2,'p_state_province',f3,'p_country',f4]);
+
+                       end;
+
+                            end;
+                     end;
+
+                            end; }
+
+
+     for i := 0 to MainNode.ChildNodes['INDIVIDUALS'].ChildNodes.Count-1 do
+               begin   // ShowMessage('ss');
+              CustomerNode := MainNode.ChildNodes['INDIVIDUALS'].ChildNodes[i];
+
+                  for j :=0 to MainNode.ChildNodes['INDIVIDUALS'].ChildNodes[i].ChildNodes.Count-1 do
+                     begin     //ShowMessage//('ss1');
+                           if MainNode.ChildNodes['INDIVIDUALS'].ChildNodes[i].ChildNodes[j].NodeName='INDIVIDUAL_ALIAS' then
+                            begin
+                  // ShowMessage(inttostr(RootNode.ChildNodes['INDIVIDUALS'].ChildNodes['INDIVIDUAL'].ChildNodes[j].ChildNodes['INDIVIDUAL_ALIAS'].ChildNodes.Count));
+                   xmlNode :=MainNode.ChildNodes['INDIVIDUALS'].ChildNodes[i].ChildNodes[j];
+                     f1:=CustomerNode.ChildNodes['DATAID'].Text;
+                     f2:=xmlNode.ChildNodes['QUALITY'].Text;
+                     f3:=xmlNode.ChildNodes['ALIAS_NAME'].Text;
+
+                     if f2<>'' then
+                       begin
+                     //  showmessage(inttostr(d_xml_type) ) ;
+                      DmBlack.OraclePackage1.CallProcedure('add_customers_black_namexml',['p_dataid',f1,'p_name',f3,'p_xml_type',d_xml_type]);
+
+
+                       end;
+
+                            end;
+
+
+                     end;
+
+                      Application.ProcessMessages;
+   Gauge_cust.Progress := Trunc(z*50 /MainNode.ChildNodes['INDIVIDUALS'].ChildNodes.Count+1);
+                      z := z + 1;
+
+
+                    end;
+
+      {  f1:='';
+        f2:='';
+        f3:='';
+        f4:='';
+
+        for i := 0 to MainNode.ChildNodes['INDIVIDUALS'].ChildNodes.Count-1 do
+               begin
+              CustomerNode := MainNode.ChildNodes['INDIVIDUALS'].ChildNodes[i];
+
+                  for j :=0 to MainNode.ChildNodes['INDIVIDUALS'].ChildNodes[i].ChildNodes.Count-1 do
+                     begin
+                           if MainNode.ChildNodes['INDIVIDUALS'].ChildNodes[i].ChildNodes[j].NodeName='INDIVIDUAL_DOCUMENT' then
+                            begin
+                     xmlNode :=MainNode.ChildNodes['INDIVIDUALS'].ChildNodes[i].ChildNodes[j];
+                     f1:=CustomerNode.ChildNodes['DATAID'].Text;
+                     f2:=xmlNode.ChildNodes['TYPE_OF_DOCUMENT'].Text;
+                     f3:=xmlNode.ChildNodes['NUMBER'].Text;
+                     f4:=xmlNode.ChildNodes['NOTE'].Text;
+                    if (f2<>'') or (f3<>'') or (f4<>'') then
+                       begin
+                    DmBlack.OraclePackage1.CallProcedure('add_customers_black_Paspxml',['p_dataid',f1,'p_type_of_document',f2,'p_pasp_number',f3,'p_note',f4]);
+
+
+                       end;
+
+                            end;
+                     end;
+                    end;  }
+
+        f1:='';
+        f2:='';
+        f3:='';
+        f4:='';
+        f5:='';
+        f6:='';
+        f7:='';
+        f8:='';
+        f9:='';
+        f10:='';
+        f11:='';
+        f12:='';
+
+      for i:=0 to MainNode.ChildNodes['ENTITIES'].ChildNodes.Count-1 do
+    begin
+      CustomerNode := MainNode.ChildNodes['ENTITIES'].ChildNodes[i];
+      f1:=0;
+      d_xml_type:=1;
+      f2:=CustomerNode.ChildNodes['DATAID'].Text;
+      f3:=CustomerNode.ChildNodes['VERSIONNUM'].Text;
+      f4:=CustomerNode.ChildNodes['FIRST_NAME'].Text;
+      f5:=CustomerNode.ChildNodes['UN_LIST_TYPE'].Text;
+      f6:=CustomerNode.ChildNodes['REFERENCE_NUMBER'].Text;
+      f7:=CustomerNode.ChildNodes['LISTED_ON'].Text;
+      f8:=CustomerNode.ChildNodes['COMMENTS1'].Text;
+        f9:=Trim(Copy(f8, 1, 800));
+        f10:=Trim(Copy(f8, 801, 800));
+        f11:=Trim(Copy(f8, 1602, 800));
+        f12:=Trim(Copy(f8, 2403, 800));
+
+
+
+
+
+
+
+       DmBlack.OraclePackage1.CallProcedure('add_cust_blackXML',['p_Tyepe',          f1,
+                                                                 'p_DATAID',         f2,
+                                                                 'p_VERSIONNUM',     f3,
+                                                                 'p_FIRST_NAME',     f4,
+                                                                 'p_UN_LIST_TYPE',   f5,
+                                                                 'p_REFERENCE_NUMBER',f6,
+                                                                 'p_LISTED_ON',       f7,
+                                                                 'p_COMMENTS1',f9,
+                                                                 'p_COMMENTS2',f10,
+                                                                 'p_COMMENTS3',f11,
+                                                                 'p_COMMENTS4',f12  ,
+                                                                 'p_xml_type', d_xml_type
+
+
+                                                                 ]);
+
+
+                            Application.ProcessMessages;
+     Gauge_cust.Progress := Trunc(z*75 / MainNode.ChildNodes['ENTITIES'].ChildNodes.Count+1);
+                            z := z + 1;
+         end;
+        f1:='';
+        f2:='';
+        f3:='';
+
+
+            for i := 0 to MainNode.ChildNodes['ENTITIES'].ChildNodes.Count-1 do
+               begin
+              CustomerNode := MainNode.ChildNodes['ENTITIES'].ChildNodes[i];
+
+                 for j :=0 to MainNode.ChildNodes['ENTITIES'].ChildNodes[i].ChildNodes.Count-1 do
+                     begin
+                        if MainNode.ChildNodes['ENTITIES'].ChildNodes[i].ChildNodes[j].NodeName='ENTITY_ALIAS' then
+                         begin
+
+                      xmlNode :=MainNode.ChildNodes['ENTITIES'].ChildNodes[i].ChildNodes[j];
+                     f1:=CustomerNode.ChildNodes['DATAID'].Text;
+                     f2:=xmlNode.ChildNodes['QUALITY'].Text;
+                     f3:=xmlNode.ChildNodes['ALIAS_NAME'].Text;
+
+
+                      DmBlack.OraclePackage1.CallProcedure('add_customers_black_namexml',['p_dataid',f1,'p_name',f3,'p_xml_type',d_xml_type]);
+
+
+
+                     end;
+
+
+                     end;
+
+                                  Application.ProcessMessages;
+    Gauge_cust.Progress := Trunc(z*100 /MainNode.ChildNodes['ENTITIES'].ChildNodes.Count+1);
+                               z := z + 1;
+
+               end;
+
+
+
+     {   f1:='';
+        f2:='';
+        f3:='';
+        f4:='';
+        f5:='';
+        f6:='';
+         for i := 0 to MainNode.ChildNodes['ENTITIES'].ChildNodes.Count-1 do
+             begin
+              CustomerNode := MainNode.ChildNodes['ENTITIES'].ChildNodes[i];
+
+                for j :=0 to MainNode.ChildNodes['ENTITIES'].ChildNodes[i].ChildNodes.Count-1 do
+                     begin
+
+                       if MainNode.ChildNodes['ENTITIES'].ChildNodes[i].ChildNodes[j].NodeName='ENTITY_ADDRESS' then
+                            begin
+                  xmlNode :=MainNode.ChildNodes['ENTITIES'].ChildNodes[i].ChildNodes[j];
+
+                             f1:=CustomerNode.ChildNodes['DATAID'].Text;
+                             f2:=xmlNode.ChildNodes['STREET'].Text;
+                             f3:=xmlNode.ChildNodes['CITY'].Text;
+                             f4:=xmlNode.ChildNodes['COUNTRY'].Text;
+                             f5:=xmlNode.ChildNodes['NOTE'].Text;
+                             f6:=f4+'  **  '+f5;
+              DmBlack.OraclePackage1.CallProcedure('add_customers_black_Paspxml',['p_dataid',f1,'p_type_of_document',f2,'p_pasp_number',f3,'p_note',f6]);
+
+                             end;
+                            end;
+                     end;}
+
+
+          MessageDlg('XML fayli uğurla oxundu', mtInformation, [mbOk], 0);
+    Gauge_cust.Progress :=0;
+    panle_Gauge.Visible:=false;
+   end;
+
+
+ procedure TBlackInst.Xml2Click(Sender: TObject);
+ var
+  d_xml_type:integer;
+  z,x:integer;
+    begin
+    panle_Gauge.Visible:=true;
+   for i := 0 to XmlFile.ChildNodes.Nodes['sdnList'].ChildNodes.Count - 1 do
+   begin
+
+    CustomerNode := XmlFile.ChildNodes.Nodes['sdnList'].ChildNodes[i];
+     d_xml_type:=2;
+ if CustomerNode.NodeName = 'sdnEntry' then
+     begin
+
+  if CustomerNode.ChildNodes.Nodes['sdnType'].text='Individual' then
+     begin
+
+      f1 := CustomerNode.ChildNodes.Nodes['uid'].text;
+      f2 := CustomerNode.ChildNodes.Nodes['firstName'].text;
+      f3 := CustomerNode.ChildNodes.Nodes['lastName'].text;
+      f4 := CustomerNode.ChildNodes.Nodes['sdnType'].text;
+    DmBlack.OraclePackage1.CallProcedure('add_cust_blackXML',['p_dataid',f1,'p_FIRST_NAME',f2,'p_SECOND_NAME',f3, 'p_xml_type', d_xml_type]);
+    MainNode.ChildNodes.Nodes[i].ChildNodes['programList'].ChildNodes['program'].text;
+
+    f2:='';
+    f3:='';
+    f4:='';
+    for j := 0 to MainNode.ChildNodes.Nodes[i].ChildNodes['akaList'].ChildNodes.Count-1 do
+    begin
+    CustomerNode := MainNode.ChildNodes[i].ChildNodes['akaList'].ChildNodes[j];//.ChildNodes[j];
+    if CustomerNode.NodeName='aka' then
+    begin
+     f2:=CustomerNode.ChildNodes.Nodes['firstName'].text;
+     f3:=CustomerNode.ChildNodes.Nodes['lastName'].text;
+      DmBlack.OraclePackage1.CallProcedure('add_customers_black_namexml',['p_dataid',f1,'p_NAME',f2,'p_NAME1',f3,'p_xml_type',d_xml_type]);
+    end;
+    end;
+   {     adrres
+    for j := 0 to MainNode.ChildNodes.Nodes[i].ChildNodes['addressList'].ChildNodes.Count-1 do
+    begin
+    CustomerNode := MainNode.ChildNodes[i].ChildNodes['addressList'].ChildNodes[j];//.ChildNodes[j];
+    if CustomerNode.NodeName='address' then
+    begin
+     showmessage(f1+'kkk'+CustomerNode.ChildNodes.Nodes['stateOrProvince'].text);
+    end;
+    end;     }
+
+  {  for j := 0 to MainNode.ChildNodes.Nodes[i].ChildNodes['dateOfBirthList'].ChildNodes.Count-1 do
+    begin
+    CustomerNode := MainNode.ChildNodes[i].ChildNodes['dateOfBirthList'].ChildNodes[j];
+    if CustomerNode.NodeName='dateOfBirthItem' then
+    begin
+     f2:=CustomerNode.ChildNodes.Nodes['dateOfBirth'].text;
+
+      DmBlack.OraclePackage1.CallProcedure('add_customers_black_contryxml',['p_dataid',f1,'p_city',f2]);
+    end;
+    end;
+
+   for j := 0 to MainNode.ChildNodes.Nodes[i].ChildNodes['placeOfBirthList'].ChildNodes.Count-1 do
+    begin
+    CustomerNode := MainNode.ChildNodes[i].ChildNodes['placeOfBirthList'].ChildNodes[j];
+    if CustomerNode.NodeName='placeOfBirthItem' then
+    begin
+    f2:=CustomerNode.ChildNodes.Nodes['placeOfBirth'].text;
+
+    DmBlack.OraclePackage1.CallProcedure('update_customers_black_contryxml',['p_dataid',f1,'p_country',f2]);
+    end;
+    end;       }
+
+              end;
+              end;             //Individual
+
+
+    if CustomerNode.ChildNodes.Nodes['sdnType'].text='Entity' then
+    begin
+      f1 := CustomerNode.ChildNodes.Nodes['uid'].text;
+      f2 := CustomerNode.ChildNodes.Nodes['lastName'].text;
+      f3 := CustomerNode.ChildNodes.Nodes['remarks'].text;
+      f4 := CustomerNode.ChildNodes.Nodes['sdnType'].text;
+      DmBlack.OraclePackage1.CallProcedure('add_cust_blackXML',['p_dataid',f1,'p_FIRST_NAME',f2, 'p_xml_type', d_xml_type{,'p_SECOND_NAME',f3}]);
+
+      MainNode.ChildNodes.Nodes[i].ChildNodes['programList'].ChildNodes['program'].text;
+
+  {  f2:='';
+    f3:='';
+    f4:='';
+    for j := 0 to MainNode.ChildNodes.Nodes[i].ChildNodes['idList'].ChildNodes.Count-1 do
+    begin
+    CustomerNode := MainNode.ChildNodes[i].ChildNodes['idList'].ChildNodes[j];//.ChildNodes[j];
+    if CustomerNode.NodeName='id' then
+    begin
+     f2:=CustomerNode.ChildNodes.Nodes['idType'].text;
+     f3:=CustomerNode.ChildNodes.Nodes['idNumber'].text;
+     f4:=CustomerNode.ChildNodes.Nodes['idCountry'].text;
+    // showmessage(f1+'ff'+f3);
+     DmBlack.OraclePackage1.CallProcedure('add_customers_black_contryxml',['p_dataid',f1,'p_city',f2,'p_state_province',f3,'p_country',f4]);
+    end;
+    end;   }
+   //  f2:='';
+     for j := 0 to MainNode.ChildNodes.Nodes[i].ChildNodes['akaList'].ChildNodes.Count-1 do
+    begin
+    CustomerNode := MainNode.ChildNodes[i].ChildNodes['akaList'].ChildNodes[j];//.ChildNodes[j];
+    if CustomerNode.NodeName='aka' then
+    begin
+     f2:=CustomerNode.ChildNodes.Nodes['lastName'].text;
+     DmBlack.OraclePackage1.CallProcedure('add_customers_black_namexml',['p_dataid',f1,'p_NAME',f2,'p_xml_type',d_xml_type]);
+    end;
+    end;
+
+
+   {   for j := 0 to MainNode.ChildNodes.Nodes[i].ChildNodes['addressList'].ChildNodes.Count-1 do
+    begin
+    CustomerNode := MainNode.ChildNodes[i].ChildNodes['addressList'].ChildNodes[j];//.ChildNodes[j];
+    if CustomerNode.NodeName='address' then
+    begin
+     f2:=CustomerNode.ChildNodes.Nodes['address1'].text;
+     f3:=CustomerNode.ChildNodes.Nodes['city'].text;
+     f4:=CustomerNode.ChildNodes.Nodes['postalCode'].text;
+     f5:=CustomerNode.ChildNodes.Nodes['country'].text;
+     DmBlack.OraclePackage1.CallProcedure('add_customers_black_Paspxml',['p_dataid',f1,'p_note',f2,'p_city',f3,'p_pasp_number',f4,'p_country',f5]);
+    end;
+    end;   }
+
+ {    for j := 0 to MainNode.ChildNodes.Nodes[i].ChildNodes['dateOfBirthList'].ChildNodes.Count-1 do
+    begin
+    CustomerNode := MainNode.ChildNodes[i].ChildNodes['dateOfBirthList'].ChildNodes[j];
+    if CustomerNode.NodeName='dateOfBirthItem' then
+    begin
+     f2:=CustomerNode.ChildNodes.Nodes['dateOfBirth'].text;
+
+      DmBlack.OraclePackage1.CallProcedure('add_customers_black_contryxml',['p_dataid',f1,'p_city',f2]);
+    end;
+    end;
+
+   for j := 0 to MainNode.ChildNodes.Nodes[i].ChildNodes['placeOfBirthList'].ChildNodes.Count-1 do
+    begin
+    CustomerNode := MainNode.ChildNodes[i].ChildNodes['placeOfBirthList'].ChildNodes[j];
+    if CustomerNode.NodeName='placeOfBirthItem' then
+    begin
+     f2:=CustomerNode.ChildNodes.Nodes['placeOfBirth'].text;
+
+       DmBlack.OraclePackage1.CallProcedure('add_customers_black_contryxml',['p_dataid',f1,'p_city',f2]);
+    end;
+    end;   }
+    end;
+
+    Application.ProcessMessages;
+     Gauge_cust.Progress := Trunc(z*100 / XmlFile.ChildNodes.Nodes['sdnList'].ChildNodes.Count+1);
+
+        z := z + 1;
+ end;//-----
+
+    MessageDlg('XML fayli uğurla oxundu', mtInformation, [mbOk], 0);
+    Gauge_cust.Progress :=0;
+    panle_Gauge.Visible:=false;
+
+    end;
+
+procedure TBlackInst.Xml3Click(Sender: TObject);
+var
+z,a :integer;
+ d_xml_type:integer;
+
+    begin
+    panle_Gauge.Visible:=true;
+ for i:= 0 to XmlFile.DocumentElement.ChildNodes.Count - 1 do
+   begin
+   a:=i+1;
+   f1:= a;
+ // strtoint( inttostr(a)+'BL');
+
+   d_xml_type:=3;
+  for j := 0 to XmlFile.DocumentElement.ChildNodes[i].ChildNodes.Count-1 do
+ begin
+  MainNode:= XmlFile.DocumentElement.ChildNodes[i].ChildNodes[j];
+
+ if MainNode.NodeName = 'nameAlias' then
+  begin
+  { Node.HasAttribute('middleName');
+   Node.HasAttribute('lastName');
+   Node.HasAttribute('firstName');}
+
+  f2:= MainNode.Attributes['firstName'];
+  f3:= MainNode.Attributes['lastName'];
+  f4:= MainNode.Attributes['middleName'];
+  f5:= MainNode.Attributes['wholeName'];
+     if f20<>f1 then
+       begin
+   DmBlack.OraclePackage1.CallProcedure('add_cust_blackXML',['p_dataid',f1,'p_FIRST_NAME',f2 + ' ' +f3+ ' '+f4,'p_SECOND_NAME',f5,'p_xml_type',d_xml_type]);
+
+
+     end;
+     f20:=f1;
+   if f20=f1 then
+     begin
+   DmBlack.OraclePackage1.CallProcedure('add_customers_black_namexml',['p_dataid',f1,'p_name',f5,'p_xml_type',d_xml_type]);
+     end;
+
+  end;
+{   if Node.NodeName = 'citizenship' then
+  begin
+     showmessage(inttostr(a)+Node.Attributes['countryIso2Code']);
+    end;
+
+    if Node.NodeName = 'birthdate' then
+  begin
+     showmessage(inttostr(a)+Node.Attributes['calendarType']);
+    end;  }
+
+
+   end;
+             Application.ProcessMessages;
+     Gauge_cust.Progress := Trunc(z*100 / XmlFile.DocumentElement.ChildNodes.Count+1);
+
+        z := z + 1;
+ end;
+
+    MessageDlg('XML fayli uğurla oxundu', mtInformation, [mbOk], 0);
+    Gauge_cust.Progress :=0;
+    panle_Gauge.Visible:=false;
+
+
+
+    end;
+
+
+procedure TBlackInst.yerli1Click(Sender: TObject);
+begin
+ if  MessageDlg(Format('Fayl vasitəsilə yüklənmiş əvvəlki məlumatlar silinəcək. Davam edilsin?',['']),mtConfirmation,mbYesNoCancel,0)=mrYes
+  then
+  begin
+DmBlack.OraclePackage1.CallProcedure('del_cust_black',['p_id',1]);
+ReadRemoteXML_yerli('http://hms.gov.az/uploads/list/1/4ca3eca254db23e131d33199bfe22f7c.xml?v=1755866308');
+DmBlack.MainDSet.Close;
+DmBlack.MainDSet.open;
+////('http://hms.gov.az/frq-content/nov_snk_v1/DOMESTIC.xml');
+  end;
+
+end;
+
+procedure TBlackInst.Button3Click(Sender: TObject);
+
+var
+  s,i,p,k,j,p1,k1,c: Integer;
+  FindText:string;
+  Sbegin,Send:string;
+begin
+
+  RichEdit1.Lines.LoadFromFile('C:\Users\Teymur\Desktop\Vafa.xml');
+  Sbegin:='<sanctionEntity';
+  Send:='</sanctionEntity';
+  p:=0;
+  k:=0;
+  p1:=0;
+  k1:=0;
+  c:=0;
+   for I := 0 to RichEdit1.Lines.Count-1 do
+  begin
+    FindText:=RichEdit1.Lines.Strings[i];
+
+   // ShowMessage(FindText);
+
+    if AnsiPos(Sbegin,FindText)>0 then
+    begin
+      p:=i;
+
+    //  ShowMessage(IntToStr(p));
+    end;
+
+    if AnsiPos(Send,FindText)>0 then
+    begin
+      k:=i;
+
+   //   ShowMessage(IntToStr(k));
+    end;
+
+    if (p>p1) and (k>k1)then
+    begin
+     c:=c+1;
+
+      OracleDataSet1.close;
+      OracleDataSet1.open;
+      OracleDataSet1.first;
+   for s := 0 to OracleDataSet1.RecordCount-1 do
+    begin
+    showmessage(OracleDataSet1FILD.AsString);
+     DmBlack.OraclePackage1.CallProcedure('report_tax',['v_id',c,'tx',OracleDataSet1FILD.AsString]);
+
+       OracleDataSet1.Next;
+       end;
+
+    // OracleDataSet3.Close;
+   //  OracleDataSet3.Open;
+
+
+      for j := p to k do
+      begin
+        FindText:=RichEdit1.Lines.Strings[j];
+
+        ShowMessage(inttostr(c));
+       //  ShowMessage(FindText);
+        RichEdit2.Lines.Add(FindText) ;
+     DmBlack.OraclePackage1.CallProcedure('aa',['c',inttostr(c),'aa',FindText]);
+      end;
+      p1:=p;
+      k1:=k;
+
+    end;
+
+  end;
+
+
+
+end;
+
+
+
+procedure TBlackInst.isertbtnClick(Sender: TObject);
+begin
+x:=1;
+with InsForm do begin
+ edit1.text:='';
+ edit2.text:='';
+ edit3.text:='';
+ edit4.text:='';
+ edit5.text:='';
+ edit6.text:='';
+ edit7.text:='';
+ edit8.text:='';
+ DBLookupComboBox3.KeyValue:='';
+ DBLookupComboBox2.KeyValue:='';
+ DBLookupComboBox1.KeyValue:=1;
+ //showmessage(DBLookupComboBox1.text);
+ DBLookupComboBox4.KeyValue:='';
+ DBEdit1.Text:='';
+ end;
+InsForm.ShowModal
+end;
+
+procedure TBlackInst.ToolButton1Click(Sender: TObject);
+begin
+x:=2;
+  InsForm.DateTimePicker1.DateTime:=DmBlack.MainDSet.fieldbyname('doc_date').asdatetime;
+ InsForm.DateTimePicker2.DateTime:=DmBlack.MainDSet.fieldbyname('birthdate').asdatetime;
+ InsForm.edit1.text:=DmBlack.MainDSet.fieldbyname('name').asstring;
+ InsForm.edit2.text:=DmBlack.MainDSet.fieldbyname('lastname').asstring;
+ InsForm.edit4.text:=DmBlack.MainDSet.fieldbyname('middlename').asstring;
+ InsForm.edit3.text:=DmBlack.MainDSet.fieldbyname('doc_pin').asstring;
+ InsForm.edit5.text:=DmBlack.MainDSet.fieldbyname('doc_organ').asstring;
+ InsForm.edit6.text:=DmBlack.MainDSet.fieldbyname('doc_num').asstring;
+ InsForm.edit7.text:=DmBlack.MainDSet.fieldbyname('doc_serie').asstring;
+ InsForm.edit8.text:=DmBlack.MainDSet.fieldbyname('address').asstring;
+ InsForm.DBLookupComboBox1.keyvalue:=DmBlack.MainDSet.fieldbyname('doc_type').asinteger;
+ InsForm.DBLookupComboBox2.keyvalue:=DmBlack.MainDSet.fieldbyname('adrs_city').asinteger;
+ InsForm.DBLookupComboBox3.keyvalue:=DmBlack.MainDSet.fieldbyname('adrs_state').asinteger;
+ InsForm.DBLookupComboBox4.keyvalue:=DmBlack.MainDSet.fieldbyname('gender').asinteger;
+
+InsForm.ShowModal;
+end;
+
+procedure TBlackInst.N1718sanksiyasiyahs1Click(Sender: TObject);
+begin
+  if  MessageDlg(Format('Fayl vasitəsilə yüklənmiş əvvəlki məlumatlar silinəcək. Davam edilsin?',['']),mtConfirmation,mbYesNoCancel,0)=mrYes
+  then
+  begin
+  d_xml_type:=3;
+ DmBlack.OraclePackage1.CallProcedure('delete_xml',['v_id',d_xml_type]);
+ ReadRemoteXML_xarci3('http://hms.gov.az/uploads/list/8/ddaf3ccbb7a67df7badfbcc13bfe8d36.xml?v=1755868081');
+ DmBlack.ods_blecxml.Close;
+ DmBlack.ods_blecxml.Open;
+  end;
+end;
+
+procedure TBlackInst.N1988sanksiyasiyahs1Click(Sender: TObject);
+begin
+
+
+    if  MessageDlg(Format('Fayl vasitəsilə yüklənmiş əvvəlki məlumatlar silinəcək. Davam edilsin?',['']),mtConfirmation,mbYesNoCancel,0)=mrYes
+  then
+  begin
+  d_xml_type:=2;
+ DmBlack.OraclePackage1.CallProcedure('delete_xml',['v_id',d_xml_type]);
+ ReadRemoteXML_xarci2('http://hms.gov.az/uploads/list/6/c29bc235b831e972379bfba9f25ad955.xml?v=1755868048');
+ DmBlack.ods_blecxml.Close;
+ DmBlack.ods_blecxml.Open;
+  end
+
+end;
+
+procedure TBlackInst.N1Click(Sender: TObject);
+begin
+{panel1.Visible:=true ;
+N1.Visible:=false;
+N2.Visible:=true; }
+Panel1.Visible :=not Panel1.Visible;
+   N1.Checked :=Panel1.Visible;
+
+end;
+
+procedure TBlackInst.N2231siyahs1Click(Sender: TObject);
+begin
+ if  MessageDlg(Format('Fayl vasitəsilə yüklənmiş əvvəlki məlumatlar silinəcək. Davam edilsin?',['']),mtConfirmation,mbYesNoCancel,0)=mrYes
+  then
+  begin
+  d_xml_type:=4;
+ DmBlack.OraclePackage1.CallProcedure('delete_xml',['v_id',d_xml_type]);
+ ReadRemoteXML_xarci4('http://hms.gov.az/uploads/list/9/972ea547f7be07367b00d3141f8fe95c.xml?v=1755868176');
+ DmBlack.ods_blecxml.Close;
+ DmBlack.ods_blecxml.Open;
+  end;
+end;
+
+procedure TBlackInst.EditNAMEChange(Sender: TObject);
+begin
+With EditNAME do
+if Text <> '' then
+DmBlack.MainDSrc.DataSet.Locate('v_NAME',LowerCase(EditNAME.Text),[loPartialKey]);
+ {DmBlack.MainDSet.filter:='NAME='''+EditNAME.text+('*')+'''';
+  ostenlen seetri axtarir}
+
+end;
+
+procedure TBlackInst.Edit2Change(Sender: TObject);
+begin
+With Edit2 do
+if Text <> '' then
+DmBlack.MainDSrc.DataSet.Locate('v_lastname',LowerCase(Edit2.Text),[loPartialKey]);
+
+end;
+
+procedure TBlackInst.Edit3Change(Sender: TObject);
+begin
+With Edit3 do
+if Text <> '' then
+DmBlack.MainDSrc.DataSet.Locate('v_middlename',LowerCase(Edit3.Text),[loPartialKey]);
+
+end;
+
+procedure TBlackInst.ToolButton2Click(Sender: TObject);
+begin
+{  with DmBlack.MainDSet do
+   if IsEmpty then begin
+    ShowMessage('Hecbir Kod qeyd olunmayib!');
+    Exit;
+   end
+   else begin   }
+
+    if  MessageDlg(Format('              Silinsin?',['p_id']),mtConfirmation,mbYesNoCancel,0)=mrYes then begin
+     DmBlack.OraclePackage1.CallProcedure('del_cust_black',
+     ['p_id',DmBlack.MainDSet .FieldByName('id').asinteger]);
+     DmBlack.MainDSet .Refresh;
+end;
+             end;
+
+
+procedure TBlackInst.ToolButton3Click(Sender: TObject);
+begin
+DmBlack.MainDSet.Refresh;
+end;
+
+procedure TBlackInst.Edit1Change(Sender: TObject);
+begin
+ With Edit1 do
+if Text <> '' then
+DmBlack.MainDSrc.DataSet.Locate('DOC_PIN',Edit1.Text,[loPartialKey]);
+end;
+
+procedure TBlackInst.EditNAMEClick(Sender: TObject);
+begin
+
+edit2.text:='';
+edit1.text:='';
+edit3.text:='';
+end;
+
+procedure TBlackInst.Edit2Click(Sender: TObject);
+begin
+EditNAME.text:='';
+edit1.text:='';
+edit3.text:='';
+end;
+
+procedure TBlackInst.Edit3Click(Sender: TObject);
+begin
+EditNAME.text:='';
+edit1.text:='';
+edit2.text:='';
+end;
+
+procedure TBlackInst.Edit1Click(Sender: TObject);
+begin
+ EditNAME.text:='';
+edit3.text:='';
+edit2.text:='';
+end;
+
+procedure TBlackInst.ToolButton7Click(Sender: TObject);
+begin
+   Panel2.Visible :=not Panel2.Visible;
+   ToolButton7.Down :=Panel2.Visible;
+   CheckBox1.Checked:=true;
+
+end;
+
+procedure TBlackInst.CheckBox1Click(Sender: TObject);
+begin
+
+if CheckBox1.Checked=true then
+Evanescence1.CheckAll
+else
+begin
+Evanescence1.UncheckAll;
+ end;
+   if Evanescence1.GetCheckedKeyList.Count=0 then
+  begin
+  ADDITIONALPARAMS:=' and a.adrs_state=0';
+  end
+  else
+  begin
+  ADDITIONALPARAMS:='';
+  end;
+DmBlack.MainDSet.Close;
+DmBlack.MainDSet.SQL[8]:= ADDITIONALPARAMS;
+DmBlack.MainDSet.open;
+end;
+
+procedure TBlackInst.Evanescence1ClickCheck(Sender: TObject);
+var
+ ADDITIONALPARAMS:string;
+begin
+if (Evanescence1.GetCheckedKeyList.Count<>Evanescence1.Items.Count) then
+  ADDITIONALPARAMS := ADDITIONALPARAMS + ' and a.adrs_state in('
+                   +Evanescence1.GetCheckedKeyList.CommaText+')'
+                   +#13#10;
+  if Evanescence1.GetCheckedKeyList.Count=0 then
+  begin
+  ADDITIONALPARAMS:=' and a.adrs_state=0';
+  end;
+
+DmBlack.MainDSet.Close;
+DmBlack.MainDSet.SQL[8]:= ADDITIONALPARAMS;
+DmBlack.MainDSet.open;
+
+end;
+
+procedure TBlackInst.N3Click(Sender: TObject);
+begin
+x:=1;
+with InsForm do begin
+ edit1.text:='';
+ edit2.text:='';
+ edit3.text:='';
+ edit4.text:='';
+ edit5.text:='';
+ edit6.text:='';
+ edit7.text:='';
+ edit8.text:='';
+ DBLookupComboBox3.KeyValue:='';
+ DBLookupComboBox2.KeyValue:='';
+ DBLookupComboBox1.KeyValue:=1;
+ DBLookupComboBox4.KeyValue:='';
+ DBEdit1.Text:='';
+ end;
+InsForm.ShowModal
+end;
+
+procedure TBlackInst.N4Click(Sender: TObject);
+begin
+InsForm.edit1.text:=DmBlack.MainDSet.fieldbyname('name').asstring;
+ InsForm.edit2.text:=DmBlack.MainDSet.fieldbyname('lastname').asstring;
+ InsForm.edit4.text:=DmBlack.MainDSet.fieldbyname('middlename').asstring;
+ InsForm.edit3.text:=DmBlack.MainDSet.fieldbyname('doc_pin').asstring;
+ InsForm.edit5.text:=DmBlack.MainDSet.fieldbyname('doc_organ').asstring;
+ InsForm.edit6.text:=DmBlack.MainDSet.fieldbyname('doc_num').asstring;
+ InsForm.edit7.text:=DmBlack.MainDSet.fieldbyname('doc_serie').asstring;
+ InsForm.edit8.text:=DmBlack.MainDSet.fieldbyname('address').asstring;
+ InsForm.DBLookupComboBox1.keyvalue:=DmBlack.MainDSet.fieldbyname('doc_type').asinteger;
+ InsForm.DBLookupComboBox2.keyvalue:=DmBlack.MainDSet.fieldbyname('adrs_city').asinteger;
+ InsForm.DBLookupComboBox3.keyvalue:=DmBlack.MainDSet.fieldbyname('adrs_state').asinteger;
+ InsForm.DBLookupComboBox4.keyvalue:=DmBlack.MainDSet.fieldbyname('gender').asinteger;
+x:=2;
+InsForm.ShowModal;
+end;
+
+procedure TBlackInst.N5Click(Sender: TObject);
+begin
+
+    if  MessageDlg(Format( '             Silinsin?',['p_id']),mtConfirmation,mbYesNoCancel,0)=mrYes then begin
+     DmBlack.OraclePackage1.CallProcedure('del_cust_black',
+     ['p_id',DmBlack.MainDSet .FieldByName('id').asinteger]);
+     DmBlack.MainDSet .Refresh;
+end;
+end ;
+
+procedure TBlackInst.N6Click(Sender: TObject);
+begin
+DmBlack.MainDSet.Refresh;
+end;
+
+procedure TBlackInst.N7Click(Sender: TObject);
+begin
+ Panel2.Visible :=not Panel2.Visible;
+   ToolButton7.Down :=Panel2.Visible;
+   CheckBox1.Checked:=true;
+end;
+
+procedure TBlackInst.ToolButton9Click(Sender: TObject);
+begin
+Panel1.Visible :=not Panel1.Visible;
+   ToolButton9.Down :=Panel1.Visible;
+
+end;
+
+procedure TBlackInst.DBGrid1DblClick(Sender: TObject);
+begin
+x:=2;
+ InsForm.DateTimePicker1.DateTime:=DmBlack.MainDSet.fieldbyname('doc_date').asdatetime;
+ InsForm.DateTimePicker2.DateTime:=DmBlack.MainDSet.fieldbyname('birthdate').asdatetime;
+ InsForm.edit1.text:=DmBlack.MainDSet.fieldbyname('name').asstring;
+ InsForm.edit2.text:=DmBlack.MainDSet.fieldbyname('lastname').asstring;
+ InsForm.edit4.text:=DmBlack.MainDSet.fieldbyname('middlename').asstring;
+ InsForm.edit3.text:=DmBlack.MainDSet.fieldbyname('doc_pin').asstring;
+ InsForm.edit5.text:=DmBlack.MainDSet.fieldbyname('doc_organ').asstring;
+ InsForm.edit6.text:=DmBlack.MainDSet.fieldbyname('doc_num').asstring;
+ InsForm.edit7.text:=DmBlack.MainDSet.fieldbyname('doc_serie').asstring;
+ InsForm.edit8.text:=DmBlack.MainDSet.fieldbyname('address').asstring;
+ InsForm.DBLookupComboBox1.keyvalue:=DmBlack.MainDSet.fieldbyname('doc_type').asinteger;
+ InsForm.DBLookupComboBox2.keyvalue:=DmBlack.MainDSet.fieldbyname('adrs_city').asstring;
+ InsForm.DBLookupComboBox3.keyvalue:=DmBlack.MainDSet.fieldbyname('citizenship').asstring;
+ InsForm.DBLookupComboBox4.keyvalue:=DmBlack.MainDSet.fieldbyname('gender').asinteger;
+
+InsForm.ShowModal;
+end;
+
+procedure TBlackInst.DBGrid2DrawColumnCell(Sender: TObject; const Rect: TRect;
+  DataCol: Integer; Column: TColumn; State: TGridDrawState);
+var
+S: string;
+
+begin
+  // Əgər hələ data yüklənməyibsə və ya hələ rəngləmə aktiv deyilsə
+  if (not EnableColoring) or (ods_hms.RecordCount = 0) then
+  begin
+    DBGrid2.DefaultDrawColumnCell(Rect, DataCol, Column, State);
+    Exit;
+  end;
+
+
+  S := LowerCase(ods_hms.FieldByName('main_status').AsString);
+
+  // MATCH → qırmızı
+  if S='match' then
+  begin
+    DBGrid2.Canvas.Brush.Color := clRed;
+    DBGrid2.Canvas.Font.Color := clWhite;
+  end
+  else
+ { if S='no match' then
+  begin
+    DBGrid2.Canvas.Brush.Color := clGreen;
+    DBGrid2.Canvas.Font.Color := clWhite;
+  end
+  else }
+  if S='close' then
+  begin
+
+    DBGrid2.Canvas.Brush.Color := clYellow;
+    DBGrid2.Canvas.Font.Color := clBlack;
+  end;
+  DBGrid2.DefaultDrawColumnCell(Rect, DataCol, Column, State);
+  //ods_hms.Next;
+
+  end;
+
+
+procedure TBlackInst.ToolButton10Click(Sender: TObject);
+begin
+formCon.ShowModal;
+end;
+
+procedure TBlackInst.ToolButton11Click(Sender: TObject);
+Const xlCellTypeLast=$000000B;
+var Excel:Variant;
+    m, n:Integer;
+    b:string;
+    v_date:tdatetime;
+begin
+  {
+ if DmBlack.OracleDataSet2.RecordCount>0 then
+   begin
+     DmBlack.OracleDataSet3.close;
+     DmBlack.OracleDataSet3.Open;
+   end;
+  if  not OpenDialog1.Execute then Exit;
+  Excel:=CreateoleObject('Excel.Application');
+  Excel.Workbooks.Open(OpenDialog1.FileName);
+  m := 6;
+  n := excel.ActiveCell.SpecialCells(xlCellTypeLast).Row+1;//axrinci
+
+  if  MessageDlg(Format('Fayl vasitəsilə yüklənmiş əvvəlki məlumatlar silinəcək. Davam edilsin?',['']),mtConfirmation,mbYesNoCancel,0)=mrYes
+  then
+  while m<>n do begin
+
+    DmBlack.OracleDataSet2.Close;
+    DmBlack.OracleDataSet2.Open;
+    DmBlack.OracleDataSet2.insert;
+
+    DmBlack.OracleDataSet2.FieldByName('black_type').Value :=1;
+    DmBlack.OracleDataSet2.FieldByName('name').Value :=Excel.Cells[m, 2].value;
+    DmBlack.OracleDataSet2.FieldByName('lastname').Value :=Excel.Cells[m, 2].value;
+    DmBlack.OracleDataSet2.FieldByName('middlename').Value :=Excel.Cells[m, 2].value;
+
+    if (not VarIsNull(Excel.Cells[m, 3].Value)) and
+       (Trim(VarToStr(Excel.Cells[m, 3].Value)) <> '') then
+      begin
+     DmBlack.OracleDataSet2.FieldByName('birthdate').Value := Excel.Cells[m, 3].Value;
+      end ;
+    DmBlack.OracleDataSet2.FieldByName('citizenship').Value :=Excel.Cells[m, 5].value;
+    DmBlack.OracleDataSet2.FieldByName('adrs_state').Value :=Excel.Cells[m, 5].value;
+    DmBlack.OracleDataSet2.FieldByName('adrs_city').Value :=Excel.Cells[m, 4].value;
+    DmBlack.OracleDataSet2.FieldByName('address').Value :=Excel.Cells[m, 6].value;
+    //DmBlack.OracleDataSet2.FieldByName('doc_date').Value :=Excel.Cells[m, 12].value;
+   // DmBlack.OracleDataSet2.FieldByName('doc_organ').Value :=Excel.Cells[m, 13].value;
+   // DmBlack.OracleDataSet2.FieldByName('gender').Value :=Excel.Cells[m, 14].value;
+    DmBlack.OracleDataSet2.FieldByName('doc_pin').Value :=Excel.Cells[m, 7].value;
+
+    DmBlack.OracleDataSet2.Post;
+    inc(m);
+    DmBlack.MainDSet.Refresh;
+  end;
+  Excel.Workbooks.Close;
+  Excel.Quit;
+
+        }
+
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TBlackInst,
+    Class_BlackInst,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

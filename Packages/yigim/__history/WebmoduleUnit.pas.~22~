@@ -1,0 +1,753 @@
+unit WebmoduleUnit;
+
+interface
+
+uses
+  SysUtils, Classes, HTTPApp,dbxjson, Oracle, DB, OracleData, xmldom,  IniFiles,
+  XMLIntf, msxmldom,IOUtils,XMLDoc;
+
+type
+  TWebModules = class(TWebModule)
+    Connection: TOracleSession;
+    Queries: TOracleDataSet;
+    credammo: TOracleDataSet;
+    Insertquery: TOracleQuery;
+    PaymentCr: TOracleDataSet;
+    searchpay: TOracleDataSet;
+    oneclient: TOracleDataSet;
+    query2: TOracleDataSet;
+    procedure WebModule1DefaultHandlerAction(Sender: TObject;
+      Request: TWebRequest; Response: TWebResponse; var Handled: Boolean);
+    procedure WebModule1InformationAction(Sender: TObject; Request: TWebRequest;
+      Response: TWebResponse; var Handled: Boolean);
+    procedure WebModule1CredtPaymentAction(Sender: TObject;
+      Request: TWebRequest; Response: TWebResponse; var Handled: Boolean);
+    procedure WebModule1CheckPaymentAction(Sender: TObject;
+      Request: TWebRequest; Response: TWebResponse; var Handled: Boolean);
+    procedure WebModulesOneclientCreditAction(Sender: TObject;
+      Request: TWebRequest; Response: TWebResponse; var Handled: Boolean);
+    procedure WebModulesClientCreditOPTAction(Sender: TObject;
+      Request: TWebRequest; Response: TWebResponse; var Handled: Boolean);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  WebModuleClass: TComponentClass = TWebModules;
+ dbname,dbuser,dbpass,dbport,dbadr,dbdriver:string;
+ duser,dpass,Output,ki:string;
+
+
+implementation
+
+{$R *.dfm}
+
+procedure TWebModules.WebModule1CheckPaymentAction(Sender: TObject;
+  Request: TWebRequest; Response: TWebResponse; var Handled: Boolean);
+ var
+i,j,k,tr,a,sr:Integer;
+st,st2,uname,upass,conffile:string;
+
+   JSonObject,JSonObject2:TJSonObject;
+   JSonValue,JsonValue2,JsonValue3,JsonValue4:TJSonValue;
+   JsonArray,JsonArray2: TJSONArray;
+   ArrayElement: TJSonValue;
+   FoundValue: TJSonValue;
+ clname,clcreditnumber,claccount,clvalu,clnum:string;
+clpayamount,payammount,clcreditamount:real;
+credid,ib,kr,m :integer;
+  resp,resparr,rrn:string;
+
+  begin
+
+
+
+
+JsonValue:=JSonObject.ParseJSONValue((TFile.ReadAllText('C:/xampp/apache/modules/conf.json')));
+   //smartbank/webservice /conf
+   JsonArray := JsonValue as TJSONArray;
+   if (JSONValue is TJSONArray) then
+    begin
+     for a:=0 to (JSONValue as TJSONArray).Size-1  do
+         begin
+         dbname:=((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbname').JSONValue.Value;
+         uname  :=((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbuser').JSONValue.Value;
+         upass  := ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbpass').JSONValue.Value;
+         dbadr  := ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbadrs').JSONValue.Value;
+         dbport :=  ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbport').JSONValue.Value;
+         dbdriver  := ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbdriver').JSONValue.Value;
+         end;
+      end;
+
+
+              connection.Connected:=False;
+              Connection.LogonDatabase:=dbname;
+              Connection.LogonUsername:=uname;
+              Connection.LogonPassword:=upass;
+              Connection.Connected:=true;
+              Connection.Connected:=true;
+
+         if not Connection.Connected then
+         begin
+         Response.Content := '{"ErrorText": "Could not connect to database",'+
+                           ' "ErrorCode": "02" }';
+          exit;
+         end;
+
+
+   st:=Request.Content;
+JsonValue2:=JSonObject.ParseJSONValue(st);
+JsonValue2:=(JsonValue2 as TJSONObject).Get('CheckPayment').JSONValue;
+JsonArray2 := JsonValue2 as TJSONArray;
+
+
+
+  if (JSONValue2 is TJSONArray) then
+    begin
+           //val:='1';
+     for a:=0 to (JSONValue2 as TJSONArray).Size-1  do
+         begin
+          rrn:=((JSONValue2 as TJSONArray).get(a) as TJSonObject).Get('Cheque').JSONValue.Value;
+
+           searchpay.Close;
+           searchpay.SetVariable('vrrn',rrn);
+           searchpay.Open;
+           if searchpay.RecordCount>=1 then
+            begin
+
+           resparr:=resparr+'{ "RRN": "'+rrn+'",'+
+            '"ClientName": "'+searchpay.FieldByName('customer').AsString +'",'+
+                '"ClientCreditNumber": "'+searchpay.FieldByName('crednumber').AsString+'",'+
+                '"ClientAccNo": "'+searchpay.FieldByName('account').AsString+'",'+
+                '"PaidValute": "'+searchpay.FieldByName('currency').AsString+'",'+
+               '"CreditPaidAmmount":'+floattostr(searchpay.FieldByName('ammount').AsFloat)+'},';
+            end
+             else
+             begin
+                 Response.ContentType := 'application/json';
+
+         resparr := resparr+'{ "RRN": "'+rrn +'",'+
+                           ' "ErrorText": "Cheque not found in system ",'+
+                           ' "ErrorCode": "05" },';
+
+             end;
+
+        end;
+
+    end;
+
+     SetLength(resparr,LENGTH(resparr)-1);
+
+      resp:=resp+'{ "CheckedCheque": ['+resparr+']} ' ;
+      Response.ContentType := 'application/json';
+          connection.Connected:=False;
+      Response.Content :=resp;
+end;
+
+procedure TWebModules.WebModule1CredtPaymentAction(Sender: TObject;
+  Request: TWebRequest; Response: TWebResponse; var Handled: Boolean);
+   var
+i,j,k,tr,a,sr:Integer;
+st,st2,uname,upass,conffile:string;
+
+   JSonObject,JSonObject2:TJSonObject;
+   JSonValue,JsonValue2,JsonValue3,JsonValue4:TJSonValue;
+   JsonArray,JsonArray2: TJSONArray;
+   ArrayElement: TJSonValue;
+   FoundValue: TJSonValue;
+ clname,clcreditnumber,claccount,clvalu,clnum:string;
+clpayamount,payammount,clcreditamount:real;
+credid,ib,kr,m :integer;
+  resp,resparr,nwdt:string;
+
+  begin
+
+
+
+
+JsonValue:=JSonObject.ParseJSONValue((TFile.ReadAllText('C:/xampp/apache/modules/conf.json')));
+   //smartbank/webservice /conf
+   JsonArray := JsonValue as TJSONArray;
+   if (JSONValue is TJSONArray) then
+    begin
+     for a:=0 to (JSONValue as TJSONArray).Size-1  do
+         begin
+         dbname:=((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbname').JSONValue.Value;
+         uname  :=((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbuser').JSONValue.Value;
+         upass  := ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbpass').JSONValue.Value;
+         dbadr  := ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbadrs').JSONValue.Value;
+         dbport :=  ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbport').JSONValue.Value;
+         dbdriver  := ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbdriver').JSONValue.Value;
+         end;
+      end;
+
+
+              connection.Connected:=False;
+              Connection.LogonDatabase:=dbname;
+              Connection.LogonUsername:=uname;
+              Connection.LogonPassword:=upass;
+              Connection.Connected:=true;
+              Connection.Connected:=true;
+
+         if not Connection.Connected then
+         begin
+         Response.ContentType := 'application/json';
+         connection.Connected:=False;
+         Response.Content := '{"ErrorText": "Could not connect to database",'+
+                           ' "ErrorCode": "02" }';
+          exit;
+         end;
+
+
+   st:=Request.Content;
+JsonValue2:=JSonObject.ParseJSONValue(st);
+JsonValue2:=(JsonValue2 as TJSONObject).Get('CreditPay').JSONValue;
+JsonArray2 := JsonValue2 as TJSONArray;
+
+
+
+  if (JSONValue2 is TJSONArray) then
+    begin
+           //val:='1';
+     for a:=0 to (JSONValue2 as TJSONArray).Size-1  do
+         begin
+          credid:=strtoint(((JSONValue2 as TJSONArray).get(a) as TJSonObject).Get('CreditId').JSONValue.Value);
+          payammount:=strtofloat(((JSONValue2 as TJSONArray).get(a) as TJSonObject).Get('PaymentAmmount').JSONValue.Value);
+          clvalu:=((JSONValue2 as TJSONArray).get(a) as TJSonObject).Get('PaymentValute').JSONValue.Value;
+
+
+        end;
+
+    end;
+
+    try
+
+   begin
+               PaymentCr.Close;
+               PaymentCr.SetVariable('crid',credid);
+               PaymentCr.Open;
+
+    nwdt :=FormatDateTime('YYYYMMDDHHMMSS',now)+clvalu+inttostr(credid) ;
+    Insertquery.Close;
+    Insertquery.SetVariable('v_accno',PaymentCr.FieldByName('accno').AsString);
+    Insertquery.SetVariable('v_ammount',payammount);
+    Insertquery.SetVariable('v_curr',clvalu);
+    Insertquery.SetVariable('v_cust',PaymentCr.FieldByName('name').AsString);
+    Insertquery.SetVariable('v_rrn',nwdt);
+    Insertquery.SetVariable('v_cred',PaymentCr.FieldByName('numberofcredit').AsString);
+    Insertquery.Execute;
+    Connection.Commit;
+
+    resp:='{"PaymentSucces": {"CreditId": '+inttostr(credid)+',"RRN": "'+nwdt+'"   }}';
+
+   Response.ContentType := 'application/json';
+   Response.Content :=resp;
+   end;
+    except
+   Response.ContentType := 'application/json';
+   connection.Connected:=False;
+   Response.Content :='{"ErrorText": "Could not create payment",'+
+                           ' "ErrorCode": "04" }';;
+    end;
+
+
+
+end;
+
+procedure TWebModules.WebModule1DefaultHandlerAction(Sender: TObject;
+  Request: TWebRequest; Response: TWebResponse; var Handled: Boolean);
+begin
+  Response.Content := '<html><heading/><body>Web Server Application</body></html>';
+end;
+
+
+
+
+
+procedure TWebModules.WebModule1InformationAction(Sender: TObject;
+  Request: TWebRequest; Response: TWebResponse; var Handled: Boolean);
+   var
+i,j,k,tr,a,sr:Integer;
+st,st2,uname,upass,conffile:string;
+
+   JSonObject,JSonObject2:TJSonObject;
+   JSonValue,JsonValue2:TJSonValue;
+   JsonArray,JsonArray2: TJSONArray;
+   ArrayElement: TJSonValue;
+   FoundValue: TJSonValue;
+ clname,clcreditnumber,claccount,clvalu,clnum,clbirthday:string;
+clpayamount,clcreditamount:real;
+credid,ib,kr,m :integer;
+  resp,resparr:string;
+
+
+begin
+// try
+   JsonValue:=JSonObject.ParseJSONValue((TFile.ReadAllText('C:/xampp/apache/modules/conf.json')));
+   //smartbank/webservice /conf
+   JsonArray := JsonValue as TJSONArray;
+   if (JSONValue is TJSONArray) then
+    begin
+     for a:=0 to (JSONValue as TJSONArray).Size-1  do
+         begin
+         dbname:=((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbname').JSONValue.Value;
+         uname  :=((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbuser').JSONValue.Value;
+         upass  := ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbpass').JSONValue.Value;
+         dbadr  := ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbadrs').JSONValue.Value;
+         dbport :=  ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbport').JSONValue.Value;
+         dbdriver  := ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbdriver').JSONValue.Value;
+         end;
+      end;
+
+
+
+       st:=Request.Content;
+
+JsonValue2:=JSonObject.ParseJSONValue(st);
+JsonValue2:=(JsonValue2 as TJSONObject).Get('Client').JSONValue;
+JsonArray2 := JsonValue2 as TJSONArray;
+
+
+
+  if (JSONValue2 is TJSONArray) then
+    begin
+           //val:='1';
+     for a:=0 to (JSONValue2 as TJSONArray).Size-1  do
+         begin
+          clnum:=((JSONValue2 as TJSONArray).get(a) as TJSonObject).Get('ClientNumber').JSONValue.Value;
+          clbirthday:=((JSONValue2 as TJSONArray).get(a) as TJSonObject).Get('ClientBirthday').JSONValue.Value;
+        end;
+
+    end;
+   //connection := TFDConnection.Create(nil);
+   // query:=TFDquery.Create(nil);
+
+
+              connection.Connected:=False;
+              Connection.LogonDatabase:=dbname;
+              Connection.LogonUsername:=uname;
+              Connection.LogonPassword:=upass;
+              Connection.Connected:=true;
+
+
+         if not Connection.Connected then
+         begin
+         Response.Content := '{"ErrorText": "Could not connect to database",'+
+                           ' "ErrorCode": "02" }';
+
+              connection.Connected:=False;
+          exit;
+         end;
+
+
+   st2:='select rownum,c.id,c.numberofcredit, a.name,b.birthday,get_accno( d.booroweraccid) accno,suBstr(get_accno( d.booroweraccid),8,3) val'
++' from customers a, custinfo b,cm_active_credits c ,cm_accounts d where a.id=:cln and to_char(b.birthday,''YYYYMMDD'')=:CLBIRTH'
++' and a.id=b.idcust and a.id=c.boorowerid and c.id=d.creditid ';
+
+      // Response.Content:=st2;
+
+     Queries.Close;
+     Queries.SQL.Clear;
+     Queries.SQL.Add(st2);
+     Queries.SetVariable('cln',clnum);
+     Queries.SetVariable('CLBIRTH',clbirthday);
+     Queries.Open;
+
+
+
+    if Queries.RecordCount<1 then
+         begin
+            Response.ContentType := 'application/json';
+            Response.Content := '{"ErrorText": "Customer or Credit Not Found", "ErrorCode": "03" }';
+
+              connection.Connected:=False;
+         exit;
+        end
+        else
+        begin
+
+      if Queries.RecordCount=1 then
+       begin
+
+       credid:=Queries.FieldByName('id').AsInteger;
+       credammo.Close;
+       credammo.SetVariable('cid',credid);
+       credammo.Open;
+
+        clname:=Utf8Encode (Queries.FieldByName('name').AsString);
+        clcreditnumber:=Utf8Encode( Queries.FieldByName('numberofcredit').AsString);
+        claccount:=Queries.FieldByName('accno').AsString;
+        clvalu:=Queries.FieldByName('val').AsString;
+        clpayamount:=credammo.FieldByName('payment').AsFloat;
+
+       resp:='{ "CreditLine": [{"ClientName": "'+clname +'",'+
+      '"ClientCreditNumber": "'+clcreditnumber+'",'+
+      '"ClientAccNo": "'+claccount+'",'+
+      '"CreditId": "'+inttostr(credid)+'",'+
+      '"CreditValute": "'+clvalu+'",'+
+     '"CreditPayAmmount":'+floattostr(clpayamount)+' }]} ' ;
+        Response.ContentType := 'application/json';
+            connection.Connected:=False;
+        Response.Content :=resp;
+
+
+
+       end
+       else
+       begin
+       Queries.First;
+           for i := 0 to Queries.RecordCount-1 do
+           begin
+               credid:=Queries.FieldByName('id').AsInteger;
+               credammo.Close;
+               credammo.SetVariable('cid',credid);
+               credammo.Open;
+
+               clname:= Utf8Encode(Queries.FieldByName('name').AsString);
+               clcreditnumber:= Utf8Encode(Queries.FieldByName('numberofcredit').AsString);
+               claccount:=Queries.FieldByName('accno').AsString;
+               clvalu:=Queries.FieldByName('val').AsString;
+               clpayamount:=credammo.FieldByName('payment').AsFloat;
+
+
+               resparr:=resparr+'{"ClientName": "'+clname +'",'+
+                '"ClientCreditNumber": "'+clcreditnumber+'",'+
+                '"ClientAccNo": "'+claccount+'",'+
+                '"CreditId": "'+inttostr(credid)+'",'+
+                '"CreditValute": "'+clvalu+'",'+
+               '"CreditPayAmmount":'+floattostr(clpayamount)+'},';
+
+
+               Queries.Next;
+
+           end;
+           SetLength(resparr,LENGTH(resparr)-1);
+                resp:=resp+'{ "CreditLine": ['+resparr+']} ' ;
+               Response.ContentType := 'application/json';
+
+              connection.Connected:=False;
+               Response.Content :=resp;
+
+
+       end;
+
+        end;
+
+
+
+end;
+
+procedure TWebModules.WebModulesClientCreditOPTAction(Sender: TObject;
+  Request: TWebRequest; Response: TWebResponse; var Handled: Boolean);
+ var
+i,j,k,tr,a,sr:Integer;
+st,st2,uname,upass,conffile:string;
+
+   JSonObject,JSonObject2:TJSonObject;
+   JSonValue,JsonValue2:TJSonValue;
+   JsonArray,JsonArray2: TJSONArray;
+   ArrayElement: TJSonValue;
+   FoundValue: TJSonValue;
+ clname,clcreditnumber,claccount,clvalu,clnum,clbirthday,clcntnum,clpin:string;
+clpayamount,clcreditamount:real;
+credid,ib,kr,m :integer;
+  resp,resparr:string;
+
+
+begin
+// try
+   JsonValue:=JSonObject.ParseJSONValue((TFile.ReadAllText('C:/xampp/apache/modules/conf.json')));
+   //smartbank/webservice /conf
+   JsonArray := JsonValue as TJSONArray;
+   if (JSONValue is TJSONArray) then
+    begin
+     for a:=0 to (JSONValue as TJSONArray).Size-1  do
+         begin
+         dbname:=((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbname').JSONValue.Value;
+         uname  :=((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbuser').JSONValue.Value;
+         upass  := ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbpass').JSONValue.Value;
+         dbadr  := ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbadrs').JSONValue.Value;
+         dbport :=  ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbport').JSONValue.Value;
+         dbdriver  := ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbdriver').JSONValue.Value;
+         end;
+      end;
+
+
+
+       st:=Request.Content;
+
+JsonValue2:=JSonObject.ParseJSONValue(st);
+JsonValue2:=(JsonValue2 as TJSONObject).Get('Client').JSONValue;
+JsonArray2 := JsonValue2 as TJSONArray;
+
+
+
+  if (JSONValue2 is TJSONArray) then
+    begin
+           //val:='1';
+     for a:=0 to (JSONValue2 as TJSONArray).Size-1  do
+         begin
+          clcntnum:=((JSONValue2 as TJSONArray).get(a) as TJSonObject).Get('ClientContractNumber').JSONValue.Value;
+          clpin:=((JSONValue2 as TJSONArray).get(a) as TJSonObject).Get('ClientPin').JSONValue.Value;
+        end;
+
+    end;
+   //connection := TFDConnection.Create(nil);
+   // query:=TFDquery.Create(nil);
+
+
+              connection.Connected:=False;
+              Connection.LogonDatabase:=dbname;
+              Connection.LogonUsername:=uname;
+              Connection.LogonPassword:=upass;
+              Connection.Connected:=true;
+
+
+         if not Connection.Connected then
+         begin
+         Response.Content := '{"ErrorText": "Could not connect to database",'+
+                           ' "ErrorCode": "02" }';
+
+              connection.Connected:=False;
+          exit;
+         end;
+   st2:='select rownum,c.id,c.numberofcredit, a.name,b.birthday,get_accno( d.booroweraccid) accno,suBstr(get_accno( d.booroweraccid),8,3) val'
++' from customers a, custinfo b,cm_active_credits c ,cm_accounts d where c.numberofcredit=:cln and b.passpin=:CLBIRTH'
++' and a.id=b.idcust and a.id=c.boorowerid and c.id=d.creditid ';
+
+
+  
+      // Response.Content:=st2;
+
+     query2.Close;
+     query2.SQL.Clear;
+     query2.SQL.Add(st2);
+     query2.SetVariable('cln',clcntnum);
+     query2.SetVariable('CLBIRTH',clpin);
+     query2.Open;
+
+
+
+    if query2.RecordCount<1 then
+         begin
+            Response.ContentType := 'application/json';
+            Response.Content := '{"ErrorText": "Customer or Credit Not Found", "ErrorCode": "03" }';
+
+              connection.Connected:=False;
+         exit;
+        end
+        else
+        begin
+
+      if query2.RecordCount=1 then
+       begin
+
+       credid:=query2.FieldByName('id').AsInteger;
+       credammo.Close;
+       credammo.SetVariable('cid',credid);
+       credammo.Open;
+
+        clname:=Utf8Encode (query2.FieldByName('name').AsString);
+        clcreditnumber:=Utf8Encode( query2.FieldByName('numberofcredit').AsString);
+        claccount:=query2.FieldByName('accno').AsString;
+        clvalu:=query2.FieldByName('val').AsString;
+        clpayamount:=credammo.FieldByName('payment').AsFloat;
+
+       resp:='{ "CreditLine": [{"ClientName": "'+clname +'",'+
+      '"ClientCreditNumber": "'+clcreditnumber+'",'+
+      '"ClientAccNo": "'+claccount+'",'+
+      '"CreditId": "'+inttostr(credid)+'",'+
+      '"CreditValute": "'+clvalu+'",'+
+     '"CreditPayAmmount":'+floattostr(clpayamount)+' }]} ' ;
+        Response.ContentType := 'application/json';
+            connection.Connected:=False;
+        Response.Content :=resp;
+
+
+
+       end
+       else
+       begin
+       query2.First;
+           for i := 0 to query2.RecordCount-1 do
+           begin
+               credid:=query2.FieldByName('id').AsInteger;
+               credammo.Close;
+               credammo.SetVariable('cid',credid);
+               credammo.Open;
+
+               clname:= Utf8Encode(Queries.FieldByName('name').AsString);
+               clcreditnumber:= Utf8Encode(query2.FieldByName('numberofcredit').AsString);
+               claccount:=query2.FieldByName('accno').AsString;
+               clvalu:=query2.FieldByName('val').AsString;
+               clpayamount:=credammo.FieldByName('payment').AsFloat;
+
+
+               resparr:=resparr+'{"ClientName": "'+clname +'",'+
+                '"ClientCreditNumber": "'+clcreditnumber+'",'+
+                '"ClientAccNo": "'+claccount+'",'+
+                '"CreditId": "'+inttostr(credid)+'",'+
+                '"CreditValute": "'+clvalu+'",'+
+               '"CreditPayAmmount":'+floattostr(clpayamount)+'},';
+
+
+               Queries.Next;
+
+           end;
+           SetLength(resparr,LENGTH(resparr)-1);
+                resp:=resp+'{ "CreditLine": ['+resparr+']} ' ;
+               Response.ContentType := 'application/json';
+
+              connection.Connected:=False;
+               Response.Content :=resp;
+
+
+       end;
+
+        end;
+
+
+end;
+
+procedure TWebModules.WebModulesOneclientCreditAction(Sender: TObject;
+  Request: TWebRequest; Response: TWebResponse; var Handled: Boolean);
+ var
+i,j,k,tr,a,sr:Integer;
+st,st2,uname,upass,conffile:string;
+
+   JSonObject,JSonObject2:TJSonObject;
+   JSonValue,JsonValue2:TJSonValue;
+   JsonArray,JsonArray2: TJSONArray;
+   ArrayElement: TJSonValue;
+   FoundValue: TJSonValue;
+ clname,clcreditnumber,claccount,clvalu,clnum,clbirthday:string;
+clpayamount,clcreditamount:real;
+credid,ib,kr,m :integer;
+  resp,resparr:string;
+
+
+begin
+// try
+   JsonValue:=JSonObject.ParseJSONValue((TFile.ReadAllText('C:/xampp/apache/modules/conf.json')));
+   //smartbank/webservice /conf
+   JsonArray := JsonValue as TJSONArray;
+   if (JSONValue is TJSONArray) then
+    begin
+     for a:=0 to (JSONValue as TJSONArray).Size-1  do
+         begin
+         dbname:=((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbname').JSONValue.Value;
+         uname  :=((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbuser').JSONValue.Value;
+         upass  := ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbpass').JSONValue.Value;
+         dbadr  := ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbadrs').JSONValue.Value;
+         dbport :=  ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbport').JSONValue.Value;
+         dbdriver  := ((JSONValue as TJSONArray).get(a) as TJSonObject).Get('dbdriver').JSONValue.Value;
+         end;
+      end;
+
+
+
+       st:=Request.Content;
+
+JsonValue2:=JSonObject.ParseJSONValue(st);
+JsonValue2:=(JsonValue2 as TJSONObject).Get('Client').JSONValue;
+JsonArray2 := JsonValue2 as TJSONArray;
+
+
+
+  if (JSONValue2 is TJSONArray) then
+    begin
+           //val:='1';
+     for a:=0 to (JSONValue2 as TJSONArray).Size-1  do
+         begin
+          clnum:=((JSONValue2 as TJSONArray).get(a) as TJSonObject).Get('CreditNumber').JSONValue.Value;
+         // clbirthday:=((JSONValue2 as TJSONArray).get(a) as TJSonObject).Get('ClientBirthday').JSONValue.Value;
+        end;
+
+    end;
+   //connection := TFDConnection.Create(nil);
+   // query:=TFDquery.Create(nil);
+
+
+              connection.Connected:=False;
+              Connection.LogonDatabase:=dbname;
+              Connection.LogonUsername:=uname;
+              Connection.LogonPassword:=upass;
+              Connection.Connected:=true;
+
+
+         if not Connection.Connected then
+         begin
+         Response.Content := '{"ErrorText": "Could not connect to database",'+
+                           ' "ErrorCode": "02" }';
+
+              connection.Connected:=False;
+          exit;
+         end;
+
+
+   st2:='select rownum,c.id,c.numberofcredit, a.name,b.birthday,get_accno( d.booroweraccid) accno,suBstr(get_accno( d.booroweraccid),8,3) val'
++' from customers a, custinfo b,cm_active_credits c ,cm_accounts d where c.numberofcredit=:cln '
++' and a.id=b.idcust and a.id=c.boorowerid and c.id=d.creditid ';
+
+      // Response.Content:=st2;
+
+     oneclient.Close;
+     oneclient.SQL.Clear;
+     oneclient.SQL.Add(st2);
+     oneclient.SetVariable('cln',clnum);
+   //  Queries.SetVariable('CLBIRTH',clbirthday);
+     oneclient.Open;
+
+
+
+    if oneclient.RecordCount<1 then
+         begin
+            Response.ContentType := 'application/json';
+            Response.Content := '{"ErrorText": "Customer or Credit Not Found", "ErrorCode": "03" }';
+
+              connection.Connected:=False;
+         exit;
+        end
+        else
+        begin
+
+      if oneclient.RecordCount=1 then
+       begin
+
+       credid:=oneclient.FieldByName('id').AsInteger;
+       credammo.Close;
+       credammo.SetVariable('cid',credid);
+       credammo.Open;
+
+        clname:= Utf8Encode( oneclient.FieldByName('name').AsString);
+        clcreditnumber:= Utf8Encode (oneclient.FieldByName('numberofcredit').AsAnsiString );
+        claccount:=oneclient.FieldByName('accno').AsString;
+        clvalu:=oneclient.FieldByName('val').AsString;
+        clpayamount:=credammo.FieldByName('payment').AsFloat;
+
+       resp:='{ "CreditLine": [{"ClientName": "'+clname +'",'+
+      '"ClientCreditNumber": "'+clcreditnumber+'",'+
+      '"ClientAccNo": "'+claccount+'",'+
+      '"CreditId": "'+inttostr(credid)+'",'+
+      '"CreditValute": "'+clvalu+'",'+
+     '"CreditPayAmmount":'+floattostr(clpayamount)+' }]} ' ;
+        Response.ContentType := 'application/json';
+            connection.Connected:=False;
+       // Response.Content :=resp;
+
+           end;
+
+
+               Response.Content :=resp;
+
+
+
+        end;
+
+
+
+end;
+
+end.

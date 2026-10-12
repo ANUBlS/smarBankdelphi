@@ -1,0 +1,175 @@
+unit resturimpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, CheckLst, Evanescence, Buttons, Oracle, Db, OracleData;
+
+type
+  TMainfrm = class(TForm)
+    GroupBox14: TGroupBox;
+    SpeedButton1: TSpeedButton;
+    SpeedButton2: TSpeedButton;
+    lAdditionGrants: TEvanescence;
+    AUserGrants: TEvanescence;
+    CheckBox2: TCheckBox;
+    CheckBox1: TCheckBox;
+    ResDataSet: TOracleDataSet;
+    ResAddDataSet: TOracleDataSet;
+    ResDataSource: TDataSource;
+    ResAddDataSource: TDataSource;
+    IUPackage: TOraclePackage;
+    Button1: TButton;
+    ResDataSetID: TFloatField;
+    ResDataSetSEYNBOL: TWideStringField;
+    ResDataSetNMAE: TWideStringField;
+    procedure FormShow(Sender: TObject);
+    procedure CheckBox1Click(Sender: TObject);
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure SpeedButton2Click(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure lAdditionGrantsClickCheck(Sender: TObject);
+    procedure CheckBox2Click(Sender: TObject);
+    procedure AUserGrantsClickCheck(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Mainfrm: TMainfrm;
+ procedure InitPlugin(s:string);export;
+implementation
+ uses   CommonDecls ,sboapiDataModuleImpl;
+{$R *.DFM}
+ procedure InitPlugin(s:string);export;
+begin
+   Mainfrm.ShowModal;
+end;
+exports
+     InitPlugin;
+
+procedure TMainfrm.FormShow(Sender: TObject);
+var
+i :integer;
+begin
+ ResDataSet.close;
+ ResDataSet.SetVariable('CRID',Get_SelectedCrdID);
+ ResDataSet.open;
+
+
+ResAddDataSet.close;
+ResAddDataSet.SetVariable('CRID',Get_SelectedCrdID);
+ResAddDataSet.open;
+
+   for i := 0 to ComponentCount - 1 do
+    if Components[i].Tag = 3112 then begin
+      (Components[i] as TEvanescence).Open;
+      (Components[i] as TEvanescence).CheckAll;
+    end;
+ lAdditionGrants.UncheckAll  ;
+ AUserGrants.UncheckAll
+end;
+
+procedure TMainfrm.CheckBox1Click(Sender: TObject);
+begin
+if CheckBox1.Checked=true then
+begin
+AUserGrants.CheckAll ;
+if AUserGrants.GetCheckedKeyList.Count > 0 then
+SpeedButton2.Enabled:=true;
+end
+else
+begin
+AUserGrants.UncheckAll ;
+SpeedButton2.Enabled:=false;
+end;
+end;
+
+
+procedure TMainfrm.SpeedButton1Click(Sender: TObject);
+var
+  i: Integer;
+begin
+  with  lAdditionGrants do begin
+    for i:=0 to KeyItems.Count-1 do
+
+      if Checked[i] then begin
+        IUPackage.CallProcedure('add_Rest',['p_id',KeyItems[i] ,'p_creditid',Get_SelectedCrdID]);
+      end;
+    ResDataSet.Refresh;
+    ResAddDataSet.Refresh;
+    lAdditionGrants.RefreshList;
+    AUserGrants.RefreshList;
+   SpeedButton1.Enabled:=false;
+   SpeedButton2.Enabled:=false;
+end;
+
+end;
+
+procedure TMainfrm.SpeedButton2Click(Sender: TObject);
+var
+  i: Integer;
+begin
+  with  AUserGrants do begin
+    for i:=0 to KeyItems.Count-1 do
+
+      if Checked[i] then begin
+        IUPackage.CallProcedure('del_res',['p_id',KeyItems[i] ,'p_creditid',Get_SelectedCrdID]);
+      end;
+    ResDataSet.Refresh;
+    ResAddDataSet.Refresh;
+    lAdditionGrants.RefreshList;
+    AUserGrants.RefreshList;
+    SpeedButton1.Enabled:=false;
+    SpeedButton2.Enabled:=false;
+
+end;
+
+end;
+
+procedure TMainfrm.FormDestroy(Sender: TObject);
+begin
+ResDataSet.close;
+ResAddDataSet.close;
+end;
+
+procedure TMainfrm.lAdditionGrantsClickCheck(Sender: TObject);
+begin
+if lAdditionGrants.GetCheckedKeyList.Count > 0 then
+SpeedButton1.Enabled:=true;
+end;
+
+procedure TMainfrm.CheckBox2Click(Sender: TObject);
+begin
+if CheckBox2.Checked=true then
+begin
+lAdditionGrants.CheckAll ;
+if lAdditionGrants.GetCheckedKeyList.Count > 0 then
+SpeedButton1.Enabled:=true;
+end
+else
+begin
+lAdditionGrants.UncheckAll   ;
+SpeedButton1.Enabled:=false;
+end;
+end;
+
+
+procedure TMainfrm.AUserGrantsClickCheck(Sender: TObject);
+begin
+if AUserGrants.GetCheckedKeyList.Count > 0 then
+SpeedButton2.Enabled:=true;
+end;
+
+procedure TMainfrm.Button1Click(Sender: TObject);
+begin
+close
+end;
+
+initialization
+ Mainfrm := TMainfrm.Create(CommonApplication);
+end.

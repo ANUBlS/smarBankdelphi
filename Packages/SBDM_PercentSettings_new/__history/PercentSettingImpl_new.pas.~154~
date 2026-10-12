@@ -1,0 +1,650 @@
+﻿unit PercentSettingImpl_new;
+
+interface
+    // depcapitalperiods
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, LDialogs,
+  Grids, DBGrids, StdCtrls, ExtCtrls, Buttons, Mask, DBCtrls, Db,
+  OracleData,  XFSCtrls, ComCtrls, XDBGrids, Oracle;
+
+type
+  TPercentSetting_new = class(TForm)
+    depcapitalperiods: TOracleDataSet;
+    depcapitalperiodsID: TFloatField;
+    depcapitalperiodsPERIOD: TFloatField;
+    depcapitalperiodsDESCRIPTION: TWideStringField;
+    depcapitalperiodsPERIODID: TFloatField;
+    depcapitalperiodsTYPE: TWideStringField;
+    Depositdatsettings: TOracleDataSet;
+    DepositdatsettingsID: TFloatField;
+    DepositdatsettingsPERCENT: TFloatField;
+    DepositdatsettingsFIRSTDATEINT: TFloatField;
+    DepositdatsettingsLASTDATEINT: TFloatField;
+    DepositdatsettingsVALCOD: TFloatField;
+    DepositdatsettingsDEPID: TFloatField;
+    DepositdatsettingsPERIODID: TFloatField;
+    DepositdatsettingsCAPITALID: TFloatField;
+    DepositdatsettingsDEPSETID: TFloatField;
+    DepositPerSetting: TOracleDataSet;
+    DepositPerSettingID: TFloatField;
+    DepositPerSettingCURRENCYID: TFloatField;
+    DepositPerSettingINTERESTRATE: TFloatField;
+    DepositPerSettingDUEINTRATE: TFloatField;
+    DepositPerSettingFIRSTAMOUNT: TFloatField;
+    DepositPerSettingLASTAMOUNT: TFloatField;
+    DepositPerSettingDEPID: TFloatField;
+    DepositPerSettingPERIODID: TFloatField;
+    DepositPerSettingCAPITALID: TFloatField;
+    DepositPerSettingBEFOINTRATE: TFloatField;
+    DepositTypes: TOracleDataSet;
+    DepositTypesID: TFloatField;
+    DepositTypesTYPE: TWideStringField;
+    depperiods: TOracleDataSet;
+    depperiodsID: TFloatField;
+    depperiodsPERIOD: TFloatField;
+    depperiodsDESCRIPTION: TWideStringField;
+    depperiodsDEPID: TFloatField;
+    XFGroupBox1: TXFGroupBox;
+    XDBGrid1: TXDBGrid;
+    XFGroupBox4: TXFGroupBox;
+    XDBGrid4: TXDBGrid;
+    XFGroupBox5: TXFGroupBox;
+    XDBGrid5: TXDBGrid;
+    XFGroupBox6: TXFGroupBox;
+    XDBGrid6: TXDBGrid;
+    XFPanel1: TXFPanel;
+    XFGroupBox2: TXFGroupBox;
+    XDBGrid2: TXDBGrid;
+    XFGroupBox3: TXFGroupBox;
+    XDBGrid3: TXDBGrid;
+    XFStatusBar1: TXFStatusBar;
+    Valutes: TOracleDataSet;
+    ValutesVAL_NAME: TWideStringField;
+    ValutesVALU_NAME: TWideStringField;
+    ValutesVALUTE: TIntegerField;
+    DepositTypesDatSrc: TDataSource;
+    depperiodsds: TDataSource;
+    depcapitalperiodsds: TDataSource;
+    ValutesDatSrc: TDataSource;
+    PerSettingDatSrc: TDataSource;
+    DatsettingsDatSrc: TDataSource;
+    Edit1: TEdit;
+    DepositPerSettingPERCENTAGE_GROWTH_STEP: TFloatField;
+    DepositPerSettingFIRST_DAY: TFloatField;
+    DepositPerSettingLAST_DAY: TFloatField;
+    DSRsbcm_amount_setting: TDataSource;
+    XFGroupBox8: TXFGroupBox;
+    XDBGrid7: TXDBGrid;
+    XFGroupBox9: TXFGroupBox;
+    DSsbcm_amount_setting: TOracleDataSet;
+    DSsbcm_amount_settingID: TFloatField;
+    DSsbcm_amount_settingFIRSTAMOUNT: TFloatField;
+    DSsbcm_amount_settingLASTAMOUNT: TFloatField;
+    DSsbcm_amount_settingPERIODID: TFloatField;
+    DepositPerSettingAMOUNT_SETTING_ID: TFloatField;
+    DSsbcm_amount_settingCURRENCYID: TFloatField;
+    DepositdatsettingsAMOUNT_SETTING_ID: TFloatField;
+    DepositPerSettingAMOUNT_GROWTH_FIRST: TFloatField;
+    DepositPerSettingAMOUNT_GROWTH_LAST: TFloatField;
+    XFPanel2: TXFPanel;
+    XFButton1: TXFButton;
+    XFButton2: TXFButton;
+    DepositPerSettingWRITE_MEMORY: TFloatField;
+    DepositPerSettingCONFIRMATION: TFloatField;
+    sbcm_percent_converting_new: TOraclePackage;
+    DSsysdat: TOracleDataSet;
+    DSsysdatTEK_DAT: TDateTimeField;
+    DSsysdatPRED_DAT: TDateTimeField;
+    DSsysdatARC_DAY: TDateTimeField;
+    DSsysdatCLOSE: TIntegerField;
+    DepositPerSettingHDATE: TDateTimeField;
+    XFPanel3: TXFPanel;
+    XFCheckBox1: TXFCheckBox;
+    DSsbcm_amount_settingMAXAMUONTCONRTACT: TFloatField;
+    DSsbcm_amount_settingMAXAMUONTCONRTACTPERCENT: TFloatField;
+    depperiodsPERIOD_TYPE: TWideStringField;
+    sb_aca: TOraclePackage;
+    procedure FormShow(Sender: TObject);
+    procedure XDBGrid3KeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure depperiodsAfterPost(DataSet: TDataSet);
+    procedure DepositPerSettingAfterPost(DataSet: TDataSet);
+    procedure XDBGrid5KeyPress(Sender: TObject; var Key: Char);
+    procedure PerSettingDatSrcDataChange(Sender: TObject; Field: TField);
+    procedure XDBGrid6KeyPress(Sender: TObject; var Key: Char);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure depcapitalperiodsAfterPost(DataSet: TDataSet);
+    procedure DepositdatsettingsAfterPost(DataSet: TDataSet);
+    procedure XDBGrid6KeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure XDBGrid7KeyPress(Sender: TObject; var Key: Char);
+    procedure DSsbcm_amount_settingAfterPost(DataSet: TDataSet);
+    procedure XFButton1Click(Sender: TObject);
+    procedure XFButton2Click(Sender: TObject);
+    procedure XDBGrid5KeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure DepositTypesDatSrcDataChange(Sender: TObject; Field: TField);
+    procedure DSRsbcm_amount_settingDataChange(Sender: TObject; Field: TField);
+  private
+
+  public
+      procedure WaitForOp;
+      procedure WaitFor;
+  end;
+
+var
+  PercentSetting_new: TPercentSetting_new;
+  procedure exportproc(S:String);export;
+
+implementation
+
+{$R *.DFM}
+uses sboapiDataModuleImpl,CommonDeclsImpl_new,SBTranslateProc;
+
+procedure exportproc(S:String);export;
+begin
+   PercentSetting_new.ShowModal;
+
+
+end;
+exports
+    exportproc;
+
+    procedure TPercentSetting_new.XDBGrid5KeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+   with Sender as TXDBGrid ,sbcm_percent_converting_new do begin
+   if (key = VK_DELETE) and (DataSource.DataSet.RecordCount>0) then
+   if MessageDlg('Silinməsinə əminsinizmi?',
+      mtConfirmation, [mbYes, mbNo], 0) = mrYes then
+
+
+  // showmessage(inttostr(XDBGrid5.DataSource.DataSet.FieldByName('id').AsInteger));
+   //abort;
+   begin
+       CallProcedure('deppseting_hist_new',[XDBGrid5.DataSource.DataSet.FieldByName('id').AsInteger,0]);
+       DataSource.DataSet.Delete;
+      end;
+   end;
+end;
+
+procedure TPercentSetting_new.XDBGrid5KeyPress(Sender: TObject; var Key: Char);
+var
+
+ p_id,p_currencyid,p_interestrate,p_dueintrate,p_firstamount,
+ p_lastamount,p_depid,p_periodid,p_capitalid,p_befointrate,p_first_day,
+ p_percentage_growth_step,p_last_day,p_amount_setting_id,p_amount_growth_first,
+ p_amount_growth_last,p_write_memory,p_confirmation :real;
+ p_hdate:Tdate;
+
+
+
+begin
+      with DepositPerSetting ,sbcm_percent_converting_new do
+   begin
+        //if UpdateStatus=usModified then
+     //begin
+
+       p_id:=XDBGrid5.DataSource.DataSet.FieldByName('id').AsFloat;
+       p_currencyid:=XDBGrid5.DataSource.DataSet.FieldByName('currencyid').AsFloat;
+       p_interestrate:=XDBGrid5.DataSource.DataSet.FieldByName('interestrate').AsFloat;
+       p_dueintrate:=XDBGrid5.DataSource.DataSet.FieldByName('dueintrate').AsFloat;
+       p_firstamount:=XDBGrid5.DataSource.DataSet.FieldByName('firstamount').AsFloat;
+       p_lastamount:=XDBGrid5.DataSource.DataSet.FieldByName('lastamount').AsFloat;
+       p_depid:=XDBGrid5.DataSource.DataSet.FieldByName('depid').AsFloat;
+       p_periodid:=XDBGrid5.DataSource.DataSet.FieldByName('periodid').AsFloat;
+       p_capitalid:=XDBGrid5.DataSource.DataSet.FieldByName('capitalid').AsFloat;
+       p_befointrate:=XDBGrid5.DataSource.DataSet.FieldByName('befointrate').AsFloat;
+       p_first_day:=XDBGrid5.DataSource.DataSet.FieldByName('first_day').AsFloat;
+       p_percentage_growth_step:=XDBGrid5.DataSource.DataSet.FieldByName('percentage_growth_step').AsFloat;
+       p_last_day:=XDBGrid5.DataSource.DataSet.FieldByName('last_day').AsFloat;
+       p_amount_setting_id:=XDBGrid5.DataSource.DataSet.FieldByName('amount_setting_id').AsFloat;
+       p_amount_growth_first:=XDBGrid5.DataSource.DataSet.FieldByName('amount_growth_first').AsFloat;
+       p_amount_growth_last:=XDBGrid5.DataSource.DataSet.FieldByName('amount_growth_last').AsFloat;
+       p_write_memory:=XDBGrid5.DataSource.DataSet.FieldByName('write_memory').AsFloat;
+       p_confirmation:=XDBGrid5.DataSource.DataSet.FieldByName('confirmation').AsFloat;
+       //p_hdate:=XDBGrid5.DataSource.DataSet.FieldByName('hdate').AsDateTime;
+
+
+       //end;
+
+
+     if UpdateStatus in [usInserted, usModified] then
+     begin
+
+       FieldByName('DepID').AsInteger     := DepositTypes.FieldByName('ID').AsInteger;
+       FieldByName('PeriodID').AsInteger  := Depperiods.FieldByName('ID').AsInteger;
+       FieldByName('CapitalID').AsInteger := Depcapitalperiods.FieldByName('ID').AsInteger;
+       FieldByName('Currencyid').AsInteger:= Valutes.FieldByName('VALUTE').AsInteger;
+       FieldByName('amount_setting_id').AsInteger:= DSsbcm_amount_setting.FieldByName('id').AsInteger;
+       FieldByName('WRITE_MEMORY').AsInteger:= 0;
+       FieldByName('CONFIRMATION').AsInteger:= 0;
+       FieldByName('hdate').AsDateTime:= DSsysdat.FieldByName('tek_dat').AsDateTime;
+
+
+   end;
+  CallProcedure('deppseting_upd_hist_new',[p_id,
+                                        p_currencyid,
+                                        p_interestrate,
+                                        p_dueintrate,
+                                        p_firstamount,
+                                        p_lastamount,
+                                        p_depid,
+                                        p_periodid,
+                                        p_capitalid,
+                                        p_befointrate,
+                                        p_first_day,
+                                        p_percentage_growth_step,
+                                        p_last_day,
+                                        p_amount_setting_id,
+                                        p_amount_growth_first,
+                                        p_amount_growth_last,
+                                        p_write_memory,
+                                        p_confirmation
+                                        ]);
+   end;
+
+end;
+procedure TPercentSetting_new.XDBGrid6KeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+   with Sender as TXDBGrid do begin
+   if (key = VK_DELETE) and (DataSource.DataSet.RecordCount>0) then
+   if MessageDlg('Silinməsinə əminsinizmi?',
+      mtConfirmation, [mbYes, mbNo], 0) = mrYes then
+
+      DataSource.DataSet.Delete;
+   end;
+end;
+
+procedure TPercentSetting_new.XDBGrid6KeyPress(Sender: TObject; var Key: Char);
+begin
+  with Depositdatsettings do
+   begin
+     if UpdateStatus in [usInserted, usModified] then
+     begin
+       FieldByName('Depsetid').AsInteger := DepositPerSetting.FieldByName('ID').AsInteger;
+       FieldByName('Depid').AsInteger    := DepositTypes.FieldByName('id').AsInteger;
+       FieldByName('PeriodID').AsInteger := Depperiods.FieldByName('ID').AsInteger;
+       FieldByName('CapitalID').AsInteger:= Depcapitalperiods.FieldByName('ID').AsInteger;
+       FieldByName('valcod').AsInteger   := Valutes.FieldByName('Valute').AsInteger;
+       FieldByName('amount_setting_id').AsInteger:= DSsbcm_amount_setting.FieldByName('id').AsInteger;
+       //showmessage(DepositTypes.FieldByName('id').AsString);
+
+    end;
+   end;
+end;
+
+procedure TPercentSetting_new.XDBGrid7KeyPress(Sender: TObject; var Key: Char);
+   var period :String;
+begin
+{period:=Depperiods.FieldByName('ID').AsString;
+if period='' then
+begin }
+
+      with DSsbcm_amount_setting do
+   begin
+     if UpdateStatus in [usInserted, usModified] then
+     begin
+
+       FieldByName('PeriodID').AsInteger  := Depperiods.FieldByName('ID').AsInteger;
+       FieldByName('Currencyid').AsInteger:= Valutes.FieldByName('VALUTE').AsInteger;
+
+     end;
+   end;
+{end else
+begin
+     showmessage('Depozitin Periodu daxil edilmiyib');
+       abort;
+end; }
+end;
+
+procedure TPercentSetting_new.XFButton1Click(Sender: TObject);
+begin
+ with PercentSetting_new,sb_aca do
+begin
+      CallProcedure('checkadvancedobjectaccess',['SBCM_PERCENT_SETTING_SAVE']);
+end;
+
+with DSsbcm_amount_setting ,sbcm_percent_converting_new do
+   begin
+
+       //CallProcedure('CancelDepositIntCalc',['p_contractID',ContractID]);
+
+       CallProcedure('upd_confir_and_writ_memory_new',[Valutes.FieldByName('Valute').AsInteger,
+                                                       Depperiods.FieldByName('ID').AsInteger,
+                                                       Depcapitalperiods.FieldByName('ID').AsInteger,
+                                                       DepositTypes.FieldByName('id').AsInteger,
+                                                       DSsbcm_amount_setting.FieldByName('id').AsInteger,
+                                                       0]);
+   showmessage('Seçilmiş sazlamalara görə faiz dərəcələri yaddaşa yazıldı.');
+   end;
+end;
+
+procedure TPercentSetting_new.XFButton2Click(Sender: TObject);
+var
+say :real;
+secimdurumu :integer;
+begin
+
+    if XFCheckBox1.Checked=true then
+    begin
+       secimdurumu:=1;
+
+    end;
+        if XFCheckBox1.Checked=false then
+    begin
+       secimdurumu:=0;
+
+    end;
+
+
+with DSsbcm_amount_setting ,sbcm_percent_converting_new do
+   begin
+
+       //CallProcedure('CancelDepositIntCalc',['p_contractID',ContractID]);
+       if secimdurumu=1 then
+       begin
+        if MessageDlg('Sazlanmis yeni faiz dərəcəsi əvvəlki bu tip depozitlərin bütün yatrımlarının aid edilsinmi?',
+      mtConfirmation, [mbYes, mbNo], 0) = mrYes then
+       begin
+       CallProcedure('upd_transh_percent',[Valutes.FieldByName('Valute').AsInteger,
+                                                       Depperiods.FieldByName('ID').AsInteger,
+                                                       Depcapitalperiods.FieldByName('ID').AsInteger,
+                                                       DepositTypes.FieldByName('id').AsInteger,
+                                                       DSsbcm_amount_setting.FieldByName('id').AsInteger,
+                                                       XDBGrid7.DataSource.DataSet.FieldByName('FIRSTAMOUNT').AsFloat,
+                                                       XDBGrid7.DataSource.DataSet.FieldByName('LASTAMOUNT').AsFloat,
+                                                       XDBGrid5.DataSource.DataSet.FieldByName('INTERESTRATE').AsFloat
+                                                       ]);
+       end;
+       end;
+
+       say:=CallFloatFunction('get_write_memory',[Valutes.FieldByName('Valute').AsInteger,
+                                                       Depperiods.FieldByName('ID').AsInteger,
+                                                       Depcapitalperiods.FieldByName('ID').AsInteger,
+                                                       DepositTypes.FieldByName('id').AsInteger,
+                                                       DSsbcm_amount_setting.FieldByName('id').AsInteger
+                                                       ]);
+          if say>0 then
+          begin
+          showmessage('Seçilmiş sazlamalara görə faiz dərəcələri yaddaşa yazılmadığından təsdiqlənə bilməz!');
+          exit;
+          end;
+
+          if say=0 then
+          begin
+       CallProcedure('upd_confir_and_writ_memory_new',[Valutes.FieldByName('Valute').AsInteger,
+                                                       Depperiods.FieldByName('ID').AsInteger,
+                                                       Depcapitalperiods.FieldByName('ID').AsInteger,
+                                                       DepositTypes.FieldByName('id').AsInteger,
+                                                       DSsbcm_amount_setting.FieldByName('id').AsInteger,
+                                                       1]);
+   showmessage('Seçilmiş sazlamalara görə faiz dərəcələri təsdiqləndi.');
+          end;
+
+   end;
+end;
+
+procedure TPercentSetting_new.depcapitalperiodsAfterPost(DataSet: TDataSet);
+begin
+ depcapitalperiods.Refresh;
+end;
+
+procedure TPercentSetting_new.DepositdatsettingsAfterPost(DataSet: TDataSet);
+begin
+Depositdatsettings.Refresh;
+end;
+
+procedure TPercentSetting_new.DepositPerSettingAfterPost(DataSet: TDataSet);
+begin
+//depositpersetting.RefreshRecord;
+  DepositPerSetting.Refresh;
+end;
+
+procedure TPercentSetting_new.DepositTypesDatSrcDataChange(Sender: TObject;
+  Field: TField);
+begin
+   WaitForOp;
+end;
+
+procedure TPercentSetting_new.depperiodsAfterPost(DataSet: TDataSet);
+begin
+depperiods.Refresh;
+end;
+
+procedure TPercentSetting_new.DSRsbcm_amount_settingDataChange(Sender: TObject;
+  Field: TField);
+var P_DepositID,P_PeriodID,P_CapitalPerID,P_CurrencyID,p_amount_setting_id :Integer;
+begin
+
+      with DepositTypes do
+           P_DepositID := FieldByName('ID').AsInteger;
+
+      with depcapitalperiods do
+           P_CapitalPerID := FieldByName('ID').AsInteger;
+
+      with DSsbcm_amount_setting do
+           p_amount_setting_id := FieldByName('ID').AsInteger;
+         //showmessage(intToStr(p_amount_setting_id));
+        // abort;
+   {with depperiods do
+   begin
+      if Active then close;
+      setVariable('DEPID',P_DepositID);
+      open;
+
+      P_PeriodID := FieldByName('ID').AsInteger;
+   end;  }
+
+      with depperiods do
+           P_PeriodID := FieldByName('ID').AsInteger;
+
+
+      with Valutes do
+           P_CurrencyID := FieldByName('VALUTE').AsInteger;
+
+      //  Edit1.Text:= IntToStr(P_DepositID)+'=' + IntToStr(P_CapitalPerID)+'='+IntToStr(P_PeriodID)+'='+IntToStr(P_CurrencyID)+IntToStr(p_amount_setting_id);
+
+    {      with DSsbcm_amount_setting do
+   begin
+      if Active then close;
+        setVariable('PERIODID',P_PeriodID);
+        setVariable('Currencyid',P_CurrencyID);
+          open;
+   end;   }
+
+       with DSsbcm_amount_setting do
+           p_amount_setting_id := FieldByName('ID').AsInteger;
+
+   with DepositPerSetting do
+   begin
+      if Active then close;
+      setVariable('DepID',P_DepositID);
+      setVariable('PeriodID',P_PeriodID);
+      setVariable('CapitalID',P_CapitalPerID);
+      setVariable('Currencyid',P_CurrencyID);
+      setVariable('Amount_setting_id',p_amount_setting_id);
+
+      open;
+   end;
+
+
+
+
+
+
+end;
+
+procedure TPercentSetting_new.DSsbcm_amount_settingAfterPost(DataSet: TDataSet);
+begin
+DSsbcm_amount_setting.Refresh;
+end;
+
+procedure TPercentSetting_new.FormCreate(Sender: TObject);
+begin
+SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TPercentSetting_new.FormDestroy(Sender: TObject);
+begin
+  DepositTypes.CloseAll;
+  Depperiods.CloseAll;
+  Depcapitalperiods.CloseAll;
+  Valutes.CloseAll;
+  DepositPerSetting.CloseAll;
+  Depositdatsettings.CloseAll;
+  DSsbcm_amount_setting.CloseAll;
+  DSsysdat.CloseAll;
+end;
+
+procedure TPercentSetting_new.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+ if ORD(key) = VK_ESCAPE then close
+end;
+
+procedure TPercentSetting_new.FormShow(Sender: TObject);
+var
+P_PeriodID ,P_CurrencyID : Integer;
+begin
+  DSsysdat.Open;
+  DepositTypes.open;
+  Depperiods.open;
+  Depcapitalperiods.open;
+  Valutes.open;
+  //DepositPerSetting.open;
+
+  Depositdatsettings.Open;
+  XFCheckBox1.Checked:=false;
+// DSsbcm_amount_setting.Open;
+
+end;
+   procedure TPercentSetting_new.PerSettingDatSrcDataChange(Sender: TObject;
+  Field: TField);
+begin
+   WaitFor;
+end;
+
+procedure TPercentSetting_new.WaitForOp;
+var P_DepositID,P_PeriodID,P_CapitalPerID,P_CurrencyID,p_amount_setting_id :Integer;
+begin
+
+      with DepositTypes do
+           P_DepositID := FieldByName('ID').AsInteger;
+
+      with depcapitalperiods do
+           P_CapitalPerID := FieldByName('ID').AsInteger;
+
+      with DSsbcm_amount_setting do
+           p_amount_setting_id := FieldByName('ID').AsInteger;
+         //showmessage(intToStr(p_amount_setting_id));
+        // abort;
+   {with depperiods do
+   begin
+      if Active then close;
+      setVariable('DEPID',P_DepositID);
+      open;
+
+      P_PeriodID := FieldByName('ID').AsInteger;
+   end;  }
+
+      with depperiods do
+           P_PeriodID := FieldByName('ID').AsInteger;
+
+
+      with Valutes do
+           P_CurrencyID := FieldByName('VALUTE').AsInteger;
+
+      //  Edit1.Text:= IntToStr(P_DepositID)+'=' + IntToStr(P_CapitalPerID)+'='+IntToStr(P_PeriodID)+'='+IntToStr(P_CurrencyID)+IntToStr(p_amount_setting_id);
+
+          with DSsbcm_amount_setting do
+   begin
+      if Active then close;
+        setVariable('PERIODID',P_PeriodID);
+        setVariable('Currencyid',P_CurrencyID);
+          open;
+   end;
+
+       with DSsbcm_amount_setting do
+           p_amount_setting_id := FieldByName('ID').AsInteger;
+
+   with DepositPerSetting do
+   begin
+      if Active then close;
+      setVariable('DepID',P_DepositID);
+      setVariable('PeriodID',P_PeriodID);
+      setVariable('CapitalID',P_CapitalPerID);
+      setVariable('Currencyid',P_CurrencyID);
+      setVariable('Amount_setting_id',p_amount_setting_id);
+
+      open;
+   end;
+
+
+
+
+
+end;
+
+
+procedure TPercentSetting_new.XDBGrid3KeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+   with Sender as TXDBGrid do begin
+   if (key = VK_DELETE) and (DataSource.DataSet.RecordCount>0) then
+   if MessageDlg('Silinməsinə əminsinizmi?',
+      mtConfirmation, [mbYes, mbNo], 0) = mrYes then
+      DataSource.DataSet.Delete;
+end;
+       end;
+
+procedure TPercentSetting_new.WaitFor;
+var P_DepID,P_Periodid,P_Capitalid,P_Valcod,P_Depsetid,p_amount_setting_id :Integer;
+begin
+
+   {with   DepositPerSetting do begin
+                                 P_DepID     :=FieldByName('DEPID').AsInteger;
+                                 P_Periodid  :=FieldByName('PERIODID').AsInteger;
+                                 P_Capitalid :=FieldByName('CAPITALID').AsInteger;
+                                 P_Valcod    :=FieldByName('CURRENCYID').AsInteger;
+                                 P_Depsetid  :=FieldByName('ID').AsInteger;
+                                 p_amount_setting_id:=FieldByName('amount_setting_id').AsInteger;
+
+                               end;   }
+      with DepositTypes do
+           P_DepID := FieldByName('ID').AsInteger;
+
+      with depperiods do
+           P_Periodid := FieldByName('ID').AsInteger;
+
+      with depcapitalperiods do
+           P_Capitalid := FieldByName('ID').AsInteger;
+
+      with Valutes do
+           P_Valcod := FieldByName('VALUTE').AsInteger;
+
+
+      with DSsbcm_amount_setting do
+           p_amount_setting_id := FieldByName('ID').AsInteger;
+               // showmessage(inttostr(p_amount_setting_id));
+
+
+
+  with Depositdatsettings do
+   begin
+      if Active then close;
+      setVariable('DepID',P_DepID);
+      setVariable('PeriodID',P_PeriodID);
+      setVariable('CapitalID',P_Capitalid);
+      setVariable('Valcod',P_Valcod);
+      //setVariable('Depsetid',P_Depsetid);
+      setVariable('amount_setting_id',p_amount_setting_id);
+      open;
+   end;
+
+end;
+initialization
+   PercentSetting_new := TPercentSetting_new.Create(CommonApplication)
+end.

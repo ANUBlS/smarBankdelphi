@@ -1,0 +1,252 @@
+unit AEMainFormImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, NLSDialogs,
+  NLSLocalizer, ImgList, ExtCtrls, ComCtrls, ToolWin, Grids, DBGridEh,
+  ActnList, CMExcelExport, StdCtrls;
+
+type
+  TAEMainForm = class(TForm)
+    NLSLocalizer1: TNLSLocalizer;
+    ImageList1: TImageList;
+    Panel1: TPanel;
+    ToolBar1: TToolBar;
+    ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
+    ToolButton3: TToolButton;
+    ToolButton4: TToolButton;
+    DBGridEh1: TDBGridEh;
+    ActionList1: TActionList;
+    ExpireExcelExport: TCMExcelExport;
+    ActnCheck: TAction;
+    ActnExport: TAction;
+    ToolButton5: TToolButton;
+    ToolButton6: TToolButton;
+    ActnAbout: TAction;
+    Panel2: TPanel;
+    Label1: TLabel;
+    Label2: TLabel;
+    lblSelectedCount: TLabel;
+    lblDueCount: TLabel;
+    ToolButton7: TToolButton;
+    PayExcExp: TCMExcelExport;
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure ActnExportExecute(Sender: TObject);
+    procedure ActnCheckExecute(Sender: TObject);
+    procedure DBGridEh1DblClick(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure ActnAboutExecute(Sender: TObject);
+    procedure ToolButton7Click(Sender: TObject);
+  private
+//    procedure ShowExpireForm;
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  AEMainForm: TAEMainForm;
+
+procedure InitPlugin(S : String); export;
+
+implementation
+
+uses AEDataModuleImpl, CommonDecls, SystemState, AEProgressFormImpl,
+  CreditStateViewImpl,PayUnit;
+
+{$R *.DFM}
+
+procedure ShowExpireForm;
+begin
+  if CommonDBGrid.SelectedRows.Count > 0 then
+    AEMainForm.lblSelectedCount.Caption := IntToStr(CommonDBGrid.SelectedRows.Count)
+  else
+    AEMainForm.lblSelectedCount.Caption := '1';
+  AEMainForm.ShowModal;
+end;
+
+procedure TAEMainForm.FormCreate(Sender: TObject);
+begin
+  DataModAE := TDataModAE.Create(Self);
+  frmStateViewer := TfrmStateViewer.Create(Self);
+  AEProgressForm := TAEProgressForm.Create(Self);
+  PayForm :=TPayForm.Create(Self);
+end;
+
+procedure TAEMainForm.FormDestroy(Sender: TObject);
+begin
+  frmStateViewer.Free;
+  DataModAE.Free;
+  AEProgressForm.Free;
+end;
+
+procedure TAEMainForm.ActnExportExecute(Sender: TObject);
+begin
+  with ExpireExcelExport do
+  begin
+    Connect;
+    ExportDataset(DataModAE.ExpiresData,'Expired Contracts',True);
+  end;
+end;
+
+procedure TAEMainForm.ActnCheckExecute(Sender: TObject);
+
+    procedure CheckForOne(CrdID : Integer; Dat : TDateTime);
+    begin
+      try
+        with DataModAE.CM_AUTO_EXPIRE do
+        CallProcedure('PastDueLoan',[
+          CrdID,
+          Dat
+        ]);
+      except
+        on E:Exception do
+          LogError(E.Message);
+      end;
+    end;
+
+resourcestring
+  rsConfirmCheck1 = 'Бу ямялиййатын йериня йетирилмяси бир гядяр вахт апаражаг .';
+  rsConfirmCheck2 = 'Давам едяк ?';
+
+var
+  CountOfSelectedRows, I : Integer;
+  CreditID : Integer;
+  Dat : TDateTime;
+begin
+
+  Dat :=  Get_CurrentDate;
+  CreditID := Get_SelectedCrdID;
+
+  with DataModAE.CM_AUTO_EXPIRE do
+    CallProcedure('ClearExpireMarks',[]);
+
+  with CommonDBGrid, DataSource.DataSet do
+  begin
+    DisableControls;
+
+    try
+      CountOfSelectedRows := SelectedRows.Count;
+      
+      if CountOfSelectedRows > 1 then
+      begin
+        if MessageDlg(
+             rsConfirmCheck1+#13+rsConfirmCheck2 ,
+             mtConfirmation ,
+             [mbYes,mbNo] ,
+             0
+           ) <> mrYes then
+        Exit;
+
+        Self.Update;
+
+        with AEProgressForm do
+        begin
+          ProgressShower.Max := CountOfSelectedRows;
+          Show;
+        end;
+
+        for I := 0 to CountOfSelectedRows - 1 do
+        begin
+          GotoBookmark(Pointer(SelectedRows[I]));
+          CreditID := Get_SelectedCrdID;
+          CheckForOne(CreditID,Dat);
+          AEProgressForm.ProgressShower.Position := AEProgressForm.ProgressShower.Position + 1;
+        end;
+
+      end else
+
+        CheckForOne(CreditID,Dat);
+
+      if DataModAE.ExpiresData.Active then
+        DataModAE.ExpiresData.Refresh
+      else
+        DataModAE.ExpiresData.Open;
+
+      lblDueCount.Caption := IntToStr(DataModAE.ExpiresData.RecordCount);
+      
+    finally
+
+      EnableControls;
+
+      with AEProgressForm do
+      begin
+        ProgressShower.Position := 0;
+        if Visible then
+          Close;
+      end;
+
+    end;
+  end;
+end;
+
+procedure TAEMainForm.DBGridEh1DblClick(Sender: TObject);
+begin
+  ActnAbout.Execute;
+end;
+
+procedure InitPlugin(S : String); export;
+begin
+  ShowExpireForm;
+end;
+
+exports
+  InitPlugin;
+
+procedure TAEMainForm.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+   with DataModAE.CM_AUTO_EXPIRE do
+     CallProcedure('ClearExpireMarks',[]);
+
+   DataModAE.ExpiresData.Close;
+   
+   lblSelectedCount.Caption := '-';
+   lblDueCount.Caption := '-';
+end;
+
+procedure TAEMainForm.ActnAboutExecute(Sender: TObject);
+var
+  CreditID : Integer;
+  
+begin
+  CreditID := Get_SelectedCrdID;
+  with DataModAE do
+  begin
+    with Payments do
+    begin
+      Close;
+      ClearVariables;
+      SetVariable('CrdID',CreditID);
+      Open;
+    end;
+    with Schedule do
+    begin
+      Close;
+      ClearVariables;
+      SetVariable('CrdID',CreditID);
+      Open;
+    end;
+  end;
+  frmStateViewer.ShowModal;  
+end;
+
+procedure TAEMainForm.ToolButton7Click(Sender: TObject);
+begin
+        {if DataModAE.PaymentData.Active=true then DataModAE.PaymentData.Close;
+        DataModAE.PaymentData.Open;
+
+        with PayExcExp do
+        begin
+        Connect;
+        ExportDataset(DataModAE.PaymentData,'Payments',True);
+        end; }
+PayForm.ShowModal;
+end;
+
+initialization
+  AEMainForm := TAEMainForm.Create(CommonApplication);
+
+end.

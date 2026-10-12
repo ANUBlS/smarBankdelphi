@@ -1,0 +1,23 @@
+library GB_ReportProj1;
+
+uses
+  ComServ,
+  GB_ReportProj1_TLB in 'GB_ReportProj1_TLB.pas',
+  GB_ReportImpl1 in 'GB_ReportImpl1.pas' {GB_Report: TActiveForm} {GB_Report: CoClass},
+  GB_Setting in 'GB_Setting.pas' {FormSettingsGBReport},
+  GB_Datamod in 'GB_Datamod.pas' {DataMod_GBReport: TDataModule};
+
+{$E ocx}
+
+exports
+  DllGetClassObject,
+  DllCanUnloadNow,
+  DllRegisterServer,
+  DllUnregisterServer;
+
+{$R *.TLB}
+
+{$R *.RES}
+
+begin
+end.

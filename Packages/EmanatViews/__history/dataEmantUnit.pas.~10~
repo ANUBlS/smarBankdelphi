@@ -1,0 +1,73 @@
+unit dataEmantUnit;
+
+interface
+
+uses
+  SysUtils, Classes, DB, OracleData, Oracle;
+
+type
+  TDataEmanat = class(TDataModule)
+    Ods_wspaymentemant: TOracleDataSet;
+    Ods_wssysdate: TOracleDataSet;
+    dsrc_wspaymentemant: TDataSource;
+    Ods_wspaymentemantID: TFloatField;
+    Ods_wspaymentemantACCOUNT: TWideStringField;
+    Ods_wspaymentemantAMOUNT: TFloatField;
+    Ods_wspaymentemantCURRENCY: TWideStringField;
+    Ods_wspaymentemantCUSTOMER: TWideStringField;
+    Ods_wspaymentemantRESPDATETIME: TDateTimeField;
+    Ods_wspaymentemantRESPDATE: TWideStringField;
+    Ods_wspaymentemantRESPTIME: TWideStringField;
+    Ods_wspaymentemantRRN: TWideStringField;
+    Ods_wspaymentemantSUBRRN: TFloatField;
+    Ods_wspaymentemantSYS_DATE: TDateTimeField;
+    Ods_wspaymentemantTARGET: TWideStringField;
+    Ods_wspaymentemantTERMINAL: TWideStringField;
+    Ods_wspaymentemantPAYMENT_ID: TFloatField;
+    Ods_wspaymentemantSTATUS: TWideStringField;
+    pg_wspayment: TOraclePackage;
+    ods_settings_emanat: TOracleDataSet;
+    ods_wsinfo: TOracleDataSet;
+    Ods_wssysdateSAAT: TWideStringField;
+    Ods_wssysdateSYSDATE: TDateTimeField;
+    ods_wsinfoKLI_ID: TFloatField;
+    ods_wsinfoACC_ID: TFloatField;
+    ods_wsinfoAMOUNT: TFloatField;
+    ods_wsinfoFILIAL: TIntegerField;
+    ods_wsinfoVAL_ACC: TIntegerField;
+    ods_settings_emanatID: TFloatField;
+    ods_settings_emanatBANKNAME: TWideStringField;
+    ods_settings_emanatCURRENCY: TWideStringField;
+    ods_settings_emanatEMAIL: TWideStringField;
+    ods_settings_emanatFILIAL: TFloatField;
+    ods_settings_emanatFROM_ACCOUNT: TWideStringField;
+    ods_settings_emanatHEADOFIS: TFloatField;
+    ods_settings_emanatMAIL_PASS: TWideStringField;
+    procedure DataModuleCreate(Sender: TObject);
+    procedure DataModuleDestroy(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  DataEmanat: TDataEmanat;
+
+implementation
+uses sboapiDataModuleImpl;
+{$R *.dfm}
+
+procedure TDataEmanat.DataModuleCreate(Sender: TObject);
+begin
+Ods_wssysdate.Open;
+ods_settings_emanat.Open;
+end;
+
+procedure TDataEmanat.DataModuleDestroy(Sender: TObject);
+begin
+Ods_wssysdate.Close;
+ods_settings_emanat.Close;
+end;
+
+end.

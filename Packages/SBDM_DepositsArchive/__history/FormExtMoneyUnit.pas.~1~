@@ -1,0 +1,64 @@
+unit FormExtMoneyUnit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Menus, NLSLocalizer, CMExcelExport, ActnList, ImgList, ComCtrls, Grids,
+  DBGridEh, ToolWin, ExtCtrls, StdCtrls, Mask, DBCtrls;
+
+type
+  TFormExtMoney = class(TForm)
+    GroupBox1: TGroupBox;
+    DBEdit2: TDBEdit;
+    Panel1: TPanel;
+    ToolBar1: TToolBar;
+    ToolButton3: TToolButton;
+    ToolButton4: TToolButton;
+    ToolButton5: TToolButton;
+    ToolButton6: TToolButton;
+    ToolButton7: TToolButton;
+    ToolButton8: TToolButton;
+    ToolButton9: TToolButton;
+    DBGridEh1: TDBGridEh;
+    StatusBar1: TStatusBar;
+    ImageList1: TImageList;
+    ActionList1: TActionList;
+    ActnAdd: TAction;
+    ActnDel: TAction;
+    ActnExprt: TAction;
+    ExcelExport: TCMExcelExport;
+    NLSPayment: TNLSLocalizer;
+    PMShowTr: TPopupMenu;
+    N1: TMenuItem;
+    procedure ToolButton9Click(Sender: TObject);
+    procedure ToolButton7Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormExtMoney: TFormExtMoney;
+
+implementation
+uses dmDepositsArchiveImpl;
+{$R *.DFM}
+
+procedure TFormExtMoney.ToolButton9Click(Sender: TObject);
+begin
+  Close;
+end;
+
+procedure TFormExtMoney.ToolButton7Click(Sender: TObject);
+begin
+  with ExcelExport do
+   begin
+      Connect;
+      ExportDataset(dmDepositsArchive.Payments,'Юдянилмиш яманятляр',True,false);
+      Disconnect;
+   end;
+end;
+
+end.

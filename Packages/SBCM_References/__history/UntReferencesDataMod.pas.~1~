@@ -1,0 +1,184 @@
+unit UntReferencesDataMod;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, OracleData, Oracle;
+
+type
+  TDataModReferences = class(TDataModule)
+    TVSubItems: TOracleDataSet;
+    BalanceLink: TOracleQuery;
+    DataSrcAccZones: TDataSource;
+    AccZones: TOracleDataSet;
+    DataSrcAccZoneInfo: TDataSource;
+    AccZoneInfo: TOracleDataSet;
+    ReferLink: TOracleDataSet;
+    ReferPackage: TOraclePackage;
+    DataSrcCreditTypes: TDataSource;
+    CreditTypes: TOracleDataSet;
+    CreditTypesID: TIntegerField;
+    CreditTypesTYPE: Twidestringfield;
+    DataSrcPledgeTypes: TDataSource;
+    PledgeTypes: TOracleDataSet;
+    DataSrcCategories: TDataSource;
+    Categories: TOracleDataSet;
+    CategoriesID: TFloatField;
+    CategoriesCATEGORY: Twidestringfield;
+    DataSrcMovieNames: TDataSource;
+    MovieNames: TOracleDataSet;
+    DataSrcSettings: TDataSource;
+    AccountSettings: TOracleDataSet;
+    CategoriesMaster: TOracleDataSet;
+    FloatField1: TFloatField;
+    StringField1: Twidestringfield;
+    DataSrcCategoriesMaster: TDataSource;
+    AccountLookup: TOracleDataSet;
+    AccountSettingsID: TFloatField;
+    AccountSettingsPARENTID: TFloatField;
+    AccountSettingsCURRENCYID: TFloatField;
+    AccountSettingsACCID: TFloatField;
+    AccountSettingsCurrencyName: Twidestringfield;
+    AccountSettingsAccNo: Twidestringfield;
+    AccountSettingsAccName: Twidestringfield;
+    AccountLookupID: TFloatField;
+    AccountLookupNAME: Twidestringfield;
+    AccountLookupACC_NO: Twidestringfield;
+    AccountLookupVAL_ACC: TIntegerField;
+    AccountLookupVAL_NAME: Twidestringfield;
+    CurrencyLookup: TOracleDataSet;
+    DataSrcReliability: TDataSource;
+    Reliability: TOracleDataSet;
+    TVSubItemsID: TFloatField;
+    TVSubItemsNAME: Twidestringfield;
+    TVSubItemsLNAME: Twidestringfield;
+    TVSubItemsPARENTID: TFloatField;
+    TVSubItemsVALUE: Twidestringfield;
+    TVSubItemsSOURCELIST: Twidestringfield;
+    ReferLinkID: TFloatField;
+    ReferLinkNAME: Twidestringfield;
+    ReferLinkLNAME: Twidestringfield;
+    ReferLinkPARENTID: TFloatField;
+    ReferLinkVALUE: Twidestringfield;
+    ReferLinkSOURCELIST: Twidestringfield;
+    ReliabilityID: TIntegerField;
+    ReliabilityRELIABILITY: Twidestringfield;
+    ReliabilityPERCENT: TIntegerField;
+    PledgeTypesID: TFloatField;
+    PledgeTypesTYPE: Twidestringfield;
+    MovieNamesID: TIntegerField;
+    MovieNamesTYPEID: TIntegerField;
+    MovieNamesNAME: Twidestringfield;
+    MovieNamesDESCRIPTION: Twidestringfield;
+    DataSrcDepositTypes: TDataSource;
+    DepositTypes: TOracleDataSet;
+    CreditTypesADDITIONALTYPE: Twidestringfield;
+    DepositTypesID: TFloatField;
+    DepositTypesTYPE: Twidestringfield;
+    DepositTypesADDITIONALTYPE: Twidestringfield;
+    DepositTypesWITHDRAWTYPE: Twidestringfield;
+    DepositTypesDATEINTERVAL: TIntegerField;
+    TrueCategories: TOracleDataSet;
+    DataSrcTrueCategories: TDataSource;
+    TrueCategoriesCATEGORYID: TFloatField;
+    TrueCategoriesNAME: Twidestringfield;
+    TrueCategoriesDESCRIPTION: Twidestringfield;
+    CategoriesTRUECATEGORY: TFloatField;
+    procedure DataModuleCreate(Sender: TObject);
+    procedure DataModuleDestroy(Sender: TObject);
+    procedure CategoriesAfterPost(DataSet: TDataSet);
+    procedure AccountSettingsAfterPost(DataSet: TDataSet);
+    procedure DepositTypesAfterPost(DataSet: TDataSet);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  DataModReferences: TDataModReferences;
+
+implementation
+
+uses  sboapiDataModuleImpl;
+{$R *.DFM}
+
+{procedure  Init;
+begin
+  DataModReferences :=TDataModReferences.Create(nil);
+end;
+procedure CleanUp;
+begin
+  DataModReferences.Free;
+end;}
+procedure TDataModReferences.DataModuleCreate(Sender: TObject);
+begin
+   Reliability.Open;
+   AccountLookup.Open;
+   AccZones.Open;
+   AccZoneInfo.Open;
+   ReferLink.Open;
+   CreditTypes.Open;
+   PledgeTypes.Open;
+   Categories.Open;
+   CategoriesMaster.Open;
+   MovieNames.Open;
+   AccountSettings.Open;
+   DepositTypes.Open;
+   TrueCategories.Open;
+end;
+
+procedure TDataModReferences.DataModuleDestroy(Sender: TObject);
+begin
+  Reliability.Close;
+  AccountLookup.Close;
+  AccZones.Close;
+  AccZoneInfo.Close;
+  ReferLink.Close;
+  CreditTypes.Close;
+  PledgeTypes.Close;
+  Categories.Close;
+  CategoriesMaster.Close;
+  MovieNames.Open;
+  AccountSettings.Close;
+  DepositTypes.Close;
+  TrueCategories.CloseAll;
+end;
+
+procedure TDataModReferences.CategoriesAfterPost(DataSet: TDataSet);
+begin
+   DataSet.Refresh;
+end;
+  { with ReferPackage do
+   Case  Action of
+     'I' :CallProcedure('InsSettings',[
+                         Sender.FieldByName('ParentID').Value
+                        ,CurrencyLookup.FieldByName('Valute').Value
+                        ,AccountLookup.FieldByName('ID').Value
+                        ]);
+     'U' :CallProcedure('UpdSettings',[
+                         Sender.FieldValues['ID'].Value
+                        ,Sender.FieldValues['ParentID'].Value
+                        ,CurrencyLookup.FieldValues['Valute'].Value
+                        ,AccountLookup.FieldValues['ID'].Value
+                        ]);
+     'D' :CallProcedure('DelSettings',[
+                        Sender.FieldValues['ID'].Value
+                       ]);
+   end;   }
+procedure TDataModReferences.AccountSettingsAfterPost(DataSet: TDataSet);
+begin
+   DataSet.Refresh;
+end;
+
+{initialization
+  Init;
+finalization
+  CleanUp;}
+procedure TDataModReferences.DepositTypesAfterPost(DataSet: TDataSet);
+begin
+  DataSet.Refresh;
+end;
+
+end.

@@ -1,0 +1,93 @@
+unit CO_Choose_unit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, NLSDialogs,
+  StdCtrls, ExtCtrls, NLSLocalizer;
+
+type
+  TCO_Choose = class(TForm)
+    Panel1: TPanel;
+    Label1: TLabel;
+    Label2: TLabel;
+    Button1: TButton;
+    ch_1: TCheckBox;
+    ch_2: TCheckBox;
+    NLSLocalizer1: TNLSLocalizer;
+    procedure Button1Click(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
+    procedure WMNCACTIVATE(var message: TWMNCActivate); message WM_NCACTIVATE;
+    procedure WMNCPaint(var message : TWMNCPaint); message WM_NCPAINT;
+    procedure Label1Click(Sender: TObject);
+    procedure Label2Click(Sender: TObject);
+
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  CO_Choose: TCO_Choose;
+
+implementation
+
+uses MemorialRep, CO_MemorialRep1_unit, CO_datamod_impl, co_memorial;
+
+{$R *.DFM}
+
+procedure TCO_Choose.WMNCACTIVATE(var message:TWMNCActivate);
+var
+ S:TWMNCPaint;
+begin
+inherited;
+WMNCPaint(s);
+end;
+
+procedure TCO_Choose.WMNCPaint(var message: TWMNCPaint);
+const Capt = 'Ñוקטל';
+var dc : hDc;
+begin
+inherited;
+Caption:='';
+dc := GetWindowDC(Handle);
+        SetBkMode(dc,Transparent);
+        SetTextColor(dc,clWhite);
+        SelectObject(dc, Font.Handle);
+        TextOut(dc, 23,6,Capt,Length(Capt));  //KNN
+end;
+procedure TCO_Choose.Button1Click(Sender: TObject);
+begin
+if ch_1.checked then
+if not CO_DataMod.DebetTransactionsData.IsEmpty then begin
+     CO_MemorialRep.preview;   end
+       else begin
+    ShowMessage('Ùוק בטנ ÿלÿכטייאע דויהÿ אכûםלאיûב');  END;
+   if ch_2.checked then
+   if not CO_DataMod.CreditTransactionsdata.IsEmpty then begin
+          CO_MemorialRep1.preview; end
+ else begin
+    ShowMessage('Ùוק בטנ ÿלÿכטייאע דויהÿ אכûםלאיûב');
+
+     CO_MemorialForm.Close;
+       Close;
+
+end;   end;
+
+procedure TCO_Choose.FormActivate(Sender: TObject);
+begin
+CO_Datamod.bankinfo.open;
+end;
+
+procedure TCO_Choose.Label1Click(Sender: TObject);
+begin
+ch_1.checked :=true;
+end;
+
+procedure TCO_Choose.Label2Click(Sender: TObject);
+begin
+ch_2.checked :=True;
+end;
+
+end.

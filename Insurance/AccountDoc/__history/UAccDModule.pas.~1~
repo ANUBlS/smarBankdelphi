@@ -1,0 +1,48 @@
+unit UAccDModule;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, OracleData;
+
+type
+  TAccountDModule = class(TDataModule)
+    Account: TOracleDataSet;
+    AccountID: TFloatField;
+    AccountKLI_ID: TFloatField;
+    AccountOP_ID: TFloatField;
+    AccountACC_NO: TWideStringField;
+    AccountVAL_ACC: TIntegerField;
+    AccountNAME: TWideStringField;
+    AccountOPEN_DAT: TDateTimeField;
+    AccountCLOSE_DAT: TDateTimeField;
+    AccountSTATUS: TFloatField;
+    AccountBAL_CN1: TFloatField;
+    AccountBAL_CN2: TFloatField;
+    AccountBAL_CN3: TFloatField;
+    AccountBAL_CN4: TFloatField;
+    AccountFILIAL: TIntegerField;
+    AccountSIM_OTCET: TFloatField;
+    AccountTIPACC: TWideStringField;
+    AccountLIMIT: TFloatField;
+    AccountOLD_ACC_NO: TWideStringField;
+    AccountPAIR_ACC: TFloatField;
+    AccountINSIDER: TWideStringField;
+    AccountData: TDataSource;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  AccountDModule: TAccountDModule;
+
+implementation
+
+uses UAccountDoc,sboapidatamoduleimpl;
+
+{$R *.DFM}
+
+end.

@@ -1,0 +1,81 @@
+unit ReportsheduleUnit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ExtCtrls, QuickRpt, Qrctrls;
+
+type
+  TReportSheduleForm = class(TForm)
+    QuickRepTR: TQuickRep;
+    TitleBand1: TQRBand;
+    QRDBImage1: TQRDBImage;
+    QRLabel2: TQRLabel;
+    QRShape1: TQRShape;
+    QRShape2: TQRShape;
+    QRShape3: TQRShape;
+    QRLabel1: TQRLabel;
+    QRShape4: TQRShape;
+    QRLabel4: TQRLabel;
+    QRLabel5: TQRLabel;
+    QRLabel6: TQRLabel;
+    QRShape6: TQRShape;
+    QRShape10: TQRShape;
+    QRShape5: TQRShape;
+    QRLabel3: TQRLabel;
+    QRDBText1: TQRDBText;
+    QRDBText2: TQRDBText;
+    QRLabel7: TQRLabel;
+    QRDBText3: TQRDBText;
+    QRLVoen: TQRLabel;
+    QRDBText4: TQRDBText;
+    QRLVoen1: TQRLabel;
+    QRDBText5: TQRDBText;
+    QRLabel9: TQRLabel;
+    FacticalDebtChild1: TQRChildBand;
+    QRShape7: TQRShape;
+    QRShape8: TQRShape;
+    QRShape9: TQRShape;
+    QRDBText6: TQRDBText;
+    QRDBText7: TQRDBText;
+    QRDBText8: TQRDBText;
+    QRDBText27: TQRDBText;
+    SumaryBand: TQRBand;
+    QRLabel10: TQRLabel;
+    QRLabel12: TQRLabel;
+    QRDBText29: TQRDBText;
+    QRLabel13: TQRLabel;
+    QRLabel14: TQRLabel;
+    QRLContractno1: TQRLabel;
+    QRLabel8: TQRLabel;
+    QRLabel15: TQRLabel;
+    QRLabel16: TQRLabel;
+    QRLabel17: TQRLabel;
+    QRLabel18: TQRLabel;
+    QRShape11: TQRShape;
+    QRLabel20: TQRLabel;
+    QRLabel19: TQRLabel;
+    procedure QuickRepTRBeforePrint(Sender: TCustomQuickRep;
+      var PrintReport: Boolean);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  ReportSheduleForm: TReportSheduleForm;
+
+implementation
+  uses StatementDataModule,SBTranslateProc,sboapiDataModuleimpl;
+{$R *.DFM}
+
+
+procedure TReportSheduleForm.QuickRepTRBeforePrint(Sender: TCustomQuickRep;
+  var PrintReport: Boolean);
+begin
+SBTranslateProc.TranslateAllCompQuickRep(Self,sboapiDataModule.OrPack_SL);
+end;
+
+end.

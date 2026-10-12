@@ -1,0 +1,180 @@
+object ControlDatMod: TControlDatMod
+  OldCreateOrder = False
+  Height = 405
+  Width = 573
+  object CM_CONTROL: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'CM_CONTROL'
+    Cursor = crSQLWait
+    Left = 32
+    Top = 32
+  end
+  object ResultsDatSet: TOracleDataSet
+    SQL.Strings = (
+      'SELECT numberofcredit, '
+      '       custname, '
+      '       sum(drest) as drest , '
+      '       sum(dinterestrest) as dinterestrest, '
+      '       sum(dduerest) as dduerest,'
+      '       sum(ddueinterestrest) as ddueinterestrest'
+      '  FROM cm_controls'
+      'group by NUMBEROFCREDIT, custname')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 128
+    Top = 32
+    object ResultsDatSetNUMBEROFCREDIT: TWideStringField
+      DisplayLabel = 'M'#252'qavil'#601'nin n'#246'mr'#601'si'
+      DisplayWidth = 30
+      FieldName = 'NUMBEROFCREDIT'
+      Required = True
+      Size = 30
+    end
+    object ResultsDatSetCUSTNAME: TWideStringField
+      DisplayLabel = 'Borcalan'
+      DisplayWidth = 90
+      FieldName = 'CUSTNAME'
+      Required = True
+      Size = 68
+    end
+    object ResultsDatSetDREST: TFloatField
+      DisplayLabel = #399'.B '#252'zr'#601' f'#601'rq'
+      FieldName = 'DREST'
+    end
+    object ResultsDatSetDINTERESTREST: TFloatField
+      DisplayLabel = 'F.B '#252'zr'#601' f'#601'rq'
+      FieldName = 'DINTERESTREST'
+    end
+    object ResultsDatSetDDUEREST: TFloatField
+      DisplayLabel = 'G'#399'. B '#252'zr'#601' f'#601'rq'
+      FieldName = 'DDUEREST'
+    end
+    object ResultsDatSetDDUEINTERESTREST: TFloatField
+      DisplayLabel = 'GF.B '#252'zr'#601' f'#601'rq'
+      FieldName = 'DDUEINTERESTREST'
+    end
+  end
+  object ResultDatSrc: TDataSource
+    DataSet = ResultsDatSet
+    Left = 32
+    Top = 104
+  end
+  object Branchs: TOracleDataSet
+    SQL.Strings = (
+      'select  -1 id ,'#39'B'#252't'#252'n filiallar'#39' name from filial'
+      'union'
+      'select  id ,name from filial')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000080000000400000049004400010000000000080000004E0041004D00
+      4500010000000000140000004B004F0044005F00460049004C00490041004C00
+      0100000000000C00000043005F004E0041004D0045000100000000000C000000
+      440052004E0041004D0045000100000000001400000044005200460055004C00
+      4C004E0041004D0045000100000000000A0000004E004E0041004D0045000100
+      00000000120000004E00460055004C004C004E0041004D004500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 128
+    Top = 96
+    object BranchsID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object BranchsNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 90
+    end
+  end
+  object BranchsDatScr: TDataSource
+    DataSet = Branchs
+    Left = 128
+    Top = 192
+  end
+  object OracleDataSet1: TOracleDataSet
+    SQL.Strings = (
+      'select id from smart.provarch p'
+      'where p.dat between :bdat and :edat'
+      'and vid_op=86 and id not in (select trid from cm_dovriye where '
+      'trid is not null'
+      ') and name not like '#39'%Kredit uzre ehtiyyatin deyishdirilmesi%'#39
+      'union'
+      'select trid id from cm_dovriye where '
+      'trid is not null and trid not in(select id from provarch where'
+      
+        ' name not like '#39'%Kredit uzre ehtiyyatin deyishdirilmesi%'#39' and da' +
+        't between :bdat and :edat)'
+      ' and dat between :bdat and :edat'
+      ' UNION'
+      ' select p.id from smart.provarch p ,cm_dovriye  t'
+      'where p.id=t.trid '
+      'and'
+      'p.dat between :bdat and :edat'
+      'and '
+      
+        'p.ammount-t.ammount<>0 and p.name not like '#39'%Kredit uzre ehtiyya' +
+        'tin deyishdirilmesi%'#39
+      
+        'and id not in (select tridprimreserve from cm_payments where pay' +
+        'date between :bdat and :edat and tridprimreserve is not null)'
+      
+        'and id not in(select reservetrid  from cm_tranches where tranche' +
+        'date between :bdat and :edat and reservetrid is not null)')
+    Optimize = False
+    Variables.Data = {
+      04000000020000000A0000003A0042004400410054000C000000000000000000
+      00000A0000003A0045004400410054000C0000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {05000000010000000400000049004400010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 288
+    Top = 48
+    object OracleDataSet1ID: TFloatField
+      DisplayLabel = #399'm'#601'liyyat'#305'n id si'
+      FieldName = 'ID'
+    end
+  end
+  object OracleDataSet2: TOracleDataSet
+    SQL.Strings = (
+      
+        'select p.id,p.numberofcredit,p.dateofconclusion, s.rest,s.intere' +
+        'strest,h.interest from cm_active_credits p,cm_int_currstate h,'
+      'cm_curr_state s'
+      'where p.id=h.creditid and p.id=s.creditid and '
+      'p.dateofconclusion<sbop.get_date and '
+      'h.interest=0 and s.rest>0 and s.stopcalcdate is null')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000600000004000000490044000100000000001C0000004E0055004D00
+      4200450052004F00460043005200450044004900540001000000000020000000
+      44004100540045004F00460043004F004E0043004C005500530049004F004E00
+      0100000000000800000052004500530054000100000000001800000049004E00
+      5400450052004500530054005200450053005400010000000000100000004900
+      4E00540045005200450053005400010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 424
+    Top = 56
+    object OracleDataSet2ID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object OracleDataSet2NUMBEROFCREDIT: TWideStringField
+      DisplayLabel = 'M'#252'qavil'#601' no'
+      FieldName = 'NUMBEROFCREDIT'
+      Size = 32
+    end
+    object OracleDataSet2DATEOFCONCLUSION: TDateTimeField
+      DisplayLabel = 'A'#231#305'lma tarixi'
+      FieldName = 'DATEOFCONCLUSION'
+    end
+    object OracleDataSet2REST: TFloatField
+      DisplayLabel = #399'.B qal'#305'q'
+      FieldName = 'REST'
+    end
+    object OracleDataSet2INTERESTREST: TFloatField
+      DisplayLabel = 'F.B qal'#305'q '
+      FieldName = 'INTERESTREST'
+    end
+    object OracleDataSet2INTEREST: TFloatField
+      DisplayLabel = 'Hesablanm'#305#351' Faiz'
+      FieldName = 'INTEREST'
+    end
+  end
+end

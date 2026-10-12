@@ -1,0 +1,126 @@
+unit Ph_CO_frmWReportUnit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Buttons, ActnList, ImgList, Word97, NLSLocalizer, OleServer, StdCtrls,
+  Mask, DBCtrlsEh, DBLookupEh;
+
+type
+  TPh_CO_frmWReport = class(TForm)
+    DBLookupComboboxEh1: TDBLookupComboboxEh;
+    WordApplication: TWordApplication;
+    NLSLocalizer1: TNLSLocalizer;
+    WordDocument: TWordDocument;
+    ImageList1: TImageList;
+    ActionList1: TActionList;
+    ActinPrint: TAction;
+    ActnClose: TAction;
+    SpeedButton1: TSpeedButton;
+    SpeedButton2: TSpeedButton;
+    procedure ActinPrintExecute(Sender: TObject);
+    procedure ActnCloseExecute(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Ph_CO_frmWReport: TPh_CO_frmWReport;
+
+implementation
+
+{$R *.DFM}
+
+procedure TPh_CO_frmWReport.ActinPrintExecute(Sender: TObject);
+resourcestring  FilenotFound = 'װאיכ עאןûכלאהû';
+  var
+         Template,Templatebool,
+         FTemplatePath,Itemindex,
+         OBookmarkCount, What, oBookMarkName: Olevariant;
+         IbookmarkCount: Integer;
+         tFieldName:String;
+         SaveChanges,
+         OriginalFormat,
+         RouteDocument: OleVariant;
+
+  begin
+
+     What := OleVariant(wdGoToBookmark);
+     FTemplatePath := P_DataModuleFS.Templates.FieldByName('Path').AsString;
+     TemplID :=P_DataModuleFS.Templates.FieldByName('ID').AsInteger;
+
+     Template := EmptyParam;
+     TemplateBooL:=False;
+     Itemindex:=1;
+
+     Wordapplication.Connect;
+
+     Wordapplication.Visible := True;
+     WordApplication.Documents.Application.Caption := DBLookupComboboxEh1.Text;
+
+     WordApplication.Options.CheckSpellingAsYouType := False;
+     WordApplication.Options.CheckGrammarAsYouType := False;
+
+     if FileExists(FTemplatePath) then
+     begin
+
+     WordApplication.Documents.Open(FTemplatePath,Template,TemplateBooL,Template,
+     Template,Template,Template,Template,Template,Template);
+
+     end else
+     begin
+
+        SaveChanges := WdDoNotSaveChanges;
+        OriginalFormat := UnAssigned;
+        RouteDocument := UnAssigned;
+        WordApplication.Quit(SaveChanges, OriginalFormat, RouteDocument);
+        WordApplication.Disconnect;
+        ShowMessage(FilenotFound);
+
+     end;
+
+     WordDocument.ConnectTo(WordApplication.Documents.Item(Itemindex));
+     WordDocument.Application.Get_ActiveWindow.Caption:=NLSLocalizer1.Caption;
+
+     try
+
+       with P_DataModuleFS, ReplaceCustDataSet, WordDocument do
+       For IbookmarkCount := 1 to Bookmarks.Count do
+       begin
+
+         OBookmarkCount := IbookmarkCount ;
+         oBookMarkName := Bookmarks.Item(OBookmarkCount).Get_Name;
+         WordApplication.Selection.GoTo_(What, EmptyParam, EmptyParam, oBookMarkName);
+         ReplaceCustDataSet.Close;
+         SetVariable('tid', TemplID);
+         SetVariable('bname', oBookMarkName);
+         ReplaceCustDataSet.Open;
+         tFieldName := FIeldByName('FIELDNAME').AsString;
+         WordApplication.Selection.InsertAfter(CustomerInfoDataSet.FieldByName(tFieldName).AsString);
+
+       end;
+
+     WordDocument.Disconnect;
+     Wordapplication.Disconnect;
+
+     except
+        SaveChanges := WdDoNotSaveChanges;
+        OriginalFormat := UnAssigned;
+        RouteDocument := UnAssigned;
+        WordApplication.Quit(SaveChanges, OriginalFormat, RouteDocument);
+        WordApplication.Disconnect;
+        ShowMessage('Bukmarklar daxil edilmeyib ');
+     end;
+
+
+end;
+
+procedure TPh_CO_frmWReport.ActnCloseExecute(Sender: TObject);
+begin
+  Close;
+end;
+
+end.

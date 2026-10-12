@@ -1,0 +1,57 @@
+unit TranceDataModuleImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, OracleData, Oracle;
+
+type
+  TTrancheDataModule = class(TDataModule)
+    CreditInfo: TOracleDataSet;
+    DataSrcCreditInfo: TDataSource;
+    TrancheAccounts: TOracleDataSet;
+    DataSrcTrancheAccounts: TDataSource;
+    CreditInfoID: TFloatField;
+    CreditInfoNUMBEROFCREDIT: TWideStringField;
+    CreditInfoCREDITLINEAMOUNT: TFloatField;
+    CreditInfoCURRENCY: TFloatField;
+    CreditInfoBOOROWERID: TFloatField;
+    CustAccount: TOracleDataSet;
+    CustAccountBOOROWERACCID: TFloatField;
+    CreditInfoOBLIGATION: TFloatField;
+    CM_TRANCHE: TOraclePackage;
+    TranchesData: TOracleDataSet;
+    DataSrcTranches: TDataSource;
+    TranchesDataID: TFloatField;
+    TranchesDataCREDITID: TFloatField;
+    TranchesDataTRANCHEDATE: TDateTimeField;
+    TranchesDataTRANCHEAMOUNT: TFloatField;
+    CreditInfoNAME: TWideStringField;
+    CreditInfoVAL_NAME: TWideStringField;
+    OracleDataSet1: TOracleDataSet;
+    DataSource1: TDataSource;
+    OracleDataSet1ACCID: TFloatField;
+    OracleDataSet1KLI_ID: TFloatField;
+    OracleDataSet1ACCOUNTNUMBER: TWideStringField;
+    OracleDataSet1ACCOUNTNAME: TWideStringField;
+    CreditInfoCREDITTYPE: TFloatField;
+    OracleDataSet1ACC_NO: TWideStringField;
+    CreditInfoPERIODCONTRACTS: TFloatField;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  TrancheDataModule: TTrancheDataModule;
+
+implementation
+
+{$R *.DFM}
+
+uses
+  sboapiDataModuleImpl;
+
+end.

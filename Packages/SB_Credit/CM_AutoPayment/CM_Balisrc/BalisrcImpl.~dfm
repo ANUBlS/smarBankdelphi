@@ -1,0 +1,340 @@
+object Bali: TBali
+  Left = 375
+  Top = 182
+  Width = 475
+  Height = 109
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'MS Sans Serif'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poMainFormCenter
+  OnCanResize = FormCanResize
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  OnKeyPress = FormKeyPress
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Panel2: TPanel
+    Left = 0
+    Top = 0
+    Width = 467
+    Height = 75
+    Align = alTop
+    BevelOuter = bvLowered
+    BiDiMode = bdLeftToRight
+    BorderStyle = bsSingle
+    Color = clWhite
+    Ctl3D = False
+    ParentBiDiMode = False
+    ParentCtl3D = False
+    TabOrder = 0
+    object Label10: TLabel
+      Left = 122
+      Top = 3
+      Width = 37
+      Height = 13
+      Caption = 'Ñ.À.À:'
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = [fsBold]
+      ParentFont = False
+    end
+    object Label1: TLabel
+      Left = 365
+      Top = 4
+      Width = 14
+      Height = 13
+      Caption = 'ÈÄ'
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = [fsBold]
+      ParentFont = False
+    end
+    object SpeedButton1: TSpeedButton
+      Left = 336
+      Top = 48
+      Width = 57
+      Height = 22
+      Caption = 'OK'
+      Flat = True
+      OnClick = SpeedButton1Click
+    end
+    object SpeedButton2: TSpeedButton
+      Left = 398
+      Top = 47
+      Width = 59
+      Height = 23
+      Caption = 'close'
+      Flat = True
+      OnClick = SpeedButton2Click
+    end
+    object Edit1: TEdit
+      Left = 3
+      Top = 20
+      Width = 279
+      Height = 19
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 0
+      OnExit = Edit1Exit
+    end
+    object Edit2: TEdit
+      Left = 301
+      Top = 20
+      Width = 161
+      Height = 19
+      TabOrder = 1
+      OnExit = Edit2Exit
+    end
+  end
+  object OracleDataSet1: TOracleDataSet
+    SQL.Strings = (
+      
+        'select rownum, p.id,p.numberofcredit,b.boorowerid,b.name,v.val_n' +
+        'ame,b.guarantorsalary,b.guarantorname,p.creditlineamount,credits' +
+        'mgr.CM_AK_REPORTS.Get_zamin(b.BOOROWERID)as d'
+      
+        ' from creditsmgr.cm_active_credits p,creditsmgr.CM_BOOROWERINFO ' +
+        'b,smart.avalute_t v'
+      'where p.id=b.creditid and '
+      'p.currency=v.valute --and rownum=1'
+      ''
+      ''
+      'order by rownum'
+      '')
+    QBEDefinition.QBEFieldDefs = {
+      040000000A00000006000000524F574E554D0100000000000E0000004E554D42
+      45524F464352454449540100000000000A000000424F4F524F57455249440100
+      00000000040000004E414D450100000000000800000056414C5F4E414D450100
+      000000000F00000047554152414E544F5253414C4152590100000000000D0000
+      0047554152414E544F524E414D45010000000000100000004352454449544C49
+      4E45414D4F554E54010000000000020000004944010000000000010000004401
+      0000000000}
+    Session = CMDataModule.CMSession
+    Top = 40
+    object OracleDataSet1ROWNUM: TFloatField
+      FieldName = 'ROWNUM'
+    end
+    object OracleDataSet1NUMBEROFCREDIT: TStringField
+      FieldName = 'NUMBEROFCREDIT'
+      Size = 32
+    end
+    object OracleDataSet1BOOROWERID: TStringField
+      FieldName = 'BOOROWERID'
+      Size = 32
+    end
+    object OracleDataSet1NAME: TStringField
+      FieldName = 'NAME'
+      Size = 64
+    end
+    object OracleDataSet1VAL_NAME: TStringField
+      FieldName = 'VAL_NAME'
+      Size = 10
+    end
+    object OracleDataSet1CREDITLINEAMOUNT: TFloatField
+      FieldName = 'CREDITLINEAMOUNT'
+    end
+    object OracleDataSet1ID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object OracleDataSet1D: TStringField
+      FieldName = 'D'
+      Size = 4000
+    end
+  end
+  object DataSource1: TDataSource
+    DataSet = OracleDataSet1
+    Left = 33
+    Top = 41
+  end
+  object OracleDataSet2: TOracleDataSet
+    SQL.Strings = (
+      
+        'select rownum,p.id, p.numberofcredit,b.boorowerid,b.name,v.val_n' +
+        'ame,b.guarantorsalary,b.guarantorname,h.rest as creditlineamount' +
+        ','
+      
+        'b.guarantorname2,b.guarantorsalary2,p.dateofconclusion,p.duedate' +
+        'firstcontract,b.phonenumber,b.salary,b.zaminwork1,'
+      'b.zamintel1'
+      
+        ' from creditsmgr.cm_active_credits p,creditsmgr.CM_BOOROWERINFO ' +
+        'b,smart.avalute_t v,creditsmgr.cm_history h'
+      
+        'where p.id=b.creditid and h.creditid=p.id and h.hdate =(select t' +
+        'ek_dat from smart.sysdat) and'
+      'p.currency=v.valute '
+      'and p.id=:pid'
+      '')
+    Variables.Data = {0300000001000000040000003A504944030000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      040000001200000006000000524F574E554D0100000000000E0000004E554D42
+      45524F464352454449540100000000000A000000424F4F524F57455249440100
+      00000000040000004E414D450100000000000800000056414C5F4E414D450100
+      000000000F00000047554152414E544F5253414C4152590100000000000D0000
+      0047554152414E544F524E414D45010000000000100000004352454449544C49
+      4E45414D4F554E540100000000000E00000047554152414E544F524E414D4532
+      0100000000001000000047554152414E544F5253414C41525932010000000000
+      10000000444154454F46434F4E434C5553494F4E010000000000140000004455
+      45444154454649525354434F4E54524143540100000000000B00000050484F4E
+      454E554D4245520100000000000600000053414C4152590100000000000A0000
+      005A414D494E574F524B31010000000000090000005A414D494E54454C310100
+      0000000009000000524553455256454944010000000000020000004944010000
+      000000}
+    Master = OracleDataSet1
+    MasterFields = 'id'
+    DetailFields = 'pid'
+    Session = CMDataModule.CMSession
+    Left = 89
+    Top = 41
+    object OracleDataSet2ROWNUM: TFloatField
+      FieldName = 'ROWNUM'
+    end
+    object OracleDataSet2NUMBEROFCREDIT: TStringField
+      FieldName = 'NUMBEROFCREDIT'
+      Size = 32
+    end
+    object OracleDataSet2VAL_NAME: TStringField
+      FieldName = 'VAL_NAME'
+      Size = 10
+    end
+    object OracleDataSet2CREDITLINEAMOUNT: TFloatField
+      FieldName = 'CREDITLINEAMOUNT'
+    end
+    object OracleDataSet2DATEOFCONCLUSION: TDateTimeField
+      FieldName = 'DATEOFCONCLUSION'
+    end
+    object OracleDataSet2DUEDATEFIRSTCONTRACT: TDateTimeField
+      FieldName = 'DUEDATEFIRSTCONTRACT'
+    end
+    object OracleDataSet2PHONENUMBER: TStringField
+      FieldName = 'PHONENUMBER'
+      Size = 255
+    end
+    object OracleDataSet2SALARY: TStringField
+      FieldName = 'SALARY'
+      Size = 80
+    end
+    object OracleDataSet2ID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+  end
+  object DataSource2: TDataSource
+    DataSet = OracleDataSet2
+    Left = 121
+    Top = 41
+  end
+  object DataSource3: TDataSource
+    DataSet = OracleDataSet3
+    Left = 177
+    Top = 41
+  end
+  object OracleDataSet3: TOracleDataSet
+    SQL.Strings = (
+      
+        'select rownum, c.* from creditsmgr.CM_ZaminID c where c.guaranto' +
+        'rid is not null'
+      ''
+      ''
+      ''
+      '')
+    QBEDefinition.QBEFieldDefs = {
+      040000001200000006000000524F574E554D0100000000000200000049440100
+      000000000B00000047554152414E544F5249440100000000000E0000004E554D
+      4245524F464352454449540100000000000A000000424F4F524F574552494401
+      0000000000040000004E414D450100000000000800000056414C5F4E414D4501
+      00000000000F00000047554152414E544F5253414C4152590100000000000D00
+      000047554152414E544F524E414D45010000000000100000004352454449544C
+      494E45414D4F554E540100000000000E00000047554152414E544F524E414D45
+      320100000000001000000047554152414E544F5253414C415259320100000000
+      0010000000444154454F46434F4E434C5553494F4E0100000000001400000044
+      5545444154454649525354434F4E54524143540100000000000B00000050484F
+      4E454E554D4245520100000000000600000053414C4152590100000000000A00
+      00005A414D494E574F524B31010000000000090000005A414D494E54454C3101
+      0000000000}
+    Session = CMDataModule.CMSession
+    Left = 225
+    Top = 41
+    object OracleDataSet3ROWNUM: TFloatField
+      FieldName = 'ROWNUM'
+    end
+    object OracleDataSet3ID: TFloatField
+      FieldName = 'ID'
+    end
+    object OracleDataSet3GUARANTORID: TStringField
+      FieldName = 'GUARANTORID'
+      Size = 80
+    end
+    object OracleDataSet3NUMBEROFCREDIT: TStringField
+      FieldName = 'NUMBEROFCREDIT'
+      Size = 32
+    end
+    object OracleDataSet3NAME: TStringField
+      FieldName = 'NAME'
+      Size = 64
+    end
+    object OracleDataSet3BOOROWERID: TStringField
+      FieldName = 'BOOROWERID'
+      Size = 32
+    end
+    object OracleDataSet3VAL_NAME: TStringField
+      FieldName = 'VAL_NAME'
+      Size = 10
+    end
+    object OracleDataSet3GUARANTORSALARY: TStringField
+      FieldName = 'GUARANTORSALARY'
+      Size = 80
+    end
+    object OracleDataSet3GUARANTORNAME: TStringField
+      FieldName = 'GUARANTORNAME'
+      Size = 64
+    end
+    object OracleDataSet3CREDITLINEAMOUNT: TFloatField
+      FieldName = 'CREDITLINEAMOUNT'
+    end
+    object OracleDataSet3GUARANTORNAME2: TStringField
+      FieldName = 'GUARANTORNAME2'
+      Size = 80
+    end
+    object OracleDataSet3GUARANTORSALARY2: TStringField
+      FieldName = 'GUARANTORSALARY2'
+      Size = 80
+    end
+    object OracleDataSet3DATEOFCONCLUSION: TDateTimeField
+      FieldName = 'DATEOFCONCLUSION'
+    end
+    object OracleDataSet3DUEDATEFIRSTCONTRACT: TDateTimeField
+      FieldName = 'DUEDATEFIRSTCONTRACT'
+    end
+    object OracleDataSet3PHONENUMBER: TStringField
+      FieldName = 'PHONENUMBER'
+      Size = 255
+    end
+    object OracleDataSet3SALARY: TStringField
+      FieldName = 'SALARY'
+      Size = 80
+    end
+    object OracleDataSet3ZAMINWORK1: TStringField
+      FieldName = 'ZAMINWORK1'
+      Size = 80
+    end
+    object OracleDataSet3ZAMINTEL1: TStringField
+      FieldName = 'ZAMINTEL1'
+      Size = 30
+    end
+  end
+end

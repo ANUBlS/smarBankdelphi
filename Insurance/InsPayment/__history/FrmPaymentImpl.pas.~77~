@@ -1,0 +1,261 @@
+﻿unit FrmPaymentImpl;
+                        //DSPlansetting
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ExtCtrls, XFSCtrls, ComCtrls, ToolWin, ImgList, Grids, DBGrids,
+  ActnList, CMExcelExport, StdCtrls,shellapi;
+
+type
+  TFrmPayment = class(TForm)
+    XFPanel1: TXFPanel;
+    ImageList1: TImageList;
+    ExcelExport: TCMExcelExport;
+    XFPanel2: TXFPanel;
+    ToolBar1: TToolBar;
+    ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
+    ToolButton5: TToolButton;
+    ToolButton3: TToolButton;
+    ToolButton4: TToolButton;
+    ToolButton6: TToolButton;
+    XFPanel3: TXFPanel;
+    XFPanel4: TXFPanel;
+    XFGroupBox1: TXFGroupBox;
+    DBGrid2: TDBGrid;
+    XFGroupBox2: TXFGroupBox;
+    DBGrid1: TDBGrid;
+    XFButton1: TXFButton;
+    ToolButton7: TToolButton;
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormCreate(Sender: TObject);
+    procedure ToolButton1Click(Sender: TObject);
+    procedure ToolButton2Click(Sender: TObject);
+    procedure ToolButton3Click(Sender: TObject);
+    procedure ToolButton4Click(Sender: TObject);
+    procedure DBGrid1DblClick(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure ToolButton6Click(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmPayment: TFrmPayment;
+
+implementation
+
+uses DMPaymentImpl, FrmAddPaymentImpl,sboapiDataModuleimpl,SBTranslateProc,frmothertaninmaimpl,CommanParametrs;
+
+{$R *.dfm}
+   procedure InitPlugin(s:string);export;
+begin
+
+
+   FrmPayment.ShowModal;
+end;
+exports
+     InitPlugin;
+    procedure TFrmPayment.Button1Click(Sender: TObject);
+begin
+ShellExecuteA(CommonApplication.Handle, 'open', 'Ins_chm.chm', nil, nil, SW_SHOWNORMAL);
+end;
+
+procedure TFrmPayment.DBGrid1DblClick(Sender: TObject);
+begin
+ if DBGrid1.DataSource.DataSet.FieldByName('PAYDATE').AsDateTime<>DMPayment.OPSBOP.CallDateFunction('get_Date', [])then
+ begin
+   Showmessage('Diqqət! Sistem tarixindən fərqli tarixdəki ödəmələri redaktə etmək olmaz');
+   exit;
+ end;
+  FrmPayment.ToolButton2Click(Self);
+end;
+
+procedure TFrmPayment.FormCreate(Sender: TObject);
+begin
+DMPayment:=TDMPayment.create(self);
+Form1 := TForm1.Create(self);
+
+end;
+
+procedure TFrmPayment.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+if ord(key)=vk_escape then close
+
+end;
+
+procedure TFrmPayment.FormShow(Sender: TObject);
+begin
+
+if contractstatus=6 then
+begin
+  ToolButton1.Enabled:=true;
+  ToolButton2.Enabled:=true;
+  ToolButton4.Enabled:=true;
+end
+else
+begin
+  ToolButton1.Enabled:=false;
+  ToolButton2.Enabled:=false;
+  ToolButton4.Enabled:=false;
+end;
+
+  with DMPayment, ODSPayments do begin
+  close;
+   SetVariable( 'pcid', contactid);
+   Open;
+    end;
+
+    with DMPayment, DSContracts do begin
+  close;
+   SetVariable( 'pcid', contactid);
+   Open;
+    end;
+
+        with DMPayment, DSPlansetting do begin
+  close;
+   SetVariable( 'pcid', contactid);
+   Open;
+    end;
+
+    with DMPayment, DSPaymentReal do begin
+  close;
+   SetVariable( 'pcid', contactid);
+   Open;
+    end;
+
+
+end;
+
+procedure TFrmPayment.ToolButton1Click(Sender: TObject);
+begin
+ with DMPayment,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['SEEPAYMENT']);
+ end;
+  FrmAddPayment := TFrmAddPayment.Create(self);
+  try
+    if FrmAddPayment.ShowModal = mrOk then
+      DMPayment.ODSPayments.Refresh;
+  finally
+    FrmAddPayment.free;
+  end;
+
+end;
+
+procedure TFrmPayment.ToolButton2Click(Sender: TObject);
+begin
+
+
+
+ if DBGrid1.DataSource.DataSet.FieldByName('PAYDATE').AsDateTime<>DMPayment.OPSBOP.CallDateFunction('get_Date', [])then
+ begin
+   Showmessage('Diqqət! Sistem tarixindən fərqli tarixdəki ödəmələri redaktə etmək olmaz');
+   exit;
+ end;
+  FrmAddPayment := TFrmAddPayment.CreateIt(ctEdit, DMPayment.ODSPaymentsID.asInteger);
+  try
+    if FrmAddPayment.ShowModal = mrOk then
+      DMPayment.ODSPayments.Refresh;
+  finally
+    FrmAddPayment.free;
+  end;
+
+end;
+
+procedure TFrmPayment.ToolButton3Click(Sender: TObject);
+begin
+ with DMPayment do
+ begin
+   ODSPayments.Refresh;
+   DSPaymentReal.Refresh;
+
+ end;
+end;
+
+procedure TFrmPayment.ToolButton4Click(Sender: TObject);
+
+var
+  traDelAskRes : Boolean;
+begin
+
+ with DMPayment,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['DELPAYMENT']);
+ end;
+
+if DBGrid2.DataSource.DataSet.RecordCount=0 then
+begin
+  showmessage('Heç bir məlumat yoxdur!');
+  exit
+end;
+
+if DBGrid2.DataSource.DataSet.FieldByName('PAYDATE').AsDateTime<>DMPayment.OPSBOP.CallDateFunction('get_Date', []) then
+begin
+  Showmessage('Diqqət! Sistem tarixindən fərqli tarixləri dəyişdirmək olmaz!');
+  exit;
+end;
+
+
+ { if (DBGrid2.DataSource.DataSet.FieldByName('planid').AsInteger=1)
+  and (DMPayment.DSPlansetting.FieldByName('PAYMENT_TYPE').AsInteger<>2) then
+   begin
+  showmessage('Diqqət!Tam ödəniş-li müqavilələrdən yalnız plandan kənar əməliyyatları silmək olar !');
+  exit;
+   end;   }
+
+
+  with DMPayment do
+   if MessageDlg('Seçilmiş ödəmə pozulacaq əminsinizmi?',
+        mtWarning, [mbYes, mbNo], 0) = mrYes then
+        begin
+          {traDelAskRes := MessageDlg('Ödəmənin əməliyyatı pozlsun?', mtWarning, [mbYes, mbNo], 0) = mrYes;
+          if ODSPayments.FieldByName('PLANID').asInteger = -1 then
+            OPCOMMON.CallBooleanFunction('deletepayment', [ODSPaymentsID.Value, traDelAskRes])
+          else
+            OPCOMMON.CallBooleanFunction('delpaybyplan', [ODSPayments.FieldByName('PLANID').asInteger, traDelAskRes]);}
+
+       // showmessage(DBGrid1.DataSource.DataSet.fieldbyname('ID').AsString);
+        with DMPayment, OPCOMMON do
+  if OPCOMMON.CallIntegerFunction('cancelcontractpayment', [DBGrid2.DataSource.DataSet.fieldbyname('ID').asInteger])=1 then
+  begin
+    MessageDlg('Əməliyyatlar pozuldu', mtInformation, [mbok], 0);
+  end;
+
+          ODSPayments.Refresh;
+          DSPaymentReal.Refresh;
+        end;
+
+
+end;
+
+procedure TFrmPayment.ToolButton6Click(Sender: TObject);
+begin
+
+ with DMPayment,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['EXCELPAYMENT']);
+ end;
+
+ if DBGrid2.DataSource.DataSet.RecordCount=0 then
+ begin
+ showmessage('Heç bir məlumat yoxdur!');
+ exit;
+ end;
+
+with ExcelExport do
+   begin
+      Connect;
+      ExportDataset(DBGrid2.DataSource.DataSet,'Ödəmələr.',True,false);
+      Disconnect;
+   end
+
+end;
+
+initialization
+ FrmPayment :=TFrmPayment.Create(Application);
+end.

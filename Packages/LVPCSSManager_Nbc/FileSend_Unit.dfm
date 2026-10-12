@@ -1,0 +1,287 @@
+object SendFileForm: TSendFileForm
+  Left = 655
+  Top = 557
+  BorderIcons = [biSystemMenu]
+  BorderStyle = bsSingle
+  Caption = 'Sent File'
+  ClientHeight = 361
+  ClientWidth = 352
+  Color = clBtnFace
+  Font.Charset = RUSSIAN_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poScreenCenter
+  OnConstrainedResize = FormConstrainedResize
+  OnKeyUp = FormKeyUp
+  DesignSize = (
+    352
+    361)
+  PixelsPerInch = 96
+  TextHeight = 14
+  object DBGrid1: TDBGrid
+    Left = 0
+    Top = 0
+    Width = 352
+    Height = 303
+    Align = alTop
+    BorderStyle = bsNone
+    Color = clBtnFace
+    DataSource = Mt150_DataSource
+    DrawingStyle = gdsGradient
+    GradientEndColor = clBlack
+    GradientStartColor = clNavy
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    Options = [dgTitles, dgColumnResize, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit]
+    ParentFont = False
+    TabOrder = 0
+    TitleFont.Charset = RUSSIAN_CHARSET
+    TitleFont.Color = clWindowText
+    TitleFont.Height = -11
+    TitleFont.Name = 'Azl Sans Serif'
+    TitleFont.Style = []
+    OnDrawColumnCell = DBGrid1DrawColumnCell
+    OnDblClick = DBGrid1DblClick
+    Columns = <
+      item
+        Color = clWhite
+        Expanded = False
+        FieldName = 'ID'
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        Title.Alignment = taCenter
+        Title.Color = 8404992
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clWhite
+        Title.Font.Height = -11
+        Title.Font.Name = 'Tahoma'
+        Title.Font.Style = []
+        Width = 58
+        Visible = True
+      end
+      item
+        Color = clSilver
+        Expanded = False
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        Title.Alignment = taCenter
+        Title.Color = 8404992
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clWindowText
+        Title.Font.Height = -11
+        Title.Font.Name = 'Tahoma'
+        Title.Font.Style = []
+        Width = 20
+        Visible = True
+      end
+      item
+        Color = clWhite
+        Expanded = False
+        FieldName = 'USER_REFERENCE'
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        Title.Alignment = taCenter
+        Title.Caption = 'Qeydiyyat '#8470
+        Title.Color = 8404992
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clWhite
+        Title.Font.Height = -11
+        Title.Font.Name = 'Tahoma'
+        Title.Font.Style = []
+        Width = 70
+        Visible = True
+      end
+      item
+        Alignment = taCenter
+        Color = clSilver
+        Expanded = False
+        FieldName = 'TYPE'
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        Title.Alignment = taCenter
+        Title.Caption = 'Tip(MT150)'
+        Title.Color = 8404992
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clWhite
+        Title.Font.Height = -11
+        Title.Font.Name = 'Tahoma'
+        Title.Font.Style = []
+        Visible = True
+      end
+      item
+        Alignment = taCenter
+        Color = clWhite
+        Expanded = False
+        FieldName = 'CREATE_DATE'
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        Title.Alignment = taCenter
+        Title.Caption = 'Tarix'
+        Title.Color = 8404992
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clWhite
+        Title.Font.Height = -11
+        Title.Font.Name = 'Tahoma'
+        Title.Font.Style = []
+        Width = 78
+        Visible = True
+      end>
+  end
+  object But_cancel: TBitBtn
+    Left = 284
+    Top = 336
+    Width = 63
+    Height = 22
+    Anchors = [akRight, akBottom]
+    Caption = #199#305'x'#305#351
+    DoubleBuffered = True
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentDoubleBuffered = False
+    ParentFont = False
+    TabOrder = 1
+    OnClick = But_cancelClick
+  end
+  object Panel1: TPanel
+    Left = 0
+    Top = 303
+    Width = 352
+    Height = 25
+    Align = alTop
+    BevelInner = bvLowered
+    Color = clGray
+    TabOrder = 2
+    object Label1: TLabel
+      Left = 114
+      Top = 6
+      Width = 22
+      Height = 13
+      Caption = '-d'#601'n'
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Label2: TLabel
+      Left = 243
+      Top = 6
+      Width = 21
+      Height = 13
+      Caption = '-d'#601'k'
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+    end
+    object DateTimePicker1: TDateTimePicker
+      Left = 0
+      Top = 2
+      Width = 113
+      Height = 21
+      Date = 37830.710877662000000000
+      Time = 37830.710877662000000000
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 0
+    end
+    object DateTimePicker2: TDateTimePicker
+      Left = 142
+      Top = 2
+      Width = 99
+      Height = 21
+      Date = 37830.710877662000000000
+      Time = 37830.710877662000000000
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 1
+    end
+    object BitBtn1: TBitBtn
+      Left = 275
+      Top = 2
+      Width = 74
+      Height = 22
+      Caption = 'Yenil'#601
+      DoubleBuffered = True
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentDoubleBuffered = False
+      ParentFont = False
+      TabOrder = 2
+      OnClick = BitBtn1Click
+    end
+  end
+  object SentInfo: TOracleDataSet
+    SQL.Strings = (
+      'select '
+      '    *'
+      ' from '
+      '    XS_SENTINFO'
+      'where'
+      '    create_date>=:BeginDate  and create_date<=:EndDate'
+      ''
+      'order by id')
+    Optimize = False
+    Variables.Data = {
+      0400000002000000140000003A0042004500470049004E004400410054004500
+      0C0000000000000000000000100000003A0045004E0044004400410054004500
+      0C0000000000000000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 48
+    Top = 56
+  end
+  object Mt150_DataSource: TDataSource
+    DataSet = SentInfo
+    Left = 48
+    Top = 88
+  end
+  object ForCheck: TOracleDataSet
+    SQL.Strings = (
+      'select out_dir from xs_config')
+    Optimize = False
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 144
+    Top = 72
+  end
+end

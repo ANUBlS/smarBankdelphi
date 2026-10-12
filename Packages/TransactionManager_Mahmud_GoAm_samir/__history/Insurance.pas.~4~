@@ -1,0 +1,75 @@
+unit Insurance;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Grids, XDBGrids, ExtCtrls, XFSCtrls, DB, OracleData, StdCtrls,
+  ComCtrls;
+
+type
+  TForminsurance = class(TForm)
+    XFPanel1: TXFPanel;
+    XFPanel2: TXFPanel;
+    XDBGrid1: TXDBGrid;
+    ods_schedule: TOracleDataSet;
+    Dsrc_schedule: TDataSource;
+    TransDate: TDateTimePicker;
+    XFLabel1: TXFLabel;
+    XFButton1: TXFButton;
+    XFButton2: TXFButton;
+    ods_dat: TOracleDataSet;
+    ods_datDAT: TDateTimeField;
+    OracleDataSet1: TOracleDataSet;
+    OracleDataSet1ID: TFloatField;
+    OracleDataSet1ACC_NO: TWideStringField;
+    ods_scheduleCREDITID: TFloatField;
+    ods_scheduleMUQ: TWideStringField;
+    ods_schedulePAYMENTDATE: TDateTimeField;
+    ods_scheduleINSURANCE: TFloatField;
+    ods_scheduleINSURANCE_ACCNO: TWideStringField;
+    procedure XFButton1Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Forminsurance: TForminsurance;
+
+implementation
+  uses sboapiDataModuleImpl;
+{$R *.dfm}
+
+procedure TForminsurance.FormCreate(Sender: TObject);
+begin
+ods_dat.Open;
+end;
+
+procedure TForminsurance.FormShow(Sender: TObject);
+begin
+TransDate.DateTime:=ods_dat.FieldByName('dat').AsDateTime;
+
+end;
+
+procedure TForminsurance.XFButton1Click(Sender: TObject);
+begin
+with ods_schedule do
+begin
+  close;
+   SetVariable('v_dat',Int(TransDate.DateTime));
+  open;
+
+end;
+with ods_schedule do
+begin
+  edit;
+  post;
+
+end;
+end;
+
+end.

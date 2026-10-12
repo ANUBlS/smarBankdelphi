@@ -1,0 +1,152 @@
+unit PropQReportImpl;
+
+interface
+
+uses Windows, SysUtils, Messages, Classes, Graphics, Controls,
+  StdCtrls, ExtCtrls, Forms, Quickrpt, QRCtrls;
+
+type
+  TPropQReport = class(TQuickRep)
+    QRLabel1: TQRLabel;
+    QRShape1: TQRShape;
+    QRShape2: TQRShape;
+    QRLabel2: TQRLabel;
+    QRLabel3: TQRLabel;
+    QRShape3: TQRShape;
+    QRLabel4: TQRLabel;
+    QRShape4: TQRShape;
+    QRLabel5: TQRLabel;
+    QRShape5: TQRShape;
+    QRShape7: TQRShape;
+    QRLabel8: TQRLabel;
+    QRShape11: TQRShape;
+    QRLabel9: TQRLabel;
+    QRShape12: TQRShape;
+    QRLabel10: TQRLabel;
+    QRShape13: TQRShape;
+    QRLabel12: TQRLabel;
+    QRLabel13: TQRLabel;
+    QRLabel15: TQRLabel;
+    QRShape16: TQRShape;
+    QRShape17: TQRShape;
+    QRShape18: TQRShape;
+    QRLabel18: TQRLabel;
+    QRLabel19: TQRLabel;
+    QRLabel20: TQRLabel;
+    QRLabel7: TQRLabel;
+    QRLabel14: TQRLabel;
+    QRLabel16: TQRLabel;
+    QRLabel21: TQRLabel;
+    QRShape6: TQRShape;
+    QRShape8: TQRShape;
+    QRShape10: TQRShape;
+    QRShape15: TQRShape;
+    QRLabel6: TQRLabel;
+    QRLabel11: TQRLabel;
+    QRShape24: TQRShape;
+    QRLabel17: TQRLabel;
+    QRLabel22: TQRLabel;
+    QRLabel23: TQRLabel;
+    DetailBand1: TQRBand;
+    QRShape19: TQRShape;
+    QRShape20: TQRShape;
+    QRShape21: TQRShape;
+    QRShape22: TQRShape;
+    QRShape23: TQRShape;
+    QRShape25: TQRShape;
+    QRDBText6: TQRDBText;
+    QRShape9: TQRShape;
+    QRDBText7: TQRDBText;
+    QRShape26: TQRShape;
+    QRDBText8: TQRDBText;
+    QRShape28: TQRShape;
+    QRDBText9: TQRDBText;
+    QRShape14: TQRShape;
+    QRShape29: TQRShape;
+    QRShape27: TQRShape;
+    QRShape30: TQRShape;
+    QRShape32: TQRShape;
+    QRDBText4: TQRDBText;
+    QRShape31: TQRShape;
+    QRLabel24: TQRLabel;
+    QRDBText1: TQRDBText;
+    QRDBText2: TQRDBText;
+    QRDBText3: TQRDBText;
+    QRShape33: TQRShape;
+    QRDBText5: TQRDBText;
+    QRShape34: TQRShape;
+    QRDBText12: TQRDBText;
+    QRDBText14: TQRDBText;
+    QRDBText15: TQRDBText;
+    QRShape35: TQRShape;
+    QRShape36: TQRShape;
+    QRShape37: TQRShape;
+    QRBand1: TQRBand;
+    qrhMain: TQRGroup;
+    QRDBText10: TQRDBText;
+    QRExpr1: TQRExpr;
+    QRDBText11: TQRDBText;
+    QRShape38: TQRShape;
+    QRShape39: TQRShape;
+    QRShape40: TQRShape;
+    QRShape41: TQRShape;
+    QRShape43: TQRShape;
+    QRShape44: TQRShape;
+    QRShape42: TQRShape;
+    qrhTarget: TQRGroup;
+    QRDBText13: TQRDBText;
+    QRBand2: TQRBand;
+    QRDBText16: TQRDBText;
+    QRExpr2: TQRExpr;
+    QRShape45: TQRShape;
+    QRShape46: TQRShape;
+    QRShape47: TQRShape;
+    QRShape48: TQRShape;
+    QRShape49: TQRShape;
+    QRShape50: TQRShape;
+    QRShape51: TQRShape;
+    QRShape52: TQRShape;
+    QRDBText17: TQRDBText;
+    QRDBText18: TQRDBText;
+    QRShape53: TQRShape;
+    QRShape54: TQRShape;
+    QRExpr3: TQRExpr;
+    QRShape55: TQRShape;
+    QRShape56: TQRShape;
+    QRExpr4: TQRExpr;
+    QRShape57: TQRShape;
+    QRShape58: TQRShape;
+    QRShape59: TQRShape;
+    QRShape60: TQRShape;
+    QRShape61: TQRShape;
+    QRShape62: TQRShape;
+    QRDBText19: TQRDBText;
+    QRExpr5: TQRExpr;
+    QRExpr6: TQRExpr;
+    QRDBText20: TQRDBText;
+    QRExpr7: TQRExpr;
+    QRExpr8: TQRExpr;
+    procedure QuickRepBeforePrint(Sender: TCustomQuickRep;
+      var PrintReport: Boolean);
+  private
+
+  public
+
+  end;
+
+var
+  PropQReport: TPropQReport;
+
+implementation
+ uses DMprop;
+{$R *.DFM}
+
+procedure TPropQReport.QuickRepBeforePrint(Sender: TCustomQuickRep;
+  var PrintReport: Boolean);
+begin
+ SBTranslateProc.TranslateAllCompQuickRep(Self,sboapiDataModule.OrPack_SL);
+end;
+
+end.
+
+

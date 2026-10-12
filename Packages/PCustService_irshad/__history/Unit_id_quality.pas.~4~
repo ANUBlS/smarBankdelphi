@@ -1,0 +1,55 @@
+unit Unit_id_quality;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Grids, DBGrids, XDBGrids, StdCtrls, XFSCtrls, ExtCtrls;
+
+type
+  TFormid_quality = class(TForm)
+    DBGrid1: TDBGrid;
+    XDBGrid1: TXDBGrid;
+    XFPanel1: TXFPanel;
+    XFButton1: TXFButton;
+    procedure FormShow(Sender: TObject);
+    procedure XFButton1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Formid_quality: TFormid_quality;
+
+implementation
+uses
+sboapiDataModuleImpl,UnitDataModPCustService, PCustServiceFormImpl1;
+{$R *.dfm}
+
+procedure TFormid_quality.FormShow(Sender: TObject);
+begin
+//DataModPCustService.Ods_cust_id_quality1.Insert;
+///DataModPCustService.Ods_cust_id_quality1.Refresh;
+///DataModPCustService.Ods_cust_id_quality1.Post;
+end;
+
+procedure TFormid_quality.XFButton1Click(Sender: TObject);
+ var
+ id_quality:integer;
+begin
+  id_quality:=DataModPCustService.ods_custID_quality.FieldByName('id').AsInteger;
+  ShowMessage(inttostr(id_quality));
+ With   PCustServiceForm do
+     begin
+     id_quality_DBLookupComboboxEh.KeyValue:=id_quality;
+     CustEdit1.Click
+     end;
+  DataModPCustService.PG_PCustService.CallProcedure('upd_custid_quality',
+     [id_quality ]);
+
+
+
+end;
+end.

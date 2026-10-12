@@ -1,0 +1,113 @@
+unit DMIns_ReinsReceiveImpl;
+
+interface
+
+uses
+  SysUtils, Classes, DB, OracleData, Oracle;
+
+type
+  TDMIns_ReinsReceive = class(TDataModule)
+    DSMain: TOracleDataSet;
+    DSRMain: TDataSource;
+    DSIns_cust: TOracleDataSet;
+    DSIns_custID: TIntegerField;
+    DSIns_custNAME1: TWideStringField;
+    DScutomers: TOracleDataSet;
+    DScutomersID: TIntegerField;
+    DScutomersNAME: TWideStringField;
+    DSins_agents: TOracleDataSet;
+    DSins_agentsID: TFloatField;
+    DSins_agentsNAME: TWideStringField;
+    DSRIns_cust: TDataSource;
+    DSRcutomers: TDataSource;
+    DSRins_agents: TDataSource;
+    DSMainID: TFloatField;
+    DSMainTYPE_ID: TFloatField;
+    DSMainBEGIN_DATE: TDateTimeField;
+    DSMainEND_DATE: TDateTimeField;
+    DSMainAMMOUNT: TFloatField;
+    DSMainPOLICY_NUM: TWideStringField;
+    DSMainINSSUMM: TFloatField;
+    DSMainFRANSHIZ: TFloatField;
+    DSMainREINS: TFloatField;
+    DSMainID_1: TFloatField;
+    DSMainINS_TYPE: TFloatField;
+    DSMainCUSTID: TFloatField;
+    DSMainREINS_PART_KOMIS: TFloatField;
+    DSMainREINS_AMMOUNT: TFloatField;
+    DSMainREINS_BRUTO_AMMOUNT: TFloatField;
+    DSMainINS__PRED_AMMOUNT: TFloatField;
+    DSMainINS_ID: TFloatField;
+    DSMainINS_AMMOUNT: TFloatField;
+    DSMainINS_PRED_INFO: TWideStringField;
+    DSMainCID: TFloatField;
+    DSMainFILIAL: TFloatField;
+    DSMainNAME2: TWideStringField;
+    DSMainSTATE: TIntegerField;
+    sb_aca: TOraclePackage;
+    OPCOMMON: TOraclePackage;
+    ODSAccount: TOracleDataSet;
+    ODSAccountID: TFloatField;
+    ODSAccountKLI_ID: TFloatField;
+    ODSAccountOP_ID: TFloatField;
+    ODSAccountACC_NO: TWideStringField;
+    ODSAccountVAL_ACC: TIntegerField;
+    ODSAccountNAME: TWideStringField;
+    ODSAccountOPEN_DAT: TDateTimeField;
+    ODSAccountCLOSE_DAT: TDateTimeField;
+    ODSAccountSTATUS: TFloatField;
+    ODSAccountBAL_CN1: TFloatField;
+    ODSAccountBAL_CN2: TFloatField;
+    ODSAccountBAL_CN3: TFloatField;
+    ODSAccountBAL_CN4: TFloatField;
+    ODSAccountFILIAL: TIntegerField;
+    ODSAccountSIM_OTCET: TFloatField;
+    ODSAccountTIPACC: TWideStringField;
+    ODSAccountLIMIT: TFloatField;
+    ODSAccountOLD_ACC_NO: TWideStringField;
+    ODSAccountPAIR_ACC: TFloatField;
+    ODSAccountINSIDER: TWideStringField;
+    ODSAccountVAL_NAME: TWideStringField;
+    ODSAccountOWNID: TFloatField;
+    ODSAccountOSTAT: TFloatField;
+    ODSAccountPOK_OSTAT: TFloatField;
+    DSMainCUST_NAME: TWideStringField;
+    DSMainSIGORTA_NOVU: TWideStringField;
+    procedure DataModuleCreate(Sender: TObject);
+    procedure DataModuleDestroy(Sender: TObject);
+    procedure DSMainAfterInsert(DataSet: TDataSet);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  DMIns_ReinsReceive: TDMIns_ReinsReceive;
+
+implementation
+
+{$R *.dfm}
+  uses sboapiDataModuleImpl,CommanParametrs;
+procedure TDMIns_ReinsReceive.DataModuleCreate(Sender: TObject);
+begin
+DSMain.Open;
+DSIns_cust.Open;
+DScutomers.Open;
+DSins_agents.Open;
+end;
+
+procedure TDMIns_ReinsReceive.DataModuleDestroy(Sender: TObject);
+begin
+DSMain.close;
+DSIns_cust.close;
+DScutomers.close;
+DSins_agents.close;
+end;
+
+procedure TDMIns_ReinsReceive.DSMainAfterInsert(DataSet: TDataSet);
+begin
+DSMain.Refresh;
+end;
+
+end.

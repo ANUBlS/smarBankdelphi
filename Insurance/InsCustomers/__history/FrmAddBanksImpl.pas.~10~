@@ -1,0 +1,52 @@
+unit FrmAddBanksImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ExtCtrls, XFSCtrls, StdCtrls, DBCtrls;
+
+type
+  TFrmAddBanks = class(TForm)
+    XFPanel1: TXFPanel;
+    XFPanel2: TXFPanel;
+    XFButton1: TXFButton;
+    XFButton2: TXFButton;
+    DBLookupComboBox1: TDBLookupComboBox;
+    procedure XFButton2Click(Sender: TObject);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure XFButton1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmAddBanks: TFrmAddBanks;
+
+implementation
+
+{$R *.dfm}
+         uses InsDataModule;
+procedure TFrmAddBanks.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+if ord(key)=vk_escape then close
+
+end;
+
+procedure TFrmAddBanks.XFButton1Click(Sender: TObject);
+begin
+if DBLookupComboBox1.KeyValue='' then
+begin
+  ShowMessage('Diqqet ! hec bir bank secilmeyib');
+  exit;
+end;
+end;
+
+procedure TFrmAddBanks.XFButton2Click(Sender: TObject);
+begin
+close;
+end;
+
+end.

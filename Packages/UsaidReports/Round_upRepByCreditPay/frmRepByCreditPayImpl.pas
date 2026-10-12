@@ -1,0 +1,1063 @@
+﻿unit frmRepByCreditPayImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActiveX, AxCtrls, Round_upRepByCreditPay_TLB, StdVcl, StdCtrls, Buttons,
+  ComCtrls, CheckLst, Evanescence, ExtCtrls, Mask, DBCtrlsEh, Grids, oracle,oracledata,
+  DBGridEh, Menus, CMExcelExport,db, DBGridEhGrouping, GridsEh;
+
+type
+  TfrmRepByCreditPay = class(TActiveForm, IfrmRepByCreditPay)
+    Panel2: TPanel;
+    GroupBox4: TGroupBox;
+    GridRepByCrdPay: TDBGridEh;
+    Panel3: TPanel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    GridSum: TDBGridEh;
+    Label6: TLabel;
+    Label7: TLabel;
+    Label8: TLabel;
+    Label9: TLabel;
+    gDBEditEh1: TDBEditEh;
+    gDBEditEh2: TDBEditEh;
+    gDBEditEh3: TDBEditEh;
+    gDBEditEh4: TDBEditEh;
+    gDBEditEh5: TDBEditEh;
+    gDBEditEh6: TDBEditEh;
+    PMDetailInf: TPopupMenu;
+    N1: TMenuItem;
+    expODSmaincpr: TCMExcelExport;
+    PMDetailInfFull1: TPopupMenu;
+    N3: TMenuItem;
+    GroupBox1: TGroupBox;
+    GroupBox5: TGroupBox;
+    ldueperiod: TEvanescence;
+    chdueperiod: TCheckBox;
+    GroupBox2: TGroupBox;
+    lvalute: TEvanescence;
+    chvalute: TCheckBox;
+    GroupBox3: TGroupBox;
+    lcredittypes: TEvanescence;
+    chcrdtype: TCheckBox;
+    GroupBox6: TGroupBox;
+    lfilial: TEvanescence;
+    chfilial: TCheckBox;
+    OK: TBitBtn;
+    BitBtnexp: TBitBtn;
+    DTPRepdat: TDateTimePicker;
+    Label1: TLabel;
+    BitBtn1: TBitBtn;
+    cbper30: TComboBox;
+    Label10: TLabel;
+    cblp: TComboBox;
+    cbminf: TCheckBox;
+    BitBtn3: TBitBtn;
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure ActiveFormDestroy(Sender: TObject);
+    procedure chfilialClick(Sender: TObject);
+    procedure chcrdtypeClick(Sender: TObject);
+    procedure chvaluteClick(Sender: TObject);
+    procedure chdueperiodClick(Sender: TObject);
+    procedure OKClick(Sender: TObject);
+    procedure GridRepByCrdPayTitleBtnClick(Sender: TObject; ACol: Integer;
+      Column: TColumnEh);
+    procedure N2DrawItem(Sender: TObject; ACanvas: TCanvas; ARect: TRect;
+      Selected: Boolean);
+    procedure N1Click(Sender: TObject);
+    procedure N2Click(Sender: TObject);
+    procedure BitBtnexpClick(Sender: TObject);
+    procedure N3Click(Sender: TObject);
+    procedure BitBtn1Click(Sender: TObject);
+    procedure BitBtn3Click(Sender: TObject);
+    
+  private
+    { Private declarations }
+    FEvents: IfrmRepByCreditPayEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+    function checkStr(r:string;S:string):String;
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+  public
+    { Public declarations }
+    procedure Initialize; override;
+  end;
+
+implementation
+
+uses ComObj, ComServ,dmRepByCreditPayImpl, frmDetail1Impl, frmDetail2Impl,
+  frmPaymentAndPlanImpl, frmTelAddressImpl
+  ,frmusaid_prognozImpl,SBTranslateProc,sboapiDataModuleImpl;
+
+{$R *.DFM}
+var  RepDat :TDateTime;FilterStr,FExpDyCnt:String;
+
+
+{ TfrmRepByCreditPay }
+
+procedure TfrmRepByCreditPay.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_frmRepByCreditPayPage); }
+end;
+
+procedure TfrmRepByCreditPay.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as IfrmRepByCreditPayEvents;
+end;
+
+procedure TfrmRepByCreditPay.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TfrmRepByCreditPay.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TfrmRepByCreditPay.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TfrmRepByCreditPay.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TfrmRepByCreditPay.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TfrmRepByCreditPay.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TfrmRepByCreditPay.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TfrmRepByCreditPay.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TfrmRepByCreditPay.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TfrmRepByCreditPay.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TfrmRepByCreditPay.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TfrmRepByCreditPay.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TfrmRepByCreditPay.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TfrmRepByCreditPay.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TfrmRepByCreditPay.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TfrmRepByCreditPay.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TfrmRepByCreditPay.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TfrmRepByCreditPay.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TfrmRepByCreditPay.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TfrmRepByCreditPay._Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TfrmRepByCreditPay.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TfrmRepByCreditPay.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TfrmRepByCreditPay.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TfrmRepByCreditPay.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TfrmRepByCreditPay.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TfrmRepByCreditPay.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TfrmRepByCreditPay.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TfrmRepByCreditPay.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TfrmRepByCreditPay.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TfrmRepByCreditPay.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TfrmRepByCreditPay.Set_AxBorderStyle(
+  Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TfrmRepByCreditPay.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TfrmRepByCreditPay.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TfrmRepByCreditPay.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TfrmRepByCreditPay.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TfrmRepByCreditPay.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TfrmRepByCreditPay.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TfrmRepByCreditPay.Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TfrmRepByCreditPay.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TfrmRepByCreditPay.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TfrmRepByCreditPay.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TfrmRepByCreditPay.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TfrmRepByCreditPay.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TfrmRepByCreditPay.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+procedure TfrmRepByCreditPay.ActiveFormCreate(Sender: TObject);
+begin
+   dmRepByCreditPay := TdmRepByCreditPay.Create(Self);
+   DTPRepdat.DateTime := dmRepByCreditPay.sysdat.FieldByName('Tek_dat').asDateTime;
+   frmDetail1 := TfrmDetail1.create(self);
+   frmDetail2 := TfrmDetail2.create(self);
+   frmTelAddress := TfrmTelAddress.Create(Self);
+   frmPaymentAndPlan := TfrmPaymentAndPlan.Create(self);
+   lfilial.open;
+   lcredittypes.open;
+   lvalute.open;
+   ldueperiod.open;
+   {lfilial.CheckAll;
+   lcredittypes.CheckAll;
+   lvalute.CheckAll;
+   ldueperiod.CheckAll;  }
+   SBTranslateProc.TranslateAllComponents(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TfrmRepByCreditPay.ActiveFormDestroy(Sender: TObject);
+begin
+  frmDetail1.free;
+  frmDetail2.free;
+  frmTelAddress.free;
+  frmPaymentAndPlan.free;
+  dmRepByCreditPay.free
+end;
+
+procedure TfrmRepByCreditPay.chfilialClick(Sender: TObject);
+begin
+   if  chfilial.Checked then lfilial.CheckAll else lfilial.UncheckAll;
+end;
+
+procedure TfrmRepByCreditPay.chcrdtypeClick(Sender: TObject);
+begin
+  if  chcrdtype.Checked then lcredittypes.CheckAll else lcredittypes.UncheckAll;
+end;
+
+procedure TfrmRepByCreditPay.chvaluteClick(Sender: TObject);
+begin
+   if  chvalute.Checked then lvalute.CheckAll else lvalute.UncheckAll;
+end;
+
+procedure TfrmRepByCreditPay.chdueperiodClick(Sender: TObject);
+begin
+   if  chdueperiod.Checked then ldueperiod.CheckAll else ldueperiod.UncheckAll;
+end;
+
+function TfrmRepByCreditPay.checkStr(r:string;S:string):String;
+begin
+   if r <> '' then r := r+' or '+s else r := s;
+   checkStr := r;
+end;
+
+procedure TfrmRepByCreditPay.OKClick(Sender: TObject);
+resourcestring  //rs_geninitialamt = 'select round(sum(p.initialamount*o.ostat),2) as geninitialamount from cm_portfolio p,operkurs o where p.currency = o.val_kod and p.id in (select creditid from cm_history where hdate =:dat and rest+duerest >0)';
+rs_geninitialamt = 'select sum(h.rest*o.ostat+h.duerest*o.ostat) as  geninitialamount from cm_history h,cm_portfolio p,operkurs o  where h.creditid = p.id and p.currency=o.val_kod and h.hdate =:dat and h.rest+h.duerest >0';
+var
+  crdtfs, fs,s_geninitialamt,Fdueper :String;
+   i, b1,b2,b3,b4,b5,b6,b7,e1,e2,e3,e4,e5,e6,e7:integer;
+   geninitialamt :real;
+begin
+   FilterStr := '';
+
+  b1:=0;b2:=0;b3:=0;b4:=0;b5:=0;b6:=0;b7:=0;e1:=0;e2:=0;e3:=0;e4:=0;e5:=0;e6:=0;e7:=0;
+  RepDat := integer(trunc(DTPRepdat.DateTime));
+  if lfilial.GetCheckedKeyList.Count = 0 then begin ShowMessage('Ən azı bir filial seçilməlidir!'); Exit; end;
+  if lcredittypes.GetCheckedKeyList.Count = 0 then begin ShowMessage('Ən azı bir kredit tipi seçilməlidir!'); Exit; end;
+  if lvalute.GetCheckedKeyList.Count = 0 then begin ShowMessage('Ən azı bir valyuta seçilməlidir!'); Exit; end;
+  if ldueperiod.GetCheckedKeyList.Count = 0 then begin ShowMessage('Ən azı bir Gecikmə periodu seçilməlidir!'); Exit; end;
+
+  //if (lfilial.GetCheckedKeyList.Count<>lfilial.Items.Count) then begin
+  if  FilterStr <> '' then
+  FilterStr := FilterStr + ' and  p.branchid in ('
+                              +lfilial.GetCheckedKeyList.CommaText +')' else begin
+   FS := 'branchid in ('
+                              +lfilial.GetCheckedKeyList.CommaText +')';
+    FilterStr := '  p.branchid in ('
+                              +lfilial.GetCheckedKeyList.CommaText +')';
+  end;
+
+  if (lcredittypes.GetCheckedKeyList.Count<>lcredittypes.Items.Count) then begin
+  if   FilterStr <> '' then
+  FilterStr := FilterStr + ' and p.credittype in  ('
+                              +lcredittypes.GetCheckedKeyList.CommaText +')' else
+  FilterStr := '  p.credittype in  ('
+                              +lcredittypes.GetCheckedKeyList.CommaText +')';
+   crdtfs := '  p.credittype in  ('
+                              +lcredittypes.GetCheckedKeyList.CommaText +')';
+
+  end;
+
+  if (lvalute.GetCheckedKeyList.Count<>lvalute.Items.Count) then begin
+  if FilterStr <> '' then
+  FilterStr := FilterStr + ' and p.currency in ('
+                              +lvalute.GetCheckedKeyList.CommaText +')' else
+    FilterStr := '  p.currency in ('
+                              +lvalute.GetCheckedKeyList.CommaText +')';
+  end;
+
+
+  Fdueper := (ldueperiod.GetCheckedKeyList.Text);
+
+
+  with GridRepByCrdPay do
+  for i := 8 to  28 do begin
+  Columns[i].Visible := false;
+  Columns[i].Field.Visible := false;
+  end;
+
+
+  with GridSum do
+  for i := 7 to  27 do begin
+  Columns[i].Visible := false;
+  Columns[i].Field.Visible := false;
+  end;
+
+  FExpDyCnt := '';
+  if (ldueperiod.GetCheckedKeyList.Count<>ldueperiod.Items.Count) then
+  for i := 1 to length(Fdueper) do begin
+       case Fdueper[i] of
+           '1':begin FExpDyCnt := checkStr(FExpDyCnt,'('+' expcrdcount.exdatcount between 0 and 7 '+')'); end;
+           '2':begin FExpDyCnt := checkStr(FExpDyCnt,'('+' expcrdcount.exdatcount between 8 and 30 '+')'); end;
+           '3':begin FExpDyCnt := checkStr(FExpDyCnt,'('+' expcrdcount.exdatcount between 31 and 60 '+')'); end;
+           '4':begin FExpDyCnt := checkStr(FExpDyCnt,'('+' expcrdcount.exdatcount between 61 and 90 '+')');end;
+           '5':begin FExpDyCnt := checkStr(FExpDyCnt,'('+' expcrdcount.exdatcount between 91 and 180 '+')'); end;
+           '6':begin FExpDyCnt := checkStr(FExpDyCnt,'('+' expcrdcount.exdatcount between 181 and 360 '+')'); end;
+           '7':begin FExpDyCnt := checkStr(FExpDyCnt,'('+' expcrdcount.exdatcount between 361 and 360000 '+')');end;
+       end;
+  end;
+
+ // ShowMessage(FExpDyCnt);abort;
+  for i := 1 to length(Fdueper) do begin
+
+      case Fdueper[i] of
+          '1':begin b1:=0;e1:=7;
+                with GridRepByCrdPay do begin
+                Columns[8].Visible:=true;
+                Columns[8].Field.Visible := true;
+                Columns[9].Visible:=true;
+                Columns[9].Field.Visible := true;
+                Columns[10].Visible:=true;
+                Columns[10].Field.Visible := true;
+                end;
+
+                with GridSum do begin
+                Columns[7].Visible:=true;
+                Columns[7].Field.Visible := true;
+                Columns[8].Visible:=true;
+                Columns[8].Field.Visible := true;
+                Columns[9].Visible:=true;
+                Columns[9].Field.Visible := true;
+                end;
+
+             end;
+          '2':begin b2:=8;e2:=30;
+                with GridRepByCrdPay do begin
+                Columns[11].Visible:=true;
+                Columns[11].Field.Visible := true;
+                Columns[12].Visible:=true;
+                Columns[12].Field.Visible := true;
+                Columns[13].Visible:=true;
+                Columns[13].Field.Visible := true;
+                end;
+
+
+                with GridSum do begin
+                Columns[10].Visible:=true;
+                Columns[10].Field.Visible := true;
+                Columns[11].Visible:=true;
+                Columns[11].Field.Visible := true;
+                Columns[12].Visible:=true;
+                Columns[12].Field.Visible := true;
+                end;
+
+              end;
+          '3':begin b3:=31;e3:=60;
+                with GridRepByCrdPay do begin
+                Columns[14].Visible:=true;
+                Columns[14].Field.Visible := true;
+                Columns[15].Visible:=true;
+                Columns[15].Field.Visible := true;
+                Columns[16].Visible:=true;
+                Columns[16].Field.Visible := true;
+                end;
+
+                with GridSum do begin
+                Columns[13].Visible:=true;
+                Columns[13].Field.Visible := true;
+                Columns[14].Visible:=true;
+                Columns[14].Field.Visible := true;
+                Columns[15].Visible:=true;
+                Columns[15].Field.Visible := true;
+                end;
+
+          end;
+          '4':begin b4:=61;e4:=90;
+                with GridRepByCrdPay do begin
+                Columns[17].Visible:=true;
+                Columns[17].Field.Visible := true;
+                Columns[18].Visible:=true;
+                Columns[18].Field.Visible := true;
+                Columns[19].Visible:=true;
+                Columns[19].Field.Visible := true;
+                end;
+
+                with GridSum do begin
+                Columns[16].Visible:=true;
+                Columns[16].Field.Visible := true;
+                Columns[17].Visible:=true;
+                Columns[17].Field.Visible := true;
+                Columns[18].Visible:=true;
+                Columns[18].Field.Visible := true;
+                end;
+
+          end;
+          '5':begin b5:=91;e5:=180;
+                with GridRepByCrdPay do begin
+                Columns[20].Visible:=true;
+                Columns[20].Field.Visible := true;
+                Columns[21].Visible:=true;
+                Columns[21].Field.Visible := true;
+                Columns[22].Visible:=true;
+                Columns[22].Field.Visible := true;
+
+                with GridSum do begin
+                Columns[19].Visible:=true;
+                Columns[19].Field.Visible := true;
+                Columns[20].Visible:=true;
+                Columns[20].Field.Visible := true;
+                Columns[21].Visible:=true;
+                Columns[21].Field.Visible := true;
+                end;
+
+                end;
+          end;
+          '6':begin b6:=181;e6:=360;
+                with GridRepByCrdPay do begin
+                Columns[23].Visible:=true;
+                Columns[23].Field.Visible := true;
+                Columns[24].Visible:=true;
+                Columns[24].Field.Visible := true;
+                Columns[25].Visible:=true;
+                Columns[25].Field.Visible := true;
+                end;
+
+                with GridSum do begin
+                Columns[22].Visible:=true;
+                Columns[22].Field.Visible := true;
+                Columns[23].Visible:=true;
+                Columns[23].Field.Visible := true;
+                Columns[24].Visible:=true;
+                Columns[24].Field.Visible := true;
+                end;
+
+          end;
+          '7':begin b7:=361;e7:=360000;
+                with GridRepByCrdPay do begin
+                Columns[26].Visible:=true;
+                Columns[26].Field.Visible := true;
+                Columns[27].Visible:=true;
+                Columns[27].Field.Visible := true;
+                Columns[28].Visible:=true;
+                Columns[28].Field.Visible := true;
+                end;
+                with GridSum do begin
+                Columns[25].Visible:=true;
+                Columns[25].Field.Visible := true;
+                Columns[26].Visible:=true;
+                Columns[26].Field.Visible := true;
+                Columns[27].Visible:=true;
+                Columns[27].Field.Visible := true;
+                end;
+
+                
+          end;
+      end;
+  end;
+
+
+  with dmRepByCreditPay do begin //1
+       with Queriescpr do begin
+       s_geninitialamt := rs_geninitialamt;
+       s_geninitialamt := s_geninitialamt + ' and o.dat = ' + QuotedStr(FormatdateTime('dd-mmm-yyyy',RepDat));
+       if FilterStr <> '' then s_geninitialamt := s_geninitialamt + ' and '+FilterStr;
+
+       CloseAll;
+       DeleteVariables;
+       DeclareVariable('dat',otDate);
+       SetVariable('dat',repdat);
+       sql.Clear;
+       sql.Add(s_geninitialamt);
+       Open;
+       geninitialamt := FieldByName('geninitialamount').AsFloat;
+       end;  
+
+       with ODSmaincpr do
+       begin
+          if Active then CloseAll;
+          SetVariable('dat',RepDat);
+          {if geninitialamt = 0 then} geninitialamt := 1;
+          SetVariable('GENERALINITIALAMT',geninitialamt);
+          SetVariable('OrderField','ID');
+          SetVariable('bexpinter1',b1);SetVariable('eexpinter1',e1);
+          SetVariable('bexpinter2',b2);SetVariable('eexpinter2',e2);
+          SetVariable('bexpinter3',b3);SetVariable('eexpinter3',e3);
+          SetVariable('bexpinter4',b4);SetVariable('eexpinter4',e4);
+          SetVariable('bexpinter5',b5);SetVariable('eexpinter5',e5);
+          SetVariable('bexpinter6',b6);SetVariable('eexpinter6',e6);
+          SetVariable('bexpinter7',b7);SetVariable('eexpinter7',e7);
+          SetVariable('fstr',FilterStr);
+          SetVariable('ffilter',FS);
+
+          if FilterStr <> '' then  begin
+          sql[32] := ' and ' + '('+FilterStr+')';
+          sql[49] := ' and  ' + '('+FilterStr+')';
+          sql[65] := ' and  ' + '('+FilterStr+')';
+          end
+          else begin
+            sql[32] := '';
+            sql[49] := '';
+            sql[65] := '';
+          end;
+          //memo1.text := FilterStr;
+          open;
+          end;
+
+          
+
+       //ShowMessage(floatTostr(sCOMMONINITIALAMOUNT));
+       with Summaincpr do begin
+          if Active then CloseAll;
+          SetVariable('dat',RepDat);
+          if geninitialamt = 0 then geninitialamt := 1;
+          SetVariable('bexpinter1',b1);SetVariable('eexpinter1',e1);
+          SetVariable('bexpinter2',b2);SetVariable('eexpinter2',e2);
+          SetVariable('bexpinter3',b3);SetVariable('eexpinter3',e3);
+          SetVariable('bexpinter4',b4);SetVariable('eexpinter4',e4);
+          SetVariable('bexpinter5',b5);SetVariable('eexpinter5',e5);
+          SetVariable('bexpinter6',b6);SetVariable('eexpinter6',e6);
+          SetVariable('bexpinter7',b7);SetVariable('eexpinter7',e7); 
+          SetVariable('fstr',FilterStr);
+          SetVariable('ffilter',FS);
+          SetVariable('crdtypestr',crdtfs);
+          if FilterStr <> '' then  begin
+          sql[56] := ' and ' + '('+FilterStr+')';
+          sql[73] := ' and ' + '('+FilterStr+')';
+          end
+          else begin
+            sql[56] := '';
+            sql[73] := '';
+          end;
+          //memo1.text :=sql.Text;
+          open;
+        // memo1.text :=sql.Text;
+       end;
+
+
+
+  end; //1
+
+end;
+
+
+
+
+
+procedure TfrmRepByCreditPay.GridRepByCrdPayTitleBtnClick(Sender: TObject;
+  ACol: Integer; Column: TColumnEh);
+
+var
+  SortField : String;
+begin
+  if (Sender as TDBGridEh).DataSource.DataSet.active then   begin
+  SortField := Column.FieldName;
+  if (Sender as TDBGridEh).DataSource.DataSet.FieldByName(SortField).Calculated then
+  SortField := copy(Column.FieldName,5,length(Column.FieldName)) ;
+  if Column.Title.SortMarker = smDownEh then
+    SortField := SortField + ' DESC';
+  with Sender as TDBGridEh , TOracleDataSet(DataSource.DataSet) do
+  begin
+   // ClearVariables;
+    Screen.Cursor := crSQLWait;
+    SetVariable('OrderField',SortField);
+    RefResh;
+    Screen.Cursor := crDefault;
+   end;
+    end;
+
+end;
+
+procedure TfrmRepByCreditPay.N2DrawItem(Sender: TObject; ACanvas: TCanvas;
+  ARect: TRect; Selected: Boolean);
+
+var
+  LineBottom: Integer;
+  SText: String;
+  Bar: TRect;
+begin
+  with ACanvas, Sender as TMenuItem do
+  begin
+    with ACanvas.Font do
+    begin
+      Charset := DEFAULT_CHARSET;
+      Name := 'Azl Sans Serif';
+      if Default then
+        Style := [fsBold];
+    end;
+    if Caption = '-' then
+    begin
+      Pen.Color := clBlack;
+      LineBottom := (ARect.Top + (ARect.Bottom - ARect.Top) div 2)-1;
+      MoveTo(ARect.Left, LineBottom);
+      LineTo(ARect.Right, LineBottom);
+      inc(LineBottom);
+      Pen.Color := clWhite;
+      MoveTo(ARect.Left, LineBottom);
+      LineTo(ARect.Right, LineBottom);
+    end
+    else
+    begin
+      if Selected then
+      begin
+        Brush.Color := clNavy;
+        if Enabled then
+          Font.Color := clWhite
+        else
+          Font.Color := clSilver;
+      end
+      else
+      begin
+        Brush.Color := clBtnFace;
+        if Enabled then
+          Font.Color := clBlack
+        else
+          Font.Color := clGrayText;
+      end;
+      Bar := ARect;
+      Inc(Bar.Left, 22);
+      FillRect(Bar);
+      TextOut(ARect.Left+{17}22, ARect.Top+1, Caption);
+    end;
+    // draw shortcut
+    SText := ShortCutToText(ShortCut);
+    TextOut(ARect.Right-TextWidth(SText)-7, ARect.Top+1, SText);
+    if ImageIndex <> -1 then
+      with GetParentMenu do
+        if Assigned(Images) then
+        begin
+          if Checked then
+          begin
+            Bar.Left := ARect.Left + 1;
+            Bar.Right := Bar.Left + 16;
+            Bar.Top := ARect.Top + 1;
+            Bar.Bottom := Bar.Top + 16;
+
+            ACanvas.Brush.Color := clBtnShadow;
+            ACanvas.FrameRect(Bar);
+
+            Inc(Bar.Left, 2);
+            Inc(Bar.Right, 2);
+            Inc(Bar.Top, 2);
+            Inc(Bar.Bottom, 2);
+
+            ACanvas.Brush.Color := clBtnHighlight;
+            ACanvas.FrameRect(Bar);
+
+            Dec(Bar.Left, 1);
+            Dec(Bar.Right, 1);
+            Dec(Bar.Top, 1);
+            Dec(Bar.Bottom, 1);
+
+            if Selected then
+              ACanvas.Brush.Color := clBtnFace
+            else
+              ACanvas.Brush.Color := clBtnHighlight;
+            ACanvas.FillRect(Bar);
+          end;
+
+          Images.Draw(ACanvas, ARect.Left, ARect.Top, ImageIndex, Enabled);
+        end;
+  end;
+
+end;
+
+procedure TfrmRepByCreditPay.N1Click(Sender: TObject);
+var f :String;
+begin
+   f := FilterStr;
+   if dmRepByCreditPay.ODSmaincpr.Active then begin
+   with dmRepByCreditPay,DetailInf1 do begin
+        if Active then CloseAll;
+        SetVariable('dat',RepDat);
+        SetVariable('crdtype',ODSmaincpr.FieldByName('ID').AsInteger);
+        SetVariable('OrderField','numberofcredit');
+        if F <> '' then begin
+        if FExpDyCnt <> '' then F := F+' and '+'('+FExpDyCnt+')';
+        SQL[108] := ' and  ' + F;
+        end
+        else begin
+        if FExpDyCnt <> '' then F := ' and '+'('+FExpDyCnt+')' else F:='';
+        SQL[108] := F;
+        end;
+        //Memo1.text :=sql[];
+        //Memo2.text := sql.text;
+        open;
+   end;
+    with frmDetail1 do begin
+    DetailInf1Grid.DataSource := dmRepByCreditPay.DetailInf1ds ;
+     DTP.DateTime := RepDat;
+     ShowModal;
+    end;
+    end;
+
+end;
+
+procedure TfrmRepByCreditPay.N2Click(Sender: TObject);
+begin
+   if dmRepByCreditPay.ODSmaincpr.Active then begin
+   with dmRepByCreditPay,DetailInf2 do begin
+        if Active then CloseAll;
+        SetVariable('dat',RepDat);
+        SetVariable('crdtype',ODSmaincpr.FieldByName('ID').AsInteger);
+        SetVariable('OrderField','numberofcredit');
+        if FilterStr <> '' then  SQL[46] := ' and  ' + FilterStr
+        else SQL[46] := '';
+
+        open;
+   end;
+    with frmDetail2 do begin
+     DTPd2.DateTime := RepDat;
+     ShowModal;
+    end;
+    end;
+end;
+
+procedure TfrmRepByCreditPay.BitBtnexpClick(Sender: TObject);
+begin
+   with expODSmaincpr do begin
+        Connect;
+        ExportDataset(dmRepByCreditPay.ODSmaincpr,'Main informations',true,false);
+        Disconnect;
+   end;
+end;
+
+procedure TfrmRepByCreditPay.N3Click(Sender: TObject);
+var f :String;
+begin
+   f := FilterStr;
+   if dmRepByCreditPay.ODSmaincpr.Active then begin
+   with dmRepByCreditPay,DetailInffull1 do begin
+        if Active then CloseAll;
+        SetVariable('dat',RepDat);
+        SetVariable('OrderField','numberofcredit');
+        if F <> '' then begin
+        if FExpDyCnt <> '' then F := F+' and '+'('+FExpDyCnt+')';
+        SQL[108] := ' and  ' + F;
+        end
+        else begin
+        if FExpDyCnt <> '' then F := ' and '+'('+FExpDyCnt+')' else F:='';
+        SQL[108] := F;
+        end;
+        //Memo1.text :=sql[];
+        //Memo2.text := sql.text;
+        open;
+   end;
+    with frmDetail1 do begin
+     DetailInf1Grid.DataSource := dmRepByCreditPay.DetailInffull1ds ;
+     DBEditEh1.DataSource := dmRepByCreditPay.DetailInffull1ds ;
+     DBEditEh2.DataSource := dmRepByCreditPay.DetailInffull1ds ;
+     DBEditEh3.DataSource := dmRepByCreditPay.DetailInffull1ds ;
+     DTP.DateTime := RepDat;
+     ShowModal;
+    end;
+    end;
+end;
+
+procedure TfrmRepByCreditPay.BitBtn1Click(Sender: TObject);
+var n :integer; f :string;
+    ods :TOracleDataSet;
+    ds :TDataSource;
+begin
+   RepDat := integer(trunc(DTPRepdat.DateTime));
+   case cbper30.ItemIndex of
+        -1,0:n := 10;
+        1:n := 30;
+   end;
+
+   case cblp.ItemIndex of
+        -1,0:begin ods := dmRepByCreditPay.DetailInf30; ds := dmRepByCreditPay.DetailInf30ds end;
+        1:begin ods := dmRepByCreditPay.DetailInfAll; ds := dmRepByCreditPay.DetailInfAllds end;
+   end;
+    
+   with dmRepByCreditPay do begin //1
+       with Paymentsrest do begin
+           CloseAll;
+           SetVariable('dat',repdat);
+           SetVariable('n',n);
+           if FilterStr <> '' then
+           sql[14] := ' and ' + '('+FilterStr+')' else
+           sql[14] := '';
+           open;
+       end;
+
+
+       with LastPayments do begin
+           CloseAll;
+           SetVariable('dat',repdat);
+           SetVariable('n',n);
+           if FilterStr <> '' then
+           sql[23] := ' and ' + '('+FilterStr+')' else
+           sql[23] := '';
+           open;
+       end;
+
+   f := FilterStr;
+   if cbminf.Checked then begin
+   with ods do begin
+        if Active then CloseAll;
+        SetVariable('dat',RepDat);
+        SetVariable('n',n);
+        SetVariable('OrderField','numberofcredit');
+        if F <> '' then begin
+       // if FExpDyCnt <> '' then F := F+' and '+'('+FExpDyCnt+')';
+        SQL[108] := ' and  ' + F;
+        end
+        else begin
+        //if FExpDyCnt <> '' then F := ' and '+'('+FExpDyCnt+')' else F:='';
+        SQL[108] := '';
+        end;
+        //Memo1.text :=sql[];
+        //Memo2.text := sql.text;
+        open;
+   end;
+
+
+
+    with frmDetail1 do begin
+     DetailInf1Grid.DataSource := ds;
+     DBEditEh1.DataSource := ds;
+     DBEditEh2.DataSource := ds;
+     DBEditEh3.DataSource := ds;
+     DTP.DateTime := RepDat;
+     ShowModal;
+    end;
+    end;
+     end;//1
+
+end;
+
+procedure TfrmRepByCreditPay.BitBtn3Click(Sender: TObject);
+begin
+   try
+      frmusaid_prognoz := Tfrmusaid_prognoz.create(self);
+      frmusaid_prognoz.ProgSetInt := 2;
+      if frmusaid_prognoz.checkaccess then
+      frmusaid_prognoz.ShowModal;
+   finally
+      frmusaid_prognoz.Release;
+   end;
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TfrmRepByCreditPay,
+    Class_frmRepByCreditPay,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

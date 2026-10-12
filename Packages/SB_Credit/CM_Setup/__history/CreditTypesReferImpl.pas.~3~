@@ -1,0 +1,184 @@
+unit CreditTypesReferImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  NLSLocalizer, Db, OracleData, StdCtrls, Grids, DBGrids, ExtCtrls,
+  ImgList, ComCtrls, ToolWin, Buttons, Oracle;
+
+type
+  TCreditTypeTuning = class(TForm)
+    CrdTypesData: TOracleDataSet;
+    DataSrcCrdTypesData: TDataSource;
+    GroupBox1: TGroupBox;
+    CrdTypesGrid: TDBGrid;
+    Panel1: TPanel;
+    ToolBar1: TToolBar;
+    ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
+    ToolButton3: TToolButton;
+    ToolButton4: TToolButton;
+    ToolButton5: TToolButton;
+    ToolButton6: TToolButton;
+    ToolButton7: TToolButton;
+    ToolButton8: TToolButton;
+    ImageList1: TImageList;
+    BitBtn1: TBitBtn;
+    SetupPackg: TOraclePackage;
+    CrdTypesDataID: TFloatField;
+    CrdTypesDataRENEWABLESTATUS: TFloatField;
+    CrdTypesDataITYPE: TFloatField;
+    CrdTypesDataICLASS: TFloatField;
+    CrdTypesDataDESCRIPTION: TWideStringField;
+    CrdTypesDataCARDTYPE: TFloatField;
+    CrdTypesDataOUTBALANCE: TFloatField;
+    CrdTypesDataDUEPERSENTDAY: TFloatField;
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+    procedure FormDestroy(Sender: TObject);
+    procedure ToolButton7Click(Sender: TObject);
+    procedure ToolButton1Click(Sender: TObject);
+    procedure ToolButton5Click(Sender: TObject);
+    procedure ToolButton3Click(Sender: TObject);
+    procedure CrdTypesDataApplyRecord(Sender: TOracleDataSet; Action: Char;
+      var Applied: Boolean; var NewRowId: String);
+  private
+    { Private declarations }
+  public
+    procedure ShowCredTypesSetup;
+    { Public declarations }
+  end;
+
+var
+  CreditTypeTuning: TCreditTypeTuning;
+
+implementation
+
+{$R *.DFM}
+
+uses
+  CMOracleAPIDataModuleImpl, CommonDecls, CreditTypesAddEditImpl;
+
+procedure TCreditTypeTuning.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+  Resize := False;
+end;
+
+procedure TCreditTypeTuning.ShowCredTypesSetup;
+begin
+
+  CrdTypesData.Open;
+  FrmAddEditCrdType := TFrmAddEditCrdType.Create(Self);
+  FrmAddEditCrdType.FDataSet := CrdTypesData;
+  FrmAddEditCrdType.DBEditDesc.DataSource := DataSrcCrdTypesData;
+  FrmAddEditCrdType.DBEdit1.DataSource := DataSrcCrdTypesData;
+
+  FrmAddEditCrdType.DBEditDesc.DataField := 'DESCRIPTION';
+   FrmAddEditCrdType.DBEdit1.DataField := 'DUEPERSENTDAY';
+  ShowModal;
+end;
+
+procedure TCreditTypeTuning.FormDestroy(Sender: TObject);
+begin
+  FrmAddEditCrdType.Free;
+end;
+
+procedure TCreditTypeTuning.ToolButton7Click(Sender: TObject);
+begin
+  CrdTypesData.Refresh
+end;
+
+procedure TCreditTypeTuning.ToolButton1Click(Sender: TObject);
+begin
+  with CrdTypesData do
+  begin
+    Insert;
+    FieldByName('ICLASS').AsInteger := 1;
+    FrmAddEditCrdType.CheckBoxReserve.Checked := True;
+    FieldByName('ITYPE').AsInteger := 0;
+    FieldByName('RENEWABLESTATUS').AsInteger := 0;
+    FieldByName('CARDTYPE').AsInteger := 0;
+    if FrmAddEditCrdType.ShowModal = mrOk then
+    Refresh
+  end;
+end;
+
+procedure TCreditTypeTuning.ToolButton5Click(Sender: TObject);
+begin
+  CrdTypesData.Delete
+end;
+
+procedure TCreditTypeTuning.ToolButton3Click(Sender: TObject);
+var
+  SavePlace : TBookmark;
+begin
+  with CrdTypesData do
+  begin
+
+    if RecordCount<=0 then
+          Exit;
+
+    Edit;
+    FrmAddEditCrdType.CheckBoxReserve.Checked := FieldByName('ICLASS').AsInteger = 1;
+    FrmAddEditCrdType.CheckBoxLine.Checked := FieldByName('ITYPE').AsInteger = 1;
+    FrmAddEditCrdType.CheckBoxRen.Checked := FieldByName('RENEWABLESTATUS').AsInteger = 1;
+    FrmAddEditCrdType.CheckBoxCredCard.Checked := FieldByName('CARDTYPE').AsInteger = 1;
+    if FrmAddEditCrdType.ShowModal = mrOk then
+    begin
+      SavePlace :=GetBookmark;
+      Refresh;
+      GotoBookmark(Pointer(SavePlace));
+      FreeBookmark(SavePlace);
+    end;
+  end;
+end;
+
+procedure TCreditTypeTuning.CrdTypesDataApplyRecord(Sender: TOracleDataSet;
+  Action: Char; var Applied: Boolean; var NewRowId: String);
+var
+  ID, RStatus, IClass, IType ,CARDTYPE : Integer;
+  Desc : String;
+begin
+
+ with Sender do
+ begin
+   ID := FieldByName('ID').AsInteger;
+   RStatus := FieldByName('RENEWABLESTATUS').AsInteger;
+   IClass := FieldByName('ICLASS').AsInteger;
+   IType := FieldByName('ITYPE').AsInteger;
+   CARDTYPE := FieldByName('CARDTYPE').AsInteger;
+   Desc := FieldByName('DESCRIPTION').AsString;
+ end;
+ Applied := True;
+ case Action of
+ 'I' :
+      SetupPackg.CallProcedure('CreditType_Add',[
+        'p_renewablestatus' , RStatus ,
+        'p_itype' , IType ,
+        'p_iclass' , IClass ,
+        'p_CARDTYPE',CARDTYPE ,
+        'p_description' , Desc
+      ]);
+ 'U' :
+      SetupPackg.CallProcedure('CreditType_Edit',[
+        'p_ID' , ID ,
+        'p_renewablestatus' , RStatus ,
+        'p_itype' , IType ,
+        'p_iclass' , IClass ,
+        'p_CARDTYPE',CARDTYPE,
+        'p_description' , Desc
+      ]);
+ 'D' :
+      SetupPackg.CallProcedure('CreditType_Delete',[
+        'p_ID' , ID
+      ]);
+
+ else
+   Applied := False;
+ end;  // case
+
+end;
+
+end.

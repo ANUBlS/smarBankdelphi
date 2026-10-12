@@ -1,0 +1,28 @@
+library Customers;
+
+
+uses
+  ComServ,
+  Customers_TLB in 'Customers_TLB.pas',
+  CustomerMainFormImpl in 'CustomerMainFormImpl.pas' {CustomerMainForm: TActiveForm} {CustomerMainForm: CoClass},
+  CustomerDataModuleImpl in 'CustomerDataModuleImpl.pas' {CustomerDataModule: TDataModule},
+  CustomerPropertiesForm_Unit in 'CustomerPropertiesForm_Unit.pas' {CustomerPropertiesForm},
+  CustomerInfoFormImpl in 'CustomerInfoFormImpl.pas' {CustomerInfoForm},
+  UnitFrmZoom in 'UnitFrmZoom.pas' {FormZoom},
+  uCustomersIPInfo in 'uCustomersIPInfo.pas' {frmIPINFO},
+  uSettingsImpl in 'uSettingsImpl.pas' {frmSettings};
+
+{$E ocx}
+
+exports
+  DllGetClassObject,
+  DllCanUnloadNow,
+  DllRegisterServer,
+  DllUnregisterServer;
+
+{$R *.TLB}
+
+{$R *.RES}
+
+begin
+end.

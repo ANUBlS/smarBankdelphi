@@ -1,0 +1,125 @@
+object FrmIEAddEdit: TFrmIEAddEdit
+  Left = 280
+  Top = 186
+  BorderIcons = [biSystemMenu]
+  ClientHeight = 175
+  ClientWidth = 262
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poMainFormCenter
+  OnCanResize = FormCanResize
+  OnKeyPress = FormKeyPress
+  PixelsPerInch = 96
+  TextHeight = 13
+  object GroupBox1: TGroupBox
+    Left = 0
+    Top = 0
+    Width = 262
+    Height = 138
+    Align = alTop
+    TabOrder = 0
+    object Label1: TLabel
+      Left = 5
+      Top = 14
+      Width = 27
+      Height = 13
+      Caption = #1060#1080#1083#1080#1072#1083
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clNavy
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = [fsBold]
+      ParentFont = False
+    end
+    object Label2: TLabel
+      Left = 5
+      Top = 54
+      Width = 43
+      Height = 13
+      Caption = #1042#1072#1083#1081#1091#1090#1072
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clNavy
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = [fsBold]
+      ParentFont = False
+    end
+    object Label3: TLabel
+      Left = 5
+      Top = 97
+      Width = 53
+      Height = 13
+      Caption = #1065#1077#1089#1072#1073' '#8470
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clNavy
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = [fsBold]
+      ParentFont = False
+    end
+    object CBBranch: TDBLookupComboBox
+      Left = 5
+      Top = 30
+      Width = 156
+      Height = 21
+      DataField = 'BRANCHID'
+      DataSource = IETuningDataMod.DataSrcLinkValues
+      KeyField = 'ID'
+      ListField = 'NAME'
+      ListSource = IETuningDataMod.DataSrcBranchList
+      TabOrder = 0
+    end
+    object DBLookupComboBox2: TDBLookupComboBox
+      Left = 5
+      Top = 70
+      Width = 108
+      Height = 21
+      DataField = 'CURRENCYID'
+      DataSource = IETuningDataMod.DataSrcLinkValues
+      KeyField = 'VALUTE'
+      ListField = 'VAL_NAME'
+      ListSource = IETuningDataMod.DataSrcCurrencyList
+      TabOrder = 1
+    end
+    object DBLookupComboboxEh1: TDBLookupComboboxEh
+      Left = 5
+      Top = 113
+      Width = 252
+      Height = 21
+      DataField = 'ACCOUNTID'
+      DataSource = IETuningDataMod.DataSrcLinkValues
+      DropDownBox.Sizable = True
+      EditButtons = <>
+      KeyField = 'ID'
+      ListField = 'ACC_NO'
+      ListSource = IETuningDataMod.DataSrcIEAccountList
+      TabOrder = 2
+      Visible = True
+      OnKeyValueChanged = DBLookupComboboxEh1KeyValueChanged
+    end
+  end
+  object Button1: TButton
+    Left = 103
+    Top = 145
+    Width = 75
+    Height = 25
+    Caption = #1043#1103#1073#1091#1083
+    TabOrder = 1
+    OnClick = Button1Click
+  end
+  object Button2: TButton
+    Left = 183
+    Top = 145
+    Width = 75
+    Height = 25
+    Caption = #1048#1084#1090#1080#1085#1072
+    TabOrder = 2
+    OnClick = Button2Click
+  end
+end

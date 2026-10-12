@@ -1,0 +1,43 @@
+unit group;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, Grids, DBGrids,Datamod1,sboapiDataModuleImpl, DB,
+  OracleData;
+
+type
+  TAddgroup = class(TForm)
+    Label1: TLabel;
+    Button1: TButton;
+    Edit1: TEdit;
+    procedure Button1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Addgroup: TAddgroup;
+
+implementation
+
+{$R *.dfm}
+
+procedure TAddgroup.Button1Click(Sender: TObject);
+begin
+DataMod.AddName.Close;
+DataMod.AddName.Open;
+  DataMod.AddName.Insert;
+   DataMod.AddName.FieldByName('Name').AsString:=edit1.Text;
+   DataMod.AddName.Post;
+
+
+
+
+
+end;
+
+end.

@@ -1,0 +1,2403 @@
+﻿unit PrepareFile_Unit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ExtCtrls, StdCtrls, ComCtrls, Buttons, CurrencyEdit, Grids, DBGrids, Db,
+  OracleData,sboapiDataModuleImpl,Variants, ToolWin, Oracle,FileCtrl,CryptoUnit,
+  datnamount;
+
+type
+  TPrepareFile_Form = class(TForm)
+    ProgressBar1: TProgressBar;
+    Button_file: TBitBtn;
+    BitBtn1: TBitBtn;
+    Panel6: TPanel;
+    Panel7: TPanel;
+    Panel1: TPanel;
+    Edit_sender: TEdit;
+    Panel4: TPanel;
+    Edit_receiver: TEdit;
+    Panel8: TPanel;
+    Panel2: TPanel;
+    SpeedButton1: TSpeedButton;
+    Edit_reference: TEdit;
+    Panel9: TPanel;
+    Panel3: TPanel;
+    Edit_count: TEdit;
+    Panel5: TPanel;
+    CurrencyEdit1: TCurrencyEdit;
+    Panel11: TPanel;
+    Edit1: TEdit;
+    SendingBatchs: TOracleDataSet;
+    ReadyBatchs: TOracleDataSet;
+    DS_ReadyBatchs: TDataSource;
+    DS_SendingBatchs: TDataSource;
+    ToolBar1: TToolBar;
+    All_to_Nosend: TSpeedButton;
+    But_noSend: TSpeedButton;
+    All_to_send: TSpeedButton;
+    But_tosend: TSpeedButton;
+    ToolButton1: TToolButton;
+    ReadyBatchsID: TFloatField;
+    ReadyBatchsF_ID: TFloatField;
+    ReadyBatchsACC_ID: TFloatField;
+    ReadyBatchsAMOUNT: TFloatField;
+    ReadyBatchsVAL_ACC: TIntegerField;
+    ReadyBatchsTRANSDATE: TDateTimeField;
+    ReadyBatchsSEND: TIntegerField;
+    ReadyBatchsSTATUS: TIntegerField;
+    Convert_pack: TOraclePackage;
+    xs_batchs: TOracleDataSet;
+    Messages: TOracleDataSet;
+    DataTemp: TOracleDataSet;
+    but_batch: TBitBtn;
+    ToolButton2: TToolButton;
+    Panel10: TPanel;
+    GridReadyBatchs: TDBGrid;
+    Panel12: TPanel;
+    GridSendingBatchs: TDBGrid;
+    ReadyBatchsCLIENT_NAME: TWideStringField;
+    ReadyBatchsCLIENT_CODE: TWideStringField;
+    ReadyBatchsTRANS_REF: TWideStringField;
+    ReadyBatchsACC_NO: TWideStringField;
+    ReadyBatchsVAL_NAME: TWideStringField;
+    ReadyBatchsOPERCODE: TWideStringField;
+    xs_batchsID: TFloatField;
+    xs_batchsOPERCODE: TWideStringField;
+    xs_batchsACC_ID: TFloatField;
+    xs_batchsCLIENT_NAME: TWideStringField;
+    xs_batchsCLIENT_CODE: TWideStringField;
+    xs_batchsTRANS_REF: TWideStringField;
+    xs_batchsAMOUNT: TFloatField;
+    xs_batchsVAL_ACC: TIntegerField;
+    xs_batchsTRANSDATE: TDateTimeField;
+    xs_batchsSEND: TIntegerField;
+    xs_batchsSTATUS: TIntegerField;
+    xs_batchsFILIAL: TFloatField;
+    xs_batchsTRANSACTION_ID: TFloatField;
+    xs_batchsCLIENT_INN: TWideStringField;
+    xs_batchsUSERID: TFloatField;
+    xs_batchsACC_NO: TWideStringField;
+    xs_batchsVAL_NAME: TWideStringField;
+    Sendingxs: TOracleDataSet;
+    xs_batchsFORMAT: TWideStringField;
+    xs_batchsDAT: TWideStringField;
+    SendingBatchsID: TFloatField;
+    SendingBatchsF_ID: TFloatField;
+    SendingBatchsOPERCODE: TWideStringField;
+    SendingBatchsACC_ID: TFloatField;
+    SendingBatchsCLIENT_NAME: TWideStringField;
+    SendingBatchsCLIENT_CODE: TWideStringField;
+    SendingBatchsTRANS_REF: TWideStringField;
+    SendingBatchsAMOUNT: TFloatField;
+    SendingBatchsVAL_ACC: TIntegerField;
+    SendingBatchsTRANSDATE: TDateTimeField;
+    SendingBatchsSEND: TIntegerField;
+    SendingBatchsSTATUS: TIntegerField;
+    SendingBatchsFILIAL: TFloatField;
+    SendingBatchsTRANSACTION_ID: TFloatField;
+    SendingBatchsCLIENT_INN: TWideStringField;
+    SendingBatchsUSERID: TFloatField;
+    SendingBatchsACC_NO: TWideStringField;
+    SendingBatchsVAL_NAME: TWideStringField;
+    SendingBatchsFORMAT: TWideStringField;
+    SendingBatchsTIMES: TWideStringField;
+    SendingBatchsDATETIME: TWideStringField;
+    SendingBatchsTODAT: TWideStringField;
+    SendingBatchsFROMDAT: TWideStringField;
+    SendingBatchsMAXPMTNUM: TFloatField;
+    SendingBatchsFREQUENCY: TWideStringField;
+    SendingBatchsCOLLTNAMT: TFloatField;
+    SendingBatchsTYPES: TFloatField;
+    SendingBatchsRELATEDREF: TWideStringField;
+    SendingBatchsMNDTST: TWideStringField;
+    ReadyBatchsFILIAL: TFloatField;
+    ReadyBatchsTRANSACTION_ID: TFloatField;
+    ReadyBatchsCLIENT_INN: TWideStringField;
+    ReadyBatchsUSERID: TFloatField;
+    ReadyBatchsFORMAT: TWideStringField;
+    xs_batchsRELATEDREF: TWideStringField;
+    countbenef: TOracleDataSet;
+    countbenefID: TFloatField;
+    countbenefBATCHID: TFloatField;
+    countbenefREC_BANK_ID: TFloatField;
+    countbenefREC_BANK_SUB_ACC: TWideStringField;
+    countbenefCLIENT_ACC_NO: TWideStringField;
+    countbenefCLIENT_NAME: TWideStringField;
+    countbenefCLIENT_CODE: TWideStringField;
+    countbenefCLIENT_INN: TWideStringField;
+    countbenefREMIT_INF: TWideStringField;
+    countbenefTRANS_COD: TIntegerField;
+    countbenefADD_INF: TWideStringField;
+    countbenefVAL_DATE: TDateTimeField;
+    countbenefVAL_COD: TIntegerField;
+    countbenefMESS_REFERENCE: TWideStringField;
+    countbenefAMOUNT: TFloatField;
+    countbenefBNFCOUNT: TIntegerField;
+    countbenefSTATUS: TIntegerField;
+    countbenefTRANSACTION_ID: TFloatField;
+    countbenefUSERID: TFloatField;
+    countbenefFTRANSACTION_ID: TFloatField;
+    countbenefATRANSACTION_ID: TFloatField;
+    SendingBatchsMEMO1: TWideMemoField;
+    SendingBatchsMEMO2: TWideMemoField;
+    procedure BitBtn1Click(Sender: TObject);
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure But_tosendClick(Sender: TObject);
+    procedure But_noSendClick(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure All_to_sendClick(Sender: TObject);
+    procedure All_to_NosendClick(Sender: TObject);
+    procedure CreateFile;
+    Procedure CreateBatchFile;
+    procedure Button_fileClick(Sender: TObject);
+    procedure FormKeyUp(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure but_batchClick(Sender: TObject);
+    procedure Edit_referenceKeyPress(Sender: TObject; var Key: Char);
+    procedure GridReadyBatchsTitleClick(Column: TColumn);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    XMLFile : TextFile;
+  end;
+
+var
+  PrepareFile_Form: TPrepareFile_Form;
+  f:textfile;
+  const
+  BreakingLine = '//----------------------------------------------------------------------------//';
+
+
+implementation
+
+uses Payment_Det, Data_Unit, LVPCSSImpl ;
+
+{$R *.DFM}
+{Helping Functions}
+function ChangeDecimal(r: real): String;
+begin
+  result:=StringReplace(formatfloat('##0.00',r),DecimalSeparator,'.',[rfReplaceAll, rfIgnoreCase]);
+end;
+function SetStringLength(orgStr:String;len:integer;addstr:String):String;
+   var tempStr:String;
+       i: Integer;
+begin
+      tempStr:=orgStr;
+      for i:=length(tempStr) to len-1 do tempStr:=addstr+tempStr;
+      Result:=tempStr;
+end;
+
+{-------------------------------------------log --------------------------- }
+
+
+// Procedure for appending a Message to an existing logfile with current Date and Time **
+
+{--------------------------------------------------------------------------}
+{------------------CREATE  FILE (XOHKS)------------------------------------}
+{--------------------------------------------------------------------------}
+
+Procedure TPrepareFile_Form.CreateFile;
+   Procedure AddStr(var BodyS : UTF8String;AddS :UTF8String;NewRow: Boolean);
+   begin
+     BodyS:=BodyS+AddS;
+     if NewRow then BodyS:=BodyS+#10;
+   end;
+
+   var mess_count:  Integer;
+   STmessage,MessageBody,tempStr,tempStr1,tempStr2,S : UTF8String;
+   FileName:UTF8String;
+   sum_amount,sum_all_amount : Real;
+   a,delimiterPos:integer;
+   dir,dir2,secondPart  ,firstPart:String;
+   L_CHIN,st                                                   : STRING;
+
+begin
+   ProgressBar1.Position:=0;
+   {OPEN DATASET'S}
+   DataTemp.Close;
+   DataTemp.SQL.Clear;
+   DataTemp.SQL.Add('Select * from xs_config');
+   DataTemp.Open;
+   {}
+   sum_all_amount:=0;
+   if not DirectoryExists(DataTemp.fieldbyname('out_dir').AsString) then
+                    MkDir(DataTemp.fieldbyname('out_dir').AsString);
+  dir:=DataTemp.fieldbyname('out_dir').AsString+'\'{+FormatDateTime('ddmmyy',date)+'\'};
+ // dir2:='C:\Clearing\out'+'\';
+
+ //showmessage(dir);
+   if not DirectoryExists(dir) then
+      MkDir(dir);
+  // if not DirectoryExists(dir2) then MkDir(dir2);
+
+
+      {datamod.OracleQuery1.Close;
+     datamod.OracleQuery1.SetVariable('vid',GridSendingBatchs.DataSource.DataSet.FieldByName('id').AsInteger);
+     datamod.OracleQuery1.SetVariable('vname',Edit_reference.Text);
+     datamod.OracleQuery1.Execute; }
+
+
+
+
+
+
+   if Trim(Edit_reference.Text)='' then exit;
+    FileName:=dir+Edit_reference.Text+'.xml';
+
+   ProgressBar1.Show;
+   AssignFile(XMLFile,Filename);
+   Rewrite(XMLFile);
+
+
+
+
+
+ //showmessage (inttostr(countbenef.recordcount));
+   {CREATE FILE HEADER}
+  // '<?xml version="1.0" encoding="latin1" ?>'
+
+   //Writeln(XMLFile,'<?xml version="1.0" encoding="UTF-8" ?>');
+ // if copy(SendingBatchs.fieldbyname('Format').AsString,3,8)='102' then   begin
+    // showMessage(SendingBatchs.fieldbyname('FORMAT').AsString);
+
+  // Writeln(XMLFile,'<SWIFT_msg_fields>');
+
+
+   if (SendingBatchs.FieldByName('format').AsString<>'CAPLMT')  then begin
+
+    if (SendingBatchs.FieldByName('format').AsString='MT992') then
+     begin
+       Writeln(XMLFile,'<msg_sender>'+Edit_sender.text+'</msg_sender>');
+       Writeln(XMLFile,'<msg_receiver>'+Edit_receiver.text+'</msg_receiver>');
+       Writeln(XMLFile,'<msg_type>995</msg_type>');
+       Writeln(XMLFile,'<msg_user_priority>0100</msg_user_priority>');
+
+       Writeln(XMLFile,'<msg_user_reference>'+Edit_reference.Text+'</msg_user_reference>');
+       Writeln(XMLFile,'<msg_mac_result></msg_mac_result>');
+       Write(XMLFile,'<block4>');
+
+       MessageBody:='';
+
+
+       AddStr(MessageBody,':20:'+(SendingBatchs.fieldbyname('TRANS_REF').AsString),true);
+       AddStr(MessageBody,':21:'+(SendingBatchs.fieldbyname('relatedref').AsString),true);
+       AddStr(MessageBody,':75:'+(SendingBatchs.fieldbyname('Opercode').AsString),true);
+       AddStr(MessageBody,':11S:998',true);
+       AddStr(MessageBody,''+UTF8String(SendingBatchs.fieldbyname('fromdat').AsString),true);
+       AddStr(MessageBody,':79/MANDATE/'+datamod.XS_CONFIG.FieldByName('myswift').AsString+(SendingBatchs.fieldbyname('TRANS_REF').AsString),true);
+       AddStr(MessageBody,(datamod.XS_CONFIG.FieldByName('myswift').AsString),true);
+
+       Write(XMLFile,MessageBody);
+
+      //Write(XMLFile,'</batch>');
+      Write(XMLFile,'</block4>');
+
+
+     end;
+     if (SendingBatchs.FieldByName('format').AsString='MT999') then
+     begin
+     {  Writeln(XMLFile,'<msg_sender>'+Edit_sender.text+'</msg_sender>');
+       Writeln(XMLFile,'<msg_receiver>'+Edit_receiver.text+'</msg_receiver>');
+       Writeln(XMLFile,'<msg_type>995</msg_type>');
+       Writeln(XMLFile,'<msg_user_priority>0100</msg_user_priority>');
+
+       Writeln(XMLFile,'<msg_user_reference>'+Edit_reference.Text+'</msg_user_reference>');
+       Writeln(XMLFile,'<msg_mac_result></msg_mac_result>');
+       Write(XMLFile,'<block4>');
+
+       MessageBody:='';
+
+
+       AddStr(MessageBody,':20:'+(SendingBatchs.fieldbyname('TRANS_REF').AsString),true);
+       AddStr(MessageBody,':21:'+(SendingBatchs.fieldbyname('relatedref').AsString),true);
+       AddStr(MessageBody,':75:'+(SendingBatchs.fieldbyname('Opercode').AsString),true);
+       AddStr(MessageBody,':11S:998',true);
+       AddStr(MessageBody,''+UTF8String(SendingBatchs.fieldbyname('fromdat').AsString),true);
+       AddStr(MessageBody,':79/MANDATE/'+datamod.XS_CONFIG.FieldByName('myswift').AsString+(SendingBatchs.fieldbyname('TRANS_REF').AsString),true);
+       AddStr(MessageBody,(datamod.XS_CONFIG.FieldByName('myswift').AsString),true);
+
+       Write(XMLFile,MessageBody);
+
+      // Write(XMLFile,'</batch>');
+      Write(XMLFile,'</block4>');
+
+                          }
+
+       // Writeln(XMLFile,'<?xml version=”1.0” encoding=”UTF-8”?>');
+
+        Writeln(XMLFile,'<SWIFT_msg_fields>');
+        Writeln(XMLFile,'<block4>');
+
+        Writeln(XMLFile,'<DataPDU xmlns="urn:cma:stp:xsd:stp.1.0">');
+
+        Writeln(XMLFile,'  <Body>');
+        Writeln(XMLFile,' <AppHdr xmlns="urn:iso:std:iso:20022:tech:xsd:head.001.001.02">');
+
+        Writeln(XMLFile,'  <Fr>');
+        Writeln(XMLFile,'  <FIId>');
+        Writeln(XMLFile,'  <FinInstnId>');
+        Writeln(XMLFile,'  <BICFI>'+datamod.XS_CONFIG.FieldByName('myswift').AsString+'</BICFI>');
+        Writeln(XMLFile,'  </FinInstnId>');
+        Writeln(XMLFile,'  </FIId>');
+        Writeln(XMLFile,'  </Fr>');
+
+        Writeln(XMLFile,'  <To>');
+        Writeln(XMLFile,'  <FIId>');
+        Writeln(XMLFile,'  <FinInstnId>');
+        Writeln(XMLFile,'  <ClrSysMmbId><MmbId>'+datamod.XS_CONFIG.FieldByName('NB_SWIFT').AsString+'BCS'+'</MmbId></ClrSysMmbId>');
+        Writeln(XMLFile,'  </FinInstnId>');
+        Writeln(XMLFile,'  </FIId>');
+        Writeln(XMLFile,'  </To>');
+
+
+        Writeln(XMLFile,'  <BizMsgIdr>'+Edit_reference.Text+'</BizMsgIdr>');
+        Writeln(XMLFile,'  <MsgDefIdr>camt.998.001.03</MsgDefIdr>');
+        Writeln(XMLFile,'  <BizSvc>cba.bcsx.01</BizSvc>');
+        Writeln(XMLFile,'  <CreDt>'+FormatDateTime('yyyy-mm-dd',StrToDate(SendingBatchs.fieldbyname('TRANSDATE').AsString))+'T'+FormatDateTime('hh:nn:ss', now)+'</CreDt>');
+        Writeln(XMLFile,'  <Prty>0050</Prty>');
+        Writeln(XMLFile,'  </AppHdr>');
+
+
+               if SendingBatchs.fieldbyname('OPERCODE').AsString='MESS' then
+               begin
+
+
+        Writeln(XMLFile,'  <Document xmlns="urn:swift:xsd:camt.998.001.03">');
+        Writeln(XMLFile,'  <CshMgmtPrtryMsg>');
+        Writeln(XMLFile,'  <MsgHdr>');
+        Writeln(XMLFile,'  <MsgId>'+Edit_reference.Text+'</MsgId>');
+        Writeln(XMLFile,'  </MsgHdr>');
+        Writeln(XMLFile,'  <PrtryData>');
+        Writeln(XMLFile,'  <Tp>cma.textMessage.001.04</Tp>');
+
+
+        Writeln(XMLFile,'  <Data>');
+        Writeln(XMLFile,'  <Document xmlns="urn:cma:xsd:cma.textMessage.001.04">');
+        Writeln(XMLFile,'  <TxtMsg>');
+        Writeln(XMLFile,'  <Rcvr>');
+        Writeln(XMLFile,'  <PrtcId>');
+
+
+
+      Messages.Close;
+      Messages.SQL.Clear;
+      Messages.SQL.Add('select x.* from xs_beneficiary x where x.BatchId='+SendingBatchs.fieldbyname('ID').AsString);
+      Messages.Open;
+
+
+      DataTemp.Close;
+      DataTemp.SQL.Clear;
+      DataTemp.SQL.Add('Select krno,inn,swift from bankm where id='+Messages.FieldByName('rec_bank_id').AsString);
+      DataTemp.Open;
+
+
+        Writeln(XMLFile,'  <BICFI>'+DataTemp.FieldByName('swift').AsString+'</BICFI>');
+        Writeln(XMLFile,'  </PrtcId>');
+
+        Writeln(XMLFile,'  </Rcvr>');
+        Writeln(XMLFile,'  <Sndr>');
+        Writeln(XMLFile,'  <BICFI>'+datamod.XS_CONFIG.FieldByName('myswift').AsString+'</BICFI>');
+        Writeln(XMLFile,'  </Sndr>');
+        Writeln(XMLFile,'  <Impt>INFO</Impt>');
+
+        Writeln(XMLFile,'  <Txt>'+SendingBatchs.FieldByName('memo2').AsString+'</Txt>');
+        Writeln(XMLFile,'  </TxtMsg>');
+
+        Writeln(XMLFile,'  </Document>');
+        Writeln(XMLFile,'  </Data>');
+
+        Writeln(XMLFile,'  </PrtryData>');
+        Writeln(XMLFile,'  </CshMgmtPrtryMsg>');
+
+        Writeln(XMLFile,'  </Document>');
+
+        end
+        else
+            begin
+          Writeln(XMLFile,'   				<Document xmlns="urn:swift:xsd:camt.998.001.03">');
+
+        //  Writeln(XMLFile,'   <Tp>cma.changePassword.001.01</Tp>');
+        //  Writeln(XMLFile,'   <Data>');
+
+          Writeln(XMLFile,'   <CshMgmtPrtryMsg>');
+        Writeln(XMLFile,'  <MsgHdr>');
+        Writeln(XMLFile,'  <MsgId>'+Edit_reference.Text+'</MsgId>');
+         Writeln(XMLFile,'<CreDtTm>'+FormatDateTime('yyyy-mm-dd',StrToDate(SendingBatchs.fieldbyname('TRANSDATE').AsString))+'T'+FormatDateTime('hh:nn:ss', now)+'</CreDtTm>');
+        Writeln(XMLFile,'  </MsgHdr>');
+              Writeln(XMLFile,'  <PrtryData>');
+               Writeln(XMLFile,'   <Tp>cma.changePassword.001.01</Tp>');
+               Writeln(XMLFile,'   <Data>');
+                 Writeln(XMLFile,'   								<Document xmlns="urn:cma:xsd:cma.changePassword.001.01">');
+          Writeln(XMLFile,'   <ChngPwd>');
+
+          Writeln(XMLFile,'   <NewPwd>'+SendingBatchs.FieldByName('memo1').AsString+'</NewPwd>');
+          Writeln(XMLFile,'   <OldPwd>'+SendingBatchs.FieldByName('memo2').AsString+'</OldPwd>');
+
+          Writeln(XMLFile,'   </ChngPwd>');
+          Writeln(XMLFile,'   </Document>');
+           Writeln(XMLFile,'   </Data>');
+           Writeln(XMLFile,'   </PrtryData>');
+
+           Writeln(XMLFile,'   </CshMgmtPrtryMsg>');
+
+              Writeln(XMLFile,'   	</Document>');
+
+
+
+
+          end;
+
+
+
+        Writeln(XMLFile,'  </Body>');
+        Writeln(XMLFile,'  </DataPDU>');
+
+
+    Writeln(XMLFile,'</block4>');
+ Writeln(XMLFile,'<msg_Copy_Srv_Id/>');
+  Writeln(XMLFile,'<msg_Copy_Srv_Info/>');
+  Writeln(XMLFile,'<msg_Del_Notif_Rq>N</msg_Del_Notif_Rq>');
+  Writeln(XMLFile,'<msg_Fin_Validation/>');
+Writeln(XMLFile,'<msg_format>S</msg_format>');
+  Writeln(XMLFile,'<msg_Id/>');
+  Writeln(XMLFile,'<msg_mac_result></msg_mac_result>');
+ Writeln(XMLFile,'<msg_Net_Input_Time/>');
+  Writeln(XMLFile,'<msg_Net_Mir/>');
+  Writeln(XMLFile,'<msg_Net_Output_Date/>');
+  Writeln(XMLFile,'<msg_Pac_Result/>');
+  Writeln(XMLFile,'<msg_pde>N</msg_pde>');
+  Writeln(XMLFile,'<msg_Pdm>N</msg_Pdm>');
+
+  Writeln(XMLFile,'<msg_priority>N</msg_priority>');
+  Writeln(XMLFile,'<msg_receiver>'+Edit_receiver.text+'XBCS'+'</msg_receiver>');
+  Writeln(XMLFile,'<msg_sender>'+Edit_sender.text+'</msg_sender>');
+  Writeln(XMLFile,'<msg_Sequence>000001</msg_Sequence>');
+ Writeln(XMLFile,'<msg_Session>0001</msg_Session>');
+ Writeln(XMLFile,'<msg_Sub_Format>I</msg_Sub_Format>');
+ Writeln(XMLFile,'<msg_type>camt.998.001.03</msg_type>');
+ Writeln(XMLFile,'<msg_user_priority>0050</msg_user_priority>');
+Writeln(XMLFile,'<msg_user_reference>'+Edit_reference.Text+'</msg_user_reference>');
+Writeln(XMLFile,'<format>MX</format>');
+ Writeln(XMLFile,'<ref_Msg_User_Reference/>');
+
+ Writeln(XMLFile,'</SWIFT_msg_fields>');
+
+
+     end;
+
+  if (SendingBatchs.FieldByName('format').AsString='MT102') or
+   (SendingBatchs.FieldByName('format').AsString='MT102T') then
+
+ begin
+
+
+
+      Writeln(XMLFile,'<SWIFT_msg_fields>');
+        Writeln(XMLFile,'<msg_format>S</msg_format>');
+  Writeln(XMLFile,'<msg_sub_format>O</msg_sub_format>');
+  Writeln(XMLFile,'<msg_sender>'+Edit_sender.text+'</msg_sender>');
+  Writeln(XMLFile,'<msg_receiver>'+Edit_receiver.text+'XBCS'+'</msg_receiver>');
+   Writeln(XMLFile,'<msg_type>head.002.001.01</msg_type>');
+  Writeln(XMLFile,'<msg_priority>N</msg_priority>');
+   Writeln(XMLFile,'<msg_user_priority>0100</msg_user_priority>');
+      Writeln(XMLFile,'<msg_user_reference>'+Edit_reference.Text+'</msg_user_reference>');
+   Writeln(XMLFile,'<msg_pde>N</msg_pde>');
+   Writeln(XMLFile,'<msg_num_of_batches>'+Edit_count.Text+'</msg_num_of_batches>');
+   Writeln(XMLFile,'<msg_amount>'+ChangeDecimal(CurrencyEdit1.Value)+'</msg_amount>');
+     Writeln(XMLFile,'<format>MX</format>');
+   //  Writeln(XMLFile,'<block4><![CDATA[');
+      Writeln(XMLFile,'<block4>');
+ // if Edit_count.Text<>'1' then
+//  Writeln(XMLFile,'<msg_mac_result></msg_mac_result>');
+
+
+
+  Writeln(XMLFile,'<Xchg xmlns="urn:iso:std:iso:20022:tech:xsd:head.002.001.01">');
+  Writeln(XMLFile,    '<PyldDesc>');
+  Writeln(XMLFile,    '<PyldDtls>');
+
+  Writeln(XMLFile,    '<PyldIdr>'+Edit_reference.Text+'</PyldIdr>');
+  Writeln(XMLFile,    '<CreDtAndTm>'+FormatDateTime('yyyy-mm-dd',StrToDate(SendingBatchs.fieldbyname('TRANSDATE').AsString))+'T'+FormatDateTime('hh:nn:ss', now)+'</CreDtAndTm>');
+  Writeln(XMLFile,    '</PyldDtls>');
+  Writeln(XMLFile,    '<ApplSpcfcInf>');
+ { Writeln(XMLFile,    '<Sgntr>');
+  Writeln(XMLFile,    '<ds:Signature Id="affa5636-61da-4870-9612-7e8149cc6747" xmlns:ds="http://www.w3.org/2000/09/xmldsig#">');
+
+  Writeln(XMLFile,    '</ds:Signature>');
+  Writeln(XMLFile,    '</Sgntr>'); }
+  Writeln(XMLFile,   '<TtlNbOfDocs>'+Edit_count.Text+'</TtlNbOfDocs> ');
+  Writeln(XMLFile,    '</ApplSpcfcInf> ');
+  Writeln(XMLFile,    '<PyldTpDtls>');
+  Writeln(XMLFile,   '<Tp>FILE</Tp>');
+  Writeln(XMLFile,    '</PyldTpDtls>');
+  Writeln(XMLFile,' </PyldDesc>');
+    Writeln(XMLFile,' <Pyld CtrlSum="'+ChangeDecimal(CurrencyEdit1.Value)+'">');
+
+
+  {Writeln(XMLFile,'<format>MT</format>');
+ Writeln(XMLFile,'<msg_format>S</msg_format>');
+  Writeln(XMLFile,'<msg_sub_format>I</msg_sub_format>');
+  Writeln(XMLFile,'<msg_sender>'+Edit_sender.text+'</msg_sender>');
+  Writeln(XMLFile,'<msg_receiver>'+Edit_receiver.text+'</msg_receiver>');
+   Writeln(XMLFile,'<msg_type>'+edit1.text+'</msg_type>');
+  Writeln(XMLFile,'<msg_priority>N</msg_priority>');
+   Writeln(XMLFile,'<msg_del_notif_rq>N</msg_del_notif_rq> ');
+   Writeln(XMLFile,'<msg_num_of_batches>'+Edit_count.Text+'</msg_num_of_batches>');
+   Writeln(XMLFile,'<msg_amount>'+ChangeDecimal(CurrencyEdit1.Value)+'</msg_amount>');
+  if Edit_count.Text<>'1' then
+  Writeln(XMLFile,'<msg_mac_result></msg_mac_result>');
+   Writeln(XMLFile,'<msg_user_priority>0100</msg_user_priority>');
+   Writeln(XMLFile,'<msg_user_reference>'+Edit_reference.Text+'</msg_user_reference>');
+                    }
+  //--------------
+   {Writeln(XMLFile,' <msg_format>S</msg_format>');
+   Writeln(XMLFile,' <msg_sub_format>I</msg_sub_format>');
+   Writeln(XMLFile,' <msg_sender>'+Edit_sender.text+'</msg_sender>');
+   Writeln(XMLFile,' <msg_receiver>'+Edit_receiver.text+'</msg_receiver>');
+   Writeln(XMLFile,' <msg_type>'+edit1.text+'</msg_type>');
+   Writeln(XMLFile,' <msg_priority>N</msg_priority>');
+   Writeln(XMLFile,' <msg_del_notif_rq>N</msg_del_notif_rq>');
+   Writeln(XMLFile,' <msg_user_priority>C099</msg_user_priority>');
+   Writeln(XMLFile,' <msg_user_reference>'+Edit_reference.Text+'</msg_user_reference>');
+                }
+              {  end else begin
+                //ShowMessage(copy(SendingBatchs.fieldbyname('Format').AsString,3,3));
+                Writeln(XMLFile,'<SWIFT_msg_fields>');
+                Writeln(XMLFile,'<msg_sender>'+Edit_sender.text+'</msg_sender>');
+                Writeln(XMLFile,'<msg_receiver>'+Edit_receiver.text+'</msg_receiver>');
+                Writeln(XMLFile,'<msg_type>'+copy(SendingBatchs.fieldbyname('Format').AsString,3,3)+'</msg_type>');
+                Writeln(XMLFile,'<msg_user_priority>0100</msg_user_priority>');
+                 Writeln(XMLFile,'<msg_user_reference>'+Edit_reference.Text+'</msg_user_reference>');
+                end; }
+
+  // Writeln(XMLFile,'<block4>');
+
+
+
+
+   MessageBody:='';
+   {FILE BATCH AND MESSAGE}
+   //ShowMessage('dd');
+   xs_batchs.Refresh;
+   xs_batchs.First;
+   while not xs_batchs.Eof do
+   begin
+      Application.ProcessMessages;
+
+
+
+             Writeln(XMLFile,' <DataPDU xmlns="urn:cma:stp:xsd:stp.1.0">');
+     Writeln(XMLFile,'<Body>');
+     Writeln(XMLFile,'<AppHdr xmlns="urn:iso:std:iso:20022:tech:xsd:head.001.001.02">');
+     Writeln(XMLFile,'<Fr>');
+
+
+
+
+
+
+
+
+
+    //  Writeln(XMLFile,'<batch>');
+    //   Writeln(XMLFile,'<msg_subtype>102</msg_subtype>');
+    //  Write(XMLFile,'<body>');
+      MessageBody:='';
+    //  AddStr(MessageBody,':20:'+UTF8String(xs_batchs.fieldbyname('TRANS_REF').AsString),true);
+   //   AddStr(MessageBody,':23:'+UTF8String(xs_batchs.fieldbyname('OPERCODE').AsString),true);
+   //   AddStr(MessageBody,':50K:/'+UTF8String(xs_batchs.fieldbyname('ACC_NO').AsString),true);
+  //    s:=AnsiToUtf8(xs_batchs.fieldbyname('CLIENT_NAME').AsString);
+  //    AddStr(MessageBody,xs_batchs.fieldbyname('CLIENT_NAME').AsString,true);
+      if xs_batchs.fieldbyname('CLIENT_CODE').AsString ='' then
+      STmessage:=''
+      else
+   //   STmessage:=xs_batchs.fieldbyname('CLIENT_CODE').AsString;
+
+   //   AddStr(MessageBody,xs_batchs.fieldbyname('CLIENT_INN').asstring+'/',true);
+  //    STmessage:='';
+
+      {SEL From Acount FIND INN}
+      DataTemp.Close;
+      DataTemp.SQL.Clear;
+      DataTemp.SQL.Add('select a.filial as Branch, c.inn from xs_account a,customers c where (a.kli_ID=c.id)and(a.id='''+xs_batchs.fieldbyname('acc_id').AsString+''')');
+      DataTemp.Open;
+      tempStr :=DataTemp.FieldByName('Branch').AsString;
+      {}
+
+      {SEL}
+      DataTemp.Close;
+      DataTemp.SQL.Clear;
+      DataTemp.SQL.Add('Select kod_b,krno,inn,swift from bankinfo_t where kod_fil='+tempStr);
+      DataTemp.Open;
+    //  STmessage:=DataTemp.fieldbyname('SWIFT').AsString;
+
+       Writeln(XMLFile,'<FIId>');
+     Writeln(XMLFile,'<FinInstnId>');
+     Writeln(XMLFile,'<BICFI>'+DataTemp.fieldbyname('SWIFT').AsString+'</BICFI>');
+     Writeln(XMLFile,'</FinInstnId>');
+     Writeln(XMLFile,'</FIId>');
+     Writeln(XMLFile,'</Fr>');
+
+      {}
+      tempStr:=DataTemp.fieldbyname('KOD_B').asstring;
+      tempStr1:=SetStringLength(DataTemp.fieldbyname('KRNO').asstring,13,'0');
+      tempStr2:=DataTemp.fieldbyname('INN').asstring;
+
+         Writeln(XMLFile,'<To>');
+         Writeln(XMLFile,'<FIId>');
+         Writeln(XMLFile,'<FinInstnId>');
+         Writeln(XMLFile,'<ClrSysMmbId><MmbId>'+Edit_receiver.text+'BCS'+'</MmbId></ClrSysMmbId>');
+         Writeln(XMLFile,'</FinInstnId>');
+         Writeln(XMLFile,'</FIId>');
+         Writeln(XMLFile,'</To>');
+         Writeln(XMLFile,'<BizMsgIdr>'+Edit_reference.Text+'</BizMsgIdr>');
+         Writeln(XMLFile,'<MsgDefIdr>pacs.008.001.10</MsgDefIdr>');
+         Writeln(XMLFile,'<BizSvc>cba.bcsx.01</BizSvc>');
+         Writeln(XMLFile,'<CreDt>'+FormatDateTime('yyyy-mm-dd',StrToDate(SendingBatchs.fieldbyname('TRANSDATE').AsString))+'T'+FormatDateTime('hh:nn:ss', now)+'</CreDt>');
+         Writeln(XMLFile,'  <Prty>0100</Prty>');
+       //  Writeln(XMLFile,'<Sgntr>Digital Signature of the Batchs Document tag created by Sending Bank</Sgntr>');
+         Writeln(XMLFile,'</AppHdr>');
+
+         Writeln(XMLFile,'<Document xmlns="urn:iso:std:iso:20022:tech:xsd:pacs.008.001.10">');
+         Writeln(XMLFile,'<FIToFICstmrCdtTrf>');
+         Writeln(XMLFile,'<GrpHdr>');
+         Writeln(XMLFile,'<MsgId>'+Edit_reference.Text+'</MsgId>');
+         Writeln(XMLFile,'<CreDtTm>'+FormatDateTime('yyyy-mm-dd',StrToDate(SendingBatchs.fieldbyname('TRANSDATE').AsString))+'T'+FormatDateTime('hh:nn:ss', now)+'</CreDtTm>');
+         Writeln(XMLFile,'<BtchBookg>true</BtchBookg>');
+
+                   DataTemp.Close;
+                    DataTemp.SQL.Clear;
+                    DataTemp.SQL.Add('select count(*) as messcount from xs_beneficiary s where s.batchid in (select id from xs_batchs where id='+inttostr(GridSendingBatchs.DataSource.DataSet.FieldByName('id').AsInteger)+')');
+                    DataTemp.Open;
+
+         Writeln(XMLFile,'<NbOfTxs>'+DataTemp.FieldByName('messcount').AsString+'</NbOfTxs>');
+
+                    DataTemp.Close;
+                    DataTemp.SQL.Clear;
+                    DataTemp.SQL.Add('select sum(AMOUNT) as sum_amt from xs_beneficiary s where s.batchid in (select id from xs_batchs where id='+inttostr(GridSendingBatchs.DataSource.DataSet.FieldByName('id').AsInteger)+')');
+                    DataTemp.Open;
+         Writeln(XMLFile,'<TtlIntrBkSttlmAmt Ccy="'+xs_batchs.fieldbyname('VAL_NAME').asstring+'">'+floattostr(DataTemp.FieldByName('sum_amt').AsFloat)+'</TtlIntrBkSttlmAmt>');
+         Writeln(XMLFile,'<IntrBkSttlmDt>'+FormatDateTime('yyyy-mm-dd',StrToDate(SendingBatchs.fieldbyname('TRANSDATE').AsString))+'</IntrBkSttlmDt>');
+
+              DataTemp.Close;
+              DataTemp.SQL.Clear;
+              DataTemp.SQL.Add('Select kod_b,krno,inn,swift from bankinfo_t where kod_fil='+tempStr);
+              DataTemp.Open;
+
+
+         Writeln(XMLFile,'<SttlmInf><SttlmMtd>CLRG</SttlmMtd></SttlmInf>');
+         Writeln(XMLFile,'<PmtTpInf>');
+         Writeln(XMLFile,'<ClrChanl>MPNS</ClrChanl>');
+         Writeln(XMLFile,'<LclInstrm><Prtry>BCSS-MCCT</Prtry></LclInstrm>');
+          Writeln(XMLFile,'</PmtTpInf>');
+           Writeln(XMLFile,'</GrpHdr>');
+
+
+
+
+
+
+
+
+      {if (xs_batchs.FieldByName('filial').AsInteger > 0)and
+         (xs_batchs.FieldByName('filial').AsInteger <> null)
+      then
+      begin
+          DataTemp.Close;
+          DataTemp.SQL.Clear;
+          DataTemp.SQL.Add('Select kod_bFil, inn_Fil from Filialinfo where kod_fil='''+xs_batchs.FieldByName('filial').AsString+'''');
+          DataTemp.Open;
+
+          tempStr:=DataTemp.fieldbyname('KOD_BFIL').asstring;
+          tempStr2:=DataTemp.fieldbyname('INN_FIL').asstring;
+      end; }
+
+   //   AddStr(MessageBody,tempstr+'/'+tempstr2,true);
+   //   AddStr(MessageBody,tempstr1,true);
+      {SEL}
+      DataTemp.Close;
+      DataTemp.SQL.Clear;
+      DataTemp.SQL.Add('Select account from xs_config');
+      DataTemp.Open;
+      {}
+    //  AddStr(MessageBody,':52A:/D/'+DataTemp.fieldbyname('ACCOUNT').asstring,true);
+   //   AddStr(MessageBody,STmessage,true);
+
+      STmessage:='';
+      {OPEN MESSAGES TABE AND CREATE :21:}
+      mess_count:=0;
+      sum_amount:=0;
+      Messages.Close;
+      Messages.SQL.Clear;
+      Messages.SQL.Add('select x.*, v.val_name from xs_beneficiary x, avalute v where (x.BatchId='''+xs_batchs.fieldbyname('ID').AsString+''')and (x.val_cod=v.valute)');
+      Messages.Open;
+      Messages.First;
+      while not messages.eof do
+      begin
+          ProgressBar1.Max:=Messages.RecordCount div xs_batchs.RecordCount;
+          Application.ProcessMessages;
+          ProgressBar1.Position:=   ProgressBar1.Position+10;
+
+           Writeln(XMLFile,' <CdtTrfTxInf>');
+            Writeln(XMLFile,' <PmtId>');
+           Writeln(XMLFile,' <InstrId>'+messages.fieldbyname('MESS_REFERENCE').asstring+'</InstrId>');
+           Writeln(XMLFile,' <EndToEndId>NOTPROVIDED</EndToEndId>');
+
+           Writeln(XMLFile,'<TxId>'+Edit_reference.Text+'//'+messages.fieldbyname('MESS_REFERENCE').asstring+'</TxId>');
+           Writeln(XMLFile,' </PmtId>');
+           Writeln(XMLFile,' <IntrBkSttlmAmt Ccy="'+messages.fieldbyname('VAL_NAME').asstring+'">'+ChangeDecimal(messages.fieldbyname('AMOUNT').asfloat)+'</IntrBkSttlmAmt>');
+           Writeln(XMLFile,' <ChrgBr>DEBT</ChrgBr>');
+           Writeln(XMLFile,' <InstgAgt>');
+           Writeln(XMLFile,' <FinInstnId>');
+
+            {SEL From Acount FIND INN}
+      DataTemp.Close;
+      DataTemp.SQL.Clear;
+      DataTemp.SQL.Add('select a.filial as Branch, c.inn from xs_account a,customers c where (a.kli_ID=c.id)and(a.id='''+xs_batchs.fieldbyname('acc_id').AsString+''')');
+      DataTemp.Open;
+      tempStr :=DataTemp.FieldByName('Branch').AsString;
+      {}
+
+      {SEL}
+      DataTemp.Close;
+      DataTemp.SQL.Clear;
+      DataTemp.SQL.Add('Select kod_b,krno,inn,swift from bankinfo_t where kod_fil='+tempStr);
+      DataTemp.Open;
+
+           Writeln(XMLFile,' <BICFI>'+DataTemp.FieldByName('SWIFT').AsString+'</BICFI>');
+           Writeln(XMLFile,' </FinInstnId>');
+           Writeln(XMLFile,'</InstgAgt>');
+
+
+           Writeln(XMLFile,'<InstdAgt>');
+           Writeln(XMLFile,'<FinInstnId>');
+
+           tempStr1:=SetStringLength(messages.fieldbyname('REC_BANK_SUB_ACC').asstring,13,'0');
+        //  AddStr(MessageBody,':57A:/C/'+tempStr1,true);
+          {SEL}
+          DataTemp.Close;
+          DataTemp.SQL.Clear;
+          DataTemp.SQL.Add('Select swift from bankm where id='''+messages.fieldbyname('REC_BANK_ID').AsString+'''');
+          DataTemp.Open;
+               if DataTemp.fieldbyname('SWIFT').asstring='CTREAZ24' then
+                   Writeln(XMLFile,'<ClrSysMmbId><MmbId>'+DataTemp.fieldbyname('SWIFT').asstring+'</MmbId></ClrSysMmbId>')
+               else
+                     Writeln(XMLFile,'<BICFI>'+DataTemp.fieldbyname('SWIFT').asstring+'</BICFI>');
+
+           Writeln(XMLFile,'</FinInstnId>');
+           Writeln(XMLFile,'</InstdAgt>');
+
+           Writeln(XMLFile,'<Dbtr>');
+           Writeln(XMLFile,'<Nm>'+AnsiToUtf8(xs_batchs.fieldbyname('CLIENT_NAME').AsString)+'</Nm>');
+
+
+
+
+
+  delimiterPos := Pos('/', xs_batchs.fieldbyname('CLIENT_INN').AsString);
+  firstPart := Copy(xs_batchs.fieldbyname('CLIENT_INN').AsString, 1, delimiterPos - 1);
+  secondPart := Copy(xs_batchs.fieldbyname('CLIENT_INN').AsString, delimiterPos + 1, Length(xs_batchs.fieldbyname('CLIENT_INN').AsString) - delimiterPos);
+
+
+
+
+  if secondPart<>'' then
+                  begin
+           Writeln(XMLFile,'<Id>');
+           Writeln(XMLFile,'<PrvtId>');
+            Writeln(XMLFile,'<Othr>');
+             Writeln(XMLFile,'<Id>'+secondPart+'</Id>');
+             Writeln(XMLFile,'<SchmeNm>');
+             Writeln(XMLFile,'<Prtry>NIDN</Prtry>');
+             Writeln(XMLFile,'</SchmeNm>');
+             Writeln(XMLFile,'</Othr>');
+               Writeln(XMLFile,'</PrvtId>');
+
+               Writeln(XMLFile,'</Id>');
+         end ;
+
+               Writeln(XMLFile,'</Dbtr>');
+
+
+
+
+                Writeln(XMLFile,'     <DbtrAcct>');
+                Writeln(XMLFile,'<Id>');
+                Writeln(XMLFile,'<IBAN>'+UTF8String(xs_batchs.fieldbyname('ACC_NO').AsString)+'</IBAN>');
+                Writeln(XMLFile,'</Id>');
+                Writeln(XMLFile,'</DbtrAcct>');
+                 Writeln(XMLFile,'<DbtrAgt>');
+                  Writeln(XMLFile,'<FinInstnId>');
+
+                   DataTemp.Close;
+      DataTemp.SQL.Clear;
+      DataTemp.SQL.Add('select a.filial as Branch, c.inn from xs_account a,customers c where (a.kli_ID=c.id)and(a.id='''+xs_batchs.fieldbyname('acc_id').AsString+''')');
+      DataTemp.Open;
+      tempStr :=DataTemp.FieldByName('Branch').AsString;
+      {}
+
+      {SEL}
+      DataTemp.Close;
+      DataTemp.SQL.Clear;
+      DataTemp.SQL.Add('Select kod_b,krno,inn,swift from bankinfo_t where kod_fil='+tempStr);
+      DataTemp.Open;
+
+      tempStr1:=DataTemp.FieldByName('krno').AsString  ;
+
+                   Writeln(XMLFile,'<BICFI>'+DataTemp.FieldByName('SWIFT').AsString+'</BICFI>');
+
+                    Writeln(XMLFile,'<Othr>');
+                    Writeln(XMLFile,'<Id>'+DataTemp.FieldByName('kod_b').AsString+'</Id>');
+                    Writeln(XMLFile,'<SchmeNm><Prtry>'+DataTemp.FieldByName('inn').AsString+'</Prtry></SchmeNm>');
+
+                    Writeln(XMLFile,'</Othr>');
+                    Writeln(XMLFile,'</FinInstnId>');
+                    Writeln(XMLFile,'</DbtrAgt>');
+
+
+
+                     Writeln(XMLFile,'<DbtrAgtAcct>');
+
+                     DataTemp.Close;
+      DataTemp.SQL.Clear;
+      DataTemp.SQL.Add('Select account from xs_config');
+      DataTemp.Open;
+                     Writeln(XMLFile,'<Id><IBAN>'+DataTemp.FieldByName('account').AsString+'</IBAN></Id>');
+                     Writeln(XMLFile,'<Prxy>');
+                     Writeln(XMLFile,'<Tp><Prtry>RTIB</Prtry></Tp>');
+                     Writeln(XMLFile,'<Id>'+tempStr1+'</Id>');
+                     Writeln(XMLFile,'</Prxy>');
+                     Writeln(XMLFile,'</DbtrAgtAcct>');
+
+
+                              //AddStr(MessageBody,':21:'+messages.fieldbyname('MESS_REFERENCE').asstring,true);
+          //AddStr(MessageBody,':32B:'+messages.fieldbyname('VAL_NAME').asstring+ChangeDecimal(messages.fieldbyname('AMOUNT').asfloat),true);
+
+          tempStr1:=SetStringLength(messages.fieldbyname('REC_BANK_SUB_ACC').asstring,13,'0');
+        //  AddStr(MessageBody,':57A:/C/'+tempStr1,true);
+          {SEL}
+          DataTemp.Close;
+          DataTemp.SQL.Clear;
+          DataTemp.SQL.Add('Select swift from bankm where id='''+messages.fieldbyname('REC_BANK_ID').AsString+'''');
+          DataTemp.Open;
+          {}
+        //  AddStr(MessageBody,DataTemp.fieldbyname('SWIFT').asstring,true);
+         // AddStr(MessageBody,':59:/'+messages.fieldbyname('CLIENT_ACC_NO').asstring,true);
+        //  AddStr(MessageBody,messages.fieldbyname('CLIENT_NAME').asstring,true);
+
+
+          Writeln(XMLFile,'<CdtrAgt>');
+                      Writeln(XMLFile,'<FinInstnId>');
+
+                      if DataTemp.fieldbyname('SWIFT').asstring='CTREAZ24' then
+
+                             Writeln(XMLFile,'<ClrSysMmbId><MmbId>'+DataTemp.fieldbyname('SWIFT').asstring+'</MmbId></ClrSysMmbId>')
+                             else
+                       Writeln(XMLFile,'  <BICFI>'+DataTemp.fieldbyname('SWIFT').asstring+'</BICFI>');
+
+                       Writeln(XMLFile,'<Othr>');
+
+
+
+          if trim(Messages.fieldbyname('CLIENT_CODE').AsString) ='' then
+          STmessage:=''
+          else
+        //  STmessage:=Messages.fieldbyname('CLIENT_CODE').AsString;
+
+       //   AddStr(MessageBody,messages.fieldbyname('CLIENT_INN').asstring+'/',true);
+        //  STmessage:='';
+
+
+          {SEL}
+          DataTemp.Close;
+          DataTemp.SQL.Clear;
+          DataTemp.SQL.Add('Select krno,inn,bankcode from bankm where id='''+messages.fieldbyname('REC_BANK_ID').AsString+'''');
+          DataTemp.Open;
+          {}
+          tempStr2:=DataTemp.fieldbyname('inn').asstring ;
+          tempStr:=SetStringLength(DataTemp.fieldbyname('KRNO').asstring,13,'0');
+
+          Writeln(XMLFile,'<Id>'+DataTemp.fieldbyname('bankcode').asstring+'</Id>');
+          Writeln(XMLFile,'<SchmeNm><Prtry>'+DataTemp.fieldbyname('INN').asstring+'</Prtry></SchmeNm>');
+          Writeln(XMLFile,'</Othr>');
+          Writeln(XMLFile,'</FinInstnId>');
+           Writeln(XMLFile,'</CdtrAgt>');
+           Writeln(XMLFile,'<CdtrAgtAcct>');
+
+           Writeln(XMLFile,'<Id><IBAN>'+messages.fieldbyname('REC_BANK_SUB_ACC').asstring+'</IBAN></Id>');
+            Writeln(XMLFile,'<Prxy>');
+             Writeln(XMLFile,'<Tp><Prtry>RTIB</Prtry></Tp>');
+              Writeln(XMLFile,'<Id>'+tempStr+'</Id>');
+               Writeln(XMLFile,'</Prxy>');
+                Writeln(XMLFile,'</CdtrAgtAcct>');
+
+
+
+
+                Writeln(XMLFile,'<Cdtr>');
+                Writeln(XMLFile,'<Nm>'+messages.fieldbyname('CLIENT_NAME').asstring+'</Nm>');
+                Writeln(XMLFile,'<Id>');
+                Writeln(XMLFile,'<OrgId>');
+                Writeln(XMLFile,'<Othr>');
+
+         if trim(Messages.fieldbyname('CLIENT_CODE').AsString) ='' then
+          STmessage:=''
+          else
+         STmessage:=Messages.fieldbyname('CLIENT_CODE').AsString;
+
+
+                Writeln(XMLFile,'<Id>'+STmessage+'</Id>');
+                Writeln(XMLFile,'<SchmeNm><Prtry>CLCD</Prtry></SchmeNm>');
+                Writeln(XMLFile,'</Othr>');
+                Writeln(XMLFile,'</OrgId>');
+
+               Writeln(XMLFile,'</Id>');
+               Writeln(XMLFile,'</Cdtr>');
+               Writeln(XMLFile,'<CdtrAcct>');
+
+
+
+               Writeln(XMLFile,' <Id><IBAN>'+messages.fieldbyname('CLIENT_ACC_NO').asstring+'</IBAN></Id>');
+               Writeln(XMLFile,'</CdtrAcct>');
+               Writeln(XMLFile,'<Purp><Prtry>900</Prtry></Purp>');
+               Writeln(XMLFile,'<RgltryRptg>');
+
+
+
+
+
+               STmessage:= LVPCSSForm.StrPart(Messages.fieldbyname('ADD_INF').AsString,'|',1);
+               if trim(STmessage) <> '' then
+               begin
+                   Writeln(XMLFile,'<Dtls>');
+                Writeln(XMLFile,'<Inf>'+Stmessage+'</Inf>');
+
+
+               STmessage:= LVPCSSForm.StrPart(Messages.fieldbyname('ADD_INF').AsString,'|',2);
+              if trim(STmessage) <> '' then
+              Writeln(XMLFile,'<Inf>'+Stmessage+'</Inf>');
+
+               STmessage:= LVPCSSForm.StrPart(Messages.fieldbyname('ADD_INF').AsString,'|',3);
+              if trim(STmessage) <> '' then
+              Writeln(XMLFile,'<Inf>'+Stmessage+'</Inf>');
+
+
+            STmessage:= LVPCSSForm.StrPart(Messages.fieldbyname('ADD_INF').AsString,'|',4);
+              if trim(STmessage) <> '' then
+              Writeln(XMLFile,'<Inf>'+Stmessage+'</Inf>');
+
+
+               Writeln(XMLFile,'</Dtls>');
+              end;
+               Writeln(XMLFile,'</RgltryRptg>');
+
+
+               Writeln(XMLFile,'<Tax>');
+               Writeln(XMLFile,'<Cdtr>');
+
+
+
+
+               DataTemp.Close;
+          DataTemp.SQL.Clear;
+          DataTemp.SQL.Add('Select krno,inn,bankcode from bankm where id='''+messages.fieldbyname('REC_BANK_ID').AsString+'''');
+          DataTemp.Open;
+          {}
+          tempStr2:=DataTemp.fieldbyname('inn').asstring ;
+
+           //    Writeln(XMLFile,'<TaxId>'+tempStr2+'</TaxId>');
+           Writeln(XMLFile,'<TaxId>'+messages.FieldByName('CLIENT_INN').AsString+'</TaxId>');
+               Writeln(XMLFile,'</Cdtr>');
+
+
+                DataTemp.Close;
+      DataTemp.SQL.Clear;
+      DataTemp.SQL.Add('select a.filial as Branch, c.inn from xs_account a,customers c where (a.kli_ID=c.id)and(a.id='''+xs_batchs.fieldbyname('acc_id').AsString+''')');
+      DataTemp.Open;
+      tempStr :=DataTemp.FieldByName('Branch').AsString;
+      {}
+
+      {SEL}
+      DataTemp.Close;
+      DataTemp.SQL.Clear;
+      DataTemp.SQL.Add('Select kod_b,krno,inn,swift from bankinfo_t where kod_fil='+tempStr);
+      DataTemp.Open;
+        // tempStr2:=DataTemp.fieldbyname('inn').asstring ;
+
+       tempStr2:= copy(xs_batchs.fieldbyname('CLIENT_INN').AsString,0,10) ;
+
+       delimiterPos := Pos('/', xs_batchs.fieldbyname('CLIENT_INN').AsString);
+       firstPart := Copy(xs_batchs.fieldbyname('CLIENT_INN').AsString, 1, delimiterPos - 1);
+       secondPart := Copy(xs_batchs.fieldbyname('CLIENT_INN').AsString, delimiterPos + 1, Length(xs_batchs.fieldbyname('CLIENT_INN').AsString) - delimiterPos);
+    //firstPart + '/' + secondPart;
+
+
+               Writeln(XMLFile,'<Dbtr>');
+               Writeln(XMLFile,'<TaxId>'+firstPart+'</TaxId>');
+               Writeln(XMLFile,'</Dbtr>');
+               Writeln(XMLFile,'</Tax>');
+
+
+             Writeln(XMLFile,'<RmtInf>');
+             STmessage:= LVPCSSForm.StrPart(Messages.fieldbyname('REMIT_INF').AsString,'|',1);
+               if trim(STmessage) <> '' then
+                Writeln(XMLFile,'<Ustrd>'+Stmessage+'</Ustrd>');
+
+               STmessage:= LVPCSSForm.StrPart(Messages.fieldbyname('REMIT_INF').AsString,'|',2);
+              if trim(STmessage) <> '' then
+              Writeln(XMLFile,'<Ustrd>'+Stmessage+'</Ustrd>');
+
+               STmessage:= LVPCSSForm.StrPart(Messages.fieldbyname('REMIT_INF').AsString,'|',3);
+              if trim(STmessage) <> '' then
+              Writeln(XMLFile,'<Ustrd>'+Stmessage+'</Ustrd>');
+
+
+            STmessage:= LVPCSSForm.StrPart(Messages.fieldbyname('REMIT_INF').AsString,'|',4);
+              if trim(STmessage) <> '' then
+              Writeln(XMLFile,'<Ustrd>'+Stmessage+'</Ustrd>');
+
+             Writeln(XMLFile,'</RmtInf>');
+             Writeln(XMLFile,'</CdtTrfTxInf>');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+         // AddStr(MessageBody,DataTemp.fieldbyname('BANKCODE').asstring+'/'+DataTemp.fieldbyname('INN').asstring,true);
+        //  AddStr(MessageBody,tempstr,true);
+          {REMIT INF}
+          {1}
+          STmessage:= LVPCSSForm.StrPart(Messages.fieldbyname('REMIT_INF').AsString,'|',1);
+          if trim(STmessage) <> '' then
+         // AddStr(MessageBody,':70:'+Stmessage,true);
+          {2}
+          STmessage:= LVPCSSForm.StrPart(Messages.fieldbyname('REMIT_INF').AsString,'|',2);
+          if trim(STmessage) <> '' then
+        //  AddStr(MessageBody,Stmessage,true);
+          {3}
+          STmessage:= LVPCSSForm.StrPart(Messages.fieldbyname('REMIT_INF').AsString,'|',3);
+          if trim(STmessage) <> '' then
+         // AddStr(MessageBody,Stmessage,true);
+          {4}
+          STmessage:= LVPCSSForm.StrPart(Messages.fieldbyname('REMIT_INF').AsString,'|',4);
+          if trim(STmessage) <> '' then
+         // AddStr(MessageBody,Stmessage,true);
+          {TRANSACTION CODE}
+       //   AddStr(MessageBody,':26T:'+messages.fieldbyname('TRANS_COD').asstring,true);
+          {ADD INF}
+          {1}
+          STmessage:= LVPCSSForm.StrPart(messages.fieldbyname('ADD_INF').asstring,'|',1);
+          if trim(STmessage) <> '' then
+         // AddStr(MessageBody,':77B:'+Stmessage,true);
+          {2}
+          STmessage:= LVPCSSForm.StrPart(messages.fieldbyname('ADD_INF').asstring,'|',2);
+          if trim(STmessage) <> '' then
+        //  AddStr(MessageBody,Stmessage,true);
+          {3}
+          STmessage:= LVPCSSForm.StrPart(messages.fieldbyname('ADD_INF').asstring,'|',3);
+          if trim(STmessage) <> '' then
+        //  AddStr(MessageBody,Stmessage,true);
+          {}
+      mess_count:=mess_count+1;
+      sum_amount:=sum_amount+messages.fieldbyname('AMOUNT').AsFloat;
+      Messages.Next;
+      end;
+   //AddStr(MessageBody,':32A:'+formatdatetime('yymmdd',messages.fieldbyname('val_date').AsDateTime)+xs_batchs.fieldbyname('VAL_NAME').asstring+ChangeDecimal(sum_amount),true);
+  // AddStr(MessageBody,':72:/BNF/'+inttostr(mess_count),false);
+     //ShowMessage(MessageBody);
+   {WIRITE MESSAGEBODY TO FILE}
+
+
+
+
+
+
+  // Write(XMLFile,MessageBody);
+
+
+
+
+
+//   ShowMessage(MessageBody);
+  { Writeln(XMLFile,'<sign>'+SetSign('','',MessageBody)+'</sign>');
+   {----------------------------------------------------------}
+   {*-*-*-*-*-*   MODIFIED BY l-CHIN CHECK KEY FILE*-*-*-*-*-*}
+    {--------------------------------------------------------}
+     {------------------------------------------------------}
+     { L_CHIN:='<sign>'+SetSign('','',MessageBody)+'</sign>';
+      IF length(L_CHIN)<>301 THEN
+      BEGIN
+         MessageDlg('DEFAULT KEY SEÇİLMƏYİB'+CHR(13)+'LÜTFƏN DEFAULT KEY-i'+CHR(13)+'KEY MANAGER PROGRAMI İLƏ FLOPPY DİSKDƏN SEÇİN!',mtWarning,[mbok],0);
+      END;
+     {------------------------------------------------------}
+    {--------------------------------------------------------}
+   {*-*-*-*-*-*   MODIFIED BY l-CHIN CHECK KEY FILE*-*-*-*-*-*}
+   {----------------------------------------------------------}
+   //WriteLn(XMLFile,'</batch>');
+   // Writeln(XMLFile,' </Pyld>');
+   sum_all_amount:=sum_all_amount+xs_batchs.fieldbyname('AMOUNT').asfloat;
+   xs_batchs.Next;
+      Writeln(XMLFile,' </FIToFICstmrCdtTrf>');
+       Writeln(XMLFile,' </Document>');
+          Writeln(XMLFile,' </Body>');
+             Writeln(XMLFile,' </DataPDU>');
+   end;
+//   Writeln(XMLFile,'</block4>');
+
+ end;  {FILE FOOTER}
+
+   if (SendingBatchs.FieldByName('format').AsString='MT998') then
+    begin
+                                    //------------------------------996
+    {Writeln(XMLFile,'<format>MT</format>');
+   Writeln(XMLFile,'<msg_format>S</msg_format>');
+   Writeln(XMLFile,'<msg_sub_format>I</msg_sub_format>');   }
+   Writeln(XMLFile,'<msg_sender>'+Edit_sender.text+'</msg_sender>');
+   Writeln(XMLFile,'<msg_receiver>'+Edit_receiver.text+'</msg_receiver>');
+   Writeln(XMLFile,'<msg_type>998</msg_type>');
+   {Writeln(XMLFile,'<msg_priority>N</msg_priority>');
+   Writeln(XMLFile,'<msg_del_notif_rq>N</msg_del_notif_rq> '); }
+
+   Writeln(XMLFile,'<msg_user_priority>0100</msg_user_priority>');
+   {Writeln(XMLFile,'<msg_user_reference>'+Edit_reference.Text+'</msg_user_reference>');
+   Writeln(XMLFile,'<msg_copy_srv_id></msg_copy_srv_id>');
+   Writeln(XMLFile,'<msg_fin_validation></msg_fin_validation> ');
+
+   Writeln(XMLFile,'<msg_pde>N</msg_pde> ');
+   Writeln(XMLFile,'<msg_session>0001</msg_session>');
+   Writeln(XMLFile,'<msg_sequence>'+UTF8String(SendingBatchs.FieldByName('id').AsVariant)+'</msg_sequence> ');
+   Writeln(XMLFile,'<msg_net_input_time>'+UTF8String(SendingBatchs.FieldByName('times').AsVariant)+'</msg_net_input_time>');
+   Writeln(XMLFile,'   <msg_net_output_date>'+UTF8String(SendingBatchs.FieldByName('datetime').AsVariant)+'</msg_net_output_date>');
+
+
+
+  Writeln(XMLFile,'<msg_copy_srv_info></msg_copy_srv_info> ');    }
+  Writeln(XMLFile,'<msg_mac_result></msg_mac_result> ');
+
+  {Writeln(XMLFile,'<msg_amount/> ');
+
+
+  Writeln(XMLFile,'<msg_num_of_batches/>');
+   Writeln(XMLFile,'<fin_copy_info/> ');  }
+    Write(XMLFile,'<block4>');
+      MessageBody:='';
+      xs_batchs.Active:=true;
+      //st:='R'+copy(UTF8String(SendingBatchs.fieldbyname('TRANS_REF').AsString),0,5)+'/998';
+     // ShowMessage(st);
+      AddStr(MessageBody,':20:'+UTF8String(SendingBatchs.fieldbyname('TRANS_REF').AsString),true);
+       //if True then
+
+      //AddStr(MessageBody,':21:NONREF',true);
+      //AddStr(MessageBody,':76:MNDT',true);
+      //AddStr(MessageBody,'ISSU/'+SendingBatchs.FieldByName('datetime').AsVariant+'0000',true);
+      //AddStr(MessageBody,':11R:998',true);
+      //AddStr(MessageBody,copy(SendingBatchs.FieldByName('datetime').AsVariant,0,6),true);
+
+     // AddStr(MessageBody,':21:NONREF',true);
+      AddStr(MessageBody,':12:661',true);
+      AddStr(MessageBody,':77E:',true);
+
+
+      Messages.Close;
+      Messages.SQL.Clear;
+      Messages.SQL.Add('select x.*, v.val_name from xs_beneficiary x, avalute v where (x.BatchId='''+SendingBatchs.fieldbyname('ID').AsString+''')and (x.val_cod=v.valute)');
+      Messages.Open;
+
+
+      DataTemp.Close;
+          DataTemp.SQL.Clear;
+          DataTemp.SQL.Add('Select krno,inn,bankcode,swift from bankm where id='''+messages.fieldbyname('REC_BANK_ID').AsString+'''');
+          DataTemp.Open;
+
+
+
+      AddStr(MessageBody,':59:'+UTF8String(DataTemp.fieldbyname('swift').asstring),true);
+      AddStr(MessageBody,':54A:'+UTF8String(DataMod.XS_CONFIG.fieldbyname('myswift').asstring),true);
+      AddStr(MessageBody,':79:/REFERENCE/'+UTF8String(SendingBatchs.fieldbyname('TRANS_REF').AsString),true);
+      AddStr(MessageBody,'/DBTR/'+UTF8String(Messages.fieldbyname('CLIENT_ACC_NO').asstring),true);
+      AddStr(MessageBody,'/DBTRAGT/'+UTF8String(DataTemp.fieldbyname('swift').asstring),true);
+      AddStr(MessageBody,'/CDTR/'+UTF8String(SendingBatchs.fieldbyname('ACC_NO').AsString),true);
+      AddStr(MessageBody,'/CDTRAGT/'+UTF8String(DataMod.XS_CONFIG.fieldbyname('myswift').asstring),true);
+      AddStr(MessageBody,'/TYPE/'+floattostr(SendingBatchs.fieldbyname('types').AsFloat),true);
+      AddStr(MessageBody,'/FROM/'+UTF8String(SendingBatchs.fieldbyname('fromdat').AsString),true);
+
+      if SendingBatchs.fieldbyname('TODAT').AsString<>'' then
+      AddStr(MessageBody,'/TO/'+UTF8String(SendingBatchs.fieldbyname('TODAT').AsString),true);
+
+
+       if SendingBatchs.fieldbyname('types').AsVariant=1 then
+        begin
+         AddStr(MessageBody,'/FREQUENCY/'+UTF8String(SendingBatchs.fieldbyname('frequency').AsString),true);
+        end;
+
+
+      AddStr(MessageBody,'/CURRENCY/AZN',true);
+      AddStr(MessageBody,'/MAXPMTNUM/'+floattostr(SendingBatchs.fieldbyname('maxpmtnum').AsFloat),true);
+      //AddStr(MessageBody,'/MAXAMT/'+ChangeDecimal(SendingBatchs.fieldbyname('amount').asfloat),true);
+        if SendingBatchs.fieldbyname('types').AsVariant=0 then
+        begin
+        AddStr(MessageBody,'/MAXAMT/'+ChangeDecimal(SendingBatchs.fieldbyname('amount').asfloat),true);
+        AddStr(MessageBody,'/COLLTNAMT/'+ChangeDecimal(SendingBatchs.fieldbyname('colltnamt').asfloat),false);
+        end
+        else
+       AddStr(MessageBody,'/MAXAMT/'+ChangeDecimal(SendingBatchs.fieldbyname('amount').asfloat),false);
+
+
+
+      Write(XMLFile,MessageBody);
+      Write(XMLFile,'</block4>');
+
+
+
+    end;
+
+     if (SendingBatchs.FieldByName('format').AsString='MT996') then
+    begin
+                                    //------------------------------996
+    {Writeln(XMLFile,'<format>MT</format>');
+   Writeln(XMLFile,'<msg_format>S</msg_format>');
+   Writeln(XMLFile,'<msg_sub_format>I</msg_sub_format>');   }
+   Writeln(XMLFile,'<msg_sender>'+Edit_sender.text+'</msg_sender>');
+   Writeln(XMLFile,'<msg_receiver>'+Edit_receiver.text+'</msg_receiver>');
+   Writeln(XMLFile,'<msg_type>996</msg_type>');
+   {Writeln(XMLFile,'<msg_priority>N</msg_priority>');
+   Writeln(XMLFile,'<msg_del_notif_rq>N</msg_del_notif_rq> '); }
+
+   Writeln(XMLFile,'<msg_user_priority>0100</msg_user_priority>');
+   {Writeln(XMLFile,'<msg_user_reference>'+Edit_reference.Text+'</msg_user_reference>');
+   Writeln(XMLFile,'<msg_copy_srv_id></msg_copy_srv_id>');
+   Writeln(XMLFile,'<msg_fin_validation></msg_fin_validation> ');
+
+   Writeln(XMLFile,'<msg_pde>N</msg_pde> ');
+   Writeln(XMLFile,'<msg_session>0001</msg_session>');
+   Writeln(XMLFile,'<msg_sequence>'+UTF8String(SendingBatchs.FieldByName('id').AsVariant)+'</msg_sequence> ');
+   Writeln(XMLFile,'<msg_net_input_time>'+UTF8String(SendingBatchs.FieldByName('times').AsVariant)+'</msg_net_input_time>');
+   Writeln(XMLFile,'   <msg_net_output_date>'+UTF8String(SendingBatchs.FieldByName('datetime').AsVariant)+'</msg_net_output_date>');
+
+
+
+  Writeln(XMLFile,'<msg_copy_srv_info></msg_copy_srv_info> ');    }
+  Writeln(XMLFile,'<msg_mac_result></msg_mac_result> ');
+
+  {Writeln(XMLFile,'<msg_amount/> ');
+
+
+  Writeln(XMLFile,'<msg_num_of_batches/>');
+   Writeln(XMLFile,'<fin_copy_info/> ');  }
+    Write(XMLFile,'<block4>');
+      MessageBody:='';
+      xs_batchs.Active:=true;
+      //st:='R'+copy(UTF8String(SendingBatchs.fieldbyname('TRANS_REF').AsString),0,5)+'/998';
+     // ShowMessage(st);
+      AddStr(MessageBody,':20:'+UTF8String(SendingBatchs.fieldbyname('TRANS_REF').AsString),true);
+      AddStr(MessageBody,':21:'+UTF8String(SendingBatchs.fieldbyname('relatedref').AsString),true);
+      AddStr(MessageBody,':76:MNDT',true);
+      AddStr(MessageBody,''+UTF8String(SendingBatchs.fieldbyname('mndtst').AsString)+'/'+SendingBatchs.FieldByName('datetime').AsVariant+'0000',true);
+      AddStr(MessageBody,':11R:998',true);
+      AddStr(MessageBody,''+copy(SendingBatchs.FieldByName('fromdat').AsVariant,0,6),true);
+      AddStr(MessageBody,':20:'+UTF8String(SendingBatchs.fieldbyname('TRANS_REF').AsString)+'1',true);
+     // AddStr(MessageBody,':21:NONREF',true);
+      AddStr(MessageBody,':12:661',true);
+      AddStr(MessageBody,':77E:',true);
+
+
+      Messages.Close;
+      Messages.SQL.Clear;
+      Messages.SQL.Add('select x.*, v.val_name from xs_beneficiary x, avalute v where (x.BatchId='+floattostr(SendingBatchs.fieldbyname('ID').Asfloat)+')and (x.val_cod=v.valute)');
+      Messages.Open;
+
+
+      DataTemp.Close;
+          DataTemp.SQL.Clear;
+          DataTemp.SQL.Add('Select krno,inn,bankcode,swift from bankm where id='''+messages.fieldbyname('REC_BANK_ID').AsString+'''');
+          DataTemp.Open;
+
+
+
+      AddStr(MessageBody,':59:'+UTF8String(DataTemp.fieldbyname('swift').asstring),true);
+      AddStr(MessageBody,':54A:'+UTF8String(DataMod.XS_CONFIG.fieldbyname('myswift').asstring),true);
+      AddStr(MessageBody,':79:/REFERENCE/'+UTF8String(SendingBatchs.fieldbyname('TRANS_REF').AsString)+'1',true);
+      AddStr(MessageBody,'/DBTR/'+UTF8String(Messages.fieldbyname('CLIENT_ACC_NO').asstring),true);
+      AddStr(MessageBody,'/DBTRAGT/'+UTF8String(DataTemp.fieldbyname('swift').asstring),true);
+      AddStr(MessageBody,'/CDTR/'+UTF8String(SendingBatchs.fieldbyname('ACC_NO').AsString),true);
+      AddStr(MessageBody,'/CDTRAGT/'+UTF8String(DataMod.XS_CONFIG.fieldbyname('myswift').asstring),true);
+      AddStr(MessageBody,'/TYPE/'+floattostr(SendingBatchs.fieldbyname('types').AsFloat),true);
+      AddStr(MessageBody,'/FROM/'+UTF8String(SendingBatchs.fieldbyname('fromdat').AsString),true);
+
+      if SendingBatchs.fieldbyname('TODAT').AsString<>'' then
+      AddStr(MessageBody,'/TO/'+UTF8String(SendingBatchs.fieldbyname('TODAT').AsString),true);
+
+
+       if SendingBatchs.fieldbyname('types').AsVariant=1 then
+        begin
+         AddStr(MessageBody,'/FREQUENCY/'+UTF8String(SendingBatchs.fieldbyname('frequency').AsString),true);
+        end;
+
+
+      AddStr(MessageBody,'/CURRENCY/AZN',true);
+      AddStr(MessageBody,'/MAXPMTNUM/'+floattostr(SendingBatchs.fieldbyname('maxpmtnum').AsFloat),true);
+      //AddStr(MessageBody,'/MAXAMT/'+ChangeDecimal(SendingBatchs.fieldbyname('amount').asfloat),true);
+        if SendingBatchs.fieldbyname('types').AsVariant=0 then
+        begin
+        AddStr(MessageBody,'/MAXAMT/'+ChangeDecimal(SendingBatchs.fieldbyname('amount').asfloat),true);
+        AddStr(MessageBody,'/COLLTNAMT/'+ChangeDecimal(SendingBatchs.fieldbyname('colltnamt').asfloat),false);
+        end
+        else
+       AddStr(MessageBody,'/MAXAMT/'+ChangeDecimal(SendingBatchs.fieldbyname('amount').asfloat),false);
+
+
+
+      Write(XMLFile,MessageBody);
+      Write(XMLFile,'</block4>');
+
+
+
+    end;
+
+
+
+
+     if (SendingBatchs.FieldByName('format').AsString='MT_104')
+       THEN
+      BEGIN
+      Writeln(XMLFile,'<msg_sender>'+Edit_sender.text+'</msg_sender>');
+      Writeln(XMLFile,'<msg_receiver>'+Edit_receiver.text+'</msg_receiver>');
+      Writeln(XMLFile,'<msg_type>150</msg_type>');
+      Writeln(XMLFile,'<msg_amount>'+ChangeDecimal(CurrencyEdit1.Value)+'</msg_amount>');
+       Writeln(XMLFile,'<msg_mac_result></msg_mac_result> ');
+      Writeln(XMLFile,'<msg_user_priority>0100</msg_user_priority>');
+      Writeln(XMLFile,'<msg_user_reference>'+Edit_reference.Text+'</msg_user_reference>');
+      Write(XMLFile,'<block4>');
+
+           xs_batchs.Refresh;
+            xs_batchs.First;
+
+  while not xs_batchs.Eof do
+   begin
+      Writeln(XMLFile,'<batch>');
+      Writeln(XMLFile,'<msg_subtype>104</msg_subtype>');
+      Write(XMLFile,'<body>');
+      MessageBody:='';
+      AddStr(MessageBody,':20:'+UTF8String(xs_batchs.fieldbyname('TRANS_REF').AsString),true);
+      AddStr(MessageBody,':23E:'+UTF8String(xs_batchs.fieldbyname('OPERCODE').AsString),true);
+      AddStr(MessageBody,':30:'+UTF8String(xs_batchs.fieldbyname('dat').AsString),true);
+
+
+
+      AddStr(MessageBody,':50K:/'+UTF8String(xs_batchs.fieldbyname('ACC_NO').AsString),true);
+      s:=AnsiToUtf8(xs_batchs.fieldbyname('CLIENT_NAME').AsString);
+      AddStr(MessageBody,xs_batchs.fieldbyname('CLIENT_NAME').AsString,true);
+      if xs_batchs.fieldbyname('CLIENT_CODE').AsString ='' then
+      STmessage:=''
+      else
+      STmessage:=xs_batchs.fieldbyname('CLIENT_CODE').AsString;
+
+      AddStr(MessageBody,xs_batchs.fieldbyname('CLIENT_INN').asstring+'/',true);
+      STmessage:='';
+
+
+      DataTemp.Close;
+      DataTemp.SQL.Clear;
+      DataTemp.SQL.Add('select a.filial as Branch, c.inn from xs_account a,customers c where (a.kli_ID=c.id)and(a.id='+floattostr(SendingBatchs.fieldbyname('acc_id').Asfloat)+')');
+      DataTemp.Open;
+      tempStr :=DataTemp.FieldByName('Branch').AsString;
+
+
+      DataTemp.Close;
+      DataTemp.SQL.Clear;
+      DataTemp.SQL.Add('Select kod_b,krno,inn,swift from bankinfo_t where kod_fil='+tempStr);
+      DataTemp.Open;
+      STmessage:=DataTemp.fieldbyname('SWIFT').AsString;
+
+      tempStr:=DataTemp.fieldbyname('KOD_B').asstring;
+      tempStr1:=SetStringLength(DataTemp.fieldbyname('KRNO').asstring,13,'0');
+      tempStr2:=DataTemp.fieldbyname('INN').asstring;
+
+      AddStr(MessageBody,tempstr+'/'+tempstr2,true);
+      AddStr(MessageBody,tempstr1,true);
+
+      DataTemp.Close;
+      DataTemp.SQL.Clear;
+      DataTemp.SQL.Add('Select account from xs_config');
+      DataTemp.Open;
+
+      AddStr(MessageBody,':52A:/'+DataTemp.fieldbyname('ACCOUNT').asstring,true);
+
+      DataTemp.Close;
+      DataTemp.SQL.Clear;
+      DataTemp.SQL.Add('Select myswift from xs_config');
+      DataTemp.Open;
+
+      AddStr(MessageBody,DataTemp.fieldbyname('myswift').asstring,true);
+
+
+
+          countbenef.CloseAll;
+          countbenef.SetVariable('xid',SendingBatchs.FieldByName('id').Asfloat);
+          countbenef.open;
+          a:=countbenef.RecordCount;
+
+      AddStr(MessageBody,':72:/BNF/'+inttostr(a),true);
+
+      Messages.Close;
+      Messages.SQL.Clear;
+      Messages.SQL.Add('select x.*, v.val_name from xs_beneficiary x, avalute v where (x.BatchId='+floattostr(SendingBatchs.FieldByName('id').Asfloat)+')and (x.val_cod=v.valute)');
+      Messages.Open;
+
+
+    //  ShowMessage(floattostr(SendingBatchs.fieldbyname('ID').AsFloat));
+   //   ShowMessage(Messages.SQL.Text);
+
+      Messages.First;
+      while not messages.eof do
+      begin
+          AddStr(MessageBody,':21:'+messages.fieldbyname('MESS_REFERENCE').asstring,true);
+          AddStr(MessageBody,':32B:'+messages.fieldbyname('VAL_NAME').asstring+ChangeDecimal(messages.fieldbyname('amount').AsFloat),true);
+          tempStr1:=SetStringLength(messages.fieldbyname('REC_BANK_SUB_ACC').asstring,13,'0');
+          AddStr(MessageBody,':57A:/'+tempStr1,true);
+          DataTemp.Close;
+          DataTemp.SQL.Clear;
+          DataTemp.SQL.Add('Select swift from bankm where id='''+messages.fieldbyname('REC_BANK_ID').AsString+'''');
+          DataTemp.Open;
+          AddStr(MessageBody,DataTemp.fieldbyname('SWIFT').asstring,true);
+          AddStr(MessageBody,':59:/'+messages.fieldbyname('CLIENT_ACC_NO').asstring,true);
+          AddStr(MessageBody,messages.fieldbyname('CLIENT_NAME').asstring,true);
+          if trim(Messages.fieldbyname('CLIENT_CODE').AsString) ='' then
+          STmessage:=''
+          else
+          STmessage:=Messages.fieldbyname('CLIENT_CODE').AsString;
+          AddStr(MessageBody,messages.fieldbyname('CLIENT_INN').asstring+'/',true);
+          STmessage:='';
+
+          DataTemp.Close;
+          DataTemp.SQL.Clear;
+          DataTemp.SQL.Add('Select krno,inn,bankcode from bankm where id='''+messages.fieldbyname('REC_BANK_ID').AsString+'''');
+          DataTemp.Open;
+
+          tempStr:=SetStringLength(DataTemp.fieldbyname('KRNO').asstring,13,'0');
+
+          AddStr(MessageBody,DataTemp.fieldbyname('BANKCODE').asstring+'/'+DataTemp.fieldbyname('INN').asstring,true);
+          AddStr(MessageBody,tempstr,true);
+
+          STmessage:= LVPCSSForm.StrPart(Messages.fieldbyname('REMIT_INF').AsString,'|',1);
+          if trim(STmessage) <> '' then
+          AddStr(MessageBody,':70:'+Stmessage,true);
+
+          STmessage:= LVPCSSForm.StrPart(Messages.fieldbyname('REMIT_INF').AsString,'|',2);
+          if trim(STmessage) <> '' then
+          AddStr(MessageBody,Stmessage,true);
+
+          STmessage:= LVPCSSForm.StrPart(Messages.fieldbyname('REMIT_INF').AsString,'|',3);
+          if trim(STmessage) <> '' then
+          AddStr(MessageBody,Stmessage,true);
+
+          STmessage:= LVPCSSForm.StrPart(Messages.fieldbyname('REMIT_INF').AsString,'|',4);
+          if trim(STmessage) <> '' then
+          AddStr(MessageBody,Stmessage,true);
+
+          AddStr(MessageBody,':26T:'+messages.fieldbyname('TRANS_COD').asstring,true);
+
+         messages.Next;
+      end;
+
+     AddStr(MessageBody,':32B:'+'AZN'+ChangeDecimal(CurrencyEdit1.Value)+'</body>',true);
+     Write(XMLFile,MessageBody);
+         xs_batchs.Next;
+     end;
+
+
+
+      //Writeln(XMLFile,'</body>');
+      Write(XMLFile,'</batch>');
+      Write(XMLFile,'</block4>');
+
+      END;
+
+
+
+ if (SendingBatchs.FieldByName('format').AsString='MT104') or
+ (SendingBatchs.FieldByName('format').AsString='MT104M')  then
+    begin
+
+
+
+    {    Writeln(XMLFile,'<format>MT</format>');
+   Writeln(XMLFile,'<msg_format>S</msg_format>');
+   Writeln(XMLFile,'<msg_sub_format>I</msg_sub_format>');}
+   Writeln(XMLFile,'<msg_sender>'+Edit_sender.text+'</msg_sender>');
+   Writeln(XMLFile,'<msg_receiver>'+Edit_receiver.text+'</msg_receiver>');
+   //Writeln(XMLFile,'<msg_type>'+edit1.text+'</msg_type>');
+   Writeln(XMLFile,'<msg_type>150</msg_type>');
+   {Writeln(XMLFile,'<msg_priority>N</msg_priority>');
+   Writeln(XMLFile,'<msg_del_notif_rq>N</msg_del_notif_rq> ');                      }
+   Writeln(XMLFile,'<msg_num_of_batches>'+Edit_count.Text+'</msg_num_of_batches>');
+   Writeln(XMLFile,'<msg_amount>'+ChangeDecimal(CurrencyEdit1.Value)+'</msg_amount>');
+  // if Edit_count.Text<>'1' then
+   Writeln(XMLFile,'<msg_mac_result></msg_mac_result>');
+   Writeln(XMLFile,'<msg_user_priority>0100</msg_user_priority>');
+   Writeln(XMLFile,'<msg_user_reference>'+Edit_reference.Text+'</msg_user_reference>');
+       Write(XMLFile,'<block4>');
+
+
+         MessageBody:='';
+      xs_batchs.Refresh;
+   xs_batchs.First;
+   while not xs_batchs.Eof do
+   begin
+      Application.ProcessMessages;
+      Writeln(XMLFile,'<batch>');
+       Writeln(XMLFile,'<msg_subtype>104</msg_subtype>');
+      Write(XMLFile,'<body>');
+      MessageBody:='';
+      AddStr(MessageBody,':20:'+UTF8String(xs_batchs.fieldbyname('TRANS_REF').AsString),true);
+      AddStr(MessageBody,':23E:'+UTF8String(xs_batchs.fieldbyname('OPERCODE').AsString),true);
+      AddStr(MessageBody,':30:'+UTF8String(xs_batchs.fieldbyname('dat').AsString),true);
+
+    countbenef.CloseAll;
+          countbenef.SetVariable('xid',SendingBatchs.FieldByName('id').Asfloat);
+          countbenef.open;
+      countbenef.First;
+
+
+      while not countbenef.eof do
+      begin
+       if (SendingBatchs.FieldByName('format').AsString<>'MT104M') then
+       begin
+      AddStr(MessageBody,':72:/BNF/'+countbenef.fieldbyname('bnfcount').asstring,true);
+      AddStr(MessageBody,':21:'+countbenef.fieldbyname('MESS_REFERENCE').asstring+'T',true);
+      AddStr(MessageBody,':32B:'+'AZN'+ChangeDecimal(CurrencyEdit1.Value),true);
+       end;
+      countbenef.next;
+      end;
+
+
+      AddStr(MessageBody,':50K:/'+UTF8String(xs_batchs.fieldbyname('ACC_NO').AsString),true);
+      s:=AnsiToUtf8(xs_batchs.fieldbyname('CLIENT_NAME').AsString);
+      AddStr(MessageBody,xs_batchs.fieldbyname('CLIENT_NAME').AsString,true);
+      if xs_batchs.fieldbyname('CLIENT_CODE').AsString ='' then
+      STmessage:=''
+      else
+      STmessage:=xs_batchs.fieldbyname('CLIENT_CODE').AsString;
+
+      AddStr(MessageBody,xs_batchs.fieldbyname('CLIENT_INN').asstring+'/',true);
+      STmessage:='';
+
+      {SEL From Acount FIND INN}
+      DataTemp.Close;
+      DataTemp.SQL.Clear;
+      DataTemp.SQL.Add('select a.filial as Branch, c.inn from xs_account a,customers c where (a.kli_ID=c.id)and(a.id='+floattostr(SendingBatchs.fieldbyname('acc_id').Asfloat)+')');
+      DataTemp.Open;
+      tempStr :=DataTemp.FieldByName('Branch').AsString;
+      {}
+
+      {SEL}
+      DataTemp.Close;
+      DataTemp.SQL.Clear;
+      DataTemp.SQL.Add('Select kod_b,krno,inn,swift from bankinfo_t where kod_fil='+tempStr);
+      DataTemp.Open;
+      STmessage:=DataTemp.fieldbyname('SWIFT').AsString;
+      {}
+      tempStr:=DataTemp.fieldbyname('KOD_B').asstring;
+      tempStr1:=SetStringLength(DataTemp.fieldbyname('KRNO').asstring,13,'0');
+      tempStr2:=DataTemp.fieldbyname('INN').asstring;
+
+      {if (xs_batchs.FieldByName('filial').AsInteger > 0)and
+         (xs_batchs.FieldByName('filial').AsInteger <> null)
+      then
+      begin
+          DataTemp.Close;
+          DataTemp.SQL.Clear;
+          DataTemp.SQL.Add('Select kod_bFil, inn_Fil from Filialinfo where kod_fil='''+xs_batchs.FieldByName('filial').AsString+'''');
+          DataTemp.Open;
+
+          tempStr:=DataTemp.fieldbyname('KOD_BFIL').asstring;
+          tempStr2:=DataTemp.fieldbyname('INN_FIL').asstring;
+      end; }
+
+      AddStr(MessageBody,tempstr+'/'+tempstr2,true);
+      AddStr(MessageBody,tempstr1,true);
+      {SEL}
+      DataTemp.Close;
+      DataTemp.SQL.Clear;
+      DataTemp.SQL.Add('Select account from xs_config');
+      DataTemp.Open;
+      {}
+      if (SendingBatchs.FieldByName('format').AsString='MT104M') then
+           begin
+      AddStr(MessageBody,':52A:/'+DataTemp.fieldbyname('ACCOUNT').asstring,true);
+      end else  AddStr(MessageBody,':52A:/'+DataTemp.fieldbyname('ACCOUNT').asstring,true);
+      AddStr(MessageBody,STmessage,true);
+
+      STmessage:='';
+      {OPEN MESSAGES TABE AND CREATE :21:}
+      mess_count:=0;
+      sum_amount:=0;
+
+      Messages.Close;
+      Messages.SQL.Clear;
+      Messages.SQL.Add('select x.*, v.val_name from xs_beneficiary x, avalute v where (x.BatchId='+floattostr(SendingBatchs.fieldbyname('id').Asfloat)+')and (x.val_cod=v.valute)');
+      Messages.Open;
+      Messages.First;
+      while not messages.eof do
+      begin
+
+          ProgressBar1.Max:=Messages.RecordCount div xs_batchs.RecordCount;
+          Application.ProcessMessages;
+
+          ProgressBar1.Position:=   ProgressBar1.Position+10;
+
+           if (SendingBatchs.FieldByName('format').AsString='MT104M') then
+           begin
+
+              AddStr(MessageBody,':72:/BNF/'+messages.fieldbyname('bnfcount').asstring,true);
+              AddStr(MessageBody,':21:'+messages.fieldbyname('MESS_REFERENCE').asstring+'T',true);
+              AddStr(MessageBody,':21C:'+xs_batchs.fieldbyname('relatedref').asstring,true);
+              AddStr(MessageBody,':32B:'+messages.fieldbyname('VAL_NAME').asstring+ChangeDecimal(messages.fieldbyname('AMOUNT').asfloat),true);
+           end else begin
+
+              //  AddStr(MessageBody,':21:'+messages.fieldbyname('MESS_REFERENCE').asstring,true);
+
+
+           end;
+
+          tempStr1:=SetStringLength(messages.fieldbyname('REC_BANK_SUB_ACC').asstring,13,'0');
+           if (SendingBatchs.FieldByName('format').AsString='MT104M') then
+           begin
+            AddStr(MessageBody,':57A:/'+tempStr1,true);
+           end else
+          AddStr(MessageBody,':57A:/'+tempStr1,true);
+          {SEL}
+          DataTemp.Close;
+          DataTemp.SQL.Clear;
+          DataTemp.SQL.Add('Select swift from bankm where id='''+messages.fieldbyname('REC_BANK_ID').AsString+'''');
+          DataTemp.Open;
+          {}
+          AddStr(MessageBody,DataTemp.fieldbyname('SWIFT').asstring,true);
+          AddStr(MessageBody,':59:/'+messages.fieldbyname('CLIENT_ACC_NO').asstring,true);
+          AddStr(MessageBody,messages.fieldbyname('CLIENT_NAME').asstring,true);
+
+          if trim(Messages.fieldbyname('CLIENT_CODE').AsString) ='' then
+          STmessage:=''
+          else
+          STmessage:=Messages.fieldbyname('CLIENT_CODE').AsString;
+
+          AddStr(MessageBody,messages.fieldbyname('CLIENT_INN').asstring+'/',true);
+          STmessage:='';
+
+
+          {SEL}
+          DataTemp.Close;
+          DataTemp.SQL.Clear;
+          DataTemp.SQL.Add('Select krno,inn,bankcode from bankm where id='''+messages.fieldbyname('REC_BANK_ID').AsString+'''');
+          DataTemp.Open;
+          {}
+          tempStr:=SetStringLength(DataTemp.fieldbyname('KRNO').asstring,13,'0');
+
+          AddStr(MessageBody,DataTemp.fieldbyname('BANKCODE').asstring+'/'+DataTemp.fieldbyname('INN').asstring,true);
+          AddStr(MessageBody,tempstr,true);
+          {REMIT INF}
+          {1}
+          STmessage:= LVPCSSForm.StrPart(Messages.fieldbyname('REMIT_INF').AsString,'|',1);
+          if trim(STmessage) <> '' then
+          AddStr(MessageBody,':70:'+Stmessage,true);
+          {2}
+          STmessage:= LVPCSSForm.StrPart(Messages.fieldbyname('REMIT_INF').AsString,'|',2);
+          if trim(STmessage) <> '' then
+          AddStr(MessageBody,Stmessage,true);
+          {3}
+          STmessage:= LVPCSSForm.StrPart(Messages.fieldbyname('REMIT_INF').AsString,'|',3);
+          if trim(STmessage) <> '' then
+          AddStr(MessageBody,Stmessage,true);
+          {4}
+          STmessage:= LVPCSSForm.StrPart(Messages.fieldbyname('REMIT_INF').AsString,'|',4);
+          if trim(STmessage) <> '' then
+          AddStr(MessageBody,Stmessage,true);
+          {TRANSACTION CODE}
+          AddStr(MessageBody,':26T:'+messages.fieldbyname('TRANS_COD').asstring,true);
+          {ADD INF}
+          {1}
+          STmessage:= LVPCSSForm.StrPart(messages.fieldbyname('ADD_INF').asstring,'|',1);
+
+
+          STmessage:= LVPCSSForm.StrPart(messages.fieldbyname('ADD_INF').asstring,'|',2);
+          if trim(STmessage) <> '' then
+          AddStr(MessageBody,Stmessage,true);
+          {3}
+          STmessage:= LVPCSSForm.StrPart(messages.fieldbyname('ADD_INF').asstring,'|',3);
+          if trim(STmessage) <> '' then
+          AddStr(MessageBody,Stmessage,true);
+            AddStr(MessageBody,':32B:'+messages.fieldbyname('VAL_NAME').asstring+ChangeDecimal(messages.fieldbyname('AMOUNT').asfloat)+'</body>',true);
+          {}
+      mess_count:=mess_count+1;
+      sum_amount:=sum_amount+messages.fieldbyname('AMOUNT').AsFloat;
+      Messages.Next;
+
+    end;
+     xs_batchs.Refresh;
+     xs_batchs.Next;
+
+      Write(XMLFile,MessageBody);
+      //Writeln(XMLFile,'</body>');
+      Write(XMLFile,'</batch>');
+      end;
+      Write(XMLFile,'</block4>');
+
+    end;
+
+    end else begin
+
+   { ShowMessage('ff');
+   ShowMessage(SendingBatchs.fieldbyname('ACC_NO').AsString);
+   ShowMessage(SendingBatchs.fieldbyname('Amount').AsString);
+   showMessage(SendingBatchs.fieldbyname('FORMAT').AsString);  }
+
+          // Writeln(XMLFile,'<?xml version=”1.0” encoding=”UTF-8”?>');
+          Writeln(XMLFile,'<SWIFT_msg_fields>');
+        Writeln(XMLFile,'<block4>');
+
+        Writeln(XMLFile,'<DataPDU xmlns="urn:cma:stp:xsd:stp.1.0">');
+
+
+        Writeln(XMLFile,'  <Body>');
+        Writeln(XMLFile,' <AppHdr xmlns="urn:iso:std:iso:20022:tech:xsd:head.001.001.02">');
+
+        Writeln(XMLFile,'  <Fr>');
+        Writeln(XMLFile,'  <FIId>');
+        Writeln(XMLFile,'  <FinInstnId>');
+        Writeln(XMLFile,'  <BICFI>'+datamod.XS_CONFIG.FieldByName('myswift').AsString+'</BICFI>');
+        Writeln(XMLFile,'  </FinInstnId>');
+        Writeln(XMLFile,'  </FIId>');
+        Writeln(XMLFile,'  </Fr>');
+
+        Writeln(XMLFile,'  <To>');
+        Writeln(XMLFile,'  <FIId>');
+        Writeln(XMLFile,'  <FinInstnId>');
+        Writeln(XMLFile,'  <ClrSysMmbId><MmbId>'+datamod.XS_CONFIG.FieldByName('NB_SWIFT').AsString+'BCS'+'</MmbId></ClrSysMmbId>');
+        Writeln(XMLFile,'  </FinInstnId>');
+        Writeln(XMLFile,'  </FIId>');
+        Writeln(XMLFile,'  </To>');
+
+        Writeln(XMLFile,'  <BizMsgIdr>'+Edit_reference.Text+'</BizMsgIdr>');
+        Writeln(XMLFile,'  <MsgDefIdr>camt.011.001.07</MsgDefIdr>');
+        Writeln(XMLFile,'  <BizSvc>cba.bcsx.01</BizSvc>');
+        Writeln(XMLFile,'  <CreDt>'+FormatDateTime('yyyy-mm-dd',StrToDate(SendingBatchs.fieldbyname('transdate').AsString))+'T'+FormatDateTime('hh:nn:ss', now)+'</CreDt>');
+
+         Writeln(XMLFile,'<Prty>0050</Prty>');
+        Writeln(XMLFile,'  </AppHdr>');
+
+        Writeln(XMLFile,'  <Document xmlns="urn:iso:std:iso:20022:tech:xsd:camt.011.001.07">');
+        Writeln(XMLFile,'  <ModfyLmt>');
+        Writeln(XMLFile,'  <MsgHdr>');
+        Writeln(XMLFile,'  <MsgId>'+Edit_reference.Text+'</MsgId>');
+         Writeln(XMLFile,'<CreDtTm>'+FormatDateTime('yyyy-mm-dd',StrToDate(SendingBatchs.fieldbyname('TRANSDATE').AsString))+'T'+FormatDateTime('hh:nn:ss', now)+'</CreDtTm>');
+        Writeln(XMLFile,'  </MsgHdr>');
+        Writeln(XMLFile,'  <LmtDtls>');
+        Writeln(XMLFile,'  <LmtId>');
+        Writeln(XMLFile,'  <Cur>');
+        Writeln(XMLFile,'  <Tp>');
+        Writeln(XMLFile,'  <Prtry>SESSION</Prtry>');
+        Writeln(XMLFile,'  </Tp>');
+        Writeln(XMLFile,'  <AcctId>');
+        Writeln(XMLFile,'  <IBAN>'+datamod.XS_CONFIG.FieldByName('ACCOUNT').AsString+'</IBAN>');
+        Writeln(XMLFile,'  </AcctId>');
+        Writeln(XMLFile,'  </Cur>');
+        Writeln(XMLFile,'  </LmtId>');
+        Writeln(XMLFile,'  <NewLmtValSet>');
+        Writeln(XMLFile,'  <Amt>');
+
+
+      DataTemp.Close;
+      DataTemp.SQL.Clear;
+      DataTemp.SQL.Add('select * from xs_BATCHS a where a.id='+floattostr(SendingBatchs.fieldbyname('ID').Asfloat));
+      DataTemp.Open;
+
+        Writeln(XMLFile,'  <AmtWthCcy Ccy="AZN">'+floattostr(DataTemp.FieldByName('amount').AsFloat)+'</AmtWthCcy>');
+        Writeln(XMLFile,'  </Amt>');
+        Writeln(XMLFile,'  </NewLmtValSet>');
+        Writeln(XMLFile,'  </LmtDtls>');
+        Writeln(XMLFile,'  </ModfyLmt>');
+        Writeln(XMLFile,'  </Document>');
+        Writeln(XMLFile,'  </Body>');
+        Writeln(XMLFile,'  </DataPDU>');
+
+
+
+                    Writeln(XMLFile,'</block4>');
+ Writeln(XMLFile,'<msg_Copy_Srv_Id/>');
+  Writeln(XMLFile,'<msg_Copy_Srv_Info/>');
+  Writeln(XMLFile,'<msg_Del_Notif_Rq>N</msg_Del_Notif_Rq>');
+  Writeln(XMLFile,'<msg_Fin_Validation/>');
+Writeln(XMLFile,'<msg_format>S</msg_format>');
+  Writeln(XMLFile,'<msg_Id/>');
+  Writeln(XMLFile,'<msg_mac_result></msg_mac_result>');
+ Writeln(XMLFile,'<msg_Net_Input_Time/>');
+  Writeln(XMLFile,'<msg_Net_Mir/>');
+  Writeln(XMLFile,'<msg_Net_Output_Date/>');
+  Writeln(XMLFile,'<msg_Pac_Result/>');
+  Writeln(XMLFile,'<msg_pde>N</msg_pde>');
+  Writeln(XMLFile,'<msg_Pdm>N</msg_Pdm>');
+
+  Writeln(XMLFile,'<msg_priority>N</msg_priority>');
+  Writeln(XMLFile,'<msg_receiver>'+Edit_receiver.text+'XBCS'+'</msg_receiver>');
+  Writeln(XMLFile,'<msg_sender>'+Edit_sender.text+'</msg_sender>');
+  Writeln(XMLFile,'<msg_Sequence>000001</msg_Sequence>');
+ Writeln(XMLFile,'<msg_Session>0001</msg_Session>');
+ Writeln(XMLFile,'<msg_Sub_Format>I</msg_Sub_Format>');
+ Writeln(XMLFile,'<msg_type>camt.011.001.07</msg_type>');
+ Writeln(XMLFile,'<msg_user_priority>0050</msg_user_priority>');
+Writeln(XMLFile,'<msg_user_reference>'+Edit_reference.Text+'</msg_user_reference>');
+Writeln(XMLFile,'<format>MX</format>');
+ Writeln(XMLFile,'<ref_Msg_User_Reference/>');
+
+ Writeln(XMLFile,'</SWIFT_msg_fields>');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ {  Writeln(XMLFile,'<msg_format>S</msg_format>');
+   Writeln(XMLFile,'<msg_sub_format>I</msg_sub_format>');
+   Writeln(XMLFile,'<msg_sender>'+Edit_sender.text+'</msg_sender>');
+   Writeln(XMLFile,'<msg_receiver>'+Edit_receiver.text+'</msg_receiver>');
+   Writeln(XMLFile,'<msg_type>999</msg_type>');
+   Writeln(XMLFile,'<msg_priority>N</msg_priority>');
+   Writeln(XMLFile,'<msg_del_notif_rq>N</msg_del_notif_rq> ');
+   Writeln(XMLFile,'<msg_user_priority>0099</msg_user_priority>');
+   Writeln(XMLFile,'<msg_user_reference/>');
+   Writeln(XMLFile,'<msg_copy_srv_id/>');
+   Writeln(XMLFile,'<msg_fin_validation/>');
+   Writeln(XMLFile,'<msg_pde>N</msg_pde>');
+   Writeln(XMLFile,'<msg_mac_result></msg_mac_result>');
+
+   MessageBody:='';
+
+      AddStr(MessageBody,':20:'+(SendingBatchs.fieldbyname('TRANS_REF').AsString),true);
+      AddStr(MessageBody,':79:/SETACCOUNTDEBITCAP/SESSION',true);
+      AddStr(MessageBody,'/ACCOUNT/'+(datamod.XS_CONFIG.FieldByName('account').AsString),true);
+      //AddStr(MessageBody,'/AMOUNT/'+(SendingBatchs.fieldbyname('amount').AsString),true);
+   //Writeln(XMLFile,'<msg_num_of_batches>'+inttostr(xs_batchs.recordcount)+'</msg_num_of_batches>');
+  // Writeln(XMLFile,'<msg_amount>'+ChangeDecimal(CurrencyEdit1.Value)+'</msg_amount>');
+  Write(XMLFile,'<block4>'+MessageBody);
+if   frac(strtofloat(SendingBatchs.fieldbyname('amount').AsVariant))=0 then
+  Writeln(XMLFile,'/AMOUNT/'+(SendingBatchs.fieldbyname('amount').AsString)+','+'</block4>')
+  else
+  Writeln(XMLFile,'/AMOUNT/'+(SendingBatchs.fieldbyname('amount').AsString)+'</block4>');
+ // Writeln(XMLFile,'</block4>');      }
+
+     end;
+
+   //Write(XMLFile,'</SWIFT_msg_fields>');
+  if  (SendingBatchs.FieldByName('format').AsString='MT102')
+   or   (SendingBatchs.FieldByName('format').AsString='MT102T')
+  // OR (SendingBatchs.FieldByName('format').AsString='MT205')
+            then
+            begin
+    Writeln(XMLFile,' </Pyld>');
+    Writeln(XMLFile,' </Xchg>');
+    // Writeln(XMLFile,'     ]]></block4>');
+    Writeln(XMLFile,'  </block4>');
+      Writeln(XMLFile,' </SWIFT_msg_fields>');
+
+
+
+
+   end;
+             CloseFile(XMLFile);
+   // if fileexists(fileName)
+  //then
+
+    CopyFile(PChar(Dir+'\'+Edit_reference.Text+'.xml'), PChar(Dir2+'\'+Edit_reference.Text+'.xml'), False)
+ //else CreateFile;
+
+
+
+
+
+ // ShowMessage(floattostr(frac(strtofloat(SendingBatchs.fieldbyname('amount').AsVariant)))) ;
+
+
+end;
+
+{----------------------------------------------------------------}
+{--------------------Create batch file---------------------------}
+{----------------------------------------------------------------}
+Procedure TPrepareFile_Form.CreateBatchFile;
+   Procedure AddStr(var BodyS : String;AddS :String;NewRow: Boolean);
+   begin
+     BodyS:=BodyS+AddS;
+     if NewRow then BodyS:=BodyS+#10;
+   end;
+
+   var mess_count,batchnom:  Integer;
+   STmessage,MessageBody,FileName,tempStr,tempStr1,tempStr2 : String;
+   sum_amount : Real;
+   dir:String;
+begin
+   ProgressBar1.Position:=0;
+   {OPEN DATASET'S}
+   DataMod.DataTemp.Close;
+   DataMod.DataTemp.SQL.Clear;
+   DataMod.DataTemp.SQL.Add('Select * from xs_config');
+   DataMod.DataTemp.Open;
+   {}
+   xs_batchs.Close;
+   xs_batchs.SQL.Clear;
+   xs_batchs.SQL.Add(DataMod.DataTemp.fieldbyname('fs_script').AsString);
+   xs_batchs.open;
+   {CREATE FOLDER}
+   if not DirectoryExists(DataMod.DataTemp.fieldbyname('out_dir').AsString+'\'+FormatDateTime('ddmmyy',date)) then
+                    MkDir(DataMod.DataTemp.fieldbyname('out_dir').AsString+'\'+FormatDateTime('ddmmyy',date));
+   dir:=DataMod.DataTemp.fieldbyname('out_dir').AsString+'\'+FormatDateTime('ddmmyy',date)+'\Batches\';
+   if not DirectoryExists(dir) then MkDir(dir);
+
+   if Trim(Edit_reference.Text)='' then exit;
+   {}
+   batchnom:=0;
+   while not xs_batchs.Eof do
+   begin
+   batchnom:=batchnom+1;
+   FileName:=dir+Edit_reference.Text+'-'+inttostr(batchnom)+'.xml';
+   ProgressBar1.Show;
+   AssignFile(XMLFile,Filename);
+   Rewrite(XMLFile);
+   {CREATE FILE HEADER}
+   Writeln(XMLFile,'<?xml version="1.0" encoding="latin1" ?>');
+   Writeln(XMLFile,'<SWIFT_msg_fields>');
+   Writeln(XMLFile,'<msg_sender>'+Edit_sender.text+'</msg_sender>');
+   Writeln(XMLFile,'<msg_receiver>'+Edit_receiver.text+'</msg_receiver>');
+   Writeln(XMLFile,'<msg_user_reference>'+ xs_batchs.FieldByName('trans_ref').AsString +'</msg_user_reference>');
+   Writeln(XMLFile,'<msg_type>102</msg_type>');
+   Writeln(XMLFile,'<msg_num_of_batches>1</msg_num_of_batches>');
+   Writeln(XMLFile,'<msg_amount>'+ChangeDecimal(xs_batchs.fieldbyname('Amount').AsFloat)+'</msg_amount>');
+   Writeln(XMLFile,'<block4>');
+   Application.ProcessMessages;
+  {FILE BATCH AND MESSAGE}
+      Writeln(XMLFile,'<batch>');
+      Writeln(XMLFile,'<body>:20:'+xs_batchs.fieldbyname('TRANS_REF').asstring);
+      Writeln(XMLFile,':23:'+xs_batchs.fieldbyname('OPERCODE').asstring);
+      Writeln(XMLFile,':50K:/'+xs_batchs.fieldbyname('ACC_NO').asstring);
+      Writeln(XMLFile,xs_batchs.fieldbyname('CLIENT_NAME').asstring);
+      if Trim(xs_batchs.fieldbyname('CLIENT_CODE').AsString) ='' then
+      STmessage:='/'
+      else
+      STmessage:=xs_batchs.fieldbyname('CLIENT_CODE').AsString;
+      Writeln(XMLFile,StMessage);
+      STmessage:='';
+      {SEL From Acount FIND INN}
+      DataTemp.Close;
+      DataTemp.SQL.Clear;
+      DataTemp.SQL.Add('select c.inn from account a,customers c where (a.kli_ID=c.id)and(a.id='''+xs_batchs.fieldbyname('acc_id').AsString+''')');
+      DataTemp.Open;
+      {}
+      Writeln(XMLFile,xs_batchs.fieldbyname('CLIENT_INN').asstring);
+      {SEL}
+      DataTemp.Close;
+      DataTemp.SQL.Clear;
+      DataTemp.SQL.Add('Select kod_b,krno,inn,swift from bankinfo');
+      DataTemp.Open;
+      STmessage:=DataTemp.fieldbyname('SWIFT').AsString;
+      {}
+      tempStr:=DataTemp.fieldbyname('KOD_B').asstring;
+      tempStr1:=SetStringLength(DataTemp.fieldbyname('KRNO').asstring,13,'0');
+      tempStr2:=DataTemp.fieldbyname('INN').asstring;
+
+      if (xs_batchs.FieldByName('filial').AsInteger>0)and(xs_batchs.FieldByName('filial').AsInteger <> null) then
+      begin
+          DataTemp.Close;
+          DataTemp.SQL.Clear;
+          DataTemp.SQL.Add('Select kod_bFil,inn_Fil from Filialinfo where kod_fil='''+xs_batchs.FieldByName('filial').AsString+'''');
+          DataTemp.Open;
+
+          tempStr:=DataTemp.fieldbyname('KOD_BFIL').asstring;
+          tempStr2:=DataTemp.fieldbyname('INN_FIL').asstring;
+//          ShowMessage(tempStr+'  '+tempStr2);
+      end;
+
+      Writeln(XMLFile,tempstr+'/'+tempstr1+'/'+tempstr2);
+      {SEL}
+      DataTemp.Close;
+      DataTemp.SQL.Clear;
+      DataTemp.SQL.Add('Select account from xs_config');
+      DataTemp.Open;
+      {}
+      Writeln(XMLFile,':52A:/D/'+DataTemp.fieldbyname('ACCOUNT').asstring);
+      Writeln(XMLFile,Stmessage);
+      STmessage:='';
+      {OPEN MESSAGES TABE AND CREATE :21:}
+      mess_count:=0;
+      sum_amount:=0;
+      Messages.Close;
+      Messages.SQL.Clear;
+      Messages.SQL.Add('select x.*, v.val_name from xs_beneficiary x, avalute v where (x.xs_batchs_id='''+xs_batchs.fieldbyname('ID').AsString+''')and (x.val_cod=v.valute)');
+      Messages.Open;
+      while not messages.eof do
+      begin
+      ProgressBar1.Max:=Messages.RecordCount div xs_batchs.RecordCount;
+      Application.ProcessMessages;
+      ProgressBar1.Position:=   ProgressBar1.Position+10;
+
+          Writeln(XMLFile,':21:'+messages.fieldbyname('MESS_REFERENCE').asstring);
+          Writeln(XMLFile,':32B:'+messages.fieldbyname('VAL_NAME').asstring+ChangeDecimal(messages.fieldbyname('AMOUNT').asfloat));
+          tempStr1:=SetStringLength(messages.fieldbyname('REC_BANK_SUB_ACC').asstring,13,'0');
+          Writeln(XMLFile,':57A:/C/'+tempStr1);
+          {SEL}
+          DataTemp.Close;
+          DataTemp.SQL.Clear;
+          DataTemp.SQL.Add('Select swift from bankm where id='''+messages.fieldbyname('REC_BANK_ID').AsString+'''');
+          DataTemp.Open;
+          {}
+          Writeln(XMLFile,DataTemp.fieldbyname('SWIFT').asstring);
+          Writeln(XMLFile,':59:/'+messages.fieldbyname('CLIENT_ACC_NO').asstring);
+          Writeln(XMLFile,messages.fieldbyname('CLIENT_NAME').asstring);
+          if Messages.fieldbyname('CLIENT_CODE').AsString ='' then
+          STmessage:='/'
+          else
+          STmessage:=Messages.fieldbyname('CLIENT_CODE').AsString;
+          Writeln(XMLFile,StMessage);
+          STmessage:='';
+          Writeln(XMLFile,messages.fieldbyname('CLIENT_INN').asstring);
+          {SEL}
+          DataTemp.Close;
+          DataTemp.SQL.Clear;
+          DataTemp.SQL.Add('Select krno,inn,bankcode from bankm where id='''+messages.fieldbyname('REC_BANK_ID').AsString+'''');
+          DataTemp.Open;
+          {}
+          tempStr:=SetStringLength(DataTemp.fieldbyname('KRNO').asstring,13,'0');
+          Writeln(XMLFile,DataTemp.fieldbyname('BANKCODE').asstring+'/'+tempstr+'/'+DataTemp.fieldbyname('INN').asstring);
+          {REMIT INF}
+          {1}
+          STmessage:= LVPCSSForm.StrPart(Messages.fieldbyname('REMIT_INF').AsString,'|',1);
+          if trim(STmessage) <> '' then
+          AddStr(MessageBody,':70:'+Stmessage,true);
+          {2}
+          STmessage:= LVPCSSForm.StrPart(Messages.fieldbyname('REMIT_INF').AsString,'|',2);
+          if trim(STmessage) <> '' then
+          AddStr(MessageBody,Stmessage,true);
+          {3}
+          STmessage:= LVPCSSForm.StrPart(Messages.fieldbyname('REMIT_INF').AsString,'|',3);
+          if trim(STmessage) <> '' then
+          AddStr(MessageBody,Stmessage,true);
+          {4}
+          STmessage:= LVPCSSForm.StrPart(Messages.fieldbyname('REMIT_INF').AsString,'|',4);
+          if trim(STmessage) <> '' then
+          AddStr(MessageBody,Stmessage,true);
+
+          {REMIT INF}
+          {1}
+          STmessage:=copy(messages.fieldbyname('REMIT_INF').asstring,0,35);
+          if trim(STmessage) <> '' then
+          Writeln(XMLFile,':70:'+Stmessage);
+          {2}
+          STmessage:=copy(messages.fieldbyname('REMIT_INF').asstring,35,35);
+          if trim(STmessage) <> '' then
+          Writeln(XMLFile,Stmessage);
+          {3}
+          STmessage:=copy(messages.fieldbyname('REMIT_INF').asstring,70,35);
+          if trim(STmessage) <> '' then
+          Writeln(XMLFile,Stmessage);
+          {4}
+          STmessage:=copy(messages.fieldbyname('REMIT_INF').asstring,105,35);
+          if trim(STmessage) <> '' then
+          Writeln(XMLFile,Stmessage);
+          {TRANSACTION CODE}
+          Writeln(XMLFile,':26T:'+messages.fieldbyname('TRANS_COD').asstring);
+          {}
+          {ADD INF}
+          {1}
+          STmessage:=Trim(copy(messages.fieldbyname('ADD_INF').asstring,0,35));
+          if trim(STmessage) <> '' then
+          Writeln(XMLFile,':77B:'+Stmessage);
+          {2}
+          STmessage:=Trim(copy(messages.fieldbyname('ADD_INF').asstring,35,35));
+          if trim(STmessage) <> '' then
+          Writeln(XMLFile,Stmessage);
+          {3}
+          STmessage:=Trim(copy(messages.fieldbyname('ADD_INF').asstring,70,35));
+          if trim(STmessage) <> '' then
+          Writeln(XMLFile,Stmessage);
+          {4}
+          STmessage:=Trim(copy(messages.fieldbyname('ADD_INF').asstring,105,35));
+          if trim(STmessage) <> '' then
+          Writeln(XMLFile,Stmessage);
+          {}
+
+      mess_count:=mess_count+1;
+      sum_amount:=sum_amount+messages.fieldbyname('AMOUNT').AsFloat;
+      Messages.Next;
+      end;
+   Writeln(XMLFile,':32A:'+formatdatetime('yymmdd',messages.fieldbyname('val_date').AsDateTime)+xs_batchs.fieldbyname('VAL_NAME').asstring+ChangeDecimal(sum_amount));
+   Writeln(XMLFile,':72:/BNF/'+inttostr(mess_count)+'</body>');
+   //   Writeln(XMLFile,'</body>');
+   Writeln(XMLFile,'<sign></sign>');
+   Writeln(XMLFile,'</batch>');
+   {FILE FOOTER}
+   Writeln(XMLFile,'</block4>');
+   Writeln(XMLFile,'</SWIFT_msg_fields>');
+   CloseFile(XMLFile);
+   xs_batchs.Next;
+   end;
+
+end;
+{END OF BATCH CREATER}
+
+
+
+procedure TPrepareFile_Form.BitBtn1Click(Sender: TObject);
+begin
+  close;
+end;
+
+procedure TPrepareFile_Form.SpeedButton1Click(Sender: TObject);
+begin
+    if SendingBatchs.RecordCount >0 then
+    Edit_Reference.Text:=DataMod.INS.CallStringfunction('GetNewFileReference',[]);
+end;
+
+procedure TPrepareFile_Form.But_tosendClick(Sender: TObject);
+begin
+//ShowMessage('aa');
+  {   if ReadyBatchs.FieldByName('format').AsString='MT102' then  begin
+     //ShowMessage('ddd');
+   if ReadyBatchs.FieldByName('AMOUNT').AsFloat >
+      DataMod.XS_CONFIG.FieldByName('amount_limit').AsFloat then
+   begin
+        MessageDlg('"'+formatfloat('##,##.00',ReadyBatchs.FieldByName('amount').Asfloat)+'"'+'  mebleği qoyulmuş limiti keçir!'+#13+
+                    '('+formatfloat('##,##.00',ReadyBatchs.FieldByName('amount').AsFloat)+'>'+formatfloat('##,##.00',DataMod.XS_CONFIG.FieldByName('amount_limit').AsFloat)+')',mtWarning,[mbok],0);
+        exit;
+   end;
+     end; }
+
+    // ShowMessage('uuu');
+   if (ReadyBatchs.RecordCount = 0)
+   then
+      begin
+        MessageDlg('Təsdiq olunmuş "Batch" yoxdur !',mtWarning,[mbok],0);
+        exit;
+      end;
+    Try
+      Screen.Cursor := crSQLWait;
+      Convert_pack.CallProcedure('BatchToSendingBatchs',
+                                  [ReadyBatchs.fieldbyname('id').asinteger,0]);
+      ReadyBatchs.Refresh;
+      SendingBatchs.Refresh;
+      CurrencyEdit1.Value:=Convert_pack.CallFloatFunction('GetBatchAmount',[]);
+      Edit_count.Text:=IntToStr(SendingBatchs.RecordCount);
+    Finally
+      Screen.Cursor := crDefault;
+    end;
+end;
+
+procedure TPrepareFile_Form.But_noSendClick(Sender: TObject);
+begin
+   if (SendingBatchs.RecordCount = 0) then   exit;
+      Convert_pack.CallProcedure('BatchToReadyBatchs',
+                                  [SendingBatchs.fieldbyname('id').asinteger,0]);
+    Try
+      Screen.Cursor := crSQLWait;
+      ReadyBatchs.Refresh;
+      SendingBatchs.Refresh;
+      CurrencyEdit1.Value:=Convert_pack.CallFloatFunction('GetBatchAmount',[]);
+      Edit_count.Text:=inttostr(SendingBatchs.RecordCount);
+    Finally
+      Screen.Cursor := crDefault;
+    end;
+end;
+
+procedure TPrepareFile_Form.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+   ReadyBatchs.Close;
+   SendingBatchs.Close;
+   ProgressBar1.Position:=0;
+end;
+
+procedure TPrepareFile_Form.All_to_sendClick(Sender: TObject);
+begin
+{    if ReadyBatchs.FieldByName('format').AsString='MT102' then begin
+
+   if ReadyBatchs.FieldByName('AMOUNT').AsFloat >
+      DataMod.XS_CONFIG.FieldByName('Amount_limit').AsFloat then
+   begin
+        MessageDlg('"'+formatfloat('##,##.00',ReadyBatchs.FieldByName('amount').Asfloat)+'"'+' mebleği qoyulmuş limiti keçir!'+#13+
+                    '('+formatfloat('##,##.00',ReadyBatchs.FieldByName('amount').AsFloat)+'>'+formatfloat('##,##.00',DataMod.XS_CONFIG.FieldByName('amount_limit').AsFloat)+')',mtWarning,[mbok],0);
+        exit;
+   end;
+    end;    }
+
+   if (ReadyBatchs.RecordCount = 0)
+   then
+   begin
+      MessageDlg('Təsdiq olunmuş "Batch" yoxdur !',mtWarning,[mbok],0);
+      exit;
+   end;
+    Try
+      Screen.Cursor := crSQLWait;
+      Convert_pack.CallProcedure('BatchToSendingBatchs',[0,1]);
+      ReadyBatchs.Refresh;
+      SendingBatchs.Refresh;
+      CurrencyEdit1.Value:=Convert_pack.CallFloatFunction('GetBatchAmount',[]);
+      Edit_count.Text:=inttostr(SendingBatchs.RecordCount);
+    Finally
+      Screen.Cursor := crDefault;
+    end;
+end;
+
+procedure TPrepareFile_Form.All_to_NosendClick(Sender: TObject);
+begin
+   if SendingBatchs.RecordCount = 0 then
+      exit;
+   Convert_pack.CallProcedure('BatchToReadyBatchs', [0,1]);
+   Try
+      Screen.Cursor := crSQLWait;
+      ReadyBatchs.Refresh;
+      SendingBatchs.Refresh;
+      CurrencyEdit1.Value:=Convert_pack.CallFloatFunction('GetBatchAmount',[]);
+      Edit_count.Text:=inttostr(SendingBatchs.RecordCount);
+   Finally
+      Screen.Cursor := crDefault;
+   End;
+end;
+
+procedure TPrepareFile_Form.Button_fileClick(Sender: TObject);
+
+begin
+
+
+        if SendingBatchs.RecordCount = 0 then exit;
+        if Trim(Edit_reference.Text)='' then begin MessageDlg('Qeydiyyat №-si verilməyib !',mtWarning,[mbok],0);exit;end;
+        screen.Cursor:=crSQLWait;
+
+          // ShowMessage('aa');
+        CreateFile ;
+        Convert_pack.CallProcedure('xs_SentInfo_insert',['S',
+                                                          edit_sender.text,
+                                                          edit_receiver.text,
+                                                          Edit1.text,
+                                                          'N',
+                                                          'N',
+                                                          'C099',
+                                                          date,
+                                                          edit_reference.text,
+                                                          0]);
+        Edit_reference.Clear;
+        Edit_count.Text:='0';
+        CurrencyEdit1.Text:='0';
+        ReadyBatchs.Refresh;
+        SendingBatchs.Refresh;
+        LVPCSSForm.RefreshDataBatchs;
+        ProgressBar1.Hide;
+        screen.Cursor:=crDefault;
+        close;
+end;
+
+procedure TPrepareFile_Form.FormKeyUp(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+   if key = Vk_escape then close;
+end;
+
+procedure TPrepareFile_Form.GridReadyBatchsTitleClick(Column: TColumn);
+
+
+Procedure XS_XmlOrderBy(OFields:String);
+  begin
+     screen.Cursor:=crSQLWait;
+     try
+        ReadyBatchs.SetVariable('Title',Ofields);
+       //RefreshDataIncoming;
+        ReadyBatchs.Refresh;
+     finally
+      screen.Cursor:=crDefault;
+     end;
+  end;
+
+
+
+  {Change color}
+  procedure ChangeTitleColor(Grid:Tdbgrid; ChColumn:Integer; OrderingColor,DefaulColor:Tcolor );
+    var i : Integer;
+  begin
+    for i := 0 to Grid.Columns.Count-1 do   Grid.Columns[i].Title.Color:=DefaulColor;
+        Grid.Columns[ChColumn].Title.Color:=OrderingColor;
+  end;
+
+
+  begin
+  if Column.Title.Caption= '№' then
+   begin
+     XS_XmlOrderBy('id');
+   end
+   else
+    if  Column.Title.Caption='Debet' then
+      begin
+        XS_XmlOrderBy('ACC_NO');
+      end
+   else
+    if  Column.Title.Caption='Debet Məbləğ' then
+      begin
+        XS_XmlOrderBy('AMOUNT');
+      end
+    else
+      if  Column.Title.Caption='Tarix' then
+      begin
+        XS_XmlOrderBy('TRANSDATE');
+      end
+      else
+         exit;
+   ChangeTitleColor(GridReadyBatchs,Column.Index,clMaroon, $00804000);
+
+
+end;
+
+procedure TPrepareFile_Form.but_batchClick(Sender: TObject);
+begin
+        if SendingBatchs.RecordCount = 0 then exit;
+        if Trim(Edit_reference.Text)='' then begin MessageDlg('Qeydiyyat №-si verilməyib !',mtWarning,[mbok],0);exit;end;
+        screen.Cursor:=crSQLWait;
+        CreateBatchFile;
+        Button_file.Click;
+        Edit_reference.Clear;
+        Edit_count.Text:='0';
+        CurrencyEdit1.Text:='0';
+        ReadyBatchs.Refresh;
+        SendingBatchs.Refresh;
+        LVPCSSForm.RefreshDataBatchs;
+        ProgressBar1.Hide;
+        screen.Cursor:=crDefault;
+end;
+procedure TPrepareFile_Form.Edit_referenceKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+   if (not (key in ['0'..'9','a'..'z','A'..'Z','/','-',':','(',')','.',',','''','+','{','}',' ',#8]))
+   then
+   Begin
+     key:=#0;
+   end;
+
+end;
+
+end.

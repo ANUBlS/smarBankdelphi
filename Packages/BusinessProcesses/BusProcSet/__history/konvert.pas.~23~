@@ -1,0 +1,72 @@
+﻿unit konvert;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Grids, DBGrids, ExtCtrls, StdCtrls, DB, OracleData;
+
+type
+  Tkonvert1 = class(TForm)
+    Panel1: TPanel;
+    GridAccount1: TDBGrid;
+    Edit1: TEdit;
+    Edit2: TEdit;
+    OracleDataSet9: TOracleDataSet;
+    OracleDataSet9ID: TFloatField;
+    OracleDataSet9SHORTNAME: TWideStringField;
+    OracleDataSet9FULLPATH: TWideStringField;
+    OracleDataSet9EXTRA: TWideStringField;
+    OracleDataSet9DIFFERENT: TFloatField;
+    DataSource9: TDataSource;
+    procedure Edit1Change(Sender: TObject);
+    procedure Edit2Change(Sender: TObject);
+    procedure GridAccount1DblClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+
+    v_shortname: Integer; { Public declarations }
+  end;
+
+var
+  konvert1: Tkonvert1;
+
+implementation
+
+uses
+  BusinessProcessSetupImpl, Unit6, DMBusProcSetimpl;
+
+{$R *.dfm}
+
+procedure Tkonvert1.Edit1Change(Sender: TObject);
+begin
+  if Edit1.Text <> '' then
+
+    OracleDataSet9.SQL[2] := ' where a.shortname like (''%' +
+      Edit1.Text + '%'')'
+
+  else
+    OracleDataSet9.SQL[2] := '';
+  OracleDataSet9.Refresh;
+
+end;
+
+procedure Tkonvert1.Edit2Change(Sender: TObject);
+begin
+  if Edit2.Text <> '' then
+    OracleDataSet9.SQL[3] := ' where a.fullpath like (''%' + Edit2.Text + '%'')'
+  else
+    OracleDataSet9.SQL[3] := '';
+  OracleDataSet9.Refresh;
+
+end;
+
+procedure Tkonvert1.GridAccount1DblClick(Sender: TObject);
+begin
+  v_shortname := OracleDataSet9SHORTNAME.AsInteger;
+
+  konvert1.Close;
+end;
+
+end.

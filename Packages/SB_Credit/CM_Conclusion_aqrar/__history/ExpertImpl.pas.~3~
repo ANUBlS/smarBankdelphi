@@ -1,0 +1,38 @@
+unit ExpertImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls;
+
+type
+  TExpertFrm = class(TForm)
+    ListBox1: TListBox;
+    procedure FormShow(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  ExpertFrm: TExpertFrm;
+
+implementation
+
+{$R *.dfm}
+uses DataModuleConclusion;
+procedure TExpertFrm.FormShow(Sender: TObject);
+begin
+
+  ListBox1.Items.Clear;
+  while not DataModuleConcl.ExpertSet.Eof do
+  begin
+    ListBox1.Items.Add(DataModuleConcl.ExpertSet.Fields[2].AsString);
+    DataModuleConcl.ExpertSet.Next;
+  end;
+
+end;
+
+end.

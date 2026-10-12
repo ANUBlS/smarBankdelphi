@@ -1,0 +1,86 @@
+unit frmReportofBalanceImpl_new;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, Buttons, Db, CMExcelExport, OracleData, ComCtrls, Mask,
+  DBCtrlsEh, DBLookupEh, ExtCtrls;
+
+type
+  TfrmReport_new = class(TForm)
+    BitBtn1: TBitBtn;
+    BitBtn2: TBitBtn;
+    CreditTypes: TOracleDataSet;
+    CreditTypesID: TFloatField;
+    CreditTypesTYPE: TWideStringField;
+    CustomerTypes: TOracleDataSet;
+    CustomerTypesID: TFloatField;
+    CustomerTypesCATEGORY: TWideStringField;
+    ExcelExport: TCMExcelExport;
+    Filials: TOracleDataSet;
+    FilialsID: TFloatField;
+    FilialsNAME: TWideStringField;
+    query: TOracleDataSet;
+    querySMR: TFloatField;
+    Panel1: TPanel;
+    GroupBox1: TGroupBox;
+    CheckBox1: TCheckBox;
+    DBLookupComboboxEh1: TDBLookupComboboxEh;
+    GroupBox3: TGroupBox;
+    DBLookupComboboxEh2: TDBLookupComboboxEh;
+    CheckBox2: TCheckBox;
+    Panel5: TPanel;
+    GroupBox7: TGroupBox;
+    CheckBox7: TCheckBox;
+    DBLookupComboboxEh7: TDBLookupComboboxEh;
+    GroupBox9: TGroupBox;
+    CheckBox8: TCheckBox;
+    DBLookupComboboxEh8: TDBLookupComboboxEh;
+    Panel9: TPanel;
+    GroupBox10: TGroupBox;
+    CheckBox10: TCheckBox;
+    DBLookupComboboxEh9: TDBLookupComboboxEh;
+    GroupBox11: TGroupBox;
+    Label1: TLabel;
+    Label2: TLabel;
+    BeginDate: TDateTimePicker;
+    EndDate: TDateTimePicker;
+    Persons: TOracleDataSet;
+    PersonsID: TFloatField;
+    PersonsNAME: TWideStringField;
+    Results: TOracleDataSet;
+    ResultsCONTRACTNO: TWideStringField;
+    ResultsOPENDATE: TDateTimeField;
+    ResultsCLOSEDATE: TDateTimeField;
+    ResultsBALANCE: TFloatField;
+    ResultsINTRATE: TFloatField;
+    ResultsPERIOD: TWideStringField;
+    ResultsVALUTE: TWideStringField;
+    ResultsBREST: TFloatField;
+    ResultsTRAMT: TFloatField;
+    ResultsPAYAMT: TFloatField;
+    ResultsEREST: TFloatField;
+    ResultsROUNDINT: TFloatField;
+    Valutes: TOracleDataSet;
+    ValutesVALUTE: TIntegerField;
+    ValutesVALU_NAME: TWideStringField;
+    ValutesDatSrc: TDataSource;
+    FilialsDatSrc: TDataSource;
+    CustTypeDatSrc: TDataSource;
+    PersonsDatSrc: TDataSource;
+    CredTypeDatScr: TDataSource;
+  private
+   function BuildFilterString :String;
+  public
+    { Public declarations }
+  end;
+
+var
+  frmReport_new: TfrmReport_new;
+
+implementation
+
+{$R *.dfm}
+
+end.

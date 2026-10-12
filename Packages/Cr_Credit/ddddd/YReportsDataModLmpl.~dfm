@@ -1,0 +1,687 @@
+object YReportsDataMod: TYReportsDataMod
+  OldCreateOrder = False
+  OnCreate = DataModuleCreate
+  OnDestroy = DataModuleDestroy
+  Left = 244
+  Top = 270
+  Height = 564
+  Width = 870
+  object Branches: TOracleDataSet
+    SQL.Strings = (
+      'SELECT id, name'
+      '  FROM filial')
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 128
+    Top = 16
+  end
+  object CurrencysSrc: TDataSource
+    DataSet = Currencys
+    Left = 48
+    Top = 80
+  end
+  object BranchesSrc: TDataSource
+    DataSet = Branches
+    Left = 128
+    Top = 80
+  end
+  object Currencys: TOracleDataSet
+    SQL.Strings = (
+      'SELECT valute,  valu_name'
+      '  FROM AVALUTE'
+      'ORDER BY VALUTE')
+    QBEDefinition.QBEFieldDefs = {
+      04000000020000000600000056414C5554450100000000000900000056414C55
+      5F4E414D45010000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 48
+    Top = 16
+    object CurrencysVALUTE: TIntegerField
+      FieldName = 'VALUTE'
+      Required = True
+    end
+    object CurrencysVALU_NAME: TStringField
+      FieldName = 'VALU_NAME'
+      Size = 25
+    end
+  end
+  object sysdat: TOracleDataSet
+    SQL.Strings = (
+      'select * from sysdat')
+    QBEDefinition.QBEFieldDefs = {
+      04000000040000000700000054454B5F44415401000000000008000000505245
+      445F444154010000000000070000004152435F44415901000000000005000000
+      434C4F5345010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 216
+    Top = 13
+    object sysdatTEK_DAT: TDateTimeField
+      FieldName = 'TEK_DAT'
+      Required = True
+    end
+    object sysdatPRED_DAT: TDateTimeField
+      FieldName = 'PRED_DAT'
+    end
+    object sysdatARC_DAY: TDateTimeField
+      FieldName = 'ARC_DAY'
+    end
+    object sysdatCLOSE: TIntegerField
+      FieldName = 'CLOSE'
+    end
+  end
+  object sysdatSrc: TDataSource
+    DataSet = sysdat
+    Left = 216
+    Top = 80
+  end
+  object Persons: TOracleDataSet
+    SQL.Strings = (
+      'SELECT id,  descripion'
+      '  FROM cr_persons')
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 296
+    Top = 16
+  end
+  object PersonsSrc: TDataSource
+    DataSet = Persons
+    Left = 296
+    Top = 80
+  end
+  object Types: TOracleDataSet
+    SQL.Strings = (
+      'SELECT id, id ||'#39'-'#39'||typedesc idname'
+      '  FROM cr_bp_types'
+      'order by id')
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 360
+    Top = 16
+    object FloatField1: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object StringField1: TStringField
+      FieldName = 'IDNAME'
+      Size = 169
+    end
+  end
+  object TypesSrc: TDataSource
+    DataSet = Types
+    Left = 360
+    Top = 80
+  end
+  object Categories: TOracleDataSet
+    SQL.Strings = (
+      'SELECT id, description'
+      '  FROM cr_categories')
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 432
+    Top = 16
+  end
+  object CategoriesSrc: TDataSource
+    DataSet = Categories
+    Left = 440
+    Top = 80
+  end
+  object Periods: TOracleDataSet
+    SQL.Strings = (
+      'SELECT *'
+      '  FROM cr_bp_purposes')
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 528
+    Top = 9
+  end
+  object PeriodsSrc: TDataSource
+    DataSet = Periods
+    Left = 528
+    Top = 80
+  end
+  object CustNames: TOracleDataSet
+    SQL.Strings = (
+      'SELECT id, name idname'
+      '  FROM customers'
+      'order by name')
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 48
+    Top = 160
+  end
+  object CustNamesSrc: TDataSource
+    DataSet = CustNames
+    Left = 48
+    Top = 224
+  end
+  object Customers: TOracleDataSet
+    SQL.Strings = (
+      'SELECT id, id||'#39'-'#39'||name idname'
+      '  FROM customers'
+      'order by id')
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 144
+    Top = 160
+  end
+  object CustomersSrc: TDataSource
+    DataSet = Customers
+    Left = 136
+    Top = 224
+  end
+  object RepForms: TOracleDataSet
+    SQL.Strings = (
+      'select * from cr_bc_reports order by id')
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 224
+    Top = 160
+  end
+  object RepFormsSrc: TDataSource
+    DataSet = RepForms
+    Left = 224
+    Top = 232
+  end
+  object CreditsDSSrc: TDataSource
+    DataSet = CreditsDS
+    Left = 312
+    Top = 224
+  end
+  object CreditsDS: TOracleDataSet
+    SQL.Strings = (
+      'select*from cr_portfolio'
+      ''
+      ''
+      ''
+      ''
+      '')
+    Session = sboapiDataModule.SBSession
+    Left = 312
+    Top = 168
+  end
+  object ResultDS: TOracleDataSet
+    SQL.Strings = (
+      'SELECT f.*'
+      '     , cr_ak_funcs.getlmcount(f.creditid,4) pret'
+      '     , cr_ak_funcs.getlmcount(f.creditid,6) idd'
+      '     , cr_ak_funcs.getlmcount(f.creditid,7) qatn'
+      '     , cr_ak_funcs.geticracount(f.creditid,7) icra'
+      
+        '    ,s.paymentdate,s.principal,s.interest,s.principal+s.interest' +
+        ' as cem,'
+      '  case when s.sex=1 then'
+      ' '#39'Kiши'#39'  '
+      'when s.sex=0 then '#39'Qadin'#39
+      
+        ' end as sex ,p.dateofconclusion, p.creditlineamount krxet ,pr.na' +
+        'me adiyat'
+      
+        ' FROM cr_report_f1 f,cr_payment_schedule_portfel s,cr_portfolio ' +
+        'p , CUSTOMERS c ,smart.prinad pr where f.CREDITID=s.CREDITID   a' +
+        'nd p.id=f.creditid and'
+      ' c.PRINAD_KOD=pr.id and  p.BOOROWERID=c.id'
+      ''
+      ''
+      ''
+      ''
+      'ORDER BY'
+      '  branch, district, village, boorowername'
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      '/*SELECT f.*'
+      '     , cm_ak_funcs.getlmcount(f.creditid,4) pret'
+      '     , cm_ak_funcs.getlmcount(f.creditid,6) idd'
+      '     , cm_ak_funcs.getlmcount(f.creditid,7) qatn'
+      '     , cm_ak_funcs.geticracount(f.creditid,7) icra'
+      
+        '    ,s.paymentdate,s.principal,s.interest,s.principal+s.interest' +
+        ' as cem,'
+      '  case when s.sex=1 then'
+      ' '#39'Kiши'#39'  '
+      'when s.sex=0 then '#39'Qadin'#39
+      ' end as sex,cm_r'
+      ''
+      
+        '  FROM cm_report_f1 f,cm_payment_schedule_portfel s,cm_active_cr' +
+        'edits p,cm_categories c where f.CREDITID=s.CREDITID and p.CUSTOM' +
+        'ERTYPE=c.id'
+      ''
+      ''
+      ''
+      'ORDER BY'
+      '  branch, district, village, boorowername*/')
+    QBEDefinition.QBEFieldDefs = {
+      04000000470000000800000043524544495449440100000000000A000000424F
+      4F524F5745524944010000000000060000004352444E554D0100000000000C00
+      0000424F4F524F5745524E414D45010000000000080000004252414E43484944
+      010000000000060000004252414E43480100000000000A000000444953545249
+      4354494401000000000008000000444953545249435401000000000009000000
+      56494C4C41474549440100000000000700000056494C4C414745010000000000
+      09000000505552504F5345494401000000000007000000505552504F53450100
+      0000000006000000545950454944010000000000080000005459504544455343
+      01000000000008000000435244434F554E540100000000000D00000050415945
+      44435244434F554E540100000000000D00000046495253545452434844415445
+      0100000000000B0000004C415354504159444154450100000000000B00000047
+      4956454E414D4F554E540100000000001100000043414C43554C415445445045
+      5243454E540100000000000C00000044415445444542544D41494E0100000000
+      000B0000004441544544454254494E540100000000000900000050415945444D
+      41494E010000000000080000005041594544494E540100000000000C00000050
+      415945444D4F4E4D41494E0100000000000B00000050415945444D4F4E494E54
+      01000000000008000000444542544D41494E0100000000000700000044454254
+      494E540100000000000C000000444542544F5645524D41494E0100000000000B
+      000000444542544F564552494E540100000000000A00000043414C4353544154
+      55530100000000000A00000043524544504552494F4401000000000007000000
+      494E5452415445010000000000060000004F4452415445010000000000050000
+      0053424F55540100000000000B00000050524F4C4F4E47444154450100000000
+      000A00000050524F4C4F4E47434E5401000000000010000000445545494E5445
+      5245535444454249540100000000000400000050524554010000000000030000
+      00494444010000000000040000005141544E0100000000000400000049435241
+      0100000000000A00000044455343524950494F4E010000000000080000005346
+      4552414441590100000000000F000000505552504F53454F4643524544495401
+      00000000000800000043555252454E4359010000000000090000004C4F414E41
+      434349440100000000000D000000424F4F524F57455241434349440100000000
+      000F000000424F4F524F57455241434352455354010000000000070000004144
+      44524553530100000000000600000053414C4152590100000000000B00000050
+      484F4E454E554D42455201000000000007000000524553455256450100000000
+      00070000004C4154454441590100000000000B0000004445534352495054494F
+      4E010000000000090000004749524F5652455354010000000000130000005052
+      494D415259524553455256454152455354010000000000160000005052494D41
+      52595055525245534552564541524553540100000000000A0000004745434755
+      4E4641495A0100000000000A000000504C454447454E414D450100000000000C
+      0000004F44454D455F454D53414C490100000000000C0000004558504552545F
+      5F4E414D45010000000000050000004B555255530100000000000B0000005041
+      594D454E5444415445010000000000090000005052494E434950414C01000000
+      000008000000494E544552455354010000000000030000005345580100000000
+      000300000043454D01000000000010000000444154454F46434F4E434C555349
+      4F4E010000000000050000004B52584554010000000000060000004144495941
+      54010000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 408
+    Top = 168
+    object ResultDSODEME_EMSALI: TFloatField
+      DisplayLabel = 'Юдямя ямсалы'
+      FieldName = 'ODEME_EMSALI'
+      DisplayFormat = '#,#0.00'
+    end
+    object ResultDSCREDITID: TFloatField
+      DisplayLabel = 'Кред ЫД'
+      FieldName = 'CREDITID'
+      Required = True
+    end
+    object ResultDSBOOROWERID: TFloatField
+      DisplayLabel = 'Мцщ ЫД'
+      FieldName = 'BOOROWERID'
+      Required = True
+    end
+    object ResultDSCRDNUM: TStringField
+      DisplayLabel = 'Мцгавиля №'
+      FieldName = 'CRDNUM'
+      Required = True
+      Size = 255
+    end
+    object ResultDSBOOROWERNAME: TStringField
+      DisplayLabel = 'Мцштяри'
+      FieldName = 'BOOROWERNAME'
+      Required = True
+      Size = 255
+    end
+    object ResultDSBRANCHID: TFloatField
+      DisplayLabel = 'Фил ЫД'
+      FieldName = 'BRANCHID'
+      Required = True
+      Visible = False
+    end
+    object ResultDSBRANCH: TStringField
+      DisplayLabel = 'Филиал'
+      FieldName = 'BRANCH'
+      Required = True
+      Size = 255
+    end
+    object ResultDSVILLAGEID: TFloatField
+      DisplayLabel = 'Кянд ЫД'
+      FieldName = 'VILLAGEID'
+      Required = True
+      Visible = False
+    end
+    object ResultDSDISTRICTID: TFloatField
+      DisplayLabel = 'Район ЫД'
+      FieldName = 'DISTRICTID'
+      Required = True
+      Visible = False
+    end
+    object ResultDSDISTRICT: TStringField
+      DisplayLabel = 'Район'
+      FieldName = 'DISTRICT'
+      Required = True
+      Size = 255
+    end
+    object ResultDSVILLAGE: TStringField
+      DisplayLabel = 'Кянд'
+      FieldName = 'VILLAGE'
+      Required = True
+      Size = 255
+    end
+    object ResultDSCREDPERIOD: TStringField
+      DisplayLabel = 'Вясаитин мянбяйи'
+      FieldName = 'CREDPERIOD'
+      Required = True
+    end
+    object ResultDSDESCRIPION: TStringField
+      DisplayLabel = 'Мцштяринин статусу'
+      FieldName = 'DESCRIPION'
+      Size = 30
+    end
+    object ResultDSSEX: TStringField
+      DisplayLabel = 'Боржаланын жинси'
+      FieldName = 'SEX'
+      Size = 12
+    end
+    object ResultDSPURPOSE: TStringField
+      DisplayLabel = 'Кредит мящсулунун ады'
+      FieldName = 'PURPOSE'
+      Required = True
+      Size = 255
+    end
+    object ResultDSSFERADAY: TStringField
+      DisplayLabel = 'Мцштяринин фяалиййат сащяси'
+      FieldName = 'SFERADAY'
+      Size = 30
+    end
+    object ResultDSPURPOSEOFCREDIT: TStringField
+      DisplayLabel = 'Кредитин тяйинаты'
+      FieldName = 'PURPOSEOFCREDIT'
+      Size = 50
+    end
+    object ResultDSPURPOSEID: TFloatField
+      DisplayLabel = 'Мягсяд ЫД'
+      FieldName = 'PURPOSEID'
+      Required = True
+      Visible = False
+    end
+    object ResultDSTYPEID: TFloatField
+      DisplayLabel = 'Тип ЫД'
+      FieldName = 'TYPEID'
+      Required = True
+      Visible = False
+    end
+    object ResultDSTYPEDESC: TStringField
+      DisplayLabel = 'Тип'
+      FieldName = 'TYPEDESC'
+      Required = True
+      Size = 10
+    end
+    object ResultDSCRDCOUNT: TFloatField
+      DisplayLabel = 'Кред Сай'
+      FieldName = 'CRDCOUNT'
+      Required = True
+      Visible = False
+    end
+    object ResultDSPAYEDCRDCOUNT: TFloatField
+      DisplayLabel = 'Юдянилиб'
+      FieldName = 'PAYEDCRDCOUNT'
+      Required = True
+      Visible = False
+    end
+    object ResultDSDATEOFCONCLUSION: TDateTimeField
+      DisplayLabel = 'Кредитин верилмя тарихи'
+      FieldName = 'DATEOFCONCLUSION'
+      Required = True
+    end
+    object ResultDSFIRSTTRCHDATE: TDateTimeField
+      DisplayLabel = 'Илк транш'
+      FieldName = 'FIRSTTRCHDATE'
+      Required = True
+    end
+    object ResultDSLASTPAYDATE: TDateTimeField
+      DisplayLabel = 'Сон юдямя'
+      FieldName = 'LASTPAYDATE'
+      Required = True
+    end
+    object ResultDSPROLONGCNT: TFloatField
+      DisplayLabel = 'Пролонгасйа мцддяти'
+      FieldName = 'PROLONGCNT'
+    end
+    object ResultDSPROLONGDATE: TDateTimeField
+      DisplayLabel = 'Пролонгасйа тарихи'
+      FieldName = 'PROLONGDATE'
+    end
+    object ResultDSCURRENCY: TStringField
+      DisplayLabel = 'Валйута'
+      FieldName = 'CURRENCY'
+      Size = 65
+    end
+    object ResultDSKURUS: TFloatField
+      DisplayLabel = 'Бу эцня курс'
+      FieldName = 'KURUS'
+    end
+    object ResultDSINTRATE: TFloatField
+      DisplayLabel = 'фаиз. stavkasы'
+      FieldName = 'INTRATE'
+      DisplayFormat = '#,#0.0'
+    end
+    object ResultDSODRATE: TFloatField
+      DisplayLabel = 'gec фаиз. stavkasы'
+      FieldName = 'ODRATE'
+      DisplayFormat = '#,#0.0'
+    end
+    object ResultDSKRXET: TFloatField
+      DisplayLabel = 'Кредитин мябляьи'
+      FieldName = 'KRXET'
+      DisplayFormat = '#,#0.0 '
+    end
+    object ResultDSGIVENAMOUNT: TFloatField
+      DisplayLabel = 'Верилмиш kr'
+      FieldName = 'GIVENAMOUNT'
+      Required = True
+      DisplayFormat = '#,#0.0 '
+    end
+    object ResultDSDATEDEBTMAIN: TFloatField
+      DisplayLabel = 'Вахты чат.'
+      FieldName = 'DATEDEBTMAIN'
+      Required = True
+      DisplayFormat = '#,#0.0'
+    end
+    object ResultDSPAYEDMAIN: TFloatField
+      DisplayLabel = 'Юдян. ясас'
+      FieldName = 'PAYEDMAIN'
+      Required = True
+      DisplayFormat = '#,#0.0'
+    end
+    object ResultDSPAYEDMONMAIN: TFloatField
+      DisplayLabel = 'Жари айда юдянян ясас'
+      FieldName = 'PAYEDMONMAIN'
+      Required = True
+      DisplayFormat = '#,#0.0'
+    end
+    object ResultDSDEBTMAIN: TFloatField
+      DisplayLabel = 'Галыг kredit borc'
+      FieldName = 'DEBTMAIN'
+      Required = True
+      DisplayFormat = '#,#0.0'
+    end
+    object ResultDSDEBTOVERMAIN: TFloatField
+      DisplayLabel = 'Ясас борж цзря эежикмя мяб'
+      FieldName = 'DEBTOVERMAIN'
+      Required = True
+      DisplayFormat = '#,#0.0'
+    end
+    object ResultDSLATEDAY: TFloatField
+      DisplayLabel = 'Я.Б эеж эцнлярин сайы'
+      FieldName = 'LATEDAY'
+    end
+    object ResultDSCALCULATEDPERCENT: TFloatField
+      DisplayLabel = 'Щес фаиз'
+      FieldName = 'CALCULATEDPERCENT'
+      Required = True
+      DisplayFormat = '#,#0.0'
+    end
+    object ResultDSDATEDEBTINT: TFloatField
+      DisplayLabel = 'Вахты чат. %; боржу.'
+      FieldName = 'DATEDEBTINT'
+      Required = True
+      DisplayFormat = '#,#0.0'
+    end
+    object ResultDSPAYEDINT: TFloatField
+      DisplayLabel = 'Юдянилмиш. % бор'
+      FieldName = 'PAYEDINT'
+      Required = True
+      DisplayFormat = '#,#0.0'
+    end
+    object ResultDSPAYEDMONINT: TFloatField
+      DisplayLabel = 'Жари айда юдянян фаиз'
+      FieldName = 'PAYEDMONINT'
+      Required = True
+      DisplayFormat = '#,#0.0'
+    end
+    object ResultDSDEBTINT: TFloatField
+      DisplayLabel = 'Фаиз галыьы'
+      FieldName = 'DEBTINT'
+      Required = True
+      DisplayFormat = '#,#0.0'
+    end
+    object ResultDSDEBTOVERINT: TFloatField
+      DisplayLabel = 'Фаиз боржу цзря  эежикмя мяб'
+      FieldName = 'DEBTOVERINT'
+      Required = True
+      DisplayFormat = '#,#0.0'
+    end
+    object ResultDSGECGUNFAIZ: TFloatField
+      DisplayLabel = 'Ф.Б эеж эцнлярин сайы'
+      FieldName = 'GECGUNFAIZ'
+    end
+    object ResultDSLOANACCID: TStringField
+      DisplayLabel = 'Ссуда щесабы'
+      FieldName = 'LOANACCID'
+      Size = 30
+    end
+    object ResultDSBOOROWERACCID: TStringField
+      DisplayLabel = 'Жари щесаб'
+      FieldName = 'BOOROWERACCID'
+      Size = 30
+    end
+    object ResultDSBOOROWERACCREST: TFloatField
+      DisplayLabel = 'Жари щесаб галыьы'
+      FieldName = 'BOOROWERACCREST'
+      DisplayFormat = '#,#0.0 '
+    end
+    object ResultDSADDRESS: TStringField
+      DisplayLabel = 'Йашайыш йери'
+      FieldName = 'ADDRESS'
+      Size = 60
+    end
+    object ResultDSPHONENUMBER: TStringField
+      DisplayLabel = 'Телефону'
+      FieldName = 'PHONENUMBER'
+      Size = 350
+    end
+    object ResultDSSALARY: TStringField
+      DisplayLabel = 'Фяалиййят йери'
+      FieldName = 'SALARY'
+      Size = 50
+    end
+    object ResultDSDESCRIPTION: TStringField
+      DisplayLabel = 'Эировун нювц'
+      FieldName = 'DESCRIPTION'
+      Size = 45
+    end
+    object ResultDSGIROVREST: TFloatField
+      DisplayLabel = 'Эировун дяйяри'
+      FieldName = 'GIROVREST'
+      DisplayFormat = '#,#0.0 '
+    end
+    object ResultDSDUEBYSCHEME: TFloatField
+      FieldKind = fkCalculated
+      FieldName = 'DUEBYSCHEME'
+      Visible = False
+      Calculated = True
+    end
+    object ResultDSCALCSTATUS: TStringField
+      DisplayLabel = '% щесабламасы статусу'
+      FieldName = 'CALCSTATUS'
+      Required = True
+      Size = 12
+    end
+    object ResultDSRESERVE: TStringField
+      DisplayLabel = 'Ещтиййат дяряжяси'
+      FieldName = 'RESERVE'
+      Size = 18
+    end
+    object ResultDSPRIMARYRESERVEAREST: TFloatField
+      DisplayLabel = 'Ади ещтиййат щес галыг'
+      FieldName = 'PRIMARYRESERVEAREST'
+      DisplayFormat = '#,#0.0 '
+    end
+    object ResultDSPRIMARYPURRESERVEAREST: TFloatField
+      DisplayLabel = 'Мягсядли ещтиййат щес галыг'
+      FieldName = 'PRIMARYPURRESERVEAREST'
+      DisplayFormat = '#,#0.0 '
+    end
+    object ResultDSPRET: TFloatField
+      FieldName = 'PRET'
+    end
+    object ResultDSIDD: TFloatField
+      FieldName = 'IDD'
+    end
+    object ResultDSQATN: TFloatField
+      FieldName = 'QATN'
+    end
+    object ResultDSICRA: TFloatField
+      FieldName = 'ICRA'
+    end
+    object ResultDSEXPERT__NAME: TStringField
+      DisplayLabel = 'Кредити жялб едян М ады'
+      FieldName = 'EXPERT__NAME'
+      Size = 25
+    end
+    object ResultDSPAYMENTDATE: TDateTimeField
+      DisplayLabel = 'Cari ayda юдяниш тарихи'
+      FieldName = 'PAYMENTDATE'
+    end
+    object ResultDSPRINCIPAL: TFloatField
+      DisplayLabel = 'Cari ayda ясасдан юдяниш'
+      FieldName = 'PRINCIPAL'
+    end
+    object ResultDSINTEREST: TFloatField
+      DisplayLabel = 'Cari ayda  % дян юдяниш'
+      FieldName = 'INTEREST'
+    end
+    object ResultDSCEM: TFloatField
+      DisplayLabel = 'Жями юдяниш'
+      FieldName = 'CEM'
+    end
+    object ResultDSADIYAT: TStringField
+      DisplayLabel = 'Боржаланын банка адиййаты'
+      FieldName = 'ADIYAT'
+      Size = 90
+    end
+  end
+end

@@ -1,0 +1,123 @@
+unit Unit5;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs,sboapiDataModuleImpl,group,datamod1, Grids, DBGrids, StdCtrls,
+  ExtCtrls;
+
+type
+  TForm5 = class(TForm)
+    PanelM: TPanel;
+    GroupBoxName: TGroupBox;
+    EditGroupName: TEdit;
+    GroupBoxNBPercent: TGroupBox;
+    EditPercentNB: TEdit;
+    GroupBoxDebtAcc: TGroupBox;
+    DebtAcc: TComboBox;
+    Edit1: TEdit;
+    GroupBoxCredAcc: TGroupBox;
+    CredAcc: TComboBox;
+    Edit3: TEdit;
+    GroupBox_main_acc: TGroupBox;
+    Edit2: TEdit;
+    Mainacc: TComboBox;
+    GroupBox_sale_acc: TGroupBox;
+    Edit4: TEdit;
+    SaleAcc: TComboBox;
+    Button1: TButton;
+    procedure Edit1Change(Sender: TObject);
+    procedure Edit2Change(Sender: TObject);
+    procedure Edit3Change(Sender: TObject);
+    procedure Edit4Change(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form5: TForm5;
+
+implementation
+
+{$R *.dfm}
+
+procedure TForm5.Edit1Change(Sender: TObject);
+begin
+with
+DataMod.addgroup do
+
+begin
+close;
+SetVariable('a',edit1.Text);
+Open;
+end;
+while not DataMod.addgroup.eof do
+begin
+  DebtAcc.Items.Add(DataMod.addgroup.FieldByName('acc_no').AsString)  ;
+DataMod.addgroup.Next;
+end;
+
+end;
+
+procedure TForm5.Edit2Change(Sender: TObject);
+begin
+with
+DataMod.addgroup do
+
+begin
+close;
+SetVariable('a',edit2.Text);
+Open;
+end;
+while not DataMod.addgroup.eof do
+begin
+  Mainacc.Items.Add(DataMod.addgroup.FieldByName('acc_no').AsString)  ;
+DataMod.addgroup.Next;
+end;
+
+end;
+
+
+
+procedure TForm5.Edit3Change(Sender: TObject);
+begin
+with
+DataMod.addgroup do
+
+begin
+close;
+SetVariable('a',edit3.Text);
+Open;
+end;
+while not DataMod.addgroup.eof do
+begin
+  CredAcc.Items.Add(DataMod.addgroup.FieldByName('acc_no').AsString)  ;
+DataMod.addgroup.Next;
+end;
+
+end;
+
+
+
+procedure TForm5.Edit4Change(Sender: TObject);
+begin
+with
+DataMod.addgroup do
+
+begin
+close;
+SetVariable('a',edit4.Text);
+Open;
+end;
+while not DataMod.addgroup.eof do
+begin
+  SaleAcc.Items.Add(DataMod.addgroup.FieldByName('acc_no').AsString)  ;
+DataMod.addgroup.Next;
+end;
+
+end;
+
+end.

@@ -1,0 +1,43 @@
+unit Unitcountry;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls, Grids, DBGrids;
+
+type
+  TFrmCountry = class(TForm)
+    GridAccount1: TDBGrid;
+    Panel1: TPanel;
+    Edit1: TEdit;
+    Edit2: TEdit;
+    procedure Edit1Change(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmCountry: TFrmCountry;
+
+implementation
+
+uses DMBusProcSetimpl, BusinessProcessSetupImpl;
+
+{$R *.dfm}
+
+procedure TFrmCountry.Edit1Change(Sender: TObject);
+begin
+if Edit1.Text <> '' then
+
+   DMBusProcSet.ODS_countries.SQL[2] := ' where symbol like (''%' +
+   Edit1.Text + '%'')'
+
+  else
+    DMBusProcSet.ODS_countries.SQL[2] := '';
+   DMBusProcSet.ODS_countries.Refresh;
+end;
+
+end.

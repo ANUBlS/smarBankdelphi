@@ -1,0 +1,358 @@
+﻿unit PortfelUnit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,  Dialogs,
+  StdCtrls, ActnList, Mask, DBCtrlsEh, DBLookupEh,  ExtCtrls,
+  oracle,DB,
+  Buttons, ComCtrls, ImgList, ToolWin, Grids, DBGrids;
+
+type
+  TPortfelForm = class(TForm)
+    Panel1: TPanel;
+    Panel2: TPanel;
+    GroupBox1: TGroupBox;
+    Panel4: TPanel;
+    Panel6: TPanel;
+    Panel7: TPanel;
+    GroupBox3: TGroupBox;
+    Panel8: TPanel;
+    GroupBox4: TGroupBox;
+    Panel9: TPanel;
+    GroupBox5: TGroupBox;
+    Panel10: TPanel;
+    GroupBox6: TGroupBox;
+    Panel11: TPanel;
+    GroupBox7: TGroupBox;
+    Panel5: TPanel;
+    Panel12: TPanel;
+    GroupBox8: TGroupBox;
+    Panel13: TPanel;
+    GroupBox9: TGroupBox;
+    Panel14: TPanel;
+    GroupBox10: TGroupBox;
+    Panel15: TPanel;
+    GroupBox11: TGroupBox;
+    Panel16: TPanel;
+    GroupBox12: TGroupBox;
+    GroupBox13: TGroupBox;
+    DBLookupComboboxValute: TDBLookupComboboxEh;
+    CheckBoxvalute: TCheckBox;
+    CheckBoxDSPReserves: TCheckBox;
+    DBLookupComboboxEhDSPReserves: TDBLookupComboboxEh;
+    CheckBoxpersons: TCheckBox;
+    DBLookupComboboxEhPersons: TDBLookupComboboxEh;
+    CheckBoxPledges: TCheckBox;
+    DBLookupComboboxEhPledges: TDBLookupComboboxEh;
+    CheckBoxFilial: TCheckBox;
+    DBLookupComboboxEhFilial: TDBLookupComboboxEh;
+    CheckBoxDSSReserves: TCheckBox;
+    DBLookupComboboxEhDSSReserves: TDBLookupComboboxEh;
+    CheckBoxCategorires: TCheckBox;
+    DBLookupComboboxEhCategories: TDBLookupComboboxEh;
+    CheckBoxUserGroup: TCheckBox;
+    DBLookupComboboxEhUserGroup: TDBLookupComboboxEh;
+    CheckBoxUser: TCheckBox;
+    DBLookupComboboxEhUser: TDBLookupComboboxEh;
+    CheckBoxCreditType: TCheckBox;
+    DBLookupComboboxEhCreditType: TDBLookupComboboxEh;
+    CheckBoxCustomers: TCheckBox;
+    DBLookupComboboxEhCustomers: TDBLookupComboboxEh;
+    ActionList1: TActionList;
+    ActionFilterAccept: TAction;
+    ActionFilterReject: TAction;
+    Panel3: TPanel;
+    ImageList1: TImageList;
+    Panel25: TPanel;
+    GroupBox19: TGroupBox;
+    DateTimePicker: TDateTimePicker;
+    GroupBox2: TGroupBox;
+    Panel22: TPanel;
+    GroupBox18: TGroupBox;
+    EditObligation: TEdit;
+    Panel18: TPanel;
+    Panel20: TPanel;
+    GroupBox14: TGroupBox;
+    Editrests: TEdit;
+    Panel23: TPanel;
+    GroupBox16: TGroupBox;
+    EditInterest: TEdit;
+    Panel19: TPanel;
+    Panel21: TPanel;
+    GroupBox15: TGroupBox;
+    EditDueRests: TEdit;
+    Panel24: TPanel;
+    GroupBox17: TGroupBox;
+    EditDueInRest: TEdit;
+    Panel17: TPanel;
+    SpeedButton1: TSpeedButton;
+    SpeedButton2: TSpeedButton;
+    SpeedButton3: TSpeedButton;
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure ActionFilterAcceptExecute(Sender: TObject);
+    procedure ActionFilterRejectExecute(Sender: TObject);
+    procedure SpeedButton3Click(Sender: TObject);
+  private
+  function FilterString:String;
+  procedure Calculation(var Rrest,Rinterest,RRduerest,RDueInRest,RRobl :Real);
+    { Private declarations }
+  public
+
+    { Public declarations }
+  end;
+
+var
+  PortfelForm: TPortfelForm;
+
+implementation
+ uses PortfelDataModImpl,CommonDecls, sbsystem,sboapiDataModuleImpl, SBTranslateProc;
+{$R *.DFM}
+
+procedure TPortfelForm.Calculation(var Rrest,Rinterest,RRduerest,RDueInRest,RRobl :real);
+var
+  srest,sinterest,sRduerest,SDueInRest,sRobl :Real; i:integer; ADate :TDate;
+begin
+   srest := 0;
+   sinterest := 0;
+   sRduerest := 0;
+   SDueInRest := 0;
+   sRobl := 0;
+
+   ADate := Integer(Trunc(DateTimePicker.DateTime));
+
+  if Adate = Get_CurrentDate then
+   begin
+       with PortfelDataModule.MainDataSet do
+       begin
+        Filter := FilterString;
+        Filtered := False;
+        Filtered := True;
+       end;
+
+       for i:=0 to PortfelDataModule.MainDataSet.RecordCount-1 do
+       begin
+          sRobl := sRobl+PortfelDataModule.MainDataSet.FieldByName('obligation').AsFloat;
+          sDueInRest := sDueInRest+PortfelDataModule.MainDataSet.FieldByName('dueinterestrest').AsFloat;
+          srest := srest+PortfelDataModule.MainDataSet.FieldByName('Rest').AsFloat;
+          sinterest := sinterest+PortfelDataModule.MainDataSet.FieldByName('INTERESTREST').AsFloat;
+          sRduerest := sRduerest+PortfelDataModule.MainDataSet.FieldByName('DUEREST').AsFloat;
+          PortfelDataModule.MainDataSet.Next;
+       end;
+
+      Rrest := srest;
+      Rinterest := Sinterest;
+      RRduerest := sRduerest;
+      RDueInRest := sDueInRest;
+      RRobl := sRobl;
+
+    end;
+
+
+   if Adate <>Get_CurrentDate then
+   begin
+       with PortfelDataModule.DateDataSet do
+       begin
+          CloseAll;
+          SetVariable('Hdate',ADate);
+          Open;
+          Filtered := False;
+          Filter := FilterString;
+          Filtered := True;
+       end;
+
+       for i:=0 to PortfelDataModule.DateDataSet.RecordCount-1 do
+       begin
+          sRobl := sRobl+PortfelDataModule.DateDataSet.FieldByName('obligation').AsFloat;
+          sDueInRest := sDueInRest+PortfelDataModule.DateDataSet.FieldByName('dueinterestrest').AsFloat;
+          srest := srest+PortfelDataModule.DateDataSet.FieldByName('Rest').AsFloat;
+          sinterest := sinterest+PortfelDataModule.DateDataSet.FieldByName('INTERESTREST').AsFloat;
+          sRduerest := sRduerest+PortfelDataModule.DateDataSet.FieldByName('DUEREST').AsFloat;
+          PortfelDataModule.DateDataSet.Next;
+       end;
+
+        Rrest :=Srest;
+        Rinterest := Sinterest;
+        RRduerest := sRduerest;
+        RDueInRest := sDueInRest;
+        RRobl := sRobl;
+  end;
+
+end;
+
+
+function TPortfelForm.FilterString:String;
+
+
+procedure F_LCOMB(var cd :string;Const cs :string; Checked :Boolean; Comb :TDBLookupComboboxEh);
+var Kv :string;
+begin
+  if Checked then
+  begin
+     Kv := String(Comb.KeyValue);
+     if cd = '' then
+     cd := '('+cs+'='+Kv+')' else
+     cd := cd+'And'+'('+cs+'='+Kv+')'
+  end
+end;
+
+begin
+  Result := '';
+   F_LCOMB(Result,'currency',CheckboxValute.Checked,DBLookupComboboxValute);
+   F_LCOMB(Result,'RESERVEID',CheckBoxDSPReserves.Checked,DBLookupComboboxEhDSPReserves);
+   F_LCOMB(Result,'PERSONALTYPE',CheckboxPersons.Checked,DBLookupComboboxEhPersons);
+   F_LCOMB(Result,'PLEDGEID',CheckboxPledges.Checked,DBLookupComboboxEhPledges);
+   F_LCOMB(Result,'Branchid',CheckboxFilial.Checked,DBLookupComboboxEhFilial);
+   F_LCOMB(Result,'DUERESERVEID',CheckboxDSSReserves.Checked,DBLookupComboboxEhDSSReserves);
+   F_LCOMB(Result,'CUSTOMERTYPE',CheckBoxCategorires.Checked,DBLookupComboboxEhCategories);
+   F_LCOMB(Result,'USRGROUP',CheckboxUserGroup.Checked,DBLookupComboboxEhUserGroup);
+   F_LCOMB(Result,'USID',CheckboxUser.Checked,DBLookupComboboxEhUser);
+   F_LCOMB(Result,'CREDITTYPE',CheckboxCreditType.Checked,DBLookupComboboxEhCreditType);
+   F_LCOMB(Result,'BOOROWERID',CheckboxCustomers.Checked,DBLookupComboboxEhCustomers);
+
+end;
+
+procedure TPortfelForm.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+   if ord(Key) = VK_ESCAPE then Close;
+end;
+
+procedure TPortfelForm.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+   Resize := False;
+end;
+
+procedure TPortfelForm.FormCreate(Sender: TObject);
+var Rrest,Rinrest,RDuerest ,RDueInrest,Robl,curs : Real;
+begin
+   PortfelDataModule := TPortfelDataModule.Create(Self);
+   with PortfelDataModule do
+   begin
+      MainDataSet.Open;
+      CurrencysDataSet.Open;
+      CategoriesDataSet.Open;
+      FilialDataSet.Open;
+      PersonsDataSet.Open;
+      PledgesdataSet.Open;
+      UsersDataSet.Open;
+      UserGroupsDataSet.open;
+      CustomersDataSet.Open;
+      PReservesDataset.Open;
+      SReservesDataSet.Open;
+      CreditTypeDataSet.Open;
+      
+      with  OperkursDataSet do
+      begin
+        if Active then CloseAll;
+        SetVariable('DDATE',Get_CurrentDate);
+        Open;
+       curs := FieldByName('ostat').AsFloat;
+     end;
+    end;
+
+    DateTimePicker.date := Get_currentdate;
+    Calculation( Rrest,Rinrest,RDuerest ,RDueInrest,Robl);
+    Editrests.Text := FormatFloat('#,#0.00',Rrest*curs);
+    EditInterest.Text := FormatFloat('#,#0.00',Rinrest*curs);
+    EditDueRests.Text := FormatFloat('#,#0.00',RDuerest*curs);
+    EditDueInRest.Text  :=  FormatFloat('#,#0.00',RDueInrest*curs);
+    EditObligation.Text :=  FormatFloat('#,#0.00',Robl*curs);
+    DateTimePicker.date := Get_currentdate;
+ SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+
+procedure TPortfelForm.FormDestroy(Sender: TObject);
+begin
+  with PortfelDataModule do
+   begin
+      MainDataSet.CloseAll;
+      CurrencysDataSet.CloseAll;
+      CategoriesDataSet.CloseAll;
+      FilialDataSet.CloseAll;
+      PersonsDataSet.CloseAll;
+      PledgesdataSet.CloseAll;
+      UsersDataSet.CloseAll;
+      UserGroupsDataSet.CloseAll;
+      CustomersDataSet.CloseAll;
+      PReservesDataset.CloseAll;
+      SReservesDataSet.CloseAll;
+      CreditTypeDataSet.CloseAll;
+   end;
+  PortfelDataModule.Free;
+end;
+
+procedure TPortfelForm.ActionFilterAcceptExecute(Sender: TObject);
+resourcestring ErrorMSG = 'Uyğun sahə seçilməyib';
+var Rrest,Rinrest,RDuerest ,RDueInrest,Robl,curs  :Real; ADate :TDateTime;
+begin
+ try
+   Cursor := crSQLWait;
+  ADate := Integer(Trunc(DateTimePicker.DateTime));
+  if  CheckBoxvalute.Checked then
+  begin
+    with  PortfelDataModule.OperkursDataSet do
+    begin
+      if Active then CloseAll;
+      SetVariable('DDATE',ADate);
+      SetVariable('val_kod',DBLookupComboboxValute.KeyValue);
+      Open;
+      curs := FieldByName('ostat').AsFloat;
+      ShowMessage(floattostr(curs));
+      Calculation(Rrest,Rinrest,RDuerest ,RDueInrest,Robl);
+      Editrests.Text      := FormatFloat('#,#0.00',Rrest*curs);
+      EditInterest.Text   := FormatFloat('#,#0.00',Rinrest*curs);
+      EditDueRests.Text   := FormatFloat('#,#0.00',RDuerest*curs);
+      EditDueInRest.Text  :=  FormatFloat('#,#0.00',RDueInrest*curs);
+      EditObligation.Text :=  FormatFloat('#,#0.00',Robl*curs);
+    end;
+  end
+     else
+  begin
+    Calculation(Rrest,Rinrest,RDuerest ,RDueInrest,Robl);
+    Editrests.Text := FormatFloat('#,#0.00',Rrest);
+    EditInterest.Text   := FormatFloat('#,#0.00',Rinrest);
+    EditDueRests.Text   := FormatFloat('#,#0.00',RDuerest);
+    EditDueInRest.Text  :=  FormatFloat('#,#0.00',RDueInrest);
+    EditObligation.Text :=  FormatFloat('#,#0.00',Robl);
+  end;
+  finally
+    cursor := crDefault;
+  end;
+end;
+
+procedure TPortfelForm.ActionFilterRejectExecute(Sender: TObject);
+begin
+
+ with PortfelDataModule.MainDataSet do
+  begin
+    Filter := '';
+    Filtered := False;
+  end;
+
+  with PortfelDataModule.DateDataSet do
+  begin
+    Filter := '';
+    Filtered := False;
+  end;
+
+    {Calculation( Rrest,Rinrest,RDuerest ,RDueInrest,Robl,False); }
+    Editrests.Text := FormatFloat('#,#0.00',0);
+    EditInterest.Text := FormatFloat('#,#0.00',0);
+    EditDueRests.Text := FormatFloat('#,#0.00',0);
+    EditDueInRest.Text  :=  FormatFloat('#,#0.00',0);
+    EditObligation.Text := FormatFloat('#,#0.00',0);
+
+end;
+
+procedure TPortfelForm.SpeedButton3Click(Sender: TObject);
+begin
+   Close;
+end;
+
+end.

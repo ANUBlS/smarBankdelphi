@@ -1,0 +1,151 @@
+object ControlDatMod: TControlDatMod
+  OldCreateOrder = False
+  Height = 405
+  Width = 573
+  object CM_CONTROL: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'CM_CONTROL'
+    Cursor = crSQLWait
+    Left = 32
+    Top = 32
+  end
+  object ResultsDatSet: TOracleDataSet
+    SQL.Strings = (
+      'SELECT numberofcredit, '
+      '       custname, '
+      '       sum(drest) as drest , '
+      '       sum(dinterestrest) as dinterestrest, '
+      '       sum(dduerest) as dduerest,'
+      '       sum(ddueinterestrest) as ddueinterestrest'
+      '  FROM cm_controls'
+      'group by NUMBEROFCREDIT, custname')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 128
+    Top = 32
+    object ResultsDatSetNUMBEROFCREDIT: TWideStringField
+      DisplayLabel = 'M'#252'qavil'#601'nin n'#246'mr'#601'si'
+      DisplayWidth = 30
+      FieldName = 'NUMBEROFCREDIT'
+      Required = True
+      Size = 30
+    end
+    object ResultsDatSetCUSTNAME: TWideStringField
+      DisplayLabel = 'Borcalan'
+      DisplayWidth = 90
+      FieldName = 'CUSTNAME'
+      Required = True
+      Size = 68
+    end
+    object ResultsDatSetDREST: TFloatField
+      DisplayLabel = #399'.B '#252'zr'#601' f'#601'rq'
+      FieldName = 'DREST'
+    end
+    object ResultsDatSetDINTERESTREST: TFloatField
+      DisplayLabel = 'F.B '#252'zr'#601' f'#601'rq'
+      FieldName = 'DINTERESTREST'
+    end
+    object ResultsDatSetDDUEREST: TFloatField
+      DisplayLabel = 'G'#399'. B '#252'zr'#601' f'#601'rq'
+      FieldName = 'DDUEREST'
+    end
+    object ResultsDatSetDDUEINTERESTREST: TFloatField
+      DisplayLabel = 'GF.B '#252'zr'#601' f'#601'rq'
+      FieldName = 'DDUEINTERESTREST'
+    end
+  end
+  object ResultDatSrc: TDataSource
+    DataSet = ResultsDatSet
+    Left = 32
+    Top = 104
+  end
+  object Branchs: TOracleDataSet
+    SQL.Strings = (
+      'select  -1 id ,'#39'B'#252't'#252'n filiallar'#39' name from filial'
+      'union'
+      'select  id ,name from filial')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000080000000400000049004400010000000000080000004E0041004D00
+      4500010000000000140000004B004F0044005F00460049004C00490041004C00
+      0100000000000C00000043005F004E0041004D0045000100000000000C000000
+      440052004E0041004D0045000100000000001400000044005200460055004C00
+      4C004E0041004D0045000100000000000A0000004E004E0041004D0045000100
+      00000000120000004E00460055004C004C004E0041004D004500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 128
+    Top = 96
+    object BranchsID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object BranchsNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 90
+    end
+  end
+  object BranchsDatScr: TDataSource
+    DataSet = Branchs
+    Left = 128
+    Top = 192
+  end
+  object OracleDataSet1: TOracleDataSet
+    SQL.Strings = (
+      
+        'select cr.numberofcredit,f.name,t.ammount,p.ammount-t.ammount as' +
+        ' ferq ,'
+      '(select acc_no from smart.account where id=p.debt) as debithes ,'
+      
+        '(select acc_no from smart.account where id=p.KREDIT) as KREDIThe' +
+        's '
+      ''
+      
+        ' from smart.provarch p ,cm_credit_transaction  t, cm_active_cred' +
+        'its cr,filial f'
+      'where p.id=t.trid '
+      'and'
+      'p.dat in (select tek_dat from smart.sysdat)'
+      'and '
+      'p.ammount-t.ammount<>0'
+      'and'
+      'cr.id=t.creditid and cr.BRANCHID=f.id')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000060000001C0000004E0055004D004200450052004F00460043005200
+      4500440049005400010000000000080000004E0041004D004500010000000000
+      0E00000041004D004D004F0055004E0054000100000000000800000046004500
+      5200510001000000000010000000440045004200490054004800450053000100
+      00000000120000004B0052004500440049005400480045005300010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 288
+    Top = 48
+    object OracleDataSet1NUMBEROFCREDIT: TWideStringField
+      DisplayLabel = 'M'#252'qavil'#601' No'
+      FieldName = 'NUMBEROFCREDIT'
+      Size = 128
+    end
+    object OracleDataSet1NAME: TWideStringField
+      DisplayLabel = 'Filial'
+      FieldName = 'NAME'
+      Size = 360
+    end
+    object OracleDataSet1AMMOUNT: TFloatField
+      DisplayLabel = #399'm'#601'liyyat'
+      FieldName = 'AMMOUNT'
+    end
+    object OracleDataSet1FERQ: TFloatField
+      DisplayLabel = 'F'#601'rq'
+      FieldName = 'FERQ'
+    end
+    object OracleDataSet1DEBITHES: TWideStringField
+      DisplayLabel = 'Debit hesab'
+      FieldName = 'DEBITHES'
+      Size = 448
+    end
+    object OracleDataSet1KREDITHES: TWideStringField
+      DisplayLabel = 'Kredit hesab '
+      FieldName = 'KREDITHES'
+      Size = 448
+    end
+  end
+end

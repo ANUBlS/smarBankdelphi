@@ -1,0 +1,23 @@
+library Ins_ReinsReceive;
+
+uses
+  ComServ,
+  PrjIns_ReinsReceive_TLB in 'PrjIns_ReinsReceive_TLB.pas',
+  FrmMainIns_ReinsReceiveImpl in 'FrmMainIns_ReinsReceiveImpl.pas' {MainReInsReceive: TActiveForm} {MainReInsReceive: CoClass},
+  DMIns_ReinsReceiveImpl in 'DMIns_ReinsReceiveImpl.pas' {DMIns_ReinsReceive: TDataModule};
+
+{$E ocx}
+
+exports
+  DllGetClassObject,
+  DllCanUnloadNow,
+  DllRegisterServer,
+  DllUnregisterServer,
+  DllInstall;
+
+{$R *.TLB}
+
+{$R *.RES}
+
+begin
+end.

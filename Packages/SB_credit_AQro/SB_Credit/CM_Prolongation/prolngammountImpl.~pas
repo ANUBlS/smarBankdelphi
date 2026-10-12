@@ -1,0 +1,45 @@
+unit prolngammountImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  NLSLocalizer, StdCtrls, ComCtrls, Mask, DBCtrlsEh, DBCtrls;
+
+type
+  TForm2 = class(TForm)
+    GroupBox2: TGroupBox;
+    GroupBox1: TGroupBox;
+    ButtonOK: TButton;
+    Localizer: TNLSLocalizer;
+    DBEdit1: TDBEdit;
+    Edit1: TEdit;
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form2: TForm2;
+
+implementation
+ uses ProlongDataModuleImpl, SystemState, CommonDecls;
+{$R *.DFM}
+
+procedure TForm2.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+Resize:=false;
+end;
+
+procedure TForm2.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+  if Ord(Key) = VK_ESCAPE then
+    ModalResult := mrCancel
+end;
+
+end.

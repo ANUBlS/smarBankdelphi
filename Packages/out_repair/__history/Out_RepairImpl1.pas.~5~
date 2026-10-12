@@ -1,0 +1,1054 @@
+unit Out_RepairImpl1;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActiveX, AxCtrls, OutRepair_TLB, StdVcl, StdCtrls, ExtCtrls, Grids,OracleData,
+  DBGrids,DB,RepairNewEdit, ComCtrls, ToolWin, Menus, ImgList, ActnList, CheckLst,
+  SearchCombo,SBPlgAx50_TLB, Mask, DBCtrls, Buttons,RepairNewDataModule,HintBox;
+   {Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, LDialogs,
+  ActiveX, AxCtrls, RepairNew_TLB, StdVcl, ExtCtrls, ToolWin, ComCtrls,
+  Grids, DBGrids, Buttons, ActnList, ImgList, StdCtrls,DB,OracleData, Mask,
+  DBCtrls,RepairNewEdit, Menus, CheckLst, SearchCombo,SBPlgAx50_TLB, }
+
+
+
+type
+TSearchOrder=(soForward,soBackward,soNone);
+  TFilterType = (ftMain,ftOrder,ftFilial,ftAll);
+  TBracket = (brBegin,brEnd,brNone);
+
+  TOut_RepairFrm = class(TActiveForm, IOut_Repair)
+    Out_pnGridlayer: TPanel;
+    Out_pnLeftAdvanced: TPanel;
+    cbMainFeatures: TControlBar;
+    Out_dbMain: TDBGrid;
+    MainActionList: TActionList;
+    ShowAdvancedOptions: TAction;
+    AddTrans: TAction;
+    DelTrans: TAction;
+    UpdTrans: TAction;
+    RefreshTrans: TAction;
+    ShowSearchPanel: TAction;
+    DateStatement: TAction;
+    ShowEditForm: TAction;
+    DateStatementEnd: TAction;
+    ShowAddForm: TAction;
+    Filter: TAction;
+    TrFullRefresh: TAction;
+    Action1: TAction;
+    MainImageList: TImageList;
+    PopupMenu1: TPopupMenu;
+    N1: TMenuItem;
+    ToolBar1: TToolBar;
+    tbAdd: TToolButton;
+    tbDrop: TToolButton;
+    tbRefresh: TToolButton;
+    ToolButton4: TToolButton;
+    tbAdvancedOptions: TToolButton;
+    tbSearch: TToolButton;
+    DatePanel: TPanel;
+    lbSysDatDef: TLabel;
+    lbSysDat: TLabel;
+    Bevel1: TBevel;
+    lbOpDatDef: TLabel;
+    Label1: TLabel;
+    dtpOpDat: TDateTimePicker;
+    dtOpDatEnd: TDateTimePicker;
+    Panel4: TPanel;
+    btAdvancedOptionsExit: TButton;
+    Button1: TButton;
+    pcFilters: TPageControl;
+    tbFilter: TTabSheet;
+    pnConteiner: TPanel;
+    Splitter1: TSplitter;
+    gbOperator: TGroupBox;
+    scUser: TSearchCombo;
+    gbValute: TGroupBox;
+    clbValute: TCheckListBox;
+    GroupBox1: TGroupBox;
+    clbOperation: TCheckListBox;
+    tbOrder: TTabSheet;
+    rbOrder: TRadioGroup;
+    tbFilial: TTabSheet;
+    GroupBox13: TGroupBox;
+    scKreditFilial: TSearchCombo;
+    GroupBox12: TGroupBox;
+    scDebetFilial: TSearchCombo;
+    GroupBox2: TGroupBox;
+    cbFiltrOptions: TCheckBox;
+    HintBox1: THintBox;
+    pnTransactionDesc: TPanel;
+    dbeTransactionDescr: TDBEdit;
+    pnSearch: TPanel;
+    pnSearchOrder: TPanel;
+    sbUp: TSpeedButton;
+    sbMiddle: TSpeedButton;
+    sbDown: TSpeedButton;
+    Label2: TLabel;
+    Label3: TLabel;
+    procedure Out_pnGridlayerResize(Sender: TObject);
+   // procedure ShowAddFormExecute(Sender: TObject);
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure AddTransExecute(Sender: TObject);
+    procedure ActiveFormDestroy(Sender: TObject);
+    procedure ShowAddFormExecute(Sender: TObject);
+    procedure FastSearch(Sender: TObject);
+    procedure Out_dbMainColumnMoved(Sender: TObject; FromIndex,
+      ToIndex: Integer);
+    procedure Out_dbMainKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure KeyFastSearch(Sender: TObject; var Key: Char);
+    procedure Out_dbMainDblClick(Sender: TObject);
+    procedure ShowEditFormExecute(Sender: TObject);
+    procedure DelTransExecute(Sender: TObject);
+    procedure RefreshTransExecute(Sender: TObject);
+    procedure dtpOpDatChange(Sender: TObject);
+    procedure dtpOpDatEnter(Sender: TObject);
+    procedure dtOpDatEndChange(Sender: TObject);
+    procedure dtOpDatEndEnter(Sender: TObject);
+    procedure DatePanelMouseDown(Sender: TObject; Button: TMouseButton;
+     Shift: TShiftState; X, Y: Integer);
+    procedure ShowAdvancedOptionsExecute(Sender: TObject);
+    procedure KeyFastUpDownSearch(Sender: TObject; var Key: Word;Shift: TShiftState);
+    procedure ShowSearchPanelExecute(Sender: TObject);
+    procedure scUserChange(Sender: TObject);
+    procedure FilterExecute(Sender: TObject);
+    procedure clbValuteClickCheck(Sender: TObject);
+    procedure clbOperationClickCheck(Sender: TObject);
+    procedure scDebetFilialChange(Sender: TObject);
+    procedure scKreditFilialChange(Sender: TObject);
+    procedure DateStatementExecute(Sender: TObject);
+    procedure UpdTransExecute(Sender: TObject);
+    procedure TrFullRefreshExecute(Sender: TObject);
+    procedure tbFilialShow(Sender: TObject);
+    procedure tbOrderShow(Sender: TObject);
+    procedure tbFilterShow(Sender: TObject);
+    procedure sbUpClick(Sender: TObject);
+    procedure sbDownClick(Sender: TObject);
+  private
+    { Private declarations }
+     FEvents: IOut_RepairEvents;
+     FOrder: TSearchOrder;
+     procedure CreateSearchPanel;
+     procedure ClearSearhPanel;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+  public
+    { Public declarations }
+    procedure Initialize; override;
+    function ExecuteEditAction(DataSet: TDataSet;Value:  TEditAction): Boolean;
+    procedure FilterShowAction(Value: TFilterType);
+    procedure InitializeChlistBoxes;
+    procedure CheckFilters;
+    procedure ReInitializeFilters(DataSet: TDataSet);
+    procedure MouseWheelHandler(var Message: TMessage);override;
+  end;
+ 
+  var
+  Out_RepairFrm:TOut_RepairFrm;
+  Valute,Operation: TStringList;
+implementation
+
+uses ComObj, ComServ ,sbcore,OutRepdelete,sboapiDataModuleImpl, SBTranslateProc;
+
+{$R *.DFM}
+const
+  csOrder=  'ORDER BY';
+var
+ TempWidth : Integer;
+{ TOut_Repair }
+
+procedure TOut_RepairFrm.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_Out_RepairPage); }
+end;
+
+procedure TOut_RepairFrm.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as IOut_RepairEvents;
+end;
+
+procedure TOut_RepairFrm.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+procedure TOut_RepairFrm.MouseWheelHandler(var Message: TMessage);
+begin
+ Inherited;
+ if out_dbMain.Focused then
+  with TCMMouseWheel(Message), out_dbMain.DataSource.DataSet do
+    if WheelDelta < 0 then
+      Next else Prior;
+end;
+
+function TOut_RepairFrm.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TOut_RepairFrm.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TOut_RepairFrm.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TOut_RepairFrm.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TOut_RepairFrm.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TOut_RepairFrm.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TOut_RepairFrm.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TOut_RepairFrm.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TOut_RepairFrm.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TOut_RepairFrm.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TOut_RepairFrm.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TOut_RepairFrm.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TOut_RepairFrm.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TOut_RepairFrm.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TOut_RepairFrm.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TOut_RepairFrm.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TOut_RepairFrm.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TOut_RepairFrm.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TOut_RepairFrm._Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TOut_RepairFrm.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TOut_RepairFrm.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TOut_RepairFrm.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TOut_RepairFrm.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TOut_RepairFrm.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TOut_RepairFrm.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TOut_RepairFrm.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TOut_RepairFrm.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TOut_RepairFrm.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TOut_RepairFrm.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TOut_RepairFrm.Set_AxBorderStyle(Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TOut_RepairFrm.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TOut_RepairFrm.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TOut_RepairFrm.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TOut_RepairFrm.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TOut_RepairFrm.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TOut_RepairFrm.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TOut_RepairFrm.Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TOut_RepairFrm.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TOut_RepairFrm.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TOut_RepairFrm.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TOut_RepairFrm.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TOut_RepairFrm.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TOut_RepairFrm.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+procedure TOut_RepairFrm.Out_pnGridlayerResize(Sender: TObject);
+
+ function ColumnsWidth: Integer;
+  var
+   i: Integer;
+  begin
+    Result:=0;
+    with Out_dbMain do
+     for i:=0 to Columns.Count-1 do
+      Result:=Result+Columns[i].Width;
+  end;
+
+
+begin
+with Out_dbMain do
+ begin
+   if Tag=0 then
+      begin
+       Tag:=(Sender as TPanel).Width;
+       Out_pnGridlayer.Tag:=Columns[Columns.Count-1].Width;
+       TempWidth:=(Sender as TPanel).Width;
+     end;
+
+    if (Columns[Columns.Count-1].Width+((Sender as TPanel).Width-Tag)>Out_pnGridlayer.Tag)
+    and ((Sender as TPanel).Width > TempWidth+4) then
+     begin
+      Columns[Columns.Count-1].Width:=Columns[Columns.Count-1].Width+((Sender as TPanel).Width-Tag);
+      Tag:=(Sender as TPanel).Width;
+     end
+    else
+     begin
+      Columns[Columns.Count-1].Width:=Out_pnGridlayer.Tag;
+      Tag:=(Sender as TPanel).Width;
+     end;
+ end;
+
+end;
+function FindOrder(List: TStrings;Value: string=csOrder): integer;
+var
+ I :integer;
+begin
+FindOrder:=-1;
+with List do
+ for i:=0 to Count-1 do
+  if Pos(UpperCase(Value),UPperCase(Strings[i]))<>0 then
+   begin
+   FindOrder:=i;
+   Break;
+   end
+  else FindOrder:=-1;
+end;
+
+procedure TOut_RepairFrm.InitializeChlistBoxes;
+begin
+if not(Assigned(Valute)) then
+ Valute:=TStringList.Create
+else Valute.Clear;
+
+if not(Assigned(Operation)) then
+ Operation:=TStringList.Create
+else Operation.Clear;
+
+ clbValute.Tag:=Integer(@Valute);
+ clbOperation.Tag:=Integer(@Operation);
+end;
+procedure TOut_RepairFrm.CheckFilters;
+
+  procedure ChangeOrder(value: string);
+  var
+  OrdNum: Integer;
+  begin
+   with RepDataModule.TransactionData,SQL do
+    begin
+      OrdNum:=FindOrder(SQL);
+     if OrdNum<>-1 then SQL[OrdNum]:='ORDER BY '+value
+     else SQL.Add('ORDER BY '+value);
+    end;
+  end;
+
+var
+ OrdStr: String;
+begin
+ case rbOrder.ItemIndex of
+  0:OrdStr:='P.ID';
+  1:OrdStr:='P.dat';
+  2:OrdStr:='ad.ACC_NO';
+  3:OrdStr:='dc.val_name ';
+  4:OrdStr:='ac.ACC_NO';
+  5:OrdStr:='cc.val_name';
+  6:OrdStr:='p.ammount';
+  7:OrdStr:='p.Ammount_C';
+  8:OrdStr:='p.LAmmount ';
+ end;
+ ChangeOrder(OrdStr);
+end;
+
+
+procedure TOut_RepairFrm.FilterShowAction(Value: TFilterType);
+
+function EnableData(Sender: TDataset): Boolean;
+begin
+ if (Sender is TDataSet) then
+  begin
+  with (Sender as TDataSet) do
+   if not(Active) then
+     Open else Refresh;
+    EnableData:=True;
+  end
+ else EnableData:=False;
+end;
+
+begin
+with RepDataModule do
+begin
+ if (Value=ftMain) or (Value=ftAll) then
+   begin
+    if Value=ftAll then
+     begin
+      clbValute.Clear;
+      TStringList(Pointer(clbValute.Tag)^).Clear;
+      clbOperation.Clear;
+      TStringList(Pointer(clbOperation.Tag)^).Clear;
+     end;
+    scUser.DataSource:=Users;
+    EnableData(UsersData);
+    if not(clbValute.Items.Count>1) then Valutes.Execute;
+    if not(clbOperation.Items.Count>1) then VidOp.Execute;
+   end;
+
+ if (Value=ftFilial) or (Value=ftAll) then
+   begin
+  if not(FilialDebetData.Active)or (Value=ftAll) then
+   if EnableData(FilialDebetData) then
+    begin
+      scDebetFilial.DataSource:=FilialDebet;
+      scDebetFilial.Refresh;
+    end;
+  if not(FilialCreditData.Active)or(Value=ftAll) then
+   if  EnableData(FilialCreditData) then
+     begin
+      scKreditFilial.DataSource:=FilialCredit;
+      scKreditFilial.Refresh;
+     end;
+   end;
+end;
+end;
+procedure TOut_RepairFrm.ActiveFormCreate(Sender: TObject);
+begin
+ Out_RepairFrm:=self;
+ RepDataModule:=TRepDataModule.Create(self);
+ lbSysDat.Caption:=DateToStr(Sb_GetSystemDate);
+ dtpOpDat.DateTime:=Sb_GetSystemDate;
+ dtOpDatEnd.DateTime:=Sb_GetSystemDate;
+ FOrder:=soNone;
+ pcFilters.ActivePageIndex:=0;
+ InitializeChlistBoxes;
+ RepDataModule.TransactionData.SetVariable('DAT',trunc(Out_RepairFrm.dtpOpDat.DateTime));
+ RepDataModule.TransactionData.SetVariable('DAT2',trunc(Out_RepairFrm.dtOpDatEnd.DateTime));
+ RepDataModule.TransactionData.Open;
+
+ SBTranslateProc.TranslateAllComponents(Self,sboapiDataModule.OrPack_SL);
+
+end;
+
+procedure TOut_RepairFrm.AddTransExecute(Sender: TObject);
+begin
+ ShowAddForm.Execute;
+ 
+end;
+procedure TOut_RepairFrm.ActiveFormDestroy(Sender: TObject);
+begin
+RepDataModule.Destroy;
+end;
+
+procedure TOut_RepairFrm.ShowAddFormExecute(Sender: TObject);
+begin
+begin
+ with RepDataModule do
+ ExecuteEditAction(TransactionData,acInsert);
+end
+end;
+
+procedure TOut_RepairFrm.Out_dbMainColumnMoved(Sender: TObject; FromIndex,
+  ToIndex: Integer);
+begin
+Beep;
+end;
+
+procedure TOut_RepairFrm.Out_dbMainKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+ case Key of
+  vk_return : Out_dbMainDblClick(Sender);
+  vk_Delete: DelTrans.Execute;
+  VK_INSERT: AddTrans.Execute;
+ end;
+end;
+
+procedure TOut_RepairFrm.Out_dbMainDblClick(Sender: TObject);
+begin
+ ShowEditForm.Execute;
+end;
+
+procedure TOut_RepairFrm.ShowEditFormExecute(Sender: TObject);
+begin
+with RepDataModule do
+ if TransactionData.RecordCount>0 then
+  ExecuteEditAction(TransactionData,acUpdate);
+end;
+ function TOut_RepairFrm.ExecuteEditAction(DataSet: TDataSet;Value:  TEditAction): Boolean;
+
+procedure ShowEditForm(AcValue: TEditAction);
+begin
+if not(Assigned(OutRepairEdit)) then
+ OutRepairEdit:=TOutRepairEdit.Create(self);
+ try
+  OutRepairEdit.EditAction:=AcValue;
+  OutRepairEdit.ShowModal;
+ finally
+  OutRepairEdit.Release;
+  OutRepairEdit:=nil;
+ end;
+end;
+
+begin
+ ExecuteEditAction:=False;
+ case Value of
+ acInsert:
+  begin
+   DataSet.Insert;
+   ShowEditForm(Value);
+   Result:=True;
+  end;
+ acUpdate:
+  begin
+   DataSet.Edit;
+   ShowEditForm(Value);
+   Result:=True;
+  end;
+ acDelete:Beep;
+ end;
+end;
+
+procedure TOut_RepairFrm.DelTransExecute(Sender: TObject);
+begin
+ShowDeleteConfirm('ям€лиййат силинсин?');
+end;
+
+procedure TOut_RepairFrm.RefreshTransExecute(Sender: TObject);
+begin
+CheckDates;
+//CheckFilters;
+with RepDataModule do
+begin
+ // TransactionData.Close;
+  TransactionData.SetVariable('DAT' ,dtpOpdat.DateTime);
+  TransactionData.SetVariable('DAT2',dtOpdatEnd.DateTime);
+  TransactionData.Refresh;
+end;
+  //Filter.Execute;
+end;
+
+procedure TOut_RepairFrm.dtpOpDatChange(Sender: TObject);
+begin
+DateStatement.Execute;
+end;
+
+procedure TOut_RepairFrm.dtpOpDatEnter(Sender: TObject);
+begin
+dtpOpDat.MaxDate:=dtOpDatEnd.DateTime;
+dtOpDatEnd.MinDate:=dtpOpDat.DateTime;
+end;
+
+procedure TOut_RepairFrm.dtOpDatEndChange(Sender: TObject);
+begin
+DateStatementEnd.Execute;
+end;
+
+procedure TOut_RepairFrm.dtOpDatEndEnter(Sender: TObject);
+begin
+dtpOpDat.MaxDate:=dtOpDatEnd.DateTime;
+dtOpDatEnd.MinDate:=dtpOpDat.DateTime;
+end;
+procedure TOut_RepairFrm.KeyFastUpDownSearch(Sender: TObject; var Key: Word;Shift: TShiftState);
+begin
+  case Key of
+  VK_UP:
+   begin
+    sbUpClick(sbUp);
+    FastSearch(Sender);
+    Key:=0;
+   end;
+  VK_DOWN:
+   begin
+    sbUpClick(sbDown);
+    FastSearch(Sender);
+    Key:=0;
+   end;
+  end;
+end;
+procedure TOut_RepairFrm.DatePanelMouseDown(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+begin
+if not(Sender is TForm) and (X<4) then
+ (Sender as TWinControl).BeginDrag(true);
+end;
+procedure TOut_RepairFrm.FastSearch(Sender: TObject);
+var
+ RecOpt :TSearchRecordOptions;
+begin
+ RecOpt:=[srIgnoreCase,srPartialMatch];
+ if (Sender is TEdit) then
+  with (Sender as TEdit),RepDataModule.TransactionData do
+    if Active then
+      begin
+        case FOrder of
+         soForward: Include(RecOpt,srForward);
+         soBackward: Include(RecOpt,srBackward);
+         soNone: Include(RecOpt,srFromBeginning);
+        end;
+         SearchRecord(Hint,Text,RecOpt);
+      end;
+end;
+procedure TOut_RepairFrm.KeyFastSearch(Sender: TObject; var Key: Char);
+begin
+ if Ord(Key)=13 then
+  begin
+   sbUpClick(sbMiddle);
+   FastSearch(Sender);
+   Key:=#0;
+  end;
+end;
+
+procedure TOut_RepairFrm.ShowAdvancedOptionsExecute(Sender: TObject);
+begin
+ Out_pnLeftAdvanced.Visible:=not(Out_pnLeftAdvanced.Visible);
+ tbAdvancedOptions.Down:=Out_pnLeftAdvanced.Visible;
+ if Out_dbMain.CanFocus then Out_dbMain.SetFocus;
+end;
+ procedure TOut_RepairFrm.ClearSearhPanel;
+begin
+ pnSearch.DestroyComponents;
+end;
+
+procedure TOut_RepairFrm.CreateSearchPanel;
+var
+i,edLeft: Integer;
+TempEdit: TEdit;
+begin
+ with out_dbMain do
+  begin
+    edLeft:=4;
+   for i:=0 to Columns.Count-1 do
+    with TempEdit do
+     begin
+      TempEdit:=TEdit.Create(pnSearch);
+      Hint:=Columns[i].Field.FieldName;
+      if pnSearch.FindComponent('ed_'+Hint)=nil then Name:='ed_'+Hint;
+      Text:=EmptyStr;
+      OnChange:=FastSearch;
+      OnKeyPress:=KeyFastSearch;
+      OnKeyDown:=KeyFastUpDownSearch;
+      SetBounds(edLeft,4,Columns[i].Width,10);
+      Parent:=pnSearch;
+      Ctl3D:=False;
+      Color:=clSilver;
+      Font.Color:=clNavy;
+      edLeft:=edLeft+Columns[i].Width+1;
+     end;
+  end;
+ pnSearchOrder.BringToFront;
+end;
+
+procedure TOut_RepairFrm.ShowSearchPanelExecute(Sender: TObject);
+begin
+with (Sender as TAction) do
+ begin
+   Checked:=not(Checked);
+   pnSearch.Visible:=Checked;
+   tbSearch.Down:=Checked;
+  if Checked then CreateSearchPanel
+  else ClearSearhPanel;
+ end;
+end;
+
+procedure TOut_RepairFrm.scUserChange(Sender: TObject);
+begin
+ if cbFiltrOptions.Checked then
+  FilterExecute(Sender);
+end;
+
+procedure TOut_RepairFrm.FilterExecute(Sender: TObject);
+
+procedure EnableCheckListBox(Value: Boolean);
+begin
+ if Sender is TCheckListBox then
+ with (Sender as TCheckListBox) do
+  begin
+   Enabled:=Value;
+   Update;
+  end;
+end;
+
+begin
+  EnableCheckListBox(False);
+  try
+   ReInitializeFilters(RepDataModule.TransactionData);
+  finally
+   EnableCheckListBox(True);
+  end;
+end;
+procedure TOut_RepairFrm.ReInitializeFilters(DataSet: TDataSet);
+const
+ orExpr=' or ';
+var
+ First: Boolean;
+ FilterString: string;
+
+procedure AddToFilter(Field,Value,Operation: string;Bracket: TBracket;BolType: string= ' and ');
+
+function AddBracketToFilter(Value: TBracket): String;
+begin
+ if Value<>brNone then
+  result:=Char(Ord(Value)+$28)
+ else result:=EmptyStr;
+end;
+
+var
+ DecompleteRes: string;
+begin
+ if First then
+   begin
+    DecompleteRes:=EmptyStr;
+    First:=False;
+   end
+ else DecompleteRes:=BolType;
+if Bracket=brBegin then
+  FilterString:=FilterString+DecompleteRes+AddBracketToFilter(Bracket)+'('+Field+operation+value+')'
+else
+  FilterString:=FilterString+DecompleteRes+'('+Field+operation+value+')'+AddBracketToFilter(Bracket);
+end;
+
+procedure ExecuteCheckBoxFilter(Box :TCheckListBox;Field1,Field2: string ;Val: Boolean;Operation: string='<>');
+var
+  i,Cnt: Integer;
+  Brackets: TBracket;
+begin
+with Box,Items do
+ begin
+ if not(Count>0) then Exit;
+ if Val then Cnt:=Count-2
+ else Cnt:=Count-1;
+ if not(Field2 = EmptyStr) then Brackets:=brBegin
+ else Brackets:=brNone;
+
+  for i:=0 to Cnt do
+    if not(Checked[i]) then
+     begin
+      AddToFilter(Field1,TStringList(Pointer(Box.Tag)^).Strings[i],operation,Brackets);
+     if not(Field2 = EmptyStr) then
+      AddToFilter(Field2,TStringList(Pointer(Box.Tag)^).Strings[i],operation,brEnd,orExpr);
+     end;
+  if Val and not(Checked[Count-1]) then
+    AddToFilter(Field1,TStringList(Pointer(Box.Tag)^).Strings[Count-1],'=',brNone);
+ end;
+end;
+
+ procedure ExecuteComboBoxFilter(Sender: TObject;DataSet: TDataSet;FieldExpression,Field,Operation: string);
+ begin
+  with RepDataModule do
+  begin
+   if DataSet.Active then
+     with (Sender as TComboBox)  do
+      if (ItemIndex<>-1) and (ItemIndex<>0) then
+       AddToFilter(FieldExpression,DataSet.FieldByName(Field).AsString,Operation,brNone);
+  end;
+ end;
+
+begin
+First:=True;
+with RepDataModule,DataSet do
+ begin
+  FilterString:=EmptyStr;
+  if (scUser.ItemIndex>0)and(scUser.DataSource.DataSet.Active) then
+  AddToFilter('OPERATORID',scUser.DataSource.DataSet.FieldByName('ID').AsString,'=',brNone);
+  ExecuteCheckBoxFilter(clbValute,'DebitCurrencyID','CreditCurrencyID',True);
+  ExecuteCheckBoxFilter(clbOperation,'OperationType',EmptyStr,False);
+  ExecuteComboBoxFilter(scDebetFilial,FilialDebetData,'DebFil','ID','=');
+  ExecuteComboBoxFilter(scKreditFilial,FilialCreditData,'CredFil','ID','=');
+  Filter:=FilterString;
+  Filtered:=True;
+ end;
+end;
+
+procedure TOut_RepairFrm.clbValuteClickCheck(Sender: TObject);
+begin
+ if cbFiltrOptions.Checked then
+  FilterExecute(Sender);
+end;
+
+procedure TOut_RepairFrm.clbOperationClickCheck(Sender: TObject);
+begin
+ if cbFiltrOptions.Checked then
+  FilterExecute(Sender);
+end;
+
+procedure TOut_RepairFrm.scDebetFilialChange(Sender: TObject);
+begin
+ if cbFiltrOptions.Checked then
+  FilterExecute(Sender);
+end;
+
+procedure TOut_RepairFrm.scKreditFilialChange(Sender: TObject);
+begin
+ if cbFiltrOptions.Checked then
+  FilterExecute(Sender);
+end;
+
+procedure TOut_RepairFrm.DateStatementExecute(Sender: TObject);
+begin
+RepDataModule.TransactionData.SetVariable('DAT',dtpOpDat.DateTime);
+end;
+
+procedure TOut_RepairFrm.UpdTransExecute(Sender: TObject);
+begin
+ ShowEditForm.Execute;
+end;
+
+procedure TOut_RepairFrm.TrFullRefreshExecute(Sender: TObject);
+begin
+RepDataModule.FullRefresh;
+end;
+
+procedure TOut_RepairFrm.tbFilialShow(Sender: TObject);
+begin
+ FilterShowAction(TFilterType(TComponent(Sender).Tag));
+end;
+
+procedure TOut_RepairFrm.tbOrderShow(Sender: TObject);
+begin
+ FilterShowAction(TFilterType(TComponent(Sender).Tag));
+end;
+
+procedure TOut_RepairFrm.tbFilterShow(Sender: TObject);
+begin
+ FilterShowAction(TFilterType(TComponent(Sender).Tag));
+end;
+
+procedure TOut_RepairFrm.sbUpClick(Sender: TObject);
+
+procedure ReenableControls(Sender: TControl);
+ var
+  i: Integer;
+ begin
+ with Sender.Parent do
+  for i:=0 to ControlCount-1 do
+     Controls[i].Enabled:=True;
+  Sender.Enabled:=False;
+ end;
+begin
+ if Sender=sbUp then FOrder:=soBackward
+ else if Sender=sbMiddle then FOrder:=soNone
+ else if Sender=sbDown then FOrder:=soForward;
+   ReenableControls(TControl(sender));
+end;
+
+procedure TOut_RepairFrm.sbDownClick(Sender: TObject);
+
+procedure ReenableControls(Sender: TControl);
+ var
+  i: Integer;
+ begin
+ with Sender.Parent do
+  for i:=0 to ControlCount-1 do
+     Controls[i].Enabled:=True;
+  Sender.Enabled:=False;
+ end;
+begin
+ if Sender=sbUp then FOrder:=soBackward
+ else if Sender=sbMiddle then FOrder:=soNone
+ else if Sender=sbDown then FOrder:=soForward;
+   ReenableControls(TControl(sender));
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TOut_RepairFrm,
+    Class_Out_RepairFrm,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

@@ -1,0 +1,396 @@
+object SMSForm: TSMSForm
+  Left = 0
+  Top = 0
+  BorderIcons = [biSystemMenu]
+  Caption = 'SMSForm'
+  ClientHeight = 429
+  ClientWidth = 883
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poDesktopCenter
+  OnCanResize = FormCanResize
+  OnCreate = FormCreate
+  PixelsPerInch = 96
+  TextHeight = 13
+  object PageControl1: TPageControl
+    Left = 0
+    Top = 0
+    Width = 883
+    Height = 429
+    ActivePage = TabSheet1
+    Align = alClient
+    TabOrder = 0
+    object TabSheet1: TTabSheet
+      Caption = '   SMS      '
+      object XFPanel2: TXFPanel
+        Left = 0
+        Top = 0
+        Width = 875
+        Height = 351
+        Align = alClient
+        TabOrder = 0
+        object SMSMemo: TMemo
+          Left = 1
+          Top = 32
+          Width = 873
+          Height = 318
+          Align = alClient
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          MaxLength = 148
+          ParentFont = False
+          TabOrder = 0
+          OnChange = SMSMemoChange
+        end
+        object XFPanel3: TXFPanel
+          Left = 1
+          Top = 1
+          Width = 873
+          Height = 31
+          Align = alTop
+          TabOrder = 1
+          object XFLabel2: TXFLabel
+            Left = 376
+            Top = 8
+            Width = 65
+            Height = 13
+            Caption = 'Standart SMS'
+          end
+          object XFRadioButton1: TXFRadioButton
+            Left = 50
+            Top = 4
+            Width = 113
+            Height = 17
+            Caption = 'Hams'#305'na g'#246'nd'#601'r      '
+            Ctl3D = True
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = [fsBold, fsUnderline]
+            ParentCtl3D = False
+            ParentFont = False
+            TabOrder = 0
+          end
+          object XFRadioButton2: TXFRadioButton
+            Left = 200
+            Top = 5
+            Width = 113
+            Height = 17
+            Caption = 'Se'#231'ilmi'#351#601' g'#246'nd'#601'r  '
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = [fsBold, fsUnderline]
+            ParentFont = False
+            TabOrder = 1
+          end
+          object DBLookupComboBox1: TDBLookupComboBox
+            Left = 464
+            Top = 6
+            Width = 172
+            Height = 21
+            KeyField = 'ID'
+            ListField = 'DESCRIPTION'
+            ListSource = Dsrc_sms
+            TabOrder = 2
+            OnCloseUp = DBLookupComboBox1CloseUp
+          end
+        end
+        object DTP1: TDateTimePicker
+          Left = 272
+          Top = 56
+          Width = 186
+          Height = 21
+          Date = 42018.536464143520000000
+          Time = 42018.536464143520000000
+          TabOrder = 2
+        end
+        object Edit2: TEdit
+          Left = 15
+          Top = 56
+          Width = 202
+          Height = 21
+          TabOrder = 3
+          Text = 'Edit2'
+        end
+        object Memo1: TMemo
+          Left = 79
+          Top = 141
+          Width = 762
+          Height = 303
+          Lines.Strings = (
+            '')
+          TabOrder = 4
+        end
+      end
+      object XFPanel1: TXFPanel
+        Left = 0
+        Top = 351
+        Width = 875
+        Height = 50
+        Align = alBottom
+        TabOrder = 1
+        object XFLabel1: TXFLabel
+          Left = 4
+          Top = 28
+          Width = 292
+          Height = 14
+          Caption = '* Diqq'#601't! Mesaj m'#601'tni yaln'#305'z ingilis h'#601'rfl'#601'ri il'#601' yaz'#305'lmal'#305'd'#305'r'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clRed
+          Font.Height = -12
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+        end
+        object XFBitBtn1: TXFBitBtn
+          Left = 302
+          Top = 17
+          Width = 62
+          Height = 25
+          Caption = 'G'#246'nd'#601'r'
+          DoubleBuffered = True
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentDoubleBuffered = False
+          ParentFont = False
+          TabOrder = 0
+          OnClick = XFBitBtn1Click
+        end
+        object Edit1: TEdit
+          Left = 15
+          Top = 4
+          Width = 41
+          Height = 21
+          Color = clMenu
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+          ReadOnly = True
+          TabOrder = 1
+          Text = '148'
+        end
+      end
+    end
+    object TabSheet2: TTabSheet
+      Caption = '   Email  '
+      ImageIndex = 1
+      object XFPanel4: TXFPanel
+        Left = 0
+        Top = 366
+        Width = 875
+        Height = 35
+        Align = alBottom
+        TabOrder = 0
+        object XFBitBtn2: TXFBitBtn
+          Left = 238
+          Top = 7
+          Width = 62
+          Height = 25
+          Caption = 'G'#246'nd'#601'r'
+          DoubleBuffered = True
+          ParentDoubleBuffered = False
+          TabOrder = 0
+        end
+      end
+      object XFPanel5: TXFPanel
+        Left = 0
+        Top = 0
+        Width = 875
+        Height = 366
+        Align = alClient
+        TabOrder = 1
+        object EmailMemo: TMemo
+          Left = 1
+          Top = 26
+          Width = 873
+          Height = 339
+          Align = alClient
+          TabOrder = 0
+          Touch.ParentTabletOptions = False
+          Touch.TabletOptions = [toPressAndHold]
+        end
+        object XFPanel6: TXFPanel
+          Left = 1
+          Top = 1
+          Width = 873
+          Height = 25
+          Align = alTop
+          TabOrder = 1
+          object XFRadioButton3: TXFRadioButton
+            Left = 50
+            Top = 4
+            Width = 122
+            Height = 15
+            BiDiMode = bdLeftToRight
+            Caption = 'Hams'#305'na g'#246'nd'#601'r      '
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = [fsBold, fsUnderline]
+            ParentBiDiMode = False
+            ParentFont = False
+            ParentShowHint = False
+            ShowHint = False
+            TabOrder = 0
+          end
+          object XFRadioButton4: TXFRadioButton
+            Left = 200
+            Top = 2
+            Width = 130
+            Height = 17
+            BiDiMode = bdLeftToRight
+            Caption = 'Se'#231'ilmi'#351#601' g'#246'nd'#601'r  '
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = [fsBold, fsUnderline]
+            ParentBiDiMode = False
+            ParentFont = False
+            TabOrder = 1
+          end
+        end
+      end
+    end
+  end
+  object sms: TOracleDataSet
+    SQL.Strings = (
+      'select*from cust_sms where id in(1)')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000070000000A0000004C004F00470049004E0001000000000010000000
+      500041005300530057004F00520044000100000000000A000000540049005400
+      4C00450001000000000016000000420055004C004B004D004500530053004100
+      4700450001000000000012000000500048004F004E0045005F004D004F004200
+      0100000000000400000049004400010000000000120000004F00500045005200
+      4100540049004F004E00010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 24
+    Top = 56
+    object smsLOGIN: TWideStringField
+      FieldName = 'LOGIN'
+      Size = 5
+    end
+    object smsPASSWORD: TWideStringField
+      FieldName = 'PASSWORD'
+      Size = 8
+    end
+    object smsTITLE: TWideStringField
+      FieldName = 'TITLE'
+      Size = 5
+    end
+    object smsBULKMESSAGE: TWideStringField
+      FieldName = 'BULKMESSAGE'
+      Size = 11
+    end
+    object smsPHONE_MOB: TWideStringField
+      FieldName = 'PHONE_MOB'
+      Size = 120
+    end
+    object smsID: TIntegerField
+      FieldName = 'ID'
+      Required = True
+    end
+    object smsOPERATION: TWideStringField
+      FieldName = 'OPERATION'
+      Size = 6
+    end
+  end
+  object ODS_FilesPath: TOracleDataSet
+    SQL.Strings = (
+      'select description from settings where name='#39'GoAmlFilesPath'#39)
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      0500000001000000160000004400450053004300520049005000540049004F00
+      4E00010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 120
+    Top = 48
+    object ODS_FilesPathDESCRIPTION: TWideStringField
+      FieldName = 'DESCRIPTION'
+      Size = 1024
+    end
+  end
+  object sys: TOracleDataSet
+    SQL.Strings = (
+      'select sysdate from dual')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000010000000E0000005300590053004400410054004500010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 264
+    Top = 96
+    object sysSYSDATE: TDateTimeField
+      FieldName = 'SYSDATE'
+    end
+  end
+  object HTTPRIO1: THTTPRIO
+    URL = 'http://192.168.2.218:8080/SmsSending/SmsSending?WSDL'
+    HTTPWebNode.UseUTF8InHeader = True
+    HTTPWebNode.InvokeOptions = [soIgnoreInvalidCerts, soAutoCheckAccessPointViaUDDI]
+    HTTPWebNode.WebNodeOptions = []
+    Converter.Options = [soSendMultiRefObj, soTryAllSchema, soRootRefNodesToBody, soCacheMimeResponse, soUTF8EncodeXML]
+    Left = 136
+    Top = 104
+  end
+  object Ods_sms: TOracleDataSet
+    SQL.Strings = (
+      'SELECT* FROM sms_templates where tip=2')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000050000000400000049004400010000000000080000004E0041004D00
+      450001000000000010000000540045004D0050004C0041005400450001000000
+      0000160000004400450053004300520049005000540049004F004E0001000000
+      000006000000540049005000010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 592
+    Top = 88
+    object Ods_smsID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object Ods_smsNAME: TWideStringField
+      FieldName = 'NAME'
+      Required = True
+      Size = 100
+    end
+    object Ods_smsTEMPLATE: TWideStringField
+      FieldName = 'TEMPLATE'
+      Required = True
+      Size = 300
+    end
+    object Ods_smsDESCRIPTION: TWideStringField
+      FieldName = 'DESCRIPTION'
+      Size = 50
+    end
+    object Ods_smsTIP: TFloatField
+      FieldName = 'TIP'
+    end
+  end
+  object Dsrc_sms: TDataSource
+    DataSet = Ods_sms
+    Left = 680
+    Top = 72
+  end
+end

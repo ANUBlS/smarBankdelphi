@@ -1,0 +1,22 @@
+library MainTravelProj;
+
+uses
+  ComServ,
+  MainTravelProj_TLB in 'MainTravelProj_TLB.pas',
+  MainTravelImpl in 'MainTravelImpl.pas' {MainTravel: TActiveForm} {MainTravel: CoClass},
+  DMMainTravelImpl in 'DMMainTravelImpl.pas' {DMMainTravel: TDataModule};
+
+{$E ocx}
+
+exports
+  DllGetClassObject,
+  DllCanUnloadNow,
+  DllRegisterServer,
+  DllUnregisterServer;
+
+{$R *.TLB}
+
+{$R *.RES}
+
+begin
+end.

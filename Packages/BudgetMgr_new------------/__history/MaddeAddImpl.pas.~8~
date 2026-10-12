@@ -1,0 +1,54 @@
+unit MaddeAddImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ExtCtrls, DBCtrls, Grids, DBGrids;
+
+type
+  TMaddeAdd = class(TForm)
+    DBGrid1: TDBGrid;
+    DBNavigator1: TDBNavigator;
+    procedure FormCanResize(Sender: TObject; var NewWidth, NewHeight: Integer;
+      var Resize: Boolean);
+    procedure DBNavigator1Click(Sender: TObject; Button: TNavigateBtn);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  MaddeAdd: TMaddeAdd;
+
+implementation
+
+{$R *.dfm}
+ uses DmBudcetImpl,MainformImpl;
+procedure TMaddeAdd.DBNavigator1Click(Sender: TObject; Button: TNavigateBtn);
+
+begin
+{case Button of
+    nbDelete :
+    if (MessageDlg('Вы действительно хотите удалить запись?', mtConfirmation, [mbYes, mbNo], 0) = mrYes) then
+    DBNavigator1.DataSource.DataSet.delete else // к примеру. короче, ваш код удаления.
+    DmBudcet.MaddeDSet.Session.Rollback;
+  end;
+   DmBudcet.MaddeDSet.Refresh;     }
+end;
+
+procedure TMaddeAdd.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+resize:=False
+end;
+
+procedure TMaddeAdd.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+//ad:=DmBudcet.MaddSrc.DataSet.FieldByName('name').AsString;
+DmBudcet.MaddSrc.DataSet.Refresh;
+end;
+
+end.

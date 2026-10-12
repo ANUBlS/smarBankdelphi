@@ -1,0 +1,92 @@
+unit DateintervalUnit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ExtCtrls,  StdCtrls, Buttons, Mask, DBCtrlsEh, ComCtrls;
+
+type
+  TDateintervalForm = class(TForm)
+    Panel1: TPanel;
+    StaticText1: TStaticText;
+    StaticText2: TStaticText;
+    BitBtn1: TBitBtn;
+    DateTimePickerStart: TDateTimePicker;
+    DateTimePickerEnd: TDateTimePicker;
+    BitBtn2: TBitBtn;
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure BitBtn1Click(Sender: TObject);
+    procedure BitBtn2Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  DateintervalForm: TDateintervalForm;
+
+implementation
+  uses CustAnalysDataModuleImpl,SystemState, CreditsinDateUnit;
+{$R *.DFM}
+
+procedure TDateintervalForm.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+   Resize := False;
+end;
+
+procedure TDateintervalForm.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+   if Ord(Key) = VK_ESCAPE  then Close;
+end;
+
+procedure TDateintervalForm.BitBtn1Click(Sender: TObject);
+
+ procedure ShowRestForm(CrdID : Integer;D1,D2 : TDateTime);
+  begin
+
+    with CustAnalysDataModule.CreditsinDateDataSet do
+    begin
+      ClearVariables;
+      SetVariable('CrdID',CrdID);
+      SetVariable('D1',D1);
+      SetVariable('D2',D2);
+      Open;
+    end;
+
+    with CreditinDateForm do
+      ShowModal;
+
+    with CustAnalysDataModule.CreditsinDateDataSet do
+         Close;
+
+  end;
+
+var
+  CreditID : Integer;
+  D1,D2 : TDateTime;
+
+begin
+  CreditID := CustAnalysDataModule.CreditAnalysDataSet.FieldByName('creditid').ASInteger;
+  D1 := DateTimePickerStart.Date;
+  D2 := DateTimePickerEnd.Date;
+  ShowRestForm(CreditID,D1,D2);
+end;
+
+procedure TDateintervalForm.BitBtn2Click(Sender: TObject);
+begin
+   Close;
+end;
+
+procedure TDateintervalForm.FormCreate(Sender: TObject);
+begin
+   DateTimePickerStart.Date := Get_CurrentDate;
+   DateTimePickerEnd.Date := Get_CurrentDate;
+end;
+
+end.

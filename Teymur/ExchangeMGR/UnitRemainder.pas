@@ -1,0 +1,81 @@
+﻿unit UnitRemainder;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ExtCtrls, Grids, DBGridEh, DBGridEhGrouping, CMExcelExport, Menus, GridsEh;
+
+type
+  TFormRemainder = class(TForm)
+    Panel1: TPanel;
+    Panel2: TPanel;
+    Panel3: TPanel;
+    Panel4: TPanel;
+    Panel5: TPanel;
+    DBGridEh1: TDBGridEh;
+    PopupMenu1: TPopupMenu;
+    Excel1: TMenuItem;
+    CMExcelExport1: TCMExcelExport;
+    procedure FormCreate(Sender: TObject);
+    procedure Excel1Click(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormRemainder: TFormRemainder;
+
+implementation
+    uses UnitDateExch,sboapiDataModuleImpl, SBTranslateProc;
+{$R *.DFM}
+
+procedure TFormRemainder.Excel1Click(Sender: TObject);
+begin
+   if DBGridEh1.DataSource.DataSet.RecordCount=0 then begin
+                                                       ShowMessage('Heç bir məlumat tapılmadı!...');
+                                                       exit;
+                                                     end;
+
+
+  with CMExcelExport1 do
+  begin
+    DBGridEh1.DataSource.DataSet.Last;
+    DBGridEh1.DataSource.DataSet.FieldByName('val_id').Visible:=false;
+    DBGridEh1.DataSource.DataSet.FieldByName('val_full_name').Visible:=false;
+    DBGridEh1.DataSource.DataSet.FieldByName('VAL_PURCHASE_COURSE').Visible:=false;
+    DBGridEh1.DataSource.DataSet.FieldByName('VAL_SELLING_COURSE').Visible:=false;
+    DBGridEh1.DataSource.DataSet.FieldByName('VAL_NB_COURSE').Visible:=false;
+    DBGridEh1.DataSource.DataSet.FieldByName('EX_ID').Visible:=false;
+    DBGridEh1.DataSource.DataSet.FieldByName('DAT').Visible:=false;
+    DBGridEh1.DataSource.DataSet.FieldByName('USR_ID').Visible:=false;
+    DBGridEh1.DataSource.DataSet.FieldByName('TIM').Visible:=false;
+    Connect;
+    ExportDataset(DBGridEh1.DataSource.DataSet, 'Qalıqlar',true,false);
+    Disconnect;
+  end;
+end;
+
+procedure TFormRemainder.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+ {   DBGridEh1.DataSource.DataSet.Last;
+    DBGridEh1.DataSource.DataSet.FieldByName('val_id').Visible:=True;
+    DBGridEh1.DataSource.DataSet.FieldByName('val_full_name').Visible:=True;
+    DBGridEh1.DataSource.DataSet.FieldByName('VAL_PURCHASE_COURSE').Visible:=True;
+    DBGridEh1.DataSource.DataSet.FieldByName('VAL_SELLING_COURSE').Visible:=True;
+    DBGridEh1.DataSource.DataSet.FieldByName('VAL_NB_COURSE').Visible:=True;
+    DBGridEh1.DataSource.DataSet.FieldByName('EX_ID').Visible:=True;
+    DBGridEh1.DataSource.DataSet.FieldByName('DAT').Visible:=True;
+    DBGridEh1.DataSource.DataSet.FieldByName('USR_ID').Visible:=True;
+    DBGridEh1.DataSource.DataSet.FieldByName('TIM').Visible:=True;  }
+end;
+
+procedure TFormRemainder.FormCreate(Sender: TObject);
+begin
+ SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+end.

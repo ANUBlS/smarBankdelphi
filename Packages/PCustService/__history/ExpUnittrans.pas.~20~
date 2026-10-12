@@ -1,0 +1,373 @@
+﻿unit ExpUnittrans;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, XFSCtrls, Mask, DBCtrlsEh, ExtCtrls, DB, OracleData,
+  DBGridEh, DBLookupEh, CurrencyEdit, DBCtrls, Oracle;
+
+type
+  TFormepxtrans = class(TForm)
+    XFPanel1: TXFPanel;
+    XFPanel2: TXFPanel;
+    Ods_type: TOracleDataSet;
+    Ods_Valute: TOracleDataSet;
+    DS_type: TDataSource;
+    DS_valute: TDataSource;
+    XFPanel3: TXFPanel;
+    XFPanel7: TXFPanel;
+    XFLabel7: TXFLabel;
+    XFLabel11: TXFLabel;
+    XFPanel8: TXFPanel;
+    XFLabel6: TXFLabel;
+    Editmuxbirid: TEdit;
+    Editmuxbirname: TEdit;
+    XFPanel9: TXFPanel;
+    XFLabel12: TXFLabel;
+    Editdilingid: TEdit;
+    Editdilingname: TEdit;
+    XFPanel10: TXFPanel;
+    XFLabel13: TXFLabel;
+    Editqarsid: TEdit;
+    editqarsname: TEdit;
+    XFLabel5: TXFLabel;
+    XFLabel15: TXFLabel;
+    DS_valute1: TDataSource;
+    Ods_Valute1: TOracleDataSet;
+    Ods_Valute1VALUTE: TIntegerField;
+    Ods_Valute1VAL_NAME: TWideStringField;
+    Ods_Valute1VALU_NAME: TWideStringField;
+    XFButton1: TXFButton;
+    XFButton2: TXFButton;
+    CurrencyEdit2: TCurrencyEdit;
+    XFLabel16: TXFLabel;
+    XFLabel17: TXFLabel;
+    XFLabel18: TXFLabel;
+    XFLabel20: TXFLabel;
+    DBLookupComb_type: TDBLookupComboBox;
+    odscust: TOracleDataSet;
+    odscustID: TIntegerField;
+    odscustCUST_NAME: TWideStringField;
+    cust_exch: TOraclePackage;
+    XFLabel9: TXFLabel;
+    RadyoTypA: TXFRadioButton;
+    XFLabel10: TXFLabel;
+    RadyoTypS: TXFRadioButton;
+    XFLabel14: TXFLabel;
+    XFLabel19: TXFLabel;
+    CurrencyEdit1: TCurrencyEdit;
+    XFLabel21: TXFLabel;
+    XFLabel22: TXFLabel;
+    CurrencyEdit3: TCurrencyEdit;
+    XFLabel8: TXFLabel;
+    XFLabel23: TXFLabel;
+    Ods_ValuteVALUTE: TIntegerField;
+    Ods_ValuteVAL_NAME: TWideStringField;
+    Ods_ValuteVALU_NAME: TWideStringField;
+    Ods_ValuteRATE: TFloatField;
+    Ods_Valute1RATE: TFloatField;
+    XFLabel3: TXFLabel;
+    XFLabel4: TXFLabel;
+    DBLookupCombVal: TDBLookupComboboxEh;
+    XFLabel1: TXFLabel;
+    XFLabel2: TXFLabel;
+    DBLookupCombVal1: TDBLookupComboboxEh;
+    XFLabel24: TXFLabel;
+    procedure DBLookupCombVal1CloseUp(Sender: TObject; Accept: Boolean);
+    procedure DBLookupCombValCloseUp(Sender: TObject; Accept: Boolean);
+    procedure XFButton2Click(Sender: TObject);
+    procedure XFButton1Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure EditmuxbiridKeyPress(Sender: TObject; var Key: Char);
+    procedure EditmuxbirnameKeyPress(Sender: TObject; var Key: Char);
+    procedure EditqarsidKeyPress(Sender: TObject; var Key: Char);
+    procedure editqarsnameKeyPress(Sender: TObject; var Key: Char);
+    procedure RadyoTypAClick(Sender: TObject);
+    procedure RadyoTypSClick(Sender: TObject);
+    procedure CurrencyEdit1Change(Sender: TObject);
+    procedure CurrencyEdit3Change(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+     function RoundNew(X: Double; Precision: Integer ): Double;
+  end;
+
+var
+  Formepxtrans: TFormepxtrans;
+
+implementation
+uses sboapiDataModuleImpl  , UnitDataModPCustService;
+{$R *.dfm}
+  function TFormepxtrans.RoundNew(X: Double; Precision: Integer ): Double;
+var
+  ScaledFractPart, Temp : Double;
+begin
+  ScaledFractPart := Frac(X)*Precision;
+  Temp := Frac(ScaledFractPart);
+  ScaledFractPart := Int(ScaledFractPart);
+  //if Temp >= 0.5 then ScaledFractPart := ScaledFractPart + 1; ***Closed by Hesen R.***
+  //if Temp <= -0.5 then ScaledFractPart := ScaledFractPart - 1; ***Closed by Hesen R.***
+  if Round(Temp*100) >= 50 then ScaledFractPart := ScaledFractPart + 1; //***Written by Hesen R.***
+  if Round(Temp*100) <= -50 then ScaledFractPart := ScaledFractPart - 1; //***Written by Hesen R.***
+  RoundNew := Int(X) + ScaledFractPart/Precision;
+end;
+
+procedure CutEditText(Sender: TObject);//Eldarix
+var
+ X, Sel: Integer;
+begin
+with TCurrencyEdit(Sender) do
+ begin
+ if DecimalSeparator=ThousandSeparator then Exit;
+  if Pos(DecimalSeparator,Text) = 0 then Exit;
+  Sel :=SelStart;
+  X :=Length(Text)-Pos(DecimalSeparator,Text)-CurrencyDecimals;
+  if (X>0) then
+   begin
+    Text:=Copy(Text, 0, (Length(Text)-X));
+    SelStart :=Sel;
+   end;
+ end;
+end;
+procedure TFormepxtrans.CurrencyEdit1Change(Sender: TObject);
+var
+lammount:Currency;
+begin
+CutEditText(Sender);
+ if TCurrencyEdit(Sender).Text =EmptyStr then TCurrencyEdit(Sender).Value :=0;
+
+  LAmmount:=RoundNew(CurrencyEdit1.Value * CurrencyEdit2.Value, 1000000);
+  CurrencyEdit3.Value :=RoundNew(LAmmount , 100);
+
+end;
+
+procedure TFormepxtrans.CurrencyEdit3Change(Sender: TObject);
+var
+lammount:Currency;
+begin
+CutEditText(Sender);
+ if TCurrencyEdit(Sender).Text =EmptyStr then TCurrencyEdit(Sender).Value :=0;
+
+  LAmmount:=RoundNew(CurrencyEdit3.Value / CurrencyEdit2.Value, 1000000);
+  CurrencyEdit1.Value :=RoundNew(LAmmount , 100);
+end;
+
+procedure TFormepxtrans.DBLookupCombVal1CloseUp(Sender: TObject;
+  Accept: Boolean);
+begin
+if DBLookupCombVal.KeyValue>-1 then
+begin
+XFLabel15.Caption:=Ods_ValuteVAL_NAME.AsString+'\'+Ods_Valute1VAL_NAME.AsString;
+end;
+XFLabel23.Caption:=Ods_Valute1VAL_NAME.AsString+'\'+Ods_Valute1rate.AsString
+end;
+
+procedure TFormepxtrans.DBLookupCombValCloseUp(Sender: TObject;
+  Accept: Boolean);
+begin
+if DBLookupCombVal1.KeyValue>-1 then
+begin
+XFLabel15.Caption:=Ods_ValuteVAL_NAME.AsString+'\'+Ods_Valute1VAL_NAME.AsString;
+end;
+XFLabel8.Caption:=Ods_ValuteVAL_NAME.AsString+'\'+ Ods_Valuterate.AsString;
+end;
+
+procedure TFormepxtrans.EditmuxbiridKeyPress(Sender: TObject; var Key: Char);
+begin
+ if ord(Key) = 13 then
+  begin
+
+  with odscust do
+  begin
+   Sql[8]:='';
+       close;
+       if Editmuxbirid.Text <> '' then
+      SQL[8] := SQL[8] + ' and ID = ' + Editmuxbirid.Text;
+     open;
+     if odscust.RecordCount=1 then
+        Editmuxbirname.Text:=odscust.FieldByName('cust_name').AsString;
+   end;
+  end;
+end;
+
+procedure TFormepxtrans.EditmuxbirnameKeyPress(Sender: TObject; var Key: Char);
+begin
+ if ord(Key) = 13 then
+  begin
+
+  with odscust do
+  begin
+   Sql[8]:='';
+       close;
+      if Editmuxbirname.Text <> '' then
+      SQL[8] := SQL[8] + ' and nvl(upper(cust_name),0) like upper (''%' +
+        Editmuxbirname.Text + '%'')';
+      open;
+      if odscust.RecordCount=1 then
+       Editmuxbirid.Text:=odscust.FieldByName('id').AsString;
+       end;
+  end;
+end;
+
+procedure TFormepxtrans.EditqarsidKeyPress(Sender: TObject; var Key: Char);
+begin
+if ord(Key) = 13 then
+  begin
+
+  with odscust do
+  begin
+   Sql[8]:='';
+       close;
+       if Editqarsid.Text <> '' then
+      SQL[8] := SQL[8] + ' and ID = ' + Editqarsid.Text;
+     open;
+     if odscust.RecordCount=1 then
+        editqarsname.Text:=odscust.FieldByName('cust_name').AsString;
+   end;
+  end;
+end;
+
+procedure TFormepxtrans.editqarsnameKeyPress(Sender: TObject; var Key: Char);
+begin
+if ord(Key) = 13 then
+  begin
+
+  with odscust do
+  begin
+   Sql[8]:='';
+       close;
+      if editqarsname.Text <> '' then
+      SQL[8] := SQL[8] + ' and nvl(upper(cust_name),0) like upper (''%' +
+        editqarsname.Text + '%'')';
+      open;
+      if odscust.RecordCount=1 then
+       Editqarsid.Text:=odscust.FieldByName('id').AsString;
+       end;
+  end;
+end;
+
+procedure TFormepxtrans.FormShow(Sender: TObject);
+begin
+Editdilingid.Text:=DataModPCustService.ODS_Customers_Phys_FSid.AsString;
+Editdilingname.Text:=DataModPCustService.ODS_CUSTOMERS_PHYS_FScust_name.AsString;
+DBLookupComb_type.SetFocus;
+end;
+
+procedure TFormepxtrans.RadyoTypAClick(Sender: TObject);
+begin
+if RadyoTypA.Checked=true then
+  begin
+  CurrencyEdit1.Enabled:=true;
+  CurrencyEdit1.color:=clwindow;
+  end;
+RadyoTypS.Checked:=false;
+CurrencyEdit3.Enabled:=false;
+CurrencyEdit3.color:=clsilver;
+
+end;
+
+procedure TFormepxtrans.RadyoTypSClick(Sender: TObject);
+begin
+if RadyoTypS.Checked=true then
+  begin
+  CurrencyEdit3.Enabled:=true;
+  CurrencyEdit3.color:=clwindow;
+  end;
+
+RadyoTypA.Checked:=false;
+CurrencyEdit1.Enabled:=false;
+CurrencyEdit1.color:=clsilver;
+
+end;
+
+procedure TFormepxtrans.XFButton1Click(Sender: TObject);
+ var
+ nov :integer;
+
+begin
+if DBLookupComb_type.Text='' then
+  begin
+ ShowMessage('Əməliyyatın  tipi sahəsi seçilməyib  ! ');
+  exit
+  end;
+
+ if CurrencyEdit2.value<=0 then
+  begin
+ ShowMessage('Kursu daxil edin  ! ');
+  exit
+  end;
+
+ if (RadyoTypA.Checked=false )and (RadyoTypS.Checked=false) then
+begin
+  Showmessage('Əməliyyatın  növü sahəsi seçilməyib  ! ');
+  exit
+end;
+
+  if DBLookupCombVal.text='' then
+  begin
+ ShowMessage('Alış valyuta sahəsi seçilməyib  ! ');
+  exit ;
+  end;
+  if (RadyoTypA.Checked)and (CurrencyEdit1.Value<=0) then
+  begin
+ showmessage('Məbləği daxil edin !');
+  exit;
+  end;
+
+  if DBLookupCombVal1.text='' then
+  begin
+ ShowMessage('Satış valyuta sahəsi seçilməyib  ! ');
+  exit ;
+  end;
+
+ if (RadyoTypS.Checked)and (CurrencyEdit3.Value<=0) then
+  begin
+ showmessage('Məbləği daxil edin !');
+  exit;
+  end;
+
+  if (Editmuxbirid.Text='')and (Editmuxbirname.Text='') then
+   begin
+     showmessage('Müxbir bank müştərisi seçilməyib  !');
+     exit;
+   end;
+
+  if (Editqarsid.Text='')and (editqarsname.Text='') then
+   begin
+     showmessage('Qarşı bank müştərisi seçilməyib  !');
+     exit;
+   end;
+
+ if RadyoTypA.Checked then
+ begin
+   nov:=1;
+ end;
+   if RadyoTypS.Checked then
+ begin
+   nov:=2;
+ end;
+   if MessageDlg(' Yaddaşa yazmaq istəyirsinizmi ?',
+   mtConfirmation, mbYesNoCancel, 0) = mrYes then
+
+     begin
+   cust_exch.CallProcedure('cust_exchtrans',
+     [nov,
+      DBLookupComb_type.KeyValue,
+      DBLookupCombVal.KeyValue,
+      DBLookupCombVal1.KeyValue,
+      Editdilingid.Text,
+      Editmuxbirid.Text,
+      Editqarsid.Text,
+      CurrencyEdit2.Value,
+      CurrencyEdit1.Value]);
+     end;
+end;
+
+procedure TFormepxtrans.XFButton2Click(Sender: TObject);
+begin
+Formepxtrans.Close
+end;
+
+end.

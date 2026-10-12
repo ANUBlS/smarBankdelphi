@@ -1,0 +1,286 @@
+unit AccountPropertiesForm_Unit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ExtCtrls, StdCtrls, HintBox, DBCtrls, Mask, ComCtrls, Db, OracleData,
+  ToolWin, ActnList, Buttons;
+
+type
+  TAccountPropertiesForm = class(TForm)
+    Accounts: TDataSource;
+    AccountsData: TOracleDataSet;
+    DayStartStateGB: TGroupBox;
+    Label8: TLabel;
+    DBEdit6: TDBEdit;
+    Label9: TLabel;
+    DBEdit7: TDBEdit;
+    AccountStateGB: TGroupBox;
+    Label10: TLabel;
+    DBEdit8: TDBEdit;
+    Label11: TLabel;
+    DBEdit9: TDBEdit;
+    AccountGB: TGroupBox;
+    AccNoEdit: TDBEdit;
+    CurencyIDEdit: TDBEdit;
+    CurencyNameCB: TDBLookupComboBox;
+    SAccNameCB: TDBLookupComboBox;
+    SAccEdit: TDBEdit;
+    CustomerNameCB: TDBLookupComboBox;
+    CustomerIDEdit: TDBEdit;
+    OpenDateEdit: TDateTimePicker;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    PairAccCB: TDBLookupComboBox;
+    Label7: TLabel;
+    AccountNameEdit: TDBEdit;
+    Label6: TLabel;
+    Label12: TLabel;
+    AccountLimitEdit: TDBEdit;
+    AccountFlagsGB: TGroupBox;
+    OkButton: TButton;
+    CancelButton: TButton;
+    Label13: TLabel;
+    ReportSymbolCB: TDBLookupComboBox;
+    ErrorHint: THintBox;
+    SpeedButton1: TSpeedButton;
+    AdditionalSAccsButton: TPanel;
+    DBEdit1: TDBEdit;
+    DBLookupComboBox1: TDBLookupComboBox;
+    DBEdit2: TDBEdit;
+    DBLookupComboBox2: TDBLookupComboBox;
+    DBEdit3: TDBEdit;
+    DBLookupComboBox3: TDBLookupComboBox;
+    Panel2: TPanel;
+    DBEdit4: TDBEdit;
+    DBLookupComboBox4: TDBLookupComboBox;
+    Label14: TLabel;
+    Label15: TLabel;
+    DBLookupComboBox5: TDBLookupComboBox;
+    Button1: TButton;
+    DBText1: TDBText;
+    procedure OkButtonClick(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure CancelButtonClick(Sender: TObject);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure CustomerNameCBCloseUp(Sender: TObject);
+    procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
+    procedure FormKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
+  private
+    { Private declarations }
+    FIsChanged: Boolean;
+  public
+    { Public declarations }
+    procedure FillCBL(FillAndCheck : Boolean;AccFlags : String);
+    function New: Boolean;
+    function Edit: Boolean;
+    property IsChanged: Boolean read FIsChanged;
+  end;
+
+var
+  AccountPropertiesForm: TAccountPropertiesForm;
+
+implementation
+
+uses AccountDataModuleImpl, sboapiDataModuleImpl, SBCore, SBAccount,
+  AccFlagsChangingImpl;
+
+{$R *.DFM}
+
+procedure TAccountPropertiesForm.OkButtonClick(Sender: TObject);
+
+  procedure CheckFields;
+  const
+    sDefEmptyFieldMessage = '"%s" сащясиня гиймят дахил олунмайыб';
+
+    procedure ShowMessage(const Message: String);
+    begin
+      ErrorHint.ShowMessage(Message);
+      Abort;
+    end;
+
+    procedure Check(
+      Field: TField;
+      Message: String = sDefEmptyFieldMessage;
+      FieldName: String = '');
+    begin
+      if Field.IsNull then
+      begin
+        if FieldName = '' then
+          FieldName := Field.DisplayName;
+        Message := Format(Message, [FieldName]);
+        ShowMessage(Message);
+      end;
+    end;
+
+    procedure CheckByName(const FieldName: String);
+    begin
+      with AccountDataModule.AccountsData do
+        Check(FieldByName(FieldName));
+    end;
+
+    procedure CheckByNames(const Names: array of String);
+    var
+      Index: Integer;
+    begin
+      for Index := Low(Names) to High(Names) do
+        CheckByName(Names[Index]);
+    end;
+
+  begin
+    CheckByNames(['AccNo', 'CurrencyID', 'SAcc', 'CustomerID', 'AccName']);
+  end;
+
+{var
+  LastAccountID: Integer;}
+begin
+  CheckFields;
+  FIsChanged := True;
+  with AccountDataModule.AccountsData do
+  begin
+    FieldByName('OpenDate').AsDateTime := Trunc(OpenDateEdit.DateTime);
+    Post;
+    ApplyUpdates([aaInsert, aaUpdate]);
+    CommitUpdates;
+ {   with FieldByName('AccID') do
+      if IsNull then
+        LastAccountID := AccountDataModule.LastAccountID
+      else
+        LastAccountID := Value;}
+//    Sb_SetAccountFlag(LastAccountID, 'Arested', ArestedButton.Down);
+//    Sb_SetAccountFlag(LastAccountID, 'Overdraft', OverdraftButton.Down);
+  end;
+  Close;
+end;
+
+procedure TAccountPropertiesForm.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+  with AccountDataModule.Accounts.DataSet do
+    Cancel;
+end;
+
+procedure TAccountPropertiesForm.CancelButtonClick(Sender: TObject);
+begin
+  Close;
+end;
+
+function TAccountPropertiesForm.New: Boolean;
+begin
+  AccountDataModule.CustomersData.Refresh;
+  AccountDataModule.Accounts.DataSet.Insert;
+  OpenDateEdit.DateTime := Sb_GetSystemDate();
+  FillCBL(false,'');
+//  ArestedButton.Down := False;
+//  OverdraftButton.Down := False;
+  ShowModal;
+  Result := FIsChanged;
+end;
+
+function TAccountPropertiesForm.Edit: Boolean;
+{var
+  AccID: Integer;}
+begin
+  with AccountDataModule.Accounts.DataSet do
+  begin
+    Edit;
+//    AccID := FieldByName('AccID').AsInteger;
+    FillCBL(true,FieldByName('AccFlags').AsString);
+//    ArestedButton.Down := Sb_GetAccountFlag(AccID, 'Arested');
+//    OverdraftButton.Down := Sb_GetAccountFlag(AccID, 'Overdraft');
+    OpenDateEdit.DateTime := Int(FieldByName('OpenDate').AsDateTime);
+  end;
+  FIsChanged := False;
+  ShowModal;
+  Result := IsChanged;
+end;
+
+procedure TAccountPropertiesForm.FillCBL;
+var
+  I : Integer;
+begin
+ // ShowMessage(AccFlags+ ' ------  > Oooooo!!!!!!!');
+  with  AccountDataModule.AccFlagsData do
+  begin
+    First;
+    AccFlagsForm.CLBAccFlags.Items.Clear;
+    while not EOF do
+    begin
+      with AccFlagsForm.CLBAccFlags do
+      I :=Items.Add(FieldByName('Symbol').AsString+' - '+FieldByName('Description').AsString);
+      if FillAndCheck and FlagExsist(AccFlags,FieldByName('Symbol').AsString[1]) then
+      AccFlagsForm.CLBAccFlags.Checked[I] := True;
+      Next;
+    end;
+
+  end;
+end;
+
+procedure TAccountPropertiesForm.FormKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if Ord(Key) = VK_RETURN then
+    SelectNext(ActiveControl, True, True);
+end;
+
+procedure TAccountPropertiesForm.CustomerNameCBCloseUp(Sender: TObject);
+begin
+  with AccountDataModule, Accounts.DataSet do
+    FieldByName('AccName').AsString := Customers.DataSet.FieldByName('Name').AsString;
+end;
+
+procedure TAccountPropertiesForm.FormCloseQuery(Sender: TObject;
+  var CanClose: Boolean);
+begin
+  {$B-}
+  CanClose := (not AccountDataModule.AccountsData.Modified) or
+    (MessageDlg('Dissmiss changes?', mtConfirmation, [mbYes, mbNo], 0) = mrYes);
+  {$B+}
+end;
+
+procedure TAccountPropertiesForm.FormKeyDown(Sender: TObject;
+  var Key: Word; Shift: TShiftState);
+begin
+  if Key = VK_ESCAPE then
+    Close;
+end;
+
+procedure TAccountPropertiesForm.SpeedButton1Click(Sender: TObject);
+begin
+  with Sender as TSpeedButton do
+    AdditionalSAccsButton.Visible := Down; 
+end;
+
+procedure TAccountPropertiesForm.FormCreate(Sender: TObject);
+begin
+  AccFlagsForm := TAccFlagsForm.Create(Self)
+end;
+
+procedure TAccountPropertiesForm.Button1Click(Sender: TObject);
+begin
+  with AccFlagsForm do
+  begin
+    FModified := False;
+    if ((ShowModal = mrOk) and (FModified)) then
+      AccountDataModule.AccountsData.FieldByName('AccFlags').AsString := Result;
+  end;
+end;
+
+procedure TAccountPropertiesForm.FormActivate(Sender: TObject);
+begin
+ with AccountDataModule do
+  if AccountsData.State in [dsInsert] then
+   AccountsData.FieldByName('FILIALID').AsInteger:=SB_ACA.CallIntegerFunction('getuserfilialid', []);
+
+end;
+
+end.

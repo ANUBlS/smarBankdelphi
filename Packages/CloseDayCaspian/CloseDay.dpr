@@ -1,0 +1,23 @@
+library CloseDay;
+
+uses
+  ComServ,
+  CloseDay_TLB in 'CloseDay_TLB.pas',
+  sbCloseDayFormImpl in 'sbCloseDayFormImpl.pas' {sbCloseDayForm: TActiveForm} {sbCloseDayForm: CoClass},
+  ControlManagerImpl in 'ControlManagerImpl.pas' {ControlManagerForm},
+  CloseDayManager in 'CloseDayManager.pas' {FormCloseDay};
+
+{$E ocx}
+
+exports
+  DllGetClassObject,
+  DllCanUnloadNow,
+  DllRegisterServer,
+  DllUnregisterServer;
+
+{$R *.TLB}
+
+{$R *.RES}
+
+begin
+end.

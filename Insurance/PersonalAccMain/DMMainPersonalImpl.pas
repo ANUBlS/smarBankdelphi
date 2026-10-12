@@ -1,0 +1,235 @@
+unit DMMainPersonalImpl;
+
+interface
+
+uses
+  SysUtils, Classes, Oracle, DB, OracleData;
+
+type
+  TDMMainPersonal = class(TDataModule)
+    DSContract1: TOracleDataSet;
+    DSContract1IDC: TFloatField;
+    DSContract1S_NOVU: TWideStringField;
+    DSContract1VALYUTA: TWideStringField;
+    DSContract1POLIS: TWideStringField;
+    DSContract1CLOSE_PREFIX: TIntegerField;
+    DSContract1CUSTNAME: TWideStringField;
+    DSContract1CUSTGROUP: TWideStringField;
+    DSContract1CUSTGROUP_ID: TIntegerField;
+    DSContract1AGENT: TWideStringField;
+    DSContract1AMMOUNT: TFloatField;
+    DSContract1INSSUMM: TFloatField;
+    DSContract1TARIFF: TFloatField;
+    DSContract1FRANSHIZ: TFloatField;
+    DSContract1INS_DATE: TDateTimeField;
+    DSContract1BEGIN_DATE: TDateTimeField;
+    DSContract1END_DATE: TDateTimeField;
+    DSContract1STATE: TIntegerField;
+    DSContract1TYPE_ID: TFloatField;
+    DSContract1MAINFORMGUID: TWideStringField;
+    DSContract1CHANGEGUID: TWideStringField;
+    DSContract1LOANACC_ID: TFloatField;
+    DSContract1CURRACC_ID: TFloatField;
+    DSContract1AGENT_ID: TFloatField;
+    DSContract1KLI_ID: TFloatField;
+    DSContract1SUGGESTIONGUID: TWideStringField;
+    DSContract1POLICYGUID: TWideStringField;
+    DSContract1TABLENAME: TWideStringField;
+    DSContract1ID: TFloatField;
+    DSContract1MARKA: TWideStringField;
+    DSContract1MODEL: TWideStringField;
+    DSContract1DOVLET_N: TWideStringField;
+    DSContract1RENGI: TWideStringField;
+    DSContract1BURAXLIS_ILI: TFloatField;
+    DSContract1MUHERRIK_N: TWideStringField;
+    DSContract1SASSI_N: TWideStringField;
+    DSContract1BAN_N: TWideStringField;
+    DSContract1RENG: TFloatField;
+    DSContract1MODEL_ID: TFloatField;
+    DSContract1MARKA_ID: TFloatField;
+    DSRContract1: TDataSource;
+    DSSysdat: TOracleDataSet;
+    DSSysdatTEK_DAT: TDateTimeField;
+    DSSysdatPRED_DAT: TDateTimeField;
+    DSSysdatARC_DAY: TDateTimeField;
+    DSSysdatCLOSE: TIntegerField;
+    DSRins_insurances: TDataSource;
+    DSins_insurances: TOracleDataSet;
+    DSins_insurancesID: TIntegerField;
+    DSins_insurancesNAME: TWideStringField;
+    DSins_insurancesMAINFORMNAME: TWideStringField;
+    DSins_insurancesMAINFORMGUID: TWideStringField;
+    DSins_insurancesCHANGEGUID: TWideStringField;
+    DSins_insurancesSUGGESTIONGUID: TWideStringField;
+    DSins_insurancesPOLICYGUID: TWideStringField;
+    DSins_insurancesLOAN_BAL_CN: TFloatField;
+    DSins_insurancesCURR_BAL_CN: TFloatField;
+    DSins_insurancesPREFIX: TWideStringField;
+    DSins_insurancesPROFIT_ACC_ID: TFloatField;
+    DSSex_type: TOracleDataSet;
+    DSSex_typeID: TFloatField;
+    DSSex_typeNAME: TWideStringField;
+    DSRSex_type: TDataSource;
+    DSIns_cust: TOracleDataSet;
+    DSIns_custID: TIntegerField;
+    DSIns_custNAME1: TWideStringField;
+    DSRIns_cust: TDataSource;
+    DScutomers: TOracleDataSet;
+    DScutomersID: TIntegerField;
+    DScutomersNAME: TWideStringField;
+    DSRcutomers: TDataSource;
+    DSins_agents: TOracleDataSet;
+    DSins_agentsID: TFloatField;
+    DSins_agentsNAME: TWideStringField;
+    DSRins_agents: TDataSource;
+    sb_aca: TOraclePackage;
+    DSRContract: TDataSource;
+    DSContract: TOracleDataSet;
+    DSContractID: TFloatField;
+    DSContractPOLICY_NUM: TWideStringField;
+    DSContractSTATE: TIntegerField;
+    DSContractVAL_NAME: TWideStringField;
+    DSContractMUSTERININ_ASA: TWideStringField;
+    DSContractBEGIN_DATE: TDateTimeField;
+    DSContractEND_DATE: TDateTimeField;
+    DSContractINSSUMM: TFloatField;
+    DSContractQALIQ: TFloatField;
+    DSContractMARKA: TWideStringField;
+    DSContractINSUREDSTATENUM: TWideStringField;
+    DSContractFRANSHIZ: TFloatField;
+    DSContractAGENT_ID: TFloatField;
+    DSContractTARIFF: TFloatField;
+    DSContractXITAM_TARIXI: TDateTimeField;
+    DSContractFILIAL_NAME: TWideStringField;
+    DSContractPNUM: TFloatField;
+    DSContractBEN_ID: TFloatField;
+    DSContractBENEFICIARY: TWideStringField;
+    DSContractTYPE_ID: TFloatField;
+    DSContractCOMMITOP_ID: TFloatField;
+    DSContractCOMMIT_DATE: TDateTimeField;
+    DSContractCANCELOPID: TFloatField;
+    DSContractLOANACC_ID: TFloatField;
+    DSContractCANCELDATE: TDateTimeField;
+    DSContractCURRACC_ID: TFloatField;
+    DSContractCLOSE_PREFIX: TIntegerField;
+    DSContractKLI_ID: TFloatField;
+    DSContractFILIAL: TFloatField;
+    DSContractCUSTID: TIntegerField;
+    DSContractVALUTE_ID: TFloatField;
+    DSContractINS_DATE: TDateTimeField;
+    DSContractINS_MID: TFloatField;
+    OPCOMMON: TOraclePackage;
+    DSins_insur: TOracleDataSet;
+    DSins_insurID: TIntegerField;
+    DSins_insurNAME: TWideStringField;
+    DSins_insurMAINFORMNAME: TWideStringField;
+    DSins_insurMAINFORMGUID: TWideStringField;
+    DSins_insurCHANGEGUID: TWideStringField;
+    DSins_insurSUGGESTIONGUID: TWideStringField;
+    DSins_insurPOLICYGUID: TWideStringField;
+    DSins_insurLOAN_BAL_CN: TFloatField;
+    DSins_insurCURR_BAL_CN: TFloatField;
+    DSins_insurPREFIX: TWideStringField;
+    DSins_insurPROFIT_ACC_ID: TFloatField;
+    DSins_insurOBEYKT_TYPE: TWideStringField;
+    ODSInsurances: TOracleDataSet;
+    ODSInsurancesID: TIntegerField;
+    ODSInsurancesNAME: TWideStringField;
+    ODSInsurancesCHANGEGUID: TWideStringField;
+    ODSInsurancesLOAN_BAL_CN: TFloatField;
+    ODSInsurancesCURR_BAL_CN: TFloatField;
+    ODSInsurancesPROFIT_ACC_ID: TFloatField;
+    ODSInsurancesAcc_list: TWideStringField;
+    ODSInsurancesMAINFORMNAME: TWideStringField;
+    ODSInsurancesMAINFORMGUID: TWideStringField;
+    ODSInsurancesSUGGESTIONGUID: TWideStringField;
+    ODSInsurancesPOLICYGUID: TWideStringField;
+    ODSInsurancesPREFIX: TWideStringField;
+    ODSInsurancesOBEYKT_TYPE: TWideStringField;
+    DSInsurances: TDataSource;
+    ODSAccount: TOracleDataSet;
+    ODSAccountID: TFloatField;
+    ODSAccountKLI_ID: TFloatField;
+    ODSAccountOP_ID: TFloatField;
+    ODSAccountACC_NO: TWideStringField;
+    ODSAccountVAL_ACC: TIntegerField;
+    ODSAccountNAME: TWideStringField;
+    ODSAccountOPEN_DAT: TDateTimeField;
+    ODSAccountCLOSE_DAT: TDateTimeField;
+    ODSAccountSTATUS: TFloatField;
+    ODSAccountBAL_CN1: TFloatField;
+    ODSAccountBAL_CN2: TFloatField;
+    ODSAccountBAL_CN3: TFloatField;
+    ODSAccountBAL_CN4: TFloatField;
+    ODSAccountFILIAL: TIntegerField;
+    ODSAccountSIM_OTCET: TFloatField;
+    ODSAccountTIPACC: TWideStringField;
+    ODSAccountLIMIT: TFloatField;
+    ODSAccountOLD_ACC_NO: TWideStringField;
+    ODSAccountPAIR_ACC: TFloatField;
+    ODSAccountINSIDER: TWideStringField;
+    ODSAccountVAL_NAME: TWideStringField;
+    ODSAccountOWNID: TFloatField;
+    ODSAccountOSTAT: TFloatField;
+    ODSAccountPOK_OSTAT: TFloatField;
+    DSAccount: TDataSource;
+    ODSPayPlan: TOracleDataSet;
+    ODSPayPlanID: TFloatField;
+    ODSPayPlanPAY_DATE: TDateTimeField;
+    ODSPayPlanAMMOUNT: TFloatField;
+    ODSPayPlanSTATUS: TIntegerField;
+    ODSPayPlanINS_ID: TFloatField;
+    ODSPayPlanISPAYED: TWideStringField;
+    DSPayPlan: TDataSource;
+    DSRPaymentInfo: TDataSource;
+    DSPaymentInfo: TOracleDataSet;
+    DSPaymentInfoSAY: TFloatField;
+    DSPaymentSettingInfo: TOracleDataSet;
+    DSPaymentSettingInfoSAY: TFloatField;
+    DSRPaymentSettingInfo: TDataSource;
+    DSContractSIGORTA_HAQQI: TFloatField;
+    DSContractNAME1: TWideStringField;
+    DSContractUSERINSERT: TWideStringField;
+    procedure DataModuleCreate(Sender: TObject);
+    procedure DataModuleDestroy(Sender: TObject);
+    procedure DSContractAfterScroll(DataSet: TDataSet);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  DMMainPersonal: TDMMainPersonal;
+
+implementation
+
+{$R *.dfm}
+
+procedure TDMMainPersonal.DataModuleCreate(Sender: TObject);
+begin
+DSSysdat.Open;
+end;
+
+procedure TDMMainPersonal.DataModuleDestroy(Sender: TObject);
+begin
+DSSysdat.close;
+end;
+
+procedure TDMMainPersonal.DSContractAfterScroll(DataSet: TDataSet);
+begin
+begin
+ with  ODSAccount do
+ begin
+   Close;
+   SetVariable('ownid', Dataset.FieldByName('id').asFloat);
+   Open;
+ end;
+
+   DSPaymentSettingInfo.Close;
+   DSPaymentSettingInfo.SetVariable('pcid',Dataset.FieldByName('id').asFloat);
+   DSPaymentSettingInfo.Open;
+end;
+end;
+
+end.

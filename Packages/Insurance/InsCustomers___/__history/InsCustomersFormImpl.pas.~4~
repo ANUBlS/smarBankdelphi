@@ -1,0 +1,1069 @@
+unit InsCustomersFormImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
+  ActiveX, AxCtrls, InsCustomers_TLB, StdVcl, Grids, DBGrids, ComCtrls,
+  StdCtrls, Buttons, Menus, ImgList, ActnList, ToolWin, Oracle, OracleData,
+  PlgModalContainer, DB, ExtCtrls,dialogs,SBTranslateProc;
+
+
+
+type
+  TOperationMode = (omInsert, omEdit, omDelete);
+
+  TGuidError = Exception;
+
+  TInsCustomersForm = class(TActiveForm, IInsCustomersForm)
+    ActionList1: TActionList;
+    gbCustomers: TGroupBox;
+    gbAccounts: TGroupBox;
+    DBGridCust: TDBGrid;
+    DBGridAcc: TDBGrid;
+    aNewCust: TAction;
+    aEditCust: TAction;
+    aDelCust: TAction;
+    aRefCust: TAction;
+    ImageList1: TImageList;
+    ToolBar2: TToolBar;
+    ToolButton5: TToolButton;
+    ToolButton6: TToolButton;
+    ToolButton7: TToolButton;
+    ToolButton8: TToolButton;
+    aNewAcc: TAction;
+    aEditAcc: TAction;
+    aDelAcc: TAction;
+    aRefAcc: TAction;
+    ToolBar1: TToolBar;
+    ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
+    ToolButton4: TToolButton;
+    ToolButton3: TToolButton;
+    pmRefresh: TPopupMenu;
+    N1: TMenuItem;
+    aRefreshAll: TAction;
+    gbContracts: TGroupBox;
+    BitBtn1: TBitBtn;
+    ToolBar3: TToolBar;
+    ToolButton9: TToolButton;
+    ToolButton10: TToolButton;
+    ToolButton11: TToolButton;
+    DBGridContracts: TDBGrid;
+    aNewIns: TAction;
+    aEditIns: TAction;
+    aDelIns: TAction;
+    aRefIns: TAction;
+    ToolButton12: TToolButton;
+    pmcCallActiveX: TPlgModalContainer;
+    PopupMenu1: TPopupMenu;
+    MenuItem1: TMenuItem;
+    MenuItem2: TMenuItem;
+    MenuItem3: TMenuItem;
+    MenuItem4: TMenuItem;
+    MenuItem5: TMenuItem;
+    MenuItem6: TMenuItem;
+    ToolButton13: TToolButton;
+    ToolButton14: TToolButton;
+    aSettings: TAction;
+    ToolButton15: TToolButton;
+    ToolButton16: TToolButton;
+    aContractAccs: TAction;
+    ToolButton17: TToolButton;
+    aPayPlan: TAction;
+    ToolButton18: TToolButton;
+    aFreeUser: TAction;
+    ToolButton19: TToolButton;
+    ToolButton20: TToolButton;
+    aAgent: TAction;
+    aBeneficiary: TAction;
+    ToolButton21: TToolButton;
+    aPayments: TAction;
+    AccountPopup: TPopupMenu;
+    AccountContainer: TPlgModalContainer;
+    an1: TMenuItem;
+    an2: TMenuItem;
+    StateContainer: TPlgModalContainer;
+    Splitter1: TSplitter;
+    Splitter2: TSplitter;
+    ToolButton22: TToolButton;
+    aFind: TAction;
+    tbFullScreen: TToolButton;
+    aFullForm: TAction;
+    ImageList2: TImageList;
+    ToolButton23: TToolButton;
+    aCommit: TAction;
+    aContFind: TAction;
+    ToolButton24: TToolButton;
+    aDeleteOperations: TAction;
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure aNewCustExecute(Sender: TObject);
+    procedure aEditCustExecute(Sender: TObject);
+    procedure aDelCustExecute(Sender: TObject);
+    procedure aRefCustExecute(Sender: TObject);
+    procedure DBGridCustDblClick(Sender: TObject);
+    procedure aNewAccExecute(Sender: TObject);
+    procedure aEditAccExecute(Sender: TObject);
+    procedure DBGridAccDblClick(Sender: TObject);
+    procedure aRefAccExecute(Sender: TObject);
+    procedure aDelAccExecute(Sender: TObject);
+    procedure aRefreshAllExecute(Sender: TObject);
+    procedure aNewInsExecute(Sender: TObject);
+    procedure aRefInsExecute(Sender: TObject);
+    procedure aEditInsExecute(Sender: TObject);
+    procedure DBGridContractsDblClick(Sender: TObject);
+    procedure aDelInsExecute(Sender: TObject);
+    procedure an1DrawItem(Sender: TObject; ACanvas: TCanvas; ARect: TRect;
+      Selected: Boolean);
+    procedure aSettingsExecute(Sender: TObject);
+    procedure aContractAccsExecute(Sender: TObject);
+    procedure aPayPlanExecute(Sender: TObject);
+    procedure aFreeUserExecute(Sender: TObject);
+    procedure aAgentExecute(Sender: TObject);
+    procedure aBeneficiaryExecute(Sender: TObject);
+    procedure aPaymentsExecute(Sender: TObject);
+    procedure an1Click(Sender: TObject);
+    procedure an2Click(Sender: TObject);
+    procedure aFindExecute(Sender: TObject);
+    procedure aFullFormExecute(Sender: TObject);
+    procedure DBGridContractsTitleClick(Column: TColumn);
+    procedure DBGridContractsDrawColumnCell(Sender: TObject;
+      const Rect: TRect; DataCol: Integer; Column: TColumn;
+      State: TGridDrawState);
+    procedure aCommitExecute(Sender: TObject);
+    procedure aContFindExecute(Sender: TObject);
+    procedure aDeleteOperationsExecute(Sender: TObject);
+  private
+    { Private declarations }
+    FEvents: IInsCustomersFormEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+    function  ShowCustForm():Integer;
+    procedure SaveCustData();
+    function  ShowAccForm():Integer;
+    procedure CallChangeForm(Params : TStringList);
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+  public
+    { Public declarations }
+    OperationMode: TOperationMode;
+    procedure Initialize; override;
+    procedure MouseWheelHandler(var Message: TMessage); override;    
+  end;
+
+var
+  InsCustomersForm : TInsCustomersForm;
+
+implementation
+
+uses ComObj, ComServ, InsDataModule, InsCustomersProperties,
+  AccountPropertiesImpl,  InsNewInsurance,  InsAccSettings,
+   InsAgents, InsProfit, InsPaymentPlan, InsSettings, AccInterval,
+  InsCustFind, InsContFind,sboapidatamoduleimpl;
+
+{$R *.DFM}
+
+{ TInsCustomersForm }
+procedure TInsCustomersForm.MouseWheelHandler(var Message: TMessage);
+type
+    TMWDataSet = ^TOracleDataSet;
+    TWMDBGriid = ^TDBGrid;
+var
+    MWDataSet : TMWDataSet;
+    MWDBGrid : TWMDBGriid;
+begin
+//  inherited;
+
+ if not (InsCustomersForm.ActiveControl is TDBGrid) then exit;
+  with InsCustomersForm, InsDataMod do
+    case (ActiveControl as TDBGrid).tag  of
+     0 : begin MWDataSet := @ODSInsCustomers; MWDBGrid := @DBGridCust end;
+     1 : begin MWDataSet := @ODSContracts; MWDBGrid := @DBGridContracts end;
+     2 : begin MWDataSet := @ODSAccount;  MWDBGrid := @DBGridAcc end;
+    end;
+  MWDBGrid.SelectedRows.Clear;
+  with TCMMouseWheel(Message), MWDataSet^ do
+    if WheelDelta < 0 then
+      Next
+    else
+      Prior;
+  MWDBGrid.Repaint;
+end;
+
+procedure TInsCustomersForm.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_InsCustomersFormPage); }
+end;
+
+procedure TInsCustomersForm.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as IInsCustomersFormEvents;
+end;
+
+procedure TInsCustomersForm.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TInsCustomersForm.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TInsCustomersForm.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TInsCustomersForm.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TInsCustomersForm.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TInsCustomersForm.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TInsCustomersForm.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TInsCustomersForm.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TInsCustomersForm.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TInsCustomersForm.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TInsCustomersForm.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TInsCustomersForm.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TInsCustomersForm.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TInsCustomersForm.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TInsCustomersForm.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TInsCustomersForm.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TInsCustomersForm.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TInsCustomersForm.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TInsCustomersForm.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TInsCustomersForm._Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TInsCustomersForm.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TInsCustomersForm.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TInsCustomersForm.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TInsCustomersForm.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TInsCustomersForm.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TInsCustomersForm.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TInsCustomersForm.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TInsCustomersForm.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TInsCustomersForm.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TInsCustomersForm.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TInsCustomersForm.Set_AxBorderStyle(
+  Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TInsCustomersForm.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TInsCustomersForm.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TInsCustomersForm.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TInsCustomersForm.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TInsCustomersForm.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TInsCustomersForm.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TInsCustomersForm.Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TInsCustomersForm.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TInsCustomersForm.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TInsCustomersForm.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TInsCustomersForm.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TInsCustomersForm.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TInsCustomersForm.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+procedure TInsCustomersForm.ActiveFormCreate(Sender: TObject);
+begin
+
+SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+   InsCustomersForm := self;
+   InsDataMod := TInsDataMod.Create(Self);
+   FormInterval:=TFormInterval.Create(Self);
+end;
+
+
+procedure TInsCustomersForm.SaveCustData();
+begin
+   with InsDataMod.ODSInsCustomers do
+    try
+      Post;
+      RefreshRecord;
+    except
+      aEditCustExecute(nil)
+    end;
+end;
+
+
+function TInsCustomersForm.ShowCustForm():Integer;
+var
+   fmCustProp : TfmCustomersProperties;
+begin
+  fmCustProp := TfmCustomersProperties.Create(self);
+  try
+    Result := fmCustProp.ShowModal;
+  finally
+    fmCustProp.Free;
+  end;
+end;
+
+
+
+
+function TInsCustomersForm.ShowAccForm():Integer;
+var
+   fmAccProp : TAccountPropertiesForm;
+begin
+  fmAccProp := TAccountPropertiesForm.Create(self);
+  with InsDataMod, Tenostat do
+  begin
+    SetVariable('ACC_ID', ODSAccountID.AsInteger);
+    Refresh;
+  end;
+  try
+    Result := fmAccProp.ShowModal;
+  finally
+    fmAccProp.Free;
+  end;
+end;
+
+procedure TInsCustomersForm.aNewCustExecute(Sender: TObject);
+begin
+  with InsDataMod.ODSInsCustomers do
+     begin
+      Insert();
+      if  ShowCustForm() = mrOk then SaveCustData() else Cancel
+     end
+end;
+
+procedure TInsCustomersForm.aEditCustExecute(Sender: TObject);
+begin
+  with InsDataMod, ODSInsCustomers do
+     begin
+      ODSCustTypes.Open;
+      Edit();
+      if  ShowCustForm() = mrOk then SaveCustData() else Cancel
+     end
+end;
+
+procedure TInsCustomersForm.aDelCustExecute(Sender: TObject);
+begin
+ if MessageDlg('Сечилмиш мцштяри ляьв olunacaq!',mtConfirmation,
+ mbYesNoCancel, 0) = mrYes then
+ try
+  with  InsDataMod,ODSInsCustomers do
+  BEGIN
+        if OPCOMMON.callbooleanfunction('del_customers',
+                                [ODSInsCustomersID.Value]) then
+        Refresh;
+  END;
+  except
+   on E:EoracleError do
+   case E.ErrorCode of
+   20002:ShowMessage('Яввялжя ачыг сыьорталары баьлайын!');
+   20300:ShowMessage('Бу ямялиййат цчцн сизин щцгугунуз чатмыр!');
+   20280:ShowMessage('Ялавя ямялиййаты цчцн сизин щцгугунуз чатмыр!');
+   20281:ShowMessage('Ляьв етмя ямялиййаты цчцн сизин щцгугунуз чатмыр!');
+   20282:ShowMessage('Бу ямялиййат цчцн сизин щцгугунуз чатмыр!');
+   end;
+  end;
+end;
+
+procedure TInsCustomersForm.aRefCustExecute(Sender: TObject);
+begin
+   with InsDataMod.ODSInsCustomers do
+     Refresh;
+end;
+
+procedure TInsCustomersForm.DBGridCustDblClick(Sender: TObject);
+begin
+  aEditCustExecute(nil);
+end;
+
+procedure TInsCustomersForm.aNewAccExecute(Sender: TObject);
+begin
+  with InsDataMod do
+     begin
+      ODSAccount.Insert();
+      ODSAccountNAME.Value := ODSInsCustomersSURNAME.value+' '+ODSInsCustomersNAME.Value;
+      ODSAccountKLI_ID.AsInteger := ODSCustomersID.AsInteger;      
+      if not (ShowAccForm() = mrOk) then ODSAccount.Cancel
+     end
+end;
+
+procedure TInsCustomersForm.aEditAccExecute(Sender: TObject);
+begin
+  with InsDataMod.ODSAccount do
+     begin
+      Edit();
+      if  not (ShowAccForm() = mrOk) then Cancel
+     end
+end;
+
+procedure TInsCustomersForm.DBGridAccDblClick(Sender: TObject);
+begin
+   aEditAccExecute(nil);
+end;
+
+procedure TInsCustomersForm.aRefAccExecute(Sender: TObject);
+begin
+   with InsDataMod.ODSAccount do
+     Refresh;
+end;
+
+procedure TInsCustomersForm.aDelAccExecute(Sender: TObject);
+begin
+
+  with  InsDataMod, ODSAccount do begin
+    if MessageDlg('Secilmish hesab baglanilsin?', mtConfirmation, [mbYes, mbNo, mbCancel], 0) = mrYes then
+       OPCOMMON.CallProcedure('close_acc', [FieldByName('id').asFloat])
+     else exit;
+     Refresh;
+  end;
+
+end;
+
+procedure TInsCustomersForm.aRefreshAllExecute(Sender: TObject);
+begin
+  with InsDataMod do
+     RefreshAll;
+end;
+
+procedure TInsCustomersForm.CallChangeForm(Params : TStringList);
+var
+  CallerGuid : TGUID;
+begin
+ with InsDataMod do
+ begin
+
+  if ODSContracts.FieldByName('CHANGEGUID').AsString = '' then
+  raise   TGuidError.Create('Guid is empty');
+  CallerGuid := StringToGuid(ODSContracts.FieldByName('CHANGEGUID').AsString);
+//  fmContainer := TfmContainer.Create(Self);
+
+//  fmContainer.OpenObj(CallerGuid, Params);
+  if pmcCallActiveX.ShowModal(CallerGuid, Params) = mrOk then
+//  if fmContainer.ShowModal = mrOk then
+      RefreshContractRec();
+ end;
+end;
+
+procedure TInsCustomersForm.aNewInsExecute(Sender: TObject);
+begin
+  fmNewInsurance := TfmNewInsurance.Create(Self);
+  with InsDataMod do
+  try
+   if fmNewInsurance.ShowModal = mrOk then
+      CloseOpenContracts;
+  finally
+   fmNewInsurance.Free;
+  end;
+end;
+
+procedure TInsCustomersForm.aRefInsExecute(Sender: TObject);
+begin
+ with InsDataMod do
+    RefreshContracts();
+end;
+
+procedure TInsCustomersForm.aEditInsExecute(Sender: TObject);
+var
+  Params : TStringList;
+begin
+  Params := TStringList.Create;
+  with InsDataMod.ODSContracts, Params do
+  try
+    Values['Mod']:= 'Edit';
+    Values['СID']:= FloatToStr(FieldByName('ID').asFloat);
+    Values['KLI_ID']:= FloatToStr(FieldByName('KLI_ID').asFloat);
+    CallChangeForm(Params);
+  finally
+    Params.Free;
+  end;
+end;
+
+procedure TInsCustomersForm.DBGridContractsDblClick(Sender: TObject);
+begin
+  aEditInsExecute(Sender);
+end;
+
+procedure TInsCustomersForm.aDelInsExecute(Sender: TObject);
+begin
+ {ShowMessage(FloatToStr(InsDataMod.ODSContractsID.Value));
+ ShowMessage(FloatToStr(InsDataMod.ODSContractsType_Id.value));}
+ if MessageDlg('Secilmish sigorta lagv olunacaq!',mtConfirmation,
+ mbYesNoCancel, 0) = mrYes then
+try
+   with InsDataMod do
+        if OPCOMMON.callbooleanfunction('del_ins',
+                                [ODSContractsID.Value,ODSContractsType_Id.value]) then
+        RefreshContracts();
+except
+     on E:EOracleError do
+     case E.ErrorCode of
+       20002: if MessageDlg('Сечилмиш щесаб ляьв олунажаг!',mtConfirmation,mbYesNoCancel, 0) = mrYes then
+                 InsDataMod.OPCOMMON.CallProcedure('close_acc', [InsDataMod.ODSAccountID.value]);
+       20001: ShowMessage('Асылы щесабларда галыг сыфырдан фярглидир!');
+     end;
+ end;   
+end;
+
+procedure TInsCustomersForm.an1DrawItem(Sender: TObject; ACanvas: TCanvas;
+  ARect: TRect; Selected: Boolean);
+var
+  LineBottom: Integer;
+  SText: String;
+  Bar: TRect;
+begin
+  with ACanvas, Sender as TMenuItem do
+  begin
+    with Font do
+    begin
+      Name := 'Azl Sans Serif';
+      Charset := DEFAULT_CHARSET;
+      if Default then
+        Style := [fsBold];
+    end;
+    if Caption = '-' then
+    begin
+      Pen.Color := clBlack;
+      LineBottom := (ARect.Top + (ARect.Bottom - ARect.Top) div 2)-1;
+      MoveTo(ARect.Left, LineBottom);
+      LineTo(ARect.Right, LineBottom);
+      inc(LineBottom);
+      Pen.Color := clWhite;
+      MoveTo(ARect.Left, LineBottom);
+      LineTo(ARect.Right, LineBottom);
+    end
+    else
+    begin
+      if Selected then
+      begin
+        Brush.Color := clNavy;
+        if Enabled then
+          Font.Color := clWhite
+        else
+          Font.Color := clSilver;
+      end
+      else
+      begin
+        Brush.Color := clBtnFace;
+        if Enabled then
+          Font.Color := clBlack
+        else
+          Font.Color := clGrayText;
+      end;
+      Bar := ARect;
+     // Inc(Bar.Left, 22);
+      FillRect(Bar);
+      TextOut(ARect.Left+20, ARect.Top+1, Caption);
+    end;
+    SText :=ShortCutToText(ShortCut);
+    TextOut(ARect.Right-TextWidth(SText)-2, ARect.Top+1, SText);
+    if ImageIndex <> -1 then
+      with GetParentMenu do
+        if Assigned(Images) then
+        begin
+          if Checked then
+          begin
+            Bar.Left := ARect.Left + 1;
+            Bar.Right := Bar.Left + 16;
+            Bar.Top := ARect.Top + 1;
+            Bar.Bottom := Bar.Top + 16;
+
+            ACanvas.Brush.Color := clBtnShadow;
+            ACanvas.FrameRect(Bar);
+
+            Inc(Bar.Left, 2);
+            Inc(Bar.Right, 2);
+            Inc(Bar.Top, 2);
+            Inc(Bar.Bottom, 2);
+
+            ACanvas.Brush.Color := clBtnHighlight;
+            ACanvas.FrameRect(Bar);
+
+            Dec(Bar.Left, 1);
+            Dec(Bar.Right, 1);
+            Dec(Bar.Top, 1);
+            Dec(Bar.Bottom, 1);
+
+            if Selected then
+              ACanvas.Brush.Color := clBtnFace
+            else
+              ACanvas.Brush.Color := clBtnHighlight;
+            ACanvas.FillRect(Bar);
+          end;
+
+          Images.Draw(ACanvas, ARect.Left, ARect.Top, ImageIndex, Enabled);
+        end;
+  end;
+end;
+
+
+procedure TInsCustomersForm.aSettingsExecute(Sender: TObject);
+begin
+  fmSettings := TfmSettings.Create(Self);
+  with InsDataMod, fmSettings do
+  try
+    ODSAcc_types.Open;
+    ODSBal_cn.Open;
+    ODSInsurances.Open;
+    ODSBankm.Open;
+    ODSStates.Open;
+    ODSTarifStates.Open;
+    ODSReleaseDate.Open;
+    ODSMonths.Open;
+    ODSTariffs.Open;
+    ODSFranshiza.Open;
+    ODSTariffs.Open;
+    ODSPolicyNums.open;
+    ODSCustTypes.Open;
+    ODSAccList.Open;
+    ShowModal;
+    ODSAccList.Close;    
+  finally
+    Free;
+  end;
+end;
+
+procedure TInsCustomersForm.aContractAccsExecute(Sender: TObject);
+begin
+  fmAccSettings := TfmAccSettings.Create(Self);
+  with InsDataMod, fmAccSettings do
+  try
+    ODSContracts.RefreshRecord;
+    ODSContracts.Edit;
+    ODSLoanAccLists.Open;
+    ODSCurrAccList.Open;
+    with InsDataMod do begin
+     if ShowModal = mrOk then ODSContracts.RefreshRecord;
+     ODSAccount.refresh;
+    end;
+  finally
+    ODSLoanAccLists.Close;
+    ODSCurrAccList.Close;
+    Free;
+  end;
+end;
+
+procedure TInsCustomersForm.aPayPlanExecute(Sender: TObject);
+begin
+
+  with InsDataMod, ODSPayPlan, TfmPaymentPlan.Create(Self) do
+  try
+    SetVariable('insid', ODSContracts.FieldByName('ID').asInteger);
+    Open;
+    ShowModal;
+    ODSPayPlan.Close;
+  finally
+    Free;
+  end;
+end;
+
+procedure TInsCustomersForm.aFreeUserExecute(Sender: TObject);
+begin
+  with  InsDataMod, ODSAccount do begin
+    if MessageDlg('Secilmish hesab istifadecinin adindan silinecek.', mtConfirmation, [mbYes, mbNo, mbCancel], 0) = mrYes then
+       OPCOMMON.CallProcedure('free_acc', [FieldByName('id').asFloat])
+     else exit;
+     Refresh;
+  end;
+end;
+
+procedure TInsCustomersForm.aAgentExecute(Sender: TObject);
+begin
+  with TfrmAgents.Create(Self) do
+  try
+    ShowModal;
+  finally
+    Free;
+  end;
+end;
+
+procedure TInsCustomersForm.aBeneficiaryExecute(Sender: TObject);
+begin
+  with TfmBeneficary.Create(Self) do
+  try
+    ShowModal;
+  finally
+    Free;
+  end;
+end;
+
+procedure TInsCustomersForm.aPaymentsExecute(Sender: TObject);
+var
+  CallerGuid : TGUID;
+  Params : TStringList;
+begin
+
+ Params := TStringList.Create;
+
+ with InsDataMod, ODSContracts, Params do
+ begin
+  Values['INSID'] := FloatToStr(FieldByName('ID').asFloat);
+  CallerGuid := StringToGuid('{33777E01-D797-4C04-85D0-31C85C7EDB12}');
+  if pmcCallActiveX.ShowModal(CallerGuid, Params) = mrOk then
+   ODSAccount.Refresh;
+ end;
+ Params.Free;
+
+end;
+
+procedure TInsCustomersForm.an1Click(Sender: TObject);
+var
+    P: TStringList;
+begin
+       p:=TStringList.Create;
+       with InsDataMod do
+       begin
+            p.Values['id']:=FloatToStr(ODSAccountID.Value);
+            p.Values['acc_no']:=ODSAccountAcc_no.Value;
+       end;
+       AccountContainer.ShowModal(StringToGuid('{839CCAEF-9A7F-447B-AF7E-C8DE033306CA}'),p);  
+       p.Free;
+
+end;
+
+procedure TInsCustomersForm.an2Click(Sender: TObject);
+var
+    p:TStringList;
+    AStartDate, AEndDate: TDateTime;
+begin
+    p:=TStringList.Create;
+    with FormInterval do
+    begin
+         StartDateEdit.DateTime :=InsDataMod.Sysdat.FieldByName('tek_dat').AsDateTime;
+         EndDateEdit.DateTime :=StartDateEdit.DateTime;
+         if ShowModal = mrOK then
+         begin
+            AStartDate :=StartDateEdit.DateTime;
+            AEndDate :=EndDateEdit.DateTime;
+            p.Values['acc_no']:=InsDataMod.ODSAccountAcc_no.Value;
+            p.Values['id']:=FloatToStr(InsDataMod.ODSAccountID.value);
+            p.Values['AStartDate']:=DateToStr(AStartDate);
+            p.Values['AEndDate']:=DateToStr(AEndDate);
+            StateContainer.ShowModal(StringToGuid('{8C35B7B8-2AF6-4BEA-BD7E-F0D01DBDC7EC}'),p);
+            p.Free;
+           {with FormAccountTransactions do
+            begin
+              OpenDataControls(AStartDate, AEndDate);
+              ShowModal;
+            end; }
+        end;
+    end;
+end;
+
+procedure TInsCustomersForm.aFindExecute(Sender: TObject);
+begin
+   if not Assigned(fmCustFind) then
+      fmCustFind := TfmCustFind.Create(Self);
+
+   fmCustFind.ShowModal;
+
+end;
+
+procedure TInsCustomersForm.aFullFormExecute(Sender: TObject);
+begin
+  with InsDataMod do
+   if not tbFullScreen.Down then  UnSetFullForm
+   else  SetFullForm;
+end;
+
+procedure TInsCustomersForm.DBGridContractsTitleClick(Column: TColumn);
+var
+   TitleName :string;
+   SortPosition: word;
+begin
+ SortPosition :=100;
+ if (InsDataMod.ODSContracts.IsEmpty) or (Column.FieldName = EmptyStr) then Exit;
+ Screen.Cursor :=crHourGlass;
+ TitleName :=Column.FieldName;
+ with InsDataMod, ODSContracts do
+  try
+   SortPosition :=SQL.Add('ORDER BY '+ TitleName);
+   Refresh;
+  finally
+   SQL[SortPosition] :=EmptyStr;
+   Screen.Cursor :=crDefault;
+  end;
+end;
+
+procedure TInsCustomersForm.DBGridContractsDrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TColumn;
+  State: TGridDrawState);
+var
+  ImageIndex: Integer;
+begin
+  with Sender as TDBGrid do
+  begin
+    if DataSource.DataSet.RecordCount <> 0 then
+    begin
+      ImageIndex := DataSource.DataSet.FieldByName('state').AsInteger;
+      if (DataCol = 0) and (ImageIndex <> -1) then begin
+        Canvas.brush.Style := bsSolid;
+        Canvas.FillRect(Rect);
+        ImageList2.Draw(Canvas, Rect.Left, Rect.Top, ImageIndex, True); end
+      else
+        DefaultDrawColumnCell(Rect, DataCol, Column, State);
+    end;
+  end;
+
+
+end;
+
+procedure TInsCustomersForm.aCommitExecute(Sender: TObject);
+var
+  funcname : String;
+begin
+ InsDataMod.ODSContracts.RefreshRecord;  //user,group ??
+ with InsDataMod, ODSContracts do
+   case fieldbyname('state').asInteger of
+    0 : funcname := 'commitblank';
+    2:  funcname := 'commitsuggestion';
+    4 : funcname := 'commitpolicy';
+    else exit;
+   end;   
+
+ with InsDataMod, OPCOMMON do
+  if CallBooleanFunction(funcname, [ODSContracts.fieldbyname('ID').asInteger]) then begin
+    MessageDlg('Testiq olundu.', mtInformation, [mbok], 0);
+    ODSContracts.RefreshRecord;
+  end;
+
+end;
+
+procedure TInsCustomersForm.aContFindExecute(Sender: TObject);
+begin
+   if not Assigned(fmContFind) then
+      fmContFind := TfmContFind.Create(Self);
+
+   fmContFind.ShowModal;
+end;
+
+procedure TInsCustomersForm.aDeleteOperationsExecute(Sender: TObject);
+begin
+  with InsDataMod, ODSContracts do
+   if  OPCOMMON.CallBooleanFunction('DeleteOperations',
+                 [FieldByName('id').asInteger]) then
+   begin
+      ShowMessage('Ямялиййатлар позулду!');
+      ODSAccount.refresh;
+   end;
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TInsCustomersForm,
+    Class_InsCustomersForm,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

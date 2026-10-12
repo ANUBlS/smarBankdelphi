@@ -1,0 +1,235 @@
+unit ControlManagerImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, Db, OracleData, ExtCtrls, Oracle, ImgList, Grids, DBGrids;
+
+
+const
+   DefLeft = 30;
+   DefTop = 35;
+
+
+type
+  TQueryArray = array of TOracleDataSet;
+
+type
+  TControlManagerForm = class(TForm)
+    ControlData: TOracleDataSet;
+    PanelCheck: TPanel;
+    ImageList: TImageList;
+    CheckBox1: TCheckBox;
+    DataSource1: TDataSource;
+    PanelButtons: TPanel;
+    Button1: TButton;
+    Button2: TButton;
+    Button3: TButton;
+    procedure Button1Click(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure Click_(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+    procedure CheckBox1Click(Sender: TObject);
+    procedure FormResize(Sender: TObject);
+  private
+
+  public
+
+    QueryArray: TQueryArray;
+    ImageLeft: Integer;
+
+    function  Odd_(Value: Longint): Word;
+    procedure Control;
+    procedure LoadPlugin;
+    procedure DestroyImages;
+    procedure DestroyControls;
+
+  end;
+
+var
+  ControlManagerForm: TControlManagerForm;
+
+implementation
+
+uses
+     sboapiDataModuleImpl;
+
+{$R *.DFM}
+
+procedure TControlManagerForm.Button1Click(Sender: TObject);
+begin
+ Control;
+end;
+
+procedure TControlManagerForm.FormDestroy(Sender: TObject);
+var
+   Index: word;
+begin                      
+ for Index :=Low(QueryArray) to High(QueryArray) do
+  QueryArray[Index].Free;
+ if Assigned(QueryArray) then
+  SetLength(QueryArray, 0);
+end;
+
+procedure TControlManagerForm.Click_(Sender: TObject);
+begin
+ with TCheckBox(Sender) do
+  ShowMessage(QueryArray[Tag -1 ].SQL.Text);
+end;
+
+procedure TControlManagerForm.LoadPlugin;
+var
+   Img: TImage;
+   LabelIndex: Word;
+   PluginLabel: TLabel;
+   PluginCheckBox: TCheckBox;
+begin
+ ImageLeft :=0;
+ with ControlData do
+ begin
+
+  CloseAll;
+  Open;
+
+  if RecordCount = 0 then
+   Raise
+    Exception.Create('No pending controls !');
+
+  if not Assigned(QueryArray) then
+   SetLength(QueryArray, RecordCount);
+
+   for LabelIndex :=1 to RecordCount do
+   begin
+     Application.ProcessMessages;
+   
+     PluginCheckBox :=TCheckBox.Create(ControlManagerForm);
+     PluginCheckBox.Parent :=ControlManagerForm;
+     PluginCheckBox.Top :=DefTop * LabelIndex - 2;
+     PluginCheckBox.Left :=DefLeft - 20;
+     PluginCheckBox.Tag :=LabelIndex;
+     PluginCheckBox.Width :=13;
+     PluginCheckBox.Checked :=True;
+     //PluginCheckBox.OnClick :=Click_;
+     PluginCheckBox.Name :='PluginCheckBox' + IntToStr(PluginCheckBox.Tag);
+     PanelButtons.Top :=PluginCheckBox.Top + 25;
+     PanelButtons.Width :=PanelCheck.Width;
+
+     PluginLabel :=TLabel.Create(ControlManagerForm);
+     PluginLabel.Parent :=ControlManagerForm;
+     PluginLabel.Top :=DefTop * LabelIndex;
+     PluginLabel.Left :=DefLeft;
+     PluginLabel.Tag :=LabelIndex;
+     PluginLabel.Name :='PluginLabel' + IntToStr(PluginLabel.Tag);
+     PluginLabel.Font.Style :=[fsUnderline];
+     PluginLabel.Caption :=IntToStr(PluginLabel.Tag) + '. ' + FieldByName('Description').AsString;
+     if PluginLabel.Width > ImageLeft then
+      ImageLeft :=PluginLabel.Width;
+     PluginLabel.Hint :=FieldByName('Hint').AsString;
+
+
+     QueryArray[LabelIndex - 1] :=TOracleDataSet.Create(ControlManagerForm);
+     QueryArray[LabelIndex - 1].Session :=ControlData.Session;
+     QueryArray[LabelIndex - 1].SQL.Text :=FieldByName('Query').AsString;
+
+     //QueryArray[LabelIndex].Execute;
+    {
+     Img :=TImage.Create(ControlManagerForm);
+     Img.Parent :=ControlManagerForm;
+     Img.Top :=DefTop * LabelIndex;;
+     Img.Left :=DefLeft + 280;
+     Img.Name :='Image' + IntToStr(PluginLabel.Tag);
+     Img.AutoSize :=true;
+     ImageList.GetIcon(Word(Boolean(QueryArray[LabelIndex].RowCount)), Img.Picture.Icon);
+     }
+     Next;
+   end;
+
+ end;
+end;
+
+procedure TControlManagerForm.Control;
+var
+   Img: TImage;
+   Index, QueryIndex: Word;
+begin
+  DestroyImages;
+  for Index :=0 to ComponentCount -1 do
+  begin
+    if (Components[Index] is TCheckBox) and (Components[Index].Tag <> -1 ) then
+     if (Components[Index] as TCheckBox).Checked then
+     begin
+      Application.ProcessMessages;
+      QueryArray[(Components[Index] as TCheckBox).Tag - 1].CloseAll;
+      QueryArray[(Components[Index] as TCheckBox).Tag - 1].Open;
+
+      Img :=TImage.Create(ControlManagerForm);
+      Img.Parent :=ControlManagerForm;
+      Img.AutoSize :=true;
+      Img.Top :=DefTop * (Components[Index] as TCheckBox).Tag;
+      Img.Left :=ImageLeft + 50;
+      Img.Name :='Image' + IntToStr((Components[Index] as TCheckBox).Tag);
+      PanelButtons.Width :=PanelCheck.Width;
+
+      ImageList.GetIcon(Odd_(QueryArray[(Components[Index] as TCheckBox).Tag -1 ].RecordCount), Img.Picture.Icon);
+     end;
+  end;
+end;
+
+procedure TControlManagerForm.DestroyImages;
+var
+   Index: Word;
+begin
+ for Index :=ComponentCount -1 downto  0  do
+  if (Components[Index] is TImage) then
+   (Components[Index] as TImage).Free;
+end;
+
+procedure TControlManagerForm.DestroyControls;
+var
+   Index: Word;
+begin
+ for Index :=ComponentCount -1 downto  0  do
+  if ((Components[Index] is TLabel) or (Components[Index] is TCheckBox)) and (Components[Index].Tag <> -1) then
+   Components[Index].Free;
+end;
+
+procedure TControlManagerForm.FormShow(Sender: TObject);
+begin
+  LoadPlugin;
+end;
+
+procedure TControlManagerForm.Button2Click(Sender: TObject);
+begin
+ DestroyControls;
+ DestroyImages;
+ LoadPlugin;
+end;
+
+procedure TControlManagerForm.CheckBox1Click(Sender: TObject);
+var
+   IsChecked: boolean;
+   Index: Word;
+begin
+ IsChecked :=TCheckBox(Sender).Checked;
+ for  Index:=0 to ComponentCount -1 do
+ if (Components[Index] is TCheckBox) then
+  (Components[Index] as TCheckBox).Checked :=IsChecked;
+end;
+
+function  TControlManagerForm.Odd_(Value: Longint): Word;
+begin
+ if Value = 0 then
+   Result :=Value
+ else
+   Result :=1;
+end;
+
+procedure TControlManagerForm.FormResize(Sender: TObject);
+begin
+ //PanelButtons.Width :=PanelCheck.Width;
+ //PanelButtons.Top := TCheckBox(FindComponent('PluginCheckBox' + IntToStr(ControlData.RecordCount))).Top;
+end;
+
+end.

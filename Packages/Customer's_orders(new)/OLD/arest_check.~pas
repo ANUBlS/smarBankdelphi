@@ -1,0 +1,82 @@
+unit arest_check;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, CheckLst;
+
+type
+  Tcheck_arest = class(TForm)
+    CheckListBox1: TCheckListBox;
+    Button1: TButton;
+    CLBAccFlags: TCheckListBox;
+    CheckBox1: TCheckBox;
+    CheckBox2: TCheckBox;
+    CheckBox3: TCheckBox;
+    CheckBox4: TCheckBox;
+    Button2: TButton;
+    procedure Button1Click(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  check_arest: Tcheck_arest;
+
+implementation
+
+uses datamodule, transaction, customers_orders_arest__;
+
+{$R *.DFM}
+
+procedure Tcheck_arest.Button1Click(Sender: TObject);
+var
+vnum :string;
+begin
+vnum :=datamodule1.search_acc.fieldbyname('acc_no').asstring;
+if checkbox1.checked then
+datamodule1.customer_orders.CallProcedure('arest_d',[vnum]);
+datamodule1.search_acc.next;
+datamodule1.search_acc.Refresh;
+if checkbox2.checked then
+datamodule1.customer_orders.CallProcedure('arest_c',[vnum]);
+datamodule1.search_acc.next;
+datamodule1.search_acc.Refresh;
+check_arest.close;
+if checkbox3.checked then
+datamodule1.customer_orders.CallProcedure('arest_o',[vnum]);
+datamodule1.search_acc.next;
+datamodule1.search_acc.Refresh;
+check_arest.close;
+if checkbox4.checked then
+datamodule1.customer_orders.CallProcedure('arest_k',[vnum]);
+datamodule1.search_acc.next;
+datamodule1.search_acc.Refresh;
+close;
+
+end;
+
+
+procedure Tcheck_arest.Button2Click(Sender: TObject);
+var
+ref: longint;
+vnum :string;
+begin
+vnum :=datamodule1.search_acc.fieldbyname('acc_no').asstring;
+datamodule1.customer_orders.CallProcedure('arest_clear',[vnum]);
+{datamodule1.search_acc.next;  }
+{datamodule1.search_acc.refresh; }
+with datamodule1.search_acc do
+begin
+ref :=fieldbyname('id').asinteger;
+closeall;
+open;
+locate('id',ref,[]);
+
+end;
+     end;
+end.

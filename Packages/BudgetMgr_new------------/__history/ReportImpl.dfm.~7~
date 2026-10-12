@@ -1,0 +1,123 @@
+object ReportFrm: TReportFrm
+  Left = 0
+  Top = 0
+  Caption = 'Hesabatlar'
+  ClientHeight = 185
+  ClientWidth = 499
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poOwnerFormCenter
+  OnCanResize = FormCanResize
+  OnKeyPress = FormKeyPress
+  PixelsPerInch = 96
+  TextHeight = 13
+  object SpeedButton1: TSpeedButton
+    Left = 4
+    Top = 2
+    Width = 82
+    Height = 28
+    Cursor = crHandPoint
+    Caption = 'A'#231
+    Flat = True
+    Glyph.Data = {
+      F6000000424DF600000000000000760000002800000010000000100000000100
+      0400000000008000000000000000000000001000000000000000000000000000
+      80000080000000808000800000008000800080800000C0C0C000808080000000
+      FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00777777777777
+      77777777777777777777000000000007777700333333333077770B0333333333
+      07770FB03333333330770BFB0333333333070FBFB000000000000BFBFBFBFB07
+      77770FBFBFBFBF0777770BFB0000000777777000777777770007777777777777
+      7007777777770777070777777777700077777777777777777777}
+    OnClick = SpeedButton1Click
+    OnDblClick = DBGrid1DblClick
+  end
+  object DBGrid1: TDBGrid
+    Left = 2
+    Top = 34
+    Width = 496
+    Height = 120
+    DataSource = DmBudcet.ReportSrc
+    Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit, dgTitleClick, dgTitleHotTrack]
+    TabOrder = 0
+    TitleFont.Charset = DEFAULT_CHARSET
+    TitleFont.Color = clWindowText
+    TitleFont.Height = -11
+    TitleFont.Name = 'Tahoma'
+    TitleFont.Style = []
+    OnDblClick = DBGrid1DblClick
+    Columns = <
+      item
+        Expanded = False
+        FieldName = 'ID'
+        Title.Color = clSilver
+        Title.Font.Charset = DEFAULT_CHARSET
+        Title.Font.Color = clBlack
+        Title.Font.Height = -12
+        Title.Font.Name = 'Tahoma'
+        Title.Font.Style = [fsBold]
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'NAME'
+        Title.Caption = 'Hesabat'#305'n ad'#305
+        Title.Color = clSilver
+        Title.Font.Charset = DEFAULT_CHARSET
+        Title.Font.Color = clBlack
+        Title.Font.Height = -12
+        Title.Font.Name = 'Tahoma'
+        Title.Font.Style = [fsBold]
+        Width = 403
+        Visible = True
+      end>
+  end
+  object Edit1: TEdit
+    Left = 3
+    Top = 160
+    Width = 85
+    Height = 21
+    TabOrder = 1
+    OnDblClick = DBGrid1DblClick
+  end
+  object Edit2: TEdit
+    Left = 93
+    Top = 160
+    Width = 405
+    Height = 21
+    TabOrder = 2
+    OnDblClick = DBGrid1DblClick
+  end
+  object ExcelExport: TCMExcelExport
+    ConnectTo = ctNewInstance
+    StyleColumnWidth = cwAutoFit
+    ColumnWidth = 0
+    FontTitles.Charset = DEFAULT_CHARSET
+    FontTitles.Color = clNavy
+    FontTitles.Height = -13
+    FontTitles.Name = 'Azl Sans Serif'
+    FontTitles.Style = [fsBold]
+    BorderTitles.Weight = bwThin
+    BorderTitles.LineStyle = blLine
+    OrientationTitles = 0
+    FontData.Charset = RUSSIAN_CHARSET
+    FontData.Color = clWindowText
+    FontData.Height = -11
+    FontData.Name = 'Azl Sans Serif'
+    FontData.Style = []
+    FontSummary.Charset = DEFAULT_CHARSET
+    FontSummary.Color = clWindowText
+    FontSummary.Height = -11
+    FontSummary.Name = 'Azl Sans Serif'
+    FontSummary.Style = []
+    SummarySelection = ssNone
+    SummaryCalculation = scSUM
+    Left = 336
+    Top = 104
+  end
+end

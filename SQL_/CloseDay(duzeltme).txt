@@ -1,0 +1,27 @@
+-----------------------------------correct----------------------------------
+declare
+ CheckDate date;
+ 
+begin
+CheckDate :='25-jan-2006';
+ --select tek_dat into CheckDate from sysdat;
+
+for rec in 
+(select a.acc_id, b.pok_ostat-a.pok_obr_d+a.pok_obr_k as realostat
+ from archost a,archost  b
+ where
+  a.datdate=CheckDate and b.datdate=(select max(dat) from operkurs where dat<CheckDate )
+  and a.acc_id=b.acc_id 
+  and a.pok_ostat<>b.pok_ostat-a.pok_obr_d+a.pok_obr_k) loop
+
+
+  update archost 
+    set pok_ostat=rec.realostat
+  where datdate=CheckDate and acc_id=rec.acc_id;
+  dbms_output.put_line('Updated acc_id:'||rec.acc_id);
+ end loop;
+ update archost 
+  set ostat = pok_ostat 
+  where datdate=CheckDate and 
+  acc_id in (select id from account where val_acc=0);  
+end;

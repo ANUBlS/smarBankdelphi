@@ -1,0 +1,127 @@
+unit oblImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ComCtrls, Buttons, ExtCtrls, Db, OracleData, Grids, DBGridEh, StdCtrls,
+  Oracle;
+
+type
+  TFrmObl = class(TForm)
+    Panel1: TPanel;
+    Panel2: TPanel;
+    SpeedButton1: TSpeedButton;
+    SpeedButton2: TSpeedButton;
+    DateTimePicker1: TDateTimePicker;
+    OracleDataSet1: TOracleDataSet;
+    DataSource1: TDataSource;
+    SpeedButton3: TSpeedButton;
+    OracleDataSet2: TOracleDataSet;
+    DBGridEh1: TDBGridEh;
+    Label1: TLabel;
+    OraclePackage1: TOraclePackage;
+    procedure FormCreate(Sender: TObject);
+    procedure SpeedButton3Click(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure SpeedButton2Click(Sender: TObject);
+    procedure DBGridEh1ColumnMoved(Sender: TObject; FromIndex,
+      ToIndex: Integer);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmObl: TFrmObl;
+    DataColIndex : Integer = 4;
+ procedure InitPlugin(s:string);export;
+implementation
+uses   CommonDecls ,CMOracleAPIDataModuleImpl;
+{$R *.DFM}
+ procedure InitPlugin(s:string);export;
+begin
+   FrmObl.ShowModal;
+end;
+exports
+     InitPlugin;
+procedure TFrmObl.FormCreate(Sender: TObject);
+begin
+OracleDataSet2.open;
+DateTimePicker1.DateTime:=OracleDataSet2.fieldbyname('tek_dat').asdatetime;
+end;
+procedure TFrmObl.SpeedButton3Click(Sender: TObject);
+var
+dat :Tdatetime;
+begin
+  dat:=integer(trunc(DateTimePicker1.DateTime));
+    with OracleDataSet1  do
+   begin
+         if Active then CloseAll;
+           SetVariable('dat',dat);
+         open;
+  end;
+end;
+
+procedure TFrmObl.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+OracleDataSet1.close;
+end;
+
+procedure TFrmObl.SpeedButton1Click(Sender: TObject);
+var
+dat :Tdatetime;
+ I : Integer;
+ SelectedRowsCnt : Integer;
+begin
+  dat:=integer(trunc(DateTimePicker1.DateTime));
+
+  OracleDataSet1.First;
+with OracleDataSet1  do
+  while not EOF do
+    begin
+    try
+        OraclePackage1.CallProcedure('ActivateCredit',['p_CreditID'  ,FieldByName('ID').AsInteger,
+                                                       'p_date',dat
+                                                                   ]);
+       except
+         on E: Exception do
+         LogError(E.Message);
+       end;
+     Next;
+   end ;
+
+
+OracleDataSet1.Close;
+
+OracleDataSet1.open;
+
+end;
+
+procedure TFrmObl.SpeedButton2Click(Sender: TObject);
+begin
+close;
+end;
+
+procedure TFrmObl.DBGridEh1ColumnMoved(Sender: TObject; FromIndex,
+  ToIndex: Integer);
+
+function FindSpecialRowIndex : Integer;
+begin
+  Result := 0;
+  with Sender as TDBGridEh do
+  while (Result < Columns.Count) and (Columns[Result].Tag <> 1) do
+  Inc(Result);
+end;
+
+begin
+  DataColIndex := FindSpecialRowIndex();
+
+end;
+
+initialization
+ FrmObl := TFrmObl.Create(CommonApplication);
+
+end.

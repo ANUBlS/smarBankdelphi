@@ -1,0 +1,97 @@
+unit ExpParameterUnit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, LDialogs,
+  ExtCtrls, Grids, DBGrids, StdCtrls, DBViewComboBox, SearchEdit,
+  NLSLocalizer, Buttons;
+
+type
+  TExpParameter = class(TForm)
+    Panel1: TPanel;
+    Panel2: TPanel;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    SearchEdit1: TSearchEdit;
+    SpeedButton1: TSpeedButton;
+    DBViewComboBox1: TDBViewComboBox;
+    DBViewComboBox2: TDBViewComboBox;
+    Label4: TLabel;
+    SearchEdit2: TSearchEdit;
+    SpeedButton2: TSpeedButton;
+    Label5: TLabel;
+    Panel3: TPanel;
+    DBGrid1: TDBGrid;
+    Panel4: TPanel;
+    DBGrid2: TDBGrid;
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure SpeedButton2Click(Sender: TObject);
+    procedure DBGrid1DblClick(Sender: TObject);
+    procedure DBGrid2DblClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  ExpParameter: TExpParameter;
+
+implementation
+uses ExpDataModuleUnit;
+
+{$R *.DFM}
+
+procedure TExpParameter.SpeedButton1Click(Sender: TObject);
+begin
+  if SearchEdit1.Text = '' then exit;
+   begin
+     with ExpDataModule do
+     begin
+       Repair.CallProcedure('Exp_accounts_add',[ValyutaDataSet.fieldbyname('VALUTE').asinteger,
+                                                AccountDataSet1.fieldbyname('id').asinteger,
+                                                AllFilialDataSet.fieldbyname('id').asinteger]);
+       SearchEdit1.clear;
+       ExpAccDataSet.Refresh;
+     end;
+   end;
+end;
+
+procedure TExpParameter.SpeedButton2Click(Sender: TObject);
+begin
+  if SearchEdit2.Text = '' then exit;
+  begin
+    with ExpDataModule do
+     begin
+       Repair.CallProcedure('Exp_branchaccount_add',[ValyutaDataSet.fieldbyname('VALUTE').asinteger,
+                                                     AccountDataSet1.fieldbyname('id').asinteger,
+                                                     AllFilialDataSet.fieldbyname('id').asinteger]);
+       SearchEdit2.clear;
+       BranchDataSet.Refresh;
+     end;
+   end;
+  end;
+
+
+procedure TExpParameter.DBGrid1DblClick(Sender: TObject);
+begin
+  with  ExpDataModule do
+  begin
+    Repair.CallProcedure('Exp_Accounts_Del',[ExpAccDataSet.FieldByName('id').AsInteger]);
+    ExpAccDataSet.Refresh;
+  end;
+end;
+
+procedure TExpParameter.DBGrid2DblClick(Sender: TObject);
+begin
+  with  ExpDataModule do
+  begin
+    Repair.CallProcedure('Exp_branchaccount_Del',[BranchDataSet.FieldByName('id').AsInteger]);
+    BranchDataSet.Refresh;
+  end;
+end;
+
+
+end.

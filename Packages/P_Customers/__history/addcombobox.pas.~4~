@@ -1,0 +1,103 @@
+unit addcombobox;
+
+interface
+
+uses oracledata, StdCtrls, Dialogs;
+
+procedure combobox_add(Dataset: TOracleDataSet; Combobox: TCombobox;
+  Field: String);
+function combobox_change(Dataset: TOracleDataSet; Combobox: TCombobox;
+  Field: String): VAriant;
+function combobox_open(Dataset1: TOracleDataSet; Dataset2: TOracleDataSet;
+  Combobox: TCombobox; Field1: String; Field2: String;
+  Field3: WideString): VAriant;
+function combobox_open_2(Dataset1: TOracleDataSet; Dataset2: TOracleDataSet;
+  Combobox: TCombobox; Field1: String; Field2: String;
+  Field3: WideString): VAriant;
+
+implementation
+
+procedure combobox_add(Dataset: TOracleDataSet; Combobox: TCombobox;
+  Field: String);
+begin
+  Combobox.Clear;
+  with Dataset do
+  begin
+    First;
+    while not Eof do
+    begin
+      Combobox.Items.Add(FieldByName(Field).AsString);
+      Dataset.Next;
+    end;
+    First;
+  end;
+end;
+
+function combobox_change(Dataset: TOracleDataSet; Combobox: TCombobox;
+  Field: String): VAriant;
+var
+  i: integer;
+begin
+  with Dataset do
+  begin
+    First;
+    for i := 0 to Combobox.itemindex do
+    begin
+      if not FieldByName(Field).isNull then
+        combobox_change := (FieldByName(Field).AsString);
+      Dataset.Next;
+    end;
+    First;
+  end;
+end;
+
+function combobox_open(Dataset1: TOracleDataSet; Dataset2: TOracleDataSet;
+  Combobox: TCombobox; Field1: String; Field2: String;
+  Field3: WideString): VAriant;
+var
+  i: integer;
+  id2: String;
+  id1: WideString;
+begin
+  combobox_open := -1;
+
+  id2 := Dataset1.FieldByName(Field1).AsString;
+  if not Dataset2.Locate(Field2, id2, []) then
+    exit;
+
+  id1 := Dataset2.FieldByName(Field3).AsString;
+  for i := 0 to Combobox.Items.Count - 1 do
+  begin
+    if Combobox.Items[i] = id1 then
+    begin
+      combobox_open := i;
+      break;
+    end;
+  end;
+end;
+
+function combobox_open_2(Dataset1: TOracleDataSet; Dataset2: TOracleDataSet;
+  Combobox: TCombobox; Field1: String; Field2: String;
+  Field3: WideString): VAriant;
+var
+  i, id2: integer;
+  id1: WideString;
+begin
+  combobox_open_2 := -1;
+
+  id2 := Dataset1.FieldByName(Field1).asInteger;
+  if not Dataset2.Locate(Field2, id2, []) then
+    exit;
+
+  id1 := Dataset2.FieldByName(Field3).AsString;
+  for i := 0 to Combobox.Items.Count - 1 do
+  begin
+    if Combobox.Items[i] = id1 then
+    begin
+      combobox_open_2 := i;
+      break;
+    end;
+  end;
+end;
+
+end.

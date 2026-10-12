@@ -1,0 +1,104 @@
+﻿unit Unitmonxs;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Grids, XDBGrids, ExtCtrls, XFSCtrls, DB, OracleData, StdCtrls;
+
+type
+  TFormMonxs = class(TForm)
+    XFPanel1: TXFPanel;
+    XDBGrid1: TXDBGrid;
+    ODS_Monxs: TOracleDataSet;
+    Dsrc_monxs: TDataSource;
+    ODS_MonxsID: TFloatField;
+    ODS_MonxsNAME: TWideStringField;
+    ODS_MonxsLAST_NAME: TWideStringField;
+    XFButton1: TXFButton;
+    XFButton2: TXFButton;
+    XFPanel2: TXFPanel;
+    XFLabel1: TXFLabel;
+    XFLabel2: TXFLabel;
+    Editname: TEdit;
+    Editlastname: TEdit;
+    procedure XFButton1Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure XDBGrid1DblClick(Sender: TObject);
+    procedure XFButton2Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormMonxs: TFormMonxs;
+
+implementation
+ uses
+  sboapidatamoduleimpl, TransactionDataModuleUnit,TransactionManagerImpl, TransactionPropertiesImpl,
+  CustUnit;
+{$R *.dfm}
+
+procedure TFormMonxs.FormShow(Sender: TObject);
+begin
+ODS_Monxs.Open;
+end;
+
+procedure TFormMonxs.XDBGrid1DblClick(Sender: TObject);
+begin
+if monex_id=true then
+     begin
+  TransactionEditForm.Edit_DCustId.Text:=ODS_Monxs.FieldByName('id').AsString ;
+     end;
+  if monex_id=false then
+     begin
+  TransactionEditForm.Edit_CCustId.Text:=ODS_Monxs.FieldByName('id').AsString ;
+     end;
+      FormMonxs.Close;
+      FormCust.Close;
+end;
+
+procedure TFormMonxs.XFButton1Click(Sender: TObject);
+begin
+
+ if trim(Editname.Text)='' then
+   begin
+     showmessage('Adı sahəsi boşdur');
+     exit;
+ end;
+ if trim(Editlastname.Text)='' then
+   begin
+     showmessage('Soyadı sahəsi boşdur');
+     exit;
+ end;
+
+
+TransactionDataModule.PG_PCustService.CallProcedure('add_cust_monxs',
+                                                                [Editname.Text,
+                                                                 Editlastname.Text
+                                                                 ]);
+
+
+ODS_Monxs.Refresh;
+  if monex_id=true then
+     begin
+  TransactionEditForm.Edit_DCustId.Text:=ODS_Monxs.FieldByName('id').AsString ;
+     end;
+  if monex_id=false then
+     begin
+  TransactionEditForm.Edit_CCustId.Text:=ODS_Monxs.FieldByName('id').AsString ;
+     end;
+                 Editname.Text:='';
+                 Editlastname.Text:='';
+                 FormMonxs.Close;
+                 FormCust.close;
+end;
+
+procedure TFormMonxs.XFButton2Click(Sender: TObject);
+begin
+FormMonxs.Close;
+end;
+
+end.

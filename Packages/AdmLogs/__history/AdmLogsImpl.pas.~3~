@@ -1,0 +1,577 @@
+unit AdmLogsImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, LDialogs,
+  ActiveX, AxCtrls, AdmLogsC_TLB, StdVcl, ComCtrls, Grids, DBGrids,
+  StdCtrls, ExtCtrls, CMExcelExport, OracleData;
+
+type
+  TAdmLogs = class(TActiveForm, IAdmLogs)
+    pgcMain: TPageControl;
+    tsUsersGrant: TTabSheet;
+    tsModules: TTabSheet;
+    tstsUsers: TTabSheet;
+    TabSheet3: TTabSheet;
+    DBGrid1: TDBGrid;
+    DBGrid2: TDBGrid;
+    DBGrid3: TDBGrid;
+    DBGrid4: TDBGrid;
+    tsClasses: TTabSheet;
+    tsGroupMan: TTabSheet;
+    DBGrid5: TDBGrid;
+    DBGrid6: TDBGrid;
+    Panel1: TPanel;
+    Button1: TButton;
+    ExcelExport: TCMExcelExport;
+    tsLocked: TTabSheet;
+    Splitter1: TSplitter;
+    DBGrid8: TDBGrid;
+    Panel2: TPanel;
+    Button2: TButton;
+    Button3: TButton;
+    dtpB: TDateTimePicker;
+    dtpE: TDateTimePicker;
+    Button4: TButton;
+    Button5: TButton;
+    Panel3: TPanel;
+    DBGrid7: TDBGrid;
+    Splitter2: TSplitter;
+    Button6: TButton;
+    DBGrid9: TDBGrid;
+    procedure Button1Click(Sender: TObject);
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+    procedure Button3Click(Sender: TObject);
+    procedure Button4Click(Sender: TObject);
+    procedure Button5Click(Sender: TObject);
+    procedure Button6Click(Sender: TObject);
+  private
+    { Private declarations }
+    FEvents: IAdmLogsEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(var Value: IFontDisp); safecall;
+    procedure AboutBox; safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+  public
+    { Public declarations }
+    procedure Initialize; override;
+  end;
+
+implementation
+
+uses ComObj, ComServ, About, ALDataMod, sboapiDataModuleImpl, SBTranslateProc;
+
+{$R *.DFM}
+
+{ TAdmLogs }
+
+procedure TAdmLogs.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_AdmLogsPage); }
+end;
+
+procedure TAdmLogs.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as IAdmLogsEvents;
+end;
+
+procedure TAdmLogs.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TAdmLogs.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TAdmLogs.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TAdmLogs.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TAdmLogs.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TAdmLogs.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TAdmLogs.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TAdmLogs.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TAdmLogs.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TAdmLogs.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TAdmLogs.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TAdmLogs.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TAdmLogs.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TAdmLogs.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TAdmLogs.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TAdmLogs.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TAdmLogs.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TAdmLogs.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TAdmLogs.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TAdmLogs._Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TAdmLogs.AboutBox;
+begin
+  ShowAdmLogsAbout;
+end;
+
+procedure TAdmLogs.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TAdmLogs.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TAdmLogs.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TAdmLogs.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TAdmLogs.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TAdmLogs.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TAdmLogs.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TAdmLogs.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TAdmLogs.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TAdmLogs.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TAdmLogs.Set_AxBorderStyle(Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TAdmLogs.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TAdmLogs.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TAdmLogs.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TAdmLogs.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TAdmLogs.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TAdmLogs.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TAdmLogs.Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TAdmLogs.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TAdmLogs.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TAdmLogs.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TAdmLogs.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TAdmLogs.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TAdmLogs.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+procedure TAdmLogs.Button1Click(Sender: TObject);
+
+begin
+with DataModAL,ExcelExport do begin
+  Connect;
+  case pgcMain.ActivePageIndex of
+  0:begin
+    ExportDataset(ODSUserGrantsLogs,'Sheet', True);
+  end;
+  1:begin
+    ExportDataset(ODSModuleLogs,'Sheet', True);
+  end;
+  2:begin
+    ExportDataset(ODSUsersLogs,'Sheet', True);
+  end;
+  3:begin
+    ExportDataset(OdsGroupsLogs,'Sheet', True);
+  end;
+  4:begin
+    ExportDataset(ODSClassesLogs,'Sheet', True);
+  end;
+  5:begin
+    ExportDataset(ODSGroupManLogs,'Sheet', True);
+  end;
+  end;
+end;
+
+end;
+
+procedure TAdmLogs.ActiveFormCreate(Sender: TObject);
+begin
+  DataModAL := TDataModAL.Create(Self);
+  pgcMain.ActivePageIndex := 0;
+  dtpB.DateTime:=Date;
+  dtpE.DateTime:=Date;
+  Button4.Click;
+
+  SBTranslateProc.TranslateAllComponents(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure RefreshDataSet(DSet: TOracleDataSet);
+begin
+  DSet.Close;
+  DSet.Open;
+end;
+
+procedure DelRowsDS(DSet: TOracleDataSet);
+var
+  i: integer;
+begin
+  DSet.First;
+  for i := 0 to dset.RecordCount-1 do begin
+    DataModAL.SB_ADM.CallProcedure('dellog',[DSet.Fields[0].AsVariant]);
+    DSet.Next;
+  end;
+  RefreshDataSet(DSet);
+end;
+
+procedure TAdmLogs.Button2Click(Sender: TObject);
+begin
+if MessageDlg('»стифад€чи ажжоунт-у ачылсын?', mtWarning, [mbyes, mbno], 0)=idyes then
+  with DataModAL do begin
+    SB_ADM.CallProcedure('lockunlockuser',[ODSLockedUsersNAME.AsVariant, False]);
+    RefreshDataSet(ODSLockedUsers);
+  end;
+end;
+
+procedure TAdmLogs.Button3Click(Sender: TObject);
+
+begin
+with DataModAL do begin
+  case pgcMain.ActivePageIndex of
+  0:begin
+    RefreshDataset(ODSUserGrantsLogs);
+  end;
+  1:begin
+    RefreshDataSet(ODSModuleLogs);
+  end;
+  2:begin
+    RefreshDataSet(ODSUsersLogs);
+  end;
+  3:begin
+    RefreshDataSet(OdsGroupsLogs);
+  end;
+  4:begin
+    RefreshDataSet(ODSClassesLogs);
+  end;
+  5:begin
+    RefreshDataSet(ODSGroupManLogs);
+  end;
+  6:begin
+    RefreshDataSet(ODSLockedUsers);
+    RefreshDataSet(ODSClasNames);
+  end;
+  end;
+end;
+end;
+
+procedure TAdmLogs.Button4Click(Sender: TObject);
+begin
+  with DataModAL do begin 
+  case pgcMain.ActivePageIndex of
+  0:begin         
+    ODSUserGrantsLogs.Close;
+    ODSUserGrantsLogs.SQL[4] :=
+              'and to_date(MODTIME)>='''+FormatDateTime('dd-mmm-yyyy',dtpB.Date)+''' '+
+              'and to_date(MODTIME)<='''+FormatDateTime('dd-mmm-yyyy',dtpE.Date)+'''';
+    ODSUserGrantsLogs.Open;
+    ODSUserGrantsLogs.SQL[4] := '';
+  end;
+  1:begin   
+    ODSModuleLogs.Close;
+    ODSModuleLogs.SQL[3] :=
+              'and to_date(MODTIME)>='''+FormatDateTime('dd-mmm-yyyy',dtpB.Date)+''' '+
+              'and to_date(MODTIME)<='''+FormatDateTime('dd-mmm-yyyy',dtpE.Date)+'''';
+    ODSModuleLogs.Open;
+    ODSModuleLogs.SQL[3] := '';
+  end;
+  2:begin    
+    ODSUsersLogs.Close;
+    ODSUsersLogs.SQL[6] :=
+              'and to_date(MODTIME)>='''+FormatDateTime('dd-mmm-yyyy',dtpB.Date)+''' '+
+              'and to_date(MODTIME)<='''+FormatDateTime('dd-mmm-yyyy',dtpE.Date)+'''';
+    ODSUsersLogs.Open;
+    ODSUsersLogs.SQL[6] := '';
+  end;
+  3:begin   
+    OdsGroupsLogs.Close;
+    OdsGroupsLogs.SQL[4] :=
+              'and to_date(MODTIME)>='''+FormatDateTime('dd-mmm-yyyy',dtpB.Date)+''' '+
+              'and to_date(MODTIME)<='''+FormatDateTime('dd-mmm-yyyy',dtpE.Date)+'''';
+    OdsGroupsLogs.Open;
+    OdsGroupsLogs.SQL[4] := '';
+  end;
+  4:begin     
+    ODSClassesLogs.Close;
+    ODSClassesLogs.SQL[4] :=
+              'and to_date(MODTIME)>='''+FormatDateTime('dd-mmm-yyyy',dtpB.Date)+''' '+
+              'and to_date(MODTIME)<='''+FormatDateTime('dd-mmm-yyyy',dtpE.Date)+'''';
+    ODSClassesLogs.Open;
+    ODSClassesLogs.SQL[4] := '';
+  end;
+  5:begin    
+    ODSGroupManLogs.Close;
+    ODSGroupManLogs.SQL[20] :=
+              'and to_date(MODTIME)>='''+FormatDateTime('dd-mmm-yyyy',dtpB.Date)+''' '+
+              'and to_date(MODTIME)<='''+FormatDateTime('dd-mmm-yyyy',dtpE.Date)+'''';
+    ODSGroupManLogs.Open;
+    ODSGroupManLogs.SQL[20] := '';
+  end;
+  6:begin    
+    ODSSLLogs.Close;
+    ODSSLLogs.SQL[4] :=
+              'and to_date(MODTIME)>='''+FormatDateTime('dd-mmm-yyyy',dtpB.Date)+''' '+
+              'and to_date(MODTIME)<='''+FormatDateTime('dd-mmm-yyyy',dtpE.Date)+'''';
+    ODSSLLogs.Open;
+    ODSSLLogs.SQL[4] := '';
+  end;
+  end;
+
+  end;
+end;
+
+procedure TAdmLogs.Button5Click(Sender: TObject);
+begin
+
+if MessageDlg('—€тирл€р силинсин?', mtWarning, [mbyes, mbno], 0)=idyes then
+
+with DataModAL do begin
+  case pgcMain.ActivePageIndex of
+    0:begin
+      DelRowsDS(ODSUserGrantsLogs);
+    end;
+    1:begin
+      DelRowsDS(ODSModuleLogs);
+    end;
+    2:begin
+      DelRowsDS(ODSUsersLogs);
+    end;
+    3:begin
+      DelRowsDS(OdsGroupsLogs);
+    end;
+    4:begin
+      DelRowsDS(ODSClassesLogs);
+    end;
+    5:begin
+      DelRowsDS(ODSGroupManLogs);
+    end;
+    6:begin
+      DelRowsDS(ODSSLLogs);
+    end;
+  end;
+end;
+end;
+
+procedure TAdmLogs.Button6Click(Sender: TObject);
+begin
+if MessageDlg('—иниф€ аид бцтцн истифад€чи ажжоунт-лары ачылсын?', mtWarning, [mbyes, mbno], 0)=idyes then
+  with DataModAL do begin
+    SB_ADM.CallProcedure('unlockclass',[ODSClasNamesID.AsVariant]);
+    RefreshDataSet(ODSLockedUsers);
+  end;
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TAdmLogs,
+    Class_AdmLogs,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

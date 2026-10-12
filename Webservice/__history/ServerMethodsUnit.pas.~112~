@@ -1,0 +1,1621 @@
+﻿unit ServerMethodsUnit;
+
+interface
+
+uses System.SysUtils,system.JSON,dbxjson,data.dbxcommon,Data.DBXPlatform,
+    Datasnap.DSServer, Datasnap.DSAuth, Data.FMTBcd, Data.DB, Data.SqlExpr,
+  Data.DBXOracle, Xml.xmldom, Xml.XMLIntf, Xml.XMLDoc, FireDAC.Stan.Intf,
+  FireDAC.Stan.Option, FireDAC.Stan.Error, FireDAC.UI.Intf, FireDAC.Phys.Intf,
+  FireDAC.Stan.Def, FireDAC.Stan.Pool, FireDAC.Stan.Async, FireDAC.Phys,
+  FireDAC.Phys.ODBC, FireDAC.Phys.ODBCDef, FireDAC.VCLUI.Wait,
+  FireDAC.Stan.Param, FireDAC.DatS, FireDAC.DApt.Intf, FireDAC.DApt,
+  FireDAC.Comp.DataSet, FireDAC.Comp.Client, FireDAC.Phys.TDBX,
+  FireDAC.Phys.TDBXDef, FireDAC.Comp.BatchMove, FireDAC.Comp.BatchMove.Text,
+  FireDAC.Stan.StorageJSON, FireDAC.Stan.StorageBin, FireDAC.Comp.UI,
+  System.Classes,Data.FireDACJSONReflect, Data.Win.ADODB;
+
+type
+{$METHODINFO ON}
+  TMethods = class(TDataModule)
+    querie: TSQLQuery;
+    conn: TSQLConnection;
+    XMLDoc: TXMLDocument;
+    procsnfuncs: TSQLStoredProc;
+    FDConnection1: TFDConnection;
+    qery: TFDQuery;
+    DataSource1: TDataSource;
+    Query: TADOQuery;
+    Connection: TADOConnection;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    function EchoString(Value: string): string;
+    function ReverseString(Value: string): string;
+
+    function login(userdb:string;passdb:string;v_session:string): string;
+    function logout(v_session:string): string;
+
+    function GetDataSet(session:string): Tstream;
+    function convertingjson (querytext :String;session:string;var k:string):string ;
+
+    function archive(v_session:string): String;
+
+
+
+
+
+    function ws_salary_test(valu:string;session:string) :Tstream;
+
+     function ws_salarylist(valu:string;session:string) :Tstream;
+
+
+
+    function ws_salary_Melumatotdel(session:string) : Tstream;   //shobeninqrupu
+    function ws_salary_Melumatkategr(session:string) :Tstream ;   //vergi guzest
+    function ws_salary_Melumatprfs(session:string) :Tstream ;    //hemkarlar
+    function ws_salary_Melumatdolj(session:string) :Tstream ;  //vezifesi
+    function ws_salary_Melumatuchstp(session:string) :Tstream ;    //elmi derece
+    function ws_salary_Melumatkpn(session:string) :Tstream ;  //gelir vergisi
+    function ws_salary_Melumatn01p04(session:string) :Tstream ;    //movcud aylar
+    function ws_salary_Melumatbudjet(session:string) :Tstream ;  //budcesi
+    function ws_salary_Melumatrazrd(session:string) :Tstream ;    //derece
+    function ws_salary_Melumatpodrzd(session:string) :Tstream ;  //shobenin adi
+    function ws_salary_Melumatogran(session:string) :Tstream ;    //mehdudiyyeti
+    function ws_salary_Melumatvidopl(session:string) :Tstream ;  //maas novu
+    function ws_salary_Melumatuchzvn(session:string) :Tstream ;  //Elmirutbesi
+    function ws_salary_Melumatixtisas(session:string) :Tstream ;  //ixtisas
+
+
+    function ws_salary_Melumataddrecordotdel(value1:string;Addorupd:Double;Id:double;session:string) :string ;  //-1 add 0 update  id is updating row  case value1='delete' adorupd is id
+    function ws_salary_Melumataddrecordkategr(value1:string;Addorupd:Double;Id:double;session:string) :string ;
+    function ws_salary_Melumataddrecordprfs(value1:string;Addorupd:Double;Id:double;session:string) :string ;
+    function ws_salary_Melumataddrecorddolj(value1:string;Addorupd:Double;Id:double;session:string) :string ;
+    function ws_salary_Melumataddrecorduchstp(value1:string;Addorupd:Double;Id:double;session:string) :string ;
+    function ws_salary_Melumataddrecordkpn(value1:string;Addorupd:Double;Id:double;session:string) :string ;
+    function ws_salary_Melumataddrecordbudjet(value1:string;Addorupd:Double;Id:double;session:string) :string ;
+    function ws_salary_Melumataddrecorduchzvn(value1:string;Addorupd:Double;Id:double;session:string) :string ;
+    function ws_salary_Melumataddrecordrazrd(value1:string;Addorupd:Double;Id:double;session:string) :string ;
+    function ws_salary_Melumataddrecordpodrazrd(value1:string;Addorupd:Double;Id:double;session:string) :string ;
+    function ws_salary_Melumataddrecordogran(value1:string;Addorupd:Double;Id:double;session:string) :string ;
+    function ws_salary_Melumataddrecordixtisas(value1:string;Addorupd:Double;Id:double;session:string) :string ;
+
+    function ws_salaryaddorupdworkers(addorupd:double;tabel:Double;Fio:String;Acc_no:String;Kpn:double;Otdel:Double;VidOpl:double;Podrzd:double;Ixtisas:double;kategr:double;
+    ogran:double;okld:double;tgd:String;plp:String;AccDate:String;prfs:double;dolj:double;filial:double;sumpod:double;ins:double;ssn:String;session:string) :string ;    //adding or updating workers  0 add 0<> id of worker
+
+    function ws_salary_rm06(session:string): Tstream;
+
+    function ws_salary_rm01(session:string): Tstream;
+    function ws_salary_rm01active(session:string): Tstream;
+
+    function ws_salary_taxes(datemon:string;dateyear:string;session:string): Tstream;
+
+
+
+    function workerinfo(value1:string;session:string):Tstream ;
+
+    function ws_salary_updsalarycell(value:double;cellname:String;v_id:double;session:string) :string ;
+    function ws_rm01upd(value:String;cellname:String;session:string) :string ;    //0 non active cell 1 active
+    function ws_salary_calculatelist(session:string) :Tstream ;
+    function Calculating(value1:string;session:string):string ;
+    function ws_calculate_active(session:string): Tstream;
+    function ws_rm06upd (v_tnr:String;v_fakt:double;v_norm:double;session:string) :string ;
+
+
+   function leavelist (session:string) :Tstream ;
+
+   function leaveaddupd (v_idmc:string;v_id:string;begindat:string;enddate:string;returndate:string;v_emr:string;addorupd:string;session:string):string ;     //0 add 1 upd  when 0 v_id is null
+
+
+
+   // function ws_rm06newsal (v_tnr:String;v_fakt:double;v_norm:double;obn:string;session:string) :string ;
+
+
+ end;
+
+
+
+{$METHODINFO OFF}
+
+implementation
+
+
+{$R *.dfm}
+
+
+uses System.StrUtils,MVCFramework.DataSet.Utils,Datasnap.DBClient;
+
+var dbname,dbuser,dbpass:string;
+var duser,dpass,Output,ki:string;
+
+function TMethods.EchoString(Value: string): string;
+begin
+  Result := Value;
+end;
+
+
+function TMethods.ReverseString(Value: string): string;
+begin
+  Result := System.StrUtils.ReverseString(Value);
+end;
+
+
+
+
+//function TMethods.dn: TFDJSONDataSets;
+//begin
+//  // Clear active so that query will reexecute.
+//  qery.Active := False;
+//  qery.SQL.Clear;
+//  qery.SQL.Text:='select id,obn,fio from rmz03 where tnr=10';
+//  Result := TFDJSONDataSets.Create;
+//
+//  TFDJSONDataSetsWriter.ListAdd(Result, qery);
+//end;
+
+function TMethods.login(userdb:string;passdb:string;v_session:string): string;
+var RootNode, xmlNode: IXMLNode;
+i,j,k,tr,sr:Integer;
+st,uname,upass:string;
+begin
+ try
+   begin
+
+    XMLDoc.LoadFromFile('C:\xampp\apache\modules\webservice_connection.xml');
+    XMLDoc.Active := True;
+    RootNode := XMLDoc.DocumentElement;
+            // dbname:= RootNode.ChildNodes['Salary'].ChildNodes['dbname'].Text;
+             uname:= RootNode.ChildNodes['Salary'].ChildNodes['dbuser'].Text;
+             upass:= RootNode.ChildNodes['Salary'].ChildNodes['dbpass'].Text;
+    Connection.Connected:=False;
+    Connection.ConnectionString:='Provider=OraOLEDB.Oracle.1;Password='+''''+upass+''''+';Persist Security Info=True;User ID='+''''+uname+''''+';Data Source=pdbnbc;Extended Properties=""' ;
+    Connection.Connected:=true;
+
+
+ {  XMLDoc.Active := False;
+   conn.Params.Values['User_Name'] := dbuser;
+   conn.Params.Values['Password'] := dbpass;
+   conn.Params.Values['Database'] := dbname;
+   conn.DriverName:='Oracle';    }
+
+
+      st :='select count(*) say from active_users where sessionid='+''''+v_session+'''';
+      Query.Close;
+      Query.sql.Clear;
+      Query.SQL.Text := st;
+      Query.Active := True;
+
+      if Query.FieldByName('say').AsInteger>0 then
+      begin
+         st :='select username,userpass from active_users where sessionid='+''''+v_session+'''';
+        Query.Close;
+        Query.sql.Clear;
+        Query.SQL.Text := st;
+        Query.Active := True;
+           dpass:=Query.FieldByName('USERPASS').AsString;
+           duser:=Query.FieldByName('username').AsString;
+
+         Connection.Connected:=False;
+         Connection.ConnectionString:='Provider=OraOLEDB.Oracle.1;Password='+''''+dpass+''''+';Persist Security Info=True;User ID='+''''+duser+''''+';Data Source=pdbnbc;Extended Properties=""' ;
+
+
+         // result:='connected to database with user = '+dbuser ;
+
+
+
+      end else
+
+      begin
+         st:= 'declare begin salary.active_user_ins ( '+''''+userdb+''''+',' +''''+passdb+''''+','+''''+v_session+''''+'); end;' ;
+          Connection.Connected:=False;
+          Connection.ConnectionString:='Provider=OraOLEDB.Oracle.1;Password='+''''+passdb+''''+';Persist Security Info=True;User ID='+''''+userdb+''''+';Data Source=pdbnbc;Extended Properties=""' ;
+
+           Query.Close;
+            Query.sql.Clear;
+            Query.SQL.Text := st;
+            Query.ExecSQL;
+
+            result:='connected to database with user= '+userdb ;
+
+
+      end;
+
+   end;
+     except
+
+               begin
+                result:='UserName or Password is Invalid!!!';
+
+               end;
+
+
+ end;
+
+end;
+
+function TMethods.logout(v_session:string): string;
+var RootNode, xmlNode: IXMLNode;
+uname,upass,st:string;
+begin
+ XMLDoc.LoadFromFile('C:\xampp\apache\modules\webservice_connection.xml');
+XMLDoc.Active := True;
+RootNode := XMLDoc.DocumentElement;
+        // dbname:= RootNode.ChildNodes['Salary'].ChildNodes['dbname'].Text;
+         uname:= RootNode.ChildNodes['Salary'].ChildNodes['dbuser'].Text;
+         upass:= RootNode.ChildNodes['Salary'].ChildNodes['dbpass'].Text;
+Connection.Connected:=False;
+Connection.ConnectionString:='Provider=OraOLEDB.Oracle.1;Password='+''''+upass+''''+';Persist Security Info=True;User ID='+''''+uname+''''+';Data Source=pdbnbc;Extended Properties=""' ;
+Connection.Connected:=true;
+
+
+ st:= 'declare begin logout_user ( '+''''+v_session+''''+'); end;' ;
+
+            Query.Close;
+            Query.sql.Clear;
+            Query.SQL.Text := st;
+            Query.ExecSQL;
+
+         if Connection.Connected then
+            result:='logged out current user '
+         else
+            result:='Could not logout user ';
+
+end;
+
+
+
+
+Function StringToStream(const AString: string): TStream;
+var utf8: utf8string;
+begin
+  utf8:= utf8encode(AString);
+  Result:= TStringStream.Create(utf8);
+end;
+
+
+
+function TMethods.convertingjson (querytext :String;session:string;var k:string):string ;
+ Var
+field_name,nameColunm,valueColunm,rt: String;
+I: Integer;
+LJSONObject:TJsonObject;
+begin
+      login('','',session);
+        Query.Active:=false;
+
+      Query.sql.Clear;
+      Query.SQL.Text := querytext;
+      Query.Active := True;
+      Query.First;
+         // jsonitems:=TJSONObject.Create;
+      while (not Query.EOF) do
+      begin
+
+        rt := rt+'{';
+        for I := 0 to Query.FieldDefs.Count-1 do
+        begin
+          nameColunm  := Query.FieldDefs[I].Name;
+          valueColunm := Query.FieldByName(nameColunm).AsString;
+          rt := rt+'"'+LowerCase(nameColunm)+'":"'+(valueColunm)+'",';
+
+        end;
+        Delete(rt, Length(rt), 1);
+        rt := rt+'},';
+        Query.Next;
+      end;
+      Query.Refresh;
+      Delete(rt, Length(rt), 1);
+
+      result:='['+rt+']';
+
+    end;
+
+
+
+
+
+
+
+
+function TMethods.workerinfo(value1:string;session:string):Tstream ;
+  var   st,KI:string;
+begin
+
+
+st:='SELECT r.tnr,r.fio,r.obn,r.acceptdate,  k.dok vergi,o.dok sobe, '
++'v.dok maasnovu,p.dok shobeadi,i.dok ixtisasi ,d.dok vezifesi, '
++'ka.dok vergiguzesti,og.dok mehdudiyyet,pr.dok hemkarlar, '
++'r.Acc_No,getfilial(r.filial) filial1 '
++'from Rmz03 r, Kpn k, Otdel o, VidOpl v, Podrzd p, '
++'Ixtisas i,  Dolj d, Kategr ka, Ogran og, Prfs pr '
++'Where r.LeftDate is null '
++'and r.Kpn=k.id '
++'and r.Otdel=o.id '
++'and r.VidOpl=v.Id '
++'and r.Podrzd=p.id '
++'and r.Ixtisas=i.Id '
++'and r.Dolj = d.Id '
++'and r.Kategr=ka.Id '
++'and r.Ogran=og.Id '
++'and r.Prfs=pr.Id      AND r.tnr='+value1;
+
+  login('','',session);
+ {Query.Active := false;
+    // Query.SQLConnection:=conn;
+     Query.Close;
+     Query.SQL.Clear;
+     Query.SQL.Add(st);
+     Query.Active := true;   }
+
+ GetInvocationMetadata().ResponseCode := 200;
+GetInvocationMetadata.ResponseContentType:= 'text/xml; charset=utf-8' ;
+ // Output:=Query.AsJSONArray;
+
+  Output:= convertingjson(st,session,ki );
+
+  Result:=StringToStream(output) ;
+
+end;
+
+
+
+
+
+
+function TMethods.Calculating(value1:string;session:string):string ;
+  var   st:string;
+begin
+
+   login('','',session);
+st:='declare begin CALC_EAT(); '
++'NORM_FACT(); '
++'A2_Sum_Yoxlama(); '
++'PUNISMENT_NULL(); '
++'Calc_Taxes('+value1+'); '
++'PUNISMENT_NULL(); '
++'CALC_PUNISHMENT('+value1+'); '
+//+'--yuvarlaqlasdirma(); '
++'A4_Take_Away(); '
++'A5_BORC_QEPIK_YOXLAMA(); '
++'A6_Total(); end;';
+
+   with query   do
+     begin
+      active:=false;
+      Close;
+      SQL.Clear;
+      SQL.Add(st);
+      ExecSQL;
+
+     end;
+
+
+Result:='hesablandi'  ;
+
+end;
+
+    {
+function TMethods.updfil(value1:double) :string ;
+var st:string;
+begin
+    login();
+
+    st:='declare begin upd_fil('+floattostr(value1)+'); end;';
+            with queries   do
+              begin
+               SQLConnection:=conn;
+               active:=false;
+               Queries.Close;
+               SQL.Clear;
+               SQL.Add(st);
+               Active := true;
+
+              end;
+
+end;    }
+
+function TMethods.GetDataSet(session:string): Tstream;
+var st,output:string;
+begin
+login('','',session);
+ Query.Active := false;
+   st:='select id,tnr,obn from rmz03 where tnr=10';
+     Query.Close;
+     Query.SQL.Clear;
+     Query.SQL.Add(st);
+     Query.Active := true;
+  GetInvocationMetadata().ResponseCode := 200;
+GetInvocationMetadata.ResponseContentType:= 'text/xml; charset=utf-8' ;
+  Output:=Query.AsJSONArray;
+  Result:=StringToStream(output);
+end;
+
+
+
+
+
+function TMethods.ws_salary_test(valu:string;session:string) :Tstream;
+   var st,ki,t:string ;
+   metaData: TDSInvocationMetadata;
+    output: String;
+     h:TJSONArray;
+begin
+
+              // login(duser,dpass);
+     //st := ' select id,obn,fio from rmz03 where tnr=519';
+   st:='select id,tnr,obn from rmz03 where tnr=10';
+     ki:='se' ;
+     Output:= convertingjson(st,session,ki );
+ GetInvocationMetadata().ResponseCode := 200;
+ GetInvocationMetadata.ResponseContentType:= 'text/xml; charset=utf-8' ;
+ Result:=StringToStream(Output) ;
+
+   end;
+
+ function TMethods.ws_salarylist(valu:string;session:string) :Tstream;
+   var st,ki,t:string ;
+     h:TJSONArray;
+begin
+
+                 login('','',session);
+
+     st:='select '+valu+ ' from Rmz03 r, Kpn k, Otdel o, VidOpl v, Podrzd p,Ixtisas i,  Dolj d, Kategr ka, Ogran og, Prfs pr,insurance iu '+
+    ' Where r.LeftDate is nulL     and r.Kpn=k.id  and r.Otdel=o.id  and r.VidOpl=v.Id and r.Podrzd=p.id and r.Ixtisas=i.Id and r.Dolj = d.Id' +
+    ' and r.Kategr=ka.Id and r.Ogran=og.Id  and r.Prfs=pr.Id  and r.ins=iu.id order by tnr ' ;
+       ki:='se' ;
+     Output:= convertingjson(st,session,ki );
+ GetInvocationMetadata().ResponseCode := 200;
+ GetInvocationMetadata.ResponseContentType:= 'text/xml; charset=utf-8' ;
+ Result:=StringToStream(Output) ;
+
+   end;
+
+
+   function TMethods.archive(v_session:string): String;
+var st,ki:string ;
+     h:TJSONArray;
+begin
+login('','',v_session);
+st:='declare begin Add_Taxes(); '
++'Add_ArxivRmz03(); '
++'A7_Silme(); '
++'PUNISMENT_NULL(); '
+//+'Advance('+value1+'); '
++'end;';
+
+   with query   do
+     begin
+      active:=false;
+      Close;
+      SQL.Clear;
+      SQL.Add(st);
+      ExecSQL;
+
+     end;
+
+
+Result:='Arxive yazildi'  ;
+
+
+end;
+
+
+
+function TMethods.ws_salary_Melumatotdel(session:string): Tstream;   //shoenin qrupu
+var st,ki:string ;
+     h:TJSONArray;
+begin
+
+         login('','',session);
+     st := ' select Id, Dok from otdel order by id';
+
+
+ ki:='se' ;
+     Output:= convertingjson(st,session,ki );
+ GetInvocationMetadata().ResponseCode := 200;
+ GetInvocationMetadata.ResponseContentType:= 'text/xml; charset=utf-8' ;
+ Result:=StringToStream(Output) ;
+ end;
+
+function TMethods.ws_salary_Melumatkategr(session:string): Tstream;        //vergi guzesti
+var st:string ;
+
+ Comm: TDBXCommand;
+ var metaData: TDSInvocationMetadata;
+begin
+
+
+     st := ' select Id, Dok from kategr order by id';
+//
+           login('','',session);
+ ki:='se' ;
+     Output:= convertingjson(st,session,ki );
+ GetInvocationMetadata().ResponseCode := 200;
+ GetInvocationMetadata.ResponseContentType:= 'text/xml; charset=utf-8' ;
+ Result:=StringToStream(Output) ;
+
+ end;
+
+function TMethods.ws_salary_Melumatprfs(session:string): Tstream;      //henkarlar
+var st:string ;
+begin
+     st := ' select Id, Dok from prfs order by id';
+
+      login('','',session);
+     ki:='se' ;
+     Output:= convertingjson(st,session,ki );
+ GetInvocationMetadata().ResponseCode := 200;
+ GetInvocationMetadata.ResponseContentType:= 'text/xml; charset=utf-8' ;
+ Result:=StringToStream(Output) ;
+ end;
+
+ function TMethods.ws_salary_rm06(session:string): Tstream;      //henkarlar
+var st:string ;
+begin
+     st := ' SELECT tnr,fio,tgd,plp,v_chgr,v_chnu,okld FROM rmz06 order by id';
+
+      login('','',session);
+ ki:='se' ;
+     Output:= convertingjson(st,session,ki );
+ GetInvocationMetadata().ResponseCode := 200;
+ GetInvocationMetadata.ResponseContentType:= 'text/xml; charset=utf-8' ;
+ Result:=StringToStream(Output) ;
+ end;
+
+
+
+
+
+ function TMethods.ws_salary_rm01(session:string): Tstream;
+var st,usl:string ;
+
+begin
+usl:='-1';
+     st := ' select perem_java,uslov,soder1 from rmz01 where uslov <>'+''''+usl+'''';
+
+      login('','',session);
+   ki:='se' ;
+     Output:= convertingjson(st,session,ki );
+ GetInvocationMetadata().ResponseCode := 200;
+ GetInvocationMetadata.ResponseContentType:= 'text/xml; charset=utf-8' ;
+ Result:=StringToStream(Output) ;
+ end;
+
+
+
+  function TMethods.leavelist(session:string): Tstream;
+var st,usl:string ;
+
+begin
+
+     st := 'SELECT a.id, a.id_mc, a.name, a.this_month_days, a.next_month_days,a.amount_of_year, a.amount_leave, a.rest_of_days, a.begin_date,'+
+      ' a.end_date, a.return_date, a.s_year, a.s_month, a.amount_income, '+
+      ' a.type_income, a.amount_this_month, a.amount_next_month,a.r_e_year, a.r_e_month, a.id_leave,a.emr  '+
+       ' FROM leave_1 a  order by begin_date';
+
+      login('','',session);
+   ki:='se' ;
+     Output:= convertingjson(st,session,ki );
+ GetInvocationMetadata().ResponseCode := 200;
+ GetInvocationMetadata.ResponseContentType:= 'text/xml; charset=utf-8' ;
+ Result:=StringToStream(Output) ;
+ end;
+
+
+
+
+
+
+  function TMethods.ws_calculate_active(session:string): Tstream;
+var st,st2,uslov,filds:string ;
+i:integer;
+
+begin
+uslov:='1'  ;
+     st := 'select perem_java from rmz01 where uslov ='+''''+uslov+'''';
+      login('','',session);
+   ki:='se' ;
+
+       with Query   do
+       begin
+       active:=false;
+       Close;
+       SQL.Clear;
+       SQL.Add(st);
+        active:=true;
+       //ExecSQL;
+
+      end;
+
+      for i := 0 to Query.RecordCount-1 do
+        begin
+              filds:=filds+ Query.FieldByName('perem_java').AsString+' ,';
+              Query.Next;
+        end;
+
+        filds:=copy(filds,0,length(filds)-1);
+
+          st2:='select '+filds+ ' from Rmz03 r, Kpn k, Otdel o, VidOpl v, Podrzd p,Ixtisas i,  Dolj d, Kategr ka, Ogran og, Prfs pr,insurance iu '+
+    ' Where r.LeftDate is nulL     and r.Kpn=k.id  and r.Otdel=o.id  and r.VidOpl=v.Id and r.Podrzd=p.id and r.Ixtisas=i.Id and r.Dolj = d.Id' +
+    ' and r.Kategr=ka.Id and r.Ogran=og.Id  and r.Prfs=pr.Id  and r.ins=iu.id  order by tnr ' ;
+
+    Output:= convertingjson(st2,session,ki );
+ GetInvocationMetadata().ResponseCode := 200;
+ GetInvocationMetadata.ResponseContentType:= 'text/xml; charset=utf-8' ;
+ Result:=StringToStream(Output) ;
+ end;
+
+
+ function TMethods.ws_salary_rm01active(session:string): Tstream;
+var st,uslov:string ;
+
+begin
+uslov:='1'  ;
+     st := 'select perem_java,uslov,soder1 from rmz01 where uslov ='+''''+uslov+'''';
+
+      login('','',session);
+   ki:='se' ;
+     Output:= convertingjson(st,session,ki );
+ GetInvocationMetadata().ResponseCode := 200;
+ GetInvocationMetadata.ResponseContentType:= 'text/xml; charset=utf-8' ;
+ Result:=StringToStream(Output) ;
+ end;
+
+ function TMethods.ws_salary_Melumatkpn(session:string): Tstream;
+var st:string ;
+begin
+     st := ' select Id, Dok from kpn order by id';
+
+           login('','',session);
+   ki:='se' ;
+     Output:= convertingjson(st,session,ki );
+ GetInvocationMetadata().ResponseCode := 200;
+ GetInvocationMetadata.ResponseContentType:= 'text/xml; charset=utf-8' ;
+ Result:=StringToStream(Output) ;
+ end;
+
+  function TMethods.ws_salary_Melumatvidopl(session:string): Tstream;
+var st:string ;
+begin
+     st := ' select Id, Dok from vidopl order by id';
+
+           login('','',session);
+    ki:='se' ;
+     Output:= convertingjson(st,session,ki );
+ GetInvocationMetadata().ResponseCode := 200;
+ GetInvocationMetadata.ResponseContentType:= 'text/xml; charset=utf-8' ;
+ Result:=StringToStream(Output) ;
+ end;
+
+  function TMethods.ws_salary_Melumatuchstp(session:string): Tstream;
+var st:string ;
+begin
+     st := ' select Id, Dok from uchstp order by id';
+
+           login('','',session);
+     ki:='se' ;
+     Output:= convertingjson(st,session,ki );
+ GetInvocationMetadata().ResponseCode := 200;
+ GetInvocationMetadata.ResponseContentType:= 'text/xml; charset=utf-8' ;
+ Result:=StringToStream(Output) ;
+ end;
+
+
+   function TMethods.ws_salary_taxes(datemon:string;dateyear:string;session:string): Tstream;
+var st:string ;
+begin
+     st := ' select * from taxes where month='+datemon +' and year='+dateyear;
+
+            login('','',session);
+    ki:='se' ;
+     Output:= convertingjson(st,session,ki );
+ GetInvocationMetadata().ResponseCode := 200;
+ GetInvocationMetadata.ResponseContentType:= 'text/xml; charset=utf-8' ;
+ Result:=StringToStream(Output) ;
+ end;
+
+
+  function TMethods.ws_salary_Melumatixtisas(session:string): Tstream;
+var st:string ;
+begin
+     st := ' select Id, Dok from ixtisas order by id';
+
+      login('','',session);
+     ki:='se' ;
+
+     Output:= convertingjson(st,session,ki );
+
+ GetInvocationMetadata().ResponseCode := 200;
+ GetInvocationMetadata.ResponseContentType:= 'text/xml; charset=utf-8' ;
+
+ Result:=StringToStream(Output) ;
+ end;
+
+ function TMethods.ws_salary_Melumatn01p04(session:string): Tstream;
+var st:string ;
+begin
+
+     st := ' select Id, Dok from n01p04 order by id';
+
+          login('','',session);
+   ki:='se' ;
+     Output:= convertingjson(st,session,ki );
+ GetInvocationMetadata().ResponseCode := 200;
+ GetInvocationMetadata.ResponseContentType:= 'text/xml; charset=utf-8' ;
+ Result:=StringToStream(Output) ;
+ end;
+
+
+ function TMethods.ws_salary_Melumatrazrd(session:string): Tstream;
+var st:string ;
+begin
+
+     st := ' select Id, Dok from razrd order by id';
+
+          login('','',session);
+      ki:='se' ;
+     Output:= convertingjson(st,session,ki );
+ GetInvocationMetadata().ResponseCode := 200;
+ GetInvocationMetadata.ResponseContentType:= 'text/xml; charset=utf-8' ;
+ Result:=StringToStream(Output) ;
+ end;
+
+ function TMethods.ws_salary_Melumatbudjet(session:string): Tstream;
+var st:string ;
+begin
+
+     st := ' select Id, Dok from budjet order by id';
+
+          login('','',session);
+     ki:='se' ;
+     Output:= convertingjson(st,session,ki );
+ GetInvocationMetadata().ResponseCode := 200;
+ GetInvocationMetadata.ResponseContentType:= 'text/xml; charset=utf-8' ;
+ Result:=StringToStream(Output) ;
+ end;
+
+
+  function TMethods.ws_salary_Melumatpodrzd(session:string): Tstream;
+var st:string ;
+begin
+
+
+     st := ' select Id, Dok from podrzd order by id';
+
+          login(duser,dpass,session);
+   ki:='se' ;
+     Output:= convertingjson(st,session,ki );
+ GetInvocationMetadata().ResponseCode := 200;
+ GetInvocationMetadata.ResponseContentType:= 'text/xml; charset=utf-8' ;
+ Result:=StringToStream(Output) ;
+ end;
+
+   function TMethods.ws_salary_Melumatogran(session:string): Tstream;
+var st:string ;
+begin
+
+     st := ' select Id, Dok from ogran order by id';
+
+          login('','',session);
+           ki:='se' ;
+     Output:= convertingjson(st,session,ki );
+ GetInvocationMetadata().ResponseCode := 200;
+ GetInvocationMetadata.ResponseContentType:= 'text/xml; charset=utf-8' ;
+ Result:=StringToStream(Output) ;
+    { Queries.Active := false;
+     Queries.SQLConnection:=conn;
+     Queries.Close;
+     Queries.SQL.Clear;
+     Queries.SQL.Add(st);
+     Queries.Active := true;
+
+        GetInvocationMetadata().ResponseCode := 200;
+GetInvocationMetadata.ResponseContentType:= 'text/xml; charset=utf-8' ;
+  Output:=Queries.AsJSONArray;
+  Result:=StringToStream(output) ; }
+ end;
+
+
+   function TMethods.ws_salary_Melumatuchzvn(session:string): Tstream;
+var st:string ;
+begin
+
+     st := ' select Id, Dok from uchzvn order by id';
+          login('','',session);
+    ki:='se' ;
+     Output:= convertingjson(st,session,ki );
+ GetInvocationMetadata().ResponseCode := 200;
+ GetInvocationMetadata.ResponseContentType:= 'text/xml; charset=utf-8' ;
+ Result:=StringToStream(Output) ;
+ end;
+
+
+
+   function TMethods.ws_salary_Melumatdolj(session:string): Tstream;
+var st:string ;
+begin
+
+     st := ' select Id, Dok from dolj order by id';
+          login('','',session);
+      ki:='se' ;
+     Output:= convertingjson(st,session,ki );
+ GetInvocationMetadata().ResponseCode := 200;
+ GetInvocationMetadata.ResponseContentType:= 'text/xml; charset=utf-8' ;
+ Result:=StringToStream(Output) ;
+ end;
+
+function TMethods.ws_salary_Melumataddrecordotdel(value1:string;Addorupd:Double;id:double;session:string): string;
+var st:string ;
+begin
+
+  if value1<>'' then
+    begin
+             if value1='delete' then
+             begin
+
+           st := 'delete  otdel where id ='+ floattostr(Addorupd);
+           login('','',session);
+          //Queries.SQLConnection:=conn;
+               Query.Active := false;
+               Query.SQL.Clear;
+               Query.SQL.Add(st);
+               Query.ExecSQL;
+               Result:='Record deleted succesfully' ;
+           end  ;
+
+
+       if Addorupd=-1 then
+           begin
+
+           st := 'Insert into otdel(Dok) Values ('+''''+value1+''''+')';
+           login('','',session);
+          // Queries.SQLConnection:=conn;
+               Query.Active := false;
+               Query.SQL.Clear;
+               Query.SQL.Add(st);
+               Query.ExecSQL;
+               Result:='Record added succesfully' ;
+           end ;
+       if Addorupd=0 then
+           begin
+                 st := 'Update otdel Set Dok =' + ''''+value1+'''' + ' Where Id='+floattostr(id);
+               login('','',session);
+              // Query.SQLConnection:=conn;
+               Query.Active := false;
+               Query.SQL.Clear;
+               Query.SQL.Add(st);
+               Query.ExecSQL;
+               Result:='Record updated succesfully' ;
+           end;
+    end
+  else
+     Result:='Null value not allowed ';
+
+
+ end;
+
+
+function TMethods.ws_salary_Melumataddrecordkategr(value1:string;Addorupd:Double;id:double;session:string): string;
+var st:string ;
+begin
+
+  if value1<>'' then
+    begin
+
+     if value1='delete' then
+             begin
+
+           st := 'delete  kategr where id ='+ floattostr(Addorupd);
+           login('','',session);
+          // Queries.SQLConnection:=conn;
+               Query.Active := false;
+               Query.SQL.Clear;
+               Query.SQL.Add(st);
+               Query.ExecSQL;
+               Result:='Record deleted succesfully' ;
+           end  ;
+       if Addorupd=-1 then
+           begin
+
+           st := 'Insert into kategr(Dok) Values ('+''''+value1+''''+')';
+           login('','',session);
+           //Queries.SQLConnection:=conn;
+               Query.Active := false;
+               Query.SQL.Clear;
+               Query.SQL.Add(st);
+               Query.ExecSQL;
+               Result:='Record added succesfully' ;
+           end ;
+   if Addorupd=0 then
+           begin
+                 st := 'Update kategr Set Dok =' + ''''+value1+'''' + ' Where Id='+floattostr(id);
+              login('','',session);
+               //Queries.SQLConnection:=conn;
+               Query.Active := false;
+               Query.SQL.Clear;
+               Query.SQL.Add(st);
+               Query.ExecSQL;
+               Result:='Record updated succesfully' ;
+           end;
+    end
+  else
+     Result:='Null value not allowed ';
+
+
+ end;
+
+
+function TMethods.ws_salary_Melumataddrecordprfs(value1:string;Addorupd:Double;id:double;session:string): string;
+var st:string ;
+begin
+
+
+  if value1<>'' then
+    begin
+
+     if value1='delete' then
+             begin
+
+           st := 'delete  prfs where id ='+ floattostr(Addorupd);
+           login('','',session);
+           //Queries.SQLConnection:=conn;
+               Query.Active := false;
+               Query.SQL.Clear;
+               Query.SQL.Add(st);
+               Query.ExecSQL;
+               Result:='Record deleted succesfully' ;
+           end  ;
+
+       if Addorupd=-1 then
+           begin
+
+           st := 'Insert into prfs(Dok) Values ('+''''+value1+''''+')';
+           login('','',session);
+          // Queries.SQLConnection:=conn;
+               Query.Active := false;
+               Query.SQL.Clear;
+               Query.SQL.Add(st);
+               Query.ExecSQL;
+               Result:='Record added succesfully' ;
+           end  ;
+
+       if Addorupd=0 then
+           begin
+                 st := 'Update prfs Set Dok =' + ''''+value1+'''' + ' Where Id='+floattostr(id);
+              login('','',session);
+             //  Queries.SQLConnection:=conn;
+               Query.Active := false;
+               Query.SQL.Clear;
+               Query.SQL.Add(st);
+               Query.ExecSQL;
+               Result:='Record updated succesfully' ;
+           end;
+
+    end
+  else
+     Result:='Null value not allowed ';
+
+
+ end;
+
+function TMethods.ws_salary_Melumataddrecordbudjet(value1:string;Addorupd:Double;id:double;session:string): string;
+var st:string ;
+begin
+
+  if value1<>'' then
+    begin
+
+     if value1='delete' then
+             begin
+
+           st := 'delete  budjet where id ='+ floattostr(Addorupd);
+           login('','',session);
+          // Queries.SQLConnection:=conn;
+               Query.Active := false;
+               Query.SQL.Clear;
+               Query.SQL.Add(st);
+               Query.ExecSQL;
+               Result:='Record deleted succesfully' ;
+           end  ;
+       if Addorupd=-1 then
+           begin
+
+           st := 'Insert into budjet(Dok) Values ('+''''+value1+''''+')';
+           login('','',session);
+           //Queries.SQLConnection:=conn;
+               Query.Active := false;
+               Query.SQL.Clear;
+               Query.SQL.Add(st);
+               Query.ExecSQL;
+               Result:='Record added succesfully' ;
+           end;
+       if Addorupd=0 then
+           begin
+                 st := 'Update budjet Set Dok =' + ''''+value1+'''' + ' Where Id='+floattostr(id);
+              login('','',session);
+              // Queries.SQLConnection:=conn;
+               Query.Active := false;
+               Query.SQL.Clear;
+               Query.SQL.Add(st);
+               Query.ExecSQL;
+               Result:='Record updated succesfully' ;
+           end;
+    end
+  else
+     Result:='Null value not allowed ';
+
+
+ end;
+
+ function TMethods.ws_salary_Melumataddrecorduchstp(value1:string;Addorupd:Double;id:double;session:string): string;
+var st:string ;
+begin
+
+  if value1<>'' then
+    begin
+
+    if value1='delete' then
+             begin
+
+           st := 'delete  uchstp where id ='+ floattostr(Addorupd);
+           login('','',session);
+           //Queries.SQLConnection:=conn;
+               Query.Active := false;
+               Query.SQL.Clear;
+               Query.SQL.Add(st);
+               Query.ExecSQL;
+               Result:='Record deleted succesfully' ;
+           end  ;
+       if Addorupd=-1 then
+           begin
+
+           st := 'Insert into uchstp(Dok) Values ('+''''+value1+''''+')';
+           login('','',session);
+           //Queries.SQLConnection:=conn;
+               Query.Active := false;
+               Query.SQL.Clear;
+               Query.SQL.Add(st);
+               Query.ExecSQL;
+               Result:='Record added succesfully' ;
+           end ;
+     if Addorupd=0 then
+           begin
+                 st := 'Update uchstp Set Dok =' + ''''+value1+'''' + ' Where Id='+floattostr(id);
+             login('','',session);
+              // Queries.SQLConnection:=conn;
+               Query.Active := false;
+               Query.SQL.Clear;
+               Query.SQL.Add(st);
+               Query.ExecSQL;
+               Result:='Record updated succesfully' ;
+           end;
+    end
+  else
+     Result:='Null value not allowed ';
+
+
+ end;
+
+
+ function TMethods.ws_salary_Melumataddrecorddolj(value1:string;Addorupd:Double;id:double;session:string): string;
+var st:string ;
+begin
+
+  if value1<>'' then
+    begin
+
+    if value1='delete' then
+             begin
+
+           st := 'delete  dolj where id ='+ floattostr(Addorupd);
+           login('','',session);
+           //Queries.SQLConnection:=conn;
+               Query.Active := false;
+               Query.SQL.Clear;
+               Query.SQL.Add(st);
+               Query.ExecSQL;
+               Result:='Record deleted succesfully' ;
+           end  ;
+       if Addorupd=-1 then
+           begin
+
+           st := 'Insert into uchstp(Dok) Values ('+''''+value1+''''+')';
+           login('','',session);
+          // Queries.SQLConnection:=conn;
+               Query.Active := false;
+               Query.SQL.Clear;
+               Query.SQL.Add(st);
+               Query.ExecSQL;
+               Result:='Record added succesfully' ;
+           end ;
+       if Addorupd=0 then
+           begin
+                 st := 'Update uchstp Set Dok =' + ''''+value1+'''' + ' Where Id='+floattostr(id);
+              login('','',session);
+             //  Queries.SQLConnection:=conn;
+               Query.Active := false;
+               Query.SQL.Clear;
+               Query.SQL.Add(st);
+               Query.ExecSQL;
+               Result:='Record updated succesfully' ;
+           end;
+    end
+  else
+     Result:='Null value not allowed ';
+
+
+ end;
+
+ function TMethods.ws_salary_Melumataddrecordkpn(value1:string;Addorupd:Double;id:double;session:string): string;
+var st:string ;
+begin
+
+  if value1<>'' then
+    begin
+       if Addorupd=-1 then
+           begin
+
+           st := 'Insert into kpn(Dok) Values ('+''''+value1+''''+')';
+           login('','',session);
+          // Queries.SQLConnection:=conn;
+               Query.Active := false;
+               Query.SQL.Clear;
+               Query.SQL.Add(st);
+               Query.ExecSQL;
+               Result:='Record added succesfully' ;
+           end ;
+       if Addorupd=0 then
+           begin
+                 st := 'Update kpn Set Dok =' + ''''+value1+'''' + ' Where Id='+floattostr(id);
+             login('','',session);
+              // Queries.SQLConnection:=conn;
+               Query.Active := false;
+               Query.SQL.Clear;
+               Query.SQL.Add(st);
+               Query.ExecSQL;
+               Result:='Record updated succesfully' ;
+           end;
+    end
+  else
+     Result:='Null value not allowed ';
+
+
+ end;
+ function TMethods.ws_salary_Melumataddrecordogran(value1:string;Addorupd:Double;id:double;session:string): string;
+var st:string ;
+begin
+
+  if value1<>'' then
+    begin
+
+    if value1='delete' then
+             begin
+
+           st := 'delete  ogran where id ='+ floattostr(Addorupd);
+           login('','',session);
+          // Queries.SQLConnection:=conn;
+               Query.Active := false;
+               Query.SQL.Clear;
+               Query.SQL.Add(st);
+               Query.ExecSQL;
+               Result:='Record deleted succesfully' ;
+           end  ;
+       if Addorupd=-1 then
+           begin
+
+           st := 'Insert into ogran(Dok) Values ('+''''+value1+''''+')';
+           login('','',session);
+          // Queries.SQLConnection:=conn;
+               Query.Active := false;
+               Query.SQL.Clear;
+               Query.SQL.Add(st);
+               Query.ExecSQL;
+               Result:='Record added succesfully' ;
+           end ;
+       if Addorupd=0 then
+           begin
+                 st := 'Update ogran Set Dok =' + ''''+value1+'''' + ' Where Id='+floattostr(id);
+              login('','',session);
+               //Queries.SQLConnection:=conn;
+               Query.Active := false;
+               Query.SQL.Clear;
+               Query.SQL.Add(st);
+               Query.ExecSQL;
+               Result:='Record updated succesfully' ;
+           end;
+    end
+  else
+     Result:='Null value not allowed ';
+
+
+ end;
+ function TMethods.ws_salary_Melumataddrecordixtisas(value1:string;Addorupd:Double;id:double;session:string): string;
+var st:string ;
+begin
+
+  if value1<>'' then
+    begin
+
+    if value1='delete' then
+             begin
+
+           st := 'delete  ixtisas where id ='+ floattostr(Addorupd);
+           login('','',session);
+           //Queries.SQLConnection:=conn;
+               Query.Active := false;
+               Query.SQL.Clear;
+               Query.SQL.Add(st);
+               Query.ExecSQL;
+               Result:='Record deleted succesfully' ;
+           end  ;
+       if Addorupd=-1 then
+           begin
+
+           st := 'Insert into ixtisas kpn(Dok) Values ('+''''+value1+''''+')';
+           login('','',session);
+         //  Queries.SQLConnection:=conn;
+               Query.Active := false;
+               Query.SQL.Clear;
+               Query.SQL.Add(st);
+               Query.ExecSQL;
+               Result:='Record added succesfully' ;
+           end ;
+       if Addorupd=0 then
+           begin
+                 st := 'Update ixtisas Set Dok =' + ''''+value1+'''' + ' Where Id='+floattostr(id);
+              login('','',session);
+              // Queries.SQLConnection:=conn;
+               Query.Active := false;
+               Query.SQL.Clear;
+               Query.SQL.Add(st);
+               Query.ExecSQL;
+               Result:='Record updated succesfully' ;
+           end;
+    end
+  else
+     Result:='Null value not allowed ';
+
+
+ end;
+
+ function TMethods.ws_salary_Melumataddrecordrazrd(value1:string;Addorupd:Double;id:double;session:string): string;
+var st:string ;
+begin
+
+  if value1<>'' then
+    begin
+
+    if value1='delete' then
+             begin
+
+           st := 'delete  razrd where id ='+ floattostr(Addorupd);
+           login('','',session);
+           //Queries.SQLConnection:=conn;
+               Query.Active := false;
+               Query.SQL.Clear;
+               Query.SQL.Add(st);
+               Query.ExecSQL;
+               Result:='Record deleted succesfully' ;
+           end  ;
+       if Addorupd=-1 then
+           begin
+
+           st := 'Insert into razrd(Dok) Values ('+''''+value1+''''+')';
+           login('','',session);
+          // Queries.SQLConnection:=conn;
+               Query.Active := false;
+               Query.SQL.Clear;
+               Query.SQL.Add(st);
+               Query.ExecSQL;
+               Result:='Record added succesfully' ;
+           end ;
+       if Addorupd=0 then
+           begin
+                 st := 'Update razrd Set Dok =' + ''''+value1+'''' + ' Where Id='+floattostr(id);
+              login('','',session);
+               //Queries.SQLConnection:=conn;
+               Query.Active := false;
+               Query.SQL.Clear;
+               Query.SQL.Add(st);
+               Query.ExecSQL;
+               Result:='Record updated succesfully' ;
+           end;
+    end
+  else
+     Result:='Null value not allowed ';
+
+
+ end;
+
+ function TMethods.ws_salary_Melumataddrecordpodrazrd(value1:string;Addorupd:Double;id:double;session:string): string;
+var st:string ;
+begin
+
+  if value1<>'' then
+    begin
+
+    if value1='delete' then
+             begin
+
+           st := 'delete  podrazrd where id ='+ floattostr(Addorupd);
+           login('','',session);
+          // Queries.SQLConnection:=conn;
+               Query.Active := false;
+               Query.SQL.Clear;
+               Query.SQL.Add(st);
+               Query.ExecSQL;
+               Result:='Record deleted succesfully' ;
+           end  ;
+       if Addorupd=-1 then
+           begin
+
+           st := 'Insert into podrazrd(Dok) Values ('+''''+value1+''''+')';
+           login('','',session);
+           //Queries.SQLConnection:=conn;
+               Query.Active := false;
+               Query.SQL.Clear;
+               Query.SQL.Add(st);
+               Query.ExecSQL;
+               Result:='Record added succesfully' ;
+           end ;
+       if Addorupd=0 then
+           begin
+                 st := 'Update podrazrd Set Dok =' + ''''+value1+'''' + ' Where Id='+floattostr(id);
+              login('','',session);
+             //  Queries.SQLConnection:=conn;
+               Query.Active := false;
+               Query.SQL.Clear;
+               Query.SQL.Add(st);
+               Query.ExecSQL;
+               Result:='Record updated succesfully' ;
+           end;
+    end
+  else
+     Result:='Null value not allowed ';
+
+
+ end;
+
+ function TMethods.ws_salary_Melumataddrecorduchzvn(value1:string;Addorupd:Double;id:double;session:string): string;
+var st:string ;
+begin
+
+  if value1<>'' then
+    begin
+    if value1='delete' then
+             begin
+
+           st := 'delete  uchzvn where id ='+ floattostr(Addorupd);
+           login('','',session);
+          // Queries.SQLConnection:=conn;
+               Query.Active := false;
+               Query.SQL.Clear;
+               Query.SQL.Add(st);
+               Query.ExecSQL;
+               Result:='Record deleted succesfully' ;
+           end  ;
+       if Addorupd=-1 then
+           begin
+
+           st := 'Insert into uchzvn(Dok) Values ('+''''+value1+''''+')';
+            login('','',session);
+          // Queries.SQLConnection:=conn;
+               Query.Active := false;
+               Query.SQL.Clear;
+               Query.SQL.Add(st);
+               Query.ExecSQL;
+               Result:='Record deleted succesfully' ;
+           end ;
+       if Addorupd=0 then
+           begin
+                 st := 'Update uchzvn Set Dok =' + ''''+value1+'''' + ' Where Id='+floattostr(id);
+               login('','',session);
+             // Queries.SQLConnection:=conn;
+               Query.Active := false;
+               Query.SQL.Clear;
+               Query.SQL.Add(st);
+               Query.ExecSQL;
+               Result:='Record updated succesfully' ;
+           end;
+    end
+  else
+     Result:='Null value not allowed ';
+
+
+ end;
+
+
+ function  TMethods.ws_salaryaddorupdworkers(addorupd:double;tabel:Double;Fio:String;Acc_no:String;Kpn:double;Otdel:Double;VidOpl:double;Podrzd:double;Ixtisas:double;kategr:double;
+    ogran:double;okld:double;tgd:String;plp:String;AccDate:String;prfs:double;dolj:double;filial:double;sumpod:double;ins:double;ssn:String;session:string) :string ;
+var st:string;
+begin
+
+  login('','',session);
+
+           if  addorupd=0 then
+                begin
+                 st:='declare begin add_rmz03(' +floattostr(tabel)+' ,'+''''+Fio+''''+' , '+''''+acc_no+''''+' , '+floattostr(kpn)
+                                                +' , '+floattostr(otdel)+' , '+floattostr(VidOpl)+' , '+floattostr(podrzd)
+                                                +' , '+floattostr(ixtisas)+' , '+floattostr(kategr)+' , '+floattostr(ogran)
+                                                +' , '+floattostr(okld)+' , '+''''+tgd+''''+' , '+''''+plp+''''
+                                                +' , '+''''+AccDate+''''+' , '+floattostr(prfs) +' , '+floattostr(dolj)+' , '+floattostr(filial)
+                                                +' , '+floattostr(sumpod)+' , '+floattostr(ins)+' , '+''''+ssn+''''+
+                          '); end;';
+                          with Query   do
+                          begin
+                           //SQLConnection:=conn;
+                           active:=false;
+                           Close;
+                           SQL.Clear;
+                           SQL.Add(st);
+                           ExecSQL;
+                          end;
+                           result:='New Worker Added Successfully';
+                end
+            else
+                begin
+
+                st:='declare begin upd_rmz03('+floattostr(addorupd)+' , ' +floattostr(tabel)+' ,'+''''+Fio+''''+' , '+''''+acc_no+''''+' , '+floattostr(kpn)
+                                                +' , '+floattostr(otdel)+' , '+floattostr(VidOpl)+' , '+floattostr(podrzd)
+                                                +' , '+floattostr(ixtisas)+' , '+floattostr(kategr)+' , '+floattostr(ogran)
+                                                +' , '+floattostr(okld)+' , '+''''+tgd+''''+' , '+''''+plp+''''
+                                                +' , '+''''+AccDate+''''+' , '+floattostr(prfs) +' , '+floattostr(dolj)+' , '+floattostr(filial)
+                                                +' , '+floattostr(sumpod)+' , '+floattostr(ins)+' , '+''''+ssn+''''+
+                          '); end;';
+                          with Query   do
+                          begin
+                          // SQLConnection:=conn;
+                           active:=false;
+                           Close;
+                           SQL.Clear;
+                           SQL.Add(st);
+                           ExecSQL;
+
+                          end;
+                          result:=' Worker Updated Successfully';
+
+                end;
+
+   end;
+
+ function  TMethods.ws_salary_updsalarycell(value:double;cellname:String;v_id:double;session:string) :string ;
+var st:string ;
+begin
+
+st:=' declare begin update rmz03  set '+cellname +' = '+ floattostr(value)+' where tnr ='+floattostr(v_id)+'; commit; end;';
+
+        login('','',session);
+
+  with Query   do
+   begin
+   //SQLConnection:=conn;
+   active:=false;
+   Close;
+   SQL.Clear;
+   SQL.Add(st);
+//      GetInvocationMetadata().ResponseCode := 200;
+//  GetInvocationMetadata().ResponseContent := query.AsJSONArrayString;
+   ExecSQL;
+
+  end;
+    Result:='Succes' ;
+
+end;
+
+
+
+function  TMethods.ws_rm06upd (v_tnr:String;v_fakt:double;v_norm:double;session:string) :string ;
+var st:string ;
+ begin                                         //v_chgr-norma
+           if v_norm=-1 then
+    st:=' declare begin update rmz06 set  v_chnu= ' +floattostr(v_fakt)+' where tnr ='+v_tnr+'; commit; end;';
+
+     if v_norm<>-1 then
+      st:=' declare begin update rmz06 set  v_chgr= ' +floattostr(v_norm)+',v_chnu= ' +floattostr(v_fakt)+' where tnr ='+v_tnr+'; commit; end;';
+
+     login('','',session);
+
+  with Query   do
+   begin
+   active:=false;
+   Close;
+   SQL.Clear;
+   SQL.Add(st);
+
+   ExecSQL;
+
+  end;
+   Result:='Succes' ;
+  end;
+
+
+  function  TMethods.leaveaddupd (v_idmc:string;v_id:string;begindat:string;enddate:string;returndate:string;v_emr:string;addorupd:string;session:string):string ;
+  var st:string ;
+  begin
+   //DataMod.SalaryPackage.CallProcedure('CALC_LEAVE',[ODSLeave_1.fieldByName('ID').AsInteger]);
+
+    if addorupd='0' then
+      begin
+        st:=' declare begin add_leave_1_web ('+v_idmc+','+begindat+','+enddate+','+returndate+','+''''+v_emr+''''+'); commit; end;';
+      end
+    else
+      begin
+       // st:=' declare begin UPD_LEAVE_1 ('+v_id+','+v_idmc+','+strtodate(begindat)+','+strtodate(enddate)+','+strtodate(returndate)+','+v_emr+'); commit; end;';
+       end;
+   with query   do
+     begin
+      active:=false;
+      Close;
+      SQL.Clear;
+      SQL.Add(st);
+      ExecSQL;
+     end;
+
+
+    if addorupd='0' then
+      begin
+       Result:='Əlavə olundu !!' ;
+      end
+    else
+      begin
+       Result:='Redakt olundu !!' ;
+      end;
+  end;
+
+
+
+
+function  TMethods.ws_rm01upd(value:String;cellname:String;session:string) :string ;
+var st:string ;
+begin
+
+st:=' declare begin update rmz01 set uslov = ' +''''+value+''''+' where perem_java ='+''''+cellname+''''+'; commit; end;';
+
+        login('','',session);
+
+  with Query   do
+   begin
+   active:=false;
+   Close;
+   SQL.Clear;
+   SQL.Add(st);
+
+   ExecSQL;
+
+  end;
+   Result:='Succes' ;
+end;
+
+
+function TMethods.ws_salary_calculatelist(session:string): Tstream;
+var st:string ;
+begin
+
+     st := 'select tnr,fio,obn from rmz03 '
+     +' Order by id';
+
+           login('','',session);
+
+    { Query.Active := false;
+     //Queries.SQLConnection:=conn;
+     Query.Close;
+     Query.SQL.Clear;
+     Query.SQL.Add(st);
+     Query.Active := true;  }
+
+ Output:= convertingjson(st,session,ki );
+ GetInvocationMetadata().ResponseCode := 200;
+ GetInvocationMetadata.ResponseContentType:= 'text/xml; charset=utf-8' ;
+ Result:=StringToStream(Output) ;
+ end;
+
+
+
+
+
+
+
+
+
+end.
+

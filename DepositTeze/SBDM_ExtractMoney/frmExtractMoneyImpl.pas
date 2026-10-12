@@ -1,0 +1,294 @@
+unit frmExtractMoneyImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, NLSDialogs,
+  StdCtrls, Mask, DBCtrls, ExtCtrls, ComCtrls, ImgList, ToolWin, Grids,
+  DBGridEh, ActnList, CMExcelExport,  Menus;
+
+type
+  TfrmExtractMoney = class(TForm)
+    GroupBox1: TGroupBox;
+    DBEdit2: TDBEdit;
+    StatusBar1: TStatusBar;
+    Panel1: TPanel;
+    ToolBar1: TToolBar;
+    ToolButton3: TToolButton;
+    ToolButton4: TToolButton;
+    ToolButton5: TToolButton;
+    ToolButton6: TToolButton;
+    ImageList1: TImageList;
+    ToolButton7: TToolButton;
+    ToolButton8: TToolButton;
+    ToolButton9: TToolButton;
+    DBGridEh1: TDBGridEh;
+    ActionList1: TActionList;
+    ActnAdd: TAction;
+    ActnDel: TAction;
+    ExcelExport: TCMExcelExport;
+    ActnExprt: TAction;
+    PMShowTr: TPopupMenu;
+    N1: TMenuItem;
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure ActnAddExecute(Sender: TObject);
+    procedure ActnDelExecute(Sender: TObject);
+    procedure ToolButton9Click(Sender: TObject);
+    procedure ActnExprtExecute(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure ActnDelUpdate(Sender: TObject);
+    procedure N1DrawItem(Sender: TObject; ACanvas: TCanvas; ARect: TRect;
+      Selected: Boolean);
+    procedure N1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    RefreshAfterOperation : Boolean;
+  end;
+
+var
+  frmExtractMoney: TfrmExtractMoney;
+
+  procedure exportproc(S:String);export;
+implementation
+
+{$R *.DFM}
+uses DMExtractMoneyImpl,frmAddExtractMoneyImpl,CommonDeclsImpl,SBTranslateProc,sboapiDataModuleimpl;
+
+procedure exportproc(S:String);export;
+var ContractID,CustAccID : Integer;
+begin
+
+   ContractID := Get_SelectedContID;
+
+   with DMExtractMoney do
+   begin
+
+       with Payments do
+       begin
+          if Active then CloseAll;
+          SetVariable('ContractID',ContractID);
+          Open;
+       end;
+
+       with DepositInfo do
+       begin
+          if Active then CloseAll;
+          SetVariable('ContractID',ContractID);
+          Open;
+       end;
+
+       with CustAcc do
+       begin
+          if Active then CloseAll;
+          SetVariable('ContractID',ContractID);
+          Open;
+          CustAccID := FieldByName('ClientACCID').AsInteger;
+       end;
+
+       with CreditAccs do
+       begin
+        if not Active then
+          //SetVariable('kliID',CustID);
+          Open;
+        if Locate('ID',CustAccID,[]) then
+        frmAddExtractMoney.AccountListCB.KeyValue := CustAccID;
+       end;
+
+
+   end;
+
+    with frmExtractMoney do begin
+         Caption := Get_SelectedContNo+' нюмряли депозитин юдянишляри';
+         ShowModal;
+    end;
+end;
+
+exports
+  exportproc;
+
+procedure TfrmExtractMoney.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+   Resize := False 
+end;
+
+procedure TfrmExtractMoney.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+   if ord(Key) = VK_ESCAPE then Close
+end;
+
+procedure TfrmExtractMoney.FormCreate(Sender: TObject);
+begin
+   DMExtractMoney := TDMExtractMoney.Create(Self);
+   frmAddExtractMoney := TfrmAddExtractMoney.Create(Self);
+   SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TfrmExtractMoney.FormDestroy(Sender: TObject);
+begin
+   DMExtractMoney.Free;
+   frmAddExtractMoney.Free;
+end;
+
+procedure TfrmExtractMoney.ActnAddExecute(Sender: TObject);
+begin
+   if frmAddExtractMoney.ShowModal = mrOk then
+   begin
+      RefreshAfterOperation := True;
+      DMExtractMoney.Payments.Refresh;
+   end;
+end;
+
+procedure TfrmExtractMoney.ActnDelExecute(Sender: TObject);
+begin
+
+    if MessageDlg('Силинмясиня яминсинизми?',
+             mtConfirmation, [mbYes, mbNo], 0) = mrNo
+    then Exit;
+
+    with DMExtractMoney,Payments,sbcm_payment do
+    begin
+         CallProcedure('DeleteWithDrawMoney',['P_DepWMoneyID',FieldByName('ID').AsInteger]);
+         Refresh;
+    end;
+
+end;
+
+procedure TfrmExtractMoney.ToolButton9Click(Sender: TObject);
+begin
+   Close;
+end;
+
+procedure TfrmExtractMoney.ActnExprtExecute(Sender: TObject);
+begin
+   with ExcelExport do
+   begin
+      Connect;
+      ExportDataset(DMExtractMoney.Payments,'Юдянилмиш яманятляр',True,false);
+      Disconnect;
+   end;
+end;
+
+procedure TfrmExtractMoney.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+   if RefreshAfterOperation then
+      RefreshWithSavely(True);
+
+end;
+
+procedure TfrmExtractMoney.ActnDelUpdate(Sender: TObject);
+begin
+    with (Sender as TAction) do
+          Enabled := DMExtractMoney.Payments.RecordCount > 0
+end;
+
+procedure TfrmExtractMoney.N1DrawItem(Sender: TObject; ACanvas: TCanvas;
+  ARect: TRect; Selected: Boolean);
+var
+  LineBottom: Integer;
+  SText: String;
+  Bar: TRect;
+begin
+  with ACanvas, Sender as TMenuItem do
+  begin
+    with ACanvas.Font do
+    begin
+      Charset := DEFAULT_CHARSET;
+      Name := 'Azl Sans Serif';
+      if Default then
+        Style := [fsBold];
+    end;
+    if Caption = '-' then
+    begin
+      Pen.Color := clBlack;
+      LineBottom := (ARect.Top + (ARect.Bottom - ARect.Top) div 2)-1;
+      MoveTo(ARect.Left, LineBottom);
+      LineTo(ARect.Right, LineBottom);
+      inc(LineBottom);
+      Pen.Color := clWhite;
+      MoveTo(ARect.Left, LineBottom);
+      LineTo(ARect.Right, LineBottom);
+    end
+    else
+    begin
+      if Selected then
+      begin
+        Brush.Color := clNavy;
+        if Enabled then
+          Font.Color := clWhite
+        else
+          Font.Color := clSilver;
+      end
+      else
+      begin
+        Brush.Color := clBtnFace;
+        if Enabled then
+          Font.Color := clBlack
+        else
+          Font.Color := clGrayText;
+      end;
+      Bar := ARect;
+      Inc(Bar.Left, 22);
+      FillRect(Bar);
+      TextOut(ARect.Left+{17}22, ARect.Top+1, Caption);
+    end;
+    // draw shortcut
+    SText := ShortCutToText(ShortCut);
+    TextOut(ARect.Right-TextWidth(SText)-7, ARect.Top+1, SText);
+    if ImageIndex <> -1 then
+      with GetParentMenu do
+        if Assigned(Images) then
+        begin
+          if Checked then
+          begin
+            Bar.Left := ARect.Left + 1;
+            Bar.Right := Bar.Left + 16;
+            Bar.Top := ARect.Top + 1;
+            Bar.Bottom := Bar.Top + 16;
+
+            ACanvas.Brush.Color := clBtnShadow;
+            ACanvas.FrameRect(Bar);
+
+            Inc(Bar.Left, 2);
+            Inc(Bar.Right, 2);
+            Inc(Bar.Top, 2);
+            Inc(Bar.Bottom, 2);
+
+            ACanvas.Brush.Color := clBtnHighlight;
+            ACanvas.FrameRect(Bar);
+
+            Dec(Bar.Left, 1);
+            Dec(Bar.Right, 1);
+            Dec(Bar.Top, 1);
+            Dec(Bar.Bottom, 1);
+
+            if Selected then
+              ACanvas.Brush.Color := clBtnFace
+            else
+              ACanvas.Brush.Color := clBtnHighlight;
+            ACanvas.FillRect(Bar);
+          end;
+
+          Images.Draw(ACanvas, ARect.Left, ARect.Top, ImageIndex, Enabled);
+        end;
+  end;
+
+end;
+
+procedure TfrmExtractMoney.N1Click(Sender: TObject);
+var TrID :String;
+begin
+   {TrID := IntToStr(DMApplyMoney.Tranches.FieldByname('TrID').AsInteger);
+   LoadPlugin('SBDM_TransactionViewer.bpl',TrID);  }
+end;
+
+initialization
+    frmExtractMoney := TfrmExtractMoney.Create(CommonApplication);
+
+end.

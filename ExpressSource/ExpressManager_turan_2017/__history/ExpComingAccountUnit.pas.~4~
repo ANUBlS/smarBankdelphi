@@ -1,0 +1,50 @@
+unit ExpComingAccountUnit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Grids, DBGrids, StdCtrls, SearchEdit, DBViewComboBox, Buttons,
+  ExtCtrls, DB, OracleData;
+
+type
+  TExpComingAccountForm = class(TForm)
+    ExpComingAccDataSet: TOracleDataSet;
+    ExpComingAccDataSource: TDataSource;
+    Panel1: TPanel;
+    Panel2: TPanel;
+    Panel4: TPanel;
+    DBGrid1: TDBGrid;
+    SpeedButton1: TSpeedButton;
+    SpeedButton2: TSpeedButton;
+    SpeedButton3: TSpeedButton;
+    SpeedButton4: TSpeedButton;
+    procedure SpeedButton4Click(Sender: TObject);
+    procedure SpeedButton1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  ExpComingAccountForm: TExpComingAccountForm;
+
+implementation
+
+uses ExpComingAccUnit;
+
+{$R *.dfm}
+
+procedure TExpComingAccountForm.SpeedButton1Click(Sender: TObject);
+begin
+  FormComingAcc.Tip:=0;
+  FormComingAcc.ShowModal;
+end;
+
+procedure TExpComingAccountForm.SpeedButton4Click(Sender: TObject);
+begin
+  Close;
+end;
+
+end.

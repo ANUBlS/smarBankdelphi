@@ -1,0 +1,77 @@
+unit Unitreject;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, IdBaseComponent, IdComponent, IdTCPConnection, IdTCPClient,
+  IdHTTP;
+
+type
+  TRejectForm = class(TForm)
+    Memo1: TMemo;
+    Button1: TButton;
+    IdHTTP1: TIdHTTP;
+    Edit6: TEdit;
+    procedure Button1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  RejectForm: TRejectForm;
+
+implementation
+
+uses Datamoduls;
+
+{$R *.dfm}
+
+procedure TRejectForm.Button1Click(Sender: TObject);
+var urls,er,headerkey,endpars,pages,cnts,respcont:Ansistring;
+RequestBody: TStream;
+ReqJson: TStringStream;
+RespJson: String;
+
+begin
+
+try
+       begin
+
+Datamod.OracleDataSet1.Close;
+DataMod.OracleDataSet1.open;
+
+  urls:= datamod.OracleDataSet1.FieldByName('ipadress').AsVariant;
+  headerkey:= datamod.OracleDataSet1.FieldByName('headerkey').AsString;
+ endpars:= datamod.OracleDataSet1.FieldByName('endpointapp').AsString+'/'+edit6.Text+datamod.OracleDataSet1.FieldByName('endpointreject').AsString;
+
+ ShowMessage('http://10.153.0.32'+endpars );
+     with IdHTTP1 do begin
+     TIdHTTP.Create(nil);
+   Request.CustomHeaders.AddValue('key',headerkey  );
+
+
+   Request.ContentType := 'application/json';
+   ReqJson := TStringStream.Create('{"rejectReason": "'+memo1.text+'"}', TEncoding.UTF8);
+   respcont:= PUT({'http://10.153.0.32'}urls+endpars, ReqJson);
+
+    datamod.insquery.sql.Clear;
+   datamod.insquery.sql.Add(' insert into json_doc_rejected (id,data) values ('+edit6.Text+','+''''+respcont+''''+' )');
+
+   //ShowMessage(DataMod.insquery.SQL.Text);
+   datamod.insquery.open;
+
+        memo1.Text:= respcont;
+    RequestBody.Free;
+     end;
+  end;
+except
+ on E:EIdHTTPProtocolException do
+     ShowMessage( E.ErrorMessage+'**'+inttostr(E.ErrorCode)+'**'+E.Message);
+end;
+
+end;
+
+end.

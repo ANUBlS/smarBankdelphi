@@ -1,0 +1,73 @@
+unit ClearImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls,DBCtrls;
+
+type
+  TClearFrm = class(TForm)
+    GroupBox1: TGroupBox;
+    CheckBox1: TCheckBox;
+    CheckBox2: TCheckBox;
+    Button1: TButton;
+    Button2: TButton;
+    procedure FormCanResize(Sender: TObject; var NewWidth, NewHeight: Integer;
+      var Resize: Boolean);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure Button1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  ClearFrm: TClearFrm;
+
+implementation
+
+uses DmBudcetImpl, AccountAddImpl;
+
+{$R *.dfm}
+
+procedure TClearFrm.Button1Click(Sender: TObject);
+var
+i :word;
+begin
+a:=1;
+if CheckBox2.Checked then
+    with DmBudcet.OracleDataSet1 do
+     begin
+      FieldByName('BALANS').AsString:='';
+      FieldByName('ACCOUNT').AsString:='';
+      FieldByName('DNTACCOUNT').AsString:='';
+     // post;
+     end;
+  if CheckBox1.Checked then
+
+for i :=0 to AccountAddFrm.ComponentCount- 1 do
+ begin
+  if ( AccountAddFrm.Components[i].ClassType = TDBEdit) then
+ begin
+    (AccountAddFrm.Components[i] as TDBEdit).DataSource.DataSet.FieldByName((AccountAddFrm.Components[i] as TDBEdit).name).AsVariant:=null;
+   end;
+   end;
+
+
+end;
+
+procedure TClearFrm.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+resize:=false
+end;
+
+procedure TClearFrm.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+ if ORD(Key) = VK_ESCAPE then
+    Close else
+end;
+
+end.

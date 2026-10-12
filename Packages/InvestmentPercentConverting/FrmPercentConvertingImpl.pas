@@ -1,0 +1,448 @@
+﻿unit FrmPercentConvertingImpl;
+           //converdeposits
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ExtCtrls, ActnList, ImgList, ToolWin, ComCtrls, StdCtrls, Grids, DBGridEh,
+  DB,Oracle,OracleData, CMExcelExport, DBGridEhGrouping, GridsEh;
+
+
+const   csUnknown   = -9;
+        csCalculated=-10;
+        csDisabled  =-11;
+
+
+  
+type
+  TFrmPercentConverting = class(TForm)
+    Panel1: TPanel;
+    ImageList1: TImageList;
+    ActnLstCalcPercents: TActionList;
+    ToolBar1: TToolBar;
+    ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
+    ToolButton3: TToolButton;
+    ToolButton4: TToolButton;
+    ToolButton5: TToolButton;
+    ToolButton6: TToolButton;
+    ToolButton7: TToolButton;
+    ToolButton8: TToolButton;
+    ToolButton9: TToolButton;
+    SearchPanel: TGroupBox;
+    Panel4: TPanel;
+    StaticText1: TStaticText;
+    EditContractNo: TEdit;
+    Panel7: TPanel;
+    StaticText2: TStaticText;
+    EditContractAccNo: TEdit;
+    Panel8: TPanel;
+    StaticText3: TStaticText;
+    EditInterestAccNo: TEdit;
+    Panel11: TPanel;
+    StaticText6: TStaticText;
+    EditCustomerName: TEdit;
+    calcPerGrid: TDBGridEh;
+    ActnCalcPercent: TAction;
+    ActnCancelCalc: TAction;
+    ActnExport: TAction;
+    ExcelExp: TCMExcelExport;
+    ActnRefresh: TAction;
+    ActnClose: TAction;
+    StatusImages: TImageList;
+    ActnSearch: TAction;
+    ToolButton10: TToolButton;
+    GroupBox1: TGroupBox;
+    DTPOperationDate: TDateTimePicker;
+    ToolButton11: TToolButton;
+    ToolButton12: TToolButton;
+    ActnFilter: TAction;
+    ActnSelectAll: TAction;
+    procedure ActnCalcPercentExecute(Sender: TObject);
+    procedure ActnCancelCalcExecute(Sender: TObject);
+    procedure ActnExportExecute(Sender: TObject);
+    procedure calcPerGridDrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TColumnEh; State: TGridDrawState);
+    procedure calcPerGridTitleBtnClick(Sender: TObject; ACol: Integer;
+      Column: TColumnEh);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure ActnRefreshExecute(Sender: TObject);
+    procedure ActnCloseExecute(Sender: TObject);
+    procedure ActnSearchExecute(Sender: TObject);
+    procedure EditContractNoKeyPress(Sender: TObject; var Key: Char);
+    procedure EditContractNoExit(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure ActnFilterExecute(Sender: TObject);
+    procedure ActnSelectAllExecute(Sender: TObject);
+  private
+    procedure Prepareprogress;
+    function CalcDeposits(GetContractID :integer;HDate :TDateTime):integer;
+    procedure CancelCalcDeposit(ContractID :integer);
+    procedure RefreshCalcedPercent;
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmPercentConverting: TFrmPercentConverting;
+  procedure exportproc(S:String);export;
+
+implementation
+
+{$R *.DFM}
+uses PercentConvertingImpl,FrmCalcPerProgressImpl,
+     NewCommonDeclsImpl,FrmCalcPerFilterImpl;
+
+procedure exportproc(S:String);export;
+begin
+   FrmPercentConverting.ShowModal;
+end;
+
+exports
+     exportproc;
+
+procedure TFrmPercentConverting.RefreshCalcedPercent;
+begin
+   calcPerGrid.SelectedRows.Clear;
+   with DMPercentConverting,CalcedDeposits do
+         Refresh;
+end;
+
+procedure TFrmPercentConverting.CancelCalcDeposit(ContractID :integer);
+begin
+   with DMPercentConverting,dm_calculator do
+        CallProcedure('CancelDepositIntCalc',['p_contractID',ContractID]);
+end;
+
+
+function TFrmPercentConverting.CalcDeposits(GetContractID :integer;HDate :TDateTime):integer;
+begin
+   with DMPercentConverting,dm_calculator do
+        Result := callIntegerfunction('converdeposits',['contractid',GetContractID,'hdate',HDate]);
+end;
+
+procedure TFrmPercentConverting.Prepareprogress;
+var SelRowsCount : Integer;
+begin
+      with DMPercentConverting,CalcedDeposits do
+            SelRowsCount := RecordCount;
+            
+      with FrmCalcPerProgress, ProgressBar  do
+      begin
+        Max := SelRowsCount;
+        Position :=0;
+        DetailsMemo.Lines.Clear;
+        DetailsMemo.Hide;
+        BtnDetails.Enabled :=False;
+        FrmCalcPerProgress.Show;
+        STContractsCount.Caption := Format('Müqavilələrin sayı %d',[SelRowsCount]);
+      end;
+
+end;
+
+procedure TFrmPercentConverting.ActnCalcPercentExecute(Sender: TObject);
+const
+   NoErrorTitle         = ' Faizlər hesablandı.';
+   ResulTitle           = ' Faizlərin hesablanmasında səhvlər var! ';
+   CapitalizationsTitle = ' %d Kapitallaşdırma.';
+   WithdrawTitle        = ' %d Cari hesaba köçrülmə.';
+var
+  SelRowsCount :Integer;
+  SelRowIndex  :Integer;
+  Aborted , ConvResult :Integer;
+  CapitalizationCount,WithdrawCount :Integer;
+  ErrMessage : String;
+  HDate : TDateTime;
+begin
+    with calcPerGrid,SelectedRows,DataSource.DataSet  do
+    begin
+      Aborted :=0;
+      CapitalizationCount :=0;
+      WithdrawCount := 0;
+      HDate := integer(trunc(DTPOperationDate.DateTime));
+      SelRowsCount :=Count;
+      if   MessageDlg('Faizlər hesablanır əminsinizmi?'
+              ,mtConfirmation
+              ,[mbYes,mbNo],0
+              )<>mrYes then Abort;
+
+      Prepareprogress;
+      Application.ProcessMessages;
+
+    try
+      for  SelRowIndex :=0  to  SelRowsCount-1 do
+      try
+        GotoBookmark(Pointer(Items[SelRowIndex]));
+       FrmCalcPerProgress.ProgressBar.StepIt;
+        FrmCalcPerProgress.CurrentDeposit.Caption :=FieldByName('ContractNo').AsString;
+        ConvResult := CalcDeposits(FieldByName('ID').AsInteger,HDate);
+        case ConvResult of
+         2 :  INC(WithdrawCount) ;
+         1 :  INC(CapitalizationCount) ;
+        end;
+      except
+        on E:EOracleError do
+        begin
+          ErrMessage := E.Message;
+        // ErrMessage := copy(ErrMessage,0,Pos('^',ErrMessage));
+          FrmCalcPerProgress.DetailsMemo.Lines.Add(' #'
+                                +FieldByName('ContractNo').AsString +' << ' + ErrMessage + ' >> '
+                              );
+          FrmCalcPerProgress.DetailsMemo.Lines.Add('');
+          Inc(Aborted);
+          Continue;
+        end;
+      end;
+    finally
+         with FrmCalcPerProgress do
+         begin
+           ProgressBar.Position :=0;
+           if Aborted <> 0 then
+           begin
+             LblResult.Font.Color := clRed;
+             LblResult.Caption :=IntToStr(Aborted)+ResulTitle
+           end
+           else
+           begin
+             LblResult.Font.Color := clGreen;
+             LblResult.Caption := NoErrorTitle;
+           end;
+           STCapitalizationsCount.Caption := Format(CapitalizationsTitle,[CapitalizationCount]);
+           STWithdrawsCount.Caption := Format(WithdrawTitle,[WithdrawCount]);
+           BtnDetails.Enabled :=True;
+           CurrentDeposit.Caption :='';
+         end;
+         RefreshCalcedPercent;
+      end;
+    end;
+
+end;
+
+procedure TFrmPercentConverting.ActnCancelCalcExecute(Sender: TObject);
+const
+   NoErrorTitle         = ' Hesablamalar ləğv olundu .';
+   ResulTitle           = ' Səhv var! ';
+var
+  SelRowsCount :Integer;
+  SelRowIndex  :Integer;
+  Aborted  :Integer;
+  ErrMessage : String;
+begin
+    with calcPerGrid,SelectedRows,DataSource.DataSet  do
+    begin
+      Aborted :=0;
+      SelRowsCount :=Count;
+      if   MessageDlg('Hesablamalar ləğv olunsun?'
+              ,mtConfirmation
+              ,[mbYes,mbNo],0
+              )<>mrYes then Abort;
+
+      Prepareprogress;
+      Application.ProcessMessages;
+    try
+      for  SelRowIndex :=0  to  SelRowsCount-1 do
+      try
+        GotoBookmark(Pointer(Items[SelRowIndex]));
+        FrmCalcPerProgress.ProgressBar.StepIt;
+       FrmCalcPerProgress.CurrentDeposit.Caption :=FieldByName('ContractNo').AsString;
+        CancelCalcDeposit(FieldByName('ID').AsInteger);
+      except
+        on E:EOracleError do
+        begin
+          ErrMessage := E.Message;
+          FrmCalcPerProgress.DetailsMemo.Lines.Add(' #'
+                                +FieldByName('ContractNo').AsString +' << ' + ErrMessage + ' >> '
+                              );
+          FrmCalcPerProgress.DetailsMemo.Lines.Add('');
+          Inc(Aborted);
+          Continue;
+        end;
+      end;
+    finally
+         with FrmCalcPerProgress do
+         begin
+           ProgressBar.Position :=0;
+           if Aborted <> 0 then
+           begin
+             LblResult.Font.Color := clRed;
+             LblResult.Caption :=IntToStr(Aborted)+ResulTitle
+           end
+           else
+           begin
+             LblResult.Font.Color := clGreen;
+             LblResult.Caption := NoErrorTitle;
+           end;
+           BtnDetails.Enabled :=True;
+           CurrentDeposit.Caption :='';
+         end;
+         RefreshCalcedPercent;
+      end;
+    end;
+
+end;
+
+procedure TFrmPercentConverting.ActnExportExecute(Sender: TObject);
+begin
+   with ExcelExp do
+   begin
+      Connect;
+      ExportDataset(DMPercentConverting.CalcedDeposits,'Hesablanmış faizlər',True,false);
+      Disconnect;
+   end;
+end;
+
+procedure TFrmPercentConverting.calcPerGridDrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TColumnEh;
+  State: TGridDrawState);
+const
+    DataColIndex = 1;
+var
+    ImageIndex :Integer;
+begin
+  ImageIndex :=-1;
+  with Sender as TDBGridEh do
+  begin
+    if DataSource.DataSet.RecordCount <> 0 then
+    begin
+      case DataSource.DataSet.FieldByName('Status').AsInteger of
+      csUnknown:
+        ImageIndex := 0;
+      csCalculated:
+        ImageIndex := 1;
+      csDisabled:
+        ImageIndex := 2;
+      end;   //Case
+      if   (DataCol = 1)   then
+        StatusImages.Draw(Canvas, Rect.Left, Rect.Top, ImageIndex, True)
+      else
+        DefaultDrawColumnCell(Rect, DataCol, Column, State);
+    end;
+  end;
+
+end;
+
+procedure TFrmPercentConverting.calcPerGridTitleBtnClick(Sender: TObject;
+  ACol: Integer; Column: TColumnEh);
+var
+  SortField : String;
+begin
+  SortField := Column.FieldName;
+  if Column.Title.SortMarker = smDownEh then
+    SortField := SortField + ' DESC';
+  with Sender as TDBGridEh , TOracleDataSet(DataSource.DataSet) do
+  begin
+    ClearVariables;
+    Screen.Cursor := crSQLWait;
+    SetVariable('OrderField',SortField);
+    RefResh;
+    Screen.Cursor := crDefault;
+   end;
+
+end;
+
+
+procedure TFrmPercentConverting.FormCreate(Sender: TObject);
+begin
+
+   DMPercentConverting := TDMPercentConverting.Create(Self);
+   FrmCalcPerProgress  := TFrmCalcPerProgress.Create(Self);
+   FrmCalcPerFilter  := TFrmCalcPerFilter.Create(Self);
+end;
+
+procedure TFrmPercentConverting.FormDestroy(Sender: TObject);
+begin
+   DMPercentConverting.Free;
+   FrmCalcPerProgress.Free;
+   FrmCalcPerFilter.Free;
+end;
+
+procedure TFrmPercentConverting.ActnRefreshExecute(Sender: TObject);
+begin
+   RefreshCalcedPercent;
+end;
+
+procedure TFrmPercentConverting.ActnCloseExecute(Sender: TObject);
+begin
+   Close;
+end;
+
+procedure TFrmPercentConverting.ActnSearchExecute(Sender: TObject);
+var
+  SearchField : string;
+  SearchOptions : TSearchRecordOptions;
+begin
+  SearchOptions := [srIgnoreCase ,srPartialMatch];
+
+  with Sender as TEdit  do
+  begin
+    SearchField := copy(Name,5,length(Name));
+    calcPerGrid.SelectedRows.Clear;
+    with  TOracleDataSet(calcPerGrid.DataSource.DataSet) do
+    if  not SearchRecord(
+                  SearchField
+                 ,Text
+                 ,SearchOptions + [srFromCurrent , srForward ]
+                 ) then
+    if MessageDlg(
+              'Axtarış sona catıb.'+#13+'əvvəldən başlamaq istəyirsinizmi?'
+             ,mtInformation
+             ,[mbNo , mbYes]
+             ,0
+             ) = mrYes  then
+    if  not SearchRecord(
+                 SearchField
+                ,Text
+                ,SearchOptions + [ srFromBeginning ]
+                )  then
+    MessageDlg('Yazı tapılmadı!',mtInformation,[mbOK],0);
+  end;
+
+
+end;
+
+procedure TFrmPercentConverting.EditContractNoKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if ord(Key) = VK_RETURN
+  then  ActnSearchExecute(Sender)
+end;
+
+procedure TFrmPercentConverting.EditContractNoExit(Sender: TObject);
+begin
+   with (Sender As TEdit) do
+         Text := '';
+end;
+
+procedure TFrmPercentConverting.FormShow(Sender: TObject);
+begin
+   DTPOperationDate.DateTime := Get_BankDate
+end;
+
+procedure TFrmPercentConverting.ActnFilterExecute(Sender: TObject);
+begin
+   FrmCalcPerFilter.ShowModal;
+end;
+
+procedure TFrmPercentConverting.ActnSelectAllExecute(Sender: TObject);
+begin
+  with calcPerGrid,SelectedRows,DataSource.DataSet do
+  begin
+    DisableControls;
+    try
+      First;
+      while not Eof do
+      begin
+        CurrentRowSelected := True;
+        Next;
+      end;
+    finally
+      EnableControls;
+    end;
+  end;
+
+end;
+
+initialization
+  FrmPercentConverting := TFrmPercentConverting.Create(CommonApplication)
+end.

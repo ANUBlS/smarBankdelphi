@@ -1,0 +1,805 @@
+﻿unit frmpbf_transactionImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, NLSDialogs,
+  ActiveX, AxCtrls, PBF_Transactions_TLB, StdVcl, ExtCtrls, StdCtrls,
+  ComCtrls, ToolWin, ImgList, Buttons, Mask, DBCtrlsEh, DBLookupEh, Grids,
+  DBGridEh, ActnList, Menus,oracle,oracledata, CMExcelExport;
+
+type
+  Tfrmpbf_transaction = class(TActiveForm, Ifrmpbf_transaction)
+    ImageList: TImageList;
+    FilterPanel: TPanel;
+    Panel2: TPanel;
+    SpeedButton1: TSpeedButton;
+    GroupBox1: TGroupBox;
+    CBCurrency: TCheckBox;
+    DBLookupComboboxEh1: TDBLookupComboboxEh;
+    GroupBox4: TGroupBox;
+    CBFilial: TCheckBox;
+    DBLookupComboboxEh2: TDBLookupComboboxEh;
+    GroupBox5: TGroupBox;
+    CBContractType: TCheckBox;
+    DBLookupComboboxEh3: TDBLookupComboboxEh;
+    PanelMain: TPanel;
+    SearchPanel: TGroupBox;
+    Panel4: TPanel;
+    StaticText1: TStaticText;
+    Editnum: TEdit;
+    Panel7: TPanel;
+    StaticText2: TStaticText;
+    EditDEBITACCNO: TEdit;
+    Panel8: TPanel;
+    StaticText3: TStaticText;
+    EditCREDITACCNO: TEdit;
+    Panel11: TPanel;
+    StaticText6: TStaticText;
+    EditDEBITAMOUNT: TEdit;
+    MainGridPBF: TDBGridEh;
+    ActionList1: TActionList;
+    AddPBFOP: TAction;
+    PopupMenuSett: TPopupMenu;
+    N1: TMenuItem;
+    N2: TMenuItem;
+    gj1: TMenuItem;
+    EditPBFOP: TAction;
+    RefreshPBFOP: TAction;
+    DelPBFOP: TAction;
+    PopupMenuOperation: TPopupMenu;
+    N3: TMenuItem;
+    N4: TMenuItem;
+    Actnsearch: TAction;
+    ToolBar: TToolBar;
+    ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
+    ToolButton3: TToolButton;
+    ToolButton4: TToolButton;
+    ToolButton7: TToolButton;
+    ToolButton6: TToolButton;
+    ToolButton5: TToolButton;
+    ToolButton8: TToolButton;
+    ToolButton9: TToolButton;
+    ToolButton10: TToolButton;
+    TBFilteration: TToolButton;
+    GRDate: TGroupBox;
+    DTPCurrentDate: TDateTimePicker;
+    ToolButton11: TToolButton;
+    GroupBox2: TGroupBox;
+    CheckBox1: TCheckBox;
+    DBLookupComboboxEh4: TDBLookupComboboxEh;
+    Label1: TLabel;
+    Label2: TLabel;
+    CheckBox2: TCheckBox;
+    DBLookupComboboxEh5: TDBLookupComboboxEh;
+    PBFExcelExport: TCMExcelExport;
+    Actnexport: TAction;
+    ActnSPanel: TAction;
+    ActnPrint: TAction;
+    ImageList1: TImageList;
+    Memo1: TMemo;
+    Memo2: TMemo;
+    N5: TMenuItem;
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure ActiveFormDestroy(Sender: TObject);
+    procedure N1Click(Sender: TObject);
+    procedure N2Click(Sender: TObject);
+    procedure gj1Click(Sender: TObject);
+    procedure EditPBFOPExecute(Sender: TObject);
+    procedure RefreshPBFOPExecute(Sender: TObject);
+    procedure DelPBFOPExecute(Sender: TObject);
+    procedure AddPBFOPExecute(Sender: TObject);
+    procedure N3Click(Sender: TObject);
+    procedure N4Click(Sender: TObject);
+    procedure ActnsearchExecute(Sender: TObject);
+    procedure EditnumKeyPress(Sender: TObject; var Key: Char);
+    procedure EditnumExit(Sender: TObject);
+    procedure MainGridPBFTitleBtnClick(Sender: TObject; ACol: Integer;
+      Column: TColumnEh);
+    procedure ActnexportExecute(Sender: TObject);
+    procedure ActnSPanelExecute(Sender: TObject);
+    procedure ActnPrintExecute(Sender: TObject);
+    procedure MainGridPBFDblClick(Sender: TObject);
+    procedure MainGridPBFDrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TColumnEh; State: TGridDrawState);
+    procedure N5Click(Sender: TObject);
+  private
+    { Private declarations }
+    FEvents: Ifrmpbf_transactionEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+  public
+    { Public declarations }
+    procedure Initialize; override;
+    function BuildFilterString : String;
+    function WithCoin(Ammount :string;val :string):string;
+  end;
+
+implementation
+
+uses ComObj, ComServ,dmpbf_transactionimpl, frmAddEditTrImpl,
+  frmpbffilialsaccsImpl, frmpbfTransactionSettImpl, FrmpbfFilialsUsersImpl,
+  frmOtherOperationsImpl, frmpbfReportImpl,pbfCurrencyToHR_Azeri_Impl,
+  frmpbfPayRepNumImpl, frmkindaccsimpl,SBTranslateProc,sboapiDataModuleImpl;
+
+{$R *.DFM}
+
+{ Tfrmpbf_transaction }
+
+function Tfrmpbf_transaction.WithCoin(Ammount :string;val :string):string;
+var
+  tTrunc :currency;
+  tDev: Double;
+begin
+   tTrunc :=Trunc(StrToCurr(Ammount));
+   tDev:=(Round(Frac(StrToCurr(Ammount))*100));
+   result :=CurrencyToHR_Azeri(tTrunc,0,[0])+' '+' '+val+' '+FloatToStr(tDev)+' qəp';
+end;
+
+function Tfrmpbf_transaction.BuildFilterString : String;
+
+  procedure ConcatFilter(var S: String; const Prefix : String; Checked : Boolean; KeyValue : Variant;check :boolean);
+  const
+     csFormat = '(%s=%s)';
+  var
+    Temp,op : String;
+
+  begin
+
+     if check then op := ' and ' else op := ' or ';
+
+    if Checked then
+    begin
+      Temp := Format(csFormat,[Prefix,Keyvalue]);
+      if S = '' then
+        S := Temp
+      else
+        S :=S + op + Temp;
+    end;
+
+  end;
+
+  procedure  ConcatFilter1(var S: String; var Prefix : String);
+  begin
+     if (S <> '') and (Prefix <> '') then S := S+' and '+Prefix;
+     if (S = '') and (Prefix <> '') then S := Prefix;
+  end;
+
+  
+var  FStatus,FopenDat1,FopenDat2,FopenDat : String;
+begin
+  Result := '';
+  FStatus := '';
+
+  ConcatFilter(Result,'val_acc',CBCurrency.Checked,DBLookupComboboxEh1.KeyValue,true);
+  ConcatFilter(Result,'branchid',CBFilial.Checked,DBLookupComboboxEh2.KeyValue,true);
+  ConcatFilter(Result,'contracttype',CBContractType.Checked,DBLookupComboboxEh3.KeyValue,true);
+  //ConcatFilter(Result,'usid',CBUsers.Checked,LCBUsers.KeyValue,true);
+
+
+
+  ConcatFilter1(Result,FStatus);
+  ConcatFilter1(Result,FopenDat);
+
+end;
+
+
+procedure Tfrmpbf_transaction.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_frmpbf_transactionPage); }
+end;
+
+procedure Tfrmpbf_transaction.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as Ifrmpbf_transactionEvents;
+end;
+
+procedure Tfrmpbf_transaction.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function Tfrmpbf_transaction.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function Tfrmpbf_transaction.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function Tfrmpbf_transaction.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function Tfrmpbf_transaction.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function Tfrmpbf_transaction.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function Tfrmpbf_transaction.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function Tfrmpbf_transaction.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function Tfrmpbf_transaction.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function Tfrmpbf_transaction.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function Tfrmpbf_transaction.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function Tfrmpbf_transaction.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function Tfrmpbf_transaction.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function Tfrmpbf_transaction.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function Tfrmpbf_transaction.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function Tfrmpbf_transaction.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function Tfrmpbf_transaction.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function Tfrmpbf_transaction.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function Tfrmpbf_transaction.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure Tfrmpbf_transaction._Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure Tfrmpbf_transaction.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure Tfrmpbf_transaction.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure Tfrmpbf_transaction.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure Tfrmpbf_transaction.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure Tfrmpbf_transaction.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure Tfrmpbf_transaction.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure Tfrmpbf_transaction.KeyPressEvent(Sender: TObject;
+  var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure Tfrmpbf_transaction.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure Tfrmpbf_transaction.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure Tfrmpbf_transaction.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure Tfrmpbf_transaction.Set_AxBorderStyle(
+  Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure Tfrmpbf_transaction.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure Tfrmpbf_transaction.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure Tfrmpbf_transaction.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure Tfrmpbf_transaction.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure Tfrmpbf_transaction.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure Tfrmpbf_transaction.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure Tfrmpbf_transaction.Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure Tfrmpbf_transaction.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure Tfrmpbf_transaction.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure Tfrmpbf_transaction.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure Tfrmpbf_transaction.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure Tfrmpbf_transaction.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure Tfrmpbf_transaction.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+procedure Tfrmpbf_transaction.ActiveFormCreate(Sender: TObject);
+begin
+   dmpbf_transaction := Tdmpbf_transaction.Create(self);
+   frmAddEditTr := TfrmAddEditTr.create(self);
+   frmOtherOperations := TfrmOtherOperations.create(self);
+   SBTranslateProc.TranslateAllComponents(Self,sboapiDataModule.OrPack_SL);
+   DTPCurrentDate.DateTime := dmpbf_transaction.currdat.FieldByName('tek_dat').AsDateTime;
+   frmpbfReport := TfrmpbfReport.create(self);
+   frmpbfPayRepNum:= TfrmpbfPayRepNum.create(self);
+   frmkindaccs := Tfrmkindaccs.create(self);
+   end;
+
+procedure Tfrmpbf_transaction.ActiveFormDestroy(Sender: TObject);
+begin
+   dmpbf_transaction.free;
+   frmAddEditTr.free;
+   frmOtherOperations.free;
+   frmpbfReport.free;
+end;
+
+procedure Tfrmpbf_transaction.N1Click(Sender: TObject);
+begin
+   if not Assigned(frmpbffilialsaccs) then frmpbffilialsaccs := Tfrmpbffilialsaccs.create(self);
+   frmpbffilialsaccs.ShowModal
+end;
+
+procedure Tfrmpbf_transaction.N2Click(Sender: TObject);
+begin
+   if not Assigned(frmpbfTransactionSett) then frmpbfTransactionSett := TfrmpbfTransactionSett.create(self);
+   frmpbfTransactionSett.ShowModal
+end;
+
+procedure Tfrmpbf_transaction.gj1Click(Sender: TObject);
+begin
+   if not Assigned(FrmpbfFilialsUsers) then FrmpbfFilialsUsers := TFrmpbfFilialsUsers.create(self);
+   FrmpbfFilialsUsers.ShowModal
+end;
+
+procedure Tfrmpbf_transaction.EditPBFOPExecute(Sender: TObject);
+var c,i :integer;
+begin
+   with dmpbf_transaction,PBFOperations do begin
+        if active then CloseAll;
+        SetVariable('OID',PBFTransactions.FieldByName('num').AsInteger);
+        Open;
+        EDIT;
+        if PBFTransactions.fieldbyname('optype').AsString = 'KREDIT' then
+        frmAddEditTr.ShowModal else begin
+        with frmOtherOperations do
+        for i := 0 to ComboBox1.Items.Count-1 do
+        if frmOtherOperations.ComboBox1.Items[i] = PBFTransactions.fieldbyname('OPNAME').AsString
+        then frmOtherOperations.ComboBox1.ItemIndex :=i;
+        
+        frmOtherOperations.ShowModal;
+        end;
+        RefreshPBFOPExecute(Sender);
+   end;
+end;
+
+procedure Tfrmpbf_transaction.RefreshPBFOPExecute(Sender: TObject);
+var
+    SaveID :Integer;
+    Dat :TdateTime;
+begin
+
+   MainGridPBF.SelectedRows.Clear;
+   dat := integer(trunc(DTPCurrentDate.DateTime));
+   with dmpbf_transaction,PBFTransactions do
+   begin
+      SaveID := FieldbyName('ID').AsInteger;
+      close;
+      SetVariable('TransactionDate',dat);
+      SetVariable('orderfield','id');
+      open;
+      Locate('ID',SaveID,[]);
+   end;
+end;
+
+procedure Tfrmpbf_transaction.DelPBFOPExecute(Sender: TObject);
+begin
+   if MessageDlg('Silinməsinə əminsinizmi?',
+      mtConfirmation, [mbYes, mbNo], 0) = mrNo then exit;
+   with dmpbf_transaction,PBFTransaction,PBFTransactions do  begin
+        CallProcedure('del_Operation',['v_operid',FieldByName('num').AsInteger]);
+       Refresh;
+   end;
+
+end;
+
+procedure Tfrmpbf_transaction.AddPBFOPExecute(Sender: TObject);
+begin
+   with dmpbf_transaction,PBFOperations do begin
+        OperType := 'KREDIT';
+        if active then CloseAll;
+        SetVariable('OID',0);
+        Open;
+        Insert;
+        frmAddEditTr.ShowModal;
+        PBFTransactions.Refresh;
+   end;
+
+end;
+
+procedure Tfrmpbf_transaction.N3Click(Sender: TObject);
+begin
+AddPBFOPExecute(sender);
+end;
+
+procedure Tfrmpbf_transaction.N4Click(Sender: TObject);
+begin
+  with dmpbf_transaction,PBFOperations do begin
+        OperType := 'OTHERS';
+        if active then CloseAll;
+        SetVariable('OID',0);
+        Open;
+        Insert;
+        FrmOtherOperations.ComboBox1.ItemIndex := 0;
+        //fieldByName('name').asString := 'AZERCELL';
+        FrmOtherOperations.ShowModal;
+        PBFTransactions.Refresh;
+   end;
+end;
+
+procedure Tfrmpbf_transaction.ActnsearchExecute(Sender: TObject);
+var
+  SearchField : string;
+  SearchOptions : TSearchRecordOptions;
+begin
+  SearchOptions := [srIgnoreCase ,srPartialMatch];
+
+  with Sender as TEdit  do
+  begin
+    SearchField := copy(Name,5,length(Name));
+    MainGridPBF.SelectedRows.Clear;
+    with  TOracleDataSet(MainGridPBF.DataSource.DataSet) do
+    if  not SearchRecord(
+                  SearchField
+                 ,Text
+                 ,SearchOptions + [srFromCurrent , srForward ]
+                 ) then
+    if MessageDlg(
+              'Axtarış sona çatıb.'+#13+'əvvəldən başlamaq istəyirsinizmi?'
+             ,mtInformation
+             ,[mbNo , mbYes]
+             ,0
+             ) = mrYes  then
+    if  not SearchRecord(
+                 SearchField
+                ,Text
+                ,SearchOptions + [ srFromBeginning ]
+                )  then
+    MessageDlg('Yazı tapılmadı!',mtInformation,[mbOK],0);
+  end;
+end;
+
+procedure Tfrmpbf_transaction.EditnumKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if ord(Key) = VK_RETURN
+  then  ActnSearchExecute(Sender)
+end;
+
+procedure Tfrmpbf_transaction.EditnumExit(Sender: TObject);
+begin
+  with (Sender as TEdit) do
+       Text := '' 
+end;
+
+procedure Tfrmpbf_transaction.MainGridPBFTitleBtnClick(Sender: TObject;
+  ACol: Integer; Column: TColumnEh);
+var
+  SortField : String;
+begin
+  SortField := Column.FieldName;
+  if Column.Title.SortMarker = smDownEh then
+    SortField := SortField + ' DESC';
+  with Sender as TDBGridEh , TOracleDataSet(DataSource.DataSet) do
+  begin
+   // ClearVariables;
+    Screen.Cursor := crSQLWait;
+    SetVariable('OrderField',SortField);
+    RefResh;
+    Screen.Cursor := crDefault;
+   end;
+end;
+
+procedure Tfrmpbf_transaction.ActnexportExecute(Sender: TObject);
+begin
+      with PBFExcelExport do begin
+            Connect;
+            ExportDataset(MainGridPBF.DataSource.DataSet,'Operations',true);
+            Disconnect;
+      end;
+end;
+
+procedure Tfrmpbf_transaction.ActnSPanelExecute(Sender: TObject);
+begin
+   SearchPanel.Visible := not SearchPanel.Visible
+end;
+
+procedure Tfrmpbf_transaction.ActnPrintExecute(Sender: TObject);
+var AType,AType1,Desc ,Str,str1,str2 :String;
+begin
+  //frmpbfPayRepNum.showmodal;
+   with dmpbf_transaction,PBFReportDs do
+   begin
+      
+      if PBFTransactions.fieldbyname('optype').AsString = 'KREDIT' then
+      begin
+      str1 := '(select BANK as re_BANK,KOD_B as re_KOD_B,INN as re_inn,to_char(KRNO) as re_KRNO,SWIFT as re_SWIFT, null as rc_inn';
+      str2:=' ,PBF_TRANSACTION.get_rcname(:clientaccid) as rc_name,PBF_TRANSACTION.get_rcaccno(:clientaccid,:acctype) as rc_account  from filialinfo b where kod_fil = PBF_TRANSACTION.get_filialCode(:clientaccid,null) )b,';
+      end
+      else
+      begin
+      str1 := '(SELECT  a.re_bank, a.re_kod_b, a.re_inn, a.re_krno,a.re_swift, a.rc_name, decode(PBF_TRANSACTION.get_filialCode(null,:usr),0,a.rc_account1,a.rc_account) as rc_account, a.rc_inn  FROM ';
+      str2 := ' pbf_beneficiars a where OPERTYPE = '+''''+PBFTransactions.fieldbyname('optype').AsString+''''+'),';
+      end;
+
+      str := str1 + str2;
+      if Active then CloseAll;
+
+      DeleteVariables;
+      //DeleteVariable('ACCTYPE');
+      //DeleteVariable('ACCTYPE1');
+
+      DeclareVariable('clientaccid',otinteger);
+      DeclareVariable('opid',otinteger);
+      DeclareVariable('usr',otString);
+      SetVariable('opid',PBFTransactions.fieldbyname('num').AsInteger);
+      SetVariable('clientaccid',PBFTransactions.fieldbyname('clientaccid').AsInteger);
+      SetVariable('usr',PBFTransactions.fieldbyname('username').AsString);
+      AType := '45'+PBFTransactions.fieldbyname('optype').AsString+'ACC';
+      if PBFTransactions.fieldbyname('optype').AsString = 'KREDIT' then AType1 := '45ACCOUNT' else atype1 := AType;
+      if PBFTransactions.fieldbyname('optype').AsString = 'KREDIT' then begin
+      DeclareVariable('ACCTYPE',otString);
+      SetVariable('ACCTYPE',AType);
+      DeclareVariable('ACCTYPE1',otString);
+      SetVariable('acctype1',AType1);
+      end;
+      if PBFTransactions.fieldbyname('optype').AsString <> 'KREDIT' then  begin
+      DeclareVariable('ACCTYPE1',otString);
+      SetVariable('acctype1',AType1);
+      end;
+      sql[11] := str; Memo1.text := sql.text;
+      memo2.text := 'AType1 = '+AType1+' clientaccid  = '+PBFTransactions.fieldbyname('clientaccid').Asstring+' opid='+PBFTransactions.fieldbyname('num').Asstring;
+      open;
+
+      if  PBFTransactions.fieldbyname('optype').AsString = 'KREDIT' then Desc := 'Kredit ödənişi' ;
+      if  PBFTransactions.fieldbyname('optype').AsString = 'GAS' then desc := 'Qaz ödənişi';
+      if  PBFTransactions.fieldbyname('optype').AsString = 'AZERCELL' then desc := 'AZERCELL ödənişi';
+      if  PBFTransactions.fieldbyname('optype').AsString = 'BAKCELL' then desc :=  'BAKCELL ödənişi';
+      if  PBFTransactions.fieldbyname('optype').AsString = 'NAR' then desc :=  'NAR ödənişi';
+      if  PBFTransactions.fieldbyname('optype').AsString = 'WATER' then desc :=  'Su ödənişi';
+      if  PBFTransactions.fieldbyname('optype').AsString = 'LIGHT' then desc :=  'Elektrik ödənişi';
+      if  PBFTransactions.fieldbyname('optype').AsString = 'SUMLIGHT' then desc :=  'Sumqayıt elektrik ödənişi';
+
+      PBFDesc.CloseAll;
+      PBFDesc.SetVariable('n',PBFTransactions.fieldbyname('optype').AsString);
+      PBFDesc.open;
+      desc := PBFDesc.fieldbyname('description').AsString;
+
+      if PBFTransactions.fieldbyname('optype').AsString = 'KREDIT' then
+      desc := PBFTransactions.fieldbyname('TRANSACTIONDATE').AsString+' -tarixində '+
+      PBFTransactions.fieldbyname('FROMFILTOFIL').AsString +' '+ desc;
+
+      if PBFTransactions.fieldbyname('optype').AsString <> 'KREDIT' then
+      desc := PBFTransactions.fieldbyname('TRANSACTIONDATE').AsString+' -tarixində '+desc;
+
+      with frmpbfReport do begin
+      QRLabel1.caption := Desc;
+      QRAmmountW.Caption := WithCoin(PBFTransactions.fieldbyname('DEBITAMOUNT').AsString,fieldbyname('VALUTE').asString);
+      QRAmmount.Caption := PBFTransactions.fieldbyname('DEBITAMOUNT').AsString;
+      QRDate.Caption := FormatDateTime('dd-mmm-yyyy', DTPCurrentDate.DateTime);
+      QRLabel3.Caption := PBFTransactions.fieldbyname('opname').AsString;
+      Preview;
+      end;
+
+   end;
+end;
+
+procedure Tfrmpbf_transaction.MainGridPBFDblClick(Sender: TObject);
+begin
+ActnPrintExecute(sender);
+end;
+
+procedure Tfrmpbf_transaction.MainGridPBFDrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TColumnEh;
+  State: TGridDrawState);
+var
+  ImageIndex: Integer;
+begin
+ ImageIndex := -1;
+  with (Sender as TDBGridEh) do
+  begin
+    if DataSource.DataSet.RecordCount <> 0 then
+    begin
+      case DataSource.DataSet.FieldByName('Status').AsInteger of
+      1:
+        ImageIndex := 0;
+      0:
+        ImageIndex := 1;
+      else
+      end;
+      if (DataCol = 1) and (ImageIndex <> -1) then
+        ImageList1.Draw(Canvas, Rect.Left, Rect.Top, ImageIndex, True)
+      else
+        DefaultDrawColumnCell(Rect, DataCol, Column, State);
+    end;
+  end;
+end;
+
+procedure Tfrmpbf_transaction.N5Click(Sender: TObject);
+begin
+  frmkindaccs.showmodal;
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    Tfrmpbf_transaction,
+    Class_frmpbf_transaction,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

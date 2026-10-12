@@ -1,0 +1,216 @@
+﻿unit CRAfrmExtractMoneyImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, Mask, DBCtrls, ExtCtrls, ComCtrls, ImgList, ToolWin, Grids,
+  DBGridEh, ActnList, CMExcelExport, Menus, DBGridEhGrouping, GridsEh;
+
+type
+  TfrmExtractMoney = class(TForm)
+    GroupBox1: TGroupBox;
+    DBEdit2: TDBEdit;
+    StatusBar1: TStatusBar;
+    Panel1: TPanel;
+    ToolBar1: TToolBar;
+    ToolButton3: TToolButton;
+    ToolButton4: TToolButton;
+    ToolButton5: TToolButton;
+    ToolButton6: TToolButton;
+    ImageList1: TImageList;
+    ToolButton7: TToolButton;
+    ToolButton8: TToolButton;
+    ToolButton9: TToolButton;
+    DBGridEh1: TDBGridEh;
+    ActionList1: TActionList;
+    ActnAdd: TAction;
+    ActnDel: TAction;
+    ExcelExport: TCMExcelExport;
+    ActnExprt: TAction;
+    PMShowTr: TPopupMenu;
+    N1: TMenuItem;
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure ActnAddExecute(Sender: TObject);
+    procedure ActnDelExecute(Sender: TObject);
+    procedure ToolButton9Click(Sender: TObject);
+    procedure ActnExprtExecute(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure ActnDelUpdate(Sender: TObject);
+    procedure N1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    RefreshAfterOperation : Boolean;
+  end;
+
+var
+  CRAfrmExtractMoney: TfrmExtractMoney;
+
+  procedure exportproc(S:String);export;
+implementation
+
+{$R *.DFM}
+uses CRADMExtractMoneyImpl,CRAfrmAddExtractMoneyImpl,CRACommonDeclsImpl;
+
+procedure exportproc(S:String);export;
+var ContractID,CustAccID : Integer;
+begin
+
+   ContractID := Get_SelectedContID;
+
+   with CRADMExtractMoney do
+   begin
+
+       with Payments do
+       begin
+          if Active then CloseAll;
+          SetVariable('ContractID',ContractID);
+          Open;
+       end;
+
+       with DepositInfo do
+       begin
+          if Active then CloseAll;
+          SetVariable('ContractID',ContractID);
+          Open;
+       end;
+
+       with CustAcc do
+       begin
+          if Active then CloseAll;
+          SetVariable('ContractID',ContractID);
+          Open;
+          CustAccID := FieldByName('ClientACCID').AsInteger;
+       end;
+
+       with CreditAccs do
+       begin
+        if not Active then
+          //SetVariable('kliID',CustID);
+          Open;
+        if Locate('ID',CustAccID,[]) then
+        CRAfrmAddExtractMoney.AccountListCB.KeyValue := CustAccID;
+       end;
+
+
+   end;
+
+    with CRAfrmExtractMoney do begin
+         Caption := Get_SelectedContNo+' nömrəli depozitin ödənişləri';
+         ShowModal;
+    end;
+end;
+
+exports
+  exportproc;
+
+procedure TfrmExtractMoney.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+   Resize := False 
+end;
+
+procedure TfrmExtractMoney.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+   if ord(Key) = VK_ESCAPE then Close
+end;
+
+procedure TfrmExtractMoney.FormCreate(Sender: TObject);
+begin
+   CRADMExtractMoney := TDMExtractMoney.Create(Self);
+   CRAfrmAddExtractMoney := TfrmAddExtractMoney.Create(Self);
+end;
+
+procedure TfrmExtractMoney.FormDestroy(Sender: TObject);
+begin
+   CRADMExtractMoney.Free;
+   CRAfrmAddExtractMoney.Free;
+end;
+
+procedure TfrmExtractMoney.ActnAddExecute(Sender: TObject);
+begin
+   if CRAfrmAddExtractMoney.ShowModal = mrOk then
+   begin
+      RefreshAfterOperation := True;
+      CRADMExtractMoney.Payments.Refresh;
+   end;
+end;
+
+procedure TfrmExtractMoney.ActnDelExecute(Sender: TObject);
+var
+p_Checkbefointtrid  :integer;
+begin
+
+    if MessageDlg('Silinməsinə əminsinizmi?',
+             mtConfirmation, [mbYes, mbNo], 0) = mrNo
+    then Exit;
+
+    with CRADMExtractMoney,Payments,cra_contract do
+    begin
+   {  if FieldByName('befointtrid').AsInteger=0 then
+     begin
+
+     end;  }
+
+    { p_Checkbefointtrid:= CallIntegerFunction('Checkbefointtrid',['p_id',FieldByName('ID').AsInteger]);
+
+     if p_Checkbefointtrid=1
+     then
+     begin
+       showmessage('Bu ödəniş Avan tipli müqavilənin  ödənişi olduğundan yatırım səhifəsindən silinməlidir!');
+       exit;
+     end;      }
+
+
+         CallProcedure('DeleteWithDrawMoney',['P_DepWMoneyID',FieldByName('ID').AsInteger]);
+         Refresh;
+    end;
+
+end;
+
+procedure TfrmExtractMoney.ToolButton9Click(Sender: TObject);
+begin
+   Close;
+end;
+
+procedure TfrmExtractMoney.ActnExprtExecute(Sender: TObject);
+begin
+   with ExcelExport do
+   begin
+      Connect;
+      ExportDataset(CRADMExtractMoney.Payments,'Ödənilmiş əmanətlər',True,false);
+      Disconnect;
+   end;
+end;
+
+procedure TfrmExtractMoney.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+   if RefreshAfterOperation then
+      RefreshWithSavely(True);
+
+end;
+
+procedure TfrmExtractMoney.ActnDelUpdate(Sender: TObject);
+begin
+    with (Sender as TAction) do
+          Enabled := CRADMExtractMoney.Payments.RecordCount > 0
+end;
+
+
+procedure TfrmExtractMoney.N1Click(Sender: TObject);
+var TrID :String;
+begin
+   {TrID := IntToStr(DMApplyMoney.Tranches.FieldByname('TrID').AsInteger);
+   LoadPlugin('SBDM_TransactionViewer.bpl',TrID);  }
+end;
+
+initialization
+    CRAfrmExtractMoney := TfrmExtractMoney.Create(CommonApplication);
+
+end.

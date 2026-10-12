@@ -1,0 +1,385 @@
+object FormTransaction2: TFormTransaction2
+  Left = 0
+  Top = 0
+  BorderIcons = [biSystemMenu]
+  Caption = 'FormTransaction2'
+  ClientHeight = 219
+  ClientWidth = 813
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poDesktopCenter
+  OnCanResize = FormCanResize
+  OnClose = FormClose
+  OnCreate = FormCreate
+  OnKeyPress = FormKeyPress
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 813
+    Height = 182
+    Align = alClient
+    BevelKind = bkFlat
+    TabOrder = 0
+    object Label7: TLabel
+      Left = 3
+      Top = 8
+      Width = 28
+      Height = 13
+      Caption = 'Kodu:'
+    end
+    object Label9: TLabel
+      Left = 386
+      Top = 8
+      Width = 42
+      Height = 13
+      Caption = 'Tam Ad'#305':'
+    end
+    object Label1: TLabel
+      Left = 386
+      Top = 34
+      Width = 44
+      Height = 13
+      Caption = 'A Hesab:'
+    end
+    object Label10: TLabel
+      Left = 154
+      Top = 8
+      Width = 80
+      Height = 13
+      Caption = 'Pasport seriyasi:'
+    end
+    object Label11: TLabel
+      Left = 154
+      Top = 34
+      Width = 81
+      Height = 13
+      Caption = 'Hesab'#305'n t'#601'yinat'#305':'
+    end
+    object Label12: TLabel
+      Left = 659
+      Top = 8
+      Width = 24
+      Height = 13
+      Caption = 'Filial:'
+    end
+    object Label13: TLabel
+      Left = 658
+      Top = 34
+      Width = 25
+      Height = 13
+      Caption = 'Kurs:'
+    end
+    object Label2: TLabel
+      Left = 293
+      Top = 82
+      Width = 51
+      Height = 16
+      Caption = 'M'#601'bl'#601#287':'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+    end
+    object Label3: TLabel
+      Left = 481
+      Top = 82
+      Width = 71
+      Height = 16
+      Caption = 'Ekvivalent:'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+    end
+    object Label4: TLabel
+      Left = 340
+      Top = 127
+      Width = 134
+      Height = 16
+      Caption = #399'm'#601'liyyat'#305'n t'#601'yinat'#305':'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+    end
+    object Label5: TLabel
+      Left = 292
+      Top = 62
+      Width = 59
+      Height = 13
+      Caption = 'Hesab'#305'n ad'#305':'
+    end
+    object Label6: TLabel
+      Left = 3
+      Top = 34
+      Width = 69
+      Height = 13
+      Caption = 'Balans hesab'#305':'
+    end
+    object Label8: TLabel
+      Left = 70
+      Top = 62
+      Width = 56
+      Height = 13
+      Caption = #214'lk'#601' se'#231'imi:'
+    end
+    object Edit1: TEdit
+      Left = 71
+      Top = 6
+      Width = 77
+      Height = 21
+      ReadOnly = True
+      TabOrder = 0
+      OnKeyPress = Edit1KeyPress
+    end
+    object Edit3: TEdit
+      Left = 431
+      Top = 6
+      Width = 210
+      Height = 21
+      ReadOnly = True
+      TabOrder = 2
+    end
+    object Edit6: TEdit
+      Left = 285
+      Top = 6
+      Width = 85
+      Height = 21
+      TabOrder = 12
+    end
+    object Edit4: TEdit
+      Left = 237
+      Top = 6
+      Width = 48
+      Height = 21
+      TabOrder = 13
+    end
+    object Edit5: TEdit
+      Left = 237
+      Top = 6
+      Width = 133
+      Height = 21
+      TabOrder = 1
+    end
+    object CurrencyEdit1: TCurrencyEdit
+      Left = 236
+      Top = 100
+      Width = 165
+      Height = 21
+      TabOrder = 10
+      Text = '0'
+      OnChange = CurrencyEdit1Change
+      OnClick = CurrencyEdit1Click
+      OnKeyPress = CurrencyEdit1KeyPress
+    end
+    object CurrencyEdit2: TCurrencyEdit
+      Left = 441
+      Top = 100
+      Width = 165
+      Height = 21
+      Enabled = False
+      TabOrder = 11
+      Text = '0'
+      OnClick = CurrencyEdit2Click
+      OnKeyPress = CurrencyEdit2KeyPress
+    end
+    object DBEdit1: TDBEdit
+      Left = 22
+      Top = 110
+      Width = 110
+      Height = 21
+      DataField = 'id'
+      DataSource = DataModPCustService.DS_AccNO_A
+      TabOrder = 14
+      Visible = False
+    end
+    object DBEdit2_A: TDBEdit
+      Left = 742
+      Top = 32
+      Width = 58
+      Height = 21
+      DataField = 'ostat'
+      DataSource = DataModPCustService.DS_AccNO_A
+      TabOrder = 8
+    end
+    object DBEdit3: TDBEdit
+      Left = 685
+      Top = 6
+      Width = 115
+      Height = 21
+      DataField = 'filial_name'
+      DataSource = DataModPCustService.DS_AccNO_A
+      TabOrder = 3
+    end
+    object DBLookupComboboxEh_A: TDBLookupComboboxEh
+      Left = 237
+      Top = 32
+      Width = 134
+      Height = 21
+      DropDownBox.Sizable = True
+      EditButtons = <>
+      KeyField = 'SYMBOL'
+      ListField = 'NAME'
+      ListSource = DataModPCustService.Dsrc_account_symbols_A
+      TabOrder = 5
+      Visible = True
+      OnCloseUp = DBLookupComboboxEh_ACloseUp
+    end
+    object DBCBoxAccNo_A: TDBLookupComboboxEh
+      Left = 431
+      Top = 32
+      Width = 210
+      Height = 21
+      DropDownBox.Sizable = True
+      EditButtons = <>
+      KeyField = 'ACC_NO'
+      ListField = 'ACC_NO1'
+      ListSource = DataModPCustService.DS_AccNO_A
+      TabOrder = 6
+      Visible = True
+      OnChange = DBCBoxAccNo_AChange
+      OnCloseUp = DBCBoxAccNo_ACloseUp
+    end
+    object Edit_AccName: TEdit
+      Left = 352
+      Top = 59
+      Width = 408
+      Height = 21
+      TabOrder = 9
+    end
+    object DBEdit2: TDBEdit
+      Left = 685
+      Top = 32
+      Width = 57
+      Height = 21
+      DataField = 'val_name'
+      DataSource = DataModPCustService.DS_AccNO_A
+      TabOrder = 7
+    end
+    object DBEdit4: TDBEdit
+      Left = 71
+      Top = 32
+      Width = 77
+      Height = 21
+      DataField = 'bal_cn1'
+      DataSource = DataModPCustService.DS_AccNO_A
+      TabOrder = 4
+    end
+    object DBLookupCEh_contrsName2: TDBLookupComboBox
+      Left = 129
+      Top = 59
+      Width = 150
+      Height = 21
+      KeyField = 'ID'
+      ListField = 'CNTR_NAME'
+      ListSource = DataModPCustService.Dsrc_contrs3
+      TabOrder = 15
+    end
+    object Edit_description: TEdit
+      Left = 131
+      Top = 151
+      Width = 61
+      Height = 21
+      TabOrder = 16
+      OnExit = Edit_descriptionExit
+      OnKeyPress = Edit_descriptionKeyPress
+    end
+    object DBLookupComboboxEh_description: TDBLookupComboboxEh
+      Left = 191
+      Top = 151
+      Width = 456
+      Height = 21
+      EditButtons = <>
+      KeyField = 'ID'
+      ListField = 'NAME'
+      ListSource = DataModPCustService.DestinationsData
+      TabOrder = 17
+      Visible = True
+      OnChange = DBLookupComboboxEh_descriptionChange
+    end
+    object EditDescription: TEdit
+      Left = 192
+      Top = 151
+      Width = 437
+      Height = 21
+      TabOrder = 18
+    end
+  end
+  object Panel2: TPanel
+    Left = 0
+    Top = 182
+    Width = 813
+    Height = 37
+    Align = alBottom
+    BevelKind = bkFlat
+    TabOrder = 1
+    object XFBitBtn2: TXFBitBtn
+      Left = 209
+      Top = 2
+      Width = 75
+      Height = 29
+      Caption = #304'mtina'
+      DoubleBuffered = True
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentDoubleBuffered = False
+      ParentFont = False
+      TabOrder = 0
+      Visible = False
+      OnClick = XFBitBtn2Click
+    end
+    object XFBitBtn1: TXFBitBtn
+      Left = 367
+      Top = 2
+      Width = 75
+      Height = 29
+      Caption = #199#305'x'#305#351
+      DoubleBuffered = True
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentDoubleBuffered = False
+      ParentFont = False
+      TabOrder = 1
+      OnClick = XFBitBtn1Click
+    end
+    object XFBitBtn3: TXFBitBtn
+      Left = 290
+      Top = 2
+      Width = 75
+      Height = 29
+      Caption = 'Q'#601'bul'
+      DoubleBuffered = True
+      Enabled = False
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentDoubleBuffered = False
+      ParentFont = False
+      TabOrder = 2
+      OnClick = XFBitBtn3Click
+    end
+  end
+end

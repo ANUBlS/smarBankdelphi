@@ -1,0 +1,527 @@
+unit UnitAccBuyers;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Buttons, ExtCtrls, StdCtrls, ComCtrls, DBCtrls, Mask, SearchEdit,
+  NLSLocalizer, Variants;
+
+type
+  TFormAccBuyers = class(TForm)
+    ButtonCommit: TButton;
+    ButtonCancel: TButton;
+    buyerid: TEdit;
+    NLSLocalizer1: TNLSLocalizer;
+    AccountGB: TGroupBox;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    Label6: TLabel;
+    Label13: TLabel;
+    Label14: TLabel;
+    Label15: TLabel;
+    Label12: TLabel;
+    DBText1: TDBText;
+    DBLookupCurr: TDBLookupComboBox;
+    DBLookupCust: TDBLookupComboBox;
+    DTPOpenDate: TDateTimePicker;
+    DBLookupComboBox4: TDBLookupComboBox;
+    DBLookupBalance1: TDBLookupComboBox;
+    EditBall: TEdit;
+    EditAcc: TEdit;
+    EditCust: TEdit;
+    EditFil: TEdit;
+    EditValute: TEdit;
+    DBEditLimit: TEdit;
+    DBEdit1: TDBEdit;
+    DBEdit2: TDBEdit;
+    DBEdit3: TDBEdit;
+    EditAccName: TEdit;
+    DBEdit5: TDBEdit;
+    DayStartStateGB: TGroupBox;
+    Label8: TLabel;
+    Label9: TLabel;
+    DBEdit6: TDBEdit;
+    DBEdit7: TDBEdit;
+    symboledit_: TEdit;
+    procedure FormActivate(Sender: TObject);
+    procedure SearchEdit1Change(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure DBLookupCurrClick(Sender: TObject);
+    procedure DBLookupCustClick(Sender: TObject);
+    procedure ButtonCancelClick(Sender: TObject);
+    procedure val_codeKeyPress(Sender: TObject; var Key: Char);
+    procedure DBLookupCurrKeyPress(Sender: TObject; var Key: Char);
+    procedure bal_cnKeyPress(Sender: TObject; var Key: Char);
+    procedure DBLookupBalance1KeyPress(Sender: TObject; var Key: Char);
+    procedure EditCustKeyPress(Sender: TObject; var Key: Char);
+    procedure DBLookupCustKeyPress(Sender: TObject; var Key: Char);
+    procedure DTPOpenDateKeyPress(Sender: TObject; var Key: Char);
+    procedure TweditKeyPress(Sender: TObject; var Key: Char);
+    procedure SymbolEditKeyPress(Sender: TObject; var Key: Char);
+    procedure LimitEditKeyPress(Sender: TObject; var Key: Char);
+    procedure BrancheditKeyPress(Sender: TObject; var Key: Char);
+    procedure DBLookupComboBox4KeyPress(Sender: TObject; var Key: Char);
+    procedure DBEditAccNameKeyPress(Sender: TObject; var Key: Char);
+    procedure val_codeChange(Sender: TObject);
+    procedure valcodeKeyPress(Sender: TObject; var Key: Char);
+    procedure DBLookupBalance1Click(Sender: TObject);
+    procedure bal_cnChange(Sender: TObject);
+    procedure EditBallKeyPress(Sender: TObject; var Key: Char);
+    procedure DBLookupComboBox4Click(Sender: TObject);
+    procedure EditCustChange(Sender: TObject);
+    procedure EditValuteChange(Sender: TObject);
+    procedure EditBallChange(Sender: TObject);
+    procedure EditFilChange(Sender: TObject);
+    procedure EditAccKeyPress(Sender: TObject; var Key: Char);
+    procedure ButtonCommitClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    procedure WMNCACTIVATE(var message:TWMNCActivate);
+    procedure WMNCPaint(var message: TWMNCPaint);
+  end;
+
+var
+  FormAccBuyers: TFormAccBuyers;
+
+implementation
+
+uses UnitData;
+
+{$R *.DFM}
+
+procedure TFormAccBuyers.WMNCACTIVATE(var message:TWMNCActivate);
+var
+ S:TWMNCPaint;
+begin
+inherited;
+WMNCPaint(s);
+end;
+
+procedure TFormAccBuyers.WMNCPaint(var message: TWMNCPaint);
+const Capt = 'Щесабын ялавя едилмяси';
+var dc : hDc;
+begin
+inherited;
+Caption:='';
+dc := GetWindowDC(Handle);
+        SetBkMode(dc,Transparent);
+        SetTextColor(dc,clWhite);
+        SelectObject(dc, Font.Handle);
+        TextOut(dc, 23,6,Capt,Length(Capt));
+end;
+
+procedure TFormAccBuyers.FormActivate(Sender: TObject);
+begin
+DataMod_Buyers.CC_Settings.Open;
+DTPOpenDate.Date:=DataMod_Buyers.SBOP.CallDateFunction('get_date',[]);
+dbedit1.text :='';
+Dbedit2.text :='';
+dbedit3.text :='';
+
+EditValute.Text:=DataMod_Buyers.cc_settings.Fieldbyname('ACCCUR').asstring;
+EditBall.Text:=DataMod_Buyers.cc_settings.Fieldbyname('ACCBALCN').asstring;
+EditCust.Text:=DataMod_Buyers.cc_settings.Fieldbyname('ACCCUST').asstring;
+EditFil.Text:=DataMod_Buyers.cc_settings.Fieldbyname('ACCBRANCH').asstring;
+EditAccName.Text:=DataMod_Buyers.oDSBuyers.fieldbyname('firstname').asstring+' '
+                 +DataMod_Buyers.oDSBuyers.fieldbyname('lastname').asstring+' '
+                 +DataMod_Buyers.oDSBuyers.fieldbyname('middlename').asstring;
+
+
+//EditAccName.text :=Datamod_Buyers.ODSBuyers.fieldbyname('byr_name').asstring;
+{EditValute.text := Datamod_Buyers.CC_Settings.fieldbyname('val_code').asstring;
+dbedit1.text := Datamod_Buyers.CC_Settings.fieldbyname('val_name').asstring;
+EditBall.text := Datamod_Buyers.CC_Settings.fieldbyname('bal_cn1').asstring;
+dbedit2.text := Datamod_Buyers.CC_Settings.fieldbyname('bal_name').asstring;
+dbedit1.text := Datamod_Buyers.CC_Settings.fieldbyname('val_name').asstring;
+editcust.text := Datamod_Buyers.CC_Settings.fieldbyname('cust_id').asstring;
+dbedit3.text := Datamod_Buyers.CC_Settings.fieldbyname('cust_name').asstring;}
+//DTPOpenDate.date :=Datamod_Buyers.CC_Settings.fieldbyname('open_date').asdatetime;
+DataMod_Buyers.Sysdat.Open;
+DTPOpenDate.date :=DataMod_Buyers.Sysdat.Fieldbyname('tek_dat').asdatetime;
+
+{symboledit_.text :=Datamod_Buyers.CC_Settings.fieldbyname('acc_symbol').asstring;
+DBEditLimit.text :=Datamod_Buyers.CC_Settings.fieldbyname('limit').asstring;
+EditFil.text :=Datamod_Buyers.CC_Settings.fieldbyname('branch_id').asstring;
+dbedit5.text :=Datamod_Buyers.CC_Settings.fieldbyname('branch_name').asstring;
+EditAccName.text :=Datamod_Buyers.ODSBuyers.fieldbyname('byr_name').asstring;
+dbedit6.text :=Datamod_Buyers.CC_Settings.fieldbyname('ostat').asstring;
+dbedit7.text :=Datamod_Buyers.CC_Settings.fieldbyname('pok_ostat').asstring;
+buyerid.text :=Datamod_Buyers.ODSBuyers.fieldbyname('id').asstring;}
+end;
+
+procedure TFormAccBuyers.SearchEdit1Change(Sender: TObject);
+begin
+//DataMod_Buyers.Avalute.fieldbyname('valute').asstring :=TSearchEdit(Sender).datasource.dataset.fieldbyname('valute').asstring;
+
+end;
+
+
+procedure TFormAccBuyers.FormCreate(Sender: TObject);
+begin
+
+DataMod_Buyers.Avalute.open;
+end;
+
+procedure TFormAccBuyers.DBLookupCurrClick(Sender: TObject);
+begin
+   EditValute.Text := IntToStr(DBLookupCurr.ListSource.DataSet.FieldByName('VALUTE').AsInTeger);
+//dbedit1.visible :=false;
+
+
+end;
+
+
+
+procedure TFormAccBuyers.DBLookupCustClick(Sender: TObject);
+begin
+  EditCust.Text := IntToStr(DBLookupCust.ListSource.DataSet.FieldByName('ID').AsInTeger);
+
+ end;
+procedure TFormAccBuyers.ButtonCancelClick(Sender: TObject);
+begin
+close;
+end;
+
+
+
+procedure TFormAccBuyers.val_codeKeyPress(Sender: TObject; var Key: Char);
+begin
+if ORD(Key) = VK_RETURN then
+  begin
+  if Sender is TWinControl then
+  with Sender as TWinControl do
+  case Tag of
+    1 : SelectNext(Sender as TWinControl ,True ,True);
+    end;
+    Key := #0;
+end;
+
+end;
+
+procedure TFormAccBuyers.DBLookupCurrKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+if ORD(Key) = VK_RETURN then
+  begin
+  if Sender is TWinControl then
+  with Sender as TWinControl do
+  case Tag of
+    1 : SelectNext(Sender as TWinControl ,True ,True);
+    end;
+    Key := #0;
+end;
+
+end;
+
+procedure TFormAccBuyers.bal_cnKeyPress(Sender: TObject; var Key: Char);
+begin
+if ORD(Key) = VK_RETURN then
+  begin
+  if Sender is TWinControl then
+  with Sender as TWinControl do
+  case Tag of
+    1 : SelectNext(Sender as TWinControl ,True ,True);
+    end;
+    Key := #0;
+end;
+
+end;
+
+procedure TFormAccBuyers.DBLookupBalance1KeyPress(Sender: TObject;
+  var Key: Char);
+begin
+if ORD(Key) = VK_RETURN then
+  begin
+  if Sender is TWinControl then
+  with Sender as TWinControl do
+  case Tag of
+    1 : SelectNext(Sender as TWinControl ,True ,True);
+    end;
+    Key := #0;
+end;
+
+end;
+
+procedure TFormAccBuyers.EditCustKeyPress(Sender: TObject; var Key: Char);
+begin
+if ORD(Key) = VK_RETURN then
+  begin
+  if Sender is TWinControl then
+  with Sender as TWinControl do
+  case Tag of
+    1 : SelectNext(Sender as TWinControl ,True ,True);
+    end;
+    Key := #0;
+end;
+
+end;
+
+procedure TFormAccBuyers.DBLookupCustKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+if ORD(Key) = VK_RETURN then
+  begin
+  if Sender is TWinControl then
+  with Sender as TWinControl do
+  case Tag of
+    1 : SelectNext(Sender as TWinControl ,True ,True);
+    end;
+    Key := #0;
+end;
+
+end;
+
+procedure TFormAccBuyers.DTPOpenDateKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+if ORD(Key) = VK_RETURN then
+  begin
+  if Sender is TWinControl then
+  with Sender as TWinControl do
+  case Tag of
+    1 : SelectNext(Sender as TWinControl ,True ,True);
+    end;
+    Key := #0;
+end;
+
+end;
+
+procedure TFormAccBuyers.TweditKeyPress(Sender: TObject; var Key: Char);
+begin
+if ORD(Key) = VK_RETURN then
+  begin
+  if Sender is TWinControl then
+  with Sender as TWinControl do
+  case Tag of
+    1 : SelectNext(Sender as TWinControl ,True ,True);
+    end;
+    Key := #0;
+end;
+
+end;
+
+procedure TFormAccBuyers.SymbolEditKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+if ORD(Key) = VK_RETURN then
+  begin
+  if Sender is TWinControl then
+  with Sender as TWinControl do
+  case Tag of
+    1 : SelectNext(Sender as TWinControl ,True ,True);
+    end;
+    Key := #0;
+end;
+
+end;
+
+procedure TFormAccBuyers.LimitEditKeyPress(Sender: TObject; var Key: Char);
+begin
+if ORD(Key) = VK_RETURN then
+  begin
+  if Sender is TWinControl then
+  with Sender as TWinControl do
+  case Tag of
+    1 : SelectNext(Sender as TWinControl ,True ,True);
+    end;
+    Key := #0;
+end;
+
+end;
+
+procedure TFormAccBuyers.BrancheditKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+if ORD(Key) = VK_RETURN then
+  begin
+  if Sender is TWinControl then
+  with Sender as TWinControl do
+  case Tag of
+    1 : SelectNext(Sender as TWinControl ,True ,True);
+    end;
+    Key := #0;
+end;
+
+end;
+
+procedure TFormAccBuyers.DBLookupComboBox4KeyPress(Sender: TObject;
+  var Key: Char);
+begin
+if ORD(Key) = VK_RETURN then
+  begin
+  if Sender is TWinControl then
+  with Sender as TWinControl do
+  case Tag of
+    1 : SelectNext(Sender as TWinControl ,True ,True);
+    end;
+    Key := #0;
+end;
+
+end;
+
+procedure TFormAccBuyers.DBEditAccNameKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+if ORD(Key) = VK_RETURN then
+  begin
+  if Sender is TWinControl then
+  with Sender as TWinControl do
+  case Tag of
+    1 : SelectNext(Sender as TWinControl ,True ,True);
+    end;
+    Key := #0;
+end;
+
+end;
+
+procedure TFormAccBuyers.val_codeChange(Sender: TObject);
+begin
+ if  (Sender as TEdit).Text <>''  then
+    DBLookupCurr.KeyValue := StrToInt((Sender as TEdit).Text)
+    else DBLookupCurr.KeyValue :=null;
+
+end;
+
+procedure TFormAccBuyers.valcodeKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+if ORD(Key) = VK_RETURN then
+  begin
+  if Sender is TWinControl then
+  with Sender as TWinControl do
+  case Tag of
+    1 : SelectNext(Sender as TWinControl ,True ,True);
+    end;
+    Key := #0;
+  end;
+if not (Key in['0'..'9','.',#8]) then Key :=#0;
+end;
+
+procedure TFormAccBuyers.DBLookupBalance1Click(Sender: TObject);
+begin
+  EditBall.Text := IntToStr(DBLookupBalance1.ListSource.DataSet.FieldByName('BAL_CN').AsInTeger);
+
+end;
+
+procedure TFormAccBuyers.bal_cnChange(Sender: TObject);
+begin
+   if  (Sender as TEdit).Text <>''  then
+   DBLookupBalance1.KeyValue := StrToInt((Sender as TEdit).Text)
+   else DBLookupBalance1.KeyValue := null;
+
+end;
+
+procedure TFormAccBuyers.EditBallKeyPress(Sender: TObject; var Key: Char);
+begin
+ if ORD(Key) = VK_RETURN then
+  begin
+  if Sender is TWinControl then
+  with Sender as TWinControl do
+  case Tag of
+    1 : SelectNext(Sender as TWinControl ,True ,True);
+    end;
+    Key := #0;
+  end;
+if not (Key in['0'..'9','.',#8]) then Key :=#0;
+
+end;
+
+procedure TFormAccBuyers.DBLookupComboBox4Click(Sender: TObject);
+begin
+  EditFil.Text := IntToStr(DBLookupComboBox4.ListSource.DataSet.FieldByName('ID').AsInTeger);
+
+end;
+
+procedure TFormAccBuyers.EditCustChange(Sender: TObject);
+begin
+   if (EditCust.Text<>'') then begin
+   DBLookupCust.KeyValue := StrToInt((Sender as TEdit).Text);
+//    EditAccName.Text := DBLookupCust.ListSource.DataSet.FIeldByName('Name').AsString;
+ end else begin
+   EditAccName.Text :='';
+   DBLookupCust.KeyValue := null;
+   end;
+
+end;
+
+procedure TFormAccBuyers.EditValuteChange(Sender: TObject);
+begin
+ if  (Sender as TEdit).Text <>''  then
+    DBLookupCurr.KeyValue := StrToInt((Sender as TEdit).Text)
+    else DBLookupCurr.KeyValue :=null;
+
+end;
+
+procedure TFormAccBuyers.EditBallChange(Sender: TObject);
+begin
+   if  (Sender as TEdit).Text <>''  then
+   DBLookupBalance1.KeyValue := StrToInt((Sender as TEdit).Text)
+   else DBLookupBalance1.KeyValue := null;
+
+end;
+
+procedure TFormAccBuyers.EditFilChange(Sender: TObject);
+begin
+  if  (Sender as TEdit).Text <>''  then 
+   DBLookupComboBox4.KeyValue := StrToInt((Sender as TEdit).Text)
+   else DBLookupComboBox4.KeyValue:=null;
+
+end;
+
+procedure TFormAccBuyers.EditAccKeyPress(Sender: TObject; var Key: Char);
+begin
+if ORD(Key) = VK_RETURN then
+  begin
+  if Sender is TWinControl then
+  with Sender as TWinControl do
+  case Tag of
+    1 : SelectNext(Sender as TWinControl ,True ,True);
+    end;
+    Key := #0;
+end;
+
+end;
+
+procedure TFormAccBuyers.ButtonCommitClick(Sender: TObject);
+var
+    DDate :TDateTime;
+    customerid    :  integer;
+    op_id         :  integer;
+    accno         :  string;
+    currencyid    :  integer;
+    name          :  string;
+    open_dat      :  tdatetime;
+    balcn         :  integer;
+    ownid         :  integer;
+
+begin
+  DDate :=Trunc(DTPOpenDate.DateTime);
+  customerid:=strtoint(EditCust.Text);
+  accno:=EditAcc.Text;
+  currencyid:=strtoint(EditValute.text);
+  name:=EditAccName.Text;
+  open_dat:=Integer(Trunc(DTPOpenDate.date));
+  balcn:=strtoint(EditBall.text);
+  ownid:=Datamod_Buyers.ODSBuyers.fieldbyname('ID').asinteger;
+
+
+  DataMod_Buyers.CC_GENERAL.CallIntegerFunction('add_account',[customerid,
+                                                         accno,
+                                                         currencyid,
+                                                         name,
+                                                         open_dat,
+                                                         balcn,
+                                                         ownid]);
+                                                        DataMod_Buyers.Accno.Close;
+                                                        DataMod_Buyers.Accno.Open;
+                                                        Close;
+
+
+end;
+end.

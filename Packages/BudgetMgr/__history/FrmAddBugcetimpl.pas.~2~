@@ -1,0 +1,110 @@
+unit FrmAddBugcetimpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Grids, DBGridEh, StdCtrls, ExtCtrls, Mask, DBCtrlsEh, Db, OracleData,
+   Buttons, DBCtrls;
+ type
+   TOperationMode = (omInsert, omEdit,omCommit,omDelete);
+type
+  TBudgetSetAccaontfr = class(TForm)
+    GroupBox1: TGroupBox;
+    GroupBox2: TGroupBox;
+    Panel1: TPanel;
+    Okbtn: TButton;
+    DBGridEh1: TDBGridEh;
+    DBGridEh2: TDBGridEh;
+    DBNavigator1: TDBNavigator;
+    SpeedButton1: TSpeedButton;
+    procedure FormCreate(Sender: TObject);
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure OkbtnClick(Sender: TObject);
+    procedure CloseBtnClick(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+  private
+    { Private declarations }
+  public
+   OperationMode: TOperationMode
+    { Public declarations }
+  end;
+
+var
+  BudgetSetAccaontfr:TBudgetSetAccaontfr;
+
+implementation
+
+uses Dmbudgetimpl,sboapiDataModuleImpl ;
+{$R *.DFM}
+
+procedure TBudgetSetAccaontfr.FormCreate(Sender: TObject);
+begin
+ // FitableHmCb.ItemIndex:=0;
+
+end;
+
+procedure TBudgetSetAccaontfr.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+   resize := false
+end;
+
+procedure TBudgetSetAccaontfr.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+      if ord(key) = VK_ESCAPE then close
+end;
+
+procedure TBudgetSetAccaontfr.OkbtnClick(Sender: TObject);
+
+
+begin
+{
+     with DMBudget do begin
+
+     case FitableHmCb.ItemIndex of
+        0:status :=0;
+        1:status :=1;
+     end;
+
+       AddArt.post;
+       ArticlesDST.Refresh;
+       AddArt.Refresh;
+       AddName.text:=''
+    end;
+          }
+                                      
+end;
+
+procedure TBudgetSetAccaontfr.CloseBtnClick(Sender: TObject);
+begin
+ //AddName.text:='' ;
+ close
+end;
+
+procedure TBudgetSetAccaontfr.FormShow(Sender: TObject);
+begin
+  //  if OperationMode = omedit then
+//FitableHmCb.ItemIndex:=DMBudget.AddArt.FieldByName('status').asinteger
+end;
+
+procedure TBudgetSetAccaontfr.SpeedButton1Click(Sender: TObject);
+begin
+//DMBudget.Accs.Refresh;
+DMBudget.articles_accs.Refresh;
+
+close
+end;
+
+procedure TBudgetSetAccaontfr.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+DMBudget.Accs.Refresh;
+DMBudget.articles_accs.Refresh;
+end;
+
+end.

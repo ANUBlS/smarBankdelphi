@@ -1,0 +1,472 @@
+object DataModReferences: TDataModReferences
+  OldCreateOrder = False
+  OnCreate = DataModuleCreate
+  OnDestroy = DataModuleDestroy
+  Height = 484
+  Width = 637
+  object TVSubItems: TOracleDataSet
+    SQL.Strings = (
+      'Select'
+      '   *'
+      '  From'
+      '     SBCM_References'
+      '   Where'
+      '    ParentID =:ParentID')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000120000003A0050004100520045004E005400490044000300
+      00000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      05000000060000000400000049004400010000000000080000004E0041004D00
+      45000100000000000A0000004C004E0041004D00450001000000000010000000
+      50004100520045004E005400490044000100000000000A000000560041004C00
+      550045000100000000001400000053004F0055005200430045004C0049005300
+      5400010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 16
+    Top = 8
+    object TVSubItemsID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object TVSubItemsNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 64
+    end
+    object TVSubItemsLNAME: TWideStringField
+      FieldName = 'LNAME'
+      Size = 128
+    end
+    object TVSubItemsPARENTID: TFloatField
+      FieldName = 'PARENTID'
+      Required = True
+    end
+    object TVSubItemsVALUE: TWideStringField
+      FieldName = 'VALUE'
+      Size = 556
+    end
+    object TVSubItemsSOURCELIST: TWideStringField
+      FieldName = 'SOURCELIST'
+      Size = 2048
+    end
+  end
+  object ReferLink: TOracleDataSet
+    SQL.Strings = (
+      'Select * From  SBCM_References')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000060000000400000049004400010000000000080000004E0041004D00
+      45000100000000000A0000004C004E0041004D00450001000000000010000000
+      50004100520045004E005400490044000100000000000A000000560041004C00
+      550045000100000000001400000053004F0055005200430045004C0049005300
+      5400010000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 72
+    Top = 8
+    object ReferLinkID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object ReferLinkNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 64
+    end
+    object ReferLinkLNAME: TWideStringField
+      FieldName = 'LNAME'
+      Size = 128
+    end
+    object ReferLinkPARENTID: TFloatField
+      FieldName = 'PARENTID'
+      Required = True
+    end
+    object ReferLinkVALUE: TWideStringField
+      FieldName = 'VALUE'
+      Size = 556
+    end
+    object ReferLinkSOURCELIST: TWideStringField
+      FieldName = 'SOURCELIST'
+      Size = 2048
+    end
+  end
+  object ReferPackage: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'sbcm_rpdepository'
+    Left = 16
+    Top = 224
+  end
+  object sbcm_ds: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'SBCM_RPDEPOSITORY'
+    Left = 16
+    Top = 168
+  end
+  object Accounts: TOracleDataSet
+    SQL.Strings = (
+      'select '
+      '       /*+ FIRST_ROWS_200(account) */'
+      '       id,'
+      '       acc_no,'
+      '       name,'
+      'val_acc'
+      'from account '
+      'where close_dat is null'
+      'and  bal_cn1 in ( select accgroup from '
+      
+        'sbcm_acc_zone_info where zoneid = (select zoneid from sbcm_acc_z' +
+        'ones'
+      'where name = '#39'InternalBankAccs'#39'))'
+      'order by acc_no')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000400000004000000490044000100000000000C000000410043004300
+      5F004E004F00010000000000080000004E0041004D0045000100000000000E00
+      0000560041004C005F00410043004300010000000000}
+    Cursor = crSQLWait
+    MasterFields = 'valute'
+    QueryAllRecords = False
+    Session = sboapiDataModule.SBSession
+    Left = 120
+    Top = 8
+    object AccountsID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object AccountsACC_NO: TWideStringField
+      DisplayWidth = 30
+      FieldName = 'ACC_NO'
+      Size = 28
+    end
+    object AccountsNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 90
+    end
+    object AccountsVAL_ACC: TIntegerField
+      FieldName = 'VAL_ACC'
+    end
+  end
+  object AccountsDatSrc: TDataSource
+    DataSet = Accounts
+    Left = 184
+    Top = 8
+  end
+  object Categories: TOracleDataSet
+    SQL.Strings = (
+      'select ROWID,id,category from sbcm_categories')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      0500000002000000040000004900440001000000000010000000430041005400
+      450047004F0052005900010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 16
+    Top = 64
+    object CategoriesID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object CategoriesCATEGORY: TWideStringField
+      FieldName = 'CATEGORY'
+      Size = 128
+    end
+  end
+  object CategoriesDatSrc: TDataSource
+    DataSet = Categories
+    Left = 88
+    Top = 64
+  end
+  object Filials: TOracleDataSet
+    SQL.Strings = (
+      'select id,name from filial')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000400000049004400010000000000080000004E0041004D00
+      4500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 152
+    Top = 64
+    object FilialsID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object FilialsNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 90
+    end
+  end
+  object FilialsDatSrc: TDataSource
+    DataSet = Filials
+    Left = 208
+    Top = 64
+  end
+  object valute: TOracleDataSet
+    SQL.Strings = (
+      'select valute,val_name,valu_name from avalute'
+      '')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000030000000C000000560041004C005500540045000100000000001000
+      0000560041004C005F004E0041004D0045000100000000001200000056004100
+      4C0055005F004E0041004D004500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 256
+    Top = 8
+    object valuteVALUTE: TIntegerField
+      FieldName = 'VALUTE'
+      Required = True
+    end
+    object valuteVAL_NAME: TWideStringField
+      FieldName = 'VAL_NAME'
+      Size = 10
+    end
+    object valuteVALU_NAME: TWideStringField
+      FieldName = 'VALU_NAME'
+      Size = 25
+    end
+  end
+  object ValutesDatSrc: TDataSource
+    DataSet = valute
+    Left = 312
+    Top = 8
+  end
+  object movie_names: TOracleDataSet
+    SQL.Strings = (
+      'SELECT id, typeid,  description'
+      '  FROM sbcm_movie_names'
+      ''
+      'where typeid = :typeid')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000E0000003A00540059005000450049004400030000000400
+      00000A00000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000300000004000000490044000100000000000C000000540059005000
+      4500490044000100000000001600000044004500530043005200490050005400
+      49004F004E00010000000000}
+    Master = Categories
+    MasterFields = 'ID'
+    DetailFields = 'TYPEID'
+    Session = sboapiDataModule.SBSession
+    Left = 288
+    Top = 67
+    object movie_namesID: TIntegerField
+      FieldName = 'ID'
+      Required = True
+    end
+    object movie_namesTYPEID: TIntegerField
+      FieldName = 'TYPEID'
+      Required = True
+    end
+    object movie_namesDESCRIPTION: TWideStringField
+      FieldName = 'DESCRIPTION'
+      Size = 128
+    end
+  end
+  object movie_namesDatSrc: TDataSource
+    DataSet = movie_names
+    Left = 384
+    Top = 67
+  end
+  object settings: TOracleDataSet
+    SQL.Strings = (
+      'SELECT rowid,id, parentid, currencyid, accid, branchid'
+      '  FROM sbcm_settings'
+      ''
+      'where parentid = :parentid')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000120000003A0050004100520045004E005400490044000300
+      0000040000003F00000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      0500000005000000040000004900440001000000000010000000500041005200
+      45004E0054004900440001000000000014000000430055005200520045004E00
+      43005900490044000100000000000A0000004100430043004900440001000000
+      0000100000004200520041004E004300480049004400010000000000}
+    Master = movie_names
+    MasterFields = 'ID'
+    DetailFields = 'PARENTID'
+    Session = sboapiDataModule.SBSession
+    Left = 400
+    Top = 14
+    object settingsID: TFloatField
+      FieldName = 'ID'
+    end
+    object settingsPARENTID: TFloatField
+      FieldName = 'PARENTID'
+      Required = True
+    end
+    object settingsCURRENCYID: TFloatField
+      FieldName = 'CURRENCYID'
+      Required = True
+    end
+    object settingsACCID: TFloatField
+      FieldName = 'ACCID'
+      Required = True
+    end
+    object settingsBRANCHID: TFloatField
+      FieldName = 'BRANCHID'
+    end
+    object settingsfilialname: TWideStringField
+      FieldKind = fkLookup
+      FieldName = 'filialname'
+      LookupDataSet = Filials
+      LookupKeyFields = 'ID'
+      LookupResultField = 'NAME'
+      KeyFields = 'BRANCHID'
+      Lookup = True
+    end
+    object settingscurrencyname: TWideStringField
+      FieldKind = fkLookup
+      FieldName = 'currencyname'
+      LookupDataSet = valute
+      LookupKeyFields = 'VALUTE'
+      LookupResultField = 'VAL_NAME'
+      KeyFields = 'CURRENCYID'
+      Lookup = True
+    end
+    object settingsaccountnumber: TStringField
+      DisplayWidth = 30
+      FieldKind = fkLookup
+      FieldName = 'accountnumber'
+      LookupDataSet = Accounts
+      LookupKeyFields = 'ID'
+      LookupResultField = 'ACC_NO'
+      KeyFields = 'ACCID'
+      Size = 28
+      Lookup = True
+    end
+  end
+  object settingsDatSrc: TDataSource
+    DataSet = settings
+    Left = 464
+    Top = 14
+  end
+  object DepositTypes: TOracleDataSet
+    SQL.Strings = (
+      
+        'SELECT rowid,id, type, additionaltype, withdrawtype, dateinterva' +
+        'l'
+      '  FROM sbcm_deposit_types where sifrtype=1'
+      'order by id ')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      0500000005000000040000004900440001000000000008000000540059005000
+      45000100000000001C0000004100440044004900540049004F004E0041004C00
+      5400590050004500010000000000180000005700490054004800440052004100
+      5700540059005000450001000000000018000000440041005400450049004E00
+      540045005200560041004C00010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 80
+    Top = 154
+    object DepositTypesID: TFloatField
+      DisplayLabel = #8470
+      FieldName = 'ID'
+    end
+    object DepositTypesTYPE: TWideStringField
+      FieldName = 'TYPE'
+      Size = 256
+    end
+    object DepositTypesADDITIONALTYPE: TWideStringField
+      FieldName = 'ADDITIONALTYPE'
+      Size = 32
+    end
+    object DepositTypesWITHDRAWTYPE: TWideStringField
+      FieldName = 'WITHDRAWTYPE'
+      Size = 32
+    end
+    object DepositTypesDATEINTERVAL: TIntegerField
+      FieldName = 'DATEINTERVAL'
+    end
+  end
+  object DepositTypesDatSrc: TDataSource
+    DataSet = DepositTypes
+    Left = 192
+    Top = 154
+  end
+  object AddTypesForcollDatSrc: TDataSource
+    DataSet = AddTypesForColl
+    Left = 192
+    Top = 202
+  end
+  object AddTypesForColl: TOracleDataSet
+    SQL.Strings = (
+      'SELECT id, addtypename, addtypedesc, withdrtype, withdrtypedesc'
+      '  FROM sbcm_deposit_addtypes')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      0500000005000000040000004900440001000000000016000000410044004400
+      54005900500045004E0041004D00450001000000000016000000410044004400
+      5400590050004500440045005300430001000000000014000000570049005400
+      48004400520054005900500045000100000000001C0000005700490054004800
+      4400520054005900500045004400450053004300010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 80
+    Top = 202
+    object AddTypesForCollID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object AddTypesForCollADDTYPENAME: TWideStringField
+      FieldName = 'ADDTYPENAME'
+      Size = 25
+    end
+    object AddTypesForCollADDTYPEDESC: TWideStringField
+      FieldName = 'ADDTYPEDESC'
+      Size = 50
+    end
+    object AddTypesForCollWITHDRTYPE: TWideStringField
+      FieldName = 'WITHDRTYPE'
+      Size = 25
+    end
+    object AddTypesForCollWITHDRTYPEDESC: TWideStringField
+      FieldName = 'WITHDRTYPEDESC'
+      Size = 50
+    end
+  end
+  object AddTypesForWith: TOracleDataSet
+    SQL.Strings = (
+      'SELECT id, addtypename, addtypedesc, withdrtype, withdrtypedesc'
+      '  FROM sbcm_deposit_addtypes'
+      'order by id')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      0500000005000000040000004900440001000000000016000000410044004400
+      54005900500045004E0041004D00450001000000000016000000410044004400
+      5400590050004500440045005300430001000000000014000000570049005400
+      48004400520054005900500045000100000000001C0000005700490054004800
+      4400520054005900500045004400450053004300010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 80
+    Top = 250
+    object FloatField1: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object AddTypesForWithADDTYPENAME: TWideStringField
+      FieldName = 'ADDTYPENAME'
+      Size = 25
+    end
+    object AddTypesForWithADDTYPEDESC: TWideStringField
+      FieldName = 'ADDTYPEDESC'
+      Size = 50
+    end
+    object AddTypesForWithWITHDRTYPE: TWideStringField
+      FieldName = 'WITHDRTYPE'
+      Size = 25
+    end
+    object AddTypesForWithWITHDRTYPEDESC: TWideStringField
+      FieldName = 'WITHDRTYPEDESC'
+      Size = 50
+    end
+  end
+  object AddTypesForWithDatSrc: TDataSource
+    DataSet = AddTypesForWith
+    Left = 192
+    Top = 250
+  end
+  object SBCM_RPDEPOSITORY: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'SBCM_RPDEPOSITORY'
+    Left = 336
+    Top = 162
+  end
+end

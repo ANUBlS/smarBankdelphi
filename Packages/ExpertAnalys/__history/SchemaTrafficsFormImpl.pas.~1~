@@ -1,0 +1,37 @@
+ unit SchemaTrafficsFormImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, Mask, DBCtrls, Grids, DBGrids;
+
+type
+  TSchemaTrafficsForm = class(TForm)
+    DBGrid1: TDBGrid;
+    GroupBox1: TGroupBox;
+    DBEdit1: TDBEdit;
+    procedure FormKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  SchemaTrafficsForm: TSchemaTrafficsForm;
+
+implementation
+
+uses ExpertDataModule;
+
+{$R *.DFM}
+
+procedure TSchemaTrafficsForm.FormKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+ if (Key =VK_ESCAPE) then Close;
+end;
+
+end.

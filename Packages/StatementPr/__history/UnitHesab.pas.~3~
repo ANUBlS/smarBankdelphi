@@ -1,0 +1,108 @@
+unit UnitHesab;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, DB, OracleData, StdCtrls, Grids, XDBGrids;
+
+type
+  TFormAccount = class(TForm)
+    XDBGridAccounts: TXDBGrid;
+    GroupBox1: TGroupBox;
+    EditBalcn: TEdit;
+    EditKli_id: TEdit;
+    ODS_Account: TOracleDataSet;
+    DS_Account: TDataSource;
+    Balans: TLabel;
+    Label1: TLabel;
+    GroupBox2: TGroupBox;
+    Label5: TLabel;
+    Button2: TButton;
+    Edit3: TEdit;
+    ODS_AccountACC_NO: TWideStringField;
+    ODS_AccountACC_NO_SEARCH: TWideStringField;
+    ODS_AccountNAME: TWideStringField;
+    ODS_AccountBAL_CN1: TFloatField;
+    ODS_AccountKLI_ID: TFloatField;
+    procedure EditKli_idKeyPress(Sender: TObject; var Key: Char);
+    procedure EditBalcnKeyPress(Sender: TObject; var Key: Char);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    procedure ActionSpeedSearchExecute(
+  Sender: TObject);
+  end;
+
+var
+  FormAccount: TFormAccount;
+
+implementation
+    uses sboapiDataModuleImpl;
+{$R *.dfm}
+
+
+
+procedure TFormAccount.ActionSpeedSearchExecute(
+  Sender: TObject);
+var
+  SearchField : string;
+  SearchOptions : TSearchRecordOptions;
+begin
+  SearchOptions := [srIgnoreCase ,srPartialMatch ];
+
+  with Sender as TEdit  do
+  begin
+    SearchField := copy(Name,5,length(Name));
+    with  TOracleDataSet(XDBGridAccounts.DataSource.DataSet) do
+    if  not SearchRecord(
+                  SearchField
+                 ,Text
+                 ,SearchOptions + [srFromCurrent , srForward ]
+                 ) then
+  {  if MessageDlg(
+              'Axtarýþ sona çatdý.'+#13+'?vv?ld?n baþlansýn?'
+             ,mtInformation
+             ,[mbNo , mbYes]
+             ,0
+             ) = mrYes  then   }
+    if not SearchRecord(
+                 SearchField
+                ,Text
+                ,SearchOptions + [ srFromBeginning ]
+                )  then
+    MessageDlg('Yazý tapýlmayýb!',mtInformation,[mbOK],0);
+ end;
+
+end;
+
+procedure TFormAccount.EditBalcnKeyPress(Sender: TObject; var Key: Char);
+begin
+if ord(Key) = 13 then
+  begin
+with  ODS_Account do
+ begin
+ close;
+ SetVariable('v_balcn1', ' = '+EditBalcn.Text);
+ open ;
+
+ end;
+  end;
+end;
+
+procedure TFormAccount.EditKli_idKeyPress(Sender: TObject; var Key: Char);
+begin
+if ord(Key) = 13 then
+  begin
+   with  ODS_Account do
+ begin
+ close;
+ SetVariable('v_kli_id', ' = '+EditKli_id.Text);
+ open ;
+
+ end;
+  end;
+end;
+
+end.

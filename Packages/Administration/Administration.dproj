@@ -1,0 +1,201 @@
+﻿	<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+		<PropertyGroup>
+			<ProjectGuid>{77861FDC-5F5B-4917-BC31-F0D73BBCF634}</ProjectGuid>
+			<MainSource>Administration.dpr</MainSource>
+			<Config Condition="'$(Config)'==''">Debug</Config>
+			<DCC_DCCCompiler>DCC32</DCC_DCCCompiler>
+			<ProjectVersion>12.3</ProjectVersion>
+			<Base>True</Base>
+			<Platform>Win32</Platform>
+			<AppType>Library</AppType>
+			<FrameworkType>None</FrameworkType>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Config)'=='Base' or '$(Base)'!=''">
+			<Base>true</Base>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Config)'=='Release' or '$(Cfg_1)'!=''">
+			<Cfg_1>true</Cfg_1>
+			<CfgParent>Base</CfgParent>
+			<Base>true</Base>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Config)'=='Debug' or '$(Cfg_2)'!=''">
+			<Cfg_2>true</Cfg_2>
+			<CfgParent>Base</CfgParent>
+			<Base>true</Base>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Base)'!=''">
+			<DCC_UsePackage>Vcl;Vcldb;dclbde;SBCommon50;sbplg50;sboapi50;doa41dXE;CMVCL50;QR5RunDXE;SearchCB;SBCMVcl50;SBTranslate</DCC_UsePackage>
+			<UsePackages>true</UsePackages>
+			<DCC_UnitSearchPath>D:\Smart-Bank\Source\Utils\ICEComponents\Oracle10_DOA40d5;$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
+			<DCC_ExeOutput>\Smart-Bank\Bin</DCC_ExeOutput>
+			<DCC_ImageBase>00400000</DCC_ImageBase>
+			<DCC_DependencyCheckOutputName>..\..\..\Bin\Administration.ocx</DCC_DependencyCheckOutputName>
+			<DCC_UnitAlias>WinTypes=Windows;WinProcs=Windows;DbiTypes=BDE;DbiProcs=BDE;DbiErrs=BDE;WinTypes=Windows;WinProcs=Windows;$(DCC_UnitAlias)</DCC_UnitAlias>
+			<DCC_Alignment>1</DCC_Alignment>
+			<DCC_Platform>x86</DCC_Platform>
+			<DCC_N>true</DCC_N>
+			<DCC_K>false</DCC_K>
+			<GenDll>true</GenDll>
+			<DCC_S>false</DCC_S>
+			<DCC_SymbolReferenceInfo>1</DCC_SymbolReferenceInfo>
+			<DCC_WriteableConstants>true</DCC_WriteableConstants>
+			<DCC_F>false</DCC_F>
+			<DCC_E>false</DCC_E>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Cfg_1)'!=''">
+			<DCC_LocalDebugSymbols>false</DCC_LocalDebugSymbols>
+			<DCC_Define>RELEASE;$(DCC_Define)</DCC_Define>
+			<DCC_SymbolReferenceInfo>0</DCC_SymbolReferenceInfo>
+			<DCC_DebugInformation>false</DCC_DebugInformation>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Cfg_2)'!=''">
+			<DCC_Define>DEBUG;$(DCC_Define)</DCC_Define>
+		</PropertyGroup>
+		<ItemGroup>
+			<DelphiCompile Include="Administration.dpr">
+				<MainSource>MainSource</MainSource>
+			</DelphiCompile>
+			<DCCReference Include="Administration_TLB.pas"/>
+			<DCCReference Include="AdministrationDataModule.pas">
+				<Form>AdministrationData</Form>
+				<DesignClass>TDataModule</DesignClass>
+			</DCCReference>
+			<DCCReference Include="AdministrationMainForm.pas">
+				<Form>AdministrationForm</Form>
+				<DesignClass>TActiveForm</DesignClass>
+				<CoClasses>AdministrationForm</CoClasses>
+			</DCCReference>
+			<DCCReference Include="AdmBarForm.pas">
+				<Form>BarForm</Form>
+			</DCCReference>
+			<DCCReference Include="AdministrationUserAddForm.pas">
+				<Form>fmUserSetup</Form>
+			</DCCReference>
+			<DCCReference Include="AdministrationClassEdit.pas">
+				<Form>fmClassEdit</Form>
+			</DCCReference>
+			<DCCReference Include="AdministrationUserPassw.pas">
+				<Form>fmUserPassw</Form>
+			</DCCReference>
+			<DCCReference Include="AdministrationModEdit.pas">
+				<Form>fmModEdit</Form>
+			</DCCReference>
+			<DCCReference Include="AdministrationOwnerSheep.pas">
+				<Form>FmOwnerSheep</Form>
+			</DCCReference>
+			<DCCReference Include="administrationUsersRefresh.pas">
+				<Form>fmUsersRefresh</Form>
+			</DCCReference>
+			<DCCReference Include="AdministrationAdvancedGrants.pas">
+				<Form>fmAdvancedgrants</Form>
+			</DCCReference>
+			<DCCReference Include="AdministrationOwnerSheepAdvanced.pas">
+				<Form>fmAdmOwnerChangeAdvanced</Form>
+			</DCCReference>
+			<DCCReference Include="DuplicateUint.pas"/>
+			<DCCReference Include="AdministrationGroupReport.pas">
+				<Form>rptQroup</Form>
+				<DesignClass>TQuickRep</DesignClass>
+			</DCCReference>
+			<DCCReference Include="AdministrationUserGranReport.pas">
+				<Form>rptUsers</Form>
+				<DesignClass>TQuickRep</DesignClass>
+			</DCCReference>
+			<DCCReference Include="AdministrationUtils.pas"/>
+			<DCCReference Include="AdministrationProfOptions.pas">
+				<Form>fmProfOptions</Form>
+			</DCCReference>
+			<DCCReference Include="adm_AdvGrantAddEditForm.pas">
+				<Form>frmAddEditAdvGrants</Form>
+			</DCCReference>
+			<DCCReference Include="AdministrationUserAdvGranReport.pas">
+				<Form>rptAdvgrant</Form>
+				<DesignClass>TQuickRep</DesignClass>
+			</DCCReference>
+			<DCCReference Include="adm_classesAdvInfoImpl.pas">
+				<Form>frmClassesAdvInfo</Form>
+			</DCCReference>
+			<DCCReference Include="adm_classesGrants.pas">
+				<Form>frmClassGrants</Form>
+			</DCCReference>
+			<DCCReference Include="COPYCLASS.pas">
+				<Form>CLSCOPY</Form>
+			</DCCReference>
+			<DCCReference Include="finger.pas">
+				<Form>fingers</Form>
+			</DCCReference>
+			<DCCReference Include="bsdkdll.pas"/>
+			<None Include="Administration.todo"/>
+			<RidlCompile Include="Administration.ridl"/>
+			<None Include="Profiling\AQtimeModule1.aqt"/>
+			<BuildConfiguration Include="Debug">
+				<Key>Cfg_2</Key>
+				<CfgParent>Base</CfgParent>
+			</BuildConfiguration>
+			<BuildConfiguration Include="Base">
+				<Key>Base</Key>
+			</BuildConfiguration>
+			<BuildConfiguration Include="Release">
+				<Key>Cfg_1</Key>
+				<CfgParent>Base</CfgParent>
+			</BuildConfiguration>
+		</ItemGroup>
+		<Import Condition="Exists('$(BDS)\Bin\CodeGear.Delphi.Targets')" Project="$(BDS)\Bin\CodeGear.Delphi.Targets"/>
+		<Import Condition="Exists('$(APPDATA)\Embarcadero\$(BDSAPPDATABASEDIR)\$(PRODUCTVERSION)\UserTools.proj')" Project="$(APPDATA)\Embarcadero\$(BDSAPPDATABASEDIR)\$(PRODUCTVERSION)\UserTools.proj"/>
+		<ProjectExtensions>
+			<Borland.Personality>Delphi.Personality.12</Borland.Personality>
+			<Borland.ProjectType>VCLApplication</Borland.ProjectType>
+			<BorlandProject>
+				<Delphi.Personality>
+					<Source>
+						<Source Name="MainSource">Administration.dpr</Source>
+					</Source>
+					<Parameters>
+						<Parameters Name="RunParams">/LocalIniSourceLocation=winini:\Smart-Bank\Bin\SBLocal.ini /SystemIniSourceLocation=winini:\Smart-Bank\Bin\SmartBank.ini</Parameters>
+						<Parameters Name="HostApplication">D:\Smart-Bank\Bin\SmartBank.exe</Parameters>
+					</Parameters>
+					<Language>
+						<Language Name="ProjectLang">$00000409</Language>
+					</Language>
+					<VersionInfo>
+						<VersionInfo Name="IncludeVerInfo">True</VersionInfo>
+						<VersionInfo Name="AutoIncBuild">False</VersionInfo>
+						<VersionInfo Name="MajorVer">1</VersionInfo>
+						<VersionInfo Name="MinorVer">0</VersionInfo>
+						<VersionInfo Name="Release">0</VersionInfo>
+						<VersionInfo Name="Build">0</VersionInfo>
+						<VersionInfo Name="Debug">False</VersionInfo>
+						<VersionInfo Name="PreRelease">False</VersionInfo>
+						<VersionInfo Name="Special">False</VersionInfo>
+						<VersionInfo Name="Private">False</VersionInfo>
+						<VersionInfo Name="DLL">True</VersionInfo>
+						<VersionInfo Name="Locale">1033</VersionInfo>
+						<VersionInfo Name="CodePage">1252</VersionInfo>
+					</VersionInfo>
+					<VersionInfoKeys>
+						<VersionInfoKeys Name="CompanyName">Smart Systems Technology LTD</VersionInfoKeys>
+						<VersionInfoKeys Name="FileDescription"/>
+						<VersionInfoKeys Name="FileVersion">1.0.0.0</VersionInfoKeys>
+						<VersionInfoKeys Name="InternalName"/>
+						<VersionInfoKeys Name="LegalCopyright"/>
+						<VersionInfoKeys Name="LegalTrademarks"/>
+						<VersionInfoKeys Name="OriginalFilename"/>
+						<VersionInfoKeys Name="ProductName">Administration Module</VersionInfoKeys>
+						<VersionInfoKeys Name="ProductVersion">1.0.0.0</VersionInfoKeys>
+						<VersionInfoKeys Name="Comments"/>
+						<VersionInfoKeys Name="OleSelfRegister">1</VersionInfoKeys>
+					</VersionInfoKeys>
+					<Excluded_Packages>
+						<Excluded_Packages Name="$(BDSBIN)\dcloffice2k150.bpl">Microsoft Office 2000 Sample Automation Server Wrapper Components</Excluded_Packages>
+					</Excluded_Packages>
+				</Delphi.Personality>
+				<ActiveXProjectInfo>
+					<version>1</version>
+				</ActiveXProjectInfo>
+				<Platforms>
+					<Platform value="Win32">True</Platform>
+				</Platforms>
+			</BorlandProject>
+			<ProjectFileVersion>12</ProjectFileVersion>
+		</ProjectExtensions>
+	</Project>

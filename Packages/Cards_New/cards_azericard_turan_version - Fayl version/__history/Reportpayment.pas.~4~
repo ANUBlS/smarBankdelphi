@@ -1,0 +1,63 @@
+unit Reportpayment;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ImgList, StdCtrls, ComCtrls, ExtCtrls, Grids, DBGrids, QExport4Dialog;
+
+type
+  TPaymentreport = class(TForm)
+    DBGrid1: TDBGrid;
+    Panel1: TPanel;
+    DateTimePicker1: TDateTimePicker;
+    DateTimePicker2: TDateTimePicker;
+    Button1: TButton;
+    Button2: TButton;
+    ImageList1: TImageList;
+    QExport4Dialog1: TQExport4Dialog;
+    procedure Button1Click(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Paymentreport: TPaymentreport;
+
+implementation
+
+uses Unit18,sboapiDataModuleImpl,SBTranslateProc, ShlObj;
+
+{$R *.dfm}
+
+procedure TPaymentreport.Button1Click(Sender: TObject);
+begin
+ with dataMod_CARDS.Payment_rep do
+  begin
+    close;
+    SetVariable('dat1',trunc(DateTimePicker1.Date));
+
+    SetVariable('dat2',trunc(DateTimePicker2.Date));
+    open;
+
+  end;
+end;
+
+procedure TPaymentreport.Button2Click(Sender: TObject);
+function DesktopPath:string;
+var zpath: array [0..MAX_PATH] of char;
+ begin
+ SHGetFolderPath(0, CSIDL_DESKTOP, 0, SHGFP_TYPE_CURRENT, @zpath);
+ result:=   (zpath);
+end ;
+begin
+QExport4Dialog1.FileName:=DesktopPath+'\PaymentFileExcel';
+  QExport4Dialog1.DataSet:= DBGrid1.DataSource.DataSet;
+  QExport4Dialog1.ShowFile:=true;
+  QExport4Dialog1.Execute;
+end;
+
+end.

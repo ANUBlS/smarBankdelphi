@@ -1,0 +1,94 @@
+unit DmUniversalImpl;
+
+interface
+
+uses
+  SysUtils, Classes, DB, OracleData;
+
+type
+  TDmUni = class(TDataModule)
+    srcBranch: TDataSource;
+    BranchDataSet: TOracleDataSet;
+    DataSource1: TDataSource;
+    OracleDataSet1: TOracleDataSet;
+    OracleDataSet2: TOracleDataSet;
+    OracleDataSet2NAME: TWideStringField;
+    OracleDataSet2CRM: TFloatField;
+    OracleDataSet2QALIQ: TFloatField;
+    OracleDataSet2SAY: TFloatField;
+    OracleDataSet2ILQALIQ: TFloatField;
+    OracleDataSet2ILSAY: TFloatField;
+    OracleDataSet2AYQALIQ: TFloatField;
+    OracleDataSet2AYSAY: TFloatField;
+    OracleDataSet2TOVQALIQ: TFloatField;
+    OracleDataSet2TOVSAY: TFloatField;
+    OracleDataSet2STQALIQ: TFloatField;
+    OracleDataSet2STSAY: TFloatField;
+    OracleDataSet2GECQALIQ: TFloatField;
+    OracleDataSet2GECSAY: TFloatField;
+    OracleDataSet2GECOTUZPMEB: TFloatField;
+    OracleDataSet2GECOTUZPSAY: TFloatField;
+    OracleDataSet2GECOTUZMMEB: TFloatField;
+    OracleDataSet2GECOTUZMSAY: TFloatField;
+    BONS: TOracleDataSet;
+    BONSNAME: TWideStringField;
+    BONSCRMEB: TFloatField;
+    BONSFULLSAY: TFloatField;
+    BONSAYMEB: TFloatField;
+    BONSSAYAY: TFloatField;
+    BONSGECSAY: TFloatField;
+    BONSGECMEB: TFloatField;
+    BONSMUSBONS: TFloatField;
+    BONSMINBONS: TFloatField;
+    BONSDESCRIPTION: TWideStringField;
+    BONSbons: TFloatField;
+    BONSAVTOSAY: TFloatField;
+    BONSREST: TFloatField;
+    OracleDataSet3: TOracleDataSet;
+    OracleDataSet3NUMBEROFCREDIT: TWideStringField;
+    OracleDataSet3NAME: TWideStringField;
+    OracleDataSet3DATEOFCONCLUSION: TDateTimeField;
+    OracleDataSet3DUEDATEFIRSTCONTRACT: TDateTimeField;
+    OracleDataSet3REST: TFloatField;
+    OracleDataSet3INTERESTREST: TFloatField;
+    OracleDataSet3DUEREST: TFloatField;
+    OracleDataSet3DUEINTERESTREST: TFloatField;
+    OracleDataSet3PAYEDAMT: TFloatField;
+    OracleDataSet3PAYEDINTAMT: TFloatField;
+    OracleDataSet3PAYEDDUEAMT: TFloatField;
+    OracleDataSet3PAYEDDUEINTAMT: TFloatField;
+    OracleDataSet3CEM: TFloatField;
+    OracleDataSet3DUEDAY: TFloatField;
+    OracleDataSet3VAL: TWideStringField;
+    OracleDataSet3FRISTDAY: TFloatField;
+    procedure DataModuleCreate(Sender: TObject);
+    procedure BONSCalcFields(DataSet: TDataSet);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  DmUni: TDmUni;
+
+implementation
+
+{$R *.dfm}
+uses
+sboapiDataModuleImpl;
+procedure TDmUni.BONSCalcFields(DataSet: TDataSet);
+begin
+BONS.FieldByName('bons').AsFloat:=
+ BONS.FieldByName('MUSBONS').AsFloat-BONS.FieldByName('MINBONS').AsFloat  ;
+
+ if BONS.FieldByName('bons').AsFloat<0 then
+  BONS.FieldByName('bons').AsFloat:=0
+end;
+
+procedure TDmUni.DataModuleCreate(Sender: TObject);
+begin
+BranchDataSet.Open;
+end;
+
+end.

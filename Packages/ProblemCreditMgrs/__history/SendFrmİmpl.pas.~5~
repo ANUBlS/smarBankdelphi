@@ -1,0 +1,46 @@
+﻿unit SendFrmİmpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, DBGridEh, StdCtrls, Buttons, Mask, DBCtrlsEh, DBLookupEh;
+
+type
+  TSendFrm = class(TForm)
+    Label1: TLabel;
+    DBLookupComboboxEh2: TDBLookupComboboxEh;
+    BitBtn1: TBitBtn;
+    BitBtn2: TBitBtn;
+    procedure FormCanResize(Sender: TObject; var NewWidth, NewHeight: Integer;
+      var Resize: Boolean);
+    procedure BitBtn1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  SendFrm: TSendFrm;
+
+implementation
+ uses PrCmDMImpl;
+{$R *.dfm}
+
+procedure TSendFrm.BitBtn1Click(Sender: TObject);
+begin
+ if DBLookupComboboxEh2.text='' then
+   begin
+   ShowMessage('Gondərəcəyiniz yeri seçin!');
+   exit;
+   end;
+end;
+
+procedure TSendFrm.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+resize:=false
+end;
+
+end.

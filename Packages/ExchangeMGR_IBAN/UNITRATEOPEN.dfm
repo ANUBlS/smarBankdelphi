@@ -1,0 +1,243 @@
+object OPENRATE: TOPENRATE
+  Left = 270
+  Top = 210
+  Caption = 'OPENRATE'
+  ClientHeight = 304
+  ClientWidth = 463
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'MS Sans Serif'
+  Font.Style = []
+  OldCreateOrder = False
+  OnCreate = FormCreate
+  PixelsPerInch = 96
+  TextHeight = 13
+  object DBGrid1: TDBGrid
+    Left = 0
+    Top = 47
+    Width = 209
+    Height = 254
+    DataSource = DataModExch.OperKURS
+    DrawingStyle = gdsGradient
+    Options = [dgTitles, dgIndicator, dgColLines, dgRowLines]
+    TabOrder = 0
+    TitleFont.Charset = DEFAULT_CHARSET
+    TitleFont.Color = clWindowText
+    TitleFont.Height = -11
+    TitleFont.Name = 'MS Sans Serif'
+    TitleFont.Style = []
+    OnDblClick = DBGrid1DblClick
+    Columns = <
+      item
+        Expanded = False
+        FieldName = 'VAL_NAME'
+        Title.Alignment = taCenter
+        Title.Caption = #1042#1072#1083
+        Title.Color = clNavy
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clNavy
+        Title.Font.Height = -11
+        Title.Font.Name = 'Tahoma'
+        Title.Font.Style = []
+        Width = 31
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'VAL_KOD'
+        Title.Alignment = taCenter
+        Title.Caption = '#'
+        Title.Color = clNavy
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clNavy
+        Title.Font.Height = -11
+        Title.Font.Name = 'Tahoma'
+        Title.Font.Style = []
+        Width = 19
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'OSTAT'
+        Title.Alignment = taCenter
+        Title.Caption = #1050#1091#1088#1089
+        Title.Color = clNavy
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clNavy
+        Title.Font.Height = -11
+        Title.Font.Name = 'Tahoma'
+        Title.Font.Style = []
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'DAT'
+        Title.Alignment = taCenter
+        Title.Caption = #1058#1072#1088#1080#1093
+        Title.Color = clNavy
+        Title.Font.Charset = DEFAULT_CHARSET
+        Title.Font.Color = clNavy
+        Title.Font.Height = -11
+        Title.Font.Name = 'Tahoma'
+        Title.Font.Style = []
+        Width = 70
+        Visible = True
+      end>
+  end
+  object Panel1: TPanel
+    Left = -1
+    Top = 0
+    Width = 462
+    Height = 47
+    TabOrder = 1
+    object Label6: TLabel
+      Left = 25
+      Top = 5
+      Width = 26
+      Height = 13
+      Caption = 'Tarix:'
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clBlue
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Label7: TLabel
+      Left = 134
+      Top = 6
+      Width = 24
+      Height = 13
+      Caption = 'Vaxt:'
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clBlue
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+    end
+    object RateTime: TDateTimePicker
+      Left = 115
+      Top = 21
+      Width = 86
+      Height = 21
+      Date = 40106.502052963000000000
+      Time = 40106.502052963000000000
+      Kind = dtkTime
+      TabOrder = 0
+    end
+    object DateTimePicker2: TDateTimePicker
+      Left = 10
+      Top = 21
+      Width = 86
+      Height = 21
+      Date = 40106.502475775500000000
+      Time = 40106.502475775500000000
+      TabOrder = 1
+    end
+    object Button1: TButton
+      Left = 232
+      Top = 16
+      Width = 77
+      Height = 28
+      Caption = #1050#1091#1088#1089#1091' '#1076#1072#1093#1080#1083' '#1077#1090
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 2
+      OnClick = Button1Click
+    end
+  end
+  object Panel2: TPanel
+    Left = 211
+    Top = 47
+    Width = 252
+    Height = 255
+    TabOrder = 2
+    object GroupBox1: TGroupBox
+      Left = 1
+      Top = -5
+      Width = 249
+      Height = 260
+      Color = clGray
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'MS Sans Serif'
+      Font.Style = []
+      ParentColor = False
+      ParentFont = False
+      TabOrder = 0
+      Visible = False
+      object Edit1: TEdit
+        Left = 56
+        Top = 74
+        Width = 121
+        Height = 21
+        TabOrder = 0
+      end
+      object Edit2: TEdit
+        Left = 57
+        Top = 126
+        Width = 121
+        Height = 21
+        TabOrder = 1
+      end
+      object BitBtn1: TBitBtn
+        Left = 40
+        Top = 184
+        Width = 75
+        Height = 25
+        Caption = #1041#1103#1083#1080
+        DoubleBuffered = True
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ParentDoubleBuffered = False
+        ParentFont = False
+        TabOrder = 2
+        OnClick = BitBtn1Click
+      end
+      object BitBtn2: TBitBtn
+        Left = 152
+        Top = 184
+        Width = 75
+        Height = 25
+        Caption = #1061#1077#1081#1080#1088
+        DoubleBuffered = True
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ParentDoubleBuffered = False
+        ParentFont = False
+        TabOrder = 3
+        OnClick = BitBtn2Click
+      end
+      object DBLookupComboBox1: TDBLookupComboBox
+        Left = 56
+        Top = 15
+        Width = 121
+        Height = 21
+        KeyField = 'ID'
+        ListField = 'NAME'
+        ListSource = DataModExch.DS_Filial
+        TabOrder = 4
+        Visible = False
+      end
+    end
+  end
+  object Timer1: TTimer
+    OnTimer = Timer1Timer
+    Left = 120
+    Top = 136
+  end
+end

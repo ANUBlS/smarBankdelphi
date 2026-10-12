@@ -1,0 +1,36 @@
+unit StartReserveDatModImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Oracle, Db, OracleData;
+
+type
+  TSRDatMod = class(TDataModule)
+    CM_RESERVE_REFRESH: TOraclePackage;
+    Reserves_nameDatSrc: TDataSource;
+    ReservesIDDatSrc: TDataSource;
+    Reserves_name: TOracleDataSet;
+    ReservesID: TOracleDataSet;
+    ReservesIDOLDPRRESID: TFloatField;
+    ReservesIDNEWPRRESID: TFloatField;
+    ReservesIDOLDSECRESID: TFloatField;
+    ReservesIDNEWSECRESID: TFloatField;
+    DefDatSet: TOracleDataSet;
+    DefDatSetDEF: TFloatField;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  SRDatMod: TSRDatMod;
+
+implementation
+
+{$R *.DFM}
+uses CMOracleApiDataModuleImpl;
+
+end.

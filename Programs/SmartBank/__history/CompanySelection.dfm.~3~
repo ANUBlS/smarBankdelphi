@@ -1,0 +1,92 @@
+object CompanyForm: TCompanyForm
+  Left = 0
+  Top = 0
+  Caption = 'Companies'
+  ClientHeight = 100
+  ClientWidth = 150
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poMainFormCenter
+  OnClose = FormClose
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object RadioGroup: TRadioGroup
+    Left = 0
+    Top = 0
+    Width = 150
+    Height = 100
+    Align = alClient
+    TabOrder = 0
+    OnClick = RadioGroupClick
+    ExplicitTop = 8
+    ExplicitWidth = 159
+    ExplicitHeight = 124
+  end
+  object SetCompany: TOracleDataSet
+    SQL.Strings = (
+      'declare'
+      'begin'
+      ''
+      
+        ' DBMS_SESSION.SET_CONTEXT('#39'CLIENTCONTEXT'#39','#39'user_company'#39',:COMP_i' +
+        'd);'
+      'end;')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000100000003A0043004F004D0050005F004900440003000000
+      0000000000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 80
+    Top = 56
+  end
+  object complist_id: TOracleDataSet
+    SQL.Strings = (
+      
+        'select id , SYS_CONTEXT ('#39'CLIENTCONTEXT'#39', '#39'user_company'#39')  compa' +
+        'nyid from companies where '
+      'company_name=:compname')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000120000003A0043004F004D0050004E0041004D0045000500
+      00000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000200000004000000490044000100000000001200000043004F004D00
+      500041004E00590049004400010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 88
+    Top = 8
+    object complist_idID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object complist_idCOMPANYID: TWideStringField
+      FieldName = 'COMPANYID'
+      Size = 256
+    end
+  end
+  object company_list: TOracleDataSet
+    SQL.Strings = (
+      'select * from companies order by company_name')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000200000004000000490044000100000000001800000043004F004D00
+      500041004E0059005F004E0041004D004500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 24
+    Top = 24
+    object company_listID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object company_listCOMPANY_NAME: TWideStringField
+      FieldName = 'COMPANY_NAME'
+      Size = 250
+    end
+  end
+end

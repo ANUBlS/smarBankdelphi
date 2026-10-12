@@ -1,0 +1,213 @@
+unit CorrectMainUnit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, NLSDialogs,
+  NLSLocalizer, Grids, DBGridEh, ComCtrls, ToolWin, ExtCtrls, ActnList,
+  ImgList, StdCtrls;
+
+type
+  TCorrectMainForm = class(TForm)
+    NLSLocalizer1: TNLSLocalizer;
+    ImageList1: TImageList;
+    ActionList1: TActionList;
+    Panel1: TPanel;
+    ToolBar1: TToolBar;
+    ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
+    ToolButton3: TToolButton;
+    ToolButton4: TToolButton;
+    ToolButton5: TToolButton;
+    ToolBar2: TToolBar;
+    ToolButton6: TToolButton;
+    ToolButton7: TToolButton;
+    ToolButton8: TToolButton;
+    ToolButton9: TToolButton;
+    ToolButton10: TToolButton;
+    ToolButton11: TToolButton;
+    Panel2: TPanel;
+    DBGridEh1: TDBGridEh;
+    DBGridEh2: TDBGridEh;
+    ActnAdd_Tranches: TAction;
+    ActnEdit_tranches: TAction;
+    ActnDel_Tranches: TAction;
+    ActnRest: TAction;
+    ToolButton12: TToolButton;
+    ToolButton13: TToolButton;
+    ToolButton14: TToolButton;
+    Label3: TLabel;
+    Label4: TLabel;
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure ActnAdd_TranchesExecute(Sender: TObject);
+    procedure ActnEdit_tranchesExecute(Sender: TObject);
+    procedure ActnDel_TranchesExecute(Sender: TObject);
+    procedure ToolButton6Click(Sender: TObject);
+    procedure ToolButton8Click(Sender: TObject);
+    procedure ToolButton10Click(Sender: TObject);
+    procedure ToolButton13Click(Sender: TObject);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  CorrectMainForm: TCorrectMainForm;
+
+procedure InitPlugin(s:string);export;
+implementation
+
+{$R *.DFM}
+uses CommonDecls,CorrectDatModImpl,sbsystem,
+     Tranches_AddEditUnit,EditTrUnit,PayAddUnit,PayEditUnit;
+
+procedure InitPlugin(s:string);export;
+var CrdID :Integer;
+begin
+
+  CrdID := Get_SelectedCrdID;
+
+  with CorrectDatMod do
+  begin
+
+     with Tranches do
+     begin
+        if Active then CloseAll;
+        SetVariable('CrdID',CrdID);
+        Open;
+     end;
+
+     with Payments do
+     begin
+        if Active then CloseAll;
+        SetVariable('CrdID',CrdID);
+        Open;
+     end;
+
+  end;
+
+   CorrectMainForm.ShowModal;
+end;
+
+exports
+  InitPlugin;
+
+procedure TCorrectMainForm.FormCreate(Sender: TObject);
+begin
+   CorrectDatMod := TCorrectDatMod.Create(Self);
+   Tranches_AddEditForm := TTranches_AddEditForm.create(self);
+   EditTrForm := TEditTrForm.Create(Self);
+   PaymentAddForm := TPaymentAddForm.create(Self);
+   PaymentEditForm := TPaymentEditForm.Create(Self);
+end;
+
+procedure TCorrectMainForm.FormDestroy(Sender: TObject);
+begin
+   CorrectDatMod.Free;
+   Tranches_AddEditForm.Free;
+   EditTrForm.Free;
+   PaymentAddForm.Free;
+   PaymentEditForm.Free;
+
+end;
+
+procedure TCorrectMainForm.ActnAdd_TranchesExecute(Sender: TObject);
+begin
+  Tranches_AddEditForm.ShowModal;
+
+end;
+
+procedure TCorrectMainForm.ActnEdit_tranchesExecute(Sender: TObject);
+begin
+   EditTrForm.ShowModal;
+end;
+
+
+procedure TCorrectMainForm.ActnDel_TranchesExecute(Sender: TObject);
+resourcestring rs= 'Силинмясиня яминсинизми? ';
+var
+   P_CrdID :integer;
+   P_TrancheDate :TDateTime;
+
+begin
+
+  P_CrdID := Get_SelectedCrdID;
+
+   with CorrectDatMod ,Tranches do
+  P_TrancheDate := FieldByName('TRANCHEDATE').AsDateTime;
+
+if    MessageDlg(
+                   rs,
+                   mtConfirmation,
+                   [mbYes,
+                   mbNo],
+                    0) = mrYes then
+begin
+
+ with CorrectDatMod , CM_CORR_TRCH_PAY,Tranches do
+ begin
+   CallProcedure('del_tranches',[P_CrdID,P_TrancheDate]);
+   Refresh;
+end;
+end;
+end;
+
+procedure TCorrectMainForm.ToolButton6Click(Sender: TObject);
+begin
+   PaymentAddForm.ShowModal;
+end;
+
+procedure TCorrectMainForm.ToolButton8Click(Sender: TObject);
+begin
+    PaymentEditForm.EditRest.Text := floattostr(CorrectDatMod.Payments.fieldbyname('payedamt').asfloat);
+    PaymentEditForm.EditDueRest.Text := '0';
+    PaymentEditForm.EditInterestRest.Text := floattostr(CorrectDatMod.Payments.fieldbyname('payedintamt').asfloat);
+    PaymentEditForm.EditDueInterestRest.Text := '0';
+   PaymentEditForm.ShowModal;
+end;
+
+procedure TCorrectMainForm.ToolButton10Click(Sender: TObject);
+resourcestring rs= 'Силинмясиня яминсинизми? ';
+var
+   P_CrdID :integer;
+   P_TrancheDate :TDateTime;
+
+begin
+
+  P_CrdID := Get_SelectedCrdID;
+
+   with CorrectDatMod ,Payments do
+  P_TrancheDate := FieldByName('paydate').AsDateTime;
+
+if   MessageDlg(
+                   rs,
+                   mtConfirmation,
+                   [mbYes,
+                   mbNo],
+                    0) = mrYes then
+begin
+
+ with CorrectDatMod , CM_CORR_TRCH_PAY,Payments do
+ begin
+   CallProcedure('del_payments',[P_CrdID,P_TrancheDate]);
+   Refresh;
+end;
+end;
+end;
+
+procedure TCorrectMainForm.ToolButton13Click(Sender: TObject);
+begin
+   Close;
+end;
+
+procedure TCorrectMainForm.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+   if ord(key) = VK_ESCAPE then Close;
+end;
+
+initialization
+    CorrectMainForm :=TCorrectMainForm.Create(CommonApplication);
+end.

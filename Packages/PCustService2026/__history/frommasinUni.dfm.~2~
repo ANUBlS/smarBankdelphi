@@ -1,0 +1,83 @@
+object FormMasin: TFormMasin
+  Left = 0
+  Top = 0
+  ClientHeight = 161
+  ClientWidth = 402
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poMainFormCenter
+  PixelsPerInch = 96
+  TextHeight = 13
+  object DBGridEh1: TDBGridEh
+    Left = 0
+    Top = 0
+    Width = 402
+    Height = 161
+    Align = alClient
+    DataGrouping.GroupLevels = <>
+    DataSource = dsrc_masin
+    Flat = False
+    FooterColor = clWindow
+    FooterFont.Charset = DEFAULT_CHARSET
+    FooterFont.Color = clWindowText
+    FooterFont.Height = -11
+    FooterFont.Name = 'Tahoma'
+    FooterFont.Style = []
+    RowDetailPanel.Color = clBtnFace
+    TabOrder = 0
+    TitleFont.Charset = DEFAULT_CHARSET
+    TitleFont.Color = clWindowText
+    TitleFont.Height = -11
+    TitleFont.Name = 'Tahoma'
+    TitleFont.Style = []
+    Columns = <
+      item
+        EditButtons = <>
+        FieldName = 'KLI_ID'
+        Footers = <>
+        Width = 98
+      end
+      item
+        EditButtons = <>
+        FieldName = 'NAME'
+        Footers = <>
+        Width = 284
+      end>
+    object RowDetailData: TRowDetailPanelControlEh
+    end
+  end
+  object ods_masin: TOracleDataSet
+    SQL.Strings = (
+      
+        'select kli_id,name  from account where substr(acc_no,10,7) in (:' +
+        'v_accno)'
+      'group by kli_id, name')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000100000003A0056005F004100430043004E004F0005000000
+      0000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000C0000004B004C0049005F00490044000100000000000800
+      00004E0041004D004500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 160
+    Top = 56
+    object ods_masinKLI_ID: TFloatField
+      FieldName = 'KLI_ID'
+    end
+    object ods_masinNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 250
+    end
+  end
+  object dsrc_masin: TDataSource
+    DataSet = ods_masin
+    Left = 224
+    Top = 56
+  end
+end

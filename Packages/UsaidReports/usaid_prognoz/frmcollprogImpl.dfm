@@ -1,0 +1,108 @@
+object frmcollprog: Tfrmcollprog
+  Left = 414
+  Top = 184
+  BorderIcons = [biSystemMenu]
+  Caption = 'Proqnoz'
+  ClientHeight = 298
+  ClientWidth = 284
+  Color = clBtnFace
+  Font.Charset = RUSSIAN_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poMainFormCenter
+  OnCanResize = FormCanResize
+  OnCreate = FormCreate
+  OnKeyPress = FormKeyPress
+  PixelsPerInch = 96
+  TextHeight = 14
+  object GroupBox2: TGroupBox
+    Left = 0
+    Top = 0
+    Width = 284
+    Height = 224
+    Align = alClient
+    Caption = #1046#1103#1084#1083#1103#1096#1084#1103#1085#1080#1085' '#1090#1080#1087#1080
+    TabOrder = 0
+    object DBGridEh2: TDBGridEh
+      Left = 2
+      Top = 16
+      Width = 280
+      Height = 206
+      Align = alClient
+      DataSource = dmusaid_prognoz.CatPds
+      FooterColor = clWindow
+      FooterFont.Charset = RUSSIAN_CHARSET
+      FooterFont.Color = clWindowText
+      FooterFont.Height = -11
+      FooterFont.Name = 'Azl Sans Serif'
+      FooterFont.Style = []
+      Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit]
+      TabOrder = 0
+      TitleFont.Charset = RUSSIAN_CHARSET
+      TitleFont.Color = clWindowText
+      TitleFont.Height = -11
+      TitleFont.Name = 'Azl Sans Serif'
+      TitleFont.Style = []
+      Columns = <
+        item
+          EditButtons = <>
+          FieldName = 'SECTOR'
+          Footers = <>
+          Title.Color = clNavy
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -12
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = []
+          Width = 247
+        end>
+    end
+  end
+  object GroupBox3: TGroupBox
+    Left = 0
+    Top = 224
+    Width = 284
+    Height = 74
+    Align = alBottom
+    Caption = #1055#1088#1086#1075#1085#1086#1079
+    TabOrder = 1
+    object Gridpr: TDBGridEh
+      Left = 2
+      Top = 16
+      Width = 280
+      Height = 56
+      Align = alClient
+      DataSource = dmusaid_prognoz.CollProgds
+      FooterColor = clWindow
+      FooterFont.Charset = RUSSIAN_CHARSET
+      FooterFont.Color = clWindowText
+      FooterFont.Height = -11
+      FooterFont.Name = 'Azl Sans Serif'
+      FooterFont.Style = []
+      TabOrder = 0
+      TitleFont.Charset = RUSSIAN_CHARSET
+      TitleFont.Color = clWindowText
+      TitleFont.Height = -11
+      TitleFont.Name = 'Azl Sans Serif'
+      TitleFont.Style = []
+      OnKeyPress = GridprKeyPress
+      Columns = <
+        item
+          EditButtons = <>
+          FieldName = 'PROGNOZ'
+          Footers = <>
+          Title.Color = clNavy
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -12
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = []
+          Width = 69
+        end>
+    end
+  end
+end

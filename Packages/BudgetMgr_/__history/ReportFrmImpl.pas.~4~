@@ -1,0 +1,331 @@
+﻿unit ReportFrmImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ComCtrls,ComObj, DBCtrls;
+
+type
+  TReportFrm = class(TForm)
+    Button1: TButton;
+    Button2: TButton;
+    GroupBox1: TGroupBox;
+    DateTimePicker1: TDateTimePicker;
+    DateTimePicker2: TDateTimePicker;
+    Label1: TLabel;
+    GroupBox2: TGroupBox;
+    DBLookupComboBox1: TDBLookupComboBox;
+    procedure FormCanResize(Sender: TObject; var NewWidth, NewHeight: Integer;
+      var Resize: Boolean);
+    procedure Button2Click(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  ReportFrm: TReportFrm;
+notAccId    :string;
+
+   Exl, Sheet: Variant;
+implementation
+
+uses Dmbudgetimpl;
+
+{$R *.dfm}
+  procedure DestroySheet;
+begin
+  try
+   Finalize(Sheet);
+   Finalize(Exl);
+  except
+
+  end;
+end;
+procedure ShowSheet;
+begin
+  try
+     Exl.Visible := True;
+  except
+     DestroySheet;
+   end;
+end;
+procedure TReportFrm.Button1Click(Sender: TObject);
+  const
+number_format='#,##0.00';
+number_format_r='#,##0.00%';
+n='yyy';
+d=2;
+f=3;
+
+
+procedure CreateSheet;
+begin
+  try
+   Exl := CreateOleObject('Excel.Application');
+   Exl.WorkBooks.add;
+   Sheet := Exl.Application.Worksheets.Item[1];
+  except
+  end;
+end;
+
+
+var
+
+ cell, row,i , j , k ,m ,www :Integer;
+t_val :integer;
+
+bash: string;
+begin
+DMBudget.OracleDataSet1.open;
+DMBudget.OracleDataSet2.open;
+DMBudget.OracleDataSet3.open;
+DMBudget.OracleDataSet4.open;
+DMBudget.OracleDataSet1.refresh;
+DMBudget.OracleDataSet2.refresh;
+DMBudget.OracleDataSet3.refresh;
+DMBudget.OracleDataSet4.refresh;
+DMBudget.ArtDataSetExcl.open ;
+DMBudget.ItmDataSetExcl.open;
+DMBudget.ArtDataSetExcl.refresh;
+ try
+     DMBudget.ArtDataSet.DisableControls;
+     CreateSheet;
+     Sheet.Range['A1:A60000'].ColumnWidth:=12;
+     Sheet.Range['B1:B60000'].ColumnWidth:=60;
+     Sheet.Range['C2:C60000'].ColumnWidth:=24;
+     Sheet.Range['C2:D60000'].NumberFormat:=number_format;
+     Sheet.Range['D2:D60000'].NumberFormat:=number_format;
+     Sheet.Range['D2:D60000'].ColumnWidth:=23;
+      Sheet.Range['D2:E60000'].NumberFormat:='#########';
+     Sheet.Range['E1:E60000'].ColumnWidth:=25;
+     Sheet.Range['F1:F60000'].NumberFormat:=number_format;
+     Sheet.Range['F1:F60000'].ColumnWidth:=18;
+     Sheet.Range['G1:G60000'].ColumnWidth:=10;
+     Sheet.Range['H1:E60000'].NumberFormat:=number_format;
+     Sheet.Range['H1:G60000'].ColumnWidth:=10;
+     Sheet.Range['Q1:E60000'].NumberFormat:=number_format_r;
+     Sheet.Range['Q1:G60000'].ColumnWidth:=25;
+     Sheet.Range['I1:E60000'].NumberFormat:=number_format;
+     Sheet.Range['I1:G60000'].ColumnWidth:=10;
+     Sheet.Range['J1:E60000'].NumberFormat:=number_format;
+     Sheet.Range['J1:G60000'].ColumnWidth:=10;
+     Sheet.Range['K1:E60000'].NumberFormat:=number_format;
+     Sheet.Range['K1:G60000'].ColumnWidth:=11;
+    // Sheet.Range['L1:E60000'].NumberFormat:=number_format;
+     Sheet.Range['L2:G60000'].ColumnWidth:=30;
+     Sheet.Range['M1:E60000'].NumberFormat:=number_format;
+     Sheet.Range['M1:G60000'].ColumnWidth:=16;
+  //   Sheet.Range['N2:E60000'].NumberFormat:=number_format_r;
+     Sheet.Range['N2:G60000'].ColumnWidth:=20;
+     Sheet.Range['O1:E60000'].NumberFormat:=number_format;
+     Sheet.Range['O1:G60000'].ColumnWidth:=16;
+     Sheet.Range['P1:E60000'].NumberFormat:=number_format;
+     Sheet.Range['P1:G60000'].ColumnWidth:=20;
+
+
+     k:=1;
+  with DMBudget do  begin
+                     i:=0;
+
+           Sheet.Cells[i+k,5].Font.Name:='Tahoma';
+           Sheet.Cells[i+k,5].Font.Bold :=true;
+           Sheet.Cells[i+k,5].Font.size :=25;
+           Sheet.Cells[i+k,5]:= FormatDateTime( n,SYSDAT.FieldByName('BEGINDAT').AsDateTime)+' вя '+
+           FormatDateTime(n,SYSDAT.FieldByName('ENDDAT').AsDateTime)+'  ci illər üzrə Müqayisəli büdcə ';
+           //DateTimeToStr
+
+    {      Sheet.Cells[i+k,1]:='Маддянин №-си';
+          Sheet.Cells[i+k,1].Font.Name:='Azl Sans Serif';
+          Sheet.Cells[i+k,1].Font.Bold :=true;
+          Sheet.Cells[i+k,2]:=ArtDataSet.FieldByName('NUMBEROFARTICLE').AsString;
+
+          Sheet.Cells[i+k,3].Font.Name:='Azl Sans Serif';
+          Sheet.Cells[i+k,3].Font.Bold :=true;
+          Sheet.Cells[i+k,3]:=ArtDataSet.FieldByName('statu').AsString;
+
+          Sheet.Cells[i+k+1,1]:='№';
+          Sheet.Cells[i+k+1,1].Font.Name:='Azl Sans Serif';
+          Sheet.Cells[i+k+1,1].Font.Bold :=true;
+          Sheet.Cells[i+k+1,2].Font.Name:='Azl Sans Serif';
+          Sheet.Cells[i+k+1,2].Value:=ArtDataSet.FieldByName('name').AsString;}
+
+
+          Sheet.Cells[i+k+1,1]:='№';
+          Sheet.Cells[i+k+1,1].Font.Name:='Tahoma';
+          Sheet.Cells[i+k+1,1].Font.Bold :=true;
+          Sheet.Cells[i+k+1,1].Font.Color:=clBlue;
+
+          Sheet.Cells[i+k+1,2].Value:='Maddalərin adı';
+          Sheet.Cells[i+k+1,2].Font.Name:='Tahoma';
+          Sheet.Cells[i+k+1,2].Font.Bold :=true;
+          Sheet.Cells[i+k+1,2].Font.Color:=clBlue;
+
+          Sheet.Cells[i+k+1,3]:='İlin əvvəlinə büdcə proqnoz';
+          Sheet.Cells[i+k+1,3].Font.Name:='Tahoma';
+          Sheet.Cells[i+k+1,3].Font.Bold :=true;
+          Sheet.Cells[i+k+1,3].Font.Color:=clBlue;
+
+          Sheet.Cells[i+k+1,4]:='Hesab';
+          Sheet.Cells[i+k+1,4].Font.Name:='Tahoma';
+          Sheet.Cells[i+k+1,4].Font.Bold :=true;
+          Sheet.Cells[i+k+1,4].Font.Color:=clBlue;
+
+          Sheet.Cells[i+k+1,5]:='Hesabın dövriyyəsi';
+          Sheet.Cells[i+k+1,5].Font.Name:='Tahoma';
+          Sheet.Cells[i+k+1,5].Font.Bold :=true;
+          Sheet.Cells[i+k+1,5].Font.Color:=clBlue;
+
+          Sheet.Cells[i+k+1,6]:='Büdcə qalığı';
+          Sheet.Cells[i+k+1,6].Font.Name:='Tahoma';
+          Sheet.Cells[i+k+1,6].Font.Bold :=true;
+          Sheet.Cells[i+k+1,6].Font.Color:=clBlue;
+
+          Sheet.Cells[i+k+1,7]:='I rüb';
+          Sheet.Cells[i+k+1,7].Font.Name:='Tahoma';
+          Sheet.Cells[i+k+1,7].Font.Bold :=true;
+          Sheet.Cells[i+k+1,7].Font.Color:=clBlue;
+
+          Sheet.Cells[i+k+1,8]:='II rüb';
+          Sheet.Cells[i+k+1,8].Font.Name:='Tahoma';
+          Sheet.Cells[i+k+1,8].Font.Bold :=true;
+          Sheet.Cells[i+k+1,8].Font.Color:=clBlue;
+
+          Sheet.Cells[i+k+1,9]:='III rüb';
+          Sheet.Cells[i+k+1,9].Font.Name:='Tahoma';
+          Sheet.Cells[i+k+1,9].Font.Bold :=true;
+          Sheet.Cells[i+k+1,9].Font.Color:=clBlue;
+
+          Sheet.Cells[i+k+1,10]:='IV rüb';
+          Sheet.Cells[i+k+1,10].Font.Name:='Tahoma';
+          Sheet.Cells[i+k+1,10].Font.Bold :=true;
+          Sheet.Cells[i+k+1,10].Font.Color:=clBlue;
+
+          Sheet.Cells[i+k+1,11]:=' V rüb fatiki istifadə';
+          Sheet.Cells[i+k+1,11].Font.Name:='Tahoma';
+          Sheet.Cells[i+k+1,11].Font.Bold :=true;
+          Sheet.Cells[i+k+1,11].Font.Color:=clBlue;
+
+          Sheet.Cells[i+k+1,12]:=' VI rüb faktiki istifadə';
+          Sheet.Cells[i+k+1,12].Font.Name:='Tahoma';
+          Sheet.Cells[i+k+1,12].Font.Bold :=true;
+          Sheet.Cells[i+k+1,12].Font.Color:=clBlue;
+
+          Sheet.Cells[i+k+1,13]:=' VII rüb faktiki istifadə';
+          Sheet.Cells[i+k+1,13].Font.Name:='Tahoma';
+          Sheet.Cells[i+k+1,13].Font.Bold :=true;
+          Sheet.Cells[i+k+1,13].Font.Color:=clBlue;
+
+
+          Sheet.Cells[i+k+1,14]:=' VIII rüb faktiki istifadə';
+          Sheet.Cells[i+k+1,14].Font.Name:='Tahoma';
+          Sheet.Cells[i+k+1,14].Font.Bold :=true;
+          Sheet.Cells[i+k+1,14].Font.Color:=clBlue;
+
+          Sheet.Cells[i+k+1,15]:='Növbəti ilin əvvəlinə büdcə proqnoz';
+          Sheet.Cells[i+k+1,15].Font.Name:='Tahoma';
+          Sheet.Cells[i+k+1,15].Font.Bold :=true;
+          Sheet.Cells[i+k+1,15].Font.Color:=clBlue;
+
+          Sheet.Cells[i+k+1,16]:='Fərq';
+          Sheet.Cells[i+k+1,16].Font.Name:='Tahoma';
+          Sheet.Cells[i+k+1,16].Font.Bold :=true;
+          Sheet.Cells[i+k+1,16].Font.Color:=clBlue;
+
+          Sheet.Cells[i+k+1,17]:='Fərq %lə';
+          Sheet.Cells[i+k+1,17].Font.Name:='Tahoma';
+          Sheet.Cells[i+k+1,17].Font.Bold :=true;
+          Sheet.Cells[i+k+1,17].Font.Color:=clBlue;
+
+
+        for i:=1 to  ArtDataSetExcl.RecordCount do begin
+        //  if  ArtDataSet.FieldByName('status').Asinteger=0then
+       // begin
+          bash:=inttostr(i+k);
+         // Sheet.Cells[i+k,1]:='Маддянин №-си';
+        //  Sheet.Cells[i+k,1].Font.Name:='Tahoma';
+         // Sheet.Cells[i+k,1].Font.Bold :=true;
+       //   Sheet.Cells[i+k,2]:=ArtDataSet.FieldByName('NUMBEROFARTICLE').AsString;
+
+          Sheet.Cells[i+k+2,1].Font.Name:='Tahoma';
+          Sheet.Cells[i+k+2,1].Font.Bold :=true;
+          Sheet.Cells[i+k+2,1]:=ArtDataSetExcl.FieldByName('NUMBEROFARTICLE').AsString+'   '+ArtDataSetExcl.FieldByName('stat').AsString;
+
+         // Sheet.Cells[i+k+1,1]:='Бяндин ады:';
+         // Sheet.Cells[i+k+1,1].Font.Name:='Tahoma';
+
+          Sheet.Cells[i+k+2,2].Font.Name:='Tahoma';
+           Sheet.Cells[i+k+2,2].Font.Bold :=true;
+           Sheet.Cells[i+k+2,2].Font.size :=10;
+          Sheet.Cells[i+k+2,2].Value:=ArtDataSetExcl.FieldByName('name').AsString;
+
+
+
+         for j:=1 to ItmDataSetExcl.RecordCount do begin
+
+          Sheet.Cells[i+k+j+d,2]:=ItmDataSetExcl.FieldByName('NUMBEROFITEM').Asstring+'  '+ItmDataSetExcl.FieldByName('name').AsString;
+          Sheet.Cells[i+k+j+d,2].Font.Name:='Tahoma';
+          Sheet.Cells[i+k+j+d,3]:=FormatFloat(number_format,ItmDataSetExcl.FieldByName('sumamount_e').Asfloat);
+          Sheet.Cells[i+k+j+d,4]:=ItmDataSetExcl.FieldByName('ACCNO').Asstring;
+          Sheet.Cells[i+k+j+d,5]:= ItmDataSetExcl.FieldByName('reat').Asfloat;
+          Sheet.Cells[i+k+j+d,6]:= ItmDataSetExcl.FieldByName('Budcet_rest').Asfloat;
+          Sheet.Cells[i+k+j+d,7]:=FormatFloat(number_format,ItmDataSetExcl.FieldByName('AMOUNTOFFIRSTQUARTER').AsFloat);
+          Sheet.Cells[i+k+j+d,8]:=FormatFloat(number_format,ItmDataSetExcl.FieldByName('AMOUNTOFSECONDQUARTER').AsFloat);
+          Sheet.Cells[i+k+j+d,9]:=FormatFloat(number_format,ItmDataSetExcl.FieldByName('AMOUNTOFTHRIDQUARTER').AsFloat);
+          Sheet.Cells[i+k+j+d,10]:=FormatFloat(number_format,ItmDataSetExcl.FieldByName('AMOUNTOFFOURTHQUARTER').AsFloat);
+
+          Sheet.Cells[i+k+j+d,11]:=FormatFloat(number_format,ItmDataSetExcl.FieldByName('AMOUNTOFFIRSTQUARTER_REAL').AsFloat);
+          Sheet.Cells[i+k+j+d,12]:=FormatFloat(number_format,ItmDataSetExcl.FieldByName('AMOUNTOFSECONDQUARTER_REAL').AsFloat);
+          Sheet.Cells[i+k+j+d,13]:=FormatFloat(number_format,ItmDataSetExcl.FieldByName('AMOUNTOFTHRIDQUARTER_REAL').AsFloat);
+          Sheet.Cells[i+k+j+d,14]:=FormatFloat(number_format,ItmDataSetExcl.FieldByName('AMOUNTOFFOURTHQUARTER_REAL').AsFloat);
+
+          Sheet.Cells[i+k+j+d,15]:=FormatFloat(number_format,ItmDataSetExcl.FieldByName('AMOUNTOFENDYEAR').Asinteger);
+          Sheet.Cells[i+k+j+d,16]:=FormatFloat(number_format,ItmDataSetEXcl.FieldByName('Dispatry').AsFloat);
+          Sheet.Cells[i+k+j+d,17]:=FormatFloat(number_format_r,ItmDataSetExcl.FieldByName('faiz').AsFloat);
+
+          ItmDataSetExcl.Next;
+
+             end;
+
+              m:=ItmDataSetExcl.RecordCount;
+              Exl.Range['A'+bash+':Q'+inttostr(i+k+m+d+2)].select;
+              Sheet.Range['A'+bash+':Q'+inttostr(i+k+m+d+2)].Borders.Color:=clBlack;
+             //  Exl.Range['A'+Inttostr(i+k+m+d+3)+':R'+Inttostr(i+k+m+d+3)].Select;
+             //  Exl.Selection.Interior.ColorIndex := 1;
+          k:=k+d+m-2;
+          ArtDataSetExcl.Next;
+            end;
+
+            end;
+
+    ShowSheet;
+  finally
+
+   Exl.Range['A1:A1'].Select;
+
+   Screen.Cursor := crDefault;
+   DestroySheet;
+   DMBudget.ArtDataSet.EnableControls;
+  end;
+
+
+
+
+
+end;
+
+procedure TReportFrm.Button2Click(Sender: TObject);
+begin
+Close
+end;
+
+procedure TReportFrm.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+resize:=false
+end;
+
+end.

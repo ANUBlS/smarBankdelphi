@@ -1,0 +1,534 @@
+object DM: TDM
+  OldCreateOrder = False
+  Height = 145
+  Width = 403
+  object ODSPayments: TOracleDataSet
+    SQL.Strings = (
+      'select * from ('
+      
+        'SELECT a.id,nvl((select filial from account where id=a.from_acci' +
+        'd),-1)as filial , a.amount, a.bank_acc, a.bank_bic, a.bank_code,' +
+        ' a.bank_name, a.bank_tin,a.currency,'
+      ' a.descreption||'#39'**'#39'||a.note as descreption,'
+      
+        '       a.pay_date,a.receiver_bank_acc, a.receiver_bank_bic, a.re' +
+        'ceiver_bank_code,a.receiver_bank_name, a.receiver_bank_tin,'
+      
+        '       a.receiver_tin,a.transaction_type,a.cli_id, a.status, a.p' +
+        'in1, a.pin2, a.trans_id, a.susdat,'
+      '     case when a.transaction_type=1  then '#39'Bank daxili'#39
+      '          when a.transaction_type=2  then '#39'AZIPS'#39
+      '          when a.transaction_type=3  then '#39'Konvertasiya'#39
+      '          when a.transaction_type=4 then '#39'X.O.H.K.S(paket uzvu)'#39
+      '          when a.transaction_type=5 then '#39'X.O.H.K.S'#39
+      '          when a.transaction_type=7  then '#39'Hesablar arasi'#39
+      '          when a.transaction_type=8 then '#39'Emekhaqqi'#39
+      '          when a.transaction_type=9 then '#39'Xarici kocurmeler'#39
+      '          end as tr_type,'
+      ''
+      
+        '  (select accno from ibank_client_products  where id=a.from_acci' +
+        'd) as  gonderen_acc ,'
+      '    case when a.transaction_type in(3,7) then'
+      
+        '          decode ((select accno from ibank_client_products  wher' +
+        'e id=a.to_accid),null, receiver_acc,-1,receiver_acc,'
+      
+        '                  (select accno from ibank_client_products  wher' +
+        'e id=a.to_accid))'
+      '                  else a.receiver_acc end as alan_acc ,'
+      '    case when a.transaction_type in(3,7) then'
+      
+        '                  decode ((select defaultname from ibank_client_' +
+        'products  where id=a.to_accid),null, receiver_name,-1,receiver_n' +
+        'ame,'
+      
+        '                          (select defaultname from ibank_client_' +
+        'products  where id=a.to_accid))'
+      '                  else a.receiver_name end as  alan_name,'
+      
+        '   (select defaultname from ibank_client_products  where id=a.fr' +
+        'om_accid) as  gonderen_name ,'
+      '    case when a.transaction_type in(3,7) then'
+      
+        '                  decode ((select acctin from ibank_client_produ' +
+        'cts  where id=a.to_accid),null, receiver_tin,-1,receiver_tin,'
+      
+        '                          (select acctin from ibank_client_produ' +
+        'cts  where id=a.to_accid))'
+      '                  else a.receiver_tin end as  alan_inn,'
+      
+        '  (select acctin from ibank_client_products  where id=a.from_acc' +
+        'id)           as  gonderen_inn'
+      
+        '   FROM ibank_temp_transaction a ,ibank_client_products c,ibank_' +
+        'client_products c1'
+      
+        '   where  c.id(+)= a.to_accid and c1.id(+)= a.from_accid and tra' +
+        'nsaction_type not in(44,55,88) and  a.trans_id is not null'
+      ''
+      
+        'AND    (trunc(a.susdat)) >=:DAT1 AND  pay_date <=:DAT2 and a.sta' +
+        'tus not in (0,9,10)'
+      ')'
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      '--order by transaction_type'
+      ' order by :sort'
+      '')
+    Optimize = False
+    Variables.Data = {
+      04000000030000000A0000003A0044004100540031000C000000000000000000
+      00000A0000003A0044004100540032000C00000000000000000000000A000000
+      3A0053004F0052005400010000000300000069640000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000001E00000004000000490044000100000000000C000000530054004100
+      5400550053000100000000000C00000041004D004F0055004E00540001000000
+      000010000000420041004E004B005F0041004300430001000000000010000000
+      420041004E004B005F0042004900430001000000000012000000420041004E00
+      4B005F0043004F004400450001000000000012000000420041004E004B005F00
+      4E0041004D00450001000000000010000000420041004E004B005F0054004900
+      4E0001000000000010000000430055005200520045004E004300590001000000
+      0000160000004400450053004300520045005000540049004F004E0001000000
+      0000100000005000410059005F00440041005400450001000000000022000000
+      520045004300450049005600450052005F00420041004E004B005F0041004300
+      430001000000000022000000520045004300450049005600450052005F004200
+      41004E004B005F00420049004300010000000000240000005200450043004500
+      49005600450052005F00420041004E004B005F0043004F004400450001000000
+      000024000000520045004300450049005600450052005F00420041004E004B00
+      5F004E0041004D00450001000000000022000000520045004300450049005600
+      450052005F00420041004E004B005F00540049004E0001000000000018000000
+      520045004300450049005600450052005F00540049004E000100000000002000
+      00005400520041004E00530041004300540049004F004E005F00540059005000
+      45000100000000000C00000043004C0049005F00490044000100000000000800
+      0000500049004E00310001000000000008000000500049004E00320001000000
+      0000100000005400520041004E0053005F00490044000100000000000C000000
+      5300550053004400410054000100000000001800000047004F004E0044004500
+      520045004E005F004100430043000100000000001000000041004C0041004E00
+      5F004100430043000100000000001200000041004C0041004E005F004E004100
+      4D0045000100000000001A00000047004F004E0044004500520045004E005F00
+      4E0041004D0045000100000000001000000041004C0041004E005F0049004E00
+      4E000100000000001800000047004F004E0044004500520045004E005F004900
+      4E004E000100000000000E000000540052005F00540059005000450001000000
+      0000}
+    Cursor = crSQLWait
+    QueryAllRecords = False
+    Session = sboapiDataModule.SBSession
+    Left = 104
+    Top = 24
+    object ODSPaymentsID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object ODSPaymentsAMOUNT: TFloatField
+      FieldName = 'AMOUNT'
+      DisplayFormat = '#,##0.00'
+    end
+    object ODSPaymentsBANK_ACC: TWideStringField
+      FieldName = 'BANK_ACC'
+      Size = 255
+    end
+    object ODSPaymentsBANK_BIC: TWideStringField
+      FieldName = 'BANK_BIC'
+      Size = 255
+    end
+    object ODSPaymentsBANK_CODE: TWideStringField
+      FieldName = 'BANK_CODE'
+      Size = 255
+    end
+    object ODSPaymentsBANK_NAME: TWideStringField
+      FieldName = 'BANK_NAME'
+      Size = 255
+    end
+    object ODSPaymentsBANK_TIN: TWideStringField
+      FieldName = 'BANK_TIN'
+      Size = 255
+    end
+    object ODSPaymentsCURRENCY: TWideStringField
+      FieldName = 'CURRENCY'
+      Size = 255
+    end
+    object ODSPaymentsDESCREPTION: TWideStringField
+      FieldName = 'DESCREPTION'
+      Size = 542
+    end
+    object ODSPaymentsPAY_DATE: TDateTimeField
+      FieldName = 'PAY_DATE'
+    end
+    object ODSPaymentsRECEIVER_BANK_ACC: TWideStringField
+      FieldName = 'RECEIVER_BANK_ACC'
+      Size = 255
+    end
+    object ODSPaymentsRECEIVER_BANK_BIC: TWideStringField
+      FieldName = 'RECEIVER_BANK_BIC'
+      Size = 255
+    end
+    object ODSPaymentsRECEIVER_BANK_CODE: TWideStringField
+      FieldName = 'RECEIVER_BANK_CODE'
+      Size = 255
+    end
+    object ODSPaymentsRECEIVER_BANK_NAME: TWideStringField
+      FieldName = 'RECEIVER_BANK_NAME'
+      Size = 255
+    end
+    object ODSPaymentsRECEIVER_BANK_TIN: TWideStringField
+      FieldName = 'RECEIVER_BANK_TIN'
+      Size = 255
+    end
+    object ODSPaymentsRECEIVER_TIN: TWideStringField
+      FieldName = 'RECEIVER_TIN'
+      Size = 255
+    end
+    object ODSPaymentsTRANSACTION_TYPE: TWideStringField
+      FieldName = 'TRANSACTION_TYPE'
+      Size = 255
+    end
+    object ODSPaymentsCLI_ID: TWideStringField
+      FieldName = 'CLI_ID'
+    end
+    object ODSPaymentsSTATUS: TWideStringField
+      FieldName = 'STATUS'
+    end
+    object ODSPaymentsPIN1: TIntegerField
+      FieldName = 'PIN1'
+    end
+    object ODSPaymentsPIN2: TIntegerField
+      FieldName = 'PIN2'
+    end
+    object ODSPaymentsTRANS_ID: TWideStringField
+      FieldName = 'TRANS_ID'
+      Size = 255
+    end
+    object ODSPaymentsSUSDAT: TDateTimeField
+      FieldName = 'SUSDAT'
+    end
+    object ODSPaymentsTR_TYPE: TWideStringField
+      FieldName = 'TR_TYPE'
+      Size = 21
+    end
+    object ODSPaymentsGONDEREN_ACC: TWideStringField
+      FieldName = 'GONDEREN_ACC'
+      Size = 255
+    end
+    object ODSPaymentsALAN_ACC: TWideStringField
+      FieldName = 'ALAN_ACC'
+      Size = 255
+    end
+    object ODSPaymentsALAN_NAME: TWideStringField
+      FieldName = 'ALAN_NAME'
+      Size = 255
+    end
+    object ODSPaymentsGONDEREN_NAME: TWideStringField
+      FieldName = 'GONDEREN_NAME'
+      Size = 255
+    end
+    object ODSPaymentsALAN_INN: TWideStringField
+      FieldName = 'ALAN_INN'
+      Size = 255
+    end
+    object ODSPaymentsGONDEREN_INN: TWideStringField
+      FieldName = 'GONDEREN_INN'
+      Size = 255
+    end
+  end
+  object DSPayments: TDataSource
+    DataSet = ODSPayments
+    Left = 24
+    Top = 24
+  end
+  object dsfilials: TOracleDataSet
+    SQL.Strings = (
+      'select * from Filial order by id')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000030000000400000049004400010000000000080000004E0041004D00
+      4500010000000000140000004B004F0044005F00460049004C00490041004C00
+      010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 101
+    Top = 74
+    object dsfilialsID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object dsfilialsNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 90
+    end
+    object dsfilialsKOD_FILIAL: TWideStringField
+      FieldName = 'KOD_FILIAL'
+      Size = 6
+    end
+  end
+  object dtfilials: TDataSource
+    DataSet = dsfilials
+    Left = 21
+    Top = 74
+  end
+  object ods_rep: TOracleDataSet
+    SQL.Strings = (
+      
+        'SELECT a.id, a.amount, a.bank_acc, a.bank_bic, a.bank_code, a.ba' +
+        'nk_name, a.bank_tin,a.currency, a.descreption||'#39'**'#39'||a.note as d' +
+        'escreption,'
+      
+        '       replace(a.descreption,'#39'|'#39',chr(13))as teynat, replace(a.no' +
+        'te,'#39'|'#39',chr(13)) as note, lower(piecesofwriting.CurrencyToHR(a.am' +
+        'ount))||'#39')'#39'||'#39' '#39'||v.valu_name as amount_yazi,'
+      
+        '       a.pay_date,a.receiver_bank_acc, a.receiver_bank_bic, a.re' +
+        'ceiver_bank_code,a.receiver_bank_name, a.receiver_bank_tin, '
+      
+        '       a.receiver_tin,a.transaction_type,a.cli_id, a.status, a.p' +
+        'in1, a.pin2, a.trans_id, a.susdat,'
+      
+        '  (select accno from ibank_client_products  where id=a.from_acci' +
+        'd) as  gonderen_acc , '
+      '    case when a.transaction_type in(3,7) then'
+      
+        '          decode ((select accno from ibank_client_products  wher' +
+        'e id=a.to_accid),null, receiver_acc,-1,receiver_acc,'
+      
+        '                  (select accno from ibank_client_products  wher' +
+        'e id=a.to_accid))'
+      '                  else a.receiver_acc end as alan_acc ,   '
+      '    case when a.transaction_type in(3,7) then'
+      
+        '                  decode ((select defaultname from ibank_client_' +
+        'products  where id=a.to_accid),null, receiver_name,-1,receiver_n' +
+        'ame,'
+      
+        '                          (select defaultname from ibank_client_' +
+        'products  where id=a.to_accid))'
+      '                  else a.receiver_name end as  alan_name,'
+      
+        '    (select defaultname from ibank_client_products  where id=a.f' +
+        'rom_accid) as  gonderen_name ,'
+      '    case when a.transaction_type in(3,7) then'
+      
+        '                  decode ((select acctin from ibank_client_produ' +
+        'cts  where id=a.to_accid),null, receiver_tin,-1,receiver_tin,'
+      
+        '                          (select acctin from ibank_client_produ' +
+        'cts  where id=a.to_accid))'
+      '                  else a.receiver_tin end as  alan_inn,'
+      
+        '     (select acctin from ibank_client_products  where id=a.from_' +
+        'accid)           as  gonderen_inn               '
+      
+        '   FROM ibank_temp_transaction a ,ibank_client_products c,ibank_' +
+        'client_products c1,avalute v'
+      
+        '   where  c.id(+)= a.to_accid and c1.id(+)= a.from_accid and a.c' +
+        'urrency=v.val_name and transaction_type not in(44,55,88) '
+      ''
+      ''
+      ''
+      ''
+      ''
+      'AND    a.id=:v_id')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000A0000003A0056005F004900440003000000000000000000
+      0000}
+    QBEDefinition.QBEFieldDefs = {
+      050000002000000004000000490044000100000000000C000000530054004100
+      5400550053000100000000000C00000041004D004F0055004E00540001000000
+      000010000000420041004E004B005F0041004300430001000000000010000000
+      420041004E004B005F0042004900430001000000000012000000420041004E00
+      4B005F0043004F004400450001000000000012000000420041004E004B005F00
+      4E0041004D00450001000000000010000000420041004E004B005F0054004900
+      4E0001000000000010000000430055005200520045004E004300590001000000
+      0000160000004400450053004300520045005000540049004F004E0001000000
+      0000100000005000410059005F00440041005400450001000000000022000000
+      520045004300450049005600450052005F00420041004E004B005F0041004300
+      430001000000000022000000520045004300450049005600450052005F004200
+      41004E004B005F00420049004300010000000000240000005200450043004500
+      49005600450052005F00420041004E004B005F0043004F004400450001000000
+      000024000000520045004300450049005600450052005F00420041004E004B00
+      5F004E0041004D00450001000000000022000000520045004300450049005600
+      450052005F00420041004E004B005F00540049004E0001000000000018000000
+      520045004300450049005600450052005F00540049004E000100000000002000
+      00005400520041004E00530041004300540049004F004E005F00540059005000
+      45000100000000000C00000043004C0049005F00490044000100000000000800
+      0000500049004E00310001000000000008000000500049004E00320001000000
+      0000100000005400520041004E0053005F00490044000100000000000C000000
+      5300550053004400410054000100000000001800000047004F004E0044004500
+      520045004E005F004100430043000100000000001000000041004C0041004E00
+      5F004100430043000100000000001200000041004C0041004E005F004E004100
+      4D0045000100000000001A00000047004F004E0044004500520045004E005F00
+      4E0041004D0045000100000000001000000041004C0041004E005F0049004E00
+      4E000100000000001800000047004F004E0044004500520045004E005F004900
+      4E004E000100000000000C0000005400450059004E0041005400010000000000
+      080000004E004F00540045000100000000001600000041004D004F0055004E00
+      54005F00590041005A004900010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 173
+    Top = 74
+    object ods_repID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object ods_repAMOUNT: TFloatField
+      FieldName = 'AMOUNT'
+    end
+    object ods_repBANK_ACC: TWideStringField
+      FieldName = 'BANK_ACC'
+      Size = 255
+    end
+    object ods_repBANK_BIC: TWideStringField
+      FieldName = 'BANK_BIC'
+      Size = 255
+    end
+    object ods_repBANK_CODE: TWideStringField
+      FieldName = 'BANK_CODE'
+      Size = 255
+    end
+    object ods_repBANK_NAME: TWideStringField
+      FieldName = 'BANK_NAME'
+      Size = 255
+    end
+    object ods_repBANK_TIN: TWideStringField
+      FieldName = 'BANK_TIN'
+      Size = 255
+    end
+    object ods_repCURRENCY: TWideStringField
+      FieldName = 'CURRENCY'
+      Size = 255
+    end
+    object ods_repDESCREPTION: TWideStringField
+      FieldName = 'DESCREPTION'
+      Size = 542
+    end
+    object ods_repPAY_DATE: TDateTimeField
+      FieldName = 'PAY_DATE'
+    end
+    object ods_repRECEIVER_BANK_ACC: TWideStringField
+      FieldName = 'RECEIVER_BANK_ACC'
+      Size = 255
+    end
+    object ods_repRECEIVER_BANK_BIC: TWideStringField
+      FieldName = 'RECEIVER_BANK_BIC'
+      Size = 255
+    end
+    object ods_repRECEIVER_BANK_CODE: TWideStringField
+      FieldName = 'RECEIVER_BANK_CODE'
+      Size = 255
+    end
+    object ods_repRECEIVER_BANK_NAME: TWideStringField
+      FieldName = 'RECEIVER_BANK_NAME'
+      Size = 255
+    end
+    object ods_repRECEIVER_BANK_TIN: TWideStringField
+      FieldName = 'RECEIVER_BANK_TIN'
+      Size = 255
+    end
+    object ods_repRECEIVER_TIN: TWideStringField
+      FieldName = 'RECEIVER_TIN'
+      Size = 255
+    end
+    object ods_repTRANSACTION_TYPE: TWideStringField
+      FieldName = 'TRANSACTION_TYPE'
+      Size = 255
+    end
+    object ods_repCLI_ID: TWideStringField
+      FieldName = 'CLI_ID'
+    end
+    object ods_repSTATUS: TWideStringField
+      FieldName = 'STATUS'
+    end
+    object ods_repPIN1: TIntegerField
+      FieldName = 'PIN1'
+    end
+    object ods_repPIN2: TIntegerField
+      FieldName = 'PIN2'
+    end
+    object ods_repTRANS_ID: TWideStringField
+      FieldName = 'TRANS_ID'
+      Size = 255
+    end
+    object ods_repSUSDAT: TDateTimeField
+      FieldName = 'SUSDAT'
+    end
+    object ods_repGONDEREN_ACC: TWideStringField
+      FieldName = 'GONDEREN_ACC'
+      Size = 255
+    end
+    object ods_repALAN_ACC: TWideStringField
+      FieldName = 'ALAN_ACC'
+      Size = 255
+    end
+    object ods_repALAN_NAME: TWideStringField
+      FieldName = 'ALAN_NAME'
+      Size = 255
+    end
+    object ods_repGONDEREN_NAME: TWideStringField
+      FieldName = 'GONDEREN_NAME'
+      Size = 255
+    end
+    object ods_repALAN_INN: TWideStringField
+      FieldName = 'ALAN_INN'
+      Size = 255
+    end
+    object ods_repGONDEREN_INN: TWideStringField
+      FieldName = 'GONDEREN_INN'
+      Size = 255
+    end
+    object ods_repTEYNAT: TWideStringField
+      FieldName = 'TEYNAT'
+      Size = 255
+    end
+    object ods_repNOTE: TWideStringField
+      FieldName = 'NOTE'
+      Size = 255
+    end
+    object ods_repAMOUNT_YAZI: TWideStringField
+      FieldName = 'AMOUNT_YAZI'
+      Size = 4000
+    end
+  end
+  object Dat: TOracleDataSet
+    SQL.Strings = (
+      'select tek_dat from sysdat')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000010000000E000000540045004B005F00440041005400010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 173
+    Top = 26
+    object DatTEK_DAT: TDateTimeField
+      FieldName = 'TEK_DAT'
+      Required = True
+    end
+  end
+  object sb_trans: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'mailbanking'
+    Left = 269
+    Top = 26
+  end
+  object OraclePackage1: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'SB_ADM'
+    Left = 333
+    Top = 26
+  end
+  object pack: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    Cursor = crSQLWait
+    Left = 216
+    Top = 24
+  end
+  object Sb_aca: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'Sb_ACA'
+    Left = 312
+    Top = 80
+  end
+end

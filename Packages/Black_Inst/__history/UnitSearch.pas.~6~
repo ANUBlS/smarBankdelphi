@@ -1,0 +1,127 @@
+unit UnitSearch;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ExtCtrls, XFSCtrls, Grids, XDBGrids, StdCtrls;
+
+type
+  TFormSearch = class(TForm)
+    XFPanel1: TXFPanel;
+    XFPanel2: TXFPanel;
+    XDBGrid1: TXDBGrid;
+    Edit1: TEdit;
+    Edit2: TEdit;
+    procedure XDBGrid1TitleClick(Column: TXColumn);
+    procedure FormShow(Sender: TObject);
+    procedure Edit1Change(Sender: TObject);
+    procedure Edit2Change(Sender: TObject);
+    procedure XDBGrid1DblClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormSearch: TFormSearch;
+
+implementation
+   uses BlackListImpl,DmBlackImpl;
+{$R *.dfm}
+
+procedure TFormSearch.Edit1Change(Sender: TObject);
+begin
+
+if edit1.Text<>'' then
+begin
+edit2.Clear;
+with DmBlack,ods_search  do
+begin
+close;
+SQL[8] := SQL[8] + ' and nvl(upper(nam),0) like upper (''%' +
+        Edit1.Text + '%'')';
+open;
+ end;
+end else
+   begin
+  DmBlack.ods_search.Close;
+  DmBlack.ods_search.SQL[8]:='';
+  DmBlack.ods_search.Open;
+
+   end;
+end;
+
+procedure TFormSearch.Edit2Change(Sender: TObject);
+begin
+
+if edit2.Text<>'' then
+begin
+edit1.Clear;
+with DmBlack,ods_search  do
+begin
+close;
+SQL[8] := SQL[8] + ' and nvl(upper(nam1),0) like upper (''%' +
+        Edit2.Text + '%'')';
+open;
+ end;
+end else
+    begin
+  DmBlack.ods_search.Close;
+  DmBlack.ods_search.SQL[8]:='';
+  DmBlack.ods_search.Open;
+
+    end;
+end;
+
+procedure TFormSearch.FormShow(Sender: TObject);
+begin
+with DmBlack,ods_search do begin
+  if not Active then
+     Open
+    else
+      Refresh;
+end;
+end;
+
+procedure TFormSearch.XDBGrid1DblClick(Sender: TObject);
+begin
+if  DmBlack.ods_searchDATAID.AsString<>'' then
+begin
+
+with DmBlack,ods_blecxml  do
+begin
+Sql[4]:='';
+close;
+SQL[4] :=   ' and  dataid  = ' + ''''+ DmBlack.ods_searchDATAID.AsString +'''';
+
+open;
+ end;
+end else
+   begin
+  DmBlack.ods_blecxml.Close;
+  DmBlack.ods_blecxml.SQL[4]:='';
+  DmBlack.ods_blecxml.Open;
+
+   end;
+   FormSearch.Close;
+  end;
+
+procedure TFormSearch.XDBGrid1TitleClick(Column: TXColumn);
+ var
+TitleName:string;
+begin
+if Column.Field.Calculated then Exit;
+ TitleName :=Column.FieldName;
+ with DmBlack,ods_search do
+ begin
+  Screen.Cursor :=crSQLWait;
+  SetVariable('Title',TitleName);
+  Refresh;
+  Screen.Cursor :=crDefault;
+ end;
+
+end;
+
+end.

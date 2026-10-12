@@ -1,0 +1,422 @@
+unit FormCustNom_GridImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Grids, XDBGrids, StdCtrls, XFSCtrls, ExtCtrls;
+
+type
+  TFormCustGrid = class(TForm)
+    MainGrid: TXDBGrid;
+    XFPanel1: TXFPanel;
+    XFButton1: TXFButton;
+    procedure MainGridDblClick(Sender: TObject);
+    procedure XFButton1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormCustGrid: TFormCustGrid;
+
+implementation
+ uses DataCustNomImpl, FormCustNomImpl,OpenAccountImpl,addcombobox1;
+{$R *.dfm}
+
+
+procedure GetPath;
+var
+  ImagesPath: String;
+
+begin
+  ImagesPath := Format('%s\..\Env\Customers', [ExtractFilePath(ParamStr(0))]);
+  Path := Format('%s\temp.jpg', [ImagesPath]);
+  Path_B := Format('%s\blank.jpg', [ImagesPath]);
+end;
+
+procedure Fill_Edit;
+   var
+  F: File of byte;
+  begin
+  GetPath;
+   if ( DataCustNom.DScustimageStamp.IsNull) then
+  begin
+    FormCustNom.Image2.Picture.LoadFromFile(Path_B);
+    { --no record - godda empty Image1-- }
+  end
+  else
+  begin
+    DataCustNom.DScustimageStamp.SaveToFile(Path);
+    AssignFile(F, Path);
+    Reset(F);
+    if FileSize(F) > 0 then
+    begin
+      CloseFile(F);
+      FormCustNom.Image2.Picture.LoadFromFile(Path);
+
+    end
+    else
+    begin
+      CloseFile(F);
+      FormCustNom.Image2.Picture.LoadFromFile(Path_B);
+    end;
+  end;
+
+   if (DataCustNom.DScustimageCUSTSIGN.IsNull) then
+  begin
+    FormCustNom.Image1.Picture.LoadFromFile(Path_B);
+   end
+  else
+  begin
+    DataCustNom.DScustimageCUSTSIGN.SaveToFile(Path);
+    AssignFile(F, Path);
+    Reset(F);
+    if FileSize(F) > 0 then
+    begin
+      CloseFile(F);
+      FormCustNom.Image1.Picture.LoadFromFile(Path);
+     end
+    else
+    begin
+      CloseFile(F);
+      FormCustNom.Image1.Picture.LoadFromFile(Path_B);
+    end;
+  end;
+    if (DataCustNom.DScustimagePhoto.IsNull) then
+  begin
+    FormCustNom.Image3.Picture.LoadFromFile(Path_B);
+   end
+  else
+  begin
+    DataCustNom.DScustimagephoto.SaveToFile(Path);
+    AssignFile(F, Path);
+    Reset(F);
+    if FileSize(F) > 0 then
+    begin
+      CloseFile(F);
+      FormCustNom.Image3.Picture.LoadFromFile(Path);
+    end
+    else
+    begin
+      CloseFile(F);
+      FormCustNom.Image3.Picture.LoadFromFile(Path_B);
+    end;
+  end;
+
+  end;
+
+
+
+procedure TFormCustGrid.MainGridDblClick(Sender: TObject);
+begin
+   with DataCustNom.DScustimage do
+    begin
+    close;
+    SetVariable('cust_id', DataCustNom.ODS_CUSTOMERS_PHYS_FSIDCUSTINFO.AsInteger);
+    Open;
+    end;
+   if DataCustNom.ODS_CUSTOMERS_PHYS_FS.Active then
+
+    with DataCustNom.ODS_CUSTOMERS_PHYS_FS do
+    begin
+      if RecordCount > 0 then
+      begin
+
+        FormCustNom.EditID.Text := FieldByName('ID').AsString;
+        FormCustNom.EditFirstName.Text := FieldByName('FirstName').AsString;
+        FormCustNom.EditPatronymic.Text := FieldByName('Patronymic').AsString;
+        FormCustNom.EditLastName.Text := FieldByName('LastName').AsString;
+        FormCustNom.Edit10.Text := FieldByName('CUST_NAME').AsString;
+        FormCustNom.EditPINCode.Text := FieldByName('passPIN').AsString;
+
+
+        { wekil DataModPCustService.DScustimage.Close;
+          DataModPCustService.DScustimage.SetVariable('cust_id',
+          DataModPCustService.ODS_CUSTOMERS_PHYS_FS.FieldByName('ID').AsInteger);
+          DataModPCustService.DScustimage.Open; }
+
+        case DataCustNom.ODS_CUSTOMERS_PHYS_FS.FieldByName('Nerezident')
+          .AsInteger of
+          0:
+            FormCustNom.RBtnNoResident.Checked := True;
+          1:
+            FormCustNom.RBtnResident.Checked := True;
+        end;
+
+
+      {  if not DataCustNom.ODS_CUSTOMERS_PHYS_FS.FieldByName
+          ('CUST_type').isNull then
+        begin
+        XFRadioGroupCust_type.ItemIndex:=DataCustNom.ODS_CUSTOMERS_PHYS_FS.FieldByName
+            ('CUST_type').AsInteger;
+            showmessage (inttostr(XFRadioGroupCust_type.ItemIndex));
+        end;  }
+        case DataCustNom.ODS_CUSTOMERS_PHYS_FS.FieldByName
+            ('CUST_type').AsInteger of
+         1:begin
+         FormCustNom.XFRadioGroupCust_type.ItemIndex:=0;
+         FormCustNom.BtnCust.Enabled:=false;
+         end;
+         2:begin
+           FormCustNom.XFRadioGroupCust_type.ItemIndex:=1;
+           FormCustNom.BtnCust.Enabled:=false;
+         end;
+         4:begin
+           FormCustNom.XFRadioGroupCust_type.ItemIndex:=2;
+         end;
+        end;
+
+      if not DataCustNom.ODS_CUSTOMERS_PHYS_FS.FieldByName
+        ('citizenship').isNull then
+      begin
+        FormCustNom.CBoxCitizenship.ItemIndex :=
+          combobox_open(DataCustNom.ODS_CUSTOMERS_PHYS_FS,
+          DataCustNom.Odscountries, FormCustNom.CBoxCitizenship, 'citizenship',
+          'ID', 'CNTR_NAME');
+
+      end
+      else
+        FormCustNom.CBoxCitizenship.ItemIndex := -1;
+
+      //CBoxGender.ItemIndex := FieldByName('sex').AsInteger;
+     // CBoxFamStatus.ItemIndex := FieldByName('fam_status').AsInteger;
+
+
+      if not DataCustNom.ODS_CUSTOMERS_PHYS_FS.FieldByName('sex')
+        .isNull then
+        FormCustNom.CBoxGender.ItemIndex :=
+          combobox_open(DataCustNom.ODS_CUSTOMERS_PHYS_FS,
+          DataCustNom.OdsGender, FormCustNom.CBoxGender, 'sex',
+          'ID', 'name')
+      else
+        FormCustNom.CBoxGender.ItemIndex := -1;
+
+     if not DataCustNom.ODS_CUSTOMERS_PHYS_FS.FieldByName('fam_status')
+        .isNull then
+        FormCustNom.CBoxFamStatus.ItemIndex :=
+          combobox_open(DataCustNom.ODS_CUSTOMERS_PHYS_FS,
+          DataCustNom.OdsFamstatus,FormCustNom.CBoxFamStatus, 'fam_status',
+          'ID', 'name')
+      else
+        FormCustNom.CBoxFamStatus.ItemIndex := -1;
+
+
+
+      if not DataCustNom.ODS_CUSTOMERS_PHYS_FS.FieldByName('group_klie')
+        .isNull then
+        FormCustNom.CBoxGroup.ItemIndex :=
+          combobox_open(DataCustNom.ODS_CUSTOMERS_PHYS_FS,
+          DataCustNom.ClientGroupData, FormCustNom.CBoxGroup, 'group_klie',
+          'ID', 'name')
+      else
+        FormCustNom.CBoxGroup.ItemIndex := -1;
+
+      if not DataCustNom.ODS_CUSTOMERS_PHYS_FS.FieldByName('vid_sob')
+        .isNull then
+        FormCustNom.CBox.ItemIndex :=
+          combobox_open(DataCustNom.ODS_CUSTOMERS_PHYS_FS,
+          DataCustNom.EstateTypeData, FormCustNom.CBox, 'vid_sob', 'ID', 'name')
+      else
+       FormCustNom.CBox.ItemIndex := -1;
+      if not DataCustNom.ODS_CUSTOMERS_PHYS_FS.FieldByName('prinad_kod')
+        .isNull then
+        FormCustNom.ComboBox3.ItemIndex :=
+          combobox_open(DataCustNom.ODS_CUSTOMERS_PHYS_FS,
+          DataCustNom.RelationData, FormCustNom.ComboBox3, 'prinad_kod',
+          'ID', 'name')
+      else
+        FormCustNom.ComboBox3.ItemIndex := -1;
+      if not DataCustNom.ODS_CUSTOMERS_PHYS_FS.FieldByName('DOC_TYPE')
+        .isNull then
+      begin
+        FormCustNom.CBoxDocType.KeyValue := DataCustNom.ODS_CUSTOMERS_PHYS_FS.
+          FieldByName('DOC_TYPE').AsInteger;
+        FormCustNom.CBoxDocType1.KeyValue := DataCustNom.ODS_CUSTOMERS_PHYS_FS.
+          FieldByName('DOC_TYPE').AsInteger;
+
+      end
+      else
+      begin
+        FormCustNom.CBoxDocType.KeyValue := -1;
+        FormCustNom.CBoxDocType1.KeyValue := -1;
+
+        end;
+
+     if not DataCustNom.ODS_CUSTOMERS_PHYS_FS.FieldByName('doc_country').IsNull then
+      FormCustNom.issue_country.KeyValue:=DataCustNom.ODS_CUSTOMERS_PHYS_FS .
+      FieldByName('doc_country').AsString
+      else
+      FormCustNom.issue_country.KeyValue:=-1;
+
+      if not DataCustNom.ODS_CUSTOMERS_PHYS_FS.FieldByName('cust_risk_categ').isnull then
+      FormCustNom.ComboBox_risk.KeyValue:=DataCustNom.ODS_Customers_Phys_FS.FieldByName('cust_risk_categ').AsInteger
+       else
+      FormCustNom.ComboBox_risk.KeyValue:=-1;
+
+      if not DataCustNom.ODS_CUSTOMERS_PHYS_FS.FieldByName('riskdescid').isnull then
+      FormCustNom.Comb_riskdescid.KeyValue:=DataCustNom.ODS_Customers_Phys_FS.FieldByName('riskdescid').AsInteger
+       else
+      FormCustNom.Comb_riskdescid.KeyValue:=-1;
+
+
+
+      if not DataCustNom.ODS_CUSTOMERS_PHYS_FS.FieldByName('citizenship2').IsNull then
+      FormCustNom.DBCBox_Citizenship2.KeyValue:=DataCustNom.ODS_CUSTOMERS_PHYS_FS .
+      FieldByName('citizenship2').AsString
+      else
+      FormCustNom.DBCBox_Citizenship2.KeyValue:=-1;
+
+       if not DataCustNom.ODS_CUSTOMERS_PHYS_FS.FieldByName('citizenship3').IsNull then
+      FormCustNom.DBCBox_Citizenship3.KeyValue:=DataCustNom.ODS_CUSTOMERS_PHYS_FS .
+      FieldByName('citizenship3').AsString
+      else
+      FormCustNom.DBCBox_Citizenship3.KeyValue:=-1;
+
+      if not DataCustNom.ODS_CUSTOMERS_PHYS_FS.FieldByName('fakt_country').IsNull then
+      FormCustNom.Fakt_Adrs_State.KeyValue:=DataCustNom.ODS_CUSTOMERS_PHYS_FS .
+      FieldByName('fakt_country').AsString
+      else
+      FormCustNom.Fakt_Adrs_State.KeyValue:=-1;
+
+      if not DataCustNom.ODS_CUSTOMERS_PHYS_FS.FieldByName('fakt_city').IsNull then
+      FormCustNom.Fakt_Adrs_City.KeyValue:=DataCustNom.ODS_CUSTOMERS_PHYS_FS .
+      FieldByName('fakt_city').AsString
+      else
+      FormCustNom.Fakt_Adrs_City.KeyValue:=-1;
+
+    FormCustNom.ZipFakt.Text:=FieldByName('fakt_zip').AsString;
+    FormCustNom.Work_Place.Text:=FieldByName('work_place').AsString;
+    FormCustNom.Work_Post.Text:=FieldByName('work_post').AsString;;
+    FormCustNom.Work_Address.Text:=FieldByName('work_adress').AsString;
+    FormCustNom.Work_Phone.Text:=FieldByName('work_phone').AsString;
+
+      case FormCustNom.XFRadioGroupCust_type.ItemIndex of
+      0,1,2: begin
+
+     if not DataCustNom.ODS_CUSTOMERS_PHYS_FS.FieldByName('info_tph_contact_type').IsNull then
+      FormCustNom.tph_contact_type.KeyValue:=DataCustNom.ODS_CUSTOMERS_PHYS_FS .
+      FieldByName('info_tph_contact_type').AsString
+      else
+      FormCustNom.tph_contact_type.KeyValue:=-1;
+
+     if not DataCustNom.ODS_CUSTOMERS_PHYS_FS.FieldByName('info_tph_country').IsNull then
+      FormCustNom.CountryByConctType.KeyValue:=DataCustNom.ODS_CUSTOMERS_PHYS_FS .
+      FieldByName('info_tph_country').AsString
+      else
+      FormCustNom.CountryByConctType.KeyValue:=-1;
+
+      if not DataCustNom.ODS_CUSTOMERS_PHYS_FS.FieldByName('info_tph_city').IsNull then
+      FormCustNom.CityByConctType.KeyValue:=DataCustNom.ODS_CUSTOMERS_PHYS_FS .
+      FieldByName('info_tph_city').AsString
+      else
+      FormCustNom.CityByConctType.KeyValue:=-1;
+
+      if not DataCustNom.ODS_CUSTOMERS_PHYS_FS.FieldByName('info_tph_country_prefix').IsNull then
+      FormCustNom.tph_country_prefix.KeyValue:=DataCustNom.ODS_CUSTOMERS_PHYS_FS .
+      FieldByName('info_tph_country_prefix').AsString
+      else
+      FormCustNom.tph_country_prefix.KeyValue:=-1;
+
+      if not DataCustNom.ODS_CUSTOMERS_PHYS_FS.FieldByName('info_tph_communication_type').IsNull then
+      FormCustNom.tph_communication_type.KeyValue:=DataCustNom.ODS_CUSTOMERS_PHYS_FS .
+      FieldByName('info_tph_communication_type').AsString
+      else
+      FormCustNom.tph_communication_type.KeyValue:=-1;
+
+       if not DataCustNom.ODS_CUSTOMERS_PHYS_FS.FieldByName('info_contact_type').IsNull then
+      FormCustNom.Address_type.KeyValue:=DataCustNom.ODS_CUSTOMERS_PHYS_FS .
+      FieldByName('info_contact_type').AsString
+      else
+      FormCustNom.Address_type.KeyValue:=-1;
+
+
+       FormCustNom.db_tph_state.Text:=FieldByName('info_tph_state').AsString;
+       FormCustNom.DB_tph_zip.Text:=FieldByName('info_tph_zip').AsString;
+       FormCustNom.db_tph_adress.Text:=FieldByName('info_tph_adress').AsString;
+       FormCustNom.db_tph_number.Text:=FieldByName('info_tph_number').AsString;
+       FormCustNom.db_tph_extension.Text:=FieldByName('info_tph_extension').AsString;
+       FormCustNom.EditEmail.Text := copy(FieldByName('email').AsString, 0,
+        pos('@', FieldByName('email').AsString) - 1);
+        FormCustNom.Edit1.Text := copy(FieldByName('email').AsString,
+        pos('@', FieldByName('email').AsString) + 1,
+              length(FieldByName('email').AsString));
+        FormCustNom.Edit_url.Text:=FieldByName('url').AsString;
+
+
+     end;
+     end;
+
+
+ if not DataCustNom.ODS_CUSTOMERS_PHYS_FS.FieldByName
+   ('sfera_dey').IsNull then
+  begin
+  FormCustNom.ActionAreaCB.ItemIndex:=
+  combobox_open(DataCustNom.ODS_CUSTOMERS_PHYS_FS,
+     DataCustNom.ActionAreaData,FormCustNom.ActionAreaCB,'sfera_dey','id','name')
+  end
+  else
+   FormCustNom.ActionAreaCB.ItemIndex:=-1;
+
+
+      FormCustNom.CBoxDocPlace2.Text := FieldByName('paspplace').AsString;
+      FormCustNom.EditShort_name1.Text:=FieldByName('Short_name').AsString;
+      FormCustNom.EditDocSerie.Text := FieldByName('passport').AsString;
+      FormCustNom.EditDocNumber.Text := FieldByName('passp_number').AsString;
+      FormCustNom.MemoNotes.Text:=FieldByName('note').AsString;
+      if VarIsNull(FieldByName('paspdate').AsVariant) then
+      FormCustNom.DTPickerDocDate.text:=''
+      else
+      FormCustNom.DTPickerDocDate.Value:=FieldByName('paspdate').AsVariant;
+
+      if VarIsNull(FieldByName('passexpire').AsVariant) then
+      FormCustNom.DTPickerDocExpiryDate.text:=''
+      else
+      FormCustNom.DTPickerDocExpiryDate.Value:=FieldByName('passexpire').AsVariant;
+
+       if VarIsNull(FieldByName('birthdate').AsVariant) then
+      FormCustNom.DTPickerBirthDate.text:=''
+      else
+      FormCustNom.DTPickerBirthDate.Value:=FieldByName('birthdate').AsVariant;
+
+
+      FormCustNom.CBoxBirthState.KeyValue := FieldByName('birthplace').AsString;
+
+      FormCustNom.CBoxBirthCity.KeyValue := FieldByName('BIRTH_STATE').AsString;
+      FormCustNom.CBoxAddressState.KeyValue := FieldByName('adrs_state').AsString;
+
+      FormCustNom.CBoxAddressCity.KeyValue := FieldByName('adrs_city').AsString;
+
+      FormCustNom.EditAddress.Text := FieldByName('adress').AsString;
+      FormCustNom.EditAddressFactical.Text := FieldByName('fakt_adress').AsString;
+      FormCustNom.EditPhoneMob.Text := FieldByName('PHONE_MOB').AsString;
+      FormCustNom.EditPhoneCity.Text := FieldByName('phone').AsString;
+
+       FormCustNom.Edit_activity.Text := FieldByName('activity').AsString;
+       FormCustNom.Edit_profession.Text := FieldByName('profession').AsString;
+       FormCustNom.Edit_source_of_income.Text := FieldByName('source_of_income').AsString;
+     Fill_Edit;
+    FormCustNom.DateTi_samelydate.Value:=FieldByName('SAMELYDATE').AsDateTime;
+     ///////////////////////////////////////////////////////////
+  risk_descPERIOD:=DataCustNom.ODS_CUST_RISK_DESCDATE_PERIOD.AsInteger;
+
+    if not (FieldByName('SAMELYDATE').isNUll) then
+    FormCustNom.DateTi_samelydate.Value := FieldByName('SAMELYDATE').AsDateTime
+    else
+    FormCustNom.DateTi_samelydate.Value := null;
+
+   OpenAccount.retrun_custid:=DataCustNom.ODS_Customers_Phys_FSID.AsInteger;
+      end;
+     FormCustGrid.Close;
+    end;
+  end;
+
+
+procedure TFormCustGrid.XFButton1Click(Sender: TObject);
+begin
+FormCustGrid.MainGridDblClick(Sender);
+end;
+
+end.

@@ -1,0 +1,481 @@
+﻿unit ThomsonImpl1;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActiveX, AxCtrls, ThomsonProj1_TLB, StdVcl, Db, OracleData, Grids,
+  DBGrids, ExtCtrls, ExcelXP, OleServer, StdCtrls, Oracle, ImgList,
+  ComCtrls, ToolWin, XDBGrids;
+
+type
+  TThomson = class(TActiveForm, IThomson)
+    Panel1: TPanel;
+    DataSource1: TDataSource;
+    OpenDialog1: TOpenDialog;
+    ExcelApplication1: TExcelApplication;
+    ExcelWorksheet1: TExcelWorksheet;
+    ExcelWorkbook1: TExcelWorkbook;
+    OracleDataSet1: TOracleDataSet;
+    OracleDataSet2: TOracleDataSet;
+    OracleDataSet3: TOracleDataSet;
+    OraclePackage1: TOraclePackage;
+    OraclePackage2: TOraclePackage;
+    ToolBar1: TToolBar;
+    ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
+    ImageList1: TImageList;
+    ToolButton3: TToolButton;
+    ToolButton4: TToolButton;
+    ToolButton5: TToolButton;
+    ToolButton6: TToolButton;
+    Panel2: TPanel;
+    XDBGridThomson: TXDBGrid;
+    ImageList2: TImageList;
+    OracleDataSet1HDATE: TDateTimeField;
+    OracleDataSet1DEBITCURRENCY: TWideStringField;
+    OracleDataSet1DEBIT: TWideStringField;
+    OracleDataSet1CREDITCURRENCY: TWideStringField;
+    OracleDataSet1CREDIT: TWideStringField;
+    OracleDataSet1DEBITAMOUNT: TFloatField;
+    OracleDataSet1CREDITAMOUNT: TFloatField;
+    OracleDataSet1DESCRIPTION: TWideStringField;
+    OracleDataSet1USERNAME: TWideStringField;
+    OracleDataSet1STATUS: TIntegerField;
+    OracleDataSet1COMMITUSERNAME: TWideStringField;
+    OracleDataSet1ID: TFloatField;
+    procedure ToolButton1Click(Sender: TObject);
+    procedure ToolButton3Click(Sender: TObject);
+    procedure ToolButton5Click(Sender: TObject);
+    procedure ActiveFormCreate(Sender: TObject);
+  private
+    { Private declarations }
+    FEvents: IThomsonEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+  public
+    { Public declarations }
+    procedure Initialize; override;
+  end;
+
+implementation
+
+uses ComObj, ComServ, sboapiDataModuleImpl, SBTranslateProc;
+
+{$R *.DFM}
+
+{ TThomson }
+
+procedure TThomson.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_ThomsonPage); }
+end;
+
+procedure TThomson.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as IThomsonEvents;
+end;
+
+procedure TThomson.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TThomson.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TThomson.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TThomson.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TThomson.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TThomson.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TThomson.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TThomson.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TThomson.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TThomson.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TThomson.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TThomson.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TThomson.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TThomson.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TThomson.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TThomson.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TThomson.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TThomson.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TThomson.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TThomson._Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TThomson.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TThomson.ActiveFormCreate(Sender: TObject);
+begin
+  OracleDataSet1.Close;
+  OracleDataSet1.Open;
+end;
+
+procedure TThomson.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TThomson.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TThomson.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TThomson.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TThomson.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TThomson.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TThomson.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TThomson.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TThomson.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TThomson.Set_AxBorderStyle(Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TThomson.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TThomson.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TThomson.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TThomson.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TThomson.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TThomson.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TThomson.Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TThomson.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TThomson.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TThomson.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TThomson.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TThomson.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TThomson.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+procedure TThomson.ToolButton1Click(Sender: TObject);
+const RootCell = 2;
+var
+    V, Sheet, Sheets  :Variant;
+    i,j: Integer;
+    a,VAL_NAME:string;
+    F:boolean;
+    //i:char;
+    say,k:integer;
+begin
+  if not OpenDialog1.Execute then Exit;
+  V:=ExcelApplication1.Application;
+  ExcelApplication1.Connect;
+   try
+     V.Workbooks.Open(OpenDialog1.FileName);
+     Sheet := V.Workbooks[1].Worksheets['Sheet1'];
+     Sheets := V.Sheets;
+     OracleDataSet2.Open;
+     OracleDataSet1.Refresh;
+     OracleDataSet1.First;
+     with OracleDataSet1 do
+     begin
+       for i:=3 to Sheet.Cells.CurrentRegion.Rows.Count do
+       begin
+         Insert;
+         FieldByName('HDATE').AsDateTime:=Sheet.cells[i,2];
+         FieldByName('DEBITCURRENCY').AsString:=Sheet.cells[i,3];
+         FieldByName('DEBIT').AsString:=Sheet.cells[i,4];
+         FieldByName('CREDITCURRENCY').AsString:=Sheet.cells[i,5];
+         FieldByName('CREDIT').AsString:=Sheet.cells[i,6];
+         FieldByName('DEBITAMOUNT').AsFloat:=Sheet.cells[i,7];
+         FieldByName('CREDITAMOUNT').AsFloat:=Sheet.cells[i,8];
+         FieldByName('DESCRIPTION').AsString:=Sheet.cells[i,9];
+         FieldByName('USERNAME').AsString:=OracleDataSet3.FieldByName('USER').AsString;
+         FieldByName('STATUS').AsInteger:=0;
+         Post;
+         Next;
+       end;
+     end;
+   finally
+     ExcelApplication1.Quit;
+     ExcelApplication1.Disconnect;
+   end;
+    OracleDataSet2.Close;
+    OracleDataSet1.Open;
+end;
+
+procedure TThomson.ToolButton3Click(Sender: TObject);
+var id,i,j,status:integer;
+    F:boolean;
+begin
+  if XDBGridThomson.DataSource.DataSet.RecordCount=0 then exit;
+  XDBGridThomson.SetFocus;
+  XDBGridThomson.SelectedRows.CurrentRowSelected:=XDBGridThomson.DataSource.DataSet.RecordCount<>0;
+   for i:=0 to XDBGridThomson.SelectedRows.Count-1 do
+   begin
+      XDBGridThomson.DataSource.DataSet.GotoBookmark(pointer(XDBGridThomson.SelectedRows.items[i]));
+      id:=XDBGridThomson.DataSource.DataSet.fieldbyname('ID').asinteger;
+      case MessageDlg(format('Əməliyyat təsdiqlənsinmi #%d ?',[id]), mtConfirmation,[mbyes,mbno,mbcancel,mball], 0) of
+           mryes :begin
+                    status:=XDBGridThomson.DataSource.DataSet.fieldbyname('status').asinteger;
+                    if status=0 then
+                    begin
+
+                      OraclePackage1.CallProcedure('sb_thomson',[id]);
+                      //OraclePackage1.CallProcedure('sb_thomson',[id]);
+                      //CallProcedure('sb_thomson',[id]);
+                      sboapiDataModule.SBSession.Commit;
+                      XDBGridThomson.DataSource.DataSet.Refresh;
+                      if XDBGridThomson.SelectedRows.Count=1 then XDBGridThomson.SelectedRows.Clear;
+                    end;
+                  end;
+           mrno  : exit;
+           mrcancel : Break;
+           mrall : begin
+                     case MessageDlg(inttostr(XDBGridThomson.SelectedRows.Count)+' sayda əməliyyat təsdiqlənsinmi ?', mtConfirmation,[mbyes,mbno], 0) of
+                     mryes: begin
+                              for j:=0 to XDBGridThomson.SelectedRows.Count-1 do
+                              begin
+                                XDBGridThomson.DataSource.DataSet.GotoBookmark(pointer(XDBGridThomson.SelectedRows.items[j]));
+                                id:=XDBGridThomson.DataSource.DataSet.fieldbyname('ID').asinteger;
+                                status:=XDBGridThomson.DataSource.DataSet.fieldbyname('status').asinteger;
+                                if status=0 then
+                                begin
+                                   OraclePackage1.CallProcedure('sb_thomson',[id]);
+                                   sboapiDataModule.SBSession.Commit;
+                                end;
+                              end;
+                              XDBGridThomson.DataSource.DataSet.Refresh;
+                              XDBGridThomson.SelectedRows.Clear;
+                              Break;
+                            end;
+                     mrno : exit;
+                     end;
+                   end;
+      end;
+
+   end;
+end;
+
+
+procedure TThomson.ToolButton5Click(Sender: TObject);
+begin
+   OracleDataSet1.Close;
+   OracleDataSet1.Open;
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TThomson,
+    Class_Thomson,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

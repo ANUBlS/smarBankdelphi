@@ -1,0 +1,497 @@
+unit TransactionDataModuleUnit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, OracleData, Oracle;
+
+type
+    TTransaction = record
+      TransactionID     : Integer;
+      TransactionDate   : TDateTime;
+      TransactionNo     : String;
+      DebitID           : Longint;
+      CreditID          : Longint;
+      DebitAmount       : Currency;
+      CreditAmount      : Currency;
+      LAmount           : Currency;
+      DebitRate         : Currency;
+      CreditRate        : Currency;
+      CashSymbol        : Word;
+      ConvertationSymbol: Word;
+      OperationCode     : Variant;
+      Flags             : Word;
+      TransactionName   : String;
+      ReportID          : Integer;
+      CountrID          : Integer;
+    end;
+
+const
+     cs_generateid = 'GenerateID';
+     cs_add_transaction = 'transaction_add';
+     cs_del_transaction = 'transaction_delete';
+     cs_commit_transaction = 'transaction_commit';
+     cs_reject_transaction = 'transaction_reject';
+     cs_commission_execute = 'SetTransactions';
+     cs_commit_delayed_transactions = 'transactions_delayed_commit';
+
+type
+  TTransactionDataModule = class(TDataModule)
+    Sysdat: TOracleDataSet;
+    TransactionsData: TDataSource;
+    DataSysdat: TDataSource;
+    DebitCurrency: TDataSource;
+    DebitCurrencyData: TOracleDataSet;
+    DebitCurrencyDataID: TIntegerField;
+    DebitCurrencyDataSNAME: TStringField;
+    DebitCurrencyDataNAME: TStringField;
+    DebitCurrencyDataRATE: TFloatField;
+    CreditCurrency: TDataSource;
+    CreditCurrencyData: TOracleDataSet;
+    CreditCurrencyDataID: TIntegerField;
+    CreditCurrencyDataSNAME: TStringField;
+    CreditCurrencyDataNAME: TStringField;
+    CreditCurrencyDataRATE: TFloatField;
+    DebitAccs: TDataSource;
+    DebitAccData: TOracleDataSet;
+    DebitAccDataID: TFloatField;
+    DebitAccDataACC_NO: TStringField;
+    DebitAccDataVAL_ACC: TIntegerField;
+    DebitAccDataNAME: TStringField;
+    DebitAccDataISCACHEACCOUNT: TFloatField;
+    CreditAccData: TOracleDataSet;
+    CreditAccs: TDataSource;
+    ConvertationSymbols: TOracleDataSet;
+    ConvertationSymbolsData: TDataSource;
+    CashSymbols: TOracleDataSet;
+    CashSymbolsData: TDataSource;
+    CreditAccDataID: TFloatField;
+    CreditAccDataACC_NO: TStringField;
+    CreditAccDataVAL_ACC: TIntegerField;
+    CreditAccDataNAME: TStringField;
+    CreditAccDataISCACHEACCOUNT: TFloatField;
+    Currency: TOracleDataSet;
+    OperationTypes: TOracleDataSet;
+    OperationTypesData: TDataSource;
+    Transactions: TOracleDataSet;
+    TransactionsID: TFloatField;
+    TransactionsOPERATORID: TFloatField;
+    TransactionsOPERATIONNO: TStringField;
+    TransactionsTRANSACTIONDATE: TDateTimeField;
+    TransactionsDEBITID: TFloatField;
+    TransactionsDEBITACCNO: TStringField;
+    TransactionsDEBITCURRENCYID: TFloatField;
+    TransactionsDEBITCURRENCYSNAME: TStringField;
+    TransactionsCREDITID: TFloatField;
+    TransactionsCREDITACCNO: TStringField;
+    TransactionsCREDITCURRENCYSNAME: TStringField;
+    TransactionsDEBITAMOUNT: TFloatField;
+    TransactionsCREDITAMOUNT: TFloatField;
+    TransactionsLAMOUNT: TFloatField;
+    TransactionsDEBITRATE: TFloatField;
+    TransactionsCREDITRATE: TFloatField;
+    TransactionsDEBITBANK: TFloatField;
+    TransactionsCREDITBANK: TFloatField;
+    DebitBranch: TOracleDataSet;
+    DebitBranchData: TDataSource;
+    CreditBranch: TOracleDataSet;
+    CreditBranchData: TDataSource;
+    UsersData: TDataSource;
+    Users: TOracleDataSet;
+    Operations: TOracleQuery;
+    Valute: TOracleQuery;
+    SBTransaction: TOraclePackage;
+    Commission: TOracleDataSet;
+    CommissionData: TDataSource;
+    CommissionID: TFloatField;
+    CommissionNAME: TStringField;
+    CommissionDEBT: TFloatField;
+    CommissionDEBITACCOUNT: TStringField;
+    CommissionDEBITCURRENCY: TStringField;
+    CommissionDEBITCURRENCYID: TFloatField;
+    CommissionCREDIT: TFloatField;
+    CommissionCREDITACCOUNT: TStringField;
+    CommissionCREDITCURRENCY: TStringField;
+    CommissionCREDITCURRENCYID: TFloatField;
+    CommissionADDITIONALDEBT: TFloatField;
+    CommissionADEBITACCOUNT: TStringField;
+    CommissionADEBITCURRENCY: TStringField;
+    CommissionADDDEBITCURRENCYID: TFloatField;
+    CommissionADDITIONALCREDIT: TFloatField;
+    CommissionACREDITACCOUNT: TStringField;
+    CommissionACREDITCURRENCY: TStringField;
+    CommissionADDCREDITCURRENCYID: TFloatField;
+    CommissionASSIGNMENT: TStringField;
+    CommissionCOMMISIONASSIGNMENT: TStringField;
+    CommissionUSERID: TFloatField;
+    SBComplexTrans: TOraclePackage;
+    Destinations: TOracleDataSet;
+    DestinationsData: TDataSource;
+    DebitAccRestData: TOracleDataSet;
+    DebitAccDataBALANCE: TCurrencyField;
+    DebitAccDataLBALANCE: TCurrencyField;
+    CreditAccRestData: TOracleDataSet;
+    CreditAccDataBALANCE: TCurrencyField;
+    CreditAccDataLBALANCE: TCurrencyField;
+    TransactionsUSR: TStringField;
+    TransactionsCYPHERCODE: TIntegerField;
+    TransactionsOPERATIONCODE: TFloatField;
+    TransactionsINBALANCECHAR: TIntegerField;
+    TransactionsOUTBALANCECHAR: TIntegerField;
+    TransactionsFILIALID: TIntegerField;
+    TransactionsDEBITBALANCE: TFloatField;
+    TransactionsNAME: TStringField;
+    TransactionsFLAGS: TFloatField;
+    TransactionsSTATUS: TFloatField;
+    TransactionsREJECT_REASON: TStringField;
+    TransactionsPACKAGENUMBER: TIntegerField;
+    TransactionsCREDITCURRENCYID: TIntegerField;
+    TransactionsREPORTID: TFloatField;
+    ReportDesc: TOracleDataSet;
+    ReportDescsData: TDataSource;
+    TransactionsCOUNTRID: TFloatField;
+    Country: TOracleDataSet;
+    CountryData: TDataSource;
+    SB_ACA: TOraclePackage;
+    TransactionsUSRCOMMIT: TStringField;
+    TransactionsDEBITBRANCH: TIntegerField;
+    TransactionsCREDITBRANCH: TIntegerField;
+    BProcData: TOracleDataSet;
+    BProc: TDataSource;
+    BPTransData: TOracleDataSet;
+    BPTrans: TDataSource;
+    PACKBPROC: TOraclePackage;
+    BProcDataID: TFloatField;
+    BProcDataNAME: TStringField;
+    procedure TransactionsApplyRecord(Sender: TOracleDataSet; Action: Char;
+      var Applied: Boolean; var NewRowId: String);
+    procedure DebitCurrencyDataAfterScroll(DataSet: TDataSet);
+    procedure DebitAccDataAfterScroll(DataSet: TDataSet);
+    procedure CreditCurrencyDataAfterScroll(DataSet: TDataSet);
+    procedure CreditAccDataAfterScroll(DataSet: TDataSet);
+    procedure OperationsThreadRecord(Sender: TOracleQuery);
+    procedure ValuteThreadRecord(Sender: TOracleQuery);
+    procedure DebitAccRestDataAfterScroll(DataSet: TDataSet);
+    procedure CreditAccRestDataAfterScroll(DataSet: TDataSet);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    function AddTransaction(Transaction: TTransaction): Longint;
+    procedure DeleteTransaction(TransactionID: Longint);
+    function CommitTransactions(TransactionIDs: WideString): Longint;
+    function CommitTransaction(TransactionID: Longint): Longint;
+    function RejectTransaction(TransactionID: Longint; const RejectReason: String): Longint;
+
+    procedure FullRefresh;
+    procedure SetCommission(CommissionID, DebitID, CreditID: Longint; DebitAmmount, CreditAmmount: Currency; TransDate: TDateTime);
+    procedure ShowInfo;
+
+    function GenerateID: Longint;
+    procedure SBCommit();
+  end;
+
+var
+  TransactionDataModule: TTransactionDataModule;
+
+implementation
+
+uses sboapiDataModuleImpl, TransactionPropertiesImpl,
+  TransactionManagerImpl;
+
+{$R *.DFM}
+
+procedure TTransactionDataModule.TransactionsApplyRecord(
+  Sender: TOracleDataSet; Action: Char; var Applied: Boolean;
+  var NewRowId: String);
+var
+  Transaction: TTransaction;
+  //TID: longint;
+  procedure BuildTransaction;
+  begin
+    with Sender, Transaction do
+    begin
+      TransactionDate := FieldByName('TransactionDate').AsDateTime;
+      TransactionNo := FieldByName('OperationNo').AsString;
+      DebitID := FieldByName('DebitID').AsInteger;
+      CreditID := FieldByName('CreditID').AsInteger;
+      DebitAmount := FieldByName('DebitAmount').AsCurrency;
+      CreditAmount := FieldByName('CreditAmount').AsCurrency;
+      LAmount := FieldByName('LAmount').AsCurrency;
+      DebitRate := FieldByName('DebitRate').AsCurrency;
+      CreditRate := FieldByName('CreditRate').AsCurrency;
+      CashSymbol := FieldByName('InbalanceChar').AsInteger;
+      ConvertationSymbol := FieldByName('OutbalanceChar').AsInteger;
+      OperationCode := FieldByName('OperationCode').Value;
+      ReportID := FieldByName('ReportID').Value;
+      CountrID := FieldByName('CountrID').Value;
+      Flags :=0;// tsDelayed Maybe will changed
+      TransactionName := FieldByName('Name').AsString;
+      with FieldByName('ID') do
+        if IsNull then
+          TransactionID := -1
+        else
+          TransactionID := AsInteger;
+    end;
+  end;
+
+begin
+  //ShowDOAInfo(sboapiDataModule.SBSession);
+  case Action of
+  'I':
+    begin
+      Sender.FieldByName('ID').AsInteger :=GenerateID;
+      BuildTransaction;
+      AddTransaction(Transaction);
+      SetCommission(Commission.FieldByName('ID').AsInteger, Transaction.DebitID, Transaction.CreditID,
+       Transaction.DebitAmount, Transaction.CreditAmount, Transaction.TransactionDate);
+      //NewRowId :=SBTransaction.CallStringFunction('GetRowID',['TID', TID]);
+      //ShowMessage('Insert'+NewRowId);
+      Applied := True;
+    end;
+
+  'U':
+    begin
+      BuildTransaction;
+      DeleteTransaction(Sender.FieldByName('ID').AsInteger);
+      AddTransaction(Transaction);
+      Applied := True;
+    end;
+
+  'L','R','C':
+      Applied := True;
+  else
+    Applied := False;
+
+  end;
+
+end;
+
+procedure TTransactionDataModule.DebitCurrencyDataAfterScroll(
+  DataSet: TDataSet);
+begin
+ if not Assigned(TransactionEditForm) then Exit;
+ with TransactionEditForm, DebitAccData do
+ begin
+  //Filtered :=False;
+  //Filter :='val_acc='+DataSet.FieldByName('ID').AsString;     { √Àﬁ  }
+  //Filtered :=True;
+  DebitCurrencyID :=DataSet.FieldByName('ID').AsInteger;
+  Transactions.FieldByName('DebitRate').AsFloat :=DataSet.FieldByName('Rate').AsFloat;
+  DebtAccSearchEdit.Text :='';//FieldByName('acc_no').AsString;
+  ClearAmmounts;
+ end;
+end;
+
+procedure TTransactionDataModule.DebitAccDataAfterScroll(
+  DataSet: TDataSet);
+begin
+ if not Assigned(TransactionEditForm) then Exit;
+ with TransactionEditForm, DataSet do
+ begin
+  Transactions.FieldByName('DebitID').AsInteger :=FieldByName('ID').AsInteger;
+  if not DebtAccSearchEdit.Focused then
+   DebtAccSearchEdit.Text :=FieldByName('acc_no').AsString;
+ end;
+end;
+
+procedure TTransactionDataModule.CreditCurrencyDataAfterScroll(
+  DataSet: TDataSet);
+begin
+ if not Assigned(TransactionEditForm) then Exit;
+ with TransactionEditForm, CreditAccData do
+ begin
+  //Filtered :=False;
+  //Filter :='val_acc='+DataSet.FieldByName('ID').AsString;      { √Àﬁ  }
+  //Filtered :=True;
+  CreditCurrencyID :=DataSet.FieldByName('ID').AsInteger;
+  Transactions.FieldByName('CreditRate').AsFloat :=DataSet.FieldByName('Rate').AsFloat;
+  CreditAccSearchEdit.Text :='';//FieldByName('acc_no').AsString;
+  ClearAmmounts;
+ end;
+end;
+
+procedure TTransactionDataModule.CreditAccDataAfterScroll(
+  DataSet: TDataSet);
+begin
+ if not Assigned(TransactionEditForm) then Exit;
+ with TransactionEditForm, DataSet do
+ begin
+  Transactions.FieldByName('CreditID').AsInteger :=FieldByName('ID').AsInteger;
+  if not CreditAccSearchEdit.Focused then
+   CreditAccSearchEdit.Text :=FieldByName('acc_no').AsString;
+ end;
+end;
+
+
+procedure TTransactionDataModule.ValuteThreadRecord(Sender: TOracleQuery);
+begin
+ with TransactionManagerForm, CLBCurrency, Items do
+  begin
+   Add(Sender.Field('valu_name'));
+   Checked[Count-1]:=True;
+   TStringList(Pointer(CLBCurrency.Tag)^).Add(Sender.Field('valute'));
+  end;
+end;
+
+procedure TTransactionDataModule.OperationsThreadRecord(
+  Sender: TOracleQuery);
+begin
+ with TransactionManagerForm, CLBOperationTypes, Items do
+  begin
+   Add(Sender.Field('name'));
+   Checked[Count-1]:=True;
+   TStringList(Pointer(CLBOperationTypes.Tag)^).Add(Sender.Field('ID'));
+  end;
+end;
+
+procedure TTransactionDataModule.DebitAccRestDataAfterScroll(
+  DataSet: TDataSet);
+begin
+ with DataSet do   //Modified by TNariman at 30.03.2005
+ begin
+  DebitAccData.FieldByName('BALANCE').AsCurrency :=FieldByName('OSTAT').AsCurrency;
+  DebitAccData.FieldByName('LBALANCE').AsCurrency :=FieldByName('POK_OSTAT').AsCurrency;
+ end;
+end;
+
+procedure TTransactionDataModule.CreditAccRestDataAfterScroll(
+  DataSet: TDataSet);
+begin
+ with DataSet do  //Modified by TNariman at 30.03.2005
+ begin
+  CreditAccData.FieldByName('BALANCE').AsCurrency :=FieldByName('OSTAT').AsCurrency;
+  CreditAccData.FieldByName('LBALANCE').AsCurrency :=FieldByName('POK_OSTAT').AsCurrency;
+ end;
+end;
+
+//---------------------------------------------------------------------------------------------------------------------
+
+procedure TTransactionDataModule.SBCommit();
+begin
+ sboapiDataModule.SBSession.Commit
+end;
+
+function TTransactionDataModule.AddTransaction(Transaction: TTransaction): Longint;
+var
+  ATransactionID: Variant;
+begin
+ with Transaction, SBTransaction do
+ begin
+  if TransactionID = -1 then
+    ATransactionID := Null
+  else
+    ATransactionID := TransactionID;
+  Result :=CallIntegerFunction(cs_add_transaction, [
+        'TransactionDate', TransactionDate,
+        'DebitID', DebitID,
+        'CreditID', CreditID,
+        'DebitAmount', DebitAmount,
+        'CreditAmount', CreditAmount,
+        'LAmount', LAmount,
+        'DebitRate', DebitRate,
+        'CreditRate', CreditRate,
+        'TrName', TransactionName,
+        'Flags', Flags,
+        'InBalanceChar', CashSymbol,
+        'OutBalanceChar', ConvertationSymbol,
+        'TransactionID', ATransactionID,
+        'OperationType', OperationCode,
+        'TransactionNo', TransactionNo,
+        'pReportID', Reportid,
+        'pCountrID', CountrID
+  ])
+ end;
+end;
+
+procedure TTransactionDataModule.DeleteTransaction(TransactionID: Longint);
+begin
+ with SBTransaction do
+  CallProcedure(cs_del_transaction, ['TransactionID', TransactionID]);
+end;
+
+function TTransactionDataModule.CommitTransactions(TransactionIDs: WideString): Longint;
+begin
+ with SBTransaction do
+  Result :=CallIntegerFunction(
+              cs_commit_delayed_transactions, [
+              'OverloadIDsStr', TransactionIDs,
+              'CommitTemp', True]);
+end;
+
+function TTransactionDataModule.CommitTransaction(TransactionID: Longint): Longint;
+begin
+ with SBTransaction do
+  Result :=CallIntegerFunction(
+              cs_commit_transaction, [
+              'TransactionID', TransactionID,
+              'CommitTemp', True]);
+
+end;
+
+function TTransactionDataModule.GenerateID: Longint;
+begin
+ with SBTransaction do
+  Result :=CallIntegerFunction(cs_generateid, []);
+end;
+
+function TTransactionDataModule.RejectTransaction(TransactionID: Longint; const RejectReason: String): Longint;
+begin
+ with SBTransaction do
+  Result :=CallIntegerFunction(
+              cs_reject_transaction, [
+              'TransactionID', TransactionID,
+              'RejectReason',RejectReason]);
+end;
+
+procedure TTransactionDataModule.SetCommission(CommissionID, DebitID, CreditID: Longint; DebitAmmount, CreditAmmount: Currency; TransDate: TDateTime);
+
+  function IsCommission: Boolean;
+  begin
+   with TransactionManagerForm do
+    Result :=OperationMode = omCommission;
+  end;
+
+begin
+ if IsCommission then
+  with SBComplexTrans do
+   CallProcedure(
+             cs_commission_execute,[
+             'CommisionID', CommissionID,
+             'DebitID', DebitID,
+             'CreditID', CreditID,
+             'DebitAmmount', DebitAmmount,
+             'CreditAmmount', CreditAmmount,
+             'TransDate', TransDate]);
+end;
+
+procedure TTransactionDataModule.ShowInfo;
+begin
+ ShowDOAInfo(sboapiDataModule.SBSession);
+end;
+
+procedure TTransactionDataModule.FullRefresh;
+const
+   c_err_message = ' Table or View in Dataset "%s" does not exist! ';
+var
+   i: Word;   //Modified by TNariman at 28.04.2005
+begin
+ for i :=0 to ComponentCount- 1 do
+  if (Components[i] is TOracleDataSet) then
+  try
+   (Components[i] as TOracleDataSet).Close;
+   (Components[i] as TOracleDataSet).Open;
+  except
+   raise Exception.Create(Format(c_err_message, [(Components[i] as TDataSet).Name]));
+  end;
+end;
+
+
+end.
+
+{--------------------------------------- COMMENTS
+
+ 436, 451, 461
+
+}

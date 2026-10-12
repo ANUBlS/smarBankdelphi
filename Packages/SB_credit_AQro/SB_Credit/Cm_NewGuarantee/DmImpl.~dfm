@@ -1,0 +1,25 @@
+object GurDm: TGurDm
+  OldCreateOrder = False
+  Left = 230
+  Top = 181
+  Height = 480
+  Width = 870
+  object MainDSet: TOracleDataSet
+    SQL.Strings = (
+      'select g.rowid, g.* from cm_guarantee g'
+      'where creditid=:creditid'
+      '--order by cardid')
+    Variables.Data = {
+      0300000001000000090000003A43524544495449440300000000000000000000
+      00}
+    Session = CMDataModule.CMSession
+    AfterOpen = MainDSetAfterOpen
+    Left = 32
+    Top = 8
+  end
+  object MainDSrc: TDataSource
+    DataSet = MainDSet
+    Left = 32
+    Top = 64
+  end
+end

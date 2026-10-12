@@ -1,0 +1,121 @@
+unit UnitData;
+        //SB_STATEMENT
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, OracleData, Oracle;
+
+type
+  TDataModSTX = class(TDataModule)
+    ODSMainState: TOracleDataSet;
+    SB_STATEMENT: TOraclePackage;
+    ODSExtractTrans: TOracleDataSet;
+    DSExtractTrans: TDataSource;
+    DSMainState: TDataSource;
+    RatesDataSet: TOracleDataSet;
+    RatesDataSetVAL_KOD: TIntegerField;
+    RatesDataSetDAT: TDateTimeField;
+    RatesDataSetOSTAT: TFloatField;
+    RatesDataSetBegin: TOracleDataSet;
+    IntegerField1: TIntegerField;
+    DateTimeField1: TDateTimeField;
+    FloatField1: TFloatField;
+    ODSNotAccId: TOracleDataSet;
+    ODSCurrency: TOracleDataSet;
+    DSCurrency: TDataSource;
+    ODSFilial: TOracleDataSet;
+    DSFilial: TDataSource;
+    ODSUsers: TOracleDataSet;
+    DSUsers: TDataSource;
+    ODSLogo: TOracleDataSet;
+    ODSCardState: TOracleDataSet;
+    OQR_SB_STATEMENT: TOracleQuery;
+    ODS_GetExtraction: TOracleDataSet;
+    ODS_GetExtractionSTR: TWideStringField;
+    ODS_ExtractionTrans: TOracleDataSet;
+    WideStringField1: TWideStringField;
+    DSoldacc_no: TOracleDataSet;
+    DSoldacc_noOLD_ACC_NO: TWideStringField;
+    SBOP: TOraclePackage;
+    PG_PCustService: TOraclePackage;
+    oldmainsatte: TOracleDataSet;
+    oldmainsatteACCOUNTID: TFloatField;
+    oldmainsatteCUSTOMERID: TFloatField;
+    oldmainsatteACCOUNTNUMBER: TWideStringField;
+    oldmainsatteACCOUNTNUMBER_OLD: TWideStringField;
+    oldmainsatteOPERATORID: TFloatField;
+    oldmainsatteCURRENCYID: TIntegerField;
+    oldmainsatteCURRENCYNAME: TWideStringField;
+    oldmainsatteACCOUNTNAME: TWideStringField;
+    oldmainsatteCUSTOMERVOIN: TWideStringField;
+    oldmainsatteBALANCECODE: TFloatField;
+    oldmainsatteOPENDATE: TDateTimeField;
+    oldmainsatteFILIAL: TIntegerField;
+    oldmainsatteLASTOPDATE: TDateTimeField;
+    oldmainsatteOSTAT: TFloatField;
+    oldmainsattePOKOSTAT: TFloatField;
+    oldmainsatteENDOSTAT: TFloatField;
+    oldmainsatteENDPOKOSTAT: TFloatField;
+    oldmainsatteDATDATE: TDateTimeField;
+    oldmainsatteENDDATE: TDateTimeField;
+    oldmainsatteAP_BEG: TWideStringField;
+    oldmainsatteAP_END: TWideStringField;
+    getextraction2: TOracleDataSet;
+    ODSMainStateACCOUNTID: TFloatField;
+    ODSMainStateCUSTOMERID: TFloatField;
+    ODSMainStateACCOUNTNUMBER: TWideStringField;
+    ODSMainStateACCOUNTNUMBER_OLD: TWideStringField;
+    ODSMainStateOPERATORID: TFloatField;
+    ODSMainStateCURRENCYID: TIntegerField;
+    ODSMainStateCURRENCYNAME: TWideStringField;
+    ODSMainStateACCOUNTNAME: TWideStringField;
+    ODSMainStateCUSTOMERVOIN: TWideStringField;
+    ODSMainStateBALANCECODE: TFloatField;
+    ODSMainStateOPENDATE: TDateTimeField;
+    ODSMainStateFILIAL: TIntegerField;
+    ODSMainStateLASTOPDATE: TDateTimeField;
+    ODSMainStateOSTAT: TFloatField;
+    ODSMainStatePOKOSTAT: TFloatField;
+    ODSMainStateENDOSTAT: TFloatField;
+    ODSMainStateENDPOKOSTAT: TFloatField;
+    ODSMainStateDATDATE: TDateTimeField;
+    ODSMainStateENDDATE: TDateTimeField;
+    ODSMainStateAP_BEG: TWideStringField;
+    ODSMainStateAP_END: TWideStringField;
+    ODSMainStatecredid: TIntegerField;
+    ODSMainStateVOEN: TIntegerField;
+    ods_aca: TOracleDataSet;
+    ods_acaID: TFloatField;
+    procedure DataModuleCreate(Sender: TObject);
+    procedure DataModuleDestroy(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  DataModSTX: TDataModSTX;
+
+implementation
+
+
+uses sboapiDataModuleImpl;
+{$R *.DFM}
+
+procedure TDataModSTX.DataModuleCreate(Sender: TObject);
+begin
+   RatesDataSet.Open;
+   RatesDataSetBegin.Open;
+end;
+
+procedure TDataModSTX.DataModuleDestroy(Sender: TObject);
+begin
+  RatesDataSet.Close;
+  RatesDataSetBegin.Close;
+  DataModSTX:= nil;
+
+end;
+
+end.

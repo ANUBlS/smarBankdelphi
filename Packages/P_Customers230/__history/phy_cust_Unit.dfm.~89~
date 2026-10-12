@@ -1,0 +1,1467 @@
+object P_Customers_Form: TP_Customers_Form
+  Left = 277
+  Top = 203
+  Width = 901
+  Height = 668
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'MS Sans Serif'
+  Font.Style = []
+  OldCreateOrder = False
+  OnCreate = ActiveFormCreate
+  PixelsPerInch = 96
+  TextHeight = 13
+  object CustomerGB: TGroupBox
+    Left = 0
+    Top = 0
+    Width = 901
+    Height = 207
+    Align = alTop
+    Caption = #1052#1094#1096#1090#1103#1088#1080#1083#1103#1088
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 0
+    object Panel1: TPanel
+      Left = 2
+      Top = 15
+      Width = 897
+      Height = 190
+      Align = alClient
+      BevelOuter = bvNone
+      TabOrder = 0
+      object CustomerSearchBar: TToolBar
+        Left = 0
+        Top = 169
+        Width = 897
+        Height = 21
+        Align = alBottom
+        AutoSize = True
+        ButtonHeight = 21
+        Caption = 'CustomerSearchBar'
+        EdgeInner = esNone
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 0
+        object EditID: TEdit
+          Left = 0
+          Top = 0
+          Width = 70
+          Height = 21
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 0
+          OnKeyPress = EditIDKeyPress
+          OnKeyUp = EditIDKeyUp
+        end
+        object EditSerial: TEdit
+          Left = 70
+          Top = 0
+          Width = 62
+          Height = 21
+          MaxLength = 3
+          TabOrder = 4
+          OnKeyPress = EditSerialKeyPress
+          OnKeyUp = EditSerialKeyUp
+        end
+        object PaspEdit: TEdit
+          Left = 132
+          Top = 0
+          Width = 136
+          Height = 21
+          TabOrder = 1
+          OnKeyUp = PaspEditKeyUp
+        end
+        object VoenEdit: TEdit
+          Left = 268
+          Top = 0
+          Width = 124
+          Height = 21
+          TabOrder = 5
+          OnKeyUp = VoenEditKeyUp
+        end
+        object EditCUST_NAME: TEdit
+          Left = 392
+          Top = 0
+          Width = 226
+          Height = 21
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 2
+          OnChange = EditCUST_NAMEChange
+          OnKeyPress = EditCUST_NAMEKeyPress
+          OnKeyUp = EditCUST_NAMEKeyUp
+        end
+        object DateEdit: TMaskEdit
+          Left = 618
+          Top = 0
+          Width = 75
+          Height = 21
+          EditMask = '!99/99/0000;1;_'
+          MaxLength = 10
+          TabOrder = 3
+          Text = '  .  .    '
+          OnKeyUp = DateEditKeyUp
+        end
+        object EditNAME1: TEdit
+          Left = 693
+          Top = 0
+          Width = 121
+          Height = 21
+          TabOrder = 6
+          Text = 'EditNAME1'
+          Visible = False
+        end
+      end
+      object DBGridCustomers: TDBGrid
+        Left = 0
+        Top = 0
+        Width = 897
+        Height = 169
+        Align = alClient
+        DataSource = P_DataModule.P_CustomersData
+        DrawingStyle = gdsGradient
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit, dgTitleClick]
+        ParentFont = False
+        PopupMenu = PopMenuCustomers
+        ReadOnly = True
+        TabOrder = 1
+        TitleFont.Charset = RUSSIAN_CHARSET
+        TitleFont.Color = clWindowText
+        TitleFont.Height = -11
+        TitleFont.Name = 'Tahoma'
+        TitleFont.Style = []
+        OnCellClick = DBGridCustomersCellClick
+        OnDblClick = DBGridCustomersDblClick
+        OnKeyUp = DBGridCustomersKeyUp
+        OnTitleClick = DBGridCustomersTitleClick
+        Columns = <
+          item
+            Alignment = taLeftJustify
+            Color = clSilver
+            Expanded = False
+            FieldName = 'ID'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clNavy
+            Font.Height = -11
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = []
+            Title.Alignment = taCenter
+            Title.Caption = #8470
+            Title.Color = clNavy
+            Title.Font.Charset = DEFAULT_CHARSET
+            Title.Font.Color = clNavy
+            Title.Font.Height = -11
+            Title.Font.Name = 'Tahoma'
+            Title.Font.Style = []
+            Width = 60
+            Visible = True
+          end
+          item
+            Alignment = taCenter
+            Expanded = False
+            FieldName = 'PASSPORT'
+            Title.Alignment = taCenter
+            Title.Caption = #1057#1077#1088#1080#1081#1072
+            Title.Color = clNavy
+            Title.Font.Charset = RUSSIAN_CHARSET
+            Title.Font.Color = clNavy
+            Title.Font.Height = -11
+            Title.Font.Name = 'Tahoma'
+            Title.Font.Style = []
+            Width = 60
+            Visible = True
+          end
+          item
+            Color = clSilver
+            Expanded = False
+            FieldName = 'PASSP_NUMBER'
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clNavy
+            Font.Height = -11
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = []
+            Title.Alignment = taCenter
+            Title.Caption = #1055#1072#1089#1087#1086#1088#1090' '#8470
+            Title.Color = clNavy
+            Title.Font.Charset = RUSSIAN_CHARSET
+            Title.Font.Color = clNavy
+            Title.Font.Height = -11
+            Title.Font.Name = 'Tahoma'
+            Title.Font.Style = []
+            Width = 130
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'INN'
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            Title.Caption = 'V'#214'EN'
+            Title.Color = clNavy
+            Title.Font.Charset = RUSSIAN_CHARSET
+            Title.Font.Color = clNavy
+            Title.Font.Height = -11
+            Title.Font.Name = 'Tahoma'
+            Title.Font.Style = []
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'CUST_NAME'
+            Title.Alignment = taCenter
+            Title.Caption = #1040#1076#1099
+            Title.Color = clNavy
+            Title.Font.Charset = DEFAULT_CHARSET
+            Title.Font.Color = clNavy
+            Title.Font.Height = -11
+            Title.Font.Name = 'Tahoma'
+            Title.Font.Style = []
+            Width = 310
+            Visible = True
+          end
+          item
+            Color = clSilver
+            Expanded = False
+            FieldName = 'OPENDATE'
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clNavy
+            Font.Height = -11
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = []
+            Title.Caption = #1040#1095#1099#1083#1084#1072' '#1090#1072#1088#1080#1093#1080
+            Title.Color = clNavy
+            Title.Font.Charset = RUSSIAN_CHARSET
+            Title.Font.Color = clNavy
+            Title.Font.Height = -11
+            Title.Font.Name = 'Tahoma'
+            Title.Font.Style = []
+            Width = 65
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'USNAM'
+            Title.Caption = 'Daxil ed'#1103'n'
+            Title.Color = clNavy
+            Title.Font.Charset = RUSSIAN_CHARSET
+            Title.Font.Color = clNavy
+            Title.Font.Height = -11
+            Title.Font.Name = 'Tahoma'
+            Title.Font.Style = []
+            Width = 90
+            Visible = True
+          end>
+      end
+      object Memo1: TMemo
+        Left = 83
+        Top = 48
+        Width = 185
+        Height = 89
+        Lines.Strings = (
+          'Memo1')
+        TabOrder = 2
+        Visible = False
+      end
+    end
+  end
+  object GroupBox1: TGroupBox
+    Left = 0
+    Top = 207
+    Width = 901
+    Height = 170
+    Align = alTop
+    Caption = #1065#1077#1089#1072#1073#1083#1072#1088
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 1
+    object DBGridAccounts: TDBGrid
+      Left = 2
+      Top = 47
+      Width = 897
+      Height = 121
+      Align = alClient
+      Color = clWhite
+      DataSource = P_DataModule.AccData
+      DrawingStyle = gdsGradient
+      FixedColor = clNavy
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit, dgTitleClick]
+      ParentFont = False
+      PopupMenu = PopMenuAccounts
+      TabOrder = 0
+      TitleFont.Charset = RUSSIAN_CHARSET
+      TitleFont.Color = clWindow
+      TitleFont.Height = -11
+      TitleFont.Name = 'Azl Sans Serif'
+      TitleFont.Style = []
+      OnCellClick = DBGridAccountsCellClick
+      OnDblClick = DBGridAccountsDblClick
+      OnKeyUp = DBGridAccountsKeyUp
+      Columns = <
+        item
+          Color = clSilver
+          Expanded = False
+          FieldName = 'ACCNO'
+          Title.Caption = #1065#1077#1089#1072#1073
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 200
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'ACCNAME'
+          Title.Caption = #1040#1076#1099
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 240
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'ACCVAL'
+          Title.Caption = #1042#1072#1083#1081#1091#1090#1072
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 45
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'OPENDATE'
+          Title.Caption = #1040#1095#1099#1083#1084#1072' '#1090#1072#1088#1080#1093#1080
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 65
+          Visible = True
+        end
+        item
+          Color = clSilver
+          Expanded = False
+          FieldName = 'BALANCE'
+          Title.Caption = #1043#1072#1083#1099#1075
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 80
+          Visible = True
+        end
+        item
+          Color = clSilver
+          Expanded = False
+          FieldName = 'LBALANCE'
+          Title.Caption = #1045#1082#1074#1080#1074#1072#1083#1077#1085#1090
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 80
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'TYPESYMB'
+          Title.Caption = #1065#1077#1089'. '#1090#1080#1087#1080
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 65
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'TIPACC'
+          Title.Caption = #1057#1080#1084#1074#1086#1083#1083#1072#1088
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 60
+          Visible = True
+        end>
+    end
+    object ControlBar2: TControlBar
+      Left = 2
+      Top = 15
+      Width = 897
+      Height = 32
+      Align = alTop
+      AutoSize = True
+      TabOrder = 1
+      object AccountViewSettingsPanel: TPanel
+        Left = 11
+        Top = 2
+        Width = 489
+        Height = 24
+        AutoSize = True
+        BevelOuter = bvNone
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 0
+        object AccountsOrderPanel: TPanel
+          Left = 0
+          Top = 0
+          Width = 271
+          Height = 24
+          TabOrder = 0
+          object Label2: TLabel
+            Left = 15
+            Top = 5
+            Width = 38
+            Height = 13
+            Caption = #1065#1077#1089#1072#1073':'
+          end
+          object SearchAcc: TEdit
+            Left = 51
+            Top = 1
+            Width = 216
+            Height = 21
+            CharCase = ecUpperCase
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+            TabOrder = 0
+            OnKeyDown = SearchAccKeyDown
+            OnKeyPress = SearchAccKeyPress
+          end
+        end
+        object AccountCurrencyPanel: TPanel
+          Left = 272
+          Top = 0
+          Width = 217
+          Height = 24
+          TabOrder = 1
+          object Label5: TLabel
+            Left = 8
+            Top = 5
+            Width = 26
+            Height = 13
+            Caption = #1040#1076#1099':'
+          end
+          object SearchEdit: TEdit
+            Left = 28
+            Top = 1
+            Width = 187
+            Height = 21
+            ReadOnly = True
+            TabOrder = 0
+            OnKeyPress = SearchEditKeyPress
+          end
+        end
+      end
+      object DBEdit1: TDBEdit
+        Left = 534
+        Top = 2
+        Width = 121
+        Height = 22
+        DataField = 'ID'
+        DataSource = P_DataModule.AccData
+        TabOrder = 1
+        Visible = False
+      end
+    end
+    object RichEdit1: TRichEdit
+      Left = 510
+      Top = 75
+      Width = 185
+      Height = 89
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 2
+      Visible = False
+    end
+  end
+  object GroupBox3: TGroupBox
+    Left = 0
+    Top = 377
+    Width = 901
+    Height = 291
+    Align = alClient
+    Caption = #1069#1094#1085#1094#1085' '#1071#1084#1103#1083#1080#1081#1081#1072#1090#1083#1072#1088#1099
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 2
+    object DBGridTransactions: TDBGrid
+      Left = 2
+      Top = 15
+      Width = 897
+      Height = 274
+      Align = alClient
+      Color = clWhite
+      DataSource = P_DataModule.TransactionsData
+      DrawingStyle = gdsGradient
+      FixedColor = clNavy
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      Options = [dgTitles, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit, dgMultiSelect, dgTitleClick]
+      ParentFont = False
+      PopupMenu = PopMenuTransactions
+      TabOrder = 0
+      TitleFont.Charset = RUSSIAN_CHARSET
+      TitleFont.Color = clWindowText
+      TitleFont.Height = -11
+      TitleFont.Name = 'Tahoma'
+      TitleFont.Style = []
+      OnDrawColumnCell = DBGridTransactionsDrawColumnCell
+      OnDblClick = DBGridTransactionsDblClick
+      OnTitleClick = DBGridTransactionsTitleClick
+      Columns = <
+        item
+          Color = clSilver
+          Expanded = False
+          FieldName = 'ID'
+          Title.Caption = #8470
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Visible = True
+        end
+        item
+          Color = clBtnFace
+          Expanded = False
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 28
+          Visible = True
+        end
+        item
+          Color = clBtnFace
+          Expanded = False
+          FieldName = 'TRANSACTIONDATE'
+          Title.Caption = #1058#1072#1088#1080#1093
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 68
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'DEBITACCNO'
+          Title.Caption = #1044#1077#1073#1077#1090
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 200
+          Visible = True
+        end
+        item
+          Color = clSilver
+          Expanded = False
+          FieldName = 'DEBITCURRENCYSNAME'
+          Title.Caption = '$'
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 40
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'CREDITACCNO'
+          Title.Caption = #1050#1088#1077#1076#1080#1090
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 200
+          Visible = True
+        end
+        item
+          Color = clSilver
+          Expanded = False
+          FieldName = 'CREDITCURRENCYSNAME'
+          Title.Caption = '$'
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 46
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'DEBITAMOUNT'
+          Title.Caption = #1044#1077#1073#1077#1090' '#1084#1103#1073#1083#1103#1100
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 76
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'CREDITAMOUNT'
+          Title.Caption = #1050#1088#1077#1076#1080#1090' '#1084#1103#1073#1083#1103#1100
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 78
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'LAMOUNT'
+          Title.Caption = #1045#1082#1074#1080#1074#1072#1083#1077#1085#1090
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'NAME'
+          Title.Alignment = taCenter
+          Title.Caption = #1058#1103#1081#1080#1085#1072#1090#1099
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clNavy
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 300
+          Visible = True
+        end>
+    end
+  end
+  object PopMenuAccounts: TPopupMenu
+    Left = 184
+    Top = 396
+    object N3: TMenuItem
+      Caption = 'Hesab'
+      object N18: TMenuItem
+        Caption = 'Yeni hesab'
+        ShortCut = 45
+        OnClick = N18Click
+      end
+      object N19: TMenuItem
+        Caption = 'Hesab qal'#305'qlar'#305
+        ShortCut = 16459
+        OnClick = N19Click
+      end
+      object N20: TMenuItem
+        Caption = 'Hesab'#305'n s'#601'n'#601'dl'#601'ri'
+        ShortCut = 16461
+        OnClick = N20Click
+      end
+      object N21: TMenuItem
+        Caption = 'Sazlama'
+        ShortCut = 16474
+        Visible = False
+        OnClick = N21Click
+      end
+    end
+    object N4: TMenuItem
+      Caption = '-'
+    end
+    object N7: TMenuItem
+      Caption = #399'm'#601'liyyat'
+      object BussnesProsses1: TMenuItem
+        Caption = 'Biznes Prosses'
+        OnClick = BussnesProsses1Click
+      end
+      object sas1: TMenuItem
+        Caption = 'Debet'
+        OnClick = sas1Click
+      end
+      object cr1: TMenuItem
+        Caption = 'Kredit'
+        OnClick = cr1Click
+      end
+      object TransIncoming: TMenuItem
+        Caption = 'M'#601'daxil'
+        OnClick = TransIncomingClick
+      end
+      object TransOutgoing: TMenuItem
+        Caption = 'M'#601'xaric'
+        OnClick = TransOutgoingClick
+      end
+      object TransDebit: TMenuItem
+        Caption = 'Debet_k'
+        Visible = False
+        OnClick = TransDebitClick
+      end
+      object TransCredit: TMenuItem
+        Caption = 'Kredit_k'
+        Visible = False
+        OnClick = TransCreditClick
+      end
+    end
+    object N12: TMenuItem
+      Caption = '-'
+    end
+    object N10: TMenuItem
+      Caption = 'Hesabdan '#231#305'xar'#305#351
+      ShortCut = 16459
+      OnClick = N10Click
+    end
+    object N11: TMenuItem
+      Caption = 'Memorial order'
+      ShortCut = 16453
+      OnClick = N11Click
+    end
+    object N24: TMenuItem
+      Caption = 'M'#252'qavil'#601' '#231'ap'#305' (sazlama)'
+      OnClick = N24Click
+    end
+    object N25: TMenuItem
+      Caption = 'M'#252'qavil'#601' '#231'ap'#305
+      OnClick = N25Click
+    end
+    object mzanmumsininap1: TMenuItem
+      Caption = #304'mza n'#252'mum'#601'sinin '#231'ap'#305
+      OnClick = mzanmumsininap1Click
+    end
+    object mazanmunsiniexcelat1: TMenuItem
+      Caption = #304'maza n'#252'mun'#601'sini excel'#601' at'
+      OnClick = mazanmunsiniexcelat1Click
+    end
+  end
+  object PopMenuTransactions: TPopupMenu
+    OnPopup = PopMenuTransactionsPopup
+    Left = 288
+    Top = 393
+    object N5: TMenuItem
+      Caption = 'S'#601'n'#601'dl'#601'r'
+      object N6: TMenuItem
+        Caption = 'Q'#601'bz'
+        OnClick = N6Click
+      end
+      object N23: TMenuItem
+        Caption = 'Order'
+        OnClick = N23Click
+      end
+    end
+    object N8: TMenuItem
+      Action = ActionStepCommit
+      Caption = 'T'#601'sdiql'#601'm'#601'k'
+      ShortCut = 16468
+    end
+    object D1: TMenuItem
+      Action = ActionCommit
+      Caption = 'T'#601'sdiql'#601'm'#601'k'
+      Visible = False
+    end
+    object N17: TMenuItem
+      Caption = 'L'#601#287'v etm'#601'k'
+      OnClick = N17Click
+    end
+    object Ordernfo1: TMenuItem
+      Caption = 'Order '#304'nfo'
+      OnClick = Ordernfo1Click
+    end
+  end
+  object ActionList: TActionList
+    Left = 649
+    Top = 229
+    object ActionRefresh: TAction
+      Caption = #1049#1077#1085#1080#1083#1103
+      ImageIndex = 0
+      ShortCut = 116
+    end
+    object ActionInsert: TAction
+      Caption = #1071#1083#1072#1074#1103' '#1077#1090#1084#1103#1082
+      ImageIndex = 1
+      ShortCut = 45
+    end
+    object ActionEdit: TAction
+      Caption = #1056#1077#1076#1072#1082#1090#1103
+      ImageIndex = 5
+      ShortCut = 16453
+    end
+    object ActionDelete: TAction
+      Caption = #1051#1103#1100#1074' '#1077#1090#1084#1103#1082
+      ImageIndex = 2
+      ShortCut = 46
+    end
+    object ActionShowFilter: TAction
+      Category = 'Filter'
+      Caption = #1060#1080#1083#1090#1077#1088' '#1087#1072#1085#1077#1083#1080
+      ImageIndex = 6
+      ShortCut = 32838
+    end
+    object ActionSpeedSearch: TAction
+      Category = 'Serach'
+      Caption = 'Search'
+    end
+    object ActionSelectAll: TAction
+      Caption = #1065#1072#1084#1089#1099#1085#1099' '#1089#1077#1095#1084#1103#1082
+      ShortCut = 16449
+    end
+    object ActionCommit: TAction
+      Caption = #1058#1103#1089#1076#1080#1075' '#1077#1090#1084#1103#1082
+      ImageIndex = 9
+      OnExecute = ActionCommitExecute
+    end
+    object ActionLoadFilters: TAction
+      Category = 'Filter'
+      Caption = 'ActionLoadFilters'
+    end
+    object ActionFilter: TAction
+      Category = 'Filter'
+      Caption = 'ActionFilter'
+    end
+    object ActionStepCommit: TAction
+      Caption = #1058#1103#1089#1076#1080#1075' '#1077#1090#1084#1103#1082
+      ImageIndex = 9
+      OnExecute = ActionStepCommitExecute
+    end
+    object ActionReject: TAction
+      Caption = #1048#1085#1082#1072#1088' '#1077#1090#1084#1103#1082
+      ImageIndex = 8
+    end
+    object ActionCommission: TAction
+      Caption = #1050#1086#1084#1080#1089#1089#1080#1081#1072' '#1103#1084#1103#1083#1080#1081#1081#1072#1090#1083#1072#1088#1099
+    end
+  end
+  object PopMenuCustomers: TPopupMenu
+    Left = 194
+    Top = 55
+    object PM_CustRefresh: TMenuItem
+      Caption = 'Yenil'#601
+      ShortCut = 116
+      OnClick = PM_CustRefreshClick
+    end
+    object PM_CustAdd: TMenuItem
+      Caption = 'Yeni m'#252#351't'#601'ri'
+      ShortCut = 45
+      OnClick = PM_CustAddClick
+    end
+    object PM_CustEdit: TMenuItem
+      Caption = 'Redakt'#601
+      ShortCut = 16474
+      OnClick = PM_CustEditClick
+    end
+    object Qeytlr1: TMenuItem
+      Caption = 'Qeydl'#601'r'
+      ShortCut = 16462
+      OnClick = Qeytlr1Click
+    end
+    object PM_CustClose: TMenuItem
+      Caption = 'Ba'#287'la'
+      ShortCut = 46
+      OnClick = PM_CustCloseClick
+    end
+  end
+  object ImageList: TImageList
+    Left = 441
+    Top = 474
+    Bitmap = {
+      494C01010A000C00040010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      0000000000003600000028000000400000003000000001001000000000000018
+      000000000000000000000000000000000000000000008C311042104210421042
+      10421042104210421042104210421042841000000000000000000000FF7FFF7F
+      FF7FFF7FFF7FFF7F000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000008010604EE03DE03DE03DE03DE03D
+      E03DE03DE03DE03DE03DE03D4A2910421042000000000000FF7FFF7F00000000
+      0000000000000000FF7FFF7F0000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000E05EE07FE07FE07FE07FE07FE07F
+      E07FE07FE07FE07FE07FE07FA6770821104200000000FF7F0000000000001000
+      000010000000100000000000FF7F000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000E05EE07FE07FE07FE07FE07FA656
+      0000A656E07FE07FE07FE07FA677082108210000FF7F00001000100010000000
+      1000000010000000100000000000FF7F00000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000021E07FE07FE07FE07FE07FA656
+      0000A656E07FE07FE07FE07FA635104200000000FF7F10001000100010001863
+      1863FF7FFF7F1000000010000000FF7F00000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000E05EE07FE07FE07FE07FE07F
+      E05EE07FE07FE07FE07FA677082108210000FF7F100010001000100010001000
+      1863FF7F100010001000000000000000FF7F0000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000000000000000000000000021E07FE07FE07FE07F2667
+      4629E07FE07FE07FE07FA635104200000000FF7F100010001000100010001F00
+      1863FF7F100010001000000010000000FF7F0000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000000000000000000000000000E05EE07FE07FE07FA635
+      0000A677E07FE07FA6770821082100000000FF7F100010001F0010001F001000
+      1863FF7F100010001000100000000000FF7F0000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000000000000021E07FE07FE07F8010
+      0000604EE07FE07FA6351042000000000000FF7F1000100010001F0010001F00
+      1863FF7F100010001000000010000000FF7F0000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000000000000000E05EE07FE07F0000
+      0000E03DE07FA67708210821000000000000FF7F100010001F0010001F001863
+      186318631F0010001000100000000000FF7F0000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000021E07FE07F0000
+      0000E03DE07FA63510420000000000000000FF7F10001F0010001F001F001F00
+      1F001000100010001000000010000000FF7F0000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000E05EE07FA656
+      E03DA677A6770821082100000000000000000000FF7F10001F0010001F001F00
+      1863FF7F1F001000100010000000FF7F00000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000000000000000000000000000000000000021E07FE07F
+      E07FE07FA6351042000000000000000000000000FF7F100010001F0010001000
+      1863186310001000100010000000FF7F00000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000000000000000000000000000000000000000E05EE07F
+      E07FA677082108210000000000000000000000000000FF7F1000100010001F00
+      100010001000100010000000FF7F000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000000000000000000000000021E07F
+      E07FA6358C31000000000000000000000000000000000000FF7FFF7F10001000
+      1000100010001000FF7FFF7F0000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000000000000000000000000000E03D
+      A6560000000000000000000000000000000000000000000000000000FF7FFF7F
+      FF7FFF7FFF7FFF7F000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000001042
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000000000000001042000000000000000000000000000000000000FF7FFF7F
+      1042000000000000000000000000000000000000000000000000000000000000
+      1000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000FF7FFF7FFF7F
+      FF7FFF7FFF7F000010420000000000000000000000000000000000000000FF7F
+      1042000000000000000000000000000000000000000000000000000000001000
+      0002100000000000000000000000000000000000000000000000104210420000
+      0000000000000000000000000000000000000000000000000000FF7FFF7FFF7F
+      00000000FF7F000010420000000000000000000000000000000000000000FF7F
+      1042000000000000000000000000000000000000000000000000000010000002
+      0002000200000000000000000000000000000000000000000000104218630000
+      0000000000000000000000000000000000000000000000000000FF7FFF7F0000
+      000000000000000010420000000000000000000000000000000000000000FF7F
+      1042000000000000000000000000000000000000000000000000100000020002
+      0002000210000000000000000000000000000000000000000000104218630000
+      0000000000000000000000000000000000000000000000000000FF7F10420000
+      000000000000000010420000000000000000000000000000000000000000FF7F
+      104200000000000000000000000000000000000000000000000000020002E003
+      E003000200021000000000000000000000000000000000000000104218630000
+      0000000000000000000000000000000000000000000000000000FF7F00000000
+      FF7F0000000000001042000000000000000000000000000000000000FF7FFF7F
+      10420000000000000000000000000000000000000000000000000002E0030000
+      0000E00300020002100000000000000000000000000010421042104218631042
+      1042000000000000000000000000000000000000000000000000FF7F0000FF7F
+      FF7FFF7F0000000010420000000000000000000000000000000000000000FF7F
+      1042000000000000000000000000000000000000000000000000E00300000000
+      0000000000020002000200000000000000000000000000001042FF7F18631042
+      0000000000000000000000000000000000000000000000000000FF7FFF7FFF7F
+      FF7F0000000000001042000000000000000000000000000000000000FF7FFF7F
+      1863000000000000000000000000000000000000000000000000000000000000
+      00000000E0030002000210000000000000000000000000000000104218630000
+      0000000000000000000000000000000000000000000000000000FF7FFF7FFF7F
+      FF7F000000000000000010420000000000000000000000000000FF7FFF7FFF7F
+      FF7F186300000000000000000000000000000000000000000000000000000000
+      0000000000000000E00300020002100000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000104200000000000000000000000000000000FF7FFF7FFF7FFF7F
+      FF7FFF7F10420000000000000000000000000000000000000000000000000000
+      0000000000000000000000020002000200000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000104200000000000000000000FF7FFF7F0000FF7F
+      0000FF7F10420000000000000000000000000000000000000000000000000000
+      00000000000000000000E0030002000200000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000FF7F00001042
+      0000186300000000000000000000000000000000000000000000000000000000
+      000000000000000000000000E003000200000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000000000000000000000000000000000000000FF7FFF7F
+      1863000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000000000000000FF7F0000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000000000000000000000000000000000000000FF7F0000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000000000000000000000000000FF7F
+      0000000000000000000000000000FF7F00000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000000000000000000000000000FF7F
+      000000000000000000000000FF7F000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      FF7F00000000000000000000FF7F000000000000000000000000104218630000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000FF7F000000000000FF7F0000000000000000000000001042FF7F18631042
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000FF7F00000000000000000000000010421042104218631042
+      1042000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000FF7F000000000000000000000000000000000000104218630000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000FF7F00000000000000000000000000000000104218630000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000FF7F00000000FF7F00000000000000000000000000000000104218630000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      FF7F00000000000000000000FF7F000000000000000000000000104210420000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000000000000000000000000000FF7F
+      0000000000000000000000000000FF7F00000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000FF7F00000000
+      00000000000000000000000000000000FF7F0000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000424D3E000000000000003E000000
+      2800000040000000300000000100010000000000800100000000000000000000
+      000000000000000000000000FFFFFF00C000F81F000000000000E00700000000
+      0000C00300000000000080010000000000018001000000008001000000000000
+      8003000000000000C003000000000000C007000000000000E007000000000000
+      E00F000000000000F00F800100000000F01F800100000000F81FC00300000000
+      F83FE00700000000FC7FF81F00000000FFFFFFFFFFFFFFFFFFFFFFFFFCFFFFFF
+      FFFFE00FF8FFFEFFFFFFE00FF8FFFC7FF1FFE00FF8FFF87FF1FFE00FF8FFF03F
+      F1FFE00FF8FFF01FF1FFE00FF8FFF30FC07FE00FF8FFF78FE0FFE00FF07FFF87
+      F1FFE007E03FFFE1FBFFE047E03FFFF1FFFFFFE3E03FFFF1FFFFFFF3E03FFFF9
+      FFFFFFFFF07FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFCFFFF
+      FDFFFFFFF3FFFFFFF8FFFFFFE1F9FFFFF0FFFC7FE1F3FBFFE67FFD7FF0E3F1FF
+      CE7FFD7FF847E0FFFF3FE10FFC0FC07FFFBFEFEFFE1FF1FFFFDFE10FFC0FF1FF
+      FFDFFD7FF84FF1FFFFEFFD7FE0E3F1FFFFF7FC7FC1F1FFFFFFFBFFFFC7F8FFFF
+      FFFDFFFFFFFFFFFFFFFFFFFFFFFFFFFF00000000000000000000000000000000
+      000000000000}
+  end
+  object DSCustomer_Info1: TOracleDataSet
+    SQL.Strings = (
+      
+        'select c.Name,c.id,cu.idcust,cu.Passer||'#39' '#8470' '#39'||cu.paspnum as pas' +
+        'port,cu.phone_h,cu.phone_m, cu.address,'
+      
+        'cu.paspplace,cu.paspdate,a.acc_no,decode(bl.cust_type,1,null,c.i' +
+        'nn) as inn from '
+      'customers c, custinfo cu, account a, bal_spr1 bl'
+      'where '
+      'c.id=cu.idcust'
+      'and a.bal_cn1=bl.bal_cn'
+      'and a.id=:acc_id '
+      'and c.id=:cust_id'
+      '')
+    Optimize = False
+    Variables.Data = {
+      0400000002000000100000003A0043005500530054005F004900440003000000
+      00000000000000000E0000003A004100430043005F0049004400030000000000
+      000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000B0000000400000049004400010000000000080000004E0041004D00
+      45000100000000000600000049004E004E000100000000000C00000049004400
+      43005500530054000100000000000E00000050004100530050004F0052005400
+      0100000000000E000000500048004F004E0045005F004D000100000000000E00
+      0000410044004400520045005300530001000000000012000000500041005300
+      500050004C004100430045000100000000001000000050004100530050004400
+      4100540045000100000000000C0000004100430043005F004E004F0001000000
+      00000E000000500048004F004E0045005F004800010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 512
+    Top = 68
+    object DSCustomer_Info1NAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 90
+    end
+    object DSCustomer_Info1ID: TIntegerField
+      FieldName = 'ID'
+      Required = True
+    end
+    object DSCustomer_Info1IDCUST: TFloatField
+      FieldName = 'IDCUST'
+      Required = True
+    end
+    object DSCustomer_Info1PASPORT: TWideStringField
+      FieldName = 'PASPORT'
+      Size = 65
+    end
+    object DSCustomer_Info1PHONE_H: TWideStringField
+      FieldName = 'PHONE_H'
+      Size = 30
+    end
+    object DSCustomer_Info1PHONE_M: TWideStringField
+      FieldName = 'PHONE_M'
+      Size = 30
+    end
+    object DSCustomer_Info1ADDRESS: TWideStringField
+      FieldName = 'ADDRESS'
+      Size = 100
+    end
+    object DSCustomer_Info1PASPPLACE: TWideStringField
+      FieldName = 'PASPPLACE'
+      Size = 100
+    end
+    object DSCustomer_Info1PASPDATE: TDateTimeField
+      FieldName = 'PASPDATE'
+    end
+    object DSCustomer_Info1ACC_NO: TWideStringField
+      FieldName = 'ACC_NO'
+      Size = 28
+    end
+    object DSCustomer_Info1INN: TWideStringField
+      FieldName = 'INN'
+    end
+  end
+  object ExcelApplication1: TExcelApplication
+    AutoConnect = False
+    ConnectKind = ckRunningOrNew
+    AutoQuit = False
+    Left = 416
+    Top = 104
+  end
+  object Bankinfo1: TOracleDataSet
+    SQL.Strings = (
+      'Select  '#39'<< '#39'||to_char(b.tek_dat,'#39'DD'#39')||'#39' >> '#39'|| '
+      'case'
+      ' to_char(b.tek_dat,'#39'MM'#39') '
+      ' when '#39'01'#39' then '#39'Yanvar'#39
+      ' when '#39'02'#39' then '#39'Fevral'#39' '
+      ' when '#39'03'#39' then '#39'Mart'#39' '
+      ' when '#39'04'#39' then '#39'Aprel'#39
+      ' when '#39'05'#39' then '#39'May'#39
+      ' when '#39'06'#39' then '#39#304'yun'#39
+      ' when '#39'07'#39' then '#39#304'yul'#39
+      ' when '#39'08'#39' then '#39'Avqust'#39
+      ' when '#39'09'#39' then '#39'Sentyabr'#39
+      ' when '#39'10'#39' then '#39'Oktyabr'#39
+      ' when '#39'11'#39' then '#39'Noyabr'#39
+      ' when '#39'12'#39' then '#39'Dekabr'#39
+      ' end ||'#39' '#39'||to_char (b.tek_dat,'#39'YYYY'#39')||'#39' il'#39' as Tarix '
+      
+        ',a.SEHER||'#39', '#39'||a.ADRESS as tam_adress, a.* From Bankinfo a, sys' +
+        'dat b'
+      '')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000330000000A0000004B004F0044005F00420001000000000008000000
+      420041004E004B000100000000000E00000041005A005F004E0041004D004500
+      010000000000080000004B0052004E004F000100000000000600000049004E00
+      4E000100000000000A000000530045004800450052000100000000000C000000
+      4100440052004500530053000100000000000800000053004500440052000100
+      000000000E00000042005500480041004C005400520001000000000006000000
+      540045004C00010000000000060000004600410058000100000000000A000000
+      530057004900460054000100000000000A000000540045004C00450058000100
+      000000000A00000045004D00410049004C000100000000000E00000050004F00
+      530054005F0049004E000100000000000E0000004B004F0044005F0046004900
+      4C000100000000000C000000460049004C00490041004C000100000000001200
+      0000410044005200450053005F00460049004C000100000000000E0000005400
+      45004C005F00460049004C000100000000000E0000004600410058005F004600
+      49004C0001000000000012000000530057004900460054005F00460049004C00
+      01000000000012000000540045004C00450058005F00460049004C0001000000
+      00001400000050004F005300540049004E005F00460049004C00010000000000
+      12000000530045004800450052005F00460049004C000100000000000E000000
+      49004E004E005F00460049004C00010000000000100000004B0052004E004F00
+      5F00460049004C000100000000000E0000005300450044005200460049004C00
+      0100000000001200000042005500480041004C005F00460049004C0001000000
+      0000100000004B004F0044005F004200460049004C0001000000000004000000
+      4E0042000100000000000E000000560041004C005F004D004F00560001000000
+      0000080000004C004F0047004F00000000000000080000004C0049004E004B00
+      0100000000000600000053004400560001000000000006000000530056004D00
+      0100000000000400000042004600010000000000180000004D0041004E004100
+      4700450052005400490054004C0045000100000000001E000000410043004300
+      4F0055004E00540041004E0054005400490054004C0045000100000000001C00
+      0000530056004D005F00430055005200520045004E0043005900490044000100
+      000000000E0000004300410050004900540041004C0001000000000012000000
+      41005300530049005300540041004E0054000100000000001C00000041005300
+      530049005300540041004E0054005400490054004C0045000100000000000C00
+      00005200450047005F004E004F00010000000000140000004C00490043004500
+      4E00530045005F004E004F000100000000001600000046004F004E0044005F00
+      5200450047005F004E004F00010000000000160000004C004900430045004E00
+      530045005F00460049004C0001000000000014000000540041004D005F004100
+      440052004500530053000100000000000A000000540041005200490058000100
+      0000000014000000520045004E0054004900540059005F004900440001000000
+      0000180000004C004900430045004E00530045005F0044004100540045000100
+      00000000160000005400410058005F0052004500470043004F00440045000100
+      00000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 496
+    Top = 123
+    object Bankinfo1TARIX: TWideStringField
+      FieldName = 'TARIX'
+      Size = 25
+    end
+    object Bankinfo1TAM_ADRESS: TWideStringField
+      FieldName = 'TAM_ADRESS'
+      Size = 72
+    end
+    object Bankinfo1KOD_B: TFloatField
+      FieldName = 'KOD_B'
+    end
+    object Bankinfo1BANK: TWideStringField
+      FieldName = 'BANK'
+      Size = 80
+    end
+    object Bankinfo1AZ_NAME: TWideStringField
+      FieldName = 'AZ_NAME'
+      Size = 80
+    end
+    object Bankinfo1KRNO: TWideStringField
+      FieldName = 'KRNO'
+    end
+    object Bankinfo1INN: TWideStringField
+      FieldName = 'INN'
+      Size = 15
+    end
+    object Bankinfo1SEHER: TWideStringField
+      FieldName = 'SEHER'
+    end
+    object Bankinfo1ADRESS: TWideStringField
+      FieldName = 'ADRESS'
+      Size = 50
+    end
+    object Bankinfo1SEDR: TWideStringField
+      FieldName = 'SEDR'
+    end
+    object Bankinfo1BUHALTR: TWideStringField
+      FieldName = 'BUHALTR'
+    end
+    object Bankinfo1TEL: TWideStringField
+      FieldName = 'TEL'
+    end
+    object Bankinfo1FAX: TWideStringField
+      FieldName = 'FAX'
+    end
+    object Bankinfo1SWIFT: TWideStringField
+      FieldName = 'SWIFT'
+    end
+    object Bankinfo1TELEX: TWideStringField
+      FieldName = 'TELEX'
+    end
+    object Bankinfo1EMAIL: TWideStringField
+      FieldName = 'EMAIL'
+      Size = 60
+    end
+    object Bankinfo1POST_IN: TWideStringField
+      FieldName = 'POST_IN'
+    end
+    object Bankinfo1KOD_FIL: TIntegerField
+      FieldName = 'KOD_FIL'
+    end
+    object Bankinfo1FILIAL: TWideStringField
+      FieldName = 'FILIAL'
+      Size = 80
+    end
+    object Bankinfo1ADRES_FIL: TWideStringField
+      FieldName = 'ADRES_FIL'
+      Size = 50
+    end
+    object Bankinfo1TEL_FIL: TWideStringField
+      FieldName = 'TEL_FIL'
+    end
+    object Bankinfo1FAX_FIL: TWideStringField
+      FieldName = 'FAX_FIL'
+    end
+    object Bankinfo1SWIFT_FIL: TWideStringField
+      FieldName = 'SWIFT_FIL'
+    end
+    object Bankinfo1TELEX_FIL: TWideStringField
+      FieldName = 'TELEX_FIL'
+    end
+    object Bankinfo1POSTIN_FIL: TWideStringField
+      FieldName = 'POSTIN_FIL'
+    end
+    object Bankinfo1SEHER_FIL: TWideStringField
+      FieldName = 'SEHER_FIL'
+    end
+    object Bankinfo1INN_FIL: TWideStringField
+      FieldName = 'INN_FIL'
+      Size = 15
+    end
+    object Bankinfo1KRNO_FIL: TWideStringField
+      FieldName = 'KRNO_FIL'
+    end
+    object Bankinfo1SEDRFIL: TWideStringField
+      FieldName = 'SEDRFIL'
+    end
+    object Bankinfo1BUHAL_FIL: TWideStringField
+      FieldName = 'BUHAL_FIL'
+    end
+    object Bankinfo1KOD_BFIL: TFloatField
+      FieldName = 'KOD_BFIL'
+    end
+    object Bankinfo1NB: TIntegerField
+      FieldName = 'NB'
+    end
+    object Bankinfo1VAL_MOV: TWideStringField
+      FieldName = 'VAL_MOV'
+      Size = 15
+    end
+    object Bankinfo1LOGO: TBlobField
+      FieldName = 'LOGO'
+      BlobType = ftOraBlob
+    end
+    object Bankinfo1LINK: TWideStringField
+      FieldName = 'LINK'
+      Size = 220
+    end
+    object Bankinfo1SDV: TFloatField
+      FieldName = 'SDV'
+    end
+    object Bankinfo1SVM: TFloatField
+      FieldName = 'SVM'
+    end
+    object Bankinfo1BF: TFloatField
+      FieldName = 'BF'
+    end
+    object Bankinfo1MANAGERTITLE: TWideStringField
+      FieldName = 'MANAGERTITLE'
+      Size = 128
+    end
+    object Bankinfo1ACCOUNTANTTITLE: TWideStringField
+      FieldName = 'ACCOUNTANTTITLE'
+      Size = 128
+    end
+    object Bankinfo1SVM_CURRENCYID: TFloatField
+      FieldName = 'SVM_CURRENCYID'
+    end
+    object Bankinfo1CAPITAL: TFloatField
+      FieldName = 'CAPITAL'
+    end
+    object Bankinfo1ASSISTANT: TWideStringField
+      FieldName = 'ASSISTANT'
+      Size = 50
+    end
+    object Bankinfo1ASSISTANTTITLE: TWideStringField
+      FieldName = 'ASSISTANTTITLE'
+      Size = 50
+    end
+    object Bankinfo1REG_NO: TWideStringField
+      FieldName = 'REG_NO'
+      Size = 10
+    end
+    object Bankinfo1LICENSE_NO: TWideStringField
+      FieldName = 'LICENSE_NO'
+      Size = 10
+    end
+    object Bankinfo1FOND_REG_NO: TWideStringField
+      FieldName = 'FOND_REG_NO'
+      Size = 10
+    end
+    object Bankinfo1LICENSE_FIL: TWideStringField
+      FieldName = 'LICENSE_FIL'
+      Size = 10
+    end
+  end
+end

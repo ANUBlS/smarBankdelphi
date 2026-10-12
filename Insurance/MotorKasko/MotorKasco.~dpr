@@ -1,0 +1,27 @@
+library MotorKasco;
+
+uses
+  ComServ,
+  MotorKasco_TLB in 'MotorKasco_TLB.pas',
+  fmMotorkascoImpl in 'fmMotorkascoImpl.pas' {fmMotorKasco: TActiveForm} {fmMotorkasco: CoClass},
+  UMotorKascoDataMod in 'UMotorKascoDataMod.pas' {DataModkasco: TDataModule},
+  UMotorKasko in 'UMotorKasko.pas' {fmBlank},
+  UMKSuggestion in 'UMKSuggestion.pas' {fmSuggestion},
+  UMKReport in 'UMKReport.pas' {qrMKReport: TQuickRep},
+  UMKPolicy in 'UMKPolicy.pas' {fmPolicy},
+  UMKPolicyReport in 'UMKPolicyReport.pas' {qrPolicy: TQuickRep};
+
+{$E ocx}
+
+exports
+  DllGetClassObject,
+  DllCanUnloadNow,
+  DllRegisterServer,
+  DllUnregisterServer;
+
+{$R *.TLB}
+
+{$R *.RES}
+
+begin
+end.

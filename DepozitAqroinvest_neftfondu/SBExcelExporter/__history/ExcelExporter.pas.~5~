@@ -1,0 +1,328 @@
+unit ExcelExporter;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes,DB,ExcelXP, OleServer,Graphics, Variants;
+
+const
+  LCID : DWORD = LOCALE_SYSTEM_DEFAULT;
+
+  InvalidPropertiesMsg = 'Invalid Properties!';
+  ExcelNotInstalledMsg = 'Microsoft Excel does not installed in current Computer';
+  InvalidFieldMsg      = 'Invalid Field Name ';
+
+type
+   TExportFileExsistEvent = procedure (Sender : TObject ; var Overrite : Boolean) of object;
+
+
+type
+  EExcelExporterExceptions = class(Exception);
+  EExcelNotInstalled       = class(EExcelExporterExceptions);
+  EExportSourceError = class(EExcelExporterExceptions);
+  EInvalidField      = class(EExcelExporterExceptions);
+  EInvalidProperties = class(EExcelExporterExceptions);
+
+type
+  TExporterErrors = (eeNone,eeDataSourceNotAssigned,eeDataSetNotAssigned,eeDataSetIsNotActive);
+
+const
+   ExporterErrMsgs : array [TExporterErrors] of String = (
+                      ''
+                     ,'DataSource not Assigned!'
+                     ,'DataSource must have DataSet!'
+                     ,'Can not perform this operation for closed DataSet!'
+                     );
+
+type
+  TExcelExporter = class(TComponent)
+  private
+    FDataSource : TDataSource;
+    FExportList : TStrings;
+    FExportAll  : Boolean;
+    XLApplication : TExcelApplication;
+    FShowTitles   : Boolean;
+    FExportFileName : WideString;
+    FSheetName : string;
+    FBeforeExport : TNotifyEvent;
+    FAfterExport  : TNotifyEvent;
+    FOnExportFileExsist : TExportFileExsistEvent;
+    FFont : TFont;
+  protected
+    procedure  SetDataSource(Value : TDataSource);
+    function   GetDataSource : TDataSource;
+    function   SourceValidate : TExporterErrors;
+    function   CheckFieldsValidate : Boolean;
+    procedure  SetExportList(Value : TStrings);
+    procedure  SetFont(Value : TFont);
+  public
+    constructor Create(AOwner : TComponent); override;
+    destructor  Destroy; override;
+    procedure   Report;dynamic;
+  published
+    property  ExportSource : TDataSource read GetDataSource write SetDataSource;
+    property  ExportList   : TStrings read FExportList write SetExportList;
+    property  SheetName  : String read FSheetName write FSheetName ;
+    property  ShowTitles   : Boolean read FShowTitles write FShowTitles default False;
+    property  BeforeExport : TNotifyEvent read FBeforeExport write FBeforeExport;
+    property  AfterExport    : TNotifyEvent read FAfterExport write FAfterExport;
+    property  ExportFileName : WideString read FExportFileName write FExportFileName;
+    property  Font : TFont read FFont write SetFont;
+    property  OnExportFileExsist : TExportFileExsistEvent read  FOnExportFileExsist write FOnExportFileExsist;
+  end;
+
+procedure Register;
+
+implementation
+
+constructor TExcelExporter.Create(AOwner : TComponent);
+begin
+  inherited  Create(AOwner);
+  FExportFileName := '';
+  FExportAll := True;
+  FFont := TFont.Create;
+  FExportList := TStringList.Create;
+  XLApplication := TExcelApplication.Create(Self);
+end;
+
+destructor TExcelExporter.Destroy;
+begin
+  FExportList.Free;
+  XLApplication.Free;
+  inherited;
+end;
+
+procedure TExcelExporter.SetDataSource;
+begin
+  FDataSource := Value;
+  if Value <> nil then Value.FreeNotification(Self);
+end;
+
+function   TExcelExporter.CheckFieldsValidate : Boolean;
+var
+  I : Word;
+  ExpListCount : Word;
+  Field : TField;
+begin
+  ExpListCount := FExportList.Count;
+  I := 0;
+    repeat
+      Field := FDataSource.DataSet.FindField(FExportList[I]);
+      INC(I)
+    until
+       (I > (ExpListCount - 1)) or (Field = nil);
+
+    Result := (I > (ExpListCount - 1)) and (Field <> nil) ;
+end;
+
+procedure  TExcelExporter.SetExportList(Value : TStrings);
+begin
+  FExportList.Assign(Value);
+end;
+
+procedure  TExcelExporter.SetFont;
+begin
+  FFont.Assign(Value);
+end;
+
+function   TExcelExporter.SourceValidate : TExporterErrors;
+begin
+  Result := eeNone;
+
+  if not Assigned(ExportSource) then
+    Result := eeDataSourceNotAssigned
+  else
+    if not Assigned(ExportSource.DataSet) then
+      Result := eeDataSetNotAssigned
+    else
+      if not ExportSource.DataSet.Active then
+        Result := eeDataSetIsNotActive;
+end;
+
+procedure TExcelExporter.Report;
+var
+  R,C,I,J : Integer;
+  V : Variant;
+  XLWB : ExcelWorkbook;
+  XLWS : ExcelWorkSheet;
+  ExceptionMsg : WideString;
+  Overrite : Boolean;
+begin
+  if Assigned(FBeforeExport)  then
+    FBeforeExport(Self);
+
+
+
+  ExceptionMsg := ExporterErrMsgs[SourceValidate];
+
+
+
+  if ExceptionMsg <> ''  then
+    raise EExportSourceError.Create(ExceptionMsg);
+
+
+  FExportAll := not (FExportList.Count > 0);
+
+  R := FDataSource.DataSet.RecordCount + Word(FShowTitles);
+
+  if FExportAll then
+    C := FDataSource.DataSet.FieldCount
+  else
+    C := FExportList.Count;
+
+  V := VarArrayCreate([0,(R - 1),0,(C-1)],varVariant);
+  VarArrayLock(V);
+  I := 0;
+
+  with  FDataSource.DataSet do
+  begin    //1
+    DisableControls;
+    First;
+    try
+      if FExportAll then
+      begin //2
+        if FShowTitles then
+        begin  //3
+          for J := 0  to C - 1 do
+            V[I,J] := Fields[J].DisplayLabel;
+            INC(I);
+        end; //3
+        while not FDataSource.DataSet.Eof do
+        begin //4
+          for J := 0 to C - 1 do
+            V[I,J] := Fields[J].AsVariant;
+          INC(I);
+          Next;
+        end; //4
+      end   //2
+      else
+      begin //5
+        if not CheckFieldsValidate then raise EInvalidField.Create(InvalidFieldMsg);
+        if FShowTitles then
+        begin  //6
+          for J := 0  to C - 1 do
+            V[I,J] := FindField(FExportList[J]).DisplayLabel;
+            INC(I);
+        end;   //6
+        while not FDataSource.DataSet.Eof do
+        begin   //7
+          for J := 0 to C - 1 do
+            V[I,J] := FindField(FExportList[J]).AsVariant;
+          INC(I);
+          Next;
+        end;   //7
+      end;     //5
+
+    finally
+      EnableControls
+    end;     //1
+    end; //With
+
+
+
+
+
+    try
+      XLApplication.Connect;
+    except
+      raise EExcelNotInstalled.Create(ExcelNotInstalledMsg);
+    end;
+
+
+    try
+
+      XLApplication.Workbooks.Add(Emptyparam,LCID);
+      XLWB:=XLApplication.ActiveWorkbook as ExcelWorkbook;
+      XLApplication.SheetsinNewWorkBook[LCID];
+      XLApplication.Sheets.Add(
+                           XLApplication.Sheets[1],     //Before
+                           EmptyParam,                  //After
+                           EmptyParam,                  //Count
+                           EmptyParam,                  //Type
+                           LCID                         //lcid
+                           );
+
+     XLWS := XLApplication.Sheets[1] as ExcelWorkSheet;
+
+     XLWS.Activate(LCID);
+
+     //*********** Worksheet properties *****************
+     if FSheetName <> ''  then
+       XLWS.Name := FSheetName;
+
+     with XLWS.Cells do
+     begin
+       Font.Name := FFont.Name;
+       Font.Italic := fsBold in FFont.Style;
+       Font.Bold   := fsBold in FFont.Style;
+       Font.Size := FFont.Size;
+       Font.Color := FFont.Color;
+     end;
+
+     //*********** Importing Data to Excel ***********
+
+     with XLWS do
+       Range['A1',XLWS.Cells.Item[R,C]].Value[null]:=V;
+     if  FShowTitles  then
+      XLWS.Range['A1','CA1'].Font.Bold := True;
+      XLWS.Cells.Range ['A1',XLWS.Cells.Item[R,C]].AutoFormat(1, 0, true, 0, 0, 0, 1);
+     XLWS.Cells.Range['A1',XLWS.Cells.Item[R,C]].NumberFormat :='# ### ###.00';
+     
+     Overrite := False;
+
+     if  FExportFileName <> ''  then
+     begin
+       if FileExists(FExportFileName) then
+       begin
+         if Assigned(FOnExportFileExsist) then
+           FOnExportFileExsist(Self,Overrite);
+
+         if  Overrite  then
+         begin
+           XLWB.Save(LCID);
+           XLApplication.Quit;
+         end
+          else
+            XLApplication.Visible[LCID] := True;
+       end
+         else
+           begin
+             XLWB.SaveAs(
+                  FExportFileName,//Filename
+                  0,              //FileFormat
+                  EmptyParam,     //Password
+                  EmptyParam,     //WriteResPassword
+                  False,          //ReadOnlyRecommended
+                  False,          //CreateBackup
+                  xlNoChange,     //AccessMode
+                  EmptyParam,     //ConflictResolution
+                  EmptyParam,     //AddToMru
+                  EmptyParam,     //TextCodepage
+                  EmptyParam,     //TextVisualLayout
+                  LCID            //LCID
+                  );
+            XLApplication.Quit;
+          end;
+     end
+       else
+         XLApplication.Visible[LCID] := True;
+
+    finally
+      VarArrayUnlock(V);
+      XLApplication.Disconnect;
+    end;
+
+end;
+
+function  TExcelExporter.GetDataSource : TDataSource;
+begin
+  Result := FDataSource
+end;
+
+procedure Register;
+begin
+  RegisterComponents('Smart', [TExcelExporter]);
+end;
+
+end.
+

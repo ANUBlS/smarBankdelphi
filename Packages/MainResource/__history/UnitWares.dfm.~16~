@@ -1,0 +1,640 @@
+object FormUpdWares: TFormUpdWares
+  Left = 523
+  Top = 220
+  BorderStyle = bsDialog
+  Caption = 'FormUpdWares'
+  ClientHeight = 376
+  ClientWidth = 491
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'MS Sans Serif'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poDesktopCenter
+  OnActivate = FormActivate
+  OnCreate = FormCreate
+  OnKeyPress = FormKeyPress
+  PixelsPerInch = 96
+  TextHeight = 13
+  object PanelMain: TPanel
+    Left = 0
+    Top = 0
+    Width = 491
+    Height = 376
+    Align = alClient
+    BevelInner = bvRaised
+    BevelOuter = bvLowered
+    Color = clNavy
+    TabOrder = 0
+    object GBoxPublic: TGroupBox
+      Left = 2
+      Top = 2
+      Width = 317
+      Height = 45
+      Caption = #1042#1103#1089#1072#1080#1090#1080#1085' '#1072#1076#1099' '
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWhite
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 0
+      object Edit_Wares_Name: TEdit
+        Left = 3
+        Top = 20
+        Width = 310
+        Height = 22
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clBlack
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 0
+        OnKeyPress = Edit_Wares_NameKeyPress
+      end
+    end
+    object GroupBoxFXM: TGroupBox
+      Left = 2
+      Top = 48
+      Width = 121
+      Height = 41
+      Caption = #1060#1072#1081#1076#1072#1083#1099' '#1093#1080#1076#1084#1103#1090' '#1084#1094#1076#1076#1103#1090#1080
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWhite
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 1
+      object CBoxFXM: TComboBox
+        Left = 4
+        Top = 15
+        Width = 113
+        Height = 22
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clBlack
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 0
+        Items.Strings = (
+          '1'
+          '2'
+          '3'
+          '4'
+          '5'
+          '6'
+          '7'
+          '8'
+          '9')
+      end
+    end
+    object GroupBoxSector: TGroupBox
+      Left = 123
+      Top = 48
+      Width = 196
+      Height = 41
+      Caption = #1057#1072#1093#1083#1072#1085#1099#1083#1076#1099#1100#1099' '#1073#1102#1083#1084#1103
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWhite
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 2
+      object Edit_Keeping_Sec: TEdit
+        Left = 4
+        Top = 15
+        Width = 188
+        Height = 22
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clBlack
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 0
+      end
+      object DBLCBName22: TDBLookupComboBox
+        Left = 4
+        Top = 14
+        Width = 190
+        Height = 22
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        KeyField = 'ID'
+        ListField = 'NAME'
+        ListSource = DataModWares.DataSource3
+        ParentFont = False
+        TabOrder = 1
+        Visible = False
+      end
+      object Edit_Keeping_Sec1: TEdit
+        Left = 5
+        Top = 14
+        Width = 189
+        Height = 22
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clBlack
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 2
+      end
+    end
+    object GroupBox3: TGroupBox
+      Left = 3
+      Top = 89
+      Width = 110
+      Height = 42
+      Caption = #1044#1072#1093#1080#1083#1086#1083#1084#1072' '#1090#1072#1088#1080#1093#1080
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWhite
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 3
+      object DTP_Using_Date: TDateTimePicker
+        Left = 3
+        Top = 16
+        Width = 103
+        Height = 21
+        Date = 38820.239196296300000000
+        Time = 38820.239196296300000000
+        Enabled = False
+        TabOrder = 0
+      end
+    end
+    object GroupBoxNB: TGroupBox
+      Left = 3
+      Top = 133
+      Width = 245
+      Height = 197
+      Caption = 'Maliyy'#601
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWhite
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 4
+      object Label_First_Price: TLabel
+        Left = 6
+        Top = 16
+        Width = 65
+        Height = 14
+        Caption = #1048#1083#1082#1080#1085' '#1076#1103#1081#1103#1088
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clWhite
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ParentFont = False
+      end
+      object Label_Balance_Price: TLabel
+        Left = 6
+        Top = 64
+        Width = 63
+        Height = 14
+        Caption = #1043#1072#1083#1099#1075' '#1076#1103#1081#1103#1088
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clWhite
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ParentFont = False
+      end
+      object Label_All_Amort: TLabel
+        Left = 6
+        Top = 111
+        Width = 137
+        Height = 14
+        Caption = #1049#1099#1100#1099#1083#1084#1099#1096' '#1072#1084#1086#1088#1090#1080#1079#1072#1089#1080#1081#1072
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clWhite
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ParentFont = False
+      end
+      object Label_Amort: TLabel
+        Left = 6
+        Top = 156
+        Width = 108
+        Height = 14
+        Caption = #1040#1081#1083#1099#1075' '#1072#1084#1086#1088#1090#1080#1079#1072#1089#1080#1081#1072
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clWhite
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ParentFont = False
+      end
+      object Edit_First_Price: TEdit
+        Left = 7
+        Top = 34
+        Width = 239
+        Height = 22
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clBlack
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 0
+        OnKeyPress = Edit_First_PriceKeyPress
+      end
+      object Edit_Balance_Price: TEdit
+        Left = 3
+        Top = 82
+        Width = 239
+        Height = 22
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clBlack
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 1
+        OnChange = Edit_Balance_PriceChange
+      end
+      object Edit_All_Amort: TEdit
+        Left = 3
+        Top = 131
+        Width = 239
+        Height = 22
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clBlack
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 2
+        OnChange = Edit_All_AmortChange
+      end
+      object Edit_Amort: TEdit
+        Left = 3
+        Top = 173
+        Width = 239
+        Height = 22
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clBlack
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 3
+        Text = '0'
+      end
+    end
+    object GroupBoxNL: TGroupBox
+      Left = 249
+      Top = 133
+      Width = 239
+      Height = 197
+      Caption = #1042#1077#1088#1101#1080
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWhite
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 5
+      object Label_Tax_First_Price: TLabel
+        Left = 6
+        Top = 17
+        Width = 150
+        Height = 14
+        Caption = #1048#1083#1080#1085' '#1103#1074#1074#1103#1083#1080#1085#1103' '#1075#1072#1083#1099#1075' '#1076#1103#1081#1103#1088#1080
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clWhite
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ParentFont = False
+      end
+      object Label_Tax_Balance_Price: TLabel
+        Left = 7
+        Top = 66
+        Width = 63
+        Height = 14
+        Caption = #1043#1072#1083#1099#1075' '#1076#1103#1081#1103#1088
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clWhite
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ParentFont = False
+      end
+      object LabelTax_All_Amort: TLabel
+        Left = 6
+        Top = 112
+        Width = 137
+        Height = 14
+        Caption = #1049#1099#1100#1099#1083#1084#1099#1096' '#1072#1084#1086#1088#1090#1080#1079#1072#1089#1080#1081#1072
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clWhite
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ParentFont = False
+      end
+      object LabelTax_Amort: TLabel
+        Left = 6
+        Top = 158
+        Width = 108
+        Height = 14
+        Caption = #1040#1081#1083#1099#1075' '#1072#1084#1086#1088#1090#1080#1079#1072#1089#1080#1081#1072
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clWhite
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ParentFont = False
+      end
+      object Edit_Tax_First_Price: TEdit
+        Left = 3
+        Top = 34
+        Width = 232
+        Height = 22
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clBlack
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 0
+      end
+      object Edit_Tax_Balance_Price: TEdit
+        Left = 3
+        Top = 82
+        Width = 232
+        Height = 22
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clBlack
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 1
+      end
+      object Edit_Tax_All_Amort: TEdit
+        Left = 3
+        Top = 131
+        Width = 232
+        Height = 22
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clBlack
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 2
+      end
+      object Edit_Tax_Amort: TEdit
+        Left = 3
+        Top = 173
+        Width = 232
+        Height = 22
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clBlack
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 3
+        Text = '0'
+      end
+    end
+    object BtnOk: TBitBtn
+      Left = 413
+      Top = 333
+      Width = 74
+      Height = 39
+      DoubleBuffered = True
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      Kind = bkOK
+      NumGlyphs = 2
+      ParentDoubleBuffered = False
+      ParentFont = False
+      TabOrder = 6
+      OnClick = BtnOkClick
+    end
+    object GroupBoxInv_No: TGroupBox
+      Left = 323
+      Top = 48
+      Width = 165
+      Height = 41
+      Caption = 'Inventar '#8470
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWhite
+      Font.Height = -11
+      Font.Name = 'MS Sans Serif'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 7
+      object Edit_Inv_No: TEdit
+        Left = 5
+        Top = 15
+        Width = 155
+        Height = 22
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clBlack
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 0
+      end
+    end
+    object GroupBox1: TGroupBox
+      Left = 323
+      Top = 2
+      Width = 164
+      Height = 45
+      Caption = #1048#1089#1090#1080#1092#1072#1076#1103#1095#1080
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWhite
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 8
+      object Edit_User: TEdit
+        Left = 5
+        Top = 20
+        Width = 156
+        Height = 22
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clBlack
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 0
+        Visible = False
+      end
+      object DBLCBName1: TDBLookupComboBox
+        Left = 7
+        Top = 19
+        Width = 157
+        Height = 22
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        KeyField = 'ID'
+        ListField = 'NAME'
+        ListSource = DataModWares.DataSource1
+        ParentFont = False
+        TabOrder = 1
+      end
+      object ComboBox11: TComboBox
+        Left = 3
+        Top = 18
+        Width = 159
+        Height = 22
+        TabOrder = 2
+        Text = 'ComboBox11'
+        Visible = False
+      end
+      object Edit_User1: TEdit
+        Left = 4
+        Top = 19
+        Width = 159
+        Height = 22
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clBlack
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 3
+      end
+    end
+    object GroupBox_Inv_Date: TGroupBox
+      Left = 120
+      Top = 89
+      Width = 233
+      Height = 42
+      Caption = 
+        '     '#1048#1089#1090#1080#1092#1072#1076#1103' '#1086#1083#1091#1085#1084#1072' '#1090#1072#1088#1080#1093#1080'                            '#1040#1084#1086#1088#1090#1080#1079#1072#1089 +
+        #1080#1081#1072' '#1090#1072#1088#1080#1093#1080'                        '
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWhite
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 9
+      object ChBox1: TCheckBox
+        Left = 8
+        Top = 15
+        Width = 16
+        Height = 21
+        TabOrder = 0
+        Visible = False
+        OnClick = ChBox1Click
+      end
+    end
+    object GroupBox4: TGroupBox
+      Left = 366
+      Top = 89
+      Width = 121
+      Height = 41
+      Caption = '   '#1041#1072#1101#1083#1072#1085#1084#1072' '#1090#1072#1088#1080#1093#1080'        '
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWhite
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 10
+      Visible = False
+      object DTP_Close_Date: TDateTimePicker
+        Left = 3
+        Top = 16
+        Width = 115
+        Height = 21
+        Date = 40113.448161169000000000
+        Time = 40113.448161169000000000
+        TabOrder = 0
+      end
+    end
+    object BitBtn1: TBitBtn
+      Left = 3
+      Top = 334
+      Width = 124
+      Height = 37
+      Caption = #1071#1083#1072#1074#1103' '#1048#1085#1092#1086#1088#1084#1072#1089#1080#1081#1072
+      DoubleBuffered = True
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentDoubleBuffered = False
+      ParentFont = False
+      TabOrder = 11
+      OnClick = BitBtn1Click
+    end
+    object DBDateTimeEditEh1: TDBDateTimeEditEh
+      Left = 254
+      Top = 106
+      Width = 83
+      Height = 21
+      EditButtons = <>
+      Kind = dtkDateEh
+      TabOrder = 12
+      Visible = True
+      OnChange = DBDateTimeEditEh1Change
+    end
+    object DBDateTimeEditEh2: TDBDateTimeEditEh
+      Left = 149
+      Top = 106
+      Width = 94
+      Height = 21
+      EditButtons = <>
+      Kind = dtkDateEh
+      TabOrder = 13
+      Visible = True
+      OnChange = DBDateTimeEditEh2Change
+    end
+    object DateTimePicker2: TDateTimePicker
+      Left = 162
+      Top = 349
+      Width = 101
+      Height = 21
+      Date = 41484.521749421300000000
+      Time = 41484.521749421300000000
+      TabOrder = 14
+      Visible = False
+      OnChange = DateTimePicker2Change
+    end
+    object DateTimePicker1: TDateTimePicker
+      Left = 293
+      Top = 349
+      Width = 99
+      Height = 21
+      Date = 41484.521749421300000000
+      Time = 41484.521749421300000000
+      TabOrder = 15
+      Visible = False
+    end
+  end
+end

@@ -1,0 +1,57 @@
+unit AccGroupsImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  NLSLocalizer, ExtCtrls, Db, OracleData, Grids, DBGrids, DBCtrls, ComCtrls;
+
+type
+  TAccGrpForm = class(TForm)
+    Localizer: TNLSLocalizer;
+    Panel1: TPanel;
+    AccGroups: TOracleDataSet;
+    AccGrInfo: TOracleDataSet;
+    DataSource1: TDataSource;
+    DataSource2: TDataSource;
+    DBGrid1: TDBGrid;
+    StatusBar1: TStatusBar;
+    Panel2: TPanel;
+    DBNavigator1: TDBNavigator;
+    DBGrid2: TDBGrid;
+    AccGroupsID: TFloatField;
+    AccGroupsINAME: TStringField;
+    AccGroupsDESCRIPTION: TStringField;
+    AccGrInfoGROUPID: TFloatField;
+    AccGrInfoACCOUNTNUMBER: TFloatField;
+    procedure FormShow(Sender: TObject);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  AccGrpForm: TAccGrpForm;
+
+implementation
+
+{$R *.DFM}
+
+uses
+  sboapiDataModuleImpl;
+
+procedure TAccGrpForm.FormShow(Sender: TObject);
+begin
+  AccGroups.Open;
+  AccGrInfo.Open;
+end;
+
+procedure TAccGrpForm.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+  if ORD(Key) = VK_ESCAPE then
+    Close;
+end;
+
+end.

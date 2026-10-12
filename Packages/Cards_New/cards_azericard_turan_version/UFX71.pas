@@ -1,0 +1,596 @@
+// ************************************************************************ //
+// The types declared in this file were generated from data read from the
+// WSDL File described below:
+// WSDL     : http://192.168.4.81:8080/UFXFundsTransfer/UFX7?wsdl
+//  >Import : http://192.168.4.81:8080/UFXFundsTransfer/UFX7?wsdl>0
+//  >Import : http://192.168.4.81:8080/UFXFundsTransfer/UFX7?xsd=1
+// Encoding : UTF-8
+// Version  : 1.0
+// (22.10.2019 11:52:05 AM - - $Rev: 34800 $)
+// ************************************************************************ //
+
+unit UFX71;
+
+interface
+
+uses InvokeRegistry, SOAPHTTPClient, Types, XSBuiltIns;
+
+const
+  IS_OPTN = $0001;
+  IS_UNBD = $0002;
+  IS_NLBL = $0004;
+  IS_UNQL = $0008;
+
+
+type
+
+  // ************************************************************************ //
+  // The following types, referred to in the WSDL document are not being represented
+  // in this file. They are either aliases[@] of other types represented or were referred
+  // to but never[!] declared in the document. The types from the latter category
+  // typically map to predefined/known XML or Embarcadero types; however, they could also 
+  // indicate incorrect WSDL documents that failed to declare or import a schema type.
+  // ************************************************************************ //
+  // !:string          - "http://www.w3.org/2001/XMLSchema"[Gbl]
+
+  IOException2         = class;                 { "http://webser/"[GblCplx] }
+  MalformedURLException = class;                { "http://webser/"[Flt][GblElm] }
+  ParserConfigurationException = class;         { "http://webser/"[Flt][GblElm] }
+  SAXException         = class;                 { "http://webser/"[Flt][GblElm] }
+  IOException          = class;                 { "http://webser/"[Flt][GblElm] }
+  MalformedURLException2 = class;               { "http://webser/"[GblCplx] }
+  ParserConfigurationException2 = class;        { "http://webser/"[GblCplx] }
+  SAXException2        = class;                 { "http://webser/"[GblCplx] }
+  JAXBException2       = class;                 { "http://webser/"[GblCplx] }
+  exception            = class;                 { "http://webser/"[GblCplx] }
+  JAXBException        = class;                 { "http://webser/"[Flt][GblElm] }
+  stackTraceElement    = class;                 { "http://webser/"[GblCplx] }
+
+
+
+  // ************************************************************************ //
+  // XML       : IOException, global, <complexType>
+  // Namespace : http://webser/
+  // ************************************************************************ //
+  IOException2 = class(TRemotable)
+  private
+    Fmessage_: string;
+    Fmessage__Specified: boolean;
+    procedure Setmessage_(Index: Integer; const Astring: string);
+    function  message__Specified(Index: Integer): boolean;
+  published
+    property message_: string  Index (IS_OPTN or IS_UNQL) read Fmessage_ write Setmessage_ stored message__Specified;
+  end;
+
+
+
+  // ************************************************************************ //
+  // XML       : MalformedURLException, global, <element>
+  // Namespace : http://webser/
+  // Info      : Fault
+  // Base Types: MalformedURLException
+  // ************************************************************************ //
+  MalformedURLException = class(ERemotableException)
+  private
+    Fmessage_: string;
+    Fmessage__Specified: boolean;
+    procedure Setmessage_(Index: Integer; const Astring: string);
+    function  message__Specified(Index: Integer): boolean;
+  published
+    property message_: string  Index (IS_OPTN or IS_UNQL) read Fmessage_ write Setmessage_ stored message__Specified;
+  end;
+
+
+
+  // ************************************************************************ //
+  // XML       : ParserConfigurationException, global, <element>
+  // Namespace : http://webser/
+  // Info      : Fault
+  // Base Types: ParserConfigurationException
+  // ************************************************************************ //
+  ParserConfigurationException = class(ERemotableException)
+  private
+    Fmessage_: string;
+    Fmessage__Specified: boolean;
+    procedure Setmessage_(Index: Integer; const Astring: string);
+    function  message__Specified(Index: Integer): boolean;
+  published
+    property message_: string  Index (IS_OPTN or IS_UNQL) read Fmessage_ write Setmessage_ stored message__Specified;
+  end;
+
+
+
+  // ************************************************************************ //
+  // XML       : SAXException, global, <element>
+  // Namespace : http://webser/
+  // Info      : Fault
+  // Base Types: SAXException
+  // ************************************************************************ //
+  SAXException = class(ERemotableException)
+  private
+    Fexception: exception;
+    Fexception_Specified: boolean;
+    Fmessage_: string;
+    Fmessage__Specified: boolean;
+    procedure Setexception(Index: Integer; const Aexception: exception);
+    function  exception_Specified(Index: Integer): boolean;
+    procedure Setmessage_(Index: Integer; const Astring: string);
+    function  message__Specified(Index: Integer): boolean;
+  public
+    destructor Destroy; override;
+  published
+    property exception: exception  Index (IS_OPTN or IS_UNQL) read Fexception write Setexception stored exception_Specified;
+    property message_:  string     Index (IS_OPTN or IS_UNQL) read Fmessage_ write Setmessage_ stored message__Specified;
+  end;
+
+
+
+  // ************************************************************************ //
+  // XML       : IOException, global, <element>
+  // Namespace : http://webser/
+  // Info      : Fault
+  // Base Types: IOException
+  // ************************************************************************ //
+  IOException = class(ERemotableException)
+  private
+    Fmessage_: string;
+    Fmessage__Specified: boolean;
+    procedure Setmessage_(Index: Integer; const Astring: string);
+    function  message__Specified(Index: Integer): boolean;
+  published
+    property message_: string  Index (IS_OPTN or IS_UNQL) read Fmessage_ write Setmessage_ stored message__Specified;
+  end;
+
+
+
+  // ************************************************************************ //
+  // XML       : MalformedURLException, global, <complexType>
+  // Namespace : http://webser/
+  // ************************************************************************ //
+  MalformedURLException2 = class(TRemotable)
+  private
+    Fmessage_: string;
+    Fmessage__Specified: boolean;
+    procedure Setmessage_(Index: Integer; const Astring: string);
+    function  message__Specified(Index: Integer): boolean;
+  published
+    property message_: string  Index (IS_OPTN or IS_UNQL) read Fmessage_ write Setmessage_ stored message__Specified;
+  end;
+
+
+
+  // ************************************************************************ //
+  // XML       : ParserConfigurationException, global, <complexType>
+  // Namespace : http://webser/
+  // ************************************************************************ //
+  ParserConfigurationException2 = class(TRemotable)
+  private
+    Fmessage_: string;
+    Fmessage__Specified: boolean;
+    procedure Setmessage_(Index: Integer; const Astring: string);
+    function  message__Specified(Index: Integer): boolean;
+  published
+    property message_: string  Index (IS_OPTN or IS_UNQL) read Fmessage_ write Setmessage_ stored message__Specified;
+  end;
+
+
+
+  // ************************************************************************ //
+  // XML       : SAXException, global, <complexType>
+  // Namespace : http://webser/
+  // ************************************************************************ //
+  SAXException2 = class(TRemotable)
+  private
+    Fexception: exception;
+    Fexception_Specified: boolean;
+    Fmessage_: string;
+    Fmessage__Specified: boolean;
+    procedure Setexception(Index: Integer; const Aexception: exception);
+    function  exception_Specified(Index: Integer): boolean;
+    procedure Setmessage_(Index: Integer; const Astring: string);
+    function  message__Specified(Index: Integer): boolean;
+  public
+    destructor Destroy; override;
+  published
+    property exception: exception  Index (IS_OPTN or IS_UNQL) read Fexception write Setexception stored exception_Specified;
+    property message_:  string     Index (IS_OPTN or IS_UNQL) read Fmessage_ write Setmessage_ stored message__Specified;
+  end;
+
+  throwable  = array of stackTraceElement;      { "http://webser/"[GblCplx] }
+
+
+  // ************************************************************************ //
+  // XML       : JAXBException, global, <complexType>
+  // Namespace : http://webser/
+  // ************************************************************************ //
+  JAXBException2 = class(TRemotable)
+  private
+    FerrorCode: string;
+    FerrorCode_Specified: boolean;
+    FlinkedException: throwable;
+    FlinkedException_Specified: boolean;
+    Fmessage_: string;
+    Fmessage__Specified: boolean;
+    procedure SeterrorCode(Index: Integer; const Astring: string);
+    function  errorCode_Specified(Index: Integer): boolean;
+    procedure SetlinkedException(Index: Integer; const Athrowable: throwable);
+    function  linkedException_Specified(Index: Integer): boolean;
+    procedure Setmessage_(Index: Integer; const Astring: string);
+    function  message__Specified(Index: Integer): boolean;
+  public
+    destructor Destroy; override;
+  published
+    property errorCode:       string     Index (IS_OPTN or IS_UNQL) read FerrorCode write SeterrorCode stored errorCode_Specified;
+    property linkedException: throwable  Index (IS_OPTN or IS_UNQL) read FlinkedException write SetlinkedException stored linkedException_Specified;
+    property message_:        string     Index (IS_OPTN or IS_UNQL) read Fmessage_ write Setmessage_ stored message__Specified;
+  end;
+
+
+
+  // ************************************************************************ //
+  // XML       : exception, global, <complexType>
+  // Namespace : http://webser/
+  // ************************************************************************ //
+  exception = class(TRemotable)
+  private
+  published
+  end;
+
+
+
+  // ************************************************************************ //
+  // XML       : JAXBException, global, <element>
+  // Namespace : http://webser/
+  // Info      : Fault
+  // Base Types: JAXBException
+  // ************************************************************************ //
+  JAXBException = class(ERemotableException)
+  private
+    FerrorCode: string;
+    FerrorCode_Specified: boolean;
+    FlinkedException: throwable;
+    FlinkedException_Specified: boolean;
+    Fmessage_: string;
+    Fmessage__Specified: boolean;
+    procedure SeterrorCode(Index: Integer; const Astring: string);
+    function  errorCode_Specified(Index: Integer): boolean;
+    procedure SetlinkedException(Index: Integer; const Athrowable: throwable);
+    function  linkedException_Specified(Index: Integer): boolean;
+    procedure Setmessage_(Index: Integer; const Astring: string);
+    function  message__Specified(Index: Integer): boolean;
+  public
+    destructor Destroy; override;
+  published
+    property errorCode:       string     Index (IS_OPTN or IS_UNQL) read FerrorCode write SeterrorCode stored errorCode_Specified;
+    property linkedException: throwable  Index (IS_OPTN or IS_UNQL) read FlinkedException write SetlinkedException stored linkedException_Specified;
+    property message_:        string     Index (IS_OPTN or IS_UNQL) read Fmessage_ write Setmessage_ stored message__Specified;
+  end;
+
+
+
+  // ************************************************************************ //
+  // XML       : stackTraceElement, global, <complexType>
+  // Namespace : http://webser/
+  // ************************************************************************ //
+  stackTraceElement = class(TRemotable)
+  private
+  published
+  end;
+
+
+  // ************************************************************************ //
+  // Namespace : http://webser/
+  // transport : http://schemas.xmlsoap.org/soap/http
+  // style     : document
+  // use       : literal
+  // binding   : UFX7PortBinding
+  // service   : UFX7
+  // port      : UFX7Port
+  // URL       : http://192.168.4.81:8080/UFXFundsTransfer/UFX7
+  // ************************************************************************ //
+  UFX7 = interface(IInvokable)
+  ['{C5C02420-9655-0BA2-D250-E885494B7DBD}']
+    function  fundstransfer(const rbsnumber: string; const MsgCode: string; const LocalDt: string; const Description: string; const Currency: string; const Amount: string
+                            ): string; stdcall;
+  end;
+
+function GetUFX7(UseWSDL: Boolean=System.False; Addr: string=''; HTTPRIO: THTTPRIO = nil): UFX7;
+
+
+implementation
+  uses SysUtils;
+
+function GetUFX7(UseWSDL: Boolean; Addr: string; HTTPRIO: THTTPRIO): UFX7;
+const
+  defWSDL = 'http://10.0.0.96:8080/UFXFundsTransfer/UFX7?wsdl';
+  defURL  = 'http://10.0.0.96:8080/UFXFundsTransfer/UFX7';
+  defSvc  = 'UFX7';
+  defPrt  = 'UFX7Port';
+var
+  RIO: THTTPRIO;
+begin
+  Result := nil;
+  if (Addr = '') then
+  begin
+    if UseWSDL then
+      Addr := defWSDL
+    else
+      Addr := defURL;
+  end;
+  if HTTPRIO = nil then
+    RIO := THTTPRIO.Create(nil)
+  else
+    RIO := HTTPRIO;
+  try
+    Result := (RIO as UFX7);
+    if UseWSDL then
+    begin
+      RIO.WSDLLocation := Addr;
+      RIO.Service := defSvc;
+      RIO.Port := defPrt;
+    end else
+      RIO.URL := Addr;
+  finally
+    if (Result = nil) and (HTTPRIO = nil) then
+      RIO.Free;
+  end;
+end;
+
+
+procedure IOException2.Setmessage_(Index: Integer; const Astring: string);
+begin
+  Fmessage_ := Astring;
+  Fmessage__Specified := True;
+end;
+
+function IOException2.message__Specified(Index: Integer): boolean;
+begin
+  Result := Fmessage__Specified;
+end;
+
+procedure MalformedURLException.Setmessage_(Index: Integer; const Astring: string);
+begin
+  Fmessage_ := Astring;
+  Fmessage__Specified := True;
+end;
+
+function MalformedURLException.message__Specified(Index: Integer): boolean;
+begin
+  Result := Fmessage__Specified;
+end;
+
+procedure ParserConfigurationException.Setmessage_(Index: Integer; const Astring: string);
+begin
+  Fmessage_ := Astring;
+  Fmessage__Specified := True;
+end;
+
+function ParserConfigurationException.message__Specified(Index: Integer): boolean;
+begin
+  Result := Fmessage__Specified;
+end;
+
+destructor SAXException.Destroy;
+begin
+  SysUtils.FreeAndNil(Fexception);
+  inherited Destroy;
+end;
+
+procedure SAXException.Setexception(Index: Integer; const Aexception: exception);
+begin
+  Fexception := Aexception;
+  Fexception_Specified := True;
+end;
+
+function SAXException.exception_Specified(Index: Integer): boolean;
+begin
+  Result := Fexception_Specified;
+end;
+
+procedure SAXException.Setmessage_(Index: Integer; const Astring: string);
+begin
+  Fmessage_ := Astring;
+  Fmessage__Specified := True;
+end;
+
+function SAXException.message__Specified(Index: Integer): boolean;
+begin
+  Result := Fmessage__Specified;
+end;
+
+procedure IOException.Setmessage_(Index: Integer; const Astring: string);
+begin
+  Fmessage_ := Astring;
+  Fmessage__Specified := True;
+end;
+
+function IOException.message__Specified(Index: Integer): boolean;
+begin
+  Result := Fmessage__Specified;
+end;
+
+procedure MalformedURLException2.Setmessage_(Index: Integer; const Astring: string);
+begin
+  Fmessage_ := Astring;
+  Fmessage__Specified := True;
+end;
+
+function MalformedURLException2.message__Specified(Index: Integer): boolean;
+begin
+  Result := Fmessage__Specified;
+end;
+
+procedure ParserConfigurationException2.Setmessage_(Index: Integer; const Astring: string);
+begin
+  Fmessage_ := Astring;
+  Fmessage__Specified := True;
+end;
+
+function ParserConfigurationException2.message__Specified(Index: Integer): boolean;
+begin
+  Result := Fmessage__Specified;
+end;
+
+destructor SAXException2.Destroy;
+begin
+  SysUtils.FreeAndNil(Fexception);
+  inherited Destroy;
+end;
+
+procedure SAXException2.Setexception(Index: Integer; const Aexception: exception);
+begin
+  Fexception := Aexception;
+  Fexception_Specified := True;
+end;
+
+function SAXException2.exception_Specified(Index: Integer): boolean;
+begin
+  Result := Fexception_Specified;
+end;
+
+procedure SAXException2.Setmessage_(Index: Integer; const Astring: string);
+begin
+  Fmessage_ := Astring;
+  Fmessage__Specified := True;
+end;
+
+function SAXException2.message__Specified(Index: Integer): boolean;
+begin
+  Result := Fmessage__Specified;
+end;
+
+destructor JAXBException2.Destroy;
+var
+  I: Integer;
+begin
+  for I := 0 to System.Length(FlinkedException)-1 do
+    SysUtils.FreeAndNil(FlinkedException[I]);
+  System.SetLength(FlinkedException, 0);
+  inherited Destroy;
+end;
+
+procedure JAXBException2.SeterrorCode(Index: Integer; const Astring: string);
+begin
+  FerrorCode := Astring;
+  FerrorCode_Specified := True;
+end;
+
+function JAXBException2.errorCode_Specified(Index: Integer): boolean;
+begin
+  Result := FerrorCode_Specified;
+end;
+
+procedure JAXBException2.SetlinkedException(Index: Integer; const Athrowable: throwable);
+begin
+  FlinkedException := Athrowable;
+  FlinkedException_Specified := True;
+end;
+
+function JAXBException2.linkedException_Specified(Index: Integer): boolean;
+begin
+  Result := FlinkedException_Specified;
+end;
+
+procedure JAXBException2.Setmessage_(Index: Integer; const Astring: string);
+begin
+  Fmessage_ := Astring;
+  Fmessage__Specified := True;
+end;
+
+function JAXBException2.message__Specified(Index: Integer): boolean;
+begin
+  Result := Fmessage__Specified;
+end;
+
+destructor JAXBException.Destroy;
+var
+  I: Integer;
+begin
+  for I := 0 to System.Length(FlinkedException)-1 do
+    SysUtils.FreeAndNil(FlinkedException[I]);
+  System.SetLength(FlinkedException, 0);
+  inherited Destroy;
+end;
+
+procedure JAXBException.SeterrorCode(Index: Integer; const Astring: string);
+begin
+  FerrorCode := Astring;
+  FerrorCode_Specified := True;
+end;
+
+function JAXBException.errorCode_Specified(Index: Integer): boolean;
+begin
+  Result := FerrorCode_Specified;
+end;
+
+procedure JAXBException.SetlinkedException(Index: Integer; const Athrowable: throwable);
+begin
+  FlinkedException := Athrowable;
+  FlinkedException_Specified := True;
+end;
+
+function JAXBException.linkedException_Specified(Index: Integer): boolean;
+begin
+  Result := FlinkedException_Specified;
+end;
+
+procedure JAXBException.Setmessage_(Index: Integer; const Astring: string);
+begin
+  Fmessage_ := Astring;
+  Fmessage__Specified := True;
+end;
+
+function JAXBException.message__Specified(Index: Integer): boolean;
+begin
+  Result := Fmessage__Specified;
+end;
+
+initialization
+  { UFX7 }
+  InvRegistry.RegisterInterface(TypeInfo(UFX7), 'http://webser/', 'UTF-8');
+  InvRegistry.RegisterDefaultSOAPAction(TypeInfo(UFX7), '');
+  InvRegistry.RegisterInvokeOptions(TypeInfo(UFX7), ioDocument);
+  { UFX7.fundstransfer }
+  InvRegistry.RegisterMethodInfo(TypeInfo(UFX7), 'fundstransfer', '',
+                                 '[ReturnName="return"]', IS_OPTN or IS_UNQL);
+  InvRegistry.RegisterParamInfo(TypeInfo(UFX7), 'fundstransfer', 'rbsnumber', '',
+                                '', IS_UNQL);
+  InvRegistry.RegisterParamInfo(TypeInfo(UFX7), 'fundstransfer', 'MsgCode', '',
+                                '', IS_UNQL);
+  InvRegistry.RegisterParamInfo(TypeInfo(UFX7), 'fundstransfer', 'LocalDt', '',
+                                '', IS_UNQL);
+  InvRegistry.RegisterParamInfo(TypeInfo(UFX7), 'fundstransfer', 'Description', '',
+                                '', IS_UNQL);
+  InvRegistry.RegisterParamInfo(TypeInfo(UFX7), 'fundstransfer', 'Currency', '',
+                                '', IS_UNQL);
+  InvRegistry.RegisterParamInfo(TypeInfo(UFX7), 'fundstransfer', 'Amount', '',
+                                '', IS_UNQL);
+  InvRegistry.RegisterParamInfo(TypeInfo(UFX7), 'fundstransfer', 'return', '',
+                                '', IS_UNQL);
+  RemClassRegistry.RegisterXSClass(IOException2, 'http://webser/', 'IOException2', 'IOException');
+  RemClassRegistry.RegisterExternalPropName(TypeInfo(IOException2), 'message_', '[ExtName="message"]');
+  RemClassRegistry.RegisterXSClass(MalformedURLException, 'http://webser/', 'MalformedURLException');
+  RemClassRegistry.RegisterExternalPropName(TypeInfo(MalformedURLException), 'message_', '[ExtName="message"]');
+  RemClassRegistry.RegisterXSClass(ParserConfigurationException, 'http://webser/', 'ParserConfigurationException');
+  RemClassRegistry.RegisterExternalPropName(TypeInfo(ParserConfigurationException), 'message_', '[ExtName="message"]');
+  RemClassRegistry.RegisterXSClass(SAXException, 'http://webser/', 'SAXException');
+  RemClassRegistry.RegisterExternalPropName(TypeInfo(SAXException), 'message_', '[ExtName="message"]');
+  RemClassRegistry.RegisterXSClass(IOException, 'http://webser/', 'IOException');
+  RemClassRegistry.RegisterExternalPropName(TypeInfo(IOException), 'message_', '[ExtName="message"]');
+  RemClassRegistry.RegisterXSClass(MalformedURLException2, 'http://webser/', 'MalformedURLException2', 'MalformedURLException');
+  RemClassRegistry.RegisterExternalPropName(TypeInfo(MalformedURLException2), 'message_', '[ExtName="message"]');
+  RemClassRegistry.RegisterXSClass(ParserConfigurationException2, 'http://webser/', 'ParserConfigurationException2', 'ParserConfigurationException');
+  RemClassRegistry.RegisterExternalPropName(TypeInfo(ParserConfigurationException2), 'message_', '[ExtName="message"]');
+  RemClassRegistry.RegisterXSClass(SAXException2, 'http://webser/', 'SAXException2', 'SAXException');
+  RemClassRegistry.RegisterExternalPropName(TypeInfo(SAXException2), 'message_', '[ExtName="message"]');
+  RemClassRegistry.RegisterXSInfo(TypeInfo(throwable), 'http://webser/', 'throwable');
+  RemClassRegistry.RegisterXSClass(JAXBException2, 'http://webser/', 'JAXBException2', 'JAXBException');
+  RemClassRegistry.RegisterExternalPropName(TypeInfo(JAXBException2), 'linkedException', '[ArrayItemName="stackTrace"]');
+  RemClassRegistry.RegisterExternalPropName(TypeInfo(JAXBException2), 'message_', '[ExtName="message"]');
+  RemClassRegistry.RegisterXSClass(exception, 'http://webser/', 'exception');
+  RemClassRegistry.RegisterXSClass(JAXBException, 'http://webser/', 'JAXBException');
+  RemClassRegistry.RegisterExternalPropName(TypeInfo(JAXBException), 'linkedException', '[ArrayItemName="stackTrace"]');
+  RemClassRegistry.RegisterExternalPropName(TypeInfo(JAXBException), 'message_', '[ExtName="message"]');
+  RemClassRegistry.RegisterXSClass(stackTraceElement, 'http://webser/', 'stackTraceElement');
+
+end.

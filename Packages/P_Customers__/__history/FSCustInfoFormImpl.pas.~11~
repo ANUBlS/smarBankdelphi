@@ -1,0 +1,577 @@
+unit FSCustInfoFormImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, Mask, DBCtrls, ExtCtrls, ComCtrls, Db, OracleData, ExtDlgs,
+  Buttons, ImgList, ToolWin, Oracle, Jpeg;
+
+type
+  TCustomerInfoForm = class(TForm)
+    TabControl: TTabControl;
+    CustInfoData: TOracleDataSet;
+    CustInfo: TDataSource;
+    OpenPictureDlg: TOpenPictureDialog;
+    Panel10: TPanel;
+    ToolBar1: TToolBar;
+    ToolButton2: TToolButton;
+    ToolButton4: TToolButton;
+    ToolButton6: TToolButton;
+    ToolButton8: TToolButton;
+    ImageList1: TImageList;
+    ScrollBox1: TScrollBox;
+    Panel14: TPanel;
+    Panel15: TPanel;
+    Panel16: TPanel;
+    Panel17: TPanel;
+    Panel18: TPanel;
+    Panel19: TPanel;
+    Panel20: TPanel;
+    Panel21: TPanel;
+    Panel22: TPanel;
+    Panel23: TPanel;
+    Panel24: TPanel;
+    Panel25: TPanel;
+    Panel26: TPanel;
+    Panel11: TPanel;
+    GroupBox1: TGroupBox;
+    Panel7: TPanel;
+    Panel8: TPanel;
+    Panel9: TPanel;
+    Panel1: TPanel;
+    ODSCustImages: TOracleDataSet;
+    DSCustImages: TDataSource;
+    ODSCustImagesID: TFloatField;
+    ODSCustImagesPHOTO: TBlobField;
+    ODSCustImagesCUSTSIGN: TBlobField;
+    ODSCustImagesSTAMP: TBlobField;
+    Edit1: TEdit;
+    Edit2: TEdit;
+    Edit3: TEdit;
+    Edit4: TEdit;
+    Edit5: TEdit;
+    Edit6: TEdit;
+    Edit7: TEdit;
+    Edit8: TEdit;
+    Edit9: TEdit;
+    Edit10: TEdit;
+    Edit11: TEdit;
+    Edit12: TEdit;
+    Edit13: TEdit;
+    Edit14: TEdit;
+    Edit16: TEdit;
+    Edit18: TEdit;
+    Edit19: TDBLookupComboBox;
+    Memo1: TMemo;
+    sb_custInfo: TOraclePackage;
+    Panel12: TPanel;
+    Edit17: TEdit;
+    Panel5: TPanel;
+    Edit15: TEdit;
+    ToolButton7: TToolButton;
+    TDEdit4: TDateTimePicker;
+    TDEdit18: TDateTimePicker;
+    passdeps: TDataSource;
+    odsPassDeps: TOracleDataSet;
+    CustInfoDataID: TFloatField;
+    CustInfoDataIDCUST: TFloatField;
+    CustInfoDataSONAME: TWideStringField;
+    CustInfoDataNAME: TWideStringField;
+    CustInfoDataLASTNAME: TWideStringField;
+    CustInfoDataBIRTHDAY: TDateTimeField;
+    CustInfoDataBIRTHPLACE: TWideStringField;
+    CustInfoDataPASSER: TWideStringField;
+    CustInfoDataPASPNUM: TWideStringField;
+    CustInfoDataPASPDATE: TDateTimeField;
+    CustInfoDataPASPPLACE: TWideStringField;
+    CustInfoDataCITY: TWideStringField;
+    CustInfoDataADDRESS: TWideStringField;
+    CustInfoDataWORKPLACE: TWideStringField;
+    CustInfoDataPHONE_W: TWideStringField;
+    CustInfoDataPHONE_H: TWideStringField;
+    CustInfoDataPHONE_M: TWideStringField;
+    CustInfoDataE_MAIL: TWideStringField;
+    CustInfoDataURL: TWideStringField;
+    CustInfoDataRECOMENDATION: TWideStringField;
+    CustInfoDataGARANTED: TWideStringField;
+    CustInfoDataOTV_PASSPORT: TWideStringField;
+    CustInfoDataOTV_ISSUED: TWideStringField;
+    CustInfoDataOTV_ISDATE: TWideStringField;
+    CustInfoDataNOTE: TWideStringField;
+    CustInfoDataWORK: TWideStringField;
+    Label1: TLabel;
+    Fill_Edit: TButton;
+    Panel2: TPanel;
+    Panel4: TPanel;
+    Image1: TImage;
+    BitBtn4: TBitBtn;
+    BitBtn1: TBitBtn;
+    Panel3: TPanel;
+    Image2: TImage;
+    BitBtn5: TBitBtn;
+    BitBtn2: TBitBtn;
+    Panel13: TPanel;
+    Panel6: TPanel;
+    Image3: TImage;
+    BitBtn6: TBitBtn;
+    BitBtn3: TBitBtn;
+    procedure CustInfoDataAfterOpen(DataSet: TDataSet);
+    procedure TabControlChange(Sender: TObject);
+    procedure CustInfoDataApplyRecord(Sender: TOracleDataSet; Action: Char;
+      var Applied: Boolean; var NewRowId: String);
+    procedure ToolButton2Click(Sender: TObject);
+    procedure ToolButton4Click(Sender: TObject);
+    procedure ToolButton6Click(Sender: TObject);
+    procedure ToolButton8Click(Sender: TObject);
+    procedure BitBtn1Click(Sender: TObject);
+    procedure BitBtn4Click(Sender: TObject);
+    procedure BitBtn5Click(Sender: TObject);
+    procedure BitBtn6Click(Sender: TObject);
+    procedure BitBtn2Click(Sender: TObject);
+    procedure BitBtn3Click(Sender: TObject);
+    procedure Fill_EditClick(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    KartOpen: Boolean;
+    procedure ViewCustInfo(CustomerID: Integer);
+  end;
+
+procedure GetPath;
+
+var
+  CustomerInfoForm: TCustomerInfoForm;
+  Path, Path_B: String;
+
+implementation
+
+uses SBCustomer, sboapiDataModuleImpl, UnitFrmZoom, P_DataMod_Unit,
+  SBTranslateProc;
+
+{$R *.DFM}
+
+procedure GetPath;
+var
+  ImagesPath: String;
+begin
+  ImagesPath := Format('%s\..\Env\Customers', [ExtractFilePath(ParamStr(0))]);
+  Path := Format('%s\temp.jpg', [ImagesPath]);
+  Path_B := Format('%s\blank.jpg', [ImagesPath]);
+end;
+
+procedure TCustomerInfoForm.ViewCustInfo(CustomerID: Integer);
+begin
+  with CustInfoData do
+  Begin
+
+    if RecordCount = 0 then
+      ToolButton2.Click;
+    GetPath;
+    ShowModal;
+  End;
+end;
+
+procedure TCustomerInfoForm.CustInfoDataAfterOpen(DataSet: TDataSet);
+var
+  Index: Integer;
+begin
+  CustInfoData.FieldByName('IDCust').AsInteger :=
+    P_DataModule.Customers.FieldByName('ID').AsInteger;
+  with DataSet, TabControl do
+  begin
+    Tabs.Clear;
+    for Index := 0 to RecordCount - 1 do
+      Tabs.Add(Format('Kart N-%d', [Index]));
+    First;
+  end;
+
+end;
+
+procedure TCustomerInfoForm.TabControlChange(Sender: TObject);
+begin
+  // ShowMessage(IntToStr(CustInfoData.RecNo));
+  ToolButton6.Click; // saving
+  // ShowMessage(IntToStr(CustInfoData.RecNo));
+  CustInfoData.RecNo := (Sender as TTabControl).TabIndex + 1; // jumping
+  // ShowMessage(IntToStr(CustInfoData.RecNo));
+  Fill_Edit.Click; // loading
+  // ShowMessage(IntToStr(CustInfoData.RecNo));
+end;
+
+procedure TCustomerInfoForm.CustInfoDataApplyRecord(Sender: TOracleDataSet;
+  Action: Char; var Applied: Boolean; var NewRowId: String);
+var
+  Info: TCustomerInfo;
+begin
+  case Action of
+    'I':
+      begin
+        with Sender, Info do
+        begin
+          Name := FieldByName('Name').AsString;
+          LastName := FieldByName('LastName').AsString;
+          SurName := FieldByName('SoName').AsString;
+          BirthDate := Trunc(FieldByName('BirthDay').AsDateTime);
+          BirthPlace := FieldByName('BirthPlace').AsString;
+          Address := FieldByName('Address').AsString;
+          City := FieldByName('City').AsString;
+          WorkPlace := FieldByName('WorkPlace').AsString;
+          PhoneWork := FieldByName('Phone_W').AsString;
+          PhoneHome := FieldByName('Phone_H').AsString;
+          PhoneCelular := FieldByName('Phone_M').AsString;
+          Email := FieldByName('E_Mail').AsString;
+          Url := FieldByName('Url').AsString;
+        end;
+        Sb_AddCustomerInfo(Sender.FieldByName('ID').AsInteger, Info);
+        Applied := True;
+      end;
+  end;
+end;
+
+procedure TCustomerInfoForm.ToolButton2Click(Sender: TObject);
+var
+  index: Integer;
+begin
+  ToolButton6Click(ToolButton6);
+  sb_custInfo.CallProcedure('add_custinfo',
+    ['vidcust', P_DataModule.Customers.FieldByName('ID').AsInteger]);
+
+  with TabControl, CustInfoData do
+  begin
+    Refresh;
+    RecNo := RecordCount;
+    index := RecordCount;
+    TabIndex := Tabs.Add(Format('Kart N-%d', [Index]));
+  end;
+
+  Fill_Edit.Click;
+end;
+
+procedure TCustomerInfoForm.ToolButton4Click(Sender: TObject);
+var
+  Index: Integer;
+begin
+  sb_custInfo.CallProcedure('del_custinfo',
+    ['v_id', CustInfoData.FieldByName('ID').AsInteger]);
+  CustInfoData.Refresh;
+  TabControl.Tabs.Clear;
+  for Index := 0 to CustInfoData.RecordCount - 1 do
+    TabControl.Tabs.Add(Format('Kart N-%d', [Index]));
+  Fill_Edit.Click;
+end;
+
+procedure TCustomerInfoForm.ToolButton6Click(Sender: TObject);
+begin
+  if CustInfoData.RecordCount <> 0 then
+  begin
+    Edit4.Text := datetostr(TDEdit4.Date);
+    Edit18.Text := datetostr(TDEdit18.Date);
+    sb_custInfo.CallProcedure('upd_custinfo',
+      ['vid', CustInfoData.FieldByName('ID').AsInteger, 'vidcust',
+      CustInfoData.FieldByName('IDCust').AsInteger, 'vName', Edit1.Text,
+      'vLastName', Edit2.Text, 'vSoName', Edit3.Text, 'vBirthDay', Edit4.Text,
+      'vBirthPlace', Edit5.Text, 'vAddress', Edit6.Text, 'vCity', Edit7.Text,
+      'vWorkPlace', Edit8.Text, 'vWork', Edit9.Text, 'vPhone_w', Edit12.Text,
+      'vPhone_h', Edit11.Text, 'vPhone_m', Edit10.Text, 've_mail', Edit13.Text,
+      'vurl', Edit14.Text, 'vGaranted', Edit15.Text, 'vPasSer', Edit16.Text,
+      'vPaspNum', Edit17.Text, 'vPaspDate', Edit18.Text, 'vPaspPlace',
+      Edit19.Text, 'vNote', Memo1.Text]);
+
+    ODSCustImages.Edit;
+
+    try
+      Image1.Picture.SaveToFile(Path);
+      TBlobField(ODSCustImages.FieldByName('PHOTO')).LoadFromFile(Path);
+      Image2.Picture.SaveToFile(Path);
+      TBlobField(ODSCustImages.FieldByName('CUSTSIGN')).LoadFromFile(Path);
+      Image3.Picture.SaveToFile(Path);
+      TBlobField(ODSCustImages.FieldByName('STAMP')).LoadFromFile(Path);
+    except
+      ShowMessage('Error during BlobOperation');
+    end;
+
+    CustInfoData.Refresh;
+  end;
+  Close;
+end;
+
+procedure TCustomerInfoForm.ToolButton8Click(Sender: TObject);
+begin
+  CustInfoData.Cancel;
+  Close;
+end;
+
+procedure TCustomerInfoForm.BitBtn1Click(Sender: TObject);
+begin
+  FormZoom := TFormZoom.create(self);
+  FormZoom.Height := Image1.Picture.Height;
+  FormZoom.Width := Image1.Picture.Width;
+  FormZoom.Image1.Height := Image1.Picture.Height;
+  FormZoom.Image1.Width := Image1.Picture.Width;
+
+  FormZoom.Image1.Picture := Image1.Picture;
+  FormZoom.ShowModal;
+end;
+
+procedure TCustomerInfoForm.BitBtn2Click(Sender: TObject);
+begin
+  FormZoom := TFormZoom.create(self);
+  FormZoom.Height := Image2.Picture.Height;
+  FormZoom.Width := Image2.Picture.Width;
+  FormZoom.Image1.Height := Image2.Picture.Height;
+  FormZoom.Image1.Width := Image2.Picture.Width;
+
+  FormZoom.Image1.Picture := Image2.Picture;
+  FormZoom.ShowModal;
+end;
+
+procedure TCustomerInfoForm.BitBtn3Click(Sender: TObject);
+begin
+  FormZoom := TFormZoom.create(self);
+  FormZoom.Height := Image3.Picture.Height;
+  FormZoom.Width := Image3.Picture.Width;
+  FormZoom.Image1.Height := Image3.Picture.Height;
+  FormZoom.Image1.Width := Image3.Picture.Width;
+
+  FormZoom.Image1.Picture := Image3.Picture;
+  FormZoom.ShowModal;
+end;
+
+procedure TCustomerInfoForm.BitBtn4Click(Sender: TObject);
+type
+  TJPEGQualityRange = 1 .. 100;
+var
+  Bmp: TBitmap;
+  Jpg: TJpegImage;
+  ExtS: String[4];
+begin
+  Bmp := TBitmap.create;
+  Jpg := TJpegImage.create;
+
+  ODSCustImages.Edit;
+  if OpenPictureDlg.Execute then
+  begin
+    try
+      { --Bmp to Jpeg Conertion -- }
+      ExtS := copy(AnsiUpperCase(ExtractFileExt(OpenPictureDlg.FileName)), 2,
+        MaxLongInt);
+      if ExtS = 'BMP' then
+      begin
+        Bmp.LoadFromFile(OpenPictureDlg.FileName);
+        Jpg.CompressionQuality := 100;
+        Jpg.Assign(Bmp);
+        Jpg.SaveToFile(Path);
+        Image1.Picture.LoadFromFile(Path);
+      end
+      else
+        Image1.Picture.LoadFromFile(OpenPictureDlg.FileName);
+      { --End of Convertion -- }
+    except
+      ShowMessage('Error during picture loading');
+    end;
+  end;
+end;
+
+procedure TCustomerInfoForm.BitBtn5Click(Sender: TObject);
+type
+  TJPEGQualityRange = 1 .. 100;
+var
+  Bmp: TBitmap;
+  Jpg: TJpegImage;
+  ExtS: String[4];
+begin
+  Bmp := TBitmap.create;
+  Jpg := TJpegImage.create;
+
+  ODSCustImages.Edit;
+  if OpenPictureDlg.Execute then
+  begin
+    try
+      { --Bmp to Jpeg Conertion -- }
+      ExtS := copy(AnsiUpperCase(ExtractFileExt(OpenPictureDlg.FileName)), 2,
+        MaxLongInt);
+      if ExtS = 'BMP' then
+      begin
+        Bmp.LoadFromFile(OpenPictureDlg.FileName);
+        Jpg.CompressionQuality := 100;
+        Jpg.Assign(Bmp);
+        Jpg.SaveToFile(Path);
+        Image2.Picture.LoadFromFile(Path);
+      end
+      else
+        Image2.Picture.LoadFromFile(OpenPictureDlg.FileName);
+      { --End of Convertion -- }
+    except
+      ShowMessage('Error during picture loading');
+    end;
+  end;
+end;
+
+procedure TCustomerInfoForm.BitBtn6Click(Sender: TObject);
+type
+  TJPEGQualityRange = 1 .. 100;
+var
+  Bmp: TBitmap;
+  Jpg: TJpegImage;
+  ExtS: String[4];
+begin
+  Bmp := TBitmap.create;
+  Jpg := TJpegImage.create;
+
+  ODSCustImages.Edit;
+  if OpenPictureDlg.Execute then
+  begin
+    try
+      { --Bmp to Jpeg Conertion -- }
+      ExtS := copy(AnsiUpperCase(ExtractFileExt(OpenPictureDlg.FileName)), 2,
+        MaxLongInt);
+      if ExtS = 'BMP' then
+      begin
+        Bmp.LoadFromFile(OpenPictureDlg.FileName);
+        Jpg.CompressionQuality := 100;
+        Jpg.Assign(Bmp);
+        Jpg.SaveToFile(Path);
+        Image3.Picture.LoadFromFile(Path);
+      end
+      else
+        Image3.Picture.LoadFromFile(OpenPictureDlg.FileName);
+      { --End of Convertion -- }
+    except
+      ShowMessage('Error during picture loading');
+    end;
+  end;
+end;
+
+procedure TCustomerInfoForm.Fill_EditClick(Sender: TObject);
+var
+  F: File of byte;
+begin
+  // CustInfoData.Open;
+  ODSCustImages.Close;
+  ODSCustImages.Open;
+
+  odsPassDeps.Close;
+  odsPassDeps.Open;
+
+  Edit1.Text := CustInfoData.FieldByName('name').AsString;
+  Edit2.Text := CustInfoData.FieldByName('lastname').AsString;
+  Edit3.Text := CustInfoData.FieldByName('soname').AsString;
+  Edit4.Text := CustInfoData.FieldByName('BIRTHDAY').AsString;
+  Edit5.Text := CustInfoData.FieldByName('BIRTHPLACE').AsString;
+  Edit6.Text := CustInfoData.FieldByName('Address').AsString;
+  Edit7.Text := CustInfoData.FieldByName('City').AsString;
+  Edit8.Text := CustInfoData.FieldByName('WorkPlace').AsString;
+  Edit9.Text := CustInfoData.FieldByName('Work').AsString;
+  Edit10.Text := CustInfoData.FieldByName('Phone_m').AsString;
+  Edit11.Text := CustInfoData.FieldByName('Phone_h').AsString;
+  Edit12.Text := CustInfoData.FieldByName('Phone_w').AsString;
+  Edit13.Text := CustInfoData.FieldByName('e_mail').AsString;
+  Edit14.Text := CustInfoData.FieldByName('url').AsString;
+  Edit15.Text := CustInfoData.FieldByName('Garanted').AsString;
+  Edit16.Text := CustInfoData.FieldByName('PasSer').AsString;
+  Edit17.Text := CustInfoData.FieldByName('PaspNum').AsString;
+  Edit18.Text := CustInfoData.FieldByName('PaspDate').AsString;
+  Edit19.keyvalue := CustInfoData.FieldByName('PaspPlace').AsString;
+  Memo1.Text := CustInfoData.FieldByName('Note').AsString;
+
+  try
+    TDEdit4.Date := strtodate(Edit4.Text);
+    TDEdit18.Date := strtodate(Edit18.Text);
+  except
+    TDEdit4.Date := Date;
+    TDEdit18.Date := Date;
+  end;
+
+  GetPath;
+
+  if (ODSCustImagesPHOTO.IsNull) then
+  begin
+    Image1.Picture.LoadFromFile(Path_B);
+    { --no record - godda empty Image1-- }
+  end
+  else
+  begin
+    ODSCustImagesPHOTO.SaveToFile(Path);
+    AssignFile(F, Path);
+    Reset(F);
+    if FileSize(F) > 0 then
+    begin
+      CloseFile(F);
+      Image1.Picture.LoadFromFile(Path);
+      // Image1.Picture.Graphic.Height := Image1.Picture.Height div ((Image1.Picture.Graphic.Width div Image1.Width) * Image1.Height);
+      // Image1.Picture.Graphic.Width := Image1.Width;
+      { --JPEG Error #41-- }
+    end
+    else
+    begin
+      CloseFile(F);
+      Image1.Picture.LoadFromFile(Path_B);
+    end;
+  end;
+
+  if (ODSCustImagesCUSTSIGN.IsNull) then
+  begin
+    Image2.Picture.LoadFromFile(Path_B);
+    { --no record - godda empty Image1-- }
+  end
+  else
+  begin
+    ODSCustImagesCUSTSIGN.SaveToFile(Path);
+    AssignFile(F, Path);
+    Reset(F);
+    if FileSize(F) > 0 then
+    begin
+      CloseFile(F);
+      Image2.Picture.LoadFromFile(Path);
+      { --JPEG Error #41-- }
+    end
+    else
+    begin
+      CloseFile(F);
+      Image2.Picture.LoadFromFile(Path_B);
+    end;
+  end;
+
+  if (ODSCustImagesSTAMP.IsNull) then
+  begin
+    Image3.Picture.LoadFromFile(Path_B);
+    { --no record - godda empty Image1-- }
+  end
+  else
+  begin
+    ODSCustImagesSTAMP.SaveToFile(Path);
+    AssignFile(F, Path);
+    Reset(F);
+    if FileSize(F) > 0 then
+    begin
+      CloseFile(F);
+      Image3.Picture.LoadFromFile(Path);
+      { --JPEG Error #41-- }
+    end
+    else
+    begin
+      CloseFile(F);
+      Image3.Picture.LoadFromFile(Path_B);
+    end;
+  end;
+
+end;
+
+procedure TCustomerInfoForm.FormActivate(Sender: TObject);
+begin
+  Fill_Edit.Click;
+
+  SBTranslateProc.TranslateAllCompForms(self, sboapiDataModule.OrPack_SL);
+end;
+
+procedure TCustomerInfoForm.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+  if Ord(Key) = VK_ESCAPE then
+    Close;
+end;
+
+end.

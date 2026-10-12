@@ -1,0 +1,165 @@
+unit NewDepositsFrmAddCapitalizeImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
+  StdCtrls, ExtCtrls, CMCurrencyEdit, Mask, DBCtrlsEh, ComCtrls, ActnList,
+  XFSCtrls;
+
+type
+  TNewDepositsFrmAddCapitalize = class(TForm)
+    ActionList1: TActionList;
+    ActnTrans: TAction;
+    XFPanel1: TXFPanel;
+    XFGroupBox1: TXFGroupBox;
+    XFPanel2: TXFPanel;
+    XFPanel3: TXFPanel;
+    DBEditClient: TDBEditEh;
+    XFPanel5: TXFPanel;
+    XFStaticText1: TXFStaticText;
+    XFPanel4: TXFPanel;
+    XFPanel6: TXFPanel;
+    XFStaticText2: TXFStaticText;
+    XFPanel7: TXFPanel;
+    XFStaticText3: TXFStaticText;
+    DBEditEh3: TDBEditEh;
+    XFPanel8: TXFPanel;
+    EdClientDebit: TCMCurrencyEdit;
+    XFGroupBox2: TXFGroupBox;
+    XFPanel9: TXFPanel;
+    XFPanel10: TXFPanel;
+    DBEditContract: TDBEditEh;
+    XFPanel11: TXFPanel;
+    XFStaticText4: TXFStaticText;
+    XFPanel12: TXFPanel;
+    XFPanel13: TXFPanel;
+    XFStaticText5: TXFStaticText;
+    XFPanel14: TXFPanel;
+    XFStaticText6: TXFStaticText;
+    DBEditEh1: TDBEditEh;
+    XFPanel15: TXFPanel;
+    EdMainDebit: TCMCurrencyEdit;
+    XFGroupBox3: TXFGroupBox;
+    XFPanel16: TXFPanel;
+    XFPanel17: TXFPanel;
+    DBEditInterest: TDBEditEh;
+    XFPanel18: TXFPanel;
+    XFStaticText7: TXFStaticText;
+    XFPanel19: TXFPanel;
+    XFPanel20: TXFPanel;
+    XFStaticText8: TXFStaticText;
+    XFPanel21: TXFPanel;
+    XFStaticText9: TXFStaticText;
+    DBEditEh2: TDBEditEh;
+    XFPanel22: TXFPanel;
+    EdIntDebit: TCMCurrencyEdit;
+    XFPanel23: TXFPanel;
+    XFPanel24: TXFPanel;
+    XFStaticText10: TXFStaticText;
+    XFPanel25: TXFPanel;
+    DTPOperation: TDateTimePicker;
+    XFButton1: TXFButton;
+    XFButton2: TXFButton;
+    procedure FormCanResize(Sender: TObject; var NewWidth, NewHeight: Integer;
+      var Resize: Boolean);
+    procedure FormCreate(Sender: TObject);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure ActnTransExecute(Sender: TObject);
+    procedure ActnTransUpdate(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure XFButton2Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  NewDepositsFrmAddCapitalize: TNewDepositsFrmAddCapitalize;
+
+implementation
+
+{$R *.dfm}
+uses NewDepositsFrmCapitalizeImpl,NewCommonDeclsImpl,SBTranslateProc,sboapiDataModuleimpl;
+procedure TNewDepositsFrmAddCapitalize.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+  Resize := False
+end;
+
+procedure TNewDepositsFrmAddCapitalize.FormCreate(Sender: TObject);
+begin
+  SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TNewDepositsFrmAddCapitalize.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+  if Ord(Key) = VK_ESCAPE then Close
+end;
+
+procedure TNewDepositsFrmAddCapitalize.FormShow(Sender: TObject);
+var ClientFact:Real;
+begin
+   NewDepositsFrmCapitalize.DepositInfo.Refresh;
+   DTPOperation.DateTime := Get_BankDate;
+   ClientFact:=NewDepositsFrmCapitalize.dm_payment.CallFloatFunction('SetResiduaryAmount',['ContractID',Get_SelectedContID,
+                                                                                            'Wdate',Get_BankDate]);
+   EdMainDebit.Value := 0;
+   EdIntDebit.Value := 0;
+   EdClientDebit.Value:=ClientFact;
+end;
+
+procedure TNewDepositsFrmAddCapitalize.XFButton2Click(Sender: TObject);
+begin
+ Close
+end;
+
+procedure TNewDepositsFrmAddCapitalize.ActnTransExecute(Sender: TObject);
+
+resourcestring
+  rsTransactionsWillProcessed = 'Kapitallaşdırma ...';
+var
+    CommitCapitalize :Boolean;
+
+begin
+
+    with NewDepositsFrmCapitalize,dm_payment do
+     CallProcedure('Capitalization',['ContractID',Get_SelectedContID,
+                                    'HDate',Get_BankDate,
+                                    'FacticalDebtWithdraw',EdMainDebit.Value,
+                                    'InterestDebtWithdraw',EdIntDebit.value,
+                                    'ClientDebtWithdraw',EdClientDebit.Value,
+                                    'showTransaction',5]);
+
+    try
+    CommitCapitalize := TrDelayed_Show(Self,rsTransactionsWillProcessed);
+
+    Update;
+
+    NewDepositsFrmCapitalize.dm_payment.CallProcedure('CommitWithDrawMoney',[
+       'DoCommit',CommitCapitalize
+    ]);
+
+    if CommitCapitalize then
+    Self.ModalResult := mrOk;
+    Self.Update;
+  except
+
+
+    NewDepositsFrmCapitalize.dm_payment.CallProcedure('CommitWithDrawMoney',['DoCommit',
+        False
+    ]);
+
+    raise;
+
+  end;
+
+
+end;
+  procedure TNewDepositsFrmAddCapitalize.ActnTransUpdate(Sender: TObject);
+begin
+   with (Sender as TAction) do
+         Enabled := (EdMainDebit.Value + EdIntDebit.Value+EdClientDebit.Value) > 0
+end;
+end.

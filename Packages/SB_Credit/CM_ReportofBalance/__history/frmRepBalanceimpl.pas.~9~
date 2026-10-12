@@ -1,0 +1,233 @@
+unit frmRepBalanceimpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+   StdCtrls, Mask, DBCtrlsEh, DBLookupEh, ExtCtrls, Buttons,
+  ComCtrls, Db, OracleData, CMExcelExport, Oracle, Gauges, DBGridEh;
+
+type
+  TFrmrep = class(TForm)
+    Panel1: TPanel;
+    GroupBox1: TGroupBox;
+    CheckBox1: TCheckBox;
+    DBLookupComboboxEh1: TDBLookupComboboxEh;
+    GroupBox3: TGroupBox;
+    DBLookupComboboxEh2: TDBLookupComboboxEh;
+    CheckBox2: TCheckBox;
+    Panel5: TPanel;
+    GroupBox7: TGroupBox;
+    CheckBox7: TCheckBox;
+    DBLookupComboboxEh7: TDBLookupComboboxEh;
+    GroupBox9: TGroupBox;
+    CheckBox8: TCheckBox;
+    DBLookupComboboxEh8: TDBLookupComboboxEh;
+    BitBtn1: TBitBtn;
+    BitBtn2: TBitBtn;
+    Panel9: TPanel;
+    GroupBox10: TGroupBox;
+    CheckBox10: TCheckBox;
+    GroupBox11: TGroupBox;
+    Label1: TLabel;
+    Label2: TLabel;
+    BeginDate: TDateTimePicker;
+    EndDate: TDateTimePicker;
+    Valutes: TOracleDataSet;
+    ValutesVALUTE: TIntegerField;
+    Filials: TOracleDataSet;
+    FilialsID: TFloatField;
+    FilialsNAME: TWideStringField;
+    CustomerTypes: TOracleDataSet;
+    CustomerTypesID: TFloatField;
+    CustomerTypesDESCRIPTION: TWideStringField;
+    Persons: TOracleDataSet;
+    PersonsID: TFloatField;
+    PersonsNAME: TWideStringField;
+    PersonsDESCRIPION: TWideStringField;
+    DBLookupComboboxEh9: TDBLookupComboboxEh;
+    CreditTypes: TOracleDataSet;
+    CreditTypesID: TFloatField;
+    CreditTypesRENEWABLESTATUS: TFloatField;
+    CreditTypesITYPE: TFloatField;
+    CreditTypesICLASS: TFloatField;
+    CreditTypesDESCRIPTION: TWideStringField;
+    CreditTypesCARDTYPE: TFloatField;
+    Results: TOracleDataSet;
+    CredTypeDatScr: TDataSource;
+    PersonsDatSrc: TDataSource;
+    CustTypeDatSrc: TDataSource;
+    FilialsDatSrc: TDataSource;
+    ValutesDatSrc: TDataSource;
+    ResultsBALANCE: TFloatField;
+    ResultsNUMBEROFCREDIT: TWideStringField;
+    ResultsNAME: TWideStringField;
+    ResultsDATEOFCONCLUSION: TDateTimeField;
+    ResultsDUEDATEFIRSTCONTRACT: TDateTimeField;
+    cm_sd: TOraclePackage;
+    ResultsANNUALYINTERESTRATE: TFloatField;
+    ResultsVAL_NAME: TWideStringField;
+    ResultsDESCRIPION: TWideStringField;
+    ResultsDOVRUNEVVELI: TFloatField;
+    ResultsDOVRUNSONU: TFloatField;
+    ResultsODENISH: TFloatField;
+    ResultsTRANSHE: TFloatField;
+    ResultsPERIOD: TWideStringField;
+    ExcelExport: TCMExcelExport;
+    ValutesVALU_NAME: TWideStringField;
+    active: TOracleDataSet;
+    activeNUMBEROFCREDIT: TWideStringField;
+    activeNAME: TWideStringField;
+    activeMEHSUL_SHEXS: TWideStringField;
+    activeCREDITLINEAMOUNT: TFloatField;
+    activeDATEOFGRANT: TDateTimeField;
+    activePRINCIPAL: TFloatField;
+    activeINTEREST: TFloatField;
+    activeODCEM: TFloatField;
+    activeODEMELI: TFloatField;
+    activePAYMENTDATE: TDateTimeField;
+    activeCEM: TFloatField;
+    activePROQ: TFloatField;
+    activeVAL_NAME: TWideStringField;
+    activePHONENUMBER: TWideStringField;
+    activeEXNAME: TWideStringField;
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormShow(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure BitBtn1Click(Sender: TObject);
+    procedure BitBtn2Click(Sender: TObject);
+  private
+    function BuildFilterString :string;
+  public
+    { Public declarations }
+  end;
+
+var
+  Frmrep: TFrmrep;
+
+procedure InitPlugin(S:String);export;
+
+implementation
+
+{$R *.DFM}
+uses commondecls,sboapiDataModuleImpl,sbsystem;
+
+
+
+procedure InitPlugin(S:String);export;
+begin
+  Frmrep.Showmodal;
+end;
+
+exports
+  InitPlugin;
+
+
+
+function TFrmrep.BuildFilterString : String;
+
+  procedure ConcatFilter(var S: String; const Prefix : String; Checked : Boolean; KeyValue : Variant);
+  const
+     csFormat = '(%s=%s)';
+  var
+    Temp : String;   
+  begin
+
+    if Checked then
+    begin
+      Temp := Format(csFormat,[Prefix,Keyvalue]);
+      if S = '' then
+        S := Temp
+      else
+        S :=S + 'and ' + Temp;
+    end;
+    
+  end;
+begin
+  Result := '';
+  ConcatFilter(Result,'CURRENCY',CheckBox1.Checked,DBLookupComboboxEh1.KeyValue);
+  ConcatFilter(Result,'BRANCHID',CheckBox2.Checked,DBLookupComboboxEh2.KeyValue);
+  ConcatFilter(Result,'PERSONALTYPE',CheckBox8.Checked,DBLookupComboboxEh8.KeyValue);
+  ConcatFilter(Result,'CUSTOMERTYPE',CheckBox7.Checked,DBLookupComboboxEh7.KeyValue);
+  ConcatFilter(Result,'CREDITTYPE',CheckBox10.Checked,DBLookupComboboxEh9.KeyValue);
+end;
+
+procedure TFrmrep.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+  Resize := False
+end;
+
+procedure TFrmrep.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+  if ord(key) = VK_ESCAPE then close;
+end;
+
+procedure TFrmrep.FormShow(Sender: TObject);
+begin
+   BeginDate.DateTime := Get_CurrentDate;
+   EndDate.DateTime := Get_CurrentDate;
+end;
+
+procedure TFrmrep.FormCreate(Sender: TObject);
+begin
+   Valutes.Open;
+   Filials.Open;
+   CustomerTypes.Open;
+   Persons.Open;
+   CreditTypes.Open;
+end;
+
+procedure TFrmrep.FormDestroy(Sender: TObject);
+begin
+   Valutes.CloseAll;
+   Filials.CloseAll;
+   CustomerTypes.CloseAll;
+   Persons.CloseAll;
+   CreditTypes.CloseAll;
+end;
+
+procedure TFrmrep.BitBtn1Click(Sender: TObject);
+var
+  StartDate ,FinDate
+:TDateTime;
+  i:integer;
+  s,cs :String;
+begin
+   StartDate := integer(trunc(BeginDate.DateTime));
+   FinDate := integer(trunc(EndDate.DateTime));
+   s := BuildFilterString;
+
+with active  do   begin
+ if Active then CloseAll;
+  SetVariable('dat1',StartDate);
+  SetVariable('dat2',FinDate);
+   if s <> '' then
+   SQL[2] := ' and '+s
+    else
+  SQL[2] :='';
+
+ open;
+
+end;
+       with ExcelExport do
+       begin
+          Connect;
+          ExportDataset(active,'Prognoz',True);
+          Disconnect;
+       end;
+        Results.close;
+
+end;
+
+procedure TFrmrep.BitBtn2Click(Sender: TObject);
+begin
+  Close
+end;
+
+initialization
+  Frmrep := TFrmrep.create(CommonApplication);
+end.

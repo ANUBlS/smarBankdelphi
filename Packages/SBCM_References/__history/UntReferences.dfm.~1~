@@ -1,0 +1,749 @@
+object FrmReferences: TFrmReferences
+  Left = 322
+  Top = 179
+  Width = 379
+  Height = 524
+  Caption = 'FrmReferences'
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poMainFormCenter
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object MainPageController: TPageControl
+    Left = 0
+    Top = 0
+    Width = 371
+    Height = 478
+    ActivePage = SelectionsTabSheet
+    Align = alClient
+    TabOrder = 0
+    OnChange = MainPageControllerChange
+    object TabSheetTree: TTabSheet
+      Caption = '    &ясас    '
+      object GroupBox1: TGroupBox
+        Left = 0
+        Top = 0
+        Width = 363
+        Height = 49
+        Align = alTop
+        Caption = '√ийм€тл€р'
+        TabOrder = 0
+        object ValuesComboBox: TComboBox
+          Left = 8
+          Top = 16
+          Width = 105
+          Height = 21
+          Style = csDropDownList
+          Enabled = False
+          ItemHeight = 13
+          TabOrder = 0
+        end
+        object ValuesEdit: TEdit
+          Left = 120
+          Top = 16
+          Width = 105
+          Height = 21
+          Enabled = False
+          TabOrder = 1
+        end
+        object BtnApply: TButton
+          Left = 240
+          Top = 14
+          Width = 75
+          Height = 25
+          Caption = '&√€бул'
+          Enabled = False
+          TabOrder = 2
+          OnClick = BtnApplyClick
+        end
+      end
+      object GroupBox2: TGroupBox
+        Left = 0
+        Top = 49
+        Width = 363
+        Height = 401
+        Align = alClient
+        Caption = '¬ерил€нл€р'
+        TabOrder = 1
+        object TV: TTreeView
+          Left = 2
+          Top = 15
+          Width = 359
+          Height = 384
+          Align = alClient
+          HotTrack = True
+          Indent = 19
+          ReadOnly = True
+          TabOrder = 0
+          OnChange = TVChange
+        end
+      end
+    end
+    object SelectionsTabSheet: TTabSheet
+      Caption = '—еч&м€л€р'
+      ImageIndex = 1
+      object GroupBox3: TGroupBox
+        Left = 0
+        Top = 161
+        Width = 363
+        Height = 289
+        Align = alClient
+        Caption = 'Ѕаланс ўесаблары'
+        TabOrder = 0
+        object AccZoneInfoGrid: TDBGrid
+          Left = 2
+          Top = 52
+          Width = 359
+          Height = 235
+          Align = alClient
+          DataSource = DataModReferences.DataSrcAccZoneInfo
+          FixedColor = clNavy
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 0
+          TitleFont.Charset = DEFAULT_CHARSET
+          TitleFont.Color = clWindow
+          TitleFont.Height = -11
+          TitleFont.Name = 'Azl Sans Serif'
+          TitleFont.Style = []
+          Columns = <
+            item
+              Color = clWhite
+              Expanded = False
+              FieldName = 'ZONEID'
+              Title.Caption = '√руп'
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'ACCGROUP'
+              Title.Caption = 'Ѕаланс ўесабы'
+              Width = 84
+              Visible = True
+            end>
+        end
+        object Panel1: TPanel
+          Left = 2
+          Top = 15
+          Width = 359
+          Height = 37
+          Align = alTop
+          BorderStyle = bsSingle
+          TabOrder = 1
+          object DBNavigator: TDBNavigator
+            Left = 4
+            Top = 4
+            Width = 240
+            Height = 25
+            DataSource = DataModReferences.DataSrcAccZoneInfo
+            TabOrder = 0
+          end
+        end
+      end
+      object GroupBox4: TGroupBox
+        Left = 0
+        Top = 0
+        Width = 363
+        Height = 161
+        Align = alTop
+        Caption = '√руплар'
+        TabOrder = 1
+        object AccZonesGrid: TDBGrid
+          Left = 2
+          Top = 15
+          Width = 359
+          Height = 144
+          Align = alClient
+          DataSource = DataModReferences.DataSrcAccZones
+          FixedColor = clNavy
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 0
+          TitleFont.Charset = DEFAULT_CHARSET
+          TitleFont.Color = clWindow
+          TitleFont.Height = -11
+          TitleFont.Name = 'Azl Sans Serif'
+          TitleFont.Style = []
+          Columns = <
+            item
+              Expanded = False
+              FieldName = 'ZONEID'
+              Title.Caption = '√руп'
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'DESCRIPTION'
+              Title.Caption = '“€йинат'
+              Width = 240
+              Visible = True
+            end>
+        end
+      end
+    end
+    object ReferTabSheet: TTabSheet
+      Caption = '&ћ€луматлар'
+      ImageIndex = 2
+      object GroupBox5: TGroupBox
+        Left = 0
+        Top = 0
+        Width = 363
+        Height = 137
+        Align = alTop
+        Caption = '& редитин типл€ри'
+        TabOrder = 0
+        object CreditTypesGrid: TDBGrid
+          Left = 2
+          Top = 15
+          Width = 359
+          Height = 120
+          Align = alClient
+          DataSource = DataModReferences.DataSrcCreditTypes
+          FixedColor = clNavy
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 0
+          TitleFont.Charset = DEFAULT_CHARSET
+          TitleFont.Color = clWindow
+          TitleFont.Height = -11
+          TitleFont.Name = 'Azl Sans Serif'
+          TitleFont.Style = []
+          Columns = <
+            item
+              Expanded = False
+              FieldName = 'TYPE'
+              Title.Caption = ' редит типл€ри'
+              Width = 130
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'ADDITIONALTYPE'
+              Title.Caption = '“ип#'
+              Width = 209
+              Visible = True
+            end>
+        end
+      end
+      object GroupBox6: TGroupBox
+        Left = 0
+        Top = 137
+        Width = 363
+        Height = 136
+        Align = alTop
+        Caption = '&Ёиров типл€ри'
+        TabOrder = 1
+        object PledgeGrid: TDBGrid
+          Left = 2
+          Top = 15
+          Width = 359
+          Height = 119
+          Align = alClient
+          DataSource = DataModReferences.DataSrcPledgeTypes
+          FixedColor = clNavy
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 0
+          TitleFont.Charset = DEFAULT_CHARSET
+          TitleFont.Color = clWindow
+          TitleFont.Height = -11
+          TitleFont.Name = 'Azl Sans Serif'
+          TitleFont.Style = []
+          Columns = <
+            item
+              Expanded = False
+              FieldName = 'TYPE'
+              Title.Caption = 'Ёировлар'
+              Width = 220
+              Visible = True
+            end>
+        end
+      end
+      object GroupBox7: TGroupBox
+        Left = 0
+        Top = 273
+        Width = 363
+        Height = 177
+        Align = alClient
+        Caption = 'ћ&цшт€ри типл€ри'
+        TabOrder = 2
+        object DBGrid2: TDBGrid
+          Left = 2
+          Top = 15
+          Width = 359
+          Height = 160
+          Align = alClient
+          DataSource = DataModReferences.DataSrcCategories
+          FixedColor = clNavy
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 0
+          TitleFont.Charset = DEFAULT_CHARSET
+          TitleFont.Color = clWindow
+          TitleFont.Height = -11
+          TitleFont.Name = 'Azl Sans Serif'
+          TitleFont.Style = []
+          Columns = <
+            item
+              Expanded = False
+              FieldName = 'CATEGORY'
+              Title.Caption = ' атегорийа'
+              Width = 300
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'TRUECATEGORY'
+              Title.Caption = '“ип'
+              Width = 36
+              Visible = True
+            end>
+        end
+      end
+    end
+    object TabSheet1: TTabSheet
+      Caption = '& ечидл€р'
+      ImageIndex = 3
+      object GroupBox8: TGroupBox
+        Left = 0
+        Top = 0
+        Width = 363
+        Height = 137
+        Align = alTop
+        Caption = '& редитин типл€ри'
+        TabOrder = 0
+        object DBGridCtegory: TDBGrid
+          Left = 2
+          Top = 15
+          Width = 359
+          Height = 120
+          Align = alClient
+          DataSource = DataModReferences.DataSrcCategoriesMaster
+          FixedColor = clNavy
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = []
+          ParentFont = False
+          ReadOnly = True
+          TabOrder = 0
+          TitleFont.Charset = DEFAULT_CHARSET
+          TitleFont.Color = clWindow
+          TitleFont.Height = -11
+          TitleFont.Name = 'Azl Sans Serif'
+          TitleFont.Style = []
+          Columns = <
+            item
+              Expanded = False
+              FieldName = 'CATEGORY'
+              Title.Caption = ' лиентин категорийасы'
+              Visible = True
+            end>
+        end
+      end
+      object GroupBox9: TGroupBox
+        Left = 0
+        Top = 137
+        Width = 363
+        Height = 113
+        Align = alTop
+        Caption = '& ечидл€р'
+        TabOrder = 1
+        object DBGridMovies: TDBGrid
+          Left = 2
+          Top = 15
+          Width = 359
+          Height = 96
+          Align = alClient
+          DataSource = DataModReferences.DataSrcMovieNames
+          FixedColor = clNavy
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = []
+          ParentFont = False
+          ReadOnly = True
+          TabOrder = 0
+          TitleFont.Charset = DEFAULT_CHARSET
+          TitleFont.Color = clWindow
+          TitleFont.Height = -11
+          TitleFont.Name = 'Azl Sans Serif'
+          TitleFont.Style = []
+          Columns = <
+            item
+              Expanded = False
+              FieldName = 'DESCRIPTION'
+              Title.Caption = '“€йинат'
+              Width = 284
+              Visible = True
+            end>
+        end
+      end
+      object GroupBox10: TGroupBox
+        Left = 0
+        Top = 250
+        Width = 363
+        Height = 200
+        Align = alClient
+        Caption = 'ўе&саблар'
+        TabOrder = 2
+        object Panel2: TPanel
+          Left = 2
+          Top = 15
+          Width = 359
+          Height = 28
+          Align = alTop
+          TabOrder = 1
+          object DBNavigator1: TDBNavigator
+            Left = 1
+            Top = 1
+            Width = 260
+            Height = 26
+            DataSource = DataModReferences.DataSrcSettings
+            TabOrder = 0
+          end
+        end
+        object DBGridAccounts: TDBGrid
+          Left = 2
+          Top = 43
+          Width = 359
+          Height = 155
+          Align = alClient
+          DataSource = DataModReferences.DataSrcSettings
+          FixedColor = clNavy
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = []
+          Options = [dgEditing, dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgConfirmDelete, dgCancelOnExit]
+          ParentFont = False
+          TabOrder = 0
+          TitleFont.Charset = DEFAULT_CHARSET
+          TitleFont.Color = clWindow
+          TitleFont.Height = -11
+          TitleFont.Name = 'Azl Sans Serif'
+          TitleFont.Style = []
+          Columns = <
+            item
+              Expanded = False
+              FieldName = 'CurrencyName'
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'AccNo'
+              Width = 110
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'AccName'
+              Width = 118
+              Visible = True
+            end>
+        end
+      end
+    end
+    object TabSheetReliability: TTabSheet
+      Caption = ' &≈щтийат   '
+      ImageIndex = 4
+      object GroupBox11: TGroupBox
+        Left = 0
+        Top = 0
+        Width = 363
+        Height = 450
+        Align = alClient
+        Caption = '≈щтийатлар'
+        TabOrder = 0
+        object Panel3: TPanel
+          Left = 2
+          Top = 15
+          Width = 359
+          Height = 38
+          Align = alTop
+          BevelOuter = bvNone
+          TabOrder = 0
+          object DBNavigator2: TDBNavigator
+            Left = 7
+            Top = 3
+            Width = 230
+            Height = 30
+            DataSource = DataModReferences.DataSrcReliability
+            TabOrder = 0
+          end
+        end
+        object Panel4: TPanel
+          Left = 2
+          Top = 53
+          Width = 359
+          Height = 320
+          Align = alClient
+          BevelOuter = bvNone
+          TabOrder = 1
+          object DBGridReliability: TDBGrid
+            Left = 0
+            Top = 0
+            Width = 359
+            Height = 320
+            Align = alClient
+            DataSource = DataModReferences.DataSrcReliability
+            FixedColor = clHighlight
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = []
+            ParentFont = False
+            TabOrder = 0
+            TitleFont.Charset = DEFAULT_CHARSET
+            TitleFont.Color = clWindow
+            TitleFont.Height = -11
+            TitleFont.Name = 'Azl Sans Serif'
+            TitleFont.Style = []
+            Columns = <
+              item
+                Expanded = False
+                FieldName = 'RELIABILITY'
+                Title.Caption = '≈тибарлылыг д€р€ж€си'
+                Width = 200
+                Visible = True
+              end
+              item
+                Expanded = False
+                FieldName = 'PERCENT'
+                Title.Caption = '≈щтиййат фаизи'
+                Width = 78
+                Visible = True
+              end>
+          end
+        end
+        object Panel5: TPanel
+          Left = 2
+          Top = 373
+          Width = 359
+          Height = 75
+          Align = alBottom
+          TabOrder = 2
+          object Label1: TLabel
+            Left = 104
+            Top = 24
+            Width = 16
+            Height = 13
+            Caption = '(с)'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clActiveCaption
+            Font.Height = -11
+            Font.Name = 'MS Sans Serif'
+            Font.Style = [fsBold]
+            ParentFont = False
+          end
+          object Label2: TLabel
+            Left = 128
+            Top = 24
+            Width = 179
+            Height = 13
+            Caption = 'Smart Systems Technology Ltd.'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clActiveCaption
+            Font.Height = -12
+            Font.Name = 'MS Sans Serif'
+            Font.Style = [fsBold]
+            ParentFont = False
+          end
+          object Label3: TLabel
+            Left = 240
+            Top = 48
+            Width = 69
+            Height = 13
+            Caption = '1996 - 2002'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clActiveCaption
+            Font.Height = -11
+            Font.Name = 'MS Sans Serif'
+            Font.Style = [fsBold]
+            ParentFont = False
+          end
+        end
+      end
+    end
+    object TabSheet2: TTabSheet
+      Caption = 'ƒепозит типл€ри'
+      ImageIndex = 5
+      object DBGrid1: TDBGrid
+        Left = 0
+        Top = 35
+        Width = 363
+        Height = 415
+        Align = alClient
+        DataSource = DataModReferences.DataSrcDepositTypes
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        Options = [dgEditing, dgAlwaysShowEditor, dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgConfirmDelete, dgCancelOnExit]
+        ParentFont = False
+        TabOrder = 0
+        TitleFont.Charset = DEFAULT_CHARSET
+        TitleFont.Color = clWhite
+        TitleFont.Height = -11
+        TitleFont.Name = 'Azl Sans Serif'
+        TitleFont.Style = []
+        OnEditButtonClick = DBGrid1EditButtonClick
+        Columns = <
+          item
+            Expanded = False
+            FieldName = 'TYPE'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clBlack
+            Font.Height = -11
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = []
+            Title.Caption = 'ƒепозит типл€ри'
+            Title.Color = clNavy
+            Width = 145
+            Visible = True
+          end
+          item
+            Color = clWhite
+            Expanded = False
+            FieldName = 'ADDITIONALTYPE'
+            PickList.Strings = (
+              'Collection'
+              'Free'
+              'None')
+            Title.Caption = 'Ќювц'
+            Title.Color = clNavy
+            Width = 65
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'WITHDRAWTYPE'
+            PickList.Strings = (
+              'Capitalization'
+              'Withdraw'
+              'None')
+            Title.Caption = '“ип'
+            Title.Color = clNavy
+            Width = 70
+            Visible = True
+          end
+          item
+            ButtonStyle = cbsEllipsis
+            Expanded = False
+            FieldName = 'DATEINTERVAL'
+            ReadOnly = True
+            Title.Caption = '»нтервал'
+            Title.Color = clNavy
+            Width = 40
+            Visible = True
+          end>
+      end
+      object Panel6: TPanel
+        Left = 0
+        Top = 0
+        Width = 363
+        Height = 35
+        Align = alTop
+        TabOrder = 1
+        object DBNavigator3: TDBNavigator
+          Left = 3
+          Top = 5
+          Width = 240
+          Height = 25
+          DataSource = DataModReferences.DataSrcDepositTypes
+          TabOrder = 0
+        end
+      end
+    end
+    object TabSheet3: TTabSheet
+      Caption = 'ћцшт€ри типл€ри'
+      ImageIndex = 6
+      object DBGrid3: TDBGrid
+        Left = 0
+        Top = 0
+        Width = 363
+        Height = 450
+        Align = alClient
+        DataSource = DataModReferences.DataSrcTrueCategories
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 0
+        TitleFont.Charset = DEFAULT_CHARSET
+        TitleFont.Color = clWhite
+        TitleFont.Height = -11
+        TitleFont.Name = 'Azl Sans Serif'
+        TitleFont.Style = []
+        Columns = <
+          item
+            Expanded = False
+            FieldName = 'CATEGORYID'
+            Title.Caption = 'є'
+            Title.Color = clNavy
+            Width = 49
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'NAME'
+            Title.Caption = 'јды'
+            Title.Color = clNavy
+            Width = 129
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'DESCRIPTION'
+            Title.Caption = '“€йинаты'
+            Title.Color = clNavy
+            Width = 161
+            Visible = True
+          end>
+      end
+    end
+  end
+  object StatusBar: TStatusBar
+    Left = 0
+    Top = 478
+    Width = 371
+    Height = 19
+    Panels = <>
+    SimplePanel = False
+  end
+end

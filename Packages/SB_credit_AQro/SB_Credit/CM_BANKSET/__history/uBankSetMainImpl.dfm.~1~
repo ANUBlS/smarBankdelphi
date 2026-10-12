@@ -1,0 +1,197 @@
+object frmBankSet: TfrmBankSet
+  Left = 215
+  Top = 152
+  BorderIcons = [biSystemMenu]
+  BorderStyle = bsSingle
+  Caption = 'Bank Settings'
+  ClientHeight = 385
+  ClientWidth = 738
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'MS Sans Serif'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poScreenCenter
+  OnCreate = FormCreate
+  PixelsPerInch = 96
+  TextHeight = 13
+  object DBGrid1: TDBGrid
+    Left = 0
+    Top = 0
+    Width = 738
+    Height = 360
+    Align = alClient
+    DataSource = bSet
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 0
+    TitleFont.Charset = DEFAULT_CHARSET
+    TitleFont.Color = clWindowText
+    TitleFont.Height = -11
+    TitleFont.Name = 'MS Sans Serif'
+    TitleFont.Style = []
+    Columns = <
+      item
+        Color = clBtnFace
+        Expanded = False
+        FieldName = 'BANK'
+        ReadOnly = True
+        Title.Color = clNavy
+        Title.Font.Charset = DEFAULT_CHARSET
+        Title.Font.Color = clWindow
+        Title.Font.Height = -11
+        Title.Font.Name = 'MS Sans Serif'
+        Title.Font.Style = []
+        Width = 270
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'ACC_NO'
+        Title.Caption = 'Ùåñàá ¹'
+        Title.Color = clNavy
+        Title.Font.Charset = DEFAULT_CHARSET
+        Title.Font.Color = clWindow
+        Title.Font.Height = -11
+        Title.Font.Name = 'Azl Sans Serif'
+        Title.Font.Style = []
+        Width = 112
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'NAME'
+        Title.Caption = 'Àäû'
+        Title.Color = clNavy
+        Title.Font.Charset = DEFAULT_CHARSET
+        Title.Font.Color = clWindow
+        Title.Font.Height = -11
+        Title.Font.Name = 'Azl Sans Serif'
+        Title.Font.Style = []
+        Width = 214
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'INN'
+        Title.Caption = 'ÂÞÅÍ'
+        Title.Color = clNavy
+        Title.Font.Charset = DEFAULT_CHARSET
+        Title.Font.Color = clWindow
+        Title.Font.Height = -11
+        Title.Font.Name = 'Azl Sans Serif'
+        Title.Font.Style = []
+        Width = 103
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'ADDRESS'
+        Title.Caption = 'Áàíêûí öíâàíû'
+        Title.Color = clNavy
+        Title.Font.Charset = DEFAULT_CHARSET
+        Title.Font.Color = clWindow
+        Title.Font.Height = -11
+        Title.Font.Name = 'Azl Sans Serif'
+        Title.Font.Style = []
+        Width = 223
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'BOSSNAME'
+        Title.Caption = 'Ðÿùáÿð øÿõñ'
+        Title.Color = clNavy
+        Title.Font.Charset = DEFAULT_CHARSET
+        Title.Font.Color = clWindow
+        Title.Font.Height = -11
+        Title.Font.Name = 'Azl Sans Serif'
+        Title.Font.Style = []
+        Width = 133
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'LASTREESTRNUM'
+        Title.Caption = 'Ñîí ðååñòð ¹'
+        Title.Color = clNavy
+        Title.Font.Charset = DEFAULT_CHARSET
+        Title.Font.Color = clWindow
+        Title.Font.Height = -11
+        Title.Font.Name = 'Azl Sans Serif'
+        Title.Font.Style = []
+        Width = 88
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'contrdate'
+        Title.Caption = 'Ìöã òàðèõè'
+        Title.Color = clNavy
+        Title.Font.Charset = DEFAULT_CHARSET
+        Title.Font.Color = clWindow
+        Title.Font.Height = -11
+        Title.Font.Name = 'Azl Sans Serif'
+        Title.Font.Style = []
+        Width = 74
+        Visible = True
+      end>
+  end
+  object DBNavigator1: TDBNavigator
+    Left = 0
+    Top = 360
+    Width = 738
+    Height = 25
+    DataSource = bSet
+    VisibleButtons = [nbFirst, nbPrior, nbNext, nbLast, nbEdit, nbPost, nbCancel, nbRefresh]
+    Align = alBottom
+    TabOrder = 1
+  end
+  object BSettings: TOracleDataSet
+    SQL.Strings = (
+      
+        'SELECT rowid, cm_ip.getbankname(bankid) bank, acc_no, name, inn,' +
+        ' address, bossname,lastreestrnum, contrdate'
+      '  FROM cm_banksettings '
+      'order by bank')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = CMDataModule.CMSession
+    DesignActivation = False
+    Active = False
+    Left = 248
+    Top = 128
+  end
+  object bSet: TDataSource
+    DataSet = BSettings
+    Left = 208
+    Top = 128
+  end
+end

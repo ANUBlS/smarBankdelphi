@@ -1,0 +1,87 @@
+unit FIXINGAddImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, Buttons, Mask, DBCtrls;
+
+type
+  TFIXINGAddFrm = class(TForm)
+    Button1: TButton;
+    Button2: TButton;
+    Label1: TLabel;
+    DBEdit1: TDBEdit;
+    Label2: TLabel;
+    SpeedButton1: TSpeedButton;
+    ColorDialog1: TColorDialog;
+    Label3: TLabel;
+    procedure FormCanResize(Sender: TObject; var NewWidth, NewHeight: Integer;
+      var Resize: Boolean);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure Button2Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FIXINGAddFrm: TFIXINGAddFrm;
+
+implementation
+
+uses DmBudcetImpl;
+
+{$R *.dfm}
+
+procedure TFIXINGAddFrm.Button1Click(Sender: TObject);
+begin
+ DmBudcet.FIXINGDSet.post;
+ close;
+end;
+
+procedure TFIXINGAddFrm.Button2Click(Sender: TObject);
+begin
+close;
+end;
+
+procedure TFIXINGAddFrm.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+resize:=false;
+end;
+
+procedure TFIXINGAddFrm.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  DmBudcet.FIXINGDSet.close;
+   DmBudcet.FIXINGDSet.open;
+end;
+
+procedure TFIXINGAddFrm.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+  if ORD(Key) = VK_ESCAPE then
+    Close else
+end;
+
+procedure TFIXINGAddFrm.FormShow(Sender: TObject);
+begin
+Label3.Caption:=''
+end;
+
+procedure TFIXINGAddFrm.SpeedButton1Click(Sender: TObject);
+var
+s :string;
+begin
+s:='';
+ColorDialog1.Execute;
+   s:= ColorToString(ColorDialog1.Color);
+ Label3.Caption:=s  ;
+ DmBudcet.FIXINGDSetCOLORCODE.AsString:=s;
+end;
+
+end.

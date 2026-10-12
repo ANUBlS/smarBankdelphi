@@ -1,0 +1,24 @@
+unit dmins_reins_exelinpimpl;
+
+interface
+
+uses
+  SysUtils, Classes;
+
+type
+  Tdmins_reins_exelinp = class(TDataModule)
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  dmins_reins_exelinp: Tdmins_reins_exelinp;
+
+implementation
+
+{$R *.dfm}
+uses sboapiDataModuleImpl,CommanParametrs;
+
+end.

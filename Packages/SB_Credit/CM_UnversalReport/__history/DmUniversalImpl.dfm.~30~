@@ -1,0 +1,798 @@
+object DmUni: TDmUni
+  OldCreateOrder = False
+  OnCreate = DataModuleCreate
+  Left = 562
+  Top = 312
+  Height = 470
+  Width = 795
+  object srcBranch: TDataSource
+    DataSet = BranchDataSet
+    Left = 72
+    Top = 72
+  end
+  object BranchDataSet: TOracleDataSet
+    SQL.Strings = (
+      'SELECT id, name'
+      '  FROM filial')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 72
+    Top = 16
+  end
+  object DataSource1: TDataSource
+    DataSet = OracleDataSet1
+    Left = 160
+    Top = 72
+  end
+  object OracleDataSet1: TOracleDataSet
+    SQL.Strings = (
+      'SELECT  1 id, '#39'Partnyorlar '#252'zr'#601#39' name'
+      '  FROM dual'
+      'union'
+      'SELECT  2 id, '#39'Bonuslar istehlak'#39' name'
+      '  FROM dual'
+      'union'
+      'SELECT  3 id, '#39'Bonuslar biznes'#39' name'
+      '  FROM dual'
+      'union'
+      'SELECT  4 id, '#39'Silinmi'#351'l'#601'r '#252'zr'#601' hesabat'#39' name'
+      '  FROM dual'
+      'union'
+      'SELECT  5 id, '#39#214'd'#601'nilmi'#351'l'#601'r '#252'zr'#601' hesabat'#39' name'
+      '  FROM dual'
+      'union'
+      'SELECT  6 id, '#39'Proqnozlar '#252'zr'#601' hesabat'#39' name'
+      '  FROM dual')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000400000049004400010000000000080000004E0041004D00
+      4500010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 160
+    Top = 16
+    object OracleDataSet1ID: TFloatField
+      FieldName = 'ID'
+    end
+    object OracleDataSet1NAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 31
+    end
+  end
+  object OracleDataSet2: TOracleDataSet
+    SQL.Strings = (
+      
+        'select s.name,sum(p.creditlineamount*o.ostat) crm,sum(h.rest*o.o' +
+        'stat +h.duerest*o.ostat) qaliq,'
+      
+        'count(*) say,sum(y.rest*o.ostat) ilqaliq,count(y.id) ilsay,sum(m' +
+        '.rest*o.ostat) ayqaliq,count(m.id)aysay'
+      
+        ',sum(tov.rest*o.ostat) tovqaliq,count(tov.id)tovsay,sum(st.rest*' +
+        'o.ostat) stqaliq,count(st.id)stsay,'
+      
+        'sum(gec.rest*o.ostat) gecqaliq,count(gec.id)gecsay,sum(gecotuzp.' +
+        'rest*o.ostat) gecotuzpmeb,count(gecotuzp.id)gecotuzpsay'
+      
+        ',sum(gecotuzm.rest*o.ostat) gecotuzmmeb,count(gecotuzm.id)gecotu' +
+        'zmsay'
+      ' from cm_portfolio p,cm_partniyor s,cm_history h,operkurs o,'
+      
+        '   ( select p.id,h.rest+h.duerest rest from cm_portfolio p,cm_pa' +
+        'rtniyor s,cm_history h'
+      
+        '   where p.partid=s.id and p.dateofconclusion between TRUNC(:dat' +
+        ' ,'#39'YEAR'#39') and :dat '
+      
+        '   and p.id=h.creditid and /*h.rest+h.duerest+h.interestrest +h.' +
+        'dueinterestrest>0 and*/'
+      '   h.hdate=:dat)y,'
+      
+        '   ( select p.id,h.rest+h.duerest rest from cm_portfolio p,cm_pa' +
+        'rtniyor s,cm_history h'
+      
+        '   where p.partid=s.id and p.dateofconclusion between TRUNC(:dat' +
+        ' ,'#39'MON'#39') and :dat '
+      
+        '   and p.id=h.creditid and /*h.rest+h.duerest+h.interestrest +h.' +
+        'dueinterestrest>0 and*/'
+      '   h.hdate=:dat)m,'
+      
+        '   ( select p.id,h.rest+h.duerest rest from cm_portfolio p,cm_pa' +
+        'rtniyor s,cm_history h'
+      '   where p.partid=s.id and p.expertid=45'
+      
+        '   and p.id=h.creditid and /*h.rest+h.duerest+h.interestrest +h.' +
+        'dueinterestrest>0 and*/'
+      '   h.hdate=:dat)tov,'
+      
+        '   ( select p.id,h.rest+h.duerest rest from cm_portfolio p,cm_pa' +
+        'rtniyor s,cm_history h'
+      '   where p.partid=s.id and p.expertid=44'
+      
+        '   and p.id=h.creditid and /*h.rest+h.duerest+h.interestrest +h.' +
+        'dueinterestrest>0 and*/'
+      '   h.hdate=:dat)st,'
+      
+        '      ( select p.id,h.rest+h.duerest rest,h.dueday from cm_portf' +
+        'olio p,cm_history h'
+      
+        '   where p.id=h.creditid and /*h.rest+h.duerest+h.interestrest +' +
+        'h.dueinterestrest>0 and*/'
+      '   h.hdate=:dat and nvl(h.dueday,0)>0)gec,'
+      
+        '   ( select p.id,h.rest+h.duerest rest,h.dueday from cm_portfoli' +
+        'o p,cm_history h'
+      
+        '   where p.id=h.creditid and /* h.rest+h.duerest+h.interestrest ' +
+        '+h.dueinterestrest>0 and*/'
+      '   h.hdate=:dat and nvl(h.dueday,0)>30)gecotuzp'
+      '   ,'
+      
+        '   ( select p.id,h.rest+h.duerest rest,h.dueday from cm_portfoli' +
+        'o p,cm_history h'
+      
+        '   where p.id=h.creditid and /*h.rest+h.duerest+h.interestrest +' +
+        'h.dueinterestrest>0 and*/'
+      '   h.hdate=:dat and nvl(h.dueday,0) BETWEEN 1 and 30)gecotuzm'
+      'where p.partid=s.id and '
+      
+        'p.id=h.creditid and /* h.rest+h.duerest+h.interestrest +h.dueint' +
+        'erestrest>0 and*/'
+      'h.hdate=:dat and'
+      'p.credittype in(17,18) and'
+      'o.dat=:dat and'
+      'p.currency=o.val_kod and'
+      'p.id =y.id(+) and'
+      'p.id =m.id(+) and'
+      'p.id =tov.id(+)and'
+      'p.id =st.id(+)and'
+      'p.id =gec.id(+)and'
+      'p.id =gecotuzp.id(+)'
+      'and'
+      'p.id =gecotuzm.id(+)'
+      ''
+      ''
+      ''
+      ''
+      ''
+      'group by s.name')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000080000003A004400410054000C0000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      0500000012000000080000004E0041004D004500010000000000060000004300
+      52004D000100000000000A000000510041004C00490051000100000000000600
+      00005300410059000100000000000E00000049004C00510041004C0049005100
+      0100000000000A00000049004C005300410059000100000000000E0000004100
+      5900510041004C00490051000100000000000A00000041005900530041005900
+      0100000000001000000054004F005600510041004C0049005100010000000000
+      0C00000054004F0056005300410059000100000000000E000000530054005100
+      41004C00490051000100000000000A0000005300540053004100590001000000
+      000010000000470045004300510041004C00490051000100000000000C000000
+      470045004300530041005900010000000000160000004700450043004F005400
+      55005A0050004D0045004200010000000000160000004700450043004F005400
+      55005A005000530041005900010000000000160000004700450043004F005400
+      55005A004D004D0045004200010000000000160000004700450043004F005400
+      55005A004D00530041005900010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 272
+    Top = 8
+    object OracleDataSet2NAME: TWideStringField
+      DisplayLabel = 'Partnyor'
+      FieldName = 'NAME'
+      Size = 200
+    end
+    object OracleDataSet2CRM: TFloatField
+      DisplayLabel = 'Kredit m'#601'bl'#601#287'i'
+      FieldName = 'CRM'
+      DisplayFormat = '#,##0.00'
+    end
+    object OracleDataSet2QALIQ: TFloatField
+      DisplayLabel = 'Kredit portfeli'
+      FieldName = 'QALIQ'
+      DisplayFormat = '#,##0.00'
+    end
+    object OracleDataSet2SAY: TFloatField
+      DisplayLabel = 'Say '#252'mumi'
+      FieldName = 'SAY'
+    end
+    object OracleDataSet2ILQALIQ: TFloatField
+      DisplayLabel = 'il '#601'rzind'#601' kredit'
+      FieldName = 'ILQALIQ'
+      DisplayFormat = '#,##0.00'
+    end
+    object OracleDataSet2ILSAY: TFloatField
+      DisplayLabel = #304'l '#601'rzind'#601' say'
+      FieldName = 'ILSAY'
+    end
+    object OracleDataSet2AYQALIQ: TFloatField
+      DisplayLabel = 'Ay '#601'rzind'#601' kredit'
+      FieldName = 'AYQALIQ'
+      DisplayFormat = '#,##0.00'
+    end
+    object OracleDataSet2AYSAY: TFloatField
+      DisplayLabel = 'Ay '#601'rzind'#601' say'
+      FieldName = 'AYSAY'
+    end
+    object OracleDataSet2TOVQALIQ: TFloatField
+      DisplayLabel = 'T'#246'vsiyy'#601
+      FieldName = 'TOVQALIQ'
+      DisplayFormat = '#,##0.00'
+    end
+    object OracleDataSet2TOVSAY: TFloatField
+      DisplayLabel = 'T'#246'vsiyy'#601' say'
+      FieldName = 'TOVSAY'
+    end
+    object OracleDataSet2STQALIQ: TFloatField
+      DisplayLabel = 'Standart m'#601'bl'#601#287
+      FieldName = 'STQALIQ'
+      DisplayFormat = '#,##0.00'
+    end
+    object OracleDataSet2STSAY: TFloatField
+      DisplayLabel = 'Standart say'
+      FieldName = 'STSAY'
+    end
+    object OracleDataSet2GECQALIQ: TFloatField
+      DisplayLabel = 'Gecikm'#601' '#252'mumi'
+      FieldName = 'GECQALIQ'
+      DisplayFormat = '#,##0.00'
+    end
+    object OracleDataSet2GECSAY: TFloatField
+      DisplayLabel = 'Gecikm'#601' say'
+      FieldName = 'GECSAY'
+    end
+    object OracleDataSet2GECOTUZPMEB: TFloatField
+      DisplayLabel = 'Gecikm'#601' 30+(m'#601'b)'
+      FieldName = 'GECOTUZPMEB'
+      DisplayFormat = '#,##0.00'
+    end
+    object OracleDataSet2GECOTUZPSAY: TFloatField
+      DisplayLabel = 'Gecikm'#601' 30 +()say'
+      FieldName = 'GECOTUZPSAY'
+    end
+    object OracleDataSet2GECOTUZMMEB: TFloatField
+      DisplayLabel = 'Gecikm'#601' 30-(m'#601'b)'
+      FieldName = 'GECOTUZMMEB'
+      DisplayFormat = '#,##0.00'
+    end
+    object OracleDataSet2GECOTUZMSAY: TFloatField
+      DisplayLabel = 'Gecikm'#601' 30-(say)'
+      FieldName = 'GECOTUZMSAY'
+    end
+  end
+  object BONS: TOracleDataSet
+    SQL.Strings = (
+      
+        'select usrgroup, description, name, sum(crmeb)crmeb, sum(rest)re' +
+        'st, sum(fullsay)fullsay,'
+      
+        '      sum(aymeb)aymeb, sum(sayay)sayay, sum(avtosay)avtosay, sum' +
+        '(gecsay)gecsay, sum(gecmeb)gecmeb, sum(musbons)musbons,'
+      '       sum(minbons)minbons from '
+      ''
+      
+        '(select  p.usrgroup,u.description, f.name,sum((p.creditlineamoun' +
+        't-nvl(hh.creditlineamount,0))*o.ostat )crmeb,sum((h.rest-nvl(hh.' +
+        'rest,0))*o.ostat)+sum((h.duerest-nvl(hh.duerest,0))*o.ostat) res' +
+        't,'
+      
+        'COUNT(*)fullsay, (ay.crmebay) aymeb ,ay.sayay,sayavto.avto avtos' +
+        'ay, gec.gecsay,gec.gecmeb '
+      
+        ',nvl(nvl(ay.sayay*2,0)+nvl(sayavto.avto*5,0)+(sum((h.rest-nvl(hh' +
+        '.rest,0))*o.ostat)+sum((h.duerest-nvl(hh.duerest,0))*o.ostat) )*' +
+        '0.0003,0) musbons,nvl(gec.gecsay*6+(gec.gecmeb*0.0009),0) minbon' +
+        's'
+      ' from '
+      'cm_portfolio p,'
+      'cm_usergroups u,cm_history h,'
+      'filial_t f,'
+      'operkurs o,'
+      
+        '(select p.usrgroup, u.description, f.name,sum(p.creditlineamount' +
+        '*o.ostat) crmebay ,count(*) sayay from '
+      'cm_portfolio p,'
+      'cm_usergroups u,'
+      'filial_t f,'
+      'operkurs o'
+      'where p.usrgroup=u.id and'
+      'p.branchid=f.id and'
+      'p.dateofconclusion BETWEEN trunc(:dat,'#39'MON'#39') and :dat  and'
+      'p.credittype in(4,17,18,22,23) AND'
+      'p.branchid not in (0) and'
+      'p.currency=o.val_kod and'
+      'o.dat=:dat'
+      'group by p.usrgroup, u.description, f.name'
+      ') ay,('
+      
+        ' select p.usrgroup, sum(h.rest+h.duerest) gecmeb, COUNT(*) gecsa' +
+        'y from  cm_portfolio p, cm_history h'
+      ' where p.id=h.creditid and '
+      ' p.dateofconclusion>'#39'01-apr-2014'#39' and'
+      ' p.credittype in(4,17,18,22,23) AND'
+      ' p.branchid not in (0) and'
+      ' h.hdate=:dat and h.rest+h.duerest>0 and h.dueday>10'
+      ' group by p.usrgroup ) gec,'
+      
+        ' (select usrgroup, count(id) avto from cm_portfolio where dateof' +
+        'conclusion BETWEEN trunc(:dat,'#39'MON'#39') and :dat and credittype in(' +
+        '1,16)  group by usrgroup) sayavto'
+      
+        ',(select creditid,rest,duerest,creditlineamount from cm_history ' +
+        'h,cm_portfolio p'
+      'where'
+      'hdate=:dat and p.id=h.creditid and  credittype in(1,16)) hh'
+      'where p.usrgroup=u.id(+) and'
+      'p.branchid=f.id and'
+      'p.dateofconclusion>'#39'01-apr-2014'#39'   and'
+      'p.credittype in(20,4,17,18,22,23,1,16)  AND'
+      'p.branchid not in (0) and'
+      'p.currency=o.val_kod and'
+      'o.dat=:dat and'
+      'p.usrgroup=ay.usrgroup(+) and'
+      'p.usrgroup=gec.usrgroup(+)and'
+      'p.usrgroup=sayavto.usrgroup(+)and'
+      'p.id=h.creditid and'
+      'h.hdate=:dat and '
+      'h.rest+h.duerest>0 and'
+      'p.id=hh.creditid(+) '
+      ''
+      
+        'group by p.usrgroup, u.description, f.name,ay.crmebay,sayay,gec.' +
+        'gecsay,gecmeb ,sayavto.avto'
+      ''
+      'union all'
+      
+        'select  p.usrgroup,u.description, f.name,sum((p.creditlineamount' +
+        '-nvl(hh.creditlineamount,0))*o.ostat )crmeb,sum((h.rest-nvl(hh.r' +
+        'est,0))*o.ostat)+sum((h.duerest-nvl(hh.duerest,0))*o.ostat) rest' +
+        ','
+      
+        'COUNT(*)fullsay, (ay.crmebay) aymeb ,ay.sayay,sayavto.avto avtos' +
+        'ay, gec.gecsay,gec.gecmeb'
+      
+        ',nvl(nvl(ay.sayay*2,0)+nvl(sayavto.avto*5,0)+(sum((h.rest-nvl(hh' +
+        '.rest,0))*o.ostat)+sum((h.duerest-nvl(hh.duerest,0))*o.ostat) )*' +
+        '0.0003,0) musbons,nvl(gec.gecsay*6+(gec.gecmeb*0.0009),0) minbon' +
+        's'
+      ' from '
+      'cm_portfolio p,'
+      'cm_usergroups u,cm_history h,'
+      'filial_t f,'
+      'operkurs o,'
+      
+        '(select p.usrgroup, u.description, f.name,sum(p.creditlineamount' +
+        '*o.ostat) crmebay ,count(*) sayay from '
+      'cm_portfolio p,'
+      'cm_usergroups u,'
+      'filial_t f,'
+      'operkurs o'
+      'where p.usrgroup=u.id and'
+      'p.branchid=f.id and'
+      'p.dateofconclusion BETWEEN trunc(:dat,'#39'MON'#39') and :dat  and'
+      'p.credittype=24 and p.expertid=44 AND'
+      'p.branchid not in (0) and'
+      'p.currency=o.val_kod and'
+      'o.dat=:dat'
+      'group by p.usrgroup, u.description, f.name'
+      ') ay,('
+      
+        ' select p.usrgroup, sum(h.rest+h.duerest) gecmeb, COUNT(*) gecsa' +
+        'y from  cm_portfolio p, cm_history h'
+      ' where p.id=h.creditid and '
+      ' p.dateofconclusion>'#39'01-apr-2014'#39' and'
+      ' p.credittype =24 AND p.expertid=44 and'
+      ' p.branchid not in (0) and'
+      ' h.hdate=:dat and h.dueday>10'
+      ' group by p.usrgroup ) gec,'
+      
+        ' (select usrgroup, count(id) avto from cm_portfolio where dateof' +
+        'conclusion BETWEEN trunc(:dat,'#39'MON'#39') and :dat and credittype in(' +
+        '1,16)  group by usrgroup) sayavto'
+      
+        ',(select creditid,rest,duerest,creditlineamount from cm_history ' +
+        'h,cm_portfolio p'
+      'where'
+      'hdate=:dat and p.id=h.creditid and  credittype in(1,16)) hh'
+      'where p.usrgroup=u.id and'
+      'p.branchid=f.id and'
+      'p.dateofconclusion>'#39'01-apr-2014'#39'   and'
+      'p.credittype in(24)  and(p.expertid=44) AND'
+      'p.branchid not in (0) and'
+      'p.currency=o.val_kod and'
+      'o.dat=:dat and'
+      'p.usrgroup=ay.usrgroup(+) and'
+      'p.usrgroup=gec.usrgroup(+)and'
+      'p.usrgroup=sayavto.usrgroup(+)and'
+      'p.id=h.creditid and'
+      'h.hdate=:dat and '
+      'p.id=hh.creditid(+) '
+      ''
+      
+        'group by p.usrgroup, u.description, f.name,ay.crmebay,sayay,gec.' +
+        'gecsay,gecmeb ,sayavto.avto)'
+      'group by usrgroup, description, name')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000080000003A004400410054000C0000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000D00000010000000550053005200470052004F005500500001000000
+      0000160000004400450053004300520049005000540049004F004E0001000000
+      0000080000004E0041004D0045000100000000000A000000430052004D004500
+      42000100000000000E000000460055004C004C00530041005900010000000000
+      0A000000410059004D00450042000100000000000A0000005300410059004100
+      59000100000000000C0000004700450043005300410059000100000000000C00
+      00004700450043004D00450042000100000000000E0000004D00550053004200
+      4F004E0053000100000000000E0000004D0049004E0042004F004E0053000100
+      000000000800000052004500530054000100000000000E000000410056005400
+      4F00530041005900010000000000}
+    Session = sboapiDataModule.SBSession
+    OnCalcFields = BONSCalcFields
+    Left = 280
+    Top = 80
+    object BONSNAME: TWideStringField
+      DisplayLabel = 'Filial'
+      FieldName = 'NAME'
+      Size = 360
+    end
+    object BONSDESCRIPTION: TWideStringField
+      DisplayLabel = #304#351#231'inin S.A.A'
+      FieldName = 'DESCRIPTION'
+      Size = 256
+    end
+    object BONSCRMEB: TFloatField
+      DisplayLabel = 'Kreditin m'#601'bl'#601#287'i'
+      FieldName = 'CRMEB'
+    end
+    object BONSREST: TFloatField
+      DisplayLabel = 'Kreditin qal'#305'q m'#601'bl'#601#287'i'
+      FieldName = 'REST'
+    end
+    object BONSFULLSAY: TFloatField
+      DisplayLabel = 'Kreditin say'
+      FieldName = 'FULLSAY'
+    end
+    object BONSAYMEB: TFloatField
+      DisplayLabel = 'Ay '#601'rzinde kreditin m'#601'bl'#601#287'i'
+      FieldName = 'AYMEB'
+    end
+    object BONSSAYAY: TFloatField
+      DisplayLabel = 'Ay '#601'rzind'#601' kreditin say'#305
+      FieldName = 'SAYAY'
+    end
+    object BONSAVTOSAY: TFloatField
+      DisplayLabel = 'Ay '#601'rzind'#601' avtomobil say'
+      FieldName = 'AVTOSAY'
+    end
+    object BONSGECMEB: TFloatField
+      DisplayLabel = 'Gecik'#601'n kreditin m'#601'bl'#601#287'i'
+      FieldName = 'GECMEB'
+    end
+    object BONSGECSAY: TFloatField
+      DisplayLabel = 'Gecik'#601'n kreditin '
+      FieldName = 'GECSAY'
+    end
+    object BONSMUSBONS: TFloatField
+      DisplayLabel = 'M'#252'sb'#601't bonus'
+      FieldName = 'MUSBONS'
+    end
+    object BONSMINBONS: TFloatField
+      DisplayLabel = 'M'#601'nfi bonus'
+      FieldName = 'MINBONS'
+    end
+    object BONSbons: TFloatField
+      DisplayLabel = 'Bonus'
+      FieldKind = fkCalculated
+      FieldName = 'bons'
+      Calculated = True
+    end
+  end
+  object OracleDataSet3: TOracleDataSet
+    SQL.Strings = (
+      
+        'select p.numberofcredit,b.name, p.dateofconclusion,p.duedatefirs' +
+        'tcontract,h.rest,h.interestrest,h.duerest,h.dueinterestrest,'
+      
+        ' py.payedamt,py.payedintamt,py.payeddueamt,py.payeddueintamt,h.d' +
+        'ueday,(select valu_name from avalute_t where valute=p.currency )' +
+        ' val,'
+      
+        ' (select dueday from cm_prev_state where creditid=p.id) fristday' +
+        ',  py.payedamt*t.ostat+py.payedintamt*t.ostat+py.payeddueamt*t.o' +
+        'stat+py.payeddueintamt*t.ostat  cem from '
+      
+        ' cm_payments py,cm_active_credits p,cm_history h,cm_boorowerinfo' +
+        ' b,temprate t'
+      ' where py.paydate BETWEEN :bdat and :edat'
+      ' and p.id=py.creditid'
+      ' and p.id=h.creditid'
+      ' and p.id=b.creditid'
+      ' and h.hdate=py.paydate'
+      ' and p.currency=t.val_kod')
+    Optimize = False
+    Variables.Data = {
+      04000000020000000A0000003A0042004400410054000C000000000000000000
+      00000A0000003A0045004400410054000C0000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      05000000100000001C0000004E0055004D004200450052004F00460043005200
+      4500440049005400010000000000080000004E0041004D004500010000000000
+      2000000044004100540045004F00460043004F004E0043004C00550053004900
+      4F004E0001000000000028000000440055004500440041005400450046004900
+      52005300540043004F004E005400520041004300540001000000000008000000
+      52004500530054000100000000001800000049004E0054004500520045005300
+      540052004500530054000100000000000E000000440055004500520045005300
+      54000100000000001E00000044005500450049004E0054004500520045005300
+      5400520045005300540001000000000010000000500041005900450044004100
+      4D005400010000000000160000005000410059004500440049004E0054004100
+      4D00540001000000000016000000500041005900450044004400550045004100
+      4D0054000100000000001C000000500041005900450044004400550045004900
+      4E00540041004D00540001000000000006000000430045004D00010000000000
+      0C00000044005500450044004100590001000000000006000000560041004C00
+      0100000000001000000046005200490053005400440041005900010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 520
+    Top = 72
+    object OracleDataSet3NUMBEROFCREDIT: TWideStringField
+      DisplayLabel = 'M'#252'qavil'#601' No'
+      FieldName = 'NUMBEROFCREDIT'
+      Size = 32
+    end
+    object OracleDataSet3NAME: TWideStringField
+      DisplayLabel = 'M'#252#351't'#601'ri'
+      FieldName = 'NAME'
+      Size = 256
+    end
+    object OracleDataSet3DATEOFCONCLUSION: TDateTimeField
+      DisplayLabel = 'A'#231#305'lma tarixi'
+      FieldName = 'DATEOFCONCLUSION'
+    end
+    object OracleDataSet3DUEDATEFIRSTCONTRACT: TDateTimeField
+      DisplayLabel = 'Bitm'#601' tarixi'
+      FieldName = 'DUEDATEFIRSTCONTRACT'
+    end
+    object OracleDataSet3VAL: TWideStringField
+      DisplayLabel = 'Valyuta'
+      FieldName = 'VAL'
+      Size = 400
+    end
+    object OracleDataSet3FRISTDAY: TFloatField
+      DisplayLabel = 'Gec g'#252'n '#246'd'#601'ni'#351'd'#601'n qabaq'
+      FieldName = 'FRISTDAY'
+    end
+    object OracleDataSet3DUEDAY: TFloatField
+      DisplayLabel = 'Gec g'#252'n '#246'd'#601'ni'#351'd'#601'n sonra'
+      FieldName = 'DUEDAY'
+    end
+    object OracleDataSet3REST: TFloatField
+      DisplayLabel = 'Qal'#305'q'
+      FieldName = 'REST'
+    end
+    object OracleDataSet3INTERESTREST: TFloatField
+      DisplayLabel = 'F.Qal'#305'q'
+      FieldName = 'INTERESTREST'
+    end
+    object OracleDataSet3DUEREST: TFloatField
+      DisplayLabel = 'G.Qal'#305'q'
+      FieldName = 'DUEREST'
+    end
+    object OracleDataSet3DUEINTERESTREST: TFloatField
+      DisplayLabel = 'GF.Qal'#305'q'
+      FieldName = 'DUEINTERESTREST'
+    end
+    object OracleDataSet3PAYEDAMT: TFloatField
+      DisplayLabel = #399'sasdan '#214'd'
+      FieldName = 'PAYEDAMT'
+    end
+    object OracleDataSet3PAYEDINTAMT: TFloatField
+      DisplayLabel = 'Faizd'#601'n '#214'd'
+      FieldName = 'PAYEDINTAMT'
+    end
+    object OracleDataSet3PAYEDDUEAMT: TFloatField
+      DisplayLabel = 'G.'#399'sasdan '#214'd'
+      FieldName = 'PAYEDDUEAMT'
+    end
+    object OracleDataSet3PAYEDDUEINTAMT: TFloatField
+      DisplayLabel = 'G.Fazid'#601'n '#214'd'
+      FieldName = 'PAYEDDUEINTAMT'
+    end
+    object OracleDataSet3CEM: TFloatField
+      DisplayLabel = 'C'#601'mi '#246'd'#601'ni'#351
+      FieldName = 'CEM'
+    end
+  end
+  object OracleDataSet4: TOracleDataSet
+    SQL.Strings = (
+      
+        'select p.numberofcredit,b.name,av.val_name,f.name fil,m.name meh' +
+        ', p.dateofconclusion,p.duedatefirstcontract,sum(v.lammount) lamm' +
+        'ount,hv.dueday,v.name ,ex.name ex from'
+      
+        ' cm_portfolio p, cm_accounts a,cm_boorowerinfo b,provarch v,aval' +
+        'ute_t av,filial_t f,cm_mehsul m,cm_expert ex,'
+      ' cm_prev_state hv'
+      'where '
+      'p.id=a.creditid and'
+      'p.id=b.creditid and'
+      'p.id=hv.creditid and'
+      'p.branchid=f.id and'
+      'p.mehsulid=m.id and '
+      'p.expertid=ex.id and '
+      'p.currency=av.valute and'
+      'a.booroweraccid=v.kredit and'
+      'v.dat BETWEEN :bdat and :edat and'
+      'p.PERSONALTYPE<>2 and'
+      'v.name not like'#39'%Mezenne ferqi%'#39' and'
+      'v.name not like'#39'%Kredit tran%'#39
+      
+        'group by p.numberofcredit,b.name, p.dateofconclusion,p.duedatefi' +
+        'rstcontract,hv.dueday,av.val_name,f.name,v.name,m.name,ex.name')
+    Optimize = False
+    Variables.Data = {
+      04000000020000000A0000003A0042004400410054000C000000000000000000
+      00000A0000003A0045004400410054000C0000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000B0000001C0000004E0055004D004200450052004F00460043005200
+      4500440049005400010000000000080000004E0041004D004500010000000000
+      2000000044004100540045004F00460043004F004E0043004C00550053004900
+      4F004E0001000000000028000000440055004500440041005400450046004900
+      52005300540043004F004E00540052004100430054000100000000000C000000
+      440055004500440041005900010000000000100000004C0041004D004D004F00
+      55004E0054000100000000000C0000004E0041004D0045005F00310001000000
+      0000060000004D004500480001000000000006000000460049004C0001000000
+      000010000000560041004C005F004E0041004D00450001000000000004000000
+      45005800010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 520
+    Top = 164
+    object OracleDataSet4NUMBEROFCREDIT: TWideStringField
+      DisplayLabel = 'M'#252'qavile no'
+      FieldName = 'NUMBEROFCREDIT'
+      Size = 32
+    end
+    object OracleDataSet4NAME: TWideStringField
+      DisplayLabel = 'M'#252#351't'#601'ri'
+      FieldName = 'NAME'
+      Size = 256
+    end
+    object OracleDataSet4DATEOFCONCLUSION: TDateTimeField
+      DisplayLabel = 'A'#231#305'lma tarixi'
+      FieldName = 'DATEOFCONCLUSION'
+    end
+    object OracleDataSet4DUEDATEFIRSTCONTRACT: TDateTimeField
+      DisplayLabel = 'Bitm'#601' tarixi'
+      FieldName = 'DUEDATEFIRSTCONTRACT'
+    end
+    object OracleDataSet4LAMMOUNT: TFloatField
+      DisplayLabel = 'M'#601'bl'#601#287
+      FieldName = 'LAMMOUNT'
+    end
+    object OracleDataSet4DUEDAY: TFloatField
+      DisplayLabel = 'Gec g'#252'n'
+      FieldName = 'DUEDAY'
+    end
+    object OracleDataSet4NAME_1: TWideStringField
+      DisplayLabel = 'T'#601'yinat'
+      FieldName = 'NAME_1'
+      Size = 1020
+    end
+    object OracleDataSet4VAL_NAME: TWideStringField
+      DisplayLabel = 'Valyuta'
+      FieldName = 'VAL_NAME'
+      Size = 160
+    end
+    object OracleDataSet4FIL: TWideStringField
+      DisplayLabel = 'Filial'
+      FieldName = 'FIL'
+      Size = 360
+    end
+    object OracleDataSet4MEH: TWideStringField
+      DisplayLabel = 'Mehsul'
+      FieldName = 'MEH'
+      Size = 400
+    end
+    object OracleDataSet4EX: TWideStringField
+      DisplayLabel = 'Kredit Expert'
+      FieldName = 'EX'
+      Size = 320
+    end
+  end
+  object OraclePackage1: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'CM_SCHEDULE_PROGNOZ'
+    ParameterMode = pmNamed
+    Left = 75
+    Top = 170
+  end
+  object Prognoz: TOracleDataSet
+    SQL.Strings = (
+      
+        'select p.id,p.annualyinterestrate,MONTHS_BETWEEN(nvl(p.duedatefi' +
+        'rstcontract,p.duedatefirstcontract),:dat) per,h.rest+h.duerest r' +
+        'est, ADD_MONTHS(:dat,1)fpaydat from cm_portfolio p,cm_history h'
+      'where p.id=h.creditid and'
+      'h.hdate=:dat and'
+      'h.rest+h.duerest>0')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000080000003A004400410054000C0000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000500000004000000490044000100000000002600000041004E004E00
+      550041004C00590049004E005400450052004500530054005200410054004500
+      0100000000000600000050004500520001000000000008000000520045005300
+      54000100000000000E0000004600500041005900440041005400010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 520
+    Top = 232
+    object PrognozID: TFloatField
+      FieldName = 'ID'
+    end
+    object PrognozANNUALYINTERESTRATE: TFloatField
+      FieldName = 'ANNUALYINTERESTRATE'
+    end
+    object PrognozPER: TFloatField
+      FieldName = 'PER'
+    end
+    object PrognozREST: TFloatField
+      FieldName = 'REST'
+    end
+    object PrognozFPAYDAT: TDateTimeField
+      FieldName = 'FPAYDAT'
+    end
+  end
+  object OracleDataSet5: TOracleDataSet
+    SQL.Strings = (
+      'select v.val_name,'
+      
+        'sum(CM_PURDENSAL.odenishmuddet_bol(id,:dat,0,30)*o.ostat) as f30' +
+        ',sum(CM_PURDENSAL.odenishmuddet_bolpr(id,:dat,31,60)*o.ostat) as' +
+        ' f3060,'
+      
+        'sum(CM_PURDENSAL.odenishmuddet_bolpr(id,:dat,61,90)*o.ostat) as ' +
+        'f6090,sum(CM_PURDENSAL.odenishmuddet_bolpr(id,:dat,91,180)*o.ost' +
+        'at) as f90180,'
+      
+        'sum(CM_PURDENSAL.odenishmuddet_bolpr(id,:dat,181,360)*o.ostat) a' +
+        's f180360,sum(CM_PURDENSAL.odenishmuddet_bolpr(id,:dat,361,10000' +
+        '0)*o.ostat) as f360b'
+      ' from smart.cm_active_credits p, smart.operkurs o,avalute_t v'
+      ' where p.currency=o.val_kod and '
+      ' o.dat=:dat and'
+      ' p.CURRENCY=v.valute'
+      ' GROUP by v.val_name')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000080000003A004400410054000C0000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000700000010000000560041004C005F004E0041004D00450001000000
+      0000060000004600330030000100000000000A00000046003300300036003000
+      0100000000000A000000460036003000390030000100000000000C0000004600
+      390030003100380030000100000000000E000000460031003800300033003600
+      30000100000000000A00000046003300360030004200010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 528
+    Top = 296
+    object OracleDataSet5VAL_NAME: TWideStringField
+      FieldName = 'VAL_NAME'
+      Size = 160
+    end
+    object OracleDataSet5F30: TFloatField
+      FieldName = 'F30'
+    end
+    object OracleDataSet5F3060: TFloatField
+      FieldName = 'F3060'
+    end
+    object OracleDataSet5F6090: TFloatField
+      FieldName = 'F6090'
+    end
+    object OracleDataSet5F90180: TFloatField
+      FieldName = 'F90180'
+    end
+    object OracleDataSet5F180360: TFloatField
+      FieldName = 'F180360'
+    end
+    object OracleDataSet5F360B: TFloatField
+      FieldName = 'F360B'
+    end
+  end
+end

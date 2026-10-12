@@ -1,0 +1,31 @@
+library ProblemCreditMgrs;
+
+uses
+  ComServ,
+  ProblemCreditmgrs_TLB in 'ProblemCreditmgrs_TLB.pas',
+  ProblemCreditManagers in 'ProblemCreditManagers.pas' {ProblemCreditMgr: TActiveForm} {ProblemCreditMgr: CoClass},
+  PrCmDMImpl in 'PrCmDMImpl.pas' {PrCmDM: TDataModule},
+  PrPayFrmImpl in 'PrPayFrmImpl.pas' {PrPayFrm},
+  PrInfoFrmImpl in 'PrInfoFrmImpl.pas' {PrInfoFrm},
+  KrdInfoFrmImpl in 'KrdInfoFrmImpl.pas' {KrdInfoFrm},
+  SendFrm›mpl in 'SendFrm›mpl.pas' {SendFrm},
+  PrReport in 'PrReport.pas' {FormReport},
+  AdminParamaterKredit in 'AdminParamaterKredit.pas' {FormSettings},
+  UserQovluqImpl in 'UserQovluqImpl.pas' {FrmUserQovluq};
+
+{$E ocx}
+
+exports
+  DllGetClassObject,
+  DllCanUnloadNow,
+  DllRegisterServer,
+  DllUnregisterServer,
+  DllInstall;
+
+
+{$R *.TLB}
+
+{$R *.RES}
+
+begin
+end.

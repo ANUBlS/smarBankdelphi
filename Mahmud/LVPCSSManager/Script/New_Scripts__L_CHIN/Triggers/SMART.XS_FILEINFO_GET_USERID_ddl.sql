@@ -1,0 +1,16 @@
+-- Start of DDL Script for Trigger SMART.XS_FILEINFO_GET_USERID
+-- Generated 20-May-2006 14:24:02 from SMART@SB
+
+CREATE OR REPLACE TRIGGER "SMART".xs_fileinfo_get_userid
+ BEFORE
+  INSERT
+ ON xs_sentinfo
+REFERENCING NEW AS NEW OLD AS OLD
+ FOR EACH ROW
+BEGIN
+   :NEW.USERID:=SBLOGIN.USERID;
+END;
+/
+
+-- End of DDL Script for Trigger SMART.XS_FILEINFO_GET_USERID
+

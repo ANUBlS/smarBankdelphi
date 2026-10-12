@@ -1,0 +1,71 @@
+unit FormUnit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, Grids, XDBGrids, ExtCtrls, DBGridEh, Mask, DBCtrlsEh,
+  DBLookupEh, DB, OracleData;
+
+type
+  TFormIns = class(TForm)
+    Panel1: TPanel;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    Label6: TLabel;
+    Label7: TLabel;
+    Label8: TLabel;
+    Edit1: TEdit;
+    Panel3: TPanel;
+    XDBGrid1: TXDBGrid;
+    Panel2: TPanel;
+    Button1: TButton;
+    Button2: TButton;
+    Button3: TButton;
+    Label9: TLabel;
+    Label10: TLabel;
+    Label11: TLabel;
+    Label12: TLabel;
+    Label13: TLabel;
+    Edit2: TEdit;
+    ods_cel: TOracleDataSet;
+    ods_celID: TFloatField;
+    ods_celNAME: TWideStringField;
+    DBLookupComboboxEh1: TDBLookupComboboxEh;
+    Edit3: TEdit;
+    DBLookupComboboxEh2: TDBLookupComboboxEh;
+    OracleDataSet1: TOracleDataSet;
+    FloatField1: TFloatField;
+    WideStringField1: TWideStringField;
+    DBLookupComboboxEh3: TDBLookupComboboxEh;
+    OracleDataSet2: TOracleDataSet;
+    OracleDataSet2ID: TFloatField;
+    OracleDataSet2NAME: TWideStringField;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormIns: TFormIns;
+
+ procedure InitPlugin(s:string);export;
+implementation
+uses  sboapiDataModuleImpl,CommonDecls;
+
+{$R *.dfm}
+
+procedure InitPlugin(s:string);export;
+begin
+   FormIns.ShowModal;
+end;
+exports
+     InitPlugin;
+
+{$R *.dfm}
+
+end.

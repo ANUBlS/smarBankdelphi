@@ -1,0 +1,86 @@
+unit frmAddEditDepositTypesImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, DBLookupEh, Mask, DBCtrlsEh, DBGridEh, DBCtrls, ExtCtrls;
+
+type
+  TfrmAddEditDepositTypes = class(TForm)
+    ButtonOk: TButton;
+    ButtonCancel: TButton;
+    Panel1: TPanel;
+    DBEditEh1: TDBEditEh;
+    Label1: TLabel;
+    Panel2: TPanel;
+    DBLookupComboboxEh1: TDBLookupComboboxEh;
+    Label2: TLabel;
+    Panel3: TPanel;
+    Label3: TLabel;
+    DBLookupComboboxEh2: TDBLookupComboboxEh;
+    Panel4: TPanel;
+    DBEditEh2: TDBEditEh;
+    Label4: TLabel;
+    Panel5: TPanel;
+    Label5: TLabel;
+    DBLookupComboboxEh3: TDBLookupComboboxEh;
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure ButtonOkClick(Sender: TObject);
+    procedure ButtonCancelClick(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  frmAddEditDepositTypes: TfrmAddEditDepositTypes;
+
+implementation
+
+{$R *.DFM}
+uses frmDepositTypesImpl, DMReferences;
+
+procedure TfrmAddEditDepositTypes.FormCanResize(Sender: TObject;
+  var NewWidth, NewHeight: Integer; var Resize: Boolean);
+begin
+   Resize := False
+end;
+
+procedure TfrmAddEditDepositTypes.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+  ButtonCancelClick(Sender);
+end;
+
+procedure TfrmAddEditDepositTypes.FormKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+   if Ord(Key) = VK_ESCAPE then Close;
+end;
+
+procedure TfrmAddEditDepositTypes.ButtonOkClick(Sender: TObject);
+begin
+   with frmDepositTypes,DataModReferences do
+   begin
+
+   //   FAdditionalType := AddTypesForColl.FieldByName('addtypename').AsString;
+    //  FWithdrawtype := AddTypesForWith.FieldByName('withdrtype').AsString;
+
+      DepositTypes.Post;
+   end;
+   ModalResult := MrOk;
+end;
+
+procedure TfrmAddEditDepositTypes.ButtonCancelClick(Sender: TObject);
+begin
+   with DataModReferences,DepositTypes do
+        Cancel;
+   Close;
+end;
+
+end.

@@ -1,0 +1,45 @@
+unit SBWRTemplatesTuning;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, Mask, DBCtrls, Grids, DBGridEh, ComCtrls, ToolWin, ActnList,
+  ImgList, NLSLocalizer;
+
+type
+  TSBWRTemplateSetup = class(TForm)
+    ToolBar1: TToolBar;
+    ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
+    ToolButton3: TToolButton;
+    ToolButton4: TToolButton;
+    ToolButton5: TToolButton;
+    ToolButton6: TToolButton;
+    ToolButton7: TToolButton;
+    ToolButton8: TToolButton;
+    ToolButton9: TToolButton;
+    DBGridEh1: TDBGridEh;
+    GroupBox1: TGroupBox;
+    DBEdit1: TDBEdit;
+    ImageList1: TImageList;
+    ActionList1: TActionList;
+    ActnAddTemplate: TAction;
+    ActnDelTemplate: TAction;
+    ActnRefreshTemplate: TAction;
+    ActnUpdatetamplate: TAction;
+    ActnClose: TAction;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  SBWRTemplateSetup: TSBWRTemplateSetup;
+
+implementation
+
+{$R *.DFM}
+
+end.

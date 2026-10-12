@@ -1,0 +1,56 @@
+object FrmAExProgress: TFrmAExProgress
+  Left = 371
+  Top = 239
+  Width = 439
+  Height = 222
+  BorderIcons = []
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'MS Sans Serif'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poScreenCenter
+  PixelsPerInch = 96
+  TextHeight = 13
+  object AExProgress: TProgressBar
+    Left = 0
+    Top = 0
+    Width = 431
+    Height = 13
+    Align = alTop
+    Min = 0
+    Max = 100
+    Step = 1
+    TabOrder = 0
+  end
+  object Memo1: TMemo
+    Left = 24
+    Top = 32
+    Width = 217
+    Height = 145
+    Lines.Strings = (
+      'Memo1')
+    TabOrder = 1
+  end
+  object Button1: TButton
+    Left = 288
+    Top = 96
+    Width = 75
+    Height = 25
+    Caption = 'Button1'
+    TabOrder = 2
+    OnClick = Button1Click
+  end
+  object NLSLocalizer1: TNLSLocalizer
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    Left = 344
+    Top = 48
+  end
+end

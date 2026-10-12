@@ -1,0 +1,265 @@
+object DataModDailyOper: TDataModDailyOper
+  OldCreateOrder = False
+  OnCreate = DataModuleCreate
+  Left = 279
+  Top = 231
+  Height = 500
+  Width = 870
+  object DS_CMACTIVE: TDataSource
+    DataSet = ODS_CMACTIVE
+    Left = 56
+    Top = 136
+  end
+  object ODS_CMACTIVE: TOracleDataSet
+    SQL.Strings = (
+      'select k.numberofcredit as "muqavile no-su", f.name filial,  '
+      
+        'b.name as "borcalan", j.val_name valyuta, v.acc_no as "ssuda hes' +
+        'abi" , '
+      'mehman.getdailypayment(k.id, :v_paydate) as "odenen mebleg",'
+      
+        'round(mehman.getdailypayment(k.id , :v_paydate)*s.ostat,2) as "o' +
+        'denen meblegin ekv",'
+      ' k.annualyinterestrate||'#39'%'#39' as "illik faiz",'
+      'mehman2.given(k.id, :k_givendate ) as "verilen mebleg",'
+      
+        'round (mehman2.given(k.id, :k_givendate)*s.ostat, 2) as "verilen' +
+        ' meblegin ekv",'
+      
+        'round (months_between (k.DUEDATEFIRSTCONTRACT,k.DATEOFCONCLUSION' +
+        '),0)  as "kreditin muddeti(ayla)",'
+      'h.rest+h.duerest  as "gun sonuna qaliq" ,'
+      'round((h.rest+h.duerest)*s.ostat, 2) as "qaligin ekv",'
+      'k.purposeofcredit as "kredit mehsulunun adi"'
+      ' from'
+      
+        'cm_active_credits k,  cm_boorowerinfo b, sb_filial f, sb_avalute' +
+        ' j,'
+      'cm_loanaccounts v, smart.temprate s,cm_history h'
+      '   where'
+      ' k.id=b.creditid and k.branchid=f.id and k.currency=j.valute '
+      
+        'and k.id=v.creditid and k.currency=s.val_kod and k.id=h.creditid' +
+        ' and'
+      ' hdate=(:h_date)'
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      '')
+    Variables.Data = {
+      03000000030000000A0000003A565F504159444154450C000000000000000000
+      00000C0000003A4B5F474956454E444154450C00000000000000000000000700
+      00003A485F444154450C0000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      040000000C0000000600000046494C49414C01000000000008000000626F7263
+      616C616E0100000000000A000000696C6C696B206661697A0100000000000C00
+      00007373756461206865736162690100000000000E0000006D75716176696C65
+      206E6F2D73750100000000000700000056414C595554410100000000000D0000
+      00616C696E616E206D65626C656701000000000013000000616C696E616E206D
+      65626C6567696E20656B760100000000000E000000766572696C656E206D6562
+      6C656701000000000014000000766572696C656E206D65626C6567696E20656B
+      760100000000001000000067756E20736F6E756E612071616C69710100000000
+      000B00000071616C6967696E20656B76010000000000}
+    Session = CMDataModule.CMSession
+    Left = 64
+    Top = 56
+  end
+  object ODS_FILIAL: TOracleDataSet
+    SQL.Strings = (
+      'SELECT * FROM sb_filial ORDER BY ID')
+    QBEDefinition.QBEFieldDefs = {
+      0400000003000000020000004944010000000000040000004E414D4501000000
+      00000A0000004B4F445F46494C49414C010000000000}
+    Session = CMDataModule.CMSession
+    Left = 64
+    Top = 240
+  end
+  object DS_FILIAL: TDataSource
+    DataSet = ODS_FILIAL
+    Left = 56
+    Top = 320
+  end
+  object odstime: TOracleDataSet
+    SQL.Strings = (
+      'select * from smart.sysdat')
+    QBEDefinition.QBEFieldDefs = {
+      04000000040000000700000054454B5F44415401000000000008000000505245
+      445F444154010000000000070000004152435F44415901000000000005000000
+      434C4F5345010000000000}
+    Session = CMDataModule.CMSession
+    Left = 184
+    Top = 56
+  end
+  object ODS_Valuta: TOracleDataSet
+    SQL.Strings = (
+      'select * from smart.avalute')
+    QBEDefinition.QBEFieldDefs = {
+      04000000170000000600000056414C5554450100000000000800000056414C5F
+      4E414D450100000000000900000056414C555F4E414D450100000000000A0000
+      0056414C555F53484F5254010000000000060000005553544F52470100000000
+      0006000000555354504F4B0100000000000800000056414C555F47454E010000
+      0000000700000056414C555F415A010000000000050000005553494E47010000
+      0000000A00000056414C555F4F544845520100000000000A00000056414C555F
+      494E5445520100000000000900000056414C555F42414C410100000000000900
+      0000505249535441564B4101000000000007000000434F554E54525901000000
+      0000080000005553545F504F4B31010000000000070000004F46464943414C01
+      0000000000050000004C494D4954010000000000050000004445424554010000
+      000000060000004B524544495401000000000006000000463535303150010000
+      0000000600000046353530315601000000000006000000534445424554010000
+      0000000700000053435245444954010000000000}
+    Session = CMDataModule.CMSession
+    Left = 184
+    Top = 136
+  end
+  object DataSource1: TDataSource
+    DataSet = ODS_Valuta
+    Left = 176
+    Top = 240
+  end
+  object ODS_CMACTIV_EHTIYAT: TOracleDataSet
+    SQL.Strings = (
+      'select k.numberofcredit as "muqavile no-su", f.name filial,  '
+      
+        'b.name as "borcalan", j.val_name valyuta, v.acc_no as "ssuda hes' +
+        'abi" , '
+      'mehman.getdailypayment(k.id, :v_paydate) as "odenen mebleg",'
+      
+        'mehman.getdailypayment(k.id , :v_paydate)*s.ostat as "odenen meb' +
+        'legin ekv",'
+      ' k.annualyinterestrate||'#39'%'#39' as "illik faiz",'
+      'mehman2.given(k.id, :k_givendate ) as "verilen mebleg",'
+      
+        'mehman2.given(k.id, :k_givendate)*s.ostat as "verilen meblegin e' +
+        'kv",'
+      
+        'round (months_between (k.DUEDATEFIRSTCONTRACT,k.DATEOFCONCLUSION' +
+        '),0)  as "kreditin muddeti(ayla)",'
+      'h.rest+h.duerest  as "gun sonuna qaliq" ,'
+      
+        '(h.rest+h.interestrest+h.duerest+h.dueinterestrest)*s.ostat as "' +
+        'qaligin ekv",'
+      'k.purposeofcredit as "kredit mehsulunun adi"'
+      ' from'
+      
+        'cm_active_credits k,  cm_boorowerinfo b, sb_filial f, sb_avalute' +
+        ' j,'
+      'cm_loanaccounts v, smart.temprate s,cm_history h'
+      '   where'
+      ' k.id=b.creditid and k.branchid=f.id and k.currency=j.valute '
+      
+        'and k.id=v.creditid and k.currency=s.val_kod and k.id=h.creditid' +
+        ' and'
+      ' hdate=(:h_date)'
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      '')
+    Variables.Data = {
+      03000000030000000A0000003A565F504159444154450C000000000000000000
+      00000C0000003A4B5F474956454E444154450C00000000000000000000000700
+      00003A485F444154450C0000000000000000000000}
+    Session = CMDataModule.CMSession
+    Left = 384
+    Top = 16
+  end
+  object DS_CMACTIV_EHTIYAT: TDataSource
+    DataSet = ODS_CMACTIV_EHTIYAT
+    Left = 392
+    Top = 96
+  end
+end

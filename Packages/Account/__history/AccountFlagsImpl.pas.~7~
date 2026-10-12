@@ -1,0 +1,127 @@
+﻿unit AccountFlagsImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, CheckLst;
+
+type
+  TFormAccFlags = class(TForm)
+    CLBAccFlags: TCheckListBox;
+    ButtonApply: TButton;
+    procedure FormKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure FormCreate(Sender: TObject);
+    procedure ButtonApplyClick(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure CLBAccFlagsClickCheck(Sender: TObject);
+    procedure CLBAccFlagsClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    FlagMap: String;
+  end;
+  type mas=array[0..99]of integer;
+var
+  FormAccFlags: TFormAccFlags;
+   a:mas;
+implementation
+
+uses AccountDataModuleImpl, AccountImpl;
+
+{$R *.DFM}
+
+procedure TFormAccFlags.FormKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+ if Key = VK_ESCAPE then
+   ModalResult := mrCancel;
+end;
+
+
+procedure TFormAccFlags.FormShow(Sender: TObject);
+var
+i:integer;
+begin
+for i:=0  to CLBAccFlags.Items.Count - 1 do
+  begin
+    if CLBAccFlags.Checked[i] then
+
+    a[i]:=i;
+
+end;
+end;
+
+procedure TFormAccFlags.CLBAccFlagsClick(Sender: TObject);
+begin
+//ShowMessage(IntToStr(CLBAccFlags.ItemIndex));
+//ShowMessage(IntToStr(CLBAccFlags.Items[CLBAccFlags.ItemIndex] ));
+end;
+
+procedure TFormAccFlags.CLBAccFlagsClickCheck(Sender: TObject);
+var
+i:integer;
+f:boolean;
+begin
+
+f:= AccDataModule.SB_ACA11.CallBooleanFunction('checkadvancedobjectaccess', ['ACC_SİMVOL']);
+
+ if not f then
+ begin
+  for i := 0 to 99 do
+  begin
+
+  if CLBAccFlags.ItemIndex=a[i] then begin
+                   CLBAccFlags.Checked[a[i]]:=true;
+                   showmessage('Sizin secilmisi goturme huququnuz yoxdur  !');
+                   exit;
+                 end;
+  end;
+
+    end;
+end;
+
+procedure TFormAccFlags.FormCreate(Sender: TObject);
+var
+   Index: Word;
+begin
+ with AccDataModule do
+ begin
+  AccFlags.Refresh;
+  AccFlags.First;
+  AccFlags.Next;
+
+  while not AccFlags.Eof do
+  begin
+   Index :=CLBAccFlags.Items.Add(AccFlags.FieldByName('Name').AsString);
+   if AccountForm.OperationMode = omEdit then
+    CLBAccFlags.Checked[Index] :=FlagExsist(Account.FieldByName('ID').AsInteger, AccFlags.FieldByName('Symbol').AsString[1]);
+   AccFlags.Next;
+  end;
+
+ end; //showmessage((CLBAccFlags.Items[index]));
+end;
+
+procedure TFormAccFlags.ButtonApplyClick(Sender: TObject);
+var
+   Index, IndexCount: Word;
+   Symbol: String;
+
+begin
+
+  FlagMap :='';
+  IndexCount :=CLBAccFlags.Items.Count;
+  for Index :=0 to IndexCount -1 do
+  if CLBAccFlags.Checked[Index] then
+   begin
+
+    Symbol :=CLBAccFlags.Items[index];
+    FlagMap :=FlagMap + ',' + Symbol[1];
+   end;
+
+  Delete(FlagMap, 1, 1);
+end;
+
+end.

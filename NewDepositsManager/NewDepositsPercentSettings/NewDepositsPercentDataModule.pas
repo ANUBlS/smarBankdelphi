@@ -1,0 +1,29 @@
+unit NewDepositsPercentDataModule;
+
+interface
+
+uses
+  SysUtils, Classes, DB, OracleData;
+
+type
+  TDataModuleTypes = class(TDataModule)
+    DepTypes: TOracleDataSet;
+    DepTypesID: TFloatField;
+    DepTypesTYPE: TWideStringField;
+    DepTypesDatSrc: TDataSource;
+    DSDayCount: TDataSource;
+    ODSDayCount: TOracleDataSet;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  DataModuleTypes: TDataModuleTypes;
+
+implementation
+
+{$R *.dfm}
+
+end.

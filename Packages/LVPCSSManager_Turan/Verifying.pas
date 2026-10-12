@@ -1,0 +1,82 @@
+unit Verifying;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Mask, DBCtrls, StdCtrls, Data_Unit;
+
+type
+  Tverify = class(TForm)
+    Edit1: TEdit;
+    Button1: TButton;
+    Button2: TButton;
+    DBEdit4: TDBEdit;
+    DBEdit1: TDBEdit;
+    Edit2: TEdit;
+    procedure Button2Click(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  verify: Tverify;
+
+implementation
+
+{$R *.dfm}
+
+procedure Tverify.Button1Click(Sender: TObject);
+begin
+IF (DataMod.XS_BATCHS.fieldbyname('status').AsInteger=1) or
+(DataMod.XS_BATCHS.fieldbyname('status').AsInteger=8)
+
+    THEN
+ BEGIN
+ //ShowMessage(edit1.Text);
+ //showmessage(edit2.Text);
+       if edit1.Text=Edit2.Text then
+     begin
+      //ShowMessage('noa');
+       DataMod.Ins.CallProcedure('xs_Batchs_VerifStatus',[dbedit4.Text]);
+        DataMod.Ins.CallProcedure('xs_beneficiary_VerifStatus',[dbedit4.Text]);
+      DataMod.XS_BATCHS.Refresh;
+         DataMod.XS_BENEFICIARY.Refresh;
+        DataMod.XS_BATCHS.Locate('ID',dbedit4.Text,[])
+     END
+   else
+  begin
+      // ShowMessage('aa');
+       DataMod.Ins.CallProcedure('xs_batchs_error',[dbedit4.Text]);
+       DataMod.XS_BATCHS.Refresh;
+         DataMod.XS_BENEFICIARY.Refresh;
+        DataMod.XS_BATCHS.Locate('ID',dbedit4.Text,[])
+  end;
+       close;
+ end;
+end;
+
+procedure Tverify.Button2Click(Sender: TObject);
+begin
+close;
+end;
+
+procedure Tverify.FormCreate(Sender: TObject);
+var a :real;
+begin
+a:=strtofloat(StringReplace(trim(DBEdit1.Text),',', '',[rfReplaceAll, rfIgnoreCase]));
+if Frac(a)<>0 then
+edit2.Text:=StringReplace(trim(DBEdit1.Text),',', '',[rfReplaceAll, rfIgnoreCase])
+
+else
+edit2.Text:=floattostr( Int(a));
+
+
+//DataMod.XS_BATCHS.FieldByName('amount').AsVariant;
+end;
+
+end.

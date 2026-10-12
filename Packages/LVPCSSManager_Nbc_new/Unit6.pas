@@ -1,0 +1,61 @@
+unit Unit6;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Data_Unit, QRCtrls, QuickRpt, ExtCtrls;
+
+type
+  TReport_inm = class(TForm)
+    QuickRep1: TQuickRep;
+    TitleBand1: TQRBand;
+    QuickRep2: TQuickRep;
+    QRLabel3: TQRLabel;
+    QRLabel5: TQRLabel;
+    QRLabel7: TQRLabel;
+    QRLabel4: TQRLabel;
+    QRLabel9: TQRLabel;
+    QRLabel8: TQRLabel;
+    QRLabel6: TQRLabel;
+    QRLabel52: TQRLabel;
+    QRLabel53: TQRLabel;
+    QRDBText12: TQRDBText;
+    QRLabel59: TQRLabel;
+    QRLabel60: TQRLabel;
+    QRDBText20: TQRDBText;
+    QRLabel62: TQRLabel;
+    QRLabel63: TQRLabel;
+    QRDBText21: TQRDBText;
+    QRLabel65: TQRLabel;
+    QRLabel66: TQRLabel;
+    QRDBText22: TQRDBText;
+    QRDBText23: TQRDBText;
+    QRLabel67: TQRLabel;
+    QRLabel68: TQRLabel;
+    QRLabel69: TQRLabel;
+    QRDBText24: TQRDBText;
+    QRDBText25: TQRDBText;
+    QRLabel70: TQRLabel;
+    QRLabel71: TQRLabel;
+    QRDBText26: TQRDBText;
+    QRLabel72: TQRLabel;
+    QRDBText27: TQRDBText;
+    QRLabel1: TQRLabel;
+    QRLabel2: TQRLabel;
+    QRDBText1: TQRDBText;
+    QRDBText2: TQRDBText;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Report_inm: TReport_inm;
+
+implementation
+
+{$R *.dfm}
+
+end.

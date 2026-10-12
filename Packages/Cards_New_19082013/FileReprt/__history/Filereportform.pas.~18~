@@ -1,0 +1,272 @@
+unit Filereportform;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, OracleData, Grids, DBGrids, StdCtrls, ComCtrls, ToolWin, ExtCtrls,
+  CMExcelExport, ImgList;
+
+type
+  TFileReports = class(TForm)
+    DataSource1: TDataSource;
+    ImageList1: TImageList;
+    CMExcelExport1: TCMExcelExport;
+    Panel3: TPanel;
+    CoolBar1: TCoolBar;
+    ToolBar1: TToolBar;
+    ToolButton1: TToolButton;
+    ToolButton10: TToolButton;
+    ToolButton11: TToolButton;
+    ToolButton20: TToolButton;
+    ToolButton14: TToolButton;
+    ToolButton15: TToolButton;
+    ToolButton17: TToolButton;
+    DBGrid1: TDBGrid;
+    ToolButton3: TToolButton;
+    ToolButton6: TToolButton;
+    ToolButton2: TToolButton;
+    ToolButton4: TToolButton;
+    ToolButton5: TToolButton;
+    RadioButton1: TRadioButton;
+    RadioButton2: TRadioButton;
+    Panel1: TPanel;
+    Panel2: TPanel;
+    RadioGroup1: TRadioGroup;
+    GroupBox1: TGroupBox;
+    DateTimePicker1: TDateTimePicker;
+    DateTimePicker2: TDateTimePicker;
+    Label1: TLabel;
+    Label2: TLabel;
+    Memo1: TMemo;
+    ToolButton7: TToolButton;
+    OracleDataSet1: TOracleDataSet;
+    Edit1: TEdit;
+    procedure FormCreate(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure ToolButton1Click(Sender: TObject);
+    procedure ToolButton6Click(Sender: TObject);
+    procedure ToolButton7Click(Sender: TObject);
+    procedure ToolButton14Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+
+
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+
+  end;
+
+var
+  FileReports: TFileReports;
+   x:string;
+
+implementation
+
+{$R *.DFM}
+uses
+datamodsUnit,sboapiDataModuleImpl, korreportUnit, hesabqaliq,
+  Excelform, cardexpireUnit, MohUnit, Operationtypeunit , Fingerprint,SBTranslateProc,
+  card;
+
+ procedure InitPlugin(s:string;k:string);export;
+begin
+
+
+        if s='card' then
+    begin
+     x:=k;
+    cards:=Tcards.Create(nil);
+    cards.ShowModal;
+
+
+      // x:=s;
+
+    //ShowMessage(x);
+    //cards.Edit4.Text:=x;
+    end;
+
+
+     if s='Finger' then
+    begin
+    Finger:=TFinger.Create(nil);
+    Finger.ShowModal;
+
+    end;
+
+
+   if s='KorrReport' then
+    begin
+    korrreport:=TKorrReport.Create(nil);
+    KorrReport.ShowModal;
+
+    end;
+
+    if s='FileReport' then
+    begin
+    FileReports.ShowModal;
+    FileReports.Edit1.Text:=k;
+    end;
+
+   if s='Hesab' then
+    begin
+    hesab:=Thesab.Create(nil);
+    hesab.Showmodal;
+    end;
+
+       if s='EXCELS' then
+    begin
+    excels:=Texcels.Create(nil);
+    excels.Showmodal;
+    end;
+
+    if s='EXPIRY' then
+    begin
+    cardexpire:=Tcardexpire.Create(nil);
+    cardexpire.Showmodal;
+    end;
+
+    if s='REZ' then
+    begin
+    KorrMoh:=TKorrMoh.Create(nil);
+    KorrMoh.Showmodal;
+    end;
+
+
+       if s='OP' then
+    begin
+    operationtype:=Toperationtype.Create(nil);
+    operationtype.Showmodal;
+    end;
+
+
+    end;
+exports
+     InitPlugin;
+
+
+  procedure TFileReports.FormCreate(Sender: TObject);
+begin
+datetimepicker1.datetime:=date;
+datetimepicker2.datetime:=date;
+ SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+
+//freportdatamod.create(commonApplication);
+end;
+
+procedure TFileReports.FormShow(Sender: TObject);
+begin
+Edit1.Text:=x;
+end;
+
+procedure TFileReports.Button1Click(Sender: TObject);
+begin
+  oracledataset1.open;
+end;
+
+function julian(dat :Tdate):integer;
+const yan=31;mar=31;apr=30;may=31;jun=30;jul=31;avg=31;seb=30;okt=31;nov=30;dec=31;
+ var   wday,feb:integer;
+ begin
+   wday:=0;
+   if IsLeapYear(strtoint(FormatDateTime('yyyy',dat))) then feb:=29 else feb:=28;
+   case strtoint(FormatDateTime('mm',dat)) of
+   1:wday:=StrToInt(FormatDateTime('dd',dat));
+   2:wday:=yan+StrToInt(FormatDateTime('dd',dat));
+   3:wday:=yan+feb+StrToInt(FormatDateTime('dd',dat));
+   4:wday:=yan+feb+mar+StrToInt(FormatDateTime('dd',dat));
+   5:wday:=yan+feb+mar+apr+StrToInt(FormatDateTime('dd',dat));
+   6:wday:=yan+feb+mar+apr+may+StrToInt(FormatDateTime('dd',dat));
+   7:wday:=yan+feb+mar+apr+may+jun+StrToInt(FormatDateTime('dd',dat));
+   8:wday:=yan+feb+mar+apr+may+jun+jul+StrToInt(FormatDateTime('dd',dat));
+   9:wday:=yan+feb+mar+apr+may+jun+jul+avg+StrToInt(FormatDateTime('dd',dat));
+  10:wday:=yan+feb+mar+apr+may+jun+jul+avg+seb+StrToInt(FormatDateTime('dd',dat));
+  11:wday:=yan+feb+mar+apr+may+jun+jul+avg+seb+okt+StrToInt(FormatDateTime('dd',dat));
+  12:wday:=yan+feb+mar+apr+may+jun+jul+avg+seb+okt+nov+StrToInt(FormatDateTime('dd',dat));
+  end;
+  Result:=wday;
+end;
+
+
+procedure TFileReports.ToolButton1Click(Sender: TObject);
+var
+bash,son: integer;
+
+begin
+
+bash:=julian(datetimepicker1.datetime);
+son:=julian(datetimepicker2.datetime);
+
+if RadioGroup1.ItemIndex=0 then
+begin
+ OracleDataSet1.close;
+ OracleDataSet1.SQL.Clear;
+ OracleDataSet1.SQL.Add('select * from CARD_MESSAGES_C_ARCHIVE  where to_number(substr(FILE_NAME,length(FILE_NAME)-2,3))>='+inttostr(bash)+' and to_number(substr(FILE_NAME,length(FILE_NAME)-2,3))<='+inttostr(son));
+   //memo1.text:= OracleDataSet1.SQL.text;
+ OracleDataSet1.Open;
+end;
+if RadioGroup1.ItemIndex=1 then
+begin
+ OracleDataSet1.close;
+ OracleDataSet1.SQL.Clear;
+ OracleDataSet1.SQL.Add('select * from CARD_DXXXFILES_ARCHIVE where to_number(substr(FILENAME,length(FILENAME)-2,3))>='+inttostr(bash)+' and to_number(substr(FILENAME,length(FILENAME)-2,3))<='+inttostr(son));
+ OracleDataSet1.Open;
+end;
+
+
+if RadioGroup1.ItemIndex=2 then
+begin
+ OracleDataSet1.close;
+ OracleDataSet1.SQL.Clear;
+ OracleDataSet1.SQL.Add('select * from card_smsfiles_archive where to_number(substr(FILENAME,length(FILENAME)-2,3))>='+inttostr(bash)+' and to_number(substr(FILENAME,length(FILENAME)-2,3))<='+inttostr(son));
+ OracleDataSet1.Open;
+end;
+
+if RadioGroup1.ItemIndex=3 then
+begin
+ OracleDataSet1.close;
+ OracleDataSet1.SQL.Clear;
+ OracleDataSet1.SQL.Add('select * from CARD_DFILES_ARCHIVE where to_number(substr(FILENAME,length(FILENAME)-2,3))>='+inttostr(bash)+' and to_number(substr(FILENAME,length(FILENAME)-2,3))<='+inttostr(son));
+ OracleDataSet1.Open;
+end;
+
+
+if RadioGroup1.ItemIndex=4 then
+begin
+ OracleDataSet1.close;
+ OracleDataSet1.SQL.Clear;
+ OracleDataSet1.SQL.Add('select * from CARD_INTRETALIFILES_ARCHIVE where to_number(substr(FILENAME,length(FILENAME)-2,3))>='+inttostr(bash)+' and to_number(substr(FILENAME,length(FILENAME)-2,3))<='+inttostr(son));
+ OracleDataSet1.Open;
+end;
+
+end;
+
+procedure TFileReports.ToolButton6Click(Sender: TObject);
+begin
+
+  if not CMExcelExport1.Connected then CMExcelExport1.Connect;
+  CMExcelExport1.ExportDataset(dbgrid1.datasource.dataset,'FileReport',true,true);
+  CMExcelExport1.Disconnect;
+end;
+
+procedure TFileReports.ToolButton7Click(Sender: TObject);
+begin
+
+  //if not CMExcelExport1.Connected then CMExcelExport1.Connect;
+ // CMExcelExport1.ExportDataset(oracledataset2,'FileReport',true,true);
+ // CMExcelExport1.Disconnect;
+end;
+
+procedure TFileReports.ToolButton14Click(Sender: TObject);
+begin
+oracledataset1.close;
+end;
+
+initialization
+   FileReports:=TFileReports.Create(nil);
+    
+   //end;
+
+
+end.

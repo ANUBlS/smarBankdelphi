@@ -1,0 +1,58 @@
+unit rbsdoreport;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, DB, OracleData, QRCtrls, QuickRpt, ExtCtrls;
+
+type
+  Tcard_state = class(TForm)
+    QRep: TQuickRep;
+    QRBandDetail: TQRBand;
+    QRLabelAcc_Name: TQRLabel;
+    QRDBTextAccMame: TQRDBText;
+    QRD_Begin: TQRLabel;
+    QRD_End: TQRLabel;
+    QRShapeH: TQRShape;
+    QRShapeV: TQRShape;
+    QRLabelDat: TQRLabel;
+    QRLabel_Val: TQRLabel;
+    QRLabelPairAcc: TQRLabel;
+    QRLabelDebt: TQRLabel;
+    QRLabelDateInterval: TQRLabel;
+    QRLabelVal: TQRLabel;
+    DBTextVal: TQRDBText;
+    DBTextOpenDate: TQRDBText;
+    QRLabelMBeg: TQRLabel;
+    QRLabelMEnd: TQRLabel;
+    DBImageBank: TQRDBImage;
+    QRSubDetail: TQRSubDetail;
+    QRDBTextDat: TQRDBText;
+    QRDBTextCurr: TQRDBText;
+    QRDBTextPairAcc: TQRDBText;
+    QRDBTextLDebit: TQRDBText;
+    QRDBTextTey: TQRDBText;
+    QRLabelSpec: TQRLabel;
+    QRShapeGF: TQRShape;
+    GroupFooterBand: TQRBand;
+    QRShapeBottom: TQRShape;
+    bankinfo: TOracleDataSet;
+    QRLabel2: TQRLabel;
+    QRDBText2: TQRDBText;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  card_state: Tcard_state;
+
+implementation
+
+uses Unit18,SBTranslateProc,sboapiDataModuleImpl;
+
+{$R *.dfm}
+
+end.

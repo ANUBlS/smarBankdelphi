@@ -1,0 +1,138 @@
+unit UDModule;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Oracle, Db, OracleData;
+
+type
+  TDModule1 = class(TDataModule)
+    ODSFranshiz: TOracleDataSet;
+    ODSFranshizFRANSHIZ: TFloatField;
+    ODSFranshizTARIFF: TFloatField;
+    DSFranshiz: TDataSource;
+    AValuteData: TDataSource;
+    AValute: TOracleDataSet;
+    AValuteVALU_NAME: TWideStringField;
+    AValuteVALUTE: TIntegerField;
+    AValuteVAL_NAME: TWideStringField;
+    AValuteVALU_SHORT: TWideStringField;
+    PolicyData: TDataSource;
+    Policy: TOracleDataSet;
+    PolicyID: TFloatField;
+    PolicyMS_ID: TFloatField;
+    PolicyPOLICYNUM: TWideStringField;
+    PolicySUBJECTVALUE: TFloatField;
+    Suggest_Rep: TOracleDataSet;
+    Suggest_RepID: TFloatField;
+    Suggest_RepMK_ID: TFloatField;
+    Suggest_RepRISKADDRESS: TWideStringField;
+    Suggest_RepINSURANCEAMMOUNT: TFloatField;
+    Suggest_RepENDDATE: TDateTimeField;
+    Suggest_RepINSURANCESUM: TFloatField;
+    Suggest_RepData: TDataSource;
+    Ins_MotorFull: TOracleDataSet;
+    Ins_MotorFullID: TFloatField;
+    Ins_MotorFullKLI_ID: TFloatField;
+    Ins_MotorFullBANKING_DETAILS: TWideStringField;
+    Ins_MotorFullINSUREDMODEL: TWideStringField;
+    Ins_MotorFullINSUREDSTATENUM: TWideStringField;
+    Ins_MotorFullINSUREDCOLOR: TWideStringField;
+    Ins_MotorFullINSUREDOUTPUTYEAR: TIntegerField;
+    Ins_MotorFullINSUREDNUMSEATS: TIntegerField;
+    Ins_MotorFullINSUREDENGINENUM: TWideStringField;
+    Ins_MotorFullINSUREDCHASSISNUM: TWideStringField;
+    Ins_MotorFullINSUREDACTUALVALUE: TFloatField;
+    Ins_MotorFullTRANSMISSION_TYPE: TWideStringField;
+    Ins_MotorFullPRESENCE_ALARM: TWideStringField;
+    Ins_MotorFullMOTOR_USAGE: TWideStringField;
+    Ins_MotorFullMOTORSTORAGEPLACE: TWideStringField;
+    Ins_MotorFullEXISTINGDAMAGE: TWideStringField;
+    Ins_MotorFullBROKER: TFloatField;
+    Ins_MotorFullINSURANCEGEOGRAPHICALLIMIT: TWideStringField;
+    Ins_MotorFullINSUREDBODY: TWideStringField;
+    Ins_MotorFullINSUREDTYPE: TFloatField;
+    Ins_MotorFullData: TDataSource;
+    SuggestionData: TDataSource;
+    Suggestion: TOracleDataSet;
+    SuggestionID: TFloatField;
+    SuggestionMK_ID: TFloatField;
+    SuggestionRISKADDRESS: TWideStringField;
+    SuggestionINSURANCEAMMOUNT: TFloatField;
+    SuggestionENDDATE: TDateTimeField;
+    SuggestionRSK_ID: TFloatField;
+    SuggestionFRZ_ID: TFloatField;
+    SuggestionCNDT_ID: TFloatField;
+    SuggestionVAL_ID: TFloatField;
+    SuggestionINSURANCESUM: TFloatField;
+    BankInfoData: TDataSource;
+    BankInfo: TOracleDataSet;
+    RisksData: TDataSource;
+    Risks: TOracleDataSet;
+    RisksID: TFloatField;
+    RisksNAME: TWideStringField;
+    CustomersData: TDataSource;
+    Customers: TOracleDataSet;
+    CustomersID: TIntegerField;
+    CustomersNAME: TWideStringField;
+    CustomersADDRESS: TWideStringField;
+    CustomersMOBILEPHONE: TWideStringField;
+    CustomersFAX: TWideStringField;
+    PINS_FULLMOTOR: TOraclePackage;
+    Conditions: TOracleDataSet;
+    ConditionsID: TFloatField;
+    ConditionsNAME: TWideStringField;
+    Risktypes: TOracleDataSet;
+    RisktypesID: TFloatField;
+    RisktypesNAME: TWideStringField;
+    ODSContracts: TOracleDataSet;
+    ODSContractsID: TFloatField;
+    ODSContractsTYPE_ID: TFloatField;
+    ODSContractsINS_DATE: TDateTimeField;
+    ODSContractsBEGIN_DATE: TDateTimeField;
+    ODSContractsEND_DATE: TDateTimeField;
+    ODSContractsVALUTE_ID: TFloatField;
+    ODSContractsAMMOUNT: TFloatField;
+    ODSContractsCLOSE_PREFIX: TIntegerField;
+    ODSContractsKLI_ID: TFloatField;
+    ODSContractsLOANACC_ID: TFloatField;
+    ODSContractsCURRACC_ID: TFloatField;
+    ODSContractsPOLICY_NUM: TWideStringField;
+    ODSContractsINSSUMM: TFloatField;
+    ODSContractsFRANSHIZ: TFloatField;
+    ODSContractsTARIFF: TFloatField;
+    ODSContractsSTATE: TIntegerField;
+    ODSContractsAGENT_ID: TFloatField;
+    DSContracts: TDataSource;
+    ConditionsData: TDataSource;
+    RisktypesData: TDataSource;
+    DSMonths: TDataSource;
+    ODSMonths: TOracleDataSet;
+    ODSMonthsID: TFloatField;
+    ODSMonthsRELEASE_ID: TFloatField;
+    ODSMonthsCOUNT: TFloatField;
+    ODSReliaseDates: TOracleDataSet;
+    ODSReliaseDatesID: TFloatField;
+    ODSReliaseDatesBEGINDATE: TDateTimeField;
+    ODSReliaseDatesENDDATE: TDateTimeField;
+    ODSReliaseDatesSTATE_ID: TFloatField;
+    Ins_MotorFullCID: TFloatField;
+    ODSFranshizID: TFloatField;
+    DsSysdat: TOracleDataSet;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  DModule1: TDModule1;
+
+implementation
+
+uses UMFSuggestion;
+
+{$R *.DFM}
+
+end.

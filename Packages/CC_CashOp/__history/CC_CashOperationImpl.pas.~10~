@@ -1,0 +1,485 @@
+﻿unit CC_CashOperationImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActiveX, AxCtrls, CC_CashOperationMgr_TLB, StdVcl, Oracle, DB, OracleData,
+  Grids, DBGrids, ExtCtrls, StdCtrls, Buttons;
+
+type
+  TCC_CashOperation = class(TActiveForm, ICC_CashOperation)
+    Panel1: TPanel;
+    DBGrid1: TDBGrid;
+    Panel2: TPanel;
+    CodeEdit: TEdit;
+    FirstEdit: TEdit;
+    LastEdit: TEdit;
+    MiddleEdit: TEdit;
+    ContEdit: TEdit;
+    FindBtn: TBitBtn;
+    RefreshBtn: TBitBtn;
+    PayBtn: TBitBtn;
+    procedure FindBtnClick(Sender: TObject);
+    procedure RefreshBtnClick(Sender: TObject);
+    procedure CodeEditKeyPress(Sender: TObject; var Key: Char);
+    procedure FirstEditKeyPress(Sender: TObject; var Key: Char);
+    procedure LastEditKeyPress(Sender: TObject; var Key: Char);
+    procedure MiddleEditKeyPress(Sender: TObject; var Key: Char);
+    procedure ContEditKeyPress(Sender: TObject; var Key: Char);
+    procedure PayBtnClick(Sender: TObject);
+  private
+    { Private declarations }
+    FEvents: ICC_CashOperationEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+  public
+    { Public declarations }
+    procedure Initialize; override;
+  end;
+
+implementation
+
+uses ComObj, ComServ, sboapiDataModuleImpl, PayForm, cc_DataMod;
+
+{$R *.DFM}
+
+{ TCC_CashOperation }
+
+procedure TCC_CashOperation.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_CC_CashOperationPage); }
+end;
+
+procedure TCC_CashOperation.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as ICC_CashOperationEvents;
+end;
+
+procedure TCC_CashOperation.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TCC_CashOperation.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TCC_CashOperation.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TCC_CashOperation.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TCC_CashOperation.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TCC_CashOperation.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TCC_CashOperation.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TCC_CashOperation.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TCC_CashOperation.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TCC_CashOperation.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TCC_CashOperation.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TCC_CashOperation.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TCC_CashOperation.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TCC_CashOperation.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TCC_CashOperation.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TCC_CashOperation.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TCC_CashOperation.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TCC_CashOperation.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TCC_CashOperation.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TCC_CashOperation._Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TCC_CashOperation.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TCC_CashOperation.FindBtnClick(Sender: TObject);
+var
+p_first : string;
+p_last : string;
+p_middle : string;
+p_code : string;
+p_cont : string;
+begin
+
+
+            if (FirstEdit.Text='')  and (LastEdit.Text='')
+            and (MiddleEdit.Text='') and (CodeEdit.Text='')
+            and (ContEdit.Text='') then
+            begin
+            ShowMessage('Heç bir məlumat tapılmadı!');
+            exit;
+              end;
+
+             if FirstEdit.Text<>'' then
+             begin
+             p_first:='%';
+             end else
+             begin
+             p_first:='';
+             end;
+
+             if LastEdit.Text<>'' then
+             begin
+             p_last:='%';
+             end else
+             begin
+             p_last:='';
+             end;
+
+             if MiddleEdit.Text<>'' then
+             begin
+             p_middle:='%';
+             end else
+             begin
+             p_middle:='';
+             end;
+
+              if CodeEdit.Text<>'' then
+             begin
+             p_code:='%';
+             end else
+             begin
+             p_code:='';
+             end;
+
+              if ContEdit.Text<>'' then
+             begin
+             p_code:='%';
+             end else
+             begin
+             p_code:='';
+             end;
+             DataModule1.cc_contracts.Close;
+             DataModule1.cc_contracts.SQL[6]:='';
+             DataModule1.cc_contracts.SQL[6]:=' and nvl(upper(code),0) like upper('+''''+p_code+CodeEdit.Text+'%'+''''+')'
+                                  +' and nvl(upper(firstname),0) like upper('+''''+p_first+FirstEdit.Text+'%'+''''+')'
+                                  +' and nvl(upper(lastname),0) like upper('+''''+p_last+LastEdit.Text+'%'+''''+')'
+                                  +' and nvl(upper(middlename),0) like upper('+''''+p_middle+MiddleEdit.Text+'%'+''''+')'
+                                  +' and nvl(upper(contnum),0) like upper('+''''+p_cont+ContEdit.Text+'%'+''''+')';
+
+             DataModule1.cc_contracts.Open;
+  //            Memo1.Lines.Clear;
+  //           Memo1.Lines.Add(cc_contracts.SQL.Text);
+             if DataModule1.cc_contracts.RecordCount=0 then
+              begin
+            ShowMessage('Heç bir məlumat tapılmadı!');
+            exit;
+              end;
+
+end;
+
+procedure TCC_CashOperation.FirstEditKeyPress(Sender: TObject; var Key: Char);
+begin
+if not (Key in ['A'..'Z','a'..'z','0'..'9',#8] )then
+begin
+ Key:=#0;
+end;
+end;
+
+procedure TCC_CashOperation.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TCC_CashOperation.CodeEditKeyPress(Sender: TObject; var Key: Char);
+begin
+  if not (Key in ['A'..'Z','a'..'z','0'..'9',#8] )then
+begin
+ Key:=#0;
+end;
+end;
+
+procedure TCC_CashOperation.ContEditKeyPress(Sender: TObject; var Key: Char);
+begin
+if not (Key in ['A'..'Z','a'..'z','0'..'9',#8] )then
+begin
+ Key:=#0;
+end;
+end;
+
+procedure TCC_CashOperation.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TCC_CashOperation.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TCC_CashOperation.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TCC_CashOperation.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TCC_CashOperation.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TCC_CashOperation.LastEditKeyPress(Sender: TObject; var Key: Char);
+begin
+if not (Key in ['A'..'Z','a'..'z','0'..'9',#8] )then
+begin
+ Key:=#0;
+end;
+end;
+
+procedure TCC_CashOperation.MiddleEditKeyPress(Sender: TObject; var Key: Char);
+begin
+if not (Key in ['A'..'Z','a'..'z','0'..'9',#8] )then
+begin
+ Key:=#0;
+end;
+end;
+
+procedure TCC_CashOperation.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TCC_CashOperation.PayBtnClick(Sender: TObject);
+begin
+{Pay:=TPay.Create(self);
+cc_payDataSet.Close;
+cc_payDataSet.SetVariable('CONTID', cc_contracts.FieldByName('ID').asinteger);
+cc_payDataSet.Open;
+Showmodal;}
+end;
+
+procedure TCC_CashOperation.RefreshBtnClick(Sender: TObject);
+begin
+ FirstEdit.Text:='';
+ LastEdit.Text:='';
+ MiddleEdit.Text:='';
+ CodeEdit.Text:='';
+ ContEdit.Text:='';
+ DataModule1.cc_contracts.Close;
+
+end;
+
+procedure TCC_CashOperation.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TCC_CashOperation.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TCC_CashOperation.Set_AxBorderStyle(
+  Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TCC_CashOperation.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TCC_CashOperation.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TCC_CashOperation.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TCC_CashOperation.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TCC_CashOperation.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TCC_CashOperation.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TCC_CashOperation.Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TCC_CashOperation.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TCC_CashOperation.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TCC_CashOperation.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TCC_CashOperation.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TCC_CashOperation.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TCC_CashOperation.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TCC_CashOperation,
+    Class_CC_CashOperation,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

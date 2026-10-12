@@ -1,0 +1,281 @@
+object WebModules: TWebModules
+  OldCreateOrder = False
+  Actions = <
+    item
+      Default = True
+      Name = 'DefaultHandler'
+      PathInfo = '/'
+      OnAction = WebModule1DefaultHandlerAction
+    end
+    item
+      MethodType = mtPost
+      Name = 'Information'
+      PathInfo = '/ClientCredit'
+      OnAction = WebModule1InformationAction
+    end
+    item
+      MethodType = mtPost
+      Name = 'CredtPayment'
+      PathInfo = '/PayCredit'
+      OnAction = WebModule1CredtPaymentAction
+    end
+    item
+      MethodType = mtPost
+      Name = 'CheckPayment'
+      PathInfo = '/Checking'
+      OnAction = WebModule1CheckPaymentAction
+    end
+    item
+      MethodType = mtPost
+      Name = 'OneclientCredit'
+      PathInfo = '/OneclientCredit'
+      OnAction = WebModulesOneclientCreditAction
+    end
+    item
+      MethodType = mtPost
+      Name = 'ClientCredit-OPT'
+      PathInfo = '/ClientCreditInfo'
+      OnAction = WebModulesClientCreditOPTAction
+    end
+    item
+      Name = 'ClientCreditinfoDetails'
+      PathInfo = '/ClientCreditInfoDetails'
+      OnAction = WebModulesClientCreditinfoDetailsAction
+    end
+    item
+      Name = 'Emanat'
+      PathInfo = '/CustomerDetail'
+      OnAction = WebModulesEmanatAction
+    end
+    item
+      Name = 'Emanatpay'
+      PathInfo = '/creditpay'
+      OnAction = WebModulesEmanatpayAction
+    end
+    item
+      Name = 'EmanatCheck'
+      PathInfo = '/check'
+      OnAction = WebModulesEmanatCheckAction
+    end
+    item
+      Name = 'Azkredit_pay'
+      PathInfo = '/payment'
+      OnAction = WebModulesAzkreditpayAction
+    end
+    item
+      MethodType = mtGet
+      Name = 'Azkredit'
+      PathInfo = '/customerdetails'
+      OnAction = WebModulesAzkredit_millionAction
+    end
+    item
+      MethodType = mtPost
+      Name = 'Finexclieninfo'
+      PathInfo = '/ClientCredits'
+      OnAction = WebModulesFinexclieninfoAction
+    end
+    item
+      MethodType = mtPost
+      Name = 'Nasclientinfo'
+      PathInfo = '/ClientsCredits'
+      OnAction = WebModulesNasclientinfoAction
+    end
+    item
+      Name = 'Azkredit_custno'
+      PathInfo = '/clientdetails'
+      OnAction = WebModulesWebActionItem1Action
+    end
+    item
+      Name = 'Azkredit_dd_kod'
+      PathInfo = '/ddadetails'
+      OnAction = WebModulesAzkredit_dd_kodAction
+    end>
+  Height = 456
+  Width = 494
+  object Connection: TOracleSession
+    Preferences.ConvertUTF = cuUTF8ToUTF16
+    Left = 72
+    Top = 144
+  end
+  object Queries: TOracleDataSet
+    SQL.Strings = (
+      'select * from webservispkg.Payment_search(:cln,:CLBIRTH)')
+    Optimize = False
+    Variables.Data = {
+      0400000002000000080000003A0043004C004E00050000000000000000000000
+      100000003A0043004C0042004900520054004800050000000000000000000000}
+    Session = Connection
+    Left = 200
+    Top = 96
+  end
+  object Insertquery: TOracleQuery
+    SQL.Strings = (
+      
+        'insert into ws_yigim(account,ammount,currency,customer,rrn,statu' +
+        's,crednumber,subrrn,paymethod)values (:v_accno,:v_ammount,:v_cur' +
+        'r,:v_cust,:v_rrn,0,:v_cred,:v_subrrn,:paymeth)')
+    Session = Connection
+    Optimize = False
+    Variables.Data = {
+      0400000008000000100000003A0056005F004100430043004E004F0005000000
+      0000000000000000140000003A0056005F0041004D004D004F0055004E005400
+      0400000000000000000000000E0000003A0056005F0043005500520052000500
+      000000000000000000000E0000003A0056005F00430055005300540005000000
+      00000000000000000C0000003A0056005F00520052004E000500000000000000
+      000000000E0000003A0056005F00430052004500440005000000000000000000
+      0000120000003A0056005F00530055004200520052004E000500000000000000
+      00000000100000003A005000410059004D004500540048000500000000000000
+      00000000}
+    Left = 344
+    Top = 96
+  end
+  object PaymentCr: TOracleDataSet
+    SQL.Strings = (
+      
+        'select rownum,c.id,c.numberofcredit, a.name,b.birthday,get_accno' +
+        '( d.booroweraccid) accno,suBstr(get_accno( d.booroweraccid),8,3)' +
+        ' val'
+      
+        ' from customers a, custinfo b,cm_active_credits c ,cm_accounts d' +
+        ' where c.id=:crid'
+      ' and a.id=b.idcust and a.id=c.boorowerid and c.id=d.creditid ')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000A0000003A00430052004900440003000000000000000000
+      0000}
+    Session = Connection
+    Left = 200
+    Top = 48
+  end
+  object searchpay: TOracleDataSet
+    SQL.Strings = (
+      'select * from ws_yigim where rrn=:vrrn')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000A0000003A005600520052004E0005000000000000000000
+      0000}
+    Session = Connection
+    Left = 72
+    Top = 40
+  end
+  object oneclient: TOracleDataSet
+    SQL.Strings = (
+      '')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000080000003A0043004C004E00050000000000000000000000}
+    Session = Connection
+    Left = 256
+    Top = 96
+  end
+  object query2: TOracleDataSet
+    SQL.Strings = (
+      
+        'select rownum,c.numberofcredit, a.name,b.birthday,get_accno( d.b' +
+        'ooroweraccid) accno,suBstr(get_accno( d.booroweraccid),8,3) val'
+      
+        ' from customers a, custinfo b,cm_active_credits c ,cm_accounts d' +
+        ' where a.id=:cln and to_char(b.birthday,'#39'YYYYMMDD'#39')=:clbirth'
+      
+        ' and a.id=b.idcust and a.id=c.boorowerid and c.id=d.creditid and' +
+        ' creditid>36285')
+    Optimize = False
+    Variables.Data = {
+      0400000002000000080000003A0043004C004E00050000000000000000000000
+      100000003A0043004C0042004900520054004800050000000000000000000000}
+    Session = Connection
+    Left = 136
+    Top = 88
+  end
+  object creditamount: TOracleDataSet
+    SQL.Strings = (
+      ''
+      ''
+      'SELECT *FROM webservispkg.PAYMENT_SQL(CREDI_IDS => :cid)')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000080000003A00430049004400030000000000000000000000}
+    Session = Connection
+    Left = 208
+    Top = 168
+  end
+  object azkredmillion: TOracleDataSet
+    SQL.Strings = (
+      'select * from webservispkg.Payment_search(:DDAK)')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000A0000003A004400440041004B0005000000000000000000
+      0000}
+    Session = Connection
+    Left = 64
+    Top = 216
+  end
+  object Finexfpay: TOracleDataSet
+    SQL.Strings = (
+      'select * from webservispkg.Payment_search(:clnum)')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000C0000003A0043004C004E0055004D000500000000000000
+      00000000}
+    Session = Connection
+    Left = 144
+    Top = 216
+  end
+  object Dinexfpaycredamount: TOracleDataSet
+    SQL.Strings = (
+      ''
+      ''
+      'SELECT * FROM webservispkg.fpay_PAYMENT_SQL(CREDI_IDS => :cid)')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000080000003A00430049004400030000000000000000000000}
+    Session = Connection
+    Left = 248
+    Top = 224
+  end
+  object Nasfpay: TOracleDataSet
+    SQL.Strings = (
+      'select * from webservispkg.Payment_search(:clnum)')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000C0000003A0043004C004E0055004D000500000000000000
+      00000000}
+    Session = Connection
+    Left = 144
+    Top = 288
+  end
+  object nasfpaycredamount: TOracleDataSet
+    SQL.Strings = (
+      ''
+      ''
+      'SELECT * FROM webservispkg.fpay_PAYMENT_SQL(CREDI_IDS => :cid)')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000080000003A00430049004400030000000000000000000000}
+    Session = Connection
+    Left = 232
+    Top = 288
+  end
+  object azkredit_custno: TOracleDataSet
+    SQL.Strings = (
+      'select * from webservispkg.Payment_search_custno(:DDAK)')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000A0000003A004400440041004B0005000000000000000000
+      0000}
+    Session = Connection
+    Left = 56
+    Top = 280
+  end
+  object azkred_dda: TOracleDataSet
+    SQL.Strings = (
+      'select * from webservispkg.Payment_search_dda(:DDAK)')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000A0000003A004400440041004B0005000000000000000000
+      0000}
+    Session = Connection
+    Left = 48
+    Top = 344
+  end
+end

@@ -1,0 +1,93 @@
+object NewDepositsFrmReferences: TNewDepositsFrmReferences
+  Left = 0
+  Top = 0
+  ClientHeight = 377
+  ClientWidth = 564
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poScreenCenter
+  OnCanResize = FormCanResize
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  OnKeyPress = FormKeyPress
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object StatusBar: TStatusBar
+    Left = 0
+    Top = 358
+    Width = 564
+    Height = 19
+    Panels = <>
+  end
+  object XFGroupBox1: TXFGroupBox
+    Left = 0
+    Top = 0
+    Width = 564
+    Height = 71
+    Align = alTop
+    Caption = #1043#1080#1081#1084#1103#1090#1083#1103#1088
+    TabOrder = 1
+    ExplicitLeft = 8
+    ExplicitTop = 61
+    ExplicitWidth = 505
+    object ValuesComboBox: TComboBox
+      Left = 9
+      Top = 17
+      Width = 113
+      Height = 21
+      Style = csDropDownList
+      Enabled = False
+      TabOrder = 0
+    end
+    object ValuesEdit: TEdit
+      Left = 129
+      Top = 17
+      Width = 113
+      Height = 21
+      Enabled = False
+      TabOrder = 1
+    end
+    object BtnApply: TXFButton
+      Left = 268
+      Top = 15
+      Width = 75
+      Height = 25
+      Caption = '&'#1043#1103#1073#1091#1083
+      DoubleBuffered = True
+      ParentDoubleBuffered = False
+      TabOrder = 2
+      OnClick = XFButton1Click
+    end
+  end
+  object XFGroupBox2: TXFGroupBox
+    Left = 0
+    Top = 71
+    Width = 564
+    Height = 287
+    Align = alClient
+    Caption = #1042#1077#1088#1080#1083#1103#1085#1083#1103#1088
+    TabOrder = 2
+    ExplicitTop = 77
+    object TV: TTreeView
+      Left = 2
+      Top = 15
+      Width = 560
+      Height = 270
+      Align = alClient
+      HotTrack = True
+      Indent = 19
+      ReadOnly = True
+      TabOrder = 0
+      OnChange = TVChange
+      ExplicitLeft = 3
+      ExplicitTop = 11
+    end
+  end
+end

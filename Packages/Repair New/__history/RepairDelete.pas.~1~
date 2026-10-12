@@ -1,0 +1,129 @@
+unit RepairDelete;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ExtCtrls, ComCtrls, StdCtrls,db,OracleData;
+
+type
+  TRepDelete = class(TForm)
+    Panel1: TPanel;
+    Panel2: TPanel;
+    Button1: TButton;
+    Button2: TButton;
+    GroupBox1: TGroupBox;
+    DelAnim: TAnimate;
+    Bevel1: TBevel;
+    chRate: TCheckBox;
+    chProfit: TCheckBox;
+    StaticText1: TStaticText;
+    procedure Button1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+procedure DeleteTrans;
+function ShowDeleteConfirm(Value: string): Boolean;
+
+var
+  RepDelete: TRepDelete;
+
+implementation
+
+uses RepairNewImpl, RepairNewDataModule, RepairNewEdit;
+
+{$R *.DFM}
+
+function ShowDeleteConfirm(Value: string): Boolean;
+var
+ DelForm: TRepDelete;
+begin
+  DelForm:=TRepDelete.Create(Application);
+  RepDelete:=DelForm;
+ with DelForm do
+ try
+  ShowModal;
+  if ModalResult=mrOk then
+   Result:=True
+  else Result:=False
+ finally
+  Release;
+  RepDelete:=nil;
+ end;
+end;
+
+procedure TRepDelete.Button1Click(Sender: TObject);
+
+procedure ShowAvi(Value: Boolean);
+begin
+ try
+ DelAnim.Active:=Value;
+ DelAnim.Visible:=Value;
+ except
+  DelAnim.Destroy;
+ end;
+end;
+
+begin
+with RepairNewMain do
+ begin
+  ShowAvi(True);
+  DeleteTrans;
+  ShowAvi(False); end;
+end;
+
+procedure DeleteTrans;
+
+function PrepareTransaction: TTransaction;
+var
+ ActTransaction :TTransaction;
+begin
+with RepDelete,RapNewDataModule.TransactionData,ActTransaction do
+ begin
+  Action:=acDelete;
+  if not(chRate.Checked) then Mode:=2
+  else if chProfit.Checked then Mode:=0
+  else Mode:=1;
+  Id:=FieldByName('ID').AsInteger;
+  Date:=FieldByName('Transactiondate').AsDateTime;
+  DebitId:=FieldByName('DebitID').AsInteger;
+  CreditId:=FieldByName('CreditID').AsInteger;
+  DebitRate:=FieldByName('DebitRate').AsCurrency;
+  CreditRate:=FieldByName('CreditRate').AsCurrency;
+  DebitAmmount:=FieldByName('DebitAmount').AsCurrency;;
+  CreditAmmount:=FieldByName('CreditAmount').AsCurrency;;
+  LAmmount:=FieldByName('LAmount').AsCurrency;;
+  Name:=FieldByName('Name').AsString;
+  DebitCurId:=FieldByName('DebitCurrencyID').AsInteger;
+  CreditCurId:=FieldByName('CreditCurrencyID').AsInteger;
+  InBalanceChar:=FieldByName('InBalanceChar').AsString; //AsInteger;
+  OutBalanceChar:=FieldByName('OutBalanceChar').AsInteger;
+  Result:=ActTransaction;
+ end;
+end;
+
+var
+TempTrans: TTransaction;
+Rec: Integer;
+begin
+with RapNewDataModule,TransactionData do
+ begin
+  Rec:=RecNo;
+  try
+  DisableControls;
+  TempTrans:=PrepareTransaction;
+  SaveTransaction(TempTrans);
+  Refresh;
+  Last;
+  if Rec>RecordCount then
+    Last else RecNo:=Rec;
+  finally
+   EnableControls;
+  end;
+ end;
+end;
+
+end.

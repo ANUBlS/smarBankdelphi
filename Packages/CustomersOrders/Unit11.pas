@@ -1,0 +1,34 @@
+unit Unit11;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, ComCtrls;
+
+type
+  TSend_arxiv = class(TForm)
+    GroupBox1: TGroupBox;
+    GroupBox2: TGroupBox;
+    GroupBox3: TGroupBox;
+    DateTimePicker1: TDateTimePicker;
+    Label1: TLabel;
+    Label2: TLabel;
+    Button1: TButton;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Send_arxiv: TSend_arxiv;
+
+implementation
+
+uses CustomersordersImpl1, CustomersordersProj1_TLB, Unit10, Unit12, Unit3,
+  Unit4, Unit5, Unit6, Unit7, Unit8, Unit9;
+
+{$R *.DFM}
+
+end.

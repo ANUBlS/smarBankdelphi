@@ -1,0 +1,2565 @@
+object DataModbpl: TDataModbpl
+  OldCreateOrder = False
+  Height = 515
+  Width = 759
+  object acount: TOracleDataSet
+    SQL.Strings = (
+      
+        'select *from sw_accounts where close_dat is null  /*and bal_cn1 ' +
+        'like '#39'38%'#39' */'
+      ''
+      'and'
+      'kli_id=:ids  and currencyname=:curr'
+      ''
+      ''
+      ''
+      ''
+      ' order by acc_no')
+    Optimize = False
+    Variables.Data = {
+      0400000002000000080000003A00490044005300030000000000000000000000
+      0A0000003A004300550052005200050000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000001B0000000C0000004100430043005F004E004F000100000000000400
+      0000490044000100000000000C0000004B004C0049005F004900440001000000
+      00000A0000004F0050005F00490044000100000000000E000000560041004C00
+      5F00410043004300010000000000080000004E0041004D004500010000000000
+      100000004F00500045004E005F00440041005400010000000000120000004300
+      4C004F00530045005F004400410054000100000000000E000000420041004C00
+      5F0043004E0031000100000000000E000000420041004C005F0043004E003200
+      0100000000000E000000420041004C005F0043004E0033000100000000000E00
+      0000420041004C005F0043004E0034000100000000000C000000460049004C00
+      490041004C0001000000000012000000530049004D005F004F00540043004500
+      54000100000000000C0000005400490050004100430043000100000000000A00
+      00004C0049004D0049005400010000000000140000004F004C0044005F004100
+      430043005F004E004F000100000000001000000050004100490052005F004100
+      430043000100000000000E00000049004E005300490044004500520001000000
+      00000800000053004900440023000100000000000C000000540045004D005000
+      490044000100000000000A0000004F0057004E00490044000100000000001000
+      000050005F004300550053005400490044000100000000000800000053005900
+      4D00420001000000000012000000420041004E004B005F0043004F0044004500
+      01000000000018000000430055005200520045004E00430059004E0041004D00
+      450001000000000014000000550053004500520049004E005300450052005400
+      010000000000}
+    QueryAllRecords = False
+    CountAllRecords = True
+    Session = sboapiDataModule.SBSession
+    Left = 8
+    Top = 8
+    object acountID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object acountKLI_ID: TFloatField
+      FieldName = 'KLI_ID'
+    end
+    object acountOP_ID: TFloatField
+      FieldName = 'OP_ID'
+    end
+    object acountACC_NO: TWideStringField
+      FieldName = 'ACC_NO'
+      Size = 448
+    end
+    object acountVAL_ACC: TIntegerField
+      FieldName = 'VAL_ACC'
+    end
+    object acountNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 1440
+    end
+    object acountOPEN_DAT: TDateTimeField
+      FieldName = 'OPEN_DAT'
+    end
+    object acountCLOSE_DAT: TDateTimeField
+      FieldName = 'CLOSE_DAT'
+    end
+    object acountBAL_CN1: TFloatField
+      FieldName = 'BAL_CN1'
+    end
+    object acountBAL_CN2: TFloatField
+      FieldName = 'BAL_CN2'
+    end
+    object acountBAL_CN3: TFloatField
+      FieldName = 'BAL_CN3'
+    end
+    object acountBAL_CN4: TFloatField
+      FieldName = 'BAL_CN4'
+    end
+    object acountFILIAL: TIntegerField
+      FieldName = 'FILIAL'
+    end
+    object acountSIM_OTCET: TFloatField
+      FieldName = 'SIM_OTCET'
+    end
+    object acountTIPACC: TWideStringField
+      FieldName = 'TIPACC'
+      Size = 320
+    end
+    object acountLIMIT: TFloatField
+      FieldName = 'LIMIT'
+    end
+    object acountOLD_ACC_NO: TWideStringField
+      FieldName = 'OLD_ACC_NO'
+      Size = 448
+    end
+    object acountPAIR_ACC: TFloatField
+      FieldName = 'PAIR_ACC'
+    end
+    object acountINSIDER: TWideStringField
+      FieldName = 'INSIDER'
+      Size = 16
+    end
+    object acountSID: TFloatField
+      FieldName = 'SID#'
+    end
+    object acountTEMPID: TFloatField
+      FieldName = 'TEMPID'
+    end
+    object acountOWNID: TFloatField
+      FieldName = 'OWNID'
+    end
+    object acountP_CUSTID: TFloatField
+      FieldName = 'P_CUSTID'
+    end
+    object acountSYMB: TWideStringField
+      FieldName = 'SYMB'
+      Size = 480
+    end
+    object acountBANK_CODE: TFloatField
+      FieldName = 'BANK_CODE'
+    end
+    object acountCURRENCYNAME: TWideStringField
+      FieldName = 'CURRENCYNAME'
+      Size = 10
+    end
+    object acountUSERINSERT: TWideStringField
+      FieldName = 'USERINSERT'
+      Size = 30
+    end
+  end
+  object banks: TOracleDataSet
+    SQL.Strings = (
+      
+        'select a.rowid, id,convertpack.CONVERT_INT(replace(a.name,'#39'"'#39','#39#39 +
+        #39#39')) as name,krno,inn,subkrno,swift,bankcode,ours from bankm_t a' +
+        ' '
+      'where val_code=:val order by a.name'
+      ''
+      ''
+      '')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000080000003A00560041004C00050000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      0500000008000000080000004B0052004E004F00010000000000060000004900
+      4E004E000100000000000A000000530057004900460054000100000000001000
+      0000420041004E004B0043004F00440045000100000000000E00000053005500
+      42004B0052004E004F00010000000000080000004F0055005200530001000000
+      00000400000049004400010000000000080000004E0041004D00450001000000
+      0000}
+    Session = sboapiDataModule.SBSession
+    Left = 56
+    Top = 8
+    object banksID: TFloatField
+      FieldName = 'ID'
+    end
+    object banksNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 4000
+    end
+    object banksKRNO: TWideStringField
+      FieldName = 'KRNO'
+      Size = 448
+    end
+    object banksINN: TWideStringField
+      FieldName = 'INN'
+      Size = 512
+    end
+    object banksSUBKRNO: TWideStringField
+      FieldName = 'SUBKRNO'
+      Size = 448
+    end
+    object banksSWIFT: TWideStringField
+      FieldName = 'SWIFT'
+      Size = 512
+    end
+    object banksBANKCODE: TWideStringField
+      FieldName = 'BANKCODE'
+      Size = 512
+    end
+    object banksOURS: TFloatField
+      FieldName = 'OURS'
+    end
+  end
+  object acountsource: TDataSource
+    DataSet = acount
+    Left = 16
+    Top = 80
+  end
+  object bankssource: TDataSource
+    DataSet = banks
+    Left = 80
+    Top = 72
+  end
+  object referans: TOracleDataSet
+    SQL.Strings = (
+      
+        'select sw_main.Set_Referense(:FORMATS,:currensy) as refe from du' +
+        'al ')
+    Optimize = False
+    Variables.Data = {
+      0400000002000000100000003A0046004F0052004D0041005400530005000000
+      0000000000000000120000003A00430055005200520045004E00530059000500
+      00000000000000000000}
+    QBEDefinition.QBEFieldDefs = {0500000001000000080000005200450046004500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 112
+    Top = 8
+    object referansREFE: TWideStringField
+      FieldName = 'REFE'
+      Size = 4000
+    end
+  end
+  object pack: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'sw_main'
+    Left = 312
+    Top = 24
+  end
+  object templates: TOracleDataSet
+    SQL.Strings = (
+      'select * from sw_templates'
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      '')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000F000000040000004900440001000000000010000000550053004500
+      52004E0041004D00450001000000000006000000440041005400010000000000
+      0C0000004700480045005300410042000100000000000E000000420041004E00
+      4B004B004F00440001000000000010000000420041004E004B004E0041004D00
+      45000100000000000C0000004100480045005300410042000100000000000800
+      000041004100440049000100000000000A000000410056004F0045004E000100
+      000000000E00000054004500590049004E004100540001000000000010000000
+      54004500590049004E004100540032000100000000000C00000041004D004F00
+      55004E005400010000000000040000004D005400010000000000100000005400
+      45004D0050004E0041004D0045000100000000000C000000560041004C005500
+      54004500010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 168
+    Top = 8
+    object templatesID: TFloatField
+      FieldName = 'ID'
+    end
+    object templatesUSERNAME: TWideStringField
+      FieldName = 'USERNAME'
+      Size = 800
+    end
+    object templatesDAT: TDateTimeField
+      FieldName = 'DAT'
+    end
+    object templatesAMOUNT: TWideStringField
+      FieldName = 'AMOUNT'
+      Size = 800
+    end
+    object templatesGHESAB: TWideStringField
+      FieldName = 'GHESAB'
+      Size = 800
+    end
+    object templatesBANKKOD: TWideStringField
+      FieldName = 'BANKKOD'
+      Size = 800
+    end
+    object templatesBANKNAME: TWideStringField
+      FieldName = 'BANKNAME'
+      Size = 800
+    end
+    object templatesAHESAB: TWideStringField
+      FieldName = 'AHESAB'
+      Size = 800
+    end
+    object templatesAADI: TWideStringField
+      FieldName = 'AADI'
+      Size = 800
+    end
+    object templatesAVOEN: TWideStringField
+      FieldName = 'AVOEN'
+      Size = 800
+    end
+    object templatesTEYINAT: TWideStringField
+      FieldName = 'TEYINAT'
+      Size = 4000
+    end
+    object templatesTEYINAT2: TWideStringField
+      FieldName = 'TEYINAT2'
+      Size = 4000
+    end
+    object templatesMT: TWideStringField
+      FieldName = 'MT'
+      Size = 200
+    end
+    object templatesTEMPNAME: TWideStringField
+      FieldName = 'TEMPNAME'
+      Size = 2000
+    end
+    object templatesVALUTE: TWideStringField
+      FieldName = 'VALUTE'
+      Size = 200
+    end
+  end
+  object templatessource: TDataSource
+    DataSet = templates
+    Left = 176
+    Top = 72
+  end
+  object azips: TOracleDataSet
+    SQL.Strings = (
+      
+        'select a.*,to_char(a.cdat,'#39'hh:mi:ss'#39') as saat,to_char(a.tdat,'#39'hh' +
+        ':mi:ss'#39') as ysaat,to_char(a.fdat,'#39'hh:mi:ss'#39') as gsaat from sw_ou' +
+        't_new a'
+      'where '
+      'a.status in (55,44,1,20) and '
+      ''
+      'a.messagetype='#39'MT103'#39' '
+      
+        'and  a.mf50_account in (select acc_no from account where kli_id=' +
+        ':v) '
+      'and a.mf32a_date=to_date(to_char(sysdate))')
+    Optimize = False
+    Variables.Data = {0400000001000000040000003A005600030000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000005B000000080000004D004600320030000100000000000A0000004D00
+      4600320033004200010000000000080000004D00460032003700010000000000
+      0A0000004D004600330032004100010000000000080000004D00460033003600
+      01000000000014000000530045004E0044004500520054005900500045000100
+      0000000012000000530045004E00440045005200420049004300010000000000
+      10000000530045004E004400450052004C005400010000000000160000004100
+      500050004C00490043004100540049004F004E000100000000000E0000004600
+      49004E0043004F0050005900010000000000160000004D004500530053004100
+      470045005400590050004500010000000000100000005000520049004F005200
+      490054005900010000000000140000004D004F004E00490054004F0052004900
+      4E00470001000000000018000000520045004300450049005600450052005400
+      5900500045000100000000001600000052004500430045004900560045005200
+      420049004300010000000000140000004D0046003300320041005F0044004100
+      54004500010000000000140000004D0046003300320041005F00430055005200
+      5200010000000000180000004D0046003300320041005F0041004D004F005500
+      4E005400010000000000180000004D004600350030005F004100430043004F00
+      55004E005400010000000000100000004D004600350030005F00420049004300
+      010000000000200000004D004600350030005F004E0041004D00450024004100
+      44005200450053005300010000000000180000004D004600350032005F004100
+      430043004F0055004E005400010000000000100000004D004600350032005F00
+      420049004300010000000000200000004D004600350032005F004E0041004D00
+      45002400410044005200450053005300010000000000180000004D0046003500
+      33005F004100430043004F0055004E005400010000000000100000004D004600
+      350033005F00420049004300010000000000240000004D004600350033005F00
+      4E0041004D00450024004C004F0043004100540049004F004E00010000000000
+      180000004D004600350034005F004100430043004F0055004E00540001000000
+      0000100000004D004600350034005F0042004900430001000000000024000000
+      4D004600350034005F004E0041004D00450024004C004F004300410054004900
+      4F004E00010000000000180000004D004600350035005F004100430043004F00
+      55004E005400010000000000100000004D004600350035005F00420049004300
+      010000000000240000004D004600350035005F004E0041004D00450024004C00
+      4F0043004100540049004F004E00010000000000180000004D00460035003600
+      5F004100430043004F0055004E005400010000000000100000004D0046003500
+      36005F00420049004300010000000000240000004D004600350036005F004E00
+      41004D00450024004C004F0043004100540049004F004E000100000000001800
+      00004D004600350039005F004100430043004F0055004E005400010000000000
+      200000004D004600350039005F004E0041004D00450024004100440052004500
+      530053000100000000000C000000530054004100540055005300010000000000
+      0400000049004400010000000000160000004D0046003700310046005F004300
+      480049004C004400010000000000160000004D0046003700310047005F004300
+      480049004C004400010000000000060000004D00320030000100000000000800
+      00004D00320033004200010000000000080000004D0033003200410001000000
+      0000060000004D0033003600010000000000060000004D003500300001000000
+      0000060000004D0035003200010000000000060000004D003500330001000000
+      0000060000004D0035003400010000000000060000004D003500350001000000
+      0000060000004D0035003600010000000000060000004D003500390001000000
+      0000060000004D0037003000010000000000080000004D003700310041000100
+      00000000080000004D00370031004600010000000000080000004D0037003100
+      4700010000000000060000004D0037003200010000000000080000004D003700
+      370042000100000000001C0000004D004600320030005F005200450046004500
+      520045004E00430045000100000000000A0000004F0050005F00490044000100
+      0000000014000000440045004C005F0053005400410054005500530001000000
+      00001600000043004F004D004D00490054005F004F0050004900440001000000
+      00001800000046004300520045004100540045005F004F005000490044000100
+      0000000016000000440045004C004500540045005F004F005000490044000100
+      00000000080000004D004600370030000100000000000A000000530048004900
+      460052000100000000000A0000004D0046003700310041000100000000000800
+      00004D004600370032000100000000000A0000004D0046003700370042000100
+      00000000160000004500440049005400450044005F004F005000490044000100
+      000000000A000000540052005F00490044000100000000000C00000054005200
+      5F004900440032000100000000000800000049004E0046004F00010000000000
+      060000005400410058000100000000000E00000043004F0055004E0054005200
+      59000100000000000E0000004800450053004100420041005400010000000000
+      100000004D004600350039005F00420049004300010000000000120000004300
+      4F004D005F004100430043004900440001000000000008000000430044004100
+      5400010000000000080000005400440041005400010000000000080000004600
+      4400410054000100000000000800000053004100410054000100000000000A00
+      0000590053004100410054000100000000000A00000047005300410041005400
+      010000000000080000004D00460032003100010000000000180000004D004600
+      350038005F004100430043004F0055004E005400010000000000100000004D00
+      4600350038005F00420049004300010000000000240000004D00460035003800
+      5F004E0041004D00450024004C004F0043004100540049004F004E0001000000
+      0000060000004D0032003100010000000000060000004D003500380001000000
+      0000}
+    Session = sboapiDataModule.SBSession
+    Left = 224
+    Top = 8
+    object azipsMF20: TWideStringField
+      FieldName = 'MF20'
+      Size = 396
+    end
+    object azipsMF23B: TWideStringField
+      FieldName = 'MF23B'
+      Size = 396
+    end
+    object azipsMF27: TWideStringField
+      FieldName = 'MF27'
+      Size = 396
+    end
+    object azipsMF32A: TWideStringField
+      FieldName = 'MF32A'
+      Size = 396
+    end
+    object azipsMF36: TWideStringField
+      FieldName = 'MF36'
+      Size = 396
+    end
+    object azipsSENDERTYPE: TWideStringField
+      FieldName = 'SENDERTYPE'
+      Size = 396
+    end
+    object azipsSENDERBIC: TWideStringField
+      FieldName = 'SENDERBIC'
+      Size = 396
+    end
+    object azipsSENDERLT: TWideStringField
+      FieldName = 'SENDERLT'
+      Size = 396
+    end
+    object azipsAPPLICATION: TWideStringField
+      FieldName = 'APPLICATION'
+      Size = 396
+    end
+    object azipsFINCOPY: TWideStringField
+      FieldName = 'FINCOPY'
+      Size = 396
+    end
+    object azipsMESSAGETYPE: TWideStringField
+      FieldName = 'MESSAGETYPE'
+      Size = 396
+    end
+    object azipsPRIORITY: TWideStringField
+      FieldName = 'PRIORITY'
+      Size = 396
+    end
+    object azipsMONITORING: TWideStringField
+      FieldName = 'MONITORING'
+      Size = 396
+    end
+    object azipsRECEIVERTYPE: TWideStringField
+      FieldName = 'RECEIVERTYPE'
+      Size = 396
+    end
+    object azipsRECEIVERBIC: TWideStringField
+      FieldName = 'RECEIVERBIC'
+      Size = 396
+    end
+    object azipsMF32A_DATE: TDateTimeField
+      FieldName = 'MF32A_DATE'
+    end
+    object azipsMF32A_CURR: TWideStringField
+      FieldName = 'MF32A_CURR'
+      Size = 32
+    end
+    object azipsMF32A_AMOUNT: TFloatField
+      FieldName = 'MF32A_AMOUNT'
+    end
+    object azipsMF50_ACCOUNT: TWideStringField
+      FieldName = 'MF50_ACCOUNT'
+      Size = 120
+    end
+    object azipsMF50_BIC: TWideStringField
+      FieldName = 'MF50_BIC'
+      Size = 40
+    end
+    object azipsMF50_NAMEADRESS: TWideStringField
+      FieldName = 'MF50_NAME$ADRESS'
+      Size = 396
+    end
+    object azipsMF52_ACCOUNT: TWideStringField
+      FieldName = 'MF52_ACCOUNT'
+      Size = 120
+    end
+    object azipsMF52_BIC: TWideStringField
+      FieldName = 'MF52_BIC'
+      Size = 40
+    end
+    object azipsMF52_NAMEADRESS: TWideStringField
+      FieldName = 'MF52_NAME$ADRESS'
+      Size = 396
+    end
+    object azipsMF53_ACCOUNT: TWideStringField
+      FieldName = 'MF53_ACCOUNT'
+      Size = 120
+    end
+    object azipsMF53_BIC: TWideStringField
+      FieldName = 'MF53_BIC'
+      Size = 40
+    end
+    object azipsMF53_NAMELOCATION: TWideStringField
+      FieldName = 'MF53_NAME$LOCATION'
+      Size = 580
+    end
+    object azipsMF54_ACCOUNT: TWideStringField
+      FieldName = 'MF54_ACCOUNT'
+      Size = 120
+    end
+    object azipsMF54_BIC: TWideStringField
+      FieldName = 'MF54_BIC'
+      Size = 40
+    end
+    object azipsMF54_NAMELOCATION: TWideStringField
+      FieldName = 'MF54_NAME$LOCATION'
+      Size = 580
+    end
+    object azipsMF55_ACCOUNT: TWideStringField
+      FieldName = 'MF55_ACCOUNT'
+      Size = 120
+    end
+    object azipsMF55_BIC: TWideStringField
+      FieldName = 'MF55_BIC'
+      Size = 40
+    end
+    object azipsMF55_NAMELOCATION: TWideStringField
+      FieldName = 'MF55_NAME$LOCATION'
+      Size = 580
+    end
+    object azipsMF56_ACCOUNT: TWideStringField
+      FieldName = 'MF56_ACCOUNT'
+      Size = 120
+    end
+    object azipsMF56_BIC: TWideStringField
+      FieldName = 'MF56_BIC'
+      Size = 40
+    end
+    object azipsMF56_NAMELOCATION: TWideStringField
+      FieldName = 'MF56_NAME$LOCATION'
+      Size = 580
+    end
+    object azipsMF59_ACCOUNT: TWideStringField
+      FieldName = 'MF59_ACCOUNT'
+      Size = 120
+    end
+    object azipsMF59_NAMEADRESS: TWideStringField
+      FieldName = 'MF59_NAME$ADRESS'
+      Size = 580
+    end
+    object azipsSTATUS: TIntegerField
+      FieldName = 'STATUS'
+    end
+    object azipsID: TFloatField
+      FieldName = 'ID'
+    end
+    object azipsMF71F_CHILD: TWideStringField
+      FieldName = 'MF71F_CHILD'
+      Size = 396
+    end
+    object azipsMF71G_CHILD: TWideStringField
+      FieldName = 'MF71G_CHILD'
+      Size = 396
+    end
+    object azipsM20: TWideStringField
+      FieldName = 'M20'
+      Size = 28
+    end
+    object azipsM23B: TWideStringField
+      FieldName = 'M23B'
+      Size = 28
+    end
+    object azipsM32A: TWideStringField
+      FieldName = 'M32A'
+      Size = 28
+    end
+    object azipsM36: TWideStringField
+      FieldName = 'M36'
+      Size = 28
+    end
+    object azipsM50: TWideStringField
+      FieldName = 'M50'
+      Size = 28
+    end
+    object azipsM52: TWideStringField
+      FieldName = 'M52'
+      Size = 28
+    end
+    object azipsM53: TWideStringField
+      FieldName = 'M53'
+      Size = 28
+    end
+    object azipsM54: TWideStringField
+      FieldName = 'M54'
+      Size = 28
+    end
+    object azipsM55: TWideStringField
+      FieldName = 'M55'
+      Size = 28
+    end
+    object azipsM56: TWideStringField
+      FieldName = 'M56'
+      Size = 28
+    end
+    object azipsM59: TWideStringField
+      FieldName = 'M59'
+      Size = 28
+    end
+    object azipsM70: TWideStringField
+      FieldName = 'M70'
+      Size = 28
+    end
+    object azipsM71A: TWideStringField
+      FieldName = 'M71A'
+      Size = 28
+    end
+    object azipsM71F: TWideStringField
+      FieldName = 'M71F'
+      Size = 28
+    end
+    object azipsM71G: TWideStringField
+      FieldName = 'M71G'
+      Size = 28
+    end
+    object azipsM72: TWideStringField
+      FieldName = 'M72'
+      Size = 28
+    end
+    object azipsM77B: TWideStringField
+      FieldName = 'M77B'
+      Size = 28
+    end
+    object azipsMF20_REFERENCE: TWideStringField
+      FieldName = 'MF20_REFERENCE'
+      Size = 80
+    end
+    object azipsOP_ID: TFloatField
+      FieldName = 'OP_ID'
+    end
+    object azipsDEL_STATUS: TIntegerField
+      FieldName = 'DEL_STATUS'
+    end
+    object azipsCOMMIT_OPID: TFloatField
+      FieldName = 'COMMIT_OPID'
+    end
+    object azipsFCREATE_OPID: TFloatField
+      FieldName = 'FCREATE_OPID'
+    end
+    object azipsDELETE_OPID: TFloatField
+      FieldName = 'DELETE_OPID'
+    end
+    object azipsMF70: TWideStringField
+      FieldName = 'MF70'
+      Size = 572
+    end
+    object azipsSHIFR: TIntegerField
+      FieldName = 'SHIFR'
+    end
+    object azipsMF71A: TWideStringField
+      FieldName = 'MF71A'
+      Size = 400
+    end
+    object azipsMF72: TWideStringField
+      FieldName = 'MF72'
+      Size = 2000
+    end
+    object azipsMF77B: TWideStringField
+      FieldName = 'MF77B'
+      Size = 800
+    end
+    object azipsEDITED_OPID: TFloatField
+      FieldName = 'EDITED_OPID'
+    end
+    object azipsTR_ID: TFloatField
+      FieldName = 'TR_ID'
+    end
+    object azipsTR_ID2: TFloatField
+      FieldName = 'TR_ID2'
+    end
+    object azipsINFO: TWideStringField
+      FieldName = 'INFO'
+      Size = 200
+    end
+    object azipsTAX: TWideStringField
+      FieldName = 'TAX'
+      Size = 56
+    end
+    object azipsCOUNTRY: TWideStringField
+      FieldName = 'COUNTRY'
+      Size = 400
+    end
+    object azipsHESABAT: TWideStringField
+      FieldName = 'HESABAT'
+      Size = 400
+    end
+    object azipsMF59_BIC: TWideStringField
+      FieldName = 'MF59_BIC'
+      Size = 60
+    end
+    object azipsCOM_ACCID: TFloatField
+      FieldName = 'COM_ACCID'
+    end
+    object azipsCDAT: TDateTimeField
+      FieldName = 'CDAT'
+    end
+    object azipsTDAT: TDateTimeField
+      FieldName = 'TDAT'
+    end
+    object azipsFDAT: TDateTimeField
+      FieldName = 'FDAT'
+    end
+    object azipsSAAT: TWideStringField
+      FieldName = 'SAAT'
+      Size = 8
+    end
+    object azipsYSAAT: TWideStringField
+      FieldName = 'YSAAT'
+      Size = 8
+    end
+    object azipsGSAAT: TWideStringField
+      FieldName = 'GSAAT'
+      Size = 8
+    end
+    object azipsMF21: TWideStringField
+      FieldName = 'MF21'
+      Size = 396
+    end
+    object azipsMF58_ACCOUNT: TWideStringField
+      FieldName = 'MF58_ACCOUNT'
+      Size = 120
+    end
+    object azipsMF58_BIC: TWideStringField
+      FieldName = 'MF58_BIC'
+      Size = 40
+    end
+    object azipsMF58_NAMELOCATION: TWideStringField
+      FieldName = 'MF58_NAME$LOCATION'
+      Size = 580
+    end
+    object azipsM21: TWideStringField
+      FieldName = 'M21'
+      Size = 28
+    end
+    object azipsM58: TWideStringField
+      FieldName = 'M58'
+      Size = 28
+    end
+  end
+  object Azipssource: TDataSource
+    DataSet = azips
+    Left = 248
+    Top = 72
+  end
+  object alanm: TOracleDataSet
+    SQL.Strings = (
+      
+        'select a.*,convertpack.CONVERT_INT(replace(a.short_name,'#39'"'#39','#39#39#39#39 +
+        ')) as d  from customers a where a.id=:kid')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000080000003A004B0049004400030000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000003500000004000000490044000100000000000A0000004F0050005F00
+      49004400010000000000100000004F00500045004E005F004400410054000100
+      000000001200000043004C004F00530045005F00440041005400010000000000
+      140000004E004500520045005A004900440045004E0054000100000000001400
+      00005000520049004E00410044005F004B004F00440001000000000008000000
+      4E0041004D00450001000000000014000000530048004F00520054005F004E00
+      41004D00450001000000000014000000470052004F00550050005F004B004C00
+      490045000100000000000E0000005600490044005F0053004F00420001000000
+      00000E0000004F00520047005F0053004F004200010000000000120000005300
+      46004500520041005F004400450059000100000000000C0000004F0054005200
+      410053004C00010000000000120000004E0041004C004F0047005F004B004F00
+      4400010000000000120000004B004F0044005F004F004B00500052004F000100
+      000000000600000049004E004E000100000000000E0000004400410054005F00
+      4E0041004C00010000000000120000004400410054005F005500530054004100
+      560001000000000006000000420049004B00010000000000100000004F005400
+      56005F004C00490043004F00010000000000180000004F00540056005F005000
+      41005300530050004F0052005400010000000000140000004F00540056005F00
+      490053005300550045004400010000000000140000004F00540056005F004900
+      530044004100540045000100000000000E0000004F004C0044005F0049004E00
+      4E000100000000001200000043005500530054005F0054005900500045000100
+      0000000010000000430041005400450047004F00520059000100000000002800
+      000049004E0043004F00520050004F0052004100540049004F004E005F004E00
+      55004D00420045005200010000000000200000005400500048005F0043004F00
+      4E0054004100430054005F0054005900500045000100000000002C0000005400
+      500048005F0043004F004D004D0055004E00490043004100540049004F004E00
+      5F005400590050004500010000000000140000005400500048005F004E005500
+      4D00420045005200010000000000180000004100440044005200450053005300
+      5F0054005900500045000100000000000E000000410044004400520045005300
+      5300010000000000080000004300490054005900010000000000180000004300
+      4F0055004E005400520059005F0043004F004400450001000000000016000000
+      4400490052004500430054004F0052005F00490044000100000000000A000000
+      45004D00410049004C0001000000000006000000550052004C00010000000000
+      2600000049004E0043004F00520050004F0052004100540049004F004E005F00
+      530054004100540045000100000000002400000049004E0043004F0052005000
+      4F0052004100540049004F004E005F0043004E00540052000100000000001A00
+      00005400500048005F0045005800540045004E00530049004F004E0001000000
+      00000E0000005400500048005F005A0049005000010000000000240000005400
+      500048005F0043004F0055004E005400520059005F0050005200450046004900
+      5800010000000000120000005400500048005F00530054004100540045000100
+      00000000140000005200490053004B005F004300410054004500470001000000
+      00001000000043005500530054005F004A005500520001000000000012000000
+      43005500530054005F0050004800590053000100000000000E00000043005500
+      530054005F0046005300010000000000140000005200490053004B0044004500
+      530043004900440001000000000014000000530041004D0045004C0059004400
+      410054004500010000000000140000005100550041004C004900540059005F00
+      490044000100000000000E00000043004F004D00500041004E00490001000000
+      000014000000550053004500520049004E005300450052005400010000000000
+      020000004400010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 56
+    Top = 144
+    object alanmID: TIntegerField
+      FieldName = 'ID'
+      Required = True
+    end
+    object alanmOP_ID: TFloatField
+      FieldName = 'OP_ID'
+    end
+    object alanmOPEN_DAT: TDateTimeField
+      FieldName = 'OPEN_DAT'
+    end
+    object alanmCLOSE_DAT: TDateTimeField
+      FieldName = 'CLOSE_DAT'
+    end
+    object alanmNEREZIDENT: TFloatField
+      FieldName = 'NEREZIDENT'
+    end
+    object alanmPRINAD_KOD: TFloatField
+      FieldName = 'PRINAD_KOD'
+    end
+    object alanmNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 360
+    end
+    object alanmSHORT_NAME: TWideStringField
+      FieldName = 'SHORT_NAME'
+      Size = 360
+    end
+    object alanmGROUP_KLIE: TFloatField
+      FieldName = 'GROUP_KLIE'
+    end
+    object alanmVID_SOB: TFloatField
+      FieldName = 'VID_SOB'
+    end
+    object alanmORG_SOB: TFloatField
+      FieldName = 'ORG_SOB'
+    end
+    object alanmSFERA_DEY: TFloatField
+      FieldName = 'SFERA_DEY'
+    end
+    object alanmOTRASL: TFloatField
+      FieldName = 'OTRASL'
+    end
+    object alanmNALOG_KOD: TFloatField
+      FieldName = 'NALOG_KOD'
+    end
+    object alanmKOD_OKPRO: TWideStringField
+      FieldName = 'KOD_OKPRO'
+      Size = 40
+    end
+    object alanmINN: TWideStringField
+      FieldName = 'INN'
+      Size = 80
+    end
+    object alanmDAT_NAL: TDateTimeField
+      FieldName = 'DAT_NAL'
+    end
+    object alanmDAT_USTAV: TDateTimeField
+      FieldName = 'DAT_USTAV'
+    end
+    object alanmBIK: TWideStringField
+      FieldName = 'BIK'
+      Size = 14
+    end
+    object alanmOTV_LICO: TWideStringField
+      FieldName = 'OTV_LICO'
+      Size = 160
+    end
+    object alanmOTV_PASSPORT: TWideStringField
+      FieldName = 'OTV_PASSPORT'
+      Size = 80
+    end
+    object alanmOTV_ISSUED: TWideStringField
+      FieldName = 'OTV_ISSUED'
+      Size = 160
+    end
+    object alanmOTV_ISDATE: TDateTimeField
+      FieldName = 'OTV_ISDATE'
+    end
+    object alanmOLD_INN: TFloatField
+      FieldName = 'OLD_INN'
+    end
+    object alanmCUST_TYPE: TIntegerField
+      FieldName = 'CUST_TYPE'
+    end
+    object alanmCATEGORY: TFloatField
+      FieldName = 'CATEGORY'
+    end
+    object alanmINCORPORATION_NUMBER: TWideStringField
+      FieldName = 'INCORPORATION_NUMBER'
+      Size = 80
+    end
+    object alanmTPH_CONTACT_TYPE: TWideStringField
+      FieldName = 'TPH_CONTACT_TYPE'
+      Size = 16
+    end
+    object alanmTPH_COMMUNICATION_TYPE: TWideStringField
+      FieldName = 'TPH_COMMUNICATION_TYPE'
+      Size = 16
+    end
+    object alanmTPH_NUMBER: TWideStringField
+      FieldName = 'TPH_NUMBER'
+      Size = 160
+    end
+    object alanmADDRESS_TYPE: TWideStringField
+      FieldName = 'ADDRESS_TYPE'
+      Size = 16
+    end
+    object alanmADDRESS: TWideStringField
+      FieldName = 'ADDRESS'
+      Size = 204
+    end
+    object alanmCITY: TWideStringField
+      FieldName = 'CITY'
+      Size = 120
+    end
+    object alanmCOUNTRY_CODE: TWideStringField
+      FieldName = 'COUNTRY_CODE'
+      Size = 4
+    end
+    object alanmDIRECTOR_ID: TFloatField
+      FieldName = 'DIRECTOR_ID'
+    end
+    object alanmEMAIL: TWideStringField
+      FieldName = 'EMAIL'
+      Size = 120
+    end
+    object alanmURL: TWideStringField
+      FieldName = 'URL'
+      Size = 120
+    end
+    object alanmINCORPORATION_STATE: TWideStringField
+      FieldName = 'INCORPORATION_STATE'
+      Size = 120
+    end
+    object alanmINCORPORATION_CNTR: TWideStringField
+      FieldName = 'INCORPORATION_CNTR'
+      Size = 40
+    end
+    object alanmTPH_EXTENSION: TWideStringField
+      FieldName = 'TPH_EXTENSION'
+      Size = 40
+    end
+    object alanmTPH_ZIP: TWideStringField
+      FieldName = 'TPH_ZIP'
+      Size = 40
+    end
+    object alanmTPH_COUNTRY_PREFIX: TWideStringField
+      FieldName = 'TPH_COUNTRY_PREFIX'
+      Size = 40
+    end
+    object alanmTPH_STATE: TWideStringField
+      FieldName = 'TPH_STATE'
+      Size = 120
+    end
+    object alanmRISK_CATEG: TFloatField
+      FieldName = 'RISK_CATEG'
+    end
+    object alanmCUST_JUR: TIntegerField
+      FieldName = 'CUST_JUR'
+    end
+    object alanmCUST_PHYS: TIntegerField
+      FieldName = 'CUST_PHYS'
+    end
+    object alanmCUST_FS: TIntegerField
+      FieldName = 'CUST_FS'
+    end
+    object alanmRISKDESCID: TFloatField
+      FieldName = 'RISKDESCID'
+    end
+    object alanmSAMELYDATE: TDateTimeField
+      FieldName = 'SAMELYDATE'
+    end
+    object alanmQUALITY_ID: TFloatField
+      FieldName = 'QUALITY_ID'
+    end
+    object alanmCOMPANI: TFloatField
+      FieldName = 'COMPANI'
+    end
+    object alanmUSERINSERT: TWideStringField
+      FieldName = 'USERINSERT'
+      Size = 30
+    end
+    object alanmD: TWideStringField
+      FieldName = 'D'
+      Size = 4000
+    end
+  end
+  object gonderen: TOracleDataSet
+    SQL.Strings = (
+      
+        'select * from filialinfo_t where kod_fil=:fid and svm_currencyid' +
+        '=:curr')
+    Optimize = False
+    Variables.Data = {
+      0400000002000000080000003A00460049004400030000000000000000000000
+      0A0000003A004300550052005200030000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      05000000270000000A0000004B004F0044005F00420001000000000008000000
+      420041004E004B000100000000000E00000041005A005F004E0041004D004500
+      010000000000080000004B0052004E004F000100000000000600000049004E00
+      4E000100000000000A000000530045004800450052000100000000000C000000
+      4100440052004500530053000100000000000800000053004500440052000100
+      000000000E00000042005500480041004C005400520001000000000006000000
+      540045004C00010000000000060000004600410058000100000000000A000000
+      530057004900460054000100000000000A000000540045004C00450058000100
+      000000000A00000045004D00410049004C000100000000000E00000050004F00
+      530054005F0049004E000100000000000E0000004B004F0044005F0046004900
+      4C000100000000000C000000460049004C00490041004C000100000000001200
+      0000410044005200450053005F00460049004C000100000000000E0000005400
+      45004C005F00460049004C000100000000000E0000004600410058005F004600
+      49004C0001000000000012000000530057004900460054005F00460049004C00
+      01000000000012000000540045004C00450058005F00460049004C0001000000
+      00001400000050004F005300540049004E005F00460049004C00010000000000
+      12000000530045004800450052005F00460049004C000100000000000E000000
+      49004E004E005F00460049004C00010000000000100000004B0052004E004F00
+      5F00460049004C000100000000000E0000005300450044005200460049004C00
+      0100000000001200000042005500480041004C005F00460049004C0001000000
+      0000100000004B004F0044005F004200460049004C0001000000000004000000
+      4E0042000100000000000E000000560041004C005F004D004F00560001000000
+      0000080000004C004F0047004F00000000000000080000004C0049004E004B00
+      0100000000000600000053004400560001000000000006000000530056004D00
+      0100000000000400000042004600010000000000180000004D0041004E004100
+      4700450052005400490054004C0045000100000000001E000000410043004300
+      4F0055004E00540041004E0054005400490054004C0045000100000000001C00
+      0000530056004D005F00430055005200520045004E0043005900490044000100
+      00000000}
+    Session = sboapiDataModule.SBSession
+    Left = 128
+    Top = 144
+  end
+  object account: TOracleDataSet
+    SQL.Strings = (
+      'select *from sw_accounts where close_dat is null'
+      'and acc_no=:accno'
+      ''
+      ''
+      ''
+      ''
+      ''
+      ' order by acc_no')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000C0000003A004100430043004E004F000500000000000000
+      00000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000001B00000004000000490044000100000000000C0000004B004C004900
+      5F00490044000100000000000A0000004F0050005F0049004400010000000000
+      0C0000004100430043005F004E004F000100000000000E000000560041004C00
+      5F00410043004300010000000000080000004E0041004D004500010000000000
+      100000004F00500045004E005F00440041005400010000000000120000004300
+      4C004F00530045005F004400410054000100000000000E000000420041004C00
+      5F0043004E0031000100000000000E000000420041004C005F0043004E003200
+      0100000000000E000000420041004C005F0043004E0033000100000000000E00
+      0000420041004C005F0043004E0034000100000000000C000000460049004C00
+      490041004C0001000000000012000000530049004D005F004F00540043004500
+      54000100000000000C0000005400490050004100430043000100000000000A00
+      00004C0049004D0049005400010000000000140000004F004C0044005F004100
+      430043005F004E004F000100000000001000000050004100490052005F004100
+      430043000100000000000E00000049004E005300490044004500520001000000
+      00000800000053004900440023000100000000000C000000540045004D005000
+      490044000100000000000A0000004F0057004E00490044000100000000001000
+      000050005F004300550053005400490044000100000000000800000053005900
+      4D00420001000000000012000000420041004E004B005F0043004F0044004500
+      01000000000018000000430055005200520045004E00430059004E0041004D00
+      450001000000000014000000550053004500520049004E005300450052005400
+      010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 232
+    Top = 144
+    object accountID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object accountKLI_ID: TFloatField
+      FieldName = 'KLI_ID'
+    end
+    object accountOP_ID: TFloatField
+      FieldName = 'OP_ID'
+    end
+    object accountACC_NO: TWideStringField
+      FieldName = 'ACC_NO'
+      Size = 448
+    end
+    object accountVAL_ACC: TIntegerField
+      FieldName = 'VAL_ACC'
+    end
+    object accountNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 1440
+    end
+    object accountOPEN_DAT: TDateTimeField
+      FieldName = 'OPEN_DAT'
+    end
+    object accountCLOSE_DAT: TDateTimeField
+      FieldName = 'CLOSE_DAT'
+    end
+    object accountBAL_CN1: TFloatField
+      FieldName = 'BAL_CN1'
+    end
+    object accountBAL_CN2: TFloatField
+      FieldName = 'BAL_CN2'
+    end
+    object accountBAL_CN3: TFloatField
+      FieldName = 'BAL_CN3'
+    end
+    object accountBAL_CN4: TFloatField
+      FieldName = 'BAL_CN4'
+    end
+    object accountFILIAL: TIntegerField
+      FieldName = 'FILIAL'
+    end
+    object accountSIM_OTCET: TFloatField
+      FieldName = 'SIM_OTCET'
+    end
+    object accountTIPACC: TWideStringField
+      FieldName = 'TIPACC'
+      Size = 320
+    end
+    object accountLIMIT: TFloatField
+      FieldName = 'LIMIT'
+    end
+    object accountOLD_ACC_NO: TWideStringField
+      FieldName = 'OLD_ACC_NO'
+      Size = 448
+    end
+    object accountPAIR_ACC: TFloatField
+      FieldName = 'PAIR_ACC'
+    end
+    object accountINSIDER: TWideStringField
+      FieldName = 'INSIDER'
+      Size = 16
+    end
+    object accountSID: TFloatField
+      FieldName = 'SID#'
+    end
+    object accountTEMPID: TFloatField
+      FieldName = 'TEMPID'
+    end
+    object accountOWNID: TFloatField
+      FieldName = 'OWNID'
+    end
+    object accountP_CUSTID: TFloatField
+      FieldName = 'P_CUSTID'
+    end
+    object accountSYMB: TWideStringField
+      FieldName = 'SYMB'
+      Size = 480
+    end
+    object accountBANK_CODE: TFloatField
+      FieldName = 'BANK_CODE'
+    end
+    object accountCURRENCYNAME: TWideStringField
+      FieldName = 'CURRENCYNAME'
+      Size = 10
+    end
+    object accountUSERINSERT: TWideStringField
+      FieldName = 'USERINSERT'
+      Size = 30
+    end
+  end
+  object sw_out: TOracleDataSet
+    SQL.Strings = (
+      'select * from sw_out_new where id =:ids')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000080000003A00490044005300030000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      0500000070000000080000004D004600320030000100000000000A0000004D00
+      4600320033004200010000000000080000004D00460032003100010000000000
+      080000004D004600320037000100000000000A0000004D004600330032004100
+      010000000000080000004D004600330036000100000000001400000053004500
+      4E00440045005200540059005000450001000000000012000000530045004E00
+      44004500520042004900430001000000000010000000530045004E0044004500
+      52004C005400010000000000160000004100500050004C004900430041005400
+      49004F004E000100000000000E000000460049004E0043004F00500059000100
+      00000000160000004D0045005300530041004700450054005900500045000100
+      00000000100000005000520049004F0052004900540059000100000000001400
+      00004D004F004E00490054004F00520049004E00470001000000000018000000
+      5200450043004500490056004500520054005900500045000100000000001600
+      0000520045004300450049005600450052004200490043000100000000001400
+      00004D0046003300320041005F00440041005400450001000000000014000000
+      4D0046003300320041005F004300550052005200010000000000180000004D00
+      46003300320041005F0041004D004F0055004E00540001000000000018000000
+      4D004600350030005F004100430043004F0055004E0054000100000000001000
+      00004D004600350030005F00420049004300010000000000200000004D004600
+      350030005F004E0041004D004500240041004400520045005300530001000000
+      0000180000004D004600350032005F004100430043004F0055004E0054000100
+      00000000100000004D004600350032005F004200490043000100000000002000
+      00004D004600350032005F004E0041004D004500240041004400520045005300
+      5300010000000000180000004D004600350033005F004100430043004F005500
+      4E005400010000000000100000004D004600350033005F004200490043000100
+      00000000240000004D004600350033005F004E0041004D00450024004C004F00
+      43004100540049004F004E00010000000000180000004D004600350034005F00
+      4100430043004F0055004E005400010000000000100000004D00460035003400
+      5F00420049004300010000000000240000004D004600350034005F004E004100
+      4D00450024004C004F0043004100540049004F004E0001000000000018000000
+      4D004600350035005F004100430043004F0055004E0054000100000000001000
+      00004D004600350035005F00420049004300010000000000240000004D004600
+      350035005F004E0041004D00450024004C004F0043004100540049004F004E00
+      010000000000180000004D004600350036005F004100430043004F0055004E00
+      5400010000000000100000004D004600350036005F0042004900430001000000
+      0000240000004D004600350036005F004E0041004D00450024004C004F004300
+      4100540049004F004E00010000000000180000004D004600350038005F004100
+      430043004F0055004E005400010000000000100000004D004600350038005F00
+      420049004300010000000000240000004D004600350038005F004E0041004D00
+      450024004C004F0043004100540049004F004E00010000000000180000004D00
+      4600350039005F004100430043004F0055004E00540001000000000020000000
+      4D004600350039005F004E0041004D0045002400410044005200450053005300
+      0100000000000C00000053005400410054005500530001000000000004000000
+      49004400010000000000160000004D0046003700310046005F00430048004900
+      4C004400010000000000160000004D0046003700310047005F00430048004900
+      4C004400010000000000060000004D0032003000010000000000080000004D00
+      320033004200010000000000060000004D003200310001000000000008000000
+      4D00330032004100010000000000060000004D00330036000100000000000600
+      00004D0035003000010000000000060000004D00350032000100000000000600
+      00004D0035003300010000000000060000004D00350034000100000000000600
+      00004D0035003500010000000000060000004D00350036000100000000000600
+      00004D0035003800010000000000060000004D00350039000100000000000600
+      00004D0037003000010000000000080000004D00370031004100010000000000
+      080000004D00370031004600010000000000080000004D003700310047000100
+      00000000060000004D0037003200010000000000080000004D00370037004200
+      0100000000001C0000004D004600320030005F00520045004600450052004500
+      4E00430045000100000000000A0000004F0050005F0049004400010000000000
+      14000000440045004C005F005300540041005400550053000100000000001600
+      000043004F004D004D00490054005F004F005000490044000100000000001800
+      000046004300520045004100540045005F004F00500049004400010000000000
+      16000000440045004C004500540045005F004F00500049004400010000000000
+      080000004D004600370030000100000000000A00000053004800490046005200
+      0100000000000A0000004D004600370031004100010000000000080000004D00
+      4600370032000100000000000A0000004D004600370037004200010000000000
+      160000004500440049005400450044005F004F00500049004400010000000000
+      0A000000540052005F00490044000100000000000C000000540052005F004900
+      440032000100000000000800000049004E0046004F0001000000000006000000
+      5400410058000100000000000E00000043004F0055004E005400520059000100
+      000000000E000000480045005300410042004100540001000000000010000000
+      4D004600350039005F004200490043000100000000001200000043004F004D00
+      5F00410043004300490044000100000000000800000043004400410054000100
+      0000000008000000460044004100540001000000000008000000540044004100
+      54000100000000000A00000052004E0041004D0045000100000000000A000000
+      520043004F0044004500010000000000120000004D004600350039005F004E00
+      41004D0045000100000000000C0000004200520041004E004300480001000000
+      00000A0000004D004600330032004200010000000000180000004D0046003300
+      320042005F0041004D004F0055004E005400010000000000060000004D003100
+      3200010000000000080000004D00370037004500010000000000060000004D00
+      37003900010000000000060000004C0030003100010000000000060000004C00
+      30003200010000000000060000004C0030003300010000000000060000004C00
+      30003400010000000000080000004D0033003400460001000000000006000000
+      4D0032003500010000000000080000004D004600320035000100000000000800
+      00004D004600310032000100000000000A0000004D0046003700370045000100
+      00000000080000004D004600370039000100000000000A0000004D0046004C00
+      300032000100000000000C0000004D0046003300340046003100010000000000
+      0C0000004D004600330034004600320001000000000012000000460049004C00
+      45005F004F005000490044000100000000000A00000043004F00440045005800
+      010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 304
+    Top = 144
+    object sw_outMF20: TWideStringField
+      FieldName = 'MF20'
+      Size = 396
+    end
+    object sw_outMF23B: TWideStringField
+      FieldName = 'MF23B'
+      Size = 396
+    end
+    object sw_outMF21: TWideStringField
+      FieldName = 'MF21'
+      Size = 396
+    end
+    object sw_outMF27: TWideStringField
+      FieldName = 'MF27'
+      Size = 396
+    end
+    object sw_outMF32A: TWideStringField
+      FieldName = 'MF32A'
+      Size = 396
+    end
+    object sw_outMF36: TWideStringField
+      FieldName = 'MF36'
+      Size = 396
+    end
+    object sw_outSENDERTYPE: TWideStringField
+      FieldName = 'SENDERTYPE'
+      Size = 396
+    end
+    object sw_outSENDERBIC: TWideStringField
+      FieldName = 'SENDERBIC'
+      Size = 396
+    end
+    object sw_outSENDERLT: TWideStringField
+      FieldName = 'SENDERLT'
+      Size = 396
+    end
+    object sw_outAPPLICATION: TWideStringField
+      FieldName = 'APPLICATION'
+      Size = 396
+    end
+    object sw_outFINCOPY: TWideStringField
+      FieldName = 'FINCOPY'
+      Size = 396
+    end
+    object sw_outMESSAGETYPE: TWideStringField
+      FieldName = 'MESSAGETYPE'
+      Size = 396
+    end
+    object sw_outPRIORITY: TWideStringField
+      FieldName = 'PRIORITY'
+      Size = 396
+    end
+    object sw_outMONITORING: TWideStringField
+      FieldName = 'MONITORING'
+      Size = 396
+    end
+    object sw_outRECEIVERTYPE: TWideStringField
+      FieldName = 'RECEIVERTYPE'
+      Size = 396
+    end
+    object sw_outRECEIVERBIC: TWideStringField
+      FieldName = 'RECEIVERBIC'
+      Size = 396
+    end
+    object sw_outMF32A_DATE: TDateTimeField
+      FieldName = 'MF32A_DATE'
+    end
+    object sw_outMF32A_CURR: TWideStringField
+      FieldName = 'MF32A_CURR'
+      Size = 32
+    end
+    object sw_outMF32A_AMOUNT: TFloatField
+      FieldName = 'MF32A_AMOUNT'
+    end
+    object sw_outMF50_ACCOUNT: TWideStringField
+      FieldName = 'MF50_ACCOUNT'
+      Size = 120
+    end
+    object sw_outMF50_BIC: TWideStringField
+      FieldName = 'MF50_BIC'
+      Size = 40
+    end
+    object sw_outMF50_NAMEADRESS: TWideStringField
+      FieldName = 'MF50_NAME$ADRESS'
+      Size = 400
+    end
+    object sw_outMF52_ACCOUNT: TWideStringField
+      FieldName = 'MF52_ACCOUNT'
+      Size = 120
+    end
+    object sw_outMF52_BIC: TWideStringField
+      FieldName = 'MF52_BIC'
+      Size = 40
+    end
+    object sw_outMF52_NAMEADRESS: TWideStringField
+      FieldName = 'MF52_NAME$ADRESS'
+      Size = 396
+    end
+    object sw_outMF53_ACCOUNT: TWideStringField
+      FieldName = 'MF53_ACCOUNT'
+      Size = 120
+    end
+    object sw_outMF53_BIC: TWideStringField
+      FieldName = 'MF53_BIC'
+      Size = 40
+    end
+    object sw_outMF53_NAMELOCATION: TWideStringField
+      FieldName = 'MF53_NAME$LOCATION'
+      Size = 580
+    end
+    object sw_outMF54_ACCOUNT: TWideStringField
+      FieldName = 'MF54_ACCOUNT'
+      Size = 120
+    end
+    object sw_outMF54_BIC: TWideStringField
+      FieldName = 'MF54_BIC'
+      Size = 40
+    end
+    object sw_outMF54_NAMELOCATION: TWideStringField
+      FieldName = 'MF54_NAME$LOCATION'
+      Size = 580
+    end
+    object sw_outMF55_ACCOUNT: TWideStringField
+      FieldName = 'MF55_ACCOUNT'
+      Size = 120
+    end
+    object sw_outMF55_BIC: TWideStringField
+      FieldName = 'MF55_BIC'
+      Size = 40
+    end
+    object sw_outMF55_NAMELOCATION: TWideStringField
+      FieldName = 'MF55_NAME$LOCATION'
+      Size = 580
+    end
+    object sw_outMF56_ACCOUNT: TWideStringField
+      FieldName = 'MF56_ACCOUNT'
+      Size = 120
+    end
+    object sw_outMF56_BIC: TWideStringField
+      FieldName = 'MF56_BIC'
+      Size = 40
+    end
+    object sw_outMF56_NAMELOCATION: TWideStringField
+      FieldName = 'MF56_NAME$LOCATION'
+      Size = 580
+    end
+    object sw_outMF58_ACCOUNT: TWideStringField
+      FieldName = 'MF58_ACCOUNT'
+      Size = 120
+    end
+    object sw_outMF58_BIC: TWideStringField
+      FieldName = 'MF58_BIC'
+      Size = 40
+    end
+    object sw_outMF58_NAMELOCATION: TWideStringField
+      FieldName = 'MF58_NAME$LOCATION'
+      Size = 580
+    end
+    object sw_outMF59_ACCOUNT: TWideStringField
+      FieldName = 'MF59_ACCOUNT'
+      Size = 120
+    end
+    object sw_outMF59_NAMEADRESS: TWideStringField
+      FieldName = 'MF59_NAME$ADRESS'
+      Size = 580
+    end
+    object sw_outSTATUS: TIntegerField
+      FieldName = 'STATUS'
+    end
+    object sw_outID: TFloatField
+      FieldName = 'ID'
+    end
+    object sw_outMF71F_CHILD: TWideStringField
+      FieldName = 'MF71F_CHILD'
+      Size = 396
+    end
+    object sw_outMF71G_CHILD: TWideStringField
+      FieldName = 'MF71G_CHILD'
+      Size = 396
+    end
+    object sw_outM20: TWideStringField
+      FieldName = 'M20'
+      Size = 28
+    end
+    object sw_outM23B: TWideStringField
+      FieldName = 'M23B'
+      Size = 28
+    end
+    object sw_outM21: TWideStringField
+      FieldName = 'M21'
+      Size = 28
+    end
+    object sw_outM32A: TWideStringField
+      FieldName = 'M32A'
+      Size = 28
+    end
+    object sw_outM36: TWideStringField
+      FieldName = 'M36'
+      Size = 28
+    end
+    object sw_outM50: TWideStringField
+      FieldName = 'M50'
+      Size = 28
+    end
+    object sw_outM52: TWideStringField
+      FieldName = 'M52'
+      Size = 28
+    end
+    object sw_outM53: TWideStringField
+      FieldName = 'M53'
+      Size = 28
+    end
+    object sw_outM54: TWideStringField
+      FieldName = 'M54'
+      Size = 28
+    end
+    object sw_outM55: TWideStringField
+      FieldName = 'M55'
+      Size = 28
+    end
+    object sw_outM56: TWideStringField
+      FieldName = 'M56'
+      Size = 28
+    end
+    object sw_outM58: TWideStringField
+      FieldName = 'M58'
+      Size = 28
+    end
+    object sw_outM59: TWideStringField
+      FieldName = 'M59'
+      Size = 28
+    end
+    object sw_outM70: TWideStringField
+      FieldName = 'M70'
+      Size = 28
+    end
+    object sw_outM71A: TWideStringField
+      FieldName = 'M71A'
+      Size = 28
+    end
+    object sw_outM71F: TWideStringField
+      FieldName = 'M71F'
+      Size = 28
+    end
+    object sw_outM71G: TWideStringField
+      FieldName = 'M71G'
+      Size = 28
+    end
+    object sw_outM72: TWideStringField
+      FieldName = 'M72'
+      Size = 28
+    end
+    object sw_outM77B: TWideStringField
+      FieldName = 'M77B'
+      Size = 28
+    end
+    object sw_outMF20_REFERENCE: TWideStringField
+      FieldName = 'MF20_REFERENCE'
+      Size = 80
+    end
+    object sw_outOP_ID: TFloatField
+      FieldName = 'OP_ID'
+    end
+    object sw_outDEL_STATUS: TIntegerField
+      FieldName = 'DEL_STATUS'
+    end
+    object sw_outCOMMIT_OPID: TFloatField
+      FieldName = 'COMMIT_OPID'
+    end
+    object sw_outFCREATE_OPID: TFloatField
+      FieldName = 'FCREATE_OPID'
+    end
+    object sw_outDELETE_OPID: TFloatField
+      FieldName = 'DELETE_OPID'
+    end
+    object sw_outMF70: TWideStringField
+      FieldName = 'MF70'
+      Size = 572
+    end
+    object sw_outSHIFR: TIntegerField
+      FieldName = 'SHIFR'
+    end
+    object sw_outMF71A: TWideStringField
+      FieldName = 'MF71A'
+      Size = 400
+    end
+    object sw_outMF72: TWideStringField
+      FieldName = 'MF72'
+      Size = 2000
+    end
+    object sw_outMF77B: TWideStringField
+      FieldName = 'MF77B'
+      Size = 800
+    end
+    object sw_outEDITED_OPID: TFloatField
+      FieldName = 'EDITED_OPID'
+    end
+    object sw_outTR_ID: TFloatField
+      FieldName = 'TR_ID'
+    end
+    object sw_outTR_ID2: TFloatField
+      FieldName = 'TR_ID2'
+    end
+    object sw_outINFO: TWideStringField
+      FieldName = 'INFO'
+      Size = 200
+    end
+    object sw_outTAX: TWideStringField
+      FieldName = 'TAX'
+      Size = 56
+    end
+    object sw_outCOUNTRY: TWideStringField
+      FieldName = 'COUNTRY'
+      Size = 400
+    end
+    object sw_outMF59_BIC: TWideStringField
+      FieldName = 'MF59_BIC'
+      Size = 60
+    end
+    object sw_outCOM_ACCID: TFloatField
+      FieldName = 'COM_ACCID'
+    end
+    object sw_outCDAT: TDateTimeField
+      FieldName = 'CDAT'
+    end
+    object sw_outFDAT: TDateTimeField
+      FieldName = 'FDAT'
+    end
+    object sw_outTDAT: TDateTimeField
+      FieldName = 'TDAT'
+    end
+    object sw_outRNAME: TWideStringField
+      FieldName = 'RNAME'
+      Size = 60
+    end
+    object sw_outRCODE: TWideStringField
+      FieldName = 'RCODE'
+      Size = 60
+    end
+    object sw_outMF59_NAME: TWideStringField
+      FieldName = 'MF59_NAME'
+      Size = 60
+    end
+    object sw_outBRANCH: TFloatField
+      FieldName = 'BRANCH'
+    end
+    object sw_outMF32B: TWideStringField
+      FieldName = 'MF32B'
+      Size = 50
+    end
+    object sw_outMF32B_AMOUNT: TFloatField
+      FieldName = 'MF32B_AMOUNT'
+    end
+    object sw_outHESABAT: TWideMemoField
+      FieldName = 'HESABAT'
+      BlobType = ftWideMemo
+    end
+    object sw_outM12: TWideStringField
+      FieldName = 'M12'
+      Size = 60
+    end
+    object sw_outM77E: TWideStringField
+      FieldName = 'M77E'
+      Size = 60
+    end
+    object sw_outM79: TWideStringField
+      FieldName = 'M79'
+      Size = 60
+    end
+    object sw_outL01: TWideStringField
+      FieldName = 'L01'
+      Size = 60
+    end
+    object sw_outL02: TWideStringField
+      FieldName = 'L02'
+      Size = 60
+    end
+    object sw_outL03: TWideStringField
+      FieldName = 'L03'
+      Size = 60
+    end
+    object sw_outL04: TWideStringField
+      FieldName = 'L04'
+      Size = 60
+    end
+    object sw_outM34F: TWideStringField
+      FieldName = 'M34F'
+      Size = 60
+    end
+    object sw_outM25: TWideStringField
+      FieldName = 'M25'
+      Size = 60
+    end
+    object sw_outMF25: TWideStringField
+      FieldName = 'MF25'
+      Size = 60
+    end
+    object sw_outMF12: TWideStringField
+      FieldName = 'MF12'
+      Size = 60
+    end
+    object sw_outMF77E: TWideStringField
+      FieldName = 'MF77E'
+      Size = 60
+    end
+    object sw_outMF79: TWideStringField
+      FieldName = 'MF79'
+      Size = 60
+    end
+    object sw_outMFL02: TWideStringField
+      FieldName = 'MFL02'
+      Size = 60
+    end
+    object sw_outMF34F1: TWideStringField
+      FieldName = 'MF34F1'
+      Size = 60
+    end
+    object sw_outMF34F2: TWideStringField
+      FieldName = 'MF34F2'
+      Size = 60
+    end
+    object sw_outFILE_OPID: TFloatField
+      FieldName = 'FILE_OPID'
+    end
+    object sw_outCODEX: TFloatField
+      FieldName = 'CODEX'
+    end
+  end
+  object OracleDataSet1: TOracleDataSet
+    SQL.Strings = (
+      'update sw_out_new set status=44 where id =:ids')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000080000003A00490044005300030000000000000000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 408
+    Top = 24
+  end
+  object OracleDataSet2: TOracleDataSet
+    SQL.Strings = (
+      'select to_char(sysdate,'#39'hh24:mi:ss'#39') as time from dual')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {050000000100000008000000540049004D004500010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 424
+    Top = 112
+  end
+  object sw_settings: TOracleDataSet
+    SQL.Strings = (
+      'select * from sw_settings')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000100000000800000050004100540048000100000000001A0000005500
+      530045005F00420041004E004B005F0044004100540045000100000000001000
+      000050004100540048005F004F00550054000100000000000600000042004900
+      43000100000000001200000043004F004D0049005300530049004F004E000100
+      000000001800000049004E004E005F00460049004C0045005400590050004500
+      0100000000001E00000049004E004E005F004D0054005F005200450041004400
+      4C0049004E0045000100000000000C00000042005F00500052004F0043000100
+      000000000E00000042005F00500052004F004300460001000000000010000000
+      4500580050004900520045005F0054000100000000001200000042005F005000
+      52004F0043005F0049004E000100000000001400000042005F00500052004F00
+      430046005F0049004E000100000000000A0000004D005F004200490043000100
+      000000000E00000050004100540048005F0049004E0001000000000018000000
+      43004F004E00560049004E00540045005200560041004C000100000000000E00
+      00005500530045005200460049004C00010000000000}
+    QueryAllRecords = False
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 304
+    Top = 80
+  end
+  object sbop: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'sbop'
+    Left = 480
+    Top = 48
+  end
+  object relatedrf: TOracleDataSet
+    SQL.Strings = (
+      'select max(id)+1  from sw_out_new')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      0500000001000000120000004D004100580028004900440029002B0031000100
+      00000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 128
+    Top = 264
+    object relatedrfMAXID1: TFloatField
+      FieldName = 'MAX(ID)+1'
+    end
+  end
+  object Bank: TOracleDataSet
+    SQL.Strings = (
+      ''
+      
+        'select substr(convertpack.CONVERT_INT(replace(a.bank,'#39'"'#39','#39#39#39#39')),' +
+        '0,35)  as name,accountanttitle,'
+      
+        'krno,inn,swift,kod_b as bankcode,krno_fil as subkrno from filial' +
+        'info_t a where nb=1 and svm_currencyid=:val')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000080000003A00560041004C00030000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      0500000007000000080000004E0041004D004500010000000000080000004B00
+      52004E004F000100000000000600000049004E004E000100000000000A000000
+      5300570049004600540001000000000010000000420041004E004B0043004F00
+      440045000100000000000E0000005300550042004B0052004E004F0001000000
+      00001E0000004100430043004F0055004E00540041004E005400540049005400
+      4C004500010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 312
+    Top = 200
+    object BankNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 140
+    end
+    object BankKRNO: TWideStringField
+      FieldName = 'KRNO'
+      Size = 112
+    end
+    object BankINN: TWideStringField
+      FieldName = 'INN'
+      Size = 60
+    end
+    object BankSWIFT: TWideStringField
+      FieldName = 'SWIFT'
+      Size = 80
+    end
+    object BankBANKCODE: TFloatField
+      FieldName = 'BANKCODE'
+    end
+    object BankSUBKRNO: TWideStringField
+      FieldName = 'SUBKRNO'
+      Size = 112
+    end
+    object BankACCOUNTANTTITLE: TWideStringField
+      FieldName = 'ACCOUNTANTTITLE'
+      Size = 512
+    end
+  end
+  object DataSource1: TDataSource
+    DataSet = Bank
+    Left = 256
+    Top = 200
+  end
+  object names205: TOracleDataSet
+    SQL.Strings = (
+      '//select * from sw_names205')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000200000004000000490044000100000000000A0000004E0041004D00
+      45005300010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 712
+    Top = 232
+    object names205ID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object names205NAMES: TWideStringField
+      FieldName = 'NAMES'
+      Size = 80
+    end
+  end
+  object name205: TDataSource
+    DataSet = names205
+    Left = 664
+    Top = 232
+  end
+  object sourcetempl: TDataSource
+    DataSet = templ
+    Left = 440
+    Top = 208
+  end
+  object templ: TOracleDataSet
+    SQL.Strings = (
+      'select a.rowid,a.* from sw_templates a'
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      '')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000F000000040000004900440001000000000010000000550053004500
+      52004E0041004D00450001000000000006000000440041005400010000000000
+      0C00000041004D004F0055004E0054000100000000000C000000470048004500
+      5300410042000100000000000E000000420041004E004B004B004F0044000100
+      0000000010000000420041004E004B004E0041004D0045000100000000000C00
+      0000410048004500530041004200010000000000080000004100410044004900
+      0100000000000A000000410056004F0045004E000100000000000E0000005400
+      4500590049004E00410054000100000000001000000054004500590049004E00
+      410054003200010000000000040000004D005400010000000000100000005400
+      45004D0050004E0041004D0045000100000000000C000000560041004C005500
+      54004500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 400
+    Top = 240
+    object templID: TFloatField
+      FieldName = 'ID'
+    end
+    object templUSERNAME: TWideStringField
+      FieldName = 'USERNAME'
+      Size = 800
+    end
+    object templDAT: TDateTimeField
+      FieldName = 'DAT'
+    end
+    object templAMOUNT: TWideStringField
+      FieldName = 'AMOUNT'
+      Size = 800
+    end
+    object templGHESAB: TWideStringField
+      FieldName = 'GHESAB'
+      Size = 800
+    end
+    object templBANKKOD: TWideStringField
+      FieldName = 'BANKKOD'
+      Size = 800
+    end
+    object templBANKNAME: TWideStringField
+      FieldName = 'BANKNAME'
+      Size = 800
+    end
+    object templAHESAB: TWideStringField
+      FieldName = 'AHESAB'
+      Size = 800
+    end
+    object templAADI: TWideStringField
+      FieldName = 'AADI'
+      Size = 800
+    end
+    object templAVOEN: TWideStringField
+      FieldName = 'AVOEN'
+      Size = 800
+    end
+    object templTEYINAT: TWideStringField
+      FieldName = 'TEYINAT'
+      Size = 4000
+    end
+    object templTEYINAT2: TWideStringField
+      FieldName = 'TEYINAT2'
+      Size = 4000
+    end
+    object templMT: TWideStringField
+      FieldName = 'MT'
+      Size = 200
+    end
+    object templTEMPNAME: TWideStringField
+      FieldName = 'TEMPNAME'
+      Size = 2000
+    end
+    object templVALUTE: TWideStringField
+      FieldName = 'VALUTE'
+      Size = 200
+    end
+  end
+  object updtemp: TOracleDataSet
+    SQL.Strings = (
+      'update sw_templates set tempname=:tname where id =:vid')
+    Optimize = False
+    Variables.Data = {
+      04000000020000000C0000003A0054004E0041004D0045000500000000000000
+      00000000080000003A00560049004400030000000000000000000000}
+    Left = 688
+    Top = 40
+  end
+  object out: TOracleDataSet
+    SQL.Strings = (
+      'select * from sw_out_new where status=20')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000006F000000080000004D004600320030000100000000000A0000004D00
+      4600320033004200010000000000080000004D00460032003100010000000000
+      080000004D004600320037000100000000000A0000004D004600330032004100
+      010000000000080000004D004600330036000100000000001400000053004500
+      4E00440045005200540059005000450001000000000012000000530045004E00
+      44004500520042004900430001000000000010000000530045004E0044004500
+      52004C005400010000000000160000004100500050004C004900430041005400
+      49004F004E000100000000000E000000460049004E0043004F00500059000100
+      00000000160000004D0045005300530041004700450054005900500045000100
+      00000000100000005000520049004F0052004900540059000100000000001400
+      00004D004F004E00490054004F00520049004E00470001000000000018000000
+      5200450043004500490056004500520054005900500045000100000000001600
+      0000520045004300450049005600450052004200490043000100000000001400
+      00004D0046003300320041005F00440041005400450001000000000014000000
+      4D0046003300320041005F004300550052005200010000000000180000004D00
+      46003300320041005F0041004D004F0055004E00540001000000000018000000
+      4D004600350030005F004100430043004F0055004E0054000100000000001000
+      00004D004600350030005F00420049004300010000000000200000004D004600
+      350030005F004E0041004D004500240041004400520045005300530001000000
+      0000180000004D004600350032005F004100430043004F0055004E0054000100
+      00000000100000004D004600350032005F004200490043000100000000002000
+      00004D004600350032005F004E0041004D004500240041004400520045005300
+      5300010000000000180000004D004600350033005F004100430043004F005500
+      4E005400010000000000100000004D004600350033005F004200490043000100
+      00000000240000004D004600350033005F004E0041004D00450024004C004F00
+      43004100540049004F004E00010000000000180000004D004600350034005F00
+      4100430043004F0055004E005400010000000000100000004D00460035003400
+      5F00420049004300010000000000240000004D004600350034005F004E004100
+      4D00450024004C004F0043004100540049004F004E0001000000000018000000
+      4D004600350035005F004100430043004F0055004E0054000100000000001000
+      00004D004600350035005F00420049004300010000000000240000004D004600
+      350035005F004E0041004D00450024004C004F0043004100540049004F004E00
+      010000000000180000004D004600350036005F004100430043004F0055004E00
+      5400010000000000100000004D004600350036005F0042004900430001000000
+      0000240000004D004600350036005F004E0041004D00450024004C004F004300
+      4100540049004F004E00010000000000180000004D004600350038005F004100
+      430043004F0055004E005400010000000000100000004D004600350038005F00
+      420049004300010000000000240000004D004600350038005F004E0041004D00
+      450024004C004F0043004100540049004F004E00010000000000180000004D00
+      4600350039005F004100430043004F0055004E00540001000000000020000000
+      4D004600350039005F004E0041004D0045002400410044005200450053005300
+      0100000000000C00000053005400410054005500530001000000000004000000
+      49004400010000000000160000004D0046003700310046005F00430048004900
+      4C004400010000000000160000004D0046003700310047005F00430048004900
+      4C004400010000000000060000004D0032003000010000000000080000004D00
+      320033004200010000000000060000004D003200310001000000000008000000
+      4D00330032004100010000000000060000004D00330036000100000000000600
+      00004D0035003000010000000000060000004D00350032000100000000000600
+      00004D0035003300010000000000060000004D00350034000100000000000600
+      00004D0035003500010000000000060000004D00350036000100000000000600
+      00004D0035003800010000000000060000004D00350039000100000000000600
+      00004D0037003000010000000000080000004D00370031004100010000000000
+      080000004D00370031004600010000000000080000004D003700310047000100
+      00000000060000004D0037003200010000000000080000004D00370037004200
+      0100000000001C0000004D004600320030005F00520045004600450052004500
+      4E00430045000100000000000A0000004F0050005F0049004400010000000000
+      14000000440045004C005F005300540041005400550053000100000000001600
+      000043004F004D004D00490054005F004F005000490044000100000000001800
+      000046004300520045004100540045005F004F00500049004400010000000000
+      16000000440045004C004500540045005F004F00500049004400010000000000
+      080000004D004600370030000100000000000A00000053004800490046005200
+      0100000000000A0000004D004600370031004100010000000000080000004D00
+      4600370032000100000000000A0000004D004600370037004200010000000000
+      160000004500440049005400450044005F004F00500049004400010000000000
+      0A000000540052005F00490044000100000000000C000000540052005F004900
+      440032000100000000000800000049004E0046004F0001000000000006000000
+      5400410058000100000000000E00000043004F0055004E005400520059000100
+      000000000E000000480045005300410042004100540001000000000010000000
+      4D004600350039005F004200490043000100000000001200000043004F004D00
+      5F00410043004300490044000100000000000800000043004400410054000100
+      0000000008000000460044004100540001000000000008000000540044004100
+      54000100000000000A00000052004E0041004D0045000100000000000A000000
+      520043004F0044004500010000000000120000004D004600350039005F004E00
+      41004D0045000100000000000C0000004200520041004E004300480001000000
+      00000A0000004D004600330032004200010000000000180000004D0046003300
+      320042005F0041004D004F0055004E005400010000000000060000004D003100
+      3200010000000000080000004D00370037004500010000000000060000004D00
+      37003900010000000000060000004C0030003100010000000000060000004C00
+      30003200010000000000060000004C0030003300010000000000060000004C00
+      30003400010000000000080000004D0033003400460001000000000006000000
+      4D0032003500010000000000080000004D004600320035000100000000000800
+      00004D004600310032000100000000000A0000004D0046003700370045000100
+      00000000080000004D004600370039000100000000000C0000004D0046003300
+      3400460031000100000000000A0000004D0046004C0030003200010000000000
+      0C0000004D004600330034004600320001000000000012000000460049004C00
+      45005F004F00500049004400010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 32
+    Top = 216
+    object outMF20: TWideStringField
+      FieldName = 'MF20'
+      Size = 396
+    end
+    object outMF23B: TWideStringField
+      FieldName = 'MF23B'
+      Size = 396
+    end
+    object outMF21: TWideStringField
+      FieldName = 'MF21'
+      Size = 396
+    end
+    object outMF27: TWideStringField
+      FieldName = 'MF27'
+      Size = 396
+    end
+    object outMF32A: TWideStringField
+      FieldName = 'MF32A'
+      Size = 396
+    end
+    object outMF36: TWideStringField
+      FieldName = 'MF36'
+      Size = 396
+    end
+    object outSENDERTYPE: TWideStringField
+      FieldName = 'SENDERTYPE'
+      Size = 396
+    end
+    object outSENDERBIC: TWideStringField
+      FieldName = 'SENDERBIC'
+      Size = 396
+    end
+    object outSENDERLT: TWideStringField
+      FieldName = 'SENDERLT'
+      Size = 396
+    end
+    object outAPPLICATION: TWideStringField
+      FieldName = 'APPLICATION'
+      Size = 396
+    end
+    object outFINCOPY: TWideStringField
+      FieldName = 'FINCOPY'
+      Size = 396
+    end
+    object outMESSAGETYPE: TWideStringField
+      FieldName = 'MESSAGETYPE'
+      Size = 396
+    end
+    object outPRIORITY: TWideStringField
+      FieldName = 'PRIORITY'
+      Size = 396
+    end
+    object outMONITORING: TWideStringField
+      FieldName = 'MONITORING'
+      Size = 396
+    end
+    object outRECEIVERTYPE: TWideStringField
+      FieldName = 'RECEIVERTYPE'
+      Size = 396
+    end
+    object outRECEIVERBIC: TWideStringField
+      FieldName = 'RECEIVERBIC'
+      Size = 396
+    end
+    object outMF32A_DATE: TDateTimeField
+      FieldName = 'MF32A_DATE'
+    end
+    object outMF32A_CURR: TWideStringField
+      FieldName = 'MF32A_CURR'
+      Size = 32
+    end
+    object outMF32A_AMOUNT: TFloatField
+      FieldName = 'MF32A_AMOUNT'
+    end
+    object outMF50_ACCOUNT: TWideStringField
+      FieldName = 'MF50_ACCOUNT'
+      Size = 120
+    end
+    object outMF50_BIC: TWideStringField
+      FieldName = 'MF50_BIC'
+      Size = 40
+    end
+    object outMF50_NAMEADRESS: TWideStringField
+      FieldName = 'MF50_NAME$ADRESS'
+      Size = 4000
+    end
+    object outMF52_ACCOUNT: TWideStringField
+      FieldName = 'MF52_ACCOUNT'
+      Size = 120
+    end
+    object outMF52_BIC: TWideStringField
+      FieldName = 'MF52_BIC'
+      Size = 40
+    end
+    object outMF52_NAMEADRESS: TWideStringField
+      FieldName = 'MF52_NAME$ADRESS'
+      Size = 396
+    end
+    object outMF53_ACCOUNT: TWideStringField
+      FieldName = 'MF53_ACCOUNT'
+      Size = 120
+    end
+    object outMF53_BIC: TWideStringField
+      FieldName = 'MF53_BIC'
+      Size = 40
+    end
+    object outMF53_NAMELOCATION: TWideStringField
+      FieldName = 'MF53_NAME$LOCATION'
+      Size = 580
+    end
+    object outMF54_ACCOUNT: TWideStringField
+      FieldName = 'MF54_ACCOUNT'
+      Size = 120
+    end
+    object outMF54_BIC: TWideStringField
+      FieldName = 'MF54_BIC'
+      Size = 40
+    end
+    object outMF54_NAMELOCATION: TWideStringField
+      FieldName = 'MF54_NAME$LOCATION'
+      Size = 580
+    end
+    object outMF55_ACCOUNT: TWideStringField
+      FieldName = 'MF55_ACCOUNT'
+      Size = 120
+    end
+    object outMF55_BIC: TWideStringField
+      FieldName = 'MF55_BIC'
+      Size = 40
+    end
+    object outMF55_NAMELOCATION: TWideStringField
+      FieldName = 'MF55_NAME$LOCATION'
+      Size = 580
+    end
+    object outMF56_ACCOUNT: TWideStringField
+      FieldName = 'MF56_ACCOUNT'
+      Size = 120
+    end
+    object outMF56_BIC: TWideStringField
+      FieldName = 'MF56_BIC'
+      Size = 40
+    end
+    object outMF56_NAMELOCATION: TWideStringField
+      FieldName = 'MF56_NAME$LOCATION'
+      Size = 580
+    end
+    object outMF58_ACCOUNT: TWideStringField
+      FieldName = 'MF58_ACCOUNT'
+      Size = 120
+    end
+    object outMF58_BIC: TWideStringField
+      FieldName = 'MF58_BIC'
+      Size = 40
+    end
+    object outMF58_NAMELOCATION: TWideStringField
+      FieldName = 'MF58_NAME$LOCATION'
+      Size = 580
+    end
+    object outMF59_ACCOUNT: TWideStringField
+      FieldName = 'MF59_ACCOUNT'
+      Size = 120
+    end
+    object outMF59_NAMEADRESS: TWideStringField
+      FieldName = 'MF59_NAME$ADRESS'
+      Size = 580
+    end
+    object outSTATUS: TIntegerField
+      FieldName = 'STATUS'
+    end
+    object outID: TFloatField
+      FieldName = 'ID'
+    end
+    object outMF71F_CHILD: TWideStringField
+      FieldName = 'MF71F_CHILD'
+      Size = 396
+    end
+    object outMF71G_CHILD: TWideStringField
+      FieldName = 'MF71G_CHILD'
+      Size = 396
+    end
+    object outM20: TWideStringField
+      FieldName = 'M20'
+      Size = 28
+    end
+    object outM23B: TWideStringField
+      FieldName = 'M23B'
+      Size = 28
+    end
+    object outM21: TWideStringField
+      FieldName = 'M21'
+      Size = 28
+    end
+    object outM32A: TWideStringField
+      FieldName = 'M32A'
+      Size = 28
+    end
+    object outM36: TWideStringField
+      FieldName = 'M36'
+      Size = 28
+    end
+    object outM50: TWideStringField
+      FieldName = 'M50'
+      Size = 28
+    end
+    object outM52: TWideStringField
+      FieldName = 'M52'
+      Size = 28
+    end
+    object outM53: TWideStringField
+      FieldName = 'M53'
+      Size = 28
+    end
+    object outM54: TWideStringField
+      FieldName = 'M54'
+      Size = 28
+    end
+    object outM55: TWideStringField
+      FieldName = 'M55'
+      Size = 28
+    end
+    object outM56: TWideStringField
+      FieldName = 'M56'
+      Size = 28
+    end
+    object outM58: TWideStringField
+      FieldName = 'M58'
+      Size = 28
+    end
+    object outM59: TWideStringField
+      FieldName = 'M59'
+      Size = 28
+    end
+    object outM70: TWideStringField
+      FieldName = 'M70'
+      Size = 28
+    end
+    object outM71A: TWideStringField
+      FieldName = 'M71A'
+      Size = 28
+    end
+    object outM71F: TWideStringField
+      FieldName = 'M71F'
+      Size = 28
+    end
+    object outM71G: TWideStringField
+      FieldName = 'M71G'
+      Size = 28
+    end
+    object outM72: TWideStringField
+      FieldName = 'M72'
+      Size = 28
+    end
+    object outM77B: TWideStringField
+      FieldName = 'M77B'
+      Size = 28
+    end
+    object outMF20_REFERENCE: TWideStringField
+      FieldName = 'MF20_REFERENCE'
+      Size = 80
+    end
+    object outOP_ID: TFloatField
+      FieldName = 'OP_ID'
+    end
+    object outDEL_STATUS: TIntegerField
+      FieldName = 'DEL_STATUS'
+    end
+    object outCOMMIT_OPID: TFloatField
+      FieldName = 'COMMIT_OPID'
+    end
+    object outFCREATE_OPID: TFloatField
+      FieldName = 'FCREATE_OPID'
+    end
+    object outDELETE_OPID: TFloatField
+      FieldName = 'DELETE_OPID'
+    end
+    object outMF70: TWideStringField
+      FieldName = 'MF70'
+      Size = 572
+    end
+    object outSHIFR: TIntegerField
+      FieldName = 'SHIFR'
+    end
+    object outMF71A: TWideStringField
+      FieldName = 'MF71A'
+      Size = 400
+    end
+    object outMF72: TWideStringField
+      FieldName = 'MF72'
+      Size = 2000
+    end
+    object outMF77B: TWideStringField
+      FieldName = 'MF77B'
+      Size = 800
+    end
+    object outEDITED_OPID: TFloatField
+      FieldName = 'EDITED_OPID'
+    end
+    object outTR_ID: TFloatField
+      FieldName = 'TR_ID'
+    end
+    object outTR_ID2: TFloatField
+      FieldName = 'TR_ID2'
+    end
+    object outINFO: TWideStringField
+      FieldName = 'INFO'
+      Size = 200
+    end
+    object outTAX: TWideStringField
+      FieldName = 'TAX'
+      Size = 56
+    end
+    object outCOUNTRY: TWideStringField
+      FieldName = 'COUNTRY'
+      Size = 400
+    end
+    object outHESABAT: TWideMemoField
+      FieldName = 'HESABAT'
+      BlobType = ftWideMemo
+    end
+    object outMF59_BIC: TWideStringField
+      FieldName = 'MF59_BIC'
+      Size = 60
+    end
+    object outCOM_ACCID: TFloatField
+      FieldName = 'COM_ACCID'
+    end
+    object outCDAT: TDateTimeField
+      FieldName = 'CDAT'
+    end
+    object outFDAT: TDateTimeField
+      FieldName = 'FDAT'
+    end
+    object outTDAT: TDateTimeField
+      FieldName = 'TDAT'
+    end
+    object outRNAME: TWideStringField
+      FieldName = 'RNAME'
+      Size = 60
+    end
+    object outRCODE: TWideStringField
+      FieldName = 'RCODE'
+      Size = 60
+    end
+    object outMF59_NAME: TWideStringField
+      FieldName = 'MF59_NAME'
+      Size = 60
+    end
+    object outBRANCH: TFloatField
+      FieldName = 'BRANCH'
+    end
+    object outMF32B: TWideStringField
+      FieldName = 'MF32B'
+      Size = 50
+    end
+    object outMF32B_AMOUNT: TFloatField
+      FieldName = 'MF32B_AMOUNT'
+    end
+  end
+  object outsource: TDataSource
+    DataSet = out
+    Left = 32
+    Top = 264
+  end
+  object bankm: TOracleDataSet
+    SQL.Strings = (
+      'select * from xs_config')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000E00000004000000490044000100000000000C00000049004E005F00
+      4400490052000100000000000E0000004F00550054005F004400490052000100
+      000000001800000041004D004F0055004E0054005F004C0049004D0049005400
+      0100000000000E0000004100430043004F0055004E0054000100000000001600
+      000041005200430048004900560045005F004400490052000100000000001600
+      0000550053004500420041004E004B0044004100540045000100000000001600
+      000043004F004D004D004900530049004F004E00490044000100000000001000
+      00004E0042005F00530057004900460054000100000000001400000043004F00
+      52004100430043004F0055004E005400010000000000100000004E0045005700
+      5F0044004100540045000100000000000E0000005600450052005F0044004900
+      52000100000000001C0000005400520041004E005A0049005400410043004300
+      4F0055004E0054000100000000000E0000004D00590053005700490046005400
+      010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 560
+    Top = 40
+    object bankmID: TFloatField
+      FieldName = 'ID'
+    end
+    object bankmIN_DIR: TWideStringField
+      FieldName = 'IN_DIR'
+      Size = 1000
+    end
+    object bankmOUT_DIR: TWideStringField
+      FieldName = 'OUT_DIR'
+      Size = 1000
+    end
+    object bankmAMOUNT_LIMIT: TFloatField
+      FieldName = 'AMOUNT_LIMIT'
+    end
+    object bankmACCOUNT: TWideStringField
+      FieldName = 'ACCOUNT'
+      Size = 112
+    end
+    object bankmARCHIVE_DIR: TWideStringField
+      FieldName = 'ARCHIVE_DIR'
+      Size = 1000
+    end
+    object bankmUSEBANKDATE: TFloatField
+      FieldName = 'USEBANKDATE'
+    end
+    object bankmCOMMISIONID: TFloatField
+      FieldName = 'COMMISIONID'
+    end
+    object bankmNB_SWIFT: TWideStringField
+      FieldName = 'NB_SWIFT'
+      Size = 60
+    end
+    object bankmCORACCOUNT: TWideStringField
+      FieldName = 'CORACCOUNT'
+      Size = 80
+    end
+    object bankmNEW_DATE: TDateTimeField
+      FieldName = 'NEW_DATE'
+    end
+    object bankmVER_DIR: TWideStringField
+      FieldName = 'VER_DIR'
+      Size = 1000
+    end
+    object bankmTRANZITACCOUNT: TWideStringField
+      FieldName = 'TRANZITACCOUNT'
+      Size = 80
+    end
+    object bankmMYSWIFT: TWideStringField
+      FieldName = 'MYSWIFT'
+      Size = 30
+    end
+  end
+  object krno: TOracleDataSet
+    SQL.Strings = (
+      
+        'select krno from filialinfo_t where nb=7 and svm_currencyid=:val' +
+        'u')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000A0000003A00560041004C00550003000000000000000000
+      0000}
+    Session = sboapiDataModule.SBSession
+    Left = 120
+    Top = 216
+  end
+  object rbnames: TOracleDataSet
+    SQL.Strings = (
+      'select * from sw_rbnames where code=:vid and valute=:valu'
+      ' order by id')
+    Optimize = False
+    Variables.Data = {
+      0400000002000000080000003A00560049004400030000000000000000000000
+      0A0000003A00560041004C005500050000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000500000004000000490044000100000000000C000000520042004E00
+      41004D0045000100000000000800000043004F00440045000100000000000C00
+      0000560041004C005500540045000100000000000C0000004200500043004F00
+      44004500010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 672
+    Top = 138
+    object rbnamesID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object rbnamesRBNAME: TWideStringField
+      FieldName = 'RBNAME'
+      Size = 50
+    end
+    object rbnamesCODE: TFloatField
+      FieldName = 'CODE'
+    end
+    object rbnamesVALUTE: TWideStringField
+      FieldName = 'VALUTE'
+      Size = 10
+    end
+  end
+  object rbdata: TDataSource
+    DataSet = rbnames
+    Left = 608
+    Top = 136
+  end
+  object radiocode: TOracleDataSet
+    SQL.Strings = (
+      'select * from sw_rbnames where rbname=:rbname')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000E0000003A00520042004E0041004D004500050000000000
+      000000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 528
+    Top = 240
+  end
+  object DataSource2: TDataSource
+    DataSet = radiocode
+    Left = 584
+    Top = 240
+  end
+end

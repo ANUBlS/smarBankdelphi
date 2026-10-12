@@ -1,0 +1,252 @@
+object DataModccBuildings: TDataModccBuildings
+  OldCreateOrder = False
+  OnCreate = DataModuleCreate
+  Height = 640
+  Width = 870
+  object CC_OP: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'cc_general'
+    Left = 32
+    Top = 24
+  end
+  object CC_Company: TOracleDataSet
+    Tag = 1
+    SQL.Strings = (
+      'select * from cc_companies order by :title')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000C0000003A005400490054004C0045000100000003000000
+      69640000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000200000004000000490044000100000000001200000043004F004D00
+      50005F004E0041004D004500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 96
+    Top = 24
+    object CC_CompanyID: TIntegerField
+      FieldName = 'ID'
+    end
+    object CC_CompanyCOMP_NAME: TWideStringField
+      FieldName = 'COMP_NAME'
+      Size = 50
+    end
+  end
+  object CC_Com_Data: TDataSource
+    DataSet = CC_Company
+    Left = 176
+    Top = 24
+  end
+  object CC_build_Data: TDataSource
+    DataSet = CC_building
+    Left = 336
+    Top = 24
+  end
+  object CC_Flat: TOracleDataSet
+    SQL.Strings = (
+      'select  *  from cc_flats order by id')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000D00000004000000490044000100000000000C00000042004C004400
+      5F00490044000100000000001400000046004C00410054004E0055004D004200
+      450052000100000000001000000045004E005400520041004E00430045000100
+      000000000C000000460046004C004F004F0052000100000000000A0000005200
+      4F004F004D005300010000000000080000004100520045004100010000000000
+      0C00000050005200490043004500310001000000000010000000500052004900
+      43004500470045004E000100000000000A000000420055005900450052000100
+      000000000C0000005500530045005200490044000100000000000A0000004100
+      43004300490044000100000000000800000043004F0044004500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 32
+    Top = 96
+    object CC_FlatID: TFloatField
+      FieldName = 'ID'
+    end
+    object CC_FlatBLD_ID: TFloatField
+      FieldName = 'BLD_ID'
+    end
+    object CC_FlatFLATNUMBER: TWideStringField
+      FieldName = 'FLATNUMBER'
+      Size = 10
+    end
+    object CC_FlatENTRANCE: TWideStringField
+      FieldName = 'ENTRANCE'
+      Size = 10
+    end
+    object CC_FlatFFLOOR: TWideStringField
+      FieldName = 'FFLOOR'
+      Size = 10
+    end
+    object CC_FlatROOMS: TFloatField
+      FieldName = 'ROOMS'
+    end
+    object CC_FlatAREA: TFloatField
+      FieldName = 'AREA'
+    end
+    object CC_FlatPRICE1: TFloatField
+      FieldName = 'PRICE1'
+    end
+    object CC_FlatPRICEGEN: TFloatField
+      FieldName = 'PRICEGEN'
+    end
+    object CC_FlatBUYER: TFloatField
+      FieldName = 'BUYER'
+    end
+    object CC_FlatUSERID: TFloatField
+      FieldName = 'USERID'
+    end
+    object CC_FlatACCID: TFloatField
+      FieldName = 'ACCID'
+    end
+    object CC_FlatCODE: TWideStringField
+      FieldName = 'CODE'
+    end
+  end
+  object CC_Flat_Data: TDataSource
+    DataSet = CC_Flat
+    Left = 112
+    Top = 96
+  end
+  object CC_Buyer_Flat: TOracleDataSet
+    SQL.Strings = (
+      
+        'select rownum, id, code, bld_id, flatnumber, entrance, ffloor, r' +
+        'ooms, area, price1,'
+      
+        '       pricegen, buyer, userid,CC_general.get_buyername(buyer) a' +
+        's Buyer_status from cc_flats'
+      'where Bld_ID = :Bld_ID'
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      'order by :title')
+    Optimize = False
+    Variables.Data = {
+      04000000020000000C0000003A005400490054004C0045000100000003000000
+      696400000000000E0000003A0042004C0044005F004900440003000000000000
+      0000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000E00000004000000490044000100000000000C00000042004C004400
+      5F00490044000100000000001400000046004C00410054004E0055004D004200
+      450052000100000000001000000045004E005400520041004E00430045000100
+      000000000C000000460046004C004F004F0052000100000000000A0000005200
+      4F004F004D005300010000000000080000004100520045004100010000000000
+      0C00000050005200490043004500310001000000000010000000500052004900
+      43004500470045004E000100000000000A000000420055005900450052000100
+      000000000C000000550053004500520049004400010000000000180000004200
+      55005900450052005F0053005400410054005500530001000000000008000000
+      43004F00440045000100000000000C00000052004F0057004E0055004D000100
+      00000000}
+    Master = CC_building
+    MasterFields = 'ID'
+    DetailFields = 'BLD_ID'
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Filtered = True
+    Left = 208
+    Top = 120
+    object CC_Buyer_FlatID: TFloatField
+      FieldName = 'ID'
+    end
+    object CC_Buyer_FlatCODE: TWideStringField
+      FieldName = 'CODE'
+    end
+    object CC_Buyer_FlatBLD_ID: TFloatField
+      FieldName = 'BLD_ID'
+    end
+    object CC_Buyer_FlatFLATNUMBER: TWideStringField
+      FieldName = 'FLATNUMBER'
+      Size = 10
+    end
+    object CC_Buyer_FlatENTRANCE: TWideStringField
+      FieldName = 'ENTRANCE'
+      Size = 10
+    end
+    object CC_Buyer_FlatFFLOOR: TWideStringField
+      FieldName = 'FFLOOR'
+      Size = 10
+    end
+    object CC_Buyer_FlatROOMS: TFloatField
+      FieldName = 'ROOMS'
+    end
+    object CC_Buyer_FlatAREA: TFloatField
+      FieldName = 'AREA'
+    end
+    object CC_Buyer_FlatPRICE1: TFloatField
+      FieldName = 'PRICE1'
+    end
+    object CC_Buyer_FlatPRICEGEN: TFloatField
+      FieldName = 'PRICEGEN'
+    end
+    object CC_Buyer_FlatBUYER: TFloatField
+      FieldName = 'BUYER'
+    end
+    object CC_Buyer_FlatUSERID: TFloatField
+      FieldName = 'USERID'
+    end
+    object CC_Buyer_FlatBUYER_STATUS: TWideStringField
+      FieldName = 'BUYER_STATUS'
+      Size = 4000
+    end
+    object CC_Buyer_FlatROWNUM: TFloatField
+      FieldName = 'ROWNUM'
+    end
+  end
+  object CC_Buyer_FlatData: TDataSource
+    DataSet = CC_Buyer_Flat
+    Left = 296
+    Top = 88
+  end
+  object CC_building: TOracleDataSet
+    SQL.Strings = (
+      'select * from cc_buildings'
+      'where'
+      'comp_id=:comp_id'
+      'order by  :title')
+    Optimize = False
+    Variables.Data = {
+      0400000002000000100000003A0043004F004D0050005F004900440003000000
+      00000000000000000C0000003A005400490054004C0045000100000003000000
+      69640000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000700000004000000490044000100000000000E00000043004F004D00
+      50005F00490044000100000000001000000042004C0044005F004E0041004D00
+      45000100000000000E0000004100440044005200450053005300010000000000
+      0C00000046004C004F004F00520053000100000000001200000045004E005400
+      520041004E004300450053000100000000000A00000046004C00410054005300
+      010000000000}
+    Master = CC_Company
+    MasterFields = 'id'
+    DetailFields = 'COMP_ID'
+    Session = sboapiDataModule.SBSession
+    Left = 256
+    Top = 24
+    object CC_buildingID: TFloatField
+      FieldName = 'ID'
+    end
+    object CC_buildingCOMP_ID: TFloatField
+      FieldName = 'COMP_ID'
+    end
+    object CC_buildingBLD_NAME: TWideStringField
+      FieldName = 'BLD_NAME'
+    end
+    object CC_buildingADDRESS: TWideStringField
+      FieldName = 'ADDRESS'
+      Size = 55
+    end
+    object CC_buildingFLOORS: TFloatField
+      FieldName = 'FLOORS'
+    end
+    object CC_buildingENTRANCES: TFloatField
+      FieldName = 'ENTRANCES'
+    end
+    object CC_buildingFLATS: TFloatField
+      FieldName = 'FLATS'
+    end
+  end
+end

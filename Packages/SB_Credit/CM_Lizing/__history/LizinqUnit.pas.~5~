@@ -1,0 +1,246 @@
+unit LizinqUnit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ExtCtrls, StdCtrls, Mask, DBCtrlsEh, DB, OracleData, Oracle;
+
+type
+  TFormLizing = class(TForm)
+    Panel1: TPanel;
+    Panel2: TPanel;
+    Panel3: TPanel;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label5: TLabel;
+    Label6: TLabel;
+    Label7: TLabel;
+    Label8: TLabel;
+    Label9: TLabel;
+    Label10: TLabel;
+    Label11: TLabel;
+    Label12: TLabel;
+    Label13: TLabel;
+    DBDateTimeEditEh1: TDBDateTimeEditEh;
+    Edit1: TEdit;
+    Edit2: TEdit;
+    Edit3: TEdit;
+    Label4: TLabel;
+    DBDateTimeEditEh2: TDBDateTimeEditEh;
+    Label14: TLabel;
+    Label15: TLabel;
+    Edit4: TEdit;
+    Edit5: TEdit;
+    Edit6: TEdit;
+    Edit7: TEdit;
+    Edit8: TEdit;
+    Edit9: TEdit;
+    Edit10: TEdit;
+    Edit11: TEdit;
+    Edit12: TEdit;
+    GroupBox1: TGroupBox;
+    Label16: TLabel;
+    Label17: TLabel;
+    Label18: TLabel;
+    Label19: TLabel;
+    Label20: TLabel;
+    Label21: TLabel;
+    Label22: TLabel;
+    GroupBox2: TGroupBox;
+    Label23: TLabel;
+    Label27: TLabel;
+    Label24: TLabel;
+    Label25: TLabel;
+    Label26: TLabel;
+    Edit13: TEdit;
+    Edit14: TEdit;
+    Edit15: TEdit;
+    Edit16: TEdit;
+    Edit17: TEdit;
+    Edit18: TEdit;
+    DBDateTimeEditEh3: TDBDateTimeEditEh;
+    Label28: TLabel;
+    Edit19: TEdit;
+    Edit20: TEdit;
+    Edit21: TEdit;
+    Edit22: TEdit;
+    Edit23: TEdit;
+    Edit24: TEdit;
+    Button1: TButton;
+    Button2: TButton;
+    ods_main: TOracleDataSet;
+    cm_credit: TOraclePackage;
+    ods_mainCREDITID: TFloatField;
+    ods_mainLI_OBYEKT_NAME_MARKA: TWideStringField;
+    ods_mainOLD_NUMBER: TWideStringField;
+    ods_mainLI_NUMBER_NEW: TWideStringField;
+    ods_mainREGISTRATION_CERTIFICATE_OLD: TWideStringField;
+    ods_mainREGISTRATION_CERTIFICATE_NEW: TWideStringField;
+    ods_mainLI_PRODUCTION_DAT: TDateTimeField;
+    ods_mainLI_OBYEKT_COLOR: TWideStringField;
+    ods_mainLI_OBYEKT_TYPE: TWideStringField;
+    ods_mainENGINE_NO: TWideStringField;
+    ods_mainENGINE_BAN: TWideStringField;
+    ods_mainLI_OBYEKT_WORTH: TWideStringField;
+    ods_mainLI_OBYEKT_PROPORTION: TWideStringField;
+    ods_mainLI_OBYEKT_DESCRIPTION: TWideStringField;
+    ods_mainGUARANTE_DAT: TDateTimeField;
+    ods_mainSELLER_NAME: TWideStringField;
+    ods_mainSELLER_LASTNAME: TWideStringField;
+    ods_mainSELLER_PATRONYMICNAME: TWideStringField;
+    ods_mainSELLER_PINCOD: TWideStringField;
+    ods_mainSELLER_PASSPORT: TWideStringField;
+    ods_mainSELLER_PASPPLACE: TWideStringField;
+    ods_mainSELLER_PASPDATE: TDateTimeField;
+    ods_mainSELLER_ADDRES: TWideStringField;
+    ods_mainREK_HESAB: TWideStringField;
+    ods_mainREK_BANKNAME: TWideStringField;
+    ods_mainREK_BANK_MUX: TWideStringField;
+    ods_mainREK_BAN_KOD: TWideStringField;
+    ods_mainREK_BANK_SIWFT: TWideStringField;
+    procedure Button1Click(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormShow(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormLizing: TFormLizing;
+   procedure InitPlugin(s:string;s2:integer);export;
+implementation
+  uses sboapiDataModuleImpl,CommonDecls;
+ var
+  creditid: integer;
+  edt:integer;
+{$R *.dfm}
+  procedure InitPlugin(s:string;s2:integer);export;
+begin
+     creditid:=s2;
+     FormLizing.ShowModal;
+
+
+end;
+exports
+     InitPlugin;
+procedure TFormLizing.Button1Click(Sender: TObject);
+begin
+
+    showmessage('insert'+inttostr(creditid));
+
+cm_credit.CallProcedure('insert_edit',[creditid,
+                                       edit1.Text,
+                                       edit2.Text,
+                                       edit3.Text,
+                                       edit11.Text,
+                                       edit12.Text,
+                                       DBDateTimeEditEh2.Value,
+                                       edit8.Text,
+                                       edit7.Text  ,
+                                       edit9.Text ,
+                                       edit6.Text,
+                                       edit10.Text ,
+                                       edit4.Text ,
+                                       edit5.Text ,
+                                       DBDateTimeEditEh1.Value,
+                                       edit13.Text,
+                                       edit14.Text,
+                                       edit15.Text,
+                                       edit16.Text,
+                                       edit17.Text,
+                                       edit18.Text,
+                                       DBDateTimeEditEh3.Value,
+                                       edit19.Text,
+                                       edit20.Text,
+                                       edit22.Text,
+                                       edit21.Text,
+                                       edit24.Text,
+                                       edit23.Text
+                                       ]);
+end;
+
+procedure TFormLizing.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+                                       edit1.Clear;
+                                       edit2.Clear;
+                                       edit3.Clear;
+                                       edit11.Clear;
+                                       edit12.Clear;
+                                       DBDateTimeEditEh2.Value:=-1;
+                                       edit8.Clear;
+                                       edit7.Clear ;
+                                       edit9.Clear ;
+                                       edit6.Clear;
+                                       edit10.Clear;
+                                       edit4.Clear ;
+                                       edit5.Clear ;
+                                       DBDateTimeEditEh1.Value:=-1;
+                                       edit13.Clear;
+                                       edit14.Clear;
+                                       edit15.Clear;
+                                       edit16.Clear;
+                                       edit17.Clear;
+                                       edit18.Clear;
+                                       DBDateTimeEditEh3.Value:=-1;
+                                       edit19.Clear;
+                                       edit20.Clear;
+                                       edit22.Clear;
+                                       edit21.Clear;
+                                       edit24.Clear;
+                                       edit23.Clear ;
+end;
+
+procedure TFormLizing.FormShow(Sender: TObject);
+begin
+//creditid:=CommonDBGrid.DataSource.DataSet.FieldByName(sID).AsInteger;
+with ods_main do
+begin
+   showmessage('create'+inttostr(creditid));
+ close;
+ SetVariable('v_crid',creditid);
+ open;
+
+ if RecordCount>0 then
+    begin
+
+     edit1.Text:=ods_mainCREDITID.AsString;
+     edit2.Text:=ods_mainold_number.AsString;
+     edit3.Text:=ods_mainLi_number_new.AsString;
+     edit11.Text:=ods_mainRegistration_certificate_old.AsString;
+     edit12.Text:=ods_mainRegistration_certificate_old.AsString;
+     DBDateTimeEditEh2.Value:=ods_mainLi_production_dat.AsVariant;
+     edit8.Text:=ods_mainli_obyekt_color.AsString;
+     edit7.Text :=ods_mainli_obyekt_type.AsString;
+     edit9.Text :=ods_mainEngine_no.AsString;
+     edit6.Text :=ods_mainEngine_ban.AsString;
+     edit10.Text :=ods_mainli_obyekt_worth.AsString;
+     edit4.Text :=ods_mainli_obyekt_proportion.AsString;
+     edit5.Text :=ods_mainli_obyekt_description.AsString;
+     DBDateTimeEditEh1.Value:=ods_mainguarante_dat.AsVariant;
+     edit13.Text:=ods_mainSeller_name.AsString;
+     edit14.Text:=ods_mainSeller_lastname.AsString;
+     edit15.Text:=ods_mainSeller_patronymicname.AsString;
+     edit16.Text:=ods_mainSeller_pincod.AsString;
+     edit17.Text:=ods_mainSeller_passport.AsString;
+     edit18.Text:=ods_mainSeller_paspplace.AsString;
+     DBDateTimeEditEh3.Value:=ods_mainSeller_paspdate.AsVariant;
+     edit19.Text:=ods_mainSeller_addres.AsString ;
+     edit20.Text:=ods_mainRek_hesab.AsString;
+     edit22.Text:=ods_mainRek_bankname.AsString;
+     edit21.Text:=ods_mainRek_bank_mux.AsString;
+     edit24.Text:=ods_mainRek_ban_kod.AsString;
+     edit23.Text:=ods_mainRek_bank_siwft.AsString;
+
+    end
+
+end;
+end;
+
+initialization
+ FormLizing := TFormLizing.Create(Application);
+
+end.

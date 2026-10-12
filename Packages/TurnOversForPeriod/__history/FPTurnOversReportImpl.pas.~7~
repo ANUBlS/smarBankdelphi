@@ -1,0 +1,83 @@
+unit FPTurnOversReportImpl;
+
+interface
+
+uses Windows, SysUtils, Messages, Classes, Graphics, Controls,
+  StdCtrls, ExtCtrls, Forms, Quickrpt, QRCtrls;
+
+type
+  TTurnOversRpt = class(TQuickRep)
+    QRBand1: TQRBand;
+    QRBand2: TQRBand;
+    QRLabel1: TQRLabel;
+    QRLabel2: TQRLabel;
+    QRLabel3: TQRLabel;
+    QRLabel4: TQRLabel;
+    QRLabel5: TQRLabel;
+    QRLabel6: TQRLabel;
+    QRLabel7: TQRLabel;
+    QRLabel8: TQRLabel;
+    QRDBText5: TQRDBText;
+    QRDBText6: TQRDBText;
+    QRDBText7: TQRDBText;
+    QRDBText8: TQRDBText;
+    QRDBText9: TQRDBText;
+    QRDBText10: TQRDBText;
+    QRDBText11: TQRDBText;
+    QRDBImage1: TQRDBImage;
+    QRDBText12: TQRDBText;
+    QRDBText13: TQRDBText;
+    QRLabel11: TQRLabel;
+    lblBranch: TQRLabel;
+    lblBeginDate: TQRLabel;
+    lblEndDate: TQRLabel;
+    QRSysData1: TQRSysData;
+    lblCurrency: TQRLabel;
+    QRLabel12: TQRLabel;
+    SummaryBand1: TQRBand;
+    QRDBText1: TQRDBText;
+    QRDBText2: TQRDBText;
+    QRDBText3: TQRDBText;
+    QRDBText4: TQRDBText;
+    QRExpr1: TQRExpr;
+    QRExpr2: TQRExpr;
+    QRExpr3: TQRExpr;
+    QRExpr4: TQRExpr;
+    QRExpr5: TQRExpr;
+    QRExpr6: TQRExpr;
+    QRGroup1: TQRGroup;
+    QRBand3: TQRBand;
+    QRExpr7: TQRExpr;
+    QRExpr8: TQRExpr;
+    QRExpr9: TQRExpr;
+    QRExpr10: TQRExpr;
+    QRExpr11: TQRExpr;
+    QRExpr12: TQRExpr;
+    QRDBText14: TQRDBText;
+    QRLabel9: TQRLabel;
+    QRLabel10: TQRLabel;
+    QRDBText15: TQRDBText;
+    procedure QuickRepBeforePrint(Sender: TCustomQuickRep;
+      var PrintReport: Boolean);
+  private
+
+  public
+
+  end;
+
+var
+  TurnOversRpt: TTurnOversRpt;
+
+implementation
+
+uses FPTurnOversDataModImpl, SBTranslateProc, sboapiDataModuleImpl;
+
+{$R *.DFM}
+
+procedure TTurnOversRpt.QuickRepBeforePrint(Sender: TCustomQuickRep;
+  var PrintReport: Boolean);
+begin
+  SBTranslateProc.TranslateAllCompQuickRep(Self,sboapiDataModule.OrPack_SL);
+end;
+
+end.

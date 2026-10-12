@@ -1,0 +1,33 @@
+unit transview_unit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, Mask, DBCtrls, ExtCtrls, Grids, DBGrids;
+
+type
+  TFormTransView = class(TForm)
+    GroupBoxAcc: TGroupBox;
+    DBGridMainState: TDBGrid;
+    PanelN: TPanel;
+    LabelTurnFirst: TLabel;
+    LabelTurnEnd: TLabel;
+    DBEditTurnBeg: TDBEdit;
+    DBEditTurnEnd: TDBEdit;
+    GroupBoxTrans: TGroupBox;
+    DBGridExtractTrans: TDBGrid;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormTransView: TFormTransView;
+
+implementation
+
+{$R *.DFM}
+
+end.

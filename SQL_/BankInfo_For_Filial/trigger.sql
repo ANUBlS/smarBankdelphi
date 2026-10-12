@@ -1,0 +1,9 @@
+CREATE OR REPLACE TRIGGER bu_changebranch
+   BEFORE UPDATE OF filial
+   ON ACCOUNT
+   REFERENCING NEW AS NEW OLD AS OLD
+   FOR EACH ROW
+BEGIN
+   sb_aca.checkadvancedobjectaccess ('ACCOUNTSFILIALCHAGE', USER);
+END;
+/

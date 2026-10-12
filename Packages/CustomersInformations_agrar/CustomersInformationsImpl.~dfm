@@ -1,0 +1,1461 @@
+object CustomersInformations: TCustomersInformations
+  Left = 256
+  Top = 110
+  Width = 798
+  Height = 545
+  Caption = 'CustomersInformations'
+  Color = clBtnFace
+  Font.Charset = RUSSIAN_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  OldCreateOrder = False
+  OnCreate = ActiveFormCreate
+  OnDestroy = ActiveFormDestroy
+  PixelsPerInch = 96
+  TextHeight = 13
+  object PanelAlTop: TPanel
+    Left = 0
+    Top = 0
+    Width = 790
+    Height = 27
+    Align = alTop
+    TabOrder = 0
+    object Label1: TLabel
+      Left = 39
+      Top = 7
+      Width = 27
+      Height = 13
+      Caption = 'Филиал'
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = [fsBold]
+      ParentFont = False
+    end
+    object HideBtn: TSpeedButton
+      Left = 13
+      Top = -1
+      Width = 23
+      Height = 22
+      Hint = 'Панели эизлят/ьюстяр'
+      Flat = True
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = [fsBold]
+      Glyph.Data = {
+        DE000000424DDE0000000000000076000000280000000D0000000D0000000100
+        0400000000006800000000000000000000001000000010000000000000000000
+        BF0000BF000000BFBF00BF000000BF00BF00BFBF0000C0C0C000808080000000
+        FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00777777777777
+        7000777707707777700077770070077770007777060060777000000006606607
+        7000066666660660700006666666606600000666666606607000000006606607
+        7000777706006077700077770070077770007777077077777000777777777777
+        7000}
+      ParentFont = False
+      ParentShowHint = False
+      ShowHint = True
+      OnClick = HideBtnClick
+    end
+    object SearchCFilial: TSearchCombo
+      Left = 72
+      Top = 2
+      Width = 145
+      Height = 21
+      Style = csDropDownList
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = [fsBold]
+      ItemHeight = 13
+      ParentFont = False
+      TabOrder = 0
+      OnChange = SearchCFilialChange
+      DataSource = DataSourceFilial
+      ViewField = 'NAME'
+      DefaultString = 'Цмуми'
+      DefaultStringUse = True
+      DefaultStringColor = clWindowText
+    end
+    object ActiveGBox: TGroupBox
+      Left = 232
+      Top = -3
+      Width = 276
+      Height = 29
+      Caption = 'Ясас жядвял'
+      TabOrder = 1
+      object RBtnCust: TRadioButton
+        Left = 22
+        Top = 13
+        Width = 70
+        Height = 13
+        Caption = 'Мцштяриляр'
+        TabOrder = 0
+        OnClick = RBtnCustClick
+      end
+      object RBtnAcc: TRadioButton
+        Left = 113
+        Top = 13
+        Width = 70
+        Height = 13
+        Caption = 'Щесаблар'
+        TabOrder = 1
+        OnClick = RBtnAccClick
+      end
+      object RBtnDocs: TRadioButton
+        Left = 203
+        Top = 13
+        Width = 70
+        Height = 13
+        Caption = 'Сянядляр'
+        TabOrder = 2
+        OnClick = RBtnDocsClick
+      end
+    end
+  end
+  object Panel1: TPanel
+    Left = 217
+    Top = 27
+    Width = 573
+    Height = 491
+    Align = alClient
+    TabOrder = 1
+    object DBGridCustomers: TDBGrid
+      Left = 1
+      Top = 1
+      Width = 571
+      Height = 175
+      Align = alTop
+      DataSource = DataSourceCustomers
+      Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit]
+      TabOrder = 0
+      TitleFont.Charset = RUSSIAN_CHARSET
+      TitleFont.Color = clWindowText
+      TitleFont.Height = -11
+      TitleFont.Name = 'Azl Sans Serif'
+      TitleFont.Style = []
+      OnTitleClick = DBGridCustomersTitleClick
+      Columns = <
+        item
+          Alignment = taCenter
+          Color = clSilver
+          Expanded = False
+          FieldName = 'ID'
+          Title.Alignment = taCenter
+          Title.Caption = '№'
+          Title.Color = clActiveCaption
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = []
+          Width = 30
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'NAME'
+          Title.Alignment = taCenter
+          Title.Color = clActiveCaption
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = []
+          Width = 250
+          Visible = True
+        end
+        item
+          Alignment = taCenter
+          Expanded = False
+          FieldName = 'INN'
+          Title.Alignment = taCenter
+          Title.Color = clActiveCaption
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = []
+          Width = 70
+          Visible = True
+        end
+        item
+          Alignment = taCenter
+          Expanded = False
+          FieldName = 'OPEN_DAT'
+          Title.Alignment = taCenter
+          Title.Color = clActiveCaption
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = []
+          Width = 110
+          Visible = True
+        end
+        item
+          Alignment = taCenter
+          Expanded = False
+          FieldName = 'CLOSE_DAT'
+          Title.Alignment = taCenter
+          Title.Color = clActiveCaption
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = []
+          Width = 110
+          Visible = True
+        end>
+    end
+    object DBGridAccounts: TDBGrid
+      Left = 1
+      Top = 176
+      Width = 571
+      Height = 150
+      Align = alTop
+      DataSource = DataSourceAccount
+      Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit]
+      TabOrder = 1
+      TitleFont.Charset = RUSSIAN_CHARSET
+      TitleFont.Color = clWindowText
+      TitleFont.Height = -11
+      TitleFont.Name = 'Azl Sans Serif'
+      TitleFont.Style = []
+      OnTitleClick = DBGridAccountsTitleClick
+      Columns = <
+        item
+          Color = clSilver
+          Expanded = False
+          FieldName = 'ACC_NO'
+          Title.Alignment = taCenter
+          Title.Caption = 'Щесаб №'
+          Title.Color = clActiveCaption
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = []
+          Width = 90
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'NAME'
+          Title.Alignment = taCenter
+          Title.Caption = 'Ады'
+          Title.Color = clActiveCaption
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = []
+          Width = 200
+          Visible = True
+        end
+        item
+          Alignment = taCenter
+          Expanded = False
+          FieldName = 'VAL_NAME'
+          Title.Alignment = taCenter
+          Title.Color = clActiveCaption
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = []
+          Width = 30
+          Visible = True
+        end
+        item
+          Alignment = taCenter
+          Expanded = False
+          FieldName = 'OPEN_DAT'
+          Title.Alignment = taCenter
+          Title.Color = clActiveCaption
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = []
+          Width = 70
+          Visible = True
+        end
+        item
+          Alignment = taCenter
+          Expanded = False
+          FieldName = 'CLOSE_DAT'
+          Title.Alignment = taCenter
+          Title.Color = clActiveCaption
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = []
+          Width = 70
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'ABS(TEN.OSTAT)'
+          Title.Alignment = taCenter
+          Title.Caption = 'Галыг'
+          Title.Color = clActiveCaption
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = []
+          Width = 65
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'ABS(TEN.POK_OSTAT)'
+          Title.Alignment = taCenter
+          Title.Caption = 'Манат екв.'
+          Title.Color = clActiveCaption
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = []
+          Width = 65
+          Visible = True
+        end>
+    end
+    object DBGridDocs: TDBGrid
+      Left = 1
+      Top = 326
+      Width = 571
+      Height = 164
+      Align = alClient
+      DataSource = DataSourceDocs
+      Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit]
+      TabOrder = 2
+      TitleFont.Charset = RUSSIAN_CHARSET
+      TitleFont.Color = clWindowText
+      TitleFont.Height = -11
+      TitleFont.Name = 'Azl Sans Serif'
+      TitleFont.Style = []
+      OnTitleClick = DBGridDocsTitleClick
+      Columns = <
+        item
+          Alignment = taCenter
+          Expanded = False
+          FieldName = 'DAT'
+          Title.Alignment = taCenter
+          Title.Color = clActiveCaption
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = []
+          Width = 60
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'DEBIT'
+          Title.Alignment = taCenter
+          Title.Caption = 'Дебет '
+          Title.Color = clActiveCaption
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = []
+          Width = 110
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'CREDIT'
+          Title.Alignment = taCenter
+          Title.Color = clActiveCaption
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = []
+          Width = 110
+          Visible = True
+        end
+        item
+          Alignment = taLeftJustify
+          Expanded = False
+          FieldName = 'AMMOUNT'
+          Title.Alignment = taCenter
+          Title.Color = clActiveCaption
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = []
+          Visible = True
+        end
+        item
+          Alignment = taLeftJustify
+          Expanded = False
+          FieldName = 'AMMOUNT_C'
+          Title.Alignment = taCenter
+          Title.Color = clActiveCaption
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = []
+          Width = 70
+          Visible = True
+        end
+        item
+          Alignment = taLeftJustify
+          Expanded = False
+          FieldName = 'LAMMOUNT'
+          Title.Alignment = taCenter
+          Title.Color = clActiveCaption
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = []
+          Width = 70
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'NAME'
+          Title.Alignment = taCenter
+          Title.Color = clActiveCaption
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = []
+          Width = 250
+          Visible = True
+        end>
+    end
+  end
+  object Panel2: TPanel
+    Left = 0
+    Top = 27
+    Width = 217
+    Height = 491
+    Align = alLeft
+    TabOrder = 2
+    object GrBoxCustomers: TGroupBox
+      Left = 1
+      Top = 1
+      Width = 215
+      Height = 175
+      Align = alTop
+      Caption = 'Мцштяриляр'
+      TabOrder = 0
+      object LabelCountCust: TLabel
+        Left = 164
+        Top = 2
+        Width = 18
+        Height = 13
+        Alignment = taRightJustify
+        Caption = '000'
+      end
+      object CustExcel: TSpeedButton
+        Left = 190
+        Top = 137
+        Width = 22
+        Height = 22
+        Hint = 'Excel'
+        Glyph.Data = {
+          7E010000424D7E01000000000000760000002800000016000000160000000100
+          0400000000000801000000000000000000001000000000000000000000000000
+          8000008000000080800080000000800080008080000080808000C0C0C0000000
+          FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00727272727272
+          72727272720027272727272727272727270072FFFFFFFFFFFFFFFFFF720027FF
+          FFFFFFFFFFFFFFFF270072FFFFFFFFFFFFFFFFFF720027FFFFFFFFFFF727272F
+          270072F2727272727F72727F720027F727272727F72727FF270072FF7272727F
+          72727FFF720027FFF72727F7272727FF270072FFFF727F72727272FF720027FF
+          FFF7F72727FFFFFF270072FFFF2F7272727FFFFF720027FFF2F727272727FFFF
+          270072FF2F72727272727FFF720027F7F72727F7272727FF270072F272727FFF
+          727272FF720027FFFFFFFFFFFFFFFFFF270072FFFFFFFFFFFFFFFFFF720027FF
+          FFFFFFFFFFFFFFFF270072727272727272727272720027272727272727272727
+          2700}
+        ParentShowHint = False
+        ShowHint = True
+        OnClick = CustExcelClick
+      end
+      object Label3: TLabel
+        Left = 6
+        Top = 125
+        Width = 37
+        Height = 13
+        Caption = '-Ахтарыш-'
+      end
+      object GrBoxCustDates: TGroupBox
+        Left = 3
+        Top = 63
+        Width = 208
+        Height = 63
+        Caption = 'Тарих'
+        TabOrder = 0
+        object RGrCustDates: TRadioGroup
+          Left = 7
+          Top = 11
+          Width = 114
+          Height = 48
+          ItemIndex = 0
+          Items.Strings = (
+            'Ачылма тарихляри'
+            'Баьланма тарихляри')
+          TabOrder = 0
+          OnClick = CBoxOpenCustClick
+        end
+        object BegDateCust: TDateTimePicker
+          Left = 121
+          Top = 16
+          Width = 83
+          Height = 18
+          CalAlignment = dtaLeft
+          Date = 32874.7091950463
+          Time = 32874.7091950463
+          DateFormat = dfShort
+          DateMode = dmComboBox
+          Kind = dtkDate
+          ParseInput = False
+          TabOrder = 1
+          OnChange = CBoxOpenCustClick
+        end
+        object EndDateCust: TDateTimePicker
+          Left = 121
+          Top = 36
+          Width = 83
+          Height = 18
+          CalAlignment = dtaLeft
+          Date = 37868.7098722917
+          Time = 37868.7098722917
+          DateFormat = dfShort
+          DateMode = dmComboBox
+          Kind = dtkDate
+          ParseInput = False
+          TabOrder = 2
+          OnChange = CBoxOpenCustClick
+        end
+      end
+      object GBoxOpenFilterCust: TGroupBox
+        Left = 3
+        Top = 15
+        Width = 208
+        Height = 49
+        TabOrder = 1
+        object CBoxOpenCust: TCheckBox
+          Left = 14
+          Top = 11
+          Width = 150
+          Height = 17
+          Caption = 'Гейдиййатда олан мцштяриляр'
+          Checked = True
+          State = cbChecked
+          TabOrder = 0
+          OnClick = CBoxOpenCustClick
+        end
+        object CBoxCloseCust: TCheckBox
+          Left = 14
+          Top = 28
+          Width = 162
+          Height = 15
+          Caption = 'Гейдиййатдан чыхан мцштяриляр'
+          TabOrder = 1
+          OnClick = CBoxOpenCustClick
+        end
+      end
+      object LocCustNum: TEdit
+        Left = 5
+        Top = 138
+        Width = 33
+        Height = 21
+        TabOrder = 2
+        OnChange = LocCustNumChange
+        OnExit = LocCustNumExit
+      end
+      object EditLocate: TEdit
+        Left = 35
+        Top = 138
+        Width = 155
+        Height = 21
+        CharCase = ecUpperCase
+        TabOrder = 3
+        OnChange = EditLocateChange
+        OnExit = EditLocateExit
+        OnKeyPress = EditLocateKeyPress
+      end
+    end
+    object GrBoxDocs: TGroupBox
+      Left = 1
+      Top = 326
+      Width = 215
+      Height = 164
+      Align = alClient
+      Caption = 'Сянядляр'
+      TabOrder = 1
+      object WaitLabel: TLabel
+        Left = 110
+        Top = 111
+        Width = 49
+        Height = 13
+        Caption = 'Эюзляйин...'
+        Visible = False
+      end
+      object LabelCountDocs: TLabel
+        Left = 187
+        Top = 1
+        Width = 18
+        Height = 13
+        Alignment = taRightJustify
+        Caption = '000'
+      end
+      object DocExcel: TSpeedButton
+        Left = 188
+        Top = 106
+        Width = 22
+        Height = 22
+        Hint = 'Excel'
+        Glyph.Data = {
+          7E010000424D7E01000000000000760000002800000016000000160000000100
+          0400000000000801000000000000000000001000000000000000000000000000
+          8000008000000080800080000000800080008080000080808000C0C0C0000000
+          FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00727272727272
+          72727272720027272727272727272727270072FFFFFFFFFFFFFFFFFF720027FF
+          FFFFFFFFFFFFFFFF270072FFFFFFFFFFFFFFFFFF720027FFFFFFFFFFF727272F
+          270072F2727272727F72727F720027F727272727F72727FF270072FF7272727F
+          72727FFF720027FFF72727F7272727FF270072FFFF727F72727272FF720027FF
+          FFF7F72727FFFFFF270072FFFF2F7272727FFFFF720027FFF2F727272727FFFF
+          270072FF2F72727272727FFF720027F7F72727F7272727FF270072F272727FFF
+          727272FF720027FFFFFFFFFFFFFFFFFF270072FFFFFFFFFFFFFFFFFF720027FF
+          FFFFFFFFFFFFFFFF270072727272727272727272720027272727272727272727
+          2700}
+        ParentShowHint = False
+        ShowHint = True
+        OnClick = DocExcelClick
+      end
+      object OKBtn: TSpeedButton
+        Left = 164
+        Top = 106
+        Width = 23
+        Height = 22
+        Hint = 'Гябул'
+        Glyph.Data = {
+          66010000424D6601000000000000760000002800000016000000140000000100
+          040000000000F0000000CE0E0000D80E00001000000000000000000000000000
+          80000080000000808000800000008000800080800000C0C0C000808080000000
+          FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00555555555555
+          5555555555005555555555555555555555005555888888888888888555005599
+          9999119999999B5555005559999111199999B555550055553B443333BBBB5555
+          5500555554C448888555555555005555ECCCC4488855555555005555ECCCCC44
+          8885555555005555ECC4ECC44888555555005555ECC48ECC4488855555005555
+          EC4885ECC448885555005555EF48855ECC44888555005555EEC55555ECC44888
+          55005555555555555ECC4488550055555555555555ECC4485500555555555555
+          555ECC4855005555555555555555EC4555005555555555555555555555005555
+          55555555555555555500}
+        ParentShowHint = False
+        ShowHint = True
+        OnClick = OKBtnClick
+      end
+      object GBoxDateDocs: TGroupBox
+        Left = 3
+        Top = 14
+        Width = 208
+        Height = 56
+        Caption = 'Тарих'
+        TabOrder = 0
+        object Label4: TLabel
+          Left = 32
+          Top = 11
+          Width = 68
+          Height = 13
+          Caption = 'Башланьыж тарих'
+        end
+        object Label5: TLabel
+          Left = 32
+          Top = 34
+          Width = 41
+          Height = 13
+          Caption = 'Сон тарих'
+        end
+        object BegDateDocs: TDateTimePicker
+          Left = 114
+          Top = 7
+          Width = 81
+          Height = 21
+          CalAlignment = dtaLeft
+          Date = 37868.7057243171
+          Time = 37868.7057243171
+          DateFormat = dfShort
+          DateMode = dmComboBox
+          Kind = dtkDate
+          ParseInput = False
+          TabOrder = 0
+        end
+        object EndDateDocs: TDateTimePicker
+          Left = 114
+          Top = 30
+          Width = 81
+          Height = 21
+          CalAlignment = dtaLeft
+          Date = 37868.7057743866
+          Time = 37868.7057743866
+          DateFormat = dfShort
+          DateMode = dmComboBox
+          Kind = dtkDate
+          ParseInput = False
+          TabOrder = 1
+        end
+      end
+      object ChListDocs: TCheckListBox
+        Left = 3
+        Top = 71
+        Width = 207
+        Height = 33
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = [fsBold]
+        ItemHeight = 13
+        Items.Strings = (
+          'Дебет цзря'
+          'Кредит цзря')
+        ParentFont = False
+        TabOrder = 1
+      end
+    end
+    object AccPageControl: TPageControl
+      Left = 1
+      Top = 176
+      Width = 215
+      Height = 150
+      ActivePage = AccMainPage
+      Align = alTop
+      TabOrder = 2
+      object AccMainPage: TTabSheet
+        Caption = 'Щесаблар'
+        object Label2: TLabel
+          Left = 5
+          Top = 8
+          Width = 35
+          Height = 13
+          Caption = 'Валйута'
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = []
+          ParentFont = False
+        end
+        object LabelCountAcc: TLabel
+          Left = 181
+          Top = -1
+          Width = 18
+          Height = 13
+          Alignment = taRightJustify
+          Caption = '000'
+        end
+        object Label6: TLabel
+          Left = 7
+          Top = 65
+          Width = 31
+          Height = 13
+          Caption = 'Ахтарыш'
+        end
+        object AccExcel: TSpeedButton
+          Left = 183
+          Top = 100
+          Width = 22
+          Height = 22
+          Hint = 'Excel'
+          Glyph.Data = {
+            7E010000424D7E01000000000000760000002800000016000000160000000100
+            0400000000000801000000000000000000001000000000000000000000000000
+            8000008000000080800080000000800080008080000080808000C0C0C0000000
+            FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00727272727272
+            72727272720027272727272727272727270072FFFFFFFFFFFFFFFFFF720027FF
+            FFFFFFFFFFFFFFFF270072FFFFFFFFFFFFFFFFFF720027FFFFFFFFFFF727272F
+            270072F2727272727F72727F720027F727272727F72727FF270072FF7272727F
+            72727FFF720027FFF72727F7272727FF270072FFFF727F72727272FF720027FF
+            FFF7F72727FFFFFF270072FFFF2F7272727FFFFF720027FFF2F727272727FFFF
+            270072FF2F72727272727FFF720027F7F72727F7272727FF270072F272727FFF
+            727272FF720027FFFFFFFFFFFFFFFFFF270072FFFFFFFFFFFFFFFFFF720027FF
+            FFFFFFFFFFFFFFFF270072727272727272727272720027272727272727272727
+            2700}
+          ParentShowHint = False
+          ShowHint = True
+          OnClick = AccExcelClick
+        end
+        object SearchCAvaluteAcc: TSearchCombo
+          Left = 44
+          Top = 11
+          Width = 161
+          Height = 22
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = []
+          ItemHeight = 16
+          ParentFont = False
+          TabOrder = 0
+          OnChange = SearchCAvaluteAccChange
+          DataSource = DataSourceAvalute
+          ViewField = 'VALU_NAME'
+          DefaultString = 'Бцтцн валйуталар'
+          DefaultStringUse = True
+          DefaultStringColor = clWindowText
+        end
+        object LocAccNum: TEdit
+          Left = 6
+          Top = 77
+          Width = 83
+          Height = 21
+          TabOrder = 1
+          OnChange = LocAccNumChange
+          OnExit = LocAccNumExit
+        end
+        object LocAccName: TEdit
+          Left = 92
+          Top = 77
+          Width = 114
+          Height = 21
+          CharCase = ecUpperCase
+          TabOrder = 2
+          OnChange = LocAccNameChange
+          OnExit = LocAccNameExit
+          OnKeyPress = LocAccNameKeyPress
+        end
+        object GBoxOpenFilterAcc: TGroupBox
+          Left = 6
+          Top = 34
+          Width = 199
+          Height = 30
+          TabOrder = 3
+          object CBoxOpenAccs: TCheckBox
+            Left = 7
+            Top = 8
+            Width = 86
+            Height = 15
+            Caption = 'Ачыг щесаблар'
+            Checked = True
+            State = cbChecked
+            TabOrder = 0
+            OnClick = SearchCAvaluteAccChange
+          end
+          object CBoxCloseAccs: TCheckBox
+            Left = 99
+            Top = 9
+            Width = 89
+            Height = 15
+            Caption = 'Баьлы щесаблар'
+            TabOrder = 1
+            OnClick = SearchCAvaluteAccChange
+          end
+        end
+      end
+      object AccAdtPage: TTabSheet
+        Caption = 'Ялавя'
+        ImageIndex = 1
+        object GBoxOstatValAcc: TGroupBox
+          Left = 116
+          Top = 3
+          Width = 86
+          Height = 53
+          TabOrder = 0
+          object RBtnOstatAZM: TRadioButton
+            Left = 8
+            Top = 15
+            Width = 54
+            Height = 12
+            Caption = 'Манат'
+            Checked = True
+            TabOrder = 0
+            TabStop = True
+          end
+          object RBtnOstatValute: TRadioButton
+            Left = 8
+            Top = 33
+            Width = 55
+            Height = 12
+            Caption = 'Valyuta'
+            TabOrder = 1
+          end
+        end
+        object GBoxOstatSumAcc: TGroupBox
+          Left = 3
+          Top = 3
+          Width = 117
+          Height = 53
+          Caption = 'Галыг'
+          TabOrder = 1
+          object Label7: TLabel
+            Left = 8
+            Top = 17
+            Width = 20
+            Height = 13
+            Caption = 'Мин.'
+          end
+          object Label8: TLabel
+            Left = 8
+            Top = 38
+            Width = 24
+            Height = 13
+            Caption = 'Мак.'
+          end
+          object EditOstatMin: TEdit
+            Left = 33
+            Top = 9
+            Width = 81
+            Height = 21
+            TabOrder = 0
+            OnKeyPress = EditOstatMinKeyPress
+          end
+          object EditOstatMax: TEdit
+            Left = 33
+            Top = 30
+            Width = 81
+            Height = 21
+            TabOrder = 1
+            OnKeyPress = EditOstatMinKeyPress
+          end
+        end
+        object GBoxAccCBDates: TGroupBox
+          Left = 3
+          Top = 56
+          Width = 117
+          Height = 66
+          Caption = 'Тарих'
+          TabOrder = 2
+          object BegDateAcc: TDateTimePicker
+            Left = 29
+            Top = 16
+            Width = 85
+            Height = 21
+            CalAlignment = dtaLeft
+            Date = 32874.6577392477
+            Time = 32874.6577392477
+            DateFormat = dfShort
+            DateMode = dmComboBox
+            Kind = dtkDate
+            ParseInput = False
+            TabOrder = 0
+            OnChange = SearchCAvaluteAccChange
+          end
+          object EndDateAcc: TDateTimePicker
+            Left = 29
+            Top = 40
+            Width = 85
+            Height = 21
+            CalAlignment = dtaLeft
+            Date = 38062.6578035764
+            Time = 38062.6578035764
+            DateFormat = dfShort
+            DateMode = dmComboBox
+            Kind = dtkDate
+            ParseInput = False
+            TabOrder = 1
+            OnChange = SearchCAvaluteAccChange
+          end
+        end
+        object RGrAccDates: TRadioGroup
+          Left = 116
+          Top = 56
+          Width = 86
+          Height = 66
+          ItemIndex = 0
+          Items.Strings = (
+            'Ачылма тарихи'
+            'Баьланма т.')
+          TabOrder = 3
+          OnClick = SearchCAvaluteAccChange
+        end
+      end
+      object AccDatePage: TTabSheet
+        Caption = 'Tarix'
+        ImageIndex = 2
+        object Label9: TLabel
+          Left = 4
+          Top = 16
+          Width = 51
+          Height = 13
+          Caption = 'Галыг тарихи:'
+        end
+        object DTPicker_Archost: TDateTimePicker
+          Left = 67
+          Top = 12
+          Width = 138
+          Height = 21
+          CalAlignment = dtaLeft
+          Date = 39584.4960188773
+          Time = 39584.4960188773
+          DateFormat = dfShort
+          DateMode = dmComboBox
+          Kind = dtkDate
+          ParseInput = False
+          TabOrder = 0
+          OnChange = SearchCAvaluteAccChange
+        end
+      end
+    end
+  end
+  object OrDSCustomers: TOracleDataSet
+    SQL.Strings = (
+      'select ID, Name, INN, Open_Dat, Close_Dat'
+      '  from Customers'
+      
+        'where ID in (select KLI_ID from Account where Filial between :FC' +
+        'ode1 and :FCode2) and'
+      'close_dat is null and '
+      '(open_dat'
+      'between (:BegDate) and (:EndDate))'
+      'and (name like:pName) '
+      'order by ID'
+      ' '
+      ' ')
+    Variables.Data = {
+      0300000003000000080000003A424547444154450C0000000000000000000000
+      080000003A454E44444154450C0000000000000000000000060000003A504E41
+      4D45050000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      0400000005000000020000004944010000000000040000004E414D4501000000
+      000003000000494E4E010000000000080000004F50454E5F4441540100000000
+      0009000000434C4F53455F444154010000000000}
+    Session = sboapiDataModule.SBSession
+    BeforeOpen = OrDSCustomersBeforeOpen
+    AfterOpen = OrDSCustomersAfterOpen
+    AfterScroll = OrDSCustomersAfterScroll
+    AfterRefresh = OrDSCustomersAfterRefresh
+    Left = 237
+    Top = 154
+    object OrDSCustomersID: TIntegerField
+      FieldName = 'ID'
+      Required = True
+    end
+    object OrDSCustomersNAME: TStringField
+      DisplayLabel = 'Ады'
+      FieldName = 'NAME'
+      Size = 90
+    end
+    object OrDSCustomersINN: TStringField
+      FieldName = 'INN'
+    end
+    object OrDSCustomersOPEN_DAT: TDateTimeField
+      DisplayLabel = 'Ачылма тарихи'
+      FieldName = 'OPEN_DAT'
+    end
+    object OrDSCustomersCLOSE_DAT: TDateTimeField
+      DisplayLabel = 'Баьланма тарихи'
+      FieldName = 'CLOSE_DAT'
+    end
+  end
+  object DataSourceCustomers: TDataSource
+    DataSet = OrDSCustomers
+    Left = 269
+    Top = 154
+  end
+  object OrDSDates: TOracleDataSet
+    SQL.Strings = (
+      'Select min(C.open_dat) as CMinDate,max(C.open_dat) as CMaxDate,'
+      
+        '          min(A.open_dat) as AMinDate,max(A.open_dat) as AMaxDat' +
+        'e'
+      'From Customers C, Account A')
+    Session = sboapiDataModule.SBSession
+    Left = 752
+    Top = 176
+    object OrDSDatesCMINDATE: TDateTimeField
+      FieldName = 'CMINDATE'
+    end
+    object OrDSDatesCMAXDATE: TDateTimeField
+      FieldName = 'CMAXDATE'
+    end
+    object OrDSDatesAMINDATE: TDateTimeField
+      FieldName = 'AMINDATE'
+    end
+    object OrDSDatesAMAXDATE: TDateTimeField
+      FieldName = 'AMAXDATE'
+    end
+  end
+  object OrDSAccount: TOracleDataSet
+    SQL.Strings = (
+      'select ac.ACC_NO,ac.Name,val.Val_Name,ac.Open_Dat,ac.Close_Dat,'
+      
+        '       ac.Kli_ID,abs(ten.Ostat),abs(ten.Pok_Ostat), ten.datdate ' +
+        'as Tarix,ac.tipacc as symbol'
+      'from Account ac, Avalute val, ArchOst ten'
+      'where kli_ID=1'
+      
+        ' and (open_dat between :BegDate and :EndDate) and ten.datdate=:B' +
+        'alDate'
+      ' and (name like:pName) '
+      ''
+      ' ')
+    Variables.Data = {
+      0300000004000000080000003A424547444154450C0000000000000000000000
+      080000003A454E44444154450C0000000000000000000000080000003A42414C
+      444154450C0000000000000000000000060000003A504E414D45050000000000
+      000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      040000000A000000060000004143435F4E4F010000000000040000004E414D45
+      0100000000000800000056414C5F4E414D45010000000000080000004F50454E
+      5F44415401000000000009000000434C4F53455F444154010000000000060000
+      004B4C495F49440100000000000E0000004142532854454E2E4F535441542901
+      0000000000120000004142532854454E2E504F4B5F4F53544154290100000000
+      000600000053594D424F4C010000000000050000005441524958010000000000}
+    Session = sboapiDataModule.SBSession
+    BeforeOpen = OrDSAccountBeforeOpen
+    AfterOpen = OrDSAccountAfterOpen
+    AfterScroll = OrDSAccountAfterScroll
+    Left = 240
+    Top = 307
+    object OrDSAccountACC_NO: TStringField
+      DisplayLabel = 'Щесабын №'
+      FieldName = 'ACC_NO'
+    end
+    object OrDSAccountNAME: TStringField
+      DisplayLabel = 'Щесабын ады'
+      FieldName = 'NAME'
+      Size = 90
+    end
+    object OrDSAccountVAL_NAME: TStringField
+      DisplayLabel = 'Вал.'
+      FieldName = 'VAL_NAME'
+      Size = 10
+    end
+    object OrDSAccountOPEN_DAT: TDateTimeField
+      DisplayLabel = 'Ачылма тарихи'
+      FieldName = 'OPEN_DAT'
+    end
+    object OrDSAccountCLOSE_DAT: TDateTimeField
+      DisplayLabel = 'Баьланма тарихи'
+      FieldName = 'CLOSE_DAT'
+    end
+    object OrDSAccountABSTENOSTAT: TFloatField
+      DisplayLabel = 'Галыг(вал.)'
+      FieldName = 'ABS(TEN.OSTAT)'
+      DisplayFormat = '#,##0.00'
+    end
+    object OrDSAccountABSTENPOK_OSTAT: TFloatField
+      DisplayLabel = 'Галыг(Ман.)'
+      FieldName = 'ABS(TEN.POK_OSTAT)'
+      DisplayFormat = '#,##0.00'
+    end
+    object OrDSAccountKLI_ID: TFloatField
+      FieldName = 'KLI_ID'
+      Visible = False
+    end
+    object OrDSAccountTARIX: TDateTimeField
+      FieldName = 'TARIX'
+      Required = True
+    end
+    object OrDSAccountSYMBOL: TStringField
+      FieldName = 'SYMBOL'
+    end
+  end
+  object DataSourceAccount: TDataSource
+    DataSet = OrDSAccount
+    Left = 272
+    Top = 307
+  end
+  object OrDSSysDat: TOracleDataSet
+    SQL.Strings = (
+      'select Tek_Dat from SysDat')
+    Session = sboapiDataModule.SBSession
+    Left = 760
+    Top = 466
+    object OrDSSysDatTEK_DAT: TDateTimeField
+      FieldName = 'TEK_DAT'
+    end
+  end
+  object OrDSFilials: TOracleDataSet
+    SQL.Strings = (
+      'select ID,NAME from Filial')
+    Session = sboapiDataModule.SBSession
+    Left = 112
+    object OrDSFilialsID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object OrDSFilialsNAME: TStringField
+      FieldName = 'NAME'
+      Size = 90
+    end
+  end
+  object DataSourceFilial: TDataSource
+    DataSet = OrDSFilials
+    Left = 136
+  end
+  object OrDSAvalute: TOracleDataSet
+    SQL.Strings = (
+      'select * from Avalute')
+    Session = sboapiDataModule.SBSession
+    Left = 132
+    Top = 206
+    object OrDSAvaluteVALUTE: TIntegerField
+      FieldName = 'VALUTE'
+      Required = True
+    end
+    object OrDSAvaluteVAL_NAME: TStringField
+      FieldName = 'VAL_NAME'
+      Size = 10
+    end
+    object OrDSAvaluteVALU_NAME: TStringField
+      FieldName = 'VALU_NAME'
+      Size = 25
+    end
+  end
+  object DataSourceAvalute: TDataSource
+    DataSet = OrDSAvalute
+    Left = 164
+    Top = 206
+  end
+  object OrDSDocs: TOracleDataSet
+    SQL.Strings = (
+      'select '
+      ' p.dat,a1.acc_no as Debit,a2.acc_no as Credit,'
+      
+        ' p.ammount,p.lammount,p.ammount_c,p.name, a1.tipacc as d_symbol,' +
+        'a2.tipacc as c_symbol '
+      'from provarch p, account a1, account a2'
+      'where '
+      '    (dat between (:BegDate) and (:EndDate))'
+      
+        '        and (p.debt in (select id from account where acc_no=:Acc' +
+        '_NO)'
+      
+        '      or p.kredit in (select id from account where acc_no=:Acc_N' +
+        'O))'
+      '  and (p.debt=a1.id and p.kredit=a2.id)')
+    Variables.Data = {
+      0300000002000000080000003A424547444154450C0000000000000000000000
+      080000003A454E44444154450C0000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      0400000009000000030000004441540100000000000500000044454249540100
+      000000000600000043524544495401000000000007000000414D4D4F554E5401
+      0000000000080000004C414D4D4F554E5401000000000009000000414D4D4F55
+      4E545F43010000000000040000004E414D4501000000000008000000445F5359
+      4D424F4C01000000000008000000435F53594D424F4C010000000000}
+    Session = sboapiDataModule.SBSession
+    BeforeOpen = OrDSDocsBeforeOpen
+    AfterOpen = OrDSDocsAfterOpen
+    AfterScroll = OrDSDocsAfterScroll
+    Left = 240
+    Top = 457
+    object OrDSDocsDAT: TDateTimeField
+      DisplayLabel = 'Тарих'
+      FieldName = 'DAT'
+    end
+    object OrDSDocsDEBIT: TStringField
+      DisplayLabel = 'Дебет'
+      FieldName = 'DEBIT'
+    end
+    object OrDSDocsCREDIT: TStringField
+      DisplayLabel = 'Кредит'
+      FieldName = 'CREDIT'
+    end
+    object OrDSDocsAMMOUNT: TFloatField
+      DisplayLabel = 'Дебет мябляь'
+      FieldName = 'AMMOUNT'
+    end
+    object OrDSDocsAMMOUNT_C: TFloatField
+      DisplayLabel = 'Кредит мябляь'
+      FieldName = 'AMMOUNT_C'
+    end
+    object OrDSDocsLAMMOUNT: TFloatField
+      DisplayLabel = 'Манат екв.'
+      FieldName = 'LAMMOUNT'
+    end
+    object OrDSDocsNAME: TStringField
+      DisplayLabel = 'Тяйинат'
+      FieldName = 'NAME'
+      Size = 255
+    end
+    object OrDSDocsD_SYMBOL: TStringField
+      FieldName = 'D_SYMBOL'
+    end
+    object OrDSDocsC_SYMBOL: TStringField
+      FieldName = 'C_SYMBOL'
+    end
+  end
+  object DataSourceDocs: TDataSource
+    DataSet = OrDSDocs
+    Left = 272
+    Top = 457
+  end
+  object ImageList: TImageList
+    Left = 520
+    Bitmap = {
+      494C010101000400040010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      0000000000003600000028000000400000001000000001002000000000000010
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000840084008400
+      8400000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000008400840084848400FFFFFF00C6C6
+      C600840084000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000008400840084848400FFFFFF00FFFFFF0084848400C6C6
+      C600C6C6C6008400840000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000084008400C6C6C600FFFFFF00FFFFFF008484840000000000840084000000
+      0000C6C6C600C6C6C60084008400000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000000000000000000000000000FFFFFF00FFFFFF00B5FF
+      FF0084008400C6C6C600848484006BCEFF008400840084008400840084008400
+      840000000000C6C6C600C6C6C600840084000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000B5FFFF00C6C6C6009C9C9C006B6B
+      6B00840084005252520084008400840084008400840000FFFF00840084008400
+      84008400840000000000C6C6C600000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000000000000000000094949400FFFFFF00FFFFFF00B5FF
+      FF0094DEFF00840084008400840084008400840084008400840000FFFF000084
+      8400840084008400840000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000B5FFFF00C6C6C6009C9C9C006B6B
+      6B006B6B6B005252520084008400840084008400840084008400840084008400
+      840000FFFF000084840084008400000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000000000000000000094949400FFFFFF00FFFFFF00B5FF
+      FF0094DEFF0094DEFF0094DEFF0084008400840084008400840000FFFF0000FF
+      FF0000FFFF008400840084008400000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000B5FFFF00B5E7FF00B5FFFF00B5FF
+      FF00B5FFFF006BCEFF00BDBDBD00ADADAD008400840084008400840084008400
+      8400840084000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000000000000000000094DEFF00BDBDBD00BDBDBD006BCE
+      FF00C6C6C6008484840094DEFF0094DEFF0094DEFF00840084008400840094DE
+      FF00000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000B5E7FF006BCEFF006BCEFF006BCE
+      FF006BCEFF00BDBDBD0094DEFF00B5FFFF00B5E7FF0094DEFF0094DEFF000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000094DEFF0094DEFF006BCE
+      FF006BCEFF0094DEFF0094DEFF00B5E7FF00F7FFFF00FFFFFF00000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000424D3E000000000000003E000000
+      2800000040000000100000000100010000000000800000000000000000000000
+      000000000000000000000000FFFFFF00FFFF000000000000FFCF000000000000
+      FF07000000000000FC03000000000000F0510000000000008008000000000000
+      0005000000000000000300000000000000010000000000000001000000000000
+      0007000000000000000F000000000000001F000000000000803F000000000000
+      FFFF000000000000FFFF00000000000000000000000000000000000000000000
+      000000000000}
+  end
+  object ExcelExporter: TCMExcelExport
+    StyleColumnWidth = cwAutoFit
+    ColumnWidth = 15
+    FontTitles.Charset = RUSSIAN_CHARSET
+    FontTitles.Color = clWindowText
+    FontTitles.Height = -11
+    FontTitles.Name = 'Azl Sans Serif'
+    FontTitles.Style = [fsBold]
+    OrientationTitles = 0
+    FontData.Charset = RUSSIAN_CHARSET
+    FontData.Color = clWindowText
+    FontData.Height = -11
+    FontData.Name = 'Azl Sans Serif'
+    FontData.Style = []
+    FontSummary.Charset = RUSSIAN_CHARSET
+    FontSummary.Color = clWindowText
+    FontSummary.Height = -11
+    FontSummary.Name = 'Azl Sans Serif'
+    FontSummary.Style = []
+    SummarySelection = ssGiven
+    SummaryCalculation = scSUM
+    Left = 553
+    Top = 65532
+  end
+end

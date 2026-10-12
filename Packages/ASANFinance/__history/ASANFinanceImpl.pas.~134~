@@ -1,0 +1,1212 @@
+﻿unit ASANFinanceImpl;
+
+{$WARN SYMBOL_PLATFORM OFF}
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActiveX, AxCtrls, ASANFinance_TLB, StdVcl, StdCtrls, ExtCtrls, ComCtrls,
+  IdIOHandler, IdIOHandlerSocket, IdIOHandlerStack, IdSSL, IdSSLOpenSSL,
+  IdBaseComponent, IdComponent, IdTCPConnection, IdTCPClient, IdHTTP,dbxjson,encddecd,
+  Grids, XDBGrids, Buttons, DBCtrls, RaBase, RaControlsVCL, Mask, CurrencyEdit,
+  CMExcelExport;
+
+type
+  TASANFinanceForm = class(TActiveForm, IASANFinanceForm)
+    PageControl1: TPageControl;
+    TabSheet1: TTabSheet;
+    TabSheet2: TTabSheet;
+    IdHTTP1: TIdHTTP;
+    ssl: TIdSSLIOHandlerSocketOpenSSL;
+    Panel1: TPanel;
+    Label14: TLabel;
+    PIN: TEdit;
+    Button2: TButton;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    Label6: TLabel;
+    Label7: TLabel;
+    Label8: TLabel;
+    Label9: TLabel;
+    Label10: TLabel;
+    Label11: TLabel;
+    Label12: TLabel;
+    Label13: TLabel;
+    Citizenship: TEdit;
+    GivenOrganization: TEdit;
+    MaritalStatus: TEdit;
+    ExpireDate: TEdit;
+    GivenDate: TEdit;
+    RegistrationAddress: TEdit;
+    Gender: TEdit;
+    BirthAddress: TEdit;
+    BirthDate: TEdit;
+    Patronymic: TEdit;
+    Surname: TEdit;
+    Name: TEdit;
+    DocumentNumber: TEdit;
+    Image1: TImage;
+    Label15: TLabel;
+    MilitaryStatus: TEdit;
+    Label16: TLabel;
+    BloodType: TEdit;
+    Label18: TLabel;
+    EyeColor: TEdit;
+    Label19: TLabel;
+    Height: TEdit;
+    Button1: TButton;
+    TabSheet3: TTabSheet;
+    PageControl2: TPageControl;
+    TabSheet4: TTabSheet;
+    Panel2: TPanel;
+    Label20: TLabel;
+    Label21: TLabel;
+    Button3: TButton;
+    TabSheet5: TTabSheet;
+    TabSheet6: TTabSheet;
+    Memo1: TMemo;
+    Memo2: TMemo;
+    Panel3: TPanel;
+    Label17: TLabel;
+    Edit1: TEdit;
+    Button4: TButton;
+    GroupBox1: TGroupBox;
+    XDBGrid1: TXDBGrid;
+    GroupBox2: TGroupBox;
+    XDBGrid2: TXDBGrid;
+    BitBtn1: TBitBtn;
+    TabSheet7: TTabSheet;
+    Panel4: TPanel;
+    Label22: TLabel;
+    Edit2: TEdit;
+    Button5: TButton;
+    BitBtn2: TBitBtn;
+    GroupBox3: TGroupBox;
+    Label26: TLabel;
+    Label25: TLabel;
+    Label24: TLabel;
+    Label23: TLabel;
+    DBEdit1: TDBEdit;
+    DBEdit2: TDBEdit;
+    DBEdit3: TDBEdit;
+    DBEdit4: TDBEdit;
+    GroupBox4: TGroupBox;
+    Label29: TLabel;
+    DBEdit5: TDBEdit;
+    Label28: TLabel;
+    DBEdit6: TDBEdit;
+    Label30: TLabel;
+    DBEdit7: TDBEdit;
+    Label31: TLabel;
+    DBEdit8: TDBEdit;
+    GroupBox5: TGroupBox;
+    Label32: TLabel;
+    DBEdit9: TDBEdit;
+    Label33: TLabel;
+    DBEdit10: TDBEdit;
+    Label34: TLabel;
+    DBEdit11: TDBEdit;
+    Label35: TLabel;
+    DBEdit12: TDBEdit;
+    Label36: TLabel;
+    DBEdit13: TDBEdit;
+    DBEdit14: TDBEdit;
+    TabSheet8: TTabSheet;
+    Panel5: TPanel;
+    Label37: TLabel;
+    Edit3: TEdit;
+    Button6: TButton;
+    BitBtn3: TBitBtn;
+    GroupBox6: TGroupBox;
+    Label38: TLabel;
+    Label39: TLabel;
+    Label40: TLabel;
+    Label41: TLabel;
+    DBEdit15: TDBEdit;
+    DBEdit16: TDBEdit;
+    DBEdit17: TDBEdit;
+    DBEdit18: TDBEdit;
+    GroupBox7: TGroupBox;
+    Button7: TButton;
+    DateTimePicker1: TDateTimePicker;
+    DateTimePicker2: TDateTimePicker;
+    Label42: TLabel;
+    Label43: TLabel;
+    Label44: TLabel;
+    CurrencyEdit1: TCurrencyEdit;
+    Button8: TButton;
+    ExcelExport: TCMExcelExport;
+    Label45: TLabel;
+    XDBGrid3: TXDBGrid;
+    Label27: TLabel;
+    CurrencyEdit2: TCurrencyEdit;
+    XDBGrid4: TXDBGrid;
+    Label46: TLabel;
+    Memo3: TMemo;
+    Label47: TLabel;
+    PaspNum: TEdit;
+    Memo4: TMemo;
+    Button9: TButton;
+    TabSheet9: TTabSheet;
+    Panel6: TPanel;
+    Label48: TLabel;
+    Edit4: TEdit;
+    Button10: TButton;
+    BitBtn4: TBitBtn;
+    XDBGrid5: TXDBGrid;
+    procedure Button2Click(Sender: TObject);
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure Button3Click(Sender: TObject);
+    procedure Button4Click(Sender: TObject);
+    procedure BitBtn1Click(Sender: TObject);
+    procedure Button5Click(Sender: TObject);
+    procedure Button6Click(Sender: TObject);
+    procedure BitBtn2Click(Sender: TObject);
+    procedure Button7Click(Sender: TObject);
+    procedure Button8Click(Sender: TObject);
+    procedure BitBtn3Click(Sender: TObject);
+    procedure Button9Click(Sender: TObject);
+    procedure Button10Click(Sender: TObject);
+  private
+    { Private declarations }
+    FEvents: IASANFinanceFormEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure MouseEnterEvent(Sender: TObject);
+    procedure MouseLeaveEvent(Sender: TObject);
+    procedure PaintEvent(Sender: TObject);
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AlignDisabled: WordBool; safecall;
+    function Get_AlignWithMargins: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_BorderWidth: Integer; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_DockSite: WordBool; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_ExplicitHeight: Integer; safecall;
+    function Get_ExplicitLeft: Integer; safecall;
+    function Get_ExplicitTop: Integer; safecall;
+    function Get_ExplicitWidth: Integer; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_MouseInClient: WordBool; safecall;
+    function Get_ParentCustomHint: WordBool; safecall;
+    function Get_ParentDoubleBuffered: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PopupMode: TxPopupMode; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_ScreenSnap: WordBool; safecall;
+    function Get_SnapBuffer: Integer; safecall;
+    function Get_UseDockManager: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_AlignWithMargins(Value: WordBool); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_BorderWidth(Value: Integer); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_DockSite(Value: WordBool); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_ParentCustomHint(Value: WordBool); safecall;
+    procedure Set_ParentDoubleBuffered(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PopupMode(Value: TxPopupMode); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_ScreenSnap(Value: WordBool); safecall;
+    procedure Set_SnapBuffer(Value: Integer); safecall;
+    procedure Set_UseDockManager(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+  public
+    { Public declarations }
+    procedure Initialize; override;
+    procedure CheckAsan(Fin :String;service:String;url:String);
+    procedure  Fill_Edit;
+    procedure  Fill_Edit1;
+    var     id:integer;
+
+  end;
+    var
+     Path,Path_B:string;
+implementation
+
+uses ComObj, ComServ, PersonalQrFmImpl, EpployeRepImpl,
+  PensioonRepImpl, EtkisRepİmpl, AsanDmInpl;
+
+{$R *.DFM}
+
+{ TASANFinanceForm }
+
+procedure TASANFinanceForm.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_ASANFinanceFormPage); }
+end;
+
+procedure TASANFinanceForm.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as IASANFinanceFormEvents;
+  inherited EventSinkChanged(EventSink);
+end;
+
+procedure TASANFinanceForm.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnMouseEnter := MouseEnterEvent;
+  OnMouseLeave := MouseLeaveEvent;
+  OnPaint := PaintEvent;
+end;
+
+
+ procedure GetPath;
+var
+  ImagesPath: String;
+
+begin
+  ImagesPath := Format('%s\..\Bin\Photo', [ExtractFilePath(ParamStr(0))]);
+  Path := 'temp.jpg';
+  Path_B := 'temp.jpg';
+end;
+procedure  TASANFinanceForm.Fill_Edit;
+    var
+  F: File of byte;
+  begin
+
+  GetPath;
+       if ( AsanDm.BankInfoLOGO.IsNull) then
+  begin
+    PersonalQrFm.QRImage2.Picture.LoadFromFile(Path_B);
+    { --no record - godda empty Image1-- }
+  end
+  else
+  begin
+    AsanDm.BankInfoLOGO.SaveToFile(Path);
+    AssignFile(F, Path);
+    Reset(F);
+    if FileSize(F) > 0 then
+    begin
+      CloseFile(F);
+     PersonalQrFm.QRImage2.Picture.LoadFromFile(Path);
+
+    end
+    else
+    begin
+      CloseFile(F);
+      PersonalQrFm.QRImage2.Picture.LoadFromFile(Path);
+    end;
+  end;
+  end;
+
+
+  procedure  TASANFinanceForm.Fill_Edit1;
+    var
+  F: File of byte;
+  begin
+
+  GetPath;
+       if ( AsanDm.BankInfoLOGO.IsNull) then
+  begin
+    EpployeRepFrm.QRImage2.Picture.LoadFromFile(Path_B);
+    { --no record - godda empty Image1-- }
+  end
+  else
+  begin
+    AsanDm.BankInfoLOGO.SaveToFile(Path);
+    AssignFile(F, Path);
+    Reset(F);
+    if FileSize(F) > 0 then
+    begin
+      CloseFile(F);
+     EpployeRepFrm.QRImage2.Picture.LoadFromFile(Path);
+
+    end
+    else
+    begin
+      CloseFile(F);
+      EpployeRepFrm.QRImage2.Picture.LoadFromFile(Path);
+    end;
+  end;
+  end;
+
+function TASANFinanceForm.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TASANFinanceForm.Get_AlignDisabled: WordBool;
+begin
+  Result := AlignDisabled;
+end;
+
+function TASANFinanceForm.Get_AlignWithMargins: WordBool;
+begin
+  Result := AlignWithMargins;
+end;
+
+function TASANFinanceForm.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TASANFinanceForm.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TASANFinanceForm.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TASANFinanceForm.Get_BorderWidth: Integer;
+begin
+  Result := Integer(BorderWidth);
+end;
+
+function TASANFinanceForm.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TASANFinanceForm.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TASANFinanceForm.Get_DockSite: WordBool;
+begin
+  Result := DockSite;
+end;
+
+function TASANFinanceForm.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TASANFinanceForm.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TASANFinanceForm.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TASANFinanceForm.Get_ExplicitHeight: Integer;
+begin
+  Result := ExplicitHeight;
+end;
+
+function TASANFinanceForm.Get_ExplicitLeft: Integer;
+begin
+  Result := ExplicitLeft;
+end;
+
+function TASANFinanceForm.Get_ExplicitTop: Integer;
+begin
+  Result := ExplicitTop;
+end;
+
+function TASANFinanceForm.Get_ExplicitWidth: Integer;
+begin
+  Result := ExplicitWidth;
+end;
+
+function TASANFinanceForm.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TASANFinanceForm.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TASANFinanceForm.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TASANFinanceForm.Get_MouseInClient: WordBool;
+begin
+  Result := MouseInClient;
+end;
+
+function TASANFinanceForm.Get_ParentCustomHint: WordBool;
+begin
+  Result := ParentCustomHint;
+end;
+
+function TASANFinanceForm.Get_ParentDoubleBuffered: WordBool;
+begin
+  Result := ParentDoubleBuffered;
+end;
+
+function TASANFinanceForm.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TASANFinanceForm.Get_PopupMode: TxPopupMode;
+begin
+  Result := Ord(PopupMode);
+end;
+
+function TASANFinanceForm.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TASANFinanceForm.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TASANFinanceForm.Get_ScreenSnap: WordBool;
+begin
+  Result := ScreenSnap;
+end;
+
+function TASANFinanceForm.Get_SnapBuffer: Integer;
+begin
+  Result := SnapBuffer;
+end;
+
+function TASANFinanceForm.Get_UseDockManager: WordBool;
+begin
+  Result := UseDockManager;
+end;
+
+function TASANFinanceForm.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TASANFinanceForm.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TASANFinanceForm._Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TASANFinanceForm.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+
+
+
+
+
+procedure TASANFinanceForm.CheckAsan(Fin :String;service:String;url:String);
+var    jsonToSend:TStringList;
+         http:TIDHttp;
+         log :integer;
+         JsonToSends: TMemoryStream;
+  begin
+  log :=0;
+     with AsanDm.IdDSet do
+     begin
+     if Active then
+      close;
+      open;
+      id:=FieldByName('id').AsInteger
+     end;
+   //  memo3.Lines.Add('id aldi  '+timetostr(now)) ;
+   if(service<>'BalanceExp')then
+    with AsanDm.LogDSest do
+     begin
+     if Active then
+      close;
+       SetVariable(':pin',Fin);
+       SetVariable(':service',service);
+       SetVariable(':doc',PaspNum.Text);
+      open;
+      log:=RecordCount;
+     end;
+ //  memo3.Lines.Add('logu yoxladi  '+timetostr(now)) ;
+ if (log>0) and (service<>'Balance') then
+  with AsanDm.InsAsanLog do
+  begin
+  open;
+   Insert;
+   FieldByName('id').AsInteger:=id;
+   FieldByName('pin').AsString:=Fin;
+   FieldByName('service').AsString:=service;
+   FieldByName('status').AsString:='duplicate';
+   FieldByName('info').AsVariant:=AsanDm.LogDSest.FieldByName('info').AsVariant;
+   post;
+   close;
+   memo1.Text := AsanDm.LogDSest.FieldByName('info').AsVariant;
+//  memo3.Lines.Add('Insert eledi  '+timetostr(now)) ;
+   end else
+begin
+try
+ Screen.Cursor:= crHourGlass;
+    http := TIDHttp.Create(nil);
+    IdHTTP1.IOHandler := ssl;
+    ssl := ssl.Create(nil);
+    http.HandleRedirects := true;
+    http.ReadTimeout := 3000;
+   http.Request.CustomHeaders.Add('ApiKey:'+AsanDm.BankInfo.FieldByName('fond_reg_no').AsString );
+  http.Request.CacheControl:='no-cache';
+  http.Request.Connection := 'Keep-Alive';
+  http.Request.Pragma:='no-cache';
+  http.Request.ContentType := 'application/json; charset=utf-8';
+  if Fin='post' then
+  begin
+ Label46.Caption:='Connecting to Asan...' ;
+  JsonToSends := TStringStream.Create(url);
+  memo1.Text := http.Post('http://prod.asanfinance.gov.az/api/v1/Info/Expenses',JsonToSends)
+  end
+   else
+ if service='Personalinfo' then
+  memo1.Text := http.get('http://prod.asanfinance.gov.az'+url+'PinAndDocNumber?pin='+Fin
+  +'&docNumber='+PaspNum.Text)
+ else
+  memo1.Text := http.get('http://prod.asanfinance.gov.az'+url+Fin);
+  Label46.Caption:='Connect to Asan...' ;
+  if service<>'Balance' then
+  with AsanDm.InsAsanLog do
+  begin
+   open;
+   Insert;
+   FieldByName('id').AsInteger:=id;
+   FieldByName('pin').AsString:=Fin;
+   FieldByName('service').AsString:=service;
+   FieldByName('status').AsString:='success';
+   FieldByName('info').AsVariant:=memo1.Text;
+   FieldByName('DOCNUMBER').AsString:=PaspNum.Text;
+   FieldByName('URL').AsString:='http://prod.asanfinance.gov.az'+url+Fin;
+   post;
+   close;
+   end ;
+ http.Destroy;
+ Screen.Cursor:= crDefault;
+  except on E: Exception do
+  begin
+    http.Destroy;
+    Screen.Cursor:= crDefault;
+    ShowMessage('Asan Finansa qoşulmada problem var: ' + E.Message);
+    exit;
+  end;
+
+end;
+end;
+
+end;
+
+procedure TASANFinanceForm.ActiveFormCreate(Sender: TObject);
+begin
+PageControl1.TabIndex:=1;
+  AsanDm := TAsanDm.Create(Self);
+  PersonalQrFm :=TPersonalQrFm.Create(Self);
+  EpployeRepFrm:=TEpployeRepFrm.Create(Self);
+  PesionRepFrm:=TPesionRepFrm.Create(Self);
+  RepEtkisFrm:=TRepEtkisFrm.Create(Self);
+  DateTimePicker1.DateTime:=now();
+  DateTimePicker2.DateTime:=now();
+end;
+
+procedure TASANFinanceForm.BitBtn1Click(Sender: TObject);
+begin
+  with EpployeRepFrm do
+  begin
+   Fill_Edit1;
+    EmpRep.Preview;
+  end;
+end;
+
+procedure TASANFinanceForm.BitBtn2Click(Sender: TObject);
+begin
+ with PesionRepFrm do
+  begin
+    Fill_Edit1;
+    PesionRepFrm.pincode.Caption:=edit2.Text;
+    PensionRep.Preview;
+  end;
+end;
+
+procedure TASANFinanceForm.BitBtn3Click(Sender: TObject);
+begin
+ with RepEtkisFrm do
+  begin
+    Fill_Edit1;
+    RepEtkisFrm.pincode.Caption:=edit3.Text;
+    EtkisRep.Preview;
+  end;
+end;
+
+procedure TASANFinanceForm.Button10Click(Sender: TObject);
+var
+  status:integer;
+
+begin
+  if edit4.Text='' then
+  begin
+    ShowMessage('Vöeni daxil edin!');
+    exit;
+  end;
+ CheckAsan(edit4.Text,'VoenInfo','/api/v2/VoenInfo/');
+     with AsanDm.Status do
+     begin
+     if Active then
+      close;
+       SetVariable(':id',id);
+      open;
+      status:=FieldByName('code').AsInteger ;
+    if (status<>0) or ( not FieldByName('Message').IsNull ) then
+      begin
+       ShowMessage(FieldByName('Message').AsString);
+       exit;
+      end;
+     end;
+end;
+
+procedure TASANFinanceForm.Button1Click(Sender: TObject);
+var
+i:integer;
+txt,nam:string;
+begin
+   for i :=0 to ComponentCount-1  do
+      begin
+       if (Components[i].ClassType = TEdit) and ((Components[i] as TEdit).Tag=20) then
+       begin
+        nam:=(Components[i] as TEdit).name   ;
+        txt:=(Components[i] as TEdit).Text   ;
+        if nam<>'' then
+         PersonalQrFm.Print(txt,nam);
+     end;
+      end;
+  with PersonalQrFm do
+  begin
+
+  QRImage1.Picture := Image1.Picture;
+  Fill_Edit;
+  PersonalRep.Preview;
+  end;
+end;
+
+procedure TASANFinanceForm.Button2Click(Sender: TObject);
+var
+  s1: string;
+  LJsonObj,LJsonObjs: TJSONObject;
+  respons: TJSONArray;
+   Fs : TFileStream;
+  S : AnsiString;
+  FileName : String;
+  f : TFileStream;
+  graphic : TOleGraphic;
+  status,i:integer;
+begin
+   i:=0;
+ if (PIN.Text='') or (PaspNum.Text='') then
+  begin
+    ShowMessage('Finkodu və ya Serya No daxil edin!');
+    exit;
+  end;
+ memo3.Lines.Add('Bashladi  '+timetostr(now)) ;
+ CheckAsan(PIN.Text,'Personalinfo','/api/v1/PersonalInfo/');
+ memo3.Lines.Add('Begin parsing  '+timetostr(now)) ;
+  s1 := Memo1.Text;
+  LJsonObj := TJSONObject.ParseJSONValue(TEncoding.UTF8.GetBytes(s1), 0) as TJSONObject;
+
+  LJsonObjs :=TJSONObject(TJSONArray(LJsonObj.Get('Status').JsonValue));
+  status:=strtoint(TJSONPair(LJsonObjs.Get('Code')).JsonValue.Value);
+  if status<>0 then
+  begin
+   ShowMessage(TJSONPair(LJsonObjs.Get('Message')).JsonValue.Value);
+   exit;
+  end;
+  try
+    try
+     LJsonObj :=TJSONObject(TJSONArray(LJsonObj.Get('Response').JsonValue));
+    for i :=0 to ComponentCount-1  do
+      begin
+       if (Components[i].ClassType = TEdit) and ((Components[i] as TEdit).Tag=20) then
+
+         (Components[i] as TEdit).Text:=TJSONPair(LJsonObj.Get((Components[i] as TEdit).name)).JsonValue.Value
+
+     end;
+
+      except on E: Exception do
+  begin
+   ShowMessage('Pinkod yanlışdır! '+ E.Message);
+   exit;
+  end;
+      end ;
+  memo3.Lines.Add('end parsing  '+timetostr(now)) ;
+  FileName := ExtractFilePath(ParamStr(0)) + 'image.jpg';
+  Fs := TFileStream.Create(FileName, fmCreate);
+  Memo2.Text:=TJSONPair(LJsonObj.Get('Image')).JsonValue.Value;
+  S := DecodeString( Trim(Memo2.Text) );
+  Fs.Write(S[1], Length(S));
+   Image1.Picture := nil;
+   memo3.Lines.Add('sekil  '+timetostr(now)) ;
+  finally
+      FreeAndNil(Fs);
+
+    LJsonObj.Free;
+  end;
+     graphic := TOleGraphic.Create;
+    f := TFileStream.Create (FileName, fmOpenRead or fmShareDenyNone);
+    try
+      graphic.LoadFromStream(f);
+      Image1.Picture.Assign(graphic);
+    finally
+      f.Free
+    end;
+end;
+
+procedure TASANFinanceForm.Button3Click(Sender: TObject);
+var
+  s1: string;
+  LJsonObj,LJsonObjs: TJSONObject;
+  respons: TJSONArray;
+  status:integer;
+begin
+ CheckAsan('','Balance','/api/v1/Info/Balance');
+  s1 := Memo1.Text;
+  LJsonObj := TJSONObject.ParseJSONValue(TEncoding.UTF8.GetBytes(s1), 0) as TJSONObject;
+
+  LJsonObjs :=TJSONObject(TJSONArray(LJsonObj.Get('Status').JsonValue));
+  status:=strtoint(TJSONPair(LJsonObjs.Get('Code')).JsonValue.Value);
+  if status<>0 then
+  begin
+   ShowMessage(TJSONPair(LJsonObjs.Get('Message')).JsonValue.Value);
+   exit;
+  end;
+    LJsonObj :=TJSONObject(TJSONArray(LJsonObj.Get('Response').JsonValue));
+    Label21.Caption:=TJSONPair(LJsonObj.Get('Balance')).JsonValue.Value;
+end;
+
+procedure TASANFinanceForm.Button4Click(Sender: TObject);
+var
+  status:integer;
+
+begin
+PaspNum.Text:='';
+  if edit1.Text='' then
+  begin
+    ShowMessage('Pinkodu daxil edin!');
+    exit;
+  end;
+ CheckAsan(edit1.Text,'Employeeinfo','/api/v2/EmployeeInfo/');
+   with AsanDm.Status do
+     begin
+     if Active then
+      close;
+       SetVariable(':id',id);
+      open;
+      status:=FieldByName('code').AsInteger ;
+    if (status<>0) or ( not FieldByName('Message').IsNull ) then
+      begin
+       ShowMessage(FieldByName('Message').AsString);
+       exit;
+      end;
+     end;
+    with AsanDm.EmployerDataSet do
+     begin
+     if Active then
+      close;
+       SetVariable(':id',id);
+      open;
+     end;
+   with AsanDm.DeActiveEmpDSet do
+     begin
+     if Active then
+      close;
+       SetVariable(':id',id);
+      open;
+     end;
+end;
+
+procedure TASANFinanceForm.Button5Click(Sender: TObject);
+var
+  status:integer;
+begin
+PaspNum.Text:='';
+  if edit2.Text='' then
+  begin
+    ShowMessage('Pinkodu daxil edin!');
+    exit;
+  end;
+ CheckAsan(edit2.Text,'PensionInfo','/api/v2/PensionInfo/');
+   with AsanDm.Status do
+     begin
+     if Active then
+      close;
+       SetVariable(':id',id);
+      open;
+      status:=FieldByName('code').AsInteger ;
+    if (status<>0) or ( not FieldByName('Message').IsNull ) then
+      begin
+       ShowMessage(FieldByName('Message').AsString);
+       exit;
+      end;
+     end;
+   with AsanDm.PensionDSet do
+     begin
+     if Active then
+      close;
+       SetVariable(':id',id);
+      open;
+     end;
+end;
+
+procedure TASANFinanceForm.Button6Click(Sender: TObject);
+var
+  status:integer;
+
+begin
+  if edit3.Text='' then
+  begin
+    ShowMessage('Pinkodu daxil edin!');
+    exit;
+  end;
+ CheckAsan(edit3.Text,'FarmInfo','/api/v1/FarmInfo/Pin/');
+   with AsanDm.Status do
+     begin
+     if Active then
+      close;
+       SetVariable(':id',id);
+      open;
+      status:=FieldByName('code').AsInteger ;
+    if (status<>0) or ( not FieldByName('Message').IsNull ) then
+      begin
+       ShowMessage(FieldByName('Message').AsString);
+       exit;
+      end;
+     end;
+    with AsanDm.FarmPersonDset do
+     begin
+     if Active then
+      close;
+       SetVariable(':id',id);
+      open;
+     end;
+     with AsanDm.FarmSet do
+     begin
+     if Active then
+      close;
+       SetVariable(':id',id);
+      open;
+     end;
+end;
+
+procedure TASANFinanceForm.Button7Click(Sender: TObject);
+var x:string;
+status:integer;
+begin
+
+x:='{ "StartDate": "'+SysUtils.FormatDateTime('yyyy-MM-dd HH:mm:ss',DateTimePicker1.datetime )+
+'", "EndDate": "' +SysUtils.FormatDateTime('yyyy-MM-dd HH:mm:ss',DateTimePicker2.datetime )+
+'","Offset": '+ CurrToStr(CurrencyEdit2.Value)+',"Limit":'+ CurrToStr(CurrencyEdit1.Value)+'}' ;
+ memo4.Text:=x;
+ CheckAsan('post','BalanceExp',x);
+    with AsanDm.Status do
+     begin
+     if Active then
+      close;
+       SetVariable(':id',id);
+      open;
+      status:=FieldByName('code').AsInteger ;
+    if (status<>0) or ( not FieldByName('Message').IsNull ) then
+      begin
+       ShowMessage(FieldByName('Message').AsString);
+       exit;
+      end;
+     end;
+
+  with AsanDm.XercSet do
+     begin
+     if Active then
+      close;
+       SetVariable(':id',id);
+      open;
+     end;
+end;
+
+procedure TASANFinanceForm.Button8Click(Sender: TObject);
+begin
+with ExcelExport do
+  begin
+    Connect;
+    ExportDataset(AsanDm.XercSet,'Xercler',True);
+    Disconnect;
+  end;
+end;
+
+procedure TASANFinanceForm.Button9Click(Sender: TObject);
+var
+l_name :string;
+l_custid:integer;
+v_gender:integer;
+v_fam_status:integer;
+begin
+ l_name:=name.Text;
+ if DocumentNumber.Text='' then
+  begin
+   ShowMessage('Öncə Asan Sorğunu edin');
+   exit;
+  end;
+
+ if Gender.Text='Qadın' then
+    v_gender:=2
+    else
+    v_gender:=1;
+
+    if MaritalStatus.Text='Subay' then
+     v_fam_status:=2
+     else
+     v_fam_status:=1;
+
+
+  l_custid:=0;
+  with AsanDm do
+   l_custid :=
+         PrPackage.CallIntegerFunction('add_cust',[
+                       'p_passnum'   , DocumentNumber.Text,
+                       'p_paspin'    , PIN.Text,
+                       'p_name'      , l_name,
+                       'p_soname'    , Patronymic.Text,
+                       'p_lastname'  , Surname.Text,
+                       'p_birthday'  , StrToDate(BirthDate.Text),
+                       'p_birthplace', BirthAddress.Text,
+                       'p_sex'       , v_gender ,
+                       'p_address'    , RegistrationAddress.Text,
+                       'p_paspdate'   ,StrToDate(GivenDate.Text),
+                       'p_passexpire' ,StrToDate(ExpireDate.Text),
+                       'p_fam_status'  ,v_fam_status,
+                       'p_paspplace',  GivenOrganization.Text,
+                       'p_citizenship' ,Citizenship.Text,
+                       'p_work_place' ,'',
+                       'p_work_post', '',
+                       'p_monthlyprofit',''
+ ]);
+     if l_custid>0 then
+      ShowMessage('Müştəri uğurla açıldı müştəri idsi-'+IntToStr(l_custid));
+end;
+
+procedure TASANFinanceForm.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TASANFinanceForm.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TASANFinanceForm.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TASANFinanceForm.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TASANFinanceForm.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TASANFinanceForm.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TASANFinanceForm.MouseEnterEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnMouseEnter;
+end;
+
+procedure TASANFinanceForm.MouseLeaveEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnMouseLeave;
+end;
+
+procedure TASANFinanceForm.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TASANFinanceForm.Set_AlignWithMargins(Value: WordBool);
+begin
+  AlignWithMargins := Value;
+end;
+
+procedure TASANFinanceForm.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TASANFinanceForm.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TASANFinanceForm.Set_AxBorderStyle(Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TASANFinanceForm.Set_BorderWidth(Value: Integer);
+begin
+  BorderWidth := TBorderWidth(Value);
+end;
+
+procedure TASANFinanceForm.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TASANFinanceForm.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TASANFinanceForm.Set_DockSite(Value: WordBool);
+begin
+  DockSite := Value;
+end;
+
+procedure TASANFinanceForm.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TASANFinanceForm.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TASANFinanceForm.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TASANFinanceForm.Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TASANFinanceForm.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := string(Value);
+end;
+
+procedure TASANFinanceForm.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TASANFinanceForm.Set_ParentCustomHint(Value: WordBool);
+begin
+  ParentCustomHint := Value;
+end;
+
+procedure TASANFinanceForm.Set_ParentDoubleBuffered(Value: WordBool);
+begin
+  ParentDoubleBuffered := Value;
+end;
+
+procedure TASANFinanceForm.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TASANFinanceForm.Set_PopupMode(Value: TxPopupMode);
+begin
+  PopupMode := TPopupMode(Value);
+end;
+
+procedure TASANFinanceForm.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TASANFinanceForm.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TASANFinanceForm.Set_ScreenSnap(Value: WordBool);
+begin
+  ScreenSnap := Value;
+end;
+
+procedure TASANFinanceForm.Set_SnapBuffer(Value: Integer);
+begin
+  SnapBuffer := Value;
+end;
+
+procedure TASANFinanceForm.Set_UseDockManager(Value: WordBool);
+begin
+  UseDockManager := Value;
+end;
+
+procedure TASANFinanceForm.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TASANFinanceForm,
+    Class_ASANFinanceForm,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

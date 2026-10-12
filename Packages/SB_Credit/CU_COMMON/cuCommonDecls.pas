@@ -1,0 +1,121 @@
+﻿unit cuCommonDecls;
+
+interface
+
+uses
+  SysUtils, Classes, Controls, DBGrids, Forms ,Messages ,DBGridEh ,DB;
+
+
+const
+  WM_SHOWDOCKPANEL = WM_USER + 1;
+
+  sID = 'ID';
+  sNO = 'NumberOfCredit';
+
+type
+  TRefreshMode = (rmLocateAfterRefresh, rmGoBookmarkAfterRefresh, rmMoveRecNoAfterRefresh, rmRefreshOnly);
+
+  ENoCreditSelected = class(Exception);
+  
+var
+  CuCommonDBGrid : TDBGridEh;
+  CommonApplication : TApplication;
+  CommonScreen : TScreen;
+
+procedure LogWarning(OutputMsg : String);
+procedure LogError(OutputMsg : String);
+procedure LogInformation(OutputMsg : String; MakeVisible : Boolean = False);
+
+function Get_SelectedCrdID : Integer;
+function Get_SelectedCrdNo : String;
+
+function TrDelayed_Show(AOwner : TComponent;SCaption : String = '') : Boolean;
+
+procedure SafeRefresh(ClearSelectedRows : Boolean;
+  RefreshMode : TRefreshMode = rmMoveRecNoAfterRefresh);
+
+implementation
+
+uses
+  cuLogOutputImpl ,cuTemporaryTransactionsViewFormImpl;
+
+procedure LogWarning(OutputMsg : String);
+begin
+  CufrmLogOutput.LogWarning(OutputMsg)
+end;
+
+procedure LogError(OutputMsg : String);
+begin
+  CufrmLogOutput.LogError(OutputMsg)
+end;
+
+procedure LogInformation(OutputMsg : String; MakeVisible : Boolean = False);
+begin
+  CufrmLogOutput.LogInformation(OutputMsg, MakeVisible)
+end;
+
+function Get_SelectedCrdID : Integer;
+begin
+  if CuCommonDBGrid.DataSource.DataSet.FieldByName(sID).IsNull then
+   raise ENoCreditSelected.Create('Heç bir kredit seçilməyib !');
+  Result := CuCommonDBGrid.DataSource.DataSet.FieldByName(sID).AsInteger;
+end;
+
+function Get_SelectedCrdNo : String;
+begin
+  if CuCommonDBGrid.DataSource.DataSet.FieldByName(sID).IsNull then
+   raise ENoCreditSelected.Create('Heç bir kredit seçilməyib!');
+  Result := CuCommonDBGrid.DataSource.DataSet.FieldByName(sNO).AsString;
+end;
+
+function TrDelayed_Show(AOwner : TComponent;SCaption : String = '') : Boolean;
+begin
+  with CuTrViewForm.Create(AOwner) do
+  try
+    if  SCaption <> '' then
+      Caption := SCaption;
+    Result := ShowModal = mrOk;
+    Update;
+  finally
+    Release
+  end;
+end;
+
+procedure SafeRefresh(ClearSelectedRows : Boolean;
+  RefreshMode : TRefreshMode = rmMoveRecNoAfterRefresh);
+var
+  SavePoint : TBookmark;
+  SaveID : Integer;
+  SaveRecNo : Integer;
+begin
+  with CuCommonDBGrid.DataSource.DataSet do
+  case RefreshMode of
+    rmLocateAfterRefresh : begin
+      SaveID := Get_SelectedCrdID;
+      Refresh;
+      Locate(sID,SaveID,[]);
+    end;
+    rmGoBookmarkAfterRefresh :begin
+      SavePoint := GetBookmark;
+      Refresh;
+      if BookmarkValid(SavePoint) then
+      GotoBookmark(SavePoint);
+    end;
+    rmMoveRecNoAfterRefresh :begin
+      SaveRecNo := RecNo;
+      Refresh;
+      if SaveRecNo > RecordCount then
+        SaveRecNo := RecordCount;
+         
+      RecNo := SaveRecNo;  
+    end;
+    rmRefreshOnly : Refresh;
+  end; // CASE
+
+  if ClearSelectedRows then
+  with CuCommonDBGrid do
+    SelectedRows.Clear;
+
+end;
+
+end.

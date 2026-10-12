@@ -1,0 +1,54 @@
+unit FormUnit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ExtCtrls, XFSCtrls, DB, OracleData, Grids, XDBGrids;
+
+type
+  TForm_balace_settings = class(TForm)
+    XFPanel1: TXFPanel;
+    XDBGrid1: TXDBGrid;
+    XDBGrid2: TXDBGrid;
+    XDBGrid3: TXDBGrid;
+    Ods_person: TOracleDataSet;
+    Ods_valyuta: TOracleDataSet;
+    Ods_balance_settings: TOracleDataSet;
+    Dsrc_person: TDataSource;
+    Dsrc_valyuta: TDataSource;
+    Dsrc_balance_settings: TDataSource;
+    Ods_personID: TFloatField;
+    Ods_personNAME: TWideStringField;
+    Ods_balance_settingsNAME: TWideStringField;
+    Ods_balance_settingsSHORT_BALCN: TFloatField;
+    Ods_balance_settingsLONG_BALCN: TFloatField;
+    Ods_balance_settingsNEWSORT_BALCN: TFloatField;
+    Ods_balance_settingsNEWLONGBALCN: TFloatField;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form_balace_settings: TForm_balace_settings;
+   procedure InitPlugin(s:string);export;
+implementation
+uses sboapiDataModuleimpl;
+
+{$R *.dfm}
+
+   procedure InitPlugin(s:string);export;
+begin
+   Form_balace_settings.ShowModal;
+end;
+exports
+     InitPlugin;
+
+initialization
+ Form_balace_settings := TForm_balace_settings.Create(Application);
+end.
+
+
+end.

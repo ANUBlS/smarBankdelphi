@@ -1,0 +1,878 @@
+﻿unit ScheduleMainFormImpl;
+
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+   Grids, DBGrids, ExtCtrls, StdCtrls, Mask, DBCtrls, ToolWin,
+  ComCtrls, ImgList, ActnList, DBGridEh, DBCtrlsEh, CMCurrencyEdit, Buttons, DB,
+  CMExcelExport, DBGridEhGrouping, GridsEh, OleServer, ExcelXP, OracleData;
+     const
+  wdFirstPageNumber = 1;
+type
+  TScheduleForm = class(TForm)
+    ToolBarImages: TImageList;
+    ScheludeActionList: TActionList;
+    ActionSave: TAction;
+    ActionPrint: TAction;
+    ActionClose: TAction;
+    GroupBox1: TGroupBox;
+    GroupBox2: TGroupBox;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label7: TLabel;
+    DBEdit1: TDBEdit;
+    DBEdit2: TDBEdit;
+    DBEdit3: TDBEdit;
+    DBEdit4: TDBEdit;
+    ToolBar1: TToolBar;
+    ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
+    ToolButton4: TToolButton;
+    ToolButton5: TToolButton;
+    ToolButton6: TToolButton;
+    ToolButton7: TToolButton;
+    ToolButton9: TToolButton;
+    SchduleGrid: TDBGridEh;
+    ToolButton8: TToolButton;
+    ToolBar2: TToolBar;
+    ToolButton10: TToolButton;
+    ToolButton11: TToolButton;
+    ToolButton12: TToolButton;
+    ToolButton13: TToolButton;
+    ToolButton14: TToolButton;
+    ToolButton15: TToolButton;
+    ToolButton16: TToolButton;
+    ToolButton17: TToolButton;
+    ToolButton18: TToolButton;
+    DBEdit5: TDBEdit;
+    ActionAdd: TAction;
+    ActionEdit: TAction;
+    ActionDelete: TAction;
+    ActionRefresh: TAction;
+    ActionAnnuty: TAction;
+    ToolButton3: TToolButton;
+    ToolButton19: TToolButton;
+    ActionChange: TAction;
+    ActionPr: TAction;
+    ToolButton20: TToolButton;
+    ToolButton21: TToolButton;
+    OracleDataSet1: TOracleDataSet;
+    OpenDialog1: TOpenDialog;
+    ods_seduludelet: TOracleDataSet;
+    ExcelWorksheet1: TExcelWorksheet;
+    ExcelWorkbook1: TExcelWorkbook;
+    ExcelApplication1: TExcelApplication;
+    CMExcelExport1: TCMExcelExport;
+    OracleDataSet1ID: TFloatField;
+    OracleDataSet1CREDITID: TFloatField;
+    OracleDataSet1PAYMENTDATE: TDateTimeField;
+    OracleDataSet1PRINCIPAL: TFloatField;
+    OracleDataSet1INTEREST: TFloatField;
+    OracleDataSet1IPINTEREST: TFloatField;
+    OracleDataSet1REST: TFloatField;
+    OracleDataSet1CHANCEDATE: TDateTimeField;
+    OracleDataSet1PORTDATE: TDateTimeField;
+    OracleDataSet1CREATE_TYPE: TWideStringField;
+    ods_seduludeletID: TFloatField;
+    ods_seduludeletCREDITID: TFloatField;
+    ods_seduludeletPAYMENTDATE: TDateTimeField;
+    ods_seduludeletPRINCIPAL: TFloatField;
+    ods_seduludeletINTEREST: TFloatField;
+    ods_seduludeletIPINTEREST: TFloatField;
+    ods_seduludeletREST: TFloatField;
+    ods_seduludeletCHANCEDATE: TDateTimeField;
+    ods_seduludeletPORTDATE: TDateTimeField;
+    ods_seduludeletCREATE_TYPE: TWideStringField;
+    Button1: TButton;
+    OracleDataSet2: TOracleDataSet;
+    OracleDataSet2KRNO: TWideStringField;
+    OracleDataSet2INN: TWideStringField;
+    OracleDataSet3: TOracleDataSet;
+    OracleDataSet3NUMBEROFCREDIT: TWideStringField;
+    OracleDataSet3NAME: TWideStringField;
+    OracleDataSet3ADDRESS: TWideStringField;
+    OracleDataSet3PASS: TWideStringField;
+    OracleDataSet3PASSPIN: TWideStringField;
+    OracleDataSet3DATEOFCONCLUSION: TDateTimeField;
+    OracleDataSet3CREDITLINEAMOUNT: TFloatField;
+    OracleDataSet3ANNUALYINTERESTRATE: TFloatField;
+    OracleDataSet3PERIODCONTRACTS: TFloatField;
+    DataSet11: TOracleDataSet;
+    DataSet11PRINCIPAL: TFloatField;
+    DataSet11INTEREST: TFloatField;
+    DataSet11REST: TFloatField;
+    DataSet11PAYMENTDATE: TDateTimeField;
+    OracleDataSet2AZ_NAME: TWideStringField;
+    DataSet11ID: TFloatField;
+    DataSet11PAMENT: TFloatField;
+    procedure FormDestroy(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure ActionCloseExecute(Sender: TObject);
+    procedure ActionAddExecute(Sender: TObject);
+    procedure ActionDeleteExecute(Sender: TObject);
+    procedure ActionRefreshExecute(Sender: TObject);
+    procedure ActionSaveExecute(Sender: TObject);
+    procedure ActionSaveUpdate(Sender: TObject);
+    procedure ActionAnnutyExecute(Sender: TObject);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure ActionPrintExecute(Sender: TObject);
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+    procedure SchduleGridKeyPress(Sender: TObject; var Key: Char);
+    procedure ActionChangeExecute(Sender: TObject);
+    procedure ActionPrintUpdate(Sender: TObject);
+    procedure ActionPrExecute(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure ToolButton21Click(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+  private
+
+  public
+    procedure  ShowPaymentSchedule;
+  end;
+
+var
+  ScheduleForm: TScheduleForm;
+
+implementation
+
+uses ScheduleDataModuleImpl, CommonDecls, SbSystem, SheduleAddUnt,
+  AnnutyPaymentFormImpl,frmReportTypeImpl, ReportImpl,ChangeScheduleImpl,
+   sboapiDataModuleImpl, SBTranslateProc,ComObj,WordXP;
+
+{$R *.DFM}
+
+var
+  CreditID : Integer;
+ // v_type :string;
+//  AmountAfterPay : Real;
+
+procedure  TScheduleForm.ShowPaymentSchedule;
+
+resourcestring
+  rsScheludeCaption = '%s № li müqavilə üçün ödəmə planı.';
+  
+begin
+
+  ScheduleDataModule := TScheduleDataModule.Create(Self);
+  frmReportType := TfrmReportType.Create(Self);
+  ReportForm := TReportForm.create(self);
+  AddEditForm := TAddEditForm.Create(Self);
+  AnnutyForm := TAnnutyForm.Create(Self);
+  FrmChangeSchedule := TFrmChangeSchedule.Create(Self);
+
+
+  Caption := Format(rsScheludeCaption,[Get_SelectedCrdNo]);
+  CreditID := Get_SelectedCrdID;
+
+  with ScheduleDataModule do
+  begin
+    with ScheduleData do
+    begin
+      ClearVariables;
+      SetVariable('CreditID',CreditID);
+      Open
+    end;
+    with BoorowerInfo do
+    begin
+      ClearVariables;
+      SetVariable('CreditID',CreditID);
+      Open    ;
+       ReportForm.QRLabel9.caption := BoorowerInfoNAME.AsString+' ______________________';
+
+    end;
+    with CreditInfo do
+    begin
+      ClearVariables;
+      SetVariable('ID',CreditID);
+      Open
+    end;
+
+    with   BankInfo do
+    begin
+      close;
+      SetVariable('v_fil',CreditInfoBRANCHID.AsInteger);
+      open ;
+
+        ReportForm.QRLabel8.caption :=' ______________________'+BankInfoSEDRFIL.asstring ;
+
+    end;
+
+
+
+
+
+
+  {   HeadOfficeID.open;
+
+          if FilialInfo.Active then FilialInfo.CloseAll;
+          FilialInfo.SetVariable('brid',CreditInfo.FieldByName('BranchID').AsInteger);
+          FilialInfo.Open;
+
+
+
+         if FilialInfo.FieldByName('ID').AsInteger = HeadOfficeID.FieldbyName('minid').AsInteger then
+           ReportForm.QRLabel10.caption := 'Müştəri xidmətləri departamentinin direktoru______________________________'
+         else
+           ReportForm.QRLabel10.caption := 'Filial direktoru                                                         ______________________________';
+       }
+  end;
+  
+  ShowModal;
+end;
+
+
+
+procedure TScheduleForm.FormDestroy(Sender: TObject);
+begin
+
+ frmReportType.Free;
+  ReportForm.Free;
+
+  AddEditForm.Free;
+  AnnutyForm.Free;
+  FrmChangeSchedule.Free;
+  ScheduleDataModule.Free;
+
+end;
+
+procedure TScheduleForm.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+//v_type:='';
+  with ScheduleDataModule do
+  begin
+    with ScheduleData.Session do
+    Rollback;
+    ScheduleData.CloseAll;
+    CreditInfo.CloseAll;
+    BoorowerInfo.CloseAll;
+  end;  
+end;
+
+procedure TScheduleForm.FormCreate(Sender: TObject);
+begin
+SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TScheduleForm.ActionCloseExecute(Sender: TObject);
+begin
+  Close;
+end;
+
+
+procedure TScheduleForm.ActionAddExecute(Sender: TObject);
+
+  function PlaneInsert() : Boolean;
+  begin
+    with ScheduleDataModule.ScheduleData do
+    begin
+      Insert;
+      FieldByName('CreditID').AsInteger := CreditID;
+    end;
+    Result := AddEditForm.ShowModal = mrOk;
+  end;
+
+function PlaneEdit() : Boolean;
+  begin
+
+    with ScheduleDataModule.ScheduleData do
+      Edit;
+      Result := AddEditForm.ShowModal = mrOk;
+    end;
+
+ var
+  SavePlace : TBookmark;
+  count :integer;
+begin
+ // with ScheduleDataModule,adm do
+ count:=ScheduleDataModule.adm.CallIntegerFunction('getadmaddition',['PAYMENTSHE']);
+
+  if count=0 then
+   begin
+    showmessage('Sizin dəyişmək hüququnuz yoxdur!'+#13+'Əlavə məlumat üçün sistem administratoruna müracət edin.');
+    exit;
+   end;
+
+  if (Sender as TAction).Tag = 1 then
+  begin
+    with ScheduleDataModule.ScheduleData do
+    if PlaneInsert then
+    begin
+      Post;
+      //SavePlace := GetBookmark;
+      ScheduleForm.ActionSaveExecute(Sender);
+      Refresh;
+      {if BookmarkValid(SavePlace) then
+        GotoBookmark(SavePlace);
+      FreeBookmark(SavePlace); }
+    end
+    {else Cancel }
+  end else
+  begin
+    with ScheduleDataModule.ScheduleData do
+    begin
+
+    if PlaneEdit then
+      begin
+
+      Post;
+      //SavePlace := GetBookmark;
+      ScheduleForm.ActionSaveExecute(Sender);
+      Refresh;
+      {if BookmarkValid(SavePlace) then
+        GotoBookmark(SavePlace);
+      FreeBookmark(SavePlace);}
+    end {else Cancel }
+  end;
+   end;
+end;
+
+procedure TScheduleForm.ActionDeleteExecute(Sender: TObject);
+resourcestring rs_DelshedulePayments = ' Silinməsinə əminsinizmi? ';
+var
+  count,I : Integer;
+begin
+   with ScheduleDataModule,adm do
+  count:=CallIntegerFunction('getadmaddition',['PAYMENTSHE']);
+
+  if count=0 then
+  begin
+ showmessage('Sizin dəyişmək hüququnuz yoxdur!'+#13+'Əlavə məlumat üçün sistem administratoruna müracət edin.');
+ exit;
+  end;
+ if MessageDlg(rs_DelshedulePayments,
+      mtConfirmation, [mbYes, mbNo], 0) = mrNO then  Exit;
+
+  with SchduleGrid do
+  for I := SelectedRows.Count - 1 downto 0 do
+  begin
+    DataSource.DataSet.GotoBookmark(Pointer(SelectedRows[I]));
+    DataSource.DataSet.Delete;
+  end;
+end;
+
+procedure TScheduleForm.ActionRefreshExecute(Sender: TObject);
+begin
+  with ScheduleDataModule.ScheduleData do
+    Refresh;
+end;
+
+procedure TScheduleForm.ActionSaveExecute(Sender: TObject);
+begin
+  with ScheduleDataModule, ScheduleData.Session do
+  begin
+    ApplyUpdates([ScheduleData],True);
+    Commit;
+  end;
+end;
+
+procedure TScheduleForm.ActionSaveUpdate(Sender: TObject);
+begin
+  with ScheduleDataModule.ScheduleData do
+  (Sender as TAction).Enabled := Active and UpdatesPending;
+end;
+ 
+procedure TScheduleForm.Button1Click(Sender: TObject);
+var
+   WordApp: OleVariant;
+   LogoPath:string; ii,j, i:integer;
+    Doc: OleVariant; InlineShape: OleVariant;
+   Table, Table1,Table3, Table2: OleVariant;
+   Range: OleVariant;
+   LineShape: OleVariant;
+   LeftPosition: Single;
+   TopPosition: Single;
+   test:string;         CurrentPage: Integer;
+   Row: Integer;
+   TextBox,TextRange,TextRange1,TextRange2,TextRange3,TextRange4,TextRange5: OleVariant;
+   TextRange_xett,TextRange_xett1 : OleVariant;
+
+  LastTable11: OleVariant;
+  LastRow11: Integer;
+  LineShape11: OleVariant;
+
+   LastRowCount:integer;
+   LastTable: OleVariant;
+  LastRow: OleVariant;
+
+begin
+  WordApp := CreateOleObject('Word.Application');
+ // WordApp.Visible := True; // Word t?tbiqini görün?n etm?k
+  Doc := WordApp.Documents.Add;
+
+  // Logo ?lav? et
+   LogoPath := 'C:\Məsələn\logo.png'; // Logo s?kilinin tam yolu
+   InlineShape:=Doc.Content.InlineShapes.AddPicture(LogoPath, False, True,Doc.Range);
+        InlineShape.Width := 150;   // Ist?diyiniz genislik (santimetr, düym v? ya piksel)
+        InlineShape.Height := 90;
+       //  InlineShape.Left := 100; // Soldan konum (piksel cinsinden)
+      //   InlineShape.Top := 50;
+      Doc.Content.InsertParagraphAfter;
+    TextRange1 := Doc.Shapes.AddTextbox(1, 500, 60, 180, 30); // Belgenin basina konumlandir
+
+    TextRange1.TextFrame.TextRange.Text := ' VÖEN:  '+OracleDataSet2inn.asstring;
+    TextRange1.left:=20;
+    TextRange1.top :=95;
+    TextRange1.TextFrame.TextRange.Font.Bold := True; // Kalin yap
+    TextRange1.TextFrame.TextRange.Font.Size := 14;
+    TextRange1.line.Visible := False;
+
+     Doc.Content.InsertParagraphAfter;
+  Table1 := Doc.Tables.Add(Doc.Range(Doc.Content.end-1, Doc.Content.End - 1), 4, 2);
+                                // Doc.Tables.Add(Doc.Range(0, 0), 2, 2);
+
+  Table1.Cell(1, 1).Range.Text := 'Müqvilə №';
+  Table1.Cell(1, 2).Range.Text := OracleDataSet3NUMBEROFCREDIT.asstring;
+  Table1.Cell(2, 1).Range.Text := 'Borcalan';
+  Table1.Cell(2, 2).Range.Text := OracleDataSet3NAME.asstring;
+  Table1.Cell(3, 1).Range.Text := 'Vəsiqə';
+  Table1.Cell(3, 2).Range.Text := OracleDataSet3PASS.asstring;
+  Table1.Cell(4, 1).Range.Text := 'Ünvan';
+  Table1.Cell(4, 2).Range.Text := OracleDataSet3ADDRESS.asstring;
+  Table1.Borders.Enable :=1;
+ // Table1.Range.ParagraphFormat.Alignment :=1;
+  Table1.Columns.Item(1).Width := 100;
+  Table1.Columns.Item(2).Width := 290;
+
+  for i := 1 to Table1.Rows.Count do
+    begin
+    Table1.Cell(i, 1).Range.ParagraphFormat.Alignment := 3; // 1 - mərkəz
+    Table1.Cell(i, 2).Range.ParagraphFormat.Alignment := 3; // 1 - mərkəz
+    end;
+     for i := 1 to Table1.Rows.Count do
+  begin
+
+    Table1.Cell(i, 1).Range.Font.Name := 'Arial';
+    Table1.Cell(i, 1).Range.Font.Size := 14;
+    Table1.Cell(i, 1).Range.Font.bold :=1;
+
+    Table1.Cell(i, 2).Range.Font.Name := 'Arial';
+    Table1.Cell(i, 2).Range.Font.Size := 12;
+    Table1.Cell(i, 2).Range.Font.bold :=1;
+   end;////////////////
+
+     Doc.Content.InsertParagraphAfter;
+     Table2 := Doc.Tables.Add(Doc.Range(Doc.Content.end-1, Doc.Content.End - 1), 4, 4);
+   // Doc.Tables.Add(Doc.Range(0, 0), 2, 2);
+  Table2.Cell(1, 1).Range.Text := 'Tarix';
+  Table2.Cell(1, 2).Range.Text := OracleDataSet3DATEOFCONCLUSION.asstring;
+
+  Table2.Cell(2, 1).Range.Text := 'Məbləğ';
+  Table2.Cell(2, 2).Range.Text := OracleDataSet3CREDITLINEAMOUNT.asstring;
+
+  Table2.Cell(2, 3).Range.Text := 'Müqvilə №';
+  Table2.Cell(2, 3).Range.Font.Name := 'Arial';
+  Table2.Cell(2, 3).Range.Font.Size := 12;
+  Table2.Cell(2, 3).Range.Font.Bold := 1;
+
+  Table2.Cell(2, 4).Range.Text := OracleDataSet3NUMBEROFCREDIT.asstring;
+  Table2.Cell(2, 4).Range.Font.Name := 'Arial';
+  Table2.Cell(2, 4).Range.Font.Size := 12;
+  Table2.Cell(2, 4).Range.Font.Bold := 1;
+
+  Table2.Cell(3, 1).Range.Text := 'Faiz dərəcəsi';
+  Table2.Cell(3, 2).Range.Text := OracleDataSet3ANNUALYINTERESTRATE.asstring;
+
+  Table2.Cell(3, 3).Range.Text := 'FIN kod:';
+  Table2.Cell(3, 3).Range.Font.Name := 'Arial';
+  Table2.Cell(3, 3).Range.Font.Size := 12;
+  Table2.Cell(3, 3).Range.Font.Bold := 1;
+
+  Table2.Cell(3, 4).Range.Text := OracleDataSet3PASSPIN.asstring;
+  Table2.Cell(3, 4).Range.Font.Name := 'Arial';
+  Table2.Cell(3, 4).Range.Font.Size := 12;
+  Table2.Cell(3, 4).Range.Font.Bold := 1;
+
+  Table2.Cell(4, 1).Range.Text := 'Ödəmə müddəti';
+  Table2.Cell(4, 2).Range.Text := OracleDataSet3PERIODCONTRACTS.asstring;
+
+   Table2.Cell(1, 3).Delete;
+   Table2.Cell(1, 3).Delete;
+   Table2.Cell(4, 3).Delete;
+   Table2.Cell(4, 3).Delete;
+
+  Table2.Borders.Enable :=1;
+ // Table1.Range.ParagraphFormat.Alignment :=1;
+
+  Table2.Columns.Item(1).Width := 110;
+  Table2.Columns.Item(2).Width := 170;
+
+  for i := 1 to Table1.Rows.Count do
+    begin
+    Table2.Cell(i, 1).Range.ParagraphFormat.Alignment := 3; // 1 - mərkəz
+    Table2.Cell(i, 2).Range.ParagraphFormat.Alignment := 3; // 1 - mərkəz
+    end;
+     for i := 1 to Table1.Rows.Count do
+  begin
+
+    Table2.Cell(i, 1).Range.Font.Name := 'Arial';
+    Table2.Cell(i, 1).Range.Font.Size := 14;
+    Table2.Cell(i, 1).Range.Font.bold :=1;
+
+    Table2.Cell(i, 2).Range.Font.Name := 'Arial';
+    Table2.Cell(i, 2).Range.Font.Size := 12;
+    Table2.Cell(i, 2).Range.Font.bold :=1;
+
+   end;
+   /////////////////////////////////
+
+
+    TextRange2 := Doc.Shapes.AddTextbox(1, 500, 60, 250, 40); // Belgenin basina konumlandir
+    TextRange2.TextFrame.TextRange.Text := ' Million';
+    TextRange2.left:=395;
+    TextRange2.top :=120;
+    TextRange2.TextFrame.TextRange.Font.Bold := True; // Kalin yap
+    TextRange2.TextFrame.TextRange.Font.Size := 30;
+    TextRange2.line.Visible := False;
+     Doc.Content.InsertParagraphAfter;
+
+    TextRange3 := Doc.Shapes.AddTextbox(1, 500, 60, 200, 40); // Belgenin basina konumlandir
+    TextRange3.TextFrame.TextRange.Text := ' Ödəniş Sistemləri ';
+    TextRange3.left:=385;
+    TextRange3.top :=155;
+    TextRange3.TextFrame.TextRange.Font.Bold := True; // Kalin yap
+    TextRange3.TextFrame.TextRange.Font.Size := 15;
+    TextRange3.line.Visible := False;
+
+
+
+    TextRange4 := Doc.Shapes.AddTextbox(1, 500, 60, 200, 40); // Belgenin basina konumlandir
+    TextRange4.TextFrame.TextRange.Text := ' Ödəniş Məlumatları ';
+    TextRange4.left:=380;
+    TextRange4.top :=260;
+    TextRange4.TextFrame.TextRange.Font.Bold := True; // Kalin yap
+    TextRange4.TextFrame.TextRange.Font.Size := 15;
+    TextRange4.line.Visible := False;
+
+     Doc.Content.InsertParagraphAfter;
+
+   ////////////////////////////////////////////////////////////////
+
+    Table := Doc.Tables.Add(Doc.Range(Doc.Content.end-1, Doc.Content.End - 1),DataSet11.recordcount + 1, 6);
+    Table.Cell(1, 1).Range.Text := '№. '; // 1-ci sütun başlığı
+    Table.Cell(1, 2).Range.Text := 'Ödəniş tarixi'; // 2-ci sütun başlığı
+    Table.Cell(1, 3).Range.Text := 'Ödəniş məbləği';
+    Table.Cell(1, 4).Range.Text := 'Əsas borc';
+    Table.Cell(1, 5).Range.Text := 'Fazi';
+    Table.Cell(1, 6).Range.Text := 'Ödənişdən sonra qalıq borc';
+   // Table.Cell(1, 6).Range.Text := 'Başlıq 2';
+
+    // DataSet-i oxuyun və cədvələ əlavə edin
+    DataSet11.First; // Yenidən ilk sətrə gətirin
+    Row := 1; // Məlumatların başladığı sətir
+
+    for  ii:=0 to DataSet11.recordcount-1 do
+    begin
+
+      // Cədvələ məlumat əlavə edin
+      Table.Cell(Row+ 1,1).Range.Text := DataSet11.FieldByName('ID').asstring;
+      Table.Cell(Row+ 1,2).Range.Text := DataSet11.FieldByName('PAYMENTDATE').asstring; // 2-ci sütun
+      Table.Cell(Row+ 1,3).Range.Text := DataSet11.FieldByName('PAMENT').asstring; // 1-ci sütun
+      Table.Cell(Row+ 1,4).Range.Text := DataSet11.FieldByName('PRINCIPAL').asstring; // 2-ci sütun
+      Table.Cell(Row+ 1,5).Range.Text := DataSet11.FieldByName('INTEREST').asstring; // 2-ci sütun
+      Table.Cell(Row+ 1,6).Range.Text := DataSet11.FieldByName('rest').asstring; // 2-ci sütun
+
+      Inc(Row);
+       LastRow := Table.Rows.Count;
+      DataSet11.Next;
+     end;
+
+
+       Table.Borders.Enable := 1; // Sərhədləri aktiv edin
+
+
+  Table.Columns.Item(1).Width := 50; // 1-ci sütunun genişliyi
+  Table.Columns.Item(2).Width := 120; // 2-ci sütunun genişliyi
+  Table.Columns.Item(3).Width := 80; // 3-cü sütunun genişliyi
+  Table.Columns.Item(4).Width := 80; // 4-cü sütunun genişliyi
+  Table.Columns.Item(5).Width := 80; // 5-ci sütunun genişliyi
+  Table.Columns.Item(6).Width := 110; // 5-ci sütunun genişliyi
+
+
+  // Başlıqları formatlayın
+  for i := 0 to 6 do
+  begin
+    Table.Cell(1, i).Range.Font.Bold := True; // Kalın font
+    Table.Cell(1, i).Range.Font.Size := 14; // Font ölçüsü
+    Table.Cell(1, i).Range.ParagraphFormat.Alignment := 1; // Mərkəzləşdir
+  end;
+
+  // Məlumatları formatlayın
+  for i := 1 to DataSet11.recordcount+1  do
+  begin
+    for  j := 0 to 6 do
+    begin
+      Table.Cell(i, j).Range.Font.Name := 'Arial'; // Font adı
+      Table.Cell(i, j).Range.Font.Size := 12; // Font ölçüsü
+      Table.Cell(i, j).Range.Font.Bold := True;
+      Table.Cell(i, j).Range.ParagraphFormat.Alignment := 1; // Mərkəzləşdir
+      end;
+
+  end;
+  Doc.Content.InsertParagraphAfter; // Yeni sətir yaradın
+  Doc.Content.InsertParagraphAfter;
+  TextRange_xett:=Doc.Content;
+   TextRange_xett.InsertAfter('Borcverən: '+OracleDataSet2AZ_NAME.asstring+'      _____________________');
+   TextRange_xett.Font.Name := 'Arial'; // Fontu Arial edin
+   TextRange_xett.Font.Size := 12; // Font ölçüsünü 12 edin
+   TextRange_xett.Font.Bold := True;
+   TextRange_xett.ParagraphFormat.Alignment := wdAlignParagraphLeft;
+
+   Doc.Content.InsertParagraphAfter; // Yeni sətir yaradın
+   Doc.Content.InsertParagraphAfter;
+   TextRange_xett1:=Doc.Content;
+   TextRange_xett1.InsertAfter('Borcalan: '+OracleDataSet3NAME.asstring +'          _____________________     ' );
+   TextRange_xett1.Font.Name := 'Arial'; // Fontu Arial edin
+   TextRange_xett1.Font.Size := 12; // Font ölçüsünü 12 edin
+   TextRange_xett1.Font.Bold := True;
+   TextRange_xett1.ParagraphFormat.Alignment :=wdAlignParagraphLeft;// wdAlignParagraphRight;
+
+     //     showmessage( inttostr(LastRow));
+     //TopPosition := Table.Range.Information(wdVerticalPositionRelativeToPage) + Table.Range.Height + 10;
+   ///////////////////////////////////////////////////////////////
+
+   // LeftPosition:=400; // Soldan 50 birim
+   // TopPosition :=Doc.Content.end-LastRow;
+   // LineShape := Doc.Shapes.AddLine(LeftPosition, TopPosition, LeftPosition + 200, TopPosition);
+
+
+   // LineShape.Line.ForeColor.RGB := RGB(0, 0, 0);
+   // LineShape.Line.Weight := 50;
+
+
+
+
+    TextRange := Doc.Shapes.AddTextbox(1, 500, 60, 250, 30); // Belgenin basina konumlandir
+    TextRange.TextFrame.TextRange.Text := ' Bank Hesablarimiz.';
+    TextRange.left:=250;
+    TextRange.top :=15;
+    TextRange.TextFrame.TextRange.Font.Bold := True; // Kalin yap
+    TextRange.TextFrame.TextRange.Font.Size := 14;
+    TextRange.line.Visible := False;
+
+
+      TextBox := Doc.Shapes.AddTextbox(1, 300, 60, 350, 45); // (Üst, Sol, Genislik, Yükseklik)
+      TextBox.TextFrame.TextRange.Text := '   Kapital Bank     H/h: ' +OracleDataSet2KRNO.asstring; // Metni ekle
+      TextBox.Left := 160; // Soldan 50 birim
+      TextBox.top :=40;
+      TextBox.TextFrame.TextRange.Font.Bold := True; // Kalin yap
+      TextBox.TextFrame.TextRange.Font.Size := 14;
+      TextBox.TextFrame.TextRange.Font.Color := RGB(0, 102, 204); // Yazi rengini mavi yap
+      TextBox.TextFrame.TextRange.ParagraphFormat.Alignment :=1;// Italik yap
+
+
+   WordApp.Visible := True; // Word t?tbiqini görün?n etm?k
+
+
+
+
+
+end;
+
+procedure TScheduleForm.ActionAnnutyExecute(Sender: TObject);
+var
+  Payment : PAnnutyPaymentInfo;
+
+  AnnualyRate : Real;
+  CreditID : Integer;
+  StartDate : TDateTime;
+  SavePoint : TBookmark;
+begin
+//v_type:='Auto';
+  with ScheduleDataModule.CreditInfo do
+  begin
+    AnnualyRate :=
+      FieldByName('ANNUALYINTERESTRATE').AsFloat;
+    StartDate := FieldByName('DATEOFCONCLUSION').AsDateTime;
+    CreditID := FieldByName('ID').AsInteger;
+  end;
+
+  with AnnutyForm do
+  begin
+
+    if not AnnutyPayment_Get(Payment)
+     then     Exit;
+
+    with Payment^ do
+    begin
+
+       //
+      with ScheduleDataModule.CM_SCHEDULE do
+      if PaymentType then
+
+        CallProcedure('InsertAnnutySchedule',[
+        'p_CreditID' , CreditID ,
+        'p_Amount' , Amount ,
+        'p_Rate' , AnnualyRate ,
+        'p_FirstPayDate' , FirstPayDate ,
+        'p_StartDate' , StartDate ,
+        'p_Periods' , NPeriods-dovr ,
+        'p_PeriodRate' , PeriodRate,
+        'p_dovr',dovr
+        //'p_type', v_type
+
+        ])
+
+      else
+        CallProcedure('InsertEqualSchedule',[
+        'p_CreditID' , CreditID ,
+        'p_Amount' , Amount ,
+        'p_Rate' , AnnualyRate ,
+        'p_FirstPayDate' , FirstPayDate ,
+        'p_StartDate' , StartDate ,
+        'p_Periods' , NPeriods-dovr ,
+        'p_PeriodRate' , PeriodRate,
+        'p_dovr',dovr
+
+        ]);
+
+
+      with ScheduleDataModule.ScheduleData do
+      begin
+        SavePoint := GetBookmark;
+        Refresh;
+        if BookmarkValid(SavePoint) then
+          GotoBookmark(SavePoint);
+        FreeBookmark(SavePoint);
+        Edit;
+        Post;
+      end;
+      
+    end; // with
+  end; // with AnnutyForm
+
+end;
+
+procedure TScheduleForm.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+  if ORD(Key) = VK_ESCAPE then
+    ActionCloseExecute(nil);
+end;
+
+procedure TScheduleForm.ActionPrintExecute(Sender: TObject);
+begin
+   with ScheduleDataModule,ExportData do begin
+   if Active then close;
+   setvariable('Creditid',Get_SelectedCrdID);
+   open;
+   {with ExcelExport do
+   begin
+   connect;
+   ExportDataset(ExportData,'Юдямя планы',true);
+   end;}
+   end;
+end;
+
+procedure TScheduleForm.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+   Resize := False
+end;
+
+procedure TScheduleForm.SchduleGridKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if ord(key) = 1 then
+  with SchduleGrid,SelectedRows,DataSource.DataSet do
+  begin
+    DisableControls;
+    try
+      First;
+      while not Eof do
+      begin
+        CurrentRowSelected := True;
+        Next;
+      end;
+    finally
+      EnableControls;
+    end;
+  end;
+end;
+
+procedure TScheduleForm.ActionChangeExecute(Sender: TObject);
+var
+count :Integer;
+begin
+count:=ScheduleDataModule.adm.CallIntegerFunction('getadmaddition',['PAYMENTSHE']);
+
+  if count=0 then
+  begin
+ showmessage('Sizin dəyişmək hüququnuz yoxdur!'+#13+'Əlavə məlumat üçün sistem administratoruna müracət edin.'); exit;
+  end;
+   FrmChangeSchedule.ShowModal;
+end;
+
+procedure TScheduleForm.ActionPrintUpdate(Sender: TObject);
+begin
+  with ScheduleDataModule,ScheduleData do
+  (Sender as TAction).Enabled := Active and (RecordCount > 0)
+
+end;
+
+procedure TScheduleForm.ActionPrExecute(Sender: TObject);
+begin
+  frmReportType.ShowModal
+end;
+
+
+
+procedure TScheduleForm.ToolButton21Click(Sender: TObject);
+Const xlCellTypeLast=$000000B;
+var Excel:Variant;
+    m, n:Integer;
+    b:string;
+begin
+ //v_type:='Excel';
+with ods_seduludelet do
+begin
+  close;
+  SetVariable('CREDITID', CreditID);
+  open;
+
+  if ods_seduludelet.RecordCount>0 then
+
+  showmessage('Əvvəlcə ödəmə planını silin, sonra faylı yükləyin!!!')
+      else
+   begin
+
+  if  not OpenDialog1.Execute then Exit;
+  Excel:=CreateoleObject('Excel.Application');
+  Excel.Workbooks.Open(OpenDialog1.FileName);
+  m := 2;
+  n := excel.ActiveCell.SpecialCells(xlCellTypeLast).Row+1;//axrinci
+
+     OracleDataSet1.Close;
+     OracleDataSet1.SetVariable('creditid',CreditID);
+    OracleDataSet1.Open;
+
+  while m<>n do begin
+  OracleDataSet1.Insert;
+    OracleDataSet1.FieldByName('creditid').Value :=CreditID;//Excel.Cells[m, 1].value;
+    OracleDataSet1.FieldByName('paymentdate').Value :=Excel.Cells[m, 1].value;
+    OracleDataSet1.FieldByName('rest').Value :=Excel.Cells[m,2].value;
+    OracleDataSet1.FieldByName('principal').Value :=Excel.Cells[m, 3].value;
+    OracleDataSet1.FieldByName('interest').Value :=Excel.Cells[m, 4].value;
+    //OracleDataSet1.FieldByName('create_type').Value:=v_type;
+    OracleDataSet1.Post;
+    inc(m);
+  end;
+       OracleDataSet1.Close;
+
+    OracleDataSet1.Open;
+    OracleDataSet1.First;
+    SchduleGrid.DataSource.DataSet.Refresh;
+
+  Excel.Workbooks.Close;
+  Excel.Quit;
+
+
+end;
+
+end; //with
+end; //if
+
+end.

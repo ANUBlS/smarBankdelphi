@@ -1,0 +1,155 @@
+unit DMTerminatedImpl;
+
+interface
+
+uses
+  SysUtils, Classes, DB, OracleData, Oracle;
+
+type
+  TDMTerminated = class(TDataModule)
+    DSRContract: TDataSource;
+    DSContract: TOracleDataSet;
+    DSPayment: TOracleDataSet;
+    DSRPayment: TDataSource;
+    DSContractID: TFloatField;
+    DSContractTYPE_ID: TFloatField;
+    DSContractINS_DATE: TDateTimeField;
+    DSContractBEGIN_DATE: TDateTimeField;
+    DSContractEND_DATE: TDateTimeField;
+    DSContractVALUTE_ID: TFloatField;
+    DSContractAMMOUNT: TFloatField;
+    DSContractCLOSE_PREFIX: TIntegerField;
+    DSContractKLI_ID: TFloatField;
+    DSContractLOANACC_ID: TFloatField;
+    DSContractCURRACC_ID: TFloatField;
+    DSContractPOLICY_NUM: TWideStringField;
+    DSContractINSSUMM: TFloatField;
+    DSContractFRANSHIZ: TFloatField;
+    DSContractTARIFF: TFloatField;
+    DSContractSTATE: TIntegerField;
+    DSContractAGENT_ID: TFloatField;
+    DSContractPNUM: TFloatField;
+    DSContractBEN_ID: TFloatField;
+    DSContractBENEFICIARY: TWideStringField;
+    DSContractCONDITIONS: TWideStringField;
+    DSContractSUGNUM: TWideStringField;
+    DSContractBLANK_ID: TFloatField;
+    DSContractOP_ID: TFloatField;
+    DSContractREINS: TFloatField;
+    DSRins_c_terminated: TDataSource;
+    DSins_c_terminated: TOracleDataSet;
+    DSins_c_terminatedID: TFloatField;
+    DSins_c_terminatedCID: TFloatField;
+    DSins_c_terminatedTERMINTED_DAT: TDateTimeField;
+    DSins_c_terminatedINTEREST_CHARGED: TFloatField;
+    DSins_c_terminatedSTAGE_OK_VERILIB: TFloatField;
+    DSins_c_terminatedSTAGE_OK_VERILIB_DAT: TDateTimeField;
+    DSins_c_terminatedSTAGE_OK_VERILIB_OPID: TFloatField;
+    DSins_c_terminatedSTAGE_TESDIQ: TFloatField;
+    DSins_c_terminatedSTAGE_TESDIQ_DAT: TDateTimeField;
+    DSins_c_terminatedSTAGE_TESDIQ_OPID: TFloatField;
+    DSins_c_terminatedOP_ID: TFloatField;
+    DSRSysdat: TDataSource;
+    DSSysdat: TOracleDataSet;
+    DSSysdatTEK_DAT: TDateTimeField;
+    DSSysdatPRED_DAT: TDateTimeField;
+    DSSysdatARC_DAY: TDateTimeField;
+    DSSysdatCLOSE: TIntegerField;
+    ins_common: TOraclePackage;
+    DSRTerminateAmount: TDataSource;
+    DSTerminateAmount: TOracleDataSet;
+    DSTerminateAmountTER_ID: TFloatField;
+    DSTerminateAmountTERMINTED_AMOUNT: TFloatField;
+    DSTerminateAmountTERMINTED_AMOUNT1: TFloatField;
+    DSTerminateAmountTERMINTED_AMOUNT2: TFloatField;
+    DSTerminateAmountTRID: TFloatField;
+    DSTerminateAmountTRID1: TFloatField;
+    DSTerminateAmountTRID2: TFloatField;
+    DSPayment1: TOracleDataSet;
+    DSRPayment1: TDataSource;
+    DSPayment2: TOracleDataSet;
+    DSRPayment2: TDataSource;
+    DSPaymentSIGORTAHAQQI: TFloatField;
+    DSPayment1SIGORTAHAQQI: TFloatField;
+    DSPayment2SIGORTAHAQQI: TFloatField;
+    DSContractCHKASKO: TFloatField;
+    DSContractCHM: TFloatField;
+    DSContractCHFQ: TFloatField;
+    DSContractCOMMITOP_ID: TFloatField;
+    DSContractCOMMIT_DATE: TDateTimeField;
+    DSContractCANCELOPID: TFloatField;
+    DSContractCANCELDATE: TDateTimeField;
+    DSBarderoSay: TOracleDataSet;
+    DSBarderoInfo: TOracleDataSet;
+    DSBarderoSaySAY: TFloatField;
+    DSBarderoInfoID: TFloatField;
+    DSBarderoInfoBARDERO_NO: TWideStringField;
+    DSBarderoInfoCID: TFloatField;
+    DSBarderoInfoCUST_ID: TFloatField;
+    DSBarderoInfoDAT: TDateTimeField;
+    DSBarderoInfoSTATUS: TFloatField;
+    DSBarderoInfoTYPE_ID: TFloatField;
+    DSpaytercount: TOracleDataSet;
+    DSpaytercountSAY: TFloatField;
+    Ds_debt_acc: TOracleDataSet;
+    DsR_debt_acc: TDataSource;
+    Ds_cont_state: TOracleDataSet;
+    FloatField1: TFloatField;
+    FloatField2: TFloatField;
+    DateTimeField1: TDateTimeField;
+    DateTimeField2: TDateTimeField;
+    DateTimeField3: TDateTimeField;
+    FloatField3: TFloatField;
+    FloatField4: TFloatField;
+    IntegerField1: TIntegerField;
+    FloatField5: TFloatField;
+    FloatField6: TFloatField;
+    FloatField7: TFloatField;
+    WideStringField1: TWideStringField;
+    FloatField8: TFloatField;
+    FloatField9: TFloatField;
+    FloatField10: TFloatField;
+    IntegerField2: TIntegerField;
+    FloatField11: TFloatField;
+    FloatField12: TFloatField;
+    FloatField13: TFloatField;
+    WideStringField2: TWideStringField;
+    WideStringField3: TWideStringField;
+    WideStringField4: TWideStringField;
+    FloatField14: TFloatField;
+    FloatField15: TFloatField;
+    FloatField16: TFloatField;
+    FloatField17: TFloatField;
+    FloatField18: TFloatField;
+    FloatField19: TFloatField;
+    FloatField20: TFloatField;
+    DateTimeField4: TDateTimeField;
+    FloatField21: TFloatField;
+    DateTimeField5: TDateTimeField;
+    sb_aca: TOraclePackage;
+    procedure DataModuleCreate(Sender: TObject);
+    procedure DataModuleDestroy(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  DMTerminated: TDMTerminated;
+
+implementation
+
+{$R *.dfm}
+    uses sboapiDataModuleImpl,CommanParametrs,FrmMainImpl;
+procedure TDMTerminated.DataModuleCreate(Sender: TObject);
+begin
+DSSysdat.Open;
+end;
+
+procedure TDMTerminated.DataModuleDestroy(Sender: TObject);
+begin
+DSSysdat.Close;
+end;
+
+end.

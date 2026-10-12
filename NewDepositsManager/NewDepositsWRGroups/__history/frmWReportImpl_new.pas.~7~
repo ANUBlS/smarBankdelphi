@@ -1,0 +1,64 @@
+unit frmWReportImpl_new;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, WordXP, OleServer, StdCtrls, Mask, DBCtrlsEh, DBLookupEh, Buttons,
+  ExtCtrls, ImgList, ActnList;
+
+type
+  TfrmWReport = class(TForm)
+    ActionList1: TActionList;
+    ActinPrint: TAction;
+    ActnClose: TAction;
+    ImageList1: TImageList;
+    Panel1: TPanel;
+    Label1: TLabel;
+    SpeedButton1: TSpeedButton;
+    SpeedButton2: TSpeedButton;
+    DBLookupComboboxEh1: TDBLookupComboboxEh;
+    WordApplication: TWordApplication;
+    WordDocument: TWordDocument;
+    procedure FormCanResize(Sender: TObject; var NewWidth, NewHeight: Integer;
+      var Resize: Boolean);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+  private
+    { Private declarations }
+  public
+    TemplID :Integer;
+  end;
+
+var
+  frmWReport: TfrmWReport;
+
+  procedure exportproc(S:String);export;
+
+implementation
+
+{$R *.DFM}
+uses DMWReportImpl_new,CommonDeclsImpl_new,SBTranslateProc,sboapiDataModuleimpl;
+
+procedure exportproc(S:String);export;
+begin
+ with TfrmWReport.Create(CommonApplication) do
+  try
+    ShowModal
+  finally
+    Release
+  end;
+end;
+exports
+   exportproc;
+procedure TfrmWReport.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+   Resize := False;
+end;
+
+procedure TfrmWReport.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+   if Ord(Key) = VK_ESCAPE then close
+end;
+
+end.

@@ -1,0 +1,241 @@
+unit DonorImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Grids, DBGrids, StdCtrls, DB, OracleData, DBGridEh, Buttons, Oracle,
+  ExtCtrls, DBCtrls;
+
+type
+  TFrmDonor = class(TForm)
+    GroupBox1: TGroupBox;
+    DataSrcdepozit: TDataSource;
+    DepoziProps: TOracleDataSet;
+    DBGrid4: TDBGrid;
+    GroupBox2: TGroupBox;
+    DBGrid1: TDBGrid;
+    DataSource1: TDataSource;
+    OracleDataSet1: TOracleDataSet;
+    SpeedButton1: TSpeedButton;
+    DonrPg: TOraclePackage;
+    OracleDataSet1ID: TFloatField;
+    OracleDataSet1CREDITID: TFloatField;
+    OracleDataSet1CUSTNAME: TWideStringField;
+    OracleDataSet1DEPAMOUNT: TFloatField;
+    OracleDataSet1DONORAMMOUNT: TFloatField;
+    SpeedButton2: TSpeedButton;
+    SpeedButton3: TSpeedButton;
+    OracleDataSet2: TOracleDataSet;
+    DepoziPropsID: TFloatField;
+    DepoziPropsCONTRACTNO: TWideStringField;
+    DepoziPropsNAME: TWideStringField;
+    DepoziPropsPERIODID: TFloatField;
+    DepoziPropsDONR: TFloatField;
+    DepoziPropsUSEDREST: TFloatField;
+    DepoziPropsFACTICALDEBT: TFloatField;
+    DepoziPropsDONORAMMOUNT: TFloatField;
+    OracleDataSet1DONID: TFloatField;
+    procedure FormCanResize(Sender: TObject; var NewWidth, NewHeight: Integer;
+      var Resize: Boolean);
+    procedure FormDestroy(Sender: TObject);
+    procedure DBGrid1DrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TColumn; State: TGridDrawState);
+    procedure DBGrid1CellClick(Column: TColumn);
+    procedure DBGrid4CellClick(Column: TColumn);
+    procedure DBGrid4DrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TColumn; State: TGridDrawState);
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormShow(Sender: TObject);
+    procedure SpeedButton2Click(Sender: TObject);
+    procedure SpeedButton3Click(Sender: TObject);
+    procedure DBGrid1KeyPress(Sender: TObject; var Key: Char);
+    procedure OracleDataSet1ApplyRecord(Sender: TOracleDataSet; Action: Char;
+      var Applied: Boolean; var NewRowId: string);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmDonor: TFrmDonor;
+
+implementation
+ uses sboapiDataModuleImpl ,CommonDecls;
+{$R *.dfm}
+
+procedure TFrmDonor.DBGrid1CellClick(Column: TColumn);
+begin
+if Column.FieldName='' then
+  begin
+    if DepoziProps.FieldByName('DONR').AsInteger=0 then
+    with DepoziProps do begin
+      edit;
+      FieldByName('DONR').AsInteger:=1;
+      Post;
+      end
+    else
+    with DepoziProps do begin
+      edit;
+      FieldByName('DONR').AsInteger:=0;
+      Post;
+      end;
+  end;
+end;
+
+procedure TFrmDonor.DBGrid1DrawColumnCell(Sender: TObject; const Rect: TRect;
+  DataCol: Integer; Column: TColumn; State: TGridDrawState);
+ Var Style   : Integer;
+  begin
+IF  Column.Title.Caption=''
+Then begin
+ IF  DepoziProps.FieldByName('DONR').value=1
+   Then Style := DFCS_CHECKED
+   Else
+   Style := DFCS_BUTTONCHECK;
+    DrawFrameControl(TDBGrid(Sender).Canvas.Handle,
+   Rect, DFC_BUTTON, Style);
+end;
+end;
+
+procedure TFrmDonor.DBGrid1KeyPress(Sender: TObject; var Key: Char);
+
+begin
+//if DepoziProps.FieldByName('').AsFloat<
+// DBGrid1.Fields[2].Value:=0  ;
+ // ShowMessage(DBGrid1.Fields[2].Value);
+
+ // OracleDataSet1.Post;
+end;
+
+procedure TFrmDonor.DBGrid4CellClick(Column: TColumn);
+begin
+
+if Column.FieldName='' then
+  begin
+    if DepoziProps.FieldByName('DONR').AsInteger=0 then
+    with DepoziProps do begin
+      edit;
+      FieldByName('DONR').AsInteger:=1;
+      Post;
+      Session.Commit;
+      end
+    else
+    with DepoziProps do begin
+      edit;
+      FieldByName('DONR').AsInteger:=0;
+      Post;
+      Session.Commit ;
+      end;
+  end
+end;
+
+procedure TFrmDonor.DBGrid4DrawColumnCell(Sender: TObject; const Rect: TRect;
+  DataCol: Integer; Column: TColumn; State: TGridDrawState);
+ Var Style   : Integer;
+  begin
+IF  Column.Title.Caption=''
+Then begin
+ IF  DepoziProps.FieldByName('DONR').value=1
+   Then Style := DFCS_CHECKED
+   Else
+   Style := DFCS_BUTTONCHECK;
+    DrawFrameControl(TDBGrid(Sender).Canvas.Handle,
+   Rect, DFC_BUTTON, Style);
+end;
+
+end;
+
+procedure TFrmDonor.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+resize:=false
+end;
+
+procedure TFrmDonor.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+DepoziProps.Close  ;
+OracleDataSet1.Close;
+OracleDataSet2.Active:=true;
+OracleDataSet2.Active:=false;
+OracleDataSet2.Session.Commit;
+end;
+
+procedure TFrmDonor.FormDestroy(Sender: TObject);
+begin
+DepoziProps.CloseAll  ;
+OracleDataSet1.CloseAll;
+end;
+
+procedure TFrmDonor.FormShow(Sender: TObject);
+begin
+DepoziProps.Open;
+
+OracleDataSet1.close;
+OracleDataSet1.SetVariable('crid',Get_SelectedCrdID);
+OracleDataSet1.Open;
+OracleDataSet1.edit;
+end;
+
+procedure TFrmDonor.OracleDataSet1ApplyRecord(Sender: TOracleDataSet;
+  Action: Char; var Applied: Boolean; var NewRowId: string);
+var
+  Result : Integer;
+begin
+  Result := 0;
+  case Action of
+  'I' :
+       begin
+
+       Applied := True;
+
+       end;
+  'U' :
+       begin
+        with OracleDataSet1 do
+     Result :=
+         DonrPg.CallIntegerFunction('upd_donor',[FieldByName('id').AsInteger,
+                                                 FieldByName('donid').AsInteger,
+                                                 FieldByName('donorammount').AsInteger] );
+         Applied := True;
+
+       end;
+       end;
+  DepoziProps.Refresh;
+  end;
+
+procedure TFrmDonor.SpeedButton1Click(Sender: TObject);
+begin
+    with DepoziProps do begin
+      edit;
+       Post;
+      Session.Commit;
+      end    ;
+DonrPg.CallIntegerFunction('get_donor',[Get_SelectedCrdID
+                                     ]);
+OracleDataSet1.Refresh;
+DepoziProps.Refresh;
+end;
+
+procedure TFrmDonor.SpeedButton2Click(Sender: TObject);
+begin
+  if MessageDlg(
+       'Silinsinmi ?',
+       mtConfirmation,
+       [mbYes,mbNo],
+       0) <> mrYes
+     then   Exit;
+DonrPg.CallIntegerFunction('del_donor',[OracleDataSet1.FieldByName('id').AsInteger
+                                     ]);
+OracleDataSet1.Refresh;
+DepoziProps.Refresh;
+end;
+
+procedure TFrmDonor.SpeedButton3Click(Sender: TObject);
+begin
+close
+end;
+
+end.

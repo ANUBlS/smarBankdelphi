@@ -1,0 +1,116 @@
+object frmAccessories: TfrmAccessories
+  Left = 391
+  Top = 285
+  BorderStyle = bsToolWindow
+  Caption = 'Aksessuarlar'
+  ClientHeight = 203
+  ClientWidth = 387
+  Color = clBtnFace
+  Font.Charset = RUSSIAN_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poMainFormCenter
+  OnCreate = FormCreate
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 387
+    Height = 162
+    Align = alClient
+    BevelInner = bvRaised
+    BevelOuter = bvLowered
+    TabOrder = 0
+    object DBGrid1: TDBGrid
+      Left = 2
+      Top = 2
+      Width = 383
+      Height = 153
+      Align = alTop
+      DataSource = InsMKDataMod.DSAccessories
+      DrawingStyle = gdsGradient
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      Options = [dgEditing, dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit, dgMultiSelect, dgTitleClick, dgTitleHotTrack]
+      ParentFont = False
+      TabOrder = 0
+      TitleFont.Charset = RUSSIAN_CHARSET
+      TitleFont.Color = clWindowText
+      TitleFont.Height = -11
+      TitleFont.Name = 'Azl Sans Serif'
+      TitleFont.Style = []
+      Columns = <
+        item
+          Expanded = False
+          FieldName = 'NAME'
+          Title.Caption = #1040#1082#1089#1077#1089#1089#1091#1072#1088
+          Title.Color = clNavy
+          Width = 250
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'AMMOUNT'
+          Title.Caption = #1043#1080#1081#1084#1103#1090#1080
+          Title.Color = clNavy
+          Width = 100
+          Visible = True
+        end>
+    end
+  end
+  object XFPanel1: TXFPanel
+    Left = 0
+    Top = 162
+    Width = 387
+    Height = 41
+    Align = alBottom
+    TabOrder = 1
+    object DBNavigator2: TDBNavigator
+      Left = 7
+      Top = 7
+      Width = 280
+      Height = 25
+      DataSource = InsMKDataMod.DSAccessories
+      Flat = True
+      Hints.Strings = (
+        #1041#1080#1088#1080#1085#1078#1080
+        #1071#1074#1074#1103#1083#1082#1080
+        #1057#1086#1085#1088#1072#1082#1099
+        #1040#1093#1099#1088#1099#1085#1078#1099
+        #1071#1083#1072#1074#1103
+        #1051#1103#1100#1074
+        #1056#1077#1076#1072#1082#1090#1103
+        #1058#1103#1089#1076#1080#1075' '#1077#1090#1084#1103#1082
+        #1048#1084#1090#1080#1085#1072
+        #1049#1077#1085#1080#1083#1103#1084#1103#1082)
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 0
+    end
+    object BitBtn1: TBitBtn
+      Left = 298
+      Top = 7
+      Width = 75
+      Height = 25
+      DoubleBuffered = True
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      Kind = bkOK
+      NumGlyphs = 2
+      ParentDoubleBuffered = False
+      ParentFont = False
+      TabOrder = 1
+      OnClick = BitBtn1Click
+    end
+  end
+end

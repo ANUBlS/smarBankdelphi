@@ -1,0 +1,315 @@
+﻿unit multiform;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, DBGridEh, StdCtrls, Mask, DBCtrlsEh, DBLookupEh, DB, OracleData;
+
+type
+  TMultiCurrency = class(TForm)
+    DBLookupComboBox1: TDBLookupComboboxEh;
+    multi1: TCheckBox;
+    multi2: TCheckBox;
+    DBLookupComboboxEh2: TDBLookupComboboxEh;
+    Edit3: TEdit;
+    OracleDataSet1: TOracleDataSet;
+    edit1: TEdit;
+    Edit2: TEdit;
+    Edit4: TEdit;
+    Button2: TButton;
+    OracleDataSet1ID: TFloatField;
+    OracleDataSet1KLI_ID: TFloatField;
+    OracleDataSet1OP_ID: TFloatField;
+    OracleDataSet1ACC_NO: TWideStringField;
+    OracleDataSet1VAL_ACC: TIntegerField;
+    OracleDataSet1NAME: TWideStringField;
+    OracleDataSet1OPEN_DAT: TDateTimeField;
+    OracleDataSet1CLOSE_DAT: TDateTimeField;
+    OracleDataSet1BAL_CN1: TFloatField;
+    OracleDataSet1BAL_CN2: TFloatField;
+    OracleDataSet1BAL_CN3: TFloatField;
+    OracleDataSet1BAL_CN4: TFloatField;
+    OracleDataSet1FILIAL: TIntegerField;
+    OracleDataSet1SIM_OTCET: TFloatField;
+    OracleDataSet1TIPACC: TWideStringField;
+    OracleDataSet1LIMIT: TFloatField;
+    OracleDataSet1OLD_ACC_NO: TWideStringField;
+    OracleDataSet1PAIR_ACC: TFloatField;
+    OracleDataSet1INSIDER: TWideStringField;
+    OracleDataSet1SID: TFloatField;
+    OracleDataSet1TEMPID: TFloatField;
+    OracleDataSet1OWNID: TFloatField;
+    OracleDataSet1P_CUSTID: TFloatField;
+    OracleDataSet1SYMB: TWideStringField;
+    OracleDataSet1OLDID: TFloatField;
+    OracleDataSet1NEW_ACC_NO: TWideStringField;
+    OracleDataSet1BAL_CN1_OLD: TFloatField;
+    OracleDataSet1BANK_CODE: TFloatField;
+    OracleDataSet1CURRENCYNAME: TWideStringField;
+    OracleDataSet1USERINSERT: TWideStringField;
+    procedure DBLookupComboBox1Change(Sender: TObject);
+
+    procedure FormCreate(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure DBLookupComboboxEh2Change(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  MultiCurrency: TMultiCurrency;
+
+implementation
+
+uses Unit18, Unitclient2,SBTranslateProc,sboapiDataModuleImpl;
+
+{$R *.dfm}
+
+procedure TMultiCurrency.Button1Click(Sender: TObject);
+var urg,kr:integer;
+ wt:string;
+begin
+            DataMod_CARDS.max.Close;
+            DataMod_CARDS.max.Open;
+
+//DataMod_CARDS.mainpacket.CallProcedure('new_multicard',[DataMod_CARDS.max.FieldByName('id').AsInteger,DBLookupComboBox6.Text]);
+close;
+
+ if  clients2.CheckBox2.Checked then  urg:=1 else urg:=0;
+     if  clients2.CheckBox3.Checked then  kr:=1 else kr:=0;
+
+ if edit4.Text='new' then   begin
+
+if multi2.Checked then
+begin
+DataMod_CARDS.referens.close;
+DataMod_CARDS.referens.open;
+ DataMod_CARDS.referens.fieldbyname('refe').asstring;
+
+
+
+
+   DataMod_CARDS.mainpacket.CallProcedure('new_card',[clients2.edit15.text+' '+clients2.edit16.text,
+                                                   clients2.edit15.text,
+                                                   clients2.edit16.text,
+                                                   clients2.edit18.text,
+                                                   datetostr(clients2.DateTimePicker7.DateTime),
+                                                   clients2.Edit17.Text,
+                                                   clients2.Edit27.Text,
+                                                   clients2.Edit20.Text,
+                                                   clients2.Edit19.Text,
+                                                   clients2.Edit22.Text,
+                                                   clients2.ComboBox4.text,
+                                                   DBLookupComboboxEh2.Text,
+                                                   Edit2.Text,
+                                                   clients2.ComboBox1.text,//DBLookupComboBox10.Text ,
+                                                   clients2.ComboBox12.text,
+                                                   clients2.Edit28.Text,
+                                                   clients2.DateTimePicker5.DateTime,
+                                                   clients2.DateTimePicker8.DateTime,
+                                                   clients2.Edit26.Text,
+                                                   clients2.Edit23.Text,
+                                                   clients2.ComboBox2.text,
+                                                   clients2.Edit25.Text,
+                                                   1,
+                                                   urg,
+                                                   clients2.Edit21.Text,
+                                                   kr,
+                                                   clients2.Edit14.Text,
+                                                   clients2.ComboBox11.text,
+                                                   clients2.ComboBox10.text,
+                                                   clients2.DateTimePicker2.datetime,
+                                                   edit3.Text]);
+
+
+
+                                                   // if StrToFloat(Edit28.Text)<>DataMod_CARDS.findcredit.FieldByName('kredit').asfloat
+                                                   //  then
+                                                   //  begin
+                                                   //  Edit28.Color:=clRed;
+                                                   //  ShowMessage('Дахил етдийиниз кредит мябляьи Смарт-Кредит модулундаки мябляья бярабяр дейилдир!');
+                                                   //  end
+                                                   //  else Edit28.Color:=clWindow;
+
+                                                 //  ShowMessage('Yeni Multikart əlavə edildi!');
+                                                   close;
+
+end;
+
+
+if multi1.Checked then    begin
+DataMod_CARDS.referens.close;
+DataMod_CARDS.referens.open;
+ DataMod_CARDS.referens.fieldbyname('refe').asstring;
+                    DataMod_CARDS.mainpacket.CallProcedure('new_card',[
+                    clients2.edit15.text+' '+clients2.edit16.text,
+                                                   clients2.edit15.text,
+                                                   clients2.edit16.text,
+                                                   clients2.edit18.text,
+                                                   datetostr(clients2.DateTimePicker7.DateTime),
+                                                   clients2.Edit17.Text,
+                                                   clients2.Edit27.Text,
+                                                   clients2.Edit20.Text,
+                                                   clients2.Edit19.Text,
+                                                   clients2.Edit22.Text,
+                                                   clients2.ComboBox4.text,
+                                                   DBLookupComboBox1.Text,
+                                                   Edit1.Text,
+                                                   clients2.ComboBox1.text,//DBLookupComboBox10.Text ,
+                                                   clients2.ComboBox12.text,
+                                                   clients2.Edit28.Text,
+                                                   clients2.DateTimePicker5.DateTime,
+                                                   clients2.DateTimePicker8.DateTime,
+                                                   clients2.Edit26.Text,
+                                                   clients2.Edit23.Text,
+                                                   clients2.ComboBox2.text,
+                                                   clients2.Edit25.Text,
+                                                   1,
+                                                   urg,
+                                                   clients2.Edit21.Text,
+                                                   kr,
+                                                   clients2.Edit14.Text,
+                                                   clients2.ComboBox11.text,
+                                                   clients2.ComboBox10.text,
+                                                   clients2.DateTimePicker2.datetime,
+                                                   edit3.Text]);
+
+
+                                                   // if StrToFloat(Edit28.Text)<>DataMod_CARDS.findcredit.FieldByName('kredit').asfloat
+                                                   //  then
+                                                   //  begin
+                                                   //  Edit28.Color:=clRed;
+                                                   //  ShowMessage('Дахил етдийиниз кредит мябляьи Смарт-Кредит модулундаки мябляья бярабяр дейилдир!');
+                                                   //  end
+                                                   //  else Edit28.Color:=clWindow;
+
+                                                   ShowMessage('Yeni MultiValyutali kart əlavə edildi!');
+                                                   close;
+end ;
+
+end ;
+
+
+        //ShowMessage('rtrt');
+if edit4.Text='edit' then   begin
+                //ShowMessage('tyty');
+         DataMod_CARDS.referens.close;
+DataMod_CARDS.referens.open;
+clients2.edit26.Text:= DataMod_CARDS.referens.fieldbyname('refe').asstring;
+  if clients2.ComboBox5.Text='WITH' then  wt:='0003' else wt:='0002';
+
+   DataMod_CARDS.fmaincard.Close;
+   DataMod_CARDS.fmaincard.SetVariable('CRD',clients2.edit24.text);
+   DataMod_CARDS.fmaincard.Open;
+
+   if multi1.Checked then    begin
+DataMod_CARDS.mainpacket.CallProcedure('edit_card',[clients2.edit15.text+' '+clients2.edit16.text,
+                                                   clients2.edit15.text,
+                                                   clients2.edit16.text,
+                                                   clients2.edit18.text,
+                                                   datetostr(clients2.DateTimePicker7.DateTime),
+                                                  clients2. Edit17.Text,
+                                                   clients2.Edit27.Text,
+                                                   clients2.Edit20.Text,
+                                                   clients2.Edit19.Text,
+                                                   clients2.Edit22.Text,
+                                                   clients2.ComboBox4.text,
+                                                   DBLookupCombobox1.Text,
+                                                   clients2.dbedit18.text,
+                                                   clients2.ComboBox1.text,//DBLookupComboBox10.Text ,
+                                                   clients2.ComboBox12.text,
+                                                   clients2.Edit28.Text,
+                                                   clients2.DateTimePicker5.DateTime,
+                                                   clients2.DateTimePicker8.DateTime,
+                                                   clients2.Edit26.Text,
+                                                   clients2.Edit23.Text,
+                                                   clients2.ComboBox2.text,
+                                                   clients2.Edit25.Text,
+                                                   clients2.edit2.text,
+                                                   urg,
+                                                  clients2.Edit21.Text,
+                                                   kr,
+                                                   clients2.Edit14.Text,
+                                                   clients2.ComboBox11.text,
+                                                   clients2.ComboBox10.text,
+                                                   clients2.edit24.text,
+                                                   wt,
+                                                   clients2.DateTimePicker2.datetime,
+                                                   edit3.Text]);
+                                                    ShowMessage(' Sub Multikart əlavə edildi!');
+                                                   close;
+   end;
+
+      if multi2.Checked then    begin
+DataMod_CARDS.mainpacket.CallProcedure('edit_card',[clients2.edit15.text+' '+clients2.edit16.text,
+                                                   clients2.edit15.text,
+                                                   clients2.edit16.text,
+                                                   clients2.edit18.text,
+                                                   datetostr(clients2.DateTimePicker7.DateTime),
+                                                  clients2. Edit17.Text,
+                                                   clients2.Edit27.Text,
+                                                   clients2.Edit20.Text,
+                                                   clients2.Edit19.Text,
+                                                   clients2.Edit22.Text,
+                                                   clients2.ComboBox4.text,
+                                                   DBLookupComboboxEh2.Text,
+                                                   clients2.dbedit18.text,
+                                                   clients2.ComboBox1.text,//DBLookupComboBox10.Text ,
+                                                   clients2.ComboBox12.text,
+                                                   clients2.Edit28.Text,
+                                                   clients2.DateTimePicker5.DateTime,
+                                                   clients2.DateTimePicker8.DateTime,
+                                                   clients2.Edit26.Text,
+                                                   clients2.Edit23.Text,
+                                                   clients2.ComboBox2.text,
+                                                   clients2.Edit25.Text,
+                                                   clients2.edit2.text,
+                                                   urg,
+                                                  clients2.Edit21.Text,
+                                                   kr,
+                                                   clients2.Edit14.Text,
+                                                   clients2.ComboBox11.text,
+                                                   clients2.ComboBox10.text,
+                                                   clients2.edit24.text,
+                                                   wt,
+                                                   clients2.DateTimePicker2.datetime,
+                                                   edit3.Text]);
+                                                    ShowMessage(' Sub Multikart əlavə edildi!');
+                                                   close;
+   end;
+end;
+
+
+end;
+
+procedure TMultiCurrency.DBLookupComboBox1Change(Sender: TObject);
+begin
+edit1.Text:=DataMod_CARDS.hesab.FieldByName('currencyname').AsString;
+ Unitclient2.multiacc:=DBLookupComboBox1.Text;
+ Unitclient2.multival:= DataMod_CARDS.hesab.FieldByName('currencyname').AsString;
+end;
+
+
+procedure TMultiCurrency.DBLookupComboboxEh2Change(Sender: TObject);
+begin
+edit2.Text:=OracleDataSet1.FieldByName('currencyname').AsString;
+end;
+
+procedure TMultiCurrency.FormCreate(Sender: TObject);
+begin
+      //  SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TMultiCurrency.FormShow(Sender: TObject);
+begin
+ OracleDataSet1.Close;
+                  OracleDataSet1.SetVariable('CID', clients2.edit14.text);
+                  OracleDataSet1.SetVariable('p_AccNO', null);
+                  OracleDataSet1.open;
+end;
+
+end.

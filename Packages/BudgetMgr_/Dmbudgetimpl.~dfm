@@ -1,0 +1,1005 @@
+object DMBudget: TDMBudget
+  OldCreateOrder = False
+  OnCreate = DataModuleCreate
+  OnDestroy = DataModuleDestroy
+  Left = 210
+  Top = 30
+  Height = 683
+  Width = 723
+  object ArticlesDS: TDataSource
+    DataSet = ArticlesDST
+    Left = 16
+    Top = 7
+  end
+  object ArticlesDST: TOracleDataSet
+    SQL.Strings = (
+      'SELECT  a.*, a.rowid'
+      '  FROM articles a'
+      'order by status,id')
+    QBEDefinition.QBEFieldDefs = {
+      0400000004000000020000004944010000000000040000004E414D4501000000
+      00000F0000004E554D4245524F4641525449434C450100000000000600000053
+      5441545553010000000000}
+    OnApplyRecord = ArticlesDSTApplyRecord
+    Session = sboapiDataModule.SBSession
+    AfterPost = ArticlesDSTAfterPost
+    Left = 95
+    Top = 7
+    object ArticlesDSTID: TFloatField
+      FieldName = 'ID'
+    end
+    object ArticlesDSTNAME: TStringField
+      FieldName = 'NAME'
+      Required = True
+      Size = 120
+    end
+    object ArticlesDSTNUMBEROFARTICLE: TStringField
+      FieldName = 'NUMBEROFARTICLE'
+      Size = 10
+    end
+    object ArticlesDSTSTATUS: TFloatField
+      FieldName = 'STATUS'
+    end
+    object ArticlesDSTst: TStringField
+      FieldKind = fkLookup
+      FieldName = 'st'
+      LookupDataSet = IncomeDst
+      LookupKeyFields = 'ID'
+      LookupResultField = 'NAME'
+      KeyFields = 'STATUS'
+      Lookup = True
+    end
+  end
+  object ItemsofArticlesDS: TDataSource
+    DataSet = ItemsofArticlesDST
+    Left = 16
+    Top = 64
+  end
+  object ItemsofArticlesDST: TOracleDataSet
+    SQL.Strings = (
+      'select*from ItemsofArticles')
+    QBEDefinition.QBEFieldDefs = {
+      040000000C0000000200000049440100000000000900000049445F4152544943
+      4C010000000000040000004E414D4501000000000011000000414D4F554E544F
+      46424547494E594541520100000000000500000041434349440100000000000C
+      0000004E554D4245524F464954454D01000000000014000000414D4F554E544F
+      4646495253545155415254455201000000000015000000414D4F554E544F4653
+      45434F4E445155415254455201000000000014000000414D4F554E544F465448
+      5249445155415254455201000000000015000000414D4F554E544F46464F5552
+      5448515541525445520100000000000F000000414D4F554E544F46454E445945
+      41520100000000000900000049445F415254444154010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 102
+    Top = 64
+    object ItemsofArticlesDSTID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object ItemsofArticlesDSTID_ARTICL: TFloatField
+      FieldName = 'ID_ARTICL'
+      Required = True
+    end
+    object ItemsofArticlesDSTNAME: TStringField
+      FieldName = 'NAME'
+      Required = True
+      Size = 120
+    end
+    object ItemsofArticlesDSTAMOUNTOFBEGINYEAR: TFloatField
+      FieldName = 'AMOUNTOFBEGINYEAR'
+      Required = True
+    end
+    object ItemsofArticlesDSTACCID: TFloatField
+      FieldName = 'ACCID'
+      Required = True
+    end
+    object ItemsofArticlesDSTNUMBEROFITEM: TStringField
+      FieldName = 'NUMBEROFITEM'
+      Size = 10
+    end
+    object ItemsofArticlesDSTAMOUNTOFFIRSTQUARTER: TFloatField
+      FieldName = 'AMOUNTOFFIRSTQUARTER'
+    end
+    object ItemsofArticlesDSTAMOUNTOFSECONDQUARTER: TFloatField
+      FieldName = 'AMOUNTOFSECONDQUARTER'
+    end
+    object ItemsofArticlesDSTAMOUNTOFTHRIDQUARTER: TFloatField
+      FieldName = 'AMOUNTOFTHRIDQUARTER'
+    end
+    object ItemsofArticlesDSTAMOUNTOFFOURTHQUARTER: TFloatField
+      FieldName = 'AMOUNTOFFOURTHQUARTER'
+    end
+    object ItemsofArticlesDSTAMOUNTOFENDYEAR: TFloatField
+      FieldName = 'AMOUNTOFENDYEAR'
+    end
+  end
+  object AddArtDatSrc: TDataSource
+    DataSet = AddArt
+    Left = 240
+    Top = 1
+  end
+  object AddArt: TOracleDataSet
+    SQL.Strings = (
+      'SELECT a.*, a.rowid,a.id, a.name, a.numberofarticle, a.status'
+      '  FROM articles a'
+      '  where a.id = :artid')
+    Variables.Data = {0300000001000000060000003A4152544944030000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      0400000008000000020000004944010000000000040000004E414D4501000000
+      00000F0000004E554D4245524F4641525449434C450100000000000600000053
+      54415455530100000000000400000049445F31010000000000060000004E414D
+      455F31010000000000110000004E554D4245524F4641525449434C455F310100
+      00000000080000005354415455535F31010000000000}
+    OnApplyRecord = AddArtApplyRecord
+    Session = sboapiDataModule.SBSession
+    Left = 312
+    object AddArtID: TFloatField
+      FieldName = 'ID'
+    end
+    object AddArtNAME: TStringField
+      FieldName = 'NAME'
+      Size = 120
+    end
+    object AddArtNUMBEROFARTICLE: TStringField
+      FieldName = 'NUMBEROFARTICLE'
+      ReadOnly = True
+      Size = 10
+    end
+    object AddArtSTATUS: TFloatField
+      FieldName = 'STATUS'
+    end
+  end
+  object AddItemsDatSrc: TDataSource
+    DataSet = AddItems
+    Left = 248
+    Top = 72
+  end
+  object AddItems: TOracleDataSet
+    SQL.Strings = (
+      'select t.rowid,t.* '
+      'from ITEMSOFARTICLES  t'
+      'where id_articl = :id_articl'
+      ''
+      ''
+      'order by t.id')
+    Variables.Data = {
+      03000000010000000A0000003A49445F41525449434C04000000080000000000
+      000000308E4000000000}
+    QBEDefinition.QBEFieldDefs = {
+      040000000C0000000200000049440100000000000900000049445F4152544943
+      4C010000000000040000004E414D4501000000000011000000414D4F554E544F
+      46424547494E594541520100000000000500000041434349440100000000000C
+      0000004E554D4245524F464954454D01000000000014000000414D4F554E544F
+      4646495253545155415254455201000000000015000000414D4F554E544F4653
+      45434F4E445155415254455201000000000014000000414D4F554E544F465448
+      5249445155415254455201000000000015000000414D4F554E544F46464F5552
+      5448515541525445520100000000000F000000414D4F554E544F46454E445945
+      41520100000000000900000049445F415254444154010000000000}
+    Master = ArticlesDST
+    MasterFields = 'ID'
+    DetailFields = 'ID_ARTICL'
+    Session = sboapiDataModule.SBSession
+    BeforePost = AddItemsBeforePost
+    AfterPost = AddItemsAfterPost
+    Left = 320
+    Top = 72
+    object AddItemsID: TFloatField
+      FieldName = 'ID'
+    end
+    object AddItemsID_ARTICL: TFloatField
+      FieldName = 'ID_ARTICL'
+    end
+    object AddItemsNAME: TStringField
+      FieldName = 'NAME'
+      Required = True
+      Size = 120
+    end
+    object AddItemsACCID: TFloatField
+      FieldName = 'ACCID'
+      Required = True
+    end
+    object AddItemsNUMBEROFITEM: TStringField
+      FieldName = 'NUMBEROFITEM'
+      ReadOnly = True
+      Size = 10
+    end
+    object AddItemsa: TStringField
+      FieldKind = fkLookup
+      FieldName = 'a'
+      LookupDataSet = Accs
+      LookupKeyFields = 'ID'
+      LookupResultField = 'ACC_NO'
+      KeyFields = 'ACCID'
+      Lookup = True
+    end
+  end
+  object ArticlesPkg: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'P_Articles'
+    Left = 408
+    Top = 4
+  end
+  object Accs: TOracleDataSet
+    SQL.Strings = (
+      'select id,acc_no '
+      'from account'
+      'where bal_cn1 in (select acc from articles_accs'
+      
+        'where groupid = (select id from ARTICLES_ACCGROUP where name ='#39'A' +
+        'rtaccounts'#39'))'
+      'and close_dat is null')
+    QBEDefinition.QBEFieldDefs = {
+      0400000002000000020000004944010000000000060000004143435F4E4F0100
+      00000000}
+    Session = sboapiDataModule.SBSession
+    Left = 16
+    Top = 136
+    object AccsID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object AccsACC_NO: TStringField
+      FieldName = 'ACC_NO'
+      Required = True
+    end
+  end
+  object AccsDatSrc: TDataSource
+    DataSet = Accs
+    Left = 72
+    Top = 138
+  end
+  object ItmDataSet: TOracleDataSet
+    SQL.Strings = (
+      'select t.rowid,t.* ,'
+      'P_ARTICLES.get_accno(accid) as accno'
+      '--ar.smobr'
+      ''
+      'from ITEMSOFARTICLES t/*,'
+      '(select acc_id,sum(obr_d) as smobr from archost'
+      ' where datdate between '
+      ' (select begindat from  articledates) and '
+      ' (select enddat  from articledates)'
+      ' group by acc_id) ar*/'
+      ''
+      'where t.id_articl = :id_articl'
+      '--and t.accid = ar.acc_id'
+      ''
+      'order by id'
+      '')
+    Variables.Data = {
+      03000000010000000A0000003A49445F41525449434C04000000080000000000
+      00000000F03F00000000}
+    QBEDefinition.QBEFieldDefs = {
+      040000000D0000000200000049440100000000000900000049445F4152544943
+      4C010000000000040000004E414D4501000000000011000000414D4F554E544F
+      46424547494E594541520100000000000500000041434349440100000000000C
+      0000004E554D4245524F464954454D01000000000014000000414D4F554E544F
+      4646495253545155415254455201000000000015000000414D4F554E544F4653
+      45434F4E445155415254455201000000000014000000414D4F554E544F465448
+      5249445155415254455201000000000015000000414D4F554E544F46464F5552
+      5448515541525445520100000000000F000000414D4F554E544F46454E445945
+      41520100000000000900000049445F4152544441540100000000000500000041
+      43434E4F010000000000}
+    Master = ArtDataSet
+    MasterFields = 'ID'
+    DetailFields = 'ID_ARTICL'
+    Session = sboapiDataModule.SBSession
+    BeforePost = ItmDataSetBeforePost
+    AfterPost = ItmDataSetAfterPost
+    OnCalcFields = ItmDataSetCalcFields
+    Left = 435
+    Top = 184
+    object ItmDataSetID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object ItmDataSetID_ARTICL: TFloatField
+      FieldName = 'ID_ARTICL'
+      Required = True
+    end
+    object ItmDataSetNAME: TStringField
+      FieldName = 'NAME'
+      Required = True
+      Size = 120
+    end
+    object ItmDataSetAMOUNTOFBEGINYEAR: TFloatField
+      FieldName = 'AMOUNTOFBEGINYEAR'
+    end
+    object ItmDataSetACCID: TFloatField
+      FieldName = 'ACCID'
+    end
+    object ItmDataSetNUMBEROFITEM: TStringField
+      FieldName = 'NUMBEROFITEM'
+      Size = 10
+    end
+    object ItmDataSetAMOUNTOFFIRSTQUARTER: TFloatField
+      FieldName = 'AMOUNTOFFIRSTQUARTER'
+      DisplayFormat = '#,##0.00'
+    end
+    object ItmDataSetAMOUNTOFSECONDQUARTER: TFloatField
+      FieldName = 'AMOUNTOFSECONDQUARTER'
+      DisplayFormat = '#,##0.00'
+    end
+    object ItmDataSetAMOUNTOFTHRIDQUARTER: TFloatField
+      FieldName = 'AMOUNTOFTHRIDQUARTER'
+      DisplayFormat = '#,##0.00'
+    end
+    object ItmDataSetAMOUNTOFFOURTHQUARTER: TFloatField
+      FieldName = 'AMOUNTOFFOURTHQUARTER'
+      DisplayFormat = '#,##0.00'
+    end
+    object ItmDataSetAMOUNTOFENDYEAR: TFloatField
+      FieldName = 'AMOUNTOFENDYEAR'
+      DisplayFormat = '#,##0.00'
+    end
+    object ItmDataSetID_ARTDAT: TFloatField
+      FieldName = 'ID_ARTDAT'
+    end
+    object ItmDataSetACCNO: TStringField
+      FieldName = 'ACCNO'
+      Size = 4000
+    end
+    object ItmDataSetr: TFloatField
+      FieldKind = fkLookup
+      FieldName = 'r'
+      LookupDataSet = accrest
+      LookupKeyFields = 'ACC_ID'
+      LookupResultField = 'SM'
+      KeyFields = 'ACCID'
+      DisplayFormat = '#,##0.00'
+      Lookup = True
+    end
+    object ItmDataSetsumamount: TFloatField
+      FieldKind = fkCalculated
+      FieldName = 'sumamount'
+      DisplayFormat = '#,##0.00'
+      Calculated = True
+    end
+    object ItmDataSetReate: TFloatField
+      FieldKind = fkCalculated
+      FieldName = 'Reate'
+      DisplayFormat = '#,##0.00'
+      Calculated = True
+    end
+    object ItmDataSetDifference: TFloatField
+      FieldKind = fkCalculated
+      FieldName = 'Difference'
+      DisplayFormat = '#,##0.00'
+      Calculated = True
+    end
+  end
+  object ArtDataSet: TOracleDataSet
+    SQL.Strings = (
+      ''
+      
+        'SELECT  cont.id,cont.rowid , cont.name,cont.numberofarticle, con' +
+        't.status'
+      '  FROM articles cont'
+      ' --where a.id = :artid'
+      'order by status,id'
+      '--order by :OrderField'
+      '--order by :artid')
+    QBEDefinition.QBEFieldDefs = {
+      0400000004000000020000004944010000000000040000004E414D4501000000
+      00000F0000004E554D4245524F4641525449434C450100000000000600000053
+      5441545553010000000000}
+    QueryAllRecords = False
+    OnApplyRecord = ArtDataSetApplyRecord
+    Session = sboapiDataModule.SBSession
+    AfterPost = ArtDataSetAfterPost
+    Left = 273
+    Top = 180
+    object ArtDataSetID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object ArtDataSetNAME: TStringField
+      FieldName = 'NAME'
+      Required = True
+      Size = 120
+    end
+    object ArtDataSetNUMBEROFARTICLE: TStringField
+      FieldName = 'NUMBEROFARTICLE'
+      Size = 10
+    end
+    object ArtDataSetSTATUS: TFloatField
+      FieldName = 'STATUS'
+    end
+    object ArtDataSetstatu: TStringField
+      FieldKind = fkLookup
+      FieldName = 'statu'
+      LookupDataSet = IncomeDst
+      LookupKeyFields = 'ID'
+      LookupResultField = 'NAME'
+      KeyFields = 'STATUS'
+      Lookup = True
+    end
+  end
+  object ArtDataSrc: TDataSource
+    DataSet = ArtDataSet
+    Left = 188
+    Top = 183
+  end
+  object ItmDataSrc: TDataSource
+    DataSet = ItmDataSet
+    Left = 359
+    Top = 182
+  end
+  object IncomeDst: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      '  0 as id,'
+      '  '#39'Ё€лир'#39' as name'
+      'from dual'
+      'union'
+      'select '
+      '  1 as id,'
+      '  '#39'’€рж'#39' as name'
+      'from dual')
+    QBEDefinition.QBEFieldDefs = {
+      0400000002000000020000004944010000000000040000004E414D4501000000
+      0000}
+    Session = sboapiDataModule.SBSession
+    Left = 16
+    Top = 200
+    object IncomeDstID: TFloatField
+      FieldName = 'ID'
+    end
+    object IncomeDstNAME: TStringField
+      FieldName = 'NAME'
+      Size = 5
+    end
+  end
+  object SetingDatSrc: TDataSource
+    DataSet = SetigDatSet
+    Left = 359
+    Top = 271
+  end
+  object SetigDatSet: TOracleDataSet
+    SQL.Strings = (
+      'select t.rowid,t.*'
+      ' from ITEMSOFARTICLES  t'
+      'where id_articl = :id_articl'
+      'order by id')
+    Variables.Data = {
+      03000000010000000A0000003A49445F41525449434C04000000080000000000
+      000000088E4000000000}
+    QBEDefinition.QBEFieldDefs = {
+      040000000C0000000200000049440100000000000900000049445F4152544943
+      4C010000000000040000004E414D4501000000000011000000414D4F554E544F
+      46424547494E594541520100000000000500000041434349440100000000000C
+      0000004E554D4245524F464954454D01000000000014000000414D4F554E544F
+      4646495253545155415254455201000000000015000000414D4F554E544F4653
+      45434F4E445155415254455201000000000014000000414D4F554E544F465448
+      5249445155415254455201000000000015000000414D4F554E544F46464F5552
+      5448515541525445520100000000000F000000414D4F554E544F46454E445945
+      41520100000000000900000049445F415254444154010000000000}
+    Master = ArtDataSet
+    MasterFields = 'ID'
+    DetailFields = 'ID_ARTICL'
+    Session = sboapiDataModule.SBSession
+    BeforeInsert = SetigDatSetBeforeInsert
+    AfterInsert = SetigDatSetAfterInsert
+    Left = 439
+    Top = 271
+    object SetigDatSetNAME: TStringField
+      FieldName = 'NAME'
+      ReadOnly = True
+      Required = True
+      Size = 120
+    end
+    object SetigDatSetAMOUNTOFBEGINYEAR: TFloatField
+      FieldName = 'AMOUNTOFBEGINYEAR'
+    end
+    object SetigDatSetNUMBEROFITEM: TStringField
+      FieldName = 'NUMBEROFITEM'
+      ReadOnly = True
+      Size = 10
+    end
+    object SetigDatSetAMOUNTOFFIRSTQUARTER: TFloatField
+      FieldName = 'AMOUNTOFFIRSTQUARTER'
+      DisplayFormat = '#,##0.00'
+    end
+    object SetigDatSetAMOUNTOFSECONDQUARTER: TFloatField
+      FieldName = 'AMOUNTOFSECONDQUARTER'
+      DisplayFormat = '#,##0.00'
+    end
+    object SetigDatSetAMOUNTOFTHRIDQUARTER: TFloatField
+      FieldName = 'AMOUNTOFTHRIDQUARTER'
+      DisplayFormat = '#,##0.00'
+    end
+    object SetigDatSetAMOUNTOFFOURTHQUARTER: TFloatField
+      FieldName = 'AMOUNTOFFOURTHQUARTER'
+      DisplayFormat = '#,##0.00'
+    end
+    object SetigDatSetAMOUNTOFENDYEAR: TFloatField
+      FieldName = 'AMOUNTOFENDYEAR'
+      DisplayFormat = '#,##0.00'
+    end
+    object SetigDatSetID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object SetigDatSetID_ARTICL: TFloatField
+      FieldName = 'ID_ARTICL'
+      Required = True
+    end
+    object SetigDatSetACCID: TFloatField
+      FieldName = 'ACCID'
+    end
+    object SetigDatSetID_ARTDAT: TFloatField
+      FieldName = 'ID_ARTDAT'
+    end
+  end
+  object ArtDatSet: TOracleDataSet
+    SQL.Strings = (
+      'select  a.rowid, a.*  from articledates a'
+      '')
+    QBEDefinition.QBEFieldDefs = {
+      040000000300000002000000494401000000000008000000424547494E444154
+      01000000000006000000454E44444154010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 95
+    Top = 264
+    object ArtDatSetID: TFloatField
+      FieldName = 'ID'
+    end
+    object ArtDatSetBEGINDAT: TDateTimeField
+      FieldName = 'BEGINDAT'
+    end
+    object ArtDatSetENDDAT: TDateTimeField
+      FieldName = 'ENDDAT'
+    end
+  end
+  object ArtDatSrc: TDataSource
+    DataSet = ArtDatSet
+    Left = 29
+    Top = 264
+  end
+  object SYSDAT: TOracleDataSet
+    SQL.Strings = (
+      'select to_date('#39'01-jan-'#39'||to_char(tek_dat,'#39'YYYY'#39')) as begindat,'
+      
+        '       to_date('#39'01-jan-'#39'||(to_number(to_char(tek_dat,'#39'YYYY'#39'))+1)' +
+        ') as enddat from sysdat'
+      ''
+      '  '
+      '')
+    QBEDefinition.QBEFieldDefs = {
+      040000000200000008000000424547494E44415401000000000006000000454E
+      44444154010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 83
+    Top = 344
+    object SYSDATBEGINDAT: TDateTimeField
+      FieldName = 'BEGINDAT'
+    end
+    object SYSDATENDDAT: TDateTimeField
+      FieldName = 'ENDDAT'
+    end
+  end
+  object sysdatSrc: TDataSource
+    DataSet = SYSDAT
+    Left = 13
+    Top = 344
+  end
+  object articles_accSrc: TDataSource
+    DataSet = articles_accs
+    Left = 16
+    Top = 400
+  end
+  object articles_accs: TOracleDataSet
+    SQL.Strings = (
+      'SELECT  a.rowid,a.* '
+      '  FROM articles_accs a'
+      'where groupid=:groupid'
+      'order by acc'
+      '')
+    Variables.Data = {
+      0300000001000000080000003A47524F55504944030000000400000001000000
+      00000000}
+    QBEDefinition.QBEFieldDefs = {
+      04000000020000000700000047524F5550494401000000000003000000414343
+      010000000000}
+    Master = articles_accgroup
+    MasterFields = 'id'
+    DetailFields = 'groupid'
+    Session = sboapiDataModule.SBSession
+    Left = 88
+    Top = 400
+    object articles_accsACC: TFloatField
+      FieldName = 'ACC'
+    end
+    object articles_accsGROUPID: TFloatField
+      FieldName = 'GROUPID'
+    end
+  end
+  object articles_accgroup: TOracleDataSet
+    SQL.Strings = (
+      'select t.*from articles_accgroup t'
+      '')
+    QBEDefinition.QBEFieldDefs = {
+      0400000003000000020000004944010000000000040000004E414D4501000000
+      00000B0000004445534352495054494F4E010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 344
+    Top = 368
+    object articles_accgroupID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object articles_accgroupNAME: TStringField
+      FieldName = 'NAME'
+      Size = 12
+    end
+    object articles_accgroupDESCRIPTION: TStringField
+      FieldName = 'DESCRIPTION'
+      Size = 30
+    end
+  end
+  object articles_accgroupSrc: TDataSource
+    DataSet = articles_accgroup
+    Left = 240
+    Top = 368
+  end
+  object accrestDatSrc: TDataSource
+    DataSet = accrest
+    Left = 192
+    Top = 267
+  end
+  object accrest: TOracleDataSet
+    SQL.Strings = (
+      'select acc_id,sum(obr_d) as sm from archost ,itemsofarticles a'
+      
+        'where  datdate between (select to_date('#39'01-jan-'#39'||to_char(tek_da' +
+        't,'#39'YYYY'#39')) as begindat from sysdat) and '
+      
+        '(select  to_date('#39'01-jan-'#39'||(to_number(to_char(tek_dat,'#39'YYYY'#39'))+' +
+        '1)) as enddat from sysdat)and'
+      '  acc_id =a.accid'
+      'group by acc_id'
+      ''
+      ''
+      ''
+      '/*select acc_id,sum(obr_d) as sm from archost'
+      
+        'where datdate between (select begindat from  articledates) and (' +
+        'select enddat  from articledates)'
+      '--and where  acc_id = :acc_id'
+      'group by acc_id*/')
+    QBEDefinition.QBEFieldDefs = {
+      0400000002000000060000004143435F494401000000000002000000534D0100
+      00000000}
+    QueryAllRecords = False
+    Session = sboapiDataModule.SBSession
+    AfterPost = accrestAfterPost
+    Left = 277
+    Top = 269
+    object accrestACC_ID: TFloatField
+      FieldName = 'ACC_ID'
+      Required = True
+    end
+    object accrestSM: TFloatField
+      FieldName = 'SM'
+    end
+  end
+  object ArtDataSetExcl: TOracleDataSet
+    SQL.Strings = (
+      ''
+      
+        'SELECT  cont.id,cont.rowid , cont.name,cont.numberofarticle, con' +
+        't.status'
+      '  FROM articles cont'
+      ' --where a.id = :artid'
+      'order by status,id'
+      '--order by :OrderField'
+      '--order by :artid')
+    QBEDefinition.QBEFieldDefs = {
+      0400000004000000020000004944010000000000040000004E414D4501000000
+      00000F0000004E554D4245524F4641525449434C450100000000000600000053
+      5441545553010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 241
+    Top = 438
+    object ArtDataSetExclNAME: TStringField
+      FieldName = 'NAME'
+      Required = True
+      Size = 120
+    end
+    object ArtDataSetExclNUMBEROFARTICLE: TStringField
+      FieldName = 'NUMBEROFARTICLE'
+      Size = 10
+    end
+    object ArtDataSetExclSTATUS: TFloatField
+      FieldName = 'STATUS'
+    end
+    object ArtDataSetExclstat: TStringField
+      FieldKind = fkLookup
+      FieldName = 'stat'
+      LookupDataSet = IncomeDst
+      LookupKeyFields = 'ID'
+      LookupResultField = 'NAME'
+      KeyFields = 'STATUS'
+      Lookup = True
+    end
+    object ArtDataSetExclID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+  end
+  object ItmDataSetExcl: TOracleDataSet
+    SQL.Strings = (
+      'select t.rowid,t.* ,'
+      'P_ARTICLES.get_accno(accid) as accno'
+      ''
+      
+        '--P_ARTICLES.get_obr_ByDat(accid, to_date('#39'01-jan-'#39'||to_char(sbo' +
+        'p.get_date,'#39'YYYY'#39')),to_date('#39'31-mar-'#39'||to_char(sbop.get_date,'#39'YY' +
+        'YY'#39'))) as AMOUNTOFFIRSTQUARTER_REAL,'
+      
+        '--P_ARTICLES.get_obr_ByDat(accid, to_date('#39'01-apr-'#39'||to_char(sbo' +
+        'p.get_date,'#39'YYYY'#39')),to_date('#39'30-jun-'#39'||to_char(sbop.get_date,'#39'YY' +
+        'YY'#39'))) as AMOUNTOFSECONDQUARTER_REAL,'
+      
+        '--P_ARTICLES.get_obr_ByDat(accid, to_date('#39'01-jul-'#39'||to_char(sbo' +
+        'p.get_date,'#39'YYYY'#39')),to_date('#39'30-sep-'#39'||to_char(sbop.get_date,'#39'YY' +
+        'YY'#39'))) as AMOUNTOFTHRIDQUARTER_REAL, '
+      
+        '--P_ARTICLES.get_obr_ByDat(accid, to_date('#39'01-oct-'#39'||to_char(sbo' +
+        'p.get_date,'#39'YYYY'#39')),to_date('#39'31-dec-'#39'||to_char(sbop.get_date,'#39'YY' +
+        'YY'#39'))) as AMOUNTOFFOURTHQUARTER_REAL'
+      ''
+      ''
+      'from ITEMSOFARTICLES t'
+      ''
+      ' where id_articl = :id_articl'
+      'order by id'
+      ' --to_char(begindat,'#39'YYYY'#39')=to_char(sbop.get_date,'#39'YYYY'#39'))')
+    Variables.Data = {
+      03000000010000000A0000003A49445F41525449434C04000000000000000000
+      0000}
+    QBEDefinition.QBEFieldDefs = {
+      040000000D0000000200000049440100000000000900000049445F4152544943
+      4C010000000000040000004E414D4501000000000011000000414D4F554E544F
+      46424547494E594541520100000000000500000041434349440100000000000C
+      0000004E554D4245524F464954454D01000000000014000000414D4F554E544F
+      4646495253545155415254455201000000000015000000414D4F554E544F4653
+      45434F4E445155415254455201000000000014000000414D4F554E544F465448
+      5249445155415254455201000000000015000000414D4F554E544F46464F5552
+      5448515541525445520100000000000F000000414D4F554E544F46454E445945
+      41520100000000000900000049445F4152544441540100000000000500000041
+      43434E4F010000000000}
+    Master = ArtDataSetExcl
+    MasterFields = 'ID'
+    DetailFields = 'ID_ARTICL'
+    Session = sboapiDataModule.SBSession
+    OnCalcFields = ItmDataSetExclCalcFields
+    Left = 348
+    Top = 440
+    object ItmDataSetExclNUMBEROFITEM: TStringField
+      FieldName = 'NUMBEROFITEM'
+      Size = 10
+    end
+    object ItmDataSetExclNAME: TStringField
+      FieldName = 'NAME'
+      Required = True
+      Size = 120
+    end
+    object ItmDataSetExclAMOUNTOFTHRIDQUARTER: TFloatField
+      FieldName = 'AMOUNTOFTHRIDQUARTER'
+      DisplayFormat = '#,##0.00'
+    end
+    object ItmDataSetExclAMOUNTOFSECONDQUARTER: TFloatField
+      FieldName = 'AMOUNTOFSECONDQUARTER'
+      DisplayFormat = '#,##0.00'
+    end
+    object ItmDataSetExclAMOUNTOFFIRSTQUARTER: TFloatField
+      FieldName = 'AMOUNTOFFIRSTQUARTER'
+      DisplayFormat = '#,##0.00'
+    end
+    object ItmDataSetExclAMOUNTOFFOURTHQUARTER: TFloatField
+      FieldName = 'AMOUNTOFFOURTHQUARTER'
+      DisplayFormat = '#,##0.00'
+    end
+    object ItmDataSetExclAMOUNTOFENDYEAR: TFloatField
+      FieldName = 'AMOUNTOFENDYEAR'
+      DisplayFormat = '#,##0.00'
+    end
+    object ItmDataSetExclACCNO: TStringField
+      FieldName = 'ACCNO'
+      Size = 4000
+    end
+    object ItmDataSetExclsumamount_e: TFloatField
+      FieldKind = fkCalculated
+      FieldName = 'sumamount_e'
+      DisplayFormat = '#,##0.00'
+      Calculated = True
+    end
+    object ItmDataSetExclBudcet_rest: TFloatField
+      FieldKind = fkCalculated
+      FieldName = 'Budcet_rest'
+      DisplayFormat = '#,##0.00'
+      Calculated = True
+    end
+    object ItmDataSetExclACCID: TFloatField
+      FieldName = 'ACCID'
+    end
+    object ItmDataSetExclDispatry: TFloatField
+      FieldKind = fkCalculated
+      FieldName = 'Dispatry'
+      Calculated = True
+    end
+    object ItmDataSetExclfaiz: TFloatField
+      FieldKind = fkCalculated
+      FieldName = 'faiz'
+      Calculated = True
+    end
+    object ItmDataSetExclreat: TFloatField
+      FieldKind = fkLookup
+      FieldName = 'reat'
+      LookupDataSet = accrest
+      LookupKeyFields = 'ACC_ID'
+      LookupResultField = 'SM'
+      KeyFields = 'ACCID'
+      Lookup = True
+    end
+    object ItmDataSetExclID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object ItmDataSetExclAMOUNTOFFIRSTQUARTER_REAL: TFloatField
+      FieldKind = fkLookup
+      FieldName = 'AMOUNTOFFIRSTQUARTER_REAL'
+      LookupDataSet = OracleDataSet1
+      LookupKeyFields = 'ACC_ID'
+      LookupResultField = 'SM'
+      KeyFields = 'ACCID'
+      Lookup = True
+    end
+    object ItmDataSetExclAMOUNTOFSECONDQUARTER_REAL: TFloatField
+      FieldKind = fkLookup
+      FieldName = 'AMOUNTOFSECONDQUARTER_REAL'
+      LookupDataSet = OracleDataSet2
+      LookupKeyFields = 'ACC_ID'
+      LookupResultField = 'SM1'
+      KeyFields = 'ACCID'
+      Lookup = True
+    end
+    object ItmDataSetExclAMOUNTOFTHRIDQUARTER_REAL: TFloatField
+      FieldKind = fkLookup
+      FieldName = 'AMOUNTOFTHRIDQUARTER_REAL'
+      LookupDataSet = OracleDataSet3
+      LookupKeyFields = 'ACC_ID'
+      LookupResultField = 'SM2'
+      KeyFields = 'ACCID'
+      Lookup = True
+    end
+    object ItmDataSetExclAMOUNTOFFOURTHQUARTER_REAL: TFloatField
+      FieldKind = fkLookup
+      FieldName = 'AMOUNTOFFOURTHQUARTER_REAL'
+      LookupDataSet = OracleDataSet4
+      LookupKeyFields = 'ACC_ID'
+      LookupResultField = 'SM3'
+      KeyFields = 'ACCID'
+      Lookup = True
+    end
+  end
+  object OracleDataSet1: TOracleDataSet
+    SQL.Strings = (
+      'select acc_id,sum(obr_d) as sm from archost ,itemsofarticles a'
+      ''
+      
+        'where datdate between (to_date('#39'01-jan-'#39'||to_char(sbop.get_date,' +
+        #39'YYYY'#39'))) and (to_date('#39'31-mar-'#39'||to_char(sbop.get_date,'#39'YYYY'#39'))' +
+        ')and'
+      '  acc_id =a.accid'
+      'group by acc_id'
+      ''
+      ''
+      ''
+      ''
+      
+        '--P_ARTICLES.get_obr_ByDat(accid, to_date('#39'01-jan-'#39'||to_char(sbo' +
+        'p.get_date,'#39'YYYY'#39')),to_date('#39'31-mar-'#39'||to_char(sbop.get_date,'#39'YY' +
+        'YY'#39'))) as AMOUNTOFFIRSTQUARTER_REAL,'
+      
+        '--P_ARTICLES.get_obr_ByDat(accid, to_date('#39'01-apr-'#39'||to_char(sbo' +
+        'p.get_date,'#39'YYYY'#39')),to_date('#39'30-jun-'#39'||to_char(sbop.get_date,'#39'YY' +
+        'YY'#39'))) as AMOUNTOFSECONDQUARTER_REAL,'
+      
+        '--P_ARTICLES.get_obr_ByDat(accid, to_date('#39'01-jul-'#39'||to_char(sbo' +
+        'p.get_date,'#39'YYYY'#39')),to_date('#39'30-sep-'#39'||to_char(sbop.get_date,'#39'YY' +
+        'YY'#39'))) as AMOUNTOFTHRIDQUARTER_REAL, '
+      
+        '--P_ARTICLES.get_obr_ByDat(accid, to_date('#39'01-oct-'#39'||to_char(sbo' +
+        'p.get_date,'#39'YYYY'#39')),to_date('#39'31-dec-'#39'||to_char(sbop.get_date,'#39'YY' +
+        'YY'#39'))) as AMOUNTOFFOURTHQUARTER_REAL')
+    QBEDefinition.QBEFieldDefs = {
+      0400000002000000060000004143435F494401000000000002000000534D0100
+      00000000}
+    Session = sboapiDataModule.SBSession
+    Left = 32
+    Top = 544
+    object OracleDataSet1ACC_ID: TFloatField
+      FieldName = 'ACC_ID'
+      Required = True
+    end
+    object OracleDataSet1SM: TFloatField
+      FieldName = 'SM'
+    end
+  end
+  object OracleDataSet2: TOracleDataSet
+    SQL.Strings = (
+      'select acc_id,sum(obr_d) as sm1 from archost ,itemsofarticles a'
+      ''
+      
+        'where datdate between (to_date('#39'01-apr-'#39'||to_char(sbop.get_date,' +
+        #39'YYYY'#39'))) and (to_date('#39'30-jun-'#39'||to_char(sbop.get_date,'#39'YYYY'#39'))' +
+        ')and'
+      '  acc_id =a.accid'
+      'group by acc_id')
+    QBEDefinition.QBEFieldDefs = {
+      0400000002000000060000004143435F494401000000000003000000534D3101
+      0000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 120
+    Top = 544
+    object OracleDataSet2ACC_ID: TFloatField
+      FieldName = 'ACC_ID'
+      Required = True
+    end
+    object OracleDataSet2SM1: TFloatField
+      FieldName = 'SM1'
+    end
+  end
+  object OracleDataSet3: TOracleDataSet
+    SQL.Strings = (
+      'select acc_id,sum(obr_d) as sm2 from archost ,itemsofarticles a'
+      ''
+      
+        'where datdate between (to_date('#39'01-jul-'#39'||to_char(sbop.get_date,' +
+        #39'YYYY'#39'))) and (to_date('#39'30-sep-'#39'||to_char(sbop.get_date,'#39'YYYY'#39'))' +
+        ')and'
+      '  acc_id =a.accid'
+      'group by acc_id'
+      '')
+    QBEDefinition.QBEFieldDefs = {
+      0400000002000000060000004143435F494401000000000003000000534D3201
+      0000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 208
+    Top = 544
+    object OracleDataSet3ACC_ID: TFloatField
+      FieldName = 'ACC_ID'
+      Required = True
+    end
+    object OracleDataSet3SM2: TFloatField
+      FieldName = 'SM2'
+    end
+  end
+  object OracleDataSet4: TOracleDataSet
+    SQL.Strings = (
+      'select acc_id,sum(obr_d) as sm3 from archost ,itemsofarticles a'
+      ''
+      
+        'where datdate between (to_date('#39'01-oct-'#39'||to_char(sbop.get_date,' +
+        #39'YYYY'#39'))) and (to_date('#39'30-dec-'#39'||to_char(sbop.get_date,'#39'YYYY'#39'))' +
+        ')and'
+      '  acc_id =a.accid'
+      'group by acc_id'
+      ''
+      '')
+    QBEDefinition.QBEFieldDefs = {
+      0400000002000000060000004143435F494401000000000003000000534D3301
+      0000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 328
+    Top = 544
+    object OracleDataSet4ACC_ID: TFloatField
+      FieldName = 'ACC_ID'
+      Required = True
+    end
+    object OracleDataSet4SM3: TFloatField
+      FieldName = 'SM3'
+    end
+  end
+end

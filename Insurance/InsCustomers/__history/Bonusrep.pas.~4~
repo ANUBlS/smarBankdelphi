@@ -1,0 +1,58 @@
+unit Bonusrep;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, CMExcelExport, StdCtrls, ComCtrls;
+
+type
+  TBonusReport = class(TForm)
+    Edit1: TEdit;
+    Edit2: TEdit;
+    DateTimePicker1: TDateTimePicker;
+    DateTimePicker2: TDateTimePicker;
+    Button1: TButton;
+    ExcelExport: TCMExcelExport;
+    Label1: TLabel;
+    Label2: TLabel;
+    Memo1: TMemo;
+    procedure Button1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  BonusReport: TBonusReport;
+
+implementation
+
+uses InsDataModule;
+
+{$R *.dfm}
+
+procedure TBonusReport.Button1Click(Sender: TObject);
+begin
+InsDataMod.ins_bonushesabat.CloseAll;
+
+InsDataMod.ins_bonushesabat.SetVariable('dat1',trunc(DateTimePicker1.Date));
+InsDataMod.ins_bonushesabat.SetVariable('dat2',trunc(DateTimePicker2.Date));
+InsDataMod.ins_bonushesabat.SetVariable('balcndb',edit1.text);
+InsDataMod.ins_bonushesabat.SetVariable('balcnkr',edit2.text);
+InsDataMod.ins_bonushesabat.Open;
+{ShowMessage(InsDataMod.ins_bonushesabat.GetVariable('dat1'));
+ShowMessage(InsDataMod.ins_bonushesabat.GetVariable('dat2'));
+ShowMessage(InsDataMod.ins_bonushesabat.GetVariable('balcndb'));
+ShowMessage(InsDataMod.ins_bonushesabat.GetVariable('balcnkr')); }
+
+ with ExcelExport do
+   begin
+      Connect;
+      ExportDataset(InsDataMod.ins_bonushesabat,'Bonus Hesabatý.',True,false);
+      Disconnect;
+   end;
+end;
+
+end.

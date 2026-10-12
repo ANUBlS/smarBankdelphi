@@ -1,0 +1,243 @@
+﻿unit AccountPropertiesImpl;
+ //ODSBranches
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ExtCtrls, StdCtrls, ComCtrls, DBCtrls, Mask, Buttons, Db, HintBox, XFSCtrls;
+
+type
+  TAccountPropertiesForm = class(TForm)
+    hbErrorBox: THintBox;
+    btnCancel: TBitBtn;
+    btnOk: TBitBtn;
+    XFGroupBox1: TXFGroupBox;
+    DBEditAccName: TDBEdit;
+    DBLookupComboBox4: TDBLookupComboBox;
+    DBEdit4: TDBEdit;
+    DBLookupSimotchet: TDBLookupComboBox;
+    DTPOpenDate: TDateTimePicker;
+    DBEditBalance1: TDBEdit;
+    DBEditAccNo: TDBEdit;
+    DBLookupBalance1: TDBLookupComboBox;
+    DBEditCurrID: TDBEdit;
+    DBLookupCurr: TDBLookupComboBox;
+    DBLookupPairAcc: TDBLookupComboBox;
+    DBEditLimit: TDBEdit;
+    XFGroupBox2: TXFGroupBox;
+    DBEdit6: TDBEdit;
+    DBEdit7: TDBEdit;
+    XFLabel1: TXFLabel;
+    XFLabel2: TXFLabel;
+    XFLabel3: TXFLabel;
+    XFLabel4: TXFLabel;
+    XFLabel5: TXFLabel;
+    XFLabel6: TXFLabel;
+    XFLabel7: TXFLabel;
+    XFLabel8: TXFLabel;
+    XFLabel9: TXFLabel;
+    XFLabel10: TXFLabel;
+    XFLabel11: TXFLabel;
+    XFPanel1: TXFPanel;
+    XFLabel12: TXFLabel;
+    SpeedButton1: TSpeedButton;
+    procedure ButtonCommitClick(Sender: TObject);
+    procedure ButtonCancelClick(Sender: TObject);
+    procedure DBEditAccNoKeyPress(Sender: TObject; var Key: Char);
+    procedure FormCreate(Sender: TObject);
+    function  SaveAccData():Boolean;
+    procedure FormShow(Sender: TObject);
+    procedure XFSpeedButton1Click(Sender: TObject);
+    procedure SpeedButton1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  AccountPropertiesForm: TAccountPropertiesForm;
+  opetion:string;
+
+implementation
+
+uses  sboapiDataModuleImpl, InsDataModule,SBTranslateProc ,
+  InsCustomersFormImpl,CommanParametrs;
+
+{$R *.DFM}
+
+function TAccountPropertiesForm.SaveAccData():Boolean;
+var
+   dsState :   TDataSetState;
+begin
+  Result := false;
+
+    InsDataMod.DSContract.Close;
+    InsDataMod.DSContract.SetVariable('p_id',InsCustomersForm.DBGridContracts.DataSource.DataSet.FieldByName('id').AsInteger);
+    InsDataMod.DSContract.open;
+    //InsDataMod.DSContract.Edit;
+
+   if InsDataMod.DSContract.FieldByName('valute_id').AsString='' then
+ begin
+   showmessage('Diqqət ! Müqavilənin valyutası daxil edilməyib!');
+   abort;
+ end;
+
+
+ if InsDataMod.DSContract.FieldByName('valute_id').AsInteger<>strtoint(DBEditCurrID.Text) then
+     begin
+  showmessage('Diqqət ! Açılan hesabın valyutası müqavilənin valyutası ilə eyni olmalıdır!');
+   abort;
+     end;
+
+
+with InsDataMod do
+ begin
+    DSins_insurances_acc.Close;
+    DSins_insurances_acc.SetVariable('p_id',InsCustomersForm.DBGridContracts.DataSource.DataSet.FieldByName('TYPE_ID').AsInteger);
+    DSins_insurances_acc.Open;
+
+ if strtofloat(DBEditBalance1.Text)<>DSins_insurances_acc.FieldByName('LOAN_BAL_CN').AsFloat  then
+
+  begin
+  if strtofloat(DBEditBalance1.Text)<>DSins_insurances_acc.fieldbyname('CURR_BAL_CN').AsFloat then
+          begin
+       showmessage('Diqqət! Bu balans hesabında  bu müqavilə növü üçün hesab açmaq olmaz!');
+       abort;
+          end;
+  end;
+
+
+           if ODSAccount.State=dsInsert then
+           begin
+       if strtofloat(DBEditBalance1.Text)=DSins_insurances_acc.FieldByName('LOAN_BAL_CN').AsFloat then
+      begin
+         if InsDataMod.DSContract.FieldByName('loanacc_id').AsInteger<>0 then
+         begin
+           showmessage('Diqqət! Bu balans hesabında  bu müqavilə  üçün  artıq hesab açılıb!');
+           abort;
+         end;
+
+      end;
+
+      if strtofloat(DBEditBalance1.Text)=DSins_insurances_acc.FieldByName('curr_bal_cn').AsFloat then
+      begin
+         if InsDataMod.DSContract.FieldByName('curracc_id').AsInteger<>0 then
+         begin
+           showmessage('Diqqət! Bu balans hesabında  bu müqavilə  üçün  artıq hesab açılıb!');
+           abort;
+         end;
+      end;
+      end;
+
+
+ end;
+
+
+   with InsDataMod, ODSAccount,DSins_insurances_acc do
+   begin
+   // try
+
+      dsState := State;
+      ODSAccount.Post;
+      ODSAccount.RefreshRecord;
+     { if dsState = dsInsert then
+      begin
+         OPCOMMON.CallProcedure('add_lazyrest', [ODSAccount.FieldByName('ID').asFloat])  ;
+      end; }
+      if opetion='I' then
+      begin
+      //showmessage(ODSAccount.FieldByName('ID').AsString) ;
+          OPCOMMON.CallProcedure('add_lazyrest', [ODSAccount.FieldByName('ID').asFloat])  ;
+      end;
+
+   { DSins_insurances_acc.Close;
+    DSins_insurances_acc.SetVariable('p_id',InsCustomersForm.DBGridContracts.DataSource.DataSet.FieldByName('TYPE_ID').AsInteger);
+    DSins_insurances_acc.Open;  }
+
+    InsDataMod.DSContract.Close;
+    InsDataMod.DSContract.SetVariable('p_id',InsCustomersForm.DBGridContracts.DataSource.DataSet.FieldByName('id').AsInteger);
+    InsDataMod.DSContract.open;
+    InsDataMod.DSContract.Edit;
+
+      if strtofloat(DBEditBalance1.Text)=DSins_insurances_acc.FieldByName('LOAN_BAL_CN').AsFloat then
+      begin
+         InsDataMod.DSContract.FieldByName('loanacc_id').AsInteger:=ODSAccount.FieldByName('ID').AsInteger;
+         InsDataMod.DSContract.Post;
+      end;
+
+      if strtofloat(DBEditBalance1.Text)=DSins_insurances_acc.FieldByName('curr_bal_cn').AsFloat then
+      begin
+         InsDataMod.DSContract.FieldByName('curracc_id').AsInteger:=ODSAccount.FieldByName('ID').AsInteger;
+         InsDataMod.DSContract.Post;
+      end;
+
+
+  //  except
+     // on E:Exception do
+     // begin
+       // hbErrorBox.ShowMessage(E.Message);
+        Result := true;
+      //end;
+    end;
+end;
+
+procedure TAccountPropertiesForm.SpeedButton1Click(Sender: TObject);
+begin
+if DBEditCurrID.Text='' then
+begin
+  showmessage('Diqqət! Valyutanı daxil edin.');
+  exit;
+end;
+end;
+
+procedure TAccountPropertiesForm.XFSpeedButton1Click(Sender: TObject);
+begin
+if True then
+
+end;
+
+procedure TAccountPropertiesForm.ButtonCommitClick(Sender: TObject);
+begin
+ with InsDataMod do
+   if ODSAccount.State in [dsEdit, dsInsert] then
+       ODSAccountOPEN_DAT.Value :=Int(DTPOpenDate.Date);
+
+ if SaveAccData then
+
+  ModalResult := mrOk
+   //ModalResult := mrCancel
+end;
+
+procedure TAccountPropertiesForm.ButtonCancelClick(Sender: TObject);
+begin
+ ModalResult := mrCancel
+end;
+
+
+procedure TAccountPropertiesForm.DBEditAccNoKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if Key = #13 then
+     begin
+       FindNextControl(ActiveControl,true,true,false).SetFocus;
+       Key := #0
+     end;
+end;
+
+procedure TAccountPropertiesForm.FormCreate(Sender: TObject);
+begin
+  with InsDataMod do
+  if ( ODSAccount.state = dsEdit ) then
+    DTPOpenDate.Date := ODSAccountOPEN_DAT.Value 
+  else
+   DTPOpenDate.Date :=  getsysdate();
+   SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TAccountPropertiesForm.FormShow(Sender: TObject);
+begin
+    opetion:=opetion_acc;
+end;
+
+end.

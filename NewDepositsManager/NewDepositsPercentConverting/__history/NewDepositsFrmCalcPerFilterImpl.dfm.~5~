@@ -1,0 +1,511 @@
+object NewDepositsFrmCalcPerFilter: TNewDepositsFrmCalcPerFilter
+  Left = 211
+  Top = 170
+  BorderIcons = [biSystemMenu]
+  ClientHeight = 225
+  ClientWidth = 607
+  Color = clBtnFace
+  Font.Charset = RUSSIAN_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poScreenCenter
+  OnCanResize = FormCanResize
+  OnKeyPress = FormKeyPress
+  PixelsPerInch = 96
+  TextHeight = 14
+  object Button1: TButton
+    Left = 336
+    Top = 196
+    Width = 81
+    Height = 27
+    Caption = 'T'#601'tbiq et'
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -12
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 0
+    OnClick = Button1Click
+  end
+  object Button2: TButton
+    Left = 423
+    Top = 196
+    Width = 81
+    Height = 27
+    Caption = 'L'#601#287'v et'
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -12
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 1
+    OnClick = Button2Click
+  end
+  object Button3: TButton
+    Left = 518
+    Top = 196
+    Width = 81
+    Height = 27
+    Caption = 'Ba'#287'la'
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -12
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 2
+    OnClick = Button3Click
+  end
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 607
+    Height = 185
+    Align = alTop
+    BevelInner = bvRaised
+    BevelOuter = bvLowered
+    TabOrder = 3
+    object Panel3: TPanel
+      Left = 2
+      Top = 2
+      Width = 603
+      Height = 70
+      Align = alTop
+      BevelInner = bvRaised
+      BevelOuter = bvLowered
+      TabOrder = 0
+      object GroupBox4: TGroupBox
+        Left = 401
+        Top = 2
+        Width = 199
+        Height = 66
+        Align = alLeft
+        Caption = 'M'#252#351't'#601'rinin kateqoriyas'#305
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -12
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 0
+        object LCBPersons: TDBLookupComboboxEh
+          Left = 4
+          Top = 17
+          Width = 191
+          Height = 22
+          DropDownBox.Sizable = True
+          EditButtons = <>
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -12
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          KeyField = 'ID'
+          ListField = 'NAME'
+          ListSource = NewDepositsDMPercentConverting.PersonsDatSrc
+          ParentFont = False
+          TabOrder = 0
+          Visible = True
+        end
+        object CBPersons: TCheckBox
+          Left = 5
+          Top = 43
+          Width = 98
+          Height = 18
+          Caption = 'T'#601'tbiq et'
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -12
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 1
+        end
+      end
+      object GroupBox5: TGroupBox
+        Left = 2
+        Top = 2
+        Width = 199
+        Height = 66
+        Align = alLeft
+        Caption = 'Valyuta'
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -12
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 1
+        object LCBValute: TDBLookupComboboxEh
+          Left = 4
+          Top = 17
+          Width = 191
+          Height = 22
+          DropDownBox.Sizable = True
+          EditButtons = <>
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -12
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          KeyField = 'VALUTE'
+          ListField = 'VALU_NAME'
+          ListSource = NewDepositsDMPercentConverting.ValutesDatSrc
+          ParentFont = False
+          TabOrder = 0
+          Visible = True
+        end
+        object CBValute: TCheckBox
+          Left = 5
+          Top = 43
+          Width = 98
+          Height = 18
+          Caption = 'T'#601'tbiq et'
+          TabOrder = 1
+        end
+      end
+      object GroupBox6: TGroupBox
+        Left = 201
+        Top = 2
+        Width = 200
+        Height = 66
+        Align = alLeft
+        Caption = 'Filial'
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -12
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 2
+        object LCBFilial: TDBLookupComboboxEh
+          Left = 4
+          Top = 17
+          Width = 191
+          Height = 22
+          DropDownBox.Sizable = True
+          EditButtons = <>
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -12
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          KeyField = 'ID'
+          ListField = 'NAME'
+          ListSource = NewDepositsDMPercentConverting.FilialsDatSrc
+          ParentFont = False
+          TabOrder = 0
+          Visible = True
+        end
+        object CBFilial: TCheckBox
+          Left = 5
+          Top = 43
+          Width = 98
+          Height = 18
+          Caption = 'T'#601'tbiq et'
+          TabOrder = 1
+        end
+      end
+    end
+    object Panel4: TPanel
+      Left = 2
+      Top = 72
+      Width = 603
+      Height = 70
+      Align = alTop
+      BevelInner = bvRaised
+      BevelOuter = bvLowered
+      TabOrder = 1
+      object GroupBox7: TGroupBox
+        Left = 401
+        Top = 2
+        Width = 199
+        Height = 66
+        Align = alLeft
+        Caption = 'M'#252#351't'#601'ri'
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -12
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 0
+        object LCBCustomer: TDBLookupComboboxEh
+          Left = 4
+          Top = 17
+          Width = 191
+          Height = 22
+          DropDownBox.Sizable = True
+          EditButtons = <>
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -12
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          KeyField = 'ID'
+          ListField = 'NAME'
+          ListSource = NewDepositsDMPercentConverting.CustomersDatSrc
+          ParentFont = False
+          TabOrder = 0
+          Visible = True
+        end
+        object CBCustomer: TCheckBox
+          Left = 5
+          Top = 43
+          Width = 98
+          Height = 18
+          Caption = 'T'#601'tbiq et'
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -12
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 1
+        end
+      end
+      object GroupBox8: TGroupBox
+        Left = 2
+        Top = 2
+        Width = 199
+        Height = 66
+        Align = alLeft
+        Caption = 'M'#252#351't'#601'rinin tipi'
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -12
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 1
+        object LCBCategories: TDBLookupComboboxEh
+          Left = 4
+          Top = 17
+          Width = 191
+          Height = 22
+          DropDownBox.Sizable = True
+          EditButtons = <>
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -12
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          KeyField = 'ID'
+          ListField = 'CATEGORY'
+          ListSource = NewDepositsDMPercentConverting.CategoriesDatSrc
+          ParentFont = False
+          TabOrder = 0
+          Visible = True
+        end
+        object CBCategories: TCheckBox
+          Left = 5
+          Top = 43
+          Width = 98
+          Height = 18
+          Caption = 'T'#601'tbiq et'
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -12
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 1
+        end
+      end
+      object GroupBox9: TGroupBox
+        Left = 201
+        Top = 2
+        Width = 200
+        Height = 66
+        Align = alLeft
+        Caption = 'Depozitin tipi'
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -12
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 2
+        object LCBDepositTypes: TDBLookupComboboxEh
+          Left = 4
+          Top = 17
+          Width = 191
+          Height = 22
+          DropDownBox.Sizable = True
+          EditButtons = <>
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -12
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          KeyField = 'ID'
+          ListField = 'TYPE'
+          ListSource = NewDepositsDMPercentConverting.DepositTypesDatSrc
+          ParentFont = False
+          TabOrder = 0
+          Visible = True
+        end
+        object CBDepositTypes: TCheckBox
+          Left = 5
+          Top = 43
+          Width = 98
+          Height = 18
+          Caption = 'T'#601'tbiq et'
+          TabOrder = 1
+        end
+      end
+    end
+    object Panel2: TPanel
+      Left = 2
+      Top = 142
+      Width = 603
+      Height = 40
+      Align = alTop
+      TabOrder = 2
+      object Image1: TImage
+        Left = 8
+        Top = 8
+        Width = 25
+        Height = 25
+        Picture.Data = {
+          07544269746D617036030000424D360300000000000036000000280000001000
+          0000100000000100180000000000000300000000000000000000000000000000
+          0000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF202020202020
+          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+          FF2020DF202020FFFFFF20209F3030AFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000FF2020DF8080800000FF4040BF
+          30303020209F3030AFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF6060DF00007F0000
+          7F0000FF0000FF0000FF0000FF0000BF2020DF0000FF00007FFFFFFFFFFFFFFF
+          FFFFFFFFFFFFFFFF5050500000FF0000FF0000FF0000FF00FFFF00FFFF00007F
+          0000FF0000FF00007F505050404040FFFFFFFFFFFF3030304040400000FF0000
+          FF0000FF0000FF00FFFF00FFFF00007F0000FF0000FF0000FF0000FF40407FFF
+          FFFF4040400000FF0000FF0000FF0000FF0000FF0000FF007FFF007FFF0000BF
+          0000FF0000FF0000FF0000BFFFFFFFFFFFFFFFFFFF00003F2020DF0000FF0000
+          FF0000FF0000FF00FFFF00FFFF00007F0000FF0000FF0000FF0000BF00003FFF
+          FFFFFFFFFF20205F2020DF0000FF0000FF0000FF0000FF00FFFF00FFFF00007F
+          0000FF0000FF0000FF0000FF0000FF50508F20205F0000FF0000FF0000FF0000
+          FF0000FF0000FF00FFFF00FFFF00007F0000FF0000FF0000FF20209F303030FF
+          FFFFFFFFFFFFFFFF50508F0000FF0000FF0000FF0000FF00FFFF00FFFF00007F
+          0000FF0000FF0000FF3030EFFFFFFFFFFFFFFFFFFFFFFFFF20209F0000FF0000
+          FF0000FF0000FF00FFFF00FFFF0000BF0000FF0000FF0000FF0000FF20209FFF
+          FFFFFFFFFF3030302020DF3030AF0000BF0000FF0000FF0000FF0000FF0000FF
+          0000FF0000FF00007F00007F20205FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000
+          7F0000FF0000DF0000BF0000FF3030EF3030EF0000FFFFFFFFFFFFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFFFFFFFFFFFF20205F3030EF0000205050500000FF505050
+          FFFFFF20205F303030FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF3030
+          30FFFFFFFFFFFFFFFFFF8080BFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+          FFFF}
+        Stretch = True
+      end
+      object Image2: TImage
+        Left = 206
+        Top = 10
+        Width = 26
+        Height = 26
+        Center = True
+        IncrementalDisplay = True
+        Picture.Data = {
+          07544269746D617036030000424D360300000000000036000000280000001000
+          0000100000000100180000000000000300000000000000000000000000000000
+          0000FFFFFFFFFFFF606060808080808080808080808080808080808080808080
+          808080808080808080808080808080202020002020009F9F007F7F007F7F007F
+          7F007F7F007F7F007F7F007F7F007F7F007F7F007F7F007F7F50505080808080
+          808000BFBF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF
+          00FFFF00FFFF00FFFF30EFEF40404080808000BFBF00FFFF00FFFF00FFFF00FF
+          FF00FFFF30AFAF00000030AFAF00FFFF00FFFF00FFFF00FFFF30EFEF40404040
+          404000404000FFFF00FFFF00FFFF00FFFF00FFFF30AFAF00000030AFAF00FFFF
+          00FFFF00FFFF00FFFF306F6F808080FFFFFFFFFFFF00BFBF00FFFF00FFFF00FF
+          FF00FFFF00FFFF00BFBF00FFFF00FFFF00FFFF00FFFF30EFEF404040404040FF
+          FFFFFFFFFF00404000FFFF00FFFF00FFFF00FFFF30CFCF30505000FFFF00FFFF
+          00FFFF00FFFF306F6F808080FFFFFFFFFFFFFFFFFFFFFFFF00BFBF00FFFF00FF
+          FF00FFFF306F6F00000030EFEF00FFFF00FFFF30EFEF404040404040FFFFFFFF
+          FFFFFFFFFFFFFFFF00404000FFFF00FFFF00FFFF002020000000009F9F00FFFF
+          00FFFF306F6F808080FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00BFBF00FF
+          FF00FFFF000000000000007F7F00FFFF30EFEF404040404040FFFFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFFFFFF00404000FFFF00FFFF000000000000007F7F00FFFF
+          306F6F808080FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00BF
+          BF00FFFF30AFAF007F7F30EFEF30EFEF404040404040FFFFFFFFFFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFFFFFFFFFFFF00404000FFFF00FFFF00FFFF00FFFF306F6F
+          808080FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+          FF00BFBF00FFFF00FFFF30EFEF404040404040FFFFFFFFFFFFFFFFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00404000FFFF00FFFF306F6F606060
+          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+          FFFFFFFF007F7F30AFAF000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+          FFFF}
+        Stretch = True
+      end
+      object Image3: TImage
+        Left = 407
+        Top = 10
+        Width = 26
+        Height = 23
+        Picture.Data = {
+          07544269746D617042010000424D420100000000000076000000280000001100
+          0000110000000100040000000000CC0000000000000000000000100000001000
+          0000000000000000BF0000BF000000BFBF00BF000000BF00BF00BFBF0000C0C0
+          C000808080000000FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFF
+          FF007777777777777777700000007777777777777777700000007777777774F7
+          77777000000077777777444F77777000000077777774444F7777700000007000
+          00444F44F7777000000070FFF444F0744F777000000070F8884FF0774F777000
+          000070FFFFFFF07774F77000000070F88888F077774F7000000070FFFFFFF077
+          7774F000000070F88777F07777774000000070FFFF00007777777000000070F8
+          8707077777777000000070FFFF00777777777000000070000007777777777000
+          0000777777777777777770000000}
+      end
+      object CheckBox20: TCheckBox
+        Left = 32
+        Top = 11
+        Width = 134
+        Height = 18
+        Caption = 'Hesablanm'#305#351'lar'
+        Checked = True
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -12
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+        State = cbChecked
+        TabOrder = 0
+      end
+      object CheckBox21: TCheckBox
+        Left = 238
+        Top = 11
+        Width = 145
+        Height = 18
+        Caption = 'Hesab. dayand'#305'r'#305'lm'#305#351'lar'
+        Checked = True
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -12
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+        State = cbChecked
+        TabOrder = 1
+      end
+      object CheckBox22: TCheckBox
+        Left = 437
+        Top = 11
+        Width = 135
+        Height = 18
+        Caption = 'Hesablanm'#305#351'lar'
+        Checked = True
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -12
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+        State = cbChecked
+        TabOrder = 2
+      end
+    end
+  end
+end

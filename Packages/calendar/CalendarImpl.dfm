@@ -1,0 +1,412 @@
+object Calendar: TCalendar
+  Left = 69
+  Top = 168
+  Width = 1028
+  Height = 665
+  Caption = 'Calendar'
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'MS Sans Serif'
+  Font.Style = []
+  OldCreateOrder = False
+  OnCreate = ActiveFormCreate
+  PixelsPerInch = 96
+  TextHeight = 13
+  object TPanel
+    Left = 0
+    Top = 322
+    Width = 1028
+    Height = 343
+    Align = alClient
+    TabOrder = 0
+    object Panel1: TPanel
+      Left = 1
+      Top = 312
+      Width = 1026
+      Height = 30
+      Align = alBottom
+      BorderStyle = bsSingle
+      TabOrder = 0
+      object DBNavigator1: TDBNavigator
+        Left = 1
+        Top = 2
+        Width = 590
+        Height = 25
+        DataSource = CalendarDataMod.DataSource1
+        TabOrder = 0
+      end
+      object BitBtn1: TBitBtn
+        Left = 592
+        Top = 0
+        Width = 153
+        Height = 29
+        Caption = #1057#1090#1072#1085#1076#1072#1088#1090' '#1073#1072#1081#1088#1072#1084' '#1101#1094#1085#1094
+        DoubleBuffered = True
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = [fsBold]
+        ParentDoubleBuffered = False
+        ParentFont = False
+        TabOrder = 1
+        OnClick = BitBtn1Click
+      end
+      object BitBtn2: TBitBtn
+        Left = 744
+        Top = 0
+        Width = 176
+        Height = 30
+        Caption = #1064#1103#1085#1073#1103' '#1101#1094#1085#1094
+        DoubleBuffered = True
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = [fsBold]
+        ParentDoubleBuffered = False
+        ParentFont = False
+        TabOrder = 2
+        OnClick = BitBtn2Click
+      end
+      object BitBtn3: TBitBtn
+        Left = 920
+        Top = 0
+        Width = 172
+        Height = 30
+        Caption = #1041#1072#1079#1072#1088' '#1101#1094#1085#1094
+        DoubleBuffered = True
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = [fsBold]
+        ParentDoubleBuffered = False
+        ParentFont = False
+        TabOrder = 3
+        OnClick = BitBtn3Click
+      end
+    end
+    object DBGridEh1: TDBGridEh
+      Left = 1
+      Top = 1
+      Width = 1026
+      Height = 311
+      Align = alClient
+      DataGrouping.GroupLevels = <>
+      DataSource = CalendarDataMod.DataSource1
+      Flat = False
+      FooterColor = clWindow
+      FooterFont.Charset = DEFAULT_CHARSET
+      FooterFont.Color = clWindowText
+      FooterFont.Height = -11
+      FooterFont.Name = 'MS Sans Serif'
+      FooterFont.Style = []
+      RowDetailPanel.Color = clBtnFace
+      TabOrder = 1
+      TitleFont.Charset = DEFAULT_CHARSET
+      TitleFont.Color = clWindowText
+      TitleFont.Height = -11
+      TitleFont.Name = 'MS Sans Serif'
+      TitleFont.Style = []
+      Columns = <
+        item
+          EditButtons = <>
+          FieldName = 'HOLIDAY_DATE'
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = []
+          Footers = <>
+          Title.Caption = #1058#1072#1088#1080#1093
+          Title.Color = clGray
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clWindowText
+          Title.Font.Height = -11
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = [fsBold]
+        end
+        item
+          EditButtons = <>
+          FieldName = 'DESCRIPTION'
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = []
+          Footers = <>
+          Title.Caption = #1043#1077#1081#1088#1080' '#1080#1096' '#1101#1094#1085#1094' ('#1040#1095#1099#1075#1083#1072#1084#1072')'
+          Title.Color = clGray
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clWindowText
+          Title.Font.Height = -11
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = [fsBold]
+          Width = 872
+        end>
+      object RowDetailData: TRowDetailPanelControlEh
+      end
+    end
+  end
+  object Panel2: TPanel
+    Left = 0
+    Top = 0
+    Width = 1028
+    Height = 161
+    Align = alTop
+    BorderStyle = bsSingle
+    TabOrder = 1
+    object Panel3: TPanel
+      Left = 911
+      Top = 1
+      Width = 182
+      Height = 155
+      Align = alLeft
+      BorderStyle = bsSingle
+      TabOrder = 0
+      object MonthCalendar6: TMonthCalendar
+        Left = 1
+        Top = 1
+        Width = 176
+        Height = 149
+        Align = alClient
+        Date = 40695.571088518520000000
+        ShowToday = False
+        TabOrder = 0
+        OnDblClick = MonthCalendar6DblClick
+      end
+    end
+    object Panel4: TPanel
+      Left = 729
+      Top = 1
+      Width = 182
+      Height = 155
+      Align = alLeft
+      BorderStyle = bsSingle
+      TabOrder = 1
+      object MonthCalendar5: TMonthCalendar
+        Left = 1
+        Top = 1
+        Width = 176
+        Height = 149
+        Align = alClient
+        Date = 40664.571088518520000000
+        ShowToday = False
+        TabOrder = 0
+        OnDblClick = MonthCalendar5DblClick
+      end
+    end
+    object Panel5: TPanel
+      Left = 547
+      Top = 1
+      Width = 182
+      Height = 155
+      Align = alLeft
+      BorderStyle = bsSingle
+      TabOrder = 2
+      object MonthCalendar4: TMonthCalendar
+        Left = 1
+        Top = 1
+        Width = 176
+        Height = 149
+        Align = alClient
+        Date = 40634.571088518520000000
+        ShowToday = False
+        TabOrder = 0
+        OnDblClick = MonthCalendar4DblClick
+      end
+    end
+    object Panel6: TPanel
+      Left = 365
+      Top = 1
+      Width = 182
+      Height = 155
+      Align = alLeft
+      BorderStyle = bsSingle
+      TabOrder = 3
+      object MonthCalendar3: TMonthCalendar
+        Left = 1
+        Top = 1
+        Width = 176
+        Height = 149
+        Align = alClient
+        Date = 40603.571088518520000000
+        ShowToday = False
+        TabOrder = 0
+        OnDblClick = MonthCalendar3DblClick
+      end
+    end
+    object Panel7: TPanel
+      Left = 183
+      Top = 1
+      Width = 182
+      Height = 155
+      Align = alLeft
+      BorderStyle = bsSingle
+      TabOrder = 4
+      object MonthCalendar2: TMonthCalendar
+        Left = 1
+        Top = 1
+        Width = 176
+        Height = 149
+        Align = alClient
+        Date = 40575.571088518520000000
+        ShowToday = False
+        TabOrder = 0
+        OnDblClick = MonthCalendar2DblClick
+      end
+    end
+    object Panel8: TPanel
+      Left = 1
+      Top = 1
+      Width = 182
+      Height = 155
+      Align = alLeft
+      BorderStyle = bsSingle
+      TabOrder = 5
+      object MonthCalendar1: TMonthCalendar
+        Left = 1
+        Top = 1
+        Width = 176
+        Height = 149
+        Align = alClient
+        Date = 40544.571088530090000000
+        ShowToday = False
+        TabOrder = 0
+        OnDblClick = MonthCalendar1DblClick
+      end
+    end
+  end
+  object Panel9: TPanel
+    Left = 0
+    Top = 161
+    Width = 1028
+    Height = 161
+    Align = alTop
+    BorderStyle = bsSingle
+    TabOrder = 2
+    object Panel10: TPanel
+      Left = 911
+      Top = 1
+      Width = 182
+      Height = 155
+      Align = alLeft
+      BorderStyle = bsSingle
+      TabOrder = 0
+      object MonthCalendar12: TMonthCalendar
+        Left = 1
+        Top = 1
+        Width = 176
+        Height = 149
+        Align = alClient
+        Date = 40878.571088530090000000
+        ShowToday = False
+        TabOrder = 0
+        OnDblClick = MonthCalendar12DblClick
+      end
+    end
+    object Panel11: TPanel
+      Left = 729
+      Top = 1
+      Width = 182
+      Height = 155
+      Align = alLeft
+      BorderStyle = bsSingle
+      TabOrder = 1
+      object MonthCalendar11: TMonthCalendar
+        Left = 1
+        Top = 1
+        Width = 176
+        Height = 149
+        Align = alClient
+        Date = 40848.571088530090000000
+        ShowToday = False
+        TabOrder = 0
+        OnDblClick = MonthCalendar11DblClick
+      end
+    end
+    object Panel12: TPanel
+      Left = 547
+      Top = 1
+      Width = 182
+      Height = 155
+      Align = alLeft
+      BorderStyle = bsSingle
+      TabOrder = 2
+      object MonthCalendar10: TMonthCalendar
+        Left = 1
+        Top = 1
+        Width = 176
+        Height = 149
+        Align = alClient
+        Date = 40817.571088530090000000
+        ShowToday = False
+        TabOrder = 0
+        OnDblClick = MonthCalendar10DblClick
+      end
+    end
+    object Panel13: TPanel
+      Left = 365
+      Top = 1
+      Width = 182
+      Height = 155
+      Align = alLeft
+      BorderStyle = bsSingle
+      TabOrder = 3
+      object MonthCalendar9: TMonthCalendar
+        Left = 1
+        Top = 1
+        Width = 176
+        Height = 149
+        Align = alClient
+        Date = 40787.571088541670000000
+        ShowToday = False
+        TabOrder = 0
+        OnDblClick = MonthCalendar9DblClick
+      end
+    end
+    object Panel14: TPanel
+      Left = 183
+      Top = 1
+      Width = 182
+      Height = 155
+      Align = alLeft
+      BorderStyle = bsSingle
+      TabOrder = 4
+      object MonthCalendar8: TMonthCalendar
+        Left = 1
+        Top = 1
+        Width = 176
+        Height = 149
+        Align = alClient
+        Date = 40756.571088541670000000
+        ShowToday = False
+        TabOrder = 0
+        OnDblClick = MonthCalendar8DblClick
+      end
+    end
+    object Panel15: TPanel
+      Left = 1
+      Top = 1
+      Width = 182
+      Height = 155
+      Align = alLeft
+      BorderStyle = bsSingle
+      TabOrder = 5
+      object MonthCalendar7: TMonthCalendar
+        Left = 1
+        Top = 1
+        Width = 176
+        Height = 149
+        Align = alClient
+        Date = 40725.571088541670000000
+        ShowToday = False
+        TabOrder = 0
+        OnDblClick = MonthCalendar7DblClick
+      end
+    end
+  end
+end

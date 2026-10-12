@@ -1,0 +1,48 @@
+package CM_IP_Schedule;
+
+{$R *.RES}
+{$ALIGN ON}
+{$ASSERTIONS ON}
+{$BOOLEVAL OFF}
+{$DEBUGINFO ON}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LOCALSYMBOLS ON}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION ON}
+{$OVERFLOWCHECKS OFF}
+{$RANGECHECKS OFF}
+{$REFERENCEINFO ON}
+{$SAFEDIVIDE OFF}
+{$STACKFRAMES OFF}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS ON}
+{$WRITEABLECONST ON}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
+{$DESCRIPTION 'Adding And Editing Contract'}
+{$DESIGNONLY}
+{$IMPLICITBUILD ON}
+
+requires
+  vcl50,
+  CMOracleAPI,
+  CMVCL50,
+  CM_COMMON,
+  DOA;
+
+contains
+  ipTrSchedUpdImpl in 'ipTrSchedUpdImpl.pas' {frmUpdTrSched},
+  ipAnnutyPaymentFormImpl in 'ipAnnutyPaymentFormImpl.pas' {AnnutyForm},
+  ipScheduleDataModuleImpl in 'ipScheduleDataModuleImpl.pas' {ScheduleDataModule: TDataModule},
+  ipScheduleMainFormImpl in 'ipScheduleMainFormImpl.pas' {ScheduleForm},
+  IpSheduleAddUnt in 'IpSheduleAddUnt.pas' {AddEditForm},
+  ipTrancheScheduleDataModuleImpl in 'ipTrancheScheduleDataModuleImpl.pas' {TrancheSheduleDataMod: TDataModule},
+  ipTrancheScheduleImpl in 'ipTrancheScheduleImpl.pas' {TrancheScheduleForm},
+  ipTrSchedAddImpl in 'ipTrSchedAddImpl.pas' {frmAddTrSched},
+  ipScheduleLoaderImpl in 'ipScheduleLoaderImpl.pas',
+  ipChangeScheduleImpl in 'ipChangeScheduleImpl.pas' {FrmChangeSchedule};
+
+end.

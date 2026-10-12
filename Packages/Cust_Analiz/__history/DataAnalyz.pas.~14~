@@ -1,0 +1,142 @@
+unit DataAnalyz;
+
+interface
+
+uses
+  SysUtils, Classes, DB, OracleData;
+
+type
+  TDataModCustAnalyz = class(TDataModule)
+    Ods_cust: TOracleDataSet;
+    Ods_Custinfo: TOracleDataSet;
+    Ods_zamin: TOracleDataSet;
+    Ods_girov: TOracleDataSet;
+    Ods_sedule: TOracleDataSet;
+    Dsrc_cust: TDataSource;
+    Dsrc_portfol: TDataSource;
+    Dsrc_custinfo: TDataSource;
+    Dsrc_zamin: TDataSource;
+    Dsrc_girov: TDataSource;
+    dsrc_sedule: TDataSource;
+    Ods_custID: TIntegerField;
+    Ods_custTAM_ADI: TWideStringField;
+    Ods_custSOYADI: TWideStringField;
+    Ods_custADI: TWideStringField;
+    Ods_custATA_ADI: TWideStringField;
+    Ods_custMUSTERI_TIPI: TFloatField;
+    Ods_portfol: TOracleDataSet;
+    Ods_portfolID: TFloatField;
+    Ods_portfolDATEOFCONCLUSION: TDateTimeField;
+    Ods_portfolNUMBEROFCREDIT: TWideStringField;
+    Ods_portfolDUEDATEFIRSTCONTRACT: TDateTimeField;
+    Ods_portfolINITIALAMOUNT: TFloatField;
+    Ods_portfolANNUALYINTERESTRATE: TFloatField;
+    Ods_portfolPERIODCONTRACTS: TFloatField;
+    Ods_portfolMUTEXSIS: TWideStringField;
+    Ods_portfolMALIYE: TWideStringField;
+    Ods_portfolVERILME_MEQSED: TWideStringField;
+    Ods_portfolREST: TFloatField;
+    Ods_portfolINTERESTREST: TFloatField;
+    Ods_portfolDUEREST: TFloatField;
+    Ods_portfolDUEINTERESTREST: TFloatField;
+    Ods_portfolPAYEDAMT: TFloatField;
+    Ods_portfolPAYEDINTAMT: TFloatField;
+    Ods_portfolPAYEDDUEAMT: TFloatField;
+    Ods_portfolPAYEDDUEINTAMT: TFloatField;
+    Ods_portfolPAYEDPENALTYAMT: TFloatField;
+    Ods_portfolPRINCIPAL: TFloatField;
+    Ods_portfolINTEREST: TFloatField;
+    Ods_portfolAYOD_CEM: TFloatField;
+    Ods_sedulePAYMENTDATE: TDateTimeField;
+    Ods_sedulePRINCIPAL: TFloatField;
+    Ods_seduleINTEREST: TFloatField;
+    Ods_seduleREST: TFloatField;
+    Ods_payments: TOracleDataSet;
+    Dsrc_payments: TDataSource;
+    Ods_paymentsID: TFloatField;
+    Ods_paymentsCREDITID: TFloatField;
+    Ods_paymentsPAYDATE: TDateTimeField;
+    Ods_paymentsPAYEDAMT: TFloatField;
+    Ods_paymentsPAYEDINTAMT: TFloatField;
+    Ods_paymentsPAYEDDUEAMT: TFloatField;
+    Ods_paymentsPAYEDDUEINTAMT: TFloatField;
+    Ods_paymentsPAYEDPENALTYAMT: TFloatField;
+    Ods_paymentsTRIDAMT: TFloatField;
+    Ods_paymentsTRIDINTAMT: TFloatField;
+    Ods_paymentsTRIDDUEAMT: TFloatField;
+    Ods_paymentsTRIDDUEINTAMT: TFloatField;
+    Ods_paymentsTRIDPENALTYAMT: TFloatField;
+    Ods_paymentsTRIDPRIMRESERVE: TFloatField;
+    Ods_paymentsTRIDSECRESERVE: TFloatField;
+    Ods_paymentsOUTTRIDOBLIGATION: TFloatField;
+    Ods_paymentsTROBLIGATION: TFloatField;
+    Ods_paymentsTRINBALANCEID: TFloatField;
+    Ods_paymentsTRINOUTBALANCEID: TFloatField;
+    Ods_paymentsTRBALANCE: TFloatField;
+    Ods_paymentsBKAMMOUNT: TFloatField;
+    Ods_paymentsIREST: TFloatField;
+    Ods_paymentsIINTREST: TFloatField;
+    Ods_seduleTOTALPAY: TFloatField;
+    Ods_seduleNO: TFloatField;
+    procedure Ods_custAfterScroll(DataSet: TDataSet);
+    procedure Ods_portfolAfterScroll(DataSet: TDataSet);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  DataModCustAnalyz: TDataModCustAnalyz;
+
+implementation
+uses  sboapiDataModuleImpl;
+{$R *.dfm}
+
+procedure TDataModCustAnalyz.Ods_custAfterScroll(DataSet: TDataSet);
+begin
+    with  DataModCustAnalyz do
+  begin
+   Ods_portfol.Close;
+   Ods_portfol.SetVariable('v_boorowerid',Ods_custID.AsInteger);
+   Ods_portfol.open;
+   Ods_portfol.First;
+  end;
+   with  DataModCustAnalyz do
+  begin
+   Ods_Custinfo.Close;
+   Ods_Custinfo.SetVariable('v_id',Ods_custID.AsInteger);
+   Ods_Custinfo.open;
+  end;
+end;
+
+procedure TDataModCustAnalyz.Ods_portfolAfterScroll(DataSet: TDataSet);
+begin
+ with  DataModCustAnalyz do
+  begin
+    Ods_zamin.Close;
+   Ods_zamin.SetVariable('v_creditid',Ods_portfolid.AsInteger);
+   Ods_zamin.open;
+  end;
+   with  DataModCustAnalyz do
+  begin
+   Ods_girov.Close;
+   Ods_girov.SetVariable('v_creditid',Ods_portfolid.AsInteger);
+   Ods_girov.open;
+  end;
+
+    with  DataModCustAnalyz do
+  begin
+   Ods_sedule.Close;
+   Ods_sedule.SetVariable('v_creditid',Ods_portfolid.AsInteger);
+   Ods_sedule.open;
+  end;
+   with  DataModCustAnalyz do
+  begin
+   Ods_payments.Close;
+   Ods_payments.SetVariable('v_creditid',Ods_portfolid.AsInteger);
+   Ods_payments.open;
+  end;
+end;
+
+end.

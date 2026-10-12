@@ -1,0 +1,70 @@
+unit TrDescTuningFormImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  NLSLocalizer, StdCtrls, Grids, DBGrids, Db, OracleData, ExtCtrls, Mask,
+  DBCtrls, ActnList, DBCtrlsEh;
+
+type
+  TTrDescTuningForm = class(TForm)
+    GroupBox1: TGroupBox;
+    GroupBox2: TGroupBox;
+    TrDescData: TOracleDataSet;
+    DataSrcTrDescData: TDataSource;
+    DBGrid1: TDBGrid;
+    Button1: TButton;
+    Panel1: TPanel;
+    TrDescDataINAME: TWideStringField;
+    TrDescDataDESCRIPTION: TWideStringField;
+    TrDescDataTRDESCRIPTION: TWideStringField;
+    ListBox1: TListBox;
+    Button2: TButton;
+    ActionList1: TActionList;
+    SaveChanges: TAction;
+    DBEdit1: TDBEdit;
+    procedure SaveChangesExecute(Sender: TObject);
+    procedure ListBox1DblClick(Sender: TObject);
+    procedure DBEditEh1KeyPress(Sender: TObject; var Key: Char);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  TrDescTuningForm: TTrDescTuningForm;
+
+implementation
+
+{$R *.DFM}
+
+uses
+  CMOracleAPIDataModuleImpl;
+  
+procedure TTrDescTuningForm.SaveChangesExecute(Sender: TObject);
+begin
+  with TrDescData do
+  if State in [dsEdit] then
+    Post
+end;
+
+procedure TTrDescTuningForm.ListBox1DblClick(Sender: TObject);
+begin
+  with TrDescData , ListBox1 do
+  begin
+    Edit;
+    FieldByName('TrDescription').AsString :=
+      FieldByName('TrDescription').AsString + Copy(Items[ItemIndex],1,2);
+  end;
+end;
+
+procedure TTrDescTuningForm.DBEditEh1KeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if ORD(Key) = VK_RETURN then
+    SelectNext(Sender as TWinControl,True,True);
+end;
+
+end.

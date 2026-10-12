@@ -1,0 +1,215 @@
+object CPDataMod: TCPDataMod
+  OldCreateOrder = False
+  OnCreate = DataModuleCreate
+  OnDestroy = DataModuleDestroy
+  Height = 290
+  Width = 507
+  object OPackage: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'sb_currencyposition'
+    Left = 24
+    Top = 8
+  end
+  object ODSCurrPosition: TOracleDataSet
+    SQL.Strings = (
+      
+        'Select * From CurrencyPosition_Smart Order By PresentDate,Balanc' +
+        'e')
+    Optimize = False
+    Variables.Data = {
+      04000000020000000C0000003A00410044004100540045000C00000000000000
+      00000000120000003A00430055005200520045004E0043005900030000000000
+      000000000000}
+    Session = sboapiDataModule.SBSession
+    OnCalcFields = ODSCurrPositionCalcFields
+    Left = 360
+    Top = 8
+    object ODSCurrPositionBANKID: TWideStringField
+      FieldName = 'BANKID'
+      Size = 64
+    end
+    object ODSCurrPositionSHORTNAME: TWideStringField
+      FieldName = 'SHORTNAME'
+      Size = 64
+    end
+    object ODSCurrPositionUSING: TIntegerField
+      FieldName = 'USING'
+    end
+    object ODSCurrPositionPRESENTDATE: TDateTimeField
+      FieldName = 'PRESENTDATE'
+    end
+    object ODSCurrPositionCURRENCY: TIntegerField
+      FieldName = 'CURRENCY'
+    end
+    object ODSCurrPositionOFFICAL: TWideStringField
+      FieldName = 'OFFICAL'
+      Size = 64
+    end
+    object ODSCurrPositionBALANCE: TFloatField
+      FieldName = 'BALANCE'
+    end
+    object ODSCurrPositionINCOMING: TFloatField
+      FieldName = 'INCOMING'
+    end
+    object ODSCurrPositionACTIVE: TFloatField
+      FieldName = 'ACTIVE'
+    end
+    object ODSCurrPositionPASSIVE: TFloatField
+      FieldName = 'PASSIVE'
+    end
+    object ODSCurrPositionRATE: TFloatField
+      FieldName = 'RATE'
+    end
+    object ODSCurrPositionEXTRA: TFloatField
+      FieldName = 'EXTRA'
+    end
+    object ODSCurrPositiontest: TWideStringField
+      FieldKind = fkCalculated
+      FieldName = 'test'
+      Calculated = True
+    end
+  end
+  object DataSrcCurrPosition: TDataSource
+    DataSet = ODSCurrPosition
+    Left = 264
+    Top = 16
+  end
+  object ODSCurrency: TOracleDataSet
+    SQL.Strings = (
+      'Select  Valute,Valu_Name '
+      ' From  AVALUTE')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 96
+    Top = 16
+  end
+  object DataSrcRate: TDataSource
+    DataSet = ODSCurrency
+    Left = 168
+    Top = 8
+  end
+  object ODSDate: TOracleDataSet
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 24
+    Top = 168
+  end
+  object DataSrcDate: TDataSource
+    DataSet = ODSDate
+    Left = 104
+    Top = 168
+  end
+  object ODSSum: TOracleDataSet
+    SQL.Strings = (
+      'Select Sum(Active),Sum(Passive) From CurrencyPosition_Smart')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 312
+    Top = 168
+  end
+  object DataSrcSum: TDataSource
+    DataSet = ODSSum
+    Left = 256
+    Top = 168
+  end
+  object BankInfo: TOracleDataSet
+    SQL.Strings = (
+      'select av.Val_name,svm_currencyid from bankinfo bi , avalute av'
+      'where av.valute = bi.SVM_CurrencyID'
+      ' ')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 168
+    Top = 168
+  end
+  object CapitalData: TOracleDataSet
+    SQL.Strings = (
+      'SELECT'
+      ' SUM(ACTIVE) as ACTIVE,'
+      ' SUM(PASSIVE) as PASSIVE,'
+      ' SUM(PASSIVE) - SUM(ACTIVE) as CAPITAL'
+      'FROM '
+      '('
+      'SELECT '
+      '       bs.bal_cn as BALANCE,'
+      
+        '       SUM(sb_mtoutview.active (AR.pok_ostat, BS.typeID, BS.addi' +
+        'tionaltypeID)) as ACTIVE,'
+      
+        '       SUM(sb_mtoutview.passiv (AR.pok_ostat, BS.typeID, BS.addi' +
+        'tionaltypeID)) as PASSIVE'
+      'FROM '
+      '  ACCOUNT ac, '
+      '  archost ar, '
+      '  bal_spr1 bs'
+      'WHERE'
+      '   AR.acc_id = AC.id and'
+      '   AC.bal_cn1 = BS.bal_cn and '
+      '   BS.bal_cn LIKE '#39'5%'#39'and '
+      '   AR.datdate =:ADATE'
+      'GROUP BY'
+      '   BS.bal_cn'
+      ''
+      'UNION'
+      ''
+      'SELECT'
+      '       BS.bal_cn as BALANCE,'
+      
+        '       SUM(sb_mtoutview.active (AR.pok_ostat, BS.typeID, BS.addi' +
+        'tionaltypeID)) as ACTIVE,'
+      
+        '       SUM(sb_mtoutview.passiv (AR.pok_ostat, BS.typeID, BS.addi' +
+        'tionaltypeID)) as PASSIVE'
+      'FROM'
+      '  ACCOUNT ac,'
+      '  archost ar,'
+      '  bal_spr1 bs'
+      'WHERE'
+      '   AR.acc_id = AC.id and'
+      '   AC.bal_cn1 = BS.bal_cn and'
+      '   BS.bal_cn LIKE '#39'2921%'#39' and'
+      '   AR.datdate =:ADATE'
+      'GROUP BY'
+      '   BS.bal_cn'
+      ''
+      ' )'
+      '   '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' ')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000C0000003A00410044004100540045000C00000000000000
+      00000000}
+    Session = sboapiDataModule.SBSession
+    Left = 104
+    Top = 240
+    object CapitalDataACTIVE: TFloatField
+      FieldName = 'ACTIVE'
+      DisplayFormat = '#,##0.00'
+    end
+    object CapitalDataPASSIVE: TFloatField
+      FieldName = 'PASSIVE'
+      DisplayFormat = '#,##0.00'
+    end
+    object CapitalDataCAPITAL: TFloatField
+      FieldName = 'CAPITAL'
+      DisplayFormat = '#,##0.00'
+    end
+  end
+  object PK_CAPITAL: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'SB_CAPITAL'
+    Left = 286
+    Top = 76
+  end
+  object CAPITAL_PAK: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'SB_CAPITAL'
+    Cursor = crHourGlass
+    Left = 24
+    Top = 64
+  end
+end

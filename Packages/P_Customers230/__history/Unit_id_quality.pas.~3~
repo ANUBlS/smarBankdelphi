@@ -1,0 +1,139 @@
+﻿unit Unit_id_quality;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, DBGrids, Grids, XDBGrids, StdCtrls, XFSCtrls, ExtCtrls;
+
+type
+  TFormid_quality = class(TForm)
+    XFPanel1: TXFPanel;
+    XFButton1: TXFButton;
+    XFButton2: TXFButton;
+    XDBGrid1: TXDBGrid;
+    XFPanel2: TXFPanel;
+    DBGrid1: TDBGrid;
+    XFButton3: TXFButton;
+    procedure XFButton1Click(Sender: TObject);
+    procedure XFButton2Click(Sender: TObject);
+    procedure XDBGrid1MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure XFButton3Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Formid_quality: TFormid_quality;
+
+implementation
+
+uses P_Datamod_Unit, P_CO_Cust, Unit_description;
+
+{$R *.dfm}
+
+procedure TFormid_quality.XDBGrid1MouseMove(Sender: TObject; Shift: TShiftState;
+  X, Y: Integer);
+begin
+P_DataModule.Ods_cust_id_qualityCount.close ;
+P_DataModule.Ods_cust_id_qualityCount.open ;
+end;
+
+procedure TFormid_quality.XFButton1Click(Sender: TObject);
+var
+ id_quality:integer;
+ id_qualityCust:integer;
+ v_id_quality:integer;
+begin
+  id_quality:=P_DataModule.ods_custID_quality.FieldByName('id').AsInteger;
+  id_qualityCust:=P_DataModule.p_customers.FieldByName('id').AsInteger;
+  v_id_quality:=P_DataModule.ods_custID_quality.FieldByName('id').AsInteger;
+  P_DataModule.ods_cust_ID_quality1.First;
+  with P_DataModule do
+  begin
+
+  Ods_cust_id_qualityCount.Close;
+  Ods_cust_id_qualityCount.SetVariable('custid',id_qualityCust);
+  Ods_cust_id_qualityCount.SetVariable('id_quality',id_quality);
+  Ods_cust_id_qualityCount.Open;
+  if Ods_cust_id_qualityCount.FieldByName('checked').AsInteger=0 then
+  begin
+  ShowMessage('Təsnifat keyfiyyətinin növünü daxil edin  !');
+  exit
+  end;
+  end;
+
+
+
+
+  P_DataModule.PHYS_FS_CUSTOMERS.CallProcedure('upd_custid_quality',
+                                                [id_quality ]);
+
+
+   P_DataModule.PHYS_FS_CUSTOMERS.CallProcedure('update_customers',
+                                               [ id_qualityCust,
+                                                  v_id_quality ]);
+
+   if not P_DataModule.p_Customers.FieldByName('quality_id').isNull
+         and (P_DataModule.p_CustomersID.AsInteger=id_qualityCust)then
+      begin
+   P_CO_Cust_Form.id_quality_DBLookupComboboxEh.KeyValue :=  v_id_quality;
+
+      end  ;
+
+    // XFButton3.Enabled:=true;
+          //  CO_Main.CustomerGB.;//N19Click(Sender);
+     //-----------PCustServiceForm. CustSearch1.Click;
+   Formid_quality.Close ;
+
+end;
+
+procedure TFormid_quality.XFButton2Click(Sender: TObject);
+begin
+Formid_quality.Close
+end;
+
+procedure TFormid_quality.XFButton3Click(Sender: TObject);
+var
+ id_quality:integer;
+ id_qualityCust:integer;
+ v_id_quality:integer;
+begin
+
+
+{  id_quality:=CO_DataMod.ods_custID_quality.FieldByName('id').AsInteger;
+  id_qualityCust:=CO_DataMod.customers.FieldByName('id').AsInteger;
+  v_id_quality:=CO_DataMod.ods_custID_quality.FieldByName('id').AsInteger;
+  CO_DataMod.ods_cust_ID_quality1.First;
+  with CO_DataMod do
+  begin
+
+  Ods_cust_id_qualityCount.Close;
+  Ods_cust_id_qualityCount.SetVariable('custid',id_qualityCust);
+  Ods_cust_id_qualityCount.SetVariable('id_quality',id_quality);
+  Ods_cust_id_qualityCount.Open;
+  if Ods_cust_id_qualityCount.FieldByName('checked').AsInteger=0 then
+  begin
+  ShowMessage('Təsnifat keyfiyyətinin növünü daxil edin  !');
+  exit
+  end;
+  end;      }
+  {if CO_DataMod.Ods_cust_id_qualityCount.FieldByName('checked').AsInteger=0 then
+  begin
+  ShowMessage('sasssTəsnifat keyfiyyətinin növünü daxil edin  !');
+  exit
+  end;     }
+Form_description:=TForm_description.create(self);
+
+Form_description.Memo1.Text:=P_DataModule.Ods_cust_id_quality1DESCRIPTION.AsString;
+
+
+Form_description.ShowModal;
+
+
+end;
+
+end.

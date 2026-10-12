@@ -1,0 +1,51 @@
+object AutoPymtDataMod: TAutoPymtDataMod
+  OldCreateOrder = False
+  Left = 192
+  Top = 107
+  Height = 480
+  Width = 696
+  object AutoPaymentableLoans: TOracleDataSet
+    SQL.Strings = (
+      'select  ID'
+      'from  CM_ACTIVE_CREDITS'
+      'where AUTOPAYMENT = 1--ON')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crSQLWait
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = CMDataModule.CMSession
+    DesignActivation = False
+    Active = False
+    Left = 88
+    Top = 64
+  end
+  object CM_PAYMENT: TOraclePackage
+    Session = CMDataModule.CMSession
+    Debug = False
+    PackageName = 'CM_PAYMENT'
+    ParameterMode = pmNamed
+    Cursor = crHourGlass
+    Optimize = True
+    Left = 168
+    Top = 136
+  end
+end

@@ -1,0 +1,88 @@
+object DmPayment: TDmPayment
+  OldCreateOrder = False
+  Height = 229
+  Width = 390
+  object DsSysdat: TOracleDataSet
+    SQL.Strings = (
+      'select tek_dat from sysdat')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000010000000E000000540045004B005F00440041005400010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 16
+    object DsSysdatTEK_DAT: TDateTimeField
+      FieldName = 'TEK_DAT'
+      Required = True
+    end
+  end
+  object DsRcontracts: TDataSource
+    DataSet = Dscontracts
+    Left = 336
+    Top = 8
+  end
+  object Dscontracts: TOracleDataSet
+    SQL.Strings = (
+      
+        'select a.id,a.ammount,cust.name as musteri, a.contract_name,a.st' +
+        'atus, '
+      
+        '(select acc_no from account where id=a.main_acc_id) as main_acc_' +
+        'id,(select acc_no from account where id=a.per_acc_id)  as per_ac' +
+        'c_id,'
+      
+        '(select ostat from tenostat where acc_id=a.main_acc_id) as esas_' +
+        'qaliq,(select ostat from tenostat where acc_id=a.per_acc_id) as ' +
+        'faiz_qaliq'
+      ' from ins_investment_contracts a,customers cust'
+      'where a.kli_id=cust.id and a.id=:cid'
+      '')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000080000003A00430049004400030000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000900000004000000490044000100000000000E00000041004D004D00
+      4F0055004E0054000100000000001A00000043004F004E005400520041004300
+      54005F004E0041004D0045000100000000000C00000053005400410054005500
+      53000100000000000E0000004D00550053005400450052004900010000000000
+      160000004D00410049004E005F004100430043005F0049004400010000000000
+      140000005000450052005F004100430043005F00490044000100000000001400
+      000045005300410053005F00510041004C004900510001000000000014000000
+      4600410049005A005F00510041004C0049005100010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 280
+    Top = 8
+    object DscontractsID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object DscontractsAMMOUNT: TFloatField
+      FieldName = 'AMMOUNT'
+    end
+    object DscontractsMUSTERI: TWideStringField
+      FieldName = 'MUSTERI'
+      Size = 360
+    end
+    object DscontractsCONTRACT_NAME: TWideStringField
+      FieldName = 'CONTRACT_NAME'
+      Size = 128
+    end
+    object DscontractsSTATUS: TIntegerField
+      FieldName = 'STATUS'
+    end
+    object DscontractsMAIN_ACC_ID: TWideStringField
+      FieldName = 'MAIN_ACC_ID'
+      Size = 28
+    end
+    object DscontractsPER_ACC_ID: TWideStringField
+      FieldName = 'PER_ACC_ID'
+      Size = 28
+    end
+    object DscontractsESAS_QALIQ: TFloatField
+      FieldName = 'ESAS_QALIQ'
+    end
+    object DscontractsFAIZ_QALIQ: TFloatField
+      FieldName = 'FAIZ_QALIQ'
+    end
+  end
+end

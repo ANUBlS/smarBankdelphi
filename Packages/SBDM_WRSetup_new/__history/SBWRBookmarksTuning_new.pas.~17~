@@ -1,0 +1,239 @@
+unit SBWRBookmarksTuning_new;
+
+interface
+
+uses
+ Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, NLSDialogs,
+ ActnList, ImgList, ExtCtrls, StdCtrls, Mask, DBCtrls,
+  Grids, DBGridEh, ComCtrls, ToolWin, PluginToolBar, Buttons;
+
+type
+  TSBWRBookmarkSetup_new = class(TForm)
+    ActionList1: TActionList;
+    ActnAddBookmark: TAction;
+    ActnDeleteBookmark: TAction;
+    ActnEditBookmark: TAction;
+    ActnNewBookmark: TAction;
+    ActnClose: TAction;
+    ActionList2: TActionList;
+    ActionAddTemplare: TAction;
+    ActionEditTemplate: TAction;
+    ActionDeleteTemplate: TAction;
+    ActionRfreshTemplate: TAction;
+    ActionClose: TAction;
+    BitBtn1: TBitBtn;
+    DBGridEh1: TDBGridEh;
+    DBGridEh2: TDBGridEh;
+    GroupBox1: TGroupBox;
+    DBEdit1: TDBEdit;
+    ImageList1: TImageList;
+    Panel2: TPanel;
+    PluginToolBar2: TPluginToolBar;
+    ToolButton10: TToolButton;
+    ToolButton11: TToolButton;
+    ToolButton12: TToolButton;
+    ToolButton13: TToolButton;
+    ToolButton14: TToolButton;
+    ToolButton15: TToolButton;
+    ToolButton16: TToolButton;
+    ToolButton17: TToolButton;
+    PluginToolBar1: TPluginToolBar;
+    ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
+    ToolButton3: TToolButton;
+    ToolButton4: TToolButton;
+    ToolButton5: TToolButton;
+    ToolButton6: TToolButton;
+    ToolButton7: TToolButton;
+    ToolButton8: TToolButton;
+    BitBtn2: TBitBtn;
+    procedure ActionAddTemplareExecute(Sender: TObject);
+    procedure ActionEditTemplateExecute(Sender: TObject);
+    procedure ActionDeleteTemplateExecute(Sender: TObject);
+    procedure ActionRfreshTemplateExecute(Sender: TObject);
+    procedure ActnAddBookmarkExecute(Sender: TObject);
+    procedure ActnDeleteBookmarkExecute(Sender: TObject);
+    procedure ActnEditBookmarkExecute(Sender: TObject);
+    procedure ActnNewBookmarkExecute(Sender: TObject);
+    procedure ActnCloseExecute(Sender: TObject);
+    procedure FormCanResize(Sender: TObject; var NewWidth, NewHeight: Integer;
+      var Resize: Boolean);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure BitBtn2Click(Sender: TObject);
+    procedure ActionAddTemplareUpdate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  SBWRBookmarkSetup_new: TSBWRBookmarkSetup_new;
+
+implementation
+
+{$R *.dfm}
+  uses SBWRSetupDataModImpl_new, SBTemplateAddEditUnt_new, SBBookmarkAddEditunt_new,
+CommonDeclsImpl_new,SBTranslateProc,sboapiDataModuleimpl;
+procedure TSBWRBookmarkSetup_new.ActionAddTemplareExecute(Sender: TObject);
+
+resourcestring
+      rsTemplateCaption = 'Йени шаблон';
+var
+    i:integer;
+begin
+
+      with SBWRSetupDataMod_new.SBWRTemplatesDSet do
+           Insert;
+           SBTemplAddEditForm.Caption:= rsTemplateCaption;
+           i:=SBTemplAddEditForm.ShowModal;
+           if i=mrOK then
+           begin
+             with SBWRSetupDataMod_new.SBWRTemplatesDSet do
+                  Refresh;
+           end;
+end;
+
+procedure TSBWRBookmarkSetup_new.ActionAddTemplareUpdate(Sender: TObject);
+begin
+   With (Sender as TAction) do
+         Enabled := SBWRSetupDataMod_new.SBWRTemplatesDSet.RecordCount > 0
+end;
+
+procedure TSBWRBookmarkSetup_new.ActionDeleteTemplateExecute(Sender: TObject);
+
+   resourcestring
+        TempdeleteMsg='Силинмясиня яминсинизми?';
+    begin
+
+      if MessageDlg(
+                   TempdeleteMsg,
+                   mtConfirmation,
+                   [mbYes,
+                   mbNo],
+                    0) = mrYes then
+       begin
+         with SBWRSetupDataMod_new.SBWRTemplatesDSet do
+               Delete;
+        end;
+end;
+
+procedure TSBWRBookmarkSetup_new.ActionEditTemplateExecute(Sender: TObject);
+
+resourcestring
+             rsUpdTemplateCaption='Шаблонун рeдактяси';
+    begin
+
+      with SBWRSetupDataMod_new.SBWRTemplatesDSet do
+           Edit;
+           SBTemplAddEditForm.Caption:=  rsUpdTemplateCaption;
+           SBTemplAddEditForm.ShowModal;
+end;
+
+procedure TSBWRBookmarkSetup_new.ActionRfreshTemplateExecute(Sender: TObject);
+begin
+
+       with SBWRSetupDataMod_new.SBWRTemplatesDSet do
+            Refresh;
+end;
+
+procedure TSBWRBookmarkSetup_new.ActnAddBookmarkExecute(Sender: TObject);
+
+resourcestring
+           rsBookmarkCaption = 'Йени';
+begin
+
+       with SBWRSetupDataMod_new.SBWRBookmarksDSet do
+            Insert;
+            i:= SBBookmarkAddEditForm_new.ShowModal;
+            SBBookmarkAddEditForm_new.Caption := rsBookmarkCaption;
+            if i=mrOK then
+            begin
+              SBWRSetupDataMod_new.SBWRBookmarksDSet.Refresh;
+            end;
+end;
+
+procedure TSBWRBookmarkSetup_new.ActnDeleteBookmarkExecute(Sender: TObject);
+
+resourcestring
+           BookmarkDelete = 'Силинмясиня яминсинизми?';
+    begin
+
+      if MessageDlg( BookmarkDelete,
+                     mtConfirmation,
+                     [mbYes, mbNo],
+                     0) = mrYes then
+      begin
+        with SBWRSetupDataMod_new.SBWRBookmarksDSet do
+        Delete;
+      end;
+end;
+
+procedure TSBWRBookmarkSetup_new.ActnEditBookmarkExecute(Sender: TObject);
+
+resourcestring
+      rsBookmarkUpdCaption = 'Рeдактя';
+    begin
+      with SBWRSetupDataMod_new.SBWRBookmarksDSet do
+           Edit;
+           SBBookmarkAddEditForm_new.Caption:=rsBookmarkUpdCaption;
+           SBBookmarkAddEditForm_new.ShowModal;
+end;
+
+procedure TSBWRBookmarkSetup_new.ActnNewBookmarkExecute(Sender: TObject);
+begin
+    with SBWRSetupDataMod_new.SBWRBookmarksDSet do
+      Refresh;
+end;
+
+procedure TSBWRBookmarkSetup_new.BitBtn2Click(Sender: TObject);
+begin
+   Close;
+end;
+
+procedure TSBWRBookmarkSetup_new.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+   Resize:=false;
+end;
+
+procedure TSBWRBookmarkSetup_new.FormCreate(Sender: TObject);
+
+var ContractID:integer;
+begin
+     ContractID := Get_SelectedContID;
+
+      SBWRSetupDataMod_new := TSBWRSetupDataMod_new.Create(Self);
+      SBBookmarkAddEditForm_new := TSBBookmarkAddEditForm_new.create(self);
+      SBTemplAddEditForm_new := TSBTemplAddEditForm_new.Create(Self);
+      SBWRSetupDataMod_new.SBWRFieldsDSet.Open;
+      SBWRSetupDataMod_new.SBWRBookmarksDSet.Open;
+      SBWRSetupDataMod_new.SBOracleDSetTamplates.Open;
+      SBWRSetupDataMod_new.SBWRTemplatesDSet.Open;
+      SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TSBWRBookmarkSetup_new.FormDestroy(Sender: TObject);
+begin
+      SBWRSetupDataMod_new.SBWRFieldsDSet.CloseAll;
+      SBWRSetupDataMod_new.SBWRTemplatesDSet.CloseAll;
+      SBWRSetupDataMod_new.SBWRBookmarksDSet.CloseAll;
+      SBWRSetupDataMod_new.SBOracleDSetTamplates.CloseAll;
+      SBBookmarkAddEditForm_new.Free;
+      SBTemplAddEditForm_new.Free;
+      SBWRSetupDataMod_new.Free;
+end;
+
+procedure TSBWRBookmarkSetup_new.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+ if Ord(Key) = VK_ESCAPE then Close;
+end;
+
+procedure TSBWRBookmarkSetup_new.ActnCloseExecute(Sender: TObject);
+begin
+Close;
+end;
+
+end.

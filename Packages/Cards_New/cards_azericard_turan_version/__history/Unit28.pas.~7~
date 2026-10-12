@@ -1,0 +1,486 @@
+unit Unit28;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, DB, OracleData, CMExcelExport, ImgList, StdCtrls, ComCtrls, ExtCtrls,
+  Grids, DBGrids, ToolWin,SBTranslateProc,sboapiDataModuleImpl, ExcelExporter;
+
+type
+  TFileReports = class(TForm)
+    Panel3: TPanel;
+    CoolBar1: TCoolBar;
+    ToolBar1: TToolBar;
+    ToolButton1: TToolButton;
+    ToolButton10: TToolButton;
+    ToolButton11: TToolButton;
+    ToolButton20: TToolButton;
+    ToolButton14: TToolButton;
+    ToolButton15: TToolButton;
+    ToolButton17: TToolButton;
+    ToolButton3: TToolButton;
+    ToolButton6: TToolButton;
+    ToolButton2: TToolButton;
+    ToolButton4: TToolButton;
+    ToolButton5: TToolButton;
+    ToolButton7: TToolButton;
+    RadioButton1: TRadioButton;
+    RadioButton2: TRadioButton;
+    Panel1: TPanel;
+    DBGrid1: TDBGrid;
+    Panel2: TPanel;
+    RadioGroup1: TRadioGroup;
+    GroupBox1: TGroupBox;
+    Label1: TLabel;
+    Label2: TLabel;
+    DateTimePicker1: TDateTimePicker;
+    DateTimePicker2: TDateTimePicker;
+    Edit1: TEdit;
+    Memo1: TMemo;
+    DataSource1: TDataSource;
+    ImageList1: TImageList;
+    CMExcelExport1: TCMExcelExport;
+    OracleDataSet1: TOracleDataSet;
+    OracleDataSet3: TOracleDataSet;
+    FloatField1: TFloatField;
+    WideStringField1: TWideStringField;
+    WideStringField2: TWideStringField;
+    WideStringField3: TWideStringField;
+    WideStringField4: TWideStringField;
+    WideStringField5: TWideStringField;
+    WideStringField6: TWideStringField;
+    WideStringField7: TWideStringField;
+    WideStringField8: TWideStringField;
+    WideStringField9: TWideStringField;
+    WideStringField10: TWideStringField;
+    FloatField2: TFloatField;
+    WideStringField11: TWideStringField;
+    WideStringField12: TWideStringField;
+    WideStringField13: TWideStringField;
+    WideStringField14: TWideStringField;
+    DataSource2: TDataSource;
+    DataSource3: TDataSource;
+    OracleDataSet2: TOracleDataSet;
+    DataSource4: TDataSource;
+    OracleDataSet4: TOracleDataSet;
+    OracleDataSet5: TOracleDataSet;
+    DataSource5: TDataSource;
+    ExcelExporter1: TExcelExporter;
+    ToolButton8: TToolButton;
+    procedure ToolButton1Click(Sender: TObject);
+    procedure ToolButton6Click(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
+    procedure ToolButton14Click(Sender: TObject);
+    procedure ToolButton7Click(Sender: TObject);
+    procedure ToolButton8Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FileReports: TFileReports;
+
+implementation
+
+uses Unit18,comobj;
+
+{$R *.dfm}
+
+function julian(dat :Tdate):integer;
+const yan=31;mar=31;apr=30;may=31;jun=30;jul=31;avg=31;seb=30;okt=31;nov=30;dec=31;
+ var   wday,feb:integer;
+ begin
+   wday:=0;
+   if IsLeapYear(strtoint(FormatDateTime('yyyy',dat))) then feb:=29 else feb:=28;
+   case strtoint(FormatDateTime('mm',dat)) of
+   1:wday:=StrToInt(FormatDateTime('dd',dat));
+   2:wday:=yan+StrToInt(FormatDateTime('dd',dat));
+   3:wday:=yan+feb+StrToInt(FormatDateTime('dd',dat));
+   4:wday:=yan+feb+mar+StrToInt(FormatDateTime('dd',dat));
+   5:wday:=yan+feb+mar+apr+StrToInt(FormatDateTime('dd',dat));
+   6:wday:=yan+feb+mar+apr+may+StrToInt(FormatDateTime('dd',dat));
+   7:wday:=yan+feb+mar+apr+may+jun+StrToInt(FormatDateTime('dd',dat));
+   8:wday:=yan+feb+mar+apr+may+jun+jul+StrToInt(FormatDateTime('dd',dat));
+   9:wday:=yan+feb+mar+apr+may+jun+jul+avg+StrToInt(FormatDateTime('dd',dat));
+  10:wday:=yan+feb+mar+apr+may+jun+jul+avg+seb+StrToInt(FormatDateTime('dd',dat));
+  11:wday:=yan+feb+mar+apr+may+jun+jul+avg+seb+okt+StrToInt(FormatDateTime('dd',dat));
+  12:wday:=yan+feb+mar+apr+may+jun+jul+avg+seb+okt+nov+StrToInt(FormatDateTime('dd',dat));
+  end;
+  Result:=wday;
+end;
+
+procedure TFileReports.FormActivate(Sender: TObject);
+begin
+datetimepicker1.datetime:=date;
+datetimepicker2.datetime:=date;
+
+
+
+ SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+
+end;
+
+procedure TFileReports.ToolButton14Click(Sender: TObject);
+begin
+oracledataset1.close;
+oracledataset2.close;
+oracledataset3.close;
+oracledataset4.close;
+oracledataset5.close;
+end;
+
+procedure TFileReports.ToolButton1Click(Sender: TObject);
+var
+bash,son: integer;
+fl1,fl2 :string;
+begindat,enddat :Variant;
+begin
+
+bash:=julian(datetimepicker1.datetime);
+son:=julian(datetimepicker2.datetime);
+
+if (bash<10) or (son<10) then
+begin
+
+fl1:='00'+inttostr(bash);
+fl2:='00'+inttostr(son);
+
+end else begin
+
+if (bash<100) or (son<100) then
+begin
+fl1:='0'+inttostr(bash);
+fl2:='0'+inttostr(son);
+end;
+end;
+
+if (bash>=100) or (son>=100) then
+begin
+fl1:=inttostr(bash);
+fl2:=inttostr(son);
+end;
+
+begindat:=integer (trunc(datetimepicker1.DateTime));
+enddat:=integer (trunc(datetimepicker2.DateTime));
+
+OracleDataSet1.close;
+// OracleDataSet1.SQL.Clear;
+
+ case RadioGroup1.ItemIndex of
+
+0:  begin
+
+ { ShowMessage(inttostr(bash));
+  ShowMessage(inttostr(son));
+  ShowMessage(begindat);
+  ShowMessage(ENDDAT); }
+
+
+     DBGrid1.DataSource:=DataSource1;
+     //OracleDataSet1.SetVariable('BASH',inttostr(bash));
+    // OracleDataSet1.SetVariable('son',inttostr(son));
+     OracleDataSet1.SetVariable('BEGINDAT',datetimepicker1.DateTime);
+      OracleDataSet1.SetVariable('ENDDAT',datetimepicker2.DateTime);
+    { OracleDataSet1.SQL.Add('select * from CARD_MESSAGES_C_ARCHIVE  where to_number(substr(FILE_NAME,length(FILE_NAME)-2,3))>='+inttostr(bash)+' and to_number(substr(FILE_NAME,length(FILE_NAME)-2,3))<='+inttostr(son));
+     OracleDataSet1.SQL.Add('and ( TRANDATE between '+''''+Formatdatetime('dd-mm-yyyy',datetimepicker1.datetime)+''''+' and '+''''+FormatDateTime('dd-mm-yyyy',datetimepicker2.datetime)+''''+')');
+    } OracleDataSet1.Open;
+
+    end;
+1:  begin
+DBGrid1.DataSource:=DataSource3;
+//OracleDataSet3.SQL.Clear;
+  //  OracleDataSet3.SQL.Add('select * from CARD_DXXXFILES_ARCHIVE where to_number(substr(FILENAME,length(FILENAME)-2,3))>='+inttostr(bash)+' and to_number(substr(FILENAME,length(FILENAME)-2,3))<='+inttostr(son));
+    //OracleDataSet3.SQL.Add('and ( TRANDATE between '+''''+Formatdatetime('dd-mm-yy',datetimepicker1.datetime)+''''+' and '+''''+FormatDateTime('dd-mm-yy',datetimepicker2.datetime)+''''+')');
+     begindat:=integer (trunc(datetimepicker1.DateTime));
+     enddat:=integer (trunc(datetimepicker2.DateTime));
+             memo1.Text:=OracleDataSet3.SQL.Text;
+     OracleDataSet3.Close;
+     OracleDataSet3.SetVariable('begindat',trunc(datetimepicker1.DateTime));
+     OracleDataSet3.SetVariable('ENDDAT',datetimepicker2.DateTime);
+
+   // OracleDataSet3.SetVariable('enddat',enddat);
+     //showmessage(inttostr(bash));
+      //showmessage(inttostr(son));
+           // OracleDataSet3.SetVariable('flname',fl1);
+          //  OracleDataSet3.SetVariable('fl2name',fl2);
+            //  ShowMessage(OracleDataSet3.GetVariable('flname'));
+             //   ShowMessage(datetostr( trunc(datetimepicker1.DateTime)));
+               //ShowMessage(OracleDataSet3.GetVariable('begindat'));
+            OracleDataSet3.Open;
+            memo1.Text:=OracleDataSet3.SQL.Text;
+     // ShowMessage(fl1+'**'+fl2);
+    end;
+
+ 2: begin
+      // DBGrid1.DataSource:=nil;
+ DBGrid1.DataSource:=DataSource5;
+  OracleDataSet5.Close;
+ OracleDataSet5.SQL.Clear;
+       OracleDataSet5.SQL.Add('select * from card_smsfiles_archive where to_number(substr(FILENAME,length(FILENAME)-2,3))>='+inttostr(bash)+' and to_number(substr(FILENAME,length(FILENAME)-2,3))<='+inttostr(son));
+    OracleDataSet5.Open;
+
+    memo1.Text:=OracleDataSet5.SQL.Text;
+    end;
+
+ 3: begin
+ DBGrid1.DataSource:=DataSource4;
+ OracleDataSet4.Close;
+ OracleDataSet4.SQL.Clear;
+      OracleDataSet4.SQL.Add('select * from CARD_DFILES_ARCHIVE where -- to_number(substr(FILENAME,length(FILENAME)-2,3))>='+inttostr(bash)+' and to_number(substr(FILENAME,length(FILENAME)-2,3))<='+inttostr(son));
+ OracleDataSet4.SQL.Add('/*and */( transactiondate between '+''''+Formatdatetime('yyyymmdd',datetimepicker1.datetime)+''''+' and '+''''+FormatDateTime('yyyymmdd',datetimepicker2.datetime)+''''+')');
+    memo1.Text:=OracleDataSet4.SQL.Text;
+   OracleDataSet4.Open;
+
+    end;
+
+ 4: begin
+ DBGrid1.DataSource:=DataSource2;
+      {OracleDataSet1.SQL.Add('select * from CARD_INTRETALIFILES_ARCHIVE where to_number(substr(FILENAME,length(FILENAME)-2,3))>='+inttostr(bash)+' and to_number(substr(FILENAME,length(FILENAME)-2,3))<='+inttostr(son));
+ OracleDataSet1.SQL.Add('and ( tr_date between '+''''+Formatdatetime('dd-mm-yy',datetimepicker1.datetime)+''''+' and '+''''+FormatDateTime('dd-mm-yy',datetimepicker2.datetime)+''''+')');
+     }
+           OracleDataSet2.Close;
+            begindat:=integer (trunc(datetimepicker1.DateTime));
+         enddat:=integer (trunc(datetimepicker2.DateTime));
+              OracleDataSet2.SetVariable('begindat',begindat);
+     OracleDataSet2.SetVariable('enddat',enddat);
+      memo1.Text:=OracleDataSet2.SQL.Text;
+     OracleDataSet2.Open;
+
+    end;
+
+
+
+ end;
+
+// OracleDataSet1.Open;
+// memo1.Text:=OracleDataSet1.SQL.Text;
+  {
+if RadioGroup1.ItemIndex=0 then
+begin
+ OracleDataSet1.close;
+ OracleDataSet1.SQL.Clear;
+ OracleDataSet1.SQL.Add('select * from CARD_MESSAGES_C_ARCHIVE  where to_number(substr(FILE_NAME,length(FILE_NAME)-2,3))>='+inttostr(bash)+' and to_number(substr(FILE_NAME,length(FILE_NAME)-2,3))<='+inttostr(son));
+   //memo1.text:= OracleDataSet1.SQL.text;
+   OracleDataSet1.SQL.Add('and ( TRANDATE between '+''''+Formatdatetime('dd-mm-yyyy',datetimepicker1.datetime)+''''+' and '+''''+FormatDateTime('dd-mm-yyyy',datetimepicker2.datetime)+''''+')');
+ OracleDataSet1.Open;
+end;
+
+if RadioGroup1.ItemIndex=1 then
+begin
+ OracleDataSet1.close;
+ OracleDataSet1.SQL.Clear;
+ OracleDataSet1.SQL.Add('select * from CARD_DXXXFILES_ARCHIVE where to_number(substr(FILENAME,length(FILENAME)-2,3))>='+inttostr(bash)+' and to_number(substr(FILENAME,length(FILENAME)-2,3))<='+inttostr(son));
+
+
+  OracleDataSet1.SQL.Add('and ( TRANDATE between '+''''+Formatdatetime('dd-mm-yy',datetimepicker1.datetime)+''''+' and '+''''+FormatDateTime('dd-mm-yy',datetimepicker2.datetime)+''''+')');
+
+  OracleDataSet1.Open;
+      memo1.text:= OracleDataSet1.SQL.text;
+end;
+
+
+if RadioGroup1.ItemIndex=2 then
+begin
+ OracleDataSet1.close;
+ OracleDataSet1.SQL.Clear;
+ OracleDataSet1.SQL.Add('select * from card_smsfiles_archive where to_number(substr(FILENAME,length(FILENAME)-2,3))>='+inttostr(bash)+' and to_number(substr(FILENAME,length(FILENAME)-2,3))<='+inttostr(son));
+ //OracleDataSet1.SQL.Add('and ( TRANDATE between '+''''+Formatdatetime('dd-mm-yy',datetimepicker1.datetime)+''''+' and '+''''+FormatDateTime('dd-mm-yy',datetimepicker2.datetime)+''''+')');
+ OracleDataSet1.Open;
+end;
+
+if RadioGroup1.ItemIndex=3 then
+begin
+ OracleDataSet1.close;
+ OracleDataSet1.SQL.Clear;
+ OracleDataSet1.SQL.Add('select * from CARD_DFILES_ARCHIVE where to_number(substr(FILENAME,length(FILENAME)-2,3))>='+inttostr(bash)+' and to_number(substr(FILENAME,length(FILENAME)-2,3))<='+inttostr(son));
+ OracleDataSet1.SQL.Add('and ( transactiondate between '+''''+Formatdatetime('yyyymmdd',datetimepicker1.datetime)+''''+' and '+''''+FormatDateTime('yyyymmdd',datetimepicker2.datetime)+''''+')');
+ OracleDataSet1.Open;
+ memo1.Text:=OracleDataSet1.SQL.Text;
+end;
+
+
+if RadioGroup1.ItemIndex=4 then
+begin
+ OracleDataSet1.close;
+ OracleDataSet1.SQL.Clear;
+ OracleDataSet1.SQL.Add('select * from CARD_INTRETALIFILES_ARCHIVE where to_number(substr(FILENAME,length(FILENAME)-2,3))>='+inttostr(bash)+' and to_number(substr(FILENAME,length(FILENAME)-2,3))<='+inttostr(son));
+ OracleDataSet1.SQL.Add('and ( tr_date between '+''''+Formatdatetime('dd-mm-yy',datetimepicker1.datetime)+''''+' and '+''''+FormatDateTime('dd-mm-yy',datetimepicker2.datetime)+''''+')');
+ OracleDataSet1.Open;
+ memo1.Text:=OracleDataSet1.SQL.Text;
+end;
+
+       }
+
+
+end;
+
+procedure TFileReports.ToolButton6Click(Sender: TObject);
+var i:integer;
+begin
+
+case RadioGroup1.ItemIndex of
+0, 2, 3:begin
+  OracleDataSet1.open;
+
+   with CMExcelExport1 do
+   begin
+      Connect;
+      ExportDataset( OracleDataSet1,'FileReport',True);
+      Disconnect;
+   end  ;
+end;
+1: begin
+   OracleDataSet3.open;
+   with CMExcelExport1 do
+   begin
+      Connect;
+      ExportDataset( OracleDataSet3,'FileReport',True);
+      Disconnect;
+   end  ;
+end;
+4:begin
+OracleDataSet2.open;
+   with CMExcelExport1 do
+   begin
+      Connect;
+      ExportDataset( OracleDataSet2,'FileReport',True);
+      Disconnect;
+   end  ;
+end;
+end;
+
+
+end;
+
+procedure TFileReports.ToolButton7Click(Sender: TObject);
+var
+   ExcelFileName: String;
+   ExcelApplication, ExcelWorkbook, ExcelWorksheet: Variant;
+   cnt_sheets :integer;
+begin
+     //be sure ComObj and Variants units are included in the "uses" clause
+
+     ExcelFileName := 'C:\sheet.xlsx'; //replace file name with the name of your file
+
+     ExcelApplication := Null;
+     ExcelWorkbook := Null;
+     ExcelWorksheet := Null;
+
+     try
+        //create Excel OLE
+        ExcelApplication := CreateOleObject('Excel.Application');
+     except
+           ExcelApplication := Null;
+           //add error/exception handling code as desired
+     end;
+
+     If VarIsNull(ExcelApplication) = False then
+        begin
+             try
+                ExcelApplication.Visible := True;
+                ExcelApplication.DisplayAlerts := False;
+
+                //Open Excel Workbook
+                try
+                   ExcelWorkbook := ExcelApplication.Workbooks.Open(ExcelFileName);
+
+                except
+                      ExcelWorkbook := Null;
+
+                end;
+
+                cnt_sheets:=1;
+
+                If VarIsNull(ExcelWorkbook) = False then
+                   begin
+                        try
+
+                           ExcelWorkbook.WorkSheets.Add(Null,Null,1,-4167);
+
+                           //reference
+                           //https://docs.microsoft.com/en-us/office/vba/api/Excel.Worksheets.Add
+
+                           ExcelWorkbook.Worksheets[cnt_sheets].Name := 'Sheet '+inttostr(cnt_sheets);
+                           //add a new worksheet after the last existing worksheet in this workbook
+
+
+                           ExcelWorkbook.WorkSheets.Add(Null,cnt_sheets,1,-4167);
+                           ExcelWorkbook.Worksheets[ExcelWorkbook.Worksheets.Count].Name := 'Sheet '+inttostr(cnt_sheets);
+
+
+                           ExcelWorksheet := ExcelWorkbook.WorkSheets[ExcelWorkbook.Worksheets.Count];
+
+                        except
+                              ExcelWorksheet := Null;
+
+                        end;
+
+                        If VarIsNull(ExcelWorksheet) = False then
+                           begin
+                                ExcelWorksheet.Select;
+                                ExcelWorksheet.Cells[1,1] := 'We created this worksheet as the last tab.'; //[row,column], in this case, text is added to Cell A1
+                                ExcelWorksheet.Cells[2,1].Select; //selects Cell A2
+                           end;
+
+                        ExcelWorksheet := Null;
+
+                        try
+                           ExcelWorksheet := ExcelWorkbook.WorkSheets[1]; //[1] specifies the first worksheet
+                        except
+                              ExcelWorksheet := Null;
+                              //add error/exception handling code as desired
+                        end;
+
+                        If VarIsNull(ExcelWorksheet) = False then
+                           begin
+                                ExcelWorksheet.Select;
+                                ExcelWorksheet.Cells[1,1] := 'We created this worksheet as the first tab.'; //[row,column], in this case, text is added to Cell A1
+                                ExcelWorksheet.Cells[2,1].Select; //selects Cell A2
+                           end;
+
+                        //save the file
+                        ExcelWorkbook.SaveAs(ExcelFileName);
+
+                   end;
+             finally
+                    ExcelApplication.Workbooks.Close;
+                    ExcelApplication.DisplayAlerts := True;
+                    ExcelApplication.Quit;
+
+                    ExcelWorksheet := Unassigned;
+                    ExcelWorkbook := Unassigned;
+                    ExcelApplication := Unassigned;
+             end;
+        end;
+
+end;
+
+procedure TFileReports.ToolButton8Click(Sender: TObject);
+ var k :integer;
+begin
+
+//ExcelExporter1.ExportSource:= DBGrid1.DataSource;
+
+
+
+  with ExcelExporter1 do
+    if ExportSource.DataSet.Active and
+      (ExportSource.DataSet.RecordCount > 0) then
+    begin
+      ExportSource.DataSet.Last;
+      ExportSource.DataSet.First;
+      ShowTitles:=True;
+   //   while k<= ExportSource.DataSet.RecordCount do
+   //     begin
+   //     SheetName:='shee'+inttostr(k);
+   //     inc(k,5)
+   //   end;
+      Report;
+    end;
+
+end;
+
+end.

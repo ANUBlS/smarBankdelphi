@@ -1,0 +1,108 @@
+object FrmPrint: TFrmPrint
+  Left = 369
+  Top = 240
+  BorderIcons = [biSystemMenu]
+  BorderStyle = bsDialog
+  Caption = 'Report'
+  ClientHeight = 102
+  ClientWidth = 187
+  Color = clBtnFace
+  Font.Charset = RUSSIAN_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poMainFormCenter
+  OnCreate = FormCreate
+  OnKeyDown = FormKeyDown
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 187
+    Height = 102
+    Align = alClient
+    TabOrder = 0
+    object GroupBox1: TGroupBox
+      Left = 1
+      Top = 1
+      Width = 185
+      Height = 100
+      Align = alClient
+      Caption = #1063#1072#1087' '#1092#1086#1088#1084#1072#1089#1099
+      TabOrder = 0
+      object RBTotal: TRadioButton
+        Tag = 1
+        Left = 8
+        Top = 22
+        Width = 102
+        Height = 17
+        Caption = ' '#1049#1077#1082#1091#1085' '#1097#1077#1089#1072#1073#1072#1090
+        Checked = True
+        TabOrder = 0
+        TabStop = True
+        OnClick = RBTotalClick
+      end
+      object RBExpand: TRadioButton
+        Tag = 2
+        Left = 8
+        Top = 48
+        Width = 100
+        Height = 17
+        Caption = ' '#1040#1088#1076#1099#1078#1099#1083' '#1097#1077#1089#1072#1073#1072#1090
+        TabOrder = 1
+        OnClick = RBTotalClick
+      end
+      object BPrint: TBitBtn
+        Tag = 1
+        Left = 8
+        Top = 69
+        Width = 54
+        Height = 25
+        Caption = #1063#1072#1087
+        Default = True
+        DoubleBuffered = True
+        ParentDoubleBuffered = False
+        TabOrder = 2
+        OnClick = BPrintClick
+      end
+      object BCancel: TBitBtn
+        Left = 124
+        Top = 69
+        Width = 54
+        Height = 25
+        Caption = '&'#1048#1084#1090#1080#1085#1072
+        DoubleBuffered = True
+        ParentDoubleBuffered = False
+        TabOrder = 3
+        OnClick = BCancelClick
+      end
+      object BitBtn1: TBitBtn
+        Tag = 2
+        Left = 66
+        Top = 69
+        Width = 54
+        Height = 25
+        Caption = '&Excel'
+        DoubleBuffered = True
+        ParentDoubleBuffered = False
+        TabOrder = 4
+        OnClick = BPrintClick
+      end
+    end
+  end
+  object ExcelExporter: TExcelExporter
+    ExportSource = ExchangeDataMod.DataExcel
+    ShowTitles = True
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    Left = 129
+    Top = 17
+  end
+end

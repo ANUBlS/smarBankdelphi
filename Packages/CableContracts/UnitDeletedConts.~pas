@@ -1,0 +1,190 @@
+unit UnitDeletedConts;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, LDialogs,
+  Grids, DBGrids, Menus, StdCtrls, ExtCtrls, OracleData, Db;
+
+type
+  TFrmDeletedConts = class(TForm)
+    DBGridDeletedConts: TDBGrid;
+    PopupMenu1: TPopupMenu;
+    N1: TMenuItem;
+    N2: TMenuItem;
+    PnlAlBottom: TPanel;
+    EdtSrchID: TEdit;
+    EdtSrchContractNum: TEdit;
+    EdtSrchABN: TEdit;
+    procedure FormCreate(Sender: TObject);
+    procedure DBGridDeletedContsTitleClick(Column: TColumn);
+    procedure OrderByColumn(DataSet: TOracleDataSet; Column: TColumn);
+    procedure N1Click(Sender: TObject);
+    procedure EdtSrchIDChange(Sender: TObject);
+    procedure EdtSrchContractNumChange(Sender: TObject);
+    procedure EdtSrchABNChange(Sender: TObject);
+    procedure N2Click(Sender: TObject);
+    procedure N1DrawItem(Sender: TObject; ACanvas: TCanvas; ARect: TRect;
+      Selected: Boolean);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmDeletedConts: TFrmDeletedConts;
+
+implementation
+
+uses DataModCableContr;
+
+var
+  OrderbyAD: String[5];
+
+{$R *.DFM}
+
+procedure TFrmDeletedConts.OrderByColumn(DataSet: TOracleDataSet; Column: TColumn);
+var
+  PosT: Integer;
+begin
+  if (orderbyAD=' asc') then orderbyAD := ' desc' else orderbyAD := ' asc';
+  PosT := DataSet.SQL.Add('order by '+ Column.FieldName+orderbyAD);
+  try
+  DataSet.Close;
+  DataSet.Open;
+  finally
+  DataSet.SQL.Delete(PosT);
+  end;
+end;
+
+
+procedure TFrmDeletedConts.FormCreate(Sender: TObject);
+begin
+  DataModC.OrDS_DeletedConts.Open;
+end;
+
+procedure TFrmDeletedConts.DBGridDeletedContsTitleClick(Column: TColumn);
+begin
+  OrderByColumn(DataModC.OrDS_DeletedConts, Column);
+end;
+
+procedure TFrmDeletedConts.N1Click(Sender: TObject);
+begin
+  DataModC.OrDS_DeletedConts.Refresh;
+end;
+
+procedure TFrmDeletedConts.EdtSrchIDChange(Sender: TObject);
+begin
+  DataModC.OrDS_DeletedConts.Locate('ID',EdtSrchID.Text,[loCaseInsensitive, loPartialKey]);
+end;
+
+procedure TFrmDeletedConts.EdtSrchContractNumChange(Sender: TObject);
+begin
+  DataModC.OrDS_DeletedConts.Locate('Contract_NUM',EdtSrchContractNum.Text,[loCaseInsensitive, loPartialKey]);
+end;
+
+procedure TFrmDeletedConts.EdtSrchABNChange(Sender: TObject);
+begin
+  DataModC.OrDS_DeletedConts.Locate('Abonent',EdtSrchABN.Text,[loCaseInsensitive, loPartialKey]);
+end;
+
+procedure TFrmDeletedConts.N2Click(Sender: TObject);
+begin
+  if MessageDlg('ћцгавил€ б€рпа олунсунму?', mtWarning, [mbYes, mbNo], 0)=idYes
+   then DataModC.CABLE.CallProcedure('ContractRestore',[DataModC.OrDS_DeletedConts.FieldByName('contract_num').AsString]);
+end;
+
+procedure TFrmDeletedConts.N1DrawItem(Sender: TObject; ACanvas: TCanvas;
+  ARect: TRect; Selected: Boolean);
+var
+  LineBottom: Integer;
+  SText: String;
+  Bar: TRect;
+begin
+  with ACanvas, Sender as TMenuItem do
+  begin
+    with Font do
+    begin
+      Name := 'Azl Sans Serif';
+      Charset := russian_CHARSET;
+      if Default then
+        Style := [fsBold];
+    end;
+    if Caption = '-' then
+    begin
+      Pen.Color := clBlack;
+      LineBottom := (ARect.Top + (ARect.Bottom - ARect.Top) div 2)-1;
+      MoveTo(ARect.Left, LineBottom);
+      LineTo(ARect.Right, LineBottom);
+      inc(LineBottom);
+      Pen.Color := clWhite;
+      MoveTo(ARect.Left, LineBottom);
+      LineTo(ARect.Right, LineBottom);
+    end
+    else
+    begin
+      if Selected then
+      begin
+        Brush.Color := clNavy;
+        if Enabled then
+          Font.Color := clWhite
+        else
+          Font.Color := clSilver;
+      end
+      else
+      begin
+        Brush.Color := clBtnFace;
+        if Enabled then
+          Font.Color := clBlack
+        else
+          Font.Color := clGrayText;
+      end;
+      Bar := ARect;
+      Inc(Bar.Left, 20);
+      FillRect(Bar);
+      TextOut(ARect.Left+{17}20, ARect.Top+1, Caption);
+    end;
+    // draw shortcut
+    SText := ShortCutToText(ShortCut);
+    TextOut(ARect.Right-TextWidth(SText)-2, ARect.Top+1, SText);
+    if ImageIndex <> -1 then
+      with GetParentMenu do
+        if Assigned(Images) then
+        begin
+          if Checked then
+          begin
+            Bar.Left := ARect.Left + 1;
+            Bar.Right := Bar.Left + 22;
+            Bar.Top := ARect.Top + 1;
+            Bar.Bottom := Bar.Top + 22;
+
+            ACanvas.Brush.Color := clBtnShadow;
+            ACanvas.FrameRect(Bar);
+
+            Inc(Bar.Left, 2);
+            Inc(Bar.Right, 2);
+            Inc(Bar.Top, 2);
+            Inc(Bar.Bottom, 2);
+            
+            ACanvas.Brush.Color := clBtnHighlight;
+            ACanvas.FrameRect(Bar);
+
+            Dec(Bar.Left, 1);
+            Dec(Bar.Right, 1);
+            Dec(Bar.Top, 1);
+            Dec(Bar.Bottom, 1);
+
+            if Selected then
+              ACanvas.Brush.Color := clBtnFace
+            else
+              ACanvas.Brush.Color := clBtnHighlight;
+            ACanvas.FillRect(Bar);
+          end;
+
+          Images.Draw(ACanvas, ARect.Left, ARect.Top, ImageIndex, Enabled);
+        end;
+  end;
+end;
+
+end.

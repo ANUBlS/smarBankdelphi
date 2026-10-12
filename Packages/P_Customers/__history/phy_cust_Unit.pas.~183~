@@ -1,0 +1,2500 @@
+﻿unit phy_cust_Unit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, Db,
+  ActiveX, AxCtrls, P_Customers_TLB, StdVcl, ActnList, Oracle, Oracledata,
+  ImgList, Menus, Mask, DBCtrls, StdCtrls, ExtCtrls, Grids, DBGrids,
+  ToolWin, ComCtrls, Variants, OleServer, ExcelXP;
+
+type
+  TOperationMode = (omInsert, omEdit, omCommission);
+  TTransactionState = (tsCommit, tsDelete, tsReject);
+
+const
+
+  tsDelayed = 1;
+  tsCommited = 2;
+  tsRejected = 3;
+
+  BooleanPrefix = ' AND ';
+
+resourcestring
+  cs_CommitInformation = 'Ümumi əməliyyatlar: %d' + #13 +
+    'Təsdiqlənmiş əməliyyatlar: %d' + #13 + 'Təsdiqlənməmiş əməliyyatlar: %d';
+  cs_RejectInformation = 'Ümumi əməliyyatlar: %d' + #13 +
+    'İnkar edilmiş əməliyyatlar: %d' + #13 + 'İnkar edilməmiş əməliyyatlar: %d';
+  no_selected_account = 'Heç bir hesab qeyd edilməyib!';
+  DebetArest_On_Account = 'Hesaba Debet Arest qoyulub!';
+  KreditArest_On_Account = 'Hesaba Kredit Arest qoyulub!';
+  no_selected_cust = 'Heç bir müştəri qeyd olunmayıb';
+  no_selected_trans = 'Heç bir əməliyyat qeyd olunmayıb';
+
+type
+  TP_Customers_Form = class(TActiveForm, IActiveFormX)
+    CustomerGB: TGroupBox;
+    Panel1: TPanel;
+    CustomerSearchBar: TToolBar;
+    EditID: TEdit;
+    EditPassp_number: TEdit;
+    EditCUST_NAME: TEdit;
+    DateEdit: TMaskEdit;
+    DBGridCustomers: TDBGrid;
+    GroupBox1: TGroupBox;
+    DBGridAccounts: TDBGrid;
+    ControlBar2: TControlBar;
+    AccountViewSettingsPanel: TPanel;
+    AccountsOrderPanel: TPanel;
+    Label2: TLabel;
+    SearchAcc: TEdit;
+    AccountCurrencyPanel: TPanel;
+    Label5: TLabel;
+    SearchEdit: TEdit;
+    DBEdit1: TDBEdit;
+    GroupBox3: TGroupBox;
+    DBGridTransactions: TDBGrid;
+    PopMenuAccounts: TPopupMenu;
+    N3: TMenuItem;
+    N4: TMenuItem;
+    N7: TMenuItem;
+    TransIncoming: TMenuItem;
+    TransOutgoing: TMenuItem;
+    N10: TMenuItem;
+    N11: TMenuItem;
+    PopMenuTransactions: TPopupMenu;
+    N5: TMenuItem;
+    N6: TMenuItem;
+    N8: TMenuItem;
+    D1: TMenuItem;
+    ActionList: TActionList;
+    ActionRefresh: TAction;
+    ActionInsert: TAction;
+    ActionEdit: TAction;
+    ActionDelete: TAction;
+    ActionShowFilter: TAction;
+    ActionSpeedSearch: TAction;
+    ActionSelectAll: TAction;
+    ActionCommit: TAction;
+    ActionLoadFilters: TAction;
+    ActionFilter: TAction;
+    ActionStepCommit: TAction;
+    ActionReject: TAction;
+    ActionCommission: TAction;
+    PopMenuCustomers: TPopupMenu;
+    PM_CustAdd: TMenuItem;
+    EditSerial: TEdit;
+    PM_CustRefresh: TMenuItem;
+    PM_CustClose: TMenuItem;
+    PM_CustEdit: TMenuItem;
+    N18: TMenuItem;
+    N19: TMenuItem;
+    N20: TMenuItem;
+    N21: TMenuItem;
+    N12: TMenuItem;
+    TransDebit: TMenuItem;
+    N17: TMenuItem;
+    TransCredit: TMenuItem;
+    N23: TMenuItem;
+    RichEdit1: TRichEdit;
+    N24: TMenuItem;
+    N25: TMenuItem;
+    EditINN: TEdit;
+    Ordernfo1: TMenuItem;
+    mzanmumsininap1: TMenuItem;
+    ImageList: TImageList;
+    EditNAME1: TEdit;
+    mazanmunsiniexcelat1: TMenuItem;
+    DSCustomer_Info1: TOracleDataSet;
+    DSCustomer_Info1NAME: TWideStringField;
+    DSCustomer_Info1ID: TIntegerField;
+    DSCustomer_Info1IDCUST: TFloatField;
+    DSCustomer_Info1PASPORT: TWideStringField;
+    DSCustomer_Info1PHONE_H: TWideStringField;
+    DSCustomer_Info1PHONE_M: TWideStringField;
+    DSCustomer_Info1ADDRESS: TWideStringField;
+    DSCustomer_Info1PASPPLACE: TWideStringField;
+    DSCustomer_Info1PASPDATE: TDateTimeField;
+    DSCustomer_Info1ACC_NO: TWideStringField;
+    DSCustomer_Info1INN: TWideStringField;
+    ExcelApplication1: TExcelApplication;
+    Bankinfo1: TOracleDataSet;
+    Bankinfo1TARIX: TWideStringField;
+    Bankinfo1TAM_ADRESS: TWideStringField;
+    Bankinfo1KOD_B: TFloatField;
+    Bankinfo1BANK: TWideStringField;
+    Bankinfo1AZ_NAME: TWideStringField;
+    Bankinfo1KRNO: TWideStringField;
+    Bankinfo1INN: TWideStringField;
+    Bankinfo1SEHER: TWideStringField;
+    Bankinfo1ADRESS: TWideStringField;
+    Bankinfo1SEDR: TWideStringField;
+    Bankinfo1BUHALTR: TWideStringField;
+    Bankinfo1TEL: TWideStringField;
+    Bankinfo1FAX: TWideStringField;
+    Bankinfo1SWIFT: TWideStringField;
+    Bankinfo1TELEX: TWideStringField;
+    Bankinfo1EMAIL: TWideStringField;
+    Bankinfo1POST_IN: TWideStringField;
+    Bankinfo1KOD_FIL: TIntegerField;
+    Bankinfo1FILIAL: TWideStringField;
+    Bankinfo1ADRES_FIL: TWideStringField;
+    Bankinfo1TEL_FIL: TWideStringField;
+    Bankinfo1FAX_FIL: TWideStringField;
+    Bankinfo1SWIFT_FIL: TWideStringField;
+    Bankinfo1TELEX_FIL: TWideStringField;
+    Bankinfo1POSTIN_FIL: TWideStringField;
+    Bankinfo1SEHER_FIL: TWideStringField;
+    Bankinfo1INN_FIL: TWideStringField;
+    Bankinfo1KRNO_FIL: TWideStringField;
+    Bankinfo1SEDRFIL: TWideStringField;
+    Bankinfo1BUHAL_FIL: TWideStringField;
+    Bankinfo1KOD_BFIL: TFloatField;
+    Bankinfo1NB: TIntegerField;
+    Bankinfo1VAL_MOV: TWideStringField;
+    Bankinfo1LOGO: TBlobField;
+    Bankinfo1LINK: TWideStringField;
+    Bankinfo1SDV: TFloatField;
+    Bankinfo1SVM: TFloatField;
+    Bankinfo1BF: TFloatField;
+    Bankinfo1MANAGERTITLE: TWideStringField;
+    Bankinfo1ACCOUNTANTTITLE: TWideStringField;
+    Bankinfo1SVM_CURRENCYID: TFloatField;
+    Bankinfo1CAPITAL: TFloatField;
+    Bankinfo1ASSISTANT: TWideStringField;
+    Bankinfo1ASSISTANTTITLE: TWideStringField;
+    Bankinfo1REG_NO: TWideStringField;
+    Bankinfo1LICENSE_NO: TWideStringField;
+    Bankinfo1FOND_REG_NO: TWideStringField;
+    Bankinfo1LICENSE_FIL: TWideStringField;
+    sas1: TMenuItem;
+    cr1: TMenuItem;
+    Qeytlr1: TMenuItem;
+    BussnesProsses1: TMenuItem;
+    Qohumlar1: TMenuItem;
+    procedure PM_CustAddClick(Sender: TObject);
+    procedure SearchAccKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure SearchAccKeyPress(Sender: TObject; var Key: Char);
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure SearchEditKeyPress(Sender: TObject; var Key: Char);
+    procedure N10Click(Sender: TObject);
+    procedure N11Click(Sender: TObject);
+    procedure DBGridTransactionsDrawColumnCell(Sender: TObject;
+      const Rect: TRect; DataCol: Integer; Column: TColumn;
+      State: TGridDrawState);
+    procedure DBGridTransactionsTitleClick(Column: TColumn);
+    procedure PM_CustCloseClick(Sender: TObject);
+    procedure TransIncomingClick(Sender: TObject);
+    procedure TransOutgoingClick(Sender: TObject);
+    procedure ideditChange(Sender: TObject);
+    procedure EditPassp_numberChange(Sender: TObject);
+    procedure EditSerialChange(Sender: TObject);
+    procedure nameditChange(Sender: TObject);
+    procedure PM_CustRefreshClick(Sender: TObject);
+    procedure DBGridCustomersCellClick(Column: TColumn);
+    procedure PM_CustEditClick(Sender: TObject);
+    procedure DBGridCustomersDblClick(Sender: TObject);
+    procedure EditSerialKeyPress(Sender: TObject; var Key: Char);
+    procedure ActionCommitExecute(Sender: TObject);
+    procedure ActionStepCommitExecute(Sender: TObject);
+    procedure N6Click(Sender: TObject);
+    procedure DBGridAccountsCellClick(Column: TColumn);
+    procedure N19Click(Sender: TObject);
+    procedure N20Click(Sender: TObject);
+    procedure N21Click(Sender: TObject);
+    procedure N18Click(Sender: TObject);
+    procedure N17Click(Sender: TObject);
+    procedure DBGridCustomersKeyUp(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure DateEditKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure AccSelKliID;
+    procedure DBGridAccountsKeyUp(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure EditPassp_numberKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure EditIDKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure EditSerialKeyUp(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure EditCUST_NAMEKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure DBGridAccountsDblClick(Sender: TObject);
+    procedure DBGridTransactionsDblClick(Sender: TObject);
+    procedure PopMenuTransactionsPopup(Sender: TObject);
+    procedure N23Click(Sender: TObject);
+    procedure N24Click(Sender: TObject);
+    procedure N25Click(Sender: TObject);
+    procedure TransDebitClick(Sender: TObject);
+    procedure TransCreditClick(Sender: TObject);
+    procedure EditINNKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure Ordernfo1Click(Sender: TObject);
+    procedure mzanmumsininap1Click(Sender: TObject);
+    procedure DBGridCustomersTitleClick(Column: TColumn);
+    procedure ActionSpeedSearchExecute(Sender: TObject);
+    procedure EditCUST_NAMEKeyPress(Sender: TObject; var Key: Char);
+    procedure EditIDKeyPress(Sender: TObject; var Key: Char);
+    procedure mazanmunsiniexcelat1Click(Sender: TObject);
+    procedure sas1Click(Sender: TObject);
+    procedure cr1Click(Sender: TObject);
+    procedure Qeytlr1Click(Sender: TObject);
+    procedure BussnesProsses1Click(Sender: TObject);
+    procedure EditINNKeyPress(Sender: TObject; var Key: Char);
+    procedure EditPassp_numberKeyPress(Sender: TObject; var Key: Char);
+    procedure Qohumlar1Click(Sender: TObject);
+
+
+  private
+  procedure LoadPlugin3(PluginName :String;PluginParam :String;PluginParam2 :String;PluginParam3 :String);
+  procedure LoadPlugin2(PluginName :String;PluginParam :String;PluginParam2 :String);
+      var PluginHandle :THandle;
+      exportproc : procedure(s:String;k:String);
+
+
+    { Private declarations }
+    FEvents: IActiveFormXEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage
+      : TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+
+  public
+    { Public declarations }
+    TransactionState: TTransactionState;
+    function CommitTransactions(TransactionIDs: WideString): Longint;
+    procedure SBCommit();
+    function CommitTransaction(TransactionID: Longint): Longint;
+    procedure GetCustomerInfo(CustID: Integer; var CustName: String;
+      var CustInn: String);
+    procedure DeleteTransaction(TransactionID: Longint);
+
+    procedure Initialize; override;
+    function IOCheck(Reference: Integer): Boolean;
+    procedure CreateOrderRpt(IOCome: Boolean; CustID: Longint);
+    procedure GetBankInfo(var BankName, BankInn: String);
+
+
+  end;
+  var
+  DB_HesabID,CR_HesabID:string;
+  tacc,p_tacc,p_custid,note_id,contract_id :string;
+implementation
+
+uses ComObj, ComServ, SBCore, P_CO_Cust, P_Datamod_Unit, sboapiDataModuleImpl,
+  P_CO_Account_Unit, p_CO_Statement_Unit, P_CO_ST_Unit, P_CO_Memorial_Unit,
+  CurrencyToHR_Azeri_Impl, P_CO_Interval, P_CO_Cust_Settings, P_Inform_Unit,
+  P_OutForm_Unit, P_CO_Out_Unit, P_CO_In_Form, P_Upd_Cust_Form, P_CO_Report_Unit,
+  P_AccSettings_Unit, P_AccState_Unit, P_AccTransaction_Unit, P_Interval,
+  P_Transaction_Unit, uAccViewFormImpl, uTrViewFormImpl, P_QREP_ORDER,
+  P_QREPORT_ORDER, Ph_CO_BookmarkSetupUnit, Ph_CO_BookmarkAddEditUnit,
+  Ph_CO_TemplAddEditUnit, P_CO_frmWReportUnit, SBTranslateProc, p_UnitOrderInfo,
+  p_ImzaNumReport;
+
+{$R *.DFM}
+{ TActiveFormX }
+
+procedure TP_Customers_Form.DefinePropertyPages(DefinePropertyPage
+  : TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+    DefinePropertyPage(Class_ActiveFormXPage); }
+end;
+
+procedure TP_Customers_Form.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as IActiveFormXEvents;
+end;
+
+procedure TP_Customers_Form.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TP_Customers_Form.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TP_Customers_Form.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TP_Customers_Form.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TP_Customers_Form.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TP_Customers_Form.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TP_Customers_Form.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TP_Customers_Form.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TP_Customers_Form.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TP_Customers_Form.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TP_Customers_Form.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TP_Customers_Form.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TP_Customers_Form.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TP_Customers_Form.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TP_Customers_Form.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TP_Customers_Form.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TP_Customers_Form.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TP_Customers_Form.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TP_Customers_Form.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TP_Customers_Form._Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TP_Customers_Form.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then
+    FEvents.OnActivate;
+end;
+
+procedure TP_Customers_Form.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then
+    FEvents.OnClick;
+end;
+
+procedure TP_Customers_Form.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then
+    FEvents.OnCreate;
+end;
+
+procedure TP_Customers_Form.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then
+    FEvents.OnDblClick;
+end;
+
+procedure TP_Customers_Form.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then
+    FEvents.OnDeactivate;
+end;
+
+procedure TP_Customers_Form.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then
+    FEvents.OnDestroy;
+end;
+
+procedure TP_Customers_Form.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then
+    FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TP_Customers_Form.LoadPlugin2(PluginName :String;PluginParam :String;PluginParam2 :String);
+var PluginHandle :THandle;
+    exportproc : procedure(s:String;k:String);
+begin
+   PluginHandle := LoadPackage(ExtractFilePath(Application.ExeName)+PluginName);
+
+   if PluginHandle > 0 then
+   begin
+      @exportproc := GetProcAddress(PluginHandle,'InitPlugin');
+      exportproc(PluginParam,PluginParam2);
+   end;
+end;
+ procedure TP_Customers_Form.LoadPlugin3(PluginName :String;PluginParam :String;PluginParam2 :String;PluginParam3 :String);
+var PluginHandle :THandle;
+    exportproc : procedure(s:String;k:String;t:string);
+begin
+   PluginHandle := LoadPackage(ExtractFilePath(Application.ExeName)+PluginName);
+
+   if PluginHandle > 0 then
+   begin
+      @exportproc := GetProcAddress(PluginHandle,'InitPlugin');
+      exportproc(PluginParam,PluginParam2,PluginParam3);
+   end;
+end;
+
+procedure TP_Customers_Form.mazanmunsiniexcelat1Click(Sender: TObject);
+
+var
+ cust_id, acc_id: Integer;
+ V, Sheet, Sheets   :Variant;
+    a,cell, row, i, j    :Integer;
+    E_Row1,OpenedXlsCnt:Integer;
+begin
+  ExcelApplication1.Disconnect;
+  V :=ExcelApplication1.Application;
+  ExcelApplication1.Connect;
+  V.Workbooks.Open(ExtractFilePath(ExtractFilePath(ParamStr(0)))+ 'cust_excel.xlsx');
+  for OpenedXlsCnt :=1 to 100 do
+  try
+   Sheet := V.Workbooks[OpenedXlsCnt].Worksheets['Sheet1'];
+   Sheet.Range['B1:B60000'].ColumnWidth:=30;
+   Sheet.Range['C1:B60000'].ColumnWidth:=30;
+   Sheet.Range['D1:B60000'].ColumnWidth:=30;
+   Sheet.Range['E1:B60000'].ColumnWidth:=25;
+   Sheet.Range['F1:B60000'].ColumnWidth:=25;
+   Break;
+  except
+  end;
+  Sheets := V.Sheets;
+  Sheets.Item['Sheet1'].Activate;
+  with DSCustomer_Info1  do
+
+ begin
+         if Active then Close;
+         cust_id := P_DataModule.Account.FieldByName('custID').asInteger;
+         acc_id := P_DataModule.Account.FieldByName('ID').asInteger;
+         DSCustomer_Info1.SetVariable('CUST_ID', cust_id);
+         DSCustomer_Info1.SetVariable('Acc_id', acc_id);
+         Open;
+
+
+        Sheet.Cells[9,3].Font.Bold :=true;
+        Sheet.Cells[9,3]:=DSCustomer_Info1.FieldByName('name').asstring;
+        //////////////////////////////////////////////////////////////////
+        Sheet.Cells[11,4].Font.Bold :=true;
+        Sheet.Cells[11,4]:=DSCustomer_Info1.FieldByName('PASPORT').asstring;
+        //////////////////////////////////////////////////////////////////
+        Sheet.Cells[12,3].Font.Bold :=true;
+        Sheet.Cells[12,3]:=DSCustomer_Info1.FieldByName('PASPDATE').AsDateTime;
+       //////////////////////////////////////////////////////////////////////
+        Sheet.Cells[12,5].Font.Bold :=true;
+        Sheet.Cells[12,5]:=DSCustomer_Info1.FieldByName('PASPPLACE').AsString;
+        ///////////////////////////////////////////////////////////////////////
+        Sheet.Cells[13,2].Font.Bold :=true;
+        Sheet.Cells[13,2]:=DSCustomer_Info1.FieldByName('ADDRESS').AsString;
+        ///////////////////////////////////////////////////////////////////////
+        Sheet.Cells[14,3].Font.Bold :=true;
+        Sheet.Cells[14,3]:=DSCustomer_Info1.FieldByName('PHONE_H').AsString;
+        ///////////////////////////////////////////////////////////////////
+        Sheet.Cells[14,5].Font.Bold :=true;
+        Sheet.Cells[14,5]:=DSCustomer_Info1.FieldByName('PHONE_M').AsString;
+        //////////////////////////////////////////////////////////////////////
+        Sheet.Cells[15,3].Font.Bold :=true;
+        Sheet.Cells[15,3]:=Bankinfo1.FieldByName('BANK').AsString;
+        ///////////////////////////////////////////////////////////////////
+        Sheet.Cells[14,7].Font.Bold :=true;
+        Sheet.Cells[14,7]:=Bankinfo1.FieldByName('TARIX').AsString;
+        //////////////////////////////////////////////////////////////////
+        Sheet.Cells[13,6].Font.Bold :=true;
+        Sheet.Cells[13,6]:=DSCustomer_Info1.FieldByName('inn').AsString;
+        //////////////////////////////////////////////////////////////////
+        Sheet.Cells[16,3].Font.Bold :=true;
+        Sheet.Cells[16,3]:=Bankinfo1.FieldByName('SWIFT').AsString;
+        //////////////////////////////////////////////////////////////////
+        Sheet.Cells[17,3].Font.Bold :=true;
+        Sheet.Cells[17,3]:=Bankinfo1.FieldByName('TAM_ADRESS').AsString;
+        //////////////////////////////////////////////////////////////////
+        Sheet.Cells[26,6].Font.Bold :=true;
+        sheet.cells[26,7].numberformat:=ansichar('@');
+        Sheet.Cells[26,7]:=DSCustomer_Info1.FieldByName('ACC_NO').AsString+' №-li hesab';
+        //////////////////////////////////////////////////////////////////
+        Sheet.Cells[31,2].Font.Bold :=true;
+        Sheet.Cells[31,2]:='1.' + DSCustomer_Info1.FieldByName('name').AsString;
+          //////////////////////////////////////////////////////////////////
+        Sheet.Cells[32,2].Font.Bold :=true;
+        Sheet.Cells[32,2]:='2.'+ DSCustomer_Info1.FieldByName('name').AsString;;
+        ///////////////////////////////////////////////////////////////////
+        Sheet.cells[36,3].font.Bold:=true;
+        Sheet.cells[36,3]:=Bankinfo1.FieldByName('SEDRFIL').AsString;
+        //////////////////////////////////////////////////////////////////
+        Sheet.cells[39,4].font.Bold:=true;
+        Sheet.cells[39,4]:=DSCustomer_Info1.FieldByName('name').AsString;
+        ////////////////////////////////////////////////////////////////
+        Sheet.cells[46,4].font.Bold:=true;
+        Sheet.cells[46,4]:=Bankinfo1.FieldByName('TARIX').AsString;
+    ExcelApplication1.Visible[0] :=True;
+    ExcelApplication1.Disconnect;
+end;
+end;
+
+
+procedure TP_Customers_Form.mzanmumsininap1Click(Sender: TObject);
+var
+ fil, cust_id, acc_id: Integer;
+  tarix: TDateTime;
+begin
+  if P_DataModule.Account.IsEmpty then
+  begin
+    ShowMessage(no_selected_account);
+    Exit;
+  end
+  else
+  begin
+
+    if not Assigned(P_CO_ImzaNumReport) then
+      P_CO_ImzaNumReport := TP_CO_ImzaNumReport.Create(Self);
+    {if not P_CO_ImzaNumReport.Bankinfo.Active then
+      P_CO_ImzaNumReport.Bankinfo.Open
+    else
+      P_CO_ImzaNumReport.Bankinfo.Refresh;
+        }
+        fil:=P_DataModule.Account.FieldByName('filial').asInteger;
+       P_CO_ImzaNumReport.Bankinfo.Close;
+       P_CO_ImzaNumReport.Bankinfo.SetVariable('v_kod_fil',fil);
+       P_CO_ImzaNumReport.Bankinfo.Open;
+
+    cust_id := P_DataModule.Account.FieldByName('custID').asInteger;
+    acc_id := P_DataModule.Account.FieldByName('ID').asInteger;
+    P_CO_ImzaNumReport.DSCustomer_Info.Close;
+    P_CO_ImzaNumReport.DSCustomer_Info.SetVariable('CUST_ID', cust_id);
+    P_CO_ImzaNumReport.DSCustomer_Info.SetVariable('Acc_id', acc_id);
+    P_CO_ImzaNumReport.DSCustomer_Info.Open;
+
+    P_CO_ImzaNumReport.PreviewModal;
+  end;
+
+end;
+
+procedure TP_Customers_Form.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then
+    FEvents.OnPaint;
+end;
+
+procedure TP_Customers_Form.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TP_Customers_Form.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TP_Customers_Form.Set_AxBorderStyle(Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TP_Customers_Form.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TP_Customers_Form.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TP_Customers_Form.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TP_Customers_Form.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TP_Customers_Form.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TP_Customers_Form.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TP_Customers_Form.Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TP_Customers_Form.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TP_Customers_Form.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TP_Customers_Form.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TP_Customers_Form.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TP_Customers_Form.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TP_Customers_Form.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+
+procedure TP_Customers_Form.EditINNKeyPress(Sender: TObject; var Key: Char);
+begin
+if key=#13 then
+begin
+         ActionSpeedSearchExecute(sender);
+end;
+end;
+
+procedure TP_Customers_Form.EditINNKeyUp(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+{  if Key = vk_return then
+    // EditPassp_numberchange(Sender);
+    if VoenEdit.Text <> '' then
+      P_DataModule.P_Customers.Locate('INN', VoenEdit.Text,
+        [loCaseInsensitive, loPartialKey]);     }
+end;
+
+procedure TP_Customers_Form.PM_CustAddClick(Sender: TObject);
+begin
+  if not Assigned(P_CO_Cust_Form) then
+    P_CO_Cust_Form := TP_CO_Cust_Form.Create(Self);
+  with P_CO_Cust_Form do
+  begin
+    AddUpd := True;
+    id_quality_DBLookupComboboxEh.Enabled:=true;
+    id_quality_DBLookupComboboxEh.KeyValue:=P_DataModule.Ods_cust_quality.Lookup('name','Yüksək','id');
+    ButtonMeyar.Visible:=false;
+    ShowModal;
+  end;
+end;
+
+function TP_Customers_Form.CommitTransaction(TransactionID: Longint): Longint;
+begin
+  with P_DataModule.SB_TRANSACTION do
+    Result := CallIntegerFunction(cs_commit_transaction,
+      ['TransactionID', TransactionID, 'CommitTemp', True]);
+
+end;
+
+function TP_Customers_Form.CommitTransactions(TransactionIDs
+  : WideString): Longint;
+begin
+  with P_DataModule.SB_TRANSACTION do
+    Result := CallIntegerFunction(cs_commit_delayed_transactions,
+      ['OverloadIDsStr', TransactionIDs, 'CommitTemp', True]);
+end;
+
+procedure TP_Customers_Form.cr1Click(Sender: TObject);
+begin
+if P_DataModule.Account.RecordCount=0 then
+begin
+ShowMessage('  Hecbir hesab qeyd edilmeyib   !');
+Exit
+end
+else
+CR_HesabID:= P_DataModule.Account.FieldByName('id').Asstring;
+
+LoadPlugin2('Sb_General.bpl','CR_Hesab',CR_HesabID);
+DBGridTransactions.DataSource.DataSet.Refresh;
+
+end;
+
+procedure TP_Customers_Form.SearchAccKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if (EditPassp_number.Text <> '') or (EditID.Text <> '') or (EditCUST_NAME.Text <> '') or
+    (DateEdit.Text <> '') or (SearchEdit.Text <> '') then
+    EditID.Text := '';
+  EditPassp_number.Text := '';
+  DateEdit.Text := '';
+  EditCUST_NAME.Text := '';
+  SearchEdit.Text := '';
+
+end;
+
+procedure TP_Customers_Form.AccSelKliID;
+begin
+  with P_DataModule.Account do
+  begin
+    Close;
+    SQL.clear;
+    SQL.add('select * from fizaccs where custid=''' +
+      P_DataModule.P_Customers.FieldByName('ID').asstring + ''' ');
+    Open;
+    Refresh;
+  end;
+end;
+
+procedure TP_Customers_Form.SearchAccKeyPress(Sender: TObject; var Key: Char);
+var
+  acc_no: String;
+begin
+  if not(Key = #13) then
+    Exit;
+  with P_DataModule, Account do
+  begin
+    if not(P_Customers.State = dsInsert) then
+      SetVariable('CID', null);
+    SetVariable('p_AccNO', SearchAcc.Text + '%');
+    if not Active then
+      Open
+    else
+      Refresh;
+  end;
+
+  if P_DataModule.Account.RecordCount > 0 then
+  begin
+    acc_no := P_DataModule.Account.FieldByName('ACCNO').asVariant;
+
+    P_DataModule.P_Customers.Locate('ID',
+      P_DataModule.Account.FieldByName('CUSTID').asInteger,
+      [loCaseInsensitive, loPartialKey]);
+
+    P_DataModule.Account.Locate('ACCNO', acc_no,
+      [loCaseInsensitive, loPartialKey]);
+  end;
+  {
+    P_DataModule.p_Customers.Locate
+    ('ID',P_DataModule.Account.Fieldbyname('CUSTID').AsInteger, [loCaseInsensitive, loPartialKey]);
+  }
+end;
+
+procedure TP_Customers_Form.ActiveFormCreate(Sender: TObject);
+begin
+  P_DataModule := TP_DataModule.Create(Self);
+
+  Ph_CO_BookmarkSetupFrom := TPh_CO_BookmarkSetupFrom.Create(Self);
+  Ph_CO_BookmarkAddEditForm := TPh_CO_BookmarkAddEditForm.Create(Self);
+  Ph_CO_frmWReport := TPh_CO_frmWReport.Create(Self);
+  {
+    P_InForm :=TP_InForm.Create(Self);
+    P_OutForm :=TP_OutForm.Create(Self);
+    P_CO_Report :=TP_CO_Report.Create(Self);
+    QuickReportORDER:=TQuickReportORDER.Create(Self);
+    PQRep_ORDER:=TPQRep_ORDER.Create(Self);
+    Ph_CO_TemplAddEditForm:=TPh_CO_TemplAddEditForm.Create(Self);
+  }
+
+  P_DataModule.P_Customers.Open;
+  P_DataModule.Sysdat.Open;
+
+  SBTranslateProc.TranslateAllComponents(Self, sboapiDataModule.OrPack_SL);
+end;
+
+  procedure TP_Customers_Form.BussnesProsses1Click(Sender: TObject);
+begin
+p_tacc:=P_DataModule.Account.FieldByName('id').AsString;
+p_custid:=P_DataModule.P_Customers.FieldByName('id').AsString;
+LoadPlugin3('Sb_General.bpl','bussPuroc',p_custid,P_tacc)  ;
+end;
+
+procedure TP_Customers_Form.ActionSpeedSearchExecute(
+  Sender: TObject);
+var
+  SearchField : string;
+  SearchOptions : TSearchRecordOptions;
+begin
+  SearchOptions := [srIgnoreCase ,srPartialMatch ];
+
+  if  not (P_DataModule.P_Customers.Active) then
+  begin
+    P_DataModule.P_Customers.Close;
+  P_DataModule.P_Customers.Open;
+  end;
+
+  with Sender as TEdit  do
+  begin                                    //S.M 02.04.2020
+  //ShowMessage(SearchField);
+    SearchField := copy(Name,5,length(Name));
+   // ShowMessage(SearchField);
+
+    with  TOracleDataSet(DBGridCustomers.DataSource.DataSet) do
+    if  not SearchRecord(
+                  SearchField
+                 ,Text
+                 ,SearchOptions + [srFromCurrent , srForward ]
+                 ) then
+    if MessageDlg(
+              'Axtarış sona çatdı.'+#13+'Əvvəldən başlansın?'
+             ,mtInformation
+             ,[mbNo , mbYes]
+             ,0
+             ) = mrYes  then
+    if not SearchRecord(
+                 SearchField
+                ,Text
+                ,SearchOptions + [ srFromBeginning ]
+                )  then
+    MessageDlg('Yazı tapılmayıb!',mtInformation,[mbOK],0);
+
+    ///ShowMessage(SearchField);
+
+    if SearchField='NAME1' then   SearchField:='CUST_NAME'  ;        //S.M 02.04.2020
+
+
+       { with P_DataModule.P_Customers do
+    begin
+     if (UpperCase(SearchField) ='ID')    or (UpperCase(SearchField) ='CUST_NAME') or
+     (UpperCase(SearchField) ='PASSP_NUMBER')
+      then
+      begin //SetVariable('pSearch', ' and lower('+SearchField+') like '''+LowerCase(Text)+'%''');
+       SQL[7]:=(' and lower('+SearchField+') like '''+LowerCase(Text)+'%''');
+       //ShowMessage(SQL[7]);
+        //SetVariable('pText', LowerCase(Text)+'%''');
+       end
+      else
+      if (UpperCase(SearchField) ='PASSP_NUMBER') or (UpperCase(SearchField) ='INN')
+
+       then
+       begin
+        SQL[7] := (':pSearch');
+        SetVariable('pSearch', ' and lower('+SearchField+') = '''+LowerCase(Text)+'''');
+       end
+      else
+      begin
+       SQL[7] := (':pSearch');
+       SetVariable('pSearch', ' and lower('+SearchField+') = '+LowerCase(Text));
+      end;
+    // Memo1.Text :=GetVariable('pSearch');
+     if Trim(Text)='' then SetVariable('pSearch', '');
+     Refresh;
+    end;
+                  }
+
+ end;
+
+end;
+
+procedure TP_Customers_Form.SearchEditKeyPress(Sender: TObject; var Key: Char);
+begin
+
+   { with P_DataModule, Account do
+    begin
+      Close;
+      SQL.clear;
+      SQL.add('Select * From FIZ_FS_ACCS Where upper(accname) like upper(''%' +
+        SearchName.Text + '%'') and rownum=1');
+      Open;
+      first;
+      P_Customers.Locate('id', P_DataModule.Account.FieldByName('CUSTID')
+        .asInteger, [loCaseInsensitive, loPartialKey]);
+      DBGridAccounts.Options := [dgRowSelect, dgAlwaysShowEditor, dgTitles,
+        dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs,
+        dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit, dgMultiSelect];
+      { with CO_DataMod.customers do begin
+        Close;
+        SQL.clear;
+        SQL.add('select * from customers where id='''+CO_DataMod.account.fieldbyname('accklid').asstring+''' ');
+        Open;
+        Refresh;
+        DBGrid1.Options:=[dgRowSelect,dgAlwaysShowEditor,dgTitles,dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs,dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit, dgMultiSelect];
+      } // --------------------KNN-------------------------------------------------------------------------------
+      {with P_DataModule.Transactions do
+      begin
+        Close;
+        //SQL.clear;
+        {SQL.add('select * from transactionsp where debitid = ''' + DBEdit1.Text
+          + ''' or creditid = ''' + DBEdit1.Text + '''  ');
+
+        SetVariable('p_AccID',DBEdit1.Text);
+         Open;
+        Refresh;
+        // --------------------KNN-------------------------------------------------------------------------------
+        DBGridAccounts.Options := [dgRowSelect, dgAlwaysShowEditor, dgTitles,
+          dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs,
+          dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit,
+          dgMultiSelect];
+        if (EditPassp_number.Text <> '') or (IDEdit.Text <> '') or (NamEdit.Text <> '')
+          or (DateEdit.Text <> '') or (SearchAcc.Text <> '') then
+          IDEdit.Text := '';
+        EditPassp_number.Text := '';
+        DateEdit.Text := '';
+        SearchAcc.Text := '';
+        NamEdit.Text := '';
+      end;
+    end;   }
+end;
+
+procedure TP_Customers_Form.N10Click(Sender: TObject);
+begin
+  If P_DataModule.Account.IsEmpty then
+  begin
+    ShowMessage(no_selected_account);
+    Exit;
+  end
+  else
+  begin
+    P_CO_St := TP_CO_St.Create(Self);
+    P_CO_St.ShowModal;
+
+  end;
+end;
+
+procedure TP_Customers_Form.N11Click(Sender: TObject);
+
+var
+  AStartDate, AEndDate: TDateTime;
+begin
+  P_CO_MemorialForm := TP_CO_MemorialForm.Create(Self);
+  P_CO_IntervalForm := TP_CO_IntervalForm.Create(Self);
+
+  If P_DataModule.Account.IsEmpty then
+  begin
+    ShowMessage(no_selected_account);
+    Exit;
+  end
+  else
+  begin
+    with P_CO_IntervalForm do
+    begin
+      StartDateEdit.DateTime := P_DataModule.Sysdat.FieldByName('tek_dat')
+        .AsDateTime;
+      EndDateEdit.DateTime := StartDateEdit.DateTime;
+
+      if ShowModal = mrOK then
+      begin
+        AStartDate := StartDateEdit.DateTime;
+        AEndDate := EndDateEdit.DateTime;
+
+        with P_CO_MemorialForm do
+        begin
+          OpenDataControls(AStartDate, AEndDate);
+          ShowModal;
+        end;
+
+      end;
+
+    end;
+
+  end;
+end; // --Modified by TKenan on 03.12.2006
+
+procedure TP_Customers_Form.DBGridTransactionsDrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TColumn; State: TGridDrawState);
+
+var
+  ImageIndex: Integer;
+begin
+
+  ImageIndex := -1;
+  with Sender as TDBGrid do
+  begin
+    if DataSource.DataSet.RecordCount <> 0 then
+    begin
+      case DataSource.DataSet.FieldByName('Status').asInteger of
+        tsCommited:
+          ImageIndex := 7;
+        tsRejected:
+          ImageIndex := 8;
+        tsDelayed:
+          ImageIndex := 9;
+      else
+      end;
+      if (DataCol = 1) and (ImageIndex <> -1) then
+        ImageList.Draw(Canvas, Rect.Left, Rect.Top, ImageIndex, True)
+      else
+        DefaultDrawColumnCell(Rect, DataCol, Column, State);
+    end;
+  end;
+end;
+
+procedure TP_Customers_Form.DBGridTransactionsTitleClick(Column: TColumn);
+var
+  TitleName: string;
+begin
+  TitleName := Column.FieldName;
+  with P_DataModule.Transactions do
+  begin
+    SetVariable('Title', TitleName);
+    Refresh;
+  end;
+end;
+
+procedure TP_Customers_Form.PM_CustCloseClick(Sender: TObject);
+const
+  table_name = 'Customers_Physical';
+var
+  v_id1: Integer;
+  v_name: string;
+  v_closedat: TDateTime;
+begin
+  if P_DataModule.P_Customers.IsEmpty then
+  begin
+    ShowMessage(no_selected_cust);
+    Exit;
+  end
+  else if P_DataModule.Account.RecordCount <> 0 then
+    MessageDlg('Aktiv hesabları olan müştərini bağlamaq olmaz', mtError,
+      [mbOk], 0)
+  else
+    with P_DataModule do
+    begin
+      v_id1 := P_Customers.FieldByName('ID').asInteger;
+      v_name := P_Customers.FieldByName('cust_name').asstring;
+      v_closedat := trunc(SysdatTEK_DAT.AsDateTime);
+      if MessageDlg(Format('%s adlı müştəri silinsin?', [v_name]),
+        mtConfirmation, mbYesNoCancel, 0) = mrYes then
+      begin
+        SBOP.CallProcedure('close_customer', ['v_id', v_id1, 'currentdate',
+          v_closedat, 'result', 1]);
+        P_Customers.Close;
+        P_Customers.Open;
+      end;
+    end; { with }
+end;
+
+procedure TP_Customers_Form.TransOutgoingClick(Sender: TObject);
+begin
+  RichEdit1.Text := P_DataModule.Account.FieldByName('TipAcc').asstring;
+  if P_DataModule.Account.IsEmpty then
+  begin
+    ShowMessage('no_selected_account');
+    Exit;
+  end
+  else if RichEdit1.FindText('D', 0, Length(RichEdit1.Text), []) <> -1 then
+  begin
+    ShowMessage(DebetArest_On_Account);
+    Exit;
+  end
+  else
+    with P_CO_TransTypeIncOut do
+    begin
+      P_CO_TransTypeIncOut := TP_CO_TransTypeIncOUT.Create(Self);
+      IncOut := 2; { outgoing }
+      ShowModal;
+    end;
+end;
+
+procedure TP_Customers_Form.TransIncomingClick(Sender: TObject);
+begin
+  RichEdit1.Text := P_DataModule.Account.FieldByName('TipAcc').asstring;
+  if P_DataModule.Account.IsEmpty then
+  begin
+    ShowMessage(no_selected_account);
+    Exit;
+  end
+  else if RichEdit1.FindText('D', 0, Length(RichEdit1.Text), []) <> -1 then
+  begin
+    ShowMessage(DebetArest_On_Account);
+    Exit;
+  end
+  else
+    with P_CO_TransTypeIncOut do
+    begin
+      P_CO_TransTypeIncOut := TP_CO_TransTypeIncOUT.Create(Self);
+      IncOut := 1; { incoming }
+      ShowModal;
+    end;
+end;
+
+procedure TP_Customers_Form.ideditChange(Sender: TObject);
+begin
+  { P_DataModule.Transactions.Close;
+    P_DataModule.Transactions.Open;
+
+
+    if idedit.Text<>'' then
+    P_DataModule.p_customers.Locate
+    ('id',idedit.Text,[loCaseInsensitive, loPartialKey]);
+    DBGridCustomers.Options:=[dgRowSelect,dgAlwaysShowEditor,dgTitles,dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs,dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit, dgMultiSelect];
+
+    with P_DataModule.Account do begin
+    Close;
+    SQL.clear;
+    SQL.add('select * from fizaccs where custid='''+P_DataModule.p_customers.fieldbyname('ID').asstring+''' ');
+    Open;
+    Refresh;
+
+
+    with P_DataModule.Transactions do begin
+    Close;
+    SQL.clear;
+    SQL.add('select * from transactionsp where debitid = '''+dbedit1.text+''' or creditid = '''+dbedit1.text+'''  ');
+    Open;
+    Refresh;
+
+
+
+    if (idedit.text<>'') then
+    searchacc.text :='';
+    EditPassp_number.text :='';
+    dateedit.Text :='';
+    searchname.text :='';
+    namedit.text :='';
+    editserial.text :='';
+
+    end; end; }
+
+end;
+
+procedure TP_Customers_Form.EditPassp_numberChange(Sender: TObject);
+begin
+  P_DataModule.Transactions.Close;
+  P_DataModule.Transactions.Open;
+  if EditPassp_number.Text <> '' then
+    P_DataModule.P_Customers.Locate('PASSP_NUMBER', EditPassp_number.Text,
+      [loCaseInsensitive, loPartialKey]);
+  DBGridCustomers.Options := [dgRowSelect, dgAlwaysShowEditor, dgTitles,
+    dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs,
+    dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit, dgMultiSelect];
+
+  with P_DataModule.Account do
+  begin
+    Close;
+    SQL.clear;
+    SQL.add('select * from fizaccs where custid=''' +
+      P_DataModule.P_Customers.FieldByName('ID').asstring + ''' ');
+    Open;
+    Refresh;
+    // --------------------KNN------------------------------------------------
+
+    with P_DataModule.Transactions do
+    begin
+      Close;
+      SQL.clear;
+      SQL.add('select * from transactionsp where debitid = ''' + DBEdit1.Text +
+        ''' or creditid = ''' + DBEdit1.Text + ''' ');
+      Open;
+      Refresh;
+      // --------------------KNN-------------------------------------------------
+      if (EditPassp_number.Text <> '') then
+        EditID.Text := '';
+      SearchAcc.Text := '';
+      DateEdit.Text := '';
+      EditCUST_NAME.Text := '';
+      SearchEdit.Text := '';
+      EditSerial.Text := '';
+      // --------------------KNN-------------------------------------------------
+    end;
+  end;
+end;
+
+procedure TP_Customers_Form.EditSerialChange(Sender: TObject);
+begin
+  P_DataModule.Transactions.Close;
+  P_DataModule.Transactions.Open;
+  if EditSerial.Text <> '' then
+    P_DataModule.P_Customers.Locate('passport', EditSerial.Text,
+      [loCaseInsensitive, loPartialKey]);
+  DBGridCustomers.Options := [dgRowSelect, dgAlwaysShowEditor, dgTitles,
+    dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs,
+    dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit, dgMultiSelect];
+
+  with P_DataModule.Account do
+  begin
+    Close;
+    SQL.clear;
+    SQL.add('select * from fizaccs where custid=''' +
+      P_DataModule.P_Customers.FieldByName('ID').asstring + ''' ');
+    Open;
+    Refresh;
+    // --------------------KNN------------------------------------------------
+
+    with P_DataModule.Transactions do
+    begin
+      Close;
+      SQL.clear;
+      SQL.add('select * from transactionsp where debitid = ''' + DBEdit1.Text +
+        ''' or creditid = ''' + DBEdit1.Text + ''' ');
+      Open;
+      Refresh;
+      // --------------------KNN-------------------------------------------------
+      if (EditSerial.Text <> '') then
+        EditID.Text := '';
+      SearchAcc.Text := '';
+      DateEdit.Text := '';
+      EditCUST_NAME.Text := '';
+      SearchEdit.Text := '';
+      EditPassp_number.Text := '';
+      // --------------------KNN-------------------------------------------------
+    end;
+  end;
+end;
+
+procedure TP_Customers_Form.nameditChange(Sender: TObject);
+begin
+  P_DataModule.Transactions.Close;
+  P_DataModule.Transactions.Open;
+  if SearchEdit.Text <> '' then
+    P_DataModule.P_Customers.Locate('cust_name', EditCUST_NAME.Text,
+      [loCaseInsensitive, loPartialKey]);
+  DBGridCustomers.Options := [dgRowSelect, dgAlwaysShowEditor, dgTitles,
+    dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs,
+    dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit, dgMultiSelect];
+  with P_DataModule.Account do
+  begin
+    Close;
+    SQL.clear;
+    SQL.add('select * from fizaccs where custid=''' +
+      P_DataModule.P_Customers.FieldByName('ID').asstring + ''' ');
+    Open;
+    Refresh;
+    // --------------------KNN------------------------------------------------
+
+    with P_DataModule.Transactions do
+    begin
+      Close;
+      SQL.clear;
+      SQL.add('select * from transactionsp where debitid = ''' + DBEdit1.Text +
+        ''' or creditid = ''' + DBEdit1.Text + ''' ');
+      Open;
+      Refresh;
+      // --------------------KNN-------------------------------------------------
+      if (EditCUST_NAME.Text <> '') then
+        EditID.Text := '';
+      SearchAcc.Text := '';
+      DateEdit.Text := '';
+      EditCUST_NAME.Text := '';
+      EditSerial.Text := '';
+      EditPassp_number.Text := '';
+      // --------------------KNN-------------------------------------------------
+    end;
+  end;
+end;
+
+procedure TP_Customers_Form.PM_CustRefreshClick(Sender: TObject);
+begin
+  P_DataModule.P_Customers.Close;
+  P_DataModule.P_Customers.Open;
+end;
+
+
+procedure TP_Customers_Form.DBGridCustomersCellClick(Column: TColumn);
+begin
+  if (EditSerial.Text <> '') or (EditCUST_NAME.Text <> '') or (DateEdit.Text <> '') or
+    (EditPassp_number.Text <> '') then
+  begin
+    EditPassp_number.Text := '';
+    EditSerial.Text := '';
+    DateEdit.Text := '';
+    EditCUST_NAME.Text := '';
+  end;
+
+  if not P_DataModule.Account.FieldByName('ACCNO').IsNull then
+    SearchAcc.Text := P_DataModule.Account.FieldByName('ACCNO').asVariant
+  else
+    SearchAcc.Text := '';
+
+  if not P_DataModule.Account.FieldByName('ACCNAME').IsNull then
+    SearchEdit.Text := P_DataModule.Account.FieldByName('ACCNAME').asVariant
+  else
+    SearchEdit.Text := '';
+end;
+
+procedure TP_Customers_Form.SBCommit();
+begin
+  sboapiDataModule.SBSession.Commit
+end;
+
+
+procedure TP_Customers_Form.PM_CustEditClick(Sender: TObject);
+var
+  csID: Integer;
+begin
+  { if  P_DataModule.P_Customers.IsEmpty then  begin ShowMessage('Щеч бир мцштяри гейд олунмайыб'); Exit; end
+    else begin
+    csID := P_DataModule.P_Customers.Fields[0].AsInteger;
+    P_Upd_Cust := TP_Upd_Cust.Create(Self);
+    P_Upd_Cust.ShowModal;
+    P_DataModule.P_Customers.Locate('ID', csID,[]);
+    end; }
+  P_DataModule.SB_ACA.CallProcedure('CheckObjectAccess',['P_CUSTOMERS','update']);
+
+  if P_DataModule.P_Customers.IsEmpty then
+  begin
+    ShowMessage(no_selected_cust);
+    Exit;
+  end;
+  if not Assigned(P_CO_Cust_Form) then
+    P_CO_Cust_Form := TP_CO_Cust_Form.Create(Self);
+  with P_CO_Cust_Form do
+  begin
+    AddUpd := False;
+  // showmessage(inttostr(P_DataModule.p_Customers.FieldByName('quality_id').AsInteger));
+  if P_DataModule.p_Customers.FieldByName('quality_id').AsInteger>0 then
+   begin
+   ButtonMeyar.Visible:=true;
+  id_quality_DBLookupComboboxEh.Enabled:=false;
+   end;
+
+    ShowModal;
+ end;
+
+end;
+
+procedure TP_Customers_Form.DBGridCustomersDblClick(Sender: TObject);
+begin
+P_DataModule.SB_ACA.CallProcedure('CheckObjectAccess',['P_CUSTOMERS','update']);
+  PM_CustEditClick(Sender);
+end;
+
+procedure TP_Customers_Form.EditSerialKeyPress(Sender: TObject; var Key: Char);
+begin
+  Key := UpCase(Key);
+end;
+
+procedure TP_Customers_Form.ActionCommitExecute(Sender: TObject);
+
+var
+  i: Integer;
+  IDs: WideString;
+  Status, TrCount: Word;
+begin
+
+  IDs := '';
+  TrCount := 0;
+  with DBGridTransactions, SelectedRows, DataSource.DataSet do
+    if Count = 0 then
+    begin
+      inc(TrCount);
+      IDs := FieldByName('ID').asstring;
+    end
+    else
+    begin
+      DisableControls;
+      try
+        for i := 0 to Count - 1 do
+        begin
+          GotoBookmark(TBookmark(Items[i]));
+          Status := FieldByName('Status').asInteger;
+          if Status in [tsDelayed, tsRejected] then
+          begin
+            inc(TrCount);
+            IDs := IDs + ',' + FieldByName('ID').asstring;
+          end;
+        end;
+        System.Delete(IDs, 1, 1);
+      finally
+        EnableControls;
+      end;
+    end;
+  if MessageDlg(Format('%d sayda əməliyyat təsdiqlənsin?', [TrCount]),
+    mtConfirmation, [mbYes, mbCancel], 0) = mrYes then
+    with P_DataModule do
+    begin
+      CommitTransactions(IDs);
+      SBCommit();
+
+    end;
+end;
+
+procedure TP_Customers_Form.ActionStepCommitExecute(Sender: TObject);
+
+var
+  i: Integer;
+  ID: Longint;
+  WillRefresh: Boolean;
+  Status, CommitedCount, ErrorCount: Word;
+  LastErrorMessage: String;
+  qaccid, qtrid: Integer;
+begin
+  If P_DataModule.Transactions.IsEmpty then
+  begin
+    ShowMessage(no_selected_trans);
+    Exit;
+  end
+  else
+  begin
+
+    CommitedCount := 0;
+    ErrorCount := 0;
+    WillRefresh := False;
+    begin
+
+      with P_DataModule, DBGridTransactions, SelectedRows, DataSource.DataSet do
+        if P_DataModule.Transactions.FieldByName('Status').asInteger = 2 then
+          ShowMessage('Əməliyyat artıq təsdiqlənib')
+        else
+        begin
+
+          if MessageDlg('Əməliyyatlar təsdiqlənsin?', mtConfirmation,
+            [mbYes, mbCancel], 0) = mrYes then
+          begin
+            DisableControls;
+            try
+              Application.ProcessMessages;
+              if Count = 0 then
+                CurrentRowSelected := True;
+              for i := 0 to Count - 1 do
+                try
+                  GotoBookmark(TBookmark(Items[i]));
+                  Status := FieldByName('Status').asInteger;
+                  if Status in [tsDelayed, tsRejected] then
+                  begin
+                    ID := FieldByName('ID').asInteger;
+                    CommitTransaction(ID);
+                    WillRefresh := True;
+                    inc(CommitedCount);
+                    SBCommit();
+                  end;
+                except
+                  on E: Exception do
+                  begin
+                    LastErrorMessage := E.Message;
+                    inc(ErrorCount);
+                    Continue;
+                  end;
+                end;
+            finally
+              if ErrorCount > 0 then
+                if ErrorCount = 1 then
+                  MessageDlg(LastErrorMessage, mtConfirmation, [mbOk], 0)
+                else
+                  MessageDlg(Format(cs_CommitInformation,
+                    [CommitedCount + ErrorCount, CommitedCount, ErrorCount]),
+                    mtConfirmation, [mbOk], 0);
+
+              EnableControls;
+
+              if WillRefresh then
+              begin
+                TransactionState := tsCommit;
+                qaccid := P_DataModule.Account.FieldByName('ID').asInteger;
+                qtrid := P_DataModule.TransactionsID.asInteger;
+                P_DataModule.Transactions.Close;
+                P_DataModule.Transactions.Open;
+                P_DataModule.Account.Close;
+                P_DataModule.Account.Open;
+                P_DataModule.Account.Locate('id', qaccid, []);
+                P_DataModule.Transactions.Locate('id', qtrid, []);
+              end;
+
+            end;
+          end;
+        end;
+    end;
+  end;
+end;
+
+procedure TP_Customers_Form.GetCustomerInfo(CustID: Integer;
+  var CustName: String; var CustInn: String);
+begin
+  with P_DataModule.OPCash do
+  begin
+    CallProcedure('GetCustomerInfo', [CustID, '', '']);
+    CustInn := GetParameter(1);
+    CustName := GetParameter(2);
+  end;
+end;
+
+procedure TP_Customers_Form.N6Click(Sender: TObject);
+var
+  ValuteName, withManat, NoManat, WithCoin: string;
+  ManatPosition, i: Integer;
+  CustName, CustInn: string;
+  TransactionID: string;
+begin
+  { CO_DataMod.Transactions.open;
+    id :=CO_DataMod.Transactions.FieldByName('id').asstring;
+    try
+    with CO_Report,CO_DataMod.Transactions do
+    begin
+    Filter:=' id= '+id;
+    Filtered :=true;
+    Preview; }
+  If P_DataModule.Transactions.IsEmpty then
+  begin
+    ShowMessage(no_selected_trans);
+    Exit;
+  end
+  else
+  begin
+    NoManat := '';
+    try
+      with P_DataModule.Transactions do
+      begin
+        GetCustomerInfo(FieldByName('creditid').asInteger, CustName, CustInn);
+        TransactionID := FieldByName('ID').asstring;
+        Filter := ' ID=' + TransactionID;
+        Filtered := True;
+      end;
+      with P_DataModule, ODSValuteName do
+      begin
+        Close;
+        SetVariable('valute',
+          Transactions.FieldByName('debitcurrencyid').Value);
+        ODSValuteName.Open;
+        ValuteName := AnsiLowerCase(FieldByName('Valu_name').asstring);
+      end;
+
+      withManat := CurrencyToHR_Azeri
+        (trunc(P_DataModule.Transactions.FieldByName('creditamount')
+        .AsFloat), 0, [0]);
+      ManatPosition := POS('manat', withManat);
+      if ManatPosition > 0 then
+        for i := 1 to ManatPosition - 1 do
+          NoManat := NoManat + withManat[i];
+
+      WithCoin := FloatToStr
+        (Frac(StrToFloat(P_DataModule.Transactions.FieldByName('creditamount')
+        .asstring)));
+      if WithCoin <> '0' then
+      begin
+        Delete(WithCoin, 1, 2);
+        if Length(WithCoin) < 2 then
+          WithCoin := WithCoin + '0'
+        else if Length(WithCoin) > 2 then
+          Delete(WithCoin, 3, Length(WithCoin));
+        WithCoin := WithCoin + ' ' + P_DataModule.ODSValuteName.FieldByName
+          ('valu_bala').asstring;
+      end { if WithCoin<>'0' }
+      else
+        WithCoin := '';
+
+      ValuteName := AnsiLowerCase(P_DataModule.ODSValuteName.FieldByName
+        ('Valu_name').asstring + '  ' + WithCoin);
+
+      if NoManat = EmptyStr then
+        NoManat := '0 ';
+      if not Assigned(P_CO_Report) then
+        P_CO_Report := TP_CO_Report.Create(Self);
+      P_CO_Report.ODSBank.Open;
+      P_CO_Report.QRAMMOUNT1.Caption := NoManat + ValuteName;
+      P_CO_Report.QRAMMOUNT2.Caption := NoManat + ValuteName;
+      P_CO_Report.Preview;
+    finally
+      with P_DataModule.Transactions do
+        Filtered := False;
+      P_CO_Report.ODSBank.Close;
+
+    end;
+  end;
+end;
+
+
+procedure TP_Customers_Form.DBGridAccountsCellClick(Column: TColumn);
+begin
+  SearchAcc.Text := P_DataModule.Account.FieldByName('AccNo').asstring;
+  SearchEdit.Text := P_DataModule.Account.FieldByName('AccName').asstring;
+end;
+
+procedure TP_Customers_Form.N19Click(Sender: TObject);
+begin
+
+  P_AccState := TP_AccState.Create(Self);
+  with P_DataModule.Account do
+    if IsEmpty then
+    begin
+      ShowMessage(no_selected_account);
+      Exit;
+    end
+    else
+    begin
+      with P_AccState do
+        ShowModal;
+
+    end;
+
+end;
+
+procedure TP_Customers_Form.N20Click(Sender: TObject);
+var
+  AStartDate, AEndDate: TDateTime;
+begin
+
+  FormAccTransaction := TFormAccTransaction.Create(Self);
+  FormInterval := TFormInterval.Create(Self);
+  with P_DataModule.Account do
+    if IsEmpty then
+    begin
+      ShowMessage(no_selected_account);
+      Exit;
+    end
+    else
+    begin
+
+      P_DataModule.Sysdat.Open;
+      with FormInterval do
+      begin
+        StartDateEdit.DateTime := P_DataModule.Sysdat.FieldByName('tek_dat')
+          .AsDateTime;
+        EndDateEdit.DateTime := StartDateEdit.DateTime;
+
+        if ShowModal = mrOK then
+        begin
+          AStartDate := StartDateEdit.DateTime;
+          AEndDate := EndDateEdit.DateTime;
+
+          with FormAccTransaction do
+          begin
+            OpenDataControls(AStartDate, AEndDate);
+            ShowModal;
+          end;
+
+        end;
+      end;
+
+    end;
+end;
+
+procedure TP_Customers_Form.N21Click(Sender: TObject);
+begin
+  P_AccSettings := TP_AccSettings.Create(Self);
+  P_AccSettings.ShowModal;
+end;
+
+
+procedure TP_Customers_Form.N18Click(Sender: TObject);
+begin
+  P_CO_Account_Form := TP_CO_Account_Form.Create(Self);
+  P_CO_Account_Form.ShowModal;
+end;
+
+procedure TP_Customers_Form.DeleteTransaction(TransactionID: Longint);
+begin
+  with P_DataModule.SB_TRANSACTION do
+    CallProcedure(cs_del_transaction, ['TransactionID', TransactionID]);
+end;
+
+procedure TP_Customers_Form.N17Click(Sender: TObject);
+var
+  Index: Integer;
+  WaitNextConfirm, WillRefresh: Boolean;
+  TransactionID: Integer;
+  qaccid, qtrid: Integer;
+begin
+  P_DataModule.SB_ACA.CallProcedure('CheckObjectAccess',
+    ['Transaction', 'delete']);
+  WaitNextConfirm := True;
+  WillRefresh := False;
+
+  with DBGridTransactions, SelectedRows, DataSource.DataSet, P_DataModule do
+    try
+      if Count = 0 then
+        CurrentRowSelected := True;
+      for Index := 0 to Count - 1 do
+      begin
+        GotoBookmark(Pointer(Items[Index]));
+        TransactionID := FieldByName('ID').asInteger;
+
+        if WaitNextConfirm then
+          case MessageDlg(Format('Əməliyyat #%d Silinsin?', [TransactionID]),
+            mtConfirmation, [mbYes, mbNo, mbCancel, mbYesToAll], 0) of
+            mrNo:
+              Continue;
+            mrCancel:
+              Break;
+            mrYesToAll:
+              if MessageDlg(Format('%d sayda əməliyyat silinsin?',
+                [Count - Index]), mtConfirmation, [mbYes, mbCancel], 0)
+                = mrYes then
+                WaitNextConfirm := False
+              else
+                Continue;
+          end;
+        Application.ProcessMessages;
+
+        with ODS_VidOPTrDel do
+        begin { H.R. 05.10.2010 }
+          Close;
+          SetVariable('v_ID', DBGridTransactions.DataSource.DataSet.FieldByName
+            ('OperationCode').asInteger);
+          Open;
+        end;
+        if ODS_VidOPTrDel.FieldByName('Cnt').asInteger = 1 then
+        begin
+          ShowMessage('Bu tip əməliyyatı bu moduldan silmək olmaz');
+          Continue;
+        end; { *** H.R. 05.10.2010 }
+
+        if DBGridTransactions.SelectedRows.Count > 1 then
+        begin { H.R. 17.03.2011 }
+          try
+            DeleteTransaction(TransactionID);
+          except
+          end;
+        end
+        else
+          DeleteTransaction(TransactionID);
+
+        WillRefresh := True;
+        SBCommit;
+        TransactionState := tsDelete;
+      end;
+    finally
+    end;
+  qaccid := P_DataModule.Account.FieldByName('ID').asInteger;
+  qtrid := P_DataModule.TransactionsID.asInteger;
+  P_DataModule.Transactions.Close;
+  P_DataModule.Transactions.Open;
+  P_DataModule.Account.Close;
+  P_DataModule.Account.Open;
+  P_DataModule.Account.Locate('ID', qaccid, []);
+  P_DataModule.Transactions.Locate('ID', qtrid, []);
+end;
+
+procedure TP_Customers_Form.DBGridCustomersKeyUp(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  { if key=vk_return then
+    DBGridCustomersCellClick(DBGridCustomers.Columns[0]); }
+end;
+
+procedure TP_Customers_Form.DBGridCustomersTitleClick(Column: TColumn);
+var
+  TitleName: string;
+begin
+  TitleName := Column.FieldName;
+  with P_DataModule.P_Customers do
+  begin
+    SetVariable('Title', TitleName);
+    Refresh;
+  end;
+end;
+
+procedure TP_Customers_Form.DateEditKeyUp(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if Key = vk_return then
+    with P_DataModule, P_Customers do
+    begin
+      Locate('OPENDATE', Variant((Sender as TMaskEdit).Text), []);
+      AccSelKliID;
+      TransactionsData.DataSet.Close;
+    end;
+end;
+
+procedure TP_Customers_Form.DBGridAccountsKeyUp(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if Key = vk_return then
+    DBGridAccountsCellClick(DBGridAccounts.Columns[0]);
+end;
+
+procedure TP_Customers_Form.EditPassp_numberKeyPress(Sender: TObject; var Key: Char);
+begin
+if key=#13 then
+begin
+         ActionSpeedSearchExecute(sender);
+end;
+end;
+
+procedure TP_Customers_Form.EditPassp_numberKeyUp(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if Key = vk_return then
+    // EditPassp_numberchange(Sender);    EditPassp_number
+    if EditPassp_number.Text <> '' then
+      P_DataModule.P_Customers.Locate('Passp_number', EditPassp_number.Text,
+        [loCaseInsensitive, loPartialKey]);
+end;
+
+procedure TP_Customers_Form.EditIDKeyPress(Sender: TObject; var Key: Char);
+begin
+if key=#13 then
+begin
+         ActionSpeedSearchExecute(Sender);
+end;
+end;
+
+procedure TP_Customers_Form.EditIDKeyUp(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+{  if Key = vk_return then
+    if IDEdit.Text <> '' then
+      P_DataModule.P_Customers.Locate('ID', IDEdit.Text,
+        [loCaseInsensitive, loPartialKey]);   }
+end;
+
+procedure TP_Customers_Form.EditSerialKeyUp(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if Key = vk_return then
+    // EditSerialChange(Sender);
+    if EditSerial.Text <> '' then
+      P_DataModule.P_Customers.Locate('Passport', EditSerial.Text,
+        [loCaseInsensitive, loPartialKey]);
+end;
+
+procedure TP_Customers_Form.EditCUST_NAMEKeyPress(Sender: TObject; var Key: Char);
+begin
+  if Key = #13 then
+  begin
+      //New Addition
+      EditNAME1.Text := EditCUST_NAME.Text;
+      {  Replace I, i, İ, i  }
+    {  with EditNAME1 do
+      begin
+          Text := StringReplace(Text, 'i', '`', [rfReplaceAll]);
+          Text := StringReplace(Text, 'I', '`', [rfReplaceAll]);
+          Text := StringReplace(Text, 'İ', '`', [rfReplaceAll]);
+          Text := StringReplace(Text, 'I', '`', [rfReplaceAll]);
+          Text := StringReplace(Text, 'ı', '`', [rfReplaceAll]);
+      end;      }
+
+       //ActionSpeedSearchExecute(Sender);
+       ActionSpeedSearchExecute(EditNAME1);
+  end;
+end;
+
+procedure TP_Customers_Form.EditCUST_NAMEKeyUp(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+{  if Key = vk_return then
+    // nameditchange(Sender);
+    if NamEdit.Text <> '' then
+      P_DataModule.P_Customers.Locate('Cust_Name', NamEdit.Text,
+        [loCaseInsensitive, loPartialKey]);   }
+end;
+
+procedure TP_Customers_Form.Ordernfo1Click(Sender: TObject);
+begin
+  if not Assigned(FormOrderInfo) then
+    FormOrderInfo := TFormOrderInfo.Create(Self);
+  FormOrderInfo.ShowModal;
+end;
+
+procedure TP_Customers_Form.DBGridAccountsDblClick(Sender: TObject);
+begin
+  frmAccInfo := TfrmAccInfo.Create(Self);
+  with frmAccInfo, P_DataModule do
+  begin
+    AccountID := Account.FieldByName('ID').asInteger;
+    ShowAccInfo;
+    ShowModal;
+  end;
+end;
+
+procedure TP_Customers_Form.DBGridTransactionsDblClick(Sender: TObject);
+begin
+  frmTrView := TfrmTrView.Create(Self);
+  with frmTrView, P_DataModule do
+  begin
+    TrID := Transactions.FieldByName('ID').asInteger;
+    ShowTrInfo;
+    ShowModal;
+  end;
+end;
+
+procedure TP_Customers_Form.PopMenuTransactionsPopup(Sender: TObject);
+begin
+  P_DataModule.settings.Open;
+
+  N6.Enabled := (DBGridTransactions.DataSource.DataSet.FieldByName('DEBITBALCN')
+    .asstring = IntToStr(P_DataModule.settings.FieldByName
+    ('CASHBALANCENATIONAL').asInteger)) or
+    (DBGridTransactions.DataSource.DataSet.FieldByName('DEBITBALCN')
+    .asstring = IntToStr(P_DataModule.settings.FieldByName('CASHBALANCEENGLISH')
+    .asInteger));
+
+  N23.Enabled :=
+    ((DBGridTransactions.DataSource.DataSet.FieldByName('DEBITBALCN')
+    .asstring = IntToStr(P_DataModule.settings.FieldByName
+    ('CASHBALANCENATIONAL').asInteger)) or
+    (DBGridTransactions.DataSource.DataSet.FieldByName('DEBITBALCN')
+    .asstring = IntToStr(P_DataModule.settings.FieldByName('CASHBALANCEENGLISH')
+    .asInteger))) or
+    ((DBGridTransactions.DataSource.DataSet.FieldByName('CREDITBALCN')
+    .asstring = IntToStr(P_DataModule.settings.FieldByName
+    ('CASHBALANCENATIONAL').asInteger)) or
+    (DBGridTransactions.DataSource.DataSet.FieldByName('CREDITBALCN')
+    .asstring = IntToStr(P_DataModule.settings.FieldByName('CASHBALANCEENGLISH')
+    .asInteger)));
+
+  P_DataModule.settings.Close;
+end;
+
+
+procedure TP_Customers_Form.Qeytlr1Click(Sender: TObject);
+var
+ a:string;
+begin
+note_id:=P_DataModule.P_Customers.FieldByName('id').Asstring;
+//contract_id:='0';
+LoadPlugin3('Sb_General.bpl','note',note_id,'')
+end;
+
+procedure TP_Customers_Form.Qohumlar1Click(Sender: TObject);
+begin
+tacc:=P_DataModule.P_Customers.FieldByName('id').Asstring;
+  if tacc<>'' then
+   begin
+  LoadPlugin2('Sb_General.bpl','Cust_contact_relatives',tacc)
+   end
+   else
+   showmessage('    Heçbir məlumat seçilməyib  ! ');
+end;
+
+
+procedure TP_Customers_Form.sas1Click(Sender: TObject);
+begin
+if P_DataModule.Account.RecordCount=0 then
+begin
+ShowMessage('  Hecbir hesab qeyd edilmeyib   !');
+Exit
+end
+else
+DB_HesabID:= P_DataModule.Account.FieldByName('id').Asstring;
+
+LoadPlugin2('Sb_General.bpl','DB_Hesab',DB_HesabID);
+DBGridTransactions.DataSource.DataSet.Refresh;
+end;
+
+procedure TP_Customers_Form.N23Click(Sender: TObject);
+var
+  TransactionID: String;
+  SavePlace: TBookmark;
+begin
+  P_DataModule.settings.Open;
+  if not Assigned(PQRep_Order) then
+    PQRep_Order := TPQRep_Order.Create(Self);
+  if not Assigned(QuickReportORDER) then
+    QuickReportORDER := TQuickReportORDER.Create(Self);
+
+  if trim(P_DataModule.settings.FieldByName('HANDOVER').asstring) = '0' then
+  begin
+    PQRep_Order.QRShape6.Enabled := False;
+    PQRep_Order.QRLabel5.Enabled := False;
+    PQRep_Order.QRShape37.Enabled := False;
+    PQRep_Order.QRLabel47.Enabled := False;
+    PQRep_Order.QRShape23.Enabled := False;
+    PQRep_Order.QRLabel23.Enabled := False;
+  end;
+  if trim(P_DataModule.settings.FieldByName('HANDOVER').asstring) = '1' then
+  begin
+    PQRep_Order.QRShape6.Enabled := True;
+    PQRep_Order.QRLabel5.Enabled := True;
+    PQRep_Order.QRShape37.Enabled := True;
+    PQRep_Order.QRLabel47.Enabled := True;
+    PQRep_Order.QRShape23.Enabled := True;
+    PQRep_Order.QRLabel23.Enabled := True;
+
+  end;
+  if trim(P_DataModule.settings.FieldByName('Chief').asstring) = '0' then
+  begin
+    PQRep_Order.QRShape2.Enabled := False;
+    PQRep_Order.QRLabel48.Enabled := False;
+    PQRep_Order.QRShape38.Enabled := False;
+    PQRep_Order.QRLabel10.Enabled := False;
+    PQRep_Order.QRShape24.Enabled := False;
+    PQRep_Order.QRLabel28.Enabled := False;
+  end;
+  if trim(P_DataModule.settings.FieldByName('Chief').asstring) = '1' then
+  begin
+    PQRep_Order.QRShape2.Enabled := True;
+    PQRep_Order.QRLabel48.Enabled := True;
+    PQRep_Order.QRShape38.Enabled := True;
+    PQRep_Order.QRLabel10.Enabled := True;
+    PQRep_Order.QRShape24.Enabled := True;
+    PQRep_Order.QRLabel28.Enabled := True;
+  end;
+
+  if trim(P_DataModule.settings.FieldByName('Operator').asstring) = '0' then
+  begin
+    PQRep_Order.QRShape40.Enabled := False;
+    PQRep_Order.QRLabel49.Enabled := False;
+    PQRep_Order.QRShape25.Enabled := False;
+    PQRep_Order.QRLabel31.Enabled := False;
+    PQRep_Order.QRShape4.Enabled := False;
+    PQRep_Order.QRLabel11.Enabled := False;
+  end;
+  if trim(P_DataModule.settings.FieldByName('Operator').asstring) = '1' then
+  begin
+    PQRep_Order.QRShape40.Enabled := True;
+    PQRep_Order.QRLabel49.Enabled := True;
+    PQRep_Order.QRShape25.Enabled := True;
+    PQRep_Order.QRLabel31.Enabled := True;
+    PQRep_Order.QRShape4.Enabled := True;
+    PQRep_Order.QRLabel11.Enabled := True;
+  end;
+  if trim(P_DataModule.settings.FieldByName('Cashier').asstring) = '0' then
+  begin
+    PQRep_Order.QRShape41.Enabled := False;
+    PQRep_Order.QRLabel50.Enabled := False;
+    PQRep_Order.QRShape26.Enabled := False;
+    PQRep_Order.QRLabel32.Enabled := False;
+    PQRep_Order.QRShape5.Enabled := False;
+    PQRep_Order.QRLabel12.Enabled := False;
+  end;
+  if trim(P_DataModule.settings.FieldByName('Cashier').asstring) = '1' then
+  begin
+    PQRep_Order.QRShape41.Enabled := True;
+    PQRep_Order.QRLabel50.Enabled := True;
+    PQRep_Order.QRShape26.Enabled := True;
+    PQRep_Order.QRLabel32.Enabled := True;
+    PQRep_Order.QRShape5.Enabled := True;
+    PQRep_Order.QRLabel12.Enabled := True;
+  end;
+
+  // ------------------------------------------Modified by  for AZNEQ.BANK on 17.08.2006
+  if trim(P_DataModule.settings.FieldByName('Controller').asstring) = '1' then
+  begin
+    PQRep_Order.QRShape82.Enabled := True;
+    PQRep_Order.QRLabel83.Enabled := True;
+    PQRep_Order.QRShape84.Enabled := True;
+    PQRep_Order.QRLabel85.Enabled := True;
+    PQRep_Order.QRShape86.Enabled := True;
+    PQRep_Order.QRLabel87.Enabled := True;
+  end;
+  if trim(P_DataModule.settings.FieldByName('Controller').asstring) = '0' then
+  begin
+    PQRep_Order.QRShape82.Enabled := False;
+    PQRep_Order.QRLabel83.Enabled := False;
+    PQRep_Order.QRShape84.Enabled := False;
+    PQRep_Order.QRLabel85.Enabled := False;
+    PQRep_Order.QRShape86.Enabled := False;
+    PQRep_Order.QRLabel87.Enabled := False;
+  end;
+
+  // -------------------OUT--------------------------------------
+  if trim(P_DataModule.settings.FieldByName('Amount').asstring) = '0' then
+  begin
+    QuickReportORDER.QRShape3.Enabled := False;
+    QuickReportORDER.QRLabel11.Enabled := False;
+    QuickReportORDER.QRShape29.Enabled := False;
+    QuickReportORDER.QRLabel47.Enabled := False;
+    QuickReportORDER.QRShape18.Enabled := False;
+    QuickReportORDER.QRLabel12.Enabled := False;
+
+  end;
+  if trim(P_DataModule.settings.FieldByName('Amount').asstring) = '1' then
+  begin
+    QuickReportORDER.QRShape3.Enabled := True;
+    QuickReportORDER.QRLabel11.Enabled := True;
+    QuickReportORDER.QRShape29.Enabled := True;
+    QuickReportORDER.QRLabel47.Enabled := True;
+    QuickReportORDER.QRShape18.Enabled := True;
+    QuickReportORDER.QRLabel12.Enabled := True;
+
+  end;
+  if trim(P_DataModule.settings.FieldByName('chief_out').asstring) = '0' then
+  begin
+    QuickReportORDER.QRShape19.Enabled := False;
+    QuickReportORDER.QRLabel14.Enabled := False;
+    QuickReportORDER.QRShape32.Enabled := False;
+    QuickReportORDER.QRLabel9.Enabled := False;
+    QuickReportORDER.QRShape33.Enabled := False;
+    QuickReportORDER.QRLabel39.Enabled := False;
+
+  end;
+  if trim(P_DataModule.settings.FieldByName('chief_out').asstring) = '1' then
+  begin
+    QuickReportORDER.QRShape19.Enabled := True;
+    QuickReportORDER.QRLabel14.Enabled := True;
+    QuickReportORDER.QRShape32.Enabled := True;
+    QuickReportORDER.QRLabel9.Enabled := True;
+    QuickReportORDER.QRShape33.Enabled := True;
+    QuickReportORDER.QRLabel39.Enabled := True;
+  end;
+
+  if trim(P_DataModule.settings.FieldByName('accountant').asstring) = '0' then
+  begin
+    QuickReportORDER.QRShape31.Enabled := False;
+    QuickReportORDER.QRLabel16.Enabled := False;
+    QuickReportORDER.QRShape30.Enabled := False;
+    QuickReportORDER.QRLabel40.Enabled := False;
+    QuickReportORDER.QRShape20.Enabled := False;
+    QuickReportORDER.QRLabel10.Enabled := False;
+  end;
+  if trim(P_DataModule.settings.FieldByName('accountant').asstring) = '1' then
+  begin
+    QuickReportORDER.QRShape31.Enabled := True;
+    QuickReportORDER.QRLabel16.Enabled := True;
+    QuickReportORDER.QRShape30.Enabled := True;
+    QuickReportORDER.QRLabel40.Enabled := True;
+    QuickReportORDER.QRShape20.Enabled := True;
+    QuickReportORDER.QRLabel10.Enabled := True;
+  end;
+
+  if trim(P_DataModule.settings.FieldByName('operator_out').asstring) = '0' then
+  begin
+    QuickReportORDER.QRShape35.Enabled := False;
+    QuickReportORDER.QRLabel50.Enabled := False;
+    QuickReportORDER.QRShape34.Enabled := False;
+    QuickReportORDER.QRLabel42.Enabled := False;
+    QuickReportORDER.QRShape5.Enabled := False;
+    QuickReportORDER.QRLabel4.Enabled := False;
+  end;
+  if trim(P_DataModule.settings.FieldByName('operator_out').asstring) = '1' then
+  begin
+    QuickReportORDER.QRShape35.Enabled := True;
+    QuickReportORDER.QRLabel50.Enabled := True;
+    QuickReportORDER.QRShape34.Enabled := True;
+    QuickReportORDER.QRLabel42.Enabled := True;
+    QuickReportORDER.QRShape5.Enabled := True;
+    QuickReportORDER.QRLabel4.Enabled := True;
+  end;
+  if trim(P_DataModule.settings.FieldByName('cashier_out').asstring) = '0' then
+  begin
+    QuickReportORDER.QRShape21.Enabled := False;
+    QuickReportORDER.QRLabel46.Enabled := False;
+    QuickReportORDER.QRShape14.Enabled := False;
+    QuickReportORDER.QRLabel3.Enabled := False;
+    QuickReportORDER.QRShape13.Enabled := False;
+    QuickReportORDER.QRLabel52.Enabled := False;
+  end;
+  if trim(P_DataModule.settings.FieldByName('cashier_out').asstring) = '1' then
+  begin
+    QuickReportORDER.QRShape21.Enabled := True;
+    QuickReportORDER.QRLabel46.Enabled := True;
+    QuickReportORDER.QRShape14.Enabled := True;
+    QuickReportORDER.QRLabel3.Enabled := True;
+    QuickReportORDER.QRShape13.Enabled := True;
+    QuickReportORDER.QRLabel52.Enabled := True;
+  end;
+
+  // ------------------------------------------Modified by for AZNEQ.BANK on 17.08.2006
+  if trim(P_DataModule.settings.FieldByName('controller_out').asstring)
+    = '1' then
+  begin
+    QuickReportORDER.QRShape91.Enabled := True;
+    QuickReportORDER.QRLabel90.Enabled := True;
+    QuickReportORDER.QRShape93.Enabled := True;
+    QuickReportORDER.QRLabel92.Enabled := True;
+    QuickReportORDER.QRShape95.Enabled := True;
+    QuickReportORDER.QRLabel94.Enabled := True;
+  end;
+  if trim(P_DataModule.settings.FieldByName('controller_out').asstring)
+    = '0' then
+  begin
+    QuickReportORDER.QRShape91.Enabled := False;
+    QuickReportORDER.QRLabel90.Enabled := False;
+    QuickReportORDER.QRShape93.Enabled := False;
+    QuickReportORDER.QRLabel92.Enabled := False;
+    QuickReportORDER.QRShape95.Enabled := False;
+    QuickReportORDER.QRLabel94.Enabled := False;
+
+  end;
+  try
+    P_DataModule.ODSLogo.Open;
+    with P_DataModule.Transactions do
+    begin
+      TransactionID := FieldByName('ID').asstring;
+      Filter := ' ID=' + TransactionID;
+      Filtered := True;
+      if IOCheck(FieldByName('debitbalance').asInteger) then
+        CreateOrderRpt(False, P_DataModule.customers.FieldByName('ID')
+          .asInteger)
+      else
+        CreateOrderRpt(True, P_DataModule.customers.FieldByName('ID').asInteger)
+    end;
+
+  finally
+    P_DataModule.Transactions.GotoBookmark(Pointer(SavePlace));
+    P_DataModule.Transactions.Filtered := False;
+    P_DataModule.ODSLogo.Close;
+    P_DataModule.settings.Close;
+    // showmessage(P_DataModule.ODSTransactionsViewer.FieldByName('issued_by').AsString);
+  end;
+end;
+
+function TP_Customers_Form.IOCheck(Reference: Integer): Boolean;
+begin
+  with P_DataModule.OPCash do
+    Result := CallBooleanFunction('CheckOICome', [Reference]);
+end;
+
+procedure TP_Customers_Form.GetBankInfo(var BankName, BankInn: String);
+begin
+  with P_DataModule.OPCash do
+  begin
+    CallProcedure('GetBankInfo', [BankName, BankInn]);
+    BankName := GetParameter(0);
+    BankInn := GetParameter(1);
+  end;
+end;
+
+procedure TP_Customers_Form.CreateOrderRpt(IOCome: Boolean; CustID: Longint);
+var
+  BankName, BankInn: String;
+  CustName, CustInn: String;
+  V: Variant;
+  withManat, WithCoin: String;
+  ManatPosition, i: Word;
+  ValuteName, NoManat: String;
+begin
+  V := Integer(trunc(P_DataModule.Transactions.FieldByName('TRANSACTIONDATE')
+    .AsDateTime));
+  NoManat := '';
+  GetBankInfo(BankName, BankInn);
+  GetCustomerInfo(CustID, CustName, CustInn);
+  // ****************************
+  if not IOCome then
+    withManat := CurrencyToHR_Azeri
+      (trunc(P_DataModule.Transactions.FieldByName('creditamount')
+      .AsFloat), 0, [0])
+  else
+    withManat := CurrencyToHR_Azeri
+      (trunc(P_DataModule.Transactions.FieldByName('debitamount')
+      .AsFloat), 0, [0]);
+
+  ManatPosition := POS('manat', withManat);
+  if ManatPosition > 0 then
+    for i := 1 to ManatPosition - 1 do
+      NoManat := NoManat + '' + withManat[i];
+
+  if NoManat = EmptyStr then
+    NoManat := '0 ';
+
+  with P_DataModule do
+  begin
+    ODSValuteName.Close;
+    ODSValuteName.SetVariable('valute',
+      Transactions.FieldByName('DEBITCURRENCYID').Value);
+    ODSValuteName.Open;
+    WithCoin := CurrToStr
+      (Frac(StrToFloat(P_DataModule.Transactions.FieldByName('DEBITAMOUNT')
+      .asstring)));
+    if WithCoin <> '0' then
+    begin
+      Delete(WithCoin, 1, 2);
+      if Length(WithCoin) < 2 then
+        WithCoin := WithCoin + '0'
+      else if Length(WithCoin) > 2 then
+        Delete(WithCoin, 3, Length(WithCoin));
+      ValuteName := (ODSValuteName.FieldByName('Valu_name').asstring + ' ' +
+        WithCoin + ' ' + ODSValuteName.FieldByName('valu_bala').asstring);
+    end
+    else
+      ValuteName := (ODSValuteName.FieldByName('Valu_name').asstring);
+  end;
+  // //*****************************************
+
+  if not IOCome then
+  begin
+    with PQRep_Order do
+    begin
+      P_DataModule.ODSCashInfo.Refresh;
+      P_DataModule.Transactions.Refresh;
+      QRLBankName.Caption := BankName;
+      QRLBankName1.Caption := BankName;
+      QRLBankName2.Caption := BankName;
+      QRLBankInn.Caption := BankInn;
+      QRLBankInn1.Caption := BankInn;
+      QRLBankInn2.Caption := BankInn;
+      QRInn.Enabled := False;
+      QRInn1.Enabled := False;
+      QRInn2.Enabled := False;
+      // QRInn.Caption :=CustInn;
+      // QRInn1.Caption :=CustInn;
+      // QRInn2.Caption :=CustInn;
+      QRLAmount.Caption := NoManat + '' + ValuteName;
+      QRLAmount1.Caption := NoManat + '' + ValuteName;
+      QRLAmount2.Caption := NoManat + '' + ValuteName;
+      Preview;
+    end
+  end
+  else
+  begin
+    with QuickReportORDER do
+    begin
+      P_DataModule.ODSCashInfo.Refresh;
+      P_DataModule.Transactions.Refresh;
+      QRLBankInn.Caption := BankInn;
+      QRLBankInn1.Caption := BankInn;
+      QRLBankInn2.Caption := BankInn;
+      QRLBankName.Caption := BankName;
+      QRLBankName1.Caption := BankName;
+      QRLBankName2.Caption := BankName;
+      QRInn1.Enabled := False;
+      QRInn2.Enabled := False;
+      QRInn3.Enabled := False;
+      // QRInn1.Caption :=CustInn;
+      // QRInn2.Caption :=CustInn;
+      // QRInn3.Caption :=CustInn;
+      QRLAmmount.Caption := NoManat + '' + ValuteName;
+      QRLAmmount1.Caption := NoManat + '' + ValuteName;
+      QRLAmmount2.Caption := NoManat + '' + ValuteName;
+      Preview;
+    end
+  end;
+
+end;
+
+procedure TP_Customers_Form.N24Click(Sender: TObject);
+begin
+  P_DataModule.Templates.Open;
+  P_DataModule.Bookmarks.Open;
+  P_DataModule.Fields.Open;
+  Ph_CO_BookmarkSetupFrom.ShowModal;
+end;
+
+procedure TP_Customers_Form.N25Click(Sender: TObject);
+begin
+
+  If P_DataModule.Account.IsEmpty then
+  begin
+    ShowMessage(no_selected_account);
+    Exit;
+  end
+  else
+  begin
+    P_DataModule.CustomerInfoDataSet.Close;
+    P_DataModule.CustomerInfoDataSet.SetVariable('ContractID',
+      DBGridAccounts.DataSource.DataSet.FieldByName('ID').asInteger);
+    P_DataModule.CustomerInfoDataSet.Open;
+    P_DataModule.Templates.Close;
+    P_DataModule.Templates.Open;
+    P_CO_frmWReportUnit.Ph_CO_frmWReport.ShowModal;
+  end;
+end;
+
+procedure TP_Customers_Form.TransDebitClick(Sender: TObject);
+begin
+  RichEdit1.Text := P_DataModule.Account.FieldByName('TipAcc').asstring;
+  if P_DataModule.Account.IsEmpty then
+  begin
+    ShowMessage(no_selected_account);
+    Exit;
+  end
+  else if RichEdit1.FindText('D', 0, Length(RichEdit1.Text), []) <> -1 then
+  begin
+    ShowMessage(DebetArest_On_Account);
+    Exit;
+  end
+  else
+  begin
+    if not Assigned(P_Transaction) then
+      P_Transaction := TP_Transaction.Create(Self);
+    with P_Transaction { , CO_DataMod } do
+    begin
+      TransTypeIncOutDC := 3;
+      ShowModal;
+    end;
+  end;
+
+end;
+
+procedure TP_Customers_Form.TransCreditClick(Sender: TObject);
+begin
+  RichEdit1.Text := P_DataModule.Account.FieldByName('TipAcc').asstring;
+  if P_DataModule.Account.IsEmpty then
+  begin
+    ShowMessage(no_selected_account);
+    Exit;
+  end
+  else if RichEdit1.FindText('C', 0, Length(RichEdit1.Text), []) <> -1 then
+  begin
+    ShowMessage(KreditArest_On_Account);
+    Exit;
+  end
+  else
+  begin
+    if not Assigned(P_Transaction) then
+      P_Transaction := TP_Transaction.Create(Self);
+    with P_Transaction, P_DataModule do
+    begin
+      TransTypeIncOutDC := 4;
+      ShowModal;
+    end;
+  end;
+
+end;
+
+initialization
+
+TActiveFormFactory.Create(ComServer, TActiveFormControl, TP_Customers_Form,
+  Class_P_Customers_Form, 1, '', OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+  tmApartment);
+
+end.

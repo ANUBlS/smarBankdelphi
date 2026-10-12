@@ -1,0 +1,51 @@
+unit expertImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, OracleData, ExtCtrls, DBCtrls, Grids, DBGrids;
+
+type
+  TExpert = class(TForm)
+    DBGrid1: TDBGrid;
+    DBNavigator1: TDBNavigator;
+    OracleDataSet1: TOracleDataSet;
+    DataSource1: TDataSource;
+    OracleDataSet2: TOracleDataSet;
+    OracleDataSet1ID: TFloatField;
+    OracleDataSet1CODE: TWideStringField;
+    OracleDataSet1NAME: TWideStringField;
+    OracleDataSet1FILIALID: TFloatField;
+    OracleDataSet2ID: TFloatField;
+    OracleDataSet2NAME: TWideStringField;
+    OracleDataSet1filid: TWideStringField;
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+    procedure FormCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Expert: TExpert;
+
+implementation
+
+{$R *.DFM}
+uses sboapiDataModuleImpl;
+procedure TExpert.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+Resize:=false
+end;
+
+procedure TExpert.FormCreate(Sender: TObject);
+begin
+OracleDataSet1.open ;
+OracleDataSet2.open
+end;
+
+end.

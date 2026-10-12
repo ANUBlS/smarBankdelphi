@@ -1,0 +1,21 @@
+program SmartBank;
+
+uses
+  Forms,
+  sbMainForm_Unit in 'sbMainForm_Unit.pas' {sbMainForm},
+  PluginViewImpl in 'PluginViewImpl.pas' {PluginViewForm},
+  AlertThread in 'AlertThread.pas',
+  ErrorFormImpl in 'ErrorFormImpl.pas' {ErrorForm},
+  AbountProgrammUnit in 'AbountProgrammUnit.pas' {frmAbout},
+  PasswordChange_unit in 'PasswordChange_unit.pas' {PasswordChange};
+
+{$R *.RES}
+
+begin
+  HintWindowClass := TAzHint;
+  Application.Initialize;
+  Application.CreateForm(TsbMainForm, sbMainForm);
+  Application.CreateForm(TErrorForm, ErrorForm);
+  Application.CreateForm(TfrmAbout, frmAbout);
+  Application.Run;
+end.

@@ -1,0 +1,234 @@
+object FormAmountLimit: TFormAmountLimit
+  Left = 0
+  Top = 0
+  Caption = 'FormAmountLimit'
+  ClientHeight = 539
+  ClientWidth = 1104
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poScreenCenter
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 1104
+    Height = 539
+    Align = alClient
+    BevelInner = bvRaised
+    BevelOuter = bvLowered
+    TabOrder = 0
+    object Panel2: TPanel
+      Left = 2
+      Top = 2
+      Width = 1100
+      Height = 47
+      Align = alTop
+      BevelInner = bvRaised
+      BevelOuter = bvLowered
+      TabOrder = 0
+      object ToolBar1: TToolBar
+        Left = 2
+        Top = 2
+        Width = 1096
+        Height = 41
+        ButtonHeight = 42
+        ButtonWidth = 71
+        Caption = 'ToolBar1'
+        TabOrder = 0
+        object GroupBox1: TGroupBox
+          Left = 0
+          Top = 0
+          Width = 1096
+          Height = 42
+          Align = alTop
+          Caption = 'Yeni limitl'#601'ri daxil edin'
+          TabOrder = 0
+          object DBNavigator1: TDBNavigator
+            Left = 6
+            Top = 13
+            Width = 272
+            Height = 25
+            DataSource = DataModExch.DSlimit
+            VisibleButtons = [nbFirst, nbPrior, nbNext, nbLast, nbEdit, nbPost, nbCancel, nbRefresh]
+            Flat = True
+            TabOrder = 0
+          end
+        end
+      end
+    end
+    object DBGridEh1: TDBGridEh
+      Left = 2
+      Top = 49
+      Width = 1100
+      Height = 488
+      Align = alClient
+      DataGrouping.GroupLevels = <>
+      DataSource = DataModExch.DSlimit
+      Flat = False
+      FooterColor = clWindow
+      FooterFont.Charset = DEFAULT_CHARSET
+      FooterFont.Color = clWindowText
+      FooterFont.Height = -11
+      FooterFont.Name = 'Tahoma'
+      FooterFont.Style = []
+      RowDetailPanel.Color = clBtnFace
+      TabOrder = 1
+      TitleFont.Charset = DEFAULT_CHARSET
+      TitleFont.Color = clWindowText
+      TitleFont.Height = -11
+      TitleFont.Name = 'Tahoma'
+      TitleFont.Style = []
+      Columns = <
+        item
+          EditButtons = <>
+          FieldName = 'DAT'
+          Footers = <>
+          ReadOnly = True
+          Title.Alignment = taCenter
+          Title.Caption = 'Tarix'
+          Title.Color = clSilver
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clBlack
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 80
+        end
+        item
+          EditButtons = <>
+          FieldName = 'VAL_NAME'
+          Footers = <>
+          ReadOnly = True
+          Title.Alignment = taCenter
+          Title.Caption = 'Valyuta'
+          Title.Color = clSilver
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clBlack
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 53
+        end
+        item
+          EditButtons = <>
+          FieldName = 'BUY_OSTAT'
+          Footers = <>
+          Title.Alignment = taCenter
+          Title.Caption = 'Al'#305#351' Limiti'
+          Title.Color = clSilver
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clBlack
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 110
+        end
+        item
+          EditButtons = <>
+          FieldName = 'BUY_POK_OSTAT'
+          Footers = <>
+          Title.Alignment = taCenter
+          Title.Caption = 'Al'#305#351' Limiti(ekvivalent)'
+          Title.Color = clSilver
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clBlack
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 110
+        end
+        item
+          EditButtons = <>
+          FieldName = 'SELL_OSTAT'
+          Footers = <>
+          Title.Alignment = taCenter
+          Title.Caption = 'Sat'#305#351' Limiti'
+          Title.Color = clSilver
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clBlack
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 110
+        end
+        item
+          EditButtons = <>
+          FieldName = 'SELL_POK_OSTAT'
+          Footers = <>
+          Title.Alignment = taCenter
+          Title.Caption = 'Sat'#305#351' Limiti(ekvivalent)'
+          Title.Color = clSilver
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clBlack
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 110
+        end
+        item
+          EditButtons = <>
+          FieldName = 'BANK_BUY_OSTAT'
+          Footers = <>
+          Title.Alignment = taCenter
+          Title.Caption = 'Bank Al'#305#351' Limiti'
+          Title.Color = clSilver
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clBlack
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 98
+        end
+        item
+          EditButtons = <>
+          FieldName = 'BANK_BUY_POK_OSTAT'
+          Footers = <>
+          Title.Alignment = taCenter
+          Title.Caption = 'Bank Al'#305#351' Limiti(ekvivalent)'
+          Title.Color = clSilver
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clBlack
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 139
+        end
+        item
+          EditButtons = <>
+          FieldName = 'BANK_SELL_OSTAT'
+          Footers = <>
+          Title.Alignment = taCenter
+          Title.Caption = 'Bank Sat'#305#351' Limiti'
+          Title.Color = clSilver
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clBlack
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 101
+        end
+        item
+          EditButtons = <>
+          FieldName = 'BANK_SELL_POK_OSTAT'
+          Footers = <>
+          Title.Alignment = taCenter
+          Title.Caption = 'Bank Sat'#305#351' Limiti(ekvivalent)'
+          Title.Color = clSilver
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clBlack
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 138
+        end>
+      object RowDetailData: TRowDetailPanelControlEh
+      end
+    end
+  end
+end

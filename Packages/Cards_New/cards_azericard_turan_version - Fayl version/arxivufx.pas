@@ -1,0 +1,83 @@
+unit arxivufx;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ComCtrls, ExtCtrls, Grids, DBGrids, StdCtrls, ImgList;
+
+type
+  TUFX_ARXIV = class(TForm)
+    Button1: TButton;
+    DBGrid1: TDBGrid;
+    Panel1: TPanel;
+    Button3: TButton;
+    begdat: TDateTimePicker;
+    enddat: TDateTimePicker;
+    ImageList1: TImageList;
+    procedure DBGrid1DrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TColumn; State: TGridDrawState);
+    procedure Button1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  UFX_ARXIV: TUFX_ARXIV;
+
+implementation
+
+uses Unit18;
+
+{$R *.dfm}
+
+procedure TUFX_ARXIV.Button1Click(Sender: TObject);
+begin
+ with  DataMod_CARDS.card_uxfarxiv do begin
+        close;
+
+        SetVariable('dat1',trunc(begdat.DateTime));
+          SetVariable('dat2',trunc(enddat.DateTime));
+          open;
+
+ end;
+end;
+
+procedure TUFX_ARXIV.DBGrid1DrawColumnCell(Sender: TObject; const Rect: TRect;
+  DataCol: Integer; Column: TColumn; State: TGridDrawState);
+    var ImageIndex:integer;
+  begin
+with Sender as TDBGrid do
+  begin
+    if DataSource.DataSet.RecordCount <> 0 then
+    begin
+      case DataSource.DataSet.FieldByName('STATUS').AsInteger of
+      0 :
+        ImageIndex := 13;
+      1 :
+        ImageIndex := 3;
+      2 :
+        ImageIndex := 3;
+      3:
+        ImageIndex :=0;
+
+      else
+      end;
+      if (DataCol = 1) and (ImageIndex <> -1) then
+        ImageList1.Draw(Canvas, Rect.Left, Rect.Top, ImageIndex, True)
+      else
+        DefaultDrawColumnCell(Rect, DataCol, Column, State);
+    end;
+  end;
+
+ { if dbgrid1.DataSource.DataSet.FieldByName('info').AsInteger=3 then
+       begin
+         dbgrid1.Canvas.Brush.Color:=Clred;
+         dbgrid1.DefaultDrawColumnCell(rect,datacol,column,state);
+       end; }
+
+end;
+
+end.

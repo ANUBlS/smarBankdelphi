@@ -1,0 +1,214 @@
+object frmAddMoney: TfrmAddMoney
+  Left = 266
+  Top = 232
+  BorderIcons = [biSystemMenu]
+  ClientHeight = 154
+  ClientWidth = 406
+  Color = clBtnFace
+  Font.Charset = RUSSIAN_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poScreenCenter
+  OnCanResize = FormCanResize
+  OnKeyPress = FormKeyPress
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 14
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 406
+    Height = 111
+    Align = alTop
+    BevelInner = bvSpace
+    BevelOuter = bvLowered
+    TabOrder = 0
+    object Label1: TLabel
+      Left = 5
+      Top = 52
+      Width = 98
+      Height = 14
+      Caption = 'Depozitin m'#601'bl'#601#287'i:'
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Label2: TLabel
+      Left = 230
+      Top = 56
+      Width = 38
+      Height = 14
+      Caption = 'Tarix : '
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Label3: TLabel
+      Left = 232
+      Top = 84
+      Width = 49
+      Height = 14
+      Caption = 'M'#601'bl'#601#287' : '
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Label4: TLabel
+      Left = 8
+      Top = 83
+      Width = 32
+      Height = 14
+      Caption = #304'llik %'
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+    end
+    object DBEditEh1: TDBEditEh
+      Left = 104
+      Top = 52
+      Width = 123
+      Height = 22
+      Color = clInfoBk
+      DataField = 'AMOUNT'
+      DataSource = DMApplyMoney.DepositInfoDatSrc
+      EditButtons = <>
+      TabOrder = 0
+      Visible = True
+    end
+    object Panel4: TPanel
+      Left = 2
+      Top = 2
+      Width = 402
+      Height = 46
+      Align = alTop
+      TabOrder = 1
+      object StaticText3: TStaticText
+        Left = 1
+        Top = 1
+        Width = 400
+        Height = 18
+        Align = alTop
+        Alignment = taCenter
+        Caption = 'M'#252#351't'#601'ri Hesab'#305
+        Color = clNavy
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindow
+        Font.Height = -12
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentColor = False
+        ParentFont = False
+        TabOrder = 0
+      end
+      object AccountListCB: TDBLookupComboboxEh
+        Left = 1
+        Top = 18
+        Width = 199
+        Height = 22
+        TabStop = False
+        DropDownBox.Sizable = True
+        EditButtons = <>
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -12
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        KeyField = 'ID'
+        ListField = 'ACC_NO'
+        ListSource = DMApplyMoney.DebitAccsDatSrc
+        ParentFont = False
+        TabOrder = 1
+        Visible = True
+        OnChange = AccountListCBChange
+      end
+      object AccnameListCB: TDBLookupComboboxEh
+        Left = 199
+        Top = 19
+        Width = 199
+        Height = 22
+        EditButtons = <>
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -12
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        KeyField = 'ID'
+        ListField = 'NAME'
+        ListSource = DMApplyMoney.DebitAccsDatSrc
+        ParentFont = False
+        TabOrder = 2
+        Visible = True
+        OnChange = AccnameListCBChange
+      end
+    end
+    object OperationDatePckr: TDateTimePicker
+      Left = 278
+      Top = 53
+      Width = 123
+      Height = 21
+      Date = 38195.537546400500000000
+      Time = 38195.537546400500000000
+      Enabled = False
+      TabOrder = 2
+    end
+    object MoneySumEdit: TCMCurrencyEdit
+      Left = 278
+      Top = 80
+      Width = 123
+      Height = 22
+      TabOrder = 3
+      Text = '0'
+    end
+    object PercentEdit: TEdit
+      Left = 103
+      Top = 78
+      Width = 123
+      Height = 22
+      TabOrder = 4
+      Text = 'PercentEdit'
+    end
+  end
+  object ButtonCommit: TButton
+    Left = 225
+    Top = 117
+    Width = 81
+    Height = 27
+    Action = ActnTransaction
+    Caption = '&'#1043#1103#1073#1091#1083
+    TabOrder = 1
+  end
+  object ButtonCancel: TButton
+    Left = 311
+    Top = 117
+    Width = 81
+    Height = 27
+    Caption = '&'#1048#1084#1090#1080#1085#1072
+    ModalResult = 2
+    TabOrder = 2
+  end
+  object ActionList1: TActionList
+    Left = 48
+    Top = 108
+    object ActnTransaction: TAction
+      Caption = 'ActnTransaction'
+      OnExecute = ActnTransactionExecute
+      OnUpdate = ActnTransactionUpdate
+    end
+  end
+end

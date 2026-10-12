@@ -1,0 +1,874 @@
+unit MainScreen;
+
+{$WARN SYMBOL_PLATFORM OFF}
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActiveX, AxCtrls, Law_modules_TLB, StdVcl, ImgList, Grids, DBGrids, StdCtrls,
+  Buttons, XFSCtrls, ExtCtrls, ComCtrls, OleServer, ExcelXP, dblookup, DBCtrls;
+
+type
+  TLawmodule = class(TActiveForm, ILawmodule)
+    PageControl: TPageControl;
+    TabSheet1: TTabSheet;
+    XFPanel1: TXFPanel;
+    refreshbtn: TXFBitBtn;
+    XFBitBtn2: TXFBitBtn;
+    XFBitBtn3: TXFBitBtn;
+    XFBitBtn4: TXFBitBtn;
+    DBGrid1: TDBGrid;
+    ImageList1: TImageList;
+    ExcelApplication1: TExcelApplication;
+    XFPanel2: TXFPanel;
+    XFBitBtn1: TXFBitBtn;
+    idedit: TEdit;
+    kliidedit: TEdit;
+    nameedit: TEdit;
+    Label4: TLabel;
+    pinedit: TEdit;
+    XFBitBtn5: TXFBitBtn;
+    DBLookupComboBox1: TDBLookupComboBox;
+    DBLookupComboBox2: TDBLookupComboBox;
+    DBLookupComboBox3: TDBLookupComboBox;
+    Button1: TButton;
+    numedit: TEdit;
+    Memo1: TMemo;
+    procedure refreshbtnClick(Sender: TObject);
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure XFBitBtn2Click(Sender: TObject);
+    procedure DBGrid1DrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TColumn; State: TGridDrawState);
+    procedure XFBitBtn4Click(Sender: TObject);
+    procedure XFBitBtn3Click(Sender: TObject);
+    procedure XFBitBtn1Click(Sender: TObject);
+    procedure DBLookupCombo1KeyPress(Sender: TObject; var Key: Char);
+    procedure DBLookupCombo2KeyPress(Sender: TObject; var Key: Char);
+    procedure XFBitBtn5Click(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure ideditKeyPress(Sender: TObject; var Key: Char);
+    procedure DBGrid1KeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure DBGrid1TitleClick(Column: TColumn);
+  private
+    { Private declarations }
+    FEvents: ILawmoduleEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure MouseEnterEvent(Sender: TObject);
+    procedure MouseLeaveEvent(Sender: TObject);
+    procedure PaintEvent(Sender: TObject);
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AlignDisabled: WordBool; safecall;
+    function Get_AlignWithMargins: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_BorderWidth: Integer; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_DockSite: WordBool; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_ExplicitHeight: Integer; safecall;
+    function Get_ExplicitLeft: Integer; safecall;
+    function Get_ExplicitTop: Integer; safecall;
+    function Get_ExplicitWidth: Integer; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_MouseInClient: WordBool; safecall;
+    function Get_ParentCustomHint: WordBool; safecall;
+    function Get_ParentDoubleBuffered: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PopupMode: TxPopupMode; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_ScreenSnap: WordBool; safecall;
+    function Get_SnapBuffer: Integer; safecall;
+    function Get_UseDockManager: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_AlignWithMargins(Value: WordBool); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_BorderWidth(Value: Integer); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_DockSite(Value: WordBool); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_ParentCustomHint(Value: WordBool); safecall;
+    procedure Set_ParentDoubleBuffered(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PopupMode(Value: TxPopupMode); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_ScreenSnap(Value: WordBool); safecall;
+    procedure Set_SnapBuffer(Value: Integer); safecall;
+    procedure Set_UseDockManager(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+  public
+    { Public declarations }
+    procedure Initialize; override;
+  end;
+
+implementation
+
+uses ComObj, ComServ, SboapiDataModuleImpl,Datmodule, CourtUNIT, Filters,
+  SettingsUnit;
+
+{$R *.DFM}
+
+{ TLawmodule }
+
+procedure TLawmodule.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_LawmodulePage); }
+end;
+
+procedure TLawmodule.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as ILawmoduleEvents;
+  inherited EventSinkChanged(EventSink);
+end;
+
+procedure TLawmodule.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnMouseEnter := MouseEnterEvent;
+  OnMouseLeave := MouseLeaveEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TLawmodule.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TLawmodule.Get_AlignDisabled: WordBool;
+begin
+  Result := AlignDisabled;
+end;
+
+function TLawmodule.Get_AlignWithMargins: WordBool;
+begin
+  Result := AlignWithMargins;
+end;
+
+function TLawmodule.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TLawmodule.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TLawmodule.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TLawmodule.Get_BorderWidth: Integer;
+begin
+  Result := Integer(BorderWidth);
+end;
+
+function TLawmodule.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TLawmodule.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TLawmodule.Get_DockSite: WordBool;
+begin
+  Result := DockSite;
+end;
+
+function TLawmodule.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TLawmodule.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TLawmodule.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TLawmodule.Get_ExplicitHeight: Integer;
+begin
+  Result := ExplicitHeight;
+end;
+
+function TLawmodule.Get_ExplicitLeft: Integer;
+begin
+  Result := ExplicitLeft;
+end;
+
+function TLawmodule.Get_ExplicitTop: Integer;
+begin
+  Result := ExplicitTop;
+end;
+
+function TLawmodule.Get_ExplicitWidth: Integer;
+begin
+  Result := ExplicitWidth;
+end;
+
+function TLawmodule.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TLawmodule.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TLawmodule.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TLawmodule.Get_MouseInClient: WordBool;
+begin
+  Result := MouseInClient;
+end;
+
+function TLawmodule.Get_ParentCustomHint: WordBool;
+begin
+  Result := ParentCustomHint;
+end;
+
+function TLawmodule.Get_ParentDoubleBuffered: WordBool;
+begin
+  Result := ParentDoubleBuffered;
+end;
+
+function TLawmodule.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TLawmodule.Get_PopupMode: TxPopupMode;
+begin
+  Result := Ord(PopupMode);
+end;
+
+function TLawmodule.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TLawmodule.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TLawmodule.Get_ScreenSnap: WordBool;
+begin
+  Result := ScreenSnap;
+end;
+
+function TLawmodule.Get_SnapBuffer: Integer;
+begin
+  Result := SnapBuffer;
+end;
+
+function TLawmodule.Get_UseDockManager: WordBool;
+begin
+  Result := UseDockManager;
+end;
+
+function TLawmodule.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TLawmodule.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TLawmodule.ideditKeyPress(Sender: TObject; var Key: Char);
+begin
+if key=#13 then
+begin
+with datamod.Mainscrpt do
+   begin
+           Filter:='';
+
+     if idedit.Text <>' ' then
+        Filter := 'id = '''+idedit.Text+('*')+'''';
+   end;
+  // datamod.Mainscrpt.Filtered:=true;;
+
+end;
+end;
+
+procedure TLawmodule._Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TLawmodule.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TLawmodule.ActiveFormCreate(Sender: TObject);
+var fltfil:string;
+begin
+Datamod := TDatamod.Create(self);
+if DataMod.filials.RecordCount>2 then
+  begin
+      fltfil:='';
+  end
+else
+  begin
+       DataMod.DataSource_filial.DataSet.Open;
+  DBLookupComboBox1.Enabled:=True;
+  DBLookupComboBox1.KeyValue:=0;
+  fltfil:=' and branch ='+inttostr(DataMod.filials.FieldByName('id').AsInteger );
+
+DataMod.Main_court.SQL[30] :=fltfil;
+
+DataMod.Mainscrpt.SQL[19] :=fltfil;
+
+  end;
+
+end;
+
+procedure TLawmodule.Button1Click(Sender: TObject);
+var    Filter1,Filter2,Filter3,Filter4,Filter5,Filter6,Filter7,Filter8 :string;
+begin
+
+
+
+  with datamod.Mainscrpt do
+   begin
+
+     if idedit.Text <>'' then
+       Filter1:= ' and  id like '''+idedit.Text+ '%'+''''
+     else
+        Filter1:='';
+    if kliidedit.Text <>'' then
+       Filter2 := ' and  MUSTERIID like '''+kliidedit.Text+ '%'+''''
+    else
+        Filter2:='';
+    if nameedit.Text <>'' then
+        Filter3 := ' and  upper(names) like  '''+nameedit.Text+ '%'+''''
+    else
+        Filter3:='';
+    if pinedit.Text <>'' then
+        Filter4 := ' and  pinkod = '''+pinedit.Text+''''
+    else
+        Filter4:='';
+    if numedit.Text <>'' then
+        Filter5 := ' and  num = '''+numedit.Text+''''
+    else
+        Filter5:='';
+
+
+ if (DBLookupComboBox2.Text='Bütün statuslar') or (DBLookupComboBox2.Text='') then
+begin  Filter6 := ' ';end
+else
+begin  Filter6 := '  and court_status = '''+DBLookupComboBox2.Text+''''; end;
+
+
+if (DBLookupComboBox3.Text='Bütün Operatorlar') or (DBLookupComboBox3.Text='') then
+begin Filter8 := '';end
+else
+begin Filter8 := 'and  court_OPERS = '''+DBLookupComboBox3.Text+''''; end;
+
+
+   if (DBLookupComboBox1.Text='Bütün statuslar') or (DBLookupComboBox1.Text='') then
+begin   Filter7 := '';end
+else
+begin  Filter7 := 'and  COURT_LASTSTAT = '''+DBLookupComboBox1.Text+'''';  end;
+
+
+ end;
+
+ datamod.Mainscrpt.sql[19]:=  Filter1+Filter2+Filter3+Filter4+Filter5+Filter6+Filter7+Filter8;
+ memo1.Text:= datamod.Mainscrpt.sql.Text;
+ {      datamod.Mainscrpt.Filter:= Filter1+Filter2+Filter3+Filter4+Filter5+Filter6+Filter7+Filter8;
+      datamod.Mainscrpt.Filtered:=true;                                                           }
+      datamod.Mainscrpt.Refresh;
+
+end;
+
+procedure TLawmodule.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TLawmodule.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TLawmodule.DBGrid1DrawColumnCell(Sender: TObject; const Rect: TRect;
+  DataCol: Integer; Column: TColumn; State: TGridDrawState);
+begin
+if DBGrid1.DataSource.DataSet.FieldByName('status').Asinteger=1
+        then
+       begin
+
+         DBGrid1.Canvas.Brush.Color:=clyellow;
+         DBGrid1.DefaultDrawColumnCell(rect,datacol,column,state);
+       end;
+
+
+       if DBGrid1.DataSource.DataSet.FieldByName('status').Asinteger=3
+        then
+       begin
+
+         DBGrid1.Canvas.Brush.Color:=clFuchsia;
+         DBGrid1.DefaultDrawColumnCell(rect,datacol,column,state);
+       end;
+
+
+end;
+
+procedure TLawmodule.DBGrid1KeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+
+if key=vk_up then
+memo1.Visible:=true;
+
+  if key=vk_down then
+memo1.Visible:=false;
+
+end;
+
+procedure TLawmodule.DBGrid1TitleClick(Column: TColumn);
+var
+   TitleName :string;
+   SortPosition: word;
+begin
+ SortPosition :=40;
+ //OrderedTitle :=Column.FieldName; //H.R. 24.06.2008
+ if (DBGrid1.DataSource.DataSet.IsEmpty) or (Column.FieldName = EmptyStr) then Exit;
+ Screen.Cursor :=crHandPoint;
+ TitleName :=Column.FieldName;
+ with DBGrid1.DataSource.DataSet do
+  try
+
+   SortPosition :=DataMod.Mainscrpt.SQL.Add('ORDER BY '+ TitleName);
+   Refresh;
+  finally
+   DataMod.Mainscrpt.SQL[SortPosition] :=EmptyStr;
+   Screen.Cursor :=crDefault;
+
+  end;
+
+end;
+
+procedure TLawmodule.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TLawmodule.DBLookupCombo1KeyPress(Sender: TObject; var Key: Char);
+begin
+if key=#13 then
+  with datamod.Mainscrpt do begin
+  Filter := 'COURT_STATUS = '''+DBLookupComboBox1.Text+('*')+'''';
+
+      datamod.Mainscrpt.Filtered:=true;
+ end;
+end;
+
+procedure TLawmodule.DBLookupCombo2KeyPress(Sender: TObject; var Key: Char);
+begin
+if key=#13 then
+  with datamod.Mainscrpt do begin
+  Filter := 'COURT_LASTSTAT = '''+DBLookupComboBox1.Text+('*')+'''';
+
+      datamod.Mainscrpt.Filtered:=true;
+ end;
+
+end;
+
+procedure TLawmodule.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TLawmodule.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TLawmodule.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TLawmodule.MouseEnterEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnMouseEnter;
+end;
+
+procedure TLawmodule.MouseLeaveEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnMouseLeave;
+end;
+
+procedure TLawmodule.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TLawmodule.refreshbtnClick(Sender: TObject);
+begin
+
+if DataMod.Mainscrpt.Active then
+begin
+  DataMod.Mainscrpt.Refresh;
+end
+else
+begin
+datamod.Mainscrpt.Filter :='';
+
+if not Assigned(Filtrs) then
+  Filtrs:=TFiltrs.Create(nil);
+//Filtrs.hasrest.Checked:=true;
+//Filtrs.closedcheck.Checked:=true;
+DataMod.Mainscrpt.open;
+Filtrs.XFBitBtn1.Click;
+end;
+
+if DataMod.Main_court.Active then
+begin
+  DataMod.Main_court.Refresh;
+end
+else
+begin
+
+Filtrs.hasrest.Checked:=true;
+Filtrs.hasrest.Checked:=true;
+end;
+
+
+
+
+
+end;
+
+procedure TLawmodule.Set_AlignWithMargins(Value: WordBool);
+begin
+  AlignWithMargins := Value;
+end;
+
+procedure TLawmodule.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TLawmodule.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TLawmodule.Set_AxBorderStyle(Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TLawmodule.Set_BorderWidth(Value: Integer);
+begin
+  BorderWidth := TBorderWidth(Value);
+end;
+
+procedure TLawmodule.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TLawmodule.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TLawmodule.Set_DockSite(Value: WordBool);
+begin
+  DockSite := Value;
+end;
+
+procedure TLawmodule.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TLawmodule.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TLawmodule.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TLawmodule.Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TLawmodule.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := string(Value);
+end;
+
+procedure TLawmodule.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TLawmodule.Set_ParentCustomHint(Value: WordBool);
+begin
+  ParentCustomHint := Value;
+end;
+
+procedure TLawmodule.Set_ParentDoubleBuffered(Value: WordBool);
+begin
+  ParentDoubleBuffered := Value;
+end;
+
+procedure TLawmodule.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TLawmodule.Set_PopupMode(Value: TxPopupMode);
+begin
+  PopupMode := TPopupMode(Value);
+end;
+
+procedure TLawmodule.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TLawmodule.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TLawmodule.Set_ScreenSnap(Value: WordBool);
+begin
+  ScreenSnap := Value;
+end;
+
+procedure TLawmodule.Set_SnapBuffer(Value: Integer);
+begin
+  SnapBuffer := Value;
+end;
+
+procedure TLawmodule.Set_UseDockManager(Value: WordBool);
+begin
+  UseDockManager := Value;
+end;
+
+procedure TLawmodule.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+procedure TLawmodule.XFBitBtn1Click(Sender: TObject);
+begin
+DataMod.Court_status.close;
+DataMod.Court_status.Open;
+DataMod.Court_laststat.Close;
+DataMod.Court_laststat.Open;
+
+
+DataMod.court_opers.Close;
+DataMod.court_opers.Open;
+
+
+ if XFPanel2.Visible then
+ begin
+     XFPanel2.Visible :=false ;
+       // datamod.Mainscrpt.Filtered:=false;
+
+ end
+ else
+ begin
+     XFPanel2.Visible:=true;
+ end;
+
+
+end;
+
+procedure TLawmodule.XFBitBtn2Click(Sender: TObject);
+begin
+ if not Assigned(CourtFrm) then
+     CourtFrm:=TCourtFrm.Create(nil);
+     CourtFrm.ShowModal;
+end;
+
+procedure TLawmodule.XFBitBtn3Click(Sender: TObject);
+var     Sheet, Sheets  :Variant;
+  ay,il,il_s,k,s,ss,st,sc,sd,sf,l,val :String;
+                            V:Variant;
+  OpenedXlsCnt,b, a,   i,j,w  :Integer;
+ v_BDate    :TDateTime;
+ v_EDate    :TDateTime;
+ row:integer;
+
+ esasborc,faizborc, cemiesas,cemifaiz:real;
+
+
+begin
+//DataMod.SB_ACA.CallProcedure('CheckAdvancedObjectAccess', ['HUQUQEMLAK']);
+ ExcelApplication1.Disconnect;
+  V :=ExcelApplication1.Application;
+  ExcelApplication1.Connect;
+  V.Workbooks.Open(ExtractFilePath(ExtractFilePath(ParamStr(0)))+ 'Portfel_Court.xlsx');
+  try
+
+  for OpenedXlsCnt :=1 to 100 do
+   Sheet := V.Workbooks[OpenedXlsCnt].Worksheets['sheet1'];
+   //Break;
+  except
+
+
+  end;
+
+  sheets :=V.Sheets;
+
+  a:=0;
+   i:=0 ;
+   if not datamod.Main_court.Active then
+   begin
+   datamod.Main_court.close;
+   datamod.Main_court.open;
+   end;
+
+         datamod.Main_court.First;
+
+
+    for a:=0 to datamod.Main_court.RecordCount-1 do
+   begin
+  // try
+     esasborc:=0;
+     faizborc:=0;
+     cemiesas:=0;
+     cemifaiz:=0;
+     val:='AZN';
+ //ShowMessage('nnnn');
+    // Sheet.cells[7+i,6]:= datamod.maincrprt.fieldbyname('INNORPIN').AsString;
+     Sheet.cells[7+i,1]:=datamod.Main_court.fieldbyname('rownum').AsString;
+     Sheet.cells[7+i,2]:=datamod.Main_court.fieldbyname('credid').AsString;
+     Sheet.cells[7+i,3]:=datamod.Main_court.fieldbyname('custid').AsString;
+     Sheet.cells[7+i,4]:=datamod.Main_court.fieldbyname('PIN').AsString;
+    // Sheet.cells[7+i,5]:=datamod.Main_court.fieldbyname('filname').AsString;
+     Sheet.cells[7+i,5]:=datamod.Main_court.fieldbyname('names').AsString;
+     Sheet.cells[7+i,6]:=datamod.Main_court.fieldbyname('COURT_AMMOUNT').AsString;
+     Sheet.cells[7+i,7]:=datamod.Main_court.fieldbyname('COURT_STATUS').AsString;
+     Sheet.cells[7+i,8]:=datamod.Main_court.fieldbyname('COURT_DATE_NUM').AsString;
+     Sheet.cells[7+i,9]:=datamod.Main_court.fieldbyname('COURT_NAME').AsString;
+     Sheet.cells[7+i,10]:=datamod.Main_court.fieldbyname('COURT_ACCEPTED_AMMOUNT').AsString;
+     Sheet.cells[7+i,11]:=datamod.Main_court.fieldbyname('COURT_DESC').AsString;
+     Sheet.cells[7+i,12]:=datamod.Main_court.fieldbyname('COURT_MANAGE').AsString;
+     Sheet.cells[7+i,13]:=datamod.Main_court.fieldbyname('COURT_LASTSTAT').AsString;
+     Sheet.cells[7+i,14]:=datamod.Main_court.fieldbyname('COURT_MEASURE').AsString;
+     Sheet.cells[7+i,15]:=datamod.Main_court.fieldbyname('COURT_REPLACE').AsString;
+     Sheet.cells[7+i,16]:=datamod.Main_court.fieldbyname('REPLACEMENT_COUNT').AsString;
+     Sheet.cells[7+i,17]:=datamod.Main_court.fieldbyname('INVESTIGATION_ORG').AsString;
+     Sheet.cells[7+i,18]:=datamod.Main_court.fieldbyname('INFOS').AsString;
+
+
+
+
+     i:=i+1;
+     datamod.Main_court.Next;
+{   except
+     ShowMessage('66666');
+   end;}
+   end;
+
+  ExcelApplication1.Visible[0] :=True;
+  ExcelApplication1.Disconnect;
+
+
+
+end;
+
+procedure TLawmodule.XFBitBtn4Click(Sender: TObject);
+begin
+
+
+
+if not Assigned(Filtrs) then
+  Filtrs:=TFiltrs.Create(nil);
+  Filtrs.ShowModal;
+
+end;
+
+procedure TLawmodule.XFBitBtn5Click(Sender: TObject);
+begin
+
+  DataMod.SB_ACA.CallProcedure('CheckAdvancedObjectAccess', ['SETT_GRANT']);
+
+if not Assigned(Settings) then
+  Settings:=TSettings.Create(nil);
+  Settings.ShowModal;
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TLawmodule,
+    Class_Lawmodule,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

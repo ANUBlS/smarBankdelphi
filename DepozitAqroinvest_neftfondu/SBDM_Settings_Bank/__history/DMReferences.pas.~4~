@@ -1,0 +1,129 @@
+unit DMReferences;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, OracleData, Oracle;
+
+type
+  TDataModReferences = class(TDataModule)
+    TVSubItems: TOracleDataSet;
+    ReferLink: TOracleDataSet;
+    ReferPackage: TOraclePackage;
+    TVSubItemsID: TFloatField;
+    TVSubItemsNAME: TWideStringField;
+    TVSubItemsLNAME: TWideStringField;
+    TVSubItemsPARENTID: TFloatField;
+    TVSubItemsVALUE: TWideStringField;
+    TVSubItemsSOURCELIST: TWideStringField;
+    ReferLinkID: TFloatField;
+    ReferLinkNAME: TWideStringField;
+    ReferLinkLNAME: TWideStringField;
+    ReferLinkPARENTID: TFloatField;
+    ReferLinkVALUE: TWideStringField;
+    ReferLinkSOURCELIST: TWideStringField;
+    sbcm_ds: TOraclePackage;
+    Accounts: TOracleDataSet;
+    AccountsID: TFloatField;
+    AccountsACC_NO: TWideStringField;
+    AccountsNAME: TWideStringField;
+    AccountsVAL_ACC: TIntegerField;
+    AccountsDatSrc: TDataSource;
+    Categories: TOracleDataSet;
+    CategoriesID: TFloatField;
+    CategoriesCATEGORY: TWideStringField;
+    CategoriesDatSrc: TDataSource;
+    Filials: TOracleDataSet;
+    FilialsID: TFloatField;
+    FilialsNAME: TWideStringField;
+    FilialsDatSrc: TDataSource;
+    valute: TOracleDataSet;
+    valuteVALUTE: TIntegerField;
+    valuteVAL_NAME: TWideStringField;
+    valuteVALU_NAME: TWideStringField;
+    ValutesDatSrc: TDataSource;
+    movie_names: TOracleDataSet;
+    movie_namesID: TIntegerField;
+    movie_namesTYPEID: TIntegerField;
+    movie_namesDESCRIPTION: TWideStringField;
+    movie_namesDatSrc: TDataSource;
+    settings: TOracleDataSet;
+    settingsID: TFloatField;
+    settingsPARENTID: TFloatField;
+    settingsCURRENCYID: TFloatField;
+    settingsACCID: TFloatField;
+    settingsBRANCHID: TFloatField;
+    settingsFILIALNAME: TWideStringField;
+    settingscurrencyname: TWideStringField;
+    settingsaccountnumber: TStringField;
+    settingsDatSrc: TDataSource;
+    DepositTypes: TOracleDataSet;
+    DepositTypesID: TFloatField;
+    DepositTypesTYPE: TWideStringField;
+    DepositTypesADDITIONALTYPE: TWideStringField;
+    DepositTypesWITHDRAWTYPE: TWideStringField;
+    DepositTypesDATEINTERVAL: TIntegerField;
+    DepositTypesDatSrc: TDataSource;
+    AddTypesForcollDatSrc: TDataSource;
+    AddTypesForColl: TOracleDataSet;
+    AddTypesForCollID: TFloatField;
+    AddTypesForCollADDTYPENAME: TWideStringField;
+    AddTypesForCollADDTYPEDESC: TWideStringField;
+    AddTypesForCollWITHDRTYPE: TWideStringField;
+    AddTypesForCollWITHDRTYPEDESC: TWideStringField;
+    AddTypesForWith: TOracleDataSet;
+    FloatField1: TFloatField;
+    AddTypesForWithADDTYPENAME: TWideStringField;
+    AddTypesForWithADDTYPEDESC: TWideStringField;
+    AddTypesForWithWITHDRTYPE: TWideStringField;
+    AddTypesForWithWITHDRTYPEDESC: TWideStringField;
+    AddTypesForWithDatSrc: TDataSource;
+    SBCM_RPDEPOSITORY: TOraclePackage;
+    procedure DataModuleCreate(Sender: TObject);
+    procedure DataModuleDestroy(Sender: TObject);
+    procedure CategoriesAfterPost(DataSet: TDataSet);
+    procedure AccountSettingsAfterPost(DataSet: TDataSet);
+    procedure DepositTypesAfterPost(DataSet: TDataSet);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  DataModReferences: TDataModReferences;
+
+implementation
+
+uses  sboapiDataModuleImpl;
+{$R *.DFM}
+
+
+procedure TDataModReferences.DataModuleCreate(Sender: TObject);
+begin
+   //Reliability.Open;
+   ReferLink.Open;
+end;
+
+procedure TDataModReferences.DataModuleDestroy(Sender: TObject);
+begin
+  //Reliability.Close;
+  ReferLink.Close;
+end;
+
+procedure TDataModReferences.CategoriesAfterPost(DataSet: TDataSet);
+begin
+   DataSet.Refresh;
+end;
+procedure TDataModReferences.AccountSettingsAfterPost(DataSet: TDataSet);
+begin
+   DataSet.Refresh;
+end;
+
+procedure TDataModReferences.DepositTypesAfterPost(DataSet: TDataSet);
+begin
+  DataSet.Refresh;
+end;
+
+end.

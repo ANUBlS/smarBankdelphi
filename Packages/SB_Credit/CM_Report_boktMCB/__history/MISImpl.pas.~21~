@@ -1,0 +1,364 @@
+﻿unit MISImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, OracleData,  CMExcelExport, StdCtrls, CheckLst,
+  Evanescence, ComCtrls, ExtCtrls, Buttons, KeyListBox, Mask, DBCtrlsEh,Excelxp,
+  DBLookupEh, DBGridEh;
+
+resourcestring
+  rsErrorValute       = 'Ən azı bir Valyuta seçilməlidir!';
+  rsErrorUsrGrp       = 'Ən azı bir istifadəçi qurupu seçilməlidir!';
+  rsErrorPersonaltype = 'Ən azı bir müştəri tipi seçilməlidir!';
+  rsErrorBranch       = 'Ən azı bir filial seçilməlidir!';
+  rsInfScriptStarted  = 'İxrac bşladı';
+  rsInfRowsExported   = '%d sətir ixrac olundu';
+  rsInfExportFinished = 'İxrac qurtardı';
+
+type
+  TMISForm = class(TForm)
+    Panel1: TPanel;
+    GroupBox1: TGroupBox;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    LookValute: TEvanescence;
+    LookUsrGrp: TEvanescence;
+    LookPersonelType: TEvanescence;
+    LookBranch: TEvanescence;
+    Panel2: TPanel;
+    Label1: TLabel;
+    Tarix: TDateTimePicker;
+    challValute: TButton;
+    unchallValute: TButton;
+    challUsrGrp: TButton;
+    unchallUsrGrp: TButton;
+    challBranch: TButton;
+    unchallBranch: TButton;
+    challPersonalType: TButton;
+    unchallPersonalType: TButton;
+    Panel3: TGroupBox;
+    ButtonExport: TBitBtn;
+    CloseBtn: TBitBtn;
+    SBListBox: TKeyListBox;
+    Panel4: TPanel;
+    spUP: TSpeedButton;
+    spDown: TSpeedButton;
+    Panel5: TPanel;
+    Panel6: TPanel;
+    Panel7: TPanel;
+    Panel8: TPanel;
+    Panel9: TPanel;
+    Panel10: TPanel;
+    GroupBox6: TGroupBox;
+    CheckBox5: TCheckBox;
+    DBLookupComboboxEh5: TDBLookupComboboxEh;
+    GroupBox7: TGroupBox;
+    CheckBox7: TCheckBox;
+    DBLookupComboboxEh7: TDBLookupComboboxEh;
+    GroupBox3: TGroupBox;
+    DBLookupComboboxEh2: TDBLookupComboboxEh;
+    CheckBox2: TCheckBox;
+    GroupBox10: TGroupBox;
+    CheckBox10: TCheckBox;
+    DBLookupComboboxEh10: TDBLookupComboboxEh;
+    GroupBox8: TGroupBox;
+    CheckBox9: TCheckBox;
+    DBLookupComboboxEh9: TDBLookupComboboxEh;
+    Panel11: TPanel;
+    Panel12: TPanel;
+    ChBActCrd: TCheckBox;
+    ChBClosCrd: TCheckBox;
+    ChBCalcInt: TCheckBox;
+    ChBStopInt: TCheckBox;
+    GroupBox2: TGroupBox;
+    DTPB: TDateTimePicker;
+    DTPE: TDateTimePicker;
+    Label6: TLabel;
+    CBOnlyRest: TCheckBox;
+    MisExcelExport_: TCMExcelExport;
+    MisExcelExport: TCMExcelExport;
+    procedure ButtonExportClick(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure CheckAllValuteClick(Sender: TObject);
+    procedure UnCheckAllValuteClick(Sender: TObject);
+    procedure challBranchClick(Sender: TObject);
+    procedure unchallBranchClick(Sender: TObject);
+    procedure challUsrGrpClick(Sender: TObject);
+    procedure unchallUsrGrpClick(Sender: TObject);
+    procedure challPersonalTypeClick(Sender: TObject);
+    procedure unchallPersonalTypeClick(Sender: TObject);
+    procedure spUPClick(Sender: TObject);
+    procedure spDownClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+  private
+    function BuildFilterString : String;
+  public
+     
+  end;
+
+var
+  MISForm: TMISForm;
+
+implementation
+
+{$R *.DFM}
+
+uses
+  sboapiDataModuleImpl,CommonDecls, sbSystem,SBTranslateProc, MISDmImpl;
+
+
+
+
+function TMISForm.BuildFilterString : String;
+
+  procedure ConcatFilter(var S: String; const Prefix : String; Checked : Boolean; KeyValue : Variant);
+  const
+     csFormat = '(%s=%s)';
+  var
+    Temp : String;   
+  begin
+
+    if Checked then
+    begin
+      Temp := Format(csFormat,[Prefix,Keyvalue]);
+      if S = '' then
+        S := Temp
+      else
+        S :=S + 'and ' + Temp;
+    end;
+    
+  end;
+begin
+  Result := '';
+  ConcatFilter(Result,'H.RESERVEID',CheckBox5.Checked,DBLookupComboboxEh5.KeyValue);
+  ConcatFilter(Result,'H.DUERESERVEID',CheckBox2.Checked,DBLookupComboboxEh2.KeyValue);
+  ConcatFilter(Result,'P.PERSONALTYPE',CheckBox7.Checked,DBLookupComboboxEh7.KeyValue);
+  ConcatFilter(Result,'G.pledgeid',CheckBox10.Checked,DBLookupComboboxEh10.KeyValue);
+  ConcatFilter(Result,'P.credittype',CheckBox9.Checked,DBLookupComboboxEh9.KeyValue);
+end;
+
+
+
+function ErrorInCheck(Look: TEvanescence; ErrorMsg: String=''):Boolean;
+begin
+  Result := True;
+  if Look.GetCheckedKeyList.Count = 0 then Result := False;
+  if (ErrorMsg <> '') and (not Result)then ShowMessage(ErrorMsg);
+end;
+
+procedure TMISForm.ButtonExportClick(Sender: TObject);
+var
+  ADDITIONALPARAMS: String;
+  RestsStr,chpayStr,SORTBY: String;
+  FilterStr,CheckStr,CheckStr1:String;
+
+  begin
+
+  FilterStr:='';
+  CheckStr := '';
+  chpayStr := '';
+  FilterStr := BuildFilterString;
+
+  if ChBActCrd.checked and  not ChBClosCrd.checked
+  then CheckStr:=' (p.partitionkey=0) ';
+
+  if CBOnlyRest.checked  then
+     RestsStr := '((h.rest+h.duerest+h.interestrest>0) or(h.rest+h.duerest+h.interestrest+h.dueinterestrest+h.penaltyrest>0))';
+
+
+  if ChBClosCrd.checked and  not ChBActCrd.checked
+  then CheckStr:=' (p.partitionkey=1) ';
+
+  if ChBClosCrd.checked and  ChBActCrd.checked
+  then CheckStr:=' ((p.partitionkey=0) or (p.partitionkey=1))';
+
+  if ChBCalcInt.checked and not ChBStopInt.checked
+  then CheckStr1:=' (h.stopcalcdate is null)  ';
+
+  if ChBStopInt.checked and not ChBCalcInt.checked
+  then CheckStr1:=' (h.stopcalcdate is not null ) ';
+
+  if ChBStopInt.checked and ChBCalcInt.checked
+  then CheckStr1:=' ((h.stopcalcdate is not null)  or (h.stopcalcdate is  null))  ';
+
+  if (checkStr1<>'') and (checkStr='') then
+  checkStr:= checkStr1;
+
+  if (checkStr1<>'')and( checkStr<>'')   then
+  checkStr:=checkStr+' and '+ checkStr1;
+
+
+  if (CheckStr<>'') and (FilterStr<>'') then
+  FilterStr := FilterStr+' AND '+CheckStr;
+
+  if (CheckStr<>'') and (FilterStr='') then
+  FilterStr := CheckStr;
+
+
+  FilterStr := FilterStr+ chpayStr;
+  if FilterStr<>'' then ADDITIONALPARAMS:=' AND '+FilterStr
+  else ADDITIONALPARAMS:='';
+  //edit1.Text:=(ADDITIONALPARAMS);  exit;
+
+  SORTBY := SBListBox.GetCheckedKeyList.CommaText;
+
+  if not ErrorInCheck(LookValute,rsErrorValute) then Exit;
+  if not ErrorInCheck(LookUsrGrp,rsErrorUsrGrp) then Exit;
+  if not ErrorInCheck(LookPersonelType,rsErrorPersonaltype) then Exit;
+  if not ErrorInCheck(LookBranch,rsErrorBranch) then Exit;
+
+  if (LookValute.GetCheckedKeyList.Count<>LookValute.Items.Count) then
+  ADDITIONALPARAMS := ADDITIONALPARAMS + ' AND p.CURRENCY in('
+                   +LookValute.GetCheckedKeyList.CommaText+')'
+                   +#13#10;
+
+  if (LookUsrGrp.GetCheckedKeyList.Count<>LookUsrGrp.Items.Count) then
+  ADDITIONALPARAMS := ADDITIONALPARAMS + ' AND p.USRGROUP in('
+                   +LookUsrGrp.GetCheckedKeyList.CommaText+')'
+                   +#13#10;
+
+  if (LookPersonelType.GetCheckedKeyList.Count<>LookPersonelType.Items.Count) then
+  ADDITIONALPARAMS := ADDITIONALPARAMS + ' AND p.CUSTOMERTYPE in('
+                   +LookPersonelType.GetCheckedKeyList.CommaText+')'
+                   +#13#10;
+
+  if (LookBranch.GetCheckedKeyList.Count<>LookBranch.Items.Count) then
+  ADDITIONALPARAMS := ADDITIONALPARAMS + ' AND p.BRANCHID in('
+                   +LookBranch.GetCheckedKeyList.CommaText+')'
+                   +#13#10;
+
+  if RestsStr <> ''  then ADDITIONALPARAMS := ADDITIONALPARAMS+' and '+RestsStr ;
+
+  with  MISDm, MISData do begin
+  Close;
+  SQL[212] := ADDITIONALPARAMS;
+
+  SetVariable('hdat',integer(trunc(Tarix.DateTime)));
+  SetVariable('bdat',integer(trunc(DTPB.DateTime)));
+  SetVariable('edat',integer(trunc(DTPE.DateTime)));
+
+  LogInformation(rsInfScriptStarted);
+   Open;
+
+  end;
+  //MISDm.MISData.sql.SaveToFile('c:\aa.txt');
+//  ShowMessage(inttostr(MISDm.MISData.RecordCount));
+
+  with MisExcelExport do
+  begin
+     Connect;
+            ExportDataset(MISDm.MISData,'MIS',true,false);
+     Disconnect;
+
+  end;
+
+
+  LogInformation(rsInfExportFinished);
+end;
+
+procedure TMISForm.FormShow(Sender: TObject);
+var
+  i: Integer;
+begin
+  for i := 0 to ComponentCount - 1 do
+    if Components[i].Tag = 3112 then begin
+      (Components[i] as TEvanescence).Open;
+      (Components[i] as TEvanescence).CheckAll;
+    end;
+  Tarix.Date := Get_CurrentDate;
+  DTPB.Date := Get_CurrentDate;
+  DTPE.Date := Get_CurrentDate;
+  for i:=0 to 2 do
+    SBListBox.Checked[i] := True
+end;
+
+procedure TMISForm.CheckAllValuteClick(Sender: TObject);
+begin
+  LookValute.CheckAll;
+end;
+
+procedure TMISForm.UnCheckAllValuteClick(Sender: TObject);
+begin
+  LookValute.UncheckAll;
+end;
+
+procedure TMISForm.challBranchClick(Sender: TObject);
+begin
+  LookBranch.CheckAll
+end;
+
+procedure TMISForm.unchallBranchClick(Sender: TObject);
+begin
+  LookBranch.UncheckAll
+end;
+
+procedure TMISForm.challUsrGrpClick(Sender: TObject);
+begin
+  LookUsrGrp.CheckAll
+end;
+
+procedure TMISForm.unchallUsrGrpClick(Sender: TObject);
+begin
+  LookUsrGrp.UncheckAll
+end;
+
+procedure TMISForm.challPersonalTypeClick(Sender: TObject);
+begin
+  LookPersonelType.CheckAll
+end;
+
+procedure TMISForm.unchallPersonalTypeClick(Sender: TObject);
+begin
+  LookPersonelType.UncheckAll
+end;
+
+procedure TMISForm.spUPClick(Sender: TObject);
+var
+  IDX : Integer;
+begin
+  IDX := SBListBox.ItemIndex;
+  with SbListBox,Items do
+  if  IDX > 0  then
+  begin
+    Move(IDX,IDX - 1);
+    Keys.Move(IDX,IDX - 1);
+    //FFieldList.Exchange(IDX,IDX - 1);
+    if IDX >= 1 then
+    ItemIndex := IDX - 1;
+  end;
+end;
+
+procedure TMISForm.spDownClick(Sender: TObject);
+var
+  IDX : Integer;
+begin
+  IDX := SBListBox.ItemIndex;
+  with SbListBox,Items do
+  if  (IDX <> - 1) and (IDX < Items.Count - 1) then
+  begin
+    Move(IDX,IDX + 1);
+    Keys.Move(IDX,IDX + 1);
+    //FFieldList.Exchange(IDX,IDX - 1);
+    if IDX <= Items.Count - 1 then
+    ItemIndex := IDX + 1;
+  end;
+end;
+
+procedure TMISForm.FormCreate(Sender: TObject);
+begin
+    MISDm := TMISDm.Create(Self);
+      SBTranslateProc.TranslateAllCompForms(Self, sboapiDataModule.OrPack_SL);
+end;
+
+procedure TMISForm.FormDestroy(Sender: TObject);
+begin
+    MISDm.free;
+
+end;
+
+end.

@@ -1,0 +1,661 @@
+﻿unit XohksMain;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, CurrencyEdit, StdCtrls, ComCtrls, Mask, DBCtrls, Buttons, ExtCtrls,
+  XFSCtrls, SearchEdit, Oracle;
+
+type
+  TFormXohks = class(TForm)
+    XFGroupBox1: TXFGroupBox;
+    XFPanel1: TXFPanel;
+    XFGroupBox2: TXFGroupBox;
+    XFPanel2: TXFPanel;
+    XFGroupBox3: TXFGroupBox;
+    XFGroupBox4: TXFGroupBox;
+    XFPanel3: TXFPanel;
+    XFPanel4: TXFPanel;
+    XFPanel5: TXFPanel;
+    XFPanel6: TXFPanel;
+    XFPanel7: TXFPanel;
+    XFPanel8: TXFPanel;
+    XFPanel9: TXFPanel;
+    XFPanel10: TXFPanel;
+    XFPanel11: TXFPanel;
+    Edit_Sender: TEdit;
+    Edit_Referens: TEdit;
+    SpeedButton1: TSpeedButton;
+    Edit8: TEdit;
+    Edit_BankCode: TEdit;
+    Edit_Account: TEdit;
+    Edit_voen: TEdit;
+    Edit_account_sub: TEdit;
+    Edit_Bik: TEdit;
+    ComboBox_CD: TComboBox;
+    XFPanel13: TXFPanel;
+    XFPanel14: TXFPanel;
+    XFPanel15: TXFPanel;
+    Edit_clientName: TEdit;
+    Edit_Client_code: TEdit;
+    Edit_Client_voen: TEdit;
+    XFPanel20: TXFPanel;
+    XFPanel21: TXFPanel;
+    XFPanel19: TXFPanel;
+    Combo_date: TDateTimePicker;
+    Combo_valute: TComboBox;
+    Valute_ID: TListBox;
+    XFPanel22: TXFPanel;
+    Edit_BNF: TEdit;
+    XFPanel23: TXFPanel;
+    XFPanel12: TXFPanel;
+    XFPanel18: TXFPanel;
+    Button_add: TXFBitBtn;
+    ButtonPost: TXFBitBtn;
+    XFBitBtn3: TXFBitBtn;
+    Edit_Amount1: TEdit;
+    Edit_amount: TCurrencyEdit;
+    AccSearch___: TSearchEdit;
+    PackTemp: TOraclePackage;
+    DBLookupComboBox1: TDBLookupComboBox;
+    LabelFilialName: TXFLabel;
+    XFPanel16: TXFPanel;
+    XFPanel17: TXFPanel;
+    XFLabel1: TXFLabel;
+    XFLabel2: TXFLabel;
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure Edit_ReferensChange(Sender: TObject);
+    procedure Edit_ReferensKeyPress(Sender: TObject; var Key: Char);
+    procedure Button_addClick(Sender: TObject);
+    procedure Edit_SenderChange(Sender: TObject);
+    procedure Edit_SenderKeyPress(Sender: TObject; var Key: Char);
+    procedure Edit_account_subKeyPress(Sender: TObject; var Key: Char);
+    procedure AccSearch___Change(Sender: TObject);
+    procedure AccSearch___KeyPress(Sender: TObject; var Key: Char);
+    procedure Edit_clientNameKeyPress(Sender: TObject; var Key: Char);
+    procedure Edit_clientNameChange(Sender: TObject);
+    procedure Edit_Client_codeKeyPress(Sender: TObject; var Key: Char);
+    procedure Edit_Client_voenKeyPress(Sender: TObject; var Key: Char);
+    procedure Edit_Client_codeChange(Sender: TObject);
+    procedure Edit_Client_voenChange(Sender: TObject);
+    procedure ButtonPostClick(Sender: TObject);
+    procedure XFBitBtn3Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure DBLookupComboBox1Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+
+var
+
+  FormXohks: TFormXohks;
+  Tcust_name:string;
+  Tcust_id:integer;
+  procedure InitPlugin(s:string;Pname:string;Pid:integer);export;
+
+implementation
+
+uses   CommonDecls,sboapiDataModuleImpl,DataXohks , XohksPayment_Det,MainXhoksFormImpl,
+  TransType_Unit, Get_to_shablonunit, AcceptTrans_Unit, ReceiveMessDetalsUnit,
+  Witch;
+{$R *.dfm}
+
+ function GetUseDate : TDateTime;
+begin
+    if DataModXhoks.XS_CONFIG.FieldByName('USEBANKDATE').AsInteger = 1 then
+       Result := Trunc(DataModXhoks.GetSysDate.CallDateFunction('GET_DATE',[]))
+    else
+       Result := Trunc(Date);
+end;
+
+function CheckField(all : Boolean): Boolean;
+begin
+       DataModXhoks.DataCheck.Close;
+       DataModXhoks.DataCheck.SQL.Clear;
+       DataModXhoks.DataCheck.SQL.Add('Select * from account where acc_no = '''+FormXohks.DBLookupComboBox1.Text+'''');
+       DataModXhoks.DataCheck.Open;
+    if (Trim(FormXohks.DBLookupComboBox1.Text) = '')    or
+       //(Length(TransForm.AccSearch.Text)<16)    or
+       (FormXohks.Edit_Client_voen.Text='')     or
+       (FormXohks.DBLookupComboBox1.Color=clred)        or
+       (Trim(FormXohks.Edit_clientName.Text)='')or
+       (DataModXhoks.DataCheck.RecordCount = 0)       then begin Result :=  false;MessageDlg('Melumat Tam deyil !',mtWarning,[mbok],0);end else Result:=true;
+       if all then
+       if (FormXohks.Edit_Amount.Text='0')      then
+       begin
+       Result :=  false;
+       MessageDlg('Məlumat Tam deyil !',mtWarning,[mbok],0);
+       end;
+
+end;
+
+
+function FindFilialID : Integer;
+   var Filial_ID: Integer;
+begin
+ with FormXohks do
+     if DataModXhoks.DataAccount.FieldByName('Filial').AsInteger > 0 then
+    begin
+       Filial_Id:=DataModXhoks.DataAccount.FieldByName('Filial').AsInteger;
+       DataModXhoks.DataSetFilial.SetVariable('FilialID',Filial_Id);
+       DataModXhoks.DataSetFilial.Refresh;
+       LabelFilialName.Caption:='FİLİAL - '+DataModXhoks.DataSetFilial.fieldbyname('Name').AsString;
+       Result:=DataModXhoks.DataSetFilial.fieldbyname('id').AsInteger;
+    end
+      else
+      begin
+         LabelFilialName.Caption:='"MƏRKƏZİ OFİS"';
+         Result:=0;
+      end;
+end;
+
+procedure InitPlugin(s:string;Pname:string;Pid:integer);export;
+begin
+if s='Main' then
+begin
+   Tcust_name:=Pname;
+   //--ShowMessage(inttostr(pid));
+   Tcust_id:=Pid;
+
+   MainXohksForm.ShowModal;
+end
+ else
+   FormXohks.ShowModal;
+end;
+exports
+     InitPlugin;
+
+procedure TFormXohks.Edit_account_subKeyPress(Sender: TObject; var Key: Char);
+begin
+  key := MainXohksForm.OnlyNumber(KEY);
+end;
+
+procedure TFormXohks.Edit_clientNameChange(Sender: TObject);
+begin
+if Batchs_Edit then ButtonPost.Enabled:=true;
+end;
+
+procedure TFormXohks.Edit_clientNameKeyPress(Sender: TObject; var Key: Char);
+begin
+  if ((not (key in ['0'..'9','a'..'z','A'..'Z','/','-',':','(',')','.',',','''','+','{','}',' ',#8]))
+       or(TEdit(Sender).Text = '/'))
+       and(key <> #8)
+   then
+   Begin
+     key:=#0;
+   end;
+end;
+
+procedure TFormXohks.Edit_Client_codeChange(Sender: TObject);
+begin
+if Batchs_Edit then ButtonPost.Enabled:=true;
+end;
+
+procedure TFormXohks.Edit_Client_codeKeyPress(Sender: TObject; var Key: Char);
+begin
+  if ((not (key in ['0'..'9','a'..'z','A'..'Z','/','-',':','(',')','.',',','''','+','{','}',' ',#8]))
+       or(TEdit(Sender).Text = '/'))
+       and(key <> #8)
+   then
+   Begin
+     key:=#0;
+   end;
+end;
+
+procedure TFormXohks.Edit_Client_voenChange(Sender: TObject);
+begin
+if Batchs_Edit then ButtonPost.Enabled:=true;
+end;
+
+procedure TFormXohks.Edit_Client_voenKeyPress(Sender: TObject; var Key: Char);
+begin
+  if ((not (key in ['0'..'9','a'..'z','A'..'Z','/','-',':','(',')','.',',','''','+','{','}',' ',#8]))
+       or(TEdit(Sender).Text = '/'))
+       and(key <> #8)
+   then
+   Begin
+     key:=#0;
+   end;
+end;
+
+procedure TFormXohks.Edit_ReferensChange(Sender: TObject);
+begin
+// if Batchs_Edit then ButtonPost.Enabled:=true;
+end;
+
+procedure TFormXohks.Edit_ReferensKeyPress(Sender: TObject; var Key: Char);
+begin
+if ((not (key in ['0'..'9','a'..'z','A'..'Z','/','-',':','(',')','.',',','''','+','{','}',' ',#8]))
+       or(TEdit(Sender).Text = '/'))
+       and(key <> #8)
+   then
+   Begin
+     key:=#0;
+   end;
+end;
+
+procedure TFormXohks.Edit_SenderChange(Sender: TObject);
+begin
+if Batchs_Edit then ButtonPost.Enabled:=true;
+end;
+
+procedure TFormXohks.Edit_SenderKeyPress(Sender: TObject; var Key: Char);
+
+begin
+   if ((not (key in ['0'..'9','a'..'z','A'..'Z','/','-',':','(',')','.',',','''','+','{','}',' ',#8]))
+       or(TEdit(Sender).Text = '/'))
+       and(key <> #8)
+   then
+   Begin
+     key:=#0;
+   end;
+end;
+
+
+procedure TFormXohks.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+sboapiDataModule.SBSession.Rollback;
+end;
+
+procedure TFormXohks.FormCreate(Sender: TObject);
+begin
+
+  MainXohksForm:=TMainXohksForm.Create(self);
+  TransCodeForm:=TTransCodeForm.Create(self);
+  FormPayment_Det:=TFormPayment_Det.Create(self);
+  DataModXhoks:=TDataModXhoks.Create(self);
+
+  Form_get_to_shablon:=TForm_get_to_shablon.Create(self);
+  FormAcceptTransaction:=TFormAcceptTransaction.Create(self);
+  RecMessDet_Form:=TRecMessDet_Form.Create(self);
+  FormWitch:=TFormWitch.Create(self);
+
+  try with DataModXhoks.SB_ACA do
+      CallProcedure('CheckAdvancedObjectAccess',['XOHKSBENIFICARY']);
+    except
+      MainXohksForm.PanelBeneficary.Hide;
+    end;
+
+     try with DataModXhoks.SB_ACA do
+      CallProcedure('CheckAdvancedObjectAccess',['VERIFIKATOR']);
+      MainXohksForm.StDate.date:= GetUseDate;
+      MainXohksForm.EndDate.date:= GetUseDate;
+      MainXohksForm.selectdate;
+      DataModXhoks.XS_BATCHS.Close;
+      DataModXhoks.XS_BATCHS.Filtered:=true;
+      DataModXhoks.XS_BATCHS.Filter:='((status=1) and (FILIAL=0))or(status=5)or(status=7)';
+      DataModXhoks.XS_BATCHS.Open;
+      DataModXhoks.XS_BENEFICIARY.Close;
+      DataModXhoks.XS_BENEFICIARY.Filtered:=true;
+      DataModXhoks.XS_BENEFICIARY.Filter:='(status=1 )or(status=5)or(status=7)';
+      DataModXhoks.XS_BENEFICIARY.Open;
+
+    except
+
+    end;
+
+
+
+    try with DataModXhoks.SB_ACA do
+      CallProcedure('CheckAdvancedObjectAccess',['FVERIFIKATOR']);
+      MainXohksForm.StDate.date:= GetUseDate;
+      MainXohksForm.EndDate.date:= GetUseDate;
+      MainXohksForm.selectdate;
+      DataModXhoks.XS_BATCHS.Close;
+      DataModXhoks.XS_BATCHS.Filtered:=true;
+      DataModXhoks.XS_BATCHS.Filter:='((status=1) and ( FILIAL>0))';
+      DataModXhoks.XS_BATCHS.Open;
+      DataModXhoks.XS_BENEFICIARY.Close;
+      DataModXhoks.XS_BENEFICIARY.Filtered:=true;
+      DataModXhoks.XS_BENEFICIARY.Filter:='(status=1)';
+      DataModXhoks.XS_BENEFICIARY.Open;
+
+    except
+    end;
+
+    try with DataModXhoks.SB_ACA do
+      CallProcedure('CheckAdvancedObjectAccess',['XOHKS_CREATEFILE']);
+      MainXohksForm.StDate.date:= GetUseDate;
+      MainXohksForm.EndDate.date:= GetUseDate;
+      MainXohksForm.selectdate;
+      DataModXhoks.XS_BATCHS.Close;
+      DataModXhoks.XS_BATCHS.Filtered:=true;
+      DataModXhoks.XS_BATCHS.Filter:='(status=6)';
+      DataModXhoks.XS_BATCHS.Open;
+      DataModXhoks.XS_BENEFICIARY.Close;
+      DataModXhoks.XS_BENEFICIARY.Filtered:=true;
+      DataModXhoks.XS_BENEFICIARY.Filter:='(status=6)';
+      DataModXhoks.XS_BENEFICIARY.Open;
+
+    except
+    end;
+
+    try with DataModXhoks.SB_ACA do
+      CallProcedure('CheckAdvancedObjectAccess',['AVTORIZATOR']);
+      MainXohksForm.StDate.date:= GetUseDate;
+      MainXohksForm.EndDate.date:= GetUseDate;
+      MainXohksForm.selectdate;
+      DataModXhoks.XS_BATCHS.Close;
+      DataModXhoks.XS_BATCHS.Filtered:=true;
+      DataModXhoks.XS_BATCHS.Filter:='(status=4)';
+      DataModXhoks.XS_BATCHS.Open;
+      DataModXhoks.XS_BENEFICIARY.Close;
+      DataModXhoks.XS_BENEFICIARY.Filtered:=true;
+      DataModXhoks.XS_BENEFICIARY.Filter:='(status=4)';
+      DataModXhoks.XS_BENEFICIARY.Open;
+
+    except
+    end;
+
+   {DATE GENARATE}
+    try with DataModXhoks.SB_ACA do
+    CallProcedure('CheckAdvancedObjectAccess',['XOHKS_COMMIT']);
+    DataModXhoks.XS_BATCHS.close;
+    DataModXhoks.XS_BENEFICIARY.close;
+    DataModXhoks.XS_BATCHS.Filtered:=false;
+    DataModXhoks.XS_BENEFICIARY.Filtered:=false;
+    except
+
+    end;
+    DataModXhoks.XS_CONFIG.Active:=true;
+    MainXohksForm.StDate.date:= GetUseDate;
+    MainXohksForm.EndDate.date:= GetUseDate;
+    MainXohksForm.selectdate;
+    DataModXhoks.DataSetFilial.close;
+    DataModXhoks.XS_BATCHS.close;
+    DataModXhoks.XS_BENEFICIARY.close;
+    DataModXhoks.XS_IncomingView.Active:=false;
+    DataModXhoks.DataSetFilial.Open;
+    DataModXhoks.XS_BATCHS.open;
+    DataModXhoks.XS_BENEFICIARY.open;
+    DataModXhoks.XS_IncomingView.Active:=true;
+    DataModXhoks.ODS_CODE.Open;
+  DataModXhoks.XS_BeneficiaryArchive.open;
+  DataModXhoks.XS_BatchsArchive.open;
+
+
+    {Setup Main Page}
+    MainXohksForm.MainPageControl.ActivePageIndex:=0;
+    MainXohksForm.MainPageControl.Pages[0].Highlighted:=true;
+    {Set Messsagein DATE}
+    MainXohksForm.UpdateFileInList;
+
+
+    MainXohksForm.StDate_in.date:= GetUseDate;
+    MainXohksForm.EndDate_in.date:= GetUseDate;
+   // Refresh_mess_in;
+    MainXohksForm.DTPickOutArchBeg.Date :=MainXohksForm.StDate.date;
+    MainXohksForm.DTPickOutArchEnd.Date :=MainXohksForm.StDate.date;
+
+    MainXohksForm.INCBDATE.Date:=MainXohksForm.StDate.date;
+    MainXohksForm.INCEDATE.Date:=MainXohksForm.StDate.date;
+
+
+end;
+
+procedure TFormXohks.FormKeyUp(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+if key = Vk_escape then close;
+end;
+
+procedure TFormXohks.FormShow(Sender: TObject);
+begin
+if DataModXhoks.DataAccount.RecordCount=1 then
+begin
+DBLookupComboBox1.KeyValue:=DataModXhoks.DataAccount.FieldByName('id').AsString ;
+
+ if (DBLookupComboBox1.Color <>clred) and(DBLookupComboBox1.Text<>'') then
+   begin
+
+   if DataModXhoks.DataAccount.fieldbyname('INN').AsVariant<>Null then
+
+         Edit_Client_voen.Text:=DataModXhoks.DataAccount.fieldbyname('INN').AsString
+      else
+         Edit_Client_voen.Text:='/';
+
+     if  FindFilialID >0 then
+         MainXohksForm.ViewBankInfo(true, FindFilialID)
+     else
+         MainXohksForm.ViewBankInfo(false,0);
+
+
+   end
+   else begin
+           Edit_Client_voen.Clear;
+   end;
+ FormXohks.Edit_clientName.Text:=DataModXhoks.DataAccount.FieldByName('name').AsString;
+end
+else
+ DBLookupComboBox1.KeyValue:='';
+end;
+
+procedure TFormXohks.SpeedButton1Click(Sender: TObject);
+begin
+ {NEW REF NUMBER}
+    Edit_Referens.text := DataModXhoks.GetReference.
+                          CallStringfunction('GetNewBatchRefrence',[strtoint(valute_id.items[combo_valute.itemindex])]);
+end;
+
+procedure TFormXohks.XFBitBtn3Click(Sender: TObject);
+begin
+sboapiDataModule.SBSession.Rollback;
+   close;
+end;
+
+procedure TFormXohks.AccSearch___Change(Sender: TObject);
+begin
+ if (DBLookupComboBox1.Color <>clred) and(DBLookupComboBox1.Text<>'') then
+   begin
+
+   if DataModXhoks.DataAccount.fieldbyname('INN').AsVariant<>Null then
+
+         Edit_Client_voen.Text:=DataModXhoks.DataAccount.fieldbyname('INN').AsString
+      else
+         Edit_Client_voen.Text:='/';
+
+     if  FindFilialID >0 then
+         MainXohksForm.ViewBankInfo(true, FindFilialID)
+     else
+         MainXohksForm.ViewBankInfo(false,0)
+
+    end
+    else begin
+           Edit_Client_voen.Clear;
+          //---- DBEdit_ostat.Clear;
+         //----  DBEdit_pokostat.Clear;
+         end;
+    if Batchs_Edit then ButtonPost.Enabled:=true
+end;
+
+procedure TFormXohks.AccSearch___KeyPress(Sender: TObject; var Key: Char);
+begin
+ if (not (key in ['0'..'9','a'..'z','A'..'Z','-',':','(',')','.',',','''','+','{','}',' ',#8]))
+   then
+   Begin
+     key:=#0;
+   end;
+end;
+
+procedure TFormXohks.ButtonPostClick(Sender: TObject);
+ var ISfilial: integer;
+        TransDate : TDate;
+        Format:string;
+begin
+    if (checkfield(true) = false)or(Trim(FormXohks.Edit_Referens.Text)='') then
+    begin
+      MessageDlg('Məlumat Tam deyil',mtWarning,[mbok],0);
+      exit
+    end;
+    if Valute_ID.Items[Combo_valute.ItemIndex] <>
+        DataModXhoks.DataAccount.FieldByName('val_acc').AsString then
+    begin
+      MessageDlg('Bu hesab seçilmiş valutaya uygun deyil !',mtWarning,[mbok],0);
+      exit;
+    end;
+    {UPDATE to change}
+    trans_date:=trunc(Combo_date.DateTime);
+    if Edit_BNF.Text <> '/BNF/0' then
+    begin
+        if Batchs_Edit then
+        begin
+           if (edit_referens.text = DataModXhoks.XS_BATCHS.fieldbyname('trans_ref').AsString)and
+              (DataModXhoks.XS_BATCHS.fieldbyname('Status').AsInteger<>0)
+           then
+             begin
+          MessageDlg('Qeydiyyat №-si dəyşilməlidir!',mtWarning,[mbok],0); exit;
+             end;
+           new_id:=DataModXhoks.XS_BATCHS.fieldbyname('id').AsInteger;
+        end;
+
+        ISfilial:=FindFilialID;
+        TransDate := Trunc(GetUseDate);
+
+        if FormPayment_Det.RB_102.Checked  then
+        begin
+          MainXohksForm.GridBatchs.Columns[13].Font.Color:=clblack;
+          Format:='MT102';
+        end;
+
+        if FormPayment_Det.RB_102T.Checked then
+        begin
+          MainXohksForm.GridBatchs.Columns[13].Font.Color:=clred;
+          Format:='MT102T';
+        end;
+
+        DataModXhoks.INS.CallProcedure('xs_Batchs_update',[  new_id,
+                                                      'CREDIT',
+                                                      DataModXhoks.DataAccount.fieldbyname('id').asinteger,//strtoint(Edit_acc_id.text),
+                                                      edit_clientname.text,
+                                                      edit_client_code.text,
+                                                      edit_referens.text,
+                                                      edit_amount.value,
+                                                      strtofloat(valute_id.items[combo_valute.itemindex]),
+                                                      iSfilial,
+                                                      Edit_client_voen.text,
+                                                      Format]);
+       sboapiDataModule.SBSession.Commit;
+       if Batchs_Edit then
+       begin
+            DataModXhoks.Ins.CallIntegerFunction('xs_Batchs_ChangeStatus',[DataModXhoks.XS_BATCHS.fieldbyname('ID').ASinteger,0]);
+            DataModXhoks.XS_BATCHS.RefreshRecord;
+       end
+       else MainXohksForm.RefreshDataBatchs;
+
+   end;
+   close;
+
+end;
+
+procedure TFormXohks.Button_addClick(Sender: TObject);
+begin
+   if  checkfield(false)=false then exit;
+    {VIEW IN EDIT}
+    if Valute_ID.Items[Combo_valute.ItemIndex] <> DataModXhoks.DataAccount.FieldByName('val_acc').AsString then
+    begin
+      MessageDlg('Bu hesab seçilmiş valutaya uygun deyil !',mtWarning,[mbok],0);
+      exit;
+    end;
+    with FormPayment_Det do
+    begin
+      If RB_102T.Checked then
+      begin
+        RB_102T.Checked:=false;
+        RB_102.Checked:=true;
+      end;
+      Edit_BankName_Self.Text:=DataModXhoks.DataBankInfo.fieldbyname('BANK').AsString;
+      Edit_BIK_Self.Text:=DataModXhoks.DataBankInfo.fieldbyname('SWIFT').AsString;
+      Edit_BankCode_Self.Text:=DataModXhoks.DataBankInfo.fieldbyname('KOD_B').AsString;
+      Edit_account_Self.Text:=DataModXhoks.DataBankInfo.fieldbyname('KRNO').AsString;
+      Edit_Voen_Self.Text:=DataModXhoks.DataBankInfo.fieldbyname('INN').AsString;
+      Combo_Valute.ItemIndex:=FormXohks.Combo_valute.ItemIndex;
+      Edit_account_sub_Self.Text:=FormXohks.Edit_account_sub.text;
+      {Cler edit's}
+      Combo_BankName.ItemIndex:=-1;
+      Edit_BIK.Clear;
+      Edit_BankCode.clear;
+      Edit_Referens.Clear;
+      Edit_account.Clear;
+      Edit_Account_Sub.Clear;
+      Edit_Voen.Clear;
+      Edit_Amount.Clear;
+      Edit_TransCode.Clear;
+      Edit_Client_Name.Clear;
+      Edit_Client_Code.Text:='/';
+      Edit_Client_acc_no.Clear;
+      Edit_Client_Voen.Clear;
+      Edit_inf1.Clear;
+      Edit_inf2.Clear;
+      Edit_inf3.Clear;
+      Edit_tey1.Clear;
+      Edit_tey2.Clear;
+      Edit_tey3.Clear;
+      Edit_tey4.Clear;
+   //----   SearchBankM.Clear;
+    end;
+    {BUTTONS}
+    {PaymentDetalsForm.ButtonFinish.Enabled:=True;
+    PaymentDetalsForm.Button2.Enabled:=false;
+    PaymentDetalsForm.ShowModal;}
+    with FormPayment_Det do
+    begin
+                 ButtonFinish.Enabled:=True;
+                 XFBitBtn6.Enabled:=false;
+                 XFBitBtn4.Enabled:=true;
+                 SpeedButton2.Enabled:=true;
+                 Combo_BankName.Enabled:=true;
+                 XFBitBtn3.Enabled:=true;
+               //-----  SearchBankM.Enabled:=true;
+                 Edit_Client_acc_no.Enabled:=true;
+                 Edit_Client_Name.Enabled:=true;
+                 Edit_Client_Code.Enabled:=true;
+                 Edit_Client_Voen.Enabled:=true;
+                 Edit_tey1.Enabled:=true;
+                 Edit_tey2.Enabled:=true;
+                 Edit_tey3.Enabled:=true;
+                 Edit_tey4.Enabled:=true;
+                 Edit_inf1.Enabled:=true;
+                 Edit_inf2.Enabled:=true;
+                 Edit_inf3.Enabled:=true;
+                 XFGroupBox8.Enabled:=true;
+                 Edit_Amount.Enabled:=true;
+                 SpeedButton1.Enabled:=true;
+                 ShowModal;
+  end;
+end;
+
+procedure TFormXohks.DBLookupComboBox1Click(Sender: TObject);
+begin
+if (DBLookupComboBox1.Color <>clred) and(DBLookupComboBox1.Text<>'') then
+   begin
+
+   if DataModXhoks.DataAccount.fieldbyname('INN').AsVariant<>Null then
+
+         Edit_Client_voen.Text:=DataModXhoks.DataAccount.fieldbyname('INN').AsString
+      else
+         Edit_Client_voen.Text:='/';
+
+     if  FindFilialID >0 then
+         MainXohksForm.ViewBankInfo(true, FindFilialID)
+     else
+         MainXohksForm.ViewBankInfo(false,0);
+
+   end
+   else begin
+           Edit_Client_voen.Clear;
+   end;
+ FormXohks.Edit_clientName.Text:=DataModXhoks.DataAccount.FieldByName('name').AsString;
+end;
+
+initialization
+ FormXohks := TFormXohks.Create(CommonApplication);
+
+end.

@@ -1,0 +1,215 @@
+object ProtFrm: TProtFrm
+  Left = 0
+  Top = 0
+  ClientHeight = 534
+  ClientWidth = 554
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poScreenCenter
+  OnCanResize = FormCanResize
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  PixelsPerInch = 96
+  TextHeight = 13
+  object PageControl1: TPageControl
+    Left = 0
+    Top = 0
+    Width = 554
+    Height = 534
+    ActivePage = TabSheet1
+    Align = alClient
+    TabOrder = 0
+    ExplicitWidth = 783
+    object TabSheet1: TTabSheet
+      Caption = 'Protokol1    '
+      ExplicitLeft = 8
+      ExplicitTop = 28
+      ExplicitWidth = 764
+      object Label1: TLabel
+        Left = 59
+        Top = 21
+        Width = 58
+        Height = 14
+        Caption = 'Ba'#351'l'#305'q  ->'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -12
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object Label2: TLabel
+        Left = 59
+        Top = 68
+        Width = 184
+        Height = 14
+        Caption = 'Kredit Komissiyas'#305'n'#305'n s'#601'dri  ->'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -12
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object Label3: TLabel
+        Left = 59
+        Top = 147
+        Width = 63
+        Height = 14
+        Caption = #220'zvl'#601'r   ->'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -12
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object Label4: TLabel
+        Left = 59
+        Top = 229
+        Width = 183
+        Height = 17
+        Caption = 'G'#252'nd'#601'likd'#601' duran m'#601's'#601'l'#601'    ->'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -12
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object Label5: TLabel
+        Left = 60
+        Top = 298
+        Width = 75
+        Height = 14
+        Caption = 'E'#351'idilidi    ->'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -12
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object Label6: TLabel
+        Left = 60
+        Top = 399
+        Width = 75
+        Height = 14
+        Caption = 'Q'#601'rarlar   ->'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -12
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object DBMemo1: TDBMemo
+        Left = 151
+        Top = 6
+        Width = 391
+        Height = 43
+        Ctl3D = False
+        DataField = 'BASHLIQ'
+        DataSource = DataSource1
+        ParentCtl3D = False
+        TabOrder = 0
+      end
+      object DBEdit1: TDBEdit
+        Left = 256
+        Top = 63
+        Width = 286
+        Height = 19
+        Ctl3D = False
+        DataField = 'SEDIR'
+        DataSource = DataSource1
+        ParentCtl3D = False
+        TabOrder = 1
+      end
+      object DBMemo2: TDBMemo
+        Left = 346
+        Top = 95
+        Width = 196
+        Height = 112
+        Ctl3D = False
+        DataField = 'UZUVLER'
+        DataSource = DataSource1
+        ParentCtl3D = False
+        TabOrder = 2
+      end
+      object DBEdit2: TDBEdit
+        Left = 256
+        Top = 223
+        Width = 286
+        Height = 19
+        Ctl3D = False
+        DataField = 'GDMESELE'
+        DataSource = DataSource1
+        ParentCtl3D = False
+        TabOrder = 3
+      end
+      object DBMemo3: TDBMemo
+        Left = 136
+        Top = 257
+        Width = 406
+        Height = 110
+        Ctl3D = False
+        DataField = 'UZUVLER'
+        DataSource = DataSource1
+        ParentCtl3D = False
+        TabOrder = 4
+      end
+      object DBMemo4: TDBMemo
+        Left = 141
+        Top = 382
+        Width = 401
+        Height = 43
+        Ctl3D = False
+        DataField = 'QERAR'
+        DataSource = DataSource1
+        ParentCtl3D = False
+        TabOrder = 5
+      end
+    end
+    object TabSheet2: TTabSheet
+      Caption = 'Protokol2     '
+      ImageIndex = 1
+      ExplicitWidth = 281
+      ExplicitHeight = 165
+    end
+  end
+  object prot1: TOracleDataSet
+    SQL.Strings = (
+      'select rowid ,a.* from cm_protokol1 a')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000060000000E00000042004100530048004C0049005100010000000000
+      0A000000530045004400490052000100000000000E00000055005A0055005600
+      4C004500520001000000000010000000470044004D004500530045004C004500
+      010000000000140000004500530048004900440049004C004900440049000100
+      000000000A00000051004500520041005200010000000000}
+    Session = CMDataModule.CMSession
+    Left = 192
+    Top = 144
+  end
+  object prot2: TOracleDataSet
+    Optimize = False
+    Session = CMDataModule.CMSession
+    Left = 296
+    Top = 144
+  end
+  object DataSource1: TDataSource
+    DataSet = prot1
+    Left = 184
+    Top = 200
+  end
+  object DataSource2: TDataSource
+    DataSet = prot2
+    Left = 296
+    Top = 200
+  end
+end

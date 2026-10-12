@@ -1,0 +1,161 @@
+object Paymentcompany: TPaymentcompany
+  Left = 0
+  Top = 0
+  Caption = 'Paymentcompany'
+  ClientHeight = 182
+  ClientWidth = 298
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poMainFormCenter
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Label1: TLabel
+    Left = 9
+    Top = 8
+    Width = 49
+    Height = 16
+    Caption = 'M'#252#351't'#601'ri'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -13
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
+    ParentFont = False
+  end
+  object Label2: TLabel
+    Left = 9
+    Top = 49
+    Width = 117
+    Height = 16
+    Caption = #399'sas borcun qal'#305#287#305
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -13
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
+    ParentFont = False
+  end
+  object Label3: TLabel
+    Left = 181
+    Top = 49
+    Width = 97
+    Height = 16
+    Caption = 'C'#601'rim'#601' m'#601'bl'#601#287'i'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -13
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
+    ParentFont = False
+  end
+  object Label4: TLabel
+    Left = 8
+    Top = 95
+    Width = 88
+    Height = 16
+    Caption = 'Gecikm'#601' g'#252'n'#252
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -13
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
+    ParentFont = False
+  end
+  object Label5: TLabel
+    Left = 102
+    Top = 95
+    Width = 96
+    Height = 16
+    Caption = #214'd'#601'ni'#351' m'#601'bl'#601#287'i'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -13
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
+    ParentFont = False
+  end
+  object Label6: TLabel
+    Left = 204
+    Top = 95
+    Width = 80
+    Height = 16
+    Caption = 'C'#601'mi m'#601'bl'#601#287
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -13
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
+    ParentFont = False
+  end
+  object clientname: TEdit
+    Left = 8
+    Top = 24
+    Width = 289
+    Height = 21
+    Enabled = False
+    TabOrder = 0
+  end
+  object Button1: TButton
+    Left = 111
+    Top = 152
+    Width = 75
+    Height = 25
+    Caption = #214'd'#601'ni'#351' et'
+    TabOrder = 1
+    OnClick = Button1Click
+  end
+  object mainrest: TEdit
+    Left = 8
+    Top = 68
+    Width = 145
+    Height = 21
+    Enabled = False
+    TabOrder = 2
+  end
+  object penaltyam: TEdit
+    Left = 152
+    Top = 68
+    Width = 145
+    Height = 21
+    Enabled = False
+    TabOrder = 3
+  end
+  object Edit4: TEdit
+    Left = 8
+    Top = 117
+    Width = 89
+    Height = 21
+    Enabled = False
+    TabOrder = 4
+  end
+  object Edit5: TEdit
+    Left = 99
+    Top = 117
+    Width = 104
+    Height = 21
+    NumbersOnly = True
+    TabOrder = 5
+    OnChange = Edit5Change
+  end
+  object Edit1: TEdit
+    Left = 8
+    Top = 153
+    Width = 69
+    Height = 21
+    TabOrder = 6
+    Text = 'Edit1'
+    Visible = False
+  end
+  object Edit2: TEdit
+    Left = 207
+    Top = 117
+    Width = 88
+    Height = 21
+    TabOrder = 7
+  end
+end

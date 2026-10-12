@@ -1,0 +1,87 @@
+﻿unit MaxiImplpas;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, DBCtrls, DBGridEh, Mask, DBCtrlsEh, DBLookupEh, Buttons;
+
+type
+  TMaxiFrm = class(TForm)
+    Label1: TLabel;
+    DBLookupComboboxEh1: TDBLookupComboboxEh;
+    BitBtn1: TBitBtn;
+    BitBtn2: TBitBtn;
+    procedure BitBtn1Click(Sender: TObject);
+    procedure BitBtn2Click(Sender: TObject);
+
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  MaxiFrm: TMaxiFrm;
+
+implementation
+
+{$R *.dfm}
+   uses
+   ProlongDataModuleImpl ,SbSystem, CommonDecls;
+
+procedure TMaxiFrm.BitBtn1Click(Sender: TObject);
+resourcestring
+  rsTransactionsWillProcessed = 'Maxi uzadılma ...';
+  rsInvalidDate = 'Düzgün tarixi daxil edin !';
+var
+  CrdID :integer;
+  CommitTranche : Boolean;
+begin
+if DBLookupComboboxEh1.Text='' then
+  begin
+  ShowMessage('Müddəti seçin!');
+   exit;
+  end;
+
+CrdID := Get_SelectedCrdID;
+
+with ProlongDataMod do
+  CM_PROLONGATION.CallProcedure('maxi_expire',[
+     CrdID ,DBLookupComboboxEh1.KeyValue  ]);
+
+  try
+
+    CommitTranche := TrDelayed_Show(Self,rsTransactionsWillProcessed);
+
+    Update;
+
+    with ProlongDataMod do
+    CM_PROLONGATION.CallProcedure('CommitTMaxi',[
+     CommitTranche
+    ]);
+
+    if CommitTranche then
+    Self.ModalResult := mrOk;
+    Self.Update;
+
+  except
+
+    with ProlongDataMod do
+    CM_TRANCHE.CallProcedure('CommitTranche',[
+       'DoCommit' , False
+    ]);
+
+    raise;
+
+  end;
+
+
+end;
+
+procedure TMaxiFrm.BitBtn2Click(Sender: TObject);
+begin
+close
+end;
+
+end.

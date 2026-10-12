@@ -1,0 +1,675 @@
+unit frmReportAnalysOfPortfelImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, NLSDialogs,
+  ActiveX, AxCtrls, ReportAnalysOfPortfel_TLB, StdVcl, StdCtrls, Buttons,
+  ComCtrls, CheckLst, Evanescence, ExtCtrls, Grids, DBGridEh,oracle,oracledata,db,
+  CMExcelExport;
+
+type
+  TfrmReportAnalysOfPortfel = class(TActiveForm, IfrmReportAnalysOfPortfel)
+    GroupBox4: TGroupBox;
+    MainGrid: TDBGridEh;
+    StatusBar1: TStatusBar;
+    Label2: TLabel;
+    EdRest: TEdit;
+    Label3: TLabel;
+    EdCrdCount: TEdit;
+    Label4: TLabel;
+    edThisAmt: TEdit;
+    Label5: TLabel;
+    EdRoundInt: TEdit;
+    expSumds: TCMExcelExport;
+    GroupBox1: TGroupBox;
+    GroupBox3: TGroupBox;
+    lfilial: TEvanescence;
+    chfilial: TCheckBox;
+    GroupBox2: TGroupBox;
+    lcredittypes: TEvanescence;
+    chcrdtype: TCheckBox;
+    GroupBox5: TGroupBox;
+    lvalute: TEvanescence;
+    chvalute: TCheckBox;
+    RgrSum: TRadioGroup;
+    Label6: TLabel;
+    cbStatusofPort: TComboBox;
+    Label1: TLabel;
+    DTPRAP: TDateTimePicker;
+    OK: TBitBtn;
+    BitBtnexp: TBitBtn;
+    BitBtn3: TBitBtn;
+    procedure OKClick(Sender: TObject);
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure ActiveFormDestroy(Sender: TObject);
+    procedure chfilialClick(Sender: TObject);
+    procedure chcrdtypeClick(Sender: TObject);
+    procedure chvaluteClick(Sender: TObject);
+    procedure MainGridTitleBtnClick(Sender: TObject; ACol: Integer;
+      Column: TColumnEh);
+    procedure BitBtnexpClick(Sender: TObject);
+    procedure MainGridDblClick(Sender: TObject);
+    procedure BitBtn3Click(Sender: TObject);
+  private
+    { Private declarations }
+    FEvents: IfrmReportAnalysOfPortfelEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+    procedure GetInitData( v_ds :TDataSource; v_count :real;
+                                                 v_initamt :Real; v_dat :TDateTime;
+                                                 v_FStr:String; v_sqlcnt :integer;v_def :boolean;v_ord:String ;
+                                                 v_F :string);
+ protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+  public
+    { Public declarations }
+    procedure Initialize; override;
+  end;
+
+implementation
+
+uses ComObj, ComServ, dmReportAnalysOfPortfelImpl,
+  frmDetailRepAnalisOfPortImpl
+  ,frmusaid_prognozImpl,SBTranslateProc,sboapiDataModuleImpl;
+
+{$R *.DFM}
+
+var repdat :TDateTime;
+    FilterStr :String;
+{ TfrmReportAnalysOfPortfel }
+
+procedure TfrmReportAnalysOfPortfel.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_frmReportAnalysOfPortfelPage); }
+end;
+
+procedure TfrmReportAnalysOfPortfel.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as IfrmReportAnalysOfPortfelEvents;
+end;
+
+procedure TfrmReportAnalysOfPortfel.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TfrmReportAnalysOfPortfel.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TfrmReportAnalysOfPortfel.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TfrmReportAnalysOfPortfel.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TfrmReportAnalysOfPortfel.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TfrmReportAnalysOfPortfel.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TfrmReportAnalysOfPortfel.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TfrmReportAnalysOfPortfel.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TfrmReportAnalysOfPortfel.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TfrmReportAnalysOfPortfel.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TfrmReportAnalysOfPortfel.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TfrmReportAnalysOfPortfel.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TfrmReportAnalysOfPortfel.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TfrmReportAnalysOfPortfel.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TfrmReportAnalysOfPortfel.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TfrmReportAnalysOfPortfel.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TfrmReportAnalysOfPortfel.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TfrmReportAnalysOfPortfel.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TfrmReportAnalysOfPortfel.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TfrmReportAnalysOfPortfel._Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TfrmReportAnalysOfPortfel.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TfrmReportAnalysOfPortfel.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TfrmReportAnalysOfPortfel.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TfrmReportAnalysOfPortfel.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TfrmReportAnalysOfPortfel.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TfrmReportAnalysOfPortfel.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TfrmReportAnalysOfPortfel.KeyPressEvent(Sender: TObject;
+  var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TfrmReportAnalysOfPortfel.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TfrmReportAnalysOfPortfel.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TfrmReportAnalysOfPortfel.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TfrmReportAnalysOfPortfel.Set_AxBorderStyle(
+  Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TfrmReportAnalysOfPortfel.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TfrmReportAnalysOfPortfel.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TfrmReportAnalysOfPortfel.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TfrmReportAnalysOfPortfel.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TfrmReportAnalysOfPortfel.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TfrmReportAnalysOfPortfel.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TfrmReportAnalysOfPortfel.Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TfrmReportAnalysOfPortfel.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TfrmReportAnalysOfPortfel.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TfrmReportAnalysOfPortfel.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TfrmReportAnalysOfPortfel.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TfrmReportAnalysOfPortfel.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TfrmReportAnalysOfPortfel.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+procedure TfrmReportAnalysOfPortfel.OKClick(Sender: TObject);
+
+resourcestring rs_gencount = 'select count(p.id) as cnt from cm_portfolio p where p.id in (select creditid from cm_history where hdate=:dat and rest+duerest>0)';
+resourcestring rs_geninitialamt = 'select round(sum(p.initialamount*o.ostat),2) as geninitialamount from cm_portfolio p,operkurs o,cm_history h where p.currency = o.val_kod and p.id = h.creditid and hdate =:dat and h.rest+duerest>0';
+resourcestring rs_genrest = 'select round(sum(rest*o.ostat+duerest*o.ostat),2) as genrest ,round(sum(p.annualyinterestrate*(h.rest*o.ostat)),2) as roundint from cm_portfolio p,cm_history h,operkurs o where p.id = h.creditid and p.currency = o.val_kod and o.dat =:dat and h.hdate=:dat';
+resourcestring r_expires =' p.id in (select psh.creditid from cm_payment_schedule psh ,cm_curr_state cs where  psh.rest < (cs.rest+cs.duerest) and (cs.duerest+cs.rest - psh.rest >= 2) and psh.creditid = cs.creditid and psh.paymentdate <=:dat group by psh.creditid  ';
+resourcestring rs_notexpires =' p.id not in (select psh.creditid from cm_payment_schedule psh ,cm_curr_state cs where  psh.rest < (cs.rest+cs.duerest) and (cs.duerest+cs.rest - psh.rest >= 2) and psh.creditid = cs.creditid and psh.paymentdate <=:dat group by psh.creditid) ';
+resourcestring r_e = 'having creditsmgr.cm_utils.bankdaysbetween (MIN (psh.paymentdate),:dat)>0)';
+var
+  fst,rs_expires,s_gencount,s_geninitialamt,s_genrest:String;
+
+  gencount,geninitialamt,genrest,roundint :real;
+
+begin
+   rs_expires := r_expires+ r_e;
+  RepDat := integer(trunc(DTPRAP.DateTime));
+  if lfilial.GetCheckedKeyList.Count = 0 then begin ShowMessage('ян азы бир филиал сечилм€лидир!'); Exit; end;
+  if lcredittypes.GetCheckedKeyList.Count = 0 then begin ShowMessage('ян азы бир кредит типи сечилм€лидир!'); Exit; end;
+  if lvalute.GetCheckedKeyList.Count = 0 then begin ShowMessage('ян азы бир валйута сечилм€лидир!'); Exit; end;
+
+
+  FSt := '';
+  FilterStr :='';
+  gencount := 0;
+  geninitialamt:= 0;
+  genrest:= 0;
+  roundint:= 0;
+
+  //if (lfilial.GetCheckedKeyList.Count<>lfilial.Items.Count) then begin
+  if  FilterStr <> '' then
+  FilterStr := FilterStr + ' and  p.branchid in ('
+                              +lfilial.GetCheckedKeyList.CommaText +')' else begin
+   FSt := 'branchid in ('
+                              +lfilial.GetCheckedKeyList.CommaText +')';
+    FilterStr := '  p.branchid in ('
+                              +lfilial.GetCheckedKeyList.CommaText +')';
+                              end;
+ // end;
+
+  if (lcredittypes.GetCheckedKeyList.Count<>lcredittypes.Items.Count) then begin
+  if   FilterStr <> '' then
+  FilterStr := FilterStr + ' and p.credittype in  ('
+                              +lcredittypes.GetCheckedKeyList.CommaText +')' else
+  FilterStr := '  p.credittype in  ('
+                              +lcredittypes.GetCheckedKeyList.CommaText +')';
+
+  end;
+
+  if (lvalute.GetCheckedKeyList.Count<>lvalute.Items.Count) then begin
+  if FilterStr <> '' then
+  FilterStr := FilterStr + ' and p.currency in ('
+                              +lvalute.GetCheckedKeyList.CommaText +')' else
+    FilterStr := '  p.currency in ('
+                              +lvalute.GetCheckedKeyList.CommaText +')';
+  end;
+
+
+  case cbStatusofPort.ItemIndex of
+      // -1:FilterStr
+       1:begin if FilterStr <> '' then FilterStr := FilterStr + ' and ' + rs_notexpires
+         else  FilterStr :=  rs_notexpires;end;
+       2:begin if FilterStr <> '' then FilterStr := FilterStr + ' and ' + rs_expires
+         else  FilterStr :=  rs_expires;end;
+  end;
+
+  with  dmReportAnalysOfPortfel do begin //1
+
+       s_gencount := rs_gencount;
+       if FilterStr <> '' then s_gencount := s_gencount + ' and   '+FilterStr;
+
+       with Queries do begin //2
+       DeleteVariables;
+       DeclareVariable('dat',otDate);
+       SetVariable('dat',repdat);
+       if Active then CloseAll;
+       sql.Clear;
+       sql.Add(s_gencount);  //Memo1.text := sql.text;
+       Open;
+       gencount := FieldByName('cnt').AsFloat;
+       if gencount = 0 then gencount := 1;
+
+
+       s_geninitialamt := rs_geninitialamt;
+       s_geninitialamt := s_geninitialamt + ' and o.dat = ' + QuotedStr(FormatdateTime('dd-mmm-yyyy',RepDat));
+       if FilterStr <> '' then s_geninitialamt := s_geninitialamt + ' and '+FilterStr;
+
+       CloseAll;
+       DeleteVariables;
+       DeclareVariable('dat',otDate);
+       SetVariable('dat',repdat);
+       sql.Clear;
+       sql.Add(s_geninitialamt);
+       Open;
+       geninitialamt := FieldByName('geninitialamount').AsFloat;
+       if geninitialamt = 0 then geninitialamt := 1;
+
+
+
+       s_genrest := rs_genrest;
+       s_genrest := s_genrest + ' and o.dat = ' + QuotedStr(FormatdateTime('dd-mmm-yyyy',RepDat));
+       if FilterStr <> '' then s_genrest := s_genrest + ' and '+FilterStr;
+
+       CloseAll;
+       DeleteVariables;
+       DeclareVariable('dat',otDate);
+       SetVariable('dat',repdat);
+       sql.Clear;
+       sql.Add(s_genrest);
+       //Memo1.text := sql.text;
+       Open;
+       genrest := FieldByName('genrest').AsFloat;
+       if genrest = 0 then genrest := 1;
+       roundint := FieldByName('roundint').AsFloat/genrest;
+       roundint := trunc(roundint) + round((roundint-trunc(roundint))*100)/100;
+
+       end; //2
+
+       case RgrSum.ItemIndex of
+           0:GetInitData(CategoriesSumds,gencount,genrest,repdat,FilterStr,20,false,'',FSt);
+           1:GetInitData(PersonsSumds,gencount,genrest,repdat,FilterStr,20,false,'',FSt);
+           2:GetInitData(PledgsPledgsSumds,gencount,genrest,repdat,FilterStr,21,false,'',FSt);
+           3:GetInitData(ValutesSumds,gencount,genrest,repdat,FilterStr,20,false,'',FSt);
+           4:GetInitData(RegionsSumds,gencount,genrest,repdat,FilterStr,23,false,'',FSt);
+           //5:GetInitData(CountriesSumds,gencount,genrest,repdat,FilterStr,22,false);
+           //6:GetInitData(CalcMethodsSumDs,gencount,genrest,repdat,FilterStr,21,false);
+           5:GetInitData(ReservesSumds,gencount,genrest,repdat,FilterStr,22,true,'',FSt);
+           6:GetInitData(AnnualIntSumds,gencount,genrest,repdat,FilterStr,46,false,'d.sectorID',FSt);
+           7:GetInitData(PeriodsSumds,gencount,genrest,repdat,FilterStr,52,false,'d.sectorID',FSt);
+       end;
+
+       end;//1
+
+       EdRest.text := FloatToStr(genrest);
+       EdCrdCount.text := FloatToStr(gencount);
+       edThisAmt.text := FloatToStr(geninitialamt);
+       EdRoundInt.text := FloatToStr(roundint)+'%';
+
+end;
+
+procedure TfrmReportAnalysOfPortfel.GetInitData( v_ds :TDataSource; v_count :real;
+                                                 v_initamt :Real; v_dat :TDateTime;
+                                                 v_FStr:String; v_sqlcnt :integer;v_def :boolean;
+                                                 v_ord:String;v_f :string);
+begin
+
+   with  v_ds.DataSet as TOracleDataSet do begin
+         if Active then CloseAll;
+         SetVariable('dat',v_dat);
+         SetVariable('GENCOUNT',v_count);
+         SetVariable('GENINITAMT',v_initamt);
+         SetVariable('ffilter',v_f);
+         if (not v_def) and (v_ord='') then
+         SetVariable('OrderField','sector')
+         else
+         SetVariable('OrderField','c.percent');
+
+         if v_ord <> '' then
+         SetVariable('OrderField',v_ord);
+
+         if v_FStr <> '' then SQL[v_sqlcnt] := ' and '+v_FStr
+         else SQL[v_sqlcnt] := '';
+         //Memo1.text := sql.text;
+         Open;
+   end;
+   
+   MainGrid.DataSource := v_ds;
+   
+end;
+
+procedure TfrmReportAnalysOfPortfel.ActiveFormCreate(Sender: TObject);
+begin
+   dmReportAnalysOfPortfel := TdmReportAnalysOfPortfel.Create(self);
+   DTPRAP.DateTime := dmReportAnalysOfPortfel.sysdat.FieldByName('tek_dat').asDateTime;
+   frmDetailRepAnalisOfPort := TfrmDetailRepAnalisOfPort.Create(self);
+   lfilial.Open;
+   lcredittypes.Open;
+   lvalute.Open;
+   {lfilial.CheckAll;
+   lcredittypes.CheckAll;
+   lvalute.CheckAll;  }
+SBTranslateProc.TranslateAllComponents(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TfrmReportAnalysOfPortfel.ActiveFormDestroy(Sender: TObject);
+begin
+  dmReportAnalysOfPortfel.free
+end;
+
+procedure TfrmReportAnalysOfPortfel.chfilialClick(Sender: TObject);
+begin
+    if chfilial.Checked then lfilial.CheckAll else lfilial.UnCheckAll
+end;
+
+procedure TfrmReportAnalysOfPortfel.chcrdtypeClick(Sender: TObject);
+begin
+   if chcrdtype.Checked then lcredittypes.CheckAll else lcredittypes.UnCheckAll
+end;
+
+procedure TfrmReportAnalysOfPortfel.chvaluteClick(Sender: TObject);
+begin
+if chvalute.Checked then lvalute.CheckAll else lvalute.UnCheckAll
+end;
+
+procedure TfrmReportAnalysOfPortfel.MainGridTitleBtnClick(Sender: TObject;
+  ACol: Integer; Column: TColumnEh);
+var
+  SortField ,cname: String;
+begin
+  cname := (Sender as TDBGridEh).DataSource.DataSet.Name;
+  if (Sender as TDBGridEh).DataSource.DataSet.active then   begin
+  SortField := Column.FieldName;
+
+  if  ((cname = 'AnnualIntSum') or (cname= 'PeriodsSum')) and
+  (not (Sender as TDBGridEh).DataSource.DataSet.FieldByName(SortField).Calculated ) then
+     SortField :=  'd.sectorID';
+
+  if (Sender as TDBGridEh).DataSource.DataSet.FieldByName(Column.FieldName).Calculated then
+  SortField := copy(Column.FieldName,5,length(Column.FieldName)) ;
+  if Column.Title.SortMarker = smDownEh then
+    SortField := SortField + ' DESC';
+  with Sender as TDBGridEh , TOracleDataSet(DataSource.DataSet) do
+  begin
+   // ClearVariables;
+    Screen.Cursor := crSQLWait;
+    SetVariable('OrderField',SortField);
+    RefResh;
+    Screen.Cursor := crDefault;
+   end;
+    end;
+end;
+
+procedure TfrmReportAnalysOfPortfel.BitBtnexpClick(Sender: TObject);
+begin
+   with expSumds do begin
+        Connect;
+        ExportDataset(MainGrid.DataSource.DataSet,'ReportAnalysOfPortfel',true,false);
+        Disconnect;
+   end;
+end;
+
+procedure TfrmReportAnalysOfPortfel.MainGridDblClick(Sender: TObject);
+
+var fstr,SpecStr :String;
+
+begin
+   SpecStr := '';
+
+   fstr := FilterStr;
+with dmReportAnalysOfPortfel do
+   case RgrSum.ItemIndex of
+        0: SpecStr := 'p.customertype = '+IntToStr(CategoriesSum.FieldbyName('CUSTOMERTYPE').AsInteger);
+        1: SpecStr := 'p.personaltype = '+IntToStr(PersonsSum.FieldbyName('personaltype').AsInteger);
+        2: SpecStr := 'p.id in (select creditid from cm_guarantee where PLEDGEID = '+IntToStr(PledgsSum.FieldbyName('PLEDGEID').AsInteger)+')';
+        3: SpecStr := 'p.currency = '+IntToStr(ValutesSum.FieldbyName('currency').AsInteger);
+        4: SpecStr := 'p.id in (select creditid from creditsmgr.cm_business_plan where villageid in (select id from agro_village where depend_id = '+IntToStr(RegionsSum.FieldbyName('DEPEND_ID').AsInteger) +'))  ';
+        5: SpecStr := 'h.reserveid = '+IntToStr(ReservesSum.FieldbyName('RESERVEID').AsInteger);
+        6: SpecStr := 'p.ANNUALYINTERESTRATE between '+IntToStr(AnnualIntSum.FieldbyName('bper').AsInteger) +' and '+IntToStr(AnnualIntSum.FieldbyName('eper').AsInteger);
+        7: SpecStr := 'creditsmgr.cm_utils.BankDaysBetween(p.DATEOFCONCLUSION,p.DUEDATEFIRSTCONTRACT) between '+IntToStr(PeriodsSum.FieldbyName('bper').AsInteger) +' and '+IntToStr(PeriodsSum.FieldbyName('eper').AsInteger);
+   end;
+
+  if fstr = '' then fstr := SpecStr
+  else fstr := fstr + ' and ('+ SpecStr+')';
+  //if FilterStr <> '' then fstr := FilterStr;
+   with dmReportAnalysOfPortfel,ODSDetail do begin
+        if Active then CloseAll;
+        SetVariable('dat',RepDat);
+        SetVariable('OrderField','numberofcredit');
+        if fstr <> '' then  SQL[40] := ' and  ' + fstr
+        else SQL[40] := ''; //showmessage(fstr);
+        open;
+   end;
+    with frmDetailRepAnalisOfPort do begin
+     MainGriddetail.DataSource := dmReportAnalysOfPortfel.ODSDetailds;
+     DBEditEh1.DataSource := dmReportAnalysOfPortfel.ODSDetailds;
+     DBEditEh2.DataSource := dmReportAnalysOfPortfel.ODSDetailds;
+     DBEditEh3.DataSource := dmReportAnalysOfPortfel.ODSDetailds;
+     DTP.DateTime := RepDat;
+     ShowModal;
+    end;
+
+end;
+
+procedure TfrmReportAnalysOfPortfel.BitBtn3Click(Sender: TObject);
+begin
+   try
+      frmusaid_prognoz := Tfrmusaid_prognoz.create(self);
+      frmusaid_prognoz.ProgSetInt := 3;
+      if frmusaid_prognoz.checkaccess then
+      frmusaid_prognoz.ShowModal;
+   finally
+      frmusaid_prognoz.Release;
+   end;
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TfrmReportAnalysOfPortfel,
+    Class_frmReportAnalysOfPortfel,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

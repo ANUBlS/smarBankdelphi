@@ -1,0 +1,990 @@
+object CPropertySuggest: TCPropertySuggest
+  Left = 192
+  Top = 107
+  Width = 478
+  Height = 330
+  Caption = 'Tekilfname'
+  Color = clBtnFace
+  Font.Charset = RUSSIAN_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  OldCreateOrder = False
+  OnCreate = ActiveFormCreate
+  PixelsPerInch = 96
+  TextHeight = 13
+  object GroupBox2: TGroupBox
+    Left = 0
+    Top = 0
+    Width = 470
+    Height = 303
+    Align = alClient
+    Caption = 'Тяклифнамя'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = [fsBold]
+    ParentFont = False
+    TabOrder = 0
+    object Label9: TLabel
+      Left = 8
+      Top = 44
+      Width = 48
+      Height = 13
+      Caption = 'Франшиза'
+    end
+    object Label10: TLabel
+      Left = 8
+      Top = 244
+      Width = 62
+      Height = 13
+      Caption = 'Сыьорта щаггы'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Label11: TLabel
+      Left = 8
+      Top = 120
+      Width = 38
+      Height = 13
+      Caption = 'Шяртляр'
+    end
+    object Label12: TLabel
+      Left = 256
+      Top = 244
+      Width = 81
+      Height = 13
+      Caption = 'Мцгавилянин тарихи'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Label19: TLabel
+      Left = 8
+      Top = 20
+      Width = 101
+      Height = 13
+      Caption = 'Мцгавилянин валйутасы'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Label1: TLabel
+      Left = 8
+      Top = 224
+      Width = 72
+      Height = 13
+      Caption = 'Сыьорта мябляьи'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Label2: TLabel
+      Left = 8
+      Top = 200
+      Width = 96
+      Height = 13
+      Caption = 'Риск йерляшян цнван'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+    end
+    object DBEdit7: TDBEdit
+      Left = 120
+      Top = 240
+      Width = 121
+      Height = 21
+      DataField = 'AMMOUNT'
+      DataSource = DSContracts
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 7
+      OnChange = DBEdit7Change
+      OnKeyPress = DBEdit7KeyPress
+    end
+    object Panel1: TPanel
+      Left = 2
+      Top = 263
+      Width = 466
+      Height = 38
+      Align = alBottom
+      BevelInner = bvRaised
+      BevelOuter = bvLowered
+      TabOrder = 11
+      object BitBtn1: TBitBtn
+        Left = 266
+        Top = 8
+        Width = 65
+        Height = 24
+        Anchors = [akTop, akRight]
+        Caption = 'Ok'
+        DragCursor = crArrow
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 0
+        OnClick = BitBtn1Click
+        OnKeyPress = DBEdit7KeyPress
+        Glyph.Data = {
+          F6000000424DF600000000000000760000002800000010000000100000000100
+          0400000000008000000000000000000000001000000000000000000000000000
+          8000008000000080800080000000800080008080000080808000C0C0C0000000
+          FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00888888888888
+          8888800000000008888803300008030888880330000803000888033000000303
+          0888033333333303000803300000330303080308888803030308030888880303
+          0308030888880003030803088888080303080000000000000308880308888808
+          0308880000000000000888880308888808088888000000000008}
+      end
+      object BitBtn2: TBitBtn
+        Left = 332
+        Top = 8
+        Width = 65
+        Height = 24
+        Anchors = [akTop, akRight]
+        Cancel = True
+        Caption = 'Имтина'
+        DragCursor = crArrow
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 1
+        OnClick = BitBtn2Click
+        OnKeyPress = DBEdit7KeyPress
+        Glyph.Data = {
+          DE010000424DDE01000000000000760000002800000024000000120000000100
+          0400000000006801000000000000000000001000000000000000000000000000
+          80000080000000808000800000008000800080800000C0C0C000808080000000
+          FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00333333333333
+          333333333333333333333333000033338833333333333333333F333333333333
+          0000333911833333983333333388F333333F3333000033391118333911833333
+          38F38F333F88F33300003339111183911118333338F338F3F8338F3300003333
+          911118111118333338F3338F833338F3000033333911111111833333338F3338
+          3333F8330000333333911111183333333338F333333F83330000333333311111
+          8333333333338F3333383333000033333339111183333333333338F333833333
+          00003333339111118333333333333833338F3333000033333911181118333333
+          33338333338F333300003333911183911183333333383338F338F33300003333
+          9118333911183333338F33838F338F33000033333913333391113333338FF833
+          38F338F300003333333333333919333333388333338FFF830000333333333333
+          3333333333333333333888330000333333333333333333333333333333333333
+          0000}
+        NumGlyphs = 2
+      end
+      object btApply: TBitBtn
+        Left = 200
+        Top = 8
+        Width = 65
+        Height = 24
+        Caption = 'Apply'
+        DragCursor = crArrow
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 2
+        OnClick = btApplyClick
+        OnKeyPress = DBEdit7KeyPress
+        Glyph.Data = {
+          F2010000424DF201000000000000760000002800000024000000130000000100
+          0400000000007C01000000000000000000001000000000000000000000000000
+          80000080000000808000800000008000800080800000C0C0C000808080000000
+          FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00333334433333
+          3333333333388F3333333333000033334224333333333333338338F333333333
+          0000333422224333333333333833338F33333333000033422222243333333333
+          83333338F3333333000034222A22224333333338F33F33338F33333300003222
+          A2A2224333333338F383F3338F33333300003A2A222A222433333338F8333F33
+          38F33333000034A22222A22243333338833333F3338F333300004222A2222A22
+          2433338F338F333F3338F3330000222A3A2224A22243338F3838F338F3338F33
+          0000A2A333A2224A2224338F83338F338F3338F300003A33333A2224A2224338
+          333338F338F3338F000033333333A2224A2243333333338F338F338F00003333
+          33333A2224A2233333333338F338F83300003333333333A2224A333333333333
+          8F338F33000033333333333A222433333333333338F338F30000333333333333
+          A224333333333333338F38F300003333333333333A223333333333333338F8F3
+          000033333333333333A3333333333333333383330000}
+        NumGlyphs = 2
+      end
+      object btPrint: TBitBtn
+        Left = 134
+        Top = 8
+        Width = 65
+        Height = 24
+        Caption = 'Чап'
+        DragCursor = crArrow
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 3
+        OnClick = btPrintClick
+        OnKeyPress = DBEdit7KeyPress
+        Glyph.Data = {
+          76010000424D7601000000000000760000002800000020000000100000000100
+          04000000000000010000130B0000130B00001000000000000000000000000000
+          800000800000008080008000000080008000808000007F7F7F00BFBFBF000000
+          FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00300000000000
+          00033FFFFFFFFFFFFFFF0888888888888880777777777777777F088888888888
+          8880777777777777777F0000000000000000FFFFFFFFFFFFFFFF0F8F8F8F8F8F
+          8F80777777777777777F08F8F8F8F8F8F9F0777777777777777F0F8F8F8F8F8F
+          8F807777777777777F7F0000000000000000777777777777777F3330FFFFFFFF
+          03333337F3FFFF3F7F333330F0000F0F03333337F77773737F333330FFFFFFFF
+          03333337F3FF3FFF7F333330F00F000003333337F773777773333330FFFF0FF0
+          33333337F3FF7F3733333330F08F0F0333333337F7737F7333333330FFFF0033
+          33333337FFFF7733333333300000033333333337777773333333}
+        NumGlyphs = 2
+      end
+      object btPolicy: TBitBtn
+        Left = 68
+        Top = 8
+        Width = 65
+        Height = 24
+        Caption = 'Полис'
+        DragCursor = crArrow
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 4
+        OnClick = btPolicyClick
+        OnKeyPress = DBEdit7KeyPress
+        Glyph.Data = {
+          F6000000424DF600000000000000760000002800000010000000100000000100
+          0400000000008000000000000000000000001000000000000000000000000000
+          80000080000000808000800000008000800080800000C0C0C000808080000000
+          FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00FF7770777777
+          77FFFF777807777777FFFF777700777777FFFF77770B077777FFFF770000B077
+          77FFFF770BBBBB0777FFFF7770FB000077FFFF7770BBB07777FFFF00000BFB07
+          77FFFF0FBBBFBBB077FFFF70FBFB000007FFFF70BFBFB07777FFFF770BFBFB07
+          77FFFF770FFFFFF077FFFF7770FBFFBF07FFFF777000000000FF}
+      end
+    end
+    object DBLookupComboBoxCondition: TDBLookupComboBox
+      Left = 120
+      Top = 113
+      Width = 345
+      Height = 21
+      DataField = 'CNDT_ID'
+      DataSource = CPSuggestSource
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      KeyField = 'ID'
+      ListField = 'NAME'
+      ListSource = ConditionsData
+      ParentFont = False
+      TabOrder = 3
+      OnClick = DBLookupComboBoxConditionClick
+      OnKeyPress = DBEdit7KeyPress
+    end
+    object cbFranshiz: TCheckBox
+      Left = 8
+      Top = 69
+      Width = 79
+      Height = 17
+      Caption = 'Йадда сахла'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 9
+      OnClick = DBEdit7Change
+      OnKeyPress = DBEdit7KeyPress
+    end
+    object cbConditions: TCheckBox
+      Left = 7
+      Top = 145
+      Width = 79
+      Height = 17
+      Caption = 'Йадда сахла'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 10
+      OnClick = DBEdit7Change
+      OnKeyPress = DBEdit7KeyPress
+    end
+    object DBLookupComboBoxFranshiz: TDBLookupComboBox
+      Left = 120
+      Top = 42
+      Width = 345
+      Height = 21
+      DataField = 'FRZ_ID'
+      DataSource = CPSuggestSource
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      KeyField = 'ID'
+      ListField = 'NAME'
+      ListSource = FranshizData
+      ParentFont = False
+      TabOrder = 1
+      OnClick = DBLookupComboBoxFranshizClick
+      OnKeyPress = DBEdit7KeyPress
+    end
+    object DTPContractDate: TDateTimePicker
+      Left = 352
+      Top = 240
+      Width = 113
+      Height = 21
+      CalAlignment = dtaLeft
+      Date = 39029.4869041088
+      Time = 39029.4869041088
+      DateFormat = dfShort
+      DateMode = dmComboBox
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      Kind = dtkDate
+      ParseInput = False
+      ParentFont = False
+      TabOrder = 8
+      OnChange = DBEdit7Change
+      OnKeyPress = DBEdit7KeyPress
+    end
+    object memFrashize: TMemo
+      Left = 120
+      Top = 66
+      Width = 345
+      Height = 45
+      Color = clInfoBk
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+      ScrollBars = ssVertical
+      TabOrder = 2
+      OnChange = DBEdit7Change
+      OnKeyPress = DBEdit7KeyPress
+    end
+    object memConditions: TMemo
+      Left = 120
+      Top = 136
+      Width = 345
+      Height = 57
+      Color = clInfoBk
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+      ScrollBars = ssVertical
+      TabOrder = 4
+      OnChange = DBEdit7Change
+      OnKeyPress = DBEdit7KeyPress
+    end
+    object DBLookupComboBox4: TDBLookupComboBox
+      Left = 120
+      Top = 16
+      Width = 345
+      Height = 21
+      DataField = 'VALUTE_ID'
+      DataSource = DSContracts
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      KeyField = 'VALUTE'
+      ListField = 'VALU_NAME'
+      ListSource = AValuteData
+      ParentFont = False
+      TabOrder = 0
+      OnClick = DBEdit7Change
+      OnKeyPress = DBEdit7KeyPress
+    end
+    object DBEdit1: TDBEdit
+      Left = 120
+      Top = 219
+      Width = 121
+      Height = 21
+      DataField = 'INSURANCESUM'
+      DataSource = CPSuggestSource
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 6
+      OnChange = DBEdit7Change
+      OnKeyPress = DBEdit7KeyPress
+    end
+    object DBEdit2: TDBEdit
+      Left = 120
+      Top = 196
+      Width = 345
+      Height = 21
+      DataField = 'RISKADDRESS'
+      DataSource = CPSuggestSource
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 5
+      OnChange = DBEdit7Change
+      OnKeyPress = DBEdit7KeyPress
+    end
+  end
+  object ODSRisks: TOracleDataSet
+    SQL.Strings = (
+      'select idr.rowid, idr.* from ins_dict_risks idr')
+    QBEDefinition.QBEFieldDefs = {
+      0400000002000000020000004944010000000000040000004E414D4501000000
+      0000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 396
+    Top = 152
+    object ODSRisksID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object ODSRisksNAME: TStringField
+      FieldName = 'NAME'
+      Size = 1024
+    end
+  end
+  object RiskSource: TDataSource
+    DataSet = ODSRisks
+    Left = 396
+    Top = 120
+  end
+  object ODSCustomers: TOracleDataSet
+    SQL.Strings = (
+      
+        'select c.rowid,c.id,c.name||'#39' '#39'||c.surname||'#39' '#39'||c.fathername as' +
+        ' name,c.address,c.mobilephone,c.fax,c.contactperson,c.contactper' +
+        'sonphone from ins_customers c')
+    QBEDefinition.QBEFieldDefs = {
+      0400000007000000020000004944010000000000040000004E414D4501000000
+      000007000000414444524553530100000000000B0000004D4F42494C4550484F
+      4E45010000000000030000004641580100000000000D000000434F4E54414354
+      504552534F4E01000000000012000000434F4E54414354504552534F4E50484F
+      4E45010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 356
+    Top = 152
+    object ODSCustomersID: TIntegerField
+      FieldName = 'ID'
+      Required = True
+    end
+    object ODSCustomersNAME: TStringField
+      FieldName = 'NAME'
+      Size = 386
+    end
+    object ODSCustomersADDRESS: TStringField
+      FieldName = 'ADDRESS'
+      Size = 1024
+    end
+    object ODSCustomersMOBILEPHONE: TStringField
+      FieldName = 'MOBILEPHONE'
+      Size = 32
+    end
+    object ODSCustomersFAX: TStringField
+      FieldName = 'FAX'
+      Size = 32
+    end
+    object ODSCustomersCONTACTPERSON: TStringField
+      FieldName = 'CONTACTPERSON'
+      Size = 256
+    end
+    object ODSCustomersCONTACTPERSONPHONE: TStringField
+      FieldName = 'CONTACTPERSONPHONE'
+      Size = 32
+    end
+  end
+  object CustomersSource: TDataSource
+    DataSet = ODSCustomers
+    Left = 356
+    Top = 120
+  end
+  object ODSCProperty: TOracleDataSet
+    SQL.Strings = (
+      
+        'select icp.rowid,icp.* from ins_commercialproperty icp where id=' +
+        ':id')
+    Variables.Data = {0300000001000000030000003A4944040000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      0400000034000000020000004944010000000000060000004B4C495F49440100
+      000000000F00000046554C4C4445534352495054494F4E0100000000000B0000
+      004C4F434154494F4E4F424A0100000000000F0000005945415253494E425553
+      494E4553530100000000000D0000004255494C44494E47555341474501000000
+      000009000000434F4E53545945415201000000000009000000464C4F4F52534E
+      554D0100000000000600000057414C4C534D010000000000090000004345494C
+      494E47534D01000000000005000000524F4F464D010000000000040000004152
+      45410100000000000E0000004150504C4943414E545350414345010000000000
+      1100000045415254485155414B4544455441494C530100000000000800000046
+      4C414D41424C4501000000000012000000535552524F494E44494E4744455441
+      494C530100000000000800000053495455455445440100000000000500000047
+      5541524401000000000005000000414C41524D010000000000050000004C4F43
+      4B530100000000000D00000053454355524954594C4F434B5301000000000004
+      00000042415253010000000000050000004F5448455201000000000008000000
+      53455454494E4753010000000000060000005245504149520100000000000600
+      0000484541544544010000000000060000005249534B49440100000000000600
+      0000414E4E55414C010000000000050000005741474553010000000000040000
+      0052454E5401000000000008000000454D504C4F594553010000000000080000
+      0045585049524954590100000000000B0000004C4F5353484953544F52590100
+      000000000700000052454E4557414C0100000000000A00000054484952445041
+      525459010000000000080000004F54484552494E460100000000000A00000049
+      4E44454D494E4954590100000000000900000056414C55455459504501000000
+      0000090000004255494C44494E475301000000000007000000434F4E54454E54
+      0100000000000900000045515549504D454E5401000000000005000000474C41
+      535301000000000004000000434153480100000000000900000057415245484F
+      5553450100000000000500000053544F434B0100000000000800000050524F44
+      554354530100000000000E000000574F524B494E50524F475245535301000000
+      00000C0000005241574D4154455249414C530100000000000C000000434C4F53
+      455F505245464958010000000000060000005459504549440100000000000800
+      000050524F4649544944010000000000070000004147454E5449440100000000
+      00}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 324
+    Top = 152
+    object ODSCPropertyID: TFloatField
+      FieldName = 'ID'
+    end
+    object ODSCPropertyKLI_ID: TFloatField
+      FieldName = 'KLI_ID'
+    end
+    object ODSCPropertyFULLDESCRIPTION: TStringField
+      FieldName = 'FULLDESCRIPTION'
+      Size = 1024
+    end
+    object ODSCPropertyLOCATIONOBJ: TStringField
+      FieldName = 'LOCATIONOBJ'
+      Size = 1024
+    end
+    object ODSCPropertyYEARSINBUSINESS: TStringField
+      FieldName = 'YEARSINBUSINESS'
+      Size = 32
+    end
+    object ODSCPropertyBUILDINGUSAGE: TStringField
+      FieldName = 'BUILDINGUSAGE'
+      Size = 128
+    end
+    object ODSCPropertyCONSTYEAR: TDateTimeField
+      FieldName = 'CONSTYEAR'
+    end
+    object ODSCPropertyFLOORSNUM: TIntegerField
+      FieldName = 'FLOORSNUM'
+    end
+    object ODSCPropertyWALLSM: TStringField
+      FieldName = 'WALLSM'
+      Size = 128
+    end
+    object ODSCPropertyCEILINGSM: TStringField
+      FieldName = 'CEILINGSM'
+      Size = 128
+    end
+    object ODSCPropertyROOFM: TStringField
+      FieldName = 'ROOFM'
+      Size = 128
+    end
+    object ODSCPropertyAREA: TFloatField
+      FieldName = 'AREA'
+    end
+    object ODSCPropertyAPPLICANTSPACE: TFloatField
+      FieldName = 'APPLICANTSPACE'
+    end
+    object ODSCPropertyEARTHQUAKEDETAILS: TStringField
+      FieldName = 'EARTHQUAKEDETAILS'
+      Size = 128
+    end
+    object ODSCPropertyFLAMABLE: TStringField
+      FieldName = 'FLAMABLE'
+      Size = 1024
+    end
+    object ODSCPropertySURROINDINGDETAILS: TStringField
+      FieldName = 'SURROINDINGDETAILS'
+      Size = 1024
+    end
+    object ODSCPropertySITUETED: TStringField
+      FieldName = 'SITUETED'
+      Size = 32
+    end
+    object ODSCPropertyGUARD: TStringField
+      FieldName = 'GUARD'
+      Size = 32
+    end
+    object ODSCPropertyALARM: TStringField
+      FieldName = 'ALARM'
+      Size = 32
+    end
+    object ODSCPropertyLOCKS: TStringField
+      FieldName = 'LOCKS'
+      Size = 32
+    end
+    object ODSCPropertySECURITYLOCKS: TStringField
+      FieldName = 'SECURITYLOCKS'
+      Size = 32
+    end
+    object ODSCPropertyBARS: TStringField
+      FieldName = 'BARS'
+      Size = 32
+    end
+    object ODSCPropertyOTHER: TStringField
+      FieldName = 'OTHER'
+      Size = 128
+    end
+    object ODSCPropertySETTINGS: TStringField
+      FieldName = 'SETTINGS'
+      Size = 1024
+    end
+    object ODSCPropertyREPAIR: TStringField
+      FieldName = 'REPAIR'
+      Size = 1024
+    end
+    object ODSCPropertyHEATED: TStringField
+      FieldName = 'HEATED'
+      Size = 128
+    end
+    object ODSCPropertyRISKID: TFloatField
+      FieldName = 'RISKID'
+    end
+    object ODSCPropertyANNUAL: TFloatField
+      FieldName = 'ANNUAL'
+    end
+    object ODSCPropertyWAGES: TFloatField
+      FieldName = 'WAGES'
+    end
+    object ODSCPropertyRENT: TFloatField
+      FieldName = 'RENT'
+    end
+    object ODSCPropertyEMPLOYES: TFloatField
+      FieldName = 'EMPLOYES'
+    end
+    object ODSCPropertyEXPIRITY: TDateTimeField
+      FieldName = 'EXPIRITY'
+    end
+    object ODSCPropertyLOSSHISTORY: TStringField
+      FieldName = 'LOSSHISTORY'
+      Size = 1024
+    end
+    object ODSCPropertyRENEWAL: TStringField
+      FieldName = 'RENEWAL'
+      Size = 1024
+    end
+    object ODSCPropertyTHIRDPARTY: TStringField
+      FieldName = 'THIRDPARTY'
+      Size = 32
+    end
+    object ODSCPropertyOTHERINF: TStringField
+      FieldName = 'OTHERINF'
+      Size = 32
+    end
+    object ODSCPropertyINDEMINITY: TStringField
+      FieldName = 'INDEMINITY'
+      Size = 10
+    end
+    object ODSCPropertyVALUETYPE: TStringField
+      FieldName = 'VALUETYPE'
+      Size = 128
+    end
+    object ODSCPropertyBUILDINGS: TFloatField
+      FieldName = 'BUILDINGS'
+    end
+    object ODSCPropertyCONTENT: TFloatField
+      FieldName = 'CONTENT'
+    end
+    object ODSCPropertyEQUIPMENT: TFloatField
+      FieldName = 'EQUIPMENT'
+    end
+    object ODSCPropertyGLASS: TFloatField
+      FieldName = 'GLASS'
+    end
+    object ODSCPropertyCASH: TFloatField
+      FieldName = 'CASH'
+    end
+    object ODSCPropertyWAREHOUSE: TFloatField
+      FieldName = 'WAREHOUSE'
+    end
+    object ODSCPropertySTOCK: TFloatField
+      FieldName = 'STOCK'
+    end
+    object ODSCPropertyPRODUCTS: TFloatField
+      FieldName = 'PRODUCTS'
+    end
+    object ODSCPropertyWORKINPROGRESS: TFloatField
+      FieldName = 'WORKINPROGRESS'
+    end
+    object ODSCPropertyRAWMATERIALS: TFloatField
+      FieldName = 'RAWMATERIALS'
+    end
+    object ODSCPropertyCLOSE_PREFIX: TIntegerField
+      FieldName = 'CLOSE_PREFIX'
+    end
+    object ODSCPropertyTYPEID: TIntegerField
+      FieldName = 'TYPEID'
+    end
+    object ODSCPropertyPROFITID: TFloatField
+      FieldName = 'PROFITID'
+    end
+  end
+  object CPropertySource: TDataSource
+    DataSet = ODSCProperty
+    Left = 324
+    Top = 120
+  end
+  object ODSContracts: TOracleDataSet
+    SQL.Strings = (
+      'select ic.rowid, ic.* from ins_contracts ic'
+      'where blank_id = :blankid'
+      'and type_id = 5')
+    Variables.Data = {
+      0300000001000000080000003A424C414E4B4944040000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      040000000F00000002000000494401000000000007000000545950455F494401
+      000000000008000000424C414E4B5F494401000000000007000000535547475F
+      494401000000000009000000504F4C4943595F49440100000000000800000049
+      4E535F444154450100000000000A000000424547494E5F444154450100000000
+      0008000000454E445F444154450100000000000900000056414C5554455F4944
+      01000000000007000000414D4D4F554E540100000000000C000000434C4F5345
+      5F505245464958010000000000060000004B4C495F49440100000000000A0000
+      004C4F414E4143435F49440100000000000A000000435552524143435F494401
+      00000000000A000000504F4C4943595F4E554D010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 288
+    Top = 152
+    object ODSContractsID: TFloatField
+      FieldName = 'ID'
+    end
+    object ODSContractsTYPE_ID: TFloatField
+      FieldName = 'TYPE_ID'
+    end
+    object ODSContractsBLANK_ID: TFloatField
+      FieldName = 'BLANK_ID'
+    end
+    object ODSContractsSUGG_ID: TFloatField
+      FieldName = 'SUGG_ID'
+    end
+    object ODSContractsPOLICY_ID: TFloatField
+      FieldName = 'POLICY_ID'
+    end
+    object ODSContractsINS_DATE: TDateTimeField
+      FieldName = 'INS_DATE'
+    end
+    object ODSContractsBEGIN_DATE: TDateTimeField
+      FieldName = 'BEGIN_DATE'
+    end
+    object ODSContractsEND_DATE: TDateTimeField
+      FieldName = 'END_DATE'
+    end
+    object ODSContractsVALUTE_ID: TFloatField
+      FieldName = 'VALUTE_ID'
+    end
+    object ODSContractsAMMOUNT: TFloatField
+      FieldName = 'AMMOUNT'
+    end
+    object ODSContractsCLOSE_PREFIX: TIntegerField
+      FieldName = 'CLOSE_PREFIX'
+    end
+    object ODSContractsKLI_ID: TFloatField
+      FieldName = 'KLI_ID'
+    end
+    object ODSContractsLOANACC_ID: TFloatField
+      FieldName = 'LOANACC_ID'
+    end
+    object ODSContractsCURRACC_ID: TFloatField
+      FieldName = 'CURRACC_ID'
+    end
+    object ODSContractsPOLICY_NUM: TStringField
+      FieldName = 'POLICY_NUM'
+      Size = 128
+    end
+  end
+  object DSContracts: TDataSource
+    DataSet = ODSContracts
+    Left = 288
+    Top = 117
+  end
+  object ODSCPropertySuggest: TOracleDataSet
+    SQL.Strings = (
+      'select icp.rowid, icp.* from ins_cproperty_suggest icp'
+      'where bid = :bid'
+      '')
+    Variables.Data = {0300000001000000040000003A424944040000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      040000000A000000020000004944010000000000030000004249440100000000
+      000B0000005249534B4144445245535301000000000010000000494E53555241
+      4E4345414D4D4F554E5401000000000007000000454E44444154450100000000
+      00070000005249534B5F49440100000000000600000046525A5F494401000000
+      000007000000434E44545F49440100000000000600000056414C5F4944010000
+      0000000C000000494E535552414E434553554D010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 256
+    Top = 152
+    object ODSCPropertySuggestID: TFloatField
+      FieldName = 'ID'
+    end
+    object ODSCPropertySuggestBID: TFloatField
+      FieldName = 'BID'
+    end
+    object ODSCPropertySuggestRISKADDRESS: TStringField
+      FieldName = 'RISKADDRESS'
+      Size = 256
+    end
+    object ODSCPropertySuggestINSURANCEAMMOUNT: TFloatField
+      FieldName = 'INSURANCEAMMOUNT'
+    end
+    object ODSCPropertySuggestENDDATE: TDateTimeField
+      FieldName = 'ENDDATE'
+    end
+    object ODSCPropertySuggestRISK_ID: TFloatField
+      FieldName = 'RISK_ID'
+    end
+    object ODSCPropertySuggestFRZ_ID: TFloatField
+      FieldName = 'FRZ_ID'
+    end
+    object ODSCPropertySuggestCNDT_ID: TFloatField
+      FieldName = 'CNDT_ID'
+    end
+    object ODSCPropertySuggestVAL_ID: TFloatField
+      FieldName = 'VAL_ID'
+    end
+    object ODSCPropertySuggestINSURANCESUM: TFloatField
+      FieldName = 'INSURANCESUM'
+    end
+  end
+  object CPSuggestSource: TDataSource
+    DataSet = ODSCPropertySuggest
+    Left = 256
+    Top = 117
+  end
+  object AValute: TOracleDataSet
+    SQL.Strings = (
+      'select valute, val_name, valu_name, valu_short from avalute')
+    QBEDefinition.QBEFieldDefs = {
+      04000000040000000600000056414C5554450100000000000800000056414C5F
+      4E414D450100000000000900000056414C555F4E414D450100000000000A0000
+      0056414C555F53484F5254010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 400
+    Top = 72
+    object AValuteVALU_NAME: TStringField
+      FieldName = 'VALU_NAME'
+      Size = 25
+    end
+    object AValuteVALUTE: TIntegerField
+      FieldName = 'VALUTE'
+      Required = True
+    end
+    object AValuteVAL_NAME: TStringField
+      FieldName = 'VAL_NAME'
+      Size = 10
+    end
+    object AValuteVALU_SHORT: TStringField
+      FieldName = 'VALU_SHORT'
+      Size = 10
+    end
+  end
+  object AValuteData: TDataSource
+    DataSet = AValute
+    Left = 368
+    Top = 72
+  end
+  object ODSConditions: TOracleDataSet
+    SQL.Strings = (
+      'select idr.rowid, idr.* from ins_dict_conditions idr')
+    QBEDefinition.QBEFieldDefs = {
+      0400000002000000020000004944010000000000040000004E414D4501000000
+      0000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 280
+    Top = 45
+    object ODSConditionsID: TFloatField
+      FieldName = 'ID'
+    end
+    object ODSConditionsNAME: TStringField
+      FieldName = 'NAME'
+      Size = 1024
+    end
+  end
+  object ConditionsData: TDataSource
+    DataSet = ODSConditions
+    Left = 280
+    Top = 77
+  end
+  object Franshiz: TOracleDataSet
+    SQL.Strings = (
+      'select idr.rowid, idr.* from ins_dict_franshiz idr')
+    QBEDefinition.QBEFieldDefs = {
+      0400000002000000020000004944010000000000040000004E414D4501000000
+      0000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 312
+    Top = 45
+    object FranshizID: TFloatField
+      FieldName = 'ID'
+    end
+    object FranshizNAME: TStringField
+      FieldName = 'NAME'
+      Size = 1024
+    end
+  end
+  object FranshizData: TDataSource
+    DataSet = Franshiz
+    Left = 312
+    Top = 77
+  end
+  object SuggestExporter: TINSWordExporter
+    Left = 192
+    Top = 152
+  end
+  object PolicyContainer: TPlgModalContainer
+    Left = 192
+    Top = 80
+  end
+end

@@ -1,0 +1,389 @@
+unit UntCashSettings;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, ExtCtrls, Mask, DBCtrls, Db, OracleData, Buttons;
+
+type
+  TFormCashSettings = class(TForm)
+    Panel1: TPanel;
+    Panel2: TPanel;
+    Panel3: TPanel;
+    StaticText2: TStaticText;
+    Panel5: TPanel;
+    Panel6: TPanel;
+    StaticText5: TStaticText;
+    Panel7: TPanel;
+    StaticText6: TStaticText;
+    CommitButton: TButton;
+    CancelButton: TButton;
+    Panel8: TPanel;
+    Panel9: TPanel;
+    StaticText8: TStaticText;
+    Panel10: TPanel;
+    StaticText9: TStaticText;
+    GroupBox1: TGroupBox;
+    GroupBox2: TGroupBox;
+    Chck1: TCheckBox;
+    Chck3: TCheckBox;
+    Chck2: TCheckBox;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label5: TLabel;
+    Chck4: TCheckBox;
+    Label6: TLabel;
+    GroupBox3: TGroupBox;
+    Chck5: TCheckBox;
+    Label3: TLabel;
+    Label4: TLabel;
+    Chck6: TCheckBox;
+    Label7: TLabel;
+    Chck7: TCheckBox;
+    Label8: TLabel;
+    Chck8: TCheckBox;
+    Label9: TLabel;
+    Chck9: TCheckBox;
+    Label10: TLabel;
+    NatBalance: TEdit;
+    DescriptionAz: TEdit;
+    DescriptionEng: TEdit;
+    signatyre: TEdit;
+    responsible_person: TEdit;
+    handover: TEdit;
+    chief: TEdit;
+    cashier: TEdit;
+    amount: TEdit;
+    chief_: TEdit;
+    accountant: TEdit;
+    operator_: TEdit;
+    cashier_: TEdit;
+    Label11: TLabel;
+    chk5: TCheckBox;
+    controller: TEdit;
+    controller_: TEdit;
+    chk_82: TCheckBox;
+    Label12: TLabel;
+    StaticText1: TStaticText;
+    StaticText4: TStaticText;
+    StaticText7: TStaticText;
+    Panel4: TPanel;
+    StaticText3: TStaticText;
+    ForBalance: TEdit;
+    SpeedButton1: TSpeedButton;
+    p_operator: TEdit;
+    StaticText10: TStaticText;
+    EditOperator: TEdit;
+    EditAccountant: TEdit;
+    StaticText11: TStaticText;
+    StaticText12: TStaticText;
+    procedure CancelButtonClick(Sender: TObject);
+
+    procedure CommitButtonClick(Sender: TObject);
+    procedure FormKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure Chck_1Click(Sender: TObject);
+    procedure Chck1Click(Sender: TObject);
+    procedure Chck2Click(Sender: TObject);
+    procedure Chck3Click(Sender: TObject);
+    procedure Chck4Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure Chck5Click(Sender: TObject);
+    procedure Chck6Click(Sender: TObject);
+    procedure Chck7Click(Sender: TObject);
+    procedure Chck8Click(Sender: TObject);
+    procedure Chck9Click(Sender: TObject);
+    procedure Editfield;
+    procedure FormActivate(Sender: TObject);
+    procedure chk5Click(Sender: TObject);
+
+    procedure chk_82Click(Sender: TObject);
+    procedure SpeedButton1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormCashSettings: TFormCashSettings;
+
+implementation
+
+uses CashDataModule, UntOrderRpt, UntQRReceiptOrder, PhotoImpl,sboapiDataModuleImpl, SBTranslateProc,
+  CashDeskImpl;
+
+{$R *.DFM}
+
+procedure TFormCashSettings.CancelButtonClick(Sender: TObject);
+begin
+   Close;
+end;
+
+procedure TFormCashSettings.CommitButtonClick(Sender: TObject);
+begin
+  CashDataMod.OPCash.CallProcedure('update_cashsettings',
+                                 [NatBalance.text
+                                 ,ForBalance.text
+                                 ,DescriptionAz.text
+                                 ,DescriptionEng.text
+                                 ,signatyre.text
+                                 ,responsible_person.text
+                                 ,handover.text
+                                 ,chief.text
+                                 ,p_operator.text
+                                 ,cashier.text
+                                 ,amount.text
+                                 ,chief_.text
+                                 ,accountant.text
+                                 ,operator_.text
+                                 ,cashier_.text
+                                 ,controller.text
+                                 ,controller_.text
+                                 ,EditOperator.Text
+                                 ,EditAccountant.Text
+                                 ]);
+  CashDataMod.Settings.refresh;
+  Close;
+end;
+
+procedure TFormCashSettings.FormKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+ if (Key =VK_ESCAPE) then
+   CancelButton.Click;
+
+end;
+
+procedure TFormCashSettings.Chck_1Click(Sender: TObject);
+begin
+ with (Sender as TCheckBox) do
+  if Checked =True then
+      Tag :=1
+  else
+      Tag :=0;
+end;
+
+procedure TFormCashSettings.Chck1Click(Sender: TObject);
+begin
+
+      if chck1.checked then
+      handover.text :='1'
+      else
+      handover.text :='0';
+end;
+
+procedure TFormCashSettings.Chck2Click(Sender: TObject);
+begin
+
+      if chck2.checked then
+      chief.text :='1'
+      else
+      chief.text :='0';
+end;
+
+procedure TFormCashSettings.Chck3Click(Sender: TObject);
+begin
+
+      if chck3.checked then
+      p_operator.text :='1'
+      else
+      p_operator.text :='0';
+end;
+
+procedure TFormCashSettings.Chck4Click(Sender: TObject);
+begin
+{ with (Sender as TCheckBox) do
+  if Checked =True then
+      Tag :=1
+  else
+      Tag :=0; }
+      if chck4.checked then
+      cashier.text :='1'
+      else
+      cashier.text :='0';
+end;
+
+procedure TFormCashSettings.FormCreate(Sender: TObject);
+var  c,c2 ,k,us:variant ;
+begin
+  FormPhoto :=TFormPhoto.Create(Self);
+  Chck1.checked :=true;
+  Chck2.checked :=true;
+  Chck3.checked :=true;
+  Chck4.checked :=true;
+  Chck5.checked :=true;
+  Chck6.checked :=true;
+  Chck7.checked :=true;
+  Chck8.checked :=true;
+  Chck9.checked :=true;
+  Chk5.checked :=true;
+  Chk_82.checked :=true;
+  with CashDataMod.Settings do begin
+   if not Active then Active :=true;
+
+   if trim(FieldByName('HANDOVER').AsString)='0' then
+      chck1.checked :=false;
+
+   if trim(FieldByName('Chief').AsString)='0' then
+      chck2.checked :=false;
+
+   if trim(FieldByName('Operator').AsString)='0' then
+      chck3.checked :=false;
+
+   if trim(FieldByName('Cashier').AsString)='0' then
+      chck4.checked :=false;
+
+   if trim(FieldByName('Amount').AsString)='0' then
+      chck5.checked :=false;
+
+   if trim(FieldByName('Chief_out').AsString)='0' then
+      chck6.checked :=false;
+
+   if trim(FieldByName('Accountant').AsString)='0' then
+      chck7.checked :=false;
+
+   if trim(FieldByName('Operator_out').AsString)='0' then
+      chck8.checked :=false;
+
+   if trim(FieldByName('Cashier_out').AsString)='0' then
+      chck9.checked :=false;
+
+   if trim(FieldByName('Controller').AsString)='0' then
+      chk5.checked :=false;
+
+   if trim(FieldByName('Controller_out').AsString)='0' then
+      chk_82.checked :=false;
+  end;
+  SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TFormCashSettings.Chck5Click(Sender: TObject);
+begin
+
+        if chck5.checked then
+
+      amount.text :='1'
+      else
+      amount.text :='0';
+
+end;
+
+procedure TFormCashSettings.EditField;
+begin
+  with CashDataMod.Settings do begin
+   NatBalance.Text := FieldbyName('cashbalancenational').AsString;
+   ForBalance.Text := FieldByName('cashbalanceenglish').AsString;
+   DescriptionAz.Text := FieldByName('description_az').AsString;
+   DescriptionEng.Text := FieldByName('description_eng').AsString;
+   Signatyre.Text := FieldByName('signatyre').AsString;
+   Responsible_person.Text := FieldByName('responsible_person').AsString;
+   EditOperator.Text := FieldByName('OperatorTitle').AsString;
+   EditAccountant.Text := FieldByName('Accountant').AsString;
+  end;
+end;
+
+procedure TFormCashSettings.Chck6Click(Sender: TObject);
+begin
+
+       if chck6.checked then
+
+      chief_.text :='1'
+      else
+      chief_.text :='0';
+      
+      
+      
+end;
+
+procedure TFormCashSettings.Chck7Click(Sender: TObject);
+begin
+
+       if chck7.checked then
+
+      accountant.text :='1'
+      else
+      accountant.text :='0';
+end;
+
+procedure TFormCashSettings.Chck8Click(Sender: TObject);
+begin
+ 
+       if chck8.checked then
+
+      operator_.text :='1'
+      else
+      operator_.text :='0';
+end;
+
+procedure TFormCashSettings.Chck9Click(Sender: TObject);
+begin
+
+       if chck9.checked then
+
+      cashier_.text :='1'
+      else
+      cashier_.text :='0';
+end;
+
+procedure TFormCashSettings.FormActivate(Sender: TObject);
+var  c,c2 ,k,us:variant ;
+begin
+     {
+
+              k:=FrmCashDesk.CBDebetFilial.Items.Count ;;
+  if k=2 then
+   begin
+     GroupBox1.Top:=256;
+   SpeedButton1.Top:=414;
+  CommitButton.Top:=414 ;
+  CancelButton.Top:=414  ;
+  FormCashSettings.ClientHeight:=459;
+
+
+   end
+   else
+   begin
+   StaticText11.Visible:=false;
+GroupBox1.Top:=191;
+SpeedButton1.Top:=358;
+CommitButton.Top:=358 ;
+CancelButton.Top:=358  ;
+FormCashSettings.ClientHeight:=395;
+
+   end;
+            }
+
+Editfield;  //----TKenan
+end;
+
+procedure TFormCashSettings.chk5Click(Sender: TObject);
+begin
+      if chk5.checked then
+      controller.text :='1'
+      else
+      controller.text :='0';
+
+end;
+
+
+
+procedure TFormCashSettings.chk_82Click(Sender: TObject);
+begin
+
+       if chk_82.checked then
+
+      controller_.text :='1'
+      else
+      controller_.text :='0';
+
+end;
+
+
+procedure TFormCashSettings.SpeedButton1Click(Sender: TObject);
+begin
+FormPhoto.showmodal;
+end;
+
+end.

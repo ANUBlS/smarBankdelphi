@@ -1,0 +1,1561 @@
+object CustDataModu: TCustDataModu
+  OldCreateOrder = False
+  OnCreate = DataModuleCreate
+  OnDestroy = DataModuleDestroy
+  Height = 640
+  Width = 853
+  object PersonelTypeDataSet: TOracleDataSet
+    SQL.Strings = (
+      'SELECT *'
+      '  FROM smart.avalute')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      0500000002000000040000004900440001000000000016000000440045005300
+      4300520049005000540049004F004E00010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 168
+    Top = 15
+  end
+  object srcPersonelType: TDataSource
+    DataSet = PersonelTypeDataSet
+    Left = 163
+    Top = 81
+  end
+  object sysdat: TOracleDataSet
+    SQL.Strings = (
+      'select * from smart.sysdat')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000040000000E000000540045004B005F00440041005400010000000000
+      1000000050005200450044005F004400410054000100000000000E0000004100
+      520043005F004400410059000100000000000A00000043004C004F0053004500
+      010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 271
+    Top = 22
+  end
+  object ResultDS2: TOracleDataSet
+    SQL.Strings = (
+      
+        'SELECT rownum sira,f.*,s.*,o.ostat,(select val_name from smart.a' +
+        'valute where valute=p.currency) val'
+      ',p.dateofconclusion, p.creditlineamount krxet,'
+      
+        ' trunc(months_between( p.duedatefirstcontract ,p.dateofconclusio' +
+        'n)) muddet,p.duedatefirstcontract ,'
+      
+        'trunc(months_between(duedatelastcontract,duedatefirstcontract)) ' +
+        'plor,'
+      
+        ' (select description from cm_credittypes where id=p.credittype) ' +
+        'tip,'
+      'case when  f.DEBTMAIN<>0 then'
+      
+        '( (select round(INTEREST,2) from CM_INT_currSTATE where creditid' +
+        '=p.id)*360/f.DEBTMAIN)/(select tek_dat-pred_dat as  d from sb_sy' +
+        'sdat)'
+      'else 0 end as krorafaiz    '
+      
+        ' FROM cm_report_f1 f,cm_active_credits p,cm_payment_schedule_por' +
+        'tfel s,smart.temprate o'
+      'where f.creditid=p.id'
+      'and s.creditid=p.id and o.val_kod=p.currency'
+      'ORDER BY'
+      '  sira'
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      '/*SELECT f.*'
+      '     , cm_ak_funcs.getlmcount(f.creditid,4) pret'
+      '     , cm_ak_funcs.getlmcount(f.creditid,6) idd'
+      '     , cm_ak_funcs.getlmcount(f.creditid,7) qatn'
+      '     , cm_ak_funcs.geticracount(f.creditid,7) icra'
+      
+        '    ,s.paymentdate,s.principal,s.interest,s.principal+s.interest' +
+        ' as cem,'
+      '  case when s.sex=1 then'
+      ' '#39'Ki'#1096#1080#39'  '
+      'when s.sex=0 then '#39'Qadin'#39
+      ' end as sex,cm_r'
+      ''
+      
+        '  FROM cm_report_f1 f,cm_payment_schedule_portfel s,cm_active_cr' +
+        'edits p,cm_categories c where f.CREDITID=s.CREDITID and p.CUSTOM' +
+        'ERTYPE=c.id'
+      ''
+      ''
+      ''
+      'ORDER BY'
+      '  branch, district, village, boorowername*/'
+      ' '
+      '')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000004A000000100000004300520045004400490054004900440001000000
+      00001400000042004F004F0052004F0057004500520049004400010000000000
+      0C0000004300520044004E0055004D000100000000001800000042004F004F00
+      52004F005700450052004E0041004D0045000100000000001000000042005200
+      41004E0043004800490044000100000000000C0000004200520041004E004300
+      4800010000000000140000004400490053005400520049004300540049004400
+      0100000000001000000044004900530054005200490043005400010000000000
+      12000000560049004C004C00410047004500490044000100000000000E000000
+      560049004C004C00410047004500010000000000120000005000550052005000
+      4F0053004500490044000100000000000E00000050005500520050004F005300
+      45000100000000000C0000005400590050004500490044000100000000001000
+      0000540059005000450044004500530043000100000000001000000043005200
+      440043004F0055004E0054000100000000001A00000050004100590045004400
+      43005200440043004F0055004E0054000100000000001A000000460049005200
+      5300540054005200430048004400410054004500010000000000160000004C00
+      4100530054005000410059004400410054004500010000000000160000004700
+      4900560045004E0041004D004F0055004E005400010000000000220000004300
+      41004C00430055004C004100540045004400500045005200430045004E005400
+      01000000000018000000440041005400450044004500420054004D0041004900
+      4E00010000000000160000004400410054004500440045004200540049004E00
+      540001000000000012000000500041005900450044004D00410049004E000100
+      00000000100000005000410059004500440049004E0054000100000000001800
+      0000500041005900450044004D004F004E004D00410049004E00010000000000
+      16000000500041005900450044004D004F004E0049004E005400010000000000
+      1000000044004500420054004D00410049004E000100000000000E0000004400
+      45004200540049004E0054000100000000001800000044004500420054004F00
+      5600450052004D00410049004E00010000000000160000004400450042005400
+      4F0056004500520049004E00540001000000000014000000430041004C004300
+      5300540041005400550053000100000000001400000043005200450044005000
+      4500520049004F0044000100000000000E00000049004E005400520041005400
+      45000100000000000C0000004F00440052004100540045000100000000000A00
+      0000530042004F005500540001000000000016000000500052004F004C004F00
+      4E004700440041005400450001000000000014000000500052004F004C004F00
+      4E00470043004E0054000100000000002000000044005500450049004E005400
+      4500520045005300540044004500420049005400010000000000140000004400
+      45005300430052004900500049004F004E000100000000001000000053004600
+      4500520041004400410059000100000000001E00000050005500520050004F00
+      530045004F004600430052004500440049005400010000000000100000004300
+      55005200520045004E0043005900010000000000120000004C004F0041004E00
+      410043004300490044000100000000001A00000042004F004F0052004F005700
+      45005200410043004300490044000100000000001E00000042004F004F005200
+      4F0057004500520041004300430052004500530054000100000000000E000000
+      41004400440052004500530053000100000000000C000000530041004C004100
+      5200590001000000000016000000500048004F004E0045004E0055004D004200
+      450052000100000000000E000000520045005300450052005600450001000000
+      00000E0000004C00410054004500440041005900010000000000160000004400
+      450053004300520049005000540049004F004E00010000000000120000004700
+      490052004F005600520045005300540001000000000026000000500052004900
+      4D00410052005900520045005300450052005600450041005200450053005400
+      0100000000002C0000005000520049004D004100520059005000550052005200
+      4500530045005200560045004100520045005300540001000000000014000000
+      470045004300470055004E004600410049005A00010000000000140000005000
+      4C0045004400470045004E0041004D004500010000000000180000004F004400
+      45004D0045005F0045004D00530041004C004900010000000000180000004500
+      580050004500520054005F005F004E0041004D0045000100000000000A000000
+      4B0055005200550053000100000000002000000044004100540045004F004600
+      43004F004E0043004C005500530049004F004E000100000000000A0000004B00
+      5200580045005400010000000000080000005300490052004100010000000000
+      0C0000004D005500440044004500540001000000000028000000440055004500
+      44004100540045004600490052005300540043004F004E005400520041004300
+      540001000000000014000000430052004500440049005400490044005F003100
+      010000000000160000005000410059004D0045004E0054004400410054004500
+      010000000000120000005000520049004E0043004900500041004C0001000000
+      00001000000049004E0054004500520045005300540001000000000006000000
+      5300450058000100000000000A0000004F005300540041005400010000000000
+      06000000560041004C0001000000000006000000540049005000010000000000
+      120000004B0052004F00520041004600410049005A0001000000000008000000
+      50004C004F005200010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 136
+    Top = 176
+    object ResultDS2SIRA: TFloatField
+      FieldName = 'SIRA'
+    end
+    object ResultDS2CREDITID: TFloatField
+      FieldName = 'CREDITID'
+      Required = True
+    end
+    object ResultDS2BOOROWERID: TFloatField
+      FieldName = 'BOOROWERID'
+      Required = True
+    end
+    object ResultDS2CRDNUM: TWideStringField
+      FieldName = 'CRDNUM'
+      Required = True
+      Size = 255
+    end
+    object ResultDS2BOOROWERNAME: TWideStringField
+      FieldName = 'BOOROWERNAME'
+      Required = True
+      Size = 255
+    end
+    object ResultDS2BRANCHID: TFloatField
+      FieldName = 'BRANCHID'
+      Required = True
+    end
+    object ResultDS2BRANCH: TWideStringField
+      FieldName = 'BRANCH'
+      Required = True
+      Size = 294
+    end
+    object ResultDS2DISTRICTID: TFloatField
+      FieldName = 'DISTRICTID'
+      Required = True
+    end
+    object ResultDS2DISTRICT: TWideStringField
+      FieldName = 'DISTRICT'
+      Required = True
+      Size = 255
+    end
+    object ResultDS2VILLAGEID: TFloatField
+      FieldName = 'VILLAGEID'
+      Required = True
+    end
+    object ResultDS2VILLAGE: TWideStringField
+      FieldName = 'VILLAGE'
+      Required = True
+      Size = 255
+    end
+    object ResultDS2PURPOSEID: TFloatField
+      FieldName = 'PURPOSEID'
+      Required = True
+    end
+    object ResultDS2PURPOSE: TWideStringField
+      FieldName = 'PURPOSE'
+      Required = True
+      Size = 255
+    end
+    object ResultDS2TYPEID: TFloatField
+      FieldName = 'TYPEID'
+      Required = True
+    end
+    object ResultDS2TYPEDESC: TWideStringField
+      FieldName = 'TYPEDESC'
+      Required = True
+      Size = 10
+    end
+    object ResultDS2CRDCOUNT: TFloatField
+      FieldName = 'CRDCOUNT'
+      Required = True
+    end
+    object ResultDS2PAYEDCRDCOUNT: TFloatField
+      FieldName = 'PAYEDCRDCOUNT'
+      Required = True
+    end
+    object ResultDS2FIRSTTRCHDATE: TDateTimeField
+      FieldName = 'FIRSTTRCHDATE'
+    end
+    object ResultDS2LASTPAYDATE: TDateTimeField
+      FieldName = 'LASTPAYDATE'
+    end
+    object ResultDS2GIVENAMOUNT: TFloatField
+      FieldName = 'GIVENAMOUNT'
+      Required = True
+    end
+    object ResultDS2CALCULATEDPERCENT: TFloatField
+      FieldName = 'CALCULATEDPERCENT'
+      Required = True
+    end
+    object ResultDS2DATEDEBTMAIN: TFloatField
+      FieldName = 'DATEDEBTMAIN'
+      Required = True
+    end
+    object ResultDS2DATEDEBTINT: TFloatField
+      FieldName = 'DATEDEBTINT'
+      Required = True
+    end
+    object ResultDS2PAYEDMAIN: TFloatField
+      FieldName = 'PAYEDMAIN'
+      Required = True
+    end
+    object ResultDS2PAYEDINT: TFloatField
+      FieldName = 'PAYEDINT'
+      Required = True
+    end
+    object ResultDS2PAYEDMONMAIN: TFloatField
+      FieldName = 'PAYEDMONMAIN'
+      Required = True
+    end
+    object ResultDS2PAYEDMONINT: TFloatField
+      FieldName = 'PAYEDMONINT'
+      Required = True
+    end
+    object ResultDS2DEBTMAIN: TFloatField
+      FieldName = 'DEBTMAIN'
+      Required = True
+    end
+    object ResultDS2DEBTINT: TFloatField
+      FieldName = 'DEBTINT'
+      Required = True
+    end
+    object ResultDS2DEBTOVERMAIN: TFloatField
+      FieldName = 'DEBTOVERMAIN'
+      Required = True
+    end
+    object ResultDS2DEBTOVERINT: TFloatField
+      FieldName = 'DEBTOVERINT'
+      Required = True
+    end
+    object ResultDS2CALCSTATUS: TWideStringField
+      FieldName = 'CALCSTATUS'
+      Required = True
+      Size = 12
+    end
+    object ResultDS2CREDPERIOD: TWideStringField
+      FieldName = 'CREDPERIOD'
+      Required = True
+      Size = 35
+    end
+    object ResultDS2INTRATE: TFloatField
+      FieldName = 'INTRATE'
+    end
+    object ResultDS2ODRATE: TFloatField
+      FieldName = 'ODRATE'
+    end
+    object ResultDS2SBOUT: TFloatField
+      FieldName = 'SBOUT'
+    end
+    object ResultDS2PROLONGDATE: TDateTimeField
+      FieldName = 'PROLONGDATE'
+    end
+    object ResultDS2PROLONGCNT: TFloatField
+      FieldName = 'PROLONGCNT'
+    end
+    object ResultDS2DUEINTERESTDEBIT: TFloatField
+      FieldName = 'DUEINTERESTDEBIT'
+    end
+    object ResultDS2DESCRIPION: TWideStringField
+      FieldName = 'DESCRIPION'
+      Size = 50
+    end
+    object ResultDS2SFERADAY: TWideStringField
+      FieldName = 'SFERADAY'
+      Size = 50
+    end
+    object ResultDS2PURPOSEOFCREDIT: TWideStringField
+      FieldName = 'PURPOSEOFCREDIT'
+      Size = 50
+    end
+    object ResultDS2CURRENCY: TWideStringField
+      FieldName = 'CURRENCY'
+      Size = 65
+    end
+    object ResultDS2LOANACCID: TWideStringField
+      FieldName = 'LOANACCID'
+      Size = 30
+    end
+    object ResultDS2BOOROWERACCID: TWideStringField
+      FieldName = 'BOOROWERACCID'
+      Size = 30
+    end
+    object ResultDS2BOOROWERACCREST: TFloatField
+      FieldName = 'BOOROWERACCREST'
+    end
+    object ResultDS2ADDRESS: TWideStringField
+      FieldName = 'ADDRESS'
+      Size = 80
+    end
+    object ResultDS2SALARY: TWideStringField
+      FieldName = 'SALARY'
+      Size = 100
+    end
+    object ResultDS2PHONENUMBER: TWideStringField
+      FieldName = 'PHONENUMBER'
+      Size = 350
+    end
+    object ResultDS2RESERVE: TWideStringField
+      FieldName = 'RESERVE'
+      Size = 29
+    end
+    object ResultDS2LATEDAY: TFloatField
+      FieldName = 'LATEDAY'
+    end
+    object ResultDS2DESCRIPTION: TWideStringField
+      FieldName = 'DESCRIPTION'
+      Size = 100
+    end
+    object ResultDS2GIROVREST: TFloatField
+      FieldName = 'GIROVREST'
+    end
+    object ResultDS2PRIMARYRESERVEAREST: TFloatField
+      FieldName = 'PRIMARYRESERVEAREST'
+    end
+    object ResultDS2PRIMARYPURRESERVEAREST: TFloatField
+      FieldName = 'PRIMARYPURRESERVEAREST'
+    end
+    object ResultDS2GECGUNFAIZ: TFloatField
+      FieldName = 'GECGUNFAIZ'
+    end
+    object ResultDS2PLEDGENAME: TWideStringField
+      FieldName = 'PLEDGENAME'
+      Size = 80
+    end
+    object ResultDS2ODEME_EMSALI: TFloatField
+      FieldName = 'ODEME_EMSALI'
+    end
+    object ResultDS2EXPERT__NAME: TWideStringField
+      FieldName = 'EXPERT__NAME'
+      Size = 50
+    end
+    object ResultDS2KURUS: TFloatField
+      FieldName = 'KURUS'
+    end
+    object ResultDS2DATEOFCONCLUSION: TDateTimeField
+      FieldName = 'DATEOFCONCLUSION'
+      Required = True
+    end
+    object ResultDS2KRXET: TFloatField
+      FieldName = 'KRXET'
+      Required = True
+    end
+    object ResultDS2MUDDET: TFloatField
+      FieldName = 'MUDDET'
+    end
+    object ResultDS2DUEDATEFIRSTCONTRACT: TDateTimeField
+      FieldName = 'DUEDATEFIRSTCONTRACT'
+      Required = True
+    end
+    object ResultDS2CREDITID_1: TFloatField
+      FieldName = 'CREDITID_1'
+      Required = True
+    end
+    object ResultDS2PAYMENTDATE: TDateTimeField
+      FieldName = 'PAYMENTDATE'
+    end
+    object ResultDS2PRINCIPAL: TFloatField
+      FieldName = 'PRINCIPAL'
+    end
+    object ResultDS2INTEREST: TFloatField
+      FieldName = 'INTEREST'
+    end
+    object ResultDS2SEX: TWideStringField
+      FieldName = 'SEX'
+      Size = 12
+    end
+    object ResultDS2OSTAT: TFloatField
+      FieldName = 'OSTAT'
+    end
+    object ResultDS2VAL: TWideStringField
+      FieldName = 'VAL'
+      Size = 10
+    end
+    object ResultDS2TIP: TWideStringField
+      FieldName = 'TIP'
+      Size = 128
+    end
+    object ResultDS2KRORAFAIZ: TFloatField
+      FieldName = 'KRORAFAIZ'
+    end
+    object ResultDS2PLOR: TFloatField
+      FieldName = 'PLOR'
+    end
+  end
+  object DataSource1: TDataSource
+    Left = 48
+    Top = 248
+  end
+  object DataSource2: TDataSource
+    DataSet = ResultDS2
+    Left = 144
+    Top = 248
+  end
+  object Main: TOracleDataSet
+    SQL.Strings = (
+      'select id from cm_active_credits '
+      
+        'where boorowerid in( select boorowerid from cm_active_credits wh' +
+        'ere id=:credid)'
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      '')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000E0000003A00430052004500440049004400030000000000
+      000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      0500000027000000040000004900440001000000000010000000430055005200
+      520045004E00430059000100000000001400000042004F004F0052004F005700
+      45005200490044000100000000001A00000049004E0049005400490041004C00
+      41004D004F0055004E0054000100000000002000000043005200450044004900
+      54004C0049004E00450041004D004F0055004E00540001000000000026000000
+      41004E004E00550041004C00590049004E005400450052004500530054005200
+      4100540045000100000000002400000041004E004E00550041004C0059004F00
+      5600450052004400550045005200410054004500010000000000240000004100
+      4E004E00550041004C005900500045004E0041004C0054005900520041005400
+      45000100000000002000000044004100540045004F00460043004F004E004300
+      4C005500530049004F004E000100000000001600000044004100540045004F00
+      46004700520041004E0054000100000000002800000044005500450044004100
+      540045004600490052005300540043004F004E00540052004100430054000100
+      000000002600000044005500450044004100540045004C004100530054004300
+      4F004E00540052004100430054000100000000001200000043004C004F005300
+      450044004100540045000100000000001C0000004E0055004D00420045005200
+      4F0046004300520045004400490054000100000000001E000000500055005200
+      50004F00530045004F0046004300520045004400490054000100000000001800
+      000043005500530054004F004D00450052005400590050004500010000000000
+      1400000043005200450044004900540054005900500045000100000000001800
+      000050004500520053004F004E0041004C005400590050004500010000000000
+      160000004100550054004F005000410059004D0045004E005400010000000000
+      140000004100550054004F004500580050004900520045000100000000001000
+      0000550053005200470052004F00550050000100000000001000000042005200
+      41004E0043004800490044000100000000000800000055005300490044000100
+      000000001800000050004100520054004900540049004F004E004B0045005900
+      0100000000001C00000041004E004E00550041004C00420041004E004B005200
+      410054004500010000000000200000004E0045005700460049004E0041004E00
+      4300450041004D004F0055004E005400010000000000240000004E0055004D00
+      4200450052004F004600420041004E004B004300520045004400490054000100
+      000000001A00000049004E005400430041004C0043004D004500540048004F00
+      44000100000000001400000050004C0045004400470053004F00520054005300
+      0100000000001400000041004300540049005600490054004900450053000100
+      000000001E00000041004300540049005600490054004900450053005F005400
+      5900500045000100000000001200000043005200450044004900540041004300
+      54000100000000000C000000410049004D005F00490044000100000000001000
+      0000450058005000450052005400490044000100000000001200000050004100
+      590049004E005400440041005900010000000000120000005000410059005000
+      4500520049004F0044000100000000000C000000530054004100540055005300
+      0100000000001200000049004E00530045005200540044004100540001000000
+      00001000000050004F00530054005500530045005200010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 432
+    Top = 104
+  end
+  object OraclePackage1: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'cm_ak_reports'
+    ParameterMode = pmNamed
+    Left = 443
+    Top = 178
+  end
+  object UsrGrpDataSet: TOracleDataSet
+    SQL.Strings = (
+      '  SELECT *'
+      '    FROM filial')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      0500000002000000040000004900440001000000000016000000440045005300
+      4300520049005000540049004F004E00010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 48
+    Top = 15
+  end
+  object srcUsrGrp: TDataSource
+    DataSet = UsrGrpDataSet
+    Left = 48
+    Top = 71
+  end
+  object ResultDS1: TOracleDataSet
+    SQL.Strings = (
+      
+        'SELECT rownum sira,f.*,(select val_name from smart.avalute where' +
+        ' valute=p.currency) val'
+      ',p.dateofconclusion, p.creditlineamount krxet,'
+      
+        ' trunc(months_between( p.duedatefirstcontract ,p.dateofconclusio' +
+        'n)) muddet,p.duedatefirstcontract ,'
+      
+        'trunc(months_between(duedatelastcontract,duedatefirstcontract)) ' +
+        'plor,'
+      
+        '(select description from cm_credittypes where id=p.credittype) t' +
+        'ip ,'
+      
+        '(SELECT newammount  FROM cm_prolong_crammount where id in( SELEC' +
+        'T max(id)  FROM cm_prolong_crammount where creditid=p.id )and cr' +
+        'editid=p.id) sonmeb ,'
+      'case when  f.DEBTMAIN<>0 then'
+      
+        '( (select round(INTEREST,2) from CM_INT_currSTATE where creditid' +
+        '=p.id)*360/f.DEBTMAIN)/(select tek_dat-pred_dat as  d from sb_sy' +
+        'sdat) '
+      'else 0 end as krorafaiz '
+      ' FROM cm_report_f1 f,cm_active_credits p'
+      'where f.creditid=p.id'
+      ''
+      'ORDER BY'
+      '  sira'
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      '/*SELECT f.*'
+      '     , cm_ak_funcs.getlmcount(f.creditid,4) pret'
+      '     , cm_ak_funcs.getlmcount(f.creditid,6) idd'
+      '     , cm_ak_funcs.getlmcount(f.creditid,7) qatn'
+      '     , cm_ak_funcs.geticracount(f.creditid,7) icra'
+      
+        '    ,s.paymentdate,s.principal,s.interest,s.principal+s.interest' +
+        ' as cem,'
+      '  case when s.sex=1 then'
+      ' '#39'Ki'#1096#1080#39'  '
+      'when s.sex=0 then '#39'Qadin'#39
+      ' end as sex,cm_r'
+      ''
+      
+        '  FROM cm_report_f1 f,cm_payment_schedule_portfel s,cm_active_cr' +
+        'edits p,cm_categories c where f.CREDITID=s.CREDITID and p.CUSTOM' +
+        'ERTYPE=c.id'
+      ''
+      ''
+      ''
+      'ORDER BY'
+      '  branch, district, village, boorowername*/'
+      ' ')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      0500000045000000100000004300520045004400490054004900440001000000
+      00001400000042004F004F0052004F0057004500520049004400010000000000
+      0C0000004300520044004E0055004D000100000000001800000042004F004F00
+      52004F005700450052004E0041004D0045000100000000001000000042005200
+      41004E0043004800490044000100000000000C0000004200520041004E004300
+      4800010000000000140000004400490053005400520049004300540049004400
+      0100000000001000000044004900530054005200490043005400010000000000
+      12000000560049004C004C00410047004500490044000100000000000E000000
+      560049004C004C00410047004500010000000000120000005000550052005000
+      4F0053004500490044000100000000000E00000050005500520050004F005300
+      45000100000000000C0000005400590050004500490044000100000000001000
+      0000540059005000450044004500530043000100000000001000000043005200
+      440043004F0055004E0054000100000000001A00000050004100590045004400
+      43005200440043004F0055004E0054000100000000001A000000460049005200
+      5300540054005200430048004400410054004500010000000000160000004C00
+      4100530054005000410059004400410054004500010000000000160000004700
+      4900560045004E0041004D004F0055004E005400010000000000220000004300
+      41004C00430055004C004100540045004400500045005200430045004E005400
+      01000000000018000000440041005400450044004500420054004D0041004900
+      4E00010000000000160000004400410054004500440045004200540049004E00
+      540001000000000012000000500041005900450044004D00410049004E000100
+      00000000100000005000410059004500440049004E0054000100000000001800
+      0000500041005900450044004D004F004E004D00410049004E00010000000000
+      16000000500041005900450044004D004F004E0049004E005400010000000000
+      1000000044004500420054004D00410049004E000100000000000E0000004400
+      45004200540049004E0054000100000000001800000044004500420054004F00
+      5600450052004D00410049004E00010000000000160000004400450042005400
+      4F0056004500520049004E00540001000000000014000000430041004C004300
+      5300540041005400550053000100000000001400000043005200450044005000
+      4500520049004F0044000100000000000E00000049004E005400520041005400
+      45000100000000000C0000004F00440052004100540045000100000000000A00
+      0000530042004F005500540001000000000016000000500052004F004C004F00
+      4E004700440041005400450001000000000014000000500052004F004C004F00
+      4E00470043004E0054000100000000002000000044005500450049004E005400
+      4500520045005300540044004500420049005400010000000000140000004400
+      45005300430052004900500049004F004E000100000000001000000053004600
+      4500520041004400410059000100000000001E00000050005500520050004F00
+      530045004F004600430052004500440049005400010000000000100000004300
+      55005200520045004E0043005900010000000000120000004C004F0041004E00
+      410043004300490044000100000000001A00000042004F004F0052004F005700
+      45005200410043004300490044000100000000001E00000042004F004F005200
+      4F0057004500520041004300430052004500530054000100000000000E000000
+      41004400440052004500530053000100000000000C000000530041004C004100
+      5200590001000000000016000000500048004F004E0045004E0055004D004200
+      450052000100000000000E000000520045005300450052005600450001000000
+      00000E0000004C00410054004500440041005900010000000000160000004400
+      450053004300520049005000540049004F004E00010000000000120000004700
+      490052004F005600520045005300540001000000000026000000500052004900
+      4D00410052005900520045005300450052005600450041005200450053005400
+      0100000000002C0000005000520049004D004100520059005000550052005200
+      4500530045005200560045004100520045005300540001000000000014000000
+      470045004300470055004E004600410049005A00010000000000140000005000
+      4C0045004400470045004E0041004D004500010000000000180000004F004400
+      45004D0045005F0045004D00530041004C004900010000000000180000004500
+      580050004500520054005F005F004E0041004D0045000100000000000A000000
+      4B00550052005500530001000000000008000000530049005200410001000000
+      00000C0000004D00550044004400450054000100000000002800000044005500
+      450044004100540045004600490052005300540043004F004E00540052004100
+      430054000100000000002000000044004100540045004F00460043004F004E00
+      43004C005500530049004F004E000100000000000A0000004B00520058004500
+      540001000000000006000000560041004C000100000000000600000054004900
+      5000010000000000120000004B0052004F00520041004600410049005A000100
+      000000000800000050004C004F0052000100000000000C00000053004F004E00
+      4D0045004200010000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 48
+    Top = 168
+    object ResultDS1SIRA: TFloatField
+      FieldName = 'SIRA'
+    end
+    object ResultDS1CREDITID: TFloatField
+      FieldName = 'CREDITID'
+      Required = True
+    end
+    object ResultDS1BOOROWERID: TFloatField
+      FieldName = 'BOOROWERID'
+      Required = True
+    end
+    object ResultDS1CRDNUM: TWideStringField
+      FieldName = 'CRDNUM'
+      Required = True
+      Size = 255
+    end
+    object ResultDS1BOOROWERNAME: TWideStringField
+      FieldName = 'BOOROWERNAME'
+      Required = True
+      Size = 255
+    end
+    object ResultDS1BRANCHID: TFloatField
+      FieldName = 'BRANCHID'
+      Required = True
+    end
+    object ResultDS1BRANCH: TWideStringField
+      FieldName = 'BRANCH'
+      Required = True
+      Size = 294
+    end
+    object ResultDS1DISTRICTID: TFloatField
+      FieldName = 'DISTRICTID'
+      Required = True
+    end
+    object ResultDS1DISTRICT: TWideStringField
+      FieldName = 'DISTRICT'
+      Required = True
+      Size = 255
+    end
+    object ResultDS1VILLAGEID: TFloatField
+      FieldName = 'VILLAGEID'
+      Required = True
+    end
+    object ResultDS1VILLAGE: TWideStringField
+      FieldName = 'VILLAGE'
+      Required = True
+      Size = 255
+    end
+    object ResultDS1PURPOSEID: TFloatField
+      FieldName = 'PURPOSEID'
+      Required = True
+    end
+    object ResultDS1PURPOSE: TWideStringField
+      FieldName = 'PURPOSE'
+      Required = True
+      Size = 255
+    end
+    object ResultDS1TYPEID: TFloatField
+      FieldName = 'TYPEID'
+      Required = True
+    end
+    object ResultDS1TYPEDESC: TWideStringField
+      FieldName = 'TYPEDESC'
+      Required = True
+      Size = 10
+    end
+    object ResultDS1CRDCOUNT: TFloatField
+      FieldName = 'CRDCOUNT'
+      Required = True
+    end
+    object ResultDS1PAYEDCRDCOUNT: TFloatField
+      FieldName = 'PAYEDCRDCOUNT'
+      Required = True
+    end
+    object ResultDS1FIRSTTRCHDATE: TDateTimeField
+      FieldName = 'FIRSTTRCHDATE'
+    end
+    object ResultDS1LASTPAYDATE: TDateTimeField
+      FieldName = 'LASTPAYDATE'
+    end
+    object ResultDS1GIVENAMOUNT: TFloatField
+      FieldName = 'GIVENAMOUNT'
+      Required = True
+    end
+    object ResultDS1CALCULATEDPERCENT: TFloatField
+      FieldName = 'CALCULATEDPERCENT'
+      Required = True
+    end
+    object ResultDS1DATEDEBTMAIN: TFloatField
+      FieldName = 'DATEDEBTMAIN'
+      Required = True
+    end
+    object ResultDS1DATEDEBTINT: TFloatField
+      FieldName = 'DATEDEBTINT'
+      Required = True
+    end
+    object ResultDS1PAYEDMAIN: TFloatField
+      FieldName = 'PAYEDMAIN'
+      Required = True
+    end
+    object ResultDS1PAYEDINT: TFloatField
+      FieldName = 'PAYEDINT'
+      Required = True
+    end
+    object ResultDS1PAYEDMONMAIN: TFloatField
+      FieldName = 'PAYEDMONMAIN'
+      Required = True
+    end
+    object ResultDS1PAYEDMONINT: TFloatField
+      FieldName = 'PAYEDMONINT'
+      Required = True
+    end
+    object ResultDS1DEBTMAIN: TFloatField
+      FieldName = 'DEBTMAIN'
+      Required = True
+    end
+    object ResultDS1DEBTINT: TFloatField
+      FieldName = 'DEBTINT'
+      Required = True
+    end
+    object ResultDS1DEBTOVERMAIN: TFloatField
+      FieldName = 'DEBTOVERMAIN'
+      Required = True
+    end
+    object ResultDS1DEBTOVERINT: TFloatField
+      FieldName = 'DEBTOVERINT'
+      Required = True
+    end
+    object ResultDS1CALCSTATUS: TWideStringField
+      FieldName = 'CALCSTATUS'
+      Required = True
+      Size = 12
+    end
+    object ResultDS1CREDPERIOD: TWideStringField
+      FieldName = 'CREDPERIOD'
+      Required = True
+      Size = 35
+    end
+    object ResultDS1INTRATE: TFloatField
+      FieldName = 'INTRATE'
+    end
+    object ResultDS1ODRATE: TFloatField
+      FieldName = 'ODRATE'
+    end
+    object ResultDS1SBOUT: TFloatField
+      FieldName = 'SBOUT'
+    end
+    object ResultDS1PROLONGDATE: TDateTimeField
+      FieldName = 'PROLONGDATE'
+    end
+    object ResultDS1PROLONGCNT: TFloatField
+      FieldName = 'PROLONGCNT'
+    end
+    object ResultDS1DUEINTERESTDEBIT: TFloatField
+      FieldName = 'DUEINTERESTDEBIT'
+    end
+    object ResultDS1DESCRIPION: TWideStringField
+      FieldName = 'DESCRIPION'
+      Size = 50
+    end
+    object ResultDS1SFERADAY: TWideStringField
+      FieldName = 'SFERADAY'
+      Size = 50
+    end
+    object ResultDS1PURPOSEOFCREDIT: TWideStringField
+      FieldName = 'PURPOSEOFCREDIT'
+      Size = 50
+    end
+    object ResultDS1CURRENCY: TWideStringField
+      FieldName = 'CURRENCY'
+      Size = 65
+    end
+    object ResultDS1LOANACCID: TWideStringField
+      FieldName = 'LOANACCID'
+      Size = 30
+    end
+    object ResultDS1BOOROWERACCID: TWideStringField
+      FieldName = 'BOOROWERACCID'
+      Size = 30
+    end
+    object ResultDS1BOOROWERACCREST: TFloatField
+      FieldName = 'BOOROWERACCREST'
+    end
+    object ResultDS1ADDRESS: TWideStringField
+      FieldName = 'ADDRESS'
+      Size = 80
+    end
+    object ResultDS1SALARY: TWideStringField
+      FieldName = 'SALARY'
+      Size = 100
+    end
+    object ResultDS1PHONENUMBER: TWideStringField
+      FieldName = 'PHONENUMBER'
+      Size = 350
+    end
+    object ResultDS1RESERVE: TWideStringField
+      FieldName = 'RESERVE'
+      Size = 29
+    end
+    object ResultDS1LATEDAY: TFloatField
+      FieldName = 'LATEDAY'
+    end
+    object ResultDS1DESCRIPTION: TWideStringField
+      FieldName = 'DESCRIPTION'
+      Size = 100
+    end
+    object ResultDS1GIROVREST: TFloatField
+      FieldName = 'GIROVREST'
+    end
+    object ResultDS1PRIMARYRESERVEAREST: TFloatField
+      FieldName = 'PRIMARYRESERVEAREST'
+    end
+    object ResultDS1PRIMARYPURRESERVEAREST: TFloatField
+      FieldName = 'PRIMARYPURRESERVEAREST'
+    end
+    object ResultDS1GECGUNFAIZ: TFloatField
+      FieldName = 'GECGUNFAIZ'
+    end
+    object ResultDS1PLEDGENAME: TWideStringField
+      FieldName = 'PLEDGENAME'
+      Size = 80
+    end
+    object ResultDS1ODEME_EMSALI: TFloatField
+      FieldName = 'ODEME_EMSALI'
+    end
+    object ResultDS1EXPERT__NAME: TWideStringField
+      FieldName = 'EXPERT__NAME'
+      Size = 50
+    end
+    object ResultDS1KURUS: TFloatField
+      FieldName = 'KURUS'
+    end
+    object ResultDS1MUDDET: TFloatField
+      FieldName = 'MUDDET'
+    end
+    object ResultDS1DUEDATEFIRSTCONTRACT: TDateTimeField
+      FieldName = 'DUEDATEFIRSTCONTRACT'
+      Required = True
+    end
+    object ResultDS1DATEOFCONCLUSION: TDateTimeField
+      FieldName = 'DATEOFCONCLUSION'
+      Required = True
+    end
+    object ResultDS1KRXET: TFloatField
+      FieldName = 'KRXET'
+      Required = True
+    end
+    object ResultDS1VAL: TWideStringField
+      FieldName = 'VAL'
+      Size = 10
+    end
+    object ResultDS1TIP: TWideStringField
+      FieldName = 'TIP'
+      Size = 128
+    end
+    object ResultDS1KRORAFAIZ: TFloatField
+      FieldName = 'KRORAFAIZ'
+    end
+    object ResultDS1PLOR: TFloatField
+      FieldName = 'PLOR'
+    end
+    object ResultDS1SONMEB: TFloatField
+      FieldName = 'SONMEB'
+    end
+  end
+  object Person: TOracleDataSet
+    SQL.Strings = (
+      'select personaltype from cm_active_credits '
+      'where id=:credid')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000E0000003A00430052004500440049004400030000000000
+      000000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 416
+    Top = 256
+  end
+  object ResultDS_por: TOracleDataSet
+    SQL.Strings = (
+      'SELECT f.*'
+      '     , cm_ak_funcs.GetLMCount(f.creditid,4) "'#1055#1088#1086#1073#1083#1077#1084'"'
+      
+        '    ,s.paymentdate,s.principal,s.interest,s.principal+s.interest' +
+        ' as cem,'
+      '  case when s.sex=1 then'
+      
+        ' '#39'Ki'#1096#1080#39' when s.sex=0 then '#39'Qadin'#39' end as sex ,p.dateofconclusion' +
+        ', p.creditlineamount krxet ,pr.name adiyat,   '
+      
+        '(select name from cm_vid_sob where id=p.ACTIVITIES_TYPE)  "'#1052#1094#1083#1082#1080 +
+        #1081#1081#1103#1090' '#1085#1102#1074#1094'",'
+      
+        '(select name from cm_creditcat where id=p.CREDITACT) "'#1041#1086#1088#1078#1072#1083#1072#1085#1099#1085 +
+        ' '#1089#1077#1082#1090#1086#1088#1091'",'
+      
+        '(select description from cm_activities where id=p.ACTIVITIES) "'#1041 +
+        #1086#1088#1078#1072#1083#1072#1085#1099#1085' '#1092#1103#1072#1083#1080#1081#1081#1103#1090'i",'
+      
+        '(select description from cm_categories where  id=p.customertype)' +
+        '"'#1041#1086#1088#1078#1072#1083#1072#1085#1099#1085' '#1092#1103#1072#1083#1080#1081#1081#1103#1090' '#1085#1102#1074#1094'",'
+      
+        '(select description from cm_credittypes where id=p.credittype) "' +
+        'Kreditin tipi",'
+      
+        '(select name from AGRO_KREDIT_TARGET where id in (select DEPEND_' +
+        'ID from AGRO_KREDIT_PURPOSE where id =f.purposeid)) "M'#1103#1097#1089#1091#1083#1091#1085' '#1090#1080 +
+        #1087#1080'"'
+      
+        ' FROM cm_report_f1 f,cm_payment_schedule_portfel s,cm_portfolio ' +
+        'p , CM_SB_CUSTOMERS c ,smart.prinad pr where f.CREDITID=s.CREDIT' +
+        'ID   and p.id=f.creditid and'
+      ' c.PRINAD_KOD=pr.id and  p.BOOROWERID=c.id'
+      ''
+      ''
+      ''
+      ''
+      'ORDER BY'
+      '  branch, district, village, boorowername'
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      '/*SELECT f.*'
+      '     , cm_ak_funcs.getlmcount(f.creditid,4) pret'
+      '     , cm_ak_funcs.getlmcount(f.creditid,6) idd'
+      '     , cm_ak_funcs.getlmcount(f.creditid,7) qatn'
+      '     , cm_ak_funcs.geticracount(f.creditid,7) icra'
+      
+        '    ,s.paymentdate,s.principal,s.interest,s.principal+s.interest' +
+        ' as cem,'
+      '  case when s.sex=1 then'
+      ' '#39'Ki'#1096#1080#39'  '
+      'when s.sex=0 then '#39'Qadin'#39
+      ' end as sex,cm_r'
+      ''
+      
+        '  FROM cm_report_f1 f,cm_payment_schedule_portfel s,cm_active_cr' +
+        'edits p,cm_categories c where f.CREDITID=s.CREDITID and p.CUSTOM' +
+        'ERTYPE=c.id'
+      ''
+      ''
+      ''
+      'ORDER BY'
+      '  branch, district, village, boorowername*/'
+      ' ')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000004A000000100000004300520045004400490054004900440001000000
+      00001400000042004F004F0052004F0057004500520049004400010000000000
+      0C0000004300520044004E0055004D000100000000001800000042004F004F00
+      52004F005700450052004E0041004D0045000100000000001000000042005200
+      41004E0043004800490044000100000000000C0000004200520041004E004300
+      4800010000000000140000004400490053005400520049004300540049004400
+      0100000000001000000044004900530054005200490043005400010000000000
+      12000000560049004C004C00410047004500490044000100000000000E000000
+      560049004C004C00410047004500010000000000120000005000550052005000
+      4F0053004500490044000100000000000E00000050005500520050004F005300
+      45000100000000000C0000005400590050004500490044000100000000001000
+      0000540059005000450044004500530043000100000000001000000043005200
+      440043004F0055004E0054000100000000001A00000050004100590045004400
+      43005200440043004F0055004E0054000100000000001A000000460049005200
+      5300540054005200430048004400410054004500010000000000160000004C00
+      4100530054005000410059004400410054004500010000000000160000004700
+      4900560045004E0041004D004F0055004E005400010000000000220000004300
+      41004C00430055004C004100540045004400500045005200430045004E005400
+      01000000000018000000440041005400450044004500420054004D0041004900
+      4E00010000000000160000004400410054004500440045004200540049004E00
+      540001000000000012000000500041005900450044004D00410049004E000100
+      00000000100000005000410059004500440049004E0054000100000000001800
+      0000500041005900450044004D004F004E004D00410049004E00010000000000
+      16000000500041005900450044004D004F004E0049004E005400010000000000
+      1000000044004500420054004D00410049004E000100000000000E0000004400
+      45004200540049004E0054000100000000001800000044004500420054004F00
+      5600450052004D00410049004E00010000000000160000004400450042005400
+      4F0056004500520049004E00540001000000000014000000430041004C004300
+      5300540041005400550053000100000000001400000043005200450044005000
+      4500520049004F0044000100000000000E00000049004E005400520041005400
+      45000100000000000C0000004F00440052004100540045000100000000000A00
+      0000530042004F005500540001000000000016000000500052004F004C004F00
+      4E004700440041005400450001000000000014000000500052004F004C004F00
+      4E00470043004E0054000100000000002000000044005500450049004E005400
+      4500520045005300540044004500420049005400010000000000140000004400
+      45005300430052004900500049004F004E000100000000001000000053004600
+      4500520041004400410059000100000000001E00000050005500520050004F00
+      530045004F004600430052004500440049005400010000000000100000004300
+      55005200520045004E0043005900010000000000120000004C004F0041004E00
+      410043004300490044000100000000001A00000042004F004F0052004F005700
+      45005200410043004300490044000100000000001E00000042004F004F005200
+      4F0057004500520041004300430052004500530054000100000000000E000000
+      41004400440052004500530053000100000000000C000000530041004C004100
+      5200590001000000000016000000500048004F004E0045004E0055004D004200
+      450052000100000000000E000000520045005300450052005600450001000000
+      00000E0000004C00410054004500440041005900010000000000160000004400
+      450053004300520049005000540049004F004E00010000000000120000004700
+      490052004F005600520045005300540001000000000026000000500052004900
+      4D00410052005900520045005300450052005600450041005200450053005400
+      0100000000002C0000005000520049004D004100520059005000550052005200
+      4500530045005200560045004100520045005300540001000000000014000000
+      470045004300470055004E004600410049005A00010000000000140000005000
+      4C0045004400470045004E0041004D004500010000000000180000004F004400
+      45004D0045005F0045004D00530041004C004900010000000000180000004500
+      580050004500520054005F005F004E0041004D0045000100000000000A000000
+      4B005500520055005300010000000000160000005000410059004D0045004E00
+      54004400410054004500010000000000120000005000520049004E0043004900
+      500041004C000100000000001000000049004E00540045005200450053005400
+      0100000000000600000053004500580001000000000006000000430045004D00
+      0100000000002000000044004100540045004F00460043004F004E0043004C00
+      5500530049004F004E000100000000000A0000004B0052005800450054000100
+      000000000C0000004100440049005900410054000100000000000E0000001F04
+      40043E0431043B0435043C040100000000001C0000001C0446043B043A043804
+      390439044F04420420003D044E04320446040100000000002400000011043E04
+      4004360430043B0430043D044B043D042000410435043A0442043E0440044304
+      0100000000002A00000011043E044004360430043B0430043D044B043D042000
+      44044F0430043B043804390439044F0442046900010000000000320000001104
+      3E044004360430043B0430043D044B043D04200044044F0430043B0438043904
+      39044F04420420003D044E04320446040100000000001A0000004B0072006500
+      64006900740069006E00200074006900700069000100000000001A0000004D00
+      4F044904410443043B0443043D042000420438043F043804010000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 520
+    Top = 48
+    object ResultDS_porODEME_EMSALI: TFloatField
+      DisplayLabel = #1070#1076#1103#1084#1103' '#1103#1084#1089#1072#1083#1099
+      FieldName = 'ODEME_EMSALI'
+      DisplayFormat = '#,#0.00'
+    end
+    object ResultDS_porCREDITID: TFloatField
+      DisplayLabel = #1050#1088#1077#1076' '#1067#1044
+      FieldName = 'CREDITID'
+      Required = True
+    end
+    object ResultDS_porBOOROWERID: TFloatField
+      DisplayLabel = #1052#1094#1097' '#1067#1044
+      FieldName = 'BOOROWERID'
+      Required = True
+    end
+    object ResultDS_porCRDNUM: TWideStringField
+      DisplayLabel = #1052#1094#1075#1072#1074#1080#1083#1103' '#8470
+      FieldName = 'CRDNUM'
+      Required = True
+      Size = 255
+    end
+    object ResultDS_porBOOROWERNAME: TWideStringField
+      DisplayLabel = #1052#1094#1096#1090#1103#1088#1080
+      FieldName = 'BOOROWERNAME'
+      Required = True
+      Size = 255
+    end
+    object ResultDS_porBRANCHID: TFloatField
+      DisplayLabel = #1060#1080#1083' '#1067#1044
+      FieldName = 'BRANCHID'
+      Required = True
+      Visible = False
+    end
+    object ResultDS_porBRANCH: TWideStringField
+      DisplayLabel = #1060#1080#1083#1080#1072#1083
+      FieldName = 'BRANCH'
+      Required = True
+      Size = 255
+    end
+    object ResultDS_porVILLAGEID: TFloatField
+      DisplayLabel = #1050#1103#1085#1076' '#1067#1044
+      FieldName = 'VILLAGEID'
+      Required = True
+      Visible = False
+    end
+    object ResultDS_porDISTRICTID: TFloatField
+      DisplayLabel = #1056#1072#1081#1086#1085' '#1067#1044
+      FieldName = 'DISTRICTID'
+      Required = True
+      Visible = False
+    end
+    object ResultDS_porDISTRICT: TWideStringField
+      DisplayLabel = #1056#1072#1081#1086#1085
+      FieldName = 'DISTRICT'
+      Required = True
+      Size = 255
+    end
+    object ResultDS_porVILLAGE: TWideStringField
+      DisplayLabel = #1050#1103#1085#1076
+      FieldName = 'VILLAGE'
+      Required = True
+      Size = 255
+    end
+    object ResultDS_porCREDPERIOD: TWideStringField
+      DisplayLabel = #1042#1103#1089#1072#1080#1090#1080#1085' '#1084#1103#1085#1073#1103#1081#1080
+      FieldName = 'CREDPERIOD'
+      Required = True
+    end
+    object ResultDS_porDESCRIPION: TWideStringField
+      DisplayLabel = #1052#1094#1096#1090#1103#1088#1080#1085#1080#1085' '#1089#1090#1072#1090#1091#1089#1091
+      FieldName = 'DESCRIPION'
+      Size = 30
+    end
+    object ResultDS_porSEX: TWideStringField
+      DisplayLabel = #1041#1086#1088#1078#1072#1083#1072#1085#1099#1085' '#1078#1080#1085#1089#1080
+      FieldName = 'SEX'
+      Size = 12
+    end
+    object ResultDS_porM: TWideStringField
+      FieldName = 'M'#1103#1097#1089#1091#1083#1091#1085' '#1090#1080#1087#1080
+      Size = 128
+    end
+    object ResultDS_porPURPOSE: TWideStringField
+      DisplayLabel = #1050#1088#1077#1076#1080#1090' '#1084#1103#1097#1089#1091#1083#1091#1085#1091#1085' '#1072#1076#1099
+      FieldName = 'PURPOSE'
+      Required = True
+      Size = 255
+    end
+    object ResultDS_porSFERADAY: TWideStringField
+      DisplayLabel = #1052#1094#1096#1090#1103#1088#1080#1085#1080#1085' '#1092#1103#1072#1083#1080#1081#1081#1072#1090' '#1089#1072#1097#1103#1089#1080
+      FieldName = 'SFERADAY'
+      Size = 30
+    end
+    object ResultDS_porPURPOSEOFCREDIT: TWideStringField
+      DisplayLabel = #1050#1088#1077#1076#1080#1090#1080#1085' '#1090#1103#1081#1080#1085#1072#1090#1099
+      FieldName = 'PURPOSEOFCREDIT'
+      Size = 50
+    end
+    object ResultDS_porPURPOSEID: TFloatField
+      DisplayLabel = #1052#1103#1075#1089#1103#1076' '#1067#1044
+      FieldName = 'PURPOSEID'
+      Required = True
+      Visible = False
+    end
+    object ResultDS_porTYPEID: TFloatField
+      DisplayLabel = #1058#1080#1087' '#1067#1044
+      FieldName = 'TYPEID'
+      Required = True
+      Visible = False
+    end
+    object ResultDS_porTYPEDESC: TWideStringField
+      DisplayLabel = #1058#1080#1087
+      FieldName = 'TYPEDESC'
+      Required = True
+      Size = 10
+    end
+    object ResultDS_porCRDCOUNT: TFloatField
+      DisplayLabel = #1050#1088#1077#1076' '#1057#1072#1081
+      FieldName = 'CRDCOUNT'
+      Required = True
+      Visible = False
+    end
+    object ResultDS_porPAYEDCRDCOUNT: TFloatField
+      DisplayLabel = #1070#1076#1103#1085#1080#1083#1080#1073
+      FieldName = 'PAYEDCRDCOUNT'
+      Required = True
+      Visible = False
+    end
+    object ResultDS_porDATEOFCONCLUSION: TDateTimeField
+      DisplayLabel = #1050#1088#1077#1076#1080#1090#1080#1085' '#1074#1077#1088#1080#1083#1084#1103' '#1090#1072#1088#1080#1093#1080
+      FieldName = 'DATEOFCONCLUSION'
+      Required = True
+    end
+    object ResultDS_porFIRSTTRCHDATE: TDateTimeField
+      DisplayLabel = #1048#1083#1082' '#1090#1088#1072#1085#1096
+      FieldName = 'FIRSTTRCHDATE'
+      Required = True
+    end
+    object ResultDS_porLASTPAYDATE: TDateTimeField
+      DisplayLabel = #1057#1086#1085' '#1102#1076#1103#1084#1103
+      FieldName = 'LASTPAYDATE'
+      Required = True
+    end
+    object ResultDS_porPROLONGCNT: TFloatField
+      DisplayLabel = #1055#1088#1086#1083#1086#1085#1075#1072#1089#1081#1072' '#1084#1094#1076#1076#1103#1090#1080
+      FieldName = 'PROLONGCNT'
+    end
+    object ResultDS_porPROLONGDATE: TDateTimeField
+      DisplayLabel = #1055#1088#1086#1083#1086#1085#1075#1072#1089#1081#1072' '#1090#1072#1088#1080#1093#1080
+      FieldName = 'PROLONGDATE'
+    end
+    object ResultDS_porCURRENCY: TWideStringField
+      DisplayLabel = #1042#1072#1083#1081#1091#1090#1072
+      FieldName = 'CURRENCY'
+      Size = 65
+    end
+    object ResultDS_porKURUS: TFloatField
+      DisplayLabel = #1041#1091' '#1101#1094#1085#1103' '#1082#1091#1088#1089
+      FieldName = 'KURUS'
+    end
+    object ResultDS_porINTRATE: TFloatField
+      DisplayLabel = #1092#1072#1080#1079'. stavkas'#1099
+      FieldName = 'INTRATE'
+      DisplayFormat = '#,#0.0'
+    end
+    object ResultDS_porODRATE: TFloatField
+      DisplayLabel = 'gec '#1092#1072#1080#1079'. stavkas'#1099
+      FieldName = 'ODRATE'
+      DisplayFormat = '#,#0.0'
+    end
+    object ResultDS_porKRXET: TFloatField
+      DisplayLabel = #1050#1088#1077#1076#1080#1090#1080#1085' '#1084#1103#1073#1083#1103#1100#1080
+      FieldName = 'KRXET'
+      DisplayFormat = '#,#0.0 '
+    end
+    object ResultDS_porGIVENAMOUNT: TFloatField
+      DisplayLabel = #1042#1077#1088#1080#1083#1084#1080#1096' kr'
+      FieldName = 'GIVENAMOUNT'
+      Required = True
+      DisplayFormat = '#,#0.0 '
+    end
+    object ResultDS_porDATEDEBTMAIN: TFloatField
+      DisplayLabel = #1042#1072#1093#1090#1099' '#1095#1072#1090'.'
+      FieldName = 'DATEDEBTMAIN'
+      Required = True
+      DisplayFormat = '#,#0.0'
+    end
+    object ResultDS_porPAYEDMAIN: TFloatField
+      DisplayLabel = #1070#1076#1103#1085'. '#1103#1089#1072#1089
+      FieldName = 'PAYEDMAIN'
+      Required = True
+      DisplayFormat = '#,#0.0'
+    end
+    object ResultDS_porPAYEDMONMAIN: TFloatField
+      DisplayLabel = #1046#1072#1088#1080' '#1072#1081#1076#1072' '#1102#1076#1103#1085#1103#1085' '#1103#1089#1072#1089
+      FieldName = 'PAYEDMONMAIN'
+      Required = True
+      DisplayFormat = '#,#0.0'
+    end
+    object ResultDS_porDEBTMAIN: TFloatField
+      DisplayLabel = #1043#1072#1083#1099#1075' kredit borc'
+      FieldName = 'DEBTMAIN'
+      Required = True
+      DisplayFormat = '#,#0.0'
+    end
+    object ResultDS_porDEBTOVERMAIN: TFloatField
+      DisplayLabel = #1071#1089#1072#1089' '#1073#1086#1088#1078' '#1094#1079#1088#1103' '#1101#1077#1078#1080#1082#1084#1103' '#1084#1103#1073
+      FieldName = 'DEBTOVERMAIN'
+      Required = True
+      DisplayFormat = '#,#0.0'
+    end
+    object ResultDS_porLATEDAY: TFloatField
+      DisplayLabel = #1071'.'#1041' '#1101#1077#1078' '#1101#1094#1085#1083#1103#1088#1080#1085' '#1089#1072#1081#1099
+      FieldName = 'LATEDAY'
+    end
+    object ResultDS_porCALCULATEDPERCENT: TFloatField
+      DisplayLabel = #1065#1077#1089' '#1092#1072#1080#1079
+      FieldName = 'CALCULATEDPERCENT'
+      Required = True
+      DisplayFormat = '#,#0.0'
+    end
+    object ResultDS_porDATEDEBTINT: TFloatField
+      DisplayLabel = #1042#1072#1093#1090#1099' '#1095#1072#1090'. % '#1073#1086#1088#1078#1091
+      FieldName = 'DATEDEBTINT'
+      Required = True
+      DisplayFormat = '#,#0.0'
+    end
+    object ResultDS_porPAYEDINT: TFloatField
+      DisplayLabel = #1070#1076#1103#1085#1080#1083#1084#1080#1096'. % '#1073#1086#1088
+      FieldName = 'PAYEDINT'
+      Required = True
+      DisplayFormat = '#,#0.0'
+    end
+    object ResultDS_porPAYEDMONINT: TFloatField
+      DisplayLabel = #1046#1072#1088#1080' '#1072#1081#1076#1072' '#1102#1076#1103#1085#1103#1085' '#1092#1072#1080#1079
+      FieldName = 'PAYEDMONINT'
+      Required = True
+      DisplayFormat = '#,#0.0'
+    end
+    object ResultDS_porDEBTINT: TFloatField
+      DisplayLabel = #1060#1072#1080#1079' '#1075#1072#1083#1099#1100#1099
+      FieldName = 'DEBTINT'
+      Required = True
+      DisplayFormat = '#,#0.0'
+    end
+    object ResultDS_porDEBTOVERINT: TFloatField
+      DisplayLabel = #1060#1072#1080#1079' '#1073#1086#1088#1078#1091' '#1094#1079#1088#1103'  '#1101#1077#1078#1080#1082#1084#1103' '#1084#1103#1073
+      FieldName = 'DEBTOVERINT'
+      Required = True
+      DisplayFormat = '#,#0.0'
+    end
+    object ResultDS_porGECGUNFAIZ: TFloatField
+      DisplayLabel = #1060'.'#1041' '#1101#1077#1078' '#1101#1094#1085#1083#1103#1088#1080#1085' '#1089#1072#1081#1099
+      FieldName = 'GECGUNFAIZ'
+    end
+    object ResultDS_porLOANACCID: TWideStringField
+      DisplayLabel = #1057#1089#1091#1076#1072' '#1097#1077#1089#1072#1073#1099
+      FieldName = 'LOANACCID'
+      Size = 30
+    end
+    object ResultDS_porBOOROWERACCID: TWideStringField
+      DisplayLabel = #1046#1072#1088#1080' '#1097#1077#1089#1072#1073
+      FieldName = 'BOOROWERACCID'
+      Size = 30
+    end
+    object ResultDS_porBOOROWERACCREST: TFloatField
+      DisplayLabel = #1046#1072#1088#1080' '#1097#1077#1089#1072#1073' '#1075#1072#1083#1099#1100#1099
+      FieldName = 'BOOROWERACCREST'
+      DisplayFormat = '#,#0.0 '
+    end
+    object ResultDS_porADDRESS: TWideStringField
+      DisplayLabel = #1049#1072#1096#1072#1081#1099#1096' '#1081#1077#1088#1080
+      FieldName = 'ADDRESS'
+      Size = 60
+    end
+    object ResultDS_porPHONENUMBER: TWideStringField
+      DisplayLabel = #1058#1077#1083#1077#1092#1086#1085#1091
+      FieldName = 'PHONENUMBER'
+      Size = 350
+    end
+    object ResultDS_porSALARY: TWideStringField
+      DisplayLabel = #1060#1103#1072#1083#1080#1081#1081#1103#1090' '#1081#1077#1088#1080
+      FieldName = 'SALARY'
+      Size = 50
+    end
+    object ResultDS_porDESCRIPTION: TWideStringField
+      DisplayLabel = #1069#1080#1088#1086#1074#1091#1085' '#1085#1102#1074#1094
+      FieldName = 'DESCRIPTION'
+      Size = 45
+    end
+    object ResultDS_porPLEDGENAME: TWideStringField
+      DisplayLabel = #1069#1080#1088#1086#1074#1091#1085' '#1090#1103#1089#1074#1080#1088#1080
+      FieldName = 'PLEDGENAME'
+      Size = 80
+    end
+    object ResultDS_porGIROVREST: TFloatField
+      DisplayLabel = #1069#1080#1088#1086#1074#1091#1085' '#1076#1103#1081#1103#1088#1080
+      FieldName = 'GIROVREST'
+      DisplayFormat = '#,#0.0 '
+    end
+    object ResultDS_porDUEBYSCHEME: TFloatField
+      FieldKind = fkCalculated
+      FieldName = 'DUEBYSCHEME'
+      Visible = False
+      Calculated = True
+    end
+    object ResultDS_porCALCSTATUS: TWideStringField
+      DisplayLabel = '% '#1097#1077#1089#1072#1073#1083#1072#1084#1072#1089#1099' '#1089#1090#1072#1090#1091#1089#1091
+      FieldName = 'CALCSTATUS'
+      Required = True
+      Size = 12
+    end
+    object ResultDS_porRESERVE: TWideStringField
+      DisplayLabel = #1045#1097#1090#1080#1081#1081#1072#1090' '#1076#1103#1088#1103#1078#1103#1089#1080
+      FieldName = 'RESERVE'
+      Size = 18
+    end
+    object ResultDS_porPRIMARYRESERVEAREST: TFloatField
+      DisplayLabel = #1040#1076#1080' '#1077#1097#1090#1080#1081#1081#1072#1090' '#1097#1077#1089' '#1075#1072#1083#1099#1075
+      FieldName = 'PRIMARYRESERVEAREST'
+      DisplayFormat = '#,#0.0 '
+    end
+    object ResultDS_porPRIMARYPURRESERVEAREST: TFloatField
+      DisplayLabel = #1052#1103#1075#1089#1103#1076#1083#1080' '#1077#1097#1090#1080#1081#1081#1072#1090' '#1097#1077#1089' '#1075#1072#1083#1099#1075
+      FieldName = 'PRIMARYPURRESERVEAREST'
+      DisplayFormat = '#,#0.0 '
+    end
+    object ResultDS_porEXPERT__NAME: TWideStringField
+      DisplayLabel = #1050#1088#1077#1076#1080#1090#1080' '#1078#1103#1083#1073' '#1077#1076#1103#1085' '#1052' '#1072#1076#1099
+      FieldName = 'EXPERT__NAME'
+      Size = 25
+    end
+    object ResultDS_porDSDesigner: TWideStringField
+      FieldName = #1055#1088#1086#1073#1083#1077#1084
+      Size = 4000
+    end
+    object ResultDS_porPAYMENTDATE: TDateTimeField
+      DisplayLabel = 'Cari ayda '#1102#1076#1103#1085#1080#1096' '#1090#1072#1088#1080#1093#1080
+      FieldName = 'PAYMENTDATE'
+    end
+    object ResultDS_porPRINCIPAL: TFloatField
+      DisplayLabel = 'Cari ayda '#1103#1089#1072#1089#1076#1072#1085' '#1102#1076#1103#1085#1080#1096
+      FieldName = 'PRINCIPAL'
+    end
+    object ResultDS_porINTEREST: TFloatField
+      DisplayLabel = 'Cari ayda  % '#1076#1103#1085' '#1102#1076#1103#1085#1080#1096
+      FieldName = 'INTEREST'
+    end
+    object ResultDS_porCEM: TFloatField
+      DisplayLabel = #1046#1103#1084#1080' '#1102#1076#1103#1085#1080#1096
+      FieldName = 'CEM'
+    end
+    object ResultDS_porADIYAT: TWideStringField
+      DisplayLabel = #1041#1086#1088#1078#1072#1083#1072#1085#1099#1085' '#1073#1072#1085#1082#1072' '#1072#1076#1080#1081#1081#1072#1090#1099
+      FieldName = 'ADIYAT'
+      Size = 90
+    end
+    object ResultDS_porDSDesigner2: TWideStringField
+      FieldName = #1052#1094#1083#1082#1080#1081#1081#1103#1090' '#1085#1102#1074#1094
+      Size = 150
+    end
+    object ResultDS_porDSDesigner3: TWideStringField
+      FieldName = #1041#1086#1088#1078#1072#1083#1072#1085#1099#1085' '#1089#1077#1082#1090#1086#1088#1091
+      Size = 64
+    end
+    object ResultDS_pori: TWideStringField
+      FieldName = #1041#1086#1088#1078#1072#1083#1072#1085#1099#1085' '#1092#1103#1072#1083#1080#1081#1081#1103#1090'i'
+      Size = 64
+    end
+    object ResultDS_porDSDesigner4: TWideStringField
+      FieldName = #1041#1086#1088#1078#1072#1083#1072#1085#1099#1085' '#1092#1103#1072#1083#1080#1081#1081#1103#1090' '#1085#1102#1074#1094
+      Size = 128
+    end
+    object ResultDS_porKreditintipi: TWideStringField
+      FieldName = 'Kreditin tipi'
+      Size = 128
+    end
+  end
+  object Browerinfo: TOracleDataSet
+    SQL.Strings = (
+      'select * from cm_boorowerinfo'
+      'where creditid=:crid')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000A0000003A00430052004900440003000000000000000000
+      0000}
+    Session = sboapiDataModule.SBSession
+    Left = 64
+    Top = 328
+  end
+end

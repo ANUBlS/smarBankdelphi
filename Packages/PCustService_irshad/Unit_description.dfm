@@ -1,0 +1,54 @@
+object Form_description: TForm_description
+  Left = 0
+  Top = 0
+  ClientHeight = 271
+  ClientWidth = 523
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poDesktopCenter
+  PixelsPerInch = 96
+  TextHeight = 13
+  object XFPanel1: TXFPanel
+    Left = 0
+    Top = 230
+    Width = 523
+    Height = 41
+    Align = alBottom
+    TabOrder = 0
+    object XFButton1: TXFButton
+      Left = 204
+      Top = 9
+      Width = 75
+      Height = 25
+      Caption = 'Q'#601'bul'
+      DoubleBuffered = True
+      ParentDoubleBuffered = False
+      TabOrder = 0
+      OnClick = XFButton1Click
+    end
+    object XFButton2: TXFButton
+      Left = 288
+      Top = 9
+      Width = 75
+      Height = 25
+      Caption = #199#305'x'#305#351
+      DoubleBuffered = True
+      ParentDoubleBuffered = False
+      TabOrder = 1
+      OnClick = XFButton2Click
+    end
+  end
+  object Memo1: TMemo
+    Left = 0
+    Top = 0
+    Width = 523
+    Height = 230
+    Align = alClient
+    TabOrder = 1
+  end
+end

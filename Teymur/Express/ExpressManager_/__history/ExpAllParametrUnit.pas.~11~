@@ -1,0 +1,139 @@
+﻿unit ExpAllParametrUnit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Grids, XDBGrids, ExtCtrls, ComCtrls, ToolWin, ImgList, StdActns,
+  ActnList;
+
+type
+  TExpAllParametr = class(TForm)
+    Panel1: TPanel;
+    XDBGrid3: TXDBGrid;
+    Panel2: TPanel;
+    Panel3: TPanel;
+    XDBGrid1: TXDBGrid;
+    XDBGrid2: TXDBGrid;
+    ImageList1: TImageList;
+    ToolBar1: TToolBar;
+    ToolButton1: TToolButton;
+    ActionList1: TActionList;
+    ActnAdd: TAction;
+    ActnEdit: TAction;
+    ActnDel: TAction;
+    ToolButton2: TToolButton;
+    ToolButton3: TToolButton;
+    ToolButton4: TToolButton;
+    ToolButton5: TToolButton;
+    procedure FormShow(Sender: TObject);
+    procedure ActnAddExecute(Sender: TObject);
+    procedure ActnEditExecute(Sender: TObject);
+    procedure ActnDelExecute(Sender: TObject);
+    procedure XDBGrid2KeyPress(Sender: TObject; var Key: Char);
+    procedure ToolButton5Click(Sender: TObject);
+    procedure ToolButton4Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  ExpAllParametr: TExpAllParametr;
+
+implementation
+uses ExpDataModuleUnit, ExpAccTypeUnit;
+{$R *.dfm}
+
+procedure TExpAllParametr.ActnAddExecute(Sender: TObject);
+begin
+  with ExpDataModule,ExpTypeAccountsDataSet do
+         Insert;
+
+    with ExpAccType do
+    begin
+       Caption := 'Yeni';
+       ShowModal;
+    end;
+
+   with ExpDataModule,ExpTypeAccountsDataSet do
+         Refresh;
+
+end;
+
+procedure TExpAllParametr.ActnDelExecute(Sender: TObject);
+begin
+   if ExpDataModule.ExpTypeAccountsDataSet.RecordCount=0 then exit;
+
+
+
+   if   MessageDlg('Silinməsinə  əminsiniz?'
+              ,mtConfirmation
+              ,[mbYes,mbNo],0
+              )<>mrYes then Exit;
+
+   with ExpDataModule,ExpTypeAccountsDataSet do
+   begin
+      Delete;
+      Refresh;
+   end;
+end;
+
+procedure TExpAllParametr.ActnEditExecute(Sender: TObject);
+begin
+ with ExpDataModule,ExpTypeAccountsDataSet do
+         Edit;
+
+    with ExpAccType do
+    begin
+       Caption := 'Redaktə';
+       ShowModal;
+    end;
+
+   with ExpDataModule,ExpTypeAccountsDataSet do
+         Refresh;
+end;
+
+procedure TExpAllParametr.FormShow(Sender: TObject);
+begin
+//  if ExpDataModule.ExpSettingsDataSet.Active then ShowMessage('aa');
+with  ExpDataModule do
+begin
+   // ExpTypeDataSet.First;
+   // ExpSettingsDataSet.First;
+    //ExpTypeAccountsDataSet.First;
+end;
+
+end;
+
+procedure TExpAllParametr.ToolButton4Click(Sender: TObject);
+begin
+  with ExpDataModule do
+  begin
+    ExpTypeDataSet.Refresh;
+    ExpSettingsDataSet.Refresh;
+    ExpTypeAccountsDataSet.Refresh;
+  end;
+
+end;
+
+procedure TExpAllParametr.ToolButton5Click(Sender: TObject);
+begin
+  Close;
+end;
+
+procedure TExpAllParametr.XDBGrid2KeyPress(Sender: TObject; var Key: Char);
+begin
+   ShowMessage('aaa');
+  if Ord(Key) = VK_DELETE then
+  begin
+     if   MessageDlg('Silinməsinə  əminsiniz?'
+              ,mtConfirmation
+              ,[mbYes,mbNo],0
+              )<>mrYes then Exit;
+    ExpDataModule.ExpSettingsDataSet.Delete;
+  end;
+end;
+
+end.

@@ -1,0 +1,69 @@
+unit TurnOversDataMod;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, OracleData;
+
+type
+  Tout_datamodule = class(TDataModule)
+    CurrencyData: TOracleDataSet;
+    BranchData: TOracleDataSet;
+    DataSrcCurrency: TDataSource;
+    DataSrcBranch: TDataSource;
+    TurnOversData: TOracleDataSet;
+    DataSrcTurnOvers: TDataSource;
+    SYSDAT: TOracleDataSet;
+    SYSDATTEK_DAT: TDateTimeField;
+    PeriodPrefixData: TOracleDataSet;
+    PeriodPrefixDataPERIODPREFIX: TDateTimeField;
+    BankInfo: TOracleDataSet;
+    CurrencyDataCURRENCYID: TIntegerField;
+    CurrencyDataCURRLNAME: TWideStringField;
+    BranchDataBRANCHID: TFloatField;
+    BranchDataBRANCHNAME: TWideStringField;
+    TurnOversDataACCOUNTID: TFloatField;
+    TurnOversDataACCNO: TWideStringField;
+    TurnOversDataACC_NAME: TWideStringField;
+    TurnOversDataCURRENCYID: TIntegerField;
+    TurnOversDataBRANCHID: TIntegerField;
+    TurnOversDataBALANCENO: TFloatField;
+    TurnOversDataBEGINACTIVE: TFloatField;
+    TurnOversDataBEGINPASSIVE: TFloatField;
+    TurnOversDataLBEGINACTIVE: TFloatField;
+    TurnOversDataLBEGINPASSIVE: TFloatField;
+    TurnOversDataDTURNOVER: TFloatField;
+    TurnOversDataCTURNOVER: TFloatField;
+    TurnOversDataLDTURNOVER: TFloatField;
+    TurnOversDataLCTURNOVER: TFloatField;
+    TurnOversDataENDACTIVE: TFloatField;
+    TurnOversDataENDPASSIVE: TFloatField;
+    TurnOversDataLENDACTIVE: TFloatField;
+    TurnOversDataLENDPASSIVE: TFloatField;
+    DSout_achost: TOracleDataSet;
+    DSout_achostDAT: TDateTimeField;
+    DSout_achost1: TOracleDataSet;
+    DateTimeField1: TDateTimeField;
+    BankInfoBANK: TWideStringField;
+    BankInfoINN: TWideStringField;
+    BankInfoLOGO: TBlobField;
+    BankInfoMANAGERTITLE: TWideStringField;
+    BankInfoACCOUNTANTTITLE: TWideStringField;
+    BankInfoMANAGER: TWideStringField;
+    BankInfoACCOUNTANT: TWideStringField;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  out_datamodule: Tout_datamodule;
+
+implementation
+
+uses sboapiDataModuleImpl;
+{$R *.DFM}
+
+end.

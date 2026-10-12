@@ -1,0 +1,123 @@
+unit U9;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ImgList, ComCtrls, ToolWin, StdCtrls, Grids, DBGrids, ExtCtrls,
+  CMExcelExport;
+
+type
+  TForm9 = class(TForm)
+    Panel1: TPanel;
+    Panel2: TPanel;
+    Panel4: TPanel;
+    EditCARDHOLDER: TEdit;
+    EditRBSNUMBER: TEdit;
+    EditCARDNUMBER: TEdit;
+    EditCREDIT_LIM: TEdit;
+    EditFNAME: TEdit;
+    EditLNAME: TEdit;
+    EditID: TEdit;
+    EditPASSPORT: TEdit;
+    Panel3: TPanel;
+    CoolBar1: TCoolBar;
+    ToolBar1: TToolBar;
+    ToolButton3: TToolButton;
+    ToolButton6: TToolButton;
+    ToolButton8: TToolButton;
+    ToolButton9: TToolButton;
+    ToolButton1: TToolButton;
+    ToolButton10: TToolButton;
+    ToolButton11: TToolButton;
+    ToolButton12: TToolButton;
+    ToolButton7: TToolButton;
+    ToolButton18: TToolButton;
+    ToolButton19: TToolButton;
+    ToolButton20: TToolButton;
+    ToolButton14: TToolButton;
+    ToolButton15: TToolButton;
+    ToolButton17: TToolButton;
+    ToolButton23: TToolButton;
+    ToolButton21: TToolButton;
+    ImageList1: TImageList;
+    DBGrid1: TDBGrid;
+    CMExcelExport1: TCMExcelExport;
+    procedure ToolButton21Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure ToolButton1Click(Sender: TObject);
+    procedure ToolButton14Click(Sender: TObject);
+    procedure ToolButton7Click(Sender: TObject);
+    procedure FormPaint(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form9: TForm9;
+
+implementation
+
+uses applicationpas, balans, CARDS_TLB, cfilepas, creditinfopas, customers,
+  dpforms, MAINFORMImpl1, newcard, payment, rezform, Unit18,SBTranslateProc,sboapiDataModuleImpl;
+
+{$R *.DFM}
+
+procedure TForm9.ToolButton21Click(Sender: TObject);
+begin
+ if   panel4.Visible=false then
+begin
+ToolButton21.Down:=True;
+Panel4.Visible:=True;
+exit;
+end
+else
+
+if panel4.Visible=true then
+begin
+ToolButton21.Down:=false;
+Panel4.Visible:=false;
+end;
+end;
+
+procedure TForm9.FormShow(Sender: TObject);
+begin
+
+DataMod_CARDS.newcard.Open;
+end;
+
+procedure TForm9.ToolButton1Click(Sender: TObject);
+begin
+if MessageDlg('Kart silinsin?',mtconfirmation,[mbyes,mbno],0)= mryes then
+DataMod_CARDS.mainpacket.CallProcedure('delete_application',[DBGrid1.DataSource.DataSet.fieldbyname('id').asinteger]);
+DBGrid1.DataSource.DataSet.Refresh;
+
+end;
+
+procedure TForm9.ToolButton14Click(Sender: TObject);
+begin
+close;
+end;
+
+procedure TForm9.ToolButton7Click(Sender: TObject);
+begin
+
+  if not CMExcelExport1.Connected then CMExcelExport1.Connect;
+  CMExcelExport1.ExportDataset(DataMod_CARDS.newcard,'CARDS',true);
+  CMExcelExport1.Disconnect;
+end;
+
+procedure TForm9.FormCreate(Sender: TObject);
+begin
+SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TForm9.FormPaint(Sender: TObject);
+begin
+DBGrid1.DataSource.DataSet.Refresh;
+end;
+
+end.

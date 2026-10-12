@@ -1,0 +1,619 @@
+object Form7: TForm7
+  Left = 0
+  Top = 0
+  BorderIcons = [biSystemMenu]
+  ClientHeight = 146
+  ClientWidth = 271
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poMainFormCenter
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object XFPanel1: TXFPanel
+    Left = 0
+    Top = 0
+    Width = 271
+    Height = 105
+    Align = alClient
+    BevelInner = bvLowered
+    BevelKind = bkFlat
+    TabOrder = 0
+    object XFLabel1: TXFLabel
+      Left = 12
+      Top = 27
+      Width = 48
+      Height = 13
+      Caption = 'Ba'#351'lan'#287#305'c:'
+    end
+    object XFLabel2: TXFLabel
+      Left = 12
+      Top = 61
+      Width = 22
+      Height = 13
+      Caption = 'Son:'
+    end
+    object DateTimePicker1: TDateTimePicker
+      Left = 81
+      Top = 33
+      Width = 155
+      Height = 21
+      Date = 43641.476735543980000000
+      Time = 43641.476735543980000000
+      TabOrder = 0
+    end
+    object DateTimePicker2: TDateTimePicker
+      Left = 81
+      Top = 60
+      Width = 155
+      Height = 21
+      Date = 43641.476735543980000000
+      Time = 43641.476735543980000000
+      TabOrder = 1
+    end
+  end
+  object XFPanel2: TXFPanel
+    Left = 0
+    Top = 105
+    Width = 271
+    Height = 41
+    Align = alBottom
+    BevelInner = bvLowered
+    BevelKind = bkFlat
+    TabOrder = 1
+    object XFButton1: TXFButton
+      Left = 22
+      Top = 4
+      Width = 75
+      Height = 25
+      Caption = 'Q'#601'bul'
+      DoubleBuffered = True
+      ParentDoubleBuffered = False
+      TabOrder = 0
+      Visible = False
+      OnClick = XFButton1Click
+    end
+    object XFButton2: TXFButton
+      Left = 173
+      Top = 7
+      Width = 75
+      Height = 25
+      Caption = 'Ba'#287'la'
+      DoubleBuffered = True
+      ParentDoubleBuffered = False
+      TabOrder = 1
+      OnClick = XFButton2Click
+    end
+  end
+  object Button1: TButton
+    Left = 97
+    Top = 113
+    Width = 75
+    Height = 25
+    Caption = 'Q'#601'bul'
+    TabOrder = 2
+    OnClick = Button1Click
+  end
+  object odsxx: TOracleDataSet
+    SQL.Strings = (
+      '/*select count(*) say,dat,inv_num, inv_date,debit,credit,'
+      '       trans_date, par1,par3, par4, par5,'
+      '       par6, par7, par8, par9, mebleg ,'
+      
+        '       par13, par14, par15,debt,sum(aMMOUNT) ammount, odenis, RN' +
+        ' from  (*/'
+      'select par11, p.dat,inv_num, inv_date,debit,credit,'
+      '       trans_date, par1,par3, par4, par5,'
+      '       par6, par7, par8, par9,  ROUND(par12,2)mebleg ,'
+      
+        '       par13, par14, par15,P.debt,P.aMMOUNT,null odenis,null as ' +
+        'yanacaq,1 as RN from provarch p,invoices i where (p.parentid=i.t' +
+        'rans_id or  p.id=i.trans_id) and  vid_op=92'
+      '       and       p.dat between :begindat and :enddat'
+      '                 and kredit=:v_accid'
+      '      /* )a '
+      '       group by dat,inv_num, inv_date,debit,credit,'
+      '       trans_date, par1,par3, par4, par5,'
+      '       par6, par7, par8, par9, mebleg ,'
+      '       par13, par14, par15,debt, odenis, RN*/'
+      '    '
+      'union all'
+      ''
+      
+        'select null as par11,p.dat,null as inv_num,null as inv_date,null' +
+        ' as debit,null as credit,'
+      
+        '      null as trans_date,null as par1,null as par3,null as par4,' +
+        'null as par5,'
+      
+        '       null as par6,null as par7,null as par8,null as par9,0 as ' +
+        'mebleg ,'
+      
+        '      null as par13,null as par14,null as par15,P.debt,null aMMO' +
+        'UNT,p.ammount odenis,null as yanacaq ,2 as RN from provarch p, a' +
+        'ccount a where p.debt=a.id'
+      '      '
+      
+        '  and (debt  in (select id from account where bal_cn1 like '#39'531'#39 +
+        ') or debt  in (select id from account where bal_cn1 like '#39'535'#39'))'
+      
+        '  and (kredit in (select id from account where bal_cn1 like '#39'22%' +
+        #39')'
+      
+        '      or kredit in (select id from account where bal_cn1 like '#39'1' +
+        '92%'#39'))'
+      '  and p.dat between :begindat and :enddat'
+      '  and p.debt=:v_accid'
+      ''
+      ''
+      'union all'
+      ''
+      
+        'select null as par11,p.dat,'#39'Qeza'#39' as inv_num,null as inv_date,nu' +
+        'll as debit,null as credit,'
+      
+        '       null as trans_date,null as par1,null as par3,null as par4' +
+        ',null as par5,'
+      
+        '       null as par6,null as par7,null as par8,null as par9,0 as ' +
+        'mebleg ,'
+      
+        '      null as par13,null as par14,null as par15,P.debt,null aMMO' +
+        'UNT,p.ammount odenis ,null as yanacaq,2 as RN from provarch p, a' +
+        'ccount a where p.debt=a.id'
+      '      '
+      
+        '  and (debt  in (select id from account where bal_cn1 like '#39'531'#39 +
+        ') or debt  in (select id from account where bal_cn1 like '#39'535'#39'))'
+      
+        '  and kredit in (select id from account where bal_cn1 like '#39'721%' +
+        #39')'
+      '    and p.vid_op<>93'
+      '  and p.dat between :begindat and :enddat'
+      '  and p.debt=:v_accid'
+      '  '
+      '  '
+      ''
+      '  union all'
+      ''
+      
+        'select null as par11,p.dat,'#39' '#39' as inv_num,null as inv_date,null ' +
+        'as debit,null as credit,'
+      
+        '       null as trans_date,null as par1,null as par3,null as par4' +
+        ',null as par5,'
+      
+        '       null as par6,null as par7,null as par8,null as par9,0 as ' +
+        'mebleg ,'
+      
+        '      null as par13,null as par14,null as par15,P.debt,null aMMO' +
+        'UNT,null as odenis,p.ammount yanacaq,4 as RN from provarch p, ac' +
+        'count a where p.debt=a.id'
+      '   and p.vid_op=93'
+      '     and p.dat between :begindat and :enddat'
+      '  and p.KREDIT=:v_accid'
+      ''
+      '  order by  RN, dat'
+      
+        ' /* and debt   in (select id from account where bal_cn1 like '#39'53' +
+        '1'#39')'
+      
+        '  and kredit in (select id from account where bal_cn1 not like '#39 +
+        '22%'#39')*/')
+    Optimize = False
+    Variables.Data = {
+      0400000003000000120000003A0042004500470049004E004400410054000C00
+      000000000000000000000E0000003A0045004E0044004400410054000C000000
+      0000000000000000100000003A0056005F004100430043004900440003000000
+      0000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      05000000180000000E00000049004E0056005F004E0055004D00010000000000
+      1000000049004E0056005F0044004100540045000100000000000A0000004400
+      45004200490054000100000000000C0000004300520045004400490054000100
+      00000000140000005400520041004E0053005F00440041005400450001000000
+      0000080000005000410052003100010000000000080000005000410052003300
+      0100000000000800000050004100520034000100000000000800000050004100
+      5200350001000000000008000000500041005200360001000000000008000000
+      5000410052003700010000000000080000005000410052003800010000000000
+      0800000050004100520039000100000000000A00000050004100520031003300
+      0100000000000A000000500041005200310034000100000000000A0000005000
+      41005200310035000100000000000C0000004D00450042004C00450047000100
+      000000000800000044004500420054000100000000000E00000041004D004D00
+      4F0055004E0054000100000000000C0000004F00440045004E00490053000100
+      00000000060000004400410054000100000000000400000052004E0001000000
+      00000A000000500041005200310031000100000000000E000000590041004E00
+      4100430041005100010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 24
+    Top = 64
+    object odsxxDAT: TDateTimeField
+      FieldName = 'DAT'
+    end
+    object odsxxINV_NUM: TWideStringField
+      FieldName = 'INV_NUM'
+    end
+    object odsxxINV_DATE: TDateTimeField
+      FieldName = 'INV_DATE'
+    end
+    object odsxxDEBIT: TFloatField
+      FieldName = 'DEBIT'
+    end
+    object odsxxCREDIT: TFloatField
+      FieldName = 'CREDIT'
+    end
+    object odsxxTRANS_DATE: TDateTimeField
+      FieldName = 'TRANS_DATE'
+    end
+    object odsxxPAR1: TWideStringField
+      FieldName = 'PAR1'
+      Size = 300
+    end
+    object odsxxPAR3: TWideStringField
+      FieldName = 'PAR3'
+      Size = 300
+    end
+    object odsxxPAR4: TWideStringField
+      FieldName = 'PAR4'
+      Size = 300
+    end
+    object odsxxPAR5: TWideStringField
+      FieldName = 'PAR5'
+      Size = 300
+    end
+    object odsxxPAR6: TWideStringField
+      FieldName = 'PAR6'
+      Size = 300
+    end
+    object odsxxPAR7: TWideStringField
+      FieldName = 'PAR7'
+      Size = 300
+    end
+    object odsxxPAR8: TWideStringField
+      FieldName = 'PAR8'
+      Size = 300
+    end
+    object odsxxPAR9: TWideStringField
+      FieldName = 'PAR9'
+      Size = 300
+    end
+    object odsxxMEBLEG: TFloatField
+      FieldName = 'MEBLEG'
+    end
+    object odsxxPAR13: TFloatField
+      FieldName = 'PAR13'
+    end
+    object odsxxPAR14: TFloatField
+      FieldName = 'PAR14'
+    end
+    object odsxxPAR15: TFloatField
+      FieldName = 'PAR15'
+    end
+    object odsxxDEBT: TFloatField
+      FieldName = 'DEBT'
+    end
+    object odsxxAMMOUNT: TFloatField
+      FieldName = 'AMMOUNT'
+    end
+    object odsxxODENIS: TFloatField
+      FieldName = 'ODENIS'
+    end
+    object odsxxRN: TFloatField
+      FieldName = 'RN'
+    end
+    object odsxxPAR11: TFloatField
+      FieldName = 'PAR11'
+    end
+    object odsxxYANACAQ: TFloatField
+      FieldName = 'YANACAQ'
+    end
+  end
+  object ExcelApplication1: TExcelApplication
+    AutoConnect = False
+    ConnectKind = ckRunningOrNew
+    AutoQuit = False
+    Left = 24
+    Top = 112
+  end
+  object sb_sysdate: TOracleDataSet
+    SQL.Strings = (
+      'select tek_dat from sysdat')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000010000000E000000540045004B005F00440041005400010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 40
+    Top = 16
+    object sb_sysdateTEK_DAT: TDateTimeField
+      FieldName = 'TEK_DAT'
+    end
+  end
+  object ods_arch: TOracleDataSet
+    SQL.Strings = (
+      
+        'select ostat from archost where acc_id=:v_accid and datdate=(sel' +
+        'ect min(datdate) from archost where acc_id=:v_accid and datdate>' +
+        '=TO_DATE(:v_begindat)-1)'
+      '')
+    Optimize = False
+    Variables.Data = {
+      0400000002000000100000003A0056005F004100430043004900440003000000
+      0000000000000000160000003A0056005F0042004500470049004E0044004100
+      54000C0000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {05000000010000000A0000004F005300540041005400010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 144
+    Top = 8
+    object ods_archOSTAT: TFloatField
+      FieldName = 'OSTAT'
+    end
+  end
+  object ods_text: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      
+        #39'Biz a'#351'a'#287#305'da imza ed'#601'nl'#601'r "Sifari'#351#231'i" Papa Lojistika MMC-nin dir' +
+        'ektoru M'#601'mm'#601'dzad'#601' Z. "'#304'cra'#231#305'"'#39'||'
+      
+        #39'fiziki '#351#601'xs'#39'||'#39'  '#39'||c.name||'#39' '#39'|| a.acc_no ||'#39#39'||'#39' bu akt'#305' t'#601'rt' +
+        'ib edir ondan '#246'tr'#252#39'||'
+      
+        #39' ki,'#39'||'#39' '#39'||i.work_place||'#39' -ci il tarixli'#39'||'#39' '#39'||i.work_post||' +
+        #39' sayl'#305' Da'#351#305'ma m'#252'qavil'#601'sin'#601' '#601'sas'#601'n'#39'||'
+      
+        #39' y'#252'kda'#351#305'ma xidm'#601'tini yerin'#601' yetirmi'#351' v'#601' g'#246'st'#601'ril'#601'n d'#601'y'#601'rd'#601' yana' +
+        'caq istifad'#601' etmi'#351'dir.'#39' text'
+      
+        'from customers c ,custinfo i ,account a where c.id=i.idcust and ' +
+        'c.id=a.kli_id and a.id=:v_accid')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000100000003A0056005F004100430043004900440003000000
+      0000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      0500000002000000080000005400450058005400010000000000060000004D00
+      55005100010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 208
+    Top = 16
+    object ods_textTEXT: TWideStringField
+      FieldName = 'TEXT'
+      Size = 918
+    end
+  end
+  object odsxx1: TOracleDataSet
+    SQL.Strings = (
+      ''
+      
+        'select '#39'AKT No: CP'#39'||'#39' '#39'||p.id id, par11, p.dat,inv_num, inv_dat' +
+        'e,debit,credit,'
+      '       trans_date, par1,par3, par4, par5,'
+      '       par6, par7, par8, par9,  ROUND(par12,2)mebleg ,'
+      
+        '       par13, par14, par15,P.debt,P.aMMOUNT,null odenis,null as ' +
+        'yanacaq,null as bonus,1 as RN from provarch p,invoices i where (' +
+        'p.parentid=i.trans_id or  p.id=i.trans_id) and  vid_op=92'
+      '       and       p.dat between :begindat and :enddat'
+      '                 and kredit=:v_accid'
+      '      '
+      '    '
+      'union all'
+      ''
+      
+        'select '#39'AKT No: CP'#39'||'#39' '#39'||p.id id, null as par11,p.dat,null as i' +
+        'nv_num,null as inv_date,null as debit,null as credit,'
+      
+        '      null as trans_date,null as par1,null as par3,null as par4,' +
+        'null as par5,'
+      
+        '       null as par6,null as par7,null as par8,null as par9,0 as ' +
+        'mebleg ,'
+      
+        '      null as par13,null as par14,null as par15,P.debt,null aMMO' +
+        'UNT,p.ammount odenis,null as yanacaq,null as bonus ,2 as RN from' +
+        ' provarch p, account a where p.debt=a.id'
+      '      '
+      
+        '  and (debt  in (select id from account where bal_cn1 like '#39'531'#39 +
+        ') or debt  in (select id from account where bal_cn1 like '#39'535'#39'))'
+      
+        '  and (kredit in (select id from account where bal_cn1 like '#39'22%' +
+        #39')'
+      
+        '      or kredit in (select id from account where bal_cn1 like '#39'1' +
+        '92%'#39'))'
+      '  and p.dat between :begindat and :enddat'
+      '  and p.debt=:v_accid'
+      ''
+      ''
+      'union all'
+      ''
+      
+        'select '#39'AKT No: CP'#39'||'#39' '#39'||p.id id, null as par11,p.dat,'#39'Qeza'#39' as' +
+        ' inv_num,null as inv_date,null as debit,null as credit,'
+      
+        '       null as trans_date,null as par1,null as par3,null as par4' +
+        ',null as par5,'
+      
+        '       null as par6,null as par7,null as par8,null as par9,0 as ' +
+        'mebleg ,'
+      
+        '      null as par13,null as par14,null as par15,P.debt,null aMMO' +
+        'UNT,p.ammount odenis ,null as yanacaq,null as bonus,2 as RN from' +
+        ' provarch p, account a where p.debt=a.id'
+      '      '
+      
+        '  and (debt  in (select id from account where bal_cn1 like '#39'531'#39 +
+        ') or debt  in (select id from account where bal_cn1 like '#39'535'#39'))'
+      
+        '  and kredit in (select id from account where bal_cn1 like '#39'721%' +
+        #39')'
+      '    and p.vid_op<>93'
+      '  and p.dat between :begindat and :enddat'
+      '  and p.debt=:v_accid'
+      '  '
+      '  '
+      ''
+      '  union all'
+      ''
+      
+        'select '#39'AKT No: CP'#39'||'#39' '#39'||p.id id,null as par11,p.dat,'#39' '#39' as inv' +
+        '_num,null as inv_date,null as debit,null as credit,'
+      
+        '       null as trans_date,null as par1,null as par3,null as par4' +
+        ',null as par5,'
+      
+        '       null as par6,null as par7,null as par8,null as par9,0 as ' +
+        'mebleg ,'
+      
+        '      null as par13,null as par14,null as par15,P.debt,null aMMO' +
+        'UNT,null as odenis,p.ammount yanacaq,null as bonus,4 as RN from ' +
+        'provarch p, account a where p.debt=a.id'
+      '   and p.vid_op=93'
+      '     and p.dat between :begindat and :enddat'
+      '  and p.KREDIT=:v_accid  '
+      '  '
+      ' union all '
+      
+        '  select '#39'AKT No: CP'#39'||'#39' '#39'||p.id id, null as par11,p.dat,'#39' '#39' as ' +
+        'inv_num,null as inv_date,null as debit,null as credit,'
+      
+        '       null as trans_date,null as par1,null as par3,null as par4' +
+        ',null as par5,'
+      
+        '       null as par6,null as par7,null as par8,null as par9,0 as ' +
+        'mebleg ,'
+      
+        '      null as par13,null as par14,null as par15,P.debt,null aMMO' +
+        'UNT,null as odenis,null as yanacaq,p.ammount bonus ,4 as RN from' +
+        ' provarch p, account a where p.debt=a.id'
+      '   '
+      
+        '   and (kredit  in (select id from account where bal_cn1 like '#39'5' +
+        '31'#39'))'
+      '  and debt in (select id from account where id=141)'
+      '     and p.dat between :begindat and :enddat'
+      '  and p.KREDIT=:v_accid'
+      ''
+      '  order by  RN, dat'
+      ' ')
+    Optimize = False
+    Variables.Data = {
+      0400000003000000120000003A0042004500470049004E004400410054000C00
+      000000000000000000000E0000003A0045004E0044004400410054000C000000
+      0000000000000000100000003A0056005F004100430043004900440003000000
+      0000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000001A0000000A0000005000410052003100310001000000000006000000
+      4400410054000100000000000E00000049004E0056005F004E0055004D000100
+      000000001000000049004E0056005F0044004100540045000100000000000A00
+      0000440045004200490054000100000000000C00000043005200450044004900
+      5400010000000000140000005400520041004E0053005F004400410054004500
+      0100000000000800000050004100520031000100000000000800000050004100
+      5200330001000000000008000000500041005200340001000000000008000000
+      5000410052003500010000000000080000005000410052003600010000000000
+      0800000050004100520037000100000000000800000050004100520038000100
+      000000000800000050004100520039000100000000000C0000004D0045004200
+      4C00450047000100000000000A00000050004100520031003300010000000000
+      0A000000500041005200310034000100000000000A0000005000410052003100
+      35000100000000000800000044004500420054000100000000000E0000004100
+      4D004D004F0055004E0054000100000000000C0000004F00440045004E004900
+      53000100000000000E000000590041004E004100430041005100010000000000
+      0400000052004E000100000000000A00000042004F004E005500530001000000
+      00000400000049004400010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 176
+    Top = 72
+    object odsxx1PAR11: TFloatField
+      FieldName = 'PAR11'
+    end
+    object odsxx1DAT: TDateTimeField
+      FieldName = 'DAT'
+    end
+    object odsxx1INV_NUM: TWideStringField
+      FieldName = 'INV_NUM'
+    end
+    object odsxx1INV_DATE: TDateTimeField
+      FieldName = 'INV_DATE'
+    end
+    object odsxx1DEBIT: TFloatField
+      FieldName = 'DEBIT'
+    end
+    object odsxx1CREDIT: TFloatField
+      FieldName = 'CREDIT'
+    end
+    object odsxx1TRANS_DATE: TDateTimeField
+      FieldName = 'TRANS_DATE'
+    end
+    object odsxx1PAR1: TWideStringField
+      FieldName = 'PAR1'
+      Size = 300
+    end
+    object odsxx1PAR3: TWideStringField
+      FieldName = 'PAR3'
+      Size = 300
+    end
+    object odsxx1PAR4: TWideStringField
+      FieldName = 'PAR4'
+      Size = 300
+    end
+    object odsxx1PAR5: TWideStringField
+      FieldName = 'PAR5'
+      Size = 300
+    end
+    object odsxx1PAR6: TWideStringField
+      FieldName = 'PAR6'
+      Size = 300
+    end
+    object odsxx1PAR7: TWideStringField
+      FieldName = 'PAR7'
+      Size = 300
+    end
+    object odsxx1PAR8: TWideStringField
+      FieldName = 'PAR8'
+      Size = 300
+    end
+    object odsxx1PAR9: TWideStringField
+      FieldName = 'PAR9'
+      Size = 300
+    end
+    object odsxx1MEBLEG: TFloatField
+      FieldName = 'MEBLEG'
+    end
+    object odsxx1PAR13: TFloatField
+      FieldName = 'PAR13'
+    end
+    object odsxx1PAR14: TFloatField
+      FieldName = 'PAR14'
+    end
+    object odsxx1PAR15: TFloatField
+      FieldName = 'PAR15'
+    end
+    object odsxx1DEBT: TFloatField
+      FieldName = 'DEBT'
+    end
+    object odsxx1AMMOUNT: TFloatField
+      FieldName = 'AMMOUNT'
+    end
+    object odsxx1ODENIS: TFloatField
+      FieldName = 'ODENIS'
+    end
+    object odsxx1YANACAQ: TFloatField
+      FieldName = 'YANACAQ'
+    end
+    object odsxx1RN: TFloatField
+      FieldName = 'RN'
+    end
+    object odsxx1BONUS: TFloatField
+      FieldName = 'BONUS'
+    end
+    object odsxx1ID: TFloatField
+      FieldName = 'ID'
+    end
+  end
+end

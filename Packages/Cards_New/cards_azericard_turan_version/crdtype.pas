@@ -1,0 +1,147 @@
+﻿unit crdtype;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, Grids, DBGrids, DBCtrls,oracledata;
+type
+  TForm14 = class(TForm)
+    DBGrid1: TDBGrid;
+    Button1: TButton;
+    Button2: TButton;
+    Edit1: TEdit;
+    Edit2: TEdit;
+    Edit3: TEdit;
+    Edit5: TEdit;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    DBLookupComboBox1: TDBLookupComboBox;
+    Edit4: TEdit;
+    Label6: TLabel;
+    Edit6: TEdit;
+    Label7: TLabel;
+    Edit7: TEdit;
+    Label8: TLabel;
+    Button3: TButton;
+    procedure Button1Click(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+    procedure DBGrid1TitleClick(Column: TColumn);
+    procedure FormActivate(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure Button3Click(Sender: TObject);
+    procedure DBGrid1DblClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form14: TForm14;
+
+implementation
+
+uses Unit18, applicationpas, balans, balhs, CARDS_TLB, cfilepas, comp,
+  creditinfopas, customers, dpforms, MAINFORMImpl1, newcard, payment,
+  rezform, setac, U9,SBTranslateProc,sboapiDataModuleIMPL;
+
+{$R *.DFM}
+
+procedure TForm14.Button1Click(Sender: TObject);
+begin
+if (Edit1.Text<>'') and  (Edit2.Text<>'')  and (DBLookupComboBox1.Text<>'') and (Edit5.Text<>'')  and (Edit3.Text<>'')
+and  (Edit6.Text<>'') and  (Edit7.Text<>'')      then
+begin
+DataMod_CARDS.mainpacket.CallProcedure('new_carttype',[edit1.text,
+                                                       edit2.text,
+                                                       DBLookupComboBox1.text,
+                                                       edit5.text,
+                                                       edit3.text,
+                                                       edit4.text,
+                                                       edit6.Text,
+                                                       edit7.Text]);
+
+
+          DataMod_CARDS.CARDTYPES.Close;
+          DataMod_CARDS.CARDTYPES.Open;
+end else ShowMessage('Xanalar tam doldurulmalıdır!');
+
+
+
+end;
+
+procedure TForm14.Button2Click(Sender: TObject);
+begin
+if MessageDlg('Seçilmiş sətir silinsin?',mtinformation,[mbyes,mbno],0)=mryes then
+DataMod_CARDS.CARDTYPES.Delete;
+DataMod_CARDS.CARDTYPES.Session.commit;
+end;
+
+procedure TForm14.Button3Click(Sender: TObject);
+begin
+DBGrid1.DataSource.DataSet.Edit;
+ DBGrid1.DataSource.DataSet.FieldByName('Name').AsString:=edit1.Text;
+ DBGrid1.DataSource.DataSet.FieldByName('Code').AsString:=edit2.Text;
+DBGrid1.DataSource.DataSet.FieldByName('BIN').AsString:=edit4.Text;
+ DBGrid1.DataSource.DataSet.FieldByName('SERVICE').AsString:=edit5.Text;
+ DBGrid1.DataSource.DataSet.FieldByName('SCHEME').AsString:=edit3.Text;
+ DBGrid1.DataSource.DataSet.FieldByName('sub_code').AsString:= edit7.Text;
+ DBGrid1.DataSource.DataSet.FieldByName('base_code').AsString:=edit6.Text;
+  DBGrid1.DataSource.DataSet.UpdateRecord;
+  sboapiDataModule.SBSession.Commit;
+ //DBGrid1.DataSource.DataSet.FieldByName('currency').AsString:=DBLookupComboBox1.KeyValue
+end;
+
+procedure TForm14.DBGrid1DblClick(Sender: TObject);
+begin
+edit1.Text:= DBGrid1.DataSource.DataSet.FieldByName('Name').AsString;
+edit2.Text:= DBGrid1.DataSource.DataSet.FieldByName('Code').AsString;
+//DBLookupComboBox1.Text:= DBGrid1.DataSource.DataSet.FieldByName('currency').AsString;
+edit4.Text:= DBGrid1.DataSource.DataSet.FieldByName('BIN').AsString;
+edit5.Text:= DBGrid1.DataSource.DataSet.FieldByName('SERVICE').AsString;
+edit3.Text:= DBGrid1.DataSource.DataSet.FieldByName('SCHEME').AsString;
+edit7.Text:= DBGrid1.DataSource.DataSet.FieldByName('sub_code').AsString;
+edit6.Text:= DBGrid1.DataSource.DataSet.FieldByName('base_code').AsString;
+end;
+
+procedure TForm14.DBGrid1TitleClick(Column: TColumn);
+var
+   TitleName :string;
+   SortPosition: word;
+begin
+ SortPosition :=100;
+ //OrderedTitle :=Column.FieldName; //H.R. 24.06.2008
+ if (DBGrid1.DataSource.DataSet.IsEmpty) or (Column.FieldName = EmptyStr) then Exit;
+ Screen.Cursor :=crHourGlass;
+ TitleName :=Column.FieldName;
+ with TOracleDataSet(DBGrid1.DataSource.DataSet) do
+  try
+  
+   SortPosition :=SQL.Add('ORDER BY '+ TitleName);
+   Refresh;
+  finally
+   SQL[SortPosition] :=EmptyStr;
+   Screen.Cursor :=crDefault;
+  end;
+end;
+
+procedure TForm14.FormActivate(Sender: TObject);
+begin
+edit1.Text:='';
+edit2.Text:='';
+DBLookupComboBox1.KeyValue:=0;
+Edit5.Text:='';
+Edit3.Text:='';
+DataMod_CARDS.CARDTYPESSOURCE.DataSet.Open;
+end;
+
+procedure TForm14.FormCreate(Sender: TObject);
+begin
+SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+end.

@@ -1,0 +1,378 @@
+object Exchangesettings: TExchangesettings
+  Left = 0
+  Top = 0
+  Caption = 'Exchangesettings'
+  ClientHeight = 554
+  ClientWidth = 1138
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poMainFormCenter
+  OnCreate = FormCreate
+  PixelsPerInch = 96
+  TextHeight = 13
+  object DBGrid1: TDBGrid
+    Left = 0
+    Top = 95
+    Width = 1138
+    Height = 459
+    Align = alBottom
+    DataSource = DataMod_CARDS.Datasett_exch
+    TabOrder = 0
+    TitleFont.Charset = DEFAULT_CHARSET
+    TitleFont.Color = clWindowText
+    TitleFont.Height = -11
+    TitleFont.Name = 'Tahoma'
+    TitleFont.Style = []
+    Columns = <
+      item
+        Expanded = False
+        FieldName = 'CONTRACTNUM'
+        Title.Caption = 'KONTRACTNUM'
+        Width = 120
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'ATMNAME'
+        Title.Caption = 'Atm ad'#305
+        Width = 110
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'ATMAZN'
+        Title.Caption = 'Azn atm'
+        Width = 210
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'VDMAZN'
+        Title.Caption = 'Azn vdm'
+        Width = 210
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'ATMUSD'
+        Title.Caption = 'Usd Atm'
+        Width = 210
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'VDMUSD'
+        Title.Caption = 'Usd Vdm'
+        Width = 210
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'ATMEUR'
+        Title.Caption = 'Eur Atm'
+        Width = 210
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'VDMEUR'
+        Title.Caption = 'Eur Vdm'
+        Width = 210
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'AZNINCOME'
+        Title.Caption = 'G'#601'lir '
+        Width = 210
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'MIDDLEACC'
+        Title.Caption = 'Ara hesab'
+        Width = 210
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'BRANCH'
+        Title.Caption = 'Filial'
+        Visible = True
+      end>
+  end
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 1138
+    Height = 97
+    Align = alTop
+    TabOrder = 1
+    object Label1: TLabel
+      Left = 429
+      Top = 8
+      Width = 92
+      Height = 16
+      Caption = 'Hesab ATM AZN'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Label2: TLabel
+      Left = 429
+      Top = 50
+      Width = 92
+      Height = 16
+      Caption = 'Hesab VDM AZN'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Label3: TLabel
+      Left = 618
+      Top = 50
+      Width = 93
+      Height = 16
+      Caption = 'Hesab VDM USD'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Label4: TLabel
+      Left = 618
+      Top = 8
+      Width = 93
+      Height = 16
+      Caption = 'Hesab ATM USD'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Label5: TLabel
+      Left = 806
+      Top = 50
+      Width = 92
+      Height = 16
+      Caption = 'Hesab VDM EUR'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Label6: TLabel
+      Left = 806
+      Top = 8
+      Width = 92
+      Height = 16
+      Caption = 'Hesab ATM EUR'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Label7: TLabel
+      Left = 992
+      Top = 8
+      Width = 95
+      Height = 16
+      Caption = 'Hesab VDM G'#601'lir'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Label8: TLabel
+      Left = 992
+      Top = 50
+      Width = 95
+      Height = 16
+      Caption = 'Hesab ARA 4509'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Label9: TLabel
+      Left = 180
+      Top = 8
+      Width = 45
+      Height = 16
+      Caption = 'Atm Ad'#305
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Label10: TLabel
+      Left = 157
+      Top = 50
+      Width = 69
+      Height = 16
+      Caption = 'M'#252'qavil'#601' '#8470
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Label11: TLabel
+      Left = 284
+      Top = 6
+      Width = 26
+      Height = 16
+      Caption = 'Filial'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+    end
+    object contract_num: TEdit
+      Left = 153
+      Top = 68
+      Width = 235
+      Height = 21
+      TabOrder = 0
+    end
+    object nameofatm: TEdit
+      Left = 153
+      Top = 23
+      Width = 93
+      Height = 21
+      TabOrder = 1
+    end
+    object BitBtn1: TBitBtn
+      Left = 16
+      Top = 21
+      Width = 75
+      Height = 25
+      Caption = 'Yadda saxla'
+      DoubleBuffered = True
+      ParentDoubleBuffered = False
+      TabOrder = 2
+      OnClick = BitBtn1Click
+    end
+    object filialcombo: TDBLookupComboBox
+      Left = 255
+      Top = 23
+      Width = 133
+      Height = 21
+      KeyField = 'ID'
+      ListField = 'NAME'
+      ListSource = DataMod_CARDS.filialsource
+      TabOrder = 3
+      OnCloseUp = filialcomboCloseUp
+    end
+    object BitBtn2: TBitBtn
+      Left = 16
+      Top = 52
+      Width = 75
+      Height = 25
+      Caption = 'Sil'
+      DoubleBuffered = True
+      ParentDoubleBuffered = False
+      TabOrder = 4
+    end
+    object Searchatmazn: TSearchEdit
+      Left = 394
+      Top = 23
+      Width = 178
+      Height = 21
+      TabOrder = 5
+      DataSource = DataMod_CARDS.excsource
+      SearchField = 'acc_no'
+    end
+    object Searchvdmazn: TSearchEdit
+      Left = 394
+      Top = 68
+      Width = 178
+      Height = 21
+      TabOrder = 6
+      DataSource = DataMod_CARDS.excsource
+      SearchField = 'acc_no'
+    end
+    object Searchvdmusd: TSearchEdit
+      Left = 579
+      Top = 68
+      Width = 178
+      Height = 21
+      TabOrder = 7
+      DataSource = DataMod_CARDS.excsource
+      SearchField = 'acc_no'
+    end
+    object Searchatmusd: TSearchEdit
+      Left = 579
+      Top = 23
+      Width = 178
+      Height = 21
+      TabOrder = 8
+      DataSource = DataMod_CARDS.excsource
+      SearchField = 'acc_no'
+    end
+    object Searchvdmeur: TSearchEdit
+      Left = 764
+      Top = 68
+      Width = 178
+      Height = 21
+      TabOrder = 9
+      DataSource = DataMod_CARDS.excsource
+      SearchField = 'acc_no'
+    end
+    object Searchatmeur: TSearchEdit
+      Left = 764
+      Top = 23
+      Width = 178
+      Height = 21
+      TabOrder = 10
+      DataSource = DataMod_CARDS.excsource
+      SearchField = 'acc_no'
+    end
+    object Searchvdmincome: TSearchEdit
+      Left = 948
+      Top = 22
+      Width = 178
+      Height = 21
+      TabOrder = 11
+      DataSource = DataMod_CARDS.excsource
+      SearchField = 'acc_no'
+    end
+    object Searchara: TSearchEdit
+      Left = 948
+      Top = 68
+      Width = 178
+      Height = 21
+      TabOrder = 12
+      DataSource = DataMod_CARDS.excsource
+      SearchField = 'acc_no'
+    end
+  end
+end

@@ -1,0 +1,171 @@
+object WRSetupDataMod: TWRSetupDataMod
+  OldCreateOrder = False
+  Left = 275
+  Top = 145
+  Height = 518
+  Width = 731
+  object WRTemplatesDataSet: TOracleDataSet
+    Tag = 1
+    SQL.Strings = (
+      'SELECT T.RowID , T.*'
+      '  FROM CR_WR_TEMPLATES T')
+    CountAllRecords = True
+    OnApplyRecord = WRTemplatesDataSetApplyRecord
+    Session = sboapiDataModule.SBSession
+    Filtered = True
+    Left = 64
+    Top = 48
+    object WRTemplatesDataSetID: TFloatField
+      FieldName = 'ID'
+    end
+    object WRTemplatesDataSetNAME: TStringField
+      FieldName = 'NAME'
+      Required = True
+      Size = 255
+    end
+    object WRTemplatesDataSetPATH: TStringField
+      FieldName = 'PATH'
+      Size = 4000
+    end
+  end
+  object WRTemplatesDataSrc: TDataSource
+    DataSet = WRTemplatesDataSet
+    Left = 64
+    Top = 104
+  end
+  object CR_WR_TOOLS: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'CR_WR_TOOLS'
+    Left = 64
+    Top = 192
+  end
+  object WRBookmarksDataSet: TOracleDataSet
+    Tag = 1
+    SQL.Strings = (
+      'SELECT ID, TEMPLATEID, FIELDID, BOOKMARKNAME'
+      '  FROM CR_WR_BOOKMARKS'
+      'where templateid = :templateid')
+    Variables.Data = {
+      03000000010000000B0000003A54454D504C4154454944040000000000000000
+      000000}
+    Master = WRTemplatesDataSet
+    MasterFields = 'ID'
+    DetailFields = 'TEMPLATEID'
+    CountAllRecords = True
+    OnApplyRecord = WRBookmarksDataSetApplyRecord
+    Session = sboapiDataModule.SBSession
+    Filtered = True
+    Left = 184
+    Top = 48
+    object WRBookmarksDataSetID: TFloatField
+      FieldName = 'ID'
+    end
+    object WRBookmarksDataSetTEMPLATEID: TFloatField
+      FieldName = 'TEMPLATEID'
+    end
+    object WRBookmarksDataSetFIELDID: TFloatField
+      FieldName = 'FIELDID'
+    end
+    object WRBookmarksDataSetBOOKMARKNAME: TStringField
+      FieldName = 'BOOKMARKNAME'
+      Size = 255
+    end
+  end
+  object WRBookmarksDataSrc: TDataSource
+    DataSet = WRBookmarksDataSet
+    Left = 184
+    Top = 104
+  end
+  object WRFieldsDataSet: TOracleDataSet
+    Tag = 1
+    SQL.Strings = (
+      'SELECT ID, FIELDNAME, DESCRIPTION'
+      '  FROM CR_WR_FIELDS'
+      'order by DESCRIPTION')
+    Session = sboapiDataModule.SBSession
+    Left = 296
+    Top = 48
+  end
+  object WRFieldsDataSrc: TDataSource
+    DataSet = WRFieldsDataSet
+    Left = 296
+    Top = 104
+  end
+  object OpenDlg: TOpenDialog
+    Filter = 'Word Templates(*.dot)|*.dot'
+    Left = 200
+    Top = 192
+  end
+  object OracleDataSetTamplates: TOracleDataSet
+    SQL.Strings = (
+      'SELECT T.*'
+      '  FROM CR_WR_TEMPLATES T')
+    Session = sboapiDataModule.SBSession
+    Left = 424
+    Top = 48
+    object OracleDataSetTamplatesID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object OracleDataSetTamplatesNAME: TStringField
+      FieldName = 'NAME'
+      Required = True
+      Size = 255
+    end
+    object OracleDataSetTamplatesPATH: TStringField
+      FieldName = 'PATH'
+      Size = 4000
+    end
+  end
+  object DataSourceTamplates: TDataSource
+    DataSet = OracleDataSetTamplates
+    Left = 424
+    Top = 112
+  end
+  object FilialDataSet: TOracleDataSet
+    SQL.Strings = (
+      'select rowid, a.* from filial_t a')
+    QBEDefinition.QBEFieldDefs = {
+      0400000009000000020000004944010000000000040000004E414D4501000000
+      00000A0000004B4F445F46494C49414C01000000000006000000435F4E414D45
+      0100000000000600000044524E414D450100000000000A000000445246554C4C
+      4E414D45010000000000050000004E4E414D45010000000000090000004E4655
+      4C4C4E414D4501000000000007000000434F554E545259010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 112
+    Top = 272
+    object FilialDataSetNAME: TStringField
+      FieldName = 'NAME'
+      Size = 90
+    end
+    object FilialDataSetC_NAME: TStringField
+      FieldName = 'C_NAME'
+      Size = 90
+    end
+    object FilialDataSetDRNAME: TStringField
+      FieldName = 'DRNAME'
+      Size = 35
+    end
+    object FilialDataSetDRFULLNAME: TStringField
+      FieldName = 'DRFULLNAME'
+      Size = 40
+    end
+    object FilialDataSetNNAME: TStringField
+      FieldName = 'NNAME'
+      Size = 40
+    end
+    object FilialDataSetNFULLNAME: TStringField
+      FieldName = 'NFULLNAME'
+      Size = 40
+    end
+    object FilialDataSetCOUNTRY: TStringField
+      FieldName = 'COUNTRY'
+      Size = 120
+    end
+  end
+  object FilialSrc: TDataSource
+    DataSet = FilialDataSet
+    Left = 40
+    Top = 272
+  end
+end

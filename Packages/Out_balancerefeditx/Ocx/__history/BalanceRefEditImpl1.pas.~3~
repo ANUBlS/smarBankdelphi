@@ -1,0 +1,481 @@
+﻿unit BalanceRefEditImpl1;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActiveX, AxCtrls, OUT_BalanceRefEditX_TLB, StdVcl, Db, OracleData, StdCtrls,
+  Grids, DBGrids, DBCtrls, Mask, ComCtrls, ExtCtrls, ToolWin;
+
+type
+  TBalanceRefEditX = class(TActiveForm, IActiveFormX)
+    ToolBar1: TToolBar;
+    DBNavigator: TDBNavigator;
+    ToolButton1: TToolButton;
+    Label1: TLabel;
+    ComboBoxPlan: TComboBox;
+    GroupBox2: TGroupBox;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Label6: TLabel;
+    Label7: TLabel;
+    Label8: TLabel;
+    Label5: TLabel;
+    DBEdit1: TDBEdit;
+    DBEdit3: TDBEdit;
+    DBCheckBox1: TDBCheckBox;
+    DBCheckBox2: TDBCheckBox;
+    DBEdit5: TDBEdit;
+    DBEdit6: TDBEdit;
+    ComboBoxTYPEID_NAME: TComboBox;
+    ComboBoxADDITIONALTYPEID_NAME: TComboBox;
+    CmbBoxCurrPosition: TComboBox;
+    DBGrid1: TDBGrid;
+    GroupBox1: TGroupBox;
+    EditSearch: TEdit;
+    DataSource1: TDataSource;
+    BalanceDataSet: TOracleDataSet;
+    CloseTypes: TDataSource;
+    CloseTypesData: TOracleDataSet;
+    BalanceDataSetBAL_CN: TFloatField;
+    BalanceDataSetTYPEID: TFloatField;
+    BalanceDataSetADDITIONALTYPEID: TFloatField;
+    BalanceDataSetACCGROUP: TFloatField;
+    BalanceDataSetACCCLASS: TFloatField;
+    BalanceDataSetSALDO: TFloatField;
+    BalanceDataSetPART: TIntegerField;
+    BalanceDataSetBALNAME: TWideStringField;
+    BalanceDataSetCLOSEBALANCE: TFloatField;
+    BalanceDataSetRATEDIFFERENCE: TFloatField;
+    BalanceDataSetCURRENCYPOSITION: TFloatField;
+    BalanceDataSetCASHINCOMING: TFloatField;
+    BalanceDataSetTYPEID_NAME: TStringField;
+    BalanceDataSetADDITIONALTYPEID_NAME: TStringField;
+    BalanceDataSetRATEDIFFERENCE_NAME: TStringField;
+    BalanceDataSetSALDO_NAME: TWideStringField;
+    procedure BalanceDataSetCalcFields(DataSet: TDataSet);
+    procedure BalanceDataSetAfterScroll(DataSet: TDataSet);
+    procedure ComboBoxPlanChange(Sender: TObject);
+    procedure ComboBoxTYPEID_NAMEChange(Sender: TObject);
+    procedure ComboBoxADDITIONALTYPEID_NAMEChange(Sender: TObject);
+    procedure EditSearchChange(Sender: TObject);
+    procedure CmbBoxCurrPositionChange(Sender: TObject);
+    procedure CmbBoxCashIncomingChange(Sender: TObject);
+    procedure DataSource1DataChange(Sender: TObject; Field: TField);
+    procedure ActiveFormCreate(Sender: TObject);
+  private
+    { Private declarations }
+    FEvents: IActiveFormXEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+  public
+    { Public declarations }
+    procedure Initialize; override;
+  end;
+
+implementation
+
+uses ComObj, ComServ,sboapiDataModuleImpl,SBTranslateProc;
+
+{$R *.DFM}
+
+{ TActiveFormX }
+
+procedure TBalanceRefEditX.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_ActiveFormXPage); }
+end;
+
+procedure TBalanceRefEditX.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as IActiveFormXEvents;
+end;
+
+procedure TBalanceRefEditX.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TBalanceRefEditX.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TBalanceRefEditX.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TBalanceRefEditX.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TBalanceRefEditX.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TBalanceRefEditX.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TBalanceRefEditX.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TBalanceRefEditX.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TBalanceRefEditX.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TBalanceRefEditX.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TBalanceRefEditX.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TBalanceRefEditX.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TBalanceRefEditX.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TBalanceRefEditX.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TBalanceRefEditX.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TBalanceRefEditX.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TBalanceRefEditX.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TBalanceRefEditX.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TBalanceRefEditX.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TBalanceRefEditX._Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TBalanceRefEditX.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TBalanceRefEditX.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TBalanceRefEditX.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TBalanceRefEditX.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TBalanceRefEditX.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TBalanceRefEditX.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TBalanceRefEditX.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TBalanceRefEditX.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TBalanceRefEditX.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TBalanceRefEditX.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TBalanceRefEditX.Set_AxBorderStyle(Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TBalanceRefEditX.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TBalanceRefEditX.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TBalanceRefEditX.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TBalanceRefEditX.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TBalanceRefEditX.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TBalanceRefEditX.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TBalanceRefEditX.Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TBalanceRefEditX.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TBalanceRefEditX.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TBalanceRefEditX.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TBalanceRefEditX.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TBalanceRefEditX.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TBalanceRefEditX.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+procedure TBalanceRefEditX.BalanceDataSetCalcFields(DataSet: TDataSet);
+begin
+  Case BalanceDataSetTYPEID.AsInteger of
+    1 : BalanceDataSetTYPEID_NAME.Value:= 'Aktiv';
+    2 : BalanceDataSetTYPEID_NAME.Value:= 'Passiv';
+    3 : BalanceDataSetTYPEID_NAME.Value:= 'Aktiv-Passiv';
+  end;
+
+  Case BalanceDataSetADDITIONALTYPEID.AsInteger of
+    1 : BalanceDataSetADDITIONALTYPEID_NAME.Value:= 'Aktiv';
+    2 : BalanceDataSetADDITIONALTYPEID_NAME.Value:= 'Passiv';
+    3 : BalanceDataSetADDITIONALTYPEID_NAME.Value:= 'Aktiv-Passiv';
+  end;
+
+  Case BalanceDataSetRATEDIFFERENCE.AsInteger of
+    0 : BalanceDataSetRATEDIFFERENCE_NAME.Value:= 'Hesablanmır';
+    1 : BalanceDataSetRATEDIFFERENCE_NAME.Value:= 'Hesablanır';
+  end;
+
+  Case BalanceDataSetSALDO.AsInteger of
+    0 : BalanceDataSetSALDO_NAME.Value:= 'Nəzərə alinmir';
+    1 : BalanceDataSetSALDO_NAME.Value:= 'Nəzərə alınır';
+  end;
+
+// ComboBoxTYPEID_NAME.ItemIndex := BalanceDataSetTYPEID.asinteger-1;
+end;
+
+
+procedure TBalanceRefEditX.BalanceDataSetAfterScroll(DataSet: TDataSet);
+begin
+   ComboBoxTYPEID_NAME.ItemIndex := BalanceDataSetTYPEID.asinteger-1;
+   ComboBoxADDITIONALTYPEID_NAME.ItemIndex := BalanceDataSetADDITIONALTYPEID.asinteger-1;
+
+end;
+
+procedure TBalanceRefEditX.ComboBoxPlanChange(Sender: TObject);
+begin
+  Case ComboBoxPlan.ItemIndex of
+   0: BalanceDataSet.SQL[1]:= 'bal_spr1 b';
+   1: BalanceDataSet.SQL[1]:= 'bal_spr2 b';
+   2: BalanceDataSet.SQL[1]:= 'bal_spr3 b';
+   3: BalanceDataSet.SQL[1]:= 'bal_spr4 b';
+   end;
+   BalanceDataSet.Close;
+   BalanceDataSet.Open;
+
+end;
+
+
+procedure TBalanceRefEditX.ComboBoxTYPEID_NAMEChange(Sender: TObject);
+begin
+ BalanceDataSet.Edit;
+  BalanceDataSetTYPEID.AsInteger := ComboBoxTYPEID_NAME.ItemIndex+1;
+
+end;
+
+procedure TBalanceRefEditX.ComboBoxADDITIONALTYPEID_NAMEChange(
+  Sender: TObject);
+begin
+ BalanceDataSet.Edit;
+  BalanceDataSetADDITIONALTYPEID.AsInteger := ComboBoxADDITIONALTYPEID_NAME.ItemIndex+1;
+end;
+
+procedure TBalanceRefEditX.EditSearchChange(Sender: TObject);
+begin
+DataSource1.DataSet.Locate('BAL_CN', EditSearch.Text, [loCaseInsensitive, loPartialKey]);
+
+end;
+
+procedure TBalanceRefEditX.CmbBoxCurrPositionChange(Sender: TObject);
+begin
+ BalanceDataSet.Edit;
+   BalanceDataSetCURRENCYPOSITION.Value  :=CmbBoxCurrPosition.ItemIndex;
+end;
+
+procedure TBalanceRefEditX.CmbBoxCashIncomingChange(Sender: TObject);
+begin
+BalanceDataSet.Edit;
+  // BalanceDataSet.FieldByName('CashIncoming').AsInteger :=CmbBoxCashIncoming.ItemIndex;
+end;
+
+procedure TBalanceRefEditX.DataSource1DataChange(Sender: TObject;
+  Field: TField);
+begin
+   //CmbBoxCashIncoming.ItemIndex :=BalanceDataSetCASHINCOMING.AsInteger;
+   CmbBoxCurrPosition.ItemIndex :=BalanceDataSetCURRENCYPOSITION.AsInteger;
+
+end;
+
+procedure TBalanceRefEditX.ActiveFormCreate(Sender: TObject);
+begin
+ComboBoxTYPEID_NAME.ItemIndex := BalanceDataSetTYPEID.asinteger-1;
+  CmbBoxCurrPosition.ItemIndex :=0;
+ BalanceDataSet.active :=true;
+ SBTranslateProc.TranslateAllComponents(Self,sboapiDataModule.OrPack_SL);
+  end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TBalanceRefEditX,
+    Class_BalanceRefEditX,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

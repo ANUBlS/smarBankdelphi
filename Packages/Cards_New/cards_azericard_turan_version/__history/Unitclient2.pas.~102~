@@ -1,0 +1,2943 @@
+﻿unit Unitclient2;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, DBCtrlsEh, DBCtrls, Grids, DBGrids, Mask, ComCtrls,db,
+  CurrencyEdit,  Menus, DBLookupEh,Variants, NLSLocalizer, DBGridEh, XDBGrids,
+  Buttons, ExtCtrls, XFSCtrls, DBGridEhGrouping, GridsEh;
+
+type
+  Tclients2 = class(TForm)
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    Label6: TLabel;
+    Label7: TLabel;
+    Label8: TLabel;
+    Label10: TLabel;
+    Label11: TLabel;
+    Label12: TLabel;
+    Label13: TLabel;
+    Label14: TLabel;
+    Label15: TLabel;
+    Label16: TLabel;
+    Label17: TLabel;
+    Label18: TLabel;
+    Label19: TLabel;
+    Label20: TLabel;
+    Label21: TLabel;
+    Label22: TLabel;
+    Label23: TLabel;
+    Label24: TLabel;
+    Label25: TLabel;
+    Label26: TLabel;
+    Label27: TLabel;
+    Label28: TLabel;
+    Label29: TLabel;
+    Label30: TLabel;
+    Label31: TLabel;
+    Label32: TLabel;
+    Label33: TLabel;
+    Label34: TLabel;
+    Label9: TLabel;
+    Label35: TLabel;
+    Label36: TLabel;
+    Edit1: TEdit;
+    Button1: TButton;
+    Button2: TButton;
+    Button3: TButton;
+    Button4: TButton;
+    DBEdit1: TDBEdit;
+    DBEdit2: TDBEdit;
+    DBEdit3: TDBEdit;
+    DBEdit4: TDBEdit;
+    DBGrid1: TDBGrid;
+    DBGrid2: TDBGrid;
+    DBGrid3: TDBGrid;
+    Edit3: TEdit;
+    Edit5: TEdit;
+    ComboBox10: TComboBox;
+    Button5: TButton;
+    ComboBox6: TComboBox;
+    ComboBox7: TComboBox;
+    CheckBox1: TCheckBox;
+    ComboBox9: TComboBox;
+    DateTimePicker4: TDateTimePicker;
+    DBGrid4: TDBGrid;
+    ComboBox2: TComboBox;
+    DBEdit5: TDBEdit;
+    DBDateTimeEditEh3: TDBDateTimeEditEh;
+    DBEdit7: TDBEdit;
+    DBEdit10: TDBEdit;
+    Edit16: TEdit;
+    Edit17: TEdit;
+    Edit18: TEdit;
+    Edit19: TEdit;
+    Edit20: TEdit;
+    Edit21: TEdit;
+    Edit22: TEdit;
+    Edit23: TEdit;
+    Edit24: TEdit;
+    Edit25: TEdit;
+    Edit26: TEdit;
+    ComboBox4: TComboBox;
+    ComboBox5: TComboBox;
+    Edit27: TEdit;
+    DBEdit18: TDBEdit;
+    Memo1: TMemo;
+    Edit15: TEdit;
+    ComboBox11: TComboBox;
+    ComboBox12: TComboBox;
+    DateTimePicker5: TDateTimePicker;
+    DateTimePicker6: TDateTimePicker;
+    DateTimePicker7: TDateTimePicker;
+    DateTimePicker8: TDateTimePicker;
+    Edit28: TEdit;
+    DBEdit17: TDBEdit;
+    CheckBox2: TCheckBox;
+    CheckBox3: TCheckBox;
+    Edit29: TEdit;
+    DBGrid5: TDBGrid;
+    DBGrid6: TDBGrid;
+    Edit32: TEdit;
+    Edit33: TEdit;
+    ComboBox1: TComboBox;
+    Edit14: TEdit;
+    CurrencyEdit1: TCurrencyEdit;
+    Edit2: TEdit;
+    Button6: TButton;
+    PopupMenu1: TPopupMenu;
+    SIL1: TMenuItem;
+    DateTimePicker1: TDateTimePicker;
+    DBLookupComboBox6: TDBLookupComboboxEh;
+    ComboBox8: TComboBox;
+    DateTimePicker2: TDateTimePicker;
+    Edit4: TEdit;
+    Edit6: TEdit;
+    Edit7: TEdit;
+    Edit_acc_name: TEdit;
+    CheckBox4: TCheckBox;
+    DBGrid51: TXDBGrid;
+    XDBGrid2: TXDBGrid;
+    db_choose: TDBLookupComboboxEh;
+    procedure FormActivate(Sender: TObject);
+    procedure Edit14KeyPress(Sender: TObject; var Key: Char);
+    procedure DBLookupComboBox65Click(Sender: TObject);
+    procedure DBGrid1DblClick(Sender: TObject);
+    procedure Edit28KeyPress(Sender: TObject; var Key: Char);
+    procedure Edit15KeyPress(Sender: TObject; var Key: Char);
+    procedure Button1Click(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+    procedure Button4Click(Sender: TObject);
+    procedure ComboBox9Enter(Sender: TObject);
+    procedure ComboBox1Enter(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure Button3Click(Sender: TObject);
+    procedure ComboBox2Enter(Sender: TObject);
+    procedure ComboBox9Click(Sender: TObject);
+    procedure CheckBox1Click(Sender: TObject);
+    procedure Button6Click(Sender: TObject);
+    procedure SIL1Click(Sender: TObject);
+    procedure DBLookupComboBox6ButtonClick(Sender: TObject;
+      var Handled: Boolean);
+    procedure DBLookupComboBox6Click(Sender: TObject);
+    procedure DBLookupComboBox6Change(Sender: TObject);
+    procedure ComboBox1KeyPress(Sender: TObject; var Key: Char);
+    procedure FormShow(Sender: TObject);
+    procedure DBGrid5DblClick(Sender: TObject);
+    procedure DBGrid5CellClick(Column: TColumn);
+    procedure DBEdit1KeyPress(Sender: TObject; var Key: Char);
+    procedure Button7Click(Sender: TObject);
+    procedure Edit14Enter(Sender: TObject);
+    procedure BitBtn1Click(Sender: TObject);
+    procedure DBEdit4Change(Sender: TObject);
+    procedure FormPaint(Sender: TObject);
+    procedure db_chooseChange(Sender: TObject);
+    procedure Edit27Exit(Sender: TObject);
+    procedure ComboBox5Change(Sender: TObject);
+
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  clients2: Tclients2;
+  multiacc:string;
+  multival:string;
+
+implementation
+
+uses Unit18, creditinfopas, dpforms, newcard,SBTranslateProc,sboapiDataModuleImpl,
+  multiform;
+
+{$R *.DFM}
+
+procedure Tclients2.FormActivate(Sender: TObject);
+var i,Z,k:integer;
+acc:string;
+ke :char;
+begin
+NullStrictConvert := false;
+ke:=char(13);
+ //ShowMessage(DataMod_CARDS.Clients.fieldbyname('RBSNUMBER').ASSTRING);
+
+
+ //----------------------------------
+
+
+
+      ComboBox9.Clear;
+ DataMod_CARDS.apptype.Close;
+ DataMod_CARDS.apptype.Open;
+ DataMod_CARDS.apptype.First;
+
+
+
+for k:=0 to DataMod_CARDS.apptype.recordcount do
+begin
+if k=0 then ComboBox9.Items.add(' ') else
+begin
+ComboBox9.Items.add(DataMod_CARDS.apptype.fieldbyname('TYPE').asstring);
+DataMod_CARDS.apptype.next;
+end;
+end;
+
+
+
+
+ //------------------------------------
+
+
+
+
+
+
+if edit1.Text='NEW' then
+begin
+
+ //ComboBox5.Text:='WITH';//samir'';
+// ComboBox5.Enabled:=False;//samir
+DBGrid6.DataSource.DataSet.Close;
+ Button3.Enabled:=False;
+DBGrid5.DataSource.DataSet.Close;
+
+Edit29.Text:='';
+DBLookupComboBox6.Value:='';
+Edit33.Text:='';
+DBEdit3.Text:='';
+Edit_acc_name.Text:='';
+
+CheckBox3.Checked:=False;
+DBEdit1.Text:='';
+DBEdit2.Text:='';
+DBEdit18.Text:='';
+
+  db_choose.Visible:=true;
+  DataMod_CARDS.choose_type.Open;
+
+//DBGrid5.Refresh;
+Edit15.Text:='';
+Edit16.Text:='';
+Edit18.Text:='';
+Edit17.Text:='';
+Edit27.Text:='';
+//Edit20.Text:='';
+//Edit19.Text:='';
+Edit22.Text:='';
+ComboBox4.Text:='';
+ComboBox1.Text:='';
+ComboBox12.Text:='';
+Edit28.Text:='0';
+Edit26.Text:='';
+Edit23.Text:='';
+ComboBox2.Text:='';
+Edit25.Text:='';
+CheckBox2.Checked:=False;
+//Edit14.Text:='';
+ComboBox11.Text:='';
+ComboBox10.Text:='';
+
+
+Edit15.Enabled:=true;
+Edit16.Enabled:=true;
+Edit18.Enabled:=true;
+DateTimePicker7.Enabled:=true;
+Edit17.Enabled:=true;
+Edit27.Enabled:=true;
+Edit20.Enabled:=true;
+Edit19.Enabled:=true;
+Edit22.Enabled:=true;
+ComboBox4.Enabled:=true;
+DBLookupComboBox6.Enabled:=true;
+ComboBox1.Enabled:=true;
+ComboBox12.Enabled:=true;
+Edit28.Enabled:=true;
+DateTimePicker8.Enabled:=true;
+Edit26.Enabled:=False;
+Edit23.Enabled:=true;
+ComboBox2.Enabled:=true;
+Edit25.Enabled:=true;
+Edit21.Enabled:=true;
+CheckBox2.Enabled:=true;
+Edit14.Enabled:=true;
+ComboBox11.Enabled:=true;
+ComboBox10.Enabled:=true;
+ComboBox9.Enabled:=False;
+DBGrid1.Enabled:=False;
+dbgrid2.Enabled:=False;
+DBGrid5.Enabled:=false;
+dbgrid6.Enabled:=false;
+ComboBox12.text:='CARD OK';
+
+Edit14.Text:='';
+ DateTimePicker5.DateTime:=date;
+ DateTimePicker6.DateTime:=date;
+ DateTimePicker7.DateTime:=date;
+ DateTimePicker8.DateTime:=date;
+ ComboBox4.Text:='RESIDENT';
+ DBGrid1.DataSource.DataSet.Close;
+ Edit24.Text:='';
+ Edit28.Color:=clWindow;
+ Edit28.Enabled:=False;
+ Edit14.Text:='';
+ Edit33.Enabled:=TRUe;
+ DBEdit18.Text:='';
+ edit27.Text:= '994';
+
+ //ComboBox5.Text:='WITH';       .
+ ComboBox5.Text:='';
+ //Edit14.Enabled:=false;
+ end;
+
+if edit1.Text='EDIT' then
+begin
+
+
+
+Button3.Enabled:=True;
+DBGrid1.DataSource.DataSet.Open;
+
+  DBLookupComboBox6.KeyValue:= DataMod_CARDS.Clients.fieldbyname('RBSNUMBER').asstring;
+DBLookupComboBox6.Visible:=true;
+
+
+    db_choose.Visible:=true;
+  DataMod_CARDS.choose_type.Open;
+
+        DataMod_CARDS.hesab.Close;
+        DataMod_CARDS.hesab.SetVariable('CID', null);
+        DataMod_CARDS.hesab.SetVariable('p_AccNO', DataMod_CARDS.Clients.fieldbyname('RBSNUMBER').asstring);
+        DataMod_CARDS.hesab.open;
+
+ DataMod_CARDS.cliencards.close;
+ DataMod_CARDS.cliencards.SetVariable('numb',DataMod_CARDS.Clients.fieldbyname('RBSNUMBER').ASSTRING);
+ DataMod_CARDS.cliencards.Open;
+DataMod_CARDS.CARDOPERATION.Close;
+DataMod_CARDS.CARDOPERATION.SetVariable('RBS',DataMod_CARDS.Clients.fieldbyname('RBSNUMBER').ASSTRING) ;
+DataMod_CARDS.CARDOPERATION.Open;
+
+
+
+DBGrid1.Enabled:=TRUE;
+
+Edit14.Text:=inttostr(DataMod_CARDS.hesab.FieldByName('kli_id').AsInteger);
+
+//Edit14KeyPress(Edit14,ke);
+
+
+DataMod_CARDS.editval.Close;
+DataMod_CARDS.editval.SetVariable('RBSNUMBER',DBLookupComboBox6.text);
+DataMod_CARDS.editval.Open;
+Edit29.Text:=DataMod_CARDS.editval.fieldbyname('VAL_NAME').asstring;
+
+    {
+ DataMod_CARDS.cliencards.close;
+ DataMod_CARDS.cliencards.SetVariable('numb',DBLookupComboBox6.text);
+DataMod_CARDS.cliencards.Open;
+DataMod_CARDS.CARDOPERATION.Close;
+DataMod_CARDS.CARDOPERATION.SetVariable('RBS',DataMod_CARDS.Clients.fieldbyname('RBSNUMBER').ASSTRING) ;
+DataMod_CARDS.CARDOPERATION.Open;
+ DataMod_CARDS.cliencards.Open;   }
+
+//ShowMessage(DataMod_CARDS.Clients.fieldbyname('ACCID').AsString);
+DataMod_CARDS.cariqaliq2.Close;
+DataMod_CARDS.cariqaliq2.SetVariable('acc_id',DataMod_CARDS.Clients.fieldbyname('ACCID').Asinteger);
+DataMod_CARDS.cariqaliq2.Open;
+//ShowMessage(DataMod_CARDS.cariqaliq2.fieldbyname('ostat').asstring);
+Edit33.Visible:=True;
+Edit33.Text:=DataMod_CARDS.cariqaliq2.fieldbyname('ostat').asstring;
+Edit33.Enabled:=False;
+
+   DataMod_CARDS.allclientcredits.Close;
+   DataMod_CARDS.allclientcredits.SetVariable('rbsnumber',DBLookupComboBox6.text);
+   DataMod_CARDS.allclientcredits.Open;
+
+Edit15.Text:=DataMod_CARDS.Clients.fieldbyname('FNAME').asstring;
+edit15.Visible:=TRUE;
+Edit16.Text:=DataMod_CARDS.Clients.fieldbyname('LNAME').asstring;
+edit16.Visible:=TRUE;
+Edit18.Text:=DataMod_CARDS.Clients.fieldbyname('PASSPORT').asstring;
+edit18.Visible:=TRUE;
+DateTimePicker7.DateTime:=DataMod_CARDS.Clients.fieldbyname('BIRTHDAY').asdatetime;
+DateTimePicker7.Visible:=true;
+Edit17.Text:=DataMod_CARDS.Clients.fieldbyname('HOMEPHONE').asstring;
+edit17.Visible:=TRUE;
+Edit27.Text:=DataMod_CARDS.Clients.fieldbyname('WORKPHONE').asstring;
+edit27.Visible:=TRUE;
+Edit20.Text:=DataMod_CARDS.Clients.fieldbyname('COUNTRY').asstring;
+edit20.Visible:=TRUE;
+Edit19.Text:=DataMod_CARDS.Clients.fieldbyname('CITY').asstring;
+edit19.Visible:=TRUE;
+Edit22.Text:=DataMod_CARDS.Clients.fieldbyname('ADDRESS').asstring;
+edit22.Visible:=TRUE;
+ComboBox4.Text:=DataMod_CARDS.Clients.fieldbyname('RESIDENT').asstring;
+ComboBox4.visible:=true;
+ComboBox1.Text:=DataMod_CARDS.Clients.fieldbyname('CARDTYPE').asstring;
+ComboBox1.visible:=true;
+ComboBox12.Text:=DataMod_CARDS.Clients.fieldbyname('CARDSTATUS').asstring;
+ComboBox12.visible:=true;
+Edit28.Text:=DataMod_CARDS.Clients.fieldbyname('CREDIT_LIM').asstring;
+edit28.Visible:=TRUE;
+DateTimePicker5.DateTime:=DataMod_CARDS.Clients.fieldbyname('DATEOPEN').asdatetime;
+DateTimePicker6.DateTime:=DataMod_CARDS.Clients.fieldbyname('EXPIRY').asdatetime;
+DateTimePicker8.DateTime:=DataMod_CARDS.Clients.fieldbyname('EXPIRY').asdatetime;
+Edit26.Text:=DataMod_CARDS.Clients.fieldbyname('REFERENCE').asstring;
+edit26.Visible:=TRUE;
+Edit23.Text:=DataMod_CARDS.Clients.fieldbyname('EMBOSSNAME').asstring;
+edit23.Visible:=TRUE;
+ComboBox2.Text:=DataMod_CARDS.Clients.fieldbyname('COMPANY').asstring;
+ComboBox2.visible:=true;
+Edit25.Text:=DataMod_CARDS.Clients.fieldbyname('SECURITY').asstring;
+edit25.Visible:=TRUE;
+Edit21.Text:=DataMod_CARDS.Clients.fieldbyname('LANG_CODE').asstring;
+edit21.Visible:=TRUE;
+CheckBox2.Checked:=False;
+//Edit14.Text:=DataMod_CARDS.Clients.fieldbyname('').asstring;
+ComboBox11.Text:=DataMod_CARDS.Clients.fieldbyname('TYPES').asstring;
+ComboBox11.visible:=true;
+ComboBox10.Text:=DataMod_CARDS.Clients.fieldbyname('TITUL').asstring;
+ComboBox10.visible:=true;
+ Edit24.Text:=DataMod_CARDS.Clients.fieldbyname('CARDNUMBER').asstring;
+Edit24.Visible:=true;
+
+
+ if DBGrid5.DataSource.DataSet.fieldbyname('withp').asstring='0003' then
+  ComboBox5.Text:='WITH' else  ComboBox5.Text:='WITHOUT';
+
+Edit15.Enabled:=False;
+Edit16.Enabled:=False;
+Edit18.Enabled:=False;
+DateTimePicker7.Enabled:=False;
+Edit17.Enabled:=False;
+Edit27.Enabled:=False;
+Edit20.Enabled:=False;
+Edit19.Enabled:=False;
+Edit22.Enabled:=False;
+ComboBox4.Enabled:=False;
+DBLookupComboBox6.Enabled:=False;
+ComboBox1.Enabled:=False;
+ComboBox12.Enabled:=False;
+Edit28.Enabled:=False;
+DateTimePicker8.Enabled:=False;
+Edit26.Enabled:=False;
+Edit23.Enabled:=False;
+ComboBox2.Enabled:=False;
+Edit25.Enabled:=False;
+Edit21.Enabled:=False;
+CheckBox2.Enabled:=False;
+Edit14.Enabled:=False;
+ComboBox11.Enabled:=False;
+ComboBox10.Enabled:=False;
+ComboBox9.Enabled:=false;
+DBGrid1.Enabled:=true;
+dbgrid2.Enabled:=true;
+DBGrid5.Enabled:=true;
+dbgrid6.Enabled:=true;
+ComboBox8.Enabled:=False;
+ComboBox5.Enabled:=False;
+ DBEdit17.Visible:=True;
+ Edit33.Visible:=False;
+end;
+
+//ComboBox5.Text:='WITH';          //esas burda olmalidi
+
+end;
+
+
+procedure Tclients2.Edit14Enter(Sender: TObject);
+begin
+    DBLookupComboBox6.value:='';
+end;
+
+procedure Tclients2.Edit14KeyPress(Sender: TObject; var Key: Char);
+var acc:variant;
+mus:   integer;
+begin
+if key=#13 then
+begin  //1
+
+  if Edit14.Text='' then begin  //2
+       // ShowMessage('bura girdi 1');
+        DataMod_CARDS.hesab.Close;
+        DataMod_CARDS.hesab.SetVariable('CID', null);
+        DataMod_CARDS.hesab.SetVariable('p_AccNO', '%%');
+        DataMod_CARDS.hesab.open;
+        DBLookupComboBox6.Text:='';
+        Edit14.Text:='';
+       //Memo1.Text :=DataMod_CARDS.hesab.SQL.Text;
+//ShowMessage(IntToStr(DataMod_CARDS.hesab.RecordCount));
+      //  if DataMod_CARDS.HESAB.RecordCount>0
+        //      then
+          //       begin //3
+            //        acc:= DataMod_CARDS.hesab.FieldByName('ACC_NO').asVariant;
+              //
+                //    DataMod_CARDS.mushteriler.Locate
+                  //  ('ID',DataMod_CARDS.HESAB.Fieldbyname('KLI_ID').AsInteger, [loCaseInsensitive, loPartialKey]);
+
+                  // DataMod_CARDS.HESAB.Locate('ACC_no',acc, [loCaseInsensitive, loPartialKey]);
+                  //2
+                  end else       //1
+
+
+
+                  begin //4
+                  //ShowMessage('bura girdi');
+                  mus:= strtoint(Edit14.Text);
+                  DataMod_CARDS.hesab.Close;
+
+                  DataMod_CARDS.hesab.SetVariable('CID', edit14.text);
+                  DataMod_CARDS.hesab.SetVariable('p_AccNO', null);
+                  DataMod_CARDS.hesab.open;
+                  DBLookupComboBox6.Text:='';
+
+                  if DataMod_CARDS.HESAB.RecordCount>0
+   then
+   begin //5
+   //ShowMessage('1 '+IntToStr(DataMod_CARDS.HESAB.RecordCount));
+  acc:= DataMod_CARDS.hesab.FieldByName('ACC_NO').asVariant;
+  DataMod_CARDS.new_cust.CloseAll;
+ DataMod_CARDS.new_cust.SetVariable('kid',DataMod_CARDS.HESAB.Fieldbyname('KLI_ID').AsInteger);
+    DataMod_CARDS.new_cust.Open;
+    Edit_acc_name.Text:=DataMod_CARDS.new_cust.FieldByName('name').AsString;
+
+
+
+  {DataMod_CARDS.mushteriler.Locate
+   ('ID',DataMod_CARDS.HESAB.Fieldbyname('KLI_ID').AsInteger, [loCaseInsensitive]);
+                         }
+  DataMod_CARDS.HESAB.Locate('ACC_no',acc, [loCaseInsensitive]);
+   //ShowMessage('2 '+IntToStr(DataMod_CARDS.HESAB.RecordCount));
+
+   end; //5
+
+end; //4
+ end;
+end;    //1
+//ShowMessage(IntToStr(DataMod_CARDS.hesab.RecordCount));
+//end;  //1
+
+procedure Tclients2.DBLookupComboBox65Click(Sender: TObject);
+  var
+acc: String;
+  begin
+  with DataMod_CARDS, HESAB do begin
+
+   SetVariable('CID', null);
+   SetVariable('p_AccNO', dblookupcombobox6.Text+'%');
+
+  end;
+
+    acc:= DataMod_CARDS.hesab.FieldByName('ACC_NO').asVariant;
+
+   DataMod_CARDS.mushteriler.Locate
+   ('ID',DataMod_CARDS.HESAB.Fieldbyname('KLI_ID').AsInteger, [loCaseInsensitive, loPartialKey]);
+
+   //DataMod_CARDS.HESAB.Locate('ACC_no',acc, [loCaseInsensitive, loPartialKey]);
+   Edit14.Text:=DataMod_CARDS.mushteriler.fieldbyname('id').AsString;
+   //ShowMessage('test');
+end;
+
+procedure Tclients2.DBGrid1DblClick(Sender: TObject);
+begin
+//ShowMessage(DataMod_CARDS.allclientcredits.fieldbyname('NUMBEROFCREDIT').asstring);
+if  DataMod_CARDS.allclientcredits.RecordCount>0 then
+begin
+krinfo:=tkrinfo.create(self);
+krinfo.CM_ACTIVE.Close;
+//DataMod_CARDS.kredits.SetVariable('hesab',DataMod_CARDS.Clients.fieldbyname('rbsnumber').asstring);
+krinfo.CM_ACTIVE.SetVariable('ids',DataMod_CARDS.allclientcredits.fieldbyname('id').asinteger);
+krinfo.CM_ACTIVE.Open;
+krinfo.ShowModal;
+end;
+end;
+
+
+procedure Tclients2.Edit27Exit(Sender: TObject);
+begin
+if Length(edit27.Text)<>12 then
+begin
+ShowMessage('Telefon nömrəsi tam doldurulmalıdır!!');
+exit;
+end;
+end;
+
+procedure Tclients2.Edit28KeyPress(Sender: TObject; var Key: Char);
+begin
+IF  not (Key in [#8, '0'..'9']) then key:=#0;
+end;
+
+procedure Tclients2.Edit15KeyPress(Sender: TObject; var Key: Char);
+begin
+IF ORD(KEY)>126  THEN KEY:=#0;
+IF ORD(KEY)=63 THEN KEY:=#0;
+ActivateKeyboardLayout(LoadKeyboardLayout('00000409', 0), 0);
+end;
+
+procedure Tclients2.BitBtn1Click(Sender: TObject);
+begin
+
+
+showmessage(DBGrid51.DataSource.DataSet.fieldbyname('id').asstring);
+    {
+Edit15.Text:=DBGrid51.DataSource.DataSet.fieldbyname('FNAME').asstring;
+edit15.Visible:=TRUE;
+Edit16.Text:=DBGrid51.DataSource.DataSet.fieldbyname('LNAME').asstring;
+edit16.Visible:=TRUE;
+Edit18.Text:=DBGrid51.DataSource.DataSet.fieldbyname('PASSPORT').asstring;
+edit18.Visible:=TRUE;
+DateTimePicker7.DateTime:=DBGrid51.DataSource.DataSet.fieldbyname('BIRTHDAY').asdatetime;
+DateTimePicker7.Visible:=true;
+Edit17.Text:=DBGrid51.DataSource.DataSet.fieldbyname('HOMEPHONE').asstring;
+edit17.Visible:=TRUE;
+Edit27.Text:=DBGrid51.DataSource.DataSet.fieldbyname('WORKPHONE').asstring;
+edit27.Visible:=TRUE;
+Edit20.Text:=DBGrid51.DataSource.DataSet.fieldbyname('COUNTRY').asstring;
+edit20.Visible:=TRUE;
+Edit19.Text:=DBGrid51.DataSource.DataSet.fieldbyname('CITY').asstring;
+edit19.Visible:=TRUE;
+Edit22.Text:=DBGrid51.DataSource.DataSet.fieldbyname('ADDRESS').asstring;
+edit22.Visible:=TRUE;
+ComboBox4.Text:=DBGrid51.DataSource.DataSet.fieldbyname('RESIDENT').asstring;
+ComboBox4.visible:=true;
+ComboBox1.Text:=DBGrid51.DataSource.DataSet.fieldbyname('CARDTYPE').asstring;
+ComboBox1.visible:=true;
+ComboBox12.Text:=DBGrid51.DataSource.DataSet.fieldbyname('CARDSTATUS').asstring;
+ComboBox12.visible:=true;
+//Edit28.Text:=DBGrid5.DataSource.DataSet.fieldbyname('CREDIT_LIM').asstring;
+edit28.Visible:=TRUE;
+DateTimePicker5.DateTime:=DBGrid51.DataSource.DataSet.fieldbyname('DATEOPEN').asdatetime;
+DateTimePicker6.DateTime:=DBGrid51.DataSource.DataSet.fieldbyname('EXPIRY').asdatetime;
+DateTimePicker8.DateTime:=DBGrid51.DataSource.DataSet.fieldbyname('EXPIRY').asdatetime;
+Edit26.Text:=DBGrid51.DataSource.DataSet.fieldbyname('REFERENCE').asstring;
+edit26.Visible:=TRUE;
+Edit23.Text:=DBGrid51.DataSource.DataSet.fieldbyname('EMBOSSNAME').asstring;
+edit23.Visible:=TRUE;
+ComboBox2.Text:=DBGrid51.DataSource.DataSet.fieldbyname('COMPANY').asstring;
+ComboBox2.visible:=true;
+Edit25.Text:=DBGrid51.DataSource.DataSet.fieldbyname('SECURITY').asstring;
+edit25.Visible:=TRUE;
+Edit21.Text:=DBGrid51.DataSource.DataSet.fieldbyname('LANG_CODE').asstring;
+edit21.Visible:=TRUE;
+CheckBox2.Checked:=False;
+//Edit14.Text:=DataMod_CARDS.Clients.fieldbyname('').asstring;
+ComboBox11.Text:=DBGrid51.DataSource.DataSet.fieldbyname('TYPES').asstring;
+ComboBox11.visible:=true;
+ComboBox10.Text:=DBGrid51.DataSource.DataSet.fieldbyname('TITUL').asstring;
+ComboBox10.visible:=true;
+Edit24.Text:=DBGrid51.DataSource.DataSet.fieldbyname('CARDNUMBER').asstring;
+Edit24.Visible:=true;
+
+
+
+Edit15.Enabled:=False;
+Edit16.Enabled:=False;
+Edit18.Enabled:=False;
+DateTimePicker7.Enabled:=False;
+Edit17.Enabled:=False;
+Edit27.Enabled:=False;
+Edit20.Enabled:=False;
+Edit19.Enabled:=False;
+Edit22.Enabled:=False;
+ComboBox4.Enabled:=False;
+DBLookupComboBox6.Enabled:=False;
+ComboBox1.Enabled:=False;
+ComboBox12.Enabled:=False;
+Edit28.Enabled:=False;
+DateTimePicker8.Enabled:=False;
+Edit26.Enabled:=False;
+Edit23.Enabled:=False;
+ComboBox2.Enabled:=False;
+Edit25.Enabled:=False;
+Edit21.Enabled:=False;
+CheckBox2.Enabled:=False;
+Edit14.Enabled:=False;
+ComboBox11.Enabled:=False;
+ComboBox10.Enabled:=False;
+ComboBox9.Enabled:=false;
+DBGrid1.Enabled:=true;
+dbgrid2.Enabled:=true;
+DBGrid51.Enabled:=true;
+dbgrid6.Enabled:=true;
+ComboBox8.Enabled:=False;
+ComboBox5.Enabled:=False;
+
+       }
+
+end;
+
+procedure Tclients2.Button1Click(Sender: TObject);
+begin
+DataMod_CARDS.SB_ACA.CallProcedure('CheckAdvancedObjectAccess', ['card_client_new']);
+Edit1.Text:='NEW';
+
+
+if edit1.Text='NEW' then
+begin
+ DBGrid6.DataSource.DataSet.Close;
+DBGrid5.DataSource.DataSet.Close;
+Edit14.Text:='';
+Edit29.Text:='';
+DBLookupComboBox6.Value:='';
+Edit33.Text:='';
+DBEdit3.Text:='';
+Edit28.Text:='0';
+Edit_acc_name.Text:='';
+
+
+Edit15.Text:='';
+Edit16.Text:='';
+Edit18.Text:='';
+Edit17.Text:='';
+Edit27.Text:='';
+//Edit20.Text:='';
+//Edit19.Text:='AZE';
+Edit22.Text:='';
+ComboBox4.Text:='';
+ComboBox1.Text:='';
+//ComboBox12.Text:='';
+Edit28.Text:='';
+Edit26.Text:='';
+Edit23.Text:='';
+ComboBox2.Text:='';
+Edit25.Text:='';
+CheckBox2.Checked:=False;
+//Edit14.Text:='';
+ComboBox11.Text:='';
+ComboBox10.Text:='';
+
+
+
+Edit15.Enabled:=true;
+Edit16.Enabled:=true;
+Edit18.Enabled:=true;
+DateTimePicker7.Enabled:=true;
+Edit17.Enabled:=true;
+Edit27.Enabled:=true;
+Edit20.Enabled:=true;
+Edit19.Enabled:=true;
+Edit22.Enabled:=true;
+ComboBox4.Enabled:=true;
+DBLookupComboBox6.Enabled:=true;
+ComboBox1.Enabled:=true;
+ComboBox12.Enabled:=true;
+Edit28.Enabled:=true;
+DateTimePicker8.Enabled:=true;
+Edit26.Enabled:=False;
+Edit23.Enabled:=true;
+ComboBox2.Enabled:=true;
+Edit25.Enabled:=true;
+Edit21.Enabled:=true;
+CheckBox2.Enabled:=true;
+Edit14.Enabled:=true;
+ComboBox11.Enabled:=true;
+ComboBox10.Enabled:=true;
+ComboBox9.Enabled:=False;
+DBGrid1.Enabled:=False;
+dbgrid2.Enabled:=False;
+DBGrid5.Enabled:=false;
+dbgrid6.Enabled:=false;
+ComboBox4.Text:='RESIDENT';
+Edit19.Text:='BAKU';
+Edit20.Text:='AZE';
+Edit21.Text:='AZE';
+ComboBox12.Text:='CARD OK';
+DBGrid1.DataSource.DataSet.Close;
+Edit24.Text:='';
+Edit28.Color:=clWindow;
+ Edit28.Enabled:=False;
+ Edit14.Text:='';
+ Edit33.Enabled:=TRUe;
+ DBEdit18.Text:='';
+  DateTimePicker5.DateTime:=date;
+ DateTimePicker6.DateTime:=date;
+ DateTimePicker7.DateTime:=date;
+ DateTimePicker8.DateTime:=date;
+//ComboBox5.ItemIndex:=1;//samir'';
+
+ // ComboBox5.Enabled:=False;//samir
+end;
+
+
+
+end;
+
+procedure Tclients2.Button2Click(Sender: TObject);
+var i,z,urg,kr:integer;
+wt:string;
+begin
+
+DataMod_CARDS.SB_ACA.CallProcedure('CheckAdvancedObjectAccess', ['card_client_save']);
+IF (Edit1.Text='NEW') or (Edit1.Text='ONLINE') THEN BEGIN
+
+ z:=0;
+
+
+
+
+
+for i :=0 to clients2.ComponentCount-1 do
+begin
+if Components[i].ClassType= Tedit then
+if (Components[i] as Tedit).Color=claqua then
+
+begin
+
+
+ if (Components[i] as TEdit).Text='' then z:=1;
+end;
+if Components[i].ClassType= Tcombobox then
+if (clients2.Components[i] as Tcombobox).Color=claqua then
+
+begin
+ if (clients2.Components[i] as Tcombobox).text='' then z:=1;
+end;
+
+if Components[i].ClassType= TDBLookupComboBox then
+if (clients2.Components[i] as TDBLookupComboBox).Color=claqua then
+
+begin
+ if (clients2.Components[i] as TDBLookupComboBox).text='' then z:=1;
+end;
+
+end ;
+
+if z=1 then
+begin
+ShowMessage('Rəngli xanalar tam doldurulmayıb!');
+exit;
+end;
+
+
+if Copy(edit27.Text,0,3)<>'994' then
+begin
+
+  edit27.Text:='994'+Copy(edit27.Text,0,100);
+end;
+
+if Length(edit27.Text)<>12 then
+begin
+ShowMessage('Telefon nömrəsi tam doldurulmalıdır!!');
+exit;
+end;
+
+if ComboBox5.Text='' then
+begin
+ShowMessage('Kartin pin xanasi doldurulmalıdır');
+exit;
+end ;
+
+
+
+
+DataMod_CARDS.fcardtype.Close;
+DataMod_CARDS.fcardtype.SetVariable('cnam',ComboBox1.text);
+DataMod_CARDS.fcardtype.Open;
+   //ShowMessage(DataMod_CARDS.fcardtype.fieldbyname('CURRENCY').AsString);
+   //ShowMessage(edit29.Text);
+
+
+
+  if DBEdit18.Text= DataMod_CARDS.fcardtype.fieldbyname('CURRENCY').AsString then
+begin
+
+DataMod_CARDS.cntkli_id .close;
+DataMod_CARDS.cntkli_id.SetVariable('kid',strtoint(edit14.Text));
+DataMod_CARDS.cntkli_id.Open;
+
+if DataMod_CARDS.cntkli_id.FieldByName('cnt').AsInteger=0 then
+begin
+DataMod_CARDS.referens.close;
+DataMod_CARDS.referens.SetVariable('v_ref', 0);
+DataMod_CARDS.referens.open;
+end
+else
+begin
+ DataMod_CARDS.referens.close;
+DataMod_CARDS.referens.SetVariable('v_ref', strtoint(edit14.Text));
+DataMod_CARDS.referens.open;
+end;
+
+
+
+
+edit26.Text:= DataMod_CARDS.referens.fieldbyname('refe').asstring;
+
+     if CheckBox2.Checked then  urg:=1 else urg:=0;
+     if CheckBox3.Checked then  kr:=1 else kr:=0;
+
+   if Length(Edit23.Text)<21 then
+  begin
+  if DateTimePicker8.DateTime>date then
+  begin
+
+   if ComboBox5.Text='WITH' then  wt:='0003' else wt:='0002';
+
+ DataMod_CARDS.mainpacket.CallProcedure('new_card',[edit15.text+' '+edit16.text,
+                                                   edit15.text,
+                                                   edit16.text,
+                                                   edit18.text,
+                                                   datetostr(DateTimePicker7.DateTime),
+                                                   Edit17.Text,
+                                                   Edit27.Text,
+                                                   Edit20.Text,
+                                                   Edit19.Text,
+                                                   Edit22.Text,
+                                                   ComboBox4.text,
+                                                   DBLookupComboBox6.Text,
+                                                   DBEdit18.Text,
+                                                   ComboBox1.text,//DBLookupComboBox10.Text ,
+                                                   ComboBox12.text,
+                                                   Edit28.Text,
+                                                   DateTimePicker5.DateTime,
+                                                   DateTimePicker8.DateTime,
+                                                   Edit26.Text,
+                                                   Edit23.Text,
+                                                   ComboBox2.text,
+                                                   Edit25.Text,
+                                                   1,
+                                                   wt, //        Turanbnkda olmaya biler
+                                                   urg,
+                                                   Edit21.Text,
+                                                   kr,
+                                                   Edit14.Text,
+                                                   ComboBox11.text,
+                                                   ComboBox10.text,
+                                                   DateTimePicker2.datetime]);
+
+                                                     if CheckBox4.Checked then
+                                                   begin
+                                                    MultiCurrency:=TMultiCurrency.Create(self);
+                                                    MultiCurrency.Edit3.Text:=DBLookupComboBox6.Text;
+                                                    MultiCurrency.Edit4.Text:='new';
+                                                    MultiCurrency.ShowModal;
+                                                   end;
+
+
+                                                   edit15.text:='';
+                                                   edit16.text:='';
+                                                   edit15.text:='';
+                                                   edit16.text:='';
+                                                   edit18.text:='';
+
+                                                   Edit17.Text:='';
+                                                   Edit27.Text:='';
+                                                   Edit20.Text:='';
+                                                   Edit19.Text:='';
+                                                   Edit22.Text:='';
+                                                   ComboBox4.text:='';
+
+                                                   DBEdit18.Text:='';
+
+                                                   ComboBox12.text:='';
+                                                   Edit28.Text:='';
+
+                                                   Edit26.Text:='';
+                                                   Edit23.Text:='';
+                                                   ComboBox2.text:='';
+                                                   Edit25.Text:='';
+
+                                                   Edit21.Text:='';
+
+                                                   Edit14.Text:='';
+                                                   ComboBox11.text:='';
+                                                   ComboBox10.text:='';
+
+                                                   DataMod_CARDS.hesabtap.close;
+                                                   DataMod_CARDS.hesabtap.SetVariable('rbs',DBLookupComboBox6.text);
+                                                   DataMod_CARDS.hesabtap.Open;
+                                                   DataMod_CARDS.findcredit.close;
+                                                   DataMod_CARDS.findcredit.SetVariable('acc',DataMod_CARDS.hesabtap.fieldbyname('id').asinteger);
+                                                   DataMod_CARDS.findcredit.Open;
+                                                   // if StrToFloat(Edit28.Text)<>DataMod_CARDS.findcredit.FieldByName('kredit').asfloat
+                                                   //  then
+                                                   //  begin
+                                                   //  Edit28.Color:=clRed;
+                                                   //  ShowMessage('Дахил етдийиниз кредит мябляьи Смарт-Кредит модулундаки мябляья бярабяр дейилдир!');
+                                                   //  end
+                                                   //  else Edit28.Color:=clWindow;
+
+
+
+                                                   ShowMessage('Yeni kart əlavə edildi!');
+                                                   close;
+
+                                                   //
+
+                                                   end
+                                                   else
+                                                   ShowMessage('Bitme tarix duz secilmeyib!');
+                                                   end else
+                                                   ShowMessage('EMMBOSSNAME UZUNDUR!');
+                                                   end else
+begin
+ShowMessage('Valyuta səhvdir');
+//exit;
+end;
+
+
+
+
+
+
+
+END;                                                   
+
+if Edit1.Text='EDIT' then
+
+begin
+
+
+
+
+
+if ComboBox9.Text<>'' then
+begin
+BEGIN
+IF edit2.Text='2' THEN
+BEGIN
+if Edit24.Text<>'' then
+begin
+if CheckBox2.Checked then  urg:=1 else urg:=0;
+     if CheckBox3.Checked then  kr:=1 else kr:=0;
+
+
+
+      DataMod_CARDS.fmaincard.Close;
+   DataMod_CARDS.fmaincard.SetVariable('CRD',edit24.text);
+   DataMod_CARDS.fmaincard.Open;
+
+DataMod_CARDS.referens.close;
+DataMod_CARDS.referens.SetVariable('v_ref', strtoint(edit14.Text ) );
+DataMod_CARDS.referens.open;
+
+edit26.Text:= DataMod_CARDS.referens.fieldbyname('refe').asstring;
+
+  if ComboBox5.Text='WITH' then  wt:='0003' else wt:='0002';
+
+
+if Length(edit27.Text)<>12 then
+begin
+ShowMessage('Telefon nömrəsi tam doldurulmalıdır!!');
+exit;
+end;
+
+
+  if DataMod_CARDS.fmaincard.FieldByName('maincard').asstring='' then
+
+  begin
+
+ DataMod_CARDS.mainpacket.CallProcedure('edit_card',[edit15.text+' '+edit16.text,
+                                                   edit15.text,
+                                                   edit16.text,
+                                                   edit18.text,
+                                                   datetostr(DateTimePicker7.DateTime),
+                                                   Edit17.Text,
+                                                   Edit27.Text,
+                                                   Edit20.Text,
+                                                   Edit19.Text,
+                                                   Edit22.Text,
+                                                   ComboBox4.text,
+                                                   DBLookupComboBox6.Text,
+                                                   dbedit18.text,
+                                                   ComboBox1.text,//DBLookupComboBox10.Text ,
+                                                   ComboBox12.text,
+                                                   Edit28.Text,
+                                                   DateTimePicker5.DateTime,
+                                                   DateTimePicker8.DateTime,
+                                                   Edit26.Text,
+                                                   Edit23.Text,
+                                                   ComboBox2.text,
+                                                   Edit25.Text,
+                                                   edit2.text,
+                                                   urg,
+                                                   Edit21.Text,
+                                                   kr,
+                                                   Edit14.Text,
+                                                   ComboBox11.text,
+                                                   ComboBox10.text,
+                                                   edit24.text,
+                                                   wt,
+                                                   DateTimePicker2.datetime]);
+                                                    end
+                                                    else
+                                                    ShowMessage('Subkarta yenidən Subcard yaratmaq olmaz');
+
+
+                                                   ShowMessage('Yadda saxlanıldı!');
+                                                   DataMod_CARDS.CARDOPERATION.Close;
+DataMod_CARDS.CARDOPERATION.SetVariable('RBS',DataMod_CARDS.Clients.fieldbyname('RBSNUMBER').ASSTRING) ;
+DataMod_CARDS.CARDOPERATION.Open;
+
+
+       ComboBox9.Text:='';
+       end else  ShowMessage('Kart nömrəsi daxil edilməyib!');
+//SUB CARD
+END;
+
+IF  edit2.Text='3' THEN
+BEGIN
+if Edit24.Text<>'' then
+begin
+
+if MessageDlg('Kartı  '+datetostr(DateTimePicker8.DateTime)+' tarixinə qədər prolonqasiya etməyinizə əminsinizmi?',mtWarning,[mbyes,mbno],0)=mryes then begin
+
+ if DateTimePicker8.DateTime>DateTimePicker1.DateTime then
+ begin
+if CheckBox2.Checked then  urg:=1 else urg:=0;
+     if CheckBox3.Checked then  kr:=1 else kr:=0;
+
+if ComboBox5.Text='WITH' then  wt:='0003' else wt:='0002';
+
+ DataMod_CARDS.mainpacket.CallProcedure('edit_card',[edit15.text+' '+edit16.text,
+                                                   edit15.text,
+                                                   edit16.text,
+                                                   edit18.text,
+                                                   datetostr(DateTimePicker7.DateTime),
+                                                   Edit17.Text,
+                                                   Edit27.Text,
+                                                   Edit20.Text,
+                                                   Edit19.Text,
+                                                   Edit22.Text,
+                                                   ComboBox4.text,
+                                                   DBLookupComboBox6.Text,
+                                                    dbedit18.text,
+                                                   ComboBox1.text,//DBLookupComboBox10.Text ,
+                                                   ComboBox12.text,
+                                                   Edit28.Text,
+                                                   DateTimePicker5.DateTime,
+                                                   DateTimePicker8.DateTime,
+                                                   Edit26.Text,
+                                                   Edit23.Text,
+                                                   ComboBox2.text,
+                                                   Edit25.Text,
+                                                   edit2.text,
+                                                   urg,
+                                                   Edit21.Text,
+                                                   kr,
+                                                   Edit14.Text,
+                                                   ComboBox11.text,
+                                                   ComboBox10.text,
+                                                   edit24.text,
+                                                   wt,
+                                                   DateTimePicker2.datetime]);
+
+
+                                                   ShowMessage('Yadda saxlanıldı!');
+                                                   DataMod_CARDS.CARDOPERATION.Close;
+DataMod_CARDS.CARDOPERATION.SetVariable('RBS',DataMod_CARDS.Clients.fieldbyname('RBSNUMBER').ASSTRING) ;
+DataMod_CARDS.CARDOPERATION.Open;
+                                                   ComboBox9.Text:='';
+                                                   end else ShowMessage('Tarix düz secilməyib!');
+                                                    end;
+                                                   end else ShowMessage('Kart nömrəsi daxil edilmətib!');
+
+//PROLONGATION
+END;
+
+IF edit2.Text='4' THEN
+BEGIN
+ if Edit24.Text<>'' then
+ begin
+if CheckBox2.Checked then  urg:=1 else urg:=0;
+     if CheckBox3.Checked then  kr:=1 else kr:=0;
+
+   if ComboBox5.Text='WITH' then  wt:='0003' else wt:='0002';
+ DataMod_CARDS.mainpacket.CallProcedure('edit_card',[edit15.text+' '+edit16.text,
+                                                   edit15.text,
+                                                   edit16.text,
+                                                   edit18.text,
+                                                   datetostr(DateTimePicker7.DateTime),
+                                                   Edit17.Text,
+                                                   Edit27.Text,
+                                                   Edit20.Text,
+                                                   Edit19.Text,
+                                                   Edit22.Text,
+                                                   ComboBox4.text,
+                                                   DBLookupComboBox6.Text,
+                                                  dbedit18.text,
+                                                   ComboBox1.text,//DBLookupComboBox10.Text ,
+                                                   ComboBox12.text,
+                                                   Edit28.Text,
+                                                   DateTimePicker5.DateTime,
+                                                   DateTimePicker8.DateTime,
+                                                   Edit26.Text,
+                                                   Edit23.Text,
+                                                   ComboBox2.text,
+                                                   Edit25.Text,
+                                                   edit2.text,
+                                                   urg,
+                                                   Edit21.Text,
+                                                   kr,
+                                                   Edit14.Text,
+                                                   ComboBox11.text,
+                                                   ComboBox10.text,
+                                                   edit24.text,
+                                                   wt,
+                                                   DateTimePicker2.datetime]);
+
+
+                                                   ShowMessage('Yadda saxlanıldı!');
+                                                   DataMod_CARDS.CARDOPERATION.Close;
+DataMod_CARDS.CARDOPERATION.SetVariable('RBS',DataMod_CARDS.Clients.fieldbyname('RBSNUMBER').ASSTRING) ;
+DataMod_CARDS.CARDOPERATION.Open;
+                                                   ComboBox9.Text:='';
+                                                   end else ShowMessage('Kart nömrəsi daxil edilmətib!');
+
+
+
+
+//REPLACE
+END;
+
+IF edit2.Text='12' THEN
+BEGIN
+
+
+if CheckBox2.Checked then  urg:=1 else urg:=0;
+     if CheckBox3.Checked then  kr:=1 else kr:=0;
+   if ComboBox5.Text='WITH' then  wt:='0003' else wt:='0002';
+
+ DataMod_CARDS.mainpacket.CallProcedure('edit_card',[edit15.text+' '+edit16.text,
+                                                   edit15.text,
+                                                   edit16.text,
+                                                   edit18.text,
+                                                   datetostr(DateTimePicker7.DateTime),
+                                                   Edit17.Text,
+                                                   Edit27.Text,
+                                                   Edit20.Text,
+                                                   Edit19.Text,
+                                                   Edit22.Text,
+                                                   ComboBox4.text,
+                                                   DBLookupComboBox6.Text,
+                                                  dbedit18.text,
+                                                   ComboBox1.text,//DBLookupComboBox10.Text ,
+                                                   ComboBox12.text,
+                                                   Edit28.Text,
+                                                   DateTimePicker5.DateTime,
+                                                   DateTimePicker8.DateTime,
+                                                   Edit26.Text,
+                                                   Edit23.Text,
+                                                   ComboBox2.text,
+                                                   Edit25.Text,
+                                                   edit2.text,
+                                                   urg,
+                                                   Edit21.Text,
+                                                   kr,
+                                                   Edit14.Text,
+                                                   ComboBox11.text,
+                                                   ComboBox10.text,
+                                                   edit24.text,
+                                                   wt,
+                                                   DateTimePicker2.datetime]);
+
+
+                                                   ShowMessage('Yadda saxlanıldı!');
+                                                   DataMod_CARDS.CARDOPERATION.Close;
+DataMod_CARDS.CARDOPERATION.SetVariable('RBS',DataMod_CARDS.Clients.fieldbyname('RBSNUMBER').ASSTRING) ;
+DataMod_CARDS.CARDOPERATION.Open;
+                                                   ComboBox9.Text:='';
+
+//PIN ATTEMPTS CLEAR
+END;
+
+IF edit2.Text='6' THEN
+BEGIN
+
+
+if CheckBox2.Checked then  urg:=1 else urg:=0;
+     if CheckBox3.Checked then  kr:=1 else kr:=0;
+
+                   if ComboBox5.Text='WITH' then  wt:='0003' else wt:='0002';
+ DataMod_CARDS.mainpacket.CallProcedure('edit_card',[edit15.text+' '+edit16.text,
+                                                   edit15.text,
+                                                   edit16.text,
+                                                   edit18.text,
+                                                   datetostr(DateTimePicker7.DateTime),
+                                                   Edit17.Text,
+                                                   Edit27.Text,
+                                                   Edit20.Text,
+                                                   Edit19.Text,
+                                                   Edit22.Text,
+                                                   ComboBox4.text,
+                                                   DBLookupComboBox6.Text,
+                                                   dbedit18.text,
+                                                   ComboBox1.text,//DBLookupComboBox10.Text ,
+                                                   ComboBox12.text,
+                                                   Edit28.Text,
+                                                   DateTimePicker5.DateTime,
+                                                   DateTimePicker8.DateTime,
+                                                   Edit26.Text,
+                                                   Edit23.Text,
+                                                   ComboBox2.text,
+                                                   Edit25.Text,
+                                                   edit2.text,
+                                                   urg,
+                                                   Edit21.Text,
+                                                   kr,
+                                                   Edit14.Text,
+                                                   ComboBox11.text,
+                                                   ComboBox10.text,
+                                                   edit24.text,
+                                                   wt,
+                                                   DateTimePicker2.datetime]);
+
+
+                                                   ShowMessage('Yadda saxlanıldı!');
+                                                   DataMod_CARDS.CARDOPERATION.Close;
+DataMod_CARDS.CARDOPERATION.SetVariable('RBS',DataMod_CARDS.Clients.fieldbyname('RBSNUMBER').ASSTRING) ;
+DataMod_CARDS.CARDOPERATION.Open;
+                                                   ComboBox9.Text:='';
+
+//STATUS CHANGE
+END;
+
+IF edit2.Text='11' THEN
+BEGIN
+
+
+if CheckBox2.Checked then  urg:=1 else urg:=0;
+     if CheckBox3.Checked then  kr:=1 else kr:=0;
+                    if ComboBox5.Text='WITH' then  wt:='0003' else wt:='0002';
+
+ DataMod_CARDS.mainpacket.CallProcedure('edit_card',[edit15.text+' '+edit16.text,
+                                                   edit15.text,
+                                                   edit16.text,
+                                                   edit18.text,
+                                                   datetostr(DateTimePicker7.DateTime),
+                                                   Edit17.Text,
+                                                   Edit27.Text,
+                                                   Edit20.Text,
+                                                   Edit19.Text,
+                                                   Edit22.Text,
+                                                   ComboBox4.text,
+                                                   DBLookupComboBox6.Text,
+                                                   dbedit18.text,
+                                                   ComboBox1.text,//DBLookupComboBox10.Text ,
+                                                   ComboBox12.text,
+                                                   Edit28.Text,
+                                                   DateTimePicker5.DateTime,
+                                                   DateTimePicker8.DateTime,
+                                                   Edit26.Text,
+                                                   Edit23.Text,
+                                                   ComboBox2.text,
+                                                   Edit25.Text,
+                                                   edit2.text,
+                                                   urg,
+                                                   Edit21.Text,
+                                                   kr,
+                                                   Edit14.Text,
+                                                   ComboBox11.text,
+                                                   ComboBox10.text,
+                                                   edit24.text,
+                                                   wt,
+                                                   DateTimePicker2.datetime]);
+
+
+                                                   ShowMessage('Yadda saxlanıldı!');
+                                                   DataMod_CARDS.CARDOPERATION.Close;
+DataMod_CARDS.CARDOPERATION.SetVariable('RBS',DataMod_CARDS.Clients.fieldbyname('RBSNUMBER').ASSTRING) ;
+DataMod_CARDS.CARDOPERATION.Open;
+                                                   ComboBox9.Text:='';
+
+//RBSNUMBER CHANGE
+END;
+
+
+IF edit2.Text='14' THEN
+BEGIN
+    DataMod_CARDS.SB_ACA.CallProcedure('CheckAdvancedObjectAccess', ['CARD_BRANCHUPD']);
+
+if CheckBox2.Checked then  urg:=1 else urg:=0;
+     if CheckBox3.Checked then  kr:=1 else kr:=0;
+
+                    if ComboBox5.Text='WITH' then  wt:='0003' else wt:='0002';
+ DataMod_CARDS.mainpacket.CallProcedure('edit_card',[edit15.text+' '+edit16.text,
+                                                   edit15.text,
+                                                   edit16.text,
+                                                   edit18.text,
+                                                   datetostr(DateTimePicker7.DateTime),
+                                                   Edit17.Text,
+                                                   Edit27.Text,
+                                                   Edit20.Text,
+                                                   Edit19.Text,
+                                                   Edit22.Text,
+                                                   ComboBox4.text,
+                                                   DBLookupComboBox6.Text,
+                                                   dbedit18.text,
+                                                   ComboBox1.text,//DBLookupComboBox10.Text ,
+                                                   ComboBox12.text,
+                                                   Edit28.Text,
+                                                   DateTimePicker5.DateTime,
+                                                   DateTimePicker8.DateTime,
+                                                   Edit26.Text,
+                                                   Edit23.Text,
+                                                   ComboBox2.text,
+                                                   Edit25.Text,
+                                                   edit2.text,
+                                                   urg,
+                                                   Edit21.Text,
+                                                   kr,
+                                                   Edit14.Text,
+                                                   ComboBox11.text,
+                                                   ComboBox10.text,
+                                                   edit24.text,
+                                                   wt,
+                                                   DateTimePicker2.datetime]);
+
+
+                                                   ShowMessage('Yadda saxlanıldı!');
+                                                   DataMod_CARDS.CARDOPERATION.Close;
+DataMod_CARDS.CARDOPERATION.SetVariable('RBS',DataMod_CARDS.Clients.fieldbyname('RBSNUMBER').ASSTRING) ;
+DataMod_CARDS.CARDOPERATION.Open;
+                                                   ComboBox9.Text:='';
+
+//branchchange
+END;
+
+IF edit2.Text='7' THEN
+BEGIN
+ DataMod_CARDS.closefind.close;
+ DataMod_CARDS.closefind.setvariable('crdnum',Edit24.Text);
+ DataMod_CARDS.closefind.open;
+
+
+ if DataMod_CARDS.closefind.recordcount=0 then
+ begin
+
+if CheckBox2.Checked then  urg:=1 else urg:=0;
+     if CheckBox3.Checked then  kr:=1 else kr:=0;
+
+                      if ComboBox5.Text='WITH' then  wt:='0003' else wt:='0002';
+ DataMod_CARDS.mainpacket.CallProcedure('edit_card',[edit15.text+' '+edit16.text,
+                                                   edit15.text,
+                                                   edit16.text,
+                                                   edit18.text,
+                                                   datetostr(DateTimePicker7.DateTime),
+                                                   Edit17.Text,
+                                                   Edit27.Text,
+                                                   Edit20.Text,
+                                                   Edit19.Text,
+                                                   Edit22.Text,
+                                                   ComboBox4.text,
+                                                   DBLookupComboBox6.Text,
+                                                   dbedit18.text,
+                                                   ComboBox1.text,//DBLookupComboBox10.Text ,
+                                                   ComboBox12.text,
+                                                   Edit28.Text,
+                                                   DateTimePicker5.DateTime,
+                                                   DateTimePicker8.DateTime,
+                                                   Edit26.Text,
+                                                   Edit23.Text,
+                                                   ComboBox2.text,
+                                                   Edit25.Text,
+                                                   edit2.text,
+                                                   urg,
+                                                   Edit21.Text,
+                                                   kr,
+                                                   Edit14.Text,
+                                                   ComboBox11.text,
+                                                   ComboBox10.text,
+                                                   edit24.text,
+                                                   wt,
+                                                   DateTimePicker2.datetime]);
+
+
+                                                   ShowMessage('Yadda saxlanıldı!');
+                                                   DataMod_CARDS.CARDOPERATION.Close;
+DataMod_CARDS.CARDOPERATION.SetVariable('RBS',DataMod_CARDS.Clients.fieldbyname('RBSNUMBER').ASSTRING) ;
+DataMod_CARDS.CARDOPERATION.Open;
+                                                   ComboBox9.Text:='';
+
+
+
+                                                   end else ShowMessage('Suply kartı var!');
+                                                   //CONTRACT CLOSE
+END;
+
+if edit2.Text='5' then
+begin
+  
+if CheckBox2.Checked then  urg:=1 else urg:=0;
+     if CheckBox3.Checked then  kr:=1 else kr:=0;
+        DataMod_CARDS.hesabtap.close;
+                                                   DataMod_CARDS.hesabtap.SetVariable('rbs',DBLookupComboBox6.text);
+                                                   DataMod_CARDS.hesabtap.Open;
+                                                   DataMod_CARDS.findcredit.close;
+                                                   DataMod_CARDS.findcredit.SetVariable('acc',DataMod_CARDS.hesabtap.fieldbyname('id').asinteger);
+                                                   DataMod_CARDS.findcredit.Open;
+        if StrToFloat(Edit28.Text)<>DataMod_CARDS.findcredit.FieldByName('kredit').asfloat
+                                                     then
+                                                     begin
+                                                     Edit28.Color:=clRed;
+                                                     ShowMessage('Daxil etdiyiniz kredit məbləği Smart-Kredit modulundakı məbləğə bərabər deyildir!');
+                                                     exit;
+                                                     end
+                                                     else Edit28.Color:=clWindow;
+               if ComboBox5.Text='WITH' then  wt:='0003' else wt:='0002';
+
+ DataMod_CARDS.mainpacket.CallProcedure('edit_card',[edit15.text+' '+edit16.text,
+                                                   edit15.text,
+                                                   edit16.text,
+                                                   edit18.text,
+                                                   datetostr(DateTimePicker7.DateTime),
+                                                   Edit17.Text,
+                                                   Edit27.Text,
+                                                   Edit20.Text,
+                                                   Edit19.Text,
+                                                   Edit22.Text,
+                                                   ComboBox4.text,
+                                                   DBLookupComboBox6.Text,
+                                                   dbedit18.text,
+                                                   ComboBox1.text,//DBLookupComboBox10.Text ,
+                                                   ComboBox12.text,
+                                                   Edit28.Text,
+                                                   DateTimePicker5.DateTime,
+                                                   DateTimePicker8.DateTime,
+                                                   Edit26.Text,
+                                                   Edit23.Text,
+                                                   ComboBox2.text,
+                                                   Edit25.Text,
+                                                   edit2.text,
+                                                   urg,
+                                                   Edit21.Text,
+                                                   kr,
+                                                   Edit14.Text,
+                                                   ComboBox11.text,
+                                                   ComboBox10.text,
+                                                   edit24.text,
+                                                   wt,
+                                                   DateTimePicker2.datetime]);
+
+
+
+
+
+                                                   ShowMessage('Yadda saxlanıldı!');
+                                                   DataMod_CARDS.CARDOPERATION.Close;
+DataMod_CARDS.CARDOPERATION.SetVariable('RBS',DataMod_CARDS.Clients.fieldbyname('RBSNUMBER').ASSTRING) ;
+DataMod_CARDS.CARDOPERATION.Open;
+                                                   ComboBox9.Text:='';
+ //CREDIT LIMIT
+
+end;
+
+
+IF edit2.Text='35' THEN
+BEGIN
+
+
+if CheckBox2.Checked then  urg:=1 else urg:=0;
+     if CheckBox3.Checked then  kr:=1 else kr:=0;
+            if ComboBox5.Text='WITH' then  wt:='0003' else wt:='0002';
+
+ DataMod_CARDS.mainpacket.CallProcedure('edit_card',[edit15.text+' '+edit16.text,
+                                                   edit15.text,
+                                                   edit16.text,
+                                                   edit18.text,
+                                                   datetostr(DateTimePicker7.DateTime),
+                                                   Edit17.Text,
+                                                   Edit27.Text,
+                                                   Edit20.Text,
+                                                   Edit19.Text,
+                                                   Edit22.Text,
+                                                   ComboBox4.text,
+                                                   DBLookupComboBox6.Text,
+                                                   dbedit18.text,
+                                                   ComboBox1.text,//DBLookupComboBox10.Text ,
+                                                   ComboBox12.text,
+                                                   Edit28.Text,
+                                                   DateTimePicker5.DateTime,
+                                                   DateTimePicker8.DateTime,
+                                                   Edit26.Text,
+                                                   Edit23.Text,
+                                                   ComboBox2.text,
+                                                   Edit25.Text,
+                                                   edit2.text,
+                                                   urg,
+                                                   Edit21.Text,
+                                                   kr,
+                                                   Edit14.Text,
+                                                   ComboBox11.text,
+                                                   ComboBox10.text,
+                                                   edit24.text,
+                                                   wt,
+                                                   DateTimePicker2.datetime]);
+
+
+                                                   ShowMessage('Yadda saxlanıldı!');
+                                                   DataMod_CARDS.CARDOPERATION.Close;
+DataMod_CARDS.CARDOPERATION.SetVariable('RBS',DataMod_CARDS.Clients.fieldbyname('RBSNUMBER').ASSTRING) ;
+DataMod_CARDS.CARDOPERATION.Open;
+                                                   ComboBox9.Text:='';
+//CARDNAME CHANGE
+END;
+
+if edit2.Text='13' then
+begin
+  
+if CheckBox2.Checked then  urg:=1 else urg:=0;
+     if CheckBox3.Checked then  kr:=1 else kr:=0;
+
+              if ComboBox5.Text='WITH' then  wt:='0003' else wt:='0002';
+ DataMod_CARDS.mainpacket.CallProcedure('edit_card',[edit15.text+' '+edit16.text,
+                                                   edit15.text,
+                                                   edit16.text,
+                                                   edit18.text,
+                                                   datetostr(DateTimePicker7.DateTime),
+                                                   Edit17.Text,
+                                                   Edit27.Text,
+                                                   Edit20.Text,
+                                                   Edit19.Text,
+                                                   Edit22.Text,
+                                                   ComboBox4.text,
+                                                   DBLookupComboBox6.Text,
+                                                   dbedit18.text,
+                                                   ComboBox1.text,//DBLookupComboBox10.Text ,
+                                                   ComboBox12.text,
+                                                   floattostr(strtofloat(Edit28.Text)*100),
+                                                   DateTimePicker5.DateTime,
+                                                   DateTimePicker8.DateTime,
+                                                   Edit26.Text,
+                                                   Edit23.Text,
+                                                   ComboBox2.text,
+                                                   Edit25.Text,
+                                                   edit2.text,
+                                                   urg,
+                                                   Edit21.Text,
+                                                   kr,
+                                                   Edit14.Text,
+                                                   ComboBox11.text,
+                                                   ComboBox10.text,
+                                                   edit24.text,
+                                                   wt,
+                                                   DateTimePicker2.datetime]);
+
+
+
+                                                   ShowMessage('Yadda saxlanıldı!');
+                                                   DataMod_CARDS.CARDOPERATION.Close;
+DataMod_CARDS.CARDOPERATION.SetVariable('RBS',DataMod_CARDS.Clients.fieldbyname('RBSNUMBER').ASSTRING) ;
+DataMod_CARDS.CARDOPERATION.Open;
+                                                   ComboBox9.Text:='';
+ //security word change
+
+end;
+
+
+
+
+end;
+END;
+end;
+
+
+//DataMod_CARDS.cliencards.close;
+// DataMod_CARDS.cliencards.SetVariable('numb',DBLookupComboBox6.text);
+//DataMod_CARDS.cliencards.Open;
+
+
+
+end;
+
+
+procedure Tclients2.Button4Click(Sender: TObject);
+begin
+close;
+end;
+
+procedure Tclients2.ComboBox9Enter(Sender: TObject);
+var i:integer;
+begin
+
+//if ComboBox9.Items.Count=0 then
+// begin
+
+end;
+
+procedure Tclients2.ComboBox1Enter(Sender: TObject);
+var i:integer;
+begin
+
+if ComboBox1.ItemIndex=0 then
+begin
+ComboBox1.Clear;
+ DataMod_CARDS.CARDTYPES.Close;
+ DataMod_CARDS.CARDTYPES.Open;
+ DataMod_CARDS.CARDTYPES.First;
+end;
+if ComboBox1.ItemIndex<>0 then
+  begin
+for i:=0 to DataMod_CARDS.CARDTYPES.recordcount do
+begin
+if i=0 then ComboBox9.Items.add(' ') else
+begin
+ComboBox1.Items.add(DataMod_CARDS.CARDTYPES.fieldbyname('NAME').asstring);
+DataMod_CARDS.CARDTYPES.next;
+end;
+end;
+  end;
+end;
+
+procedure Tclients2.FormCreate(Sender: TObject);
+begin
+//
+       // DataMod_CARDS.mushteriler.Open;
+
+        DataMod_CARDS.hesab.Close;
+        DataMod_CARDS.hesab.SetVariable('CID', null);
+        DataMod_CARDS.hesab.SetVariable('p_AccNO', '%%');
+
+     //   DataMod_CARDS.hesab.Open ;
+     button1.Click;
+
+
+
+
+
+     {****************************************************
+      ****************************************************
+      ****************************************************
+      **************Sabuhi M. 2017.06.29******************
+      ****************************************************
+      ****************************************************
+      ***************************************************}
+        SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+
+end;
+
+procedure Tclients2.FormPaint(Sender: TObject);
+begin
+ { if   Edit1.Text='EDIT' then
+
+                                                 begin
+                                                  //if  DBLookupComboBox6.text<>'' then
+
+                                                  //begin
+
+                                                 Button6.click;
+                                                  DataMod_CARDS.hesabtap.close;
+                                                   DataMod_CARDS.hesabtap.SetVariable('rbs',DataMod_CARDS.Clients.fieldbyname('RBSNUMBER').asstring);
+                                                   DataMod_CARDS.hesabtap.Open;
+
+
+                                                   DataMod_CARDS.findcredit.close;
+                                                   DataMod_CARDS.findcredit.SetVariable('acc',DataMod_CARDS.hesabtap.fieldbyname('id').asinteger);
+                                                   DataMod_CARDS.findcredit.Open;
+
+                                                    if StrToFloat(Edit28.Text)<>DataMod_CARDS.findcredit.FieldByName('kredit').asfloat
+                                                     then Edit28.Color:=clRed else Edit28.Color:=clWindow;
+                                                    // end;
+                                                     end;  }
+
+end;
+
+procedure Tclients2.Button3Click(Sender: TObject);
+begin
+DataMod_CARDS.SB_ACA.CallProcedure('CheckAdvancedObjectAccess', ['card_client_edit']);
+Edit1.Text:='EDIT';
+DBGrid1.Enabled:=TRUE;
+
+//Edit14.Text:=DBEdit1.Text;
+//DataMod_CARDS.editval.Close;
+//DataMod_CARDS.editval.SetVariable('RBSNUMBER',DBLookupComboBox6.text);
+//DataMod_CARDS.editval.Open;
+//Edit29.Text:=DataMod_CARDS.editval.fieldbyname('VAL_NAME').asstring;
+
+
+// DataMod_CARDS.cliencards.close;
+// DataMod_CARDS.cliencards.SetVariable('numb',DBLookupComboBox6.text);
+//DataMod_CARDS.cliencards.Open;
+//DataMod_CARDS.CARDOPERATION.Close;
+//DataMod_CARDS.CARDOPERATION.SetVariable('RBS',DataMod_CARDS.Clients.fieldbyname('RBSNUMBER').ASSTRING) ;
+//DataMod_CARDS.CARDOPERATION.Open;
+// DataMod_CARDS.cliencards.Open;
+
+//ShowMessage(DataMod_CARDS.Clients.fieldbyname('ACCID').AsString);
+//DataMod_CARDS.cariqaliq2.Close;
+//DataMod_CARDS.cariqaliq2.SetVariable('acc_id',DataMod_CARDS.Clients.fieldbyname('ACCID').Asinteger);
+//DataMod_CARDS.cariqaliq2.Open;
+//ShowMessage(DataMod_CARDS.cariqaliq2.fieldbyname('ostat').asstring);
+//Edit33.Visible:=True;
+//Edit33.Text:=DataMod_CARDS.cariqaliq2.fieldbyname('ostat').asstring;
+//Edit33.Enabled:=False;
+
+
+DBLookupComboBox6.KeyValue:= DataMod_CARDS.Clients.fieldbyname('RBSNUMBER').asstring;
+DBLookupComboBox6.Visible:=true;
+Edit15.Text:=DBGrid5.DataSource.DataSet.fieldbyname('FNAME').asstring;
+edit15.Visible:=TRUE;
+Edit16.Text:=DBGrid5.DataSource.DataSet.fieldbyname('LNAME').asstring;
+edit16.Visible:=TRUE;
+Edit18.Text:=DBGrid5.DataSource.DataSet.fieldbyname('PASSPORT').asstring;
+edit18.Visible:=TRUE;
+DateTimePicker7.DateTime:=DBGrid5.DataSource.DataSet.fieldbyname('BIRTHDAY').asdatetime;
+DateTimePicker7.Visible:=true;
+Edit17.Text:=DBGrid5.DataSource.DataSet.fieldbyname('HOMEPHONE').asstring;
+edit17.Visible:=TRUE;
+Edit27.Text:=DBGrid5.DataSource.DataSet.fieldbyname('WORKPHONE').asstring;
+edit27.Visible:=TRUE;
+Edit20.Text:=DBGrid5.DataSource.DataSet.fieldbyname('COUNTRY').asstring;
+edit20.Visible:=TRUE;
+Edit19.Text:=DBGrid5.DataSource.DataSet.fieldbyname('CITY').asstring;
+edit19.Visible:=TRUE;
+Edit22.Text:=DBGrid5.DataSource.DataSet.fieldbyname('ADDRESS').asstring;
+edit22.Visible:=TRUE;
+ComboBox4.Text:=DBGrid5.DataSource.DataSet.fieldbyname('RESIDENT').asstring;
+ComboBox4.visible:=true;
+ComboBox1.Text:=DBGrid5.DataSource.DataSet.fieldbyname('CARDTYPE').asstring;
+ComboBox1.visible:=true;
+ComboBox12.Text:=DBGrid5.DataSource.DataSet.fieldbyname('CARDSTATUS').asstring;
+ComboBox12.visible:=true;
+Edit28.Text:=DBGrid5.DataSource.DataSet.fieldbyname('CREDIT_LIM').asstring;
+edit28.Visible:=TRUE;
+DateTimePicker5.DateTime:=DBGrid5.DataSource.DataSet.fieldbyname('DATEOPEN').asdatetime;
+DateTimePicker5.DateTime:=DBGrid5.DataSource.DataSet.fieldbyname('EXPIRY').asdatetime;
+Edit26.Text:=DBGrid5.DataSource.DataSet.fieldbyname('REFERENCE').asstring;
+edit26.Visible:=TRUE;
+Edit23.Text:=DBGrid5.DataSource.DataSet.fieldbyname('EMBOSSNAME').asstring;
+edit23.Visible:=TRUE;
+ComboBox2.Text:=DBGrid5.DataSource.DataSet.fieldbyname('COMPANY').asstring;
+ComboBox2.visible:=true;
+Edit25.Text:=DBGrid5.DataSource.DataSet.fieldbyname('SECURITY').asstring;
+edit25.Visible:=TRUE;
+Edit21.Text:=DBGrid5.DataSource.DataSet.fieldbyname('LANG_CODE').asstring;
+edit21.Visible:=TRUE;
+CheckBox2.Checked:=False;
+//Edit14.Text:=DataMod_CARDS.Clients.fieldbyname('').asstring;
+ComboBox11.Text:=DBGrid5.DataSource.DataSet.fieldbyname('TYPES').asstring;
+ComboBox11.visible:=true;
+ComboBox10.Text:=DBGrid5.DataSource.DataSet.fieldbyname('TITUL').asstring;
+ComboBox10.visible:=true;
+Edit24.Text:=DBGrid5.DataSource.DataSet.fieldbyname('CARDNUMBER').asstring;
+Edit24.Visible:=true;
+
+
+
+Edit15.Enabled:=False;
+Edit16.Enabled:=False;
+Edit18.Enabled:=False;
+DateTimePicker7.Enabled:=False;
+Edit17.Enabled:=False;
+Edit27.Enabled:=False;
+Edit20.Enabled:=False;
+Edit19.Enabled:=False;
+Edit22.Enabled:=False;
+ComboBox4.Enabled:=False;
+DBLookupComboBox6.Enabled:=False;
+ComboBox1.Enabled:=False;
+ComboBox12.Enabled:=False;
+Edit28.Enabled:=False;
+DateTimePicker8.Enabled:=False;
+Edit26.Enabled:=False;
+Edit23.Enabled:=False;
+ComboBox2.Enabled:=False;
+Edit25.Enabled:=False;
+Edit21.Enabled:=False;
+CheckBox2.Enabled:=False;
+Edit14.Enabled:=False;
+ComboBox11.Enabled:=False;
+ComboBox10.Enabled:=False;
+ComboBox9.Enabled:=true;
+DBGrid1.Enabled:=true;
+dbgrid2.Enabled:=true;
+DBGrid5.Enabled:=true;
+dbgrid6.Enabled:=true;
+  ComboBox8.Enabled:=False;
+ ComboBox5.Enabled:=False;
+
+
+ if DBGrid5.DataSource.DataSet.fieldbyname('withp').asstring='0003' then
+  ComboBox5.Text:='WITH' else  ComboBox5.Text:='WITHOUT';
+
+end;
+
+procedure Tclients2.ComboBox2Enter(Sender: TObject);
+var z:integer;
+begin
+
+
+
+     //  ShowMessage(inttostr(DataMod_CARDS.COMPANY.RecordCount));
+
+   ComboBox2.Clear;
+   DataMod_CARDS.COMPANi.Close;
+   DataMod_CARDS.COMPANi.Open;
+   DataMod_CARDS.COMPANi.First;
+
+   if ComboBox2.ItemIndex<>0 then
+    begin
+FOR  z:=0 to DataMod_CARDS.compani.RecordCount do
+begin
+ IF Z=0 THEN  ComboBox2.Items.add(' ') else
+  begin
+
+ ComboBox2.Items.add(DataMod_CARDS.COMPANi.fieldbyname('COMPANY_NAME').asstring);
+ DataMod_CARDS.COMPANi.next;
+  end;
+ end;
+    end;
+end;
+
+
+
+procedure Tclients2.ComboBox5Change(Sender: TObject);
+var i:integer;
+cr_fl:string;
+begin
+cr_fl:='%PS%' ;
+
+if combobox5.Text='WITH' then
+  begin
+    DataMod_CARDS.CARDTYPES.Close;
+  DataMod_CARDS.CARDTYPES.SQL.Clear;
+   DataMod_CARDS.CARDTYPES.SQL.Text:='SELECT c.rowid, c.* FROM CARD_CARDTYPE c ';
+     DataMod_CARDS.CARDTYPES.Open;
+  DataMod_CARDS.CARDTYPES.First;
+  ComboBox1.Clear;
+
+  for i:=0 to DataMod_CARDS.CARDTYPES.recordcount do
+    begin
+    if i=0 then ComboBox9.Items.add(' ') else
+      begin
+      ComboBox1.Items.add(DataMod_CARDS.CARDTYPES.fieldbyname('NAME').asstring);
+      DataMod_CARDS.CARDTYPES.next;
+      end;
+    end;
+
+  end
+else
+begin
+
+  DataMod_CARDS.CARDTYPES.Close;
+  DataMod_CARDS.CARDTYPES.SQL.Clear;
+ DataMod_CARDS.CARDTYPES.SQL.Text:='SELECT c.rowid, c.* FROM CARD_CARDTYPE c where c.name like  ''' + cr_fl+'''';
+   DataMod_CARDS.CARDTYPES.Open;
+   DataMod_CARDS.CARDTYPES.First;
+  ComboBox1.Clear;
+showmessage(DataMod_CARDS.CARDTYPES.SQL.Text) ;
+for i:=0 to DataMod_CARDS.CARDTYPES.recordcount do
+begin
+if i=0 then ComboBox9.Items.add(' ') else
+begin
+ComboBox1.Items.add(DataMod_CARDS.CARDTYPES.fieldbyname('NAME').asstring);
+DataMod_CARDS.CARDTYPES.next;
+end;
+end;
+
+end;
+
+end;
+
+procedure Tclients2.ComboBox9Click(Sender: TObject);
+var ke:char;
+begin
+NullStrictConvert := false;
+   ke:=#13;
+
+
+IF  ComboBox9.Text='Suppl.Card' THEN
+begin
+edit2.Text:='2';
+
+Edit15.Enabled:=True;
+Edit16.Enabled:=True;
+Edit18.Enabled:=True;
+DateTimePicker7.Enabled:=True;
+Edit17.Enabled:=True;
+Edit27.Enabled:=True;
+Edit20.Enabled:=True;
+Edit19.Enabled:=True;
+Edit22.Enabled:=True;
+ComboBox4.Enabled:=True;
+DBLookupComboBox6.Enabled:=True;
+ComboBox1.Enabled:=True;
+ComboBox12.Enabled:=True;
+Edit28.Enabled:=False;
+DateTimePicker8.Enabled:=True;
+Edit26.Enabled:=False;
+Edit23.Enabled:=True;
+ComboBox2.Enabled:=True;
+Edit25.Enabled:=True;
+Edit21.Enabled:=True;
+CheckBox2.Enabled:=True;
+Edit14.Enabled:=False;
+ComboBox11.Enabled:=True;
+ComboBox10.Enabled:=True;
+Edit33.Enabled:=False;
+ DBLookupComboBox6.Enabled:=False;
+ ComboBox5.Enabled:=TRUE;
+DateTimePicker8.Enabled:=true;
+ComboBox8.Enabled:=True;
+end;
+
+
+
+
+
+IF  ComboBox9.Text='Prolongation' THEN
+begin
+edit2.Text:='3';
+
+Edit15.Enabled:=False;
+Edit16.Enabled:=False;
+Edit18.Enabled:=False;
+DateTimePicker7.Enabled:=False;
+Edit17.Enabled:=False;
+Edit27.Enabled:=False;
+Edit20.Enabled:=False;
+Edit19.Enabled:=False;
+Edit22.Enabled:=False;
+ComboBox4.Enabled:=False;
+DBLookupComboBox6.Enabled:=False;
+ComboBox1.Enabled:=False;
+ComboBox12.Enabled:=False;
+Edit28.Enabled:=False;
+DateTimePicker8.Enabled:=False;
+Edit26.Enabled:=False;
+Edit23.Enabled:=False;
+ComboBox2.Enabled:=False;
+Edit25.Enabled:=False;
+Edit21.Enabled:=False;
+CheckBox2.Enabled:=False;
+Edit14.Enabled:=False;
+ComboBox11.Enabled:=False;
+ComboBox10.Enabled:=False;
+
+CheckBox2.Enabled:=true;
+ComboBox5.Enabled:=true;
+DateTimePicker8.Enabled:=true;
+ ComboBox8.Enabled:=True;
+
+DateTimePicker1.DateTime:=DateTimePicker8.DateTime;
+end;
+
+IF  ComboBox9.Text='Replace Card' THEN
+begin
+edit2.Text:='4';
+
+Edit15.Enabled:=False;
+Edit16.Enabled:=False;
+Edit18.Enabled:=False;
+DateTimePicker7.Enabled:=False;
+Edit17.Enabled:=False;
+Edit27.Enabled:=False;
+Edit20.Enabled:=False;
+Edit19.Enabled:=False;
+Edit22.Enabled:=False;
+ComboBox4.Enabled:=False;
+DBLookupComboBox6.Enabled:=False;
+ComboBox1.Enabled:=False;
+ComboBox12.Enabled:=False;
+Edit28.Enabled:=False;
+DateTimePicker8.Enabled:=False;
+Edit26.Enabled:=False;
+Edit23.Enabled:=False;
+ComboBox2.Enabled:=False;
+Edit25.Enabled:=False;
+Edit21.Enabled:=False;
+CheckBox2.Enabled:=True;
+Edit14.Enabled:=False;
+ComboBox11.Enabled:=False;
+ComboBox10.Enabled:=False;
+
+ComboBox4.Enabled:=False;
+ComboBox5.Enabled:=true;
+DateTimePicker8.Enabled:=true;
+ComboBox8.Enabled:=True;
+DateTimePicker8.Enabled:=False;
+end;
+
+ IF  ComboBox9.Text='BranchChange' THEN
+begin
+edit2.Text:='14';
+
+Edit15.Enabled:=False;
+Edit16.Enabled:=False;
+Edit18.Enabled:=False;
+DateTimePicker7.Enabled:=False;
+Edit17.Enabled:=False;
+Edit27.Enabled:=False;
+Edit20.Enabled:=False;
+Edit19.Enabled:=False;
+Edit22.Enabled:=False;
+ComboBox4.Enabled:=False;
+DBLookupComboBox6.Enabled:=False;
+ComboBox1.Enabled:=False;
+ComboBox12.Enabled:=False;
+Edit28.Enabled:=False;
+DateTimePicker8.Enabled:=False;
+Edit26.Enabled:=False;
+Edit23.Enabled:=False;
+ComboBox2.Enabled:=False;
+Edit25.Enabled:=False;
+Edit21.Enabled:=False;
+CheckBox2.Enabled:=False;
+Edit14.Enabled:=False;
+ComboBox11.Enabled:=False;
+ComboBox10.Enabled:=False;
+
+ComboBox5.Enabled:=false;
+
+edit28.Enabled:=False;
+
+ ComboBox8.Enabled:=True;
+DateTimePicker8.Enabled:=False;
+end;
+
+IF  ComboBox9.Text='Credit Limit' THEN
+begin
+edit2.Text:='5';
+
+Edit15.Enabled:=False;
+Edit16.Enabled:=False;
+Edit18.Enabled:=False;
+DateTimePicker7.Enabled:=False;
+Edit17.Enabled:=False;
+Edit27.Enabled:=False;
+Edit20.Enabled:=False;
+Edit19.Enabled:=False;
+Edit22.Enabled:=False;
+ComboBox4.Enabled:=False;
+DBLookupComboBox6.Enabled:=False;
+ComboBox1.Enabled:=False;
+ComboBox12.Enabled:=False;
+Edit28.Enabled:=False;
+DateTimePicker8.Enabled:=False;
+Edit26.Enabled:=False;
+Edit23.Enabled:=False;
+ComboBox2.Enabled:=False;
+Edit25.Enabled:=False;
+Edit21.Enabled:=False;
+CheckBox2.Enabled:=False;
+Edit14.Enabled:=False;
+ComboBox11.Enabled:=False;
+ComboBox10.Enabled:=False;
+
+ComboBox5.Enabled:=false;
+
+edit28.Enabled:=true;
+
+ ComboBox8.Enabled:=True;
+DateTimePicker8.Enabled:=False;
+
+end;
+
+
+IF  ComboBox9.Text='Card Status' THEN
+begin
+edit2.Text:='6';
+
+Edit15.Enabled:=False;
+Edit16.Enabled:=False;
+Edit18.Enabled:=False;
+DateTimePicker7.Enabled:=False;
+Edit17.Enabled:=False;
+Edit27.Enabled:=False;
+Edit20.Enabled:=False;
+Edit19.Enabled:=False;
+Edit22.Enabled:=False;
+ComboBox4.Enabled:=False;
+DBLookupComboBox6.Enabled:=False;
+ComboBox1.Enabled:=False;
+ComboBox12.Enabled:=False;
+Edit28.Enabled:=False;
+DateTimePicker8.Enabled:=False;
+Edit26.Enabled:=False;
+Edit23.Enabled:=False;
+ComboBox2.Enabled:=False;
+Edit25.Enabled:=False;
+Edit21.Enabled:=False;
+CheckBox2.Enabled:=False;
+Edit14.Enabled:=False;
+ComboBox11.Enabled:=False;
+ComboBox10.Enabled:=False;
+
+DateTimePicker8.Enabled:=true;
+
+ ComboBox8.Enabled:=True;
+ComboBox12.Enabled:=true;
+
+DateTimePicker8.Enabled:=False;
+end;
+
+ IF  ComboBox9.Text='Contract Close' THEN
+begin
+edit2.Text:='7';
+
+Edit15.Enabled:=False;
+Edit16.Enabled:=False;
+Edit18.Enabled:=False;
+DateTimePicker7.Enabled:=False;
+Edit17.Enabled:=False;
+Edit27.Enabled:=False;
+Edit20.Enabled:=False;
+Edit19.Enabled:=False;
+Edit22.Enabled:=False;
+ComboBox4.Enabled:=False;
+DBLookupComboBox6.Enabled:=False;
+ComboBox1.Enabled:=False;
+ComboBox12.Enabled:=False;
+Edit28.Enabled:=False;
+DateTimePicker8.Enabled:=False;
+Edit26.Enabled:=False;
+Edit23.Enabled:=False;
+ComboBox2.Enabled:=False;
+Edit25.Enabled:=False;
+Edit21.Enabled:=False;
+CheckBox2.Enabled:=False;
+Edit14.Enabled:=False;
+ComboBox11.Enabled:=False;
+ComboBox10.Enabled:=False;
+
+DateTimePicker8.Enabled:=true;
+ ComboBox8.Enabled:=True;
+ DateTimePicker8.Enabled:=False;
+end;
+
+IF  ComboBox9.Text='PIN Clear' THEN
+begin
+edit2.Text:='12';
+
+Edit15.Enabled:=False;
+Edit16.Enabled:=False;
+Edit18.Enabled:=False;
+DateTimePicker7.Enabled:=False;
+Edit17.Enabled:=False;
+Edit27.Enabled:=False;
+Edit20.Enabled:=False;
+Edit19.Enabled:=False;
+Edit22.Enabled:=False;
+ComboBox4.Enabled:=False;
+DBLookupComboBox6.Enabled:=False;
+ComboBox1.Enabled:=False;
+ComboBox12.Enabled:=False;
+Edit28.Enabled:=False;
+DateTimePicker8.Enabled:=False;
+Edit26.Enabled:=False;
+Edit23.Enabled:=False;
+ComboBox2.Enabled:=False;
+Edit25.Enabled:=False;
+Edit21.Enabled:=False;
+CheckBox2.Enabled:=False;
+Edit14.Enabled:=False;
+ComboBox11.Enabled:=False;
+ComboBox10.Enabled:=False;
+
+DateTimePicker8.Enabled:=true;
+ ComboBox8.Enabled:=True;
+ DateTimePicker8.Enabled:=False;
+end;
+
+IF  ComboBox9.Text='RBS Change' THEN
+begin
+edit2.Text:='11';
+
+Edit15.Enabled:=False;
+Edit16.Enabled:=False;
+Edit18.Enabled:=False;
+DateTimePicker7.Enabled:=False;
+Edit17.Enabled:=False;
+Edit27.Enabled:=False;
+Edit20.Enabled:=False;
+Edit19.Enabled:=False;
+Edit22.Enabled:=False;
+ComboBox4.Enabled:=False;
+DBLookupComboBox6.Enabled:=False;
+ComboBox1.Enabled:=False;
+ComboBox12.Enabled:=False;
+Edit28.Enabled:=False;
+DateTimePicker8.Enabled:=False;
+Edit26.Enabled:=False;
+Edit23.Enabled:=False;
+ComboBox2.Enabled:=False;
+Edit25.Enabled:=False;
+Edit21.Enabled:=False;
+CheckBox2.Enabled:=False;
+Edit14.Enabled:=False;
+ComboBox11.Enabled:=False;
+ComboBox10.Enabled:=False;
+ ComboBox8.Enabled:=True;
+DateTimePicker8.Enabled:=true;
+DBLookupComboBox6.Enabled:=true;
+DateTimePicker8.Enabled:=False;
+
+ // Edit14KeyPress(Edit14,ke);
+            //  ShowMessage('12');
+DataMod_CARDS.hesab.Close;
+                             // ShowMessage('1');
+                  DataMod_CARDS.hesab.SetVariable('CID',DataMod_CARDS.Clients.FieldByName('kli_id').AsVariant);
+                  DataMod_CARDS.hesab.SetVariable('p_AccNO', null);
+                  DataMod_CARDS.hesab.open;
+
+                  DBLookupComboBox6.Text:='';
+
+                  if DataMod_CARDS.HESAB.RecordCount>0
+   then
+   begin //5
+   //ShowMessage('1 '+IntToStr(DataMod_CARDS.HESAB.RecordCount));
+       //   ShowMessage('13');
+  DataMod_CARDS.new_cust.CloseAll;
+ DataMod_CARDS.new_cust.SetVariable('kid',edit14.text);
+    DataMod_CARDS.new_cust.Open;
+    Edit_acc_name.Text:=DataMod_CARDS.new_cust.FieldByName('name').AsString;
+
+
+   {
+  DataMod_CARDS.mushteriler.Locate ('ID',edit14.text, [loCaseInsensitive]);
+  DataMod_CARDS.HESAB.Locate('ACC_no',DataMod_CARDS.hesab.FieldByName('ACC_NO').asVariant, [loCaseInsensitive]);
+  //ShowMessage('2 '+IntToStr(DataMod_CARDS.HESAB.RecordCount));
+
+             }
+   end; //5   }
+
+
+
+
+
+end;
+
+IF  ComboBox9.Text='CardName Change' THEN
+begin
+edit2.Text:='35';
+
+Edit15.Enabled:=True;
+Edit16.Enabled:=true;
+Edit18.Enabled:=True;
+DateTimePicker7.Enabled:=False;
+Edit17.Enabled:=False;
+Edit27.Enabled:=False;
+Edit20.Enabled:=False;
+Edit19.Enabled:=False;
+Edit22.Enabled:=False;
+ComboBox4.Enabled:=False;
+DBLookupComboBox6.Enabled:=False;
+ComboBox1.Enabled:=False;
+ComboBox12.Enabled:=False;
+Edit28.Enabled:=False;
+DateTimePicker8.Enabled:=False;
+Edit26.Enabled:=False;
+Edit23.Enabled:=True;
+ComboBox2.Enabled:=False;
+Edit25.Enabled:=False;
+Edit21.Enabled:=False;
+CheckBox2.Enabled:=False;
+Edit14.Enabled:=False;
+ComboBox11.Enabled:=False;
+ComboBox10.Enabled:=False;
+
+ComboBox4.Enabled:=TRUE;
+edit23.Enabled:=true;
+ ComboBox8.Enabled:=True;
+
+DateTimePicker8.Enabled:=true;
+DateTimePicker8.Enabled:=False;
+ComboBox4.Enabled:=false;
+CheckBox1.Enabled:=true;
+end;
+
+IF  ComboBox9.Text='Security Word Change' THEN
+begin
+edit2.Text:='13';
+
+Edit15.Enabled:=False;
+Edit16.Enabled:=False;
+Edit18.Enabled:=False;
+DateTimePicker7.Enabled:=False;
+Edit17.Enabled:=False;
+Edit27.Enabled:=False;
+Edit20.Enabled:=False;
+Edit19.Enabled:=False;
+Edit22.Enabled:=False;
+ComboBox4.Enabled:=False;
+DBLookupComboBox6.Enabled:=False;
+ComboBox1.Enabled:=False;
+ComboBox12.Enabled:=False;
+Edit28.Enabled:=False;
+DateTimePicker8.Enabled:=False;
+Edit26.Enabled:=False;
+Edit23.Enabled:=False;
+ComboBox2.Enabled:=False;
+Edit25.Enabled:=False;
+Edit21.Enabled:=False;
+CheckBox2.Enabled:=False;
+Edit14.Enabled:=False;
+ComboBox11.Enabled:=False;
+ComboBox10.Enabled:=False;
+
+edit25.Enabled:=true;
+
+ 
+DateTimePicker8.Enabled:=true;
+ComboBox8.Enabled:=True;
+DateTimePicker8.Enabled:=False;
+end;
+end;
+
+procedure Tclients2.CheckBox1Click(Sender: TObject);
+begin
+if CheckBox1.Checked then
+begin
+if ComboBox10.Text<>'' then
+Edit23.Text:=ComboBox10.Text+'/'+Edit15.Text+'/'+edit16.Text else
+Edit23.Text:='/'+Edit15.Text+'/'+edit16.Text
+end;
+end;
+
+procedure Tclients2.Button6Click(Sender: TObject);
+var
+i: integer;
+begin
+//ShowMessage('test');
+  if edit1.Text='EDIT' then
+  begin
+DataMod_CARDS.cliencards.close;
+ DataMod_CARDS.cliencards.SetVariable('numb',DataMod_CARDS.Clients.fieldbyname('RBSNUMBER').ASSTRING);
+DataMod_CARDS.cliencards.Open;
+DataMod_CARDS.CARDOPERATION.Close;
+DataMod_CARDS.CARDOPERATION.SetVariable('RBS',DataMod_CARDS.Clients.fieldbyname('RBSNUMBER').ASSTRING) ;
+DataMod_CARDS.CARDOPERATION.Open;
+
+end;
+
+
+end;
+
+procedure Tclients2.Button7Click(Sender: TObject);
+var
+
+i:integer;
+begin
+//ShowMessage(inttostr(DataMod_CARDS.COMPANY.RecordCount));
+    for I := 0 to DataMod_CARDS.cliencards.RecordCount-1 do
+           begin
+  //RadioGroup1.Items.Add(DataMod_CARDS.cliencards.fieldbyname('id').asstring);
+  DataMod_CARDS.cliencards.Next;
+           end;
+
+
+end;
+
+procedure Tclients2.SIL1Click(Sender: TObject);
+begin
+ DataMod_CARDS.mainpacket.CallProcedure('delete_application',[DBgrid6.datasource.dataset.fieldbyname('id').asinteger]);
+  DBgrid6.datasource.dataset.Refresh;
+end;
+
+procedure Tclients2.DBLookupComboBox6ButtonClick(Sender: TObject;
+  var Handled: Boolean);
+  var
+acc: String;
+  begin
+  with DataMod_CARDS, HESAB do begin
+
+   SetVariable('CID', null);
+   SetVariable('p_AccNO', dblookupcombobox6.Text+'%');
+
+  end;
+
+    acc:= DataMod_CARDS.hesab.FieldByName('ACC_NO').asVariant;
+
+   DataMod_CARDS.mushteriler.Locate
+   ('ID',DataMod_CARDS.HESAB.Fieldbyname('KLI_ID').AsInteger, [loCaseInsensitive, loPartialKey]);
+
+   //DataMod_CARDS.HESAB.Locate('ACC_no',acc, [loCaseInsensitive, loPartialKey]);
+   Edit14.Text:=DataMod_CARDS.mushteriler.fieldbyname('id').AsString;
+   //ShowMessage('test');
+end;
+
+procedure Tclients2.DBLookupComboBox6Click(Sender: TObject);
+  var
+acc: String;
+  begin
+  with DataMod_CARDS, HESAB do begin
+
+   SetVariable('CID', null);
+   SetVariable('p_AccNO', dblookupcombobox6.Text+'%');
+
+  end;
+
+    acc:= DataMod_CARDS.hesab.FieldByName('ACC_NO').asVariant;
+
+   DataMod_CARDS.mushteriler.Locate
+   ('ID',DataMod_CARDS.HESAB.Fieldbyname('KLI_ID').AsInteger, [loCaseInsensitive, loPartialKey]);
+
+   //DataMod_CARDS.HESAB.Locate('ACC_no',acc, [loCaseInsensitive, loPartialKey]);
+   Edit14.Text:=DataMod_CARDS.mushteriler.fieldbyname('id').AsString;
+   //ShowMessage('test');
+end;
+
+procedure Tclients2.db_chooseChange(Sender: TObject);
+begin
+edit17.Text:=db_choose.Text;
+end;
+
+procedure Tclients2.DBLookupComboBox6Change(Sender: TObject);
+  var
+acc,st: String;
+Flags: TReplaceFlags;
+  begin
+  Flags:= [ rfReplaceAll, rfIgnoreCase ];
+  SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+if DataMod_CARDS.hesab.RecordCount>0 then
+   begin
+  with DataMod_CARDS, HESAB do begin
+
+  if edit14.text='' then
+   SetVariable('CID', null)
+   else
+   SetVariable('CID', edit14.text);
+
+   SetVariable('p_AccNO', dblookupcombobox6.Text);
+
+  end;
+    DataMod_CARDS.new_cust.CloseAll;
+
+ DataMod_CARDS.new_cust.SetVariable('kid',DataMod_CARDS.HESAB.Fieldbyname('KLI_ID').AsInteger);
+    DataMod_CARDS.new_cust.Open;
+
+
+   {DataMod_CARDS.mushteriler.Locate
+   ('ID',DataMod_CARDS.HESAB.Fieldbyname('KLI_ID').AsInteger, [loCaseInsensitive]);
+        }
+        acc:= DataMod_CARDS.hesab.FieldByName('ACC_NO').asString;
+
+   //DataMod_CARDS.HESAB.Locate('ACC_no',acc, [loCaseInsensitive, loPartialKey]);
+
+  // Edit14.Text:=Inttostr(DataMod_CARDS.mushteriler.fieldbyname('id').AsInteger);
+   Edit14.Text:=Inttostr(DataMod_CARDS.new_cust.Fieldbyname('ID').AsInteger);
+   Edit_acc_name.Text:=DataMod_CARDS.new_cust.FieldByName('name').AsString;
+//-----------------------------------------------Sabuhi.M 2015 for nbc ---------------------------------------------
+
+     DataMod_CARDS.musterinfo.Close;
+       DataMod_CARDS.musterinfo.SetVariable('mid',DataMod_CARDS.HESAB.Fieldbyname('KLI_ID').AsInteger);
+     DataMod_CARDS.musterinfo.open;
+     edit4.Text:=   DataMod_CARDS.musterinfo.fieldbyname('Name').AsString;
+     edit6.Text:=  DataMod_CARDS.musterinfo.fieldbyname('LastName').AsString;
+     edit7.Text:=  DataMod_CARDS.musterinfo.fieldbyname('address').AsString;
+     // DataMod_CARDS.musterinfo.SQL.Text;
+
+    {  DataMod_CARDS.musterinfo.Close;
+             DataMod_CARDS.musterinfo.SetVariable('mid',Edit14.Text);
+             DataMod_CARDS.musterinfo.SetVariable('name',edit4.Text);
+             DataMod_CARDS.musterinfo.SetVariable('lastname',edit6.Text);
+             DataMod_CARDS.musterinfo.SetVariable('address',edit7.Text);
+      DataMod_CARDS.musterinfo.open;   }
+
+   st:=DataMod_CARDS.musterinfo.fieldbyname('phone_m').AsVariant ;
+   edit15.Text:=  DataMod_CARDS.musterinfo.fieldbyname('Name').AsString;
+   edit16.Text:=  DataMod_CARDS.musterinfo.fieldbyname('LastName').AsString;
+   edit22.Text:=  copy(DataMod_CARDS.musterinfo.fieldbyname('address').AsString,0,47);
+   edit18.Text:= 'AZE '+ DataMod_CARDS.musterinfo.fieldbyname('paspnum').AsVariant;
+   edit17.Text:=  DataMod_CARDS.musterinfo.fieldbyname('phone_h').AsVariant ;
+
+   DateTimePicker7.DateTime:= DataMod_CARDS.musterinfo.fieldbyname('birthday').AsDateTime;
+
+   edit27.Text:= StringReplace (St, '-', '', Flags) ;
+
+   //DataMod_CARDS.musterinfo.fieldbyname('phone_m').AsVariant ;
+
+
+
+   //except on   e:evarianttypecasterror  do
+
+
+   //end;
+ //-------------------------------------------------------------------------------------------------//
+DataMod_CARDS.cariqaliq2.Close;
+DataMod_CARDS.cariqaliq2.SetVariable('acc_id',DataMod_CARDS.hesab.fieldbyname('id').Asinteger);
+DataMod_CARDS.cariqaliq2.Open;
+ edit33.Text:=DataMod_CARDS.cariqaliq2.fieldbyname('ostat').asstring;
+
+
+   DataMod_CARDS.valut2.close;
+    DataMod_CARDS.valut2.SetVariable('valacc',DataMod_CARDS.hesab.fieldbyname('val_acc').asinteger);
+   DataMod_CARDS.valut2.open;
+     //ShowMessage(DataMod_CARDS.hesab.fieldbyname('val_acc').asstring);
+    // ShowMessage(DataMod_CARDS.valut2.fieldbyname('val_Name').asstring);
+
+  end;
+end;
+
+procedure Tclients2.ComboBox1KeyPress(Sender: TObject; var Key: Char);
+begin
+key:=#0;
+end;
+
+procedure Tclients2.FormShow(Sender: TObject);
+VAR
+I:INTEGER;
+begin
+DateTimePicker2.DateTime:=date;
+ DataMod_CARDS.CARDTYPES.First;
+ComboBox1.Clear;
+
+
+
+
+for i:=0 to DataMod_CARDS.CARDTYPES.recordcount do
+begin
+if i=0 then ComboBox9.Items.add(' ') else
+begin
+ComboBox1.Items.add(DataMod_CARDS.CARDTYPES.fieldbyname('NAME').asstring);
+DataMod_CARDS.CARDTYPES.next;
+end;
+end;
+Edit19.Text:='BAKU';
+Edit20.Text:='AZE';
+Edit21.Text:='AZE';
+ComboBox12.Text:='CARD OK';
+
+
+
+  end;
+
+
+procedure Tclients2.DBGrid5DblClick(Sender: TObject);
+begin
+//DBGrid5.DataSource.DataSet.Open;
+
+//  DBLookupComboBox6.KeyValue:= DataMod_CARDS.Clients.fieldbyname('RBSNUMBER').asstring;
+//DBLookupComboBox6.Visible:=true;
+// DataMod_CARDS.cliencards.close;
+// DataMod_CARDS.cliencards.SetVariable('numb',DataMod_CARDS.Clients.fieldbyname('RBSNUMBER').ASSTRING);
+// DataMod_CARDS.cliencards.Open;
+//DataMod_CARDS.CARDOPERATION.Close;
+//DataMod_CARDS.CARDOPERATION.SetVariable('RBS',DataMod_CARDS.Clients.fieldbyname('RBSNUMBER').ASSTRING) ;
+//DataMod_CARDS.CARDOPERATION.Open;
+
+
+
+//DBGrid1.Enabled:=TRUE;
+
+//Edit14.Text:=DBEdit1.Text;
+//DataMod_CARDS.editval.Close;
+//DataMod_CARDS.editval.SetVariable('RBSNUMBER',DBLookupComboBox6.text);
+//DataMod_CARDS.editval.Open;
+//Edit29.Text:=DataMod_CARDS.editval.fieldbyname('VAL_NAME').asstring;
+
+
+// DataMod_CARDS.cliencards.close;
+// DataMod_CARDS.cliencards.SetVariable('numb',DBLookupComboBox6.text);
+//DataMod_CARDS.cliencards.Open;
+//DataMod_CARDS.CARDOPERATION.Close;
+//DataMod_CARDS.CARDOPERATION.SetVariable('RBS',DataMod_CARDS.Clients.fieldbyname('RBSNUMBER').ASSTRING) ;
+//DataMod_CARDS.CARDOPERATION.Open;
+// DataMod_CARDS.cliencards.Open;
+
+//ShowMessage(DataMod_CARDS.Clients.fieldbyname('ACCID').AsString);
+//DataMod_CARDS.cariqaliq2.Close;
+//DataMod_CARDS.cariqaliq2.SetVariable('acc_id',DataMod_CARDS.Clients.fieldbyname('ACCID').Asinteger);
+//DataMod_CARDS.cariqaliq2.Open;
+//ShowMessage(DataMod_CARDS.cariqaliq2.fieldbyname('ostat').asstring);
+//Edit33.Visible:=True;
+//Edit33.Text:=DataMod_CARDS.cariqaliq2.fieldbyname('ostat').asstring;
+//Edit33.Enabled:=False;
+
+
+
+Edit15.Text:=DBGrid5.DataSource.DataSet.fieldbyname('FNAME').asstring;
+edit15.Visible:=TRUE;
+Edit16.Text:=DBGrid5.DataSource.DataSet.fieldbyname('LNAME').asstring;
+edit16.Visible:=TRUE;
+Edit18.Text:=DBGrid5.DataSource.DataSet.fieldbyname('PASSPORT').asstring;
+edit18.Visible:=TRUE;
+DateTimePicker7.DateTime:=DBGrid5.DataSource.DataSet.fieldbyname('BIRTHDAY').asdatetime;
+DateTimePicker7.Visible:=true;
+Edit17.Text:=DBGrid5.DataSource.DataSet.fieldbyname('HOMEPHONE').asstring;
+edit17.Visible:=TRUE;
+Edit27.Text:=DBGrid5.DataSource.DataSet.fieldbyname('WORKPHONE').asstring;
+edit27.Visible:=TRUE;
+Edit20.Text:=DBGrid5.DataSource.DataSet.fieldbyname('COUNTRY').asstring;
+edit20.Visible:=TRUE;
+Edit19.Text:=DBGrid5.DataSource.DataSet.fieldbyname('CITY').asstring;
+edit19.Visible:=TRUE;
+Edit22.Text:=DBGrid5.DataSource.DataSet.fieldbyname('ADDRESS').asstring;
+edit22.Visible:=TRUE;
+ComboBox4.Text:=DBGrid5.DataSource.DataSet.fieldbyname('RESIDENT').asstring;
+ComboBox4.visible:=true;
+ComboBox1.Text:=DBGrid5.DataSource.DataSet.fieldbyname('CARDTYPE').asstring;
+ComboBox1.visible:=true;
+ComboBox12.Text:=DBGrid5.DataSource.DataSet.fieldbyname('CARDSTATUS').asstring;
+ComboBox12.visible:=true;
+//Edit28.Text:=DBGrid5.DataSource.DataSet.fieldbyname('CREDIT_LIM').asstring;
+edit28.Visible:=TRUE;
+DateTimePicker5.DateTime:=DBGrid5.DataSource.DataSet.fieldbyname('DATEOPEN').asdatetime;
+DateTimePicker6.DateTime:=DBGrid5.DataSource.DataSet.fieldbyname('EXPIRY').asdatetime;
+DateTimePicker8.DateTime:=DBGrid5.DataSource.DataSet.fieldbyname('EXPIRY').asdatetime;
+Edit26.Text:=DBGrid5.DataSource.DataSet.fieldbyname('REFERENCE').asstring;
+edit26.Visible:=TRUE;
+Edit23.Text:=DBGrid5.DataSource.DataSet.fieldbyname('EMBOSSNAME').asstring;
+edit23.Visible:=TRUE;
+ComboBox2.Text:=DBGrid5.DataSource.DataSet.fieldbyname('COMPANY').asstring;
+ComboBox2.visible:=true;
+Edit25.Text:=DBGrid5.DataSource.DataSet.fieldbyname('SECURITY').asstring;
+edit25.Visible:=TRUE;
+Edit21.Text:=DBGrid5.DataSource.DataSet.fieldbyname('LANG_CODE').asstring;
+edit21.Visible:=TRUE;
+CheckBox2.Checked:=False;
+//Edit14.Text:=DataMod_CARDS.Clients.fieldbyname('').asstring;
+ComboBox11.Text:=DBGrid5.DataSource.DataSet.fieldbyname('TYPES').asstring;
+ComboBox11.visible:=true;
+ComboBox10.Text:=DBGrid5.DataSource.DataSet.fieldbyname('TITUL').asstring;
+ComboBox10.visible:=true;
+Edit24.Text:=DBGrid5.DataSource.DataSet.fieldbyname('CARDNUMBER').asstring;
+Edit24.Visible:=true;
+
+
+
+Edit15.Enabled:=False;
+Edit16.Enabled:=False;
+Edit18.Enabled:=False;
+DateTimePicker7.Enabled:=False;
+Edit17.Enabled:=False;
+Edit27.Enabled:=False;
+Edit20.Enabled:=False;
+Edit19.Enabled:=False;
+Edit22.Enabled:=False;
+ComboBox4.Enabled:=False;
+DBLookupComboBox6.Enabled:=False;
+ComboBox1.Enabled:=False;
+ComboBox12.Enabled:=False;
+Edit28.Enabled:=False;
+DateTimePicker8.Enabled:=False;
+Edit26.Enabled:=False;
+Edit23.Enabled:=False;
+ComboBox2.Enabled:=False;
+Edit25.Enabled:=False;
+Edit21.Enabled:=False;
+CheckBox2.Enabled:=False;
+Edit14.Enabled:=False;
+ComboBox11.Enabled:=False;
+ComboBox10.Enabled:=False;
+ComboBox9.Enabled:=false;
+DBGrid1.Enabled:=true;
+dbgrid2.Enabled:=true;
+DBGrid5.Enabled:=true;
+dbgrid6.Enabled:=true;
+ComboBox8.Enabled:=False;
+ComboBox5.Enabled:=False;
+
+
+end;
+
+procedure Tclients2.DBGrid5CellClick(Column: TColumn);
+begin
+//DBGrid5.DataSource.DataSet.Open;
+
+//  DBLookupComboBox6.KeyValue:= DataMod_CARDS.Clients.fieldbyname('RBSNUMBER').asstring;
+//DBLookupComboBox6.Visible:=true;
+// DataMod_CARDS.cliencards.close;
+// DataMod_CARDS.cliencards.SetVariable('numb',DataMod_CARDS.Clients.fieldbyname('RBSNUMBER').ASSTRING);
+// DataMod_CARDS.cliencards.Open;
+//DataMod_CARDS.CARDOPERATION.Close;
+//DataMod_CARDS.CARDOPERATION.SetVariable('RBS',DataMod_CARDS.Clients.fieldbyname('RBSNUMBER').ASSTRING) ;
+//DataMod_CARDS.CARDOPERATION.Open;
+
+
+
+//DBGrid1.Enabled:=TRUE;
+
+//Edit14.Text:=DBEdit1.Text;
+//DataMod_CARDS.editval.Close;
+//DataMod_CARDS.editval.SetVariable('RBSNUMBER',DBLookupComboBox6.text);
+//DataMod_CARDS.editval.Open;
+//Edit29.Text:=DataMod_CARDS.editval.fieldbyname('VAL_NAME').asstring;
+
+
+// DataMod_CARDS.cliencards.close;
+// DataMod_CARDS.cliencards.SetVariable('numb',DBLookupComboBox6.text);
+//DataMod_CARDS.cliencards.Open;
+//DataMod_CARDS.CARDOPERATION.Close;
+//DataMod_CARDS.CARDOPERATION.SetVariable('RBS',DataMod_CARDS.Clients.fieldbyname('RBSNUMBER').ASSTRING) ;
+//DataMod_CARDS.CARDOPERATION.Open;
+// DataMod_CARDS.cliencards.Open;
+
+//ShowMessage(DataMod_CARDS.Clients.fieldbyname('ACCID').AsString);
+//DataMod_CARDS.cariqaliq2.Close;
+//DataMod_CARDS.cariqaliq2.SetVariable('acc_id',DataMod_CARDS.Clients.fieldbyname('ACCID').Asinteger);
+//DataMod_CARDS.cariqaliq2.Open;
+//ShowMessage(DataMod_CARDS.cariqaliq2.fieldbyname('ostat').asstring);
+//Edit33.Visible:=True;
+//Edit33.Text:=DataMod_CARDS.cariqaliq2.fieldbyname('ostat').asstring;
+//Edit33.Enabled:=False;
+
+
+
+Edit15.Text:=DBGrid5.DataSource.DataSet.fieldbyname('FNAME').asstring;
+edit15.Visible:=TRUE;
+Edit16.Text:=DBGrid5.DataSource.DataSet.fieldbyname('LNAME').asstring;
+edit16.Visible:=TRUE;
+Edit18.Text:=DBGrid5.DataSource.DataSet.fieldbyname('PASSPORT').asstring;
+edit18.Visible:=TRUE;
+DateTimePicker7.DateTime:=DBGrid5.DataSource.DataSet.fieldbyname('BIRTHDAY').asdatetime;
+DateTimePicker7.Visible:=true;
+Edit17.Text:=DBGrid5.DataSource.DataSet.fieldbyname('HOMEPHONE').asstring;
+edit17.Visible:=TRUE;
+Edit27.Text:=DBGrid5.DataSource.DataSet.fieldbyname('WORKPHONE').asstring;
+edit27.Visible:=TRUE;
+Edit20.Text:=DBGrid5.DataSource.DataSet.fieldbyname('COUNTRY').asstring;
+edit20.Visible:=TRUE;
+Edit19.Text:=DBGrid5.DataSource.DataSet.fieldbyname('CITY').asstring;
+edit19.Visible:=TRUE;
+Edit22.Text:=DBGrid5.DataSource.DataSet.fieldbyname('ADDRESS').asstring;
+edit22.Visible:=TRUE;
+ComboBox4.Text:=DBGrid5.DataSource.DataSet.fieldbyname('RESIDENT').asstring;
+ComboBox4.visible:=true;
+ComboBox1.Text:=DBGrid5.DataSource.DataSet.fieldbyname('CARDTYPE').asstring;
+ComboBox1.visible:=true;
+ComboBox12.Text:=DBGrid5.DataSource.DataSet.fieldbyname('CARDSTATUS').asstring;
+ComboBox12.visible:=true;
+//Edit28.Text:=DBGrid5.DataSource.DataSet.fieldbyname('CREDIT_LIM').asstring;
+edit28.Visible:=TRUE;
+DateTimePicker5.DateTime:=DBGrid5.DataSource.DataSet.fieldbyname('DATEOPEN').asdatetime;
+DateTimePicker6.DateTime:=DBGrid5.DataSource.DataSet.fieldbyname('EXPIRY').asdatetime;
+DateTimePicker8.DateTime:=DBGrid5.DataSource.DataSet.fieldbyname('EXPIRY').asdatetime;
+Edit26.Text:=DBGrid5.DataSource.DataSet.fieldbyname('REFERENCE').asstring;
+edit26.Visible:=TRUE;
+Edit23.Text:=DBGrid5.DataSource.DataSet.fieldbyname('EMBOSSNAME').asstring;
+edit23.Visible:=TRUE;
+ComboBox2.Text:=DBGrid5.DataSource.DataSet.fieldbyname('COMPANY').asstring;
+ComboBox2.visible:=true;
+Edit25.Text:=DBGrid5.DataSource.DataSet.fieldbyname('SECURITY').asstring;
+edit25.Visible:=TRUE;
+Edit21.Text:=DBGrid5.DataSource.DataSet.fieldbyname('LANG_CODE').asstring;
+edit21.Visible:=TRUE;
+CheckBox2.Checked:=False;
+//Edit14.Text:=DataMod_CARDS.Clients.fieldbyname('').asstring;
+ComboBox11.Text:=DBGrid5.DataSource.DataSet.fieldbyname('TYPES').asstring;
+ComboBox11.visible:=true;
+ComboBox10.Text:=DBGrid5.DataSource.DataSet.fieldbyname('TITUL').asstring;
+ComboBox10.visible:=true;
+Edit24.Text:=DBGrid5.DataSource.DataSet.fieldbyname('CARDNUMBER').asstring;
+Edit24.Visible:=true;
+
+
+
+Edit15.Enabled:=False;
+Edit16.Enabled:=False;
+Edit18.Enabled:=False;
+DateTimePicker7.Enabled:=False;
+Edit17.Enabled:=False;
+Edit27.Enabled:=False;
+Edit20.Enabled:=False;
+Edit19.Enabled:=False;
+Edit22.Enabled:=False;
+ComboBox4.Enabled:=False;
+DBLookupComboBox6.Enabled:=False;
+ComboBox1.Enabled:=False;
+ComboBox12.Enabled:=False;
+Edit28.Enabled:=False;
+DateTimePicker8.Enabled:=False;
+Edit26.Enabled:=False;
+Edit23.Enabled:=False;
+ComboBox2.Enabled:=False;
+Edit25.Enabled:=False;
+Edit21.Enabled:=False;
+CheckBox2.Enabled:=False;
+Edit14.Enabled:=False;
+ComboBox11.Enabled:=False;
+ComboBox10.Enabled:=False;
+ComboBox9.Enabled:=false;
+DBGrid1.Enabled:=true;
+dbgrid2.Enabled:=true;
+DBGrid5.Enabled:=true;
+dbgrid6.Enabled:=true;
+ComboBox8.Enabled:=False;
+ComboBox5.Enabled:=False;
+
+
+end;
+
+procedure Tclients2.DBEdit1KeyPress(Sender: TObject; var Key: Char);
+var acc:variant;
+mus:   integer;
+begin
+if key=#13 then
+begin  //1
+
+  if Edit14.Text='' then begin  //2
+       // ShowMessage('bura girdi 1');
+        //DataMod_CARDS.hesab.Close;
+        DataMod_CARDS.hesab.SetVariable('CID', null);
+        DataMod_CARDS.hesab.SetVariable('p_AccNO', '%%');
+        DataMod_CARDS.hesab.refresh;
+        DBLookupComboBox6.Text:='';
+        Edit14.Text:='';
+       //Memo1.Text :=DataMod_CARDS.hesab.SQL.Text;
+//ShowMessage(IntToStr(DataMod_CARDS.hesab.RecordCount));
+      //  if DataMod_CARDS.HESAB.RecordCount>0
+        //      then
+          //       begin //3
+            //        acc:= DataMod_CARDS.hesab.FieldByName('ACC_NO').asVariant;
+              //
+                //    DataMod_CARDS.mushteriler.Locate
+                  //  ('ID',DataMod_CARDS.HESAB.Fieldbyname('KLI_ID').AsInteger, [loCaseInsensitive, loPartialKey]);
+
+                  // DataMod_CARDS.HESAB.Locate('ACC_no',acc, [loCaseInsensitive, loPartialKey]);
+                  //2
+                  end else       //1
+
+
+
+                  begin //4
+                  //ShowMessage('bura girdi');
+                  mus:= strtoint(Edit14.Text);
+                 // DataMod_CARDS.hesab.Close;
+
+                  DataMod_CARDS.hesab.SetVariable('CID', edit14.text);
+                  DataMod_CARDS.hesab.SetVariable('p_AccNO', null);
+                  DataMod_CARDS.hesab.refresh;
+                  DBLookupComboBox6.Text:='';
+                  if DataMod_CARDS.HESAB.RecordCount>0
+   then
+   begin //5
+   //ShowMessage('1 '+IntToStr(DataMod_CARDS.HESAB.RecordCount));
+  acc:= DataMod_CARDS.hesab.FieldByName('ACC_NO').asVariant;
+
+  DataMod_CARDS.mushteriler.Locate
+   ('ID',DataMod_CARDS.HESAB.Fieldbyname('KLI_ID').AsInteger, [loCaseInsensitive, loPartialKey]);
+
+  DataMod_CARDS.HESAB.Locate('ACC_no',acc, [loCaseInsensitive, loPartialKey]);
+   //ShowMessage('2 '+IntToStr(DataMod_CARDS.HESAB.RecordCount));
+
+   end; //5
+
+end; //4
+ end;
+end;    procedure Tclients2.DBEdit4Change(Sender: TObject);
+begin
+
+end;
+
+//1
+//ShowMessage(IntToStr(DataMod_CARDS.hesab.RecordCount));
+//end;  //1
+
+
+end.

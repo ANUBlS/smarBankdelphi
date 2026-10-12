@@ -1,0 +1,225 @@
+object FormFilter: TFormFilter
+  Left = 0
+  Top = 0
+  Caption = 'FormFilter'
+  ClientHeight = 244
+  ClientWidth = 243
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poScreenCenter
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 243
+    Height = 244
+    Align = alClient
+    BevelInner = bvRaised
+    BevelOuter = bvLowered
+    TabOrder = 0
+    ExplicitLeft = -40
+    ExplicitTop = 8
+    ExplicitHeight = 311
+    object Panel2: TPanel
+      Left = 2
+      Top = 138
+      Width = 239
+      Height = 68
+      Align = alTop
+      BevelInner = bvRaised
+      BevelOuter = bvLowered
+      TabOrder = 0
+      ExplicitTop = 2
+      object GroupBox1: TGroupBox
+        Left = 2
+        Top = 2
+        Width = 235
+        Height = 63
+        Align = alTop
+        Caption = 'K'#246#231#252'rm'#601'nin n'#246'v'#252
+        TabOrder = 0
+        object DBLookupComboBox1: TDBLookupComboBox
+          Left = 2
+          Top = 15
+          Width = 231
+          Height = 21
+          Align = alClient
+          KeyField = 'ID'
+          ListField = 'NAME'
+          ListSource = DataSource3
+          TabOrder = 0
+          ExplicitLeft = 3
+          ExplicitTop = 16
+          ExplicitWidth = 145
+        end
+        object CheckBox1: TCheckBox
+          Left = 2
+          Top = 40
+          Width = 76
+          Height = 17
+          Caption = 'T'#601'tbiq et'
+          TabOrder = 1
+        end
+      end
+    end
+    object Panel3: TPanel
+      Left = 2
+      Top = 70
+      Width = 239
+      Height = 68
+      Align = alTop
+      BevelInner = bvRaised
+      BevelOuter = bvLowered
+      TabOrder = 1
+      ExplicitTop = 2
+      object GroupBox2: TGroupBox
+        Left = 2
+        Top = 2
+        Width = 235
+        Height = 63
+        Align = alTop
+        Caption = 'Valyuta'
+        TabOrder = 0
+        object DBLookupComboBox2: TDBLookupComboBox
+          Left = 2
+          Top = 15
+          Width = 231
+          Height = 21
+          Align = alClient
+          KeyField = 'VALUTE'
+          ListField = 'VALU_NAME'
+          ListSource = DataSource2
+          TabOrder = 0
+          ExplicitLeft = 3
+          ExplicitTop = 16
+          ExplicitWidth = 145
+        end
+        object CheckBox2: TCheckBox
+          Left = 2
+          Top = 40
+          Width = 76
+          Height = 17
+          Caption = 'T'#601'tbiq et'
+          TabOrder = 1
+        end
+      end
+    end
+    object Panel4: TPanel
+      Left = 2
+      Top = 2
+      Width = 239
+      Height = 68
+      Align = alTop
+      BevelInner = bvRaised
+      BevelOuter = bvLowered
+      TabOrder = 2
+      object GroupBox3: TGroupBox
+        Left = 2
+        Top = 2
+        Width = 235
+        Height = 63
+        Align = alTop
+        Caption = 'Filial'
+        TabOrder = 0
+        object DBLookupComboBox3: TDBLookupComboBox
+          Left = 2
+          Top = 15
+          Width = 231
+          Height = 21
+          Align = alClient
+          KeyField = 'ID'
+          ListField = 'NAME'
+          ListSource = DataSource1
+          TabOrder = 0
+          ExplicitLeft = 3
+          ExplicitTop = 16
+          ExplicitWidth = 145
+        end
+        object CheckBox3: TCheckBox
+          Left = 2
+          Top = 40
+          Width = 76
+          Height = 17
+          Caption = 'T'#601'tbiq et'
+          TabOrder = 1
+        end
+      end
+    end
+    object Button1: TButton
+      Left = 77
+      Top = 211
+      Width = 75
+      Height = 25
+      Caption = 'Q'#601'bul'
+      TabOrder = 3
+    end
+    object Button2: TButton
+      Left = 157
+      Top = 211
+      Width = 75
+      Height = 25
+      Caption = #304'mtina'
+      TabOrder = 4
+      OnClick = Button2Click
+    end
+  end
+  object DataSource1: TDataSource
+    DataSet = OracleDataSet1
+    Left = 152
+    Top = 40
+  end
+  object OracleDataSet1: TOracleDataSet
+    SQL.Strings = (
+      'select * from filial')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000030000000400000049004400010000000000080000004E0041004D00
+      4500010000000000140000004B004F0044005F00460049004C00490041004C00
+      010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 120
+    Top = 40
+  end
+  object OracleDataSet2: TOracleDataSet
+    SQL.Strings = (
+      'select valute,valu_name from avalute')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000C000000560041004C005500540045000100000000001200
+      0000560041004C0055005F004E0041004D004500010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 120
+    Top = 104
+  end
+  object DataSource2: TDataSource
+    DataSet = OracleDataSet2
+    Left = 152
+    Top = 104
+  end
+  object OracleDataSet3: TOracleDataSet
+    SQL.Strings = (
+      'select  * from exp_settingstype')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000400000004000000490044000100000000000E000000530054005900
+      5000450049004400010000000000080000004E0041004D004500010000000000
+      160000004400450053004300520049005000540049004F004E00010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 120
+    Top = 176
+  end
+  object DataSource3: TDataSource
+    DataSet = OracleDataSet3
+    Left = 152
+    Top = 176
+  end
+end

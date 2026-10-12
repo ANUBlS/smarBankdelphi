@@ -1,0 +1,125 @@
+unit FormInfoImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Buttons, ExtCtrls, ComCtrls, ToolWin, Grids, DBGrids, StdCtrls, ImgList
+  ;
+
+type
+  TFormInfo = class(TForm)
+    Panel1: TPanel;
+    CoolBar1: TCoolBar;
+    ToolBar1: TToolBar;
+    ToolButton1: TToolButton;
+    GroupBox1: TGroupBox;
+    ToolButton2: TToolButton;
+    Panel2: TPanel;
+    SpeedButton1: TSpeedButton;
+    ToolButton3: TToolButton;
+    ImageList1: TImageList;
+    DBGrid1: TDBGrid;
+    ToolButton4: TToolButton;
+    ToolButton5: TToolButton;
+    procedure FormCreate(Sender: TObject);
+    procedure ToolButton1Click(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure ToolButton2Click(Sender: TObject);
+    procedure ToolButton3Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormInfo: TFormInfo;
+
+implementation
+
+uses Frmproperties_creditImpl,DMprop, FrmInfodeletImpl,sboapiDataModuleImpl,SBTranslateProc;
+
+{$R *.DFM}
+
+
+
+procedure TFormInfo.FormCreate(Sender: TObject);
+var
+id:integer;
+begin
+Frmproperties_credit:=TFrmproperties_credit.Create(self);
+Frmproperties_creditDel:=TFrmproperties_creditDel.Create(self);
+DMproperties.DSet_Prop_Kredit.open ;
+DMproperties.DataSetCredit.open ;
+SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TFormInfo.ToolButton1Click(Sender: TObject);
+begin
+  with Frmproperties_credit, DMproperties do
+   begin
+ if DataSetCredit.RecordCount > 0 then
+ begin
+ AddOtherPAPERNO.RefreshList;
+ showmodal  ;
+ DataSetCredit.Refresh;
+ end;
+  end
+end;
+
+procedure TFormInfo.FormDestroy(Sender: TObject);
+begin
+DMproperties.DSet_Prop_Kredit.closeall ;
+Frmproperties_credit.Free;
+Frmproperties_creditDel.Free;
+end;
+
+procedure TFormInfo.FormShow(Sender: TObject);
+var
+propid:integer;
+begin
+propid:=DMproperties.DataSetPropIns.FieldByname('id').asinteger;
+with DMproperties.DSet_Prop_Kredit do
+begin
+ close ;
+   SetVariable('id',propid);
+ open   ;
+ refresh
+ end;
+
+end;
+
+procedure TFormInfo.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+  if ord(key) = VK_ESCAPE then close
+end;
+
+procedure TFormInfo.SpeedButton1Click(Sender: TObject);
+begin
+close
+end;
+
+procedure TFormInfo.ToolButton2Click(Sender: TObject);
+begin
+ with Frmproperties_creditDel,DMproperties do
+  begin
+   if DSet_Prop_Kredit.RecordCount > 0 then
+   begin
+  DSet_Prop_Kredit.refresh;
+  DelOtherPAPERNO.RefreshList;
+   showmodal ;
+
+  end;
+ end
+end;
+
+procedure TFormInfo.ToolButton3Click(Sender: TObject);
+begin
+DMproperties.DSet_Prop_Kredit.refresh;
+end;
+
+end.

@@ -1,0 +1,112 @@
+﻿unit UnitAIFArchive;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ImgList, Grids, XDBGrids, ComCtrls, ToolWin, ExtCtrls, StdCtrls;
+
+type
+  TFormAifArchive = class(TForm)
+    Panel12: TPanel;
+    RichEdit1: TRichEdit;
+    Panel25: TPanel;
+    ControlBar3: TControlBar;
+    ToolBar1: TToolBar;
+    ToolButton2: TToolButton;
+    ToolButton8: TToolButton;
+    ToolButton6: TToolButton;
+    ToolButton12: TToolButton;
+    Panel53: TPanel;
+    DateTimePicker2: TDateTimePicker;
+    ImageList: TImageList;
+    ImageList1: TImageList;
+    Panel1: TPanel;
+    DateTimePicker1: TDateTimePicker;
+    XDBGridArchive: TXDBGrid;
+    procedure ToolButton6Click(Sender: TObject);
+    procedure XDBGridArchiveTitleClick(Column: TXColumn);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormCreate(Sender: TObject);
+    procedure ToolButton2Click(Sender: TObject);
+    procedure DateTimePicker1Change(Sender: TObject);
+    procedure DateTimePicker2Change(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormAifArchive: TFormAifArchive;
+  bdtp,edtp:TDateTime;
+
+implementation
+
+uses DataAIFUnit, AIFSearchUnit;
+
+{$R *.dfm}
+
+procedure TFormAifArchive.DateTimePicker1Change(Sender: TObject);
+begin
+  bdtp:=integer(trunc(DateTimePicker1.DateTime));
+end;
+
+procedure TFormAifArchive.DateTimePicker2Change(Sender: TObject);
+begin
+  edtp:=integer(trunc(DateTimePicker2.DateTime));
+end;
+
+procedure TFormAifArchive.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  DataModuleAIF.AIFPAYMENTSARCHIVE.Close;
+end;
+
+procedure TFormAifArchive.FormCreate(Sender: TObject);
+begin
+  DateTimePicker1.DateTime:=Date;
+  DateTimePicker2.DateTime:=Date;
+  bdtp:=integer(trunc(DateTimePicker1.DateTime));
+  edtp:=integer(trunc(DateTimePicker2.DateTime));
+  DataModuleAIF.AIFPAYMENTSARCHIVE.SetVariable('bdate',DateTimePicker1.DateTime);
+  DataModuleAIF.AIFPAYMENTSARCHIVE.SetVariable('edate',DateTimePicker1.DateTime);
+  DataModuleAIF.AIFPAYMENTSARCHIVE.Open;
+
+end;
+
+procedure TFormAifArchive.ToolButton2Click(Sender: TObject);
+begin
+  with DataModuleAIF,AIFPAYMENTSARCHIVE do
+  begin
+    Close;
+    SetVariable('bdate',bdtp);
+    SetVariable('bdate',edtp);
+    open;
+  end;
+end;
+
+procedure TFormAifArchive.ToolButton6Click(Sender: TObject);
+begin
+  if DataModuleAIF.AIFPAYMENTSARCHIVE.RecordCount = 0 then
+  exit;
+  FormAifSearch.DbGr := XDBGridArchive;
+  FormAifSearch.ShowModal;
+
+end;
+
+procedure TFormAifArchive.XDBGridArchiveTitleClick(Column: TXColumn);
+begin
+  IF Column.FieldName = '' THEN
+    exit;
+  with DataModuleAIF, AIFPAYMENTSARCHIVE do
+  begin
+    close;
+    if Column.Title.MarkerIndex = 2 then
+      SetVariable('title', Column.FieldName + ' ' + 'ASC')
+    else
+      SetVariable('title', Column.FieldName + ' ' + 'DESC');
+    open;
+  end;
+end;
+
+end.

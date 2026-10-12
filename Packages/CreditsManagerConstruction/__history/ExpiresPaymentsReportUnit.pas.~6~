@@ -1,0 +1,155 @@
+﻿unit ExpiresPaymentsReportUnit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ComCtrls, StdCtrls, Buttons, ExtCtrls, Db, OracleData, Grids, DBGrids,
+  CMExcelExport, ActnList,oracle;
+
+type
+  TExpiresPaymentsForm = class(TForm)
+    Credits: TOracleDataSet;
+    CreditsDatSrc: TDataSource;
+    Panel1: TPanel;
+    BitBtn1: TBitBtn;
+    BitBtn2: TBitBtn;
+    DTPD: TDateTimePicker;
+    GroupBox1: TGroupBox;
+    CommonGrid: TDBGrid;
+    ExcelExport: TCMExcelExport;
+    EditContractno: TEdit;
+    ActionList1: TActionList;
+    ActnOK: TAction;
+    ACTNnook: TAction;
+    ActnSearch: TAction;
+    CreditsID: TFloatField;
+    CreditsCONTRACTNO: TWideStringField;
+    CreditsCUSTNAME: TWideStringField;
+    CreditsACCNO: TWideStringField;
+    CreditsOPENDATE: TDateTimeField;
+    CreditsCLOSEDATE: TDateTimeField;
+    CreditsGECMEB: TFloatField;
+    CreditsGECGUN: TFloatField;
+    CreditsBLD_NAME: TWideStringField;
+    CreditsCONTAMOUNT: TFloatField;
+    procedure FormShow(Sender: TObject);
+    procedure BitBtn1Click(Sender: TObject);
+    procedure BitBtn2Click(Sender: TObject);
+    procedure EditContractnoKeyPress(Sender: TObject; var Key: Char);
+    procedure ActnSearchExecute(Sender: TObject);
+  private
+    { Private declarations }
+    function FindNextRecord(DataSet : TDataSet;FieldName : String;Value : String) : Boolean;
+
+  public
+    { Public declarations }
+  end;
+
+var
+  ExpiresPaymentsForm: TExpiresPaymentsForm;
+
+implementation
+
+{$R *.DFM}
+uses sboapiDataModuleImpl;
+
+function TExpiresPaymentsForm.FindNextRecord(DataSet : TDataSet;FieldName : String;Value : String) : Boolean;
+
+resourcestring
+  rsRecordRecachedEOF = 'Axtarış cərgənin sonuna çatıb.';
+  rsContinueFromTop   = 'Əvvəldən axtarmaqla davam etmək istəyirsiniz?';
+  rsRecordNotFound    = 'Yazı tapılmadı.';
+
+var
+  SearchOptions : TSearchRecordOptions;
+
+begin
+  SearchOptions := [srIgnoreCase ,srPartialMatch];
+  with  (DataSet as TOracleDataSet) do
+  begin
+
+    Result := SearchRecord(
+                FieldName,
+                Value,
+                SearchOptions + [srFromCurrent, srForward]
+    );
+    if not Result then
+
+    if MessageDlg(
+              rsRecordRecachedEOF + #10#13 + rsContinueFromTop
+             ,mtInformation
+             ,[mbNo , mbYes]
+             ,0
+             ) = mrYes  then
+    begin
+
+      Result := SearchRecord(
+                  FieldName,
+                  Value,
+                  SearchOptions + [srFromBeginning]
+      );
+
+      if not Result then
+      MessageDlg(rsRecordNotFound,mtInformation,[mbOk],0);
+
+    end;
+  end;
+end;
+
+
+procedure TExpiresPaymentsForm.FormShow(Sender: TObject);
+var Sysdat :TdateTime;
+begin
+ { Sysdat:=Date;
+  DTPD.Date:= Date;
+   with Credits do
+   begin
+      if Active then Close;
+      SetVariable('Title','CONTRACTNO');
+      SetVariable('pdat',Sysdat);
+      open;
+   end;  }
+end;
+
+procedure TExpiresPaymentsForm.BitBtn1Click(Sender: TObject);
+var sysdat :TdateTime;
+begin
+
+  Sysdat:= Integer(trunc(DTPD.Date));
+   with Credits do
+   begin
+      if Active then Close;
+  //    SetVariable('pdat',Sysdat);
+      open;
+   end;
+
+end;
+
+procedure TExpiresPaymentsForm.BitBtn2Click(Sender: TObject);
+begin
+  with ExcelExport do begin
+   Connect;
+   ExportDataset(Credits,'Ödənişlər',true);
+   Disconnect;
+  end;
+end;
+
+procedure TExpiresPaymentsForm.EditContractnoKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+    if (Key = #13)and(EditContractno.Text <> '')  then
+     ActnSearchExecute(Sender);
+
+end;
+
+procedure TExpiresPaymentsForm.ActnSearchExecute(Sender: TObject);
+var SearchField,SearchRecord : String;
+begin
+   SearchField := Copy((Sender as TEdit).name,5,length((Sender as TEdit).name));
+   SearchRecord := (Sender as TEdit).Text;
+   FindNextRecord(Credits,SearchField,SearchRecord);
+
+end;
+
+end.

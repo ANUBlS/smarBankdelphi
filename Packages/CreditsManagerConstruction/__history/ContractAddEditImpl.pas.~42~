@@ -1,0 +1,337 @@
+unit ContractAddEditImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, DBViewComboBox, ExtCtrls, DBCtrls, Mask, ComCtrls, Buttons,
+  SearchEdit, CMDBSearchEdit, DBCtrlsEh, DBLookupEh,Oracle,DB, CMHintBox,
+  dblookup;
+
+type
+  TAddEditContractForm = class(TForm)
+    Panel1: TPanel;
+    GroupBox1: TGroupBox;
+    BranchCBEh: TDBLookupComboboxEh;
+    Panel3: TPanel;
+    StaticText2: TStaticText;
+    DBEditContNum: TDBEdit;
+    GroupBox2: TGroupBox;
+    Panel10: TPanel;
+    StaticText8: TStaticText;
+    Edit6: TEdit;
+    Panel2: TPanel;
+    StaticText3: TStaticText;
+    StaticText4: TStaticText;
+    StaticText5: TStaticText;
+    StaticText6: TStaticText;
+    StaticText19: TStaticText;
+    Edit1: TEdit;
+    Edit2: TEdit;
+    Edit3: TEdit;
+    Edit4: TEdit;
+    Edit5: TEdit;
+    BitBtn3: TBitBtn;
+    Panel4: TPanel;
+    Panel9: TPanel;
+    Label1: TLabel;
+    Label2: TLabel;
+    DTPOpenDate: TDateTimePicker;
+    DTPCloseDate: TDateTimePicker;
+    DBEdit6: TDBEdit;
+    StaticText17: TStaticText;
+    GroupBox5: TGroupBox;
+    StaticText14: TStaticText;
+    StaticText15: TStaticText;
+    DBEdit4: TDBEdit;
+    StaticText16: TStaticText;
+    DBEdit5: TDBEdit;
+    StaticText18: TStaticText;
+    DBLookupComboboxEh3: TDBLookupComboboxEh;
+    GroupBox3: TGroupBox;
+    CMSearchEditLoacAccs: TCMSearchEdit;
+    DBLookupComboboxEh2: TDBLookupComboboxEh;
+    GroupBox4: TGroupBox;
+    Label3: TLabel;
+    DBEdit1: TDBEdit;
+    DBLookupComboboxEh6: TDBLookupComboboxEh;
+    GroupBox6: TGroupBox;
+    DBLookupComboboxEh5: TDBLookupComboboxEh;
+    Panel5: TPanel;
+    BitBtn1: TBitBtn;
+    BitBtn2: TBitBtn;
+    SpeedButton2: TSpeedButton;
+    SpeedButton1: TSpeedButton;
+    HBConclusion: TCMHintBox;
+    StaticText1: TStaticText;
+    StaticText7: TStaticText;
+    StaticText9: TStaticText;
+    DBEditEh3: TDBEditEh;
+    DBNumberEditEh1: TDBNumberEditEh;
+    DBNumberEditEh2: TDBNumberEditEh;
+    DBNumberEditEh3: TDBNumberEditEh;
+    StaticText10: TStaticText;
+    DBNumberEditEh4: TDBNumberEditEh;
+    StaticText11: TStaticText;
+    DBNumberEditEh5: TDBNumberEditEh;
+    StaticText12: TStaticText;
+    DBNumberEditEh6: TDBNumberEditEh;
+    Edit7: TEdit;
+    DBLookupComboBox1: TDBLookupComboBox;
+    StaticText13: TStaticText;
+    StaticText20: TStaticText;
+    StaticText21: TStaticText;
+    EditPrice1: TEdit;
+    EditFlatCode: TEdit;
+    procedure BitBtn3Click(Sender: TObject);
+    procedure BranchCBEhKeyPress(Sender: TObject; var Key: Char);
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure SpeedButton2Click(Sender: TObject);
+    procedure BitBtn2Click(Sender: TObject);
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure BitBtn1Click(Sender: TObject);
+    procedure BranchCBEhChange(Sender: TObject);
+    procedure DBLookupComboboxEh6KeyValueChanged(Sender: TObject);
+    procedure DBLookupComboboxEh6Exit(Sender: TObject);
+    procedure DBLookupComboboxEh6Change(Sender: TObject);
+    procedure DTPCloseDateChange(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure Edit7Change(Sender: TObject);
+    procedure Edit7KeyPress(Sender: TObject; var Key: Char);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  AddEditContractForm: TAddEditContractForm;
+
+implementation
+
+{$R *.DFM}
+
+uses DatModConstructionImpl,FlatMgrUnit,CustMgrUnit,AccMgrUnit,TransactionViewerUnit,sboapiDataModuleImpl,
+  CreditsManagerForConstructionImpl;
+
+procedure TAddEditContractForm.BitBtn3Click(Sender: TObject);
+begin
+
+  FlatsMgrForm := TFlatsMgrForm.Create(Self);
+  FlatsMgrForm.ShowModal;
+
+end;
+
+procedure TAddEditContractForm.BranchCBEhKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if ORD(Key) = VK_RETURN then
+  begin
+  if Sender is TWinControl then
+  with Sender as TWinControl do
+  case Tag of
+    1 : SelectNext(Sender as TWinControl ,True ,True);
+    end;
+    Key := #0;
+  end;
+
+end;
+
+procedure TAddEditContractForm.Button1Click(Sender: TObject);
+var
+d : variant;
+
+begin
+
+end;
+
+procedure TAddEditContractForm.SpeedButton1Click(Sender: TObject);
+begin
+  CustMgrForm := TCustMgrForm.Create(Self);
+  CustMgrForm.ShowModal;
+end;
+
+procedure TAddEditContractForm.SpeedButton2Click(Sender: TObject);
+begin
+   AccMgrForm := TAccMgrForm.Create(Self);
+   AccMgrForm .ShowModal;
+end;
+
+procedure TAddEditContractForm.BitBtn2Click(Sender: TObject);
+begin
+  Close
+end;
+
+procedure TAddEditContractForm.FormActivate(Sender: TObject);
+var
+accid : integer;
+begin
+
+//DatModConstruction.CreditPurpose.Refresh;
+DBLookupComboboxEh2.Text:=DBLookupComboboxEh2.ListSource.DataSet.FieldByName('NAME').AsString;
+Edit7.Text:=DatModConstruction.CreditPurpose.FieldByName('PeriodContracts').AsString;
+DBLookupComboBox1.KeyValue:=DatModConstruction.CreditPurpose.FieldByName('note').AsString;
+ DatModConstruction.CreditPurpose.Close;
+ DatModConstruction.CreditPurpose.Open;
+
+ if    addupd=1 then
+ begin
+   DatModConstruction.CreditPurpose.insert;
+ end;
+ if    addupd=2 then
+ begin
+   DatModConstruction.CreditPurpose.Edit;
+ end;
+
+
+AccID :=DatModConstruction.CreditPurpose.FieldByName('ACCID').AsInteger;
+
+end;
+
+procedure TAddEditContractForm.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+   Resize := False
+end;
+
+procedure TAddEditContractForm.FormKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+   if ord(Key) = VK_ESCAPE then close
+end;
+
+procedure TAddEditContractForm.BitBtn1Click(Sender: TObject);
+var
+  //DDate :TDateTime;
+  CustomerID    :  integer;
+  op_id         :  integer;
+  accno         :  string;
+  CurrencyID    :  integer;
+  name          :  string;
+  open_dat      :  tdatetime;
+  balcn         :  integer;
+  ownid         :  integer;
+  AccID         :  integer;
+begin
+
+  if not DatModConstruction.cc_settings.active  then DatModConstruction.cc_settings.open;
+
+  //DDate :=Trunc(DatModConstruction.SBOP.CallDateFunction('get_date',[]));
+
+  AccID :=DatModConstruction.CreditPurpose.FieldByName('ACCID').AsInteger;
+
+  if DatModConstruction.CreditPurpose.State=dsInsert then
+  begin
+        CustomerID:=DatModConstruction.cc_settings.FieldByName('ACCCUST').AsInteger;
+        CurrencyID:=DatModConstruction.cc_settings.FieldByName('ACCCUR').AsInteger;
+        name:=DBLookupComboboxEh6.Text;
+        open_dat:=Integer(Trunc(DatModConstruction.SBOP.CallDateFunction('get_date',[])));
+        balcn:=DatModConstruction.cc_settings.FieldByName('ACCBALCN').AsInteger;
+        ownid:=DatModConstruction.CreditPurpose.FieldByName('BUYER').AsInteger;
+        accno:=DatModConstruction.sbcm_construction.CallStringFunction('GenerateAccountNumber',['CustomerID',strtoint(DBEdit1.Text)]);
+
+               AccID := DatModConstruction.sbcm_construction.CallIntegerFunction('add_account',[
+               'p_CustID', customerid,
+               'p_AccNo', accno,
+               'p_Curr', currencyid,
+               'p_Name', name,
+               'p_OpenDate', open_dat,
+               'p_BalCn', balcn,
+               'p_OwnID', ownid]);
+                DatModConstruction.Accounts.Refresh;
+   end;
+
+   with DatModConstruction,CreditPurpose do
+   begin
+
+         FieldByName('AccID').AsInteger := AccID;
+         FieldByName('CONTAMOUNT').asfloat:= FieldByName('restt').AsFloat;
+         FieldByName('opendate').AsDateTime := trunc(DTPOpenDate.DateTime);
+         FieldByName('note').AsInteger:=DBLookupComboBox1.KeyValue;
+         Post;
+         DatModConstruction.Credits.Refresh;
+   end;
+
+   DatModConstruction.Credits.Locate('CONTNUM', AddEditContractForm.DBEditContNum.Text, []);
+   AddEditContractForm.Close;
+
+
+end;
+
+procedure TAddEditContractForm.BranchCBEhChange(Sender: TObject);
+begin
+     with DatModConstruction, Accounts do begin
+       close;
+        SetVariable('val',BranchCBEh.KeyValue);
+        Open;
+   end;
+
+end;
+
+procedure TAddEditContractForm.DBLookupComboboxEh6KeyValueChanged(
+  Sender: TObject);
+begin
+  with (Sender as TDBLookupComboboxEh) do
+  if DataSource.DataSet.Active then
+   UpdateData;
+
+end;
+
+procedure TAddEditContractForm.DTPCloseDateChange(Sender: TObject);
+begin
+   with DatModConstruction,CreditPurpose do  begin
+
+         FieldByName('opendate').AsDateTime := trunc(DTPOpenDate.DateTime);
+         FieldByName('expdate').AsDateTime := trunc(DTPCloseDate.DateTime);
+
+
+      // DatModConstruction.Credits.Refresh;
+   end;
+    Edit7.Text:=DBEditEh3.Text;
+end;
+
+procedure TAddEditContractForm.Edit7Change(Sender: TObject);
+var
+mon : integer;
+begin
+mon := strtoint(edit7.text);
+AddEditContractForm.DTPCloseDate.DateTime:=DatModConstruction.sbcm_construction.CallDateFunction('GetFindExpdate',['odat',DTPOpenDate.DateTime,'mon',mon]);
+ with DatModConstruction,CreditPurpose do  begin
+
+         FieldByName('opendate').AsDateTime := trunc(DTPOpenDate.DateTime);
+         FieldByName('expdate').AsDateTime := trunc(DTPCloseDate.DateTime);
+
+
+      // DatModConstruction.Credits.Refresh;
+   end;
+end;
+
+procedure TAddEditContractForm.Edit7KeyPress(Sender: TObject; var Key: Char);
+begin
+  {ShowMessage(chr( ord(Key)));
+   Key:=#0;}
+end;
+
+procedure TAddEditContractForm.DBLookupComboboxEh6Exit(Sender: TObject);
+begin
+  CMSearchEditLoacAccs.Text := '';
+   with DatModConstruction,Accounts do begin
+       Close;
+        SetVariable('BID',DBLookupComboboxEh6.ListSource.DataSet.FieldByName('ID').asInteger);
+        Open;
+   CMSearchEditLoacAccs.Text:= Fieldbyname('Acc_no').asString;
+   DBLookupComboboxEh2.Text := Fieldbyname('Name').asString;
+   end;
+
+end;
+
+procedure TAddEditContractForm.DBLookupComboboxEh6Change(Sender: TObject);
+begin
+   //DBLookupComboboxEh2.Text:= '';
+   //CMSearchEditLoacAccs.Text := '';
+end;
+
+end.

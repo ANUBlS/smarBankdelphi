@@ -1,0 +1,138 @@
+unit Witch;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,Data_Unit,Dialogs,
+  Db, Grids, DBGrids, OracleData,sboapiDataModuleImpl;
+
+type
+  TFormWitch = class(TForm)
+    DBGrid1: TDBGrid;
+    DBGrid2: TDBGrid;
+    OracleDataSet1: TOracleDataSet;
+    OracleDataSet2: TOracleDataSet;
+    DataSource1: TDataSource;
+    DataSource2: TDataSource;
+    procedure DBGrid1DrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TColumn; State: TGridDrawState);
+    procedure DBGrid2DrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TColumn; State: TGridDrawState);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormWitch: TFormWitch;
+
+implementation
+uses LVPCSSImpl;
+{$R *.DFM}
+
+procedure TFormWitch.DBGrid1DrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TColumn;
+  State: TGridDrawState);
+var
+  ImageIndex,ImageIndexFilial: Integer;
+begin
+  ImageIndex:=-1;
+  with (Sender as TDBGrid) do
+  begin
+    if (Sender as TDBGrid).DataSource.DataSet.RecordCount <> 0 then
+    begin
+      case (Sender as TDBGrid).DataSource.DataSet.FieldByName('Status').AsInteger of
+      msDefault:
+        ImageIndex := 3;
+      msCommit:
+        ImageIndex := 10;
+      msReject:
+        ImageIndex := 4;
+      msFileCreated:
+        ImageIndex := 5;
+      msVerifikator:
+        ImageIndex :=18;
+      msFVerifikator:
+        ImageIndex :=17;
+      msAvtorizator:
+        ImageIndex :=19;
+      msReturnBack:
+        ImageIndex :=16;    
+      end;
+      if (DataCol = 2) and (ImageIndex <> -1) then
+       LVPCSSForm.ImageList.Draw(Canvas, Rect.Left, Rect.Top, ImageIndex, True)
+      else
+        DefaultDrawColumnCell(Rect, DataCol, Column, State);
+
+      {view filial}
+      if ((Sender as TDBGrid)= DBGrid1)
+         then
+      begin
+        case (Sender as TDBGrid).DataSource.DataSet.FieldByName('FILIAL').AsInteger of
+              MsHeadOffice:  ImageIndexFilial := -1;
+              else
+                  ImageIndexFilial := 0;
+        end;
+        if (DataCol = 1) and (ImageIndex <> -1) then
+           LVPCSSForm.ImageListFilial.Draw(Canvas, Rect.Left, Rect.Top, ImageIndexFilial, True);
+      end;
+    end;
+  end;
+
+
+end;
+
+procedure TFormWitch.DBGrid2DrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TColumn;
+  State: TGridDrawState);
+var
+  ImageIndex,ImageIndexFilial: Integer;
+begin
+  ImageIndex:=-1;
+  with (Sender as TDBGrid) do
+  begin
+    if (Sender as TDBGrid).DataSource.DataSet.RecordCount <> 0 then
+    begin
+      case (Sender as TDBGrid).DataSource.DataSet.FieldByName('Status').AsInteger of
+      msDefault:
+        ImageIndex := 3;
+      msCommit:
+        ImageIndex := 10;
+      msReject:
+        ImageIndex := 4;
+      msFileCreated:
+        ImageIndex := 5;
+      msVerifikator:
+        ImageIndex :=18;
+      msFVerifikator:
+        ImageIndex :=17;
+      msAvtorizator:
+        ImageIndex :=19;
+      msReturnBack:
+        ImageIndex :=16;    
+      end;
+      if (DataCol = 2) and (ImageIndex <> -1) then
+        LVPCSSForm.ImageList.Draw(Canvas, Rect.Left, Rect.Top, ImageIndex, True)
+      else
+        DefaultDrawColumnCell(Rect, DataCol, Column, State);
+
+      {view filial}
+      if ((Sender as TDBGrid)=DBGrid1)
+           then
+      begin
+        case (Sender as TDBGrid).DataSource.DataSet.FieldByName('FILIAL').AsInteger of
+              MsHeadOffice:  ImageIndexFilial := -1;
+              else
+                  ImageIndexFilial := 0;
+        end;
+        if (DataCol = 1) and (ImageIndex <> -1) then
+            LVPCSSForm.ImageListFilial.Draw(Canvas, Rect.Left, Rect.Top, ImageIndexFilial, True);
+      end;
+    end;
+  end;
+
+
+end;
+
+end.

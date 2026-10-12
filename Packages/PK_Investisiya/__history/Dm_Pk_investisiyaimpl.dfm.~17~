@@ -1,0 +1,246 @@
+object Dm_Pk_investisiya: TDm_Pk_investisiya
+  OldCreateOrder = False
+  OnCreate = DataModuleCreate
+  OnDestroy = DataModuleDestroy
+  Height = 353
+  Width = 680
+  object DsValute: TOracleDataSet
+    SQL.Strings = (
+      'select valute,val_name from avalute')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000C000000560041004C005500540045000100000000001000
+      0000560041004C005F004E0041004D004500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 7
+    Top = 6
+    object DsValuteVALUTE: TIntegerField
+      FieldName = 'VALUTE'
+      Required = True
+    end
+    object DsValuteVAL_NAME: TWideStringField
+      FieldName = 'VAL_NAME'
+      Size = 160
+    end
+  end
+  object DsrValute: TDataSource
+    DataSet = DsValute
+    Left = 8
+    Top = 59
+  end
+  object Ds_Cust: TOracleDataSet
+    SQL.Strings = (
+      'select id , name from customers'
+      'where cust_type=0'
+      '--and group_klie=70 '
+      'and close_dat is  NULL'
+      'order by id')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000400000049004400010000000000080000004E0041004D00
+      4500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 56
+    Top = 5
+    object Ds_CustID: TIntegerField
+      FieldName = 'ID'
+      Required = True
+    end
+    object Ds_CustNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 360
+    end
+  end
+  object Dsr_Cust: TDataSource
+    DataSet = Ds_Cust
+    Left = 54
+    Top = 53
+  end
+  object dsinvest_type: TOracleDataSet
+    SQL.Strings = (
+      'select * from ins_investment_type')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000400000049004400010000000000080000004E0041004D00
+      4500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 117
+    Top = 4
+    object dsinvest_typeID: TFloatField
+      FieldName = 'ID'
+    end
+    object dsinvest_typeNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 255
+    end
+  end
+  object dsrinvest_type: TDataSource
+    DataSet = dsinvest_type
+    Left = 120
+    Top = 56
+  end
+  object pk_ins_Investment: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'ins_Investment'
+    Left = 40
+    Top = 120
+  end
+  object DsMain_Contracts: TOracleDataSet
+    SQL.Strings = (
+      
+        'select a.rowid,a.id, iit.name contr_type, a.begin_date, a.end_da' +
+        'te, (a.ammount+nvl((select sum(ammount) from ins_invest_payment ' +
+        'where cid=a.id),0)) as ammount,a.percent,'
+      '(select name from filial where id=a.filial)as filial,'
+      
+        '(select acc_no from account where id=a.main_acc_id) as main_acc_' +
+        'id,'
+      
+        '(select acc_no from account where id=a.per_acc_id)  as per_acc_i' +
+        'd,a.per_ammount,round((a.per_ammount/360),2) as Calc_day_per,'
+      
+        'round((a.per_ammount/360)*10/100,2) as omv,(round((a.per_ammount' +
+        '/360),2)-round((a.per_ammount/360)*10/100,2)) as remainder_per_a' +
+        'mmount,'
+      
+        'cust.name as musteri, a.contract_name,ii.name as muddetli,av.val' +
+        '_name,a.status,a.close_prefix,(select abs(ostat) from tenostat w' +
+        'here acc_id=a.main_acc_id) as esas_qaliq,'
+      
+        '(select ostat from tenostat where acc_id=a.per_acc_id) as faiz_q' +
+        'aliq'
+      
+        'from ins_investment_contracts a,ins_investment_type iit,ins_inve' +
+        'stment_time ii,customers cust,avalute av'
+      
+        'where a.invest_type_id=iit.id and a.kli_id=cust.id and a.invest_' +
+        'time=ii.id and a.valute_id=av.valute'
+      ''
+      ''
+      '')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      0500000015000000040000004900440001000000000014000000420045004700
+      49004E005F0044004100540045000100000000001000000045004E0044005F00
+      44004100540045000100000000000E00000041004D004D004F0055004E005400
+      0100000000001A00000043004F004E00540052004100430054005F004E004100
+      4D004500010000000000100000004D00550044004400450054004C0049000100
+      0000000010000000560041004C005F004E0041004D0045000100000000000E00
+      00004D005500530054004500520049000100000000001400000043004F004E00
+      540052005F0054005900500045000100000000000C0000005300540041005400
+      550053000100000000000E000000500045005200430045004E00540001000000
+      00001800000043004C004F00530045005F005000520045004600490058000100
+      000000000C000000460049004C00490041004C00010000000000160000004D00
+      410049004E005F004100430043005F0049004400010000000000140000005000
+      450052005F004100430043005F00490044000100000000001600000050004500
+      52005F0041004D004D004F0055004E005400010000000000060000004F004D00
+      560001000000000018000000430041004C0043005F004400410059005F005000
+      450052000100000000002A000000520045004D00410049004E00440045005200
+      5F005000450052005F0041004D004D004F0055004E0054000100000000001400
+      000045005300410053005F00510041004C004900510001000000000014000000
+      4600410049005A005F00510041004C0049005100010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 200
+    Top = 8
+    object DsMain_ContractsID: TFloatField
+      DisplayLabel = 'M'#252'qavil'#601' ID-si'
+      FieldName = 'ID'
+      Required = True
+    end
+    object DsMain_ContractsCONTRACT_NAME: TWideStringField
+      DisplayLabel = 'M'#252'qavil'#601' n'#246'mr'#601'si'
+      FieldName = 'CONTRACT_NAME'
+      Size = 128
+    end
+    object DsMain_ContractsMAIN_ACC_ID: TWideStringField
+      DisplayLabel = #399'sas Hesab '#8470
+      FieldName = 'MAIN_ACC_ID'
+      Size = 448
+    end
+    object DsMain_ContractsVAL_NAME: TWideStringField
+      DisplayLabel = 'Valyuta'
+      FieldName = 'VAL_NAME'
+      Size = 160
+    end
+    object DsMain_ContractsMUSTERI: TWideStringField
+      DisplayLabel = 'M'#252#351't'#601'ri ad'#305
+      FieldName = 'MUSTERI'
+      Size = 360
+    end
+    object DsMain_ContractsPER_ACC_ID: TWideStringField
+      DisplayLabel = 'Faiz Hesab '#8470
+      FieldName = 'PER_ACC_ID'
+      Size = 448
+    end
+    object DsMain_ContractsBEGIN_DATE: TDateTimeField
+      DisplayLabel = 'Ba'#351'lanma tarixi'
+      FieldName = 'BEGIN_DATE'
+    end
+    object DsMain_ContractsEND_DATE: TDateTimeField
+      DisplayLabel = 'Bitm'#601' tarixi'
+      FieldName = 'END_DATE'
+    end
+    object DsMain_ContractsAMMOUNT: TFloatField
+      DisplayLabel = 'M'#601'bl'#601#287
+      FieldName = 'AMMOUNT'
+    end
+    object DsMain_ContractsESAS_QALIQ: TFloatField
+      DisplayLabel = 'Esas Qaliq'
+      FieldName = 'ESAS_QALIQ'
+    end
+    object DsMain_ContractsFAIZ_QALIQ: TFloatField
+      DisplayLabel = 'Faiz Qaliq'
+      FieldName = 'FAIZ_QALIQ'
+    end
+    object DsMain_ContractsPERCENT: TIntegerField
+      DisplayLabel = #304'llik %'
+      FieldName = 'PERCENT'
+    end
+    object DsMain_ContractsCALC_DAY_PER: TFloatField
+      DisplayLabel = 'Hesablanm'#305#351' g'#252'nd'#601'lik faiz'
+      FieldName = 'CALC_DAY_PER'
+    end
+    object DsMain_ContractsOMV: TFloatField
+      DisplayLabel = #214'MV m'#601'bl'#601#287'i'
+      FieldName = 'OMV'
+    end
+    object DsMain_ContractsREMAINDER_PER_AMMOUNT: TFloatField
+      DisplayLabel = 'Qal'#305'q faiz m'#601'bl'#601#287'i'
+      FieldName = 'REMAINDER_PER_AMMOUNT'
+    end
+    object DsMain_ContractsMUDDETLI: TWideStringField
+      DisplayLabel = 'M'#252'dd'#601'tli/M'#252'dd'#601'tsiz'
+      FieldName = 'MUDDETLI'
+      Size = 255
+    end
+    object DsMain_ContractsFILIAL: TWideStringField
+      DisplayLabel = 'Filial'
+      FieldName = 'FILIAL'
+      Size = 360
+    end
+    object DsMain_ContractsCONTR_TYPE: TWideStringField
+      DisplayLabel = #304'nvestisiya n'#246'v'#252
+      FieldName = 'CONTR_TYPE'
+      Visible = False
+      Size = 255
+    end
+    object DsMain_ContractsPER_AMMOUNT: TFloatField
+      DisplayLabel = 'Hesablanm'#305#351' % m'#601'bl'#601#287'i'
+      FieldName = 'PER_AMMOUNT'
+      Visible = False
+    end
+    object DsMain_ContractsSTATUS: TIntegerField
+      DisplayLabel = ' '
+      FieldName = 'STATUS'
+      Visible = False
+    end
+    object DsMain_ContractsCLOSE_PREFIX: TFloatField
+      FieldName = 'CLOSE_PREFIX'
+    end
+  end
+  object DsrMain_Contracts: TDataSource
+    DataSet = DsMain_Contracts
+    Left = 200
+    Top = 64
+  end
+end

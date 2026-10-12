@@ -1,0 +1,53 @@
+﻿unit UMKAccesories;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Grids, DBGrids, ExtCtrls, DBCtrls, StdCtrls, Buttons, DB, XFSCtrls;
+
+type
+  TfrmAccessories = class(TForm)
+    Panel1: TPanel;
+    DBGrid1: TDBGrid;
+    XFPanel1: TXFPanel;
+    DBNavigator2: TDBNavigator;
+    BitBtn1: TBitBtn;
+    procedure BitBtn1Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  frmAccessories: TfrmAccessories;
+
+implementation
+
+uses UMKDataMod, UMKBlank,sboapiDataModuleimpl,SBTranslateProc,CommanParametrs;
+
+{$R *.DFM}
+
+procedure TfrmAccessories.BitBtn1Click(Sender: TObject);
+begin
+if contractstatus=1 then  //CommanParametrs
+ begin
+   showmessage('Diqqət! Bu müqavilə bağlanmış müqavilə olduğundan heç bir deyişiklik oluna bilməz.');
+   exit;
+ end;
+  with InsMKDataMod, ODSAccessories do
+     if State in [dsEdit, dsInsert] then
+     begin
+        ODSAccessoriesCid.Value:=ODSMotorKaskoID.Value;
+        Post;
+     end;
+end;
+
+procedure TfrmAccessories.FormCreate(Sender: TObject);
+begin
+SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+end.

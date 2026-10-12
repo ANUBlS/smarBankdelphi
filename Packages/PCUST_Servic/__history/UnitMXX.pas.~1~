@@ -1,0 +1,55 @@
+unit UnitMXX;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, XFSCtrls, DBCtrls, ExtCtrls;
+
+type
+  TFormMMX = class(TForm)
+    XFPanel1: TXFPanel;
+    XFPanel2: TXFPanel;
+    XFLabel1: TXFLabel;
+    XFLabel2: TXFLabel;
+    XFLabel3: TXFLabel;
+    XFLabel4: TXFLabel;
+    DBLC_MMX_Transmode: TDBLookupComboBox;
+    DBLC_MMX_reportcode: TDBLookupComboBox;
+    Edit1: TEdit;
+    Edit2: TEdit;
+    XFButton1: TXFButton;
+    XFButton2: TXFButton;
+    procedure XFButton2Click(Sender: TObject);
+    procedure XFButton1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormMMX: TFormMMX;
+
+implementation
+
+uses DatUnit;
+
+{$R *.dfm}
+
+procedure TFormMMX.XFButton1Click(Sender: TObject);
+begin
+DM_goAml.OP_MMX.CallProcedure('up_mmx_transinfo',[DM_goAml.ods_subtransCCUSTID.AsInteger
+                                                 ,DBLC_MMX_reportcode.KeyValue
+                                                 ,DBLC_MMX_Transmode.Keyvalue
+                                                 ,Edit1.Text
+                                                 ,Edit2.Text
+                                                 ]);
+end;
+
+procedure TFormMMX.XFButton2Click(Sender: TObject);
+begin
+FormMMX.Close
+end;
+
+end.

@@ -1,0 +1,430 @@
+object SalesFrm: TSalesFrm
+  Left = 0
+  Top = 0
+  Caption = 'SalesFrm'
+  ClientHeight = 335
+  ClientWidth = 1070
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poOwnerFormCenter
+  OnCanResize = FormCanResize
+  OnClose = FormClose
+  OnCloseQuery = FormCloseQuery
+  OnCreate = FormCreate
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object GroupBox1: TGroupBox
+    Left = 0
+    Top = 0
+    Width = 310
+    Height = 335
+    Align = alLeft
+    Caption = 'M'#601'hsullar'
+    TabOrder = 0
+    object Label1: TLabel
+      Left = 9
+      Top = 21
+      Width = 83
+      Height = 14
+      Caption = 'M'#601'hsulun tipi'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+    end
+    object Label2: TLabel
+      Left = 9
+      Top = 68
+      Width = 81
+      Height = 14
+      Caption = 'M'#601'hsulun ad'#305
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+    end
+    object Label3: TLabel
+      Left = 11
+      Top = 126
+      Width = 66
+      Height = 14
+      Caption = #214'l'#231#252' vahidi'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+    end
+    object Label4: TLabel
+      Left = 14
+      Top = 196
+      Width = 29
+      Height = 14
+      Caption = 'Say'#305' '
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+    end
+    object Label5: TLabel
+      Left = 15
+      Top = 159
+      Width = 46
+      Height = 14
+      Caption = 'Qiym'#601'ti'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+    end
+    object DBLookupComboboxEh12: TDBLookupComboboxEh
+      Tag = 1
+      Left = 14
+      Top = 41
+      Width = 290
+      Height = 21
+      DropDownBox.Sizable = True
+      EditButtons = <>
+      KeyField = 'ID'
+      ListField = 'NAME'
+      ListSource = RtDataModule.ProductTypeSrc
+      TabOrder = 0
+      Visible = True
+    end
+    object DBLookupComboboxEh1: TDBLookupComboboxEh
+      Tag = 1
+      Left = 14
+      Top = 88
+      Width = 290
+      Height = 21
+      DropDownBox.Sizable = True
+      EditButtons = <>
+      KeyField = 'ID'
+      ListField = 'NAME'
+      ListSource = RtDataModule.ProductSrc
+      TabOrder = 1
+      Visible = True
+      OnChange = DBLookupComboboxEh1Change
+    end
+    object Edit1: TEdit
+      Left = 96
+      Top = 124
+      Width = 199
+      Height = 21
+      Enabled = False
+      TabOrder = 2
+    end
+    object Edit2: TEdit
+      Left = 96
+      Top = 194
+      Width = 199
+      Height = 21
+      TabOrder = 3
+    end
+    object CMCurrencyEdit1: TCMCurrencyEdit
+      Left = 96
+      Top = 155
+      Width = 199
+      Height = 21
+      TabOrder = 4
+      Text = '0'
+    end
+    object BitBtn1: TBitBtn
+      Left = 15
+      Top = 295
+      Width = 162
+      Height = 31
+      Cursor = crHandPoint
+      Caption = 'Sifari'#351'l'#601'r'#601' '#601'lav'#601' et '
+      DoubleBuffered = True
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      Glyph.Data = {
+        36040000424D3604000000000000360000002800000010000000100000000100
+        2000000000000004000000000000000000000000000000000000FF00FF00FF00
+        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+        FF00FF00FF00FF00FF00FF00FF00FF00FF00000000000000000000000000FF00
+        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+        FF00FF00FF00FF00FF00FF00FF00FF00FF0000000000FF00FF0000000000FF00
+        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+        FF00FF00FF00FF00FF00FF00FF00FF00FF0000000000FF00FF0000000000FF00
+        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+        FF00FF00FF0000000000000000000000000000000000FF00FF00000000000000
+        00000000000000000000FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+        FF00FF00FF0000000000FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+        FF00FF00FF0000000000FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+        FF00FF00FF0000000000000000000000000000000000FF00FF00000000000000
+        00000000000000000000FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+        FF00FF00FF00FF00FF00FF00FF00FF00FF0000000000FF00FF0000000000FF00
+        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+        FF00FF00FF00FF00FF00FF00FF00FF00FF0000000000FF00FF0000000000FF00
+        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+        FF00FF00FF00FF00FF00FF00FF00FF00FF00000000000000000000000000FF00
+        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00}
+      ParentDoubleBuffered = False
+      ParentFont = False
+      TabOrder = 5
+      OnClick = BitBtn1Click
+    end
+  end
+  object GroupBox2: TGroupBox
+    Left = 310
+    Top = 0
+    Width = 760
+    Height = 335
+    Align = alClient
+    Caption = 'M'#601'nim Sifari'#351'im'
+    TabOrder = 1
+    object Panel1: TPanel
+      Left = 2
+      Top = 295
+      Width = 756
+      Height = 38
+      Align = alBottom
+      BevelInner = bvLowered
+      TabOrder = 0
+      object BitBtn2: TBitBtn
+        Left = 448
+        Top = 4
+        Width = 169
+        Height = 31
+        Caption = 'Kredit m'#252'qavil'#601'sini yarat'
+        DoubleBuffered = True
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        Glyph.Data = {
+          F6000000424DF600000000000000760000002800000010000000100000000100
+          0400000000008000000000000000000000001000000000000000000000000000
+          8000008000000080800080000000800080008080000080808000C0C0C0000000
+          FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00888888888888
+          888888888888888888888888888888888888873333333333338887BB3B33B3B3
+          B38887B3B3B13B3B3388873B3B9913B3B38887B3B399973B3388873B397B9973
+          B38887B397BBB997338887FFFFFFFF91BB8888FBBBBB88891888888FFFF88888
+          9188888888888888898888888888888888988888888888888888}
+        ParentDoubleBuffered = False
+        ParentFont = False
+        TabOrder = 0
+        OnClick = BitBtn2Click
+      end
+      object BitBtn3: TBitBtn
+        Left = 644
+        Top = 4
+        Width = 75
+        Height = 31
+        Caption = 'Silm'#601'k'
+        DoubleBuffered = True
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        Glyph.Data = {
+          36030000424D3603000000000000360000002800000010000000100000000100
+          1800000000000003000000000000000000000000000000000000FFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFF404040606060808080808080808080606060404040FFFF
+          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF20202020206020209F0000BF00
+          00BF0000BF20209F404080808080606060202020FFFFFFFFFFFFFFFFFFFFFFFF
+          00002020209F0000FF0000FF0000FF0000FF0000FF0000FF0000FF20209F6060
+          80808080202020FFFFFFFFFFFF0000200000DF0000FF0000FF0000FF0000FF00
+          00FF0000FF0000FF0000FF0000FF0000DF606080606060FFFFFFFFFFFF00007F
+          0000FF0000FF3F3FFF0000FF0000FF0000FF0000FF0000FF3F3FFF0000FF0000
+          FF20209F8080804040400000400000FF0000FF3F3FFFFFFFFFBFBFFF0000FF00
+          00FF0000FFBFBFFFFFFFFF3F3FFF0000FF0000FF40408060606000007F0000FF
+          0000FF0000FFBFBFFFFFFFFFBFBFFF0000FFBFBFFFFFFFFFBFBFFF0000FF0000
+          FF0000FF20209F8080800000BF0000FF0000FF0000FF0000FFBFBFFFFFFFFFFF
+          FFFFFFFFFFBFBFFF0000FF0000FF0000FF0000FF0000BF8080800000BF0000FF
+          0000FF0000FF0000FF0000FFFFFFFFFFFFFFFFFFFF0000FF0000FF0000FF0000
+          FF0000FF0000BF8080800000BF0000FF0000FF0000FF0000FFBFBFFFFFFFFFFF
+          FFFFFFFFFFBFBFFF0000FF0000FF0000FF0000FF0000BF60606000007F0000FF
+          0000FF0000FFBFBFFFFFFFFFBFBFFF0000FFBFBFFFFFFFFFBFBFFF0000FF0000
+          FF0000FF20209F4040400000400000FF0000FF3F3FFFFFFFFFBFBFFF0000FF00
+          00FF0000FFBFBFFFFFFFFF3F3FFF0000FF0000FF202060FFFFFFFFFFFF00007F
+          0000FF0000FF3F3FFF0000FF0000FF0000FF0000FF0000FF3F3FFF0000FF0000
+          FF20209F202020FFFFFFFFFFFF0000200000DF0000FF0000FF0000FF0000FF00
+          00FF0000FF0000FF0000FF0000FF0000DF000020FFFFFFFFFFFFFFFFFFFFFFFF
+          00002000007F0000FF0000FF0000FF0000FF0000FF0000FF0000FF00007F0000
+          20FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00004000007F0000BF00
+          00BF0000BF00007F000040FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF}
+        ParentDoubleBuffered = False
+        ParentFont = False
+        TabOrder = 1
+        OnClick = BitBtn3Click
+      end
+      object BitBtn4: TBitBtn
+        Left = 4
+        Top = 4
+        Width = 173
+        Height = 31
+        Caption = 'Sifari'#351'i anbara g'#246'nd'#601'r'
+        DoubleBuffered = True
+        Enabled = False
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        Glyph.Data = {
+          36030000424D3603000000000000360000002800000010000000100000000100
+          1800000000000003000000000000000000000000000000000000FF00FFFF00FF
+          FF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00
+          FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FF840000FF
+          00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FF
+          FF00FFFF00FFFF00FF840000008400840000FF00FFFF00FFFF00FFFF00FFFF00
+          FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FF84000000840000840000
+          8400840000FF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FF
+          FF00FF84000000840000840000FF00008400008400840000FF00FFFF00FFFF00
+          FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FF00840000840000FF00FF00FF00
+          FF00008400008400840000FF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FF
+          FF00FF00840000FF00FF00FFFF00FFFF00FF00FF00008400008400840000FF00
+          FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FF00FF00FF00FFFF00FFFF00FFFF
+          00FFFF00FF00FF00008400008400840000FF00FFFF00FFFF00FFFF00FFFF00FF
+          FF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FF00FF000084000084
+          00840000FF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF
+          00FFFF00FFFF00FFFF00FF00FF00008400008400840000FF00FFFF00FFFF00FF
+          FF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FF00FF
+          00008400008400FF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF
+          00FFFF00FFFF00FFFF00FFFF00FFFF00FF00FF00008400FF00FFFF00FFFF00FF
+          FF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00
+          FFFF00FF00FF00FF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF
+          00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FF
+          FF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00
+          FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF
+          00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FF}
+        ParentDoubleBuffered = False
+        ParentFont = False
+        TabOrder = 2
+        OnClick = BitBtn4Click
+      end
+    end
+    object XDBGrid1: TXDBGrid
+      Left = 2
+      Top = 15
+      Width = 756
+      Height = 280
+      Align = alClient
+      Ctl3D = False
+      Ctl3DAuto = False
+      DataColLineColor = clAqua
+      DataRowLineColor = clNavy
+      DataSource = RtDataModule.SaleSrc
+      FixedStyle = fsNice
+      FixedTheme = ftNone
+      Gradient.Direction = gdHorizontal
+      Gradient.EndColor = clSilver
+      Gradient.HotColor = clInactiveCaptionText
+      Gradient.Options = [goGradient, goHotButton, goHotTrack, goHotColor]
+      GridStyle.VisualStyle = vsXPStyle
+      HotButtons = hbNone
+      KeyFields = 'CustNo'
+      Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgRowSelect, dgConfirmDelete, dgCancelOnExit, dgMultiSelect, dgExtendedSelect, dgInternalSelect, dgRowResize, dgRowScroll, dgHotButtons, dgTitleButtons, dgTitleHeaders, dgTitleWidthOff, dgMarkerAutoAlign, dgMarkerAutoToggle, dgForceSequence, dgThumbTracking]
+      OptionsEx = [dgBlankRow, dgTotalFooter, dgTotalColLines, dgTotalHeaderBox, dgTotalValuesBox, dgTotalFieldsBox, dgTotalFooterBox, dgAutoUpdateOrder, dgAutoAscendOrder, dgAutoUpdateSequence, dgDelayUpdateSequence, dgAutoUpdateTotals, dgDelayUpdateTotals, dgCalcWholeDataSet, dgDelaySelectedRows, dgTotalHeaderSelected, dgSelectedAutoHidden, dgClickSelectOff]
+      ParentCtl3D = False
+      TabOrder = 1
+      Totals.BoxStyle = cbAutoLowered
+      Columns = <
+        item
+          Alignment = taRightJustify
+          AutoNumber = True
+          Expanded = False
+          Title.Alignment = taRightJustify
+          Title.Caption = 'No.'
+          TotalFooter.CalcValue = cvCount
+          TotalFooter.Format = '%d.'
+          TotalFooter.TotalResult = trCalcValue
+          TotalHeader.CalcValue = cvCount
+          TotalHeader.TotalResult = trCalcValue
+          Visible = True
+          Width = 31
+        end
+        item
+          Expanded = False
+          FieldName = 'CODE'
+          Title.Caption = 'M'#601'hsulun kodu'
+          Title.Marker = tmAscend
+          Title.MarkerIndex = 2
+          Visible = True
+          Width = 97
+        end
+        item
+          Expanded = False
+          FieldName = 'DATE_ORDER'
+          Title.Caption = 'Sat'#305#351' tarixi'
+          TotalFooter.TotalResult = trCalcValue
+          TotalHeader.TotalResult = trCalcValue
+          Visible = True
+          Width = 119
+        end
+        item
+          Expanded = False
+          FieldName = 'PRODUCTNAME'
+          Title.Caption = 'M'#601'hsulun ad'#305
+          TotalFooter.TotalResult = trCalcValue
+          TotalHeader.TotalResult = trCalcValue
+          Visible = True
+          Width = 171
+        end
+        item
+          Expanded = False
+          FieldName = 'WEIGHT'
+          Title.Caption = 'M'#601'hsulun say'#305
+          TotalFooter.TotalResult = trCalcValue
+          TotalHeader.TotalResult = trCalcValue
+          Visible = True
+          Width = 84
+        end
+        item
+          Expanded = False
+          FieldName = 'SALE_PRICE'
+          Title.Caption = 'M'#601'hsulun qiym'#601'ti'
+          TotalFooter.TotalResult = trCalcValue
+          TotalHeader.TotalResult = trCalcValue
+          Visible = True
+          Width = 89
+        end
+        item
+          Expanded = False
+          FieldName = 'CEM'
+          Title.Caption = 'C'#601'mi'
+          TotalFooter.TotalResult = trCalcValue
+          TotalHeader.TotalResult = trCalcValue
+          Visible = True
+          Width = 100
+        end>
+      OrderFields = 'CODE'
+    end
+  end
+end

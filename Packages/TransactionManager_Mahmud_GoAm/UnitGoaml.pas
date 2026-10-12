@@ -1,0 +1,62 @@
+unit UnitGoaml;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Grids, DBGrids, DB, OracleData;
+
+type
+  TFormGo = class(TForm)
+    DBGrid1: TDBGrid;
+    OracleDataSet1: TOracleDataSet;
+    OracleDataSet2: TOracleDataSet;
+    DataSource1: TDataSource;
+    OracleDataSet2ID: TIntegerField;
+    OracleDataSet2NAME: TWideStringField;
+    OracleDataSet2DESCRIPTION: TWideStringField;
+    OracleDataSet1REPORT_CODE: TWideStringField;
+    OracleDataSet1TRANSMODE_CODE: TIntegerField;
+    OracleDataSet1ID: TFloatField;
+    OracleDataSet1DEBITBALANCE: TFloatField;
+    OracleDataSet1CREDITBALANCE: TFloatField;
+    OracleDataSet1DEBITACCNO: TWideStringField;
+    OracleDataSet1CREDITACCNO: TWideStringField;
+    OracleDataSet1DEBITAMOUNT: TFloatField;
+    OracleDataSet1CREDITAMOUNT: TFloatField;
+    OracleDataSet1DEBITRATE: TFloatField;
+    OracleDataSet1CREDITRATE: TFloatField;
+    procedure FormCreate(Sender: TObject);
+    procedure DBGrid1DblClick(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormGo: TFormGo;
+
+implementation
+ uses
+ sboapiDataModuleImpl   , UnitReportCode;
+{$R *.dfm}
+
+procedure TFormGo.DBGrid1DblClick(Sender: TObject);
+begin
+FormReportCode.ShowModal;
+end;
+
+procedure TFormGo.FormCreate(Sender: TObject);
+begin
+FormReportCode:=TFormReportCode.create(self);
+end;
+
+procedure TFormGo.FormShow(Sender: TObject);
+begin
+OracleDataSet1.Open;
+
+end;
+
+end.

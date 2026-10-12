@@ -1,0 +1,59 @@
+unit NewDepositsDataModule;
+
+interface
+
+uses
+  SysUtils, Classes, DB, OracleData;
+
+type
+  TNewDepositDataModule = class(TDataModule)
+    DmDataSetArchive: TOracleDataSet;
+    DmDataSetArchiveID: TFloatField;
+    DmDataSetArchiveCONTRACTNO: TWideStringField;
+    DmDataSetArchiveVAL_NAME: TWideStringField;
+    DmDataSetArchiveCUSTOMERNAME: TWideStringField;
+    DmDataSetArchiveOPENDATE: TDateTimeField;
+    DmDataSetArchiveCLOSEDATE: TDateTimeField;
+    DmDataSetArchiveAMOUNT: TFloatField;
+    DmDataSetArchiveINTEREST: TFloatField;
+    DmDataSetArchiveFACTICALDEBT: TFloatField;
+    DmDataSetArchiveFACTICALINTERESTDEBT: TFloatField;
+    DmDataSetArchiveOSTAT: TFloatField;
+    DmDataSetArchiveCURRENCY: TFloatField;
+    DmDataSetArchivePERSONALTYPE: TFloatField;
+    DmDataSetArchiveCLIENTTYPE: TFloatField;
+    DmDataSetArchiveBRANCHID: TFloatField;
+    DmDataSetArchiveCONTRACTTYPE: TIntegerField;
+    DmDataSetArchiveCUSTOMERID: TFloatField;
+    DmDataSetArchiveUSID: TFloatField;
+    DmDataSetArchivePROLONGATIONDATE: TDateTimeField;
+    DmDataSetArchiveSTOPCALCDATE: TDateTimeField;
+    DmDataSetArchiveCONTRACTTYPENAME: TWideStringField;
+    DmDataSetArchiveUSERNAME: TWideStringField;
+    DmDataSetArchiveFILIAL: TWideStringField;
+    DmDataSetArchiveAGENTID: TFloatField;
+    DMArchiveDataSrc: TDataSource;
+    Valutes: TOracleDataSet;
+    ValutesVALUTE: TIntegerField;
+    ValutesVALU_NAME: TWideStringField;
+    ValutesDatSrc: TDataSource;
+    Filials: TOracleDataSet;
+    FilialsID: TFloatField;
+    FilialsNAME: TWideStringField;
+    FilialsDatSrc: TDataSource;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  NewDepositDataModule: TNewDepositDataModule;
+
+implementation
+
+{$R *.dfm}
+
+uses sboapiDataModuleImpl;
+
+end.

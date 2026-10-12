@@ -1,0 +1,82 @@
+unit FlatsMgrIMPL;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, Buttons, Db, ImgList, OracleData, Grids, DBGrids, ExtCtrls;
+
+type
+  TFlatsMgrForm = class(TForm)
+    Panel1: TPanel;
+    Panel2: TPanel;
+    DBGrid3: TDBGrid;
+    Panel3: TPanel;
+    DBGrid2: TDBGrid;
+    Panel4: TPanel;
+    DBGrid1: TDBGrid;
+    companie: TOracleDataSet;
+    companieCOMP_NAME: TStringField;
+    building: TOracleDataSet;
+    buildingID: TFloatField;
+    buildingCOMP_ID: TFloatField;
+    buildingBLD_NAME: TStringField;
+    flat: TOracleDataSet;
+    StatusImages: TImageList;
+    companiesDatSrc: TDataSource;
+    buildingsDatSrc: TDataSource;
+    flatsDatSrc: TDataSource;
+    BitBtn1: TBitBtn;
+    BitBtn2: TBitBtn;
+    companieID: TIntegerField;
+    buildingADDRESS: TStringField;
+    buildingENTRANCES: TFloatField;
+    buildingFLATS: TFloatField;
+    flatID: TFloatField;
+    flatBLD_ID: TFloatField;
+    flatFLATNUMBER: TStringField;
+    flatENTRANCE: TIntegerField;
+    flatFFLOOR: TIntegerField;
+    flatROOMS: TIntegerField;
+    flatAREA: TFloatField;
+    flatPRICE1: TFloatField;
+    flatPRICEGEN: TFloatField;
+    flatBUYER: TFloatField;
+    flatUSERID: TFloatField;
+    flatBUYER_STATUS: TStringField;
+    procedure FormCreate(Sender: TObject);
+    procedure BitBtn1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FlatsMgrForm: TFlatsMgrForm;
+
+implementation
+uses sboapiDataModuleImpl,Contractimpl, DatModConstimpl;
+{$R *.DFM}
+
+procedure TFlatsMgrForm.FormCreate(Sender: TObject);
+begin
+companie.open;
+building.open;
+flat.open
+end;
+
+procedure TFlatsMgrForm.BitBtn1Click(Sender: TObject);
+begin
+    FrmContract.Edit6.text := floattostr(FlatsMgrForm.flat.FieldByName('PRICEGEN').AsFloat);
+    FrmContract.Edit1.text := FlatsMgrForm.building.FieldByName('BLD_NAME').AsString;
+    FrmContract.Edit2.text := FlatsMgrForm.flat.FieldByName('ENTRANCE').AsString ;
+    FrmContract.Edit3.text := FlatsMgrForm.flat.FieldByName('FLATNUMBER').AsString ;
+    FrmContract.Edit4.text := floattostr(FlatsMgrForm.flat.FieldByName('AREA').AsFloat) ;
+    FrmContract.Edit5.text := inttostr(FlatsMgrForm.flat.FieldByName('ROOMS').AsInteger) ;
+    DatModConstr.CreditPurpose.FieldByName('FLATID').AsInteger:= FlatsMgrForm.flat.FieldByName('id').AsInteger ;
+
+   close;
+end;
+
+end.

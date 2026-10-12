@@ -1,0 +1,172 @@
+object Form6: TForm6
+  Left = 359
+  Top = 299
+  ClientHeight = 430
+  ClientWidth = 653
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'MS Sans Serif'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poScreenCenter
+  OnCanResize = FormCanResize
+  OnCreate = FormCreate
+  PixelsPerInch = 96
+  TextHeight = 13
+  object GroupBox1: TGroupBox
+    Left = 0
+    Top = 0
+    Width = 653
+    Height = 430
+    Align = alClient
+    Caption = 'Filiallar '#1094#1079#1088#1103' '#1087#1088#1086#1075#1085#1086#1079#1072#1088#1099#1080' '#1076#1072#1093#1080#1083' '#1077#1076#1080#1083#1084#1103#1089#1080
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -13
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = [fsBold]
+    ParentFont = False
+    TabOrder = 0
+    object DBGrid1: TDBGrid
+      Left = 2
+      Top = 18
+      Width = 649
+      Height = 375
+      Align = alClient
+      DataSource = DataSource1
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 0
+      TitleFont.Charset = RUSSIAN_CHARSET
+      TitleFont.Color = clWindowText
+      TitleFont.Height = -13
+      TitleFont.Name = 'Azl Sans Serif'
+      TitleFont.Style = [fsBold]
+      Columns = <
+        item
+          Expanded = False
+          FieldName = 'NAME'
+          Title.Caption = #1060#1080#1083#1080#1072#1083
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clWindowText
+          Title.Font.Height = -13
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = [fsBold]
+          Width = 132
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'RESTPR'
+          Title.Caption = #1050#1088#1077#1076#1080#1090' '#1087#1086#1088#1090#1092#1077#1083#1080' '#1094#1079#1088#1103' '#1082#1088#1077#1076#1080#1090' '#1084#1103#1073#1083#1103#1100#1080
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clWindowText
+          Title.Font.Height = -13
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = [fsBold]
+          Width = 234
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'INTERESTPR'
+          Title.Caption = #1060#1072#1080#1079' '#1101#1103#1083#1080#1088#1080' '#1094#1079#1088#1103' '#1087#1088#1072#1075#1085#1086#1079' '#1084#1103#1073#1083#1103#1100#1080
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clWindowText
+          Title.Font.Height = -13
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = [fsBold]
+          Width = 234
+          Visible = True
+        end>
+    end
+    object Panel2: TPanel
+      Left = 2
+      Top = 393
+      Width = 649
+      Height = 35
+      Align = alBottom
+      TabOrder = 1
+      object BitBtn1: TBitBtn
+        Left = 495
+        Top = 8
+        Width = 75
+        Height = 25
+        Caption = 'Ok'
+        DoubleBuffered = True
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -13
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = [fsBold]
+        ParentDoubleBuffered = False
+        ParentFont = False
+        TabOrder = 0
+        OnClick = BitBtn1Click
+      end
+      object BitBtn2: TBitBtn
+        Left = 573
+        Top = 8
+        Width = 69
+        Height = 25
+        Caption = 'Close'
+        DoubleBuffered = True
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -13
+        Font.Name = 'MS Sans Serif'
+        Font.Style = [fsBold]
+        ParentDoubleBuffered = False
+        ParentFont = False
+        TabOrder = 1
+        OnClick = BitBtn2Click
+      end
+    end
+  end
+  object DataSource1: TDataSource
+    DataSet = OracleDataSet1
+    Left = 376
+    Top = 96
+  end
+  object OracleDataSet1: TOracleDataSet
+    SQL.Strings = (
+      'select rowid,a.* from filial_t a')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000D0000000400000049004400010000000000080000004E0041004D00
+      4500010000000000140000004B004F0044005F00460049004C00490041004C00
+      0100000000000C00000043005F004E0041004D0045000100000000000C000000
+      440052004E0041004D0045000100000000001400000044005200460055004C00
+      4C004E0041004D0045000100000000000A0000004E004E0041004D0045000100
+      00000000120000004E00460055004C004C004E0041004D004500010000000000
+      0E00000043004F0055004E005400520059000100000000000C00000052004500
+      53005400500052000100000000001400000049004E0054004500520045005300
+      5400500052000100000000001800000043004F00520041004300430049004400
+      530045004C0046000100000000001800000043004F0052004100430043004900
+      44004800450041004400010000000000}
+    Session = sboapiDataModule.SBSession
+    AfterInsert = OracleDataSet1AfterInsert
+    Left = 488
+    Top = 88
+    object OracleDataSet1ID: TFloatField
+      FieldName = 'ID'
+    end
+    object OracleDataSet1NAME: TWideStringField
+      FieldName = 'NAME'
+      ReadOnly = True
+      Size = 360
+    end
+    object OracleDataSet1RESTPR: TFloatField
+      FieldName = 'RESTPR'
+    end
+    object OracleDataSet1INTERESTPR: TFloatField
+      FieldName = 'INTERESTPR'
+    end
+  end
+end

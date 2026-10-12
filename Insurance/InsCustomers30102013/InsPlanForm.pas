@@ -1,0 +1,59 @@
+unit InsPlanForm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, ComCtrls, Buttons, ExtCtrls, Mask, DBCtrls, Oracle, HintBox,
+  CurrencyEdit, DB, XFSCtrls;
+
+type
+  TfmPlanForm = class(TForm)
+    XFPanel1: TXFPanel;
+    BitBtn1: TBitBtn;
+    BitBtn2: TBitBtn;
+    XFGroupBox1: TXFGroupBox;
+    DBEdit3: TDBEdit;
+    DBEdit1: TDBEdit;
+    XFLabel1: TXFLabel;
+    XFLabel2: TXFLabel;
+    procedure BitBtn1Click(Sender: TObject);
+    procedure BitBtn2Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  fmPlanForm: TfmPlanForm;
+
+implementation
+
+uses InsDataModule,sboapiDataModuleimpl,SBTranslateProc;
+
+{$R *.DFM}
+
+procedure TfmPlanForm.BitBtn1Click(Sender: TObject);
+begin
+ with InsDataMod, ODSPayPlan do
+   if state in [dsInsert, dsEdit] then begin
+      ODSPayPlan.FieldByName('INS_ID').asFloat := ODSContractsID.Value;
+      Post;
+   end;
+
+end;
+
+procedure TfmPlanForm.BitBtn2Click(Sender: TObject);
+begin
+ with InsDataMod, ODSPayPlan do
+  cancel
+end;
+
+procedure TfmPlanForm.FormCreate(Sender: TObject);
+begin
+SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+end.

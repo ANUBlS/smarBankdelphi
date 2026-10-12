@@ -1,0 +1,136 @@
+#------------------------------------------------------------------------------
+VERSION = BWS.01
+#------------------------------------------------------------------------------
+!ifndef ROOT
+ROOT = $(MAKEDIR)\..
+!endif
+#------------------------------------------------------------------------------
+MAKE = $(ROOT)\bin\make.exe -$(MAKEFLAGS) -f$**
+DCC = $(ROOT)\bin\dcc32.exe $**
+BRCC = $(ROOT)\bin\brcc32.exe $**
+#------------------------------------------------------------------------------
+PROJECTS = InsVCL50.bpl Insurances.ocx sboapi50.bpl InsCustomers.ocx \
+  PInsFullMotorCasco.ocx MKBlank.ocx sbplg50.bpl MKSuggestion.ocx MKPolicy.ocx \
+  PMFBlank.ocx PMFSuggestion.ocx PMFPolicy.ocx RefEdit.ocx PConstructionMain.ocx \
+  PConstractiondpr.ocx PConstructionSuggest.ocx PConstructionPolicy.ocx \
+  InsMotorKasco.ocx MEDBlank.ocx MEDPolicy.ocx MEDSuggestion.ocx InsMedical.ocx \
+  PPAccidentBlank.ocx PMainPersonalAcc.ocx PPAccidentSuggest.ocx PPAccPolicy.ocx \
+  PCPropertyBlank.ocx InsPayments.ocx PMainCProperty.ocx PCPropertySuggest.ocx \
+  PCPropertyPolicy.ocx PPMFMain.ocx AutoDict.ocx DictChilde.ocx \
+  SBExcelExporter.bpl PAccountState.ocx PAccountDoc.ocx
+#------------------------------------------------------------------------------
+default: $(PROJECTS)
+#------------------------------------------------------------------------------
+
+InsVCL50.bpl: InsVCL50\InsVCL50.dpk
+  $(DCC)
+
+Insurances.ocx: Insurances\Insurances.dpr
+  $(DCC)
+
+sboapi50.bpl: ..\Packages\sboapi50\sboapi50.dpk
+  $(DCC)
+
+InsCustomers.ocx: InsCustomers\InsCustomers.dpr
+  $(DCC)
+
+PInsFullMotorCasco.ocx: InsFullMotorCasco\PInsFullMotorCasco.dpr
+  $(DCC)
+
+MKBlank.ocx: MKBlank\MKBlank.dpr
+  $(DCC)
+
+sbplg50.bpl: ..\Packages\sbplg50\sbplg50.dpk
+  $(DCC)
+
+MKSuggestion.ocx: MKSuggestion\MKSuggestion.dpr
+  $(DCC)
+
+MKPolicy.ocx: MKPolicy\MKPolicy.dpr
+  $(DCC)
+
+PMFBlank.ocx: MFBlank\PMFBlank.dpr
+  $(DCC)
+
+PMFSuggestion.ocx: MFSuggestion\PMFSuggestion.dpr
+  $(DCC)
+
+PMFPolicy.ocx: MFPolicy\PMFPolicy.dpr
+  $(DCC)
+
+RefEdit.ocx: ..\Packages\RefEdit\RefEdit.dpr
+  $(DCC)
+
+PConstructionMain.ocx: ConstructionMain\PConstructionMain.dpr
+  $(DCC)
+
+PConstractiondpr.ocx: ConstractionBlank\PConstractiondpr.dpr
+  $(DCC)
+
+PConstructionSuggest.ocx: ConstructionSuggest\PConstructionSuggest.dpr
+  $(DCC)
+
+PConstructionPolicy.ocx: ConstructionPolicy\PConstructionPolicy.dpr
+  $(DCC)
+
+InsMotorKasco.ocx: InsMotorKasco\InsMotorKasco.dpr
+  $(DCC)
+
+MEDBlank.ocx: MEDBlank\MEDBlank.dpr
+  $(DCC)
+
+MEDPolicy.ocx: MEDPolicy\MEDPolicy.dpr
+  $(DCC)
+
+MEDSuggestion.ocx: MEDSuggestion\MEDSuggestion.dpr
+  $(DCC)
+
+InsMedical.ocx: InsMedical\InsMedical.dpr
+  $(DCC)
+
+PPAccidentBlank.ocx: PersonalAccident\PPAccidentBlank.dpr
+  $(DCC)
+
+PMainPersonalAcc.ocx: PersonalAccMain\PMainPersonalAcc.dpr
+  $(DCC)
+
+PPAccidentSuggest.ocx: PersonalAccSuggestion\PPAccidentSuggest.dpr
+  $(DCC)
+
+PPAccPolicy.ocx: PersonalAccPolicy\PPAccPolicy.dpr
+  $(DCC)
+
+PCPropertyBlank.ocx: CommercialPropertyBlank\PCPropertyBlank.dpr
+  $(DCC)
+
+InsPayments.ocx: InsPayments\InsPayments.dpr
+  $(DCC)
+
+PMainCProperty.ocx: CommercialPropertyMain\PMainCProperty.dpr
+  $(DCC)
+
+PCPropertySuggest.ocx: CommercialPropertySuggest\PCPropertySuggest.dpr
+  $(DCC)
+
+PCPropertyPolicy.ocx: CommercialPropertyPolicy\PCPropertyPolicy.dpr
+  $(DCC)
+
+AutoDict.ocx: AutoDict\AutoDict.dpr
+  $(DCC)
+
+PPMFMain.ocx: FullMotor\PPMFMain.dpr
+  $(DCC)
+
+DictChilde.ocx: DictChilde\DictChilde.dpr
+  $(DCC)
+
+SBExcelExporter.bpl: SBExcelExporter\SBExcelExporter.dpk
+  $(DCC)
+
+PAccountState.ocx: AccountState\PAccountState.dpr
+  $(DCC)
+
+PAccountDoc.ocx: AccountDoc\PAccountDoc.dpr
+  $(DCC)
+
+

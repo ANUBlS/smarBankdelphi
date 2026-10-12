@@ -1,0 +1,71 @@
+unit InterestshistoryImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, NLSDialogs,
+  NLSLocalizer, ComCtrls, StdCtrls, Mask, DBCtrlsEh, Grids, DBGridEh,
+  ExtCtrls, Buttons, CMExcelExport, DBGridEhGrouping, GridsEh;
+
+type
+  TInterestsForm = class(TForm)
+    Panel1: TPanel;
+    Panel2: TPanel;
+    SpeedButton1: TSpeedButton;
+    DBGridEh1: TDBGridEh;
+    SpeedButton2: TSpeedButton;
+    EExport: TCMExcelExport;
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure SpeedButton2Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  InterestsForm: TInterestsForm;
+
+implementation
+
+uses CommonDecls,StatementDataModule,SBTranslateProc,sboapiDataModuleimpl;
+
+{$R *.DFM}
+
+procedure TInterestsForm.FormCreate(Sender: TObject);
+begin
+SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TInterestsForm.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+  if Ord(Key) = VK_ESCAPE then
+    ModalResult := mrCancel
+end;
+
+procedure TInterestsForm.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+  Resize := False;
+end;
+
+procedure TInterestsForm.SpeedButton1Click(Sender: TObject);
+begin
+   Close;
+end;
+
+procedure TInterestsForm.SpeedButton2Click(Sender: TObject);
+begin
+   with EExport do
+   begin
+      DBGridEh1.DataSource.DataSet.Last;
+      Connect;
+      ExportDataset(DBGridEh1.DataSource.DataSet,'hesablanmish faiz',True);
+      Disconnect;
+   end;
+end;
+end.

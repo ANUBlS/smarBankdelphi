@@ -1,0 +1,44 @@
+object DefineCalcDatMod: TDefineCalcDatMod
+  OldCreateOrder = False
+  OnCreate = DataModuleCreate
+  OnDestroy = DataModuleDestroy
+  Height = 434
+  Width = 613
+  object CM_CREDITS: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'CM_CREDIT'
+    Left = 56
+    Top = 40
+  end
+  object OracleDataSet1: TOracleDataSet
+    SQL.Strings = (
+      
+        'select  nvl(to_char(stopcalcdate),0) stopcalcdate from cm_curr_s' +
+        'tate where creditid=:creditid')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000120000003A00430052004500440049005400490044000300
+      00000000000000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 208
+    Top = 40
+  end
+  object OracleDataSet2: TOracleDataSet
+    SQL.Strings = (
+      'SELECT rowid,a.*'
+      '  FROM cm_endcalac  a'
+      'where creditid=:creditid')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000120000003A00430052004500440049005400490044000300
+      00000000000000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 216
+    Top = 152
+  end
+  object DataSource1: TDataSource
+    DataSet = OracleDataSet2
+    Left = 296
+    Top = 152
+  end
+end

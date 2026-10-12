@@ -1,0 +1,41 @@
+﻿unit Unit28;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ComCtrls;
+
+type
+  TForm28 = class(TForm)
+    DateTimePicker1: TDateTimePicker;
+    Button1: TButton;
+    Edit1: TEdit;
+    procedure Button1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form28: TForm28;
+
+implementation
+
+uses Data_Unit;
+
+{$R *.dfm}
+
+procedure TForm28.Button1Click(Sender: TObject);
+ var Trans_Date : TDateTime;
+begin
+      Trans_Date:=trunc(DateTimePicker1.Datetime );
+DataMod.Ins.CallProcedure('change_date',[edit1.Text,Trans_Date]);
+ShowMessage('Tarix dəyisildi');
+DataMod.XS_BATCHS.RefreshRecord;
+DataMod.XS_BENEFICIARY.Refresh;
+close;
+end;
+
+end.

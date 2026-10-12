@@ -1,0 +1,440 @@
+unit AdministrationOwnerSheepAdvanced;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, Buttons, ExtCtrls, ComCtrls, Grids, DBGrids, Tabs, Db,
+  OracleData, Oracle;
+
+type
+  TSearchOrder=(soForward,soBackward,soNone);
+
+  TMyDBGrid = class(TDBGrid)
+    property DataLink;
+    property UpdateLock;
+  end;
+
+  TfmAdmOwnerChangeAdvanced = class(TForm)
+    pnMain: TPanel;
+    pnBtns: TPanel;
+    btnOk: TBitBtn;
+    btnExit: TBitBtn;
+    GroupBox1: TGroupBox;
+    dtDat: TDateTimePicker;
+    btnSearch: TBitBtn;
+    pcMain: TPageControl;
+    tbMain: TTabSet;
+    dbgOwner: TDBGrid;
+    AccountsData: TOracleDataSet;
+    TransactionsData: TOracleDataSet;
+    CustomersData: TOracleDataSet;
+    KreditsData: TOracleDataSet;
+    DepozitsData: TOracleDataSet;
+    dsMain: TDataSource;
+    AccountsDataOPENDATE: TDateTimeField;
+    AccountsDataCLOSEDATE: TDateTimeField;
+    UsersData: TOracleDataSet;
+    UsersDataID: TFloatField;
+    UsersDataNAME: TStringField;
+    UsersDataCTIME: TDateTimeField;
+    AccountsDataOP_ID: TFloatField;
+    CustomersDataID: TIntegerField;
+    CustomersDataOP_ID: TFloatField;
+    CustomersDataOPEN_DAT: TDateTimeField;
+    CustomersDataCLOSE_DAT: TDateTimeField;
+    KreditsDataOPENDATE: TDateTimeField;
+    KreditsDataCLOSEDATE: TDateTimeField;
+    KreditsDataFACTICALDEBT: TFloatField;
+    KreditsDataFACTICALINTERESTDEBT: TFloatField;
+    KreditsDataOVERDUEDEBT: TFloatField;
+    KreditsDataOVERDUEINTERESTDEBT: TFloatField;
+    KreditsDataRESIDUARYAMOUNT: TFloatField;
+    KreditsDataINTERESTBALANCE: TFloatField;
+    KreditsDataCLIENTBALANCE: TFloatField;
+    DepozitsDataOPENDATE: TDateTimeField;
+    DepozitsDataCLOSEDATE: TDateTimeField;
+    DepozitsDataAMOUNT: TFloatField;
+    DepozitsDataFACTICALDEBT: TFloatField;
+    DepozitsDataFACTICALINTERESTDEBT: TFloatField;
+    DepozitsDataSTOPCALCULATIONDATE: TDateTimeField;
+    DepozitsDataOVERDUEINTERESTDEBT: TFloatField;
+    TransactionsDataID: TFloatField;
+    TransactionsDataOP_ID: TFloatField;
+    TransactionsDataTRANSACTIONDATE: TDateTimeField;
+    TransactionsDataDEBITAMOUNT: TFloatField;
+    TransactionsDataCREDITAMOUNT: TFloatField;
+    TransactionsDataLAMOUNT: TFloatField;
+    Bevel1: TBevel;
+    btnRefresh: TBitBtn;
+    cbTriggersDisb: TCheckBox;
+    pnSearch: TScrollBox;
+    bvBevel: TBevel;
+    KreditsDataOP_ID: TFloatField;
+    DepozitsDataOP_ID: TFloatField;
+    AccountsDataACCNO: TWideStringField;
+    AccountsDataSACC: TFloatField;
+    AccountsDataUSER: TStringField;
+    AccountsDataCURRENCYSNAME: TWideStringField;
+    AccountsDataACCNAME: TWideStringField;
+    TransactionsDataUSER: TStringField;
+    TransactionsDataDEBITACCNO: TWideStringField;
+    TransactionsDataDEBITCURRENCYSNAME: TWideStringField;
+    TransactionsDataCREDITACCNO: TWideStringField;
+    TransactionsDataCREDITCURRENCYSNAME: TWideStringField;
+    TransactionsDataNAME: TWideStringField;
+    CustomersDataUSER: TStringField;
+    CustomersDataNAME: TWideStringField;
+    KreditsDataUSER: TStringField;
+    KreditsDataCONTRACTNO: TWideStringField;
+    KreditsDataMONTHDAY: TWideStringField;
+    KreditsDataCONTRACTACCNO: TWideStringField;
+    KreditsDataCONTRACTACCNAME: TWideStringField;
+    KreditsDataCONTRACTCURRENCY: TWideStringField;
+    DepozitsDataUSER: TStringField;
+    DepozitsDataCONTRACTNO: TWideStringField;
+    DepozitsDataCONTRACTACCNO: TWideStringField;
+    DepozitsDataCONTRACTACCNAME: TWideStringField;
+    DepozitsDataCONTRACTCURRENCY: TWideStringField;
+    procedure dbgOwnerDrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TColumn; State: TGridDrawState);
+    procedure FormCreate(Sender: TObject);
+    procedure tbMainChange(Sender: TObject; NewTab: Integer;
+      var AllowChange: Boolean);
+    procedure dtDatChange(Sender: TObject);
+    procedure btnRefreshClick(Sender: TObject);
+    procedure btnOkClick(Sender: TObject);
+    procedure btnSearchClick(Sender: TObject);
+    procedure AccountsDataAfterPost(DataSet: TDataSet);
+    procedure dbgOwnerKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+  private
+   RepaintFlag: Boolean;
+   Executing : Boolean;
+   FOrder: TSearchOrder;
+   procedure CreateGrid;
+   procedure EnablingData(DataSet: TORacleDataSet);
+   procedure FastSearch(Sender: TObject);
+   procedure KeyFastSearch(Sender: TObject; var Key: Char);
+   procedure KeyFastUpDownSearch(Sender: TObject; var Key: Word;Shift: TShiftState);
+  public
+   Grid:  TMyDBGrid;
+   procedure ClearSearhPanel;
+   procedure CreateSearchPanel;
+   procedure RecreateSearchPanel;
+   procedure MouseWheelHandler(var Message: TMessage);override;
+   property SearchOrder : TSearchOrder read FOrder write FOrder default soNone;
+  end;
+
+implementation
+
+
+uses sboapiDataModuleImpl,sbcore, AdministrationDataModule, DuplicateUint;
+
+
+{$R *.DFM}
+
+procedure TfmAdmOwnerChangeAdvanced.dbgOwnerDrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TColumn;
+  State: TGridDrawState);
+var
+  Index   : Integer;
+  Marked,
+  Selected: Boolean;
+begin
+  Marked := False;
+with Grid do
+ begin
+  if (dgMultiSelect in Options) and TMyDBGrid(Grid).Datalink.Active then
+   Marked:=SelectedRows.Find(TMyDBGrid(Grid).Datalink.Datasource.Dataset.Bookmark, Index);
+
+  Selected := TMyDBGrid(Grid).Datalink.Active and (Grid.Row-1=TMyDBGrid(Grid).Datalink.ActiveRecord);
+ if Marked then
+  begin
+    Canvas.Brush.Color:=clHighlight;
+    Canvas.Font.Color :=clWhite;
+  end;
+  if Selected then
+   begin
+    Canvas.Brush.Color:= clHighlight; //$FFFBF0;
+    Canvas.Font.Color :=clWhite;
+  if Marked then
+    Canvas.Brush.Color:=clHighlight;
+  end;
+  DefaultDrawColumnCell(Rect, DataCol, Column, State);
+ end;
+ with Column do
+  If Field.Tag=0 then
+   begin
+   if Color<>clWhite then
+    Color:=clWhite;
+   if Font.Color<>clWindowText then
+     Font.Color:=clWindowText;
+   end
+   else
+    begin
+    if Column.Color<>clSilver then
+      Column.Color:=clSilver;
+    if Font.Color<>clNavy then
+     Font.Color:=clNavy;
+    end;
+end;
+
+procedure TfmAdmOwnerChangeAdvanced.CreateGrid;
+var
+ TempName: String;
+begin
+ TComponent(GRID) :=DuplicateComponents(dbgOwner);
+ TempName:=dbgOwner.Name;
+ dbgOwner.Destroy;
+ GRID.Name:=TempName;
+end;
+
+procedure TfmAdmOwnerChangeAdvanced.FormCreate(Sender: TObject);
+begin
+ CreateGrid;
+ FOrder:=soNone;
+ UsersData.Open;
+ AccountsData.Open;
+ dtDat.DateTime:=Sb_GetSystemDate;
+ TransactionsData.SetVariable('DAT',dtDat.DateTime);
+ Executing:=False;
+end;
+
+procedure TfmAdmOwnerChangeAdvanced.tbMainChange(Sender: TObject;
+  NewTab: Integer; var AllowChange: Boolean);
+begin
+with dbgOwner,DataSource do
+ begin
+  case NewTab of
+   0:
+    begin
+      if not(AccountsData.Active) then AccountsData.Open;
+     DataSet:=AccountsData;
+    end;
+   1:
+    begin
+     if not(TransactionsData.Active) then  TransactionsData.Open;
+     DataSet:=TransactionsData;
+    end;
+   2:
+    begin
+     if not(CustomersData.Active) then CustomersData.Open;
+     DataSet:=CustomersData;
+    end;
+   3:
+    begin
+     if not(KreditsData.Active) then KreditsData.Open;
+     DataSet:=KreditsData;
+    end;
+   4:
+    begin
+     if not(DepozitsData.Active) then DepozitsData.Open;
+     DataSet:=DepozitsData;
+    end;
+  end;
+   if TOracleDataSet(DataSet).VariableIndex('DAT')<>-1 then
+    begin
+     dtDat.DateTime:=TOracleDataSet(DataSet).GetVariable('DAT');
+     dtDat.Enabled:=True;
+    end
+   else dtDat.Enabled:=False;
+ end;
+RecreateSearchPanel;
+end;
+
+procedure TfmAdmOwnerChangeAdvanced.MouseWheelHandler(var Message: TMessage);
+var
+ Key : DWORD;
+begin
+if (Message.Msg = WM_MOUSEWHEEL) and (dbgOwner.Focused) then
+  begin
+   with TCMMouseWheel(Message), dbgOwner.DataSource.DataSet do
+    begin
+     if WheelDelta < 0 then
+      Key:=VK_DOWN else Key:=VK_UP;
+     if  Assigned(dbgOwner) then
+      PostMessage(dbgOwner.Handle,WM_KeyDOWN,Key,0);
+    end
+  end
+  else Inherited;
+end;
+
+procedure TfmAdmOwnerChangeAdvanced.dtDatChange(Sender: TObject);
+begin
+with dbgOwner,TOracleDataSet(DataSource.DataSet) do
+  if  dtDat.DateTime<>GetVariable('DAT') then
+   begin
+    SetVariable('DAT',dtDat.DateTime);
+    Refresh;
+   end;
+end;
+
+procedure TfmAdmOwnerChangeAdvanced.btnRefreshClick(Sender: TObject);
+begin
+with TOracleDataSet(dbgOwner.DataSource.DataSet) do
+if CachedUpdates then
+ begin
+  Close;
+  Open;
+ end
+ else Refresh;
+end;
+
+procedure TfmAdmOwnerChangeAdvanced.btnOkClick(Sender: TObject);
+var
+ i : integer;
+begin
+for i:=0 to ComponentCount-1 do
+ if (Components[i] is TOracleDataSet) then
+  with (Components[i] as TOracleDataSet), AdministrationData.pcADM do
+   if CachedUpdates and UpdatesPending then
+    begin
+     if cbTriggersDisb.Checked then CallProcedure('TriggerInterface',[Sm_Own,GetUpdatingTable,False]);
+     Session.ApplyUpdates([TOracleDataSet(self.Components[i])],True);
+     if cbTriggersDisb.Checked then CallProcedure('TriggerInterface',[Sm_Own,GetUpdatingTable,True]);
+    end;
+end;
+
+procedure TfmAdmOwnerChangeAdvanced.RecreateSearchPanel;
+begin
+ ClearSearhPanel;
+ CreateSearchPanel;
+end;
+
+
+procedure TfmAdmOwnerChangeAdvanced.ClearSearhPanel;
+begin
+ pnSearch.DestroyComponents;
+end;
+
+procedure TfmAdmOwnerChangeAdvanced.CreateSearchPanel;
+var
+i,edLeft: Integer;
+TempEdit: TEdit;
+begin
+ with dbgOwner do
+  begin
+    edLeft:=4;
+   for i:=0 to Columns.Count-1 do
+    with TempEdit do
+     begin
+      TempEdit:=TEdit.Create(pnSearch);
+      Hint:=Columns[i].Field.FieldName;
+      if pnSearch.FindComponent('ed_'+Hint)=nil then Name:='ed_'+Hint;
+      Text:=EmptyStr;
+      OnChange:=FastSearch;
+      OnKeyPress:=KeyFastSearch;
+      OnKeyDown:=KeyFastUpDownSearch;
+      SetBounds(edLeft,4,Columns[i].Width,10);
+      Parent:=pnSearch;
+      Ctl3D:=False;
+      Color:=clSilver;
+      Font.Color:=clNavy;
+      edLeft:=edLeft+Columns[i].Width+1;
+     end;
+  end;
+end;
+
+
+procedure TfmAdmOwnerChangeAdvanced.KeyFastSearch(Sender: TObject; var Key: Char);
+begin
+ if Ord(Key)=13 then
+  begin
+   SearchOrder:=soNone;
+   FastSearch(Sender);
+   Key:=#0;
+  end;
+end;
+
+procedure TfmAdmOwnerChangeAdvanced.KeyFastUpDownSearch(Sender: TObject; var Key: Word;Shift: TShiftState);
+begin
+  case Key of
+  VK_UP:
+   begin
+    SearchOrder:=soBackward;
+    FastSearch(Sender);
+    Key:=0;
+   end;
+  VK_DOWN:
+   begin
+    SearchOrder:=soForward;
+    FastSearch(Sender);
+    Key:=0;
+   end;
+  end;
+end;
+
+procedure TfmAdmOwnerChangeAdvanced.FastSearch(Sender: TObject);
+var
+ RecOpt :TSearchRecordOptions;
+begin
+ RecOpt:=[srIgnoreCase,srPartialMatch];
+ if (Sender is TEdit) then
+  with (Sender as TEdit),TORacleDataSet(dbgOwner.DataSource.DataSet) do
+    if Active then
+      begin
+        case SearchOrder of
+         soForward: Include(RecOpt,srForward);
+         soBackward: Include(RecOpt,srBackward);
+         soNone: Include(RecOpt,srFromBeginning);
+        end;
+         RepaintFlag:=True;
+         SearchRecord(Hint,Text,RecOpt);
+      end;
+end;
+
+procedure TfmAdmOwnerChangeAdvanced.btnSearchClick(Sender: TObject);
+begin
+pnSearch.Visible:=not(pnSearch.Visible);
+if pnSearch.Visible then
+ RecreateSearchPanel;
+end;
+
+procedure TfmAdmOwnerChangeAdvanced.EnablingData(DataSet: TORacleDataSet);
+var
+ i,SavedUserID: integer;
+ Bk :TBookmark;
+begin
+Bk:=DataSet.GetBookmark;
+Executing := true;
+ with DataSet,dbgOwner.SelectedRows do
+  try
+  if dbgOwner.SelectedRows.Count>0 then
+  begin
+   SavedUserID:=FieldByName('OP_ID').AsInteger;
+   DisableControls;
+    for i:=0 to Count-1 do
+     begin
+      GoToBookmark(pointer(Items[i]));
+      Edit;
+      FieldByName('OP_ID').AsInteger:=SavedUserID;
+      Post;
+     end;
+    GoToBookmark(Bk);
+    EnableControls;
+    GoToBookmark(Bk);
+ end;
+ finally
+  Executing:=False;
+ end;
+end;
+
+procedure TfmAdmOwnerChangeAdvanced.AccountsDataAfterPost(
+  DataSet: TDataSet);
+begin
+   if not(Executing) then EnablingData(TOracleDataSet(DataSet));
+end;
+
+procedure TfmAdmOwnerChangeAdvanced.dbgOwnerKeyDown(Sender: TObject;
+  var Key: Word; Shift: TShiftState);
+begin
+ if key=VK_RETURN then
+  with (Sender as TDBGrid).DataSource.DataSet do
+   begin
+   if (Active)and(State = dsEdit)then Post;
+   key:=0;
+   end;
+end;
+
+end.

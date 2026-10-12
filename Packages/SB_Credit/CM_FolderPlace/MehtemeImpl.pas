@@ -1,0 +1,92 @@
+﻿unit MehtemeImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, DBGridEh, Mask, DBCtrlsEh, DBLookupEh, CurrencyEdit,
+  ComCtrls;
+
+type
+  TMhFrm = class(TForm)
+    Button1: TButton;
+    Button2: TButton;
+    DBLookupComboboxEh4: TDBLookupComboboxEh;
+    Label1: TLabel;
+    Label2: TLabel;
+    DateTimePicker1: TDateTimePicker;
+    Label4: TLabel;
+    CurrencyEdit1: TCurrencyEdit;
+    Label3: TLabel;
+    CurrencyEdit2: TCurrencyEdit;
+    Label5: TLabel;
+    CurrencyEdit3: TCurrencyEdit;
+    procedure Button2Click(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  MhFrm: TMhFrm;
+
+implementation
+  uses FlReCalculationDataModuleImpl,ReCalculationMainForm;
+{$R *.dfm}
+
+procedure TMhFrm.Button1Click(Sender: TObject);
+begin
+close
+end;
+
+procedure TMhFrm.Button2Click(Sender: TObject);
+
+begin
+
+
+mehid:=DBLookupComboboxEh4.KeyValue;
+if CurrencyEdit1.Value=0 then
+   begin
+     ShowMessage('Qətnamə Ə.B seçin!');
+     exit;
+   end;
+     if CurrencyEdit1.Value=0 then
+   begin
+     ShowMessage('Qətnamə F.B!');
+     exit;
+   end;
+   if CurrencyEdit1.Value=0 then
+   begin
+     ShowMessage('Qətnamə Cərimə!');
+     exit;
+   end;
+  with PRDataModule.CalculatorPackage do
+
+    CallProcedure('add_qetname',[
+    'p_id'        ,QCrdID,
+    'p_qdat'      ,DateTimePicker1.DateTime,
+    'p_qrest'     ,CurrencyEdit1.Value,
+    'p_qintrest'  ,CurrencyEdit2.Value,
+    'p_qpen'      ,CurrencyEdit3.Value
+    ]);
+
+close;
+end;
+
+procedure TMhFrm.FormShow(Sender: TObject);
+begin
+if PRDataModule.OracleDataSet17.Active then
+    PRDataModule.OracleDataSet17.close;
+    PRDataModule.OracleDataSet17.SetVariable('creditid',QCrdID);
+    PRDataModule.OracleDataSet17.open;
+
+   DateTimePicker1.DateTime:=PRDataModule.OracleDataSet17.FieldByName('q_dat').AsDateTime  ;
+   CurrencyEdit1.Value:=PRDataModule.OracleDataSet17.FieldByName('q_rest').AsVariant;
+   CurrencyEdit2.Value:=PRDataModule.OracleDataSet17.FieldByName('q_intrest').AsVariant;
+   CurrencyEdit3.Value:=PRDataModule.OracleDataSet17.FieldByName('q_penya').AsVariant;
+end;
+
+end.

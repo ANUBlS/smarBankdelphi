@@ -1,0 +1,43 @@
+unit CO_PhotoLogo;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, Buttons, ExtCtrls;
+
+type
+  TFrmLoqo = class(TForm)
+    Panel4: TPanel;
+    Image1: TImage;
+    BitBtn4: TBitBtn;
+    BitBtn1: TBitBtn;
+    Panel3: TPanel;
+    Image2: TImage;
+    BitBtn5: TBitBtn;
+    BitBtn2: TBitBtn;
+    Panel6: TPanel;
+    Image3: TImage;
+    BitBtn6: TBitBtn;
+    BitBtn3: TBitBtn;
+    procedure FormCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmLoqo: TFrmLoqo;
+
+implementation
+  uses SBTranslateProc,sboapiDataModuleImpl;
+{$R *.dfm}
+
+
+procedure TFrmLoqo.FormCreate(Sender: TObject);
+begin
+SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+end.

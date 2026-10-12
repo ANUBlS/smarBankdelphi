@@ -1,0 +1,502 @@
+object Saxlanilma: TSaxlanilma
+  Left = 61
+  Top = 158
+  Width = 1067
+  Height = 558
+  Caption = 'Saxlanilma'
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'MS Sans Serif'
+  Font.Style = []
+  OldCreateOrder = False
+  PixelsPerInch = 96
+  TextHeight = 13
+  object DBGrid1: TDBGrid
+    Left = 0
+    Top = 0
+    Width = 1057
+    Height = 203
+    Color = clBtnFace
+    DataSource = DataSource1
+    ReadOnly = True
+    TabOrder = 0
+    TitleFont.Charset = DEFAULT_CHARSET
+    TitleFont.Color = clWindowText
+    TitleFont.Height = -11
+    TitleFont.Name = 'MS Sans Serif'
+    TitleFont.Style = []
+    OnDrawColumnCell = DBGrid1DrawColumnCell
+    Columns = <
+      item
+        Color = clSilver
+        Expanded = False
+        FieldName = 'ID'
+        Title.Alignment = taCenter
+        Title.Caption = '№'
+        Title.Color = 8404992
+        Title.Font.Charset = DEFAULT_CHARSET
+        Title.Font.Color = clWhite
+        Title.Font.Height = -11
+        Title.Font.Name = 'Arial AzLat'
+        Title.Font.Style = []
+        Width = 50
+        Visible = True
+      end
+      item
+        Expanded = False
+        Title.Alignment = taCenter
+        Title.Caption = 'F'
+        Title.Color = 8404992
+        Title.Font.Charset = DEFAULT_CHARSET
+        Title.Font.Color = clWhite
+        Title.Font.Height = -11
+        Title.Font.Name = 'Arial AzLat'
+        Title.Font.Style = []
+        Width = 19
+        Visible = True
+      end
+      item
+        Expanded = False
+        Title.Color = 8404992
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clWhite
+        Title.Font.Height = -11
+        Title.Font.Name = 'Arial AzLat'
+        Title.Font.Style = []
+        Width = 19
+        Visible = True
+      end
+      item
+        Alignment = taCenter
+        Color = clSilver
+        Expanded = False
+        FieldName = 'TRANSDATE'
+        Title.Alignment = taCenter
+        Title.Caption = 'Тарих'
+        Title.Color = 8404992
+        Title.Font.Charset = DEFAULT_CHARSET
+        Title.Font.Color = clWhite
+        Title.Font.Height = -11
+        Title.Font.Name = 'Arial AzLat'
+        Title.Font.Style = []
+        Width = 70
+        Visible = True
+      end
+      item
+        Alignment = taCenter
+        Color = clWhite
+        Expanded = False
+        FieldName = 'ACC_NO'
+        Title.Alignment = taCenter
+        Title.Caption = 'ДЕБЕТ'
+        Title.Color = 8404992
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clWhite
+        Title.Font.Height = -11
+        Title.Font.Name = 'Arial AzLat'
+        Title.Font.Style = []
+        Width = 103
+        Visible = True
+      end
+      item
+        Alignment = taCenter
+        Color = clSilver
+        Expanded = False
+        FieldName = 'VAL_NAME'
+        Title.Alignment = taCenter
+        Title.Caption = '$'
+        Title.Color = 8404992
+        Title.Font.Charset = DEFAULT_CHARSET
+        Title.Font.Color = clWhite
+        Title.Font.Height = -11
+        Title.Font.Name = 'Arial AzLat'
+        Title.Font.Style = []
+        Width = 28
+        Visible = True
+      end
+      item
+        Color = clWhite
+        Expanded = False
+        FieldName = 'AMOUNT'
+        Title.Alignment = taCenter
+        Title.Caption = 'Дебет Мябляь'
+        Title.Color = 8404992
+        Title.Font.Charset = DEFAULT_CHARSET
+        Title.Font.Color = clWhite
+        Title.Font.Height = -11
+        Title.Font.Name = 'Arial AzLat'
+        Title.Font.Style = []
+        Width = 112
+        Visible = True
+      end
+      item
+        Alignment = taCenter
+        Color = clSilver
+        Expanded = False
+        FieldName = 'TRANS_REF'
+        Title.Alignment = taCenter
+        Title.Caption = 'ГЕЙДИЙЙАТ №'
+        Title.Color = 8404992
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clWhite
+        Title.Font.Height = -11
+        Title.Font.Name = 'Arial AzLat'
+        Title.Font.Style = []
+        Width = 101
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'USERNAME'
+        Title.Alignment = taCenter
+        Title.Caption = 'Модификатор'
+        Title.Color = 8404992
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clWhite
+        Title.Font.Height = -11
+        Title.Font.Name = 'Arial AzLat'
+        Title.Font.Style = []
+        Width = 101
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'FUSERID'
+        Title.Alignment = taCenter
+        Title.Caption = 'ФВерификатор'
+        Title.Color = 8404992
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clWhite
+        Title.Font.Height = -11
+        Title.Font.Name = 'Arial AzLat'
+        Title.Font.Style = []
+        Width = 102
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'VUSERID'
+        Title.Alignment = taCenter
+        Title.Caption = 'Верификатор'
+        Title.Color = 8404992
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clWhite
+        Title.Font.Height = -11
+        Title.Font.Name = 'Arial AzLat'
+        Title.Font.Style = []
+        Width = 107
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'AUSERID'
+        Title.Alignment = taCenter
+        Title.Caption = 'Авторизатор'
+        Title.Color = 8404992
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clWhite
+        Title.Font.Height = -11
+        Title.Font.Name = 'Arial AzLat'
+        Title.Font.Style = []
+        Width = 112
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'SDATE'
+        Title.Alignment = taCenter
+        Title.Caption = 'Ямялиййат Тарихи'
+        Title.Color = 8404992
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clWhite
+        Title.Font.Height = -11
+        Title.Font.Name = 'Arial AzLat'
+        Title.Font.Style = []
+        Width = 101
+        Visible = True
+      end>
+  end
+  object DBGrid2: TDBGrid
+    Left = 0
+    Top = 208
+    Width = 1057
+    Height = 313
+    Color = clBtnFace
+    DataSource = DataSource2
+    ReadOnly = True
+    TabOrder = 1
+    TitleFont.Charset = DEFAULT_CHARSET
+    TitleFont.Color = clWindowText
+    TitleFont.Height = -11
+    TitleFont.Name = 'MS Sans Serif'
+    TitleFont.Style = []
+    OnDrawColumnCell = DBGrid2DrawColumnCell
+    Columns = <
+      item
+        Color = clSilver
+        Expanded = False
+        FieldName = 'ID'
+        Title.Alignment = taCenter
+        Title.Caption = '№'
+        Title.Color = 8404992
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clWhite
+        Title.Font.Height = -11
+        Title.Font.Name = 'Arial AzLat'
+        Title.Font.Style = []
+        Width = 51
+        Visible = True
+      end
+      item
+        Expanded = False
+        Visible = False
+      end
+      item
+        Expanded = False
+        Title.Color = 8404992
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clWindowText
+        Title.Font.Height = -11
+        Title.Font.Name = 'Azl Sans Serif'
+        Title.Font.Style = []
+        Width = 20
+        Visible = True
+      end
+      item
+        Alignment = taCenter
+        Color = clSilver
+        Expanded = False
+        FieldName = 'VAL_DATE'
+        Title.Alignment = taCenter
+        Title.Caption = 'Тарих'
+        Title.Color = 8404992
+        Title.Font.Charset = DEFAULT_CHARSET
+        Title.Font.Color = clWhite
+        Title.Font.Height = -11
+        Title.Font.Name = 'Azl Sans Serif'
+        Title.Font.Style = []
+        Width = 99
+        Visible = True
+      end
+      item
+        Alignment = taCenter
+        Color = clWhite
+        Expanded = False
+        FieldName = 'CLIENT_ACC_NO'
+        Title.Alignment = taCenter
+        Title.Caption = 'КРЕДИТ'
+        Title.Color = 8404992
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clWhite
+        Title.Font.Height = -11
+        Title.Font.Name = 'Arial Az Lat'
+        Title.Font.Style = []
+        Width = 157
+        Visible = True
+      end
+      item
+        Alignment = taCenter
+        Color = clSilver
+        Expanded = False
+        FieldName = 'VAL_NAME'
+        Title.Alignment = taCenter
+        Title.Caption = '$'
+        Title.Color = 8404992
+        Title.Font.Charset = DEFAULT_CHARSET
+        Title.Font.Color = clWhite
+        Title.Font.Height = -11
+        Title.Font.Name = 'MS Sans Serif'
+        Title.Font.Style = []
+        Width = 38
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'AMOUNT'
+        Title.Alignment = taCenter
+        Title.Caption = 'Кредит мябляь'
+        Title.Color = 8404992
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clWhite
+        Title.Font.Height = -11
+        Title.Font.Name = 'Arial Az Lat'
+        Title.Font.Style = []
+        Width = 160
+        Visible = True
+      end
+      item
+        Alignment = taRightJustify
+        Color = clSilver
+        Expanded = False
+        FieldName = 'MESS_REFERENCE'
+        Title.Alignment = taCenter
+        Title.Caption = 'ГЕЙДИЙЙАТ№'
+        Title.Color = 8404992
+        Title.Font.Charset = DEFAULT_CHARSET
+        Title.Font.Color = clWhite
+        Title.Font.Height = -11
+        Title.Font.Name = 'Azl Sans Serif'
+        Title.Font.Style = []
+        Width = 106
+        Visible = True
+      end>
+  end
+  object OracleDataSet1: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      '  x.*, x.rowid,'
+      '  a.acc_no,'
+      '  a.name,'
+      '  v.val_name'
+      'from'
+      '  XS_BATCHS x ,'
+      '  account a, '
+      '  avalute v'
+      'where'
+      '  x.acc_id = a.id and'
+      '  v.valute=a.val_acc and'
+      '  (x.transdate>:BeginDate )')
+    Variables.Data = {
+      03000000010000000A0000003A424547494E444154450C000000000000000000
+      0000}
+    QBEDefinition.QBEFieldDefs = {
+      040000001800000002000000494401000000000004000000465F494401000000
+      0000080000004F504552434F4445010000000000060000004143435F49440100
+      000000000B000000434C49454E545F4E414D450100000000000B000000434C49
+      454E545F434F4445010000000000090000005452414E535F5245460100000000
+      0006000000414D4F554E540100000000000700000056414C5F41434301000000
+      0000090000005452414E53444154450100000000000400000053454E44010000
+      000000060000005354415455530100000000000600000046494C49414C010000
+      0000000E0000005452414E53414354494F4E5F49440100000000000A00000043
+      4C49454E545F494E4E0100000000000600000055534552494401000000000007
+      0000004655534552494401000000000007000000565553455249440100000000
+      0007000000415553455249440100000000000500000053444154450100000000
+      0008000000555345524E414D45010000000000060000004143435F4E4F010000
+      000000040000004E414D450100000000000800000056414C5F4E414D45010000
+      000000}
+    Cursor = crSQLWait
+    QueryAllRecords = False
+    Session = sboapiDataModule.SBSession
+    Left = 216
+    Top = 104
+    object OracleDataSet1ID: TFloatField
+      FieldName = 'ID'
+    end
+    object OracleDataSet1F_ID: TFloatField
+      FieldName = 'F_ID'
+    end
+    object OracleDataSet1OPERCODE: TStringField
+      FieldName = 'OPERCODE'
+      Size = 6
+    end
+    object OracleDataSet1ACC_ID: TFloatField
+      FieldName = 'ACC_ID'
+    end
+    object OracleDataSet1CLIENT_NAME: TStringField
+      FieldName = 'CLIENT_NAME'
+      Size = 70
+    end
+    object OracleDataSet1CLIENT_CODE: TStringField
+      FieldName = 'CLIENT_CODE'
+      Size = 70
+    end
+    object OracleDataSet1TRANS_REF: TStringField
+      FieldName = 'TRANS_REF'
+      Size = 16
+    end
+    object OracleDataSet1AMOUNT: TFloatField
+      FieldName = 'AMOUNT'
+    end
+    object OracleDataSet1VAL_ACC: TIntegerField
+      FieldName = 'VAL_ACC'
+    end
+    object OracleDataSet1TRANSDATE: TDateTimeField
+      FieldName = 'TRANSDATE'
+    end
+    object OracleDataSet1SEND: TIntegerField
+      FieldName = 'SEND'
+    end
+    object OracleDataSet1STATUS: TIntegerField
+      FieldName = 'STATUS'
+    end
+    object OracleDataSet1FILIAL: TFloatField
+      FieldName = 'FILIAL'
+    end
+    object OracleDataSet1TRANSACTION_ID: TFloatField
+      FieldName = 'TRANSACTION_ID'
+    end
+    object OracleDataSet1CLIENT_INN: TStringField
+      FieldName = 'CLIENT_INN'
+      Size = 30
+    end
+    object OracleDataSet1USERID: TFloatField
+      FieldName = 'USERID'
+    end
+    object OracleDataSet1FUSERID: TStringField
+      FieldName = 'FUSERID'
+      Size = 50
+    end
+    object OracleDataSet1VUSERID: TStringField
+      FieldName = 'VUSERID'
+      Size = 50
+    end
+    object OracleDataSet1AUSERID: TStringField
+      FieldName = 'AUSERID'
+      Size = 50
+    end
+    object OracleDataSet1SDATE: TDateTimeField
+      FieldName = 'SDATE'
+    end
+    object OracleDataSet1USERNAME: TStringField
+      FieldName = 'USERNAME'
+      Size = 50
+    end
+    object OracleDataSet1ACC_NO: TStringField
+      FieldName = 'ACC_NO'
+    end
+    object OracleDataSet1NAME: TStringField
+      FieldName = 'NAME'
+      Size = 90
+    end
+    object OracleDataSet1VAL_NAME: TStringField
+      FieldName = 'VAL_NAME'
+      Size = 10
+    end
+  end
+  object DataSource1: TDataSource
+    DataSet = OracleDataSet1
+    Left = 272
+    Top = 112
+  end
+  object OracleDataSet2: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      '    x.rowid,'
+      '    x.*,'
+      '    v.val_name,'
+      '    b.name as BankName'
+      'from'
+      '    XS_BENEFICIARY X,'
+      '    avalute v,'
+      '    BankM b'
+      'where'
+      '   (x.batchID=:id)and'
+      '   (x.val_cod=v.valute)'
+      '  and (x.rec_bank_id=b.id)')
+    Variables.Data = {0300000001000000030000003A4944050000000000000000000000}
+    Cursor = crSQLWait
+    Master = OracleDataSet1
+    MasterFields = 'ID'
+    QueryAllRecords = False
+    Session = sboapiDataModule.SBSession
+    Left = 184
+    Top = 264
+  end
+  object DataSource2: TDataSource
+    DataSet = OracleDataSet2
+    Left = 240
+    Top = 256
+  end
+end

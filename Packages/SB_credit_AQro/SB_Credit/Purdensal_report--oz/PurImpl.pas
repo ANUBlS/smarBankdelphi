@@ -1,0 +1,483 @@
+unit PurImpl;
+
+interface
+
+uses                
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  DBCtrls, ComCtrls, StdCtrls, Buttons, ExtCtrls, Db, OracleData,
+  CMExcelExport, Oracle, Gauges;
+
+  resourcestring
+  rsErrorUsrGrp       = 'ян азы бир истифад€чи групу сечилм€лидир!';
+  rsErrorPersonaltype = 'ян азы бир мцшт€ри типи сечилм€лидир!';
+  rsInfScriptStarted  = 'ўесабат алыныр ';
+  rsPleaseWait=         '«€щм€т олмаса бир аз эюзл€йин!  ';
+  rsInfRowsExported   = '%d с€тир ихраж олунду';
+  rsInfExportFinished = '»храж гуртарды';
+
+type
+  TPurFrm = class(TForm)
+    DataSource1: TDataSource;
+    DataSource2: TDataSource;
+    DataSource3: TDataSource;
+    OracleDataSet1: TOracleDataSet;
+    OracleDataSet2: TOracleDataSet;
+    OracleDataSet3: TOracleDataSet;
+    Main: TOracleDataSet;
+    MainID: TFloatField;
+    MainNUMBEROFCREDIT: TStringField;
+    MainDSDesigner: TStringField;
+    MainDSDesigner2: TStringField;
+    MainDSDesigner3: TStringField;
+    MainDSDesigner4: TStringField;
+    MainDSDesigner5: TStringField;
+    MainDSDesigner6: TStringField;
+    MainDSDesigner7: TStringField;
+    MainCREDITLINEAMOUNT: TFloatField;
+    MainEKVALENT: TFloatField;
+    MainVAL_NAME: TStringField;
+    MainBORCALAN: TStringField;
+    MainDESCRIPTION: TStringField;
+    MainDATEOFCONCLUSION: TDateTimeField;
+    MainDUEDATEFIRSTCONTRACT: TDateTimeField;
+    MainDUEDATELASTCONTRACT: TDateTimeField;
+    MainVAXTIBITMISH: TFloatField;
+    MainHESABLANMAYAN: TFloatField;
+    MainANNUALYINTERESTRATE: TFloatField;
+    MainANNUALYOVERDUERATE: TFloatField;
+    MainDESCRIPTION_1: TStringField;
+    MainPLEDGEPRICE: TFloatField;
+    MainPLEDGENAME: TStringField;
+    MainREZDENT: TStringField;
+    MainMulkiyyetnovu: TStringField;
+    MainKreditinalunmameqsedi: TStringField;
+    MainBorcalanunsektoru: TStringField;
+    MainBorcalaninfaliyyeti: TStringField;
+    MainBorcalaninfaliyyetnovu: TStringField;
+    Mainfaizleruzreborclar: TFloatField;
+    MainFaizleruzreborclarek: TFloatField;
+    MainCariborclar: TFloatField;
+    MainCariborclarEK: TFloatField;
+    MainGECGUN: TFloatField;
+    MainDS_REST: TFloatField;
+    MainDSREST_EK: TFloatField;
+    MainDSINTERESTREST: TFloatField;
+    MainDSINT_EK: TFloatField;
+    MainDSDUEREST: TFloatField;
+    MainDSDUEREST_EK: TFloatField;
+    MainDSDUEINTERESTREST: TFloatField;
+    MainDSDOEINT_EK: TFloatField;
+    SysDat: TOracleDataSet;
+    SysDatTEK_DAT: TDateTimeField;
+    ExcelExport: TCMExcelExport;
+    CemSet: TOracleDataSet;
+    CemSetMulkiyyetnovu: TStringField;
+    CemSetBorcalanunsektoru: TStringField;
+    CemSetBorcalaninfaliyyeti: TStringField;
+    CemSetBorcalaninfaliyyetnovu: TStringField;
+    CemSetSUMCREDITLINEAMOUNT: TFloatField;
+    CemSetSUMEKVALENT: TFloatField;
+    CemSetSUMHESABLANMAYAN: TFloatField;
+    CemSetSUMDS_REST: TFloatField;
+    CemSetSUMDSREST_EK: TFloatField;
+    CemSetSUMDSINTERESTREST: TFloatField;
+    CemSetSUMDSINT_EK: TFloatField;
+    CemSetSUMDSDUEREST: TFloatField;
+    CemSetSUMDSDUEREST_EK: TFloatField;
+    CemSetSUMDSDUEINTERESTREST: TFloatField;
+    CemSetSUMDSDOEINT_EK: TFloatField;
+    CemSetSUMFAIZLERUZREBORCLAR: TFloatField;
+    CemSetSUMFAIZLERUZREBORCLAREK: TFloatField;
+    CemSetSUMCARIBORCLAR: TFloatField;
+    CemSetSUMCARIBORCLAREK: TFloatField;
+    CemSetS_KODU: TStringField;
+    CemSetF_KODU: TStringField;
+    CemSetFN_KODU: TStringField;
+    Active: TOracleDataSet;
+    OraclePackage1: TOraclePackage;
+    CemSetM_KODU: TStringField;
+    CemSetNAME: TStringField;
+    CemSetCODE: TStringField;
+    OracleDataSet4: TOracleDataSet;
+    MainADI: TFloatField;
+    MainMEQSEDLI: TFloatField;
+    CemSetSUMADI: TFloatField;
+    CemSetSUMMEQSEDLI: TFloatField;
+    CemSetVAL_NAME: TStringField;
+    MainDSDesigner130: TFloatField;
+    MainDSDesigner3160: TFloatField;
+    MainDSDesigner6190: TFloatField;
+    MainDSDesigner91120: TFloatField;
+    MainDSDesigner121150: TFloatField;
+    MainDSDesigner151180: TFloatField;
+    MainDSDesigner181210: TFloatField;
+    MainDSDesigner211240: TFloatField;
+    MainDSDesigner241270: TFloatField;
+    MainDSDesigner271300: TFloatField;
+    MainDSDesigner301330: TFloatField;
+    MainDSDesigner331365: TFloatField;
+    MainBirildenartiq: TFloatField;
+    CemSetSUM130: TFloatField;
+    CemSetSUM3160: TFloatField;
+    CemSetSUM6190: TFloatField;
+    CemSetSUM91120: TFloatField;
+    CemSetSUM121150: TFloatField;
+    CemSetSUM151180: TFloatField;
+    CemSetSUM181210: TFloatField;
+    CemSetSUM211240: TFloatField;
+    CemSetSUM241270: TFloatField;
+    CemSetSUM271300: TFloatField;
+    CemSetSUM301330: TFloatField;
+    CemSetSUM331365: TFloatField;
+    CemSetSUMBIRILDENARTIQ: TFloatField;
+    CemSetSUMUZADILMISHDAR: TFloatField;
+    PageControl1: TPageControl;
+    TabSheet1: TTabSheet;
+    TabSheet2: TTabSheet;
+    Panel1: TPanel;
+    SpeedButton1: TSpeedButton;
+    SpeedButton2: TSpeedButton;
+    Gauge1: TGauge;
+    GroupBox6: TGroupBox;
+    CBaValute: TCheckBox;
+    DateTimePicker1: TDateTimePicker;
+    GroupBox1: TGroupBox;
+    CheckBox2: TCheckBox;
+    DBLookupComboBox1: TDBLookupComboBox;
+    GroupBox2: TGroupBox;
+    CBPersons: TCheckBox;
+    LCBPersons: TDBLookupComboBox;
+    GroupBox3: TGroupBox;
+    CheckBox1: TCheckBox;
+    DBLookupComboBox2: TDBLookupComboBox;
+    Cem: TCheckBox;
+    Animate1: TAnimate;
+    DateTimePicker2: TDateTimePicker;
+    Label1: TLabel;
+    SpeedButton3: TSpeedButton;
+    SpeedButton4: TSpeedButton;
+    odenish: TOracleDataSet;
+    CemSetSUM0: TFloatField;
+    CemSetSUM2: TFloatField;
+    CemSetSUM10: TFloatField;
+    CemSetSUM30: TFloatField;
+    CemSetSUM60: TFloatField;
+    CemSetSUM100: TFloatField;
+    Girov: TOracleDataSet;
+    CMExcelExport1: TCMExcelExport;
+    GirovSAY: TFloatField;
+    GirovTEMCODE: TStringField;
+    GirovTEMINAT: TStringField;
+    GirovPURCODE: TStringField;
+    GirovDESCRIPTION: TStringField;
+    GirovQALIQ: TFloatField;
+    GirovGIROV: TFloatField;
+    GirovQENAITBEXSH: TFloatField;
+    GirovNEZARETALT: TFloatField;
+    GirovMEQSEDLI: TFloatField;
+    GirovTEHLUKELI: TFloatField;
+    GirovUMUDSUZ: TFloatField;
+    GirovTESNIFATA_DAXIL_EDILMEMISH: TFloatField;
+    CemSetSUMGIROV: TFloatField;
+    TabSheet3: TTabSheet;
+    SpeedButton5: TSpeedButton;
+    SpeedButton6: TSpeedButton;
+    GroupBox4: TGroupBox;
+    DateTimePicker3: TDateTimePicker;
+    GroupBox5: TGroupBox;
+    DateTimePicker4: TDateTimePicker;
+    adiyyat: TOracleDataSet;
+    adiyyatD: TStringField;
+    adiyyatFULLCOUNT: TFloatField;
+    adiyyatFULLTRANCVE: TFloatField;
+    adiyyatVALCOUNT: TFloatField;
+    adiyyatVALTRAN: TFloatField;
+    MainTEMINATLIQ: TStringField;
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure SpeedButton2Click(Sender: TObject);
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure SpeedButton3Click(Sender: TObject);
+    procedure SpeedButton4Click(Sender: TObject);
+    procedure CemClick(Sender: TObject);
+    procedure SpeedButton5Click(Sender: TObject);
+    procedure SpeedButton6Click(Sender: TObject);
+  private
+  function BuildFilterString : String;
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  PurFrm: TPurFrm;
+  procedure InitPlugin(s:string);export;
+implementation
+uses CommonDecls,systemstate,CMOracleApiDataModuleImpl;
+{$R *.DFM}
+procedure InitPlugin(s:string);export;
+begin
+   PurFrm.ShowModal;
+end;
+exports
+     InitPlugin;
+
+procedure TPurFrm.FormCreate(Sender: TObject);
+var dY, dM, dD: Word;
+begin
+OracleDataSet1.open;
+OracleDataSet2.open;
+OracleDataSet3.open;
+Active.open;
+SysDat.open;
+
+  DecodeDate(SysDat.fieldbyname('tek_dat').AsDateTime{date}, dY, dM, dD);
+  if dM-1=0 then begin
+    dM := 12;
+    dY := dY{-1 };
+  end else begin
+    dM := dM{-1 hemin ayin biri } ;  
+  end;
+  DateTimePicker3.DateTime := EncodeDate(dY, dM, 1);
+end;
+
+procedure TPurFrm.FormDestroy(Sender: TObject);
+begin
+OracleDataSet1.closeall;
+OracleDataSet2.closeall;
+OracleDataSet3.closeall;
+SysDat.closeall;
+//PurFrm.free   ;
+end;
+
+procedure TPurFrm.FormShow(Sender: TObject);
+begin
+ DateTimePicker1.DateTime:=SysDat.fieldbyname('tek_dat').asdatetime;
+ DateTimePicker2.DateTime:=SysDat.fieldbyname('tek_dat').asdatetime;
+
+ DateTimePicker4.DateTime:=SysDat.fieldbyname('tek_dat').asdatetime;
+end;
+
+procedure TPurFrm.SpeedButton2Click(Sender: TObject);
+begin
+close;
+//PurFrm.Destroy;
+end;
+function TPurFrm.BuildFilterString : String;
+
+  procedure ConcatFilter(var S: String; const Prefix : String; Checked : Boolean; KeyValue : Variant);
+  const
+     csFormat = '(%s=%s)';
+  var
+    Temp : String;   
+  begin
+
+    if Checked then
+    begin
+      Temp := Format(csFormat,[Prefix,Keyvalue]);
+      if S = '' then
+        S := Temp
+      else
+        S :=S + 'and ' + Temp;
+    end;
+    
+  end;  // Concat Filter
+
+begin
+
+  Result := '';
+ConcatFilter(Result,'cu.VID_SOB',CBPersons.Checked,LCBPersons.KeyValue);
+ConcatFilter(Result,'p.BRANCHID',CheckBox2.Checked,DBLookupComboBox1.KeyValue);
+ConcatFilter(Result,'p.CURRENCY',CheckBox1.Checked,DBLookupComboBox2.KeyValue)
+end;
+procedure TPurFrm.SpeedButton1Click(Sender: TObject);
+var
+dat : Tdatetime;
+FilterStr: String;
+i: integer;
+begin
+LogInformation(rsInfScriptStarted);
+  dat:=integer(trunc(DateTimePicker1.DateTime));
+  FilterStr:='';
+if cem.Checked then
+
+ begin
+active.first;
+Gauge1.Visible:=true;
+i:=1;
+with active  do
+
+  while not EOF do
+    begin
+        OraclePackage1.CallProcedure('Gec_gun',[
+                                                  'p_id',FieldByName('ID').AsInteger,
+                                                  'p_date',dat
+
+                                                 ]);
+
+    Gauge1.Progress:=trunc(i*20/RecordCount);
+    i:=i+1;
+     Next;
+
+   end ;
+
+with CemSet do begin
+ Gauge1.Progress:=35;
+  if Active then CloseAll;
+  Gauge1.Progress:=50;
+  SetVariable('dat',dat);
+    //  showmessage(BuildFilterString);
+        if BuildFilterString <> '' then
+          begin
+           FilterStr := ' where '+BuildFilterString;
+           SQL[13] := FilterStr;
+         end
+         else
+         SQL[13] :='';
+         open;
+         Gauge1.Progress:=80  ;
+     LogInformation(rsPleaseWait);
+
+  with ExcelExport do
+   begin
+   Gauge1.Progress:=88;
+     Connect;
+      ExportDataset(CemSet,'Purdensal cem',True,false);
+     Disconnect;
+     Gauge1.Progress:=95;
+   end;
+   Gauge1.Progress:=100  ;
+   Gauge1.Visible:=false;
+  LogInformation(rsInfExportFinished);
+  end;
+end
+else  begin
+  Animate1.Visible:=True;
+  Animate1.Active:=True;
+  Animate1.CommonAVI:=aviCopyFile ;
+with active  do
+
+  while not EOF do
+    begin
+       OraclePackage1.CallProcedure('Gec_gun',[
+                                                  'p_id',FieldByName('ID').AsInteger,
+                                                  'p_date',dat
+
+                                                 ]);
+     Next;
+
+   end ;
+  with main do
+   begin
+         if Active then CloseAll;//ShowMessage( datetostr(dat));
+         SetVariable('dat',dat);
+         if BuildFilterString <> '' then
+          begin //ShowMessage( BuildFilterString);
+           FilterStr := ' and '+BuildFilterString;
+           SQL[64] := FilterStr;
+         end
+         else
+         SQL[64] :='';
+
+
+         // Memo1.Text := SQL.Text;
+         open;
+          LogInformation(rsPleaseWait);
+  with ExcelExport do
+   begin
+     Connect;
+      ExportDataset(Main,'Purdensal',True,false);
+
+     Disconnect;
+   end;
+      LogInformation(rsInfExportFinished);
+      Animate1.Visible:=false;
+      Animate1.Active :=false
+end;
+end; end;
+procedure TPurFrm.SpeedButton3Click(Sender: TObject);
+var
+dat : Tdatetime;
+begin
+  dat:=integer(trunc(DateTimePicker2.DateTime));
+ with odenish do
+   begin
+         if Active then CloseAll;//ShowMessage( datetostr(dat));
+         SetVariable('dat',dat);
+        open;
+   end;
+ with Girov do
+   begin
+        if Active then CloseAll;
+         SetVariable('dat',dat);
+        open;
+   end;
+   with CMExcelExport1 do
+   begin
+     Connect;
+      ExportDataset(Girov,'prugirov',True,false);
+      ExportDataset(odenish,'ODMBC',True,false);
+      Disconnect;
+   end;
+
+end;
+procedure TPurFrm.SpeedButton4Click(Sender: TObject);
+begin
+close
+end;
+
+procedure TPurFrm.CemClick(Sender: TObject);
+begin
+if cem.Checked= true then
+begin
+
+GroupBox6.Enabled:=false;
+GroupBox2.Enabled:=false;
+GroupBox1.Enabled:=false;
+GroupBox3.Enabled:=false;
+end
+else
+begin
+ GroupBox6.Enabled:=true;
+GroupBox2.Enabled:=true;
+GroupBox1.Enabled:=true;
+GroupBox3.Enabled:=true;
+
+
+end;
+
+
+end;
+
+procedure TPurFrm.SpeedButton5Click(Sender: TObject);
+var
+b_dat : Tdatetime;
+e_dat : Tdatetime;
+begin
+  b_dat:=integer(trunc(DateTimePicker3.DateTime));
+  e_dat:=integer(trunc(DateTimePicker4.DateTime));
+ with adiyyat do
+   begin
+        if Active then CloseAll;
+         SetVariable('bdat',b_dat);
+         SetVariable('edat',e_dat);
+        open;
+   end;
+   with CMExcelExport1 do
+   begin
+     Connect;
+      ExportDataset(adiyyat,'Adiyyat',True,false);
+      Disconnect;
+   end;
+end;
+
+procedure TPurFrm.SpeedButton6Click(Sender: TObject);
+begin
+close
+end;
+
+initialization
+   PurFrm := TPurFrm.Create(CommonApplication);
+end.
+end.

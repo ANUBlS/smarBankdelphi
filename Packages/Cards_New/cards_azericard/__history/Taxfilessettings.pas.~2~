@@ -1,0 +1,54 @@
+unit Taxfilessettings;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, SearchEdit, DBCtrls, Buttons, ExtCtrls, Grids, DBGrids;
+
+type
+  TRbsTaxFileAccsett = class(TForm)
+    Panel1: TPanel;
+    BitBtn2: TBitBtn;
+    BitBtn1: TBitBtn;
+    filialcombo: TDBLookupComboBox;
+    Label11: TLabel;
+    valutecombo: TDBLookupComboBox;
+    Label2: TLabel;
+    Searchtax1: TSearchEdit;
+    Searchtax10: TSearchEdit;
+    Label3: TLabel;
+    Searchtax18: TSearchEdit;
+    Label4: TLabel;
+    Label5: TLabel;
+    Label6: TLabel;
+    Label1: TLabel;
+    DBGrid1: TDBGrid;
+    procedure BitBtn1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  RbsTaxFileAccsett: TRbsTaxFileAccsett;
+
+implementation
+
+uses Unit18;
+
+{$R *.dfm}
+
+procedure TRbsTaxFileAccsett.BitBtn1Click(Sender: TObject);
+begin
+DataMod_CARDS.mainpacket.CallProcedure('rbs_tax_acc_settings',[filialcombo.KeyValue,
+                                                          valutecombo.KeyValue,
+                                                          Searchtax1.Text,
+                                                          Searchtax10.Text,
+                                                          Searchtax18.Text]);
+
+dBGrid1.DataSource.DataSet.Refresh;
+end;
+
+end.

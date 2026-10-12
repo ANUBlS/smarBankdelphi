@@ -1,0 +1,147 @@
+﻿unit UnitAifMxAccount;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, DB, OracleData, Grids, DBGrids, StdCtrls, DBViewComboBox, SearchEdit,
+  Buttons, ExtCtrls;
+
+type
+  TFormAifMxAccount = class(TForm)
+    Panel1: TPanel;
+    Panel2: TPanel;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    SpeedButton1: TSpeedButton;
+    Label4: TLabel;
+    SpeedButton2: TSpeedButton;
+    Label5: TLabel;
+    SearchEdit1: TSearchEdit;
+    DBViewComboBox1: TDBViewComboBox;
+    DBViewComboBox2: TDBViewComboBox;
+    SearchEdit2: TSearchEdit;
+    Panel3: TPanel;
+    DBGrid1: TDBGrid;
+    Panel4: TPanel;
+    DBGrid2: TDBGrid;
+    AifAccDataSet: TOracleDataSet;
+    BranchDataSet: TOracleDataSet;
+    AifAccDataSource: TDataSource;
+    BranchDataSource: TDataSource;
+    AccountDataSet: TOracleDataSet;
+    FilialDataSet: TOracleDataSet;
+    ValyutaDataSet: TOracleDataSet;
+    AccountDataSource: TDataSource;
+    FilialDataSource: TDataSource;
+    ValyutaDataSource: TDataSource;
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormShow(Sender: TObject);
+    procedure DBGrid1DblClick(Sender: TObject);
+    procedure DBGrid2DblClick(Sender: TObject);
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure SpeedButton2Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormAifMxAccount: TFormAifMxAccount;
+
+implementation
+
+uses DataAIFUnit;
+
+{$R *.dfm}
+
+procedure TFormAifMxAccount.DBGrid1DblClick(Sender: TObject);
+begin
+  Case MessageDlg('Əməliyyatın silinməsinə əminsinizmi?', mtConfirmation,
+    [mbyes, mbno], 0) of
+    mryes:
+      begin
+        With DataModuleAIF,AifAccDataSet do
+        begin
+          Del.CallProcedure('Exp_Accounts_Del',[fieldbyname('id').asinteger]);
+          Refresh;
+        end;
+      end;
+    mrno:
+      exit;
+  end;
+end;
+
+procedure TFormAifMxAccount.DBGrid2DblClick(Sender: TObject);
+begin
+   Case MessageDlg('Əməliyyatın silinməsinə əminsinizmi?', mtConfirmation,
+    [mbyes, mbno], 0) of
+    mryes:
+      begin
+        With DataModuleAIF,BranchDataSet do
+        begin
+          Del.CallProcedure('Exp_branchaccounts_Del',[fieldbyname('id').asinteger]);
+          Refresh;
+        end;
+      end;
+    mrno:
+      exit;
+  end;
+end;
+
+procedure TFormAifMxAccount.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  AifAccDataSet.Close;
+  BranchDataSet.Close;
+  FilialDataSet.Close;
+  ValyutaDataSet.Close;
+  AccountDataSet.Close;
+end;
+
+procedure TFormAifMxAccount.FormShow(Sender: TObject);
+begin
+  IF not(AifAccDataSet.Active) then
+    AifAccDataSet.Open;
+  IF not(BranchDataSet.Active) then
+    BranchDataSet.Open;
+  IF not(FilialDataSet.Active) then
+    FilialDataSet.Open;
+  IF not(ValyutaDataSet.Active) then
+    ValyutaDataSet.Open;
+  IF not(AccountDataSet.Active) then
+    AccountDataSet.Open;
+  SearchEdit1.clear;
+  SearchEdit2.clear;
+  DBViewComboBox1.ItemIndex := 0;
+  DBViewComboBox2.ItemIndex := 0;
+end;
+
+procedure TFormAifMxAccount.SpeedButton1Click(Sender: TObject);
+begin
+  if SearchEdit1.Text = '' then exit;
+  With DataModuleAIF do
+  begin
+    Del.CallProcedure('Aif_accounts_add',[ValyutaDataSet.fieldbyname('VALUTE').asinteger,
+                                          AccountDataSet.fieldbyname('id').asinteger,
+                                          FilialDataSet.fieldbyname('id').asinteger]);
+    SearchEdit1.clear;
+    AifAccDataSet.Refresh;
+  end;
+end;
+
+procedure TFormAifMxAccount.SpeedButton2Click(Sender: TObject);
+begin
+  if SearchEdit1.Text = '' then exit;
+  With DataModuleAIF do
+  begin
+    Del.CallProcedure('Aif_branchaccounts_add',[ValyutaDataSet.fieldbyname('VALUTE').asinteger,
+                                                AccountDataSet.fieldbyname('id').asinteger,
+                                                FilialDataSet.fieldbyname('id').asinteger]);
+    SearchEdit1.clear;
+    BranchDataSet.Refresh;
+  end
+end;
+
+end.

@@ -1,0 +1,117 @@
+unit UserSelectFormImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Grids, DBGrids, ImgList, StdCtrls, ExtCtrls, Db, OracleData, ActnList, SBSecurity;
+
+type
+  TUserSelectForm = class;
+  TAddUserEvent = procedure(Sender: TUserSelectForm; UserID: Integer) of object;
+  
+  TUserSelectForm = class(TForm)
+    UserGB: TGroupBox;
+    Panel1: TPanel;
+    Button1: TButton;
+    Button2: TButton;
+    ImageList1: TImageList;
+    UsersGrid: TDBGrid;
+    Users: TDataSource;
+    UsersData: TOracleDataSet;
+    ActionList1: TActionList;
+    Accept: TAction;
+    Cancel: TAction;
+    UsersDataID: TFloatField;
+    UsersDataTYPE: TFloatField;
+    UsersDataNAME: TWideStringField;
+    procedure AcceptExecute(Sender: TObject);
+    procedure CancelExecute(Sender: TObject);
+    procedure UsersGridDrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TColumn; State: TGridDrawState);
+  private
+    { Private declarations }
+    FUserAdd: TAddUserEvent;
+    procedure AddUser(UserID: Integer);
+  public
+    { Public declarations }
+    procedure ViewUsers(Sid: TSid);
+    property OnAddUser: TAddUserEvent read FUserAdd write FUserAdd;
+  end;
+
+var
+  UserSelectForm: TUserSelectForm;
+
+implementation
+
+{$R *.DFM}
+
+uses SBSrvIntf;
+
+procedure TUserSelectForm.ViewUsers(Sid: TSid);
+begin
+  with UsersData do
+  begin
+    Close;
+    SetVariable('SID', Sid);
+    Open;
+    if RecordCount = 0 then
+      raise ENoDataFound.Create('No users to view');
+  end;
+  ShowModal;
+end;
+
+procedure TUserSelectForm.AddUser(UserID: Integer);
+begin
+  if Assigned(FUserAdd) then
+    FUserAdd(Self, UserID);
+end;
+
+procedure TUserSelectForm.AcceptExecute(Sender: TObject);
+var
+  Index: Integer;
+begin
+  with UsersGrid do
+  begin
+    for Index := 0 to SelectedRows.Count-1 do
+    begin
+      UsersData.GotoBookmark(Pointer(SelectedRows[Index]));
+      AddUser(UsersData.FieldByName('ID').AsInteger);
+    end;
+  end;
+  Close;
+end;
+
+procedure TUserSelectForm.CancelExecute(Sender: TObject);
+begin
+  Close;
+end;
+
+procedure TUserSelectForm.UsersGridDrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TColumn;
+  State: TGridDrawState);
+var
+  Bar: TRect;
+begin
+  with Sender as TDBgrid do
+  begin
+    DefaultDrawColumnCell(Rect, DataCol, Column, State);
+    if DataCol = 0 then
+    begin
+      Bar := Rect;
+      inc(Bar.Left, 10);
+      inc(Bar.Top);
+      Bar.Right := Bar.Left + 18;
+      Canvas.Brush.Color := clWhite;
+      Canvas.FillRect(Bar);
+
+      ImageList1.Draw(
+        Canvas,
+        Rect.Left+10,
+        Rect.Top+1,
+        DataSource.DataSet.FieldByName('type#').AsInteger-1+2);
+    end;
+  end;
+end;
+
+end.

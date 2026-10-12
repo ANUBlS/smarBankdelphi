@@ -1,0 +1,96 @@
+unit uAccViewFormImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, OracleData, StdCtrls, Mask, DBCtrls;
+
+type
+  TfrmAccInfo = class(TForm)
+    odsAcc: TOracleDataSet;
+    acc: TDataSource;
+    odsAccID: TFloatField;
+    odsAccKLI_ID: TFloatField;
+    odsAccUSNAME: TWideStringField;
+    odsAccACC_NO: TWideStringField;
+    odsAccVAL_ACC: TIntegerField;
+    odsAccVALU_NAME: TWideStringField;
+    odsAccNAME: TWideStringField;
+    odsAccOPEN_DAT: TDateTimeField;
+    odsAccBAL_CN1: TFloatField;
+    odsAccFID: TFloatField;
+    odsAccFILIALNAME: TWideStringField;
+    odsAccSIM_OTCET: TFloatField;
+    odsAccREPSYMB: TWideStringField;
+    odsAccTIPACC: TWideStringField;
+    odsAccLIMIT: TFloatField;
+    odsAccBALNAME: TWideStringField;
+    Label2: TLabel;
+    DBEdit2: TDBEdit;
+    DBEdit3: TDBEdit;
+    Label4: TLabel;
+    DBEdit4: TDBEdit;
+    Label5: TLabel;
+    DBEdit5: TDBEdit;
+    Label6: TLabel;
+    DBEdit6: TDBEdit;
+    DBEdit7: TDBEdit;
+    Label8: TLabel;
+    DBEdit8: TDBEdit;
+    Label9: TLabel;
+    DBEdit9: TDBEdit;
+    Label10: TLabel;
+    DBEdit10: TDBEdit;
+    Label11: TLabel;
+    DBEdit11: TDBEdit;
+    DBEdit12: TDBEdit;
+    Label13: TLabel;
+    DBEdit14: TDBEdit;
+    Label15: TLabel;
+    DBEdit15: TDBEdit;
+    Label16: TLabel;
+    DBEdit16: TDBEdit;
+    DBEdit17: TDBEdit;
+    Button1: TButton;
+    odsAccCUSTNAME: TWideStringField;
+    procedure Button1Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+  private
+    FAccountID: Integer;
+  public
+    property AccountID: Integer read FAccountID write FAccountID;
+    procedure ShowAccInfo;
+  end;
+
+var
+  frmAccInfo: TfrmAccInfo;
+
+implementation
+
+uses sboapidatamoduleimpl, SBTranslateProc;
+
+{$R *.DFM}
+
+procedure TfrmAccInfo.FormCreate(Sender: TObject);
+begin
+  SBTranslateProc.TranslateAllCompForms(Self, sboapiDataModule.OrPack_SL);
+end;
+
+procedure TfrmAccInfo.ShowAccInfo;
+begin
+  with odsAcc do
+  begin
+    ClearVariables;
+    Close;
+    SetVariable('accid', FAccountID);
+    Open;
+  end;
+end;
+
+procedure TfrmAccInfo.Button1Click(Sender: TObject);
+begin
+  Close;
+end;
+
+end.

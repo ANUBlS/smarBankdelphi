@@ -1,0 +1,1246 @@
+﻿unit AccountImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActiveX, AxCtrls, out_account_TLB, StdVcl, ComCtrls, ToolWin, DBCtrls,
+  ExtCtrls, Buttons, StdCtrls, Mask, Grids,Db,Oracledata, DBGrids,Menus, ActnList,
+  ImgList;
+ 
+type
+  TOperationMode = (omInsert, omEdit, omDelete);
+
+type
+  TAccountForm = class(TActiveForm, IActiveFormX)
+    GroupBox2: TGroupBox;
+    GridAccount: TDBGrid;
+    Panel3: TPanel;
+    Panel4: TPanel;
+    Label1: TLabel;
+    Label2: TLabel;
+    DBEdit2: TDBEdit;
+    Panel5: TPanel;
+    Label3: TLabel;
+    Label4: TLabel;
+    DBEdit3: TDBEdit;
+    DBEdit4: TDBEdit;
+    PanelSearch: TPanel;
+    EditAcc_No: TEdit;
+    EditBal_cn1: TEdit;
+    EditVal_acc: TEdit;
+    EditName: TEdit;
+    EditOpen_dat: TEdit;
+    EditClose_dat: TEdit;
+    PanelSettings: TGroupBox;
+    Panel11: TPanel;
+    SpeedButton1: TSpeedButton;
+    GBAccountStatus: TRadioGroup;
+    GroupBox1: TGroupBox;
+    DBLookupTipacc: TDBLookupComboBox;
+    GroupBox3: TGroupBox;
+    DBLookupBranch: TDBLookupComboBox;
+    GroupBox4: TGroupBox;
+    DBLookupCurrency: TDBLookupComboBox;
+    GroupBox5: TGroupBox;
+    DBLookupOperator: TDBLookupComboBox;
+    GroupBox6: TGroupBox;
+    DBLookupBalance: TDBLookupComboBox;
+    Panel6: TPanel;
+    Label5: TLabel;
+    SpeedButton2: TSpeedButton;
+    ToolBar1: TToolBar;
+    ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
+    ToolButton3: TToolButton;
+    ToolButton4: TToolButton;
+    ButtonFilter: TToolButton;
+    ImageList: TImageList;
+    ActionList: TActionList;
+    ActionRefresh: TAction;
+    ActionInsert: TAction;
+    ActionEdit: TAction;
+    ActionCloseAcc: TAction;
+    ActionShowFilter: TAction;
+    ActionSpeedSearch: TAction;
+    ActionSearch: TAction;
+    ActionFilter: TAction;
+    ActionFullRefresh: TAction;
+    ActionAccTrans: TAction;
+    ToolButton6: TToolButton;
+    DBEdit1: TDBEdit;
+    PopupMenuMain: TPopupMenu;
+    N2: TMenuItem;
+    N3: TMenuItem;
+    N4: TMenuItem;
+    N5: TMenuItem;
+    N7: TMenuItem;
+    N6: TMenuItem;
+    PopupMenu: TPopupMenu;
+    N1: TMenuItem;
+    CBFilial: TCheckBox;
+    CBValyuta: TCheckBox;
+    CBUser: TCheckBox;
+    CbAccType: TCheckBox;
+    CBBal_Cn: TCheckBox;
+    EditKLI_ID: TEdit;
+    EditOLD_ACC_NO: TEdit;
+    EditBal_cn2: TEdit;
+    EditSIM_OTCET: TEdit;
+    procedure ToolButton1Click(Sender: TObject);
+    procedure ToolButton2Click(Sender: TObject);
+    procedure ToolButton3Click(Sender: TObject);
+    procedure ToolButton4Click(Sender: TObject);
+    procedure ButtonFilterClick(Sender: TObject);
+    procedure ToolButton6Click(Sender: TObject);
+    procedure ActionInsertExecute(Sender: TObject);
+    procedure ActionEditExecute(Sender: TObject);
+    procedure ActionRefreshExecute(Sender: TObject);
+    procedure ActionFullRefreshExecute(Sender: TObject);
+    procedure ActionAccTransExecute(Sender: TObject);
+    procedure ActionShowFilterExecute(Sender: TObject);
+    procedure ActionFilterExecute(Sender: TObject);
+    procedure ActionSpeedSearchExecute(Sender: TObject);
+    procedure ActionSearchExecute(Sender: TObject);
+    procedure GridAccountDblClick(Sender: TObject);
+    procedure GridAccountTitleClick(Column: TColumn);
+    procedure EditAcc_NoKeyPress(Sender: TObject; var Key: Char);
+    procedure EditBal_cn1KeyPress(Sender: TObject; var Key: Char);
+    procedure EditVal_accKeyPress(Sender: TObject; var Key: Char);
+    procedure EditNameKeyPress(Sender: TObject; var Key: Char);
+    procedure EditOpen_datKeyPress(Sender: TObject; var Key: Char);
+    procedure EditClose_datKeyPress(Sender: TObject; var Key: Char);
+    procedure EditAcc_NoExit(Sender: TObject);
+    procedure EditBal_cn1Exit(Sender: TObject);
+    procedure EditVal_accExit(Sender: TObject);
+    procedure EditNameExit(Sender: TObject);
+    procedure EditOpen_datExit(Sender: TObject);
+    procedure EditClose_datExit(Sender: TObject);
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure N7Click(Sender: TObject);
+    procedure N4Click(Sender: TObject);
+    procedure Yenihesab1Click(Sender: TObject);
+    procedure Redakteetmek1Click(Sender: TObject);
+    procedure DBLookupBranchClick(Sender: TObject);
+    procedure DBLookupCurrencyClick(Sender: TObject);
+    procedure DBLookupOperatorClick(Sender: TObject);
+    procedure DBLookupTipaccClick(Sender: TObject);
+    procedure DBLookupBalanceClick(Sender: TObject);
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure SpeedButton2Click(Sender: TObject);
+    procedure GBAccountStatusClick(Sender: TObject);
+    procedure ActionCloseAccExecute(Sender: TObject);
+    procedure CBFilialClick(Sender: TObject);
+    procedure CBValyutaClick(Sender: TObject);
+    procedure CBUserClick(Sender: TObject);
+    procedure CbAccTypeClick(Sender: TObject);
+    procedure CBBal_CnClick(Sender: TObject);
+    procedure Edit1Exit(Sender: TObject);
+    procedure Edit1KeyPress(Sender: TObject; var Key: Char);
+    procedure EditKLI_IDExit(Sender: TObject);
+    procedure EditKLI_IDKeyPress(Sender: TObject; var Key: Char);
+    procedure EditOLD_ACC_NOExit(Sender: TObject);
+    procedure EditSIM_OTCETKeyPress(Sender: TObject; var Key: Char);
+  private
+    { Private declarations }
+    FEvents: IActiveFormXEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+  public
+    { Public declarations }
+   OperationMode: TOperationMode;
+
+    procedure Initialize; override;
+
+    procedure InitData;
+    procedure InitControl;
+    procedure MouseWheelHandler(var Message: TMessage); override;
+  end;
+ var
+   AccountForm: TAccountForm;
+implementation
+
+uses ComObj, ComServ, AccountPropertiesImpl, AccountDataModuleImpl,
+  IntervalImpl, sboapiDataModuleImpl, AccountTransactionsImpl, AccountRestState,SBTranslateProc;
+
+{$R *.DFM}
+
+{ TActiveFormX }
+
+procedure TAccountForm.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_ActiveFormXPage); }
+end;
+
+procedure TAccountForm.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as IActiveFormXEvents;
+end;
+
+procedure TAccountForm.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TAccountForm.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TAccountForm.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TAccountForm.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TAccountForm.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TAccountForm.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TAccountForm.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TAccountForm.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TAccountForm.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TAccountForm.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TAccountForm.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TAccountForm.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TAccountForm.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TAccountForm.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TAccountForm.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TAccountForm.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TAccountForm.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TAccountForm.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TAccountForm.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TAccountForm._Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TAccountForm.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TAccountForm.CbAccTypeClick(Sender: TObject);
+begin
+if CbAccType.Checked=True then
+DBLookupTipacc.Enabled:=True
+else
+begin
+ DBLookupTipacc.Enabled:=False;
+ InitControl;
+end;
+   ActionFilterExecute(Sender);
+end;
+
+procedure TAccountForm.CBBal_CnClick(Sender: TObject);
+begin
+if CBBal_Cn.Checked=True then
+begin
+DBLookupBalance.Enabled:=True;
+//DBLookupBalance.ListSource.DataSet.First;
+end
+else
+begin
+ DBLookupBalance.Enabled:=False;
+ InitControl;
+end;
+   ActionFilterExecute(Sender);
+end;
+
+procedure TAccountForm.CBFilialClick(Sender: TObject);
+begin
+if CBFilial.Checked=True then
+DBLookupBranch.Enabled:=True
+else
+begin
+ DBLookupBranch.Enabled:=False;
+ InitControl;
+end;
+   ActionFilterExecute(Sender);
+end;
+
+procedure TAccountForm.CBUserClick(Sender: TObject);
+begin
+if CBUSER.Checked=True then
+DBLookupOperator.Enabled:=True
+else
+begin
+ DBLookupOperator.Enabled:=False;
+ InitControl;
+end;
+   ActionFilterExecute(Sender);
+end;
+
+procedure TAccountForm.CBValyutaClick(Sender: TObject);
+begin
+if CBValyuta.Checked=True then
+DBLookupCurrency.Enabled:=True
+else
+begin
+ DBLookupCurrency.Enabled:=False;
+ InitControl;
+end;
+   ActionFilterExecute(Sender);
+end;
+
+procedure TAccountForm.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TAccountForm.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TAccountForm.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TAccountForm.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TAccountForm.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TAccountForm.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TAccountForm.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TAccountForm.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TAccountForm.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TAccountForm.Set_AxBorderStyle(Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TAccountForm.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TAccountForm.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TAccountForm.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TAccountForm.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TAccountForm.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TAccountForm.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TAccountForm.Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TAccountForm.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TAccountForm.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TAccountForm.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TAccountForm.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TAccountForm.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TAccountForm.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+procedure TAccountForm.ToolButton1Click(Sender: TObject);
+var
+  AccountID: Longint;
+begin
+ with Out_accdatamodule.Account do
+ begin
+  AccountID :=FieldByName('ID').AsInteger;
+  CloseAll;
+  Open;
+  Locate('ID', AccountID, []);
+ end;
+end;
+
+
+procedure TAccountForm.ToolButton2Click(Sender: TObject);
+begin
+  with   out_accdatamodule do
+  SB_ACA.CallProcedure('CheckObjectAccess', ['out_account','insert']);
+
+ OperationMode :=omInsert;
+ out_accdatamodule.Account.Insert;
+ AccountPropertiesForm.ShowModal;
+
+end;
+
+procedure TAccountForm.ToolButton3Click(Sender: TObject);
+begin
+     with   out_accdatamodule do
+ SB_ACA.CallProcedure('CheckObjectAccess', ['out_account','update']);
+ out_accdatamodule.Customers.Open;
+
+ OperationMode :=omEdit;
+ out_accdatamodule.Account.Edit;
+ AccountPropertiesForm.ShowModal;
+
+end;
+
+procedure TAccountForm.ToolButton4Click(Sender: TObject);
+const
+   cs_message = '"%s" №-li hesab bağlansın?';
+begin
+ with out_accdatamodule, Account do begin
+  SB_ACA.CallProcedure('CheckObjectAccess', ['out_account','delete']);
+  if MessageDlg(Format(cs_message, [FieldByName('acc_no').AsString]), mtConfirmation, [mbYes, mbNo], 0) = mrYes then
+  begin
+    CloseAccount(FieldByName('ID').AsInteger);
+    ActionRefreshExecute(Sender);
+  end;
+  end;
+end;
+
+
+
+procedure TAccountForm.ButtonFilterClick(Sender: TObject);
+begin
+  PanelSettings.Visible :=not PanelSettings.Visible;
+
+end;
+
+procedure TAccountForm.ToolButton6Click(Sender: TObject);
+begin
+  PanelSearch.Visible :=not PanelSearch.Visible;
+  if EditAcc_No.CanFocus then
+   EditAcc_No.SetFocus;
+
+end;
+
+procedure TAccountForm.MouseWheelHandler(var Message: TMessage);
+begin
+ inherited;
+ if GridAccount.Focused then
+  begin
+   GridAccount.SelectedRows.Clear;
+   with TCMMouseWheel(Message), GridAccount.DataSource.DataSet do
+    if WheelDelta < 0 then
+      Next
+    else
+      Prior;
+  end;
+end;
+
+procedure TAccountForm.InitData;
+const
+   c_err_message = ' Table or View in Dataset "%s" does not exist! ';
+var
+   i: Word;
+begin
+with out_accdatamodule do
+begin
+Account.Open;
+//Customers.Open;
+Users.Open;
+Branches.Open;
+Currency.Open;
+AccFlags.Open;
+BalAcc.Open;
+BalAccnew.Open;
+Tenostat.Open;
+Lazyrest.Open;
+ReportSymbol.Open;
+PairAccount.Open;
+Sysdat.Open;
+end;
+
+
+      //with out_accdatamodule do  Refresh_('');
+
+ {with out_accdatamodule do
+  for i :=0 to ComponentCount -1 do
+  if (Components[i] is TDataSet) then
+   if (Components[i] as TDataSet).Tag = 1 then
+  //begin
+      try
+     (Components[i] as TDataSet).Open;
+      except
+     raise Exception.Create(Format(c_err_message, [(Components[i] as TDataSet).Name]));
+   end;    }
+end;
+
+procedure TAccountForm.InitControl;
+begin
+ DBLookupBranch.ListSource.DataSet.First;
+ DBLookupBranch.KeyValue :=DBLookupBranch.ListSource.DataSet.FieldByName('ID').AsInteger;
+ DBLookupCurrency.ListSource.DataSet.First;
+ DBLookupCurrency.KeyValue :=DBLookupCurrency.ListSource.DataSet.FieldByName('VALUTE').AsString;
+ DBLookupOperator.ListSource.DataSet.First;
+ DBLookupOperator.KeyValue :=DBLookupOperator.ListSource.DataSet.FieldByName('ID').AsInteger;
+ DBLookupTipacc.ListSource.DataSet.First;
+ DBLookupTipacc.KeyValue :=DBLookupTipacc.ListSource.DataSet.FieldByName('Symbol').AsString;
+ DBLookupBalance.ListSource.DataSet.First;
+ DBLookupBalance.KeyValue :=DBLookupBalance.ListSource.DataSet.FieldByName('Bal_cn').AsString;
+
+end;
+
+procedure TAccountForm.ActionInsertExecute(Sender: TObject);
+begin
+ OperationMode :=omInsert;
+ out_accdatamodule.Account.Insert;
+ AccountPropertiesForm.ShowModal;
+end;
+
+procedure TAccountForm.ActionCloseAccExecute(Sender: TObject);
+const
+   cs_message = '"%s" N-li hesab bağlansın?';
+begin
+ with out_accdatamodule, Account do
+  if MessageDlg(Format(cs_message, [FieldByName('acc_no').AsString]), mtConfirmation, [mbYes, mbNo], 0) = mrYes then
+  begin
+    CloseAccount(FieldByName('ID').AsInteger);
+    ActionRefreshExecute(Sender);
+  end;
+
+end;
+
+procedure TAccountForm.ActionEditExecute(Sender: TObject);
+begin
+OperationMode :=omEdit;
+ out_accdatamodule.Account.Edit;
+ AccountPropertiesForm.ShowModal;
+end;
+
+procedure TAccountForm.ActionRefreshExecute(Sender: TObject);
+var
+  AccountID: Longint;
+begin
+ with out_accdatamodule.Account do
+ begin
+  AccountID :=FieldByName('ID').AsInteger;
+  CloseAll;
+  Open;
+  Locate('ID', AccountID, []);
+ end;
+end;
+
+
+procedure TAccountForm.ActionFullRefreshExecute(Sender: TObject);
+begin
+   with out_accdatamodule do
+  Refresh_('');
+end;
+
+procedure TAccountForm.ActionAccTransExecute(Sender: TObject);
+var
+  AStartDate, AEndDate: TDateTime;
+begin
+
+ with FormInterval do
+ begin
+   StartDateEdit.DateTime :=out_accdatamodule.Sysdat.FieldByName('tek_dat').AsDateTime;
+   EndDateEdit.DateTime :=StartDateEdit.DateTime;
+
+   if ShowModal = mrOK then
+   begin
+    AStartDate :=StartDateEdit.DateTime;
+    AEndDate :=EndDateEdit.DateTime;
+
+    with FormAccountTransactions do
+    begin
+     OpenDataControls(AStartDate, AEndDate);
+     ShowModal;
+    end;
+
+   end;
+ end;
+
+end;
+
+procedure TAccountForm.ActionShowFilterExecute(Sender: TObject);
+begin
+   PanelSettings.Visible :=not PanelSettings.Visible;
+end;
+{
+procedure TAccountForm.ActionFilterExecute(Sender: TObject);
+ function  CheckFiltered(IsChecked: Boolean; const FilterStr: String; Args: array of const): String;
+   begin
+    Result :='';
+    if  IsChecked  then
+     Result :=Format(FilterStr, Args);
+   end;
+
+const
+   BooleanPrefix = ' AND ';
+
+   StatusFilter = '(Status=%d)';
+   BranchFilter = '(Filial=%d)';
+   CurrencyFilter = '(Val_acc=%d)';
+   OperatorFilter = '(Op_ID=%d)';
+   TipaccFilter = '(Tipacc=%s)';
+   BalanceFilter = '(Bal_cn1=%s)';
+var
+   Status:    String;
+   Branch:    String;
+   Currency:  String;
+   Operator:  String;
+   Tipacc:    String;
+   Balance:   String;
+   FilterStr: String;
+begin
+ FilterStr :='';
+
+ Status :=CheckFiltered(
+              GBAccountStatus.ItemIndex <> 0
+             ,StatusFilter
+             ,[GBAccountStatus.ItemIndex]
+              );
+
+ Branch :=CheckFiltered(
+              DBLookupBranch.KeyValue <> -1
+             ,BranchFilter
+             ,[DBLookupBranch.ListSource.DataSet.FieldByName('ID').AsInteger]
+              );
+
+ Currency :=CheckFiltered(
+              DBLookupCurrency.KeyValue <> -1
+             ,CurrencyFilter
+             ,[DBLookupCurrency.ListSource.DataSet.FieldByName('Valute').AsInteger]
+              );
+
+ Operator :=CheckFiltered(
+              DBLookupOperator.KeyValue <> -1
+             ,OperatorFilter
+             ,[DBLookupOperator.ListSource.DataSet.FieldByName('ID').AsInteger]
+              );
+
+ Tipacc :=CheckFiltered(
+              Pos('Bütün', DBLookupTipacc.ListSource.DataSet.FieldByName('Name').AsString) = 0
+             ,TipaccFilter
+             ,[''''+DBLookupTipacc.ListSource.DataSet.FieldByName('Symbol').AsString+'''']
+              );
+
+ Balance :=CheckFiltered(
+              Pos('Bütün', DBLookupBalance.Text) = 0
+             ,BalanceFilter
+             ,[DBLookupBalance.Text]
+              );
+
+ FilterStr :=Status;
+
+  if  Branch <> '' then
+  if  FilterStr=''  then
+    FilterStr :=Branch
+  else
+    FilterStr :=FilterStr + BooleanPrefix + Branch;
+
+  if  Currency <> '' then
+  if  FilterStr=''  then
+    FilterStr :=Currency
+  else
+    FilterStr :=FilterStr + BooleanPrefix + Currency;
+
+  if  Operator <> '' then
+  if  FilterStr=''  then
+    FilterStr :=Operator
+  else
+    FilterStr :=FilterStr + BooleanPrefix + Operator;
+
+  if  Tipacc <> '' then
+  if  FilterStr=''  then
+    FilterStr :=Tipacc
+  else
+    FilterStr :=FilterStr + BooleanPrefix + Tipacc;
+
+  if  Balance <> '' then
+  if  FilterStr=''  then
+    FilterStr :=Balance
+  else
+    FilterStr :=FilterStr + BooleanPrefix + Balance;
+
+ with out_accdatamodule.Account do
+ begin
+  //Cursor :=crSQLWait;
+  Filtered :=False;
+  Filter :=FilterStr;
+  Filtered :=True;
+  //Cursor :=crDefault;
+ end;
+
+end;   }
+
+procedure TAccountForm.ActionFilterExecute(Sender: TObject);
+
+   function  CheckFiltered(IsChecked: Boolean; const FilterStr: String; Args: array of const): String;
+   begin
+    Result :='';
+    if  IsChecked  then
+     Result :=Format(FilterStr, Args);
+   end;
+
+const
+   BooleanPrefix = ' AND ';
+
+   StatusFilter = '(Status=%d)';
+   BranchFilter = '(Filial=%d)';
+   CurrencyFilter = '(Val_acc=%d)';
+   OperatorFilter = '(Op_ID=%d)';
+   TipaccFilter = '(Tipacc like  %s)';
+   BalanceFilter = '(Bal_cn1=%s)';
+var
+   Status:    String;
+   Branch:    String;
+   Currency:  String;
+   Operator:  String;
+   Tipacc:    String;
+   Balance:   String;
+   FilterStr: String;
+begin
+ FilterStr :='';
+
+ Status :=CheckFiltered(
+              GBAccountStatus.ItemIndex <> 0
+             ,StatusFilter
+             ,[GBAccountStatus.ItemIndex]
+              );
+
+ Branch :=CheckFiltered(
+              CBFilial.Checked//DBLookupBranch.KeyValue <> -1
+             ,BranchFilter
+             ,[DBLookupBranch.ListSource.DataSet.FieldByName('ID').AsInteger]
+              );
+
+ Currency :=CheckFiltered(
+              CBValyuta.Checked//DBLookupCurrency.KeyValue <> -1
+             ,CurrencyFilter
+             ,[DBLookupCurrency.ListSource.DataSet.FieldByName('Valute').AsInteger]
+              );
+
+ Operator :=CheckFiltered(
+              CBUser.Checked  //DBLookupOperator.KeyValue <> -1
+             ,OperatorFilter
+             ,[DBLookupOperator.ListSource.DataSet.FieldByName('ID').AsInteger]
+              );
+
+ Tipacc :=CheckFiltered(
+              CbAccType.Checked //Pos('Butun', DBLookupTipacc.ListSource.DataSet.FieldByName('Name').AsString) = 0
+             ,TipaccFilter
+             ,[''''+'%'+DBLookupTipacc.ListSource.DataSet.FieldByName('Symbol').AsString+'%'+'''']
+              );
+
+ Balance :=CheckFiltered(
+              CBBal_Cn.Checked //Pos('Butun', DBLookupBalance.Text) = 0
+             ,BalanceFilter
+             ,[DBLookupBalance.Text]
+              );
+
+  if Status='' then
+   FilterStr:='status is not null'
+ else
+    FilterStr :=Status;
+
+  if  CBFilial.Checked //Branch <> ''
+  then
+  if  FilterStr=''  then
+    FilterStr :=Branch
+  else
+    FilterStr :=FilterStr + BooleanPrefix + Branch;
+
+  if  CBValyuta.Checked //Currency <> ''
+  then
+  if  FilterStr=''  then
+    FilterStr :=Currency
+  else
+    FilterStr :=FilterStr + BooleanPrefix + Currency;
+
+  if  CBUser.Checked //Operator <> ''
+  then
+  if  FilterStr=''  then
+    FilterStr :=Operator
+  else
+    FilterStr :=FilterStr + BooleanPrefix + Operator;
+
+  if  CbAccType.Checked //Tipacc <> ''
+  then
+  if  FilterStr=''  then
+    FilterStr :=Tipacc
+  else
+    FilterStr :=FilterStr + BooleanPrefix + Tipacc;
+
+  if   CBBal_Cn.Checked //Balance <> ''
+  then
+  if  FilterStr=''  then
+    FilterStr :=Balance
+  else
+    FilterStr :=FilterStr + BooleanPrefix + Balance;
+
+  out_accdatamodule.account.sql[6]:=' where '+ FilterStr;
+  out_accdatamodule.account.sql.text:=Stringreplace(out_accdatamodule.account.sql.text,'Status','DECODE (close_dat, NULL, 1, 2)', [rfReplaceAll, rfIgnoreCase]);
+  { with AccDataModule.Account do
+ begin
+  //Cursor :=crSQLWait;
+  Filtered :=False;
+  Filter :=FilterStr;
+  memo1.text:=sql.text;
+
+  //Filtered :=True;
+  //Cursor :=crDefault;
+ end;  }
+  //showmessage(accdatamodule.account.sql.text);
+
+ out_accdatamodule.account.close;
+ out_accdatamodule.account.Open;
+
+end;
+
+
+procedure TAccountForm.ActionSpeedSearchExecute(Sender: TObject);
+var
+  SearchField : string;
+  SearchOptions : TSearchRecordOptions;
+begin
+  SearchOptions := [srIgnoreCase ,srPartialMatch ];
+
+  with Sender as TEdit  do
+  begin
+    SearchField := copy(Name,5,length(Name));
+    with  TOracleDataSet(GridAccount.DataSource.DataSet) do
+    if  not SearchRecord(
+                  SearchField
+                 ,Text
+                 ,SearchOptions + [srFromCurrent , srForward ]
+                 ) then
+
+    if MessageDlg(
+              'Axtarış sona çatdı.'+#13+'Əvvəldən başlansın?'
+             ,mtInformation
+             ,[mbNo , mbYes]
+             ,0
+             ) = mrYes  then
+ 
+    if not SearchRecord(
+                 SearchField
+                ,Text
+                ,SearchOptions + [ srFromBeginning ]
+                )  then
+    MessageDlg('Yazı tapılmayıb!',mtInformation,[mbOK],0);
+ end;
+
+end;
+
+procedure TAccountForm.ActionSearchExecute(Sender: TObject);
+begin
+ PanelSearch.Visible :=not PanelSearch.Visible;
+  if EditAcc_No.CanFocus then
+   EditAcc_No.SetFocus;
+end;
+
+procedure TAccountForm.GridAccountDblClick(Sender: TObject);
+begin
+OperationMode :=omEdit;
+ out_accdatamodule.Account.Edit;
+ AccountPropertiesForm.ShowModal;
+end;
+
+procedure TAccountForm.GridAccountTitleClick(Column: TColumn);
+var
+   TitleName :string;
+begin
+ if Column.Field.Calculated then Exit;
+ TitleName :=Column.FieldName;
+ with out_accdatamodule.Account do
+ begin
+  Screen.Cursor :=crSQLWait;
+  SetVariable('Title',TitleName);
+  Refresh;
+  Screen.Cursor :=crDefault;
+ end;
+end;
+
+procedure TAccountForm.EditAcc_NoKeyPress(Sender: TObject; var Key: Char);
+begin
+if Key = #13  then
+   ActionSpeedSearchExecute(Sender);
+end;
+
+procedure TAccountForm.EditBal_cn1KeyPress(Sender: TObject; var Key: Char);
+begin
+if Key = #13  then
+   ActionSpeedSearchExecute(Sender);
+end;
+
+procedure TAccountForm.EditVal_accKeyPress(Sender: TObject; var Key: Char);
+begin
+if Key = #13  then
+   ActionSpeedSearchExecute(Sender);
+end;
+
+procedure TAccountForm.EditNameKeyPress(Sender: TObject; var Key: Char);
+begin
+if Key = #13  then
+   ActionSpeedSearchExecute(Sender);
+end;
+
+procedure TAccountForm.EditOpen_datKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+if Key = #13  then
+   ActionSpeedSearchExecute(Sender);
+end;
+
+procedure TAccountForm.EditSIM_OTCETKeyPress(Sender: TObject; var Key: Char);
+begin
+  if Key = #13  then
+  begin
+   ActionSpeedSearchExecute(Sender);
+  end;
+end;
+
+procedure TAccountForm.EditClose_datKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+if Key = #13  then
+   ActionSpeedSearchExecute(Sender);
+end;
+
+procedure TAccountForm.EditKLI_IDExit(Sender: TObject);
+begin
+ TEdit(Sender).Text :=EmptyStr;
+end;
+
+procedure TAccountForm.EditKLI_IDKeyPress(Sender: TObject; var Key: Char);
+begin
+ if Key = #13  then
+  begin
+   ActionSpeedSearchExecute(Sender);
+  end;
+end;
+
+procedure TAccountForm.Edit1Exit(Sender: TObject);
+begin
+TEdit(Sender).Text :=EmptyStr;
+end;
+
+procedure TAccountForm.Edit1KeyPress(Sender: TObject; var Key: Char);
+begin
+ if Key = #13  then
+  begin
+   ActionSpeedSearchExecute(Sender);
+  end;
+
+end;
+
+procedure TAccountForm.EditAcc_NoExit(Sender: TObject);
+begin
+ TEdit(Sender).Text :=EmptyStr;
+end;
+
+procedure TAccountForm.EditBal_cn1Exit(Sender: TObject);
+begin
+ TEdit(Sender).Text :=EmptyStr;
+end;
+
+procedure TAccountForm.EditVal_accExit(Sender: TObject);
+begin
+ TEdit(Sender).Text :=EmptyStr;
+end;
+
+procedure TAccountForm.EditNameExit(Sender: TObject);
+begin
+ TEdit(Sender).Text :=EmptyStr;
+end;
+
+procedure TAccountForm.EditOLD_ACC_NOExit(Sender: TObject);
+begin
+ TEdit(Sender).Text :=EmptyStr;
+end;
+
+procedure TAccountForm.EditOpen_datExit(Sender: TObject);
+begin
+ TEdit(Sender).Text :=EmptyStr;
+end;
+
+procedure TAccountForm.EditClose_datExit(Sender: TObject);
+begin
+ TEdit(Sender).Text :=EmptyStr;
+end;
+
+procedure TAccountForm.ActiveFormCreate(Sender: TObject);
+begin
+ AccountForm :=Self;
+
+ out_accdatamodule :=Tout_accdatamodule.Create(Self);
+ AccountPropertiesForm :=TAccountPropertiesForm.Create(Self);
+ FormAccountTransactions :=TFormAccountTransactions.Create(Self);
+ AccountState :=TAccountState.Create(Self);
+ FormInterval :=TFormInterval.Create(Self);
+   SBTranslateProc.TranslateAllComponents(Self,sboapiDataModule.OrPack_SL);
+ InitData;
+ InitControl;
+ ActionFilterExecute(Sender);
+end;
+
+procedure TAccountForm.N7Click(Sender: TObject);
+begin
+ with AccountState do
+  ShowModal;
+
+end;
+
+procedure TAccountForm.N4Click(Sender: TObject);
+const
+   cs_message = '"%s" №-li hesab bağlansın?';
+begin
+ with out_accdatamodule, Account do
+  if MessageDlg(Format(cs_message, [FieldByName('acc_no').AsString]), mtConfirmation, [mbYes, mbNo], 0) = mrYes then
+  begin
+    CloseAccount(FieldByName('ID').AsInteger);
+    ActionRefreshExecute(Sender);
+  end;
+end;
+
+procedure TAccountForm.Yenihesab1Click(Sender: TObject);
+begin
+ OperationMode :=omInsert;
+ out_accdatamodule.Account.Insert;
+ AccountPropertiesForm.ShowModal;
+
+end;
+
+procedure TAccountForm.Redakteetmek1Click(Sender: TObject);
+begin
+ OperationMode :=omEdit;
+ out_accdatamodule.Account.Edit;
+ AccountPropertiesForm.ShowModal;
+
+end;
+procedure TAccountForm.DBLookupBranchClick(Sender: TObject);
+begin
+ ActionFilterExecute(Sender);
+
+end;
+
+procedure TAccountForm.DBLookupCurrencyClick(Sender: TObject);
+begin
+ ActionFilterExecute(Sender);
+
+end;
+
+procedure TAccountForm.DBLookupOperatorClick(Sender: TObject);
+begin
+ ActionFilterExecute(Sender);
+
+end;
+
+procedure TAccountForm.DBLookupTipaccClick(Sender: TObject);
+begin
+ ActionFilterExecute(Sender);
+
+end;
+
+procedure TAccountForm.DBLookupBalanceClick(Sender: TObject);
+begin
+ ActionFilterExecute(Sender);
+
+end;
+
+procedure TAccountForm.SpeedButton1Click(Sender: TObject);
+begin
+ ButtonFilter.Down :=False;
+ PanelSettings.Visible :=False;
+
+end;
+
+procedure TAccountForm.SpeedButton2Click(Sender: TObject);
+begin
+ InitControl;
+ ActionFilterExecute(Sender);
+
+end;
+
+procedure TAccountForm.GBAccountStatusClick(Sender: TObject);
+begin
+ ActionFilterExecute(Sender);
+
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TAccountForm,
+    Class_AccountForm,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

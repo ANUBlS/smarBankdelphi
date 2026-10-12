@@ -1,0 +1,826 @@
+unit UConstructionSuggest;
+                //DTPContractDate
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActiveX, AxCtrls, PConstructionSuggest_TLB, StdVcl, StdCtrls, ComCtrls, Buttons,
+  DBCtrls, Mask, ExtCtrls,SBPlgAx50_TLB, Db, OracleData, Oracle,
+  INSWordExporter, PlgModalContainer, XFSCtrls;
+
+const
+   WM_ModalResult = WM_USER+139;
+   fmCaption = 'Teklifname: (%s)';
+
+type
+  TConstructionSuggest = class(TActiveForm, IConstructionSuggest,IUIObject,
+             IParamInput)
+    CONSTRUCTIONData: TDataSource;
+    CONSTSUGGESTData: TDataSource;
+    ODSCONSTRUCTION: TOracleDataSet;
+    ODSCONSTSUGGEST: TOracleDataSet;
+    Customers: TOracleDataSet;
+    CustomersID: TIntegerField;
+    CustomersNAME: TWideStringField;
+    CustomersADDRESS: TWideStringField;
+    CustomersMOBILEPHONE: TWideStringField;
+    CustomersFAX: TWideStringField;
+    CustomersData: TDataSource;
+    BankInfo: TOracleDataSet;
+    BankInfoData: TDataSource;
+    Conditions: TOracleDataSet;
+    ConditionsID: TFloatField;
+    ConditionsNAME: TWideStringField;
+    ConditionsData: TDataSource;
+    FranshizData: TDataSource;
+    Franshiz: TOracleDataSet;
+    FranshizID: TFloatField;
+    FranshizNAME: TWideStringField;
+    PINS_CONSTRUCTION: TOraclePackage;
+    ConstructionWordExporter: TINSWordExporter;
+    ODSCONSTRUCTIONID: TFloatField;
+    ODSCONSTRUCTIONKLI_ID: TFloatField;
+    ODSCONSTRUCTIONFULLDESCRIPTION: TWideStringField;
+    ODSCONSTRUCTIONLOCATIONOBJ: TWideStringField;
+    ODSCONSTRUCTIONYEARSINBUSINESS: TWideStringField;
+    ODSCONSTRUCTIONBUILDINGUSAGE: TWideStringField;
+    ODSCONSTRUCTIONCONSTYEAR: TDateTimeField;
+    ODSCONSTRUCTIONFLOORSNUM: TIntegerField;
+    ODSCONSTRUCTIONWALLSM: TWideStringField;
+    ODSCONSTRUCTIONCEILINGSM: TWideStringField;
+    ODSCONSTRUCTIONROOFM: TWideStringField;
+    ODSCONSTRUCTIONAREA: TFloatField;
+    ODSCONSTRUCTIONAPPLICANTSPACE: TFloatField;
+    ODSCONSTRUCTIONEARTHQUAKEDETAILS: TWideStringField;
+    ODSCONSTRUCTIONFLAMABLE: TWideStringField;
+    ODSCONSTRUCTIONSURROINDINGDETAILS: TWideStringField;
+    ODSCONSTRUCTIONSITUETED: TWideStringField;
+    ODSCONSTRUCTIONGUARD: TWideStringField;
+    ODSCONSTRUCTIONALARM: TWideStringField;
+    ODSCONSTRUCTIONLOCKS: TWideStringField;
+    ODSCONSTRUCTIONSECURITYLOCKS: TWideStringField;
+    ODSCONSTRUCTIONBARS: TWideStringField;
+    ODSCONSTRUCTIONOTHER: TWideStringField;
+    ODSCONSTRUCTIONSETTINGS: TWideStringField;
+    ODSCONSTRUCTIONREPAIR: TWideStringField;
+    ODSCONSTRUCTIONHEATED: TWideStringField;
+    ODSCONSTRUCTIONRISKID: TFloatField;
+    ODSCONSTRUCTIONANNUAL: TFloatField;
+    ODSCONSTRUCTIONWAGES: TFloatField;
+    ODSCONSTRUCTIONRENT: TFloatField;
+    ODSCONSTRUCTIONEMPLOYES: TFloatField;
+    ODSCONSTRUCTIONEXPIRITY: TDateTimeField;
+    ODSCONSTRUCTIONLOSSHISTORY: TWideStringField;
+    ODSCONSTRUCTIONRENEWAL: TWideStringField;
+    ODSCONSTRUCTIONTHIRDPARTY: TWideStringField;
+    ODSCONSTRUCTIONOTHERINF: TWideStringField;
+    ODSCONSTRUCTIONINDEMINITY: TWideStringField;
+    ODSCONSTRUCTIONVALUETYPE: TWideStringField;
+    ODSCONSTRUCTIONBUILDINGS: TFloatField;
+    ODSCONSTRUCTIONENGINEER: TFloatField;
+    ODSCONSTRUCTIONEXDECO: TFloatField;
+    ODSCONSTRUCTIONINDECO: TFloatField;
+    ODSCONSTRUCTIONFIRESYS: TFloatField;
+    ODSCONSTRUCTIONTYPEID: TIntegerField;
+    PlgPolicy: TPlgModalContainer;
+    ODSCONSTSUGGESTID: TFloatField;
+    ODSCONSTSUGGESTCID: TFloatField;
+    ODSCONSTSUGGESTFRZ_ID: TFloatField;
+    ODSCONSTSUGGESTCNDT_ID: TFloatField;
+    ODSCONSTSUGGESTMLIMIT: TFloatField;
+    ODSCONSTSUGGESTRMLIMIT: TFloatField;
+    ODSCONSTSUGGESTIVALUEMAIN: TFloatField;
+    ODSCONSTSUGGESTRPERIOD: TWideStringField;
+    ODSCONSTSUGGESTRIVALUE: TFloatField;
+    ODSCONSTSUGGESTENDDATE: TDateTimeField;
+    ODSCONSTSUGGESTRFRZ_ID: TFloatField;
+    Risks: TOracleDataSet;
+    RisksID: TFloatField;
+    RisksNAME: TWideStringField;
+    RisksData: TDataSource;
+    ODSCONSTRUCTIONPROFITID: TFloatField;
+    ODSContracts: TOracleDataSet;
+    ODSContractsID: TFloatField;
+    ODSContractsTYPE_ID: TFloatField;
+    ODSContractsBLANK_ID: TFloatField;
+    ODSContractsINS_DATE: TDateTimeField;
+    ODSContractsBEGIN_DATE: TDateTimeField;
+    ODSContractsEND_DATE: TDateTimeField;
+    ODSContractsVALUTE_ID: TFloatField;
+    ODSContractsAMMOUNT: TFloatField;
+    ODSContractsCLOSE_PREFIX: TIntegerField;
+    ODSContractsKLI_ID: TFloatField;
+    ODSContractsLOANACC_ID: TFloatField;
+    ODSContractsCURRACC_ID: TFloatField;
+    ODSContractsPOLICY_NUM: TWideStringField;
+    DSContracts: TDataSource;
+    AValuteData: TDataSource;
+    AValute: TOracleDataSet;
+    AValuteVALU_NAME: TWideStringField;
+    AValuteVALUTE: TIntegerField;
+    AValuteVAL_NAME: TWideStringField;
+    AValuteVALU_SHORT: TWideStringField;
+    ODSCONSTSUGGESTVAL_ID: TFloatField;
+    ODSInterest: TOracleDataSet;
+    FloatField1: TFloatField;
+    InterestSource: TDataSource;
+    ODSCONSTSUGGESTINTER_ID: TFloatField;
+    ODSInterestNAME: TWideStringField;
+    XFPanel1: TXFPanel;
+    DBEdit1: TDBEdit;
+    Edit1: TEdit;
+    XFGroupBox1: TXFGroupBox;
+    DBLookupComboBox2: TDBLookupComboBox;
+    DBLookupComboBox1: TDBLookupComboBox;
+    XFGroupBox2: TXFGroupBox;
+    XFPanel2: TXFPanel;
+    BitBtn2: TBitBtn;
+    BitBtn1: TBitBtn;
+    btApply: TBitBtn;
+    btPrint: TBitBtn;
+    btPolicy: TBitBtn;
+    cbFranshiz: TCheckBox;
+    cbIFranshiz: TCheckBox;
+    cbInterest: TCheckBox;
+    cbConditions: TCheckBox;
+    DTPContractDate: TDateTimePicker;
+    memConditions: TMemo;
+    DBLookupComboBoxCondition: TDBLookupComboBox;
+    DBEdit9: TDBEdit;
+    DBEdit8: TDBEdit;
+    MemInterest: TMemo;
+    DBLookupComboBox5: TDBLookupComboBox;
+    DBEdit4: TDBEdit;
+    MemoRFranshiz: TMemo;
+    DBLookupComboBox3: TDBLookupComboBox;
+    DBEdit3: TDBEdit;
+    DBEdit7: TDBEdit;
+    memFrashize: TMemo;
+    DBLookupComboBoxFranshiz: TDBLookupComboBox;
+    DBEdit2: TDBEdit;
+    DBLookupComboBox4: TDBLookupComboBox;
+    XFLabel1: TXFLabel;
+    XFLabel2: TXFLabel;
+    XFLabel3: TXFLabel;
+    XFLabel4: TXFLabel;
+    XFLabel5: TXFLabel;
+    XFLabel6: TXFLabel;
+    XFLabel7: TXFLabel;
+    XFLabel8: TXFLabel;
+    XFLabel9: TXFLabel;
+    XFLabel10: TXFLabel;
+    XFLabel11: TXFLabel;
+    XFLabel12: TXFLabel;
+    XFLabel13: TXFLabel;
+    XFLabel14: TXFLabel;
+    XFLabel15: TXFLabel;
+    XFLabel16: TXFLabel;
+    XFLabel17: TXFLabel;
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure BitBtn2Click(Sender: TObject);
+    procedure BitBtn1Click(Sender: TObject);
+    procedure DBLookupComboBox3Click(Sender: TObject);
+    procedure DBLookupComboBoxConditionClick(Sender: TObject);
+    procedure ETimeKeyPress(Sender: TObject; var Key: Char);
+    procedure DBLookupComboBoxFranshizClick(Sender: TObject);
+    procedure DTPContractDateChange(Sender: TObject);
+    procedure ODSCONSTSUGGESTNewRecord(DataSet: TDataSet);
+    procedure btPrintClick(Sender: TObject);
+    procedure btPolicyClick(Sender: TObject);
+    procedure btApplyClick(Sender: TObject);
+    procedure DBEdit2Change(Sender: TObject);
+  private
+    { Private declarations }
+    id : Integer;
+    FParams: TStrings;
+    FOwnerHandle : Integer;
+    f:boolean;
+    FEvents: IConstructionSuggestEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+
+    function  Get_Owner:Integer; safecall;
+    procedure Set_Owner(val : Integer);  safecall;
+    {IParamInput}
+    function  Get_Params(const Name: WideString): OleVariant; safecall;
+    procedure Set_Params(const Name: WideString; Value: OleVariant); safecall;
+    property Params[const Name: WideString]: OleVariant read Get_Params write Set_Params;
+    {IInstance}
+    function InstanceInitialize: HResult; safecall;
+    function IUIObject.Initialize = InstanceInitialize;
+    function Cleanup: HResult; safecall;
+    {IUIObject}
+//    function  Get_Icon: OLE_HANDLE; safecall;
+    function UIObjectActivate: HResult; safecall;
+    function IUIObject.Activate = UIObjectActivate;
+    function QueryDeactivate: HResult; safecall;
+    function UIObjectDeactivate: HResult; safecall;
+    function IUIObject.Deactivate = UIObjectDeactivate;
+    function SaveState: HResult; safecall;
+    function  Get_Height : Integer; safecall;
+    function  Get_Width  : Integer; safecall;
+
+  public
+    { Public declarations }
+    procedure Initialize; override;
+    function  SaveData():Boolean;
+    procedure LoadData;
+  end;
+
+var
+    ConstructionSuggest:TConstructionSuggest;
+
+implementation
+
+uses ComObj, ComServ,sboapiDataModuleImpl,SBTranslateProc;
+
+{$R *.DFM}
+
+{ TConstructionSuggest }
+
+procedure TConstructionSuggest.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_ConstructionSuggestPage); }
+end;
+
+procedure TConstructionSuggest.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as IConstructionSuggestEvents;
+end;
+
+procedure TConstructionSuggest.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TConstructionSuggest.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TConstructionSuggest.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TConstructionSuggest.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TConstructionSuggest.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TConstructionSuggest.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TConstructionSuggest.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TConstructionSuggest.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TConstructionSuggest.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TConstructionSuggest.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TConstructionSuggest.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TConstructionSuggest.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TConstructionSuggest.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TConstructionSuggest.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TConstructionSuggest.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TConstructionSuggest.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TConstructionSuggest.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TConstructionSuggest.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TConstructionSuggest.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TConstructionSuggest._Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TConstructionSuggest.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TConstructionSuggest.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TConstructionSuggest.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TConstructionSuggest.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TConstructionSuggest.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TConstructionSuggest.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TConstructionSuggest.KeyPressEvent(Sender: TObject;
+  var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TConstructionSuggest.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TConstructionSuggest.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TConstructionSuggest.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TConstructionSuggest.Set_AxBorderStyle(
+  Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TConstructionSuggest.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TConstructionSuggest.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TConstructionSuggest.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TConstructionSuggest.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TConstructionSuggest.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TConstructionSuggest.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TConstructionSuggest.Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TConstructionSuggest.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TConstructionSuggest.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TConstructionSuggest.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TConstructionSuggest.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TConstructionSuggest.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TConstructionSuggest.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+
+function  TConstructionSuggest.Get_Owner:Integer;
+begin
+  Result := handle;
+end;
+
+procedure TConstructionSuggest.Set_Owner(val : Integer);
+begin
+  if val > 0 then
+     FOwnerHandle := val;
+end;
+
+
+function  TConstructionSuggest.Get_Params(const Name: WideString): OleVariant;
+begin
+  Result := FParams.Values[Name];
+end;
+
+procedure TConstructionSuggest.Set_Params(const Name: WideString; Value: OleVariant);
+begin
+  FParams.Values[Name] := Value;
+end;
+
+function TConstructionSuggest.InstanceInitialize: HResult;
+begin
+  Result := S_OK;
+end;
+
+function TConstructionSuggest.Cleanup: HResult;
+begin
+  Result := S_OK;
+end;
+
+function TConstructionSuggest.UIObjectActivate: HResult;
+begin
+          id:=StrToInt(Get_Params('ID'));
+          f:=true;
+          ODSConstruction.Locate('id',id,[]);
+          ODSContracts.Close;
+          ODSContracts.SetVariable('blankid',ODSConstructionID.value);
+          ODSContracts.Open;
+          ODSCONSTSUGGEST.CloseAll;
+          ODSCONSTSUGGEST.SetVariable('cid',id);
+          ODSConstSuggest.Open;
+          if ODSConstSuggest.RecordCount<1 then
+          begin
+             DTPContractDate.DateTime:=Now;
+             Caption := format(fmCaption, ['Elave']);
+          end
+          else
+             Caption := format(fmCaption, ['Redakte']);
+          if  ODSCONSTSUGGESTId.Value=0 then
+          begin
+              btPrint.Enabled:=false;
+              btPolicy.Enabled:=false;
+              //LoadData;
+              DTPContractDate.DateTime:=ODSConstSuggest.FieldByName('enddate').AsDateTime;
+          end;
+          DTPContractDate.DateTime:=ODSConstSuggest.FieldByName('enddate').AsDateTime;
+          //LoadData;
+          ODSConstSuggest.Edit;
+
+      // end;
+       Result := S_OK;
+end;
+
+function TConstructionSuggest.QueryDeactivate: HResult;
+begin
+  Result := S_OK;
+end;
+
+function TConstructionSuggest.UIObjectDeactivate: HResult;
+begin
+  Result := S_OK;
+end;
+
+function TConstructionSuggest.SaveState: HResult;
+begin
+  Result := S_OK;
+end;
+
+function  TConstructionSuggest.Get_Height : Integer;
+begin
+  Result := Height;
+end;
+
+function  TConstructionSuggest.Get_Width  : Integer;
+begin
+  Result := Width;
+end;
+
+procedure TConstructionSuggest.ActiveFormCreate(Sender: TObject);
+begin
+     ConstructionSuggest:=Self;
+     FParams := TStringList.Create;
+     SBTranslateProc.TranslateAllComponents(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TConstructionSuggest.BitBtn2Click(Sender: TObject);
+begin
+     PostMessage(FOwnerHandle, WM_ModalResult, mrCancel, 0);
+end;
+
+procedure TConstructionSuggest.LoadData;
+begin
+
+
+     DTPContractDate.DateTime:=ODSConstSuggest.FieldByName('enddate').AsDateTime;
+
+end;
+
+function TConstructionSuggest.SaveData: Boolean;
+begin
+     Result := False;
+   if   cbFranshiz.State = cbChecked then
+    with Franshiz do
+    begin
+        Insert;
+        //ODSConstSuggest.Insert;
+        FieldByName('name').asString := memFrashize.Text;
+        Post;
+        RefreshRecord;
+    end;
+
+    if   cbConditions.State = cbChecked then
+    with Conditions do
+    begin
+         Insert;
+         //ODSConstSuggest.Insert;
+         FieldByName('name').asString := memConditions.Text;
+         Post;
+         RefreshRecord;
+    end;
+
+    if   cbInterest.State = cbChecked then
+    with ODSInterest do
+    begin
+         Insert;
+         //ODSConstSuggest.Insert;
+         FieldByName('name').asString := memInterest.Text;
+         Post;
+         RefreshRecord;
+    end;
+
+    with ODSConstSuggest do
+    begin
+         FieldByName('cid').AsFloat := id;
+         FieldByName('frz_id').AsFloat := Franshiz.FieldByName('id').asFloat;
+         FieldByName('rfrz_id').AsFloat := Franshiz.FieldByName('id').asFloat;
+         FieldByName('cndt_id').AsFloat := Conditions.FieldByName('id').asFloat;
+         FieldByName('inter_id').AsFloat := ODSInterest.FieldByName('id').asFloat;
+         FieldByName('enddate').AsDateTime := DTPContractDate.DateTime;
+         if State in [dsInsert,dsEdit] then Post;
+         RefreshRecord();
+         if f then
+         begin
+            ODSContracts.Edit;
+            //ODSContracts.FieldByName('sugg_id').AsFloat := FieldByName('id').asFloat;
+            ODSContracts.FieldByName('ins_date').AsDateTime := DTPContractDate.DateTime;
+            ODSContracts.Post;
+         end;
+         f:=false;
+         result := True;
+    end;
+end;
+
+procedure TConstructionSuggest.BitBtn1Click(Sender: TObject);
+begin
+     if SaveData() then
+     PostMessage(FOwnerHandle, WM_ModalResult, mrOk, 0);
+end;
+
+procedure TConstructionSuggest.DBLookupComboBox3Click(Sender: TObject);
+begin
+     with Franshiz do
+     MemoRFranshiz.Text := FieldByName('name').asString;
+     btApply.Enabled:=true;
+end;
+
+procedure TConstructionSuggest.DBLookupComboBoxConditionClick(
+  Sender: TObject);
+begin
+     with Conditions do
+          memConditions.Text := FieldByName('name').asString;
+     btApply.Enabled:=true;
+end;
+
+procedure TConstructionSuggest.ETimeKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+     if Key = #13 then
+     begin
+        if HiWord(GetKeyState(VK_Shift))<>0 then
+           with Sender as TControl do
+           SelectNext(ActiveControl,False, True)
+        else
+           with Sender as TControl do
+           SelectNext(ActiveControl,True, True);
+        key:=#0;
+     end;
+end;
+
+procedure TConstructionSuggest.DBLookupComboBoxFranshizClick(
+  Sender: TObject);
+begin
+     with Franshiz do
+     memFrashize.Text := FieldByName('name').asString;
+     btApply.Enabled:=true;
+end;
+
+procedure TConstructionSuggest.DTPContractDateChange(Sender: TObject);
+var
+   Key:char;
+begin
+     ETimeKeyPress(Sender,Key);
+end;
+
+procedure TConstructionSuggest.ODSCONSTSUGGESTNewRecord(DataSet: TDataSet);
+begin
+     DataSet.FieldByName('ID').AsInteger:=PINS_construction.CallIntegerFunction('generateSugID', []);
+end;
+
+procedure TConstructionSuggest.btPrintClick(Sender: TObject);
+begin
+     ODSInterest.Locate('id',ODSCONSTSUGGESTInter_ID.Value,[]);
+     AValute.Locate('valute',ODSCOntractsValute_ID.Value,[]);
+     try
+        with ConstructionWordExporter do
+        begin
+             FileName:=ExtractFilePath(Application.ExeName)+ '\ConstructionSuggest.doc';
+             Open(False);
+             SetBookmark('Insured',CustomersName.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('IAddress',CustomersAddress.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('IPeriod',DateToStr(ODSContractsBegin_date.value)+' - '+DateToStr(ODSContractsEnd_date.value), false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('MLimit',CurrToStr(ODSCONSTSUGGESTMLimit.value), false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Franshiz',FranshizName.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('IValue',CurrToStr(ODSCONtractsAmmount.value), false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('RMLimit',CurrToStr(ODSCONSTSUGGESTRMLimit.value)+' '+AValuteValu_name.value, false, false, False, false, 8, 'Arial AzLat', False);
+         {?!}    SetBookmark('RFranshiz',FranshizName.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Inter',ODSInterestName.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('IValueMain',CurrToStr(ODSCONSTSUGGESTIValueMain.value), false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Employees',CurrToStr(ODSCONSTRUCTIONEmployes.value), false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('RIPeriod',ODSCONSTSUGGESTRPeriod.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('RIValue',CurrToStr(ODSCONSTSUGGESTRIValue.value), false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Cond',ConditionsName.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('EDate',DateToStr(ODSCONSTSUGGESTEndDate.value), false, false, False, false, 8, 'Arial AzLat', False);
+        end;
+    finally
+        ConstructionWordExporter.Show;
+    end;
+end;
+
+procedure TConstructionSuggest.btPolicyClick(Sender: TObject);
+var
+   p : TStringList;
+begin
+   p:=TStringList.Create;
+   p.Values['id']:=FloatToStr(ODSCONSTRUCTIONId.value);
+   p.Values['fid']:=FloatToStr(ODSCONSTSUGGESTfrz_id.Value);
+   p.Values['cdid']:=FloatToStr(ODSCONSTSUGGESTCNDT_id.Value);
+   p.Values['riskid']:=FloatToStr(ODSCONSTRUCTIONRiskId.value);
+  // p.Values['sid']:=FloatToStr(ODSCONSTSUGGESTCid.Value);
+   p.Values['Mod']:='Insert';
+   with plgPolicy do
+         ShowModal(StringToGuid('{FEE93B74-CDCF-49A1-A5D9-84162C91971C}'),p );
+   p.Free;
+
+end;
+
+procedure TConstructionSuggest.btApplyClick(Sender: TObject);
+begin
+   if SaveData() then
+   begin
+      btPolicy.Enabled:=true;
+      btPrint.Enabled:=true;
+      btApply.Enabled:=false;
+   end;
+end;
+
+procedure TConstructionSuggest.DBEdit2Change(Sender: TObject);
+begin
+     btApply.Enabled:=true;
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TConstructionSuggest,
+    Class_ConstructionSuggest,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

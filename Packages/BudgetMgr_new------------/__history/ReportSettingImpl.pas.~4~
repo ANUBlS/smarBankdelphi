@@ -1,0 +1,39 @@
+unit ReportSettingImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, CheckLst, Evanescence, ExtCtrls;
+
+type
+  TFrmRepSetting = class(TForm)
+    Panel1: TPanel;
+    Panel2: TPanel;
+    Button1: TButton;
+    AddOtherPAPERNO: TEvanescence;
+    procedure Button1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmRepSetting: TFrmRepSetting;
+
+implementation
+
+uses DmBudcetImpl, ProgresImpl;
+
+{$R *.dfm}
+
+procedure TFrmRepSetting.Button1Click(Sender: TObject);
+begin
+  DmBudcet.PackgSubdiv.CallProcedure('fakt_updateay',[]);
+      if not Assigned(ProgresFrm) then
+      ProgresFrm:= TProgresFrm.Create(application);
+     ProgresFrm.Show ;
+     end;
+
+end.

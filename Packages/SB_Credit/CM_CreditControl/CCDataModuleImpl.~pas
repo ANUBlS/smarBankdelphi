@@ -1,0 +1,53 @@
+unit CCDataModuleImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Oracle, Db, OracleData;
+
+type
+  TCCDataMod = class(TDataModule)
+    CM_CREDIT: TOraclePackage;
+    Accounts: TOracleDataSet;
+    AccountsCREDITID: TFloatField;
+    AccountsBOOROWERACCID: TFloatField;
+    AccountsLOANACCID: TFloatField;
+    AccountsDUELOANACCID: TFloatField;
+    AccountsINTERESTACCID: TFloatField;
+    AccountsDUEINTERESTACCID: TFloatField;
+    AccountsPRIMARYRESERVEACCID: TFloatField;
+    AccountsSECONDARYRESERVEACCID: TFloatField;
+    AccountsLOANACCNO: TStringField;
+    AccountsBOOROWERACCNO: TStringField;
+    AccountsINTERESTACCNO: TStringField;
+    AccountsDUELOANACCNO: TStringField;
+    AccountsPRIMARYRESACCNO: TStringField;
+    AccountsDUEINTERESTACCNO: TStringField;
+    AccountsSECONDARYRESACCNO: TStringField;
+    AccountsBOOROWERREST: TFloatField;
+    AccountsLOANREST: TFloatField;
+    AccountsINTERESTREST: TFloatField;
+    AccountsDUELOANREST: TFloatField;
+    AccountsPRIMARYRESREST: TFloatField;
+    AccountsDUEINTERESTREST: TFloatField;
+    AccountsSECONDARYRESREST: TFloatField;
+    AccountsDatSrc: TDataSource;
+    AccountsNAME: TStringField;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  CCDataMod: TCCDataMod;
+
+implementation
+
+{$R *.DFM}
+
+uses
+  CMOracleAPIDataModuleImpl;
+
+end.

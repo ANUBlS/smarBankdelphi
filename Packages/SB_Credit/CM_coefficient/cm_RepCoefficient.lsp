@@ -1,0 +1,1 @@
+-+c:\program files\embarcadero\rad studio\8.0\lib\Win32\release\Gauges.obj -+D:\Smart-Bank\Source\Packages\SB_Credit\CM_coefficient\coefficientImpl.obj -+c:\program files\embarcadero\rad studio\8.0\lib\Win32\release\SysInit.obj 

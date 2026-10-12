@@ -1,0 +1,44 @@
+unit PaymentsUnit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Menus, ImgList, ComCtrls, StdCtrls, Grids, DBGrids, ExtCtrls;
+
+type
+  TPayments = class(TForm)
+    Label4: TLabel;
+    Panel2: TPanel;
+    Gridin: TDBGrid;
+    Button2: TButton;
+    DateTimePicker1: TDateTimePicker;
+    DateTimePicker2: TDateTimePicker;
+    swImageList2: TImageList;
+    PopupMenu1: TPopupMenu;
+    Hesabat1: TMenuItem;
+    procedure Button2Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Payments: TPayments;
+
+implementation
+
+uses Datamodunit;
+
+{$R *.dfm}
+
+procedure TPayments.Button2Click(Sender: TObject);
+begin
+DataMod.Amountpays.CloseAll;
+DataMod.Amountpays.SetVariable('dat1',trunc(DateTimePicker1.DateTime));
+DataMod.Amountpays.SetVariable('dat2',trunc(DateTimePicker2.DateTime));
+DataMod.Amountpays.open;
+end;
+
+end.

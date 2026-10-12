@@ -1,0 +1,414 @@
+object NewDepsitDataModule: TNewDepsitDataModule
+  OldCreateOrder = False
+  OnCreate = DataModuleCreate
+  OnDestroy = DataModuleDestroy
+  Height = 565
+  Width = 766
+  object Valutes: TOracleDataSet
+    SQL.Strings = (
+      'select valute,valu_name '
+      'from avalute')
+    Optimize = False
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 32
+    Top = 72
+    object ValutesVALUTE: TIntegerField
+      FieldName = 'VALUTE'
+      Required = True
+    end
+    object ValutesVALU_NAME: TWideStringField
+      FieldName = 'VALU_NAME'
+      Size = 25
+    end
+  end
+  object ValutesDatSrc: TDataSource
+    DataSet = Valutes
+    Left = 120
+    Top = 72
+  end
+  object Filials: TOracleDataSet
+    SQL.Strings = (
+      'select id,name from '
+      'filial'
+      'order by id ')
+    Optimize = False
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 32
+    Top = 128
+    object FilialsID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object FilialsNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 90
+    end
+  end
+  object FilialsDatSrc: TDataSource
+    DataSet = Filials
+    Left = 120
+    Top = 128
+  end
+  object dm_types: TOracleDataSet
+    SQL.Strings = (
+      'select id,type'
+      'from dm_types')
+    Optimize = False
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 32
+    Top = 184
+    object dm_typesID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object dm_typesTYPE: TWideStringField
+      FieldName = 'TYPE'
+      Required = True
+      Size = 256
+    end
+  end
+  object dm_typesDatSrc: TDataSource
+    DataSet = dm_types
+    Left = 120
+    Top = 184
+  end
+  object dm_categories: TOracleDataSet
+    SQL.Strings = (
+      'select id,category from dm_categories')
+    Optimize = False
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 32
+    Top = 240
+    object dm_categoriesID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object dm_categoriesCATEGORY: TWideStringField
+      FieldName = 'CATEGORY'
+      Size = 128
+    end
+  end
+  object dm_categoriesDatSrc: TDataSource
+    DataSet = dm_categories
+    Left = 128
+    Top = 240
+  end
+  object dm_persons: TOracleDataSet
+    SQL.Strings = (
+      'select id,name from dm_persons')
+    Optimize = False
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 32
+    Top = 296
+    object dm_personsID: TFloatField
+      FieldName = 'ID'
+    end
+    object dm_personsNAME: TWideStringField
+      FieldName = 'NAME'
+    end
+  end
+  object dm_personsDatSrc: TDataSource
+    DataSet = dm_persons
+    Left = 120
+    Top = 296
+  end
+  object BankDate: TOracleDataSet
+    SQL.Strings = (
+      'select tek_dat from sysdat')
+    Optimize = False
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 216
+    Top = 24
+    object BankDateTEK_DAT: TDateTimeField
+      FieldName = 'TEK_DAT'
+      Required = True
+    end
+  end
+  object BankDateDatSrc: TDataSource
+    DataSet = BankDate
+    Left = 296
+    Top = 24
+  end
+  object FilialID: TOracleDataSet
+    SQL.Strings = (
+      'select kod_fil from bankinfo')
+    Optimize = False
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 216
+    Top = 88
+    object FilialIDKOD_FIL: TIntegerField
+      FieldName = 'KOD_FIL'
+    end
+  end
+  object FilialIDDatSrc: TDataSource
+    DataSet = FilialID
+    Left = 296
+    Top = 88
+  end
+  object dm_stored_programs: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'dm_stored_programs'
+    ParameterMode = pmNamed
+    Cursor = crSQLWait
+    Left = 232
+    Top = 160
+  end
+  object users: TOracleDataSet
+    SQL.Strings = (
+      'select id,name from user$'
+      'where id in (select sid# from dm_contracts group by sid#)')
+    Optimize = False
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 216
+    Top = 216
+    object usersID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object usersNAME: TWideStringField
+      FieldName = 'NAME'
+      Required = True
+      Size = 30
+    end
+  end
+  object usersDatSrc: TDataSource
+    DataSet = users
+    Left = 272
+    Top = 224
+  end
+  object dm_tranches: TOracleDataSet
+    SQL.Strings = (
+      'SELECT total,hdate'
+      '  FROM dm_tranches'
+      '  where id# = :ContractID'
+      'order by hdate')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000160000003A0043004F004E00540052004100430054004900
+      4400030000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      05000000030000000A000000480044004100540045000100000000000A000000
+      54004F00540041004C000100000000000E000000520045005300450052005600
+      4500010000000000}
+    Cursor = crSQLWait
+    MasterFields = 'ID'
+    DetailFields = 'CONTRACTID'
+    Session = sboapiDataModule.SBSession
+    Left = 240
+    Top = 288
+    object dm_tranchesTOTAL: TFloatField
+      Alignment = taCenter
+      DisplayLabel = #1052#1103#1073#1083#1103#1100
+      FieldName = 'TOTAL'
+    end
+    object dm_tranchesHDATE: TDateTimeField
+      Alignment = taCenter
+      DisplayLabel = ' '#1058#1072#1088#1080#1093
+      FieldName = 'HDATE'
+    end
+    object dm_tranchesRESERVE: TFloatField
+      Alignment = taCenter
+      DisplayLabel = #1060#1072#1080#1079
+      FieldName = 'RESERVE'
+    end
+  end
+  object sb_aca: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'sb_aca'
+    Left = 344
+    Top = 160
+  end
+  object DMDataSrc: TDataSource
+    DataSet = DmDataSet
+    Left = 648
+    Top = 33
+  end
+  object DmDataSet: TOracleDataSet
+    SQL.Strings = (
+      'select cont.rowid,'
+      '       cont.id,'
+      '       cont.contractno,'
+      '       av.val_name,'
+      
+        '       dm_stored_programs.getcustomername(cont.customerid) as Cu' +
+        'stomerName,'
+      '       cont.opendate,'
+      '       cont.closedate,'
+      '       cont.amount,'
+      '       interest,      '
+      
+        '       (select sum(facticaldebt) from dm_history_currstate where' +
+        ' id#=cont.id) as facticaldebt ,'
+      
+        '       (select sum(facticalinterestdebt) from dm_history_currsta' +
+        'te where id#=cont.id) as facticalinterestdebt,'
+      
+        '       (select ostat from tenostat where acc_id=acc.clientaccid)' +
+        ' as ostat,'
+      
+        '      (select type from dm_types where id=cont.contracttype)as c' +
+        'ontracttypename,'
+      '       cont.currency,'
+      '       cont.personaltype,'
+      '       cont.clienttype,'
+      '       cont.branchid,'
+      '       cont.contracttype,'
+      '       cont.customerid,'
+      '       cont.prolongationdate,'
+      '       cont.stopcalcdate,'
+      '       cont.sid# as usid,'
+      '       (select name from user$ where id=cont.sid#) username'
+      'from dm_active_contracts cont,'
+      '     dm_contract_accounts acc,'
+      '     avalute av'
+      'where acc.id# = cont.id and'
+      '      cont.currency = av.valute and'
+      '      cont.type# = 3 '
+      ''
+      'order by :OrderField     ')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000160000003A004F0052004400450052004600490045004C00
+      4400010000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000001600000004000000490044000100000000001400000043004F004E00
+      540052004100430054004E004F0001000000000010000000560041004C005F00
+      4E0041004D0045000100000000001800000043005500530054004F004D004500
+      52004E0041004D004500010000000000100000004F00500045004E0044004100
+      540045000100000000001200000043004C004F00530045004400410054004500
+      0100000000000C00000041004D004F0055004E00540001000000000010000000
+      49004E0054004500520045005300540001000000000018000000460041004300
+      54004900430041004C0044004500420054000100000000002800000046004100
+      430054004900430041004C0049004E0054004500520045005300540044004500
+      4200540001000000000010000000430055005200520045004E00430059000100
+      000000001800000050004500520053004F004E0041004C005400590050004500
+      0100000000001400000043004C00490045004E00540054005900500045000100
+      00000000100000004200520041004E0043004800490044000100000000001800
+      000043004F004E00540052004100430054005400590050004500010000000000
+      1400000043005500530054004F004D0045005200490044000100000000000800
+      000055005300490044000100000000000A0000004F0053005400410054000100
+      0000000020000000500052004F004C004F004E0047004100540049004F004E00
+      440041005400450001000000000018000000530054004F005000430041004C00
+      430044004100540045000100000000002000000043004F004E00540052004100
+      4300540054005900500045004E0041004D004500010000000000100000005500
+      5300450052004E0041004D004500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 568
+    Top = 32
+    object DmDataSetID: TFloatField
+      FieldName = 'ID'
+      Visible = False
+    end
+    object DmDataSetCONTRACTNO: TWideStringField
+      DisplayLabel = 'M'#252'qavil'#601'nin '#8470
+      FieldName = 'CONTRACTNO'
+      Size = 256
+    end
+    object DmDataSetVAL_NAME: TWideStringField
+      DisplayLabel = '$'
+      FieldName = 'VAL_NAME'
+      Size = 160
+    end
+    object DmDataSetCUSTOMERNAME: TWideStringField
+      DisplayLabel = 'M'#252#351't'#601'rinin ad'#305
+      FieldName = 'CUSTOMERNAME'
+      Size = 4000
+    end
+    object DmDataSetOPENDATE: TDateTimeField
+      DisplayLabel = 'A'#231#305'lma tarixi'
+      FieldName = 'OPENDATE'
+    end
+    object DmDataSetCLOSEDATE: TDateTimeField
+      DisplayLabel = 'Ba'#287'lanma tarixi'
+      FieldName = 'CLOSEDATE'
+    end
+    object DmDataSetAMOUNT: TFloatField
+      DisplayLabel = 'M'#601'bl'#601#287
+      FieldName = 'AMOUNT'
+      DisplayFormat = '#,##0.00'
+    end
+    object DmDataSetINTEREST: TFloatField
+      DisplayLabel = #304'llik %'
+      FieldName = 'INTEREST'
+      DisplayFormat = '#,##0.00'
+    end
+    object DmDataSetFACTICALDEBT: TFloatField
+      DisplayLabel = 'Cari M'#601'bl'#601#287
+      FieldName = 'FACTICALDEBT'
+      DisplayFormat = '#,##0.00'
+    end
+    object DmDataSetFACTICALINTERESTDEBT: TFloatField
+      DisplayLabel = 'Cari M'#601'bl'#601#287' '#252'zr'#601' %'
+      FieldName = 'FACTICALINTERESTDEBT'
+      DisplayFormat = '#,##0.00'
+    end
+    object DmDataSetOSTAT: TFloatField
+      DisplayLabel = 'Cari hesab'#305'n qal'#305#287#305
+      FieldName = 'OSTAT'
+    end
+    object DmDataSetCURRENCY: TFloatField
+      FieldName = 'CURRENCY'
+      Visible = False
+    end
+    object DmDataSetPERSONALTYPE: TFloatField
+      FieldName = 'PERSONALTYPE'
+      Visible = False
+    end
+    object DmDataSetCLIENTTYPE: TFloatField
+      FieldName = 'CLIENTTYPE'
+      Visible = False
+    end
+    object DmDataSetBRANCHID: TFloatField
+      FieldName = 'BRANCHID'
+      Visible = False
+    end
+    object DmDataSetCONTRACTTYPE: TIntegerField
+      DisplayLabel = 'Depozitin tipi'
+      FieldName = 'CONTRACTTYPE'
+      Visible = False
+    end
+    object DmDataSetCUSTOMERID: TFloatField
+      DisplayLabel = 'Depozit M'#252#351't'#601'ri id-si'
+      FieldName = 'CUSTOMERID'
+    end
+    object DmDataSetFilial: TWideStringField
+      FieldKind = fkLookup
+      FieldName = 'Filial'
+      LookupDataSet = Filials
+      LookupKeyFields = 'ID'
+      LookupResultField = 'NAME'
+      KeyFields = 'BRANCHID'
+      Lookup = True
+    end
+    object DmDataSetUSID: TFloatField
+      FieldName = 'USID'
+      Visible = False
+    end
+    object DmDataSetPROLONGATIONDATE: TDateTimeField
+      DisplayLabel = 'Uzad'#305'lma tarixi'
+      FieldName = 'PROLONGATIONDATE'
+    end
+    object DmDataSetSTOPCALCDATE: TDateTimeField
+      DisplayLabel = 'Dayand'#305'r'#305'lma tarixi'
+      FieldName = 'STOPCALCDATE'
+    end
+    object DmDataSetCONTRACTTYPENAME: TWideStringField
+      DisplayLabel = 'Depozitin tipi'
+      FieldName = 'CONTRACTTYPENAME'
+      Size = 2000
+    end
+    object DmDataSetUSERNAME: TWideStringField
+      DisplayLabel = #304'stifad'#601#231'inin ad'#305
+      FieldName = 'USERNAME'
+      Size = 128
+    end
+  end
+end

@@ -1,0 +1,301 @@
+unit finger;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, DB, OracleData, StdCtrls, DBCtrls, Grids, DBGrids;
+
+type
+  Tfingers = class(TForm)
+    LogMemo: TMemo;
+    Save2DbButton: TButton;
+    TakeSampleButton: TButton;
+    DataSource1: TDataSource;
+    Label1: TLabel;
+    OracleDataSet12: TOracleDataSet;
+    OracleDataSet2: TOracleDataSet;
+    OracleDataSet2TEST: TFloatField;
+    OracleDataSet12ID: TFloatField;
+    OracleDataSet12TYPE: TWideStringField;
+    OracleDataSet12OBJ: TWideStringField;
+    OracleDataSet12CREATEDATE: TDateTimeField;
+    OracleDataSet12DESCRIPTION: TWideStringField;
+    OracleDataSet12FULLNAME: TWideStringField;
+    OracleDataSet12PHONE: TWideStringField;
+    OracleDataSet12CLASSID: TFloatField;
+    OracleDataSet12FILIALID: TFloatField;
+    OracleDataSet12ADVTYPE: TFloatField;
+    OracleDataSet12SYSUSERID: TFloatField;
+    OracleDataSet12USER_FIRST_NAME: TWideStringField;
+    OracleDataSet12USER_LAST_NAME: TWideStringField;
+    OracleDataSet12USER_MIDDLE_NAME: TWideStringField;
+    OracleDataSet12USER_ADRESS: TWideStringField;
+    OracleDataSet12USER_PHONE: TWideStringField;
+    OracleDataSet12FINGER: TBlobField;
+    OracleDataSet12FINGER2: TBlobField;
+    OracleDataSet12FINGER3: TFloatField;
+    OracleDataSet1: TOracleDataSet;
+    Image1: TDBImage;
+    Button1: TButton;
+    OracleDataSet1USERNAME: TWideStringField;
+    OracleDataSet1FINGER: TBlobField;
+    OracleDataSet1FINGER2: TBlobField;
+    procedure FormActivate(Sender: TObject);
+    procedure TakeSampleButtonClick(Sender: TObject);
+    procedure Save2DbButtonClick(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+  private
+    { Private declarations }
+        pScanner: Pointer;
+    pLastScannedImpression: Pointer;
+    FLastTemplate: Pointer;
+    FDBDir: String;
+  public
+    { Public declarations }
+    filename:string;
+  end;
+
+var
+  fingers: Tfingers;
+
+implementation
+
+uses AdministrationMainForm, AdministrationDataModule,bsdkdll,sboapidatamoduleimpl;
+
+{$R *.dfm}
+
+//--------------------------------------------------
+     procedure FreeTemplate();
+ var
+ FLastTemplate: Pointer;
+begin
+  if (FLastTemplate <> nil) then
+  begin
+    BSDK_Destroy_Object(FLastTemplate);
+    FLastTemplate := nil;
+  end;
+end;
+
+function ScanImage(pScanner : pointer) : pointer;
+var
+  pImage : pointer;
+  expressQuality : integer;
+  res : integer;
+begin
+  expressQuality := 0;
+  pImage := nil;
+  while (expressQuality < 20) do begin
+      if (pImage <> nil) then
+          BSDK_Destroy_Object(pImage);
+
+      //acquiring image from the scanner
+      res := Bsdk_Scanner_AcquireImage(pScanner, pImage);
+      CheckResult(res);
+
+      //getting image quality
+      expressQuality := Bsdk_Image_GetExpressQuality(pImage, 8);
+  end;
+
+  Result := pImage;
+end;
+
+function Initialize(): Pointer;
+var
+  res: integer;
+  pDeviceList: pointer;
+  pDeviceDescriptorPtr: pointer;
+  pScanner: pointer;
+begin
+  //creating License object
+  res := bsdk_License_Create(BSDK_LICENSE_TYPE_ALL);
+  CheckResult(res);
+
+  //creating the list of devices
+  res := BSDK_DeviceList_Create(pDeviceList, Bsdk_Device_Type_Scanner_Any);
+  CheckResult(res);
+  if (BSDK_DeviceList_GetSize(pDeviceList)= 0) then
+    raise Exception.Create('Scanner was not found');
+
+  //selecting first found device
+  pDeviceDescriptorPtr := BSDK_DeviceList_GetDeviceDescriptor(pDeviceList, 0);
+  //creating Scanner object
+  res := Bsdk_Scanner_Create(pScanner, pDeviceDescriptorPtr);
+  CheckResult(res);
+
+  Result := pScanner;
+end;
+
+ procedure LogMessage(const Msg: String);
+begin
+  fingers.LogMemo.Lines.Add(Msg);
+end;
+
+
+
+
+
+//-----------------------------------------------------
+
+
+
+
+
+procedure Tfingers.Button1Click(Sender: TObject);
+begin
+  AdministrationData.clsf.Close;
+  AdministrationData.clsf.SetVariable('t','U');
+ AdministrationData.clsf.SetVariable('cls',AdministrationForm.edUsInfName.text);
+
+
+AdministrationData.clsf.open;
+  AdministrationData.clsf.Edit;
+end;
+
+procedure Tfingers.FormActivate(Sender: TObject);
+begin
+
+Label1.Caption:=AdministrationForm.edUsInfName.text;
+
+  pScanner := nil;
+
+  LogMessage('Initializing...');
+  Repaint();
+
+  FDBDir := GetCurrentDir()+'\DB';
+  pScanner := Initialize();
+
+  LogMessage('Ready!');
+
+
+  //OracleDataSet1.Edit;
+end;
+
+procedure Tfingers.FormShow(Sender: TObject);
+begin
+ OracleDataSet1.Close;
+ //OracleDataSet1.SetVariable('t','U');
+ OracleDataSet1.SetVariable('nam',AdministrationForm.edUsInfName.text);
+
+
+OracleDataSet1.open;
+ShowMessage(OracleDataSet1.FieldByName('username').asstring);
+ // AdministrationData.clsf.Edit;
+//ShowMessage(AdministrationData.clsf.FieldByName('obj').asstring);
+//ShowMessage(AdministrationForm.edUsInfName.text);
+
+end;
+
+procedure Tfingers.Save2DbButtonClick(Sender: TObject);
+ Var Stream2: TStream;
+  Stream1: TFileStream;
+    res: Integer;
+  templateLength: Cardinal;
+  bufferTemplate: PChar;
+  FileName: String;
+  pTransfered: Integer;
+begin
+if MessageDlg('Save finger?',mtinformation,[mbyes,mbno],0)=mryes then
+begin
+  //AdministrationData.clsf.Close;
+   //OracleDataSet1.Close;
+
+  //OracleDataSet1.SetVariable('nam',administrationform.edUsInfName.text);
+
+  //AdministrationData.clsf.refresh;
+       //OracleDataSet1.Session.Commit;
+    //AdministrationData.clsf.edit;
+    OracleDataSet1.edit;
+
+
+
+  LogMessage('Storing to database...');
+  //saving template to bufferTemplate1 byte array
+  templateLength := Bsdk_Template_GetSize(FLastTemplate);
+  GetMem(bufferTemplate, templateLength);
+  res := Bsdk_Template_Save(FLastTemplate, bufferTemplate, templateLength, pTransfered);
+  CheckResult(res);
+  OracleDataSet2.open;
+      FileName:=OracleDataSet2TEST.AsString;
+  // save template
+  //if InputQuery('', 'Enter file name: ', FileName) then
+    with TFileStream.Create(FDBDir+'\'+FileName+'.bin', fmCreate) do
+    try
+      WriteBuffer(PChar(bufferTemplate)^, templateLength);
+    finally
+      Free;
+    end;
+   Stream1 := TFileStream.Create(FDBDir+'\'+FileName+'.bin', fmOpenRead);
+
+Stream2 := OracleDataSet1.CreateBlobStream(OracleDataSet1.fieldbyname('finger2'), bmWrite);
+Stream2.CopyFrom(Stream1, Stream1.Size);
+
+//Oracledataset1.fieldbyname('id').asinteger :=10;
+      FreeAndNil(Stream1);
+      FreeAndNil(Stream2);
+
+      OracleDataSet1.Post;
+      //OracleDataSet1.Close;
+      //OracleDataSet1.Open;
+     DeleteFile(FDBDir+'\'+FileName+'.bin');
+    end;
+   end;
+
+
+procedure Tfingers.TakeSampleButtonClick(Sender: TObject);
+var
+  res: Integer;
+  Bmp: PChar;
+  BmpSize: Integer;
+const
+  pImageSet: Pointer = nil;
+  pImageProcessor: Pointer = nil;
+  pTemp: Pointer = nil;
+begin
+
+filename:=FDBDir+'\'+OracleDataSet2TEST.AsString+'.bmp';
+
+//filename:='D:\123.bmp';
+  LogMessage('Acquiring fingerprint...');
+  pLastScannedImpression := ScanImage(pScanner);
+
+  GetMem(Bmp, 500*500);
+  CheckResult(Bsdk_Image_Save(pLastScannedImpression, Bmp, 500*500, BmpSize));
+  with TFileStream.Create(filename, fmCreate) do
+  try
+    WriteBuffer(PChar(Bmp)^, BmpSize);
+  finally
+    Free;
+  end;
+  Image1.Picture.Bitmap.LoadFromFile(filename);
+
+  FreeTemplate();
+
+  //creating ImageSet object to hold Image objects
+  res := Bsdk_ImageSet_Create(pImageSet);
+  CheckResult(res);
+  //adding Image objects to ImageSet with some FingerCode
+  res := Bsdk_ImageSet_AddImage(pImageSet, pLastScannedImpression, 0);
+  CheckResult(res);
+
+  //creating ImageProcessor object to create template
+  //You can specify math type when creating ImageProcessor, Template, TemplateSet or Matcher objects.
+  //The math type should be the same for all these objects.
+  res := Bsdk_ImageProcessor_Create(pImageProcessor, 0);
+  CheckResult(res);
+
+  res := Bsdk_ImageProcessor_CreateTemplateFromImageSet(pImageProcessor, pImageSet, pTemp);
+  CheckResult(res);
+
+  BSDK_Destroy_Object(pImageProcessor);
+  BSDK_Destroy_Object(pImageSet);
+
+  FLastTemplate := pTemp;
+
+  LogMessage('Done!');
+    DeleteFile(filename);
+    end;
+
+
+end.

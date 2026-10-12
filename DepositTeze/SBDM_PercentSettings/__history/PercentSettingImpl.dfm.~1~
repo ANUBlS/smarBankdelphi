@@ -1,0 +1,766 @@
+object PercentSetting: TPercentSetting
+  Left = 423
+  Top = 139
+  Width = 510
+  Height = 693
+  VertScrollBar.Tracking = True
+  BorderIcons = [biSystemMenu]
+  Color = clBtnFace
+  Font.Charset = RUSSIAN_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poScreenCenter
+  OnDestroy = FormDestroy
+  OnKeyPress = FormKeyPress
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object XFGroupBox1: TXFGroupBox
+    Left = 0
+    Top = 0
+    Width = 502
+    Height = 118
+    Align = alTop
+    Caption = 'Депозитлярин типляри'
+    Gradient.SwapColors = True
+    TabOrder = 0
+    object XDBGrid1: TXDBGrid
+      Left = 2
+      Top = 15
+      Width = 498
+      Height = 101
+      Align = alClient
+      DataSource = DepositTypesDatSrc
+      FillerIndex = -13
+      FixedStyle = fsFine
+      FixedTheme = ftNone
+      Gradient.EndColor = clActiveCaption
+      Gradient.HotColor = clActiveCaption
+      Gradient.StartColor = clActiveCaption
+      GridStyle.VisualStyle = vsXPStyle
+      IndicatorWidth = 11
+      Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgConfirmDelete, dgCancelOnExit, dgExtendedSelect, dgInternalSelect, dgRowResize, dgRowScroll, dgHotButtons, dgTitleButtons, dgTitleHeaders, dgTitleWidthOff, dgMarkerAutoAlign, dgMarkerAutoToggle]
+      OptionsEx = [dgTotalHeaderBox, dgTotalValuesBox, dgTotalFieldsBox, dgTotalFooterBox, dgAutoAscendOrder, dgAutoUpdateSequence, dgDelayUpdateSequence, dgAutoUpdateTotals, dgDelayUpdateTotals, dgCalcWholeDataSet, dgDelaySelectedRows, dgSelectedAutoHidden]
+      OptionsExt = [dgAutoNumberColumn, dgAutoUpdateListItems, dgDelayUpdateListItems, dgGridStyleLists, dgMouseScrolling]
+      ParentShowHint = False
+      ScrollBars = ssNone
+      ScrollProp.ParentStyle = False
+      ScrollProp.Style = ssHotTrack
+      ScrollProp.ThumbBar = ssVertical
+      SelectCellColor = clTeal
+      SelectionColor = clScrollBar
+      SelectRowColor = clTeal
+      ShowHint = False
+      TabOrder = 0
+      Columns = <
+        item
+          AutoNumber = True
+          Expanded = False
+          FieldName = 'ID'
+          Title.Alignment = taCenter
+          Title.Caption = '№'
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = []
+          Visible = True
+          Width = 37
+        end
+        item
+          Expanded = False
+          FieldName = 'TYPE'
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = []
+          Visible = True
+        end>
+    end
+  end
+  object XFPanel1: TXFPanel
+    Left = 0
+    Top = 118
+    Width = 502
+    Height = 135
+    Align = alTop
+    BevelInner = bvLowered
+    BevelOuter = bvNone
+    TabOrder = 1
+    object XFGroupBox2: TXFGroupBox
+      Left = 1
+      Top = 1
+      Width = 249
+      Height = 133
+      Align = alLeft
+      Caption = 'Мцддятляр цзря'
+      Gradient.SwapColors = True
+      TabOrder = 0
+      object XDBGrid2: TXDBGrid
+        Left = 2
+        Top = 15
+        Width = 245
+        Height = 116
+        Align = alClient
+        DataSource = depperiodsds
+        FillerIndex = -13
+        FixedStyle = fsFine
+        FixedTheme = ftNone
+        Gradient.EndColor = clActiveCaption
+        Gradient.HotColor = clInactiveCaption
+        Gradient.StartColor = clActiveCaption
+        GridStyle.VisualStyle = vsXPStyle
+        IndicatorWidth = 11
+        ScrollBars = ssNone
+        SelectCellColor = clTeal
+        SelectRowColor = clTeal
+        TabOrder = 0
+        OnKeyDown = XDBGrid3KeyDown
+        Columns = <
+          item
+            Expanded = False
+            FieldName = 'PERIOD'
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clMenuText
+            Font.Height = -11
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = []
+            Title.Alignment = taCenter
+            Title.Font.Charset = RUSSIAN_CHARSET
+            Title.Font.Color = clWhite
+            Title.Font.Height = -11
+            Title.Font.Name = 'Azl Sans Serif'
+            Title.Font.Style = []
+            Visible = True
+            Width = 72
+          end
+          item
+            Expanded = False
+            FieldName = 'DESCRIPTION'
+            Title.Font.Charset = RUSSIAN_CHARSET
+            Title.Font.Color = clWhite
+            Title.Font.Height = -11
+            Title.Font.Name = 'Azl Sans Serif'
+            Title.Font.Style = []
+            Visible = True
+            Width = 126
+          end>
+      end
+    end
+    object XFGroupBox3: TXFGroupBox
+      Left = 250
+      Top = 1
+      Width = 252
+      Height = 133
+      Align = alLeft
+      Caption = 'Капиталлашдырма мцдяттляри цзря'
+      Gradient.SwapColors = True
+      TabOrder = 1
+      object XDBGrid3: TXDBGrid
+        Left = 2
+        Top = 15
+        Width = 248
+        Height = 116
+        Align = alClient
+        DataSource = depcapitalperiodsds
+        FillerIndex = -13
+        FixedStyle = fsFine
+        FixedTheme = ftNone
+        Gradient.EndColor = clActiveCaption
+        Gradient.HotColor = clActiveCaption
+        Gradient.StartColor = clActiveCaption
+        GridStyle.VisualStyle = vsXPStyle
+        IndicatorWidth = 11
+        ScrollBars = ssNone
+        SelectCellColor = clTeal
+        SelectRowColor = clTeal
+        TabOrder = 0
+        OnKeyDown = XDBGrid3KeyDown
+        Columns = <
+          item
+            Expanded = False
+            FieldName = 'PERIOD'
+            Title.Font.Charset = RUSSIAN_CHARSET
+            Title.Font.Color = clWhite
+            Title.Font.Height = -11
+            Title.Font.Name = 'Azl Sans Serif'
+            Title.Font.Style = []
+            Visible = True
+            Width = 78
+          end
+          item
+            Expanded = False
+            FieldName = 'DESCRIPTION'
+            Title.Alignment = taCenter
+            Title.Font.Charset = RUSSIAN_CHARSET
+            Title.Font.Color = clWhite
+            Title.Font.Height = -11
+            Title.Font.Name = 'Azl Sans Serif'
+            Title.Font.Style = []
+            Visible = True
+            Width = 82
+          end
+          item
+            Expanded = False
+            FieldName = 'TYPE#'
+            PickText.Strings = (
+              'TOCONTRACT'
+              'TOCLIENT')
+            Title.Alignment = taCenter
+            Title.Caption = 'Типи'
+            Title.Font.Charset = RUSSIAN_CHARSET
+            Title.Font.Color = clWhite
+            Title.Font.Height = -11
+            Title.Font.Name = 'Azl Sans Serif'
+            Title.Font.Style = []
+            Visible = True
+            Width = 66
+          end>
+      end
+    end
+  end
+  object XFGroupBox4: TXFGroupBox
+    Left = 0
+    Top = 253
+    Width = 502
+    Height = 125
+    Align = alTop
+    Caption = 'Валйуталар'
+    Gradient.SwapColors = True
+    TabOrder = 2
+    object XDBGrid4: TXDBGrid
+      Left = 2
+      Top = 15
+      Width = 498
+      Height = 108
+      Align = alClient
+      DataSource = ValutesDatSrc
+      FixedStyle = fsFine
+      FixedTheme = ftNone
+      Gradient.EndColor = clActiveCaption
+      Gradient.HotColor = clActiveCaption
+      Gradient.StartColor = clActiveCaption
+      GridStyle.VisualStyle = vsXPStyle
+      IndicatorWidth = 11
+      OptionsExt = [dgAutoNumberColumn, dgAutoUpdateListItems, dgDelayUpdateListItems, dgGridStyleLists, dgMouseScrolling]
+      ScrollBars = ssNone
+      SelectCellColor = clTeal
+      SelectRowColor = clTeal
+      TabOrder = 0
+      Columns = <
+        item
+          AutoNumber = True
+          Expanded = False
+          FieldName = 'VALUTE'
+          Title.Alignment = taCenter
+          Title.Caption = '№'
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = []
+          Visible = True
+          Width = 36
+        end
+        item
+          Alignment = taCenter
+          Expanded = False
+          FieldName = 'VAL_NAME'
+          Title.Alignment = taCenter
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = []
+          Visible = True
+          Width = 48
+        end
+        item
+          Expanded = False
+          FieldName = 'VALU_NAME'
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = []
+          Visible = True
+        end>
+    end
+  end
+  object XFGroupBox5: TXFGroupBox
+    Left = 0
+    Top = 378
+    Width = 502
+    Height = 125
+    Align = alTop
+    Caption = 'Мябляьляр вя Фаизляр'
+    Gradient.SwapColors = True
+    TabOrder = 3
+    object XDBGrid5: TXDBGrid
+      Left = 2
+      Top = 15
+      Width = 498
+      Height = 108
+      Align = alClient
+      DataSource = PerSettingDatSrc
+      FixedStyle = fsFine
+      FixedTheme = ftNone
+      Gradient.EndColor = clActiveCaption
+      Gradient.HotColor = clActiveCaption
+      Gradient.StartColor = clActiveCaption
+      GridStyle.VisualStyle = vsXPStyle
+      IndicatorWidth = 11
+      OptionsExt = [dgAutoNumberColumn, dgAutoUpdateListItems, dgDelayUpdateListItems, dgGridStyleLists, dgMouseScrolling]
+      ScrollBars = ssNone
+      SelectCellColor = clTeal
+      SelectRowColor = clTeal
+      TabOrder = 0
+      OnKeyPress = XDBGrid5KeyPress
+      Columns = <
+        item
+          Expanded = False
+          FieldName = 'FIRSTAMOUNT'
+          Title.Alignment = taCenter
+          Title.Caption = 'Мябляь(мин)'
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = []
+          Visible = True
+          Width = 78
+        end
+        item
+          Expanded = False
+          FieldName = 'LASTAMOUNT'
+          Title.Alignment = taCenter
+          Title.Caption = 'Мябляь(мах)'
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = []
+          Visible = True
+          Width = 73
+        end
+        item
+          Expanded = False
+          FieldName = 'INTERESTRATE'
+          Title.Alignment = taCenter
+          Title.Caption = 'Иллик%'
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = []
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'BEFOINTRATE'
+          Title.Alignment = taCenter
+          Title.Caption = 'М.Я.%'
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = []
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'DUEINTRATE'
+          Title.Alignment = taCenter
+          Title.Caption = 'М.С.%'
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = []
+          Visible = True
+        end>
+    end
+  end
+  object XFGroupBox6: TXFGroupBox
+    Left = 0
+    Top = 503
+    Width = 502
+    Height = 130
+    Align = alClient
+    Caption = 'Мцддятдян яввял фаиз дяряжяляри'
+    Gradient.SwapColors = True
+    TabOrder = 4
+    object XDBGrid6: TXDBGrid
+      Left = 2
+      Top = 15
+      Width = 498
+      Height = 113
+      Align = alClient
+      DataSource = DatsettingsDatSrc
+      FixedStyle = fsFine
+      FixedTheme = ftNone
+      Gradient.EndColor = clActiveCaption
+      Gradient.HotColor = clActiveCaption
+      Gradient.StartColor = clActiveCaption
+      GridStyle.DataRowSpace = 4
+      GridStyle.HeaderRowSpace = 8
+      GridStyle.TitleColMargin = 1
+      GridStyle.TitleRowSpace = 8
+      GridStyle.TotalColMargin = 0
+      GridStyle.TotalRowSpace = 8
+      GridStyle.VisualStyle = vsCustom
+      IndicatorWidth = 11
+      ScrollBars = ssNone
+      SelectCellColor = clTeal
+      SelectRowColor = clTeal
+      TabOrder = 0
+      OnKeyPress = XDBGrid6KeyPress
+      Columns = <
+        item
+          Expanded = False
+          FieldName = 'FIRSTDATEINT'
+          Title.Alignment = taCenter
+          Title.Caption = 'Дюврцн яввяли'
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = []
+          Visible = True
+          Width = 85
+        end
+        item
+          Expanded = False
+          FieldName = 'LASTDATEINT'
+          Title.Alignment = taCenter
+          Title.Caption = 'Дюврцн сону'
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = []
+          Visible = True
+          Width = 102
+        end
+        item
+          Expanded = False
+          FieldName = 'PERCENT'
+          Title.Alignment = taCenter
+          Title.Caption = 'Иллик%'
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = []
+          Visible = True
+          Width = 69
+        end>
+    end
+  end
+  object XFStatusBar1: TXFStatusBar
+    Left = 0
+    Top = 633
+    Width = 502
+    Height = 26
+    Panels = <>
+    SimplePanel = False
+  end
+  object DepositTypes: TOracleDataSet
+    SQL.Strings = (
+      'SELECT id, type'
+      '  FROM sbcm_deposit_types')
+    QBEDefinition.QBEFieldDefs = {
+      0400000002000000020000004944010000000000040000005459504501000000
+      0000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 312
+    Top = 80
+    object DepositTypesID: TFloatField
+      DisplayWidth = 10
+      FieldName = 'ID'
+      Required = True
+    end
+    object DepositTypesTYPE: TWideStringField
+      DisplayLabel = 'Типи'
+      DisplayWidth = 39
+      FieldName = 'TYPE'
+      Required = True
+      Size = 256
+    end
+  end
+  object DepositTypesDatSrc: TDataSource
+    DataSet = DepositTypes
+    OnDataChange = DepositTypesDatSrcDataChange
+    Left = 360
+    Top = 80
+  end
+  object Valutes: TOracleDataSet
+    SQL.Strings = (
+      'select valute,val_name,valu_name from avalute')
+    QBEDefinition.QBEFieldDefs = {
+      04000000030000000600000056414C5554450100000000000800000056414C5F
+      4E414D450100000000000900000056414C555F4E414D45010000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 248
+    Top = 312
+    object ValutesVAL_NAME: TWideStringField
+      DisplayLabel = '$'
+      FieldName = 'VAL_NAME'
+      Size = 10
+    end
+    object ValutesVALU_NAME: TWideStringField
+      DisplayLabel = 'Ады'
+      FieldName = 'VALU_NAME'
+      Size = 25
+    end
+    object ValutesVALUTE: TIntegerField
+      FieldName = 'VALUTE'
+      Required = True
+    end
+  end
+  object ValutesDatSrc: TDataSource
+    DataSet = Valutes
+    Left = 288
+    Top = 312
+  end
+  object DepositPerSetting: TOracleDataSet
+    SQL.Strings = (
+      
+        'SELECT id,rowid, currencyid, interestrate,dueintrate,firstamount' +
+        ',lastamount,depid, periodid, capitalid, befointrate'
+      'FROM sbcm_depositpersetting where Depid     = :depid'
+      'and   Periodid  = :periodid  '
+      'and   Capitalid = :capitalid'
+      'and   Currencyid=:currencyid'
+      '')
+    Variables.Data = {
+      0300000004000000060000003A44455049440300000000000000000000000900
+      00003A504552494F4449440300000000000000000000000A0000003A43415049
+      54414C49440300000000000000000000000B0000003A43555252454E43594944
+      030000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      040000000A0000000200000049440100000000000A00000043555252454E4359
+      49440100000000000C000000494E544552455354524154450100000000000A00
+      0000445545494E54524154450100000000000500000044455049440100000000
+      0008000000504552494F444944010000000000090000004341504954414C4944
+      0100000000000B0000004245464F494E54524154450100000000000B00000046
+      49525354414D4F554E540100000000000A0000004C415354414D4F554E540100
+      00000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    AfterPost = DepositPerSettingAfterPost
+    Left = 336
+    Top = 432
+    object DepositPerSettingID: TFloatField
+      FieldName = 'ID'
+    end
+    object DepositPerSettingCURRENCYID: TFloatField
+      FieldName = 'CURRENCYID'
+      Required = True
+    end
+    object DepositPerSettingINTERESTRATE: TFloatField
+      FieldName = 'INTERESTRATE'
+      Required = True
+    end
+    object DepositPerSettingDUEINTRATE: TFloatField
+      FieldName = 'DUEINTRATE'
+    end
+    object DepositPerSettingFIRSTAMOUNT: TFloatField
+      FieldName = 'FIRSTAMOUNT'
+    end
+    object DepositPerSettingLASTAMOUNT: TFloatField
+      FieldName = 'LASTAMOUNT'
+    end
+    object DepositPerSettingDEPID: TFloatField
+      FieldName = 'DEPID'
+    end
+    object DepositPerSettingPERIODID: TFloatField
+      FieldName = 'PERIODID'
+    end
+    object DepositPerSettingCAPITALID: TFloatField
+      FieldName = 'CAPITALID'
+    end
+    object DepositPerSettingBEFOINTRATE: TFloatField
+      FieldName = 'BEFOINTRATE'
+    end
+  end
+  object PerSettingDatSrc: TDataSource
+    DataSet = DepositPerSetting
+    OnDataChange = PerSettingDatSrcDataChange
+    Left = 384
+    Top = 432
+  end
+  object NLSLocalizer1: TNLSLocalizer
+    Caption = 'Фаизлярин сазланмасы'
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    Left = 368
+    Top = 472
+  end
+  object Depositdatsettings: TOracleDataSet
+    SQL.Strings = (
+      'SELECT id,rowid, percent, firstdateint, lastdateint, valcod,'
+      '       depid, periodid, capitalid, depsetid'
+      'FROM  sbcm_depositunitime'
+      'where Depid     = :depid'
+      'and   Periodid  = :periodid  '
+      'and   Capitalid = :capitalid'
+      'and   valcod    = :valcod'
+      'and   depsetid  = :depsetid'
+      '       '
+      '')
+    Variables.Data = {
+      0300000005000000060000003A44455049440300000000000000000000000900
+      00003A504552494F4449440300000000000000000000000A0000003A43415049
+      54414C4944030000000000000000000000070000003A56414C434F4403000000
+      0000000000000000090000003A44455053455449440300000000000000000000
+      00}
+    QBEDefinition.QBEFieldDefs = {
+      04000000090000000200000049440100000000000700000050455243454E5401
+      00000000000C000000464952535444415445494E540100000000000B0000004C
+      41535444415445494E540100000000000600000056414C434F44010000000000
+      05000000444550494401000000000008000000504552494F4449440100000000
+      00090000004341504954414C4944010000000000080000004445505345544944
+      010000000000}
+    Cursor = crSQLWait
+    QueryAllRecords = False
+    Session = sboapiDataModule.SBSession
+    Left = 256
+    Top = 568
+    object DepositdatsettingsID: TFloatField
+      FieldName = 'ID'
+    end
+    object DepositdatsettingsPERCENT: TFloatField
+      FieldName = 'PERCENT'
+    end
+    object DepositdatsettingsFIRSTDATEINT: TFloatField
+      FieldName = 'FIRSTDATEINT'
+    end
+    object DepositdatsettingsLASTDATEINT: TFloatField
+      FieldName = 'LASTDATEINT'
+    end
+    object DepositdatsettingsVALCOD: TFloatField
+      FieldName = 'VALCOD'
+    end
+    object DepositdatsettingsDEPID: TFloatField
+      FieldName = 'DEPID'
+    end
+    object DepositdatsettingsPERIODID: TFloatField
+      FieldName = 'PERIODID'
+    end
+    object DepositdatsettingsCAPITALID: TFloatField
+      FieldName = 'CAPITALID'
+    end
+    object DepositdatsettingsDEPSETID: TFloatField
+      FieldName = 'DEPSETID'
+    end
+  end
+  object DatsettingsDatSrc: TDataSource
+    DataSet = Depositdatsettings
+    Left = 312
+    Top = 568
+  end
+  object depperiods: TOracleDataSet
+    SQL.Strings = (
+      'select id,rowid,period,description,depid from sbcm_depperiods'
+      'where depid = :depid'
+      'order by period ')
+    Variables.Data = {
+      0300000001000000060000003A44455049440400000008000000000000000000
+      F03F00000000}
+    QBEDefinition.QBEFieldDefs = {
+      040000000400000006000000504552494F440100000000000200000049440100
+      000000000B0000004445534352495054494F4E01000000000005000000444550
+      4944010000000000}
+    Cursor = crSQLWait
+    Master = DepositTypes
+    MasterFields = 'ID'
+    DetailFields = 'DEPID'
+    Session = sboapiDataModule.SBSession
+    AfterPost = depperiodsAfterPost
+    Left = 136
+    Top = 208
+    object depperiodsID: TFloatField
+      FieldName = 'ID'
+    end
+    object depperiodsPERIOD: TFloatField
+      DisplayLabel = 'Период(айларла)'
+      FieldName = 'PERIOD'
+      Required = True
+    end
+    object depperiodsDESCRIPTION: TWideStringField
+      DisplayLabel = 'Тяйинаты'
+      FieldName = 'DESCRIPTION'
+      Size = 30
+    end
+    object depperiodsDEPID: TFloatField
+      FieldName = 'DEPID'
+    end
+  end
+  object depperiodsds: TDataSource
+    DataSet = depperiods
+    OnDataChange = DepositTypesDatSrcDataChange
+    Left = 185
+    Top = 209
+  end
+  object depcapitalperiods: TOracleDataSet
+    SQL.Strings = (
+      
+        'select id,rowid,period,description,periodid,type# from sbcm_depc' +
+        'apitalperiods'
+      'where periodid = :periodid'
+      'order by period')
+    Variables.Data = {
+      0300000001000000090000003A504552494F4449440400000008000000000000
+      000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      040000000500000002000000494401000000000006000000504552494F440100
+      000000000B0000004445534352495054494F4E01000000000008000000504552
+      494F444944010000000000050000005459504523010000000000}
+    Cursor = crSQLWait
+    Master = depperiods
+    MasterFields = 'ID'
+    DetailFields = 'PERIODID'
+    Session = sboapiDataModule.SBSession
+    Active = True
+    AfterPost = depcapitalperiodsAfterPost
+    Left = 264
+    Top = 208
+    object depcapitalperiodsID: TFloatField
+      FieldName = 'ID'
+    end
+    object depcapitalperiodsPERIOD: TFloatField
+      DisplayLabel = 'Период(эцнлярля)'
+      FieldName = 'PERIOD'
+      Required = True
+    end
+    object depcapitalperiodsDESCRIPTION: TWideStringField
+      DisplayLabel = 'Тяйинаты'
+      FieldName = 'DESCRIPTION'
+      Size = 30
+    end
+    object depcapitalperiodsPERIODID: TFloatField
+      FieldName = 'PERIODID'
+    end
+    object depcapitalperiodsTYPE: TWideStringField
+      FieldName = 'TYPE#'
+      Size = 40
+    end
+  end
+  object depcapitalperiodsds: TDataSource
+    DataSet = depcapitalperiods
+    OnDataChange = DepositTypesDatSrcDataChange
+    Left = 308
+    Top = 208
+  end
+end

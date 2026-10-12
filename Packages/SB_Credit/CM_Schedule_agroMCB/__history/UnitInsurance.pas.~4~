@@ -1,0 +1,38 @@
+unit UnitInsurance;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Grids, DBGrids, DB, OracleData;
+
+type
+  TFormInsurance = class(TForm)
+    DBGrid1: TDBGrid;
+    procedure FormShow(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormInsurance: TFormInsurance;
+
+implementation
+uses ScheduleDataModuleImpl,sboapiDataModuleImpl;
+{$R *.dfm}
+
+procedure TFormInsurance.FormShow(Sender: TObject);
+begin
+
+showmessage(ScheduleDataModule.Ods_insurance.SQL.Text);
+
+   with ScheduleDataModule,Ods_insurance do
+begin
+open;
+  insert;
+end;
+end;
+
+end.

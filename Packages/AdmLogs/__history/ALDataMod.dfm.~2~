@@ -1,0 +1,756 @@
+object DataModAL: TDataModAL
+  OldCreateOrder = False
+  Height = 640
+  Width = 870
+  object ODSLogs: TOracleDataSet
+    SQL.Strings = (
+      
+        'select id, logtype, decode(logtype, 1, '#39'User Grants'#39', 2, '#39'Module' +
+        's'#39', 3, '#39'Objects'#39', 4, '#39'Group Man'#39') logtp, usname, modtime, moduse' +
+        'r, modul, cins, cupd, cdel,'
+      
+        '       oper, decode(oper, 1,'#39'Insert'#39', 2,'#39'Before Update'#39', 3,'#39'Dele' +
+        'te'#39', 4,'#39'After Update'#39') operat, description, trvdesc, advanced_gr' +
+        'ants, otype, ofullname,'
+      '       ophone, oclassid, ofilialid, oadvtype, osysuserid'
+      ' from sba_adm_logs'
+      ''
+      'order by id desc')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000001600000004000000490044000100000000000E0000004C004F004700
+      54005900500045000100000000000A0000004C004F0047005400500001000000
+      00000C000000550053004E0041004D0045000100000000000E0000004D004F00
+      4400540049004D0045000100000000000E0000004D004F004400550053004500
+      52000100000000000A0000004D004F00440055004C0001000000000008000000
+      430049004E005300010000000000080000004300550050004400010000000000
+      080000004300440045004C00010000000000080000004F005000450052000100
+      000000000C0000004F0050004500520041005400010000000000160000004400
+      450053004300520049005000540049004F004E000100000000000E0000005400
+      5200560044004500530043000100000000001E00000041004400560041004E00
+      4300450044005F004700520041004E00540053000100000000000A0000004F00
+      5400590050004500010000000000120000004F00460055004C004C004E004100
+      4D0045000100000000000C0000004F00500048004F004E004500010000000000
+      100000004F0043004C0041005300530049004400010000000000120000004F00
+      460049004C00490041004C0049004400010000000000100000004F0041004400
+      56005400590050004500010000000000140000004F0053005900530055005300
+      4500520049004400010000000000}
+    QueryAllRecords = False
+    Session = sboapiDataModule.SBSession
+    Left = 104
+    Top = 32
+    object ODSLogsID: TFloatField
+      FieldName = 'ID'
+    end
+    object ODSLogsLOGTYPE: TFloatField
+      FieldName = 'LOGTYPE'
+    end
+    object ODSLogsLOGTP: TWideStringField
+      FieldName = 'LOGTP'
+      Size = 11
+    end
+    object ODSLogsUSNAME: TWideStringField
+      FieldName = 'USNAME'
+      Size = 30
+    end
+    object ODSLogsMODTIME: TDateTimeField
+      FieldName = 'MODTIME'
+    end
+    object ODSLogsMODUSER: TWideStringField
+      FieldName = 'MODUSER'
+      Size = 30
+    end
+    object ODSLogsMODUL: TWideStringField
+      FieldName = 'MODUL'
+      Size = 100
+    end
+    object ODSLogsCINS: TIntegerField
+      FieldName = 'CINS'
+    end
+    object ODSLogsCUPD: TIntegerField
+      FieldName = 'CUPD'
+    end
+    object ODSLogsCDEL: TIntegerField
+      FieldName = 'CDEL'
+    end
+    object ODSLogsOPER: TIntegerField
+      FieldName = 'OPER'
+    end
+    object ODSLogsOPERAT: TWideStringField
+      FieldName = 'OPERAT'
+      Size = 13
+    end
+    object ODSLogsDESCRIPTION: TWideStringField
+      FieldName = 'DESCRIPTION'
+      Size = 128
+    end
+    object ODSLogsTRVDESC: TWideStringField
+      FieldName = 'TRVDESC'
+      Size = 256
+    end
+    object ODSLogsADVANCED_GRANTS: TIntegerField
+      FieldName = 'ADVANCED_GRANTS'
+    end
+    object ODSLogsOTYPE: TWideStringField
+      FieldName = 'OTYPE'
+      Size = 1
+    end
+    object ODSLogsOFULLNAME: TWideStringField
+      FieldName = 'OFULLNAME'
+      Size = 128
+    end
+    object ODSLogsOPHONE: TWideStringField
+      FieldName = 'OPHONE'
+      Size = 30
+    end
+    object ODSLogsOCLASSID: TFloatField
+      FieldName = 'OCLASSID'
+    end
+    object ODSLogsOFILIALID: TFloatField
+      FieldName = 'OFILIALID'
+    end
+    object ODSLogsOADVTYPE: TFloatField
+      FieldName = 'OADVTYPE'
+    end
+    object ODSLogsOSYSUSERID: TFloatField
+      FieldName = 'OSYSUSERID'
+    end
+  end
+  object ODSModuleLogs: TOracleDataSet
+    SQL.Strings = (
+      
+        'select id, logtype, decode(logtype, 1, '#39'User Grants'#39', 2, '#39'Module' +
+        's'#39', 3, '#39'Objects'#39', 4, '#39'Group Man'#39') logtp, usname, modtime,  modul' +
+        ', decode(cins,0,'#39'-'#39',1,'#39'+'#39') cins, decode(cupd,0,'#39'-'#39',1,'#39'+'#39') cupd, ' +
+        'decode(cdel,0,'#39'-'#39',1,'#39'+'#39') cdel,'
+      
+        '       oper, decode(oper, 1,'#39'Insert'#39', 2,'#39'Before Update'#39', 3,'#39'Dele' +
+        'te'#39', 4,'#39'After Update'#39') operat, description, trvdesc, advanced_gr' +
+        'ants from sba_adm_logs'
+      'where logtype=2'
+      ''
+      ''
+      ''
+      'order by id desc'
+      ' ')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000E00000004000000490044000100000000000E0000004C004F004700
+      54005900500045000100000000000A0000004C004F0047005400500001000000
+      00000C000000550053004E0041004D0045000100000000000E0000004D004F00
+      4400540049004D0045000100000000000A0000004D004F00440055004C000100
+      0000000008000000430049004E00530001000000000008000000430055005000
+      4400010000000000080000004300440045004C00010000000000080000004F00
+      5000450052000100000000000C0000004F005000450052004100540001000000
+      0000160000004400450053004300520049005000540049004F004E0001000000
+      00000E00000054005200560044004500530043000100000000001E0000004100
+      4400560041004E004300450044005F004700520041004E005400530001000000
+      0000}
+    QueryAllRecords = False
+    Session = sboapiDataModule.SBSession
+    Left = 208
+    Top = 120
+    object ODSModuleLogsID: TFloatField
+      FieldName = 'ID'
+    end
+    object ODSModuleLogsLOGTYPE: TFloatField
+      FieldName = 'LOGTYPE'
+    end
+    object ODSModuleLogsLOGTP: TWideStringField
+      FieldName = 'LOGTP'
+      Size = 11
+    end
+    object ODSModuleLogsUSNAME: TWideStringField
+      FieldName = 'USNAME'
+      Size = 30
+    end
+    object ODSModuleLogsMODTIME: TDateTimeField
+      FieldName = 'MODTIME'
+    end
+    object ODSModuleLogsMODUL: TWideStringField
+      FieldName = 'MODUL'
+      Size = 100
+    end
+    object ODSModuleLogsCINS: TWideStringField
+      FieldName = 'CINS'
+      Size = 1
+    end
+    object ODSModuleLogsCUPD: TWideStringField
+      FieldName = 'CUPD'
+      Size = 1
+    end
+    object ODSModuleLogsCDEL: TWideStringField
+      FieldName = 'CDEL'
+      Size = 1
+    end
+    object ODSModuleLogsOPER: TIntegerField
+      FieldName = 'OPER'
+    end
+    object ODSModuleLogsOPERAT: TWideStringField
+      FieldName = 'OPERAT'
+      Size = 13
+    end
+    object ODSModuleLogsDESCRIPTION: TWideStringField
+      FieldName = 'DESCRIPTION'
+      Size = 128
+    end
+    object ODSModuleLogsTRVDESC: TWideStringField
+      FieldName = 'TRVDESC'
+      Size = 256
+    end
+    object ODSModuleLogsADVANCED_GRANTS: TIntegerField
+      FieldName = 'ADVANCED_GRANTS'
+    end
+  end
+  object ODSUsersLogs: TOracleDataSet
+    SQL.Strings = (
+      
+        'select l.id, logtype, decode(logtype, 1, '#39'User Grants'#39', 2, '#39'Modu' +
+        'les'#39', 3, '#39'Objects'#39', 4, '#39'Group Man'#39') logtp,'
+      
+        'usname, modtime, moduser,       oper, decode(oper, 1,'#39'Insert'#39', 2' +
+        ','#39'Before Update'#39', 3,'#39'Delete'#39', 4,'#39'After Update'#39') operat, '
+      'l.description, otype, ofullname,'
+      
+        '       ophone, nvl(o.obj,'#39'Yox'#39') oclassid, f.name ofilialid, oadv' +
+        'type, osysuserid'
+      ' from sba_adm_logs l, filial_t f, sba_objinf o'
+      
+        'where logtype=3 and otype='#39'U'#39' and f.id=ofilialid and o.id(+)=ocl' +
+        'assid'
+      '         '
+      ''
+      ''
+      'order by id desc'
+      ''
+      ' ')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000001000000004000000490044000100000000000E0000004C004F004700
+      54005900500045000100000000000A0000004C004F0047005400500001000000
+      00000C000000550053004E0041004D0045000100000000000E0000004D004F00
+      4400540049004D0045000100000000000E0000004D004F004400550053004500
+      5200010000000000080000004F005000450052000100000000000C0000004F00
+      5000450052004100540001000000000016000000440045005300430052004900
+      5000540049004F004E000100000000000A0000004F0054005900500045000100
+      00000000120000004F00460055004C004C004E0041004D004500010000000000
+      0C0000004F00500048004F004E004500010000000000100000004F0043004C00
+      41005300530049004400010000000000120000004F00460049004C0049004100
+      4C0049004400010000000000100000004F004100440056005400590050004500
+      010000000000140000004F005300590053005500530045005200490044000100
+      00000000}
+    QueryAllRecords = False
+    Session = sboapiDataModule.SBSession
+    Left = 312
+    Top = 113
+    object ODSUsersLogsID: TFloatField
+      FieldName = 'ID'
+    end
+    object ODSUsersLogsLOGTYPE: TFloatField
+      FieldName = 'LOGTYPE'
+    end
+    object ODSUsersLogsLOGTP: TWideStringField
+      FieldName = 'LOGTP'
+      Size = 11
+    end
+    object ODSUsersLogsUSNAME: TWideStringField
+      FieldName = 'USNAME'
+      Size = 30
+    end
+    object ODSUsersLogsMODTIME: TDateTimeField
+      FieldName = 'MODTIME'
+    end
+    object ODSUsersLogsMODUSER: TWideStringField
+      FieldName = 'MODUSER'
+      Size = 30
+    end
+    object ODSUsersLogsOPER: TIntegerField
+      FieldName = 'OPER'
+    end
+    object ODSUsersLogsOPERAT: TWideStringField
+      FieldName = 'OPERAT'
+      Size = 13
+    end
+    object ODSUsersLogsDESCRIPTION: TWideStringField
+      FieldName = 'DESCRIPTION'
+      Size = 128
+    end
+    object ODSUsersLogsOTYPE: TWideStringField
+      FieldName = 'OTYPE'
+      Size = 1
+    end
+    object ODSUsersLogsOFULLNAME: TWideStringField
+      FieldName = 'OFULLNAME'
+      Size = 128
+    end
+    object ODSUsersLogsOPHONE: TWideStringField
+      FieldName = 'OPHONE'
+      Size = 30
+    end
+    object ODSUsersLogsOCLASSID: TWideStringField
+      FieldName = 'OCLASSID'
+      Size = 56
+    end
+    object ODSUsersLogsOFILIALID: TWideStringField
+      FieldName = 'OFILIALID'
+      Size = 90
+    end
+    object ODSUsersLogsOADVTYPE: TFloatField
+      FieldName = 'OADVTYPE'
+    end
+    object ODSUsersLogsOSYSUSERID: TFloatField
+      FieldName = 'OSYSUSERID'
+    end
+  end
+  object ODSClassesLogs: TOracleDataSet
+    SQL.Strings = (
+      
+        'select id, logtype, decode(logtype, 1, '#39'User Grants'#39', 2, '#39'Module' +
+        's'#39', 3, '#39'Objects'#39', 4, '#39'Group Man'#39') logtp, usname, modtime, moduse' +
+        'r,'
+      
+        '       oper, decode(oper, 1,'#39'Insert'#39', 2,'#39'Before Update'#39', 3,'#39'Dele' +
+        'te'#39', 4,'#39'After Update'#39') operat, otype'
+      ' from sba_adm_logs'
+      'where logtype=3 and otype='#39'C'#39
+      ''
+      ''
+      'order by id desc'
+      ' ')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000900000004000000490044000100000000000E0000004C004F004700
+      54005900500045000100000000000A0000004C004F0047005400500001000000
+      00000C000000550053004E0041004D0045000100000000000E0000004D004F00
+      4400540049004D0045000100000000000E0000004D004F004400550053004500
+      5200010000000000080000004F005000450052000100000000000C0000004F00
+      500045005200410054000100000000000A0000004F0054005900500045000100
+      00000000}
+    QueryAllRecords = False
+    Session = sboapiDataModule.SBSession
+    Left = 408
+    Top = 105
+    object ODSClassesLogsID: TFloatField
+      FieldName = 'ID'
+    end
+    object ODSClassesLogsLOGTYPE: TFloatField
+      FieldName = 'LOGTYPE'
+    end
+    object ODSClassesLogsLOGTP: TWideStringField
+      FieldName = 'LOGTP'
+      Size = 11
+    end
+    object ODSClassesLogsUSNAME: TWideStringField
+      FieldName = 'USNAME'
+      Size = 30
+    end
+    object ODSClassesLogsMODTIME: TDateTimeField
+      FieldName = 'MODTIME'
+    end
+    object ODSClassesLogsMODUSER: TWideStringField
+      FieldName = 'MODUSER'
+      Size = 30
+    end
+    object ODSClassesLogsOPER: TIntegerField
+      FieldName = 'OPER'
+    end
+    object ODSClassesLogsOPERAT: TWideStringField
+      FieldName = 'OPERAT'
+      Size = 13
+    end
+    object ODSClassesLogsOTYPE: TWideStringField
+      FieldName = 'OTYPE'
+      Size = 1
+    end
+  end
+  object OdsGroupsLogs: TOracleDataSet
+    SQL.Strings = (
+      
+        'select l.id, logtype, decode(logtype, 1, '#39'User Grants'#39', 2, '#39'Modu' +
+        'les'#39', 3, '#39'Objects'#39', 4, '#39'Group Man'#39') logtp, usname, modtime, modu' +
+        'ser,'
+      
+        '       oper, decode(oper, 1,'#39'Insert'#39', 2,'#39'Before Update'#39', 3,'#39'Dele' +
+        'te'#39', 4,'#39'After Update'#39') operat, description, otype, descr oadvtyp' +
+        'e'
+      ' from sba_adm_logs l, sba_grouptypes g'
+      'where logtype=3 and otype='#39'G'#39' and oadvtype=g.id'
+      ''
+      ''
+      'order by id desc'
+      ''
+      ' ')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000B00000004000000490044000100000000000E0000004C004F004700
+      54005900500045000100000000000A0000004C004F0047005400500001000000
+      00000C000000550053004E0041004D0045000100000000000E0000004D004F00
+      4400540049004D0045000100000000000E0000004D004F004400550053004500
+      5200010000000000080000004F005000450052000100000000000C0000004F00
+      5000450052004100540001000000000016000000440045005300430052004900
+      5000540049004F004E000100000000000A0000004F0054005900500045000100
+      00000000100000004F004100440056005400590050004500010000000000}
+    QueryAllRecords = False
+    Session = sboapiDataModule.SBSession
+    Left = 112
+    Top = 249
+    object OdsGroupsLogsID: TFloatField
+      FieldName = 'ID'
+    end
+    object OdsGroupsLogsLOGTYPE: TFloatField
+      FieldName = 'LOGTYPE'
+    end
+    object OdsGroupsLogsLOGTP: TWideStringField
+      FieldName = 'LOGTP'
+      Size = 11
+    end
+    object OdsGroupsLogsUSNAME: TWideStringField
+      FieldName = 'USNAME'
+      Size = 30
+    end
+    object OdsGroupsLogsMODTIME: TDateTimeField
+      FieldName = 'MODTIME'
+    end
+    object OdsGroupsLogsMODUSER: TWideStringField
+      FieldName = 'MODUSER'
+      Size = 30
+    end
+    object OdsGroupsLogsOPER: TIntegerField
+      FieldName = 'OPER'
+    end
+    object OdsGroupsLogsOPERAT: TWideStringField
+      FieldName = 'OPERAT'
+      Size = 13
+    end
+    object OdsGroupsLogsDESCRIPTION: TWideStringField
+      FieldName = 'DESCRIPTION'
+      Size = 128
+    end
+    object OdsGroupsLogsOTYPE: TWideStringField
+      FieldName = 'OTYPE'
+      Size = 1
+    end
+    object OdsGroupsLogsOADVTYPE: TWideStringField
+      FieldName = 'OADVTYPE'
+      Size = 128
+    end
+  end
+  object ODSUserGrantsLogs: TOracleDataSet
+    SQL.Strings = (
+      
+        'select id, logtype, decode(logtype, 1, '#39'User Grants'#39', 2, '#39'Module' +
+        's'#39', 3, '#39'Objects'#39', 4, '#39'Group Man'#39') logtp, usname, modtime, moduse' +
+        'r, modul, decode(cins,0,'#39'-'#39',1,'#39'+'#39') cins, decode(cupd,0,'#39'-'#39',1,'#39'+'#39 +
+        ') cupd, decode(cdel,0,'#39'-'#39',1,'#39'+'#39') cdel,'
+      
+        '       oper, decode(oper, 1,'#39'Insert'#39', 2,'#39'Before Update'#39', 3,'#39'Dele' +
+        'te'#39', 4,'#39'After Update'#39') operat'
+      ' from sba_adm_logs'
+      'where logtype=1'
+      ''
+      'order by id desc'
+      ' ')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000C00000004000000490044000100000000000E0000004C004F004700
+      54005900500045000100000000000A0000004C004F0047005400500001000000
+      00000C000000550053004E0041004D0045000100000000000E0000004D004F00
+      4400540049004D0045000100000000000E0000004D004F004400550053004500
+      52000100000000000A0000004D004F00440055004C0001000000000008000000
+      430049004E005300010000000000080000004300550050004400010000000000
+      080000004300440045004C00010000000000080000004F005000450052000100
+      000000000C0000004F0050004500520041005400010000000000}
+    QueryAllRecords = False
+    Session = sboapiDataModule.SBSession
+    Left = 104
+    Top = 120
+    object ODSUserGrantsLogsID: TFloatField
+      FieldName = 'ID'
+    end
+    object ODSUserGrantsLogsLOGTYPE: TFloatField
+      FieldName = 'LOGTYPE'
+    end
+    object ODSUserGrantsLogsLOGTP: TWideStringField
+      FieldName = 'LOGTP'
+      Size = 11
+    end
+    object ODSUserGrantsLogsUSNAME: TWideStringField
+      FieldName = 'USNAME'
+      Size = 30
+    end
+    object ODSUserGrantsLogsMODTIME: TDateTimeField
+      FieldName = 'MODTIME'
+    end
+    object ODSUserGrantsLogsMODUSER: TWideStringField
+      FieldName = 'MODUSER'
+      Size = 30
+    end
+    object ODSUserGrantsLogsMODUL: TWideStringField
+      FieldName = 'MODUL'
+      Size = 100
+    end
+    object ODSUserGrantsLogsCINS: TWideStringField
+      FieldName = 'CINS'
+      Size = 1
+    end
+    object ODSUserGrantsLogsCUPD: TWideStringField
+      FieldName = 'CUPD'
+      Size = 1
+    end
+    object ODSUserGrantsLogsCDEL: TWideStringField
+      FieldName = 'CDEL'
+      Size = 1
+    end
+    object ODSUserGrantsLogsOPER: TIntegerField
+      FieldName = 'OPER'
+    end
+    object ODSUserGrantsLogsOPERAT: TWideStringField
+      FieldName = 'OPERAT'
+      Size = 13
+    end
+  end
+  object ODSGroupManLogs: TOracleDataSet
+    SQL.Strings = (
+      'select   l.id, logtype,'
+      '         decode (logtype,'
+      '                 1, '#39'User Grants'#39','
+      '                 2, '#39'Modules'#39','
+      '                 3, '#39'Objects'#39','
+      '                 4, '#39'Group Man'#39
+      '                ) logtp,'
+      '         usname, modtime, moduser, oper,'
+      '         decode (oper,'
+      '                 1, '#39'Insert'#39','
+      '                 2, '#39'Before Update'#39','
+      '                 3, '#39'Delete'#39','
+      '                 4, '#39'After Update'#39
+      '                ) operat,'
+      
+        '         advanced_grants, o.obj oclassid, decode(oadvtype,1,'#39#1041#1072#1096 +
+        #39',2, '#39#1058#1072#1073#1077#39',3, '#39#1053#1077#1081#1090#1088#1072#1083#39') oadvtype, oclassid grid'
+      '    from sba_adm_logs l, sba_objinf o'
+      '   where l.oclassid = o.id and logtype = 4'
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      'order by id desc'
+      ''
+      ' ')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000C00000004000000490044000100000000000E0000004C004F004700
+      54005900500045000100000000000A0000004C004F0047005400500001000000
+      00000C000000550053004E0041004D0045000100000000000E0000004D004F00
+      4400540049004D0045000100000000000E0000004D004F004400550053004500
+      5200010000000000080000004F005000450052000100000000000C0000004F00
+      500045005200410054000100000000001E00000041004400560041004E004300
+      450044005F004700520041004E0054005300010000000000100000004F004300
+      4C0041005300530049004400010000000000100000004F004100440056005400
+      590050004500010000000000080000004700520049004400010000000000}
+    QueryAllRecords = False
+    Session = sboapiDataModule.SBSession
+    Left = 216
+    Top = 240
+    object ODSGroupManLogsID: TFloatField
+      FieldName = 'ID'
+    end
+    object ODSGroupManLogsLOGTYPE: TFloatField
+      FieldName = 'LOGTYPE'
+    end
+    object ODSGroupManLogsLOGTP: TWideStringField
+      FieldName = 'LOGTP'
+      Size = 11
+    end
+    object ODSGroupManLogsUSNAME: TWideStringField
+      FieldName = 'USNAME'
+      Size = 30
+    end
+    object ODSGroupManLogsMODTIME: TDateTimeField
+      FieldName = 'MODTIME'
+    end
+    object ODSGroupManLogsMODUSER: TWideStringField
+      FieldName = 'MODUSER'
+      Size = 30
+    end
+    object ODSGroupManLogsOPER: TIntegerField
+      FieldName = 'OPER'
+    end
+    object ODSGroupManLogsOPERAT: TWideStringField
+      FieldName = 'OPERAT'
+      Size = 13
+    end
+    object ODSGroupManLogsADVANCED_GRANTS: TIntegerField
+      FieldName = 'ADVANCED_GRANTS'
+    end
+    object ODSGroupManLogsOCLASSID: TWideStringField
+      FieldName = 'OCLASSID'
+      Size = 56
+    end
+    object ODSGroupManLogsOADVTYPE: TWideStringField
+      FieldName = 'OADVTYPE'
+      Size = 14
+    end
+    object ODSGroupManLogsGRID: TFloatField
+      FieldName = 'GRID'
+    end
+  end
+  object UserGrants: TDataSource
+    DataSet = ODSUserGrantsLogs
+    Left = 104
+    Top = 176
+  end
+  object Module: TDataSource
+    DataSet = ODSModuleLogs
+    Left = 208
+    Top = 176
+  end
+  object Users: TDataSource
+    DataSet = ODSUsersLogs
+    Left = 312
+    Top = 176
+  end
+  object Classes: TDataSource
+    DataSet = ODSClassesLogs
+    Left = 408
+    Top = 160
+  end
+  object Groups: TDataSource
+    DataSet = OdsGroupsLogs
+    Left = 112
+    Top = 296
+  end
+  object GroupMan: TDataSource
+    DataSet = ODSGroupManLogs
+    Left = 208
+    Top = 304
+  end
+  object ODSLockedUsers: TOracleDataSet
+    SQL.Strings = (
+      ''
+      
+        'select u.id, u.name from user$ u, sba_objinf o where name=obj an' +
+        'd sb_adm.islocked_num(name)=1')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000400000049004400010000000000080000004E0041004D00
+      4500010000000000}
+    QueryAllRecords = False
+    Session = sboapiDataModule.SBSession
+    Left = 320
+    Top = 248
+    object ODSLockedUsersID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object ODSLockedUsersNAME: TWideStringField
+      FieldName = 'NAME'
+      Required = True
+      Size = 30
+    end
+  end
+  object LockedUsers: TDataSource
+    DataSet = ODSLockedUsers
+    Left = 312
+    Top = 304
+  end
+  object SB_ADM: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'SB_ADM'
+    Left = 16
+    Top = 16
+  end
+  object ODSSLLogs: TOracleDataSet
+    SQL.Strings = (
+      
+        'select id, logtype, decode(logtype, 1, '#39#1065#1094#1075#1091#1075#1083#1072#1088#39', 2, '#39'Modules'#39',' +
+        ' 3, '#39#1048#1089#1090#1080#1092#1072#1076#1103#1095#1080#1083#1103#1088#39', 4, '#39#1043#1088#1091#1087#1083#1072#1088#39') logtp, usname, modtime, modus' +
+        'er,'
+      
+        '        decode(oper, 1,'#39'Insert'#39', 2,'#39'Before Update'#39', 3,'#39'Delete'#39', ' +
+        '4,'#39'After Update'#39') operat from sba_adm_logs'
+      'where moduser=:moduser'
+      ''
+      ''
+      ''
+      'order by id desc'
+      ' ')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000100000003A004D004F004400550053004500520005000000
+      0400000041424F0000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000700000004000000490044000100000000000E0000004C004F004700
+      54005900500045000100000000000A0000004C004F0047005400500001000000
+      00000C000000550053004E0041004D0045000100000000000E0000004D004F00
+      4400540049004D0045000100000000000E0000004D004F004400550053004500
+      52000100000000000C0000004F0050004500520041005400010000000000}
+    Master = ODSLockedUsers
+    MasterFields = 'name'
+    DetailFields = 'moduser'
+    QueryAllRecords = False
+    Session = sboapiDataModule.SBSession
+    Left = 410
+    Top = 240
+    object ODSSLLogsID: TFloatField
+      FieldName = 'ID'
+    end
+    object ODSSLLogsLOGTYPE: TFloatField
+      FieldName = 'LOGTYPE'
+    end
+    object ODSSLLogsLOGTP: TWideStringField
+      FieldName = 'LOGTP'
+      Size = 26
+    end
+    object ODSSLLogsUSNAME: TWideStringField
+      FieldName = 'USNAME'
+      Size = 30
+    end
+    object ODSSLLogsMODTIME: TDateTimeField
+      FieldName = 'MODTIME'
+    end
+    object ODSSLLogsMODUSER: TWideStringField
+      FieldName = 'MODUSER'
+      Size = 30
+    end
+    object ODSSLLogsOPERAT: TWideStringField
+      FieldName = 'OPERAT'
+      Size = 13
+    end
+  end
+  object SLLog: TDataSource
+    DataSet = ODSSLLogs
+    Left = 416
+    Top = 288
+  end
+  object ODSClasNames: TOracleDataSet
+    SQL.Strings = (
+      'select id, obj from sba_objinf where type='#39'C'#39
+      'order by 2')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000400000049004400010000000000060000004F0042004A00
+      010000000000}
+    QueryAllRecords = False
+    Session = sboapiDataModule.SBSession
+    Left = 114
+    Top = 365
+    object ODSClasNamesID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object ODSClasNamesOBJ: TWideStringField
+      FieldName = 'OBJ'
+      Size = 56
+    end
+  end
+  object Classnames: TDataSource
+    DataSet = ODSClasNames
+    Left = 120
+    Top = 416
+  end
+end

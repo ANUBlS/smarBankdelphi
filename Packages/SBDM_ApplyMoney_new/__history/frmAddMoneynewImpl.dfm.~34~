@@ -1,0 +1,179 @@
+object frmAddMoneynew: TfrmAddMoneynew
+  Left = 0
+  Top = 0
+  ClientHeight = 152
+  ClientWidth = 409
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poScreenCenter
+  OnCanResize = FormCanResize
+  OnCreate = FormCreate
+  OnKeyPress = FormKeyPress
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object ButtonCancel: TButton
+    Left = 311
+    Top = 117
+    Width = 81
+    Height = 27
+    Caption = '&'#1048#1084#1090#1080#1085#1072
+    ModalResult = 2
+    TabOrder = 0
+  end
+  object ButtonCommit: TButton
+    Left = 224
+    Top = 117
+    Width = 81
+    Height = 27
+    Action = ActnTransaction
+    Caption = '&'#1043#1103#1073#1091#1083
+    TabOrder = 1
+  end
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 409
+    Height = 111
+    Align = alTop
+    BevelInner = bvSpace
+    BevelOuter = bvLowered
+    TabOrder = 2
+    object Label1: TLabel
+      Left = 5
+      Top = 52
+      Width = 104
+      Height = 13
+      Caption = #1044#1077#1087#1086#1079#1080#1090#1080#1085' '#1084#1103#1073#1083#1103#1100#1080':'
+    end
+    object Label2: TLabel
+      Left = 230
+      Top = 56
+      Width = 46
+      Height = 13
+      Caption = #1058#1072#1088#1080#1093#1080' : '
+    end
+    object Label3: TLabel
+      Left = 232
+      Top = 84
+      Width = 48
+      Height = 13
+      Caption = #1052#1103#1073#1083#1103#1100' : '
+    end
+    object Label4: TLabel
+      Left = 8
+      Top = 83
+      Width = 45
+      Height = 13
+      Caption = #1048#1083#1083#1080#1082' %'
+    end
+    object DBEditEh1: TDBEditEh
+      Left = 104
+      Top = 52
+      Width = 123
+      Height = 21
+      Color = clInfoBk
+      DataField = 'AMOUNT'
+      DataSource = DMApplyMoney_new.DepositInfoDatSrc
+      EditButtons = <>
+      TabOrder = 0
+      Visible = True
+    end
+    object Panel4: TPanel
+      Left = 2
+      Top = 2
+      Width = 405
+      Height = 46
+      Align = alTop
+      TabOrder = 1
+      object StaticText3: TStaticText
+        Left = 1
+        Top = 1
+        Width = 403
+        Height = 19
+        Align = alTop
+        Alignment = taCenter
+        Caption = #1052#1094#1096#1090#1103#1088#1080' '#1065#1077#1089#1072#1073
+        Color = clNavy
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindow
+        Font.Height = -12
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ParentColor = False
+        ParentFont = False
+        TabOrder = 0
+      end
+      object AccountListCB: TDBLookupComboboxEh
+        Left = 1
+        Top = 18
+        Width = 199
+        Height = 21
+        TabStop = False
+        DropDownBox.Sizable = True
+        EditButtons = <>
+        KeyField = 'ID'
+        ListField = 'ACC_NO'
+        ListSource = DMApplyMoney_new.DebitAccsDatSrc
+        TabOrder = 1
+        Visible = True
+        OnChange = AccountListCBChange
+      end
+      object AccnameListCB: TDBLookupComboboxEh
+        Left = 199
+        Top = 19
+        Width = 199
+        Height = 21
+        EditButtons = <>
+        KeyField = 'ID'
+        ListField = 'NAME'
+        ListSource = DMApplyMoney_new.DebitAccsDatSrc
+        TabOrder = 2
+        Visible = True
+        OnChange = AccnameListCBChange
+      end
+    end
+    object OperationDatePckr: TDateTimePicker
+      Left = 278
+      Top = 53
+      Width = 123
+      Height = 21
+      Date = 38195.537546400500000000
+      Time = 38195.537546400500000000
+      Enabled = False
+      TabOrder = 2
+    end
+    object MoneySumEdit: TCMCurrencyEdit
+      Left = 278
+      Top = 80
+      Width = 123
+      Height = 21
+      TabOrder = 3
+      Text = '0'
+    end
+    object PercentEdit: TEdit
+      Left = 103
+      Top = 78
+      Width = 123
+      Height = 21
+      ReadOnly = True
+      TabOrder = 4
+      Text = 'PercentEdit'
+    end
+  end
+  object ActionList1: TActionList
+    Left = 48
+    Top = 108
+    object ActnTransaction: TAction
+      Caption = 'ActnTransaction'
+      OnExecute = ActnTransactionExecute
+      OnUpdate = ActnTransactionUpdate
+    end
+  end
+end

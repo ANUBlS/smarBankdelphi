@@ -1,0 +1,143 @@
+﻿unit Excelform;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, ExtCtrls,comobj;
+
+type
+  TExcels = class(TForm)
+    Excels: TRadioGroup;
+    Button1: TButton;
+    procedure Button1Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Excels: TExcels;
+
+implementation
+
+{$R *.DFM}
+     uses SBTranslateProc,sboapiDataModuleImpl;
+procedure TExcels.Button1Click(Sender: TObject);
+var Excel: Variant;
+begin
+if Excels.ItemIndex=0 then
+begin
+//------------------------------accountclose
+ Excel := CreateOleObject('Excel.Application');
+ Excel.Workbooks.Add;
+ Excel.Sheets.Item[1].Name:='CARDS';
+ Excel.WorkBooks[1].WorkSheets[1].Columns[1].ColumnWidth := 40;
+ Excel.Range['a1']:='Карт №';
+ Excel.Range['a1'].Font.Name :='Arial AzLat' ;
+ Excel.Range['a1'].Font.Bold:=true;
+ Excel.Range['a1:a12'].Borders.LineStyle := 1;
+ Excel.Visible := True;
+ //------------------------------------------
+end;
+   if Excels.ItemIndex=2 then
+begin
+//---------------------------- Prolonqation
+ Excel := CreateOleObject('Excel.Application');
+ Excel.Workbooks.Add;
+ Excel.Sheets.Item[1].Name:='CARDS';
+ Excel.WorkBooks[1].WorkSheets[1].Columns[1].ColumnWidth := 40;
+ Excel.WorkBooks[1].WorkSheets[1].Columns[2].ColumnWidth := 20;
+ Excel.Range['a1']:='Карт №';
+ Excel.Range['a1'].Font.Name :='Arial AzLat' ;
+ Excel.Range['a1'].Font.Bold:=true;
+// Excel.Range['a1'].formatcell:='text';
+ Excel.Range['b1']:='Tarix';
+ Excel.Range['b1'].Font.Name :='Arial AzLat' ;
+ Excel.Range['b1'].Font.Bold:=true;
+ Excel.Range['a1:b12'].Borders.LineStyle := 1;
+ Excel.Visible := True;
+
+//----------------------------
+  end;
+
+  if Excels.ItemIndex=1 then
+  begin
+  //---------------------------new card
+      Excel := CreateOleObject('Excel.Application');
+ Excel.Workbooks.Add;
+ Excel.Sheets.Item[1].Name:='CARDS';
+ Excel.WorkBooks[1].WorkSheets[1].Columns[1].ColumnWidth := 5;
+ Excel.WorkBooks[1].WorkSheets[1].Columns[2].ColumnWidth := 12;
+ Excel.WorkBooks[1].WorkSheets[1].Columns[3].ColumnWidth := 12;
+ Excel.WorkBooks[1].WorkSheets[1].Columns[4].ColumnWidth := 10;
+ Excel.WorkBooks[1].WorkSheets[1].Columns[5].ColumnWidth := 10;
+ Excel.WorkBooks[1].WorkSheets[1].Columns[6].ColumnWidth := 20;
+ Excel.WorkBooks[1].WorkSheets[1].Columns[7].ColumnWidth := 10;
+ Excel.WorkBooks[1].WorkSheets[1].Columns[8].ColumnWidth := 20;
+ Excel.WorkBooks[1].WorkSheets[1].Columns[9].ColumnWidth := 20;
+ Excel.WorkBooks[1].WorkSheets[1].Columns[10].ColumnWidth := 20;
+ Excel.WorkBooks[1].WorkSheets[1].Columns[11].ColumnWidth := 20;
+ Excel.WorkBooks[1].WorkSheets[1].Columns[12].ColumnWidth := 20;
+ Excel.Range['a1']:='#';
+ Excel.Range['b1']:='Ad';
+ Excel.Range['c1']:='Soyad';
+ Excel.Range['d1']:='Dogum Tarixi';
+ Excel.Range['e1']:='Shexsiyyet vesiqesi ID';
+ Excel.Range['f1']:='Rezident Q/Rezident';
+ Excel.Range['g1']:='Shexsi kod';
+ Excel.Range['h1']:='Telefon';
+ Excel.Range['i1']:='Kart Novu';
+ Excel.Range['j1']:='Hesab Nomresi';
+ Excel.Range['k1']:='Address';
+ Excel.Range['l1']:='Şirkət adı';
+ Excel.Range['a1:k100'].Font.Name :='Arial AzLat' ;
+ Excel.Range['a1:k100'].Font.Bold:=true;
+ Excel.Range['a1:k100'].Borders.LineStyle := 1;
+ Excel.Visible := True;
+  //---------------------------------
+   end;
+
+
+
+
+    if Excels.ItemIndex=3 then
+  begin
+  //------------------------salary
+ Excel := CreateOleObject('Excel.Application');
+ Excel.Workbooks.Add;
+ Excel.Sheets.Item[1].Name:='CARDS';
+ Excel.WorkBooks[1].WorkSheets[1].Columns[1].ColumnWidth := 10;
+ Excel.WorkBooks[1].WorkSheets[1].Columns[2].ColumnWidth := 20;
+ Excel.WorkBooks[1].WorkSheets[1].Columns[3].ColumnWidth := 20;
+ Excel.WorkBooks[1].WorkSheets[1].Columns[4].ColumnWidth := 20;
+ Excel.WorkBooks[1].WorkSheets[1].Columns[5].ColumnWidth := 10;
+ Excel.WorkBooks[1].WorkSheets[1].Columns[6].ColumnWidth := 20;
+ Excel.Range['b3']:='Мцяссися ';
+ Excel.Range['b5']:='Тарих  ';
+ Excel.Range['b6']:='Тяйинат  ';
+ Excel.Range['a9']:='Сыра №';
+ Excel.Range['b9']:='Ады Сойады';
+ Excel.Range['c9']:='Кредит Щесабы';
+ Excel.Range['d9']:='Мябляь';
+ Excel.Range['e9']:='Валйута';
+ Excel.Range['f9']:='Дебет щесабы';
+ Excel.Range['a1:f100'].Font.Name :='Arial AzLat' ;
+ Excel.Range['a1:f100'].Font.Bold:=true;
+ Excel.Range['a9:f100'].Borders.LineStyle := 1;
+ Excel.Visible := True;
+  //-----------------------------
+  end;
+
+
+
+end;
+
+procedure TExcels.FormCreate(Sender: TObject);
+begin
+SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+end.

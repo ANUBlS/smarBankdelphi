@@ -1,0 +1,71 @@
+﻿unit comp;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  DBCtrls, StdCtrls, Grids, DBGrids,LDialogs;
+
+type
+  TForm13 = class(TForm)
+    DBGrid1: TDBGrid;
+    Button1: TButton;
+    Button2: TButton;
+    Edit1: TEdit;
+    procedure Edit1KeyPress(Sender: TObject; var Key: Char);
+    procedure Button1Click(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form13: TForm13;
+
+implementation
+
+uses Unit18,SBTranslateProc,sboapiDataModuleImpl;
+
+{$R *.DFM}
+
+procedure TForm13.Edit1KeyPress(Sender: TObject; var Key: Char);
+begin
+KEY:=UpCase(KEY);
+IF ORD(KEY)>126  THEN KEY:=#0;
+IF ORD(KEY)=63 THEN KEY:=#0;
+ActivateKeyboardLayout(LoadKeyboardLayout('00000409', 0), 0);
+end;
+
+procedure TForm13.Button1Click(Sender: TObject);
+begin
+DataMod_CARDS.COMPANY.Insert;
+DataMod_CARDS.COMPANY.FieldByName('COMPANY_NAME').AsString:=Edit1.Text;
+DataMod_CARDS.COMPANY.Post;
+DataMod_CARDS.COMPANY.Session.Commit;
+DataMod_CARDS.COMPANY.CLOSE;
+DataMod_CARDS.COMPANY.OPEN;
+
+end;
+
+procedure TForm13.Button2Click(Sender: TObject);
+begin
+if MessageDlg('Seçilmiş sətir silinsin?',mtinformation,[mbyes,mbno],0)=mryes then
+DataMod_CARDS.COMPANY.Delete;
+DataMod_CARDS.COMPANY.Session.commit;
+end;
+
+procedure TForm13.FormActivate(Sender: TObject);
+begin
+edit1.Text:='';
+end;
+
+procedure TForm13.FormCreate(Sender: TObject);
+begin
+SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+end.

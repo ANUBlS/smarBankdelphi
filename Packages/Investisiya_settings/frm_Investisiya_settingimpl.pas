@@ -1,0 +1,65 @@
+unit frm_Investisiya_settingimpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ComCtrls, ExtCtrls, XFSCtrls, DBCtrls, Grids, DBGrids, XDBCtrls,
+  StdCtrls;
+
+type
+  Tfrm_Investisiya_setting = class(TForm)
+    XFPanel1: TXFPanel;
+    PageControl1: TPageControl;
+    TabSheet1: TTabSheet;
+    TabSheet2: TTabSheet;
+    DBGrid1: TDBGrid;
+    DBNavigator1: TDBNavigator;
+    DBGrid2: TDBGrid;
+    TabSheet3: TTabSheet;
+    GroupBox1: TGroupBox;
+    GroupBox2: TGroupBox;
+    DBGrid3: TDBGrid;
+    DBGrid4: TDBGrid;
+    XDBNavigator1: TXDBNavigator;
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  frm_Investisiya_setting: Tfrm_Investisiya_setting;
+
+implementation
+
+{$R *.dfm}
+uses CommanParametrs,sboapiDataModuleImpl,dmsettingsimpl;
+   procedure InitPlugin(s:string);export;
+begin
+
+   if s='' then
+   begin
+   frm_Investisiya_setting.ShowModal;
+   end;
+
+end;
+exports
+     InitPlugin;
+
+procedure Tfrm_Investisiya_setting.FormCreate(Sender: TObject);
+begin
+dmsettings:=Tdmsettings.Create(self);
+end;
+
+procedure Tfrm_Investisiya_setting.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+if ord(key)=vk_escape then  close;
+end;
+
+initialization
+ frm_Investisiya_setting :=Tfrm_Investisiya_setting.Create(Application);
+
+end.

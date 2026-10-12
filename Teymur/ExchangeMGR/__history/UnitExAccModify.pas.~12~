@@ -1,0 +1,281 @@
+﻿unit UnitExAccModify;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ExtCtrls, DBCtrls, StdCtrls, Buttons, Mask,  Unit_ExchangeMGR;
+
+type
+  TFormExAccModify = class(TForm)
+    PanelMain: TPanel;
+    DBCBoxValute: TDBLookupComboBox;
+    BtnOk: TBitBtn;
+    LabelVal: TLabel;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    CB_Purchase_Acc_No: TDBLookupComboBox;
+    CB_Selling_Acc_No: TDBLookupComboBox;
+    CB_Profit_Acc_No: TDBLookupComboBox;
+    CB_Harm_Acc_No: TDBLookupComboBox;
+    Label5: TLabel;
+    all_filial: TDBLookupComboBox;
+    Label6: TLabel;
+    CB_Cash_Acc_No: TDBLookupComboBox;
+    Label7: TLabel;
+    CB_Pur_Acc_No: TDBLookupComboBox;
+    Label8: TLabel;
+    procedure BtnOkClick(Sender: TObject);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormActivate(Sender: TObject);
+    procedure DBCBoxValuteClick(Sender: TObject);
+    procedure all_FilialClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormExAccModify       : TFormExAccModify;
+  ExchangeMGR_X         : TExchangeMGR_X;
+                      r          :integer;
+                   v_ex_id            :integer;
+implementation
+         uses UnitDateExch,IniFiles, sboapiDataModuleImpl, SBTranslateProc;
+{$R *.DFM}
+
+procedure TFormExAccModify.BtnOkClick(Sender: TObject);
+var
+      v_id               :integer;
+      v_val_id           :integer;
+      v_val_name         :string;
+      v_purchase_acc_no  :string;
+      v_selling_acc_no   :string;
+      v_profit_acc_no    :string;
+      v_harm_acc_no      :string;
+      v_cash_acc_no      :string;
+      v_pur_acc_no       :string;
+      v_filial           :integer;
+
+
+begin
+
+  Case  EditOrInsert of
+
+   1: begin
+         if (DBCBoxValute.KeyValue<>-1)  then
+         begin
+                //ShowMessage('aa');
+                 with DataModExch do
+                  begin
+                         v_ex_id:=ODSExchOffice.FieldByName('ex_no').AsInteger;
+                         v_val_id:=DBCBoxValute.KeyValue;
+                         v_val_name:=DBCBoxValute.Text;
+                         v_purchase_acc_no:=CB_Purchase_Acc_No.Text;
+                         v_selling_acc_no:=CB_Selling_Acc_No.Text;
+                         v_profit_acc_no:=CB_Profit_Acc_No.Text;
+                         v_harm_acc_no:=CB_Harm_Acc_No.Text;
+                         v_cash_acc_no:=CB_Cash_Acc_No.Text;
+                         v_pur_acc_no:=CB_Pur_Acc_No.Text;
+                        // v_filial     :=StrToInt(all_filial.Text);
+                         r:=OPExchMgr.CallIntegerFunction('ex_accounts_add',[v_ex_id,
+                                                                             v_val_id ,
+                                                                             v_val_name,
+                                                                             v_purchase_acc_no,
+                                                                             v_selling_acc_no,
+                                                                             v_profit_acc_no,
+                                                                             v_harm_acc_no,
+                                                                             v_cash_acc_no,
+                                                                             v_pur_acc_no
+                                                                             ]);
+                                                                             //v_filial]);
+                         ODSExchAcc.Refresh;
+                  end;
+         end;
+         Close;
+    end;
+ 2: begin
+
+         if (DBCBoxValute.KeyValue<>-1)   then
+         begin
+                 with DataModExch do
+                  begin
+                         v_id:=ODSExchAcc.fieldbyname('id').AsInteger;
+                         v_ex_id:=ODSExchOffice.FieldByName('ex_no').AsInteger;
+
+                         v_val_id:=DBCBoxValute.KeyValue;
+                         v_val_name:=DBCBoxValute.Text;
+                         v_purchase_acc_no:=CB_Purchase_Acc_No.Text;
+                         v_selling_acc_no:=CB_Selling_Acc_No.Text;
+                         v_profit_acc_no:=CB_Profit_Acc_No.Text;
+                         v_harm_acc_no:=CB_Harm_Acc_No.Text;
+                         v_cash_acc_no:=CB_Cash_Acc_No.Text;
+                         v_pur_acc_no:=CB_Pur_Acc_No.Text;
+                        // v_filial     :=StrToInt(all_filial.Text);
+                         OPExchMgr.CallProcedure('ex_accounts_edit',[v_id,
+                                                                    v_ex_id,
+                                                                    v_val_id ,
+                                                                    v_val_name,
+                                                                    v_purchase_acc_no,
+                                                                    v_selling_acc_no,
+                                                                    v_profit_acc_no,
+                                                                    v_harm_acc_no,
+                                                                    v_cash_acc_no,
+                                                                    v_pur_acc_no
+                                                                    ]);
+                                                                  //  v_filial]);
+                         ODSExchAcc.Refresh;
+                  end;
+         end;
+         Close;
+    end;
+
+  end;
+
+
+end;
+
+procedure TFormExAccModify.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+       if ( ORD(Key) = VK_ESCAPE ) then Close;
+end;
+
+procedure TFormExAccModify.FormActivate(Sender: TObject);
+var
+Ini,Ini1  : TIniFile;
+Bal_Manat  ,
+Bal_Valuta ,
+Bal_Gelir  ,
+Bal_Zerer,
+Bal_KassaM,
+Bal_KassaV  :string;
+v_val_id   :integer;
+begin
+
+ with DataModExch do
+  begin
+    DBCBoxValute.KeyValue:=ODSExchAcc.FieldByName('val_id').AsInteger;
+
+     v_val_id:=DBCBoxValute.KeyValue ;
+
+
+   if (not ODSExchRate.IsEmpty) then
+    begin
+       Ini:=TIniFile.Create(ExtractFilePath(paramstr(0))+'ExchangeBalance.ini');
+       Ini1:=TIniFile.Create(ExtractFilePath(paramstr(0))+'Exchange.ini');
+
+       Bal_Manat  :=Ini.ReadString('DefaultBalance','Bal_Manat','');
+       Bal_Valuta :=Ini.ReadString('DefaultBalance','Bal_Valuta','');
+       Bal_Gelir  :=Ini.ReadString('DefaultBalance','Bal_Gelir','');
+       Bal_Zerer  :=Ini.ReadString('DefaultBalance','Bal_Zerer','');
+       Bal_KassaM :=Ini1.ReadString('DefaultBalance','Balance_Main_Debt','');
+       Bal_KassaV :=Ini1.ReadString('DefaultBalance','Balance_Main_Cred','');
+
+
+
+      if Trim(Bal_Manat)  =''  then Bal_Manat  := '-1';
+      if Trim(Bal_Valuta) =''  then Bal_Valuta := '-1';
+      if Trim(Bal_Gelir)  =''  then Bal_Gelir  := '-1';
+      if Trim(Bal_Zerer)  =''  then Bal_Zerer  := '-1';
+      if Trim(Bal_KassaM) =''  then Bal_KassaM := '-1';
+      if Trim(Bal_KassaV) =''  then Bal_KassaV := '-1';
+
+
+          ODSAcc_main_debt.Close;
+          ODSAcc_main_debt.SetVariable('balance',Bal_Manat);
+          ODSAcc_main_debt.Open;
+
+          ODSAcc_child_debt.Close;
+          ODSAcc_child_debt.SetVariable('balance',Bal_Gelir);
+          ODSAcc_child_debt.Open;
+
+          ODSAcc_child_cred.Close;
+          ODSAcc_child_cred.SetVariable('balance',Bal_Zerer);
+          ODSAcc_child_cred.Open;
+
+          ODSCashDebt.Close;
+          ODSCashDebt.SetVariable('balance',Bal_KassaM);
+          ODSCashDebt.Open;
+
+
+          ODSFilial.Open;
+
+
+Case  EditOrInsert of
+
+1:  begin
+       DBCBoxValute.KeyValue:=-1;
+       CB_Harm_Acc_No.KeyValue:=-1;
+       CB_Profit_Acc_No.KeyValue:=-1;
+       CB_Purchase_Acc_No.KeyValue:=-1;
+       CB_Cash_Acc_No.KeyValue:=-1;
+       CB_Pur_Acc_No.KeyValue:=-1;
+       
+       Caption:='AddAccount';
+          ODSAcc_main_cred.Close;
+          ODSAcc_main_cred.SetVariable('balance',Bal_Valuta);
+          ODSAcc_main_cred.SetVariable('val_id',-1);
+          ODSAcc_main_cred.Open;
+
+          ODSCashKredit.Close;
+          ODSCashKredit.SetVariable('balance',Bal_Valuta);
+          ODSCashKredit.SetVariable('val_id',-1);
+          ODSCashKredit.Open;
+
+    end;
+
+2:  begin
+      Caption:='EditAccount';
+      DBCBoxValute.KeyValue:=ODSExchAcc.FieldByName('val_id').AsVariant;
+      CB_Purchase_Acc_No.KeyValue:=ODSExchAcc.FieldByName('purchase_acc_no').AsVariant;
+      CB_Selling_Acc_No.KeyValue :=ODSExchAcc.FieldByName('selling_acc_no').AsVariant;
+      CB_Profit_Acc_No.KeyValue  :=ODSExchAcc.FieldByName('profit_acc_no').AsVariant;
+      CB_Harm_Acc_No.KeyValue    :=ODSExchAcc.FieldByName('harm_acc_no').AsVariant;
+      CB_Cash_Acc_No.KeyValue    :=ODSExchAcc.FieldByName('cash_acc_no').AsVariant;
+      CB_Pur_Acc_No.KeyValue     :=ODSExchAcc.FieldByName('pur_acc_no').AsVariant;
+
+
+          ODSAcc_main_cred.Close;
+          ODSAcc_main_cred.SetVariable('balance',Bal_Valuta);
+          ODSAcc_main_cred.SetVariable('val_id',v_val_id);
+          ODSAcc_main_cred.Open;
+
+          ODSCashKredit.Close;
+          ODSCashKredit.SetVariable('balance',Bal_Valuta);
+          ODSCashKredit.SetVariable('val_id',v_val_id);
+          ODSCashKredit.Open;
+
+
+    end;
+
+   end;
+        end
+         else
+          ShowMessage('Yeni kursları daxil edin!!!');
+   end;
+end;
+procedure TFormExAccModify.FormCreate(Sender: TObject);
+begin
+SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TFormExAccModify.DBCBoxValuteClick(Sender: TObject);
+begin
+      with DataModExch do
+       begin
+          ODSAcc_main_cred.Close;
+          ODSAcc_main_cred.SetVariable('val_id',DBCBoxValute.KeyValue );
+          ODSAcc_main_cred.Open;
+      end;    
+end;
+
+procedure TFormExAccModify.all_FilialClick(Sender: TObject);
+begin
+  DataModExch.ODSFilial.Open;
+end;
+
+end.

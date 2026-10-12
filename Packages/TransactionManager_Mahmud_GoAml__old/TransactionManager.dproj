@@ -1,0 +1,171 @@
+﻿	<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+		<PropertyGroup>
+			<ProjectGuid>{79F514D3-A0AC-4D43-8240-2269FD953391}</ProjectGuid>
+			<MainSource>TransactionManager.dpr</MainSource>
+			<Config Condition="'$(Config)'==''">Debug</Config>
+			<DCC_DCCCompiler>DCC32</DCC_DCCCompiler>
+			<ProjectVersion>12.3</ProjectVersion>
+			<Base>True</Base>
+			<Platform>Win32</Platform>
+			<AppType>Library</AppType>
+			<FrameworkType>None</FrameworkType>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Config)'=='Base' or '$(Base)'!=''">
+			<Base>true</Base>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Config)'=='Release' or '$(Cfg_1)'!=''">
+			<Cfg_1>true</Cfg_1>
+			<CfgParent>Base</CfgParent>
+			<Base>true</Base>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Config)'=='Debug' or '$(Cfg_2)'!=''">
+			<Cfg_2>true</Cfg_2>
+			<CfgParent>Base</CfgParent>
+			<Base>true</Base>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Base)'!=''">
+			<DCC_DependencyCheckOutputName>..\..\..\Bin\TransactionManager.ocx</DCC_DependencyCheckOutputName>
+			<DCC_ExeOutput>\Smart-Bank\Bin</DCC_ExeOutput>
+			<DCC_UsePackage>Vcl;Vcldb;dclbde;SBCommon50;sbplg50;sboapi50;doa41dXE;SBCMVcl50;SBTranslate;SmSBanking</DCC_UsePackage>
+			<DCC_ImageBase>00400000</DCC_ImageBase>
+			<DCC_UnitAlias>WinTypes=Windows;WinProcs=Windows;DbiTypes=BDE;DbiProcs=BDE;DbiErrs=BDE;WinTypes=Windows;WinProcs=Windows;$(DCC_UnitAlias)</DCC_UnitAlias>
+			<DCC_Alignment>1</DCC_Alignment>
+			<DCC_Platform>x86</DCC_Platform>
+			<UsePackages>true</UsePackages>
+			<DCC_N>true</DCC_N>
+			<DCC_K>false</DCC_K>
+			<GenDll>true</GenDll>
+			<DCC_S>false</DCC_S>
+			<DCC_SymbolReferenceInfo>1</DCC_SymbolReferenceInfo>
+			<DCC_WriteableConstants>true</DCC_WriteableConstants>
+			<DCC_F>false</DCC_F>
+			<DCC_E>false</DCC_E>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Cfg_1)'!=''">
+			<DCC_LocalDebugSymbols>false</DCC_LocalDebugSymbols>
+			<DCC_Define>RELEASE;$(DCC_Define)</DCC_Define>
+			<DCC_SymbolReferenceInfo>0</DCC_SymbolReferenceInfo>
+			<DCC_DebugInformation>false</DCC_DebugInformation>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Cfg_2)'!=''">
+			<DCC_Define>DEBUG;$(DCC_Define)</DCC_Define>
+		</PropertyGroup>
+		<ItemGroup>
+			<DelphiCompile Include="TransactionManager.dpr">
+				<MainSource>MainSource</MainSource>
+			</DelphiCompile>
+			<DCCReference Include="TransactionManager_TLB.pas"/>
+			<DCCReference Include="TransactionManagerImpl.pas">
+				<Form>TransactionManagerForm</Form>
+				<DesignClass>TActiveForm</DesignClass>
+				<CoClasses>TransactionManagerForm</CoClasses>
+			</DCCReference>
+			<DCCReference Include="TransactionDataModuleUnit.pas">
+				<Form>TransactionDataModule</Form>
+				<DesignClass>TDataModule</DesignClass>
+			</DCCReference>
+			<DCCReference Include="TransactionPropertiesImpl.pas">
+				<Form>TransactionEditForm</Form>
+			</DCCReference>
+			<DCCReference Include="TransactionDestinationImpl.pas">
+				<Form>TransactionDestinationForm</Form>
+			</DCCReference>
+			<DCCReference Include="CommissionImpl.pas">
+				<Form>CommissionForm</Form>
+			</DCCReference>
+			<DCCReference Include="BProcTrans.pas">
+				<Form>frmBTrans</Form>
+			</DCCReference>
+			<DCCReference Include="FormBalCnImpl.pas">
+				<Form>FormBal_CN</Form>
+			</DCCReference>
+			<DCCReference Include="FormAccountsImpl.pas">
+				<Form>FormAccounts</Form>
+			</DCCReference>
+			<RidlCompile Include="TransactionManager.ridl"/>
+			<BuildConfiguration Include="Debug">
+				<Key>Cfg_2</Key>
+				<CfgParent>Base</CfgParent>
+			</BuildConfiguration>
+			<BuildConfiguration Include="Base">
+				<Key>Base</Key>
+			</BuildConfiguration>
+			<BuildConfiguration Include="Release">
+				<Key>Cfg_1</Key>
+				<CfgParent>Base</CfgParent>
+			</BuildConfiguration>
+		</ItemGroup>
+		<Import Condition="Exists('$(BDS)\Bin\CodeGear.Delphi.Targets')" Project="$(BDS)\Bin\CodeGear.Delphi.Targets"/>
+		<Import Condition="Exists('$(APPDATA)\Embarcadero\$(BDSAPPDATABASEDIR)\$(PRODUCTVERSION)\UserTools.proj')" Project="$(APPDATA)\Embarcadero\$(BDSAPPDATABASEDIR)\$(PRODUCTVERSION)\UserTools.proj"/>
+		<ProjectExtensions>
+			<Borland.Personality>Delphi.Personality.12</Borland.Personality>
+			<Borland.ProjectType>VCLApplication</Borland.ProjectType>
+			<BorlandProject>
+				<Delphi.Personality>
+					<Source>
+						<Source Name="MainSource">TransactionManager.dpr</Source>
+					</Source>
+					<Parameters>
+						<Parameters Name="RunParams">D:\Smart-Bank\Bin\SmartBank.exe /LocalIniSourceLocation=winini:\Smart-Bank\Bin\SBLocal.ini /SystemIniSourceLocation=winini:\Smart-Bank\Bin\SmartBank.ini</Parameters>
+						<Parameters Name="HostApplication">D:\Smart-Bank\Bin\SmartBank.exe</Parameters>
+					</Parameters>
+					<Language>
+						<Language Name="ProjectLang">$00000409</Language>
+					</Language>
+					<VersionInfo>
+						<VersionInfo Name="IncludeVerInfo">True</VersionInfo>
+						<VersionInfo Name="AutoIncBuild">False</VersionInfo>
+						<VersionInfo Name="MajorVer">1</VersionInfo>
+						<VersionInfo Name="MinorVer">0</VersionInfo>
+						<VersionInfo Name="Release">0</VersionInfo>
+						<VersionInfo Name="Build">0</VersionInfo>
+						<VersionInfo Name="Debug">False</VersionInfo>
+						<VersionInfo Name="PreRelease">False</VersionInfo>
+						<VersionInfo Name="Special">False</VersionInfo>
+						<VersionInfo Name="Private">False</VersionInfo>
+						<VersionInfo Name="DLL">True</VersionInfo>
+						<VersionInfo Name="Locale">1033</VersionInfo>
+						<VersionInfo Name="CodePage">1252</VersionInfo>
+					</VersionInfo>
+					<VersionInfoKeys>
+						<VersionInfoKeys Name="CompanyName">SMART SYSTEMS TECHNOLOGY</VersionInfoKeys>
+						<VersionInfoKeys Name="FileDescription">Transaction Manager</VersionInfoKeys>
+						<VersionInfoKeys Name="FileVersion">1.0.0.0</VersionInfoKeys>
+						<VersionInfoKeys Name="InternalName">TRANSACTION MANAGER</VersionInfoKeys>
+						<VersionInfoKeys Name="LegalCopyright">SMART SYSTEMS TECHNOLOGY</VersionInfoKeys>
+						<VersionInfoKeys Name="LegalTrademarks"/>
+						<VersionInfoKeys Name="OriginalFilename"/>
+						<VersionInfoKeys Name="ProductName">TRANSACTION MANAGER</VersionInfoKeys>
+						<VersionInfoKeys Name="ProductVersion">1.0.0.0</VersionInfoKeys>
+						<VersionInfoKeys Name="Comments">Gunun Senedleri</VersionInfoKeys>
+						<VersionInfoKeys Name="OleSelfRegister">1</VersionInfoKeys>
+					</VersionInfoKeys>
+					<Excluded_Packages>
+						<Excluded_Packages Name="D:\Smart-Bank\Bin\SBExcelExporter.bpl">(untitled)</Excluded_Packages>
+						<Excluded_Packages Name="D:\Smart-Bank\Bin\FieldSearch.bpl">(untitled)</Excluded_Packages>
+						<Excluded_Packages Name="D:\Smart-Bank\Bin\SBDM_Common_new.bpl">(untitled)</Excluded_Packages>
+						<Excluded_Packages Name="D:\Smart-Bank\Bin\SBTranslate.bpl">(untitled)</Excluded_Packages>
+						<Excluded_Packages Name="C:\Program Files\DevExpress VCL\Library\Delphi15\dcldxDockingD15.bpl">File C:\Program Files\DevExpress VCL\Library\Delphi15\dcldxDockingD15.bpl not found</Excluded_Packages>
+						<Excluded_Packages Name="C:\Program Files\DevExpress VCL\Library\Delphi15\dcldxFlowChartD15.bpl">ExpressFlowChart by Developer Express Inc.</Excluded_Packages>
+						<Excluded_Packages Name="C:\Program Files\DevExpress VCL\Library\Delphi15\dcldxDBOrD15.bpl">File C:\Program Files\DevExpress VCL\Library\Delphi15\dcldxDBOrD15.bpl not found</Excluded_Packages>
+						<Excluded_Packages Name="C:\Program Files\DevExpress VCL\Library\Delphi15\dclcxPivotGridChartD15.bpl">File C:\Program Files\DevExpress VCL\Library\Delphi15\dclcxPivotGridChartD15.bpl not found</Excluded_Packages>
+						<Excluded_Packages Name="C:\Program Files\DevExpress VCL\Library\Delphi15\dclcxSchedulerGridD15.bpl">File C:\Program Files\DevExpress VCL\Library\Delphi15\dclcxSchedulerGridD15.bpl not found</Excluded_Packages>
+						<Excluded_Packages Name="C:\Documents and Settings\All Users\Documents\RAD Studio\8.0\Bpl\dclcxSchedulerD15.bpl">File C:\Documents and Settings\All Users\Documents\RAD Studio\8.0\Bpl\dclcxSchedulerD15.bpl not found</Excluded_Packages>
+						<Excluded_Packages Name="C:\Program Files\DevExpress VCL\Library\Delphi15\dcldxSBD15.bpl">File C:\Program Files\DevExpress VCL\Library\Delphi15\dcldxSBD15.bpl not found</Excluded_Packages>
+						<Excluded_Packages Name="C:\Program Files\DevExpress VCL\Library\Delphi15\dcldxSpellCheckerD15.bpl">File C:\Program Files\DevExpress VCL\Library\Delphi15\dcldxSpellCheckerD15.bpl not found</Excluded_Packages>
+						<Excluded_Packages Name="C:\Program Files\DevExpress VCL\Library\Delphi15\dclcxSpreadSheetD15.bpl">File C:\Program Files\DevExpress VCL\Library\Delphi15\dclcxSpreadSheetD15.bpl not found</Excluded_Packages>
+						<Excluded_Packages Name="C:\Program Files\DevExpress VCL\Library\Delphi15\dcldxPSPrVwAdvD15.bpl">File C:\Program Files\DevExpress VCL\Library\Delphi15\dcldxPSPrVwAdvD15.bpl not found</Excluded_Packages>
+						<Excluded_Packages Name="C:\Program Files\DevExpress VCL\Library\Delphi15\dcldxPSPrVwRibbonD15.bpl">File C:\Program Files\DevExpress VCL\Library\Delphi15\dcldxPSPrVwRibbonD15.bpl not found</Excluded_Packages>
+						<Excluded_Packages Name="$(BDSBIN)\dcloffice2k150.bpl">Microsoft Office 2000 Sample Automation Server Wrapper Components</Excluded_Packages>
+					</Excluded_Packages>
+				</Delphi.Personality>
+				<ActiveXProjectInfo>
+					<version>1</version>
+				</ActiveXProjectInfo>
+				<Platforms>
+					<Platform value="Win32">True</Platform>
+				</Platforms>
+			</BorlandProject>
+			<ProjectFileVersion>12</ProjectFileVersion>
+		</ProjectExtensions>
+	</Project>

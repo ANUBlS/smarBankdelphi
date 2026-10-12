@@ -1,0 +1,49 @@
+﻿unit NewDepositsFormAccNameImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, DB, OracleData, ComCtrls, ToolWin, Grids, XDBGrids,
+  ExtCtrls, XFSCtrls;
+
+type
+  TNewDepositsFormAccName = class(TForm)
+    XFPanel1: TXFPanel;
+    XDBGrid1: TXDBGrid;
+    XFPanel2: TXFPanel;
+    AccountsDatSrc: TDataSource;
+    Accounts: TOracleDataSet;
+    AccountsID: TFloatField;
+    AccountsACC_NO: TWideStringField;
+    AccountsNAME: TWideStringField;
+    AccountsVAL_ACC: TIntegerField;
+    XFPanel5: TXFPanel;
+    EditName: TEdit;
+    XFPanel6: TXFPanel;
+    EditID: TEdit;
+    XFPanel7: TXFPanel;
+    EditACC_NO: TEdit;
+    AccountsFILIAL: TWideStringField;
+    AccountsID2: TFloatField;
+    procedure FormShow(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  NewDepositsFormAccName: TNewDepositsFormAccName;
+
+implementation
+
+{$R *.dfm}
+
+procedure TNewDepositsFormAccName.FormShow(Sender: TObject);
+begin
+  Accounts.Close;
+  Accounts.Open;
+end;
+
+end.

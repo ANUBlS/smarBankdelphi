@@ -1,0 +1,181 @@
+object DMPercentSetting: TDMPercentSetting
+  OldCreateOrder = False
+  OnCreate = DataModuleCreate
+  OnDestroy = DataModuleDestroy
+  Left = 219
+  Top = 115
+  Height = 480
+  Width = 696
+  object DepositPerSetting: TOracleDataSet
+    SQL.Strings = (
+      
+        'SELECT rowid,id, depositid, currencyid, interestrate,firstamount' +
+        ', lastamount'
+      '  FROM sbcm_depositpersetting'
+      'where DepositID = :DepID'
+      'and   CurrencyID = :CurrID')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    Variables.Data = {
+      0300000002000000060000003A44455049440300000000000000000000000700
+      00003A435552524944030000000000000000000000}
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = False
+    Active = False
+    Left = 32
+    Top = 120
+    object DepositPerSettingID: TFloatField
+      FieldName = 'ID'
+      Visible = False
+    end
+    object DepositPerSettingDEPOSITID: TFloatField
+      FieldName = 'DEPOSITID'
+      Required = True
+    end
+    object DepositPerSettingCURRENCYID: TFloatField
+      FieldName = 'CURRENCYID'
+      Required = True
+    end
+    object DepositPerSettingINTERESTRATE: TFloatField
+      DisplayLabel = '%'
+      FieldName = 'INTERESTRATE'
+      Required = True
+    end
+    object DepositPerSettingFIRSTAMOUNT: TFloatField
+      DisplayLabel = 'Áàøëàíüûæ Ìÿá.'
+      FieldName = 'FIRSTAMOUNT'
+      Required = True
+    end
+    object DepositPerSettingLASTAMOUNT: TFloatField
+      DisplayLabel = 'Ñîí Ìÿá.'
+      FieldName = 'LASTAMOUNT'
+      Required = True
+    end
+  end
+  object PerSettingDatSrc: TDataSource
+    DataSet = DepositPerSetting
+    Left = 128
+    Top = 120
+  end
+  object DepositTypes: TOracleDataSet
+    SQL.Strings = (
+      'SELECT id, type'
+      '  FROM sbcm_deposit_types')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = False
+    Active = False
+    Left = 32
+    Top = 8
+    object DepositTypesID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object DepositTypesTYPE: TStringField
+      DisplayLabel = 'Òèïè'
+      FieldName = 'TYPE'
+      Required = True
+      Size = 256
+    end
+  end
+  object DepositTypesDatSrc: TDataSource
+    DataSet = DepositTypes
+    OnDataChange = DepositTypesDatSrcDataChange
+    Left = 120
+    Top = 8
+  end
+  object Valutes: TOracleDataSet
+    SQL.Strings = (
+      'select valute,val_name,valu_name from avalute')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = False
+    Active = False
+    Left = 32
+    Top = 56
+    object ValutesVAL_NAME: TStringField
+      DisplayLabel = '$'
+      FieldName = 'VAL_NAME'
+      Size = 10
+    end
+    object ValutesVALU_NAME: TStringField
+      DisplayLabel = 'Àäû'
+      FieldName = 'VALU_NAME'
+      Size = 25
+    end
+    object ValutesVALUTE: TIntegerField
+      FieldName = 'VALUTE'
+      Required = True
+    end
+  end
+  object ValutesDatSrc: TDataSource
+    DataSet = Valutes
+    Left = 120
+    Top = 56
+  end
+end

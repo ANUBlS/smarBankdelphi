@@ -1,0 +1,167 @@
+unit FrmTranchesAddImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ExtCtrls, DBCtrls, StdCtrls, Mask, DBCtrlsEh, DBLookupEh, Buttons,
+  CMDBSearchEdit, ComCtrls;
+
+type
+   TFrmTranchesAdd = class(TForm)
+    Panel1: TPanel;
+    BitBtn1: TBitBtn;
+    Panel2: TPanel;
+    StaticText1: TStaticText;
+    DBLookupComboboxEh1: TDBLookupComboboxEh;
+    Panel3: TPanel;
+    StaticText2: TStaticText;
+    DBLookupComboboxEh2: TDBLookupComboboxEh;
+    Panel4: TPanel;
+    Panel5: TPanel;
+    StaticText3: TStaticText;
+    StaticText4: TStaticText;
+    DateTimePicker1: TDateTimePicker;
+    BitBtn2: TBitBtn;
+    Edit2: TEdit;
+    edit1: TEdit;
+    Edit3: TEdit;
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+    procedure FormShow(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure BitBtn1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmTranchesAdd: TFrmTranchesAdd;
+
+implementation
+ uses DMprop,CommonPropImpl, sboapiDataModuleImpl,SBTranslateProc;
+{$R *.DFM}
+
+procedure TFrmTranchesAdd.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+   if Ord(Key) = VK_ESCAPE then Close;
+end;
+
+procedure TFrmTranchesAdd.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+Resize:=false;
+end;
+
+procedure TFrmTranchesAdd.FormShow(Sender: TObject);
+var
+propid:integer;
+a:real;
+begin
+
+//propid:=Get_SelectedContID;//propid:=DMproperties.DataSetPropIns.FieldByname('id').asinteger;
+//a:=DMproperties.DataSetPropIns.FieldByname('v').asinteger;
+edit3.text:=floattostr(
+DMproperties.DataSetPropIns.FieldByName('value').asFloat
+  );
+
+
+with DMproperties.DataSetTake do
+begin
+ close ;
+   SetVariable('propid',propid);
+   open   ;
+ refresh
+ end;
+{with DMproperties.DSet_Prop_Kredit do
+begin
+ close ;
+   SetVariable('id',propid);
+   open   ;
+ refresh
+ end;  }
+edit1.text:=floattostr(a-
+DMproperties.DataSetTake.FieldByName('maind').asFloat
+  );
+end;
+
+procedure TFrmTranchesAdd.FormCreate(Sender: TObject);
+
+begin
+with DMproperties do
+begin
+  DataSetPropIns.open;
+  CreditAccs.open;
+  OracleDataSet1.open;
+  DateTimePicker1.DateTime:= OracleDataSet1.FieldbyName('TEK_DAT').asDateTime;
+ end;
+ SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TFrmTranchesAdd.FormDestroy(Sender: TObject);
+begin
+with DMproperties do
+begin
+  DataSetPropIns.closeall;
+  CreditAccs.close;
+  OracleDataSet1.close;
+  DataSetTake.closeall;
+
+ end
+end;
+
+procedure TFrmTranchesAdd.BitBtn1Click(Sender: TObject);
+resourcestring
+  rsTransactionsWillProcessed = 'Транш ...';
+var
+propid,Debitaccid ,propcount:  integer ;
+propnumetofcredit: string;
+value   :real;
+CommitTranche : Boolean;
+date:string;
+begin
+ date:=FormatDateTime('dd-mmm-yyyy', Trunc(DateTimePicker1.Date))  ;
+ Debitaccid := DBLookupComboboxEh2.ListSource.DataSet.FieldByName('ID').AsInteger;
+ propnumetofcredit:= DBLookupComboboxEh1.ListSource.DataSet.FieldByName('NUMBEROFCREDIT').Asstring;
+ propid:=Get_SelectedContID;
+ value:=strtofloat(Edit1.text) ;
+// propcount:=strtoint(edit2.text);
+  //ShowMessage(floattostr(value));
+ // ShowMessage(inttostr(Debitaccid));
+ DMproperties.OraclePackage2.CallProcedure('AddTranche',['p_propid',propid,
+                                                         'p_propnumetofcredit',propnumetofcredit,
+                                                         'p_Debitaccid',Debitaccid,
+                                                         'p_value',value,
+                                                         'p_date',date
+                                                         ]) ;
+  try
+
+    CommitTranche := TrDelayed_Show(Self,rsTransactionsWillProcessed);
+     ShowMessage('a');
+    Update;
+    
+    DMproperties.OraclePackage2.CallProcedure('CommitTranche',['DoCommit',
+       CommitTranche
+    ]);
+
+    if CommitTranche then
+    Self.ModalResult := mrOk;
+    Self.Update;
+  except
+   ShowMessage('b');
+
+   DMproperties.OraclePackage2.CallProcedure('CommitTranche',['DoCommit',
+        False
+    ]);
+
+    raise;
+  end;
+// DMproperties.DataSetProp_take.refresh;
+// close
+end;
+
+end.

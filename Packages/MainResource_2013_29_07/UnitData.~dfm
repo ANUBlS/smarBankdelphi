@@ -1,0 +1,1377 @@
+object DataModWares: TDataModWares
+  OldCreateOrder = False
+  Height = 738
+  Width = 1024
+  object DSGroups: TDataSource
+    DataSet = ODSGroups
+    Left = 104
+    Top = 16
+  end
+  object ODSGroups: TOracleDataSet
+    SQL.Strings = (
+      'Select'
+      '   rownum,'
+      '   id,'
+      '   name,'
+      '   amort,'
+      '   taxamort, '
+      
+        '   main_account,SB_COMPLEX_TRANSACTIONS.GetAccountNumber(main_ac' +
+        'count) as MainAccNo,'
+      
+        '   exp_account,SB_COMPLEX_TRANSACTIONS.GetAccountNumber(exp_acco' +
+        'unt) as DebtAccNo,'
+      
+        '   amort_account,SB_COMPLEX_TRANSACTIONS.GetAccountNumber(amort_' +
+        'account) as CreditAccNo,'
+      
+        '   sale_account,SB_COMPLEX_TRANSACTIONS.GetAccountNumber(sale_ac' +
+        'count) as SaleAccNo'
+      'From'
+      '   Groups'
+      'Order by :Title'
+      ' ')
+    Variables.Data = {
+      0300000001000000060000003A5449544C450100000003000000696400000000
+      00}
+    QBEDefinition.QBEFieldDefs = {
+      040000000D00000006000000524F574E554D0100000000000200000049440100
+      00000000040000004E414D4501000000000005000000414D4F52540100000000
+      0008000000544158414D4F52540100000000000C0000004D41494E5F4143434F
+      554E54010000000000090000004D41494E4143434E4F0100000000000B000000
+      4558505F4143434F554E5401000000000009000000444542544143434E4F0100
+      000000000D000000414D4F52545F4143434F554E540100000000000B00000043
+      52454449544143434E4F0100000000000C00000053414C455F4143434F554E54
+      0100000000000900000053414C454143434E4F010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 16
+    Top = 16
+  end
+  object DSWares: TDataSource
+    DataSet = ODSWares
+    Left = 16
+    Top = 64
+  end
+  object ODSWares: TOracleDataSet
+    SQL.Strings = (
+      'Select  '
+      '         w.rowid,'
+      '         rownum,W.*'
+      'From  '
+      '         Wares_All W'
+      ''
+      ''
+      'Where W.groups_id = :groups_id and VISIBLE=0 '
+      ''
+      ''
+      'Order by :Title')
+    Variables.Data = {
+      03000000020000000A0000003A47524F5550535F494404000000080000000000
+      00000000354000000000060000003A5449544C45010000000A00000075736572
+      5F6E616D650000000000}
+    QBEDefinition.QBEFieldDefs = {
+      040000001E00000006000000524F574E554D0100000000000A00000057415245
+      535F4E414D450100000000000800000057415245535F49440100000000000D00
+      0000494E56454E5441525F444154450100000000000900000047524F5550535F
+      49440100000000000B00000046495253545F5052494345010000000000090000
+      0052454D41494E44455201000000000005000000414D4F525401000000000009
+      000000414C4C5F414D4F52540100000000000700000050455243454E54010000
+      0000000F0000005441585F46495253545F50524943450100000000000D000000
+      5441585F52454D41494E444552010000000000090000005441585F414D4F5254
+      0100000000000D0000005441585F414C4C5F414D4F52540100000000000B0000
+      005441585F50455243454E540100000000000C000000434C4F53455F464F524D
+      41540100000000000A000000414D4F52545F4441544501000000000003000000
+      46584D0100000000000B0000004B454550494E475F5345430100000000000700
+      0000555345525F4944010000000000100000005441585F434C4F53455F464F52
+      4D41540100000000000B000000494E56454E5441525F4E4F0100000000000900
+      0000555345525F4E414D450100000000000700000056495349424C4501000000
+      00000A000000454E5445525F4441544501000000000009000000434841524143
+      5445520100000000000A00000050524F44554354494F4E0100000000000B0000
+      00494E464F524D4154494F4E0100000000000500000055535249440100000000
+      0006000000555352494431010000000000}
+    Master = ODSGroups
+    MasterFields = 'ID'
+    DetailFields = 'GROUPS_ID'
+    Session = sboapiDataModule.SBSession
+    Left = 89
+    Top = 80
+  end
+  object SB_MAIN_RESOURCE: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'SB_MAIN_RESOURCE'
+    Left = 536
+    Top = 16
+  end
+  object ODSCalcWares: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      'W.*,'
+      'SB_MAIN_RESOURCE.GetAccountNumber(W.debt_acc) as DebtAccNo ,'
+      'SB_MAIN_RESOURCE.GetAccountNumber(W.cred_acc) as CredAccNo '
+      'from '
+      'wares_all_trans'
+      'W')
+    Session = sboapiDataModule.SBSession
+    Filter = 'debt_amount<>0 '
+    Filtered = True
+    Left = 104
+    Top = 128
+  end
+  object DSCalcWares: TDataSource
+    DataSet = ODSCalcWares
+    Left = 24
+    Top = 128
+  end
+  object ODSReport: TOracleDataSet
+    SQL.Strings = (
+      
+        'select g.name,g.id,rownum,w.* from groups g,wares_all w where g.' +
+        'id=w.groups_id  and VISIBLE=0'
+      'order by g.id')
+    QBEDefinition.QBEFieldDefs = {
+      040000001A000000040000004E414D4501000000000002000000494401000000
+      00000A00000057415245535F4E414D450100000000000800000057415245535F
+      49440100000000000D000000494E56454E5441525F4441544501000000000009
+      00000047524F5550535F49440100000000000B00000046495253545F50524943
+      450100000000000900000052454D41494E44455201000000000005000000414D
+      4F525401000000000009000000414C4C5F414D4F525401000000000007000000
+      50455243454E540100000000000F0000005441585F46495253545F5052494345
+      0100000000000D0000005441585F52454D41494E444552010000000000090000
+      005441585F414D4F52540100000000000D0000005441585F414C4C5F414D4F52
+      540100000000000B0000005441585F50455243454E540100000000000C000000
+      434C4F53455F464F524D41540100000000000A000000414D4F52545F44415445
+      0100000000000300000046584D0100000000000B0000004B454550494E475F53
+      454301000000000007000000555345525F494401000000000010000000544158
+      5F434C4F53455F464F524D41540100000000000B000000494E56454E5441525F
+      4E4F01000000000009000000555345525F4E414D450100000000000700000056
+      495349424C4501000000000006000000524F574E554D010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 200
+    Top = 126
+  end
+  object ODSTraffics: TOracleDataSet
+    SQL.Strings = (
+      'Select'
+      '   *'
+      'From'
+      '    wares_last'
+      'where'
+      '   wares_ID =:WaresID '
+      ' and'
+      '   close_format<>0'
+      ''
+      'Order by '
+      '   amort_date')
+    Variables.Data = {
+      0300000001000000080000003A57415245534944030000000000000000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 400
+    Top = 213
+  end
+  object ODSTrans: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      'W.*,'
+      'SB_MAIN_RESOURCE.GetAccountNumber(W.debt_acc) as DebtAccNo ,'
+      'SB_MAIN_RESOURCE.GetAccountNumber(W.cred_acc) as CredAccNo '
+      'from '
+      'wares_all_trans_out'
+      'W')
+    Session = sboapiDataModule.SBSession
+    Left = 88
+    Top = 192
+  end
+  object DSTransOut: TDataSource
+    DataSet = ODSTrans
+    Left = 24
+    Top = 192
+  end
+  object ODSViewGr: TOracleDataSet
+    SQL.Strings = (
+      'select id,acc_no from account order by acc_no')
+    QBEDefinition.QBEFieldDefs = {
+      0400000002000000060000004143435F4E4F0100000000000200000049440100
+      00000000}
+    Session = sboapiDataModule.SBSession
+    Left = 272
+    Top = 16
+  end
+  object ODSSumWares: TOracleDataSet
+    SQL.Strings = (
+      'Select'
+      '     Groups_ID,  '
+      '     sum(First_Price) First_Price,'
+      '     sum(Remainder) Remainder,'
+      '     sum(All_Amort) All_Amort,'
+      '     sum(Amort) Amort, '
+      '     sum(Tax_First_Price) Tax_First_Price,'
+      '     sum(Tax_Remainder) Tax_Remainder,'
+      '     sum(Tax_All_Amort) Tax_All_Amort,'
+      '     sum(Tax_Amort) Tax_Amort'
+      ' '
+      ''
+      ''
+      'From'
+      '      Wares_All '
+      'where groups_id = :groups_id and VISIBLE=0'
+      ''
+      'group by groups_id')
+    Variables.Data = {
+      03000000010000000A0000003A47524F5550535F494404000000000000000000
+      0000}
+    QBEDefinition.QBEFieldDefs = {
+      04000000090000000900000047524F5550535F49440100000000000B00000046
+      495253545F50524943450100000000000900000052454D41494E444552010000
+      00000009000000414C4C5F414D4F525401000000000005000000414D4F525401
+      00000000000F0000005441585F46495253545F50524943450100000000000D00
+      00005441585F52454D41494E4445520100000000000D0000005441585F414C4C
+      5F414D4F5254010000000000090000005441585F414D4F5254010000000000}
+    Master = ODSGroups
+    MasterFields = 'ID'
+    DetailFields = 'GROUPS_ID'
+    Session = sboapiDataModule.SBSession
+    Left = 104
+    Top = 256
+  end
+  object DSSumWares: TDataSource
+    DataSet = ODSSumWares
+    Left = 24
+    Top = 256
+  end
+  object ODSGroupXLS: TOracleDataSet
+    SQL.Strings = (
+      'Select'
+      '   rownum,'
+      '   id,'
+      '   name,'
+      '   amort,'
+      '   taxamort, '
+      
+        '   main_account,SB_COMPLEX_TRANSACTIONS.GetAccountNumber(main_ac' +
+        'count) as MainAccNo,'
+      
+        '   exp_account,SB_COMPLEX_TRANSACTIONS.GetAccountNumber(exp_acco' +
+        'unt) as DebtAccNo,'
+      
+        '   amort_account,SB_COMPLEX_TRANSACTIONS.GetAccountNumber(amort_' +
+        'account) as CreditAccNo,'
+      
+        '   sale_account,SB_COMPLEX_TRANSACTIONS.GetAccountNumber(sale_ac' +
+        'count) as SaleAccNo'
+      'From'
+      '   Groups'
+      ' ')
+    Session = sboapiDataModule.SBSession
+    Left = 288
+    Top = 128
+  end
+  object ODSWaresXLS: TOracleDataSet
+    SQL.Strings = (
+      ''
+      '')
+    Variables.Data = {
+      03000000010000000A0000003A47524F5550535F494403000000000000000000
+      0000}
+    Master = ODSGroupXLS
+    MasterFields = 'ID'
+    DetailFields = 'GROUPS_ID'
+    Session = sboapiDataModule.SBSession
+    Left = 304
+    Top = 216
+  end
+  object ODSViewWares: TOracleDataSet
+    SQL.Strings = (
+      'Select  '
+      '         *'
+      'From  '
+      '         Wares_Last'
+      ''
+      ''
+      'Where  '
+      '          ( groups_id =:groups_id )'
+      '       and'
+      '          ( amort_date =:v_amort_date )'
+      ''
+      '')
+    Variables.Data = {
+      03000000020000000A0000003A47524F5550535F494403000000000000000000
+      00000D0000003A565F414D4F52545F444154450C0000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      04000000110000000A00000057415245535F4E414D4501000000000008000000
+      57415245535F49440100000000000D000000494E56454E5441525F4441544501
+      00000000000900000047524F5550535F49440100000000000B00000046495253
+      545F50524943450100000000000900000052454D41494E444552010000000000
+      05000000414D4F525401000000000009000000414C4C5F414D4F525401000000
+      00000700000050455243454E540100000000000F0000005441585F4649525354
+      5F50524943450100000000000D0000005441585F52454D41494E444552010000
+      000000090000005441585F414D4F52540100000000000D0000005441585F414C
+      4C5F414D4F52540100000000000B0000005441585F50455243454E5401000000
+      00000C000000434C4F53455F464F524D41540100000000000A000000414D4F52
+      545F44415445010000000000100000005441585F434C4F53455F464F524D4154
+      010000000000}
+    Master = ODSViewGroups
+    MasterFields = 'ID'
+    DetailFields = 'GROUPS_ID'
+    Session = sboapiDataModule.SBSession
+    Left = 472
+    Top = 80
+  end
+  object DSViewWares: TDataSource
+    DataSet = ODSViewWares
+    Left = 384
+    Top = 80
+  end
+  object ODSViewGroups: TOracleDataSet
+    SQL.Strings = (
+      'Select'
+      '   rownum,'
+      '   id,'
+      '   name,'
+      '   amort,'
+      '   taxamort, '
+      
+        '   main_account,SB_COMPLEX_TRANSACTIONS.GetAccountNumber(main_ac' +
+        'count) as MainAccNo,'
+      
+        '   exp_account,SB_COMPLEX_TRANSACTIONS.GetAccountNumber(exp_acco' +
+        'unt) as DebtAccNo,'
+      
+        '   amort_account,SB_COMPLEX_TRANSACTIONS.GetAccountNumber(amort_' +
+        'account) as CreditAccNo,'
+      
+        '   sale_account,SB_COMPLEX_TRANSACTIONS.GetAccountNumber(sale_ac' +
+        'count) as SaleAccNo'
+      'From'
+      '   Groups')
+    QBEDefinition.QBEFieldDefs = {
+      040000000D00000006000000524F574E554D0100000000000200000049440100
+      00000000040000004E414D4501000000000005000000414D4F52540100000000
+      0008000000544158414D4F52540100000000000C0000004D41494E5F4143434F
+      554E54010000000000090000004D41494E4143434E4F0100000000000B000000
+      4558505F4143434F554E5401000000000009000000444542544143434E4F0100
+      000000000D000000414D4F52545F4143434F554E540100000000000B00000043
+      52454449544143434E4F0100000000000C00000053414C455F4143434F554E54
+      0100000000000900000053414C454143434E4F010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 128
+    Top = 376
+  end
+  object DSViewGroups: TDataSource
+    DataSet = ODSViewGroups
+    Left = 32
+    Top = 376
+  end
+  object ODSSumViewWares: TOracleDataSet
+    SQL.Strings = (
+      'Select'
+      '     Amort_Date, '
+      '     Groups_ID,'
+      '     sum(First_Price) First_Price,'
+      '     sum(Remainder) Remainder,'
+      '     sum(All_Amort) All_Amort,'
+      '     sum(Amort) Amort, '
+      '     sum(Tax_First_Price) Tax_First_Price,'
+      '     sum(Tax_Remainder) Tax_Remainder,'
+      '     sum(Tax_All_Amort) Tax_All_Amort,'
+      '     sum(Tax_Amort) Tax_Amort '
+      ''
+      'From'
+      '      Wares_Last '
+      'where '
+      'groups_id = :groups_id'
+      ''
+      'and'
+      ''
+      'amort_date=:amort_date'
+      ''
+      'group by groups_id,amort_date')
+    Variables.Data = {
+      03000000020000000A0000003A47524F5550535F494404000000000000000000
+      00000B0000003A414D4F52545F444154450C0000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      040000000A0000000900000047524F5550535F49440100000000000B00000046
+      495253545F50524943450100000000000900000052454D41494E444552010000
+      00000009000000414C4C5F414D4F525401000000000005000000414D4F525401
+      00000000000F0000005441585F46495253545F50524943450100000000000D00
+      00005441585F52454D41494E4445520100000000000D0000005441585F414C4C
+      5F414D4F5254010000000000090000005441585F414D4F52540100000000000A
+      000000414D4F52545F44415445010000000000}
+    Master = ODSViewGroups
+    MasterFields = 'id'
+    DetailFields = 'groups_id'
+    Session = sboapiDataModule.SBSession
+    Left = 128
+    Top = 312
+  end
+  object DSSumViewWares: TDataSource
+    DataSet = ODSSumViewWares
+    Left = 32
+    Top = 312
+  end
+  object DSRepGroupAllNB: TDataSource
+    DataSet = ODSRepGroupAllNB
+    Left = 176
+    Top = 72
+  end
+  object ODSRepGroupAllNB: TOracleDataSet
+    SQL.Strings = (
+      'SELECT  '
+      'g.id,'
+      'g.name,'
+      'g.amort as percent,'
+      'g.taxamort as tax_percent,'
+      'w.groups_id,'
+      'w.amort_date,'
+      'sum(w.first_price) as first_price,'
+      'sum(w.remainder) as remainder,'
+      'sum(w.all_amort) as all_amort,'
+      'sum(w.amort) as amort,'
+      'sum(w.tax_first_price) as tax_first_price,'
+      'sum(w.tax_remainder) as tax_remainder,'
+      'sum(w.tax_all_amort) as tax_all_amort,'
+      'sum(w.tax_amort) as tax_amort'
+      ''
+      'FROM '
+      '       wares_last w,groups g'
+      ''
+      'WHERE '
+      '        g.id=w.groups_id'
+      '      and'
+      '        amort_date between :v_amort_date and :end_date'
+      ''
+      'GROUP BY '
+      '        g.id,'
+      '        g.name,'
+      '        g.amort,'
+      '        g.taxamort,'
+      '        w.groups_id,'
+      '        w.amort_date '
+      'ORDER BY'
+      '         name,amort_date,first_price')
+    Variables.Data = {
+      03000000020000000D0000003A565F414D4F52545F444154450C000000000000
+      0000000000090000003A454E445F444154450C0000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      040000000E000000020000004944010000000000040000004E414D4501000000
+      000005000000414D4F52540100000000000900000047524F5550535F49440100
+      000000000A000000414D4F52545F444154450100000000000B00000046495253
+      545F50524943450100000000000900000052454D41494E444552010000000000
+      09000000414C4C5F414D4F52540100000000000F0000005441585F4649525354
+      5F50524943450100000000000D0000005441585F52454D41494E444552010000
+      0000000D0000005441585F414C4C5F414D4F5254010000000000090000005441
+      585F414D4F52540100000000000700000050455243454E540100000000000B00
+      00005441585F50455243454E54010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 280
+    Top = 72
+  end
+  object ODSWaresXLSALL: TOracleDataSet
+    SQL.Strings = (
+      'Select  '
+      '         rownum,W.*'
+      'From  '
+      '         Wares_ALL W'
+      ''
+      ''
+      'where groups_id = :groups_id and VISIBLE=0'
+      ''
+      'order by W.wares_name, W.amort_date')
+    Variables.Data = {
+      03000000010000000A0000003A47524F5550535F494404000000000000000000
+      0000}
+    Master = ODSGroupXLS
+    MasterFields = 'ID'
+    DetailFields = 'GROUPS_ID'
+    Session = sboapiDataModule.SBSession
+    Left = 208
+    Top = 216
+  end
+  object ODSFilterGroup: TOracleDataSet
+    SQL.Strings = (
+      'Select'
+      '   id,'
+      '   name'
+      'From'
+      '   Groups')
+    QBEDefinition.QBEFieldDefs = {
+      0400000002000000020000004944010000000000040000004E414D4501000000
+      0000}
+    Session = sboapiDataModule.SBSession
+    Left = 384
+    Top = 128
+  end
+  object DSViewGr: TDataSource
+    DataSet = ODSViewGr
+    Left = 184
+    Top = 16
+  end
+  object ODSFilterWares: TOracleDataSet
+    SQL.Strings = (
+      
+        'select distinct keeping_sec,wares_name,user_name from wares_all ' +
+        'where keeping_sec is not null')
+    QBEDefinition.QBEFieldDefs = {
+      04000000030000000B0000004B454550494E475F5345430100000000000A0000
+      0057415245535F4E414D4501000000000009000000555345525F4E414D450100
+      00000000}
+    Session = sboapiDataModule.SBSession
+    Left = 472
+    Top = 136
+  end
+  object ODSet_WExp: TOracleDataSet
+    SQL.Strings = (
+      'SELECT id,parentid,name,description,value,valuelist,'
+      '       display_value_list'
+      '  FROM settings where name='#39'WARES_MinPer'#39)
+    QBEDefinition.QBEFieldDefs = {
+      040000000700000002000000494401000000000008000000504152454E544944
+      010000000000040000004E414D450100000000000B0000004445534352495054
+      494F4E0100000000000500000056414C55450100000000000900000056414C55
+      454C49535401000000000012000000444953504C41595F56414C55455F4C4953
+      54010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 440
+    Top = 16
+  end
+  object DSource_WExp: TDataSource
+    DataSet = ODSet_WExp
+    Left = 352
+    Top = 16
+  end
+  object ODSetArWares: TOracleDataSet
+    SQL.Strings = (
+      'Select  '
+      '         rownum,W.*'
+      'From  '
+      '         Wares_All W'
+      ''
+      ''
+      'where groups_id = :groups_id and visible=2'
+      'and amort_date>=:B_DATE and amort_date<=:E_DATE')
+    Variables.Data = {
+      03000000030000000A0000003A47524F5550535F494404000000080000000000
+      00000000454000000000070000003A425F444154450C00000007000000786B05
+      1E01010100000000070000003A455F444154450C00000007000000786B060101
+      010100000000}
+    QBEDefinition.QBEFieldDefs = {
+      040000001800000006000000524F574E554D0100000000000A00000057415245
+      535F4E414D450100000000000800000057415245535F49440100000000000D00
+      0000494E56454E5441525F444154450100000000000900000047524F5550535F
+      49440100000000000B00000046495253545F5052494345010000000000090000
+      0052454D41494E44455201000000000005000000414D4F525401000000000009
+      000000414C4C5F414D4F52540100000000000700000050455243454E54010000
+      0000000F0000005441585F46495253545F50524943450100000000000D000000
+      5441585F52454D41494E444552010000000000090000005441585F414D4F5254
+      0100000000000D0000005441585F414C4C5F414D4F52540100000000000B0000
+      005441585F50455243454E540100000000000C000000434C4F53455F464F524D
+      41540100000000000A000000414D4F52545F4441544501000000000003000000
+      46584D0100000000000B0000004B454550494E475F5345430100000000000700
+      0000555345525F4944010000000000100000005441585F434C4F53455F464F52
+      4D41540100000000000B000000494E56454E5441525F4E4F0100000000000900
+      0000555345525F4E414D450100000000000700000056495349424C4501000000
+      0000}
+    Master = ODSGroupsAr
+    MasterFields = 'ID'
+    DetailFields = 'GROUPS_ID'
+    Session = sboapiDataModule.SBSession
+    Left = 240
+    Top = 376
+  end
+  object DSourArWares: TDataSource
+    DataSet = ODSetArWares
+    Left = 320
+    Top = 376
+  end
+  object DSGroupsAr: TDataSource
+    DataSet = ODSGroupsAr
+    Left = 320
+    Top = 320
+  end
+  object ODSGroupsAr: TOracleDataSet
+    SQL.Strings = (
+      'Select'
+      '   rownum,'
+      '   id,'
+      '   name,'
+      '   amort,'
+      '   taxamort, '
+      
+        '   main_account,SB_COMPLEX_TRANSACTIONS.GetAccountNumber(main_ac' +
+        'count) as MainAccNo,'
+      
+        '   exp_account,SB_COMPLEX_TRANSACTIONS.GetAccountNumber(exp_acco' +
+        'unt) as DebtAccNo,'
+      
+        '   amort_account,SB_COMPLEX_TRANSACTIONS.GetAccountNumber(amort_' +
+        'account) as CreditAccNo,'
+      
+        '   sale_account,SB_COMPLEX_TRANSACTIONS.GetAccountNumber(sale_ac' +
+        'count) as SaleAccNo'
+      'From'
+      '   Groups'
+      'Order by rownum'
+      ' ')
+    Variables.Data = {
+      0300000001000000060000003A5449544C450100000003000000696400000000
+      00}
+    QBEDefinition.QBEFieldDefs = {
+      040000000D00000006000000524F574E554D0100000000000200000049440100
+      00000000040000004E414D4501000000000005000000414D4F52540100000000
+      0008000000544158414D4F52540100000000000C0000004D41494E5F4143434F
+      554E54010000000000090000004D41494E4143434E4F0100000000000B000000
+      4558505F4143434F554E5401000000000009000000444542544143434E4F0100
+      000000000D000000414D4F52545F4143434F554E540100000000000B00000043
+      52454449544143434E4F0100000000000C00000053414C455F4143434F554E54
+      0100000000000900000053414C454143434E4F010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 240
+    Top = 320
+  end
+  object ODSBankInfo: TOracleDataSet
+    SQL.Strings = (
+      'Select '
+      '   AZ_NAME  FullBankName'
+      'From '
+      '   BankInfo')
+    QBEDefinition.QBEFieldDefs = {04000000010000000C00000046554C4C42414E4B4E414D45010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 560
+    Top = 81
+    object ODSBankInfoFULLBANKNAME: TStringField
+      FieldName = 'FULLBANKNAME'
+      Size = 80
+    end
+  end
+  object DSSumWaresAr: TDataSource
+    DataSet = ODSSumWaresAr
+    Left = 424
+    Top = 318
+  end
+  object ODSSumWaresAr: TOracleDataSet
+    SQL.Strings = (
+      'Select'
+      '     Groups_ID,  '
+      '     sum(First_Price) First_Price,'
+      '     sum(Remainder) Remainder,'
+      '     sum(All_Amort) All_Amort,'
+      '     sum(Amort) Amort, '
+      '     sum(Tax_First_Price) Tax_First_Price,'
+      '     sum(Tax_Remainder) Tax_Remainder,'
+      '     sum(Tax_All_Amort) Tax_All_Amort,'
+      '     sum(Tax_Amort) Tax_Amort '
+      ''
+      'From'
+      '      Wares_All '
+      'where groups_id = :groups_id and VISIBLE=2'
+      'and amort_date>=:B_DATE and amort_date<=:E_DATE'
+      'group by groups_id')
+    Variables.Data = {
+      03000000030000000A0000003A47524F5550535F494404000000080000000000
+      00000000454000000000070000003A425F444154450C00000007000000786B05
+      1E01010100000000070000003A455F444154450C00000007000000786B060101
+      010100000000}
+    QBEDefinition.QBEFieldDefs = {
+      04000000090000000900000047524F5550535F49440100000000000B00000046
+      495253545F50524943450100000000000900000052454D41494E444552010000
+      00000009000000414C4C5F414D4F525401000000000005000000414D4F525401
+      00000000000F0000005441585F46495253545F50524943450100000000000D00
+      00005441585F52454D41494E4445520100000000000D0000005441585F414C4C
+      5F414D4F5254010000000000090000005441585F414D4F5254010000000000}
+    Master = ODSGroupsAr
+    MasterFields = 'ID'
+    DetailFields = 'GROUPS_ID'
+    Session = sboapiDataModule.SBSession
+    Left = 512
+    Top = 318
+  end
+  object ODSArWaresS: TOracleDataSet
+    SQL.Strings = (
+      'SELECT ROWNUM, w.*'
+      '  FROM wares_all w'
+      ' WHERE close_format = 2'
+      
+        '   AND ((tax_remainder <= first_price * 5 / 100) OR (tax_first_p' +
+        'rice < 100))'
+      '   AND groups_id = :groups_id'
+      ''
+      '')
+    Variables.Data = {
+      03000000010000000A0000003A47524F5550535F494404000000080000000000
+      00000060794000000000}
+    QBEDefinition.QBEFieldDefs = {
+      040000001D00000006000000524F574E554D0100000000000A00000057415245
+      535F4E414D450100000000000800000057415245535F49440100000000000D00
+      0000494E56454E5441525F444154450100000000000900000047524F5550535F
+      49440100000000000B00000046495253545F5052494345010000000000090000
+      0052454D41494E44455201000000000005000000414D4F525401000000000009
+      000000414C4C5F414D4F52540100000000000700000050455243454E54010000
+      0000000F0000005441585F46495253545F50524943450100000000000D000000
+      5441585F52454D41494E444552010000000000090000005441585F414D4F5254
+      0100000000000D0000005441585F414C4C5F414D4F52540100000000000B0000
+      005441585F50455243454E540100000000000C000000434C4F53455F464F524D
+      41540100000000000A000000414D4F52545F4441544501000000000003000000
+      46584D0100000000000B0000004B454550494E475F5345430100000000000700
+      0000555345525F4944010000000000100000005441585F434C4F53455F464F52
+      4D41540100000000000B000000494E56454E5441525F4E4F0100000000000900
+      0000555345525F4E414D450100000000000700000056495349424C4501000000
+      00000A000000454E5445525F4441544501000000000009000000434841524143
+      5445520100000000000A00000050524F44554354494F4E0100000000000B0000
+      00494E464F524D4154494F4E0100000000000500000055535249440100000000
+      00}
+    Master = ODSGroupsAr
+    MasterFields = 'ID'
+    DetailFields = 'GROUPS_ID'
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 424
+    Top = 376
+  end
+  object DSArWaresS: TDataSource
+    DataSet = ODSArWaresS
+    Left = 520
+    Top = 376
+  end
+  object ODSArWaresReport: TOracleDataSet
+    SQL.Strings = (
+      
+        'select g.name,g.id,rownum,w.* from groups g,wares_all w where g.' +
+        'id=w.groups_id'
+      'and w.close_format = 2'
+      
+        '   AND ((w.remainder <= w.first_price * 5 / 100) OR (w.tax_first' +
+        '_price < 100))'
+      'order by g.id')
+    QBEDefinition.QBEFieldDefs = {
+      040000001F000000040000004E414D4501000000000002000000494401000000
+      00000A00000057415245535F4E414D450100000000000800000057415245535F
+      49440100000000000D000000494E56454E5441525F4441544501000000000009
+      00000047524F5550535F49440100000000000B00000046495253545F50524943
+      450100000000000900000052454D41494E44455201000000000005000000414D
+      4F525401000000000009000000414C4C5F414D4F525401000000000007000000
+      50455243454E540100000000000F0000005441585F46495253545F5052494345
+      0100000000000D0000005441585F52454D41494E444552010000000000090000
+      005441585F414D4F52540100000000000D0000005441585F414C4C5F414D4F52
+      540100000000000B0000005441585F50455243454E540100000000000C000000
+      434C4F53455F464F524D41540100000000000A000000414D4F52545F44415445
+      0100000000000300000046584D0100000000000B0000004B454550494E475F53
+      454301000000000007000000555345525F494401000000000010000000544158
+      5F434C4F53455F464F524D41540100000000000B000000494E56454E5441525F
+      4E4F01000000000009000000555345525F4E414D450100000000000700000056
+      495349424C4501000000000006000000524F574E554D0100000000000A000000
+      454E5445525F4441544501000000000009000000434841524143544552010000
+      0000000A00000050524F44554354494F4E0100000000000B000000494E464F52
+      4D4154494F4E010000000000050000005553524944010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 416
+    Top = 432
+  end
+  object OracleDataSet1: TOracleDataSet
+    SQL.Strings = (
+      'select * from wares_users')
+    Session = sboapiDataModule.SBSession
+    Filtered = True
+    Left = 240
+    Top = 432
+  end
+  object OracleDataSet2: TOracleDataSet
+    SQL.Strings = (
+      
+        'select  c.ACC_NO,c.BAL_CN1,a.WARES_NAME,a.INVENTAR_DATE,a.FIRST_' +
+        'PRICE,a.REMAINDER,'
+      '                 a.ALL_AMORT,a.AMORT,a.PERCENT,'
+      '                a. AMORT_DATE ,a.USER_NAME,d.fxm'
+      
+        'from wares_last  a ,GROUPS b ,ACCOUNT c,wares_all d  where a.CLO' +
+        'SE_FORMAT=1'
+      
+        'and b.MAIN_ACCOUNT=c.ID  and a.GROUPS_ID=b.id  and d.WARES_ID=a.' +
+        'WARES_ID and a.AMORT_DATE  between :BDATE AND :EDATE'
+      ''
+      ' '
+      ' ')
+    Variables.Data = {
+      0300000002000000060000003A42444154450C00000000000000000000000600
+      00003A45444154450C0000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      040000000C000000060000004143435F4E4F0100000000000A00000057415245
+      535F4E414D450100000000000D000000494E56454E5441525F44415445010000
+      0000000B00000046495253545F50524943450100000000000900000052454D41
+      494E44455201000000000009000000414C4C5F414D4F52540100000000000500
+      0000414D4F52540100000000000700000050455243454E540100000000000A00
+      0000414D4F52545F4441544501000000000009000000555345525F4E414D4501
+      00000000000300000046584D0100000000000700000042414C5F434E31010000
+      000000}
+    Session = sboapiDataModule.SBSession
+    Left = 32
+    Top = 432
+    object OracleDataSet2ACC_NO: TStringField
+      DisplayLabel = 'ўесаб'
+      FieldName = 'ACC_NO'
+    end
+    object OracleDataSet2BAL_CN1: TFloatField
+      DisplayLabel = 'Ѕаланс щесабы'
+      FieldName = 'BAL_CN1'
+    end
+    object OracleDataSet2WARES_NAME: TStringField
+      DisplayLabel = 'ўесабын ады'
+      FieldName = 'WARES_NAME'
+      Size = 90
+    end
+    object OracleDataSet2INVENTAR_DATE: TDateTimeField
+      DisplayLabel = '»нвентар тарих'
+      FieldName = 'INVENTAR_DATE'
+    end
+    object OracleDataSet2FIRST_PRICE: TFloatField
+      DisplayLabel = '»лкин д€й€р'
+      FieldName = 'FIRST_PRICE'
+    end
+    object OracleDataSet2REMAINDER: TFloatField
+      DisplayLabel = '√алыг д€й€р'
+      FieldName = 'REMAINDER'
+    end
+    object OracleDataSet2ALL_AMORT: TFloatField
+      DisplayLabel = '…ыэылмыш амортизасийа'
+      FieldName = 'ALL_AMORT'
+    end
+    object OracleDataSet2AMORT: TFloatField
+      DisplayLabel = 'јмортизасийа'
+      FieldName = 'AMORT'
+    end
+    object OracleDataSet2PERCENT: TFloatField
+      DisplayLabel = 'ћалийй€ фаизи'
+      FieldName = 'PERCENT'
+    end
+    object OracleDataSet2AMORT_DATE: TDateTimeField
+      DisplayLabel = 'јмортизасийа тарихи'
+      FieldName = 'AMORT_DATE'
+    end
+    object OracleDataSet2USER_NAME: TStringField
+      DisplayLabel = '»стифад€чинин ады'
+      FieldName = 'USER_NAME'
+      Size = 40
+    end
+    object OracleDataSet2FXM: TFloatField
+      DisplayLabel = '»стифад€ мцдд€ти'
+      FieldName = 'FXM'
+    end
+  end
+  object OracleDataSet3: TOracleDataSet
+    SQL.Strings = (
+      
+        'select c.ACC_NO, c.BAL_CN1,a.WARES_NAME,a.INVENTAR_DATE,a.TAX_FI' +
+        'RST_PRICE,a.REMAINDER,a.TAX_ALL_AMORT,a.TAX_AMORT,'
+      
+        '                  a.TAX_PERCENT,a. AMORT_DATE,a.USER_NAME ,d. FX' +
+        'M'
+      
+        '                    from wares_last  a,GROUPS b, ACCOUNT c,wares' +
+        '_all d'
+      
+        'where  a.TAX_CLOSE_FORMAT=1  and  b.MAIN_ACCOUNT=c.ID and a.GROU' +
+        'PS_ID=b.id and d.WARES_ID=a.WARES_ID and a.AMORT_DATE  between :' +
+        'BDATE AND :EDATE'
+      ' ')
+    Variables.Data = {
+      0300000002000000060000003A42444154450C00000000000000000000000600
+      00003A45444154450C0000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      040000000C0000000D000000494E56454E5441525F4441544501000000000009
+      00000052454D41494E4445520100000000000F0000005441585F46495253545F
+      5052494345010000000000090000005441585F414D4F52540100000000000D00
+      00005441585F414C4C5F414D4F52540100000000000B0000005441585F504552
+      43454E540100000000000A000000414D4F52545F444154450100000000000300
+      000046584D010000000000060000004143435F4E4F0100000000000900000055
+      5345525F4E414D450100000000000A00000057415245535F4E414D4501000000
+      00000700000042414C5F434E31010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 128
+    Top = 432
+    object OracleDataSet3ACC_NO: TStringField
+      DisplayLabel = 'ўесаб'
+      FieldName = 'ACC_NO'
+    end
+    object OracleDataSet3BAL_CN1: TFloatField
+      DisplayLabel = 'Ѕаланс щесабы'
+      FieldName = 'BAL_CN1'
+    end
+    object OracleDataSet3WARES_NAME: TStringField
+      DisplayLabel = 'ўесабын ады'
+      FieldName = 'WARES_NAME'
+      Size = 90
+    end
+    object OracleDataSet3INVENTAR_DATE: TDateTimeField
+      DisplayLabel = '»нвентар тарих'
+      FieldName = 'INVENTAR_DATE'
+    end
+    object OracleDataSet3TAX_FIRST_PRICE: TFloatField
+      DisplayLabel = '»лин €вв€лин€ д€й€р'
+      FieldName = 'TAX_FIRST_PRICE'
+    end
+    object OracleDataSet3REMAINDER: TFloatField
+      DisplayLabel = '√алыг д€й€р'
+      FieldName = 'REMAINDER'
+    end
+    object OracleDataSet3TAX_ALL_AMORT: TFloatField
+      DisplayLabel = '…ыэылмыш амортизасийа'
+      FieldName = 'TAX_ALL_AMORT'
+    end
+    object OracleDataSet3TAX_AMORT: TFloatField
+      DisplayLabel = 'јмортизасийа'
+      FieldName = 'TAX_AMORT'
+    end
+    object OracleDataSet3TAX_PERCENT: TFloatField
+      DisplayLabel = '¬ерэи фаизи'
+      FieldName = 'TAX_PERCENT'
+    end
+    object OracleDataSet3AMORT_DATE: TDateTimeField
+      DisplayLabel = 'јмортизасийа тарихи'
+      FieldName = 'AMORT_DATE'
+    end
+    object OracleDataSet3USER_NAME: TStringField
+      DisplayLabel = '»стифад€чинин ады'
+      FieldName = 'USER_NAME'
+      Size = 40
+    end
+    object OracleDataSet3FXM: TFloatField
+      DisplayLabel = '»стифад€ мцдд€ти'
+      FieldName = 'FXM'
+    end
+  end
+  object OraclePackage1: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'SB_ACA'
+    Left = 496
+    Top = 208
+  end
+  object SysdatSet: TOracleDataSet
+    SQL.Strings = (
+      'select * from smart.sysdat')
+    QBEDefinition.QBEFieldDefs = {
+      04000000040000000700000054454B5F44415401000000000008000000505245
+      445F444154010000000000070000004152435F44415901000000000005000000
+      434C4F5345010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 224
+    Top = 264
+    object SysdatSetTEK_DAT: TDateTimeField
+      FieldName = 'TEK_DAT'
+      Required = True
+    end
+  end
+  object SysdatSrc: TDataSource
+    DataSet = SysdatSet
+    Left = 288
+    Top = 264
+  end
+  object OracleDataSet5: TOracleDataSet
+    SQL.Strings = (
+      'select * from groups order by name')
+    QBEDefinition.QBEFieldDefs = {
+      0400000009000000020000004944010000000000040000004E414D4501000000
+      000005000000414D4F52540100000000000C0000004D41494E5F4143434F554E
+      540100000000000B0000004558505F4143434F554E540100000000000D000000
+      414D4F52545F4143434F554E540100000000000C00000053414C455F4143434F
+      554E5401000000000008000000544158414D4F52540100000000000300000053
+      4944010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 32
+    Top = 504
+    object OracleDataSet5ID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object OracleDataSet5NAME: TStringField
+      FieldName = 'NAME'
+      Size = 90
+    end
+    object OracleDataSet5AMORT: TFloatField
+      FieldName = 'AMORT'
+    end
+    object OracleDataSet5MAIN_ACCOUNT: TFloatField
+      FieldName = 'MAIN_ACCOUNT'
+    end
+    object OracleDataSet5EXP_ACCOUNT: TFloatField
+      FieldName = 'EXP_ACCOUNT'
+    end
+    object OracleDataSet5AMORT_ACCOUNT: TFloatField
+      FieldName = 'AMORT_ACCOUNT'
+    end
+    object OracleDataSet5SALE_ACCOUNT: TFloatField
+      FieldName = 'SALE_ACCOUNT'
+    end
+    object OracleDataSet5TAXAMORT: TFloatField
+      FieldName = 'TAXAMORT'
+    end
+    object OracleDataSet5SID: TFloatField
+      FieldName = 'SID'
+    end
+  end
+  object OracleDataSet6: TOracleDataSet
+    SQL.Strings = (
+      
+        'select * from wares_archive where groups_id=:GID and INVENTAR_DA' +
+        'TE<=:ENT and (DEL_DATE>:ENT or DEL_DATE is null) and amort_date=' +
+        ':ENT')
+    Variables.Data = {
+      0300000002000000040000003A454E540C000000000000000000000004000000
+      3A474944030000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      04000000180000000A00000057415245535F4E414D450100000000000D000000
+      494E56454E5441525F444154450100000000000B00000046495253545F505249
+      43450100000000000900000052454D41494E4445520100000000000900000041
+      4C4C5F414D4F525401000000000005000000414D4F5254010000000000070000
+      0050455243454E540100000000000A000000414D4F52545F4441544501000000
+      000009000000555345525F4E414D450100000000000800000057415245535F49
+      440100000000000900000047524F5550535F49440100000000000F0000005441
+      585F46495253545F50524943450100000000000D0000005441585F52454D4149
+      4E444552010000000000090000005441585F414D4F52540100000000000D0000
+      005441585F414C4C5F414D4F52540100000000000B0000005441585F50455243
+      454E540100000000000C000000434C4F53455F464F524D415401000000000010
+      0000005441585F434C4F53455F464F524D41540100000000000B000000494E56
+      454E5441525F4E4F0100000000000300000046584D0100000000000B0000004B
+      454550494E475F53454301000000000007000000555345525F49440100000000
+      000700000056495349424C450100000000000800000044454C5F444154450100
+      00000000}
+    Master = OracleDataSet5
+    MasterFields = 'ID'
+    DetailFields = 'GID'
+    Session = sboapiDataModule.SBSession
+    Left = 120
+    Top = 504
+    object OracleDataSet6WARES_NAME: TStringField
+      DisplayWidth = 90
+      FieldName = 'WARES_NAME'
+      Size = 90
+    end
+    object OracleDataSet6WARES_ID: TFloatField
+      FieldName = 'WARES_ID'
+    end
+    object OracleDataSet6INVENTAR_DATE: TDateTimeField
+      FieldName = 'INVENTAR_DATE'
+    end
+    object OracleDataSet6GROUPS_ID: TFloatField
+      FieldName = 'GROUPS_ID'
+    end
+    object OracleDataSet6FIRST_PRICE: TFloatField
+      FieldName = 'FIRST_PRICE'
+    end
+    object OracleDataSet6REMAINDER: TFloatField
+      FieldName = 'REMAINDER'
+    end
+    object OracleDataSet6AMORT: TFloatField
+      FieldName = 'AMORT'
+    end
+    object OracleDataSet6ALL_AMORT: TFloatField
+      FieldName = 'ALL_AMORT'
+    end
+    object OracleDataSet6PERCENT: TFloatField
+      FieldName = 'PERCENT'
+    end
+    object OracleDataSet6TAX_FIRST_PRICE: TFloatField
+      FieldName = 'TAX_FIRST_PRICE'
+    end
+    object OracleDataSet6TAX_REMAINDER: TFloatField
+      FieldName = 'TAX_REMAINDER'
+    end
+    object OracleDataSet6TAX_AMORT: TFloatField
+      FieldName = 'TAX_AMORT'
+    end
+    object OracleDataSet6TAX_ALL_AMORT: TFloatField
+      FieldName = 'TAX_ALL_AMORT'
+    end
+    object OracleDataSet6TAX_PERCENT: TFloatField
+      FieldName = 'TAX_PERCENT'
+    end
+    object OracleDataSet6CLOSE_FORMAT: TFloatField
+      FieldName = 'CLOSE_FORMAT'
+    end
+    object OracleDataSet6AMORT_DATE: TDateTimeField
+      FieldName = 'AMORT_DATE'
+    end
+    object OracleDataSet6TAX_CLOSE_FORMAT: TFloatField
+      FieldName = 'TAX_CLOSE_FORMAT'
+    end
+    object OracleDataSet6INVENTAR_NO: TStringField
+      FieldName = 'INVENTAR_NO'
+      Size = 30
+    end
+    object OracleDataSet6USER_NAME: TStringField
+      FieldName = 'USER_NAME'
+      Size = 30
+    end
+    object OracleDataSet6FXM: TFloatField
+      FieldName = 'FXM'
+    end
+    object OracleDataSet6KEEPING_SEC: TStringField
+      FieldName = 'KEEPING_SEC'
+      Size = 50
+    end
+    object OracleDataSet6USER_ID: TFloatField
+      FieldName = 'USER_ID'
+    end
+    object OracleDataSet6VISIBLE: TIntegerField
+      FieldName = 'VISIBLE'
+    end
+    object OracleDataSet6DEL_DATE: TDateTimeField
+      FieldName = 'DEL_DATE'
+    end
+  end
+  object OracleDataSet7: TOracleDataSet
+    SQL.Strings = (
+      'select * from groups order by name')
+    QBEDefinition.QBEFieldDefs = {
+      040000000900000005000000414D4F5254010000000000020000004944010000
+      000000040000004E414D450100000000000C0000004D41494E5F4143434F554E
+      540100000000000B0000004558505F4143434F554E540100000000000D000000
+      414D4F52545F4143434F554E540100000000000C00000053414C455F4143434F
+      554E5401000000000008000000544158414D4F52540100000000000300000053
+      4944010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 376
+    Top = 504
+    object OracleDataSet7ID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object OracleDataSet7NAME: TStringField
+      FieldName = 'NAME'
+      Size = 90
+    end
+    object OracleDataSet7AMORT: TFloatField
+      FieldName = 'AMORT'
+    end
+    object OracleDataSet7MAIN_ACCOUNT: TFloatField
+      FieldName = 'MAIN_ACCOUNT'
+    end
+    object OracleDataSet7EXP_ACCOUNT: TFloatField
+      FieldName = 'EXP_ACCOUNT'
+    end
+    object OracleDataSet7AMORT_ACCOUNT: TFloatField
+      FieldName = 'AMORT_ACCOUNT'
+    end
+    object OracleDataSet7SALE_ACCOUNT: TFloatField
+      FieldName = 'SALE_ACCOUNT'
+    end
+    object OracleDataSet7TAXAMORT: TFloatField
+      FieldName = 'TAXAMORT'
+    end
+    object OracleDataSet7SID: TFloatField
+      FieldName = 'SID'
+    end
+  end
+  object OracleDataSet8: TOracleDataSet
+    SQL.Strings = (
+      
+        'select * from wares_archive where groups_id=:GID and  DEL_DATE<=' +
+        ':ENT ')
+    Variables.Data = {
+      0300000002000000040000003A47494403000000000000000000000004000000
+      3A454E540C0000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      04000000180000000A00000057415245535F4E414D4501000000000008000000
+      57415245535F49440100000000000D000000494E56454E5441525F4441544501
+      00000000000900000047524F5550535F49440100000000000700000050455243
+      454E540100000000000F0000005441585F46495253545F505249434501000000
+      00000D0000005441585F52454D41494E44455201000000000009000000544158
+      5F414D4F52540100000000000D0000005441585F414C4C5F414D4F5254010000
+      0000000B0000005441585F50455243454E540100000000000C000000434C4F53
+      455F464F524D41540100000000000A000000414D4F52545F4441544501000000
+      00000300000046584D0100000000000B0000004B454550494E475F5345430100
+      0000000007000000555345525F4944010000000000100000005441585F434C4F
+      53455F464F524D41540100000000000B000000494E56454E5441525F4E4F0100
+      0000000009000000555345525F4E414D45010000000000070000005649534942
+      4C450100000000000800000044454C5F444154450100000000000B0000004649
+      5253545F50524943450100000000000900000052454D41494E44455201000000
+      000005000000414D4F525401000000000009000000414C4C5F414D4F52540100
+      00000000}
+    Master = OracleDataSet7
+    MasterFields = 'ID'
+    DetailFields = 'GID'
+    Session = sboapiDataModule.SBSession
+    Left = 456
+    Top = 504
+    object OracleDataSet8WARES_NAME: TStringField
+      FieldName = 'WARES_NAME'
+      Size = 90
+    end
+    object OracleDataSet8WARES_ID: TFloatField
+      FieldName = 'WARES_ID'
+      Required = True
+    end
+    object OracleDataSet8INVENTAR_DATE: TDateTimeField
+      FieldName = 'INVENTAR_DATE'
+    end
+    object OracleDataSet8GROUPS_ID: TFloatField
+      FieldName = 'GROUPS_ID'
+    end
+    object OracleDataSet8FIRST_PRICE: TFloatField
+      FieldName = 'FIRST_PRICE'
+    end
+    object OracleDataSet8REMAINDER: TFloatField
+      FieldName = 'REMAINDER'
+    end
+    object OracleDataSet8AMORT: TFloatField
+      FieldName = 'AMORT'
+    end
+    object OracleDataSet8ALL_AMORT: TFloatField
+      FieldName = 'ALL_AMORT'
+    end
+    object OracleDataSet8PERCENT: TFloatField
+      FieldName = 'PERCENT'
+    end
+    object OracleDataSet8TAX_FIRST_PRICE: TFloatField
+      FieldName = 'TAX_FIRST_PRICE'
+    end
+    object OracleDataSet8TAX_REMAINDER: TFloatField
+      FieldName = 'TAX_REMAINDER'
+    end
+    object OracleDataSet8TAX_AMORT: TFloatField
+      FieldName = 'TAX_AMORT'
+    end
+    object OracleDataSet8TAX_ALL_AMORT: TFloatField
+      FieldName = 'TAX_ALL_AMORT'
+    end
+    object OracleDataSet8TAX_PERCENT: TFloatField
+      FieldName = 'TAX_PERCENT'
+    end
+    object OracleDataSet8CLOSE_FORMAT: TFloatField
+      FieldName = 'CLOSE_FORMAT'
+    end
+    object OracleDataSet8AMORT_DATE: TDateTimeField
+      FieldName = 'AMORT_DATE'
+    end
+    object OracleDataSet8FXM: TFloatField
+      FieldName = 'FXM'
+    end
+    object OracleDataSet8KEEPING_SEC: TStringField
+      FieldName = 'KEEPING_SEC'
+      Size = 50
+    end
+    object OracleDataSet8USER_ID: TFloatField
+      FieldName = 'USER_ID'
+    end
+    object OracleDataSet8TAX_CLOSE_FORMAT: TFloatField
+      FieldName = 'TAX_CLOSE_FORMAT'
+    end
+    object OracleDataSet8INVENTAR_NO: TStringField
+      FieldName = 'INVENTAR_NO'
+      Size = 30
+    end
+    object OracleDataSet8USER_NAME: TStringField
+      FieldName = 'USER_NAME'
+      Size = 60
+    end
+    object OracleDataSet8VISIBLE: TIntegerField
+      FieldName = 'VISIBLE'
+    end
+    object OracleDataSet8DEL_DATE: TDateTimeField
+      FieldName = 'DEL_DATE'
+    end
+  end
+  object OracleDataSet4: TOracleDataSet
+    SQL.Strings = (
+      'Select    '
+      '     sum(First_Price) First_Price,'
+      '     sum(Remainder) Remainder,'
+      '     sum(All_Amort) All_Amort,'
+      '     sum(Amort) Amort, '
+      '     sum(Tax_First_Price) Tax_First_Price,'
+      '     sum(Tax_Remainder) Tax_Remainder,'
+      '     sum(Tax_All_Amort) Tax_All_Amort,'
+      '     sum(Tax_Amort) Tax_Amort '
+      ''
+      'From  '
+      '         Wares_All '
+      ''
+      ''
+      'Where groups_id = :groups_id and VISIBLE=0 '
+      ''
+      ''
+      'Order by :Title')
+    Variables.Data = {
+      03000000020000000A0000003A47524F5550535F494404000000080000000000
+      00000000354000000000060000003A5449544C45010000000A00000075736572
+      5F6E616D650000000000}
+    QBEDefinition.QBEFieldDefs = {
+      040000001800000006000000524F574E554D0100000000000A00000057415245
+      535F4E414D450100000000000800000057415245535F49440100000000000D00
+      0000494E56454E5441525F444154450100000000000900000047524F5550535F
+      49440100000000000B00000046495253545F5052494345010000000000090000
+      0052454D41494E44455201000000000005000000414D4F525401000000000009
+      000000414C4C5F414D4F52540100000000000700000050455243454E54010000
+      0000000F0000005441585F46495253545F50524943450100000000000D000000
+      5441585F52454D41494E444552010000000000090000005441585F414D4F5254
+      0100000000000D0000005441585F414C4C5F414D4F52540100000000000B0000
+      005441585F50455243454E540100000000000C000000434C4F53455F464F524D
+      41540100000000000A000000414D4F52545F4441544501000000000003000000
+      46584D0100000000000B0000004B454550494E475F5345430100000000000700
+      0000555345525F4944010000000000100000005441585F434C4F53455F464F52
+      4D41540100000000000B000000494E56454E5441525F4E4F0100000000000900
+      0000555345525F4E414D450100000000000700000056495349424C4501000000
+      0000}
+    Master = ODSGroups
+    MasterFields = 'ID'
+    DetailFields = 'GROUPS_ID'
+    Session = sboapiDataModule.SBSession
+    Left = 680
+    Top = 152
+  end
+  object OracleDataSet9: TOracleDataSet
+    SQL.Strings = (
+      'select * from wa_user')
+    QBEDefinition.QBEFieldDefs = {
+      0400000002000000020000004944010000000000040000004E414D4501000000
+      0000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 752
+    Top = 520
+    object OracleDataSet9ID: TFloatField
+      FieldName = 'ID'
+    end
+    object OracleDataSet9NAME: TStringField
+      FieldName = 'NAME'
+      Size = 60
+    end
+  end
+  object DataSource1: TDataSource
+    DataSet = OracleDataSet9
+    Left = 616
+    Top = 504
+  end
+  object DataSource2: TDataSource
+    DataSet = OracleDataSet9
+    Left = 848
+    Top = 528
+  end
+  object SalaryPackage: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    Left = 923
+    Top = 515
+  end
+  object OracleDataSet10: TOracleDataSet
+    SQL.Strings = (
+      'select * from wa_user1')
+    QBEDefinition.QBEFieldDefs = {
+      0400000002000000020000004944010000000000040000004E414D4501000000
+      0000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 744
+    Top = 600
+  end
+  object DataSource3: TDataSource
+    DataSet = OracleDataSet10
+    Left = 824
+    Top = 600
+  end
+  object DataSource4: TDataSource
+    DataSet = ODSWares
+    Left = 824
+    Top = 376
+  end
+end

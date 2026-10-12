@@ -1,0 +1,191 @@
+unit AgreeUnit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActnList,  StdCtrls, Mask, ExtCtrls,
+   OleServer, ImgList, Buttons, variants,{Outlook8,} WordXP, DBCtrls;
+
+type
+  TAgreeForm = class(TForm)
+    Panel1: TPanel;
+    Label1: TLabel;
+    ActionList1: TActionList;
+    ActinPrint: TAction;
+    ActnClose: TAction;
+    WordApplication: TWordApplication;
+    WordDocument: TWordDocument;
+    SpeedButton1: TSpeedButton;
+    SpeedButton2: TSpeedButton;
+    ImageList1: TImageList;
+    DBLookupComboBox1: TDBLookupComboBox;
+    procedure ActnCloseExecute(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure ActinPrintExecute(Sender: TObject);
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+  private
+
+    TemplID:Integer;
+  public
+    { Public declarations }
+  end;
+
+var
+  AgreeForm: TAgreeForm;
+
+implementation
+  uses  AgreeDataModImplUnit,CommonDecls,CurrencyToHR_AzeriAbo_Impl;
+{$R *.DFM}
+
+  procedure TAgreeForm.ActnCloseExecute(Sender: TObject);
+  begin
+    Close;
+  end;
+
+  procedure TAgreeForm.FormCreate(Sender: TObject);
+  var
+    girov,ammount :real;
+ girovv, yazidat, valname,yaz: string;
+   dat :integer;
+
+  begin
+
+
+     AgreeDataModule:=TAgreeDataModule.Create(self);
+     AgreeDataModule.CreditInfoDataSet.SetVariable('crid', Get_SelectedCrdID);
+     AgreeDataModule.BookmarksDataSet.SetVariable('templid',TemplID);
+     AgreeDataModule.BookmarksDataSet.Open;
+
+
+     AgreeDataModule.yazi.SetVariable('id', Get_SelectedCrdID);
+     AgreeDataModule.yazi.open;
+     ammount :=AgreeDataModule.yazi.FieldByName('CREDITLINEAMOUNT').asfloat;
+     dat:=AgreeDataModule.yazi.FieldByName('per').asinteger;
+     girov:=AgreeDataModule.yazi.FieldByName('pledgeprice').asfloat;
+
+     valname:=AgreeDataModule.yazi.FieldByName('VALU_NAME').asstring;
+     yaz:=CurrencyToHR_Azeri(ammount,0,[0],valname);
+     yazidat:=CurrencyToHR_Azeri(dat,0,[0],'àé');
+     girovv:=CurrencyToHR_Azeri(girov,0,[0],'man');
+     AgreeDataModule.CreditInfoDataSet.SetVariable('man', yaz);
+     AgreeDataModule.CreditInfoDataSet.SetVariable('dat', yazidat);
+
+     AgreeDataModule.CreditInfoDataSet.SetVariable('gir', girovv);
+     AgreeDataModule.CreditInfoDataSet.Open;
+  end;
+
+  procedure TAgreeForm.FormDestroy(Sender: TObject);
+  begin
+
+    AgreeDataModule.TemplatesDataSet.CloseAll;
+    AgreeDataModule.BookmarksDataSet.CloseAll;
+    AgreeDataModule.CreditInfoDataSet.CloseAll;
+    AgreeDataModule.Free;
+
+  end;
+
+  procedure TAgreeForm.ActinPrintExecute(Sender: TObject);
+  resourcestring  FilenotFound = 'Fayýl tapýlmadý';
+  var
+         Template,Templatebool,
+         FTemplatePath,Itemindex,
+         OBookmarkCount, What, oBookMarkName: Olevariant;
+         IbookmarkCount: Integer;
+         tFieldName:String;
+         SaveChanges,
+         OriginalFormat,
+         RouteDocument: OleVariant;
+
+  begin
+     What := OleVariant(wdGoToBookmark);
+     FTemplatePath :=AgreeDataModule.TemplatesDataSet.FieldByName('Path').AsString;
+     TemplID :=AgreeDataModule.TemplatesDataSet.FieldByName('ID').AsInteger;
+
+     Template := EmptyParam;
+     TemplateBooL:=False;
+     Itemindex:=1;
+
+     Wordapplication.Connect;
+
+     Wordapplication.Visible := True;
+     WordApplication.Documents.Application.Caption := DBLookupCombobox1.Text;
+
+     WordApplication.Options.CheckSpellingAsYouType := False;
+     WordApplication.Options.CheckGrammarAsYouType := False;
+
+     if FileExists(FTemplatePath) then
+     begin
+
+     WordApplication.Documents.Open(FTemplatePath,Template,TemplateBooL,Template,
+     Template,Template,Template,Template,Template,Template,
+     Template,Template,Template,Template,Template);
+
+     end else
+     begin
+
+        SaveChanges := WdDoNotSaveChanges;
+        OriginalFormat := UnAssigned;
+        RouteDocument := UnAssigned;
+        WordApplication.Quit(SaveChanges, OriginalFormat, RouteDocument);
+        WordApplication.Disconnect;
+        ShowMessage(FilenotFound);
+
+     end;
+
+     WordDocument.ConnectTo(WordApplication.Documents.Item(Itemindex));
+     WordDocument.Application.Get_ActiveWindow.Caption:=Caption;
+
+     try
+
+       with AgreeDataModule, ReplaceDataSet, WordDocument do
+
+
+       For IbookmarkCount := 1 to Bookmarks.Count do
+       begin
+
+         OBookmarkCount := IbookmarkCount ;
+         oBookMarkName := Bookmarks.Item(OBookmarkCount).Get_Name;
+         WordApplication.Selection.GoTo_(What, EmptyParam, EmptyParam, oBookMarkName);
+         ReplaceDataSet.Close;
+         SetVariable('tid', TemplID);
+         SetVariable('bname', oBookMarkName);
+         ReplaceDataSet.Open;
+         tFieldName := FIeldByName('FIELDNAME').AsString;
+         WordApplication.Selection.InsertAfter(CreditInfoDataSet.FieldByName(tFieldName).AsString);
+
+       end;
+
+     WordDocument.Disconnect;
+     Wordapplication.Disconnect;
+
+     except
+       SaveChanges := WdDoNotSaveChanges;
+        OriginalFormat := UnAssigned;
+        RouteDocument := UnAssigned;
+        WordApplication.Quit(SaveChanges, OriginalFormat, RouteDocument);
+        WordApplication.Disconnect;
+       ShowMessage('Bukmarklar daxil edilmeyib ');
+     end;
+
+  end;
+
+  procedure TAgreeForm.FormCanResize(Sender: TObject; var NewWidth,
+                                     NewHeight: Integer; var Resize: Boolean);
+  begin
+      Resize := False;
+  end;
+
+  procedure TAgreeForm.FormKeyPress(Sender: TObject; var Key: Char);
+  begin
+    if ORD(Key) = VK_ESCAPE then
+    Close;
+  end;
+
+ end.
+
+
+

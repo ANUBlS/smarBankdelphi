@@ -1,0 +1,148 @@
+﻿unit SettinImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls, DBCtrls, Grids, DBGrids, Menus, XDBCtrls,
+  XDBGrids, ComCtrls;
+
+type
+  TFrmSetting = class(TForm)
+    PopupMenu1: TPopupMenu;
+    lavet1: TMenuItem;
+    GroupBox1: TGroupBox;
+    GroupBox2: TGroupBox;
+    GroupBox3: TGroupBox;
+    DBGrid3: TDBGrid;
+    XDBNavigator2: TXDBNavigator;
+    DBGrid2: TDBGrid;
+    N1: TMenuItem;
+    Mqavilninxapnsazla1: TMenuItem;
+    GroupBox4: TGroupBox;
+    PageControl1: TPageControl;
+    TabSheet1: TTabSheet;
+    GroupBox5: TGroupBox;
+    XDBGrid1: TXDBGrid;
+    XDBNavigator1: TXDBNavigator;
+    TabSheet2: TTabSheet;
+    GroupBox6: TGroupBox;
+    XDBGrid2: TXDBGrid;
+    XDBNavigator3: TXDBNavigator;
+    DBGrid4: TDBGrid;
+    DBGrid1: TDBGrid;
+    XDBNavigator4: TXDBNavigator;
+    N2: TMenuItem;
+    Ehtiyyathesablarnn1: TMenuItem;
+    procedure FormCreate(Sender: TObject);
+    procedure lavet1Click(Sender: TObject);
+    procedure FormCanResize(Sender: TObject; var NewWidth, NewHeight: Integer;
+      var Resize: Boolean);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure XDBNavigator2Click(Sender: TObject; Button: TNavigateBtn);
+    procedure FormShow(Sender: TObject);
+    procedure Mqavilninxapnsazla1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmSetting: TFrmSetting;
+   mehid :integer;
+   procedure InitPlugin(s:string);export;
+implementation
+
+{$R *.dfm}
+uses CommonDecls,sbsystem,sboapiDataModuleImpl, Dmretsetitnq, KreditSetImpl,
+  Percenİmpl, FrmReserveAccImpl;
+procedure InitPlugin(s:string);export;
+begin
+   if s='PERCENT' then
+   begin
+   FrmPercen.ShowModal;
+
+   end else
+   FrmSetting.ShowModal;
+end;
+exports
+     InitPlugin;
+
+procedure TFrmSetting.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+Resize:=false
+end;
+
+procedure TFrmSetting.FormCreate(Sender: TObject);
+begin
+DmRt:=TDmRt.Create(Self);
+FrmReserveAcc:=TFrmReserveAcc.Create(self);
+//FrmPercen:=TFrmPercen.Create(self);
+FrmKreditSet:=TFrmKreditSet.Create(Self);
+end;
+
+procedure TFrmSetting.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+if ord(key)=27 then
+FrmSetting.Close;
+end;
+
+procedure TFrmSetting.FormShow(Sender: TObject);
+begin
+PageControl1.TabIndex:=0
+end;
+
+procedure TFrmSetting.lavet1Click(Sender: TObject);
+begin
+with dmrt do
+begin
+//PersonLink.Close;
+//PersonLink.open;
+PersonLink.edit;
+end;
+FrmKreditSet.ShowModal
+end;
+procedure LoadPlugin(PluginName :String;PluginParam :String; mehid:integer);
+var PluginHandle :THandle;
+    exportproc : procedure(s:String; mehid:integer);
+begin
+
+   PluginHandle := LoadPackage(ExtractFilePath(Application.ExeName)+PluginName);
+
+   if PluginHandle > 0 then
+   begin
+      @exportproc := GetProcAddress(PluginHandle,'InitPlugin');
+      exportproc(PluginParam,mehid);
+   end;
+end;
+
+procedure TFrmSetting.Mqavilninxapnsazla1Click(Sender: TObject);
+begin
+mehid:=dmrt.PersonLink.FieldByName('ID').asinteger;
+LoadPlugin('CM_WRSETUP.bpl','WRBookmarkSetup',mehid)  ;
+end;
+
+
+
+procedure TFrmSetting.XDBNavigator2Click(Sender: TObject; Button: TNavigateBtn);
+begin
+case Button of
+ nbPost:
+begin
+ DmRt.PersonLink.close;
+ DmRt.PersonLink.open;
+ DmRt.Persons.refresh;
+end;
+ nbDelete:
+begin
+ DmRt.PersonLink.Session.Commit;;
+
+end;
+end;
+end;
+
+initialization
+ FrmSetting := TFrmSetting.Create(CommonApplication);
+end.

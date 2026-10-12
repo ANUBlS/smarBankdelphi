@@ -1,0 +1,83 @@
+object frmReportType: TfrmReportType
+  Left = 338
+  Top = 292
+  BorderIcons = [biSystemMenu]
+  ClientHeight = 108
+  ClientWidth = 185
+  Color = clBtnFace
+  Font.Charset = RUSSIAN_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poScreenCenter
+  OnCanResize = FormCanResize
+  OnKeyPress = FormKeyPress
+  PixelsPerInch = 96
+  TextHeight = 14
+  object RGReport: TRadioGroup
+    Left = 0
+    Top = 0
+    Width = 185
+    Height = 71
+    Align = alTop
+    Caption = #1057#1077#1095#1080#1084
+    ItemIndex = 0
+    Items.Strings = (
+      #1065#1077#1089#1072#1073#1072#1090
+      'Exel')
+    TabOrder = 0
+  end
+  object BitBtn1: TBitBtn
+    Left = 98
+    Top = 78
+    Width = 81
+    Height = 26
+    Caption = #1048#1084#1090#1080#1085#1072
+    DoubleBuffered = True
+    Kind = bkCancel
+    NumGlyphs = 2
+    ParentDoubleBuffered = False
+    TabOrder = 1
+    OnClick = BitBtn1Click
+  end
+  object BitBtn2: TBitBtn
+    Left = 11
+    Top = 78
+    Width = 81
+    Height = 26
+    Caption = #1043#1103#1073#1091#1083
+    DoubleBuffered = True
+    Kind = bkOK
+    NumGlyphs = 2
+    ParentDoubleBuffered = False
+    TabOrder = 2
+    OnClick = BitBtn2Click
+  end
+  object ExcelExport: TCMExcelExport
+    StyleColumnWidth = cwDefault
+    ColumnWidth = 0
+    FontTitles.Charset = RUSSIAN_CHARSET
+    FontTitles.Color = clWindowText
+    FontTitles.Height = -11
+    FontTitles.Name = 'Azl Sans Serif'
+    FontTitles.Style = []
+    OrientationTitles = 0
+    FontData.Charset = RUSSIAN_CHARSET
+    FontData.Color = clWindowText
+    FontData.Height = -11
+    FontData.Name = 'Azl Sans Serif'
+    FontData.Style = []
+    FontSummary.Charset = DEFAULT_CHARSET
+    FontSummary.Color = clWindowText
+    FontSummary.Height = -11
+    FontSummary.Name = 'MS Sans Serif'
+    FontSummary.Style = []
+    SummarySelection = ssNone
+    SummaryCalculation = scSUM
+    Left = 165
+    Top = 330
+  end
+end

@@ -1,0 +1,173 @@
+unit CRADatModImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, OracleData, Oracle;
+
+type
+  TCRADatMod = class(TDataModule)
+    Purpose: TOracleDataSet;
+    Currency: TOracleDataSet;
+    Branches: TOracleDataSet;
+    ContAccs: TOracleDataSet;
+    IntAccs: TOracleDataSet;
+    Categories: TOracleDataSet;
+    Persons: TOracleDataSet;
+    PurposeDatSrc: TDataSource;
+    CurrencyDatSrc: TDataSource;
+    BranchesDatSrc: TDataSource;
+    ContAccsDatSrc: TDataSource;
+    IntAccsDatSrc: TDataSource;
+    CategoriesDatSrc: TDataSource;
+    PersonsDatSrc: TDataSource;
+    CurrencyVALUTE: TIntegerField;
+    CurrencyVAL_NAME: TStringField;
+    CurrencyVALU_NAME: TStringField;
+    BranchesID: TFloatField;
+    BranchesNAME: TStringField;
+    Contracts: TOracleDataSet;
+    ContractsDatSrc: TDataSource;
+    ContractsANNUALINTEREST: TFloatField;
+    ContractsOPENDATE: TDateTimeField;
+    ContractsCLOSEDATE: TDateTimeField;
+    ContractsCONTRACTNO: TStringField;
+    ContractsCONTRACTACCNO: TStringField;
+    ContractsINTERESTACCNO: TStringField;
+    BranchKod: TOracleDataSet;
+    BranchKodKOD_FIL: TIntegerField;
+    BankDate: TOracleDataSet;
+    BankDateTEK_DAT: TDateTimeField;
+    CRA_CONTRACT: TOraclePackage;
+    ContractsVAL_NAME: TStringField;
+    ContractsID: TFloatField;
+    ContractsACCNAME: TStringField;
+    PurposeCURRENCY: TFloatField;
+    PurposeANNUALINTEREST: TFloatField;
+    PurposeOPENDATE: TDateTimeField;
+    PurposeCLOSEDATE: TDateTimeField;
+    PurposeCONTRACTNO: TStringField;
+    PurposePERSONALTYPE: TFloatField;
+    PurposeCLIENTTYPE: TFloatField;
+    PurposeBRANCHID: TFloatField;
+    PurposeCONTRACTACCID: TFloatField;
+    PurposeINTERESTACCID: TFloatField;
+    ContractsSTATUS: TFloatField;
+    ContractsCONTREST: TFloatField;
+    ContractsINTREST: TFloatField;
+    Corrector: TOracleDataSet;
+    CorrectorCONTRACTNO: TStringField;
+    CorrectorLASTPROCESSDATE: TDateTimeField;
+    CorrectorDatSrc: TDataSource;
+    procedure DataModuleCreate(Sender: TObject);
+    procedure DataModuleDestroy(Sender: TObject);
+    procedure PurposeApplyRecord(Sender: TOracleDataSet; Action: Char;
+      var Applied: Boolean; var NewRowId: String);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    FLastContractID :integer;
+  end;
+
+var
+  CRADatMod: TCRADatMod;
+
+implementation
+
+{$R *.DFM}
+uses sboapiDataModuleImpl;
+
+procedure TCRADatMod.DataModuleCreate(Sender: TObject);
+begin
+   Currency.Open;
+   Categories.Open;
+   ContAccs.Open;
+   IntAccs.Open;
+   Branches.Open;
+   with  Contracts do
+   begin
+   SetVariable('OrderClause','contractaccno');
+     Open;
+   end;
+   Persons.Open;
+   BankDate.Open;
+end;
+
+procedure TCRADatMod.DataModuleDestroy(Sender: TObject);
+begin
+   Currency.CloseAll;
+   Categories.CloseAll;
+   ContAccs.CloseAll;
+   IntAccs.CloseAll;
+   Branches.CloseAll;
+   Contracts.CloseAll;
+   Persons.CloseAll;
+   BankDate.CloseAll;
+
+end;
+
+procedure TCRADatMod.PurposeApplyRecord(Sender: TOracleDataSet;
+  Action: Char; var Applied: Boolean; var NewRowId: String);
+
+var   currency,
+      personaltype ,
+      clienttype  ,
+      branchid    ,
+      contractaccid ,
+      interestaccid :INTEGER;
+      opendate  ,
+      closedate :TDATETime;
+      annualIntRest :Real;
+      contractno  :string;
+
+      begin
+   with Sender do
+   begin
+      currency :=FieldByName('CURRENCY').AsInteger;
+      personaltype :=FieldByName('personaltype').AsInteger;
+      clienttype :=FieldByName('clienttype').AsInteger;
+      branchid :=FieldByName('branchid').AsInteger;
+      contractaccid :=FieldByName('contractaccid').AsInteger;
+      interestaccid :=FieldByName('interestaccid').AsInteger;
+      opendate :=FieldByName('opendate').AsDateTime;
+      closedate :=FieldByName('closedate').AsDateTime;
+      annualIntRest :=FieldByName('ANNUALINTEREST').AsFloat;
+      contractno :=FieldByName('contractno').AsString;
+   end;
+
+   case Action of
+      'I':
+        CRA_CONTRACT.CallProcedure('add_cra_contracts',
+                 ['currency',currency,
+                  'personaltype',personaltype,
+                  'clienttype',clienttype,
+                  'branchid',branchid,
+                  'contractaccid',contractaccid,
+                  'interestaccid',interestaccid,
+                  'opendate',opendate,
+                  'closedate',closedate,
+                  'annualIntRest',annualIntRest,
+                  'contractno',contractno]);
+
+
+     'U':
+        CRA_CONTRACT.CallProcedure('Edit_cra_contracts',
+                 ['ContractID',Purpose.GetVariable('ContID'),
+                  'currency',currency,
+                  'personaltype',personaltype,
+                  'clienttype',clienttype,
+                  'branchid',branchid,
+                  'contractaccid',contractaccid,
+                  'interestaccid',interestaccid,
+                  'opendate',opendate,
+                  'closedate',closedate,
+                  'annualIntRest',annualIntRest,
+                  'contractno',contractno]);
+
+       end;
+        Applied :=True;   
+end;
+
+end.

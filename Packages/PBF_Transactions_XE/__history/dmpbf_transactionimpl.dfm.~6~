@@ -1,0 +1,571 @@
+object dmpbf_transaction: Tdmpbf_transaction
+  OldCreateOrder = False
+  OnCreate = DataModuleCreate
+  OnDestroy = DataModuleDestroy
+  Height = 480
+  Width = 696
+  object TransactionsData: TDataSource
+    DataSet = PBFTransactions
+    Left = 121
+    Top = 25
+  end
+  object PBFTransactions: TOracleDataSet
+    SQL.Strings = (
+      '/*'
+      'SELECT'
+      
+        '  po.id as num,po.name as opname,po.fromfilialtofilial as fromfi' +
+        'ltofil,po.paymentno,'
+      '  p.ID,po.username,po.clientaccid,PO.operationtype AS optype,'
+      '  p.dat as TransactionDate,'
+      '  ad.ACC_NO as DebitAccNo,ad.filial as debitfilial,'
+      '  dc.val_name as DebitCurrencySName,'
+      '  ac.ACC_NO as CreditAccNo,ac.filial as creditfilial,'
+      '  cc.val_name as CreditCurrencySName,'
+      '  p.ammount as DebitAmount,'
+      '  p.Ammount_C as CreditAmount,'
+      '  p.LAmmount as LAmount,'
+      '  p.Name,p.VAL_ACC,'
+      '  0 as status'
+      'FROM'
+      '    account ad,'
+      '    account ac,'
+      '    avalute dc,'
+      '    avalute cc,'
+      '    LAZYTRANSACTION p,'
+      '    pbf_operations po,'
+      '    pbf_transactions pt'
+      'where'
+      '    p.dat =:TransactionDate'
+      '    and (ad.ID = p.DEBT)'
+      '    and (ac.ID = p.KREDIT)'
+      '    and (ad.val_acc = p.val_acc)'
+      '    and (ac.val_acc = p.CurrencyID_C)'
+      '    and (dc.VALUTE = p.val_acc)'
+      '    and (cc.VALUTE = p.CurrencyID_C)'
+      '    and ((P.OP_ID<>-1 and'
+      
+        '          not EXISTS(select SUSER from sba_userman where MUSER=u' +
+        'id and (type#=1 or type#=0)))'
+      '          or'
+      
+        '          (P.OP_ID in(select SUSER from sba_userman where MUSER=' +
+        'uid and (type#=1 or type#=0))))'
+      '    and po.id = pt.operid '
+      '    and p.id = pt.TRANSACTIONID '
+      '    and pt.hdate = :TransactionDate'
+      ''
+      'union'
+      '*/'
+      ''
+      'SELECT'
+      
+        '  po.id as num,po.name as opname,po.fromfilialtofilial as fromfi' +
+        'ltofil,po.paymentno,'
+      '  p.ID,po.username,po.clientaccid,PO.operationtype AS optype,'
+      '  p.dat as TransactionDate,'
+      '  ad.ACC_NO as DebitAccNo,ad.filial as debitfilial,'
+      '  dc.val_name as DebitCurrencySName,'
+      '  ac.ACC_NO as CreditAccNo,ac.filial as creditfilial,'
+      '  cc.val_name as CreditCurrencySName,'
+      '  p.ammount as DebitAmount,'
+      '  p.Ammount_C as CreditAmount,'
+      '  p.LAmmount as LAmount,'
+      '  p.Name,p.VAL_ACC,'
+      '  1 as status'
+      'FROM'
+      '    account ad,'
+      '    account ac,'
+      '    avalute dc,'
+      '    avalute cc,'
+      '    provarch p,'
+      '    pbf_operations po,'
+      '    pbf_transactions pt'
+      'where'
+      '    p.dat =:TransactionDate'
+      '    and (ad.ID = p.DEBT)'
+      '    and (ac.ID = p.KREDIT)'
+      '    and (ad.val_acc = p.val_acc)'
+      '    and (ac.val_acc = p.CurrencyID_C)'
+      '    and (dc.VALUTE = p.val_acc)'
+      '    and (cc.VALUTE = p.CurrencyID_C)'
+      '    and ((P.OP_ID<>-1 and'
+      
+        '          not EXISTS(select SUSER from sba_userman where MUSER=u' +
+        'id and (type#=1 or type#=0)))'
+      '          or'
+      
+        '          (P.OP_ID in(select SUSER from sba_userman where MUSER=' +
+        'uid and (type#=1 or type#=0))))'
+      '   -- and po.id = pt.operid '
+      '   -- and p.id = pt.TRANSACTIONID '
+      '    and pt.hdate = :TransactionDate'
+      ''
+      '--order by :orderfield'
+      '')
+    Optimize = False
+    Variables.Data = {
+      0400000002000000200000003A005400520041004E0053004100430054004900
+      4F004E0044004100540045000C0000000000000000000000160000003A004F00
+      52004400450052004600490045004C004400010000000000000000000000}
+    QueryAllRecords = False
+    Session = sboapiDataModule.SBSession
+    Left = 32
+    Top = 24
+    object PBFTransactionsID: TFloatField
+      FieldName = 'ID'
+      Visible = False
+    end
+    object PBFTransactionsNUM: TFloatField
+      DisplayLabel = #8470
+      FieldName = 'NUM'
+      Required = True
+    end
+    object PBFTransactionsTRANSACTIONDATE: TDateTimeField
+      DisplayLabel = #1058#1072#1088#1080#1093
+      FieldName = 'TRANSACTIONDATE'
+    end
+    object PBFTransactionsDEBITACCNO: TWideStringField
+      DisplayLabel = #1044#1077#1073#1077#1090
+      FieldName = 'DEBITACCNO'
+    end
+    object PBFTransactionsDEBITCURRENCYSNAME: TWideStringField
+      DisplayLabel = '$'
+      FieldName = 'DEBITCURRENCYSNAME'
+      Size = 10
+    end
+    object PBFTransactionsCREDITACCNO: TWideStringField
+      DisplayLabel = #1050#1088#1077#1076#1080#1090
+      FieldName = 'CREDITACCNO'
+    end
+    object PBFTransactionsCREDITCURRENCYSNAME: TWideStringField
+      DisplayLabel = '$'
+      FieldName = 'CREDITCURRENCYSNAME'
+      Size = 10
+    end
+    object PBFTransactionsDEBITAMOUNT: TFloatField
+      DisplayLabel = #1044#1077#1073#1077#1090' '#1084#1103#1073#1083#1103#1100
+      FieldName = 'DEBITAMOUNT'
+      DisplayFormat = '#,##0.00'
+    end
+    object PBFTransactionsCREDITAMOUNT: TFloatField
+      DisplayLabel = #1050#1088#1077#1076#1080#1090' '#1084#1103#1073#1083#1103#1100
+      FieldName = 'CREDITAMOUNT'
+      DisplayFormat = '#,##0.00'
+    end
+    object PBFTransactionsLAMOUNT: TFloatField
+      DisplayLabel = #1045#1082#1074#1080#1074#1072#1083#1077#1085#1090
+      FieldName = 'LAMOUNT'
+      DisplayFormat = '#,##0.00'
+    end
+    object PBFTransactionsOPNAME: TWideStringField
+      DisplayLabel = 'Tipi'
+      FieldName = 'OPNAME'
+      Required = True
+      Size = 40
+    end
+    object PBFTransactionsVAL_ACC: TFloatField
+      FieldName = 'VAL_ACC'
+      Visible = False
+    end
+    object PBFTransactionsDEBITFILIAL: TIntegerField
+      FieldName = 'DEBITFILIAL'
+      Visible = False
+    end
+    object PBFTransactionsCREDITFILIAL: TIntegerField
+      FieldName = 'CREDITFILIAL'
+      Visible = False
+    end
+    object PBFTransactionsFROMFILTOFIL: TWideStringField
+      DisplayLabel = #1060#1080#1083#1080#1072#1083
+      FieldName = 'FROMFILTOFIL'
+      Size = 60
+    end
+    object PBFTransactionsUSERNAME: TWideStringField
+      DisplayLabel = #1048#1089#1090#1080#1092#1072#1076#1103#1095#1080
+      FieldName = 'USERNAME'
+      Size = 50
+    end
+    object PBFTransactionsCLIENTACCID: TFloatField
+      FieldName = 'CLIENTACCID'
+      Visible = False
+    end
+    object PBFTransactionsNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 255
+    end
+    object PBFTransactionsSTATUS: TFloatField
+      DisplayLabel = #1057#1090#1072#1090#1091#1089
+      FieldName = 'STATUS'
+    end
+    object PBFTransactionsPAYMENTNO: TWideStringField
+      DisplayLabel = #1070#1076#1103#1085#1080#1096#1080#1085' '#8470
+      FieldName = 'PAYMENTNO'
+      Size = 10
+    end
+    object PBFTransactionsOPTYPE: TWideStringField
+      FieldName = 'OPTYPE'
+      Size = 30
+    end
+  end
+  object PBFOperationsds: TDataSource
+    DataSet = PBFOperations
+    Left = 296
+    Top = 24
+  end
+  object PBFOperations: TOracleDataSet
+    SQL.Strings = (
+      'SELECT a.rowid,a.id, a.name, a.hdate, a.clientaccid, a.amount'
+      '  FROM pbf_operations a'
+      '  where ID = :OID')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000080000003A004F0049004400030000000000000000000000}
+    OnApplyRecord = PBFOperationsApplyRecord
+    Session = sboapiDataModule.SBSession
+    Left = 208
+    Top = 24
+    object PBFOperationsID: TFloatField
+      FieldName = 'ID'
+    end
+    object PBFOperationsNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 40
+    end
+    object PBFOperationsHDATE: TDateTimeField
+      FieldName = 'HDATE'
+    end
+    object PBFOperationsCLIENTACCID: TFloatField
+      FieldName = 'CLIENTACCID'
+    end
+    object PBFOperationsAMOUNT: TFloatField
+      FieldName = 'AMOUNT'
+      Required = True
+    end
+  end
+  object CurrDat: TOracleDataSet
+    SQL.Strings = (
+      'select * from sysdat')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 361
+    Top = 24
+    object CurrDatTEK_DAT: TDateTimeField
+      FieldName = 'TEK_DAT'
+      Required = True
+    end
+    object CurrDatPRED_DAT: TDateTimeField
+      FieldName = 'PRED_DAT'
+    end
+  end
+  object PBFAccs: TOracleDataSet
+    SQL.Strings = (
+      '  select id,acc_no,name from smart.account'
+      '  where close_dat is null '
+      '  and bal_cn1 in (select ACCGROUP from sbcm_acc_zone_info'
+      
+        '  where ZONEID in (select zoneid from sbcm_acc_zones where name ' +
+        '= '#39'Account'#39'))')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 26
+    Top = 82
+  end
+  object PBFAccsds: TDataSource
+    DataSet = PBFAccs
+    Left = 96
+    Top = 81
+  end
+  object PBFTransaction: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'PBF_TRANSACTION'
+    ParameterMode = pmNamed
+    Cursor = crSQLWait
+    Left = 28
+    Top = 144
+  end
+  object PBFValutes: TOracleDataSet
+    SQL.Strings = (
+      'select valute,valu_name from avalute')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 200
+    Top = 80
+    object PBFValutesVALUTE: TIntegerField
+      FieldName = 'VALUTE'
+      Required = True
+    end
+    object PBFValutesVALU_NAME: TWideStringField
+      FieldName = 'VALU_NAME'
+      Size = 25
+    end
+  end
+  object PBFFilials: TOracleDataSet
+    SQL.Strings = (
+      'select id,name from filial')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 200
+    Top = 136
+    object PBFFilialsID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object PBFFilialsNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 90
+    end
+  end
+  object PBFOptypes: TOracleDataSet
+    SQL.Strings = (
+      'select OPERATIONTYPE from pbf_operations'
+      'group by OPERATIONTYPE')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 208
+    Top = 192
+    object PBFOptypesOPERATIONTYPE: TWideStringField
+      FieldName = 'OPERATIONTYPE'
+      Size = 30
+    end
+  end
+  object pbfusers: TOracleDataSet
+    SQL.Strings = (
+      'select id,name from user$'
+      'order by name')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 208
+    Top = 248
+    object pbfusersID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object pbfusersNAME: TWideStringField
+      FieldName = 'NAME'
+      Required = True
+      Size = 30
+    end
+  end
+  object PBFValutesds: TDataSource
+    DataSet = PBFValutes
+    Left = 272
+    Top = 80
+  end
+  object PBFFilialsds: TDataSource
+    DataSet = PBFFilials
+    Left = 272
+    Top = 132
+  end
+  object PBFOptypesds: TDataSource
+    DataSet = PBFOptypes
+    Left = 278
+    Top = 189
+  end
+  object pbfusersds: TDataSource
+    DataSet = pbfusers
+    Left = 279
+    Top = 248
+  end
+  object PBFReportDs: TOracleDataSet
+    SQL.Strings = (
+      'select * from '
+      '(select BANK as pe_BANK,'
+      '        KOD_B as pe_KOD_B,'
+      '        INN as pe_inn,'
+      '        KRNO as pe_KRNO,'
+      '        SWIFT as pe_SWIFT,sedr,BUHALTR,'
+      
+        '        PBF_TRANSACTION.get_accnoByType(:acctype1, a.kod_fil, :c' +
+        'lientaccid, '#39'SELF'#39',:opid) as pc_accno,'
+      '        PBF_TRANSACTION.get_valByAccID(:clientaccid) as valute'
+      '        from filialinfo a'
+      'where kod_fil = PBF_TRANSACTION.get_filialCode(null,:usr) )a,'
+      ''
+      
+        '(SELECT  a.re_bank, a.re_kod_b, a.re_inn, a.re_krno,a.re_swift, ' +
+        'a.rc_name, a.rc_account, a.rc_inn  FROM  pbf_beneficiars a where' +
+        ' OPERTYPE = '#39'AZERCELL'#39'),'
+      ''
+      ''
+      '(SELECT   a.stamp, a.chiefsign, a.accoutantsign'
+      
+        '  FROM pbf_othersettings a where filialid=PBF_TRANSACTION.get_fi' +
+        'lialCode(null,:usr)) c,'
+      ''
+      '(select paymentno from pbf_operations where id = :opid) d'
+      ''
+      ''
+      ''
+      ''
+      '')
+    Optimize = False
+    Variables.Data = {
+      0400000004000000180000003A0043004C00490045004E005400410043004300
+      49004400030000000000000000000000080000003A0055005300520005000000
+      0000000000000000120000003A00410043004300540059005000450031000500
+      000000000000000000000A0000003A004F005000490044000300000000000000
+      00000000}
+    QBEDefinition.QBEFieldDefs = {
+      05000000150000000E000000500045005F00420041004E004B00010000000000
+      10000000500045005F004B004F0044005F0042000100000000000C0000005000
+      45005F0049004E004E000100000000000E000000500045005F004B0052004E00
+      4F0001000000000010000000500045005F005300570049004600540001000000
+      00000800000053004500440052000100000000000E0000004200550048004100
+      4C005400520001000000000010000000500043005F004100430043004E004F00
+      0100000000000C000000560041004C005500540045000100000000000E000000
+      520045005F00420041004E004B0001000000000010000000520045005F004B00
+      4F0044005F0042000100000000000C000000520045005F0049004E004E000100
+      000000000E000000520045005F004B0052004E004F0001000000000010000000
+      520045005F00530057004900460054000100000000000E000000520043005F00
+      4E0041004D00450001000000000014000000520043005F004100430043004F00
+      55004E0054000100000000000C000000520043005F0049004E004E0001000000
+      00000A0000005300540041004D00500000000000000012000000430048004900
+      450046005300490047004E000000000000001A0000004100430043004F005500
+      540041004E0054005300490047004E0000000000000012000000500041005900
+      4D0045004E0054004E004F00010000000000}
+    Session = sboapiDataModule.SBSession
+    OnCalcFields = PBFReportDsCalcFields
+    Left = 40
+    Top = 216
+    object PBFReportDsPE_BANK: TWideStringField
+      FieldName = 'PE_BANK'
+      Size = 80
+    end
+    object PBFReportDsPE_KOD_B: TFloatField
+      FieldName = 'PE_KOD_B'
+    end
+    object PBFReportDsPE_INN: TWideStringField
+      DisplayWidth = 60
+      FieldName = 'PE_INN'
+      Size = 50
+    end
+    object PBFReportDsPE_KRNO: TWideStringField
+      FieldName = 'PE_KRNO'
+      Size = 28
+    end
+    object PBFReportDsPE_SWIFT: TWideStringField
+      FieldName = 'PE_SWIFT'
+    end
+    object PBFReportDsPC_ACCNO: TWideStringField
+      FieldName = 'PC_ACCNO'
+      Size = 4000
+    end
+    object PBFReportDsVALUTE: TWideStringField
+      FieldName = 'VALUTE'
+      Size = 4000
+    end
+    object PBFReportDsRE_BANK: TWideStringField
+      FieldName = 'RE_BANK'
+      Required = True
+      Size = 80
+    end
+    object PBFReportDsRE_KOD_B: TFloatField
+      FieldName = 'RE_KOD_B'
+    end
+    object PBFReportDsRE_INN: TWideStringField
+      FieldName = 'RE_INN'
+      Required = True
+      Size = 50
+    end
+    object PBFReportDsRE_KRNO: TWideStringField
+      FieldName = 'RE_KRNO'
+      Required = True
+      Size = 30
+    end
+    object PBFReportDsRE_SWIFT: TWideStringField
+      FieldName = 'RE_SWIFT'
+      Required = True
+      Size = 30
+    end
+    object PBFReportDsRC_NAME: TWideStringField
+      FieldName = 'RC_NAME'
+      Required = True
+      Size = 80
+    end
+    object PBFReportDsRC_ACCOUNT: TWideStringField
+      FieldName = 'RC_ACCOUNT'
+      Required = True
+      Size = 30
+    end
+    object PBFReportDsRC_INN: TWideStringField
+      FieldName = 'RC_INN'
+      Required = True
+      Size = 30
+    end
+    object PBFReportDsSTAMP: TBlobField
+      FieldName = 'STAMP'
+      BlobType = ftOraBlob
+    end
+    object PBFReportDsCHIEFSIGN: TBlobField
+      FieldName = 'CHIEFSIGN'
+      BlobType = ftOraBlob
+    end
+    object PBFReportDsACCOUTANTSIGN: TBlobField
+      FieldName = 'ACCOUTANTSIGN'
+      BlobType = ftOraBlob
+    end
+    object PBFReportDsPAYMENTNO: TWideStringField
+      FieldName = 'PAYMENTNO'
+      Size = 10
+    end
+    object PBFReportDsSEDR: TWideStringField
+      FieldName = 'SEDR'
+    end
+    object PBFReportDsBUHALTR: TWideStringField
+      FieldName = 'BUHALTR'
+    end
+    object PBFReportDspee_krno: TWideStringField
+      FieldKind = fkCalculated
+      FieldName = 'pee_krno'
+      Size = 50
+      Calculated = True
+    end
+  end
+  object kindofaccs: TOracleDataSet
+    SQL.Strings = (
+      'SELECT a.acc_no'
+      '  FROM pbf_kindofaccs a')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 32
+    Top = 264
+    object kindofaccsACC_NO: TWideStringField
+      FieldName = 'ACC_NO'
+      Required = True
+      Size = 40
+    end
+  end
+  object PBFOpertionTypes: TOracleDataSet
+    SQL.Strings = (
+      'SELECT a.id, a.name'
+      '  FROM pbf_otheroptypes a')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 208
+    Top = 304
+    object PBFOpertionTypesID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object PBFOpertionTypesNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 23
+    end
+  end
+  object PBFDesc: TOracleDataSet
+    SQL.Strings = (
+      'SELECT   description'
+      '  FROM pbf_otheroptypes '
+      '  where name=:n')
+    Optimize = False
+    Variables.Data = {0400000001000000040000003A004E00050000000000000000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 376
+    Top = 88
+    object PBFDescDESCRIPTION: TWideStringField
+      FieldName = 'DESCRIPTION'
+      Size = 50
+    end
+  end
+end

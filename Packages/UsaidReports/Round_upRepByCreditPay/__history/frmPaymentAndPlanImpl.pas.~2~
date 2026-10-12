@@ -1,0 +1,61 @@
+unit frmPaymentAndPlanImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, ExtCtrls, Grids, DBGridEh, ComCtrls;
+
+type
+  TfrmPaymentAndPlan = class(TForm)
+    Panel1: TPanel;
+    BtnClose: TButton;
+    PageControl1: TPageControl;
+    TabSheet1: TTabSheet;
+    Panel10: TPanel;
+    GroupBox2: TGroupBox;
+    DBGridEh1: TDBGridEh;
+    TabSheet3: TTabSheet;
+    GroupBox3: TGroupBox;
+    DBGridEh2: TDBGridEh;
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormShow(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  frmPaymentAndPlan: TfrmPaymentAndPlan;
+
+implementation
+
+{$R *.DFM}
+uses dmRepByCreditPayImpl,SBTranslateProc,sboapiDataModuleImpl;
+
+procedure TfrmPaymentAndPlan.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+   Resize := false
+end;
+
+procedure TfrmPaymentAndPlan.FormCreate(Sender: TObject);
+begin
+SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TfrmPaymentAndPlan.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+   if Ord(Key) = VK_ESCAPE then Close
+end;
+
+procedure TfrmPaymentAndPlan.FormShow(Sender: TObject);
+begin
+    PageControl1.ActivePageIndex := 0;
+end;
+
+end.

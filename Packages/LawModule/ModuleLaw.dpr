@@ -1,0 +1,26 @@
+library ModuleLaw;
+
+uses
+  ComServ,
+  Law_modules_TLB in 'Law_modules_TLB.pas',
+  MainScreen in 'MainScreen.pas' {Lawmodule: TActiveForm} {Lawmodule: CoClass},
+  Datmodule in 'Datmodule.pas' {DataMod: TDataModule},
+  CourtUNIT in 'CourtUNIT.pas' {CourtFrm},
+  Filters in 'Filters.pas' {Filtrs},
+  SettingsUnit in 'SettingsUnit.pas' {Settings};
+
+{$E ocx}
+
+exports
+  DllGetClassObject,
+  DllCanUnloadNow,
+  DllRegisterServer,
+  DllUnregisterServer,
+  DllInstall;
+
+{$R *.TLB}
+
+{$R *.RES}
+
+begin
+end.

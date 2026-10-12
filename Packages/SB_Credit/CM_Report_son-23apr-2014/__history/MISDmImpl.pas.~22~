@@ -1,0 +1,276 @@
+unit MISDmImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, OracleData;
+
+type
+  TMISDm = class(TDataModule)
+    MISData_: TOracleDataSet;
+    MISData_ID: TFloatField;
+    MISData_NUMBEROFCREDIT: TWideStringField;
+    MISData_CONTRACTACCNO: TWideStringField;
+    MISData_INTERESTACCNO: TWideStringField;
+    MISData_DUECONTRACTACCNO: TWideStringField;
+    MISData_DUEINTERESTACCNO: TWideStringField;
+    MISData_RESERVEACCNO: TWideStringField;
+    MISData_DUERESERVEACCNO: TWideStringField;
+    MISData_VAL_NAME: TWideStringField;
+    MISData_NAME: TWideStringField;
+    MISData_DATEOFCONCLUSION: TDateTimeField;
+    MISData_DUEDATEFIRSTCONTRACT: TDateTimeField;
+    MISData_DUEDATELASTCONTRACT: TDateTimeField;
+    MISData_CREDITLINEAMOUNT: TFloatField;
+    MISData_ANNUALYINTERESTRATE: TFloatField;
+    MISData_REST: TFloatField;
+    MISData_EKREST: TFloatField;
+    MISData_INTERESTREST: TFloatField;
+    MISData_EKINT: TFloatField;
+    MISData_DUEREST: TFloatField;
+    MISData_EKDUEREST: TFloatField;
+    MISData_DUEINTERESTREST: TFloatField;
+    MISData_EKDUEINT: TFloatField;
+    MISData_GIVENAMOUNT: TFloatField;
+    MISData_EKGIVENAMOUNT: TFloatField;
+    MISData_PERCENT: TFloatField;
+    MISData_DUEPERCENT: TFloatField;
+    MISData_DESCRIPTION: TWideStringField;
+    MISData_PLEDGEPRICE: TFloatField;
+    MISData_PURPOSEOFCREDIT: TWideStringField;
+    MISData_PLEDGENAME: TWideStringField;
+    MISData_HOLDERNAME: TWideStringField;
+    MISData_REGISTRYNO: TWideStringField;
+    MISData_BOOROWERID: TWideStringField;
+    MISData_ADDRESS: TWideStringField;
+    MISData_ANYINFOTODISTING: TWideStringField;
+    MISData_REGISTRYAGENCY: TWideStringField;
+    MISData_REGISTRYDATE: TDateTimeField;
+    MISData_INSURANCEAMOUNT: TFloatField;
+    MISData_INSURANCEDATE: TDateTimeField;
+    MISData_PHONENUMBER: TWideStringField;
+    MISData_ANNUALYPENALTYRATE: TFloatField;
+    MISData_PENALTYREST: TFloatField;
+    MISData_EKPEN: TFloatField;
+    MISData_STOPCALCDATE: TDateTimeField;
+    MISData_LASTINTPAYDATE: TDateTimeField;
+    MISData_LASTMAINPAYDATE: TDateTimeField;
+    MISData_PRINCIPAL: TFloatField;
+    MISData_INTEREST: TFloatField;
+    MISData_PSNAME: TWideStringField;
+    MISData_DESCRIPTION_1: TWideStringField;
+    MISData_INTCALCMETHOD: TFloatField;
+    MISData_BRANCHID: TFloatField;
+    MISData_BALACCNO: TWideStringField;
+    MISData_BOOROWERACCNO: TWideStringField;
+    MISData_BOORREST: TFloatField;
+    MISData_PAYMENTDATEOFREPORTDAT: TDateTimeField;
+    DSSReserves: TDataSource;
+    SReserves: TOracleDataSet;
+    SReservesID: TFloatField;
+    SReservesPERCENT: TFloatField;
+    SReservesDESCRIPTION: TWideStringField;
+    SReservesFULLDESC: TWideStringField;
+    Pledges: TOracleDataSet;
+    DSPledges: TDataSource;
+    DSPReserves: TDataSource;
+    PReserves: TOracleDataSet;
+    PReservesID: TFloatField;
+    PReservesPERCENT: TFloatField;
+    PReservesDESCRIPTION: TWideStringField;
+    PReservesFULLDESC: TWideStringField;
+    DSCreditTypes: TDataSource;
+    CreditTypes: TOracleDataSet;
+    Persons: TOracleDataSet;
+    DSPersons: TDataSource;
+    UsrGrpDataSet: TOracleDataSet;
+    srcUsrGrp: TDataSource;
+    srcValute: TDataSource;
+    ValuteDataSet: TOracleDataSet;
+    srcPersonelType: TDataSource;
+    PersonelTypeDataSet: TOracleDataSet;
+    srcBranch: TDataSource;
+    BranchDataSet: TOracleDataSet;
+    MISData_CREDITTYPE: TWideStringField;
+    MISData_EBOORREST: TFloatField;
+    MISData: TOracleDataSet;
+    MISDataID: TFloatField;
+    MISDataNUMBEROFCREDIT: TWideStringField;
+    MISDataBALACCNO: TWideStringField;
+    MISDataCONTRACTACCNO: TWideStringField;
+    MISDataINTERESTACCNO: TWideStringField;
+    MISDataDUECONTRACTACCNO: TWideStringField;
+    MISDataDUEINTERESTACCNO: TWideStringField;
+    MISDataRESERVEACCNO: TWideStringField;
+    MISDataDUERESERVEACCNO: TWideStringField;
+    MISDataBOOROWERACCNO: TWideStringField;
+    MISDataBOORREST: TFloatField;
+    MISDataEBOORREST: TFloatField;
+    MISDataVAL_NAME: TWideStringField;
+    MISDataNAME: TWideStringField;
+    MISDataCREDITTYPE: TWideStringField;
+    MISDataDATEOFCONCLUSION: TDateTimeField;
+    MISDataDUEDATEFIRSTCONTRACT: TDateTimeField;
+    MISDataDUEDATELASTCONTRACT: TDateTimeField;
+    MISDataCREDITLINEAMOUNT: TFloatField;
+    MISDataANNUALYINTERESTRATE: TFloatField;
+    MISDataREST: TFloatField;
+    MISDataEKREST: TFloatField;
+    MISDataINTERESTREST: TFloatField;
+    MISDataEKINT: TFloatField;
+    MISDataDUEREST: TFloatField;
+    MISDataEKDUEREST: TFloatField;
+    MISDataDUEINTERESTREST: TFloatField;
+    MISDataEKDUEINT: TFloatField;
+    MISDataGIVENAMOUNT: TFloatField;
+    MISDataEKGIVENAMOUNT: TFloatField;
+    MISDataPERCENT: TFloatField;
+    MISDataDUEPERCENT: TFloatField;
+    MISDataPLEDGEPRICE: TFloatField;
+    MISDataPURPOSEOFCREDIT: TWideStringField;
+    MISDataPLEDGENAME: TWideStringField;
+    MISDataHOLDERNAME: TWideStringField;
+    MISDataREGISTRYNO: TWideStringField;
+    MISDataBOOROWERID: TWideStringField;
+    MISDataADDRESS: TWideStringField;
+    MISDataANYINFOTODISTING: TWideStringField;
+    MISDataREGISTRYAGENCY: TWideStringField;
+    MISDataREGISTRYDATE: TDateTimeField;
+    MISDataINSURANCEAGENCY: TWideStringField;
+    MISDataINSURANCEAMOUNT: TFloatField;
+    MISDataINSURANCEDATE: TDateTimeField;
+    MISDataPHONENUMBER: TWideStringField;
+    MISDataANNUALYPENALTYRATE: TFloatField;
+    MISDataPENALTYREST: TFloatField;
+    MISDataEKPEN: TFloatField;
+    MISDataSTOPCALCDATE: TDateTimeField;
+    MISDataLASTINTPAYDATE: TDateTimeField;
+    MISDataDLASTINTPAYDATE: TDateTimeField;
+    MISDataLASTMAINPAYDATE: TDateTimeField;
+    MISDataDLASTMAINPAYDATE: TDateTimeField;
+    MISDataPAYMENTDATEOFREPORTDAT: TDateTimeField;
+    MISDataPRINCIPAL: TFloatField;
+    MISDataINTEREST: TFloatField;
+    MISDataPSNAME: TWideStringField;
+    MISDataFLINAME: TWideStringField;
+    MISDataINTCALCMETHOD: TFloatField;
+    MISDataMONTHPAY: TFloatField;
+    MISDataMONTHLYPROFIT: TFloatField;
+    MISDataSALARY: TWideStringField;
+    MISDataMulkiyyetnovu: TWideStringField;
+    MISDataBorcalaninsektoru: TWideStringField;
+    MISDataBorcalaninfaliyyeti: TWideStringField;
+    MISDataBorcalaninfaliyyetnovu: TWideStringField;
+    MISDataINSURANCERIGHT: TFloatField;
+    MISDataEXPERT: TWideStringField;
+    MISDataDESCRIPTION_1: TWideStringField;
+    MISDataSHERT: TWideStringField;
+    MISDataQOVLUQ: TWideStringField;
+    MISDataPART2: TWideStringField;
+    MISDataAUTOPAY: TWideStringField;
+    MISDataBAL_CN1: TFloatField;
+    MISDataAFTONO: TWideStringField;
+    MISDataGUARANTORNAME: TWideStringField;
+    MISDataZAMINWORK1: TWideStringField;
+    MISDataZAMINTEL1: TWideStringField;
+    MISDataZMTELMOB1: TWideStringField;
+    MISDataNAME2: TWideStringField;
+    MISDataWR2: TWideStringField;
+    MISDataEVTEL2: TWideStringField;
+    MISDataMOBTEL2: TWideStringField;
+    MISDataNAME3: TWideStringField;
+    MISDataWR3: TWideStringField;
+    MISDataEVTEL3: TWideStringField;
+    MISDataMOBTEL3: TWideStringField;
+    MISDataGUARANTORID1: TWideStringField;
+    MISDataGUARANTORID2: TWideStringField;
+    MISDataGUARANTORID3: TWideStringField;
+    MISDataCARIPAY: TFloatField;
+    MISDataAIM: TWideStringField;
+    MISDataYASH: TFloatField;
+    OracleDataSet2: TOracleDataSet;
+    OracleDataSet2NUMBEROFCREDIT: TWideStringField;
+    OracleDataSet2CUSTOMER: TWideStringField;
+    OracleDataSet2CARDID: TFloatField;
+    OracleDataSet2GUARANTORNAME: TWideStringField;
+    OracleDataSet2GUARANTORID: TWideStringField;
+    OracleDataSet2PINCODE: TWideStringField;
+    OracleDataSet2GUARANTORSALARY: TWideStringField;
+    OracleDataSet2ZAMINWORK1: TWideStringField;
+    OracleDataSet2ZAMINADRES1: TWideStringField;
+    OracleDataSet2ZAMINTEL1: TWideStringField;
+    OracleDataSet2DATEOFBIRTH: TDateTimeField;
+    OracleDataSet2FNAME: TWideStringField;
+    OracleDataSet2VAL: TWideStringField;
+    OracleDataSet2REST: TFloatField;
+    OracleDataSet2INTERESTREST: TFloatField;
+    OracleDataSet2DUEREST: TFloatField;
+    OracleDataSet2DUEINTERESTREST: TFloatField;
+    OracleDataSet2CUNTRY: TWideStringField;
+    OracleDataSet2CITY: TWideStringField;
+    OracleDataSet2DATEOFCONCLUSION: TDateTimeField;
+    OracleDataSet3: TOracleDataSet;
+    OracleDataSet3NAME: TWideStringField;
+    OracleDataSet3VAL_NAME: TWideStringField;
+    OracleDataSet3NUMBEROFCREDIT: TWideStringField;
+    OracleDataSet3INITIALAMOUNT: TFloatField;
+    OracleDataSet3ANNUALYINTERESTRATE: TFloatField;
+    OracleDataSet3DATEOFCONCLUSION: TDateTimeField;
+    OracleDataSet3DUEDATEFIRSTCONTRACT: TDateTimeField;
+    OracleDataSet3REST: TFloatField;
+    OracleDataSet3DUEREST: TFloatField;
+    OracleDataSet3INTERESTREST: TFloatField;
+    OracleDataSet3DUEINTERESTREST: TFloatField;
+    OracleDataSet3CARIESAS: TFloatField;
+    OracleDataSet3CARIFAIZ: TFloatField;
+    OracleDataSet3CEMESAS: TFloatField;
+    OracleDataSet3CEMFAIZ: TFloatField;
+    OracleDataSet3FNAME: TWideStringField;
+    MISDataINFO: TWideStringField;
+    procedure DataModuleCreate(Sender: TObject);
+    procedure DataModuleDestroy(Sender: TObject);
+    procedure SReservesCalcFields(DataSet: TDataSet);
+  private
+    { Private declarations }
+  public
+    { Public declaratios }
+  end;
+
+var
+  MISDm: TMISDm;
+
+implementation
+
+{$R *.DFM}
+uses sboapiDataModuleImpl;
+
+procedure TMISDm.DataModuleCreate(Sender: TObject);
+begin
+    SReserves.Open;
+    Pledges.Open;
+    PReserves.Open;
+    CreditTypes.Open;
+    Persons.Open;
+
+end;
+
+procedure TMISDm.DataModuleDestroy(Sender: TObject);
+begin
+    SReserves.CloseAll;
+    Pledges.CloseAll;
+    PReserves.CloseAll;
+    CreditTypes.CloseAll;
+    Persons.CloseAll;
+
+end;
+
+procedure TMISDm.SReservesCalcFields(DataSet: TDataSet);
+begin
+   with DataSet do
+   FieldByName('FULLDESC').AsString :=
+        FieldByName('PERCENT').AsString + '% - ' + FieldByName('DESCRIPTION').AsString;
+
+end;
+
+end.

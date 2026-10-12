@@ -1,0 +1,23 @@
+#------------------------------------------------------------------------------
+VERSION = BWS.01
+#------------------------------------------------------------------------------
+!ifndef ROOT
+ROOT = $(MAKEDIR)\..
+!endif
+#------------------------------------------------------------------------------
+MAKE = $(ROOT)\bin\make.exe -$(MAKEFLAGS) -f$**
+DCC = $(ROOT)\bin\dcc32.exe $**
+BRCC = $(ROOT)\bin\brcc32.exe $**
+#------------------------------------------------------------------------------
+PROJECTS = DBViewComboBoxTest2.exe SBCommon50.bpl
+#------------------------------------------------------------------------------
+default: $(PROJECTS)
+#------------------------------------------------------------------------------
+
+DBViewComboBoxTest2.exe: ..\..\..\Program Files\Borland\Delphi5\Projects\DBViewComboBoxTest2\DBViewComboBoxTest2.dpr
+  $(DCC)
+
+SBCommon50.bpl: SBCommon50.dpk
+  $(DCC)
+
+

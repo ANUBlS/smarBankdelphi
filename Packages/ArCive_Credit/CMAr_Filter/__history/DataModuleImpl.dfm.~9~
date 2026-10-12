@@ -1,0 +1,237 @@
+object FilterDataModule: TFilterDataModule
+  OldCreateOrder = False
+  OnCreate = DataModuleCreate
+  OnDestroy = DataModuleDestroy
+  Height = 582
+  Width = 770
+  object DSCurrencys: TDataSource
+    DataSet = Currencys
+    Left = 24
+    Top = 384
+  end
+  object Currencys: TOracleDataSet
+    SQL.Strings = (
+      'SELECT valute,  valu_name'
+      '  FROM AVALUTE'
+      'ORDER BY VALUTE')
+    Optimize = False
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 24
+    Top = 432
+  end
+  object DSBranches: TDataSource
+    DataSet = Branches
+    Left = 104
+    Top = 320
+  end
+  object Branches: TOracleDataSet
+    SQL.Strings = (
+      'SELECT id, name'
+      '  FROM filial')
+    Optimize = False
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 104
+    Top = 272
+  end
+  object DSPledges: TDataSource
+    DataSet = Pledges
+    Left = 24
+    Top = 192
+  end
+  object Pledges: TOracleDataSet
+    SQL.Strings = (
+      'SELECT id,  description'
+      '  FROM cm_pledges')
+    Optimize = False
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 24
+    Top = 144
+  end
+  object DSUserGroups: TDataSource
+    DataSet = UserGroups
+    Left = 24
+    Top = 320
+  end
+  object UserGroups: TOracleDataSet
+    SQL.Strings = (
+      'SELECT id, description'
+      '  FROM cm_usergroups')
+    Optimize = False
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 24
+    Top = 272
+  end
+  object DSPReserves: TDataSource
+    DataSet = PReserves
+    Left = 136
+    Top = 8
+  end
+  object PReserves: TOracleDataSet
+    SQL.Strings = (
+      'SELECT id, percent, description'
+      '  FROM cm_reserves'
+      'ORDER BY percent'
+      '')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000300000004000000490044000100000000000E000000500045005200
+      430045004E005400010000000000160000004400450053004300520049005000
+      540049004F004E00010000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    OnCalcFields = PReservesCalcFields
+    Left = 136
+    Top = 56
+    object PReservesID: TFloatField
+      FieldName = 'ID'
+    end
+    object PReservesPERCENT: TFloatField
+      FieldName = 'PERCENT'
+    end
+    object PReservesDESCRIPTION: TWideStringField
+      FieldName = 'DESCRIPTION'
+      Size = 256
+    end
+  end
+  object DSSReserves: TDataSource
+    DataSet = SReserves
+    Left = 544
+    Top = 176
+  end
+  object SReserves: TOracleDataSet
+    SQL.Strings = (
+      'SELECT *'
+      '  FROM cm_aim_cred'
+      'ORDER BY name')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000050000000400000049004400010000000000080000004E0041004D00
+      45000100000000000A0000004E00450057004900440001000000000008000000
+      43004F0044004500010000000000100000004300550053005400540059005000
+      4500010000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    OnCalcFields = PReservesCalcFields
+    Left = 544
+    Top = 224
+    object SReservesID: TFloatField
+      FieldName = 'ID'
+    end
+    object SReservesNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 256
+    end
+  end
+  object DSUsers: TDataSource
+    DataSet = Users
+    Left = 104
+    Top = 192
+  end
+  object Users: TOracleDataSet
+    SQL.Strings = (
+      'SELECT id, name'
+      '  FROM SB_user$'
+      'ORDER BY NAME')
+    Optimize = False
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 104
+    Top = 144
+  end
+  object DSPersons: TDataSource
+    DataSet = Persons
+    Left = 200
+    Top = 376
+  end
+  object Persons: TOracleDataSet
+    SQL.Strings = (
+      'SELECT id,  descripion'
+      '  FROM cm_persons')
+    Optimize = False
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 200
+    Top = 424
+  end
+  object DSCategories: TDataSource
+    DataSet = Categories
+    Left = 312
+    Top = 72
+  end
+  object Categories: TOracleDataSet
+    SQL.Strings = (
+      'SELECT id, description'
+      '  FROM cm_categories')
+    Optimize = False
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 312
+    Top = 24
+  end
+  object DSCreditTypes: TDataSource
+    DataSet = CreditTypes
+    Left = 312
+    Top = 136
+  end
+  object CreditTypes: TOracleDataSet
+    SQL.Strings = (
+      'SELECT id,  description'
+      '  FROM cm_credittypes')
+    Optimize = False
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 312
+    Top = 184
+  end
+  object DSCustomers: TDataSource
+    DataSet = Customers
+    Left = 312
+    Top = 312
+  end
+  object Customers: TOracleDataSet
+    SQL.Strings = (
+      'SELECT id,  name'
+      '  FROM CM_SB_CUSTOMERS'
+      'ORDER BY NAME')
+    Optimize = False
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 312
+    Top = 256
+  end
+  object ExpertDaet: TOracleDataSet
+    SQL.Strings = (
+      'select * from cm_expert')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000400000004000000490044000100000000000800000043004F004400
+      4500010000000000080000004E0041004D004500010000000000100000004600
+      49004C00490041004C0049004400010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 544
+    Top = 72
+    object ExpertDaetID: TFloatField
+      FieldName = 'ID'
+    end
+    object ExpertDaetCODE: TWideStringField
+      FieldName = 'CODE'
+      Size = 48
+    end
+    object ExpertDaetNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 320
+    end
+    object ExpertDaetFILIALID: TFloatField
+      FieldName = 'FILIALID'
+    end
+  end
+  object ExpertDSrc: TDataSource
+    DataSet = ExpertDaet
+    Left = 616
+    Top = 72
+  end
+end

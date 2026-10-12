@@ -1,0 +1,163 @@
+object PRDataModule: TPRDataModule
+  OldCreateOrder = False
+  OnCreate = DataModuleCreate
+  Left = 410
+  Top = 169
+  Height = 480
+  Width = 696
+  object CalculatorPackage: TOraclePackage
+    PackageName = 'CM_CALCULATOR'
+    ParameterMode = pmNamed
+    Cursor = crHourGlass
+    Left = 152
+    Top = 80
+  end
+  object IntCache: TOracleDataSet
+    SQL.Strings = (
+      'select '
+      '            *'
+      '  from'
+      '            CM_INTCACHE'
+      'order by :OrderField')
+    Variables.Data = {
+      03000000010000000B0000003A4F524445524649454C4401000000050000004E
+      414D450000000000}
+    QBEDefinition.QBEFieldDefs = {
+      04000000160000000200000049440100000000000800000043555252454E4359
+      0100000000000A000000424F4F524F57455249440100000000000E0000004E55
+      4D4245524F464352454449540100000000000800000055535247524F55500100
+      00000000080000004252414E4348494401000000000004000000555349440100
+      000000000C000000435553544F4D4552545950450100000000000C0000005045
+      52534F4E414C545950450100000000000A000000435245444954545950450100
+      000000000C00000053544F5043414C4344415445010000000000040000005245
+      53540100000000000C000000494E544552455354524553540100000000000700
+      0000445545524553540100000000000F000000445545494E5445524553545245
+      53540100000000000D000000434F4E54524143544143434E4F0100000000000F
+      00000050454E414C5459494E5445524553540100000000000800000056414C5F
+      4E414D45010000000000040000004E414D4501000000000008000000494E5445
+      524553540100000000000B000000445545494E5445524553540100000000000B
+      000000545250524F434553534544010000000000}
+    Cursor = crSQLWait
+    Left = 40
+    Top = 96
+    object IntCacheNUMBEROFCREDIT: TStringField
+      DefaultExpression = '№'
+      DisplayLabel = '№'
+      FieldName = 'NUMBEROFCREDIT'
+      Size = 32
+    end
+    object IntCacheCONTRACTACCNO: TStringField
+      DisplayLabel = 'Щесаб -ын №'
+      FieldName = 'CONTRACTACCNO'
+      Size = 110
+    end
+    object IntCacheVAL_NAME: TStringField
+      DisplayLabel = '$'
+      FieldName = 'VAL_NAME'
+      Size = 10
+    end
+    object IntCacheNAME: TStringField
+      DisplayLabel = 'Боржалан '
+      FieldName = 'NAME'
+      Size = 64
+    end
+    object IntCacheREST: TFloatField
+      DisplayLabel = 'Ясас борж'
+      FieldName = 'REST'
+      Required = True
+    end
+    object IntCacheINTERESTREST: TFloatField
+      DisplayLabel = 'Борж цзря %'
+      FieldName = 'INTERESTREST'
+      Required = True
+    end
+    object IntCacheDUEREST: TFloatField
+      DisplayLabel = 'Эежикмиш борж'
+      FieldName = 'DUEREST'
+      Required = True
+    end
+    object IntCacheDUEINTERESTREST: TFloatField
+      DisplayLabel = 'Эежикмиш борж %'
+      FieldName = 'DUEINTERESTREST'
+      Required = True
+    end
+    object IntCacheBRANCHID: TFloatField
+      FieldName = 'BRANCHID'
+      Required = True
+      Visible = False
+    end
+    object IntCacheUSID: TFloatField
+      FieldName = 'USID'
+      Required = True
+      Visible = False
+    end
+    object IntCacheUSRGROUP: TFloatField
+      FieldName = 'USRGROUP'
+      Required = True
+      Visible = False
+    end
+    object IntCacheSTOPCALCDATE: TDateTimeField
+      FieldName = 'STOPCALCDATE'
+      Visible = False
+    end
+    object IntCacheBOOROWERID: TFloatField
+      FieldName = 'BOOROWERID'
+      Required = True
+      Visible = False
+    end
+    object IntCacheID: TFloatField
+      FieldName = 'ID'
+      Required = True
+      Visible = False
+    end
+    object IntCacheCURRENCY: TFloatField
+      FieldName = 'CURRENCY'
+      Required = True
+      Visible = False
+    end
+    object IntCacheINTEREST: TFloatField
+      DisplayLabel = 'Я.Б. Щесабланыб'
+      FieldName = 'INTEREST'
+      Required = True
+    end
+    object IntCacheDUEINTEREST: TFloatField
+      DisplayLabel = 'Э.Б. Щесабланыб'
+      FieldName = 'DUEINTEREST'
+      Required = True
+    end
+    object IntCacheTRPROCESSED: TFloatField
+      FieldName = 'TRPROCESSED'
+      Required = True
+      Visible = False
+    end
+    object IntCacheCUSTOMERTYPE: TFloatField
+      FieldName = 'CUSTOMERTYPE'
+      Required = True
+      Visible = False
+    end
+    object IntCachePERSONALTYPE: TFloatField
+      FieldName = 'PERSONALTYPE'
+      Required = True
+      Visible = False
+    end
+    object IntCacheCREDITTYPE: TFloatField
+      FieldName = 'CREDITTYPE'
+      Required = True
+      Visible = False
+    end
+    object IntCachePENALTYINTEREST: TFloatField
+      FieldName = 'PENALTYINTEREST'
+    end
+  end
+  object DataSrcIntCache: TDataSource
+    DataSet = IntCache
+    Left = 40
+    Top = 152
+  end
+  object cm_autoexp: TOraclePackage
+    PackageName = 'cm_autoexp'
+    Cursor = crSQLWait
+    Left = 160
+    Top = 152
+  end
+end

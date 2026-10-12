@@ -1,0 +1,114 @@
+object NewDepositsFrmCategories: TNewDepositsFrmCategories
+  Left = 0
+  Top = 0
+  ClientHeight = 363
+  ClientWidth = 322
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poScreenCenter
+  OnCanResize = FormCanResize
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  OnKeyPress = FormKeyPress
+  PixelsPerInch = 96
+  TextHeight = 13
+  object DBNavigator1: TDBNavigator
+    Left = 0
+    Top = 0
+    Width = 322
+    Height = 26
+    DataSource = CategoriesDatSrc
+    Align = alTop
+    Flat = True
+    TabOrder = 0
+    ExplicitWidth = 269
+  end
+  object StatusBar1: TStatusBar
+    Left = 0
+    Top = 344
+    Width = 322
+    Height = 19
+    Panels = <>
+    ExplicitTop = 313
+    ExplicitWidth = 269
+  end
+  object Panel1: TPanel
+    Left = 0
+    Top = 26
+    Width = 322
+    Height = 318
+    Align = alClient
+    TabOrder = 2
+    ExplicitTop = 20
+    object DBGridEh1: TDBGridEh
+      Left = 1
+      Top = 1
+      Width = 320
+      Height = 316
+      Align = alClient
+      DataGrouping.GroupLevels = <>
+      DataSource = CategoriesDatSrc
+      Flat = True
+      FooterColor = clWindow
+      FooterFont.Charset = DEFAULT_CHARSET
+      FooterFont.Color = clWindowText
+      FooterFont.Height = -11
+      FooterFont.Name = 'Tahoma'
+      FooterFont.Style = []
+      RowDetailPanel.Color = clBtnFace
+      TabOrder = 0
+      TitleFont.Charset = DEFAULT_CHARSET
+      TitleFont.Color = clWindowText
+      TitleFont.Height = -11
+      TitleFont.Name = 'Tahoma'
+      TitleFont.Style = []
+      VertScrollBar.VisibleMode = sbNeverShowEh
+      OnKeyPress = DBGridEh1KeyPress
+      Columns = <
+        item
+          EditButtons = <>
+          FieldName = 'CATEGORY'
+          Footers = <>
+          Title.Alignment = taCenter
+          Title.Caption = 'M'#252#351't'#601'rinin tipi'
+          Title.Color = clNavy
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -12
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Width = 280
+        end>
+      object RowDetailData: TRowDetailPanelControlEh
+      end
+    end
+  end
+  object Categories: TOracleDataSet
+    SQL.Strings = (
+      '/* Formatted on 2007/08/31 13:02 (Formatter Plus v4.7.0) */'
+      'SELECT ROWID, ID, CATEGORY'
+      '  FROM dm_categories')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      0500000002000000040000004900440001000000000010000000430041005400
+      450047004F0052005900010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 28
+    Top = 247
+    object CategoriesCATEGORY: TWideStringField
+      FieldName = 'CATEGORY'
+      Size = 128
+    end
+  end
+  object CategoriesDatSrc: TDataSource
+    DataSet = Categories
+    Left = 58
+    Top = 247
+  end
+end

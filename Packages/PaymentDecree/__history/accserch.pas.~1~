@@ -1,0 +1,65 @@
+﻿unit accserch;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs,ActnList,OracleData,XDBGrids, Grids, StdCtrls;
+
+type
+  TFormAccounts = class(TForm)
+    GroupBox1: TGroupBox;
+    Button1: TButton;
+    EditACC_NO_SEARCH: TEdit;
+    EditACC_NO: TEdit;
+    EditName: TEdit;
+    XDBGridAccounts: TXDBGrid;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormAccounts: TFormAccounts;
+
+implementation
+
+{$R *.dfm}
+
+
+procedure ActionSpeedSearchExecute(
+  Sender: TObject);
+var
+  SearchField : string;
+  SearchOptions : TSearchRecordOptions;
+begin
+  SearchOptions := [srIgnoreCase ,srPartialMatch ];
+
+  with Sender as TEdit,FormAccounts  do
+  begin
+    SearchField := copy(Name,5,length(Name));
+    with  TOracleDataSet(XDBGridAccounts.DataSource.DataSet) do
+    if  not SearchRecord(
+                  SearchField
+                 ,Text
+                 ,SearchOptions + [srFromCurrent , srForward ]
+                 ) then
+  {  if MessageDlg(
+              'Axtarış sona çatdı.'+#13+'Əvvəldən başlansın?'
+             ,mtInformation
+             ,[mbNo , mbYes]
+             ,0
+             ) = mrYes  then   }
+    if not SearchRecord(
+                 SearchField
+                ,Text
+                ,SearchOptions + [ srFromBeginning ]
+                )  then
+    MessageDlg('Yazı tapılmayıb!',mtInformation,[mbOK],0);
+ end;
+
+end;
+
+
+end.

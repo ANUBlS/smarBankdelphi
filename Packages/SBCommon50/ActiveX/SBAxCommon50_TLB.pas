@@ -1,0 +1,672 @@
+unit SBAxCommon50_TLB;
+
+// ************************************************************************ //
+// WARNING
+// -------
+// The types declared in this file were generated from data read from a
+// Type Library. If this type library is explicitly or indirectly (via
+// another type library referring to this type library) re-imported, or the
+// 'Refresh' command of the Type Library Editor activated while editing the
+// Type Library, the contents of this file will be regenerated and all
+// manual modifications will be lost.
+// ************************************************************************ //
+
+// $Rev: 34747 $
+// File generated on 21.02.2011 12:18:26 from Type Library described below.
+
+// ************************************************************************  //
+// Type Lib: D:\Smart-Bank\Source\Packages\SBCommon50\ActiveX\SBAxCommon50 (1)
+// LIBID: {788D4560-69CB-4B05-A10A-BFE9600E44AF}
+// LCID: 0
+// Helpfile:
+// HelpString: SmartBank Common Classes ActiveX Library
+// DepndLst:
+//   (1) v2.0 stdole, (C:\WINDOWS\system32\stdole2.tlb)
+//   (2) v4.0 StdVCL, (STDVCL40.DLL)
+// ************************************************************************ //
+{$TYPEDADDRESS OFF} // Unit must be compiled without type-checked pointers.
+{$WARN SYMBOL_PLATFORM OFF}
+{$WRITEABLECONST ON}
+{$VARPROPSETTER ON}
+{$ALIGN 4}
+interface
+
+uses Windows, ActiveX, Classes, Graphics, StdVCL, Variants;
+
+
+// *********************************************************************//
+// GUIDS declared in the TypeLibrary. Following prefixes are used:
+//   Type Libraries     : LIBID_xxxx
+//   CoClasses          : CLASS_xxxx
+//   DISPInterfaces     : DIID_xxxx
+//   Non-DISP interfaces: IID_xxxx
+// *********************************************************************//
+const
+  // TypeLibrary Major and minor versions
+  SBAxCommon50MajorVersion = 1;
+  SBAxCommon50MinorVersion = 0;
+
+  LIBID_SBAxCommon50: TGUID = '{788D4560-69CB-4B05-A10A-BFE9600E44AF}';
+
+  IID_IInstance: TGUID = '{99CDEA0C-F50A-4FF9-A388-5A91B6FF34AB}';
+  IID_ICustomIniSource: TGUID = '{04E864C2-19EB-4557-99CF-47C7B5CA6A5D}';
+  IID_IMemIniSource: TGUID = '{FA0C305F-EE6A-41E8-BA4C-EEB01C9B53CB}';
+  IID_IFileIniSource: TGUID = '{34ACB3EF-38BA-4E29-ADF7-500358CEBE4C}';
+  IID_IRegIniSource: TGUID = '{E255EC6C-FF9E-40F9-BF7D-8C94EBCBB0D5}';
+  IID_IDBIniSource: TGUID = '{C6A8DE36-C6A9-4306-AF84-E5E88913D69E}';
+  IID_IOraIniSource: TGUID = '{D3219F80-A172-433D-9F8C-53D1D452E5C1}';
+  IID_IIniSource: TGUID = '{2EE5A270-D820-4424-ADE6-06FD348DADD0}';
+  IID_IIniSourceFactory: TGUID = '{1FA25F9E-3E9D-4454-9BAB-5A177AEAF137}';
+  IID_IIniSourceManager: TGUID = '{03E31F41-ED6E-41AE-94AF-AD863EAE15D3}';
+  IID_ICommandSectionContainer: TGUID = '{CC7A3B6A-FEB9-4624-8F67-9D7802D234EC}';
+  IID_ICommand: TGUID = '{392F9324-ADAC-427B-A710-0EE76220A61B}';
+  IID_ICommandProvider: TGUID = '{90EF028D-563A-4D07-A131-0DB608D821E8}';
+  IID_IJob: TGUID = '{A28C0B34-CE6E-4549-90E9-340ACC7BA96B}';
+  IID_IJobManager: TGUID = '{317390B8-25FA-4E1F-A3FE-239A3FE089E4}';
+  IID_IJobs: TGUID = '{FA81EFBA-0E82-4152-AE70-53961C5B1621}';
+type
+
+// *********************************************************************//
+// Forward declaration of types defined in TypeLibrary
+// *********************************************************************//
+  IInstance = interface;
+  IInstanceDisp = dispinterface;
+  ICustomIniSource = interface;
+  ICustomIniSourceDisp = dispinterface;
+  IMemIniSource = interface;
+  IMemIniSourceDisp = dispinterface;
+  IFileIniSource = interface;
+  IFileIniSourceDisp = dispinterface;
+  IRegIniSource = interface;
+  IRegIniSourceDisp = dispinterface;
+  IDBIniSource = interface;
+  IDBIniSourceDisp = dispinterface;
+  IOraIniSource = interface;
+  IOraIniSourceDisp = dispinterface;
+  IIniSource = interface;
+  IIniSourceDisp = dispinterface;
+  IIniSourceFactory = interface;
+  IIniSourceFactoryDisp = dispinterface;
+  IIniSourceManager = interface;
+  IIniSourceManagerDisp = dispinterface;
+  ICommandSectionContainer = interface;
+  ICommandSectionContainerDisp = dispinterface;
+  ICommand = interface;
+  ICommandDisp = dispinterface;
+  ICommandProvider = interface;
+  ICommandProviderDisp = dispinterface;
+  IJob = interface;
+  IJobDisp = dispinterface;
+  IJobManager = interface;
+  IJobManagerDisp = dispinterface;
+  IJobs = interface;
+  IJobsDisp = dispinterface;
+
+// *********************************************************************//
+// Declaration of structures, unions and aliases.
+// *********************************************************************//
+  POleVariant1 = ^OleVariant;
+  POleVariant2 = ^OleVariant; {*}
+
+  TIniSourceType = WideString;
+
+// *********************************************************************//
+// Interface: IInstance
+// Flags:     (4416) Dual OleAutomation Dispatchable
+// GUID:      {99CDEA0C-F50A-4FF9-A388-5A91B6FF34AB}
+// *********************************************************************//
+  IInstance = interface(IDispatch)
+    ['{99CDEA0C-F50A-4FF9-A388-5A91B6FF34AB}']
+    procedure Open; safecall;
+    procedure Close; safecall;
+    function Get_Active: WordBool; safecall;
+    procedure Set_Active(Value: WordBool); safecall;
+    property Active: WordBool read Get_Active write Set_Active;
+  end;
+
+// *********************************************************************//
+// DispIntf:  IInstanceDisp
+// Flags:     (4416) Dual OleAutomation Dispatchable
+// GUID:      {99CDEA0C-F50A-4FF9-A388-5A91B6FF34AB}
+// *********************************************************************//
+  IInstanceDisp = dispinterface
+    ['{99CDEA0C-F50A-4FF9-A388-5A91B6FF34AB}']
+    procedure Open; dispid 1;
+    procedure Close; dispid 2;
+    property Active: WordBool dispid 3;
+  end;
+
+// *********************************************************************//
+// Interface: ICustomIniSource
+// Flags:     (4416) Dual OleAutomation Dispatchable
+// GUID:      {04E864C2-19EB-4557-99CF-47C7B5CA6A5D}
+// *********************************************************************//
+  ICustomIniSource = interface(IInstance)
+    ['{04E864C2-19EB-4557-99CF-47C7B5CA6A5D}']
+    function Get_Location: WideString; safecall;
+    procedure Set_Location(const Value: WideString); safecall;
+    function ReadValue(const Section: WideString; const Name: WideString; DefaultValue: OleVariant): OleVariant; safecall;
+    procedure WriteValue(const Section: WideString; const Name: WideString; Value: OleVariant;
+                         ValueType: Integer); safecall;
+    procedure UpdateIniFile; safecall;
+    procedure ReloadIniFile; safecall;
+    function Get_DefaultSection: WideString; safecall;
+    procedure Set_DefaultSection(const Value: WideString); safecall;
+    function Get_Modified: WordBool; safecall;
+    procedure Erase; safecall;
+    procedure Delete; safecall;
+    procedure Upload(const Source: ICustomIniSource); safecall;
+    procedure EraseSection(const Ident: WideString); safecall;
+    procedure ReadSections(const Ident: IStrings); safecall;
+    procedure ReadSectionValues(const Ident: WideString; const Strings: IStrings); safecall;
+    procedure ReadSection(const Ident: WideString; const Strings: IStrings); safecall;
+    function Get_HostIniSource: ICustomIniSource; safecall;
+    procedure Set_HostIniSource(const Value: ICustomIniSource); safecall;
+    procedure ConfigRequired(const IniSource: ICustomIniSource); safecall;
+    property Location: WideString read Get_Location write Set_Location;
+    property DefaultSection: WideString read Get_DefaultSection write Set_DefaultSection;
+    property Modified: WordBool read Get_Modified;
+    property HostIniSource: ICustomIniSource read Get_HostIniSource write Set_HostIniSource;
+  end;
+
+// *********************************************************************//
+// DispIntf:  ICustomIniSourceDisp
+// Flags:     (4416) Dual OleAutomation Dispatchable
+// GUID:      {04E864C2-19EB-4557-99CF-47C7B5CA6A5D}
+// *********************************************************************//
+  ICustomIniSourceDisp = dispinterface
+    ['{04E864C2-19EB-4557-99CF-47C7B5CA6A5D}']
+    property Location: WideString dispid 101;
+    function ReadValue(const Section: WideString; const Name: WideString; DefaultValue: OleVariant): OleVariant; dispid 102;
+    procedure WriteValue(const Section: WideString; const Name: WideString; Value: OleVariant;
+                         ValueType: Integer); dispid 103;
+    procedure UpdateIniFile; dispid 104;
+    procedure ReloadIniFile; dispid 105;
+    property DefaultSection: WideString dispid 106;
+    property Modified: WordBool readonly dispid 107;
+    procedure Erase; dispid 108;
+    procedure Delete; dispid 109;
+    procedure Upload(const Source: ICustomIniSource); dispid 110;
+    procedure EraseSection(const Ident: WideString); dispid 7;
+    procedure ReadSections(const Ident: IStrings); dispid 8;
+    procedure ReadSectionValues(const Ident: WideString; const Strings: IStrings); dispid 4;
+    procedure ReadSection(const Ident: WideString; const Strings: IStrings); dispid 5;
+    property HostIniSource: ICustomIniSource dispid 6;
+    procedure ConfigRequired(const IniSource: ICustomIniSource); dispid 9;
+    procedure Open; dispid 1;
+    procedure Close; dispid 2;
+    property Active: WordBool dispid 3;
+  end;
+
+// *********************************************************************//
+// Interface: IMemIniSource
+// Flags:     (4416) Dual OleAutomation Dispatchable
+// GUID:      {FA0C305F-EE6A-41E8-BA4C-EEB01C9B53CB}
+// *********************************************************************//
+  IMemIniSource = interface(ICustomIniSource)
+    ['{FA0C305F-EE6A-41E8-BA4C-EEB01C9B53CB}']
+  end;
+
+// *********************************************************************//
+// DispIntf:  IMemIniSourceDisp
+// Flags:     (4416) Dual OleAutomation Dispatchable
+// GUID:      {FA0C305F-EE6A-41E8-BA4C-EEB01C9B53CB}
+// *********************************************************************//
+  IMemIniSourceDisp = dispinterface
+    ['{FA0C305F-EE6A-41E8-BA4C-EEB01C9B53CB}']
+    property Location: WideString dispid 101;
+    function ReadValue(const Section: WideString; const Name: WideString; DefaultValue: OleVariant): OleVariant; dispid 102;
+    procedure WriteValue(const Section: WideString; const Name: WideString; Value: OleVariant;
+                         ValueType: Integer); dispid 103;
+    procedure UpdateIniFile; dispid 104;
+    procedure ReloadIniFile; dispid 105;
+    property DefaultSection: WideString dispid 106;
+    property Modified: WordBool readonly dispid 107;
+    procedure Erase; dispid 108;
+    procedure Delete; dispid 109;
+    procedure Upload(const Source: ICustomIniSource); dispid 110;
+    procedure EraseSection(const Ident: WideString); dispid 7;
+    procedure ReadSections(const Ident: IStrings); dispid 8;
+    procedure ReadSectionValues(const Ident: WideString; const Strings: IStrings); dispid 4;
+    procedure ReadSection(const Ident: WideString; const Strings: IStrings); dispid 5;
+    property HostIniSource: ICustomIniSource dispid 6;
+    procedure ConfigRequired(const IniSource: ICustomIniSource); dispid 9;
+    procedure Open; dispid 1;
+    procedure Close; dispid 2;
+    property Active: WordBool dispid 3;
+  end;
+
+// *********************************************************************//
+// Interface: IFileIniSource
+// Flags:     (4416) Dual OleAutomation Dispatchable
+// GUID:      {34ACB3EF-38BA-4E29-ADF7-500358CEBE4C}
+// *********************************************************************//
+  IFileIniSource = interface(ICustomIniSource)
+    ['{34ACB3EF-38BA-4E29-ADF7-500358CEBE4C}']
+  end;
+
+// *********************************************************************//
+// DispIntf:  IFileIniSourceDisp
+// Flags:     (4416) Dual OleAutomation Dispatchable
+// GUID:      {34ACB3EF-38BA-4E29-ADF7-500358CEBE4C}
+// *********************************************************************//
+  IFileIniSourceDisp = dispinterface
+    ['{34ACB3EF-38BA-4E29-ADF7-500358CEBE4C}']
+    property Location: WideString dispid 101;
+    function ReadValue(const Section: WideString; const Name: WideString; DefaultValue: OleVariant): OleVariant; dispid 102;
+    procedure WriteValue(const Section: WideString; const Name: WideString; Value: OleVariant;
+                         ValueType: Integer); dispid 103;
+    procedure UpdateIniFile; dispid 104;
+    procedure ReloadIniFile; dispid 105;
+    property DefaultSection: WideString dispid 106;
+    property Modified: WordBool readonly dispid 107;
+    procedure Erase; dispid 108;
+    procedure Delete; dispid 109;
+    procedure Upload(const Source: ICustomIniSource); dispid 110;
+    procedure EraseSection(const Ident: WideString); dispid 7;
+    procedure ReadSections(const Ident: IStrings); dispid 8;
+    procedure ReadSectionValues(const Ident: WideString; const Strings: IStrings); dispid 4;
+    procedure ReadSection(const Ident: WideString; const Strings: IStrings); dispid 5;
+    property HostIniSource: ICustomIniSource dispid 6;
+    procedure ConfigRequired(const IniSource: ICustomIniSource); dispid 9;
+    procedure Open; dispid 1;
+    procedure Close; dispid 2;
+    property Active: WordBool dispid 3;
+  end;
+
+// *********************************************************************//
+// Interface: IRegIniSource
+// Flags:     (4416) Dual OleAutomation Dispatchable
+// GUID:      {E255EC6C-FF9E-40F9-BF7D-8C94EBCBB0D5}
+// *********************************************************************//
+  IRegIniSource = interface(ICustomIniSource)
+    ['{E255EC6C-FF9E-40F9-BF7D-8C94EBCBB0D5}']
+  end;
+
+// *********************************************************************//
+// DispIntf:  IRegIniSourceDisp
+// Flags:     (4416) Dual OleAutomation Dispatchable
+// GUID:      {E255EC6C-FF9E-40F9-BF7D-8C94EBCBB0D5}
+// *********************************************************************//
+  IRegIniSourceDisp = dispinterface
+    ['{E255EC6C-FF9E-40F9-BF7D-8C94EBCBB0D5}']
+    property Location: WideString dispid 101;
+    function ReadValue(const Section: WideString; const Name: WideString; DefaultValue: OleVariant): OleVariant; dispid 102;
+    procedure WriteValue(const Section: WideString; const Name: WideString; Value: OleVariant;
+                         ValueType: Integer); dispid 103;
+    procedure UpdateIniFile; dispid 104;
+    procedure ReloadIniFile; dispid 105;
+    property DefaultSection: WideString dispid 106;
+    property Modified: WordBool readonly dispid 107;
+    procedure Erase; dispid 108;
+    procedure Delete; dispid 109;
+    procedure Upload(const Source: ICustomIniSource); dispid 110;
+    procedure EraseSection(const Ident: WideString); dispid 7;
+    procedure ReadSections(const Ident: IStrings); dispid 8;
+    procedure ReadSectionValues(const Ident: WideString; const Strings: IStrings); dispid 4;
+    procedure ReadSection(const Ident: WideString; const Strings: IStrings); dispid 5;
+    property HostIniSource: ICustomIniSource dispid 6;
+    procedure ConfigRequired(const IniSource: ICustomIniSource); dispid 9;
+    procedure Open; dispid 1;
+    procedure Close; dispid 2;
+    property Active: WordBool dispid 3;
+  end;
+
+// *********************************************************************//
+// Interface: IDBIniSource
+// Flags:     (4416) Dual OleAutomation Dispatchable
+// GUID:      {C6A8DE36-C6A9-4306-AF84-E5E88913D69E}
+// *********************************************************************//
+  IDBIniSource = interface(ICustomIniSource)
+    ['{C6A8DE36-C6A9-4306-AF84-E5E88913D69E}']
+  end;
+
+// *********************************************************************//
+// DispIntf:  IDBIniSourceDisp
+// Flags:     (4416) Dual OleAutomation Dispatchable
+// GUID:      {C6A8DE36-C6A9-4306-AF84-E5E88913D69E}
+// *********************************************************************//
+  IDBIniSourceDisp = dispinterface
+    ['{C6A8DE36-C6A9-4306-AF84-E5E88913D69E}']
+    property Location: WideString dispid 101;
+    function ReadValue(const Section: WideString; const Name: WideString; DefaultValue: OleVariant): OleVariant; dispid 102;
+    procedure WriteValue(const Section: WideString; const Name: WideString; Value: OleVariant;
+                         ValueType: Integer); dispid 103;
+    procedure UpdateIniFile; dispid 104;
+    procedure ReloadIniFile; dispid 105;
+    property DefaultSection: WideString dispid 106;
+    property Modified: WordBool readonly dispid 107;
+    procedure Erase; dispid 108;
+    procedure Delete; dispid 109;
+    procedure Upload(const Source: ICustomIniSource); dispid 110;
+    procedure EraseSection(const Ident: WideString); dispid 7;
+    procedure ReadSections(const Ident: IStrings); dispid 8;
+    procedure ReadSectionValues(const Ident: WideString; const Strings: IStrings); dispid 4;
+    procedure ReadSection(const Ident: WideString; const Strings: IStrings); dispid 5;
+    property HostIniSource: ICustomIniSource dispid 6;
+    procedure ConfigRequired(const IniSource: ICustomIniSource); dispid 9;
+    procedure Open; dispid 1;
+    procedure Close; dispid 2;
+    property Active: WordBool dispid 3;
+  end;
+
+// *********************************************************************//
+// Interface: IOraIniSource
+// Flags:     (4416) Dual OleAutomation Dispatchable
+// GUID:      {D3219F80-A172-433D-9F8C-53D1D452E5C1}
+// *********************************************************************//
+  IOraIniSource = interface(IDBIniSource)
+    ['{D3219F80-A172-433D-9F8C-53D1D452E5C1}']
+  end;
+
+// *********************************************************************//
+// DispIntf:  IOraIniSourceDisp
+// Flags:     (4416) Dual OleAutomation Dispatchable
+// GUID:      {D3219F80-A172-433D-9F8C-53D1D452E5C1}
+// *********************************************************************//
+  IOraIniSourceDisp = dispinterface
+    ['{D3219F80-A172-433D-9F8C-53D1D452E5C1}']
+    property Location: WideString dispid 101;
+    function ReadValue(const Section: WideString; const Name: WideString; DefaultValue: OleVariant): OleVariant; dispid 102;
+    procedure WriteValue(const Section: WideString; const Name: WideString; Value: OleVariant;
+                         ValueType: Integer); dispid 103;
+    procedure UpdateIniFile; dispid 104;
+    procedure ReloadIniFile; dispid 105;
+    property DefaultSection: WideString dispid 106;
+    property Modified: WordBool readonly dispid 107;
+    procedure Erase; dispid 108;
+    procedure Delete; dispid 109;
+    procedure Upload(const Source: ICustomIniSource); dispid 110;
+    procedure EraseSection(const Ident: WideString); dispid 7;
+    procedure ReadSections(const Ident: IStrings); dispid 8;
+    procedure ReadSectionValues(const Ident: WideString; const Strings: IStrings); dispid 4;
+    procedure ReadSection(const Ident: WideString; const Strings: IStrings); dispid 5;
+    property HostIniSource: ICustomIniSource dispid 6;
+    procedure ConfigRequired(const IniSource: ICustomIniSource); dispid 9;
+    procedure Open; dispid 1;
+    procedure Close; dispid 2;
+    property Active: WordBool dispid 3;
+  end;
+
+// *********************************************************************//
+// Interface: IIniSource
+// Flags:     (4416) Dual OleAutomation Dispatchable
+// GUID:      {2EE5A270-D820-4424-ADE6-06FD348DADD0}
+// *********************************************************************//
+  IIniSource = interface(ICustomIniSource)
+    ['{2EE5A270-D820-4424-ADE6-06FD348DADD0}']
+    function Get_IniSourceType: TIniSourceType; safecall;
+    procedure Set_IniSourceType(const Value: TIniSourceType); safecall;
+    property IniSourceType: TIniSourceType read Get_IniSourceType write Set_IniSourceType;
+  end;
+
+// *********************************************************************//
+// DispIntf:  IIniSourceDisp
+// Flags:     (4416) Dual OleAutomation Dispatchable
+// GUID:      {2EE5A270-D820-4424-ADE6-06FD348DADD0}
+// *********************************************************************//
+  IIniSourceDisp = dispinterface
+    ['{2EE5A270-D820-4424-ADE6-06FD348DADD0}']
+    property IniSourceType: TIniSourceType dispid 201;
+    property Location: WideString dispid 101;
+    function ReadValue(const Section: WideString; const Name: WideString; DefaultValue: OleVariant): OleVariant; dispid 102;
+    procedure WriteValue(const Section: WideString; const Name: WideString; Value: OleVariant;
+                         ValueType: Integer); dispid 103;
+    procedure UpdateIniFile; dispid 104;
+    procedure ReloadIniFile; dispid 105;
+    property DefaultSection: WideString dispid 106;
+    property Modified: WordBool readonly dispid 107;
+    procedure Erase; dispid 108;
+    procedure Delete; dispid 109;
+    procedure Upload(const Source: ICustomIniSource); dispid 110;
+    procedure EraseSection(const Ident: WideString); dispid 7;
+    procedure ReadSections(const Ident: IStrings); dispid 8;
+    procedure ReadSectionValues(const Ident: WideString; const Strings: IStrings); dispid 4;
+    procedure ReadSection(const Ident: WideString; const Strings: IStrings); dispid 5;
+    property HostIniSource: ICustomIniSource dispid 6;
+    procedure ConfigRequired(const IniSource: ICustomIniSource); dispid 9;
+    procedure Open; dispid 1;
+    procedure Close; dispid 2;
+    property Active: WordBool dispid 3;
+  end;
+
+// *********************************************************************//
+// Interface: IIniSourceFactory
+// Flags:     (4416) Dual OleAutomation Dispatchable
+// GUID:      {1FA25F9E-3E9D-4454-9BAB-5A177AEAF137}
+// *********************************************************************//
+  IIniSourceFactory = interface(IDispatch)
+    ['{1FA25F9E-3E9D-4454-9BAB-5A177AEAF137}']
+    function CreateIniSource(Owner: OleVariant; var Param: OleVariant): ICustomIniSource; safecall;
+    function Get_IniSourceType: WideString; safecall;
+    procedure Set_IniSourceType(const Value: WideString); safecall;
+    property IniSourceType: WideString read Get_IniSourceType write Set_IniSourceType;
+  end;
+
+// *********************************************************************//
+// DispIntf:  IIniSourceFactoryDisp
+// Flags:     (4416) Dual OleAutomation Dispatchable
+// GUID:      {1FA25F9E-3E9D-4454-9BAB-5A177AEAF137}
+// *********************************************************************//
+  IIniSourceFactoryDisp = dispinterface
+    ['{1FA25F9E-3E9D-4454-9BAB-5A177AEAF137}']
+    function CreateIniSource(Owner: OleVariant; var Param: OleVariant): ICustomIniSource; dispid 1;
+    property IniSourceType: WideString dispid 2;
+  end;
+
+// *********************************************************************//
+// Interface: IIniSourceManager
+// Flags:     (4416) Dual OleAutomation Dispatchable
+// GUID:      {03E31F41-ED6E-41AE-94AF-AD863EAE15D3}
+// *********************************************************************//
+  IIniSourceManager = interface(IDispatch)
+    ['{03E31F41-ED6E-41AE-94AF-AD863EAE15D3}']
+    function RegFactory(const Factory: IIniSourceFactory): Integer; safecall;
+    procedure UnRegFactory(Index: Integer); safecall;
+    function Get_Factory(Index: Integer): IIniSourceFactory; safecall;
+    procedure Set_Factory(Index: Integer; const Value: IIniSourceFactory); safecall;
+    property Factory[Index: Integer]: IIniSourceFactory read Get_Factory write Set_Factory;
+  end;
+
+// *********************************************************************//
+// DispIntf:  IIniSourceManagerDisp
+// Flags:     (4416) Dual OleAutomation Dispatchable
+// GUID:      {03E31F41-ED6E-41AE-94AF-AD863EAE15D3}
+// *********************************************************************//
+  IIniSourceManagerDisp = dispinterface
+    ['{03E31F41-ED6E-41AE-94AF-AD863EAE15D3}']
+    function RegFactory(const Factory: IIniSourceFactory): Integer; dispid 1;
+    procedure UnRegFactory(Index: Integer); dispid 2;
+    property Factory[Index: Integer]: IIniSourceFactory dispid 3;
+  end;
+
+// *********************************************************************//
+// Interface: ICommandSectionContainer
+// Flags:     (4416) Dual OleAutomation Dispatchable
+// GUID:      {CC7A3B6A-FEB9-4624-8F67-9D7802D234EC}
+// *********************************************************************//
+  ICommandSectionContainer = interface(IDispatch)
+    ['{CC7A3B6A-FEB9-4624-8F67-9D7802D234EC}']
+    function Get_Count: Integer; safecall;
+    function Get_Sections(Index: Integer): ICommandSectionContainer; safecall;
+    function Get_Name: WideString; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Commands(Index: Integer): ICommand; safecall;
+    property Count: Integer read Get_Count;
+    property Sections[Index: Integer]: ICommandSectionContainer read Get_Sections;
+    property Name: WideString read Get_Name;
+    property Caption: WideString read Get_Caption;
+    property Commands[Index: Integer]: ICommand read Get_Commands;
+  end;
+
+// *********************************************************************//
+// DispIntf:  ICommandSectionContainerDisp
+// Flags:     (4416) Dual OleAutomation Dispatchable
+// GUID:      {CC7A3B6A-FEB9-4624-8F67-9D7802D234EC}
+// *********************************************************************//
+  ICommandSectionContainerDisp = dispinterface
+    ['{CC7A3B6A-FEB9-4624-8F67-9D7802D234EC}']
+    property Count: Integer readonly dispid 2;
+    property Sections[Index: Integer]: ICommandSectionContainer readonly dispid 3;
+    property Name: WideString readonly dispid 4;
+    property Caption: WideString readonly dispid 5;
+    property Commands[Index: Integer]: ICommand readonly dispid 6;
+  end;
+
+// *********************************************************************//
+// Interface: ICommand
+// Flags:     (4416) Dual OleAutomation Dispatchable
+// GUID:      {392F9324-ADAC-427B-A710-0EE76220A61B}
+// *********************************************************************//
+  ICommand = interface(IDispatch)
+    ['{392F9324-ADAC-427B-A710-0EE76220A61B}']
+    function Get_Name: WideString; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Index: Integer; safecall;
+    function Get_Enabled: WordBool; safecall;
+    procedure Execute; safecall;
+    procedure Update; safecall;
+    function Get_Section: ICommandSectionContainer; safecall;
+    property Name: WideString read Get_Name;
+    property Caption: WideString read Get_Caption;
+    property Index: Integer read Get_Index;
+    property Enabled: WordBool read Get_Enabled;
+    property Section: ICommandSectionContainer read Get_Section;
+  end;
+
+// *********************************************************************//
+// DispIntf:  ICommandDisp
+// Flags:     (4416) Dual OleAutomation Dispatchable
+// GUID:      {392F9324-ADAC-427B-A710-0EE76220A61B}
+// *********************************************************************//
+  ICommandDisp = dispinterface
+    ['{392F9324-ADAC-427B-A710-0EE76220A61B}']
+    property Name: WideString readonly dispid 1;
+    property Caption: WideString readonly dispid 2;
+    property Index: Integer readonly dispid 3;
+    property Enabled: WordBool readonly dispid 4;
+    procedure Execute; dispid 5;
+    procedure Update; dispid 6;
+    property Section: ICommandSectionContainer readonly dispid 7;
+  end;
+
+// *********************************************************************//
+// Interface: ICommandProvider
+// Flags:     (4416) Dual OleAutomation Dispatchable
+// GUID:      {90EF028D-563A-4D07-A131-0DB608D821E8}
+// *********************************************************************//
+  ICommandProvider = interface(IDispatch)
+    ['{90EF028D-563A-4D07-A131-0DB608D821E8}']
+    function Get_Sections(Index: Integer): ICommandSectionContainer; safecall;
+    property Sections[Index: Integer]: ICommandSectionContainer read Get_Sections;
+  end;
+
+// *********************************************************************//
+// DispIntf:  ICommandProviderDisp
+// Flags:     (4416) Dual OleAutomation Dispatchable
+// GUID:      {90EF028D-563A-4D07-A131-0DB608D821E8}
+// *********************************************************************//
+  ICommandProviderDisp = dispinterface
+    ['{90EF028D-563A-4D07-A131-0DB608D821E8}']
+    property Sections[Index: Integer]: ICommandSectionContainer readonly dispid 1;
+  end;
+
+// *********************************************************************//
+// Interface: IJob
+// Flags:     (4416) Dual OleAutomation Dispatchable
+// GUID:      {A28C0B34-CE6E-4549-90E9-340ACC7BA96B}
+// *********************************************************************//
+  IJob = interface(IDispatch)
+    ['{A28C0B34-CE6E-4549-90E9-340ACC7BA96B}']
+    function Get_Title: WideString; safecall;
+    function Get_Community: WideString; safecall;
+    function Get_SeparateThread: WordBool; safecall;
+    function Get_ThreadID: Integer; safecall;
+    function Get_ProgressJob: WordBool; safecall;
+    function Get_Progress: Integer; safecall;
+    procedure Start; safecall;
+    procedure Suspend; safecall;
+    procedure Terminate; safecall;
+    procedure Resume; safecall;
+    property Title: WideString read Get_Title;
+    property Community: WideString read Get_Community;
+    property SeparateThread: WordBool read Get_SeparateThread;
+    property ThreadID: Integer read Get_ThreadID;
+    property ProgressJob: WordBool read Get_ProgressJob;
+    property Progress: Integer read Get_Progress;
+  end;
+
+// *********************************************************************//
+// DispIntf:  IJobDisp
+// Flags:     (4416) Dual OleAutomation Dispatchable
+// GUID:      {A28C0B34-CE6E-4549-90E9-340ACC7BA96B}
+// *********************************************************************//
+  IJobDisp = dispinterface
+    ['{A28C0B34-CE6E-4549-90E9-340ACC7BA96B}']
+    property Title: WideString readonly dispid 1;
+    property Community: WideString readonly dispid 2;
+    property SeparateThread: WordBool readonly dispid 3;
+    property ThreadID: Integer readonly dispid 4;
+    property ProgressJob: WordBool readonly dispid 5;
+    property Progress: Integer readonly dispid 6;
+    procedure Start; dispid 7;
+    procedure Suspend; dispid 8;
+    procedure Terminate; dispid 9;
+    procedure Resume; dispid 10;
+  end;
+
+// *********************************************************************//
+// Interface: IJobManager
+// Flags:     (4416) Dual OleAutomation Dispatchable
+// GUID:      {317390B8-25FA-4E1F-A3FE-239A3FE089E4}
+// *********************************************************************//
+  IJobManager = interface(IDispatch)
+    ['{317390B8-25FA-4E1F-A3FE-239A3FE089E4}']
+    procedure Suspend(const Community: WideString); safecall;
+    procedure Resume(const Community: WideString); safecall;
+    procedure Terminate(const Community: WideString); safecall;
+  end;
+
+// *********************************************************************//
+// DispIntf:  IJobManagerDisp
+// Flags:     (4416) Dual OleAutomation Dispatchable
+// GUID:      {317390B8-25FA-4E1F-A3FE-239A3FE089E4}
+// *********************************************************************//
+  IJobManagerDisp = dispinterface
+    ['{317390B8-25FA-4E1F-A3FE-239A3FE089E4}']
+    procedure Suspend(const Community: WideString); dispid 1;
+    procedure Resume(const Community: WideString); dispid 2;
+    procedure Terminate(const Community: WideString); dispid 3;
+  end;
+
+// *********************************************************************//
+// Interface: IJobs
+// Flags:     (4416) Dual OleAutomation Dispatchable
+// GUID:      {FA81EFBA-0E82-4152-AE70-53961C5B1621}
+// *********************************************************************//
+  IJobs = interface(IDispatch)
+    ['{FA81EFBA-0E82-4152-AE70-53961C5B1621}']
+    procedure Add(const Result: IJob); safecall;
+    function Get_Count: Integer; safecall;
+    procedure Delete(Index: Integer); safecall;
+    property Count: Integer read Get_Count;
+  end;
+
+// *********************************************************************//
+// DispIntf:  IJobsDisp
+// Flags:     (4416) Dual OleAutomation Dispatchable
+// GUID:      {FA81EFBA-0E82-4152-AE70-53961C5B1621}
+// *********************************************************************//
+  IJobsDisp = dispinterface
+    ['{FA81EFBA-0E82-4152-AE70-53961C5B1621}']
+    procedure Add(const Result: IJob); dispid 1;
+    property Count: Integer readonly dispid 2;
+    procedure Delete(Index: Integer); dispid 3;
+  end;
+
+implementation
+
+uses ComObj;
+
+end.
+

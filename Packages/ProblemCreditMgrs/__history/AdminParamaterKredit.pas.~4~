@@ -1,0 +1,56 @@
+unit AdminParamaterKredit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Grids, XDBGrids, StdCtrls, XFSCtrls, ExtCtrls;
+
+type
+  TFormSettings = class(TForm)
+    XFPanel1: TXFPanel;
+    XFPanel2: TXFPanel;
+    XFGroupBox1: TXFGroupBox;
+    XDBGrid3: TXDBGrid;
+    XFPanel3: TXFPanel;
+    XFPanel4: TXFPanel;
+    XFGroupBox2: TXFGroupBox;
+    XDBGrid1: TXDBGrid;
+    XFPanel5: TXFPanel;
+    XDBGrid2: TXDBGrid;
+    procedure XDBGrid1DblClick(Sender: TObject);
+    procedure XDBGrid2DblClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormSettings: TFormSettings;
+
+implementation
+
+uses PrCmDMImpl;
+
+{$R *.dfm}
+
+procedure TFormSettings.XDBGrid1DblClick(Sender: TObject);
+begin
+  PrCmDM.PrPackage.CallProcedure('admin_add',['userid_', PrCmDM.CourtAdmin.FieldByName('ID').AsInteger,
+                                  'qrupid_',  PrCmDM.AdminGroups.FieldByName('ID').AsInteger,
+                                  'username_',PrCmDM.CourtAdmin.FieldByName('NAME').AsString,
+                                  'qrupname_',PrCmDM.AdminGroups.FieldByName('NAME').AsString]);
+  PrCmDM.AdminIn.Refresh;
+end;
+
+procedure TFormSettings.XDBGrid2DblClick(Sender: TObject);
+begin
+   PrCmDM.PrPackage.CallProcedure('admin_del',['userid_',  PrCmDM.AdminIn.FieldByName('USERID').AsInteger,
+                                               'qrupid_',  PrCmDM.AdminIn.FieldByName('QRUPID').AsInteger,
+                                               'username_',PrCmDM.AdminIn.FieldByName('USERNAME').AsString,
+                                               'qrupname_',PrCmDM.AdminIn.FieldByName('QRUPNAME').AsString]);
+   PrCmDM.AdminIn.Refresh;
+end;
+
+end.

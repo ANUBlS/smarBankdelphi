@@ -1,0 +1,348 @@
+﻿unit Unitazips2;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Grids, DBGrids, ComCtrls, ToolWin, ImgList,oracle,db;
+
+    const
+  Notcreate =1;
+  Created =2;
+  Commited =5;
+  Problemed =8;
+  Problemed2 =7;
+  new=10;
+  edits=11;
+
+type
+  TAzips2 = class(TForm)
+    ImageList1: TImageList;
+    CoolBar1: TCoolBar;
+    ToolBar1: TToolBar;
+    isertbtn: TToolButton;
+    ToolButton2: TToolButton;
+    ToolButton4: TToolButton;
+    ToolButton5: TToolButton;
+    ToolButton3: TToolButton;
+    ToolButton6: TToolButton;
+    ToolButton8: TToolButton;
+    ToolButton9: TToolButton;
+    ToolButton1: TToolButton;
+    ToolButton10: TToolButton;
+    ToolButton11: TToolButton;
+    ToolButton12: TToolButton;
+    ToolButton7: TToolButton;
+    ToolButton18: TToolButton;
+    ToolButton19: TToolButton;
+    ToolButton20: TToolButton;
+    ToolButton14: TToolButton;
+    ToolButton15: TToolButton;
+    ToolButton17: TToolButton;
+    ToolButton16: TToolButton;
+    ToolButton13: TToolButton;
+    ToolButton21: TToolButton;
+    ToolButton25: TToolButton;
+    ToolButton26: TToolButton;
+    ToolButton27: TToolButton;
+    DBGrid1: TDBGrid;
+    swImageList1: TImageList;
+    procedure FormCreate(Sender: TObject);
+    procedure isertbtnClick(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
+    procedure DBGrid1DrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TColumn; State: TGridDrawState);
+    procedure ToolButton14Click(Sender: TObject);
+    procedure ToolButton3Click(Sender: TObject);
+    procedure ToolButton7Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Azips2: TAzips2;
+
+implementation
+
+uses Unitdatamod, Filereportform, Unitazips, printpas;
+
+{$R *.dfm}
+
+procedure TAzips2.DBGrid1DrawColumnCell(Sender: TObject; const Rect: TRect;
+  DataCol: Integer; Column: TColumn; State: TGridDrawState);
+var
+  ImageIndex: Integer;
+
+begin
+//SWDataModule.SB_ACA.CallProcedure('CheckAdvancedObjectAccess', ['SW_OUT_CREATEDVIEW']);
+ ImageIndex := -1;
+  with Sender as TDBGrid do
+  begin
+    if DataSource.DataSet.RecordCount <> 0 then
+    begin
+      case DataSource.DataSet.FieldByName('STATUS').AsInteger of
+      44 :
+        ImageIndex := 16;
+      55 :
+        ImageIndex := 4;
+      commited :
+        ImageIndex := 5;
+      Problemed:
+        ImageIndex :=16;
+      Problemed2:
+        ImageIndex :=16;
+      15:
+        ImageIndex :=7;
+        1:
+        ImageIndex:=25;
+        20:
+         ImageIndex:=7;
+      else
+      end;
+      if (DataCol = 1) and (ImageIndex <> -1) then
+        swImageList1.Draw(Canvas, Rect.Left, Rect.Top, ImageIndex, True)
+      else
+        DefaultDrawColumnCell(Rect, DataCol, Column, State);
+    end;
+
+    //if (DataSource.DataSet.FieldByName('id').asinteger<>722) and (DataCol  =2)  then
+
+     //(
+    //Column.Font.Color:=clred
+         // else
+          //Column.Font.Color:=clblack ;
+        //DefaultDrawColumnCell(Rect, DataCol, Column, State);
+    //DefaultDrawColumnCell
+
+
+  end;
+end;
+
+procedure TAzips2.FormActivate(Sender: TObject);
+begin
+DataModbpl.azips.Close;
+DataModbpl.azips.SetVariable('V',x);
+DataModbpl.azips.Open;
+
+DBGrid1.DataSource:=nil;
+DBGrid1.DataSource:=DataModbpl.Azipssource;
+
+end;
+
+procedure TAzips2.FormCreate(Sender: TObject);
+begin
+DataModbpl:=TDataModbpl.Create(nil);
+ {
+DataModbpl.azips.Close;
+DataModbpl.azips.SetVariable('V',x);
+DataModbpl.azips.Open;   }
+end;
+
+procedure TAzips2.isertbtnClick(Sender: TObject);
+begin
+Azips:=TAzips.Create(nil);
+azips.Edit5.Text:='N';
+Azips.showmodal;
+
+end;
+
+procedure TAzips2.ToolButton14Click(Sender: TObject);
+begin
+DBGrid1.DataSource.DataSet.Refresh;
+end;
+
+procedure TAzips2.ToolButton3Click(Sender: TObject);
+begin
+
+
+if DBGrid1.DataSource.DataSet.FieldByName('status').AsInteger=44 then
+     begin
+Azips:=TAzips.Create(nil);
+azips.Edit5.Text:='E';
+//ShowMessage(DBGrid1.DataSource.DataSet.FieldByName('mf50_account').AsString);
+
+azips.SearchEdit1.KeyValue:=DBGrid1.DataSource.DataSet.FieldByName('mf50_account').AsString;
+azips.amount.Text:=DBGrid1.DataSource.DataSet.FieldByName('mf32a_amount').AsString;
+azips.edit2.Text:=DBGrid1.DataSource.DataSet.FieldByName('mf59_account').AsString;
+Azips.reciverbic.Text:=DBGrid1.DataSource.DataSet.FieldByName('mf59_account').AsString;
+Azips.SearchCombo2.Text:=DBGrid1.DataSource.DataSet.FieldByName('mf59_account').AsString;
+azips.referens.Text:=DBGrid1.DataSource.DataSet.FieldByName('mf20_reference').AsString;
+Azips.showmodal;
+       end else ShowMessage('Seçilmiş köçürmə redaktə oluna bilməz!');
+
+end;
+
+procedure TAzips2.ToolButton7Click(Sender: TObject);
+var
+
+c:integer;
+v_DataSet: TDataset;
+v_mf20,v_mf23,v_mf32,v_mf50,v_mf52,v_mf53,v_mf54,v_mf55,v_mf56,v_mf57,v_mf59,v_mf70,v_mf71,v_mf72,v_mf77: WideString;
+v_MF50_NAMEADRESS,a: WideString;
+begin
+
+//c:=StrToInt(Edit1.Text);
+//case c of
+//1:v_DataSet:=Grid_out.DataSource.DataSet;
+//2:v_DataSet:=Gridout2.DataSource.DataSet;
+v_DataSet:=dbGrid1.DataSource.DataSet;
+//end;
+
+with v_DataSet do
+begin
+
+v_mf20:=fieldbyname('MF20').asstring+' '+fieldbyname('MF20_REFERENCE').asstring;
+v_mf23:=#13+#13+ fieldbyname('M23B').asstring+' '+fieldbyname('mf23b').asstring;
+v_mf32:=#13+#13+ fieldbyname('M32A').asstring+' '+fieldbyname('MF32A_DATE').asstring+' '
+        +v_DataSet.fieldbyname('MF32A_CURR').asstring+v_DataSet.fieldbyname('MF32A_AMOUNT').asstring;
+ //----------------M50 begin------------------------
+if fieldbyname('M50').asstring=':50A:'
+        then
+        v_mf50:=#13+#13+ fieldbyname('M50').asstring+' /'+fieldbyname('MF50_ACCOUNT').asstring
+        +#13+fieldbyname('MF50_BIC').asstring+#13+fieldbyname('MF50_NAME$ADRESS').asstring
+        else
+if (fieldbyname('M50').asstring=':50K:') and (fieldbyname('FINCOPY').asstring<>'AZN')
+        then
+        begin
+       v_MF50_NAMEADRESS:=fieldbyname('MF50_NAME$ADRESS').asstring;
+       v_MF50_NAMEADRESS:=copy(v_MF50_NAMEADRESS,0,pos(#13,v_MF50_NAMEADRESS)-1)
+       +#13+'TAXID '
+       +copy(v_MF50_NAMEADRESS,pos(#13,v_MF50_NAMEADRESS)+2,length(v_MF50_NAMEADRESS)-pos(#13,v_MF50_NAMEADRESS));
+
+v_mf50:=#13+#13+ fieldbyname('M50').asstring+' /'+fieldbyname('MF50_ACCOUNT').asstring+#13+v_MF50_NAMEADRESS;
+        end
+        else
+v_mf50:=#13+#13+ fieldbyname('M50').asstring+' /'+fieldbyname('MF50_ACCOUNT').asstring+#13+fieldbyname('MF50_NAME$ADRESS').asstring;
+
+ //----------------M52 begin------------------------
+if fieldbyname('M52').asstring=':52A:'
+        then
+v_mf52:=#13+#13+fieldbyname('M52').AsString+' /'+fieldbyname('MF52_ACCOUNT').AsString
+        +#13+ fieldbyname('MF52_BIC').AsString+#13+ fieldbyname('MF52_NAME$ADRESS').AsString
+        else
+if fieldbyname('M52').asstring=':52D:'
+        then
+v_mf52:=#13+#13+fieldbyname('M52').AsString+' /'+fieldbyname('MF52_ACCOUNT').AsString
+        +#13+ fieldbyname('MF52_NAME$ADRESS').AsString
+        else v_mf52:='';
+ //----------------M53 begin------------------------
+if fieldbyname('FINCOPY').AsString='AZN'
+then
+ v_mf53:=''
+ else
+ v_mf53:=#13+#13+ fieldbyname('M53').AsString+' /'+fieldbyname('MF53_ACCOUNT').AsString;
+// +#13+fieldbyname('MF53_NAME$LOCATION').AsString;
+  //----------------M54 begin------------------------
+  if fieldbyname('M54').AsString=':54A:' then
+   v_mf54:=#13+#13+ fieldbyname('M54').AsString+' /'+fieldbyname('MF54_ACCOUNT').AsString
+           +#13+ fieldbyname('MF54_BIC').AsString+#13+ fieldbyname('MF54_NAME$LOCATION').AsString
+   else
+  if ((fieldbyname('M54').AsString=':54B:') or (fieldbyname('M54').AsString=':54D:')) then
+    v_mf54:=#13+#13+ fieldbyname('M54').AsString+' /'+fieldbyname('MF54_ACCOUNT').AsString
+            +#13 + fieldbyname('MF54_NAME$LOCATION').AsString
+  else v_mf54:='';
+   //----------------M55 begin------------------------
+   if fieldbyname('M55').AsString=':55A:' then
+   v_mf55:=#13+#13+fieldbyname('M55').AsString+ ' /'+fieldbyname('MF55_ACCOUNT').AsString
+          +#13+ fieldbyname('MF55_BIC').AsString+#13+ fieldbyname('MF55_NAME$LOCATION').AsString
+   else
+   if ((fieldbyname('M55').AsString=':55B:') or (fieldbyname('M55').AsString=':55D:')) then
+       v_mf55:=#13+#13+ fieldbyname('M55').AsString+' /'+fieldbyname('MF55_ACCOUNT').AsString
+            +#13 + fieldbyname('MF55_NAME$LOCATION').AsString
+   else v_mf55:='';
+    //----------------M56 begin------------------------
+    if fieldbyname('M56').AsString=':56A:' then
+    v_mf56:=#13+#13+fieldbyname('M56').AsString+' /'+fieldbyname('MF56_ACCOUNT').AsString
+           +#13+ fieldbyname('MF56_BIC').AsString+#13+ fieldbyname('MF56_NAME$LOCATION').AsString
+    else
+    if fieldbyname('M56').AsString=':56C:' then
+     v_mf56:=#13+#13+fieldbyname('M56').AsString+' /'+fieldbyname('MF56_ACCOUNT').AsString
+    else
+    if fieldbyname('M56').AsString=':56D:' then
+      v_mf56:=#13+#13+fieldbyname('M56').AsString+' /'+fieldbyname('MF56_ACCOUNT').AsString
+             +#13+fieldbyname('MF56_NAME$LOCATION').AsString
+      else v_mf56:='';
+     //----------------M57 begin------------------------
+     if fieldbyname('M57').AsString=':57A:' then
+        v_mf57:=#13+#13+fieldbyname('M57').AsString+' /'+fieldbyname('MF57_ACCOUNT').AsString
+           +#13+ fieldbyname('MF57_BIC').AsString+#13+ fieldbyname('MF57_NAME$LOCATION').AsString
+     else
+     if fieldbyname('M57').AsString=':57B:' then
+        v_mf57:=#13+#13+fieldbyname('M57').AsString+' /'+fieldbyname('MF57_ACCOUNT').AsString
+           +#13+fieldbyname('MF57_NAME$LOCATION').AsString
+     else
+     if fieldbyname('M57').AsString=':57C:' then
+        v_mf57:=#13+#13+fieldbyname('M57').AsString+' /'+fieldbyname('MF57_ACCOUNT').AsString
+     else
+     if fieldbyname('M57').AsString=':57D:' then
+        v_mf57:=#13+#13+fieldbyname('M57').AsString+' /'+fieldbyname('MF57_ACCOUNT').AsString
+        +#13+fieldbyname('MF57_NAME$LOCATION').AsString
+     else v_mf57:='';
+      //----------------M59 begin------------------------
+  v_mf59:=#13+#13+ fieldbyname('M59').asstring+' /'+fieldbyname('MF59_ACCOUNT').asstring
++#13+fieldbyname('MF59_NAME$ADRESS').asstring;
+
+if fieldbyname('M70').asstring=':70:' then
+v_mf70:=#13+#13+ fieldbyname('M70').asstring+' '+fieldbyname('MF70').asstring
+else  v_mf70:='';
+
+v_mf71:=#13+#13+ fieldbyname('M71A').asstring+' '+fieldbyname('MF71A').asstring;
+
+if fieldbyname('M72').asstring=':72:' then
+v_mf72:=#13+#13+ fieldbyname('M72').asstring+' '+fieldbyname('MF72').asstring
+else
+v_mf72:='';
+if fieldbyname('M77B').asstring=':77B:' then
+v_mf77:=#13+#13+ fieldbyname('M77B').asstring+' '+fieldbyname('MF77B').asstring
+else
+v_mf77:='';
+
+end;
+
+a:= v_mf20 + v_mf23 + v_mf32 + v_mf50 + v_mf52 + v_mf53 + v_mf54 + v_mf55 +
+ v_mf56 + v_mf57 + v_mf59 + v_mf70 + v_mf71 + v_mf72 + v_mf77;
+
+
+{if c=2 then begin
+a:= Gridout2.DataSource.DataSet.fieldbyname('MF20').asstring+' '+
+Gridout2.DataSource.DataSet.fieldbyname('MF20_REFERENCE').asstring+#13+#13
++Gridout2.DataSource.DataSet.fieldbyname('M23B').asstring+' '+Gridout2.DataSource.DataSet.fieldbyname('mf23b').asstring
++#13+#13+Gridout2.DataSource.DataSet.fieldbyname('M32A').asstring+' '+Gridout2.DataSource.DataSet.fieldbyname('MF32A_DATE').asstring+' '+Gridout2.DataSource.DataSet.fieldbyname('MF32A_CURR').asstring+Gridout2.DataSource.DataSet.fieldbyname('MF32A_AMOUNT').asstring
++#13+#13+Gridout2.DataSource.DataSet.fieldbyname('M50').asstring+' '+Gridout2.DataSource.DataSet.fieldbyname('MF50_ACCOUNT').asstring
++#13+Gridout2.DataSource.DataSet.fieldbyname('MF50_NAME$ADRESS').asstring
++#13+#13+Gridout2.DataSource.DataSet.fieldbyname('M59').asstring+' '+Gridout2.DataSource.DataSet.fieldbyname('MF59_ACCOUNT').asstring
++#13+Gridout2.DataSource.DataSet.fieldbyname('MF59_NAME$ADRESS').asstring
++#13+#13+Gridout2.DataSource.DataSet.fieldbyname('M70').asstring+' '+Gridout2.DataSource.DataSet.fieldbyname('MF70').asstring
++#13+Gridout2.DataSource.DataSet.fieldbyname('M72').asstring+' '+Gridout2.DataSource.DataSet.fieldbyname('MF72').asstring;
+end;
+
+if c=3 then begin
+a:= Gridout3.DataSource.DataSet.fieldbyname('MF20').asstring+' '+
+Gridout3.DataSource.DataSet.fieldbyname('MF20_REFERENCE').asstring+#13+#13
++Gridout3.DataSource.DataSet.fieldbyname('M23B').asstring+' '+Gridout3.DataSource.DataSet.fieldbyname('mf23b').asstring
++#13+#13+Gridout3.DataSource.DataSet.fieldbyname('M32A').asstring+' '+Gridout3.DataSource.DataSet.fieldbyname('MF32A_DATE').asstring+' '+Gridout3.DataSource.DataSet.fieldbyname('MF32A_CURR').asstring+Gridout3.DataSource.DataSet.fieldbyname('MF32A_AMOUNT').asstring
++#13+#13+Gridout3.DataSource.DataSet.fieldbyname('M50').asstring+' '+Gridout3.DataSource.DataSet.fieldbyname('MF50_ACCOUNT').asstring
++#13+Gridout3.DataSource.DataSet.fieldbyname('MF50_NAME$ADRESS').asstring
++#13+#13+Gridout3.DataSource.DataSet.fieldbyname('M59').asstring+' '+Gridout3.DataSource.DataSet.fieldbyname('MF59_ACCOUNT').asstring
++#13+Gridout3.DataSource.DataSet.fieldbyname('MF59_NAME$ADRESS').asstring
++#13+#13+Gridout3.DataSource.DataSet.fieldbyname('M70').asstring+' '+Gridout3.DataSource.DataSet.fieldbyname('MF70').asstring
++#13+Gridout3.DataSource.DataSet.fieldbyname('M72').asstring+' '+Gridout3.DataSource.DataSet.fieldbyname('MF72').asstring;
+end;  }
+
+
+//printform:=Tprintform.create(self);
+//printform.showmodal;
+// if not assigned(QuickReport1) then
+// QuickReport1:=TQuickReport1.Create(application);
+// QuickReport1.qrrichtext1.lines.Text:=a;
+
+printform:=tprintform.create(self);
+printform.PRT.Lines.Add(A);
+   printform.ShowModal;
+ //ShowMessage(a);
+
+ //QuickReport1.Preview;
+   end;
+end.

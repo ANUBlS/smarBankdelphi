@@ -1,0 +1,49 @@
+unit CommanParametrs;
+
+interface
+ uses
+  SysUtils, Classes, Controls,  Forms ,Messages ,
+   DB,Windows,XDBGrids,DBGrids;
+
+    procedure LoadPlugin(PluginName :String;PluginParam  :String);
+    procedure LoadPlugin1(PluginName :String;PluginParam  :String);
+
+ var
+ CommonApplication,CommonApplication1: TApplication;
+ commangrid, gridmesuliyyet,gridferdiqeza,Maininvestgrid: TDBGrid;
+ Reinsgrid,Xcommangrid : TXDBGrid;
+
+
+ commandataset,commandatasetTravel,commandatasetcargo:Tdataset;
+
+
+  contractstatus1,commandepid,frmloss,commoncid,contactid,ins_cutsid,contractstatus,MK_ID,instype_id,p_contractstate,lossimtina,lossimtinaR,plossid,lossoperatin,losstesdiq,lossstatus:integer;
+  moduletype,opetion_acc,opetion,opetion_avto,ins_or_upd ,op_cust,BarderoReportType,Bordero_type,bordero_say,bardero_hesabat:String;
+
+ implementation
+ procedure LoadPlugin(PluginName :String;PluginParam  :String);
+var PluginHandle :THandle;
+    exportproc : procedure(s:String;k:String);
+begin
+   PluginHandle := LoadPackage(ExtractFilePath(Application.ExeName)+PluginName);
+
+   if PluginHandle > 0 then
+   begin
+      @exportproc := GetProcAddress(PluginHandle,'InitPlugin');
+      exportproc(PluginParam,'');
+   end;
+end;
+procedure LoadPlugin1(PluginName :String;PluginParam  :String);
+var PluginHandle :THandle;
+    exportproc : procedure(s:String;k:String);
+begin
+   PluginHandle := LoadPackage(ExtractFilePath(Application.ExeName)+PluginName);
+
+   if PluginHandle > 0 then
+   begin
+      @exportproc := GetProcAddress(PluginHandle,'InitPlugin');
+      exportproc(PluginParam,'');
+   end;
+end;
+
+end.

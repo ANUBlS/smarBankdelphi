@@ -1,0 +1,95 @@
+unit ExpComAccUnit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, DBViewComboBox, SearchEdit, Grids, DBGrids, Buttons, ExtCtrls,
+  NLSLocalizer;
+
+type
+  TExpComAccForm = class(TForm)
+    Panel1: TPanel;
+    Panel2: TPanel;
+    Label1: TLabel;
+    DBViewComboBox1: TDBViewComboBox;
+    Label2: TLabel;
+    DBViewComboBox2: TDBViewComboBox;
+    Label3: TLabel;
+    SearchEdit1: TSearchEdit;
+    SpeedButton1: TSpeedButton;
+    Label4: TLabel;
+    SearchEdit2: TSearchEdit;
+    SpeedButton2: TSpeedButton;
+    Label5: TLabel;
+    Panel3: TPanel;
+    Panel4: TPanel;
+    DBGrid1: TDBGrid;
+    DBGrid2: TDBGrid;
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure SpeedButton2Click(Sender: TObject);
+    procedure DBGrid1DblClick(Sender: TObject);
+    procedure DBGrid2DblClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  ExpComAccForm: TExpComAccForm;
+
+implementation
+uses ExpDataModuleUnit;
+{$R *.DFM}
+
+procedure TExpComAccForm.SpeedButton1Click(Sender: TObject);
+begin
+  if SearchEdit1.Text = '' then exit;
+  begin
+    with ExpDataModule do
+    begin
+      Repair.CallProcedure('Exp_chequeaccount_add',[ValyutaDataSet.fieldbyname('VALUTE').asinteger,
+                                                    AccountDataSet1.fieldbyname('id').asinteger,
+                                                    AllFilialDataSet.fieldbyname('id').asinteger]);
+       SearchEdit1.clear;
+       ExpChequeAccDataSet.Refresh;
+    end;
+end;
+
+end;
+
+procedure TExpComAccForm.SpeedButton2Click(Sender: TObject);
+begin
+  if SearchEdit2.Text = '' then exit;
+  begin
+    with ExpDataModule do
+    begin
+      Repair.CallProcedure('Exp_comissionaccount_add',[ValyutaDataSet.fieldbyname('VALUTE').asinteger,
+                                                       AccountDataSet1.fieldbyname('id').asinteger,
+                                                       AllFilialDataSet.fieldbyname('id').asinteger]);
+       SearchEdit2.clear;
+       ExpComissionAccDataSet.Refresh;
+    end;
+  end;
+end;
+
+procedure TExpComAccForm.DBGrid1DblClick(Sender: TObject);
+begin
+  with  ExpDataModule do
+  begin
+    Repair.CallProcedure('Exp_chequeaccount_del',[ExpChequeAccDataSet.FieldByName('id').AsInteger]);
+    ExpChequeAccDataSet.Refresh;
+  end;
+end;
+ 
+procedure TExpComAccForm.DBGrid2DblClick(Sender: TObject);
+begin
+  with  ExpDataModule do
+  begin
+    Repair.CallProcedure('Exp_comissionaccount_Del',[ExpComissionAccDataSet.FieldByName('id').AsInteger]);
+    ExpComissionAccDataSet.Refresh;
+  end;
+end;
+
+end.

@@ -1,0 +1,161 @@
+unit CustAnalysDataModuleImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, OracleData, Oracle;
+
+type
+  TCustAnalysDataModule = class(TDataModule)
+    CustAnalysDataSource: TDataSource;
+    CreditAnalysDataSet: TOracleDataSet;
+    CreditAnalysDataSource: TDataSource;
+    UsersDataSet: TOracleDataSet;
+    UsersDataSource: TDataSource;
+    FilialDataSet: TOracleDataSet;
+    FilialDataSource: TDataSource;
+    CategoriesDataSet: TOracleDataSet;
+    CategoriesDataSource: TDataSource;
+    CurrencysDataSet: TOracleDataSet;
+    CurrencysDataSource: TDataSource;
+    PersonsDataSet: TOracleDataSet;
+    PersonsDataSource: TDataSource;
+    UserGroupsDataSet: TOracleDataSet;
+    CreditTypeDataSet: TOracleDataSet;
+    UserGroupsDataSource: TDataSource;
+    CreditTypeDataSource: TDataSource;
+    CustomersDataSet: TOracleDataSet;
+    CustomersDataSource: TDataSource;
+    CustAnalysDataSet: TOracleDataSet;
+    TrancheDataSource: TDataSource;
+    TrancheDataSet: TOracleDataSet;
+    TrancheDataSetTRANCHEAMOUNT: TFloatField;
+    TrancheDataSetTRANCHEDATE: TDateTimeField;
+    PaymentsDataSet: TOracleDataSet;
+    PaymentsDataSource: TDataSource;
+    PaymentsDataSetID: TFloatField;
+    PaymentsDataSetCREDITID: TFloatField;
+    PaymentsDataSetPAYDATE: TDateTimeField;
+    PaymentsDataSetPAYEDAMT: TFloatField;
+    PaymentsDataSetPAYEDINTAMT: TFloatField;
+    PaymentsDataSetPAYEDDUEAMT: TFloatField;
+    PaymentsDataSetPAYEDDUEINTAMT: TFloatField;
+    PaymentsDataSetPAYEDPENALTYAMT: TFloatField;
+    CustAnalysDataSetBOOROWERID: TIntegerField;
+    CreditsinDateDataSet: TOracleDataSet;
+    CreditsinDateDataSource: TDataSource;
+    CreditsinDateDataSetHDATE: TDateTimeField;
+    CreditsinDateDataSetREST: TFloatField;
+    CreditsinDateDataSetINTERESTREST: TFloatField;
+    CreditsinDateDataSetDUEREST: TFloatField;
+    CreditsinDateDataSetDUEINTERESTREST: TFloatField;
+    ScheduleDataSet: TOracleDataSet;
+    ScheduleDataSource: TDataSource;
+    ScheduleDataSetID: TFloatField;
+    ScheduleDataSetCREDITID: TFloatField;
+    ScheduleDataSetPAYMENTDATE: TDateTimeField;
+    ScheduleDataSetPRINCIPAL: TFloatField;
+    ScheduleDataSetINTEREST: TFloatField;
+    CreditAnalysDataSetBOOROWERID: TFloatField;
+    CreditAnalysDataSetCREDITID: TFloatField;
+    CreditAnalysDataSetBRANCHID: TFloatField;
+    CreditAnalysDataSetCURRENCY: TFloatField;
+    CreditAnalysDataSetNUMBEROFCREDIT: TWideStringField;
+    CreditAnalysDataSetCUSTOMERTYPE: TFloatField;
+    CreditAnalysDataSetCREDITTYPE: TFloatField;
+    CreditAnalysDataSetUSID: TFloatField;
+    CreditAnalysDataSetPERSONALTYPE: TFloatField;
+    CreditAnalysDataSetREST: TFloatField;
+    CreditAnalysDataSetINTERESTREST: TFloatField;
+    CreditAnalysDataSetDUEREST: TFloatField;
+    CreditAnalysDataSetDUEINTERESTREST: TFloatField;
+    CreditAnalysDataSetVAL_NAME: TWideStringField;
+    CreditAnalysDataSetVALUTE: TIntegerField;
+    CreditAnalysDataSetCONTRACTACCNO: TWideStringField;
+    ProlongationDataSet: TOracleDataSet;
+    ProlongationDataSource: TDataSource;
+    ProlongationDataSetPROLONGDATE: TDateTimeField;
+    ProlongationDataSetNEWCLOSEDATE: TDateTimeField;
+    SumSheDataSet: TOracleDataSet;
+    SumSheDataSource: TDataSource;
+    SumPayDataSet: TOracleDataSet;
+    SumPayDataSource: TDataSource;
+    SumSheDataSetCREDITID: TFloatField;
+    SumSheDataSetSUMPRINCIPAL: TFloatField;
+    SumSheDataSetSUMINTEREST: TFloatField;
+    SumPayDataSetCREDITID: TFloatField;
+    SumPayDataSetSUMPAYEDAMT: TFloatField;
+    SumPayDataSetSUMPAYEDINTAMT: TFloatField;
+    SumPayDataSetSUMPAYEDDUEAMT: TFloatField;
+    SumPayDataSetSUMPAYEDDUEINTAMT: TFloatField;
+    SumPayDataSetSUMPAYEDPENALTYAMT: TFloatField;
+    ReportDataSet: TOracleDataSet;
+    ReportDataSetNUMBEROFCREDIT: TWideStringField;
+    ReportDataSetDATEOFCONCLUSION: TDateTimeField;
+    ReportDataSetCLOSEDATE: TDateTimeField;
+    ReportDataSetPURPOSEOFCREDIT: TWideStringField;
+    ReportDataSetCREDITLINEAMOUNT: TFloatField;
+    ReportDataSetANNUALYINTERESTRATE: TFloatField;
+    ReportDataSetANNUALYOVERDUERATE: TFloatField;
+    ReportDataSetANNUALYPENALTYRATE: TFloatField;
+    ReportDataSetDESCRIPION: TWideStringField;
+    ReportDataSetDESCRIPTION: TWideStringField;
+    ReportDataSetDESCRIPTION_1: TWideStringField;
+    ReportDataSetDESCRIPTION_2: TWideStringField;
+    ReportDataSetVAL_NAME: TWideStringField;
+    ReportDataSetPLEDGENAME: TWideStringField;
+    ReportDataSetRESREVENAME: TWideStringField;
+    ReportDataSetDUERESREVENAME: TWideStringField;
+    ReportDataSetPLEDGEPRICE: TFloatField;
+    CreditAnalysDataSetDATEOFCONCLUSION: TDateTimeField;
+    CreditAnalysDataSetCLOSEDATE: TDateTimeField;
+    CreditAnalysDataSetDUEDATEFIRSTCONTRACT: TDateTimeField;
+    CustAnalysDataSetBOOROWERNAME: TWideStringField;
+    CreditAnalysDataSetPENALTYREST: TFloatField;
+    CreditAnalysDataSetCEM: TFloatField;
+    CreditAnalysDataSetFILNAME: TWideStringField;
+    CreditAnalysDataSetCREDITLINEAMOUNT: TFloatField;
+    CreditAnalysDataSetMAINPAY: TFloatField;
+    CreditAnalysDataSetCEMPAY: TFloatField;
+    OraclePackage1: TOraclePackage;
+    CreditAnalysDataSetUSERFIL: TFloatField;
+    CreditAnalysDataSetBOOROWERACCID: TFloatField;
+    CreditAnalysDataSetTEY: TWideStringField;
+    Returnquery: TOracleQuery;
+    Returntrans: TOracleDataSet;
+    Returntransdata: TDataSource;
+    OraclePackage2: TOraclePackage;
+    usrfil: TOracleDataSet;
+    usrfilFILIALID: TFloatField;
+    CreditAnalysDataSetUSRGROUP: TWideStringField;
+    OracleDataSet1: TOracleDataSet;
+    DataSource1: TDataSource;
+    CustAnalysDataSetEXPERTID: TFloatField;
+    CreditAnalysDataSetDUEDAY: TFloatField;
+    CreditAnalysDataSetPHONENUMBER: TWideStringField;
+    bnkacc: TOracleDataSet;
+    BNK_src: TDataSource;
+    procedure DataModuleCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  CustAnalysDataModule: TCustAnalysDataModule;
+
+implementation
+
+uses sboapiDataModuleImpl;
+
+{$R *.DFM}
+    
+procedure TCustAnalysDataModule.DataModuleCreate(Sender: TObject);
+begin
+OracleDataSet1.Open;
+end;
+
+end.
+

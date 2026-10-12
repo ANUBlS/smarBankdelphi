@@ -1,0 +1,390 @@
+unit uIprepFilter;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, Db, OracleData, Oracle, CMExcelExport,  Mask,
+  DBCtrlsEh, DBLookupEh, ExtCtrls, Quickrpt, ComCtrls, Gauges,variants;
+
+type
+  TfrmIpRepFilter = class(TForm)
+    ODSCredits: TOracleDataSet;
+    CM_IP_REPORTS: TOraclePackage;
+    ODSBoorInfo: TOracleDataSet;
+    Panel1: TPanel;
+    GroupBox1: TGroupBox;
+    CheckBox1: TCheckBox;
+    DBLookupComboboxEh1: TDBLookupComboboxEh;
+    GroupBox2: TGroupBox;
+    DBLookupComboboxEh3: TDBLookupComboboxEh;
+    CheckBox3: TCheckBox;
+    GroupBox3: TGroupBox;
+    DBLookupComboboxEh2: TDBLookupComboboxEh;
+    CheckBox2: TCheckBox;
+    Panel2: TPanel;
+    GroupBox4: TGroupBox;
+    CheckBox4: TCheckBox;
+    DBLookupComboboxEh4: TDBLookupComboboxEh;
+    GroupBox5: TGroupBox;
+    DBLookupComboboxEh6: TDBLookupComboboxEh;
+    CheckBox6: TCheckBox;
+    GroupBox6: TGroupBox;
+    DBLookupComboboxEh5: TDBLookupComboboxEh;
+    CheckBox5: TCheckBox;
+    Panel5: TPanel;
+    GroupBox7: TGroupBox;
+    CheckBox7: TCheckBox;
+    DBLookupComboboxEh7: TDBLookupComboboxEh;
+    GroupBox8: TGroupBox;
+    CheckBox9: TCheckBox;
+    DBLookupComboboxEh9: TDBLookupComboboxEh;
+    GroupBox9: TGroupBox;
+    CheckBox8: TCheckBox;
+    DBLookupComboboxEh8: TDBLookupComboboxEh;
+    Panel9: TPanel;
+    GroupBox10: TGroupBox;
+    CheckBox10: TCheckBox;
+    DBLookupComboboxEh10: TDBLookupComboboxEh;
+    GroupBox11: TGroupBox;
+    CheckBox11: TCheckBox;
+    DBLookupComboboxEh11: TDBLookupComboboxEh;
+    ODFValute: TOracleDataSet;
+    Valute: TDataSource;
+    ODFBranch: TOracleDataSet;
+    Branch: TDataSource;
+    ODFUsrGroup: TOracleDataSet;
+    UsrGroup: TDataSource;
+    ODFReserves: TOracleDataSet;
+    Reserves: TDataSource;
+    DueReserve: TDataSource;
+    ODFUsers: TOracleDataSet;
+    Users: TDataSource;
+    ODFPersons: TOracleDataSet;
+    Persons: TDataSource;
+    ODFCategories: TOracleDataSet;
+    Categories: TDataSource;
+    ODFCrdTypes: TOracleDataSet;
+    CrdType: TDataSource;
+    ODFPledges: TOracleDataSet;
+    Pledges: TDataSource;
+    ODFCustomers: TOracleDataSet;
+    Customers: TDataSource;
+    Panel3: TPanel;
+    GroupBox13: TGroupBox;
+    CheckBox13: TCheckBox;
+    DBLookupComboboxEh13: TDBLookupComboboxEh;
+    ODSMKTsInfo: TOracleDataSet;
+    ODFReport: TOracleDataSet;
+    ODFReportFULLNAME: TStringField;
+    ODFReportDATASET: TStringField;
+    ODFReportPROCNAME: TStringField;
+    ODFReportQRNAME: TStringField;
+    reportSettings: TDataSource;
+    ODSMKTInfo: TOracleDataSet;
+    ODSInsurInfo: TOracleDataSet;
+    ODSDateInfo: TOracleDataSet;
+    Button1: TButton;
+    ODSPredInfo: TOracleDataSet;
+    ODSALEVInfo: TOracleDataSet;
+    ODSBoorInfoROWNUM: TFloatField;
+    ODSBoorInfoCREDITID: TFloatField;
+    ODSBoorInfoNAME: TStringField;
+    ODSBoorInfoAGE: TFloatField;
+    ODSBoorInfoBIRTHDATE: TDateTimeField;
+    ODSBoorInfoADDRESS: TStringField;
+    ODSBoorInfoWORKNPOST: TStringField;
+    ODSBoorInfoMONEYMONEY: TFloatField;
+    ODSBoorInfoCREDAMTGIVEN: TFloatField;
+    ODSBoorInfoCREDAMTYM: TFloatField;
+    ODSBoorInfoCREDPERIODCRED: TFloatField;
+    ODSBoorInfoCREDPERIODYM: TFloatField;
+    ODSBoorInfoCREDPERCCRED: TFloatField;
+    ODSBoorInfoCREDPERCYM: TFloatField;
+    ODSMKTInfoROWNUM: TFloatField;
+    ODSMKTInfoCREDITID: TFloatField;
+    ODSMKTInfoAKTNO: TStringField;
+    ODSMKTInfoBOOROWER: TStringField;
+    ODSMKTInfoCREDAMOUNTGIVEN: TFloatField;
+    ODSMKTInfoCREDAMOUNTYM: TFloatField;
+    ODSMKTInfoCREDAMOUNTPAYED: TFloatField;
+    ODSMKTInfoCREDAMOUNTREST: TFloatField;
+    ODSMKTInfoPERCENTAGEMKT: TFloatField;
+    ODSMKTInfoPERCENTAGEAIF: TFloatField;
+    ODSMKTInfoPERIODCREDIT: TFloatField;
+    ODSMKTInfoPERIODYM: TFloatField;
+    ODSMKTInfoANUITET: TFloatField;
+    ODSMKTInfoCONTRACTDATE: TDateTimeField;
+    ODSMKTInfoCONTRACTNO: TStringField;
+    ODSMKTInfoIPCONTRACTDATE: TDateTimeField;
+    ODSMKTInfoIPCONTRACTNO: TStringField;
+    ODSInsurInfoROWNUM: TFloatField;
+    ODSInsurInfoCREDITID: TFloatField;
+    ODSInsurInfoMKTNAME: TStringField;
+    ODSInsurInfoBOOROWER: TStringField;
+    ODSInsurInfoCRDAMOUNT: TFloatField;
+    ODSInsurInfoCRDPERIOD: TFloatField;
+    ODSInsurInfoCRDNUM: TStringField;
+    ODSInsurInfoCRDDATE: TDateTimeField;
+    ODSInsurInfoPERSAMOUNT: TFloatField;
+    ODSInsurInfoPERSPERIOD: TFloatField;
+    ODSInsurInfoPERSLASTDAT: TDateTimeField;
+    ODSInsurInfoPROPAMOUNT: TFloatField;
+    ODSInsurInfoPROPPERIOD: TFloatField;
+    ODSInsurInfoPROPLASTDAT: TDateTimeField;
+    ODSPredInfoROWNUM: TFloatField;
+    ODSPredInfoCREDITID: TFloatField;
+    ODSPredInfoMKTNAME: TStringField;
+    ODSPredInfoBOOROWER: TStringField;
+    ODSPredInfoIPPASTE: TStringField;
+    ODSPredInfoPADDR: TStringField;
+    ODSPredInfoPPRICE: TFloatField;
+    ODSPredInfoPAREA: TFloatField;
+    ODSPredInfoIPCONTNUM: TStringField;
+    ODSPredInfoIPCONTDAT: TDateTimeField;
+    ODSPredInfoIPAPERNUM: TStringField;
+    ODSPredInfoIPAPERDAT: TDateTimeField;
+    ODSPredInfoIPEXTRNUM: TStringField;
+    ODSPredInfoIPEXTRDAT: TDateTimeField;
+    ODSPredInfoPFIRMA: TStringField;
+    ODSPredInfoPDATE: TDateTimeField;
+    ODSPredInfoPARAZI: TStringField;
+    ODSDateInfoROWNUM: TFloatField;
+    ODSDateInfoCREDITID: TFloatField;
+    ODSDateInfoNAME: TStringField;
+    ODSDateInfoANDERFIRST: TDateTimeField;
+    ODSDateInfoANDERIPRED: TDateTimeField;
+    ODSDateInfoANDERANKET: TDateTimeField;
+    ODSDateInfoANDERREPRT: TDateTimeField;
+    ODSDateInfoCRDNUMBER: TDateTimeField;
+    ODSDateInfoCRDFIRST: TDateTimeField;
+    ODSDateInfoCRDPAYED: TDateTimeField;
+    ODSDateInfoBUYSELNUM: TDateTimeField;
+    ODSDateInfoBUYSELPAY: TDateTimeField;
+    ODSDateInfoIPOTEKANUM: TDateTimeField;
+    ODSDateInfoIPOTEKAPAPER: TDateTimeField;
+    ODSDateInfoIPOTEKARETPAPER: TDateTimeField;
+    ODSDateInfoYMAIF: TDateTimeField;
+    ODSDateInfoYMBILD: TDateTimeField;
+    ODSDateInfoYMTEHVIL: TDateTimeField;
+    ODSDateInfoYMTI: TDateTimeField;
+    ODSDateInfoMKTNAME: TStringField;
+    ODSALEVInfoROWNUM: TFloatField;
+    ODSALEVInfoCREDITID: TFloatField;
+    ODSALEVInfoMKTNAME: TStringField;
+    ODSALEVInfoBOOROWER: TStringField;
+    ODSALEVInfoPARAZI: TStringField;
+    ODSALEVInfoPADDR: TStringField;
+    ODSALEVInfoPPRICE: TFloatField;
+    ODSALEVInfoPAREA: TFloatField;
+    ODSALEVInfoPDATE: TDateTimeField;
+    ODSPschedInfo: TOracleDataSet;
+    ODSMKTInfoMKTNAME: TStringField;
+    ODSMKTInfoTICKNO: TStringField;
+    ODSPschedInfoCREDITID: TFloatField;
+    ODSPschedInfoPAYMENTDATE: TDateTimeField;
+    ODSPschedInfoPRINCIPAL: TFloatField;
+    ODSPschedInfoRESTBEFORE: TFloatField;
+    ODSPschedInfoRESTAFTER: TFloatField;
+    ODSPschedInfoMKTNAME: TStringField;
+    ODSPschedInfoBOOROWERNAME: TStringField;
+    ODSPschedInfoCRDNUM: TStringField;
+    ODSPschedInfoINTEREST: TFloatField;
+    rbRepType: TRadioGroup;
+    GroupBox12: TGroupBox;
+    dtp1: TDateTimePicker;
+    dtp2: TDateTimePicker;
+    ODSMKTsInfoROWNUM: TFloatField;
+    ODSMKTsInfoMKTNAME: TStringField;
+    ODSMKTsInfoBOORCNT: TFloatField;
+    ODSMKTsInfoGIVENAMOUNT: TFloatField;
+    ODSMKTsInfoYMAMOUNT: TFloatField;
+    ODSMKTsInfoREST: TFloatField;
+    ODSMKTsInfoCLOSECRDCOUNT: TFloatField;
+    ODSMKTsInfoCLOSECRDYMAMOUNT: TFloatField;
+    ODSInsurInfoINSURANCECOMPANY: TStringField;
+    ODSInsurInfoINSURANCENO: TStringField;
+    ODSInsurInfoINSURANCEDATE: TDateTimeField;
+    ODSMKTsInfoFAKCREDCOUNT: TFloatField;
+    ODSMKTsInfoFAKYMKRCOUNT: TFloatField;
+    ODSMKTsInfoFAKYMKRREST: TFloatField;
+    Exporter: TCMExcelExport;
+    MKT: TOracleDataSet;
+    MKTROWNUM: TFloatField;
+    MKTMKTNAME: TStringField;
+    MKTBOORCNT: TFloatField;
+    MKTGIVENAMOUNT: TFloatField;
+    MKTYMAMOUNT: TFloatField;
+    MKTREST: TFloatField;
+    MKTCLOSECRDCOUNT: TFloatField;
+    MKTCLOSECRDYMAMOUNT: TFloatField;
+    MKTFAKCREDCOUNT: TFloatField;
+    MKTFAKYMKRCOUNT: TFloatField;
+    MKTFAKYMKRREST: TFloatField;
+    Gauge1: TGauge;
+    procedure Button1Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+  private
+    function BuildFilterString:String;
+    procedure GetReport(RepDataSet: TOracleDataSet;procname: String; RepType: Byte;QRep: TQuickRep);
+  public
+    { Public declarations }
+  end;
+
+var
+  frmIpRepFilter: TfrmIpRepFilter;
+
+procedure InitPlugin(S : String); export;
+
+implementation
+
+{$R *.DFM}
+
+uses
+  CommonDecls, SbSystem,sboapiDataModuleimpl,
+  uMKTInfoImpl,
+  uBoorInfoRepImpl, uMKTsInfoImpl, uDateInfoImpl, uInsurInfoImpl,
+  uPredInfoImpl, uALEVInfoImpl, iPSchedInfoImpl;
+
+procedure InitPlugin(S : String); export;
+begin
+
+    frmIpRepFilter.ShowModal;
+end;
+
+exports
+  InitPlugin;
+
+function TfrmIpRepFilter.BuildFilterString;
+
+  procedure ConcatFilter(var S: String; const Prefix : String; Checked : Boolean; KeyValue : Variant);
+  const
+     csFormat = '(%s=%s)';
+  var
+    Temp : String;   
+  begin
+
+    if Checked then
+    begin
+      Temp := Format(csFormat,[Prefix,Keyvalue]);
+      if S = '' then
+        S := Temp
+      else
+        S :=S + 'and ' + Temp;
+    end;
+    
+  end;
+begin
+  Result := 'DATEOFCONCLUSION between '''+FormatDateTime('dd-mmm-yyyy', dtp1.Date)+''' and '''+FormatDateTime('dd-mmm-yyyy', dtp2.Date)+'''';
+  ConcatFilter(Result,'CURRENCY',CheckBox1.Checked,DBLookupComboboxEh1.KeyValue);
+  ConcatFilter(Result,'BRANCHID',CheckBox2.Checked,DBLookupComboboxEh2.KeyValue);
+  ConcatFilter(Result,'USRGROUP',CheckBox3.Checked,DBLookupComboboxEh3.KeyValue);
+  ConcatFilter(Result,'RESERVEID',CheckBox4.Checked,DBLookupComboboxEh4.KeyValue);
+  ConcatFilter(Result,'DUERESERVEID',CheckBox5.Checked,DBLookupComboboxEh5.KeyValue);
+  ConcatFilter(Result,'USID',CheckBox6.Checked,DBLookupComboboxEh6.KeyValue);
+  ConcatFilter(Result,'PERSONALTYPE',CheckBox7.Checked,DBLookupComboboxEh7.KeyValue);
+  ConcatFilter(Result,'CUSTOMERTYPE',CheckBox8.Checked,DBLookupComboboxEh8.KeyValue);
+  ConcatFilter(Result,'CREDITTYPE',CheckBox9.Checked,DBLookupComboboxEh9.KeyValue);
+  ConcatFilter(Result,'PLEDGEID',CheckBox10.Checked,DBLookupComboboxEh10.KeyValue);
+  ConcatFilter(Result,'BOOROWERID',CheckBox11.Checked,DBLookupComboboxEh11.KeyValue);
+end;
+
+procedure TfrmIpRepFilter.GetReport;
+var bdat,edat :TDateTime;
+i:integer;
+begin
+
+   bdat := integer(trunc(dtp1.DateTime));
+   edat := integer(trunc(dtp2.DateTime));
+  i:=1;
+  Gauge1.Visible:=true;
+  with ODSCredits do begin
+    Session.Commit;
+    Close;
+    if BuildFilterString<>'' then
+      SQL[2] := 'where '+BuildFilterString
+    else
+      SQL[3] := '';
+
+    Open;
+    while not Eof do begin
+   CM_IP_REPORTS.CallProcedure(procname,[fieldbyname('id').AsVariant,bdat,edat]);
+
+      Gauge1.Progress:=trunc(i*100/RecordCount);
+      i:=i+1;
+      Next;
+    end;
+  end;
+
+  RepDataSet.Close;
+  RepDataSet.Open;
+  
+  Screen.Cursor := crDefault;
+    
+  if RepType=1 then begin
+    with QRep do begin
+      preview;
+    end;
+  end else begin
+    with Exporter do begin
+      Connect;
+      ExportDataset(RepDataSet,'IP');
+      ShowExcel;
+    end;
+  end;
+ Gauge1.Visible:=false;
+end;
+
+procedure TfrmIpRepFilter.Button1Click(Sender: TObject);
+var
+  a: integer;
+  repDS: TOracleDataSet;
+  repQR: TQuickRep;
+begin
+  Screen.Cursor := crSQLWait;
+   if DBLookupComboboxEh8.keyvalue<>null then
+   a:=DBLookupComboboxEh8.keyvalue;
+    if ODFReportPROCNAME.AsString='' then exit;
+
+ //  if ODFReportPROCNAME.AsString='insonerowmkts' then  begin
+   if (a=1) and (CheckBox8.checked=true) and ( ODFReportPROCNAME.AsString='insonerowmkts')then
+   GetReport(MKT,ODFReportPROCNAME.AsString,rbRepType.ItemIndex,repQR)
+   else
+
+   begin
+  repDS := FindComponent(ODFReportDATASET.AsString) as TOracleDataSet;
+  repQR := FindComponent(ODFReportQRNAME.AsString) as TQuickRep;
+  GetReport(repDS,ODFReportPROCNAME.AsString,rbRepType.ItemIndex,repQR);
+  Screen.Cursor := crDefault;
+  end;
+end;
+
+procedure TfrmIpRepFilter.FormCreate(Sender: TObject);
+var
+  i: Integer;
+begin
+
+  qrpMKTInfo := TqrpMKTInfo.Create(Self);
+  qrpBoorInfo := TqrpBoorInfo.Create(Self);
+  qrpInsurInfo := TqrpInsurInfo.Create(Self);
+  qrpMKTsInfo := TqrpMKTsInfo.Create(Self);
+  qrpDateInfo := TqrpDateInfo.Create(Self);
+  qrpPredInfo := TqrpPredInfo.Create(Self);
+  qrpALEVInfo := TqrpALEVInfo.Create(Self);
+  qrpPSchedInfo := TqrpPSchedInfo.Create(Self);
+
+ for i:=0 to ComponentCount-1 do
+    if (Components[i] is TOracleDataSet) and (Components[i].tag=0) then
+       (Components[i] as TOracleDataSet).Open;
+
+  DBLookupComboboxEh13.KeyValue := 'insonerowmkt';
+
+  dtp1.DateTime := Get_CurrentDate;
+  dtp2.DateTime := Get_CurrentDate;
+
+end;
+
+initialization
+  frmIpRepFilter := TfrmIpRepFilter.Create(CommonApplication);
+
+end.

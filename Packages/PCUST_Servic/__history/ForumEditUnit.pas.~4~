@@ -1,0 +1,122 @@
+unit ForumEditUnit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Grids, XDBGrids, ExtCtrls, XFSCtrls, StdCtrls, DBCtrls, DB,
+  OracleData, Oracle;
+
+type
+  TFormEdit = class(TForm)
+    XFPanel1: TXFPanel;
+    XFButton1: TXFButton;
+    XFButton2: TXFButton;
+    XFPanel2: TXFPanel;
+    ODS_MMX_TRANSMODE: TOracleDataSet;
+    ODS_MMX_TRANSMODEID: TIntegerField;
+    ODS_MMX_TRANSMODENAME: TIntegerField;
+    ODS_MMX_TRANSMODEDESCRIPTION: TWideStringField;
+    Ods_mmx_reportcode: TOracleDataSet;
+    Ods_mmx_reportcodeID: TIntegerField;
+    Ods_mmx_reportcodeNAME: TWideStringField;
+    Ods_mmx_reportcodeDESCRIPTION: TWideStringField;
+    Dsrc_mmx_reportcode: TDataSource;
+    DS_MMX_TRANSMODE: TDataSource;
+    XFPanel3: TXFPanel;
+    XFLabel2: TXFLabel;
+    DBLC_MMX_reportcode: TDBLookupComboBox;
+    Editreportcode: TEdit;
+    XFPanel4: TXFPanel;
+    XFLabel1: TXFLabel;
+    EditTransModeCode: TEdit;
+    DBLC_MMX_Transmode: TDBLookupComboBox;
+    ods_trinf: TOracleDataSet;
+    XFLabel3: TXFLabel;
+    XFLableTRid: TXFLabel;
+    ods_trinfTRANSID: TFloatField;
+    ods_trinfTRANSMODE_CODE: TIntegerField;
+    ods_trinfREPORT_CODE: TWideStringField;
+    OP_MMXX: TOraclePackage;
+    procedure FormShow(Sender: TObject);
+    procedure EditTransModeCodeKeyPress(Sender: TObject; var Key: Char);
+    procedure DBLC_MMX_TransmodeCloseUp(Sender: TObject);
+    procedure EditreportcodeKeyPress(Sender: TObject; var Key: Char);
+    procedure DBLC_MMX_reportcodeCloseUp(Sender: TObject);
+    procedure XFButton2Click(Sender: TObject);
+    procedure XFButton1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormEdit: TFormEdit;
+
+implementation
+
+uses GoAml_serviceImpl,sboapiDataModuleImpl;
+
+{$R *.dfm}
+
+procedure TFormEdit.DBLC_MMX_reportcodeCloseUp(Sender: TObject);
+begin
+if DBLC_MMX_reportcode.KeyVAlue<>null then
+Editreportcode.Text:=DBLC_MMX_reportcode.KeyVAlue;
+
+end;
+
+procedure TFormEdit.DBLC_MMX_TransmodeCloseUp(Sender: TObject);
+begin
+if DBLC_MMX_Transmode.KeyVAlue<>null then
+EditTransModeCode.Text:=DBLC_MMX_Transmode.KeyVAlue;
+end;
+
+procedure TFormEdit.EditreportcodeKeyPress(Sender: TObject; var Key: Char);
+begin
+if key=#13 then
+
+ DBLC_MMX_reportcode.KeyValue:=Editreportcode.Text;
+end;
+
+procedure TFormEdit.EditTransModeCodeKeyPress(Sender: TObject; var Key: Char);
+begin
+if key=#13 then
+begin
+if trim(EditTransModeCode.Text)<>'' then
+DBLC_MMX_Transmode.KeyValue:=EditTransModeCode.Text;
+
+DBLC_MMX_Transmode.SetFocus;
+end;
+end;
+
+procedure TFormEdit.FormShow(Sender: TObject);
+begin
+ods_trinf.close;
+ods_trinf.SetVariable('v_trid',GoAml_ServiceForm.DBGridTransactions1.DataSource.DataSet.FieldByName('transactionnumber').AsString );
+ods_trinf.open;
+
+    DBLC_MMX_Transmode.KeyValue:=ods_trinf.FieldByName('TRANSMODE_CODE').AsInteger;
+    EditTransModeCode.Text:=ods_trinf.FieldByName('TRANSMODE_CODE').AsString;
+
+    DBLC_MMX_reportcode.KeyValue:=ods_trinf.FieldByName('report_code').Asstring;
+    Editreportcode.Text:=ods_trinf.FieldByName('report_code').AsString;
+    XFLableTRid.Caption:= ods_trinf.FieldByName('TRANSID').AsString;
+end;
+
+procedure TFormEdit.XFButton1Click(Sender: TObject);
+begin
+OP_MMXX.CallProcedure('update_mmx_transinfo' ,[ ods_trinf.FieldByName('TRANSID').AsInteger
+                                             , EditTransModeCode.Text
+                                             , Editreportcode.Text
+
+                                           ]);
+end;
+
+procedure TFormEdit.XFButton2Click(Sender: TObject);
+begin
+FormEdit.Close;
+end;
+
+end.

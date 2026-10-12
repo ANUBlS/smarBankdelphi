@@ -1,0 +1,90 @@
+﻿unit InfoFrmImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ExtCtrls, StdCtrls;
+
+type
+  TInfoFrm = class(TForm)
+    ScrollBox1: TScrollBox;
+    Panel1: TPanel;
+    procedure FormShow(Sender: TObject);
+    procedure FormCanResize(Sender: TObject; var NewWidth, NewHeight: Integer;
+      var Resize: Boolean);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  InfoFrm: TInfoFrm;
+
+implementation
+
+uses DataMPrCrImpl;
+{$R *.dfm}
+
+procedure TInfoFrm.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+Resize:=false
+end;
+
+procedure TInfoFrm.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+//ScrollBox1.Free
+end;
+
+procedure TInfoFrm.FormShow(Sender: TObject);
+var
+  tp, lft, t: integer;
+  fname: string;
+begin
+Caption:= DataMPrCredit.CreditInfoDSet.FieldByName('numberofcredit').AsString +
+'  Nömrəli kreditin məlumatlaı' ;
+  tp := 20;
+  lft := 5;
+  t := 0;
+  with DataMPrCredit.PrViewDSet do
+  begin
+    if Active then
+      close;
+    open;
+    First;
+    while not EOF do
+    begin
+      with (TLabeledEdit.create(InfoFrm)) do
+      begin
+        Parent := ScrollBox1;
+        EditLabel.Caption := FieldByName('comments').AsString;
+        EditLabel.Font.Color := clBlue;
+        EditLabel.Font.Style := [fsBold];
+        fname := FieldByName('column_name').AsString;
+        Text:=DataMPrCredit.CreditInfoDSet.FieldByName(fname).AsString;
+
+        Top := tp;
+        left := lft;
+        width := 250;
+
+        lft := lft + 256;
+        t := t + 1;
+        if t > 2 then
+        begin
+          tp := tp + 40;
+          lft := 5;
+          t := 0;
+        end;
+
+      end;
+      next;
+    end;
+
+  end;
+
+end;
+
+end.

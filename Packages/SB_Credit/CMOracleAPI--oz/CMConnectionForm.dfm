@@ -1,0 +1,122 @@
+object ConnectionForm: TConnectionForm
+  Left = 281
+  Top = 246
+  Width = 291
+  Height = 176
+  BorderIcons = [biSystemMenu]
+  Color = clBtnFace
+  Font.Charset = RUSSIAN_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 283
+    Height = 149
+    Align = alClient
+    BevelInner = bvRaised
+    BevelOuter = bvLowered
+    TabOrder = 0
+    object GroupBox1: TGroupBox
+      Left = 2
+      Top = 2
+      Width = 279
+      Height = 109
+      Align = alTop
+      TabOrder = 0
+      object LblUserName: TLabel
+        Left = 24
+        Top = 14
+        Width = 42
+        Height = 13
+        Caption = 'Истифадячи'
+      end
+      object LblPassword: TLabel
+        Left = 25
+        Top = 49
+        Width = 21
+        Height = 13
+        Caption = 'Шифря'
+      end
+      object LblDatabases: TLabel
+        Left = 24
+        Top = 82
+        Width = 46
+        Height = 13
+        Caption = 'Database'
+      end
+      object EdUserName: TEdit
+        Left = 85
+        Top = 12
+        Width = 187
+        Height = 21
+        TabOrder = 0
+      end
+      object EdPassword: TEdit
+        Left = 85
+        Top = 46
+        Width = 187
+        Height = 21
+        TabOrder = 1
+      end
+      object CmBDatabase: TComboBox
+        Left = 86
+        Top = 76
+        Width = 188
+        Height = 21
+        ItemHeight = 13
+        TabOrder = 2
+        Text = 'CmBDatabase'
+      end
+    end
+    object BitBtn1: TBitBtn
+      Left = 99
+      Top = 117
+      Width = 75
+      Height = 25
+      Caption = 'Гябул'
+      TabOrder = 1
+      OnClick = BitBtn1Click
+      Kind = bkOK
+    end
+    object BitBtn2: TBitBtn
+      Left = 194
+      Top = 116
+      Width = 75
+      Height = 25
+      Caption = 'Имтина'
+      TabOrder = 2
+      OnClick = BitBtn2Click
+      Kind = bkCancel
+    end
+  end
+  object CMHintBox1: TCMHintBox
+    Left = -54
+    Top = 128
+    Width = 150
+    Height = 18
+    AutoSize = True
+    BevelOuter = bvNone
+    Caption = 'CMHintBox1'
+    TabOrder = 1
+    Visible = False
+    Timeout = 0
+    BeepOnMessage = False
+  end
+  object NLSLocalizer1: TNLSLocalizer
+    Caption = 'Login'
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    Left = 16
+    Top = 144
+  end
+end

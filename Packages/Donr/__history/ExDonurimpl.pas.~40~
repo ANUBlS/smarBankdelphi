@@ -1,0 +1,501 @@
+﻿{$A1,B-,C+,D+,E-,F-,G+,H+,I+,J+,K-,L+,M-,N+,O+,P+,Q-,R-,S-,T-,U-,V+,W-,X+,Y+,Z1}
+{$MINSTACKSIZE $00004000}
+{$MAXSTACKSIZE $00100000}
+{$IMAGEBASE $00400000}
+{$APPTYPE GUI}
+{$WARN SYMBOL_DEPRECATED ON}
+{$WARN SYMBOL_LIBRARY ON}
+{$WARN SYMBOL_PLATFORM ON}
+{$WARN SYMBOL_EXPERIMENTAL ON}
+{$WARN UNIT_LIBRARY ON}
+{$WARN UNIT_PLATFORM ON}
+{$WARN UNIT_DEPRECATED ON}
+{$WARN UNIT_EXPERIMENTAL ON}
+{$WARN HRESULT_COMPAT ON}
+{$WARN HIDING_MEMBER ON}
+{$WARN HIDDEN_VIRTUAL ON}
+{$WARN GARBAGE ON}
+{$WARN BOUNDS_ERROR ON}
+{$WARN ZERO_NIL_COMPAT ON}
+{$WARN STRING_CONST_TRUNCED ON}
+{$WARN FOR_LOOP_VAR_VARPAR ON}
+{$WARN TYPED_CONST_VARPAR ON}
+{$WARN ASG_TO_TYPED_CONST ON}
+{$WARN CASE_LABEL_RANGE ON}
+{$WARN FOR_VARIABLE ON}
+{$WARN CONSTRUCTING_ABSTRACT ON}
+{$WARN COMPARISON_FALSE ON}
+{$WARN COMPARISON_TRUE ON}
+{$WARN COMPARING_SIGNED_UNSIGNED ON}
+{$WARN COMBINING_SIGNED_UNSIGNED ON}
+{$WARN UNSUPPORTED_CONSTRUCT ON}
+{$WARN FILE_OPEN ON}
+{$WARN FILE_OPEN_UNITSRC ON}
+{$WARN BAD_GLOBAL_SYMBOL ON}
+{$WARN DUPLICATE_CTOR_DTOR ON}
+{$WARN INVALID_DIRECTIVE ON}
+{$WARN PACKAGE_NO_LINK ON}
+{$WARN PACKAGED_THREADVAR ON}
+{$WARN IMPLICIT_IMPORT ON}
+{$WARN HPPEMIT_IGNORED ON}
+{$WARN NO_RETVAL ON}
+{$WARN USE_BEFORE_DEF ON}
+{$WARN FOR_LOOP_VAR_UNDEF ON}
+{$WARN UNIT_NAME_MISMATCH ON}
+{$WARN NO_CFG_FILE_FOUND ON}
+{$WARN IMPLICIT_VARIANTS ON}
+{$WARN UNICODE_TO_LOCALE ON}
+{$WARN LOCALE_TO_UNICODE ON}
+{$WARN IMAGEBASE_MULTIPLE ON}
+{$WARN SUSPICIOUS_TYPECAST ON}
+{$WARN PRIVATE_PROPACCESSOR ON}
+{$WARN UNSAFE_TYPE OFF}
+{$WARN UNSAFE_CODE OFF}
+{$WARN UNSAFE_CAST OFF}
+{$WARN OPTION_TRUNCATED ON}
+{$WARN WIDECHAR_REDUCED ON}
+{$WARN DUPLICATES_IGNORED ON}
+{$WARN UNIT_INIT_SEQ ON}
+{$WARN LOCAL_PINVOKE ON}
+{$WARN MESSAGE_DIRECTIVE ON}
+{$WARN TYPEINFO_IMPLICITLY_ADDED ON}
+{$WARN RLINK_WARNING ON}
+{$WARN IMPLICIT_STRING_CAST ON}
+{$WARN IMPLICIT_STRING_CAST_LOSS ON}
+{$WARN EXPLICIT_STRING_CAST OFF}
+{$WARN EXPLICIT_STRING_CAST_LOSS OFF}
+{$WARN CVT_WCHAR_TO_ACHAR ON}
+{$WARN CVT_NARROWING_STRING_LOST ON}
+{$WARN CVT_ACHAR_TO_WCHAR ON}
+{$WARN CVT_WIDENING_STRING_LOST ON}
+{$WARN XML_WHITESPACE_NOT_ALLOWED ON}
+{$WARN XML_UNKNOWN_ENTITY ON}
+{$WARN XML_INVALID_NAME_START ON}
+{$WARN XML_INVALID_NAME ON}
+{$WARN XML_EXPECTED_CHARACTER ON}
+{$WARN XML_CREF_NO_RESOLVE ON}
+{$WARN XML_NO_PARM ON}
+{$WARN XML_NO_MATCHING_PARM ON}
+unit ExDonurimpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,ComObj,
+  Dialogs, StdCtrls, DBCtrls, Buttons, ExtCtrls, ComCtrls;
+
+type
+  Texdonr = class(TForm)
+    GroupBox1: TGroupBox;
+    Panel1: TPanel;
+    SpeedButton1: TSpeedButton;
+    Panel2: TPanel;
+    GroupBox2: TGroupBox;
+    DBLookupComboBox1: TDBLookupComboBox;
+    CheckBox1: TCheckBox;
+    Panel3: TPanel;
+    GroupBox4: TGroupBox;
+    DBLookupComboBox3: TDBLookupComboBox;
+    CheckBox3: TCheckBox;
+    GroupBox5: TGroupBox;
+    DBLookupComboBox4: TDBLookupComboBox;
+    CheckBox4: TCheckBox;
+    GroupBox3: TGroupBox;
+    CheckBox2: TCheckBox;
+    DateTimePicker1: TDateTimePicker;
+    procedure SpeedButton1Click(Sender: TObject);
+//    procedure CheckBox2Click(Sender: TObject);
+  //  procedure CheckBox1Click(Sender: TObject);
+
+  private
+    { Private declarations }
+     function BuildFilterString : String;
+  public
+    { Public declarations }
+  end;
+
+var
+  exdonr: Texdonr;
+
+  Exl, Sheet: Variant;
+// procedure InitPlugin(s:string);export;
+
+implementation
+
+{$R *.dfm}
+   uses DataModDonrimpl;
+
+
+
+function Texdonr.BuildFilterString : String;
+
+  procedure ConcatFilter(var S: String; const Prefix : String; Checked : Boolean; KeyValue : Variant);
+  const
+     csFormat = '(%s=%s)';
+  var
+    Temp : String;
+  begin
+
+    if Checked then
+    begin
+      Temp := Format(csFormat,[Prefix,Keyvalue]);
+      if S = '' then
+        S := Temp
+      else
+        S :=S + 'and ' + Temp;
+    end;
+
+  end;  // Concat Filter
+
+begin
+
+  Result := '';
+  ConcatFilter(Result,'cont.id',CheckBox1.Checked,DBLookupComboBox1.KeyValue);
+  ConcatFilter(Result,'cont.BRANCHID',CheckBox3.Checked,DBLookupComboBox3.KeyValue);
+ ConcatFilter(Result,'cont.currency',CheckBox4.Checked,DBLookupComboBox4.KeyValue)
+end;
+
+
+
+procedure Texdonr.SpeedButton1Click(Sender: TObject);
+var
+RestsStr,chpayStr: String;
+ ADDITIONALPARAMS,FilterStr,CheckStr:String;
+ sysdat :Tdatetime;
+
+const
+number_format='#,##0.00';
+number_format_r='#,##0.00%';
+n='yyy';
+d=2;
+f=3;
+
+
+procedure CreateSheet;
+begin
+  try
+   Exl := CreateOleObject('Excel.Application');
+   Exl.WorkBooks.add;
+   Sheet := Exl.Application.Worksheets.Item[1];
+  except
+  end;
+end;
+ procedure DestroySheet;
+begin
+  try
+   Finalize(Sheet);
+   Finalize(Exl);
+  except
+
+  end;
+end;
+procedure ShowSheet;
+begin
+  try
+     Exl.Visible := True;
+  except
+     DestroySheet;
+   end;
+  end;
+var
+s,l,cell, r,i ,  j , k ,m ,w :Integer;
+//tt,dat,dd :tdatetime;
+t_val :integer;
+bash: string;
+edat,dat : Tdatetime;
+ //dat:Tdatetime;
+
+begin
+
+dat:= integer(trunc(DateTimePicker1.DateTime));
+     with DataModDonr.OracleDataSet1 do
+     begin
+         if Active then Close;
+
+            if BuildFilterString <> '' then
+            SQL[43] := BuildFilterString
+            else
+            SQL[43] :='';
+       Open;
+       end;
+
+
+ DataModDonr.OracleDataSet1.First;
+ with  DataModDonr.OracleDataSet2 do
+   begin
+    if Active then Close;
+    SetVariable('dat',dat);
+   open;
+   end;
+ try
+     DataModDonr.DonrDset.DisableControls;
+     CreateSheet;
+     Sheet.Range['A1:A60000'].ColumnWidth:=12;
+     Sheet.Range['E1:E60000'].ColumnWidth:=18;
+     Sheet.Range['F1:F60000'].ColumnWidth:=18;
+
+     Sheet.Range['J1:J60000'].ColumnWidth:=20;
+     Sheet.Range['K1:K60000'].ColumnWidth:=15;
+     Sheet.Range['L1:L60000'].ColumnWidth:=18;
+     Sheet.Range['M1:M60000'].ColumnWidth:=18;
+     {Sheet.Range['A1:A60000'].ColumnWidth:=12;
+     Sheet.Range['B1:B60000'].ColumnWidth:=60;
+     Sheet.Range['C2:C60000'].ColumnWidth:=24;
+     Sheet.Range['C2:D60000'].NumberFormat:=number_format;
+     Sheet.Range['D2:D60000'].NumberFormat:=number_format;
+     Sheet.Range['D2:D60000'].ColumnWidth:=23;
+     Sheet.Range['D2:D60000'].NumberFormat:='#########'; }
+
+
+        j:=1;
+     k:=0; with DataModDonr do  begin
+
+           for i:=1 to  OracleDataSet1.RecordCount do begin
+            bash:=inttostr(i+k);
+
+            Sheet.Cells[i+k,7].Font.Bold :=true;
+            Sheet.Cells[i+k,7].Font.size :=16;
+            Sheet.Cells[i+k,7]:='Donor haqqda sintetik hesabat';
+            Sheet.Cells[i+k,7].Font.Color:=clRed;
+
+            Sheet.Cells[i+k+1,1]:='Müqavilə №' ;
+            Sheet.Cells[i+k+1,1].Font.Color:=clRed;
+            Sheet.Cells[i+k+2,1]:=OracleDataSet1.FieldByName('CONTRACTNO').asstring ;
+
+            Sheet.Cells[i+k+1,2]:='Valyuta ' ;
+            Sheet.Cells[i+k+1,2].Font.Color:=clRed;
+            Sheet.Cells[i+k+2,2]:=OracleDataSet1.FieldByName('VAL_NAME').asstring ;
+
+            Sheet.Cells[i+k+1,3]:='Donorun adı' ;
+            Sheet.Cells[i+k+1,3].Font.Color:=clRed;
+            Sheet.Cells[i+k+2,3]:=OracleDataSet1.FieldByName('CUSTOMERNAME').asstring ;
+
+            Sheet.Cells[i+k+1,4]:='Donorun balans hesabi ' ;
+            Sheet.Cells[i+k+1,4].Font.Color:=clRed;
+            Sheet.Cells[i+k+1,4].WrapText := true;
+            Sheet.Cells[i+k+2,4]:=OracleDataSet1.FieldByName('BALCIN').asstring ;
+
+            Sheet.Cells[i+k+1,5]:='Donor  hesabı' ;
+            Sheet.Cells[i+k+1,5].Font.Color:=clRed;
+            Sheet.Cells[i+k+1,5].WrapText := true;
+            Sheet.Cells[i+k+2,5]:=OracleDataSet1.FieldByName('CONTRACTACCNO').asstring ;
+
+            Sheet.Cells[i+k+1,6]:='Donorun faiz hesabı' ;
+            Sheet.Cells[i+k+1,6].Font.Color:=clRed;
+            Sheet.Cells[i+k+1,6].WrapText := true;
+            Sheet.Cells[i+k+2,6]:=OracleDataSet1.FieldByName('INTERESTACCNO').asstring ;
+
+            Sheet.Cells[i+k+1,7]:='Donor tranzit hesabı' ;
+            Sheet.Cells[i+k+1,7].Font.Color:=clRed;
+            Sheet.Cells[i+k+1,7].WrapText := true;
+
+            Sheet.Cells[i+k+1,8]:='Açılma tarixi' ;
+            Sheet.Cells[i+k+1,8].Font.Color:=clRed;
+            Sheet.Cells[i+k+1,8].WrapText := true;
+            Sheet.Cells[i+k+2,8]:=OracleDataSet1.FieldByName('OPENDATE').asdatetime ;
+
+            Sheet.Cells[i+k+1,9]:='Bağlanma tarixi' ;
+            Sheet.Cells[i+k+1,9].Font.Color:=clRed;
+            Sheet.Cells[i+k+1,9].WrapText := true;
+            Sheet.Cells[i+k+2,9]:=OracleDataSet1.FieldByName('CLOSEDATE').asdatetime ;
+
+            Sheet.Cells[i+k+1,10]:='Donorla bağlanilan muqavilenin məbleği' ;
+            Sheet.Cells[i+k+1,10].Font.Color:=clRed;
+            Sheet.Cells[i+k+1,10].WrapText := true;
+            Sheet.Cells[i+k+2,10]:=OracleDataSet1.FieldByName('AMOUNT').asfloat ;
+
+            Sheet.Cells[i+k+1,11]:='Faiz dərecəsi %' ;
+            Sheet.Cells[i+k+1,11].Font.Color:=clRed;
+            Sheet.Cells[i+k+1,11].WrapText := true;
+            Sheet.Cells[i+k+2,11]:=OracleDataSet1.FieldByName('INTEREST').asfloat ;
+
+            Sheet.Cells[i+k+1,12]:='Donorun faktiki qaliğı' ;
+            Sheet.Cells[i+k+1,12].Font.Color:=clRed;
+            Sheet.Cells[i+k+1,12].WrapText := true;
+            Sheet.Cells[i+k+2,12]:=OracleDataSet1.FieldByName('FACTICALDEBT').asfloat ;
+
+            Sheet.Cells[i+k+1,13]:='Donorun faiz məbleği' ;
+            Sheet.Cells[i+k+1,13].Font.Color:=clRed;
+            Sheet.Cells[i+k+1,13].WrapText := true;
+            Sheet.Cells[i+k+2,13]:=OracleDataSet1.FieldByName('FACTICALINTERESTDEBT').asfloat ;
+
+            Sheet.Cells[i+k+1,14]:='Müqavile ile faktiki qaligin fərqi(-)';
+            Sheet.Cells[i+k+1,14].Font.Color:=clRed;
+            Sheet.Cells[i+k+1,14].WrapText := true;
+            Sheet.Cells[i+k+2,14]:=OracleDataSet1.FieldByName('AMOUNT').asfloat-OracleDataSet1.FieldByName('FACTICALDEBT').asfloat ;
+ ////////////////////////////////// ikin ci///////////////////////////
+
+            Sheet.Cells[i+k+4,7].Font.Bold :=true;
+            Sheet.Cells[i+k+4,7].Font.size :=16;
+            Sheet.Cells[i+k+4,7]:='Donor vəsaiti ilə verilmiş kredir analtik hesabat' ;
+            Sheet.Cells[i+k+4,7].Font.Color:=clRed;
+
+            Sheet.Cells[i+k+5,1]:='Müqavilə №' ;
+            Sheet.Cells[i+k+5,1].Font.Color:=clBlue;
+
+            Sheet.Cells[i+k+5,2]:='Valyuta' ;
+            Sheet.Cells[i+k+5,2].Font.Color:=clBlue;
+
+            Sheet.Cells[i+k+5,3]:='Donorun adi Vəsaitin mənbəyi' ;
+            Sheet.Cells[i+k+5,3].Font.Color:=clBlue;
+            Sheet.Cells[i+k+5,3].WrapText := true;
+
+            Sheet.Cells[i+k+5,4]:='Filial' ;
+            Sheet.Cells[i+k+5,4].Font.Color:=clBlue;
+
+            Sheet.Cells[i+k+5,5]:='Kredit müştərinin adi' ;
+            Sheet.Cells[i+k+5,5].Font.Color:=clBlue;
+
+            Sheet.Cells[i+k+5,6]:='Açilma tarixi' ;
+            Sheet.Cells[i+k+5,6].Font.Color:=clBlue;
+
+            Sheet.Cells[i+k+5,7]:='Bağlanma tarixi' ;
+            Sheet.Cells[i+k+5,7].Font.Color:=clBlue;
+
+            Sheet.Cells[i+k+5,8]:='Polonqrasiya tarixi' ;
+            Sheet.Cells[i+k+5,8].Font.Color:=clBlue;
+
+            Sheet.Cells[i+k+5,9]:='Müştərinin statusu' ;
+            Sheet.Cells[i+k+5,9].Font.Color:=clBlue;
+
+            Sheet.Cells[i+k+5,9]:='Mülkiyyət növü' ;
+            Sheet.Cells[i+k+5,9].Font.Name:='Azl Sans Serif';
+            Sheet.Cells[i+k+5,9].Font.Color:=clBlue;
+
+            Sheet.Cells[i+k+5,10]:='Borcalanın sektoru' ;
+            Sheet.Cells[i+k+5,10].Font.Name:='Azl Sans Serif';
+            Sheet.Cells[i+k+5,10].Font.Color:=clBlue;
+
+            Sheet.Cells[i+k+5,11]:='Borcalanın faliyyəti' ;
+            Sheet.Cells[i+k+5,11].Font.Color:=clBlue;
+
+            Sheet.Cells[i+k+5,12]:='Borcalanın faliyyəti növü' ;
+            Sheet.Cells[i+k+5,12].Font.Color:=clBlue;
+            Sheet.Cells[i+k+5,12].WrapText := true;
+
+            Sheet.Cells[i+k+5,13]:='Kreditin tipi' ;
+            Sheet.Cells[i+k+5,13].Font.Color:=clBlue;
+
+            Sheet.Cells[i+k+5,14]:='Kredit müqavilənin məbləgi' ;
+            Sheet.Cells[i+k+5,14].Font.Color:=clBlue;
+
+            Sheet.Cells[i+k+5,15]:='Kredit müqavilənin məbləg ekv' ;
+            Sheet.Cells[i+k+5,15].Font.Color:=clBlue;
+
+            Sheet.Cells[i+k+5,16]:='Adi ehtiyyat dərəcəsi' ;
+            Sheet.Cells[i+k+5,16].Font.Color:=clBlue;
+
+            Sheet.Cells[i+k+5,17]:='Məqsədli ehtiyyat dərəcəsi' ;
+            Sheet.Cells[i+k+5,17].Font.Color:=clBlue;
+
+            Sheet.Cells[i+k+5,18]:='Donor vəsaiti ilə verilmiş məbləğ' ;
+            Sheet.Cells[i+k+5,18].Font.Color:=clBlue;
+
+            Sheet.Cells[i+k+5,19]:='Donor vəsaiti ilə verilmiş məbləğ ekv' ;
+            Sheet.Cells[i+k+5,19].Font.Color:=clBlue;
+
+            Sheet.Cells[i+k+5,20]:='Əsas borc' ;
+            Sheet.Cells[i+k+5,20].Font.Color:=clBlue;
+
+            Sheet.Cells[i+k+5,21]:='Əsas borc ekv' ;
+            Sheet.Cells[i+k+5,21].Font.Color:=clBlue;
+
+            Sheet.Cells[i+k+5,22]:='Hesablanmış faiz' ;
+            Sheet.Cells[i+k+5,22].Font.Color:=clBlue;
+
+            Sheet.Cells[i+k+5,23]:='Hesablanmış faiz ekv' ;
+            Sheet.Cells[i+k+5,23].Font.Color:=clBlue;
+
+            Sheet.Cells[i+k+5,24]:='Adi ehtiyyat məbləği' ;
+            Sheet.Cells[i+k+5,24].Font.Color:=clBlue;
+
+            Sheet.Cells[i+k+5,25]:='Məqsədli ehtiyyat məbləği' ;
+            Sheet.Cells[i+k+5,25].Font.Color:=clBlue;
+
+            Sheet.Cells[i+k+5,26]:='Əsəs borc üzrə gecikmə' ;
+            Sheet.Cells[i+k+5,26].Font.Color:=clBlue;
+
+            Sheet.Cells[i+k+5,27]:='Əsas borc uzrə gecikmə ekv' ;
+            Sheet.Cells[i+k+5,27].Font.Color:=clBlue;
+
+            Sheet.Cells[i+k+5,28]:='Faiz üzrə gecikmə' ;
+            Sheet.Cells[i+k+5,28].Font.Color:=clBlue;
+
+            Sheet.Cells[i+k+5,29]:='Faiz üzrə gecikmə ekv' ;
+            Sheet.Cells[i+k+5,29].Font.Color:=clBlue;
+
+            Sheet.Cells[i+k+5,30]:='Hesablanmış cərimə' ;
+            Sheet.Cells[i+k+5,30].Font.Color:=clBlue;
+
+            Sheet.Cells[i+k+5,31]:='gecikdirmə günləri' ;
+            Sheet.Cells[i+k+5,31].Font.Color:=clBlue;
+
+
+            Sheet.Cells[i+k+5,32]:='Krediti cəlb edən mütəxəssis' ;
+            Sheet.Cells[i+k+5,32].Font.Color:=clBlue;
+         //   ShowMessage(IntToStr(k));
+       for j:=1 to OracleDataSet2.RecordCount do
+         begin
+             Sheet.Cells[i+k+j+5,1]:=OracleDataSet2.FieldByName('Numberofcredit').asstring ;
+             Sheet.Cells[i+k+j+5,2]:=OracleDataSet2.FieldByName('VAL_NAME').asstring ;
+             Sheet.Cells[i+k+j+5,3]:=OracleDataSet2.FieldByName('DONRNAME').asstring ;
+             Sheet.Cells[i+k+j+5,4]:=OracleDataSet2.FieldByName('NAME').asstring ;
+             Sheet.Cells[i+k+j+5,5]:=OracleDataSet2.FieldByName('CUSTOMER').asstring ;
+             Sheet.Cells[i+k+j+5,6]:=OracleDataSet2.FieldByName('DATEOFCONCLUSION').asdatetime ;
+             Sheet.Cells[i+k+j+5,7]:=OracleDataSet2.FieldByName('DUEDATEFIRSTCONTRACT').asdatetime ;
+             Sheet.Cells[i+k+j+5,8]:=OracleDataSet2.FieldByName('DUEDATELASTCONTRACT').asdatetime ;
+             Sheet.Cells[i+k+j+5,9]:=OracleDataSet2.FieldByName('DESCRIPION').asstring ;
+             Sheet.Cells[i+k+j+5,10]:=OracleDataSet2.FieldByName('MNOVU').asstring ;
+             Sheet.Cells[i+k+j+5,10].WrapText := true;
+             Sheet.Cells[i+k+j+5,11]:=OracleDataSet2.FieldByName('BSEKTOR').asstring ;
+             Sheet.Cells[i+k+j+5,11].WrapText := true;
+             Sheet.Cells[i+k+j+5,12]:=OracleDataSet2.FieldByName('BFALIYYET').asstring ;
+             Sheet.Cells[i+k+j+5,12].WrapText := true;
+             Sheet.Cells[i+k+j+5,13]:=OracleDataSet2.FieldByName('BFALIYETNOVU').asstring ;
+             Sheet.Cells[i+k+j+5,13].WrapText := true;
+             Sheet.Cells[i+k+j+5,14]:=OracleDataSet2.FieldByName('TIP').asstring ;
+             Sheet.Cells[i+k+j+5,15]:=OracleDataSet2.FieldByName('CREDITLINEAMOUNT').asfloat;
+             Sheet.Cells[i+k+j+5,16]:=OracleDataSet2.FieldByName('AMOUNTEK').asfloat ;
+             Sheet.Cells[i+k+j+5,17]:=OracleDataSet2.FieldByName('ADI').Asinteger;
+             Sheet.Cells[i+k+j+5,18]:=OracleDataSet2.FieldByName('MEQ').Asinteger ;
+             Sheet.Cells[i+k+j+5,19]:=OracleDataSet2.FieldByName('DONVES').AsFloat ;
+             Sheet.Cells[i+k+j+5,20]:=OracleDataSet2.FieldByName('DONVESEK').AsFloat ;
+             Sheet.Cells[i+k+j+5,21]:=OracleDataSet2.FieldByName('REST').AsFloat ;
+             Sheet.Cells[i+k+j+5,22]:=OracleDataSet2.FieldByName('RESTEK').AsFloat ;
+             Sheet.Cells[i+k+j+5,23]:=OracleDataSet2.FieldByName('INTERESTREST').AsFloat ;
+             Sheet.Cells[i+k+j+5,24]:=OracleDataSet2.FieldByName('INTERESTRESTEK').AsFloat ;
+             Sheet.Cells[i+k+j+5,25]:=OracleDataSet2.FieldByName('ADIMEB').AsFloat ;
+             Sheet.Cells[i+k+j+5,26]:=OracleDataSet2.FieldByName('MEQMEB').AsFloat ;
+             Sheet.Cells[i+k+j+5,27]:=OracleDataSet2.FieldByName('DUEREST').AsFloat ;
+             Sheet.Cells[i+k+j+5,28]:=OracleDataSet2.FieldByName('DUERESTEK').AsFloat ;
+             Sheet.Cells[i+k+j+5,29]:=OracleDataSet2.FieldByName('DUEINTERESTREST').AsFloat ;
+             Sheet.Cells[i+k+j+5,30]:=OracleDataSet2.FieldByName('DUEINTERESTRESTEK').AsFloat ;
+             Sheet.Cells[i+k+j+5,31]:=OracleDataSet2.FieldByName('MUTEXESIS').Asstring ;
+
+
+
+             OracleDataSet2.Next;
+          end;
+
+                     m:=OracleDataSet2.RecordCount;
+              Exl.Range['A'+bash+':Q'+inttostr(i+k+m+d+2)].select;
+            Sheet.Range['A'+bash+':Q'+inttostr(i+k+m+d+2)].Borders.Color:=clBlack;
+             //  Exl.Range['A'+Inttostr(i+k+m+d+3)+':R'+Inttostr(i+k+m+d+3)].Select;
+             //  Exl.Selection.Interior.ColorIndex := 1;
+         k:=k+OracleDataSet2.RecordCount+5;
+          OracleDataSet1.Next;
+            end;
+
+            end;
+
+   ShowSheet;
+  finally
+
+   Exl.Range['A1:A1'].Select;
+
+   Screen.Cursor := crDefault;
+   DestroySheet;
+   DataModDonr.DonrDset.EnableControls;
+end;
+ end;
+end.

@@ -1,0 +1,691 @@
+object Form_acchistory: TForm_acchistory
+  Left = 0
+  Top = 0
+  BorderIcons = [biSystemMenu]
+  ClientHeight = 456
+  ClientWidth = 838
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poMainFormCenter
+  OnClose = FormClose
+  OnCreate = FormCreate
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Panel2: TPanel
+    Left = 0
+    Top = 0
+    Width = 838
+    Height = 456
+    Align = alClient
+    TabOrder = 0
+    object PageControl1: TPageControl
+      Left = 1
+      Top = 1
+      Width = 836
+      Height = 454
+      ActivePage = TabSheet1
+      Align = alClient
+      TabOrder = 0
+      object TabSheet1: TTabSheet
+        Caption = 'Qal'#305'q'
+        object Panel3: TPanel
+          Left = 0
+          Top = 0
+          Width = 828
+          Height = 41
+          Align = alTop
+          TabOrder = 0
+          object Label1: TLabel
+            Left = 272
+            Top = 15
+            Width = 49
+            Height = 13
+            Caption = 'Ba'#351'lan'#287#305'c'
+          end
+          object Label2: TLabel
+            Left = 475
+            Top = 15
+            Width = 21
+            Height = 13
+            Caption = 'Son '
+          end
+          object Button1: TButton
+            Left = 667
+            Top = 7
+            Width = 75
+            Height = 25
+            Caption = 'Q'#601'bul'
+            TabOrder = 0
+            OnClick = Button1Click
+          end
+          object Button2: TButton
+            Left = 748
+            Top = 7
+            Width = 75
+            Height = 25
+            Caption = 'Excel'
+            TabOrder = 1
+            OnClick = Button2Click
+          end
+          object StartDateEdit: TDateTimePicker
+            Left = 326
+            Top = 11
+            Width = 137
+            Height = 21
+            Date = 37359.759652256900000000
+            Time = 37359.759652256900000000
+            TabOrder = 2
+          end
+          object EndDateEdit: TDateTimePicker
+            Left = 502
+            Top = 11
+            Width = 137
+            Height = 21
+            Date = 37359.759652256900000000
+            Time = 37359.759652256900000000
+            TabOrder = 3
+          end
+          object DBEditEh3: TDBEditEh
+            Left = 2
+            Top = 11
+            Width = 218
+            Height = 21
+            DataField = 'ACC_NO'
+            DataSource = dsrc_account
+            EditButtons = <>
+            TabOrder = 4
+            Visible = True
+          end
+        end
+        object DBGrid1: TDBGrid
+          Left = 0
+          Top = 41
+          Width = 828
+          Height = 385
+          Align = alClient
+          DataSource = dsrc_archost
+          TabOrder = 1
+          TitleFont.Charset = DEFAULT_CHARSET
+          TitleFont.Color = clWindowText
+          TitleFont.Height = -11
+          TitleFont.Name = 'Tahoma'
+          TitleFont.Style = []
+          Columns = <
+            item
+              Expanded = False
+              FieldName = 'ACC_ID'
+              Title.Caption = 'ID'
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'DATDATE'
+              Title.Caption = 'Tarix'
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'OSTAT'
+              Title.Caption = 'Qal'#305'q'
+              Width = 73
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'POK_OSTAT'
+              Title.Caption = 'Qal'#305'q ekv'
+              Width = 89
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'OBR_D'
+              Title.Caption = 'D d'#246'vriyy'#601
+              Width = 80
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'OBR_K'
+              Title.Caption = 'K d'#246'vriyy'#601
+              Width = 84
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'POK_OBR_D'
+              Title.Caption = 'D d'#246'vriyy'#601' ekv'
+              Width = 110
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'POK_OBR_K'
+              Title.Caption = 'K d'#246'vriyy'#601' ekv'
+              Width = 99
+              Visible = True
+            end>
+        end
+      end
+      object TabSheet2: TTabSheet
+        Caption = 'Debt'
+        ImageIndex = 1
+        object Panel4: TPanel
+          Left = 0
+          Top = 0
+          Width = 828
+          Height = 41
+          Align = alTop
+          TabOrder = 0
+          object Label3: TLabel
+            Left = 38
+            Top = 15
+            Width = 69
+            Height = 13
+            Caption = 'Ba'#351'lan'#287#305'c tarix'
+          end
+          object Label4: TLabel
+            Left = 309
+            Top = 15
+            Width = 43
+            Height = 13
+            Caption = 'Son tarix'
+          end
+          object Button3: TButton
+            Left = 555
+            Top = 7
+            Width = 75
+            Height = 25
+            Caption = 'Q'#601'bul'
+            TabOrder = 0
+            OnClick = Button3Click
+          end
+          object Button4: TButton
+            Left = 636
+            Top = 7
+            Width = 75
+            Height = 25
+            Caption = 'Excel'
+            TabOrder = 1
+            OnClick = Button4Click
+          end
+          object DateTimePicker2: TDateTimePicker
+            Left = 120
+            Top = 11
+            Width = 137
+            Height = 21
+            Date = 37359.759652256900000000
+            Time = 37359.759652256900000000
+            TabOrder = 2
+          end
+          object DateTimePicker3: TDateTimePicker
+            Left = 376
+            Top = 11
+            Width = 137
+            Height = 21
+            Date = 37359.759652256900000000
+            Time = 37359.759652256900000000
+            TabOrder = 3
+          end
+        end
+        object DBGrid2: TDBGrid
+          Left = 0
+          Top = 38
+          Width = 828
+          Height = 365
+          DataSource = dsrc_debttrans
+          TabOrder = 1
+          TitleFont.Charset = DEFAULT_CHARSET
+          TitleFont.Color = clWindowText
+          TitleFont.Height = -11
+          TitleFont.Name = 'Tahoma'
+          TitleFont.Style = []
+          Columns = <
+            item
+              Expanded = False
+              FieldName = 'ID'
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'DAT'
+              Title.Caption = 'Tarix'
+              Width = 80
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'ACC_NO'
+              Title.Caption = 'Debt'
+              Width = 205
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'ACC_NO_1'
+              Title.Caption = 'Kredit'
+              Width = 205
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'AMMOUNT'
+              Title.Caption = 'D m'#601'bl'#601#287
+              Width = 80
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'AMMOUNT_C'
+              Title.Caption = 'K m'#601'bl'#601#287
+              Width = 80
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'LAMMOUNT'
+              Title.Caption = 'Ekvivalent'
+              Width = 80
+              Visible = True
+            end>
+        end
+        object DBEditEh1: TDBEditEh
+          Left = -1
+          Top = 404
+          Width = 828
+          Height = 21
+          Alignment = taLeftJustify
+          DataField = 'NAME'
+          DataSource = dsrc_debttrans
+          EditButtons = <>
+          TabOrder = 2
+          Visible = True
+        end
+      end
+      object TabSheet3: TTabSheet
+        Caption = 'Kredit'
+        ImageIndex = 2
+        object Panel1: TPanel
+          Left = 0
+          Top = 0
+          Width = 828
+          Height = 41
+          Align = alTop
+          TabOrder = 0
+          object Label5: TLabel
+            Left = 38
+            Top = 15
+            Width = 69
+            Height = 13
+            Caption = 'Ba'#351'lan'#287#305'c tarix'
+          end
+          object Label6: TLabel
+            Left = 309
+            Top = 15
+            Width = 43
+            Height = 13
+            Caption = 'Son tarix'
+          end
+          object Button5: TButton
+            Left = 555
+            Top = 7
+            Width = 75
+            Height = 25
+            Caption = 'Q'#601'bul'
+            TabOrder = 0
+            OnClick = Button5Click
+          end
+          object Button6: TButton
+            Left = 636
+            Top = 7
+            Width = 75
+            Height = 25
+            Caption = 'Excel'
+            TabOrder = 1
+            OnClick = Button6Click
+          end
+          object DateTimePicker4: TDateTimePicker
+            Left = 120
+            Top = 11
+            Width = 137
+            Height = 21
+            Date = 37359.759652256900000000
+            Time = 37359.759652256900000000
+            TabOrder = 2
+          end
+          object DateTimePicker5: TDateTimePicker
+            Left = 376
+            Top = 11
+            Width = 137
+            Height = 21
+            Date = 37359.759652256900000000
+            Time = 37359.759652256900000000
+            TabOrder = 3
+          end
+        end
+        object DBGrid3: TDBGrid
+          Left = 0
+          Top = 42
+          Width = 828
+          Height = 361
+          DataSource = dsrc_credtrans
+          TabOrder = 1
+          TitleFont.Charset = DEFAULT_CHARSET
+          TitleFont.Color = clWindowText
+          TitleFont.Height = -11
+          TitleFont.Name = 'Tahoma'
+          TitleFont.Style = []
+          Columns = <
+            item
+              Expanded = False
+              FieldName = 'ID'
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'DAT'
+              Width = 80
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'ACC_NO'
+              Title.Caption = 'Debt'
+              Width = 205
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'ACC_NO_1'
+              Title.Caption = 'Kredit'
+              Width = 205
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'AMMOUNT'
+              Title.Caption = 'D m'#601'bl'#601#287
+              Width = 80
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'AMMOUNT_C'
+              Title.Caption = 'K m'#601'bl'#601#287
+              Width = 80
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'LAMMOUNT'
+              Title.Caption = 'Ekvivalent'
+              Width = 80
+              Visible = True
+            end>
+        end
+        object DBEditEh2: TDBEditEh
+          Left = 0
+          Top = 402
+          Width = 828
+          Height = 21
+          DataField = 'NAME'
+          DataSource = dsrc_credtrans
+          EditButtons = <>
+          TabOrder = 2
+          Visible = True
+        end
+      end
+    end
+  end
+  object sysdat: TOracleDataSet
+    SQL.Strings = (
+      'select*from sysdat')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000060000000E000000540045004B005F00440041005400010000000000
+      1000000050005200450044005F004400410054000100000000000E0000004100
+      520043005F004400410059000100000000000A00000043004C004F0053004500
+      010000000000100000004E004500570052004100540045005300010000000000
+      18000000500045005200430045004E0054005F00430041004C00430001000000
+      0000}
+    Session = sboapiDataModule.SBSession
+    Left = 216
+    Top = 128
+    object sysdatTEK_DAT: TDateTimeField
+      FieldName = 'TEK_DAT'
+    end
+  end
+  object ods_archost: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      ''
+      
+        ' acc_id,datdate ,abs(ostat)ostat,abs(pok_ostat) pok_ostat,obr_d,' +
+        'obr_k pok_obr_d,pok_obr_k  from archost where acc_id=:accid and ' +
+        'datdate between :dat1 and :dat2')
+    Optimize = False
+    Variables.Data = {
+      04000000030000000A0000003A0044004100540031000C000000000000000000
+      00000A0000003A0044004100540032000C00000000000000000000000C000000
+      3A0041004300430049004400030000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      05000000080000000C0000004100430043005F00490044000100000000000A00
+      00004F0053005400410054000100000000001200000050004F004B005F004F00
+      53005400410054000100000000000E0000004400410054004400410054004500
+      0100000000000A0000004F00420052005F004400010000000000120000005000
+      4F004B005F004F00420052005F0044000100000000001200000050004F004B00
+      5F004F00420052005F004B000100000000000C0000004100430043005F004E00
+      4F00010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 408
+    Top = 104
+    object ods_archostACC_ID: TFloatField
+      FieldName = 'ACC_ID'
+      Required = True
+    end
+    object ods_archostDATDATE: TDateTimeField
+      FieldName = 'DATDATE'
+      Required = True
+    end
+    object ods_archostOSTAT: TFloatField
+      FieldName = 'OSTAT'
+    end
+    object ods_archostPOK_OSTAT: TFloatField
+      FieldName = 'POK_OSTAT'
+    end
+    object ods_archostOBR_D: TFloatField
+      FieldName = 'OBR_D'
+    end
+    object ods_archostPOK_OBR_D: TFloatField
+      FieldName = 'POK_OBR_D'
+    end
+    object ods_archostPOK_OBR_K: TFloatField
+      FieldName = 'POK_OBR_K'
+    end
+  end
+  object ods_bebttrans: TOracleDataSet
+    SQL.Strings = (
+      'select '
+      
+        'p.id,p.dat,db.acc_no,kr.acc_no,p.ammount,p.ammount_c,p.lammount,' +
+        'p.name'
+      'from  '
+      'provarch p,account db,account kr '
+      'where'
+      'p.debt=db.id and p.kredit=kr.id'
+      'and db.id=:accid'
+      'and p.dat between  :dat1 and :dat2'
+      ''
+      'order by p.dat')
+    Optimize = False
+    Variables.Data = {
+      04000000030000000C0000003A00410043004300490044000300000000000000
+      000000000A0000003A0044004100540031000C00000000000000000000000A00
+      00003A0044004100540032000C0000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000800000004000000490044000100000000000C000000410043004300
+      5F004E004F00010000000000100000004100430043005F004E004F005F003100
+      0100000000000E00000041004D004D004F0055004E0054000100000000001200
+      000041004D004D004F0055004E0054005F004300010000000000100000004C00
+      41004D004D004F0055004E005400010000000000080000004E0041004D004500
+      01000000000006000000440041005400010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 536
+    Top = 88
+    object ods_bebttransID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object ods_bebttransDAT: TDateTimeField
+      FieldName = 'DAT'
+      Required = True
+    end
+    object ods_bebttransACC_NO: TWideStringField
+      FieldName = 'ACC_NO'
+      Size = 28
+    end
+    object ods_bebttransACC_NO_1: TWideStringField
+      FieldName = 'ACC_NO_1'
+      Size = 28
+    end
+    object ods_bebttransAMMOUNT: TFloatField
+      FieldName = 'AMMOUNT'
+      Required = True
+    end
+    object ods_bebttransAMMOUNT_C: TFloatField
+      FieldName = 'AMMOUNT_C'
+      Required = True
+    end
+    object ods_bebttransLAMMOUNT: TFloatField
+      FieldName = 'LAMMOUNT'
+      Required = True
+    end
+    object ods_bebttransNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 4000
+    end
+  end
+  object ods_credtrans: TOracleDataSet
+    SQL.Strings = (
+      'select '
+      
+        'p.id,p.dat,db.acc_no,kr.acc_no,p.ammount,p.ammount_c,p.lammount,' +
+        'p.name'
+      'from  '
+      'provarch p,account db,account kr '
+      'where'
+      'p.debt=db.id and p.kredit=kr.id'
+      'and kr.id=:accid'
+      'and p.dat between  :dat1 and :dat2'
+      ''
+      'order by p.dat')
+    Optimize = False
+    Variables.Data = {
+      04000000030000000C0000003A00410043004300490044000300000000000000
+      000000000A0000003A0044004100540031000C00000000000000000000000A00
+      00003A0044004100540032000C0000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000800000004000000490044000100000000000C000000410043004300
+      5F004E004F00010000000000100000004100430043005F004E004F005F003100
+      0100000000000E00000041004D004D004F0055004E0054000100000000001200
+      000041004D004D004F0055004E0054005F004300010000000000100000004C00
+      41004D004D004F0055004E005400010000000000080000004E0041004D004500
+      01000000000006000000440041005400010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 544
+    Top = 160
+    object ods_credtransID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object ods_credtransDAT: TDateTimeField
+      FieldName = 'DAT'
+      Required = True
+    end
+    object ods_credtransACC_NO: TWideStringField
+      FieldName = 'ACC_NO'
+      Size = 28
+    end
+    object ods_credtransACC_NO_1: TWideStringField
+      FieldName = 'ACC_NO_1'
+      Size = 28
+    end
+    object ods_credtransAMMOUNT: TFloatField
+      FieldName = 'AMMOUNT'
+      Required = True
+    end
+    object ods_credtransAMMOUNT_C: TFloatField
+      FieldName = 'AMMOUNT_C'
+      Required = True
+    end
+    object ods_credtransLAMMOUNT: TFloatField
+      FieldName = 'LAMMOUNT'
+      Required = True
+    end
+    object ods_credtransNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 4000
+    end
+  end
+  object dsrc_archost: TDataSource
+    DataSet = ods_archost
+    Left = 416
+    Top = 160
+  end
+  object dsrc_debttrans: TDataSource
+    DataSet = ods_bebttrans
+    Left = 672
+    Top = 88
+  end
+  object dsrc_credtrans: TDataSource
+    DataSet = ods_credtrans
+    Left = 672
+    Top = 168
+  end
+  object MisExcelExport: TCMExcelExport
+    StyleColumnWidth = cwDefault
+    ColumnWidth = 0
+    FontTitles.Charset = RUSSIAN_CHARSET
+    FontTitles.Color = clWindowText
+    FontTitles.Height = -11
+    FontTitles.Name = 'Azl Sans Serif'
+    FontTitles.Style = []
+    OrientationTitles = 0
+    FontData.Charset = RUSSIAN_CHARSET
+    FontData.Color = clWindowText
+    FontData.Height = -11
+    FontData.Name = 'Azl Sans Serif'
+    FontData.Style = []
+    FontSummary.Charset = RUSSIAN_CHARSET
+    FontSummary.Color = clWindowText
+    FontSummary.Height = -11
+    FontSummary.Name = 'Azl Sans Serif'
+    FontSummary.Style = []
+    SummarySelection = ssNone
+    SummaryCalculation = scSUM
+    Left = 308
+    Top = 155
+  end
+  object ods_account: TOracleDataSet
+    SQL.Strings = (
+      'select acc_no from account where id=:v_id')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000A0000003A0056005F004900440003000000000000000000
+      0000}
+    Session = sboapiDataModule.SBSession
+    Left = 120
+    Top = 176
+  end
+  object dsrc_account: TDataSource
+    DataSet = ods_account
+    Left = 128
+    Top = 224
+  end
+end

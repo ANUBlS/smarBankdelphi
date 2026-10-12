@@ -1,0 +1,263 @@
+﻿object Cust_contact: TCust_contact
+  Left = 0
+  Top = 0
+  ClientHeight = 415
+  ClientWidth = 853
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poMainFormCenter
+  PixelsPerInch = 96
+  TextHeight = 13
+  object XFPanel2: TXFPanel
+    Left = 0
+    Top = 49
+    Width = 853
+    Height = 325
+    Align = alClient
+    BevelInner = bvLowered
+    BevelKind = bkFlat
+    TabOrder = 0
+    ExplicitLeft = 8
+    ExplicitTop = 48
+    ExplicitWidth = 671
+    ExplicitHeight = 337
+    object XDBGrid1: TXDBGrid
+      Left = 2
+      Top = 2
+      Width = 845
+      Height = 317
+      Align = alClient
+      DataSource = DataSource1
+      GridStyle.VisualStyle = vsXPStyle
+      Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit, dgExtendedSelect, dgInternalSelect, dgRowResize, dgRowScroll, dgHotButtons, dgTitleButtons, dgTitleHeaders, dgTitleWidthOff, dgMarkerAutoAlign, dgMarkerAutoToggle]
+      TabOrder = 0
+      OnDblClick = XDBGrid1DblClick
+      Columns = <
+        item
+          Expanded = False
+          FieldName = 'CUST_ID'
+          Title.Alignment = taCenter
+          Title.Caption = 'CUST ID'
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'RELATIVE_PHONE'
+          Title.Alignment = taCenter
+          Title.Caption = 'Telfon n'#246'mr'#601'si'
+          Visible = True
+          Width = 100
+        end
+        item
+          Expanded = False
+          FieldName = 'RELATIVE_NAME'
+          Title.Alignment = taCenter
+          Title.Caption = 'Tam ad'#305
+          Visible = True
+          Width = 249
+        end
+        item
+          Expanded = False
+          FieldName = 'RELATIVE_ADDRESS'
+          Title.Alignment = taCenter
+          Title.Caption = #220'nvan'
+          Visible = True
+          Width = 388
+        end>
+    end
+  end
+  object XFPanel1: TXFPanel
+    Left = 0
+    Top = 0
+    Width = 853
+    Height = 49
+    Align = alTop
+    BevelInner = bvLowered
+    BevelKind = bkFlat
+    TabOrder = 1
+    ExplicitWidth = 846
+    object Ad: TXFLabel
+      Left = 211
+      Top = 14
+      Width = 13
+      Height = 15
+      Caption = 'Ad'
+    end
+    object Telfon: TXFLabel
+      Left = 13
+      Top = 14
+      Width = 30
+      Height = 15
+      Caption = 'Telfon'
+    end
+    object Ünvan: TXFLabel
+      Left = 489
+      Top = 16
+      Width = 31
+      Height = 13
+      Caption = #220'nvan'
+    end
+    object Edit1: TEdit
+      Left = 50
+      Top = 11
+      Width = 141
+      Height = 21
+      TabOrder = 0
+    end
+    object Edit2: TEdit
+      Left = 228
+      Top = 11
+      Width = 247
+      Height = 21
+      TabOrder = 1
+    end
+    object Edit3: TEdit
+      Left = 527
+      Top = 11
+      Width = 299
+      Height = 21
+      TabOrder = 2
+    end
+  end
+  object XFPanel3: TXFPanel
+    Left = 0
+    Top = 374
+    Width = 853
+    Height = 41
+    Align = alBottom
+    BevelInner = bvLowered
+    BevelKind = bkFlat
+    TabOrder = 2
+    ExplicitTop = 337
+    ExplicitWidth = 671
+    object XFButton1: TXFButton
+      Left = 590
+      Top = 6
+      Width = 75
+      Height = 25
+      Caption = 'Q'#601'bul'
+      DoubleBuffered = True
+      ParentDoubleBuffered = False
+      TabOrder = 0
+      OnClick = XFButton1Click
+    end
+    object XFButton2: TXFButton
+      Left = 670
+      Top = 6
+      Width = 75
+      Height = 25
+      Caption = 'Redakt'#601
+      DoubleBuffered = True
+      ParentDoubleBuffered = False
+      TabOrder = 1
+      OnClick = XFButton2Click
+    end
+    object XFButton3: TXFButton
+      Left = 751
+      Top = 6
+      Width = 75
+      Height = 25
+      Caption = 'Sil'
+      DoubleBuffered = True
+      ParentDoubleBuffered = False
+      TabOrder = 2
+      OnClick = XFButton3Click
+    end
+  end
+  object OracleDataSet1: TOracleDataSet
+    SQL.Strings = (
+      
+        'select rowid,a.*from customer_relatives a where a.cust_id=:v_cus' +
+        'tid')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000120000003A0056005F004300550053005400490044000500
+      00000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000500000004000000490044000100000000000E000000430055005300
+      54005F00490044000100000000001A000000520045004C004100540049005600
+      45005F004E0041004D0045000100000000001C000000520045004C0041005400
+      4900560045005F00500048004F004E0045000100000000002000000052004500
+      4C00410054004900560045005F00410044004400520045005300530001000000
+      0000}
+    Session = sboapiDataModule.SBSession
+    Left = 272
+    Top = 184
+    object OracleDataSet1CUST_ID: TFloatField
+      FieldName = 'CUST_ID'
+    end
+    object OracleDataSet1RELATIVE_PHONE: TWideStringField
+      FieldName = 'RELATIVE_PHONE'
+      Size = 2500
+    end
+    object OracleDataSet1RELATIVE_NAME: TWideStringField
+      FieldName = 'RELATIVE_NAME'
+      Size = 2500
+    end
+    object OracleDataSet1RELATIVE_ADDRESS: TWideStringField
+      FieldName = 'RELATIVE_ADDRESS'
+      Size = 2500
+    end
+    object OracleDataSet1ID: TFloatField
+      FieldName = 'ID'
+    end
+  end
+  object DataSource1: TDataSource
+    DataSet = OracleDataSet1
+    Left = 184
+    Top = 184
+  end
+  object OracleDataSet2: TOracleDataSet
+    SQL.Strings = (
+      
+        'insert into customer_relatives  (cust_id,relative_phone ,relativ' +
+        'e_name,relative_address)values(:v_custid,:v_pone,:v_name,:v_addr' +
+        'ess)')
+    Optimize = False
+    Variables.Data = {
+      04000000040000000E0000003A0056005F0050004F004E004500050000000000
+      0000000000000E0000003A0056005F004E0041004D0045000500000000000000
+      00000000140000003A0056005F00410044004400520045005300530005000000
+      0000000000000000120000003A0056005F004300550053005400490044000500
+      00000000000000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 320
+    Top = 80
+  end
+  object OracleDataSet3: TOracleDataSet
+    SQL.Strings = (
+      'update customer_relatives set'
+      'cust_id=:v_custid,'
+      'relative_phone=:v_pone'
+      ' ,relative_name=:v_name,'
+      'relative_address=:v_address '
+      'where id=:v_id')
+    Optimize = False
+    Variables.Data = {
+      04000000050000000E0000003A0056005F0050004F004E004500050000000000
+      0000000000000E0000003A0056005F004E0041004D0045000500000000000000
+      00000000140000003A0056005F00410044004400520045005300530005000000
+      0000000000000000120000003A0056005F004300550053005400490044000500
+      000000000000000000000A0000003A0056005F00490044000500000000000000
+      00000000}
+    Session = sboapiDataModule.SBSession
+    Left = 480
+    Top = 136
+  end
+  object OracleDataSet4: TOracleDataSet
+    SQL.Strings = (
+      'delete customer_relatives where id=:v_id')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000A0000003A0056005F004900440003000000000000000000
+      0000}
+    Session = sboapiDataModule.SBSession
+    Left = 608
+    Top = 120
+  end
+end

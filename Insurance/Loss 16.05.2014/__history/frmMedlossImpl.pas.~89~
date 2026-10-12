@@ -1,0 +1,408 @@
+﻿unit frmMedlossImpl;
+                 //XFCheckBox1
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ExtCtrls, XFSCtrls, StdCtrls, ComCtrls, DBCtrls, Mask,db, oracle,
+  CurrencyEdit, Buttons, CMCurrencyEdit;
+
+type
+  TfrmMedloss = class(TForm)
+    XFPanel1: TXFPanel;
+    XFPanel2: TXFPanel;
+    XFButton1: TXFButton;
+    XFButton2: TXFButton;
+    XFGroupBox1: TXFGroupBox;
+    XFLabel5: TXFLabel;
+    XFLabel8: TXFLabel;
+    XFLabel6: TXFLabel;
+    XFLabel9: TXFLabel;
+    CurrencyEdit1: TCurrencyEdit;
+    CurrencyEdit2: TCurrencyEdit;
+    CurrencyEdit3: TCurrencyEdit;
+    XFLabel10: TXFLabel;
+    DBEdit3: TDBEdit;
+    XFPanel3: TXFPanel;
+    DBEdit6: TDBEdit;
+    XFLabel7: TXFLabel;
+    XFCheckBox2: TXFCheckBox;
+    XFGroupBox2: TXFGroupBox;
+    XFLabel4: TXFLabel;
+    DBLookupComboBox2: TDBLookupComboBox;
+    XFLabel3: TXFLabel;
+    DBEdit2: TDBEdit;
+    XFLabel1: TXFLabel;
+    DateTimePicker1: TDateTimePicker;
+    DBLookupComboBox1: TDBLookupComboBox;
+    XFLabel2: TXFLabel;
+    XFLabel35: TXFLabel;
+    DBEdit23: TDBEdit;
+    XFCheckBox1: TXFCheckBox;
+    XFSpeedButton1: TXFSpeedButton;
+    XFGroupBox8: TXFGroupBox;
+    XFLabel36: TXFLabel;
+    XFLabel37: TXFLabel;
+    XFLabel38: TXFLabel;
+    DateTimePicker2: TDateTimePicker;
+    DBEdit25: TDBEdit;
+    DBEdit4: TDBEdit;
+    XFPanel4: TXFPanel;
+    DBEdit1: TDBEdit;
+    procedure XFButton2Click(Sender: TObject);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormShow(Sender: TObject);
+    procedure XFButton1Click(Sender: TObject);
+    procedure DBEdit3Change(Sender: TObject);
+    procedure CurrencyEdit1Change(Sender: TObject);
+    procedure XFSpeedButton1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+      sub_id:integer;
+              var
+yuktesdiq:integer;
+inmtina_dat :Tdatetime;
+  end;
+
+var
+  frmMedloss: TfrmMedloss;
+  sub_id:integer;
+implementation
+
+uses DmLossImpl, FrmMainLossImpl,CommanParametrs;
+{$R *.dfm}
+
+procedure TfrmMedloss.CurrencyEdit1Change(Sender: TObject);
+begin
+if (CurrencyEdit1.Text='') then
+begin
+    CurrencyEdit1.Value:=0;
+end;
+if (CurrencyEdit2.Text='') then
+begin
+    CurrencyEdit2.Value:=0;
+end;
+if (CurrencyEdit3.Text='') then
+begin
+    CurrencyEdit3.Value:=0;
+end;
+
+   DBEdit6.Text:=floattostr(CurrencyEdit1.Value+CurrencyEdit2.Value+CurrencyEdit3.Value);
+end;
+
+procedure TfrmMedloss.DBEdit3Change(Sender: TObject);
+begin
+DBEdit6.Text:=floattostr(CurrencyEdit1.Value+CurrencyEdit3.Value+CurrencyEdit2.Value);
+end;
+
+procedure TfrmMedloss.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+if ord(key)=vk_escape  then close
+
+end;
+
+procedure TfrmMedloss.FormShow(Sender: TObject);
+begin
+
+yuktesdiq:=0;
+
+if (lossoperatin=1) and (lossstatus<>1) then
+
+//if (FrmMainLoss.XFRadioButton1.Checked=true)or(FrmMainLoss.XFRadioButton3.Checked=true) then
+begin
+     XFGroupBox1.Visible:=true;
+end
+else
+begin
+     XFGroupBox1.Visible:=false;
+
+end;
+
+if lossstatus=1 then
+begin
+     XFGroupBox8.Visible:=true;
+     XFButton1.Enabled:=true;
+end
+else
+begin
+     XFGroupBox8.Visible:=false;
+end;
+
+
+DmLoss.DSEmploes.Close;
+DmLoss.DSEmploes.SetVariable('pcid',contactid);
+DmLoss.DSEmploes.Open;
+  if FrmMainLoss.op_type='Insert' then
+  begin
+
+  CurrencyEdit1.Value:=0;
+  CurrencyEdit2.Value:=0;
+  CurrencyEdit3.Value:=0;
+  XFCheckBox2.Checked:=false;
+   DateTimePicker1.DateTime:=DmLoss.DSSysdat.FieldByName('tek_dat').AsDateTime;
+   DateTimePicker2.DateTime:=DmLoss.DSSysdat.FieldByName('tek_dat').AsDateTime;
+    //EFUSAL_DATE
+
+
+  end;
+      // showmessage(DmLoss.ODSClaimDescription.FieldByName('subraqasiya').AsString);
+    if FrmMainLoss.op_type='Edit' then
+  begin
+
+  CurrencyEdit1.Value:=DmLoss.DSclaimmed.FieldByName('AMOUNT_MEDICAL_SERVICES').AsFloat ;
+  CurrencyEdit3.Value:=DmLoss.DSclaimmed.FieldByName('AMOUNT_MEDICINE_USED').AsFloat ;
+  CurrencyEdit2.Value:=DmLoss.DSclaimmed.FieldByName('AMOUNT_SERVICE_STOMOTALOJI').AsFloat ;
+  dateTimePicker1.DateTime:=DmLoss.ODSClaimDescription.FieldByName('CLAIM_DATE').AsDateTime;
+
+     if DmLoss.ODSClaimDescription.FieldByName('REFUSAL_DATE').AsString<>'' then
+      DateTimePicker2.DateTime:=DmLoss.ODSClaimDescription.FieldByName('REFUSAL_DATE').AsDateTime
+   else
+      DateTimePicker2.DateTime:=DmLoss.DSSysdat.FieldByName('tek_dat').AsDateTime;
+
+       // showmessage(DmLoss.ODSClaimDescription.FieldByName('subraqasiya').AsString);
+
+     if DmLoss.ODSClaimDescription.FieldByName('subraqasiya').AsInteger=0 then
+     frmMedloss.XFCheckBox2.Checked:=false
+     else
+     frmMedloss.XFCheckBox2.Checked:=true;
+
+  end;
+
+
+
+end;
+
+procedure TfrmMedloss.XFButton1Click(Sender: TObject);
+var
+td:integer;
+
+begin
+if contractstatus=1 then  //CommanParametrs
+ begin
+   showmessage('Diqqət! Bu müqavilə bağlanmış müqavilə olduğundan heç bir deyişiklik oluna bilməz.');
+   Abort;
+ end;
+if DmLoss.ODSContracts.FieldByName('state').AsInteger<>6 then
+begin
+showmessage('Diqqət!Yalnız Təsdiq olunmuş müqavilənin  zərəri redaktə etmək olar!');
+    exit;
+end;
+
+
+
+if DBEdit2.Text='' then
+begin
+  Showmessage('Diqqət!Müayinə sahəsi boşdur!');
+  exit;
+end;
+
+if DBLookupComboBox2.Text='' then
+begin
+  Showmessage('Diqqət!A.S.A sahəsi boşdur!');
+  exit;
+end;
+
+if DBLookupComboBox1.Text='' then
+begin
+  Showmessage('Diqqət!Tibb müəssəsi sahəsi boşdur!');
+  exit;
+end;
+     if lossoperatin=1 then
+ begin
+   losstesdiq:=0;
+if DBEdit1.Text='' then
+begin
+  Showmessage('Diqqət!Zərər № sahəsi boşdur!');
+  exit;
+end;
+if DBEdit6.Text='' then
+begin
+  Showmessage('Diqqət!Yekun zərər məbləğı sahəsi boşdur!');
+  exit;
+end;
+if DBEdit3.Text='' then
+begin
+  Showmessage('Diqqət!Sığorta ödənişinin məbləği sahəsi boşdur!');
+  exit;
+end;
+ end;
+
+    if lossstatus=1 then
+begin
+
+  if DBEdit4.Text='' then
+  begin
+    showmessage('Diqqət! İmtina məbləği sahəsi boşdur.');
+    exit;
+  end;
+
+    if DBEdit2.Text='' then
+  begin
+    showmessage('Diqqət! İmtina səbəbi sahəsi boşdur.');
+    exit;
+  end;
+
+end;
+
+
+if XFCheckBox1.Checked=true then
+td:=1
+else
+td:=0;
+sub_id:=0;
+if XFCheckBox2.Checked=true then
+   sub_id:=1
+ else
+  sub_id:=0;
+
+   if lossstatus=1 then
+    inmtina_dat:=DateTimePicker1.DateTime
+   else
+       inmtina_dat:=strtodate('30.12.1899');
+
+//showmessage('Salam 1');
+with DmLoss,ODSClaimDescription do
+     begin
+     if State in [dsEdit, dsInsert] then
+     begin
+        ODSClaimDescriptionMK_ID.Value:=ODSMotorKaskoID.Value;  //baxmaliyam
+        ODSClaimDescriptionCID.Value:=contactid;
+        ODSClaimDescriptionCLAIM_DATE.Value:=DateTimePicker1.DateTime;
+            ODSClaimDescriptionREFUSAL_DATE.Value:=inmtina_dat;
+        ODSClaimDescriptionSUBRAQASIYA.Value:=sub_id;
+         Post;
+        DmLoss.ODSClaimDescription.RefreshRecord;
+        FrmMainLoss.dep_id:=FieldByName('id').asinteger;
+
+     end;
+//showmessage('Salam 2');
+     with DSclaimmed do
+     begin
+
+         DSclaimmed.FieldByName('DEP_ID').AsInteger:= FrmMainLoss.dep_id;
+         DSclaimmed.FieldByName('cid').AsInteger:=contactid;
+         DSclaimmed.FieldByName('AMOUNT_MEDICAL_SERVICES').AsFloat:=CurrencyEdit1.Value;
+         DSclaimmed.FieldByName('AMOUNT_MEDICINE_USED').AsFloat:=CurrencyEdit3.Value;
+         DSclaimmed.FieldByName('AMOUNT_SERVICE_STOMOTALOJI').AsFloat:=CurrencyEdit2.Value;
+         DSclaimmed.FieldByName('PROVISION').AsInteger:=td;
+         DSclaimmed.Post;
+         DSclaimmed.RefreshRecord;
+
+     end;
+  //showmessage('Salam 3');
+     end;    //FrmMainLoss
+
+      if FrmMainLoss.CheckBox8.Checked=true then
+              begin
+
+               FrmMainLoss.Tesdiq:=1;
+                FrmMainLoss.CheckBox8.Color:=clGray;
+                //Tesdiqdat:=DSSysdat.FieldByName('tek_dat').AsDateTime;
+                FrmMainLoss.Tesdiqdat:=FrmMainLoss.DateTimePicker4.DateTime;
+
+
+                if DmLoss.ODSClaimDescription.FieldByName('claim_status').AsInteger=1 then
+               begin
+                if (DmLoss.ODSClaimDescription.FieldByName('auto_real_market_value').AsString='') or
+                (DmLoss.ODSClaimDescription.FieldByName('remains_value').AsString='') or
+                (DmLoss.ODSClaimDescription.FieldByName('bank_accno').AsString='')  then
+                begin
+                  showmessage('Diqqət! Tam məvhalına uyğun məlumatlar tam yığılmadığindan təsdiqlənə bilməz!');
+                 FrmMainLoss.Tesdiq:=0;
+                 FrmMainLoss.CheckBox8.Color:=clRed;
+                 FrmMainLoss.Tesdiqdat:=strtodate('30.12.1899');
+                 FrmMainLoss.CheckBox8.Checked:=false;
+                 // exit;
+                end   ;
+               end;
+              end
+               else
+               begin
+               FrmMainLoss.Tesdiq:=0;
+               FrmMainLoss.CheckBox8.Color:=clRed;
+               FrmMainLoss.Tesdiqdat:=strtodate('30.12.1899');
+
+               end;
+               if FrmMainLoss.XFRadioButton2.Checked=false then
+                 begin
+               if (FrmMainLoss.Tesdiq=1)and (FrmMainLoss.CheckBox8.Checked=true)and (FrmMainLoss.op_type<>'Insert') then
+            begin
+                // pteyinat:= DmLoss.ODSContracts.FieldByName('').
+            if  DmLoss.OPCOMMON.CallIntegerFunction('commitloss',[contactid,FrmMainLoss.XDBGrid1.DataSource.DataSet.FieldByName('ID').AsInteger])=1 then
+             begin
+               showmessage('Zərər təsdiqləndi!');
+             end;
+             end;
+
+                 end;
+             DmLoss.DSclaim_status.RefreshRecord;
+             DmLoss.ODSClaimDescription.RefreshRecord;
+
+          if FrmMainLoss.frmname<>'FrmAllLoss' then
+           begin
+          if FrmMainLoss.op_type='Insert' then
+       DmLoss.Dsmain.Refresh
+     else
+       DmLoss.Dsmain.RefreshRecord;
+       end
+       else
+       begin
+     if FrmMainLoss.op_type='Insert' then
+       DmLoss.DSALLMain.Refresh
+     else
+       DmLoss.DSALLMain.RefreshRecord;
+
+       end;
+       if FrmMainLoss.XFRadioButton2.Checked=true then
+           begin
+
+           FrmMainLoss.XFButton6Click(Sender);
+           //showmessage(inttostr(FrmMainLoss.status));
+           DmLoss.DSclaim_status.RefreshRecord;
+        DmLoss.DSclaim_status.Edit;
+        DmLoss.DSclaim_status.FieldByName('STATUS').AsInteger:=1;//status;
+        DmLoss.DSclaim_status.FieldByName('DEP_ID').AsInteger:=FrmMainLoss.XDBGrid1.DataSource.DataSet.FieldByName('ID').AsInteger;
+
+        DmLoss.DSclaim_status.Post;
+
+           end;
+
+           //
+           yuktesdiq:=0;
+
+       frmMedloss.Close;
+
+
+end;
+
+procedure TfrmMedloss.XFButton2Click(Sender: TObject);
+begin
+if losstesdiq=0 then
+begin
+   if DmLoss.DSclaim_status.FieldByName('STAGE_TESDIQ').AsInteger=0 then
+    begin
+   FrmMainLoss.CheckBox8.Checked:=false;
+
+    end;
+end
+else
+begin
+   FrmMainLoss.CheckBox8.Checked:=true;
+end;
+
+
+close
+end;
+
+procedure TfrmMedloss.XFSpeedButton1Click(Sender: TObject);
+begin
+      DBEdit1.Text:=OPCOMMON.CallStringFunction('GenerateLossNumber',
+                                       [DmLoss.oDSClaimDescription.FieldByName('cid').AsInteger,
+                                       DmLoss.oDSClaimDescription.FieldByName('TYPE').AsInteger,
+                                       DmLoss.oDSClaimDescription.FieldByName('id').AsInteger,
+                                       CLAIM_STATUS]);
+end;
+
+end.

@@ -1,0 +1,86 @@
+object ReportFrm: TReportFrm
+  Left = 0
+  Top = 0
+  ClientHeight = 136
+  ClientWidth = 350
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poScreenCenter
+  OnCanResize = FormCanResize
+  OnCreate = FormCreate
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Button1: TButton
+    Left = 190
+    Top = 106
+    Width = 75
+    Height = 25
+    Caption = 'Q'#601'bul'
+    TabOrder = 0
+    OnClick = Button1Click
+  end
+  object Button2: TButton
+    Left = 271
+    Top = 106
+    Width = 75
+    Height = 25
+    Caption = 'Ba'#287'la'
+    TabOrder = 1
+    OnClick = Button2Click
+  end
+  object GroupBox1: TGroupBox
+    Left = 0
+    Top = 0
+    Width = 350
+    Height = 57
+    Align = alTop
+    Caption = 'Tarix aral'#305#287#305
+    TabOrder = 2
+    object Label1: TLabel
+      Left = 174
+      Top = 27
+      Width = 12
+      Height = 13
+      Caption = '__'
+    end
+    object DateTimePicker1: TDateTimePicker
+      Left = 6
+      Top = 26
+      Width = 166
+      Height = 21
+      Date = 41311.449640405100000000
+      Time = 41311.449640405100000000
+      TabOrder = 0
+    end
+    object DateTimePicker2: TDateTimePicker
+      Left = 188
+      Top = 27
+      Width = 159
+      Height = 21
+      Date = 41311.449640405100000000
+      Time = 41311.449640405100000000
+      TabOrder = 1
+    end
+  end
+  object GroupBox2: TGroupBox
+    Left = 0
+    Top = 57
+    Width = 350
+    Height = 45
+    Align = alTop
+    Caption = 'Filial se'#231'imi'
+    TabOrder = 3
+    object DBLookupComboBox1: TDBLookupComboBox
+      Left = 59
+      Top = 15
+      Width = 232
+      Height = 21
+      TabOrder = 0
+    end
+  end
+end

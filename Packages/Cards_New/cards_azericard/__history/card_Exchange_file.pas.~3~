@@ -1,0 +1,136 @@
+unit card_Exchange_file;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Menus, CMExcelExport, ImgList, ComCtrls, Grids, DBGrids, StdCtrls,
+  FileCtrl, ToolWin, Buttons, ExtCtrls;
+
+type
+  TForm29 = class(TForm)
+    Panel1: TPanel;
+    RefwithSel: TSpeedButton;
+    CoolBar1: TCoolBar;
+    ToolBar1: TToolBar;
+    ToolButton3: TToolButton;
+    isertbtn: TToolButton;
+    ToolButton1: TToolButton;
+    ToolButton7: TToolButton;
+    CTInboxRich: TRichEdit;
+    FileListBox1: TFileListBox;
+    DBGrid1: TDBGrid;
+    Animate1: TAnimate;
+    DBGrid2: TDBGrid;
+    ImageList1: TImageList;
+    CMExcelExport1: TCMExcelExport;
+    PopupMenu1: TPopupMenu;
+    selectall1: TMenuItem;
+    procedure ToolButton3Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form29: TForm29;
+
+implementation
+
+{$R *.dfm}
+
+
+function CheckFileExt(fname : string) : boolean;
+    var i, checkFileExtLen: integer;
+        fileExt : String;
+begin
+      checkFileExtLen:=0;
+      fileExt:='';
+      fileExt:= trim(ExtractFileExt(fname));
+      for i:=0 to length(fileext) do
+        begin
+        if fileExt[i] in ['0'..'9','.'] then inc(checkFileExtLen);
+        end;
+      {check for file extention}
+      if checkFileExtLen <> length(fileext) then result:=false else result:=true;
+end;
+
+function DirectoryExists(const Name: string): Boolean;
+var
+  Code: Integer;
+begin
+  Code := GetFileAttributes(PChar(Name));
+  Result := (Code <> -1) and (FILE_ATTRIBUTE_DIRECTORY and Code <> 0);
+end;
+
+procedure TForm29.ToolButton3Click(Sender: TObject);
+var i,j,k,h,z,rowcount,selst,selstF,lengthofTA,msgcount :integer;
+    all,all1,STmessage,currency,syssim,fileExt:String;
+    test,transummUSD,amountsummUSD,feeamounsummUSD:real;
+    transummAZM,amountsummAZM,feeamounsummAZM:real;
+    transummEUR,amountsummEUR,feeamounsummEUR:real;
+   // Client : array[1..100] of Tclient;
+    go:boolean;
+    f:textfile;
+    v_dir:string;
+begin
+v_dir:= GetCurrentDir;
+
+try
+   CTInboxRich.Lines.Clear;
+   //CTPanelCount.Caption:='0';
+   if not DirectoryExists('C:\AZCARD\IN') then MkDir('C:\AZCARD\IN');
+   FileListBox1.Directory:='C:\AZCARD\IN';
+   FileListBox1.Update;
+   if FileListBox1.Items.Count = 0 then exit;
+   {******************* AZERCARD PGP ZIP OPEN ***********************}
+   //Extract_PGP_Zip('C*.0*','C*.1*','C*.2*','C*.3*');
+   {******************* AZERCARD PGP ZIP OPEN ***********************}
+   FileListBox1.Mask:='*.*';
+   FileListBox1.Update;
+   test:=122 / 10;
+   if pos('.',floattostr(test))>0 then syssim:='.' else
+   if pos(',',floattostr(test))>0 then syssim:=',';
+   for i:=0 to FileListBox1.items.Count-1 do
+   begin
+      Application.ProcessMessages;
+      msgcount:=0;
+
+      if (copy(FileListBox1.items[i],0,1) <> 'C')and((copy(FileListBox1.items[i],0,1) <> 'c')) then Continue;
+
+       AssignFile(F,'C:\AZCARD\IN\'+FileListBox1.Items[i]);
+      Reset(F);
+      rowcount:=0;
+      while not eof(f) do
+      begin
+        rowcount:=rowcount+1;
+        Readln(F,Stmessage);
+        if trim(copy(STmessage,19,3)) <> 'BAL'  then  msgcount:=msgcount+1;
+//        ShowMessage(IntToStr(msgcount));
+      end;
+      STmessage:='';
+      Reset(f);
+      {VIEW FILE NAME}
+          if  RefwithSel.Down = false then
+      begin
+      //CTPanelCount.Caption:=IntToStr(strtoint(CTPanelCount.Caption)+1);
+      CTInboxRich.Lines.Add('FILE NAME            :< '+FileListBox1.items[i]+' >   '+'Message count: '+inttostr(msgcount-2));
+      {VIEW FILE MESSAGE}
+
+
+      {///////////////////////////***************************************************************}
+
+
+
+      end;
+
+   end;
+finally
+
+
+end;
+
+end;
+
+end.

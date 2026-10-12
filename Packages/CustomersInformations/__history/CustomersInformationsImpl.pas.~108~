@@ -1,0 +1,1050 @@
+﻿unit CustomersInformationsImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActiveX, AxCtrls, Customers_Informations_TLB, StdVcl, StdCtrls, Grids,
+  DBGrids, Db, OracleData, ExtCtrls, ComCtrls, SearchCombo, Buttons,
+  CheckLst, Mask, DBCtrls, ExcelExporter, ImgList,ShlObj,
+  CMExcelExport, SBPlgAx50_TLB, QExport4, QExport4Xlsx, QExport4Dialog;
+
+type
+  TCustomersInformations = class(TActiveForm, ICustomersInformations,
+   IIconExporter)
+    OrDSCustomers: TOracleDataSet;
+    DataSourceCustomers: TDataSource;
+    OrDSCustomersID: TIntegerField;
+    OrDSCustomersOPEN_DAT: TDateTimeField;
+    OrDSCustomersCLOSE_DAT: TDateTimeField;
+    OrDSDates: TOracleDataSet;
+    OrDSAccount: TOracleDataSet;
+    DataSourceAccount: TDataSource;
+    OrDSSysDat: TOracleDataSet;
+    OrDSSysDatTEK_DAT: TDateTimeField;
+    PanelAlTop: TPanel;
+    Label1: TLabel;
+    SearchCFilial: TSearchCombo;
+    OrDSFilials: TOracleDataSet;
+    DataSourceFilial: TDataSource;
+    OrDSFilialsID: TFloatField;
+    OrDSAccountOPEN_DAT: TDateTimeField;
+    OrDSAccountCLOSE_DAT: TDateTimeField;
+    OrDSAvalute: TOracleDataSet;
+    DataSourceAvalute: TDataSource;
+    OrDSAvaluteVALUTE: TIntegerField;
+    OrDSDocs: TOracleDataSet;
+    DataSourceDocs: TDataSource;
+    OrDSDocsDAT: TDateTimeField;
+    OrDSDocsAMMOUNT: TFloatField;
+    OrDSDocsLAMMOUNT: TFloatField;
+    OrDSDocsAMMOUNT_C: TFloatField;
+    Panel1: TPanel;
+    DBGridCustomers: TDBGrid;
+    DBGridAccounts: TDBGrid;
+    DBGridDocs: TDBGrid;
+    Panel2: TPanel;
+    GrBoxCustomers: TGroupBox;
+    GrBoxCustDates: TGroupBox;
+    RGrCustDates: TRadioGroup;
+    BegDateCust: TDateTimePicker;
+    EndDateCust: TDateTimePicker;
+    GrBoxDocs: TGroupBox;
+    GBoxDateDocs: TGroupBox;
+    Label4: TLabel;
+    Label5: TLabel;
+    BegDateDocs: TDateTimePicker;
+    EndDateDocs: TDateTimePicker;
+    ChListDocs: TCheckListBox;
+    ActiveGBox: TGroupBox;
+    RBtnCust: TRadioButton;
+    RBtnAcc: TRadioButton;
+    RBtnDocs: TRadioButton;
+    HideBtn: TSpeedButton;
+    OrDSDocsDEBIT: TWideStringField;
+    OrDSDocsCREDIT: TWideStringField;
+    OrDSAccountABSTENOSTAT: TFloatField;
+    OrDSAccountABSTENPOK_OSTAT: TFloatField;
+    WaitLabel: TLabel;
+    LabelCountCust: TLabel;
+    LabelCountDocs: TLabel;
+    ImageList: TImageList;
+    AccPageControl: TPageControl;
+    AccMainPage: TTabSheet;
+    AccAdtPage: TTabSheet;
+    GBoxOstatValAcc: TGroupBox;
+    RBtnOstatAZM: TRadioButton;
+    RBtnOstatValute: TRadioButton;
+    Label2: TLabel;
+    SearchCAvaluteAcc: TSearchCombo;
+    LabelCountAcc: TLabel;
+    LocAccNum: TEdit;
+    LocAccName: TEdit;
+    Label6: TLabel;
+    GBoxOpenFilterAcc: TGroupBox;
+    CBoxOpenAccs: TCheckBox;
+    CBoxCloseAccs: TCheckBox;
+    GBoxOstatSumAcc: TGroupBox;
+    EditOstatMin: TEdit;
+    EditOstatMax: TEdit;
+    Label7: TLabel;
+    Label8: TLabel;
+    GBoxAccCBDates: TGroupBox;
+    BegDateAcc: TDateTimePicker;
+    EndDateAcc: TDateTimePicker;
+    RGrAccDates: TRadioGroup;
+    OrDSDatesCMINDATE: TDateTimeField;
+    OrDSDatesCMAXDATE: TDateTimeField;
+    OrDSDatesAMINDATE: TDateTimeField;
+    OrDSDatesAMAXDATE: TDateTimeField;
+    GBoxOpenFilterCust: TGroupBox;
+    CBoxOpenCust: TCheckBox;
+    CBoxCloseCust: TCheckBox;
+    ExcelExporter: TCMExcelExport;
+    OrDSAccountKLI_ID: TFloatField;
+    CustExcel: TSpeedButton;
+    LocCustNum: TEdit;
+    EditLocate: TEdit;
+    Label3: TLabel;
+    AccExcel: TSpeedButton;
+    DocExcel: TSpeedButton;
+    OKBtn: TSpeedButton;
+    AccDatePage: TTabSheet;
+    DTPicker_Archost: TDateTimePicker;
+    Label9: TLabel;
+    OrDSAccountTARIX: TDateTimeField;
+    OrDSFilialsNAME: TWideStringField;
+    OrDSAvaluteVAL_NAME: TWideStringField;
+    OrDSAvaluteVALU_NAME: TWideStringField;
+    OrDSCustomersNAME: TWideStringField;
+    OrDSCustomersINN: TWideStringField;
+    OrDSAccountACC_NO: TWideStringField;
+    OrDSAccountNAME: TWideStringField;
+    OrDSAccountVAL_NAME: TWideStringField;
+    OrDSAccountSYMBOL: TWideStringField;
+    OrDSDocsNAME: TWideStringField;
+    OrDSDocsD_SYMBOL: TWideStringField;
+    OrDSDocsC_SYMBOL: TWideStringField;
+    ComboBox1: TComboBox;
+    OrDSCustomersCUST_TYPE_NAME: TWideStringField;
+    OrDSAccountFILIAL: TWideStringField;
+    OrDSCustomersUSER_NAME: TWideStringField;
+    OrDSCustomersFILIAL_NAME: TWideStringField;
+    OrDSCustomersFILIAL_ID: TFloatField;
+    Memo1: TMemo;
+    OrDSCustomersSHORT_NAME: TWideStringField;
+    OrDSCustomersDAT_NAL: TDateTimeField;
+    OrDSCustomersDAT_USTAV: TDateTimeField;
+    OrDSCustomersINCORPORATION_NUMBER: TWideStringField;
+    Memo2: TMemo;
+    OrDSDocsDNAME: TWideStringField;
+    OrDSDocsCNAME: TWideStringField;
+    OrDSAccountCUST_NAME: TWideStringField;
+    OrDSAccountCUST_VOEN: TWideStringField;
+    OrDSAccountID: TFloatField;
+    OrDSAccountCUST_TYPE: TWideStringField;
+    OrDSAccountBAL_CN1: TFloatField;
+    OrDSCustomersNEREZIDENT: TWideStringField;
+    OrDSCustomersPRINAD: TWideStringField;
+    OrDSCustomersVID_SOB: TWideStringField;
+    OrDSCustomersORG_SOB: TWideStringField;
+    OrDSCustomersSFERA_DEY: TWideStringField;
+    OrDSCustomersGROUP_KLIE: TWideStringField;
+    OrDSCustomersOTRASL: TWideStringField;
+    OrDSCustomersNALOG_KOD: TWideStringField;
+    OrDSCustomersCATEGORY: TWideStringField;
+    OrDSCustomersBIK: TWideStringField;
+    Label10: TLabel;
+    CMExcelExport1: TCMExcelExport;
+    OracleDataSet1: TOracleDataSet;
+    QExport4Dialog1: TQExport4Dialog;
+    OrDSCustomersBIRTHDAY: TDateTimeField;
+    OrDSCustomersPASSER: TWideStringField;
+    OrDSCustomersPASPNUM: TWideStringField;
+    OrDSCustomersPASSPIN: TWideStringField;
+    OrDSCustomersCUST_TYPE: TIntegerField;
+    OrDSCustomersOP_ID: TFloatField;
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure OrDSCustomersAfterOpen(DataSet: TDataSet);
+    procedure SearchCAvaluteAccChange(Sender: TObject);
+    procedure SearchCFilialChange(Sender: TObject);
+    procedure OrDSAccountAfterOpen(DataSet: TDataSet);
+    procedure EditLocateChange(Sender: TObject);
+    procedure OrDSDocsBeforeOpen(DataSet: TDataSet);
+    procedure OrDSDocsAfterOpen(DataSet: TDataSet);
+    procedure ActiveFormDestroy(Sender: TObject);
+    procedure EditLocateExit(Sender: TObject);
+    procedure LocCustNumChange(Sender: TObject);
+    procedure LocAccNumChange(Sender: TObject);
+    procedure LocAccNameChange(Sender: TObject);
+    procedure LocCustNumExit(Sender: TObject);
+    procedure LocAccNumExit(Sender: TObject);
+    procedure LocAccNameExit(Sender: TObject);
+    procedure OrDSAccountBeforeOpen(DataSet: TDataSet);
+    procedure OrDSCustomersBeforeOpen(DataSet: TDataSet);
+    procedure OrDSCustomersAfterScroll(DataSet: TDataSet);
+    procedure RBtnAccClick(Sender: TObject);
+    procedure RBtnCustClick(Sender: TObject);
+    procedure OrDSAccountAfterScroll(DataSet: TDataSet);
+    procedure RBtnDocsClick(Sender: TObject);
+    procedure HideBtnClick(Sender: TObject);
+    procedure OrDSDocsAfterScroll(DataSet: TDataSet);
+    procedure DBGridCustomersTitleClick(Column: TColumn);
+    procedure DBGridAccountsTitleClick(Column: TColumn);
+    procedure DBGridDocsTitleClick(Column: TColumn);
+    procedure EditOstatMinKeyPress(Sender: TObject; var Key: Char);
+    procedure CBoxOpenCustClick(Sender: TObject);
+    procedure AccExcelClick(Sender: TObject);
+    procedure CustExcelClick(Sender: TObject);
+    procedure DocExcelClick(Sender: TObject);
+    procedure OKBtnClick(Sender: TObject);
+    procedure EditLocateKeyPress(Sender: TObject; var Key: Char);
+    procedure OrDSCustomersAfterRefresh(DataSet: TDataSet);
+    procedure LocAccNameKeyPress(Sender: TObject; var Key: Char);
+    procedure ComboBox1CloseUp(Sender: TObject);
+    procedure OrDSCustomersCalcFields(DataSet: TDataSet);
+    procedure Button1Click(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+    procedure DBGridCustomersDblClick(Sender: TObject);
+  private
+    { Private declarations }
+    FEvents: ICustomersInformationsEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_Icon: OLE_HANDLE; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+  public
+    { Public declarations }
+    procedure Initialize; override;
+  end;
+
+implementation
+
+uses ComObj, ComServ , SboapiDataModuleImpl, SBTranslateProc;
+
+var HidePanel2: Boolean;
+    CTitle, ATitle, DTitle: Integer;
+
+    ExcelCl: Boolean;
+{$R *.DFM}
+
+{ TCustomersInformations }
+
+function TCustomersInformations.Get_Icon: OLE_HANDLE;
+const
+  ImageIndex =0;
+begin
+  ImageList.GetIcon(ImageIndex,Icon);
+  Result := Icon.Handle;
+end;
+
+
+procedure TCustomersInformations.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_CustomersInformationsPage); }
+end;
+
+procedure TCustomersInformations.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as ICustomersInformationsEvents;
+end;
+
+procedure TCustomersInformations.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TCustomersInformations.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TCustomersInformations.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TCustomersInformations.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TCustomersInformations.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TCustomersInformations.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TCustomersInformations.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TCustomersInformations.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TCustomersInformations.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TCustomersInformations.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+function DesktopPath:string;
+var zpath: array [0..MAX_PATH] of char;
+ begin
+ SHGetFolderPath(0, CSIDL_DESKTOP, 0, SHGFP_TYPE_CURRENT, @zpath);
+ result:=   (zpath);
+end ;
+
+
+function TCustomersInformations.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TCustomersInformations.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TCustomersInformations.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TCustomersInformations.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TCustomersInformations.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TCustomersInformations.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TCustomersInformations.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TCustomersInformations.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TCustomersInformations.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TCustomersInformations._Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TCustomersInformations.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TCustomersInformations.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TCustomersInformations.ComboBox1CloseUp(Sender: TObject);
+begin
+if OrDSAccount.Active=True then
+begin
+ OrDSCustomers.Close;
+ OrDSCustomers.Open;
+end;
+end;
+
+procedure TCustomersInformations.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TCustomersInformations.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TCustomersInformations.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TCustomersInformations.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TCustomersInformations.KeyPressEvent(Sender: TObject;
+  var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TCustomersInformations.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TCustomersInformations.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TCustomersInformations.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TCustomersInformations.Set_AxBorderStyle(
+  Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TCustomersInformations.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TCustomersInformations.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TCustomersInformations.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TCustomersInformations.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TCustomersInformations.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TCustomersInformations.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TCustomersInformations.Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TCustomersInformations.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TCustomersInformations.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TCustomersInformations.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TCustomersInformations.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TCustomersInformations.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TCustomersInformations.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+///////////////////////////***//////////////////////////////////////
+///////////////////////////***//////////////////////////////////////
+procedure TCustomersInformations.ActiveFormCreate(Sender: TObject);
+begin
+  HidePanel2:=false;
+  CTitle:=0;
+  ATitle:=0;
+  DTitle:=0;
+
+
+  ExcelCl:=False;
+  OrDSFilials.Open;
+  SearchCFilial.ItemIndex:=0;
+  //OrDSDates.Open;
+  {BegDateCust.Date:=OrDSDatesCMINDATE.AsDateTime;
+  EndDateCust.Date:=OrDSDatesCMAXDATE.AsDateTime;
+  BegDateAcc.Date :=OrDSDatesAMINDATE.AsDateTime;
+  EndDateAcc.Date :=OrDSDatesAMAXDATE.AsDateTime;}
+  //BegDateCust.Date:=01/01/1990;
+  EndDateCust.Date:=Date;
+  //BegDateAcc.Date :=01/01/1990;
+  EndDateAcc.Date :=Date;
+  //RBtnCust.Checked:=true;
+  //OrDSCustomers.Open;
+  //LabelCountCust.Caption :=IntToStr(OrDSCustomers.RecordCount);
+
+  OrDSAvalute.Open;
+  SearchCAvaluteAcc.ItemIndex:=0;
+
+  OrDSSysDat.Open;
+  BegDateDocs.Date :=OrDSSysDatTEK_DAT.AsDateTime;
+  EndDateDocs.Date :=OrDSSysDatTEK_DAT.AsDateTime;
+
+  DTPicker_Archost.Date :=OrDSSysDatTEK_DAT.AsDateTime;
+
+  SBTranslateProc.TranslateAllComponents(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TCustomersInformations.OrDSCustomersBeforeOpen(
+  DataSet: TDataSet);
+begin
+  with OrDSCustomers do begin
+   Close;
+   SQL.Clear;
+
+
+  { SQL.Add(' select c.ID, c.Name, c.INN, c.Open_Dat, c.Close_Dat, c.Cust_TYPE,c.op_id,');
+   SQL.Add('(select name from user$ where id=c.op_id) as USER_NAME,');
+   SQL.Add('(select filialid from sba_objinf where obj=(select name from user$ where id=c.op_id)) filial_id,');
+   SQL.Add('(select name from filial_t where id=(select filialid from sba_objinf where obj=(select name from user$ where id=c.op_id))) filial_name');
+   SQL.Add(' from Customers c where');  }
+   //SQL.Add(', '''+OrDSFilials.FieldByName('Name').AsWideString+''' Filial from Customers c where');
+    SQL.Add(Memo2.Text);
+
+   if (RBtnCust.Checked=false) and (OrDSAccount.RecordCount<>0) then
+      SQL.Add(' c.ID='+OrDSAccountKLI_ID.AsString+' and');
+   if SearchCFilial.ItemIndex<>0 then
+     // SQL.Add(' (ID in (select KLI_ID from Account where'+
+             // ' Filial='+OrDSFilialsID.AsString+')) and');
+   SQL.Add(' (select filialid from sba_objinf where obj=(select name from user$ where id=c.op_id)) ='+OrDSFilialsID.AsString+' and');
+
+   if (CBoxOpenCust.Checked=true) and (CBoxCloseCust.Checked=false)  then
+      SQL.Add(' c.close_dat is null and');
+   if (CBoxOpenCust.Checked=false) and (CBoxCloseCust.Checked=true) then
+      SQL.Add(' c.close_dat is not null and');
+   if RGrCustDates.ItemIndex=0 then
+      SQL.Add(' (c.open_dat between (:BegDate) and (:EndDate))');
+   if RGrCustDates.ItemIndex=1 then
+      SQL.Add(' (c.close_dat between (:BegDate) and (:EndDate))');
+   //SQL.Add(' order by ID ' );
+   SQL.Add(' and upper(c.name) like :pName ');
+   SQL.Add(' and (NVL(c.cust_type,0) in (:P_CUSTTYPE)) ');
+   SQL.Add(' order by c.'+DBGridCustomers.Columns[CTitle].FieldName);
+case ComboBox1.ItemIndex of
+0: begin OrDSCustomers.SetVariable('P_CUSTTYPE','0,1,2,3'); end;
+1: begin OrDSCustomers.SetVariable('P_CUSTTYPE','0'); end;
+2: begin OrDSCustomers.SetVariable('P_CUSTTYPE','1'); end;
+3: begin OrDSCustomers.SetVariable('P_CUSTTYPE','2'); end;
+4: begin OrDSCustomers.SetVariable('P_CUSTTYPE','3'); end;
+end;
+   SetVariable('BegDate',Integer(trunc(BegDateCust.Date)));
+   SetVariable('EndDate',Integer(trunc(EndDateCust.Date)));
+   SetVariable('pName','%%');
+ //  memo1.text:=Sql.Text;
+ end;{with OrDSCustomers}
+end;
+
+procedure TCustomersInformations.OrDSCustomersCalcFields(DataSet: TDataSet);
+begin
+  Case OrDSCustomersCUST_TYPE.AsInteger of
+    0 : OrDSCustomersCUST_TYPE_NAME.Value:= 'Hüquqi şəxs';
+    1 : OrDSCustomersCUST_TYPE_NAME.Value:= 'Fiziki şəxs';
+    2 : OrDSCustomersCUST_TYPE_NAME.Value:= 'Fiziki sahibkar';
+    3 : OrDSCustomersCUST_TYPE_NAME.Value:= 'Fiziki şəxs və sahibkar';
+  end;
+
+end;
+
+procedure TCustomersInformations.OrDSAccountBeforeOpen(DataSet: TDataSet);
+begin
+ with OrDSAccount do begin
+  Close;
+  SQL.Clear;
+  SQL.Add(' select ac.id,ac.ACC_NO,ac.Name,val.Val_Name,ac.Open_Dat,ac.Close_Dat,'+
+          'ac.Kli_ID,abs(ten.Ostat),abs(ten.Pok_Ostat),ten.datdate as Tarix ,'+
+          'ac.tipacc as symbol, f.Name as Filial, cu.name as cust_name,ac.bal_cn1,cu.inn as cust_voen,ct.name as cust_type'+
+          ' from Account ac, Avalute val, Archost ten, Filial f, customers cu,cust_types ct'+
+          ' where ten.Datdate=:BalDate and f.ID=ac.filial and cu.id=ac.kli_id and ct.id=cu.cust_type and');
+  if (RBtnCust.Checked=true) and (OrDSCustomers.RecordCount<>0) then
+     SQL.Add(' ac.Kli_ID='+OrDSCustomersID.AsString+' and');
+  if RBtnDocs.Checked =true then
+     SQL.Add(' (ac.ACC_NO='+''''+OrDSDocsDEBIT.AsString+''''+
+             ' or ac.ACC_NO='+''''+OrDSDocsCREDIT.AsString+''''+') and');
+  SQL.Add(' ac.Val_Acc=val.Valute and ac.ID=ten.Acc_ID');
+  if SearchCFilial.ItemIndex<>0 then
+     SQL.Add(' and ac.Filial='+OrDSFilialsID.AsString);
+  if SearchCAvaluteAcc.ItemIndex<>0 then
+     SQL.Add(' and (ac.Val_Acc='+OrDSAvaluteVALUTE.AsString+')');
+  if EditOstatMin.Text<>'' then
+     if RBtnOstatAZM.Checked=true then
+     SQL.Add(' and abs(ten.Pok_ostat)>='+EditOstatMin.Text)
+     else SQL.Add(' and abs(ten.Ostat)>='+EditOstatMin.Text);
+  if EditOstatMax.Text<>'' then
+     if RBtnOstatAZM.Checked=true then
+     SQL.Add(' and abs(ten.Pok_ostat)<='+EditOstatMax.Text)
+     else SQL.Add(' and abs(ten.Ostat)<='+EditOstatMax.Text);
+  if (CBoxOpenAccs.Checked=true) and (CBoxCloseAccs.Checked=false) then
+     SQL.Add(' and  (ac.Close_Dat is null)');
+  if (CBoxOpenAccs.Checked=false) and (CBoxCloseAccs.Checked=true) then
+     SQL.Add(' and (ac.Close_Dat is not null)');
+  if RGrAccDates.ItemIndex=0 then
+      SQL.Add(' and (ac.open_dat between (:BegDate) and (:EndDate))');
+  if RGrAccDates.ItemIndex=1 then
+      SQL.Add(' and (ac.close_dat between (:BegDate) and (:EndDate))');
+
+  SQL.Add(' and upper(ac.name) like :pName ');
+  SQL.Add(' order by '+DBGridAccounts.Columns[ATitle].FieldName);
+
+ SetVariable('BalDate',Integer(trunc(DTPicker_Archost.Date)));
+  SetVariable('BegDate',Integer(trunc(BegDateAcc.Date)));
+  SetVariable('EndDate',Integer(trunc(EndDateAcc.Date)));
+  SetVariable('pName','%%');
+ //Memo1.Text:=Sql.Text;
+ end;{with OrDSAccount}
+end;
+
+procedure TCustomersInformations.OrDSDocsBeforeOpen(DataSet: TDataSet);
+begin
+  with OrDSDocs do begin
+  Close;
+  SQL.Clear;
+  SQL.Add(' select p.dat,a1.acc_no as Debit,a1.Name as DName,a2.acc_no as Credit,a2.Name as CName,'+
+  'p.ammount,p.lammount,p.ammount_c,p.name, a1.tipacc as d_symbol, a2.tipacc as c_symbol'+
+  ' from provarch p, account a1, account a2 ');
+  SQL.Add(' where (dat between (:BegDate) and (:EndDate))');
+  if (RBtnDocs.Checked=false) and (OrDSAccount.RecordCount<>0) then begin
+  if ChListDocs.Checked[0]=true and ChListDocs.Checked[1]=true then
+    SQL.Add(' and (p.debt in (select id from account where acc_no='+''''+
+      OrDSAccountACC_NO.AsString+''''+')'+
+      ' or p.kredit in (select id from account where acc_no='+''''+
+      OrDSAccountACC_NO.AsString+''''+'))')
+      else begin
+      if ChListDocs.Checked[0]=true then
+         SQL.Add(' and (p.debt in (select id from account where acc_no='+''''+
+         OrDSAccountACC_NO.AsString+''''+'))');
+      if ChListDocs.Checked[1]=true then
+         SQL.Add(' and (p.kredit in (select id from account where acc_no='+''''+
+         OrDSAccountACC_NO.AsString+''''+'))');
+      end;{else}
+  end{if RBtnDocs.Checked=false}
+  else begin
+   if SearchCFilial.ItemIndex<>0 then
+    SQL.Add(' and (a1.Filial='+OrDSFilialsID.AsString+
+            ' or a2.Filial=' +OrDSFilialsID.AsString+')');
+  end;{else}
+  SQL.Add(' and (p.debt=a1.id and p.kredit=a2.id)');
+  SQL.Add(' order by '+DBGridDocs.Columns[DTitle].FieldName);
+
+
+//   SetVariable('Acc_NO',OrDSAccountACC_NO.AsString);
+   SetVariable('BegDate',Integer(trunc(BegDateDocs.Date)));
+   SetVariable('EndDate',Integer(trunc(EndDateDocs.Date)));
+  end;{with OrDSDocs}
+end;
+
+procedure TCustomersInformations.OrDSCustomersAfterOpen(DataSet: TDataSet);
+begin
+  LabelCountCust.Caption :=IntToStr(OrDSCustomers.RecordCount);
+end;
+
+procedure TCustomersInformations.OrDSAccountAfterOpen(DataSet: TDataSet);
+begin
+  LabelCountAcc.Caption := IntToStr(OrDSAccount.RecordCount);
+end;
+
+procedure TCustomersInformations.OrDSDocsAfterOpen(DataSet: TDataSet);
+begin
+  LabelCountDocs.Caption :=IntToStr(OrDSDocs.RecordCount);
+end;
+
+procedure TCustomersInformations.OrDSCustomersAfterScroll(
+  DataSet: TDataSet);
+begin
+ { if ExcelCl=false then begin
+  if RBtnCust.Checked=true then begin
+   OrDSAccount.Close;
+   OrDSAccount.Open;
+  end;if RBtnCust.Checked=true
+ end; if ExcelCl=false}
+end;
+
+procedure TCustomersInformations.OrDSAccountAfterScroll(DataSet: TDataSet);
+begin
+  if ExcelCl=false then begin
+  if RBtnCust.Checked=false then begin
+   OrDSCustomers.Close;
+   OrDSCustomers.Open;
+  end;{if RBtnCust.Checked=false}
+  end;{if ExcelCl=false}
+end;
+
+procedure TCustomersInformations.OrDSDocsAfterScroll(DataSet: TDataSet);
+begin
+  if ExcelCl=false then begin
+  if RBtnDocs.Checked=true then begin
+   OrDSAccount.Close;
+   OrDSAccount.Open;
+  end;{if RBtnDocs.Checked=true}
+  end;{if ExcelCl=false}
+end;
+
+procedure TCustomersInformations.CBoxOpenCustClick(Sender: TObject);
+begin
+  with OrDSCustomers do begin
+      Close;
+      Memo1.Text:=sql.Text;
+      Open;
+  end;{with OrDSCustomers}
+end;
+
+procedure TCustomersInformations.SearchCAvaluteAccChange(Sender: TObject);
+begin
+  with OrDSAccount do begin
+   Close;
+   Open;
+  end;
+end;
+
+procedure TCustomersInformations.SearchCFilialChange(Sender: TObject);
+begin
+  with OrDSCustomers do begin
+   Close;
+   Open;
+  end;
+  with OrDSAccount do begin
+   Close;
+   Open;
+  end;
+end;
+
+procedure TCustomersInformations.EditLocateChange(Sender: TObject);
+begin
+  OrDSCustomers.Locate('Name',EditLocate.Text,[loCaseInsensitive,loPartialKey]);
+end;
+
+procedure TCustomersInformations.ActiveFormDestroy(Sender: TObject);
+begin
+  OrDSAccount.Close;
+  OrDSFilials.Close;
+  OrDSAvalute.Close;
+  OrDSCustomers.Close;
+  OrDSDates.Close;
+  OrDSDocs.Close;
+  OrDSSysDat.Close;
+end;
+
+procedure TCustomersInformations.Button1Click(Sender: TObject);
+begin
+{  with CMExcelExport1 do begin
+   Connect;
+   ExportDataset(OracleDataSet1, 'Customers', True, True);
+   Disconnect;
+  end;}
+  //QExport4Xlsx1.Execute;
+end;
+
+procedure TCustomersInformations.Button2Click(Sender: TObject);
+begin
+  oracledataset1.Active:=true;
+end;
+
+procedure TCustomersInformations.EditLocateExit(Sender: TObject);
+begin
+  EditLocate.Text:='';
+end;
+
+procedure TCustomersInformations.LocCustNumChange(Sender: TObject);
+begin
+  OrDSCustomers.Locate('ID',LocCustNum.Text,[loCaseInsensitive,loPartialKey]);
+end;
+
+procedure TCustomersInformations.LocAccNumChange(Sender: TObject);
+begin
+  OrDSAccount.Locate('Acc_NO',LocAccNum.Text,[loCaseInsensitive,loPartialKey]);
+end;
+
+procedure TCustomersInformations.LocAccNameChange(Sender: TObject);
+begin
+  OrDSAccount.Locate('Name',LocAccName.Text,[loCaseInsensitive,loPartialKey]);
+end;
+
+procedure TCustomersInformations.LocCustNumExit(Sender: TObject);
+begin
+  LocCustNum.Text :='';
+end;
+
+procedure TCustomersInformations.LocAccNumExit(Sender: TObject);
+begin
+  LocAccNum.Text :='';
+end;
+
+procedure TCustomersInformations.LocAccNameExit(Sender: TObject);
+begin
+  LocAccName.Text :='';
+end;
+
+procedure TCustomersInformations.RBtnAccClick(Sender: TObject);
+begin
+  OrDSAccount.Close;
+  OrDSAccount.Open;
+  OrDSCustomers.Close;
+  OrDSCustomers.Open;
+end;
+
+procedure TCustomersInformations.RBtnCustClick(Sender: TObject);
+begin
+  OrDSCustomers.Close;
+  OrDSCustomers.Open;
+  OrDSAccount.Close;
+  OrDSAccount.Open;
+end;
+
+procedure TCustomersInformations.RBtnDocsClick(Sender: TObject);
+begin
+  OrDSDocs.Close;
+  OrDSDocs.Open;
+  OrDSAccount.Close;
+  OrDSAccount.Open;
+  OrDSCustomers.Close;
+  OrDSCustomers.Open;
+end;
+
+procedure TCustomersInformations.HideBtnClick(Sender: TObject);
+begin
+  if HidePanel2 = true then begin
+     Panel2.Visible:=true;
+     HidePanel2:=false;
+     end
+   else begin
+     Panel2.Visible:=false;
+     HidePanel2:=true;
+     end;
+end;
+
+procedure TCustomersInformations.DBGridCustomersDblClick(Sender: TObject);
+begin
+if ExcelCl=false then begin
+  if RBtnCust.Checked=true then begin
+   OrDSAccount.Close;
+   OrDSAccount.Open;
+  end;{if RBtnCust.Checked=true}
+  end;{if ExcelCl=false}
+end;
+
+procedure TCustomersInformations.DBGridCustomersTitleClick(
+  Column: TColumn);
+begin
+  OrDSCustomers.Close;
+  CTitle:=Column.Index;
+  OrDSCustomers.Open;
+end;
+
+procedure TCustomersInformations.DBGridAccountsTitleClick(Column: TColumn);
+begin
+  OrDSAccount.Close;
+  ATitle:=Column.Index;
+  OrDSAccount.Open;
+end;
+
+procedure TCustomersInformations.DBGridDocsTitleClick(Column: TColumn);
+begin
+  OrDSDocs.Close;
+  DTitle:=Column.Index;
+  OrDSDocs.Open;
+end;
+
+procedure TCustomersInformations.EditOstatMinKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if Key=#13 then
+   with OrDSAccount do begin
+       Close;
+       Open;
+  end;{with OrDSAccount}
+end;
+
+procedure TCustomersInformations.AccExcelClick(Sender: TObject);
+begin
+  ExcelCl:=True;
+  {with CMExcelExport1 do
+  begin
+   if not Connected then Connect;
+    ExportDataset(OrDSAccount,'Accounts',true);
+    Disconnect;
+  end;   }
+
+  QExport4Dialog1.FileName:=DesktopPath+'\Analiz';
+   QExport4Dialog1.DataSet:= OrDSAccount;
+   QExport4Dialog1.ShowFile:=true;
+  QExport4Dialog1.Execute;
+  ExcelCl:=False;
+end;
+
+procedure TCustomersInformations.CustExcelClick(Sender: TObject);
+begin
+  ExcelCl:=True;
+ { OrDSCustomers.Last;
+  with CMExcelExport1 do begin
+   Connect;
+   ExportDataset(OrDSCustomers, 'Customers', True, True);
+   Disconnect;
+  end;          }
+
+  QExport4Dialog1.FileName:=DesktopPath+'\Analiz';
+  QExport4Dialog1.DataSet:= OrDSCustomers;
+  QExport4Dialog1.ShowFile:=true;
+  QExport4Dialog1.Execute;
+  ExcelCl:=False;
+end;
+
+procedure TCustomersInformations.DocExcelClick(Sender: TObject);
+begin
+  ExcelCl:=True;
+  {with CMExcelExport1 do
+  begin
+   if not Connected then Connect;
+    ExportDataset(OrDSDocs,'Documents',true);
+    Disconnect;
+  end;     }
+  QExport4Dialog1.FileName:=DesktopPath+'\Analiz';
+   QExport4Dialog1.DataSet:= OrDSDocs;
+   QExport4Dialog1.ShowFile:=true;
+  QExport4Dialog1.Execute;
+  ExcelCl:=False;
+end;
+
+procedure TCustomersInformations.OKBtnClick(Sender: TObject);
+begin
+  WaitLabel.Visible :=true;
+  Application.ProcessMessages;
+  with OrDSDocs do begin
+   Close;
+   Open;
+  end;
+  WaitLabel.Visible :=false;
+end;
+
+procedure TCustomersInformations.EditLocateKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if Key =#13 then with OrDSCustomers do begin
+   SetVariable('pName','%'+upperCase(EditLocate.text)+'%');
+   Refresh;
+  end; {if Key =#13}
+end;
+
+procedure TCustomersInformations.OrDSCustomersAfterRefresh(
+  DataSet: TDataSet);
+begin
+  LabelCountCust.Caption :=IntToStr(OrDSCustomers.RecordCount);
+end;
+
+procedure TCustomersInformations.LocAccNameKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if Key =#13 then with OrDSAccount do begin
+   SetVariable('pName','%'+upperCase(LocAccName.text)+'%');
+   ShowMessage('%'+upperCase(LocAccName.text)+'%');
+   Refresh;
+  end; {if Key =#13}
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TCustomersInformations,
+    Class_CustomersInformations,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

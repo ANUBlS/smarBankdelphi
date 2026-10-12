@@ -1,0 +1,48 @@
+unit crTranceDataModuleImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, OracleData, Oracle;
+
+type
+  TTrancheDataModule = class(TDataModule)
+    CreditInfo: TOracleDataSet;
+    DataSrcCreditInfo: TDataSource;
+    TrancheAccounts: TOracleDataSet;
+    DataSrcTrancheAccounts: TDataSource;
+    CreditInfoID: TFloatField;
+    CreditInfoNUMBEROFCREDIT: TWideStringField;
+    CreditInfoCREDITLINEAMOUNT: TFloatField;
+    CreditInfoNAME: TWideStringField;
+    CreditInfoCURRENCY: TFloatField;
+    CreditInfoBOOROWERID: TFloatField;
+    CustAccount: TOracleDataSet;
+    CustAccountBOOROWERACCID: TFloatField;
+    CreditInfoVAL_NAME: TWideStringField;
+    CreditInfoOBLIGATION: TFloatField;
+    CR_TRANCHE: TOraclePackage;
+    TranchesData: TOracleDataSet;
+    DataSrcTranches: TDataSource;
+    TranchesDataID: TFloatField;
+    TranchesDataCREDITID: TFloatField;
+    TranchesDataTRANCHEDATE: TDateTimeField;
+    TranchesDataTRANCHEAMOUNT: TFloatField;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  TrancheDataModule: TTrancheDataModule;
+
+implementation
+
+{$R *.DFM}
+
+uses
+  sboapiDataModuleImpl;
+
+end.

@@ -1,0 +1,187 @@
+﻿unit UnitNote;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, DB, OracleData, StdCtrls, DBCtrls, ExtCtrls, XFSCtrls, Grids,
+  XDBGrids, Oracle, Buttons;
+
+type
+  TForm1 = class(TForm)
+    XFPanel2: TXFPanel;
+    OracleDataSet1: TOracleDataSet;
+    OracleDataSet2: TOracleDataSet;
+    DataSource1: TDataSource;
+    DataSource2: TDataSource;
+    OracleDataSet1ID: TFloatField;
+    OracleDataSet1NAME: TWideStringField;
+    OracleDataSet2ID: TFloatField;
+    OracleDataSet2NAME: TWideStringField;
+    OracleDataSet4: TOracleDataSet;
+    DataSource4: TDataSource;
+    XFPanel3: TXFPanel;
+    XDBGrid1: TXDBGrid;
+    XFPanel1: TXFPanel;
+    XFLabel1: TXFLabel;
+    DBLookupComboBox1: TDBLookupComboBox;
+    DBLookupComboBox2: TDBLookupComboBox;
+    Memo1: TMemo;
+    XFLabel2: TXFLabel;
+    OracleDataSet4CUSTID: TFloatField;
+    OracleDataSet4NOTE: TWideStringField;
+    OracleDataSet4STATUS: TFloatField;
+    OracleDataSet4USERINSERT: TWideStringField;
+    OracleDataSet4CONTRACTID: TFloatField;
+    OracleDataSet4DAT: TDateTimeField;
+    OracleDataSet4TIM: TDateTimeField;
+    pgcust_note: TOraclePackage;
+    XFLabel3: TXFLabel;
+    XFLabel4: TXFLabel;
+    OracleDataSet4ID: TFloatField;
+    OracleDataSet4NOTETYPE_NAME: TWideStringField;
+    OracleDataSet4COMMTYPE_NAME: TWideStringField;
+    OracleDataSet4NOTETYPE: TFloatField;
+    OracleDataSet4COMMTYPE: TFloatField;
+    XFButton2: TXFButton;
+    XFButton3: TXFButton;
+    XFBitBtn1: TXFBitBtn;
+    procedure FormShow(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure XFButton2Click(Sender: TObject);
+    procedure XFButton3Click(Sender: TObject);
+    procedure XDBGrid1CellDblClick(Column: TXColumn);
+    procedure XFBitBtn1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form1: TForm1;
+  dey:Boolean;
+implementation
+uses
+sboapiDataModuleImpl,OpenAccountImpl;
+{$R *.dfm}
+
+procedure TForm1.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+DBLookupComboBox1.KeyValue:=-1;
+DBLookupComboBox2.KeyValue:=-1;
+memo1.Clear;
+end;
+
+procedure TForm1.FormCreate(Sender: TObject);
+begin
+
+dey:=false;
+
+OracleDataSet1.Open;
+OracleDataSet2.Open;
+end;
+
+procedure TForm1.FormShow(Sender: TObject);
+begin
+with OracleDataSet4 do
+begin
+close;
+SetVariable('v_id',strtoint(cust_noteid));
+open;
+end;
+//XFButton1.Enabled:=false;
+// XFButton2.Enabled:=True;
+end;
+
+procedure TForm1.XDBGrid1CellDblClick(Column: TXColumn);
+begin
+dey:=true;
+if not OracleDataSet4NOTETYPE.IsNull then
+ begin
+DBLookupComboBox1.KeyValue:=OracleDataSet4NOTETYPE.AsInteger;
+ end
+ else
+ DBLookupComboBox1.KeyValue:=-1;
+ if not OracleDataSet4COMMTYPE.IsNull then
+ begin
+DBLookupComboBox2.KeyValue:=OracleDataSet4COMMTYPE.AsInteger;
+ end
+ else
+ DBLookupComboBox2.KeyValue:=-1;
+ memo1.Text:=OracleDataSet4NOTE.AsString;
+ //XFButton1.Enabled:=true;
+ //XFButton2.Enabled:=False;
+end;
+
+procedure TForm1.XFBitBtn1Click(Sender: TObject);
+begin
+ dey:=false;
+DBLookupComboBox1.KeyValue:=-1;
+DBLookupComboBox2.KeyValue:=-1;
+memo1.Clear;
+
+end;
+
+procedure TForm1.XFButton2Click(Sender: TObject);
+begin
+  //  showmessage(note_id);
+///showmessage(contract_id);
+   if  DBLookupComboBox1.KeyValue=-1 then
+   begin
+   showmessage('Modul növü sahəsi seçilməyib  !');
+   exit
+   end;
+   if  DBLookupComboBox2.KeyValue=-1 then
+   begin
+   showmessage('Əlaqə növü sahəsi seçilməyib   !');
+   exit
+   end;
+    if trim(memo1.text)='' then
+   begin
+   showmessage('Qeyd sahəsi doldurulmayıb  !');
+   exit
+   end;
+   if  dey=false then
+   begin
+
+      pgcust_note.CallProcedure('add_cust_notes',[ strtoint(cust_noteid),
+                                                   DBLookupComboBox1.KeyValue,
+                                                   DBLookupComboBox2.KeyValue,
+                                                    memo1.Text,
+                                                    strtoint(contract_id)
+                                                  ]);
+
+
+
+   end;
+    if  dey=true then
+   begin
+
+    pgcust_note.CallProcedure('updat_cust_notes',[   OracleDataSet4.FieldByName('id').AsInteger,
+                                                   strtoint(cust_noteid),
+                                                   DBLookupComboBox1.KeyValue,
+                                                   DBLookupComboBox2.KeyValue,
+                                                    memo1.Text,
+                                                    strtoint(contract_id)
+                                                  ]);
+
+   dey:=false
+   end;
+
+    DBLookupComboBox1.KeyValue:=-1;
+    DBLookupComboBox2.KeyValue:=-1;
+    memo1.Clear;
+
+     OracleDataSet4.Refresh;
+
+
+end;
+
+procedure TForm1.XFButton3Click(Sender: TObject);
+begin
+Form1.Close
+end;
+
+end.

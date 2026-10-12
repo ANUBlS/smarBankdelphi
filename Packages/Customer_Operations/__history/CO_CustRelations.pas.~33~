@@ -1,0 +1,123 @@
+﻿unit CO_CustRelations;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Grids, DBGrids, CO_datamod_impl, Menus, CustomersImpl, ExtCtrls,
+  StdCtrls, Buttons, ComCtrls, ToolWin, XDBGrids,DB;
+
+type
+  TFormCustRelations = class(TForm)
+    PM1: TPopupMenu;
+    laqlndirmk1: TMenuItem;
+    laqlndirmnisil1: TMenuItem;
+    GroupBox1: TGroupBox;
+    PanelPhotos: TPanel;
+    Panel4: TPanel;
+    Image1: TImage;
+    BitBtn4: TBitBtn;
+    BitBtn1: TBitBtn;
+    Panel3: TPanel;
+    Image2: TImage;
+    BitBtn5: TBitBtn;
+    BitBtn2: TBitBtn;
+    Panel6: TPanel;
+    Image3: TImage;
+    BitBtn6: TBitBtn;
+    BitBtn3: TBitBtn;
+    ToolBar1: TToolBar;
+    ToolButton2: TToolButton;
+    ToolButton3: TToolButton;
+    ToolButton1: TToolButton;
+    ToolButton6: TToolButton;
+    TBPhotos: TToolButton;
+    ToolButton5: TToolButton;
+    XDBGrid1: TXDBGrid;
+    procedure laqlndirmk1Click(Sender: TObject);
+    procedure laqlndirmnisil1Click(Sender: TObject);
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+    procedure ToolButton5Click(Sender: TObject);
+    procedure TBPhotosClick(Sender: TObject);
+    procedure ToolButton2Click(Sender: TObject);
+    procedure ToolButton1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormCustRelations: TFormCustRelations;
+
+implementation
+
+{$R *.dfm}
+
+procedure TFormCustRelations.Button2Click(Sender: TObject);
+begin
+ FormCustRelations.Close;
+end;
+
+procedure TFormCustRelations.laqlndirmk1Click(Sender: TObject);
+begin
+  if not assigned(FormCustomers) then
+    FormCustomers := TFormCustomers.Create(Self);
+  FormCustomers.ShowModal;
+
+  if FormCustomers.vCustId <> -1 then
+  begin
+    CO_DataMod.sb_custInfo.CallProcedure('add_cust_relations',
+      ['v_custid', CO_DataMod.Customers.FieldByName('ID').AsInteger,
+      'v_custid2', FormCustomers.vCustId]);
+      CO_DataMod.Customers_relations.Refresh;
+   end;
+
+end;
+
+procedure TFormCustRelations.laqlndirmnisil1Click(Sender: TObject);
+begin
+  CO_DataMod.sb_custInfo.CallProcedure('del_cust_relations',
+    ['v_custid', CO_DataMod.CustomersID.AsInteger, 'v_custid2',
+    CO_DataMod.Customers_relations.FieldByName('CUSTID2').AsInteger]);
+    CO_DataMod.Customers_relations.Refresh;
+end;
+
+procedure TFormCustRelations.SpeedButton1Click(Sender: TObject);
+begin
+ if PanelPhotos.Visible=False then
+PanelPhotos.Visible:=True
+else PanelPhotos.Visible:=False;
+end;
+
+procedure TFormCustRelations.ToolButton1Click(Sender: TObject);
+begin
+if CO_DataMod.Customers_relations.State in [dsEdit, dsInsert] then
+CO_DataMod.Customers_relations.Cancel;
+end;
+
+procedure TFormCustRelations.ToolButton2Click(Sender: TObject);
+begin
+if CO_DataMod.Customers_relations.State in [dsEdit, dsInsert] then
+CO_DataMod.Customers_relations.Post;
+end;
+
+procedure TFormCustRelations.TBPhotosClick(Sender: TObject);
+begin
+ if TBPhotos.Down = True then
+  begin
+    PanelPhotos.Visible:=True
+  end
+  else
+  begin
+    PanelPhotos.Visible:=False;
+  end;
+end;
+
+procedure TFormCustRelations.ToolButton5Click(Sender: TObject);
+begin
+FormCustRelations.Close;
+end;
+
+end.

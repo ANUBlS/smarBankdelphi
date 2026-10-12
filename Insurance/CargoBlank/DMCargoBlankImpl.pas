@@ -1,0 +1,167 @@
+unit DMCargoBlankImpl;
+
+interface
+
+uses
+  SysUtils, Classes, DB, OracleData, Oracle;
+
+type
+  TDMCargoBlank = class(TDataModule)
+    BeneficiarySource: TDataSource;
+    ins_common: TOraclePackage;
+    DSins_contract_cargo: TOracleDataSet;
+    DSins_contract_cargoID: TFloatField;
+    DSins_contract_cargoTYPEID: TFloatField;
+    DSins_contract_cargoCID: TFloatField;
+    DSins_contract_cargoCLOSE_PREFIX: TFloatField;
+    DSins_contracts: TOracleDataSet;
+    DSins_contractsID: TFloatField;
+    DSins_contractsTYPE_ID: TFloatField;
+    DSins_contractsINS_DATE: TDateTimeField;
+    DSins_contractsBEGIN_DATE: TDateTimeField;
+    DSins_contractsEND_DATE: TDateTimeField;
+    DSins_contractsVALUTE_ID: TFloatField;
+    DSins_contractsAMMOUNT: TFloatField;
+    DSins_contractsCLOSE_PREFIX: TIntegerField;
+    DSins_contractsKLI_ID: TFloatField;
+    DSins_contractsLOANACC_ID: TFloatField;
+    DSins_contractsCURRACC_ID: TFloatField;
+    DSins_contractsPOLICY_NUM: TWideStringField;
+    DSins_contractsINSSUMM: TFloatField;
+    DSins_contractsFRANSHIZ: TFloatField;
+    DSins_contractsTARIFF: TFloatField;
+    DSins_contractsSTATE: TIntegerField;
+    DSins_contractsAGENT_ID: TFloatField;
+    DSins_contractsPNUM: TFloatField;
+    DSins_contractsBEN_ID: TFloatField;
+    DSins_contractsBENEFICIARY: TWideStringField;
+    DSins_contractsCONDITIONS: TWideStringField;
+    DSins_contractsSUGNUM: TWideStringField;
+    DSins_contractsBLANK_ID: TFloatField;
+    DSRins_contract_cargo: TDataSource;
+    DSRins_contracts: TDataSource;
+    ODSAvalute: TOracleDataSet;
+    ODSAvaluteVALUTE: TIntegerField;
+    ODSAvaluteVAL_NAME: TWideStringField;
+    ODSAvaluteVALU_NAME: TWideStringField;
+    ODSAvaluteVALU_SHORT: TWideStringField;
+    DSAvalute: TDataSource;
+    DsSysdat: TOracleDataSet;
+    DsSysdatTEK_DAT: TDateTimeField;
+    DsSysdatPRED_DAT: TDateTimeField;
+    DsSysdatARC_DAY: TDateTimeField;
+    DsSysdatCLOSE: TIntegerField;
+    ODSAgents: TOracleDataSet;
+    ODSAgentsID: TFloatField;
+    ODSAgentsNAME: TWideStringField;
+    AgentsSource: TDataSource;
+    CustomersData: TDataSource;
+    ODSBeneficiary: TOracleDataSet;
+    ODSBeneficiaryID: TFloatField;
+    ODSBeneficiaryNAME: TWideStringField;
+    ODSBeneficiaryADDRESS: TWideStringField;
+    ODSBeneficiaryPHONE: TWideStringField;
+    ODSBeneficiaryBANKING_DETAILS: TWideStringField;
+    Customers: TOracleDataSet;
+    CustomersID: TIntegerField;
+    CustomersADDRESS: TWideStringField;
+    CustomersMOBILEPHONE: TWideStringField;
+    CustomersFAX: TWideStringField;
+    CustomersCONTACTPERSON: TWideStringField;
+    sb_aca: TOraclePackage;
+    DSins_contract_cargoNAME_CARGO: TWideStringField;
+    DSins_contract_cargoNUMBER_PARCELS: TFloatField;
+    DSins_contract_cargoLOADING_STATION: TWideStringField;
+    DSins_contract_cargoCARGO_ROUTE: TWideStringField;
+    DSins_contract_cargoLOADING_DATE: TDateTimeField;
+    DSins_contract_cargoNEQ_SHIP: TFloatField;
+    DSins_contract_cargoNEQ_LORRY: TFloatField;
+    DSins_contract_cargoNEQ_TRAIN: TFloatField;
+    DSRBank: TDataSource;
+    DSBank: TOracleDataSet;
+    DSinscust: TOracleDataSet;
+    DSBankID: TFloatField;
+    DSBankKRNO: TWideStringField;
+    DSBankNAME: TWideStringField;
+    DSBankINN: TWideStringField;
+    DSBankSWIFT: TWideStringField;
+    DSBankBANKCODE: TWideStringField;
+    DSBankSUBKRNO: TWideStringField;
+    DSBankBANK_KOD: TFloatField;
+    DSBankLICENSE_DATE: TDateTimeField;
+    DSBankTAX_REGCODE: TWideStringField;
+    DSinscustID: TIntegerField;
+    DSinscustCUST_ID: TIntegerField;
+    DSinscustINS_NAME: TWideStringField;
+    DSinscustCUS_NAME: TWideStringField;
+    DSins_contract_cargoFINAL_DESTINATION: TWideStringField;
+    DSins_contract_cargoINS_COVER: TWideStringField;
+    DSins_contract_cargoSPECIAL_CONDITIONS: TWideStringField;
+    DSFilial: TOracleDataSet;
+    DSRFilial: TDataSource;
+    DSins_contractsOP_ID: TFloatField;
+    DSins_contractsREINS: TFloatField;
+    DSins_contractsCHKASKO: TFloatField;
+    DSins_contractsCHM: TFloatField;
+    DSins_contractsCHFQ: TFloatField;
+    DSins_contractsCOMMITOP_ID: TFloatField;
+    DSins_contractsCOMMIT_DATE: TDateTimeField;
+    DSins_contractsCANCELOPID: TFloatField;
+    DSins_contractsCANCELDATE: TDateTimeField;
+    DSins_contractsFILIAL: TFloatField;
+    ds_ekvalent: TOracleDataSet;
+    ds_ekvalentVAL_KOD: TIntegerField;
+    ds_ekvalentOSTAT: TFloatField;
+    ds_ekvalentDAT: TDateTimeField;
+    ds_ekvalentSHIFR: TFloatField;
+    ds_ekvalentSELL_RATE: TFloatField;
+    ds_ekvalentBUY_RATE: TFloatField;
+    DSins_contractsBNF_TYPE: TFloatField;
+    Ods_bnf_type: TDataSource;
+    Ds_bnf_type: TOracleDataSet;
+    Ds_bnf_typeID: TFloatField;
+    Ds_bnf_typeNAME: TWideStringField;
+    CustomersNAME1: TWideStringField;
+    DSins_contractsUSERINSERT: TWideStringField;
+    DSins_contractsINSURED: TWideStringField;
+    DSins_contractsCOMISSION: TFloatField;
+    procedure DataModuleCreate(Sender: TObject);
+    procedure DataModuleDestroy(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  DMCargoBlank: TDMCargoBlank;
+
+implementation
+
+{$R *.dfm}
+    uses sboapiDataModuleImpl;
+procedure TDMCargoBlank.DataModuleCreate(Sender: TObject);
+begin
+ODSAvalute.Open;
+Customers.Open;
+ODSBeneficiary.Open;
+ODSAgents.Open;
+DsSysdat.Open;
+DSBank.Open;
+DSFilial.Open;
+Ds_bnf_type.Open;
+end;
+
+procedure TDMCargoBlank.DataModuleDestroy(Sender: TObject);
+begin
+ODSAvalute.close;
+Customers.close;
+ODSBeneficiary.close;
+ODSAgents.close;
+DsSysdat.close;
+DSBank.close;
+DSFilial.close;
+Ds_bnf_type.close;
+end;
+
+end.

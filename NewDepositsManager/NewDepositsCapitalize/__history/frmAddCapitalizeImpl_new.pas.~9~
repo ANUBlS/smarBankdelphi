@@ -1,0 +1,109 @@
+unit frmAddCapitalizeImpl_new;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
+  StdCtrls, ExtCtrls, CMCurrencyEdit, Mask, DBCtrlsEh, ComCtrls, ActnList;
+
+type
+  TfrmAddCapitalize_new = class(TForm)
+    ActionList1: TActionList;
+    ActnTrans: TAction;
+    Button1: TButton;
+    Button2: TButton;
+    Panel1: TPanel;
+    Label1: TLabel;
+    Label2: TLabel;
+    EdCapital: TCMCurrencyEdit;
+    DTPCapital: TDateTimePicker;
+    Panel2: TPanel;
+    GroupBox5: TGroupBox;
+    Panel4: TPanel;
+    StaticText2: TStaticText;
+    DBEditEh3: TDBEditEh;
+    Panel5: TPanel;
+    StaticText1: TStaticText;
+    DBEditEh4: TDBEditEh;
+    GroupBox1: TGroupBox;
+    Panel3: TPanel;
+    StaticText5: TStaticText;
+    DBEditEh2: TDBEditEh;
+    Panel7: TPanel;
+    StaticText6: TStaticText;
+    DBEditEh5: TDBEditEh;
+    procedure FormCanResize(Sender: TObject; var NewWidth, NewHeight: Integer;
+      var Resize: Boolean);
+    procedure FormCreate(Sender: TObject);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  frmAddCapitalize_new: TfrmAddCapitalize_new;
+
+implementation
+
+{$R *.dfm}
+ uses frmCapitalizeImpl_new,CommonDeclsImpl,SBTranslateProc,sboapiDataModuleimpl;
+procedure TfrmAddCapitalize_new.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+  Resize := False
+end;
+
+procedure TfrmAddCapitalize_new.FormCreate(Sender: TObject);
+begin
+SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TfrmAddCapitalize_new.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+  if Ord(Key) = VK_ESCAPE then Close
+end;
+
+procedure TfrmAddCapitalize_new.ActnTransExecute(Sender: TObject);
+
+resourcestring
+  rsTransactionsWillProcessed = 'Депозитин кариталлашдырылмасы ...';
+var
+    CommitCapitalize :Boolean;
+
+begin
+
+    with frmCapitalize_new,sbcm_payment do
+     CallProcedure('Capitalization',['ContractID',Get_SelectedContID,
+                                    'HDate',Get_BankDate,
+                                    'Total',EdCapital.Value,
+                                    'UseTransactions',True]);
+
+    try
+    CommitCapitalize := TrDelayed_Show(Self,rsTransactionsWillProcessed);
+
+    Update;
+
+    frmCapitalize_new.SBCM_PAYMENT.CallProcedure('CommitWithDrawMoney',[
+       'DoCommit',CommitCapitalize
+    ]);
+
+    if CommitCapitalize then
+    Self.ModalResult := mrOk;
+    Self.Update;
+  except
+
+
+    frmCapitalize_new.SBCM_PAYMENT.CallProcedure('CommitWithDrawMoney',['DoCommit',
+        False
+    ]);
+
+    raise;
+
+  end;
+
+
+end;
+
+end.

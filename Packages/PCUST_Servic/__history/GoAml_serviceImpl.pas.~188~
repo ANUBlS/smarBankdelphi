@@ -1,0 +1,4546 @@
+﻿unit GoAml_serviceImpl;
+
+{$WARN SYMBOL_PLATFORM OFF}
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActiveX, AxCtrls, GoAml_ServiceProject_TLB, StdVcl, ExtCtrls, StdCtrls,
+  ComCtrls, ToolWin, XFSCtrls, ExtDlgs, DBGridEh, DBCtrls, Mask, DBCtrlsEh,
+  DBLookupEh, Grids, XDBGrids, DB, OracleData, Menus, DBGrids, ImgList,
+  CMExcelExport, Buttons,Variants, OleServer, WordXP;
+
+type
+  TGoAml_ServiceForm = class(TActiveForm, IGoAml_Service)
+    WordDocument: TWordDocument;
+    Pop_CTR101: TPopupMenu;
+    CTR: TMenuItem;
+    ImageList1: TImageList;
+    Pop_file: TPopupMenu;
+    Fayl: TMenuItem;
+    Pop_STR201: TPopupMenu;
+    STR: TMenuItem;
+    PM_RE_Errors: TPopupMenu;
+    mizl1: TMenuItem;
+    Redakte: TPopupMenu;
+    Yenile1: TMenuItem;
+    tpr11: TMenuItem;
+    PR21: TMenuItem;
+    PR31: TMenuItem;
+    CMExcelExport1: TCMExcelExport;
+    Excel1: TMenuItem;
+    PageControl1: TPageControl;
+    TabSheet1: TTabSheet;
+    TabSheet2: TTabSheet;
+    XFPanel12: TXFPanel;
+    RE_Errors: TRichEdit;
+    XFPanel11: TXFPanel;
+    DBGridTransactions1: TDBGrid;
+    XFPanel10: TXFPanel;
+    XFPanel1: TXFPanel;
+    XFPanel4: TXFPanel;
+    XFPanel21: TXFPanel;
+    DTP1: TDateTimePicker;
+    DTP2: TDateTimePicker;
+    Edit1: TEdit;
+    Button1: TButton;
+    XFPanel2: TXFPanel;
+    XFPanel13: TXFPanel;
+    ToolBar1: TToolBar;
+    BtnCust: TToolButton;
+    XFPanel3: TXFPanel;
+    XFPanel14: TXFPanel;
+    ToolBar2: TToolBar;
+    ToolButton1: TToolButton;
+    DBGrid2: TDBGrid;
+    XFPanel6: TXFPanel;
+    XFPanel7: TXFPanel;
+    XFPanel8: TXFPanel;
+    XFPanel9: TXFPanel;
+    XDBGrid1: TXDBGrid;
+    XDBGrid2: TXDBGrid;
+    Date_begin: TDateTimePicker;
+    Date_end: TDateTimePicker;
+    XFLabel1: TXFLabel;
+    XFLabel2: TXFLabel;
+    XFButton1: TXFButton;
+    PopupMenu1: TPopupMenu;
+    Cap1: TMenuItem;
+    Excel2: TMenuItem;
+    CMExcelExport2: TCMExcelExport;
+    PopupMenu2: TPopupMenu;
+    Redakt1: TMenuItem;
+    muq1: TMenuItem;
+    WordApplication: TWordApplication;
+    cap2: TMenuItem;
+
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure CTRClick(Sender: TObject);
+    procedure createfiles;
+    procedure CreateXmlFile();
+    procedure WriteLnString(S: string);
+    procedure WriteString(S: string);
+    procedure NODE_TPERSON;
+    procedure NODE_TPERSON_1;
+    procedure NODE_TPERSON_tessci;
+    procedure NODE_TPERSON_2;
+    procedure NODE_FORM_PERSON;
+    procedure NODE_FORM_in;
+    procedure NODE_FORM_out;
+    procedure NODE_TACCOUNT_Xoks(Dset: Tdataset);
+    procedure NODE_LocationADDRESS(Dset: Tdataset);
+    procedure NODE_TTRANSACTION;
+    procedure node_tforeign_currency(vFieldSymb: String);
+    procedure node_tforeign_currency_vdm(vFieldSymb: String);
+    procedure NODE_TACCOUNT(Dset: Tdataset);
+    procedure NODE_TENTITY;
+    procedure NODE_PHONES(Dset: Tdataset);
+    procedure NODE_PHONES_1(Dset: Tdataset);
+    procedure NODE_TADDRESS(Dset: Tdataset);
+    procedure NODE_TADDRESS_1(Dset: Tdataset);
+    procedure NODE_identification;
+    procedure FaylClick(Sender: TObject);
+    procedure DBGrid2CellClick(Column: TColumn);
+    procedure STRClick(Sender: TObject);
+    procedure mizl1Click(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure Yenile1Click(Sender: TObject);
+    procedure tpr11Click(Sender: TObject);
+    procedure PR21Click(Sender: TObject);
+    procedure PR31Click(Sender: TObject);
+    procedure Excel1Click(Sender: TObject);
+    procedure XFButton1Click(Sender: TObject);
+    procedure Date_beginCloseUp(Sender: TObject);
+    procedure Date_endCloseUp(Sender: TObject);
+    procedure Cap1Click(Sender: TObject);
+    procedure Excel2Click(Sender: TObject);
+    procedure Redakt1Click(Sender: TObject);
+    procedure muq1Click(Sender: TObject);
+    procedure cap2Click(Sender: TObject);
+  private
+    { Private declarations }
+    FEvents: IGoAml_ServiceEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure MouseEnterEvent(Sender: TObject);
+    procedure MouseLeaveEvent(Sender: TObject);
+    procedure PaintEvent(Sender: TObject);
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_AlignDisabled: WordBool; safecall;
+    function Get_AlignWithMargins: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_BorderWidth: Integer; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_DockSite: WordBool; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_ExplicitHeight: Integer; safecall;
+    function Get_ExplicitLeft: Integer; safecall;
+    function Get_ExplicitTop: Integer; safecall;
+    function Get_ExplicitWidth: Integer; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_MouseInClient: WordBool; safecall;
+    function Get_ParentCustomHint: WordBool; safecall;
+    function Get_ParentDoubleBuffered: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PopupMode: TxPopupMode; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_ScreenSnap: WordBool; safecall;
+    function Get_SnapBuffer: Integer; safecall;
+    function Get_UseDockManager: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_AlignWithMargins(Value: WordBool); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_BorderWidth(Value: Integer); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_DockSite(Value: WordBool); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_ParentCustomHint(Value: WordBool); safecall;
+    procedure Set_ParentDoubleBuffered(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PopupMode(Value: TxPopupMode); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_ScreenSnap(Value: WordBool); safecall;
+    procedure Set_SnapBuffer(Value: Integer); safecall;
+    procedure Set_UseDockManager(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+  public
+    { Public declarations }
+    procedure Initialize; override;
+     procedure ActinPrintExecute(Sender: TObject);
+  end;
+  type mas=array[0..99] of string;
+var
+ GoAml_ServiceForm: TGoAml_ServiceForm;
+  er_count: Integer;
+  v_begdat, v_enddat, v_dat,v_date1,v_date2: TDate;
+  FilePAth: String;
+  f: TextFile;
+  dey,dey1,dey2,dey3,dey4: string;
+  a:mas;
+  d_cust_type,c_cust_type:integer;
+  dc_custtype :boolean;
+  v_inout,vid_op,tr_id,trasnfers_trid,pop_ctrtpr_clik:integer;
+  word_type:integer;
+  TemplID: Integer;
+implementation
+
+uses ComObj, ComServ,sboapiDataModuleImpl, DatUnit, ForumEditUnit, UnitHuquqi,
+  UnitFiziki, UnitMXX;
+
+{$R *.DFM}
+
+{ TGoAml_Service }
+
+procedure TGoAml_ServiceForm.createfiles;
+
+var
+  formattedDateTime, dir,rep_code: String;
+begin
+
+
+
+
+
+    case DM_goAml.ODS_Rep.FieldByName('dk').AsInteger of
+   1:begin
+           if  DBGridTransactions1.DataSource=DM_goAml.DS_maindbt then
+             begin
+      if(pop_ctrtpr_clik=1)and
+      ((DBGrid2.DataSource.DataSet.FieldByName('report_code').AsString='TPR1')or
+      (DBGrid2.DataSource.DataSet.FieldByName('report_code').AsString='TPR2')or
+      (DBGrid2.DataSource.DataSet.FieldByName('report_code').AsString='TPR3'))
+       then
+       begin
+       dey:='CTR'
+
+       end
+        else
+        begin
+       dey:=(DBGrid2.DataSource.DataSet.FieldByName('report_code').AsString);
+
+        end;
+                dey1:=DBGridTransactions1.DataSource.DataSet.FieldByName('TRANSACTIONNUMBER').AsString;
+                dey2:=DBGridTransactions1.DataSource.DataSet.FieldByName('DCUSTID').AsString;
+                dey3:=DBGridTransactions1.DataSource.DataSet.FieldByName('KCUSTID').AsString;
+                dey4:=DBGridTransactions1.DataSource.DataSet.FieldByName('NOMDCUSTID').AsString;
+
+             end;
+   end;
+   2:begin
+      if  DBGridTransactions1.DataSource=DM_goAml.DS_Main then
+             begin
+      if(pop_ctrtpr_clik=1)and
+      ((DBGrid2.DataSource.DataSet.FieldByName('report_code').AsString='TPR1')or
+      (DBGrid2.DataSource.DataSet.FieldByName('report_code').AsString='TPR2')or
+      (DBGrid2.DataSource.DataSet.FieldByName('report_code').AsString='TPR3'))
+       then
+       begin
+       dey:='CTR'
+
+       end
+        else
+        begin
+                dey:=(DBGrid2.DataSource.DataSet.FieldByName('report_code').AsString);
+        end;
+                dey1:=DBGridTransactions1.DataSource.DataSet.FieldByName('TRANSACTIONNUMBER').AsString;
+                dey2:=DBGridTransactions1.DataSource.DataSet.FieldByName('DCUSTID').AsString;
+                dey3:=DBGridTransactions1.DataSource.DataSet.FieldByName('KCUSTID').AsString;
+                dey4:=DBGridTransactions1.DataSource.DataSet.FieldByName('NOMDCUSTID').AsString;
+
+
+   end;
+   end;
+    end;
+
+
+
+
+          if DBGridTransactions1.DataSource=DM_goAml.DSRC_MAIN201 then
+             begin
+                dey:=(DBGridTransactions1.DataSource.DataSet.FieldByName('report_code').AsString);
+                dey1:=DBGridTransactions1.DataSource.DataSet.FieldByName('TRANSACTIONNUMBER').AsString;
+                dey2:=DBGridTransactions1.DataSource.DataSet.FieldByName('DCUSTID').AsString;
+                dey3:=DBGridTransactions1.DataSource.DataSet.FieldByName('KCUSTID').AsString;
+                dey4:=DBGridTransactions1.DataSource.DataSet.FieldByName('NOMDCUSTID').AsString;
+             end;
+
+
+
+  if not DirectoryExists(DM_goAml.ODS_FilesPathDESCRIPTION.AsWideString) then
+    MkDir(DM_goAml.ODS_FilesPathDESCRIPTION.AsWideString);
+
+  DateTimeToString(formattedDateTime, 'yyyyddmm', DTP1.Date);
+  dir := DM_goAml.ODS_FilesPathDESCRIPTION.AsWideString +
+    formattedDateTime + '\';
+
+  if not DirectoryExists(dir) then
+    MkDir(dir);
+
+  DateTimeToString(formattedDateTime, 'yyyyddmm', DTP1.Date);
+  FilePAth := dir+ dey+'_'+dey2+'_'+dey3+'_'+dey4+'_'+ dey1+ '.xml';
+  AssignFile(f, FilePAth);
+  Rewrite(f);
+  Closefile(f);
+  CreateXmlFile;
+
+end;
+procedure TGoAml_ServiceForm.WriteLnString(S: string);
+begin
+
+  AssignFile(f, FilePAth); { Assigns the Filename }
+  Append(f); { Opens the file for editing }
+  Writeln(f, UTF8Encode(StringReplace(S, #13 + #10, '', [rfReplaceAll])));
+  Closefile(f);
+end;
+procedure TGoAml_ServiceForm.WriteString(S: string);
+begin
+
+  AssignFile(f, FilePAth); { Assigns the Filename }
+  Append(f); { Opens the file for editing }
+  Write(f, UTF8Encode(StringReplace(S, #13 + #10, '', [rfReplaceAll])));
+  Closefile(f);
+end;
+procedure TGoAml_ServiceForm.XFButton1Click(Sender: TObject);
+var
+i,i1,i2,i3,i4,i5,i6,i7,i8,i9,i10,i11:integer;
+begin
+ v_date1:=Date_begin.Date;
+  v_date2:=Date_end.Date;
+   DM_goAml.Ods_subheli.Session.Commit;
+  with DM_goAml do
+  begin
+  ods_sub1.Close;
+   ods_sub1.SetVariable('v_dat1',trunc(Date_begin.DateTime));
+   ods_sub1.SetVariable('v_dat2',trunc(Date_end.DateTime));
+  ods_sub1.Open;
+
+
+  ods_sub2.Close;
+ //  ods_sub2.SetVariable('v_dat1',trunc(Date_begin.DateTime));
+   ods_sub2.SetVariable('v_dat2',trunc(Date_end.DateTime));
+  ods_sub2.Open;
+
+  ods_sub3.Close;
+   ods_sub3.SetVariable('v_dat1',trunc(Date_begin.DateTime));
+   ods_sub3.SetVariable('v_dat2',trunc(Date_end.DateTime));
+  ods_sub3.Open;
+
+  ods_sub4.Close;
+  // ods_sub4.SetVariable('v_dat1',trunc(Date_begin.DateTime));
+  ods_sub4.SetVariable('v_dat2',trunc(Date_end.DateTime));
+  ods_sub4.Open;
+
+  ods_sub5.Close;
+     ods_sub5.SetVariable('v_dat2',trunc(Date_end.DateTime));
+  ods_sub5.Open;
+
+
+  ods_sub6.Close;
+      ods_sub6.SetVariable('v_dat2',trunc(Date_end.DateTime));
+  ods_sub6.Open;
+
+   ods_sub7.Close;
+   ods_sub7.SetVariable('v_dat1',trunc(Date_begin.DateTime));
+   ods_sub7.SetVariable('v_dat2',trunc(Date_end.DateTime));
+   ods_sub7.Open;
+
+   ods_sub8.Close;
+      ods_sub8.SetVariable('v_dat2',trunc(Date_end.DateTime));
+  ods_sub8.Open;
+
+  ods_sub9.Close;
+      ods_sub9.SetVariable('v_dat2',trunc(Date_end.DateTime));
+  ods_sub9.Open;
+
+  ods_sub10.Close;
+   ods_sub10.SetVariable('v_dat1',trunc(Date_begin.DateTime));
+   ods_sub10.SetVariable('v_dat2',trunc(Date_end.DateTime));
+  ods_sub10.Open;
+
+  ods_sub11.Close;
+   ods_sub11.SetVariable('v_dat1',trunc(Date_begin.DateTime));
+   ods_sub11.SetVariable('v_dat2',trunc(Date_end.DateTime));
+  ods_sub11.Open;
+  end;
+
+
+
+   with DM_goAml do
+   begin
+   ods_sub1.first ;
+    for I1 := 0 to ods_sub1.RecordCount-1 do
+     begin
+   PG_PCustService.CallProcedure('add_subheli',
+                                                [ods_sub1.FieldByName('custid').AsInteger,
+                                                 ods_sub1.FieldByName('cust_name').AsString,
+                                                 ods_sub1.FieldByName('ammount').AsFloat,
+                                                 ods_sub1.FieldByName('description').AsString,
+                                                 -1,
+                                                 ods_sub1.FieldByName('type').AsInteger
+                                                 ]);
+
+
+     ods_sub1.Next;
+
+      end;
+
+     ods_sub2.first ;
+    for I2 := 0 to ods_sub2.RecordCount-1 do
+     begin
+   PG_PCustService.CallProcedure('add_subheli',
+                                                [ods_sub2.FieldByName('custid').AsInteger,
+                                                 ods_sub2.FieldByName('cust_name').AsString,
+                                                 ods_sub2.FieldByName('ammount').AsFloat,
+                                                 ods_sub2.FieldByName('description').AsString,
+                                                 -1,
+                                                 ods_sub2.FieldByName('type').AsInteger
+                                                 ]);
+
+
+     ods_sub2.Next;
+      end;
+
+      ods_sub3.first ;
+    for I3 := 0 to ods_sub3.RecordCount-1 do
+     begin
+   PG_PCustService.CallProcedure('add_subheli',
+                                                [ods_sub3.FieldByName('custid').AsInteger,
+                                                 ods_sub3.FieldByName('cust_name').AsString,
+                                                 ods_sub3.FieldByName('ammount').AsFloat,
+                                                 ods_sub3.FieldByName('description').AsString,
+                                                 -1,
+                                                 ods_sub3.FieldByName('type').AsInteger
+                                                 ]);
+
+
+     ods_sub3.Next;
+      end;
+
+        ods_sub4.first ;
+    for I4 := 0 to ods_sub4.RecordCount-1 do
+     begin
+   PG_PCustService.CallProcedure('add_subheli',
+                                                [ods_sub4.FieldByName('custid').AsInteger,
+                                                 ods_sub4.FieldByName('cust_name').AsString,
+                                                 ods_sub4.FieldByName('ammount').AsFloat,
+                                                 ods_sub4.FieldByName('description').AsString,
+                                                 -1,
+                                                 ods_sub4.FieldByName('type').AsInteger
+                                                 ]);
+
+
+     ods_sub4.Next;
+      end;
+
+     ods_sub5.first ;
+    for I5 := 0 to ods_sub5.RecordCount-1 do
+     begin
+   PG_PCustService.CallProcedure('add_subheli',
+                                                [ods_sub5.FieldByName('custid').AsInteger,
+                                                 ods_sub5.FieldByName('cust_name').AsString,
+                                                 ods_sub5.FieldByName('ammount').AsFloat,
+                                                 ods_sub5.FieldByName('description').AsString,
+                                                 ods_sub5.FieldByName('acc_id').AsInteger,
+                                                 ods_sub5.FieldByName('type').AsInteger]);
+
+     ods_sub5.Next;
+
+      end;
+
+      ods_sub6.first ;
+
+     for I6 := 0 to ods_sub6.RecordCount-1 do
+     begin
+   PG_PCustService.CallProcedure('add_subheli',
+                                                [ods_sub6.FieldByName('custid').AsInteger,
+                                                 ods_sub6.FieldByName('cust_name').AsString,
+                                                 ods_sub6.FieldByName('ammount').AsFloat,
+                                                 ods_sub6.FieldByName('description').AsString,
+                                                 ods_sub6.FieldByName('acc_id').AsInteger,
+                                                 ods_sub6.FieldByName('type').AsInteger]);
+
+
+     ods_sub6.Next;
+
+      end;
+
+          ods_sub7.first ;
+    for I7 := 0 to ods_sub7.RecordCount-1 do
+     begin
+   PG_PCustService.CallProcedure('add_subheli',
+                                                [ods_sub7.FieldByName('custid').AsVariant,
+                                                 ods_sub7.FieldByName('cust_name').AsString,
+                                                 ods_sub7.FieldByName('ammount').AsFloat,
+                                                 ods_sub7.FieldByName('description').AsString,
+                                                 -1,
+                                                 ods_sub7.FieldByName('type').AsVariant
+                                                 ]);
+
+
+     ods_sub7.Next;
+      end;
+
+       ods_sub8.first ;
+   for I8 := 0 to ods_sub8.RecordCount-1 do
+     begin
+   PG_PCustService.CallProcedure('add_subheli',
+                                                [ods_sub8.FieldByName('custid').AsInteger,
+                                                 ods_sub8.FieldByName('cust_name').AsString,
+                                                 ods_sub8.FieldByName('ammount').AsFloat,
+                                                 ods_sub8.FieldByName('description').AsString,
+                                                 -1,
+                                                 ods_sub8.FieldByName('type').AsInteger
+                                                 ]);
+
+
+     ods_sub8.Next;
+      end;
+
+      ods_sub9.first ;
+   for I9 := 0 to ods_sub9.RecordCount-1 do
+     begin
+   PG_PCustService.CallProcedure('add_subheli',
+                                                [ods_sub9.FieldByName('custid').AsInteger,
+                                                 ods_sub9.FieldByName('cust_name').AsString,
+                                                 ods_sub9.FieldByName('ammount').AsFloat,
+                                                 ods_sub9.FieldByName('description').AsString,
+                                                 -1,
+                                                 ods_sub9.FieldByName('type').AsInteger
+                                                 ]);
+
+
+     ods_sub9.Next;
+      end;
+
+         ods_sub10.first ;
+   for I10 := 0 to ods_sub10.RecordCount-1 do
+     begin
+   PG_PCustService.CallProcedure('add_subheli',
+                                                [ods_sub10.FieldByName('custid').AsInteger,
+                                                 ods_sub10.FieldByName('cust_name').AsString,
+                                                 ods_sub10.FieldByName('ammount').AsFloat,
+                                                 ods_sub10.FieldByName('description').AsString,
+                                                 -1,
+                                                 ods_sub10.FieldByName('type').AsInteger
+                                                 ]);
+
+
+     ods_sub10.Next;
+      end;
+
+     ods_sub11.first ;
+   for I11 := 0 to ods_sub11.RecordCount-1 do
+     begin
+   PG_PCustService.CallProcedure('add_subheli',
+                                                [ods_sub11.FieldByName('custid').AsInteger,
+                                                 ods_sub11.FieldByName('cust_name').AsString,
+                                                 ods_sub11.FieldByName('ammount').AsFloat,
+                                                 ods_sub11.FieldByName('description').AsString,
+                                                 -1,
+                                                 ods_sub11.FieldByName('type').AsInteger
+                                                 ]);
+
+
+     ods_sub10.Next;
+      end;
+
+
+        DM_goAml.Ods_subheli.Refresh;
+
+   end;
+
+
+
+
+
+end;
+
+
+
+procedure TGoAml_ServiceForm.Yenile1Click(Sender: TObject);
+begin
+
+FormEdit.ShowModal;
+end;
+
+procedure TGoAml_ServiceForm.CreateXmlFile();
+begin
+   er_count := 0;
+  RE_Errors.Clear;
+
+  with DM_goAml.ODS_MainReport do
+  begin
+    WriteLnString('<report>');
+
+    if not(FieldByName('rentity_id').isNUll) then
+    begin
+      WriteString('<rentity_id>');
+      WriteString(FieldByName('rentity_id').AsString);
+      WriteLnString('</rentity_id>');
+    end
+    else
+    begin
+      er_count := er_count + 1;
+      RE_Errors.Lines.Add('Fayl yarnmadi! Səhvlər: rentity_id');
+    end;
+
+    WriteString('<rentity_branch>');
+    WriteString(FieldByName('rentity_branch').AsString);
+    WriteLnString('</rentity_branch>');
+
+    if not(FieldByName('submission_code').isNUll) then
+    begin
+      WriteString('<submission_code>');
+      WriteString(FieldByName('submission_code').AsString);
+      WriteLnString('</submission_code>');
+    end
+    else
+    begin
+      er_count := er_count + 1;
+      RE_Errors.Lines.Add('Göndərilmə tipi');
+    end;
+
+     if(pop_ctrtpr_clik=1)and
+      ((DBGrid2.DataSource.DataSet.FieldByName('report_code').AsString='TPR1')or
+      (DBGrid2.DataSource.DataSet.FieldByName('report_code').AsString='TPR2')or
+      (DBGrid2.DataSource.DataSet.FieldByName('report_code').AsString='TPR3'))
+       then
+       begin
+      WriteString('<report_code>');
+      WriteString('CTR');
+      WriteLnString('</report_code>');
+       end
+       else
+       begin
+
+    if not(FieldByName('report_code').isNUll) then
+    begin
+      WriteString('<report_code>');
+      WriteString(FieldByName('report_code').AsString);
+      WriteLnString('</report_code>');
+    end
+    else
+    begin
+      er_count := er_count + 1;
+      RE_Errors.Lines.Add('report_code');
+    end;
+       end;
+
+    WriteString('<entity_reference>');
+    WriteString(FieldByName('entity_reference').AsString);
+    WriteLnString('</entity_reference>');
+
+    WriteString('<fiu_ref_number>');
+    WriteString(FieldByName('fiu_ref_number').AsString);
+    WriteLnString('</fiu_ref_number>');
+
+    if not(FieldByName('submission_date').isNUll) then
+    begin
+      WriteString('<submission_date>');
+      WriteString(FieldByName('submission_date').AsString);
+      WriteLnString('</submission_date>');
+    end
+    else
+    begin
+      er_count := er_count + 1;
+      RE_Errors.Lines.Add('submission_date');
+    end;
+
+    if not(FieldByName('currency_code_local').isNUll) then
+    begin
+      WriteString('<currency_code_local>');
+      WriteString(FieldByName('currency_code_local').AsString);
+      WriteLnString('</currency_code_local>');
+    end
+    else
+    begin
+      er_count := er_count + 1;
+      RE_Errors.Lines.Add('currency_code_local');
+    end;
+
+    WriteString('<reporting_person>');
+    DM_goAml.ODS_TPERSON.close;
+    DM_goAml.ODS_TPERSON.SQL.Clear;
+    DM_goAml.ODS_TPERSON.SQL.Text :=
+      'select * from mmx_userinfo where userid=uid';
+    DM_goAml.ODS_TPERSON.Open;
+
+    NODE_TPERSON_1;
+    NODE_PHONES(DM_goAml.ODS_TPERSON);
+     NODE_TPERSON_2;
+    DM_goAml.ODS_TPERSON.close;
+    DM_goAml.ODS_TPERSON.SQL.Clear;
+    DM_goAml.ODS_TPERSON.SQL.Text := 'select * from mmx_userinfo where userid=uid';//userid=0 sam//
+    DM_goAml.ODS_TPERSON.Open;
+    WriteLnString('</reporting_person>');
+
+    WriteString('<location>');
+    NODE_LocationADDRESS(DM_goAml.ODS_LOCATION);
+    WriteString('</location>');
+
+    WriteString('<reason>');
+    WriteLnString('</reason>');
+
+    WriteString('<action>');
+    WriteString(FieldByName('action').AsString);
+    WriteLnString('</action>');
+
+    NODE_TTRANSACTION;
+
+    {
+      WriteString('<report_indicators>');
+      WriteString('<indicator>');     WritelnString('</indicator>');
+      WritelnString('</report_indicators>');
+    }
+    RE_Errors.Lines.Add(inttostr(er_count) + ' sayda səhv tapıldı!');
+    WriteString('</report>');
+  end;
+
+end;
+ procedure TGoAml_ServiceForm.NODE_FORM_in;
+ begin
+     with DM_goAml,ods_incoming do
+     begin
+
+        WriteLnString('<t_from>');
+
+       WriteString('<from_funds_code>');
+       WriteString('A');
+       WriteLnString('</from_funds_code>');
+
+       WriteString('<from_account>');
+
+       WriteString('<institution_name>');
+       WriteString(FieldByName('FIRSTNAME').AsString);
+       WriteLnString('</institution_name>');
+
+       WriteString('<swift>');
+       WriteString(FieldByName('BANKSWIFT').AsString);
+       WriteLnString('</swift>');
+
+       WriteString('<non_bank_institution>');
+       WriteString('false');
+       WriteLnString('</non_bank_institution>');
+
+       WriteString('<account>');
+       WriteString(FieldByName('ACCNUM').AsString);
+       WriteLnString('</account>');
+
+       WriteString('<iban>');
+       WriteString(FieldByName('ACCNUM').AsString);
+       WriteLnString('</iban>');
+
+       WriteString('<signatory>');
+
+       WriteString('<is_primary>');
+       WriteString('1');
+       WriteLnString('</is_primary>');
+
+       WriteString('<t_person>');
+
+
+       WriteString('<first_name>');
+       WriteString(FieldByName('FIRSTNAME').AsString);
+       WriteLnString('</first_name>');
+
+       WriteString('<last_name>');
+       WriteString(FieldByName('FIRSTNAME').AsString);
+       WriteLnString('</last_name>');
+
+       WriteLnString('</t_person>');
+       WriteLnString('</signatory>');
+       WriteLnString('</from_account>');
+
+       WriteString('<from_country>');
+       WriteString('AZ');
+       WriteLnString('</from_country>');
+       WriteLnString('</t_from>');
+
+
+     end;
+ end;
+
+
+ procedure TGoAml_ServiceForm.NODE_FORM_out;
+ begin
+     with DM_goAml,ods_incoming do
+     begin
+
+        WriteLnString('<t_to>');
+
+       WriteString('<to_funds_code>');
+       WriteString('A');
+       WriteLnString('</to_funds_code>');
+
+       WriteString('<to_account>');
+
+       WriteString('<institution_name>');
+       WriteString(FieldByName('FIRSTNAME').AsString);
+       WriteLnString('</institution_name>');
+
+       WriteString('<swift>');
+       WriteString(FieldByName('BANKSWIFT').AsString);
+       WriteLnString('</swift>');
+
+       WriteString('<non_bank_institution>');
+       WriteString('false');
+       WriteLnString('</non_bank_institution>');
+
+       WriteString('<account>');
+       WriteString(FieldByName('ACCNUM').AsString);
+       WriteLnString('</account>');
+
+       WriteString('<iban>');
+       WriteString(FieldByName('ACCNUM').AsString);
+       WriteLnString('</iban>');
+
+       WriteString('<signatory>');
+
+       WriteString('<is_primary>');
+       WriteString('1');
+       WriteLnString('</is_primary>');
+
+       WriteString('<t_person>');
+
+
+       WriteString('<first_name>');
+       WriteString(FieldByName('FIRSTNAME').AsString);
+       WriteLnString('</first_name>');
+
+       WriteString('<last_name>');
+       WriteString(FieldByName('FIRSTNAME').AsString);
+       WriteLnString('</last_name>');
+
+       WriteLnString('</t_person>');
+       WriteLnString('</signatory>');
+       WriteLnString('</to_account>');
+
+       WriteString('<to_country>');
+       WriteString('AZ');
+       WriteLnString('</to_country>');
+       WriteLnString('</t_to>');
+
+
+     end;
+ end;
+
+procedure TGoAml_ServiceForm.NODE_FORM_PERSON;
+begin
+ // if vid_op<>15 then
+  //  begin
+   WriteString('<from_person>');
+
+     DM_goAml.ODS_CustRelSignatory.close;
+     DM_goAml.ODS_CustRelSignatory.SetVariable('V_ID',
+    DM_goAml.ODS_TACCOUNT.FieldByName('cust_id').AsInteger);
+    DM_goAml.ODS_CustRelSignatory.Open;
+     tr_id:=DBGridTransactions1.DataSource.DataSet.FieldByName('TRANSACTIONNUMBER').AsInteger ;
+     DM_goAml.OracleDataSet1.Close;
+     DM_goAml.OracleDataSet1.SetVariable('v_transid',tr_id);
+     DM_goAml.OracleDataSet1.open;
+
+   if not(DM_goAml.OracleDataSet1cCUSTID.IsNull) and not(DM_goAml.OracleDataSet1NOMdCUSTID.IsNull) then
+     begin
+     DM_goAml.OracleDataSet2.Close;
+     DM_goAml.OracleDataSet2.SetVariable('v_cuid',DM_goAml.OracleDataSet1NOMdCUSTID.AsInteger);
+     DM_goAml.OracleDataSet2.open;
+    if  DM_goAml.OracleDataSet2CUST_TYPE.AsString='0' then
+     begin
+   DM_goAml.ODS_CustRelSignatory.close;
+   DM_goAml.ODS_CustRelSignatory.SetVariable('V_ID',
+   DM_goAml.OracleDataSet1NOMdCUSTID.AsInteger);
+   DM_goAml.ODS_CustRelSignatory.Open;
+ if DM_goAml.ODS_CustRelSignatory.FieldByName('custid2').isNUll then
+     begin
+     er_count := er_count + 1;
+     RE_Errors.Lines.Add('Hüquqi şəxsdə Müdür və hesab sahibi olan şəxs qeyd edilməyib!');
+     end
+    else
+     begin
+     DM_goAml.ODS_TPERSON.close;
+     DM_goAml.ODS_TPERSON.SQL.Clear;
+     DM_goAml.ODS_TPERSON.SQL.Text := 'select * from mmx_signatory where custid='
+       +DM_goAml.ODS_CustRelSignatory.FieldByName('custid2').AsString;
+     DM_goAml.ODS_TPERSON.Open;
+
+     end;
+      end
+      else
+      begin
+       DM_goAml.ODS_TPERSON.close;
+     DM_goAml.ODS_TPERSON.SQL.Clear;
+     DM_goAml.ODS_TPERSON.SQL.Text := 'select * from mmx_signatory where custid='
+       +DM_goAml.OracleDataSet1NOMdCUSTID.AsString;
+     DM_goAml.ODS_TPERSON.Open;
+
+      end;
+     end
+     else
+     begin
+
+     DM_goAml.OracleDataSet2.Close;
+     DM_goAml.OracleDataSet2.SetVariable('v_cuid',DM_goAml.OracleDataSet1cCUSTID.AsInteger);
+     DM_goAml.OracleDataSet2.open;
+        if  DM_goAml.OracleDataSet2CUST_TYPE.AsString='0' then
+     begin
+   DM_goAml.ODS_CustRelSignatory.close;
+   DM_goAml.ODS_CustRelSignatory.SetVariable('V_ID',
+   DM_goAml.OracleDataSet1cCUSTID.AsInteger);
+   DM_goAml.ODS_CustRelSignatory.Open;
+
+ if DM_goAml.ODS_CustRelSignatory.FieldByName('custid2').isNUll then
+     begin
+        er_count := er_count + 1;
+     RE_Errors.Lines.Add('Hüquqi şəxsdə Müdür və hesab sahibi olan şəxs qeyd edilməyib!');
+     end
+    else
+     begin
+     DM_goAml.ODS_TPERSON.close;
+     DM_goAml.ODS_TPERSON.SQL.Clear;
+     DM_goAml.ODS_TPERSON.SQL.Text := 'select * from mmx_signatory where custid='
+       +DM_goAml.ODS_CustRelSignatory.FieldByName('custid2').AsString;
+     DM_goAml.ODS_TPERSON.Open;
+
+     end;
+      end
+      else
+      begin
+       DM_goAml.ODS_TPERSON.close;
+     DM_goAml.ODS_TPERSON.SQL.Clear;
+     DM_goAml.ODS_TPERSON.SQL.Text := 'select * from mmx_signatory where custid='
+       +DM_goAml.OracleDataSet1cCUSTID.AsString;
+     DM_goAml.ODS_TPERSON.Open;
+
+      end;
+      end;
+
+   NODE_TPERSON ;
+
+    WriteLnString('</from_person>');
+    WriteString('<from_country>');
+    WriteString( DM_goAml.ODS_MainReport.FieldByName('from_country').AsString);
+
+     WriteLnString('</from_country>');
+     WriteLnString('</t_from_my_client>');
+       WriteString('<t_to_my_client>');
+
+    WriteString('<to_funds_code>');
+    WriteString(DM_goAml.ODS_MainReport.FieldByName('to_funds_code').AsString);
+    WriteLnString('</to_funds_code>');
+    end;
+//end;
+
+procedure TGoAml_ServiceForm.NODE_TTRANSACTION;
+
+begin
+  WriteLnString('<transaction>');
+  with DM_goAml.ODS_MainReport do
+  begin
+    if not(FieldByName('transactionnumber').isNUll) then
+    begin
+      WriteString('<transactionnumber>');
+      WriteString(FieldByName('transactionnumber').AsString);
+      WriteLnString('</transactionnumber>');
+    end
+    else
+    begin
+      er_count := er_count + 1;
+      RE_Errors.Lines.Add('Əməliyyatın İD-si');
+    end;
+
+    if not(FieldByName('internal_ref_number').isNUll) then
+    begin
+      WriteString('<internal_ref_number>');
+      WriteString(FieldByName('internal_ref_number').AsString);
+      WriteLnString('</internal_ref_number>');
+    end;
+
+    WriteString('<transaction_description>');
+    WriteString(FieldByName('transaction_description').AsString);
+    WriteLnString('</transaction_description>');
+
+    WriteString('<date_transaction>');
+    WriteString(FieldByName('date_transaction').AsString);
+    WriteLnString('</date_transaction>');
+
+    {
+    WriteString('<late_deposit>');
+    WriteString(FieldByName('late_deposit').AsString);
+    WriteLnString('</late_deposit>');
+     }
+    if not(FieldByName('transmode_code').isNUll) then
+    begin
+      WriteString('<transmode_code>');
+      WriteString(FieldByName('transmode_code').AsString);
+      WriteLnString('</transmode_code>');
+    end
+    else
+    begin
+      er_count := er_count + 1;
+      RE_Errors.Lines.Add('Əməliyyatın növü');
+    end;
+
+   if vid_op=7 then
+   begin
+    if DM_goAml.ODS_MainReport.FieldByName('D_FOREIGN_CURRENCY_CODE').AsString <> 'AZN' then
+       if not(FieldByName('amount_local').isNUll) then
+    begin
+
+      WriteString('<amount_local>');
+      WriteString(FieldByName('amount_local'{'d_foreign_amount'}).AsString);
+      WriteLnString('</amount_local>')
+    end
+    else
+    begin
+      er_count := er_count + 1;
+      RE_Errors.Lines.Add('amount_local');
+    end;
+   end;
+
+   if vid_op=7 then
+   begin
+    if DM_goAml.ODS_MainReport.FieldByName('C_FOREIGN_CURRENCY_CODE').AsString <> 'AZN' then
+       if not(FieldByName('amount_local').isNUll) then
+    begin
+      //showmessage('dd'+FieldByName('amount_local').AsString);
+      WriteString('<amount_local>');
+      WriteString(FieldByName('amount_local').AsString);
+      WriteLnString('</amount_local>')
+    end
+    else
+    begin
+      er_count := er_count + 1;
+      RE_Errors.Lines.Add('amount_local');
+    end;
+
+  if (DM_goAml.ODS_MainReport.FieldByName('C_FOREIGN_CURRENCY_CODE').AsString <> 'AZN')and
+  (vid_op<>7)
+  then
+
+   begin
+       WriteString('<from_funds_code>');
+      WriteString(DM_goAml.ODS_MainReport.FieldByName('to_funds_code').AsString);
+      WriteLnString('</from_funds_code>');
+       if DM_goAml.ODS_MainReport.FieldByName('D_FOREIGN_CURRENCY_CODE').AsString <>
+      'AZN' then
+    begin
+      WriteString('<from_foreign_currency>');
+      node_tforeign_currency('d_');
+      WriteLnString('</from_foreign_currency>');
+    end else
+    begin
+     WriteString('<from_foreign_currency>');
+     node_tforeign_currency_vdm('d_');
+     WriteLnString('</from_foreign_currency>');
+
+    end;
+   end;
+
+   end;
+
+
+  if  vid_op<>7  then
+    begin
+    if not(FieldByName('amount_local').isNUll) then
+    begin
+      WriteString('<amount_local>');
+      WriteString(FieldByName('amount_local').AsString);
+      WriteLnString('</amount_local>')
+    end
+    else
+    begin
+      er_count := er_count + 1;
+      RE_Errors.Lines.Add('amount_local');
+    end;
+
+
+  if (DM_goAml.ODS_MainReport.FieldByName('C_FOREIGN_CURRENCY_CODE').AsString <> 'AZN')and
+  (vid_op<>7)
+  then
+
+   begin
+       WriteString('<from_funds_code>');
+      WriteString(DM_goAml.ODS_MainReport.FieldByName('to_funds_code').AsString);
+      WriteLnString('</from_funds_code>');
+       if DM_goAml.ODS_MainReport.FieldByName('D_FOREIGN_CURRENCY_CODE').AsString <>
+      'AZN' then
+    begin
+      WriteString('<from_foreign_currency>');
+      node_tforeign_currency('d_');
+      WriteLnString('</from_foreign_currency>');
+    end else
+    begin
+     WriteString('<from_foreign_currency>');
+     node_tforeign_currency_vdm('d_');
+     WriteLnString('</from_foreign_currency>');
+
+    end;
+   end;
+   end;
+
+   if vid_op=7 then
+   begin
+      WriteString('<t_from_my_client>');
+       WriteString('<from_funds_code>');
+      WriteString(DM_goAml.ODS_MainReport.FieldByName('to_funds_code').AsString);
+      WriteLnString('</from_funds_code>');
+       if DM_goAml.ODS_MainReport.FieldByName('D_FOREIGN_CURRENCY_CODE').AsString <>
+      'AZN' then
+    begin
+      WriteString('<from_foreign_currency>');
+      node_tforeign_currency('d_');
+      WriteLnString('</from_foreign_currency>');
+    end else
+    begin
+     WriteString('<from_foreign_currency>');
+     node_tforeign_currency_vdm('d_');
+     WriteLnString('</from_foreign_currency>');
+    end;
+
+   tr_id:=DBGridTransactions1.DataSource.DataSet.FieldByName('TRANSACTIONNUMBER').AsInteger ;
+   with DM_goAml , OracleDataSet1  do
+   begin
+   close;
+   SetVariable('V_TRANSID',tr_id);
+   open;
+
+   end;
+    DM_goAml.ODS_TPERSON.close;
+    DM_goAml.ODS_TPERSON.SQL.Clear;
+    DM_goAml.ODS_TPERSON.SQL.Text :=
+      'select * from mmx_signatory where custid='+DM_goAml.OracleDataSet1.FieldByName('ccustid').AsString ;
+    DM_goAml.ODS_TPERSON.Open;
+
+
+      WriteString('<t_conductor>');
+        NODE_TPERSON  ;
+      WriteLnString('</t_conductor>');
+
+      WriteString('<from_person>');
+        NODE_TPERSON  ;
+      WriteLnString('</from_person>');
+
+      WriteString('<from_country>');
+      WriteString( DM_goAml.ODS_MainReport.FieldByName('from_country').AsString);
+      WriteLnString('</from_country>');
+
+      WriteLnString('</t_from_my_client>');
+
+      WriteString('<t_to_my_client>');
+      WriteString('<to_funds_code>');
+      WriteString(DM_goAml.ODS_MainReport.FieldByName('to_funds_code').AsString);
+      WriteLnString('</to_funds_code>');
+
+    if DM_goAml.ODS_MainReport.FieldByName('C_FOREIGN_CURRENCY_CODE').AsString <>
+      'AZN' then
+    begin
+      WriteString('<to_foreign_currency>');
+      node_tforeign_currency('c_');
+      WriteLnString('</to_foreign_currency>');
+    end else
+    begin
+     WriteString('<to_foreign_currency>');
+      node_tforeign_currency_vdm('c_');
+      WriteLnString('</to_foreign_currency>');
+    end;
+
+      WriteString('<to_person>');
+        NODE_TPERSON  ;
+      WriteLnString('</to_person>');
+      WriteString('<to_country>');
+      WriteString( DM_goAml.ODS_MainReport.FieldByName('from_country').AsString);
+      WriteLnString('</to_country>');
+      WriteLnString('</t_to_my_client>');
+      WriteLnString('</transaction>');
+
+   end;
+
+  if (DM_goAml.ODS_MainReport.FieldByName('transmode_code').AsInteger = 1000) or
+     (DM_goAml.ODS_MainReport.FieldByName('transmode_code').AsInteger = 1001)
+  then
+        begin
+   tr_id:=DBGridTransactions1.DataSource.DataSet.FieldByName('TRANSACTIONNUMBER').AsInteger ;
+   with DM_goAml , OracleDataSet1  do
+   begin
+   close;
+   SetVariable('V_TRANSID',tr_id);
+   open;
+
+   end;
+
+   if (DM_goAml.ODS_MainReport.FieldByName('transmode_code').AsInteger = 1000) then
+     begin
+
+     DM_goAml.OracleDataSet2.Close;
+     DM_goAml.OracleDataSet2.SetVariable('V_CUID',DM_goAml.OracleDataSet1.FieldByName('ccustid').AsInteger);
+     DM_goAml.OracleDataSet2.Open;
+     if  DM_goAml.OracleDataSet2.FieldByName('cust_type').AsInteger =0 then
+     begin
+
+  DM_goAml.ODS_CustRelAccOwer.close;
+  DM_goAml.ODS_CustRelAccOwer.SetVariable('V_ID',DM_goAml.OracleDataSet1.FieldByName('ccustid').AsInteger);
+  DM_goAml.ODS_CustRelAccOwer.Open;
+
+     DM_goAml.ODS_TPERSON.close;
+     DM_goAml.ODS_TPERSON.SQL.Clear;
+     DM_goAml.ODS_TPERSON.SQL.Text := 'select * from mmx_signatory where custid='
+       +DM_goAml.ODS_CustRelAccOwer.FieldByName('custid2').AsString;
+     DM_goAml.ODS_TPERSON.Open;
+     end else
+       begin
+
+    DM_goAml.ODS_TPERSON.close;
+    DM_goAml.ODS_TPERSON.SQL.Clear;
+    DM_goAml.ODS_TPERSON.SQL.Text :=
+      'select * from mmx_signatory where custid='+DM_goAml.OracleDataSet1.FieldByName('ccustid').AsString ;
+    DM_goAml.ODS_TPERSON.Open;
+       end;
+     WriteString('<t_from_my_client>');
+      WriteString('<from_funds_code>');
+    WriteString(DM_goAml.ODS_MainReport.FieldByName('to_funds_code').AsString);
+    WriteLnString('</from_funds_code>');
+    WriteString('<from_person>');
+    NODE_TPERSON  ;
+
+    WriteLnString('</from_person>');
+    WriteString('<from_country>');
+    WriteString( DM_goAml.ODS_MainReport.FieldByName('from_country').AsString);
+    WriteLnString('</from_country>');
+     WriteLnString('</t_from_my_client>');
+
+
+    WriteString('<t_to>');
+    WriteString('<to_funds_code>');
+    WriteString(DM_goAml.ODS_MainReport.FieldByName('to_funds_code').AsString);
+    WriteLnString('</to_funds_code>');
+
+   with DM_goAml,ods_monex do
+   begin
+      close;
+      SetVariable('v_id',DM_goAml.OracleDataSet1.FieldByName('monex_id').AsInteger);
+      open;
+
+      WriteString('<to_person>');
+      WriteString('<first_name>');
+      WriteString(FieldByName('name').AsString);
+      WriteLnString('</first_name>');
+
+      WriteString('<last_name>');
+      WriteString(FieldByName('last_name').AsString);
+      WriteLnString('</last_name>');
+
+   end;
+    WriteLnString('</to_person>');
+    WriteString('<to_country>');
+    WriteString( DM_goAml.ODS_MainReport.FieldByName('from_country').AsString);
+    WriteLnString('</to_country>');
+
+        WriteLnString('</t_to>');
+     end;
+  if (DM_goAml.ODS_MainReport.FieldByName('transmode_code').AsInteger = 1001) then
+       begin
+    WriteString('<t_from>');
+    WriteString('<from_funds_code>');
+    WriteString(DM_goAml.ODS_MainReport.FieldByName('from_funds_code').AsString);
+    WriteLnString('</from_funds_code>');
+
+   with DM_goAml,ods_monex do
+   begin
+      close;
+      SetVariable('v_id',DM_goAml.OracleDataSet1.FieldByName('monex_id').AsInteger);
+      open;
+
+      WriteString('<from_person>');
+      WriteString('<first_name>');
+      WriteString(FieldByName('name').AsString);
+      WriteLnString('</first_name>');
+
+      WriteString('<last_name>');
+      WriteString(FieldByName('last_name').AsString);
+      WriteLnString('</last_name>');
+
+   end;
+    WriteLnString('</from_person>');
+    WriteString('<from_country>');
+    WriteString( DM_goAml.ODS_MainReport.FieldByName('from_country').AsString);
+    WriteLnString('</from_country>');
+    WriteLnString('</t_from>');
+    WriteString('<t_to_my_client>');
+    WriteString('<to_funds_code>');
+    WriteString(DM_goAml.ODS_MainReport.FieldByName('to_funds_code').AsString);
+    WriteLnString('</to_funds_code>');
+        WriteString('<to_person>');
+
+     DM_goAml.OracleDataSet2.Close;
+     DM_goAml.OracleDataSet2.SetVariable('V_CUID',DM_goAml.OracleDataSet1.FieldByName('dcustid').AsInteger);
+     DM_goAml.OracleDataSet2.Open;
+     if  DM_goAml.OracleDataSet2.FieldByName('cust_type').AsInteger =0 then
+     begin
+     DM_goAml.ODS_CustRelAccOwer.close;
+     DM_goAml.ODS_CustRelAccOwer.SetVariable('V_ID',DM_goAml.OracleDataSet1.FieldByName('dcustid').AsInteger);
+     DM_goAml.ODS_CustRelAccOwer.Open;
+
+     DM_goAml.ODS_TPERSON.close;
+     DM_goAml.ODS_TPERSON.SQL.Clear;
+     DM_goAml.ODS_TPERSON.SQL.Text := 'select * from mmx_signatory where custid='
+       +DM_goAml.ODS_CustRelAccOwer.FieldByName('custid2').AsString;
+
+     DM_goAml.ODS_TPERSON.Open;
+     end else
+       begin
+    DM_goAml.ODS_TPERSON.close;
+    DM_goAml.ODS_TPERSON.SQL.Clear;
+    DM_goAml.ODS_TPERSON.SQL.Text :=
+      'select * from mmx_signatory where custid='+DM_goAml.OracleDataSet1.FieldByName('dcustid').AsString ;
+    DM_goAml.ODS_TPERSON.Open;
+
+       end;
+    NODE_TPERSON  ;
+        WriteLnString('</to_person>');
+    WriteString('<to_country>');
+    WriteString( DM_goAml.ODS_MainReport.FieldByName('from_country').AsString);
+    WriteLnString('</to_country>');
+      WriteLnString('</t_to_my_client>');
+       end;
+
+       WriteLnString('</transaction>');
+        end  ;
+    // ------------------------------------------------------------------------
+    DM_goAml.ods_incoming.close;
+    DM_goAml.ods_incoming.SetVariable('v_trid',trasnfers_trid);
+    DM_goAml.ods_incoming.open;
+    v_inout:=DM_goAml.ods_incoming.FieldByName('inout').AsInteger;
+
+
+    if (((DM_goAml.ODS_MainReport.FieldByName('debitbalance').AsString <> '1001') and
+       (DM_goAml.ODS_MainReport.FieldByName('debitbalance').AsString <> '1011'))and
+       ((DM_goAml.ODS_MainReport.FieldByName('creditbalance').AsString <> '1001')  and
+       (DM_goAml.ODS_MainReport.FieldByName('creditbalance').AsString <> '1011')))and
+       (v_inout=1 ) and
+       (DM_goAml.ODS_MainReport.FieldByName('transmode_code').AsInteger <>1000) and
+       (DM_goAml.ODS_MainReport.FieldByName('transmode_code').AsInteger <> 1001)
+   then
+   begin
+     NODE_FORM_in ;
+     tr_id:=DBGridTransactions1.DataSource.DataSet.FieldByName('TRANSACTIONNUMBER').AsInteger ;
+   with DM_goAml , OracleDataSet1  do
+   begin
+   close;
+   SetVariable('V_TRANSID',tr_id);
+   open;
+   end;
+
+
+      DM_goAml.ODS_TACCOUNT.close;
+      DM_goAml.ODS_TACCOUNT.SetVariable('v_id',
+      DM_goAml.ODS_MainReport.FieldByName('creditid').AsInteger);
+      DM_goAml.ODS_TACCOUNT.Open;
+
+      DM_goAml.odscust4509.Close;
+      DM_goAml.odscust4509.SetVariable('vcustid', DM_goAml.OracleDataSet1CCUSTID.AsInteger);
+      DM_goAml.odscust4509.Open;
+      WriteString('<t_to_my_client>');
+       WriteString('<to_funds_code>');
+      WriteString('A');
+      WriteLnString('</to_funds_code>');
+
+      WriteString('<to_account>');
+      NODE_TACCOUNT_Xoks(DM_goAml.ODS_TACCOUNT);
+      WriteString('<to_country>');
+      WriteString(FieldByName('to_country').AsString);
+      WriteLnString('</to_country>');
+
+      WriteLnString('</t_to_my_client>');
+      WriteLnString('</transaction>');
+
+end else
+
+     if (((DM_goAml.ODS_MainReport.FieldByName('debitbalance').AsString <> '1001') and
+       (DM_goAml.ODS_MainReport.FieldByName('debitbalance').AsString <> '1011'))and
+       ((DM_goAml.ODS_MainReport.FieldByName('creditbalance').AsString <> '1001')  and
+       (DM_goAml.ODS_MainReport.FieldByName('creditbalance').AsString <> '1011')))and
+       ( v_inout=2)and
+       (DM_goAml.ODS_MainReport.FieldByName('transmode_code').AsInteger <>1000) and
+       (DM_goAml.ODS_MainReport.FieldByName('transmode_code').AsInteger <> 1001)
+   then
+   begin
+   tr_id:=DBGridTransactions1.DataSource.DataSet.FieldByName('TRANSACTIONNUMBER').AsInteger ;
+   with DM_goAml , OracleDataSet1  do
+   begin
+   close;
+   SetVariable('V_TRANSID',tr_id);
+   open;
+   end;
+
+      DM_goAml.odscust4509.Close;
+      DM_goAml.odscust4509.SetVariable('vcustid', DM_goAml.OracleDataSet1DCUSTID.AsInteger);
+      DM_goAml.odscust4509.Open;
+
+       WriteString('<t_from_my_client>');
+       WriteString('<from_funds_code>');
+       WriteString('A');
+       WriteLnString('</from_funds_code>');
+       DM_goAml.ODS_TACCOUNT.close;
+       DM_goAml.ODS_TACCOUNT.SetVariable('v_id',
+       DM_goAml.ODS_MainReport.FieldByName('DebitId').AsInteger);
+       DM_goAml.ODS_TACCOUNT.Open;
+       WriteString('<from_account>');
+       NODE_TACCOUNT_Xoks(DM_goAml.ODS_TACCOUNT);
+
+       WriteString('<from_country>');
+       WriteString(FieldByName('from_country').AsString);
+       WriteLnString('</from_country>');
+       WriteLnString('</t_from_my_client>');
+
+        NODE_FORM_out ;
+       WriteLnString('</transaction>');
+    //showmessage('aaa111');
+  //  showmessage(DM_goAml.ODS_MainReport.FieldByName('transmode_code').AsString);
+end
+else
+begin
+
+   if (((DM_goAml.ODS_MainReport.FieldByName('debitbalance').AsString <> '1001') and
+       (DM_goAml.ODS_MainReport.FieldByName('debitbalance').AsString <> '1011')and
+       (DM_goAml.ODS_MainReport.FieldByName('debitbalance').AsString <> '2801')and
+       (DM_goAml.ODS_MainReport.FieldByName('debitbalance').AsString <> '2811')and
+       (DM_goAml.ODS_MainReport.FieldByName('debitbalance').AsString <> '4801')and
+       (DM_goAml.ODS_MainReport.FieldByName('debitbalance').AsString <> '4811')and
+       (DM_goAml.ODS_MainReport.FieldByName('debitbalance').AsString <> '2509'))and
+
+       ((DM_goAml.ODS_MainReport.FieldByName('creditbalance').AsString <> '1001')  and
+       (DM_goAml.ODS_MainReport.FieldByName('creditbalance').AsString <> '1011')   and
+       (DM_goAml.ODS_MainReport.FieldByName('creditbalance').AsString <> '2801')   and
+       (DM_goAml.ODS_MainReport.FieldByName('creditbalance').AsString <> '2811')   and
+       (DM_goAml.ODS_MainReport.FieldByName('debitbalance').AsString <> '4801')and
+       (DM_goAml.ODS_MainReport.FieldByName('debitbalance').AsString <> '4811')and
+       (DM_goAml.ODS_MainReport.FieldByName('creditbalance').AsString <> '2509') ))and
+       ((v_inout<>1 )and( v_inout<>2)and (vid_op<>7)) and
+       (DM_goAml.ODS_MainReport.FieldByName('transmode_code').AsInteger <>1000) and
+       (DM_goAml.ODS_MainReport.FieldByName('transmode_code').AsInteger <> 1001)
+       and (((copy(DM_goAml.ODS_MainReport.FieldByName('debitbalance').AsString,1,1)='3'))
+       and ((copy(DM_goAml.ODS_MainReport.FieldByName('creditbalance').AsString,1,1) = '3')))
+   then
+        begin
+     WriteString('<t_from_my_client>');
+     WriteString('<from_funds_code>');
+     WriteString(FieldByName('from_funds_code').AsString);
+     WriteLnString('</from_funds_code>');
+  if DM_goAml.ODS_MainReport.FieldByName('D_FOREIGN_CURRENCY_CODE').AsString <>
+      'AZN' then
+    begin
+      WriteString('<from_foreign_currency>');
+      node_tforeign_currency('d_');
+      WriteLnString('</from_foreign_currency>');
+    end;
+
+    if not(copy(DM_goAml.ODS_MainReport.FieldByName('debitbalance').AsString,1,1)<>'3')
+    then
+    begin
+
+    dc_custtype:=true;
+      DM_goAml.ODS_TACCOUNT.close;
+      DM_goAml.ODS_TACCOUNT.SetVariable('v_id',
+        DM_goAml.ODS_MainReport.FieldByName('DebitId').AsInteger);
+      DM_goAml.ODS_TACCOUNT.Open;
+      WriteString('<from_account>');
+         NODE_TACCOUNT(DM_goAml.ODS_TACCOUNT);
+      end;
+
+
+   if not(copy(DM_goAml.ODS_MainReport.FieldByName('creditbalance').AsString,1,1) <> '3')  then
+    begin
+
+    dc_custtype:=false;
+      DM_goAml.ODS_TACCOUNT.close;
+      DM_goAml.ODS_TACCOUNT.SetVariable('v_id',
+        DM_goAml.ODS_MainReport.FieldByName('creditid').AsInteger);
+      DM_goAml.ODS_TACCOUNT.Open;
+      //NODE_FORM_PERSON;
+      WriteString('<to_account>');
+      NODE_TACCOUNT(DM_goAml.ODS_TACCOUNT);
+     end ;
+
+    WriteString('<to_country>');
+    WriteString(FieldByName('to_country').AsString);
+    WriteLnString('</to_country>');
+
+    WriteLnString('</t_to_my_client>');
+     // ------------------------------------------------------------------------
+    WriteLnString('</transaction>');
+
+
+end
+else
+begin
+if (DM_goAml.ODS_MainReport.FieldByName('transmode_code').AsInteger <> 1000) and
+   (DM_goAml.ODS_MainReport.FieldByName('transmode_code').AsInteger <> 1001)
+
+then
+  begin
+  if ((DM_goAml.ODS_MainReport.FieldByName('debitbalance').AsString = '1001') or
+      (DM_goAml.ODS_MainReport.FieldByName('debitbalance').AsString = '1011') or
+      (DM_goAml.ODS_MainReport.FieldByName('debitbalance').AsString = '2801') or
+      (DM_goAml.ODS_MainReport.FieldByName('debitbalance').AsString = '2811') or
+      (DM_goAml.ODS_MainReport.FieldByName('debitbalance').AsString = '4801') or
+      (DM_goAml.ODS_MainReport.FieldByName('debitbalance').AsString = '4811') or
+      (DM_goAml.ODS_MainReport.FieldByName('debitbalance').AsString = '2509'))or
+
+     ((DM_goAml.ODS_MainReport.FieldByName('creditbalance').AsString = '1001')or
+      (DM_goAml.ODS_MainReport.FieldByName('creditbalance').AsString = '1011')or
+      (DM_goAml.ODS_MainReport.FieldByName('creditbalance').AsString = '2801')or
+      (DM_goAml.ODS_MainReport.FieldByName('creditbalance').AsString = '2811')or
+      (DM_goAml.ODS_MainReport.FieldByName('creditbalance').AsString = '4801')or
+      (DM_goAml.ODS_MainReport.FieldByName('creditbalance').AsString = '4811')or
+      (DM_goAml.ODS_MainReport.FieldByName('creditbalance').AsString = '2509'))
+   then
+
+        begin
+    WriteString('<t_from_my_client>');
+    WriteString('<from_funds_code>');
+    WriteString(FieldByName('from_funds_code').AsString);
+    WriteLnString('</from_funds_code>');
+  if DM_goAml.ODS_MainReport.FieldByName('D_FOREIGN_CURRENCY_CODE').AsString <>
+      'AZN' then
+    begin
+      WriteString('<from_foreign_currency>');
+      node_tforeign_currency('d_');
+      WriteLnString('</from_foreign_currency>');
+    end;
+
+    /////////--------- t_conductor---/////
+     if copy(DM_goAml.ODS_MainReport.FieldByName('debitbalance').AsString,1,1)='3' then
+        begin
+      with DM_goAml, odscust4509 do
+      begin
+      close;
+      SetVariable('vcustid',DM_goAml.ODS_MainReportDCUSTID.AsInteger);
+      open;
+
+      end;
+     if DM_goAml.odscust4509.FieldByName('cust_type').AsINteger = 0 then
+      begin
+      with DM_goAml,ODS_CustConductur do
+      begin
+      close;
+     SetVariable('v_id',DM_goAml.odscust4509ID.AsInteger);
+      open;
+      end;
+    if DM_goAml.ODS_CustConductur.FieldByName('custid2').isNUll then
+     begin
+     er_count := er_count + 1;
+     RE_Errors.Lines.Add('Hüquqi şəxsdə Əvəz edici olan şəxs qeyd edilməyib!');
+     end
+    else
+     begin
+        DM_goAml.ODS_TPERSON.close;
+    DM_goAml.ODS_TPERSON.SQL.Clear;
+    DM_goAml.ODS_TPERSON.SQL.Text :=
+      'select * from mmx_signatory where custid='+DM_goAml.ODS_CustConductur.FieldByName('custid2').AsString ;
+    DM_goAml.ODS_TPERSON.Open;
+
+
+      WriteString('<t_conductor>');
+        NODE_TPERSON  ;
+      WriteLnString('</t_conductor>');
+     end;
+      end;
+       end;
+       /////////--------- t_conductor---/////
+       ///  -----t_conductor---/////////////////
+         if copy(DM_goAml.ODS_MainReport.FieldByName('CREDITBALANCE').AsString,1,1)='3' then
+        begin
+      with DM_goAml, odscust4509 do
+      begin
+      close;
+      SetVariable('vcustid',DM_goAml.ODS_MainReportKCUSTID.AsInteger);
+      open;
+
+      end;
+     if DM_goAml.odscust4509.FieldByName('cust_type').AsINteger = 0 then
+      begin
+      with DM_goAml,ODS_CustConductur do
+      begin
+      close;
+     SetVariable('v_id',DM_goAml.odscust4509ID.AsInteger);
+      open;
+      end;
+    if DM_goAml.ODS_CustConductur.FieldByName('custid2').isNUll then
+     begin
+     er_count := er_count + 1;
+     RE_Errors.Lines.Add('Hüquqi  şəxsdə Əvəz edici  olan şəxs qeyd edilməyib!');
+     end
+    else
+     begin
+    // showmessage(DM_goAml.odscust4509ID.AsString);
+      DM_goAml.ODS_TPERSON.close;
+    DM_goAml.ODS_TPERSON.SQL.Clear;
+    DM_goAml.ODS_TPERSON.SQL.Text :=
+      'select * from mmx_signatory where custid='+DM_goAml.ODS_CustConductur.FieldByName('custid2').AsString ;
+    DM_goAml.ODS_TPERSON.Open;
+
+
+      WriteString('<t_conductor>');
+        NODE_TPERSON  ;
+      WriteLnString('</t_conductor>');
+     end;
+      end;
+       end;
+    ///-------------t_conductur//--------------////
+   if not
+     ((DM_goAml.ODS_MainReport.FieldByName('debitbalance').AsString = '1001') or
+      (DM_goAml.ODS_MainReport.FieldByName('debitbalance').AsString = '1011') or
+      (DM_goAml.ODS_MainReport.FieldByName('debitbalance').AsString = '2801') or
+      (DM_goAml.ODS_MainReport.FieldByName('debitbalance').AsString = '2811') or
+      (DM_goAml.ODS_MainReport.FieldByName('debitbalance').AsString = '2509') or
+      (DM_goAml.ODS_MainReport.FieldByName('debitbalance').AsString = '4801') or
+      (DM_goAml.ODS_MainReport.FieldByName('debitbalance').AsString = '4811'))
+      then
+    begin
+    dc_custtype:=true;
+
+      DM_goAml.ODS_TACCOUNT.close;
+      DM_goAml.ODS_TACCOUNT.SetVariable('v_id',
+        DM_goAml.ODS_MainReport.FieldByName('DebitId').AsInteger);
+      DM_goAml.ODS_TACCOUNT.Open;
+      WriteString('<from_account>');
+
+
+      NODE_TACCOUNT(DM_goAml.ODS_TACCOUNT);
+   //   WriteLnString('</from_account>');
+    end
+    else
+    begin
+       dc_custtype:=false;
+      DM_goAml.ODS_TACCOUNT.close;
+      DM_goAml.ODS_TACCOUNT.SetVariable('v_id',
+        DM_goAml.ODS_MainReport.FieldByName('creditid').AsInteger);
+      DM_goAml.ODS_TACCOUNT.Open;
+      end;
+
+   if not
+    ((DM_goAml.ODS_MainReport.FieldByName('creditbalance').AsString = '1001') or
+     (DM_goAml.ODS_MainReport.FieldByName('creditbalance').AsString = '1011') or
+     (DM_goAml.ODS_MainReport.FieldByName('creditbalance').AsString = '2801') or
+     (DM_goAml.ODS_MainReport.FieldByName('creditbalance').AsString = '2811') or
+     (DM_goAml.ODS_MainReport.FieldByName('creditbalance').AsString = '2509') or
+     (DM_goAml.ODS_MainReport.FieldByName('creditbalance').AsString = '4801') or
+     (DM_goAml.ODS_MainReport.FieldByName('creditbalance').AsString = '4811')
+      ) and not(dc_custtype) then
+    begin
+
+      DM_goAml.ODS_TACCOUNT.close;
+      DM_goAml.ODS_TACCOUNT.SetVariable('v_id',
+        DM_goAml.ODS_MainReport.FieldByName('creditid').AsInteger);
+      DM_goAml.ODS_TACCOUNT.Open;
+      NODE_FORM_PERSON;
+      WriteString('<to_account>');
+      NODE_TACCOUNT(DM_goAml.ODS_TACCOUNT);
+    // WriteLnString('</from_account>');
+    end
+    else
+    begin
+      DM_goAml.ODS_TACCOUNT.close;
+      DM_goAml.ODS_TACCOUNT.SetVariable('v_id',
+        DM_goAml.ODS_MainReport.FieldByName('DebitId').AsInteger);
+      DM_goAml.ODS_TACCOUNT.Open;
+     end;
+
+    WriteString('<to_country>');
+    WriteString(FieldByName('to_country').AsString);
+    WriteLnString('</to_country>');
+
+    WriteLnString('</t_to_my_client>');
+      // ------------------------------------------------------------------------
+    WriteLnString('</transaction>');
+  end;
+  end;
+end;
+
+  end;
+  end;
+
+end;
+ procedure TGoAml_ServiceForm.NODE_TACCOUNT_Xoks(Dset: Tdataset);
+ var
+ tr_id:integer;
+ cudt_dr:integer;
+ begin
+  WriteString('<institution_name>');
+  WriteString(Dset.FieldByName('institution_name').AsString);
+  WriteLnString('</institution_name>');
+
+  WriteString('<swift>');
+  WriteString(Dset.FieldByName('swift').AsString);
+  WriteLnString('</swift>');
+
+  WriteString('<non_bank_institution>');
+  WriteString(Dset.FieldByName('non_bank_institution').AsString);
+  WriteLnString('</non_bank_institution>');
+
+  WriteString('<branch>');
+  WriteString(Dset.FieldByName('branch').AsString);
+  WriteLnString('</branch>');
+
+  WriteString('<account>');
+  WriteString(Dset.FieldByName('account').AsString);
+  WriteLnString('</account>');
+
+  WriteString('<currency_code>');
+  WriteString(Dset.FieldByName('currency_code').AsString);
+  WriteLnString('</currency_code>');
+
+  WriteString('<iban>');
+  WriteString(Dset.FieldByName('iban').AsString);
+  WriteLnString('</iban>');
+
+  WriteString('<personal_account_type>');
+  WriteString(Dset.FieldByName('personal_account_type').AsString);
+  WriteLnString('</personal_account_type>');
+
+
+  if DM_goAml.odscust4509.FieldByName('cust_type').AsString = '0' then
+  begin
+
+
+ //  showmessage(DM_goAml.ODS_CustRelSignatory.FieldByName('custid2').AsString);
+    WriteString('<t_entity>');
+    DM_goAml.ODS_ENTITY.close;
+    DM_goAml.ODS_ENTITY.SetVariable('v_id',DM_goAml.odscust4509.FieldByName('id').AsInteger {Dset.FieldByName('cust_id').AsInteger});
+    DM_goAml.ODS_ENTITY.Open;
+    // showmessage('b'+DM_goAml.ODS_ENTITY.FieldByName('id').AsString);
+    NODE_TENTITY;
+
+
+///////////--------------director_id --------/////////////
+
+   DM_goAml.ODS_CustRelSignatory.close;
+  DM_goAml.ODS_CustRelSignatory.SetVariable('V_ID',
+  DM_goAml.odscust4509.FieldByName('id').asinteger
+    {DM_goAml.ODS_TACCOUNT.FieldByName('cust_id').AsInteger});
+  DM_goAml.ODS_CustRelSignatory.Open;
+
+ if DM_goAml.odscust4509.FieldByName('cust_type').AsString='0' then
+ begin
+ //showmessage('b11'+Dset.FieldByName('cust_id').AsString);
+    if DM_goAml.ODS_CustRelSignatory.FieldByName('custid2').isNUll then
+     begin
+     er_count := er_count + 1;
+
+     RE_Errors.Lines.Add('Hüquqi şəxsdə Müdür və hesab sahibi olan şəxs qeyd edilməyib!');
+     end
+    else
+     begin
+   // showmessage('dr'+DM_goAml.ODS_CustRelSignatory.FieldByName('custid2').AsString) ;
+     DM_goAml.ODS_TPERSON.close;
+     DM_goAml.ODS_TPERSON.SQL.Clear;
+     DM_goAml.ODS_TPERSON.SQL.Text := 'select * from mmx_signatory where custid='
+       +DM_goAml.ODS_CustRelSignatory.FieldByName('custid2').AsString;
+     DM_goAml.ODS_TPERSON.Open;
+     end;
+     WriteString('<director_id>');
+    NODE_TPERSON_tessci;
+    WriteLnString('</director_id>');
+
+ end;
+
+  ///////////--------------director_id --------/////////////
+
+   ///////////--------------tessci --------/////////////
+   DM_goAml.ODS_CustRelAccOwer.close;
+  DM_goAml.ODS_CustRelAccOwer.SetVariable('V_ID',
+     DM_goAml.odscust4509.FieldByName('id').asinteger
+    {DM_goAml.ODS_TACCOUNT.FieldByName('cust_id').AsInteger});
+  DM_goAml.ODS_CustRelAccOwer.Open;
+
+ if DM_goAml.odscust4509.FieldByName('cust_type').AsINteger = 0 then
+ begin
+    if DM_goAml.ODS_CustRelAccOwer.FieldByName('custid2').isNUll then
+     begin
+     er_count := er_count + 1;
+     RE_Errors.Lines.Add('Hüquqi şəxsdə Təsisçi və imza hüququ olan şəxs qeyd edilməyib!');
+     end
+    else
+     begin
+     //showmessage('dr'+DM_goAml.ODS_CustRelSignatory.FieldByName('custid2').AsString) ;
+     DM_goAml.ODS_TPERSON.close;
+     DM_goAml.ODS_TPERSON.SQL.Clear;
+     DM_goAml.ODS_TPERSON.SQL.Text := 'select * from mmx_signatory where custid='
+       +DM_goAml.ODS_CustRelAccOwer.FieldByName('custid2').AsString;
+     DM_goAml.ODS_TPERSON.Open;
+     end;
+    WriteString('<founder>');
+    WriteString('<governmental>');
+    WriteString('false');
+    WriteLnString('</governmental>' );
+      WriteString('<founder_person>');
+       NODE_TPERSON_tessci;
+      WriteLnString('</founder_person>');
+       WriteLnString('</founder>');
+     WriteString('<ceo>');
+       NODE_TPERSON_tessci;
+     WriteLnString('</ceo>');
+
+ end;
+
+   ///////////--------------tessci --------/////////////
+     WriteLnString('</t_entity>');
+  end;
+
+     WriteString('<signatory>');
+
+  WriteString('<is_primary>');
+  WriteString('1');
+  WriteLnString('</is_primary>');
+
+///////////-----------t_person-----------------/////////////////
+  WriteString('<t_person>');
+
+    tr_id:=DBGridTransactions1.DataSource.DataSet.FieldByName('TRANSACTIONNUMBER').AsInteger ;
+     DM_goAml.OracleDataSet1.Close;
+     DM_goAml.OracleDataSet1.SetVariable('v_transid',tr_id);
+     DM_goAml.OracleDataSet1.open;
+
+  if DM_goAml.odscust4509.FieldByName('cust_type').AsString<>'0' then
+ begin
+     DM_goAml.ODS_TPERSON.close;
+     DM_goAml.ODS_TPERSON.SQL.Clear;
+     DM_goAml.ODS_TPERSON.SQL.Text := 'select * from mmx_signatory where custid='
+     +DM_goAml.odscust4509.FieldByName('id').AsString;//  +DM_goAml.ODS_TACCOUNT.FieldByName('cust_id').AsString;
+     DM_goAml.ODS_TPERSON.Open;
+
+ end;
+  if DM_goAml.odscust4509.FieldByName('cust_type').AsString='0' then
+ begin
+ if DM_goAml.ODS_CustRelSignatory.FieldByName('custid2').isNUll then
+     begin
+     er_count := er_count + 1;
+
+     RE_Errors.Lines.Add('Hüquqi şəxsdə Müdür və hesab sahibi olan şəxs qeyd edilməyib!');
+     end
+    else
+     begin
+
+     DM_goAml.ODS_TPERSON.close;
+     DM_goAml.ODS_TPERSON.SQL.Clear;
+     DM_goAml.ODS_TPERSON.SQL.Text := 'select * from mmx_signatory where custid='
+       +DM_goAml.ODS_CustRelSignatory.FieldByName('custid2').AsString;
+     DM_goAml.ODS_TPERSON.Open;
+
+ end;
+ end;
+    NODE_TPERSON ;
+    WriteLnString('</t_person>');
+
+   WriteLnString('</signatory>');
+
+    WriteString('<opened>');
+  WriteString(Dset.FieldByName('opened').AsString);
+  WriteLnString('</opened>');
+
+ 
+  if not Dset.FieldByName('closed').isNUll then
+  begin
+    WriteString('<closed>');
+    WriteString(Dset.FieldByName('closed').AsString);
+    WriteLnString('</closed>');
+  end;
+
+  WriteString('<balance>');
+  WriteString(Dset.FieldByName('balance').AsString);
+  WriteLnString('</balance>');
+
+  WriteString('<status_code>');
+  WriteString(Dset.FieldByName('status_code').AsString);
+  WriteLnString('</status_code>');
+   if v_inout=1 then
+   begin
+      WriteLnString('</to_account>')
+   end;
+
+     if v_inout=2 then
+   begin
+      WriteLnString('</from_account>')
+   end;
+ end;
+
+
+procedure TGoAml_ServiceForm.NODE_TACCOUNT(Dset: Tdataset);
+var
+tr_id:integer;
+begin
+  WriteString('<institution_name>');
+  WriteString(Dset.FieldByName('institution_name').AsString);
+  WriteLnString('</institution_name>');
+
+  WriteString('<swift>');
+  WriteString(Dset.FieldByName('swift').AsString);
+  WriteLnString('</swift>');
+
+  WriteString('<non_bank_institution>');
+  WriteString(Dset.FieldByName('non_bank_institution').AsString);
+  WriteLnString('</non_bank_institution>');
+
+  WriteString('<branch>');
+  WriteString(Dset.FieldByName('branch').AsString);
+  WriteLnString('</branch>');
+
+  WriteString('<account>');
+  WriteString(Dset.FieldByName('account').AsString);
+  WriteLnString('</account>');
+
+  WriteString('<currency_code>');
+  WriteString(Dset.FieldByName('currency_code').AsString);
+  WriteLnString('</currency_code>');
+
+  WriteString('<iban>');
+  WriteString(Dset.FieldByName('iban').AsString);
+  WriteLnString('</iban>');
+
+  WriteString('<personal_account_type>');
+  WriteString(Dset.FieldByName('personal_account_type').AsString);
+  WriteLnString('</personal_account_type>');
+
+
+  {---------------
+  WriteString('<institution_code>');
+  WriteString(Dset.FieldByName('institution_code').AsString);
+  WriteLnString('</institution_code>');
+
+  WriteString('<account_name>');
+  WriteString(Dset.FieldByName('account_name').AsString);
+  WriteLnString('</account_name>');
+  WriteString('<client_number>');
+  WriteString(Dset.FieldByName('client_number').AsString);
+  WriteLnString('</client_number>');    ---}
+
+ if Dset.FieldByName('cust_type').AsString = '0' then
+  begin
+
+   //showmessage('b1'+Dset.FieldByName('cust_id').AsString);
+    WriteString('<t_entity>');
+    DM_goAml.ODS_ENTITY.close;
+    DM_goAml.ODS_ENTITY.SetVariable('v_id', Dset.FieldByName('cust_id').AsInteger);
+    DM_goAml.ODS_ENTITY.Open;
+     //showmessage('c'+DM_goAml.ODS_ENTITY.FieldByName('id').AsString);
+    NODE_TENTITY;
+
+
+///////////--------------director_id --------/////////////
+
+   DM_goAml.ODS_CustRelSignatory.close;
+  DM_goAml.ODS_CustRelSignatory.SetVariable('V_ID',
+    DM_goAml.ODS_TACCOUNT.FieldByName('cust_id').AsInteger);
+  DM_goAml.ODS_CustRelSignatory.Open;
+
+ if Dset.FieldByName('cust_type').AsString='0' then
+ begin
+ //showmessage('b11'+Dset.FieldByName('cust_id').AsString);
+    if DM_goAml.ODS_CustRelSignatory.FieldByName('custid2').isNUll then
+     begin
+     er_count := er_count + 1;
+
+     RE_Errors.Lines.Add('Hüquqi şəxsdə Müdür və hesab sahibi olan şəxs qeyd edilməyib!');
+     end
+    else
+     begin
+   // showmessage('dr'+DM_goAml.ODS_CustRelSignatory.FieldByName('custid2').AsString) ;
+     DM_goAml.ODS_TPERSON.close;
+     DM_goAml.ODS_TPERSON.SQL.Clear;
+     DM_goAml.ODS_TPERSON.SQL.Text := 'select * from mmx_signatory where custid='
+       +DM_goAml.ODS_CustRelSignatory.FieldByName('custid2').AsString;
+     DM_goAml.ODS_TPERSON.Open;
+     end;
+     WriteString('<director_id>');
+    NODE_TPERSON_tessci;;
+    WriteLnString('</director_id>');
+
+ end;
+
+  ///////////--------------director_id --------/////////////
+
+   ///////////--------------tessci --------/////////////
+
+   DM_goAml.ODS_CustRelAccOwer.close;
+  DM_goAml.ODS_CustRelAccOwer.SetVariable('V_ID',
+    DM_goAml.ODS_TACCOUNT.FieldByName('cust_id').AsInteger);
+  DM_goAml.ODS_CustRelAccOwer.Open;
+
+ if Dset.FieldByName('cust_type').AsINteger = 0 then
+ begin
+    if DM_goAml.ODS_CustRelAccOwer.FieldByName('custid2').isNUll then
+     begin
+     er_count := er_count + 1;
+     RE_Errors.Lines.Add('Hüquqi şəxsdə Təsisçi və imza hüququ olan şəxs qeyd edilməyib!');
+     end
+    else
+     begin
+     DM_goAml.ODS_TPERSON.close;
+     DM_goAml.ODS_TPERSON.SQL.Clear;
+     DM_goAml.ODS_TPERSON.SQL.Text := 'select * from mmx_signatory where custid='
+       +DM_goAml.ODS_CustRelAccOwer.FieldByName('custid2').AsString;
+     DM_goAml.ODS_TPERSON.Open;
+     end;
+    WriteString('<founder>');
+    WriteString('<governmental>');
+    WriteString('false');
+    WriteLnString('</governmental>' );
+      WriteString('<founder_person>');
+       NODE_TPERSON_tessci;
+      WriteLnString('</founder_person>');
+       WriteLnString('</founder>');
+     WriteString('<ceo>');
+       NODE_TPERSON_tessci;
+     WriteLnString('</ceo>');
+
+ end;
+
+   ///////////--------------tessci --------/////////////
+     WriteLnString('</t_entity>');
+  end;
+
+  WriteString('<signatory>');
+
+  WriteString('<is_primary>');
+  WriteString('1');
+  WriteLnString('</is_primary>');
+
+///////////-----------t_person-----------------/////////////////
+  WriteString('<t_person>');
+     if dc_custtype=true then
+     begin
+    tr_id:=DBGridTransactions1.DataSource.DataSet.FieldByName('TRANSACTIONNUMBER').AsInteger ;
+     DM_goAml.OracleDataSet1.Close;
+     DM_goAml.OracleDataSet1.SetVariable('v_transid',tr_id);
+     DM_goAml.OracleDataSet1.open;
+      if not(DM_goAml.OracleDataSet1cCUSTID.IsNull) and not(DM_goAml.OracleDataSet1NOMcCUSTID.IsNull) then
+     begin
+
+     DM_goAml.OracleDataSet2.Close;
+     DM_goAml.OracleDataSet2.SetVariable('v_cuid',DM_goAml.OracleDataSet1NOMcCUSTID.AsInteger);
+     DM_goAml.OracleDataSet2.open;
+    if  DM_goAml.OracleDataSet2CUST_TYPE.AsInteger=0 then
+     begin
+   DM_goAml.ODS_CustRelSignatory.close;
+   DM_goAml.ODS_CustRelSignatory.SetVariable('V_ID',
+   DM_goAml.OracleDataSet1NOMcCUSTID.AsInteger);
+   DM_goAml.ODS_CustRelSignatory.Open;
+ if DM_goAml.ODS_CustRelSignatory.FieldByName('custid2').isNUll then
+     begin
+
+     er_count := er_count + 1;
+     RE_Errors.Lines.Add('Hüquqi şəxsdə Müdür və hesab sahibi olan şəxs qeyd edilməyib!');
+     end
+    else
+     begin
+     DM_goAml.ODS_TPERSON.close;
+     DM_goAml.ODS_TPERSON.SQL.Clear;
+     DM_goAml.ODS_TPERSON.SQL.Text := 'select * from mmx_signatory where custid='
+       +DM_goAml.ODS_CustRelSignatory.FieldByName('custid2').AsString;
+     DM_goAml.ODS_TPERSON.Open;
+     end;
+      end
+      else
+      begin
+       DM_goAml.ODS_TPERSON.close;
+     DM_goAml.ODS_TPERSON.SQL.Clear;
+     DM_goAml.ODS_TPERSON.SQL.Text := 'select * from mmx_signatory where custid='
+       +DM_goAml.OracleDataSet1NOMcCUSTID.AsString;
+     DM_goAml.ODS_TPERSON.Open;
+      end;
+     end
+     else
+     begin
+
+     DM_goAml.OracleDataSet2.Close;
+     DM_goAml.OracleDataSet2.SetVariable('v_cuid',DM_goAml.OracleDataSet1dCUSTID.AsInteger);
+     DM_goAml.OracleDataSet2.open;
+
+  if  DM_goAml.OracleDataSet2CUST_TYPE.AsString='0' then
+    begin
+
+   DM_goAml.ODS_CustRelSignatory.close;
+   DM_goAml.ODS_CustRelSignatory.SetVariable('V_ID',
+   DM_goAml.OracleDataSet1dCUSTID.AsInteger);
+   DM_goAml.ODS_CustRelSignatory.Open;
+ if (DM_goAml.ODS_CustRelSignatory.FieldByName('custid2').IsNull) then
+     begin
+
+        er_count := er_count + 1;
+     RE_Errors.Lines.Add('Hüquqi şəxsdə Müdür və hesab sahibi olan şəxs qeyd edilməyib!');
+     end
+    else
+     begin
+     DM_goAml.ODS_TPERSON.close;
+     DM_goAml.ODS_TPERSON.SQL.Clear;
+     DM_goAml.ODS_TPERSON.SQL.Text := 'select * from mmx_signatory where custid='
+       +DM_goAml.ODS_CustRelSignatory.FieldByName('custid2').AsString;
+     DM_goAml.ODS_TPERSON.Open;
+     end;
+      end
+      else
+      begin
+       DM_goAml.ODS_TPERSON.close;
+     DM_goAml.ODS_TPERSON.SQL.Clear;
+     DM_goAml.ODS_TPERSON.SQL.Text := 'select * from mmx_signatory where custid='
+       +DM_goAml.OracleDataSet1dCUSTID.AsString;
+     DM_goAml.ODS_TPERSON.Open;
+      end;
+      end;
+      NODE_TPERSON ;
+     end;
+
+  if dc_custtype=false then
+     begin
+    tr_id:=DBGridTransactions1.DataSource.DataSet.FieldByName('TRANSACTIONNUMBER').AsInteger ;
+     DM_goAml.OracleDataSet1.Close;
+     DM_goAml.OracleDataSet1.SetVariable('v_transid',tr_id);
+     DM_goAml.OracleDataSet1.open;
+      if not(DM_goAml.OracleDataSet1cCUSTID.IsNull) and not(DM_goAml.OracleDataSet1NOMcCUSTID.IsNull) then
+     begin
+
+     DM_goAml.OracleDataSet2.Close;
+     DM_goAml.OracleDataSet2.SetVariable('v_cuid',DM_goAml.OracleDataSet1NOMcCUSTID.AsInteger);
+     DM_goAml.OracleDataSet2.open;
+    if  DM_goAml.OracleDataSet2CUST_TYPE.AsInteger=0 then
+     begin
+   DM_goAml.ODS_CustRelSignatory.close;
+   DM_goAml.ODS_CustRelSignatory.SetVariable('V_ID',
+   DM_goAml.OracleDataSet1NOMcCUSTID.AsInteger);
+   DM_goAml.ODS_CustRelSignatory.Open;
+ if DM_goAml.ODS_CustRelSignatory.FieldByName('custid2').isNUll then
+     begin
+
+     er_count := er_count + 1;
+     RE_Errors.Lines.Add('Hüquqi şəxsdə Müdür və hesab sahibi olan şəxs qeyd edilməyib!');
+     end
+    else
+     begin
+     DM_goAml.ODS_TPERSON.close;
+     DM_goAml.ODS_TPERSON.SQL.Clear;
+     DM_goAml.ODS_TPERSON.SQL.Text := 'select * from mmx_signatory where custid='
+       +DM_goAml.ODS_CustRelSignatory.FieldByName('custid2').AsString;
+     DM_goAml.ODS_TPERSON.Open;
+     end;
+      end
+      else
+      begin
+       DM_goAml.ODS_TPERSON.close;
+     DM_goAml.ODS_TPERSON.SQL.Clear;
+     DM_goAml.ODS_TPERSON.SQL.Text := 'select * from mmx_signatory where custid='
+       +DM_goAml.OracleDataSet1NOMcCUSTID.AsString;
+     DM_goAml.ODS_TPERSON.Open;
+      end;
+     end
+     else
+     begin
+
+     DM_goAml.OracleDataSet2.Close;
+     DM_goAml.OracleDataSet2.SetVariable('v_cuid',DM_goAml.OracleDataSet1cCUSTID.AsInteger);
+     DM_goAml.OracleDataSet2.open;
+
+  if  DM_goAml.OracleDataSet2CUST_TYPE.AsString='0' then
+    begin
+
+   DM_goAml.ODS_CustRelSignatory.close;
+   DM_goAml.ODS_CustRelSignatory.SetVariable('V_ID',
+   DM_goAml.OracleDataSet1cCUSTID.AsInteger);
+   DM_goAml.ODS_CustRelSignatory.Open;
+ if (DM_goAml.ODS_CustRelSignatory.FieldByName('custid2').IsNull) then
+     begin
+
+        er_count := er_count + 1;
+     RE_Errors.Lines.Add('Hüquqi şəxsdə Müdür və hesab sahibi olan şəxs qeyd edilməyib!');
+     end
+    else
+     begin
+     DM_goAml.ODS_TPERSON.close;
+     DM_goAml.ODS_TPERSON.SQL.Clear;
+     DM_goAml.ODS_TPERSON.SQL.Text := 'select * from mmx_signatory where custid='
+       +DM_goAml.ODS_CustRelSignatory.FieldByName('custid2').AsString;
+     DM_goAml.ODS_TPERSON.Open;
+     end;
+      end
+      else
+      begin
+       DM_goAml.ODS_TPERSON.close;
+     DM_goAml.ODS_TPERSON.SQL.Clear;
+     DM_goAml.ODS_TPERSON.SQL.Text := 'select * from mmx_signatory where custid='
+       +DM_goAml.OracleDataSet1cCUSTID.AsString;
+     DM_goAml.ODS_TPERSON.Open;
+      end;
+      end;
+      NODE_TPERSON ;
+     end;
+
+    WriteLnString('</t_person>');
+
+   WriteLnString('</signatory>');
+
+    WriteString('<opened>');
+  WriteString(Dset.FieldByName('opened').AsString);
+  WriteLnString('</opened>');
+
+
+
+  if not Dset.FieldByName('closed').isNUll then
+  begin
+    WriteString('<closed>');
+    WriteString(Dset.FieldByName('closed').AsString);
+    WriteLnString('</closed>');
+  end;
+
+  WriteString('<balance>');
+  WriteString(Dset.FieldByName('balance').AsString);
+  WriteLnString('</balance>');
+
+  WriteString('<status_code>');
+  WriteString(Dset.FieldByName('status_code').AsString);
+  WriteLnString('</status_code>');
+  ////////////////--------------------t_person------------ ////
+  if dc_custtype=true then
+  begin
+    WriteLnString('</from_account>');
+  end
+  else
+   WriteLnString('</to_account>');
+
+   if dc_custtype=true then
+  begin
+    WriteString('<from_country>');
+    WriteString( DM_goAml.ODS_MainReport.FieldByName('from_country').AsString);
+    WriteLnString('</from_country>');
+
+    WriteLnString('</t_from_my_client>');
+    WriteString('<t_to_my_client>');
+
+    WriteString('<to_funds_code>');
+    WriteString(DM_goAml.ODS_MainReport.FieldByName('to_funds_code').AsString);
+    WriteLnString('</to_funds_code>');
+  end;
+  ///////////////-------------to_person----------//////////
+
+   if dc_custtype=true then
+     begin
+   WriteString('<to_person>');
+   DM_goAml.ODS_CustRelSignatory.close;
+   DM_goAml.ODS_CustRelSignatory.SetVariable('V_ID',
+    DM_goAml.ODS_TACCOUNT.FieldByName('cust_id').AsInteger);
+   DM_goAml.ODS_CustRelSignatory.Open;
+
+
+     tr_id:=DBGridTransactions1.DataSource.DataSet.FieldByName('TRANSACTIONNUMBER').AsInteger ;
+     DM_goAml.OracleDataSet1.Close;
+     DM_goAml.OracleDataSet1.SetVariable('v_transid',tr_id);
+     DM_goAml.OracleDataSet1.open;
+
+
+
+if not(DM_goAml.OracleDataSet1DCUSTID.IsNull) and not(DM_goAml.OracleDataSet1NOMDCUSTID.IsNull) then
+     begin
+     DM_goAml.OracleDataSet2.Close;
+     DM_goAml.OracleDataSet2.SetVariable('v_cuid',DM_goAml.OracleDataSet1NOMDCUSTID.AsInteger);
+     DM_goAml.OracleDataSet2.open;
+ if  DM_goAml.OracleDataSet2CUST_TYPE.AsString='0' then
+     begin
+   DM_goAml.ODS_CustRelSignatory.close;
+   DM_goAml.ODS_CustRelSignatory.SetVariable('V_ID',
+   DM_goAml.OracleDataSet1NOMDCUSTID.AsInteger);
+   DM_goAml.ODS_CustRelSignatory.Open;
+ if DM_goAml.ODS_CustRelSignatory.FieldByName('custid2').isNUll then
+     begin
+
+     er_count := er_count + 1;
+     RE_Errors.Lines.Add('Hüquqi şəxsdə Müdür və hesab sahibi olan şəxs qeyd edilməyib!');
+     end
+    else
+     begin
+
+     DM_goAml.ODS_TPERSON.close;
+     DM_goAml.ODS_TPERSON.SQL.Clear;
+     DM_goAml.ODS_TPERSON.SQL.Text := 'select * from mmx_signatory where custid='
+       +DM_goAml.ODS_CustRelSignatory.FieldByName('custid2').AsString;
+     DM_goAml.ODS_TPERSON.Open;
+     end;
+      end
+      else
+      begin
+       DM_goAml.ODS_TPERSON.close;
+     DM_goAml.ODS_TPERSON.SQL.Clear;
+     DM_goAml.ODS_TPERSON.SQL.Text := 'select * from mmx_signatory where custid='
+       +DM_goAml.OracleDataSet1NOMDCUSTID.AsString;
+     DM_goAml.ODS_TPERSON.Open;
+      end;
+     end
+     else
+     begin
+
+     DM_goAml.OracleDataSet2.Close;
+     DM_goAml.OracleDataSet2.SetVariable('v_cuid',DM_goAml.OracleDataSet1DCUSTID.AsInteger);
+     DM_goAml.OracleDataSet2.open;
+
+     if  DM_goAml.OracleDataSet2CUST_TYPE.AsString='0' then
+     begin
+
+   DM_goAml.ODS_CustRelSignatory.close;
+   DM_goAml.ODS_CustRelSignatory.SetVariable('V_ID',
+   DM_goAml.OracleDataSet1DCUSTID.AsInteger);
+   DM_goAml.ODS_CustRelSignatory.Open;
+ if DM_goAml.ODS_CustRelSignatory.FieldByName('custid2').isNUll then
+     begin
+     er_count := er_count + 1;
+     RE_Errors.Lines.Add('Hüquqi şəxsdə Müdür və hesab sahibi olan şəxs qeyd edilməyib!');
+     end
+    else
+     begin
+
+     DM_goAml.ODS_TPERSON.close;
+     DM_goAml.ODS_TPERSON.SQL.Clear;
+     DM_goAml.ODS_TPERSON.SQL.Text := 'select * from mmx_signatory where custid='
+       +DM_goAml.ODS_CustRelSignatory.FieldByName('custid2').AsString;
+     DM_goAml.ODS_TPERSON.Open;
+     end;
+      end
+      else
+      begin
+       DM_goAml.ODS_TPERSON.close;
+     DM_goAml.ODS_TPERSON.SQL.Clear;
+     DM_goAml.ODS_TPERSON.SQL.Text := 'select * from mmx_signatory where custid='
+       +DM_goAml.OracleDataSet1DCUSTID.AsString;
+     DM_goAml.ODS_TPERSON.Open;
+      end;
+     end;
+
+   NODE_TPERSON ;
+
+  WriteLnString('</to_person>');
+  end;
+
+    //WriteLnString('</to_person>');
+
+  //////////////------------to_person--------//////////2///
+
+
+
+  {
+    WriteString('<beneficiary>');
+    WriteLnString('</beneficiary>');
+    WriteString('<beneficiary_comment>');
+    WriteLnString('</beneficiary_comment>');
+  }
+end;
+
+procedure TGoAml_ServiceForm.NODE_TADDRESS_1(Dset: Tdataset);
+begin
+
+  with Dset do
+  begin
+
+    if not(FieldByName('address_type').isNUll) then
+    begin
+      WriteString('<address_type>');
+      WriteString(FieldByName('address_type').AsString);
+      WriteLnString('</address_type>')
+    end
+    else
+    begin
+      er_count := er_count + 1;
+      RE_Errors.Lines.Add('Adress tipi');
+    end;
+
+    if not(FieldByName('address').isNUll) then
+    begin
+      WriteString('<address>');
+      WriteString(FieldByName('address').AsString);
+      WriteLnString('</address>')
+    end
+    else
+    begin
+      er_count := er_count + 1;
+      RE_Errors.Lines.Add('Adress');
+    end;
+
+    if not(FieldByName('city').isNUll) then
+    begin
+      WriteString('<city>');
+      WriteString(FieldByName('city').AsString);
+      WriteLnString('</city>');
+    end
+    else
+    begin
+      er_count := er_count + 1;
+      RE_Errors.Lines.Add('Şəhər');
+    end;
+
+    { WriteString('<zip>');
+      WriteString(Dset.FieldByName('zip').AsString);
+      WriteLnString('</zip>'); }
+
+    if not(FieldByName('country_code').isNUll) then
+    begin
+      WriteString('<country_code>');
+      WriteString(FieldByName('country_code').AsString);
+      WriteLnString('</country_code>');
+    end
+    else
+    begin
+      er_count := er_count + 1;
+      RE_Errors.Lines.Add('Ölkə kodu');
+    end;
+
+    { WriteString('<state>');
+      WriteString(Dset.FieldByName('state').AsString);
+      WriteLnString('</state>'); }
+  end;
+
+
+end;
+
+procedure TGoAml_ServiceForm.NODE_TADDRESS(Dset: Tdataset);
+begin
+  WriteLnString('<addresses>');
+  WriteLnString('<address>');
+
+  with Dset do
+  begin
+
+    if not(FieldByName('address_type').isNUll) then
+    begin
+      WriteString('<address_type>');
+      WriteString(FieldByName('address_type').AsString);
+      WriteLnString('</address_type>')
+    end
+    else
+    begin
+      er_count := er_count + 1;
+      RE_Errors.Lines.Add('Adress tipi');
+    end;
+
+    if not(FieldByName('address').isNUll) then
+    begin
+      WriteString('<address>');
+      WriteString(FieldByName('address').AsString);
+      WriteLnString('</address>')
+    end
+    else
+    begin
+      er_count := er_count + 1;
+      RE_Errors.Lines.Add('Adress');
+    end;
+
+    if not(FieldByName('city').isNUll) then
+    begin
+      WriteString('<city>');
+      WriteString(FieldByName('city').AsString);
+      WriteLnString('</city>');
+    end
+    else
+    begin
+      er_count := er_count + 1;
+      RE_Errors.Lines.Add('Şəhər');
+    end;
+
+    { WriteString('<zip>');
+      WriteString(Dset.FieldByName('zip').AsString);
+      WriteLnString('</zip>'); }
+
+    if not(FieldByName('country_code').isNUll) then
+    begin
+      WriteString('<country_code>');
+      WriteString(FieldByName('country_code').AsString);
+      WriteLnString('</country_code>');
+    end
+    else
+    begin
+      er_count := er_count + 1;
+      RE_Errors.Lines.Add('Ölkə kodu');
+    end;
+
+    { WriteString('<state>');
+      WriteString(Dset.FieldByName('state').AsString);
+      WriteLnString('</state>'); }
+  end;
+
+  WriteLnString('</address>');
+  WriteLnString('</addresses>');
+end;
+
+procedure TGoAml_ServiceForm.NODE_TENTITY;
+begin
+  with DM_goAml.ODS_ENTITY do
+  begin
+
+    WriteString('<name>');
+    WriteString(FieldByName('name').AsString);
+    WriteLnString('</name>');
+
+    WriteString('<incorporation_legal_form>');
+    WriteString(FieldByName('incorporation_legal_form').AsString);
+    WriteLnString('</incorporation_legal_form>');
+
+    if not FieldByName('incorporation_number').isNUll then
+    begin
+      WriteString('<incorporation_number>');
+      WriteString(FieldByName('inn').AsString);
+      WriteLnString('</incorporation_number>')
+    end
+    else
+    begin
+      er_count := er_count + 1;
+      RE_Errors.Lines.Add('Dövlət qeydiyyat nömrəsi');
+    end;
+
+    if not FieldByName('incorporation_number').isNUll then
+    begin
+      WriteString('<registration_number>');
+      WriteString(FieldByName('incorporation_number').AsString);
+      WriteLnString('</registration_number>')
+    end
+    else
+    begin
+      er_count := er_count + 1;
+      RE_Errors.Lines.Add('Dövlət qeydiyyat nömrəsi');
+    end;
+
+
+    WriteString('<business>');
+   WriteString('87300');// WriteString(FieldByName('business').AsString);
+    WriteLnString('</business>');
+
+    NODE_TADDRESS(DM_goAml.ODS_ENTITY);
+
+    WriteString('<email>');
+    WriteString(FieldByName('email').AsString);
+    WriteLnString('</email>');
+
+    WriteString('<url>');
+    WriteString(FieldByName('url').AsString);
+    WriteLnString('</url>');
+
+    WriteString('<incorporation_state>');
+    WriteString(FieldByName('incorporation_state').AsString);
+    WriteLnString('</incorporation_state>');
+
+    WriteString('<incorporation_country_code>');
+    WriteString(FieldByName('incorporation_country_code').AsString);
+    WriteLnString('</incorporation_country_code>');
+   {
+    WriteString('<director_id>');
+    showmessage('oo'+ inttostr(DM_goAml.ODS_ENTITY.RecordCount));
+    NODE_TPERSON;
+    WriteLnString('</director_id>');
+       }
+    {WriteString('<founder_person>');
+     WriteString('<founder>');
+      NODE_TPERSON_tessci;
+     WriteLnString('</founder>');
+     WriteLnString('</founder_person>');
+
+     WriteString('<ceo>');
+      NODE_TPERSON_tessci;
+     WriteLnString('</ceo>');}
+ ///--------------   NODE_PHONES(DM_goAml.ODS_ENTITY);
+
+
+  end;
+end;
+
+procedure TGoAml_ServiceForm.NODE_PHONES_1(Dset: Tdataset);
+begin
+  with Dset do
+  begin
+
+    if not(FieldByName('tph_contact_type').isNUll) then
+    begin
+      WriteString('<tph_contact_type>');
+      WriteString(FieldByName('tph_contact_type').AsString);
+      WriteLnString('</tph_contact_type>');
+    end
+    else
+    begin
+      er_count := er_count + 1;
+      RE_Errors.Lines.Add('Əlaqə növü');
+    end;
+
+    if not(FieldByName('tph_communication_type').isNUll) then
+    begin
+      WriteString('<tph_communication_type>');
+      WriteString(FieldByName('tph_communication_type').AsString);
+      WriteLnString('</tph_communication_type>');
+    end
+    else
+    begin
+      er_count := er_count + 1;
+      RE_Errors.Lines.Add('Rabitə növü');
+    end;
+
+     WriteString('<tph_country_prefix>');
+      WriteString(Dset.FieldByName('tph_country_prefix').AsString);
+      WriteLnString('</tph_country_prefix>');
+
+    if not(FieldByName('tph_number').isNUll) then
+    begin
+      WriteString('<tph_number>');
+      WriteString(FieldByName('tph_number').AsString);
+      WriteLnString('</tph_number>');
+    end
+    else
+    begin
+      er_count := er_count + 1;
+      RE_Errors.Lines.Add('Telefon');
+    end;
+
+    { WriteString('<tph_extension>');
+      WriteString(Dset.FieldByName('tph_extension').AsString);
+      WriteLnString('</tph_extension>'); }
+  end;
+  end;
+
+procedure TGoAml_ServiceForm.NODE_PHONES(Dset: Tdataset);
+begin
+  WriteLnString('<phones>');
+  WriteLnString('<phone>');
+
+  with Dset do
+  begin
+
+    if not(FieldByName('tph_contact_type').isNUll) then
+    begin
+      WriteString('<tph_contact_type>');
+      WriteString(FieldByName('tph_contact_type').AsString);
+      WriteLnString('</tph_contact_type>');
+    end
+    else
+    begin
+      er_count := er_count + 1;
+      RE_Errors.Lines.Add('Əlaqə növü');
+    end;
+
+    if not(FieldByName('tph_communication_type').isNUll) then
+    begin
+      WriteString('<tph_communication_type>');
+      WriteString(FieldByName('tph_communication_type').AsString);
+      WriteLnString('</tph_communication_type>');
+    end
+    else
+    begin
+      er_count := er_count + 1;
+      RE_Errors.Lines.Add('Rabitə növü');
+    end;
+
+     WriteString('<tph_country_prefix>');
+      WriteString(Dset.FieldByName('tph_country_prefix').AsString);
+      WriteLnString('</tph_country_prefix>');
+
+    if not(FieldByName('tph_number').isNUll) then
+    begin
+      WriteString('<tph_number>');
+      WriteString(FieldByName('tph_number').AsString);
+      WriteLnString('</tph_number>');
+    end
+    else
+    begin
+      er_count := er_count + 1;
+      RE_Errors.Lines.Add('Telefon');
+    end;
+
+    { WriteString('<tph_extension>');
+      WriteString(Dset.FieldByName('tph_extension').AsString);
+      WriteLnString('</tph_extension>'); }
+  end;
+
+  WriteLnString('</phone>');
+  WriteLnString('</phones>');
+end;
+
+procedure TGoAml_ServiceForm.node_tforeign_currency_vdm(vFieldSymb: String);
+var
+v_rat:Currency;
+begin
+  with DM_goAml.ODS_MainReport do
+  begin
+    WriteString('<foreign_currency_code>');
+    WriteString(FieldByName(vFieldSymb + 'foreign_currency_code').AsString);
+    WriteLnString('</foreign_currency_code>');
+
+    WriteString('<foreign_amount>');
+    WriteString(FieldByName( 'amount_local').AsString);
+    WriteLnString('</foreign_amount>');
+
+   if FieldByName('D_FOREIGN_CURRENCY_CODE').AsString ='AZN'then
+   begin
+
+   v_rat:=1/FieldByName('c_foreign_exchange_rate').AsFloat;
+   WriteString('<foreign_exchange_rate>');
+   WriteString(FloatToStr(v_rat));
+   WriteLnString('</foreign_exchange_rate>');
+   end
+   else
+   begin
+   v_rat:=1/FieldByName('d_foreign_exchange_rate').AsFloat;
+   WriteString('<foreign_exchange_rate>');
+   WriteString(FloatToStr(v_rat));
+   WriteLnString('</foreign_exchange_rate>');
+   end;
+
+  end;
+end;
+
+procedure TGoAml_ServiceForm.node_tforeign_currency(vFieldSymb: String);
+begin
+  with DM_goAml.ODS_MainReport do
+  begin
+    WriteString('<foreign_currency_code>');
+    WriteString(FieldByName(vFieldSymb + 'foreign_currency_code').AsString);
+    WriteLnString('</foreign_currency_code>');
+
+    WriteString('<foreign_amount>');
+    WriteString(FieldByName(vFieldSymb + 'foreign_amount').AsString);
+    WriteLnString('</foreign_amount>');
+
+    WriteString('<foreign_exchange_rate>');
+    WriteString(FieldByName(vFieldSymb + 'foreign_exchange_rate').AsString);
+    WriteLnString('</foreign_exchange_rate>');
+  end;
+end;
+procedure TGoAml_ServiceForm.NODE_LocationADDRESS(Dset: Tdataset);
+begin
+  with Dset do
+  begin
+
+    if not(FieldByName('address_type').isNUll) then
+    begin
+      WriteString('<address_type>');
+      WriteString(FieldByName('address_type').AsString);
+      WriteLnString('</address_type>')
+    end
+    else
+    begin
+      er_count := er_count + 1;
+      RE_Errors.Lines.Add('Adress tipi');
+    end;
+
+    if not(FieldByName('address').isNUll) then
+    begin
+      WriteString('<address>');
+      WriteString(FieldByName('address').AsString);
+      WriteLnString('</address>')
+    end
+    else
+    begin
+      er_count := er_count + 1;
+      RE_Errors.Lines.Add('Adress');
+    end;
+
+    if not(FieldByName('city').isNUll) then
+    begin
+      WriteString('<city>');
+      WriteString(FieldByName('city').AsString);
+      WriteLnString('</city>');
+    end
+    else
+    begin
+      er_count := er_count + 1;
+      RE_Errors.Lines.Add('Şəhər');
+    end;
+
+    { WriteString('<zip>');
+      WriteString(Dset.FieldByName('zip').AsString);
+      WriteLnString('</zip>'); }
+
+    if not(FieldByName('country_code').isNUll) then
+    begin
+      WriteString('<country_code>');
+      WriteString(FieldByName('country_code').AsString);
+      WriteLnString('</country_code>');
+    end
+    else
+    begin
+      er_count := er_count + 1;
+      RE_Errors.Lines.Add('Ölkə kodu');
+    end;
+
+    { WriteString('<state>');
+      WriteString(Dset.FieldByName('state').AsString);
+      WriteLnString('</state>'); }
+  end;
+
+  // WriteLnString('</address>');
+  // WriteLnString('</addresses>');
+end;
+procedure TGoAml_ServiceForm.NODE_TPERSON_2 ;
+  begin
+   with DM_goAml.ODS_TPERSON do
+  begin
+
+    WriteString('<email>');
+    WriteString(FieldByName('email').AsString);
+    WriteLnString('</email>');
+  end;
+  end;
+
+  procedure TGoAml_ServiceForm.NODE_TPERSON_1 ;
+  begin
+   with DM_goAml.ODS_TPERSON do
+  begin
+ // showmessage(DM_goAml.ODS_TPERSON.SQL.Text);
+    if not(FieldByName('first_name').isNUll) then
+    begin
+      WriteString('<first_name>');
+      WriteString(FieldByName('first_name').AsString);
+      WriteLnString('</first_name>');
+    end
+    else
+    begin
+      er_count := er_count + 1;
+      RE_Errors.Lines.Add('Adı');
+    end;
+     if not(FieldByName('last_name').isNUll) then
+    begin
+      WriteString('<last_name>');
+      WriteString(FieldByName('last_name').AsString);
+      WriteLnString('</last_name>');
+    end
+    else
+    begin
+      er_count := er_count + 1;
+      RE_Errors.Lines.Add('Soyadı');
+    end;
+
+  end;
+  end;
+
+   procedure TGoAml_ServiceForm.NODE_TPERSON_tessci ;
+  begin
+   with DM_goAml.ODS_TPERSON do
+  begin
+
+    if not(FieldByName('first_name').isNUll) then
+    begin
+      WriteString('<first_name>');
+      WriteString(FieldByName('first_name').AsString);
+      WriteLnString('</first_name>');
+    end
+    else
+    begin
+      er_count := er_count + 1;
+      RE_Errors.Lines.Add('Adı');
+    end;
+
+   if not FieldByName('middle_name').isNUll then
+    begin
+      WriteString('<middle_name>');
+      WriteString(FieldByName('middle_name').AsString);
+      WriteLnString('</middle_name>');
+    end;
+
+     if not(FieldByName('last_name').isNUll) then
+    begin
+      WriteString('<last_name>');
+      WriteString(FieldByName('last_name').AsString);
+      WriteLnString('</last_name>');
+    end
+    else
+    begin
+      er_count := er_count + 1;
+      RE_Errors.Lines.Add('Soyadı');
+    end;
+
+    WriteString('<birthdate>');
+    WriteString(FieldByName('birthdate').AsString);
+    WriteLnString('</birthdate>');
+
+  end;
+  end;
+procedure TGoAml_ServiceForm.NODE_TPERSON;
+  var
+  d_custid,c_custid:string;
+  v_comments:string;
+begin
+
+  with DM_goAml.ODS_TPERSON do
+  begin
+
+    if not(FieldByName('gender').isNUll) then
+    begin
+      WriteString('<gender>');
+      WriteString(FieldByName('gender').AsString);
+      WriteLnString('</gender>');
+    end
+    else
+    begin
+      er_count := er_count + 1;
+      RE_Errors.Lines.Add('Cinsi');
+    end;
+
+    if not(FieldByName('title').isNUll) then
+    begin
+      WriteString('<title>');
+      WriteString(FieldByName('title').AsString);
+      WriteLnString('</title>');
+    end;
+    { else
+      begin
+      er_count:=er_count+1;
+      RE_Errors.Lines.Add('title');
+      end; }
+
+    if not(FieldByName('first_name').isNUll) then
+    begin
+      WriteString('<first_name>');
+      WriteString(FieldByName('first_name').AsString);
+      WriteLnString('</first_name>');
+    end
+    else
+    begin
+      er_count := er_count + 1;
+      RE_Errors.Lines.Add('Adı');
+    end;
+
+    if not FieldByName('middle_name').isNUll then
+    begin
+      WriteString('<middle_name>');
+      WriteString(FieldByName('middle_name').AsString);
+      WriteLnString('</middle_name>');
+    end;
+
+    if not FieldByName('prefix').isNUll then
+    begin
+      WriteString('<prefix>');
+      WriteString(FieldByName('prefix').AsString);
+      WriteLnString('</prefix>');
+    end;
+
+    if not(FieldByName('last_name').isNUll) then
+    begin
+      WriteString('<last_name>');
+      WriteString(FieldByName('last_name').AsString);
+      WriteLnString('</last_name>');
+    end
+    else
+    begin
+      er_count := er_count + 1;
+      RE_Errors.Lines.Add('Soyadı');
+    end;
+
+    WriteString('<birthdate>');
+    WriteString(FieldByName('birthdate').AsString);
+    WriteLnString('</birthdate>');
+
+    // if not FieldByName('birth_place').isNUll then
+    // begin
+    WriteString('<birth_place>');
+    WriteString(FieldByName('birth_place').AsString);
+    WriteLnString('</birth_place>');
+    // end;
+
+    if not FieldByName('mothers_name').isNUll then
+    begin
+      WriteString('<mothers_name>');
+      WriteString(FieldByName('mothers_name').AsString);
+      WriteLnString('</mothers_name>');
+    end;
+
+    if not FieldByName('ssn').isNUll then
+    begin
+      WriteString('<ssn>');
+      WriteString(FieldByName('ssn').AsString);
+      WriteLnString('</ssn>');
+    end;
+
+    if not(FieldByName('nationality1').isNUll) then
+    begin
+      WriteString('<nationality1>');
+      WriteString(FieldByName('nationality1').AsString);
+      WriteLnString('</nationality1>');
+    end
+    else
+    begin
+      er_count := er_count + 1;
+      RE_Errors.Lines.Add('Vətəndaşlığı');
+    end;
+
+    if not FieldByName('nationality2').isNUll then
+    begin
+      WriteString('<nationality2>');
+      WriteString(FieldByName('nationality2').AsString);
+      WriteLnString('</nationality2>');
+    end;
+
+    if not FieldByName('nationality3').isNUll then
+    begin
+      WriteString('<nationality3>');
+      WriteString(FieldByName('nationality3').AsString);
+      WriteLnString('</nationality3>');
+    end;
+
+    if not FieldByName('residence').isNUll then
+    begin
+      WriteString('<residence>');
+      WriteString(FieldByName('residence').AsString);
+      WriteLnString('</residence>');
+    end
+    else
+    begin
+      er_count := er_count + 1;
+      RE_Errors.Lines.Add('Rezidentliyi');
+    end;
+
+    NODE_PHONES(DM_goAml.ODS_TPERSON);
+    NODE_TADDRESS(DM_goAml.ODS_TPERSON);
+
+    WriteString('<email>');
+    WriteString(FieldByName('email').AsString);
+    WriteLnString('</email>');
+
+    if not FieldByName('occupation').isNUll then
+    begin
+      WriteString('<occupation>');
+      WriteString(FieldByName('occupation').AsString);
+      WriteLnString('</occupation>');
+
+   end
+    else
+    begin
+      er_count := er_count + 1;
+      RE_Errors.Lines.Add('Vəzifəsi');
+    end;
+
+     if not FieldByName('employer_name').isNUll then
+    begin
+      WriteString('<employer_name>');
+      WriteString(FieldByName('employer_name').AsString);
+      WriteLnString('</employer_name>');
+    end
+    else
+    begin
+      er_count := er_count + 1;
+      RE_Errors.Lines.Add('is yeri');
+    end;
+
+
+      WriteString('<employer_address_id>');
+      NODE_TADDRESS_1(DM_goAml.ODS_TPERSON);
+      WriteLnString('</employer_address_id>');
+
+
+      WriteString('<employer_phone_id>');
+       NODE_PHONES_1(DM_goAml.ODS_TPERSON);
+      WriteLnString('</employer_phone_id>');
+
+
+    WriteString('<identification>');
+    NODE_identification;
+    WriteLnString('</identification>');
+  //------------------------------------------- //
+   if pop_ctrtpr_clik=5 then
+     begin
+     DM_goAml.ods_cust.Close;
+     DM_goAml.ods_cust.SetVariable('c_id',dey2);
+     DM_goAml.ods_cust.open;
+
+     if DM_goAml.ods_custCOMPANI.AsInteger in [2,3,5,6,7] then
+       begin
+      WriteString('<tax_number>');
+      WriteString(DM_goAml.ods_cust.FieldByName('inn').AsString);
+      WriteLnString('</tax_number>');
+     if  DM_goAml.ods_cust.FieldByName('sfera_deycod').AsVariant>0 then
+     begin
+      WriteString('<tax_reg_number>');
+      WriteString(DM_goAml.ods_cust.FieldByName('sfera_deycod').AsString);
+      WriteLnString('</tax_reg_number>');
+      end;
+        end;
+
+      DM_goAml.ods_cust.Close;
+     DM_goAml.ods_cust.SetVariable('c_id',dey3);
+     DM_goAml.ods_cust.open;
+
+     if DM_goAml.ods_custCOMPANI.AsInteger in [2,3,5,6,7] then
+       begin
+      WriteString('<tax_number>');
+      WriteString(DM_goAml.ods_cust.FieldByName('inn').AsString);
+      WriteLnString('</tax_number>');
+     if  DM_goAml.ods_cust.FieldByName('sfera_deycod').AsVariant>0 then
+     begin
+      WriteString('<tax_reg_number>');
+      WriteString(DM_goAml.ods_cust.FieldByName('sfera_deycod').AsString);
+      WriteLnString('</tax_reg_number>');
+      end;
+        end;
+
+     end;
+  //------------------------------------------//
+      if pop_ctrtpr_clik<>5 then
+     begin
+    case DM_goAml.ODS_Rep.FieldByName('dk').AsInteger of
+   1:begin
+           if  DBGridTransactions1.DataSource=DM_goAml.DS_maindbt then
+             begin
+       dey2:=DBGridTransactions1.DataSource.DataSet.FieldByName('KCUSTID').AsString;
+
+     DM_goAml.ods_cust.Close;
+     DM_goAml.ods_cust.SetVariable('c_id',dey2);
+     DM_goAml.ods_cust.open;
+    if ((DM_goAml.ods_cust.FieldByName('cust_type').AsInteger=0) or
+       (DM_goAml.ods_cust.FieldByName('cust_type').AsInteger=2)or
+       (DM_goAml.ods_cust.FieldByName('cust_type').AsInteger=3))
+     then
+     begin
+      v_comments:=DM_goAml.ods_cust.FieldByName('COMMENTS').AsString;
+      WriteString('<tax_number>');
+      WriteString(DM_goAml.ods_cust.FieldByName('inn').AsString);
+      WriteLnString('</tax_number>');
+     if  DM_goAml.ods_cust.FieldByName('sfera_deycod').AsVariant>0 then
+     begin
+      WriteString('<tax_reg_number>');
+      WriteString(DM_goAml.ods_cust.FieldByName('sfera_deycod').AsString);
+      WriteLnString('</tax_reg_number>');
+
+     end;
+     end;
+
+             end;
+   end;
+   2:begin
+      if  DBGridTransactions1.DataSource=DM_goAml.DS_Main then
+             begin
+      dey3:=DBGridTransactions1.DataSource.DataSet.FieldByName('DCUSTID').AsString;
+        DM_goAml.ods_cust.Close;
+     DM_goAml.ods_cust.SetVariable('c_id',dey3);
+     DM_goAml.ods_cust.open;
+    if ((DM_goAml.ods_cust.FieldByName('cust_type').AsInteger=0) or
+       (DM_goAml.ods_cust.FieldByName('cust_type').AsInteger=2)or
+       (DM_goAml.ods_cust.FieldByName('cust_type').AsInteger=3))
+     then
+
+     begin
+      v_comments:=DM_goAml.ods_cust.FieldByName('COMMENTS').AsString;
+      WriteString('<tax_number>');
+      WriteString(DM_goAml.ods_cust.FieldByName('inn').AsString);
+      WriteLnString('</tax_number>');
+
+      WriteString('<tax_reg_number>');
+      WriteString(DM_goAml.ods_cust.FieldByName('sfera_deycod').AsString);
+      WriteLnString('</tax_reg_number>');
+    end;
+             end;
+   end;
+    end;
+   end;
+
+
+
+   // showmessage(dey2+'yy'+dey3);
+    WriteString('<unemployed>');
+    WriteString('false');
+    WriteLnString('</unemployed>');
+
+
+      WriteString('<source_of_wealth>');
+
+    if not(FieldByName('activity').isNUll) then
+    begin
+    //showmessage(DM_goAml.ODS_TPERSON.SQL.Text);
+      WriteString('<activity>');
+      WriteString(FieldByName('activity').AsString);
+      WriteLnString('</activity>');
+    end
+    else
+    begin
+      er_count := er_count + 1;
+      RE_Errors.Lines.Add(' Fəaliyyət istiqaməti');
+    end;
+
+    if not(FieldByName('profession').isNUll) then
+    begin
+     WriteString('<profession>');
+      WriteString(FieldByName('profession').AsString);
+      WriteLnString('</profession>');
+    end
+    else
+    begin
+      er_count := er_count + 1;
+      RE_Errors.Lines.Add('Peşəsi');
+    end;
+
+    if not(FieldByName('source_of_income').isNUll) then
+    begin
+     WriteString('<source_of_income>');
+      WriteString(FieldByName('source_of_income').AsString);
+      WriteLnString('</source_of_income>');
+      WriteLnString('</source_of_wealth>');
+    end
+    else
+    begin
+      er_count := er_count + 1;
+      RE_Errors.Lines.Add('Gəlir mənbəyi');
+    end;
+
+   if pop_ctrtpr_clik<>5 then
+     begin
+ if DM_goAml.ods_cust.RecordCount>0 then
+  begin
+  if  v_comments<>'' then
+  begin
+    writeString('<comments>');
+  WriteString(DM_goAml.ods_cust.FieldByName('COMMENTS').AsString);
+  WriteLnString('</comments>');
+  end
+  else begin
+  writeString('<comments>');
+  WriteString('məlum olmadı');
+  WriteLnString('</comments>');
+   end;
+  end;
+     end;
+
+  end;
+  end;
+
+
+procedure TGoAml_ServiceForm.NODE_identification;
+begin
+   with DM_goAml.ODS_TPERSON do
+  begin
+    // WriteString('<t_person_identification>');
+    if not(FieldByName('pasp_type').isNUll) then
+    begin
+      WriteString('<type>');
+      WriteString(FieldByName('pasp_type').AsString);
+      WriteLnString('</type>');
+    end
+    else
+    begin
+      er_count := er_count + 1;
+      RE_Errors.Lines.Add('Sənədin növü');
+    end;
+
+    if not(FieldByName('pasp_number').isNUll) then
+    begin
+      WriteString('<number>');
+      WriteString(FieldByName('pasp_number').AsString);
+      WriteLnString('</number>');
+    end
+    else
+    begin
+       er_count := er_count + 1;
+      RE_Errors.Lines.Add('Sənədin nömrəsi');
+    end;
+
+    if not FieldByName('issue_date').isNUll then
+    begin
+      WriteString('<issue_date>');
+      WriteString(FieldByName('issue_date').AsString);;
+      WriteLnString('</issue_date>');
+    end;
+
+    if not FieldByName('expiry_date').isNUll then
+    begin
+      WriteString('<expiry_date>');
+      WriteString(FieldByName('expiry_date').AsString);
+      WriteLnString('</expiry_date>');
+    end;
+
+    if not FieldByName('issued_by').isNUll then
+    begin
+      WriteString('<issued_by>');
+      WriteString(FieldByName('issued_by').AsString);
+      WriteLnString('</issued_by>');
+    end
+    else
+    begin
+      er_count := er_count + 1;
+      RE_Errors.Lines.Add('Sənədin verildiyi orqan');
+    end;
+
+    if not FieldByName('issue_country').isNUll then
+    begin
+      WriteString('<issue_country>');
+      WriteString(FieldByName('issue_country').AsString);
+      WriteLnString('</issue_country>');
+    end
+    else
+    begin
+      er_count := er_count + 1;
+      RE_Errors.Lines.Add('Sənədin verildiyi ölkə');
+    end;
+
+    // WriteString('</t_person_identification>');
+
+  end;
+end;
+
+procedure TGoAml_ServiceForm.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_GoAml_ServicePage); }
+end;
+
+procedure TGoAml_ServiceForm.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as IGoAml_ServiceEvents;
+  inherited EventSinkChanged(EventSink);
+end;
+
+procedure TGoAml_ServiceForm.Excel1Click(Sender: TObject);
+begin
+ with CMExcelExport1 do
+  begin
+     Connect;
+     ExportDataset(DBGridTransactions1.DataSource.DataSet,'GoAml',true,true);
+     Disconnect;
+  end;
+end;
+
+procedure TGoAml_ServiceForm.Excel2Click(Sender: TObject);
+begin
+  if DM_goAml.ods_subtrans.RecordCount>0 then
+  begin
+   with CMExcelExport2 do
+   begin
+      Connect;
+      ExportDataset( DM_goAml.ods_subtrans,'Tax',True);
+      Disconnect;
+   end  ;
+  end
+  else
+  begin
+    Showmessage('  Heç bir  əməliyyat   yoxdur   !');
+  end;
+end;
+
+procedure TGoAml_ServiceForm.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnMouseEnter := MouseEnterEvent;
+  OnMouseLeave := MouseLeaveEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TGoAml_ServiceForm.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TGoAml_ServiceForm.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TGoAml_ServiceForm.Get_AlignDisabled: WordBool;
+begin
+  Result := AlignDisabled;
+end;
+
+function TGoAml_ServiceForm.Get_AlignWithMargins: WordBool;
+begin
+  Result := AlignWithMargins;
+end;
+
+function TGoAml_ServiceForm.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TGoAml_ServiceForm.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TGoAml_ServiceForm.Get_BorderWidth: Integer;
+begin
+  Result := Integer(BorderWidth);
+end;
+
+function TGoAml_ServiceForm.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TGoAml_ServiceForm.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TGoAml_ServiceForm.Get_DockSite: WordBool;
+begin
+  Result := DockSite;
+end;
+
+function TGoAml_ServiceForm.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TGoAml_ServiceForm.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TGoAml_ServiceForm.Get_ExplicitHeight: Integer;
+begin
+  Result := ExplicitHeight;
+end;
+
+function TGoAml_ServiceForm.Get_ExplicitLeft: Integer;
+begin
+  Result := ExplicitLeft;
+end;
+
+function TGoAml_ServiceForm.Get_ExplicitTop: Integer;
+begin
+  Result := ExplicitTop;
+end;
+
+function TGoAml_ServiceForm.Get_ExplicitWidth: Integer;
+begin
+  Result := ExplicitWidth;
+end;
+
+function TGoAml_ServiceForm.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TGoAml_ServiceForm.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TGoAml_ServiceForm.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TGoAml_ServiceForm.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TGoAml_ServiceForm.Get_MouseInClient: WordBool;
+begin
+  Result := MouseInClient;
+end;
+
+function TGoAml_ServiceForm.Get_ParentCustomHint: WordBool;
+begin
+  Result := ParentCustomHint;
+end;
+
+function TGoAml_ServiceForm.Get_ParentDoubleBuffered: WordBool;
+begin
+  Result := ParentDoubleBuffered;
+end;
+
+function TGoAml_ServiceForm.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TGoAml_ServiceForm.Get_PopupMode: TxPopupMode;
+begin
+  Result := Ord(PopupMode);
+end;
+
+function TGoAml_ServiceForm.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TGoAml_ServiceForm.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TGoAml_ServiceForm.Get_ScreenSnap: WordBool;
+begin
+  Result := ScreenSnap;
+end;
+
+function TGoAml_ServiceForm.Get_SnapBuffer: Integer;
+begin
+  Result := SnapBuffer;
+end;
+
+function TGoAml_ServiceForm.Get_UseDockManager: WordBool;
+begin
+  Result := UseDockManager;
+end;
+
+function TGoAml_ServiceForm.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TGoAml_ServiceForm.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TGoAml_ServiceForm._Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+
+
+procedure TGoAml_ServiceForm.CTRClick(Sender: TObject);
+begin
+  pop_ctrtpr_clik:=1;
+ DBGridTransactions1.DataSource:=DM_goAml.dsrc_grid;
+
+   DM_goAml.ODS_Rep.close;
+   DM_goAml.ODS_Rep.SQL.Clear;
+   DM_goAml.ODS_Rep.SQL.Text
+   :='select transmode_code, report_code,custid,b.name,sum(lammount) lammount,dk  from ('+
+'select ti.transmode_code,ti.report_code,l.kcustid as custid,sum(l.lamount) lammount, 1 as dk  from mmx_transactions l,mmx_transinfo ti '+
+' where l.id=ti.transid and  '+
+' (l.debitbalance in (select bal_cn from bal_spr1 where goaml=1) and  '+
+' l.debitbalance in (''1001'',''1011'',''1003'',''2801'',''2811''/*turan b,''2509'',''2519'',''2801'',''2811'',''4801'',''4811'',''4509'',''4519''*/))'+
+' and l.transactiondate=:V_DAT and l.lamount>=20000 and ti.report_code  in(''CTR'',''TPR1'',''TPR2'',''TPR3'')'+
+' group by ti.transmode_code,ti.report_code,l.kcustid '+
+'/* union all  '+
+' select ti.transmode_code,ti.report_code,l.kcustid as custid  , sum(l.lamount) lammount,1 as dk from mmx_transactions l,mmx_transinfo ti '+
+' where l.id=ti.transid and '+
+'(l.creditbalance in (select bal_cn from bal_spr1 where goaml=1)) and  '+
+' l.transactiondate=:V_DAT and l.lamount>=20000 and l.vid_op=-2 and ti.report_code=''CTR'''+
+' group by ti.transmode_code,ti.report_code,l.kcustid*/'+
+' union all '+
+' select ti.transmode_code,ti.report_code,l.dcustid as custid  , sum(l.lamount) lammount,2 as dk from mmx_transactions l,mmx_transinfo ti '+
+' where l.id=ti.transid and '+
+'(l.creditbalance in (select bal_cn from bal_spr1 where goaml=1) and  '+
+' l.creditbalance in (''1001'',''1011'',''1003'',''2801'',''2811''/*,''2509'',''2519'',''2801'',''2811'',''4801'',''4811'',''4509'',''4519''*/)) '+
+' and l.transactiondate=:V_DAT and l.lamount>=20000 and ti.report_code  in(''CTR'',''TPR1'',''TPR2'',''TPR3'')'+
+' group by ti.transmode_code,ti.report_code,l.dcustid) a, customers b where  a.custid=b.id /*and b.compani  not in(2,3,5,6,7)*/ '+
+
+' group by transmode_code, report_code,custid ,name,dk'+
+' order by transmode_code';
+
+   DM_goAml.ODS_Rep.Open;
+ //   memo1.Text:=  DM_goAml.ODS_Rep.SQL.Text;
+  DBGrid2.DataSource:=DM_goAml.DS_Rep;
+
+/// FirstDate := Integer(Trunc(DTPFirstDate.DateTime));
+  // LastDate := Integer(Trunc(DTPLastDate.DateTime));
+  v_dat := Integer(Trunc(DTP1.Date));
+  DM_goAml.ODS_Rep.close;
+  DM_goAml.ODS_Rep.SetVariable('v_dat', v_dat);
+  DM_goAml.ODS_Rep.Open;
+  DM_goAml.ODS_MainReport.close;
+  DM_goAml.ODS_MainReport.Open;
+  DBGrid2.Columns.Items[5].Visible:=False;
+
+
+case DM_goAml.ODS_Rep.FieldByName('dk').AsInteger of
+   1:begin
+  DM_goAml.Ods_maindbt.close;
+  DM_goAml.Ods_maindbt.SQL.Clear;
+  DM_goAml.Ods_maindbt.sql.Text:=
+'select * from mmx_rep_car_dbt where transmode_code=:v_transmcode'+
+' and transactiondate = :v_dat and report_code=:v_report_code'+#13+#13+#13+ #13+ #13+#13+#13+
+' order by  transactionnumber';
+  DM_goAml.Ods_maindbt.SetVariable('v_transmcode',DM_goAml.ODS_RepTRANSMODE_CODE.AsString);
+  DM_goAml.Ods_maindbt.SetVariable('v_dat', Integer(Trunc(DTP1.Date)));
+  DM_goAml.Ods_maindbt.SetVariable('v_report_code',
+  DM_goAml.ODS_RepREPORT_CODE.AsString);
+  DM_goAml.Ods_maindbt.SQL[4]:=' and KCUSTID ='+DM_goAml.ODS_RepCUSTID.AsString;
+  DM_goAml.Ods_maindbt.SQL[5]:=' and amount_local >=20000';
+
+  DM_goAml.Ods_maindbt.Open;
+  DBGridTransactions1.DataSource:=DM_goAml.DS_maindbt;
+
+  end;
+2:begin
+
+ DM_goAml.ODS_Main.Close;
+  DM_goAml.ODS_Main.SQL.Clear;
+  DM_goAml.ODS_Main.sql.Text:=
+'select * from mmx_rep_car_credt where transmode_code=:v_transmcode'+
+' and transactiondate = :v_dat and report_code=:v_report_code'+#13+#13+#13+ #13+ #13+#13+#13+
+' order by  transactionnumber';
+
+
+  DM_goAml.ODS_Main.SetVariable('v_transmcode',DM_goAml.ODS_RepTRANSMODE_CODE.AsString);
+  DM_goAml.ODS_Main.SetVariable('v_dat', Integer(Trunc(DTP1.Date)));
+  DM_goAml.ODS_Main.SetVariable('v_report_code',
+  DM_goAml.ODS_RepREPORT_CODE.AsString);
+  DM_goAml.ODS_Main.SQL[4]:=' and DCUSTID= ' +DM_goAml.ODS_RepCUSTID.AsString;
+  DM_goAml.ODS_Main.SQL[5]:=' and amount_local >=20000';
+
+  DM_goAml.ODS_Main.Open;
+
+ // memo1.Text:=  DM_goAml.ODS_Main.SQL.Text;
+  DBGridTransactions1.DataSource:=DM_goAml.DS_Main;
+
+end;
+end;
+    end;
+
+procedure TGoAml_ServiceForm.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TGoAml_ServiceForm.ActiveFormCreate(Sender: TObject);
+begin
+   GoAml_ServiceForm:=self;
+ if not assigned(DM_goAml) then
+  DM_goAml :=TDM_goAml.Create(Self);
+  FormEdit:=TFormEdit.create(self);
+  DTP1.Date := DM_goAml.ODS_SYSDAT.FieldByName('Tek_dat').AsDateTime;
+  Date_begin.Date := DM_goAml.ODS_SYSDAT.FieldByName('Tek_dat1').AsDateTime;
+  Date_end.Date   := DM_goAml.ODS_SYSDAT.FieldByName('Tek_dat').AsDateTime;
+  v_date1:=Date_begin.Date;
+  v_date2:=Date_end.Date;
+  DM_goAml.ODS_FilesPath.Open;
+
+end;
+
+procedure TGoAml_ServiceForm.FaylClick(Sender: TObject);
+var
+  i: Integer;
+  id:integer;
+begin
+
+  if DM_goAml.ODS_FilesPath.RecordCount <> 0 then
+  begin
+
+  DBGridTransactions1.DataSource.DataSet.First;
+
+  for i := 0 to DBGridTransactions1.DataSource.DataSet.RecordCount - 1 do
+    begin
+      //showmessage('kk'+inttostr((DBGridTransactions1.DataSource.DataSet.RecordCount)));
+      with DM_goAml.ODS_MainReport do
+      begin
+        if Active = True then
+          close;
+        SetVariable('v_id', DBGridTransactions1.DataSource.DataSet.FieldByName('id').AsInteger);
+
+           Open;
+
+             trasnfers_trid:=DBGridTransactions1.DataSource.DataSet.FieldByName('id').AsInteger;
+             vid_op:=DM_goAml.ODS_MainReport.FieldByName('VID_OP').AsInteger;
+
+      end;
+      createfiles;
+     DBGridTransactions1.DataSource.DataSet.Next;
+    end;
+    if er_count = 0 then
+      MessageDlg('XML file uğurla yaradıldı', mtInformation, [mbOk], 0);
+  end
+  else
+  begin
+    showmessage('Faylın yolu təyin olunmayıb!');
+    Exit;
+  end;
+
+end;
+
+procedure TGoAml_ServiceForm.Cap1Click(Sender: TObject);
+begin
+if not assigned(repH) then repH:=TrepH.Create(self);
+if not assigned(repF) then repF:=TrepF.Create(self);
+ with DM_goAml do
+ begin
+ odsc_custSube.Close;
+ odsc_custSube.SetVariable('v_id',  DM_goAml.Ods_subheliCUSTID.AsInteger);
+ odsc_custSube.Open
+ end;
+ if DM_goAml.odsc_custSubeCUST_TYPE.AsInteger<>0 then
+  begin
+  with repF do
+   begin
+     QRLabel18.Caption:=DM_goAml.odsc_custSubeNAME.AsString;
+     QRLabel19.Caption:=DM_goAml.odsc_custSubeLASTNAME.AsString;
+     QRLabel20.Caption:=DM_goAml.odsc_custSubeSONAME.AsString;
+     QRLabel21.Caption:=DM_goAml.odsc_custSubeINN.AsString;
+     QRLabel22.Caption:=DM_goAml.odsc_custSubeBIRTHDAY.AsString;
+     QRLabel23.Caption:=DM_goAml.odsc_custSubeCNTR.AsString;
+   end;
+   repF.Preview ;
+
+  end;
+
+ if DM_goAml.odsc_custSubeCUST_TYPE.AsInteger=0 then
+  begin
+   with repH do
+   begin
+     QRLabel18.Caption:=DM_goAml.odsc_custSubeH_NAME.AsString;
+     QRLabel19.Caption:=DM_goAml.odsc_custSubeINN.AsString;
+     QRLabel20.Caption:=DM_goAml.odsc_custSubeDAT_NAL.AsString;
+
+   end;
+   repH.Preview
+  end;
+end;
+
+procedure TGoAml_ServiceForm.cap2Click(Sender: TObject);
+begin
+with DM_goAml do
+ begin
+
+ odsc_custSube.Close;
+ odsc_custSube.SetVariable('v_id',  DM_goAml.ODS_Rep.FieldByName('custid').AsInteger);
+ odsc_custSube.Open ;
+
+
+ end;
+ word_type:=-1;
+ if DM_goAml.odsc_custSubeCUST_TYPE.AsInteger<>0 then
+ begin
+    word_type:=2
+
+   end
+
+   else begin
+
+   word_type:=3;
+   end;
+
+  ActinPrintExecute(sender);
+end;
+
+procedure TGoAml_ServiceForm.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TGoAml_ServiceForm.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TGoAml_ServiceForm.Date_beginCloseUp(Sender: TObject);
+begin
+v_date1:=Date_begin.Date;
+end;
+
+procedure TGoAml_ServiceForm.Date_endCloseUp(Sender: TObject);
+begin
+v_date2:=Date_end.Date;
+end;
+
+procedure TGoAml_ServiceForm.DBGrid2CellClick(Column: TColumn);
+begin
+if pop_ctrtpr_clik=1 then
+begin
+
+if DBGrid2.DataSource=DM_goAml.DS_Rep then
+   begin
+ case DM_goAml.ODS_Rep.FieldByName('dk').AsInteger of
+   1:begin
+  DM_goAml.Ods_maindbt.close;
+  DM_goAml.Ods_maindbt.SQL.Clear;
+  DM_goAml.Ods_maindbt.sql.Text:=
+' select * from mmx_rep_car_dbt where transmode_code=:v_transmcode'+
+' and transactiondate = :v_dat and report_code=:v_report_code'+#13+#13+#13+ #13+ #13+#13+#13+
+' order by  transactionnumber';
+
+
+  DM_goAml.Ods_maindbt.SetVariable('v_transmcode',DM_goAml.ODS_RepTRANSMODE_CODE.AsString);
+  DM_goAml.Ods_maindbt.SetVariable('v_dat', Integer(Trunc(DTP1.Date)));
+  DM_goAml.Ods_maindbt.SetVariable('v_report_code',
+  DM_goAml.ODS_RepREPORT_CODE.AsString);
+  DM_goAml.Ods_maindbt.SQL[4]:=' and KCUSTID ='+DM_goAml.ODS_RepCUSTID.AsString;
+  DM_goAml.Ods_maindbt.SQL[5]:=' and amount_local >=20000';
+   DM_goAml.Ods_maindbt.Open;
+  DBGridTransactions1.DataSource:=DM_goAml.ds_maindbt;
+   dey:=(DBGrid2.DataSource.DataSet.FieldByName('CUSTID').AsString);
+   dey1:=DBGridTransactions1.DataSource.DataSet.FieldByName('TRANSACTIONNUMBER').AsString;
+  end;
+2:begin
+  DM_goAml.ODS_Main.Close;
+  DM_goAml.ODS_Main.SQL.Clear;
+  DM_goAml.ODS_Main.sql.Text:=
+'select * from mmx_rep_car_credt where transmode_code=:v_transmcode'+
+' and transactiondate = :v_dat and report_code=:v_report_code'+#13+#13+#13+ #13+ #13+#13+#13+
+' order by  transactionnumber';
+ DM_goAml.ODS_Main.SetVariable('v_transmcode',DM_goAml.ODS_RepTRANSMODE_CODE.AsString);
+  DM_goAml.ODS_Main.SetVariable('v_dat', Integer(Trunc(DTP1.Date)));
+  DM_goAml.ODS_Main.SetVariable('v_report_code',
+  DM_goAml.ODS_RepREPORT_CODE.AsString);
+  DM_goAml.ODS_Main.SQL[4]:=' and DCUSTID= '+DM_goAml.ODS_RepCUSTID.AsString;
+  DM_goAml.ODS_Main.SQL[5]:=' and amount_local >=20000';
+  DM_goAml.ODS_Main.Open;
+  DBGridTransactions1.DataSource:=DM_goAml.DS_Main;
+   dey:=(DBGrid2.DataSource.DataSet.FieldByName('CUSTID').AsString);
+   dey1:=DBGridTransactions1.DataSource.DataSet.FieldByName('TRANSACTIONNUMBER').AsString;
+end;
+end;
+   end;
+
+  end;
+
+  if (pop_ctrtpr_clik=2) or(pop_ctrtpr_clik=4)then
+   begin
+ case DM_goAml.ODS_Rep.FieldByName('dk').AsInteger of
+   1:begin
+   DM_goAml.Ods_maindbt.close;
+   DM_goAml.Ods_maindbt.SQL.Clear;
+   DM_goAml.Ods_maindbt.SQL.Text :=
+   ' select * from mmx_rep_car_dbt where transmode_code=:v_transmcode'+
+   ' and transactiondate between ADD_MONTHS((LAST_DAY(:V_DAT)+1),-1) and LAST_DAY(:V_DAT)'+
+   ' and report_code=:v_report_code'+#13+#13+#13+ #13+ #13+#13+#13+
+   ' order by  transactionnumber' ;
+
+  DM_goAml.Ods_maindbt.SetVariable('v_transmcode',DM_goAml.ODS_RepTRANSMODE_CODE.AsString);
+  DM_goAml.Ods_maindbt.SetVariable('v_dat', Integer(Trunc(DTP1.Date)));
+  DM_goAml.Ods_maindbt.SetVariable('v_report_code',
+  DM_goAml.ODS_RepREPORT_CODE.AsString);
+  DM_goAml.Ods_maindbt.SQL[4]:=' and KCUSTID ='+DM_goAml.ODS_RepCUSTID.AsString;
+  DM_goAml.Ods_maindbt.Open;
+  DBGridTransactions1.DataSource:=DM_goAml.DS_maindbt;
+
+  end;
+2:begin
+
+ DM_goAml.ODS_Main.close;
+   DM_goAml.ODS_Main.SQL.Clear;
+   DM_goAml.ODS_Main.SQL.Text :=
+   ' select * from mmx_rep_car_credt where transmode_code=:v_transmcode '+
+   ' and transactiondate  between ADD_MONTHS((LAST_DAY(:V_DAT)+1),-1) and LAST_DAY(:V_DAT)'+
+   ' and report_code=:v_report_code'+#13+#13+#13+#13+ #13+#13+#13+
+   ' order by  transactionnumber' ;
+
+
+  DM_goAml.ODS_Main.SetVariable('v_transmcode',DM_goAml.ODS_RepTRANSMODE_CODE.AsString);
+  DM_goAml.ODS_Main.SetVariable('v_dat', Integer(Trunc(DTP1.Date)));
+  DM_goAml.ODS_Main.SetVariable('v_report_code',
+  DM_goAml.ODS_RepREPORT_CODE.AsString);
+  DM_goAml.ODS_Main.SQL[4]:=' and DCUSTID= '+DM_goAml.ODS_RepCUSTID.AsString;
+  DM_goAml.ODS_Main.Open;
+  DBGridTransactions1.DataSource:=DM_goAml.DS_Main;
+
+end;
+end;
+     end;
+
+ if pop_ctrtpr_clik =3 then
+
+   begin
+case DM_goAml.ODS_Rep.FieldByName('dk').AsInteger of
+   1:begin
+   DM_goAml.Ods_maindbt.close;
+   DM_goAml.Ods_maindbt.SQL.Clear;
+   DM_goAml.Ods_maindbt.SQL.Text :=
+   ' select * from mmx_rep_car_dbt where transmode_code=:v_transmcode'+
+   ' and transactiondate between  TRUNC (to_date (:V_DAT) , ''YEAR'') and ADD_MONTHS(TRUNC (TO_DATE(:V_DAT) ,''YEAR''),12)-1'+
+   ' and report_code=:v_report_code'+#13+#13+#13+ #13+#13+#13+#13+
+   ' order by  transactionnumber' ;
+
+  DM_goAml.Ods_maindbt.SetVariable('v_transmcode',DM_goAml.ODS_RepTRANSMODE_CODE.AsString);
+  DM_goAml.Ods_maindbt.SetVariable('v_dat', Integer(Trunc(DTP1.Date)));
+  DM_goAml.Ods_maindbt.SetVariable('v_report_code',
+  DM_goAml.ODS_RepREPORT_CODE.AsString);
+  DM_goAml.Ods_maindbt.SQL[4]:=' and KCUSTID ='+DM_goAml.ODS_RepCUSTID.AsString;
+  DM_goAml.Ods_maindbt.Open;
+  DBGridTransactions1.DataSource:=DM_goAml.DS_maindbt;
+
+  end;
+2:begin
+
+ DM_goAml.ODS_Main.close;
+   DM_goAml.ODS_Main.SQL.Clear;
+   DM_goAml.ODS_Main.SQL.Text :=
+   ' select * from mmx_rep_car_credt where transmode_code=:v_transmcode '+
+   ' and transactiondate  between TRUNC (to_date (:V_DAT) , ''YEAR'') and ADD_MONTHS(TRUNC (TO_DATE(:V_DAT) ,''YEAR''),12)-1'+
+   ' and report_code=:v_report_code'+#13+#13+#13+#13+#13+#13+#13+
+   ' order by  transactionnumber' ;
+
+  DM_goAml.ODS_Main.SetVariable('v_transmcode',DM_goAml.ODS_RepTRANSMODE_CODE.AsString);
+  DM_goAml.ODS_Main.SetVariable('v_dat', Integer(Trunc(DTP1.Date)));
+  DM_goAml.ODS_Main.SetVariable('v_report_code',
+  DM_goAml.ODS_RepREPORT_CODE.AsString);
+  DM_goAml.ODS_Main.SQL[4]:=' and DCUSTID= '+DM_goAml.ODS_RepCUSTID.AsString;
+  DM_goAml.ODS_Main.Open;
+  DBGridTransactions1.DataSource:=DM_goAml.DS_Main;
+
+end;
+end;
+   end;
+  if DBGrid2.DataSource=DM_goAml.DSRC_REP201 then
+   BEGIN
+
+  DM_goAml.ODS_Main201.close;
+  DM_goAml.ODS_Main201.SetVariable('v_transmcode',DM_goAml.ODS_Rep201TRANSMODE_CODE.AsString);
+  DM_goAml.ODS_Main201.SetVariable('v_dcustid', DM_goAml.ODS_Rep201CUSTID.AsInteger);
+  DM_goAml.ODS_Main201.SetVariable('v_Kcustid', DM_goAml.ODS_Rep201CCUSTID.AsInteger);
+  DM_goAml.ODS_Main201.SetVariable('v_dat', Integer(Trunc(DTP1.Date)));
+  DM_goAml.ODS_Main201.SetVariable('v_report_code',
+  DM_goAml.ODS_REP201REPORT_CODE.AsString);
+  DM_goAml.ODS_Main201.Open;
+  DBGridTransactions1.DataSource:=DM_goAml.DSRC_Main201;
+   END;
+    END;
+
+
+
+
+procedure TGoAml_ServiceForm.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TGoAml_ServiceForm.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TGoAml_ServiceForm.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TGoAml_ServiceForm.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TGoAml_ServiceForm.mizl1Click(Sender: TObject);
+begin
+RE_Errors.Clear;
+end;
+
+procedure TGoAml_ServiceForm.MouseEnterEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnMouseEnter;
+end;
+
+
+procedure TGoAml_ServiceForm.MouseLeaveEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnMouseLeave;
+end;
+
+
+ procedure TGoAml_ServiceForm.ActinPrintExecute(Sender: TObject);
+resourcestring
+  FilenotFound = 'Fayl tapılmadı';
+var
+  Template, Templatebool, FTemplatePath, Itemindex, OBookmarkCount, What,
+     oBookMarkName: Olevariant;
+  IbookmarkCount: Integer;
+  tFieldName: String;
+  SaveChanges, OriginalFormat, RouteDocument: Olevariant;
+
+begin
+      with DM_goAml do
+      begin
+       Templates.Close;
+        Templates.SetVariable('v_custtype',word_type);
+       Templates.Open;
+      end;
+
+  What := Olevariant(wdGoToBookmark);
+  FTemplatePath := DM_goAml.Templates.FieldByName('Path').AsString;
+  TemplID := DM_goAml.Templates.FieldByName('ID').AsInteger;
+
+  Template := EmptyParam;
+  Templatebool := False;
+  Itemindex := 1;
+
+  WordApplication.Connect;
+
+  WordApplication.Visible := True;
+  WordApplication.Documents.Application.Caption :=  DM_goAml.Templates.FieldByName('Path').AsString;
+
+  WordApplication.Options.CheckSpellingAsYouType := False;
+  WordApplication.Options.CheckGrammarAsYouType := False;
+
+  if FileExists(FTemplatePath) then
+  begin
+
+    WordApplication.Documents.Open(FTemplatePath, Template, Templatebool,
+      Template, Template, Template, Template, Template, Template, Template,
+      Template, Template, Template, Template, Template);
+
+  end
+  else
+  begin
+
+    SaveChanges := WdDoNotSaveChanges;
+    OriginalFormat := UnAssigned;
+    RouteDocument := UnAssigned;
+    WordApplication.Quit(SaveChanges, OriginalFormat, RouteDocument);
+    WordApplication.Disconnect;
+    ShowMessage(FilenotFound);
+
+  end;
+
+  WordDocument.ConnectTo(WordApplication.Documents.Item(Itemindex));
+  // WordDocument.Application.Get_ActiveWindow.Caption:=NLSLocalizer1.Caption;
+
+  try
+
+    with DM_goAml, ReplaceCustDataSet, WordDocument do
+      For IbookmarkCount := 1 to Bookmarks.Count do
+     begin
+
+        OBookmarkCount := IbookmarkCount;
+        oBookMarkName := Bookmarks.Item(OBookmarkCount).Get_Name;
+        WordApplication.Selection.GoTo_(What, EmptyParam, EmptyParam,
+          oBookMarkName);
+
+      // showmessage(oBookMarkName+'d'+inttostr(TemplID));
+        ReplaceCustDataSet.Close;
+        SetVariable('tid', TemplID);
+        SetVariable('bname', oBookMarkName);
+        ReplaceCustDataSet.Open;
+        tFieldName := FieldByName('FIELDNAME').AsString;
+
+     //  showmessage(odsc_custSube.FieldByName(tFieldName).AsString) ;
+        WordApplication.Selection.InsertAfter(odsc_custSube.FieldByName(tFieldName).AsString);
+         end ;
+
+
+    WordDocument.Disconnect;
+    WordApplication.Disconnect;
+
+  except
+    SaveChanges := WdDoNotSaveChanges;
+    OriginalFormat := UnAssigned;
+    RouteDocument := UnAssigned;
+    WordApplication.Quit(SaveChanges, OriginalFormat, RouteDocument);
+    WordApplication.Disconnect;
+    ShowMessage(oBookMarkName + '   Bukmarklar daxil edilmeyib ');
+  end;
+
+end;
+
+
+
+
+
+
+
+procedure TGoAml_ServiceForm.muq1Click(Sender: TObject);
+begin
+ with DM_goAml do
+ begin
+
+ odsc_custSube.Close;
+ odsc_custSube.SetVariable('v_id',  DM_goAml.Ods_subheliCUSTID.AsInteger);
+ odsc_custSube.Open
+ end;
+ word_type:=-1;
+ if DM_goAml.odsc_custSubeCUST_TYPE.AsInteger<>0 then
+ begin
+    word_type:=1
+
+   end
+
+   else begin
+   word_type:=0;
+   end;
+
+  ActinPrintExecute(sender);
+end;
+
+procedure TGoAml_ServiceForm.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TGoAml_ServiceForm.PR21Click(Sender: TObject);
+begin
+   pop_ctrtpr_clik:=3;
+   DM_goAml.ODS_Rep.close;
+   DM_goAml.ODS_Rep.SQL.Clear;
+   DM_goAml.ODS_Rep.SQL.Text
+   :='select transmode_code, report_code,custid,b.name,sum(lammount) lammount,dk  from ('+
+'select ti.transmode_code,ti.report_code,l.kcustid as custid,sum(l.lamount) lammount, 1 as dk  from mmx_transactions l,mmx_transinfo ti'+
+' where  l.id = ti.transid and (l.debitbalance in (select bal_cn from bal_spr1 where goaml=1) and l.debitbalance in (''1001'',''1011'',''1003''/*turanBank*/,''2509'',''2801'',''2811''))'+
+'and l.transactiondate between ADD_MONTHS((LAST_DAY(:V_DAT)+1),-1) and LAST_DAY(:V_DAT) and ti.report_code in(''TPR1'',''TPR2'')'+
+'group by ti.transmode_code,ti.report_code,l.kcustid '+
+'union all '+
+'select ti.transmode_code,ti.report_code,l.dcustid as custid  , sum(l.lamount) lammount,2 as dk from mmx_transactions l,mmx_transinfo ti'+
+' where l.id=ti.transid and (l.creditbalance in (select bal_cn from bal_spr1 where goaml=1) and l.creditbalance in (''1001'',''1011'',''1003''/*,''2509'',''2801'',''2811''*/))'+
+'and l.transactiondate between TRUNC (to_date (:V_DAT) , ''YEAR'') and ADD_MONTHS(TRUNC (TO_DATE(:V_DAT) ,''YEAR''),12)-1  and ti.report_code in(''TPR1'',''TPR2'')'+
+'group by ti.transmode_code,ti.report_code,l.dcustid) a, customers b where a.lammount>=200000 and a.custid=b.id '+
+' group by transmode_code, report_code,custid ,name,dk'+
+' order by transmode_code';
+
+   DM_goAml.ODS_Rep.Open;
+
+
+DBGrid2.DataSource:=DM_goAml.DS_Rep;
+  v_dat := Integer(Trunc(DTP1.Date));
+  DM_goAml.ODS_Rep.close;
+  DM_goAml.ODS_Rep.SetVariable('v_dat', v_dat);
+  DM_goAml.ODS_Rep.Open;
+
+  DM_goAml.ODS_MainReport.close;
+  DM_goAml.ODS_MainReport.Open;
+ DBGrid2.Columns.Items[5].Visible:=False;
+
+  if DM_goAml.ODS_Rep.RecordCount=0 then
+  begin
+
+  DM_goAml.Ods_maindbt.close;
+  DM_goAml.Ods_maindbt.SQL.Clear;
+  DM_goAml.Ods_maindbt.sql.Text:=
+'select * from mmx_rep_car_dbt where transmode_code=:v_transmcode'+
+' and transactiondate = :v_dat and report_code=:v_report_code'+#13+#13+#13+ #13+ #13+#13+#13+
+' order by  transactionnumber';
+  DM_goAml.Ods_maindbt.open;
+ DM_goAml.Ods_main.close;
+  DM_goAml.Ods_main.SQL.Clear;
+  DM_goAml.Ods_main.sql.Text:=
+'select * from mmx_rep_car_dbt where transmode_code=:v_transmcode'+
+' and transactiondate = :v_dat and report_code=:v_report_code'+#13+#13+#13+ #13+ #13+#13+#13+
+' order by  transactionnumber';
+  DM_goAml.Ods_main.open;
+   end;
+case DM_goAml.ODS_Rep.FieldByName('dk').AsInteger of
+   1:begin
+   DM_goAml.Ods_maindbt.close;
+   DM_goAml.Ods_maindbt.SQL.Clear;
+   DM_goAml.Ods_maindbt.SQL.Text :=
+   ' select * from mmx_rep_car_dbt where transmode_code=:v_transmcode'+
+   ' and transactiondate between  TRUNC (to_date (:V_DAT) , ''YEAR'') and ADD_MONTHS(TRUNC (TO_DATE(:V_DAT) ,''YEAR''),12)-1'+
+   ' and report_code=:v_report_code'+#13+#13+#13+ #13+#13+#13+#13+
+   ' order by  transactionnumber' ;
+
+  DM_goAml.Ods_maindbt.SetVariable('v_transmcode',DM_goAml.ODS_RepTRANSMODE_CODE.AsString);
+  DM_goAml.Ods_maindbt.SetVariable('v_dat', Integer(Trunc(DTP1.Date)));
+  DM_goAml.Ods_maindbt.SetVariable('v_report_code',
+  DM_goAml.ODS_RepREPORT_CODE.AsString);
+  DM_goAml.Ods_maindbt.SQL[4]:=' and KCUSTID ='+DM_goAml.ODS_RepCUSTID.AsString;
+  DM_goAml.Ods_maindbt.Open;
+  DBGridTransactions1.DataSource:=DM_goAml.DS_maindbt;
+
+  end;
+2:begin
+
+ DM_goAml.ODS_Main.close;
+   DM_goAml.ODS_Main.SQL.Clear;
+   DM_goAml.ODS_Main.SQL.Text :=
+   ' select * from mmx_rep_car_credt where transmode_code=:v_transmcode '+
+   ' and transactiondate  between TRUNC (to_date (:V_DAT) , ''YEAR'') and ADD_MONTHS(TRUNC (TO_DATE(:V_DAT) ,''YEAR''),12)-1'+
+   ' and report_code=:v_report_code'+#13+#13+#13+#13+#13+#13+#13+
+   ' order by  transactionnumber' ;
+
+  DM_goAml.ODS_Main.SetVariable('v_transmcode',DM_goAml.ODS_RepTRANSMODE_CODE.AsString);
+  DM_goAml.ODS_Main.SetVariable('v_dat', Integer(Trunc(DTP1.Date)));
+  DM_goAml.ODS_Main.SetVariable('v_report_code',
+  DM_goAml.ODS_RepREPORT_CODE.AsString);
+  DM_goAml.ODS_Main.SQL[4]:=' and DCUSTID= '+DM_goAml.ODS_RepCUSTID.AsString;
+  DM_goAml.ODS_Main.Open;
+  DBGridTransactions1.DataSource:=DM_goAml.DS_Main;
+
+end;
+end;
+end;
+
+procedure TGoAml_ServiceForm.PR31Click(Sender: TObject);
+begin
+  pop_ctrtpr_clik:=4;
+  DBGridTransactions1.DataSource:=DM_goAml.dsrc_grid;
+   DM_goAml.ODS_Rep.close;
+   DM_goAml.ODS_Rep.SQL.Clear;
+   DM_goAml.ODS_Rep.SQL.Text
+  :='select transmode_code, report_code,custid,b.name,sum(lammount) lammount,dk  from (/*'+
+' select ti.transmode_code,ti.report_code,l.kcustid as custid,sum(l.lamount) lammount, 1 as dk  from mmx_transactions l,mmx_transinfo ti'+
+' where  l.id = ti.transid and (l.debitbalance in (select bal_cn from bal_spr1 where goaml=1) and  '+
+' l.debitbalance in (''1001'',''1011'',''1003'',''2509'',''2519'',''2801'',''2811'',''4801'',''4811''))'+
+' and l.transactiondate between ADD_MONTHS((LAST_DAY(:V_DAT)+1),-1) and LAST_DAY(:V_DAT) and ti.report_code in(''TPR3'')'+
+' group by ti.transmode_code,ti.report_code,l.kcustid '+
+' union all */'+
+' select ti.transmode_code,ti.report_code,l.dcustid as custid  , sum(l.lamount) lammount,2 as dk from mmx_transactions l,mmx_transinfo ti'+
+' where l.id=ti.transid and(l.creditbalance in (select bal_cn from bal_spr1 where goaml=1) and  '+
+' l.creditbalance in (''1001'',''1011'',''1003'',''2509'',''2519'',''2801'',''2811'',''4801'',''4811'')) '+
+' and l.transactiondate between ADD_MONTHS((LAST_DAY(:V_DAT)+1),-1) and LAST_DAY(:V_DAT)  and ti.report_code in(''TPR3'')'+
+' group by ti.transmode_code,ti.report_code,l.dcustid) a, customers b where a.lammount>=15000 and a.custid=b.id and b.compani in(7)'+
+' group by transmode_code, report_code,custid ,name,dk'+
+' order by transmode_code';
+
+   DM_goAml.ODS_Rep.Open;
+ //  memo1.Text:=     DM_goAml.ODS_Rep.sql.Text;
+ DBGrid2.DataSource:=DM_goAml.DS_Rep;
+  v_dat := Integer(Trunc(DTP1.Date));
+  DM_goAml.ODS_Rep.close;
+  DM_goAml.ODS_Rep.SetVariable('v_dat', v_dat);
+  DM_goAml.ODS_Rep.Open;
+ // showmessage(DM_goAml.ODS_Rep.SQL.Text);
+  DM_goAml.ODS_MainReport.close;
+  DM_goAml.ODS_MainReport.Open;
+ DBGrid2.Columns.Items[5].Visible:=False;
+
+
+case DM_goAml.ODS_Rep.FieldByName('dk').AsInteger of
+   1:begin
+
+  DM_goAml.Ods_maindbt.close;
+   DM_goAml.Ods_maindbt.SQL.Clear;
+   DM_goAml.Ods_maindbt.SQL.Text :=
+   ' select * from mmx_rep_car_dbt where transmode_code=:v_transmcode'+
+   ' and transactiondate between ADD_MONTHS((LAST_DAY(:V_DAT)+1),-1) and LAST_DAY(:V_DAT)'+
+   ' and report_code=:v_report_code'+#13+#13+#13+ #13+#13+#13+#13+
+   ' order by  transactionnumber' ;
+
+  DM_goAml.Ods_maindbt.SetVariable('v_transmcode',DM_goAml.ODS_RepTRANSMODE_CODE.AsString);
+  DM_goAml.Ods_maindbt.SetVariable('v_dat', Integer(Trunc(DTP1.Date)));
+  DM_goAml.Ods_maindbt.SetVariable('v_report_code',
+  DM_goAml.ODS_RepREPORT_CODE.AsString);
+  DM_goAml.Ods_maindbt.SQL[4]:=' and KCUSTID ='+DM_goAml.ODS_RepCUSTID.AsString;
+  DM_goAml.Ods_maindbt.Open;
+  DBGridTransactions1.DataSource:=DM_goAml.DS_maindbt;
+
+  end;
+2:begin
+
+ DM_goAml.ODS_Main.close;
+   DM_goAml.ODS_Main.SQL.Clear;
+   DM_goAml.ODS_Main.SQL.Text :=
+   ' select * from mmx_rep_car_credt where transmode_code=:v_transmcode '+
+   ' and transactiondate  between ADD_MONTHS((LAST_DAY(:V_DAT)+1),-1) and LAST_DAY(:V_DAT)'+
+   ' and report_code=:v_report_code'+#13+#13+#13+#13+#13+#13+#13+
+   ' order by  transactionnumber' ;
+
+  DM_goAml.ODS_Main.SetVariable('v_transmcode',DM_goAml.ODS_RepTRANSMODE_CODE.AsString);
+  DM_goAml.ODS_Main.SetVariable('v_dat', Integer(Trunc(DTP1.Date)));
+  DM_goAml.ODS_Main.SetVariable('v_report_code',
+  DM_goAml.ODS_RepREPORT_CODE.AsString);
+  DM_goAml.ODS_Main.SQL[4]:=' and DCUSTID= '+DM_goAml.ODS_RepCUSTID.AsString;
+  DM_goAml.ODS_Main.Open;
+
+  DBGridTransactions1.DataSource:=DM_goAml.DS_Main;
+
+end;
+end;
+end;
+
+procedure TGoAml_ServiceForm.Redakt1Click(Sender: TObject);
+begin
+ if not assigned(FormMMX) then
+
+FormMMX:=TFormMMX.create(self);
+FormMMX.ShowModal;
+end;
+
+procedure TGoAml_ServiceForm.Set_AxBorderStyle(Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TGoAml_ServiceForm.Set_AlignWithMargins(Value: WordBool);
+begin
+  AlignWithMargins := Value;
+end;
+
+procedure TGoAml_ServiceForm.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TGoAml_ServiceForm.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TGoAml_ServiceForm.Set_BorderWidth(Value: Integer);
+begin
+  BorderWidth := TBorderWidth(Value);
+end;
+
+procedure TGoAml_ServiceForm.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TGoAml_ServiceForm.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TGoAml_ServiceForm.Set_DockSite(Value: WordBool);
+begin
+  DockSite := Value;
+end;
+
+procedure TGoAml_ServiceForm.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TGoAml_ServiceForm.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TGoAml_ServiceForm.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TGoAml_ServiceForm.Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TGoAml_ServiceForm.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := string(Value);
+end;
+
+procedure TGoAml_ServiceForm.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TGoAml_ServiceForm.Set_ParentCustomHint(Value: WordBool);
+begin
+  ParentCustomHint := Value;
+end;
+
+procedure TGoAml_ServiceForm.Set_ParentDoubleBuffered(Value: WordBool);
+begin
+  ParentDoubleBuffered := Value;
+end;
+
+procedure TGoAml_ServiceForm.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TGoAml_ServiceForm.Set_PopupMode(Value: TxPopupMode);
+begin
+  PopupMode := TPopupMode(Value);
+end;
+
+procedure TGoAml_ServiceForm.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TGoAml_ServiceForm.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TGoAml_ServiceForm.Set_ScreenSnap(Value: WordBool);
+begin
+  ScreenSnap := Value;
+end;
+
+procedure TGoAml_ServiceForm.Set_SnapBuffer(Value: Integer);
+begin
+  SnapBuffer := Value;
+end;
+
+procedure TGoAml_ServiceForm.Set_UseDockManager(Value: WordBool);
+begin
+  UseDockManager := Value;
+end;
+
+procedure TGoAml_ServiceForm.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+procedure TGoAml_ServiceForm.STRClick(Sender: TObject);
+begin
+pop_ctrtpr_clik:=5;
+DBGrid2.DataSource:=DM_goAml.DSRC_Rep201;
+  v_dat := Integer(Trunc(DTP1.Date));
+  DM_goAml.ODS_Rep201.close;
+  DM_goAml.ODS_Rep201.SetVariable('v_dat', v_dat);
+  DM_goAml.ODS_Rep201.Open;
+
+  DM_goAml.ODS_MainReport.close;
+  DM_goAml.ODS_MainReport.Open;
+  DM_goAml.ODS_Main201.close;
+  DM_goAml.ODS_Main201.SetVariable('v_transmcode', DM_goAml.ODS_Rep201TRANSMODE_CODE.AsString);
+  DM_goAml.ODS_Main201.SetVariable('v_dcustid', DM_goAml.ODS_Rep201CUSTID.AsInteger);
+  DM_goAml.ODS_Main201.SetVariable('v_Kcustid', DM_goAml.ODS_Rep201CCUSTID.AsInteger);
+  DM_goAml.ODS_Main201.SetVariable('v_dat', Integer(Trunc(DTP1.Date)));
+  DM_goAml.ODS_Main201.SetVariable('v_report_code',
+  DM_goAml.ODS_REP201REPORT_CODE.AsString);
+  DM_goAml.ODS_Main201.Open;
+  DBGridTransactions1.DataSource:=DM_goAml.DSRC_Main201;
+end;
+
+procedure TGoAml_ServiceForm.tpr11Click(Sender: TObject);
+ var v_dat1 :string;
+begin
+
+   pop_ctrtpr_clik:=2;
+
+DBGridTransactions1.DataSource:=DM_goAml.dsrc_grid;
+
+
+
+
+   DM_goAml.ODS_Rep.close;
+   DM_goAml.ODS_Rep.SQL.Clear;
+   DM_goAml.ODS_Rep.SQL.Text
+   :='select transmode_code, report_code,custid,b.name,sum(lammount) lammount,dk  from (/*'+
+' select ti.transmode_code,ti.report_code,l.kcustid as custid,sum(l.lamount) lammount, 1 as dk  from mmx_transactions l,mmx_transinfo ti'+
+' where  l.id = ti.transid and (l.debitbalance in (select bal_cn from bal_spr1 where goaml=1) and  '+
+' l.debitbalance in (''1001'',''1011'',''1003'',''2509'',''2519'',''2801'',''2811'',''4801'',''4811''))'+
+' and l.transactiondate between ADD_MONTHS((LAST_DAY(:V_DAT)+1),-1) and LAST_DAY(:V_DAT) and ti.report_code in(''TPR1'',''TPR2'')'+
+' group by ti.transmode_code,ti.report_code,l.kcustid '+
+' union all */'+
+' select ti.transmode_code,ti.report_code,l.dcustid as custid  , sum(l.lamount) lammount,2 as dk from mmx_transactions l,mmx_transinfo ti'+
+' where l.id=ti.transid and (l.creditbalance in (select bal_cn from bal_spr1 where goaml=1) and  '+
+' l.creditbalance in (''1001'',''1011'',''1003'',''2509'',''2519'',''2801'',''2811'',''4801'',''4811'')) '+
+' and l.transactiondate between ADD_MONTHS((LAST_DAY(:V_DAT)+1),-1) and LAST_DAY(:V_DAT)  and ti.report_code in(''TPR1'',''TPR2'')'+
+' group by ti.transmode_code,ti.report_code,l.dcustid) a, customers b where a.lammount>=30000 and a.custid=b.id and b.compani in(5,6)'+
+' group by transmode_code, report_code,custid ,name,dk'+
+' order by transmode_code';
+
+   DM_goAml.ODS_Rep.Open;
+
+DBGrid2.DataSource:=DM_goAml.DS_Rep;
+  v_dat := Integer(Trunc(DTP1.Date));
+
+ { ShowMessage('              d/m/y = '+
+              formatdatetime('mm/yyyy', v_dat)); }
+  DM_goAml.ODS_Rep.close;
+  DM_goAml.ODS_Rep.SetVariable('v_dat', v_dat);
+  DM_goAml.ODS_Rep.Open;
+
+  DM_goAml.ODS_MainReport.close;
+  DM_goAml.ODS_MainReport.Open;
+ DBGrid2.Columns.Items[5].Visible:=False;
+
+
+case DM_goAml.ODS_Rep.FieldByName('dk').AsInteger of
+   1:begin
+
+   DM_goAml.Ods_maindbt.close;
+   DM_goAml.Ods_maindbt.SQL.Clear;
+   DM_goAml.Ods_maindbt.SQL.Text :=
+   ' select * from mmx_rep_car_dbt where transmode_code=:v_transmcode'+
+   ' and transactiondate between ADD_MONTHS((LAST_DAY(:V_DAT)+1),-1) and LAST_DAY(:V_DAT)'+
+   ' and report_code=:v_report_code'+#13+#13+#13+ #13+#13+#13+#13+
+   ' order by  transactionnumber' ;
+
+  DM_goAml.Ods_maindbt.SetVariable('v_transmcode',DM_goAml.ODS_RepTRANSMODE_CODE.AsString);
+  DM_goAml.Ods_maindbt.SetVariable('v_dat', Integer(Trunc(DTP1.Date)));
+  DM_goAml.Ods_maindbt.SetVariable('v_report_code',
+  DM_goAml.ODS_RepREPORT_CODE.AsString);
+  DM_goAml.Ods_maindbt.SQL[4]:=' and KCUSTID ='+DM_goAml.ODS_RepCUSTID.AsString;
+  DM_goAml.Ods_maindbt.Open;
+
+  DBGridTransactions1.DataSource:=DM_goAml.DS_maindbt;
+
+  end;
+2:begin
+
+ DM_goAml.ODS_Main.close;
+   DM_goAml.ODS_Main.SQL.Clear;
+   DM_goAml.ODS_Main.SQL.Text :=
+   ' select * from mmx_rep_car_credt where transmode_code=:v_transmcode '+
+   ' and transactiondate  between ADD_MONTHS((LAST_DAY(:V_DAT)+1),-1) and LAST_DAY(:V_DAT)'+
+   ' and report_code=:v_report_code'+#13+#13+#13+#13+#13+#13+#13+
+   ' order by  transactionnumber' ;
+
+  DM_goAml.ODS_Main.SetVariable('v_transmcode',DM_goAml.ODS_RepTRANSMODE_CODE.AsString);
+  DM_goAml.ODS_Main.SetVariable('v_dat', Integer(Trunc(DTP1.Date)));
+  DM_goAml.ODS_Main.SetVariable('v_report_code',
+  DM_goAml.ODS_RepREPORT_CODE.AsString);
+  DM_goAml.ODS_Main.SQL[4]:=' and DCUSTID= '+DM_goAml.ODS_RepCUSTID.AsString;
+  DM_goAml.ODS_Main.Open;
+
+  DBGridTransactions1.DataSource:=DM_goAml.DS_Main;
+
+end;
+end;
+ end;
+
+procedure TGoAml_ServiceForm.Button1Click(Sender: TObject);
+var
+i:integer;
+ b:string;
+begin
+       DM_goAml.ODS_CustRelSignatory.close;
+        DM_goAml.ODS_CustRelSignatory.SetVariable('v_id',21);
+        DM_goAml.ODS_CustRelSignatory.open;
+        b:='';
+   for I := 0 to DM_goAml.ODS_CustRelSignatory.RecordCount-1 do
+  begin
+     //  showmessage(DM_goAml.ODS_CustRelSignatory.FieldByName('custid2').AsString);
+
+     a[i]:=DM_goAml.ODS_CustRelSignatory.FieldByName('custid2').AsString;
+   //  showmessage(a[i]);
+  if i<DM_goAml.ODS_CustRelSignatory.RecordCount-1 then
+     b:=b+a[i]+','
+       else
+     b:=b+a[i] ;
+
+      DM_goAml.ODS_CustRelSignatory.Next;
+            showmessage(b);
+
+
+
+          DM_goAml.ODS_TPERSON.close;
+          DM_goAml.ODS_TPERSON.SQL.Clear;
+          DM_goAml.ODS_TPERSON.SQL.Text :=
+            'select * from mmx_signatory where custid in('+ b+')';
+           end;
+
+        showmessage( DM_goAml.ODS_TPERSON.SQL.Text );
+
+end;
+
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TGoAml_ServiceForm,
+    CLASS_GoAml_Service,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+
+
+
+
+
+
+end.

@@ -1,0 +1,221 @@
+object DMResponsibilityBlank: TDMResponsibilityBlank
+  OldCreateOrder = False
+  Height = 534
+  Width = 861
+  object Customers: TOracleDataSet
+    SQL.Strings = (
+      
+        'select c.rowid,c.id,c.name||'#39' '#39'||c.surname||'#39' '#39'||c.fathername as' +
+        ' name,c.address,c.mobilephone,c.fax,c.contactperson from ins_cus' +
+        'tomers c')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000060000000400000049004400010000000000080000004E0041004D00
+      4500010000000000160000004D004F00420049004C004500500048004F004E00
+      45000100000000000E0000004100440044005200450053005300010000000000
+      060000004600410058000100000000001A00000043004F004E00540041004300
+      540050004500520053004F004E00010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 125
+    Top = 64
+    object CustomersID: TIntegerField
+      FieldName = 'ID'
+      Required = True
+    end
+    object CustomersNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 386
+    end
+    object CustomersADDRESS: TWideStringField
+      FieldName = 'ADDRESS'
+      Size = 1024
+    end
+    object CustomersMOBILEPHONE: TWideStringField
+      FieldName = 'MOBILEPHONE'
+      Size = 32
+    end
+    object CustomersFAX: TWideStringField
+      FieldName = 'FAX'
+      Size = 32
+    end
+    object CustomersCONTACTPERSON: TWideStringField
+      FieldName = 'CONTACTPERSON'
+      Size = 256
+    end
+  end
+  object BeneficiarySource: TDataSource
+    DataSet = ODSBeneficiary
+    Left = 224
+    Top = 21
+  end
+  object ODSBeneficiary: TOracleDataSet
+    SQL.Strings = (
+      'select ib.rowid,ib.* from ins_beneficiary ib')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000050000000400000049004400010000000000080000004E0041004D00
+      45000100000000000E0000004100440044005200450053005300010000000000
+      0A000000500048004F004E0045000100000000001E000000420041004E004B00
+      49004E0047005F00440045005400410049004C005300010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 226
+    Top = 64
+    object ODSBeneficiaryID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object ODSBeneficiaryNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 128
+    end
+    object ODSBeneficiaryADDRESS: TWideStringField
+      FieldName = 'ADDRESS'
+      Size = 128
+    end
+    object ODSBeneficiaryPHONE: TWideStringField
+      FieldName = 'PHONE'
+      Size = 64
+    end
+    object ODSBeneficiaryBANKING_DETAILS: TWideStringField
+      FieldName = 'BANKING_DETAILS'
+      Size = 128
+    end
+  end
+  object CustomersData: TDataSource
+    DataSet = Customers
+    Left = 128
+    Top = 20
+  end
+  object AgentsSource: TDataSource
+    DataSet = ODSAgents
+    Left = 303
+    Top = 20
+  end
+  object ODSAgents: TOracleDataSet
+    SQL.Strings = (
+      
+        'select a.id,a.name||'#39' '#39'||a.surname||'#39' '#39'||a.fathername as name fr' +
+        'om ins_agents a')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      0500000002000000080000004E0041004D004500010000000000040000004900
+      4400010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 302
+    Top = 65
+    object ODSAgentsID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object ODSAgentsNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 386
+    end
+  end
+  object DsSysdat: TOracleDataSet
+    SQL.Strings = (
+      'select * from sysdat')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000040000000E000000540045004B005F00440041005400010000000000
+      1000000050005200450044005F004400410054000100000000000E0000004100
+      520043005F004400410059000100000000000A00000043004C004F0053004500
+      010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 56
+    Top = 128
+    object DsSysdatTEK_DAT: TDateTimeField
+      FieldName = 'TEK_DAT'
+      Required = True
+    end
+    object DsSysdatPRED_DAT: TDateTimeField
+      FieldName = 'PRED_DAT'
+    end
+    object DsSysdatARC_DAY: TDateTimeField
+      FieldName = 'ARC_DAY'
+    end
+    object DsSysdatCLOSE: TIntegerField
+      FieldName = 'CLOSE'
+    end
+  end
+  object DSAvalute: TDataSource
+    DataSet = ODSAvalute
+    Left = 48
+    Top = 21
+  end
+  object ODSAvalute: TOracleDataSet
+    SQL.Strings = (
+      'select valute, val_name, valu_name, valu_short from avalute'
+      'order by valute')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000040000000C000000560041004C005500540045000100000000001000
+      0000560041004C005F004E0041004D0045000100000000001200000056004100
+      4C0055005F004E0041004D00450001000000000014000000560041004C005500
+      5F00530048004F0052005400010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 48
+    Top = 64
+    object ODSAvaluteVALUTE: TIntegerField
+      FieldName = 'VALUTE'
+      Required = True
+    end
+    object ODSAvaluteVAL_NAME: TWideStringField
+      FieldName = 'VAL_NAME'
+      Size = 10
+    end
+    object ODSAvaluteVALU_NAME: TWideStringField
+      FieldName = 'VALU_NAME'
+      Size = 25
+    end
+    object ODSAvaluteVALU_SHORT: TWideStringField
+      FieldName = 'VALU_SHORT'
+      Size = 10
+    end
+  end
+  object DSRins_contracts: TDataSource
+    DataSet = DSins_contracts
+    Left = 48
+    Top = 240
+  end
+  object DSRins_contract_responsibility: TDataSource
+    DataSet = DSins_contract_responsibility
+    Left = 168
+    Top = 240
+  end
+  object DSins_contracts: TOracleDataSet
+    SQL.Strings = (
+      'select c.rowid,c.* from ins_contracts c'
+      'where c.id=:cid')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000080000003A00430049004400030000000000000000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 48
+    Top = 192
+  end
+  object DSins_contract_responsibility: TOracleDataSet
+    SQL.Strings = (
+      'SELECT rowid,a.*'
+      '  FROM ins_contract_responsibility a'
+      'where a.cid=:p_cid')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000C0000003A0050005F004300490044000300000000000000
+      00000000}
+    Session = sboapiDataModule.SBSession
+    Left = 168
+    Top = 192
+  end
+  object ins_common: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'ins_common'
+    Left = 448
+    Top = 40
+  end
+end

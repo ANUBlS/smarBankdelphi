@@ -1,0 +1,1296 @@
+object PropertiesForm: TPropertiesForm
+  Left = 184
+  Top = 187
+  BorderIcons = [biSystemMenu]
+  BorderStyle = bsSingle
+  Caption = 'PropertiesForm'
+  ClientHeight = 448
+  ClientWidth = 813
+  Color = clBtnFace
+  Font.Charset = RUSSIAN_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poMainFormCenter
+  OnActivate = FormActivate
+  OnKeyUp = FormKeyUp
+  PixelsPerInch = 96
+  TextHeight = 13
+  object SpeedButton2: TSpeedButton
+    Left = 5
+    Top = 418
+    Width = 97
+    Height = 25
+    Caption = 'Диэяр параметрляр'
+    OnClick = SpeedButton2Click
+  end
+  object Admin_: TSpeedButton
+    Left = 120
+    Top = 420
+    Width = 89
+    Height = 22
+    Caption = 'Админ Параметр'
+    OnClick = Admin_Click
+  end
+  object But_cancel: TBitBtn
+    Left = 731
+    Top = 418
+    Width = 75
+    Height = 25
+    Anchors = [akRight, akBottom]
+    Caption = 'Чыхыш'
+    TabOrder = 0
+    OnClick = But_cancelClick
+  end
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 813
+    Height = 413
+    Align = alTop
+    BevelOuter = bvNone
+    Caption = 'Panel1'
+    TabOrder = 1
+    object Panel4: TPanel
+      Left = 304
+      Top = 0
+      Width = 509
+      Height = 413
+      Align = alClient
+      BevelOuter = bvNone
+      TabOrder = 0
+      object GroupBox4: TGroupBox
+        Left = 0
+        Top = 0
+        Width = 509
+        Height = 413
+        Align = alClient
+        Caption = 'ХЮЩКС Щесаблары'
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = 8404992
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = [fsBold]
+        ParentFont = False
+        TabOrder = 0
+        object DBGrid2: TDBGrid
+          Left = 2
+          Top = 89
+          Width = 252
+          Height = 236
+          Align = alLeft
+          Color = clSilver
+          DataSource = DS_XSAccount
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = []
+          Options = [dgTitles, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit]
+          ParentFont = False
+          TabOrder = 2
+          TitleFont.Charset = RUSSIAN_CHARSET
+          TitleFont.Color = clWindowText
+          TitleFont.Height = -11
+          TitleFont.Name = 'Azl Sans Serif'
+          TitleFont.Style = [fsBold]
+          Columns = <
+            item
+              Alignment = taCenter
+              Expanded = False
+              FieldName = 'VAL_NAME'
+              Title.Alignment = taCenter
+              Title.Caption = 'Val.'
+              Title.Font.Charset = RUSSIAN_CHARSET
+              Title.Font.Color = clWindowText
+              Title.Font.Height = -11
+              Title.Font.Name = 'Azl Sans Serif'
+              Title.Font.Style = []
+              Width = 35
+              Visible = True
+            end
+            item
+              Alignment = taCenter
+              Color = clWhite
+              Expanded = False
+              FieldName = 'ACC_NO'
+              Title.Alignment = taCenter
+              Title.Caption = 'Щесаб'
+              Title.Font.Charset = RUSSIAN_CHARSET
+              Title.Font.Color = clWindowText
+              Title.Font.Height = -11
+              Title.Font.Name = 'Azl Sans Serif'
+              Title.Font.Style = []
+              Width = 122
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'NAME'
+              Title.Alignment = taCenter
+              Title.Caption = 'Филиал'
+              Title.Font.Charset = RUSSIAN_CHARSET
+              Title.Font.Color = clWindowText
+              Title.Font.Height = -11
+              Title.Font.Name = 'Azl Sans Serif'
+              Title.Font.Style = []
+              Width = 79
+              Visible = True
+            end>
+        end
+        object Panel7: TPanel
+          Left = 2
+          Top = 39
+          Width = 505
+          Height = 24
+          Align = alTop
+          Alignment = taLeftJustify
+          BevelOuter = bvNone
+          Caption = ' Валйута:'
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 0
+          object Combo_valute: TComboBox
+            Left = 157
+            Top = 1
+            Width = 191
+            Height = 21
+            Style = csDropDownList
+            Color = clSilver
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = []
+            ItemHeight = 13
+            ParentFont = False
+            TabOrder = 0
+          end
+          object Valute_ID: TListBox
+            Left = 239
+            Top = 4
+            Width = 26
+            Height = 16
+            ItemHeight = 13
+            TabOrder = 1
+            Visible = False
+          end
+        end
+        object Panel8: TPanel
+          Left = 2
+          Top = 63
+          Width = 505
+          Height = 26
+          Align = alTop
+          Alignment = taLeftJustify
+          BevelOuter = bvNone
+          Caption = ' Щесаб:'
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 1
+          object SpeedButton3: TSpeedButton
+            Left = 214
+            Top = 2
+            Width = 25
+            Height = 21
+            Anchors = [akRight, akBottom]
+            Caption = 'OK'
+            OnClick = SpeedButton3Click
+          end
+          object BtnXS_BranchAccountOK: TSpeedButton
+            Left = 425
+            Top = 1
+            Width = 23
+            Height = 22
+            Caption = 'OK'
+            OnClick = BtnXS_BranchAccountOKClick
+          end
+          object Label4: TLabel
+            Left = 450
+            Top = 6
+            Width = 37
+            Height = 13
+            Caption = '(2801)'
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clNavy
+            Font.Height = -11
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = [fsBold]
+            ParentFont = False
+          end
+          object SearchXsAccount: TSearchEdit
+            Left = 46
+            Top = 2
+            Width = 163
+            Height = 21
+            CharCase = ecUpperCase
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Courier'
+            Font.Style = []
+            MaxLength = 16
+            ParentFont = False
+            TabOrder = 0
+            DataSource = DataMod.Account_Source
+            SearchField = 'acc_no'
+          end
+          object SearchEditXS_BranchAccount: TSearchEdit
+            Left = 254
+            Top = 2
+            Width = 163
+            Height = 21
+            CharCase = ecUpperCase
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Courier'
+            Font.Style = []
+            MaxLength = 16
+            ParentFont = False
+            TabOrder = 1
+            DataSource = DataMod.Account_Source
+            SearchField = 'acc_no'
+          end
+        end
+        object GroupBox7: TGroupBox
+          Left = 2
+          Top = 325
+          Width = 505
+          Height = 86
+          Align = alBottom
+          Caption = 'Кючцрмя ямялиййатын ады'
+          TabOrder = 3
+          object Panel14: TPanel
+            Left = 2
+            Top = 15
+            Width = 501
+            Height = 69
+            Align = alClient
+            BevelOuter = bvNone
+            TabOrder = 0
+            object SpeedButton14: TSpeedButton
+              Left = 444
+              Top = 32
+              Width = 53
+              Height = 21
+              Anchors = [akRight, akBottom]
+              Caption = 'Гябул'
+              Font.Charset = RUSSIAN_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Azl Sans Serif'
+              Font.Style = []
+              ParentFont = False
+              OnClick = SpeedButton14Click
+            end
+            object DBText1: TDBText
+              Left = 5
+              Top = 0
+              Width = 244
+              Height = 27
+              DataField = 'NAME'
+              DataSource = DS_Commision
+              Font.Charset = RUSSIAN_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Azl Sans Serif'
+              Font.Style = []
+              ParentFont = False
+              WordWrap = True
+            end
+            object DBLookupComboBox1: TDBLookupComboBox
+              Left = 255
+              Top = 32
+              Width = 187
+              Height = 21
+              Anchors = [akRight, akBottom]
+              Font.Charset = RUSSIAN_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Azl Sans Serif'
+              Font.Style = []
+              KeyField = 'ID'
+              ListField = 'NAME'
+              ListSource = DS_Commision
+              ParentFont = False
+              TabOrder = 0
+            end
+          end
+        end
+        object Panel9: TPanel
+          Left = 2
+          Top = 15
+          Width = 505
+          Height = 24
+          Align = alTop
+          Alignment = taLeftJustify
+          BevelOuter = bvNone
+          Caption = ' Филиал:'
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 4
+          object ComFilial: TDBViewComboBox
+            Left = 157
+            Top = 1
+            Width = 190
+            Height = 21
+            Style = csDropDownList
+            ItemHeight = 13
+            TabOrder = 0
+            ListSource = DSFilial
+            ListFields = 'NAME'
+            FieldInterval = 5
+            DropDownOnEnter = False
+          end
+          object DTP1: TDateTimePicker
+            Left = 365
+            Top = 0
+            Width = 132
+            Height = 21
+            CalAlignment = dtaLeft
+            Date = 39570.6758506944
+            Time = 39570.6758506944
+            DateFormat = dfShort
+            DateMode = dmComboBox
+            Kind = dtkDate
+            ParseInput = False
+            TabOrder = 1
+            OnChange = DTP1Change
+          end
+        end
+        object DBGrid1: TDBGrid
+          Left = 254
+          Top = 89
+          Width = 253
+          Height = 236
+          Align = alClient
+          Color = clSilver
+          DataSource = DS_XSBranchAccount
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = []
+          Options = [dgTitles, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit]
+          ParentFont = False
+          TabOrder = 5
+          TitleFont.Charset = RUSSIAN_CHARSET
+          TitleFont.Color = clWindowText
+          TitleFont.Height = -11
+          TitleFont.Name = 'Azl Sans Serif'
+          TitleFont.Style = [fsBold]
+          Columns = <
+            item
+              Alignment = taCenter
+              Expanded = False
+              FieldName = 'VAL_NAME'
+              Title.Alignment = taCenter
+              Title.Caption = 'Val.'
+              Title.Font.Charset = RUSSIAN_CHARSET
+              Title.Font.Color = clWindowText
+              Title.Font.Height = -11
+              Title.Font.Name = 'Azl Sans Serif'
+              Title.Font.Style = []
+              Width = 35
+              Visible = True
+            end
+            item
+              Alignment = taCenter
+              Color = clWhite
+              Expanded = False
+              FieldName = 'ACC_NO'
+              Title.Alignment = taCenter
+              Title.Caption = 'Щесаб'
+              Title.Font.Charset = RUSSIAN_CHARSET
+              Title.Font.Color = clWindowText
+              Title.Font.Height = -11
+              Title.Font.Name = 'Azl Sans Serif'
+              Title.Font.Style = []
+              Width = 122
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'NAME'
+              Title.Alignment = taCenter
+              Title.Caption = 'Филиал'
+              Title.Font.Charset = RUSSIAN_CHARSET
+              Title.Font.Color = clWindowText
+              Title.Font.Height = -11
+              Title.Font.Name = 'Azl Sans Serif'
+              Title.Font.Style = []
+              Width = 79
+              Visible = True
+            end>
+        end
+      end
+    end
+    object Panel3: TPanel
+      Left = 0
+      Top = 0
+      Width = 304
+      Height = 413
+      Align = alLeft
+      BevelOuter = bvNone
+      Caption = 'Panel3'
+      TabOrder = 1
+      object GroupBox3: TGroupBox
+        Left = 0
+        Top = 53
+        Width = 304
+        Height = 46
+        Align = alTop
+        Caption = 'Кюжцрмя лимити'
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = 8404992
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = [fsBold]
+        ParentFont = False
+        TabOrder = 0
+        object SpeedButton5: TSpeedButton
+          Left = 246
+          Top = 17
+          Width = 53
+          Height = 21
+          Anchors = [akRight, akBottom]
+          Caption = 'Гябул'
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = []
+          ParentFont = False
+          OnClick = SpeedButton5Click
+        end
+        object Label3: TLabel
+          Left = 12
+          Top = 21
+          Width = 24
+          Height = 13
+          Caption = 'Лимит:'
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = []
+          ParentFont = False
+        end
+        object Edit_limit: TCurrencyEdit
+          Left = 74
+          Top = 17
+          Width = 165
+          Height = 21
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 0
+          Text = '0'
+        end
+      end
+      object GroupBox1: TGroupBox
+        Left = 0
+        Top = 0
+        Width = 304
+        Height = 53
+        Align = alTop
+        Caption = 'Суб щесаблары'
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = 8404992
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = [fsBold]
+        ParentFont = False
+        TabOrder = 1
+        object SpeedButton1: TSpeedButton
+          Left = 247
+          Top = 19
+          Width = 53
+          Height = 21
+          Anchors = [akRight, akBottom]
+          Caption = 'Гябул'
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = []
+          ParentFont = False
+          OnClick = SpeedButton1Click
+        end
+        object Label2: TLabel
+          Left = 9
+          Top = 16
+          Width = 57
+          Height = 28
+          AutoSize = False
+          Caption = 'Мцхбир саб щесаб:'
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = []
+          ParentFont = False
+          WordWrap = True
+        end
+        object Panel5: TPanel
+          Left = 26
+          Top = 54
+          Width = 300
+          Height = 31
+          Alignment = taLeftJustify
+          BevelInner = bvLowered
+          Caption = ' SWIFT - мцхбир щесаб:'
+          TabOrder = 0
+          Visible = False
+        end
+        object Edit_Account: TEdit
+          Left = 73
+          Top = 19
+          Width = 167
+          Height = 21
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Courier'
+          Font.Style = []
+          MaxLength = 13
+          ParentFont = False
+          TabOrder = 1
+          OnKeyPress = Edit_AccountKeyPress
+        end
+      end
+      object GroupBox5: TGroupBox
+        Left = 0
+        Top = 237
+        Width = 304
+        Height = 67
+        Caption = 'SWIFT Файл директорийалары'
+        TabOrder = 2
+        object Panel10: TPanel
+          Left = 2
+          Top = 15
+          Width = 300
+          Height = 26
+          Align = alTop
+          Alignment = taLeftJustify
+          BevelInner = bvLowered
+          Caption = ' Эялянляр:'
+          TabOrder = 0
+          object SpeedButton8: TSpeedButton
+            Left = 47
+            Top = 4
+            Width = 16
+            Height = 18
+            Caption = '...'
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = [fsBold]
+            ParentFont = False
+          end
+          object SpeedButton9: TSpeedButton
+            Left = 243
+            Top = 3
+            Width = 53
+            Height = 21
+            Anchors = [akRight, akBottom]
+            Caption = 'Гябул ет'
+          end
+        end
+        object Panel11: TPanel
+          Left = 2
+          Top = 41
+          Width = 300
+          Height = 24
+          Align = alTop
+          Alignment = taLeftJustify
+          BevelInner = bvLowered
+          Caption = ' Эедянляр:'
+          TabOrder = 1
+          object SpeedButton10: TSpeedButton
+            Left = 48
+            Top = 3
+            Width = 16
+            Height = 18
+            Caption = '...'
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = [fsBold]
+            ParentFont = False
+          end
+          object SpeedButton11: TSpeedButton
+            Left = 243
+            Top = 2
+            Width = 53
+            Height = 21
+            Anchors = [akRight, akBottom]
+            Caption = 'Гябул ет'
+          end
+        end
+      end
+      object GroupBox2: TGroupBox
+        Left = 0
+        Top = 99
+        Width = 304
+        Height = 93
+        Align = alTop
+        Caption = 'Файл директорийалары'
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = 8404992
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = [fsBold]
+        ParentFont = False
+        TabOrder = 3
+        object Panel6: TPanel
+          Left = 2
+          Top = 15
+          Width = 300
+          Height = 26
+          Align = alTop
+          Alignment = taLeftJustify
+          BevelOuter = bvNone
+          Caption = ' Эялянляр:'
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 0
+          object But_in: TSpeedButton
+            Left = 219
+            Top = 4
+            Width = 20
+            Height = 18
+            Caption = '...'
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = []
+            ParentFont = False
+            OnClick = But_inClick
+          end
+          object SpeedButton6: TSpeedButton
+            Left = 243
+            Top = 3
+            Width = 53
+            Height = 21
+            Anchors = [akRight, akBottom]
+            Caption = 'Гябул'
+            OnClick = SpeedButton6Click
+          end
+          object Edit_IN_Dir: TEdit
+            Left = 52
+            Top = 3
+            Width = 163
+            Height = 21
+            Color = clSilver
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = []
+            ParentFont = False
+            ReadOnly = True
+            TabOrder = 0
+          end
+        end
+        object Panel12: TPanel
+          Left = 2
+          Top = 41
+          Width = 300
+          Height = 24
+          Align = alTop
+          Alignment = taLeftJustify
+          BevelOuter = bvNone
+          Caption = ' Эедянляр:'
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 1
+          object But_out: TSpeedButton
+            Left = 219
+            Top = 3
+            Width = 20
+            Height = 18
+            Caption = '...'
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = []
+            ParentFont = False
+            OnClick = But_outClick
+          end
+          object SpeedButton7: TSpeedButton
+            Left = 243
+            Top = 2
+            Width = 53
+            Height = 21
+            Anchors = [akRight, akBottom]
+            Caption = 'Гябул'
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = []
+            ParentFont = False
+            OnClick = SpeedButton7Click
+          end
+          object Edit_out_dir: TEdit
+            Left = 52
+            Top = 1
+            Width = 164
+            Height = 21
+            Color = clSilver
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = []
+            ParentFont = False
+            ReadOnly = True
+            TabOrder = 0
+          end
+        end
+        object Panel15: TPanel
+          Left = 2
+          Top = 65
+          Width = 300
+          Height = 24
+          Align = alTop
+          Alignment = taLeftJustify
+          BevelOuter = bvNone
+          Caption = ' Архив:'
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 2
+          object but_archive: TSpeedButton
+            Left = 219
+            Top = 3
+            Width = 20
+            Height = 18
+            Caption = '...'
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = []
+            ParentFont = False
+            OnClick = but_archiveClick
+          end
+          object SpeedButton16: TSpeedButton
+            Left = 243
+            Top = 2
+            Width = 53
+            Height = 21
+            Anchors = [akRight, akBottom]
+            Caption = 'Гябул'
+            OnClick = SpeedButton16Click
+          end
+          object Edit_archiv_dir: TEdit
+            Left = 52
+            Top = 1
+            Width = 164
+            Height = 21
+            Color = clSilver
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = []
+            ParentFont = False
+            ReadOnly = True
+            TabOrder = 0
+          end
+        end
+      end
+      object GroupBox6: TGroupBox
+        Left = 0
+        Top = 192
+        Width = 304
+        Height = 221
+        Align = alClient
+        Caption = 'Юдяниш нювляринин Кодлары'
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = 8404992
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = [fsBold]
+        ParentFont = False
+        TabOrder = 4
+        object SpeedButton13: TSpeedButton
+          Left = 226
+          Top = 169
+          Width = 68
+          Height = 21
+          Caption = 'Sil'
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = []
+          ParentFont = False
+          OnClick = SpeedButton13Click
+        end
+        object SpeedButton12: TSpeedButton
+          Left = 226
+          Top = 143
+          Width = 68
+          Height = 21
+          Caption = 'Ялавя ет'
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = []
+          ParentFont = False
+          OnClick = SpeedButton12Click
+        end
+        object DBGrid3: TDBGrid
+          Left = 2
+          Top = 141
+          Width = 211
+          Height = 78
+          Align = alLeft
+          BorderStyle = bsNone
+          Color = clSilver
+          DataSource = DataMod.DSTransTypeCode
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = []
+          Options = [dgColumnResize, dgRowLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit]
+          ParentFont = False
+          TabOrder = 0
+          TitleFont.Charset = RUSSIAN_CHARSET
+          TitleFont.Color = clWindowText
+          TitleFont.Height = -11
+          TitleFont.Name = 'Azl Sans Serif'
+          TitleFont.Style = [fsBold]
+          Columns = <
+            item
+              Expanded = False
+              FieldName = 'NAME'
+              Width = 160
+              Visible = True
+            end
+            item
+              Alignment = taCenter
+              Color = clWhite
+              Expanded = False
+              FieldName = 'CODE'
+              Width = 30
+              Visible = True
+            end>
+        end
+        object Panel13: TPanel
+          Left = 2
+          Top = 113
+          Width = 300
+          Height = 28
+          Align = alTop
+          Alignment = taLeftJustify
+          BevelInner = bvRaised
+          BevelOuter = bvNone
+          Caption = ' Ачыглама:'
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 1
+          object Label1: TLabel
+            Left = 215
+            Top = 5
+            Width = 28
+            Height = 13
+            Caption = 'Коду:'
+          end
+          object Edit_transcode_name: TEdit
+            Left = 51
+            Top = 2
+            Width = 160
+            Height = 21
+            CharCase = ecUpperCase
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = []
+            MaxLength = 15
+            ParentFont = False
+            TabOrder = 0
+          end
+          object Edit_transCode_value: TSpinEdit
+            Left = 244
+            Top = 2
+            Width = 47
+            Height = 22
+            MaxLength = 3
+            MaxValue = 999
+            MinValue = 0
+            TabOrder = 1
+            Value = 0
+          end
+        end
+        object Panel2: TPanel
+          Left = 2
+          Top = 15
+          Width = 300
+          Height = 98
+          Align = alTop
+          Alignment = taLeftJustify
+          BevelOuter = bvNone
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 2
+          object SpeedButton17: TSpeedButton
+            Left = 226
+            Top = 60
+            Width = 68
+            Height = 21
+            Caption = 'Sil'
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = []
+            ParentFont = False
+            OnClick = SpeedButton17Click
+          end
+          object SpeedButton15: TSpeedButton
+            Left = 226
+            Top = 34
+            Width = 68
+            Height = 21
+            Caption = 'Ялавя ет'
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = []
+            ParentFont = False
+            OnClick = SpeedButton15Click
+          end
+          object Panel16: TPanel
+            Left = 0
+            Top = 0
+            Width = 300
+            Height = 28
+            Align = alTop
+            Alignment = taLeftJustify
+            BevelInner = bvRaised
+            BevelOuter = bvNone
+            Caption = ' Ады:'
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = []
+            ParentFont = False
+            TabOrder = 0
+            object Edit_TransType_name: TEdit
+              Left = 24
+              Top = 2
+              Width = 187
+              Height = 21
+              CharCase = ecUpperCase
+              Font.Charset = RUSSIAN_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Azl Sans Serif'
+              Font.Style = []
+              MaxLength = 15
+              ParentFont = False
+              TabOrder = 0
+            end
+          end
+          object DBCtrlGrid1: TDBCtrlGrid
+            Left = 0
+            Top = 28
+            Width = 213
+            Height = 70
+            Align = alLeft
+            AllowInsert = False
+            ColCount = 1
+            Color = clBtnFace
+            DataSource = DataMod.DSTransTypeName
+            PanelBorder = gbNone
+            PanelHeight = 17
+            PanelWidth = 197
+            ParentColor = False
+            TabOrder = 1
+            RowCount = 4
+            SelectedColor = clGray
+            object DBText2: TDBText
+              Left = 3
+              Top = 2
+              Width = 186
+              Height = 12
+              DataField = 'NAME'
+              DataSource = DataMod.DSTransTypeName
+            end
+          end
+        end
+      end
+    end
+  end
+  object DataXSAccount: TOracleDataSet
+    SQL.Strings = (
+      'SELECT v.val_name, a.acc_no, f.NAME'
+      '  FROM xs_accounts x, avalute v, ACCOUNT a, Filial f'
+      
+        ' WHERE (x.valute = v.valute) AND (x.acc_id = a.id) AND (f.id = x' +
+        '.branchid)'
+      ''
+      ''
+      ''
+      ''
+      ' '
+      ' '
+      ' '
+      ' '
+      ' ')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = False
+    Active = False
+    Left = 504
+    Top = 167
+  end
+  object DS_XSAccount: TDataSource
+    DataSet = DataXSAccount
+    Left = 504
+    Top = 200
+  end
+  object DataTemp: TOracleDataSet
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = False
+    Active = False
+    Left = 400
+    Top = 168
+  end
+  object PackConfig: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    Debug = False
+    PackageName = 'XS_CONTROL'
+    ParameterMode = pmPositional
+    Cursor = crDefault
+    Optimize = True
+    Left = 434
+    Top = 167
+  end
+  object Commision: TOracleDataSet
+    SQL.Strings = (
+      'select * from commision_trans')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = False
+    Active = False
+    Left = 352
+    Top = 256
+  end
+  object DS_Commision: TDataSource
+    DataSet = Commision
+    Left = 388
+    Top = 251
+  end
+  object DataFilial: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      '    *'
+      'from'
+      '    Filial'
+      ''
+      ' '
+      ' '
+      ' '
+      ' ')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = False
+    Active = False
+    Left = 472
+    Top = 167
+  end
+  object DSFilial: TDataSource
+    DataSet = DataFilial
+    Left = 472
+    Top = 200
+  end
+  object DS_XSBranchAccount: TDataSource
+    DataSet = OrDSXS_BranchAccount
+    Left = 752
+    Top = 200
+  end
+  object OrDSXS_BranchAccount: TOracleDataSet
+    SQL.Strings = (
+      'SELECT v.Val_Name, a.Acc_No, f.Name'
+      '  FROM xs_BranchAccount x, Avalute v, Account a, Filial f'
+      
+        ' WHERE (x.valute = v.valute) and (x.AccID = a.ID) and (f.ID = x.' +
+        'BranchID)'
+      ''
+      ''
+      ' '
+      ' '
+      ' '
+      ' '
+      ' ')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = False
+    Active = False
+    Left = 751
+    Top = 167
+  end
+end

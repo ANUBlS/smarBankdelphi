@@ -1,0 +1,229 @@
+﻿unit frmAccountTurningImpl_new;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, NLSDialogs,
+  ComCtrls, ToolWin, ExtCtrls,  ImgList, Grids, DBGridEh, Db,
+  OracleData, Oracle, ActnList;
+
+
+type
+  TfrmAccountTurning = class(TForm)
+    Panel2: TPanel;
+    Panel4: TPanel;
+    DBGridEh3: TDBGridEh;
+    Panel3: TPanel;
+    DBGridEh2: TDBGridEh;
+    Panel1: TPanel;
+    DBGridEh1: TDBGridEh;
+    sbcm_ds: TOraclePackage;
+    Categories: TOracleDataSet;
+    CategoriesID: TFloatField;
+    CategoriesCATEGORY: TWideStringField;
+    CategoriesDatSrc: TDataSource;
+    Accounts: TOracleDataSet;
+    AccountsID: TFloatField;
+    AccountsACC_NO: TWideStringField;
+    AccountsNAME: TWideStringField;
+    AccountsVAL_ACC: TIntegerField;
+    AccountsDatSrc: TDataSource;
+    Filials: TOracleDataSet;
+    FilialsID: TFloatField;
+    FilialsNAME: TWideStringField;
+    FilialsDatSrc: TDataSource;
+    valute: TOracleDataSet;
+    valuteVALUTE: TIntegerField;
+    valuteVAL_NAME: TWideStringField;
+    valuteVALU_NAME: TWideStringField;
+    ValutesDatSrc: TDataSource;
+    movie_names: TOracleDataSet;
+    movie_namesID: TIntegerField;
+    movie_namesTYPEID: TIntegerField;
+    movie_namesDESCRIPTION: TWideStringField;
+    movie_namesDatSrc: TDataSource;
+    ImageList1: TImageList;
+    ActionList1: TActionList;
+    ActnAdd: TAction;
+    ActnEdit: TAction;
+    ActnDel: TAction;
+    settings: TOracleDataSet;
+    settingsID: TFloatField;
+    settingsPARENTID: TFloatField;
+    settingsCURRENCYID: TFloatField;
+    settingsACCID: TFloatField;
+    settingsBRANCHID: TFloatField;
+    settingsfilialname: TWideStringField;
+    settingscurrencyname: TWideStringField;
+    settingsaccountnumber: TWideStringField;
+    settingsDatSrc: TDataSource;
+    DataSource1: TDataSource;
+    DataSource2: TDataSource;
+    ToolBar1: TToolBar;
+    ToolButton1: TToolButton;
+    ToolButton3: TToolButton;
+    ToolButton2: TToolButton;
+    ToolButton4: TToolButton;
+    ToolButton5: TToolButton;
+    ToolButton9: TToolButton;
+    ToolButton8: TToolButton;
+    ToolButton6: TToolButton;
+    ToolButton7: TToolButton;
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure ToolButton8Click(Sender: TObject);
+    procedure ActnAddExecute(Sender: TObject);
+    procedure ActnEditExecute(Sender: TObject);
+    procedure ActnDelExecute(Sender: TObject);
+    procedure ToolButton7Click(Sender: TObject);
+    procedure ActnEditUpdate(Sender: TObject);
+    procedure ActnDelUpdate(Sender: TObject);
+    procedure FormCanResize(Sender: TObject; var NewWidth, NewHeight: Integer;
+      var Resize: Boolean);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure settingsApplyRecord(Sender: TOracleDataSet; Action: Char;
+      var Applied: Boolean; var NewRowId: string);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  frmAccountTurning: TfrmAccountTurning;
+
+implementation
+
+{$R *.dfm}
+   uses  sboapiDataModuleImpl,frmAddEditAccTurningImpl_new,SBTranslateProc;
+procedure TfrmAccountTurning.ActnAddExecute(Sender: TObject);
+begin
+   with settings do
+         Insert;
+
+    with frmAddEditAccTurning_new do
+    begin
+       Caption := 'Yeni';
+       ShowModal;
+    end;
+
+   with settings do
+         Refresh;
+end;
+
+procedure TfrmAccountTurning.ActnDelExecute(Sender: TObject);
+begin
+      if   MessageDlg('Silinməsinə əminsinizmi?'
+              ,mtConfirmation
+              ,[mbYes,mbNo],0
+              )<>mrYes then Exit;
+
+   with settings do
+   begin
+      Delete;
+      Refresh;
+   end;
+end;
+
+procedure TfrmAccountTurning.ActnDelUpdate(Sender: TObject);
+begin
+   with (Sender as TAction) do
+        Enabled := settings.RecordCount > 0
+end;
+
+procedure TfrmAccountTurning.ActnEditExecute(Sender: TObject);
+begin
+   with settings do
+         Edit;
+
+    with frmAddEditAccTurning_new do
+    begin
+       Caption := 'Redaktə';
+       ShowModal;
+    end;
+
+   with settings do
+         Refresh;
+end;
+
+procedure TfrmAccountTurning.ActnEditUpdate(Sender: TObject);
+begin
+   with (Sender as TAction) do
+        Enabled := settings.RecordCount > 0
+end;
+
+procedure TfrmAccountTurning.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+   Resize := false
+end;
+
+procedure TfrmAccountTurning.FormCreate(Sender: TObject);
+begin
+     Categories.Open;
+     Accounts.Open;
+     Filials.Open;
+     Valute.Open;
+     movie_names.Open;
+     settings.Open;
+     frmAddEditAccTurning_new:= TfrmAddEditAccTurning_new.Create(Self);
+     SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TfrmAccountTurning.FormDestroy(Sender: TObject);
+begin
+     Categories.CloseAll;
+     Accounts.CloseAll;
+     Filials.CloseAll;
+     Valute.CloseAll;
+     movie_names.CloseAll;
+     settings.CloseAll;
+     frmAddEditAccTurning_new.Free;
+end;
+
+procedure TfrmAccountTurning.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+   if Ord(Key) = VK_ESCAPE then Close;
+end;
+
+procedure TfrmAccountTurning.settingsApplyRecord(Sender: TOracleDataSet;
+  Action: Char; var Applied: Boolean; var NewRowId: string);
+
+var
+    p_id ,p_PARENTID,p_CurrencyID,
+    p_AccID,p_branchid :Integer;
+
+begin
+     with settings do begin
+        p_id := fieldbyname('ID').AsInteger;
+        p_PARENTID := fieldbyname('PARENTID').AsInteger;
+        p_CurrencyID := fieldbyname('CurrencyID').AsInteger;
+        p_AccID := fieldbyname('AccID').AsInteger;
+        p_branchid := fieldbyname('branchid').AsInteger;
+     end;
+
+    { with sbcm_ds do begin
+     case Action of
+        'I':CallProcedure('InsSettings',[p_PARENTID,p_CurrencyID,p_AccID,p_branchid]);
+        'U':CallProcedure('UpdSettings',[p_id,p_PARENTID,p_CurrencyID,p_AccID,p_branchid]);
+
+     end;
+     Applied := True;
+     end;}
+end;
+
+
+procedure TfrmAccountTurning.ToolButton7Click(Sender: TObject);
+begin
+  Close
+end;
+
+procedure TfrmAccountTurning.ToolButton8Click(Sender: TObject);
+begin
+     Categories.Refresh;
+     Accounts.Refresh;
+     movie_names.Refresh;
+     settings.Refresh;
+end;
+
+end.

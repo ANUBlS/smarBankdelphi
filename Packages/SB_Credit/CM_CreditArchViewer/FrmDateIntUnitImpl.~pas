@@ -1,0 +1,97 @@
+unit FrmDateIntUnitImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  NLSLocalizer, StdCtrls, Buttons, Mask, DBCtrlsEh, ComCtrls, Db,
+  OracleData;
+
+type
+  TFrmDateInterval = class(TForm)
+    Label1: TLabel;
+    BitBtn1: TBitBtn;
+    BitBtn2: TBitBtn;
+    NLSLDateInt: TNLSLocalizer;
+    Label2: TLabel;
+    BeginDate: TDateTimePicker;
+    EndDate: TDateTimePicker;
+    CreditsDatSet: TOracleDataSet;
+    CreditsDatSetDATEOFCONCLUSION: TDateTimeField;
+    CreditsDatSetDUEDATEFIRSTCONTRACT: TDateTimeField;
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure BitBtn1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmDateInterval: TFrmDateInterval;
+
+ procedure InitPlugin(S:String);export;
+ 
+implementation
+
+{$R *.DFM}
+
+uses CommonDecls,SystemState,
+     FrmCredArchUnitImpl,
+     CredArchDatModUnitImpl,
+     CMOracleApiDataModuleImpl;
+
+procedure InitPlugin(S:String);export;
+begin
+   FrmDateInterval.ShowModal;
+end;
+
+exports
+  InitPlugin;
+  
+
+procedure TFrmDateInterval.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+  if ord (Key) = VK_ESCAPE then close
+end;
+
+procedure TFrmDateInterval.FormCreate(Sender: TObject);
+begin
+   CredArchDatMod := TCredArchDatMod.Create( Self);
+   FrmCreditArch := TFrmCreditArch.Create(Self)
+end;
+
+procedure TFrmDateInterval.FormDestroy(Sender: TObject);
+begin
+   FrmCreditArch.Free;
+   CredArchDatMod.Free
+end;
+
+procedure TFrmDateInterval.FormShow(Sender: TObject);
+var OpenDat,CloseDat :TDateTime;
+begin
+   with CreditsDatSet do
+   begin
+      if Active then CloseAll;
+      SetVariable('CrdID',Get_SelectedCrdID);
+      open;
+      OpenDat := FieldByName('DATEOFCONCLUSION').AsDateTime;
+      CloseDat := FieldByName('DUEDATEFIRSTCONTRACT').AsDateTime;
+   end;
+
+   BeginDate.DateTime := OpenDat;
+   EndDate.DateTime := CloseDat
+end;
+
+procedure TFrmDateInterval.BitBtn1Click(Sender: TObject);
+begin
+  FrmCreditArch.ShowModal;
+  ModalResult := mrOk
+end;
+
+initialization
+   FrmDateInterval := TFrmDateInterval.Create(CommonApplication)
+end.

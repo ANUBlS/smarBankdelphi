@@ -1,0 +1,83 @@
+unit FrmIEAddEditImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, OracleData, StdCtrls, Mask, DBCtrlsEh, DBLookupEh, DBCtrls,
+  NLSLocalizer;
+
+type
+  TFrmIEAddEdit = class(TForm)
+    Localizer: TNLSLocalizer;
+    Button1: TButton;
+    Button2: TButton;
+    GroupBox1: TGroupBox;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    CBBranch: TDBLookupComboBox;
+    DBLookupComboBox2: TDBLookupComboBox;
+    DBLookupComboboxEh1: TDBLookupComboboxEh;
+    IEAccountList: TOracleDataSet;
+    IEAccountListID: TFloatField;
+    IEAccountListACC_NO: TWideStringField;
+    IEAccountListVAL_ACC: TIntegerField;
+    IEAccountListNAME: TWideStringField;
+    BranchList: TOracleDataSet;
+    BranchListNAME: TWideStringField;
+    DataSrcIEAccountList: TDataSource;
+    DataSrcBranchList: TDataSource;
+    CurrencyList: TOracleDataSet;
+    CurrencyListVALUTE: TIntegerField;
+    CurrencyListVAL_NAME: TWideStringField;
+    DataSrcCurrencyList: TDataSource;
+    BranchListID: TFloatField;
+    DBEdit1: TDBEdit;
+    Label4: TLabel;
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmIEAddEdit: TFrmIEAddEdit;
+
+implementation
+uses actImpl,CMOracleApiDataModuleImpl;
+{$R *.DFM}
+
+procedure TFrmIEAddEdit.FormCreate(Sender: TObject);
+begin
+
+CurrencyList.open;
+BranchList.open
+end;
+
+procedure TFrmIEAddEdit.FormDestroy(Sender: TObject);
+begin
+IEAccountList.close;
+CurrencyList.close;
+BranchList.close
+end;
+
+procedure TFrmIEAddEdit.Button1Click(Sender: TObject);
+begin
+  with ActFrom.LinkValuesData do
+  Post;
+  ModalResult := mrOK;
+end;
+
+procedure TFrmIEAddEdit.Button2Click(Sender: TObject);
+begin
+  with ActFrom.LinkValuesData do
+  Cancel;
+  ModalResult := mrOK;
+end;
+
+end.

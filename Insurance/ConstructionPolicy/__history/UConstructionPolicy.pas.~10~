@@ -1,0 +1,792 @@
+﻿unit UConstructionPolicy;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActiveX, AxCtrls, PConstructionPolicy_TLB, StdVcl, DBCtrls, StdCtrls, Mask,SBPlgAx50_TLB,
+  Db, OracleData, Buttons, INSWordExporter, ExtCtrls, Oracle, XFSCtrls;
+
+const
+     WM_ModalResult = WM_USER+139;
+     fmCaption = 'Policy: (%s)';
+
+type
+  TConstructionPolicy = class(TActiveForm, IConstructionPolicy,IUIObject,
+                          IParamInput)
+    ODSConstPolicy: TOracleDataSet;
+    ConstPolicyData: TDataSource;
+    ODSCONSTSUGGEST: TOracleDataSet;
+    CONSTSUGGESTData: TDataSource;
+    ODSConstPolicyID: TFloatField;
+    ODSConstPolicyCS_ID: TFloatField;
+    PolicyExporter: TINSWordExporter;
+    PINS_CONSTRUCTION: TOraclePackage;
+    ODSConstruction: TOracleDataSet;
+    ConstData: TDataSource;
+    ODSConstructionID: TFloatField;
+    ODSConstructionKLI_ID: TFloatField;
+    ODSConstructionFULLDESCRIPTION: TWideStringField;
+    ODSConstructionLOCATIONOBJ: TWideStringField;
+    ODSConstructionYEARSINBUSINESS: TWideStringField;
+    ODSConstructionBUILDINGUSAGE: TWideStringField;
+    ODSConstructionCONSTYEAR: TDateTimeField;
+    ODSConstructionFLOORSNUM: TIntegerField;
+    ODSConstructionWALLSM: TWideStringField;
+    ODSConstructionCEILINGSM: TWideStringField;
+    ODSConstructionROOFM: TWideStringField;
+    ODSConstructionAREA: TFloatField;
+    ODSConstructionAPPLICANTSPACE: TFloatField;
+    ODSConstructionEARTHQUAKEDETAILS: TWideStringField;
+    ODSConstructionFLAMABLE: TWideStringField;
+    ODSConstructionSURROINDINGDETAILS: TWideStringField;
+    ODSConstructionSITUETED: TWideStringField;
+    ODSConstructionGUARD: TWideStringField;
+    ODSConstructionALARM: TWideStringField;
+    ODSConstructionLOCKS: TWideStringField;
+    ODSConstructionSECURITYLOCKS: TWideStringField;
+    ODSConstructionBARS: TWideStringField;
+    ODSConstructionOTHER: TWideStringField;
+    ODSConstructionSETTINGS: TWideStringField;
+    ODSConstructionREPAIR: TWideStringField;
+    ODSConstructionHEATED: TWideStringField;
+    ODSConstructionRISKID: TFloatField;
+    ODSConstructionANNUAL: TFloatField;
+    ODSConstructionWAGES: TFloatField;
+    ODSConstructionRENT: TFloatField;
+    ODSConstructionEMPLOYES: TFloatField;
+    ODSConstructionEXPIRITY: TDateTimeField;
+    ODSConstructionLOSSHISTORY: TWideStringField;
+    ODSConstructionRENEWAL: TWideStringField;
+    ODSConstructionTHIRDPARTY: TWideStringField;
+    ODSConstructionOTHERINF: TWideStringField;
+    ODSConstructionINDEMINITY: TWideStringField;
+    ODSConstructionVALUETYPE: TWideStringField;
+    ODSConstructionBUILDINGS: TFloatField;
+    ODSConstructionENGINEER: TFloatField;
+    ODSConstructionEXDECO: TFloatField;
+    ODSConstructionINDECO: TFloatField;
+    ODSConstructionFIRESYS: TFloatField;
+    ODSConstructionTYPEID: TIntegerField;
+    Customers: TOracleDataSet;
+    CustomersID: TIntegerField;
+    CustomersNAME: TWideStringField;
+    CustomersADDRESS: TWideStringField;
+    CustomersMOBILEPHONE: TWideStringField;
+    CustomersFAX: TWideStringField;
+    CustomersData: TDataSource;
+    ODSRisks: TOracleDataSet;
+    ODSRisksID: TFloatField;
+    ODSRisksNAME: TWideStringField;
+    RisksData: TDataSource;
+    Franshiz: TOracleDataSet;
+    FranshizID: TFloatField;
+    FranshizNAME: TWideStringField;
+    FranshizData: TDataSource;
+    Conditions: TOracleDataSet;
+    ConditionsID: TFloatField;
+    ConditionsNAME: TWideStringField;
+    ConditionsData: TDataSource;
+    ODSCONSTSUGGESTID: TFloatField;
+    ODSCONSTSUGGESTCID: TFloatField;
+    ODSCONSTSUGGESTFRZ_ID: TFloatField;
+    ODSCONSTSUGGESTCNDT_ID: TFloatField;
+    ODSCONSTSUGGESTMLIMIT: TFloatField;
+    ODSCONSTSUGGESTRMLIMIT: TFloatField;
+    ODSCONSTSUGGESTIVALUEMAIN: TFloatField;
+    ODSCONSTSUGGESTRPERIOD: TWideStringField;
+    ODSCONSTSUGGESTRIVALUE: TFloatField;
+    ODSCONSTSUGGESTENDDATE: TDateTimeField;
+    ODSCONSTSUGGESTRFRZ_ID: TFloatField;
+    ODSConstructionR: TOracleDataSet;
+    ODSConstructionRNAME: TWideStringField;
+    ODSConstructionRADDRESS: TWideStringField;
+    ODSConstructionRPHONE: TWideStringField;
+    ODSConstructionRFAX: TWideStringField;
+    ODSConstructionRID: TFloatField;
+    ODSConstructionRKLI_ID: TFloatField;
+    ODSConstructionRFULLDESCRIPTION: TWideStringField;
+    ODSConstructionRLOCATIONOBJ: TWideStringField;
+    ODSConstructionRYEARSINBUSINESS: TWideStringField;
+    ODSConstructionRBUILDINGUSAGE: TWideStringField;
+    ODSConstructionRCONSTYEAR: TDateTimeField;
+    ODSConstructionRFLOORSNUM: TIntegerField;
+    ODSConstructionRWALLSM: TWideStringField;
+    ODSConstructionRCEILINGSM: TWideStringField;
+    ODSConstructionRROOFM: TWideStringField;
+    ODSConstructionRAREA: TFloatField;
+    ODSConstructionRAPPLICANTSPACE: TFloatField;
+    ODSConstructionREARTHQUAKEDETAILS: TWideStringField;
+    ODSConstructionRFLAMABLE: TWideStringField;
+    ODSConstructionRSURROINDINGDETAILS: TWideStringField;
+    ODSConstructionRSITUETED: TWideStringField;
+    ODSConstructionRGUARD: TWideStringField;
+    ODSConstructionRALARM: TWideStringField;
+    ODSConstructionRLOCKS: TWideStringField;
+    ODSConstructionRSECURITYLOCKS: TWideStringField;
+    ODSConstructionRBARS: TWideStringField;
+    ODSConstructionROTHER: TWideStringField;
+    ODSConstructionRSETTINGS: TWideStringField;
+    ODSConstructionRREPAIR: TWideStringField;
+    ODSConstructionRHEATED: TWideStringField;
+    ODSConstructionRRISKID: TFloatField;
+    ODSConstructionRANNUAL: TFloatField;
+    ODSConstructionRWAGES: TFloatField;
+    ODSConstructionRRENT: TFloatField;
+    ODSConstructionREMPLOYES: TFloatField;
+    ODSConstructionREXPIRITY: TDateTimeField;
+    ODSConstructionRLOSSHISTORY: TWideStringField;
+    ODSConstructionRRENEWAL: TWideStringField;
+    ODSConstructionRTHIRDPARTY: TWideStringField;
+    ODSConstructionROTHERINF: TWideStringField;
+    ODSConstructionRINDEMINITY: TWideStringField;
+    ODSConstructionRVALUETYPE: TWideStringField;
+    ODSConstructionRBUILDINGS: TFloatField;
+    ODSConstructionRENGINEER: TFloatField;
+    ODSConstructionREXDECO: TFloatField;
+    ODSConstructionRINDECO: TFloatField;
+    ODSConstructionRFIRESYS: TFloatField;
+    ODSConstructionRTYPEID: TIntegerField;
+    ConstReportSource: TDataSource;
+    ODSConstructionPROFITID: TFloatField;
+    ODSConstructionRPROFITID: TFloatField;
+    ODSBeneficiary: TOracleDataSet;
+    BeneficiarySource: TDataSource;
+    ODSBeneficiaryID: TFloatField;
+    ODSBeneficiaryNAME: TWideStringField;
+    ODSBeneficiaryADDRESS: TWideStringField;
+    ODSBeneficiaryPHONE: TWideStringField;
+    ODSBeneficiaryBANKING_DETAILS: TWideStringField;
+    AgentSource: TDataSource;
+    ODSAgent: TOracleDataSet;
+    ODSConstPolicyPOLICYNUM: TWideStringField;
+    ODSConstPolicyAGENTID: TFloatField;
+    ODSAgentID: TFloatField;
+    ODSAgentNAME: TWideStringField;
+    ODSContracts: TOracleDataSet;
+    ODSContractsID: TFloatField;
+    ODSContractsTYPE_ID: TFloatField;
+    ODSContractsBLANK_ID: TFloatField;
+    ODSContractsINS_DATE: TDateTimeField;
+    ODSContractsBEGIN_DATE: TDateTimeField;
+    ODSContractsEND_DATE: TDateTimeField;
+    ODSContractsVALUTE_ID: TFloatField;
+    ODSContractsAMMOUNT: TFloatField;
+    ODSContractsCLOSE_PREFIX: TIntegerField;
+    ODSContractsKLI_ID: TFloatField;
+    ODSContractsLOANACC_ID: TFloatField;
+    ODSContractsCURRACC_ID: TFloatField;
+    ODSContractsPOLICY_NUM: TWideStringField;
+    DSContracts: TDataSource;
+    ODSCONSTSUGGESTVAL_ID: TFloatField;
+    AValute: TOracleDataSet;
+    AValuteVALU_NAME: TWideStringField;
+    AValuteVALUTE: TIntegerField;
+    AValuteVAL_NAME: TWideStringField;
+    AValuteVALU_SHORT: TWideStringField;
+    AValuteData: TDataSource;
+    OPCOMMON: TOraclePackage;
+    CustomersCONTACTPERSON: TWideStringField;
+    CustomersCONTACTPERSONPHONE: TWideStringField;
+    ODSCONSTSUGGESTINTER_ID: TFloatField;
+    XFPanel3: TXFPanel;
+    XFPanel1: TXFPanel;
+    Edit1: TEdit;
+    DBLookupComboBox2: TDBLookupComboBox;
+    ENum: TDBEdit;
+    XFPanel2: TXFPanel;
+    btPrint: TBitBtn;
+    btApply: TBitBtn;
+    BitBtn2: TBitBtn;
+    BitBtn3: TBitBtn;
+    XFLabel1: TXFLabel;
+    XFLabel2: TXFLabel;
+    XFLabel3: TXFLabel;
+    ODSConstructionCLOSE_PREFIX: TIntegerField;
+    ODSConstructionCID: TFloatField;
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure BitBtn3Click(Sender: TObject);
+    procedure BitBtn2Click(Sender: TObject);
+    procedure ODSConstPolicyNewRecord(DataSet: TDataSet);
+    procedure ENumKeyPress(Sender: TObject; var Key: Char);
+    procedure btPrintClick(Sender: TObject);
+    procedure btApplyClick(Sender: TObject);
+    procedure ENumChange(Sender: TObject);
+  private
+    { Private declarations }
+    FParams : TStrings;
+    FOwnerHandle : Integer;
+    ID,tid : Integer;
+    FEvents: IConstructionPolicyEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+    procedure Addtransh;
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+
+      {}
+    function  Get_Owner:Integer; safecall;
+    procedure Set_Owner(val : Integer);  safecall;
+    {IParamInput}
+    function  Get_Params(const Name: WideString): OleVariant; safecall;
+    procedure Set_Params(const Name: WideString; Value: OleVariant); safecall;
+    property Params[const Name: WideString]: OleVariant read Get_Params write Set_Params;
+    {IInstance}
+    function InstanceInitialize: HResult; safecall;
+    function IUIObject.Initialize = InstanceInitialize;
+    function Cleanup: HResult; safecall;
+    {IUIObject}
+//    function  Get_Icon: OLE_HANDLE; safecall;
+    function UIObjectActivate: HResult; safecall;
+    function IUIObject.Activate = UIObjectActivate;
+    function QueryDeactivate: HResult; safecall;
+    function UIObjectDeactivate: HResult; safecall;
+    function IUIObject.Deactivate = UIObjectDeactivate;
+    function SaveState: HResult; safecall;
+    function  Get_Height : Integer; safecall;
+    function  Get_Width  : Integer; safecall;
+  public
+    { Public declarations }
+    procedure Initialize; override;
+    //Procedure LoadData;
+
+  end;
+
+var
+     ConstructionPolicy:TConstructionPolicy;
+
+implementation
+
+uses ComObj, ComServ,sboapiDataModuleImpl,SBTranslateProc;
+
+{$R *.DFM}
+
+{ TConstructionPolicy }
+
+procedure TConstructionPolicy.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_ConstructionPolicyPage); }
+end;
+
+procedure TConstructionPolicy.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as IConstructionPolicyEvents;
+end;
+
+procedure TConstructionPolicy.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TConstructionPolicy.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TConstructionPolicy.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TConstructionPolicy.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TConstructionPolicy.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TConstructionPolicy.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TConstructionPolicy.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TConstructionPolicy.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TConstructionPolicy.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TConstructionPolicy.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TConstructionPolicy.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TConstructionPolicy.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TConstructionPolicy.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TConstructionPolicy.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TConstructionPolicy.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TConstructionPolicy.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TConstructionPolicy.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TConstructionPolicy.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TConstructionPolicy.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TConstructionPolicy._Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TConstructionPolicy.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TConstructionPolicy.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TConstructionPolicy.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TConstructionPolicy.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TConstructionPolicy.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TConstructionPolicy.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TConstructionPolicy.KeyPressEvent(Sender: TObject;
+  var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TConstructionPolicy.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TConstructionPolicy.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TConstructionPolicy.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TConstructionPolicy.Set_AxBorderStyle(
+  Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TConstructionPolicy.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TConstructionPolicy.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TConstructionPolicy.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TConstructionPolicy.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TConstructionPolicy.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TConstructionPolicy.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TConstructionPolicy.Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TConstructionPolicy.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TConstructionPolicy.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TConstructionPolicy.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TConstructionPolicy.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TConstructionPolicy.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TConstructionPolicy.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+
+function  TConstructionPolicy.Get_Owner:Integer;
+begin
+  Result := handle;
+end;
+
+procedure TConstructionPolicy.Set_Owner(val : Integer);
+begin
+  if val > 0 then
+     FOwnerHandle := val;
+end;
+
+
+function  TConstructionPolicy.Get_Params(const Name: WideString): OleVariant;
+begin
+  Result := FParams.Values[Name];
+end;
+
+procedure TConstructionPolicy.Set_Params(const Name: WideString; Value: OleVariant);
+begin
+  FParams.Values[Name] := Value;
+end;
+
+function TConstructionPolicy.InstanceInitialize: HResult;
+begin
+  Result := S_OK;
+end;
+
+function TConstructionPolicy.Cleanup: HResult;
+begin
+  Result := S_OK;
+end;
+
+function TConstructionPolicy.UIObjectActivate: HResult;
+begin
+        id := StrToInt(Get_Params('id'));
+
+        ODSConstruction.CloseAll;
+        ODSConstruction.SetVariable('id',id);
+        ODSConstruction.Open;
+        ODSContracts.Close;
+
+        ODSContracts.SetVariable('cid',ODSConstructionCID.value);
+        ODSContracts.Open;
+        ODSContracts.Edit;
+
+        ODSConstructionR.CloseAll;
+        ODSConstructionR.SetVariable('id',id);
+        ODSConstructionR.Open;
+
+        ODSConstSuggest.CloseAll;
+        ODSCONSTSUGGEST.SetVariable('CID',StrToInt(Get_Params('id')));
+        ODSConstSuggest.Open;
+        ODSCONSTSUGGEST.Locate('CID', ODSConstructionID.Value,[]);
+        ODSRisks.Locate('id',StrToInt(Get_Params('riskid')),[]);
+        Franshiz.Locate('id',StrToInt(Get_Params('fid')),[]);
+        Conditions.Locate('id',StrToInt(Get_Params('cdid')),[]);
+        tid:=ODSConstructionTypeID.Value;
+        if Get_Params('Mod') = 'Insert' then
+        begin
+            ODSConstPolicy.Insert;
+            ODSConstPolicy.CloseAll;
+            ODSConstPolicy.SetVariable('CS_ID',FloatToStr(ODSCONSTSUGGESTID.value));
+            ODSConstPolicy.Open;
+        end;
+        if (Get_Params('Mod') = 'Insert') and (ODSConstPolicy.RecordCount<1) {or (ODSContractsPolicy_Num.IsNull)} then
+        begin
+           Caption := format(fmCaption, ['Elave']);
+           btPrint.Enabled:=false;
+        end   
+        else
+           Caption := format(fmCaption, ['Redakte']);
+      Result := S_OK;
+end;
+
+function TConstructionPolicy.QueryDeactivate: HResult;
+begin
+  Result := S_OK;
+end;
+
+function TConstructionPolicy.UIObjectDeactivate: HResult;
+begin
+  Result := S_OK;
+end;
+
+function TConstructionPolicy.SaveState: HResult;
+begin
+  Result := S_OK;
+end;
+
+function  TConstructionPolicy.Get_Height : Integer;
+begin
+  Result := Height;
+end;
+
+function  TConstructionPolicy.Get_Width  : Integer;
+begin
+  Result := Width;
+end;
+
+procedure TConstructionPolicy.ActiveFormCreate(Sender: TObject);
+begin
+     ConstructionPolicy:=Self;
+     FParams := TStringList.Create;
+     //LoadData;
+     SBTranslateProc.TranslateAllComponents(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TConstructionPolicy.BitBtn3Click(Sender: TObject);
+begin
+     PostMessage(FOwnerHandle, WM_ModalResult, mrCancel, 0);
+end;
+
+procedure TConstructionPolicy.BitBtn2Click(Sender: TObject);
+begin
+      with ODSConstPolicy do
+      begin
+           ODSConstPolicyCs_id.Value:=ODSConstSuggestID.Value;
+           if State in [dsInsert, dsEdit] then  Post;
+           RefreshRecord;
+      end;
+     with ODSContracts do
+     if State in [dsEdit, dsInsert] then
+     begin
+        FieldByName('policy_id').asFloat := ODSConstPolicy.FieldByName('id').asFloat;
+        if ODSContractsPolicy_Num.IsNull then
+        FieldByName('POLICY_NUM').AsString:=OPCommon.callStringFunction('generatePolicy_Num',[tid]);
+        Post;
+     end;
+     PostMessage(FOwnerHandle, WM_ModalResult, mrOk, 0);
+end;
+
+procedure TConstructionPolicy.ODSConstPolicyNewRecord(DataSet: TDataSet);
+begin
+      DataSet.FieldByName('ID').AsInteger:=PINS_CONSTRUCTION.CallIntegerFunction('generatePolicyID',[]);
+end;
+
+{procedure TConstructionPolicy.LoadData;
+begin
+      //ENum.Text:=ODSConstPolicyPolicynum.Value;
+end;  }
+
+procedure TConstructionPolicy.ENumKeyPress(Sender: TObject; var Key: Char);
+begin
+     if Key = #13 then
+     begin
+        if HiWord(GetKeyState(VK_Shift))<>0 then
+           with Sender as TControl do
+           SelectNext(ActiveControl,False, True)
+        else
+           with Sender as TControl do
+           SelectNext(ActiveControl,True, True);
+        key:=#0;
+     end;
+end;
+
+procedure TConstructionPolicy.btPrintClick(Sender: TObject);
+begin
+
+      if  MessageDlg('Əməliyyat aparılsın?', mtConfirmation	, [mbYes, mbNo], 0) = mrYes then
+      AddTransh();
+      AValute.Locate('valute',ODSCOntractsValute_ID.Value,[]);
+      try
+        with PolicyExporter do
+        begin
+             FileName:=ExtractFilePath(Application.ExeName)+ '\Inshaat polis formasi.doc';
+             Open(False);
+             SetBookmark('PolicyNum',ODSContractsPolicy_Num.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Insured',ODSConstructionRName.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Agent',ODSAgentNAME.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Valute',AValuteValu_name.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Beneficiary',ODSBeneficiaryName.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('ISubjAddr',ODSConstructionRLocationObj.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('ContactTel',CustomersContactPersonPhone.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Risks',ODSRisksName.value, false, false, False, false, 8, 'Arial AzLat', False);
+             //SetBookmark('IPeriod',ODSConstructionRReq_Period.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Franshiz',FranshizName.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Cond',ConditionsName.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('IPremium',FloatToStr(ODSContractsAmmount.value), false, false, False, false, 8, 'Arial AzLat', False);
+
+        end;
+     finally
+        PolicyExporter.Show;
+     end;
+end;
+
+procedure TConstructionPolicy.btApplyClick(Sender: TObject);
+begin
+     with ODSConstPolicy do
+      begin
+           ODSConstPolicyCs_id.Value:=ODSConstSuggestID.Value;
+           if State in [dsInsert, dsEdit] then  Post;
+           RefreshRecord;
+      end;
+     with ODSContracts do
+     if State in [dsEdit, dsInsert] then
+     begin
+        //FieldByName('policy_id').asFloat := ODSConstPolicy.FieldByName('id').asFloat;
+        if ODSContractsPolicy_Num.IsNull then
+        FieldByName('POLICY_NUM').AsString:=OPCommon.callStringFunction('generatePolicy_Num',[tid]);
+        Post;
+     end;
+     btApply.Enabled:=false;
+     btPrint.Enabled:=true;
+end;
+
+procedure TConstructionPolicy.ENumChange(Sender: TObject);
+begin
+     btApply.Enabled:=true;
+end;
+
+procedure TConstructionPolicy.Addtransh;
+begin
+      with ODSConstructionR, OPCOMMON do begin
+      ODSConstructionR.Locate('ID',ODSConstructionID.Value,[]);
+      ODSContracts.Close;
+      ODSContracts.SetVariable('blankid',ODSConstructionID.Value);
+      ODSContracts.Open;
+      if CallIntegerFunction('addtransaction', [
+                      ODSContracts.FieldByName('LOANACC_ID').asFloat,
+                      ODSContracts.FieldByName('CURRACC_ID').asFloat,
+                      ODSContracts.FieldByName('AMMOUNT').asFloat]) > 0 then
+      MessageDlg('Əməliyyat keçirildi.', mtInformation, [mbOK], 0);
+      Close;
+    end;
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TConstructionPolicy,
+    Class_ConstructionPolicy,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

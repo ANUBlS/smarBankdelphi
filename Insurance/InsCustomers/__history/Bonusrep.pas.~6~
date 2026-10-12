@@ -1,0 +1,69 @@
+unit Bonusrep;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,ShlObj,
+  Dialogs, CMExcelExport, StdCtrls, ComCtrls,ShellApi, QExport4, QExport4XLS,
+  QExport4Xlsx;
+
+type
+  TBonusReport = class(TForm)
+    Edit1: TEdit;
+    Edit2: TEdit;
+    DateTimePicker1: TDateTimePicker;
+    DateTimePicker2: TDateTimePicker;
+    Button1: TButton;
+    Label1: TLabel;
+    Label2: TLabel;
+    QExport4Xlsx1: TQExport4Xlsx;
+    procedure Button1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  BonusReport: TBonusReport;
+
+implementation
+
+uses InsDataModule;
+
+{$R *.dfm}
+
+
+function DesktopPath:string;
+var zpath: array [0..MAX_PATH] of char;
+ begin
+ SHGetFolderPath(0, CSIDL_DESKTOP, 0, SHGFP_TYPE_CURRENT, @zpath);
+ result:=   (zpath);
+end ;
+
+procedure TBonusReport.Button1Click(Sender: TObject);
+begin
+InsDataMod.ins_bonushesabat.CloseAll;
+
+InsDataMod.ins_bonushesabat.SetVariable('dat1',trunc(DateTimePicker1.Date));
+InsDataMod.ins_bonushesabat.SetVariable('dat2',trunc(DateTimePicker2.Date));
+InsDataMod.ins_bonushesabat.SetVariable('DBBALCN',edit1.text);
+InsDataMod.ins_bonushesabat.SetVariable('KRBALCN',edit2.text);
+
+InsDataMod.ins_bonushesabat.Open;
+{ShowMessage(InsDataMod.ins_bonushesabat.GetVariable('dat1'));
+ShowMessage(InsDataMod.ins_bonushesabat.GetVariable('dat2'));
+ShowMessage(InsDataMod.ins_bonushesabat.GetVariable('balcndb'));
+ShowMessage(InsDataMod.ins_bonushesabat.GetVariable('balcnkr')); }
+
+
+
+
+ QExport4Xlsx1.FileName  :='\Bonus.xlsx';
+   QExport4Xlsx1.DataSet:= InsDataMod.ins_bonushesabat;
+    QExport4Xlsx1.ShowFile:=true;
+    QExport4Xlsx1.Execute;
+InsDataMod.ins_bonushesabat.close;
+end;
+
+end.

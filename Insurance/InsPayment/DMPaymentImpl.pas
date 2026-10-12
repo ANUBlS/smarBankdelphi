@@ -1,0 +1,144 @@
+﻿unit DMPaymentImpl;
+
+interface
+
+uses
+  SysUtils, Classes, Oracle, DB, OracleData;
+
+type
+  TDMPayment = class(TDataModule)
+    ODSPayments: TOracleDataSet;
+    DSPayments: TDataSource;
+    ODSPlan: TOracleDataSet;
+    DSPlan: TDataSource;
+    OPSBOP: TOraclePackage;
+    OPCOMMON: TOraclePackage;
+    ODSPaymentsID: TFloatField;
+    ODSPaymentsINS_ID: TFloatField;
+    ODSPaymentsTRAID: TFloatField;
+    ODSPaymentsAMMOUNT: TFloatField;
+    ODSPaymentsPAYDATE: TDateTimeField;
+    ODSPaymentsNAME: TWideStringField;
+    ODSPlanID: TFloatField;
+    ODSPlanPAYDATE: TWideStringField;
+    ODSPlanAMMOUNT: TFloatField;
+    ODSPlanSTATUS: TFloatField;
+    ODSPaymentsPLANTYPE: TWideStringField;
+    DSRRestPayment: TDataSource;
+    DSRestPayment: TOracleDataSet;
+    DSRestPaymentQALIQ: TFloatField;
+    DSContracts: TOracleDataSet;
+    DSRContracts: TDataSource;
+    DSContractsID: TFloatField;
+    DSContractsTYPE_ID: TFloatField;
+    DSContractsINS_DATE: TDateTimeField;
+    DSContractsBEGIN_DATE: TDateTimeField;
+    DSContractsEND_DATE: TDateTimeField;
+    DSContractsVALUTE_ID: TFloatField;
+    DSContractsAMMOUNT: TFloatField;
+    DSContractsCLOSE_PREFIX: TIntegerField;
+    DSContractsKLI_ID: TFloatField;
+    DSContractsLOANACC_ID: TFloatField;
+    DSContractsCURRACC_ID: TFloatField;
+    DSContractsPOLICY_NUM: TWideStringField;
+    DSContractsINSSUMM: TFloatField;
+    DSContractsFRANSHIZ: TFloatField;
+    DSContractsTARIFF: TFloatField;
+    DSContractsSTATE: TIntegerField;
+    DSContractsAGENT_ID: TFloatField;
+    DSContractsPNUM: TFloatField;
+    DSContractsBEN_ID: TFloatField;
+    DSContractsBENEFICIARY: TWideStringField;
+    DSContractsCONDITIONS: TWideStringField;
+    DSContractsSUGNUM: TWideStringField;
+    DSContractsBLANK_ID: TFloatField;
+    DSContractsOP_ID: TFloatField;
+    DSContractsREINS: TFloatField;
+    DSContractsCHKASKO: TFloatField;
+    DSContractsCHM: TFloatField;
+    DSContractsCHFQ: TFloatField;
+    DSContractsCOMMITOP_ID: TFloatField;
+    DSContractsCOMMIT_DATE: TDateTimeField;
+    DSContractsCANCELOPID: TFloatField;
+    DSContractsCANCELDATE: TDateTimeField;
+    DSPlansetting: TOracleDataSet;
+    ODSPaymentsPLANID: TFloatField;
+    DSPlansettingID: TFloatField;
+    DSPlansettingCID: TFloatField;
+    DSPlansettingPAYMENT_TYPE: TFloatField;
+    DSPlansettingPERCENT: TFloatField;
+    DSPlansettingPERCENT_F: TFloatField;
+    DSPlansettingPERCENT_M: TFloatField;
+    DSPlansettingOP_ID: TFloatField;
+    DSRHesab: TDataSource;
+    DSHesab: TOracleDataSet;
+    DSpaymentAcc: TOracleDataSet;
+    DSRpaymentAcc: TDataSource;
+    DSpaymentAccID: TFloatField;
+    DSpaymentAccACC_NO: TWideStringField;
+    DSRPaymentReal: TDataSource;
+    DSPaymentReal: TOracleDataSet;
+    DSPaymentRealID: TFloatField;
+    DSPaymentRealINS_ID: TFloatField;
+    DSPaymentRealTRAID: TFloatField;
+    DSPaymentRealAMMOUNT: TFloatField;
+    DSPaymentRealPAYDATE: TDateTimeField;
+    DSPaymentRealNAME: TWideStringField;
+    DSPaymentRealPLANID: TFloatField;
+    DSPaymentRealPLANTYPE: TWideStringField;
+    DSTSighaqqı: TOracleDataSet;
+    DSTSighaqqıK: TOracleDataSet;
+    DSTSighaqqıM: TOracleDataSet;
+    DSTSighaqqıFQ: TOracleDataSet;
+    DSTSighaqqıMSIGHAQQIQALIQ: TFloatField;
+    DSTSighaqqıKSIGHAQQIQALIQ: TFloatField;
+    DSTSighaqqıSIGHAQQIQALIQ: TFloatField;
+    DSTSighaqqıFQSIGHAQQIQALIQ: TFloatField;
+    DSRins_dict_next_event_per: TDataSource;
+    DSins_dict_next_event_per: TOracleDataSet;
+    DSins_dict_next_event_perPERCENT: TFloatField;
+    sb_aca: TOraclePackage;
+    dscustname: TOracleDataSet;
+    dscustnameNAME: TWideStringField;
+    dsRcustname: TDataSource;
+    dsotherkdhesab: TOracleDataSet;
+    dsotherdbhesab: TOracleDataSet;
+    dsrotherkdhesab: TDataSource;
+    dsrotherdbhesab: TDataSource;
+    dsotherkdhesabID: TFloatField;
+    dsotherkdhesabACC_NO: TWideStringField;
+    dsotherdbhesabID: TFloatField;
+    dsotherdbhesabACC_NO: TWideStringField;
+    Dskassabalans: TOracleDataSet;
+    DskassabalansID: TFloatField;
+    DskassabalansKLI_ID: TFloatField;
+    DskassabalansBAL_CN1: TFloatField;
+    procedure DataModuleCreate(Sender: TObject);
+    procedure DataModuleDestroy(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  DMPayment: TDMPayment;
+
+implementation
+
+{$R *.dfm}
+    uses sboapiDataModuleimpl,CommanParametrs;
+procedure TDMPayment.DataModuleCreate(Sender: TObject);
+begin
+
+
+dsotherkdhesab.Open;
+end;
+
+procedure TDMPayment.DataModuleDestroy(Sender: TObject);
+begin
+dsotherkdhesab.close;
+dsotherdbhesab.close;
+end;
+
+end.

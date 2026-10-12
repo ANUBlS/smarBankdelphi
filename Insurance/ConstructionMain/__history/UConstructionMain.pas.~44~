@@ -1,0 +1,1234 @@
+﻿unit UConstructionMain;
+               //OPCOMMON
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActiveX, AxCtrls, PConstructionMain_TLB, StdVcl, ComCtrls, ActnList, ImgList,
+  ToolWin, Grids, DBGrids, ExtCtrls, PlgModalContainer, Db, OracleData,
+  Oracle,SBPlgAx50_TLB, Menus, INSWordExporter, StdCtrls, XFSCtrls, DBCtrls;
+
+const
+     WM_ModalResult = WM_USER+139;
+type
+  TConstructionMain = class(TActiveForm, IConstructionMain,IUIObject,
+             IParamInput)
+    ImageList: TImageList;
+    ActionList1: TActionList;
+    AInsert: TAction;
+    AEdit: TAction;
+    ADelete: TAction;
+    AReport: TAction;
+    ARefresh: TAction;
+    PlgBlank: TPlgModalContainer;
+    INS_CONSTRUCTION: TOracleDataSet;
+    CONSTRUCTIONDATA: TDataSource;
+    PINS_CONSTRUCTION: TOraclePackage;
+    RisksData: TDataSource;
+    AFullRefresh: TAction;
+    PopupMenu2: TPopupMenu;
+    N2: TMenuItem;
+    N3: TMenuItem;
+    N4: TMenuItem;
+    N5: TMenuItem;
+    N6: TMenuItem;
+    N9: TMenuItem;
+    N7: TMenuItem;
+    N8: TMenuItem;
+    PopupMenu1: TPopupMenu;
+    N1: TMenuItem;
+    ASuggestion: TAction;
+    ODSCONSTSUGGEST: TOracleDataSet;
+    CONSTSUGGESTData: TDataSource;
+    INS_CONSTRUCTIONID: TFloatField;
+    INS_CONSTRUCTIONKLI_ID: TFloatField;
+    INS_CONSTRUCTIONFULLDESCRIPTION: TWideStringField;
+    INS_CONSTRUCTIONLOCATIONOBJ: TWideStringField;
+    INS_CONSTRUCTIONYEARSINBUSINESS: TWideStringField;
+    INS_CONSTRUCTIONBUILDINGUSAGE: TWideStringField;
+    INS_CONSTRUCTIONCONSTYEAR: TDateTimeField;
+    INS_CONSTRUCTIONFLOORSNUM: TIntegerField;
+    INS_CONSTRUCTIONWALLSM: TWideStringField;
+    INS_CONSTRUCTIONCEILINGSM: TWideStringField;
+    INS_CONSTRUCTIONROOFM: TWideStringField;
+    INS_CONSTRUCTIONAREA: TFloatField;
+    INS_CONSTRUCTIONAPPLICANTSPACE: TFloatField;
+    INS_CONSTRUCTIONEARTHQUAKEDETAILS: TWideStringField;
+    INS_CONSTRUCTIONFLAMABLE: TWideStringField;
+    INS_CONSTRUCTIONSURROINDINGDETAILS: TWideStringField;
+    INS_CONSTRUCTIONSITUETED: TWideStringField;
+    INS_CONSTRUCTIONGUARD: TWideStringField;
+    INS_CONSTRUCTIONALARM: TWideStringField;
+    INS_CONSTRUCTIONLOCKS: TWideStringField;
+    INS_CONSTRUCTIONSECURITYLOCKS: TWideStringField;
+    INS_CONSTRUCTIONBARS: TWideStringField;
+    INS_CONSTRUCTIONOTHER: TWideStringField;
+    INS_CONSTRUCTIONSETTINGS: TWideStringField;
+    INS_CONSTRUCTIONREPAIR: TWideStringField;
+    INS_CONSTRUCTIONHEATED: TWideStringField;
+    INS_CONSTRUCTIONRISKID: TFloatField;
+    INS_CONSTRUCTIONANNUAL: TFloatField;
+    INS_CONSTRUCTIONWAGES: TFloatField;
+    INS_CONSTRUCTIONRENT: TFloatField;
+    INS_CONSTRUCTIONEMPLOYES: TFloatField;
+    INS_CONSTRUCTIONEXPIRITY: TDateTimeField;
+    INS_CONSTRUCTIONLOSSHISTORY: TWideStringField;
+    INS_CONSTRUCTIONRENEWAL: TWideStringField;
+    INS_CONSTRUCTIONTHIRDPARTY: TWideStringField;
+    INS_CONSTRUCTIONOTHERINF: TWideStringField;
+    INS_CONSTRUCTIONINDEMINITY: TWideStringField;
+    INS_CONSTRUCTIONVALUETYPE: TWideStringField;
+    INS_CONSTRUCTIONBUILDINGS: TFloatField;
+    INS_CONSTRUCTIONENGINEER: TFloatField;
+    INS_CONSTRUCTIONEXDECO: TFloatField;
+    INS_CONSTRUCTIONINDECO: TFloatField;
+    INS_CONSTRUCTIONFIRESYS: TFloatField;
+    INS_CONSTRUCTIONTYPEID: TIntegerField;
+    ConstructionExporter: TINSWordExporter;
+    Customers: TOracleDataSet;
+    CustomersID: TIntegerField;
+    CustomersNAME: TWideStringField;
+    CustomersADDRESS: TWideStringField;
+    CustomersMOBILEPHONE: TWideStringField;
+    CustomersFAX: TWideStringField;
+    CustomersData: TDataSource;
+    ODSConstructionR: TOracleDataSet;
+    ODSConstructionRNAME: TWideStringField;
+    ODSConstructionRADDRESS: TWideStringField;
+    ODSConstructionRPHONE: TWideStringField;
+    ODSConstructionRFAX: TWideStringField;
+    ODSConstructionRID: TFloatField;
+    ODSConstructionRKLI_ID: TFloatField;
+    ODSConstructionRFULLDESCRIPTION: TWideStringField;
+    ODSConstructionRLOCATIONOBJ: TWideStringField;
+    ODSConstructionRYEARSINBUSINESS: TWideStringField;
+    ODSConstructionRBUILDINGUSAGE: TWideStringField;
+    ODSConstructionRCONSTYEAR: TDateTimeField;
+    ODSConstructionRFLOORSNUM: TIntegerField;
+    ODSConstructionRWALLSM: TWideStringField;
+    ODSConstructionRCEILINGSM: TWideStringField;
+    ODSConstructionRROOFM: TWideStringField;
+    ODSConstructionRAREA: TFloatField;
+    ODSConstructionRAPPLICANTSPACE: TFloatField;
+    ODSConstructionREARTHQUAKEDETAILS: TWideStringField;
+    ODSConstructionRFLAMABLE: TWideStringField;
+    ODSConstructionRSURROINDINGDETAILS: TWideStringField;
+    ODSConstructionRSITUETED: TWideStringField;
+    ODSConstructionRGUARD: TWideStringField;
+    ODSConstructionRALARM: TWideStringField;
+    ODSConstructionRLOCKS: TWideStringField;
+    ODSConstructionRSECURITYLOCKS: TWideStringField;
+    ODSConstructionRBARS: TWideStringField;
+    ODSConstructionROTHER: TWideStringField;
+    ODSConstructionRSETTINGS: TWideStringField;
+    ODSConstructionRREPAIR: TWideStringField;
+    ODSConstructionRHEATED: TWideStringField;
+    ODSConstructionRRISKID: TFloatField;
+    ODSConstructionRANNUAL: TFloatField;
+    ODSConstructionRWAGES: TFloatField;
+    ODSConstructionRRENT: TFloatField;
+    ODSConstructionREMPLOYES: TFloatField;
+    ODSConstructionREXPIRITY: TDateTimeField;
+    ODSConstructionRLOSSHISTORY: TWideStringField;
+    ODSConstructionRRENEWAL: TWideStringField;
+    ODSConstructionRTHIRDPARTY: TWideStringField;
+    ODSConstructionROTHERINF: TWideStringField;
+    ODSConstructionRINDEMINITY: TWideStringField;
+    ODSConstructionRVALUETYPE: TWideStringField;
+    ODSConstructionRBUILDINGS: TFloatField;
+    ODSConstructionRENGINEER: TFloatField;
+    ODSConstructionREXDECO: TFloatField;
+    ODSConstructionRINDECO: TFloatField;
+    ODSConstructionRFIRESYS: TFloatField;
+    ODSConstructionRTYPEID: TIntegerField;
+    DataSource1: TDataSource;
+    PINS_FULLMOTOR: TOraclePackage;
+    APolicy: TAction;
+    ODSCONSTSUGGESTID: TFloatField;
+    ODSCONSTSUGGESTCID: TFloatField;
+    ODSCONSTSUGGESTFRZ_ID: TFloatField;
+    ODSCONSTSUGGESTCNDT_ID: TFloatField;
+    ODSCONSTSUGGESTMLIMIT: TFloatField;
+    ODSCONSTSUGGESTRMLIMIT: TFloatField;
+    ODSCONSTSUGGESTIVALUEMAIN: TFloatField;
+    ODSCONSTSUGGESTRPERIOD: TWideStringField;
+    ODSCONSTSUGGESTRIVALUE: TFloatField;
+    ODSCONSTSUGGESTENDDATE: TDateTimeField;
+    ODSCONSTSUGGESTRFRZ_ID: TFloatField;
+    Risks: TOracleDataSet;
+    RisksID: TFloatField;
+    RisksNAME: TWideStringField;
+    INS_CONSTRUCTIONPROFITID: TFloatField;
+    ODSConstructionRPROFITID: TFloatField;
+    ODSBeneficiary: TOracleDataSet;
+    ODSBeneficiaryID: TFloatField;
+    ODSBeneficiaryNAME: TWideStringField;
+    ODSBeneficiaryADDRESS: TWideStringField;
+    ODSBeneficiaryPHONE: TWideStringField;
+    ODSBeneficiaryBANKING_DETAILS: TWideStringField;
+    BeneficiarySource: TDataSource;
+    ODSContracts: TOracleDataSet;
+    ODSContractsID: TFloatField;
+    ODSContractsTYPE_ID: TFloatField;
+    ODSContractsBLANK_ID: TFloatField;
+    ODSContractsINS_DATE: TDateTimeField;
+    ODSContractsBEGIN_DATE: TDateTimeField;
+    ODSContractsEND_DATE: TDateTimeField;
+    ODSContractsVALUTE_ID: TFloatField;
+    ODSContractsAMMOUNT: TFloatField;
+    ODSContractsCLOSE_PREFIX: TIntegerField;
+    ODSContractsKLI_ID: TFloatField;
+    ODSContractsLOANACC_ID: TFloatField;
+    ODSContractsCURRACC_ID: TFloatField;
+    ODSContractsPOLICY_NUM: TWideStringField;
+    DSContracts: TDataSource;
+    CustomersCONTACTPERSON: TWideStringField;
+    CustomersCONTACTPERSONPHONE: TWideStringField;
+    ODSCONSTSUGGESTINTER_ID: TFloatField;
+    INS_CONSTRUCTIONCLOSE_PREFIX: TIntegerField;
+    OPCOMMON: TOraclePackage;
+    INS_CONSTRUCTIONBEGIN_DATE: TDateTimeField;
+    INS_CONSTRUCTIONEND_DATE: TDateTimeField;
+    ASearch: TAction;
+    INS_CONSTRUCTIONNAME: TWideStringField;
+    XFPanel1: TXFPanel;
+    ToolBar1: TToolBar;
+    ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
+    ToolButton3: TToolButton;
+    ToolButton4: TToolButton;
+    ToolButton5: TToolButton;
+    ToolButton6: TToolButton;
+    ToolButton7: TToolButton;
+    ToolButton8: TToolButton;
+    XFGroupBox1: TXFGroupBox;
+    RGContract: TXFRadioGroup;
+    XFGroupBox2: TXFGroupBox;
+    DBLookupComboBox1: TDBLookupComboBox;
+    XFCheckBox1: TXFCheckBox;
+    XFGroupBox11: TXFGroupBox;
+    DBLookupComboBox6: TDBLookupComboBox;
+    XFCheckBox9: TXFCheckBox;
+    XFGroupBox3: TXFGroupBox;
+    DBLookupComboBox2: TDBLookupComboBox;
+    XFCheckBox2: TXFCheckBox;
+    XFGroupBox5: TXFGroupBox;
+    Edit1: TEdit;
+    XFCheckBox6: TXFCheckBox;
+    XFGroupBox9: TXFGroupBox;
+    Edit2: TEdit;
+    XFCheckBox7: TXFCheckBox;
+    XFGroupBox10: TXFGroupBox;
+    Edit3: TEdit;
+    XFCheckBox8: TXFCheckBox;
+    XFPanel2: TXFPanel;
+    GridConstruction: TDBGrid;
+    XFPanel3: TXFPanel;
+    EditPOLICY_NUM: TEdit;
+    EditNAME: TEdit;
+    EditAGENT: TEdit;
+    EditFRANSHIZ: TEdit;
+    EditEMPNUM: TEdit;
+    EditINSSUMM: TEdit;
+    EditCOST: TEdit;
+    INS_CONSTRUCTIONCID: TFloatField;
+    Memo1: TMemo;
+    INS_CONSTRUCTIONAGENT: TWideStringField;
+    INS_CONSTRUCTIONAGENT_ID: TFloatField;
+    INS_CONSTRUCTIONPOLICY_NUM: TWideStringField;
+    INS_CONSTRUCTIONFRANSHIZ: TFloatField;
+    INS_CONSTRUCTIONINSSUMM: TFloatField;
+    INS_CONSTRUCTIONAMMOUNT: TFloatField;
+    DSIns_cust: TOracleDataSet;
+    DSIns_custID: TIntegerField;
+    DSIns_custNAME1: TWideStringField;
+    DSRIns_cust: TDataSource;
+    DScutomers: TOracleDataSet;
+    DSRcutomers: TDataSource;
+    DSins_agents: TOracleDataSet;
+    DSins_agentsID: TFloatField;
+    DSins_agentsNAME: TWideStringField;
+    DSRins_agents: TDataSource;
+    ODSConstructionRCLOSE_PREFIX: TIntegerField;
+    ODSConstructionRCID: TFloatField;
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure AInsertExecute(Sender: TObject);
+    procedure AEditExecute(Sender: TObject);
+    procedure ADeleteExecute(Sender: TObject);
+    procedure ARefreshExecute(Sender: TObject);
+    procedure AFullRefreshExecute(Sender: TObject);
+    procedure N1DrawItem(Sender: TObject; ACanvas: TCanvas; ARect: TRect;
+      Selected: Boolean);
+    procedure ASuggestionExecute(Sender: TObject);
+    procedure AReportExecute(Sender: TObject);
+    procedure GridConstructionTitleClick(Column: TColumn);
+    procedure APolicyExecute(Sender: TObject);
+    procedure ASearchExecute(Sender: TObject);
+    procedure RGContractClick(Sender: TObject);
+    procedure XFCheckBox1Click(Sender: TObject);
+    procedure DBLookupComboBox1Click(Sender: TObject);
+    procedure XFCheckBox9Click(Sender: TObject);
+    procedure XFCheckBox2Click(Sender: TObject);
+private
+    { Private declarations }
+    id : Integer;
+    FParams: TStrings;
+    FOwnerHandle : Integer;
+
+    FEvents: IConstructionMainEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+
+    function  Get_Owner:Integer; safecall;
+    procedure Set_Owner(val : Integer);  safecall;
+    {IParamInput}
+    function  Get_Params(const Name: WideString): OleVariant; safecall;
+    procedure Set_Params(const Name: WideString; Value: OleVariant); safecall;
+    property Params[const Name: WideString]: OleVariant read Get_Params write Set_Params;
+    {IInstance}
+    function InstanceInitialize: HResult; safecall;
+    function IUIObject.Initialize = InstanceInitialize;
+    function Cleanup: HResult; safecall;
+    {IUIObject}
+//    function  Get_Icon: OLE_HANDLE; safecall;
+    function UIObjectActivate: HResult; safecall;
+    function IUIObject.Activate = UIObjectActivate;
+    function QueryDeactivate: HResult; safecall;
+    function UIObjectDeactivate: HResult; safecall;
+    function IUIObject.Deactivate = UIObjectDeactivate;
+    function SaveState: HResult; safecall;
+    function  Get_Height : Integer; safecall;
+    function  Get_Width  : Integer; safecall;
+  public
+    { Public declarations }
+    resultID :integer;
+    resultB:boolean;
+    procedure Initialize; override;
+    procedure DeleteConstructionInfo(Id:integer);
+    procedure FullRefresh(DataSetName: String);
+    procedure ActionFilterExecute(Sender: TObject);
+   // procedure ActionSpeedSearchExecute(Sender: TObject);
+  end;
+
+VAR
+    ConstructionMain:TConstructionMain;
+implementation
+
+uses ComObj, ComServ,sboapiDataModuleImpl,SBTranslateProc, USearch;
+
+{$R *.DFM}
+
+{ TConstructionMain }
+
+procedure TConstructionMain.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_ConstructionMainPage); }
+end;
+
+procedure TConstructionMain.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as IConstructionMainEvents;
+end;
+
+procedure TConstructionMain.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TConstructionMain.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TConstructionMain.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TConstructionMain.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TConstructionMain.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TConstructionMain.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TConstructionMain.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TConstructionMain.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TConstructionMain.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TConstructionMain.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TConstructionMain.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TConstructionMain.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TConstructionMain.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TConstructionMain.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TConstructionMain.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TConstructionMain.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TConstructionMain.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TConstructionMain.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TConstructionMain.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TConstructionMain._Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TConstructionMain.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TConstructionMain.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TConstructionMain.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TConstructionMain.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TConstructionMain.DBLookupComboBox1Click(Sender: TObject);
+begin
+ ActionFilterExecute(Sender);
+end;
+
+procedure TConstructionMain.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TConstructionMain.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TConstructionMain.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TConstructionMain.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TConstructionMain.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TConstructionMain.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TConstructionMain.Set_AxBorderStyle(
+  Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TConstructionMain.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TConstructionMain.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TConstructionMain.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TConstructionMain.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TConstructionMain.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TConstructionMain.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TConstructionMain.Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TConstructionMain.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TConstructionMain.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TConstructionMain.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TConstructionMain.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TConstructionMain.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TConstructionMain.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+
+
+function  TConstructionMain.Get_Owner:Integer;
+begin
+  Result := handle;
+end;
+
+procedure TConstructionMain.Set_Owner(val : Integer);
+begin
+  if val > 0 then
+     FOwnerHandle := val;
+end;
+
+
+function  TConstructionMain.Get_Params(const Name: WideString): OleVariant;
+begin
+  Result := FParams.Values[Name];
+end;
+
+procedure TConstructionMain.Set_Params(const Name: WideString; Value: OleVariant);
+begin
+  FParams.Values[Name] := Value;
+end;
+
+function TConstructionMain.InstanceInitialize: HResult;
+begin
+  Result := S_OK;
+end;
+
+function TConstructionMain.Cleanup: HResult;
+begin
+  Result := S_OK;
+end;
+
+function TConstructionMain.UIObjectActivate: HResult;
+begin
+       Result := S_OK;
+       ODSContracts.Close;
+       ODSContracts.SetVariable('cid',INS_CONSTRUCTIONCID.value);
+       ODSContracts.Open;
+
+end;
+
+function TConstructionMain.QueryDeactivate: HResult;
+begin
+  Result := S_OK;
+end;
+
+procedure TConstructionMain.RGContractClick(Sender: TObject);
+begin
+ ActionFilterExecute(Sender);
+end;
+procedure TConstructionMain.ActionFilterExecute(Sender: TObject);
+
+   function  CheckFiltered(IsChecked: Boolean; const FilterStr: String; Args: array of const): String;
+   begin
+    Result :='';
+    if  IsChecked  then
+     Result :=Format(FilterStr, Args);
+     //showmessage('Result= '+Result)  ;
+   end;
+
+const
+   BooleanPrefix = ' AND ';
+
+   StatusFilter = '(ic.close_prefix=%d)';
+   nameFilter = '(ic.KLI_ID=%d)';
+   custFilter = '(icust.cust_id=%d)';
+   AGENT_IDFilter = '(ic.AGENT_ID=%d)';
+   marka_IDFilter='(im.MARKA_ID=%d)';
+   Avtotype_IDFilter='(im.INSUREDTYPE=%d)';
+   FransizaFilter = '(ic.franshiz=%d)';
+var
+   Status:    String;
+   p_name:    String;
+   p_CUST_ID:  String;
+   p_AGENT_ID:  String;
+   p_marka:    String;
+   p_Avtotype:   String;
+   p_fransiza:   String;
+
+   FilterStr: String;
+begin
+ FilterStr :='';
+  // showmessage(StatusFilter);
+ Status :=CheckFiltered(
+               RGContract.ItemIndex <> -1
+             ,StatusFilter
+             ,[RGContract.ItemIndex]
+              );
+  // showmessage(Status);
+    //showmessage(nameFilter);
+    //showmessage(DBLookupComboBox1.ListSource.DataSet.FieldByName('name1').asstring);
+ p_name :=CheckFiltered(
+              XFCheckBox1.Checked//DBLookupBranch.KeyValue <> -1
+             ,nameFilter
+             ,[DBLookupComboBox1.ListSource.DataSet.FieldByName('id').asinteger]
+              );
+ p_cust_id :=CheckFiltered(
+              XFCheckBox9.Checked  //DBLookupOperator.KeyValue <> -1
+             ,custFilter
+             ,[DBLookupComboBox6.ListSource.DataSet.FieldByName('ID').AsInteger]
+              );
+
+ p_AGENT_ID:=CheckFiltered(
+              XFCheckBox2.Checked//DBLookupCurrency.KeyValue <> -1
+             ,AGENT_IDFilter
+             ,[DBLookupComboBox2.ListSource.DataSet.FieldByName('id').AsInteger]
+              );
+
+ {p_marka:=CheckFiltered(
+              XFCheckBox3.Checked  //DBLookupOperator.KeyValue <> -1
+             ,marka_IDFilter
+             ,[DBLookupComboBox3.ListSource.DataSet.FieldByName('ID').AsInteger]
+              );
+
+ p_Avtotype:=CheckFiltered(
+              XFCheckBox5.Checked  //DBLookupOperator.KeyValue <> -1
+             ,Avtotype_IDFilter
+             ,[DBLookupComboBox5.ListSource.DataSet.FieldByName('ID').AsInteger]
+              );
+                   }
+ p_fransiza :=CheckFiltered(
+              XFCheckBox6.Checked//DBLookupCurrency.KeyValue <> -1
+             ,FransizaFilter
+             ,[strtoint(Edit1.Text)]
+              );
+
+  if Status='' then
+   FilterStr:='status is not null'
+ else
+    FilterStr :=Status;
+
+  if  XFCheckBox1.Checked //Branch <> ''
+  then
+  if  FilterStr=''  then
+    FilterStr :=p_name
+  else
+    FilterStr :=FilterStr + BooleanPrefix + p_name;
+
+    if  XFCheckBox9.Checked //Operator <> ''
+  then
+  if  FilterStr=''  then
+    FilterStr :=p_cust_id
+  else
+    FilterStr :=FilterStr + BooleanPrefix + p_cust_id;
+
+ if  XFCheckBox2.Checked //Currency <> ''
+  then
+  if  FilterStr=''  then
+    FilterStr :=p_AGENT_ID
+  else
+    FilterStr :=FilterStr + BooleanPrefix + p_AGENT_ID;
+
+  {if  XFCheckBox3.Checked //Operator <> ''
+  then
+  if  FilterStr=''  then
+    FilterStr :=p_marka
+  else
+    FilterStr :=FilterStr + BooleanPrefix + p_marka;
+
+  if  XFCheckBox5.Checked //Operator <> ''
+  then
+  if  FilterStr=''  then
+    FilterStr :=p_Avtotype
+  else
+    FilterStr :=FilterStr + BooleanPrefix + p_Avtotype; }
+
+    if  XFCheckBox6.Checked //Currency <> ''
+  then
+  if  FilterStr=''  then
+    FilterStr :=p_fransiza
+  else
+    FilterStr :=FilterStr + BooleanPrefix + p_fransiza;
+
+    //showmessage(' and '+ FilterStr);
+
+
+  ConstructionMain.INS_CONSTRUCTION.sql[8]:=' and '+ FilterStr;
+  memo1.Text:= ConstructionMain.INS_CONSTRUCTION.sql.Text;
+  ConstructionMain.INS_CONSTRUCTION.sql.text:=Stringreplace(ConstructionMain.INS_CONSTRUCTION.sql.text,'status','DECODE (ic.close_prefix, 0, 1, 2)', [rfReplaceAll, rfIgnoreCase]);
+
+  ConstructionMain.INS_CONSTRUCTION.close;
+  ConstructionMain.INS_CONSTRUCTION.Open;
+
+end;
+
+
+function TConstructionMain.UIObjectDeactivate: HResult;
+begin
+  Result := S_OK;
+end;
+
+procedure TConstructionMain.XFCheckBox1Click(Sender: TObject);
+begin
+   if XFCheckBox1.Checked=True then
+DBLookupComboBox1.Enabled:=True
+else
+ DBLookupComboBox1.Enabled:=False;
+   ActionFilterExecute(Sender);
+end;
+
+procedure TConstructionMain.XFCheckBox2Click(Sender: TObject);
+begin
+   if XFCheckBox2.Checked=True then
+DBLookupComboBox2.Enabled:=True
+else
+ DBLookupComboBox2.Enabled:=False;
+   ActionFilterExecute(Sender);
+end;
+
+procedure TConstructionMain.XFCheckBox9Click(Sender: TObject);
+begin
+   if XFCheckBox9.Checked=True then
+DBLookupComboBox6.Enabled:=True
+else
+ DBLookupComboBox6.Enabled:=False;
+   ActionFilterExecute(Sender);
+end;
+
+function TConstructionMain.SaveState: HResult;
+begin
+  Result := S_OK;
+end;
+
+function  TConstructionMain.Get_Height : Integer;
+begin
+  Result := Height;
+end;
+
+function  TConstructionMain.Get_Width  : Integer;
+begin
+  Result := Width;
+end;
+
+
+procedure TConstructionMain.ActiveFormCreate(Sender: TObject);
+begin
+     ConstructionMain:=Self;
+     FParams := TStringList.Create;
+     RGContract.ItemIndex:=0;
+     SBTranslateProc.TranslateAllComponents(Self,sboapiDataModule.OrPack_SL);
+end;
+
+
+
+procedure TConstructionMain.DeleteConstructionInfo(id:integer);
+begin
+    try
+        OPCommon.CallBooleanFunction('del_ins',['v_id',id,'v_typeid',10]);
+    except on E:EOracleError do
+    case E.ErrorCode of
+       { 20002: if MessageDlg('Secilmish hesab lagv olunacaq!',mtConfirmation,mbYesNoCancel, 0) = mrYes then
+                 InsDataMod.OPCOMMON.CallProcedure('close_acc', [InsDataMod.ODSAccountID.value]);  }
+        20001: ShowMessage('Asılı hesablarda qalıq sıfırdan fərqlidir!');
+        20002: ShowMessage('Əvvəlcə asılı hesabları bağlayın!');
+    end;
+    end;
+end;
+
+
+
+procedure TConstructionMain.AInsertExecute(Sender: TObject);
+var
+   p : TStringList;
+begin
+     p:= TStringList.Create;
+     p.Values['KLI_ID']:=FloatToStr(INS_ConstructionKLI_ID.Value);
+     p.Values['Mod']:='Insert';
+    // p.Values['ID'] := IntToStr(PINS_CONSTRUCTION.CallIntegerFunction('generateID',[]));
+    // INS_CONSTRUCTION.Insert;
+     with plgBlank do
+         ShowModal(StringToGuid('{5F747E30-D623-4C34-BB55-9FBC1288AA9C}'),p );
+     p.Free;
+end;
+
+procedure TConstructionMain.AEditExecute(Sender: TObject);
+var
+   p : TStringList;
+   a:integer;
+begin
+a:=0;
+    if INS_Construction.IsEmpty then
+    begin
+       ShowMessage('Cədvəldə məlumat yoxdur!');
+       exit;
+    end;
+    p:= TStringList.Create;
+    p.Values['Mod']:='Edit';
+    //showmessage(FloatToStr(INS_ConstructionID.Value));
+    p.Values['ID']:=FloatToStr(INS_ConstructionID.Value);
+    OPCOMMON.CallProcedure('p_ins_cid',['p_cid',GridConstruction.DataSource.DataSet.FieldByName('CID').AsInteger,
+    'p_bid',a,'p_kli_id',GridConstruction.DataSource.DataSet.FieldByName('KLI_ID').AsInteger,'p_mod','Edit']);
+    with plgBlank do
+         ShowModal(StringToGuid('{5F747E30-D623-4C34-BB55-9FBC1288AA9C}'),p );
+    p.Free;
+
+end;
+
+procedure TConstructionMain.ADeleteExecute(Sender: TObject);
+var
+    id:longint;
+    i: Integer;
+    WaitNextConfirm, WillRefresh: Boolean;
+begin
+    WaitNextConfirm :=True;
+    WillRefresh :=False;
+    with GridConstruction,SelectedRows,Ins_Construction do
+    try
+       if Count = 0 then  CurrentRowSelected := True;
+         for  I:=0 to  Count - 1 do
+    begin
+      GotoBookmark(Pointer(Items[I]));
+      ID :=FieldbyName('CID').AsInteger;
+
+      if  WaitNextConfirm  then
+      case MessageDlg('Məlumatlar silinsin?'
+               ,mtConfirmation
+       ,[mbYes, mbNo ,mbCancel ,mbYesToAll]
+       ,0
+       )   of
+        mrNo       : Continue;
+        mrCancel   : Break;
+        mrYesToAll :
+          if MessageDlg(Format('%d  sayda məlumat silinsin ?', [Count - I]), mtConfirmation, [mbYes, mbCancel], 0) = mrYes then
+             WaitNextConfirm :=False
+          else
+             Continue;
+      end;
+      Application.ProcessMessages;
+      DeleteConstructionInfo(ID);
+      WillRefresh :=True;
+    end;
+     ARefreshExecute(sender);
+
+   finally
+      if WillRefresh then
+      ARefreshExecute(Sender);
+
+  end;
+end;
+
+procedure TConstructionMain.ARefreshExecute(Sender: TObject);
+var
+    ConstructionID: Longint;
+begin
+    with Ins_Construction do
+    begin
+        ConstructionID :=FieldByName('ID').AsInteger;
+        CloseAll;
+        Open;
+        Locate('ID', ConstructionID, []);
+    end;
+
+end;
+
+procedure TConstructionMain.FullRefresh(DataSetName: String);
+const
+     c_err_message = ' Table or View in Dataset "%s" does not exist! ';
+var
+     i: Word;
+begin
+     for i :=0 to ComponentCount- 1 do
+     if (Components[i] is TOracleDataSet) and (Components[i].Name <> DataSetName) then
+     try
+        (Components[i] as TOracleDataSet).Close;
+        (Components[i] as TOracleDataSet).Open;
+     except
+         raise Exception.Create(Format(c_err_message, [(Components[i] as TDataSet).Name]));
+     end;
+
+
+end;
+
+procedure TConstructionMain.AFullRefreshExecute(Sender: TObject);
+begin
+    FullRefresh('');
+end;
+
+procedure TConstructionMain.N1DrawItem(Sender: TObject; ACanvas: TCanvas;
+  ARect: TRect; Selected: Boolean);
+var
+    LineBottom: Integer;
+    SText: String;
+    Bar: TRect;
+begin
+    with ACanvas, Sender as TMenuItem do
+  begin
+    with Font do
+    begin
+      Name := 'Azl Sans Serif';
+      Charset := RUSSIAN_CHARSET;
+      if Default then
+        Style := [fsBold];
+    end;
+    if Caption = '-' then
+    begin
+      Pen.Color := clBlack;
+      LineBottom := (ARect.Top + (ARect.Bottom - ARect.Top) div 2)-1;
+      MoveTo(ARect.Left, LineBottom);
+      LineTo(ARect.Right, LineBottom);
+      inc(LineBottom);
+      Pen.Color := clWhite;
+      MoveTo(ARect.Left, LineBottom);
+      LineTo(ARect.Right, LineBottom);
+    end
+    else
+    begin
+      if Selected then
+      begin
+        Brush.Color := clNavy;
+        if Enabled then
+          Font.Color := clWhite
+        else
+          Font.Color := clSilver;
+      end
+      else
+      begin
+        Brush.Color := clBtnFace;
+        if Enabled then
+          Font.Color := clBlack
+        else
+          Font.Color := clGrayText;
+      end;
+      Bar := ARect;
+      Inc(Bar.Left, 22);
+      FillRect(Bar);
+      TextOut(ARect.Left+{17}22, ARect.Top+1, Caption);
+    end;
+    // draw shortcut
+    SText := ShortCutToText(ShortCut);
+    TextOut(ARect.Right-TextWidth(SText)-2, ARect.Top+1, SText);
+    if ImageIndex <> -1 then
+      with GetParentMenu do
+        if Assigned(Images) then
+        begin
+          if Checked then
+          begin
+            Bar.Left := ARect.Left + 1;
+            Bar.Right := Bar.Left + 16;
+            Bar.Top := ARect.Top + 1;
+            Bar.Bottom := Bar.Top + 16;
+
+            ACanvas.Brush.Color := clBtnShadow;
+            ACanvas.FrameRect(Bar);
+
+            Inc(Bar.Left, 2);
+            Inc(Bar.Right, 2);
+            Inc(Bar.Top, 2);
+            Inc(Bar.Bottom, 2);
+
+            ACanvas.Brush.Color := clBtnHighlight;
+            ACanvas.FrameRect(Bar);
+
+            Dec(Bar.Left, 1);
+            Dec(Bar.Right, 1);
+            Dec(Bar.Top, 1);
+            Dec(Bar.Bottom, 1);
+
+            if Selected then
+              ACanvas.Brush.Color := clBtnFace
+            else
+              ACanvas.Brush.Color := clBtnHighlight;
+            ACanvas.FillRect(Bar);
+          end;
+
+          Images.Draw(ACanvas, ARect.Left, ARect.Top, ImageIndex, Enabled);
+        end;
+  end;
+
+end;
+
+procedure TConstructionMain.ASuggestionExecute(Sender: TObject);
+var
+   p : TStringList;  
+begin
+    p:= TStringList.Create;
+    p.Values['ID']:=FloatToStr(INS_ConstructionID.Value);
+    with plgBlank do
+         ShowModal(StringToGuid('{0D0BAE0E-C323-439C-AAD6-EBBB63D04E9C}'),p );
+    p.Free;
+
+end;
+
+
+
+procedure TConstructionMain.AReportExecute(Sender: TObject);
+var
+    idr:double;
+begin
+     idr:=INS_ConstructionID.value;
+     ODSConstructionR.CloseAll;
+     ODSConstructionR.SetVariable('ID',idr);
+     ODSConstructionR.Open;
+     ODSContracts.Close;
+     ODSContracts.SetVariable('cid',ODSConstructionR.FieldByName('cid').AsInteger);
+     ODSContracts.Open;
+     try
+        with ConstructionExporter do
+        begin
+             FileName:=ExtractFilePath(Application.ExeName)+ '\ConstructionAppl.doc';
+             Open(False);
+             SetBookmark('Insured',ODSConstructionRName.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('AInsured',ODSConstructionRAddress.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('TInsured',ODSConstructionRPhone.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('FInsured',ODSConstructionRFax.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('RPeriod',DateToStr(ODSContractsBegin_Date.value)+' - '+DateToStr(ODSContractsEnd_Date.value), false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Beneficiary',ODSBeneficiaryName.value, True, false, False, false, 10, 'Arial AzLat', False);
+             SetBookmark('BAddress',ODSBeneficiaryAddress.value, True, false, False, false, 10, 'Arial AzLat', False);
+             SetBookmark('BTel',ODSBeneficiaryPhone.value, True, false, False, false, 10, 'Arial AzLat', False);
+             SetBookmark('BBank',ODSBeneficiaryBanking_details.value, True, false, False, false, 10, 'Arial AzLat', False);
+             SetBookmark('FullDesc',INS_CONSTRUCTIONFullDescription.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Location',INS_CONSTRUCTIONLocationObj.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Yearsinb',INS_CONSTRUCTIONYEARSINBUSINESS.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('CPerson',CustomersContactPerson.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('TCPerson',CustomersContactPersonPhone.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('BUsage',INS_CONSTRUCTIONBuildingusage.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('YearConst',DateToStr(INS_CONSTRUCTIONconstyear.value), false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('FloorsNum',IntToStr(INS_CONSTRUCTIONFloorsNum.value), false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('WallsM',INS_CONSTRUCTIONWallsM.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('CeilingsM',INS_CONSTRUCTIONCeilingsM.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('RoofM',INS_CONSTRUCTIONRoofM.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Area',FloatToStr(INS_CONSTRUCTIONArea.value), false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('AppArea',FloatToStr(INS_CONSTRUCTIONApplicantSpace.value), false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Earthquake',INS_CONSTRUCTIONEARTHQUAKEDETAILS.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Flamable',INS_CONSTRUCTIONFlamable.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Surroinding',INS_CONSTRUCTIONSURROINDINGDETAILS.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Situeted',INS_CONSTRUCTIONSitueted.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Issecure',INS_CONSTRUCTIONGuard.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Alarm',INS_CONSTRUCTIONAlarm.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Locks',INS_CONSTRUCTIONLocks.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('SLocks',INS_CONSTRUCTIONSecurityLocks.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Bars',INS_CONSTRUCTIONBars.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Other',INS_CONSTRUCTIONOther.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Settings',INS_CONSTRUCTIONSettings.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Repair',INS_CONSTRUCTIONRepair.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('RepairDetail',INS_CONSTRUCTIONRepair.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Heated',INS_CONSTRUCTIONHeated.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('ValueType',INS_CONSTRUCTIONValueType.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Buildings',floatToStr(INS_CONSTRUCTIONBuildings.value), false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Engineering',floatToStr(INS_CONSTRUCTIONEngineer.value), false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Exdeco',floatToStr(INS_CONSTRUCTIONExDeco.value), false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Indeco',floatToStr(INS_CONSTRUCTIONIndeco.value), false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Firesys',floatToStr(INS_CONSTRUCTIONFiresys.value), false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Annual',floatToStr(INS_CONSTRUCTIONAnnual.value), false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Wages',floatToStr(INS_CONSTRUCTIONWages.value), false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Rent',floatToStr(INS_CONSTRUCTIONRent.value), false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Employes',floatToStr(INS_CONSTRUCTIONEmployes.value), false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Indeminity',INS_CONSTRUCTIONIndeminity.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Expirity',DateToStr(INS_CONSTRUCTIONExpirity.value), false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('LHistory',INS_CONSTRUCTIONLossHistory.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('OtherInf',INS_CONSTRUCTIONRenewal.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Thirdp',INS_CONSTRUCTIONThirdParty.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('OtherInform',INS_CONSTRUCTIONOtherInf.value, false, false, False, false, 8, 'Arial AzLat', False);
+        end
+     finally
+        ConstructionExporter.Show;
+     end;
+end;
+
+procedure TConstructionMain.GridConstructionTitleClick(Column: TColumn);
+var
+   TitleName :string;
+begin
+   if Column.Field.Calculated then Exit;
+   TitleName :=Column.FieldName;
+   if Column.FieldName='NAME' then
+      TitleName:='kli_id';
+   with Ins_Construction do
+   begin
+        Screen.Cursor :=crSQLWait;
+        SetVariable('ID',TitleName);
+        Refresh;
+        Screen.Cursor :=crDefault;
+   end;
+
+end;
+
+procedure TConstructionMain.APolicyExecute(Sender: TObject);
+var
+   p : TStringList;
+begin
+   if ODSCONSTSUGGESTID.Value=0 then
+   begin
+           ShowMessage('Təklifname hazir deyil! Əvvəlce təklifnamə hazırlanmalıdır !');
+           exit;
+   end;
+   p:=TStringList.Create;
+   p.Values['id']:=FloatToStr(INS_CONSTRUCTIONId.value);
+   p.Values['fid']:=FloatToStr(ODSCONSTSUGGESTfrz_id.Value);
+   p.Values['cdid']:=FloatToStr(ODSCONSTSUGGESTCNDT_id.Value);
+   p.Values['riskid']:=FloatToStr(INS_CONSTRUCTIONRiskId.value);
+   p.Values['Mod']:='Insert';
+   with plgBlank do
+         ShowModal(StringToGuid('{FEE93B74-CDCF-49A1-A5D9-84162C91971C}'),p );
+   p.Free;
+end;
+
+procedure TConstructionMain.ASearchExecute(Sender: TObject);
+begin
+      {if not Assigned(frmSearch) then
+      frmSearch := TfrmSearch.Create(Self);
+      frmSearch.ShowModal;}
+      XFGroupBox1.Visible :=not XFGroupBox1.Visible;
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TConstructionMain,
+    Class_ConstructionMain,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

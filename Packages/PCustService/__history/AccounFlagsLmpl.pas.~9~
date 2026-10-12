@@ -1,0 +1,91 @@
+unit AccounFlagsLmpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, CheckLst, Buttons, XFSCtrls, ExtCtrls;
+
+const
+  cs_flagexsist = 'FlagExsist';
+
+type
+  TFormAccounFlags = class(TForm)
+    CListBoxAccFlags: TCheckListBox;
+    Panel1: TPanel;
+    XFBitBtn1: TXFBitBtn;
+    procedure FormCreate(Sender: TObject);
+    procedure XFBitBtn1Click(Sender: TObject);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+  private
+
+    { Private declarations }
+    function FlagExsist(AccID: Integer; Ch: Char): Boolean;
+  public
+    FlagMap: String;
+    { Public declarations }
+  end;
+
+var
+  FormAccounFlags: TFormAccounFlags;
+
+implementation
+
+{$R *.dfm}
+
+uses UnitDataModPCustService, PCustServiceFormImpl1, AccountPropertiesFLmpl;
+
+function TFormAccounFlags.FlagExsist(AccID: Integer; Ch: Char): Boolean;
+begin
+  with DataModPCustService.SBUTIL do
+    Result := CallBooleanFunction(cs_flagexsist,
+      ['AccID', AccID, 'FlagChar', Ch]);
+end;
+
+procedure TFormAccounFlags.FormCreate(Sender: TObject);
+var
+  Index: Word;
+begin
+  with DataModPCustService do
+  begin
+    AccFlags.Refresh;
+    AccFlags.First;
+    AccFlags.Next;
+
+    while not AccFlags.Eof do
+    begin
+      Index := CListBoxAccFlags.Items.Add(AccFlags.FieldByName('Name')
+        .AsString);
+      // if PCustServiceForm.OperationMode = omEdit then
+      // CListBoxAccFlags.Checked[Index] :=FlagExsist(Account.FieldByName('ID').AsInteger, AccFlags.FieldByName('Symbol').AsString[1]);
+      AccFlags.Next;
+    end;
+
+  end;
+end;
+
+procedure TFormAccounFlags.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+  if ord(Key) = 27 then
+    Close;
+end;
+
+procedure TFormAccounFlags.XFBitBtn1Click(Sender: TObject);
+var
+  Index, IndexCount: Word;
+  Symbol: String;
+begin
+  FlagMap := '';
+  IndexCount := CListBoxAccFlags.Items.Count;
+  for Index := 0 to IndexCount - 1 do
+    if CListBoxAccFlags.Checked[Index] then
+    begin
+      Symbol := CListBoxAccFlags.Items[index];
+      FlagMap := FlagMap + ',' + Symbol[1];
+    end;
+  Delete(FlagMap, 1, 1);
+  AccountPropertiesF.Label_Symbols.Caption := FlagMap;
+  Close;
+end;
+
+end.

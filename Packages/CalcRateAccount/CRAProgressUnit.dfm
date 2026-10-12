@@ -1,0 +1,107 @@
+object FormCRAProgress: TFormCRAProgress
+  Left = 300
+  Top = 269
+  AutoSize = True
+  BorderIcons = []
+  Caption = 'FormCRAProgress'
+  ClientHeight = 237
+  ClientWidth = 529
+  Color = clBtnFace
+  Font.Charset = RUSSIAN_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  OldCreateOrder = False
+  OnCreate = FormCreate
+  PixelsPerInch = 96
+  TextHeight = 14
+  object ProgressBar: TProgressBar
+    Left = 0
+    Top = 72
+    Width = 529
+    Height = 20
+    Align = alTop
+    TabOrder = 0
+  end
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 529
+    Height = 72
+    Align = alTop
+    TabOrder = 1
+    object Label1: TLabel
+      Left = 6
+      Top = 13
+      Width = 77
+      Height = 18
+      Caption = #1052#1094#1075#1072#1074#1080#1083#1103':'
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -15
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = [fsBold]
+      ParentFont = False
+    end
+    object StaticTextContNo: TStaticText
+      Left = 84
+      Top = 13
+      Width = 148
+      Height = 18
+      Caption = '                                                '
+      TabOrder = 0
+    end
+    object Button1: TButton
+      Left = 103
+      Top = 38
+      Width = 81
+      Height = 27
+      Caption = #1043#1077#1081#1076#1083#1103#1088
+      TabOrder = 1
+      OnClick = Button1Click
+    end
+    object Button2: TButton
+      Left = 207
+      Top = 38
+      Width = 81
+      Height = 27
+      Caption = #1041#1072#1100#1083#1072
+      ModalResult = 1
+      TabOrder = 2
+      OnClick = Button2Click
+    end
+  end
+  object MemoD: TMemo
+    Left = 0
+    Top = 140
+    Width = 529
+    Height = 97
+    Align = alTop
+    Color = clScrollBar
+    TabOrder = 2
+    Visible = False
+  end
+  object GroupBox1: TGroupBox
+    Left = 0
+    Top = 92
+    Width = 529
+    Height = 48
+    Align = alTop
+    Caption = #1065#1077#1089#1072#1073#1083#1072#1084#1072#1083#1072#1088#1085' '#1085#1103#1090#1080#1078#1103#1083#1103#1088#1080
+    TabOrder = 3
+    object LblResult: TLabel
+      Left = 10
+      Top = 23
+      Width = 161
+      Height = 15
+      Caption = '12121212121212121212121'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = [fsBold]
+      ParentFont = False
+    end
+  end
+end

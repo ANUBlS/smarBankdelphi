@@ -1,0 +1,165 @@
+unit DMBusProcSetimpl;
+
+interface
+
+uses
+  SysUtils, Classes, DB, OracleData,VAriants,Dialogs;
+
+type
+  TDMBusProcSet = class(TDataModule)
+    DS_SB_BUSINESS_PROC_TARIFS: TDataSource;
+    ODS_SB_BUSINESS_PROC_TARIFS: TOracleDataSet;
+    ODS_SB_BUSINESS_PROC_TARIFSID: TFloatField;
+    ODS_SB_BUSINESS_PROC_TARIFSGROUPID: TFloatField;
+    ODS_SB_BUSINESS_PROC_TARIFSBPCHILDID: TFloatField;
+    ODS_SB_BUSINESS_PROC_TARIFSMINAMT: TFloatField;
+    ODS_SB_BUSINESS_PROC_TARIFSMAXAMT: TFloatField;
+    ODS_SB_BUSINESS_PROC_TARIFSAMTPERCENT: TFloatField;
+    ODS_SB_BUSINESS_PROC_TARIFSAMTVALUE: TFloatField;
+    ODS_SB_BUSINESS_PROC_TARIFSNAME: TWideStringField;
+    DS_sb_business_proc_childs: TDataSource;
+    ODS_sb_business_proc_childs: TOracleDataSet;
+    ODS_sb_business_proc_childsID: TFloatField;
+    ODS_sb_business_proc_childsPARENTID: TFloatField;
+    ODS_sb_business_proc_childsUSERID: TFloatField;
+    ODS_sb_business_proc_childsBRANCHID: TFloatField;
+    ODS_sb_business_proc_childsDEBT: TFloatField;
+    ODS_sb_business_proc_childsKREDIT: TFloatField;
+    ODS_sb_business_proc_childsKASSA_B: TWideStringField;
+    ODS_sb_business_proc_childsKASSA_Z: TIntegerField;
+    ODS_sb_business_proc_childsNAME: TWideStringField;
+    ODS_sb_business_proc_childsREPORTID: TFloatField;
+    ODS_sb_business_proc_childsCOUNTRID: TFloatField;
+    ODS_sb_business_proc_childsOPERID: TFloatField;
+    ODS_sb_business_proc_childsDEBTACC: TWideStringField;
+    ODS_sb_business_proc_childsKREDACC: TWideStringField;
+    ODS_sb_business_proc_childsREPORTDESC: TWideStringField;
+    ODS_sb_business_proc_childsCOUNTRY: TWideStringField;
+    ODS_sb_business_proc_childsDEP_OPERID: TFloatField;
+    ODS_sb_business_proc_childsDEP_AMT: TFloatField;
+    ODS_sb_business_proc_childsRATEPOS: TFloatField;
+    ODS_sb_business_proc_childsBALCN_4: TWideStringField;
+    ODS_sb_business_proc_childsSYMB_4: TWideStringField;
+    ODS_sb_business_proc_childsCURR_4: TWideStringField;
+    ODS_sb_business_proc_childsBRANCH_4: TWideStringField;
+    ODS_sb_business_proc_childsKASSA_Z_NAME: TWideStringField;
+    DS_SB_BUSINESS_PROCESSES: TDataSource;
+    ODS_SB_BUSINESS_PROCESSES: TOracleDataSet;
+    ODS_SB_BUSINESS_PROCESSESID: TFloatField;
+    ODS_SB_BUSINESS_PROCESSESNAME: TWideStringField;
+    ODS_SB_BUSINESS_PROCESSESACCBALCN_A: TWideStringField;
+    ODS_SB_BUSINESS_PROCESSESACCSYMB_A: TWideStringField;
+    ODS_SB_BUSINESS_PROCESSESACCCURR_A: TWideStringField;
+    ODS_SB_BUSINESS_PROCESSESACCBALCN_B: TWideStringField;
+    ODS_SB_BUSINESS_PROCESSESACCSYMB_B: TWideStringField;
+    ODS_SB_BUSINESS_PROCESSESACCCURR_B: TWideStringField;
+    ODS_SB_BUSINESS_PROCESSESACCBALCN_C: TWideStringField;
+    ODS_SB_BUSINESS_PROCESSESACCSYMB_C: TWideStringField;
+    ODS_SB_BUSINESS_PROCESSESACCCURR_C: TWideStringField;
+    ODS_SB_BUSINESS_PROCESSESFORMNUM: TIntegerField;
+    DS_vid_op: TDataSource;
+    ODS_vid_op: TOracleDataSet;
+    ODS_vid_opID: TIntegerField;
+    ODS_vid_opNAME: TWideStringField;
+    ODS_vid_opTRDELETE: TIntegerField;
+    ODS_vid_opCH_INSERT: TIntegerField;
+    ClientGrp: TDataSource;
+    ClientGrpData: TOracleDataSet;
+    ClientGrpDataID: TFloatField;
+    ClientGrpDataNAME: TWideStringField;
+    Ds_convert_assignments: TDataSource;
+    ODS_convert_assignments: TOracleDataSet;
+    ODS_convert_assignmentsID: TFloatField;
+    ODS_convert_assignmentsSHORTNAME: TWideStringField;
+    ODS_convert_assignmentsFULLPATH: TWideStringField;
+    ODS_convert_assignmentsEXTRA: TWideStringField;
+    ODS_convert_assignmentsDIFFERENT: TFloatField;
+    Ds_kassa_b: TDataSource;
+    ODS_kassa_b: TOracleDataSet;
+    DS_trdestination: TDataSource;
+    ODS_trdestination: TOracleDataSet;
+    ODS_trdestinationID: TFloatField;
+    ODS_trdestinationNAME: TWideStringField;
+    ODS_provcountries: TOracleDataSet;
+    DS_provcountries: TDataSource;
+    ODS_reportdescs: TOracleDataSet;
+    DS_reportdescs: TDataSource;
+    Ods_sb_bproc_acc: TOracleDataSet;
+    DS_sb_bproc_acc: TDataSource;
+    ODS_Report: TOracleDataSet;
+    DS_Report: TDataSource;
+    ODS_ReportID: TFloatField;
+    ODS_ReportNAME: TWideStringField;
+    ODS_kassa_bSYMBOL: TWideStringField;
+    ODS_kassa_bNAME: TWideStringField;
+    ODS_kassa_bMEDIOCRITY: TFloatField;
+    DS_Transaction: TDataSource;
+    ODS_Transaction: TOracleDataSet;
+    ODS_TransactionID: TIntegerField;
+    ODS_TransactionNAME: TWideStringField;
+    ODS_TransactionTRDELETE: TIntegerField;
+    ODS_TransactionCH_INSERT: TIntegerField;
+    ODS_sb_business_proc_childsVID_OP: TIntegerField;
+    ODS_sb_business_proc_childsVID_OP_NAME: TWideStringField;
+    Ds_countries: TDataSource;
+    ODS_countries: TOracleDataSet;
+    ODS_countriesID: TFloatField;
+    ODS_countriesCNTR_NAME: TWideStringField;
+    ODS_sb_business_proc_childsCNTR_NAME: TWideStringField;
+    procedure DataModuleCreate(Sender: TObject);
+    procedure ODS_SB_BUSINESS_PROC_TARIFSBeforePost(DataSet: TDataSet);
+    procedure ODS_SB_BUSINESS_PROC_TARIFSApplyRecord(Sender: TOracleDataSet;
+      Action: Char; var Applied: Boolean; var NewRowId: string);
+    procedure ODS_SB_BUSINESS_PROC_TARIFSCalcFields(DataSet: TDataSet);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  DMBusProcSet: TDMBusProcSet;
+
+implementation
+
+uses sboapidatamoduleimpl,
+  BusinessProcessSetupImpl;
+{$R *.dfm}
+
+procedure TDMBusProcSet.DataModuleCreate(Sender: TObject);
+begin
+  ODS_SB_BUSINESS_PROCESSES.Open;
+  ODS_sb_business_proc_childs.Open;
+  ODS_SB_BUSINESS_PROC_TARIFS.Open;
+end;
+
+procedure TDMBusProcSet.ODS_SB_BUSINESS_PROC_TARIFSApplyRecord(
+  Sender: TOracleDataSet; Action: Char; var Applied: Boolean;
+  var NewRowId: string);
+begin
+DMBusProcSet.ODS_SB_BUSINESS_PROC_TARIFSGROUPID.AsInteger:=BusinessProcessSetup.DBLookupComboBox5.KeyValue;
+
+end;
+
+procedure TDMBusProcSet.ODS_SB_BUSINESS_PROC_TARIFSBeforePost(
+  DataSet: TDataSet);
+begin
+if not BusinessProcessSetup.DBLookupComboBox5.KeyVAlue=null then
+begin
+
+//ODS_SB_BUSINESS_PROC_TARIFS.FieldByName('GROUPID').ASInteger:=65;
+//showmessage(ODS_SB_BUSINESS_PROC_TARIFS.FieldByName('GROUPID').AsString) ;
+//ClientGrpData.FieldByName('ID').AsInteger;
+ //BusinessProcessSetup.DBLookupComboBox5.KeyValue;
+end;
+end;
+
+procedure TDMBusProcSet.ODS_SB_BUSINESS_PROC_TARIFSCalcFields(
+  DataSet: TDataSet);
+begin
+ShowMessage(inttostr(BusinessProcessSetup.DBLookupComboBox5.KeyValue));
+DMBusProcSet.ODS_SB_BUSINESS_PROC_TARIFSGROUPID.AsInteger
+:=BusinessProcessSetup.DBLookupComboBox5.KeyValue;
+end;
+
+end.

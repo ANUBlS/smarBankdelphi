@@ -1,0 +1,45 @@
+unit MainImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ExtCtrls, DB, OracleData, Grids, DBGrids;
+
+type
+  TMainFrm = class(TForm)
+    Panel1: TPanel;
+    DBGrid1: TDBGrid;
+    DataSrcCreditProps: TDataSource;
+    CreditProps: TOracleDataSet;
+    CreditPropsNAME: TWideStringField;
+    CreditPropsANNUALYINTERESTRATE: TFloatField;
+    CreditPropsANNUALYOVERDUERATE: TFloatField;
+    CreditPropsANNUALYPENALTYRATE: TFloatField;
+    CreditPropsKOMISSION: TFloatField;
+
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  MainFrm: TMainFrm;
+    procedure InitPlugin(S:String);export;
+implementation
+
+{$R *.dfm}
+ uses CommonDecls,CMOracleAPIDataModuleImpl;
+
+  procedure InitPlugin(S:String);export;
+ begin
+   MainFrm.ShowModal;
+ end;
+
+ exports
+   InitPlugin;
+
+   Initialization
+   MainFrm := TMainFrm.Create(CommonApplication);
+end.

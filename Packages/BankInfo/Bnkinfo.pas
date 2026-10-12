@@ -1,0 +1,90 @@
+﻿unit Bnkinfo;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ExtCtrls, StdCtrls, XFSCtrls, Buttons, Mask, DBCtrlsEh,
+  sboapiDataModuleImpl, DB, OracleData;
+
+type
+  TForm21 = class(TForm)
+    XFPanel1: TXFPanel;
+    XFBitBtn1: TXFBitBtn;
+    bnknumber: TEdit;
+    bnkname: TEdit;
+    bnklname: TEdit;
+    bnkfname: TEdit;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    ComboBox1: TComboBox;
+    bnkinfo: TOracleDataSet;
+    bnkinfoKOD_B: TFloatField;
+    bnkinfoCN: TWideStringField;
+    bnkinfoNAME: TWideStringField;
+    bnkinfoSURNAME: TWideStringField;
+    bnkinfoFNAME: TWideStringField;
+    ComboBox2: TComboBox;
+    procedure ComboBox1Change(Sender: TObject);
+    procedure XFBitBtn1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form21: TForm21;
+
+implementation
+
+uses frminfo;
+
+{$R *.dfm}
+
+procedure TForm21.ComboBox1Change(Sender: TObject);
+begin
+bnkinfo.close;
+bnkinfo.setvariable('nf',combobox1.text);
+bnkinfo.open;
+
+
+
+bnknumber.text:= bnkinfo.FieldByName('cn').AsString;
+bnkname.text:=  bnkinfo.FieldByName('name').AsString;
+bnklname.text:=  bnkinfo.FieldByName('surname').AsString;
+bnkfname.text:=  bnkinfo.FieldByName('fname').AsString;
+
+
+end;
+
+procedure TForm21.XFBitBtn1Click(Sender: TObject);
+begin
+
+bnkinfo.Open;
+
+bnkinfo.Insert;
+bnkinfo.FieldByName('kod_b').AsInteger     := ComboBox2.ItemIndex;
+bnkinfo.FieldByName('cn').AsString         := bnknumber.text;
+bnkinfo.FieldByName('name').AsString       := bnkname.text;
+bnkinfo.FieldByName('surname').AsString    := bnklname.text;
+bnkinfo.FieldByName('fname').AsString      := bnkfname.text;
+bnkinfo.Post;
+
+
+
+ShowMessage('Əlavə edildi.');
+bnkinfo.Refresh;
+
+
+
+ComboBox1.Items.Add(bnknumber.text);
+
+
+
+
+end;
+
+end.

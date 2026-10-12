@@ -1,0 +1,132 @@
+object Form23: TForm23
+  Left = 0
+  Top = 0
+  Caption = 'INFO'
+  ClientHeight = 396
+  ClientWidth = 886
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poMainFormCenter
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 886
+    Height = 396
+    Align = alClient
+    TabOrder = 2
+    ExplicitWidth = 390
+    ExplicitHeight = 123
+    object DBGrid1: TDBGrid
+      Left = 1
+      Top = 1
+      Width = 680
+      Height = 394
+      Align = alLeft
+      DataSource = DataSource1
+      TabOrder = 0
+      TitleFont.Charset = DEFAULT_CHARSET
+      TitleFont.Color = clWindowText
+      TitleFont.Height = -11
+      TitleFont.Name = 'Tahoma'
+      TitleFont.Style = []
+      OnDblClick = DBGrid1DblClick
+      Columns = <
+        item
+          Expanded = False
+          FieldName = 'CN'
+          Title.Caption = 'M'#252#351't'#601'ri  '#8470
+          Width = 104
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'NAME'
+          Title.Caption = 'Ad'#305
+          Width = 200
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'SURNAME'
+          Title.Caption = 'Soyad'#305
+          Width = 200
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'FNAME'
+          Title.Caption = 'Atas'#305'n'#305'n ad'#305
+          Width = 150
+          Visible = True
+        end>
+    end
+  end
+  object ComboBox1: TComboBox
+    Left = 685
+    Top = 3
+    Width = 193
+    Height = 21
+    ItemIndex = 0
+    TabOrder = 0
+    Text = 'Bank inzibat'#231'ilar'#305
+    Items.Strings = (
+      'Bank inzibat'#231'ilar'#305
+      'Bank'#305'n s'#601'hmdarlar'#305' '
+      'Bank'#305'n m'#252#351'ahid'#601' '#351'uras'#305' '
+      'Bank'#305'n audit komit'#601'si '
+      'Bank'#305'n idar'#601' heyy'#601'ti ')
+  end
+  object Button1: TButton
+    Left = 803
+    Top = 363
+    Width = 75
+    Height = 25
+    Caption = 'Bax'
+    TabOrder = 1
+    OnClick = Button1Click
+  end
+  object bankaddinfo: TOracleDataSet
+    SQL.Strings = (
+      'select * from bankinfo_adif where kod_b=:addinfo')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000100000003A0041004400440049004E0046004F0003000000
+      0000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      05000000050000000A0000004B004F0044005F00420001000000000004000000
+      43004E00010000000000080000004E0041004D0045000100000000000E000000
+      5300550052004E0041004D0045000100000000000A00000046004E0041004D00
+      4500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 552
+    Top = 8
+    object bankaddinfoCN: TWideStringField
+      FieldName = 'CN'
+      Size = 255
+    end
+    object bankaddinfoNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 4000
+    end
+    object bankaddinfoSURNAME: TWideStringField
+      FieldName = 'SURNAME'
+      Size = 4000
+    end
+    object bankaddinfoFNAME: TWideStringField
+      FieldName = 'FNAME'
+      Size = 4000
+    end
+  end
+  object DataSource1: TDataSource
+    DataSet = bankaddinfo
+    Left = 560
+    Top = 80
+  end
+end

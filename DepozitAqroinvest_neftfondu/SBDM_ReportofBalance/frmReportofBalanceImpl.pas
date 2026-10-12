@@ -1,0 +1,212 @@
+unit frmReportofBalanceImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, Buttons, Db, CMExcelExport, OracleData, ComCtrls, Mask,
+  DBCtrlsEh, DBLookupEh, ExtCtrls;
+
+type
+  TfrmReport = class(TForm)
+    Panel1: TPanel;
+    GroupBox1: TGroupBox;
+    CheckBox1: TCheckBox;
+    DBLookupComboboxEh1: TDBLookupComboboxEh;
+    GroupBox3: TGroupBox;
+    DBLookupComboboxEh2: TDBLookupComboboxEh;
+    CheckBox2: TCheckBox;
+    Panel5: TPanel;
+    GroupBox7: TGroupBox;
+    CheckBox7: TCheckBox;
+    DBLookupComboboxEh7: TDBLookupComboboxEh;
+    GroupBox9: TGroupBox;
+    CheckBox8: TCheckBox;
+    DBLookupComboboxEh8: TDBLookupComboboxEh;
+    Panel9: TPanel;
+    GroupBox10: TGroupBox;
+    CheckBox10: TCheckBox;
+    DBLookupComboboxEh9: TDBLookupComboboxEh;
+    GroupBox11: TGroupBox;
+    Label1: TLabel;
+    Label2: TLabel;
+    BeginDate: TDateTimePicker;
+    EndDate: TDateTimePicker;
+    Valutes: TOracleDataSet;
+    Filials: TOracleDataSet;
+    FilialsID: TFloatField;
+    CustomerTypes: TOracleDataSet;
+    CustomerTypesID: TFloatField;
+    Persons: TOracleDataSet;
+    CreditTypes: TOracleDataSet;
+    Results: TOracleDataSet;
+    ExcelExport: TCMExcelExport;
+    CredTypeDatScr: TDataSource;
+    PersonsDatSrc: TDataSource;
+    CustTypeDatSrc: TDataSource;
+    FilialsDatSrc: TDataSource;
+    ValutesDatSrc: TDataSource;
+    BitBtn1: TBitBtn;
+    BitBtn2: TBitBtn;
+    PersonsID: TFloatField;
+    CreditTypesID: TFloatField;
+    ResultsOPENDATE: TDateTimeField;
+    ResultsCLOSEDATE: TDateTimeField;
+    ResultsBALANCE: TFloatField;
+    ResultsINTRATE: TFloatField;
+    ResultsBREST: TFloatField;
+    ResultsTRAMT: TFloatField;
+    ResultsPAYAMT: TFloatField;
+    ResultsEREST: TFloatField;
+    query: TOracleDataSet;
+    querySMR: TFloatField;
+    ResultsROUNDINT: TFloatField;
+    ValutesVALUTE: TIntegerField;
+    ValutesVALU_NAME: TWideStringField;
+    FilialsNAME: TWideStringField;
+    CustomerTypesCATEGORY: TWideStringField;
+    PersonsNAME: TWideStringField;
+    CreditTypesTYPE: TWideStringField;
+    ResultsCONTRACTNO: TWideStringField;
+    ResultsPERIOD: TWideStringField;
+    ResultsVALUTE: TWideStringField;
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure BitBtn1Click(Sender: TObject);
+    procedure BitBtn2Click(Sender: TObject);
+  private
+    function BuildFilterString :String;
+  public
+    { Public declarations }
+  end;
+
+var
+  frmReport: TfrmReport;
+    procedure exportproc(S:String);export;
+
+implementation
+
+{$R *.DFM}
+
+uses sboapiDataModuleImpl,CommonDeclsImpl;
+
+
+procedure exportproc(S:String);export;
+begin
+   frmReport.ShowModal;
+end;
+exports
+   exportproc;
+   
+
+
+function TfrmReport.BuildFilterString : String;
+
+  procedure ConcatFilter(var S: String; const Prefix : String; Checked : Boolean; KeyValue : Variant);
+  const
+     csFormat = '(%s=%s)';
+  var
+    Temp : String;   
+  begin
+
+    if Checked then
+    begin
+      Temp := Format(csFormat,[Prefix,Keyvalue]);
+      if S = '' then
+        S := Temp
+      else
+        S :=S + 'and ' + Temp;
+    end;
+    
+  end;
+begin
+  Result := '';
+  ConcatFilter(Result,'CURRENCY',CheckBox1.Checked,DBLookupComboboxEh1.KeyValue);
+  ConcatFilter(Result,'BRANCHID',CheckBox2.Checked,DBLookupComboboxEh2.KeyValue);
+  ConcatFilter(Result,'PERSONALTYPE',CheckBox8.Checked,DBLookupComboboxEh8.KeyValue);
+  ConcatFilter(Result,'CLIENTTYPE',CheckBox7.Checked,DBLookupComboboxEh7.KeyValue);
+  ConcatFilter(Result,'CONTRACTTYPE',CheckBox10.Checked,DBLookupComboboxEh9.KeyValue);
+end;
+
+
+procedure TfrmReport.FormCreate(Sender: TObject);
+begin
+   Valutes.Open;
+   Filials.Open;
+   CustomerTypes.Open;
+   Persons.Open;
+   CreditTypes.Open;
+end;
+
+procedure TfrmReport.FormDestroy(Sender: TObject);
+begin
+   Valutes.CloseAll;
+   Filials.CloseAll;
+   CustomerTypes.CloseAll;
+   Persons.CloseAll;
+   CreditTypes.CloseAll;
+end;
+
+procedure TfrmReport.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+   Resize := False
+end;
+
+procedure TfrmReport.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+   If Ord(Key) = VK_ESCAPE then close;
+end;
+
+procedure TfrmReport.BitBtn1Click(Sender: TObject);
+var
+  StartDate ,FinDate :TDateTime;
+  s,cs :String;
+  sm :real;
+begin
+   sm := 0;
+   StartDate := integer(trunc(BeginDate.DateTime));
+   FinDate := integer(trunc(EndDate.DateTime));
+   cs := ' order by  balance ' ;
+   s := BuildFilterString;
+   with query do begin
+       if Active then close;
+        if s <>'' then sql[1] := ' where id# in (select id from sbcm_contracts where '+s +' and type# in (3,4) )';
+          //Memo1.text := sql.text;
+        open;
+        sm := fieldByName('SMR').AsFloat;
+        if sm = 0 then sm :=1;
+
+
+   end;
+
+   with Results do
+   begin
+     if  s <> '' then s := ' where  '+s+ ' and type# in (3,4) ' +cs else s := ' where  type# in (3,4) ' +cs;
+     SQL[13] := s;
+      if Active then CloseAll;
+      SetVariable('bdat',StartDate) ;
+      SetVariable('edat',FinDate) ;
+      SetVariable('sm',sm);
+
+      Open;
+       with ExcelExport do
+       begin
+          Connect;
+          ExportDataset(Results,'Hesabat',True);
+          Disconnect;
+       end;
+   end;
+end;
+
+procedure TfrmReport.BitBtn2Click(Sender: TObject);
+begin
+  Close
+end;
+ initialization
+   frmReport := TfrmReport.Create(CommonApplication)
+
+end.

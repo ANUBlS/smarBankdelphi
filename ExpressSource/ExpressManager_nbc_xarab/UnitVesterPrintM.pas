@@ -1,0 +1,85 @@
+unit UnitVesterPrintM;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, QuickRpt, ExtCtrls, QRCtrls;
+
+type
+  TFormVesterPrintM = class(TForm)
+    QuickRepVester: TQuickRep;
+    QRBand1: TQRBand;
+    QRDBImage5: TQRDBImage;
+    QRLabel5: TQRLabel;
+    QRDBText43: TQRDBText;
+    QRLBankName: TQRLabel;
+    QRDBText9: TQRDBText;
+    QRShape4: TQRShape;
+    QRLabel17: TQRLabel;
+    QRLabel26: TQRLabel;
+    QRDBText21: TQRDBText;
+    QRDBText24: TQRDBText;
+    QRShape7: TQRShape;
+    QRDBText12: TQRDBText;
+    QRLabel28: TQRLabel;
+    QRLabel19: TQRLabel;
+    QRDBText32: TQRDBText;
+    QRDBText35: TQRDBText;
+    QRShape11: TQRShape;
+    QRLabel30: TQRLabel;
+    QRLabel31: TQRLabel;
+    QRDBText13: TQRDBText;
+    QRLabel32: TQRLabel;
+    QRLabel33: TQRLabel;
+    QRDBText38: TQRDBText;
+    QRInn: TQRLabel;
+    QRLabel36: TQRLabel;
+    QRDBText15: TQRDBText;
+    QRLAmmount: TQRLabel;
+    QRLabel34: TQRLabel;
+    QRDBText16: TQRDBText;
+    QRShape12: TQRShape;
+    QRShape16: TQRShape;
+    QRLabel37: TQRLabel;
+    QRDBText17: TQRDBText;
+    QRDBText19: TQRDBText;
+    QRDBText20: TQRDBText;
+    QRDBText11: TQRDBText;
+    QRShape17: TQRShape;
+    QRLabel38: TQRLabel;
+    QRShape3: TQRShape;
+    QRLabel11: TQRLabel;
+    QRLabel9: TQRLabel;
+    QRLabel90: TQRLabel;
+    QRLabel4: TQRLabel;
+    QRLabel3: TQRLabel;
+    QRShape33: TQRShape;
+    QRShape91: TQRShape;
+    QRShape5: TQRShape;
+    QRShape13: TQRShape;
+    QRShape15: TQRShape;
+    QRLBankInn: TQRLabel;
+    procedure QuickRepVesterBeforePrint(Sender: TCustomQuickRep;
+      var PrintReport: Boolean);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormVesterPrintM: TFormVesterPrintM;
+
+implementation
+uses SBTranslateProc,sboapiDataModuleImpl,ExpDataModuleUnit;
+
+{$R *.dfm}
+
+procedure TFormVesterPrintM.QuickRepVesterBeforePrint(Sender: TCustomQuickRep;
+  var PrintReport: Boolean);
+begin
+  SBTranslateProc.TranslateAllCompQuickRep(QuickRepVester,sboapiDataModule.OrPack_SL);
+end;
+
+end.

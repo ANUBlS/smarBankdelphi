@@ -1,0 +1,39 @@
+unit UNotes;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, DBCtrls, Buttons, ExtCtrls,DB;
+
+type
+  TfrmNotes = class(TForm)
+    Panel1: TPanel;
+    btOk: TBitBtn;
+    DBMemo1: TDBMemo;
+    BitBtn2: TBitBtn;
+    procedure btOkClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  frmNotes: TfrmNotes;
+
+implementation
+
+uses UMKDataMod;
+
+{$R *.DFM}
+
+procedure TfrmNotes.btOkClick(Sender: TObject);
+begin
+      with InsMKDataMod,ODSMotorkasko do
+      begin
+           if State in [dsEdit,dsInsert] then Post;
+      end;
+end;
+
+end.

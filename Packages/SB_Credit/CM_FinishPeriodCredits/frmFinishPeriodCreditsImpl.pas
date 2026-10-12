@@ -1,0 +1,278 @@
+unit frmFinishPeriodCreditsImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, Mask, DBCtrlsEh, DBLookupEh, ExtCtrls, ComCtrls, CheckLst,
+   CMExcelExport, Buttons;
+
+type
+  TfrmFinishPeriodCredits = class(TForm)
+    Panel1: TPanel;
+    GroupBox1: TGroupBox;
+    CBaValute: TCheckBox;
+    LCBValutes: TDBLookupComboboxEh;
+    GroupBox2: TGroupBox;
+    LCBusergroup: TDBLookupComboboxEh;
+    CBusergroup: TCheckBox;
+    GroupBox3: TGroupBox;
+    LCBFilials: TDBLookupComboboxEh;
+    CBFilial: TCheckBox;
+    Panel2: TPanel;
+    GroupBox4: TGroupBox;
+    CBCategories: TCheckBox;
+    LCBCategories: TDBLookupComboboxEh;
+    GroupBox5: TGroupBox;
+    LCBCreditType: TDBLookupComboboxEh;
+    CBCreditType: TCheckBox;
+    GroupBox6: TGroupBox;
+    LCBPersons: TDBLookupComboboxEh;
+    CBPersons: TCheckBox;
+    Panel3: TPanel;
+    GroupBox7: TGroupBox;
+    CBReserve: TCheckBox;
+    LCBReserve: TDBLookupComboboxEh;
+    GroupBox8: TGroupBox;
+    LCBpledgid: TDBLookupComboboxEh;
+    CBpledgid: TCheckBox;
+    GroupBox9: TGroupBox;
+    LCBDueReserve: TDBLookupComboboxEh;
+    CBDueReserve: TCheckBox;
+    Panel4: TPanel;
+    GroupBox12: TGroupBox;
+    CLBStatus: TCheckListBox;
+    GroupBox10: TGroupBox;
+    Label2: TLabel;
+    DTPCls1: TDateTimePicker;
+    DTPCls2: TDateTimePicker;
+    EExport: TCMExcelExport;
+    BitBtnOk: TBitBtn;
+    BitBtnCancel: TBitBtn;
+    GroupBox11: TGroupBox;
+    Label1: TLabel;
+    CBOpenedDep: TCheckBox;
+    DTPO1: TDateTimePicker;
+    DTPO2: TDateTimePicker;
+    CBCloseDep: TCheckBox;
+    Panel5: TPanel;
+    GroupBox14: TGroupBox;
+    GroupBox15: TGroupBox;
+    LCBCustomer: TDBLookupComboboxEh;
+    CBCustomer: TCheckBox;
+    CBCustomerID: TCheckBox;
+    LCBCustomerID: TDBLookupComboboxEh;
+    RGreport: TRadioGroup;
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormShow(Sender: TObject);
+    procedure BitBtnOkClick(Sender: TObject);
+    procedure BitBtnCancelClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+  private
+    function BuildFilterString : String;
+    procedure ExecReport;
+    procedure ShowReport;
+    procedure ExportExcel;
+  public
+    { Public declarations }
+  end;
+
+var
+  frmFinishPeriodCredits: TfrmFinishPeriodCredits;
+
+  procedure InitPlugin(S:String);export;
+
+implementation
+
+{$R *.DFM}
+
+uses CommonDecls,dmFinishPeriodCreditsImpl,
+     SbSystem,frmQrptFPCreditsImpl,SBTranslateProc,sboapiDataModuleimpl;
+
+procedure TfrmFinishPeriodCredits.ExportExcel;
+begin
+     with EExport do begin
+      Connect;
+      ExportDataset(dmFinishPeriodCredits.ReportData,'¬ахты чатмыш кредитл€р',True);
+      Disconnect;
+    end;  
+end;
+
+procedure TfrmFinishPeriodCredits.ShowReport;
+begin
+   with frmQrptFPCredits,FPCreditsQRp do
+        Preview;
+end;
+
+procedure TfrmFinishPeriodCredits.ExecReport;
+begin
+   with RGreport do
+   case ItemIndex of
+      0:ExportExcel;
+      1:ShowReport;
+   end;
+
+end;
+
+procedure InitPlugin(S:String);export;
+begin
+   frmFinishPeriodCredits.ShowModal;
+end;
+
+exports
+  InitPlugin;
+
+
+function TfrmFinishPeriodCredits.BuildFilterString : String;
+
+  procedure ConcatFilter(var S: String; const Prefix : String; Checked : Boolean; KeyValue : Variant);
+  const
+     csFormat = '(%s=%s)';
+  var
+    Temp : String;   
+  begin
+
+    if Checked then
+    begin
+      Temp := Format(csFormat,[Prefix,Keyvalue]);
+      if S = '' then
+        S := Temp
+      else
+        S :=S + 'and ' + Temp;
+    end;
+    
+  end;  // Concat Filter
+
+  procedure  ConcatFilter1(var S: String; var Prefix : String;  ch :boolean);
+  var chS :String;
+  begin
+      if ch then ChS := ' and  ' else chS := ' or ';
+
+     if (S <> '') and (Prefix <> '') then S := '('+S+ChS+Prefix+')';
+     if (S = '') and (Prefix <> '') then S := Prefix;
+  end;
+
+var
+  FStatus,FopenDat1,FopenDat2,
+  FopenDat,FStatus2,FStatus1
+  ,FCloseDat,FCloseDat1,FCloseDat2: String;     
+begin
+
+  Result := '';
+  FStatus := '';
+  FopenDat1 := '';
+  FopenDat2 := '';
+  FopenDat := '';
+  
+  ConcatFilter(Result,'p.CURRENCY',CBaValute.Checked,LCBValutes.KeyValue);
+  ConcatFilter(Result,'p.BRANCHID',CBFilial.Checked,LCBFilials.KeyValue);
+  ConcatFilter(Result,'p.PERSONALTYPE',CBPersons.Checked,LCBPersons.KeyValue);
+  ConcatFilter(Result,'p.CustomerTYPE',CBCategories.Checked,LCBCategories.KeyValue);
+  ConcatFilter(Result,'p.CreditType',CBCreditType.Checked,LCBCreditType.KeyValue);
+  ConcatFilter(Result,'p.usergroup',CBusergroup.Checked,LCBusergroup.KeyValue);
+  ConcatFilter(Result,'h.ReserveID',CBReserve.Checked,LCBReserve.KeyValue);
+  ConcatFilter(Result,'h.DueReserveID',CBDueReserve.Checked,LCBDueReserve.KeyValue);
+  ConcatFilter(Result,'h.pledgid',CBpledgid.Checked,LCBpledgid.KeyValue);
+  ConcatFilter(Result,'p.BoorowerID',CBCustomer.Checked,LCBCustomer.KeyValue);
+  ConcatFilter(Result,'p.BoorowerID',CBCustomerID.Checked,LCBCustomerID.KeyValue);
+
+  with CLBStatus do
+  begin
+  if Checked[0] then FStatus1 := '(h.stopcalcdate is null )' else FStatus1 := '';
+  if Checked[1] then FStatus2 := '(h.stopcalcdate is not null)' else FStatus2 := '';
+
+  ConcatFilter1(FStatus,FStatus1,false);
+  ConcatFilter1(FStatus,FStatus2,false);
+  end;
+
+
+  if  CBOpenedDep.Checked then
+  begin
+     FopenDat1 := ' p.dateofconclusion >=  '''+FormatDateTime('dd-MMM-yyyy',DTPO1.Date)+'''';
+     FopenDat2 := ' p.dateofconclusion <=  '''+FormatDateTime('dd-MMM-yyyy',DTPO2.Date)+'''';
+     FopenDat := '('+'('+FopenDat1+')'+' and '+'('+FopenDat2+')'+')';
+  end;
+
+  if  CBCloseDep.Checked then
+  begin
+     FCloseDat1 := ' p.duedatefirstcontract >=  '''+FormatDateTime('dd-MMM-yyyy',DTPCls1.Date)+'''';
+     FCloseDat2 := ' p.duedatefirstcontract <=  '''+FormatDateTime('dd-MMM-yyyy',DTPCls2.Date)+'''';
+     FCloseDat := '('+'('+FCloseDat1+')'+' and '+'('+FCloseDat2+')'+')';
+  end;
+
+  ConcatFilter1(Result,FStatus,True);
+  ConcatFilter1(Result,FCloseDat,True);
+  ConcatFilter1(Result,FopenDat,True);
+
+ // ShowMessage(Result)
+
+end;
+
+
+procedure TfrmFinishPeriodCredits.FormCanResize(Sender: TObject;
+  var NewWidth, NewHeight: Integer; var Resize: Boolean);
+begin
+    Resize := False;
+end;
+
+procedure TfrmFinishPeriodCredits.FormKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+   if Ord(Key) = VK_ESCAPE then Close
+end;
+
+procedure TfrmFinishPeriodCredits.FormShow(Sender: TObject);
+begin
+   with CLBStatus do
+   begin
+      Checked[0] := True;
+      Checked[1] := True;
+   end;
+
+   DTPO1.DateTime := Get_CurrentDate;
+   DTPO2.DateTime := Get_CurrentDate;
+   DTPCls1.DateTime := Get_CurrentDate;
+   DTPCls2.DateTime := Get_CurrentDate; 
+
+end;
+
+procedure TfrmFinishPeriodCredits.BitBtnOkClick(Sender: TObject);
+begin
+   with dmFinishPeriodCredits do
+   begin
+
+      with ReportData do
+      begin
+         if Active then Close;
+         SQL[25] := ' and '+BuildFilterString; 
+         Open;
+      end;
+   end;
+   ExecReport;
+end;
+
+procedure TfrmFinishPeriodCredits.BitBtnCancelClick(Sender: TObject);
+begin
+    Close
+end;
+
+procedure TfrmFinishPeriodCredits.FormCreate(Sender: TObject);
+begin
+   dmFinishPeriodCredits := TdmFinishPeriodCredits.Create(Self);
+   frmQrptFPCredits := TfrmQrptFPCredits.Create(Self);
+   SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TfrmFinishPeriodCredits.FormDestroy(Sender: TObject);
+begin
+   dmFinishPeriodCredits.Free;
+   frmQrptFPCredits.Free;
+end;
+
+initialization
+    frmFinishPeriodCredits := TfrmFinishPeriodCredits.Create(CommonApplication);
+
+end.

@@ -1,0 +1,63 @@
+unit untdatamod;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, OracleData, Oracle;
+
+type
+  TControlDataModule = class(TDataModule)
+    ForMoney: TOracleDataSet;
+    ForTable: TOracleDataSet;
+    DataSource1: TDataSource;
+    BanksName: TOracleDataSet;
+    ForTableBAL_CN1: TFloatField;
+    ForTableAMMOUNTS: TFloatField;
+    ForTableLAMMOUNTS: TFloatField;
+    Group: TOracleDataSet;
+    OraclePackage1: TOraclePackage;
+    ODSTransactionView: TOracleDataSet;
+    ODSTransactionViewBALANCEACCOUNT: TFloatField;
+    ODSTransactionViewDEBIT: TWideStringField;
+    ODSTransactionViewDEBITCURRENCY: TIntegerField;
+    ODSTransactionViewDVALNAME: TWideStringField;
+    ODSTransactionViewCREDIT: TWideStringField;
+    ODSTransactionViewCREDITCURRENCY: TIntegerField;
+    ODSTransactionViewCVALNAME: TWideStringField;
+    ODSTransactionViewDEBITAMMOUNT: TFloatField;
+    ODSTransactionViewCREDITAMMOUNT: TFloatField;
+    ODSTransactionViewCOMMONAMMOUNT: TFloatField;
+    ODSTransactionViewNAME: TWideStringField;
+    GroupOperationDate: TWideStringField;
+    GroupCURRENCYNAME: TWideStringField;
+    GroupAMMOUNT: TFloatField;
+    GroupLAMMOUNT: TFloatField;
+    GroupSTATUS: TFloatField;
+    GroupBAL_CN1: TFloatField;
+    Branch: TOracleDataSet;
+    BranchData: TDataSource;
+    GroupCURRENCY: TFloatField;
+    procedure GroupCalcFields(DataSet: TDataSet);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  ControlDataModule: TControlDataModule;
+
+implementation
+
+uses ControlTapeImpl, untrep1,sboapiDataModuleImpl;
+
+{$R *.DFM}
+
+procedure TControlDataModule.GroupCalcFields(DataSet: TDataSet);
+begin
+ with DataSet, FrmControlTape do
+  FieldByName('OperationDate').AsString :=FormatDateTime('dd/mm/yyyy',DoDate.DateTime)
+end;
+
+end.

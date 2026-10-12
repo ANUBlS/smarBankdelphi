@@ -1,0 +1,381 @@
+﻿unit ceskin;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, Mask, DBCtrls, SearchEdit, DBViewComboBox;
+
+type
+  TCeskform = class(TForm)
+    GroupBox1: TGroupBox;
+    GroupBox2: TGroupBox;
+    Label1: TLabel;
+    DBEdit1: TDBEdit;
+    DBEdit2: TDBEdit;
+    Label2: TLabel;
+    SearchEdit1: TSearchEdit;
+    Label3: TLabel;
+    Button1: TButton;
+    Button2: TButton;
+    Button3: TButton;
+    DBEdit3: TDBEdit;
+    Label4: TLabel;
+    Label5: TLabel;
+    DBEdit4: TDBEdit;
+    Label6: TLabel;
+    DBEdit5: TDBEdit;
+    Label7: TLabel;
+    DBEdit6: TDBEdit;
+    Button4: TButton;
+    Button5: TButton;
+    stat: TLabel;
+    DBEdit7: TDBEdit;
+    GroupBox5: TGroupBox;
+    Label40: TLabel;
+    Label41: TLabel;
+    DBViewComboBox1: TDBViewComboBox;
+    DBViewComboBox2: TDBViewComboBox;
+    procedure Button4Click(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
+    procedure DBEdit4Change(Sender: TObject);
+    procedure SearchEdit1Change(Sender: TObject);
+    procedure Edit1Change(Sender: TObject);
+    procedure Button5Click(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+    procedure Button3Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Ceskform: TCeskform;
+
+implementation
+
+uses Unit2, SWIFT_MAINImpl1,SBTranslateProc,sboapidatamoduleimpl;
+
+{$R *.DFM}
+
+procedure TCeskform.Button4Click(Sender: TObject);
+begin
+//SWDataModule.SW_IN.NEXT;
+
+repeat
+if SWDataModule.sw_in.Eof=false then
+
+begin
+SWDataModule.SW_IN.NEXT;
+ if (SWDataModule.sw_in.FieldByName('Status').asinteger=2) and    (SWDataModule.sw_in.FieldByName('mt').asstring='MT103')
+then
+
+stat.Caption:='Yoxlanılmalıdır!' else     stat.Caption:='test!' ;
+
+//SearchEdit1.Text:=DBEdit4.Text;
+   if stat.Caption='Yoxlanılmalıdır!'  then
+
+  begin
+      Button1.Enabled:=True;
+      Button2.Enabled:=True;
+  end else
+
+  begin
+    Button1.Enabled:=False;
+    Button2.Enabled:=False;
+  end;
+  if SWDataModule.sw_in.FieldByName('VALUTE').AsString<>'AZN' then
+ begin
+  DBViewComboBox2.Visible:=True;
+  GroupBox5.Visible:=True;
+ end
+  else
+  begin
+  DBViewComboBox2.Visible:=False;
+  GroupBox5.Visible:=False;
+  end;
+ //SearchEdit1.Text:=DBEdit4.Text;
+//SearchEdit1.OnChange(sender);
+end
+else
+begin
+ if (SWDataModule.sw_in.FieldByName('Status').asinteger=2) and    (SWDataModule.sw_in.FieldByName('mt').asstring='MT103')
+then
+
+stat.Caption:='Йохланылмалыдыр!' else     stat.Caption:='test!' ;
+
+//SearchEdit1.Text:=DBEdit4.Text;
+   if stat.Caption='Йохланылмалыдыр!'  then
+
+  begin
+      Button1.Enabled:=True;
+      Button2.Enabled:=True;
+  end else
+
+  begin
+    Button1.Enabled:=False;
+    Button2.Enabled:=False;
+  end;
+  if SWDataModule.sw_in.FieldByName('VALUTE').AsString<>'AZN' then
+ begin
+  DBViewComboBox2.Visible:=True;
+  GroupBox5.Visible:=True;
+ end
+  else
+  begin
+  DBViewComboBox2.Visible:=False;
+  GroupBox5.Visible:=False;
+  end;
+ //SearchEdit1.Text:=DBEdit4.Text;
+//SearchEdit1.OnChange(sender);
+exit;
+end;
+// begin
+until  (SWDataModule.sw_in.FieldByName('status').AsInteger=2);
+
+
+
+end;
+
+procedure TCeskform.FormActivate(Sender: TObject);
+begin
+if (SWDataModule.sw_in.FieldByName('Status').asinteger=2) and    (SWDataModule.sw_in.FieldByName('mt').asstring='MT103')
+then
+
+stat.Caption:='Yoxlanılmalıdir!' else     stat.Caption:='test!' ;
+
+//SearchEdit1.Text:=DBEdit4.Text;
+   if stat.Caption='Yoxlanılmalıdır!'  then
+
+  begin
+      Button1.Enabled:=True;
+      Button2.Enabled:=True;
+  end else
+
+  begin
+    Button1.Enabled:=False;
+    Button2.Enabled:=False;
+  end;
+  if SWDataModule.sw_in.FieldByName('VALUTE').AsString<>'AZN' then
+ begin
+  DBViewComboBox2.Visible:=True;
+  GroupBox5.Visible:=True;
+ end
+  else
+  begin
+  DBViewComboBox2.Visible:=False;
+  GroupBox5.Visible:=False;
+  end;
+end;
+
+procedure TCeskform.FormCreate(Sender: TObject);
+begin
+SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TCeskform.DBEdit4Change(Sender: TObject);
+begin
+if (SWDataModule.sw_in.FieldByName('Status').asinteger=2) and (SWDataModule.sw_in.FieldByName('mt').asstring='MT103')
+then
+
+stat.Caption:='Yoxlanılmalıdır!' else     stat.Caption:='test!' ;
+
+//SearchEdit1.text:=DBEdit4.Text;
+  if stat.Caption='Yoxlanılmalıdır!'  then
+
+  begin
+      Button1.Enabled:=True;
+      Button2.Enabled:=True;
+  end else
+
+  begin
+    Button1.Enabled:=False;
+    Button2.Enabled:=False;
+  end;
+end;
+
+procedure TCeskform.SearchEdit1Change(Sender: TObject);
+begin
+if not assigned(swdatamodule.sw_customers)
+then swdatamodule.sw_customers.Active;
+     swdatamodule.sw_customers.Locate
+   ('id',SWDataModule.Account.Fieldbyname('KLI_ID').asinteger,[]);
+   //ShowMessage('ozzzzzun');
+
+
+end;
+
+procedure TCeskform.Edit1Change(Sender: TObject);
+begin
+
+   //ShowMessage('ozzzzzun');
+end;
+
+procedure TCeskform.Button5Click(Sender: TObject);
+begin
+//SWDataModule.SW_IN.Prior;
+repeat
+if SWDataModule.sw_in.Bof=false then
+begin
+
+SWDataModule.SW_IN.Prior;
+ if (SWDataModule.sw_in.FieldByName('Status').asinteger=2) and    (SWDataModule.sw_in.FieldByName('mt').asstring='MT103')
+then
+
+stat.Caption:='Йохланылмалыдыр!' else     stat.Caption:='test!' ;
+
+//SearchEdit1.Text:=DBEdit4.Text;
+   if stat.Caption='Йохланылмалыдыр!'  then
+
+  begin
+      Button1.Enabled:=True;
+      Button2.Enabled:=True;
+  end else
+
+  begin
+    Button1.Enabled:=False;
+    Button2.Enabled:=False;
+  end;
+  if SWDataModule.sw_in.FieldByName('VALUTE').AsString<>'AZN' then
+ begin
+  DBViewComboBox2.Visible:=True;
+  GroupBox5.Visible:=True;
+ end
+  else
+  begin
+  DBViewComboBox2.Visible:=False;
+  GroupBox5.Visible:=False;
+  end;
+
+
+end
+
+else
+
+begin
+//SWDataModule.sw_in.First;
+ if (SWDataModule.sw_in.FieldByName('Status').asinteger=2) and    (SWDataModule.sw_in.FieldByName('mt').asstring='MT103')
+then
+
+stat.Caption:='Yoxlanılmalıdır!' else     stat.Caption:='test!' ;
+
+//SearchEdit1.Text:=DBEdit4.Text;
+   if stat.Caption='Yoxlanılmalıdır!'  then
+
+  begin
+      Button1.Enabled:=True;
+      Button2.Enabled:=True;
+  end else
+
+  begin
+    Button1.Enabled:=False;
+    Button2.Enabled:=False;
+  end;
+  if SWDataModule.sw_in.FieldByName('VALUTE').AsString<>'AZN' then
+ begin
+  DBViewComboBox2.Visible:=True;
+  GroupBox5.Visible:=True;
+ end
+  else
+  begin
+  DBViewComboBox2.Visible:=False;
+  GroupBox5.Visible:=False;
+  end;
+ exit;
+end;
+
+
+until  SWDataModule.sw_in.FieldByName('status').AsInteger=2;
+
+ end;
+
+procedure TCeskform.Button1Click(Sender: TObject);
+begin
+      case MessageDlg(Format('Əməliyyat düz olaraq qebul edilsin?  ',[dbedit7.text]), mtConfirmation,[mbyes,mbno], 0) of
+           mryes :begin
+
+if (DBViewComboBox2.Visible=true) and (DBViewComboBox2.Text<>'') then
+begin
+with SWDataModule.sw_in do
+begin
+Edit;
+FieldByName('status').AsInteger:=11;
+FieldByName('info').asstring:='Йохланылыб!';
+FieldByName('hesabat').asstring:=SWDataModule.hteyinat.FieldByName('ID').asString;
+post;
+end;
+//close;
+Button4.Click;
+ end else
+ begin
+if (DBViewComboBox2.Visible=False)  then
+begin
+with SWDataModule.sw_in do
+begin
+SWDataModule.sw_in.Edit;
+SWDataModule.sw_in.FieldByName('status').AsInteger:=11;
+SWDataModule.sw_in.FieldByName('info').asstring:='Yoxlanılıb!';
+//SWDataModule.sw_in.FieldByName('hesabat').asstring:=DBViewComboBox2.Text;
+post;
+
+end;
+//close;
+Button4.Click;
+end else
+if  DBViewComboBox2.Text='' then
+begin
+ShowMessage('Hesabat təyinatını seçin!');
+end;
+
+  end;
+    end;       mrno  : exit;
+           //mrcancel : Break;
+
+          end;
+
+end;
+
+procedure TCeskform.Button2Click(Sender: TObject);
+begin
+      case MessageDlg(Format('Əməliyyat təyin edilməmişə atılsın?  ',[dbedit7.text]), mtConfirmation,[mbyes,mbno,mbcancel], 0) of
+           mryes :begin
+                  SWDataModule.SB_ACA.CallProcedure('CheckAdvancedObjectAccess', ['SW_IN_UNDEF']);
+                  with SWDataModule.sw_in do
+begin
+SWDataModule.sw_in.Edit;
+SWDataModule.sw_in.FieldByName('status').AsInteger:=12;
+SWDataModule.sw_in.FieldByName('info').asstring:='Təyin edilməmişə atılıb !';
+post;
+SWDataModule.sw_in_insert.CallProcedure('undifined_transactions',[SWDataModule.sw_in.FieldByName('id').AsInteger]);
+end;
+SWDataModule.SW_IN.NEXT;
+
+                  end;
+           mrno: begin
+                 with SWDataModule.sw_in do
+begin
+SWDataModule.sw_in.Edit;
+SWDataModule.sw_in.FieldByName('status').AsInteger:=8;
+SWDataModule.sw_in.FieldByName('info').asstring:='Səhvdir!';
+post;
+
+end;
+SWDataModule.SW_IN.NEXT;
+
+                 end;
+           mrcancel: begin
+                     exit;
+                     end;
+
+
+end;
+end;
+procedure TCeskform.Button3Click(Sender: TObject);
+begin
+close;
+end;
+
+end.

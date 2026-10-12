@@ -1,0 +1,73 @@
+﻿unit SettingFrmImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls, DBGridEhGrouping, DBCtrls, GridsEh, DBGridEh;
+
+type
+  TSettingFrm = class(TForm)
+    Panel1: TPanel;
+    RadioGroup1: TRadioGroup;
+    GroupBox1: TGroupBox;
+    GroupBox2: TGroupBox;
+    DBGridEh1: TDBGridEh;
+    DBGridEh2: TDBGridEh;
+    DBNavigator1: TDBNavigator;
+    DBNavigator2: TDBNavigator;
+    procedure RadioGroup1Click(Sender: TObject);
+    procedure DBNavigator1Click(Sender: TObject; Button: TNavigateBtn);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  SettingFrm: TSettingFrm;
+
+implementation
+uses FlReCalculationDataModuleImpl;
+{$R *.dfm}
+
+procedure TSettingFrm.DBNavigator1Click(Sender: TObject; Button: TNavigateBtn);
+begin
+PRDataModule.OracleDataSet8.FieldByName('pr_id').AsInteger:=RadioGroup1.ItemIndex;
+
+end;
+
+procedure TSettingFrm.RadioGroup1Click(Sender: TObject);
+begin
+if not PRDataModule.OracleDataSet9.active then
+ PRDataModule.OracleDataSet9.Open;
+
+if not PRDataModule.OracleDataSet10.active then
+ PRDataModule.OracleDataSet10.Open;
+
+if RadioGroup1.ItemIndex=0 then
+begin
+   GroupBox2.Caption:='Filyallar'  ;
+   PRDataModule.OracleDataSet8.close;
+   PRDataModule.OracleDataSet8.SetVariable('prid',RadioGroup1.ItemIndex);
+   PRDataModule.OracleDataSet8.Open;
+   PRDataModule.OracleDataSet8.FieldByName('pr_id').AsInteger:=RadioGroup1.ItemIndex ;
+   DBGridEh2.DataSource:=PRDataModule.DataSource9;
+   DBNavigator2.DataSource:=PRDataModule.DataSource9;
+
+
+end
+   else
+   begin
+   GroupBox2.Caption:='İcra şöbələri ';
+   PRDataModule.OracleDataSet8.close;
+   PRDataModule.OracleDataSet8.SetVariable('prid',RadioGroup1.ItemIndex);
+   PRDataModule.OracleDataSet8.Open;
+   PRDataModule.OracleDataSet8.FieldByName('pr_id').AsInteger:=RadioGroup1.ItemIndex  ;
+
+    DBGridEh2.DataSource:=PRDataModule.DataSource10;
+    DBNavigator2.DataSource:=PRDataModule.DataSource10;
+   end;
+end;
+
+end.

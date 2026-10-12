@@ -1,0 +1,56 @@
+unit UnitRemainder;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ExtCtrls, Grids, DBGridEh, DBGridEhGrouping, CMExcelExport, Menus, GridsEh;
+
+type
+  TFormRemainder = class(TForm)
+    Panel1: TPanel;
+    Panel2: TPanel;
+    Panel3: TPanel;
+    Panel4: TPanel;
+    Panel5: TPanel;
+    DBGridEh1: TDBGridEh;
+    PopupMenu1: TPopupMenu;
+    Excel1: TMenuItem;
+    CMExcelExport1: TCMExcelExport;
+    procedure FormCreate(Sender: TObject);
+    procedure Excel1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormRemainder: TFormRemainder;
+
+implementation
+    uses UnitDateExch,sboapiDataModuleImpl, SBTranslateProc;
+{$R *.DFM}
+
+procedure TFormRemainder.Excel1Click(Sender: TObject);
+begin
+   if DBGridEh1.DataSource.DataSet.RecordCount=0 then begin
+                                                       ShowMessage('He? bir m?lumat tap?lmad?!...');
+                                                       exit;
+                                                     end;
+
+  with CMExcelExport1 do
+  begin
+    DBGridEh1.DataSource.DataSet.Last;
+    Connect;
+    ExportDataset(DBGridEh1.DataSource.DataSet,'?m?liyyatlar',true,true);
+    Disconnect;
+  end;
+end;
+
+procedure TFormRemainder.FormCreate(Sender: TObject);
+begin
+ SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+end.

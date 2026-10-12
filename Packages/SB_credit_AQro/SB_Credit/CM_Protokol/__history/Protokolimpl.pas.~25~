@@ -1,0 +1,149 @@
+﻿unit Protokolimpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ComCtrls, StdCtrls, Buttons, DB, OracleData, Oracle;
+
+type
+  Tmainform = class(TForm)
+    BitBtn1: TBitBtn;
+    BitBtn2: TBitBtn;
+    Label1: TLabel;
+    Label2: TLabel;
+    Edit1: TEdit;
+    DateTimePicker1: TDateTimePicker;
+    sysdat: TOracleDataSet;
+    Protokol: TOraclePackage;
+    sysdatTEK_DAT: TDateTimeField;
+    sysdatPRED_DAT: TDateTimeField;
+    sysdatARC_DAY: TDateTimeField;
+    sysdatCLOSE: TIntegerField;
+    Button1: TButton;
+    procedure FormCanResize(Sender: TObject; var NewWidth, NewHeight: Integer;
+      var Resize: Boolean);
+    procedure FormCreate(Sender: TObject);
+    procedure BitBtn1Click(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure BitBtn2Click(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  mainform: Tmainform;
+   procedure InitPlugin(s:string);export;
+implementation
+uses   CommonDecls, protImpl,CMOracleAPIDataModuleImpl, ErizeImpl;
+
+{$R *.DFM}
+  procedure InitPlugin(s:string);export;
+begin
+if s='Main' then
+   mainform.Show;
+
+if s='Prot' then
+   ProtFrm.ShowModal;
+
+
+if s='Erize' then
+   ERizeFrm.Showmodal
+end;
+
+exports
+     InitPlugin;
+
+ procedure Tmainform.BitBtn1Click(Sender: TObject);
+ Resourcestring Can_Inf = 'Seçilmiş ərizələrin protokola daxil edilməsiinə əminsinizmi ?';
+var i ,
+    SlectedRowCnt,
+    CrdId:Integer;
+    dat:tdatetime;
+   ver, id :string;
+begin
+  dat:=integer(trunc(DateTimePicker1.DateTime));
+   if MessageDlg(Can_Inf,
+              mtInformation,
+              [mbYes,mbNo],
+               0) <> mrYes
+               then exit ;
+
+ ver:=',';
+  if   ERizeFrm.MainGrid.SelectedRows.Count>1 then
+  begin
+
+   with ERizeFrm.MainGrid, DataSource.DataSet do
+   begin
+      SlectedRowCnt := SelectedRows.Count;
+      for i:=0 to SlectedRowCnt-1 do
+      begin
+         GotoBookmark(Pointer(SelectedRows[I]));
+         CrdId :=FieldByName('ID').AsInteger;
+
+     if i= (SlectedRowCnt-1)then
+       ver:='';
+
+       id:= id+IntToStr(CrdId)+ver;
+
+   end;
+   end;refresh;
+   end
+else
+   begin
+   with CommonDBGrid, DataSource.DataSet do
+   begin
+         CrdId :=FieldByName('ID').AsInteger;
+         Protokol.CallProcedure('up_port_protokol',[
+              CrdId,
+              dat,
+              edit1.Text]);
+    id:= IntToStr(CrdId);
+  Refresh;
+   end;
+   end;
+
+   with ProtFrm,Erize1 do
+    begin
+    close;
+      showmessage('where id in ( '+id+')');
+   SQL[2]:='where id in ( '+id+')';
+    open;
+     ShowModal ;
+    end;
+end;
+
+procedure Tmainform.BitBtn2Click(Sender: TObject);
+begin
+close
+end;
+
+procedure Tmainform.Button1Click(Sender: TObject);
+begin
+//ProtFrm.ShowModal
+end;
+
+procedure Tmainform.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+resize:=false
+end;
+
+procedure Tmainform.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+Edit1.Text:=''
+end;
+
+procedure Tmainform.FormCreate(Sender: TObject);
+begin
+sysdat.Open;
+ProtFrm:=TProtFrm.create(Self);
+ERizeFrm:=TERizeFrm.create(self);
+DateTimePicker1.DateTime:=sysdat.FieldByName('Tek_dat').AsDateTime;
+ end;
+initialization
+ mainform := Tmainform.Create(CommonApplication);
+end.

@@ -1,0 +1,236 @@
+﻿unit UnitCustProps;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActnList, DBCtrls, ExtCtrls, StdCtrls, Mask, ComCtrls, SBCustomer, Db;
+
+type
+  TFrmCustProps = class(TForm)
+    Label3: TLabel;
+    Label5: TLabel;
+    Label7: TLabel;
+    Label9: TLabel;
+    Label10: TLabel;
+    Label11: TLabel;
+    Label12: TLabel;
+    Label13: TLabel;
+    Label15: TLabel;
+    Label16: TLabel;
+    Label17: TLabel;
+    Label18: TLabel;
+    Label19: TLabel;
+    Bevel1: TBevel;
+    Label6: TLabel;
+    Label8: TLabel;
+    OpenDateEdit: TDateTimePicker;
+    OkButton: TButton;
+    CancelButton: TButton;
+    NameEdit: TDBEdit;
+    RelationCB: TDBLookupComboBox;
+    GroupCB: TDBLookupComboBox;
+    EstateTypeCB: TDBLookupComboBox;
+    OrganizationTypeCB: TDBLookupComboBox;
+    ActionAreaCB: TDBLookupComboBox;
+    BranchCB: TDBLookupComboBox;
+    ClientClosedCB: TCheckBox;
+    ClientClosedPanel: TPanel;
+    CloseDateEdit: TDateTimePicker;
+    IsNotResidentCB: TDBCheckBox;
+    OKPOCodeEdit: TDBEdit;
+    TazAreaCB: TDBLookupComboBox;
+    TaxIDEdit: TDBEdit;
+    BankIDEdit: TDBEdit;
+    DBEdit1: TDBEdit;
+    DBEdit3: TDBEdit;
+    DBEdit4: TDBEdit;
+    Button1: TButton;
+    ActionList1: TActionList;
+    InfoView: TAction;
+    IpInfoView: TAction;
+    Dpt_Nal: TDateTimePicker;
+    Dtp_Ustav: TDateTimePicker;
+    procedure CancelButtonClick(Sender: TObject);
+    procedure OkButtonClick(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure ClientClosedCBClick(Sender: TObject);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure Button1Click(Sender: TObject);
+    procedure Dpt_NalChange(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+  private
+    { Private declarations }
+    FCustomerParams: TCustomer;
+    FClientClosed: Boolean;
+    FChanged: Boolean;
+    procedure SetCustomerParams(Customer: TCustomer);
+    property CustomerParams: TCustomer read FCustomerParams write SetCustomerParams;
+    procedure SetClientClosed(Value: Boolean);
+  public
+    { Public declarations }
+    procedure Reset;
+    function New: Boolean;
+    procedure Edit(ID: Integer);
+    property ClientClosed: Boolean read FClientClosed write SetClientClosed;
+  end;
+
+var
+  FrmCustProps: TFrmCustProps;
+
+implementation
+
+{$R *.DFM}
+
+uses CO_datamod_impl, OracleData, SBCore, CustInfoFormImpl, SBTranslateProc, sboapiDataModuleImpl;
+
+function TFrmCustProps.New: Boolean;
+begin
+  Reset;
+  CO_DataMod.Customers.Insert;
+  InfoView.Visible := False;
+  Button1.Visible := false;
+  dtp_ustav.date := CO_DataMod.SysdatTEK_DAT.AsDateTime;
+  dpt_nal.date := CO_DataMod.SysdatTEK_DAT.AsDateTime;
+  ShowModal;
+  Result := FChanged;
+end;
+
+procedure TFrmCustProps.Edit(ID: Integer);
+var
+  Customer: TCustomer;
+begin
+  Reset;
+  CO_DataMod.Customers.Edit;
+  Sb_GetCustomer(ID, Customer);
+  CustomerParams := Customer;
+  InfoView.Visible := True;
+  dtp_ustav.date := CO_DataMod.Customers.FieldByName('dat_ustav').AsDateTime;
+  dpt_nal.date := CO_DataMod.Customers.FieldByName('dat_nal').AsDateTime;
+  Button1.Visible := True;
+  Button1.Enabled := True;
+  ShowModal;
+end;
+
+procedure TFrmCustProps.CancelButtonClick(Sender: TObject);
+begin
+  Close;
+end;
+
+procedure TFrmCustProps.OkButtonClick(Sender: TObject);
+begin
+  if NameEdit.Text = '' then begin ShowMessage('Müştərinin adını daxil edin'); Exit; end;
+  if EstateTypeCB.Text = '' then begin ShowMessage('Mülkiyyət növünü daxil edin'); Exit; end;
+ with CO_DataMod.Customers do
+  begin
+    FChanged := True;
+    FieldByName('ID').Required := False;
+    FieldByName('OPEN_DAT').AsDateTime := OpenDateEdit.DateTime;
+    FieldByName('Dat_Nal').AsDateTime := Trunc(Dpt_Nal.DateTime);
+    FieldByName('Dat_Ustav').AsDateTime := Trunc(Dtp_Ustav.DateTime);
+    Post;      
+    ApplyUpdates([aaInsert, aaUpdate]);
+    CommitUpdates;      
+  end;
+  Close;
+end;
+
+procedure TFrmCustProps.Reset;
+var
+ CurrentDay : TDateTime;
+begin
+  FChanged := False;
+  CurrentDay := Sb_GetSystemDate();
+  OpenDateEdit.DateTime := CurrentDay;
+  CloseDateEdit.DateTime := CurrentDay;
+  ClientClosed := False;
+end;
+
+procedure TFrmCustProps.SetCustomerParams(Customer: TCustomer);
+begin
+  FCustomerParams := Customer;
+
+  with CustomerParams do
+  begin
+    OpenDateEdit.DateTime := OpenDate;
+    CloseDateEdit.DateTime := CloseDate;
+    ClientClosed := CloseDate <> NullDate;
+
+    CO_DataMod.Relation.DataSet.Locate('ID', RelationID, []);
+  end;
+end;
+
+procedure TFrmCustProps.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+  with CO_DataMod.Customers do
+    if State = dsInsert then
+    begin
+      Cancel;
+      CancelUpdates;
+    end;
+end;
+
+procedure TFrmCustProps.FormCreate(Sender: TObject);
+begin
+ with CO_DataMod do begin
+   Customers.Open;
+   RelationData.Open;
+   ClientGroupData.Open;
+   EstateTypeData.Open;
+   OrganizationTypeData.Open;
+   ActionAreaData.Open;
+   BranchData.Open;
+   TaxAreaData.Open;
+  end;
+  SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TFrmCustProps.SetClientClosed(Value: Boolean);
+begin
+  FClientClosed := Value;
+//  ClientClosedPanel.Visible := Value;
+  CloseDateEdit.Enabled := Value;
+  ClientClosedCB.Checked := Value;
+end;
+
+procedure TFrmCustProps.ClientClosedCBClick(Sender: TObject);
+begin
+  ClientClosed := (Sender as TCheckBox).Checked;
+end;
+
+procedure TFrmCustProps.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+  if Ord(Key) = VK_RETURN then
+    SelectNext(ActiveControl, True, True);
+end;
+
+procedure TFrmCustProps.FormKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+ if Key = VK_ESCAPE then
+    Close;
+end;
+
+procedure TFrmCustProps.Button1Click(Sender: TObject);
+begin
+  if not assigned(CustomerInfoForm) then CustomerInfoForm := TCustomerInfoForm.Create(Self);
+  with CustomerInfoForm, CustInfoData do begin
+     ClearVariables;
+     Close;
+     SetVariable('customerid', CO_DataMod.Customers.fields[0].AsVariant);
+     Open;
+     if recordcount=0 then ToolButton2Click(Sender);
+     ShowModal;
+  end;
+end;
+
+procedure TFrmCustProps.Dpt_NalChange(Sender: TObject);
+begin
+  with CO_DataMod, Customers do
+   FieldByName('dat'+(copy((sender as tcomponent).name,4,10))).Value := (sender as TDateTimePicker).DateTime;
+end;
+
+end.

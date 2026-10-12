@@ -1,0 +1,146 @@
+﻿unit ExpParameterUnit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, LDialogs,
+  ExtCtrls, Grids, DBGrids, StdCtrls, DBViewComboBox, SearchEdit,
+  Buttons, DB, OracleData;
+
+type
+  TExpParameter = class(TForm)
+    Panel1: TPanel;
+    Panel2: TPanel;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    SearchEdit1: TSearchEdit;
+    SpeedButton1: TSpeedButton;
+    DBViewComboBox1: TDBViewComboBox;
+    DBViewComboBox2: TDBViewComboBox;
+    Label4: TLabel;
+    SearchEdit2: TSearchEdit;
+    SpeedButton2: TSpeedButton;
+    Label5: TLabel;
+    Panel3: TPanel;
+    DBGrid1: TDBGrid;
+    Panel4: TPanel;
+    DBGrid2: TDBGrid;
+    ExpAccDataSet: TOracleDataSet;
+    ExpAccDataSource: TDataSource;
+    BranchDataSet: TOracleDataSet;
+    BranchDataSource: TDataSource;
+    FilialDataSet: TOracleDataSet;
+    FilialDataSource: TDataSource;
+    ValyutaDataSet: TOracleDataSet;
+    ValyutaDataSource: TDataSource;
+    AccountDataSet: TOracleDataSet;
+    AccountDataSource: TDataSource;
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure SpeedButton2Click(Sender: TObject);
+    procedure DBGrid1DblClick(Sender: TObject);
+    procedure DBGrid2DblClick(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  ExpParameter: TExpParameter;
+
+implementation
+
+uses ExpDataModuleUnit;
+
+{$R *.DFM}
+
+procedure TExpParameter.SpeedButton1Click(Sender: TObject);
+begin
+  if SearchEdit1.Text = '' then
+    exit;
+  ExpDataModule.Repair.CallProcedure('Exp_accounts_add',
+    [ValyutaDataSet.fieldbyname('VALUTE').asinteger,
+    AccountDataSet.fieldbyname('id').asinteger, FilialDataSet.fieldbyname('id')
+    .asinteger]);
+  SearchEdit1.clear;
+  ExpAccDataSet.Refresh;
+end;
+
+procedure TExpParameter.SpeedButton2Click(Sender: TObject);
+begin
+  if SearchEdit2.Text = '' then
+    exit;
+  ExpDataModule.Repair.CallProcedure('Exp_branchaccount_add',
+    [ValyutaDataSet.fieldbyname('VALUTE').asinteger,
+    AccountDataSet.fieldbyname('id').asinteger, FilialDataSet.fieldbyname('id')
+    .asinteger]);
+  SearchEdit2.clear;
+  BranchDataSet.Refresh;
+end;
+
+procedure TExpParameter.DBGrid1DblClick(Sender: TObject);
+begin
+  Case MessageDlg('Əməliyyatın silinməsinə əminsinizmi?', mtConfirmation,
+    [mbyes, mbno], 0) of
+    mryes:
+      begin
+        ExpDataModule.Repair.CallProcedure('Exp_Accounts_Del',
+          [ExpAccDataSet.fieldbyname('id').asinteger]);
+        ExpAccDataSet.Refresh;
+      end;
+    mrno:
+      exit;
+
+  end;
+
+end;
+
+procedure TExpParameter.DBGrid2DblClick(Sender: TObject);
+begin
+  Case MessageDlg('Əməliyyatın silinməsinə əminsinizmi?', mtConfirmation,
+    [mbyes, mbno], 0) of
+    mryes:
+      begin
+        ExpDataModule.Repair.CallProcedure('Exp_branchaccount_Del',
+          [BranchDataSet.fieldbyname('id').asinteger]);
+        BranchDataSet.Refresh;
+      end;
+    mrno:
+      exit;
+
+  end;
+
+end;
+
+procedure TExpParameter.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  ExpAccDataSet.Close;
+  BranchDataSet.Close;
+  FilialDataSet.Close;
+  ValyutaDataSet.Close;
+  AccountDataSet.Close;
+end;
+
+procedure TExpParameter.FormShow(Sender: TObject);
+begin
+  IF not(ExpAccDataSet.Active) then
+    ExpAccDataSet.Open;
+  IF not(BranchDataSet.Active) then
+    BranchDataSet.Open;
+  IF not(FilialDataSet.Active) then
+    FilialDataSet.Open;
+  IF not(ValyutaDataSet.Active) then
+    ValyutaDataSet.Open;
+  IF not(AccountDataSet.Active) then
+    AccountDataSet.Open;
+  SearchEdit1.clear;
+  SearchEdit2.clear;
+  DBViewComboBox1.ItemIndex := 0;
+  DBViewComboBox2.ItemIndex := 0;
+
+end;
+
+end.

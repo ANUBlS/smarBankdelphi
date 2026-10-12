@@ -1,0 +1,47 @@
+unit CompanySelection;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls, DB, OracleData;
+
+type
+  TCompanyForm = class(TForm)
+    RadioGroup: TRadioGroup;
+    SetCompany: TOracleDataSet;
+    complist_id: TOracleDataSet;
+    complist_idID: TFloatField;
+    complist_idCOMPANYID: TWideStringField;
+    company_list: TOracleDataSet;
+    company_listID: TFloatField;
+    company_listCOMPANY_NAME: TWideStringField;
+    procedure FormShow(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  CompanyForm: TCompanyForm;
+
+implementation
+
+{$R *.dfm}
+
+procedure TCompanyForm.FormShow(Sender: TObject);
+ var i :integer;
+begin
+company_list.Active:=true;
+
+ for i := 0 to company_list.RecordCount-1 do
+  begin
+
+
+   RadioGroup.Items.Add(company_list.FieldByName('company_name').AsString);
+
+  end;
+end;
+
+end.

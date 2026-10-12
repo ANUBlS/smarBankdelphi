@@ -1,0 +1,76 @@
+unit CO_MemorialRep1_unit;
+
+interface
+
+uses Windows, SysUtils, Messages, Classes, Graphics, Controls,
+  StdCtrls, ExtCtrls, Forms, Quickrpt, QRCtrls;
+
+type
+  TCO_MemorialRep1 = class(TQuickRep)
+    QRSubDetail1: TQRSubDetail;
+    QRDBText6: TQRDBText;
+    QRDBText1: TQRDBText;
+    QRDBText2: TQRDBText;
+    QRDBText7: TQRDBText;
+    QRDBText3: TQRDBText;
+    QRChildBand1: TQRChildBand;
+    QRLabelTitle: TQRLabel;
+    QRDBText5: TQRDBText;
+    SummaryBand1: TQRBand;
+    QRLabel2: TQRLabel;
+    QRBand1: TQRBand;
+    QRLV: TQRLabel;
+    QRLM: TQRLabel;
+    QRShape1: TQRShape;
+    QRShape2: TQRShape;
+    QRLD: TQRLabel;
+    QRShape5: TQRShape;
+    QRLK: TQRLabel;
+    QRShape7: TQRShape;
+    QRLXV: TQRLabel;
+    QRShape9: TQRShape;
+    QRLMEB: TQRLabel;
+    QRShape10: TQRShape;
+    QRShape6: TQRShape;
+    QRShape8: TQRShape;
+    QRLabel1: TQRLabel;
+    QRLabel3: TQRLabel;
+    QRDBText11: TQRDBText;
+    QRLabel5: TQRLabel;
+    QRDBText12: TQRDBText;
+    QRDBText10: TQRDBText;
+    QRDBText16: TQRDBText;
+    QRDBText8: TQRDBText;
+    QRLabel4: TQRLabel;
+    QRLabel6: TQRLabel;
+    QRShape3: TQRShape;
+    d_val: TQRLabel;
+    c_name: TQRLabel;
+    QRDBText4: TQRDBText;
+    procedure QuickRepBeforePrint(Sender: TCustomQuickRep;
+      var PrintReport: Boolean);
+  private
+
+  public
+
+  end;
+
+var
+  CO_MemorialRep1: TCO_MemorialRep1;
+
+implementation
+
+uses CO_Datamod_impl, customers_operation_impl, SBTranslateProc,
+  sboapiDataModuleImpl;
+{$R *.DFM}
+
+procedure TCO_MemorialRep1.QuickRepBeforePrint(Sender: TCustomQuickRep;
+  var PrintReport: Boolean);
+begin
+  d_val.caption := CO_DataMod.Account.fieldbyname('accval').asstring;
+  c_name.caption := CO_DataMod.Account.fieldbyname('accname').asstring;
+
+  SBTranslateProc.TranslateAllCompQuickRep(Self, sboapiDataModule.OrPack_SL);
+end;
+
+end.

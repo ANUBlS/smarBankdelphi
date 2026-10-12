@@ -1,0 +1,182 @@
+﻿unit frmWReportImpl_new;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, WordXP, OleServer, StdCtrls, Mask, DBCtrlsEh, DBLookupEh, Buttons,
+  ExtCtrls, ImgList, ActnList;
+
+type
+  TfrmWReport_new = class(TForm)
+    ActionList1: TActionList;
+    ActinPrint: TAction;
+    ActnClose: TAction;
+    ImageList1: TImageList;
+    Panel1: TPanel;
+    Label1: TLabel;
+    SpeedButton1: TSpeedButton;
+    SpeedButton2: TSpeedButton;
+    DBLookupComboboxEh1: TDBLookupComboboxEh;
+    WordApplication: TWordApplication;
+    WordDocument: TWordDocument;
+    procedure FormCanResize(Sender: TObject; var NewWidth, NewHeight: Integer;
+      var Resize: Boolean);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure ActinPrintExecute(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure ActnCloseExecute(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    TemplID :Integer;
+  end;
+
+var
+  frmWReport_new: TfrmWReport_new;
+
+  procedure exportproc(S:String);export;
+
+implementation
+
+{$R *.DFM}
+uses DMWReportImpl_new,CommonDeclsImpl_new,SBTranslateProc,sboapiDataModuleimpl;
+
+procedure exportproc(S:String);export;
+begin
+ with TfrmWReport_new.Create(CommonApplication) do
+  try
+    ShowModal
+  finally
+    Release
+  end;
+end;
+exports
+   exportproc;
+procedure TfrmWReport_new.ActinPrintExecute(Sender: TObject);
+
+ resourcestring  FilenotFound = 'Fayl tapılmadı';
+  var
+         Template,Templatebool,
+         FTemplatePath,Itemindex,
+         OBookmarkCount, What, oBookMarkName: Olevariant;
+         IbookmarkCount: Integer;
+         tFieldName:String;
+         SaveChanges,
+         OriginalFormat,
+         RouteDocument: OleVariant;
+
+  begin
+     What := OleVariant(wdGoToBookmark);
+     FTemplatePath := DMWReport_new.TemplatesDataSet.FieldByName('Path').AsString;
+     TemplID :=DMWReport_new.TemplatesDataSet.FieldByName('ID').AsInteger;
+
+     Template := EmptyParam;
+     TemplateBooL:=False;
+     Itemindex:=1;
+
+     Wordapplication.Connect;
+
+
+     WordApplication.Documents.Application.Caption := DBLookupComboboxEh1.Text;
+
+     WordApplication.Options.CheckSpellingAsYouType := False;
+     WordApplication.Options.CheckGrammarAsYouType := False;
+
+     if FileExists(FTemplatePath) then
+     begin
+
+    WordApplication.Documents.Open(FTemplatePath,Template,TemplateBooL,Template,
+     Template,Template,Template,Template,Template,Template,Template,Template,Template,Template,Template);
+
+     end else
+     begin
+
+        SaveChanges := WdDoNotSaveChanges;
+        OriginalFormat := UnAssigned;
+        RouteDocument := UnAssigned;
+        WordApplication.Quit(SaveChanges, OriginalFormat, RouteDocument);
+        WordApplication.Disconnect;
+        ShowMessage(FilenotFound);
+
+     end;
+
+     WordDocument.ConnectTo(WordApplication.Documents.Item(Itemindex));
+     WordDocument.Application.Get_ActiveWindow.Caption:=frmWReport_new.Caption;
+
+     try
+
+       with DMWReport_new, ReplaceDataSet, WordDocument do
+       For IbookmarkCount := 1 to Bookmarks.Count do
+       begin
+
+         OBookmarkCount := IbookmarkCount ;
+         oBookMarkName := Bookmarks.Item(OBookmarkCount).Get_Name;
+         WordApplication.Selection.GoTo_(What, EmptyParam, EmptyParam, oBookMarkName);
+         ReplaceDataSet.Close;
+         SetVariable('tid', TemplID);
+         SetVariable('bname', oBookMarkName);
+         ReplaceDataSet.Open;
+         tFieldName := FIeldByName('FIELDNAME').AsString;
+         WordApplication.Selection.InsertAfter(DepositInfoDataSet.FieldByName(tFieldName).AsString);
+
+       end;
+
+     Wordapplication.Visible := True;
+     WordDocument.Disconnect;
+     Wordapplication.Disconnect;
+
+     except
+       SaveChanges := WdDoNotSaveChanges;
+        OriginalFormat := UnAssigned;
+        RouteDocument := UnAssigned;
+        WordApplication.Quit(SaveChanges, OriginalFormat, RouteDocument);
+        WordApplication.Disconnect;
+      ShowMessage('Bukmarklar daxil edilməyib ');
+     end;
+
+end;
+
+procedure TfrmWReport_new.ActnCloseExecute(Sender: TObject);
+begin
+   Close;
+end;
+
+procedure TfrmWReport_new.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+   Resize := False;
+end;
+
+procedure TfrmWReport_new.FormCreate(Sender: TObject);
+begin
+   DMWReport_new := TDMWReport_new.Create(Self);
+   SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TfrmWReport_new.FormDestroy(Sender: TObject);
+begin
+  DMWReport_new.Free;
+end;
+
+procedure TfrmWReport_new.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+   if Ord(Key) = VK_ESCAPE then close
+end;
+
+procedure TfrmWReport_new.FormShow(Sender: TObject);
+begin
+   with DMWReport_new,DepositInfoDataSet do
+   begin
+      CloseAll;
+      //BookmarksDataSet
+      SetVariable('ContractID',Get_SelectedContID);
+      //SetVariable('templid',TemplID);
+      Open;
+   end;
+end;
+   initialization
+   frmWReport_new := TfrmWReport_new.Create(CommonApplication);
+end.

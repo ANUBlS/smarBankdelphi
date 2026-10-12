@@ -1,0 +1,42 @@
+unit UnitSearchLegalCustName;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls, Grids, DBGrids;
+
+type
+  TFormSearchLegalCustName = class(TForm)
+    DBGrid1: TDBGrid;
+    Panel1: TPanel;
+    EditName: TEdit;
+    Edit4: TEdit;
+    Button1: TButton;
+    EditLastName: TEdit;
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormSearchLegalCustName: TFormSearchLegalCustName;
+
+implementation
+uses ExpDataModuleUnit;
+
+{$R *.dfm}
+
+procedure TFormSearchLegalCustName.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+  with ExpDataModule do
+  begin
+    SendDataSet.Filter:='';
+    SendDataSet.Filtered:=false;
+  end;
+end;
+
+end.

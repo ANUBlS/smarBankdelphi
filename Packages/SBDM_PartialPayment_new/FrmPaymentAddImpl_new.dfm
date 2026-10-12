@@ -1,0 +1,424 @@
+object FrmPaymentAdd_new: TFrmPaymentAdd_new
+  Left = 0
+  Top = 0
+  ClientHeight = 254
+  ClientWidth = 442
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poScreenCenter
+  OnCreate = FormCreate
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object XFPanel1: TXFPanel
+    Left = 0
+    Top = 0
+    Width = 442
+    Height = 254
+    Align = alClient
+    TabOrder = 0
+    object XFGroupBox3: TXFGroupBox
+      Left = 1
+      Top = 1
+      Width = 440
+      Height = 39
+      Align = alTop
+      Caption = #1071#1084#1103#1083#1080#1081#1081#1072#1090' '#1058#1072#1088#1080#1093#1080
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      Gradient.EndColor = clBtnFace
+      Gradient.StartColor = clBtnFace
+      Gradient.SwapColors = True
+      ParentFont = False
+      TabOrder = 0
+      object DBEdit3: TDBEdit
+        Left = 5
+        Top = 14
+        Width = 170
+        Height = 22
+        Color = clInfoBk
+        DataField = 'TEK_DAT'
+        DataSource = DataModPartialPayment_new.SysdatDatSrc
+        TabOrder = 0
+      end
+    end
+    object XFPanel2: TXFPanel
+      Left = 1
+      Top = 40
+      Width = 440
+      Height = 49
+      Align = alTop
+      BorderStyle = bsSingle
+      Gradient.StartColor = clBtnFace
+      Gradient.SwapColors = True
+      TabOrder = 1
+      object StaticText1: TStaticText
+        Left = 1
+        Top = 1
+        Width = 434
+        Height = 18
+        Align = alTop
+        Caption = 
+          '                                                        '#1052#1094#1096#1090#1103#1088#1080#1085 +
+          #1080#1085' '#1065#1077#1089#1072#1073#1099' '
+        Color = clActiveCaption
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clWhite
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ParentColor = False
+        ParentFont = False
+        TabOrder = 0
+      end
+      object DBEdit1: TDBEdit
+        Left = 2
+        Top = 19
+        Width = 210
+        Height = 21
+        Color = clInfoBk
+        DataField = 'ACC_NO'
+        DataSource = DataModPartialPayment_new.CreditAccsDatSrc
+        TabOrder = 1
+      end
+      object DBEdit2: TDBEdit
+        Left = 213
+        Top = 19
+        Width = 210
+        Height = 22
+        Color = clInfoBk
+        DataField = 'NAME'
+        DataSource = DataModPartialPayment_new.DepositInfoSrc
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 2
+      end
+    end
+    object GroupBox1: TGroupBox
+      Left = 1
+      Top = 89
+      Width = 440
+      Height = 56
+      Align = alTop
+      Caption = #1071#1089#1072#1089' '#1084#1103#1073#1083#1103#1100
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 2
+      object Panel3: TPanel
+        Left = 2
+        Top = 16
+        Width = 170
+        Height = 38
+        Align = alLeft
+        BevelInner = bvRaised
+        BevelOuter = bvLowered
+        TabOrder = 0
+        object StaticText5: TStaticText
+          Left = 2
+          Top = 2
+          Width = 166
+          Height = 18
+          Align = alTop
+          Alignment = taCenter
+          Caption = #1065#1077#1089#1072#1073#1099#1085' '#8470
+          Color = clActiveCaption
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWhite
+          Font.Height = -11
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = []
+          ParentColor = False
+          ParentFont = False
+          TabOrder = 0
+        end
+        object DBEditEh1: TDBEditEh
+          Left = 0
+          Top = 17
+          Width = 172
+          Height = 22
+          TabStop = False
+          Alignment = taLeftJustify
+          Color = clInfoBk
+          DataField = 'ACC_NO'
+          DataSource = DataModPartialPayment_new.DebitAccsDatSrc
+          EditButtons = <>
+          TabOrder = 1
+          Visible = True
+        end
+      end
+      object Panel7: TPanel
+        Left = 172
+        Top = 16
+        Width = 115
+        Height = 38
+        Align = alLeft
+        BevelInner = bvRaised
+        BevelOuter = bvLowered
+        TabOrder = 1
+        object StaticText6: TStaticText
+          Left = 2
+          Top = 2
+          Width = 111
+          Height = 18
+          Align = alTop
+          Alignment = taCenter
+          Caption = #1043#1072#1083#1099#1075
+          Color = clActiveCaption
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWhite
+          Font.Height = -11
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = []
+          ParentColor = False
+          ParentFont = False
+          TabOrder = 0
+        end
+        object DBEditEh2: TDBEditEh
+          Left = 0
+          Top = 17
+          Width = 113
+          Height = 22
+          TabStop = False
+          Alignment = taRightJustify
+          Color = clSilver
+          DataField = 'TOTAL'
+          DataSource = DataModPartialPayment_new.PaymentsDatSrc
+          EditButtons = <>
+          ReadOnly = True
+          TabOrder = 1
+          Visible = True
+        end
+      end
+      object Panel8: TPanel
+        Left = 287
+        Top = 16
+        Width = 134
+        Height = 38
+        Align = alLeft
+        BevelInner = bvRaised
+        BevelOuter = bvLowered
+        TabOrder = 2
+        object StaticText7: TStaticText
+          Left = 2
+          Top = 2
+          Width = 130
+          Height = 18
+          Align = alTop
+          Alignment = taCenter
+          Caption = #1070#1076#1103#1085#1080#1083#1103#1078#1103#1082' '#1084#1103#1073#1083#1103#1100
+          Color = clActiveCaption
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWhite
+          Font.Height = -11
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = []
+          ParentColor = False
+          ParentFont = False
+          TabOrder = 0
+        end
+        object EdMainDebit: TCMCurrencyEdit
+          Tag = 1
+          Left = 1
+          Top = 17
+          Width = 132
+          Height = 22
+          TabOrder = 1
+          Text = '0'
+        end
+      end
+    end
+    object GroupBox5: TGroupBox
+      Left = 1
+      Top = 145
+      Width = 440
+      Height = 56
+      Align = alTop
+      Caption = #1060#1072#1080#1079' '#1084#1103#1073#1083#1103#1100#1080
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 3
+      object Panel4: TPanel
+        Left = 2
+        Top = 16
+        Width = 170
+        Height = 38
+        Align = alLeft
+        BevelInner = bvRaised
+        BevelOuter = bvLowered
+        TabOrder = 0
+        object StaticText2: TStaticText
+          Left = 2
+          Top = 2
+          Width = 166
+          Height = 18
+          Align = alTop
+          Alignment = taCenter
+          Caption = #1065#1077#1089#1072#1073#1099#1085' '#8470
+          Color = clActiveCaption
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWhite
+          Font.Height = -11
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = []
+          ParentColor = False
+          ParentFont = False
+          TabOrder = 0
+        end
+        object DBEditEh3: TDBEditEh
+          Left = 0
+          Top = 17
+          Width = 168
+          Height = 22
+          TabStop = False
+          Alignment = taLeftJustify
+          Color = clInfoBk
+          DataField = 'ACC_NO'
+          DataSource = DataModPartialPayment_new.PercentAccsDatSrc
+          EditButtons = <>
+          TabOrder = 1
+          Visible = True
+        end
+      end
+      object Panel5: TPanel
+        Left = 172
+        Top = 16
+        Width = 114
+        Height = 38
+        Align = alLeft
+        BevelInner = bvRaised
+        BevelOuter = bvLowered
+        TabOrder = 1
+        object StaticText3: TStaticText
+          Left = 2
+          Top = 2
+          Width = 110
+          Height = 18
+          Align = alTop
+          Alignment = taCenter
+          Caption = #1043#1072#1083#1099#1075
+          Color = clActiveCaption
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWhite
+          Font.Height = -11
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = []
+          ParentColor = False
+          ParentFont = False
+          TabOrder = 0
+        end
+        object CurrencyEdit1: TCurrencyEdit
+          Left = 1
+          Top = 17
+          Width = 121
+          Height = 22
+          Color = clSilver
+          ReadOnly = True
+          TabOrder = 1
+          Text = '0'
+        end
+      end
+      object Panel6: TPanel
+        Left = 286
+        Top = 16
+        Width = 134
+        Height = 38
+        Align = alLeft
+        BevelInner = bvRaised
+        BevelOuter = bvLowered
+        TabOrder = 2
+        object StaticText4: TStaticText
+          Left = 2
+          Top = 2
+          Width = 130
+          Height = 18
+          Align = alTop
+          Alignment = taCenter
+          Caption = #1070#1076#1103#1085#1080#1083#1103#1078#1103#1082' '#1084#1103#1073#1083#1103#1100
+          Color = clActiveCaption
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWhite
+          Font.Height = -11
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = []
+          ParentColor = False
+          ParentFont = False
+          TabOrder = 0
+        end
+        object EdIntDebit: TCMCurrencyEdit
+          Tag = 1
+          Left = 1
+          Top = 17
+          Width = 132
+          Height = 22
+          Color = clSilver
+          ReadOnly = True
+          TabOrder = 1
+          Text = '0'
+        end
+      end
+    end
+    object XFButton1: TXFButton
+      Left = 248
+      Top = 214
+      Width = 75
+      Height = 25
+      Action = ActionTr
+      Caption = #1043#1103#1073#1091#1083
+      DoubleBuffered = True
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentDoubleBuffered = False
+      ParentFont = False
+      TabOrder = 4
+    end
+    object XFButton2: TXFButton
+      Left = 336
+      Top = 214
+      Width = 75
+      Height = 25
+      Caption = #1048#1084#1090#1080#1085#1072
+      DoubleBuffered = True
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentDoubleBuffered = False
+      ParentFont = False
+      TabOrder = 5
+      OnClick = XFButton2Click
+    end
+  end
+  object ActionList1: TActionList
+    Left = 48
+    Top = 208
+    object ActionTr: TAction
+      Caption = 'ActionTr'
+      OnUpdate = ActionTrUpdate
+    end
+  end
+end

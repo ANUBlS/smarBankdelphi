@@ -1,0 +1,2225 @@
+object TransactionsMainForm: TTransactionsMainForm
+  Left = 50
+  Top = 88
+  Width = 968
+  Height = 587
+  Caption = 'Transaction manager'
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  OldCreateOrder = False
+  OnActivate = ActiveFormActivate
+  OnCreate = ActiveFormCreate
+  OnDestroy = ActiveFormDestroy
+  PixelsPerInch = 96
+  TextHeight = 13
+  object FilterGB: TGroupBox
+    Left = 0
+    Top = 44
+    Width = 189
+    Height = 516
+    Align = alLeft
+    TabOrder = 0
+    Visible = False
+    object Panel2: TPanel
+      Left = 2
+      Top = 15
+      Width = 185
+      Height = 26
+      Align = alTop
+      Alignment = taLeftJustify
+      BevelOuter = bvNone
+      Caption = '   Ахтарыш вя сыралама'
+      TabOrder = 0
+      object SpeedButton5: TSpeedButton
+        Left = 158
+        Top = 1
+        Width = 23
+        Height = 22
+        Caption = 'X'
+        Flat = True
+        OnClick = SpeedButton5Click
+      end
+      object Bevel1: TBevel
+        Left = -1
+        Top = 22
+        Width = 182
+        Height = 2
+      end
+      object Bevel2: TBevel
+        Left = -1
+        Top = 0
+        Width = 182
+        Height = 2
+      end
+    end
+    object ToolBar2: TToolBar
+      Left = 2
+      Top = 492
+      Width = 185
+      Height = 22
+      Align = alBottom
+      ButtonHeight = 21
+      ButtonWidth = 57
+      Caption = 'ToolBar3'
+      Flat = True
+      ShowCaptions = True
+      TabOrder = 1
+      object ToolButton8: TToolButton
+        Left = 0
+        Top = 0
+        Action = ResetFilter
+        Style = tbsCheck
+      end
+      object ToolButton7: TToolButton
+        Left = 57
+        Top = 0
+        Action = UseFilter
+      end
+    end
+    object PageControl1: TPageControl
+      Left = 2
+      Top = 41
+      Width = 185
+      Height = 451
+      ActivePage = TabSheet7
+      Align = alClient
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 2
+      object TabSheet1: TTabSheet
+        Caption = 'Сечимляр'
+        object GroupBox6: TGroupBox
+          Left = 0
+          Top = 130
+          Width = 177
+          Height = 121
+          Align = alTop
+          Caption = 'Хцсусиййятляри'
+          TabOrder = 0
+          object Bevel3: TBevel
+            Left = 70
+            Top = 36
+            Width = 3
+            Height = 77
+          end
+          object CheckBox3: TCheckBox
+            Left = 78
+            Top = 34
+            Width = 97
+            Height = 17
+            Action = FilterNationalCurrency
+            Caption = 'Милли валйутада'
+            State = cbChecked
+            TabOrder = 0
+          end
+          object CheckBox4: TCheckBox
+            Left = 78
+            Top = 50
+            Width = 97
+            Height = 17
+            Action = FilterForeignCurrency
+            Caption = 'Харижи валйутада'
+            State = cbChecked
+            TabOrder = 1
+          end
+          object CheckBox5: TCheckBox
+            Left = 78
+            Top = 66
+            Width = 97
+            Height = 17
+            Action = FilterMultyCurrency
+            Caption = 'Мулти валйутада'
+            State = cbChecked
+            TabOrder = 2
+          end
+          object CheckBox6: TCheckBox
+            Left = 78
+            Top = 82
+            Width = 97
+            Height = 17
+            Action = FilterRateDifference
+            Caption = 'Мязяння фярги'
+            State = cbChecked
+            TabOrder = 3
+          end
+          object RadioButton2: TRadioButton
+            Left = 8
+            Top = 32
+            Width = 57
+            Height = 17
+            Action = FilterTransactionsSelected
+            TabOrder = 4
+          end
+          object CheckBox7: TCheckBox
+            Left = 78
+            Top = 98
+            Width = 89
+            Height = 17
+            Action = FilterProfitDebit
+            State = cbChecked
+            TabOrder = 5
+          end
+          object RadioButton1: TRadioButton
+            Left = 8
+            Top = 16
+            Width = 113
+            Height = 17
+            Action = FilterTransactionsAll
+            TabOrder = 6
+            TabStop = True
+          end
+        end
+        object GroupBox11: TGroupBox
+          Left = 0
+          Top = 251
+          Width = 177
+          Height = 72
+          Align = alTop
+          Caption = 'Тястиг олунмасына ьюря'
+          TabOrder = 1
+          object CheckBox9: TCheckBox
+            Left = 22
+            Top = 16
+            Width = 95
+            Height = 17
+            Action = FilterDelayed
+            State = cbChecked
+            TabOrder = 0
+          end
+          object CheckBox10: TCheckBox
+            Left = 22
+            Top = 32
+            Width = 97
+            Height = 17
+            Action = FilterCommited
+            State = cbChecked
+            TabOrder = 1
+          end
+          object CheckBox11: TCheckBox
+            Left = 22
+            Top = 48
+            Width = 97
+            Height = 17
+            Action = FilterRejected
+            State = cbChecked
+            TabOrder = 2
+          end
+        end
+        object HintBox: THintBox
+          Left = 0
+          Top = 328
+          Width = 150
+          Height = 17
+          AutoSize = True
+          BevelOuter = bvNone
+          Caption = 'HintBox'
+          TabOrder = 2
+          Visible = False
+          HintStyle = hsWarning
+          Timeout = 4000
+          BeepOnMessage = True
+        end
+        object GroupBox13: TGroupBox
+          Left = 0
+          Top = 40
+          Width = 177
+          Height = 45
+          Align = alTop
+          Caption = 'Кредит филиаллар цзря сечилмя'
+          TabOrder = 3
+          object scbCFilial: TSearchCombo
+            Left = 4
+            Top = 16
+            Width = 170
+            Height = 22
+            ItemHeight = 16
+            TabOrder = 0
+            OnChange = scbOperatorChange
+            DataSource = TransactionsDataModule.FilialsC
+            ViewField = 'NAME'
+            DefaultString = 'Бцтцн филиаллар'
+            DefaultStringUse = True
+            DefaultStringColor = clRed
+          end
+        end
+        object GroupBox12: TGroupBox
+          Left = 0
+          Top = 85
+          Width = 177
+          Height = 45
+          Align = alTop
+          Caption = 'Дебит филиаллар цзря сечилмя'
+          TabOrder = 4
+          object scbDFilial: TSearchCombo
+            Left = 4
+            Top = 16
+            Width = 170
+            Height = 22
+            ItemHeight = 16
+            TabOrder = 0
+            OnChange = scbOperatorChange
+            DataSource = TransactionsDataModule.Filials
+            ViewField = 'NAME'
+            DefaultString = 'Бцтцн филиаллар'
+            DefaultStringUse = True
+            DefaultStringColor = clRed
+          end
+        end
+        object GroupBox5: TGroupBox
+          Left = 0
+          Top = 0
+          Width = 177
+          Height = 40
+          Align = alTop
+          Caption = 'Ямалиййаты дахил едян ямалиййатчы:'
+          TabOrder = 5
+          object scbOperator: TSearchCombo
+            Left = 4
+            Top = 16
+            Width = 170
+            Height = 22
+            DragMode = dmAutomatic
+            ItemHeight = 16
+            TabOrder = 0
+            OnChange = scbOperatorChange
+            DataSource = TransactionsDataModule.Us
+            ViewField = 'NAME'
+            DefaultString = '-йох-'
+            DefaultStringUse = True
+            DefaultStringColor = clRed
+          end
+        end
+      end
+      object TabSheet9: TTabSheet
+        Caption = 'Сыралашма'
+        ImageIndex = 4
+        object Label11: TLabel
+          Left = 8
+          Top = 8
+          Width = 31
+          Height = 13
+          Caption = 'Сцтун:'
+        end
+        object OrderFieldCB: TComboBox
+          Left = 16
+          Top = 32
+          Width = 145
+          Height = 21
+          Style = csDropDownList
+          ItemHeight = 13
+          TabOrder = 0
+          OnChange = OrderFieldCBChange
+          Items.Strings = (
+            'Нэмрясиня эюря'
+            'Дебет щесабы'
+            'Кредит щесабы'
+            'Дебет валйутасы'
+            'Кредит валйутасы'
+            'Дебет мябляги'
+            'Кредит мябляги'
+            'Еквивалент')
+        end
+      end
+      object TabSheet2: TTabSheet
+        Caption = 'Щесаблар'
+        Enabled = False
+        ImageIndex = 1
+        object GroupBox1: TGroupBox
+          Left = 0
+          Top = 0
+          Width = 177
+          Height = 141
+          Align = alTop
+          Caption = 'Дебет щесабына эюря филтер'
+          TabOrder = 0
+          object Label1: TLabel
+            Left = 6
+            Top = 121
+            Width = 38
+            Height = 13
+            Caption = 'Валйута:'
+          end
+          object GroupBox2: TGroupBox
+            Left = 2
+            Top = 36
+            Width = 173
+            Height = 82
+            Align = alTop
+            Caption = 'Щесаб(лар)ын параметрляри'
+            TabOrder = 0
+            object PageControl2: TPageControl
+              Left = 2
+              Top = 15
+              Width = 169
+              Height = 65
+              ActivePage = TabSheet3
+              Align = alClient
+              MultiLine = True
+              TabOrder = 0
+              object TabSheet3: TTabSheet
+                Caption = 'Баланс щесабы'
+                object DBText1: TDBText
+                  Left = -1
+                  Top = 22
+                  Width = 164
+                  Height = 12
+                  DataField = 'NAME'
+                  DataSource = DebitBalanceSource
+                  WordWrap = True
+                end
+                object Label2: TLabel
+                  Left = 0
+                  Top = 3
+                  Width = 69
+                  Height = 13
+                  Caption = 'Баланс щесабы:'
+                end
+                object DebitBalanceCB: TDBViewComboBox
+                  Left = 77
+                  Top = 0
+                  Width = 86
+                  Height = 21
+                  ItemHeight = 0
+                  TabOrder = 0
+                  Text = 'DebitBalanceCB - DebitBalanceSource { No }'
+                  OnEnter = DebitBalanceCBEnter
+                  ListSource = DebitBalanceSource
+                  ListFields = 'No'
+                  FieldInterval = 5
+                  DropDownOnEnter = False
+                end
+              end
+              object TabSheet4: TTabSheet
+                Caption = 'Шяхси щесабы'
+                ImageIndex = 1
+                object DBText2: TDBText
+                  Left = 1
+                  Top = 22
+                  Width = 152
+                  Height = 17
+                  DataField = 'NAME'
+                  DataSource = DebitAccountsSource
+                end
+                object DebitAccountCB: TDBViewComboBox
+                  Left = 1
+                  Top = 0
+                  Width = 161
+                  Height = 21
+                  ItemHeight = 0
+                  TabOrder = 0
+                  Text = 'DebitAccountCB - DebitAccountsSource { AccountNo }'
+                  OnEnter = DebitAccountCBEnter
+                  ListSource = DebitAccountsSource
+                  ListFields = 'AccountNo'
+                  FieldInterval = 5
+                  DropDownOnEnter = False
+                end
+              end
+            end
+          end
+          object Panel3: TPanel
+            Left = 2
+            Top = 15
+            Width = 173
+            Height = 21
+            Align = alTop
+            BevelOuter = bvLowered
+            TabOrder = 1
+            object CheckBox2: TCheckBox
+              Left = 8
+              Top = 2
+              Width = 129
+              Height = 17
+              Action = FilterDebitUse
+              Caption = 'Филтери истифадя етмяк'
+              TabOrder = 0
+            end
+          end
+          object DebitCurrencyCB: TDBViewComboBox
+            Left = 53
+            Top = 118
+            Width = 126
+            Height = 21
+            Style = csDropDownList
+            ItemHeight = 0
+            TabOrder = 2
+            Text = 'DebitCurrencyCB - DebitCurrency { Name }'
+            OnEnter = DebitCurrencyCBEnter
+            ListSource = DebitCurrency
+            ListFields = 'Name'
+            FieldInterval = 5
+            DropDownOnEnter = False
+          end
+        end
+        object GroupBox3: TGroupBox
+          Left = 0
+          Top = 141
+          Width = 177
+          Height = 141
+          Align = alTop
+          Caption = 'Кредит щесабына эюря филтер'
+          TabOrder = 1
+          object Label4: TLabel
+            Left = 6
+            Top = 121
+            Width = 38
+            Height = 13
+            Caption = 'Валйута:'
+          end
+          object GroupBox4: TGroupBox
+            Left = 2
+            Top = 36
+            Width = 173
+            Height = 82
+            Align = alTop
+            Caption = 'Щесаб(лар)ын параметрляри'
+            TabOrder = 0
+            object PageControl3: TPageControl
+              Left = 2
+              Top = 15
+              Width = 169
+              Height = 65
+              ActivePage = TabSheet5
+              Align = alClient
+              TabOrder = 0
+              object TabSheet5: TTabSheet
+                Caption = 'Баланс щесабы'
+                object DBText3: TDBText
+                  Left = 0
+                  Top = 22
+                  Width = 160
+                  Height = 12
+                  DataField = 'NAME'
+                  DataSource = CreditBalanceSource
+                  WordWrap = True
+                end
+                object Label5: TLabel
+                  Left = 0
+                  Top = 3
+                  Width = 69
+                  Height = 13
+                  Caption = 'Баланс щесабы:'
+                end
+                object CreditBalanceCB: TDBViewComboBox
+                  Left = 77
+                  Top = 0
+                  Width = 84
+                  Height = 21
+                  ItemHeight = 0
+                  TabOrder = 0
+                  Text = 'CreditBalanceCB - CreditBalanceSource { No }'
+                  OnEnter = CreditBalanceCBEnter
+                  ListSource = CreditBalanceSource
+                  ListFields = 'No'
+                  FieldInterval = 5
+                  DropDownOnEnter = False
+                end
+              end
+              object TabSheet6: TTabSheet
+                Caption = 'Шяхси щесабы'
+                ImageIndex = 1
+                object DBText4: TDBText
+                  Left = 1
+                  Top = 22
+                  Width = 65
+                  Height = 17
+                end
+                object CreditAccountCB: TDBViewComboBox
+                  Left = 1
+                  Top = 0
+                  Width = 161
+                  Height = 21
+                  ItemHeight = 0
+                  TabOrder = 0
+                  Text = 'CreditAccountCB - CreditAccountsSource { AccountNo }'
+                  OnEnter = CreditAccountCBEnter
+                  ListSource = CreditAccountsSource
+                  ListFields = 'AccountNo'
+                  FieldInterval = 5
+                  DropDownOnEnter = False
+                end
+              end
+            end
+          end
+          object Panel1: TPanel
+            Left = 2
+            Top = 15
+            Width = 173
+            Height = 21
+            Align = alTop
+            BevelOuter = bvLowered
+            TabOrder = 1
+            object CheckBox1: TCheckBox
+              Left = 8
+              Top = 2
+              Width = 129
+              Height = 17
+              Action = FilterCreditUse
+              Caption = 'Филтери истифадя етмяк'
+              TabOrder = 0
+            end
+          end
+          object CreditCurrencyCB: TDBViewComboBox
+            Left = 53
+            Top = 118
+            Width = 125
+            Height = 21
+            Style = csDropDownList
+            ItemHeight = 0
+            TabOrder = 2
+            Text = 'CreditCurrencyCB - CreditCurrency { Name }'
+            OnEnter = CreditCurrencyCBEnter
+            ListSource = CreditCurrency
+            ListFields = 'Name'
+            FieldInterval = 5
+            DropDownOnEnter = False
+          end
+        end
+      end
+      object TabSheet7: TTabSheet
+        Caption = 'Мябляг'
+        Enabled = False
+        ImageIndex = 2
+        object GroupBox8: TGroupBox
+          Left = 0
+          Top = 0
+          Width = 177
+          Height = 423
+          Align = alClient
+          Caption = 'Мябляья гюря филтр'
+          TabOrder = 0
+          object GroupBox7: TGroupBox
+            Left = 2
+            Top = 35
+            Width = 173
+            Height = 69
+            Align = alTop
+            TabOrder = 0
+            object RadioButton3: TRadioButton
+              Left = 16
+              Top = 16
+              Width = 113
+              Height = 17
+              Action = FilterDebitAmount
+              TabOrder = 0
+            end
+            object RadioButton4: TRadioButton
+              Left = 16
+              Top = 32
+              Width = 113
+              Height = 17
+              Action = FilterCreditAmount
+              TabOrder = 1
+            end
+            object RadioButton5: TRadioButton
+              Left = 16
+              Top = 48
+              Width = 113
+              Height = 17
+              Action = FilterLAmount
+              TabOrder = 2
+              TabStop = True
+            end
+          end
+          object Panel6: TPanel
+            Left = 2
+            Top = 125
+            Width = 173
+            Height = 21
+            Align = alTop
+            BevelOuter = bvNone
+            TabOrder = 1
+            object Label6: TLabel
+              Left = 5
+              Top = 3
+              Width = 47
+              Height = 13
+              Caption = 'Мябляг 1:'
+            end
+            object AmountEdit: TCurrencyEdit
+              Left = 56
+              Top = 0
+              Width = 121
+              Height = 21
+              TabOrder = 0
+              Text = '0'
+            end
+          end
+          object Panel7: TPanel
+            Left = 2
+            Top = 104
+            Width = 173
+            Height = 21
+            Align = alTop
+            BevelOuter = bvNone
+            TabOrder = 2
+            object LessButton: TSpeedButton
+              Left = 40
+              Top = 0
+              Width = 23
+              Height = 22
+              GroupIndex = 1
+              Caption = '<='
+              OnClick = LessButtonClick
+            end
+            object EqualButton: TSpeedButton
+              Left = 64
+              Top = 0
+              Width = 23
+              Height = 22
+              GroupIndex = 1
+              Down = True
+              Caption = '='
+              OnClick = LessButtonClick
+            end
+            object MoreButton: TSpeedButton
+              Left = 112
+              Top = 0
+              Width = 23
+              Height = 22
+              GroupIndex = 1
+              Caption = '>='
+              OnClick = LessButtonClick
+            end
+            object NotEqualButton: TSpeedButton
+              Left = 88
+              Top = 0
+              Width = 23
+              Height = 22
+              GroupIndex = 1
+              Caption = '<>'
+              OnClick = LessButtonClick
+            end
+          end
+          object Panel8: TPanel
+            Left = 2
+            Top = 15
+            Width = 173
+            Height = 20
+            Align = alTop
+            BevelOuter = bvLowered
+            TabOrder = 3
+            object CheckBox8: TCheckBox
+              Left = 4
+              Top = 2
+              Width = 97
+              Height = 17
+              Action = FilterAmountUse
+              TabOrder = 0
+            end
+          end
+          object Panel9: TPanel
+            Left = 2
+            Top = 146
+            Width = 173
+            Height = 41
+            Align = alTop
+            BevelOuter = bvNone
+            TabOrder = 4
+            object Button1: TButton
+              Left = 48
+              Top = 0
+              Width = 75
+              Height = 25
+              Action = FilterAmountApply
+              Default = True
+              TabOrder = 0
+            end
+          end
+        end
+      end
+      object TabSheet8: TTabSheet
+        Caption = 'Сыралашма'
+        ImageIndex = 3
+        TabVisible = False
+        object GroupBox9: TGroupBox
+          Left = 0
+          Top = 0
+          Width = 177
+          Height = 139
+          Align = alTop
+          Caption = 'Бцтцн'
+          TabOrder = 0
+          object ListBox1: TListBox
+            Left = 2
+            Top = 15
+            Width = 173
+            Height = 122
+            Align = alClient
+            ItemHeight = 13
+            Items.Strings = (
+              '№ - си'
+              'Дебет'
+              'Дебет валцтасы'
+              'Кредит'
+              'Кредит валцтасы'
+              'Дебет мябляг'
+              'Еквивалент')
+            TabOrder = 0
+          end
+        end
+        object Panel5: TPanel
+          Left = 0
+          Top = 139
+          Width = 177
+          Height = 27
+          Align = alTop
+          BevelOuter = bvNone
+          TabOrder = 1
+          object SpeedButton1: TSpeedButton
+            Left = 57
+            Top = 4
+            Width = 23
+            Height = 23
+            Action = OrderAddField
+            Glyph.Data = {
+              F6000000424DF600000000000000760000002800000010000000100000000100
+              0400000000008000000000000000000000001000000000000000000000000000
+              8000008000000080800080000000800080008080000080808000C0C0C0000000
+              FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00888888800888
+              88888888880B30888888888880B3B308888888880B3B3B3088888880B3B3B3B3
+              0888880B3B300B3B308880B3B30000B3B3080B3B3B300B3B3B3003B3B3B003B3
+              B3B0803B3B300B3B3B088803B3B003B3B08888803B300B3B0888888803B3B3B0
+              88888888803B3B08888888888803B08888888888888008888888}
+          end
+          object SpeedButton2: TSpeedButton
+            Left = 81
+            Top = 4
+            Width = 23
+            Height = 23
+            Action = OrderRemoveField
+            Glyph.Data = {
+              F6000000424DF600000000000000760000002800000010000000100000000100
+              0400000000008000000000000000000000001000000000000000000000000000
+              8000008000000080800080000000800080008080000080808000C0C0C0000000
+              FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00888888800888
+              88888888880BB0888888888880BB3B08888888880BB3B3B088888880BB300B3B
+              0888880BB3B003B3B08880BB3B300B3B3B080BB3B3B003B3B3B00B3B3B300B3B
+              3B3080B3B30000B3B308880B3B300B3B30888880B3B3B3B3088888880B3B3B30
+              8888888880B3B30888888888880B308888888888888008888888}
+          end
+        end
+        object GroupBox10: TGroupBox
+          Left = 0
+          Top = 166
+          Width = 177
+          Height = 257
+          Align = alClient
+          Caption = 'Сечилмиш'
+          TabOrder = 2
+          object Panel10: TPanel
+            Left = 148
+            Top = 15
+            Width = 27
+            Height = 240
+            Align = alRight
+            BevelInner = bvLowered
+            TabOrder = 0
+            object SpeedButton3: TSpeedButton
+              Left = 2
+              Top = 2
+              Width = 23
+              Height = 22
+              Flat = True
+              Glyph.Data = {
+                F6000000424DF600000000000000760000002800000010000000100000000100
+                0400000000008000000000000000000000001000000000000000000000000000
+                8000008000000080800080000000800080008080000080808000C0C0C0000000
+                FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00888888800888
+                88888888880BB0888888888880BB3B08888888880BB3B3B088888880BB300B3B
+                0888880BB3B003B3B08880BB3B300B3B3B080BB3B3B003B3B3B00B3B3B300B3B
+                3B3080B3B30000B3B308880B3B300B3B30888880B3B3B3B3088888880B3B3B30
+                8888888880B3B30888888888880B308888888888888008888888}
+            end
+            object SpeedButton4: TSpeedButton
+              Left = 2
+              Top = 25
+              Width = 23
+              Height = 22
+              Flat = True
+              Glyph.Data = {
+                F6000000424DF600000000000000760000002800000010000000100000000100
+                0400000000008000000000000000000000001000000000000000000000000000
+                8000008000000080800080000000800080008080000080808000C0C0C0000000
+                FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00888888800888
+                88888888880B30888888888880B3B308888888880B3B3B3088888880B3B3B3B3
+                0888880B3B300B3B308880B3B30000B3B3080B3B3B300B3B3B3003B3B3B003B3
+                B3B0803B3B300B3B3B088803B3B003B3B08888803B300B3B0888888803B3B3B0
+                88888888803B3B08888888888803B08888888888888008888888}
+            end
+          end
+          object ListBox2: TListBox
+            Left = 2
+            Top = 15
+            Width = 146
+            Height = 240
+            Align = alClient
+            ItemHeight = 13
+            TabOrder = 1
+          end
+        end
+      end
+    end
+  end
+  object ControlBar1: TControlBar
+    Left = 0
+    Top = 0
+    Width = 960
+    Height = 44
+    Align = alTop
+    AutoSize = True
+    TabOrder = 1
+    object ToolBar1: TToolBar
+      Left = 11
+      Top = 2
+      Width = 737
+      Height = 36
+      AutoSize = True
+      ButtonHeight = 36
+      ButtonWidth = 71
+      Caption = 'ToolBar1'
+      EdgeBorders = []
+      Flat = True
+      Images = ImageList
+      ShowCaptions = True
+      TabOrder = 0
+      Wrapable = False
+      object ToolButton1: TToolButton
+        Left = 0
+        Top = 0
+        Action = AddTransaction
+        Caption = 'Ялавя етмяк'
+      end
+      object ToolButton2: TToolButton
+        Left = 71
+        Top = 0
+        Action = DeleteTransaction
+        Caption = 'Ляьв етмяк'
+      end
+      object ToolButton3: TToolButton
+        Left = 142
+        Top = 0
+        Action = RefreshAction
+      end
+      object ToolButton6: TToolButton
+        Left = 213
+        Top = 0
+        Action = CommitTransaction
+      end
+      object ToolButton9: TToolButton
+        Left = 284
+        Top = 0
+        Action = RejectTransaction
+      end
+      object ToolButton4: TToolButton
+        Left = 355
+        Top = 0
+        Width = 8
+        Caption = 'ToolButton4'
+        ImageIndex = 3
+        Style = tbsSeparator
+      end
+      object ToolButton5: TToolButton
+        Left = 363
+        Top = 0
+        Action = ToggleFilterAction
+        Caption = 'Ахтарыш paneli'
+        Style = tbsCheck
+      end
+      object ToolButton10: TToolButton
+        Left = 434
+        Top = 0
+        Width = 8
+        Caption = 'ToolButton10'
+        ImageIndex = 4
+        Style = tbsSeparator
+      end
+      object ToolButton11: TToolButton
+        Left = 442
+        Top = 0
+        Caption = 'Эялир / Зяряр'
+        ImageIndex = 4
+        OnClick = ToolButton11Click
+      end
+      object DatePanel: TPanel
+        Left = 513
+        Top = 0
+        Width = 225
+        Height = 36
+        TabOrder = 0
+        object Label8: TLabel
+          Left = 86
+          Top = 17
+          Width = 24
+          Height = 13
+          Caption = '-дан,'
+        end
+        object Label9: TLabel
+          Left = 3
+          Top = 1
+          Width = 76
+          Height = 13
+          Caption = 'Системдяки тарих:'
+        end
+        object SystemDateLabel: TLabel
+          Left = 83
+          Top = 1
+          Width = 83
+          Height = 13
+          Caption = 'SystemDateLabel'
+        end
+        object Label10: TLabel
+          Left = 200
+          Top = 17
+          Width = 21
+          Height = 13
+          Caption = '-дяк'
+        end
+        object FromDateEdit: TDateTimePicker
+          Left = 1
+          Top = 14
+          Width = 83
+          Height = 21
+          CalAlignment = dtaLeft
+          Date = 37571.7010177894
+          Time = 37571.7010177894
+          DateFormat = dfShort
+          DateMode = dmComboBox
+          Kind = dtkDate
+          ParseInput = False
+          TabOrder = 0
+          OnChange = FromDateEditChange
+        end
+        object ToDateEdit: TDateTimePicker
+          Left = 114
+          Top = 14
+          Width = 83
+          Height = 21
+          CalAlignment = dtaLeft
+          Date = 37571.7010177894
+          Time = 37571.7010177894
+          DateFormat = dfShort
+          DateMode = dmComboBox
+          Kind = dtkDate
+          ParseInput = False
+          TabOrder = 1
+          OnChange = ToDateEditChange
+        end
+      end
+    end
+  end
+  object Panel4: TPanel
+    Left = 189
+    Top = 44
+    Width = 771
+    Height = 516
+    Align = alClient
+    BevelOuter = bvNone
+    TabOrder = 2
+    object Splitter1: TSplitter
+      Left = 0
+      Top = 113
+      Width = 771
+      Height = 1
+      Cursor = crVSplit
+      Align = alTop
+    end
+    object ToolBar3: TToolBar
+      Left = 0
+      Top = 492
+      Width = 771
+      Height = 24
+      Align = alBottom
+      ButtonHeight = 21
+      Caption = 'ToolBar3'
+      EdgeBorders = []
+      TabOrder = 0
+      object TransactionIDSearchEdit: TEdit
+        Left = 0
+        Top = 2
+        Width = 87
+        Height = 21
+        TabOrder = 0
+        OnChange = TransactionIDSearchEditChange
+        OnExit = TransactionIDSearchEditExit
+      end
+      object TransactionTransactionDateSearchEdit: TEdit
+        Left = 87
+        Top = 2
+        Width = 69
+        Height = 21
+        TabOrder = 7
+        OnChange = TransactionIDSearchEditChange
+        OnExit = TransactionIDSearchEditExit
+      end
+      object TransactionDebitAccNoSearchEdit: TEdit
+        Left = 156
+        Top = 2
+        Width = 104
+        Height = 21
+        TabOrder = 1
+        OnChange = TransactionIDSearchEditChange
+        OnExit = TransactionIDSearchEditExit
+      end
+      object TransactionDebetCurrencySearchEdit: TEdit
+        Left = 260
+        Top = 2
+        Width = 26
+        Height = 21
+        TabOrder = 2
+        OnChange = TransactionIDSearchEditChange
+        OnExit = TransactionIDSearchEditExit
+      end
+      object TransactionCreditAccNoSearchEdit: TEdit
+        Left = 286
+        Top = 2
+        Width = 106
+        Height = 21
+        TabOrder = 3
+        OnChange = TransactionIDSearchEditChange
+        OnExit = TransactionIDSearchEditExit
+      end
+      object TransactionCreditCurrencySearchEdit: TEdit
+        Left = 392
+        Top = 2
+        Width = 28
+        Height = 21
+        TabOrder = 4
+        OnChange = TransactionIDSearchEditChange
+        OnExit = TransactionIDSearchEditExit
+      end
+      object TransactionDebitAmountSearchEdit: TEdit
+        Left = 420
+        Top = 2
+        Width = 116
+        Height = 21
+        TabOrder = 5
+        OnChange = TransactionIDSearchEditChange
+        OnExit = TransactionIDSearchEditExit
+      end
+      object TransactionCreditAmountSearchEdit: TEdit
+        Left = 536
+        Top = 2
+        Width = 113
+        Height = 21
+        TabOrder = 6
+        OnChange = TransactionIDSearchEditChange
+        OnExit = TransactionIDSearchEditExit
+      end
+      object TransactionLAmountSearchEdit: TEdit
+        Left = 649
+        Top = 2
+        Width = 116
+        Height = 21
+        TabOrder = 8
+        OnChange = TransactionIDSearchEditChange
+        OnExit = TransactionIDSearchEditExit
+      end
+    end
+    object BrowseGrid: TDBGrid
+      Left = 0
+      Top = 114
+      Width = 771
+      Height = 227
+      TabStop = False
+      Align = alClient
+      Color = clBtnFace
+      DataSource = TransactionsDataModule.Transactions
+      Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit, dgMultiSelect]
+      PopupMenu = PopupMenu1
+      TabOrder = 1
+      TitleFont.Charset = DEFAULT_CHARSET
+      TitleFont.Color = clWindowText
+      TitleFont.Height = -11
+      TitleFont.Name = 'Azl Sans Serif'
+      TitleFont.Style = []
+      OnDrawColumnCell = BrowseGridDrawColumnCell
+      OnDblClick = BrowseGridDblClick
+      Columns = <
+        item
+          Color = clSilver
+          Expanded = False
+          FieldName = 'ID'
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clNavy
+          Font.Height = -11
+          Font.Name = 'Arial AzLat'
+          Font.Style = []
+          Title.Alignment = taCenter
+          Title.Caption = '№'
+          Title.Color = clNavy
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Arial AzLat'
+          Title.Font.Style = []
+          Width = 51
+          Visible = True
+        end
+        item
+          Expanded = False
+          Title.Color = clNavy
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = []
+          Width = 19
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'TransactionDate'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clNavy
+          Font.Height = -11
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = []
+          Title.Caption = 'Тарих'
+          Title.Color = clNavy
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = []
+          Width = 70
+          Visible = True
+        end
+        item
+          Color = clWhite
+          Expanded = False
+          FieldName = 'DEBITACCNO'
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Arial AzLat'
+          Font.Style = []
+          Title.Alignment = taCenter
+          Title.Caption = 'ДЕБЕТ'
+          Title.Color = clNavy
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Arial AzLat'
+          Title.Font.Style = []
+          Width = 101
+          Visible = True
+        end
+        item
+          Color = clSilver
+          Expanded = False
+          FieldName = 'DEBITCURRENCYSNAME'
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clNavy
+          Font.Height = -11
+          Font.Name = 'Arial AzLat'
+          Font.Style = []
+          Title.Caption = '$'
+          Title.Color = clNavy
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'MS Sans Serif'
+          Title.Font.Style = []
+          Width = 28
+          Visible = True
+        end
+        item
+          Color = clWhite
+          Expanded = False
+          FieldName = 'CREDITACCNO'
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Arial AzLat'
+          Font.Style = []
+          Title.Alignment = taCenter
+          Title.Caption = 'КРЕДИТ'
+          Title.Color = clNavy
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Arial AzLat'
+          Title.Font.Style = []
+          Width = 103
+          Visible = True
+        end
+        item
+          Color = clSilver
+          Expanded = False
+          FieldName = 'CREDITCURRENCYSNAME'
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clNavy
+          Font.Height = -11
+          Font.Name = 'Arial AzLat'
+          Font.Style = []
+          Title.Caption = '$'
+          Title.Color = clNavy
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'MS Sans Serif'
+          Title.Font.Style = []
+          Width = 28
+          Visible = True
+        end
+        item
+          Color = clWhite
+          Expanded = False
+          FieldName = 'DEBITAMOUNT'
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Arial AzLat'
+          Font.Style = []
+          Title.Alignment = taCenter
+          Title.Caption = 'Дебет мябляь'
+          Title.Color = clNavy
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Arial AzLat'
+          Title.Font.Style = []
+          Width = 114
+          Visible = True
+        end
+        item
+          Color = clWhite
+          Expanded = False
+          FieldName = 'CREDITAMOUNT'
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Arial AzLat'
+          Font.Style = []
+          Title.Caption = 'Кредит мябляь'
+          Title.Color = clNavy
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Arial AzLat'
+          Title.Font.Style = []
+          Width = 111
+          Visible = True
+        end
+        item
+          Color = clWhite
+          Expanded = False
+          FieldName = 'LAMOUNT'
+          Title.Alignment = taCenter
+          Title.Caption = 'Еквивалент'
+          Title.Color = clNavy
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = []
+          Width = 112
+          Visible = True
+        end
+        item
+          Color = clSilver
+          Expanded = False
+          FieldName = 'CurrencyRate'
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clNavy
+          Font.Height = -11
+          Font.Name = 'Arial AzLat'
+          Font.Style = []
+          Title.Caption = 'Курс'
+          Title.Color = clNavy
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Arial AzLat'
+          Title.Font.Style = []
+          Visible = False
+        end>
+    end
+    object LogMemo: TMemo
+      Left = 0
+      Top = 341
+      Width = 771
+      Height = 107
+      Align = alBottom
+      Color = clSilver
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clNavy
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      Lines.Strings = (
+        'LogMemo')
+      ParentFont = False
+      ScrollBars = ssVertical
+      TabOrder = 2
+      Visible = False
+    end
+    object HintsPanel: TPanel
+      Left = 0
+      Top = 448
+      Width = 771
+      Height = 44
+      Align = alBottom
+      AutoSize = True
+      TabOrder = 3
+      object RejectReasonPanel: TPanel
+        Left = 1
+        Top = 22
+        Width = 769
+        Height = 21
+        Align = alTop
+        Alignment = taLeftJustify
+        BevelOuter = bvNone
+        TabOrder = 0
+        object Label3: TLabel
+          Left = 20
+          Top = 3
+          Width = 40
+          Height = 13
+          Caption = 'Reason:'
+        end
+        object RejectedPaintBox: TPaintBox
+          Left = 0
+          Top = 2
+          Width = 16
+          Height = 16
+          OnPaint = RejectedPaintBoxPaint
+        end
+        object RejectReasonDBEdit: TDBEdit
+          Left = 96
+          Top = 0
+          Width = 673
+          Height = 21
+          Anchors = [akLeft, akTop, akRight]
+          Color = clSilver
+          DataField = 'REJECT_REASON'
+          DataSource = TransactionsDataModule.Transactions
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clNavy
+          Font.Height = -11
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 0
+        end
+      end
+      object DestinationPanel: TPanel
+        Left = 1
+        Top = 1
+        Width = 769
+        Height = 21
+        Align = alTop
+        Alignment = taLeftJustify
+        BevelOuter = bvNone
+        TabOrder = 1
+        object Label7: TLabel
+          Left = 20
+          Top = 3
+          Width = 45
+          Height = 13
+          Caption = 'Тяййинаты:'
+        end
+        object DestinationEdit: TDBEdit
+          Left = 96
+          Top = 0
+          Width = 673
+          Height = 21
+          Anchors = [akLeft, akTop, akRight]
+          Color = clSilver
+          DataField = 'NAME'
+          DataSource = TransactionsDataModule.Transactions
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clNavy
+          Font.Height = -11
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 0
+        end
+      end
+    end
+    object CommisionViewer: TDBGrid
+      Left = 0
+      Top = 0
+      Width = 771
+      Height = 113
+      Align = alTop
+      Color = clBtnFace
+      DataSource = TransactionsDataModule.DSCommisionTrans
+      Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit]
+      PopupMenu = PopupMenu2
+      TabOrder = 4
+      TitleFont.Charset = DEFAULT_CHARSET
+      TitleFont.Color = clWindowText
+      TitleFont.Height = -11
+      TitleFont.Name = 'Azl Sans Serif'
+      TitleFont.Style = []
+      Visible = False
+      OnDblClick = CommisionViewerDblClick
+      OnEnter = CommisionViewerEnter
+      OnExit = CommisionViewerExit
+      Columns = <
+        item
+          Expanded = False
+          FieldName = 'NAME'
+          Title.Caption = 'Комиссийа ямялиййатлары'
+          Title.Color = clNavy
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = []
+          Width = 228
+          Visible = True
+        end
+        item
+          Color = clWhite
+          Expanded = False
+          FieldName = 'DEBITACCOUNT'
+          Title.Caption = 'ДЕБЕТ'
+          Title.Color = clNavy
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = []
+          Width = 101
+          Visible = True
+        end
+        item
+          Alignment = taCenter
+          Color = clSilver
+          Expanded = False
+          FieldName = 'DEBITCURRENCY'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clNavy
+          Font.Height = -11
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = []
+          Title.Alignment = taCenter
+          Title.Caption = '$'
+          Title.Color = clNavy
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = []
+          Width = 30
+          Visible = True
+        end
+        item
+          Color = clWhite
+          Expanded = False
+          FieldName = 'CREDITACCOUNT'
+          Title.Caption = 'КРЕДИТ'
+          Title.Color = clNavy
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = []
+          Width = 101
+          Visible = True
+        end
+        item
+          Alignment = taCenter
+          Color = clSilver
+          Expanded = False
+          FieldName = 'CREDITCURRENCY'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clNavy
+          Font.Height = -11
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = []
+          Title.Alignment = taCenter
+          Title.Caption = '$'
+          Title.Color = clNavy
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = []
+          Width = 30
+          Visible = True
+        end>
+    end
+  end
+  object TrsActionList: TActionList
+    Images = ImageList
+    Left = 272
+    Top = 104
+    object AddTransaction: TAction
+      Caption = 'Сянядин ялавя етмяси'
+      ImageIndex = 1
+      ShortCut = 45
+      OnExecute = AddTransactionExecute
+    end
+    object EditTransaction: TAction
+      Caption = 'Ямалиййатынын редактя едилмяси'
+      OnExecute = EditTransactionExecute
+    end
+    object DeleteTransaction: TAction
+      Caption = 'Сянядин ляьв етмяси'
+      ImageIndex = 0
+      ShortCut = 46
+      OnExecute = DeleteTransactionExecute
+      OnUpdate = DeleteTransactionUpdate
+    end
+    object RefreshAction: TAction
+      Caption = 'Йенилямяк'
+      ImageIndex = 2
+      ShortCut = 116
+      OnExecute = RefreshActionExecute
+    end
+    object ToggleFilterAction: TAction
+      Caption = 'Filtr paneli'
+      ImageIndex = 3
+      OnExecute = ToggleFilterActionExecute
+    end
+    object ResetFilter: TAction
+      Caption = 'ResetFilter'
+    end
+    object UseFilter: TAction
+      Caption = 'UseFilter'
+    end
+    object CommitTransaction: TAction
+      Caption = 'Тясдиг етмяк'
+      ImageIndex = 9
+      OnExecute = CommitTransactionExecute
+      OnUpdate = CommitTransactionUpdate
+    end
+    object RejectTransaction: TAction
+      Caption = 'Инкар етмяк'
+      ImageIndex = 8
+      OnExecute = RejectTransactionExecute
+      OnUpdate = RejectTransactionUpdate
+    end
+    object SelectAllAction: TAction
+      Caption = 'Щамсыны сечмяк'
+      ShortCut = 16449
+      OnExecute = SelectAllActionExecute
+    end
+    object FirstRec: TAction
+      Caption = 'Яввялиня'
+      OnExecute = FirstRecExecute
+      OnUpdate = FirstRecUpdate
+    end
+    object LastRec: TAction
+      Caption = 'Сонуна'
+      OnExecute = LastRecExecute
+      OnUpdate = LastRecUpdate
+    end
+  end
+  object ImageList: TImageList
+    Left = 240
+    Top = 104
+    Bitmap = {
+      494C01010A000E00040010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      0000000000003600000028000000400000004000000001001000000000000020
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000000000008C311042104210421042
+      10421042104210421042104210421042841000000000000000000000FF7FFF7F
+      FF7FFF7FFF7FFF7F000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000008010604EE03DE03DE03DE03DE03D
+      E03DE03DE03DE03DE03DE03D4A2910421042000000000000FF7FFF7F00000000
+      0000000000000000FF7FFF7F0000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000E05EE07FE07FE07FE07FE07FE07F
+      E07FE07FE07FE07FE07FE07FA6770821104200000000FF7F0000000000001000
+      000010000000100000000000FF7F000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000E05EE07FE07FE07FE07FE07FA656
+      0000A656E07FE07FE07FE07FA677082108210000FF7F00001000100010000000
+      1000000010000000100000000000FF7F00000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000021E07FE07FE07FE07FE07FA656
+      0000A656E07FE07FE07FE07FA635104200000000FF7F10001000100010001863
+      1863FF7FFF7F1000000010000000FF7F00000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000E05EE07FE07FE07FE07FE07F
+      E05EE07FE07FE07FE07FA677082108210000FF7F100010001000100010001000
+      1863FF7F100010001000000000000000FF7F0000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000000000000000000000000021E07FE07FE07FE07F2667
+      4629E07FE07FE07FE07FA635104200000000FF7F100010001000100010001F00
+      1863FF7F100010001000000010000000FF7F0000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000000000000000000000000000E05EE07FE07FE07FA635
+      0000A677E07FE07FA6770821082100000000FF7F100010001F0010001F001000
+      1863FF7F100010001000100000000000FF7F0000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000000000000021E07FE07FE07F8010
+      0000604EE07FE07FA6351042000000000000FF7F1000100010001F0010001F00
+      1863FF7F100010001000000010000000FF7F0000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000000000000000E05EE07FE07F0000
+      0000E03DE07FA67708210821000000000000FF7F100010001F0010001F001863
+      186318631F0010001000100000000000FF7F0000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000021E07FE07F0000
+      0000E03DE07FA63510420000000000000000FF7F10001F0010001F001F001F00
+      1F001000100010001000000010000000FF7F0000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000E05EE07FA656
+      E03DA677A6770821082100000000000000000000FF7F10001F0010001F001F00
+      1863FF7F1F001000100010000000FF7F00000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000000000000000000000000000000000000021E07FE07F
+      E07FE07FA6351042000000000000000000000000FF7F100010001F0010001000
+      1863186310001000100010000000FF7F00000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000000000000000000000000000000000000000E05EE07F
+      E07FA677082108210000000000000000000000000000FF7F1000100010001F00
+      100010001000100010000000FF7F000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000000000000000000000000021E07F
+      E07FA6358C31000000000000000000000000000000000000FF7FFF7F10001000
+      1000100010001000FF7FFF7F0000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000000000000000000000000000E03D
+      A6560000000000000000000000000000000000000000000000000000FF7FFF7F
+      FF7FFF7FFF7FFF7F000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      E07F004200000000000000000000000000000000000000000000000000000000
+      E07FE07F00000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000000000000000000000000000E07F
+      0042E07F0042000000000000000000000000000000000000000000000000E07F
+      E07F0042E07F0000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      10000000000000000000000000000000000000000000000000000000E07F0042
+      E07F0042E07F00420000000000000000000000000000000000000000E07FE07F
+      0042E07F0042E07F000000000000000000000000000000000000000000001042
+      FF7F000018630000000000000000000000000000000000000000000000001000
+      0002100000000000000000000000000000000000000000000000E07F0042E07F
+      0042E07F0042E07F004200000000000000000000000000000000E07FE07F0042
+      00000000E07F0042E07F00000000000000000040004000000000FF7F1042FF7F
+      1042FF7F00001863000000000000000000000000000000000000000010000002
+      000200020000000000000000000000000000000000000000E07F0042E07F0042
+      00000000E07F0042E07F0042000000000000000000000000E07FE07F0042E07F
+      000000000042E07F0042E07F000000000000004000400000FF7F1042FF7F1042
+      18631863FF7F0000186300000000000000000000000000000000100000020002
+      00020002100000000000000000000000000000000000E07F0042E07F00420000
+      000000000000E07F0042E07F00420000000000000000E07FE07F0042E07F0042
+      00000000E07F0042E07F0042E07F00000000004000400000FF7FFF7F1042FF7F
+      186310021863FF7F00001863000000000000000000000000000000020002E003
+      E003000200021000000000000000000000000000E07F0042E07F0042E07F0042
+      00000000E07F0042E07F0042E07F004200000000E07FE07F0042E07F0042E07F
+      000000000042E07F0042E07F0042E07F0000004000400000FF7FFF7F18630000
+      0000000000001863FF7F000018630000000000000000000000000002E0030000
+      0000E003000200021000000000000000000000000042E07F0042E07F0042E07F
+      000000000042E07F0042E07F0042E07F00000000E07F0042E07F0042E07F0042
+      00000000E07F0042E07F0042E07F00420000004000400000FF7FFF7FFF7FFF7F
+      FF7FFF7FFF7F00001042FF7F0000186300000000000000000000E00300000000
+      000000000002000200020000000000000000000000000042E07F0042E07F0042
+      00000000E07F0042E07F0042E07F0000000000000000E07F0042E07F00420000
+      000000000000E07F0042E07F00420000000000400040000010421042FF7FFF7F
+      FF7F104210421042FF7F10421863104200000000000000000000000000000000
+      00000000E0030002000210000000000000000000000000000042E07F0042E07F
+      000000000042E07F0042E07F000000000000000000000000E07F0042E07F0042
+      00000000E07F0042E07F00420000000000000040004000000000000010421042
+      104200001042FF7F104218631042000000000000000000000000000000000000
+      0000000000000000E003000200021000000000000000000000000042E07F0042
+      00000000E07F0042E07F00000000000000000000000000000000E07F0042E07F
+      0042E07F0042E07F004200000000000000000000000000000000000000000000
+      0000000000001042000010420000000000000000000000000000000000000000
+      000000000000000000000002000200020000000000000000000000000042E07F
+      0042E07F0042E07F0000000000000000000000000000000000000000E07F0042
+      E07F0042E07F0042000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000E0030002000200000000000000000000000000000042
+      E07F0042E07F000000000000000000000000000000000000000000000000E07F
+      0042E07F00420000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000E003000200000000000000000000000000000000
+      0042E07F00000000000000000000000000000000000000000000000000000000
+      E07F004200000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000000000000000FF7F0000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000000000000000000000000000000000000000FF7F0000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000000000000000000000000000FF7F
+      0000000000000000000000000000FF7F00000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000000000000000000000000000FF7F
+      000000000000000000000000FF7F000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      FF7F00000000000000000000FF7F000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000001000104200000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000FF7F000000000000FF7F0000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000010421000000000000000
+      0000000010001000100010001000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000FF7F00000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000010000000000000000000
+      0000000000001000100010001000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000FF7F000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000010000000000000000000
+      0000000000000000100010001000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000FF7F00000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000010000000000000000000
+      0000000000001000000010001000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000FF7F00000000FF7F00000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000010421000000000000000
+      0000100010000000000000001000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      FF7F00000000000000000000FF7F000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000001042100010001000
+      1000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000000000000000000000000000FF7F
+      0000000000000000000000000000FF7F00000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000FF7F00000000
+      00000000000000000000000000000000FF7F0000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000424D3E000000000000003E000000
+      2800000040000000400000000100010000000000000200000000000000000000
+      000000000000000000000000FFFFFF0000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000000000000000C000F81F000000000000E00700000000
+      0000C00300000000000080010000000000018001000000008001000000000000
+      8003000000000000C003000000000000C007000000000000E007000000000000
+      E00F000000000000F00F800100000000F01F800100000000F81FC00300000000
+      F83FE00700000000FC7FF81F00000000FE7FFE7FFFFFFFFFFC3FFC3FFFFFFFFF
+      F81FF81FFD7FFEFFF00FF00F101FFC7FE007E007000FF87FC003C0030007F03F
+      800180010003F01F000000000001F30F000000000000F78F800180010001FF87
+      C003C0031883FFE1E007E007FFD7FFF1F00FF00FFFFFFFF1F81FF81FFFFFFFF9
+      FC3FFC3FFFFFFFFFFE7FFE7FFFFFFFFFFFFFFFFFFFFFFFFFFFFCFFFFFFFFFFFF
+      F3FFFFFFFFFFFEFFE1F9FFFFFFFFFE7FE1F3FC7FFFFFFE3FF0E3FD7FE7FFFE1F
+      F847FD7FCF83FE0FFC0FE10FDFC3FE07FE1FEFEFDFE3FE0FFC0FE10FDFD3FE1F
+      F84FFD7FCF3BFE3FE0E3FD7FE0FFFE7FC1F1FC7FFFFFFEFFC7F8FFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00000000000000000000000000000000
+      000000000000}
+  end
+  object PopupMenu1: TPopupMenu
+    Images = ImageList
+    Left = 304
+    Top = 104
+    object N1: TMenuItem
+      Action = AddTransaction
+      OnDrawItem = N3DrawItem
+    end
+    object EditTransaction1: TMenuItem
+      Action = EditTransaction
+      Default = True
+      OnDrawItem = N3DrawItem
+    end
+    object N2: TMenuItem
+      Action = DeleteTransaction
+      OnDrawItem = N3DrawItem
+    end
+    object N3: TMenuItem
+      Action = RefreshAction
+      OnDrawItem = N3DrawItem
+    end
+    object CommitTransaction1: TMenuItem
+      Action = CommitTransaction
+      OnDrawItem = N3DrawItem
+    end
+    object Reject1: TMenuItem
+      Action = RejectTransaction
+      OnDrawItem = N3DrawItem
+    end
+    object N5: TMenuItem
+      Caption = '-'
+    end
+    object FirstRec1: TMenuItem
+      Action = FirstRec
+      OnDrawItem = N3DrawItem
+    end
+    object LastRec1: TMenuItem
+      Action = LastRec
+      OnDrawItem = N3DrawItem
+    end
+    object N4: TMenuItem
+      Caption = '-'
+    end
+    object N7: TMenuItem
+      Action = ActionCommision
+      OnDrawItem = N3DrawItem
+    end
+    object SelectAllAction1: TMenuItem
+      Action = SelectAllAction
+      OnDrawItem = N3DrawItem
+    end
+  end
+  object FilterActionList: TActionList
+    Images = ImageList
+    Left = 272
+    Top = 136
+    object FilterNationalCurrency: TAction
+      Category = 'FilterByFlag'
+      Caption = 'Милли валцтада'
+      Checked = True
+      OnExecute = FilterNationalCurrencyExecute
+    end
+    object FilterForeignCurrency: TAction
+      Category = 'FilterByFlag'
+      Caption = 'Харижи валцтада'
+      Checked = True
+      OnExecute = FilterNationalCurrencyExecute
+    end
+    object FilterMultyCurrency: TAction
+      Category = 'FilterByFlag'
+      Caption = 'Мултивалцта'
+      Checked = True
+      OnExecute = FilterNationalCurrencyExecute
+    end
+    object FilterRateDifference: TAction
+      Category = 'FilterByFlag'
+      Caption = 'Курс фярги'
+      Checked = True
+      OnExecute = FilterNationalCurrencyExecute
+    end
+    object FilterProfitDebit: TAction
+      Category = 'FilterByFlag'
+      Caption = 'Гялир-зяряр'
+      Checked = True
+      OnExecute = FilterNationalCurrencyExecute
+    end
+    object FilterTransactionsSelected: TAction
+      Category = 'FilterByFlag'
+      Caption = 'Сечилмиш'
+      OnExecute = ToggleRBFilterAction
+    end
+    object FilterDebitUse: TAction
+      Category = 'FilterByAccount'
+      Caption = 'Филтри истифадя етмяк'
+      OnExecute = FilterDebitUseExecute
+    end
+    object FilterCreditUse: TAction
+      Category = 'FilterByAccount'
+      Caption = 'Филтри истифадя етмяк'
+      OnExecute = FilterDebitUseExecute
+    end
+    object FilterTransactionsAll: TAction
+      Category = 'FilterByFlag'
+      Caption = 'Бцтцн ямалиййатлар'
+      Checked = True
+      OnExecute = ToggleRBFilterAction
+    end
+    object FilterDelayed: TAction
+      Category = 'FilterByFlag'
+      Caption = 'Планлашдырылмыш'
+      Checked = True
+      OnExecute = ToggleChecked
+    end
+    object FilterDebitAmount: TAction
+      Category = 'FilterByAmount'
+      Caption = 'Дебет мябляг'
+      OnExecute = FilterDebitAmountExecute
+    end
+    object FilterCreditAmount: TAction
+      Category = 'FilterByAmount'
+      Caption = 'Кредит мябляг'
+      OnExecute = FilterDebitAmountExecute
+    end
+    object FilterLAmount: TAction
+      Category = 'FilterByAmount'
+      Caption = 'Еквивалент'
+      Checked = True
+      OnExecute = FilterDebitAmountExecute
+    end
+    object FilterAmountUse: TAction
+      Category = 'FilterByAmount'
+      Caption = 'FilterAmountUse'
+      OnExecute = FilterAmountUseExecute
+    end
+    object FilterAmountApply: TAction
+      Category = 'FilterByAmount'
+      Caption = 'Сеч'
+      OnExecute = FilterAmountApplyExecute
+    end
+    object OrderAddField: TAction
+      Category = 'Order'
+      ImageIndex = 4
+    end
+    object OrderRemoveField: TAction
+      Category = 'Order'
+      ImageIndex = 5
+    end
+    object OrderFieldUp: TAction
+      Category = 'Order'
+      Caption = 'OrderFieldUp'
+      ImageIndex = 5
+    end
+    object OrderFieldDown: TAction
+      Category = 'Order'
+      Caption = 'OrderFieldDown'
+      ImageIndex = 4
+    end
+    object FilterCommited: TAction
+      Category = 'FilterByFlag'
+      Caption = 'Тястиг олунмуш'
+      Checked = True
+      OnExecute = ToggleChecked
+    end
+    object FilterRejected: TAction
+      Category = 'FilterByFlag'
+      Caption = 'Инкар едилмиш'
+      Checked = True
+      OnExecute = ToggleChecked
+    end
+    object ActionCommision: TAction
+      Caption = 'Комиссийа ямялиййатлары'
+      OnExecute = ActionCommisionExecute
+    end
+  end
+  object DebitAccountData: TOracleDataSet
+    SQL.Strings = (
+      'select ID, ACC_NO as AccountNo, Name from account'
+      'order by AccountNo')
+    QBEDefinition.QBEFieldDefs = {
+      0400000003000000020000004944010000000000090000004143434F554E544E
+      4F010000000000040000004E414D45010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    AfterScroll = AccsFilterChanged
+    Left = 288
+    Top = 200
+    object DebitAccountDataID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object DebitAccountDataACCOUNTNO: TStringField
+      FieldName = 'ACCOUNTNO'
+    end
+    object DebitAccountDataNAME: TStringField
+      FieldName = 'NAME'
+      Size = 90
+    end
+  end
+  object DebitAccountsSource: TDataSource
+    DataSet = DebitAccountData
+    Left = 256
+    Top = 200
+  end
+  object CreditAccountData: TOracleDataSet
+    SQL.Strings = (
+      'select ID, ACC_NO as AccountNo, Name from account'
+      'order by AccountNo')
+    QBEDefinition.QBEFieldDefs = {
+      0400000003000000020000004944010000000000090000004143434F554E544E
+      4F010000000000040000004E414D45010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    AfterScroll = AccsFilterChanged
+    Left = 360
+    Top = 200
+    object FloatField1: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object StringField1: TStringField
+      FieldName = 'ACCOUNTNO'
+    end
+    object StringField2: TStringField
+      FieldName = 'NAME'
+      Size = 90
+    end
+  end
+  object CreditAccountsSource: TDataSource
+    DataSet = CreditAccountData
+    Left = 328
+    Top = 200
+  end
+  object DebitBalanceData: TOracleDataSet
+    SQL.Strings = (
+      'select bal_cn as No, balname as Name'
+      'from bal_spr1'
+      'where bal_cn>=1000'
+      'order by bal_cn')
+    QBEDefinition.QBEFieldDefs = {
+      0400000002000000020000004E4F010000000000040000004E414D4501000000
+      0000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    AfterScroll = AccsFilterChanged
+    Left = 288
+    Top = 232
+  end
+  object DebitBalanceSource: TDataSource
+    DataSet = DebitBalanceData
+    Left = 256
+    Top = 232
+  end
+  object CreditBalanceSource: TDataSource
+    DataSet = CreditBalanceData
+    Left = 328
+    Top = 232
+  end
+  object CreditBalanceData: TOracleDataSet
+    SQL.Strings = (
+      'select bal_cn as No, balname as Name'
+      'from bal_spr1'
+      'where bal_cn>=1000'
+      'order by bal_cn')
+    QBEDefinition.QBEFieldDefs = {
+      0400000002000000020000004E4F010000000000040000004E414D4501000000
+      0000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    AfterScroll = AccsFilterChanged
+    Left = 360
+    Top = 232
+  end
+  object DebitCurrencyData: TOracleDataSet
+    SQL.Strings = (
+      'select VALUTE as CurrencyID, VALU_NAME as Name'
+      'from AVALUTE'
+      'order by CurrencyID')
+    QBEDefinition.QBEFieldDefs = {
+      04000000020000000A00000043555252454E4359494401000000000004000000
+      4E414D45010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    AfterScroll = AccsFilterChanged
+    Left = 437
+    Top = 204
+  end
+  object DebitCurrency: TDataSource
+    DataSet = DebitCurrencyData
+    Left = 405
+    Top = 204
+  end
+  object CreditCurrency: TDataSource
+    DataSet = CreditCurrencyData
+    Left = 405
+    Top = 236
+  end
+  object CreditCurrencyData: TOracleDataSet
+    SQL.Strings = (
+      'select VALUTE as CurrencyID, VALU_NAME as Name'
+      'from AVALUTE'
+      'order by CurrencyID')
+    QBEDefinition.QBEFieldDefs = {
+      04000000020000000A00000043555252454E4359494401000000000004000000
+      4E414D45010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    AfterScroll = AccsFilterChanged
+    Left = 437
+    Top = 236
+  end
+  object PopupMenu2: TPopupMenu
+    OwnerDraw = True
+    Left = 589
+    Top = 68
+    object N6: TMenuItem
+      Caption = 'Йениля         '
+      OnClick = N6Click
+      OnDrawItem = N3DrawItem
+    end
+  end
+end

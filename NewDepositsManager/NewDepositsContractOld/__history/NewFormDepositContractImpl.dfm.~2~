@@ -1,0 +1,1203 @@
+object NewFormDepositContract: TNewFormDepositContract
+  Left = 0
+  Top = 0
+  Caption = 'NewFormDepositContract'
+  ClientHeight = 433
+  ClientWidth = 684
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poScreenCenter
+  OnCanResize = FormCanResize
+  OnClose = FormClose
+  OnCloseQuery = FormCloseQuery
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  OnKeyDown = FormKeyDown
+  OnKeyPress = FormKeyPress
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Panel1: TPanel
+    Left = 0
+    Top = 401
+    Width = 684
+    Height = 32
+    Align = alBottom
+    BevelOuter = bvNone
+    TabOrder = 0
+    object RefreshListLbl: TLabel
+      Left = 17
+      Top = 11
+      Width = 85
+      Height = 15
+      Caption = 'F5 -'#1049#1077#1085#1080#1083#1103#1084#1103#1082
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = [fsBold]
+      ParentFont = False
+      OnClick = RefreshListLblClick
+    end
+    object Label13: TLabel
+      Left = 117
+      Top = 10
+      Width = 67
+      Height = 13
+      Caption = #1048#1089#1090#1080#1092#1072#1076#1103#1095#1080':'
+      Color = clBtnFace
+      ParentColor = False
+    end
+    object Lbluser: TLabel
+      Left = 170
+      Top = 10
+      Width = 34
+      Height = 13
+      Caption = 'Lbluser'
+      Color = clBtnFace
+      ParentColor = False
+    end
+    object BitBtnOk: TBitBtn
+      Left = 406
+      Top = 4
+      Width = 81
+      Height = 27
+      Caption = #1043#1077#1081#1076' '#1077#1090
+      DoubleBuffered = True
+      ParentDoubleBuffered = False
+      TabOrder = 0
+      OnClick = BitBtnOkClick
+    end
+    object BitBtnCancel: TBitBtn
+      Left = 499
+      Top = 4
+      Width = 81
+      Height = 27
+      Caption = #1048#1084#1090#1080#1085#1072' '#1077#1090
+      DoubleBuffered = True
+      ParentDoubleBuffered = False
+      TabOrder = 1
+      OnClick = BitBtnCancelClick
+    end
+    object BitBtnClose: TBitBtn
+      Left = 586
+      Top = 4
+      Width = 81
+      Height = 27
+      Caption = #1041#1072#1100#1083#1072
+      DoubleBuffered = True
+      ParentDoubleBuffered = False
+      TabOrder = 2
+      OnClick = BitBtnCloseClick
+    end
+    object ContractHint: THintBox
+      Left = 10
+      Top = 2
+      Width = 233
+      Height = 26
+      AutoSize = True
+      BevelOuter = bvNone
+      Caption = 'ContractHint'
+      Color = clRed
+      TabOrder = 3
+      Visible = False
+      HintStyle = hsAlert
+      Timeout = 4000
+      BeepOnMessage = False
+    end
+  end
+  object Panel2: TPanel
+    Left = 0
+    Top = 0
+    Width = 684
+    Height = 401
+    Align = alClient
+    BevelInner = bvRaised
+    BevelOuter = bvLowered
+    TabOrder = 1
+    object Panel3: TPanel
+      Left = 2
+      Top = 2
+      Width = 289
+      Height = 397
+      Align = alLeft
+      BevelInner = bvRaised
+      BevelOuter = bvLowered
+      TabOrder = 0
+      object Panel17: TPanel
+        Left = 2
+        Top = 2
+        Width = 285
+        Height = 35
+        Align = alTop
+        BevelInner = bvLowered
+        TabOrder = 0
+        object Label25: TLabel
+          Left = 15
+          Top = 8
+          Width = 82
+          Height = 14
+          Caption = #1044#1077#1087#1086#1079#1080#1090#1080#1085' '#1090#1080#1087#1080
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = []
+          ParentFont = False
+        end
+        object Label26: TLabel
+          Left = 4
+          Top = 9
+          Width = 6
+          Height = 18
+          Caption = '*'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clNavy
+          Font.Height = -15
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
+        object ContractTypes: TDBLookupComboboxEh
+          Tag = 1
+          Left = 98
+          Top = 6
+          Width = 182
+          Height = 21
+          DataField = 'CONTRACTTYPE'
+          DataSource = NewDataModDepositsContract.DepositPorpsDatSrc
+          DropDownBox.Sizable = True
+          EditButtons = <>
+          KeyField = 'ID'
+          ListField = 'TYPE'
+          ListSource = NewDataModDepositsContract.DepositTypesDatSrc
+          TabOrder = 0
+          Visible = True
+          OnKeyPress = ContractTypesKeyPress
+          OnKeyValueChanged = ContractTypesKeyValueChanged
+        end
+      end
+      object Panel43: TPanel
+        Left = 2
+        Top = 71
+        Width = 285
+        Height = 35
+        Align = alTop
+        BevelInner = bvLowered
+        TabOrder = 2
+        object Label98: TLabel
+          Left = 14
+          Top = 8
+          Width = 61
+          Height = 14
+          Caption = #1052#1094#1076#1076#1103#1090' ('#1072#1081')'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = []
+          ParentFont = False
+        end
+        object Label99: TLabel
+          Left = 3
+          Top = 9
+          Width = 6
+          Height = 18
+          Caption = '*'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clNavy
+          Font.Height = -15
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
+        object Label3: TLabel
+          Left = 172
+          Top = 9
+          Width = 41
+          Height = 13
+          Caption = #1050#1072#1087'.'#1087#1077#1088
+        end
+        object LCBPeriods: TDBLookupComboboxEh
+          Tag = 1
+          Left = 98
+          Top = 5
+          Width = 71
+          Height = 21
+          DataField = 'PERIODID'
+          DataSource = NewDataModDepositsContract.DepositPorpsDatSrc
+          EditButtons = <>
+          KeyField = 'ID'
+          ListField = 'DESCRIPTION'
+          ListSource = NewDataModDepositsContract.DepPeriodsds
+          TabOrder = 0
+          Visible = True
+          OnChange = LCBPeriodsChange
+          OnKeyPress = ContractTypesKeyPress
+          OnKeyValueChanged = LCBPeriodsKeyValueChanged
+        end
+        object LCBCapPer: TDBLookupComboboxEh
+          Tag = 1
+          Left = 213
+          Top = 4
+          Width = 68
+          Height = 21
+          DataField = 'CAPITALPERID'
+          DataSource = NewDataModDepositsContract.DepositPorpsDatSrc
+          EditButtons = <>
+          KeyField = 'ID'
+          ListField = 'DESCRIPTION'
+          ListSource = NewDataModDepositsContract.DepCapperiodds
+          TabOrder = 1
+          Visible = True
+          OnChange = LCBCapPerChange
+          OnKeyPress = LCBCapPerKeyPress
+        end
+      end
+      object Panel15: TPanel
+        Left = 2
+        Top = 37
+        Width = 285
+        Height = 34
+        Align = alTop
+        BevelInner = bvRaised
+        BevelOuter = bvLowered
+        TabOrder = 1
+        object Label16: TLabel
+          Left = 19
+          Top = 10
+          Width = 42
+          Height = 13
+          Caption = #1042#1072#1083#1081#1091#1090#1072
+        end
+        object Label22: TLabel
+          Left = 4
+          Top = 9
+          Width = 6
+          Height = 18
+          Caption = '*'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clNavy
+          Font.Height = -15
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
+        object DBLCBValutes: TDBLookupComboboxEh
+          Tag = 3
+          Left = 99
+          Top = 6
+          Width = 182
+          Height = 21
+          DataField = 'CURRENCY'
+          DataSource = NewDataModDepositsContract.DepositPorpsDatSrc
+          DropDownBox.Sizable = True
+          EditButtons = <>
+          KeyField = 'VALUTE'
+          ListField = 'VALU_NAME'
+          ListSource = NewDataModDepositsContract.valutesDatSrc
+          TabOrder = 0
+          Visible = True
+          OnKeyPress = ContractTypesKeyPress
+        end
+      end
+      object Panel6: TPanel
+        Left = 2
+        Top = 106
+        Width = 285
+        Height = 34
+        Align = alTop
+        BevelInner = bvLowered
+        Color = clMedGray
+        ParentBackground = False
+        TabOrder = 3
+        object Label6: TLabel
+          Left = 14
+          Top = 8
+          Width = 81
+          Height = 14
+          Caption = #1040#1095#1099#1083#1084#1072' '#1090#1072#1088#1080#1093#1080
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = []
+          ParentFont = False
+        end
+        object Label7: TLabel
+          Left = 4
+          Top = 9
+          Width = 6
+          Height = 18
+          Caption = '*'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clNavy
+          Font.Height = -15
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
+        object DTO: TDBDateTimeEditEh
+          Tag = 1
+          Left = 150
+          Top = 3
+          Width = 131
+          Height = 21
+          Hint = 'dd/mm/yyyy'
+          DataField = 'OPENDATE'
+          DataSource = NewDataModDepositsContract.DepositPorpsDatSrc
+          EditButtons = <>
+          Kind = dtkDateEh
+          ParentShowHint = False
+          ReadOnly = True
+          ShowHint = True
+          TabOrder = 0
+          Visible = True
+          OnKeyPress = DBLCBFilialKeyPress
+        end
+      end
+      object Panel7: TPanel
+        Left = 2
+        Top = 140
+        Width = 285
+        Height = 34
+        Align = alTop
+        BevelInner = bvLowered
+        Color = clMedGray
+        ParentBackground = False
+        TabOrder = 4
+        object Label8: TLabel
+          Left = 14
+          Top = 8
+          Width = 104
+          Height = 14
+          Caption = #1041#1072#1100#1083#1072#1085#1072#1078#1072#1100#1099' '#1090#1072#1088#1080#1093
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = []
+          ParentFont = False
+        end
+        object Label9: TLabel
+          Left = 4
+          Top = 9
+          Width = 6
+          Height = 18
+          Caption = '*'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clNavy
+          Font.Height = -15
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
+        object DBDateTimeEditEh2: TDBDateTimeEditEh
+          Tag = 1
+          Left = 149
+          Top = 3
+          Width = 132
+          Height = 21
+          Hint = 'dd/mm/yyyy'
+          DataField = 'CLOSEDATE'
+          DataSource = NewDataModDepositsContract.DepositPorpsDatSrc
+          EditButtons = <>
+          Kind = dtkDateEh
+          ParentShowHint = False
+          ReadOnly = True
+          ShowHint = True
+          TabOrder = 0
+          Visible = True
+          OnKeyPress = DBLCBFilialKeyPress
+        end
+      end
+      object Panel13: TPanel
+        Left = 2
+        Top = 207
+        Width = 284
+        Height = 34
+        BevelInner = bvLowered
+        TabOrder = 6
+        object Label20: TLabel
+          Left = 18
+          Top = 6
+          Width = 87
+          Height = 14
+          Caption = #1048#1083#1083#1080#1082' '#1092#1072#1080#1079#1080' (%)'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = []
+          ParentFont = False
+        end
+        object Label21: TLabel
+          Left = 4
+          Top = 8
+          Width = 6
+          Height = 18
+          Caption = '*'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clNavy
+          Font.Height = -15
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
+        object DBEditEh3: TDBEditEh
+          Left = 117
+          Top = 3
+          Width = 163
+          Height = 21
+          Alignment = taRightJustify
+          DataField = 'INTEREST'
+          DataSource = NewDataModDepositsContract.DepositPorpsDatSrc
+          EditButtons = <>
+          ReadOnly = True
+          TabOrder = 0
+          Visible = True
+        end
+      end
+      object Panel11: TPanel
+        Left = 2
+        Top = 241
+        Width = 284
+        Height = 35
+        BevelInner = bvLowered
+        TabOrder = 7
+        object Label4: TLabel
+          Left = 14
+          Top = 8
+          Width = 79
+          Height = 14
+          Caption = #1052'.'#1071'.'#1069' '#1092#1072#1080#1079' (%)'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = []
+          ParentFont = False
+        end
+        object DBNumberEditEh3: TDBNumberEditEh
+          Tag = 1
+          Left = 116
+          Top = 3
+          Width = 165
+          Height = 21
+          currency = True
+          DataField = 'DUEINTEREST'
+          DataSource = NewDataModDepositsContract.DepositPorpsDatSrc
+          DecimalPlaces = 4
+          EditButtons = <>
+          ReadOnly = True
+          TabOrder = 0
+          Visible = True
+        end
+      end
+      object Panel18: TPanel
+        Left = 2
+        Top = 276
+        Width = 284
+        Height = 34
+        BevelInner = bvLowered
+        TabOrder = 8
+        object Label17: TLabel
+          Left = 14
+          Top = 8
+          Width = 78
+          Height = 14
+          Caption = #1052'.'#1057'.'#1069' '#1092#1072#1080#1079' (%)'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = []
+          ParentFont = False
+        end
+        object DBEditEh2: TDBEditEh
+          Tag = 1
+          Left = 116
+          Top = 4
+          Width = 164
+          Height = 21
+          Alignment = taRightJustify
+          DataField = 'OVERDUEINTEREST'
+          DataSource = NewDataModDepositsContract.DepositPorpsDatSrc
+          EditButtons = <>
+          ReadOnly = True
+          TabOrder = 0
+          Visible = True
+        end
+      end
+      object Panel10: TPanel
+        Left = 2
+        Top = 310
+        Width = 284
+        Height = 35
+        BevelInner = bvLowered
+        TabOrder = 9
+        object Label10: TLabel
+          Left = 14
+          Top = 8
+          Width = 91
+          Height = 14
+          Caption = #1052#1094#1096#1090#1103#1088#1080#1085#1080#1085' '#1090#1080#1087#1080
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = []
+          ParentFont = False
+        end
+        object Label11: TLabel
+          Left = 4
+          Top = 9
+          Width = 6
+          Height = 18
+          Caption = '*'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clNavy
+          Font.Height = -15
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
+        object CBCategories: TDBLookupComboboxEh
+          Left = 116
+          Top = 5
+          Width = 165
+          Height = 21
+          DataField = 'CLIENTTYPE'
+          DataSource = NewDataModDepositsContract.DepositPorpsDatSrc
+          EditButtons = <>
+          KeyField = 'ID'
+          ListField = 'CATEGORY'
+          ListSource = NewDataModDepositsContract.ClientTypesDatSrc
+          TabOrder = 0
+          Visible = True
+        end
+      end
+      object Panel16: TPanel
+        Left = 2
+        Top = 345
+        Width = 284
+        Height = 34
+        BevelInner = bvLowered
+        TabOrder = 10
+        object Label23: TLabel
+          Left = 14
+          Top = 8
+          Width = 126
+          Height = 14
+          Caption = #1052#1094#1096#1090#1103#1088#1080#1085#1080#1085' '#1082#1072#1090#1077#1075#1086#1081#1072#1089#1099
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = []
+          ParentFont = False
+        end
+        object Label24: TLabel
+          Left = 4
+          Top = 9
+          Width = 6
+          Height = 18
+          Caption = '*'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clNavy
+          Font.Height = -15
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
+        object CBPersons: TDBLookupComboboxEh
+          Left = 145
+          Top = 5
+          Width = 135
+          Height = 21
+          DataField = 'PERSONALTYPE'
+          DataSource = NewDataModDepositsContract.DepositPorpsDatSrc
+          EditButtons = <>
+          KeyField = 'ID'
+          ListField = 'NAME'
+          ListSource = NewDataModDepositsContract.personsDatSrc
+          TabOrder = 0
+          Visible = True
+        end
+      end
+      object Panel12: TPanel
+        Tag = 1
+        Left = 2
+        Top = 172
+        Width = 284
+        Height = 35
+        BevelInner = bvLowered
+        TabOrder = 5
+        object Label18: TLabel
+          Left = 15
+          Top = 6
+          Width = 102
+          Height = 14
+          Caption = #1044#1077#1087#1086#1079#1080#1090#1080#1085' '#1084#1103#1073#1083#1103#1100#1080
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = []
+          ParentFont = False
+        end
+        object Label19: TLabel
+          Left = 4
+          Top = 8
+          Width = 6
+          Height = 18
+          Caption = '*'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clNavy
+          Font.Height = -15
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
+        object DBNumberEditeh: TDBNumberEditEh
+          Tag = 3
+          Left = 117
+          Top = 3
+          Width = 163
+          Height = 21
+          currency = True
+          DataField = 'AMOUNT'
+          DataSource = NewDataModDepositsContract.DepositPorpsDatSrc
+          EditButtons = <>
+          TabOrder = 0
+          Visible = True
+          OnKeyPress = DBNumberEditehKeyPress
+        end
+      end
+    end
+    object Panel14: TPanel
+      Left = 291
+      Top = 2
+      Width = 391
+      Height = 397
+      Align = alClient
+      BevelInner = bvLowered
+      TabOrder = 1
+      object Panel26: TPanel
+        Left = 2
+        Top = 106
+        Width = 387
+        Height = 49
+        Align = alTop
+        BevelInner = bvLowered
+        TabOrder = 3
+        object Label27: TLabel
+          Left = 4
+          Top = 29
+          Width = 26
+          Height = 13
+          Caption = 'ID-si:'
+        end
+        object Label28: TLabel
+          Left = 126
+          Top = 29
+          Width = 26
+          Height = 13
+          Caption = #1040#1076#1099':'
+        end
+        object StaticText1: TStaticText
+          Left = 2
+          Top = 2
+          Width = 383
+          Height = 17
+          Align = alTop
+          Alignment = taCenter
+          Caption = #1052#1094#1096#1090#1103#1088#1080
+          Color = clMedGray
+          ParentColor = False
+          TabOrder = 0
+        end
+        object DBLookupComboboxEh8: TDBLookupComboboxEh
+          Tag = 3
+          Left = 160
+          Top = 25
+          Width = 220
+          Height = 21
+          DataField = 'CUSTOMERID'
+          DataSource = NewDataModDepositsContract.DepositPorpsDatSrc
+          DropDownBox.Sizable = True
+          EditButtons = <>
+          KeyField = 'ID'
+          ListField = 'NAME'
+          ListSource = NewDataModDepositsContract.CustomersDatSrc
+          TabOrder = 2
+          Visible = True
+          OnKeyPress = DBLCBFilialKeyPress
+        end
+        object DBEdit1: TDBEdit
+          Tag = 3
+          Left = 32
+          Top = 25
+          Width = 88
+          Height = 21
+          DataField = 'CUSTOMERID'
+          DataSource = NewDataModDepositsContract.DepositPorpsDatSrc
+          TabOrder = 1
+          OnKeyPress = DBEdit1KeyPress
+        end
+      end
+      object GroupBox1: TGroupBox
+        Left = 2
+        Top = 155
+        Width = 387
+        Height = 237
+        Align = alTop
+        Caption = #1065#1077#1089#1072#1073#1083#1072#1088
+        TabOrder = 4
+        object Panel25: TPanel
+          Left = 2
+          Top = 15
+          Width = 383
+          Height = 44
+          Align = alTop
+          BevelInner = bvLowered
+          TabOrder = 0
+          object Label30: TLabel
+            Left = 4
+            Top = 8
+            Width = 6
+            Height = 18
+            Caption = '*'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clNavy
+            Font.Height = -15
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = [fsBold]
+            ParentFont = False
+          end
+          object DBLookupComboboxEh9: TDBLookupComboboxEh
+            Tag = 3
+            Left = 196
+            Top = 20
+            Width = 182
+            Height = 21
+            DataField = 'CONTRACTACCID'
+            DataSource = NewDataModDepositsContract.DepositPorpsDatSrc
+            DropDownBox.Sizable = True
+            EditButtons = <>
+            KeyField = 'ID'
+            ListField = 'CLIENTNAME'
+            ListSource = NewDataModDepositsContract.DepositAccsDatSrc
+            TabOrder = 2
+            Visible = True
+            OnKeyPress = DBLCBFilialKeyPress
+            OnKeyValueChanged = DBLookupComboboxEh9KeyValueChanged
+          end
+          object StaticText2: TStaticText
+            Left = 2
+            Top = 2
+            Width = 379
+            Height = 17
+            Align = alTop
+            Alignment = taCenter
+            Caption = #1044#1077#1087#1086#1079#1080#1090' '#1065#1077#1089#1072#1073#1099
+            Color = clMedGray
+            ParentColor = False
+            TabOrder = 0
+          end
+          object CMSearchEdit1: TCMSearchEdit
+            Tag = 3
+            Left = 4
+            Top = 20
+            Width = 190
+            Height = 21
+            TabOrder = 1
+            OnKeyPress = DBLCBFilialKeyPress
+            DataField = 'CONTRACTACCID'
+            DataSource = NewDataModDepositsContract.DepositPorpsDatSrc
+            KeyField = 'ID'
+            ListField = 'ACCNO'
+            ListSource = NewDataModDepositsContract.DepositAccsDatSrc
+            ErrorColor = clRed
+            BeepOnNotFound = True
+          end
+        end
+        object Panel24: TPanel
+          Left = 2
+          Top = 59
+          Width = 383
+          Height = 46
+          Align = alTop
+          BevelInner = bvLowered
+          TabOrder = 1
+          object StaticText3: TStaticText
+            Left = 2
+            Top = 2
+            Width = 379
+            Height = 17
+            Align = alTop
+            Alignment = taCenter
+            Caption = #1052#1094#1096#1090#1103#1088#1080' '#1065#1077#1089#1072#1073#1099
+            Color = clMedGray
+            ParentColor = False
+            TabOrder = 0
+          end
+          object CMSearchEdit2: TCMSearchEdit
+            Tag = 3
+            Left = 4
+            Top = 20
+            Width = 190
+            Height = 21
+            TabOrder = 1
+            OnKeyPress = DBLCBFilialKeyPress
+            DataField = 'CLIENTACCID'
+            DataSource = NewDataModDepositsContract.DepositPorpsDatSrc
+            KeyField = 'ID'
+            ListField = 'ACCNO'
+            ListSource = NewDataModDepositsContract.ClientaccsDatSrc
+            ErrorColor = clRed
+            BeepOnNotFound = True
+          end
+          object DBLookupComboboxEh10: TDBLookupComboboxEh
+            Tag = 3
+            Left = 196
+            Top = 20
+            Width = 182
+            Height = 21
+            DataField = 'CLIENTACCID'
+            DataSource = NewDataModDepositsContract.DepositPorpsDatSrc
+            DropDownBox.Sizable = True
+            EditButtons = <>
+            KeyField = 'ID'
+            ListField = 'CLIENTNAME'
+            ListSource = NewDataModDepositsContract.ClientaccsDatSrc
+            TabOrder = 2
+            Visible = True
+            OnKeyPress = DBLCBFilialKeyPress
+            OnKeyValueChanged = DBLookupComboboxEh9KeyValueChanged
+          end
+        end
+        object Panel23: TPanel
+          Left = 2
+          Top = 149
+          Width = 383
+          Height = 43
+          Align = alTop
+          BevelInner = bvLowered
+          TabOrder = 3
+          object CMSearchEdit3: TCMSearchEdit
+            Tag = 3
+            Left = 4
+            Top = 18
+            Width = 190
+            Height = 21
+            TabOrder = 1
+            OnKeyPress = DBLCBFilialKeyPress
+            DataField = 'INTERESTACCID'
+            DataSource = NewDataModDepositsContract.DepositPorpsDatSrc
+            KeyField = 'ID'
+            ListField = 'ACCNO'
+            ListSource = NewDataModDepositsContract.InterestsAccsDatSrc
+            ErrorColor = clRed
+            BeepOnNotFound = True
+          end
+          object DBLookupComboboxEh11: TDBLookupComboboxEh
+            Tag = 3
+            Left = 196
+            Top = 18
+            Width = 182
+            Height = 21
+            DataField = 'INTERESTACCID'
+            DataSource = NewDataModDepositsContract.DepositPorpsDatSrc
+            DropDownBox.Sizable = True
+            EditButtons = <>
+            KeyField = 'ID'
+            ListField = 'CLIENTNAME'
+            ListSource = NewDataModDepositsContract.InterestsAccsDatSrc
+            TabOrder = 2
+            Visible = True
+            OnKeyPress = DBLCBFilialKeyPress
+            OnKeyValueChanged = DBLookupComboboxEh9KeyValueChanged
+          end
+          object StaticText4: TStaticText
+            Left = -2
+            Top = 0
+            Width = 413
+            Height = 17
+            Alignment = taCenter
+            Caption = 
+              '                                           '#1060#1072#1080#1079#1083#1103#1088' '#1065#1077#1089#1072#1073#1099'       ' +
+              '                                                         '
+            Color = clMedGray
+            ParentColor = False
+            TabOrder = 0
+          end
+        end
+        object Panel20: TPanel
+          Left = 2
+          Top = 105
+          Width = 383
+          Height = 44
+          Align = alTop
+          BevelInner = bvLowered
+          TabOrder = 2
+          object StaticText5: TStaticText
+            Left = 2
+            Top = 2
+            Width = 379
+            Height = 17
+            Align = alTop
+            Alignment = taCenter
+            Caption = #1049#1099#1100#1099#1083#1084#1099#1096' '#1092#1072#1080#1079#1083#1103#1088' '#1094#1095#1094#1085' '#1082#1102#1095#1094#1088#1094#1083#1084#1103' '#1065#1077#1089#1072#1073#1099
+            Color = clMedGray
+            ParentColor = False
+            TabOrder = 0
+          end
+          object CMSearchEdit4: TCMSearchEdit
+            Tag = 3
+            Left = 4
+            Top = 19
+            Width = 190
+            Height = 21
+            TabOrder = 1
+            OnKeyPress = DBLCBFilialKeyPress
+            DataField = 'BOOROWERACCID'
+            DataSource = NewDataModDepositsContract.DepositPorpsDatSrc
+            KeyField = 'ID'
+            ListField = 'ACCNO'
+            ListSource = NewDataModDepositsContract.BoorowerAccsds
+            ErrorColor = clRed
+            BeepOnNotFound = True
+          end
+          object DBLookupComboboxEh2: TDBLookupComboboxEh
+            Tag = 3
+            Left = 196
+            Top = 19
+            Width = 182
+            Height = 21
+            DataField = 'BOOROWERACCID'
+            DataSource = NewDataModDepositsContract.DepositPorpsDatSrc
+            DropDownBox.Sizable = True
+            EditButtons = <>
+            KeyField = 'ID'
+            ListField = 'CLIENTNAME'
+            ListSource = NewDataModDepositsContract.BoorowerAccsds
+            TabOrder = 2
+            Visible = True
+            OnKeyPress = DBLCBFilialKeyPress
+            OnKeyValueChanged = DBLookupComboboxEh9KeyValueChanged
+          end
+        end
+        object Panel8: TPanel
+          Left = 2
+          Top = 192
+          Width = 383
+          Height = 43
+          Align = alBottom
+          BevelInner = bvLowered
+          TabOrder = 4
+          object CMSearchEdit5: TCMSearchEdit
+            Tag = 3
+            Left = 2
+            Top = 20
+            Width = 190
+            Height = 21
+            TabOrder = 1
+            OnKeyPress = DBLCBFilialKeyPress
+            DataField = 'BEFO_INTERESTPEYTACCID'
+            DataSource = NewDataModDepositsContract.DepositPorpsDatSrc
+            KeyField = 'ID'
+            ListField = 'ACCNO'
+            ListSource = NewDataModDepositsContract.DSRBEFO_INTERESTPEYTACC
+            ErrorColor = clRed
+            BeepOnNotFound = True
+          end
+          object DBLookupComboboxEh1: TDBLookupComboboxEh
+            Tag = 3
+            Left = 196
+            Top = 20
+            Width = 182
+            Height = 21
+            DataField = 'BEFO_INTERESTPEYTACCID'
+            DataSource = NewDataModDepositsContract.DepositPorpsDatSrc
+            DropDownBox.Sizable = True
+            EditButtons = <>
+            KeyField = 'ID'
+            ListField = 'CLIENTNAME'
+            ListSource = NewDataModDepositsContract.DSRBEFO_INTERESTPEYTACC
+            TabOrder = 2
+            Visible = True
+            OnKeyPress = DBLCBFilialKeyPress
+            OnKeyValueChanged = DBLookupComboboxEh9KeyValueChanged
+          end
+          object StaticText6: TStaticText
+            Left = 1
+            Top = 0
+            Width = 477
+            Height = 17
+            Alignment = taCenter
+            Caption = 
+              '                              Faizl'#601'rin '#601'vv'#601'lc'#601'd'#601'n '#246'd'#601'nm'#601'si hesa' +
+              'blar'#305'                                                           ' +
+              '     '
+            Color = clMedGray
+            ParentColor = False
+            TabOrder = 0
+          end
+        end
+      end
+      object Panel19: TPanel
+        Left = 2
+        Top = 71
+        Width = 387
+        Height = 35
+        Align = alTop
+        BevelInner = bvLowered
+        TabOrder = 2
+        object Label31: TLabel
+          Left = 20
+          Top = 8
+          Width = 139
+          Height = 14
+          Caption = #1060#1072#1080#1079#1080#1085' '#1080#1083#1082' '#1102#1076#1103#1085#1080#1096' '#1090#1072#1088#1080#1093#1080
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = []
+          ParentFont = False
+        end
+        object Label29: TLabel
+          Left = 10
+          Top = 8
+          Width = 6
+          Height = 18
+          Caption = '*'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clNavy
+          Font.Height = -15
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
+        object DBDateTimeEditEh1: TDBDateTimeEditEh
+          Tag = 3
+          Left = 171
+          Top = 3
+          Width = 109
+          Height = 21
+          DataField = 'FIRSTINTERESTPAYDAT'
+          DataSource = NewDataModDepositsContract.DepositPorpsDatSrc
+          EditButtons = <>
+          Kind = dtkDateEh
+          TabOrder = 0
+          Visible = True
+          OnKeyPress = DBLCBFilialKeyPress
+        end
+        object ChAutopr: TCheckBox
+          Left = 289
+          Top = 4
+          Width = 90
+          Height = 19
+          Caption = #1040#1074#1090#1086' '#1087#1088#1086#1083#1086#1085#1075'.'
+          Checked = True
+          State = cbChecked
+          TabOrder = 1
+        end
+      end
+      object Panel4: TPanel
+        Left = 2
+        Top = 37
+        Width = 387
+        Height = 34
+        Align = alTop
+        BevelInner = bvLowered
+        TabOrder = 1
+        object Label5: TLabel
+          Left = 25
+          Top = 10
+          Width = 38
+          Height = 13
+          Caption = #1060#1080#1083#1080#1072#1083
+        end
+        object Label32: TLabel
+          Left = 10
+          Top = 9
+          Width = 6
+          Height = 18
+          Caption = '*'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clNavy
+          Font.Height = -15
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
+        object DBLCBFilial: TDBLookupComboboxEh
+          Tag = 1
+          Left = 171
+          Top = 4
+          Width = 209
+          Height = 21
+          DataField = 'BRANCHID'
+          DataSource = NewDataModDepositsContract.DepositPorpsDatSrc
+          DropDownBox.Sizable = True
+          EditButtons = <>
+          KeyField = 'ID'
+          ListField = 'NAME'
+          ListSource = NewDataModDepositsContract.FilalsDatSrc
+          TabOrder = 0
+          Visible = True
+          OnKeyPress = DBLCBFilialKeyPress
+        end
+      end
+      object Panel5: TPanel
+        Left = 2
+        Top = 2
+        Width = 387
+        Height = 35
+        Align = alTop
+        BevelInner = bvLowered
+        TabOrder = 0
+        object Label1: TLabel
+          Left = 21
+          Top = 10
+          Width = 83
+          Height = 13
+          Caption = #1052#1094#1075#1072#1074#1080#1083#1103#1085#1080#1085' '#8470
+        end
+        object Label2: TLabel
+          Left = 10
+          Top = 9
+          Width = 6
+          Height = 18
+          Caption = '*'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clNavy
+          Font.Height = -15
+          Font.Name = 'Azl Sans Serif'
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
+        object DBEditEh1: TDBEditEh
+          Tag = 1
+          Left = 171
+          Top = 5
+          Width = 208
+          Height = 21
+          DataField = 'CONTRACTNO'
+          DataSource = NewDataModDepositsContract.DepositPorpsDatSrc
+          EditButtons = <>
+          TabOrder = 0
+          Visible = True
+        end
+      end
+    end
+  end
+end

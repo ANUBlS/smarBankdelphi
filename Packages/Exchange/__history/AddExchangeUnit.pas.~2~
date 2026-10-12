@@ -1,0 +1,126 @@
+ unit AddExchangeUnit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, Buttons, ExtCtrls;
+
+type
+  TFrmAddExchange = class(TForm)
+    Panel1: TPanel;
+    GroupBox1: TGroupBox;
+    Label1: TLabel;
+    Label2: TLabel;
+    Edit1: TEdit;
+    Edit2: TEdit;
+    Button1: TButton;
+    Button2: TButton;
+    procedure BitBtn1Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure FormKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure Button1Click(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmAddExchange: TFrmAddExchange;
+
+implementation
+
+uses ExcangeDataModule, UntExchangeImpl,sboapiDataModuleImpl, SBTranslateProc;;
+
+{$R *.DFM}
+
+procedure TFrmAddExchange.BitBtn1Click(Sender: TObject);
+begin
+if FrmExchange.i=1 then
+ begin
+  if (Edit1.text='') or (Edit2.Text='')then
+  begin
+   ShowMessage('Вы не до конца ввели все данные!');
+   Abort;
+  end;
+  ExchangeDataMod.OPacExchange.CallProcedure('add_exchanges',[Edit2.text,StrToInt(Edit1.text)]);
+  ExchangeDataMod.ViewGrid.Refresh;
+  Edit1.Text:='';
+  Edit2.Text:='';
+  Close;
+ end
+else
+ if FrmExchange.i=2 then
+ begin
+  if (Edit1.text='') or (Edit2.Text='')then
+  begin
+   ShowMessage('Вы не до конца ввели все данные!');
+   Abort;
+  end;
+  ExchangeDataMod.OPacExchange.CallProcedure('upd_exchanges',[ExchangeDataMod.ViewGrid.FieldByName('ID').AsInteger,Edit2.Text,StrToInt(Edit1.Text)]);
+  ExchangeDataMod.ViewGrid.Refresh;
+  Edit1.Text:='';
+  Edit2.Text:='';
+  Close;
+
+ end;
+end;
+
+procedure TFrmAddExchange.FormShow(Sender: TObject);
+begin
+ if  FrmExchange.i=2 then
+ begin
+  Edit1.Text:=ExchangeDataMod.ViewGrid.FieldByName('Exnum').AsString;
+  Edit2.Text:=ExchangeDataMod.ViewGrid.FieldByName('Name').AsString;
+ end; 
+end;
+
+procedure TFrmAddExchange.FormKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+ if (Key =VK_ESCAPE) then Close;
+end;
+
+procedure TFrmAddExchange.Button1Click(Sender: TObject);
+begin
+ Close;
+ Edit1.Text:='';
+ Edit2.Text:='';
+end;
+
+procedure TFrmAddExchange.Button2Click(Sender: TObject);
+begin
+if FrmExchange.i=1 then
+ begin
+  if (Edit1.text='') or (Edit2.Text='')then
+  begin
+   ShowMessage('Вы не до конца ввели все данные!');
+   Abort;
+  end;
+  ExchangeDataMod.OPacExchange.CallProcedure('add_exchanges',[Edit2.text,StrToInt(Edit1.text)]);
+  ExchangeDataMod.ViewGrid.Refresh;
+  Edit1.Text:='';
+  Edit2.Text:='';
+  Close;
+ end
+else
+ if FrmExchange.i=2 then
+ begin
+  if (Edit1.text='') or (Edit2.Text='')then
+  begin
+   ShowMessage('Вы не до конца ввели все данные!');
+   Abort;
+  end;
+  ExchangeDataMod.OPacExchange.CallProcedure('upd_exchanges',[ExchangeDataMod.ViewGrid.FieldByName('ID').AsInteger,Edit2.Text,StrToInt(Edit1.Text)]);
+  ExchangeDataMod.ViewGrid.Refresh;
+  Edit1.Text:='';
+  Edit2.Text:='';
+  Close;
+
+ end;
+end;
+
+end.

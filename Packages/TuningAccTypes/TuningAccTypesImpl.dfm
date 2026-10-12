@@ -1,0 +1,129 @@
+object FrmTuningAccTypes: TFrmTuningAccTypes
+  Left = 192
+  Top = 107
+  Width = 696
+  Height = 480
+  Caption = 'FrmTuningAccTypes'
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  OldCreateOrder = False
+  OnCreate = ActiveFormCreate
+  PixelsPerInch = 96
+  TextHeight = 13
+  object FlagsEditor: TDBGrid
+    Left = 0
+    Top = 0
+    Width = 688
+    Height = 453
+    Align = alClient
+    DataSource = DataSrcAccTypes
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 0
+    TitleFont.Charset = DEFAULT_CHARSET
+    TitleFont.Color = clWindow
+    TitleFont.Height = -11
+    TitleFont.Name = 'MS Sans Serif'
+    TitleFont.Style = []
+    Columns = <
+      item
+        Color = clWhite
+        Expanded = False
+        FieldName = 'SYMBOL'
+        Title.Caption = 'Ñèì'
+        Title.Color = clNavy
+        Title.Font.Charset = DEFAULT_CHARSET
+        Title.Font.Color = clWindow
+        Title.Font.Height = -11
+        Title.Font.Name = 'Azl Sans Serif'
+        Title.Font.Style = []
+        Width = 35
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'NAME'
+        Title.Color = clNavy
+        Width = 112
+        Visible = True
+      end
+      item
+        Color = clWhite
+        Expanded = False
+        FieldName = 'DESCRIPTION'
+        Title.Caption = 'Òÿéèíàòû'
+        Title.Color = clNavy
+        Title.Font.Charset = DEFAULT_CHARSET
+        Title.Font.Color = clWindow
+        Title.Font.Height = -11
+        Title.Font.Name = 'Azl Sans Serif'
+        Title.Font.Style = []
+        Width = 390
+        Visible = True
+      end>
+  end
+  object Account_Types: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      '  AT.* ,'
+      '  AT.RowID'
+      'from'
+      '  Account_Flags AT  ')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = False
+    Active = False
+    AfterOpen = Account_TypesAfterOpen
+    AfterPost = Account_TypesAfterPost
+    Left = 296
+    Top = 152
+    object Account_TypesSYMBOL: TStringField
+      FieldName = 'SYMBOL'
+      Required = True
+      Size = 1
+    end
+    object Account_TypesNAME: TStringField
+      FieldName = 'NAME'
+      Size = 32
+    end
+    object Account_TypesDESCRIPTION: TStringField
+      FieldName = 'DESCRIPTION'
+      Size = 128
+    end
+  end
+  object DataSrcAccTypes: TDataSource
+    DataSet = Account_Types
+    Left = 336
+    Top = 152
+  end
+end

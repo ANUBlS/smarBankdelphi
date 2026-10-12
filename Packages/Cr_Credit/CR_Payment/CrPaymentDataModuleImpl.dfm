@@ -1,0 +1,438 @@
+object PaymentDataModuleCr: TPaymentDataModuleCr
+  OldCreateOrder = False
+  Left = 419
+  Top = 230
+  Height = 480
+  Width = 696
+  object PaymentInfo: TOracleDataSet
+    SQL.Strings = (
+      
+        'SELECT id, creditid, paydate, payedamt, payedintamt, payeddueamt' +
+        ','
+      
+        '       payeddueintamt, payedpenaltyamt, tridamt, tridintamt, tri' +
+        'ddueamt,'
+      
+        '       triddueintamt, tridpenaltyamt, tridprimreserve, tridsecre' +
+        'serve,'
+      '       outtridobligation'
+      '  FROM cr_payments'
+      'WHERE CreditID=:CREDITID'
+      'ORDER BY PayDate DESC')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000120000003A00430052004500440049005400490044000300
+      00000000000000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 80
+    Top = 32
+    object PaymentInfoID: TFloatField
+      DisplayLabel = #8470
+      FieldName = 'ID'
+      Required = True
+    end
+    object PaymentInfoCREDITID: TFloatField
+      FieldName = 'CREDITID'
+      Required = True
+      Visible = False
+    end
+    object PaymentInfoPAYDATE: TDateTimeField
+      DisplayLabel = #1058#1072#1088#1080#1093
+      FieldName = 'PAYDATE'
+      Required = True
+    end
+    object PaymentInfoPAYEDAMT: TFloatField
+      DisplayLabel = #1071#1089#1072#1089' '#1073#1086#1088#1078#1076#1072#1085
+      FieldName = 'PAYEDAMT'
+      Required = True
+      DisplayFormat = '#,##0.00'
+    end
+    object PaymentInfoPAYEDINTAMT: TFloatField
+      DisplayLabel = #1060#1072#1080#1079' '#1073#1086#1088#1078#1091#1085#1076#1072#1085
+      FieldName = 'PAYEDINTAMT'
+      Required = True
+      DisplayFormat = '#,##0.00'
+    end
+    object PaymentInfoPAYEDDUEAMT: TFloatField
+      DisplayLabel = #1069#1077#1078#1080#1082#1084#1080#1096' '#1073#1086#1088#1078#1076#1072#1085
+      FieldName = 'PAYEDDUEAMT'
+      Required = True
+      DisplayFormat = '#,##0.00'
+    end
+    object PaymentInfoPAYEDDUEINTAMT: TFloatField
+      DisplayLabel = #1069#1077#1078#1080#1082#1084#1080#1096' '#1092#1072#1080#1079' '#1073#1086#1088#1078#1091#1085#1076#1072#1085
+      FieldName = 'PAYEDDUEINTAMT'
+      Required = True
+      DisplayFormat = '#,##0.00'
+    end
+    object PaymentInfoPAYEDPENALTYAMT2: TFloatField
+      DisplayLabel = #1055#1077#1085#1080#1081#1072
+      FieldName = 'PAYEDPENALTYAMT'
+    end
+  end
+  object DataSrcPaymentInfo: TDataSource
+    DataSet = PaymentInfo
+    Left = 80
+    Top = 80
+  end
+  object CustAccount: TOracleDataSet
+    SQL.Strings = (
+      'select '
+      '      BOOROWERACCID '
+      '   from '
+      '      CR_ACCOUNTS'
+      ' where CreditID=:CreditID')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000120000003A00430052004500440049005400490044000300
+      00000000000000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 336
+    Top = 40
+    object CustAccountBOOROWERACCID: TFloatField
+      FieldName = 'BOOROWERACCID'
+    end
+  end
+  object PaymentAccounts: TOracleDataSet
+    SQL.Strings = (
+      
+        'SELECT   a.id AS accid, a.kli_id, a.acc_no AS accountnumber , ab' +
+        's(t.OSTAT) as Rest, v.VAL_NAME'
+      '    FROM ACCOUNT  a ,'
+      '         TENOSTAT t ,'
+      '         AVALUTE  v'
+      '   WHERE (    a.kli_id = :kli_id'
+      '          AND a.bal_cn1 IN (SELECT accountnumber'
+      '                            FROM cr_aginfo'
+      '                           WHERE groupid = (SELECT g.id'
+      
+        '                                              FROM cr_accountgro' +
+        'ups g'
+      
+        '                                             WHERE g.iname = '#39'Cl' +
+        'ientAccs'#39'))'
+      '         )'
+      '         AND t.Acc_ID = a.ID'
+      '         AND v.VALUTE = a.VAL_ACC'
+      'UNION ALL'
+      
+        'SELECT   a.id AS accid, a.kli_id, a.acc_no AS accountnumber , ab' +
+        's(t.OSTAT) as Rest, v.VAL_NAME'
+      '    FROM ACCOUNT  a ,'
+      '         TENOSTAT t ,'
+      '         AVALUTE  v'
+      '   WHERE ((bal_cn1 IN (SELECT accountnumber'
+      '                         FROM cr_aginfo'
+      '                        WHERE groupid = (SELECT g.id'
+      
+        '                                           FROM cr_accountgroups' +
+        ' g'
+      
+        '                                          WHERE g.iname = '#39'Inter' +
+        'nalBankAccs'#39'))'
+      '          )'
+      '         )'
+      '         AND t.Acc_ID = a.ID'
+      '         AND v.VALUTE = a.VAL_ACC'
+      '         '
+      '--ORDER BY kli_id, accountnumber')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000E0000003A004B004C0049005F0049004400030000000000
+      000000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 200
+    Top = 88
+    object PaymentAccountsACCID: TFloatField
+      FieldName = 'ACCID'
+    end
+    object PaymentAccountsKLI_ID: TFloatField
+      FieldName = 'KLI_ID'
+    end
+    object PaymentAccountsACCOUNTNUMBER: TWideStringField
+      FieldName = 'ACCOUNTNUMBER'
+      Size = 30
+    end
+    object PaymentAccountsREST: TFloatField
+      FieldName = 'REST'
+      DisplayFormat = '#,##0.00'
+    end
+    object PaymentAccountsVAL_NAME: TWideStringField
+      FieldName = 'VAL_NAME'
+      Size = 10
+    end
+  end
+  object DataSrcPaymentAccounts: TDataSource
+    DataSet = PaymentAccounts
+    Left = 200
+    Top = 32
+  end
+  object LoanRest: TOracleDataSet
+    SQL.Strings = (
+      'SELECT'
+      '   C.REST , '
+      '   CR_COMMON.AccountNumber_Get(D.LOANACCID) as ACC_NO,'
+      '   C.PenaltyRest,'
+      '   cr_utils.Get_CreditPenaltyAccount(b.id) as penaltyAccno'
+      'FROM'
+      '   CR_ACTIVE_CREDITS B'
+      ' , CR_CURR_STATE C'
+      ' , CR_ACCOUNTS D'
+      'WHERE'
+      '     (B.ID =:CreditID)'
+      ' AND (D.CREDITID =:CreditID)'
+      ' AND (C.CREDITID =:CreditID)')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000120000003A00430052004500440049005400490044000300
+      00000000000000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 336
+    Top = 296
+    object LoanRestREST: TFloatField
+      FieldName = 'REST'
+      Required = True
+    end
+    object LoanRestPENALTYREST: TFloatField
+      FieldName = 'PENALTYREST'
+    end
+    object LoanRestACC_NO: TWideStringField
+      FieldName = 'ACC_NO'
+      Size = 4000
+    end
+    object LoanRestPENALTYACCNO: TWideStringField
+      FieldName = 'PENALTYACCNO'
+      Size = 4000
+    end
+  end
+  object DueIntRest: TOracleDataSet
+    SQL.Strings = (
+      'SELECT'
+      '   C.DUEINTERESTREST , '
+      '   CR_COMMON.AccountNumber_Get(D.DUEINTERESTACCID) as ACC_NO'
+      'FROM'
+      '   CR_ACTIVE_CREDITS B'
+      ' , CR_CURR_STATE C'
+      ' , CR_ACCOUNTS D'
+      'WHERE'
+      '     (B.ID =:CreditID)'
+      ' AND (D.CREDITID =:CreditID)'
+      ' AND (C.CREDITID =:CreditID)')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000120000003A00430052004500440049005400490044000300
+      00000000000000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 136
+    Top = 296
+    object DueIntRestDUEINTERESTREST: TFloatField
+      FieldName = 'DUEINTERESTREST'
+      Required = True
+    end
+    object DueIntRestACC_NO: TWideStringField
+      FieldName = 'ACC_NO'
+      Size = 4000
+    end
+  end
+  object DueRest: TOracleDataSet
+    SQL.Strings = (
+      'SELECT'
+      '   C.DUEREST , '
+      '   CR_COMMON.AccountNumber_Get(D.DUELOANACCID) as ACC_NO'
+      'FROM'
+      '   CR_ACTIVE_CREDITS B'
+      ' , CR_CURR_STATE C'
+      ' , CR_ACCOUNTS D'
+      'WHERE'
+      '     (B.ID =:CreditID)'
+      ' AND (D.CREDITID =:CreditID)'
+      ' AND (C.CREDITID =:CreditID)')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000120000003A00430052004500440049005400490044000300
+      00000000000000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 216
+    Top = 296
+    object DueRestDUEREST: TFloatField
+      FieldName = 'DUEREST'
+      Required = True
+    end
+    object DueRestACC_NO: TWideStringField
+      FieldName = 'ACC_NO'
+      Size = 4000
+    end
+  end
+  object IntRest: TOracleDataSet
+    SQL.Strings = (
+      'SELECT'
+      '   C.INTERESTREST , '
+      '   CR_COMMON.AccountNumber_Get(D.INTERESTACCID) as ACC_NO'
+      'FROM'
+      '   CR_ACTIVE_CREDITS B'
+      ' , CR_CURR_STATE C'
+      ' , CR_ACCOUNTS D'
+      'WHERE'
+      '     (B.ID =:CreditID)'
+      ' AND (D.CREDITID =:CreditID)'
+      ' AND (C.CREDITID =:CreditID)')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000120000003A00430052004500440049005400490044000300
+      00000000000000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 272
+    Top = 296
+    object IntRestINTERESTREST: TFloatField
+      FieldName = 'INTERESTREST'
+      Required = True
+    end
+    object IntRestACC_NO: TWideStringField
+      FieldName = 'ACC_NO'
+      Size = 4000
+    end
+  end
+  object DSLoanRest: TDataSource
+    DataSet = LoanRest
+    Left = 336
+    Top = 232
+  end
+  object DSDueIntRest: TDataSource
+    DataSet = DueIntRest
+    Left = 136
+    Top = 232
+  end
+  object DSDueRest: TDataSource
+    DataSet = DueRest
+    Left = 208
+    Top = 232
+  end
+  object DSIntRest: TDataSource
+    DataSet = IntRest
+    Left = 272
+    Top = 232
+  end
+  object PortfInfo: TOracleDataSet
+    SQL.Strings = (
+      'SELECT'
+      '   BOOROWERID , NAME'
+      'FROM'
+      '   CR_ACTIVE'
+      'WHERE ID=:CREDITID   ')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000120000003A00430052004500440049005400490044000300
+      00000000000000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 392
+    Top = 120
+  end
+  object DSPortfInfo: TDataSource
+    DataSet = PortfInfo
+    Left = 392
+    Top = 168
+  end
+  object CM_PAYMENT: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'CR_PAYMENT'
+    ParameterMode = pmNamed
+    Cursor = crHourGlass
+    Left = 64
+    Top = 176
+  end
+  object PeniyaPayAccounts: TOracleDataSet
+    SQL.Strings = (
+      ''
+      
+        'SELECT   a.id AS accid, a.kli_id, a.acc_no AS accountnumber , ab' +
+        's(t.OSTAT) as Rest, v.VAL_NAME'
+      '    FROM ACCOUNT  a ,'
+      '         TENOSTAT t ,'
+      '         AVALUTE  v'
+      '   WHERE ((bal_cn1 IN (SELECT accountnumber'
+      '                         FROM cr_aginfo'
+      '                        WHERE groupid = (SELECT g.id'
+      
+        '                                           FROM cr_accountgroups' +
+        ' g'
+      
+        '                                          WHERE g.iname = '#39'Inter' +
+        'nalBankAccs'#39'))'
+      '          )'
+      '         )'
+      '         AND t.Acc_ID = a.ID'
+      '         AND v.VALUTE = a.VAL_ACC'
+      '         '
+      'ORDER BY kli_id, accountnumber')
+    Optimize = False
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 192
+    Top = 152
+    object FloatField1: TFloatField
+      FieldName = 'ACCID'
+    end
+    object FloatField2: TFloatField
+      FieldName = 'KLI_ID'
+    end
+    object StringField1: TWideStringField
+      FieldName = 'ACCOUNTNUMBER'
+    end
+    object FloatField3: TFloatField
+      FieldName = 'REST'
+      DisplayFormat = '#,##0.00'
+    end
+    object StringField2: TWideStringField
+      FieldName = 'VAL_NAME'
+      Size = 10
+    end
+  end
+  object DSrcPeniyaPayAccounts: TDataSource
+    DataSet = PeniyaPayAccounts
+    Left = 296
+    Top = 144
+  end
+  object cm_utils: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'CR_UTILS'
+    Left = 56
+    Top = 248
+  end
+  object expcrdcnt: TOracleDataSet
+    SQL.Strings = (
+      'select '
+      'cr_utils.bankdaysbetween (MIN (psh.paymentdate),'
+      '                                   :dat'
+      '                                  ) AS exdatcount'
+      '                                  '
+      'from   cr_payment_schedule psh ,cr_curr_state cs'
+      
+        'where  psh.rest < cs.rest+cs.duerest and (cs.duerest+cs.rest - p' +
+        'sh.rest >= 0.5) '
+      'and psh.creditid = cs.creditid'
+      'and psh.paymentdate <=:dat'
+      'and psh.creditid = :crdid'
+      'group by psh.creditid')
+    Optimize = False
+    Variables.Data = {
+      0400000002000000080000003A004400410054000C0000000000000000000000
+      0C0000003A0043005200440049004400030000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      0500000001000000140000004500580044004100540043004F0055004E005400
+      010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 56
+    Top = 312
+    object expcrdcntEXDATCOUNT: TFloatField
+      FieldName = 'EXDATCOUNT'
+    end
+  end
+end

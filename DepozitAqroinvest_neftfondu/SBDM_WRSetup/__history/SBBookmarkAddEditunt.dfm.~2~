@@ -1,0 +1,129 @@
+object SBBookmarkAddEditForm: TSBBookmarkAddEditForm
+  Left = 359
+  Top = 238
+  BorderIcons = [biSystemMenu]
+  Caption = 'SBBookmarkAddEditForm'
+  ClientHeight = 94
+  ClientWidth = 316
+  Color = clBtnFace
+  Font.Charset = RUSSIAN_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poOwnerFormCenter
+  OnCanResize = FormCanResize
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  OnKeyPress = FormKeyPress
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Label1: TLabel
+    Left = 1
+    Top = 8
+    Width = 38
+    Height = 13
+    Caption = 'T'#601'yinat'#305
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
+  end
+  object Label4: TLabel
+    Left = 159
+    Top = 6
+    Width = 65
+    Height = 13
+    Caption = 'Bukmark'#305'n ad'#305
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
+  end
+  object DBEdit3: TDBEdit
+    Left = 159
+    Top = 25
+    Width = 144
+    Height = 21
+    Color = clWhite
+    DataField = 'BOOKMARKNAME'
+    DataSource = SBWRSetupDataMod.SBWRBookmarksDSrc
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 0
+  end
+  object Button1: TButton
+    Left = 150
+    Top = 56
+    Width = 75
+    Height = 25
+    Action = ActnAccept
+    Caption = 'Q'#601'bul'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ModalResult = 1
+    ParentFont = False
+    TabOrder = 1
+  end
+  object Button2: TButton
+    Left = 230
+    Top = 56
+    Width = 75
+    Height = 25
+    Action = ActnReject
+    Caption = #304'mtina'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 2
+  end
+  object DBLookupComboboxEh1: TDBLookupComboboxEh
+    Left = 1
+    Top = 24
+    Width = 145
+    Height = 21
+    Color = clCaptionText
+    DataField = 'FIELDID'
+    DataSource = SBWRSetupDataMod.SBWRBookmarksDSrc
+    DropDownBox.Sizable = True
+    EditButtons = <>
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    KeyField = 'ID'
+    ListField = 'DESCRIPTION'
+    ListSource = SBWRSetupDataMod.SBWRFieldsDSrc
+    ParentFont = False
+    TabOrder = 3
+    Visible = True
+  end
+  object ActionList1: TActionList
+    Top = 48
+    object ActnAccept: TAction
+      Caption = #1043#1103#1073#1091#1083
+      OnExecute = ActnAcceptExecute
+    end
+    object ActnReject: TAction
+      Caption = #1048#1084#1090#1080#1085#1072
+      OnExecute = ActnRejectExecute
+    end
+  end
+end

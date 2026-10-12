@@ -1,0 +1,755 @@
+﻿unit UMFPolicy;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActiveX, AxCtrls, PMFPolicy_TLB, StdVcl, Db, OracleData, StdCtrls,
+  Buttons, ExtCtrls, HintBox, DBCtrls, Mask,SBPlgAx50_TLB, INSWordExporter,
+  Oracle;
+
+const
+   WM_ModalResult = WM_USER+139;
+   fmCaption = 'Policy: (%s)';
+
+type
+  TMFPolicy = class(TActiveForm, IMFPolicy,IUIObject,
+                          IParamInput)//,
+                          //ISBPlgAc50BufferForm)    tale
+    GroupBox3: TGroupBox;
+    Label4: TLabel;
+    ENum: TDBEdit;
+    GroupBox2: TGroupBox;
+    Label2: TLabel;
+    Label11: TLabel;
+    Label14: TLabel;
+    DBEdit8: TDBEdit;
+    DBEdit9: TDBEdit;
+    DBEdit10: TDBEdit;
+    GroupBox1: TGroupBox;
+    Label30: TLabel;
+    Label32: TLabel;
+    Label31: TLabel;
+    Label33: TLabel;
+    Label34: TLabel;
+    Label27: TLabel;
+    ENumberP: TDBEdit;
+    ETotalMedical: TDBEdit;
+    ETotalLimit: TDBEdit;
+    ELimitPer: TDBEdit;
+    EMedicalExpen: TDBEdit;
+    EPremiuumIns: TDBEdit;
+    Ins_MotorFullData: TDataSource;
+    Ins_MotorFull: TOracleDataSet;
+    Ins_MotorFullID: TFloatField;
+    Ins_MotorFullKLI_ID: TFloatField;
+    Ins_MotorFullBANKING_DETAILS: TWideStringField;
+    Ins_MotorFullINSUREDMODEL: TWideStringField;
+    Ins_MotorFullINSUREDSTATENUM: TWideStringField;
+    Ins_MotorFullINSUREDCOLOR: TWideStringField;
+    Ins_MotorFullINSUREDOUTPUTYEAR: TIntegerField;
+    Ins_MotorFullINSUREDNUMSEATS: TIntegerField;
+    Ins_MotorFullINSUREDENGINENUM: TWideStringField;
+    Ins_MotorFullINSUREDCHASSISNUM: TWideStringField;
+    Ins_MotorFullINSUREDACTUALVALUE: TFloatField;
+    Ins_MotorFullTRANSMISSION_TYPE: TWideStringField;
+    Ins_MotorFullPRESENCE_ALARM: TWideStringField;
+    Ins_MotorFullMOTOR_USAGE: TWideStringField;
+    Ins_MotorFullMOTORSTORAGEPLACE: TWideStringField;
+    Ins_MotorFullEXISTINGDAMAGE: TWideStringField;
+    Ins_MotorFullINSURANCEGEOGRAPHICALLIMIT: TWideStringField;
+    Ins_MotorFullINSUREDBODY: TWideStringField;
+    PolicyData: TDataSource;
+    Policy: TOracleDataSet;
+    PolicyID: TFloatField;
+    PolicyMS_ID: TFloatField;
+    PolicyPOLICYNUM: TWideStringField;
+    PolicySUBJECTVALUE: TFloatField;
+    Customers: TOracleDataSet;
+    CustomersID: TIntegerField;
+    CustomersNAME: TWideStringField;
+    CustomersADDRESS: TWideStringField;
+    CustomersMOBILEPHONE: TWideStringField;
+    CustomersFAX: TWideStringField;
+    CustomersData: TDataSource;
+    BankInfoData: TDataSource;
+    BankInfo: TOracleDataSet;
+    AValute: TOracleDataSet;
+    AValuteVALU_NAME: TWideStringField;
+    AValuteVALUTE: TIntegerField;
+    AValuteVAL_NAME: TWideStringField;
+    AValuteVALU_SHORT: TWideStringField;
+    AValuteData: TDataSource;
+    SuggestionData: TDataSource;
+    Suggestion: TOracleDataSet;
+    SuggestionID: TFloatField;
+    SuggestionMK_ID: TFloatField;
+    SuggestionRISKADDRESS: TWideStringField;
+    SuggestionINSURANCEAMMOUNT: TFloatField;
+    SuggestionENDDATE: TDateTimeField;
+    SuggestionRSK_ID: TFloatField;
+    SuggestionFRZ_ID: TFloatField;
+    SuggestionCNDT_ID: TFloatField;
+    FranshizData: TDataSource;
+    Franshiz: TOracleDataSet;
+    FranshizID: TFloatField;
+    FranshizNAME: TWideStringField;
+    INSWordExporter1: TINSWordExporter;
+    MoreThanData: TDataSource;
+    MoreThan: TOracleDataSet;
+    MoreThanOneNAME: TWideStringField;
+    DBEdit1: TDBEdit;
+    Label1: TLabel;
+    Panel1: TPanel;
+    btPrint: TBitBtn;
+    BitBtn2: TBitBtn;
+    BitBtn3: TBitBtn;
+    btApply: TBitBtn;
+    Ins_MotorFullBROKER: TFloatField;
+    ODSBeneficiary: TOracleDataSet;
+    ODSBeneficiaryID: TFloatField;
+    ODSBeneficiaryNAME: TWideStringField;
+    ODSBeneficiaryADDRESS: TWideStringField;
+    ODSBeneficiaryPHONE: TWideStringField;
+    ODSBeneficiaryBANKING_DETAILS: TWideStringField;
+    BeneficiarySource: TDataSource;
+    ODSContracts: TOracleDataSet;
+    DSContracts: TDataSource;
+    ODSContractsID: TFloatField;
+    ODSContractsTYPE_ID: TFloatField;
+    ODSContractsINS_DATE: TDateTimeField;
+    ODSContractsBEGIN_DATE: TDateTimeField;
+    ODSContractsEND_DATE: TDateTimeField;
+    ODSContractsVALUTE_ID: TFloatField;
+    ODSContractsAMMOUNT: TFloatField;
+    ODSContractsCLOSE_PREFIX: TIntegerField;
+    ODSContractsKLI_ID: TFloatField;
+    ODSContractsLOANACC_ID: TFloatField;
+    ODSContractsCURRACC_ID: TFloatField;
+    ODSContractsPOLICY_NUM: TWideStringField;
+    SuggestionINSURANCESUM: TFloatField;
+    SuggestionVAL_ID: TFloatField;
+    ODSAgents: TOracleDataSet;
+    ODSAgentsNAME: TWideStringField;
+    ODSAgentsID: TFloatField;
+    AgentsSource: TDataSource;
+    OPCOMMON: TOraclePackage;
+    Ins_MotorFullPROFITID: TFloatField;
+    Ins_MotorFullTYPEID: TIntegerField;
+    Ins_MotorFullINSUREDTYPE: TFloatField;
+    Ins_MotorFullINSUREDMARK: TWideStringField;
+    ODSAutoTypes: TOracleDataSet;
+    ODSAutoTypesID: TFloatField;
+    ODSAutoTypesNAME: TWideStringField;
+    DSAutoTypes: TDataSource;
+    SpeedButton1: TSpeedButton;
+    Ins_MotorFullCID: TFloatField;
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure BitBtn3Click(Sender: TObject);
+    procedure ENumKeyPress(Sender: TObject; var Key: Char);
+    procedure BitBtn2Click(Sender: TObject);
+    procedure btPrintClick(Sender: TObject);
+    procedure btApplyClick(Sender: TObject);
+    procedure DBEdit8Change(Sender: TObject);
+    procedure SpeedButton1Click(Sender: TObject);
+  private
+    { Private declarations }
+    FParams : TStrings;
+    FOwnerHandle : Integer;
+    ID,tid : Integer;
+    FEvents: IMFPolicyEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+    procedure AddTransh;
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+
+     {}
+    function  Get_Owner:Integer; safecall;
+    procedure Set_Owner(val : Integer);  safecall;
+    {IParamInput}
+    function  Get_Params(const Name: WideString): OleVariant; safecall;
+    procedure Set_Params(const Name: WideString; Value: OleVariant); safecall;
+    property Params[const Name: WideString]: OleVariant read Get_Params write Set_Params;
+    {IInstance}
+    function InstanceInitialize: HResult; safecall;
+    function IUIObject.Initialize = InstanceInitialize;
+    function Cleanup: HResult; safecall;
+    {IUIObject}
+//    function  Get_Icon: OLE_HANDLE; safecall;
+    function UIObjectActivate: HResult; safecall;
+    function IUIObject.Activate = UIObjectActivate;
+    function QueryDeactivate: HResult; safecall;
+    function UIObjectDeactivate: HResult; safecall;
+    function IUIObject.Deactivate = UIObjectDeactivate;
+    function SaveState: HResult; safecall;
+    function  Get_Height : Integer; safecall;
+    function  Get_Width  : Integer; safecall;
+    Procedure SaveData;
+    public
+    { Public declarations }
+    procedure Initialize; override;
+  end;
+
+var
+    MFPolicy:TMFPolicy;
+
+implementation
+
+uses ComObj, ComServ,sboapiDataModuleImpl,SBTranslateProc;
+
+{$R *.DFM}
+
+{ TMFPolicy }
+
+procedure TMFPolicy.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_MFPolicyPage); }
+end;
+
+procedure TMFPolicy.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as IMFPolicyEvents;
+end;
+
+procedure TMFPolicy.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TMFPolicy.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TMFPolicy.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TMFPolicy.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TMFPolicy.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TMFPolicy.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TMFPolicy.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TMFPolicy.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TMFPolicy.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TMFPolicy.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TMFPolicy.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TMFPolicy.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TMFPolicy.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TMFPolicy.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TMFPolicy.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TMFPolicy.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TMFPolicy.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TMFPolicy.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TMFPolicy.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TMFPolicy._Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TMFPolicy.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TMFPolicy.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TMFPolicy.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TMFPolicy.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TMFPolicy.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TMFPolicy.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TMFPolicy.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TMFPolicy.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TMFPolicy.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TMFPolicy.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TMFPolicy.Set_AxBorderStyle(Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TMFPolicy.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TMFPolicy.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TMFPolicy.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TMFPolicy.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TMFPolicy.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TMFPolicy.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TMFPolicy.Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TMFPolicy.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TMFPolicy.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TMFPolicy.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TMFPolicy.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TMFPolicy.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TMFPolicy.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+function  TMFPolicy.Get_Owner:Integer;
+begin
+  Result := handle;
+end;
+
+procedure TMFPolicy.Set_Owner(val : Integer);
+begin
+  if val > 0 then
+     FOwnerHandle := val;
+end;
+
+
+function  TMFPolicy.Get_Params(const Name: WideString): OleVariant;
+begin
+  Result := FParams.Values[Name];
+end;
+
+procedure TMFPolicy.Set_Params(const Name: WideString; Value: OleVariant);
+begin
+  FParams.Values[Name] := Value;
+end;
+
+function TMFPolicy.InstanceInitialize: HResult;
+begin
+  Result := S_OK;
+end;
+
+function TMFPolicy.Cleanup: HResult;
+begin
+  Result := S_OK;
+end;
+
+function TMFPolicy.UIObjectActivate: HResult;
+begin
+        id := StrToInt(Get_Params('id'));
+        //showmessage(floattostr(id));
+        Ins_motorFull.Locate('ID',id,[]);
+        Franshiz.Locate('ID',Ins_motorFullBroker.Value,[]);
+        Suggestion.Locate('MK_ID', Ins_MotorFullID.Value,[]);
+        //showmessage(floattostr(Ins_MotorFullID.Value));
+        ODSContracts.Close;
+        ODSContracts.SetVariable('blankid',Ins_MotorFullID.value);
+        ODSContracts.Open;
+        ODSContracts.Edit;
+        Policy.SetVariable('MS_ID', SuggestionId.value);
+         Policy.Open;
+         //showmessage(floattostr(SuggestionId.value));
+         //showmessage(Get_Params('Mod'));
+        tid:=Ins_MotorFullTypeId.Value;
+        if Get_Params('Mod') = 'Insert' then
+        begin
+          Caption := format(fmCaption, ['Elave']);
+          Policy.Insert;
+          Policy.SetVariable('MS_ID', FloatToStr(SuggestionId.value));
+          Policy.Open;
+       end ;
+       //else
+       if Get_Params('Mod') = 'Edit' then
+          begin
+              Caption := format(fmCaption, ['Redakte']);
+              Policy.Edit;
+              Policy.SetVariable('MS_ID', SuggestionId.value);
+              Policy.Open;
+              btPrint.Enabled := True;
+              btApply.Enabled:=true;
+          end;
+       Result := S_OK;
+end;
+
+function TMFPolicy.QueryDeactivate: HResult;
+begin
+  Result := S_OK;
+end;
+
+function TMFPolicy.UIObjectDeactivate: HResult;
+begin
+  Result := S_OK;
+end;
+
+function TMFPolicy.SaveState: HResult;
+begin
+  Result := S_OK;
+end;
+
+function  TMFPolicy.Get_Height : Integer;
+begin
+  Result := Height;
+end;
+
+function  TMFPolicy.Get_Width  : Integer;
+begin
+  Result := Width;
+end;
+
+procedure TMFPolicy.ActiveFormCreate(Sender: TObject);
+begin
+     MFPolicy:=Self;
+     FParams := TStringList.Create;
+     SBTranslateProc.TranslateAllComponents(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TMFPolicy.BitBtn3Click(Sender: TObject);
+begin
+     PostMessage(FOwnerHandle, WM_ModalResult, mrCancel, 0);
+end;
+
+procedure TMFPolicy.SaveData;
+begin
+     PolicyMS_id.Value:=SuggestionID.Value;
+     PolicyPOLICYNUM.Value:=ODSContractsPOLICY_NUM.Value;
+     Policy.Post;
+     Policy.RefreshRecord();
+    { with ODSContracts do
+     if State in [dsEdit, dsInsert] then
+     begin
+        FieldByName('policy_id').asFloat := Policy.FieldByName('id').asFloat;  
+        Post;
+     end;  }
+          with ODSContracts do
+     if State in [dsEdit, dsInsert] then
+     begin
+        FieldByName('policy_num').asFloat := ENum.Text;
+        Post;
+     end;
+end;
+
+procedure TMFPolicy.ENumKeyPress(Sender: TObject; var Key: Char);
+begin
+     if Key = #13 then
+     begin
+        if HiWord(GetKeyState(VK_Shift))<>0 then
+           with Sender as TControl do
+           SelectNext(ActiveControl,False, True)
+        else
+           with Sender as TControl do
+           SelectNext(ActiveControl,True, True);
+        key:=#0;
+     end;
+end;
+
+procedure TMFPolicy.BitBtn2Click(Sender: TObject);
+begin
+         SaveData;
+         with Policy do
+         begin
+              if State in [dsInsert, dsEdit] then  Post;
+              RefreshRecord;
+         end;
+         PostMessage(FOwnerHandle, WM_ModalResult, mrOk, 0);
+end;
+
+procedure TMFPolicy.btPrintClick(Sender: TObject);
+var
+   i:integer;
+begin
+      if  MessageDlg('Əməliyyat aparılsın?', mtConfirmation,[mbYes, mbNo], 0) = mrYes then
+      AddTransh();
+      AValute.Locate('valute',ODSCOntractsValute_ID.Value,[]);
+      Customers.Locate('id',Ins_MotorFullKli_ID.value,[]);
+      with INSWordExporter1 do
+      begin
+          ODSBeneficiary.Locate('id',Ins_MotorFullProfitID.Value,[]);
+          ODSAgents.Locate('id',Ins_MotorFullBroker.Value,[]);
+          if not ODSAutoTypes.Active then ODSAutoTypes.Open;
+          ODSAutoTypes.Locate('ID',Ins_MotorFullInsuredType.Value,[]);
+          FileName:=ExtractFilePath(Application.ExeName)+ '\MotorFullPolicys.doc';   
+          Open(False);
+          if not CustomersName.IsNull then
+          SetBookmark('Insured1',CustomersName.value, false, false, False, false, 8, 'Arial AzLat', False);
+          if not SuggestionEndDate.IsNull then
+          begin
+               SetBookmark('Date1',DateToStr(SuggestionEndDate.value), False, False, False, False, 8, 'Arial AzLat', False);
+               SetBookmark('Date2',DateToStr(SuggestionEndDate.value), False, False, False, False, 8, 'Arial AzLat', False);
+          end;
+
+          SetBookmark('Agent',ODSAgentsName.value, false, false, False, false, 8, 'Arial AzLat', False);
+          SetBookmark('PolicyN',ODSContractsPolicy_Num.value, false, false, False, false, 8, 'Arial AzLat', False);
+          SetBookmark('Beneficiary',ODSBeneficiaryName.value, false, false, False, false, 8, 'Arial AzLat', False);
+          SetBookmark('Insured',CustomersName.value, false, false, False, false, 8, 'Arial AzLat', False);
+          SetBookmark('AInsured',CustomersAddress.value, false, false, False, false, 8, 'Arial AzLat', False);
+          SetBookmark('TInsured',CustomersMobilePhone.value, false, false, False, false, 8, 'Arial AzLat', False);
+          SetBookmark('Geo',Ins_MotorFullInsuranceGeographicalLimit.value, false, false, False, false, 8, 'Arial AzLat', False);
+          SetBookmark('Model',Ins_MotorFullInsuredMark.value+' '+Ins_MotorFullInsuredModel.value, false, false, False, false, 8, 'Arial AzLat', False);
+          SetBookmark('Year',InTToStr(Ins_MotorFullInsuredoutputYear.value), false, false, False, false, 8, 'Arial AzLat', False);
+          SetBookmark('Color',Ins_MotorFullInsuredColor.value, false, false, False, false, 8, 'Arial AzLat', False);
+          SetBookmark('Type',ODSAutoTypesName.Value, false, false, False, false, 8, 'Arial AzLat', False);
+          SetBookmark('Capacity',IntToStr(Ins_MotorFullInsuredNumSeats.value), false, false, False, false, 8, 'Arial AzLat', False);
+          SetBookmark('Engine',Ins_MotorFullInsuredEngineNum.value, false, false, False, false, 8, 'Arial AzLat', False);
+          SetBookmark('Body',Ins_MotorFullInsuredBody.value, false, false, False, false, 8, 'Arial AzLat', False);
+          SetBookmark('Chassis',Ins_MotorFullInsuredChassisNum.value, false, false, False, false, 8, 'Arial AzLat', False);
+          SetBookmark('Plate',Ins_MotorFullInsuredStateNum.value, false, false, False, false, 8, 'Arial AzLat', False);
+
+          if not Franshiz.Fields[1].IsNull then
+          SetBookmark('Deductible',Franshiz.Fields[1].value, false, false, False, false, 8, 'Arial AzLat', False);
+          if not SuggestionInsuranceSum.IsNull then
+          SetBookmark('SumInsured',CurrToStr(SuggestionInsuranceSum.value), false, false, False, false, 8, 'Arial AzLat', False);
+          if not ODSContractsAmmount.IsNull then
+          SetBookmark('InsPrem',CurrToStr(ODSContractsAmmount.value), false, false, False, false, 8, 'Arial AzLat', False);
+          { if not ODSContractsPolicy_num.IsNull then
+          SetBookmark('SValue',ODSContractsPolicy_num.value, false, false, False, false, 8, 'Arial AzLat', False);  }
+          if not AValute.Fields[0].IsNull then
+          SetBookmark('Currency',AValute.Fields[0].value, false, false, False, false, 8, 'Arial AzLat', False);
+          MoreThan.First;
+          for i:=0 to MoreThan.RecordCount-1 do
+          begin
+              if MoreThan.Fields[0].IsNull then Continue;
+              SetBookmark('Drivers',MoreThan.Fields[0].value+#13#10, false, false, false, false, 8, 'Arial AzLat', False);
+              MoreThan.Next;
+          end;
+          Show;
+     end;
+end;
+
+procedure TMFPolicy.btApplyClick(Sender: TObject);
+begin
+      SaveData;
+      with Policy do
+      begin
+           if State in [dsInsert, dsEdit] then  Post;
+           RefreshRecord;
+           Edit;
+      end;
+      btPrint.Enabled:=true;
+      btApply.Enabled:=false;
+end;
+
+procedure TMFPolicy.DBEdit8Change(Sender: TObject);
+begin
+     btApply.Enabled:=true;
+end;
+
+procedure TMFPolicy.AddTransh;
+begin
+     with OPCOMMON do begin
+      ODSContracts.Close;
+      ODSContracts.SetVariable('blankid',Ins_MotorFullID.Value);
+      ODSContracts.Open;
+      if CallIntegerFunction('addtransaction', [
+                      ODSContracts.FieldByName('LOANACC_ID').asFloat,
+                      ODSContracts.FieldByName('CURRACC_ID').asFloat,
+                      ODSContracts.FieldByName('AMMOUNT').asFloat]) > 0 then
+      MessageDlg('Emeliyyat kecirildi.', mtInformation, [mbOK], 0);
+      Close;
+    end;
+end;
+
+procedure TMFPolicy.SpeedButton1Click(Sender: TObject);
+begin
+     with ODSContracts do
+     if ODSContractsPolicy_Num.IsNull then
+        FieldByName('POLICY_NUM').AsString:=OPCommon.callStringFunction('generatePolicy_Num',[tid]);
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TMFPolicy,
+    Class_MFPolicy,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

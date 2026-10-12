@@ -1,0 +1,65 @@
+object ExpPasswordForm: TExpPasswordForm
+  Left = 0
+  Top = 0
+  AutoSize = True
+  Caption = #350'ifr'#601
+  ClientHeight = 97
+  ClientWidth = 213
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poScreenCenter
+  OnClose = FormClose
+  PixelsPerInch = 96
+  TextHeight = 13
+  object GroupBox1: TGroupBox
+    Left = 0
+    Top = 0
+    Width = 213
+    Height = 57
+    Align = alTop
+    Caption = #350'ir'#601
+    TabOrder = 0
+    object EditPassword: TEdit
+      Left = 10
+      Top = 22
+      Width = 184
+      Height = 21
+      TabOrder = 0
+    end
+  end
+  object Button1: TButton
+    Left = 23
+    Top = 72
+    Width = 75
+    Height = 25
+    Caption = 'Daxil et'
+    TabOrder = 1
+    OnClick = Button1Click
+  end
+  object Button2: TButton
+    Left = 104
+    Top = 72
+    Width = 75
+    Height = 25
+    Caption = #304'mtina'
+    TabOrder = 2
+    OnClick = Button2Click
+  end
+  object CMHintBox1: TCMHintBox
+    Left = 8
+    Top = 49
+    Width = 197
+    Height = 18
+    AutoSize = True
+    BevelOuter = bvNone
+    TabOrder = 3
+    Visible = False
+    Timeout = 4000
+    BeepOnMessage = False
+  end
+end

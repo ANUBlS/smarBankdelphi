@@ -1,0 +1,47 @@
+unit FrmCalculationimpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ExtCtrls;
+
+type
+  TFrmCalculation = class(TForm)
+    Panel1: TPanel;
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmCalculation: TFrmCalculation;
+
+implementation
+
+{$R *.dfm}
+
+uses CommanParametrs,sboapiDataModuleImpl,DmCalculationimpl;
+  procedure InitPlugin(s:string);export;
+begin
+
+   if s='' then
+   begin
+   FrmCalculation.ShowModal;
+   end;
+
+end;
+exports
+     InitPlugin;
+
+procedure TFrmCalculation.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+if ord(key)=vk_escape then  close;
+end;
+
+initialization
+ FrmCalculation :=TFrmCalculation.Create(Application);
+
+end.

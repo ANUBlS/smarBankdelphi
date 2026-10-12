@@ -1,0 +1,84 @@
+﻿unit EndCallAddİmpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, Buttons, DBCtrlsEh, Mask;
+
+type
+  TEndCallAddform = class(TForm)
+    BitBtn1: TBitBtn;
+    BitBtn2: TBitBtn;
+    GroupBox1: TGroupBox;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    CheckBox1: TCheckBox;
+    DBDateTimeEditEh1: TDBDateTimeEditEh;
+    CheckBox2: TCheckBox;
+    CheckBox3: TCheckBox;
+    procedure BitBtn1Click(Sender: TObject);
+    procedure CheckBox2Click(Sender: TObject);
+    procedure CheckBox1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  EndCallAddform: TEndCallAddform;
+
+implementation
+
+{$R *.dfm}
+ uses IntCalcDataModImpl,CommonDecls;
+procedure TEndCallAddform.BitBtn1Click(Sender: TObject);
+begin
+if CheckBox1.Checked=false then
+ if (CheckBox2.Checked=false ) and (CheckBox3.Checked=false ) then
+ begin
+  ShowMessage('Faiz və ya gecikmiş faiz bölmələrindən biri seçilməlidir');
+  exit;
+ end;
+if CheckBox1.Checked then
+DefineCalcDatMod.OracleDataSet2STATUS.AsInteger:=1
+else
+DefineCalcDatMod.OracleDataSet2STATUS.AsInteger:=0;
+
+DefineCalcDatMod.OracleDataSet2CREDITID.AsInteger:=Get_SelectedCrdID;
+DefineCalcDatMod.OracleDataSet2.Post;
+close;
+end;
+
+procedure TEndCallAddform.CheckBox1Click(Sender: TObject);
+begin
+if CheckBox1.Checked then
+begin
+ DBDateTimeEditEh1.Enabled:=False;
+ CheckBox2.Enabled :=false;
+ CheckBox3.Enabled :=false;
+ CheckBox2.Checked :=false;
+ CheckBox3.Checked :=false;
+end
+else
+  DBDateTimeEditEh1.Enabled:=true;
+ CheckBox2.Enabled :=true;
+ CheckBox3.Enabled :=true;
+end;
+
+procedure TEndCallAddform.CheckBox2Click(Sender: TObject);
+begin
+ if CheckBox2.Checked  then
+  DefineCalcDatMod.OracleDataSet2INTEREST.AsInteger:=1
+else
+DefineCalcDatMod.OracleDataSet2INTEREST.AsInteger:=0   ;
+
+ if CheckBox3.Checked  then
+  DefineCalcDatMod.OracleDataSet2DUEINTEREST.AsInteger:=1
+else
+DefineCalcDatMod.OracleDataSet2DUEINTEREST.AsInteger:=0
+end;
+
+end.

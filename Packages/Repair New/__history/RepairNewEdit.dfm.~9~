@@ -1,0 +1,678 @@
+object RepairEdit: TRepairEdit
+  Left = 213
+  Top = 246
+  BorderStyle = bsDialog
+  Caption = 'Repair'
+  ClientHeight = 395
+  ClientWidth = 818
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poScreenCenter
+  OnClose = FormClose
+  OnCreate = FormCreate
+  OnKeyPress = FormKeyPress
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object pnActionButtonsPanel: TPanel
+    Left = 0
+    Top = 364
+    Width = 818
+    Height = 31
+    Align = alBottom
+    TabOrder = 0
+    DesignSize = (
+      818
+      31)
+    object btClear: TBitBtn
+      Left = 657
+      Top = 4
+      Width = 75
+      Height = 24
+      Anchors = [akTop, akRight]
+      Caption = '&'#304'mtina'
+      DoubleBuffered = True
+      NumGlyphs = 2
+      ParentDoubleBuffered = False
+      TabOrder = 1
+      OnClick = btClearClick
+    end
+    object btCancel: TBitBtn
+      Left = 738
+      Top = 3
+      Width = 75
+      Height = 24
+      Anchors = [akTop, akRight]
+      Cancel = True
+      Caption = '&'#199#305'x'#305#351
+      DoubleBuffered = True
+      ModalResult = 2
+      NumGlyphs = 2
+      ParentDoubleBuffered = False
+      TabOrder = 2
+    end
+    object ErrorBox: THintBox
+      Left = 8
+      Top = 5
+      Width = 150
+      Height = 18
+      AutoSize = True
+      BevelOuter = bvNone
+      TabOrder = 3
+      Visible = False
+      HintStyle = hsAlert
+      Timeout = 4000
+      BeepOnMessage = True
+    end
+    object RepAnim: TAnimate
+      Left = 8
+      Top = 6
+      Width = 16
+      Height = 16
+      Color = clBtnFace
+      CommonAVI = aviFindComputer
+      ParentColor = False
+      StopFrame = 8
+      Visible = False
+    end
+    object btSave: TBitBtn
+      Left = 385
+      Top = 3
+      Width = 75
+      Height = 24
+      Caption = '&Yadda'#351'a yaz'
+      DoubleBuffered = True
+      ModalResult = 1
+      ParentDoubleBuffered = False
+      TabOrder = 0
+      OnClick = btSaveClick
+    end
+    object Button1: TButton
+      Left = 216
+      Top = 0
+      Width = 75
+      Height = 25
+      Caption = 'Button1'
+      TabOrder = 5
+      Visible = False
+      OnClick = Button1Click
+    end
+  end
+  object pnMain: TPanel
+    Left = 0
+    Top = 0
+    Width = 818
+    Height = 364
+    Align = alClient
+    BevelInner = bvLowered
+    TabOrder = 1
+    object pnDebet: TPanel
+      Left = 2
+      Top = 34
+      Width = 407
+      Height = 121
+      Align = alLeft
+      BevelInner = bvRaised
+      BevelOuter = bvNone
+      TabOrder = 1
+      object Label2: TLabel
+        Left = 7
+        Top = 6
+        Width = 36
+        Height = 13
+        Caption = 'DEBET'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ParentFont = False
+      end
+      object Panel2: TPanel
+        Left = 2
+        Top = 20
+        Width = 402
+        Height = 98
+        BevelInner = bvSpace
+        BevelOuter = bvLowered
+        TabOrder = 0
+        object Label4: TLabel
+          Left = 8
+          Top = 8
+          Width = 37
+          Height = 13
+          Caption = 'V. Kodu'
+        end
+        object Label5: TLabel
+          Left = 64
+          Top = 8
+          Width = 36
+          Height = 13
+          Caption = 'Valyuta'
+        end
+        object Label8: TLabel
+          Left = 318
+          Top = 8
+          Width = 43
+          Height = 13
+          Caption = 'M'#601'z'#601'nn'#601
+        end
+        object dblcCurDebet: TDBLookupComboBox
+          Left = 61
+          Top = 21
+          Width = 252
+          Height = 21
+          Color = clSilver
+          DataField = 'DEBITCURRENCYID'
+          DataSource = RapNewDataModule.Transaction
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          KeyField = 'VALUTE'
+          ListField = 'VALU_NAME'
+          ListSource = RapNewDataModule.CurDebet
+          ParentFont = False
+          TabOrder = 1
+          TabStop = False
+          OnCloseUp = dblcCurDebetCloseUp
+        end
+        object dlbcDebitAccNo: TDBLookupComboBox
+          Left = 199
+          Top = 46
+          Width = 200
+          Height = 21
+          Color = clSilver
+          DataField = 'DEBITID'
+          DataSource = RapNewDataModule.Transaction
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          KeyField = 'ID'
+          ListField = 'ACC_NO'
+          ListSource = RapNewDataModule.DebetAcc
+          ParentFont = False
+          TabOrder = 2
+          TabStop = False
+          OnCloseUp = dlbcDebitAccNoCloseUp
+        end
+        object dlbcDebitCustomer: TDBLookupComboBox
+          Left = 5
+          Top = 70
+          Width = 394
+          Height = 21
+          Color = clSilver
+          DataField = 'DEBITID'
+          DataSource = RapNewDataModule.Transaction
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          KeyField = 'ID'
+          ListField = 'NAME'
+          ListSource = RapNewDataModule.DebetAcc
+          ParentFont = False
+          TabOrder = 3
+          TabStop = False
+          OnCloseUp = dlbcDebitAccNoCloseUp
+        end
+        object seCurrenIDDebet: TEdit
+          Left = 6
+          Top = 21
+          Width = 52
+          Height = 21
+          ParentShowHint = False
+          ShowHint = False
+          TabOrder = 0
+          OnChange = seCurrenIDDebetChange
+          OnExit = seCurrenIDDebetExit
+        end
+        object edDebitAccNo: TSearchEdit
+          Left = 6
+          Top = 46
+          Width = 190
+          Height = 21
+          TabOrder = 4
+          Text = 'edDebitAccNo'
+          OnChange = edDebitAccNoChange
+          DataSource = RapNewDataModule.DebetAcc
+          SearchField = 'acc_no'
+        end
+        object ceDebetCurrency: TEdit
+          Left = 314
+          Top = 21
+          Width = 83
+          Height = 21
+          TabOrder = 5
+          OnChange = ceDebetCurrencyChange
+        end
+      end
+    end
+    object pnCredit: TPanel
+      Left = 409
+      Top = 34
+      Width = 407
+      Height = 121
+      Align = alClient
+      BevelInner = bvRaised
+      BevelOuter = bvNone
+      TabOrder = 2
+      DesignSize = (
+        407
+        121)
+      object Label3: TLabel
+        Left = 7
+        Top = 7
+        Width = 36
+        Height = 13
+        Caption = 'KRED'#304'T'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+      end
+      object Panel3: TPanel
+        Left = 3
+        Top = 20
+        Width = 402
+        Height = 98
+        Anchors = [akLeft, akTop, akRight]
+        BevelInner = bvSpace
+        BevelOuter = bvLowered
+        TabOrder = 0
+        object Label6: TLabel
+          Left = 8
+          Top = 8
+          Width = 37
+          Height = 13
+          Caption = 'V. Kodu'
+        end
+        object Label7: TLabel
+          Left = 64
+          Top = 8
+          Width = 36
+          Height = 13
+          Caption = 'Valyuta'
+        end
+        object Label9: TLabel
+          Left = 320
+          Top = 8
+          Width = 43
+          Height = 13
+          Caption = 'M'#601'z'#601'nn'#601
+        end
+        object dblcCurKredit: TDBLookupComboBox
+          Left = 61
+          Top = 21
+          Width = 252
+          Height = 21
+          Color = clSilver
+          DataField = 'CREDITCURRENCYID'
+          DataSource = RapNewDataModule.Transaction
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          KeyField = 'VALUTE'
+          ListField = 'VALU_NAME'
+          ListSource = RapNewDataModule.CurKredit
+          ParentFont = False
+          TabOrder = 2
+          TabStop = False
+          OnCloseUp = dblcCurKreditCloseUp
+        end
+        object dlbcKreditAccNo: TDBLookupComboBox
+          Left = 198
+          Top = 46
+          Width = 200
+          Height = 21
+          Color = clSilver
+          DataField = 'CREDITID'
+          DataSource = RapNewDataModule.Transaction
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          KeyField = 'ID'
+          ListField = 'ACC_NO'
+          ListSource = RapNewDataModule.CreditAcc
+          ParentFont = False
+          TabOrder = 3
+          TabStop = False
+          OnCloseUp = dlbcKreditAccNoCloseUp
+        end
+        object dlbcKreditCustomer: TDBLookupComboBox
+          Left = 5
+          Top = 69
+          Width = 394
+          Height = 21
+          Color = clSilver
+          DataField = 'CREDITID'
+          DataSource = RapNewDataModule.Transaction
+          KeyField = 'ID'
+          ListField = 'NAME'
+          ListSource = RapNewDataModule.CreditAcc
+          TabOrder = 4
+          TabStop = False
+          OnCloseUp = dlbcKreditAccNoCloseUp
+        end
+        object edKreditAccNo: TSearchEdit
+          Left = 5
+          Top = 46
+          Width = 190
+          Height = 21
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 1
+          Text = 'edKreditAccNo'
+          OnChange = edKreditAccNoChange
+          DataSource = RapNewDataModule.CreditAcc
+          SearchField = 'acc_no'
+        end
+        object seCurrenIDKredit: TEdit
+          Left = 6
+          Top = 21
+          Width = 52
+          Height = 21
+          TabOrder = 0
+          OnChange = seCurrenIDDebetChange
+          OnExit = seCurrenIDDebetExit
+        end
+        object ceKreditCurrency: TEdit
+          Left = 314
+          Top = 21
+          Width = 83
+          Height = 21
+          TabOrder = 5
+          OnChange = ceKreditCurrencyChange
+        end
+      end
+    end
+    object Panel1: TPanel
+      Left = 2
+      Top = 2
+      Width = 814
+      Height = 32
+      Align = alTop
+      BevelInner = bvRaised
+      BevelOuter = bvLowered
+      TabOrder = 0
+      object Label1: TLabel
+        Left = 8
+        Top = 8
+        Width = 87
+        Height = 13
+        Caption = #399'm'#601'liyyat'#305'n tarixi:'
+      end
+      object Bevel1: TBevel
+        Left = 502
+        Top = 2
+        Width = 310
+        Height = 28
+        Align = alRight
+        Shape = bsFrame
+      end
+      object Bevel2: TBevel
+        Left = 2
+        Top = 2
+        Width = 500
+        Height = 28
+        Align = alClient
+        Shape = bsFrame
+        ExplicitWidth = 508
+      end
+      object dtpRepairedit: TDateTimePicker
+        Left = 101
+        Top = 5
+        Width = 121
+        Height = 21
+        Date = 37989.714998182900000000
+        Time = 37989.714998182900000000
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 0
+        OnChange = dtpRepaireditChange
+      end
+      object chProfit: TCheckBox
+        Left = 488
+        Top = 8
+        Width = 121
+        Height = 17
+        Caption = 'G'#601'lir - Z'#601'r'#601'r hesablans'#305'n'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 2
+      end
+      object chRate: TCheckBox
+        Left = 326
+        Top = 8
+        Width = 153
+        Height = 17
+        Caption = 'M'#601'z'#601'nn'#601' f'#601'rqi hesablans'#305'n'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 1
+      end
+    end
+    object GroupBox1: TGroupBox
+      Left = 2
+      Top = 155
+      Width = 814
+      Height = 90
+      Align = alBottom
+      Caption = 'M'#601'bl'#601#287
+      TabOrder = 3
+      object SpeedButton1: TSpeedButton
+        Left = 5
+        Top = 53
+        Width = 128
+        Height = 30
+        Caption = 'Debet hesab'#305'n'#305'n qal'#305'qlar'#305
+        Flat = True
+        Visible = False
+      end
+      object SpeedButton2: TSpeedButton
+        Left = 680
+        Top = 54
+        Width = 128
+        Height = 30
+        Caption = 'Kredit hesab'#305'n'#305'n qal'#305'qlar'#305
+        Flat = True
+        Visible = False
+      end
+      object Panel4: TPanel
+        Left = 2
+        Top = 16
+        Width = 402
+        Height = 33
+        BevelInner = bvLowered
+        TabOrder = 0
+        object Label10: TLabel
+          Left = 4
+          Top = 9
+          Width = 70
+          Height = 13
+          Caption = 'Debet m'#601'bl'#601#287':'
+        end
+        object ceDebetAmount: TCurrencyEdit
+          Left = 88
+          Top = 6
+          Width = 209
+          Height = 21
+          TabOrder = 0
+          Text = '0'
+          OnChange = ceDebetAmountChange
+        end
+      end
+      object Panel5: TPanel
+        Left = 405
+        Top = 16
+        Width = 404
+        Height = 33
+        BevelInner = bvLowered
+        TabOrder = 1
+        object Label11: TLabel
+          Left = 4
+          Top = 9
+          Width = 69
+          Height = 13
+          Caption = 'Kredit m'#601'bl'#601#287':'
+        end
+        object ceKreditAmount: TCurrencyEdit
+          Left = 88
+          Top = 6
+          Width = 209
+          Height = 21
+          TabOrder = 0
+          Text = '0'
+          OnChange = ceKreditAmountChange
+        end
+      end
+      object Panel7: TPanel
+        Left = 136
+        Top = 52
+        Width = 541
+        Height = 32
+        BevelInner = bvLowered
+        TabOrder = 2
+        object Label12: TLabel
+          Left = 8
+          Top = 9
+          Width = 71
+          Height = 13
+          Caption = 'Milli valyutada:'
+        end
+        object ceLamount: TCurrencyEdit
+          Left = 113
+          Top = 6
+          Width = 256
+          Height = 21
+          TabOrder = 0
+          Text = '0'
+          OnChange = ceLamountChange
+        end
+      end
+    end
+    object GroupBox2: TGroupBox
+      Left = 2
+      Top = 245
+      Width = 814
+      Height = 71
+      Align = alBottom
+      Caption = 'M'#601'lumatlar'
+      TabOrder = 4
+      object Label13: TLabel
+        Left = 16
+        Top = 20
+        Width = 59
+        Height = 13
+        Caption = 'Balansdaxili:'
+      end
+      object Label14: TLabel
+        Left = 8
+        Top = 42
+        Width = 71
+        Height = 13
+        Caption = 'Konv. t'#601'yinat'#305':'
+      end
+      object dlbcBalance: TDBLookupComboBox
+        Left = 136
+        Top = 16
+        Width = 673
+        Height = 21
+        Color = clSilver
+        DataField = 'INBALANCECHAR'
+        DataSource = RapNewDataModule.Transaction
+        KeyField = 'SYMBOL'
+        ListField = 'NAME'
+        ListSource = RapNewDataModule.InBalanceChar
+        TabOrder = 0
+        TabStop = False
+        OnDropDown = dlbcBalanceDropDown
+      end
+      object dlbcConvertation: TDBLookupComboBox
+        Left = 136
+        Top = 40
+        Width = 673
+        Height = 21
+        Color = clSilver
+        DataField = 'OUTBALANCECHAR'
+        DataSource = RapNewDataModule.Transaction
+        KeyField = 'ID'
+        ListField = 'FULLPATH'
+        ListSource = RapNewDataModule.OutBalanceChar
+        TabOrder = 1
+        TabStop = False
+      end
+      object seOutBalance: TDBEdit
+        Left = 80
+        Top = 40
+        Width = 49
+        Height = 21
+        DataField = 'OUTBALANCECHAR'
+        DataSource = RapNewDataModule.Transaction
+        TabOrder = 3
+        OnChange = seInBalanceChange
+      end
+      object seInBalance: TDBEdit
+        Left = 80
+        Top = 16
+        Width = 49
+        Height = 21
+        CharCase = ecUpperCase
+        DataField = 'INBALANCECHAR'
+        DataSource = RapNewDataModule.Transaction
+        TabOrder = 2
+        OnChange = seInBalanceChange
+        OnExit = seInBalanceExit
+      end
+    end
+    object GroupBox3: TGroupBox
+      Left = 2
+      Top = 316
+      Width = 814
+      Height = 46
+      Align = alBottom
+      Caption = #399'm'#601'liyyat'#305'n t'#601'yinat'#305
+      TabOrder = 5
+      object edDescription: TComboBox
+        Left = 6
+        Top = 16
+        Width = 803
+        Height = 21
+        TabOrder = 0
+        OnDropDown = edDescriptionDropDown
+      end
+    end
+  end
+end

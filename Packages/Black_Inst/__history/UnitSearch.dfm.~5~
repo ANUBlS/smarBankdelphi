@@ -1,0 +1,86 @@
+object FormSearch: TFormSearch
+  Left = 0
+  Top = 0
+  ClientHeight = 513
+  ClientWidth = 1005
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poMainFormCenter
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object XFPanel1: TXFPanel
+    Left = 0
+    Top = 0
+    Width = 1005
+    Height = 472
+    Align = alClient
+    TabOrder = 0
+    object XDBGrid1: TXDBGrid
+      Left = 1
+      Top = 1
+      Width = 1003
+      Height = 470
+      Align = alClient
+      DataSource = DmBlack.dsrc_search
+      GridStyle.VisualStyle = vsXPStyle
+      Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit, dgExtendedSelect, dgInternalSelect, dgRowResize, dgRowScroll, dgHotButtons, dgTitleButtons, dgTitleHeaders, dgTitleWidthOff, dgMarkerAutoAlign, dgMarkerAutoToggle]
+      TabOrder = 0
+      OnTitleClick = XDBGrid1TitleClick
+      Columns = <
+        item
+          Expanded = False
+          FieldName = 'DATAID'
+          Title.Alignment = taCenter
+          Visible = True
+          Width = 200
+        end
+        item
+          Expanded = False
+          FieldName = 'NAM'
+          Title.Alignment = taCenter
+          Title.Caption = 'nam'
+          Visible = True
+          Width = 350
+        end
+        item
+          Expanded = False
+          FieldName = 'NAM1'
+          Title.Alignment = taCenter
+          Title.Caption = '#**#'
+          Visible = True
+          Width = 350
+        end>
+    end
+  end
+  object XFPanel2: TXFPanel
+    Left = 0
+    Top = 472
+    Width = 1005
+    Height = 41
+    Align = alBottom
+    TabOrder = 1
+    object Edit1: TEdit
+      Left = 24
+      Top = 6
+      Width = 216
+      Height = 21
+      TabOrder = 0
+      Text = 'Edit1'
+    end
+    object Button1: TButton
+      Left = 296
+      Top = 8
+      Width = 75
+      Height = 25
+      Caption = 'Button1'
+      TabOrder = 1
+      OnClick = Button1Click
+    end
+  end
+end

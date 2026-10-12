@@ -1,0 +1,45 @@
+unit UnitHuquqi;
+
+interface
+
+uses Windows, SysUtils, Messages, Classes, Graphics, Controls,
+  StdCtrls, ExtCtrls,dialogs, Forms, Quickrpt, QRCtrls, DB, OracleData;
+
+type
+  Trep = class(TQuickRep)
+    QRShape2: TQRShape;
+    QRSubDetail1: TQRSubDetail;
+    QRLoopBand1: TQRLoopBand;
+    QRMemo1: TQRMemo;
+    QRLabel1: TQRLabel;
+    QRLabel2: TQRLabel;
+    QRLabel3: TQRLabel;
+    QRLabel4: TQRLabel;
+    QRLabel5: TQRLabel;
+    QRLabel6: TQRLabel;
+    QRLabel7: TQRLabel;
+    QRLabel8: TQRLabel;
+    procedure QuickRepBeforePrint(Sender: TCustomQuickRep;
+      var PrintReport: Boolean);
+  private
+
+  public
+
+  end;
+
+var
+  rep: Trep;
+
+implementation
+
+uses  sboapiDataModuleImpl, SBTranslateProc,WorldCheckUnit;
+
+{$R *.DFM}
+
+procedure Trep.QuickRepBeforePrint(Sender: TCustomQuickRep;
+  var PrintReport: Boolean);
+begin
+SBTranslateProc.TranslateAllCompQuickRep(Self,sboapiDataModule.OrPack_SL);
+end;
+
+end.

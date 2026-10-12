@@ -1,0 +1,158 @@
+unit ExportFormImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, CheckLst, ExtCtrls, ExcelXP, Db, Variants;
+
+const
+  LCID : DWORD = LOCALE_SYSTEM_DEFAULT;
+
+type
+  TExportForm = class(TForm)
+    Panel1: TPanel;
+    CheckExportList: TCheckListBox;
+    Button1: TButton;
+    Panel2: TPanel;
+    CheckBox1: TCheckBox;
+    procedure FormCreate(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure FormKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure CheckBox1Click(Sender: TObject);
+  private
+
+  public
+
+   ExportList: TStrings;
+  end;
+
+var
+  ExportForm: TExportForm;
+
+implementation
+
+uses TransactionsViewerDataModuleUnit;
+
+{$R *.DFM}
+
+procedure TExportForm.FormCreate(Sender: TObject);
+var
+  Dummy, ExportedFieldsCount: Integer;
+begin
+ ExportList :=TStringList.Create;
+ with  CheckExportList.Items, TransDataModule do
+  begin
+    ExportedFieldsCount :=Transactions.FieldCount;
+    Clear;
+    for Dummy := 0  to ExportedFieldsCount - 1  do
+     begin
+      Add(Transactions.Fields[Dummy].DisplayName);
+      CheckExportList.Checked[Dummy] := True;
+     end;
+  end;
+
+end;
+
+procedure TExportForm.Button1Click(Sender: TObject);
+var
+  Dummy: Integer;
+  R,C,I,J : Integer;
+  V : Variant;
+  XLWS : ExcelWorkSheet;
+  XLApplication : TExcelApplication;
+  DataSet: TDataSet;
+  FName :String;
+begin
+ {
+ DataSet :=TransDataModule.Transactions;
+ DataSet.Last;
+ with DataSet, CheckExportList do
+  begin
+   ExportList.Clear;
+   for Dummy :=0 to FieldCount -1 do
+    if  Checked[Dummy]  then
+     begin
+      FName :=Fields[Dummy].Name;
+      System.Delete(FName,1,12);
+      ExportList.Add(FName);
+     end;
+  end;
+
+  I := 0;
+  R := DataSet.RecordCount+1;
+
+  if not (ExportList.Count)> 0 then
+   C := DataSet.FieldCount
+  else
+   C:=ExportList.Count;
+
+  V := VarArrayCreate([0,(R),0,(C-1)],varVariant);
+  VarArrayLock(V);
+  XLApplication := TExcelApplication.Create(Self);
+
+  with  DataSet do
+   begin
+    Open;
+    DisableControls;
+    First;
+    try
+     for J := 0  to C - 1 do
+      V[I,J] := FindField(ExportList[J]).DisplayLabel;
+      INC(I);
+        while not DataSet.Eof do
+        begin
+          for J := 0 to C - 1 do
+            V[I,J] := FindField(ExportList[J]).AsVariant;
+          INC(I);
+          Next;
+        end;
+    finally
+     EnableControls;
+     VarArrayUnlock(V);
+    end;
+   end;
+    //-----------------------------------IMPORT------------------------
+
+    XLApplication.Connect;
+    XLApplication.Visible[LCID] := True;
+    try
+      XLApplication.Workbooks.Add(EmptyParam,LCID);
+      XLWS := XLApplication.Sheets[1] as ExcelWorkSheet;
+      XLWS.Activate(LCID);
+
+      //XLWS.Cells.Range_['D1',XLWS.Cells.Item[R,C]].NumberFormat :='#,##.00';
+    XLWS.Range['A1','CA1'].Font.Bold := True;
+    XLWS.Cells.Font.Name :='Tahoma';
+    with XLWS do
+     Range['A1',XLWS.Cells.Item[R,C]].Value[V];//:=V;
+    finally
+      XLApplication.Disconnect;
+    end;       }
+
+    Close;
+end;
+
+procedure TExportForm.FormKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+ if (Key =VK_ESCAPE) then Close;
+end;
+
+procedure TExportForm.CheckBox1Click(Sender: TObject);
+var
+   i, icount: integer;
+   IsChecked: boolean;
+begin
+ IsChecked :=TCheckBox(Sender).Checked;
+ with CheckExportList do
+  begin
+   icount :=Items.Count;
+   for  i:=0 to icount-1 do
+    Checked[i] :=IsChecked;
+  end;
+
+end;
+
+end.

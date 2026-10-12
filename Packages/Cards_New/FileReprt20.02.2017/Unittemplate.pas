@@ -1,0 +1,189 @@
+unit Unittemplate;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Unitdatamod, Unitazips, Unitazips2, Grids, DBGrids, StdCtrls,
+  ExtCtrls, Menus;
+
+type
+  Ttemplate = class(TForm)
+    DBGrid1: TDBGrid;
+    Panel1: TPanel;
+    Label1: TLabel;
+    Edit2: TEdit;
+    Label2: TLabel;
+    Edit1: TEdit;
+    PopupMenu1: TPopupMenu;
+    ablonusil1: TMenuItem;
+    procedure FormCreate(Sender: TObject);
+    procedure DBGrid1DblClick(Sender: TObject);
+    procedure Edit1Change(Sender: TObject);
+    procedure Edit2Change(Sender: TObject);
+    procedure ablonusil1Click(Sender: TObject);
+    procedure DBGrid1TitleClick(Column: TColumn);
+    procedure Button1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  template: Ttemplate;
+  codex:integer;
+
+implementation
+
+{$R *.dfm}
+
+procedure Ttemplate.ablonusil1Click(Sender: TObject);
+begin
+with DataModbpl.templ do begin
+  DataModbpl.templ.Delete;
+
+end;
+end;
+
+procedure Ttemplate.Button1Click(Sender: TObject);
+begin
+DataModbpl.templ.Refresh;
+end;
+
+procedure Ttemplate.DBGrid1DblClick(Sender: TObject);
+var key:char;
+begin
+      key:=char(13);
+ if DataModbpl.templ.FieldByName('mt').AsString='MT205' then     begin
+   azips.MT205.Checked:=true;
+   azips.reciverbic.DataSource :=DataModbpl.bankssource;
+   azips.SearchEdit2.DataSource:=DataModbpl.bankssource;
+   azips.memo4.Text :=DataModbpl.templ.FieldByName('bankname').AsVariant;
+   azips.edit8.Text:= DataModbpl.templ.FieldByName('AMOUNT').AsString;
+   azips.reciverbic.Text :=copy(azips.Memo4.Lines[0],2,8);
+   azips.SearchEdit2.Text:=copy(azips.Memo4.Lines[4],1,8);
+   azips.SearchCombo2.Text:=copy(azips.Memo4.Lines[1],1,35);
+
+   if copy(DataModbpl.templ.FieldByName('teyinat2').AsString,0,5)='/BNF/' then  begin
+
+
+     azips.OF72_RichEdit.Text:=copy(DataModbpl.templ.FieldByName('teyinat2').AsString,6,1000) ;
+       azips.OF72_RichEdit.Text :=StringReplace(azips.OF72_RichEdit.text,'//', '',
+                          [rfReplaceAll, rfIgnoreCase]);
+
+   end
+   else
+   //azips.OF72_RichEdit.Text:=copy(DataModbpl.templ.FieldByName('teyinat2').AsString,7,35);
+
+
+   codex:=strtoint(DataModbpl.templ.FieldByName('teyinat').AsString);
+   // ShowMessage(DataModbpl.templ.FieldByName('teyinat').AsString);
+    //inttostr(codex));
+    case strtoint(DataModbpl.templ.FieldByName('teyinat').AsString) of
+
+    0: azips.RadioButton1.Checked:=true;
+    1: azips.RadioButton2.Checked:=true;
+    2: azips.RadioButton4.Checked:=true;
+    3: azips.RadioButton5.Checked:=true;
+    8: azips.RadioButton7.Checked:=true;
+    5: azips.RadioButton6.Checked:=true;
+    6: azips.RadioButton5.Checked:=true;
+      end;
+
+
+   close;
+end else     begin   //103
+     azips.MT103.Checked:=true;
+
+    azips.reciverbic.DataSource :=DataModbpl.bankssource;
+   azips.SearchEdit2.DataSource:=DataModbpl.bankssource;
+   azips.memo1.Text :=DataModbpl.templ.FieldByName('bankname').AsString;
+   azips.memo2.Text :=DataModbpl.templ.FieldByName('ahesab').AsString;
+
+
+   azips.amount.Text:=DataModbpl.templ.FieldByName('AMOUNT').AsString;
+
+      azips.edit2.Text:=copy(azips.Memo2.Lines[0],2,30);
+      azips.edit3.Text:=copy(azips.Memo2.Lines[1],0,35);
+      azips.edit4.Text:=DataModbpl.templ.FieldByName('avoen').AsString;
+
+
+     azips.edit7.Text:= DataModbpl.templ.FieldByName('ghesab').AsString;
+  DataModbpl.account.Closeall;
+ DataModbpl.account.SetVariable('accno',azips.edit7.Text);
+ DataModbpl.account.open;
+
+ azips.edit6.Text:= DataModbpl.account.FieldByName('KLi_id').AsVariant;
+  azips.Edit6KeyPress(azips.edit6,key);
+   azips.SearchEdit1.text:= DataModbpl.templ.FieldByName('ghesab').AsString;
+
+      azips.reciverbic.Text :=copy(azips.Memo2.Lines[3],0,6);
+   azips.SearchEdit2.Text:=copy(azips.Memo2.Lines[3],19,10);
+   azips.SearchCombo2.Text:= DataModbpl.templ.FieldByName('aadi').AsString;
+
+    azips.OF70_RichEdit.Text:=  DataModbpl.templ.FieldByName('teyinat').AsString ;
+    azips.OF72_RichEdit.Text:=  DataModbpl.templ.FieldByName('teyinat2').AsString ;
+
+   close;
+
+
+
+
+
+
+end;
+
+end;
+
+procedure Ttemplate.DBGrid1TitleClick(Column: TColumn);
+var TitleName :string;
+   SortPosition: word;
+begin
+ if Column.Field.Calculated then Exit;
+  Screen.Cursor := crSQLWait;
+  TitleName :=Column.FieldName;
+  try
+   with DataModbpl.templates do
+    begin
+
+    close;
+    sql[6]:='order by '+TitleName;
+     //;
+     open;
+     DBGrid1.DataSource.DataSet:=DataModbpl.templates;
+       //  ShowMessage(sql.Text);
+     Refresh
+    end;
+  finally
+   Screen.Cursor := crDefault;
+  end;
+
+
+
+end;
+
+procedure Ttemplate.Edit1Change(Sender: TObject);
+begin
+ with DataModbpl.templ do begin
+  Filter := 'mt = '''+Edit1.Text+('*')+'''';
+  Filtered:=true;
+end;
+end;
+
+procedure Ttemplate.Edit2Change(Sender: TObject);
+begin
+  with DataModbpl.templ do begin
+  Filter := 'tempname = '''+Edit2.Text+('*')+'''';
+  Filtered:=true;
+end;
+end;
+
+procedure Ttemplate.FormCreate(Sender: TObject);
+begin
+DBGrid1.DataSource:=DataModbpl.sourcetempl;
+DBGrid1.DataSource.DataSet.Active:=true;
+DBGrid1.DataSource.DataSet.Refresh;
+end;
+
+end.

@@ -1,0 +1,56 @@
+object DataModuleBanks: TDataModuleBanks
+  OldCreateOrder = False
+  Left = 39
+  Top = 256
+  Height = 480
+  Width = 696
+  object DSBanks: TDataSource
+    DataSet = Banks
+    Left = 200
+    Top = 92
+  end
+  object Banks: TOracleDataSet
+    SQL.Strings = (
+      'Select'
+      '   MainBanks.RowID'
+      '    ,MainBanks.*'
+      'From'
+      '    BankM MainBanks'
+      'Order By'
+      '     :Title'
+      ''
+      ' ')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    Variables.Data = {
+      0300000001000000060000003A5449544C45010000000900000042616E6B436F
+      64650000000000}
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = sboapiDataModule.SBSession
+    DesignActivation = False
+    Active = False
+    AfterPost = BanksAfterPost
+    Left = 120
+    Top = 88
+  end
+end

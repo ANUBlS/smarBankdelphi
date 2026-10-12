@@ -1,0 +1,324 @@
+object CC_AccInForm: TCC_AccInForm
+  Left = 497
+  Top = 553
+  Width = 783
+  Height = 384
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'MS Sans Serif'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poScreenCenter
+  PixelsPerInch = 96
+  TextHeight = 13
+  object SettingsBrowser: TDBGrid
+    Left = 0
+    Top = 0
+    Width = 758
+    Height = 273
+    Align = alTop
+    Color = clWhite
+    DataSource = CO_In_data
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    Options = [dgTitles, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit]
+    ParentFont = False
+    TabOrder = 0
+    TitleFont.Charset = RUSSIAN_CHARSET
+    TitleFont.Color = clWindowText
+    TitleFont.Height = -11
+    TitleFont.Name = 'Azl Sans Serif'
+    TitleFont.Style = [fsBold]
+    OnDblClick = SettingsBrowserDblClick
+    Columns = <
+      item
+        Color = clGray
+        Expanded = False
+        FieldName = 'NAME'
+        Title.Caption = 'ям€лиййатын ады'
+        Title.Color = clNavy
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clWhite
+        Title.Font.Height = -11
+        Title.Font.Name = 'Azl Sans Serif'
+        Title.Font.Style = []
+        Width = 171
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'DEBITACCOUNT'
+        Title.Caption = 'ƒебет'
+        Title.Color = clNavy
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clWhite
+        Title.Font.Height = -11
+        Title.Font.Name = 'Azl Sans Serif'
+        Title.Font.Style = []
+        Width = 116
+        Visible = True
+      end
+      item
+        Alignment = taCenter
+        Color = clSilver
+        Expanded = False
+        FieldName = 'DEBITCURRENCY'
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clNavy
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        Title.Alignment = taCenter
+        Title.Caption = '$'
+        Title.Color = clNavy
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clWhite
+        Title.Font.Height = -11
+        Title.Font.Name = 'Azl Sans Serif'
+        Title.Font.Style = []
+        Width = 30
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'CREDITACCOUNT'
+        Title.Caption = ' редит'
+        Title.Color = clNavy
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clWhite
+        Title.Font.Height = -11
+        Title.Font.Name = 'Azl Sans Serif'
+        Title.Font.Style = []
+        Width = 119
+        Visible = True
+      end
+      item
+        Alignment = taCenter
+        Color = clSilver
+        Expanded = False
+        FieldName = 'CREDITCURRENCY'
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clNavy
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        Title.Alignment = taCenter
+        Title.Caption = '$'
+        Title.Color = clNavy
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clWhite
+        Title.Font.Height = -11
+        Title.Font.Name = 'Azl Sans Serif'
+        Title.Font.Style = []
+        Width = 30
+        Visible = True
+      end>
+  end
+  object Panel4: TPanel
+    Left = 0
+    Top = 273
+    Width = 758
+    Height = 46
+    Align = alTop
+    AutoSize = True
+    BevelInner = bvLowered
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 1
+    object Panel5: TPanel
+      Left = 2
+      Top = 2
+      Width = 754
+      Height = 21
+      Align = alTop
+      Alignment = taLeftJustify
+      BevelOuter = bvNone
+      Caption = ' ям€лиййатын т€йинаты:'
+      TabOrder = 0
+      object DBEdit1: TDBEdit
+        Left = 102
+        Top = 0
+        Width = 686
+        Height = 21
+        Anchors = [akLeft, akTop, akRight]
+        Color = clSilver
+        DataField = 'ASSIGNMENT'
+        DataSource = CO_In_data
+        TabOrder = 0
+      end
+    end
+    object Panel6: TPanel
+      Left = 2
+      Top = 23
+      Width = 754
+      Height = 21
+      Align = alTop
+      Alignment = taLeftJustify
+      BevelOuter = bvNone
+      Caption = '  омиссийа €м€лиййатынын т€йинаты'
+      TabOrder = 1
+      Visible = False
+      object DBEdit2: TDBEdit
+        Left = 156
+        Top = 0
+        Width = 632
+        Height = 21
+        Anchors = [akLeft, akTop, akRight]
+        Color = clSilver
+        DataSource = CO_In_data
+        TabOrder = 0
+        Visible = False
+      end
+    end
+  end
+  object Panel3: TPanel
+    Left = 0
+    Top = 319
+    Width = 758
+    Height = 33
+    Align = alTop
+    BevelOuter = bvNone
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 2
+    object ButtonRefresh: TButton
+      Left = 595
+      Top = 6
+      Width = 75
+      Height = 25
+      Anchors = [akTop, akRight]
+      Caption = '…енил€'
+      TabOrder = 0
+      OnClick = ButtonRefreshClick
+    end
+    object ButtonClose: TButton
+      Left = 682
+      Top = 6
+      Width = 75
+      Height = 25
+      Anchors = [akTop, akRight]
+      Caption = 'Ѕаьла'
+      TabOrder = 1
+      OnClick = ButtonCloseClick
+    end
+    object Button3: TButton
+      Left = 508
+      Top = 6
+      Width = 75
+      Height = 27
+      Anchors = [akTop, akRight]
+      Caption = 'ялав€'
+      TabOrder = 2
+      OnClick = Button3Click
+    end
+  end
+  object CO_In_data: TDataSource
+    DataSet = CC_InForm
+    Left = 208
+    Top = 56
+  end
+  object CC_InForm: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      '    commision_trans.*'
+      '   ,id'
+      '   ,name'
+      '   ,debt'
+      
+        '   ,sb_complex_transactions.getaccountnumber(debt) as DebitAccou' +
+        'nt'
+      
+        '   ,sb_complex_transactions.GetAccountCurrency(debt) as DebitCur' +
+        'rency'
+      '   ,credit'
+      
+        '   ,sb_complex_transactions.getaccountnumber(credit) as CreditAc' +
+        'count'
+      
+        '   ,sb_complex_transactions.GetAccountCurrency(credit) as Credit' +
+        'Currency'
+      '   ,assignment'
+      '   ,UserID'
+      'from'
+      '    commision_trans'
+      'where'
+      '   debt>0'
+      'order by'
+      '    commision_trans.ID')
+    QBEDefinition.QBEFieldDefs = {
+      0400000013000000020000004944010000000000040000004E414D4501000000
+      000004000000444542540100000000000C00000044454249544143434F554E54
+      0100000000000D000000444542495443555252454E4359010000000000060000
+      004352454449540100000000000D0000004352454449544143434F554E540100
+      000000000E00000043524544495443555252454E43590100000000000A000000
+      41535349474E4D454E5401000000000006000000555345524944010000000000
+      0E0000004144444954494F4E414C444542540100000000001000000041444449
+      54494F4E414C43524544495401000000000013000000434F4D4D4953494F4E41
+      535349474E4D454E540100000000000400000049445F31010000000000060000
+      004E414D455F3101000000000006000000444542545F31010000000000080000
+      004352454449545F310100000000000C00000041535349474E4D454E545F3101
+      0000000000080000005553455249445F31010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 208
+    Top = 112
+    object CC_InFormID: TFloatField
+      FieldName = 'ID'
+    end
+    object CC_InFormNAME: TStringField
+      FieldName = 'NAME'
+      Size = 150
+    end
+    object CC_InFormDEBT: TFloatField
+      FieldName = 'DEBT'
+    end
+    object CC_InFormDEBITACCOUNT: TStringField
+      FieldName = 'DEBITACCOUNT'
+      Size = 4000
+    end
+    object CC_InFormDEBITCURRENCY: TStringField
+      FieldName = 'DEBITCURRENCY'
+      Size = 4000
+    end
+    object CC_InFormCREDIT: TFloatField
+      FieldName = 'CREDIT'
+    end
+    object CC_InFormCREDITACCOUNT: TStringField
+      FieldName = 'CREDITACCOUNT'
+      Size = 4000
+    end
+    object CC_InFormCREDITCURRENCY: TStringField
+      FieldName = 'CREDITCURRENCY'
+      Size = 4000
+    end
+    object CC_InFormASSIGNMENT: TStringField
+      FieldName = 'ASSIGNMENT'
+      Size = 300
+    end
+    object CC_InFormUSERID: TFloatField
+      FieldName = 'USERID'
+    end
+  end
+  object NLSLocalizer1: TNLSLocalizer
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    Left = 312
+    Top = 104
+  end
+end

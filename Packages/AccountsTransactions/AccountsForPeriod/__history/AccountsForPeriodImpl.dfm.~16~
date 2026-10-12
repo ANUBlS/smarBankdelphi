@@ -1,0 +1,481 @@
+object AccountsForPeriodForm: TAccountsForPeriodForm
+  Left = 167
+  Top = 114
+  Width = 767
+  Height = 499
+  Caption = 'Accounts For Period'
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  OnCreate = ActiveFormCreate
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 767
+    Height = 87
+    Align = alTop
+    TabOrder = 0
+    object SBExecute: TSpeedButton
+      Left = 568
+      Top = 8
+      Width = 70
+      Height = 36
+      Flat = True
+      Glyph.Data = {
+        36010000424D3601000000000000760000002800000015000000100000000100
+        040000000000C000000000000000000000001000000000000000000000000000
+        80000080000000808000800000008000800080800000C0C0C000808080000000
+        FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00333333333333
+        333333333000333333333333333333333000338FF3FF3333333333333000338C
+        F38CFF33333333333000338CF38CCCFF333333333000338CF38CCCCCFF333333
+        3000338CF38CCCCCCCFF33333000338CF38CCCCCCCCCFF333000338CF38CCCCC
+        CCCC88F33000338CF38CCCCCCC8833333000338CF38CCCCC883333333000338C
+        F38CCC88333333333000338CF38C88333333333330003388F388333333333333
+        3000333333333333333333333000333333333333333333333000}
+      OnClick = SBExecuteClick
+    end
+    object SBExcelExport: TSpeedButton
+      Left = 644
+      Top = 12
+      Width = 70
+      Height = 36
+      Hint = 'Excel  Export '
+      Flat = True
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      Glyph.Data = {
+        76010000424D7601000000000000760000002800000020000000100000000100
+        04000000000000010000130B0000130B00001000000000000000000000000000
+        800000800000008080008000000080008000808000007F7F7F00BFBFBF000000
+        FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00300000000000
+        00033FFFFFFFFFFFFFFF0888888888888880777777777777777F088888888888
+        8880777777777777777F0000000000000000FFFFFFFFFFFFFFFF0F8F8F8F8F8F
+        8F80777777777777777F08F8F8F8F8F8F9F0777777777777777F0F8F8F8F8F8F
+        8F807777777777777F7F0000000000000000777777777777777F3330FFFFFFFF
+        03333337F3FFFF3F7F333330F0000F0F03333337F77773737F333330FFFFFFFF
+        03333337F3FF3FFF7F333330F00F000003333337F773777773333330FFFF0FF0
+        33333337F3FF7F3733333330F08F0F0333333337F7737F7333333330FFFF0033
+        33333337FFFF7733333333300000033333333337777773333333}
+      NumGlyphs = 2
+      ParentFont = False
+      ParentShowHint = False
+      ShowHint = True
+      OnClick = SBExcelExportClick
+    end
+    object Label1: TLabel
+      Left = 153
+      Top = 59
+      Width = 78
+      Height = 13
+      Caption = #1041#1072#1083#1072#1085#1089' '#1097#1077#1089#1072#1073#1099
+    end
+    object Label2: TLabel
+      Left = 547
+      Top = 59
+      Width = 76
+      Height = 13
+      Caption = #1097#1077#1089#1072#1073' '#1089#1080#1084#1074#1086#1083#1091
+    end
+    object GroupBox1: TGroupBox
+      Left = 1
+      Top = 1
+      Width = 147
+      Height = 85
+      Align = alLeft
+      Caption = #1058#1072#1088#1080#1093' '#1072#1088#1072#1083#1099#1100#1099
+      TabOrder = 0
+      object DTPFirstDate: TDateTimePicker
+        Left = 9
+        Top = 18
+        Width = 129
+        Height = 21
+        Date = 37910.636930740700000000
+        Time = 37910.636930740700000000
+        TabOrder = 0
+      end
+      object DTPLastDate: TDateTimePicker
+        Left = 9
+        Top = 53
+        Width = 129
+        Height = 21
+        Date = 37910.636940868100000000
+        Time = 37910.636940868100000000
+        TabOrder = 1
+      end
+    end
+    object GroupBox2: TGroupBox
+      Left = 148
+      Top = 1
+      Width = 198
+      Height = 45
+      Caption = #1060#1080#1083#1080#1072#1083
+      TabOrder = 1
+      object BranchesCB: TSearchCombo
+        Left = 4
+        Top = 16
+        Width = 189
+        Height = 22
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -12
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 0
+        DataSource = FPADataMod.DataSrcBranches
+        ViewField = 'Name'
+        DefaultString = #220'mumi bank '#252'zr'#601
+        DefaultStringUse = True
+        DefaultStringColor = clNavy
+      end
+    end
+    object AccountsListEdit: TEdit
+      Left = 230
+      Top = 55
+      Width = 307
+      Height = 21
+      TabOrder = 2
+    end
+    object GroupBox3: TGroupBox
+      Left = 347
+      Top = 1
+      Width = 188
+      Height = 45
+      Caption = #1048#1089#1090#1080#1092#1072#1076#1103#1095#1080
+      TabOrder = 3
+      object UsersCB: TSearchCombo
+        Left = 4
+        Top = 16
+        Width = 178
+        Height = 22
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -12
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 0
+        DataSource = FPADataMod.DataSrcSysUsers
+        ViewField = 'NAME'
+        DefaultString = 'B'#252't'#252'n istifad'#601#231'il'#601'r'
+        DefaultStringUse = True
+        DefaultStringColor = clNavy
+      end
+    end
+    object simvoledit: TEdit
+      Left = 625
+      Top = 54
+      Width = 185
+      Height = 21
+      CharCase = ecUpperCase
+      TabOrder = 4
+    end
+  end
+  object AccountsViewer: TDBGrid
+    Left = 0
+    Top = 87
+    Width = 767
+    Height = 412
+    Align = alClient
+    DataSource = FPADataMod.DataSrcAccounts
+    DrawingStyle = gdsGradient
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -12
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit, dgTitleClick]
+    ParentFont = False
+    TabOrder = 1
+    TitleFont.Charset = DEFAULT_CHARSET
+    TitleFont.Color = clWhite
+    TitleFont.Height = -11
+    TitleFont.Name = 'Azl Sans Serif'
+    TitleFont.Style = []
+    OnTitleClick = AccountsViewerTitleClick
+    Columns = <
+      item
+        Color = clSilver
+        Expanded = False
+        FieldName = 'ACCCURRENCY'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clNavy
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        Title.Caption = '   $'
+        Title.Color = clNavy
+        Title.Font.Charset = DEFAULT_CHARSET
+        Title.Font.Color = clNavy
+        Title.Font.Height = -11
+        Title.Font.Name = 'Tahoma'
+        Title.Font.Style = []
+        Width = 30
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'BALANCENO'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        Title.Color = clNavy
+        Title.Font.Charset = DEFAULT_CHARSET
+        Title.Font.Color = clNavy
+        Title.Font.Height = -11
+        Title.Font.Name = 'Tahoma'
+        Title.Font.Style = []
+        Width = 73
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'ACCNAME'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        Title.Color = clNavy
+        Title.Font.Charset = DEFAULT_CHARSET
+        Title.Font.Color = clNavy
+        Title.Font.Height = -11
+        Title.Font.Name = 'Tahoma'
+        Title.Font.Style = []
+        Width = 152
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'OPENDATE'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        Title.Color = clNavy
+        Title.Font.Charset = DEFAULT_CHARSET
+        Title.Font.Color = clNavy
+        Title.Font.Height = -11
+        Title.Font.Name = 'Tahoma'
+        Title.Font.Style = []
+        Width = 90
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'CLOSEDATE'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        Title.Color = clNavy
+        Title.Font.Charset = DEFAULT_CHARSET
+        Title.Font.Color = clNavy
+        Title.Font.Height = -11
+        Title.Font.Name = 'Tahoma'
+        Title.Font.Style = []
+        Width = 90
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'TAXID'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        Title.Color = clNavy
+        Title.Font.Charset = DEFAULT_CHARSET
+        Title.Font.Color = clNavy
+        Title.Font.Height = -11
+        Title.Font.Name = 'Tahoma'
+        Title.Font.Style = []
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'ACCNO'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        Title.Color = clNavy
+        Title.Font.Charset = DEFAULT_CHARSET
+        Title.Font.Color = clNavy
+        Title.Font.Height = -11
+        Title.Font.Name = 'Tahoma'
+        Title.Font.Style = []
+        Width = 190
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'OPERATORID'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        Title.Color = clNavy
+        Title.Font.Charset = DEFAULT_CHARSET
+        Title.Font.Color = clNavy
+        Title.Font.Height = -11
+        Title.Font.Name = 'Tahoma'
+        Title.Font.Style = []
+        Width = 92
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'SEXSIYYETID'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        Title.Color = clNavy
+        Title.Font.Charset = DEFAULT_CHARSET
+        Title.Font.Color = clNavy
+        Title.Font.Height = -11
+        Title.Font.Name = 'Tahoma'
+        Title.Font.Style = []
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'REZ'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        Title.Color = clNavy
+        Title.Font.Charset = DEFAULT_CHARSET
+        Title.Font.Color = clNavy
+        Title.Font.Height = -11
+        Title.Font.Name = 'Tahoma'
+        Title.Font.Style = []
+        Width = 64
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'PHONE'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        Title.Color = clNavy
+        Title.Font.Charset = DEFAULT_CHARSET
+        Title.Font.Color = clNavy
+        Title.Font.Height = -11
+        Title.Font.Name = 'Tahoma'
+        Title.Font.Style = []
+        Width = 64
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'DOGUM'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        Title.Color = clNavy
+        Title.Font.Charset = DEFAULT_CHARSET
+        Title.Font.Color = clNavy
+        Title.Font.Height = -11
+        Title.Font.Name = 'Tahoma'
+        Title.Font.Style = []
+        Width = 64
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'ADRESS'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        Title.Color = clNavy
+        Title.Font.Charset = DEFAULT_CHARSET
+        Title.Font.Color = clNavy
+        Title.Font.Height = -11
+        Title.Font.Name = 'Tahoma'
+        Title.Font.Style = []
+        Width = 64
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'ADI'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        Title.Color = clNavy
+        Title.Font.Charset = DEFAULT_CHARSET
+        Title.Font.Color = clNavy
+        Title.Font.Height = -11
+        Title.Font.Name = 'Tahoma'
+        Title.Font.Style = []
+        Width = 64
+        Visible = True
+      end>
+  end
+  object AccountsExporter: TExcelExporter
+    ExportSource = FPADataMod.DataSrcAccounts
+    SheetName = 'Accounts'
+    ShowTitles = True
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    Left = 600
+    Top = 176
+  end
+  object CMExcelExport1: TCMExcelExport
+    StyleColumnWidth = cwDefault
+    ColumnWidth = 0
+    FontTitles.Charset = DEFAULT_CHARSET
+    FontTitles.Color = clWindowText
+    FontTitles.Height = -11
+    FontTitles.Name = 'Tahoma'
+    FontTitles.Style = []
+    OrientationTitles = 0
+    FontData.Charset = DEFAULT_CHARSET
+    FontData.Color = clWindowText
+    FontData.Height = -11
+    FontData.Name = 'Tahoma'
+    FontData.Style = []
+    FontSummary.Charset = DEFAULT_CHARSET
+    FontSummary.Color = clWindowText
+    FontSummary.Height = -11
+    FontSummary.Name = 'Tahoma'
+    FontSummary.Style = []
+    SummarySelection = ssNone
+    SummaryCalculation = scSUM
+    Left = 528
+    Top = 232
+  end
+end

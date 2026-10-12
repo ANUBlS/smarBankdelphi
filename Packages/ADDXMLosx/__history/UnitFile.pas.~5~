@@ -1,0 +1,47 @@
+unit UnitFile;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, Buttons, XFSCtrls, Gauges, ExtCtrls, DB, OracleData;
+
+type
+  TFormFile = class(TForm)
+    XFPanel1: TXFPanel;
+    Gauge_cust: TGauge;
+    XFGroupBox1: TXFGroupBox;
+    SpeedButton1: TSpeedButton;
+    EditFile: TEdit;
+    XFBitBtn2: TXFBitBtn;
+    XFBitBtn1: TXFBitBtn;
+    SaveDlgKredit: TSaveDialog;
+    OracleDataSet1: TOracleDataSet;
+    procedure SpeedButton1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormFile: TFormFile;
+    f: TextFile;
+    UnusableGrops: Set Of Byte;
+    FilePAth: String;
+implementation
+ uses   sboapiDataModuleImpl,ADD_XML;
+
+{$R *.dfm}
+
+procedure TFormFile.SpeedButton1Click(Sender: TObject);
+begin
+  with SaveDlgKredit do
+    if Execute then
+      EditFile.Text:= FileName;
+      AssignFile(f, EditFile.Text);
+      Rewrite(f);
+      Closefile(f);
+end;
+
+end.

@@ -1,0 +1,2122 @@
+﻿unit mainUnit;
+
+{$WARN SYMBOL_PLATFORM OFF}
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics,Variants, Controls, Forms, Dialogs,
+  ActiveX, AxCtrls, Accepted_portfel_TLB, StdVcl, Grids, DBGrids, StdCtrls,
+  ExtCtrls, ImgList, OleServer, ExcelXP, Menus, Buttons, DBCtrls, ComCtrls;
+
+
+type
+  TAcceptedportfell = class(TActiveForm, IAcceptedportfell)
+    Panel1: TPanel;
+    BtnRefresh: TButton;
+    ImageList1: TImageList;
+    Button2: TButton;
+    Button3: TButton;
+    ExcelApplication1: TExcelApplication;
+    PopupMenu1: TPopupMenu;
+    mliyyat1: TMenuItem;
+    Settbtn: TButton;
+    Button4: TButton;
+    filtergroup: TGroupBox;
+    DBLookupComboBox1: TDBLookupComboBox;
+    Label3: TLabel;
+    CheckBox1: TCheckBox;
+    filterrefreshbutton: TSpeedButton;
+    DBLookupComboBox2: TDBLookupComboBox;
+    CheckBox2: TCheckBox;
+    Label2: TLabel;
+    Button1: TButton;
+    Button5: TButton;
+    Button6: TButton;
+    Panel2: TPanel;
+    SearchGroup: TGroupBox;
+    DBGrid1: TDBGrid;
+    EditRownum: TEdit;
+    EditId: TEdit;
+    Editinnorpinn: TEdit;
+    EditBorrowername: TEdit;
+    Editakt1: TEdit;
+    Editakt2: TEdit;
+    Editbeneficiar: TEdit;
+    Button7: TButton;
+    HquqiTdbirlr1: TMenuItem;
+    mlak1: TMenuItem;
+    mliyyatArxiv1: TMenuItem;
+    MaliyyAray1: TMenuItem;
+    Redakt1: TMenuItem;
+    procedure BtnRefreshClick(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure Button3Click(Sender: TObject);
+    procedure SettbtnClick(Sender: TObject);
+    procedure mliyyat1Click(Sender: TObject);
+    procedure Button4Click(Sender: TObject);
+    procedure DBLookupComboBox1CloseUp(Sender: TObject);
+    procedure CheckBox1Click(Sender: TObject);
+    procedure CheckBox2Click(Sender: TObject);
+    procedure DBLookupComboBox2Click(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure Button5Click(Sender: TObject);
+    procedure Button6Click(Sender: TObject);
+    procedure Button7Click(Sender: TObject);
+    procedure EditRownumChange(Sender: TObject);
+    procedure EditIdChange(Sender: TObject);
+    procedure EditinnorpinnChange(Sender: TObject);
+    procedure EditBorrowernameChange(Sender: TObject);
+    procedure Editakt1Change(Sender: TObject);
+    procedure Editakt2Change(Sender: TObject);
+    procedure EditbeneficiarChange(Sender: TObject);
+    procedure Button8Click(Sender: TObject);
+    procedure HquqiTdbirlr1Click(Sender: TObject);
+    procedure mlak1Click(Sender: TObject);
+    procedure mliyyatArxiv1Click(Sender: TObject);
+    procedure MaliyyAray1Click(Sender: TObject);
+    procedure Redakt1Click(Sender: TObject);
+  private
+    { Private declarations }
+    FEvents: IAcceptedportfellEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure MouseEnterEvent(Sender: TObject);
+    procedure MouseLeaveEvent(Sender: TObject);
+    procedure PaintEvent(Sender: TObject);
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AlignDisabled: WordBool; safecall;
+    function Get_AlignWithMargins: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_BorderWidth: Integer; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_DockSite: WordBool; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_ExplicitHeight: Integer; safecall;
+    function Get_ExplicitLeft: Integer; safecall;
+    function Get_ExplicitTop: Integer; safecall;
+    function Get_ExplicitWidth: Integer; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_MouseInClient: WordBool; safecall;
+    function Get_ParentCustomHint: WordBool; safecall;
+    function Get_ParentDoubleBuffered: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PopupMode: TxPopupMode; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_ScreenSnap: WordBool; safecall;
+    function Get_SnapBuffer: Integer; safecall;
+    function Get_UseDockManager: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_AlignWithMargins(Value: WordBool); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_BorderWidth(Value: Integer); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_DockSite(Value: WordBool); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_ParentCustomHint(Value: WordBool); safecall;
+    procedure Set_ParentDoubleBuffered(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PopupMode(Value: TxPopupMode); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_ScreenSnap(Value: WordBool); safecall;
+    procedure Set_SnapBuffer(Value: Integer); safecall;
+    procedure Set_UseDockManager(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+  public
+    { Public declarations }
+    procedure Initialize; override;
+  end;
+
+implementation
+
+uses ComObj, ComServ, sboapiDataModuleImpl, Datamodunit, NewFrm,SBTranslateProc,
+  trasactions, SettingsUnit, PaymentsUnit, PaymentreportUnit, Unitselection,
+  CourtUNIT, PropertyUnit, Unittranarxiv, EDİTORFORM;
+
+{$R *.DFM}
+
+{ TAcceptedportfell }
+
+procedure TAcceptedportfell.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_AcceptedportfellPage); }
+end;
+
+procedure TAcceptedportfell.Editakt1Change(Sender: TObject);
+begin
+ with datamod.maincrprt do begin
+  Filter := 'akt1 = '''+Editakt1.Text+('*')+'''';
+ end;
+end;
+
+procedure TAcceptedportfell.Editakt2Change(Sender: TObject);
+begin
+ with datamod.maincrprt do begin
+  Filter := 'akt2 = '''+Editakt2.Text+('*')+'''';
+ end;
+end;
+
+procedure TAcceptedportfell.EditbeneficiarChange(Sender: TObject);
+begin
+ with datamod.maincrprt do begin
+  Filter := 'beneficiar = '''+Editbeneficiar.Text+('*')+'''';
+ end;
+end;
+
+procedure TAcceptedportfell.EditBorrowernameChange(Sender: TObject);
+begin
+ with datamod.maincrprt do begin
+  Filter := 'borrower_name = '''+EditBorrowername.Text+('*')+'''';
+ end;
+end;
+
+procedure TAcceptedportfell.EditIdChange(Sender: TObject);
+begin
+ with datamod.maincrprt do begin
+  Filter := 'cust_id = '''+Editid.Text+('*')+'''';
+ end;
+end;
+
+procedure TAcceptedportfell.EditinnorpinnChange(Sender: TObject);
+begin
+
+  with datamod.maincrprt do begin
+  Filter := 'innorpin = '''+Editinnorpinn.Text+('*')+'''';
+ end;
+
+end;
+
+procedure TAcceptedportfell.EditRownumChange(Sender: TObject);
+begin
+ with datamod.maincrprt do begin
+  Filter := 'prtid = '''+EditRownum.Text+('*')+'''';
+
+
+ end;
+end;
+
+procedure TAcceptedportfell.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as IAcceptedportfellEvents;
+  inherited EventSinkChanged(EventSink);
+end;
+
+procedure TAcceptedportfell.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnMouseEnter := MouseEnterEvent;
+  OnMouseLeave := MouseLeaveEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TAcceptedportfell.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TAcceptedportfell.Get_AlignDisabled: WordBool;
+begin
+  Result := AlignDisabled;
+end;
+
+function TAcceptedportfell.Get_AlignWithMargins: WordBool;
+begin
+  Result := AlignWithMargins;
+end;
+
+function TAcceptedportfell.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TAcceptedportfell.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TAcceptedportfell.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TAcceptedportfell.Get_BorderWidth: Integer;
+begin
+  Result := Integer(BorderWidth);
+end;
+
+function TAcceptedportfell.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TAcceptedportfell.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TAcceptedportfell.Get_DockSite: WordBool;
+begin
+  Result := DockSite;
+end;
+
+function TAcceptedportfell.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TAcceptedportfell.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TAcceptedportfell.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TAcceptedportfell.Get_ExplicitHeight: Integer;
+begin
+  Result := ExplicitHeight;
+end;
+
+function TAcceptedportfell.Get_ExplicitLeft: Integer;
+begin
+  Result := ExplicitLeft;
+end;
+
+function TAcceptedportfell.Get_ExplicitTop: Integer;
+begin
+  Result := ExplicitTop;
+end;
+
+function TAcceptedportfell.Get_ExplicitWidth: Integer;
+begin
+  Result := ExplicitWidth;
+end;
+
+function TAcceptedportfell.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TAcceptedportfell.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TAcceptedportfell.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TAcceptedportfell.Get_MouseInClient: WordBool;
+begin
+  Result := MouseInClient;
+end;
+
+function TAcceptedportfell.Get_ParentCustomHint: WordBool;
+begin
+  Result := ParentCustomHint;
+end;
+
+function TAcceptedportfell.Get_ParentDoubleBuffered: WordBool;
+begin
+  Result := ParentDoubleBuffered;
+end;
+
+function TAcceptedportfell.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TAcceptedportfell.Get_PopupMode: TxPopupMode;
+begin
+  Result := Ord(PopupMode);
+end;
+
+function TAcceptedportfell.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TAcceptedportfell.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TAcceptedportfell.Get_ScreenSnap: WordBool;
+begin
+  Result := ScreenSnap;
+end;
+
+function TAcceptedportfell.Get_SnapBuffer: Integer;
+begin
+  Result := SnapBuffer;
+end;
+
+function TAcceptedportfell.Get_UseDockManager: WordBool;
+begin
+  Result := UseDockManager;
+end;
+
+function TAcceptedportfell.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TAcceptedportfell.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TAcceptedportfell.HquqiTdbirlr1Click(Sender: TObject);
+begin
+DataMod.SB_ACA.CallProcedure('CheckAdvancedObjectAccess', ['COURTEDIT']);
+  if not Assigned(datamod) then
+     datamod:=TDataMod.Create(nil);
+
+      if not Assigned(CourtFrm) then
+     CourtFrm:=TCourtFrm.Create(nil);
+     CourtFrm.ShowModal;
+end;
+
+procedure TAcceptedportfell._Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TAcceptedportfell.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TAcceptedportfell.ActiveFormCreate(Sender: TObject);
+begin
+  SBTranslateProc.TranslateFEComponents(Self,sboapiDataModule.OrPack_SL);
+ if not Assigned(datamod) then
+     datamod:=TDataMod.Create(nil);
+end;
+
+procedure TAcceptedportfell.BtnRefreshClick(Sender: TObject);
+begin
+ if not Assigned(datamod) then
+     datamod:=TDataMod.Create(nil);
+
+EditRownum.Text:='';
+EditBorrowername.Text:='';
+Editbeneficiar.Text:='';
+EditId.Text:='';
+Editinnorpinn.Text:='';
+Editakt1.Text:='';
+Editakt2.text:='';
+
+datamod.maincrprt.close;
+datamod.maincrprt.Filter :='';
+datamod.maincrprt.open;
+datamod.Main_court.close;
+datamod.Main_court.Filter :='';
+datamod.Main_court.open;
+
+
+end;
+
+procedure TAcceptedportfell.Button1Click(Sender: TObject);
+begin
+DataMod.SB_ACA.CallProcedure('CheckAdvancedObjectAccess', ['PAYMENTLIST']);
+Payments:=TPayments.create(self);
+  Payments.ShowModal;
+end;
+
+procedure TAcceptedportfell.Button2Click(Sender: TObject);
+begin
+DataMod.SB_ACA.CallProcedure('CheckAdvancedObjectAccess', ['ADDNEW']);
+     Addingnew:=TAddingnew.Create(self);
+   //  datamod.custms.Open;
+     datamod.Valute.Open;
+     datamod.reducttypes.Open;
+     datamod.OracleDataSet1.Open;
+     datamod.OracleDataSet2.Open;
+     datamod.OracleDataSet3.Open;
+
+     Addingnew.ShowModal
+end;
+
+procedure TAcceptedportfell.Button3Click(Sender: TObject);
+var     Sheet, Sheets  :Variant;
+  ay,il,il_s,k,s,ss,st,sc,sd,sf,l,val :String;
+                            V:Variant;
+  OpenedXlsCnt,b, a,   i,j,w  :Integer;
+ v_BDate    :TDateTime;
+ v_EDate    :TDateTime;
+ row:integer;
+
+ esasborc,faizborc, cemiesas,cemifaiz:real;
+
+
+begin
+ ExcelApplication1.Disconnect;
+  V :=ExcelApplication1.Application;
+  ExcelApplication1.Connect;
+  V.Workbooks.Open(ExtractFilePath(ExtractFilePath(ParamStr(0)))+ 'PortfelABB_payment.xlsx');
+  try
+
+  for OpenedXlsCnt :=1 to 100 do
+   Sheet := V.Workbooks[OpenedXlsCnt].Worksheets['sheet1'];
+   //Break;
+  except
+
+
+  end;
+
+  sheets :=V.Sheets;
+
+  a:=0;
+   i:=0 ;
+       datamod.maincrprt.open;
+         datamod.maincrprt.First;
+
+
+    for a:=0 to datamod.maincrprt.RecordCount-1 do
+   begin
+  // try
+     esasborc:=0;
+     faizborc:=0;
+     cemiesas:=0;
+     cemifaiz:=0;
+     val:='AZN';
+ //ShowMessage('nnnn');
+    // Sheet.cells[7+i,6]:= datamod.maincrprt.fieldbyname('INNORPIN').AsString;
+     Sheet.cells[7+i,1]:=datamod.maincrprt.fieldbyname('rownum').AsString;
+     Sheet.cells[7+i,2]:=datamod.maincrprt.fieldbyname('rownum').AsString;
+     Sheet.cells[7+i,3]:=datamod.maincrprt.fieldbyname('prtid').AsString;
+     Sheet.cells[7+i,4]:=datamod.maincrprt.fieldbyname('INNORPIN').AsString;
+     Sheet.cells[7+i,5]:=datamod.maincrprt.fieldbyname('types').AsString;
+     Sheet.cells[7+i,6]:=datamod.maincrprt.fieldbyname('borrower_name').AsString;
+     Sheet.cells[7+i,7]:=datamod.maincrprt.fieldbyname('akt1').AsString;
+     Sheet.cells[7+i,8]:=datamod.maincrprt.fieldbyname('akt1_date').AsVariant;
+     Sheet.cells[7+i,9]:=datamod.maincrprt.fieldbyname('akt2').AsString;
+     Sheet.cells[7+i,10]:=datamod.maincrprt.fieldbyname('akt2_date').AsVariant;
+     Sheet.cells[7+i,11]:=datamod.maincrprt.fieldbyname('eurabbesas').AsFloat;
+     Sheet.cells[7+i,12]:=datamod.maincrprt.fieldbyname('eurabbfaiz').AsFloat;
+     Sheet.cells[7+i,13]:=datamod.maincrprt.fieldbyname('eurabbesas').AsFloat+datamod.maincrprt.fieldbyname('eurabbfaiz').AsFloat;
+     Sheet.cells[7+i,14]:=datamod.maincrprt.fieldbyname('usdabbesas').AsFloat;
+     Sheet.cells[7+i,15]:=datamod.maincrprt.fieldbyname('usdabbfaiz').AsFloat;
+     Sheet.cells[7+i,16]:=datamod.maincrprt.fieldbyname('usdabbesas').AsFloat+datamod.maincrprt.fieldbyname('usdabbfaiz').AsFloat;
+     Sheet.cells[7+i,17]:=datamod.maincrprt.fieldbyname('rurabbesas').AsFloat;
+     Sheet.cells[7+i,18]:=datamod.maincrprt.fieldbyname('rurabbfaiz').AsFloat;
+     Sheet.cells[7+i,19]:=datamod.maincrprt.fieldbyname('rurabbesas').AsFloat+datamod.maincrprt.fieldbyname('rurabbfaiz').AsFloat;
+     Sheet.cells[7+i,20]:=datamod.maincrprt.fieldbyname('aznabbesas').AsFloat;
+     Sheet.cells[7+i,21]:=datamod.maincrprt.fieldbyname('aznabbfaiz').AsFloat;
+     Sheet.cells[7+i,22]:=datamod.maincrprt.fieldbyname('aznabbesas').AsFloat+datamod.maincrprt.fieldbyname('aznabbfaiz').AsFloat;
+
+
+      if (datamod.maincrprt.fieldbyname('aznesas').AsFloat<>0) or (datamod.maincrprt.fieldbyname('aznfaiz').AsFloat<>0) then
+     begin
+
+       esasborc:=datamod.maincrprt.fieldbyname('aznesas').AsFloat;
+       faizborc:=datamod.maincrprt.fieldbyname('aznfaiz').AsFloat;
+       val:='AZN';
+     end;
+      if (datamod.maincrprt.fieldbyname('usdesas').AsFloat<>0) or (datamod.maincrprt.fieldbyname('usdfaiz').AsFloat<>0) then
+     begin
+      esasborc:=0;
+       faizborc:=0;
+       esasborc:=datamod.maincrprt.fieldbyname('usdesas').AsFloat;
+       faizborc:=datamod.maincrprt.fieldbyname('usdfaiz').AsFloat;
+       val:='USD';
+     end;
+      if (datamod.maincrprt.fieldbyname('euresas').AsFloat<>0) or (datamod.maincrprt.fieldbyname('eurfaiz').AsFloat<>0) then
+     begin
+      esasborc:=0;
+       faizborc:=0;
+       esasborc:=datamod.maincrprt.fieldbyname('euresas').AsFloat;
+       faizborc:=datamod.maincrprt.fieldbyname('eurfaiz').AsFloat;
+       val:='EUR';
+     end;
+      if (datamod.maincrprt.fieldbyname('gbpesas').AsFloat<>0) or (datamod.maincrprt.fieldbyname('gbpfaiz').AsFloat<>0) then
+     begin
+      esasborc:=0;
+       faizborc:=0;
+       esasborc:=datamod.maincrprt.fieldbyname('gbpesas').AsFloat;
+       faizborc:=datamod.maincrprt.fieldbyname('gbpfaiz').AsFloat;
+       val:='GBP';
+     end;
+      if (datamod.maincrprt.fieldbyname('ruresas').AsFloat<>0) or (datamod.maincrprt.fieldbyname('rurfaiz').AsFloat<>0) then
+     begin
+      esasborc:=0;
+       faizborc:=0;
+       esasborc:=datamod.maincrprt.fieldbyname('ruresas').AsFloat;
+       faizborc:=datamod.maincrprt.fieldbyname('rurfaiz').AsFloat;
+       val:='RUR';
+     end;
+      if (datamod.maincrprt.fieldbyname('gelesas').AsFloat<>0) or (datamod.maincrprt.fieldbyname('gelfaiz').AsFloat<>0) then
+     begin
+       esasborc:=0;
+       faizborc:=0;
+       esasborc:=datamod.maincrprt.fieldbyname('gelesas').AsFloat;
+       faizborc:=datamod.maincrprt.fieldbyname('gelfaiz').AsFloat;
+       val:='GEL';
+     end;
+     
+
+
+
+     Sheet.cells[7+i,23]:=UpperCase(val);
+     Sheet.cells[7+i,24]:=esasborc;
+     Sheet.cells[7+i,25]:=faizborc;
+     Sheet.cells[7+i,26]:=esasborc+faizborc;
+     Sheet.cells[7+i,27]:=datamod.maincrprt.fieldbyname('RESTRUKesas').AsFloat;
+     Sheet.cells[7+i,28]:=datamod.maincrprt.fieldbyname('RESTRUKfaiz').AsFloat;
+     Sheet.cells[7+i,29]:=datamod.maincrprt.fieldbyname('RESTRUKesas').AsFloat+datamod.maincrprt.fieldbyname('RESTRUKfaiz').AsFloat;
+     Sheet.cells[7+i,30]:=datamod.maincrprt.fieldbyname('otmetarixi').AsVariant;
+     Sheet.cells[7+i,31]:=datamod.maincrprt.fieldbyname('OTURMEesas').AsFloat;
+     Sheet.cells[7+i,32]:=datamod.maincrprt.fieldbyname('OTURMEfaiz').AsFloat;
+     Sheet.cells[7+i,33]:=datamod.maincrprt.fieldbyname('OTURMEesas').AsFloat+datamod.maincrprt.fieldbyname('OTURMEfaiz').AsFloat;
+     Sheet.cells[7+i,34]:=datamod.maincrprt.fieldbyname('ODENISesas').AsFloat;
+     Sheet.cells[7+i,35]:=datamod.maincrprt.fieldbyname('ODENISfaiz').AsFloat;
+     Sheet.cells[7+i,36]:=datamod.maincrprt.fieldbyname('ODENISesas').AsFloat+datamod.maincrprt.fieldbyname('ODENISfaiz').AsFloat;
+     Sheet.cells[7+i,37]:=datamod.maincrprt.fieldbyname('Servishaqq').AsFloat;
+     Sheet.cells[7+i,38]:=floattostr(datamod.maincrprt.fieldbyname('xidmetfaizi').AsFloat*100)+'%';
+     Sheet.cells[7+i,39]:=datamod.maincrprt.fieldbyname('ximethaqqi').AsFloat;
+     Sheet.cells[7+i,40]:=datamod.maincrprt.fieldbyname('azalmasehmesas').AsFloat;
+     Sheet.cells[7+i,41]:=datamod.maincrprt.fieldbyname('azalmasehmfaiz').AsFloat;
+     Sheet.cells[7+i,42]:=datamod.maincrprt.fieldbyname('azalmasehmesas').AsFloat+datamod.maincrprt.fieldbyname('azalmasehmfaiz').AsFloat;
+     Sheet.cells[7+i,43]:=datamod.maincrprt.fieldbyname('azalmemlakesas').AsFloat;
+     Sheet.cells[7+i,44]:=datamod.maincrprt.fieldbyname('azalmemlakfaiz').AsFloat;
+     Sheet.cells[7+i,45]:=datamod.maincrprt.fieldbyname('azalmemlakfaiz').AsFloat+datamod.maincrprt.fieldbyname('azalmemlakesas').AsFloat;
+     Sheet.cells[7+i,46]:=datamod.maincrprt.fieldbyname('azalmguzestesas').AsFloat;
+     Sheet.cells[7+i,47]:=datamod.maincrprt.fieldbyname('azalmguzestfaiz').AsFloat;
+     Sheet.cells[7+i,48]:=datamod.maincrprt.fieldbyname('azalmguzestesas').AsFloat+datamod.maincrprt.fieldbyname('azalmguzestfaiz').AsFloat;
+     Sheet.cells[7+i,49]:=datamod.maincrprt.fieldbyname('azalmqarantesas').AsFloat;
+     Sheet.cells[7+i,50]:=datamod.maincrprt.fieldbyname('azalmqarantfaiz').AsFloat;
+     Sheet.cells[7+i,51]:=datamod.maincrprt.fieldbyname('azalmqarantesas').AsFloat+datamod.maincrprt.fieldbyname('azalmqarantfaiz').AsFloat;
+     Sheet.cells[7+i,52]:=datamod.maincrprt.fieldbyname('askesas').AsFloat;
+     Sheet.cells[7+i,53]:=datamod.maincrprt.fieldbyname('askfaiz').AsFloat;
+     Sheet.cells[7+i,54]:=datamod.maincrprt.fieldbyname('askesas').AsFloat+datamod.maincrprt.fieldbyname('askfaiz').AsFloat;                                                                 
+     Sheet.cells[7+i,55]:=datamod.maincrprt.fieldbyname('emlak').AsFloat; 
+
+      cemiesas:=esasborc+datamod.maincrprt.fieldbyname('RESTRUKesas').AsFloat+ datamod.maincrprt.fieldbyname('OTURMEesas').AsFloat
+       -datamod.maincrprt.fieldbyname('azalmasehmesas').AsFloat-datamod.maincrprt.fieldbyname('azalmemlakesas').AsFloat
+       -datamod.maincrprt.fieldbyname('azalmguzestesas').AsFloat-datamod.maincrprt.fieldbyname('azalmqarantesas').AsFloat
+       -datamod.maincrprt.fieldbyname('ODENISesas').AsFloat;
+       
+       cemifaiz:=faizborc+datamod.maincrprt.fieldbyname('RESTRUKfaiz').AsFloat+ datamod.maincrprt.fieldbyname('OTURMEfaiz').AsFloat
+       -datamod.maincrprt.fieldbyname('azalmasehmfaiz').AsFloat-datamod.maincrprt.fieldbyname('azalmemlakfaiz').AsFloat
+       -datamod.maincrprt.fieldbyname('azalmguzestfaiz').AsFloat-datamod.maincrprt.fieldbyname('azalmqarantfaiz').AsFloat
+       -datamod.maincrprt.fieldbyname('ODENISfaiz').AsFloat;
+     
+     Sheet.cells[7+i,56]:=cemiesas;
+     Sheet.cells[7+i,57]:=cemifaiz;
+     Sheet.cells[7+i,58]:=cemiesas+cemifaiz;   
+     Sheet.cells[7+i,59]:=datamod.maincrprt.fieldbyname('management').AsString; 
+     Sheet.cells[7+i,60]:=datamod.maincrprt.fieldbyname('beneficiar').AsString; 
+     Sheet.cells[7+i,61]:=datamod.maincrprt.fieldbyname('project').AsString; 
+     Sheet.cells[7+i,62]:=datamod.maincrprt.fieldbyname('prject_country').AsString;
+     
+     Sheet.cells[7+i,63]:=datamod.maincrprt.fieldbyname('group_type').AsString; 
+     Sheet.cells[7+i,64]:=datamod.maincrprt.fieldbyname('name').AsString; 
+     Sheet.cells[7+i,65]:=datamod.maincrprt.fieldbyname('abb_branch').AsString; 
+     Sheet.cells[7+i,66]:=datamod.maincrprt.fieldbyname('legal_type').AsString;
+     Sheet.cells[7+i,67]:=datamod.maincrprt.fieldbyname('mtk').AsString; 
+     Sheet.cells[7+i,68]:=datamod.maincrprt.fieldbyname('activity_area').AsString; 
+     Sheet.cells[7+i,69]:=datamod.maincrprt.fieldbyname('capital_founder').AsString; 
+     Sheet.cells[7+i,70]:=datamod.maincrprt.fieldbyname('founder').AsString;
+     Sheet.cells[7+i,71]:=datamod.maincrprt.fieldbyname('address').AsString;
+     Sheet.cells[7+i,72]:=datamod.maincrprt.fieldbyname('phone').AsString; 
+     Sheet.cells[7+i,73]:=datamod.maincrprt.fieldbyname('types_1').AsString; 
+     Sheet.cells[7+i,74]:=datamod.maincrprt.fieldbyname('valut').AsString;
+     Sheet.cells[7+i,75]:=datamod.maincrprt.fieldbyname('ammount').AsFloat;
+     Sheet.cells[7+i,76]:=datamod.maincrprt.fieldbyname('descs').AsString; 
+     Sheet.cells[7+i,77]:=datamod.maincrprt.fieldbyname('pricername').AsString; 
+     Sheet.cells[7+i,78]:=datamod.maincrprt.fieldbyname('price_date').AsString;
+     Sheet.cells[7+i,79]:=datamod.maincrprt.fieldbyname('price').AsFloat; 
+     Sheet.cells[7+i,80]:=datamod.maincrprt.fieldbyname('valut_1').AsString;
+     Sheet.cells[7+i,81]:=datamod.maincrprt.fieldbyname('pricername_').AsString; 
+     Sheet.cells[7+i,82]:=datamod.maincrprt.fieldbyname('price_date_').AsVariant;
+     Sheet.cells[7+i,83]:=datamod.maincrprt.fieldbyname('price_').AsFloat; 
+     Sheet.cells[7+i,84]:=datamod.maincrprt.fieldbyname('valut_').AsString;
+     Sheet.cells[7+i,85]:=datamod.maincrprt.fieldbyname('descs_1').AsString; 
+     Sheet.cells[7+i,86]:=datamod.maincrprt.fieldbyname('court_date').AsVariant;
+     Sheet.cells[7+i,87]:=datamod.maincrprt.fieldbyname('court_dec').AsString; 
+     Sheet.cells[7+i,88]:=datamod.maincrprt.fieldbyname('decission').AsString;
+     Sheet.cells[7+i,89]:=datamod.maincrprt.fieldbyname('dec_date').AsVariant;
+     Sheet.cells[7+i,90]:=datamod.maincrprt.fieldbyname('manages').AsString;
+     Sheet.cells[7+i,91]:=datamod.maincrprt.fieldbyname('laststat').AsString;                
+
+
+
+
+     i:=i+1;
+     datamod.maincrprt.Next;
+{   except
+     ShowMessage('66666');
+   end;}
+   end;
+
+  ExcelApplication1.Visible[0] :=True;
+  ExcelApplication1.Disconnect;
+
+
+end;
+
+procedure TAcceptedportfell.Button4Click(Sender: TObject);
+begin
+ filtergroup.Visible:=not filtergroup.Visible;
+end;
+
+procedure TAcceptedportfell.Button5Click(Sender: TObject);
+begin
+Payreport:=TPayreport.create(self);
+  Payreport.ShowModal;
+end;
+
+procedure TAcceptedportfell.Button6Click(Sender: TObject);
+begin
+SelectionUnit:=TSelectionUnit.create(self);
+  SelectionUnit.ShowModal;
+end;
+
+procedure TAcceptedportfell.Button7Click(Sender: TObject);
+begin
+SearchGroup.Visible:=not SearchGroup.Visible;
+  datamod.maincrprt.Filtered:=true;
+end;
+
+procedure TAcceptedportfell.Button8Click(Sender: TObject);
+var     Sheet, Sheets  :Variant;
+  ay,il,il_s,k,s,ss,st,sc,sd,sf,l,val :String;
+                            V:Variant;
+  OpenedXlsCnt,b, a,   i,j,w  :Integer;
+ v_BDate    :TDateTime;
+ v_EDate    :TDateTime;
+ row:integer;
+
+ esasborc,faizborc, cemiesas,cemifaiz:real;
+
+
+begin
+ ExcelApplication1.Disconnect;
+  V :=ExcelApplication1.Application;
+  ExcelApplication1.Connect;
+  V.Workbooks.Open(ExtractFilePath(ExtractFilePath(ParamStr(0)))+ 'PortfelABB_payment.xlsx');
+  try
+
+  for OpenedXlsCnt :=1 to 100 do
+   Sheet := V.Workbooks[OpenedXlsCnt].Worksheets['sheet1'];
+   //Break;
+  except
+
+
+  end;
+
+  sheets :=V.Sheets;
+
+  a:=0;
+   i:=0 ;
+       datamod.maincrprt.open;
+         datamod.maincrprt.First;
+
+
+    for a:=0 to datamod.maincrprt.RecordCount-1 do
+   begin
+  // try
+     esasborc:=0;
+     faizborc:=0;
+     cemiesas:=0;
+     cemifaiz:=0;
+     val:='AZN';
+ //ShowMessage('nnnn');
+    // Sheet.cells[7+i,6]:= datamod.maincrprt.fieldbyname('INNORPIN').AsString;
+     Sheet.cells[7+i,1]:=datamod.maincrprt.fieldbyname('rownum').AsString;
+     Sheet.cells[7+i,2]:=datamod.maincrprt.fieldbyname('rownum').AsString;
+     Sheet.cells[7+i,3]:=datamod.maincrprt.fieldbyname('prtid').AsString;
+     Sheet.cells[7+i,4]:=datamod.maincrprt.fieldbyname('INNORPIN').AsString;
+     Sheet.cells[7+i,5]:=datamod.maincrprt.fieldbyname('types').AsString;
+     Sheet.cells[7+i,6]:=datamod.maincrprt.fieldbyname('borrower_name').AsString;
+     Sheet.cells[7+i,7]:=datamod.maincrprt.fieldbyname('akt1').AsString;
+     Sheet.cells[7+i,8]:=datamod.maincrprt.fieldbyname('akt1_date').AsVariant;
+     Sheet.cells[7+i,9]:=datamod.maincrprt.fieldbyname('akt2').AsString;
+     Sheet.cells[7+i,10]:=datamod.maincrprt.fieldbyname('akt2_date').AsVariant;
+     Sheet.cells[7+i,11]:=datamod.maincrprt.fieldbyname('eurabbesas').AsFloat;
+     Sheet.cells[7+i,12]:=datamod.maincrprt.fieldbyname('eurabbfaiz').AsFloat;
+     Sheet.cells[7+i,13]:=datamod.maincrprt.fieldbyname('eurabbesas').AsFloat+datamod.maincrprt.fieldbyname('eurabbfaiz').AsFloat;
+     Sheet.cells[7+i,14]:=datamod.maincrprt.fieldbyname('usdabbesas').AsFloat;
+     Sheet.cells[7+i,15]:=datamod.maincrprt.fieldbyname('usdabbfaiz').AsFloat;
+     Sheet.cells[7+i,16]:=datamod.maincrprt.fieldbyname('usdabbesas').AsFloat+datamod.maincrprt.fieldbyname('usdabbfaiz').AsFloat;
+     Sheet.cells[7+i,17]:=datamod.maincrprt.fieldbyname('rurabbesas').AsFloat;
+     Sheet.cells[7+i,18]:=datamod.maincrprt.fieldbyname('rurabbfaiz').AsFloat;
+     Sheet.cells[7+i,19]:=datamod.maincrprt.fieldbyname('rurabbesas').AsFloat+datamod.maincrprt.fieldbyname('rurabbfaiz').AsFloat;
+     Sheet.cells[7+i,20]:=datamod.maincrprt.fieldbyname('aznabbesas').AsFloat;
+     Sheet.cells[7+i,21]:=datamod.maincrprt.fieldbyname('aznabbfaiz').AsFloat;
+     Sheet.cells[7+i,22]:=datamod.maincrprt.fieldbyname('aznabbesas').AsFloat+datamod.maincrprt.fieldbyname('aznabbfaiz').AsFloat;
+
+
+      if (datamod.maincrprt.fieldbyname('aznesas').AsFloat<>0) or (datamod.maincrprt.fieldbyname('aznfaiz').AsFloat<>0) then
+     begin
+
+       esasborc:=datamod.maincrprt.fieldbyname('aznesas').AsFloat;
+       faizborc:=datamod.maincrprt.fieldbyname('aznfaiz').AsFloat;
+       val:='AZN';
+     end;
+      if (datamod.maincrprt.fieldbyname('usdesas').AsFloat<>0) or (datamod.maincrprt.fieldbyname('usdfaiz').AsFloat<>0) then
+     begin
+      esasborc:=0;
+       faizborc:=0;
+       esasborc:=datamod.maincrprt.fieldbyname('usdesas').AsFloat;
+       faizborc:=datamod.maincrprt.fieldbyname('usdfaiz').AsFloat;
+       val:='USD';
+     end;
+      if (datamod.maincrprt.fieldbyname('euresas').AsFloat<>0) or (datamod.maincrprt.fieldbyname('eurfaiz').AsFloat<>0) then
+     begin
+      esasborc:=0;
+       faizborc:=0;
+       esasborc:=datamod.maincrprt.fieldbyname('euresas').AsFloat;
+       faizborc:=datamod.maincrprt.fieldbyname('eurfaiz').AsFloat;
+       val:='EUR';
+     end;
+      if (datamod.maincrprt.fieldbyname('gbpesas').AsFloat<>0) or (datamod.maincrprt.fieldbyname('gbpfaiz').AsFloat<>0) then
+     begin
+      esasborc:=0;
+       faizborc:=0;
+       esasborc:=datamod.maincrprt.fieldbyname('gbpesas').AsFloat;
+       faizborc:=datamod.maincrprt.fieldbyname('gbpfaiz').AsFloat;
+       val:='GBP';
+     end;
+      if (datamod.maincrprt.fieldbyname('ruresas').AsFloat<>0) or (datamod.maincrprt.fieldbyname('rurfaiz').AsFloat<>0) then
+     begin
+      esasborc:=0;
+       faizborc:=0;
+       esasborc:=datamod.maincrprt.fieldbyname('ruresas').AsFloat;
+       faizborc:=datamod.maincrprt.fieldbyname('rurfaiz').AsFloat;
+       val:='RUR';
+     end;
+      if (datamod.maincrprt.fieldbyname('gelesas').AsFloat<>0) or (datamod.maincrprt.fieldbyname('gelfaiz').AsFloat<>0) then
+     begin
+       esasborc:=0;
+       faizborc:=0;
+       esasborc:=datamod.maincrprt.fieldbyname('gelesas').AsFloat;
+       faizborc:=datamod.maincrprt.fieldbyname('gelfaiz').AsFloat;
+       val:='GEL';
+     end;
+
+
+
+
+     Sheet.cells[7+i,23]:=UpperCase(val);
+     Sheet.cells[7+i,24]:=esasborc;
+     Sheet.cells[7+i,25]:=faizborc;
+     Sheet.cells[7+i,26]:=esasborc+faizborc;
+     Sheet.cells[7+i,27]:=datamod.maincrprt.fieldbyname('RESTRUKesas').AsFloat;
+     Sheet.cells[7+i,28]:=datamod.maincrprt.fieldbyname('RESTRUKfaiz').AsFloat;
+     Sheet.cells[7+i,29]:=datamod.maincrprt.fieldbyname('RESTRUKesas').AsFloat+datamod.maincrprt.fieldbyname('RESTRUKfaiz').AsFloat;
+     Sheet.cells[7+i,30]:=datamod.maincrprt.fieldbyname('otmetarixi').AsVariant;
+     Sheet.cells[7+i,31]:=datamod.maincrprt.fieldbyname('OTURMEesas').AsFloat;
+     Sheet.cells[7+i,32]:=datamod.maincrprt.fieldbyname('OTURMEfaiz').AsFloat;
+     Sheet.cells[7+i,33]:=datamod.maincrprt.fieldbyname('OTURMEesas').AsFloat+datamod.maincrprt.fieldbyname('OTURMEfaiz').AsFloat;
+     Sheet.cells[7+i,34]:=datamod.maincrprt.fieldbyname('ODENISesas').AsFloat;
+     Sheet.cells[7+i,35]:=datamod.maincrprt.fieldbyname('ODENISfaiz').AsFloat;
+     Sheet.cells[7+i,36]:=datamod.maincrprt.fieldbyname('ODENISesas').AsFloat+datamod.maincrprt.fieldbyname('ODENISfaiz').AsFloat;
+     Sheet.cells[7+i,37]:=datamod.maincrprt.fieldbyname('Servishaqq').AsFloat;
+     Sheet.cells[7+i,38]:=floattostr(datamod.maincrprt.fieldbyname('xidmetfaizi').AsFloat*100)+'%';
+     Sheet.cells[7+i,39]:=datamod.maincrprt.fieldbyname('ximethaqqi').AsFloat;
+     Sheet.cells[7+i,40]:=datamod.maincrprt.fieldbyname('azalmasehmesas').AsFloat;
+     Sheet.cells[7+i,41]:=datamod.maincrprt.fieldbyname('azalmasehmfaiz').AsFloat;
+     Sheet.cells[7+i,42]:=datamod.maincrprt.fieldbyname('azalmasehmesas').AsFloat+datamod.maincrprt.fieldbyname('azalmasehmfaiz').AsFloat;
+     Sheet.cells[7+i,43]:=datamod.maincrprt.fieldbyname('azalmemlakesas').AsFloat;
+     Sheet.cells[7+i,44]:=datamod.maincrprt.fieldbyname('azalmemlakfaiz').AsFloat;
+     Sheet.cells[7+i,45]:=datamod.maincrprt.fieldbyname('azalmemlakfaiz').AsFloat+datamod.maincrprt.fieldbyname('azalmemlakesas').AsFloat;
+     Sheet.cells[7+i,46]:=datamod.maincrprt.fieldbyname('azalmguzestesas').AsFloat;
+     Sheet.cells[7+i,47]:=datamod.maincrprt.fieldbyname('azalmguzestfaiz').AsFloat;
+     Sheet.cells[7+i,48]:=datamod.maincrprt.fieldbyname('azalmguzestesas').AsFloat+datamod.maincrprt.fieldbyname('azalmguzestfaiz').AsFloat;
+     Sheet.cells[7+i,49]:=datamod.maincrprt.fieldbyname('azalmqarantesas').AsFloat;
+     Sheet.cells[7+i,50]:=datamod.maincrprt.fieldbyname('azalmqarantfaiz').AsFloat;
+     Sheet.cells[7+i,51]:=datamod.maincrprt.fieldbyname('azalmqarantesas').AsFloat+datamod.maincrprt.fieldbyname('azalmqarantfaiz').AsFloat;
+     Sheet.cells[7+i,52]:=datamod.maincrprt.fieldbyname('askesas').AsFloat;
+     Sheet.cells[7+i,53]:=datamod.maincrprt.fieldbyname('askfaiz').AsFloat;
+     Sheet.cells[7+i,54]:=datamod.maincrprt.fieldbyname('askesas').AsFloat+datamod.maincrprt.fieldbyname('askfaiz').AsFloat;
+     Sheet.cells[7+i,55]:=datamod.maincrprt.fieldbyname('emlak').AsFloat;
+
+      cemiesas:=esasborc+datamod.maincrprt.fieldbyname('RESTRUKesas').AsFloat+ datamod.maincrprt.fieldbyname('OTURMEesas').AsFloat
+       -datamod.maincrprt.fieldbyname('azalmasehmesas').AsFloat-datamod.maincrprt.fieldbyname('azalmemlakesas').AsFloat
+       -datamod.maincrprt.fieldbyname('azalmguzestesas').AsFloat-datamod.maincrprt.fieldbyname('azalmqarantesas').AsFloat
+       -datamod.maincrprt.fieldbyname('ODENISesas').AsFloat;
+
+       cemifaiz:=faizborc+datamod.maincrprt.fieldbyname('RESTRUKfaiz').AsFloat+ datamod.maincrprt.fieldbyname('OTURMEfaiz').AsFloat
+       -datamod.maincrprt.fieldbyname('azalmasehmfaiz').AsFloat-datamod.maincrprt.fieldbyname('azalmemlakfaiz').AsFloat
+       -datamod.maincrprt.fieldbyname('azalmguzestfaiz').AsFloat-datamod.maincrprt.fieldbyname('azalmqarantfaiz').AsFloat
+       -datamod.maincrprt.fieldbyname('ODENISfaiz').AsFloat;
+
+     Sheet.cells[7+i,56]:=cemiesas;
+     Sheet.cells[7+i,57]:=cemifaiz;
+     Sheet.cells[7+i,58]:=cemiesas+cemifaiz;
+     Sheet.cells[7+i,59]:=datamod.maincrprt.fieldbyname('management').AsString;
+     Sheet.cells[7+i,60]:=datamod.maincrprt.fieldbyname('beneficiar').AsString;
+     Sheet.cells[7+i,61]:=datamod.maincrprt.fieldbyname('project').AsString;
+     Sheet.cells[7+i,62]:=datamod.maincrprt.fieldbyname('prject_country').AsString;
+
+     Sheet.cells[7+i,63]:=datamod.maincrprt.fieldbyname('group_type').AsString;
+     Sheet.cells[7+i,64]:=datamod.maincrprt.fieldbyname('name').AsString;
+     Sheet.cells[7+i,65]:=datamod.maincrprt.fieldbyname('abb_branch').AsString;
+     Sheet.cells[7+i,66]:=datamod.maincrprt.fieldbyname('legal_type').AsString;
+     Sheet.cells[7+i,67]:=datamod.maincrprt.fieldbyname('mtk').AsString;
+     Sheet.cells[7+i,68]:=datamod.maincrprt.fieldbyname('activity_area').AsString;
+     Sheet.cells[7+i,69]:=datamod.maincrprt.fieldbyname('capital_founder').AsString;
+     Sheet.cells[7+i,70]:=datamod.maincrprt.fieldbyname('founder').AsString;
+     Sheet.cells[7+i,71]:=datamod.maincrprt.fieldbyname('address').AsString;
+     Sheet.cells[7+i,72]:=datamod.maincrprt.fieldbyname('phone').AsString;
+     Sheet.cells[7+i,73]:=datamod.maincrprt.fieldbyname('types_1').AsString;
+     Sheet.cells[7+i,74]:=datamod.maincrprt.fieldbyname('valut').AsString;
+     Sheet.cells[7+i,75]:=datamod.maincrprt.fieldbyname('ammount').AsFloat;
+     Sheet.cells[7+i,76]:=datamod.maincrprt.fieldbyname('descs').AsString;
+     Sheet.cells[7+i,77]:=datamod.maincrprt.fieldbyname('pricername').AsString;
+     Sheet.cells[7+i,78]:=datamod.maincrprt.fieldbyname('price_date').AsString;
+     Sheet.cells[7+i,79]:=datamod.maincrprt.fieldbyname('price').AsFloat;
+     Sheet.cells[7+i,80]:=datamod.maincrprt.fieldbyname('valut_1').AsString;
+     Sheet.cells[7+i,81]:=datamod.maincrprt.fieldbyname('pricername_').AsString;
+     Sheet.cells[7+i,82]:=datamod.maincrprt.fieldbyname('price_date_').AsVariant;
+     Sheet.cells[7+i,83]:=datamod.maincrprt.fieldbyname('price_').AsFloat;
+     Sheet.cells[7+i,84]:=datamod.maincrprt.fieldbyname('valut_').AsString;
+     Sheet.cells[7+i,85]:=datamod.maincrprt.fieldbyname('descs_1').AsString;
+     Sheet.cells[7+i,86]:=datamod.maincrprt.fieldbyname('court_date').AsVariant;
+     Sheet.cells[7+i,87]:=datamod.maincrprt.fieldbyname('court_dec').AsString;
+     Sheet.cells[7+i,88]:=datamod.maincrprt.fieldbyname('decission').AsString;
+     Sheet.cells[7+i,89]:=datamod.maincrprt.fieldbyname('dec_date').AsVariant;
+     Sheet.cells[7+i,90]:=datamod.maincrprt.fieldbyname('manages').AsString;
+     Sheet.cells[7+i,91]:=datamod.maincrprt.fieldbyname('laststat').AsString;
+
+
+
+
+     i:=i+1;
+     datamod.maincrprt.Next;
+{   except
+     ShowMessage('66666');
+   end;}
+   end;
+
+  ExcelApplication1.Visible[0] :=True;
+  ExcelApplication1.Disconnect;
+
+
+
+end;
+
+procedure TAcceptedportfell.SettbtnClick(Sender: TObject);
+var
+   ExcelFile : Variant;
+   WorkBook : Variant;
+   WorkSheet : Variant;
+ begin
+// Open Excel OLE
+{  ExcelFile :=  CreateOleObject('Excel.Application');
+  // Handle WoorkBook
+  if not VarIsNull(ExcelFile) then begin
+      WorkBook := ExcelFile.WorkBooks.Open(ExtractFilePath(ExtractFilePath(ParamStr(0)))+ 'PortfelABB.xlsx');
+      if not VarIsNull(WorkBook) then begin
+      // Handle Sheet
+          WorkSheet := WorkBook.WorkSheets.Item['sheet1'];
+      end;
+  end;      }
+
+  DataMod.SB_ACA.CallProcedure('CheckAdvancedObjectAccess', ['SETTINGS']);
+  SettingFrm:=TSettingFrm.create(self);
+  SettingFrm.ShowModal;
+
+end;
+
+procedure TAcceptedportfell.CheckBox1Click(Sender: TObject);
+begin
+if CheckBox1.Checked then
+begin
+//DataMod_CARDS.payment.Filtered:=True;
+
+DBLookupComboBox1.Enabled:=True;
+DBLookupComboBox1.KeyValue:=0;
+
+
+end
+else
+begin
+
+datamod.maincrprt.sql[8]:='';
+datamod.Main_court.sql[8]:='';
+DBLookupComboBox1.Enabled:=false;
+DBLookupComboBox1.KeyValue:=0;
+
+BtnRefresh.Click;
+
+end;
+
+end;
+
+procedure TAcceptedportfell.CheckBox2Click(Sender: TObject);
+begin
+if CheckBox2.Checked then
+begin
+//DataMod_CARDS.payment.Filtered:=True;
+
+DBLookupComboBox2.Enabled:=True;
+DBLookupComboBox2.KeyValue:=0;
+
+
+end
+else
+begin
+
+datamod.maincrprt.sql[9]:='';
+DBLookupComboBox2.Enabled:=false;
+DBLookupComboBox2.KeyValue:=0;
+
+BtnRefresh.Click;
+
+end;
+end;
+
+procedure TAcceptedportfell.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TAcceptedportfell.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TAcceptedportfell.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TAcceptedportfell.DBLookupComboBox1CloseUp(Sender: TObject);
+begin
+with datamod.maincrprt do begin
+
+ sql[8]:='and flt.id = '''+inttostr(DBLookupComboBox1.KeyValue)+'''';
+
+  end;
+
+  with datamod.Main_court do begin
+
+ sql[8]:='and flt.id = '''+inttostr(DBLookupComboBox1.KeyValue)+'''';
+
+  end;
+  BtnRefresh.Click;
+//  ShowMessage(dm.ODSPayments.SQL.Text);
+end;
+
+procedure TAcceptedportfell.DBLookupComboBox2Click(Sender: TObject);
+begin
+ with datamod.maincrprt do begin
+
+ sql[9]:=' and grp.id = '''+inttostr(DBLookupComboBox2.KeyValue)+'''';
+
+  end;
+  BtnRefresh.Click;
+end;
+
+procedure TAcceptedportfell.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TAcceptedportfell.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TAcceptedportfell.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TAcceptedportfell.MaliyyAray1Click(Sender: TObject);
+var     Sheet, Sheets  :Variant;
+  ay,il,il_s,k,s,ss,st,sc,sd,sf,l,val :String;
+                            V:Variant;
+  OpenedXlsCnt,b,z,p, a, m,n,  i,j,w  :Integer;
+ v_BDate    :TDateTime;
+ v_EDate    :TDateTime;
+ row:integer;
+ azalemlak,azalguz,azalsehm,azalqaran:string;
+begin
+ DataMod.SB_ACA.CallProcedure('CheckAdvancedObjectAccess', ['FINANCEREF']);
+
+
+DataMod.main_araryis.CloseAll ;
+DataMod.main_araryis.SetVariable('vid',DBGrid1.DataSource.DataSet.FieldByName('cust_id').AsInteger) ;
+DataMod.main_araryis.open ;   //PortfelABB_Finance_ref       arayislist_agg
+
+DataMod.arayislist_agg.CloseAll ;
+DataMod.arayislist_agg.SetVariable('vid',DBGrid1.DataSource.DataSet.FieldByName('cust_id').AsInteger) ;
+DataMod.arayislist_agg.open ;
+
+ ExcelApplication1.Disconnect;
+  V :=ExcelApplication1.Application;
+  ExcelApplication1.Connect;
+  V.Workbooks.Open(ExtractFilePath(ExtractFilePath(ParamStr(0)))+ 'PortfelABB_Finance_ref.xlsx');
+  try
+
+  for OpenedXlsCnt :=1 to 100 do
+   Sheet := V.Workbooks[OpenedXlsCnt].Worksheets['sheet1'];
+   //Break;
+  except
+
+
+  end;
+
+  sheets :=V.Sheets;
+
+   a:=0;
+   i:=0 ;
+   m:=0;
+   w:=0;
+   n:=0;
+   z:=0;
+   p:=0;
+         datamod.main_araryis.First;
+
+        // ShowMessage(DataMod.arayislist_agg.FieldByName('akts').AsString);
+        st:='Azərbaycan Respublikası Prezidentinin 15 iyul 2015-ci il tarixli 570 nömrəli Fərmanının icrası ilə bağlı '+
+          ' ”Azərbaycan Beynəlxalq Bankı” ASC ilə ”Aqrarkredit” QSC arasında imzalanmış '+
+          DataMod.arayislist_agg.FieldByName('akts').AsString +' təhvil təslim aktı əsasında  '    +
+         '  ”Aqrarkredit QSC”-nin idarəetməsinə verimiş  ' + DataMod.arayislist_agg.FieldByName('BORROWNAME').AsString +
+         ' üzrə borclar barədə maliyyə arayışı' ;
+
+         sheet.Range['A6', 'K6']:=st;
+      //    sheet.Range['A6', 'K6'].WrapText := True;
+           //sheet.Range['A6', 'K6'].HorizontalAlignment := 'xlcenter'; ;
+        //  Sheet.Range['A6', 'K6'].Merge();
+        //  Sheet.Range['K6', 'K11'].Merge();
+        //  Sheet.Range['A6', 'A11'].Merge();
+    Sheet.cells[13,11]:=now;
+    for a:=0 to datamod.main_araryis.RecordCount-1 do
+   begin
+
+               if datamod.main_araryis.fieldbyname('ACCEPTED_VALUTE').Asfloat=0 then
+               begin
+
+
+     Sheet.cells[17+i,1]:=datamod.main_araryis.fieldbyname('nov').AsString;
+      Sheet.cells[17+i,2]:=  'AZN';
+      Sheet.cells[17+i,3]:=datamod.main_araryis.fieldbyname('aznesas').asfloat;
+      Sheet.cells[17+i,4]:=datamod.main_araryis.fieldbyname('aznfaiz').asfloat;
+      Sheet.cells[17+i,5]:=datamod.main_araryis.fieldbyname('aznesas').asfloat+datamod.main_araryis.fieldbyname('aznfaiz').asfloat;
+      Sheet.cells[17+i,6]:=datamod.main_araryis.fieldbyname('odenisesas').asfloat+
+      datamod.main_araryis.fieldbyname('azalmemlakesas').asfloat+
+      datamod.main_araryis.fieldbyname('azalmasehmesas').asfloat+
+      datamod.main_araryis.fieldbyname('azalmguzestesas').asfloat+
+      datamod.main_araryis.fieldbyname('azalmqarantesas').asfloat ;
+
+      Sheet.cells[17+i,7]:=datamod.main_araryis.fieldbyname('odenisfaiz').asfloat+
+      datamod.main_araryis.fieldbyname('azalmemlakfaiz').asfloat+
+      datamod.main_araryis.fieldbyname('azalmasehmfaiz').asfloat+
+      datamod.main_araryis.fieldbyname('azalmguzestfaiz').asfloat+
+      datamod.main_araryis.fieldbyname('azalmqarantfaiz').asfloat ;
+
+      Sheet.cells[17+i,8].Formula:='=Sum(F'+inttostr(17+i)+':G'+inttostr(17+i)+')';
+      Sheet.cells[17+i,9]:=datamod.main_araryis.fieldbyname('aznesas').asfloat-(datamod.main_araryis.fieldbyname('odenisesas').asfloat+
+      datamod.main_araryis.fieldbyname('azalmemlakesas').asfloat+
+      datamod.main_araryis.fieldbyname('azalmasehmesas').asfloat+
+      datamod.main_araryis.fieldbyname('azalmguzestesas').asfloat+
+      datamod.main_araryis.fieldbyname('azalmqarantesas').asfloat);
+
+      Sheet.cells[17+i,10]:=datamod.main_araryis.fieldbyname('aznfaiz').asfloat-(datamod.main_araryis.fieldbyname('odenisfaiz').asfloat+
+      datamod.main_araryis.fieldbyname('azalmemlakfaiz').asfloat+
+      datamod.main_araryis.fieldbyname('azalmasehmfaiz').asfloat+
+      datamod.main_araryis.fieldbyname('azalmguzestfaiz').asfloat+
+      datamod.main_araryis.fieldbyname('azalmqarantfaiz').asfloat);
+
+      Sheet.cells[17+i,11].Formula:='=Sum(I'+inttostr(17+i)+':J'+inttostr(17+i)+')';
+       i:=i+1;
+
+
+{   except
+     ShowMessage('66666');
+   end;     }
+
+       Sheet.cells[17+i,1]:='Cəmi'     ;
+     // Sheet.Range['A'+inttostr(17+i), 'B'+inttostr(17+i+m)].Merge();
+
+      Sheet.cells[17+i,3]:=datamod.main_araryis.fieldbyname('aznesascem').asfloat;
+
+      Sheet.cells[17+i,4]:=datamod.main_araryis.fieldbyname('aznfaizcem').asfloat;
+      Sheet.cells[17+i,5].Formula:='=Sum(C'+inttostr(17+i)+':D'+inttostr(17+i)+')';
+
+      Sheet.cells[17+i,6]:=
+                        datamod.main_araryis.fieldbyname('odenisesasazncem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmemlakesascem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmasehmesascem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmguzestesascem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmqarantesascem').asfloat  ;
+
+      Sheet.cells[17+i,7]:=
+          datamod.main_araryis.fieldbyname('odenisfaizazncem').asfloat+
+      datamod.main_araryis.fieldbyname('AZALMEMLAKFAIZSCEM').asfloat+
+      datamod.main_araryis.fieldbyname('azalmasehmfaizcem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmguzestfaizcem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmqarantfaizcem').asfloat;
+
+
+
+
+     Sheet.cells[17+i,8].Formula:='=Sum(F'+inttostr(17+i)+':G'+inttostr(17+i)+')';
+
+      Sheet.cells[17+i,9]:=
+                  datamod.main_araryis.fieldbyname('aznesascem').asfloat-(datamod.main_araryis.fieldbyname('odenisesasazncem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmemlakesascem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmasehmesascem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmguzestesascem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmqarantesascem').asfloat);
+
+
+      Sheet.cells[17+i,10]:= datamod.main_araryis.fieldbyname('aznfaizcem').asfloat-(datamod.main_araryis.fieldbyname('odenisfaizazncem').asfloat+
+      datamod.main_araryis.fieldbyname('AZALMEMLAKFAIZSCEM').asfloat+
+      datamod.main_araryis.fieldbyname('azalmasehmfaizcem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmguzestfaizcem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmqarantfaizcem').asfloat);
+
+      Sheet.cells[17+i,11] :=datamod.main_araryis.fieldbyname('aznesascem').asfloat-(datamod.main_araryis.fieldbyname('odenisesasazncem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmemlakesascem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmasehmesascem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmguzestesascem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmqarantesascem').asfloat)+
+      datamod.main_araryis.fieldbyname('aznfaizcem').asfloat-(datamod.main_araryis.fieldbyname('odenisfaizazncem').asfloat+
+      datamod.main_araryis.fieldbyname('AZALMEMLAKFAIZSCEM').asfloat+
+      datamod.main_araryis.fieldbyname('azalmasehmfaizcem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmguzestfaizcem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmqarantfaizcem').asfloat);
+   m:=1;
+   w:=1;
+   n:=1;
+   z:=1;
+   p:=1;
+
+
+       end;
+
+
+
+
+
+         if datamod.main_araryis.fieldbyname('ACCEPTED_VALUTE').asfloat=1 then
+         begin
+
+            w:=1;
+            n:=1;
+            z:=1;
+            p:=1;
+      Sheet.cells[17+i+m,1]:=datamod.main_araryis.fieldbyname('nov').AsString;
+      Sheet.cells[17+i+m,2]:='USD';
+      Sheet.cells[17+i+m,3]:=datamod.main_araryis.fieldbyname('usdesas').asfloat;
+      Sheet.cells[17+i+m,4]:=datamod.main_araryis.fieldbyname('usdfaiz').asfloat;
+
+      Sheet.cells[17+i+m,5]:=datamod.main_araryis.fieldbyname('usdesas').asfloat+datamod.main_araryis.fieldbyname('usdfaiz').asfloat;
+
+      Sheet.cells[17+i+m,6]:=datamod.main_araryis.fieldbyname('odenisesas').asfloat+
+      datamod.main_araryis.fieldbyname('azalmemlakesas').asfloat+
+      datamod.main_araryis.fieldbyname('azalmasehmesas').asfloat+
+      datamod.main_araryis.fieldbyname('azalmguzestesas').asfloat+
+      datamod.main_araryis.fieldbyname('azalmqarantesas').asfloat ;
+
+      Sheet.cells[17+i+m,7]:=datamod.main_araryis.fieldbyname('odenisfaiz').asfloat+
+      datamod.main_araryis.fieldbyname('azalmemlakfaiz').asfloat+
+      datamod.main_araryis.fieldbyname('azalmasehmfaiz').asfloat+
+      datamod.main_araryis.fieldbyname('azalmguzestfaiz').asfloat+
+      datamod.main_araryis.fieldbyname('azalmqarantfaiz').asfloat ;
+
+      Sheet.cells[17+i+m,8].Formula:='=Sum(F'+inttostr(17+i+m)+':G'+inttostr(17+i+m)+')';
+
+      Sheet.cells[17+i+m,9]:=datamod.main_araryis.fieldbyname('usdesas').asfloat-(datamod.main_araryis.fieldbyname('odenisesas').asfloat+
+      datamod.main_araryis.fieldbyname('azalmemlakesas').asfloat+
+      datamod.main_araryis.fieldbyname('azalmasehmesas').asfloat+
+      datamod.main_araryis.fieldbyname('azalmguzestesas').asfloat+
+      datamod.main_araryis.fieldbyname('azalmqarantesas').asfloat);
+
+      Sheet.cells[17+i+m,10]:=datamod.main_araryis.fieldbyname('usdfaiz').asfloat-(datamod.main_araryis.fieldbyname('odenisfaiz').asfloat+
+      datamod.main_araryis.fieldbyname('azalmemlakfaiz').asfloat+
+      datamod.main_araryis.fieldbyname('azalmasehmfaiz').asfloat+
+      datamod.main_araryis.fieldbyname('azalmguzestfaiz').asfloat+
+      datamod.main_araryis.fieldbyname('azalmqarantfaiz').asfloat);
+
+
+      Sheet.cells[17+i+m,11].Formula:='=Sum(I'+inttostr(17+i+m)+':J'+inttostr(17+i+m)+')';
+        m:=m+1;
+
+
+
+{   except
+     ShowMessage('66666');
+   end;}
+
+      Sheet.cells[17+i+m,1]:='Cəmi'     ;
+     // Sheet.Range['A'+inttostr(17+i+m), 'B'+inttostr(17+i+m)].Merge();
+
+      Sheet.cells[17+i+m,3]:=datamod.main_araryis.fieldbyname('usdesascem').asfloat;
+
+      Sheet.cells[17+i+m,4]:=datamod.main_araryis.fieldbyname('usdfaizcem').asfloat;
+      Sheet.cells[17+i+m,5]:=
+      datamod.main_araryis.fieldbyname('usdfaizcem').asfloat+datamod.main_araryis.fieldbyname('usdesascem').asfloat;
+      Sheet.cells[17+i+m,6]:=
+                        datamod.main_araryis.fieldbyname('odenisesasusdcem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmemlakesascem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmasehmesascem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmguzestesascem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmqarantesascem').asfloat  ;
+
+      Sheet.cells[17+i+m,7]:=
+          datamod.main_araryis.fieldbyname('odenisfaizusdcem').asfloat+
+      datamod.main_araryis.fieldbyname('AZALMEMLAKFAIZSCEM').asfloat+
+      datamod.main_araryis.fieldbyname('azalmasehmfaizcem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmguzestfaizcem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmqarantfaizcem').asfloat;
+
+
+
+
+     Sheet.cells[17+i+m,8].Formula:='=Sum(F'+inttostr(17+i+m)+':G'+inttostr(17+i+m)+')';
+
+      Sheet.cells[17+i+m,9]:=
+                  datamod.main_araryis.fieldbyname('usdesascem').asfloat-(datamod.main_araryis.fieldbyname('odenisesasusdcem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmemlakesascem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmasehmesascem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmguzestesascem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmqarantesascem').asfloat);
+
+
+      Sheet.cells[17+i+m,10]:= datamod.main_araryis.fieldbyname('usdfaizcem').asfloat-(datamod.main_araryis.fieldbyname('odenisfaizusdcem').asfloat+
+      datamod.main_araryis.fieldbyname('AZALMEMLAKFAIZSCEM').asfloat+
+      datamod.main_araryis.fieldbyname('azalmasehmfaizcem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmguzestfaizcem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmqarantfaizcem').asfloat);
+
+      Sheet.cells[17+i+m,11] :=datamod.main_araryis.fieldbyname('usdesascem').asfloat-(datamod.main_araryis.fieldbyname('odenisesasusdcem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmemlakesascem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmasehmesascem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmguzestesascem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmqarantesascem').asfloat)+
+      datamod.main_araryis.fieldbyname('usdfaizcem').asfloat-(datamod.main_araryis.fieldbyname('odenisfaizusdcem').asfloat+
+      datamod.main_araryis.fieldbyname('AZALMEMLAKFAIZSCEM').asfloat+
+      datamod.main_araryis.fieldbyname('azalmasehmfaizcem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmguzestfaizcem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmqarantfaizcem').asfloat);
+
+           end;
+
+
+         if datamod.main_araryis.fieldbyname('ACCEPTED_VALUTE').asfloat=45 then
+         begin
+
+                    if m=1 then
+                    m:=0;
+           n:=1;
+           z:=1;
+           p:=1;
+      Sheet.cells[17+i+m+w,1]:=datamod.main_araryis.fieldbyname('nov').AsString;
+      Sheet.cells[17+i+m+w,2]:='EUR';
+      Sheet.cells[17+i+m+w,3]:=datamod.main_araryis.fieldbyname('euresas').asfloat;
+      Sheet.cells[17+i+m+w,4]:=datamod.main_araryis.fieldbyname('eurfaiz').asfloat;
+
+      Sheet.cells[17+i+m+w,5]:=datamod.main_araryis.fieldbyname('euresas').asfloat+datamod.main_araryis.fieldbyname('eurfaiz').asfloat;
+
+      Sheet.cells[17+i+m+w,6]:=datamod.main_araryis.fieldbyname('odenisesas').asfloat+
+      datamod.main_araryis.fieldbyname('azalmemlakesas').asfloat+
+      datamod.main_araryis.fieldbyname('azalmasehmesas').asfloat+
+      datamod.main_araryis.fieldbyname('azalmguzestesas').asfloat+
+      datamod.main_araryis.fieldbyname('azalmqarantesas').asfloat ;
+
+      Sheet.cells[17+i+m+w,7]:=datamod.main_araryis.fieldbyname('odenisfaiz').asfloat+
+      datamod.main_araryis.fieldbyname('azalmemlakfaiz').asfloat+
+      datamod.main_araryis.fieldbyname('azalmasehmfaiz').asfloat+
+      datamod.main_araryis.fieldbyname('azalmguzestfaiz').asfloat+
+      datamod.main_araryis.fieldbyname('azalmqarantfaiz').asfloat ;
+
+      Sheet.cells[17+i+m+w,8].Formula:='=Sum(F'+inttostr(17+i+m+w)+':G'+inttostr(17+i+m+w)+')';
+
+      Sheet.cells[17+i+m+w,9]:=datamod.main_araryis.fieldbyname('euresas').asfloat-(datamod.main_araryis.fieldbyname('odenisesas').asfloat+
+      datamod.main_araryis.fieldbyname('azalmemlakesas').asfloat+
+      datamod.main_araryis.fieldbyname('azalmasehmesas').asfloat+
+      datamod.main_araryis.fieldbyname('azalmguzestesas').asfloat+
+      datamod.main_araryis.fieldbyname('azalmqarantesas').asfloat);
+
+      Sheet.cells[17+i+m+w,10]:=datamod.main_araryis.fieldbyname('eurfaiz').asfloat-(datamod.main_araryis.fieldbyname('odenisfaiz').asfloat+
+      datamod.main_araryis.fieldbyname('azalmemlakfaiz').asfloat+
+      datamod.main_araryis.fieldbyname('azalmasehmfaiz').asfloat+
+      datamod.main_araryis.fieldbyname('azalmguzestfaiz').asfloat+
+      datamod.main_araryis.fieldbyname('azalmqarantfaiz').asfloat);
+
+
+      Sheet.cells[17+i+m+w,11].Formula:='=Sum(I'+inttostr(17+i+m+w)+':J'+inttostr(17+i+m+w)+')';
+        w:=w+1;
+
+
+
+{   except
+     ShowMessage('66666');
+   end;}
+
+      Sheet.cells[17+i+m+w,1]:='Cəmi'     ;
+     // Sheet.Range['A'+inttostr(17+i+m), 'B'+inttostr(17+i+m)].Merge();
+
+      Sheet.cells[17+i+m+w,3]:=datamod.main_araryis.fieldbyname('euresascem').asfloat;
+
+      Sheet.cells[17+i+m+w,4]:=datamod.main_araryis.fieldbyname('eurfaizcem').asfloat;
+      Sheet.cells[17+i+m+w,5]:=
+      datamod.main_araryis.fieldbyname('eurfaizcem').asfloat+datamod.main_araryis.fieldbyname('euresascem').asfloat;
+      Sheet.cells[17+i+m+w,6]:=
+                        datamod.main_araryis.fieldbyname('odenisesaseurcem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmemlakesascem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmasehmesascem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmguzestesascem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmqarantesascem').asfloat  ;
+
+      Sheet.cells[17+i+m+w,7]:=
+          datamod.main_araryis.fieldbyname('odenisfaizeurcem').asfloat+
+      datamod.main_araryis.fieldbyname('AZALMEMLAKFAIZSCEM').asfloat+
+      datamod.main_araryis.fieldbyname('azalmasehmfaizcem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmguzestfaizcem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmqarantfaizcem').asfloat;
+
+
+     Sheet.cells[17+i+m+w,8].Formula:='=Sum(F'+inttostr(17+i+m+w)+':G'+inttostr(17+i+m+w)+')';
+
+      Sheet.cells[17+i+m+w,9]:=
+                  datamod.main_araryis.fieldbyname('euresascem').asfloat-(datamod.main_araryis.fieldbyname('odenisesaseurcem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmemlakesascem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmasehmesascem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmguzestesascem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmqarantesascem').asfloat);
+
+
+      Sheet.cells[17+i+m+w,10]:= datamod.main_araryis.fieldbyname('eurfaizcem').asfloat-(datamod.main_araryis.fieldbyname('odenisfaizeurcem').asfloat+
+      datamod.main_araryis.fieldbyname('AZALMEMLAKFAIZSCEM').asfloat+
+      datamod.main_araryis.fieldbyname('azalmasehmfaizcem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmguzestfaizcem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmqarantfaizcem').asfloat);
+
+      Sheet.cells[17+i+m+w,11] :=datamod.main_araryis.fieldbyname('euresascem').asfloat-(datamod.main_araryis.fieldbyname('odenisesaseurcem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmemlakesascem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmasehmesascem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmguzestesascem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmqarantesascem').asfloat)+
+      datamod.main_araryis.fieldbyname('eurfaizcem').asfloat-(datamod.main_araryis.fieldbyname('odenisfaizeurcem').asfloat+
+      datamod.main_araryis.fieldbyname('AZALMEMLAKFAIZSCEM').asfloat+
+      datamod.main_araryis.fieldbyname('azalmasehmfaizcem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmguzestfaizcem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmqarantfaizcem').asfloat);
+
+           end;
+
+
+            if datamod.main_araryis.fieldbyname('ACCEPTED_VALUTE').asfloat=48 then
+         begin
+
+                    if m=1 then
+                    m:=0;
+                    if w=1 then
+                    w:=0;
+                   z:=1;
+                   p:=1;
+      Sheet.cells[17+i+m+w+n,1]:=datamod.main_araryis.fieldbyname('nov').AsString;
+      Sheet.cells[17+i+m+w+n,2]:='RUR';
+      Sheet.cells[17+i+m+w+n,3]:=datamod.main_araryis.fieldbyname('ruresas').asfloat;
+      Sheet.cells[17+i+m+w+n,4]:=datamod.main_araryis.fieldbyname('rurfaiz').asfloat;
+
+      Sheet.cells[17+i+m+w+n,5]:=datamod.main_araryis.fieldbyname('ruresas').asfloat+datamod.main_araryis.fieldbyname('rurfaiz').asfloat;
+
+      Sheet.cells[17+i+m+w+n,6]:=datamod.main_araryis.fieldbyname('odenisesas').asfloat+
+      datamod.main_araryis.fieldbyname('azalmemlakesas').asfloat+
+      datamod.main_araryis.fieldbyname('azalmasehmesas').asfloat+
+      datamod.main_araryis.fieldbyname('azalmguzestesas').asfloat+
+      datamod.main_araryis.fieldbyname('azalmqarantesas').asfloat ;
+
+      Sheet.cells[17+i+m+w+n,7]:=datamod.main_araryis.fieldbyname('odenisfaiz').asfloat+
+      datamod.main_araryis.fieldbyname('azalmemlakfaiz').asfloat+
+      datamod.main_araryis.fieldbyname('azalmasehmfaiz').asfloat+
+      datamod.main_araryis.fieldbyname('azalmguzestfaiz').asfloat+
+      datamod.main_araryis.fieldbyname('azalmqarantfaiz').asfloat ;
+
+      Sheet.cells[17+i+m+w+n,8].Formula:='=Sum(F'+inttostr(17+i+m+w+n)+':G'+inttostr(17+i+m+w+n)+')';
+
+      Sheet.cells[17+i+m+w+n,9]:=datamod.main_araryis.fieldbyname('ruresas').asfloat-(datamod.main_araryis.fieldbyname('odenisesas').asfloat+
+      datamod.main_araryis.fieldbyname('azalmemlakesas').asfloat+
+      datamod.main_araryis.fieldbyname('azalmasehmesas').asfloat+
+      datamod.main_araryis.fieldbyname('azalmguzestesas').asfloat+
+      datamod.main_araryis.fieldbyname('azalmqarantesas').asfloat);
+
+      Sheet.cells[17+i+m+w+n,10]:=datamod.main_araryis.fieldbyname('rurfaiz').asfloat-(datamod.main_araryis.fieldbyname('odenisfaiz').asfloat+
+      datamod.main_araryis.fieldbyname('azalmemlakfaiz').asfloat+
+      datamod.main_araryis.fieldbyname('azalmasehmfaiz').asfloat+
+      datamod.main_araryis.fieldbyname('azalmguzestfaiz').asfloat+
+      datamod.main_araryis.fieldbyname('azalmqarantfaiz').asfloat);
+
+
+      Sheet.cells[17+i+m+w+n,11].Formula:='=Sum(I'+inttostr(17+i+m+w)+':J'+inttostr(17+i+m+w+n)+')';
+        n:=n+1;
+
+
+
+{   except
+     ShowMessage('66666');
+   end;}
+
+      Sheet.cells[17+i+m+w+n,1]:='Cəmi'     ;
+     // Sheet.Range['A'+inttostr(17+i+m), 'B'+inttostr(17+i+m)].Merge();
+
+      Sheet.cells[17+i+m+w+n,3]:=datamod.main_araryis.fieldbyname('ruresascem').asfloat;
+
+      Sheet.cells[17+i+m+w+n,4]:=datamod.main_araryis.fieldbyname('rurfaizcem').asfloat;
+      Sheet.cells[17+i+m+w+n,5]:=
+      datamod.main_araryis.fieldbyname('eurfaizcem').asfloat+datamod.main_araryis.fieldbyname('ruresascem').asfloat;
+      Sheet.cells[17+i+m+n+w,6]:=
+                        datamod.main_araryis.fieldbyname('odenisesasrurcem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmemlakesascem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmasehmesascem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmguzestesascem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmqarantesascem').asfloat  ;
+
+      Sheet.cells[17+i+m+w+n,7]:=
+          datamod.main_araryis.fieldbyname('odenisfaizrurcem').asfloat+
+      datamod.main_araryis.fieldbyname('AZALMEMLAKFAIZSCEM').asfloat+
+      datamod.main_araryis.fieldbyname('azalmasehmfaizcem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmguzestfaizcem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmqarantfaizcem').asfloat;
+
+
+     Sheet.cells[17+i+m+w+n,8].Formula:='=Sum(F'+inttostr(17+i+m+w+n)+':G'+inttostr(17+i+m+n+w)+')';
+
+      Sheet.cells[17+i+m+w+n,9]:=
+                  datamod.main_araryis.fieldbyname('ruresascem').asfloat-(datamod.main_araryis.fieldbyname('odenisesasrurcem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmemlakesascem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmasehmesascem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmguzestesascem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmqarantesascem').asfloat);
+
+
+      Sheet.cells[17+i+m+w+n,10]:= datamod.main_araryis.fieldbyname('rurfaizcem').asfloat-(datamod.main_araryis.fieldbyname('odenisfaizrurcem').asfloat+
+      datamod.main_araryis.fieldbyname('AZALMEMLAKFAIZSCEM').asfloat+
+      datamod.main_araryis.fieldbyname('azalmasehmfaizcem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmguzestfaizcem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmqarantfaizcem').asfloat);
+
+      Sheet.cells[17+i+m+w+n,11] :=datamod.main_araryis.fieldbyname('ruresascem').asfloat-(datamod.main_araryis.fieldbyname('odenisesasrurcem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmemlakesascem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmasehmesascem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmguzestesascem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmqarantesascem').asfloat)+
+      datamod.main_araryis.fieldbyname('rurfaizcem').asfloat-(datamod.main_araryis.fieldbyname('odenisfaizrurcem').asfloat+
+      datamod.main_araryis.fieldbyname('AZALMEMLAKFAIZSCEM').asfloat+
+      datamod.main_araryis.fieldbyname('azalmasehmfaizcem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmguzestfaizcem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmqarantfaizcem').asfloat);
+
+           end;
+
+
+            if datamod.main_araryis.fieldbyname('ACCEPTED_VALUTE').asfloat=475 then
+         begin
+
+                    if m=1 then
+                    m:=0;
+                    if w=1 then
+                    w:=0;
+                    if n=1 then
+                    n:=0;
+
+                    p:=1;
+      Sheet.cells[17+i+m+w+n+z,1]:=datamod.main_araryis.fieldbyname('nov').AsString;
+      Sheet.cells[17+i+m+w+n+z,2]:='GEL';
+      Sheet.cells[17+i+m+w+n+z,3]:=datamod.main_araryis.fieldbyname('gelesas').asfloat;
+      Sheet.cells[17+i+m+w+n+z,4]:=datamod.main_araryis.fieldbyname('gelfaiz').asfloat;
+
+      Sheet.cells[17+i+m+w+n+z,5]:=datamod.main_araryis.fieldbyname('gelesas').asfloat+datamod.main_araryis.fieldbyname('gelfaiz').asfloat;
+
+      Sheet.cells[17+i+m+w+n+z,6]:=datamod.main_araryis.fieldbyname('odenisesas').asfloat+
+      datamod.main_araryis.fieldbyname('azalmemlakesas').asfloat+
+      datamod.main_araryis.fieldbyname('azalmasehmesas').asfloat+
+      datamod.main_araryis.fieldbyname('azalmguzestesas').asfloat+
+      datamod.main_araryis.fieldbyname('azalmqarantesas').asfloat ;
+
+      Sheet.cells[17+i+m+w+n+z,7]:=datamod.main_araryis.fieldbyname('odenisfaiz').asfloat+
+      datamod.main_araryis.fieldbyname('azalmemlakfaiz').asfloat+
+      datamod.main_araryis.fieldbyname('azalmasehmfaiz').asfloat+
+      datamod.main_araryis.fieldbyname('azalmguzestfaiz').asfloat+
+      datamod.main_araryis.fieldbyname('azalmqarantfaiz').asfloat ;
+
+      Sheet.cells[17+i+m+w+n+z,8].Formula:='=Sum(F'+inttostr(17+i+m+w+n+z)+':G'+inttostr(17+i+m+w+n+z)+')';
+
+      Sheet.cells[17+i+m+w+n+z,9]:=datamod.main_araryis.fieldbyname('gelesas').asfloat-(datamod.main_araryis.fieldbyname('odenisesas').asfloat+
+      datamod.main_araryis.fieldbyname('azalmemlakesas').asfloat+
+      datamod.main_araryis.fieldbyname('azalmasehmesas').asfloat+
+      datamod.main_araryis.fieldbyname('azalmguzestesas').asfloat+
+      datamod.main_araryis.fieldbyname('azalmqarantesas').asfloat);
+
+      Sheet.cells[17+i+m+w+n+z,10]:=datamod.main_araryis.fieldbyname('gelfaiz').asfloat-(datamod.main_araryis.fieldbyname('odenisfaiz').asfloat+
+      datamod.main_araryis.fieldbyname('azalmemlakfaiz').asfloat+
+      datamod.main_araryis.fieldbyname('azalmasehmfaiz').asfloat+
+      datamod.main_araryis.fieldbyname('azalmguzestfaiz').asfloat+
+      datamod.main_araryis.fieldbyname('azalmqarantfaiz').asfloat);
+
+
+      Sheet.cells[17+i+m+w+n+z,11].Formula:='=Sum(I'+inttostr(17+i+m+w)+':J'+inttostr(17+i+m+w+n+z)+')';
+        z:=z+1;
+
+
+
+{   except
+     ShowMessage('66666');
+   end;}
+
+      Sheet.cells[17+i+m+w+n+z,1]:='Cəmi'     ;
+     // Sheet.Range['A'+inttostr(17+i+m), 'B'+inttostr(17+i+m)].Merge();
+
+      Sheet.cells[17+i+m+w+n+z,3]:=datamod.main_araryis.fieldbyname('gelesascem').asfloat;
+
+      Sheet.cells[17+i+m+w+n+z,4]:=datamod.main_araryis.fieldbyname('gelfaizcem').asfloat;
+      Sheet.cells[17+i+m+w+n+z,5]:=
+      datamod.main_araryis.fieldbyname('eurfaizcem').asfloat+datamod.main_araryis.fieldbyname('gelesascem').asfloat;
+      Sheet.cells[17+i+m+n+w,6]:=
+                        datamod.main_araryis.fieldbyname('odenisesasgelcem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmemlakesascem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmasehmesascem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmguzestesascem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmqarantesascem').asfloat  ;
+
+      Sheet.cells[17+i+m+w+n+z,7]:=
+          datamod.main_araryis.fieldbyname('odenisfaizgelcem').asfloat+
+      datamod.main_araryis.fieldbyname('AZALMEMLAKFAIZSCEM').asfloat+
+      datamod.main_araryis.fieldbyname('azalmasehmfaizcem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmguzestfaizcem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmqarantfaizcem').asfloat;
+
+
+     Sheet.cells[17+i+m+w+n+z,8].Formula:='=Sum(F'+inttostr(17+i+m+w+n+z)+':G'+inttostr(17+i+m+n+w)+')';
+
+      Sheet.cells[17+i+m+w+n+z,9]:=
+                  datamod.main_araryis.fieldbyname('gelesascem').asfloat-(datamod.main_araryis.fieldbyname('odenisesasgelcem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmemlakesascem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmasehmesascem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmguzestesascem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmqarantesascem').asfloat);
+
+
+      Sheet.cells[17+i+m+w+n+z,10]:= datamod.main_araryis.fieldbyname('gelfaizcem').asfloat-(datamod.main_araryis.fieldbyname('odenisfaizgelcem').asfloat+
+      datamod.main_araryis.fieldbyname('AZALMEMLAKFAIZSCEM').asfloat+
+      datamod.main_araryis.fieldbyname('azalmasehmfaizcem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmguzestfaizcem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmqarantfaizcem').asfloat);
+
+      Sheet.cells[17+i+m+w+n+z,11] :=datamod.main_araryis.fieldbyname('gelesascem').asfloat-(datamod.main_araryis.fieldbyname('odenisesasgelcem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmemlakesascem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmasehmesascem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmguzestesascem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmqarantesascem').asfloat)+
+      datamod.main_araryis.fieldbyname('gelfaizcem').asfloat-(datamod.main_araryis.fieldbyname('odenisfaizgelcem').asfloat+
+      datamod.main_araryis.fieldbyname('AZALMEMLAKFAIZSCEM').asfloat+
+      datamod.main_araryis.fieldbyname('azalmasehmfaizcem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmguzestfaizcem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmqarantfaizcem').asfloat);
+
+           end;
+
+            if datamod.main_araryis.fieldbyname('ACCEPTED_VALUTE').asfloat=50 then
+         begin
+
+                    if m=1 then
+                    m:=0;
+                    if w=1 then
+                    w:=0;
+                    if n=1 then
+                    n:=0;
+                    if z=1 then
+                    z:=0;
+
+
+      Sheet.cells[17+i+m+w+n+z+p,1]:=datamod.main_araryis.fieldbyname('nov').AsString;
+      Sheet.cells[17+i+m+w+n+z+p,2]:='GBP';
+      Sheet.cells[17+i+m+w+n+z+p,3]:=datamod.main_araryis.fieldbyname('gbpesas').asfloat;
+      Sheet.cells[17+i+m+w+n+z+p,4]:=datamod.main_araryis.fieldbyname('gbpfaiz').asfloat;
+
+      Sheet.cells[17+i+m+w+n+z+p,5]:=datamod.main_araryis.fieldbyname('gbpesas').asfloat+datamod.main_araryis.fieldbyname('gbpfaiz').asfloat;
+
+      Sheet.cells[17+i+m+w+n+z+p,6]:=datamod.main_araryis.fieldbyname('odenisesas').asfloat+
+      datamod.main_araryis.fieldbyname('azalmemlakesas').asfloat+
+      datamod.main_araryis.fieldbyname('azalmasehmesas').asfloat+
+      datamod.main_araryis.fieldbyname('azalmguzestesas').asfloat+
+      datamod.main_araryis.fieldbyname('azalmqarantesas').asfloat ;
+
+      Sheet.cells[17+i+m+w+n+z+p,7]:=datamod.main_araryis.fieldbyname('odenisfaiz').asfloat+
+      datamod.main_araryis.fieldbyname('azalmemlakfaiz').asfloat+
+      datamod.main_araryis.fieldbyname('azalmasehmfaiz').asfloat+
+      datamod.main_araryis.fieldbyname('azalmguzestfaiz').asfloat+
+      datamod.main_araryis.fieldbyname('azalmqarantfaiz').asfloat ;
+
+      Sheet.cells[17+i+m+w+n+z+p,8].Formula:='=Sum(F'+inttostr(17+i+m+w+n+z+p)+':G'+inttostr(17+i+m+w+n+z+p)+')';
+
+      Sheet.cells[17+i+m+w+n+z+p,9]:=datamod.main_araryis.fieldbyname('gbpesas').asfloat-(datamod.main_araryis.fieldbyname('odenisesas').asfloat+
+      datamod.main_araryis.fieldbyname('azalmemlakesas').asfloat+
+      datamod.main_araryis.fieldbyname('azalmasehmesas').asfloat+
+      datamod.main_araryis.fieldbyname('azalmguzestesas').asfloat+
+      datamod.main_araryis.fieldbyname('azalmqarantesas').asfloat);
+
+      Sheet.cells[17+i+m+w+n+z+p,10]:=datamod.main_araryis.fieldbyname('gbpfaiz').asfloat-(datamod.main_araryis.fieldbyname('odenisfaiz').asfloat+
+      datamod.main_araryis.fieldbyname('azalmemlakfaiz').asfloat+
+      datamod.main_araryis.fieldbyname('azalmasehmfaiz').asfloat+
+      datamod.main_araryis.fieldbyname('azalmguzestfaiz').asfloat+
+      datamod.main_araryis.fieldbyname('azalmqarantfaiz').asfloat);
+
+
+      Sheet.cells[17+i+m+w+n+z+p,11].Formula:='=Sum(I'+inttostr(17+i+m+w)+':J'+inttostr(17+i+m+w+n+z+p)+')';
+        p:=p+1;
+
+
+
+{   except
+     ShowMessage('66666');
+   end;}
+
+      Sheet.cells[17+i+m+w+n+z+p,1]:='Cəmi'     ;
+     // Sheet.Range['A'+inttostr(17+i+m), 'B'+inttostr(17+i+m)].Merge();
+
+      Sheet.cells[17+i+m+w+n+z+p,3]:=datamod.main_araryis.fieldbyname('gbpesascem').asfloat;
+
+      Sheet.cells[17+i+m+w+n+z+p,4]:=datamod.main_araryis.fieldbyname('gbpfaizcem').asfloat;
+      Sheet.cells[17+i+m+w+n+z+p,5]:=
+      datamod.main_araryis.fieldbyname('gbpfaizcem').asfloat+datamod.main_araryis.fieldbyname('gbpesascem').asfloat;
+      Sheet.cells[17+i+m+n+w,6]:=
+                        datamod.main_araryis.fieldbyname('odenisesasdbpcem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmemlakesascem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmasehmesascem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmguzestesascem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmqarantesascem').asfloat  ;
+
+      Sheet.cells[17+i+m+w+n+z+p,7]:=
+          datamod.main_araryis.fieldbyname('odenisfaizdbpcem').asfloat+
+      datamod.main_araryis.fieldbyname('AZALMEMLAKFAIZSCEM').asfloat+
+      datamod.main_araryis.fieldbyname('azalmasehmfaizcem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmguzestfaizcem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmqarantfaizcem').asfloat;
+
+
+     Sheet.cells[17+i+m+w+n+z+p,8].Formula:='=Sum(F'+inttostr(17+i+m+w+n+z+p)+':G'+inttostr(17+i+m+n+w)+')';
+
+      Sheet.cells[17+i+m+w+n+z+p,9]:=
+                  datamod.main_araryis.fieldbyname('gbpesascem').asfloat-(datamod.main_araryis.fieldbyname('odenisesasdbpcem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmemlakesascem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmasehmesascem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmguzestesascem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmqarantesascem').asfloat);
+
+
+      Sheet.cells[17+i+m+w+n+z+p,10]:= datamod.main_araryis.fieldbyname('gbpfaizcem').asfloat-(datamod.main_araryis.fieldbyname('odenisfaizdbpcem').asfloat+
+      datamod.main_araryis.fieldbyname('AZALMEMLAKFAIZSCEM').asfloat+
+      datamod.main_araryis.fieldbyname('azalmasehmfaizcem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmguzestfaizcem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmqarantfaizcem').asfloat);
+
+      Sheet.cells[17+i+m+w+n+z+p,11] :=datamod.main_araryis.fieldbyname('gbpesascem').asfloat-(datamod.main_araryis.fieldbyname('odenisesasdbpcem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmemlakesascem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmasehmesascem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmguzestesascem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmqarantesascem').asfloat)+
+      datamod.main_araryis.fieldbyname('gbpfaizcem').asfloat-(datamod.main_araryis.fieldbyname('odenisfaizdbpcem').asfloat+
+      datamod.main_araryis.fieldbyname('AZALMEMLAKFAIZSCEM').asfloat+
+      datamod.main_araryis.fieldbyname('azalmasehmfaizcem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmguzestfaizcem').asfloat+
+      datamod.main_araryis.fieldbyname('azalmqarantfaizcem').asfloat);
+
+           end;
+
+               datamod.main_araryis.Next;
+
+
+   end;
+
+                    if m=1 then
+                    m:=0;
+                    if w=1 then
+                    w:=0;
+                    if n=1 then
+                    n:=0;
+                    if z=1 then
+                    z:=0;
+                    if p=1 then
+                    p:=0;
+
+
+                    if (datamod.main_araryis.fieldbyname('odenisesasazncem').asfloat <>0) or (datamod.main_araryis.fieldbyname('odenisfaizazncem').asfloat<>0) then
+                    begin
+                      Sheet.cells[17+i+m+w+n+z+p+2,2] := 'Qeyd';
+                      Sheet.cells[17+i+m+w+n+z+p+2,3]:=' "Aqrarkredit” QSC tərəfindən borcun idarəetməyə götürüldükdən sonra azalmanın tərkibi aşağıdaki kimidir.';
+                      Sheet.cells[17+i+m+w+n+z+p+4,3]:= '- Ödəniş hesabına: əsas borcdan '+floattostr(datamod.main_araryis.fieldbyname('odenisesasazncem').asfloat) +' manat, faiz borcundan '+
+                      floattostr(datamod.main_araryis.fieldbyname('odenisfaizazncem').asfloat) +' cəmi borcdan '+
+                        floattostr(datamod.main_araryis.fieldbyname('odenisesasazncem').asfloat +  datamod.main_araryis.fieldbyname('odenisfaizazncem').asfloat )    +' manat təşkil edir';
+                    end;
+
+            if (datamod.main_araryis.fieldbyname('azalmemlakesascem').asfloat<>0) or (datamod.main_araryis.fieldbyname('AZALMEMLAKFAIZSCEM').asfloat<>0) then
+              azalemlak:='Əmlak hesabına: əsas borcundan '+floattostr(datamod.main_araryis.fieldbyname('azalmemlakesascem').asfloat)+' manat, faiz borcundan '+floattostr(datamod.main_araryis.fieldbyname('AZALMEMLAKFAIZSCEM').asfloat) +' manat, cəmi borcdan '+
+                     floattostr(datamod.main_araryis.fieldbyname('azalmemlakesascem').asfloat+  datamod.main_araryis.fieldbyname('AZALMEMLAKFAIZSCEM').asfloat)         +' manat təşkil edir.' +#13#10;
+
+             if (datamod.main_araryis.fieldbyname('azalmguzestesascem').asfloat<>0) or (datamod.main_araryis.fieldbyname('azalmguzestfaizcem').asfloat<>0) then
+              azalguz:='Güzəşt hesabına: əsas borcundan '+floattostr(datamod.main_araryis.fieldbyname('azalmguzestesascem').asfloat)+' manat, faiz borcundan '+floattostr(datamod.main_araryis.fieldbyname('azalmguzestfaizcem').asfloat) +' manat, cəmi borcdan '+
+                     floattostr(datamod.main_araryis.fieldbyname('azalmguzestesascem').asfloat +  datamod.main_araryis.fieldbyname('azalmguzestfaizcem').asfloat)         +' manat təşkil edir.'+#13#10;
+
+               if (datamod.main_araryis.fieldbyname('azalmasehmesascem').asfloat<>0) or (datamod.main_araryis.fieldbyname('azalmasehmfaizcem').asfloat<>0) then
+              azalsehm:='Səhm hesabına: əsas borcundan '+floattostr(datamod.main_araryis.fieldbyname('azalmasehmesascem').asfloat)+' manat, faiz borcundan '+floattostr(datamod.main_araryis.fieldbyname('azalmasehmfaizcem').asfloat) +' manat, cəmi borcdan '+
+                     floattostr(datamod.main_araryis.fieldbyname('azalmasehmesascem').asfloat+  datamod.main_araryis.fieldbyname('azalmasehmfaizcem').asfloat)         +' manat təşkil edir.'+#13#10;
+
+
+               if (datamod.main_araryis.fieldbyname('azalmqarantesascem').asfloat<>0) or (datamod.main_araryis.fieldbyname('azalmqarantfaizcem').asfloat<>0) then
+              azalqaran:='Qarantiya hesabına: əsas borcundan '+floattostr(datamod.main_araryis.fieldbyname('azalmqarantesascem').asfloat)+' manat, faiz borcundan '+floattostr(datamod.main_araryis.fieldbyname('azalmqarantfaizcem').asfloat) +' manat, cəmi borcdan '+
+                     floattostr(datamod.main_araryis.fieldbyname('azalmqarantesascem').asfloat+  datamod.main_araryis.fieldbyname('azalmqarantfaizcem').asfloat)         +' manat təşkil edir.'+#13#10;
+
+
+                       if (azalemlak<>'') or (azalguz<>'') or (azalsehm<>'') or (azalqaran<>'')  then
+                          Sheet.cells[17+i+m+w+n+z+p+6,3] := ' - BAİA tərəfindən edilmiş '+ azalemlak+azalguz+azalsehm+azalqaran;
+                          Sheet.Range['C17','C100'].WrapText := False;
+  ExcelApplication1.Visible[0] :=True;
+  ExcelApplication1.Disconnect;
+
+
+
+
+end;
+
+procedure TAcceptedportfell.mlak1Click(Sender: TObject);
+begin
+DataMod.SB_ACA.CallProcedure('CheckAdvancedObjectAccess', ['PROPERTYEDIT']);
+  if not Assigned(datamod) then
+     datamod:=TDataMod.Create(nil);
+
+      if not Assigned(Propertyfrm) then
+     Propertyfrm:=TPropertyfrm.Create(nil);
+     Propertyfrm.ShowModal;
+end;
+
+procedure TAcceptedportfell.mliyyat1Click(Sender: TObject);
+begin
+DataMod.SB_ACA.CallProcedure('CheckAdvancedObjectAccess', ['transactions']);
+ Transacfrm:=TTransacfrm.Create(self);
+ Transacfrm.showmodal;
+
+end;
+
+procedure TAcceptedportfell.mliyyatArxiv1Click(Sender: TObject);
+begin
+
+DataMod.SB_ACA.CallProcedure('CheckAdvancedObjectAccess', ['Arxivtransaction']);
+ ArxivTran:=TArxivTran.Create(self);
+ ArxivTran.showmodal;
+end;
+
+procedure TAcceptedportfell.MouseEnterEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnMouseEnter;
+end;
+
+procedure TAcceptedportfell.MouseLeaveEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnMouseLeave;
+end;
+
+procedure TAcceptedportfell.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TAcceptedportfell.Redakt1Click(Sender: TObject);
+var
+acc_val:integer;
+esasborc,faizborc :real;
+begin
+DataMod.SB_ACA.CallProcedure('CheckAdvancedObjectAccess', ['EDITOR']);
+
+      if not Assigned(Editform) then
+     Editform:=TEditform.Create(nil);
+
+
+
+
+     Editform.Branchedit.Text:=DBGrid1.DataSource.DataSet.FieldByName('branch').AsVariant;
+     Editform.ABBMAINEDIT.Text:=DBGrid1.DataSource.DataSet.FieldByName('aznabbesas').AsVariant;
+     Editform.ABBPERCEDIT.Text:=DBGrid1.DataSource.DataSet.FieldByName('aznabbfaiz').AsVariant;
+     Editform.ABBMAINusd.Text:=DBGrid1.DataSource.DataSet.FieldByName('usdabbesas').AsVariant;
+     Editform.ABBPERCusd.Text:=DBGrid1.DataSource.DataSet.FieldByName('usdabbfaiz').AsVariant;
+     Editform.ABBMAINeur.Text:=DBGrid1.DataSource.DataSet.FieldByName('eurabbesas').AsVariant;
+     Editform.ABBPERCeur.Text:=DBGrid1.DataSource.DataSet.FieldByName('eurabbfaiz').AsVariant;
+     Editform.ABBMAINrub.Text:=DBGrid1.DataSource.DataSet.FieldByName('rurabbesas').AsVariant;
+     Editform.ABBPERCrub.Text:=DBGrid1.DataSource.DataSet.FieldByName('rurabbfaiz').AsVariant;
+     Editform.REDUCTIONMAINEDIT.Text:=DBGrid1.DataSource.DataSet.FieldByName('AZALMASEHMESAS').AsVariant;
+     Editform.REDUCTIONpercEDIT.Text:=DBGrid1.DataSource.DataSet.FieldByName('AZALMASEHMFAIZ').AsVariant;
+     Editform.REDUCTIONMAINprop.Text:=DBGrid1.DataSource.DataSet.FieldByName('AZALMEMLAKESAS').AsVariant;
+     Editform.REDUCTIONpercprop.Text:=DBGrid1.DataSource.DataSet.FieldByName('AZALMEMLAKFAIZ').AsVariant;
+     Editform.REDUCTIONMAINqarant.Text:=DBGrid1.DataSource.DataSet.FieldByName('AZALMQARANTESAS').AsVariant;
+     Editform.REDUCTIONpercqarant.Text:=DBGrid1.DataSource.DataSet.FieldByName('AZALMQARANTFAIZ').AsVariant;
+     Editform.REDUCTIONmainguz.Text:=DBGrid1.DataSource.DataSet.FieldByName('AZALMGUZESTESAS').AsVariant;
+     Editform.REDUCTIONpercguz.Text:=DBGrid1.DataSource.DataSet.FieldByName('AZALMGUZESTFAIZ').AsVariant;
+
+
+     Editform.RESTRUCTMAINEDIT.Text:=DBGrid1.DataSource.DataSet.FieldByName('RESTRUKESAS').AsVariant;
+     Editform.RESTRUCTpercEDIT.Text:=DBGrid1.DataSource.DataSet.FieldByName('RESTRUKFAIZ').AsVariant;
+
+     Editform.ASKSENDEDMNAINEDIT.Text:=DBGrid1.DataSource.DataSet.FieldByName('ASKESAS').AsVariant;
+     Editform.ASKSENDEDpercEDIT.Text:=DBGrid1.DataSource.DataSet.FieldByName('ASKFAIZ').AsVariant;
+
+
+     acc_val:= DBGrid1.DataSource.DataSet.FieldByName('accepted_valute').AsVariant ;
+
+      if (datamod.maincrprt.fieldbyname('aznesas').AsFloat<>0) or (datamod.maincrprt.fieldbyname('aznfaiz').AsFloat<>0) then
+     begin
+
+       esasborc:=datamod.maincrprt.fieldbyname('aznesas').AsFloat;
+       faizborc:=datamod.maincrprt.fieldbyname('aznfaiz').AsFloat;
+       acc_val:=0;
+     end;
+      if (datamod.maincrprt.fieldbyname('usdesas').AsFloat<>0) or (datamod.maincrprt.fieldbyname('usdfaiz').AsFloat<>0) then
+     begin
+      esasborc:=0;
+       faizborc:=0;
+       esasborc:=datamod.maincrprt.fieldbyname('usdesas').AsFloat;
+       faizborc:=datamod.maincrprt.fieldbyname('usdfaiz').AsFloat;
+       acc_val:=1;
+     end;
+      if (datamod.maincrprt.fieldbyname('euresas').AsFloat<>0) or (datamod.maincrprt.fieldbyname('eurfaiz').AsFloat<>0) then
+     begin
+      esasborc:=0;
+       faizborc:=0;
+       esasborc:=datamod.maincrprt.fieldbyname('euresas').AsFloat;
+       faizborc:=datamod.maincrprt.fieldbyname('eurfaiz').AsFloat;
+       acc_val:=45;
+     end;
+      if (datamod.maincrprt.fieldbyname('gbpesas').AsFloat<>0) or (datamod.maincrprt.fieldbyname('gbpfaiz').AsFloat<>0) then
+     begin
+      esasborc:=0;
+       faizborc:=0;
+       esasborc:=datamod.maincrprt.fieldbyname('gbpesas').AsFloat;
+       faizborc:=datamod.maincrprt.fieldbyname('gbpfaiz').AsFloat;
+       acc_val:=3;
+     end;
+      if (datamod.maincrprt.fieldbyname('ruresas').AsFloat<>0) or (datamod.maincrprt.fieldbyname('rurfaiz').AsFloat<>0) then
+     begin
+      esasborc:=0;
+       faizborc:=0;
+       esasborc:=datamod.maincrprt.fieldbyname('ruresas').AsFloat;
+       faizborc:=datamod.maincrprt.fieldbyname('rurfaiz').AsFloat;
+       acc_val:=48;
+     end;
+      if (datamod.maincrprt.fieldbyname('gelesas').AsFloat<>0) or (datamod.maincrprt.fieldbyname('gelfaiz').AsFloat<>0) then
+     begin
+       esasborc:=0;
+       faizborc:=0;
+       esasborc:=datamod.maincrprt.fieldbyname('gelesas').AsFloat;
+       faizborc:=datamod.maincrprt.fieldbyname('gelfaiz').AsFloat;
+       acc_val:=475;
+     end;
+
+     Editform.ACCEPTEDMAINEDIT.Text:=floattostr(esasborc);
+     Editform.ACCEPTEDpercEDIT.Text:=floattostr(faizborc);
+     Editform.Acceprtedval.KeyValue:= acc_val;
+
+
+
+     Editform.SENDEDMAINEDIT.Text:=DBGrid1.DataSource.DataSet.FieldByName('OTURMEESAS').AsVariant;
+     Editform.SENDEDpercEDIT.Text:=DBGrid1.DataSource.DataSet.FieldByName('OTURMEFAIZ').AsVariant;
+
+     Editform.DBDateTimeEditEh1.Value:=DBGrid1.DataSource.DataSet.FieldByName('OTMETARIXI').AsVariant;
+
+     Editform.PAidmainEDIT.Text:=DBGrid1.DataSource.DataSet.FieldByName('ODENISESAS').AsVariant;
+     Editform.PAidPERCEDit.Text:=DBGrid1.DataSource.DataSet.FieldByName('ODENISFAIZ').AsVariant;
+
+     Editform.servicecalcedit.Text:=DBGrid1.DataSource.DataSet.FieldByName('SERVISHAQQ').AsVariant;
+     Editform.SERVICEamtedit.Text:=DBGrid1.DataSource.DataSet.FieldByName('XIMETHAQQI').AsVariant;
+     Editform.SERVICEPERCENTEDITEDIT.Text:=DBGrid1.DataSource.DataSet.FieldByName('XIDMETFAIZI').AsVariant;
+
+
+    // Editform.aktedit.Text:=DBGrid1.DataSource.DataSet.FieldByName('akt1').AsVariant;
+     Editform.DBLookupComboBox1.KeyValue:=DBGrid1.DataSource.DataSet.FieldByName('branch').AsVariant;
+  //   Editform.restrukedit.Text:=DBGrid1.DataSource.DataSet.FieldByName('restrukesas').AsVariant;
+     Editform.custidedit.Text:=DBGrid1.DataSource.DataSet.FieldByName('cust_id').AsString;
+
+     Editform.Editprtid.Text:= DBGrid1.DataSource.DataSet.FieldByName('prtid').AsString;
+     Editform.Emlakedit.Text:= DBGrid1.DataSource.DataSet.FieldByName('emlak').AsString;
+
+     Editform.ShowModal;
+
+
+
+
+
+end;
+
+procedure TAcceptedportfell.Set_AlignWithMargins(Value: WordBool);
+begin
+  AlignWithMargins := Value;
+end;
+
+procedure TAcceptedportfell.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TAcceptedportfell.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TAcceptedportfell.Set_AxBorderStyle(Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TAcceptedportfell.Set_BorderWidth(Value: Integer);
+begin
+  BorderWidth := TBorderWidth(Value);
+end;
+
+procedure TAcceptedportfell.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TAcceptedportfell.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TAcceptedportfell.Set_DockSite(Value: WordBool);
+begin
+  DockSite := Value;
+end;
+
+procedure TAcceptedportfell.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TAcceptedportfell.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TAcceptedportfell.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TAcceptedportfell.Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TAcceptedportfell.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := string(Value);
+end;
+
+procedure TAcceptedportfell.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TAcceptedportfell.Set_ParentCustomHint(Value: WordBool);
+begin
+  ParentCustomHint := Value;
+end;
+
+procedure TAcceptedportfell.Set_ParentDoubleBuffered(Value: WordBool);
+begin
+  ParentDoubleBuffered := Value;
+end;
+
+procedure TAcceptedportfell.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TAcceptedportfell.Set_PopupMode(Value: TxPopupMode);
+begin
+  PopupMode := TPopupMode(Value);
+end;
+
+procedure TAcceptedportfell.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TAcceptedportfell.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TAcceptedportfell.Set_ScreenSnap(Value: WordBool);
+begin
+  ScreenSnap := Value;
+end;
+
+procedure TAcceptedportfell.Set_SnapBuffer(Value: Integer);
+begin
+  SnapBuffer := Value;
+end;
+
+procedure TAcceptedportfell.Set_UseDockManager(Value: WordBool);
+begin
+  UseDockManager := Value;
+end;
+
+procedure TAcceptedportfell.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TAcceptedportfell,
+    Class_Acceptedportfell,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

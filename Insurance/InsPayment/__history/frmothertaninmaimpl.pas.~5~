@@ -1,0 +1,52 @@
+unit frmothertaninmaimpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ExtCtrls, XFSCtrls, StdCtrls, DBCtrls, CMCurrencyEdit;
+
+type
+  TForm1 = class(TForm)
+    XFPanel1: TXFPanel;
+    XFPanel2: TXFPanel;
+    CMCurrencyEdit1: TCMCurrencyEdit;
+    Edit1: TEdit;
+    DBLookupComboBox1: TDBLookupComboBox;
+    DBLookupComboBox2: TDBLookupComboBox;
+    XFButton1: TXFButton;
+    XFButton2: TXFButton;
+    XFLabel1: TXFLabel;
+    XFLabel2: TXFLabel;
+    XFLabel3: TXFLabel;
+    XFLabel4: TXFLabel;
+    procedure XFButton2Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form1: TForm1;
+
+implementation
+
+{$R *.dfm}
+ uses DMPaymentImpl, FrmAddPaymentImpl,sboapiDataModuleimpl,SBTranslateProc,CommanParametrs;
+
+procedure TForm1.FormShow(Sender: TObject);
+begin
+CMCurrencyEdit1.Value:=0;
+DBLookupComboBox1.KeyValue:='';
+DBLookupComboBox2.KeyValue:='';
+Edit1.Text:='';
+end;
+
+procedure TForm1.XFButton2Click(Sender: TObject);
+begin
+close;
+end;
+
+end.

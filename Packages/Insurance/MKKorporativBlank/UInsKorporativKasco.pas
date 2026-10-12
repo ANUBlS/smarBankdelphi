@@ -1,0 +1,809 @@
+unit UInsKorporativKasco;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActiveX, AxCtrls, PInsKorporativBlank_TLB, StdVcl, HintBox, StdCtrls,
+  Buttons, CurrencyEdit, DBCtrls, Mask, ComCtrls, ExtCtrls,SBPlgAx50_TLB,Db;
+
+const
+   WM_ModalResult = WM_USER+139;
+   fmCaption = 'Kasko sigortasi anket formasi: (%s)';
+   pBlankDone = 1;
+
+type
+
+  TConversionExcept = Exception;
+  TCalcException = Exception;
+  TOutputYear = Exception;
+
+  TfrmInsKorporativKasco = class(TActiveForm, IInsKorporativKasco,IUIObject,
+             IParamInput,
+             ISBPlgAc50BufferForm)
+    Panel2: TPanel;
+    lbDBCBCustName: TLabel;
+    Label4: TLabel;
+    GroupBox5: TGroupBox;
+    lbBeginDate: TLabel;
+    lbEndDate: TLabel;
+    Label3: TLabel;
+    SpeedButton1: TSpeedButton;
+    Label7: TLabel;
+    edBeginDate: TDateTimePicker;
+    edEndDate: TDateTimePicker;
+    DBMonths: TDBLookupComboBox;
+    edIns_Date: TDateTimePicker;
+    DBCBCustName: TDBLookupComboBox;
+    GroupBox1: TGroupBox;
+    Label15: TLabel;
+    lbInsSumm: TLabel;
+    lbFranshiz: TLabel;
+    lbTariff: TLabel;
+    Label10: TLabel;
+    SpeedButton7: TSpeedButton;
+    dbAvalute: TDBLookupComboBox;
+    edInsSumm: TDBEdit;
+    edFranshiz: TDBComboBox;
+    edTariff: TDBEdit;
+    edAmmount: TDBEdit;
+    DBAgents: TDBLookupComboBox;
+    edAgents: TEdit;
+    Panel1: TPanel;
+    btOk: TBitBtn;
+    BitBtn2: TBitBtn;
+    btSuggestion: TBitBtn;
+    btApply: TBitBtn;
+    Label2: TLabel;
+    btnAvto: TBitBtn;
+    hbErrMsg: THintBox;
+    Suggest: TBitBtn;
+    procedure btnAvtoClick(Sender: TObject);
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure ActiveFormDestroy(Sender: TObject);
+    procedure edIns_DateChange(Sender: TObject);
+    procedure edBeginDateChange(Sender: TObject);
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure DBMonthsClick(Sender: TObject);
+    procedure edFranshizChange(Sender: TObject);
+    procedure SpeedButton7Click(Sender: TObject);
+    procedure btOkClick(Sender: TObject);
+    procedure btApplyClick(Sender: TObject);
+    procedure BitBtn2Click(Sender: TObject);
+  private
+    { Private declarations }
+    FParams: TStrings;
+    FOwnerHandle : Integer;
+    IsSaved : Boolean;
+    FEvents: IInsKorporativKascoEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+    function  SaveData():Boolean;
+    procedure CalcEndDate();
+    procedure CalcMonth();
+    procedure MakeFranshizList();
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+
+    function  Get_Owner:Integer; safecall;
+    procedure Set_Owner(val : Integer);  safecall;
+    {IParamInput}
+    function  Get_Params(const Name: WideString): OleVariant; safecall;
+    procedure Set_Params(const Name: WideString; Value: OleVariant); safecall;
+    property Params[const Name: WideString]: OleVariant read Get_Params write Set_Params;
+    {IInstance}
+    function InstanceInitialize: HResult; safecall;
+    function IUIObject.Initialize = InstanceInitialize;
+    function Cleanup: HResult; safecall;
+    {IUIObject}
+//    function  Get_Icon: OLE_HANDLE; safecall;
+    function UIObjectActivate: HResult; safecall;
+    function IUIObject.Activate = UIObjectActivate;
+    function QueryDeactivate: HResult; safecall;
+    function UIObjectDeactivate: HResult; safecall;
+    function IUIObject.Deactivate = UIObjectDeactivate;
+    function SaveState: HResult; safecall;
+    function  Get_Height : Integer; safecall;
+    function  Get_Width  : Integer; safecall;
+    procedure BlankInitialization;
+    procedure DisableControls(ControlName : TCustomControl; disable : boolean = true);
+  public
+    { Public declarations }
+    CID : Integer;
+    procedure Initialize; override;
+  end;
+
+var
+      frmInsKorporativKasco:TfrmInsKorporativKasco;
+
+implementation
+
+uses ComObj, ComServ, DModuleInsKorporativ, UAvto;
+
+{$R *.DFM}
+
+{ TInsKorporativKasco }
+
+procedure TfrmInsKorporativKasco.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_InsKorporativKascoPage); }
+end;
+
+procedure TfrmInsKorporativKasco.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as IInsKorporativKascoEvents;
+end;
+
+procedure TfrmInsKorporativKasco.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TfrmInsKorporativKasco.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TfrmInsKorporativKasco.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TfrmInsKorporativKasco.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TfrmInsKorporativKasco.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TfrmInsKorporativKasco.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TfrmInsKorporativKasco.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TfrmInsKorporativKasco.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TfrmInsKorporativKasco.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TfrmInsKorporativKasco.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TfrmInsKorporativKasco.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TfrmInsKorporativKasco.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TfrmInsKorporativKasco.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TfrmInsKorporativKasco.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TfrmInsKorporativKasco.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TfrmInsKorporativKasco.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TfrmInsKorporativKasco.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TfrmInsKorporativKasco.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TfrmInsKorporativKasco.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TfrmInsKorporativKasco._Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TfrmInsKorporativKasco.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TfrmInsKorporativKasco.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TfrmInsKorporativKasco.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TfrmInsKorporativKasco.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TfrmInsKorporativKasco.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TfrmInsKorporativKasco.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TfrmInsKorporativKasco.KeyPressEvent(Sender: TObject;
+  var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TfrmInsKorporativKasco.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TfrmInsKorporativKasco.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TfrmInsKorporativKasco.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TfrmInsKorporativKasco.Set_AxBorderStyle(
+  Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TfrmInsKorporativKasco.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TfrmInsKorporativKasco.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TfrmInsKorporativKasco.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TfrmInsKorporativKasco.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TfrmInsKorporativKasco.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TfrmInsKorporativKasco.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TfrmInsKorporativKasco.Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TfrmInsKorporativKasco.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TfrmInsKorporativKasco.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TfrmInsKorporativKasco.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TfrmInsKorporativKasco.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TfrmInsKorporativKasco.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TfrmInsKorporativKasco.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+
+function  TfrmInsKorporativKasco.Get_Owner:Integer;
+begin
+  Result := handle;
+end;
+
+procedure TfrmInsKorporativKasco.Set_Owner(val : Integer);
+begin
+  if val > 0 then
+     FOwnerHandle := val;
+end;
+
+
+function  TfrmInsKorporativKasco.Get_Params(const Name: WideString): OleVariant;
+begin
+  Result := FParams.Values[Name];
+end;
+
+procedure TfrmInsKorporativKasco.Set_Params(const Name: WideString; Value: OleVariant);
+begin
+  FParams.Values[Name] := Value;
+end;
+
+function TfrmInsKorporativKasco.InstanceInitialize: HResult;
+begin
+  Result := S_OK;
+end;
+
+function TfrmInsKorporativKasco.Cleanup: HResult;
+begin
+  Result := S_OK;
+end;
+
+function TfrmInsKorporativKasco.UIObjectActivate: HResult;
+var
+    i:byte;
+begin
+
+    BlankInitialization;
+
+    if Get_Params('Mod') = 'Insert' then begin
+
+       with DModuleKorporativ do begin
+         ODSMotorkasko.Insert;
+         ODSContracts.Insert;
+       end;
+
+       edIns_Date.DateTime := Now;
+       edBeginDate.DateTime := Now;
+       edEndDate.DateTime := Now;
+       Caption := format(fmCaption, ['Yeni anket']);
+
+       DBCBCustName.KeyValue :=  StrToInt(Get_Params('KLI_ID'));
+       
+       with DModuleKorporativ do
+        ODSContracts.FieldByName('KLI_ID').AsInteger :=StrToInt(Get_Params('KLI_ID'));
+
+    end;
+    if Get_Params('Mod') = 'Edit' then begin
+       Caption := format(fmCaption, ['Redakte']);
+
+       with DModuleKorporativ, ODSdrAccessPeople do begin
+        SetVariable('CID', CID);
+        Open;
+       end;
+      { with DModuleKorporativ, ODSMotorkasko do begin
+         rbBank.Checked := FieldByName('ben_id').asInteger = 0;
+         rbBeneficiary.Checked := FieldByName('ben_id').asInteger = 1;
+      //   DBInsColors.Text := FieldByName('INSUREDCOLOR').asString;
+       end;                    }
+
+       with DModuleKorporativ, ODSContracts do begin
+         ODSMotorkasko.Edit;
+         ODSContracts.Edit;
+         edIns_Date.DateTime := fieldByName('INS_DATE').asDateTime;
+         edBeginDate.DateTime := fieldByName('BEGIN_DATE').asDateTime;
+         edEndDate.DateTime := fieldByName('END_DATE').asDateTime;
+       end;
+  //     SpeedButton1Click(SpeedButton1);
+       btSuggestion.Enabled := True;
+
+       //-----------Disable controls -------------
+       with DModuleKorporativ, OPCOMMON do
+         if CallIntegerFunction('get_state',[CID]) = 6 {is disable?} then
+
+       DisableControls(Panel2, false);
+
+        for i := 0 to ComponentCount -1 do
+        begin
+            if (Components[i] is TGroupBox) then
+               (Components[i] as TGroupBox).Enabled:= true;
+        end;
+
+
+    end;
+  Result := S_OK;
+end;
+
+function TfrmInsKorporativKasco.QueryDeactivate: HResult;
+begin
+  Result := S_OK;
+end;
+
+function TfrmInsKorporativKasco.UIObjectDeactivate: HResult;
+begin
+  Result := S_OK;
+end;
+
+function TfrmInsKorporativKasco.SaveState: HResult;
+begin
+  Result := S_OK;
+end;
+
+function  TfrmInsKorporativKasco.Get_Height : Integer;
+begin
+  Result := Height;
+end;
+
+function  TfrmInsKorporativKasco.Get_Width  : Integer;
+begin
+  Result := Width;
+end;
+
+
+
+procedure TfrmInsKorporativKasco.BlankInitialization;
+begin
+
+    CID := Get_Params('ÑID');
+    with DModuleKorporativ do begin
+      ODSMotorKasko.SetVariable('CID', CID);
+      ODSMotorKasko.Open;
+
+      ODSContracts.SetVariable('CID', CID);
+      ODSContracts.Open;
+
+      ODSModels.Open;
+    end;
+   // CalcAccessories;
+end;
+
+procedure TfrmInsKorporativKasco.DisableControls(
+  ControlName: TCustomControl; disable: boolean);
+ procedure DisableControl(CName : TCustomControl);
+  var i : Integer;
+  begin
+    with CName do
+      for i := 0 to ControlCount -1 do begin
+        //ShowMessage(Controls[i].name);
+        if (Controls[i] is TCustomControl) then
+          DisableControl(Controls[i] as TCustomControl);
+        Controls[i].Enabled := disable;
+
+      end
+  end;
+
+begin
+  with DModuleKorporativ do
+  if OPCOMMON.CallIntegerFunction('disablepolicies', []) = 0 then
+    Exit;
+
+  DisableControl(ControlName);
+
+  btApply.Enabled := Disable;
+  btOk.Enabled := Disable;
+
+end;
+
+procedure TfrmInsKorporativKasco.btnAvtoClick(Sender: TObject);
+var
+    i:byte;
+begin
+      with DModuleKorporativ.ODSMotorkasko do
+      begin
+       if CID = -1 then
+       if MessageDlg('Melumatlar yadda saxlanilsin?',
+                mtConfirmation, [mbYes, mbNo], 0) = mrYes then SaveData
+       else exit;//Generating New CID
+       Close;
+       SetVariable('CID', DModuleKorporativ.ODSContractsID.value);
+       Open;
+       //ShowMessage(FloatToStr(DModuleKorporativ.ODSContractsID.value));
+       {ShowMessage(FloatToStr(DModuleKorporativ.ODSMotorkaskoID.value));
+       ShowMessage(FloatToStr(DModuleKorporativ.ODSMotorkaskoCID.value));}
+       frmAvto:=TfrmAvto.Create(Self);
+       frmAvto.ShowModal;
+       Close;
+    end;
+   // if Get_Params('Mod') = 'Insert' then
+    for i := 0 to ComponentCount -1 do begin
+        if (Components[i] is TGroupBox) then
+        (Components[i] as TGroupBox).Enabled:= true;
+   end;
+end;
+
+function TfrmInsKorporativKasco.SaveData: Boolean;
+var
+  str : String;
+begin
+ Result := false;
+  try
+
+    with DModuleKorporativ, ODSContracts do
+     if State in [dsEdit, dsInsert] then
+        begin
+          FieldByName('AGENT_ID').AsFloat := ODSAgentID.value;
+          FieldByName('Ins_Date').AsDateTime := edIns_Date.Date;
+          FieldByName('Begin_Date').AsDateTime := edBeginDate.Date;
+          FieldByName('End_Date').AsDateTime := edEndDate.Date;
+          Post;
+          RefreshRecord;
+          CID := FieldByName('id').asInteger;
+        end;
+
+    with DModuleKorporativ, ODSdrAccessPeople,ODSAccessories do
+     if State in [dsEdit, dsInsert] then
+       begin
+         Post;
+         RefreshRecord;
+       end;
+
+    with DModuleKorporativ, ODSMotorkasko do
+     if State in [dsEdit, dsInsert] then
+       begin
+         //FieldByName('CID').AsInteger := CID;
+        // FieldByName('ben_id').asInteger := Integer(not rbBank.Checked);
+         //FieldByName('INSUREDCOLOR').asString := DBInsColors.Text;
+         Post;
+         RefreshRecord;
+       end;
+
+    with DModuleKorporativ, ODSAgent do
+          if (trim(edAgents.Text) <> '') then
+            if (edAgents.Text <> DBAgents.Text) then begin
+                str := edAgents.Text;
+                Insert;
+                FieldByName('ID').asInteger := 1;
+                FieldByName('Surname').asString := str;
+                Post;
+                RefreshRecord;
+              end;
+
+
+    IsSaved := True;
+    Result := True;
+  except
+   on E:Exception do hbErrMsg.ShowMessage(E.message);
+  end;
+
+end;
+
+procedure TfrmInsKorporativKasco.ActiveFormCreate(Sender: TObject);
+begin
+     frmInsKorporativKasco := Self;
+     FParams := TStringList.Create;
+     DModuleKorporativ := TDModuleKorporativ.Create(Self);
+     isSaved := False;
+end;
+
+procedure TfrmInsKorporativKasco.ActiveFormDestroy(Sender: TObject);
+begin
+     DModuleKorporativ.Free;
+     FParams.Free;
+end;
+
+procedure TfrmInsKorporativKasco.edIns_DateChange(Sender: TObject);
+begin
+     with DModuleKorporativ, ODSContracts do
+     if state in [dsInsert] then
+        edBeginDate.DateTime := (Sender as TdateTimePicker).DateTime;
+end;
+
+procedure TfrmInsKorporativKasco.edBeginDateChange(Sender: TObject);
+begin
+     CalcEndDate();
+end;
+
+procedure TfrmInsKorporativKasco.CalcEndDate;
+begin
+   with DModuleKorporativ do
+   edEndDate.DateTime :=
+       IncMonth(edBeginDate.DateTime, ODSMonths.fieldbyname('COUNT').asInteger);
+end;
+
+procedure TfrmInsKorporativKasco.CalcMonth;
+begin
+    with DModuleKorporativ do
+    ODSMonths.Locate('count',
+       IntToStr(trunc((edEndDate.DateTime - edBeginDate.DateTime)/30)), [] );
+end;
+
+procedure TfrmInsKorporativKasco.MakeFranshizList;
+begin
+  with DModuleKorporativ, ODSFranshiz do
+  begin
+    edFranshiz.Items.Clear;
+    First;
+    while not EOF do begin
+      edFranshiz.Items.Add(FloatToStr(FieldByName('FRANSHIZ').asFloat));
+      Next;
+    end;
+    First  
+  end;
+end;
+
+procedure TfrmInsKorporativKasco.SpeedButton1Click(Sender: TObject);
+begin
+  with DModuleKorporativ, ODSReliaseDates do
+  try
+    Close;
+     DModuleKorporativ.ODSMotorkasko.Close;
+     DModuleKorporativ.ODSMotorkasko.SetVariable('cid',DModuleKorporativ.ODSContractsID.value);
+     DModuleKorporativ.ODSMotorkasko.Open;
+
+  //  ShowMessage(FloatToStr(ODSMotorKaskoCID.value));
+    if (ODSMarks.FieldByName('calcoptions').asInteger = 1)  then
+         raise TCalcException.Create('Verilmish avtomobil markasi ucun tarif hesablanmir.');
+    if trim(ODSMotorKasko.FieldByName('insuredoutputyear').AsString) = '' then
+         raise TOutputYear.Create('Avtomobilin buraxilish ilini daxil edin');
+    SetVariable('state', ODSMarks.fieldbyName('state_id').asInteger);
+    SetVariable('releaseyear',ODSMotorKasko.FieldByName('insuredoutputyear').AsInteger);
+    Open;
+   { ShowMessage(ODSMarks.fieldbyName('state_id').AsString);
+    ShowMessage(ODSMotorKasko.fieldbyName('insuredoutputyear').AsString);
+    ShowMessage(FloatToStr(ODSReliaseDatesID.value));    }
+    ODSMonths.Open;
+    ODSFranshiz.Close;
+    ODSFranshiz.Open;
+    MakeFranshizList;
+  except
+   on E : Exception do
+    MessageDlg(E.Message , mtInformation, [mbOK], 0);
+  end;
+end;
+
+procedure TfrmInsKorporativKasco.DBMonthsClick(Sender: TObject);
+begin
+     CalcEndDate();
+     MakeFranshizList;
+end;
+
+procedure TfrmInsKorporativKasco.edFranshizChange(Sender: TObject);
+begin
+     with DModuleKorporativ, ODSFranshiz do begin
+    Locate('FRANSHIZ', ODSContracts.FieldByName('FRANSHIZ').asFloat, []);
+    ODSContracts.FieldByName('TARIFF').asFloat :=  FieldByName('TARIFF').asFloat;
+  end;
+end;
+
+procedure TfrmInsKorporativKasco.SpeedButton7Click(Sender: TObject);
+begin
+     edAmmount.SetFocus;
+     with DModuleKorporativ, ODSContracts do
+     FieldByName('AMMOUNT').asFloat :=
+//                      (StrToCurr(edInsSumm.Text)/100) * StrToCurr(edTariff.Text)
+                (FieldByName('INSSUMM').asFloat / 100) * FieldByName('TARIFF').asFloat;
+end;
+
+procedure TfrmInsKorporativKasco.btOkClick(Sender: TObject);
+begin
+   if SaveData() or IsSaved then begin
+      PostMessage(FOwnerHandle, WM_ModalResult, mrOk, 0);
+   end;
+end;
+
+procedure TfrmInsKorporativKasco.btApplyClick(Sender: TObject);
+begin
+     if SaveData then begin
+        btSuggestion.Enabled := True;
+        btApply.Enabled := False;
+     end;
+end;
+
+procedure TfrmInsKorporativKasco.BitBtn2Click(Sender: TObject);
+begin
+    with DModuleKorporativ do begin
+         ODSMotorkasko.Cancel;
+         ODSContracts.Cancel;
+         ODSdrAccessPeople.Cancel;
+   end;
+   PostMessage(FOwnerHandle, WM_ModalResult, mrCancel, 0);
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TfrmInsKorporativKasco,
+    Class_frmInsKorporativKasco,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

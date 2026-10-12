@@ -1,0 +1,95 @@
+unit CC_AccInForm_Unit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, Mask, DBCtrls, ExtCtrls, Grids, DBGrids, Db, OracleData,
+  NLSLocalizer;
+
+type
+  TCC_ACCOutForm = class(TForm)
+    SettingsBrowser: TDBGrid;
+    Panel4: TPanel;
+    Panel5: TPanel;
+    DBEdit1: TDBEdit;
+    Panel6: TPanel;
+    DBEdit2: TDBEdit;
+    Panel3: TPanel;
+    ButtonRefresh: TButton;
+    ButtonClose: TButton;
+    Button3: TButton;
+    CO_Out_data: TDataSource;
+    CC_OutForm: TOracleDataSet;
+    procedure ButtonCloseClick(Sender: TObject);
+    procedure SettingsBrowserDblClick(Sender: TObject);
+    procedure Button3Click(Sender: TObject);
+    procedure ButtonRefreshClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+   procedure WMNCACTIVATE(var message:TWMNCActivate);
+  procedure WMNCPaint(var message: TWMNCPaint);
+
+  end;
+
+var
+  CC_ACCOutForm: TCC_ACCOutForm;
+
+implementation
+
+uses UnitData, CC_AccTransaction_Unit, CC_AccOutForm_Unit,sboapiDataModuleImpl
+;
+
+{$R *.DFM}
+
+ procedure TCC_ACCOutForm.WMNCACTIVATE(var message:TWMNCActivate);
+var
+ S:TWMNCPaint;
+begin
+inherited;
+WMNCPaint(s);
+end;
+
+procedure TCC_ACCOutForm.WMNCPaint(var message: TWMNCPaint);
+const Capt = 'Комиссийа ямялиййатлары';
+var dc : hDc;
+begin
+inherited;
+Caption:='';
+dc := GetWindowDC(Handle);
+        SetBkMode(dc,Transparent);
+        SetTextColor(dc,clWhite);
+        SelectObject(dc, Font.Handle);
+        TextOut(dc, 23,6,Capt,Length(Capt));
+end;
+
+procedure TCC_ACCOutForm.ButtonCloseClick(Sender: TObject);
+begin
+close;
+end;
+
+procedure TCC_ACCOutForm.SettingsBrowserDblClick(Sender: TObject);
+begin
+FormAccOut :=TFormAccOut.Create(self);
+ FormAccOut.Showmodal;
+   close;
+end;
+
+
+
+procedure TCC_ACCOutForm.Button3Click(Sender: TObject);
+begin
+FormAccOut :=TFormAccOut.Create(self);
+ FormAccOut.Showmodal;
+  close;
+end;
+
+procedure TCC_ACCOutForm.ButtonRefreshClick(Sender: TObject);
+begin
+CC_OutForm.close;
+CC_OutForm.open;
+end;
+
+end.

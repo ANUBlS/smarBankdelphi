@@ -1,0 +1,43 @@
+unit YoneltmeImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ExtCtrls, DBCtrls, Grids, DBGrids, DB, OracleData;
+
+type
+  TYoneltmeFrm = class(TForm)
+    DBGrid1: TDBGrid;
+    DBNavigator1: TDBNavigator;
+    OracleDataSet1: TOracleDataSet;
+    DataSource1: TDataSource;
+    OracleDataSet1NAME: TWideStringField;
+    OracleDataSet1WHEREFROM: TWideStringField;
+    OracleDataSet1AMMOUNT: TFloatField;
+    OracleDataSet1CREDITID: TFloatField;
+    procedure FormShow(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  YoneltmeFrm: TYoneltmeFrm;
+
+implementation
+uses
+sboapiDataModuleImpl,BPMainFormImpl;
+{$R *.dfm}
+
+procedure TYoneltmeFrm.FormShow(Sender: TObject);
+begin
+OracleDataSet1.Close ;
+OracleDataSet1.SetVariable('creditid',CrdID) ;
+OracleDataSet1.open ;
+OracleDataSet1CREDITID.AsInteger:=CrdID ;
+
+end;
+
+end.

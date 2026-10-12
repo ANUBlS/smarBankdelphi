@@ -1,0 +1,169 @@
+unit DatModAexUnitImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, OracleData;
+
+type
+  TDatModAex = class(TDataModule)
+    DatSetExpCredits: TOracleDataSet;
+    DatSrcExpCredits: TDataSource;
+    DatSetExpCreditsNUMBEROFCREDIT: TWideStringField;
+    DatSetExpCreditsNAME: TWideStringField;
+    DatSetExpCreditsCUSTACCREST: TFloatField;
+    DatSetExpCreditsPRINCIPAL: TFloatField;
+    DatSetExpCreditsINTEREST: TFloatField;
+    DatSetExpCreditsPENALTYREST: TFloatField;
+    DatSetPayments: TOracleDataSet;
+    DatSetSchedule: TOracleDataSet;
+    DatSrcPayments: TDataSource;
+    DatSrcSchedule: TDataSource;
+    DatSetPaymentsPAYDATE: TDateTimeField;
+    DatSetPaymentsPAYEDAMT: TFloatField;
+    DatSetPaymentsPAYEDINTAMT: TFloatField;
+    DatSetPaymentsPAYEDPENALTYAMT: TFloatField;
+    DatSetSchedulePAYMENTDATE: TDateTimeField;
+    DatSetSchedulePRINCIPAL: TFloatField;
+    DatSetScheduleINTEREST: TFloatField;
+    DatSetTranches: TOracleDataSet;
+    DatSrcTranches: TDataSource;
+    DatSetTranchesTRANCHEDATE: TDateTimeField;
+    DatSetTranchesTRANCHEAMOUNT: TFloatField;
+    DatSetInterests: TOracleDataSet;
+    DatSrcInterests: TDataSource;
+    DatSetInterestsHDATE: TDateTimeField;
+    DatSetInterestsINTEREST: TFloatField;
+    DatSetInterestsDUEINTEREST: TFloatField;
+    DatSetInterestsPENALTYINTEREST: TFloatField;
+    DatSetPaymentsPAYEDDUEAMT: TFloatField;
+    DatSetPaymentsPAYEDDUEINTAMT: TFloatField;
+    DatSetExpCreditsID: TFloatField;
+    DatSetExpCreditsEXPDATCOUNT: TFloatField;
+    DatSetReserves: TOracleDataSet;
+    DatSrcReserves: TDataSource;
+    DatSetCategories: TOracleDataSet;
+    DatSrcPersons: TDataSource;
+    DatSetCreditTypes: TOracleDataSet;
+    DatSrctCategories: TDataSource;
+    DatSetValute: TOracleDataSet;
+    DatSrcCreditTypes: TDataSource;
+    DatSetFilials: TOracleDataSet;
+    DatSrcFilials: TDataSource;
+    DatSetPersons: TOracleDataSet;
+    DatSrcValute: TDataSource;
+    DatSetValuteVALUTE: TIntegerField;
+    DatSetValuteVALU_NAME: TWideStringField;
+    DatSetPersonsID: TFloatField;
+    DatSetPersonsDESCRIPION: TWideStringField;
+    DatSetCategoriesID: TFloatField;
+    DatSetCreditTypesID: TFloatField;
+    DatSetCreditTypesDESCRIPTION: TWideStringField;
+    DatSetReservesID: TFloatField;
+    DatSetReservesDESCRIPTION: TWideStringField;
+    DatSetExpCreditsVAL_NAME: TWideStringField;
+    DatSetExpCreditsCONTRACTACCNO: TWideStringField;
+    DatSetExpCreditsCURRENCY: TFloatField;
+    DatSetExpCreditsPERSONALTYPE: TFloatField;
+    DatSetExpCreditsCUSTOMERTYPE: TFloatField;
+    DatSetExpCreditsBRANCHID: TFloatField;
+    DatSetExpCreditsCREDITTYPE: TFloatField;
+    DatSetExpCreditsRESERVEID: TFloatField;
+    DatSetExpCreditsSUMAMT: TFloatField;
+    DatSetExpCreditsPLR: TFloatField;
+    DatSetExpCreditsOPENDATE: TDateTimeField;
+    DatSetExpCreditsCLOSEDATE: TDateTimeField;
+    DatSetExpCreditsANNUALYINTERESTRATE: TFloatField;
+    DatSetExpCreditsBALACCNO: TFloatField;
+    DatSetExpCreditsBOOROWERID: TFloatField;
+    DatSetExpCreditsPHONENUMBER: TWideStringField;
+    DatSetExpCredits_: TOracleDataSet;
+    DatSetExpCredits_ID: TFloatField;
+    DatSetExpCredits_NUMBEROFCREDIT: TWideStringField;
+    DatSetExpCredits_OPENDATE: TDateTimeField;
+    DatSetExpCredits_CLOSEDATE: TDateTimeField;
+    DatSetExpCredits_ANNUALYINTERESTRATE: TFloatField;
+    DatSetExpCredits_BOOROWERID: TFloatField;
+    DatSetExpCredits_CONTRACTACCNO: TWideStringField;
+    DatSetExpCredits_VAL_NAME: TWideStringField;
+    DatSetExpCredits_CUSTACCREST: TFloatField;
+    DatSetExpCredits_PRINCIPAL: TFloatField;
+    DatSetExpCredits_INTEREST: TFloatField;
+    DatSetExpCredits_SUMAMT: TFloatField;
+    DatSetExpCredits_PENALTYREST: TFloatField;
+    DatSetExpCredits_RESERVEID: TFloatField;
+    DatSetExpCredits_BALACCNO: TFloatField;
+    DatSetExpCredits_NAME: TWideStringField;
+    DatSetExpCredits_OUTDAT: TDateTimeField;
+    DatSetExpCredits_PLANREST: TFloatField;
+    DatSetExpCredits_CURRENCY: TFloatField;
+    DatSetExpCredits_PERSONALTYPE: TFloatField;
+    DatSetExpCredits_CUSTOMERTYPE: TFloatField;
+    DatSetExpCredits_BRANCHID: TFloatField;
+    DatSetExpCredits_CREDITTYPE: TFloatField;
+    DatSetExpCredits_DATEOFCONCLUSION: TDateTimeField;
+    DatSetExpCredits_DUEDATEFIRSTCONTRACT: TDateTimeField;
+    DatSetExpCredits_DUEDATELASTCONTRACT: TDateTimeField;
+    DatSetExpCredits_EXDATCOUNT: TFloatField;
+    DatSetExpCredits_PHONENUMBER: TWideStringField;
+    OracleDataSet1: TOracleDataSet;
+    DatSetExpCreditsSALARY: TWideStringField;
+    DatSetExpCredits_SALARY: TWideStringField;
+    DatSetExpCreditsCREDITEND: TWideStringField;
+    DatSetExpCreditsREST: TFloatField;
+    DatSetExpCreditsINTERESTREST: TFloatField;
+    DatSetCategoriesDESCRIPTION: TWideStringField;
+    DatSetExpCreditsGUARANTORNAME: TWideStringField;
+    DatSetExpCreditsZAMINWORK1: TWideStringField;
+    DatSetExpCreditsZAMINTEL1: TWideStringField;
+    DatSetExpCreditsZMTELMOB1: TWideStringField;
+    DatSetExpCreditsNAME2: TWideStringField;
+    DatSetExpCreditsWR2: TWideStringField;
+    DatSetExpCreditsEVTEL2: TWideStringField;
+    DatSetExpCreditsMOBTEL2: TWideStringField;
+    DatSetExpCreditsNAME3: TWideStringField;
+    DatSetExpCreditsWR3: TWideStringField;
+    DatSetExpCreditsEVTEL3: TWideStringField;
+    DatSetExpCreditsMOBTEL3: TWideStringField;
+    DatSetExpCreditsDUEREST: TFloatField;
+    DatSetExpCreditsQEYD: TWideStringField;
+    procedure DataModuleCreate(Sender: TObject);
+    procedure DataModuleDestroy(Sender: TObject);
+  private
+  public
+    { Public declarations }
+  end;
+
+var
+  DatModAex: TDatModAex;
+
+implementation
+
+{$R *.DFM}
+uses sboapiDataModuleImpl;
+
+
+
+procedure TDatModAex.DataModuleCreate(Sender: TObject);
+begin
+   DatSetValute.Open;
+   DatSetFilials.open;
+   DatSetPersons.open;
+   DatSetCategories.open;
+   DatSetCreditTypes.open;
+   DatSetReserves.open;
+end;
+
+procedure TDatModAex.DataModuleDestroy(Sender: TObject);
+begin
+   DatSetValute.CloseAll;
+   DatSetFilials.CloseAll;
+   DatSetPersons.CloseAll;
+   DatSetCategories.CloseAll;
+   DatSetCreditTypes.CloseAll;
+   DatSetReserves.CloseAll;
+
+end;
+
+end.

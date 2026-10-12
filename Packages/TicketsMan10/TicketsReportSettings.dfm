@@ -1,0 +1,83 @@
+object frmSettings: TfrmSettings
+  Left = 144
+  Top = 316
+  Width = 795
+  Height = 314
+  Caption = 'Settings'
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  OldCreateOrder = False
+  PixelsPerInch = 96
+  TextHeight = 13
+  object DBGrid1: TDBGrid
+    Left = 0
+    Top = 0
+    Width = 787
+    Height = 267
+    Align = alClient
+    DataSource = DataModuleTicketMan.Settings
+    TabOrder = 0
+    TitleFont.Charset = DEFAULT_CHARSET
+    TitleFont.Color = clWindowText
+    TitleFont.Height = -11
+    TitleFont.Name = 'Azl Sans Serif'
+    TitleFont.Style = []
+    Columns = <
+      item
+        Expanded = False
+        FieldName = 'REPORTNAME'
+        Title.Caption = 'Ады'
+        Width = 159
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'LBLABEL'
+        Title.Caption = 'Символ'
+        Width = 40
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'LBTITLE'
+        Title.Caption = 'Башлыг'
+        Width = 126
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'LBBNUMB'
+        Title.Caption = 'Алт йазы'
+        Width = 44
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'FORMATDAT'
+        Title.Caption = 'Тарих форматы'
+        Width = 70
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'LBDESCR'
+        Title.Caption = 'Тяйинат'
+        Width = 300
+        Visible = True
+      end>
+  end
+  object DBNavigator1: TDBNavigator
+    Left = 0
+    Top = 267
+    Width = 787
+    Height = 20
+    DataSource = DataModuleTicketMan.Settings
+    Align = alBottom
+    Flat = True
+    TabOrder = 1
+  end
+end

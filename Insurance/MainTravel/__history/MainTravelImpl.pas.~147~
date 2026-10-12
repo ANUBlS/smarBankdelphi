@@ -1,0 +1,1219 @@
+﻿unit MainTravelImpl;       //commandataset
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActiveX, AxCtrls, MainTravelProj_TLB, StdVcl, StdCtrls, ImgList, Grids,
+  XDBGrids, ComCtrls, ToolWin, XFSCtrls, ExtCtrls, DBCtrls, CMExcelExport,
+  variants, DB, OracleData, ActnList, Oracle, DBGrids, Menus, PlgModalContainer;
+
+type
+  TMainTravel = class(TActiveForm, IMainTravel)
+    ExcelExport: TCMExcelExport;
+    XFGroupBox1: TXFGroupBox;
+    RGContract: TXFRadioGroup;
+    XFGroupBox2: TXFGroupBox;
+    DBLookupComboBox1: TDBLookupComboBox;
+    XFCheckBox1: TXFCheckBox;
+    XFGroupBox11: TXFGroupBox;
+    DBLookupComboBox6: TDBLookupComboBox;
+    XFCheckBox9: TXFCheckBox;
+    XFGroupBox3: TXFGroupBox;
+    DBLookupComboBox2: TDBLookupComboBox;
+    XFCheckBox2: TXFCheckBox;
+    XFPanel2: TXFPanel;
+    XFGroupBox4: TXFGroupBox;
+    XFRadioGroup1: TXFRadioGroup;
+    XFCheckBox6: TXFCheckBox;
+    DateTimePicker1: TDateTimePicker;
+    DateTimePicker2: TDateTimePicker;
+    XFButton1: TXFButton;
+    XFCheckBox3: TXFCheckBox;
+    XFPanel1: TXFPanel;
+    ToolBar1: TToolBar;
+    ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
+    ToolButton3: TToolButton;
+    ToolButton4: TToolButton;
+    ToolButton5: TToolButton;
+    ToolButton6: TToolButton;
+    ToolButton7: TToolButton;
+    ToolButton8: TToolButton;
+    ToolButton9: TToolButton;
+    ToolButton10: TToolButton;
+    ToolButton11: TToolButton;
+    ToolButton12: TToolButton;
+    ToolButton13: TToolButton;
+    ImageList: TImageList;
+    ImageList2: TImageList;
+    Emeliyyat5: TPopupMenu;
+    dmplan1: TMenuItem;
+    N8: TMenuItem;
+    dmlr1: TMenuItem;
+    N7: TMenuItem;
+    Zrrlr1: TMenuItem;
+    N9: TMenuItem;
+    Xitam1: TMenuItem;
+    XFPanel4: TXFPanel;
+    XDBGrid1: TXDBGrid;
+    XFPanel3: TXFPanel;
+    EditVALYUTA: TEdit;
+    EditPOLICY_NUM: TEdit;
+    EditMUSTERININ_ASA: TEdit;
+    EditAMMOUNT: TEdit;
+    EditINSSUMM: TEdit;
+    EditQALIQ: TEdit;
+    Memo1: TMemo;
+    XFGroupBox5: TXFGroupBox;
+    ComboBox1: TComboBox;
+    XFCheckBox4: TXFCheckBox;
+    XFLabel1: TXFLabel;
+    XFCheckBox5: TXFCheckBox;
+    EditNAME1: TEdit;
+    XFRadioGroup2: TXFRadioGroup;
+    XFCheckBox7: TXFCheckBox;
+    ToolButton14: TToolButton;
+    procedure ToolButton13Click(Sender: TObject);
+    procedure ToolButton9Click(Sender: TObject);
+    procedure ToolButton5Click(Sender: TObject);
+    procedure ToolButton1Click(Sender: TObject);
+    procedure ToolButton3Click(Sender: TObject);
+    procedure RGContractClick(Sender: TObject);
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure ToolButton7Click(Sender: TObject);
+    procedure EditS_NOVUExit(Sender: TObject);
+    procedure EditS_NOVUKeyPress(Sender: TObject; var Key: Char);
+    procedure XDBGrid1TitleClick(Column: TXColumn);
+    procedure XDBGrid1DrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TXColumn; State: TGridDrawState);
+    procedure dmplan1Click(Sender: TObject);
+    procedure dmlr1Click(Sender: TObject);
+    procedure Zrrlr1Click(Sender: TObject);
+    procedure Xitam1Click(Sender: TObject);
+    procedure EditMUSTERININ_ASAKeyPress(Sender: TObject; var Key: Char);
+    procedure ToolButton14Click(Sender: TObject);
+  private
+    { Private declarations }
+    FEvents: IMainTravelEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+  public
+    { Public declarations }
+    procedure Initialize; override;
+    procedure LoadPlugin1(PluginName :String;PluginParam  :String);
+    procedure ActionFilterExecute(Sender: TObject);
+    procedure ActionSpeedSearchExecute(Sender: TObject);
+  end;
+
+implementation
+
+uses ComObj, ComServ, DMMainTravelImpl,sboapiDataModuleimpl,SBTranslateProc,CommanParametrs;
+
+      var
+           filterstatus:integer;
+            sort_ASC: Boolean;
+             sqlstring,sql,sql1:string;
+
+{$R *.DFM}
+
+{ TMainTravel }
+
+procedure TMainTravel.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_MainTravelPage); }
+end;
+
+procedure TMainTravel.EditMUSTERININ_ASAKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+
+if Key = #13  then
+  begin
+      //New Addition
+      EditNAME1.Text := EditMUSTERININ_ASA.Text;
+      {  Replace I, i, İ, i  }
+      with EditNAME1 do
+      begin
+          Text := StringReplace(Text, 'i', '`', [rfReplaceAll]);
+          Text := StringReplace(Text, 'I', '`', [rfReplaceAll]);
+          Text := StringReplace(Text, 'İ', '`', [rfReplaceAll]);
+          Text := StringReplace(Text, 'I', '`', [rfReplaceAll]);
+          Text := StringReplace(Text, 'ı', '`', [rfReplaceAll]);
+      end;
+
+       //ActionSpeedSearchExecute(Sender);
+       ActionSpeedSearchExecute(EditNAME1);
+  end;
+end;
+
+procedure TMainTravel.EditS_NOVUExit(Sender: TObject);
+begin
+  TEdit(Sender).Text :=EmptyStr;
+end;
+
+procedure TMainTravel.EditS_NOVUKeyPress(Sender: TObject; var Key: Char);
+begin
+  if Key = #13  then
+  begin
+   ActionSpeedSearchExecute(Sender);
+  end;
+end;
+
+procedure TMainTravel.ActionSpeedSearchExecute(
+  Sender: TObject);
+var
+  SearchField : string;
+  SearchOptions : TSearchRecordOptions;
+begin
+  SearchOptions := [srIgnoreCase ,srPartialMatch ];
+
+  with Sender as TEdit  do
+  begin
+    SearchField := copy(Name,5,length(Name));
+    with  TOracleDataSet(XDBGrid1.DataSource.DataSet) do
+    if  not SearchRecord(
+                  SearchField
+                 ,Text
+                 ,SearchOptions + [srFromCurrent , srForward ]
+                 ) then
+    if MessageDlg(
+              'Axtarış sona çatdı.'+#13+'Əvvəldən başlansın?'
+             ,mtInformation
+             ,[mbNo , mbYes]
+             ,0
+             ) = mrYes  then
+    if not SearchRecord(
+                 SearchField
+                ,Text
+                ,SearchOptions + [ srFromBeginning ]
+                )  then
+    MessageDlg('Yazı tapılmayıb!',mtInformation,[mbOK],0);
+ end;
+end;
+
+
+procedure TMainTravel.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as IMainTravelEvents;
+end;
+
+procedure TMainTravel.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TMainTravel.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TMainTravel.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TMainTravel.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TMainTravel.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TMainTravel.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TMainTravel.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TMainTravel.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TMainTravel.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TMainTravel.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TMainTravel.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TMainTravel.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TMainTravel.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TMainTravel.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TMainTravel.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TMainTravel.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TMainTravel.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TMainTravel.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TMainTravel.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TMainTravel._Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TMainTravel.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TMainTravel.ActiveFormCreate(Sender: TObject);
+begin
+ filterstatus:=0;
+  XFCheckBox5.Checked:=false;
+   sort_ASC:=true;
+
+DMMainTravel:=TDMMainTravel.Create(Self);
+ sql1:=DMMainTravel.DSContract.SQL.Text;
+ RGContract.ItemIndex:=0;
+ XFRadioGroup1.ItemIndex:=0;
+ DateTimePicker1.DateTime:=DMMainTravel.DSSysdat.FieldByName('tek_dat').AsDateTime;
+ DateTimePicker2.DateTime:=DMMainTravel.DSSysdat.FieldByName('tek_dat').AsDateTime;
+  commandatasetTravel:=DMMainTravel.DSContract;
+
+
+end;
+
+procedure TMainTravel.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TMainTravel.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+
+
+procedure TMainTravel.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TMainTravel.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TMainTravel.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TMainTravel.dmlr1Click(Sender: TObject);
+begin
+if XDBGrid1.DataSource.DataSet.recordcount=0 then
+ begin
+ Showmessage('Diqqət! Cədvəldə məlumat yoxdur.');
+   exit;
+ end;
+ with DMMainTravel,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['SEEPAYMENT']);
+ end;
+
+ contactid:=XDBGrid1.DataSource.DataSet.FieldByName('id').AsInteger;
+ contractstatus:=XDBGrid1.DataSource.DataSet.FieldByName('STATE').AsInteger;
+ loadPlugin('InsPayment.bpl','');
+
+end;
+
+procedure TMainTravel.dmplan1Click(Sender: TObject);
+begin
+if XDBGrid1.DataSource.DataSet.recordcount=0 then
+ begin
+ Showmessage('Diqqət! Cədvəldə məlumat yoxdur.');
+   exit;
+ end;
+contactid:=XDBGrid1.DataSource.DataSet.FieldByName('id').AsInteger;
+contractstatus:=XDBGrid1.DataSource.DataSet.FieldByName('STATE').AsInteger;
+ loadPlugin('InsPaymentPlan.bpl','');
+
+end;
+
+procedure TMainTravel.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TMainTravel.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TMainTravel.RGContractClick(Sender: TObject);
+begin
+ ActionFilterExecute(Sender);
+     //sql1:=DMMainTravel.DSContract.SQL.Text;
+end;
+      {nmjmj,l
+
+      n bmbn m
+      mjjkbh
+      n mbv n
+      nmbn bm
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      hjbknjbm,
+
+
+      njkbn,
+
+
+
+      jkbh
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      }
+
+procedure TMainTravel.ActionFilterExecute(Sender: TObject);
+
+   function  CheckFiltered(IsChecked: Boolean; const FilterStr: String; Args: array of const): String;
+   begin
+    Result :='';
+    if  IsChecked  then
+     Result :=Format(FilterStr, Args);
+     //showmessage('Result= '+Result)  ;
+   end;
+
+const
+   BooleanPrefix = ' AND ';
+
+   StatusFilter = '(ic.close_prefix=%d)';
+   nametype= '(ic.type_id=%d)';
+   nameFilter = '(ic.KLI_ID=%d)';
+   //custFilter = '(custgroup_id=%d)';
+   custFilter = '(cust.id=%d)';
+   AGENT_IDFilter = '(ic.AGENT_ID=%d)';
+   FransizaFilter = '(ic.franshiz=%d)';
+   begindateFilter = ' ic.begin_date ';
+   enddateFilter = ' ic.end_date ';
+   bankenarfilter = '(ic.bnf_type=%d)';
+var
+   Status:    String;
+   p_name:    String;
+   p_CUST_ID:  String;
+   p_AGENT_ID:  String;
+   p_marka:    String;
+   p_Avtotype:   String;
+   p_fransiza:   String;
+   p_type:     String;
+   p_begin_date:   String;
+   p_end_date:   String;
+     pstate :integer;
+   FilterStr: String;
+   bankenar: String;
+begin
+ FilterStr :='';
+  // showmessage(StatusFilter);
+ Status :=CheckFiltered(
+               RGContract.ItemIndex <> -1
+             ,StatusFilter
+             ,[RGContract.ItemIndex]
+              );
+
+                bankenar :=CheckFiltered(
+               XFRadioGroup2.ItemIndex <> -1
+             ,bankenarfilter
+             ,[XFRadioGroup2.ItemIndex]
+              );
+
+  // showmessage(Status);
+    //showmessage(nameFilter);
+    //showmessage(DBLookupComboBox1.ListSource.DataSet.FieldByName('name1').asstring);
+
+
+ p_name :=CheckFiltered(
+              XFCheckBox1.Checked//DBLookupBranch.KeyValue <> -1
+             ,nameFilter
+             ,[DBLookupComboBox1.ListSource.DataSet.FieldByName('id').asinteger]
+              );
+ p_cust_id :=CheckFiltered(
+              XFCheckBox9.Checked  //DBLookupOperator.KeyValue <> -1
+             ,custFilter
+             ,[DBLookupComboBox6.ListSource.DataSet.FieldByName('ID').AsInteger]
+              );
+
+ p_AGENT_ID:=CheckFiltered(
+              XFCheckBox2.Checked//DBLookupCurrency.KeyValue <> -1
+             ,AGENT_IDFilter
+             ,[DBLookupComboBox2.ListSource.DataSet.FieldByName('id').AsInteger]
+              );
+
+
+  if Status='' then
+   FilterStr:='status is not null'
+ else
+    FilterStr :=Status;
+
+     if XFCheckBox7.Checked then
+   if bankenar='' then
+   FilterStr:='bnf_type is not null'
+ else
+    FilterStr :=bankenar;
+
+  if  XFCheckBox1.Checked //Branch <> ''
+  then
+  if  FilterStr=''  then
+    FilterStr :=p_name
+  else
+    FilterStr :=FilterStr + BooleanPrefix + p_name;
+
+    if  XFCheckBox9.Checked //Operator <> ''
+  then
+  if  FilterStr=''  then
+    FilterStr :=p_cust_id
+  else
+    FilterStr :=FilterStr + BooleanPrefix + p_cust_id;
+
+ if  XFCheckBox2.Checked //Currency <> ''
+  then
+  if  FilterStr=''  then
+    FilterStr :=p_AGENT_ID
+  else
+    FilterStr :=FilterStr + BooleanPrefix + p_AGENT_ID;
+
+
+  if XFCheckBox3.Checked then
+  begin
+      if XFRadioGroup1.ItemIndex=0 then
+      begin
+        p_begin_date:=begindateFilter+ ' between  '+''''+datetostr(DateTimePicker1.DateTime)+''''+' and '+''''+datetostr(DateTimePicker2.DateTime)+'''';
+
+  if  FilterStr=''  then
+    FilterStr :=BooleanPrefix+p_begin_date
+  else
+    FilterStr :=FilterStr + BooleanPrefix + p_begin_date;
+    //showmessage(FilterStr);
+      end;
+
+      if XFRadioGroup1.ItemIndex=1 then
+      begin
+       p_end_date:=enddateFilter+ ' between  '+''''+datetostr(DateTimePicker1.DateTime)+''''+' and '+''''+datetostr(DateTimePicker2.DateTime)+'''';
+       //showmessage(p_end_date);
+  if  FilterStr=''  then
+    FilterStr :=p_end_date
+  else
+    FilterStr :=FilterStr + BooleanPrefix + p_end_date;
+      end;
+        //else
+
+
+  end;
+    if XFCheckBox4.Checked=true then
+    begin
+
+    case ComboBox1.ItemIndex of
+   0:pstate:=6;
+   1:pstate:=0;
+   2:pstate:=7;
+   3:pstate:=8;
+     end;
+
+       if  FilterStr=''  then
+       begin
+
+    FilterStr :=' and ic.state='+inttostr(pstate);
+    end
+  else
+    FilterStr :=FilterStr + ' and ic.state='+inttostr(pstate);
+      end;
+
+    //showmessage(' and '+ FilterStr);
+    //showmessage(DMMainTravel.DSContract.sql.Text);
+    DMMainTravel.DSContract.sql.Text:='';
+              sql:=sql1+' and '+ FilterStr;
+  //DMMainTravel.DSContract.sql:=' and '+ FilterStr;
+  DMMainTravel.DSContract.sql.Text:=sql;
+
+  if   XFCheckBox5.Checked then
+  begin
+    DMMainTravel.DSContract.sql[19]:='';
+  end;
+
+   if   XFCheckBox1.Checked then
+  begin
+    DMMainTravel.DSContract.sql[19]:='';
+  end;
+   if   XFCheckBox9.Checked then
+  begin
+    DMMainTravel.DSContract.sql[19]:='';
+  end;
+   if   XFCheckBox2.Checked then
+  begin
+    DMMainTravel.DSContract.sql[19]:='';
+  end;
+   if   XFCheckBox3.Checked then
+  begin
+    DMMainTravel.DSContract.sql[19]:='';
+  end;
+   if   XFCheckBox4.Checked then
+  begin
+    DMMainTravel.DSContract.sql[19]:='';
+  end;
+
+  memo1.Text:= DMMainTravel.DSContract.sql.Text;
+  DMMainTravel.DSContract.sql.text:=Stringreplace(DMMainTravel.DSContract.sql.text,'status','DECODE (ic.close_prefix, 0, 1, 2)', [rfReplaceAll, rfIgnoreCase]);
+
+  DMMainTravel.DSContract.close;
+  DMMainTravel.DSContract.Open;
+
+end;
+
+
+procedure TMainTravel.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TMainTravel.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TMainTravel.Set_AxBorderStyle(Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TMainTravel.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TMainTravel.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TMainTravel.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TMainTravel.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TMainTravel.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TMainTravel.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TMainTravel.Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TMainTravel.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TMainTravel.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TMainTravel.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TMainTravel.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TMainTravel.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TMainTravel.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+procedure TMainTravel.ToolButton13Click(Sender: TObject);
+begin
+
+ with DMMainTravel,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['EXCELCONTRACT_ALLTRAVEL']);
+ end;
+
+with ExcelExport do
+   begin
+      Connect;
+      ExportDataset(XDBGrid1.DataSource.DataSet,'Səyahət sığortaları.',True,false);
+      Disconnect;
+   end
+end;
+
+procedure TMainTravel.ToolButton14Click(Sender: TObject);
+begin
+opetion:='Seetravel';
+moduletype:='c';
+ins_cutsid:= XDBGrid1.DataSource.DataSet.FieldByName('Kli_id').AsInteger;
+contactid:=XDBGrid1.DataSource.DataSet.FieldByName('ID').AsInteger;
+contractstatus:=XDBGrid1.DataSource.DataSet.FieldByName('STATE').AsInteger;
+p_contractstate:=XDBGrid1.DataSource.DataSet.FieldByName('STATE').AsInteger;
+loadPlugin1('TravelBlank.bpl','');
+end;
+
+procedure TMainTravel.ToolButton1Click(Sender: TObject);
+begin
+
+ with DMMainTravel,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['NEWCONTRACT_ALLTRAVEL']);
+ end;
+opetion:='ins';
+ins_cutsid:=0;
+moduletype:='c';
+//showmessage(XDBGrid1.DataSource.DataSet.FieldByName('IDC').AsString);
+//contactid:=XDBGrid1.DataSource.DataSet.FieldByName('IDC').AsInteger;
+contactid:=-1;
+
+ loadPlugin1('TravelBlank.bpl','');
+
+end;
+
+
+procedure TMainTravel.ToolButton3Click(Sender: TObject);
+begin
+ {with DMMainTravel,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['EDITCONTRACT_ALLTRAVEL']);
+ end;   }
+
+opetion:='upd';
+moduletype:='c';
+ins_cutsid:= XDBGrid1.DataSource.DataSet.FieldByName('Kli_id').AsInteger;
+contactid:=XDBGrid1.DataSource.DataSet.FieldByName('ID').AsInteger;
+contractstatus:=XDBGrid1.DataSource.DataSet.FieldByName('STATE').AsInteger;
+p_contractstate:=XDBGrid1.DataSource.DataSet.FieldByName('STATE').AsInteger;
+ loadPlugin1('TravelBlank.bpl','');
+
+
+end;
+
+procedure TMainTravel.LoadPlugin1(PluginName :String;PluginParam  :String);
+var PluginHandle :THandle;
+    exportproc : procedure(s:String;k:String);
+begin
+   PluginHandle := LoadPackage(ExtractFilePath(Application.ExeName)+PluginName);
+
+   if PluginHandle > 0 then
+   begin
+      @exportproc := GetProcAddress(PluginHandle,'InitPlugin');
+      exportproc(PluginParam,'');
+   end;
+end;
+
+procedure TMainTravel.ToolButton5Click(Sender: TObject);
+begin
+DMMainTravel.DSContract.Refresh;
+end;
+
+procedure TMainTravel.ToolButton7Click(Sender: TObject);
+begin
+ with DMMainTravel,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['CLOSECONTRACT_ALLTRAVEL']);
+ end;
+
+ if contractstatus=1 then
+ begin
+   showmessage('Diqqət! Bu müqavilə bağlanmış müqavilə olduğundan heç bir deyişiklik oluna bilməz.');
+   exit;
+ end;
+
+ {ShowMessage(FloatToStr(InsDataMod.ODSContractsID.Value));
+ ShowMessage(FloatToStr(InsDataMod.ODSContractsType_Id.value));  }
+ if MessageDlg('Seçilmiş siğorta ləğv olunacaq!',mtConfirmation,
+ mbYesNoCancel, 0) = mrYes then
+try
+   with DMMainTravel,OPCOMMON,DSContract do
+   begin
+   //showmessage(inttostr(ODSContracts.FieldByName('ID').AsInteger));
+   //showmessage(inttostr(ODSContracts.FieldByName('TYPE_ID').AsInteger));
+
+if DMMainTravel.OPCOMMON.callbooleanfunction('del_ins',[DSContractID.Value,DSContractType_Id.value]) then
+
+     XDBGrid1.DataSource.DataSet.Refresh;
+
+   end;
+except
+    on E:EOracleError do
+    case E.ErrorCode of
+       20002: if MessageDlg('Seçilmiş müqaviləyə uyğun hesablar ləğv olunacaq!',mtConfirmation,mbYesNoCancel, 0) = mrYes then
+                 DMMainTravel.OPCOMMON.CallProcedure('close_acc', [DMMainTravel.ODSAccountID.value]);
+       20001: ShowMessage('Aslı hesablarda qalıq sıfırdan fərqlidir!');
+     end;
+ end;
+
+end;
+
+procedure TMainTravel.ToolButton9Click(Sender: TObject);
+begin
+ XFGroupBox1.Visible :=not XFGroupBox1.Visible;
+ if XFGroupBox1.Visible=true then
+ begin
+   DMMainTravel.DSIns_cust.Close;
+   DMMainTravel.DSIns_cust.Open;
+
+   DMMainTravel.DScutomers.Close;
+   DMMainTravel.DScutomers.Open;
+
+   DMMainTravel.DSins_agents.Close;
+   DMMainTravel.DSins_agents.Open;
+
+
+ end;
+end;
+
+procedure TMainTravel.XDBGrid1DrawColumnCell(Sender: TObject; const Rect: TRect;
+  DataCol: Integer; Column: TXColumn; State: TGridDrawState);
+
+var
+  ImageIndex: Integer;
+begin
+ with Sender as TXDBGrid do
+  begin
+    if DataSource.DataSet.RecordCount <> 0 then
+    begin
+      ImageIndex := DataSource.DataSet.FieldByName('state').AsInteger;
+      if (DataCol = 1) and (ImageIndex <> -1) then begin
+        Canvas.brush.Style := bsSolid;
+        Canvas.FillRect(Rect);
+        ImageList2.Draw(Canvas, Rect.Left, Rect.Top, ImageIndex, True); end
+      else
+        DefaultDrawColumnCell(Rect, DataCol, Column, State);
+    end;
+  end;
+
+end;
+
+procedure TMainTravel.XDBGrid1TitleClick(Column: TXColumn);
+ var
+   TitleName :string;
+   SortPosition: word;
+begin
+ SortPosition :=100;
+ if (DMMainTravel.DSContract.IsEmpty) or (Column.FieldName = EmptyStr) then Exit;
+ Screen.Cursor :=crHourGlass;
+ TitleName :=Column.FieldName;
+ with DMMainTravel, DSContract do
+  try
+   SortPosition :=SQL.Add('ORDER BY '+ TitleName);
+   Refresh;
+  finally
+   SQL[SortPosition] :=EmptyStr;
+   Screen.Cursor :=crDefault;
+  end;
+{ sqlstring:=sql;
+ if sort_ASC=true then
+      begin
+        try
+          begin
+             //m_bmk:=DataModule1.MyCards.bookmark;     DMMainTravel.DSRContract
+            DMMainTravel.DSContract.Close;
+            DMMainTravel.DSContract.SQL.Clear;
+           //showmessage(' ic.'+Column.FieldName+' ASC');
+           DMMainTravel.DSContract.SQL.Add(sqlstring);
+
+           //DMMainTravel.DSContract.SQL.Add(' Order by '+'ic.'+Column.FieldName+' ASC');
+           DMMainTravel.DSContract.SQL.Add(' ,ic.'+Column.FieldName+' ASC');
+           //DMMain.TreasureDS.SetVariable('contid',get_TRID);
+           //showmessage(DMMain.TreasureDS.SQL.Text);
+           DMMainTravel.DSContract.Open;
+            Memo2.Text:= DMMainTravel.DSContract.SQL.Text;
+          //DMPaying_graphic.DSpayment_plans.bookmark:=M_bmk;
+
+            sort_ASC:=false;
+          end;
+        except
+           on E: Exception do
+              begin
+                  showmessage(E.message+'SIRALAMA ÜÇÜN MƏLUMAT TAPILMADI');
+              end;
+        end;
+     end
+    Else
+      begin
+        try
+          begin
+//            m_bmk:=DMPaying_graphic.MyCards.bookmark;
+            DMMainTravel.DSContract.Close;
+            DMMainTravel.DSContract.SQL.Clear;
+            DMMainTravel.DSContract.SQL.Add(sqlstring);
+            //DMMain.TreasureDS.SetVariable('contid',get_TRID);
+            DMMainTravel.DSContract.SQL.Add(' ,ic.'+column.FieldName+' DESC');
+            DMMainTravel.DSContract.Open;
+//            DMPaying_graphic.DSpayment_plans.bookmark:=M_bmk;
+               Memo3.Text:= DMMainTravel.DSContract.SQL.Text;
+            sort_ASC:=true;
+          end;
+        except
+           on E: Exception do
+              begin
+                  showmessage(E.message+'SIRALAMA ÜÇÜN MƏLUMAT TAPILMADI');
+             end;
+        end;
+ end;    }
+
+ end;
+
+
+
+procedure TMainTravel.Xitam1Click(Sender: TObject);
+begin
+if XDBGrid1.DataSource.DataSet.recordcount=0 then
+ begin
+ Showmessage('Diqqət! Cədvəldə məlumat yoxdur.');
+   exit;
+ end;
+with DMMainTravel,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['TERMINATEDINS_CONTRACT']);
+ end;
+      if XDBGrid1.DataSource.DataSet.FieldByName('state').AsInteger<>8  then
+ begin
+      if XDBGrid1.DataSource.DataSet.FieldByName('state').AsInteger<>6  then
+ begin
+ Showmessage('Diqqət!Yalnız Təsdiq statusunda olan muqaviləyə xitam vermək olar.');
+   exit;
+ end;
+contactid:=XDBGrid1.DataSource.DataSet.FieldByName('id').AsInteger;
+contractstatus:=XDBGrid1.DataSource.DataSet.FieldByName('STATE').AsInteger;
+ loadPlugin('InsContracterminated.bpl','');
+
+ end;
+end;
+
+procedure TMainTravel.Zrrlr1Click(Sender: TObject);
+begin
+if XDBGrid1.DataSource.DataSet.recordcount=0 then
+ begin
+ Showmessage('Diqqət! Cədvəldə məlumat yoxdur.');
+   exit;
+ end;
+//showmessage(inttostr(DMMainTravel.DSContract.FieldByName('id').AsInteger));
+//showmessage(inttostr(XDBGrid1.DataSource.DataSet.FieldByName('id').AsInteger));
+contactid:=XDBGrid1.DataSource.DataSet.FieldByName('id').AsInteger;
+commoncid:=XDBGrid1.DataSource.DataSet.FieldByName('id').AsInteger;
+      //showmessage(inttostr(contactid));
+
+ if XDBGrid1.DataSource.DataSet.FieldByName('type_id').AsInteger=4 then
+ begin
+ with DMMainTravel,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['SEELOSSKASKO']);
+ end;
+ end;
+
+ if XDBGrid1.DataSource.DataSet.FieldByName('type_id').AsInteger=1 then
+ begin
+ with DMMainTravel,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['SEELOSSFQ']);
+ end;
+ end;
+
+ if XDBGrid1.DataSource.DataSet.FieldByName('type_id').AsInteger=13 then
+ begin
+ with DMMainTravel,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['SEELOSSMES']);
+ end;
+ end;
+
+  if XDBGrid1.DataSource.DataSet.FieldByName('type_id').AsInteger=8 then
+ begin
+ with DMMainTravel,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['SEELOSYUK']);
+ end;
+  end;
+
+  if XDBGrid1.DataSource.DataSet.FieldByName('type_id').AsInteger=3 then
+ begin
+ with DMMainTravel,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['SEELOSSEMLAK']);
+ end;
+ end;
+
+ if XDBGrid1.DataSource.DataSet.FieldByName('type_id').AsInteger=21 then
+ begin
+ with DMMainTravel,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['SEELOSSSEYAHET']);
+ end;
+ end;
+
+ if XDBGrid1.DataSource.DataSet.FieldByName('type_id').AsInteger=2 then
+ begin
+ with DMMainTravel,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['SEELOSSTIBB']);
+ end;
+ end;
+  contactid:=XDBGrid1.DataSource.DataSet.FieldByName('id').AsInteger;
+  contractstatus:=XDBGrid1.DataSource.DataSet.FieldByName('STATE').AsInteger;
+     loadPlugin('loss.bpl','');
+     contactid:=XDBGrid1.DataSource.DataSet.FieldByName('id').AsInteger;
+
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TMainTravel,
+    Class_MainTravel,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

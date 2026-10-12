@@ -1,0 +1,156 @@
+﻿unit Unit6;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, DB, OracleData, SearchEdit, dblookup, DBCtrls, Grids,
+  DBGrids, ExtCtrls, Designer, ActnList;
+
+type
+  TForm6 = class(TForm)
+    ComboBox2: TComboBox;
+    ComboBox4: TComboBox;
+    SearchEdit1: TSearchEdit;
+    SearchEdit2: TSearchEdit;
+    ODS_avalute_t: TOracleDataSet;
+    DS_avalute_t: TDataSource;
+    DBLookupComboBox1: TDBLookupComboBox;
+    ODS_avalute_tVAL_NAME: TWideStringField;
+    DBLookupComboBox2: TDBLookupComboBox;
+    GridAccount: TDBGrid;
+    ODS_sb_bproc_acc: TOracleDataSet;
+    DS_sb_bproc_acc: TDataSource;
+    Panel1: TPanel;
+    Edit_BalCN: TEdit;
+    DBLookupComboBox3: TDBLookupComboBox;
+    ODS_sb_bproc_accID: TFloatField;
+    ODS_sb_bproc_accACC_NO: TWideStringField;
+    ODS_sb_bproc_accNAME: TWideStringField;
+    ODS_sb_bproc_accBAL_CN1: TFloatField;
+    Edit_AccNo: TEdit;
+    ODS_sb_bproc_accVAL_ACC: TIntegerField;
+    ODS_sb_bproc_accVal_NAME: TWideStringField;
+    ODS_avalute_tVALUTE: TFloatField;
+    ActionList1: TActionList;
+    Action_Src: TAction;
+    Edit1: TEdit;
+    procedure FormCanResize(Sender: TObject; var NewWidth, NewHeight: Integer;
+      var Resize: Boolean);
+    procedure FormShow(Sender: TObject);
+    procedure GridAccountDblClick(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure Edit_ACCNoChange(Sender: TObject);
+    procedure Edit_BalCNChange(Sender: TObject);
+    procedure DBLookupComboBox3CloseUp(Sender: TObject);
+    procedure Action_SrcExecute(Sender: TObject);
+    procedure Edit1Change(Sender: TObject);
+  private
+    { Private declarations }
+  public
+  var
+    v_accID: Integer;
+    { Public declarations }
+  end;
+
+var
+  Form6: TForm6;
+
+implementation
+
+uses
+  sboapidatamoduleimpl;
+
+{$R *.dfm}
+
+procedure TForm6.Action_SrcExecute(Sender: TObject);
+begin
+  if Edit_AccNo.Text <> '' then
+    ODS_sb_bproc_acc.SQL[1] := 'and sb.ACC_NO like (''%' +
+      Edit_AccNo.Text + '%'')'
+  else
+    ODS_sb_bproc_acc.SQL[1] := '';
+
+  if Edit_BalCN.Text <> '' then
+    ODS_sb_bproc_acc.SQL[2] := 'and a.bal_cn1 like (''%' +
+      Edit_BalCN.Text + '%'')'
+  else
+    ODS_sb_bproc_acc.SQL[2] := '';
+
+  if Edit1.Text <> '' then
+    ODS_sb_bproc_acc.SQL[3] := 'and a.name like (''%' + Edit1.Text + '%'')'
+  else
+    ODS_sb_bproc_acc.SQL[3] := '';
+
+  if DBLookupComboBox3.KeyValue <> -1 then
+    ODS_sb_bproc_acc.SQL[4] := 'and a.val_acc = ' +
+      inttostr(DBLookupComboBox3.KeyValue)
+  else
+    ODS_sb_bproc_acc.SQL[4] := '';
+
+  ODS_sb_bproc_acc.Refresh;
+
+end;
+
+procedure TForm6.DBLookupComboBox3CloseUp(Sender: TObject);
+begin
+  Action_Src.Execute;
+end;
+
+procedure TForm6.Edit1Change(Sender: TObject);
+begin
+  Action_Src.Execute;
+end;
+
+procedure TForm6.Edit_ACCNoChange(Sender: TObject);
+begin
+  Action_Src.Execute;
+end;
+
+procedure TForm6.Edit_BalCNChange(Sender: TObject);
+begin
+  Action_Src.Execute;
+end;
+
+procedure TForm6.FormCanResize(Sender: TObject;
+  var NewWidth, NewHeight: Integer; var Resize: Boolean);
+begin
+  Resize := False;
+end;
+
+procedure TForm6.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+
+  if v_accID <> 0 then
+    Form6.Close
+  else
+  begin
+    // showmessage('Heç bir hesab seçilməyib!!');
+    // v_accID:=-1;
+  end;
+
+end;
+
+procedure TForm6.FormShow(Sender: TObject);
+begin
+
+  if not ODS_sb_bproc_acc.Active then
+    ODS_sb_bproc_acc.Open
+  else
+    ODS_sb_bproc_acc.Refresh;
+  ODS_sb_bproc_acc.Locate('ID', v_accID, []);
+  // v_accID:=0;
+  DBLookupComboBox3.KeyValue := -1;
+
+end;
+
+procedure TForm6.GridAccountDblClick(Sender: TObject);
+begin
+  v_accID := ODS_sb_bproc_accID.AsInteger;
+  if v_accID = 0 then
+   showmessage('Heç bir hesab seçilməyib!!')
+ else
+    Form6.Close;
+end;
+
+end.

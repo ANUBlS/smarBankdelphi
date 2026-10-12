@@ -1,0 +1,239 @@
+﻿unit Universalİmpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, CheckLst, Evanescence, ComCtrls, DBGridEh, Mask, DBCtrlsEh,
+  DBLookupEh, CMExcelExport;
+  resourcestring
+  rsErrorUsrGrp       = 'Ən azı bir istifadəçi qurupu seçilməlidir!';
+  rsErrorPersonaltype = 'Ən azı bir müştəri tipi seçilməlidir !';
+  rsInfScriptStarted  = 'Hesabat alınır ';
+  rsPleaseWait=         'Zəhmət olmasa bir az gözləyin!  ';
+  rsInfRowsExported   = '%d sətir ixrac olundu';
+  rsInfExportFinished = 'İxrac qurtardı';
+type
+  TMainForm = class(TForm)
+    GroupBox1: TGroupBox;
+    DTPB: TDateTimePicker;
+    DTPE: TDateTimePicker;
+    Label1: TLabel;
+    Label2: TLabel;
+    challBranch: TButton;
+    unchallBranch: TButton;
+    Label3: TLabel;
+    LookBranch: TEvanescence;
+    GroupBox2: TGroupBox;
+    DBLookupComboboxEh2: TDBLookupComboboxEh;
+    Button1: TButton;
+    Button2: TButton;
+    MisExcelExport: TCMExcelExport;
+    ExcelExport: TCMExcelExport;
+    Label5: TLabel;
+    procedure FormCanResize(Sender: TObject; var NewWidth, NewHeight: Integer;
+      var Resize: Boolean);
+    procedure FormShow(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure unchallBranchClick(Sender: TObject);
+    procedure challBranchClick(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  MainForm: TMainForm;
+    procedure InitPlugin(s:string);export;
+implementation
+
+{$R *.dfm}
+uses CommonDecls,sbsystem, DmUniversalImpl, Unit2;
+procedure InitPlugin(s:string);export;
+begin
+MainForm.ShowModal;
+end;
+exports
+     InitPlugin;
+
+
+procedure TMainForm.Button1Click(Sender: TObject);
+var
+ADDITIONALPARAMS: String;
+i:integer;
+begin
+  if (LookBranch.GetCheckedKeyList.Count<>LookBranch.Items.Count) then
+  ADDITIONALPARAMS := ADDITIONALPARAMS + ' AND p.BRANCHID in('
+                   +LookBranch.GetCheckedKeyList.CommaText+')'
+                   +#13#10;
+  //                 ShowMessage(ADDITIONALPARAMS);
+
+  if DBLookupComboboxEh2.Text='' then
+   begin
+    ShowMessage('hesabat növünü seçməmisiz!');
+    exit;
+   end;
+if DBLookupComboboxEh2.KeyValue=1 then
+  begin
+  with  dmuni, OracleDataSet2 do begin
+  Close;
+ // ShowMessage(ADDITIONALPARAMS);
+  if ADDITIONALPARAMS<>'' then
+   SQL[47] := ADDITIONALPARAMS
+   else
+   SQL[47] := '';
+  SetVariable('dat',integer(trunc(DTPE.DateTime)));
+
+   Open;
+
+  end;
+    if dmuni.OracleDataSet2.RecordCount=0 then
+      begin
+        ShowMessage('Heç bir məlumat yoxdur');
+        exit;
+      end;
+   with ExcelExport do
+  begin
+     Connect;
+     ExportDataset(dmuni.OracleDataSet2,'UNIVERSAL',true,false);
+     Disconnect;
+  end;
+  end;
+
+  if DBLookupComboboxEh2.KeyValue=2 then
+  begin
+   dmuni.BONS.Close;
+    dmuni.BONS.SetVariable('dat',integer(trunc(DTPE.DateTime)));
+   dmuni.BONS.open;
+
+    with ExcelExport do
+  begin
+     Connect;
+     ExportDataset(dmuni.BONS,'UNIVERSAL',true,false);
+     Disconnect;
+  end;
+  end;
+
+  if DBLookupComboboxEh2.KeyValue=4 then
+  begin
+   dmuni.OracleDataSet3.Close;
+    dmuni.OracleDataSet3.SetVariable('bdat',integer(trunc(DTPB.DateTime)));
+    dmuni.OracleDataSet3.SetVariable('edat',integer(trunc(DTPE.DateTime)));
+   dmuni.OracleDataSet3.open;
+
+    with ExcelExport do
+  begin
+     Connect;
+     ExportDataset(dmuni.OracleDataSet3,'UNIVERSAL',true,false);
+     Disconnect;
+  end;
+  end;
+   if DBLookupComboboxEh2.KeyValue=5 then
+  begin
+   dmuni.OracleDataSet4.Close;
+    dmuni.OracleDataSet4.SetVariable('bdat',integer(trunc(DTPB.DateTime)));
+    dmuni.OracleDataSet4.SetVariable('edat',integer(trunc(DTPE.DateTime)));
+   dmuni.OracleDataSet4.open;
+
+    with ExcelExport do
+  begin
+     Connect;
+     ExportDataset(dmuni.OracleDataSet4,'UNIVERSAL',true,false);
+     Disconnect;
+  end;
+  end;
+
+  if DBLookupComboboxEh2.KeyValue=6 then
+  begin
+  LogInformation(rsInfScriptStarted);
+   dmuni.Prognoz.Close;
+   dmuni.Prognoz.SetVariable('dat',integer(trunc(DTPB.DateTime)));
+   dmuni.Prognoz.open;
+  //Label4.Caption:= inttostr(dmuni.Prognoz.RecordCount);
+    i:=1;
+    form2.Show;
+   with dmuni.Prognoz  do
+  while not EOF do
+    begin
+    if FieldByName('per').AsFloat>0 then
+        dmuni.OraclePackage1.CallProcedure('insertannutyschedule',[
+                                                  'p_creditid',FieldByName('ID').AsInteger,
+                                                  'p_amount',FieldByName('rest').AsFloat,
+                                                  'p_rate' , FieldByName('annualyinterestrate').AsFloat,
+                                                  'p_firstpaydate', FieldByName('FPAYDAT').AsDateTime,
+                                                  'p_startdate',DTPB.DateTime,
+                                                  'p_periods',FieldByName('per').AsFloat ,
+                                                  'p_periodrate',1,
+                                                  'p_optype',false,
+                                                  'p_dovr',0,
+                                                  'p_status',0
+                                                  ]);
+   form2.Gauge1.Progress:=trunc(i*100/RecordCount);
+    i:=i+1;
+    Next;
+    end ;
+   LogInformation(rsPleaseWait);
+   dmuni.OracleDataSet5.Close;
+   dmuni.OracleDataSet5.SetVariable('dat',integer(trunc(DTPB.DateTime)));
+   dmuni.OracleDataSet5.open;
+   form2.Close;
+    with ExcelExport do
+  begin
+     Connect;
+     ExportDataset(dmuni.OracleDataSet5,'UNIVERSAL',true,false);
+     Disconnect;
+  end;
+  LogInformation(rsInfExportFinished);
+  end;
+
+end;
+
+procedure TMainForm.Button2Click(Sender: TObject);
+begin
+close
+end;
+
+procedure TMainForm.challBranchClick(Sender: TObject);
+begin
+  LookBranch.CheckAll
+end;
+
+procedure TMainForm.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+resize:=false;
+end;
+
+procedure TMainForm.FormCreate(Sender: TObject);
+var
+  i: Integer;
+begin
+ DmUni := TDmUni.Create(Self);
+ form2 := Tform2.Create(Self);
+   for i := 0 to ComponentCount - 1 do
+    if Components[i].Tag = 3112 then begin
+      (Components[i] as TEvanescence).Open;
+      (Components[i] as TEvanescence).CheckAll;
+    end;
+end;
+
+procedure TMainForm.FormShow(Sender: TObject);
+var
+  i: Integer;
+begin
+
+  DTPB.Date := Get_CurrentDate;
+  DTPE.Date := Get_CurrentDate;
+end;
+
+procedure TMainForm.unchallBranchClick(Sender: TObject);
+begin
+LookBranch.UncheckAll
+end;
+
+initialization
+ MainForm := TMainForm.Create(CommonApplication);
+end.

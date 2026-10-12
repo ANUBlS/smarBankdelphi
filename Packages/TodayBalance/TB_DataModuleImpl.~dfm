@@ -1,0 +1,383 @@
+object DataModTB: TDataModTB
+  OldCreateOrder = False
+  Left = 192
+  Top = 107
+  Height = 480
+  Width = 696
+  object BalanceData: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      '  b.bal_cn as AccountNumber ,'
+      '  SUM ('
+      '     sb_mtoutview.active ('
+      '       ar.%sostat,            /*4*/'
+      '       b.typeid,'
+      '       b.additionaltypeid'
+      '     )'
+      '  ) Active,'
+      '  SUM ('
+      '     sb_mtoutview.passiv ('
+      '        ar.%sostat,           /*11*/'
+      '        b.typeid,'
+      '        b.additionaltypeid'
+      '     )'
+      '  ) Passive,'
+      '  SUM (ar.%sObr_D) as DTurnOver , /*16*/'
+      '  SUM (ar.%sObr_K) as CTurnOver , /*17*/'
+      '  MIN (b.balname) as AccountName'
+      'from'
+      '  %s ar ,        /*20*/'
+      '  account ac ,'
+      '  bal_spr1 b'
+      'where'
+      ' (ac.filial = %d) and        /*24  -- Branch   */'
+      ' (ac.val_acc = %d) and       /*25  -- Currency */'
+      ' (ac.bal_cn1 in (%s)) and    /*26  -- By Selected Accounts */'
+      ' (ar.acc_id = ac.id) and'
+      ' (ac.bal_cn1 = b.bal_cn) and'
+      ' (ar.datdate = :TargetDate)'
+      'group by'
+      '  b.bal_cn'
+      'order by b.bal_cn'
+      ''
+      ''
+      ''
+      ''
+      ' ')
+    Variables.Data = {
+      03000000010000000B0000003A544152474554444154450C0000000000000000
+      000000}
+    Session = sboapiDataModule.SBSession
+    Left = 56
+    Top = 24
+    object BalanceDataACCOUNTNUMBER: TFloatField
+      FieldName = 'ACCOUNTNUMBER'
+      Required = True
+    end
+    object BalanceDataACTIVE: TFloatField
+      FieldName = 'ACTIVE'
+      DisplayFormat = '#,#0.00'
+    end
+    object BalanceDataPASSIVE: TFloatField
+      FieldName = 'PASSIVE'
+      DisplayFormat = '#,#0.00'
+    end
+    object BalanceDataDTURNOVER: TFloatField
+      FieldName = 'DTURNOVER'
+      DisplayFormat = '#,#0.00'
+    end
+    object BalanceDataCTURNOVER: TFloatField
+      FieldName = 'CTURNOVER'
+      DisplayFormat = '#,#0.00'
+    end
+    object BalanceDataACCOUNTNAME: TStringField
+      FieldName = 'ACCOUNTNAME'
+      Size = 181
+    end
+  end
+  object AccountData: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      '  ac.acc_no   as AccNumber ,'
+      '  av.val_name as AccCurrency ,'
+      '  sb_mtoutview.active ('
+      '    ar.%sostat,            /*4*/'
+      '    b.typeid,'
+      '    b.additionaltypeid'
+      '  ) as Active ,'
+      ''
+      '  sb_mtoutview.passiv ('
+      '     ar.%sostat,           /*10*/'
+      '     b.typeid,'
+      '     b.additionaltypeid'
+      '  ) as Passive ,'
+      ''
+      '  ac.bal_cn1 as AccountNumber ,'
+      '  ac.ID as AccID ,'
+      '  ar.%sObr_D as DTurnOver , /*17*/'
+      '  ar.%sObr_K as CTurnOver , /*18*/'
+      '  ac.name as AccountName'
+      'from'
+      '  %s ar ,        /*21*/'
+      '  account ac ,'
+      '  bal_spr1 b ,'
+      '  avalute av'
+      'where'
+      ' (ac.filial = %d) and        /*26  -- Branch   */'
+      ' (ac.val_acc = %d) and       /*27  -- Currency */'
+      ' (ac.bal_cn1 = :AccountNumber) and'
+      ' (ar.acc_id = ac.id) and'
+      ' (ac.bal_cn1 = b.bal_cn) and'
+      ' (ar.datdate = :TargetDate) and'
+      ' (ac.val_acc = av.valute) and'
+      ' ((ac.Close_Dat is null)or(ac.close_dat > :TargetDate))'
+      ''
+      ''
+      ''
+      ''
+      ''
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' '
+      ' ')
+    Variables.Data = {
+      03000000020000000B0000003A544152474554444154450C0000000000000000
+      0000000E0000003A4143434F554E544E554D4245520300000000000000000000
+      00}
+    Master = BalanceData
+    MasterFields = 'ACCOUNTNUMBER'
+    DetailFields = 'ACCOUNTNUMBER'
+    Session = sboapiDataModule.SBSession
+    AfterScroll = AccountDataAfterScroll
+    Left = 56
+    Top = 120
+    object AccountDataACCNUMBER: TStringField
+      FieldName = 'ACCNUMBER'
+    end
+    object AccountDataACCOUNTNAME: TStringField
+      FieldName = 'ACCOUNTNAME'
+      Size = 90
+    end
+    object AccountDataACCCURRENCY: TStringField
+      FieldName = 'ACCCURRENCY'
+      Size = 10
+    end
+    object AccountDataACTIVE: TFloatField
+      FieldName = 'ACTIVE'
+      DisplayFormat = '#,#0.00'
+    end
+    object AccountDataPASSIVE: TFloatField
+      FieldName = 'PASSIVE'
+      DisplayFormat = '#,#0.00'
+    end
+    object AccountDataDTURNOVER: TFloatField
+      FieldName = 'DTURNOVER'
+      DisplayFormat = '#,#0.00'
+    end
+    object AccountDataCTURNOVER: TFloatField
+      FieldName = 'CTURNOVER'
+      DisplayFormat = '#,#0.00'
+    end
+    object AccountDataACCOUNTNUMBER: TFloatField
+      FieldName = 'ACCOUNTNUMBER'
+    end
+    object AccountDataACCID: TFloatField
+      FieldName = 'ACCID'
+    end
+  end
+  object DataSrcBalanceData: TDataSource
+    DataSet = BalanceData
+    Left = 56
+    Top = 72
+  end
+  object DataSrcAccountData: TDataSource
+    DataSet = AccountData
+    Left = 56
+    Top = 176
+  end
+  object SYSDAT: TOracleDataSet
+    SQL.Strings = (
+      'select TEK_DAT as CurrentDate from SMART.SYSDAT')
+    Session = sboapiDataModule.SBSession
+    Left = 16
+    Top = 240
+    object SYSDATCURRENTDATE: TDateTimeField
+      FieldName = 'CURRENTDATE'
+      Required = True
+    end
+  end
+  object BankInfo: TOracleDataSet
+    SQL.Strings = (
+      'select *from  Bankinfo')
+    QBEDefinition.QBEFieldDefs = {
+      040000002A000000050000004B4F445F420100000000000400000042414E4B01
+      000000000007000000415A5F4E414D45010000000000040000004B524E4F0100
+      0000000003000000494E4E010000000000050000005345484552010000000000
+      0600000041445245535301000000000004000000534544520100000000000700
+      0000425548414C54520100000000000300000054454C01000000000003000000
+      4641580100000000000500000053574946540100000000000500000054454C45
+      5801000000000005000000454D41494C01000000000007000000504F53545F49
+      4E010000000000070000004B4F445F46494C0100000000000600000046494C49
+      414C0100000000000900000041445245535F46494C0100000000000700000054
+      454C5F46494C010000000000070000004641585F46494C010000000000090000
+      0053574946545F46494C0100000000000900000054454C45585F46494C010000
+      0000000A000000504F5354494E5F46494C010000000000090000005345484552
+      5F46494C01000000000007000000494E4E5F46494C010000000000080000004B
+      524E4F5F46494C010000000000070000005345445246494C0100000000000900
+      0000425548414C5F46494C010000000000080000004B4F445F4246494C010000
+      000000020000004E420100000000000700000056414C5F4D4F56010000000000
+      040000004C4F474F000000000000040000004C494E4B01000000000003000000
+      5344560100000000000300000053564D01000000000002000000424601000000
+      00000C0000004D414E414745525449544C450100000000000F0000004143434F
+      554E54414E545449544C450100000000000E00000053564D5F43555252454E43
+      594944010000000000070000004341504954414C010000000000090000004153
+      53495354414E540100000000000E000000415353495354414E545449544C4501
+      0000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 64
+    Top = 240
+  end
+  object CurrencyInfo: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      '  Valute as Currency ,'
+      '  Valu_Name as CurrLName '
+      'from'
+      '  Avalute'
+      'order by valute')
+    Session = sboapiDataModule.SBSession
+    Left = 208
+    Top = 224
+    object CurrencyInfoCURRENCY: TIntegerField
+      FieldName = 'CURRENCY'
+      Required = True
+    end
+    object CurrencyInfoCURRLNAME: TStringField
+      FieldName = 'CURRLNAME'
+      Size = 25
+    end
+  end
+  object DataSrcCurrencyInfo: TDataSource
+    DataSet = CurrencyInfo
+    Left = 208
+    Top = 272
+  end
+  object BranchesInfo: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      '  ID as BranchID ,'
+      '  Name as BranchName '
+      'from'
+      '  Filial')
+    Session = sboapiDataModule.SBSession
+    Left = 40
+    Top = 320
+    object BranchesInfoBRANCHID: TFloatField
+      FieldName = 'BRANCHID'
+      Required = True
+    end
+    object BranchesInfoBRANCHNAME: TStringField
+      FieldName = 'BRANCHNAME'
+      Size = 90
+    end
+  end
+  object DataSrcBranchesInfo: TDataSource
+    DataSet = BranchesInfo
+    Left = 128
+    Top = 320
+  end
+  object TransactionsData: TOracleDataSet
+    SQL.Strings = (
+      'SELECT'
+      '  p.ID,'
+      '  ad.ID as DebitAccID ,'
+      '  ac.ID as CreditAccID ,'
+      ' '#9'sbsec.getusername(p.OP_ID) as OperatorID,'
+      '  p.dat as TransactionDate,'
+      '  ad.ACC_NO as DebitAccNo,'
+      '  dc.val_name as DebitCurrencySName,'
+      '  ac.ACC_NO as CreditAccNo,'
+      '  cc.val_name as CreditCurrencySName,'
+      '  p.ammount as DebitAmount,'
+      '  p.Ammount_C as CreditAmount,'
+      '  p.LAmmount as LAmount,'
+      '  p.Name as TrDescription'
+      'FROM'
+      '  %s p, /*15*/'
+      #9'account ad,'
+      #9'account ac,'
+      #9'avalute dc,'
+      #9'avalute cc'
+      'where'
+      ' (ad.ID = p.DEBT) and'
+      ' (ac.ID = p.KREDIT) and'
+      ' (ad.val_acc = p.val_acc) and'
+      ' (ac.val_acc = p.CurrencyID_C) and'
+      ' (dc.VALUTE = p.val_acc) and'
+      ' (cc.VALUTE = p.CurrencyID_C) and'
+      ' (p.dat = :TargetDate)'
+      ''
+      ''
+      ' ')
+    Variables.Data = {
+      03000000010000000B0000003A544152474554444154450C0000000000000000
+      000000}
+    Session = sboapiDataModule.SBSession
+    Left = 184
+    Top = 32
+    object TransactionsDataID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object TransactionsDataDEBITACCID: TFloatField
+      FieldName = 'DEBITACCID'
+      Required = True
+    end
+    object TransactionsDataCREDITACCID: TFloatField
+      FieldName = 'CREDITACCID'
+      Required = True
+    end
+    object TransactionsDataOPERATORID: TStringField
+      FieldName = 'OPERATORID'
+      Size = 4000
+    end
+    object TransactionsDataTRANSACTIONDATE: TDateTimeField
+      FieldName = 'TRANSACTIONDATE'
+    end
+    object TransactionsDataDEBITACCNO: TStringField
+      FieldName = 'DEBITACCNO'
+    end
+    object TransactionsDataDEBITCURRENCYSNAME: TStringField
+      FieldName = 'DEBITCURRENCYSNAME'
+      Size = 10
+    end
+    object TransactionsDataCREDITACCNO: TStringField
+      FieldName = 'CREDITACCNO'
+    end
+    object TransactionsDataCREDITCURRENCYSNAME: TStringField
+      FieldName = 'CREDITCURRENCYSNAME'
+      Size = 10
+    end
+    object TransactionsDataDEBITAMOUNT: TFloatField
+      FieldName = 'DEBITAMOUNT'
+      DisplayFormat = '#,#0.00'
+    end
+    object TransactionsDataCREDITAMOUNT: TFloatField
+      FieldName = 'CREDITAMOUNT'
+      DisplayFormat = '#,#0.00'
+    end
+    object TransactionsDataLAMOUNT: TFloatField
+      FieldName = 'LAMOUNT'
+      DisplayFormat = '#,#0.00'
+    end
+    object TransactionsDataTRDESCRIPTION: TStringField
+      FieldName = 'TRDESCRIPTION'
+      Size = 255
+    end
+  end
+  object DataSrcTransactionsData: TDataSource
+    DataSet = TransactionsData
+    Left = 189
+    Top = 80
+  end
+  object WorkDateData: TOracleDataSet
+    SQL.Strings = (
+      'select '
+      '  max(dat) as WorkDate'
+      'from Operkurs'
+      'where '
+      '   dat<=:RealDate')
+    Variables.Data = {
+      0300000001000000090000003A5245414C444154450C00000000000000000000
+      00}
+    Session = sboapiDataModule.SBSession
+    Left = 328
+    Top = 136
+    object WorkDateDataWORKDATE: TDateTimeField
+      FieldName = 'WORKDATE'
+    end
+  end
+end

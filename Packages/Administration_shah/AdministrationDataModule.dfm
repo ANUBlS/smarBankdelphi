@@ -1,0 +1,1801 @@
+object AdministrationData: TAdministrationData
+  OldCreateOrder = False
+  Height = 675
+  Width = 894
+  object ModulesData: TOracleDataSet
+    SQL.Strings = (
+      'SELECT id,trvdesc, REPLACE(description,'#39' '#39')description ,name,'
+      'can_insert,'
+      'can_delete ,'
+      'can_update'
+      'FROM modules'
+      'order by description '
+      '')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000700000004000000490044000100000000000E000000540052005600
+      4400450053004300010000000000160000004400450053004300520049005000
+      540049004F004E00010000000000080000004E0041004D004500010000000000
+      14000000430041004E005F0049004E0053004500520054000100000000001400
+      0000430041004E005F00440045004C0045005400450001000000000014000000
+      430041004E005F00550050004400410054004500010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 96
+    Top = 64
+    object ModulesDataTRVDESC: TWideStringField
+      DisplayLabel = 'T'#601'yinat'#305
+      DisplayWidth = 60
+      FieldName = 'TRVDESC'
+      Size = 120
+    end
+    object ModulesDataCAN_UPDATE: TIntegerField
+      FieldName = 'CAN_UPDATE'
+      Visible = False
+    end
+    object ModulesDataDESCRIPTION: TWideStringField
+      DisplayLabel = 'Modulun ad'#305
+      DisplayWidth = 40
+      FieldName = 'DESCRIPTION'
+      Size = 60
+    end
+    object ModulesDataNAME: TWideStringField
+      DisplayLabel = 'Sinif N'
+      DisplayWidth = 50
+      FieldName = 'NAME'
+      Required = True
+      Size = 50
+    end
+    object ModulesDataID: TFloatField
+      FieldName = 'ID'
+      Required = True
+      Visible = False
+    end
+    object ModulesDataCAN_INSERT: TIntegerField
+      FieldName = 'CAN_INSERT'
+      Visible = False
+    end
+    object ModulesDataCAN_DELETE: TIntegerField
+      FieldName = 'CAN_DELETE'
+      Visible = False
+    end
+  end
+  object Modules: TDataSource
+    DataSet = ModulesData
+    Left = 24
+    Top = 64
+  end
+  object UsersData: TOracleDataSet
+    SQL.Strings = (
+      'SELECT   sus.user#, sus.NAME,'
+      ' sus.ctime,'
+      ' sba.description,'
+      ' sba.fullname,'
+      ' sba.phone, sba.classid, '
+      ' sba.filialid,sb_aca.isadm_num (sus.NAME) AS is_adm'
+      ',sb_aca.checkLockUser_num(sus.NAME) as is_locked'
+      ',sus.datats#'
+      '  FROM sys.user$ sus, sba_objinf sba'
+      '  WHERE sus.NAME = sba.obj'
+      ''
+      ''
+      'and datats#>=5'
+      'and sb_aca.isadm_num (sus.NAME) <> 1'
+      ''
+      'ORDER BY NAME'
+      ' ')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000B0000000A0000005500530045005200230001000000000008000000
+      4E0041004D0045000100000000000A0000004300540049004D00450001000000
+      0000160000004400450053004300520049005000540049004F004E0001000000
+      000010000000460055004C004C004E0041004D0045000100000000000A000000
+      500048004F004E0045000100000000000E00000043004C004100530053004900
+      440001000000000010000000460049004C00490041004C004900440001000000
+      00000C000000490053005F00410044004D000100000000001200000049005300
+      5F004C004F0043004B00450044000100000000000E0000004400410054004100
+      540053002300010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 96
+    Top = 16
+    object UsersDataUSER: TFloatField
+      FieldName = 'USER#'
+      Required = True
+      Visible = False
+    end
+    object UsersDataNAME: TWideStringField
+      DisplayLabel = #304'stifad'#601#231'i ad'#305
+      DisplayWidth = 20
+      FieldName = 'NAME'
+      Required = True
+      Size = 30
+    end
+    object UsersDataDESCRIPTION: TWideStringField
+      DisplayLabel = 'T'#601'yinat'#305
+      DisplayWidth = 20
+      FieldName = 'DESCRIPTION'
+      Size = 60
+    end
+    object UsersDataFULLNAME: TWideStringField
+      DisplayLabel = 'Tam ad'#305
+      DisplayWidth = 20
+      FieldName = 'FULLNAME'
+      Size = 60
+    end
+    object UsersDataCTIME: TDateTimeField
+      DisplayLabel = 'Yarad'#305'lma tarixi'
+      DisplayWidth = 20
+      FieldName = 'CTIME'
+      Required = True
+    end
+    object UsersDataPHONE: TWideStringField
+      DisplayLabel = 'Telefon'
+      FieldName = 'PHONE'
+      Size = 8
+    end
+    object UsersDataCLASSID: TFloatField
+      DisplayLabel = 'Sinif N'
+      FieldName = 'CLASSID'
+    end
+    object UsersDataFILIALID: TFloatField
+      FieldName = 'FILIALID'
+      Visible = False
+    end
+    object UsersDataIS_ADM: TFloatField
+      FieldName = 'IS_ADM'
+      Visible = False
+    end
+    object UsersDataIS_LOCKED: TFloatField
+      FieldName = 'IS_LOCKED'
+    end
+    object UsersDataDATATS: TFloatField
+      FieldName = 'DATATS#'
+      Required = True
+    end
+  end
+  object Users: TDataSource
+    DataSet = UsersData
+    Left = 24
+    Top = 16
+  end
+  object pcADM: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'SB_ADM'
+    Left = 160
+    Top = 16
+  end
+  object UsModulesData: TOracleDataSet
+    SQL.Strings = (
+      'SELECT id,trvdesc, description,'
+      'SB_ACA.checkmodaccess_int(description,:USERNAME) as ModAcc,'
+      'rowid'
+      'FROM modules'
+      'order by description')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000120000003A0055005300450052004E0041004D0045000500
+      00000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000400000004000000490044000100000000000E000000540052005600
+      4400450053004300010000000000160000004400450053004300520049005000
+      540049004F004E000100000000000C0000004D004F0044004100430043000100
+      00000000}
+    CachedUpdates = True
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 96
+    Top = 208
+    object UsModulesDataTRVDESC: TWideStringField
+      FieldName = 'TRVDESC'
+      Size = 256
+    end
+    object UsModulesDataDESCRIPTION: TWideStringField
+      FieldName = 'DESCRIPTION'
+      Size = 128
+    end
+    object UsModulesDataMODACC: TFloatField
+      FieldName = 'MODACC'
+    end
+    object UsModulesDataID: TFloatField
+      FieldName = 'ID'
+      Required = True
+      Visible = False
+    end
+  end
+  object UsModules: TDataSource
+    DataSet = UsModulesData
+    Left = 24
+    Top = 208
+  end
+  object UsTablesData: TOracleDataSet
+    SQL.Strings = (
+      '  select'
+      '  md.id'
+      '  ,md.trvdesc'
+      '  ,Replace(md.Description,'#39' '#39') Description'
+      '  ,md.can_insert mod_insert'
+      '  ,md.can_delete mod_delete'
+      '  ,md.can_update mod_update '
+      '  ,md.advanced_grants'
+      ' ,sba.cur_user '
+      ' ,Decode(sba.can_insert,null,0,sba.can_insert) as can_insert'
+      ' ,Decode(sba.can_update,null,0,sba.can_delete) as can_delete'
+      ' ,Decode(sba.can_delete,null,0,sba.can_update) as can_update'
+      ' ,SB_ACA.checkmodaccess_int(description,:USERNAME) as "Select"'
+      ' ,md.rowid'
+      ' from modules md ,'
+      '  (select *'
+      '   from sba_usergrants sba'
+      '   where cur_user=UPPER(:USERNAME)) sba '
+      '  where'
+      '  UPPER(Replace(md.Description,'#39' '#39')) =sba.cur_module(+)'
+      '   order by Description')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000120000003A0055005300450052004E0041004D0045000500
+      00000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000C00000004000000490044000100000000000E000000540052005600
+      4400450053004300010000000000160000004400450053004300520049005000
+      540049004F004E00010000000000140000004D004F0044005F0049004E005300
+      450052005400010000000000140000004D004F0044005F00440045004C004500
+      54004500010000000000140000004D004F0044005F0055005000440041005400
+      45000100000000001E00000041004400560041004E004300450044005F004700
+      520041004E0054005300010000000000100000004300550052005F0055005300
+      4500520001000000000014000000430041004E005F0049004E00530045005200
+      540001000000000014000000430041004E005F00440045004C00450054004500
+      01000000000014000000430041004E005F005500500044004100540045000100
+      000000000C000000530065006C00650063007400010000000000}
+    OnApplyRecord = UsTablesDataApplyRecord
+    CachedUpdates = True
+    Session = sboapiDataModule.SBSession
+    Active = True
+    AfterScroll = UsTablesDataAfterScroll
+    Left = 96
+    Top = 160
+    object UsTablesDataTRVDESC: TWideStringField
+      FieldName = 'TRVDESC'
+      Size = 256
+    end
+    object UsTablesDataDESCRIPTION: TWideStringField
+      FieldName = 'DESCRIPTION'
+      Size = 128
+    end
+    object UsTablesDataMOD_DELETE: TIntegerField
+      FieldName = 'MOD_DELETE'
+    end
+    object UsTablesDataMOD_INSERT: TIntegerField
+      FieldName = 'MOD_INSERT'
+    end
+    object UsTablesDataMOD_UPDATE: TIntegerField
+      FieldName = 'MOD_UPDATE'
+    end
+    object UsTablesDataADVANCED_GRANTS: TIntegerField
+      FieldName = 'ADVANCED_GRANTS'
+    end
+    object UsTablesDataCUR_USER: TWideStringField
+      FieldName = 'CUR_USER'
+      Size = 72
+    end
+    object UsTablesDataCAN_INSERT: TFloatField
+      FieldName = 'CAN_INSERT'
+    end
+    object UsTablesDataCAN_DELETE: TFloatField
+      FieldName = 'CAN_DELETE'
+    end
+    object UsTablesDataCAN_UPDATE: TFloatField
+      FieldName = 'CAN_UPDATE'
+    end
+    object UsTablesDataSelect: TFloatField
+      FieldName = 'Select'
+    end
+    object UsTablesDataID: TFloatField
+      FieldName = 'ID'
+      Required = True
+      Visible = False
+    end
+  end
+  object UsTables: TDataSource
+    DataSet = UsTablesData
+    Left = 24
+    Top = 160
+  end
+  object pcAca: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'SB_ACA'
+    Left = 160
+    Top = 64
+  end
+  object Classesdata: TOracleDataSet
+    SQL.Strings = (
+      'select id,obj,description,createdate from'
+      'sba_OBJINF'
+      'where UPPER(type)='#39'C'#39
+      'order by id')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000040000000400000049004400010000000000060000004F0042004A00
+      010000000000160000004400450053004300520049005000540049004F004E00
+      0100000000001400000043005200450041005400450044004100540045000100
+      00000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 96
+    Top = 112
+    object ClassesdataID: TFloatField
+      FieldName = 'ID'
+      Required = True
+      Visible = False
+    end
+    object ClassesdataOBJ: TWideStringField
+      DisplayLabel = 'Sinif ad'#305
+      FieldName = 'OBJ'
+      Size = 56
+    end
+    object ClassesdataDESCRIPTION: TWideStringField
+      DisplayLabel = 'T'#601'yinat'#305
+      FieldName = 'DESCRIPTION'
+      Size = 96
+    end
+    object ClassesdataCREATEDATE: TDateTimeField
+      DisplayLabel = 'Yarad'#305'lma tarixi'
+      FieldName = 'CREATEDATE'
+    end
+  end
+  object Classes: TDataSource
+    DataSet = Classesdata
+    Left = 24
+    Top = 112
+  end
+  object Modeditdata: TOracleDataSet
+    SQL.Strings = (
+      
+        'SELECT REPLACE (md.ROLE, '#39'SBR_'#39') CLASS, DECODE (sba.OBJECT, NULL' +
+        ', 0, 1) acc,'
+      
+        '       md.ROWID, m.trvdesc, m.id modid, m.can_insert cni, m.can_' +
+        'update cnu, m.can_delete cnd, ins, upd, del'
+      '  FROM dba_roles md, modules m,'
+      '       (SELECT *'
+      '          FROM sba_objmanager'
+      '         WHERE id = (SELECT id'
+      '                       FROM sba_objinf'
+      
+        '                      WHERE UPPER (TYPE) = '#39'C'#39' AND obj = :CLASSN' +
+        'AME) )sba'
+      
+        ' WHERE (m.description=REPLACE (md.ROLE, '#39'SBR_'#39'))AND(REPLACE (md.' +
+        'ROLE, '#39'SBR_'#39') = sba.OBJECT(+) AND ROLE LIKE ('#39'SBR_%'#39'))'
+      'order by trvdesc'
+      '')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000140000003A0043004C004100530053004E0041004D004500
+      050000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000A0000000A00000043004C0041005300530001000000000006000000
+      4100430043000100000000000E00000054005200560044004500530043000100
+      000000000A0000004D004F004400490044000100000000000600000043004E00
+      49000100000000000600000043004E0055000100000000000600000043004E00
+      44000100000000000600000049004E0053000100000000000600000055005000
+      440001000000000006000000440045004C00010000000000}
+    CachedUpdates = True
+    Session = sboapiDataModule.SBSession
+    Left = 80
+    Top = 256
+    object ModeditdataCLASS: TWideStringField
+      FieldName = 'CLASS'
+      Size = 30
+    end
+    object ModeditdataACC: TFloatField
+      DisplayLabel = #1044#1072#1097#1080#1083
+      FieldName = 'ACC'
+    end
+    object ModeditdataTRVDESC: TWideStringField
+      FieldName = 'TRVDESC'
+      Size = 256
+    end
+    object ModeditdataMODID: TFloatField
+      FieldName = 'MODID'
+      Required = True
+    end
+    object ModeditdataCNI: TIntegerField
+      FieldName = 'CNI'
+    end
+    object ModeditdataCNU: TIntegerField
+      FieldName = 'CNU'
+    end
+    object ModeditdataCND: TIntegerField
+      FieldName = 'CND'
+    end
+    object ModeditdataINS: TIntegerField
+      FieldName = 'INS'
+    end
+    object ModeditdataUPD: TIntegerField
+      FieldName = 'UPD'
+    end
+    object ModeditdataDEL: TIntegerField
+      FieldName = 'DEL'
+    end
+  end
+  object Modedit: TDataSource
+    DataSet = Modeditdata
+    Left = 24
+    Top = 256
+  end
+  object GroupsData: TOracleDataSet
+    SQL.Strings = (
+      
+        'select objinf.id,objinf.obj,objinf.description,objinf.createdate' +
+        ',objinf.advtype,grtype.type$,grtype.descr'
+      'from sba_objinf objinf,SBA_GROUPTYPES grtype'
+      'where type='#39'G'#39' '
+      'and objinf.advtype=grtype.id(+)'
+      'order by id')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000070000000400000049004400010000000000060000004F0042004A00
+      010000000000160000004400450053004300520049005000540049004F004E00
+      0100000000001400000043005200450041005400450044004100540045000100
+      000000000E00000041004400560054005900500045000100000000000A000000
+      540059005000450024000100000000000A000000440045005300430052000100
+      00000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 96
+    Top = 304
+    object GroupsDataID: TFloatField
+      FieldName = 'ID'
+      Required = True
+      Visible = False
+    end
+    object GroupsDataOBJ: TWideStringField
+      DisplayLabel = 'Qrupun ad'#305
+      FieldName = 'OBJ'
+      Size = 56
+    end
+    object GroupsDataDESCRIPTION: TWideStringField
+      DisplayLabel = 'T'#601'yinat'#305
+      FieldName = 'DESCRIPTION'
+      Size = 96
+    end
+    object GroupsDataCREATEDATE: TDateTimeField
+      DisplayLabel = 'Yarad'#305'lma tarixi'
+      DisplayWidth = 30
+      FieldName = 'CREATEDATE'
+    end
+    object GroupsDataADVTYPE: TFloatField
+      FieldName = 'ADVTYPE'
+      Visible = False
+    end
+    object GroupsDataTYPE: TWideStringField
+      FieldName = 'TYPE$'
+      Size = 24
+    end
+    object GroupsDataDESCR: TWideStringField
+      DisplayLabel = 'Qrupun tipi'
+      FieldName = 'DESCR'
+      Size = 128
+    end
+  end
+  object Groups: TDataSource
+    DataSet = GroupsData
+    Left = 24
+    Top = 304
+  end
+  object GroupUsersData: TOracleDataSet
+    SQL.Strings = (
+      'SELECT   gmn.userid,sus.name, gmn.groupid, gmn.type'
+      '  FROM sba_groupmanager gmn,sys.user$ sus'
+      'where gmn.userid=sus.user#'
+      'and gmn.groupid=:GROUPID')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000100000003A00470052004F00550050004900440003000000
+      0000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      05000000040000000C0000005500530045005200490044000100000000000800
+      00004E0041004D0045000100000000000E000000470052004F00550050004900
+      4400010000000000080000005400590050004500010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 296
+    Top = 16
+    object GroupUsersDataUSERID: TFloatField
+      FieldName = 'USERID'
+      Required = True
+    end
+    object GroupUsersDataNAME: TWideStringField
+      DisplayLabel = 'Ad'#305
+      FieldName = 'NAME'
+      Required = True
+      Size = 30
+    end
+    object GroupUsersDataGROUPID: TFloatField
+      DisplayLabel = 'Qrup N'
+      FieldName = 'GROUPID'
+      Required = True
+    end
+    object GroupUsersDataTYPE: TIntegerField
+      DisplayLabel = 'Tipi'
+      FieldName = 'TYPE'
+      Required = True
+    end
+  end
+  object GroupUsers: TDataSource
+    DataSet = GroupUsersData
+    Left = 224
+    Top = 16
+  end
+  object DependencesData: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      'usman.SUSER,usdat.NAME,usdat.ctime,objinf.*'
+      'from '
+      'sba_userman usman,sys.user$ usdat,'
+      
+        '(select obj.id,obj.obj,grouptypes.descr as type$ from sba_objinf' +
+        ' obj,sba_grouptypes grouptypes'
+      'where obj.advtype=grouptypes.id) objinf'
+      'where '
+      'usman.SUSER=usdat.USER# '
+      'and usman.SUSER<>usman.MUSER'
+      'and usman.MUSER= :USERID'
+      'and usman.ugrup=objinf.id'
+      'order by obj')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000E0000003A00550053004500520049004400030000000000
+      000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      05000000060000000A0000005300550053004500520001000000000008000000
+      4E0041004D0045000100000000000A0000004300540049004D00450001000000
+      00000400000049004400010000000000060000004F0042004A00010000000000
+      0A00000054005900500045002400010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 288
+    Top = 64
+    object DependencesDataSUSER: TFloatField
+      FieldName = 'SUSER'
+      Required = True
+    end
+    object DependencesDataNAME: TWideStringField
+      FieldName = 'NAME'
+      Required = True
+      Size = 30
+    end
+    object DependencesDataCTIME: TDateTimeField
+      FieldName = 'CTIME'
+      Required = True
+    end
+    object DependencesDataID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object DependencesDataOBJ: TWideStringField
+      FieldName = 'OBJ'
+      Size = 56
+    end
+    object DependencesDataTYPE: TWideStringField
+      DisplayWidth = 60
+      FieldName = 'TYPE$'
+      Size = 60
+    end
+  end
+  object SubmissionData: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      'usman.MUSER,usdat.NAME,usdat.ctime,objinf.*'
+      'from '
+      'sba_userman usman,sys.user$ usdat,'
+      
+        '(select obj.id,obj.obj,grouptypes.descr as type$ from sba_objinf' +
+        ' obj,sba_grouptypes grouptypes'
+      'where obj.advtype=grouptypes.id) objinf'
+      'where '
+      'usman.MUSER=usdat.USER# '
+      'and usman.MUSER<>usman.SUSER'
+      'and usman.SUSER= :USERID'
+      'and usman.ugrup=objinf.id'
+      'order by obj')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000E0000003A00550053004500520049004400030000000000
+      000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      05000000060000000A0000004D00550053004500520001000000000008000000
+      4E0041004D0045000100000000000A0000004300540049004D00450001000000
+      00000400000049004400010000000000060000004F0042004A00010000000000
+      0A00000054005900500045002400010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 288
+    Top = 112
+    object SubmissionDataMUSER: TFloatField
+      FieldName = 'MUSER'
+      Required = True
+    end
+    object SubmissionDataNAME: TWideStringField
+      FieldName = 'NAME'
+      Required = True
+      Size = 30
+    end
+    object SubmissionDataCTIME: TDateTimeField
+      FieldName = 'CTIME'
+      Required = True
+    end
+    object SubmissionDataID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object SubmissionDataOBJ: TWideStringField
+      FieldName = 'OBJ'
+      Size = 56
+    end
+    object SubmissionDataTYPE: TWideStringField
+      DisplayWidth = 60
+      FieldName = 'TYPE$'
+      Size = 60
+    end
+  end
+  object Dependences: TDataSource
+    DataSet = DependencesData
+    Left = 224
+    Top = 64
+  end
+  object Submission: TDataSource
+    DataSet = SubmissionData
+    Left = 224
+    Top = 112
+  end
+  object FilialData: TOracleDataSet
+    SQL.Strings = (
+      'select * from filial')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000030000000400000049004400010000000000080000004E0041004D00
+      4500010000000000140000004B004F0044005F00460049004C00490041004C00
+      010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 288
+    Top = 168
+  end
+  object Filial: TDataSource
+    DataSet = FilialData
+    Left = 224
+    Top = 168
+  end
+  object ObjectsData: TOracleDataSet
+    SQL.Strings = (
+      'SELECT object_name,object_type'
+      'FROM sys.all_objects'
+      
+        'WHERE owner =:OWNERNAME and(object_type='#39'TABLE'#39' or object_type='#39 +
+        'VIEW'#39
+      
+        'or object_type= '#39'FUNCTION'#39' or object_type= '#39'PROCEDURE'#39'  or objec' +
+        't_type='#39'PACKAGE'#39') '
+      
+        'union select ROLE,DECODE(ROLE,null,null,'#39'ROLE'#39') as Rtype from db' +
+        'a_roles'
+      'order by object_name')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000140000003A004F0057004E00450052004E0041004D004500
+      050000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      0500000002000000160000004F0042004A004500430054005F004E0041004D00
+      4500010000000000160000004F0042004A004500430054005F00540059005000
+      4500010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 288
+    Top = 224
+    object ObjectsDataOBJECT_NAME: TWideStringField
+      FieldName = 'OBJECT_NAME'
+      Size = 30
+    end
+    object ObjectsDataOBJECT_TYPE: TWideStringField
+      FieldName = 'OBJECT_TYPE'
+      Size = 19
+    end
+  end
+  object Objects: TDataSource
+    DataSet = ObjectsData
+    Left = 224
+    Top = 224
+  end
+  object ModPrivsData: TOracleDataSet
+    SQL.Strings = (
+      'select temptab.rowid,objects.* from '
+      'dual temptab,'
+      '(select grantee,TABLE_NAME,privilege'
+      'from dba_tab_privs dgr'
+      ' union'
+      
+        'select grantee,granted_role as TABLE_NAME,Decode(granted_role,nu' +
+        'll,null,'#39'ROLE'#39') as privilege'
+      ' from dba_role_privs'
+      ' union'
+      
+        'select grantee,PRIVILEGE as TABLE_NAME,Decode(PRIVILEGE,null,nul' +
+        'l,'#39'PRIVILEGE'#39') as privilege'
+      ' from dba_sys_privs) objects'
+      'where objects.grantee=UPPER(REPLACE(:MODULE,'#39' '#39'))'
+      'order by objects.table_name')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000E0000003A004D004F00440055004C004500050000000000
+      000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      05000000030000000E0000004700520041004E00540045004500010000000000
+      140000005400410042004C0045005F004E0041004D0045000100000000001200
+      0000500052004900560049004C00450047004500010000000000}
+    CachedUpdates = True
+    Session = sboapiDataModule.SBSession
+    AfterScroll = ModPrivsDataAfterScroll
+    Left = 288
+    Top = 280
+    object ModPrivsDataTABLE_NAME: TWideStringField
+      FieldName = 'TABLE_NAME'
+      Size = 40
+    end
+    object ModPrivsDataPRIVILEGE: TWideStringField
+      FieldName = 'PRIVILEGE'
+      Size = 40
+    end
+  end
+  object ModPrivs: TDataSource
+    DataSet = ModPrivsData
+    Left = 224
+    Top = 280
+  end
+  object ModAdvancedGrants: TDataSource
+    DataSet = ModAdvancedGrantsData
+    Left = 225
+    Top = 331
+  end
+  object ModAdvancedGrantsData: TOracleDataSet
+    SQL.Strings = (
+      '/*select sec.*,sec.rowid,fir.*,'
+      'Decode(fir.username,null,0,1) as UserGranted'
+      'from '
+      '(select id,grantname,description,errormessage from'
+      'sba_advanced_grants'
+      'where moduleid=:modid) sec,'
+      '(select * from sba_usergrants_advanced'
+      'where username=:usernam) fir'
+      'where '
+      'sec.id=fir.advancedgrantid(+)'
+      '*/'
+      'select sec.*, sec.rowid, fir.*,'
+      '       decode (fir.username, null, 0, 1) as usergranted,'
+      '       decode (mbo.advgrantid, null, 0, 1) havvalue,'
+      '       nvl (mbo.maxavalue, 0) maxavalue'
+      '  from (select id, grantname, description, errormessage'
+      '          from sba_advanced_grants'
+      '         where moduleid = :modid) sec,'
+      '       (select *'
+      '          from sba_usergrants_advanced'
+      '         where username = :usernam) fir,'
+      '       (select *'
+      '          from sba_monetaryborder) mbo'
+      
+        ' where sec.id = fir.advancedgrantid(+) and sec.id = mbo.advgrant' +
+        'id(+)'
+      '')
+    Optimize = False
+    Variables.Data = {
+      04000000020000000C0000003A004D004F004400490044000300000000000000
+      00000000100000003A0055005300450052004E0041004D000500000000000000
+      00000000}
+    QBEDefinition.QBEFieldDefs = {
+      0500000009000000040000004900440001000000000012000000470052004100
+      4E0054004E0041004D0045000100000000001600000044004500530043005200
+      49005000540049004F004E000100000000001000000055005300450052004E00
+      41004D0045000100000000001E00000041004400560041004E00430045004400
+      4700520041004E00540049004400010000000000160000005500530045005200
+      4700520041004E00540045004400010000000000180000004500520052004F00
+      52004D0045005300530041004700450001000000000010000000480041005600
+      560041004C0055004500010000000000120000004D0041005800410056004100
+      4C0055004500010000000000}
+    CachedUpdates = True
+    Session = sboapiDataModule.SBSession
+    Left = 313
+    Top = 322
+    object ModAdvancedGrantsDataID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object ModAdvancedGrantsDataGRANTNAME: TWideStringField
+      FieldName = 'GRANTNAME'
+      Required = True
+      Size = 128
+    end
+    object ModAdvancedGrantsDataDESCRIPTION: TWideStringField
+      FieldName = 'DESCRIPTION'
+      Required = True
+      Size = 128
+    end
+    object ModAdvancedGrantsDataUSERNAME: TWideStringField
+      FieldName = 'USERNAME'
+      Size = 128
+    end
+    object ModAdvancedGrantsDataADVANCEDGRANTID: TFloatField
+      FieldName = 'ADVANCEDGRANTID'
+    end
+    object ModAdvancedGrantsDataUSERGRANTED: TFloatField
+      FieldName = 'USERGRANTED'
+    end
+    object ModAdvancedGrantsDataERRORMESSAGE: TWideStringField
+      FieldName = 'ERRORMESSAGE'
+      Size = 128
+    end
+    object ModAdvancedGrantsDataHAVVALUE: TFloatField
+      FieldName = 'HAVVALUE'
+    end
+    object ModAdvancedGrantsDataMAXAVALUE: TFloatField
+      FieldName = 'MAXAVALUE'
+    end
+  end
+  object GroupTypesData: TOracleDataSet
+    SQL.Strings = (
+      'SELECT id, type$, descr'
+      '  FROM sba_grouptypes'
+      '  order by id')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000300000004000000490044000100000000000A000000540059005000
+      450024000100000000000A00000044004500530043005200010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 304
+    Top = 376
+  end
+  object GroupTypes: TDataSource
+    DataSet = GroupTypesData
+    Left = 224
+    Top = 376
+  end
+  object UserGroupData: TOracleDataSet
+    SQL.Strings = (
+      
+        'select grman.userid,grman.groupid,decode(type,1,'#39#1041#1072#1096#39',2,'#39#1058#1072#1073#1077#39',3' +
+        ','#39#1053#1077#1081#1090#1088#1072#1083#39') as UserState,objMan.*'
+      'from sba_groupmanager grman,'
+      
+        '(select obj.id,obj.obj,obj.createdate,obj.description,grouptypes' +
+        '.descr as type$ from sba_objinf obj,sba_grouptypes grouptypes'
+      'where obj.advtype=grouptypes.id) objMan'
+      'where grman.groupid=objMan.id'
+      'and userid = :USERID'
+      'order by obj')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000E0000003A00550053004500520049004400030000000000
+      000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      05000000080000000C0000005500530045005200490044000100000000000E00
+      0000470052004F00550050004900440001000000000012000000550053004500
+      5200530054004100540045000100000000000400000049004400010000000000
+      060000004F0042004A0001000000000014000000430052004500410054004500
+      4400410054004500010000000000160000004400450053004300520049005000
+      540049004F004E000100000000000A0000005400590050004500240001000000
+      0000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 96
+    Top = 352
+    object UserGroupDataUSERID: TFloatField
+      FieldName = 'USERID'
+      Required = True
+      Visible = False
+    end
+    object UserGroupDataGROUPID: TFloatField
+      FieldName = 'GROUPID'
+      Required = True
+      Visible = False
+    end
+    object UserGroupDataUSERSTATE: TWideStringField
+      FieldName = 'USERSTATE'
+      Size = 14
+    end
+    object UserGroupDataID: TFloatField
+      FieldName = 'ID'
+      Required = True
+      Visible = False
+    end
+    object UserGroupDataOBJ: TWideStringField
+      FieldName = 'OBJ'
+      Size = 56
+    end
+    object UserGroupDataCREATEDATE: TDateTimeField
+      FieldName = 'CREATEDATE'
+      Visible = False
+    end
+    object UserGroupDataDESCRIPTION: TWideStringField
+      FieldName = 'DESCRIPTION'
+      Size = 96
+    end
+    object UserGroupDataTYPE: TWideStringField
+      FieldName = 'TYPE$'
+      Size = 128
+    end
+  end
+  object UserGroup: TDataSource
+    DataSet = UserGroupData
+    Left = 24
+    Top = 352
+  end
+  object repGroupsData: TOracleDataSet
+    SQL.Strings = (
+      
+        'select distinct(Groupman.groupid),Usergroups.* from sba_groupman' +
+        'ager Groupman,'
+      '   (select '
+      '   inf.id,inf.obj,inf.createdate,inf.description,inf.advtype,  '
+      '   grtype.type$,grtype.descr '
+      '   from sba_objInf inf,SBA_GROUPTYPES grtype'
+      '   where type='#39'G'#39
+      '   and inf.advtype=grtype.id'
+      '   order by inf.obj) Usergroups'
+      'where Groupman.groupid=Usergroups.id'
+      'order by Usergroups.advtype,Usergroups.obj')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000080000000E000000470052004F005500500049004400010000000000
+      0400000049004400010000000000060000004F0042004A000100000000001400
+      0000430052004500410054004500440041005400450001000000000016000000
+      4400450053004300520049005000540049004F004E000100000000000E000000
+      41004400560054005900500045000100000000000A0000005400590050004500
+      24000100000000000A00000044004500530043005200010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 472
+    Top = 16
+    object repGroupsDataGROUPID: TFloatField
+      FieldName = 'GROUPID'
+      Required = True
+    end
+    object repGroupsDataID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object repGroupsDataOBJ: TWideStringField
+      FieldName = 'OBJ'
+      Size = 56
+    end
+    object repGroupsDataCREATEDATE: TDateTimeField
+      FieldName = 'CREATEDATE'
+    end
+    object repGroupsDataDESCRIPTION: TWideStringField
+      FieldName = 'DESCRIPTION'
+      Size = 96
+    end
+    object repGroupsDataTYPE: TWideStringField
+      FieldName = 'TYPE$'
+      Required = True
+      Size = 24
+    end
+    object repGroupsDataDESCR: TWideStringField
+      FieldName = 'DESCR'
+      Size = 128
+    end
+  end
+  object repGroupManData: TOracleDataSet
+    SQL.Strings = (
+      'SELECT'
+      'us.NAME,'
+      'decode(grman.type,1,'#39#1041#1072#1096#39',2,'#39#1058#1072#1073#1077#39',3,'#39#1053#1077#1081#1090#1088#1072#1083#39',null)  UserType, '
+      'us.ctime UserCreateDate,'
+      'grman.groupid'
+      'FROM sba_groupmanager grman,user$ us'
+      'where  userid=us.ID'
+      'and grman.groupid=:groupid'
+      'order by grMan.type,us.name')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000100000003A00470052004F00550050004900440003000000
+      040000000607000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      0500000004000000080000004E0041004D004500010000000000100000005500
+      53004500520054005900500045000100000000001C0000005500530045005200
+      43005200450041005400450044004100540045000100000000000E0000004700
+      52004F005500500049004400010000000000}
+    Master = repGroupsData
+    MasterFields = 'ID'
+    DetailFields = 'groupid'
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 480
+    Top = 64
+    object repGroupManDataNAME: TWideStringField
+      FieldName = 'NAME'
+      Required = True
+      Size = 30
+    end
+    object repGroupManDataUSERTYPE: TWideStringField
+      FieldName = 'USERTYPE'
+      Size = 14
+    end
+    object repGroupManDataUSERCREATEDATE: TDateTimeField
+      FieldName = 'USERCREATEDATE'
+      Required = True
+    end
+    object repGroupManDataGROUPID: TFloatField
+      FieldName = 'GROUPID'
+      Required = True
+    end
+  end
+  object repAboutBankData: TOracleDataSet
+    SQL.Strings = (
+      'Select bank,'
+      '  AZ_NAME as FullBankName ,'
+      '  Logo ,'
+      '  ManagerTitle ,'
+      '  AccountantTitle '
+      'From'
+      '  BankInfo   '
+      '')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000500000008000000420041004E004B00010000000000180000004600
+      55004C004C00420041004E004B004E0041004D00450001000000000008000000
+      4C004F0047004F00000000000000180000004D0041004E004100470045005200
+      5400490054004C0045000100000000001E0000004100430043004F0055004E00
+      540041004E0054005400490054004C004500010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 472
+    Top = 112
+  end
+  object repAboutBank: TDataSource
+    DataSet = repAboutBankData
+    Left = 384
+    Top = 112
+  end
+  object repGroupMan: TDataSource
+    DataSet = repGroupManData
+    Left = 384
+    Top = 64
+  end
+  object repGroups: TDataSource
+    DataSet = repGroupsData
+    Left = 384
+    Top = 16
+  end
+  object repUsersData: TOracleDataSet
+    SQL.Strings = (
+      'SELECT   '
+      ' sus.id user#,'
+      ' sus.NAME,'
+      ' sus.ctime,'
+      ' sba.description,'
+      ' sba.fullname,'
+      
+        ' Decode(sb_aca.isadm_num (sus.NAME)  ,0,'#39' '#39',1,'#39'('#1040#1076#1084#1080#1085#1080#1089#1090#1088#1072#1090#1086#1088')'#39')' +
+        ' as  is_adm'
+      '  FROM user$ sus, sba_objinf sba'
+      '  WHERE sus.NAME = sba.obj(+)'
+      'ORDER BY is_adm,NAME')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000060000000A0000005500530045005200230001000000000008000000
+      4E0041004D0045000100000000000A0000004300540049004D00450001000000
+      0000160000004400450053004300520049005000540049004F004E0001000000
+      000010000000460055004C004C004E0041004D0045000100000000000C000000
+      490053005F00410044004D00010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 472
+    Top = 168
+    object UsersUSER: TFloatField
+      FieldName = 'USER#'
+      Required = True
+    end
+    object repUsersDataNAME: TWideStringField
+      FieldName = 'NAME'
+      Required = True
+      Size = 30
+    end
+    object UsersCTIME: TDateTimeField
+      FieldName = 'CTIME'
+      Required = True
+    end
+    object repUsersDataDESCRIPTION: TWideStringField
+      FieldName = 'DESCRIPTION'
+      Size = 96
+    end
+    object repUsersDataFULLNAME: TWideStringField
+      FieldName = 'FULLNAME'
+      Size = 96
+    end
+    object repUsersDataIS_ADM: TWideStringField
+      FieldName = 'IS_ADM'
+      Size = 28
+    end
+  end
+  object repUsersGrantsData: TOracleDataSet
+    SQL.Strings = (
+      'select * from'
+      '(select'
+      '  s.name,'
+      '  s.id as modid,'
+      '  s.trvdesc, '
+      '  decode(s.ModAcc ,1,:GRANTED,:NOTGRANTED) as "Can use",'
+      '  decode(sba.can_insert,1,:GRANTED,:NOTGRANTED) as "Can insert",'
+      '  decode(sba.can_delete,1,:GRANTED,:NOTGRANTED) as "Can Delete",'
+      '  decode(sba.can_update,1,:GRANTED,:NOTGRANTED) as "Can Update"'
+      'from'
+      
+        '  (SELECT u.name,m.id,m.trvdesc,m.description,SB_ACA.checkmodacc' +
+        'ess_int(description,u.name) as ModAcc, '
+      '  sb_aca.isadm_num (u.NAME) AS is_adm  '
+      '  FROM modules m ,user$ u'
+      '  order by u.name) s,'
+      '  sba_usergrants sba'
+      'where'
+      '  s.is_adm<>1 and'
+      '  s.modacc<>0 '
+      '  and  sba.cur_user(+)=UPPER(s.name) '
+      '  and  sba.cur_module (+)=s.description '
+      ''
+      'UNION '
+      ''
+      '  SELECT grantsadv.username as name, '
+      '  grantsMod.moduleid as modid,'
+      '  grantsMod.Advdescription as trvdesc,'
+      '  :GRANTED as "Can Use",null,null,null'
+      '  FROM sba_usergrants_advanced grantsadv,'
+      
+        '  (select modgrants.id advgrantid, modgrants.description Advdesc' +
+        'ription,modgrants.moduleid'
+      '   from sba_advanced_grants modgrants) grantsMod'
+      '   where grantsadv.advancedgrantid=grantsMod.advgrantid'
+      '   and grantsadv.username in '
+      '        (select name from user$)'
+      ') AllGrants'
+      'where name=:name'
+      '   order by name,trvdesc')
+    Optimize = False
+    Variables.Data = {
+      04000000030000000A0000003A004E0041004D00450005000000060000004142
+      4241530000000000100000003A004700520041004E0054004500440005000000
+      020000002B0000000000160000003A004E004F0054004700520041004E005400
+      4500440005000000020000002D0000000000}
+    QBEDefinition.QBEFieldDefs = {
+      0500000007000000080000004E0041004D0045000100000000000A0000004D00
+      4F004400490044000100000000000E0000005400520056004400450053004300
+      0100000000000E000000430061006E0020007500730065000100000000001400
+      0000430061006E00200069006E00730065007200740001000000000014000000
+      430061006E002000440065006C00650074006500010000000000140000004300
+      61006E002000550070006400610074006500010000000000}
+    Master = repUsersData
+    MasterFields = 'NAME'
+    DetailFields = 'NAME'
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 472
+    Top = 216
+    object repUsersGrantsDataNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 128
+    end
+    object repUsersGrantsDataMODID: TFloatField
+      FieldName = 'MODID'
+    end
+    object repUsersGrantsDataTRVDESC: TWideStringField
+      FieldName = 'TRVDESC'
+      Size = 256
+    end
+    object repUsersGrantsDataCanuse: TWideStringField
+      FieldName = 'Can use'
+      Size = 2000
+    end
+    object repUsersGrantsDataCaninsert: TWideStringField
+      FieldName = 'Can insert'
+      Size = 2000
+    end
+    object repUsersGrantsDataCanDelete: TWideStringField
+      FieldName = 'Can Delete'
+      Size = 2000
+    end
+    object repUsersGrantsDataCanUpdate: TWideStringField
+      FieldName = 'Can Update'
+      Size = 2000
+    end
+  end
+  object repUsers: TDataSource
+    DataSet = repUsersData
+    Left = 384
+    Top = 168
+  end
+  object repUsersGrants: TDataSource
+    DataSet = repUsersGrantsData
+    Left = 384
+    Top = 216
+  end
+  object BalAcc: TDataSource
+    DataSet = ODSBalAcc
+    Left = 384
+    Top = 272
+  end
+  object ODSBalAcc: TOracleDataSet
+    SQL.Strings = (
+      'select * from sba_rtsas')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000E000000420041004C005F00410043004300010000000000
+      06000000480041005600010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 472
+    Top = 272
+  end
+  object ODSQuery: TOracleDataSet
+    SQL.Strings = (
+      'select * from sba_rtsas')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000E000000420041004C005F00410043004300010000000000
+      06000000480041005600010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 584
+    Top = 120
+  end
+  object ODSOpTypes: TOracleDataSet
+    SQL.Strings = (
+      'select * from sba_optypes')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000400000049004400010000000000080000004E0041004D00
+      4500010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 472
+    Top = 328
+    object ODSOpTypesID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object ODSOpTypesNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 100
+    end
+  end
+  object opTypes: TDataSource
+    DataSet = ODSOpTypes
+    Left = 384
+    Top = 329
+  end
+  object repAdvGrantData: TOracleDataSet
+    SQL.Strings = (
+      
+        'select moduleid, m.trvdesc modulename, g.description, b.maxavalu' +
+        'e, decode(username, null, '#39'-'#39', '#39'+'#39') hasaccess, username'
+      
+        '  from modules m, sba_advanced_grants g, sba_monetaryborder b, (' +
+        'select * from sba_usergrants_advanced )a'
+      'where username='#39'AKARIMOV'#39
+      ''
+      
+        ' and moduleid = m.id and b.advgrantid(+)=g.id and a.advancedgran' +
+        'tid (+) = g.id'
+      ' order by a.username,'
+      '2, 3'
+      '')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      0500000006000000100000004D004F00440055004C0045004900440001000000
+      0000140000004D004F00440055004C0045004E0041004D004500010000000000
+      160000004400450053004300520049005000540049004F004E00010000000000
+      120000004D00410058004100560041004C005500450001000000000012000000
+      4800410053004100430043004500530053000100000000001000000055005300
+      450052004E0041004D004500010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 568
+    Top = 24
+    object repAdvGrantDataMODULEID: TFloatField
+      FieldName = 'MODULEID'
+      Required = True
+    end
+    object repAdvGrantDataMODULENAME: TWideStringField
+      FieldName = 'MODULENAME'
+      Size = 256
+    end
+    object repAdvGrantDataDESCRIPTION: TWideStringField
+      FieldName = 'DESCRIPTION'
+      Required = True
+      Size = 128
+    end
+    object repAdvGrantDataMAXAVALUE: TFloatField
+      FieldName = 'MAXAVALUE'
+    end
+    object repAdvGrantDataHASACCESS: TWideStringField
+      FieldName = 'HASACCESS'
+      Size = 1
+    end
+    object repAdvGrantDataUSERNAME: TWideStringField
+      FieldName = 'USERNAME'
+      Required = True
+      Size = 128
+    end
+  end
+  object ClsBalAcc: TDataSource
+    DataSet = odsClsBalAcc
+    Left = 48
+    Top = 489
+  end
+  object odsAccFlags: TOracleDataSet
+    SQL.Strings = (
+      
+        'select symbol, description, decode(username,null,0,1) acc from (' +
+        'SELECT username, flagsymb'
+      
+        '  FROM sba_class_flags where username=:ClassName) u, account_fla' +
+        'gs a'
+      '  where u.flagsymb(+)=a.symbol')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000140000003A0043004C004100530053004E0041004D004500
+      050000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      05000000030000000C000000530059004D0042004F004C000100000000001600
+      00004400450053004300520049005000540049004F004E000100000000000600
+      0000410043004300010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 112
+    Top = 441
+    object odsAccFlagsSYMBOL: TWideStringField
+      FieldName = 'SYMBOL'
+      Required = True
+      Size = 1
+    end
+    object odsAccFlagsDESCRIPTION: TWideStringField
+      FieldName = 'DESCRIPTION'
+      Size = 100
+    end
+    object odsAccFlagsACC: TFloatField
+      FieldName = 'ACC'
+    end
+  end
+  object AccFlags: TDataSource
+    DataSet = odsAccFlags
+    Left = 48
+    Top = 441
+  end
+  object odsClsBalAcc: TOracleDataSet
+    SQL.Strings = (
+      
+        'select bal_cn, decode(username,null,0,1) acc, :op optype from (S' +
+        'ELECT username, bal_acc, optype'
+      
+        '  FROM sba_class_balance_acc where username=:classname and optyp' +
+        'e=:op) u, bal_spr1 b'
+      '  where u.bal_acc(+)=b.bal_cn'
+      '  order by bal_cn')
+    Optimize = False
+    Variables.Data = {
+      0400000002000000060000003A004F0050000300000000000000000000001400
+      00003A0043004C004100530053004E0041004D00450005000000000000000000
+      0000}
+    QBEDefinition.QBEFieldDefs = {
+      05000000030000000C000000420041004C005F0043004E000100000000000600
+      00004100430043000100000000000C0000004F00500054005900500045000100
+      00000000}
+    Session = sboapiDataModule.SBSession
+    Left = 112
+    Top = 488
+    object odsClsBalAccBAL_CN: TFloatField
+      FieldName = 'BAL_CN'
+      Required = True
+    end
+    object odsClsBalAccACC: TFloatField
+      FieldName = 'ACC'
+    end
+    object odsClsBalAccOPTYPE: TFloatField
+      FieldName = 'OPTYPE'
+    end
+  end
+  object ClsModAdvGrant: TDataSource
+    DataSet = odsClsModAdvGrant
+    Left = 48
+    Top = 537
+  end
+  object odsClsModAdvGrant: TOracleDataSet
+    SQL.Strings = (
+      'select a.id, a.description, decode (username, null, 0, 1) acc'
+      '  from sba_advanced_grants a, (select *'
+      '                                 from sba_classgrants_advanced'
+      '                                where username = :classname) c'
+      ' where moduleid = :mid and a.id = c.advancedgrantid(+)'
+      '')
+    Optimize = False
+    Variables.Data = {
+      0400000002000000140000003A0043004C004100530053004E0041004D004500
+      050000000000000000000000080000003A004D00490044000300000000000000
+      00000000}
+    QBEDefinition.QBEFieldDefs = {
+      0500000003000000060000004100430043000100000000000400000049004400
+      010000000000160000004400450053004300520049005000540049004F004E00
+      010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 160
+    Top = 536
+    object odsClsModAdvGrantID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object odsClsModAdvGrantDESCRIPTION: TWideStringField
+      FieldName = 'DESCRIPTION'
+      Required = True
+      Size = 128
+    end
+    object odsClsModAdvGrantACC: TFloatField
+      FieldName = 'ACC'
+    end
+  end
+  object ModeditDataX: TOracleDataSet
+    SQL.Strings = (
+      
+        'select o.rowid, m.id, nvl(ins,0) ins, nvl(upd,0) upd, nvl(del,0)' +
+        ' del, can_insert,can_update,can_delete from modules m, (select *' +
+        ' from sba_objmanager where id=:clsid)o'
+      'where o.object(+)=m.description and m.id=:modid')
+    Optimize = False
+    Variables.Data = {
+      04000000020000000C0000003A0043004C005300490044000300000000000000
+      000000000C0000003A004D004F00440049004400030000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      05000000070000000600000049004E0053000100000000000600000055005000
+      440001000000000006000000440045004C000100000000000400000049004400
+      01000000000014000000430041004E005F0049004E0053004500520054000100
+      0000000014000000430041004E005F0055005000440041005400450001000000
+      000014000000430041004E005F00440045004C00450054004500010000000000}
+    CachedUpdates = True
+    Session = sboapiDataModule.SBSession
+    Left = 159
+    Top = 256
+    object ModeditDataXID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object ModeditDataXINS: TFloatField
+      FieldName = 'INS'
+    end
+    object ModeditDataXUPD: TFloatField
+      FieldName = 'UPD'
+    end
+    object ModeditDataXDEL: TFloatField
+      FieldName = 'DEL'
+    end
+    object ModeditDataXCAN_INSERT: TIntegerField
+      FieldName = 'CAN_INSERT'
+    end
+    object ModeditDataXCAN_UPDATE: TIntegerField
+      FieldName = 'CAN_UPDATE'
+    end
+    object ModeditDataXCAN_DELETE: TIntegerField
+      FieldName = 'CAN_DELETE'
+    end
+  end
+  object allqrants: TOracleDataSet
+    SQL.Strings = (
+      'select * from'
+      '(select'
+      '  s.name,'
+      '  s.id as modid,'
+      '  s.trvdesc, '
+      '  decode(s.ModAcc ,1,'#39'+'#39','#39'-'#39') as "Can use",'
+      '  decode(sba.can_insert,1,'#39'+'#39','#39'-'#39') as "Can insert",'
+      '  decode(sba.can_delete,1,'#39'+'#39','#39'+'#39') as "Can Delete",'
+      '  decode(sba.can_update,1,'#39'+'#39','#39'+'#39') as "Can Update"'
+      'from'
+      
+        '  (SELECT u.name,m.id,m.trvdesc,m.description,SB_ACA.checkmodacc' +
+        'ess_int(description,u.name) as ModAcc, '
+      '  sb_aca.isadm_num (u.NAME) AS is_adm  '
+      '  FROM modules m ,user$ u'
+      '  order by u.name) s,'
+      '  sba_usergrants sba'
+      'where'
+      '  s.is_adm<>1 and'
+      '  s.modacc<>0 '
+      '  and  sba.cur_user(+)=UPPER(s.name) '
+      '  and  sba.cur_module (+)=s.description '
+      ''
+      'UNION '
+      ''
+      '  SELECT grantsadv.username as name, '
+      '  grantsMod.moduleid as modid,'
+      '  grantsMod.Advdescription as trvdesc,'
+      '  '#39'+'#39' as "Can Use",null,null,null'
+      '  FROM sba_usergrants_advanced grantsadv,'
+      
+        '  (select modgrants.id advgrantid, modgrants.description Advdesc' +
+        'ription,modgrants.moduleid'
+      '   from sba_advanced_grants modgrants) grantsMod'
+      '   where grantsadv.advancedgrantid=grantsMod.advgrantid'
+      '   and grantsadv.username in '
+      '        (select name from user$)'
+      ') AllGrants'
+      '--where name=:name'
+      '   order by name,trvdesc'
+      '')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 576
+    Top = 232
+  end
+  object clsf: TOracleDataSet
+    SQL.Strings = (
+      
+        'select a.rowid, a.* from sba_objinf a where a.type=:t and a.obj=' +
+        ':cls')
+    Optimize = False
+    Variables.Data = {
+      0400000002000000080000003A0043004C005300050000000000000000000000
+      040000003A005400050000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      0500000013000000040000004900440001000000000008000000540059005000
+      4500010000000000060000004F0042004A000100000000001400000043005200
+      4500410054004500440041005400450001000000000016000000440045005300
+      4300520049005000540049004F004E0001000000000010000000460055004C00
+      4C004E0041004D0045000100000000000A000000500048004F004E0045000100
+      000000000E00000043004C004100530053004900440001000000000010000000
+      460049004C00490041004C00490044000100000000000E000000410044005600
+      5400590050004500010000000000120000005300590053005500530045005200
+      490044000100000000001E00000055005300450052005F004600490052005300
+      54005F004E0041004D0045000100000000001C00000055005300450052005F00
+      4C004100530054005F004E0041004D0045000100000000002000000055005300
+      450052005F004D004900440044004C0045005F004E0041004D00450001000000
+      00001600000055005300450052005F0041004400520045005300530001000000
+      00001400000055005300450052005F00500048004F004E004500010000000000
+      0C000000460049004E004700450052000000000000000E000000460049004E00
+      47004500520032000000000000000E000000460049004E004700450052003300
+      010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 688
+    Top = 24
+    object clsfID: TFloatField
+      FieldName = 'ID'
+    end
+    object clsfTYPE: TWideStringField
+      FieldName = 'TYPE'
+      Size = 1
+    end
+    object clsfOBJ: TWideStringField
+      FieldName = 'OBJ'
+      Size = 56
+    end
+    object clsfCREATEDATE: TDateTimeField
+      FieldName = 'CREATEDATE'
+    end
+    object clsfDESCRIPTION: TWideStringField
+      FieldName = 'DESCRIPTION'
+      Size = 96
+    end
+    object clsfFULLNAME: TWideStringField
+      FieldName = 'FULLNAME'
+      Size = 96
+    end
+    object clsfPHONE: TWideStringField
+      FieldName = 'PHONE'
+      Size = 8
+    end
+    object clsfCLASSID: TFloatField
+      FieldName = 'CLASSID'
+    end
+    object clsfFILIALID: TFloatField
+      FieldName = 'FILIALID'
+    end
+    object clsfADVTYPE: TFloatField
+      FieldName = 'ADVTYPE'
+    end
+    object clsfSYSUSERID: TFloatField
+      FieldName = 'SYSUSERID'
+    end
+    object clsfUSER_FIRST_NAME: TWideStringField
+      FieldName = 'USER_FIRST_NAME'
+      Size = 15
+    end
+    object clsfUSER_LAST_NAME: TWideStringField
+      FieldName = 'USER_LAST_NAME'
+      Size = 15
+    end
+    object clsfUSER_MIDDLE_NAME: TWideStringField
+      FieldName = 'USER_MIDDLE_NAME'
+      Size = 15
+    end
+    object clsfUSER_ADRESS: TWideStringField
+      FieldName = 'USER_ADRESS'
+      Size = 15
+    end
+    object clsfUSER_PHONE: TWideStringField
+      FieldName = 'USER_PHONE'
+      Size = 15
+    end
+    object clsfFINGER: TBlobField
+      FieldName = 'FINGER'
+      BlobType = ftOraBlob
+    end
+    object clsfFINGER2: TBlobField
+      FieldName = 'FINGER2'
+      BlobType = ftOraBlob
+    end
+    object clsfFINGER3: TFloatField
+      FieldName = 'FINGER3'
+    end
+  end
+  object checksynonyms: TOracleDataSet
+    SQL.Strings = (
+      'SELECT   *'
+      '          FROM   dba_synonyms'
+      
+        '         WHERE   owner = UPPER (:usrnm) AND table_name = '#39'FILIAL' +
+        '_T'#39
+      'and synonym_name= '#39'FILIAL'#39)
+    Optimize = False
+    Variables.Data = {
+      04000000010000000C0000003A005500530052004E004D000500000000000000
+      00000000}
+    Session = sboapiDataModule.SBSession
+    Left = 616
+    Top = 424
+  end
+  object AvailableMod: TOracleDataSet
+    SQL.Strings = (
+      
+        'SELECT REPLACE (md.ROLE, '#39'SBR_'#39') CLASS, DECODE (sba.OBJECT, NULL' +
+        ', 0, 1) acc,'
+      
+        '       md.ROWID, m.trvdesc, m.id modid, m.can_insert cni, m.can_' +
+        'update cnu, m.can_delete cnd, ins, upd, del'
+      '  FROM dba_roles md, modules m,'
+      '       (SELECT *'
+      '          FROM sba_objmanager'
+      '         WHERE id = (SELECT id'
+      '                       FROM sba_objinf'
+      
+        '                      WHERE UPPER (TYPE) = '#39'C'#39' AND obj = :NAME) ' +
+        ')sba'
+      
+        ' WHERE (m.description=REPLACE (md.ROLE, '#39'SBR_'#39'))AND(REPLACE (md.' +
+        'ROLE, '#39'SBR_'#39') = sba.OBJECT(+) AND ROLE LIKE ('#39'SBR_%'#39')) and sba.O' +
+        'BJECT is null'
+      'order by trvdesc'
+      '')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000A0000003A004E0041004D00450005000000000000000000
+      0000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000A0000000A00000043004C0041005300530001000000000006000000
+      4100430043000100000000000E00000054005200560044004500530043000100
+      000000000A0000004D004F004400490044000100000000000600000043004E00
+      49000100000000000600000043004E0055000100000000000600000043004E00
+      44000100000000000600000049004E0053000100000000000600000055005000
+      440001000000000006000000440045004C00010000000000}
+    CachedUpdates = True
+    Session = sboapiDataModule.SBSession
+    Left = 792
+    Top = 112
+    object AvailableModCLASS: TWideStringField
+      FieldName = 'CLASS'
+      Size = 30
+    end
+    object AvailableModACC: TFloatField
+      FieldName = 'ACC'
+    end
+    object AvailableModTRVDESC: TWideStringField
+      FieldName = 'TRVDESC'
+      Size = 1024
+    end
+    object AvailableModMODID: TFloatField
+      FieldName = 'MODID'
+      Required = True
+    end
+    object AvailableModCNI: TIntegerField
+      FieldName = 'CNI'
+    end
+    object AvailableModCNU: TIntegerField
+      FieldName = 'CNU'
+    end
+    object AvailableModCND: TIntegerField
+      FieldName = 'CND'
+    end
+    object AvailableModINS: TIntegerField
+      FieldName = 'INS'
+    end
+    object AvailableModUPD: TIntegerField
+      FieldName = 'UPD'
+    end
+    object AvailableModDEL: TIntegerField
+      FieldName = 'DEL'
+    end
+  end
+  object AvailableModDatSrc: TDataSource
+    DataSet = AvailableMod
+    Left = 792
+    Top = 160
+  end
+  object GrantedMod: TOracleDataSet
+    SQL.Strings = (
+      
+        'SELECT REPLACE (md.ROLE, '#39'SBR_'#39') CLASS, DECODE (sba.OBJECT, NULL' +
+        ', 0, 1) acc,'
+      
+        '       md.ROWID, m.trvdesc, m.id modid, m.can_insert cni, m.can_' +
+        'update cnu, m.can_delete cnd, ins, upd, del'
+      '  FROM dba_roles md, modules m,'
+      '       (SELECT *'
+      '          FROM sba_objmanager'
+      '         WHERE id = (SELECT id'
+      '                       FROM sba_objinf'
+      
+        '                      WHERE UPPER (TYPE) = '#39'C'#39' AND obj = :NAME) ' +
+        ')sba'
+      
+        ' WHERE (m.description=REPLACE (md.ROLE, '#39'SBR_'#39'))AND(REPLACE (md.' +
+        'ROLE, '#39'SBR_'#39') = sba.OBJECT(+) AND ROLE LIKE ('#39'SBR_%'#39')) and sba.O' +
+        'BJECT is not null'
+      'order by trvdesc'
+      '')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000A0000003A004E0041004D00450005000000000000000000
+      0000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000A0000000A00000043004C0041005300530001000000000006000000
+      4100430043000100000000000E00000054005200560044004500530043000100
+      000000000A0000004D004F004400490044000100000000000600000043004E00
+      49000100000000000600000043004E0055000100000000000600000043004E00
+      44000100000000000600000049004E0053000100000000000600000055005000
+      440001000000000006000000440045004C00010000000000}
+    CachedUpdates = True
+    Session = sboapiDataModule.SBSession
+    Left = 704
+    Top = 112
+    object WideStringField1: TWideStringField
+      FieldName = 'CLASS'
+      Size = 30
+    end
+    object FloatField1: TFloatField
+      FieldName = 'ACC'
+    end
+    object WideStringField2: TWideStringField
+      FieldName = 'TRVDESC'
+      Size = 1024
+    end
+    object FloatField2: TFloatField
+      FieldName = 'MODID'
+      Required = True
+    end
+    object IntegerField1: TIntegerField
+      FieldName = 'CNI'
+    end
+    object IntegerField2: TIntegerField
+      FieldName = 'CNU'
+    end
+    object IntegerField3: TIntegerField
+      FieldName = 'CND'
+    end
+    object IntegerField4: TIntegerField
+      FieldName = 'INS'
+    end
+    object IntegerField5: TIntegerField
+      FieldName = 'UPD'
+    end
+    object IntegerField6: TIntegerField
+      FieldName = 'DEL'
+    end
+  end
+  object GrantedModDatSrc: TDataSource
+    DataSet = GrantedMod
+    Left = 704
+    Top = 168
+  end
+end

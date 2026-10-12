@@ -1,0 +1,391 @@
+object ADDXML: TADDXML
+  Left = 0
+  Top = 0
+  Width = 1006
+  Height = 562
+  Caption = 'ADDXML'
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  OnCreate = ActiveFormCreate
+  PixelsPerInch = 96
+  TextHeight = 13
+  object XFPanel1: TXFPanel
+    Left = 0
+    Top = 0
+    Width = 1006
+    Height = 58
+    Align = alTop
+    BevelInner = bvLowered
+    BevelKind = bkSoft
+    BevelOuter = bvSpace
+    TabOrder = 0
+    object XFLabel1: TXFLabel
+      Left = 16
+      Top = 17
+      Width = 26
+      Height = 13
+      Caption = 'Ilkin :'
+    end
+    object XFLabel2: TXFLabel
+      Left = 243
+      Top = 17
+      Width = 25
+      Height = 13
+      Caption = 'Son :'
+    end
+    object XFButton1: TXFButton
+      Left = 752
+      Top = 14
+      Width = 75
+      Height = 31
+      Caption = 'Q'#601'bul'
+      DoubleBuffered = True
+      ParentDoubleBuffered = False
+      TabOrder = 0
+      OnClick = XFButton1Click
+    end
+    object XFButton2: TXFButton
+      Left = 848
+      Top = 14
+      Width = 82
+      Height = 31
+      Caption = 'File yarat'
+      DoubleBuffered = True
+      ParentDoubleBuffered = False
+      TabOrder = 1
+    end
+    object DBLookupComboBox1: TDBLookupComboBox
+      Left = 53
+      Top = 14
+      Width = 145
+      Height = 21
+      TabOrder = 2
+    end
+    object DBLookupComboBox2: TDBLookupComboBox
+      Left = 281
+      Top = 14
+      Width = 145
+      Height = 21
+      TabOrder = 3
+    end
+  end
+  object XFPanel2: TXFPanel
+    Left = 0
+    Top = 58
+    Width = 1006
+    Height = 504
+    Align = alClient
+    BevelInner = bvLowered
+    BevelKind = bkSoft
+    BevelOuter = bvSpace
+    TabOrder = 1
+    object XDBGrid1: TXDBGrid
+      Left = 2
+      Top = 2
+      Width = 998
+      Height = 496
+      Align = alClient
+      GridStyle.VisualStyle = vsXPStyle
+      TabOrder = 0
+    end
+  end
+  object ods_kreditxml: TOracleDataSet
+    SQL.Strings = (
+      'select rownum,f.name filial,b.name,b.boorowerid'
+      ','
+      
+        'case when c.cust_type=0 then (select(select name from customers ' +
+        'where id=custid2)  from customers_relations where custid=c.id an' +
+        'd work_post=2)/*mudur idisi*/end mudr,'
+      
+        'case when c.cust_type=0 then (select(select name from customers ' +
+        'where id=custid2)  from customers_relations where custid=c.id an' +
+        'd work_post=3)/*tesisci idisi*/end tesici,'
+      #39'Bir-biri il? ?laq?li borcalanlar uzr? qrup kodu'#39','
+      
+        'case when(select  prinad from customers_relations where custid2=' +
+        'p.boorowerid  )>0 then '#39'he'#39' else '#39'Yox'#39' end  tip,'#39'?m?liyyat?n xar' +
+        'akteri'#39','
+      
+        'p.dateofconclusion,p.dateofconclusion,p.duedatelastcontract,(sel' +
+        'ect count(*)from cm_prolongations where id=p.id)uzadilmasayi,v.v' +
+        'al_name,p.annualyinterestrate,'
+      
+        'p.creditlineamount,h.rest, h.obligation,h.duerest,h.interestrest' +
+        '+h.dueinterestrest cemfaiz ,h.interestrest,h.dueinterestrest,h.p' +
+        'enaltyrest,'
+      
+        'cm_utils.Get_creditPlanPrincipal(p.id,sbop.get_date),cm_utils.Ge' +
+        't_creditPlaninterest(p.id,sbop.get_date),'
+      
+        '(select  max(paydate) from cm_payments   where creditid=p.id) op' +
+        'dtarix,'
+      
+        ' (select sum(payedamt+payedintamt+payeddueamt+payeddueintamt+pay' +
+        'edpenaltyamt )pay from cm_payments  where '
+      
+        '  paydate =(select max(paydate)from cm_payments where creditid=p' +
+        '.id) and creditid=p.id) odmeb,h.dueday,h.dueday,e1.percent,h.res' +
+        'erverest, e2.percent,h.reserveintrest,'
+      
+        '  case when  (select count(*) from cm_prolongations where trance' +
+        'id is not null and creditid=p.id)=0 then '#39'Yox'#39' else '#39'He'#39' end as ' +
+        'res,'
+      
+        '  (select max(prolongdate) from cm_prolongations where tranceid ' +
+        'is not null and creditid=p.id)resdat,'
+      
+        '  (select count(*) from cm_prolongations where tranceid is not n' +
+        'ull and creditid=p.id)ressay,(select name from cust_quality wher' +
+        'e id=c.quality_id)kefiyyet'
+      
+        '  , case when g.pledgeid=3 then g.pledgeprice else 0 end as g1, ' +
+        'case when g.pledgeid=25 then g.pledgeprice else 0 end as g2'
+      
+        '  , case when g.pledgeid=6 then g.pledgeprice else 0 end as g3 ,' +
+        ' case when g.pledgeid=4 then g.pledgeprice else 0 end as g4   '
+      
+        '  , case when g.pledgeid=5 then g.pledgeprice else 0 end as g5, ' +
+        'case when g.pledgeid=2 then g.pledgeprice else 0 end as g6  ,g.p' +
+        'ledgeprice,pg.description,t.description,ca.description,p.purpose' +
+        'ofcredit'
+      
+        ' from cm_active_credits p,filial f,cm_boorowerinfo b,customers c' +
+        ',avalute_t v,cm_curr_state h,'
+      
+        ' cm_reserve_types e1,cm_reserve_types e2,cm_guarantee g,cm_pledg' +
+        'es pg,cm_credittypes t,cm_categories ca'
+      ''
+      'where p.branchid=f.id and'
+      'p.id=b.creditid and'
+      'p.id=g.creditid(+) and'
+      ' pg.id=g.pledgeid and'
+      'c.id=p.boorowerid and'
+      'p.currency=v.valute and'
+      'p.id=h.creditid and'
+      'h.reserveid=e1.id and'
+      'h.duereserveid=e2.id and '
+      't.id=p.credittype and'
+      'ca.id=p.customertype and p.id in(65766,46515,66514,59319,34477)')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000300000000C00000052004F0057004E0055004D000100000000000C00
+      0000460049004C00490041004C00010000000000080000004E0041004D004500
+      0100000000001400000042004F004F0052004F00570045005200490044000100
+      00000000080000004D005500440052000100000000000C000000540045005300
+      4900430049000100000000003C00000027004200490052002D00420049005200
+      490049004C003F003F004C00410051003F004C00490042004F00520043004100
+      4C0041004E004C00410052000100000000000600000054004900500001000000
+      00002C00000027003F004D003F004C00490059005900410054003F004E005800
+      4100520041004B00540045005200490027000100000000002000000044004100
+      540045004F00460043004F004E0043004C005500530049004F004E0001000000
+      00002400000044004100540045004F00460043004F004E0043004C0055005300
+      49004F004E005F00310001000000000026000000440055004500440041005400
+      45004C0041005300540043004F004E0054005200410043005400010000000000
+      1800000055005A004100440049004C004D004100530041005900490001000000
+      000010000000560041004C005F004E0041004D00450001000000000026000000
+      41004E004E00550041004C00590049004E005400450052004500530054005200
+      410054004500010000000000200000004300520045004400490054004C004900
+      4E00450041004D004F0055004E00540001000000000008000000520045005300
+      5400010000000000140000004F0042004C00490047004100540049004F004E00
+      0100000000000E00000044005500450052004500530054000100000000000E00
+      0000430045004D004600410049005A000100000000001800000049004E005400
+      4500520045005300540052004500530054000100000000001E00000044005500
+      450049004E005400450052004500530054005200450053005400010000000000
+      16000000500045004E0041004C00540059005200450053005400010000000000
+      3C00000043004D005F005500540049004C0053002E004700450054005F004300
+      5200450044004900540050004C0041004E005000520049004E00430049005000
+      0100000000003C00000043004D005F005500540049004C0053002E0047004500
+      54005F0043005200450044004900540050004C0041004E0049004E0054004500
+      520045005300010000000000100000004F005000440054004100520049005800
+      0100000000000A0000004F0044004D00450042000100000000000C0000004400
+      5500450044004100590001000000000010000000440055004500440041005900
+      5F0031000100000000000E000000500045005200430045004E00540001000000
+      0000160000005200450053004500520056004500520045005300540001000000
+      000012000000500045005200430045004E0054005F0031000100000000001C00
+      0000520045005300450052005600450049004E00540052004500530054000100
+      00000000060000005200450053000100000000000C0000005200450053004400
+      410054000100000000000C000000520045005300530041005900010000000000
+      100000004B004500460049005900590045005400010000000000040000004700
+      3100010000000000040000004700320001000000000004000000470033000100
+      0000000004000000470034000100000000000400000047003500010000000000
+      04000000470036000100000000001600000050004C0045004400470045005000
+      5200490043004500010000000000160000004400450053004300520049005000
+      540049004F004E000100000000001A0000004400450053004300520049005000
+      540049004F004E005F0031000100000000001A00000044004500530043005200
+      49005000540049004F004E005F0032000100000000001E000000500055005200
+      50004F00530045004F004600430052004500440049005400010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 104
+    Top = 136
+    object ods_kreditxmlROWNUM: TFloatField
+      FieldName = 'ROWNUM'
+    end
+    object ods_kreditxmlFILIAL: TWideStringField
+      FieldName = 'FILIAL'
+      Size = 360
+    end
+    object ods_kreditxmlNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 256
+    end
+    object ods_kreditxmlBOOROWERID: TWideStringField
+      FieldName = 'BOOROWERID'
+      Size = 128
+    end
+    object ods_kreditxmlMUDR: TWideStringField
+      FieldName = 'MUDR'
+      Size = 360
+    end
+    object ods_kreditxmlTESICI: TWideStringField
+      FieldName = 'TESICI'
+      Size = 360
+    end
+    object ods_kreditxmlBIRBIRIILLAQLIBORCALANLAR: TWideStringField
+      FieldName = #39'BIR-BIRIIL??LAQ?LIBORCALANLAR'
+      Size = 128
+    end
+    object ods_kreditxmlTIP: TWideStringField
+      FieldName = 'TIP'
+      Size = 3
+    end
+    object ods_kreditxmlMLIYYATNXARAKTERI: TWideStringField
+      FieldName = #39'?M?LIYYAT?NXARAKTERI'#39
+      Size = 32
+    end
+    object ods_kreditxmlDATEOFCONCLUSION: TDateTimeField
+      FieldName = 'DATEOFCONCLUSION'
+    end
+    object ods_kreditxmlDATEOFCONCLUSION_1: TDateTimeField
+      FieldName = 'DATEOFCONCLUSION_1'
+    end
+    object ods_kreditxmlDUEDATELASTCONTRACT: TDateTimeField
+      FieldName = 'DUEDATELASTCONTRACT'
+    end
+    object ods_kreditxmlUZADILMASAYI: TFloatField
+      FieldName = 'UZADILMASAYI'
+    end
+    object ods_kreditxmlVAL_NAME: TWideStringField
+      FieldName = 'VAL_NAME'
+      Size = 160
+    end
+    object ods_kreditxmlANNUALYINTERESTRATE: TFloatField
+      FieldName = 'ANNUALYINTERESTRATE'
+    end
+    object ods_kreditxmlCREDITLINEAMOUNT: TFloatField
+      FieldName = 'CREDITLINEAMOUNT'
+    end
+    object ods_kreditxmlREST: TFloatField
+      FieldName = 'REST'
+    end
+    object ods_kreditxmlOBLIGATION: TFloatField
+      FieldName = 'OBLIGATION'
+    end
+    object ods_kreditxmlDUEREST: TFloatField
+      FieldName = 'DUEREST'
+    end
+    object ods_kreditxmlCEMFAIZ: TFloatField
+      FieldName = 'CEMFAIZ'
+    end
+    object ods_kreditxmlINTERESTREST: TFloatField
+      FieldName = 'INTERESTREST'
+    end
+    object ods_kreditxmlDUEINTERESTREST: TFloatField
+      FieldName = 'DUEINTERESTREST'
+    end
+    object ods_kreditxmlPENALTYREST: TFloatField
+      FieldName = 'PENALTYREST'
+    end
+    object ods_kreditxmlCM_UTILSGET_CREDITPLANPRINCIP: TFloatField
+      FieldName = 'CM_UTILS.GET_CREDITPLANPRINCIP'
+    end
+    object ods_kreditxmlCM_UTILSGET_CREDITPLANINTERES: TFloatField
+      FieldName = 'CM_UTILS.GET_CREDITPLANINTERES'
+    end
+    object ods_kreditxmlOPDTARIX: TDateTimeField
+      FieldName = 'OPDTARIX'
+    end
+    object ods_kreditxmlODMEB: TFloatField
+      FieldName = 'ODMEB'
+    end
+    object ods_kreditxmlDUEDAY: TFloatField
+      FieldName = 'DUEDAY'
+    end
+    object ods_kreditxmlDUEDAY_1: TFloatField
+      FieldName = 'DUEDAY_1'
+    end
+    object ods_kreditxmlPERCENT: TFloatField
+      FieldName = 'PERCENT'
+    end
+    object ods_kreditxmlRESERVEREST: TFloatField
+      FieldName = 'RESERVEREST'
+    end
+    object ods_kreditxmlPERCENT_1: TFloatField
+      FieldName = 'PERCENT_1'
+    end
+    object ods_kreditxmlRESERVEINTREST: TFloatField
+      FieldName = 'RESERVEINTREST'
+    end
+    object ods_kreditxmlRES: TWideStringField
+      FieldName = 'RES'
+      Size = 3
+    end
+    object ods_kreditxmlRESDAT: TDateTimeField
+      FieldName = 'RESDAT'
+    end
+    object ods_kreditxmlRESSAY: TFloatField
+      FieldName = 'RESSAY'
+    end
+    object ods_kreditxmlKEFIYYET: TWideStringField
+      FieldName = 'KEFIYYET'
+      Size = 100
+    end
+    object ods_kreditxmlG1: TFloatField
+      FieldName = 'G1'
+    end
+    object ods_kreditxmlG2: TFloatField
+      FieldName = 'G2'
+    end
+    object ods_kreditxmlG3: TFloatField
+      FieldName = 'G3'
+    end
+    object ods_kreditxmlG4: TFloatField
+      FieldName = 'G4'
+    end
+    object ods_kreditxmlG5: TFloatField
+      FieldName = 'G5'
+    end
+    object ods_kreditxmlG6: TFloatField
+      FieldName = 'G6'
+    end
+    object ods_kreditxmlPLEDGEPRICE: TFloatField
+      FieldName = 'PLEDGEPRICE'
+    end
+    object ods_kreditxmlDESCRIPTION: TWideStringField
+      FieldName = 'DESCRIPTION'
+      Size = 256
+    end
+    object ods_kreditxmlDESCRIPTION_1: TWideStringField
+      FieldName = 'DESCRIPTION_1'
+      Size = 512
+    end
+    object ods_kreditxmlDESCRIPTION_2: TWideStringField
+      FieldName = 'DESCRIPTION_2'
+      Size = 1600
+    end
+    object ods_kreditxmlPURPOSEOFCREDIT: TWideStringField
+      FieldName = 'PURPOSEOFCREDIT'
+      Size = 300
+    end
+  end
+  object Dsrc_kreditxml: TDataSource
+    DataSet = ods_kreditxml
+    Left = 112
+    Top = 192
+  end
+end

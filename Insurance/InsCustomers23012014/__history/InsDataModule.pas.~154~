@@ -1,0 +1,839 @@
+﻿unit InsDataModule;
+   //ODSContracts
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, OracleData, Oracle;
+
+
+
+
+type
+  TInsDataMod = class(TDataModule)
+    DSInsCustomers: TDataSource;
+    ODSInsCustomers: TOracleDataSet;
+    DSCustomers: TDataSource;
+    ODSCustomers: TOracleDataSet;
+    ODSCustomersID: TIntegerField;
+    ODSCustomersNAME: TWideStringField;
+    ODSInsCustomersID: TIntegerField;
+    ODSInsCustomersCUST_ID: TIntegerField;
+    ODSInsCustomersNAME: TWideStringField;
+    ODSInsCustomersSURNAME: TWideStringField;
+    ODSInsCustomersFATHERNAME: TWideStringField;
+    ODSInsCustomersHOMEPHONE: TWideStringField;
+    ODSInsCustomersWORKPHONE: TWideStringField;
+    ODSInsCustomersFAX: TWideStringField;
+    ODSInsCustomersADDRESS: TWideStringField;
+    ODSAccount: TOracleDataSet;
+    ODSAccountID: TFloatField;
+    ODSAccountKLI_ID: TFloatField;
+    ODSAccountOP_ID: TFloatField;
+    ODSAccountACC_NO: TWideStringField;
+    ODSAccountVAL_ACC: TIntegerField;
+    ODSAccountNAME: TWideStringField;
+    ODSAccountOPEN_DAT: TDateTimeField;
+    ODSAccountCLOSE_DAT: TDateTimeField;
+    ODSAccountSTATUS: TFloatField;
+    ODSAccountBAL_CN1: TFloatField;
+    ODSAccountBAL_CN2: TFloatField;
+    ODSAccountBAL_CN3: TFloatField;
+    ODSAccountBAL_CN4: TFloatField;
+    ODSAccountFILIAL: TIntegerField;
+    ODSAccountSIM_OTCET: TFloatField;
+    ODSAccountTIPACC: TWideStringField;
+    ODSAccountLIMIT: TFloatField;
+    ODSAccountOLD_ACC_NO: TWideStringField;
+    ODSAccountPAIR_ACC: TFloatField;
+    ODSAccountINSIDER: TWideStringField;
+    DSAccount: TDataSource;
+    BalAcc: TOracleDataSet;
+    BalAccBAL_CN: TWideStringField;
+    BalAccBALNAME: TWideStringField;
+    BalAccData: TDataSource;
+    Currency: TOracleDataSet;
+    CurrencyData: TDataSource;
+    Tenostat: TOracleDataSet;
+    TenostatOSTAT: TFloatField;
+    TenostatPOK_OSTAT: TFloatField;
+    TenostatACC_ID: TFloatField;
+    DataTenostat: TDataSource;
+    PairAccount: TOracleDataSet;
+    PairAccountData: TDataSource;
+    ODSAccountVAL_NAME: TWideStringField;
+    CurrencyVALUTE: TIntegerField;
+    CurrencyVAL_NAME: TWideStringField;
+    CurrencyVALU_NAME: TWideStringField;
+    CurrencyVALU_SHORT: TWideStringField;
+    ODSAccountOWNID: TFloatField;
+    ODSContracts: TOracleDataSet;
+    DSContracts: TDataSource;
+    ODSInsurances: TOracleDataSet;
+    DSInsurances: TDataSource;
+    ODSInsurancesID: TIntegerField;
+    ODSInsurancesNAME: TWideStringField;
+    ODSInsurancesCHANGEGUID: TWideStringField;
+    OPINS: TOraclePackage;
+    ODSInsCustomersDATEOFBIRTH: TDateTimeField;
+    ODSInsCustomersPLACEOFBIRTH: TWideStringField;
+    ODSInsCustomersAGE: TIntegerField;
+    ODSInsCustomersSEX: TIntegerField;
+    ODSInsCustomersPASPORTNO: TWideStringField;
+    ODSInsCustomersMS_ID: TIntegerField;
+    ODSInsCustomersCITY: TWideStringField;
+    ODSInsCustomersINDEX_: TWideStringField;
+    ODSInsCustomersMAILINGADDRESS: TWideStringField;
+    ODSInsCustomersOCC_ID: TIntegerField;
+    ODSInsCustomersED_ID: TIntegerField;
+    ODSInsCustomersSTATE: TWideStringField;
+    DSOccupations: TDataSource;
+    ODSOccupations: TOracleDataSet;
+    ODSEducations: TOracleDataSet;
+    DSEducations: TDataSource;
+    ODSInsCustomersACT_ID: TIntegerField;
+    ODSInsCustomersCONTACTPERSON: TWideStringField;
+    DSActivity: TDataSource;
+    ODSActivity: TOracleDataSet;
+    ODSContractsID: TFloatField;
+    ODSContractsKLI_ID: TFloatField;
+    ODSContractsNAME: TWideStringField;
+    ODSContractsMAINFORMGUID: TWideStringField;
+    ODSContractsCHANGEGUID: TWideStringField;
+    ODSContractsSUGGESTIONGUID: TWideStringField;
+    ODSContractsPOLICYGUID: TWideStringField;
+    ODSContractsTABLENAME: TWideStringField;
+    ODSAcc_types: TOracleDataSet;
+    DSAcc_types: TDataSource;
+    ODSBal_cn: TOracleDataSet;
+    DSBal_cn: TDataSource;
+    ODSAcc_typesID: TFloatField;
+    ODSAcc_typesNAME: TWideStringField;
+    ODSBal_cnDICT_ID: TFloatField;
+    ODSBal_cnBAL_CN: TFloatField;
+    ODSLoanAccLists: TOracleDataSet;
+    DSLoanAccLists: TDataSource;
+    ODSContractsLOANACC_ID: TFloatField;
+    ODSContractsCURRACC_ID: TFloatField;
+    ODSCurrAccList: TOracleDataSet;
+    DSCurrAccList: TDataSource;
+    ODSLoanAccListsID: TFloatField;
+    ODSLoanAccListsACC_NO: TWideStringField;
+    ODSLoanAccListsBAL_CN1: TFloatField;
+    ODSCurrAccListID: TFloatField;
+    ODSCurrAccListACC_NO: TWideStringField;
+    ODSCurrAccListBAL_CN1: TFloatField;
+    ODSCurrAccListNAME: TWideStringField;
+    ODSLoanAccListsNAME: TWideStringField;
+    OPCOMMON: TOraclePackage;
+    ODSContractsPOLICY_NUM: TWideStringField;
+    ODSContractsINS_DATE: TDateTimeField;
+    ODSContractsSUGGESTION: TWideStringField;
+    ODSPayPlan: TOracleDataSet;
+    DSPayPlan: TDataSource;
+    ODSContractsAMMOUNT: TFloatField;
+    ODSContractsBEGIN_DATE: TDateTimeField;
+    ODSContractsEND_DATE: TDateTimeField;
+    ODSAgents: TOracleDataSet;
+    DSAgents: TDataSource;
+    ODSBeneficiary: TOracleDataSet;
+    DSBeneficiary: TDataSource;
+    ODSBeneficiaryID: TFloatField;
+    ODSBeneficiaryNAME: TWideStringField;
+    ODSBeneficiaryADDRESS: TWideStringField;
+    ODSBeneficiaryPHONE: TWideStringField;
+    ODSBeneficiaryBANKING_DETAILS: TWideStringField;
+    ODSAgentsID: TFloatField;
+    ODSAgentsNAME: TWideStringField;
+    ODSAgentsSURNAME: TWideStringField;
+    ODSAgentsFATHERNAME: TWideStringField;
+    ODSInsCustomersCONTACTPERSONPHONE: TWideStringField;
+    ODSPayPlanID: TFloatField;
+    ODSPayPlanPAY_DATE: TDateTimeField;
+    ODSPayPlanAMMOUNT: TFloatField;
+    ODSPayPlanSTATUS: TIntegerField;
+    ODSPayPlanINS_ID: TFloatField;
+    ODSPayPlanISPAYED: TWideStringField;
+    ODSStates: TOracleDataSet;
+    ODSTariffs: TOracleDataSet;
+    DSStates: TDataSource;
+    DSTariffs: TDataSource;
+    ODSBankm: TOracleDataSet;
+    DSBankm: TDataSource;
+    ODSBankmID: TFloatField;
+    ODSBankmNAME: TWideStringField;
+    ODSStatesID: TFloatField;
+    ODSStatesNAME: TWideStringField;
+    ODSAccountOSTAT: TFloatField;
+    ODSAccountPOK_OSTAT: TFloatField;
+    Sysdat: TOracleDataSet;
+    SysdatTEK_DAT: TDateTimeField;
+    ODSTarifStates: TOracleDataSet;
+    ODSTarifStatesID: TFloatField;
+    ODSTarifStatesBANK_ID: TFloatField;
+    ODSTarifStatesSTATE_ID: TFloatField;
+    DSTarifStates: TDataSource;
+    ODSReportSymbols: TOracleDataSet;
+    DSReportSymbols: TDataSource;
+    ODSMonths: TOracleDataSet;
+    DSMonths: TDataSource;
+    ODSFranshiza: TOracleDataSet;
+    DSFranshiza: TDataSource;
+    ODSFranshizaID: TFloatField;
+    ODSFranshizaMONTH_ID: TFloatField;
+    ODSFranshizaAMMOUNT: TFloatField;
+    ODSTariffsID: TFloatField;
+    ODSTariffsFRANSHIZ_ID: TFloatField;
+    ODSTariffsAMMOUNT: TFloatField;
+    ODSMonthsID: TFloatField;
+    ODSMonthsRELEASE_ID: TFloatField;
+    ODSMonthsCOUNT: TFloatField;
+    ODSTarifStatesStates: TWideStringField;
+    ODSBranches: TOracleDataSet;
+    ODSBranchesID: TFloatField;
+    ODSBranchesNAME: TWideStringField;
+    DSBranches: TDataSource;
+    ODSInsCustomersCLOSE_PREFIX: TIntegerField;
+    ODSContractsVAL_NAME: TWideStringField;
+    ODSContractsINSSUMM: TFloatField;
+    ODSContractsTARIFF: TFloatField;
+    ODSContractsFRANSHIZ: TFloatField;
+    ODSContractsSTATE: TIntegerField;
+    ODSContractsTYPE_ID: TFloatField;
+    ODSInsCustomersINSURED_TYPEID: TIntegerField;
+    ODSInsurancesLOAN_BAL_CN: TFloatField;
+    ODSInsurancesCURR_BAL_CN: TFloatField;
+    ODSReleaseDate: TOracleDataSet;
+    FloatField1: TFloatField;
+    DateTimeField1: TDateTimeField;
+    DateTimeField2: TDateTimeField;
+    FloatField2: TFloatField;
+    DSReleaseDate: TDataSource;
+    ODSReportSymbolsID: TFloatField;
+    ODSReportSymbolsNAME: TWideStringField;
+    DSCustTypes: TDataSource;
+    ODSCustTypes: TOracleDataSet;
+    ODSPolicyNums: TOracleDataSet;
+    DSPolicyNums: TDataSource;
+    ODSCustTypesNAME: TWideStringField;
+    ODSInsurancesPROFIT_ACC_ID: TFloatField;
+    ODSAccList: TOracleDataSet;
+    DSAccList: TDataSource;
+    ODSInsurancesAcc_list: TWideStringField;
+    ODSPolicyNumsTYPEID: TFloatField;
+    ODSPolicyNumsCOUNTS: TFloatField;
+    ODSPolicyNumsFORMAT: TWideStringField;
+    ODSPolicyNumsPREFIX: TWideStringField;
+    ODSCustTypesID: TFloatField;
+    ODSInsCustomersMOBILEPHONE: TWideStringField;
+    ODSPolicyNumsICOUNTS: TFloatField;
+    ODSPolicyNumsCCOUNTS: TFloatField;
+    ODSPolicyNumsID: TIntegerField;
+    ODSPolicyNumsNAME: TWideStringField;
+    ODSInsCustomersPASSER: TWideStringField;
+    OdsDoctaypes: TOracleDataSet;
+    DsrcDoctaypes: TDataSource;
+    OdsDoctaypesID: TFloatField;
+    OdsDoctaypesNAME: TWideStringField;
+    OdsDoctaypesSYMBOL: TWideStringField;
+    OdsDoctaypesSERIES: TWideStringField;
+    OdsDoctaypesPINCODFORCED: TIntegerField;
+    OdsDoctaypesFORDOCTYPES: TIntegerField;
+    ODSInsCustomersDOCUMENT_TYPE: TFloatField;
+    ODSInsCustomersINN: TWideStringField;
+    ODSInsCustomersFULLNAME: TWideStringField;
+    ODSInsCustomersENTER_DATE: TDateTimeField;
+    DSCust_Type: TOracleDataSet;
+    DSRCust_Type: TDataSource;
+    DSCust_TypeID: TFloatField;
+    DSCust_TypeNAME: TWideStringField;
+    DSRActivity_f: TDataSource;
+    DSActivity_f: TOracleDataSet;
+    DSActivity_fID: TFloatField;
+    DSActivity_fNAME: TWideStringField;
+    DSRSex_type: TDataSource;
+    DSSex_type: TOracleDataSet;
+    DSSex_typeID: TFloatField;
+    DSSex_typeNAME: TWideStringField;
+    DSRins_insurances: TDataSource;
+    DSins_insurances: TOracleDataSet;
+    DSins_insurancesID: TIntegerField;
+    DSins_insurancesNAME: TWideStringField;
+    DSins_insurancesMAINFORMNAME: TWideStringField;
+    DSins_insurancesMAINFORMGUID: TWideStringField;
+    DSins_insurancesCHANGEGUID: TWideStringField;
+    DSins_insurancesSUGGESTIONGUID: TWideStringField;
+    DSins_insurancesPOLICYGUID: TWideStringField;
+    DSins_insurancesLOAN_BAL_CN: TFloatField;
+    DSins_insurancesCURR_BAL_CN: TFloatField;
+    DSins_insurancesPREFIX: TWideStringField;
+    DSins_insurancesPROFIT_ACC_ID: TFloatField;
+    DSRCust_Ins: TDataSource;
+    DSCust_Ins: TOracleDataSet;
+    DSCust_InsID: TIntegerField;
+    DSCust_InsNAME: TWideStringField;
+    ODSInsCustomersMAIL: TWideStringField;
+    DScountries: TOracleDataSet;
+    DScities: TOracleDataSet;
+    DSRcountries: TDataSource;
+    DSRcities: TDataSource;
+    DScountriesID: TFloatField;
+    DScountriesCNTR_NAME: TWideStringField;
+    DScountriesCNTR_CODE: TIntegerField;
+    DScountriesSYMB: TWideStringField;
+    DScountriesALFA1: TWideStringField;
+    DScountriesALFA2: TWideStringField;
+    DScountriesPHONE_CODE: TIntegerField;
+    DScountriesCURRENCY: TWideStringField;
+    DScountriesCUR_SYMB: TWideStringField;
+    ODSInsCustomersSTATE_ID: TFloatField;
+    ODSInsCustomersCITY_ID: TFloatField;
+    DSins_insurances_acc: TOracleDataSet;
+    DSins_insurances_accID: TIntegerField;
+    DSins_insurances_accNAME: TWideStringField;
+    DSins_insurances_accMAINFORMNAME: TWideStringField;
+    DSins_insurances_accMAINFORMGUID: TWideStringField;
+    DSins_insurances_accCHANGEGUID: TWideStringField;
+    DSins_insurances_accSUGGESTIONGUID: TWideStringField;
+    DSins_insurances_accPOLICYGUID: TWideStringField;
+    DSins_insurances_accLOAN_BAL_CN: TFloatField;
+    DSins_insurances_accCURR_BAL_CN: TFloatField;
+    DSins_insurances_accPREFIX: TWideStringField;
+    DSins_insurances_accPROFIT_ACC_ID: TFloatField;
+    DSContract: TOracleDataSet;
+    DSContractID: TFloatField;
+    DSContractTYPE_ID: TFloatField;
+    DSContractINS_DATE: TDateTimeField;
+    DSContractBEGIN_DATE: TDateTimeField;
+    DSContractEND_DATE: TDateTimeField;
+    DSContractVALUTE_ID: TFloatField;
+    DSContractAMMOUNT: TFloatField;
+    DSContractCLOSE_PREFIX: TIntegerField;
+    DSContractKLI_ID: TFloatField;
+    DSContractLOANACC_ID: TFloatField;
+    DSContractCURRACC_ID: TFloatField;
+    DSContractPOLICY_NUM: TWideStringField;
+    DSContractINSSUMM: TFloatField;
+    DSContractFRANSHIZ: TFloatField;
+    DSContractTARIFF: TFloatField;
+    DSContractSTATE: TIntegerField;
+    DSContractAGENT_ID: TFloatField;
+    DSContractPNUM: TFloatField;
+    DSContractBEN_ID: TFloatField;
+    DSContractBENEFICIARY: TWideStringField;
+    DSContractCONDITIONS: TWideStringField;
+    DSContractSUGNUM: TWideStringField;
+    DSContractBLANK_ID: TFloatField;
+    Psbop: TOraclePackage;
+    sb_aca: TOraclePackage;
+    ODSInsurancesMAINFORMNAME: TWideStringField;
+    ODSInsurancesMAINFORMGUID: TWideStringField;
+    ODSInsurancesSUGGESTIONGUID: TWideStringField;
+    ODSInsurancesPOLICYGUID: TWideStringField;
+    ODSInsurancesPREFIX: TWideStringField;
+    ODSInsurancesOBEYKT_TYPE: TWideStringField;
+    DSins_insur: TOracleDataSet;
+    DSins_insurID: TIntegerField;
+    DSins_insurNAME: TWideStringField;
+    DSins_insurMAINFORMNAME: TWideStringField;
+    DSins_insurMAINFORMGUID: TWideStringField;
+    DSins_insurCHANGEGUID: TWideStringField;
+    DSins_insurSUGGESTIONGUID: TWideStringField;
+    DSins_insurPOLICYGUID: TWideStringField;
+    DSins_insurLOAN_BAL_CN: TFloatField;
+    DSins_insurCURR_BAL_CN: TFloatField;
+    DSins_insurPREFIX: TWideStringField;
+    DSins_insurPROFIT_ACC_ID: TFloatField;
+    DSins_insurOBEYKT_TYPE: TWideStringField;
+    ODSContractsCLOSE_PREFIX: TIntegerField;
+    DSCustomersIndividual: TOracleDataSet;
+    DSCustomersIndividualAD: TWideStringField;
+    DSCustomersIndividualSOYAD: TWideStringField;
+    DSCustomersIndividualATAADI: TWideStringField;
+    DSCustomersIndividualSERIYA: TWideStringField;
+    DSCustomersIndividualSERIYANO: TWideStringField;
+    DSCustomersIndividualCINSI: TIntegerField;
+    DSCustomersIndividualVOIN: TWideStringField;
+    DSCustomersIndividualTEVELLUD: TDateTimeField;
+    DSCustomersIndividualQEYDIYYATUNVANI: TWideStringField;
+    DSCustomersIndividualFAKTIKIUNVAN: TWideStringField;
+    DSCustomersIndividualMAIL: TWideStringField;
+    DSCustomersIndividualISTEL: TWideStringField;
+    DSCustomersIndividualEVTEL: TWideStringField;
+    DSCustomersIndividualMOBTEL: TWideStringField;
+    DSCustomersIndividualCUST_TYPE: TIntegerField;
+    DSRdict_emp_acc: TDataSource;
+    DSdict_emp_acc: TOracleDataSet;
+    DSRservic: TDataSource;
+    DSservic: TOracleDataSet;
+    DSservicID: TFloatField;
+    DSservicNAME: TWideStringField;
+    DSRins_dict_companie: TDataSource;
+    DSins_dict_companie: TOracleDataSet;
+    DSins_dict_companieID: TFloatField;
+    DSins_dict_companieNAME: TWideStringField;
+    DSRdict_med_institut: TDataSource;
+    DSdict_med_institut: TOracleDataSet;
+    DSdict_med_institutID: TFloatField;
+    DSdict_med_institutNAME: TWideStringField;
+    ODSContractsCOMMITOP_ID: TFloatField;
+    ODSContractsCOMMIT_DATE: TDateTimeField;
+    ODSContractsCANCELOPID: TFloatField;
+    ODSContractsCANCELDATE: TDateTimeField;
+    DSRplancontract: TDataSource;
+    DSplancontract: TOracleDataSet;
+    DSplancontractID: TFloatField;
+    DSplancontractTYPE_ID: TFloatField;
+    DSplancontractINS_DATE: TDateTimeField;
+    DSplancontractBEGIN_DATE: TDateTimeField;
+    DSplancontractEND_DATE: TDateTimeField;
+    DSplancontractVALUTE_ID: TFloatField;
+    DSplancontractAMMOUNT: TFloatField;
+    DSplancontractCLOSE_PREFIX: TIntegerField;
+    DSplancontractKLI_ID: TFloatField;
+    DSplancontractLOANACC_ID: TFloatField;
+    DSplancontractCURRACC_ID: TFloatField;
+    DSplancontractPOLICY_NUM: TWideStringField;
+    DSplancontractINSSUMM: TFloatField;
+    DSplancontractFRANSHIZ: TFloatField;
+    DSplancontractTARIFF: TFloatField;
+    DSplancontractSTATE: TIntegerField;
+    DSplancontractAGENT_ID: TFloatField;
+    DSplancontractPNUM: TFloatField;
+    DSplancontractBEN_ID: TFloatField;
+    DSplancontractBENEFICIARY: TWideStringField;
+    DSplancontractCONDITIONS: TWideStringField;
+    DSplancontractSUGNUM: TWideStringField;
+    DSplancontractBLANK_ID: TFloatField;
+    DSplancontractOP_ID: TFloatField;
+    DSplancontractREINS: TFloatField;
+    DSplancontractCHKASKO: TFloatField;
+    DSplancontractCHM: TFloatField;
+    DSplancontractCHFQ: TFloatField;
+    DSplancontractCOMMITOP_ID: TFloatField;
+    DSplancontractCOMMIT_DATE: TDateTimeField;
+    DSplancontractCANCELOPID: TFloatField;
+    DSplancontractCANCELDATE: TDateTimeField;
+    DSRPaymentsetting: TDataSource;
+    DSPaymentsetting: TOracleDataSet;
+    DSRPaymentInfo: TDataSource;
+    DSPaymentInfo: TOracleDataSet;
+    DSPaymentSettingInfo: TOracleDataSet;
+    DSRPaymentSettingInfo: TDataSource;
+    DSPaymentSettingInfoSAY: TFloatField;
+    DSPaymentInfoSAY: TFloatField;
+    DSReportDuePayment: TOracleDataSet;
+    DSReportDuePaymentPOLICY_NUM: TWideStringField;
+    DSReportDuePaymentAGENT_ADI: TWideStringField;
+    DSReportDuePaymentSIGORTAETDIREN: TWideStringField;
+    DSReportDuePaymentSIGORTALI: TWideStringField;
+    DSPay_loss_acc: TOracleDataSet;
+    DSPay_loss_accID: TFloatField;
+    DSPay_loss_accACC_NO: TWideStringField;
+    DSRPay_loss_acc: TDataSource;
+    DSRAccountPayment: TDataSource;
+    DSAccountPayment: TOracleDataSet;
+    DSAccountPaymentID: TFloatField;
+    DSAccountPaymentACC_NO: TWideStringField;
+    dsacc_pay_los: TOracleDataSet;
+    dsacc_pay_losID: TFloatField;
+    dsacc_pay_losACC_ID: TFloatField;
+    DSmesuliyyetShaqqi: TOracleDataSet;
+    DSFerdiqezaShaqqi: TOracleDataSet;
+    DSmesuliyyetShaqqiSIGHAQQIM: TFloatField;
+    DSFerdiqezaShaqqiSIGHAQQIF: TFloatField;
+    DSPaymentsettingID: TFloatField;
+    DSPaymentsettingCID: TFloatField;
+    DSPaymentsettingPAYMENT_TYPE: TFloatField;
+    DSPaymentsettingPERCENT: TFloatField;
+    DSPaymentsettingPERCENT_F: TFloatField;
+    DSPaymentsettingPERCENT_M: TFloatField;
+    DSPaymentsettingOP_ID: TFloatField;
+    DSPaymentsettingAMMOUNT_F: TFloatField;
+    DSPaymentsettingAMMOUNT_M: TFloatField;
+    DSPaymentsettingAMMOUNT: TFloatField;
+    DSReportDuePaymentPLAN_UZREODENMELI_MEBLEG: TFloatField;
+    DSReportDuePaymentPLAN_UZRE_OSENMIS_M: TFloatField;
+    DSReportDuePaymentGECIKME_MEBLEGI: TFloatField;
+    DSRins_dict_next_per: TDataSource;
+    DSins_dict_next_per: TOracleDataSet;
+    DSins_dict_next_perPERCENT: TFloatField;
+    DSMedEmploes: TOracleDataSet;
+    dspaymentpercent: TOracleDataSet;
+    dspaymentpercentPERCENT: TFloatField;
+    dsrpaymentpercent: TDataSource;
+    DSReportDuePaymentGECIKME_GUNLERI: TFloatField;
+    ODSInsCustomersDRIVER_DAT: TDateTimeField;
+    ODSPolicyNumsPREFIX_LOSS: TWideStringField;
+    ODSPolicyNumsPREFIX_LOSS_FULL: TWideStringField;
+    DSRBankSetting: TDataSource;
+    DSBankSetting: TOracleDataSet;
+    DSBankSettingID: TFloatField;
+    DSBankSettingKRNO: TWideStringField;
+    DSBankSettingNAME: TWideStringField;
+    DSBankSettingINN: TWideStringField;
+    DSBankSettingSWIFT: TWideStringField;
+    DSBankSettingBANKCODE: TWideStringField;
+    DSBankSettingSUBKRNO: TWideStringField;
+    DSBankSettingBANK_KOD: TFloatField;
+    DSBankSettingLICENSE_DATE: TDateTimeField;
+    DSBankSettingTAX_REGCODE: TWideStringField;
+    DSRBanksList: TDataSource;
+    DSBanksList: TOracleDataSet;
+    DSBanksListID: TFloatField;
+    DSBanksListNAME: TWideStringField;
+    ODSTarifStatesFIRST_AMMOUNT: TFloatField;
+    ODSTarifStatesLAST_AMOUNT: TFloatField;
+    DSCustomersIndividualDOC_TYPE: TFloatField;
+    DSins_balans_acc: TOracleDataSet;
+    DSRins_balans_acc: TDataSource;
+    DSins_balans_accBAL_CN1: TFloatField;
+    DSins_balans_accTYPE_ID: TWideStringField;
+    DSRCommanAcc_list: TDataSource;
+    DSCommanAcc_list: TOracleDataSet;
+    DSCommanAcc_listID: TFloatField;
+    DSCommanAcc_listACC_NO: TWideStringField;
+    ODSInsurancesCOMMAN_ACC_ID: TFloatField;
+    DSOperkurs: TOracleDataSet;
+    procedure ODSCustomersAfterFetchRecord(Sender: TOracleDataSet;
+      FilterAccept: Boolean; var Action: TAfterFetchRecordAction);
+    procedure ODSInsCustomersBeforeDelete(DataSet: TDataSet);
+    procedure ODSAccountCalcFields(DataSet: TDataSet);
+    procedure DataModuleCreate(Sender: TObject);
+    procedure ODSAccountAfterFetchRecord(Sender: TOracleDataSet;
+      FilterAccept: Boolean; var Action: TAfterFetchRecordAction);
+    procedure ODSAccountBeforeDelete(DataSet: TDataSet);
+    procedure ODSInsCustomersAfterScroll(DataSet: TDataSet);
+    procedure ODSContractsAfterScroll(DataSet: TDataSet);
+    procedure ODSBal_cnBeforeInsert(DataSet: TDataSet);
+    procedure ODSContractsCalcFields(DataSet: TDataSet);
+    procedure ODSPayPlanCalcFields(DataSet: TDataSet);
+    procedure SaveData;
+    procedure RedoData;
+    procedure ODSTariffsAfterPost(DataSet: TDataSet);
+    procedure ODSBeneficiaryBeforeDelete(DataSet: TDataSet);
+    procedure DataModuleDestroy(Sender: TObject);
+  private
+    { Private declarations }
+
+    a:string;
+  public
+    function GetSysDate():TDate;
+    procedure SetFullForm();
+    procedure UnSetFullForm();
+    procedure RefreshAll;
+    procedure RefreshContractRec;
+    procedure RefreshContracts;
+    procedure CloseOpenContracts;
+    { Public declarations }
+  end;
+        //' and ic.close_prefix=0'+       "IC"."INSSUMMNVL":
+const
+  //a:='nvl(RESP_AMMOUNT,0)+(PERSONAL_COUNT*(nvl(ONE_ACCIDENT_AMOUNT,0)+nvl(ONE_MAX_MED_EXPENSES,0))) as inssumm';
+ p='nvl(RESP_AMMOUNT,0)+(PERSONAL_COUNT*(nvl(ONE_ACCIDENT_AMOUNT,0)+nvl(ONE_MAX_MED_EXPENSES,0))) as inssumm';
+  Condition  = 'and ic.KLI_ID = :KLI_ID ';
+  ContractsSQL = ' SELECT ic.rowid, ic.ID , ic.kli_id, ic.loanacc_id, ic.curracc_id,'+
+                 ' ii.NAME, ii.mainformguid, ii.changeguid,ic.commitop_id,ic.commit_date,ic.cancelopid,ic.canceldate,'+
+                 ' ii.suggestionguid, ii.policyguid, ii.mainformname AS tablename, ic.policy_num,'+
+                 ' trunc(ic.ins_date) as ins_date, ic.begin_date, ic.end_date,ic.ammount+nvl(r.RESP_PREMIUM,0)+nvl(INS_PREMIUM,0) as ammount, '+
+                 ' av.val_name, ic.inssumm+nvl(RESP_AMMOUNT,0)+nvl((PERSONAL_COUNT*(nvl(ONE_ACCIDENT_AMOUNT,0)+nvl(ONE_MAX_MED_EXPENSES,0))),0) as inssumm, ic.tariff, ic.franshiz, ic.state, ic.type_id ,ic.close_prefix '+
+                 ' FROM ins_contracts ic, ins_insurances ii, avalute av,ins_contract_responsibility r,ins_contr_per_acc_motor p'+
+                 ' WHERE ii.ID = ic.type_id and r.cid(+)=ic.id and p.cid(+)=ic.id'+
+                 ' %s'+
+
+                 ' and ic.valute_id = av.valute(+) ';
+
+
+
+var
+  InsDataMod: TInsDataMod;
+  ContractsFullForm : Boolean = True;
+implementation
+uses  sboapiDataModuleImpl, InsCustomersFormImpl;
+{$R *.DFM}
+
+
+
+
+procedure TInsDataMod.SetFullForm();
+var fid : integer;
+begin
+
+  with InsCustomersForm do
+    gbCustomers.Visible := False;
+
+
+  with ODSContracts do begin
+    fid := FieldByName('id').asInteger;
+    close;
+    DeleteVariables;
+    SQL.Text := format(ContractsSQL, [' ']);
+    Open;
+    Locate('ID', fid, []);
+
+  end;
+
+  ContractsFullForm := True;
+end;
+
+procedure TInsDataMod.UnSetFullForm();
+var fid : integer;
+begin
+  with InsCustomersForm do
+    gbCustomers.Visible := True;
+
+  with ODSContracts do begin
+    ODSInsCustomers.Locate('ID', FieldByName('KLI_ID').asInteger, []);
+    fid := FieldByName('id').asInteger;
+    close;
+    SQL.Text := format(ContractsSQL, [Condition]);
+
+    DeclareVariable('KLI_ID', otInteger);
+    SetVariable('KLI_ID', ODSInsCustomers.FieldByName('id').asFloat);
+    Open;
+
+    Locate('ID', fid, []);
+  end;
+
+   ContractsFullForm := False;
+end;
+
+procedure TInsDataMod.ODSCustomersAfterFetchRecord(Sender: TOracleDataSet;
+  FilterAccept: Boolean; var Action: TAfterFetchRecordAction);
+const
+  FetchRecLimit = 50;
+begin
+  with Sender do
+  if RecordCount = FetchRecLimit then
+  Action := afPause
+end;
+
+procedure TInsDataMod.ODSInsCustomersBeforeDelete(DataSet: TDataSet);
+begin
+   if   MessageDlg('Seçilmiş anket pozulacaq', mtWarning, [mbYes, mbCancel], 0) = mrCancel then
+   Abort;
+end;
+
+
+
+
+procedure TInsDataMod.ODSAccountCalcFields(DataSet: TDataSet);
+begin
+  Currency.Locate('VALUTE',ODSAccountVAL_ACC.value, []);
+  ODSAccountVAL_NAME.Value :=  CurrencyVAL_NAME.Value;
+
+end;
+
+procedure TInsDataMod.DataModuleCreate(Sender: TObject);
+var
+ContractsSQL:string;
+begin
+DSBankSetting.Open;
+  Currency.Open;
+  ODSAccount.Open;
+  BalAcc.Open;
+  PairAccount.Open;
+  ODSInsurances.Open;
+  Tenostat.Open;
+  ODSInsCustomers.Open;
+  ODSCustomers.Open;
+  ODSOccupations.Open;
+  ODSActivity.Open;
+  ODSEducations.open;
+  ODSBranches.Open;
+  UnSetFullForm;
+  ODSCustTypes.Open;
+  OdsDoctaypes.Open;
+  Sysdat.Open;
+  DSdict_emp_acc.Open;
+  DSservic.Open;
+  DSins_dict_companie.Open;
+  DSdict_med_institut.Open;
+  DSBanksList.Open;
+  DSCommanAcc_list.Open;
+
+
+ // dspaymentpercent.Open;
+      // ContractsSQL=InsDataMod.ODSContracts.sql.text;
+end;
+
+procedure TInsDataMod.DataModuleDestroy(Sender: TObject);
+begin
+DSBankSetting.close;
+  DSBanksList.close;
+ Currency.close;
+  ODSAccount.close;
+  BalAcc.close;
+  PairAccount.close;
+  ODSInsurances.close;
+  Tenostat.close;
+  ODSInsCustomers.close;
+  ODSCustomers.close;
+  ODSOccupations.close;
+  ODSActivity.close;
+  ODSEducations.close;
+  ODSBranches.close;
+  UnSetFullForm;
+  ODSCustTypes.close;
+  OdsDoctaypes.close;
+  Sysdat.close;
+  DSdict_emp_acc.close;
+  DSservic.close;
+  DSins_dict_companie.Close;
+  DSdict_med_institut.Close;
+   dspaymentpercent.Close;
+     //DSins_balans_acc.Close;
+end;
+
+procedure TInsDataMod.ODSAccountAfterFetchRecord(Sender: TOracleDataSet;
+  FilterAccept: Boolean; var Action: TAfterFetchRecordAction);
+begin
+ if Sender.RecordCount = 50 then
+  Action :=  afPause;
+end;
+
+function TInsDataMod.GetSysDate():TDate;
+begin
+ if Assigned( sboapiDataModule ) then
+ with sboapiDataModule do
+    Result := SBOperationDay.CallDateFunction('get_date', []);
+end;
+
+
+procedure TInsDataMod.ODSAccountBeforeDelete(DataSet: TDataSet);
+begin
+   if   MessageDlg('Secilmish anket pozulacaq', mtWarning, [mbYes, mbCancel], 0) = mrCancel then
+   Abort;
+end;
+
+procedure TInsDataMod.RefreshAll;
+begin
+  screen.Cursor := crHourGlass;
+  try
+   ODSInsCustomers.Refresh;
+   ODSCustomers.Refresh;
+   BalAcc.Refresh;
+   Currency.Refresh;
+   Tenostat.Refresh;
+   PairAccount.Refresh;
+   ODSAccount.Refresh;
+   ODSInsurances.Refresh;
+   ODSOccupations.Refresh;
+   ODSEducations.Refresh;
+  finally
+   Screen.Cursor := crDefault 
+  end;
+end;
+
+procedure TInsDataMod.ODSInsCustomersAfterScroll(DataSet: TDataSet);
+begin
+
+ if ContractsFullForm then exit;
+
+ with ODSContracts do
+ begin
+   Close;
+   SetVariable('kli_id', Dataset.FieldByName('id').asFloat);
+   Open;
+ end;
+
+end;
+
+procedure TInsDataMod.RefreshContractRec;
+begin
+  with ODSContracts do
+     RefreshRecord;
+end;
+
+
+procedure TInsDataMod.CloseOpenContracts;
+begin
+  with ODSContracts do begin
+     Close;Open
+  end;
+end;
+
+procedure TInsDataMod.RefreshContracts;
+begin
+  with ODSContracts do
+     Refresh;
+end;
+
+procedure TInsDataMod.ODSContractsAfterScroll(DataSet: TDataSet);
+var
+  img : TBitmap;
+begin
+ with  ODSAccount do
+ begin
+   Close;
+   SetVariable('ownid', Dataset.FieldByName('id').asFloat);
+   Open;
+ end;
+
+   DSPaymentSettingInfo.Close;
+   DSPaymentSettingInfo.SetVariable('pcid',Dataset.FieldByName('id').asFloat);
+   DSPaymentSettingInfo.Open;
+
+ with ODSContracts do
+ begin
+      InsCustomersForm.aCommit.Enabled :=(FieldByName('state').asInteger in [0, 2, 4]);
+
+      if (DSPaymentSettingInfo.FieldByName('say').AsInteger in [0]) then
+      begin
+      InsCustomersForm.aCommit.Enabled:=false;
+      end;
+      //InsCustomersForm.aEditIns.Enabled := (FieldByName('state').asInteger in [0, 2, 4,7]);
+
+ end;
+
+end;
+
+procedure TInsDataMod.ODSBal_cnBeforeInsert(DataSet: TDataSet);
+begin
+  with InsDataMod do
+   if ODSAcc_types.State in [dsEdit, dsInsert] then begin
+    ODSAcc_types.Post;
+    ODSAcc_types.RefreshRecord;
+  end;
+end;
+
+procedure TInsDataMod.ODSContractsCalcFields(DataSet: TDataSet);
+begin
+{ if DataSet.FieldByName('sugg_id').asFloat > 0 then
+   DataSet.FieldByName('SUGGESTION').asString := 'Вар'
+ else
+   DataSet.FieldByName('SUGGESTION').asString := 'Йохдур'}
+end;
+
+procedure TInsDataMod.ODSPayPlanCalcFields(DataSet: TDataSet);
+begin
+ with DataSet do
+   if FieldByName('STATUS').asInteger > 0 then
+      FieldByName('ISPAYED').asString := 'Ödənilib'
+   else FieldByName('ISPAYED').asString := '---------'
+end;
+
+procedure TInsDataMod.SaveData;
+begin
+  with sboapiDataModule do
+    SBSession.Commit;
+end;
+
+procedure TInsDataMod.RedoData;
+begin
+  with sboapiDataModule do
+    SBSession.Rollback;
+end;
+
+procedure TInsDataMod.ODSTariffsAfterPost(DataSet: TDataSet);
+begin
+  (DataSet as TOracleDataSet).RefreshRecord; 
+end;
+
+procedure TInsDataMod.ODSBeneficiaryBeforeDelete(DataSet: TDataSet);
+begin
+  if (DataSet as TOracleDataSet).FieldByName('ID').AsFloat = -1 then
+  MessageDlg('Bu yazını pozmaq qadağandır!', mtConfirmation, [mbOK], 0);
+end;
+
+end.

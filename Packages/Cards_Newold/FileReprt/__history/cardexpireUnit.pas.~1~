@@ -1,0 +1,130 @@
+unit cardexpireUnit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, OracleData, Grids, DBGrids, ComCtrls, StdCtrls, ToolWin, ExtCtrls,
+  ImgList, CMExcelExport;
+
+type
+  Tcardexpire = class(TForm)
+    CMExcelExport1: TCMExcelExport;
+    ImageList1: TImageList;
+    DataSource1: TDataSource;
+    Panel3: TPanel;
+    CoolBar1: TCoolBar;
+    ToolBar1: TToolBar;
+    ToolButton1: TToolButton;
+    ToolButton10: TToolButton;
+    ToolButton11: TToolButton;
+    ToolButton20: TToolButton;
+    ToolButton14: TToolButton;
+    ToolButton15: TToolButton;
+    ToolButton17: TToolButton;
+    ToolButton3: TToolButton;
+    ToolButton6: TToolButton;
+    ToolButton2: TToolButton;
+    ToolButton4: TToolButton;
+    ToolButton5: TToolButton;
+    ToolButton7: TToolButton;
+    RadioButton1: TRadioButton;
+    RadioButton2: TRadioButton;
+    Panel1: TPanel;
+    Panel2: TPanel;
+    GroupBox1: TGroupBox;
+    Label1: TLabel;
+    Label2: TLabel;
+    DateTimePicker1: TDateTimePicker;
+    DateTimePicker2: TDateTimePicker;
+    DBGrid1: TDBGrid;
+    OracleDataSet1: TOracleDataSet;
+    CheckBox1: TCheckBox;
+    CheckBox2: TCheckBox;
+    procedure CheckBox1Click(Sender: TObject);
+    procedure CheckBox2Click(Sender: TObject);
+    procedure ToolButton1Click(Sender: TObject);
+    procedure ToolButton14Click(Sender: TObject);
+    procedure ToolButton6Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  cardexpire: Tcardexpire;
+
+implementation
+
+{$R *.DFM}
+uses
+sboapiDataModuleImpl;
+procedure Tcardexpire.CheckBox1Click(Sender: TObject);
+begin
+if CheckBox1.Checked then
+DateTimePicker1.Enabled:=true else DateTimePicker1.Enabled:=False;
+end;
+
+procedure Tcardexpire.CheckBox2Click(Sender: TObject);
+begin
+if CheckBox2.Checked then
+DateTimePicker2.Enabled:=true else DateTimePicker2.Enabled:=False;
+end;
+
+procedure Tcardexpire.ToolButton1Click(Sender: TObject);
+begin
+if (CheckBox1.Checked) and  (CheckBox2.Checked)   then
+begin
+ OracleDataSet1.close;
+ OracleDataSet1.SQL[4]:=' ';
+ OracleDataSet1.SQL[4]:='where expiry between '+''''+Formatdatetime('dd-mmm-yyyy',datetimepicker1.datetime)+''''+' and '+''''+FormatDateTime('dd-mmm-yyyy',datetimepicker2.datetime)+'''';
+ // ShowMessage('where expiry between '+''''+datetostr(datetimepicker1.datetime)+''''+' and '+''''+datetostr(datetimepicker2.datetime)+'''');
+ OracleDataSet1.open;
+ end
+    else
+
+if CheckBox1.Checked then
+begin
+ OracleDataSet1.close;
+ OracleDataSet1.SQL[4]:=' ';
+ OracleDataSet1.SQL[4]:='where expiry >= '+''''+Formatdatetime('dd-mmm-yyyy',datetimepicker1.datetime)+'''';
+ OracleDataSet1.open;
+
+end
+   else
+if  CheckBox2.Checked  then
+begin
+  OracleDataSet1.close;
+ OracleDataSet1.SQL[4]:=' ';
+ OracleDataSet1.SQL[4]:='where expiry <= '+''''+Formatdatetime('dd-mmm-yyyy',datetimepicker2.datetime)+'''';
+ OracleDataSet1.open;
+end
+else
+
+begin
+ ShowMessage('tarixlerin en azi biri secilmelidir!');
+end;
+
+end;
+
+procedure Tcardexpire.ToolButton14Click(Sender: TObject);
+begin
+OracleDataSet1.close;
+end;
+
+procedure Tcardexpire.ToolButton6Click(Sender: TObject);
+begin
+  if not CMExcelExport1.Connected then CMExcelExport1.Connect;
+  CMExcelExport1.ExportDataset(dbgrid1.datasource.dataset,'Expiry',true,true);
+  CMExcelExport1.Disconnect;
+end;
+
+procedure Tcardexpire.FormShow(Sender: TObject);
+begin
+DateTimePicker1.DateTime:=date;
+DateTimePicker2.DateTime:=date;
+end;
+
+end.

@@ -1,0 +1,398 @@
+object FormAddEditContract: TFormAddEditContract
+  Left = 339
+  Top = 169
+  Width = 540
+  Height = 324
+  BorderIcons = [biSystemMenu]
+  Caption = 'FormAddEditContract'
+  Color = clBtnFace
+  Font.Charset = RUSSIAN_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  OnCanResize = FormCanResize
+  OnCreate = FormCreate
+  OnKeyPress = FormKeyPress
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 532
+    Height = 257
+    Align = alTop
+    BevelInner = bvLowered
+    TabOrder = 0
+    object Panel2: TPanel
+      Left = 2
+      Top = 2
+      Width = 332
+      Height = 253
+      Align = alLeft
+      BevelInner = bvLowered
+      TabOrder = 0
+      object GroupBox1: TGroupBox
+        Left = 2
+        Top = 2
+        Width = 328
+        Height = 44
+        Align = alTop
+        Caption = 'Валйута'
+        TabOrder = 0
+        object DBLookupComboboxEh1: TDBLookupComboboxEh
+          Left = 5
+          Top = 14
+          Width = 216
+          Height = 21
+          DataField = 'CURRENCY'
+          DataSource = CRADatMod.PurposeDatSrc
+          EditButtons = <>
+          KeyField = 'VALUTE'
+          ListField = 'VALU_NAME'
+          ListSource = CRADatMod.CurrencyDatSrc
+          TabOrder = 0
+          Visible = True
+        end
+      end
+      object Panel4: TPanel
+        Left = 2
+        Top = 95
+        Width = 328
+        Height = 49
+        Align = alTop
+        BevelInner = bvLowered
+        TabOrder = 1
+        object StaticText1: TStaticText
+          Left = 2
+          Top = 2
+          Width = 324
+          Height = 17
+          Align = alTop
+          Caption = '                                  Фаиз  Щесабын №-си'
+          Color = clSilver
+          ParentColor = False
+          TabOrder = 0
+        end
+        object DBLookupComboboxEh2: TDBLookupComboboxEh
+          Left = 153
+          Top = 23
+          Width = 172
+          Height = 21
+          DataField = 'INTERESTACCID'
+          DataSource = CRADatMod.PurposeDatSrc
+          EditButtons = <>
+          KeyField = 'ID'
+          ListField = 'NAME'
+          ListSource = CRADatMod.IntAccsDatSrc
+          TabOrder = 1
+          Visible = True
+          OnChange = DBLookupComboboxEh2Change
+        end
+        object CMSearchEdit1: TCMSearchEdit
+          Left = 4
+          Top = 23
+          Width = 149
+          Height = 21
+          TabOrder = 2
+          DataField = 'INTERESTACCID'
+          DataSource = CRADatMod.PurposeDatSrc
+          KeyField = 'ID'
+          ListField = 'ACC_NO'
+          ListSource = CRADatMod.IntAccsDatSrc
+          ErrorColor = clRed
+          BeepOnNotFound = True
+        end
+      end
+      object Panel5: TPanel
+        Left = 2
+        Top = 46
+        Width = 328
+        Height = 49
+        Align = alTop
+        BevelInner = bvLowered
+        TabOrder = 2
+        object StaticText2: TStaticText
+          Left = 2
+          Top = 2
+          Width = 324
+          Height = 17
+          Align = alTop
+          Caption = '                                 Щесабын №-си'
+          Color = clSilver
+          ParentColor = False
+          TabOrder = 0
+        end
+        object DBLookupComboboxEh3: TDBLookupComboboxEh
+          Left = 153
+          Top = 23
+          Width = 172
+          Height = 21
+          DataField = 'CONTRACTACCID'
+          DataSource = CRADatMod.PurposeDatSrc
+          EditButtons = <>
+          KeyField = 'ID'
+          ListField = 'NAME'
+          ListSource = CRADatMod.ContAccsDatSrc
+          TabOrder = 1
+          Visible = True
+          OnChange = DBLookupComboboxEh3Change
+        end
+        object CMSearchEdit2: TCMSearchEdit
+          Left = 4
+          Top = 23
+          Width = 149
+          Height = 21
+          TabOrder = 2
+          DataField = 'CONTRACTACCID'
+          DataSource = CRADatMod.PurposeDatSrc
+          KeyField = 'ID'
+          ListField = 'ACC_NO'
+          ListSource = CRADatMod.ContAccsDatSrc
+          ErrorColor = clRed
+          BeepOnNotFound = True
+        end
+      end
+      object Panel6: TPanel
+        Left = 2
+        Top = 144
+        Width = 328
+        Height = 59
+        Align = alTop
+        BevelInner = bvLowered
+        TabOrder = 3
+        object Label1: TLabel
+          Left = 50
+          Top = 8
+          Width = 55
+          Height = 13
+          Caption = 'Ачылма тарихи'
+        end
+        object Label2: TLabel
+          Left = 205
+          Top = 8
+          Width = 71
+          Height = 13
+          Caption = 'Баьланма тарихи'
+        end
+        object DBDateTimeEditEh1: TDBDateTimeEditEh
+          Left = 5
+          Top = 26
+          Width = 153
+          Height = 21
+          DataField = 'OPENDATE'
+          DataSource = CRADatMod.PurposeDatSrc
+          EditButtons = <>
+          Kind = dtkDateEh
+          TabOrder = 0
+          Visible = True
+        end
+        object DBDateTimeEditEh2: TDBDateTimeEditEh
+          Left = 162
+          Top = 26
+          Width = 153
+          Height = 21
+          DataField = 'CLOSEDATE'
+          DataSource = CRADatMod.PurposeDatSrc
+          EditButtons = <>
+          Kind = dtkDateEh
+          TabOrder = 1
+          Visible = True
+        end
+      end
+      object Panel7: TPanel
+        Left = 2
+        Top = 203
+        Width = 328
+        Height = 48
+        Align = alClient
+        BevelInner = bvLowered
+        TabOrder = 4
+        object StaticText3: TStaticText
+          Left = 2
+          Top = 2
+          Width = 324
+          Height = 17
+          Align = alTop
+          Caption = '                                   Мцгавилянин №-си'
+          Color = clSilver
+          ParentColor = False
+          TabOrder = 0
+        end
+        object DBEditEh2: TDBEditEh
+          Left = 4
+          Top = 21
+          Width = 217
+          Height = 21
+          DataField = 'CONTRACTNO'
+          DataSource = CRADatMod.PurposeDatSrc
+          EditButtons = <>
+          TabOrder = 1
+          Visible = True
+        end
+      end
+    end
+    object Panel3: TPanel
+      Left = 334
+      Top = 2
+      Width = 196
+      Height = 253
+      Align = alClient
+      BevelInner = bvLowered
+      TabOrder = 1
+      object Panel8: TPanel
+        Left = 2
+        Top = 143
+        Width = 192
+        Height = 47
+        Align = alTop
+        BevelInner = bvLowered
+        TabOrder = 0
+        object StaticText4: TStaticText
+          Left = 2
+          Top = 2
+          Width = 188
+          Height = 17
+          Align = alTop
+          Caption = 'Мцштяринин типи'
+          Color = clSilver
+          ParentColor = False
+          TabOrder = 0
+        end
+        object DBLookupComboboxEh6: TDBLookupComboboxEh
+          Left = 5
+          Top = 21
+          Width = 183
+          Height = 21
+          DataField = 'PERSONALTYPE'
+          DataSource = CRADatMod.PurposeDatSrc
+          EditButtons = <>
+          KeyField = 'ID'
+          ListField = 'NAME'
+          ListSource = CRADatMod.PersonsDatSrc
+          TabOrder = 1
+          Visible = True
+        end
+      end
+      object Panel9: TPanel
+        Left = 2
+        Top = 49
+        Width = 192
+        Height = 47
+        Align = alTop
+        BevelInner = bvLowered
+        TabOrder = 1
+        object StaticText5: TStaticText
+          Left = 2
+          Top = 2
+          Width = 188
+          Height = 17
+          Align = alTop
+          Caption = '                             Фаиз  дяряжяси-си'
+          Color = clSilver
+          ParentColor = False
+          TabOrder = 0
+        end
+        object DBEditEh3: TDBEditEh
+          Left = 4
+          Top = 21
+          Width = 128
+          Height = 21
+          DataField = 'ANNUALINTEREST'
+          DataSource = CRADatMod.PurposeDatSrc
+          EditButtons = <>
+          TabOrder = 1
+          Visible = True
+        end
+      end
+      object Panel10: TPanel
+        Left = 2
+        Top = 2
+        Width = 192
+        Height = 47
+        Align = alTop
+        BevelInner = bvLowered
+        TabOrder = 2
+        object StaticText6: TStaticText
+          Left = 2
+          Top = 2
+          Width = 188
+          Height = 17
+          Align = alTop
+          Caption = ' Филиал'
+          Color = clSilver
+          ParentColor = False
+          TabOrder = 0
+        end
+        object DBLookupComboboxEh4: TDBLookupComboboxEh
+          Left = 5
+          Top = 21
+          Width = 183
+          Height = 21
+          DataField = 'BRANCHID'
+          DataSource = CRADatMod.PurposeDatSrc
+          EditButtons = <>
+          KeyField = 'ID'
+          ListField = 'NAME'
+          ListSource = CRADatMod.BranchesDatSrc
+          TabOrder = 1
+          Visible = True
+        end
+      end
+      object Panel11: TPanel
+        Left = 2
+        Top = 96
+        Width = 192
+        Height = 47
+        Align = alTop
+        BevelInner = bvLowered
+        TabOrder = 3
+        object StaticText7: TStaticText
+          Left = 2
+          Top = 2
+          Width = 188
+          Height = 17
+          Align = alTop
+          Caption = 'Мцштяринин катеэорийасы'
+          Color = clSilver
+          ParentColor = False
+          TabOrder = 0
+        end
+        object DBLookupComboboxEh5: TDBLookupComboboxEh
+          Left = 5
+          Top = 21
+          Width = 183
+          Height = 21
+          DataField = 'CLIENTTYPE'
+          DataSource = CRADatMod.PurposeDatSrc
+          EditButtons = <>
+          KeyField = 'ID'
+          ListField = 'CATEGORY'
+          ListSource = CRADatMod.CategoriesDatSrc
+          TabOrder = 1
+          Visible = True
+        end
+      end
+    end
+  end
+  object BitBtn1: TBitBtn
+    Left = 326
+    Top = 268
+    Width = 75
+    Height = 25
+    Caption = 'Гябул'
+    TabOrder = 1
+    OnClick = BitBtn1Click
+  end
+  object BitBtn2: TBitBtn
+    Left = 418
+    Top = 269
+    Width = 75
+    Height = 25
+    Caption = 'Имтина'
+    TabOrder = 2
+    OnClick = BitBtn2Click
+  end
+end

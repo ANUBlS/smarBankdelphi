@@ -1,0 +1,1110 @@
+﻿unit PrudensialImpl1;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActiveX, AxCtrls, Prudensialhes_TLB, StdVcl, StdCtrls, OleServer, ExcelXP,filectrl,
+  ComCtrls, Db, OracleData, CMExcelExport, ExcelExporter , Oracle, Buttons,
+  ExtCtrls;
+
+
+
+
+  type
+  TPrudensial = class(TActiveForm, IPrudensial)
+    Button1: TButton;
+    rer: TExcelWorksheet;
+    ExcelWorkbook1: TExcelWorkbook;
+    prd: TExcelApplication;
+    ExcelApplication2: TExcelApplication;
+    ExcelApplication3: TExcelApplication;
+    ExcelApplication4: TExcelApplication;
+    tem: TRichEdit;
+    prud: TRichEdit;
+    dl: TRichEdit;
+    ButtonBkt1: TButton;
+    BKT1: TOracleDataSet;
+    DataSource1: TDataSource;
+    BKT2: TOracleDataSet;
+    CME1: TCMExcelExport;
+    ButtonBkt2: TButton;
+    ButtonBkt5: TButton;
+    CME2: TCMExcelExport;
+    ButtonBkt6: TButton;
+    dep1: TOracleDataSet;
+    CME3_1: TCMExcelExport;
+    dep2: TOracleDataSet;
+    CME4: TCMExcelExport;
+    dep3: TOracleDataSet;
+    CME5: TCMExcelExport;
+    ButtonBkt7: TButton;
+    ButtonBkt9_1: TButton;
+    OraclePackage1: TOraclePackage;
+    saldo: TOracleDataSet;
+    CMe6: TCMExcelExport;
+    CemSet: TOracleDataSet;
+    OraclePackage10: TOraclePackage;
+    ExcelExport: TCMExcelExport;
+    CMExcelExport10: TCMExcelExport;
+    Active: TOracleDataSet;
+    Girov: TOracleDataSet;
+    GirovSAY: TFloatField;
+    GirovPURCODE: TWideStringField;
+    GirovTEMINAT: TWideStringField;
+    GirovTEMCODE: TWideStringField;
+    GirovDESCRIPTION: TWideStringField;
+    GirovQALIQ: TFloatField;
+    GirovGIROV: TFloatField;
+    GirovQENAITBEXSH: TFloatField;
+    GirovNEZARETALT: TFloatField;
+    GirovMEQSEDLI: TFloatField;
+    GirovTEHLUKELI: TFloatField;
+    GirovUMUDSUZ: TFloatField;
+    GirovTESNIFATA_DAXIL_EDILMEMISH: TFloatField;
+    odenish: TOracleDataSet;
+    pr: TButton;
+    CME7: TCMExcelExport;
+    sbop: TOraclePackage;
+    sexi: TOracleDataSet;
+    CheckBox1: TCheckBox;
+    rt: TCMExcelExport;
+    gx2: TButton;
+    gx: TExcelApplication;
+    OraclePackage2: TOraclePackage;
+    RadioButton1: TRadioButton;
+    RadioButton2: TRadioButton;
+    GirovG_QENAITBEXSH: TFloatField;
+    GirovG_NEZARETALT: TFloatField;
+    GirovG_MEQSEDLI: TFloatField;
+    GirovG_TEHLUKELI: TFloatField;
+    GirovG_UMUDSUZ: TFloatField;
+    GirovG_TESNIFATA_DAXIL_EDILMEMISH: TFloatField;
+    CemSetCODE: TWideStringField;
+    CemSetNAME: TWideStringField;
+    CemSetM_KODU: TWideStringField;
+    CemSetMulkiyyetnovu: TWideStringField;
+    CemSetS_KODU: TWideStringField;
+    CemSetBorcalanunsektoru: TWideStringField;
+    CemSetF_KODU: TWideStringField;
+    CemSetBorcalaninfaliyyeti: TWideStringField;
+    CemSetFN_KODU: TWideStringField;
+    CemSetBorcalaninfaliyyetnovu: TWideStringField;
+    CemSetVAL_NAME: TWideStringField;
+    CemSetSUMCREDITLINEAMOUNT: TFloatField;
+    CemSetSUMEKVALENT: TFloatField;
+    CemSetSUMUZADILMISHDAR: TFloatField;
+    CemSetSUMHESABLANMAYAN: TFloatField;
+    CemSetSUMADI: TFloatField;
+    CemSetSUMMEQSEDLI: TFloatField;
+    CemSetSUMDS_REST: TFloatField;
+    CemSetSUMDSREST_EK: TFloatField;
+    CemSetSUMDSINTERESTREST: TFloatField;
+    CemSetSUMDSINT_EK: TFloatField;
+    CemSetSUMDSDUEREST: TFloatField;
+    CemSetSUMDSDUEREST_EK: TFloatField;
+    CemSetSUMDSDUEINTERESTREST: TFloatField;
+    CemSetSUMDSDOEINT_EK: TFloatField;
+    CemSetSUMFAIZLERUZREBORCLAR: TFloatField;
+    CemSetSUMFAIZLERUZREBORCLAREK: TFloatField;
+    CemSetSUMCARIBORCLAR: TFloatField;
+    CemSetSUMCARIBORCLAREK: TFloatField;
+    CemSetSUM130: TFloatField;
+    CemSetSUM3160: TFloatField;
+    CemSetSUM6190: TFloatField;
+    CemSetSUM91120: TFloatField;
+    CemSetSUM121150: TFloatField;
+    CemSetSUM151180: TFloatField;
+    CemSetSUM181210: TFloatField;
+    CemSetSUM211240: TFloatField;
+    CemSetSUM241270: TFloatField;
+    CemSetSUM271300: TFloatField;
+    CemSetSUM301330: TFloatField;
+    CemSetSUM331365: TFloatField;
+    CemSetSUMBIRILDENARTIQ: TFloatField;
+    CemSetSUM0: TFloatField;
+    CemSetSUM2: TFloatField;
+    CemSetSUM10: TFloatField;
+    CemSetSUM30: TFloatField;
+    CemSetSUM60: TFloatField;
+    CemSetSUM100: TFloatField;
+    CemSetSUMGIROV: TFloatField;
+    BKT5: TOracleDataSet;
+    BKT6: TOracleDataSet;
+    BKT7: TOracleDataSet;
+    ButtonBkt3: TButton;
+    ButtonBkt4: TButton;
+    BKT3: TOracleDataSet;
+    CMExcelExport3: TCMExcelExport;
+    BKT4: TOracleDataSet;
+    ExcelApplication1: TExcelApplication;
+    ButtonBkt8: TButton;
+    ButtonBkt9_2: TButton;
+    ButtonBkt10: TButton;
+    ButtonBkt11: TButton;
+    ButtonBkt12: TButton;
+    ButtonBkt13: TButton;
+    BKT8: TOracleDataSet;
+    BKT9_1: TOracleDataSet;
+    BKT9_2: TOracleDataSet;
+    BKT10: TOracleDataSet;
+    BKT11: TOracleDataSet;
+    BKT12: TOracleDataSet;
+    BKT13: TOracleDataSet;
+    CME8: TCMExcelExport;
+    CME9_2: TCMExcelExport;
+    CME9_1: TCMExcelExport;
+    CMExcelExport11: TCMExcelExport;
+    CMExcelExport13: TCMExcelExport;
+    CMExcelExport10_1: TCMExcelExport;
+    BKT10ID: TFloatField;
+    BKT10KLI_ID: TFloatField;
+    BKT10OP_ID: TFloatField;
+    BKT10ACC_NO: TWideStringField;
+    BKT10VAL_ACC: TIntegerField;
+    BKT10NAME: TWideStringField;
+    BKT10OPEN_DAT: TDateTimeField;
+    BKT10CLOSE_DAT: TDateTimeField;
+    BKT10BAL_CN1: TFloatField;
+    BKT10BAL_CN2: TFloatField;
+    BKT10BAL_CN3: TFloatField;
+    BKT10BAL_CN4: TFloatField;
+    BKT10FILIAL: TIntegerField;
+    BKT10SIM_OTCET: TFloatField;
+    BKT10TIPACC: TWideStringField;
+    BKT10LIMIT: TFloatField;
+    BKT10OLD_ACC_NO: TWideStringField;
+    BKT10PAIR_ACC: TFloatField;
+    BKT10INSIDER: TWideStringField;
+    BKT10SID: TFloatField;
+    BKT10TEMPID: TFloatField;
+    BKT10OWNID: TFloatField;
+    BKT10P_CUSTID: TFloatField;
+    BKT10SYMB: TWideStringField;
+    BKT10OLDID: TFloatField;
+    BKT10NEW_ACC_NO: TWideStringField;
+    BKT10BAL_CN1_OLD: TFloatField;
+    BKT10BANK_CODE: TFloatField;
+    BKT10CURRENCYNAME: TWideStringField;
+    BKT10USERINSERT: TWideStringField;
+    BKT10KLI_ID2: TFloatField;
+    BKT10PROCURATION_DAT: TDateTimeField;
+    BKT10ID_ACC: TFloatField;
+    CMExcelExport12: TCMExcelExport;
+    Panel2: TPanel;
+    Panel3: TPanel;
+    DateTimePicker1: TDateTimePicker;
+    Label2: TLabel;
+    Label3: TLabel;
+    DateTimePicker2: TDateTimePicker;
+    Panel4: TPanel;
+    Panel1: TPanel;
+    Label1: TLabel;
+   procedure Button1Click(Sender: TObject);
+    procedure ButtonBkt1Click(Sender: TObject);
+    procedure ButtonBkt2Click(Sender: TObject);
+    procedure ButtonBkt6Click(Sender: TObject);
+    //procedure Button7Click(Sender: TObject);
+    procedure ButtonBkt5Click(Sender: TObject);
+    procedure ButtonBkt7Click(Sender: TObject);
+    procedure ButtonBkt9_1Click(Sender: TObject);
+    procedure prClick(Sender: TObject);
+    procedure BitBtn1Click(Sender: TObject);
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure CheckBox1Click(Sender: TObject);
+    procedure gx2Click(Sender: TObject);
+    procedure RadioButton1Click(Sender: TObject);
+    procedure RadioButton2Click(Sender: TObject);
+    procedure ActiveFormDestroy(Sender: TObject);
+    procedure ButtonBkt3Click(Sender: TObject);
+    procedure ButtonBkt4Click(Sender: TObject);
+    procedure ButtonBkt8Click(Sender: TObject);
+    procedure ButtonBkt9_2Click(Sender: TObject);
+    procedure ButtonBkt11Click(Sender: TObject);
+    procedure ButtonBkt13Click(Sender: TObject);
+    procedure ButtonBkt10Click(Sender: TObject);
+    procedure ButtonBkt12Click(Sender: TObject);
+    procedure Panel4Click(Sender: TObject);
+  private
+    { Private declarations }
+    FEvents: IPrudensialEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+  public
+    { Public declarations }
+    procedure Initialize; override;
+    procedure ExpXLS(DataSet: TDataSet; Arq: string; Status:integer; Sh:string);
+  end;
+
+implementation
+
+uses ComObj, ComServ,sboapiDataModuleImpl,SBTranslateProc,UnitBalansAdd,UnitBktBalans;
+ var path: string;
+     Par:integer=0;
+{$R *.DFM}
+
+{ TPrudensial }
+
+
+
+
+procedure TPrudensial.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_PrudensialPage); }
+end;
+
+procedure TPrudensial.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as IPrudensialEvents;
+end;
+
+procedure TPrudensial.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TPrudensial.Get_Active: WordBool;
+begin
+  //Result := Active;
+end;
+
+function TPrudensial.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TPrudensial.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TPrudensial.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TPrudensial.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TPrudensial.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TPrudensial.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TPrudensial.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TPrudensial.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TPrudensial.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TPrudensial.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TPrudensial.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TPrudensial.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TPrudensial.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TPrudensial.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TPrudensial.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TPrudensial.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TPrudensial.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TPrudensial._Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TPrudensial.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TPrudensial.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TPrudensial.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TPrudensial.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TPrudensial.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TPrudensial.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TPrudensial.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TPrudensial.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TPrudensial.Panel4Click(Sender: TObject);
+begin
+  With BKTBalans do
+  begin
+    BKTBalans.Close;
+    BKTBalans.Open;
+    BKTName.Close;
+    BKTName.Open;
+    ShowModal;
+  end;
+end;
+
+procedure TPrudensial.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TPrudensial.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TPrudensial.Set_AxBorderStyle(Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TPrudensial.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TPrudensial.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TPrudensial.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TPrudensial.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TPrudensial.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TPrudensial.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TPrudensial.Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TPrudensial.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TPrudensial.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TPrudensial.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TPrudensial.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TPrudensial.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TPrudensial.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+
+procedure TPrudensial.ExpXLS(DataSet: TDataSet; Arq: string; status:integer; Sh:string);
+var
+  ExcApp: OleVariant;
+  i,l: integer;
+begin
+  ExcApp := CreateOleObject('Excel.Application');
+  ExcApp.Visible := False;
+  ExcApp.WorkBooks.Add;
+  DataSet.First;
+  l := 2;
+  DataSet.First;
+  while not DataSet.EOF do
+  begin
+    for i := 0 to DataSet.Fields.Count - 1 do
+      ExcApp.WorkBooks[1].Sheets[1].Cells[l,i + 1] :=
+        DataSet.Fields[i].DisplayText;
+    DataSet.Next;
+    l := l + 1;
+  end;
+  ExcApp.DisplayAlerts := False;
+  ExcApp.WorkBooks[1].Sheets[1].name:=Sh;
+  ExcApp.WorkBooks[1].SaveAs(Arq);
+  IF par=1 THEN ExcApp.Quit
+           ELSE ExcApp.Visible := True;
+end;
+
+
+procedure TPrudensial.ButtonBkt8Click(Sender: TObject);
+var
+st:Tfileformat;
+dat1:Tdatetime;
+dat2:Tdatetime;
+Ft:boolean;
+begin
+  dat1:=integer(trunc(datetimepicker1.datetime));
+  dat2:=integer(trunc(datetimepicker2.datetime));
+  With BKT8 do
+  begin
+    ClearVariables;
+    CloseAll;
+    SQL.Clear;
+    SQL.Add('begin PRUDENSIAL.BKT8SQL(dat1=>:dat1,dat2=>:dat2,result=>:result); end;');
+    SetVariable('dat1' , dat1);
+    SetVariable('dat2' , dat2);
+    Open;
+  end;
+  ExpXLS(BKT8,path+'Env\Prudensial\Bkt8.xlsx',par,'Bkt8');
+end;
+
+procedure TPrudensial.ButtonBkt9_2Click(Sender: TObject);
+var
+st:Tfileformat;
+dat1:Tdatetime;
+dat2:Tdatetime;
+Ft:boolean;
+begin
+  dat1:=integer(trunc(datetimepicker1.datetime));
+  dat2:=integer(trunc(datetimepicker2.datetime));
+  With BKT9_2 do
+  begin
+    ClearVariables;
+    CloseAll;
+    SQL.Clear;
+    SQL.Add('begin PRUDENSIAL.BKT9_2SQL(dat1=>:dat1,dat2=>:dat2,result=>:result); end;');
+    SetVariable('dat1' , dat1);
+    SetVariable('dat2' , dat2);
+    Open;
+  end;
+  ExpXLS(BKT9_2,path+'Env\Prudensial\BKT9_2.xlsx',par,'Bkt9_2');
+end;
+
+
+procedure TPrudensial.ButtonBkt10Click(Sender: TObject);
+Var Ft:boolean;
+begin
+  BKT10.close;
+  BKT10.Open;
+  ExpXLS(BKT10,path+'Env\Prudensial\BKT10.xlsx',par,'Bkt10');
+end;
+
+procedure TPrudensial.ButtonBkt11Click(Sender: TObject);
+var
+st:Tfileformat;
+dat2:Tdatetime;
+Ft:boolean;
+begin
+  dat2:=integer(trunc(datetimepicker2.datetime));
+  With BKT11 do
+  begin
+    ClearVariables;
+    CloseAll;
+    SQL.Clear;
+    SQL.Add('begin PRUDENSIAL.BKT11SQL(dat2=>:dat2,result=>:result); end;');
+    SetVariable('dat2' , dat2);
+    Open;
+  end;
+  ExpXLS(BKT11,path+'Env\Prudensial\BKT11.xlsx',par,'Bkt11');
+end;
+
+procedure TPrudensial.ButtonBkt12Click(Sender: TObject);
+var
+st:Tfileformat;
+dat2:Tdatetime;
+Ft:boolean;
+begin
+  dat2:=integer(trunc(datetimepicker2.datetime));
+  With BKT12 do
+  begin
+    ClearVariables;
+    CloseAll;
+    SQL.Clear;
+    SQL.Add('begin PRUDENSIAL.BKT12SQL(dat2=>:dat2,result=>:result); end;');
+    SetVariable('dat2' , dat2);
+    Open;
+  end;
+  ExpXLS(BKT12,path+'Env\Prudensial\BKT12.xlsx',par,'Bkt12');
+end;
+
+procedure TPrudensial.ButtonBkt13Click(Sender: TObject);
+var
+st:Tfileformat;
+dat2:Tdatetime;
+Ft:boolean;
+begin
+  dat2:=integer(trunc(datetimepicker2.datetime));
+  With BKT13 do
+  begin
+    ClearVariables;
+    CloseAll;
+    SQL.Clear;
+    SQL.Add('begin PRUDENSIAL.BKT13SQL(dat2=>:dat2,result=>:result); end;');
+    SetVariable('dat2' , dat2);
+    Open;
+  end;
+  ExpXLS(BKT13,path+'Env\Prudensial\BKT13.xlsx',par,'Bkt13');
+end;
+
+procedure TPrudensial.Button1Click(Sender: TObject);
+  var
+  Sheet, Sheets ,v :Variant;
+  c, r, kr, i, j, z  :Integer;
+  st, s, name1   :String;
+  DepartmentName,Filename :String;
+  DepartmentCount, DepRow:Integer;
+  v_Obn, v_bdntm :Real;
+  pruden,temizlemek,del2 :Textfile;
+  Excel             : OleVariant;
+begin
+  Par:=0;
+  prClick(Sender);
+  ButtonBkt1Click(Sender);
+  ButtonBkt2Click(Sender);
+  ButtonBkt3Click(Sender);
+  ButtonBkt4Click(Sender);
+  ButtonBkt5Click(Sender);
+  ButtonBkt6Click(Sender);
+  ButtonBkt7Click(Sender);
+  ButtonBkt8Click(Sender);
+  ButtonBkt9_1Click(Sender);
+  ButtonBkt9_2Click(Sender);
+  //ButtonBkt10Click(Sender);
+  ButtonBkt11Click(Sender);
+  ButtonBkt12Click(Sender);
+  ButtonBkt13Click(Sender);
+
+end;
+
+procedure TPrudensial.ButtonBkt1Click(Sender: TObject);
+var
+st:Tfileformat;
+dat1:Tdatetime;
+dat2:Tdatetime;
+Ft:boolean;
+begin
+  dat1 :=integer(trunc(DateTimePicker1.datetime));
+  dat2 :=integer(trunc(DateTimePicker2.datetime));
+ { If Par=0 then Ft:=True
+           else Ft:=False;  }
+
+  With BKT1 do
+  begin
+    ClearVariables;
+    CloseAll;
+    SQL.Clear;
+    SQL.Add('begin PRUDENSIAL.BKT1SQL(dtr=>:dtr,dtrn=>:dtrn,result=>:result); end;');
+    SetVariable('dtr',   dat1);
+    SetVariable('dtrn' , dat2);
+    Open;
+  end;
+  ExpXLS(BKT1,path+'Env\Prudensial\Bkt1.xlsx',par,'Bkt1');
+    {if RecordCount>0 then
+    begin
+      CME1.Connect;
+      CME1.Filename:=path+'Env\Prudensial\Bkt1.xls';
+      CME1.ExportDataset(BKT1,'Bkt1',Ft);
+      CME1.SaveAs(path+'Env\Prudensial\Bkt1',FFXLS);
+      if not ft then CME1.Disconnect;
+    end;
+    Close;
+  end;  }
+
+
+//CMExcelExport1.Disconnect;
+
+end;
+
+procedure TPrudensial.ButtonBkt2Click(Sender: TObject);
+var
+st:Tfileformat;
+dat11:Tdatetime;
+dat22:Tdatetime;
+dat33:TDateTime;
+Ft:boolean;
+begin
+  dat22:=integer(trunc(DateTimePicker2.datetime));
+  With BKT2 do
+  begin
+    ClearVariables;
+    CloseAll;
+    SQL.Clear;
+    SQL.Add('begin PRUDENSIAL.BKT2SQL(dat2=>:dat2,result=>:result); end;');
+    SetVariable('dat2' , dat22);
+    Open;
+  end;
+  ExpXLS(BKT2,path+'Env\Prudensial\Bkt2.xlsx',par,'Bkt2');
+
+end;
+procedure TPrudensial.ButtonBkt6Click(Sender: TObject);
+var
+st:Tfileformat;
+dat1:Tdatetime;
+dat2:Tdatetime;
+Ft:boolean;
+begin
+  dat1:=integer(trunc(datetimepicker1.datetime));
+  dat2:=integer(trunc(datetimepicker2.datetime));
+  With BKT6 do
+  begin
+    ClearVariables;
+    CloseAll;
+    SQL.Clear;
+    SQL.Add('begin PRUDENSIAL.BKT6SQL(dat1=>:dat1,dat2=>:dat2,result=>:result); end;');
+    SetVariable('dat1' , dat1);
+    SetVariable('dat2' , dat2);
+    Open;
+  end;
+  ExpXLS(BKT6,path+'Env\Prudensial\Bkt6.xlsx',par,'Bkt6');
+
+end;
+
+procedure TPrudensial.ButtonBkt3Click(Sender: TObject);
+var
+ dat1:Tdatetime;
+ st:Tfileformat;
+ Ft:boolean;
+begin
+  dat1:=integer(trunc(datetimepicker2.datetime));
+  With BKT3 do
+  begin
+    ClearVariables;
+    CloseAll;
+    SQL.Clear;
+    SQL.Add('begin PRUDENSIAL.BKT3SQL(dat1=>:dat1,result=>:result); end;');
+    SetVariable('dat1' , dat1);
+    Open;
+  end;
+  ExpXLS(BKT3,path+'Env\Prudensial\Bkt3.xlsx',par,'Bkt3');
+end;
+
+procedure TPrudensial.ButtonBkt4Click(Sender: TObject);
+var
+ dat1:Tdatetime;
+ st:Tfileformat;
+ Ft:boolean;
+begin
+  dat1:=integer(trunc(datetimepicker2.datetime));
+  With BKT4 do
+  begin
+    ClearVariables;
+    CloseAll;
+    SQL.Clear;
+    SQL.Add('begin PRUDENSIAL.BKT4SQL(dat1=>:dat1,result=>:result); end;');
+    SetVariable('dat1' , dat1);
+    Open;
+  end;
+  ExpXLS(BKT4,path+'Env\Prudensial\Bkt4.xlsx',par,'Bkt4');
+end;
+
+
+procedure TPrudensial.ButtonBkt5Click(Sender: TObject);
+var
+ dat1:Tdatetime;
+ st:Tfileformat;
+ Ft:boolean;
+begin
+  dat1:=integer(trunc(datetimepicker2.datetime));
+  With BKT5 do
+  begin
+    ClearVariables;
+    CloseAll;
+    SQL.Clear;
+    SQL.Add('begin PRUDENSIAL.BKT5SQL(dat1=>:dat1,result=>:result); end;');
+    SetVariable('dat1' , dat1);
+    Open;
+  end;
+  ExpXLS(BKT5,path+'Env\Prudensial\Bkt5.xlsx',par,'Bkt5');
+
+end;
+
+procedure TPrudensial.ButtonBkt7Click(Sender: TObject);
+var
+st:Tfileformat;
+dat2:Tdatetime;
+Ft:boolean;
+begin
+  dat2:=integer(trunc(datetimepicker2.datetime));
+  With BKT7 do
+  begin
+    ClearVariables;
+    CloseAll;
+    SQL.Clear;
+    SQL.Add('begin PRUDENSIAL.BKT7SQL(dat2=>:dat2,result=>:result); end;');
+    SetVariable('dat2' , dat2);
+    Open;
+  end;
+  ExpXLS(BKT7,path+'Env\Prudensial\Bkt7.xlsx',par,'Bkt7');
+end;
+
+
+procedure TPrudensial.ButtonBkt9_1Click(Sender: TObject);
+var
+st:Tfileformat;
+dat2:Tdatetime;
+Ft:boolean;
+begin
+  dat2:=integer(trunc(datetimepicker2.datetime));
+  With BKT9_1 do
+  begin
+    ClearVariables;
+    CloseAll;
+    SQL.Clear;
+    SQL.Add('begin PRUDENSIAL.BKT9_1SQL(dat2=>:dat2,result=>:result); end;');
+    SetVariable('dat2' , dat2);
+    Open;
+  end;
+  ExpXLS(BKT9_1,path+'Env\Prudensial\Bkt9_1.xlsx',par,'Bkt9_1');
+end;
+
+procedure TPrudensial.prClick(Sender: TObject);
+  var
+  excel,Sheet, Sheets ,v :Variant;
+  c, r, kr, i, j, z  :Integer;
+  st, s, name1   :String;
+  DepartmentName,Filename :String;
+  DepartmentCount, DepRow:Integer;
+  v_Obn, v_bdntm :Real;
+  pruden,temizlemek,del2 :Textfile;
+
+begin
+  V :=ExcelApplication1.Application;
+  ExcelApplication1.Connect;
+  V.Workbooks.Open(path+'Env\Prudensial\prudencial.xlsx');
+  V.Visible := True;
+  ExcelApplication1.Visible[0] :=True;
+  ExcelApplication1.Disconnect;
+end;
+
+procedure TPrudensial.BitBtn1Click(Sender: TObject);
+  var
+  Sheet, Sheets ,v :Variant;
+  c, r, kr, i, j, z  :Integer;
+  st, s, name1   :String;
+  DepartmentName,Filename :String;
+  DepartmentCount, DepRow:Integer;
+  v_Obn, v_bdntm :Real;
+  pruden,temizlemek,del2 :Textfile;
+  del:Tcomponent;
+
+begin
+
+prd.Visible[0]:= true;
+
+
+ try
+ prd.Run('temizlemek');
+ except
+ prd.Run('pruden');
+ prd.Run('del');
+ end;
+end;
+
+procedure TPrudensial.ActiveFormCreate(Sender: TObject);
+begin
+  BKTBalans:=TBKTBalans.Create(self);
+  FormAdd:=TFormAdd.Create(self);
+  RadioButton1.Checked;
+  DateTimePicker1.DateTime:=sbop.CallDateFunction('get_date',[]);
+  DateTimePicker2.DateTime:=sbop.CallDateFunction('get_date',[]);
+  ButtonBkt1.Visible:=False;
+  ButtonBkt2.Visible:=False;
+  ButtonBkt3.Visible:=False;
+  ButtonBkt4.Visible:=False;
+  ButtonBkt5.Visible:=False;
+  ButtonBkt6.Visible:=False;
+  ButtonBkt7.Visible:=False;
+  ButtonBkt8.Visible:=False;
+  ButtonBkt9_1.Visible:=False;
+  ButtonBkt9_2.Visible:=False;
+  ButtonBkt10.Visible:=False;
+  ButtonBkt11.Visible:=False;
+  ButtonBkt12.Visible:=False;
+  ButtonBkt13.Visible:=False;
+  PR.Visible:=False;
+  path:=Copy(GetCurrentDir, 0, 14);//length(GetCurrentDir)-3);
+  SBTranslateProc.TranslateAllComponents(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TPrudensial.ActiveFormDestroy(Sender: TObject);
+begin
+  CME1.Disconnect;
+  CME2.Disconnect;
+  CME6.Disconnect;
+  CMExcelExport3.Disconnect;
+  ExcelExport.Disconnect;
+  CMExcelExport10.Disconnect;
+//ExcelExport.Disconnect;
+end;
+
+procedure TPrudensial.CheckBox1Click(Sender: TObject);
+var
+v:variant;
+begin
+
+
+
+end;
+
+procedure TPrudensial.gx2Click(Sender: TObject);
+  var
+  excel,Sheet, Sheets ,v :Variant;
+  c, r, kr, i, j, z  :Integer;
+  st, s, name1   :String;
+  DepartmentName,Filename :String;
+  DepartmentCount, DepRow:Integer;
+  v_Obn, v_bdntm :Real;
+  pruden,temizlemek,del2 :Textfile;
+
+begin
+Excel.Visible := false;
+
+
+
+
+
+if not DirectoryExists('C:\Smart-Bank\Env\prudesial\mac') then
+MkDir('C:\Smart-Bank\Env\prudesial\mac');
+
+ //-------------------------------------------create files-
+     //FileName:=dir+'sw'+edit_ref+'.inp';
+   AssignFile(pruden,'C:\Smart-Bank\Env\prudesial\mac\pruden.bas');
+   Rewrite(pruden);
+   for i:=0 to prud.Lines.Count do
+   writeln(pruden,prud.lines[i]);
+   CloseFile(pruden);
+   AssignFile(temizlemek,'C:\Smart-Bank\Env\prudesial\mac\temizlemek.bas');
+   Rewrite(temizlemek);
+   for c:=0 to tem.Lines.Count do
+   writeln(temizlemek,tem.lines[c]);
+    CloseFile(temizlemek);
+
+   AssignFile(del2,'C:\Smart-Bank\Env\prudesial\mac\del.bas');
+   Rewrite(del2);
+
+      for r:=0 to dl.Lines.Count do
+   writeln(del2,dl.lines[r]);
+    CloseFile(del2);
+ //------------------------------------------end create files-
+
+  //ShowMessage('test');
+
+  //ExcelApplication1.Disconnect;
+  //ExcelApplication1:=TExcelApplication.Create(self);
+
+
+
+
+ //prd.Disconnect;
+     v:=prd.Application;
+ v.workbooks.add('C:\Smart-Bank\Env\prudesial\pruden.xlsm');
+ v.VBE.ActiveVBProject.VBComponents.Import('C:\Smart-Bank\Env\prudesial\mac\temizlemek.bas');
+  v.Run('temizlemek');
+//ExcelApplication1.Workbooks.Add('D:\Smart-Bank\Env\prudesial\PRUDEN.xls',0);
+//ExcelApplication1.Connect;
+
+ v.VBE.ActiveVBProject.VBComponents.Import('C:\Smart-Bank\Env\prudesial\mac\pruden.bas');
+ v.Run('pruden');
+
+
+ 
+
+ v.VBE.ActiveVBProject.VBComponents.Import('C:\Smart-Bank\Env\prudesial\mac\del.bas');
+ v.Run('del');
+  end;
+
+procedure TPrudensial.RadioButton1Click(Sender: TObject);
+begin
+ Button1.Visible:=True;
+ ButtonBkt1.Visible:=False;
+ ButtonBkt2.Visible:=False;
+ ButtonBkt3.Visible:=False;
+ ButtonBkt4.Visible:=False;
+ ButtonBkt5.Visible:=False;
+ ButtonBkt6.Visible:=False;
+ ButtonBkt7.Visible:=False;
+ ButtonBkt8.Visible:=False;
+ ButtonBkt9_1.Visible:=False;
+ ButtonBkt9_2.Visible:=False;
+ ButtonBkt10.Visible:=False;
+ ButtonBkt11.Visible:=False;
+ ButtonBkt12.Visible:=False;
+ ButtonBkt13.Visible:=False;
+ PR.Visible:=False;
+ Par:=1;
+end;
+
+procedure TPrudensial.RadioButton2Click(Sender: TObject);
+begin
+ Button1.Visible:=False;
+ ButtonBkt1.Visible:=True;
+ ButtonBkt2.Visible:=True;
+ ButtonBkt3.Visible:=True;
+ ButtonBkt4.Visible:=True;
+ ButtonBkt5.Visible:=True;
+ ButtonBkt6.Visible:=True;
+ ButtonBkt7.Visible:=True;
+ ButtonBkt8.Visible:=True;
+ ButtonBkt9_1.Visible:=True;
+ ButtonBkt9_2.Visible:=True;
+ ButtonBkt10.Visible:=True;
+ ButtonBkt11.Visible:=True;
+ ButtonBkt12.Visible:=True;
+ ButtonBkt13.Visible:=True;
+ PR.Visible:=True;
+ Par:=0;
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TPrudensial,
+    Class_Prudensial,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.
+

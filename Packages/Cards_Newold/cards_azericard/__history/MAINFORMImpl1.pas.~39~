@@ -1,0 +1,1260 @@
+
+unit MAINFORMImpl1;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActiveX, AxCtrls, CARDS_TLB, StdVcl, ComCtrls, DBCtrls, ExtCtrls, Tabs,
+  StdCtrls, Mask, FieldSearchEdit, Buttons, FileCtrl, Grids, DBGrids,
+   CMExcelExport, ExcelXp, OleServer,
+  ActnList, ImgList, Menus, ToolWin, jpeg, PluginToolBar ;
+
+type
+  TMAINFORM = class(TActiveForm, IMAINFORM)
+    PopupMenu1: TPopupMenu;
+    N11: TMenuItem;
+    N21: TMenuItem;
+    ImageList1: TImageList;
+    N1: TMenuItem;
+    PopupMenu2: TPopupMenu;
+    MenuItem1: TMenuItem;
+    MenuItem2: TMenuItem;
+    MenuItem3: TMenuItem;
+    IntReatil1: TMenuItem;
+    PopupMenu3: TPopupMenu;
+    MenuItem4: TMenuItem;
+    MenuItem5: TMenuItem;
+    MenuItem6: TMenuItem;
+    Panel1: TPanel;
+    CoolBar1: TCoolBar;
+    ToolBar1: TToolBar;
+    isertbtn: TToolButton;
+    ToolButton1: TToolButton;
+    ToolButton3: TToolButton;
+    ToolButton7: TToolButton;
+    RVisa1: TMenuItem;
+    N2: TMenuItem;
+    N3: TMenuItem;
+    N4: TMenuItem;
+    N5: TMenuItem;
+    N6: TMenuItem;
+    N7: TMenuItem;
+    N8: TMenuItem;
+    N9: TMenuItem;
+    Panel2: TPanel;
+    Image1: TImage;
+    N10: TMenuItem;
+    Dilling1: TMenuItem;
+    Kliring1: TMenuItem;
+    DFile1: TMenuItem;
+    N12: TMenuItem;
+    cARDNUMBERCHANGE1: TMenuItem;
+    N13: TMenuItem;
+    N14: TMenuItem;
+    Limitlr1: TMenuItem;
+    procedure MainMenuMouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure ActiveFormActivate(Sender: TObject);
+    procedure ActiveFormKeyUp(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure CTButtonRefreshClick(Sender: TObject);
+//    procedure NewfileClick(Sender: TObject);
+    procedure NewCardClick(Sender: TObject);
+    procedure N21Click(Sender: TObject);
+    procedure N11Click(Sender: TObject);
+    procedure N1Click(Sender: TObject);
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure MenuItem1Click(Sender: TObject);
+    procedure N9Click(Sender: TObject);
+    procedure ToolButton7Click(Sender: TObject);
+    procedure N10Click(Sender: TObject);
+    procedure ToolButton3Click(Sender: TObject);
+    procedure MenuItem3Click(Sender: TObject);
+    procedure IntReatil1Click(Sender: TObject);
+    procedure MenuItem2Click(Sender: TObject);
+    procedure RVisa1Click(Sender: TObject);
+    procedure DFile1Click(Sender: TObject);
+    procedure Dilling1Click(Sender: TObject);
+    procedure Kliring1Click(Sender: TObject);
+    procedure test1Click(Sender: TObject);
+    procedure N12DrawItem(Sender: TObject; ACanvas: TCanvas; ARect: TRect;
+      Selected: Boolean);
+    procedure N12Click(Sender: TObject);
+    procedure cARDNUMBERCHANGE1Click(Sender: TObject);
+    procedure PopupMenu1Popup(Sender: TObject);
+    procedure N13Click(Sender: TObject);
+    procedure N14Click(Sender: TObject);
+    procedure Limitlr1Click(Sender: TObject);
+  private
+    { Private declarations }
+    FEvents: IMAINFORMEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+  public
+    { Public declarations }
+    procedure Initialize; override;
+  end;
+
+implementation
+
+uses ComObj, ComServ, Unit18, Unit7, balans, customers, payment, newcard,
+  cfilepas, applicationpas, creditinfopas, rezform, Unit9, U9, setac, balhs,
+  comp, crdtype, banksettings, filialaccounts, datclose, domesticbank,
+  atmendpos, poscomission, sms, Unitintfile, UnitDxxx, UnitRvisa, Unit155,
+  dilingUnit, klirinqUnit, UnitDfile, Unitclient2, Unitexcel, Unitsalary,
+  cardnumbersource, unitverification, accountcloseunit,sboapiDataModuleImpl, SBTranslateProc,
+  limittur;
+
+{$R *.DFM}
+
+{ TMAINFORM }
+
+
+
+{CHECK FOR APPEND AND NOT ACCEPTED MESSAGES }
+
+
+{PROCEDURE ADD VALUTE TO THE COMBO}
+
+{Function check file extention}
+
+procedure LoadPlugin(PluginName :String;PluginParam :String);
+var PluginHandle :THandle;
+    exportproc : procedure(s:String);
+begin
+   PluginHandle := LoadPackage(ExtractFilePath(Application.ExeName)+PluginName);
+
+   if PluginHandle > 0 then
+   begin
+      @exportproc := GetProcAddress(PluginHandle,'InitPlugin');
+      exportproc(PluginParam);
+   end;
+end;
+
+
+
+procedure NewCardCreateList;
+begin
+
+end;
+
+
+
+function CheckFileExt(fname : string) : boolean;
+    var i, checkFileExtLen: integer;
+        fileExt : String;
+begin
+      checkFileExtLen:=0;
+      fileExt:='';
+      fileExt:= trim(ExtractFileExt(fname));
+      for i:=0 to length(fileext) do
+        begin
+        if fileExt[i] in ['0'..'9','.'] then inc(checkFileExtLen);
+        end;
+      {check for file extention}
+      if checkFileExtLen <> length(fileext) then result:=false else result:=true;
+end;
+{}
+{procedure delfile(flist:TFileListBox;filename:string;messcount:integer;messtype:integer);
+begin
+   if messcount=0 then begin ShowMessage('No message');exit;end;
+   case MessageDlg('Are you sure remove  the file '''+filename+''' ?',mtConfirmation,[mbyes,mbno],0) of
+        mryes:begin
+              Datamod.UMUMI1.Active:=false;
+              Datamod.UMUMI1.sql.Clear;
+              Datamod.UMUMI1.sql.Add('delete from clients where (filename='''+filename+''')and(messtype='''+inttostr(messtype)+''')');
+              Datamod.UMUMI1.ExecSQL;
+
+              if FileExists('C:\AZCARD\OUT\'+FormatDateTime('DDMMYY',DATE)+'\'+filename) then DeleteFile(filename);
+              flist.Update;
+              Datamod.ReCreateFile.RefreshRecord;
+              end;
+        mrno:abort;
+        mrcancel:abort;
+        end;
+end;}
+{}
+
+{INSERT ZERO}
+function insertzero(acc:real):string ;
+var modpart,s:string;
+    dempos:integer;
+begin
+       result:='';
+       result:=inttostr(trunc(acc));
+       s:=FloatToStr(acc);
+       dempos:=pos(DecimalSeparator,s);
+       if dempos = 0 then  modpart:='00' else
+       begin
+          if length(copy(s,dempos+1,length(s)-dempos)) = 1 then
+          modpart:= copy(s,dempos+1,length(s)-dempos)+'0' else
+          if length(copy(s,dempos+1,length(s)-dempos)) = 2 then
+          modpart:=copy(s,dempos+1,length(s)-dempos);
+       end;
+       Result:=Result+'.'+modpart;
+
+end;
+
+
+
+
+
+function whenday:integer;
+const yan=31;mar=31;apr=30;may=31;jun=30;jul=31;avg=31;seb=30;okt=31;nov=30;dec=31;
+ var   wday,feb:integer;
+ begin
+   wday:=0;
+   if IsLeapYear(strtoint(FormatDateTime('yyyy',date))) then feb:=29 else feb:=28;
+   case strtoint(FormatDateTime('mm',date)) of
+   1:wday:=StrToInt(FormatDateTime('dd',date));
+   2:wday:=yan+StrToInt(FormatDateTime('dd',date));
+   3:wday:=yan+feb+StrToInt(FormatDateTime('dd',date));
+   4:wday:=yan+feb+mar+StrToInt(FormatDateTime('dd',date));
+   5:wday:=yan+feb+mar+apr+StrToInt(FormatDateTime('dd',date));
+   6:wday:=yan+feb+mar+apr+may+StrToInt(FormatDateTime('dd',date));
+   7:wday:=yan+feb+mar+apr+may+jun+StrToInt(FormatDateTime('dd',date));
+   8:wday:=yan+feb+mar+apr+may+jun+jul+StrToInt(FormatDateTime('dd',date));
+   9:wday:=yan+feb+mar+apr+may+jun+jul+avg+StrToInt(FormatDateTime('dd',date));
+  10:wday:=yan+feb+mar+apr+may+jun+jul+avg+seb+StrToInt(FormatDateTime('dd',date));
+  11:wday:=yan+feb+mar+apr+may+jun+jul+avg+seb+okt+StrToInt(FormatDateTime('dd',date));
+  12:wday:=yan+feb+mar+apr+may+jun+jul+avg+seb+okt+nov+StrToInt(FormatDateTime('dd',date));
+  end;
+  Result:=wday;
+end;
+{}
+{Convert integer to STRING for when}
+Function when2Str(wday:integer): string;
+var
+ wd: string;
+begin
+   wd:=InttoStr(wday);
+   case length(wd) of
+    1: wd:='00'+wd;
+    2: wd:='0'+wd;
+   end;
+when2Str:=wd;
+end;
+
+{Convert integer to date}
+function whichdate(wnday:integer):String;
+const yan=31;mar=31;apr=30;may=31;jun=30;jul=31;avg=31;seb=30;okt=31;nov=30;dec=31;
+ var   feb:integer;
+begin
+    if IsLeapYear(strtoint(FormatDateTime('yyyy',date))) then feb:=29 else feb:=28;
+{1} if (wnday>=1)and(wnday<= yan) then Result:=inttostr(wnday)+'.01.'+FormatDateTime('YYYY',date) else
+
+{2} if (wnday> yan)and(wnday<=yan+feb) then Result:=(inttostr(wnday-yan)+'.02.'+FormatDateTime('YYYY',date)) else
+
+{3} if (wnday>yan+feb)and(wnday<=yan+feb+mar) then  Result:=(inttostr(wnday-(yan+feb))+'.03.'+FormatDateTime('YYYY',date)) else
+
+{4} if (wnday>yan+feb+mar)and(wnday<=yan+feb+mar+apr) then Result:=(inttostr(wnday-(yan+feb+mar))+'.04.'+FormatDateTime('YYYY',date)) else
+
+{5} if (wnday >yan+feb+mar+apr)and(wnday<=yan+feb+mar+apr+may) then  Result:=(inttostr(wnday-(yan+feb+mar+apr))+'.05.'+FormatDateTime('YYYY',date))else
+
+{6} if (wnday >yan+feb+mar+apr+may)and(wnday<=yan+feb+mar+apr+may+jun) then Result:=(inttostr(wnday-(yan+feb+mar+apr+may))+'.06.'+FormatDateTime('YYYY',date))else
+
+{7} if (wnday >yan+feb+mar+apr+may+jun)and(wnday<=yan+feb+mar+apr+may+jun+jul) then  Result:=(inttostr(wnday-(yan+feb+mar+apr+may+jun))+'.07.'+FormatDateTime('YYYY',date))else
+
+{8} if (wnday >yan+feb+mar+apr+may+jun+jul)and(wnday<=yan+feb+mar+apr+may+jun+jul+avg) then Result:=(inttostr(wnday-(yan+feb+mar+apr+may+jun+jul))+'.08.'+FormatDateTime('YYYY',date)) else
+
+{9} if (wnday>yan+feb+mar+apr+may+jun+jul+avg)and (wnday<= yan+feb+mar+apr+may+jun+jul+avg+seb) then Result:=(inttostr(wnday-(yan+feb+mar+apr+may+jun+jul+avg))+'.09.'+FormatDateTime('YYYY',date)) else
+
+{10}if (wnday >yan+feb+mar+apr+may+jun+jul+avg+seb)and(wnday<=yan+feb+mar+apr+may+jun+jul+avg+seb+okt) then Result:=(inttostr(wnday-(yan+feb+mar+apr+may+jun+jul+avg+seb))+'.10.'+FormatDateTime('YYYY',date))else
+
+{11}if (wnday> yan+feb+mar+apr+may+jun+jul+avg+seb+okt)and(wnday<= yan+feb+mar+apr+may+jun+jul+avg+seb+okt+nov) then Result:=(inttostr(wnday-(yan+feb+mar+apr+may+jun+jul+avg+seb+okt))+'.11.'+FormatDateTime('YYYY',date))else
+
+{12}if (wnday>yan+feb+mar+apr+may+jun+jul+avg+seb+okt+nov)and(wnday<= yan+feb+mar+apr+may+jun+jul+avg+seb+okt+nov+dec) then  Result:=(inttostr(wnday-(yan+feb+mar+apr+may+jun+jul+avg+seb+okt+nov))+'.12.'+FormatDateTime('YYYY',date));
+end;
+{}
+function sysday:String;
+var t:TDate;
+begin
+  case DayOfWeek(date) of
+  2,3,4,5:Result:=formatdatetime('YYYYMMDD',date);
+  6:begin t:=date+3;Result:=formatdatetime('YYYYMMDD',t);end;
+  7:begin t:=date+2;Result:=formatdatetime('YYYYMMDD',t);end;
+  1:begin t:=date+1;Result:=formatdatetime('YYYYMMDD',t);end;
+  end;
+end;
+{}
+function otherdate(otherd:tdate;tip:boolean):string;
+var  str:String;
+begin
+if tip then
+begin
+   case strtoint(formatdatetime('mm',date)) of
+        1: str:='JAN';
+        2: str:='FEB';
+        3: str:='MAR';
+        4: str:='APR';
+        5: str:='MAY';
+        6: str:='JUN';
+        7: str:='JLY';
+        8: str:='AUG';
+        9: str:='SEP';
+        10: str:='OCT';
+        11: str:='NOV';
+        12: str:='DEC';
+        end;
+   Result:= FormatDateTime('dd ',otherd)+str+FormatDateTime(' yy',otherd);
+end else
+begin
+   Result:=FormatDateTime('dd',otherd)+'/'+FormatDateTime('mm',otherd)+'/'+FormatDateTime('yy',otherd);
+end;
+end;
+
+function MonthIntNum(MonthStr:String):Integer;
+var IntNum :Integer;
+begin
+  if MonthStr = 'JAN' then IntNum :=1;
+  if MonthStr = 'FEB' then IntNum :=2;
+  if MonthStr = 'MAR' then IntNum :=3;
+  if MonthStr = 'APR' then IntNum :=4;
+  if MonthStr = 'MAY' then IntNum :=5;
+  if MonthStr = 'JUN' then IntNum :=6;
+  if MonthStr = 'JUL' then IntNum :=7;
+  if MonthStr = 'AUG' then IntNum :=8;
+  if MonthStr = 'SEP' then IntNum :=9;
+  if MonthStr = 'OCT' then IntNum :=10;
+  if MonthStr = 'NOV' then IntNum :=11;
+  if MonthStr = 'DEC' then IntNum :=12;
+  Result :=IntNum;
+end;
+
+
+
+
+
+
+
+
+
+procedure TMAINFORM.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_MAINFORMPage); }
+end;
+
+procedure TMAINFORM.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as IMAINFORMEvents;
+end;
+
+procedure TMAINFORM.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TMAINFORM.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TMAINFORM.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TMAINFORM.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TMAINFORM.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TMAINFORM.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TMAINFORM.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TMAINFORM.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TMAINFORM.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TMAINFORM.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TMAINFORM.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TMAINFORM.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TMAINFORM.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TMAINFORM.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TMAINFORM.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TMAINFORM.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TMAINFORM.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TMAINFORM.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TMAINFORM.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TMAINFORM._Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TMAINFORM.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TMAINFORM.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TMAINFORM.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TMAINFORM.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TMAINFORM.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TMAINFORM.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TMAINFORM.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TMAINFORM.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TMAINFORM.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TMAINFORM.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TMAINFORM.Set_AxBorderStyle(Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TMAINFORM.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TMAINFORM.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TMAINFORM.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TMAINFORM.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TMAINFORM.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TMAINFORM.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TMAINFORM.Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TMAINFORM.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TMAINFORM.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TMAINFORM.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TMAINFORM.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TMAINFORM.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TMAINFORM.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+procedure TMAINFORM.MainMenuMouseMove(Sender: TObject; Shift: TShiftState;
+  X, Y: Integer);
+begin
+   //Shape2.Brush.Color:=clGray;
+   //Label17.Font.Style:=[];
+end;
+
+procedure TMAINFORM.ActiveFormActivate(Sender: TObject);
+  //elave:=1;
+   begin
+
+  {if (ViewValidityOnActivate = 1)and(ShowExpiryCard=false) then
+  begin
+    DateExpiryCard.Execute;
+  end;}
+end;
+
+procedure TMAINFORM.ActiveFormKeyUp(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+var
+i:integer;
+begin
+   if key = vk_f3 then
+   begin
+    //if not FormSearch.Showing then
+    //begin
+     //FormSearch.SearchRbs.Clear;
+     //FormSearch.SearchCardNumber.Clear;
+     //FormSearch.ButtonCICard.Down:=true;
+     //FormSearch.ButtonCISelec.Down:=false;
+     //FormSearch.PanelSubCrad.Visible:=false;
+     //FormSearch.ButtonCICard.Click;
+
+
+   // end;
+    FormSearch:=TFormSearch.Create(self);
+    FormSearch.Showmodal;
+
+     
+
+
+
+
+
+
+
+   end;
+end;
+
+procedure TMAINFORM.CTButtonRefreshClick(Sender: TObject);
+type Tclient = record
+     cardnumber:string;
+     RBSnumber:string;
+     terminal:String;
+     trantime:string;
+     trandate:string;
+     TranAmount:Real;
+     AcountAmount:real;
+     feeamount:Real;
+     Trancurrency:String;
+     Tranbalanssign:String;
+     Acccurrency:String;
+     Accbalanssign:String;
+     Feecurrency:String;
+     Feebalanssign:String;
+
+     end;
+
+var i,j,k,h,z,rowcount,selst,selstF,lengthofTA,msgcount :integer;
+    all,all1,STmessage,currency,syssim,fileExt:String;
+    test,transummUSD,amountsummUSD,feeamounsummUSD:real;
+    transummAZM,amountsummAZM,feeamounsummAZM:real;
+    Client : array[1..100] of Tclient;
+    go:boolean;
+    f:textfile;
+begin
+   //CTButtonRefresh.Enabled:=false;
+ {try
+   CTInboxRich.Lines.Clear;
+   CTPanelCount.Caption:='0';
+   if not DirectoryExists('C:\AZCARD\IN') then MkDir('C:\AZCARD\IN');
+   FileListBox1.Directory:='C:\AZCARD\IN';
+   FileListBox1.Update;
+   if FileListBox1.Items.Count = 0 then exit;
+   test:=122 / 10;
+   if pos('.',floattostr(test))>0 then syssim:='.' else
+   if pos(',',floattostr(test))>0 then syssim:=',';
+   for i:=0 to FileListBox1.items.Count-1 do
+   begin
+      Application.ProcessMessages;
+      msgcount:=0;
+      if (copy(FileListBox1.items[i],0,3) <> 'EXD')and((copy(FileListBox1.items[i],0,1) <> 'exd')) then Continue;
+
+      {check for file extention}
+     { if CheckFileExt(FileListBox1.Directory+FileListBox1.items[i])=false then continue;
+
+      {LINK TO FILE}
+     { AssignFile(F,'C:\AZCARD\IN\'+FileListBox1.Items[i]);
+      Reset(F);
+      rowcount:=0;
+      while not eof(f) do
+      begin
+        rowcount:=rowcount+1;
+        Readln(F,Stmessage);
+        if trim(copy(STmessage,19,3)) <> 'BAL'  then  msgcount:=msgcount+1;
+//        ShowMessage(IntToStr(msgcount));
+      end;
+      STmessage:='';
+      Reset(f);
+      {VIEW FILE NAME}
+
+    {  if  RefwithSel.Down = false then
+      begin
+      CTPanelCount.Caption:=IntToStr(strtoint(CTPanelCount.Caption)+1);
+      CTInboxRich.Lines.Add('FILE NAME            :< '+FileListBox1.items[i]+' >   '+'Message count: '+inttostr(msgcount-2));
+      {VIEW FILE MESSAGE}
+   {   for j:=1 to rowcount-1 do
+      begin
+          Application.ProcessMessages;
+          Readln(F,Stmessage);
+          if j = 1 then Continue;
+          if trim(copy(STmessage,19,3)) = 'BAL'  then Continue;
+          CTInboxRich.Lines.Add('CARD NUMBER          :'+trim(copy(STmessage,72,16)));
+          CTInboxRich.Lines.Add('RBS NUMBER           :'+trim(copy(STmessage,38,20)));
+          CTInboxRich.Lines.Add('TRANSACTION DETAILS  :'+trim(copy(STmessage,126,27)));
+          CTInboxRich.Lines.Add('TERMINAL             :'+copy(STmessage,111,15)); //trim(FloatToStr(strtofloat(copy(STmessage,221,24)))));
+          CTInboxRich.Lines.Add('TRANSACTION DATE     :'+trim(copy(STmessage,14,8)));
+          CTInboxRich.Lines.Add('TRANSACTION TIME     :'+trim(copy(STmessage,211,8)));
+          {}
+        {  all:='';
+          ALL:=FloatToStr(StrToFloat(copy(STmessage,91,12)));
+          if pos(syssim,all)=0 then  Insert(syssim+'00',all,length(all)+1);
+          {Insert(syssim,all,length(all)-1);}
+        {  for k:=length(all) to 14 do all:=all+' ';
+          if copy(STmessage,34,1) = 'C' then begin all:=all+'   CREDIT'; end else
+          if copy(STmessage,34,1) = 'D' then begin all:=all+'   DEBET ';  end else
+          if copy(STmessage,34,1) = ' ' then begin all:=all+'         ';  end;
+
+//          if copy(STmessage,260,3) = '944' then currency := 'AZN' else if copy(STmessage,260,3) = '840' then currency := 'USD';
+          CTInboxRich.Lines.Add('TRANSACTION AMOUNT   :'+all+' '+trim(copy(STmessage,88,3)));
+          {}
+         { all:='';
+          ALL:=FloatToStr(StrToFloat(copy(STmessage,22,12)));
+          if pos(syssim,all)=0 then  Insert(syssim+'00',all,length(all)+1);
+{          Insert(syssim,all,length(all)-1);  }
+        {  for k:=length(all) to 14 do all:=all+' ';
+          if copy(STmessage,34,1) = 'C' then begin all:=all+'   CREDIT'; end else
+          if copy(STmessage,34,1) = 'D' then begin all:=all+'   DEBET ';  end else
+          if copy(STmessage,34,1) = ' ' then begin all:=all+'         ';  end;
+//          if copy(STmessage,266,3) = '944' then currency := 'AZN' else if copy(STmessage,266,3) = '840' then currency := 'USD';
+          CTInboxRich.Lines.Add('ACCOUNT AMOUNT       :'+all+' '+trim(copy(STmessage,35,3)));
+          {}
+       {   aLL:='';
+          all:=FloatToStr(StrToFloat(copy(STmessage,176,12)));
+          if pos(syssim,all)=0 then  Insert(syssim+'00',all,length(all)+1);
+          //if copy(STmessage,266,3) = '944' then currency := 'AZN' else if copy(STmessage,266,3) = '840' then currency := 'USD';
+          for k:=length(all) to 23 do all:=all+' ';
+          CTInboxRich.Lines.Add('FEE AMOUNT           :'+ ALL+' '+trim(copy(STmessage,88,3)));
+          {}
+        {  CTInboxRich.Lines.Add('---------------------------------------------------------------------------------');
+      end;
+      end else
+{IF WITH SELECT BUTTON DOWN}
+    {  if RefwithSel.Down then
+      begin
+      CTPanelCount.Caption:=IntToStr(strtoint(CTPanelCount.Caption)+1);
+      CTInboxRich.Lines.Add('FILE NAME            :< '+FileListBox1.items[i]+' >');
+      {INSERT INTO ARRAY CLIENT}
+     { for j:=1 to rowcount-1 do
+      begin
+          Readln(F,Stmessage);
+          if j = 1 then Continue;
+          if trim(copy(STmessage,19,3)) = 'BAL'  then Continue;
+          {}
+          {------------
+
+          {------------}
+        {  Client[j].cardnumber:=trim(copy(STmessage,72,16));
+          Client[j].RBSnumber:=trim(copy(STmessage,38,20));
+          Client[j].terminal:=floattostr(strtofloat(trim(copy(STmessage,111,15))));
+          Client[j].Trandate:=trim(copy(STmessage,14,8));
+          Client[j].trantime:=trim(copy(STmessage,211,8));
+          {TRANS}
+        {  all:='';
+          ALL:=FloatToStr(StrToFloat(copy(STmessage,91,12))/100);
+          Client[j].TranAmount:=StrToFloat(all);
+          all:='';
+          if copy(STmessage,34,1) = 'C' then begin all:='   CREDIT';Client[j].TranAmount:=Client[j].TranAmount*(-1) end else
+          if copy(STmessage,34,1) = 'D' then begin all:='   DEBET ';  end;
+          client[j].Tranbalanssign:=all;
+          all:='';
+          //if copy(STmessage,260,3) = '944' then currency := 'AZN' else if copy(STmessage,260,3) = '840' then currency := 'USD';
+          Client[j].Trancurrency:=copy(STmessage,88,3);
+          {}
+       {   all:='';
+          ALL:=FloatToStr(StrToFloat(copy(STmessage,22,12))/100);
+          Client[j].AcountAmount:=StrToFloat(all);
+          all:='';
+          if copy(STmessage,34,1) = 'C' then begin all:='   CREDIT';Client[j].AcountAmount:=Client[j].AcountAmount*(-1) end else
+          if copy(STmessage,34,1) = 'D' then begin all:='   DEBET ';  end;
+          Client[j].Accbalanssign:=all;
+          all:='';
+          //if copy(STmessage,266,3) = '944' then currency := 'AZN' else if copy(STmessage,266,3) = '840' then currency := 'USD';
+          Client[j].Acccurrency:=copy(STmessage,35,3);
+          {}
+     {     aLL:='';
+          client[j].feeamount:=StrToFloat(copy(STmessage,176,12))/100;
+
+          if copy(STmessage,34,1) = 'C' then begin all:='   CREDIT';client[j].feeamount:=client[j].feeamount*(-1);end else
+          if copy(STmessage,34,1) = 'D' then begin all:='   DEBET ';  end;
+          Client[j].Feebalanssign:=all;
+          //if copy(STmessage,266,3) = '944' then currency := 'AZN' else if copy(STmessage,266,3) = '840' then currency := 'USD';
+          Client[j].Feecurrency:=copy(STmessage,88,3);
+      end;
+      Reset(f);
+      {VIEW FILE MESSAGE}
+   {   for j:=2 to rowcount-1 do
+      begin
+          transummUSD:=0;
+          transummAZM:=0;
+          amountsummUSD:=0;
+          amountsummAZM:=0;
+          feeamounsummUSD:=0;
+          feeamounsummAZM:=0;
+          go:=false;
+          for z:=2 to j-1 do if (Client[j].cardnumber = Client[z].cardnumber) then begin go:=true; break;end;
+          if go then Continue;
+          if Client[j].Trancurrency = 'USD' then transummUSD:=client[j].TranAmount else if Client[j].Trancurrency = 'AZN' then transummAZM:=client[j].TranAmount;
+          if Client[j].Acccurrency = 'USD' then amountsummUSD:=client[j].AcountAmount else if Client[j].Acccurrency = 'AZN' then amountsummAZM:=client[j].AcountAmount;
+          if Client[j].Feecurrency = 'USD' then feeamounsummUSD:=client[j].feeamount else if Client[j].Feecurrency = 'AZN' then feeamounsummAZM:=client[j].feeamount;
+
+          for h:=j+1 to rowcount-1 do
+          begin
+              if Client[j].cardnumber = Client[h].cardnumber then
+              begin
+                 {}
+               {     if Client[h].Trancurrency = 'USD'  then
+                    transummUSD:=transummUSD+client[h].TranAmount
+                    else
+                    if Client[h].Trancurrency = 'AZN'  then
+                    transummAZM:=transummAZM+client[h].TranAmount;
+                 {}
+               {     if Client[h].Acccurrency = 'USD'  then
+                    amountsummUSD:=amountsummUSD+client[h].AcountAmount
+                    else
+                    if Client[h].Acccurrency = 'AZN'  then
+                    amountsummAZM:=amountsummAZM+client[h].AcountAmount;
+                 {}
+                 {   if Client[h].Feecurrency = 'USD' then
+                    feeamounsummUSD:=feeamounsummUSD+client[h].feeamount
+                    else
+                    if Client[h].Feecurrency = 'AZN' then
+                    feeamounsummAZM:=feeamounsummAZM+client[h].feeamount;
+              end;
+      end;
+      CTInboxRich.Lines.Add('CONTRACT NUMBER      :'+client[j].cardnumber);
+      CTInboxRich.Lines.Add('RBS NUMBER           :'+Client[j].RBSnumber);
+      CTInboxRich.Lines.Add('TERMINAL             :'+client[j].terminal);
+      CTInboxRich.Lines.Add('TRANSACTION DATE     :'+client[j].trandate);
+      CTInboxRich.Lines.Add('TRANSACTION TIME     :'+client[j].trantime);
+      {TRANS}
+ {     all1:='';
+      all1:=FloatToStr(abs(transummUSD));
+      if pos(syssim,all1)=0 then Insert(syssim+'00',all1,length(all1)+1);
+      for k:=length(all1) to 14 do all1:=all1+' ';
+      if transummUSD < 0 then all1:=all1+'  CREDIT' else all1:=all1+'  DEBIT ';
+      all1:='['+all1+' USD]';
+      //*//
+      all:='';
+      all:=FloatToStr(abs(transummAZM));
+      if pos(syssim,all)=0 then Insert(syssim+'00',all,length(all)+1);
+      for k:=length(all) to 14 do all:=all+' ';
+      if transummAZM < 0 then all:=all+'  CREDIT' else all:=all+'  DEBIT ';
+      all:='['+all+' AZN]';
+      all:=all+' + '+all1;
+      CTInboxRich.Lines.Add('TRANSACTION AMOUNT   :'+all);
+      {AMOUNT}
+   {   all:='';
+      all:=FloatToStr(abs(amountsummAZM+abs(amountsummUSD)));
+      if pos(syssim,all)=0 then Insert(syssim+'00',all,length(all)+1);
+      for k:=length(all) to 14 do all:=all+' ';
+      if (amountsummAZM+amountsummUSD)< 0 then all:=all+'  CREDIT' else all:=all+'  DEBIT ';
+      all:='['+all+' '+client[j].Acccurrency+']';
+      all:=all;
+      CTInboxRich.Lines.Add('ACCOUNT AMOUNT       :'+all);
+      {FEE}
+    {  all:='';
+      all:=FloatToStr(abs(feeamounsummAZM)+abs(feeamounsummUSD));
+      if pos(syssim,all)=0 then Insert(syssim+'00',all,length(all)+1);
+      for k:=length(all) to 14 do all:=all+' ';
+      if (feeamounsummAZM+feeamounsummUSD)< 0 then all:=all+'  CREDIT' else all:=all+'  DEBIT ';
+      all:='['+all+' '+client[j].Feecurrency+']';
+      all:=all;
+      CTInboxRich.Lines.Add('FEE AMOUNT           :'+all);
+      CTInboxRich.Lines.Add('-----------------------------------------------------------------------------------');
+      end;
+      end;
+      if RefwithSel.Down = false then
+      begin
+      CTInboxRich.SelStart:=CTInboxRich.FindText('Message count:',selst,LENGTH(CTInboxRich.Text),[stMatchCase]);
+      CTInboxRich.SelLength:=18;
+      CTInboxRich.SelAttributes.Color:=clBlue;
+      CTInboxRich.SelAttributes.Style:=[];
+      selst:=CTInboxRich.FindText('Message count:',selst,LENGTH(CTInboxRich.Text),[stMatchCase])+1;
+      CTInboxRich.SelLength:=-1;
+      end;
+      CTInboxRich.SelStart:=CTInboxRich.FindText('FILE NAME',selstF,LENGTH(CTInboxRich.Text),[stMatchCase]);
+      CTInboxRich.SelLength:=38;
+      CTInboxRich.SelAttributes.Color:=clred;
+      selstF:=CTInboxRich.FindText('FILE NAME',selstF,LENGTH(CTInboxRich.Text),[stMatchCase])+1;
+      CTInboxRich.SelLength:=-1;
+      CloseFile(F);
+   end;
+   CTInboxRich.SelStart:=0;
+   FINALLY
+   CTButtonRefresh.Enabled:=true;
+   END;
+SendMessage(CTInboxRich.Handle, EM_LINESCROLL, 0,(-1)*(CTInboxRich.Lines.Count-1));
+
+end;
+
+procedure TMAINFORM.NewfileClick(Sender: TObject);
+begin
+   {SETTING}
+ //------------------------------------------
+
+
+end;
+
+procedure TMAINFORM.NewCardClick(Sender: TObject);
+var
+  i :Integer;
+begin
+   {SETTING}
+   end;
+
+
+procedure TMAINFORM.N21Click(Sender: TObject);
+begin
+DataMod_CARDS.SB_ACA.CallProcedure('CheckAdvancedObjectAccess', ['card_balans']);
+
+Balance:=TBalance.Create(Self);
+Balance.ShowModal;
+end;
+
+procedure TMAINFORM.N11Click(Sender: TObject);
+begin
+DataMod_CARDS.SB_ACA.CallProcedure('CheckAdvancedObjectAccess', ['card_clients']);
+
+clients:=Tclients.create(self);
+clients.showmodal;
+end;
+
+procedure TMAINFORM.N1Click(Sender: TObject);
+begin
+DataMod_CARDS.SB_ACA.CallProcedure('CheckAdvancedObjectAccess', ['card_payment']);
+
+Payments:=TPayments.create(self);
+Payments.ShowModal;
+end;
+
+procedure TMAINFORM.ActiveFormCreate(Sender: TObject);
+begin
+
+DataMod_CARDS:=TDataMod_CARDS.create(self);
+
+
+{
+
+//Customer_new:=TCustomer_new.create(self);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+PROVS:=TPROVS.create(self);
+dilinq_form:=Tdilinq_form.create(self);
+
+
+clients2:=tclients2.create(self);
+
+Salary:=TSalary.create(Self);
+
+
+accountclose:=taccountclose.create(self);}
+ SBTranslateProc.TranslateAllComponents(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TMAINFORM.MenuItem1Click(Sender: TObject);
+begin
+DataMod_CARDS.SB_ACA.CallProcedure('CheckAdvancedObjectAccess', ['card_cfile']);
+cfile:=Tcfile.Create(Self);
+cfile.showmodal;
+end;
+
+procedure TMAINFORM.N9Click(Sender: TObject);
+begin
+DataMod_CARDS.SB_ACA.CallProcedure('CheckAdvancedObjectAccess', ['card_application']);
+Applications:=TApplications.Create(self);
+Applications.ShowModal;
+end;
+
+procedure TMAINFORM.ToolButton7Click(Sender: TObject);
+begin
+DataMod_CARDS.SB_ACA.CallProcedure('CheckAdvancedObjectAccess', ['card_hesabat']);
+hesabatlar:=thesabatlar.create(self);
+hesabatlar.showmodal;
+end;
+
+procedure TMAINFORM.N10Click(Sender: TObject);
+begin
+DataMod_CARDS.SB_ACA.CallProcedure('CheckAdvancedObjectAccess', ['card_newcard']);
+form9:=tform9.create(self);
+form9.showmodal;
+end;
+
+procedure TMAINFORM.ToolButton3Click(Sender: TObject);
+begin
+DataMod_CARDS.SB_ACA.CallProcedure('CheckAdvancedObjectAccess', ['card_setting']);
+    form10:=tform10.create(self);
+ Form10.ShowModal;
+end;
+
+procedure TMAINFORM.MenuItem3Click(Sender: TObject);
+begin
+DataMod_CARDS.SB_ACA.CallProcedure('CheckAdvancedObjectAccess', ['card_smsfiles']);
+smsfile:=Tsmsfile.Create(self);
+smsfile.showmodal;
+end;
+
+procedure TMAINFORM.IntReatil1Click(Sender: TObject);
+begin
+DataMod_CARDS.SB_ACA.CallProcedure('CheckAdvancedObjectAccess', ['card_intretail']);
+intfile:=Tintfile.create(self);
+intfile.showmodal;
+end;
+
+procedure TMAINFORM.MenuItem2Click(Sender: TObject);
+begin
+DataMod_CARDS.SB_ACA.CallProcedure('CheckAdvancedObjectAccess', ['card_dxxxfile']);
+Dxxx:=TDxxx.Create(Self);
+dxxx.showmodal;
+end;
+
+procedure TMAINFORM.RVisa1Click(Sender: TObject);
+begin
+DataMod_CARDS.SB_ACA.CallProcedure('CheckAdvancedObjectAccess', ['card_rvisa']);
+  rvisa:=Trvisa.create(self);
+rvisa.ShowModal;
+end;
+
+procedure TMAINFORM.DFile1Click(Sender: TObject);
+begin
+DataMod_CARDS.SB_ACA.CallProcedure('CheckAdvancedObjectAccess', ['card_dfile']);
+dfile:=Tdfile.create(self);
+Dfile.ShowModal;
+end;
+
+procedure TMAINFORM.Dilling1Click(Sender: TObject);
+begin
+DataMod_CARDS.SB_ACA.CallProcedure('CheckAdvancedObjectAccess', ['card_dilinq']);
+
+end;
+
+procedure TMAINFORM.Kliring1Click(Sender: TObject);
+begin
+DataMod_CARDS.SB_ACA.CallProcedure('CheckAdvancedObjectAccess', ['card_klirinq']);
+Klirinq_form:=TKlirinq_form.create(Self);
+Klirinq_form.showmodal;
+
+
+end;
+
+procedure TMAINFORM.Limitlr1Click(Sender: TObject);
+begin
+lim:=Tlim.Create(self);
+
+lim.showmodal;
+end;
+
+procedure TMAINFORM.test1Click(Sender: TObject);
+begin
+
+clients2.showmodal;
+end;
+
+procedure TMAINFORM.N12DrawItem(Sender: TObject; ACanvas: TCanvas;
+  ARect: TRect; Selected: Boolean);
+ var
+  LineBottom: Integer;
+  SText: String;
+  Bar: TRect;
+ begin
+  with ACanvas, Sender as TMenuItem do
+  begin
+    with ACanvas.Font do
+    begin
+      Charset := DEFAULT_CHARSET;
+      Name := 'Azl Sans Serif';
+      if Default then
+        Style := [fsBold];
+    end;
+    if Caption = '-' then
+    begin
+      Pen.Color := clBlack;
+      LineBottom := (ARect.Top + (ARect.Bottom - ARect.Top) div 2)-1;
+      MoveTo(ARect.Left, LineBottom);
+      LineTo(ARect.Right, LineBottom);
+      inc(LineBottom);
+      Pen.Color := clWhite;
+      MoveTo(ARect.Left, LineBottom);
+      LineTo(ARect.Right, LineBottom);
+    end
+    else
+    begin
+      if Selected then
+      begin
+        Brush.Color := clNavy;
+        if Enabled then
+          Font.Color := clWhite
+        else
+          Font.Color := clSilver;
+      end
+      else
+      begin
+        Brush.Color := clBtnFace;
+        if Enabled then
+          Font.Color := clBlack
+        else
+          Font.Color := clGrayText;
+      end;
+      Bar := ARect;
+      Inc(Bar.Left, 22);
+      FillRect(Bar);
+      TextOut(ARect.Left+{17}22, ARect.Top+1, Caption);
+    end;
+    // draw shortcut
+    SText := ShortCutToText(ShortCut);
+    TextOut(ARect.Right-TextWidth(SText)-7, ARect.Top+1, SText);
+    if ImageIndex <> -1 then
+      with GetParentMenu do
+        if Assigned(Images) then
+        begin
+          if Checked then
+          begin
+            Bar.Left := ARect.Left + 1;
+            Bar.Right := Bar.Left + 16;
+            Bar.Top := ARect.Top + 1;
+            Bar.Bottom := Bar.Top + 16;
+
+            ACanvas.Brush.Color := clBtnShadow;
+            ACanvas.FrameRect(Bar);
+
+            Inc(Bar.Left, 2);
+            Inc(Bar.Right, 2);
+            Inc(Bar.Top, 2);
+            Inc(Bar.Bottom, 2);
+
+            ACanvas.Brush.Color := clBtnHighlight;
+            ACanvas.FrameRect(Bar);
+
+            Dec(Bar.Left, 1);
+            Dec(Bar.Right, 1);
+            Dec(Bar.Top, 1);
+            Dec(Bar.Bottom, 1);
+
+            if Selected then
+              ACanvas.Brush.Color := clBtnFace
+            else
+              ACanvas.Brush.Color := clBtnHighlight;
+            ACanvas.FillRect(Bar);
+          end;
+
+          Images.Draw(ACanvas, ARect.Left, ARect.Top, ImageIndex, Enabled);
+        end;
+  end;
+
+end;
+
+
+procedure TMAINFORM.N12Click(Sender: TObject);
+begin
+DataMod_CARDS.SB_ACA.CallProcedure('CheckAdvancedObjectAccess', ['card_excelfile']);
+excelform:=tExcelform.create(Self);
+EXCELform.ShowModal;
+end;
+
+procedure TMAINFORM.cARDNUMBERCHANGE1Click(Sender: TObject);
+begin
+DataMod_CARDS.SB_ACA.CallProcedure('CheckAdvancedObjectAccess', ['card_cardnumber']);
+cardnumber:=tcardnumber.create(Self);
+cardnumber.showmodal;
+end;
+
+procedure TMAINFORM.PopupMenu1Popup(Sender: TObject);
+begin
+DataMod_CARDS.settings.refresh;
+if DataMod_CARDS.settings.fieldbyname('dord').asinteger=1 then N13.Visible:=true else N13.Visible:=False; 
+end;
+
+procedure TMAINFORM.N13Click(Sender: TObject);
+begin
+
+
+DataMod_CARDS.SB_ACA.CallProcedure('CheckAdvancedObjectAccess', ['VERIF']);
+verification:=tverification.create(self);
+verification.showmodal;
+end;
+
+procedure TMAINFORM.N14Click(Sender: TObject);
+begin
+LoadPlugin('FileReport.bpl','REZ');
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TMAINFORM,
+    Class_MAINFORM,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

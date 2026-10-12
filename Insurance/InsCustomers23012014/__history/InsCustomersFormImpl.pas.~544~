@@ -1,0 +1,2510 @@
+﻿unit InsCustomersFormImpl;
+   //ToolBar3
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActiveX, AxCtrls, InsCustomers_TLB, StdVcl, Grids, DBGrids, ComCtrls,
+  StdCtrls, Buttons, Menus, ImgList, ActnList, ToolWin, Oracle, OracleData,
+  PlgModalContainer, DB, ExtCtrls, XDBGrids, XFSCtrls, Mask, DBCtrls,
+  CurrencyEdit, CMExcelExport;
+
+
+
+type
+  TOperationMode = (omInsert, omEdit, omDelete);
+
+  TGuidError = Exception;
+
+  TInsCustomersForm = class(TActiveForm, IInsCustomersForm)
+    ActionList1: TActionList;
+    aNewCust: TAction;
+    aEditCust: TAction;
+    aDelCust: TAction;
+    aRefCust: TAction;
+    ImageList1: TImageList;
+    aNewAcc: TAction;
+    aEditAcc: TAction;
+    aDelAcc: TAction;
+    aRefAcc: TAction;
+    pmRefresh: TPopupMenu;
+    N1: TMenuItem;
+    aRefreshAll: TAction;
+    aNewIns: TAction;
+    aEditIns: TAction;
+    aDelIns: TAction;
+    aRefIns: TAction;
+    pmcCallActiveX: TPlgModalContainer;
+    PopupMenu1: TPopupMenu;
+    MenuItem1: TMenuItem;
+    MenuItem2: TMenuItem;
+    aSettings: TAction;
+    aContractAccs: TAction;
+    aPayPlan: TAction;
+    aFreeUser: TAction;
+    aAgent: TAction;
+    aBeneficiary: TAction;
+    aPayments: TAction;
+    AccountPopup: TPopupMenu;
+    AccountContainer: TPlgModalContainer;
+    an1: TMenuItem;
+    an2: TMenuItem;
+    StateContainer: TPlgModalContainer;
+    aFind: TAction;
+    aFullForm: TAction;
+    ImageList2: TImageList;
+    aCommit: TAction;
+    aContFind: TAction;
+    aDeleteOperations: TAction;
+    XFPanel5: TXFPanel;
+    XFPanel1: TXFPanel;
+    XFPanel6: TXFPanel;
+    gbAccounts: TGroupBox;
+    DBGridAcc: TDBGrid;
+    XFPanel7: TXFPanel;
+    ToolBar4: TToolBar;
+    ToolButton25: TToolButton;
+    ToolButton26: TToolButton;
+    ToolButton27: TToolButton;
+    ToolButton28: TToolButton;
+    ToolButton29: TToolButton;
+    gbContracts: TGroupBox;
+    BitBtn1: TBitBtn;
+    DBGridContracts: TDBGrid;
+    XFPanel2: TXFPanel;
+    ToolBar3: TToolBar;
+    ToolButton9: TToolButton;
+    ToolButton10: TToolButton;
+    ToolButton23: TToolButton;
+    ToolButton11: TToolButton;
+    ToolButton12: TToolButton;
+    ToolButton15: TToolButton;
+    ToolButton16: TToolButton;
+    ToolButton17: TToolButton;
+    ToolButton24: TToolButton;
+    ToolBar5: TToolBar;
+    gbCustomers: TGroupBox;
+    XFPanel3: TXFPanel;
+    ToolBar1: TToolBar;
+    ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
+    ToolButton4: TToolButton;
+    ToolButton3: TToolButton;
+    ToolButton13: TToolButton;
+    ToolButton22: TToolButton;
+    ToolBar2: TToolBar;
+    DBGridCust: TDBGrid;
+    XFPanel4: TXFPanel;
+    EditID: TEdit;
+    EditCUST_ID: TEdit;
+    EditPASSER: TEdit;
+    EditPASPORTNO: TEdit;
+    EditINN: TEdit;
+    EditFULLNAME: TEdit;
+    EditNAME1: TEdit;
+    XFGroupBox1: TXFGroupBox;
+    XFGroupBox2: TXFGroupBox;
+    XFGroupBox3: TXFGroupBox;
+    DBEdit1: TDBEdit;
+    DBLookupComboBox1: TDBLookupComboBox;
+    XFCheckBox1: TXFCheckBox;
+    XFLabel1: TXFLabel;
+    XFLabel2: TXFLabel;
+    XFGroupBox4: TXFGroupBox;
+    XFCheckBox2: TXFCheckBox;
+    DBLookupComboBox2: TDBLookupComboBox;
+    XFGroupBox5: TXFGroupBox;
+    DBLookupComboBox3: TDBLookupComboBox;
+    XFGroupBox6: TXFGroupBox;
+    DBLookupComboBox4: TDBLookupComboBox;
+    XFCheckBox3: TXFCheckBox;
+    XFCheckBox4: TXFCheckBox;
+    XFPanel8: TXFPanel;
+    EditNAME: TEdit;
+    EditPOLICY_NUM: TEdit;
+    EditINSSUMM: TEdit;
+    EditTARIFF: TEdit;
+    EditAMMOUNT: TEdit;
+    EditFRANSHIZ: TEdit;
+    RGCust: TXFRadioGroup;
+    XFGroupBox7: TXFGroupBox;
+    XFGroupBox8: TXFGroupBox;
+    XFGroupBox10: TXFGroupBox;
+    XFGroupBox11: TXFGroupBox;
+    XFCheckBox5: TXFCheckBox;
+    XFCheckBox6: TXFCheckBox;
+    DBLookupComboBox5: TDBLookupComboBox;
+    RGContract: TXFRadioGroup;
+    XFCheckBox7: TXFCheckBox;
+    XFCheckBox8: TXFCheckBox;
+    XFCheckBox9: TXFCheckBox;
+    XFCheckBox10: TXFCheckBox;
+    XFPanel9: TXFPanel;
+    Edit1: TEdit;
+    Edit2: TEdit;
+    ExcelExport: TCMExcelExport;
+    N2: TMenuItem;
+    N3: TMenuItem;
+    Excelat1: TMenuItem;
+    N4: TMenuItem;
+    Hesabatlar1: TMenuItem;
+    ToolButton5: TToolButton;
+    Sazlama: TPopupMenu;
+    Faydagtrnlr1: TMenuItem;
+    DigrSazlama1: TMenuItem;
+    Agent1: TMenuItem;
+    N5: TMenuItem;
+    N6: TMenuItem;
+    ToolButton6: TToolButton;
+    Report: TPopupMenu;
+    Gndlikzrrlr1: TMenuItem;
+    Bardohesbatlar1: TMenuItem;
+    ddd1: TMenuItem;
+    Xitamverilmis1: TMenuItem;
+    Subroqasiyabarderosu1: TMenuItem;
+    ZererBarderosu1: TMenuItem;
+    Emeliyyat: TPopupMenu;
+    Xitam1: TMenuItem;
+    Memo1: TMemo;
+    ToolButton7: TToolButton;
+    dmlr1: TMenuItem;
+    Zrrlr1: TMenuItem;
+    N7: TMenuItem;
+    N8: TMenuItem;
+    dmplan1: TMenuItem;
+    N9: TMenuItem;
+    Gecikmlr1: TMenuItem;
+    N10: TMenuItem;
+    N11: TMenuItem;
+    N12: TMenuItem;
+    N13: TMenuItem;
+    N14: TMenuItem;
+    N15: TMenuItem;
+    N16: TMenuItem;
+    N17: TMenuItem;
+    Birgnsonradncksortalar1: TMenuItem;
+    Portfelhesabat1: TMenuItem;
+    N18: TMenuItem;
+    krarsigortanndnmsi1: TMenuItem;
+    Zrrlrhaqqndahesabat1: TMenuItem;
+    N19: TMenuItem;
+    N20: TMenuItem;
+    Zrrbarderosunundnms1: TMenuItem;
+    N21: TMenuItem;
+    Hesablar1: TMenuItem;
+    N22: TMenuItem;
+    BalansHesablar1: TMenuItem;
+    N24: TMenuItem;
+    krarsiortayaxitambarderosunundnmsi1: TMenuItem;
+    N23: TMenuItem;
+    krarsiortayaxitambarderosunundnmsi2: TMenuItem;
+    AmartizatorSazlamasi1: TMenuItem;
+    N25: TMenuItem;
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure aNewCustExecute(Sender: TObject);
+    procedure aEditCustExecute(Sender: TObject);
+    procedure aDelCustExecute(Sender: TObject);
+    procedure aRefCustExecute(Sender: TObject);
+    procedure DBGridCustDblClick(Sender: TObject);
+    procedure aNewAccExecute(Sender: TObject);
+    procedure aEditAccExecute(Sender: TObject);
+    procedure DBGridAccDblClick(Sender: TObject);
+    procedure aRefAccExecute(Sender: TObject);
+    procedure aDelAccExecute(Sender: TObject);
+    procedure aRefreshAllExecute(Sender: TObject);
+    procedure aNewInsExecute(Sender: TObject);
+    procedure aRefInsExecute(Sender: TObject);
+    procedure aEditInsExecute(Sender: TObject);
+    procedure DBGridContractsDblClick(Sender: TObject);
+    procedure aDelInsExecute(Sender: TObject);
+    procedure aContractAccsExecute(Sender: TObject);
+    procedure aPayPlanExecute(Sender: TObject);
+    procedure aFreeUserExecute(Sender: TObject);
+    procedure aPaymentsExecute(Sender: TObject);
+    procedure an1Click(Sender: TObject);
+    procedure an2Click(Sender: TObject);
+    procedure aFindExecute(Sender: TObject);
+    procedure aFullFormExecute(Sender: TObject);
+    procedure DBGridContractsTitleClick(Column: TColumn);
+    procedure DBGridContractsDrawColumnCell(Sender: TObject;
+      const Rect: TRect; DataCol: Integer; Column: TColumn;
+      State: TGridDrawState);
+    procedure aCommitExecute(Sender: TObject);
+    procedure aContFindExecute(Sender: TObject);
+    procedure aDeleteOperationsExecute(Sender: TObject);
+    procedure XDBGrid1DblClick(Sender: TObject);
+    procedure DBGrid1DblClick(Sender: TObject);
+    procedure DBGridCustTitleClick(Column: TColumn);
+    procedure EditINNKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure EditFULLNAMEKeyPress(Sender: TObject; var Key: Char);
+    procedure EditPASPORTNOKeyUp(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure EditPASSERKeyPress(Sender: TObject; var Key: Char);
+    procedure EditIDKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure EditINSSUMMKeyUp(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure EditIDExit(Sender: TObject);
+    procedure EditNAMEKeyPress(Sender: TObject; var Key: Char);
+    procedure EditINSSUMMKeyPress(Sender: TObject; var Key: Char);
+    procedure EditTARIFFKeyPress(Sender: TObject; var Key: Char);
+    procedure EditAMMOUNTKeyPress(Sender: TObject; var Key: Char);
+    procedure EditFRANSHIZKeyPress(Sender: TObject; var Key: Char);
+    procedure EditCUST_IDKeyPress(Sender: TObject; var Key: Char);
+    procedure EditNAMEExit(Sender: TObject);
+    procedure EditPOLICY_NUMKeyPress(Sender: TObject; var Key: Char);
+    procedure RGCustClick(Sender: TObject);
+    procedure DBEdit1KeyPress(Sender: TObject; var Key: Char);
+    procedure XFCheckBox2Click(Sender: TObject);
+    procedure XFCheckBox3Click(Sender: TObject);
+    procedure XFCheckBox4Click(Sender: TObject);
+    procedure XFCheckBox8Click(Sender: TObject);
+    procedure XFCheckBox9Click(Sender: TObject);
+    procedure CurrencyEdit1KeyPress(Sender: TObject; var Key: Char);
+    procedure XFCheckBox10Click(Sender: TObject);
+    procedure Edit2Change(Sender: TObject);
+    procedure Edit1Change(Sender: TObject);
+    procedure RGContractClick(Sender: TObject);
+    procedure DBLookupComboBox5Click(Sender: TObject);
+    procedure XFCheckBox7Click(Sender: TObject);
+    procedure XFCheckBox1Click(Sender: TObject);
+    procedure DBGridContractsCellClick(Column: TColumn);
+    procedure Excelat1Click(Sender: TObject);
+    procedure Hesabatlar1Click(Sender: TObject);
+    procedure DigrSazlama1Click(Sender: TObject);
+    procedure Agent1Click(Sender: TObject);
+    procedure Faydagtrnlr1Click(Sender: TObject);
+    procedure Gndlikzrrlr1Click(Sender: TObject);
+    procedure Xitam1Click(Sender: TObject);
+    procedure dmlr1Click(Sender: TObject);
+    procedure Zrrlr1Click(Sender: TObject);
+    procedure Gecikmlr1Click(Sender: TObject);
+    procedure ddd1Click(Sender: TObject);
+    procedure Xitamverilmis1Click(Sender: TObject);
+    procedure Subroqasiyabarderosu1Click(Sender: TObject);
+    procedure ZererBarderosu1Click(Sender: TObject);
+    procedure Portfelhesabat1Click(Sender: TObject);
+    procedure krarsigortanndnmsi1Click(Sender: TObject);
+    procedure Zrrlrhaqqndahesabat1Click(Sender: TObject);
+    procedure Zrrbarderosunundnms1Click(Sender: TObject);
+    procedure Hesablar1Click(Sender: TObject);
+    procedure BalansHesablar1Click(Sender: TObject);
+    procedure krarsiortayaxitambarderosunundnmsi1Click(Sender: TObject);
+    procedure krarsiortayaxitambarderosunundnmsi2Click(Sender: TObject);
+    procedure ToolButton6Click(Sender: TObject);
+    procedure AmartizatorSazlamasi1Click(Sender: TObject);
+
+  private
+    { Private declarations }
+    FEvents: IInsCustomersFormEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+    function  ShowCustForm():Integer;
+    procedure SaveCustData();
+    function  ShowAccForm():Integer;
+    procedure CallChangeForm(Params : TStringList);
+    procedure ActionSpeedSearchExecute(Sender: TObject);
+    procedure ActionSpeedSearchExecute1(Sender: TObject);
+    procedure ActionFilterExecute(Sender: TObject);
+    procedure ActionFilterExecute1(Sender: TObject);
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+  //  procedure LoadPlugin1(PluginName :String;PluginParam  :String);
+    procedure LoadPlugin2(PluginName :String;PluginParam :String;PluginParam2 :String);
+  public
+    { Public declarations }
+    OperationMode: TOperationMode;
+    procedure Initialize; override;
+    procedure MouseWheelHandler(var Message: TMessage); override;
+
+
+  end;
+
+var
+  InsCustomersForm : TInsCustomersForm;
+//    opetion:String;
+
+    i :integer;
+    implementation
+
+uses ComObj, ComServ, InsDataModule, InsCustomersProperties,
+  AccountPropertiesImpl,  InsNewInsurance,  InsAccSettings,
+   InsAgents, InsProfit, InsPaymentPlan, InsSettings, AccInterval,
+  InsCustFind, InsContFind,sboapiDataModuleimpl,SBTranslateProc,CommanParametrs,
+  FrmAddBanksImpl;
+
+{$R *.DFM}
+
+{ TInsCustomersForm }
+procedure TInsCustomersForm.MouseWheelHandler(var Message: TMessage);
+type
+    TMWDataSet = ^TOracleDataSet;
+    TWMDBGriid = ^TDBGrid;
+var
+    MWDataSet : TMWDataSet;
+    MWDBGrid : TWMDBGriid;
+
+begin
+//  inherited;
+
+ if not (InsCustomersForm.ActiveControl is TDBGrid) then exit;
+  with InsCustomersForm, InsDataMod do
+    case (ActiveControl as TDBGrid).tag  of
+     0 : begin MWDataSet := @ODSInsCustomers; MWDBGrid := @DBGridCust end;
+     1 : begin MWDataSet := @ODSContracts; MWDBGrid := @DBGridContracts end;
+     2 : begin MWDataSet := @ODSAccount;  MWDBGrid := @DBGridAcc end;
+    end;
+  MWDBGrid.SelectedRows.Clear;
+  with TCMMouseWheel(Message), MWDataSet^ do
+    if WheelDelta < 0 then
+      Next
+    else
+      Prior;
+  MWDBGrid.Repaint;
+end;
+
+procedure TInsCustomersForm.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_InsCustomersFormPage); }
+end;
+
+
+ procedure TInsCustomersForm.ActionSpeedSearchExecute(
+  Sender: TObject);
+var
+  SearchField : string;
+  SearchOptions : TSearchRecordOptions;
+begin
+  SearchOptions := [srIgnoreCase ,srPartialMatch ];
+
+  with Sender as TEdit  do
+  begin
+    SearchField := copy(Name,5,length(Name));
+    with  TOracleDataSet(DBGridCust.DataSource.DataSet) do
+    if  not SearchRecord(
+                  SearchField
+                 ,Text
+                 ,SearchOptions + [srFromCurrent , srForward ]
+                 ) then
+    if MessageDlg(
+              'Axtarış sona çatdı.'+#13+'Əvvəldən başlansın?'
+             ,mtInformation
+             ,[mbNo , mbYes]
+             ,0
+             ) = mrYes  then
+    if not SearchRecord(
+                 SearchField
+                ,Text
+                ,SearchOptions + [ srFromBeginning ]
+                )  then
+    MessageDlg('Yazı tapılmayıb!',mtInformation,[mbOK],0);
+ end;
+
+end;
+
+procedure TInsCustomersForm.ActionSpeedSearchExecute1(
+  Sender: TObject);
+var
+  SearchField : string;
+  SearchOptions : TSearchRecordOptions;
+begin
+  SearchOptions := [srIgnoreCase ,srPartialMatch ];
+
+  with Sender as TEdit  do
+  begin
+    SearchField := copy(Name,5,length(Name));
+    with  TOracleDataSet(DBGridContracts.DataSource.DataSet) do
+    if  not SearchRecord(
+                  SearchField
+                 ,Text
+                 ,SearchOptions + [srFromCurrent , srForward ]
+                 ) then
+    if MessageDlg(
+              'Axtarış sona çatdı.'+#13+'Əvvəldən başlansın?'
+             ,mtInformation
+             ,[mbNo , mbYes]
+             ,0
+             ) = mrYes  then
+    if not SearchRecord(
+                 SearchField
+                ,Text
+                ,SearchOptions + [ srFromBeginning ]
+                )  then
+    MessageDlg('Yazı tapılmayıb!',mtInformation,[mbOK],0);
+ end;
+
+end;
+
+
+procedure TInsCustomersForm.Edit1Change(Sender: TObject);
+begin
+if edit1.Text='' then
+begin
+  edit1.Text:=floattostr(0);
+end;
+ ActionFilterExecute1(Sender);
+end;
+
+procedure TInsCustomersForm.Edit2Change(Sender: TObject);
+begin
+if edit2.Text='' then
+begin
+  edit2.Text:=floattostr(0);
+end;
+ ActionFilterExecute1(Sender);
+end;
+
+procedure TInsCustomersForm.EditAMMOUNTKeyPress(Sender: TObject; var Key: Char);
+begin
+  if Key = #13  then
+  begin
+   ActionSpeedSearchExecute1(Sender);
+  end;
+end;
+
+procedure TInsCustomersForm.EditCUST_IDKeyPress(Sender: TObject; var Key: Char);
+begin
+  if Key = #13  then
+  begin
+   ActionSpeedSearchExecute(Sender);
+  end;
+end;
+
+procedure TInsCustomersForm.EditFRANSHIZKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if Key = #13  then
+  begin
+   ActionSpeedSearchExecute1(Sender);
+  end;
+end;
+
+procedure TInsCustomersForm.EditFULLNAMEKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if Key = #13 then
+  begin
+      //New Addition
+      EditNAME1.Text := EditFULLNAME.Text;
+      {  Replace I, i, İ, i  }
+      with EditNAME1 do
+      begin
+          Text := StringReplace(Text, 'i', '`', [rfReplaceAll]);
+          Text := StringReplace(Text, 'I', '`', [rfReplaceAll]);
+          Text := StringReplace(Text, 'İ', '`', [rfReplaceAll]);
+          Text := StringReplace(Text, 'I', '`', [rfReplaceAll]);
+          Text := StringReplace(Text, 'ı', '`', [rfReplaceAll]);
+      end;
+
+       //ActionSpeedSearchExecute(Sender);
+       ActionSpeedSearchExecute(EditFULLNAME);
+  end;
+end;
+
+procedure TInsCustomersForm.EditIDExit(Sender: TObject);
+begin
+  TEdit(Sender).Text :=EmptyStr;
+end;
+
+procedure TInsCustomersForm.EditIDKeyUp(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+
+       if Key = vk_return then
+    // EditSerialChange(Sender);
+    if EditID.Text <> '' then
+       InsDataMod.ODSInsCustomers.Locate('id', EditID.Text,
+        [loCaseInsensitive, loPartialKey]);
+end;
+
+
+procedure TInsCustomersForm.EditINNKeyUp(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if Key = vk_return then
+    // paspeditchange(Sender);
+    if EditINN.Text <> '' then
+      InsDataMod.ODSInsCustomers.Locate('INN', EditINN.Text,
+        [loCaseInsensitive, loPartialKey]);
+end;
+
+procedure TInsCustomersForm.EditINSSUMMKeyPress(Sender: TObject; var Key: Char);
+begin
+  if Key = #13  then
+  begin
+   ActionSpeedSearchExecute1(Sender);
+  end;
+end;
+
+procedure TInsCustomersForm.EditINSSUMMKeyUp(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+
+      { if Key = vk_return then
+    // EditSerialChange(Sender);
+    if EditINSSUMM.Text <> '' then
+       InsDataMod.ODSContracts.Locate('INSSUMM', EditINSSUMM.Text,
+        [loCaseInsensitive, loPartialKey]);  }
+end;
+
+procedure TInsCustomersForm.EditNAMEExit(Sender: TObject);
+begin
+  TEdit(Sender).Text :=EmptyStr;
+end;
+
+procedure TInsCustomersForm.EditNAMEKeyPress(Sender: TObject; var Key: Char);
+begin
+  if Key = #13  then
+  begin
+   ActionSpeedSearchExecute1(Sender);
+  end;
+end;
+
+procedure TInsCustomersForm.EditPASPORTNOKeyUp(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if Key = vk_return then
+    // paspeditchange(Sender);
+    if EditPASPORTNO.Text <> '' then
+      InsDataMod.ODSInsCustomers.Locate('PASPORTNO', EditPASPORTNO.Text,
+        [loCaseInsensitive, loPartialKey]);
+end;
+
+procedure TInsCustomersForm.EditPASSERKeyPress(Sender: TObject; var Key: Char);
+begin
+  if Key = #13  then
+  begin
+   ActionSpeedSearchExecute1(Sender);
+  end;
+end;
+
+procedure TInsCustomersForm.EditPOLICY_NUMKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if Key = #13  then
+  begin
+   ActionSpeedSearchExecute1(Sender);
+  end;
+end;
+
+procedure TInsCustomersForm.EditTARIFFKeyPress(Sender: TObject; var Key: Char);
+begin
+  if Key = #13  then
+  begin
+   ActionSpeedSearchExecute1(Sender);
+  end;
+end;
+
+procedure TInsCustomersForm.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as IInsCustomersFormEvents;
+end;
+
+procedure TInsCustomersForm.Excelat1Click(Sender: TObject);
+begin
+
+ with InsDataMod,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['EXCELINSCUST']);
+ end;
+//LoadPlugin1('NominalCustomers.bpl','');
+{if i=0 then
+begin
+  i:=1;
+  XFPanel1.Visible:=true;
+end;
+if i=1 then
+begin
+  i:=0;
+  XFPanel1.Visible:=false;
+end;    }
+//XFPanel1.Visible :=not XFPanel1.Visible;
+
+        with ExcelExport do
+   begin
+      Connect;
+      ExportDataset(InsCustomersForm.DBGridCust.DataSource.DataSet,'Müştəri Hesabatı',True,false);
+      Disconnect;
+   end;
+
+end;
+
+procedure TInsCustomersForm.Faydagtrnlr1Click(Sender: TObject);
+begin
+
+ with InsDataMod,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['FGINSCUST']);
+ end;
+
+  with TfmBeneficary.Create(Self) do
+  try
+    ShowModal;
+  finally
+    Free;
+  end;
+end;
+
+procedure TInsCustomersForm.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+procedure TInsCustomersForm.Gecikmlr1Click(Sender: TObject);
+begin
+with InsDataMod,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['REPORTDELAYPAYMENT']);
+ end;
+
+InsDataMod.DSReportDuePayment.Open;
+        with ExcelExport do
+   begin
+      Connect;
+      ExportDataset(InsDataMod.DSReportDuePayment,'Gecikmələr',True,false);
+      Disconnect;
+   end;
+InsDataMod.DSReportDuePayment.close;
+end;
+
+function TInsCustomersForm.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TInsCustomersForm.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TInsCustomersForm.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TInsCustomersForm.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TInsCustomersForm.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TInsCustomersForm.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TInsCustomersForm.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TInsCustomersForm.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TInsCustomersForm.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TInsCustomersForm.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TInsCustomersForm.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TInsCustomersForm.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TInsCustomersForm.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TInsCustomersForm.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TInsCustomersForm.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TInsCustomersForm.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TInsCustomersForm.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TInsCustomersForm.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TInsCustomersForm.Gndlikzrrlr1Click(Sender: TObject);
+begin
+with InsDataMod,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['DAILY_LOSSES']);
+ end;
+
+ {
+with InsDataMod,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['LOSSCONTRACT_KASKO']);
+ end; }
+     {with InsMKDataMod do
+     begin
+          ODSClaims.SetVariable('id',cid);
+
+          ODSClaimSal.SetVariable('eid',cid);
+     end;
+     frmClaims:=TfrmClaims.Create(self);
+     frmClaims.ShowModal; }
+     loadPlugin('loss.bpl','AllLost');
+
+
+
+end;
+
+procedure TInsCustomersForm.Hesabatlar1Click(Sender: TObject);
+begin
+   loadPlugin('InsReport.bpl','');
+end;
+
+procedure TInsCustomersForm.Hesablar1Click(Sender: TObject);
+begin
+   loadPlugin('ins_Setting.bpl','');
+
+end;
+
+procedure TInsCustomersForm._Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TInsCustomersForm.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TInsCustomersForm.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TInsCustomersForm.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TInsCustomersForm.CurrencyEdit1KeyPress(Sender: TObject;
+  var Key: Char);
+begin
+ ActionFilterExecute1(Sender);
+end;
+
+procedure TInsCustomersForm.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TInsCustomersForm.DBLookupComboBox5Click(Sender: TObject);
+begin
+ ActionFilterExecute1(Sender);
+end;
+
+procedure TInsCustomersForm.ddd1Click(Sender: TObject);
+begin
+with InsDataMod,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['DAILY_LOSSES']);
+ end;
+
+ BarderoReportType:='Premiya Barderosu.XLS';
+    loadPlugin('InsReport.bpl','');
+
+end;
+
+procedure TInsCustomersForm.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TInsCustomersForm.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TInsCustomersForm.DigrSazlama1Click(Sender: TObject);
+begin
+ with InsDataMod,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['SETTINGCUST']);
+ end;
+  fmSettings := TfmSettings.Create(Self);
+  with InsDataMod, fmSettings do
+  try
+    ODSAcc_types.Open;
+    ODSBal_cn.Open;
+    ODSInsurances.Open;
+    ODSBankm.Open;
+    ODSStates.Open;
+    ODSTarifStates.Open;
+    ODSReleaseDate.Open;
+    ODSMonths.Open;
+    ODSTariffs.Open;
+    ODSFranshiza.Open;
+    ODSTariffs.Open;
+    ODSPolicyNums.open;
+    ODSCustTypes.Open;
+    ODSAccList.Open;
+    ShowModal;
+    ODSAccList.Close;
+  finally
+    Free;
+  end;
+
+end;
+
+procedure TInsCustomersForm.dmlr1Click(Sender: TObject);
+begin
+ if DBGridContracts.DataSource.DataSet.recordcount=0 then
+ begin
+ Showmessage('Diqqət! Cədvəldə məlumat yoxdur.');
+   exit;
+ end;
+ with InsDataMod,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['SEEPAYMENT']);
+ end;
+
+ contactid:=DBGridContracts.DataSource.DataSet.FieldByName('id').AsInteger;
+ contractstatus:=InsCustomersForm.DBGridContracts.DataSource.DataSet.FieldByName('STATE').AsInteger;
+ loadPlugin('InsPayment.bpl','');
+end;
+
+procedure TInsCustomersForm.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TInsCustomersForm.krarsigortanndnmsi1Click(Sender: TObject);
+begin
+with InsDataMod,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['SEEALLBARDERO_PREMIYA']);
+ end;
+ Bordero_type:='S_haqqi';
+contactid:=DBGridContracts.DataSource.DataSet.FieldByName('id').AsInteger;
+contractstatus:=InsCustomersForm.DBGridContracts.DataSource.DataSet.FieldByName('STATE').AsInteger;
+ loadPlugin('Reinsurance.bpl','operation');
+end;
+
+procedure TInsCustomersForm.krarsiortayaxitambarderosunundnmsi1Click(
+  Sender: TObject);
+begin
+with InsDataMod,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['SEEALLBARDERO_TERMINATE']);
+ end;
+Bordero_type:='xitam';
+contactid:=DBGridContracts.DataSource.DataSet.FieldByName('id').AsInteger;
+contractstatus:=InsCustomersForm.DBGridContracts.DataSource.DataSet.FieldByName('STATE').AsInteger;
+ loadPlugin('Reinsurance.bpl','operation');
+end;
+
+procedure TInsCustomersForm.krarsiortayaxitambarderosunundnmsi2Click(
+  Sender: TObject);
+begin
+{with InsDataMod,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['SEEALLBARDERO_TERMINATE']);
+ end; }
+Bordero_type:='sub';
+contactid:=DBGridContracts.DataSource.DataSet.FieldByName('id').AsInteger;
+contractstatus:=InsCustomersForm.DBGridContracts.DataSource.DataSet.FieldByName('STATE').AsInteger;
+ loadPlugin('Reinsurance.bpl','operation');
+
+end;
+
+procedure TInsCustomersForm.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TInsCustomersForm.Portfelhesabat1Click(Sender: TObject);
+begin
+with InsDataMod,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['DAILY_LOSSES']);
+ end;
+
+ BarderoReportType:='Premiya Barderosu.XLS';
+    loadPlugin('InsReport.bpl','Portfel');
+end;
+
+procedure TInsCustomersForm.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TInsCustomersForm.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TInsCustomersForm.Set_AxBorderStyle(
+  Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TInsCustomersForm.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TInsCustomersForm.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TInsCustomersForm.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TInsCustomersForm.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TInsCustomersForm.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TInsCustomersForm.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TInsCustomersForm.Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TInsCustomersForm.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TInsCustomersForm.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TInsCustomersForm.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TInsCustomersForm.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TInsCustomersForm.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TInsCustomersForm.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+procedure TInsCustomersForm.ActiveFormCreate(Sender: TObject);
+begin
+   InsCustomersForm := self;
+   InsDataMod := TInsDataMod.Create(Self);
+   FormInterval:=TFormInterval.Create(Self);
+   commangrid:=DBGridContracts;
+   FrmAddBanks:=TFrmAddBanks.create(self);
+   //fmCustomersProperties:= fmCustomersProperties.Create(Self);
+   SBTranslateProc.TranslateAllComponents(Self,sboapiDataModule.OrPack_SL);
+   i:=0;
+   XFPanel1.Visible:=false;
+   InsCustomersForm.RGCust.ItemIndex:=0;
+   InsCustomersForm.RGContract.ItemIndex:=0;
+   commandataset:=InsDataMod.ODSContracts;
+
+
+end;
+
+
+procedure TInsCustomersForm.SaveCustData();
+begin
+   with InsDataMod.ODSInsCustomers do
+    try
+      Post;
+      RefreshRecord;
+    except
+      aEditCustExecute(nil)
+    end;
+end;
+
+
+function TInsCustomersForm.ShowCustForm():Integer;
+var
+//bura
+   fmCustProp : TfmCustomersProperties;
+begin
+  fmCustProp := TfmCustomersProperties.Create(self);
+  try
+  {if opetion='ins' then
+            begin
+    Result := fmCustProp.ShowModal;
+    fmCustomersProperties.DBEdit9.Text:='AZE';
+                 end;
+
+  if opetion='upd' then
+            begin  }
+  //InsDataMod.ODSInsCustomers.FieldByName('ENTER_DATE').AsDateTime:=InsDataMod.Sysdat.FieldByName('tek_dat').AsDateTime;
+      //fmCustomersProperties.DateTimePicker1.DateTime:=InsDataMod.ODSInsCustomers.FieldByName('ENTER_DATE').AsDateTime;
+
+    Result := fmCustProp.ShowModal;
+
+   { if InsCustomersForm.DBGridCust.DataSource.DataSet.FieldByName('CLOSE_PREFIX').AsInteger=1 then
+       begin
+     fmCustomersProperties.XFGroupBox1.Enabled:=false;
+     fmCustomersProperties.XFPanel2.Enabled:=false;
+     fmCustomersProperties.XFPanel3.Enabled:=false;
+
+       end;
+
+     if InsCustomersForm.DBGridCust.DataSource.DataSet.FieldByName('CLOSE_PREFIX').AsInteger=0 then
+       begin
+     fmCustomersProperties.XFGroupBox1.Enabled:=false;
+     fmCustomersProperties.XFPanel2.Enabled:=false;
+     fmCustomersProperties.XFPanel3.Enabled:=false;
+
+       end;   }
+
+    //fmCustomersProperties.DBEdit9.Text:='AZE';
+
+  finally
+    fmCustProp.Free;
+  end;
+end;
+
+
+procedure TInsCustomersForm.Subroqasiyabarderosu1Click(Sender: TObject);
+begin
+with InsDataMod,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['DAILY_LOSSES']);
+ end;
+  BarderoReportType:='Subroqasiya barderosu.xls';
+    loadPlugin('InsReport.bpl','');
+end;
+
+procedure TInsCustomersForm.ToolButton6Click(Sender: TObject);
+begin
+
+end;
+
+{procedure TInsCustomersForm.LoadPlugin1(PluginName :String;PluginParam  :String);
+var PluginHandle :THandle;
+    exportproc : procedure(s:String;k:String);
+begin
+   PluginHandle := LoadPackage(ExtractFilePath(Application.ExeName)+PluginName);
+
+   if PluginHandle > 0 then
+   begin
+      @exportproc := GetProcAddress(PluginHandle,'InitPlugin');
+      exportproc(PluginParam,'');
+   end;
+end;    }
+
+procedure TInsCustomersForm.XDBGrid1DblClick(Sender: TObject);
+begin
+ aEditCustExecute(nil);
+end;
+
+procedure TInsCustomersForm.XFCheckBox10Click(Sender: TObject);
+begin
+   if XFCheckBox10.Checked=True then
+Edit2.Enabled:=True
+else
+ Edit2.Enabled:=False;
+ Edit2.Text:= floattostr(0);
+// showmessage(floattostr(CurrencyEdit1.Value));
+   ActionFilterExecute1(Sender);
+end;
+
+procedure TInsCustomersForm.XFCheckBox1Click(Sender: TObject);
+begin
+   if XFCheckBox1.Checked=True then
+DBLookupComboBox1.Enabled:=True
+else
+ DBLookupComboBox1.Enabled:=False;
+   ActionFilterExecute(Sender);
+end;
+
+procedure TInsCustomersForm.XFCheckBox2Click(Sender: TObject);
+begin
+   if XFCheckBox2.Checked=True then
+DBLookupComboBox2.Enabled:=True
+else
+ DBLookupComboBox2.Enabled:=False;
+   ActionFilterExecute(Sender);
+end;
+
+procedure TInsCustomersForm.XFCheckBox3Click(Sender: TObject);
+begin
+   if XFCheckBox3.Checked=True then
+DBLookupComboBox3.Enabled:=True
+else
+ DBLookupComboBox3.Enabled:=False;
+   ActionFilterExecute(Sender);
+end;
+
+procedure TInsCustomersForm.XFCheckBox4Click(Sender: TObject);
+begin
+   if XFCheckBox4.Checked=True then
+DBLookupComboBox4.Enabled:=True
+else
+ DBLookupComboBox4.Enabled:=False;
+   ActionFilterExecute(Sender);
+end;
+
+procedure TInsCustomersForm.XFCheckBox7Click(Sender: TObject);
+begin
+   if XFCheckBox8.Checked=True then
+   begin
+XFCheckBox5.Enabled:=false ;
+XFCheckBox6.Enabled:=false;
+   end
+else
+XFCheckBox5.Enabled:=false;
+XFCheckBox6.Enabled:=false;
+XFCheckBox5.Checked:=true;
+XFCheckBox6.Checked:=true;
+
+   ActionFilterExecute1(Sender);
+
+end;
+
+procedure TInsCustomersForm.XFCheckBox8Click(Sender: TObject);
+begin
+   if XFCheckBox8.Checked=True then
+DBLookupComboBox5.Enabled:=True
+else
+ DBLookupComboBox5.Enabled:=False;
+   ActionFilterExecute1(Sender);
+end;
+
+procedure TInsCustomersForm.XFCheckBox9Click(Sender: TObject);
+begin
+   if XFCheckBox9.Checked=True then
+Edit1.Enabled:=True
+else
+ Edit1.Enabled:=False;
+ Edit1.Text:= floattostr(0);
+// showmessage(floattostr(CurrencyEdit1.Value));
+   ActionFilterExecute1(Sender);
+end;
+
+procedure TInsCustomersForm.Xitam1Click(Sender: TObject);
+begin
+ if DBGridContracts.DataSource.DataSet.recordcount=0 then
+ begin
+ Showmessage('Diqqət! Cədvəldə məlumat yoxdur.');
+   exit;
+ end;
+with InsDataMod,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['TERMINATEDINS_CONTRACT']);
+ end;
+
+ if DBGridContracts.DataSource.DataSet.FieldByName('state').AsInteger<>8  then
+ begin
+ if DBGridContracts.DataSource.DataSet.FieldByName('state').AsInteger<>6  then
+ begin
+ Showmessage('Diqqət!Yalnız Təsdiq statusunda olan muqaviləyə xitam vermək olar.');
+   exit;
+ end;
+ end;
+contactid:=DBGridContracts.DataSource.DataSet.FieldByName('id').AsInteger;
+contractstatus:=InsCustomersForm.DBGridContracts.DataSource.DataSet.FieldByName('STATE').AsInteger;
+ loadPlugin('InsContracterminated.bpl','');
+end;
+
+procedure TInsCustomersForm.Xitamverilmis1Click(Sender: TObject);
+begin
+with InsDataMod,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['DAILY_LOSSES']);
+ end;
+  BarderoReportType:='Xitam verilmis.XLS';
+    loadPlugin('InsReport.bpl','');
+end;
+
+procedure TInsCustomersForm.ZererBarderosu1Click(Sender: TObject);
+begin
+with InsDataMod,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['DAILY_LOSSES']);
+ end;
+  BarderoReportType:='Zerer Barderosu.xls';
+    loadPlugin('InsReport.bpl','');
+end;
+
+procedure TInsCustomersForm.Zrrbarderosunundnms1Click(Sender: TObject);
+begin
+with InsDataMod,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['SEEALLBARDERO_LOSS']);
+ end;
+ Bordero_type:='Zerer';
+contactid:=DBGridContracts.DataSource.DataSet.FieldByName('id').AsInteger;
+contractstatus:=InsCustomersForm.DBGridContracts.DataSource.DataSet.FieldByName('STATE').AsInteger;
+ loadPlugin('Reinsurance.bpl','operation');
+end;
+
+procedure TInsCustomersForm.Zrrlr1Click(Sender: TObject);
+begin
+ if DBGridContracts.DataSource.DataSet.recordcount=0 then
+ begin
+ Showmessage('Diqqət! Cədvəldə məlumat yoxdur.');
+   exit;
+ end;
+
+ if DBGridContracts.DataSource.DataSet.FieldByName('type_id').AsInteger=4 then
+ begin
+ with InsDataMod,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['SEELOSSKASKO']);
+ end;
+ end;
+
+ if DBGridContracts.DataSource.DataSet.FieldByName('type_id').AsInteger=1 then
+ begin
+ with InsDataMod,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['SEELOSSFQ']);
+ end;
+ end;
+
+ if DBGridContracts.DataSource.DataSet.FieldByName('type_id').AsInteger=13 then
+ begin
+ with InsDataMod,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['SEELOSSMES']);
+ end;
+ end;
+
+  if DBGridContracts.DataSource.DataSet.FieldByName('type_id').AsInteger=8 then
+ begin
+ with InsDataMod,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['SEELOSYUK']);
+ end;
+  end;
+
+  if DBGridContracts.DataSource.DataSet.FieldByName('type_id').AsInteger=3 then
+ begin
+ with InsDataMod,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['SEELOSSEMLAK']);
+ end;
+ end;
+
+ if DBGridContracts.DataSource.DataSet.FieldByName('type_id').AsInteger=21 then
+ begin
+ with InsDataMod,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['SEELOSSSEYAHET']);
+ end;
+ end;
+
+ if DBGridContracts.DataSource.DataSet.FieldByName('type_id').AsInteger=2 then
+ begin
+ with InsDataMod,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['SEELOSSTIBB']);
+ end;
+ end;
+   commoncid:=DBGridContracts.DataSource.DataSet.FieldByName('id').AsInteger;
+  contactid:=DBGridContracts.DataSource.DataSet.FieldByName('id').AsInteger;
+  contractstatus:=InsCustomersForm.DBGridContracts.DataSource.DataSet.FieldByName('STATE').AsInteger;
+     {with InsMKDataMod do
+     begin
+          ODSClaims.SetVariable('id',cid);
+          ODSClaimSal.SetVariable('eid',cid);
+     end;
+     frmClaims:=TfrmClaims.Create(self);
+     frmClaims.ShowModal; }
+     loadPlugin('loss.bpl','');
+end;
+
+procedure TInsCustomersForm.Zrrlrhaqqndahesabat1Click(Sender: TObject);
+begin
+   loadPlugin('InsReport.bpl','loss');
+end;
+
+procedure TInsCustomersForm.ActionFilterExecute1(Sender: TObject);
+
+   function  CheckFiltered(IsChecked: Boolean; const FilterStr: String; Args: array of const): String;
+   begin
+    Result :='';
+    if  IsChecked  then
+     Result :=Format(FilterStr, Args);
+   end;
+
+const
+   BooleanPrefix = ' AND ';
+
+   StatusFilter = '(ic.close_prefix=%d)';
+   type_idFilter = '(type_id=%d)';
+   TARIFFFilter = '(ic.TARIFF=%d)';
+   franshizFilter = '(ic.franshiz=%d)';
+   TipaccFilter = '(Tipacc like  %s)';
+   BalanceFilter = '(Bal_cn1=%s)';
+   RepSymbFilter = '(Sim_Otcet=%d)';
+var
+   Status:    String;
+   p_type_id:    String;
+   p_TARIFF:  String;
+   p_franshiz:  String;
+   Tipacc:    String;
+   Balance:   String;
+   RepSymb:   String;
+   FilterStr: String;
+begin
+ FilterStr :='';
+
+ Status :=CheckFiltered(
+              RGContract.ItemIndex <> -1
+             ,StatusFilter
+             ,[RGContract.ItemIndex]
+              );
+
+ p_type_id :=CheckFiltered(
+              XFCheckBox8.Checked//DBLookupBranch.KeyValue <> -1
+             ,type_idFilter
+             ,[DBLookupComboBox5.ListSource.DataSet.FieldByName('ID').AsInteger]
+              );
+
+  //showmessage(CurrencyEdit1.Text);
+
+ p_TARIFF :=CheckFiltered(
+              XFCheckBox9.Checked//DBLookupCurrency.KeyValue <> -1
+             ,TARIFFFilter
+             ,[strtoint(Edit1.Text)]
+              );
+
+ p_franshiz :=CheckFiltered(
+              XFCheckBox10.Checked  //DBLookupOperator.KeyValue <> -1
+             ,franshizFilter
+             ,[strtoint(Edit2.Text)]
+              );
+
+ {Tipacc :=CheckFiltered(
+              CbAccType.Checked //Pos('Butun', DBLookupTipacc.ListSource.DataSet.FieldByName('Name').AsString) = 0
+             ,TipaccFilter
+             ,[''''+'%'+DBLookupTipacc.ListSource.DataSet.FieldByName('Symbol').AsString+'%'+'''']
+              );
+
+ Balance :=CheckFiltered(
+              CBBal_Cn.Checked //Pos('Butun', DBLookupBalance.Text) = 0
+             ,BalanceFilter
+             ,[DBLookupBalance.Text]
+              );
+
+  RepSymb :=CheckFiltered(
+              ChBoxSimOtcet.Checked
+             ,RepSymbFilter
+             ,[DBLookupCBoxSimOtcet.ListSource.DataSet.FieldByName('ID').AsInteger]
+              );  }
+
+  if Status='' then
+   FilterStr:='status is not null'
+ else
+    FilterStr :=Status;
+
+  if  XFCheckBox8.Checked //Branch <> ''
+  then
+  if  FilterStr=''  then
+    FilterStr :=p_type_id
+  else
+    FilterStr :=FilterStr + BooleanPrefix + p_type_id;
+
+  if  XFCheckBox9.Checked //Currency <> ''
+  then
+  if  FilterStr=''  then
+    FilterStr :=p_TARIFF
+  else
+    FilterStr :=FilterStr + BooleanPrefix + p_TARIFF;
+    //showmessage('FilterStr= '+FilterStr) ;
+  if  XFCheckBox10.Checked //Operator <> ''
+  then
+  if  FilterStr=''  then
+    FilterStr :=p_franshiz
+  else
+    FilterStr :=FilterStr + BooleanPrefix + p_franshiz;
+
+ {if  CbAccType.Checked //Tipacc <> ''
+  then
+  if  FilterStr=''  then
+    FilterStr :=Tipacc
+  else
+    FilterStr :=FilterStr + BooleanPrefix + Tipacc;
+
+  if   CBBal_Cn.Checked //Balance <> ''
+  then
+  if  FilterStr=''  then
+    FilterStr :=Balance
+  else
+    FilterStr :=FilterStr + BooleanPrefix + Balance;
+
+  if ChBoxSimOtcet.Checked then
+   if FilterStr='' then FilterStr := RepSymb
+    else FilterStr :=FilterStr + BooleanPrefix + RepSymb;
+      }
+    //showmessage(' where '+ FilterStr);
+    //Memo1.Text:=' where '+ FilterStr;
+   // exit;
+   //Memo2.Text:=insDataMod.ODSContracts.sql.text;
+  InsDataMod.ODSContracts.sql.Text:= ' SELECT ic.rowid, ic.ID , ic.kli_id, ic.loanacc_id, ic.curracc_id,'+
+                 ' ii.NAME, ii.mainformguid, ii.changeguid,ic.commitop_id,ic.commit_date,ic.cancelopid,ic.canceldate,'+
+                 ' ii.suggestionguid, ii.policyguid, ii.mainformname AS tablename, ic.policy_num,'+
+                 ' trunc(ic.ins_date) as ins_date, ic.begin_date, ic.end_date, ins_report.get_S_haqq(ic.id) as ammount, '+
+                 ' av.val_name, ins_report.get_s_mebleg(ic.id) as inssumm, ic.tariff, ic.franshiz, ic.state, ic.type_id ,ic.close_prefix '+
+                 ' FROM ins_contracts ic, ins_insurances ii, avalute av,ins_contract_responsibility r,ins_contr_per_acc_motor p'+
+                 ' WHERE ii.ID = ic.type_id and r.cid(+)=ic.id and p.cid(+)=ic.id'+
+                 ' and ic.KLI_ID = :KLI_ID '+
+                 ' and ic.valute_id = av.valute(+) '+
+                 ' and '+ FilterStr;
+  InsDataMod.ODSContracts.sql.text:=Stringreplace(InsDataMod.ODSContracts.sql.text,'status','DECODE (ic.close_prefix, 0, 1, 2)', [rfReplaceAll, rfIgnoreCase]);
+  //Memo1.Text:= InsDataMod.ODSContracts.SQL.Text;
+ InsDataMod.ODSContracts.close;
+ InsDataMod.ODSContracts.Open;
+
+
+end;
+
+
+
+procedure TInsCustomersForm.ActionFilterExecute(Sender: TObject);
+
+   function  CheckFiltered(IsChecked: Boolean; const FilterStr: String; Args: array of const): String;
+   begin
+    Result :='';
+    if  IsChecked  then
+     Result :=Format(FilterStr, Args);
+   end;
+
+const
+   BooleanPrefix = ' AND ';
+
+   StatusFilter = '(close_prefix=%d)';
+   BranchFilter = '(INSURED_TYPEID=%d)';
+   ACT_IDFilter = '(ACT_ID=%d)';
+   sexFilter = '(sex=%d)';
+   custFilter = '(cust_id=%d)';
+var
+   Status:    String;
+   INSURED_T:    String;
+   ACT:  String;
+   sex:  String;
+   p_cust_id : String;
+   Tipacc:    String;
+   Balance:   String;
+   RepSymb:   String;
+   FilterStr: String;
+begin
+ FilterStr :='';
+
+ Status :=CheckFiltered(
+              RGCust.ItemIndex <> -1
+             ,StatusFilter
+             ,[RGCust.ItemIndex]
+              );
+
+ INSURED_T :=CheckFiltered(
+              XFCheckBox2.Checked//DBLookupBranch.KeyValue <> -1
+             ,BranchFilter
+             ,[DBLookupComboBox2.ListSource.DataSet.FieldByName('ID').AsInteger]
+              );
+
+ ACT :=CheckFiltered(
+              XFCheckBox3.Checked//DBLookupCurrency.KeyValue <> -1
+             ,ACT_IDFilter
+             ,[DBLookupComboBox3.ListSource.DataSet.FieldByName('id').AsInteger]
+              );
+
+ sex :=CheckFiltered(
+              XFCheckBox4.Checked  //DBLookupOperator.KeyValue <> -1
+             ,sexFilter
+             ,[DBLookupComboBox4.ListSource.DataSet.FieldByName('ID').AsInteger]
+              );
+
+  p_cust_id :=CheckFiltered(
+              XFCheckBox1.Checked  //DBLookupOperator.KeyValue <> -1
+             ,custFilter
+             ,[DBLookupComboBox1.ListSource.DataSet.FieldByName('ID').AsInteger]
+              );
+
+
+  if Status='' then
+   FilterStr:='status is not null'
+ else
+    FilterStr :=Status;
+
+  if  XFCheckBox2.Checked //Branch <> ''
+  then
+  if  FilterStr=''  then
+    FilterStr :=INSURED_T
+  else
+    FilterStr :=FilterStr + BooleanPrefix + INSURED_T;
+
+  if  XFCheckBox3.Checked //Currency <> ''
+  then
+  if  FilterStr=''  then
+    FilterStr :=ACT
+  else
+    FilterStr :=FilterStr + BooleanPrefix + ACT;
+
+  if  XFCheckBox4.Checked //Operator <> ''
+  then
+  if  FilterStr=''  then
+    FilterStr :=sex
+  else
+    FilterStr :=FilterStr + BooleanPrefix + sex;
+
+    if  XFCheckBox1.Checked //Operator <> ''
+  then
+  if  FilterStr=''  then
+    FilterStr :=p_cust_id
+  else
+    FilterStr :=FilterStr + BooleanPrefix + p_cust_id;
+
+  InsDataMod.ODSInsCustomers.sql[6]:=' where '+ FilterStr;
+  InsDataMod.ODSInsCustomers.sql.text:=Stringreplace(InsDataMod.ODSInsCustomers.sql.text,'status','DECODE (close_prefix, 0, 1, 2)', [rfReplaceAll, rfIgnoreCase]);
+
+ InsDataMod.ODSInsCustomers.close;
+ InsDataMod.ODSInsCustomers.Open;
+
+end;
+
+
+procedure TInsCustomersForm.RGContractClick(Sender: TObject);
+begin
+ ActionFilterExecute1(Sender);
+end;
+
+procedure TInsCustomersForm.RGCustClick(Sender: TObject);
+begin
+
+ ActionFilterExecute(Sender);
+end;
+
+function TInsCustomersForm.ShowAccForm():Integer;
+var
+   fmAccProp : TAccountPropertiesForm;
+begin
+  fmAccProp := TAccountPropertiesForm.Create(self);
+  with InsDataMod, Tenostat do
+  begin
+    SetVariable('ACC_ID', ODSAccountID.AsInteger);
+    Refresh;
+  end;
+  try
+    Result := fmAccProp.ShowModal;
+  finally
+    fmAccProp.Free;
+  end;
+end;
+
+procedure TInsCustomersForm.aNewCustExecute(Sender: TObject);
+begin
+op_cust:='Insert';
+
+ with InsDataMod,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['ADDINSCUST']);
+ end;
+
+ //fmCustomersProperties.op:='ins';
+  with InsDataMod.ODSInsCustomers do
+     begin
+      Insert();
+      //FieldByName('ENTER_DATE').AsDateTime:=InsDataMod.Sysdat.FieldByName('tek_dat').AsDateTime;
+      //fmCustomersProperties.DateTimePicker1.DateTime:=InsDataMod.Sysdat.FieldByName('tek_dat').AsDateTime;
+       if  ShowCustForm() = mrOk then SaveCustData() else Cancel
+
+     end  ;
+
+end;
+
+procedure TInsCustomersForm.aEditCustExecute(Sender: TObject);
+begin
+op_cust:='Edit';
+ with InsDataMod,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['EDITINSCUST']);
+ end;
+
+ //fmCustomersProperties.op:='edit';
+  with InsDataMod, ODSInsCustomers do
+     begin
+      ODSCustTypes.Open;
+      Edit();
+
+   if  ShowCustForm() = mrOk then SaveCustData() else Cancel
+     end ;
+
+end;
+
+procedure TInsCustomersForm.aDelCustExecute(Sender: TObject);
+begin
+
+ with InsDataMod,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['CLOSEINSCUST']);
+ end;
+
+ if MessageDlg('Seçilmiş müştəri ləğv olunacaq!',mtConfirmation,
+ mbYesNoCancel, 0) = mrYes then
+ try
+  with  InsDataMod,ODSInsCustomers do
+  BEGIN
+        if OPCOMMON.callbooleanfunction('del_customers',
+                                [ODSInsCustomersID.Value]) then
+        Refresh;
+  END;
+  except
+   on E:EoracleError do
+   case E.ErrorCode of
+   20002:ShowMessage('Əvvəlcə açıq sığortaları bağlayın!');
+   20300:ShowMessage('By əməliyyat üçün sizin hüququnuz yoxdur!');
+   20280:ShowMessage('Əlavə əməliyyatı üçün sizin hüqüqunuz yoxdur!');
+   20281:ShowMessage('Ləğv etmə əməliyyatı üçün sizin hüququnuz yoxdur!');
+   20282:ShowMessage('Bu əməliyyat üçün sizin hüququnuz çatmır!');
+   end;
+  end;
+end;
+
+procedure TInsCustomersForm.aRefCustExecute(Sender: TObject);
+begin
+ with InsDataMod,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['REFRESHINSCUST']);
+ end;
+
+   with InsDataMod.ODSInsCustomers do
+     Refresh;
+end;
+
+procedure TInsCustomersForm.DBGridCustDblClick(Sender: TObject);
+begin
+  aEditCustExecute(nil);
+end;
+
+procedure TInsCustomersForm.DBGridCustTitleClick(Column: TColumn);
+var
+  TitleName: string;
+begin
+  TitleName := Column.FieldName;
+  with InsDataMod.ODSInsCustomers do
+  begin
+    SetVariable('Title', TitleName);
+    Refresh;
+  end;
+end;
+
+procedure TInsCustomersForm.aNewAccExecute(Sender: TObject);
+begin
+
+ with InsDataMod,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['ADDINSCONT_ACC']);
+ end;
+
+opetion_acc:='I';
+  with InsDataMod do
+     begin
+     ODSAccount.Insert();
+      ODSAccountNAME.Value := ODSInsCustomersSURNAME.value+' '+ODSInsCustomersNAME.Value;
+      //showmessage(inttostr(ODSCustomersID.AsInteger));
+      //showmessage(inttostr(DBGridCust.DataSource.DataSet.FieldByName('cust_id').AsInteger));
+      //ODSAccountKLI_ID.AsInteger := ODSCustomersID.AsInteger;
+      ODSAccountKLI_ID.AsInteger := DBGridCust.DataSource.DataSet.FieldByName('cust_id').AsInteger;
+      ODSAccountFILIAL.AsInteger:=0;
+      if not (ShowAccForm() = mrOk) then ODSAccount.Cancel
+     end
+end;
+
+procedure TInsCustomersForm.aEditAccExecute(Sender: TObject);
+begin
+
+ with InsDataMod,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['EDITINSCONT_ACC']);
+ end;
+
+opetion_acc:='U';
+  with InsDataMod.ODSAccount do
+     begin
+      Edit();
+      if  not (ShowAccForm() = mrOk) then Cancel
+     end
+end;
+
+procedure TInsCustomersForm.DBEdit1KeyPress(Sender: TObject; var Key: Char);
+begin
+   if Key = #13 then
+     begin
+       FindNextControl(ActiveControl,true,true,false).SetFocus;
+       Key := #0
+     end;
+end;
+
+procedure TInsCustomersForm.DBGrid1DblClick(Sender: TObject);
+begin
+ aEditCustExecute(nil);
+end;
+
+procedure TInsCustomersForm.DBGridAccDblClick(Sender: TObject);
+begin
+   aEditAccExecute(nil);
+end;
+
+procedure TInsCustomersForm.aRefAccExecute(Sender: TObject);
+begin
+
+ with InsDataMod,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['REFRESHINSCONT_ACC']);
+ end;
+
+   with InsDataMod.ODSAccount do
+     Refresh;
+end;
+
+procedure TInsCustomersForm.aDelAccExecute(Sender: TObject);
+begin
+ with InsDataMod,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['CLOSEINSCONT_ACC']);
+ end;
+  with  InsDataMod, ODSAccount do begin
+    if MessageDlg('Secilmish hesab baglanilsin?', mtConfirmation, [mbYes, mbNo, mbCancel], 0) = mrYes then
+       OPCOMMON.CallProcedure('close_acc', [FieldByName('id').asFloat])
+     else exit;
+     Refresh;
+  end;
+
+end;
+
+procedure TInsCustomersForm.aRefreshAllExecute(Sender: TObject);
+begin
+  with InsDataMod do
+     RefreshAll;
+end;
+
+procedure TInsCustomersForm.BalansHesablar1Click(Sender: TObject);
+begin
+   loadPlugin('ins_Setting.bpl','BalansH');
+end;
+
+procedure TInsCustomersForm.CallChangeForm(Params : TStringList);
+var
+  CallerGuid : TGUID;
+begin
+ with InsDataMod do
+ begin
+
+  if ODSContracts.FieldByName('CHANGEGUID').AsString = '' then
+  raise   TGuidError.Create('Guid is empty');
+  CallerGuid := StringToGuid(ODSContracts.FieldByName('CHANGEGUID').AsString);
+//  fmContainer := TfmContainer.Create(Self);
+
+//  fmContainer.OpenObj(CallerGuid, Params);
+  if pmcCallActiveX.ShowModal(CallerGuid, Params) = mrOk then
+//  if fmContainer.ShowModal = mrOk then
+      RefreshContractRec();
+ end;
+end;
+
+procedure TInsCustomersForm.aNewInsExecute(Sender: TObject);
+begin
+opetion:='ins';
+ins_cutsid:= InsCustomersForm.DBGridCust.DataSource.DataSet.FieldByName('id').AsInteger;
+contactid:=InsCustomersForm.DBGridContracts.DataSource.DataSet.FieldByName('ID').AsInteger;
+moduletype:='m';
+ with InsDataMod,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['ADDINSCONTRACTS']);
+ end;
+
+  fmNewInsurance := TfmNewInsurance.Create(Self);
+  with InsDataMod do
+  try
+   if fmNewInsurance.ShowModal = mrOk then
+      CloseOpenContracts;
+  finally
+   fmNewInsurance.Free;
+  end;
+end;
+
+procedure TInsCustomersForm.aRefInsExecute(Sender: TObject);
+begin
+
+
+ with InsDataMod,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['REFRESHINSCONTRACTS']);
+ end;
+
+ with InsDataMod do
+    RefreshContracts();
+end;
+
+procedure TInsCustomersForm.aEditInsExecute(Sender: TObject);
+var
+  Params : TStringList;
+  a:integer;
+  p_obeykt_type,p_obeykt_name:string;
+begin
+moduletype:='m';
+opetion:='upd';
+
+//showmessage('Salam1');
+
+ins_cutsid:= InsCustomersForm.DBGridCust.DataSource.DataSet.FieldByName('id').AsInteger;
+contactid:=InsCustomersForm.DBGridContracts.DataSource.DataSet.FieldByName('ID').AsInteger;
+contractstatus:=InsCustomersForm.DBGridContracts.DataSource.DataSet.FieldByName('STATE').AsInteger;
+p_contractstate:=InsCustomersForm.DBGridContracts.DataSource.DataSet.FieldByName('STATE').AsInteger;
+
+// showmessage('Salam2');
+
+ with InsDataMod,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['EDITINSCONTRACTS']);
+ end;
+
+
+ if (DBGridContracts.DataSource.DataSet.RecordCount<>0) and (DBGridContracts.DataSource.DataSet.FieldByName('state').AsInteger=7) then
+ begin
+
+   with InsDataMod,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['REFUSALINS_EDİTCONTRACTS']);
+ end;
+
+  if MessageDlg('Seçilmiş siğorta müqaviləsi redaktə statusuna keçəcək əminsinizmi?',mtConfirmation,
+ mbYesNoCancel, 0) = mrYes then
+ begin
+  with InsDataMod, OPCOMMON do
+  if OPCOMMON.CallIntegerFunction('editcontract', [ODSContracts.fieldbyname('ID').asInteger])=1 then begin
+    MessageDlg('Müqavilə redaktə statusuna keçdi.', mtInformation, [mbok], 0);
+    ODSContracts.RefreshRecord;
+  end;
+ end;
+
+ end;
+
+  with InsDataMod do
+ begin
+     DSins_insur.Close;
+     DSins_insur.SetVariable('p_id',InsCustomersForm.DBGridContracts.DataSource.DataSet.FieldByName('TYPE_ID').AsInteger);
+     DSins_insur.Open;
+
+     p_obeykt_type:= DSins_insur.FieldByName('obeykt_type').AsString;
+     p_obeykt_name:= DSins_insur.FieldByName('changeguid').AsString;
+
+ end;
+
+           if p_obeykt_type='ocx' then
+     begin
+
+      pmcCallActiveX.p_id:=DBGridContracts.DataSource.DataSet.FieldByName('id').AsInteger;
+      //showmessage(inttostr(pmcCallActiveX.p_id));
+ Params := TStringList.Create;
+  with InsDataMod.ODSContracts,InsDataMod.OPCOMMON, Params do
+
+  try
+            a:=InsDataMod.OPCOMMON.CallIntegerFunction('get_blank_id',[FieldByName('ID').asFloat]);
+    Values['Mod']:= 'Edit';
+    Values['СID']:= FloatToStr(FieldByName('ID').asFloat);
+    Values['bid']:= InsDataMod.OPCOMMON.CallIntegerFunction('get_blank_id',[FieldByName('ID').asFloat]);
+    Values['KLI_ID']:= FloatToStr(FieldByName('KLI_ID').asFloat);
+    InsDataMod.OPCOMMON.CallProcedure('p_ins_cid',[FieldByName('ID').asFloat,a,FloatToStr(FieldByName('KLI_ID').asFloat),'Edit']);
+    CallChangeForm(Params);
+
+  finally
+    Params.Free;
+  end;
+end;
+  if p_obeykt_type='bpl'  then
+  begin
+  //commoncid:=InsCustomersForm.DBGridContracts.DataSource.DataSet.FieldByName('id').AsInteger;
+  // showmessage(inttostr(commoncid));
+  //p_obeykt_name:=''''+fmNewInsurance.DBGrid1.DataSource.DataSet.FieldByName('changeguid').AsString+'''';
+  //p_obeykt_name:=fmNewInsurance.DBGrid1.DataSource.DataSet.FieldByName('changeguid').AsString;
+    loadPlugin1(p_obeykt_name,'');
+
+  end;
+
+end;
+
+procedure TInsCustomersForm.DBGridContractsCellClick(Column: TColumn);
+begin
+    contractstatus:=DBGridContracts.DataSource.DataSet.FieldByName('CLOSE_PREFIX').AsInteger;
+     //showmessage(inttostr(contractstatus));
+end;
+
+procedure TInsCustomersForm.DBGridContractsDblClick(Sender: TObject);
+begin
+  aEditInsExecute(Sender);
+end;
+
+procedure TInsCustomersForm.aDelInsExecute(Sender: TObject);
+
+begin
+
+
+ with InsDataMod,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['CLOSEINSCONTRACTS']);
+ end;
+
+  if contractstatus=1 then
+ begin
+   showmessage('Diqqət! Bu müqavilə bağlanmış müqavilə olduğundan heç bir deyişiklik oluna bilməz.');
+   exit;
+ end;
+
+ {ShowMessage(FloatToStr(InsDataMod.ODSContractsID.Value));
+ ShowMessage(FloatToStr(InsDataMod.ODSContractsType_Id.value));  }
+ if MessageDlg('Seçilmiş siğorta ləğv olunacaq!',mtConfirmation,
+ mbYesNoCancel, 0) = mrYes then
+try
+   with InsDataMod,OPCOMMON,ODSContracts do
+   begin
+   //showmessage(inttostr(ODSContracts.FieldByName('ID').AsInteger));
+   //showmessage(inttostr(ODSContracts.FieldByName('TYPE_ID').AsInteger));
+
+        if InsDataMod.OPCOMMON.callbooleanfunction('del_ins',[ODSContractsID.Value,ODSContractsType_Id.value]) then
+
+        RefreshContracts();
+
+   end;
+except
+    on E:EOracleError do
+    case E.ErrorCode of
+       20002: if MessageDlg('Seçilmiş müqaviləyə uyğun hesablar ləğv olunacaq!',mtConfirmation,mbYesNoCancel, 0) = mrYes then
+                 InsDataMod.OPCOMMON.CallProcedure('close_acc', [InsDataMod.ODSAccountID.value]);
+       20001: ShowMessage('Aslı hesablarda qalıq sıfırdan fərqlidir!');
+     end;
+ end;
+end;
+
+procedure TInsCustomersForm.aContractAccsExecute(Sender: TObject);
+begin
+  fmAccSettings := TfmAccSettings.Create(Self);
+  with InsDataMod, fmAccSettings do
+  try
+    ODSContracts.RefreshRecord;
+    ODSContracts.Edit;
+    ODSLoanAccLists.Open;
+    ODSCurrAccList.Open;
+    with InsDataMod do begin
+     if ShowModal = mrOk then ODSContracts.RefreshRecord;
+     ODSAccount.refresh;
+    end;
+  finally
+    ODSLoanAccLists.Close;
+    ODSCurrAccList.Close;
+    Free;
+  end;
+end;
+
+procedure TInsCustomersForm.aPayPlanExecute(Sender: TObject);
+begin
+   if DBGridContracts.DataSource.DataSet.recordcount=0 then
+ begin
+ Showmessage('Diqqət! Cədvəldə məlumat yoxdur.');
+   exit;
+ end;
+contactid:=DBGridContracts.DataSource.DataSet.FieldByName('id').AsInteger;
+contractstatus:=InsCustomersForm.DBGridContracts.DataSource.DataSet.FieldByName('STATE').AsInteger;
+ loadPlugin('InsPaymentPlan.bpl','');
+ {with InsDataMod,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['PEYMENT_PLANINSCONTRACTS']);
+ end;
+
+  with InsDataMod, ODSPayPlan, TfmPaymentPlan.Create(Self) do
+  try
+    SetVariable('insid', ODSContracts.FieldByName('ID').asInteger);
+
+    Open;
+    ShowModal;
+    ODSPayPlan.Close;
+  finally
+    Free;
+  end; }
+end;
+
+procedure TInsCustomersForm.aFreeUserExecute(Sender: TObject);
+begin
+ with InsDataMod,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['DELINSCONT_ACC']);
+ end;
+  with  InsDataMod, ODSAccount do begin
+    if MessageDlg('Secilmish hesab istifadecinin adindan silinecek.', mtConfirmation, [mbYes, mbNo, mbCancel], 0) = mrYes then
+       OPCOMMON.CallProcedure('free_acc', [FieldByName('id').asFloat])
+     else exit;
+     Refresh;
+  end;
+end;
+
+procedure TInsCustomersForm.aPaymentsExecute(Sender: TObject);
+var
+  CallerGuid : TGUID;
+  Params : TStringList;
+begin
+
+ {Params := TStringList.Create;
+
+ with InsDataMod, ODSContracts, Params do
+ begin
+  Values['INSID'] := FloatToStr(FieldByName('ID').asFloat);  }
+  //CallerGuid := StringToGuid('{33777E01-D797-4C04-85D0-31C85C7EDB12}');
+  //if pmcCallActiveX.ShowModal(CallerGuid, Params) = mrOk then
+  // ODSAccount.Refresh;
+ //end;
+ //Params.Free;   }
+ contactid:=DBGridContracts.DataSource.DataSet.FieldByName('id').AsInteger;
+ loadPlugin('InsPayment.bpl','');
+
+end;
+
+procedure TInsCustomersForm.an1Click(Sender: TObject);
+var
+    P: TStringList;
+begin
+       p:=TStringList.Create;
+       with InsDataMod do
+       begin
+            p.Values['id']:=FloatToStr(ODSAccountID.Value);
+            p.Values['acc_no']:=ODSAccountAcc_no.Value;
+       end;
+       AccountContainer.ShowModal(StringToGuid('{839CCAEF-9A7F-447B-AF7E-C8DE033306CA}'),p);  
+       p.Free;
+
+end;
+
+procedure TInsCustomersForm.an2Click(Sender: TObject);
+var
+    p:TStringList;
+    AStartDate, AEndDate: TDateTime;
+begin
+    p:=TStringList.Create;
+    with FormInterval do
+    begin
+         StartDateEdit.DateTime :=InsDataMod.Sysdat.FieldByName('tek_dat').AsDateTime;
+         EndDateEdit.DateTime :=StartDateEdit.DateTime;
+         if ShowModal = mrOK then
+         begin
+            AStartDate :=StartDateEdit.DateTime;
+            AEndDate :=EndDateEdit.DateTime;
+            p.Values['acc_no']:=InsDataMod.ODSAccountAcc_no.Value;
+            p.Values['id']:=FloatToStr(InsDataMod.ODSAccountID.value);
+            p.Values['AStartDate']:=DateToStr(AStartDate);
+            p.Values['AEndDate']:=DateToStr(AEndDate);
+            StateContainer.ShowModal(StringToGuid('{8C35B7B8-2AF6-4BEA-BD7E-F0D01DBDC7EC}'),p);
+            p.Free;
+           {with FormAccountTransactions do
+            begin
+              OpenDataControls(AStartDate, AEndDate);
+              ShowModal;
+            end; }
+        end;
+    end;
+end;
+
+procedure TInsCustomersForm.aFindExecute(Sender: TObject);
+begin
+ with InsDataMod,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['FILTERINSCUST']);
+ end;
+  // if not Assigned(fmCustFind) then
+      {fmCustFind := TfmCustFind.Create(Self);
+    fmCustFind.ShowModal; }
+    XFPanel1.Visible :=not XFPanel1.Visible;
+end;
+
+procedure TInsCustomersForm.aFullFormExecute(Sender: TObject);
+begin
+
+
+ with InsDataMod,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['OPINSCONTRACTS']);
+ end;
+ if contractstatus=1 then
+ begin
+   showmessage('Diqqət! Bu müqavilə bağlanmış müqavilə olduğundan heç bir deyişiklik oluna bilməz.');
+   exit;
+ end;
+  {with InsDataMod do
+   if not tbFullScreen.Down then  UnSetFullForm
+   else  SetFullForm; }
+     commoncid:=DBGridContracts.DataSource.DataSet.FieldByName('id').AsInteger;
+    // showmessage(inttostr(commoncid));
+   loadPlugin1('InsBusinessProcesses.bpl','');
+end;
+
+procedure TInsCustomersForm.Agent1Click(Sender: TObject);
+begin
+with InsDataMod,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['AGENTINSCUST']);
+ end;
+
+
+  with TfrmAgents.Create(Self) do
+  try
+    ShowModal;
+  finally
+    Free;
+  end;
+end;
+
+procedure TInsCustomersForm.AmartizatorSazlamasi1Click(Sender: TObject);
+begin
+  loadPlugin('ins_Setting.bpl','amartizator');
+end;
+
+procedure TInsCustomersForm.DBGridContractsTitleClick(Column: TColumn);
+var
+   TitleName :string;
+   SortPosition: word;
+begin
+ SortPosition :=100;
+ if (InsDataMod.ODSContracts.IsEmpty) or (Column.FieldName = EmptyStr) then Exit;
+ Screen.Cursor :=crHourGlass;
+ TitleName :=Column.FieldName;
+ with InsDataMod, ODSContracts do
+  try
+   SortPosition :=SQL.Add('ORDER BY '+ TitleName);
+   Refresh;
+  finally
+   SQL[SortPosition] :=EmptyStr;
+   Screen.Cursor :=crDefault;
+  end;
+end;
+
+procedure TInsCustomersForm.DBGridContractsDrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TColumn;
+  State: TGridDrawState);
+var
+  ImageIndex: Integer;
+begin
+  with Sender as TDBGrid do
+  begin
+    if DataSource.DataSet.RecordCount <> 0 then
+    begin
+      ImageIndex := DataSource.DataSet.FieldByName('state').AsInteger;
+      if (DataCol = 1) and (ImageIndex <> -1) then begin
+        Canvas.brush.Style := bsSolid;
+        Canvas.FillRect(Rect);
+        ImageList2.Draw(Canvas, Rect.Left, Rect.Top, ImageIndex, True); end
+      else
+        DefaultDrawColumnCell(Rect, DataCol, Column, State);
+    end;
+  end;
+
+
+end;
+
+procedure TInsCustomersForm.aCommitExecute(Sender: TObject);
+var
+  funcname : String;
+begin
+
+ with InsDataMod,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['COMMITINSCONTRACTS']);
+ end;
+
+ if contractstatus=1 then
+ begin
+   showmessage('Diqqət! Bu müqavilə bağlanmış müqavilə olduğundan heç bir deyişiklik oluna bilməz.');
+   exit;
+ end;
+    contactid:=DBGridContracts.DataSource.DataSet.FieldByName('ID').asInteger ;
+ with InsDataMod do
+ begin
+   DSPaymentSettingInfo.Close;
+   DSPaymentSettingInfo.SetVariable('pcid',contactid);
+   DSPaymentSettingInfo.Open;
+
+   if DSPaymentSettingInfo.FieldByName('say').AsInteger=0 then
+   begin
+     showmessage('Diqqət! Bu müqavilənin Ödəmə planı haqqındakı məlumatları yığılmayıb!');
+     exit;
+   end;
+
+
+   DSPaymentsetting.Close;
+   DSPaymentsetting.SetVariable('pcid',contactid);
+   DSPaymentsetting.Open;
+
+   DSPaymentInfo.Close;
+   DSPaymentInfo.SetVariable('pcid',contactid);
+   DSPaymentInfo.Open;
+
+    if DSPaymentsetting.FieldByName('payment_type').AsInteger=2 then
+    begin
+   if DSPaymentInfo.FieldByName('say').AsInteger=0 then
+   begin
+     showmessage('Diqqət! Bu müqavilənin Ödəmə planı hissələrlə ödəniş olduğundan ödəmə planı yığılmalıdır!');
+     exit;
+   end;
+   end;
+
+ end;
+ if (DBGridContracts.DataSource.DataSet.FieldByName('type_id').asInteger=2)   then
+ begin
+  InsDataMod.DSMedEmploes.Close;
+  InsDataMod.DSMedEmploes.SetVariable('pcid',contactid);
+  InsDataMod.DSMedEmploes.Open;
+ if (InsDataMod.DSMedEmploes.RecordCount=0) then
+ begin
+   showmessage('Diqqət! Bu tibbi sığorta müqaviləsi üçün Sığortalanacaq işçilərin siyahısı yığılmayıb!');
+   exit;
+ end;
+ end;
+
+   InsDataMod.DScontractcommit.Close;
+   InsDataMod.DScontractcommit.SetVariable('pid',contactid);
+   InsDataMod.DScontractcommit.Open;
+
+ if InsDataMod.DScontractcommit.FieldByName('valute_id').AsInteger<>0 then
+   begin
+
+   InsDataMod.DSOperkurs.close;
+   InsDataMod.DSOperkurs.SetVariable('pval_kod',InsDataMod.DScontractcommit.FieldByName('valute_id').AsInteger);
+   InsDataMod.DSOperkurs.SetVariable('pdat',InsDataMod.DScontractcommit.FieldByName('ins_date').AsDateTime);
+   InsDataMod.DSOperkurs.Open;
+           if InsDataMod.DSOperkurs.FieldByName('say').AsInteger=0 then
+           begin
+
+       showmessage('Diqqət !Sistemdə bu müqavilənin  muqavilə tarixinə və valyutasına uyğun kurs movcudd deyil.');
+       exit;
+           end;
+   end;
+
+
+ {InsDataMod.ODSContracts.RefreshRecord;  //user,group ??
+ with InsDataMod, ODSContracts do
+   case fieldbyname('state').asInteger of
+    0 : funcname := 'commitblank';
+    2:  funcname := 'commitsuggestion';
+    4 : funcname := 'commitpolicy';
+    else exit;
+   end;
+
+ with InsDataMod, OPCOMMON do
+  if CallBooleanFunction(funcname, [ODSContracts.fieldbyname('ID').asInteger]) then begin
+    MessageDlg('Testiq olundu.', mtInformation, [mbok], 0);
+    ODSContracts.RefreshRecord;
+  end; }
+  //showmessage(DBGridContracts.DataSource.DataSet.FieldByName('ID').AsString);
+  //showmessage(InsDataMod.ODSContracts.FieldByName('ID').AsString);
+
+   with InsDataMod, OPCOMMON do
+  if OPCOMMON.CallIntegerFunction('commitcontract', [contactid])=1 then
+  begin
+    MessageDlg('Testiq olundu.', mtInformation, [mbok], 0);
+    InsDataMod.ODSContracts.RefreshRecord;
+  end;
+
+
+end;
+
+procedure TInsCustomersForm.LoadPlugin2(PluginName :String;PluginParam :String;PluginParam2 :String);
+var PluginHandle :THandle;
+    exportproc : procedure(s:String;k:String);
+begin
+   PluginHandle := LoadPackage(ExtractFilePath(Application.ExeName)+PluginName);
+
+   if PluginHandle > 0 then
+   begin
+      @exportproc := GetProcAddress(PluginHandle,'InitPlugin');
+      exportproc(PluginParam,PluginParam2);
+   end;
+end;
+procedure TInsCustomersForm.aContFindExecute(Sender: TObject);
+var
+tacc:String;
+begin
+tacc:=DBGridCust.DataSource.DataSet.FieldByName('CUST_ID').Asstring;
+
+  LoadPlugin2('Sb_General.bpl','ForOperation',tacc)  ;
+  {Pif cradd=1 then
+ begin
+    with DataModPCustService,ODS_CUSTOMERS_PHYS_FS do
+begin
+ if Active then close;
+  SetVariable(':custid',tacc);
+  open;
+
+end;
+ end;     }
+
+   {if not Assigned(fmContFind) then
+      fmContFind := TfmContFind.Create(Self);
+
+   fmContFind.ShowModal;   }
+end;
+
+procedure TInsCustomersForm.aDeleteOperationsExecute(Sender: TObject);
+begin
+
+
+
+ with InsDataMod,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['REFUSALINSCONTRACTS']);
+ end;
+  if contractstatus=1 then
+ begin
+   showmessage('Diqqət! Bu müqavilə bağlanmış müqavilə olduğundan heç bir deyişiklik oluna bilməz.');
+   exit;
+ end;
+
+
+
+ { with InsDataMod, ODSContracts do
+   if  OPCOMMON.CallBooleanFunction('DeleteOperations',
+                 [FieldByName('id').asInteger]) then
+   begin
+      ShowMessage('Əməliyyatlar pozuldu!');
+      ODSAccount.refresh;
+   end;  }
+                     //imtina
+              //showmessage(InsDataMod.ODSContracts.FieldByName('state').AsString);
+
+  if InsDataMod.ODSContracts.FieldByName('state').AsInteger<>6 then
+  begin
+  showmessage('Diqqət! Yalniz Təsdiq olunmuş muqavilə inkar statusuna keçrilə bilər!');
+  exit;
+   end;
+
+     if InsDataMod.ODSContracts.FieldByName('commit_date').AsDateTime<>InsDataMod.Sysdat.FieldByName('tek_dat').AsDateTime then
+  begin
+  showmessage('Diqqət! System tarixindən fərqli tarixdə təsdiq olunmuş müqaviləni "İnkar" etmək olmaz!');
+  exit;
+   end;
+
+  with InsDataMod, OPCOMMON do
+  if OPCOMMON.CallIntegerFunction('cancelcontract', [ODSContracts.fieldbyname('ID').asInteger])=1 then begin
+    MessageDlg('Əməliyyatlar pozuldu', mtInformation, [mbok], 0);
+    ODSContracts.RefreshRecord;
+  end;
+
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TInsCustomersForm,
+    Class_InsCustomersForm,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

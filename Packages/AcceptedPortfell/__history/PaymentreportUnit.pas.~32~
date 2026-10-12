@@ -1,0 +1,913 @@
+unit PaymentreportUnit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, OleServer, ExcelXP, StdCtrls, ComCtrls, DBCtrls, Mask, DBCtrlsEh,
+  DBLookupEh, DBGridEh;
+
+type
+  TPayreport = class(TForm)
+    DateTimePicker1: TDateTimePicker;
+    DateTimePicker2: TDateTimePicker;
+    Button1: TButton;
+    ExcelApplication1: TExcelApplication;
+    Button3: TButton;
+    Edit1: TEdit;
+    CheckBox1: TCheckBox;
+    DBLookupCombobox1: TDBLookupComboboxEh;
+    Button4: TButton;
+    Button5: TButton;
+    procedure Button1Click(Sender: TObject);
+    procedure Button3Click(Sender: TObject);
+    procedure CheckBox1Click(Sender: TObject);
+    procedure DBLookupCombobox1Change(Sender: TObject);
+    procedure Button8Click(Sender: TObject);
+    procedure Button4Click(Sender: TObject);
+    procedure Button5Click(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Payreport: TPayreport;
+
+implementation
+
+uses Datamodunit, Unitselection;
+
+{$R *.dfm}
+
+procedure TPayreport.Button1Click(Sender: TObject);
+var     Sheet, Sheets  :Variant;
+  ay,il,il_s,k,s,ss,st,sc,sd,sf,l,val :String;
+                            V:Variant;
+  OpenedXlsCnt,b, a,   i,j,w  :Integer;
+ v_BDate    :TDateTime;
+ v_EDate    :TDateTime;
+ row:integer;
+
+ esasborc,faizborc, cemiesas,cemifaiz:real;
+
+
+begin
+DataMod.SB_ACA.CallProcedure('CheckAdvancedObjectAccess', ['PORTFELPAYMENT']);
+ if CheckBox1.Checked then
+     begin
+DataMod.Main_pay.CloseAll ;
+DataMod.Main_pay.SetVariable('dat1',trunc(DateTimePicker1.Datetime)) ;
+DataMod.Main_pay.SetVariable('dat2',trunc(DateTimePicker2.Datetime)) ;
+DataMod.Main_pay.SetVariable('brname',edit1.Text) ;
+DataMod.Main_pay.open ;
+
+try
+
+     Screen.Cursor := crSQLWait;
+
+ ExcelApplication1.Disconnect;
+  V :=ExcelApplication1.Application;
+  ExcelApplication1.Connect;
+  V.Workbooks.Open(ExtractFilePath(ExtractFilePath(ParamStr(0)))+ 'PortfelABB_Payment.xlsx');
+  try
+
+  for OpenedXlsCnt :=1 to 100 do
+   Sheet := V.Workbooks[OpenedXlsCnt].Worksheets['sheet1'];
+   //Break;
+  except
+
+
+  end;
+
+  sheets :=V.Sheets;
+
+  a:=0;
+   i:=0 ;
+     //  datamod.Main_pay.open;
+         datamod.Main_pay.First;
+
+
+    for a:=0 to datamod.Main_pay.RecordCount-1 do
+   begin
+  // try
+     esasborc:=0;
+     faizborc:=0;
+     cemiesas:=0;
+     cemifaiz:=0;
+     val:='AZN';
+
+     Sheet.cells[7+i,1]:=datamod.Main_pay.fieldbyname('rownum').AsString;
+     Sheet.cells[7+i,2]:=datamod.Main_pay.fieldbyname('prtid').AsString;
+     Sheet.cells[7+i,3]:=datamod.Main_pay.fieldbyname('borrower_name').AsString;
+     Sheet.cells[7+i,4]:=datamod.Main_pay.fieldbyname('types').AsString;
+     Sheet.cells[7+i,5]:=datamod.Main_pay.fieldbyname('management').AsString;
+     Sheet.cells[7+i,6]:=datamod.Main_pay.fieldbyname('legal_type').AsString;
+     Sheet.cells[7+i,7]:=datamod.Main_pay.fieldbyname('manages').AsString;
+     Sheet.cells[7+i,8]:=datamod.Main_pay.fieldbyname('name').AsString;
+
+     Sheet.cells[7+i,9]:=datamod.Main_pay.fieldbyname('MAINBEFOREAMOUNT').AsFloat;
+     Sheet.cells[7+i,10]:=datamod.Main_pay.fieldbyname('PERCBEFOREAMOUNT').AsFloat;
+     Sheet.cells[7+i,11] := datamod.Main_pay.fieldbyname('MAINBEFOREAMOUNT').AsFloat+datamod.Main_pay.fieldbyname('PERCBEFOREAMOUNT').AsFloat;
+
+     Sheet.cells[7+i,12]:= datamod.Main_pay.fieldbyname('typename').AsString;
+     Sheet.cells[7+i,13]:= datamod.Main_pay.fieldbyname('datdate').AsDateTime;
+     Sheet.cells[7+i,14]:= datamod.Main_pay.fieldbyname('val_name').AsString;
+
+     Sheet.cells[7+i,15]:= datamod.Main_pay.fieldbyname('AMOUNT_MAIN').AsFloat+datamod.Main_pay.fieldbyname('AMOUNT_PERC').AsFloat;
+     Sheet.cells[7+i,16]:= datamod.Main_pay.fieldbyname('AMOUNT_MAIN').AsFloat;
+     Sheet.cells[7+i,17]:= datamod.Main_pay.fieldbyname('AMOUNT_PERC').AsFloat;
+     Sheet.cells[7+i,18]:= datamod.Main_pay.fieldbyname('SERVICEFEE').AsFloat;
+
+     Sheet.cells[7+i,19]:= datamod.Main_pay.fieldbyname('mainafteramount').AsFloat;
+     Sheet.cells[7+i,20]:= datamod.Main_pay.fieldbyname('mainafterperc').AsFloat;
+     Sheet.cells[7+i,21]:=datamod.Main_pay.fieldbyname('mainafteramount').AsFloat+datamod.Main_pay.fieldbyname('mainafterperc').AsFloat ;
+    i:=i+1;
+     datamod.Main_pay.Next;
+{   except
+     ShowMessage('66666');
+   end;}
+   end;
+
+  ExcelApplication1.Visible[0] :=True;
+  ExcelApplication1.Disconnect;
+
+
+finally
+     Screen.Cursor := crDefault;
+       Payreport.Close;
+    SelectionUnit.Close;
+end;
+     end else
+     begin
+         DataMod.Main_pay2.CloseAll ;
+DataMod.Main_pay2.SetVariable('dat1',trunc(DateTimePicker1.Date)) ;
+DataMod.Main_pay2.SetVariable('dat2',trunc(DateTimePicker2.Date)) ;
+//DataMod.Main_pay.SetVariable('brname',edit1.Text) ;
+DataMod.Main_pay2.open ;
+
+
+try
+
+     Screen.Cursor := crSQLWait;
+
+ ExcelApplication1.Disconnect;
+  V :=ExcelApplication1.Application;
+  ExcelApplication1.Connect;
+  V.Workbooks.Open(ExtractFilePath(ExtractFilePath(ParamStr(0)))+ 'PortfelABB_Payment.xlsx');
+  try
+
+  for OpenedXlsCnt :=1 to 100 do
+   Sheet := V.Workbooks[OpenedXlsCnt].Worksheets['sheet1'];
+   //Break;
+  except
+
+
+  end;
+
+  sheets :=V.Sheets;
+
+  a:=0;
+   i:=0 ;
+     //  datamod.Main_pay.open;
+         datamod.Main_pay2.First;
+
+
+    for a:=0 to datamod.Main_pay2.RecordCount-1 do
+   begin
+  // try
+     esasborc:=0;
+     faizborc:=0;
+     cemiesas:=0;
+     cemifaiz:=0;
+     val:='AZN';
+
+     Sheet.cells[7+i,1]:=datamod.Main_pay2.fieldbyname('rownum').AsString;
+     Sheet.cells[7+i,2]:=datamod.Main_pay2.fieldbyname('prtid').AsString;
+     Sheet.cells[7+i,3]:=datamod.Main_pay2.fieldbyname('borrower_name').AsString;
+     Sheet.cells[7+i,4]:=datamod.Main_pay2.fieldbyname('types').AsString;
+     Sheet.cells[7+i,5]:=datamod.Main_pay2.fieldbyname('management').AsString;
+     Sheet.cells[7+i,6]:=datamod.Main_pay2.fieldbyname('legal_type').AsString;
+     Sheet.cells[7+i,7]:=datamod.Main_pay2.fieldbyname('manages').AsString;
+     Sheet.cells[7+i,8]:=datamod.Main_pay2.fieldbyname('name').AsString;
+
+     Sheet.cells[7+i,9]:=datamod.Main_pay2.fieldbyname('MAINBEFOREAMOUNT').AsFloat;
+     Sheet.cells[7+i,10]:=datamod.Main_pay2.fieldbyname('PERCBEFOREAMOUNT').AsFloat;
+     Sheet.cells[7+i,11] := datamod.Main_pay2.fieldbyname('MAINBEFOREAMOUNT').AsFloat+datamod.Main_pay2.fieldbyname('PERCBEFOREAMOUNT').AsFloat;
+
+     Sheet.cells[7+i,12]:= datamod.Main_pay2.fieldbyname('typename').AsString;
+     Sheet.cells[7+i,13]:= datamod.Main_pay2.fieldbyname('datdate').AsDateTime;
+     Sheet.cells[7+i,14]:= datamod.Main_pay2.fieldbyname('val_name').AsString;
+
+     Sheet.cells[7+i,15]:= datamod.Main_pay2.fieldbyname('AMOUNT_MAIN').AsFloat+datamod.Main_pay2.fieldbyname('AMOUNT_PERC').AsFloat;
+     Sheet.cells[7+i,16]:= datamod.Main_pay2.fieldbyname('AMOUNT_MAIN').AsFloat;
+     Sheet.cells[7+i,17]:= datamod.Main_pay2.fieldbyname('AMOUNT_PERC').AsFloat;
+     Sheet.cells[7+i,18]:= datamod.Main_pay2.fieldbyname('SERVICEFEE').AsFloat;
+
+     Sheet.cells[7+i,19]:= datamod.Main_pay2.fieldbyname('mainafteramount').AsFloat;
+     Sheet.cells[7+i,20]:= datamod.Main_pay2.fieldbyname('mainafterperc').AsFloat;
+     Sheet.cells[7+i,21]:=datamod.Main_pay2.fieldbyname('mainafteramount').AsFloat+datamod.Main_pay2.fieldbyname('mainafterperc').AsFloat ;
+    i:=i+1;
+     datamod.Main_pay2.Next;
+{   except
+     ShowMessage('66666');
+   end;}
+   end;
+
+  ExcelApplication1.Visible[0] :=True;
+  ExcelApplication1.Disconnect;
+
+
+finally
+     Screen.Cursor := crDefault;
+       Payreport.Close;
+    SelectionUnit.Close;
+end;
+     end;
+
+
+end;
+
+procedure TPayreport.Button4Click(Sender: TObject);
+var     Sheet, Sheets  :Variant;
+  ay,il,il_s,k,s,ss,st,sc,sd,sf,l,val :String;
+                            V:Variant;
+  OpenedXlsCnt,b, a,   i,j,w  :Integer;
+ v_BDate    :TDateTime;
+ v_EDate    :TDateTime;
+ row:integer;
+
+ esasborc,faizborc, cemiesas,cemifaiz:real;
+
+
+begin
+DataMod.SB_ACA.CallProcedure('CheckAdvancedObjectAccess', ['HUQUQEMLAK']);
+ ExcelApplication1.Disconnect;
+  V :=ExcelApplication1.Application;
+  ExcelApplication1.Connect;
+  V.Workbooks.Open(ExtractFilePath(ExtractFilePath(ParamStr(0)))+ 'PortfelABB_Court.xlsx');
+  try
+
+  for OpenedXlsCnt :=1 to 100 do
+   Sheet := V.Workbooks[OpenedXlsCnt].Worksheets['sheet1'];
+   //Break;
+  except
+
+
+  end;
+
+  sheets :=V.Sheets;
+
+  a:=0;
+   i:=0 ;
+   if not datamod.Main_court.Active then
+   begin
+   datamod.Main_court.close;
+   datamod.Main_court.open;
+   end;
+
+         datamod.Main_court.First;
+
+
+    for a:=0 to datamod.Main_court.RecordCount-1 do
+   begin
+  // try
+     esasborc:=0;
+     faizborc:=0;
+     cemiesas:=0;
+     cemifaiz:=0;
+     val:='AZN';
+ //ShowMessage('nnnn');
+    // Sheet.cells[7+i,6]:= datamod.maincrprt.fieldbyname('INNORPIN').AsString;
+     Sheet.cells[7+i,1]:=datamod.Main_court.fieldbyname('rownum').AsString;
+     Sheet.cells[7+i,2]:=datamod.Main_court.fieldbyname('rownum').AsString;
+     Sheet.cells[7+i,3]:=datamod.Main_court.fieldbyname('prtid').AsString;
+     Sheet.cells[7+i,4]:=datamod.Main_court.fieldbyname('INNORPIN').AsString;
+     Sheet.cells[7+i,5]:=datamod.Main_court.fieldbyname('filname').AsString;
+     Sheet.cells[7+i,6]:=datamod.Main_court.fieldbyname('borrower_name').AsString;
+     Sheet.cells[7+i,7]:=datamod.Main_court.fieldbyname('akt1').AsString;
+     Sheet.cells[7+i,8]:=datamod.Main_court.fieldbyname('akt1_date').AsVariant;
+     Sheet.cells[7+i,9]:=datamod.Main_court.fieldbyname('akt2').AsString;
+     Sheet.cells[7+i,10]:=datamod.Main_court.fieldbyname('akt2_date').AsVariant;
+     Sheet.cells[7+i,23]:=datamod.Main_court.fieldbyname('COURT_AMMOUNT').AsString;
+     Sheet.cells[7+i,24]:=datamod.Main_court.fieldbyname('COURT_STATUS').AsString;
+     Sheet.cells[7+i,25]:=datamod.Main_court.fieldbyname('COURT_DATE_NUM').AsString;
+     Sheet.cells[7+i,26]:=datamod.Main_court.fieldbyname('COURT_NAME').AsString;
+     Sheet.cells[7+i,27]:=datamod.Main_court.fieldbyname('COURT_ACCEPTED_AMMOUNT').AsString;
+     Sheet.cells[7+i,28]:=datamod.Main_court.fieldbyname('COURT_DESC').AsString;
+     Sheet.cells[7+i,29]:=datamod.Main_court.fieldbyname('COURT_MANAGE').AsString;
+     Sheet.cells[7+i,30]:=datamod.Main_court.fieldbyname('COURT_LASTSTAT').AsString;
+     Sheet.cells[7+i,31]:=datamod.Main_court.fieldbyname('COURT_MEASURE').AsString;
+     Sheet.cells[7+i,32]:=datamod.Main_court.fieldbyname('COURT_REPLACE').AsString;
+     Sheet.cells[7+i,33]:=datamod.Main_court.fieldbyname('REPLACEMENT_COUNT').AsString;
+     Sheet.cells[7+i,34]:=datamod.Main_court.fieldbyname('INVESTIGATION_ORG').AsString;
+     Sheet.cells[7+i,35]:=datamod.Main_court.fieldbyname('INFOS').AsString;
+
+
+
+
+     i:=i+1;
+     datamod.Main_court.Next;
+{   except
+     ShowMessage('66666');
+   end;}
+   end;
+
+  ExcelApplication1.Visible[0] :=True;
+  ExcelApplication1.Disconnect;
+   SelectionUnit.Close;
+
+end;
+
+procedure TPayreport.Button5Click(Sender: TObject);
+var     Sheet, Sheets  :Variant;
+  ay,il,il_s,k,s,ss,st,sc,sd,sf,l,val :String;
+                            V:Variant;
+  OpenedXlsCnt,b, a,   i,j,w  :Integer;
+ v_BDate    :TDateTime;
+ v_EDate    :TDateTime;
+ row:integer;
+
+ esasborc,faizborc, cemiesas,cemifaiz:real;
+
+
+begin
+DataMod.SB_ACA.CallProcedure('CheckAdvancedObjectAccess', ['EMLAKCAP']);
+ ExcelApplication1.Disconnect;
+  V :=ExcelApplication1.Application;
+  ExcelApplication1.Connect;
+  V.Workbooks.Open(ExtractFilePath(ExtractFilePath(ParamStr(0)))+ 'PortfelABB_PROP.xlsx');
+  try
+
+  for OpenedXlsCnt :=1 to 100 do
+   Sheet := V.Workbooks[OpenedXlsCnt].Worksheets['sheet1'];
+   //Break;
+  except
+
+
+  end;
+
+  sheets :=V.Sheets;
+
+  a:=0;
+   i:=0 ;
+   if not datamod.Main_court.Active then
+   begin
+   datamod.Main_court.close;
+   datamod.Main_court.open;
+   end;
+
+         datamod.Main_court.First;
+
+
+    for a:=0 to datamod.Main_court.RecordCount-1 do
+   begin
+  // try
+     esasborc:=0;
+     faizborc:=0;
+     cemiesas:=0;
+     cemifaiz:=0;
+     val:='AZN';
+ //ShowMessage('nnnn');
+    // Sheet.cells[7+i,6]:= datamod.maincrprt.fieldbyname('INNORPIN').AsString;
+     Sheet.cells[7+i,1]:=datamod.Main_court.fieldbyname('rownum').AsString;
+     Sheet.cells[7+i,2]:=datamod.Main_court.fieldbyname('rownum').AsString;
+     Sheet.cells[7+i,3]:=datamod.Main_court.fieldbyname('prtid').AsString;
+     Sheet.cells[7+i,4]:=datamod.Main_court.fieldbyname('INNORPIN').AsString;
+     Sheet.cells[7+i,5]:=datamod.Main_court.fieldbyname('filname').AsString;
+     Sheet.cells[7+i,6]:=datamod.Main_court.fieldbyname('borrower_name').AsString;
+     Sheet.cells[7+i,7]:=datamod.Main_court.fieldbyname('akt1').AsString;
+     Sheet.cells[7+i,8]:=datamod.Main_court.fieldbyname('akt1_date').AsVariant;
+     Sheet.cells[7+i,9]:=datamod.Main_court.fieldbyname('akt2').AsString;
+     Sheet.cells[7+i,10]:=datamod.Main_court.fieldbyname('akt2_date').AsVariant;
+
+     Sheet.cells[7+i,23]:=datamod.Main_court.fieldbyname('PROPERTY').AsString;
+     Sheet.cells[7+i,24]:=datamod.Main_court.fieldbyname('PROP_DESC').AsString;
+     Sheet.cells[7+i,25]:=datamod.Main_court.fieldbyname('PROP_ADDRESS').AsString;
+     Sheet.cells[7+i,26]:=datamod.Main_court.fieldbyname('PORP_PASSPORT').AsString;
+     Sheet.cells[7+i,27]:=datamod.Main_court.fieldbyname('PROP_PRICE').AsString;
+     Sheet.cells[7+i,28]:=datamod.Main_court.fieldbyname('PROP_INFO').AsString;
+
+
+
+     i:=i+1;
+     datamod.Main_court.Next;
+{   except
+     ShowMessage('66666');
+   end;}
+   end;
+
+  ExcelApplication1.Visible[0] :=True;
+  ExcelApplication1.Disconnect;
+   SelectionUnit.Close;
+
+end;
+
+procedure TPayreport.Button3Click(Sender: TObject);
+var     Sheet, Sheets  :Variant;
+  ay,il,il_s,k,s,ss,st,sc,sd,sf,l,val :String;
+                            V:Variant;
+  OpenedXlsCnt,b, a,   i,j,w  :Integer;
+ v_BDate    :TDateTime;
+ v_EDate    :TDateTime;
+ row:integer;
+
+ esasborc,faizborc, cemiesas,cemifaiz:real;
+
+
+begin
+DataMod.SB_ACA.CallProcedure('CheckAdvancedObjectAccess', ['PORTFEL']);
+ ExcelApplication1.Disconnect;
+  V :=ExcelApplication1.Application;
+  ExcelApplication1.Connect;
+  V.Workbooks.Open(ExtractFilePath(ExtractFilePath(ParamStr(0)))+ 'PortfelABB.xlsx');
+  try
+
+  for OpenedXlsCnt :=1 to 100 do
+   Sheet := V.Workbooks[OpenedXlsCnt].Worksheets['sheet1'];
+   //Break;
+  except
+
+
+  end;
+
+  sheets :=V.Sheets;
+
+  a:=0;
+   i:=0 ;
+       datamod.maincrprt.open;
+         datamod.maincrprt.First;
+
+
+    for a:=0 to datamod.maincrprt.RecordCount-1 do
+   begin
+  // try
+     esasborc:=0;
+     faizborc:=0;
+     cemiesas:=0;
+     cemifaiz:=0;
+     val:='AZN';
+ //ShowMessage('nnnn');
+    // Sheet.cells[7+i,6]:= datamod.maincrprt.fieldbyname('INNORPIN').AsString;
+     Sheet.cells[7+i,1]:=datamod.maincrprt.fieldbyname('rownum').AsString;
+     Sheet.cells[7+i,2]:=datamod.maincrprt.fieldbyname('rownum').AsString;
+     Sheet.cells[7+i,3]:=datamod.maincrprt.fieldbyname('prtid').AsString;
+     Sheet.cells[7+i,4]:=datamod.maincrprt.fieldbyname('INNORPIN').AsString;
+     Sheet.cells[7+i,5]:=datamod.maincrprt.fieldbyname('types').AsString;
+     Sheet.cells[7+i,6]:=datamod.maincrprt.fieldbyname('borrower_name').AsString;
+     Sheet.cells[7+i,7]:=datamod.maincrprt.fieldbyname('akt1').AsString;
+     Sheet.cells[7+i,8]:=datamod.maincrprt.fieldbyname('akt1_date').AsVariant;
+     Sheet.cells[7+i,9]:=datamod.maincrprt.fieldbyname('akt2').AsString;
+     Sheet.cells[7+i,10]:=datamod.maincrprt.fieldbyname('akt2_date').AsVariant;
+     Sheet.cells[7+i,11]:=datamod.maincrprt.fieldbyname('eurabbesas').AsFloat;
+     Sheet.cells[7+i,12]:=datamod.maincrprt.fieldbyname('eurabbfaiz').AsFloat;
+     Sheet.cells[7+i,13]:=datamod.maincrprt.fieldbyname('eurabbesas').AsFloat+datamod.maincrprt.fieldbyname('eurabbfaiz').AsFloat;
+     Sheet.cells[7+i,14]:=datamod.maincrprt.fieldbyname('usdabbesas').AsFloat;
+     Sheet.cells[7+i,15]:=datamod.maincrprt.fieldbyname('usdabbfaiz').AsFloat;
+     Sheet.cells[7+i,16]:=datamod.maincrprt.fieldbyname('usdabbesas').AsFloat+datamod.maincrprt.fieldbyname('usdabbfaiz').AsFloat;
+     Sheet.cells[7+i,17]:=datamod.maincrprt.fieldbyname('rurabbesas').AsFloat;
+     Sheet.cells[7+i,18]:=datamod.maincrprt.fieldbyname('rurabbfaiz').AsFloat;
+     Sheet.cells[7+i,19]:=datamod.maincrprt.fieldbyname('rurabbesas').AsFloat+datamod.maincrprt.fieldbyname('rurabbfaiz').AsFloat;
+     Sheet.cells[7+i,20]:=datamod.maincrprt.fieldbyname('aznabbesas').AsFloat;
+     Sheet.cells[7+i,21]:=datamod.maincrprt.fieldbyname('aznabbfaiz').AsFloat;
+     Sheet.cells[7+i,22]:=datamod.maincrprt.fieldbyname('aznabbesas').AsFloat+datamod.maincrprt.fieldbyname('aznabbfaiz').AsFloat;
+
+
+      if (datamod.maincrprt.fieldbyname('aznesas').AsFloat<>0) or (datamod.maincrprt.fieldbyname('aznfaiz').AsFloat<>0) then
+     begin
+
+       esasborc:=datamod.maincrprt.fieldbyname('aznesas').AsFloat;
+       faizborc:=datamod.maincrprt.fieldbyname('aznfaiz').AsFloat;
+       val:='AZN';
+     end;
+      if (datamod.maincrprt.fieldbyname('usdesas').AsFloat<>0) or (datamod.maincrprt.fieldbyname('usdfaiz').AsFloat<>0) then
+     begin
+      esasborc:=0;
+       faizborc:=0;
+       esasborc:=datamod.maincrprt.fieldbyname('usdesas').AsFloat;
+       faizborc:=datamod.maincrprt.fieldbyname('usdfaiz').AsFloat;
+       val:='USD';
+     end;
+      if (datamod.maincrprt.fieldbyname('euresas').AsFloat<>0) or (datamod.maincrprt.fieldbyname('eurfaiz').AsFloat<>0) then
+     begin
+      esasborc:=0;
+       faizborc:=0;
+       esasborc:=datamod.maincrprt.fieldbyname('euresas').AsFloat;
+       faizborc:=datamod.maincrprt.fieldbyname('eurfaiz').AsFloat;
+       val:='EUR';
+     end;
+      if (datamod.maincrprt.fieldbyname('gbpesas').AsFloat<>0) or (datamod.maincrprt.fieldbyname('gbpfaiz').AsFloat<>0) then
+     begin
+      esasborc:=0;
+       faizborc:=0;
+       esasborc:=datamod.maincrprt.fieldbyname('gbpesas').AsFloat;
+       faizborc:=datamod.maincrprt.fieldbyname('gbpfaiz').AsFloat;
+       val:='GBP';
+     end;
+      if (datamod.maincrprt.fieldbyname('ruresas').AsFloat<>0) or (datamod.maincrprt.fieldbyname('rurfaiz').AsFloat<>0) then
+     begin
+      esasborc:=0;
+       faizborc:=0;
+       esasborc:=datamod.maincrprt.fieldbyname('ruresas').AsFloat;
+       faizborc:=datamod.maincrprt.fieldbyname('rurfaiz').AsFloat;
+       val:='RUR';
+     end;
+      if (datamod.maincrprt.fieldbyname('gelesas').AsFloat<>0) or (datamod.maincrprt.fieldbyname('gelfaiz').AsFloat<>0) then
+     begin
+       esasborc:=0;
+       faizborc:=0;
+       esasborc:=datamod.maincrprt.fieldbyname('gelesas').AsFloat;
+       faizborc:=datamod.maincrprt.fieldbyname('gelfaiz').AsFloat;
+       val:='GEL';
+     end;
+
+
+
+
+       if (datamod.maincrprt.fieldbyname('ACCEPTED_VALUTE').AsFloat=0)  then
+     begin
+        val:='AZN';
+     end;
+      if (datamod.maincrprt.fieldbyname('ACCEPTED_VALUTE').AsFloat=1) then
+     begin
+       val:='USD';
+     end;
+      if (datamod.maincrprt.fieldbyname('ACCEPTED_VALUTE').AsFloat=45)  then
+     begin
+          val:='EUR';
+     end;
+      if (datamod.maincrprt.fieldbyname('ACCEPTED_VALUTE').AsFloat=50) then
+     begin
+          val:='GBP';
+     end;
+      if (datamod.maincrprt.fieldbyname('ACCEPTED_VALUTE').AsFloat=48)  then
+     begin
+
+       val:='RUR';
+     end;
+      if (datamod.maincrprt.fieldbyname('ACCEPTED_VALUTE').AsFloat=475)   then
+     begin
+        val:='GEL';
+     end;
+
+
+
+
+
+
+     Sheet.cells[7+i,23]:=UpperCase(val);
+     Sheet.cells[7+i,24]:=esasborc;
+     Sheet.cells[7+i,25]:=faizborc;
+     Sheet.cells[7+i,26]:=esasborc+faizborc;
+     Sheet.cells[7+i,27]:=datamod.maincrprt.fieldbyname('RESTRUKesas').AsFloat;
+     Sheet.cells[7+i,28]:=datamod.maincrprt.fieldbyname('RESTRUKfaiz').AsFloat;
+     Sheet.cells[7+i,29]:=datamod.maincrprt.fieldbyname('RESTRUKesas').AsFloat+datamod.maincrprt.fieldbyname('RESTRUKfaiz').AsFloat;
+     Sheet.cells[7+i,30]:=datamod.maincrprt.fieldbyname('otmetarixi').AsVariant;
+     Sheet.cells[7+i,31]:=datamod.maincrprt.fieldbyname('OTURMEesas').AsFloat;
+     Sheet.cells[7+i,32]:=datamod.maincrprt.fieldbyname('OTURMEfaiz').AsFloat;
+     Sheet.cells[7+i,33]:=datamod.maincrprt.fieldbyname('OTURMEesas').AsFloat+datamod.maincrprt.fieldbyname('OTURMEfaiz').AsFloat;
+     Sheet.cells[7+i,34]:=datamod.maincrprt.fieldbyname('ODENISesas').AsFloat;
+     Sheet.cells[7+i,35]:=datamod.maincrprt.fieldbyname('ODENISfaiz').AsFloat;
+     Sheet.cells[7+i,36]:=datamod.maincrprt.fieldbyname('ODENISesas').AsFloat+datamod.maincrprt.fieldbyname('ODENISfaiz').AsFloat;
+     Sheet.cells[7+i,37]:=datamod.maincrprt.fieldbyname('Servishaqq').AsFloat;
+     Sheet.cells[7+i,38]:=floattostr(datamod.maincrprt.fieldbyname('xidmetfaizi').AsFloat*100)+'%';
+     Sheet.cells[7+i,39]:=datamod.maincrprt.fieldbyname('ximethaqqi').AsFloat;
+     Sheet.cells[7+i,40]:=datamod.maincrprt.fieldbyname('azalmasehmesas').AsFloat;
+     Sheet.cells[7+i,41]:=datamod.maincrprt.fieldbyname('azalmasehmfaiz').AsFloat;
+     Sheet.cells[7+i,42]:=datamod.maincrprt.fieldbyname('azalmasehmesas').AsFloat+datamod.maincrprt.fieldbyname('azalmasehmfaiz').AsFloat;
+     Sheet.cells[7+i,43]:=datamod.maincrprt.fieldbyname('azalmemlakesas').AsFloat;
+     Sheet.cells[7+i,44]:=datamod.maincrprt.fieldbyname('azalmemlakfaiz').AsFloat;
+     Sheet.cells[7+i,45]:=datamod.maincrprt.fieldbyname('azalmemlakfaiz').AsFloat+datamod.maincrprt.fieldbyname('azalmemlakesas').AsFloat;
+     Sheet.cells[7+i,46]:=datamod.maincrprt.fieldbyname('azalmguzestesas').AsFloat;
+     Sheet.cells[7+i,47]:=datamod.maincrprt.fieldbyname('azalmguzestfaiz').AsFloat;
+     Sheet.cells[7+i,48]:=datamod.maincrprt.fieldbyname('azalmguzestesas').AsFloat+datamod.maincrprt.fieldbyname('azalmguzestfaiz').AsFloat;
+     Sheet.cells[7+i,49]:=datamod.maincrprt.fieldbyname('azalmqarantesas').AsFloat;
+     Sheet.cells[7+i,50]:=datamod.maincrprt.fieldbyname('azalmqarantfaiz').AsFloat;
+     Sheet.cells[7+i,51]:=datamod.maincrprt.fieldbyname('azalmqarantesas').AsFloat+datamod.maincrprt.fieldbyname('azalmqarantfaiz').AsFloat;
+     Sheet.cells[7+i,52]:=datamod.maincrprt.fieldbyname('askesas').AsFloat;
+     Sheet.cells[7+i,53]:=datamod.maincrprt.fieldbyname('askfaiz').AsFloat;
+     Sheet.cells[7+i,54]:=datamod.maincrprt.fieldbyname('askesas').AsFloat+datamod.maincrprt.fieldbyname('askfaiz').AsFloat;
+     Sheet.cells[7+i,55]:=datamod.maincrprt.fieldbyname('emlak').AsFloat;
+
+      cemiesas:=esasborc+datamod.maincrprt.fieldbyname('RESTRUKesas').AsFloat+ datamod.maincrprt.fieldbyname('OTURMEesas').AsFloat
+       -datamod.maincrprt.fieldbyname('azalmasehmesas').AsFloat-datamod.maincrprt.fieldbyname('azalmemlakesas').AsFloat
+       -datamod.maincrprt.fieldbyname('azalmguzestesas').AsFloat-datamod.maincrprt.fieldbyname('azalmqarantesas').AsFloat
+       -datamod.maincrprt.fieldbyname('ODENISesas').AsFloat;
+
+       cemifaiz:=faizborc+datamod.maincrprt.fieldbyname('RESTRUKfaiz').AsFloat+ datamod.maincrprt.fieldbyname('OTURMEfaiz').AsFloat
+       -datamod.maincrprt.fieldbyname('azalmasehmfaiz').AsFloat-datamod.maincrprt.fieldbyname('azalmemlakfaiz').AsFloat
+       -datamod.maincrprt.fieldbyname('azalmguzestfaiz').AsFloat-datamod.maincrprt.fieldbyname('azalmqarantfaiz').AsFloat
+       -datamod.maincrprt.fieldbyname('ODENISfaiz').AsFloat;
+
+     Sheet.cells[7+i,56]:=cemiesas;
+     Sheet.cells[7+i,57]:=cemifaiz;
+     Sheet.cells[7+i,58]:=cemiesas+cemifaiz;
+     Sheet.cells[7+i,59]:=datamod.maincrprt.fieldbyname('management').AsString;
+     Sheet.cells[7+i,60]:=datamod.maincrprt.fieldbyname('beneficiar').AsString;
+     Sheet.cells[7+i,61]:=datamod.maincrprt.fieldbyname('project').AsString;
+     Sheet.cells[7+i,62]:=datamod.maincrprt.fieldbyname('prject_country').AsString;
+
+     Sheet.cells[7+i,63]:=datamod.maincrprt.fieldbyname('group_type').AsString;
+     Sheet.cells[7+i,64]:=datamod.maincrprt.fieldbyname('name').AsString;
+     Sheet.cells[7+i,65]:=datamod.maincrprt.fieldbyname('abb_branch').AsString;
+     Sheet.cells[7+i,66]:=datamod.maincrprt.fieldbyname('legal_type').AsString;
+     Sheet.cells[7+i,67]:=datamod.maincrprt.fieldbyname('mtk').AsString;
+     Sheet.cells[7+i,68]:=datamod.maincrprt.fieldbyname('activity_area').AsString;
+     Sheet.cells[7+i,69]:=datamod.maincrprt.fieldbyname('capital_founder').AsString;
+     Sheet.cells[7+i,70]:=datamod.maincrprt.fieldbyname('founder').AsString;
+     Sheet.cells[7+i,71]:=datamod.maincrprt.fieldbyname('address').AsString;
+     Sheet.cells[7+i,72]:=datamod.maincrprt.fieldbyname('phone').AsString;
+     Sheet.cells[7+i,73]:=datamod.maincrprt.fieldbyname('types_1').AsString;
+     Sheet.cells[7+i,74]:=datamod.maincrprt.fieldbyname('valut').AsString;
+     Sheet.cells[7+i,75]:=datamod.maincrprt.fieldbyname('ammount').AsFloat;
+     Sheet.cells[7+i,76]:=datamod.maincrprt.fieldbyname('descs').AsString;
+     Sheet.cells[7+i,77]:=datamod.maincrprt.fieldbyname('pricername').AsString;
+     Sheet.cells[7+i,78]:=datamod.maincrprt.fieldbyname('price_date').AsString;
+     Sheet.cells[7+i,79]:=datamod.maincrprt.fieldbyname('price').AsFloat;
+     Sheet.cells[7+i,80]:=datamod.maincrprt.fieldbyname('valut_1').AsString;
+     Sheet.cells[7+i,81]:=datamod.maincrprt.fieldbyname('pricername_').AsString;
+     Sheet.cells[7+i,82]:=datamod.maincrprt.fieldbyname('price_date_').AsVariant;
+     Sheet.cells[7+i,83]:=datamod.maincrprt.fieldbyname('price_').AsFloat;
+     Sheet.cells[7+i,84]:=datamod.maincrprt.fieldbyname('valut_').AsString;
+     Sheet.cells[7+i,85]:=datamod.maincrprt.fieldbyname('descs_1').AsString;
+     Sheet.cells[7+i,86]:=datamod.maincrprt.fieldbyname('CUST_ID').AsString;
+     Sheet.cells[7+i,87]:=datamod.maincrprt.fieldbyname('AZ_BORC').AsString;
+     Sheet.cells[7+i,88]:=cemiesas+cemifaiz-datamod.maincrprt.fieldbyname('AZ_BORC').AsFloat;
+    {Sheet.cells[7+i,86]:=datamod.maincrprt.fieldbyname('COURT_AMMOUNT').AsString;
+     Sheet.cells[7+i,87]:=datamod.maincrprt.fieldbyname('COURT_STATUS').AsString;
+     Sheet.cells[7+i,88]:=datamod.maincrprt.fieldbyname('COURT_DATE_NUM').AsString;
+     Sheet.cells[7+i,89]:=datamod.maincrprt.fieldbyname('COURT_NAME').AsString;
+     Sheet.cells[7+i,90]:=datamod.maincrprt.fieldbyname('COURT_ACCEPTED_AMMOUNT').AsString;
+     Sheet.cells[7+i,91]:=datamod.maincrprt.fieldbyname('COURT_DESC').AsString;
+     Sheet.cells[7+i,92]:=datamod.maincrprt.fieldbyname('COURT_MANAGE').AsString;
+     Sheet.cells[7+i,93]:=datamod.maincrprt.fieldbyname('COURT_LASTSTAT').AsString;
+     Sheet.cells[7+i,94]:=datamod.maincrprt.fieldbyname('COURT_MEASURE').AsString;
+     Sheet.cells[7+i,95]:=datamod.maincrprt.fieldbyname('COURT_REPLACE').AsString;
+       Sheet.cells[7+i,96]:=datamod.maincrprt.fieldbyname('REPLACEMENT_COUNT').AsString;
+     Sheet.cells[7+i,97]:=datamod.maincrprt.fieldbyname('INVESTIGATION_ORG').AsString;
+     Sheet.cells[7+i,98]:=datamod.maincrprt.fieldbyname('INFOS').AsString;
+     Sheet.cells[7+i,99]:=datamod.maincrprt.fieldbyname('PROPERTY').AsString;
+     Sheet.cells[7+i,100]:=datamod.maincrprt.fieldbyname('PROP_DESC').AsString;
+     Sheet.cells[7+i,101]:=datamod.maincrprt.fieldbyname('PROP_ADDRESS').AsString;
+
+     Sheet.cells[7+i,102]:=datamod.maincrprt.fieldbyname('PORP_PASSPORT').AsString;
+     Sheet.cells[7+i,103]:=datamod.maincrprt.fieldbyname('PROP_PRICE').AsString;      }
+
+
+
+
+     i:=i+1;
+     datamod.maincrprt.Next;
+{   except
+     ShowMessage('66666');
+   end;}
+   end;
+
+  ExcelApplication1.Visible[0] :=True;
+  ExcelApplication1.Disconnect;
+   SelectionUnit.Close;
+
+end;
+
+procedure TPayreport.Button8Click(Sender: TObject);
+var     Sheet, Sheets  :Variant;
+  ay,il,il_s,k,s,ss,st,sc,sd,sf,l,val :String;
+                            V:Variant;
+  OpenedXlsCnt,b, a,   i,j,w  :Integer;
+ v_BDate    :TDateTime;
+ v_EDate    :TDateTime;
+ row:integer;
+
+ esasborc,faizborc, cemiesas,cemifaiz:real;
+
+
+begin
+ ExcelApplication1.Disconnect;
+  V :=ExcelApplication1.Application;
+  ExcelApplication1.Connect;
+  V.Workbooks.Open(ExtractFilePath(ExtractFilePath(ParamStr(0)))+ 'PortfelABB_Mehkeme.xlsx');
+  try
+
+  for OpenedXlsCnt :=1 to 100 do
+   Sheet := V.Workbooks[OpenedXlsCnt].Worksheets['sheet1'];
+   //Break;
+  except
+
+
+  end;
+
+  sheets :=V.Sheets;
+
+  a:=0;
+   i:=0 ;
+       datamod.maincrprt.open;
+         datamod.maincrprt.First;
+
+
+    for a:=0 to datamod.maincrprt.RecordCount-1 do
+   begin
+  // try
+     esasborc:=0;
+     faizborc:=0;
+     cemiesas:=0;
+     cemifaiz:=0;
+     val:='AZN';
+ //ShowMessage('nnnn');
+    // Sheet.cells[7+i,6]:= datamod.maincrprt.fieldbyname('INNORPIN').AsString;
+     Sheet.cells[7+i,1]:=datamod.maincrprt.fieldbyname('rownum').AsString;
+     Sheet.cells[7+i,2]:=datamod.maincrprt.fieldbyname('rownum').AsString;
+     Sheet.cells[7+i,3]:=datamod.maincrprt.fieldbyname('prtid').AsString;
+     Sheet.cells[7+i,4]:=datamod.maincrprt.fieldbyname('INNORPIN').AsString;
+     Sheet.cells[7+i,5]:=datamod.maincrprt.fieldbyname('types').AsString;
+     Sheet.cells[7+i,6]:=datamod.maincrprt.fieldbyname('borrower_name').AsString;
+     Sheet.cells[7+i,7]:=datamod.maincrprt.fieldbyname('akt1').AsString;
+     Sheet.cells[7+i,8]:=datamod.maincrprt.fieldbyname('akt1_date').AsVariant;
+     Sheet.cells[7+i,9]:=datamod.maincrprt.fieldbyname('akt2').AsString;
+     Sheet.cells[7+i,10]:=datamod.maincrprt.fieldbyname('akt2_date').AsVariant;
+     Sheet.cells[7+i,11]:=datamod.maincrprt.fieldbyname('eurabbesas').AsFloat;
+     Sheet.cells[7+i,12]:=datamod.maincrprt.fieldbyname('eurabbfaiz').AsFloat;
+     Sheet.cells[7+i,13]:=datamod.maincrprt.fieldbyname('eurabbesas').AsFloat+datamod.maincrprt.fieldbyname('eurabbfaiz').AsFloat;
+     Sheet.cells[7+i,14]:=datamod.maincrprt.fieldbyname('usdabbesas').AsFloat;
+     Sheet.cells[7+i,15]:=datamod.maincrprt.fieldbyname('usdabbfaiz').AsFloat;
+     Sheet.cells[7+i,16]:=datamod.maincrprt.fieldbyname('usdabbesas').AsFloat+datamod.maincrprt.fieldbyname('usdabbfaiz').AsFloat;
+     Sheet.cells[7+i,17]:=datamod.maincrprt.fieldbyname('rurabbesas').AsFloat;
+     Sheet.cells[7+i,18]:=datamod.maincrprt.fieldbyname('rurabbfaiz').AsFloat;
+     Sheet.cells[7+i,19]:=datamod.maincrprt.fieldbyname('rurabbesas').AsFloat+datamod.maincrprt.fieldbyname('rurabbfaiz').AsFloat;
+     Sheet.cells[7+i,20]:=datamod.maincrprt.fieldbyname('aznabbesas').AsFloat;
+     Sheet.cells[7+i,21]:=datamod.maincrprt.fieldbyname('aznabbfaiz').AsFloat;
+     Sheet.cells[7+i,22]:=datamod.maincrprt.fieldbyname('aznabbesas').AsFloat+datamod.maincrprt.fieldbyname('aznabbfaiz').AsFloat;
+
+
+      if (datamod.maincrprt.fieldbyname('aznesas').AsFloat<>0) or (datamod.maincrprt.fieldbyname('aznfaiz').AsFloat<>0) then
+     begin
+
+       esasborc:=datamod.maincrprt.fieldbyname('aznesas').AsFloat;
+       faizborc:=datamod.maincrprt.fieldbyname('aznfaiz').AsFloat;
+       val:='AZN';
+     end;
+      if (datamod.maincrprt.fieldbyname('usdesas').AsFloat<>0) or (datamod.maincrprt.fieldbyname('usdfaiz').AsFloat<>0) then
+     begin
+      esasborc:=0;
+       faizborc:=0;
+       esasborc:=datamod.maincrprt.fieldbyname('usdesas').AsFloat;
+       faizborc:=datamod.maincrprt.fieldbyname('usdfaiz').AsFloat;
+       val:='USD';
+     end;
+      if (datamod.maincrprt.fieldbyname('euresas').AsFloat<>0) or (datamod.maincrprt.fieldbyname('eurfaiz').AsFloat<>0) then
+     begin
+      esasborc:=0;
+       faizborc:=0;
+       esasborc:=datamod.maincrprt.fieldbyname('euresas').AsFloat;
+       faizborc:=datamod.maincrprt.fieldbyname('eurfaiz').AsFloat;
+       val:='EUR';
+     end;
+      if (datamod.maincrprt.fieldbyname('gbpesas').AsFloat<>0) or (datamod.maincrprt.fieldbyname('gbpfaiz').AsFloat<>0) then
+     begin
+      esasborc:=0;
+       faizborc:=0;
+       esasborc:=datamod.maincrprt.fieldbyname('gbpesas').AsFloat;
+       faizborc:=datamod.maincrprt.fieldbyname('gbpfaiz').AsFloat;
+       val:='GBP';
+     end;
+      if (datamod.maincrprt.fieldbyname('ruresas').AsFloat<>0) or (datamod.maincrprt.fieldbyname('rurfaiz').AsFloat<>0) then
+     begin
+      esasborc:=0;
+       faizborc:=0;
+       esasborc:=datamod.maincrprt.fieldbyname('ruresas').AsFloat;
+       faizborc:=datamod.maincrprt.fieldbyname('rurfaiz').AsFloat;
+       val:='RUR';
+     end;
+      if (datamod.maincrprt.fieldbyname('gelesas').AsFloat<>0) or (datamod.maincrprt.fieldbyname('gelfaiz').AsFloat<>0) then
+     begin
+       esasborc:=0;
+       faizborc:=0;
+       esasborc:=datamod.maincrprt.fieldbyname('gelesas').AsFloat;
+       faizborc:=datamod.maincrprt.fieldbyname('gelfaiz').AsFloat;
+       val:='GEL';
+     end;
+
+
+
+
+     Sheet.cells[7+i,23]:=UpperCase(val);
+     Sheet.cells[7+i,24]:=esasborc;
+     Sheet.cells[7+i,25]:=faizborc;
+     Sheet.cells[7+i,26]:=esasborc+faizborc;
+     Sheet.cells[7+i,27]:=datamod.maincrprt.fieldbyname('RESTRUKesas').AsFloat;
+     Sheet.cells[7+i,28]:=datamod.maincrprt.fieldbyname('RESTRUKfaiz').AsFloat;
+     Sheet.cells[7+i,29]:=datamod.maincrprt.fieldbyname('RESTRUKesas').AsFloat+datamod.maincrprt.fieldbyname('RESTRUKfaiz').AsFloat;
+     Sheet.cells[7+i,30]:=datamod.maincrprt.fieldbyname('otmetarixi').AsVariant;
+     Sheet.cells[7+i,31]:=datamod.maincrprt.fieldbyname('OTURMEesas').AsFloat;
+     Sheet.cells[7+i,32]:=datamod.maincrprt.fieldbyname('OTURMEfaiz').AsFloat;
+     Sheet.cells[7+i,33]:=datamod.maincrprt.fieldbyname('OTURMEesas').AsFloat+datamod.maincrprt.fieldbyname('OTURMEfaiz').AsFloat;
+     Sheet.cells[7+i,34]:=datamod.maincrprt.fieldbyname('ODENISesas').AsFloat;
+     Sheet.cells[7+i,35]:=datamod.maincrprt.fieldbyname('ODENISfaiz').AsFloat;
+     Sheet.cells[7+i,36]:=datamod.maincrprt.fieldbyname('ODENISesas').AsFloat+datamod.maincrprt.fieldbyname('ODENISfaiz').AsFloat;
+     Sheet.cells[7+i,37]:=datamod.maincrprt.fieldbyname('Servishaqq').AsFloat;
+     Sheet.cells[7+i,38]:=floattostr(datamod.maincrprt.fieldbyname('xidmetfaizi').AsFloat*100)+'%';
+     Sheet.cells[7+i,39]:=datamod.maincrprt.fieldbyname('ximethaqqi').AsFloat;
+     Sheet.cells[7+i,40]:=datamod.maincrprt.fieldbyname('azalmasehmesas').AsFloat;
+     Sheet.cells[7+i,41]:=datamod.maincrprt.fieldbyname('azalmasehmfaiz').AsFloat;
+     Sheet.cells[7+i,42]:=datamod.maincrprt.fieldbyname('azalmasehmesas').AsFloat+datamod.maincrprt.fieldbyname('azalmasehmfaiz').AsFloat;
+     Sheet.cells[7+i,43]:=datamod.maincrprt.fieldbyname('azalmemlakesas').AsFloat;
+     Sheet.cells[7+i,44]:=datamod.maincrprt.fieldbyname('azalmemlakfaiz').AsFloat;
+     Sheet.cells[7+i,45]:=datamod.maincrprt.fieldbyname('azalmemlakfaiz').AsFloat+datamod.maincrprt.fieldbyname('azalmemlakesas').AsFloat;
+     Sheet.cells[7+i,46]:=datamod.maincrprt.fieldbyname('azalmguzestesas').AsFloat;
+     Sheet.cells[7+i,47]:=datamod.maincrprt.fieldbyname('azalmguzestfaiz').AsFloat;
+     Sheet.cells[7+i,48]:=datamod.maincrprt.fieldbyname('azalmguzestesas').AsFloat+datamod.maincrprt.fieldbyname('azalmguzestfaiz').AsFloat;
+     Sheet.cells[7+i,49]:=datamod.maincrprt.fieldbyname('azalmqarantesas').AsFloat;
+     Sheet.cells[7+i,50]:=datamod.maincrprt.fieldbyname('azalmqarantfaiz').AsFloat;
+     Sheet.cells[7+i,51]:=datamod.maincrprt.fieldbyname('azalmqarantesas').AsFloat+datamod.maincrprt.fieldbyname('azalmqarantfaiz').AsFloat;
+     Sheet.cells[7+i,52]:=datamod.maincrprt.fieldbyname('askesas').AsFloat;
+     Sheet.cells[7+i,53]:=datamod.maincrprt.fieldbyname('askfaiz').AsFloat;
+     Sheet.cells[7+i,54]:=datamod.maincrprt.fieldbyname('askesas').AsFloat+datamod.maincrprt.fieldbyname('askfaiz').AsFloat;
+     Sheet.cells[7+i,55]:=datamod.maincrprt.fieldbyname('emlak').AsFloat;
+
+      cemiesas:=esasborc+datamod.maincrprt.fieldbyname('RESTRUKesas').AsFloat+ datamod.maincrprt.fieldbyname('OTURMEesas').AsFloat
+       -datamod.maincrprt.fieldbyname('azalmasehmesas').AsFloat-datamod.maincrprt.fieldbyname('azalmemlakesas').AsFloat
+       -datamod.maincrprt.fieldbyname('azalmguzestesas').AsFloat-datamod.maincrprt.fieldbyname('azalmqarantesas').AsFloat
+       -datamod.maincrprt.fieldbyname('ODENISesas').AsFloat;
+
+       cemifaiz:=faizborc+datamod.maincrprt.fieldbyname('RESTRUKfaiz').AsFloat+ datamod.maincrprt.fieldbyname('OTURMEfaiz').AsFloat
+       -datamod.maincrprt.fieldbyname('azalmasehmfaiz').AsFloat-datamod.maincrprt.fieldbyname('azalmemlakfaiz').AsFloat
+       -datamod.maincrprt.fieldbyname('azalmguzestfaiz').AsFloat-datamod.maincrprt.fieldbyname('azalmqarantfaiz').AsFloat
+       -datamod.maincrprt.fieldbyname('ODENISfaiz').AsFloat;
+
+     Sheet.cells[7+i,56]:=cemiesas;
+     Sheet.cells[7+i,57]:=cemifaiz;
+     Sheet.cells[7+i,58]:=cemiesas+cemifaiz;
+     Sheet.cells[7+i,59]:=datamod.maincrprt.fieldbyname('management').AsString;
+     Sheet.cells[7+i,60]:=datamod.maincrprt.fieldbyname('beneficiar').AsString;
+     Sheet.cells[7+i,61]:=datamod.maincrprt.fieldbyname('project').AsString;
+     Sheet.cells[7+i,62]:=datamod.maincrprt.fieldbyname('prject_country').AsString;
+
+     Sheet.cells[7+i,63]:=datamod.maincrprt.fieldbyname('group_type').AsString;
+     Sheet.cells[7+i,64]:=datamod.maincrprt.fieldbyname('name').AsString;
+     Sheet.cells[7+i,65]:=datamod.maincrprt.fieldbyname('abb_branch').AsString;
+     Sheet.cells[7+i,66]:=datamod.maincrprt.fieldbyname('legal_type').AsString;
+     Sheet.cells[7+i,67]:=datamod.maincrprt.fieldbyname('mtk').AsString;
+     Sheet.cells[7+i,68]:=datamod.maincrprt.fieldbyname('activity_area').AsString;
+     Sheet.cells[7+i,69]:=datamod.maincrprt.fieldbyname('capital_founder').AsString;
+     Sheet.cells[7+i,70]:=datamod.maincrprt.fieldbyname('founder').AsString;
+     Sheet.cells[7+i,71]:=datamod.maincrprt.fieldbyname('address').AsString;
+     Sheet.cells[7+i,72]:=datamod.maincrprt.fieldbyname('phone').AsString;
+     Sheet.cells[7+i,73]:=datamod.maincrprt.fieldbyname('types_1').AsString;
+     Sheet.cells[7+i,74]:=datamod.maincrprt.fieldbyname('valut').AsString;
+     Sheet.cells[7+i,75]:=datamod.maincrprt.fieldbyname('ammount').AsFloat;
+     Sheet.cells[7+i,76]:=datamod.maincrprt.fieldbyname('descs').AsString;
+     Sheet.cells[7+i,77]:=datamod.maincrprt.fieldbyname('pricername').AsString;
+     Sheet.cells[7+i,78]:=datamod.maincrprt.fieldbyname('price_date').AsString;
+     Sheet.cells[7+i,79]:=datamod.maincrprt.fieldbyname('price').AsFloat;
+     Sheet.cells[7+i,80]:=datamod.maincrprt.fieldbyname('valut_1').AsString;
+     Sheet.cells[7+i,81]:=datamod.maincrprt.fieldbyname('pricername_').AsString;
+     Sheet.cells[7+i,82]:=datamod.maincrprt.fieldbyname('price_date_').AsVariant;
+     Sheet.cells[7+i,83]:=datamod.maincrprt.fieldbyname('price_').AsFloat;
+     Sheet.cells[7+i,84]:=datamod.maincrprt.fieldbyname('valut_').AsString;
+     Sheet.cells[7+i,85]:=datamod.maincrprt.fieldbyname('descs_1').AsString;
+     Sheet.cells[7+i,86]:=datamod.maincrprt.fieldbyname('court_date').AsVariant;
+     Sheet.cells[7+i,87]:=datamod.maincrprt.fieldbyname('court_dec').AsString;
+     Sheet.cells[7+i,88]:=datamod.maincrprt.fieldbyname('decission').AsString;
+     Sheet.cells[7+i,89]:=datamod.maincrprt.fieldbyname('dec_date').AsVariant;
+     Sheet.cells[7+i,90]:=datamod.maincrprt.fieldbyname('manages').AsString;
+     Sheet.cells[7+i,91]:=datamod.maincrprt.fieldbyname('laststat').AsString;
+
+
+
+
+     i:=i+1;
+     datamod.maincrprt.Next;
+{   except
+     ShowMessage('66666');
+   end;}
+   end;
+
+  ExcelApplication1.Visible[0] :=True;
+  ExcelApplication1.Disconnect;
+   SelectionUnit.Close;
+
+end;
+
+procedure TPayreport.CheckBox1Click(Sender: TObject);
+begin
+if CheckBox1.Checked then
+DBLookupCombobox1.Enabled:=true
+//edit1.Enabled:=true
+else
+// edit1.Enabled:=    False;
+DBLookupCombobox1.Enabled:=False;
+end;
+
+procedure TPayreport.DBLookupCombobox1Change(Sender: TObject);
+begin
+edit1.Text:=DBLookupCombobox1.Text
+end;
+
+procedure TPayreport.FormActivate(Sender: TObject);
+begin
+DateTimePicker1.DateTime:=now;
+DateTimePicker2.DateTime:=now;
+end;
+
+end.

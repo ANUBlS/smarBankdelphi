@@ -1,0 +1,526 @@
+object DMMain: TDMMain
+  OldCreateOrder = False
+  OnCreate = DataModuleCreate
+  OnDestroy = DataModuleDestroy
+  Height = 497
+  Width = 747
+  object DSRins_insurances: TDataSource
+    DataSet = DSins_insurances
+    Left = 64
+    Top = 80
+  end
+  object DSRins_acc_types: TDataSource
+    DataSet = DSins_acc_types
+    Left = 72
+    Top = 144
+  end
+  object DSRins_acc_type_id: TDataSource
+    DataSet = DSins_acc_type_id
+    Left = 72
+    Top = 208
+  end
+  object DSins_insurances: TOracleDataSet
+    SQL.Strings = (
+      'select id, name from ins_insurances'
+      'where obeykt_type is not null')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000400000049004400010000000000080000004E0041004D00
+      4500010000000000}
+    Session = sboapiDataModule.SBSession
+    AfterScroll = DSins_insurancesAfterScroll
+    Left = 176
+    Top = 80
+    object DSins_insurancesID: TIntegerField
+      FieldName = 'ID'
+    end
+    object DSins_insurancesNAME: TWideStringField
+      DisplayLabel = 'Ad'#305
+      FieldName = 'NAME'
+      Size = 4000
+    end
+  end
+  object DSins_acc_types: TOracleDataSet
+    SQL.Strings = (
+      'SELECT a.id, a.name'
+      '  FROM ins_acc_types a')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000400000049004400010000000000080000004E0041004D00
+      4500010000000000}
+    Session = sboapiDataModule.SBSession
+    AfterScroll = DSins_acc_typesAfterScroll
+    Left = 176
+    Top = 144
+    object DSins_acc_typesID: TFloatField
+      FieldName = 'ID'
+    end
+    object DSins_acc_typesNAME: TWideStringField
+      DisplayLabel = 'Ad'#305
+      FieldName = 'NAME'
+      Size = 512
+    end
+  end
+  object DSins_acc_type_id: TOracleDataSet
+    SQL.Strings = (
+      
+        ' SELECT a.rowid,a.id, a.type_id, a.acc_type_id, a.acc_id,acc.acc' +
+        '_no'
+      '  FROM ins_acc_type_id a,account acc'
+      '  where a.acc_id=acc.id'
+      '  and type_id=:ptype_id'
+      '  and acc_type_id=:pacc_type_id')
+    Optimize = False
+    Variables.Data = {
+      04000000020000001A0000003A0050004100430043005F005400590050004500
+      5F0049004400030000000000000000000000120000003A005000540059005000
+      45005F0049004400030000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000500000004000000490044000100000000000E000000540059005000
+      45005F0049004400010000000000160000004100430043005F00540059005000
+      45005F00490044000100000000000C0000004100430043005F00490044000100
+      000000000C0000004100430043005F004E004F00010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 184
+    Top = 208
+    object DSins_acc_type_idID: TFloatField
+      FieldName = 'ID'
+    end
+    object DSins_acc_type_idTYPE_ID: TFloatField
+      FieldName = 'TYPE_ID'
+    end
+    object DSins_acc_type_idACC_TYPE_ID: TFloatField
+      FieldName = 'ACC_TYPE_ID'
+    end
+    object DSins_acc_type_idACC_ID: TFloatField
+      FieldName = 'ACC_ID'
+    end
+    object DSins_acc_type_idACC_NO: TWideStringField
+      DisplayLabel = 'Hesab '#8470'-si'
+      FieldName = 'ACC_NO'
+      Size = 448
+    end
+  end
+  object DSRAccount: TDataSource
+    DataSet = DSAccount
+    Left = 352
+    Top = 112
+  end
+  object DSAccount: TOracleDataSet
+    SQL.Strings = (
+      'select id,acc_no from account'
+      'where close_dat is null'
+      
+        'and bal_cn1 in (select bal_cn FROM ins_acc_bal_cn where dict_id=' +
+        ':pdict_id)')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000120000003A00500044004900430054005F00490044000300
+      00000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000200000004000000490044000100000000000C000000410043004300
+      5F004E004F00010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 352
+    Top = 56
+    object DSAccountID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object DSAccountACC_NO: TWideStringField
+      FieldName = 'ACC_NO'
+      Size = 448
+    end
+  end
+  object DSRins_acc_typesB: TDataSource
+    DataSet = DSins_acc_typesB
+    Left = 352
+    Top = 168
+  end
+  object DSRins_acc_bal_cn: TDataSource
+    DataSet = DSins_acc_bal_cn
+    Left = 368
+    Top = 272
+  end
+  object DSins_acc_typesB: TOracleDataSet
+    SQL.Strings = (
+      'SELECT a.id, a.name'
+      '  FROM ins_acc_types a')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000400000049004400010000000000080000004E0041004D00
+      4500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 264
+    Top = 176
+    object DSins_acc_typesBID: TFloatField
+      FieldName = 'ID'
+    end
+    object DSins_acc_typesBNAME: TWideStringField
+      DisplayLabel = 'Ad'#305
+      FieldName = 'NAME'
+      Size = 512
+    end
+  end
+  object DSins_acc_bal_cn: TOracleDataSet
+    SQL.Strings = (
+      'SELECT a.rowid,a.dict_id, a.bal_cn'
+      '  FROM ins_acc_bal_cn a'
+      ''
+      'where dict_id = :dict_id')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000100000003A0044004900430054005F004900440004000000
+      0000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000E00000044004900430054005F0049004400010000000000
+      0C000000420041004C005F0043004E00010000000000}
+    Master = DSins_acc_typesB
+    MasterFields = 'ID'
+    DetailFields = 'DICT_ID'
+    Session = sboapiDataModule.SBSession
+    Left = 264
+    Top = 272
+    object DSins_acc_bal_cnDICT_ID: TFloatField
+      FieldName = 'DICT_ID'
+    end
+    object DSins_acc_bal_cnBAL_CN: TFloatField
+      DisplayLabel = 'Balans Hesab'#305
+      FieldName = 'BAL_CN'
+    end
+  end
+  object Ds_motor_capacity: TOracleDataSet
+    SQL.Strings = (
+      'select rowid, a.* from ins_dict_motor_capcite a'
+      'where a.type_motor = :type_motor')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000160000003A0054005900500045005F004D004F0054004F00
+      5200040000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      05000000030000000400000049004400010000000000080000004E0041004D00
+      45000100000000001400000054005900500045005F004D004F0054004F005200
+      010000000000}
+    Master = Ds_motor_type
+    MasterFields = 'id'
+    DetailFields = 'type_motor'
+    Session = sboapiDataModule.SBSession
+    Left = 32
+    Top = 304
+    object Ds_motor_capacityNAME: TWideStringField
+      DisplayLabel = 'Ad'#305
+      FieldName = 'NAME'
+      Size = 200
+    end
+    object Ds_motor_capacityID: TFloatField
+      FieldName = 'ID'
+      Visible = False
+    end
+    object Ds_motor_capacityTYPE_MOTOR: TFloatField
+      FieldName = 'TYPE_MOTOR'
+      Visible = False
+    end
+  end
+  object Dsr_motor_capacity: TDataSource
+    DataSet = Ds_motor_capacity
+    Left = 152
+    Top = 296
+  end
+  object dsr_ins_motor_capacity_tarif: TDataSource
+    DataSet = ds_ins_motor_capacity_tarif
+    Left = 160
+    Top = 356
+  end
+  object ds_ins_motor_capacity_tarif: TOracleDataSet
+    SQL.Strings = (
+      ' select rowid,a.* from ins_dict_motor_capacity_tarif a'
+      'where a.CAPACITY_ID = :CAPACITY_ID')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000180000003A00430041005000410043004900540059005F00
+      49004400040000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      0500000003000000040000004900440001000000000016000000430041005000
+      410043004900540059005F00490044000100000000000A000000540041005200
+      49004600010000000000}
+    Master = Ds_motor_capacity
+    MasterFields = 'id'
+    DetailFields = 'CAPACITY_ID'
+    Session = sboapiDataModule.SBSession
+    Left = 32
+    Top = 360
+    object ds_ins_motor_capacity_tarifTARIF: TFloatField
+      DisplayLabel = 'Tarif'
+      FieldName = 'TARIF'
+    end
+    object ds_ins_motor_capacity_tarifCAPACITY_ID: TFloatField
+      FieldName = 'CAPACITY_ID'
+    end
+    object ds_ins_motor_capacity_tarifID: TFloatField
+      FieldName = 'ID'
+      Visible = False
+    end
+  end
+  object Ds_motor_type: TOracleDataSet
+    SQL.Strings = (
+      'select * from INS_DICT_MOTOR_TYPE')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000400000049004400010000000000080000004E0041004D00
+      4500010000000000}
+    MasterFields = 'id'
+    Session = sboapiDataModule.SBSession
+    Left = 296
+    Top = 344
+    object Ds_motor_typeNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 200
+    end
+    object Ds_motor_typeID: TFloatField
+      FieldName = 'ID'
+      Visible = False
+    end
+  end
+  object Dsr_motor_type: TDataSource
+    DataSet = Ds_motor_type
+    Left = 368
+    Top = 352
+  end
+  object ds_ins_dict_year_distanc_travel: TOracleDataSet
+    SQL.Strings = (
+      'select * from ins_dict_year_distanc_travel')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000300000004000000490044000100000000000C000000560041004C00
+      5500450031000100000000000C000000560041004C0055004500320001000000
+      0000}
+    Session = sboapiDataModule.SBSession
+    Left = 48
+    Top = 424
+    object ds_ins_dict_year_distanc_travelVALUE1: TFloatField
+      FieldName = 'VALUE1'
+    end
+    object ds_ins_dict_year_distanc_travelVALUE2: TFloatField
+      FieldName = 'VALUE2'
+    end
+    object ds_ins_dict_year_distanc_travelID: TFloatField
+      FieldName = 'ID'
+      Visible = False
+    end
+  end
+  object dsr_ins_dict_year_distanc_travel: TDataSource
+    DataSet = ds_ins_dict_year_distanc_travel
+    Left = 168
+    Top = 432
+  end
+  object dsr_ins_dict_all_for_year: TDataSource
+    DataSet = ds_ins_dict_all_for_year
+    Left = 408
+    Top = 416
+  end
+  object ds_ins_dict_all_for_year: TOracleDataSet
+    SQL.Strings = (
+      'select rowid,a.* from ins_dict_all_for_year a'
+      'where a.value_id= :value_id')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000120000003A00560041004C00550045005F00490044000400
+      00000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      0500000003000000040000004900440001000000000010000000560041004C00
+      550045005F00490044000100000000000A000000540041005200490046000100
+      00000000}
+    Master = ds_ins_dict_year_distanc_travel
+    MasterFields = 'id'
+    DetailFields = 'value_id'
+    Session = sboapiDataModule.SBSession
+    Left = 304
+    Top = 416
+    object ds_ins_dict_all_for_yearVALUE_ID: TFloatField
+      FieldName = 'VALUE_ID'
+    end
+    object ds_ins_dict_all_for_yearTARIF: TFloatField
+      FieldName = 'TARIF'
+    end
+    object ds_ins_dict_all_for_yearID: TFloatField
+      FieldName = 'ID'
+      Visible = False
+    end
+  end
+  object DSins_travel_programs: TOracleDataSet
+    SQL.Strings = (
+      'SELECT a.id, a.name'
+      '  FROM ins_travel_programs a')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000400000049004400010000000000080000004E0041004D00
+      4500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 536
+    Top = 56
+    object FloatField1: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object DSins_travel_programsNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 100
+    end
+  end
+  object DSRins_travel_programs: TDataSource
+    DataSet = DSins_travel_programs
+    Left = 536
+    Top = 112
+  end
+  object DSins_travel_limit: TOracleDataSet
+    SQL.Strings = (
+      'SELECT a.rowid,a.id, a.ammount_limit'
+      '  FROM ins_travel_limit a')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000200000004000000490044000100000000001A00000041004D004D00
+      4F0055004E0054005F004C0049004D0049005400010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 528
+    Top = 208
+    object FloatField2: TFloatField
+      FieldName = 'ID'
+    end
+    object DSins_travel_limitAMMOUNT_LIMIT: TFloatField
+      FieldName = 'AMMOUNT_LIMIT'
+    end
+  end
+  object DSRins_travel_limit: TDataSource
+    DataSet = DSins_travel_limit
+    Left = 528
+    Top = 264
+  end
+  object DSins_travel_day: TOracleDataSet
+    SQL.Strings = (
+      'SELECT a.rowid,a.id, a.name, a.val1, a.val2'
+      '  FROM ins_travel_day a')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000040000000400000049004400010000000000080000004E0041004D00
+      450001000000000008000000560041004C003100010000000000080000005600
+      41004C003200010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 528
+    Top = 328
+    object FloatField3: TFloatField
+      FieldName = 'ID'
+    end
+    object DSins_travel_dayVAL1: TFloatField
+      FieldName = 'VAL1'
+    end
+    object DSins_travel_dayVAL2: TFloatField
+      FieldName = 'VAL2'
+    end
+    object DSins_travel_dayNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 100
+    end
+  end
+  object DSRins_travel_day: TDataSource
+    DataSet = DSins_travel_day
+    Left = 528
+    Top = 384
+  end
+  object DSins_travel_limit1: TOracleDataSet
+    SQL.Strings = (
+      'SELECT a.rowid,a.id, a.ammount_limit'
+      '  FROM ins_travel_limit a')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000200000004000000490044000100000000001A00000041004D004D00
+      4F0055004E0054005F004C0049004D0049005400010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 640
+    Top = 208
+    object FloatField4: TFloatField
+      FieldName = 'ID'
+    end
+    object FloatField5: TFloatField
+      FieldName = 'AMMOUNT_LIMIT'
+    end
+  end
+  object DSRins_travel_limit1: TDataSource
+    DataSet = DSins_travel_limit1
+    Left = 640
+    Top = 264
+  end
+  object DSins_travel_day1: TOracleDataSet
+    SQL.Strings = (
+      'SELECT a.rowid,a.id, a.name, a.val1, a.val2'
+      '  FROM ins_travel_day a')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000040000000400000049004400010000000000080000004E0041004D00
+      450001000000000008000000560041004C003100010000000000080000005600
+      41004C003200010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 640
+    Top = 328
+    object FloatField6: TFloatField
+      FieldName = 'ID'
+    end
+    object FloatField7: TFloatField
+      FieldName = 'VAL1'
+    end
+    object FloatField8: TFloatField
+      FieldName = 'VAL2'
+    end
+    object WideStringField1: TWideStringField
+      FieldName = 'NAME'
+      Size = 100
+    end
+  end
+  object DSRins_travel_day1: TDataSource
+    DataSet = DSins_travel_day1
+    Left = 640
+    Top = 384
+  end
+  object DSins_travel_setting: TOracleDataSet
+    SQL.Strings = (
+      'SELECT a.rowid,a.id, a.day_id, a.limit_id, a.program_id,a.amount'
+      '  FROM ins_travel_setting a'
+      'where a.day_id=:p_day_id'
+      'and a.limit_id=:p_limit_id'
+      'and a.program_id=:p_program_id')
+    Optimize = False
+    Variables.Data = {
+      0400000003000000120000003A0050005F004400410059005F00490044000300
+      00000000000000000000160000003A0050005F004C0049004D00490054005F00
+      490044000300000000000000000000001A0000003A0050005F00500052004F00
+      4700520041004D005F0049004400030000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000500000004000000490044000100000000000C000000440041005900
+      5F0049004400010000000000100000004C0049004D00490054005F0049004400
+      01000000000014000000500052004F004700520041004D005F00490044000100
+      000000000C00000041004D004F0055004E005400010000000000}
+    Session = sboapiDataModule.SBSession
+    AfterPost = DSins_travel_settingAfterPost
+    Left = 656
+    Top = 48
+    object DSins_travel_settingID: TFloatField
+      FieldName = 'ID'
+    end
+    object DSins_travel_settingDAY_ID: TFloatField
+      FieldName = 'DAY_ID'
+    end
+    object DSins_travel_settingLIMIT_ID: TFloatField
+      FieldName = 'LIMIT_ID'
+    end
+    object DSins_travel_settingPROGRAM_ID: TFloatField
+      FieldName = 'PROGRAM_ID'
+    end
+    object DSins_travel_settingAMOUNT: TFloatField
+      FieldName = 'AMOUNT'
+    end
+  end
+  object DSRins_travel_setting: TDataSource
+    DataSet = DSins_travel_setting
+    Left = 656
+    Top = 104
+  end
+end

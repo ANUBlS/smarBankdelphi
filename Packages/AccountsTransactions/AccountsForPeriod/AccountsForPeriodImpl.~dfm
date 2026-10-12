@@ -1,0 +1,318 @@
+object AccountsForPeriodForm: TAccountsForPeriodForm
+  Left = 167
+  Top = 114
+  Width = 767
+  Height = 499
+  Caption = 'Accounts For Period'
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  OldCreateOrder = False
+  OnCreate = ActiveFormCreate
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 759
+    Height = 81
+    Align = alTop
+    TabOrder = 0
+    object SBExecute: TSpeedButton
+      Left = 527
+      Top = 7
+      Width = 65
+      Height = 34
+      Flat = True
+      Glyph.Data = {
+        36010000424D3601000000000000760000002800000015000000100000000100
+        040000000000C000000000000000000000001000000000000000000000000000
+        80000080000000808000800000008000800080800000C0C0C000808080000000
+        FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00333333333333
+        333333333000333333333333333333333000338FF3FF3333333333333000338C
+        F38CFF33333333333000338CF38CCCFF333333333000338CF38CCCCCFF333333
+        3000338CF38CCCCCCCFF33333000338CF38CCCCCCCCCFF333000338CF38CCCCC
+        CCCC88F33000338CF38CCCCCCC8833333000338CF38CCCCC883333333000338C
+        F38CCC88333333333000338CF38C88333333333330003388F388333333333333
+        3000333333333333333333333000333333333333333333333000}
+      OnClick = SBExecuteClick
+    end
+    object SBExcelExport: TSpeedButton
+      Left = 599
+      Top = 7
+      Width = 65
+      Height = 34
+      Hint = 'Excel  Export '
+      Flat = True
+      Glyph.Data = {
+        76010000424D7601000000000000760000002800000020000000100000000100
+        04000000000000010000130B0000130B00001000000000000000000000000000
+        800000800000008080008000000080008000808000007F7F7F00BFBFBF000000
+        FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00300000000000
+        00033FFFFFFFFFFFFFFF0888888888888880777777777777777F088888888888
+        8880777777777777777F0000000000000000FFFFFFFFFFFFFFFF0F8F8F8F8F8F
+        8F80777777777777777F08F8F8F8F8F8F9F0777777777777777F0F8F8F8F8F8F
+        8F807777777777777F7F0000000000000000777777777777777F3330FFFFFFFF
+        03333337F3FFFF3F7F333330F0000F0F03333337F77773737F333330FFFFFFFF
+        03333337F3FF3FFF7F333330F00F000003333337F773777773333330FFFF0FF0
+        33333337F3FF7F3733333330F08F0F0333333337F7737F7333333330FFFF0033
+        33333337FFFF7733333333300000033333333337777773333333}
+      NumGlyphs = 2
+      ParentShowHint = False
+      ShowHint = True
+      OnClick = SBExcelExportClick
+    end
+    object Label1: TLabel
+      Left = 142
+      Top = 55
+      Width = 66
+      Height = 13
+      Caption = 'Баланс щесабы'
+    end
+    object Label2: TLabel
+      Left = 508
+      Top = 55
+      Width = 67
+      Height = 13
+      Caption = 'щесаб символу'
+    end
+    object GroupBox1: TGroupBox
+      Left = 1
+      Top = 1
+      Width = 136
+      Height = 79
+      Align = alLeft
+      Caption = 'Тарих аралыьы'
+      TabOrder = 0
+      object DTPFirstDate: TDateTimePicker
+        Left = 8
+        Top = 17
+        Width = 120
+        Height = 21
+        CalAlignment = dtaLeft
+        Date = 37910.6369307407
+        Time = 37910.6369307407
+        DateFormat = dfShort
+        DateMode = dmComboBox
+        Kind = dtkDate
+        ParseInput = False
+        TabOrder = 0
+      end
+      object DTPLastDate: TDateTimePicker
+        Left = 8
+        Top = 49
+        Width = 120
+        Height = 21
+        CalAlignment = dtaLeft
+        Date = 37910.6369408681
+        Time = 37910.6369408681
+        DateFormat = dfShort
+        DateMode = dmComboBox
+        Kind = dtkDate
+        ParseInput = False
+        TabOrder = 1
+      end
+    end
+    object GroupBox2: TGroupBox
+      Left = 137
+      Top = 1
+      Width = 184
+      Height = 42
+      Caption = 'Филиал'
+      TabOrder = 1
+      object BranchesCB: TSearchCombo
+        Left = 4
+        Top = 15
+        Width = 175
+        Height = 22
+        ItemHeight = 16
+        TabOrder = 0
+        DataSource = FPADataMod.DataSrcBranches
+        ViewField = 'Name'
+        DefaultString = 'Цмуми банк цзря'
+        DefaultStringUse = True
+        DefaultStringColor = clNavy
+      end
+    end
+    object AccountsListEdit: TEdit
+      Left = 214
+      Top = 51
+      Width = 285
+      Height = 21
+      TabOrder = 2
+    end
+    object GroupBox3: TGroupBox
+      Left = 322
+      Top = 1
+      Width = 175
+      Height = 42
+      Caption = 'Истифадячи'
+      TabOrder = 3
+      object UsersCB: TSearchCombo
+        Left = 4
+        Top = 15
+        Width = 165
+        Height = 22
+        ItemHeight = 16
+        TabOrder = 0
+        DataSource = FPADataMod.DataSrcSysUsers
+        ViewField = 'NAME'
+        DefaultString = 'Бцтцн истифадячиляр'
+        DefaultStringUse = True
+        DefaultStringColor = clNavy
+      end
+    end
+    object simvoledit: TEdit
+      Left = 580
+      Top = 50
+      Width = 172
+      Height = 21
+      CharCase = ecUpperCase
+      TabOrder = 4
+    end
+  end
+  object AccountsViewer: TDBGrid
+    Left = 0
+    Top = 81
+    Width = 759
+    Height = 384
+    Align = alClient
+    DataSource = FPADataMod.DataSrcAccounts
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit]
+    ParentFont = False
+    TabOrder = 1
+    TitleFont.Charset = DEFAULT_CHARSET
+    TitleFont.Color = clWhite
+    TitleFont.Height = -11
+    TitleFont.Name = 'Azl Sans Serif'
+    TitleFont.Style = []
+    Columns = <
+      item
+        Color = clSilver
+        Expanded = False
+        FieldName = 'ACCCURRENCY'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clNavy
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        Title.Caption = '   $'
+        Title.Color = clNavy
+        Width = 30
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'BALANCENO'
+        Title.Color = clNavy
+        Width = 73
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'ACCNAME'
+        Title.Color = clNavy
+        Width = 152
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'OPENDATE'
+        Title.Color = clNavy
+        Width = 90
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'CLOSEDATE'
+        Title.Color = clNavy
+        Width = 90
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'TAXID'
+        Title.Color = clNavy
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'ACCNO'
+        Title.Color = clNavy
+        Width = 120
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'OPERATORID'
+        Title.Color = clNavy
+        Width = 92
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'SEXSIYYETID'
+        Title.Color = clNavy
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'REZ'
+        Title.Color = clNavy
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'PHONE'
+        Title.Color = clNavy
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'DOGUM'
+        Title.Color = clNavy
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'ADRESS'
+        Title.Color = clNavy
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'ADI'
+        Title.Color = clNavy
+        Visible = True
+      end>
+  end
+  object Memo1: TMemo
+    Left = 120
+    Top = 120
+    Width = 425
+    Height = 297
+    Lines.Strings = (
+      'Memo1')
+    TabOrder = 2
+  end
+  object AccountsExporter: TExcelExporter
+    ExportSource = FPADataMod.DataSrcAccounts
+    SheetName = 'Accounts'
+    ShowTitles = True
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Arial AzLat'
+    Font.Style = []
+    Left = 600
+    Top = 176
+  end
+end

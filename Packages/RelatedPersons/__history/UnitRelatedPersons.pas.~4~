@@ -1,0 +1,632 @@
+unit UnitRelatedPersons;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActiveX, AxCtrls, RelatedPersons_TLB, StdVcl, StdCtrls, Buttons, ComCtrls,
+  ExtCtrls,sboapiDataModuleimpl, Db, CMExcelExport, OracleData, Oracle,
+  SBTranslateProc;
+
+type
+  TFormRelatedPersons = class(TActiveForm, IActiveFormX)
+    Panel1: TPanel;
+    GroupBox1: TGroupBox;
+    Label2: TLabel;
+    Label3: TLabel;
+    date1: TDateTimePicker;
+    date2: TDateTimePicker;
+    cb: TComboBox;
+    Label1: TLabel;
+    GroupBox2: TGroupBox;
+    SpeedButton3: TSpeedButton;
+    CheckBox1: TCheckBox;
+    CheckBox2: TCheckBox;
+    krdt: TOracleDataSet;
+    cmexp: TCMExcelExport;
+    emdt: TOracleDataSet;
+    out_emdt: TOracleDataSet;
+    qal: TOracleDataSet;
+    PeriodPrefixData: TOracleDataSet;
+    PeriodPrefixDataPERIODPREFIX: TDateTimeField;
+    qal_out: TOracleDataSet;
+    prinad: TOracleDataSet;
+    qalACCOUNTID: TFloatField;
+    qalACCNO: TWideStringField;
+    qalACC_NAME: TWideStringField;
+    qalCURRENCYID: TIntegerField;
+    qalBRANCHID: TIntegerField;
+    qalBALANCENO: TFloatField;
+    qalBEGINACTIVE: TFloatField;
+    qalBEGINPASSIVE: TFloatField;
+    qalLBEGINACTIVE: TFloatField;
+    qalLBEGINPASSIVE: TFloatField;
+    qalDTURNOVER: TFloatField;
+    qalCTURNOVER: TFloatField;
+    qalLDTURNOVER: TFloatField;
+    qalLCTURNOVER: TFloatField;
+    qalENDACTIVE: TFloatField;
+    qalENDPASSIVE: TFloatField;
+    qalLENDACTIVE: TFloatField;
+    qalLENDPASSIVE: TFloatField;
+    SpeedButton1: TSpeedButton;
+    SpeedButton2: TSpeedButton;
+    sysdat: TOracleDataSet;
+    Shape1: TShape;
+    Shape2: TShape;
+    Memo1: TMemo;
+    Memo2: TMemo;
+    qalNAME_1: TWideStringField;
+    CMExcelExport1: TCMExcelExport;
+    procedure SpeedButton3Click(Sender: TObject);
+
+
+    procedure Button1Click(Sender: TObject);
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure SpeedButton2Click(Sender: TObject);
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure cbChange(Sender: TObject);
+  private
+    { Private declarations }
+    FEvents: IActiveFormXEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+  public
+    { Public declarations }
+    procedure Initialize; override;
+  end;
+
+implementation
+
+uses ComObj, ComServ;
+
+{$R *.DFM}
+
+{ TActiveFormX }
+
+procedure TFormRelatedPersons.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_ActiveFormXPage); }
+end;
+
+procedure TFormRelatedPersons.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as IActiveFormXEvents;
+end;
+
+procedure TFormRelatedPersons.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TFormRelatedPersons.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TFormRelatedPersons.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TFormRelatedPersons.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TFormRelatedPersons.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TFormRelatedPersons.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TFormRelatedPersons.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TFormRelatedPersons.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TFormRelatedPersons.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TFormRelatedPersons.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TFormRelatedPersons.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TFormRelatedPersons.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TFormRelatedPersons.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TFormRelatedPersons.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TFormRelatedPersons.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TFormRelatedPersons.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TFormRelatedPersons.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TFormRelatedPersons.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TFormRelatedPersons.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TFormRelatedPersons._Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TFormRelatedPersons.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TFormRelatedPersons.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TFormRelatedPersons.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TFormRelatedPersons.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TFormRelatedPersons.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TFormRelatedPersons.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TFormRelatedPersons.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TFormRelatedPersons.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TFormRelatedPersons.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TFormRelatedPersons.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TFormRelatedPersons.Set_AxBorderStyle(Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TFormRelatedPersons.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TFormRelatedPersons.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TFormRelatedPersons.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TFormRelatedPersons.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TFormRelatedPersons.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TFormRelatedPersons.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TFormRelatedPersons.Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TFormRelatedPersons.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TFormRelatedPersons.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TFormRelatedPersons.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TFormRelatedPersons.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TFormRelatedPersons.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TFormRelatedPersons.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+procedure TFormRelatedPersons.SpeedButton3Click(Sender: TObject);
+var
+prinadid :integer;
+begin
+if cb.ItemIndex<>0 then prinadid:=strtoint(memo1.lines[cb.ItemIndex-1]);
+ krdt.closeall;
+ krdt.SetVariable(':dd',integer(trunc(date2.datetime)));
+ if cb.ItemIndex<>0 then
+ krdt.SQL[10]:=' and cu.prinad_kod='+inttostr(prinadid)+''
+ else
+ krdt.SQL[10]:='and nvl(cu.prinad_kod,0)<>0';
+
+  memo2.text:=krdt.sql.text;
+
+
+ krdt.Open;
+ if cb.ItemIndex<>0 then krdt.FieldByName('name_1').visible:=false
+ else krdt.FieldByName('name_1').visible:=true;
+
+ cmexp.Connect;
+   cmexp.ExportDataset(krdt,'List1',true);
+ cmexp.Disconnect;
+end;
+ {
+procedure Tform1.SpeedButton2Click(Sender: TObject);
+begin
+ emdt.active:=false;
+emdt.SetVariable(':d1',integer(trunc(date1.datetime)));
+emdt.SetVariable(':d2',integer(trunc(date2.datetime)));
+if cb.ItemIndex<>0 then
+begin
+emdt.SQL[19]:=',(select * from Account where kli_id in (select id from Customers  where prinad_kod =(select id from Prinad where name='''+cb.text+'''))) A1' ;
+emdt.SQL[20]:=',(select * from Account where kli_id in (select id from Customers  where prinad_kod =(select id from Prinad where name='''+cb.text+'''))) A2' ;
+end
+else
+begin
+emdt.SQL[19]:=',(select * from Account where kli_id in(select id from Customers where prinad_kod is not null)) A1';
+emdt.SQL[20]:=',(select * from Account where kli_id in(select id from Customers where prinad_kod is not null)) A2';
+end;
+emdt.open;
+cmexp.Connect;
+cmexp.ExportDataset(emdt,'List1',true);
+cmexp.Disconnect;
+
+  if checkbox1.Checked then
+  begin
+
+   out_emdt.active:=false;
+out_emdt.SetVariable(':d1',date1.date);
+out_emdt.SetVariable(':d2',date2.date);
+if cb.ItemIndex<>0 then
+begin
+out_emdt.SQL[18]:=',(select * from out_Account where kli_id in (select id from Customers cu where prinad_kod =(select id from Prinad where name='''+cb.text+''') )) A1' ;
+out_emdt.SQL[19]:=',(select * from out_Account where kli_id in (select id from Customers cu where prinad_kod =(select id from Prinad where name='''+cb.text+''') )) A2' ;
+end
+else
+begin
+out_emdt.SQL[18]:=',(select * from out_Account where kli_id in(select id from Customers where prinad_kod is not null)) A1';
+out_emdt.SQL[19]:=',(select * from out_Account where kli_id in(select id from Customers where prinad_kod is not null)) A2';
+end;
+out_emdt.open;
+
+cmexp.Connect;
+ cmexp.ExportDataset(out_emdt,'List2',true);
+cmexp.Disconnect;
+
+   end;
+
+end;
+       }
+
+
+procedure TFormRelatedPersons.Button1Click(Sender: TObject);
+begin
+ close;
+end;
+
+procedure TFormRelatedPersons.ActiveFormCreate(Sender: TObject);
+var
+i:integer;
+begin
+  shortdateformat:='dd.mm.yyyy';
+  sysdat.Open;
+  date1.Date:=trunc(sysdat.fieldbyname('tek_dat').asdatetime);
+  date2.Date:=date1.Date;
+  prinad.open;
+  prinad.First;
+  for i:=1 to prinad.RecordCount do
+  begin
+  cb.Items.Add(prinad.fieldbyname('name').asstring);
+  memo1.Lines.Add(prinad.fieldbyname('ID').asstring);
+  prinad.Next;
+  end;
+  cb.ItemIndex:=0;
+
+  SBTranslateProc.TranslateAllComponents(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TFormRelatedPersons.SpeedButton2Click(Sender: TObject);
+var
+prinadid :integer;
+begin
+
+  if cb.ItemIndex<>0 then prinadid:=strtoint(memo1.lines[cb.ItemIndex-1]);
+  emdt.active:=false;
+emdt.SetVariable(':d1',integer(trunc(date1.datetime)));
+emdt.SetVariable(':d2',integer(trunc(date2.datetime)));
+if cb.ItemIndex<>0 then
+begin
+
+emdt.SQL[27]:='and cu.prinad_kod='+inttostr(prinadid)+'';
+end
+else
+begin
+emdt.SQL[27]:='and nvl(cu.prinad_kod,0) <>0';
+end;
+memo2.Text:=emdt.SQL.Text;
+
+emdt.open;
+if cb.ItemIndex<>0 then emdt.FieldByName('name_1').visible:=false
+else emdt.FieldByName('name_1').visible:=true;
+
+  if checkbox2.Checked then
+  begin
+
+   out_emdt.active:=false;
+out_emdt.SetVariable(':d1',integer(trunc(date1.datetime)));
+out_emdt.SetVariable(':d2',integer(trunc(date2.datetime)));
+
+if cb.ItemIndex<>0 then
+begin
+out_emdt.SQL[27]:='and cu.prinad_kod='+inttostr(prinadid)+'';
+end
+else
+begin
+out_emdt.SQL[27]:='and nvl(cu.prinad_kod,0)<>0';
+end;
+memo2.Text:=out_emdt.SQL.Text;
+out_emdt.open;
+ if cb.ItemIndex<>0 then out_emdt.FieldByName('name_1').visible:=false
+ else   out_emdt.FieldByName('name_1').visible:=true;
+
+
+
+   end;
+   cmexp.Connect;
+ cmexp.ExportDataset(emdt,'List1',true);
+ if checkbox2.checked then cmexp.ExportDataset(out_emdt,'List1-out',true);
+cmexp.Disconnect;
+end;
+
+
+
+
+procedure TFormRelatedPersons.SpeedButton1Click(Sender: TObject);
+var
+beginperiod:tdatetime;
+prinadid :integer;
+function GetPeriodPrefix(ADate : TDateTime) : TDateTime;
+  begin
+    with periodprefixdata do
+    begin
+      if Active then CloseAll;
+      SetVariable('ADate',ADate);
+      Open;
+      if FieldByName('PeriodPrefix').IsNull then
+      Result := ADate else
+      Result := FieldByName('PeriodPrefix').AsDateTime;
+    end;
+
+  end;
+begin
+  if cb.ItemIndex<>0 then prinadid:=strtoint(memo1.lines[cb.ItemIndex-1]);
+
+   screen.Cursor:=crsqlwait;
+  qal.Active:=false;
+  qal.SetVariable(':begindate',integer(trunc(date1.datetime)));
+  qal.SetVariable(':enddate',integer(trunc(date2.datetime)));
+  BeginPeriod := GetPeriodPrefix(integer(trunc(date1.datetime)));
+  qal.SetVariable(':beginperiod',beginperiod);
+  if cb.ItemIndex<>0 then
+begin
+qal.SQL[50]:='(select * from Account where kli_id in (select id from Customers cu where prinad_kod ='+inttostr(prinadid)+')) ac,' ;
+qal.SQL[92]:='(select * from Account where kli_id in (select id from Customers  cu where prinad_kod ='+inttostr(prinadid)+')) ac,';
+qal.SQL[112]:='(select * from Account where kli_id in (select id from Customers cu where prinad_kod ='+inttostr(prinadid)+')) ac,';
+end
+else
+begin
+  qal.SQL[50]:='(select * from Account where kli_id in(select id from Customers where nvl(prinad_kod,0)<>0)) ac,';
+  qal.SQL[92]:='(select * from Account where kli_id in(select id from Customers where nvl(prinad_kod,0)<>0)) ac,';
+  qal.SQL[112]:='(select * from Account where kli_id in(select id from Customers where nvl(prinad_kod,0)<>0)) ac,';
+end;
+  qal.Open;
+  if cb.ItemIndex<>0 then qal.FieldByName('name_1').visible:=false
+  else
+   qal.FieldByName('name_1').visible:=true;
+
+  screen.Cursor:=crdefault;
+
+  memo2.text:=qal.sql.text;
+
+
+  if checkbox1.Checked then
+    begin
+      screen.Cursor:=crsqlwait;
+  qal_out.Active:=false;
+  qal_out.SetVariable(':begindate',integer(trunc(date1.datetime)));
+  qal_out.SetVariable(':enddate',integer(trunc(date2.datetime)));
+  BeginPeriod := GetPeriodPrefix(integer(trunc(date1.datetime)));
+  qal_out.SetVariable(':beginperiod',beginperiod);
+
+   if cb.ItemIndex<>0 then
+begin
+qal_OUT.SQL[50]:='(select * from out_Account where kli_id in (select id from Customers cu where prinad_kod ='+inttostr(prinadid)+')) ac,' ;
+qal_out.SQL[92]:='(select * from out_Account where kli_id in (select id from Customers cu  where prinad_kod ='+inttostr(prinadid)+')) ac,';
+qal_out.SQL[112]:='(select * from out_Account where kli_id in (select id from Customers cu where prinad_kod ='+inttostr(prinadid)+')) ac,';
+end
+else
+begin
+  qal_out.SQL[50]:='(select * from out_Account where kli_id in(select id from Customers where nvl(prinad_kod,0)<>0)) ac,';
+  qal_out.SQL[92]:='(select * from out_Account where kli_id in(select id from Customers where nvl(prinad_kod,0)<>0)) ac,';
+  qal_out.SQL[112]:='(select * from out_Account where kli_id in(select id from Customers where nvl(prinad_kod,0)<>0)) ac,';
+end;
+  qal_out.Open;
+    if cb.ItemIndex<>0 then qal_out.FieldByName('name_1').visible:=false
+    else    qal_out.FieldByName('name_1').visible:=true;
+
+
+  screen.Cursor:=crdefault;
+
+
+    end;
+   cmexp.Connect;
+    if checkbox1.checked then
+  cmexp.ExportDataset(qal_out,'List2-out',true);
+  cmexp.ExportDataset(qal,'List2',true);
+  cmexp.Disconnect;
+end;
+
+procedure TFormRelatedPersons.cbChange(Sender: TObject);
+begin
+//showmessage(memo1.Lines[1]);
+
+
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TFormRelatedPersons,
+    Class_FormRelatedPersons,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

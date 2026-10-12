@@ -1,0 +1,172 @@
+﻿unit MainFormFilİmpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, DBGridEh, Mask, DBCtrlsEh, DBLookupEh, DB, OracleData,
+  ExtCtrls;
+
+type
+  TMainForm = class(TForm)
+    Button1: TButton;
+    Button2: TButton;
+    Button3: TButton;
+    DSCustomers: TDataSource;
+    Customers: TOracleDataSet;
+    CheckBox1: TCheckBox;
+    Panel1: TPanel;
+    Panel2: TPanel;
+    Panel3: TPanel;
+    Panel4: TPanel;
+    Panel5: TPanel;
+    Label1: TLabel;
+    Mid: TEdit;
+    Label2: TLabel;
+    Label3: TLabel;
+    DBLookupComboboxEh1: TDBLookupComboboxEh;
+    Label4: TLabel;
+    Knum: TEdit;
+    Label5: TLabel;
+    Kid: TEdit;
+    Mkod: TEdit;
+    procedure FormCanResize(Sender: TObject; var NewWidth, NewHeight: Integer;
+      var Resize: Boolean);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure Button3Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+  private
+   function BuildFilterString : String;
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  MainForm: TMainForm;
+
+   procedure InitPlugin(s:string);export
+implementation
+
+{$R *.dfm}
+uses CommonDecls,sboapiDataModuleImpl;
+function TMainForm.BuildFilterString : String;
+begin
+ Result := '';
+ if Kid.Text<>'' then
+ Result:=Result+' id='+Kid.Text;
+ if Knum.Text<>'' then
+ if Result='' then
+  Result:=Result+' numberofcredit='+''''+Knum.Text+''''
+  else
+ Result:=Result+' and numberofcredit='+''''+Knum.Text+'''';
+
+if Mid.Text<>'' then
+if Result='' then
+Result:=Result+'  BOOROWERID='+Mid.Text
+else
+  Result:=Result+' and BOOROWERID='+Mid.Text;
+
+ if DBLookupComboboxEh1.Text<>'' then
+ if Result='' then
+   Result:=Result+' BOOROWERID='+inttostr(DBLookupComboboxEh1.KeyValue)
+   else
+  Result:=Result+' and BOOROWERID='+inttostr(DBLookupComboboxEh1.KeyValue);
+
+if Mkod.Text<>'' then
+if Result='' then
+Result:=Result+'  passpin='+Mkod.Text
+else
+  Result:=Result+' and passpin='+Mkod.Text;
+
+
+end;
+procedure InitPlugin(s:string);export;
+begin
+     MainForm.Show;
+end;
+
+exports
+  InitPlugin;
+
+procedure TMainForm.Button1Click(Sender: TObject);
+begin
+ShowMessage(BuildFilterString);
+  with CommonDBGrid ,DataSource.DataSet do
+  begin
+  if CheckBox1.Checked then
+   begin
+   Filter := '';
+    Filtered := False;
+    SelectedRows.Clear;
+    CommonDBGrid.Visible:=true;
+    open;
+   end else
+   if BuildFilterString<>'' then
+    begin
+    Filter := BuildFilterString;
+    Filtered := False;
+    open;
+    Filtered := True;
+    SelectedRows.Clear;
+    if RecordCount=0 then
+    begin
+     ShowMessage('Heç bir məlumat tapılmadı');
+     CommonDBGrid.Visible:=false
+    end
+      else
+      begin
+      open;
+      CommonDBGrid.Visible:=true ;
+      end;
+     end;
+   end;
+end;
+
+procedure TMainForm.Button2Click(Sender: TObject);
+begin
+with CommonDBGrid, DataSource.DataSet do
+  begin
+    Filter := '';
+    Filtered := False;
+    SelectedRows.Clear;
+    CommonDBGrid.Visible:=false
+  end;
+end;
+
+procedure TMainForm.Button3Click(Sender: TObject);
+begin
+close
+end;
+
+procedure TMainForm.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+resize:=false
+end;
+
+procedure TMainForm.FormCreate(Sender: TObject);
+begin
+Customers.Open;
+end;
+
+procedure TMainForm.FormDestroy(Sender: TObject);
+begin
+Customers.close;
+end;
+
+procedure TMainForm.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+  if Ord(Key) = VK_ESCAPE then
+  begin
+    Close;
+    Key := #0;
+  end;
+end;
+
+initialization
+   MainForm := TMainForm.Create(CommonApplication);
+end.

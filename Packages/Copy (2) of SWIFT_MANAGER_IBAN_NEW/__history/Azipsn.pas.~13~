@@ -1,0 +1,118 @@
+﻿unit Azipsn;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ComCtrls, SearchEdit, DBCtrls, Unit2, DB, OracleData,
+  ExtCtrls, Grids, DBGrids, IdBaseComponent, IdCoder, IdCoder3to4, IdCoder00E,
+  IdCoderXXE, IdCoderMIME, IdCoderUUE;
+
+type
+  Tsettings = class(TForm)
+    RadioButton1: TRadioButton;
+    RadioButton2: TRadioButton;
+    DBGrid1: TDBGrid;
+    tsd: TButton;
+    procedure tsdClick(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
+    procedure RadioButton2Click(Sender: TObject);
+    procedure RadioButton1Click(Sender: TObject);
+
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  settings: Tsettings;
+  isEmpty,CanClose: boolean;
+  code:String;
+
+implementation
+
+{$R *.dfm}
+
+function Sezar(Key:Integer; S:String; Decode:Boolean):String;
+var
+  i:Integer;
+  st:String;
+begin
+  st:=S;
+  if Decode then Key:=-Key;
+  for i:=1 to Length(S) do
+    st[i]:=Chr((Ord(S[i])+Key));
+  Result:=st;
+end;
+
+
+
+
+procedure Tsettings.tsdClick(Sender: TObject);
+
+var
+  i,Key:Integer;
+begin
+{  Key:=13;
+  for i:=0 to Memo1.Lines.Count-1 do
+    Memo1.Lines[i]:=Sezar(Key,Memo1.Lines[i],False);
+
+    memo2.Text:=IdEncoderXXE1.Encode(Memo1.Text); }
+
+
+
+end;
+
+procedure Tsettings.Button2Click(Sender: TObject);
+var
+  i,Key:Integer;
+begin
+{memo2.Text:=IdDecoderXXE1.DecodeString(Memo1.Text);
+//showmessage('l');
+  Key:=13;
+  for i:=0 to Memo2.Lines.Count-1 do
+   Memo2.Lines[i]:=Sezar(Key,Memo2.Lines[i],True);  }
+
+end;
+
+procedure Tsettings.FormActivate(Sender: TObject);
+begin
+SWDataModule.Intesdiq.Open;
+end;
+
+procedure Tsettings.RadioButton1Click(Sender: TObject);
+begin
+code:='2';
+tsd.Visible:=true;
+
+with SWDataModule.updswin do begin
+close;
+ SetVariable('kod',code);
+ SetVariable('vid',DBGrid1.DataSource.DataSet.FieldByName('id').AsInteger);
+
+ Execute ;
+ Session.Commit;
+
+end;
+end;
+
+procedure Tsettings.RadioButton2Click(Sender: TObject);
+begin
+code:='1';
+tsd.Visible:=true;
+
+with SWDataModule.updswin do begin
+close;
+ SetVariable('kod',code);
+ SetVariable('vid',DBGrid1.DataSource.DataSet.FieldByName('id').AsInteger);
+
+ Execute ;
+ Session.Commit;
+
+end;
+
+end;
+
+end.

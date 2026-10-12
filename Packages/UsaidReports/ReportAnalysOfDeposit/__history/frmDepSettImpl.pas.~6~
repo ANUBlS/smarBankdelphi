@@ -1,0 +1,140 @@
+﻿unit frmDepSettImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,Dialogs
+  StdCtrls, Buttons, ComCtrls, ExtCtrls, DBCtrls, Grids, DBGridEh, Db,
+  OracleData;
+
+type
+  TfrmDepSett = class(TForm)
+    BitBtn1: TBitBtn;
+    PageControl1: TPageControl;
+    TabSheet1: TTabSheet;
+    TabSheet3: TTabSheet;
+    DBGridEh1: TDBGridEh;
+    GroupBox1: TGroupBox;
+    DBGridEh2: TDBGridEh;
+    DBGridEh5: TDBGridEh;
+    GroupBox3: TGroupBox;
+    DBGridEh6: TDBGridEh;
+    DSource: TOracleDataSet;
+    DSource_B: TOracleDataSet;
+    DPerson: TOracleDataSet;
+    DPerson_b: TOracleDataSet;
+    DType: TOracleDataSet;
+    DType_b: TOracleDataSet;
+    DSourceds: TDataSource;
+    DSource_Bds: TDataSource;
+    DPersonds: TDataSource;
+    DPerson_bds: TDataSource;
+    DTypeds: TDataSource;
+    DType_bds: TDataSource;
+    DSourceID: TFloatField;
+    DSourceNAME: TStringField;
+    DSource_BID: TFloatField;
+    DSource_BSOURCEID: TFloatField;
+    DPersonNAME: TStringField;
+    DPerson_bID: TFloatField;
+    DPerson_bPERSONID: TFloatField;
+    DPerson_bBAL_CN: TFloatField;
+    DPersonID: TFloatField;
+    DTypeID: TFloatField;
+    DTypeNAME: TStringField;
+    DType_bID: TFloatField;
+    DType_bTYPEID: TFloatField;
+    DType_bBAL_CN: TFloatField;
+    DSource_BBAL_CN: TFloatField;
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormShow(Sender: TObject);
+    procedure DBGridEh1KeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure DBGridEh2KeyPress(Sender: TObject; var Key: Char);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure DSourceAfterPost(DataSet: TDataSet);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  frmDepSett: TfrmDepSett;
+
+implementation
+
+{$R *.DFM}
+
+uses sboapiDataModuleImpl,SBTranslateProc;
+
+procedure TfrmDepSett.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+   Resize := false;
+end;
+
+procedure TfrmDepSett.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+   if ord(key) = VK_ESCAPE then close;
+end;
+
+procedure TfrmDepSett.FormShow(Sender: TObject);
+begin
+   PageControl1.ActivePageIndex := 0;
+end;
+
+procedure TfrmDepSett.DBGridEh1KeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+   with (sender as TDBGridEh) do begin
+   if (key = VK_DELETE) and (DataSource.DataSet.RecordCount>0) then
+   if   MessageDlg('Silinməsinə əminsinizmi?',
+        mtConfirmation, [mbYes, mbNo], 0) = mrYes then
+       DataSource.DataSet.Delete;
+   end;
+end;
+
+procedure TfrmDepSett.DBGridEh2KeyPress(Sender: TObject; var Key: Char);
+begin
+  {with (sender as TDBGridEh) do
+   with DataSource.DataSet do
+   begin
+   if UpdateStatus in [usInserted, usModified] then begin
+     FieldByName('DepositID').AsInteger := DepositTypes.FieldByName('ID').AsInteger;
+     FieldByName('CurrencyID').AsInteger := Valutes.FieldByName('Valute').AsInteger;
+     end;
+   end;}
+
+end;
+
+procedure TfrmDepSett.FormCreate(Sender: TObject);
+begin
+   DSource.open;
+   DSource_B.open;
+   DPerson.open;
+   DPerson_b.open;
+   DType.open;
+   DType_b.open;
+   SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TfrmDepSett.FormDestroy(Sender: TObject);
+begin
+   DSource.CloseAll;
+   DSource_B.CloseAll;
+   DPerson.CloseAll;
+   DPerson_b.CloseAll;
+   DType.CloseAll;
+   DType_b.CloseAll;
+end;
+
+procedure TfrmDepSett.DSourceAfterPost(DataSet: TDataSet);
+begin
+   DataSet.Refresh;
+end;
+
+end.

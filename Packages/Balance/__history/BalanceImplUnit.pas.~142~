@@ -1,0 +1,1080 @@
+﻿unit BalanceImplUnit;
+       //DataModuleMain.ODSMain
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActiveX, AxCtrls, Balance_TLB, StdVcl, Mask, DBCtrls, StdCtrls, Buttons,
+  ExtCtrls, ComCtrls, Oracle, OracleData, DB, DBTables, ImgList, SBPlgAx50_TLB,
+  DBViewComboBox, ExcelExporter, CheckLst, Grids, DBGrids;
+
+type
+  TFrmBalance = class(TActiveForm, IFrmBalance)
+    MBBalance: TTable;
+    DataSrcBankInfo: TDataSource;
+    ODSBankInfo: TOracleDataSet;
+    SaveDlg: TSaveDialog;
+    ImageList1: TImageList;
+    ODSBankInfoNB: TIntegerField;
+    ODSBankInfoBF: TFloatField;
+    GroupBox1: TGroupBox;
+    GroupBox2: TGroupBox;
+    Label1: TLabel;
+    Label9: TLabel;
+    DTPBegin: TDateTimePicker;
+    DTPEnd: TDateTimePicker;
+    GroupBox3: TGroupBox;
+    Label3: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    Label2: TLabel;
+    ComboBoxFont: TComboBox;
+    CmbBoxFormat: TComboBox;
+    ComboBoxPlan: TComboBox;
+    CmbBoxRate: TComboBox;
+    ProgressBar: TProgressBar;
+    PanelBranch: TPanel;
+    BitBtnAnalysis: TBitBtn;
+    BitBtnOk: TBitBtn;
+    GroupBox4: TGroupBox;
+    Label6: TLabel;
+    Label7: TLabel;
+    Label8: TLabel;
+    DBEdit1: TDBEdit;
+    DBEdit2: TDBEdit;
+    GroupBox6: TGroupBox;
+    SBBrowse: TSpeedButton;
+    Label10: TLabel;
+    BtnCreateFile: TButton;
+    PathEdit: TEdit;
+    DivisorEdit: TEdit;
+    PanelFilial: TPanel;
+    ChListFilial: TCheckListBox;
+    GBoxFilial: TGroupBox;
+    ChBoxAllFilials: TCheckBox;
+    LBoxFilial: TListBox;
+    BtnCompBalance: TButton;
+    BtnCompBalanceSettings: TButton;
+    BitBtn1: TBitBtn;
+    Memo1: TMemo;
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure ActiveFormDestroy(Sender: TObject);
+    procedure BitBtnOkClick(Sender: TObject);
+    procedure DTPBeginChange(Sender: TObject);
+    procedure BitBtnAnalysisClick(Sender: TObject);
+    procedure BtnCreateFileClick(Sender: TObject);
+    procedure SBBrowseClick(Sender: TObject);
+    procedure ChBoxAllFilialsClick(Sender: TObject);
+    procedure ChListFilialClickCheck(Sender: TObject);
+    procedure BtnCompBalanceClick(Sender: TObject);
+    procedure BtnCompBalanceSettingsClick(Sender: TObject);
+  private
+    { Private declarations }
+    FEvents: IFrmBalanceEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage
+      : TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+    function Get_Icon: OLE_HANDLE; safecall;
+    // **********************************************************
+    function sb_GetBalance(begDate, endDate: TDateTime;
+      BalanceType, CurrencyID, FormatID: Integer; BranchID: String = '-1')
+      : WideString;
+    function sb_GetSumBalance(begDate, endDate: TDateTime;
+      BalanceType, CurrencyID, FormatID: Integer): WideString;
+    procedure sb_InitRpt(RptID: Byte);
+    procedure FillCBRate;
+    procedure FillBranch;
+    procedure sb_Analysis;
+    procedure sb_DoOpen(DataSet: TOracleDataSet; QueryStr: WideString);
+    procedure sb_GetBankInfo(var BankName, ManagerName, Accountant: string;
+      var BankCode: LongInt);
+    function sb_GetBankDate: TDateTime;
+    function sb_GetUserName: String;
+    function sb_Selections(BalanceType: Byte): WideString;
+    procedure CrFilialStr;
+  public
+    { Public declarations }
+    Modified: Boolean;
+    Rate: array of Integer;
+    Branch: array of Integer;
+    procedure sb_OpenDataSet(DataSet: TOracleDataSet; VarabName: string;
+      VarabValue: WideString);
+    procedure Initialize; override;
+    function sb_GetAccTurn(FDate, LDate: TDateTime; AccID: String): WideString;
+    function sb_GetAccountList(begDate, endDate: TDateTime;
+      BalanceType, CurrencyID, FormatID, BalanceID: Integer): WideString;
+  end;
+
+var
+  FrmBalance: TFrmBalance;
+  TableNameFilIDs: String;
+  BranchStr: String;
+
+implementation
+
+uses ComObj, ComServ, UnitAnaliz, UntBalanceRpt1,
+  UntBalanceRpt2, UntBalanceRpt4, UntBalnceRpt3, UnitDataMod,
+  sboapiDataModuleImpl,
+  InterBalanceUnit, InterBalance2Unit, ExportFormImpl, SBTranslateProc,
+  BalanceReportImpl, UnitCompBalSettings;
+
+{$R *.DFM}
+
+{ TFrmBalance }
+procedure TFrmBalance.DefinePropertyPages(DefinePropertyPage
+  : TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+    DefinePropertyPage(Class_FrmBalancePage); }
+end;
+
+procedure TFrmBalance.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as IFrmBalanceEvents;
+end;
+
+procedure TFrmBalance.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TFrmBalance.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TFrmBalance.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TFrmBalance.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TFrmBalance.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TFrmBalance.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TFrmBalance.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TFrmBalance.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TFrmBalance.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TFrmBalance.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TFrmBalance.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TFrmBalance.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TFrmBalance.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TFrmBalance.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TFrmBalance.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TFrmBalance.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TFrmBalance.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TFrmBalance.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TFrmBalance.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TFrmBalance._Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TFrmBalance.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then
+    FEvents.OnActivate;
+end;
+
+procedure TFrmBalance.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then
+    FEvents.OnClick;
+end;
+
+procedure TFrmBalance.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then
+    FEvents.OnCreate;
+end;
+
+procedure TFrmBalance.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then
+    FEvents.OnDblClick;
+end;
+
+procedure TFrmBalance.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then
+    FEvents.OnDeactivate;
+end;
+
+procedure TFrmBalance.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then
+    FEvents.OnDestroy;
+end;
+
+procedure TFrmBalance.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then
+    FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TFrmBalance.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then
+    FEvents.OnPaint;
+end;
+
+procedure TFrmBalance.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TFrmBalance.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TFrmBalance.Set_AxBorderStyle(Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TFrmBalance.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TFrmBalance.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TFrmBalance.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TFrmBalance.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TFrmBalance.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TFrmBalance.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TFrmBalance.Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TFrmBalance.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TFrmBalance.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TFrmBalance.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TFrmBalance.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TFrmBalance.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TFrmBalance.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+function TFrmBalance.Get_Icon: OLE_HANDLE;
+const
+  ImageIndex = 0;
+begin
+  ImageList1.GetIcon(ImageIndex, Icon);
+  Result := Icon.Handle;
+end;
+
+// ***********************************************************************
+function TFrmBalance.sb_GetSumBalance(begDate, endDate: TDateTime;
+  BalanceType, CurrencyID, FormatID: Integer): WideString;
+const
+  cGetBalance = 'sb_SumSelections';
+var
+  AStrParam: WideString;
+  Param1, Param2: WideString;
+begin
+  with DataModuleMain.SB_BalanceFilIDs do
+  begin
+    SetVariable('p_Procedure', cGetBalance);
+    SetVariable('begDate', begDate);
+    SetVariable('endDate', endDate);
+    SetVariable('BalanceType', BalanceType);
+    SetVariable('CurrencyID', CurrencyID);
+    SetVariable('FormatID', FormatID);
+    SetVariable('BranchID', -1);
+    Execute;
+    Param1 := GetVariable('Param1');
+    Param2 := GetVariable('Param2');
+  end;
+  AStrParam := Param1 + Param2;
+  sb_GetSumBalance := AStrParam;
+end;
+
+function TFrmBalance.sb_GetAccountList(begDate, endDate: TDateTime;
+  BalanceType, CurrencyID, FormatID, BalanceID: Integer): WideString;
+const
+  cGetBalance = 'sb_AccountSelections';
+var
+  AStrParam: WideString;
+  Param1, Param2: WideString;
+begin
+
+with DataModuleMain.OracleDataSet1 do
+  begin
+  Close;
+   // SetVariable('p_Procedure', cGetBalance);
+    SetVariable('begDate', begDate);
+    SetVariable('endDate', endDate);
+    SetVariable('BalanceType', BalanceType);
+    SetVariable('CurrencyID', CurrencyID);
+    SetVariable('FormatID', FormatID);
+    SetVariable('BalanceID', BalanceID);
+    Open;
+    //Execute;
+    Param1 := FieldByName('Result').AsWideString;   //GetVariable('Param1');
+    //Param2 := GetVariable('Param2');
+  end;
+ // Result:= DataModuleMain.OraclePackage.CallStringFunction('sb_AccountSelections', [begDate, endDate, BalanceType,
+  //  CurrencyID, FormatID, BalanceID]) + ' Order By Accountant';
+ Result := Param1 + ' Order By Accountant';
+  showmessage(Result);
+end;
+
+function TFrmBalance.sb_GetAccTurn(FDate, LDate: TDateTime; AccID: String)
+  : WideString;
+begin
+  with DataModuleMain.OraclePackage do
+    Result := CallStringFunction('sb_TurnSelections', [FDate, LDate, AccID]);
+end;
+
+function TFrmBalance.sb_GetBalance(begDate, endDate: TDateTime;
+  BalanceType, CurrencyID, FormatID: Integer; BranchID: String = '-1')
+  : WideString;
+const
+  cGetBalance = 'sb_BalanceSelections';
+var
+  AStrParam: WideString;
+  Param1, Param2 { ,Param3 } : WideString;
+begin
+  with DataModuleMain.SB_BalanceFilIDs do
+  begin
+    SetVariable('p_Procedure', cGetBalance);
+    SetVariable('begDate', begDate);
+    SetVariable('endDate', endDate);
+    SetVariable('BalanceType', BalanceType);
+    SetVariable('CurrencyID', CurrencyID);
+    SetVariable('FormatID', FormatID);
+    SetVariable('BranchID', BranchID);
+    Execute;
+    Param1 := DataModuleMain.SB_BalanceFilIDs.GetVariable('Param1');
+    Param2 := DataModuleMain.SB_BalanceFilIDs.GetVariable('Param2');
+  end;
+  AStrParam := Param1 + Param2 + ' Order By Bal_CN';
+  sb_GetBalance := AStrParam;
+end;
+
+procedure TFrmBalance.sb_Analysis;
+begin
+  { sb_DoOpen(DataMod.ODSBalance,'Select * From Balance_'+sb_GetUserName+' Order By BAL_CN');
+    sb_DoOpen(DataMod.ODSSum,'Select SUM(OBR_D),SUM(OBR_K),SUM(ACTIV_BEG),SUM(ACTIV_END),SUM(PASSIV_BEG),SUM(PASSIV_END) From  Balance_'+sb_GetUserName);
+    sb_DoOpen(DataMod.ODSAcc,sb_Selections(ComboBoxPlan.ItemIndex+1)); }
+end;
+
+procedure TFrmBalance.sb_OpenDataSet;
+begin
+
+  with DataSet do
+  begin
+    // if  DataSet=FrmAnaliz.ODSAcc then showmessage(VarabValue);
+    if Active then
+      Close;
+    SetVariable(VarabName + '1', Copy(VarabValue, 1, 1999));
+    SetVariable(VarabName + '2', Copy(VarabValue, 2000, Length(VarabValue)));
+    OPEN;
+  end;
+end;
+
+procedure TFrmBalance.sb_DoOpen;
+begin
+  with DataSet do
+  begin
+    if Active then
+      Close;
+    with SQL do
+    begin
+      Clear;
+      Add(QueryStr);
+      OPEN;
+    end;
+  end;
+end;
+
+function TFrmBalance.sb_GetUserName: String;
+const
+  cUser = 'getUserName';
+begin
+  with DataModuleMain.OraclePackage do
+    Result := CallStringFunction(cUser, []);
+end;
+
+function TFrmBalance.sb_GetBankDate: TDateTime;
+begin
+  with DataModuleMain.OraclePackage do
+    Result := CallDateFunction('GetBankDay', []);
+end;
+
+function TFrmBalance.sb_Selections(BalanceType: Byte): WideString;
+var
+  QueryStr: WideString;
+  Balance: string[32];
+  Valute: String[32];
+begin
+  if Rate[CmbBoxRate.ItemIndex] <> -1 then
+    Valute := 'And(Ac.VAL_ACC=' + IntToStr(Rate[CmbBoxRate.ItemIndex]) + ')'
+  else
+    Valute := '';
+
+  Balance := 'AC.BAL_CN' + IntToStr(BalanceType) + ' as BAL_CN';
+  QueryStr := 'Select Ac.ACC_NO ,Ar.POK_OSTAT ,Ar.POK_OBR_D,Ar.POK_OBR_K , ' +
+    Balance + ' From Account Ac ,Archost Ar Where  (Ar.ACC_ID=Ac.ID)And((Ar.POK_OBR_D+Ar.POK_OBR_K)<>0 OR (Ar.POK_OSTAT<>0))'
+    + Valute + 'And((Ar.DatDate>=' + '''' + FormatDateTime('dd-mmm-yyyy',
+    Trunc(DTPBegin.DateTime)) + '''' + ')And(Ar.DatDate<=' + '''' +
+    FormatDateTime('dd-mmm-yyyy', Trunc(DTPEnd.DateTime)) + '''' + '))';
+  // Edit3.Text :=QueryStr;//  ?
+  Result := QueryStr;
+end;
+
+procedure TFrmBalance.sb_GetBankInfo;
+const
+  cGetBankInfo = 'GetBankInfo';
+begin
+  with DataModuleMain.OraclePackage do
+  begin
+    CallProcedure(cGetBankInfo, ['', 0, '', '']);
+    BankName := GetParameter(0);
+    BankCode := GetParameter(1);
+    ManagerName := GetParameter(2);
+    Accountant := GetParameter(3);
+  end;
+end;
+
+procedure TFrmBalance.sb_InitRpt;
+var
+  Bank, Manager, Accant: string;
+  Code: LongInt;
+begin
+  sb_GetBankInfo(Bank, Manager, Accant, Code);
+  case RptID of
+    0:
+      with BalanceRpt1 do
+      begin
+        with DataModuleMain.ODSMain do
+        begin
+          Filter := '(LastActive<>0)or(LastPassive<>0)';
+          Filtered := True;
+        end;
+
+        QRLValute.Caption := CmbBoxRate.Items[CmbBoxRate.ItemIndex];
+        QRShape6.Enabled := False;
+        QRShape9.Enabled := False;
+        QRLBank.Caption := Bank;
+        QRLCode.Caption := IntToStr(Code);
+        QRLSedr.Caption := Manager;
+        QRLBM.Caption := Accant;
+        FDate.Caption := FormatDateTime('dd/mm/yyyy', Trunc(DTPBegin.DateTime));
+        LDate.Caption := FormatDateTime('dd/mm/yyyy', Trunc(DTPEnd.DateTime));
+        LDate.Enabled := not(Trunc(DTPBegin.DateTime) = Trunc(DTPEnd.DateTime));
+        FDate.AlignToBand := not LDate.Enabled;
+
+        Preview;
+        DataModuleMain.ODSMain.Filter := '';
+        DataModuleMain.ODSMain.Filtered := False;
+      end;
+    1:
+      with BalanceRpt4 do
+      begin
+        QRLValute.Caption := CmbBoxRate.Items[CmbBoxRate.ItemIndex];
+        QRLBank.Caption := Bank;
+        QRLCode.Caption := IntToStr(Code);
+        QRLSedr.Caption := Manager;
+        QRLBM.Caption := Accant;
+        FDate.Caption := FormatDateTime('dd/mm/yyyy', Trunc(DTPBegin.DateTime));
+        LDate.Caption := FormatDateTime('dd/mm/yyyy', Trunc(DTPEnd.DateTime));
+        LDate.Enabled := not(Trunc(DTPBegin.DateTime) = Trunc(DTPEnd.DateTime));
+        FDate.AlignToBand := not LDate.Enabled;
+
+        Preview;
+      end;
+    2:
+      with BalanceRpt3 do
+      begin
+        with DataModuleMain.ODSMain do
+        begin
+          Filter := '(LastActive<>0)or(LastPassive<>0)or(DTurnOver<>0)or(KTurnOver<>0)';
+          Filtered := True;
+        end;
+
+        QRLValute.Caption := CmbBoxRate.Items[CmbBoxRate.ItemIndex];
+        QRLBank.Caption := Bank;
+        QRLCode.Caption := IntToStr(Code);
+        QRLSedr.Caption := Manager;
+        QRLBM.Caption := Accant;
+        FDate.Caption := FormatDateTime('dd/mm/yyyy', Trunc(DTPBegin.DateTime));
+        LDate.Caption := FormatDateTime('dd/mm/yyyy', Trunc(DTPEnd.DateTime));
+        LDate.Enabled := not(Trunc(DTPBegin.DateTime) = Trunc(DTPEnd.DateTime));
+        FDate.AlignToBand := not LDate.Enabled;
+
+        Preview;
+
+        DataModuleMain.ODSMain.Filter := '';
+        DataModuleMain.ODSMain.Filtered := False;
+
+      end;
+    3:
+      with BalanceRpt2 do
+      begin
+        with DataModuleMain.ODSMain do
+        begin
+          Filter := '(LastActive<>0)or(LastPassive<>0)or(DTurnOver<>0)or(KTurnOver<>0)';
+          Filtered := True;
+        end;
+
+        QRLValute.Caption := CmbBoxRate.Items[CmbBoxRate.ItemIndex];
+        QRLBank.Caption := Bank;
+        QRLCode.Caption := IntToStr(Code);
+        QRLSedr.Caption := Manager;
+        QRLBM.Caption := Accant;
+        FDate.Caption := FormatDateTime('dd/mm/yyyy', Trunc(DTPBegin.DateTime));
+        LDate.Caption := FormatDateTime('dd/mm/yyyy', Trunc(DTPEnd.DateTime));
+        LDate.Enabled := not(Trunc(DTPBegin.DateTime) = Trunc(DTPEnd.DateTime));
+        FDate.AlignToBand := not LDate.Enabled;
+
+        Preview;
+        DataModuleMain.ODSMain.Filter := '';
+        DataModuleMain.ODSMain.Filtered := False;
+
+      end;
+    4:
+      begin
+        with DataModuleMain.ODSMain do
+        begin
+          Filter := '(LastActive<>0)or(LastPassive<>0)';
+          Filtered := True;
+        end;
+        InterBalance.Preview
+      end;
+    5:
+      begin
+        with DataModuleMain.ODSMain do
+        begin
+          Filter := '(LastActive<>0)or(LastPassive<>0)';
+          Filtered := True;
+        end;
+        InterBalance2.Preview
+      end;
+  end; // case
+end;
+
+procedure TFrmBalance.FillBranch;
+var
+  BranchIndex: Integer;
+begin
+  with DataModuleMain.BranchDataSet do
+    try
+      OPEN;
+      SetLength(Branch, RecordCount + 1);
+      First;
+      BranchIndex := 0;
+      ChListFilial.Items.Clear;
+      Branch[BranchIndex] := -1;
+      while not EOF do
+      begin
+        BranchIndex := BranchIndex + 1;
+        ChListFilial.Items.Add(FieldByName('Name').AsString);
+        LBoxFilial.Items.Add(FieldByName('ID').AsString);
+        ChListFilial.Checked[BranchIndex - 1] := True;
+        Branch[BranchIndex] := FieldByName('ID').AsInteger;
+        Next;
+      end;
+    finally
+      // Close;
+    end;
+end;
+
+procedure TFrmBalance.CrFilialStr;
+var
+  i: Integer;
+  k: Boolean;
+begin
+  BranchStr := ' ';
+  k := True;
+  for i := 0 to (ChListFilial.Items.Count - 1) do
+  begin
+    if ChListFilial.Checked[i] = True then
+    begin
+      if k = True then
+        BranchStr := BranchStr + LBoxFilial.Items[i]
+      else
+        BranchStr := BranchStr + ',' + LBoxFilial.Items[i];
+      k := False;
+    end;
+  end;
+end;
+
+procedure TFrmBalance.FillCBRate;
+var
+  RateIndex: Byte;
+begin
+  with DataModuleMain.ODSRate do
+  begin
+    OPEN;
+    RateIndex := 0;
+    SetLength(Rate, RecordCount + 1);
+    CmbBoxRate.Items.Clear;
+    CmbBoxRate.Items.Add('Bütün valyutalar');
+    Rate[RateIndex] := -1;
+    First;
+    while not EOF do
+    begin
+      INC(RateIndex);
+      Rate[RateIndex] := FieldByName('Valute').AsInteger;
+      CmbBoxRate.Items.Add(FieldByName('VALU_NAME').AsString);
+      Next
+    end;
+  end;
+end;
+
+procedure TFrmBalance.ActiveFormCreate(Sender: TObject);
+// var FilialRec: Integer;
+begin
+  FrmBalance := Self;
+  DataModuleMain := TDataModuleMain.Create(Self);
+  FrmAnaliz := TFrmAnaliz.Create(Self);
+  ExportForm := TExportForm.Create(Self);
+  BalanceRpt1 := TBalanceRpt1.Create(Self);
+  BalanceRpt2 := TBalanceRpt2.Create(Self);
+  BalanceRpt3 := TBalanceRpt3.Create(Self);
+  BalanceRpt4 := TBalanceRpt4.Create(Self);
+  InterBalance := TInterBalance.Create(Self);
+  InterBalance2 := TInterBalance2.Create(Self);
+  QRBalance := TQRBalance.Create(Self);
+  Screen.Cursor := crSQLWait;
+  Modified := True;
+  try
+    DTPBegin.DateTime := sb_GetBankDate;
+    DTPEnd.DateTime := sb_GetBankDate;
+    FillCBRate;
+    FillBranch;
+    ODSBankInfo.OPEN;
+    DataModuleMain.ODS_SETTINGS.OPEN;
+    if DataModuleMain.ODS_SETTINGS.FieldByName('Value').AsInteger = 2 then
+    begin
+      // BitBtnOk.Visible :=false;
+      BtnCompBalance.Visible := True;
+      BtnCompBalanceSettings.Visible := True;
+    end;
+    CmbBoxRate.ItemIndex := 0;
+    ComboBoxPlan.ItemIndex := 0;
+    CmbBoxFormat.ItemIndex := 0;
+    ComboBoxFont.ItemIndex := 0;
+
+    Screen.Cursor := crDefault;
+  except
+    Screen.Cursor := crDefault;
+    raise;
+  end;
+
+  TranslateAllComponents(Self, DataModuleMain.OPack_SL);
+end;
+
+procedure TFrmBalance.ActiveFormDestroy(Sender: TObject);
+begin
+  { if  Assigned(FrmAnaliz) then
+    FrmAnaliz.Release; }
+  SetLength(Rate, 0);
+  SetLength(Branch, 0);
+  Self.Free;
+end;
+
+procedure TFrmBalance.BitBtnOkClick(Sender: TObject);
+Var
+  Get_Balance: WideString;
+begin
+  Screen.Cursor := crSQLWait;
+  try
+    ProgressBar.StepBy(10);
+    ProgressBar.StepBy(47);
+    CrFilialStr;
+    Get_Balance := (sb_GetBalance(Trunc(DTPBegin.DateTime),
+      Trunc(DTPEnd.DateTime), ComboBoxPlan.ItemIndex + 1,
+      Rate[CmbBoxRate.ItemIndex], CmbBoxFormat.ItemIndex, BranchStr));
+
+    sb_OpenDataSet(DataModuleMain.ODSMain, 'AStrParam', Get_Balance);
+      // Memo1.Text:=Get_Balance;
+       //Memo1.Text:=DataModuleMain.ODSMain.SQL.Text;
+    //showmessage(DataModuleMain.ODSMain.SQL.Text);
+
+    //showmessage(Get_Balance);
+    //abort;
+
+    ProgressBar.StepBy(33);
+    Screen.Cursor := crDefault;
+
+    if (Sender as TBitBtn).Tag = 1 then
+      sb_InitRpt(ComboBoxFont.ItemIndex)
+    else
+      with ExportForm do
+        ShowModal;
+
+    ProgressBar.StepBy(10);
+    ProgressBar.Position := 0;
+  except
+    Screen.Cursor := crDefault;
+    ProgressBar.Position := 0;
+    raise;
+  end;
+end;
+
+procedure TFrmBalance.DTPBeginChange(Sender: TObject);
+begin
+  Modified := True;
+end;
+
+procedure TFrmBalance.BitBtnAnalysisClick(Sender: TObject);
+Var
+  Get_Balance: WideString;
+  Get_SumBalance: WideString;
+begin
+  Screen.Cursor := crSQLWait;
+  // try
+  if Modified then
+  begin
+    Get_Balance := sb_GetBalance(Trunc(DTPBegin.DateTime),
+      Trunc(DTPEnd.DateTime), ComboBoxPlan.ItemIndex + 1,
+      Rate[CmbBoxRate.ItemIndex], CmbBoxFormat.ItemIndex);
+
+    Get_SumBalance := sb_GetSumBalance(Trunc(DTPBegin.DateTime),
+      Trunc(DTPEnd.DateTime), ComboBoxPlan.ItemIndex + 1,
+      Rate[CmbBoxRate.ItemIndex], CmbBoxFormat.ItemIndex);
+
+    sb_OpenDataSet(FrmAnaliz.ODSBalance, 'AStrParam', Get_Balance);
+    sb_OpenDataSet(FrmAnaliz.ODSSum, 'AStrParam', Get_SumBalance);
+    Modified := False;
+  end;
+  with FrmAnaliz do
+  begin
+    StaticText1.Caption := FormatDateTime('dd/mm/yyyy', DTPBegin.Date);
+    StaticText2.Caption := FormatDateTime('dd/mm/yyyy', DTPEnd.Date);
+    ShowModal;
+  end;
+  Screen.Cursor := crDefault;
+  // except
+  // Screen.Cursor := crDefault;
+  // end;
+end;
+
+procedure TFrmBalance.BtnCreateFileClick(Sender: TObject);
+var
+  DBaseName, TblName: String;
+  Path: String;
+  lpExistingFileName: array [0 .. 255] of Char;
+  lpNewFileName: array [0 .. 255] of Char;
+  Diversity: Integer;
+begin
+  Path := ExtractFilePath(Application.ExeName) + 'F600ta.dbf';
+  StrPCopy(lpExistingFileName, Path);
+  StrPCopy(lpNewFileName, PathEdit.Text);
+
+  if FileExists(PathEdit.Text) then
+    if MessageDlg(Format('Overrite the Existing File ?' + #13 + ' %s  ',
+      [PathEdit.Text]), mtConfirmation, MBYESNOCANCEL, 0) <> mrYes then
+      Exit;
+
+  if not CopyFile(lpExistingFileName, lpNewFileName, False) then
+  begin
+    showmessage('File Creation UnSuccesful Terminated!');
+    Exit;
+  end;
+
+  DBaseName := ExtractFileDir(PathEdit.Text);
+  TblName := ExtractFileName(PathEdit.Text);
+
+  Diversity := StrToInt(DivisorEdit.Text);
+
+  Screen.Cursor := crSQLWait;
+  ProgressBar.Position := 0;
+
+  try
+    sb_OpenDataSet(DataModuleMain.ODSMain, 'AStrParam',
+      sb_GetBalance(Trunc(DTPBegin.DateTime), Trunc(DTPEnd.DateTime),
+      ComboBoxPlan.ItemIndex + 1, Rate[0], 0 { CmbBoxFormat.ItemIndex } ));
+    with DataModuleMain.ODSMain do
+    begin
+      Filter := '(LastActive<>0)or(LastPassive<>0)';
+      Filtered := True;
+    end;
+    ProgressBar.StepBy(60);
+    with MBBalance do
+      try
+        DatabaseName := DBaseName;
+        TableName := TblName;
+        OPEN;
+        ProgressBar.StepBy(100);
+        ProgressBar.Position := 0;
+        ProgressBar.Max := DataModuleMain.ODSMain.RecordCount;
+        DataModuleMain.ODSMain.First;
+        while not DataModuleMain.ODSMain.EOF do
+        begin
+          Insert;
+          FieldByName('NB').Value := ODSBankInfo.FieldByName('NB').Value;
+          FieldByName('NF').Value := ODSBankInfo.FieldByName('BF').Value;
+          FieldByName('NB1').Value := DataModuleMain.ODSMain.FieldByName
+            ('Bal_CN').Value;
+          FieldByName('Sum1').Value := DataModuleMain.ODSMain.FieldByName
+            ('LastActive').Value * Diversity;
+          FieldByName('Sum2').Value := DataModuleMain.ODSMain.FieldByName
+            ('LastPassive').Value * Diversity;
+          Post;
+
+          DataModuleMain.ODSMain.Next;
+          ProgressBar.StepIt;
+        end;
+      finally
+        Close;
+        showmessage(Format('Creating %s ' + #13 +
+          'Balance File successfully completed!', [PathEdit.Text]));
+      end;
+  finally
+    Screen.Cursor := crDefault;
+    ProgressBar.Position := 0;
+  end;
+end;
+
+procedure TFrmBalance.SBBrowseClick(Sender: TObject);
+begin
+  with SaveDlg do
+    if Execute then
+      PathEdit.Text := FileName;
+end;
+
+procedure TFrmBalance.ChBoxAllFilialsClick(Sender: TObject);
+var
+  i: Integer;
+begin
+  DataModuleMain.BranchDataSet.OPEN;
+  if ChBoxAllFilials.Checked = True then
+  begin
+    for i := 0 to DataModuleMain.BranchDataSet.RecordCount - 1 do
+      ChListFilial.Checked[i] := True;
+  end
+  else
+  begin
+    for i := 0 to DataModuleMain.BranchDataSet.RecordCount - 1 do
+      ChListFilial.Checked[i] := False;
+  end;
+  ChListFilialClickCheck(Sender);
+end;
+
+procedure TFrmBalance.ChListFilialClickCheck(Sender: TObject);
+var
+  i: Integer;
+begin
+  BitBtnOk.Enabled := False;
+  for i := 0 to (ChListFilial.Items.Count - 1) do
+  begin
+    if ChListFilial.Checked[i] = True then
+      BitBtnOk.Enabled := True;
+  end; { for }
+end;
+
+procedure TFrmBalance.BtnCompBalanceClick(Sender: TObject);
+var
+  BDate, EDate: TDateTime;
+begin
+  BDate := Int(DTPBegin.DateTime);
+  EDate := Int(DTPEnd.DateTime);
+  CrFilialStr;
+  with DataModuleMain do
+  begin
+    OP.CallProcedure('getbalance', ['BeginDate', BDate, 'LastDate', EDate,
+      'Branchs', BranchStr, 'CurrencyID', Rate[CmbBoxRate.ItemIndex]]);
+
+    ODSBalance.Close;
+    ODSBalance.OPEN;
+    ODSBankInfo.Refresh;
+    QRBalance.Preview;
+  end;
+end;
+
+procedure TFrmBalance.BtnCompBalanceSettingsClick(Sender: TObject);
+begin
+  FrmCompBalSettings := TFrmCompBalSettings.Create(Self);
+  DataModuleMain.ODS_BALANCE_SETTINGS.OPEN;
+  FrmCompBalSettings.ShowModal;
+end;
+
+initialization
+
+TActiveFormFactory.Create(ComServer, TActiveFormControl, TFrmBalance,
+  Class_FrmBalance, 1, '', OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+  tmApartment);
+
+{ Screen.Cursor :=crSQLWait;
+  try
+  ProgressBar.StepBy(10);
+  ProgressBar.StepBy(47);
+  sb_OpenDataSet(DataModuleMain.ODSMain,'AStrParam',sb_GetBalance(TRUNC(DTPBegin.DateTime),TRUNC(DTPEnd.DateTime),ComboBoxPlan.ItemIndex+1,Rate[CmbBoxRate.ItemIndex],CmbBoxFormat.ItemIndex));
+  ProgressBar.StepBy(33);
+  Screen.Cursor :=crDefault;
+  sb_InitRpt(0);
+  ProgressBar.StepBy(10);
+  ProgressBar.Position:=0;
+  except
+  Screen.Cursor :=crDefault;
+  ProgressBar.Position:=0;
+  raise;
+  end; }
+end.

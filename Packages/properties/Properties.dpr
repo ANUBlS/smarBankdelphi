@@ -1,0 +1,37 @@
+library Properties;
+
+uses
+  ComServ,
+  Properties_TLB in 'Properties_TLB.pas',
+  PropertiesImpl1 in 'PropertiesImpl1.pas' {PropertiesFrm: TActiveForm} {PropertiesX: CoClass},
+  DMprop in 'DMprop.pas' {DMproperties: TDataModule},
+  FrmPropAddImpl in 'FrmPropAddImpl.pas' {FrmPropAdd},
+  frmpropeditImol in 'frmpropeditImol.pas' {FrmSeting},
+  FormInfoImpl in 'FormInfoImpl.pas' {FormInfo},
+  Frmproperties_creditImpl in 'Frmproperties_creditImpl.pas' {Frmproperties_credit},
+  FrmInfodeletImpl in 'FrmInfodeletImpl.pas' {Frmproperties_creditDel},
+  FrmtypicalImpl in 'FrmtypicalImpl.pas' {FrmTypical},
+  FrmtranceImpl in 'FrmtranceImpl.pas' {FrmTrance},
+  FrmTranchesAddImpl in 'FrmTranchesAddImpl.pas' {FrmTranchesAdd},
+  TransactionsViewFormImpl in 'TransactionsViewFormImpl.pas' {TransactionsViewForm},
+  PropQReportImpl in 'PropQReportImpl.pas' {PropQReport: TQuickRep},
+  FrmProp_paymentImpl in 'FrmProp_paymentImpl.pas' {FrmProp_payment},
+  FrmProp_paymentAddImpl in 'FrmProp_paymentAddImpl.pas' {FrmProp_paymentAdd},
+  gelirimpl in 'gelirimpl.pas' {FormGelirXerc},
+  InfoImpl in 'InfoImpl.pas' {InfoFrm},
+  ReportImpl in 'ReportImpl.pas' {ReportFrm};
+
+{$E ocx}
+
+exports
+  DllGetClassObject,
+  DllCanUnloadNow,
+  DllRegisterServer,
+  DllUnregisterServer;
+
+{$R *.TLB}
+
+{$R *.RES}
+
+begin
+end.

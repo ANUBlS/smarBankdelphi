@@ -1,0 +1,2569 @@
+﻿unit UCProperty;
+           //see
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActiveX, AxCtrls, PCPropertyBlank_TLB, StdVcl,SBPlgAx50_TLB, ExtCtrls,
+  StdCtrls, Buttons, DBCtrls, ComCtrls, Mask, Db, OracleData, Oracle,
+  INSWordExporter, PlgModalContainer, XFSCtrls, variants;
+
+const
+     WM_ModalResult = WM_USER+139;
+
+type
+  TCProperty = class(TActiveForm, ICProperty,IUIObject,
+             IParamInput)//,
+             //ISBPlgAc50BufferForm)       tale
+    ConstructionPageControl: TPageControl;
+    SECTION1: TTabSheet;
+    SECTION23: TTabSheet;
+    SecurityGroupBox: TGroupBox;
+    SECTION4: TTabSheet;
+    SECTION5: TTabSheet;
+    CPropertyExporter: TINSWordExporter;
+    plgSuggest: TPlgModalContainer;
+    XFPanel1: TXFPanel;
+    XFGroupBox1: TXFGroupBox;
+    DBComboBox5: TDBComboBox;
+    DBEdit17: TDBEdit;
+    DBEdit21: TDBEdit;
+    DBEdit20: TDBEdit;
+    DBEdit19: TDBEdit;
+    DBEdit18: TDBEdit;
+    DBEdit16: TDBEdit;
+    DBEdit15: TDBEdit;
+    DBEdit14: TDBEdit;
+    DBEdit13: TDBEdit;
+    DBEdit1: TDBEdit;
+    XFGroupBox2: TXFGroupBox;
+    DBLookupComboBoxRisk: TDBLookupComboBox;
+    cbRisks: TCheckBox;
+    btRisksAdd: TBitBtn;
+    memRisk: TMemo;
+    XFGroupBox3: TXFGroupBox;
+    EIndeminity: TDBEdit;
+    EEmploy: TDBEdit;
+    ERent: TDBEdit;
+    EWages: TDBEdit;
+    EAnnual: TDBEdit;
+    XFLabel1: TXFLabel;
+    XFLabel2: TXFLabel;
+    XFLabel3: TXFLabel;
+    XFLabel4: TXFLabel;
+    XFLabel5: TXFLabel;
+    XFLabel6: TXFLabel;
+    XFLabel7: TXFLabel;
+    XFLabel8: TXFLabel;
+    XFLabel9: TXFLabel;
+    XFLabel10: TXFLabel;
+    XFLabel11: TXFLabel;
+    XFLabel12: TXFLabel;
+    XFLabel13: TXFLabel;
+    XFLabel14: TXFLabel;
+    XFLabel15: TXFLabel;
+    XFLabel16: TXFLabel;
+    XFLabel17: TXFLabel;
+    XFLabel18: TXFLabel;
+    XFLabel19: TXFLabel;
+    XFLabel20: TXFLabel;
+    XFLabel21: TXFLabel;
+    XFGroupBox4: TXFGroupBox;
+    ConstYearDateTimePicker: TDateTimePicker;
+    DBEdit3: TDBEdit;
+    DBEdit4: TDBEdit;
+    DBEdit5: TDBEdit;
+    DBEdit6: TDBEdit;
+    DBEdit7: TDBEdit;
+    DBEdit8: TDBEdit;
+    DBEdit9: TDBEdit;
+    DBEdit10: TDBEdit;
+    DBEdit11: TDBEdit;
+    XFGroupBox5: TXFGroupBox;
+    DBComboBox1: TDBComboBox;
+    XFLabel22: TXFLabel;
+    XFLabel23: TXFLabel;
+    XFLabel24: TXFLabel;
+    XFLabel25: TXFLabel;
+    XFLabel26: TXFLabel;
+    XFLabel27: TXFLabel;
+    XFLabel28: TXFLabel;
+    XFLabel29: TXFLabel;
+    XFLabel30: TXFLabel;
+    XFLabel31: TXFLabel;
+    XFLabel32: TXFLabel;
+    XFLabel33: TXFLabel;
+    XFLabel34: TXFLabel;
+    XFLabel35: TXFLabel;
+    XFPanel2: TXFPanel;
+    DBEdit12: TDBEdit;
+    DBComboBox12: TDBComboBox;
+    DBComboBox13: TDBComboBox;
+    XFLabel36: TXFLabel;
+    XFLabel38: TXFLabel;
+    XFLabel39: TXFLabel;
+    XFLabel40: TXFLabel;
+    XFLabel41: TXFLabel;
+    XFGroupBox6: TXFGroupBox;
+    DBComboBox2: TDBComboBox;
+    DBEdit25: TDBEdit;
+    DBMemo1: TDBMemo;
+    ESpecify: TDBEdit;
+    EHeat: TDBEdit;
+    DBComboBox8: TDBComboBox;
+    DBComboBox7: TDBComboBox;
+    DBComboBox6: TDBComboBox;
+    DBComboBox4: TDBComboBox;
+    XFLabel42: TXFLabel;
+    XFLabel43: TXFLabel;
+    XFLabel44: TXFLabel;
+    XFLabel45: TXFLabel;
+    XFLabel46: TXFLabel;
+    XFLabel47: TXFLabel;
+    XFLabel48: TXFLabel;
+    XFLabel49: TXFLabel;
+    XFLabel50: TXFLabel;
+    XFLabel51: TXFLabel;
+    XFLabel52: TXFLabel;
+    XFLabel53: TXFLabel;
+    XFPanel3: TXFPanel;
+    XFGroupBox7: TXFGroupBox;
+    DBEdit24: TDBEdit;
+    DBEdit23: TDBEdit;
+    AgentLookupComboBox: TDBLookupComboBox;
+    InsLookupComboBox: TDBLookupComboBox;
+    XFGroupBox8: TXFGroupBox;
+    XFPanel4: TXFPanel;
+    edEndDate: TDateTimePicker;
+    edBeginDate: TDateTimePicker;
+    edIns_Date: TDateTimePicker;
+    DBEdit22: TDBEdit;
+    edInsSumm: TDBEdit;
+    dbAvalute: TDBLookupComboBox;
+    edFranshiz: TDBComboBox;
+    edTariff: TDBEdit;
+    SpeedButton7: TSpeedButton;
+    edAmmount: TDBEdit;
+    XFPanel5: TXFPanel;
+    DBEdit2: TDBEdit;
+    ExpirityDateTimePicker: TDateTimePicker;
+    YearsInBus: TDBEdit;
+    FulDescrip: TDBEdit;
+    XFLabel37: TXFLabel;
+    XFLabel55: TXFLabel;
+    XFLabel56: TXFLabel;
+    XFLabel57: TXFLabel;
+    XFLabel58: TXFLabel;
+    XFLabel59: TXFLabel;
+    XFLabel60: TXFLabel;
+    XFLabel61: TXFLabel;
+    XFLabel62: TXFLabel;
+    XFLabel63: TXFLabel;
+    XFLabel64: TXFLabel;
+    XFLabel65: TXFLabel;
+    XFLabel66: TXFLabel;
+    XFLabel67: TXFLabel;
+    XFLabel68: TXFLabel;
+    XFLabel69: TXFLabel;
+    XFLabel70: TXFLabel;
+    XFPanel6: TXFPanel;
+    Suggest: TBitBtn;
+    btPolicy: TBitBtn;
+    Report: TBitBtn;
+    Back: TBitBtn;
+    Next: TBitBtn;
+    btApply: TBitBtn;
+    Commit: TBitBtn;
+    BitBtn2: TBitBtn;
+    DBEdit26: TDBEdit;
+    XFLabel71: TXFLabel;
+    Button1: TButton;
+    XFButton1: TXFButton;
+    XFLabel72: TXFLabel;
+    DBLookupComboBox1: TDBLookupComboBox;
+    XFGroupBox9: TXFGroupBox;
+    XFRadioButton1: TXFRadioButton;
+    XFRadioButton2: TXFRadioButton;
+    XFRadioButton3: TXFRadioButton;
+    DBEdit27: TDBEdit;
+    DBEdit28: TDBEdit;
+    DBLookupComboBox2: TDBLookupComboBox;
+    XFLabel54: TXFLabel;
+    ComboBox1: TComboBox;
+    XFButton2: TXFButton;
+    Button2: TButton;
+    DBLookupComboBox3: TDBLookupComboBox;
+    Button3: TButton;
+    XFSpeedButton1: TXFSpeedButton;
+    Button4: TButton;
+    XFLabel73: TXFLabel;
+    DBEdit29: TDBEdit;
+    XFSpeedButton2: TXFSpeedButton;
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure ConstructionPageControlChange(Sender: TObject);
+    procedure BitBtn2Click(Sender: TObject);
+    procedure InsLookupComboBoxKeyPress(Sender: TObject; var Key: Char);
+    procedure BackClick(Sender: TObject);
+    procedure NextClick(Sender: TObject);
+    procedure btApplyClick(Sender: TObject);
+    procedure CommitClick(Sender: TObject);
+    procedure btRisksAddClick(Sender: TObject);
+    procedure InsLookupComboBoxClick(Sender: TObject);
+    procedure ReportClick(Sender: TObject);
+    procedure SuggestClick(Sender: TObject);
+    procedure edBeginDateChange(Sender: TObject);
+    procedure SpeedButton7Click(Sender: TObject);
+    procedure DBLookupComboBox1Click(Sender: TObject);
+    procedure btPolicyClick(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure XFButton1Click(Sender: TObject);
+    procedure XFRadioButton1Click(Sender: TObject);
+    procedure XFRadioButton2Click(Sender: TObject);
+    procedure XFRadioButton3Click(Sender: TObject);
+    procedure DBEdit26KeyPress(Sender: TObject; var Key: Char);
+    procedure XFButton2Click(Sender: TObject);
+    procedure Button3Click(Sender: TObject);
+    procedure XFSpeedButton1Click(Sender: TObject);
+    procedure Button4Click(Sender: TObject);
+    procedure XFSpeedButton2Click(Sender: TObject);
+  private
+    { Private declarations }
+    id : Integer;
+    FParams: TStrings;
+    FOwnerHandle : Integer;
+    FEvents: ICPropertyEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+    function SaveData():boolean;
+    procedure LoadData;
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+
+    function  Get_Owner:Integer; safecall;
+    procedure Set_Owner(val : Integer);  safecall;
+    {IParamInput}
+    function  Get_Params(const Name: WideString): OleVariant; safecall;
+    procedure Set_Params(const Name: WideString; Value: OleVariant); safecall;
+    property Params[const Name: WideString]: OleVariant read Get_Params write Set_Params;
+    {IInstance}
+    function InstanceInitialize: HResult; safecall;
+    function IUIObject.Initialize = InstanceInitialize;
+    function Cleanup: HResult; safecall;
+    {IUIObject}
+//    function  Get_Icon: OLE_HANDLE; safecall;
+    function UIObjectActivate: HResult; safecall;
+    function IUIObject.Activate = UIObjectActivate;
+    function QueryDeactivate: HResult; safecall;
+    function UIObjectDeactivate: HResult; safecall;
+    function IUIObject.Deactivate = UIObjectDeactivate;
+    function SaveState: HResult; safecall;
+    function  Get_Height : Integer; safecall;
+    function  Get_Width  : Integer; safecall;
+
+  public
+    { Public declarations }
+    CID : Integer;
+    procedure Initialize; override;
+  end;
+
+var
+    CProperty:TCProperty;
+implementation
+
+uses ComObj, ComServ,SBTranslateProc,sboapiDataModuleimpl, URisks, UDModule,CommanParametrs;
+
+{$R *.DFM}
+
+{ TCProperty }
+
+procedure TCProperty.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_CPropertyPage); }
+end;
+
+procedure TCProperty.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as ICPropertyEvents;
+end;
+
+procedure TCProperty.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TCProperty.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TCProperty.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TCProperty.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TCProperty.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TCProperty.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TCProperty.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TCProperty.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TCProperty.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TCProperty.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TCProperty.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TCProperty.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TCProperty.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TCProperty.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TCProperty.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TCProperty.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TCProperty.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TCProperty.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TCProperty.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TCProperty._Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TCProperty.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TCProperty.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TCProperty.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TCProperty.DBEdit26KeyPress(Sender: TObject; var Key: Char);
+begin
+if not (Key in ['A'..'Z','a'..'z','0'..'9',#8,'/','-'] )then begin Key:=#0; end;
+end;
+
+procedure TCProperty.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TCProperty.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TCProperty.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TCProperty.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TCProperty.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TCProperty.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TCProperty.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TCProperty.Set_AxBorderStyle(Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TCProperty.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TCProperty.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TCProperty.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TCProperty.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TCProperty.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TCProperty.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TCProperty.Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TCProperty.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TCProperty.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TCProperty.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TCProperty.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TCProperty.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TCProperty.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+
+function  TCProperty.Get_Owner:Integer;
+begin
+  Result := handle;
+end;
+
+procedure TCProperty.Set_Owner(val : Integer);
+begin
+  if val > 0 then
+     FOwnerHandle := val;
+end;
+
+
+function  TCProperty.Get_Params(const Name: WideString): OleVariant;
+begin
+  Result := FParams.Values[Name];
+end;
+
+procedure TCProperty.Set_Params(const Name: WideString; Value: OleVariant);
+begin
+  FParams.Values[Name] := Value;
+end;
+
+function TCProperty.InstanceInitialize: HResult;
+begin
+  Result := S_OK;
+end;
+
+function TCProperty.Cleanup: HResult;
+begin
+  Result := S_OK;
+end;
+
+function TCProperty.UIObjectActivate: HResult;
+begin
+//ShowMessage(IntToStr(id));
+//ShowMessage(Get_Params('СID'));
+//exit;
+       CID := Get_Params('СID');
+              with DModule do
+       begin
+            ODSCProperty.SetVariable('CID', CID);
+            ODSCProperty.Open;
+
+            ODSContracts.SetVariable('CID', CID);
+            ODSContracts.Open;
+
+            ODSCustomers.Locate('id',ODSContractsKli_ID.Value,[]);
+       end;
+       if  Get_Params('Mod') = 'Insert' then
+       begin
+       InsLookupComboBox.Enabled:=true;
+           with DModule do
+           begin
+                ODSContracts.Insert;
+                ODSCProperty.Insert;
+                edBeginDate.DateTime := DModule.DsSysdat.FieldByName('TEK_DAT').AsDateTime;
+                edEndDate.DateTime :=DModule.DsSysdat.FieldByName('TEK_DAT').AsDateTime;
+                edIns_Date.DateTime:=DModule.DsSysdat.FieldByName('TEK_DAT').AsDateTime;
+                ExpirityDateTimePicker.DateTime:=DModule.DsSysdat.FieldByName('TEK_DAT').AsDateTime;
+                ConstYearDateTimePicker.DateTime:=DModule.DsSysdat.FieldByName('TEK_DAT').AsDateTime;
+                InsLookupComboBox.KeyValue :=  StrToInt(Get_Params('KLI_ID'));
+                ODSContracts.FieldByName('KLI_ID').AsInteger :=StrToInt(Get_Params('KLI_ID'));
+
+           end;
+
+       end;
+        //////////////////////////////////
+        if opetion='See' then
+       begin
+             btApply.Visible:=false;
+             Commit.Visible:=false;
+         with DModule, ODSContracts do
+         begin
+              LoadData;
+              ODSCProperty.Edit;
+              ODSContracts.Edit;
+              ComboBox1.ItemIndex:=FieldByName('BNF_TYPE').AsInteger;
+              edIns_Date.DateTime := fieldByName('INS_DATE').asDateTime;
+              edBeginDate.DateTime := fieldByName('BEGIN_DATE').asDateTime;
+              edEndDate.DateTime := fieldByName('END_DATE').asDateTime;
+              XFRadioButton1.Checked := FieldByName('ben_id').asInteger = 0;
+              XFRadioButton2.Checked := FieldByName('ben_id').asInteger = 1;
+              XFRadioButton3.Checked := FieldByName('ben_id').asInteger = 2;
+              InsLookupComboBox.Enabled:=false;
+
+         end;
+          Report.Enabled:=true;
+          if (p_contractstate=6) or (p_contractstate=7) or(p_contractstate=8)  then
+        begin
+            Commit.Enabled:=false;
+            btApply.Enabled:=false;
+
+        end
+        else
+        begin
+        btApply .Enabled:=true;
+        Commit.Enabled:=true;
+         XFGroupBox8.Enabled:=true;
+         end;
+       end;
+
+        //////////////////////////////////////
+
+
+
+
+       if Get_Params('Mod')='Edit' then
+       begin
+
+         with DModule, ODSContracts do
+         begin
+              LoadData;
+              ODSCProperty.Edit;
+              ODSContracts.Edit;
+              //ComboBox1.ItemIndex:=FieldByName('BNF_TYPE').AsInteger;
+              edIns_Date.DateTime := fieldByName('INS_DATE').asDateTime;
+              edBeginDate.DateTime := fieldByName('BEGIN_DATE').asDateTime;
+              edEndDate.DateTime := fieldByName('END_DATE').asDateTime;
+              XFRadioButton1.Checked := FieldByName('ben_id').asInteger = 0;
+              XFRadioButton2.Checked := FieldByName('ben_id').asInteger = 1;
+              XFRadioButton3.Checked := FieldByName('ben_id').asInteger = 2;
+              InsLookupComboBox.Enabled:=false;
+
+         end;
+
+          //Suggest.Enabled:=true;
+          Report.Enabled:=true;
+          if (p_contractstate=6) or (p_contractstate=7) or(p_contractstate=8)  then
+        begin
+            Commit.Enabled:=false;
+            btApply.Enabled:=false;
+
+       { if DModule.ODSContracts.FieldByName('BEGIN_DATE').AsDateTime > StrToDateTime('27.12.2013') then
+        begin
+
+          Commit.Enabled:=false;
+          XFGroupBox8.Enabled:=false;
+          btApply.Enabled:=false;
+        end
+        else
+        begin
+          Commit.Enabled:=true;
+          btApply.Enabled:=true;
+         XFGroupBox8.Enabled:=false;
+        end; }
+        end
+        else
+        begin
+        btApply .Enabled:=true;
+        Commit.Enabled:=true;
+         XFGroupBox8.Enabled:=true;
+         end;
+       end;
+       Result := S_OK;
+
+end;
+
+function TCProperty.QueryDeactivate: HResult;
+begin
+  Result := S_OK;
+end;
+
+function TCProperty.UIObjectDeactivate: HResult;
+begin
+  Result := S_OK;
+end;
+
+procedure TCProperty.XFButton1Click(Sender: TObject);
+begin
+commoncid:=contactid;
+  if DModule.ODSContracts.FieldByName('type_id').AsInteger=3 then
+ begin
+ with DModule,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['SEELOSSEMLAK']);
+ end;
+ end;
+ loadPlugin('loss.bpl','');
+end;
+
+procedure TCProperty.XFButton2Click(Sender: TObject);
+begin
+
+          DBEdit26.Text:=DModule.OPCOMMON.CallStringFunction('generatePolicy_Num',[5,'']) ;
+
+
+
+
+end;
+
+procedure TCProperty.XFRadioButton1Click(Sender: TObject);
+begin
+       if  XFRadioButton1.Checked=True then
+       begin
+
+       DBLookupComboBox2.Enabled:=true;
+       //DBEdit1.Enabled:=false;
+       //DBEdit2.Enabled:=false ;
+       //DBEdit1.Text:='';
+       //DBEdit2.Text:='';
+       DModule.ODSContracts.FieldByName('BEN_ID').AsInteger:=0;
+       end
+       else
+       DBLookupComboBox1.Enabled:=false;
+
+end;
+
+procedure TCProperty.XFRadioButton2Click(Sender: TObject);
+begin
+//(InsLookupComboBox.KeyValue='') or
+if  (InsLookupComboBox.KeyValue=0) then
+begin
+  showmessage('Diqqət! Sığortalı seçilməyib');
+  exit;
+end;
+
+if  XFRadioButton2.Checked=True then
+       begin
+       //showmessage(inttostr(insLookupComboBox.KeyValue));
+       DModule.DSinscust.Close;
+       DModule.DSinscust.SetVariable('pid',InsLookupComboBox.KeyValue);
+       DModule.DSinscust.Open;
+       //showmessage(DMCargoBlank.DSinscust.FieldByName('cus_name').AsString);
+       DBEdit28.Text:=DModule.DSinscust.FieldByName('cus_name').AsString;
+       DBEdit27.Text:=DModule.DSinscust.FieldByName('cus_name').AsString;
+       DModule.ODSContracts.FieldByName('BENEFICIARY').AsString:=DModule.DSinscust.FieldByName('cus_name').AsString;
+       DModule.ODSContracts.FieldByName('BEN_ID').AsInteger:=1;
+       DBLookupComboBox2.Enabled:=false;
+       //DModule.ODSContracts.RefreshRecord;
+       //DBEdit1.Enabled:=false;
+       //DBEdit2.Enabled:=false ;
+       end
+       else
+       DBEdit28.Enabled:=false;
+
+end;
+
+procedure TCProperty.XFRadioButton3Click(Sender: TObject);
+begin
+if  XFRadioButton3.Checked=True then
+       begin
+       //showmessage(inttostr(insLookupComboBox.KeyValue));
+       DModule.DSinscust.Close;
+       DModule.DSinscust.SetVariable('pid',InsLookupComboBox.KeyValue);
+       DModule.DSinscust.Open;
+       //showmessage(DModule.DSinscust.FieldByName('ins_name').AsString);
+       DModule.ODSContracts.Edit;
+       DBEdit28.Text:=DModule.DSinscust.FieldByName('ins_name').AsString;
+       DBEdit27.Text:=DModule.DSinscust.FieldByName('ins_name').AsString;
+       DModule.ODSContracts.FieldByName('BENEFICIARY').AsString:=DModule.DSinscust.FieldByName('ins_name').AsString;
+       DModule.ODSContracts.FieldByName('BEN_ID').AsInteger:=2;
+       DBLookupComboBox2.Enabled:=false;
+         //DModule.ODSContracts.RefreshRecord;
+       //DBEdit1.Enabled:=false;
+       //DBEdit2.Enabled:=false ;
+       end
+       else
+       DBEdit27.Enabled:=false;
+
+
+end;
+
+procedure TCProperty.XFSpeedButton1Click(Sender: TObject);
+var
+   WordApp:OleVariant;
+   wrdDataDoc,wrdApp,wrdSelection : Variant;
+   i,n:integer;
+   FileName:String;
+begin
+      with DModule do
+      begin
+           DsEmlak_cap.Close;
+           DsEmlak_cap.SetVariable('cid',CID);
+           DsEmlak_cap.Open;
+
+           FileName:=ExtractFilePath(Application.ExeName)+ '\PropertyBlankNewIpoteka.docx';
+           wrdApp := CreateOleObject('Word.Application');
+           wrdApp.Visible := True;
+           wrdDataDoc := wrdApp.Documents.Open(FileName);
+           wrdSelection:=wrdApp.Selection;
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'policy_num');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.Font.Color := clRed;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('policy_num').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'begin_date');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.Font.Color := clRed;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('ins_date').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'surname');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('surname').AsString);
+
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'name');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('name').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'fathername');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('fathername').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'birthday');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('dateofbirth').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'mobile_p');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('mobilephone').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'home_p');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('homephone').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'siqortali_unvan');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('address').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'obyekt_unvan');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('obyektin_unvani').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'tikildiyi_il');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('tikildiyi_il').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'cem_mertebe_say');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('cem_mertebe_say').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'umumi_sahe');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('umumu_s').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'yasayis_sahesi');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('yasayis_s').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'begin_date1');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('begin_date').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'end_date');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('end_date').AsString);
+
+
+
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'obyekt_deyeri');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('siq_obyek_deyeri').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'inssumm');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('siq_mebleq').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'siq_haqqi');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('SIQ_HAQQI').AsString);
+
+           {wrdSelection.GoTo(-1,unAssigned,unAssigned,'faiz');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('faiz').AsString); }
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'faiz_nisbet');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('faiz_nisbet').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'begin_date2');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('ins_date').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'siqortali');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('siqortali').AsString);
+
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'agentname');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('agentname').AsString);
+
+          {   wrdSelection.GoTo(-1,unAssigned,unAssigned,'odenilecek_hisse');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('odenilecek_hisse').AsString);
+
+
+            wrdSelection.GoTo(-1,unAssigned,unAssigned,'ay_sayi');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('ay_sayi').AsString);
+                                                                                   }
+
+
+      end;
+
+end;
+
+procedure TCProperty.XFSpeedButton2Click(Sender: TObject);
+
+var
+   WordApp:OleVariant;
+   wrdDataDoc,wrdApp,wrdSelection : Variant;
+   i,n:integer;
+   FileName:String;
+begin
+ with DModule do
+      begin
+           DsEmlak_cap.Close;
+           DsEmlak_cap.SetVariable('cid',CID);
+           DsEmlak_cap.Open;
+
+           custypes.Close;
+           custypes.SetVariable('cid',CID);
+           custypes.Open;
+
+           if custypes.FieldByName('cust_type').AsInteger=1 then
+             begin
+              FileName:=ExtractFilePath(Application.ExeName)+ '\PropertyBlankMovableIndividual.docx';
+           wrdApp := CreateOleObject('Word.Application');
+           wrdApp.Visible := True;
+           wrdDataDoc := wrdApp.Documents.Open(FileName);
+           wrdSelection:=wrdApp.Selection;
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'policy_num');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.Font.Color := clRed;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('policy_num').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'begin_date');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.Font.Color := clRed;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('ins_date').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'surname');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('surname').AsString);
+
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'name');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('name').AsString);
+
+
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'fathername');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('fathername').AsString);
+
+
+         {  wrdSelection.GoTo(-1,unAssigned,unAssigned,'birthday');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('dateofbirth').AsString);
+           ShowMessage('er');
+
+          { wrdSelection.GoTo(-1,unAssigned,unAssigned,'mobile_p');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('mobilephone').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'home_p');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('homephone').AsString);   }
+
+
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'siqortali_unvan');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('address').AsString);
+
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'obyekt_unvan');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('obyektin_unvani').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'tikildiyi_il');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('tikildiyi_il').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'cem_mertebe_say');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('cem_mertebe_say').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'umumi_sahe');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('umumu_s').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'yasayis_sahesi');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('yasayis_s').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'begin_date1');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('begin_date').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'end_date');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('end_date').AsString);
+
+
+
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'obyekt_deyeri');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('siq_obyek_deyeri').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'inssumm');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('siq_mebleq').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'siq_haqqi');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('SIQ_HAQQI').AsString);
+
+
+           {wrdSelection.GoTo(-1,unAssigned,unAssigned,'faiz');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('faiz').AsString); }
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'faiz_nisbet');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('faiz_nisbet').AsString);
+                                         ;
+           {wrdSelection.GoTo(-1,unAssigned,unAssigned,'begin_date2');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('ins_date').AsString);  }
+
+
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'siqortali');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('siqortali').AsString);
+
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'agentname');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('agentname').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'siqorta_obyekt');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('siqorta_obyekt').AsString);
+
+
+
+            wrdSelection.GoTo(-1,unAssigned,unAssigned,'odenilecek_hisse');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('odenilecek_hisse').AsString);
+
+
+            wrdSelection.GoTo(-1,unAssigned,unAssigned,'ay_sayi');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('ay_sayi').AsString);
+
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'plan_date');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('plan_date').AsString);
+
+
+            wrdSelection.GoTo(-1,unAssigned,unAssigned,'plan_amount');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('PLAN_AMOUNT').AsString);
+
+
+
+
+             end
+           else
+             begin
+                    FileName:=ExtractFilePath(Application.ExeName)+ '\PropertyBlankMovableEntity.docx';
+           wrdApp := CreateOleObject('Word.Application');
+           wrdApp.Visible := True;
+           wrdDataDoc := wrdApp.Documents.Open(FileName);
+           wrdSelection:=wrdApp.Selection;
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'policy_num');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.Font.Color := clRed;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('policy_num').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'begin_date');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.Font.Color := clRed;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('ins_date').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'surname');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('surname').AsString);
+
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'name');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('name').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'fathername');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('fathername').AsString);
+
+         {  wrdSelection.GoTo(-1,unAssigned,unAssigned,'birthday');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('dateofbirth').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'mobile_p');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('mobilephone').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'home_p');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('homephone').AsString);    }
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'siqortali_unvan');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('address').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'obyekt_unvan');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('obyektin_unvani').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'tikildiyi_il');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('tikildiyi_il').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'cem_mertebe_say');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('cem_mertebe_say').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'umumi_sahe');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('umumu_s').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'yasayis_sahesi');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('yasayis_s').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'begin_date1');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('begin_date').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'end_date');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('end_date').AsString);
+
+
+
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'siqorta_obyekt');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('siqorta_obyekt').AsString);
+
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'obyekt_deyeri');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('siq_obyek_deyeri').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'inssumm');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('siq_mebleq').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'siq_haqqi');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('SIQ_HAQQI').AsString);
+
+           {wrdSelection.GoTo(-1,unAssigned,unAssigned,'faiz');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('faiz').AsString); }
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'faiz_nisbet');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('faiz_nisbet').AsString);
+
+          { wrdSelection.GoTo(-1,unAssigned,unAssigned,'begin_date2');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('ins_date').AsString);   }
+
+          { wrdSelection.GoTo(-1,unAssigned,unAssigned,'siqortali');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.Font.Bold := True;
+          wrdSelection.TypeText(DsEmlak_cap.FieldByName('siqortali').AsString);   }
+
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'agentname');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('agentname').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'odenilecek_hisse');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('odenilecek_hisse').AsString);
+
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'ay_sayi');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('ay_sayi').AsString);
+
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'plan_date');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('plan_date').AsString);
+
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'plan_amount');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('PLAN_AMOUNT').AsString);
+
+
+
+             end;
+
+
+
+      end;
+
+
+
+end;
+
+function TCProperty.SaveState: HResult;
+begin
+  Result := S_OK;
+end;
+
+function  TCProperty.Get_Height : Integer;
+begin
+  Result := Height;
+end;
+
+function  TCProperty.Get_Width  : Integer;
+begin
+  Result := Width;
+end;
+
+
+procedure TCProperty.ActiveFormCreate(Sender: TObject);
+begin
+    CProperty:=Self;
+     DModule:=TDModule.Create(Self);
+    FParams := TStringList.Create;
+
+
+
+    Back.Enabled:=false;
+    ConstructionPageControl.ActivePage:=SECTION1;
+   SBTranslateProc.TranslateAllComponents(Self,sboapiDataModule.OrPack_SL);
+
+
+end;
+
+procedure TCProperty.ConstructionPageControlChange(Sender: TObject);
+begin
+      with ConstructionPageControl do
+      begin
+          if ActivePageIndex<>PageCount-1 then Next.Enabled:=true else Next.Enabled:=false;
+          if ActivepageIndex<>0 then Back.Enabled:=true else Back.Enabled:=false;
+      end;
+end;
+
+procedure TCProperty.BitBtn2Click(Sender: TObject);
+begin
+     PostMessage(FOwnerHandle, WM_ModalResult, mrCancel, 0);
+end;
+
+procedure TCProperty.InsLookupComboBoxKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+     if Key = #13 then
+     begin
+        if HiWord(GetKeyState(VK_Shift))<>0 then
+           with Sender as TControl do
+           SelectNext(ActiveControl,False, True)
+        else
+           with Sender as TControl do
+           SelectNext(ActiveControl,True, True);
+        key:=#0;
+     end;
+end;
+
+procedure TCProperty.BackClick(Sender: TObject);
+begin
+     with ConstructionPageControl do
+     begin
+          ActivePageIndex:=ActivePageIndex-1;
+          if ActivePageIndex=0 then
+          Back.Enabled:=false;
+          Next.Enabled:=true;
+     end;
+end;
+
+procedure TCProperty.NextClick(Sender: TObject);
+begin
+      ConstructionPageControl.ActivePageIndex:= ConstructionPageControl.ActivePageIndex+1;
+      if ConstructionPageControl.ActivePageIndex=ConstructionPageControl.PageCount-1 then
+      Next.Enabled:=false;
+      Back.Enabled:=true;
+end;
+
+function TCProperty.SaveData: boolean;
+var
+a,c_acc:integer;
+begin
+
+with DModule,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['EDITCONTRACT_ALL PROPERTY']);
+ end;
+
+with DModule,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['SAVECONTRACT_ PROPERTY']);
+ end;
+
+  with DModule, OPCOMMON do
+   begin
+     a:=CallIntegerFunction('get_acc_balanc_hesab',[3]);
+
+     if a=0 then
+     begin
+       showmessage('Diqqət ! Bu müqavilə tipində avtomatik hesabların açılası üçün balans hesabları sazlanmayıb!.');
+       exit;
+     end;
+   end;
+
+       Result:=false;
+
+          if DBEdit26.Text='' then
+       begin
+         showmessage('Polis № sahəsi boşdur');
+         exit;
+       end;
+
+
+      //showmessage('salam');
+       if InsLookupComboBox.KeyValue=0 then
+       begin
+         showmessage('Sığorta etdirən sahəsi boşdur');
+         exit;
+       end;
+
+        //showmessage('salam1');
+
+       if AgentLookupComboBox.KeyValue=0 then
+       begin
+         showmessage('Agent sahəsi boşdur');
+         exit;
+       end;
+        //showmessage('salam3');
+
+       if DBEdit23.Text='' then
+       begin
+         showmessage('Sığorta obeykti sahəsi boşdur');
+         exit;
+       end;
+
+         if DBEdit24.Text='' then
+       begin
+         showmessage('Sığorta obeyktinin ünvanı sahəsi boşdur');
+         exit;
+       end;
+
+       if DBLookupComboBox3.KeyValue=null then
+       begin
+         showmessage('Bank/Kənar sahəsi boşdur');
+         exit;
+       end;
+
+       if DBLookupComboBox1.KeyValue=null then
+       begin
+         showmessage('Filial sahəsi boşdur');
+         exit;
+       end;
+
+         if dbAvalute.KeyValue=null then
+       begin
+         showmessage('Valyutası sahəsi boşdur');
+         exit;
+       end;
+
+         if edInsSumm.text='' then
+       begin
+         showmessage('Sığorta məbləği sahəsi boşdur');
+         exit;
+       end;
+
+         if DBEdit22.text='' then
+       begin
+         showmessage('Sığorta  obyektinin dəyəri sahəsi boşdur');
+         exit;
+       end;
+
+         if edFranshiz.text='' then
+       begin
+         showmessage('Franşiza sahəsi boşdur');
+         exit;
+       end;
+
+         if edTariff.text='' then
+       begin
+         showmessage('Tarif sahəsi boşdur');
+         exit;
+       end;
+
+         if edAmmount.text='' then
+       begin
+         showmessage('Sığorta haqqı sahəsi boşdur');
+         exit;
+       end;
+
+
+         if FulDescrip.text='' then
+       begin
+         showmessage('İş fəaliyyətinin tam təsviri sahəsi boşdur');
+         exit;
+       end;
+
+        if YearsInBus.text='' then
+       begin
+         showmessage('Fəaliyyət müddəti sahəsi boşdur');
+         exit;
+       end;
+
+        if DBEdit2.text='' then
+       begin
+         showmessage('Son üç il ərzində olan zərərlər sahəsi boşdur');
+         exit;
+       end;
+
+       if DBComboBox1.text='' then
+       begin
+         showmessage('Bina nə kimi istifadə olunur sahəsi boşdur');
+         exit;
+       end;
+
+       { if DBLookupComboBoxRisk.text='' then
+       begin
+         showmessage('Sığorta riskləri sahəsi boşdur');
+         exit;
+       end;
+
+        if FulDescrip.text='' then
+       begin
+         showmessage('İş fəaliyyətinin tam təsviri sahəsi boşdur');
+         exit;
+       end;
+         if YearsInBus.text='' then
+       begin
+         showmessage('Fəaliyyət müddəti sahəsi boşdur');
+         exit;
+       end;
+         if DBEdit2.text='' then
+       begin
+         showmessage('Son üç il ərzində olan zərərlər(tarixi,səbəbi,məbləği) sahəsi boşdur');
+         exit;
+       end;
+
+         if DBEdit12.text='' then
+       begin
+         showmessage('Sizə hər hansı sığ yenilənməsində imtina edilibmi və sığ müqav. yenilənməsində əlavə şərt qoyulubmu? sahəsi boşdur');
+         exit;
+       end;
+
+         if DBComboBox12.text='' then
+       begin
+         showmessage('Üçüncü şəxslər qarşısında mülki məsuliyyət üçün sığ. təminatı tələb sahəsi boşdur');
+         exit;
+       end;
+
+       if DBComboBox4.text='' then
+       begin
+         showmessage('Binada siqnalizasiya varmı? sahəsi boşdur');
+         exit;
+       end;
+
+       if DBComboBox6.text='' then
+       begin
+         showmessage('Adi kilidlər sahəsi boşdur');
+         exit;
+       end;
+
+       if DBComboBox7.text='' then
+       begin
+         showmessage('Təhlükəsizlik kilidi sahəsi boşdur');
+         exit;
+       end;
+
+       if DBComboBox8.text='' then
+       begin
+         showmessage('Barmaqlıqlar sahəsi boşdur');
+         exit;
+       end;
+
+       if DBMemo1.text='' then
+       begin
+         showmessage('Ən yaxın polis və yanğınsöndürmə idarələrinə təxmini məsafə. sahəsi boşdur');
+         exit;
+       end;
+
+       if EHeat.text='' then
+       begin
+         showmessage('Bina isidilirmi?Əgər isidilirsə, hansı vasitə ilə? sahəsi boşdur');
+         exit;
+       end;
+
+
+
+       if DBEdit3.text='' then
+       begin
+         showmessage('Mərtəbələrinin sayı sahəsi boşdur');
+         exit;
+       end;
+
+       if DBEdit4.text='' then
+       begin
+         showmessage('Divarların materialı sahəsi boşdur');
+         exit;
+       end;
+
+       if DBEdit5.text='' then
+       begin
+         showmessage('Tavanın materialı sahəsi boşdur');
+         exit;
+       end;
+
+       if DBEdit6.text='' then
+       begin
+         showmessage('Örtüyün materialı sahəsi boşdur');
+         exit;
+       end;
+
+       if DBEdit7.text='' then
+       begin
+         showmessage('Təxmini ümumi sahə(kv.m) sahəsi boşdur');
+         exit;
+       end;
+
+        if DBEdit8.text='' then
+       begin
+         showmessage('Ərizəçi tərəfindən istifadə olunan sah. sahəsi boşdur');
+         exit;
+       end;
+
+       if DBEdit9.text='' then
+       begin
+         showmessage('Binanın və strukturunun zəlzələyə davamlı olmasına dair məlumat sahəsi boşdur');
+         exit;
+       end;
+       if DBEdit10.text='' then
+       begin
+         showmessage('Bina(lar)da saxlanılan tez alışan və təhlükəli maddələr(əgər varsa) sahəsi boşdur');
+         exit;
+       end;
+       if DBEdit11.text='' then
+       begin
+         showmessage('Ətrafdakı tikililərlə bağlı məlumat sahəsi boşdur');
+         exit;
+       end;
+
+       if DBEdit17.text='' then
+       begin
+         showmessage('1. Bina(lar) sahəsi boşdur');
+         exit;
+       end;
+
+       if DBEdit18.text='' then
+       begin
+         showmessage('2.Daşınar əmlak sahəsi boşdur');
+         exit;
+       end;
+
+       if DBEdit19.text='' then
+       begin
+         showmessage('3.Maşın və avadanlıq sahəsi boşdur');
+         exit;
+       end;
+
+       if DBEdit20.text='' then
+       begin
+         showmessage('4.Şüşələr sahəsi boşdur');
+         exit;
+       end;
+
+       if DBEdit21.text='' then
+       begin
+         showmessage('5.Seyfdəki pullar sahəsi boşdur');
+         exit;
+       end;
+
+       if DBEdit1.text='' then
+       begin
+         showmessage('6. Anbar sahəsi boşdur');
+         exit;
+       end;
+
+       if DBEdit13.text='' then
+       begin
+         showmessage('7.Anbarda olan mallar sahəsi boşdur');
+         exit;
+       end;
+
+        if DBEdit14.text='' then
+       begin
+         showmessage('7.1.Hazir məhsullar sahəsi boşdur');
+         exit;
+       end;
+
+       if DBEdit15.text='' then
+       begin
+         showmessage('7.2.Yarımfabrikatlar sahəsi boşdur');
+         exit;
+       end;
+
+       if DBEdit16.text='' then
+       begin
+         showmessage('7.3.Xammal,ehtiyyat hisseleri və s. sahəsi boşdur');
+         exit;
+       end;
+
+        if DBComboBox5.text='' then
+       begin
+         showmessage('Sığorta məbləği sahəsi boşdur');
+         exit;
+       end;
+               }
+      if   cbRisks.State = cbChecked then
+      with DModule.ODSRisks do
+      begin
+           DModule.ODSRisks.Insert;
+           FieldByName('name').asString := memRisk.Text;
+           DModule.ODSRisks.Post;
+           DModule.ODSRisks.RefreshRecord;
+      end;
+         //showmessage('salam');
+     with DModule, ODSContracts do
+     if State in [dsEdit, dsInsert] then
+     begin
+        //ODSContracts.FieldByName('BNF_TYPE').AsFloat := ComboBox1.ItemIndex;
+        ODSContracts.FieldByName('AGENT_ID').AsFloat := ODSAgentID.value;
+        ODSContracts.FieldByName('Ins_Date').AsDateTime := edIns_Date.DateTime;
+        ODSContracts.FieldByName('Begin_Date').AsDateTime := edBeginDate.DateTime ;
+        ODSContracts.FieldByName('End_Date').AsDateTime := edEndDate.DateTime;
+
+         ODSContracts.FieldByName('COMISSION').asstring := dbedit29.Text;
+        //ODSContracts.FieldByName('Ins_Date').AsDateTime := Integer(trunc(edIns_Date.Date));
+        //ODSContracts.FieldByName('Begin_Date').AsDateTime := Integer(trunc(edBeginDate.Date));
+        //ODSContracts.FieldByName('End_Date').AsDateTime := Integer(trunc(edEndDate.Date));
+        //ODSContractsAmmount.Value:=ODSCPropertyAmmount.Value;
+        //ODSContractsTariff.Value:=ODSCPropertyTariff.Value;
+        //ODSContractsInssumm.Value:=ODSCPropertyInssumm.Value;
+     //   FieldByName('ben_id').asInteger := Integer(not rbBank.Checked);
+        ODSContracts.Post;
+         ODSContracts.RefreshRecord;
+           CID := FieldByName('id').asInteger;
+         //showmessage('salam1');
+       // ODSContracts.edit;
+        //FieldByName('BNF_TYPE').AsInteger:= ComboBox1.ItemIndex;
+        //  ODSContracts.RefreshRecord;
+          end;
+        // showmessage('salam2');
+      with DModule,OPCOMMON do
+   begin
+     c_acc:=CallIntegerFunction('get_acc_id',[CID]);
+       // showmessage(inttostr(c_acc));
+       // exit;
+     if c_acc=0 then
+       begin
+    CallProcedure('account_open',[CID,DBLookupComboBox1.KeyValue]);
+       end;
+
+     end;
+        // showmessage('salam3');
+     with DModule,ODSCProperty do
+     begin
+          if State in [dsInsert,dsEdit] then
+          begin
+             //ODSCPropertyKli_ID.Value:= InsLookupComboBox.KeyValue;
+             //ODSBanks.Locate('name',DBBanks.KeyValue,[]);
+             //ODSCPropertyBank_Id.Value:=ODSBanksID.Value;
+             FieldByName('riskid').AsInteger := ODSRisks.FieldByName('id').AsInteger;
+             FieldByName('ConstYear').AsDateTime:=ConstYearDateTimePicker.Date;
+             FieldByName('Expirity').AsDateTime:=ExpirityDateTimePicker.Date;
+             FieldByName('CID').AsInteger := CID;
+             ODSCProperty.Post;
+             ODSCProperty.RefreshRecord;
+               //showmessage('salam4');
+             {ODSContracts.Edit;
+             ODSContractsAmmount.Value:=ODSCPropertyAmmount.Value;
+             ODSContractsTariff.Value:=ODSCPropertyTariff.Value;
+             ODSContractsInssumm.Value:=ODSCPropertyInssumm.Value;
+             ODSContracts.Post;
+             ODSContracts.RefreshRecord; }
+           //  OPCommon.CallIntegerFunction('newinsurance',[5,ODSCPropertyID.Value,edBeginDate.DateTime,edEndDate.DateTime,ODSCPropertyKLI_ID.Value]);
+         end;
+      end;
+          //showmessage('salam5');
+      Result:=true;
+end;
+
+procedure TCProperty.btApplyClick(Sender: TObject);
+begin
+     if SaveData() then
+     begin
+        Report.Enabled:=true;
+        Suggest.Enabled:=true;
+        btApply.Enabled:=false;
+     end;
+end;
+
+procedure TCProperty.CommitClick(Sender: TObject);
+begin
+     if SaveData() then
+     PostMessage(FOwnerHandle, WM_ModalResult, mrOk, 0);
+end;
+
+procedure TCProperty.LoadData;
+begin
+    with DModule,ODSCProperty do
+    begin
+         ConstYearDateTimePicker.Date:= FieldByName('ConstYear').AsDateTime;
+         ExpirityDateTimePicker.Date:= FieldByName('Expirity').AsDateTime;
+    end;
+end;
+
+procedure TCProperty.btRisksAddClick(Sender: TObject);
+begin
+    DModule.ODSRisktype.Open;
+    with TRiskForm.Create(Self) do
+    ShowModal;
+    if memRisk.Text <> '' then
+    cbRisks.State := cbChecked;
+    DModule.ODSRisktype.Close;
+end;
+
+procedure TCProperty.Button1Click(Sender: TObject);
+begin
+with DModule,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['SEEBARDERO_PREMIYA']);
+ end;
+
+loadPlugin('Reinsurance.bpl','');
+end;
+
+procedure TCProperty.Button3Click(Sender: TObject);
+var
+   WordApp:OleVariant;
+   wrdDataDoc,wrdApp,wrdSelection : Variant;
+   i,n:integer;
+   FileName:String;
+begin
+      with DModule do
+      begin
+           DsEmlak_cap.Close;
+           DsEmlak_cap.SetVariable('cid',CID);
+           DsEmlak_cap.Open;
+
+           FileName:=ExtractFilePath(Application.ExeName)+ '\PropertyBlankNewGirov.docx';
+           wrdApp := CreateOleObject('Word.Application');
+           wrdApp.Visible := True;
+           wrdDataDoc := wrdApp.Documents.Open(FileName);
+           wrdSelection:=wrdApp.Selection;
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'policy_num');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.Font.Color := clRed;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('policy_num').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'begin_date');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.Font.Color := clRed;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('ins_date').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'surname');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('surname').AsString);
+
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'name');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('name').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'fathername');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('fathername').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'birthday');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('dateofbirth').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'mobile_p');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('mobilephone').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'home_p');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('homephone').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'siqortali_unvan');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('address').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'benef_adres');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('benef_adres').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'obyekt_unvan');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('obyektin_unvani').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'tikildiyi_il');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('tikildiyi_il').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'cem_mertebe_say');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('cem_mertebe_say').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'umumi_sahe');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('umumu_s').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'yasayis_sahesi');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('yasayis_s').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'begin_date1');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('begin_date').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'end_date');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('end_date').AsString);
+
+
+
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'obyekt_deyeri');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('siq_obyek_deyeri').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'inssumm');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('siq_mebleq').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'siq_haqqi');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('SIQ_HAQQI').AsString);
+
+           {wrdSelection.GoTo(-1,unAssigned,unAssigned,'faiz');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('faiz').AsString);   }
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'faiz_nisbet');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('faiz_nisbet').AsString);
+
+          // wrdSelection.FormFields('faiz_nisbet').CheckBox.Value := True  ;
+
+
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'begin_date2');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('begin_date').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'siqortali');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('siqortali').AsString);
+
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'agentname');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('agentname').AsString);
+
+           if DsEmlak_cap.FieldByName('ay_sayi').AsString<>'0' then
+            begin
+
+             wrdSelection.GoTo(-1,unAssigned,unAssigned,'odenilecek_hisse');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('odenilecek_hisse').AsString);
+           end;
+
+
+            wrdSelection.GoTo(-1,unAssigned,unAssigned,'ay_sayi');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('ay_sayi').AsString);
+
+                 wrdSelection.GoTo(-1,unAssigned,unAssigned,'plan_date');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('plan_date').AsString);
+
+
+            wrdSelection.GoTo(-1,unAssigned,unAssigned,'plan_amount');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('PLAN_AMOUNT').AsString);
+
+
+
+      end;
+
+end;
+
+procedure TCProperty.Button4Click(Sender: TObject);
+var
+   WordApp:OleVariant;
+   wrdDataDoc,wrdApp,wrdSelection : Variant;
+   i,n:integer;
+   FileName:String;
+begin
+      with DModule do
+      begin
+           DsEmlak_cap.Close;
+           DsEmlak_cap.SetVariable('cid',CID);
+           DsEmlak_cap.Open;
+
+           FileName:=ExtractFilePath(Application.ExeName)+ '\PropertyBlankNewGirov(YS).docx';
+           wrdApp := CreateOleObject('Word.Application');
+           wrdApp.Visible := True;
+           wrdDataDoc := wrdApp.Documents.Open(FileName);
+           wrdSelection:=wrdApp.Selection;
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'policy_num');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.Font.Color := clRed;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('policy_num').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'begin_date');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.Font.Color := clRed;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('ins_date').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'surname');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('surname').AsString);
+
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'name');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('name').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'fathername');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('fathername').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'birthday');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('dateofbirth').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'mobile_p');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('mobilephone').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'home_p');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('homephone').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'siqortali_unvan');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('address').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'benef_adres');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('benef_adres').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'obyekt_unvan');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('obyektin_unvani').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'tikildiyi_il');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('tikildiyi_il').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'cem_mertebe_say');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('cem_mertebe_say').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'umumi_sahe');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('umumu_s').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'yasayis_sahesi');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('yasayis_s').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'begin_date1');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('begin_date').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'end_date');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('end_date').AsString);
+
+
+
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'obyekt_deyeri');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('siq_obyek_deyeri').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'inssumm');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('siq_mebleq').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'siq_haqqi');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('SIQ_HAQQI').AsString);
+
+
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'faiz_nisbet');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('faiz_nisbet').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'begin_date2');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('begin_date').AsString);
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'siqortali');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=11;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('siqortali').AsString);
+
+
+
+           wrdSelection.GoTo(-1,unAssigned,unAssigned,'agentname');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('agentname').AsString);
+
+             wrdSelection.GoTo(-1,unAssigned,unAssigned,'odenilecek_hisse');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('odenilecek_hisse').AsString);
+
+
+            wrdSelection.GoTo(-1,unAssigned,unAssigned,'ay_sayi');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('ay_sayi').AsString);
+
+
+                   wrdSelection.GoTo(-1,unAssigned,unAssigned,'plan_date');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('plan_date').AsString);
+
+
+            wrdSelection.GoTo(-1,unAssigned,unAssigned,'plan_amount');
+           wrdSelection.Font.Name := 'Times New Roman';
+           wrdSelection.Font.Size :=9.5;
+           wrdSelection.Font.Bold := True;
+           wrdSelection.TypeText(DsEmlak_cap.FieldByName('PLAN_AMOUNT').AsString);
+
+
+
+      end;
+
+
+end;
+
+procedure TCProperty.InsLookupComboBoxClick(Sender: TObject);
+begin
+if DModule.ODSContracts.FieldByName('STATE').AsInteger=0 then
+   begin
+  btApply.Enabled:=True;
+  end
+  else begin
+   btApply.Enabled:=false;
+  end;
+
+end;
+
+procedure TCProperty.ReportClick(Sender: TObject);
+begin
+with DModule,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['REPORTCONTRACT_ PROPERTY']);
+ end;
+     with DModule do
+     begin
+     ODSContracts.Close;
+     ODSContracts.SetVariable('cid',cid);
+     ODSContracts.Open;
+     ODSCustomers.Locate('id',ODSContractsKLI_ID.Value,[]);
+     ODSBeneficiary.Locate('id',ODSCPropertyProfitID.Value,[]);
+     ODSRisks.Locate('id',ODSCPropertyRiskID.Value,[]);
+     try
+        with CPropertyExporter do
+        begin
+             FileName:=ExtractFilePath(Application.ExeName)+ '\CPropertyPolicy.doc';
+             Open(False);
+             {SetBookmark('Insured',ODSCustomersName.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('AInsured',ODSCustomersAddress.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('TInsured',ODSCustomersMobilePhone.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('FInsured',ODSCustomersFax.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('RPeriod',DateToStr(ODSContractsBegin_Date.value)+' - '+DateToStr(ODSContractsEnd_Date.value), false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Beneficiary',ODSBeneficiaryName.value, True, false, False, false, 10, 'Arial AzLat', False);
+             SetBookmark('BAddress',ODSBeneficiaryAddress.value, True, false, False, false, 10, 'Arial AzLat', False);
+             SetBookmark('BTel',ODSBeneficiaryPhone.value, True, false, False, false, 10, 'Arial AzLat', False);
+             SetBookmark('BBank',ODSBeneficiaryBanking_details.value, True, false, False, false, 10, 'Arial AzLat', False);
+             SetBookmark('FullDesc',ODSCPropertyFullDescription.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Location',ODSCPropertyLocationObj.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Yearsinb',ODSCPropertyYEARSINBUSINESS.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('CPerson',ODSCustomersContactPerson.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('TCPerson',ODSCustomersContactPersonPhone.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('BUsage',ODSCPropertyBuildingusage.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('YearConst',DateToStr(ODSCPropertyconstyear.value), false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('FloorsNum',IntToStr(ODSCPropertyFloorsNum.value), false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('WallsM',ODSCPropertyWallsM.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('CeilingsM',ODSCPropertyCeilingsM.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('RoofM',ODSCPropertyRoofM.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Area',FloatToStr(ODSCPropertyArea.value), false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('AppArea',FloatToStr(ODSCPropertyApplicantSpace.value), false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Earthquake',ODSCPropertyEARTHQUAKEDETAILS.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Flamable',ODSCPropertyFlamable.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Surroinding',ODSCPropertySURROINDINGDETAILS.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Situeted',ODSCPropertySitueted.value, false, false, False, false, 8, 'Arial AzLat', False); }
+             if ODSCPropertyGuard.IsNull then
+                SetBookmark('Issecure','Хейр', false, false, False, false, 8, 'Arial AzLat', False)
+             else
+                SetBookmark('Issecure','Бяли', false, false, False, false, 8, 'Arial AzLat', False);
+            { SetBookmark('Alarm',ODSCPropertyAlarm.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Locks',ODSCPropertyLocks.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('SLocks',ODSCPropertySecurityLocks.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Bars',ODSCPropertyBars.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Other',ODSCPropertyOther.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Settings',ODSCPropertySettings.value, false, false, False, false, 8, 'Arial AzLat', False);    }
+             if not(ODSCPropertyRepair.IsNull) then
+             SetBookmark('Repair','Бяли', false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('RepairDetail',ODSCPropertyRepair.value, false, false, False, false, 8, 'Arial AzLat', False);
+             {SetBookmark('Heated',ODSCPropertyHeated.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('ValueType',ODSCPropertyValueType.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Risks',ODSRisksName.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Buildings',floatToStr(ODSCPropertyBuildings.value), false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Contents',floatToStr(ODSCPropertyContent.value), false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Equipments',floatToStr(ODSCPropertyEquipment.value), false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Glass',floatToStr(ODSCPropertyGlass.value), false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Cash',floatToStr(ODSCPropertyCash.value), false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Warehouse',floatToStr(ODSCPropertyWarehouse.value), false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Stock',floatToStr(ODSCPropertyStock.value), false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Products',floatToStr(ODSCPropertyProducts.value), false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('WProqress',floatToStr(ODSCPropertyWorkinprogress.value), false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Raw',floatToStr(ODSCPropertyRawmaterials.value), false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Annual',floatToStr(ODSCPropertyAnnual.value), false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Wages',floatToStr(ODSCPropertyWages.value), false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Rent',floatToStr(ODSCPropertyRent.value), false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Employes',floatToStr(ODSCPropertyEmployes.value), false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Indeminity',ODSCPropertyIndeminity.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Expirity',DateToStr(ODSCPropertyExpirity.value), false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('LHistory',ODSCPropertyLossHistory.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('OtherInf',ODSCPropertyRenewal.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Thirdp',ODSCPropertyThirdParty.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('OtherInform',ODSCPropertyOtherInf.value, false, false, False, false, 8, 'Arial AzLat', False); }
+         end;
+     finally
+        CPropertyExporter.Show;
+     end;
+     end;
+end;
+
+procedure TCProperty.SuggestClick(Sender: TObject);
+var
+   p : TStringList;
+begin
+with DModule,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['SUGGESTIONCONTRACT_ PROPERTY']);
+ end;
+    p:= TStringList.Create;
+    //p.Values['ID']:=IntToStr(cid);
+    p.Values['CID']:=IntToStr(cid);
+    with plgSuggest do
+         ShowModal(StringToGuid('{3918AA1B-6A5D-4559-8F6E-826F4E72F309}'),p );
+    p.Free;
+
+end;
+
+procedure TCProperty.edBeginDateChange(Sender: TObject);
+begin  
+     btApply.Enabled:=True;
+end;
+
+procedure TCProperty.SpeedButton7Click(Sender: TObject);
+begin
+     edAmmount.SetFocus;
+     with DModule, ODSContracts//ODSCProperty
+     do
+     begin
+          FieldByName('AMMOUNT').asFloat :=((FieldByName('INSSUMM').asFloat / 100) * FieldByName('TARIFF').asFloat);
+                //round((FieldByName('INSSUMM').asFloat / 100) * FieldByName('TARIFF').asFloat);
+     end;
+
+
+end;
+
+procedure TCProperty.DBLookupComboBox1Click(Sender: TObject);
+begin
+   with DModule,ODSCProperty do
+   edEndDate.DateTime :=
+       IncMonth(edBeginDate.DateTime,ODSMonths.fieldbyname('COUNT').asInteger);
+end;
+
+procedure TCProperty.btPolicyClick(Sender: TObject);
+var
+   p : TStringList;
+begin
+with DModule,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['POLISCONTRACT_ PROPERTY']);
+ end;
+   p:= TStringList.Create;
+   p.Values['CID']:=IntToStr(cid);
+   with PLGSuggest do begin
+     ShowModal(StringToGuid('{0F2A35A4-7A65-4085-BED1-BDCBC55C5836}'),p );
+   end;
+   p.Free;
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TCProperty,
+    Class_CProperty,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

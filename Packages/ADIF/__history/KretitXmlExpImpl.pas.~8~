@@ -1,0 +1,127 @@
+﻿unit KretitXmlExpImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, Buttons, Gauges;
+
+type
+  TBankInfo = record
+    BankName: WideString;
+    BankID: WideString;
+  end;
+  TKredit = class(TForm)
+    GroupBox1: TGroupBox;
+    SpeedButton1: TSpeedButton;
+    SBSave: TSpeedButton;
+    EditDest: TEdit;
+    SaveDlg: TSaveDialog;
+    Gauge1: TGauge;
+    BitBtn1: TBitBtn;
+    procedure FormCanResize(Sender: TObject; var NewWidth, NewHeight: Integer;
+      var Resize: Boolean);
+    procedure SBSaveClick(Sender: TObject);
+    procedure BitBtn1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+   function Get_BankInfo: TBankInfo;
+    { Public declarations }
+  end;
+
+var
+  Kredit: TKredit;
+   f: TextFile;
+implementation
+
+{$R *.dfm}
+uses IniFiles,sboapiDataModuleImpl, UnitAdifData;
+const
+  SIniLocation = 'BankInfo.ini';
+  SSection = 'BankInfo';
+  SBankID = 'BankID';
+  SBankName = 'BankName';
+
+function TKredit.Get_BankInfo: TBankInfo;
+var
+  INI: TIniFile;
+  BankID, BankName: String;
+  Path: String;
+begin
+  Path := ExtractFilePath(Application.ExeName) + SIniLocation;
+  INI := TIniFile.Create(Path);
+  with INI do
+    try
+      BankID := ReadString(SSection, SBankID, '');
+      BankName := ReadString(SSection, SBankName, '');
+      Result.BankName := Utf8Decode(BankName);
+      Result.BankID := Utf8Decode(BankID);
+    finally
+      Free;
+    end;
+end;
+
+procedure TKredit.BitBtn1Click(Sender: TObject);
+  procedure WriteString(S: string);
+  begin
+
+     AssignFile(f, EditDest.Text); { Assigns the Filename }
+     Append(f);
+      Write(f, UTF8Encode(S));
+     Closefile(f);
+
+  end;
+  var
+   sr, r,S, i, a: integer;
+  BankID, BankName: String;
+  ABankInfo: TBankInfo;
+begin
+  if EditDest.Text = '' then
+  begin
+    ShowMessage('      Faylı seçməmisiz!     ');
+    Exit;
+  end;
+  r:=Adif_Data.KreditDSet.recordcount;
+  Adif_Data.KreditXmlstruct.Open;
+  sr:= Adif_Data.KreditXmlstruct.recordcount;
+
+    ABankInfo := Get_BankInfo;
+    BankID := ABankInfo.BankID;
+    BankName := ABankInfo.BankName;
+    WriteString('<?xml version="1.0" encoding="UTF-8" ?> ');
+    WriteString('<BANK_CODE>');
+    WriteString(BankID);
+    WriteString('</BANK_CODE>');
+    WriteString('<BANK_NAME>');
+    WriteString(BankName);
+    WriteString('</BANK_NAME>');
+    WriteString('<ROWCOUNT>');
+    WriteString(inttostr(r));
+    WriteString('</ROWCOUNT>');
+
+    for I := 1 to r do
+      begin
+      Adif_Data.KreditXmlstruct.First;
+      end;
+
+end;
+
+procedure TKredit.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+Resize:=false;
+end;
+
+procedure TKredit.SBSaveClick(Sender: TObject);
+begin
+  with SaveDlg do
+    if Execute then
+      EditDest.Text := FileName;
+  AssignFile(f, EditDest.Text);
+  Rewrite(f);
+  Closefile(f);
+end;
+
+
+end.

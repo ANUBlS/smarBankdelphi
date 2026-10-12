@@ -1,0 +1,94 @@
+﻿unit Unit15;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Unitdatamod, StdCtrls, ComCtrls, DBCtrls, DBGridEh, Mask, DBCtrlsEh,
+  DBLookupEh;
+
+type
+  TFormat102 = class(TForm)
+    GroupBox1: TGroupBox;
+    GroupBox2: TGroupBox;
+    GroupBox4: TGroupBox;
+    Label3: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    Label6: TLabel;
+    Label7: TLabel;
+    referens: TEdit;
+    mf23b: TEdit;
+    val: TEdit;
+    DateTimePicker1: TDateTimePicker;
+    Edit1: TEdit;
+    Edit5: TEdit;
+    amount: TEdit;
+    Edit6: TEdit;
+    Label19: TLabel;
+    Label11: TLabel;
+    Label14: TLabel;
+    Memo1: TMemo;
+    searchcombo: TDBLookupComboboxEh;
+    procedure Edit6KeyPress(Sender: TObject; var Key: Char);
+    procedure searchcomboExit(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Format102: TFormat102;
+
+implementation
+
+{$R *.dfm}
+
+procedure TFormat102.searchcomboExit(Sender: TObject);
+var custname : string     ;
+begin
+DataModbpl.account.Closeall;
+ DataModbpl.account.SetVariable('accno',searchcombo.Text);
+ DataModbpl.account.open;
+
+ DataModbpl.gonderen.Close;
+ DataModbpl.gonderen.SetVariable('fid',DataModbpl.account.FieldByName('filial').AsInteger);
+ DataModbpl.gonderen.Open;
+
+ DataModbpl.alanm.Close;
+ DataModbpl.alanm.SetVariable('kid',edit6.Text);
+ DataModbpl.alanm.Open;
+
+custname:=  DataModbpl.alanm.FieldByName('d').AsString;//, ' " ', '''', [rfReplaceAll, rfIgnoreCase]);
+custname:=  Copy(custname, 1, 35);
+memo1.Text:= '/'+searchcombo.Text+#13#10+custname+
+#13#10+DataModbpl.alanm.FieldByName('inn').AsString+'/'+ #13#10+
+DataModbpl.gonderen.FieldByName('kod_b').AsString+'/'+DataModbpl.gonderen.FieldByName('inn').AsString+'/'+DataModbpl.gonderen.FieldByName('swift').AsString+'XXX'+#13#10+
+DataModbpl.gonderen.FieldByName('krno').AsString ;
+
+end;
+
+procedure TFormat102.Edit6KeyPress(Sender: TObject; var Key: Char);
+begin
+IF not (key in ['0'..'9',#8,#13]) THEN key:=#0;
+  IF  Key=#13 THEN BEGIN
+
+                    DataModbpl.acount.CloseAll;
+  DataModbpl.acount.SetVariable('ids',edit6.Text);
+  DataModbpl.acount.Open;
+
+
+
+  //ShowMessage(inttostr(DataModbpl.acount.RecordCount)+edit6.Text);
+
+                    IF DataModbpl.acount.RecordCount=0 THEN  BEGIN
+                                                ShowMessage('Müştəri tapılmadı');
+                                                Edit6.Clear;
+                    END;
+
+  END;
+
+end;
+
+end.

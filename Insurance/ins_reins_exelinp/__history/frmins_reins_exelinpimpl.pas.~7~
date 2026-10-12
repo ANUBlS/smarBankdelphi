@@ -1,0 +1,90 @@
+﻿unit frmins_reins_exelinpimpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Grids, XDBGrids, StdCtrls, XFSCtrls, ExtCtrls;
+
+type
+  Tfrmins_reins_exelinp = class(TForm)
+    XFPanel1: TXFPanel;
+    XFPanel2: TXFPanel;
+    XFPanel3: TXFPanel;
+    XFButton1: TXFButton;
+    XFButton2: TXFButton;
+    XFButton3: TXFButton;
+    XFButton4: TXFButton;
+    XFGroupBox1: TXFGroupBox;
+    XDBGrid1: TXDBGrid;
+    XFGroupBox2: TXFGroupBox;
+    XDBGrid2: TXDBGrid;
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormCreate(Sender: TObject);
+    procedure XFButton1Click(Sender: TObject);
+    procedure XFButton4Click(Sender: TObject);
+    procedure XFButton2Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  frmins_reins_exelinp: Tfrmins_reins_exelinp;
+
+implementation
+
+{$R *.dfm}
+uses dmins_reins_exelinpimpl,CommanParametrs,sboapiDataModuleImpl,SBTranslateProc;
+ procedure InitPlugin(s:string);export;
+begin
+
+   if s='' then
+   begin
+   frmins_reins_exelinp.ShowModal;
+   end;
+  { if s='AllLost' then
+   begin
+     FrmAllLoss.showmodal;
+   end;   }
+end;
+exports
+     InitPlugin;
+     procedure Tfrmins_reins_exelinp.FormCreate(Sender: TObject);
+begin
+dmins_reins_exelinp:=Tdmins_reins_exelinp.create(self);
+end;
+
+procedure Tfrmins_reins_exelinp.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+if ord(key)=vk_escape then close
+end;
+
+procedure Tfrmins_reins_exelinp.XFButton1Click(Sender: TObject);
+begin
+close;
+end;
+
+procedure Tfrmins_reins_exelinp.XFButton2Click(Sender: TObject);
+begin
+ if XDBGrid1.DataSource.DataSet.RecordCount=0 then
+  begin
+    showmessage ('Məlumat Yoxdur');
+    exit;
+end;
+end;
+
+procedure Tfrmins_reins_exelinp.XFButton4Click(Sender: TObject);
+begin
+  if XDBGrid1.DataSource.DataSet.RecordCount=0 then
+  begin
+    showmessage ('Məlumat Yoxdur');
+    exit;
+end;
+end;
+
+initialization
+ frmins_reins_exelinp :=Tfrmins_reins_exelinp.Create(Application);
+
+end.

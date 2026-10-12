@@ -1,0 +1,361 @@
+﻿unit AccountPropertiesEditFLmpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Grids, XDBGrids, ExtCtrls, XFSCtrls, DB, OracleData, StdCtrls,
+  Buttons, Menus, ImgList;
+ const
+
+  tsDelayed = 1;
+  tsCommited = 2;
+  tsRejected = 3;
+type
+  TAccountPropertiesEditF = class(TForm)
+    XFPanel1: TXFPanel;
+    XFPanel2: TXFPanel;
+    Account_grid: TXDBGrid;
+    XFBitBtn1: TXFBitBtn;
+    PopupMenu1: TPopupMenu;
+    closeAccount: TMenuItem;
+    XFBitBtn2: TXFBitBtn;
+    Accountedit1: TMenuItem;
+    XFButton1: TXFButton;
+    N1: TMenuItem;
+    Debit2: TMenuItem;
+    Kredit2: TMenuItem;
+    XFPanel3: TXFPanel;
+    EditBAL_CN1: TEdit;
+    XFLabel1: TXFLabel;
+    XFLabel2: TXFLabel;
+    EditAcc_no: TEdit;
+    XFPanel4: TXFPanel;
+    XDBGrid1: TXDBGrid;
+    ImageList: TImageList;
+    ddd1: TMenuItem;
+    Yanacaq: TMenuItem;
+    N2: TMenuItem;
+
+    procedure FormCreate(Sender: TObject);
+    procedure closeAccountClick(Sender: TObject);
+    procedure ActionRefreshExecute(Sender: TObject);
+    procedure Account_gridDblClick(Sender: TObject);
+    procedure XFBitBtn1Click(Sender: TObject);
+    procedure XFBitBtn2Click(Sender: TObject);
+    procedure Accountedit1Click(Sender: TObject);
+    procedure XFButton1Click(Sender: TObject);
+    procedure Debit2Click(Sender: TObject);
+    procedure Kredit2Click(Sender: TObject);
+    procedure EditBAL_CN1KeyPress(Sender: TObject; var Key: Char);
+    procedure EditAcc_noKeyPress(Sender: TObject; var Key: Char);
+    procedure ddd1Click(Sender: TObject);
+    procedure YanacaqClick(Sender: TObject);
+    procedure N2Click(Sender: TObject);
+    procedure Account_gridDrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TXColumn; State1: TGridDrawState);
+    procedure N1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    procedure ActionSpeedSearchExecute(
+  Sender: TObject);
+    procedure LoadPlugin2(PluginName :String;PluginParam :String;PluginParam2 :String);
+var PluginHandle :THandle;
+    exportproc : procedure(s:String;k:String);
+  end;
+
+var
+ DB_HesabID,CR_HesabID:string;
+  AccountPropertiesEditF: TAccountPropertiesEditF;
+  resourcestring
+   no_selected_account = 'Heç bir hesab qeyd edilməyib!';
+
+implementation
+
+uses UnitDataModPCustService, AccountPropertiesEditFormLmpl,
+  AccountPropertiesLmpl, PCustServiceFormImpl1,SBTranslateProc, sboapiDataModuleImpl,
+  Pcust_CO_BookmarkSetupUnit, Pcust_CO_BookmarkAddEditUnit,
+  Pcust_CO_frmWReportUnit, FormBusProc, UnitLikol, Unit7, Unit8;
+{$R *.dfm}
+ procedure TAccountPropertiesEditF.ActionSpeedSearchExecute(
+  Sender: TObject);
+var
+  SearchField : string;
+  SearchOptions : TSearchRecordOptions;
+begin
+  SearchOptions := [srIgnoreCase ,srPartialMatch ];
+
+  with Sender as TEdit  do
+  begin
+    SearchField := copy(Name,5,length(Name));
+    with  TOracleDataSet(Account_grid.DataSource.DataSet) do
+
+           if  not SearchRecord(
+                  SearchField
+                 ,Text
+                 ,SearchOptions + [srFromCurrent , srForward ]
+                 ) then
+    if MessageDlg(
+              'Axtarış sona çatdı.'+#13+'Əvvəldən başlansın?'
+             ,mtInformation
+             ,[mbNo , mbYes]
+             ,0
+             ) = mrYes  then
+    if not SearchRecord(
+                 SearchField
+                ,Text
+                ,SearchOptions + [ srFromBeginning ]
+                )  then
+    MessageDlg('Yazı tapılmayıb!',mtInformation,[mbOK],0);
+ end;
+ end;
+
+procedure TAccountPropertiesEditF.ActionRefreshExecute(Sender: TObject);
+var
+  AccountID: Longint;
+begin
+  with DataModPCustService.Ods_closAccount do
+  begin
+    AccountID := FieldByName('ID').AsInteger;
+    CloseAll;
+    Open;
+    Locate('ID', AccountID, []);
+  end;
+end;
+
+
+procedure TAccountPropertiesEditF.LoadPlugin2(PluginName :String;PluginParam :String;PluginParam2 :String);
+var PluginHandle :THandle;
+    exportproc : procedure(s:String;k:String);
+begin
+   PluginHandle := LoadPackage(ExtractFilePath(Application.ExeName)+PluginName);
+
+   if PluginHandle > 0 then
+   begin
+      @exportproc := GetProcAddress(PluginHandle,'InitPlugin');
+      exportproc(PluginParam,PluginParam2);
+   end;
+end;
+procedure TAccountPropertiesEditF.N1Click(Sender: TObject);
+begin
+DataModPCustService.SB_ACA.CallProcedure('checkadvancedobjectaccess', ['PCUS_EM']);
+end;
+
+procedure TAccountPropertiesEditF.N2Click(Sender: TObject);
+begin
+Form7:=TForm7.create(self);
+Form7.ShowModal;
+end;
+
+procedure TAccountPropertiesEditF.Accountedit1Click(Sender: TObject);
+begin
+
+
+if DataModPCustService.Ods_closAccount.RecordCount=0 then
+begin
+      ShowMessage('Heç bir məlumat seçilməyib !');
+      exit;
+    end;
+account_id:=DataModPCustService.Ods_closAccount.FieldByName('id').AsString;
+LoadPlugin2('Sb_General.bpl','account_edit',account_id);
+end;
+
+procedure TAccountPropertiesEditF.EditAcc_noKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+
+  if Key = #13  then
+   ActionSpeedSearchExecute(Sender);
+end;
+
+procedure TAccountPropertiesEditF.EditBAL_CN1KeyPress(Sender: TObject; var Key: Char);
+
+  begin
+  if Key = #13  then
+   ActionSpeedSearchExecute(Sender);
+end;
+
+procedure TAccountPropertiesEditF.FormCreate(Sender: TObject);
+ var
+ tt:integer;
+begin
+  AccountPropertiesEditForm := TAccountPropertiesEditForm.create(self);
+ // AccountProperties := TAccountProperties.create(self);
+  Ph_CO_frmWReport:=TPh_CO_frmWReport.Create(self);
+  SBTranslateProc.TranslateAllCompForms(Self, sboapiDataModule.OrPack_SL);
+
+
+   tt:=DataModPCustService.PG_PCustService.CallIntegerFunction('get_Modle_comp',['PCustService','PCustServiceForm','N1']);
+   if tt=0 then N1.Visible:=false
+          else
+          N1.Visible:=true;
+
+   tt:=DataModPCustService.PG_PCustService.CallIntegerFunction('get_Modle_comp',['PCustService','PCustServiceForm','closeAccount']);
+   if tt=0 then closeAccount.Visible:=false
+          else
+          closeAccount.Visible:=true;
+
+   tt:=DataModPCustService.PG_PCustService.CallIntegerFunction('get_Modle_comp',['PCustService','PCustServiceForm','Accountedit1']);
+   if tt=0 then Accountedit1.Visible:=false
+          else
+          Accountedit1.Visible:=true;
+
+   tt:=DataModPCustService.PG_PCustService.CallIntegerFunction('get_Modle_comp',['PCustService','PCustServiceForm','Yanacaq']);
+   if tt=0 then Yanacaq.Visible:=false
+          else
+          Yanacaq.Visible:=true;
+
+   tt:=DataModPCustService.PG_PCustService.CallIntegerFunction('get_Modle_comp',['PCustService','PCustServiceForm','N2']);
+   if tt=0 then N2.Visible:=false
+          else
+          N2.Visible:=true;
+
+end;
+
+procedure TAccountPropertiesEditF.Kredit2Click(Sender: TObject);
+begin
+if DataModPCustService.Ods_closAccount.RecordCount=0 then
+begin
+ShowMessage('  Hecbir hesab qeyd edilmeyib   !');
+Exit
+end
+else
+CR_HesabID:= DataModPCustService.Ods_closAccount.FieldByName('id').Asstring;
+LoadPlugin2('Sb_General.bpl','CR_Hesab',CR_HesabID);
+DataModPCustService.Transaction.Refresh
+end;
+
+procedure TAccountPropertiesEditF.closeAccountClick(Sender: TObject);
+const
+  cs_message = '"%s" N-li hesab bağlansın?';
+begin
+  with DataModPCustService, Ods_closAccount do
+    if MessageDlg(Format(cs_message, [FieldByName('acc_no').AsString]),
+      mtConfirmation, [mbYes, mbNo], 0) = mrYes then
+    begin
+      CloseAccount(FieldByName('ID').AsInteger);
+      ActionRefreshExecute(Sender);
+      DataModPCustService.Ods_closAccount.Refresh;
+    end;
+
+end;
+
+procedure TAccountPropertiesEditF.ddd1Click(Sender: TObject);
+begin
+ ///////sahil trans olduqda activ edin //
+{if (DataModPCustService.Ods_closAccount.FieldByName('bal_cn1').AsString <>'531') and
+   (DataModPCustService.Ods_closAccount.FieldByName('bal_cn1').AsString <>'538')then
+ begin
+   showmessage(' Ancaq 531 ve ya 538 balans hesabı ilə əməliyyat vermek olar Hesabı düzgün seçin   !');
+   exit
+ end; }
+ //////////////////////////
+ DataModPCustService.SB_ACA.CallProcedure('checkadvancedobjectaccess', ['PCUS_BUS']);
+Form_busnesProc:=TForm_busnesProc.create(self);
+Form_busnesProc.ShowModal;
+end;
+
+procedure TAccountPropertiesEditF.Debit2Click(Sender: TObject);
+begin
+if DataModPCustService.Ods_closAccount.RecordCount=0 then
+begin
+ShowMessage('  Hecbir hesab qeyd edilmeyib   !');
+Exit
+end
+else
+DB_HesabID:= DataModPCustService.Ods_closAccount.FieldByName('id').Asstring;
+
+LoadPlugin2('Sb_General.bpl','DB_Hesab',DB_HesabID);
+DataModPCustService.Transaction.Refresh
+///DBGridTransactions.DataSource.DataSet.Refresh;
+end;
+
+procedure TAccountPropertiesEditF.Account_gridDblClick(Sender: TObject);
+begin
+
+  // ShowMessage('ss');
+  { AccountProperties.DBLookupComboboxEh2.keyvalue:=DataModPCustService.Ods_closAccount.FieldByName('VAL_ACC').asinteger;
+    AccountProperties.edit4.text:=DataModPCustService.Ods_closAccount.FieldByName('BAL_CN1').asstring ;
+    AccountProperties.DBLookupComboboxEh3.KeyValue:=DataModPCustService.Ods_closAccount.FieldByName('BAL_CN1').asstring ;
+    //AccountProperties.DBLookupComboboxEh3.keyvalue:=DataModPCustService.Ods_closAccount.FieldByName('BAL_CN1').asstring ;
+    {if AccountProperties.edit4.text=DataModPCustService.ODS_Bal_spr.FieldByName('bal_cn').AsString then
+    DataModPCustService.ODS_Bal_spr.Locate('Balname',AccountProperties.DBLookupComboboxEh3.Text,[]) ; }
+account_id:=DataModPCustService.Ods_closAccount.FieldByName('id').AsString;
+LoadPlugin2('Sb_General.bpl','account_edit',account_id);
+DataModPCustService.Ods_closAccount.Refresh;
+end;
+
+procedure TAccountPropertiesEditF.Account_gridDrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TXColumn; State1: TGridDrawState);
+begin
+
+       with DataModPCustService,Ods_closAccount do
+        begin
+    if not (FieldByName('procuration_dat').isNUll) then
+    begin
+
+    if
+   FieldByName('procuration_dat').AsDatetime<=DataModPCustService.ods_SysdateTEK_DAT.AsDateTime
+     then
+
+   Account_grid.Canvas.Font.Color := clRed;
+   Account_grid.Canvas.Font.Style := [fsBold];
+   Account_grid.DefaultDrawDataCell(Rect,Account_grid.Columns[datacol].Field, State1);
+
+
+
+    end;
+        end;
+
+
+
+
+
+end;
+
+procedure TAccountPropertiesEditF.XFBitBtn1Click(Sender: TObject);
+begin
+
+if DataModPCustService.Ods_closAccount.RecordCount=0 then
+begin
+      ShowMessage('Heç bir məlumat seçilməyib !');
+      exit;
+    end;
+account_id:=DataModPCustService.Ods_closAccount.FieldByName('id').AsString;
+LoadPlugin2('Sb_General.bpl','account_edit',account_id);
+
+DataModPCustService.Ods_closAccount.Refresh;
+//-- AccountProperties.ShowModal;
+end;
+
+procedure TAccountPropertiesEditF.XFBitBtn2Click(Sender: TObject);
+begin
+closeAccount.Click;
+end;
+
+procedure TAccountPropertiesEditF.XFButton1Click(Sender: TObject);
+begin
+AccountPropertiesEditF.Close;
+end;
+
+procedure TAccountPropertiesEditF.YanacaqClick(Sender: TObject);
+begin
+DataModPCustService.SB_ACA.CallProcedure('checkadvancedobjectaccess', ['PCUS_YAN']);
+with DataModPCustService, ODS_CUSTOMERS_PHYS_FS do
+  begin
+    if (Active) and (RecordCount <> 0) then
+    begin
+    FormLikol:=TFormLikol.create(self);
+    FormLikol.ShowModal;
+    end
+    else
+    begin
+      ShowMessage('Heç bir məlumat seçilməyib !');
+      exit;
+    end;
+  end;
+end;
+
+end.

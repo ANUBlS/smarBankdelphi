@@ -1,0 +1,167 @@
+object PFDataMod: TPFDataMod
+  OldCreateOrder = False
+  OnCreate = DataModuleCreate
+  OnDestroy = DataModuleDestroy
+  Height = 479
+  Width = 741
+  object Branches: TOracleDataSet
+    SQL.Strings = (
+      'select id ,name from sb_filial')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000400000049004400010000000000080000004E0041004D00
+      4500010000000000}
+    Session = CMDataModule.CMSession
+    Left = 48
+    Top = 16
+    object BranchesID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object BranchesNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 90
+    end
+  end
+  object CM_AK_REPORTS: TOraclePackage
+    Session = CMDataModule.CMSession
+    PackageName = 'CM_AK_REPORTS'
+    Cursor = crSQLWait
+    Left = 48
+    Top = 72
+  end
+  object BranchesDatScr: TDataSource
+    DataSet = Branches
+    Left = 120
+    Top = 16
+  end
+  object Persons: TOracleDataSet
+    SQL.Strings = (
+      'select id,descripion from cm_persons')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      0500000002000000040000004900440001000000000014000000440045005300
+      430052004900500049004F004E00010000000000}
+    Session = CMDataModule.CMSession
+    Left = 208
+    Top = 16
+    object PersonsID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object PersonsDESCRIPION: TWideStringField
+      FieldName = 'DESCRIPION'
+      Size = 64
+    end
+  end
+  object PersonsDatSrc: TDataSource
+    DataSet = Persons
+    Left = 288
+    Top = 16
+  end
+  object Results: TOracleDataSet
+    SQL.Strings = (
+      
+        'SELECT personsname, filialname, facticalrest, rest, restdue, tra' +
+        'mt,'
+      
+        '       payamt, paydue, expamt, lastfacticalrest, lastrest, lastd' +
+        'uerest,'
+      '       percentexp, tranchplamt, payplamt'
+      '  FROM cm_port_filials  '
+      ' -- where personsname='#39'Fiziki '#351#601'xs'#39
+      ' /* '
+      '  union all'
+      '  '
+      
+        '  SELECT personsname, filialname, facticalrest, rest, restdue, t' +
+        'ramt,'
+      
+        '       payamt, paydue, expamt, lastfacticalrest, lastrest, lastd' +
+        'uerest,'
+      '       percentexp, tranchplamt, payplamt'
+      '  FROM cm_port_filials  '
+      '  --where personsname='#39'H'#252'quqi '#351#601'xs'#39
+      '*/')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000F0000001600000050004500520053004F004E0053004E0041004D00
+      450001000000000014000000460049004C00490041004C004E0041004D004500
+      0100000000001800000046004100430054004900430041004C00520045005300
+      54000100000000000800000052004500530054000100000000000E0000005200
+      4500530054004400550045000100000000000A0000005400520041004D005400
+      0100000000000C00000050004100590041004D0054000100000000000C000000
+      5000410059004400550045000100000000000C00000045005800500041004D00
+      5400010000000000200000004C00410053005400460041004300540049004300
+      41004C005200450053005400010000000000100000004C004100530054005200
+      450053005400010000000000160000004C004100530054004400550045005200
+      45005300540001000000000014000000500045005200430045004E0054004500
+      58005000010000000000160000005400520041004E004300480050004C004100
+      4D0054000100000000001000000050004100590050004C0041004D0054000100
+      00000000}
+    Session = CMDataModule.CMSession
+    Left = 144
+    Top = 72
+    object ResultsPERSONSNAME: TWideStringField
+      DisplayLabel = #1041#1086#1088#1078#1072#1083#1072#1085#1099#1085' '#1082#1072#1090#1077#1075#1086#1088#1080#1081#1072#1089#1099
+      FieldName = 'PERSONSNAME'
+    end
+    object ResultsFILIALNAME: TWideStringField
+      DisplayLabel = #1060#1080#1083#1080#1072#1083#1099#1085' '#1072#1076#1099
+      FieldName = 'FILIALNAME'
+      Size = 50
+    end
+    object ResultsFACTICALREST: TFloatField
+      DisplayLabel = #1044','#1071' '#1073#1094#1090#1094#1085' '#1050#1088#1077#1076#1080#1090#1083#1103#1088#1080#1085' '#1043#1072#1083#1099#1075#1099
+      FieldName = 'FACTICALREST'
+    end
+    object ResultsREST: TFloatField
+      DisplayLabel = #1044','#1071' '#1050#1088#1077#1076#1080#1090#1083#1103#1088#1080#1085' '#1043#1072#1083#1099#1075#1099
+      FieldName = 'REST'
+    end
+    object ResultsRESTDUE: TFloatField
+      DisplayLabel = #1044','#1071' '#1100#1077#1078#1080#1082#1084#1080#1096' '#1050#1088#1077#1076#1080#1090#1083#1103#1088#1080#1085' '#1043#1072#1083#1099#1075#1099
+      FieldName = 'RESTDUE'
+    end
+    object ResultsTRAMT: TFloatField
+      DisplayLabel = #1044#1102#1074#1094#1088' '#1071#1088#1079#1080#1085#1076#1103'  '#1074#1077#1088#1080#1083#1084#1080#1096' '#1082#1088#1077#1076#1080#1077#1083#1103#1088
+      FieldName = 'TRAMT'
+    end
+    object ResultsPAYAMT: TFloatField
+      DisplayLabel = #1044#1102#1074#1094#1088' '#1071#1088#1079#1080#1085#1076#1103'  '#1102#1076#1103#1085#1080#1083#1084#1080#1096'  '#1082#1088#1077#1076#1080#1077#1083#1103#1088
+      FieldName = 'PAYAMT'
+    end
+    object ResultsPAYDUE: TFloatField
+      DisplayLabel = #1044#1102#1074#1094#1088' '#1071#1088#1079#1080#1085#1076#1103' '#1068','#1041'-'#1076#1072#1085'  '#1102#1076#1103#1085#1080#1083#1084#1080#1096'  '#1082#1088#1077#1076#1080#1077#1083#1103#1088
+      FieldName = 'PAYDUE'
+    end
+    object ResultsEXPAMT: TFloatField
+      DisplayLabel = #1044#1102#1074#1094#1088' '#1071#1088#1079#1080#1085#1076#1103'  '#1100#1077#1078#1080#1082#1076#1080#1088#1080#1083#1084#1080#1096'  '#1082#1088#1077#1076#1080#1077#1083#1103#1088
+      FieldName = 'EXPAMT'
+    end
+    object ResultsLASTFACTICALREST: TFloatField
+      DisplayLabel = #1044','#1057' '#1073#1094#1090#1094#1085' '#1050#1088#1077#1076#1080#1090#1083#1103#1088#1080#1085' '#1043#1072#1083#1099#1075#1099
+      FieldName = 'LASTFACTICALREST'
+    end
+    object ResultsLASTREST: TFloatField
+      DisplayLabel = #1044','#1057' '#1073#1094#1090#1094#1085' '#1050#1088#1077#1076#1080#1090#1083#1103#1088#1080#1085' '#1043#1072#1083#1099#1075#1099
+      FieldName = 'LASTREST'
+    end
+    object ResultsLASTDUEREST: TFloatField
+      DisplayLabel = #1044','#1057' '#1100#1077#1078#1080#1082#1084#1080#1096' '#1050#1088#1077#1076#1080#1090#1083#1103#1088#1080#1085' '#1043#1072#1083#1099#1075#1099
+      FieldName = 'LASTDUEREST'
+    end
+    object ResultsPERCENTEXP: TFloatField
+      DisplayLabel = #1068#1077#1078#1080#1082#1076#1080#1088#1080#1083#1084#1080#1096' '#1082#1088#1077#1076#1080#1090#1083#1103#1088' '#1094#1079#1088#1103' %'
+      FieldName = 'PERCENTEXP'
+    end
+    object ResultsTRANCHPLAMT: TFloatField
+      DisplayLabel = #1044','#1057'-'#1085#1072' '#1074#1077#1088#1080#1083#1084#1103' '#1087#1083#1072#1085#1099
+      FieldName = 'TRANCHPLAMT'
+    end
+    object ResultsPAYPLAMT: TFloatField
+      DisplayLabel = #1044','#1057'-'#1085#1072' '#1102#1076#1103#1084#1103' '#1087#1083#1072#1085#1099
+      FieldName = 'PAYPLAMT'
+    end
+  end
+end

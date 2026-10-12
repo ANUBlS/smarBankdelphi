@@ -1,0 +1,74 @@
+unit DMCardSettings;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, OracleData, Oracle;
+
+type
+  TDMCardSeting = class(TDataModule)
+    Categories: TOracleDataSet;
+    CategoriesDatSrc: TDataSource;
+    CategoriesID: TFloatField;
+    CategoriesDESCRIPTION: TWideStringField;
+    cardsorts: TOracleDataSet;
+    cardsortsDatSrc: TDataSource;
+    cardsettings: TOracleDataSet;
+    cardsettingsDatSrc: TDataSource;
+    cardsettingsCARDID: TFloatField;
+    cardsettingsBEGINPERIOD: TFloatField;
+    cardsettingsENDPERIOD: TFloatField;
+    cardsettingsANNUALINTRATE: TFloatField;
+    cardsettingsFIXEDDAY: TFloatField;
+    cardcustsettings: TOracleDataSet;
+    cardcustsettingsDatSrc: TDataSource;
+    cardcustsettingsID: TFloatField;
+    cardcustsettingsCARDID: TFloatField;
+    cardcustsettingsCATEGORYID: TFloatField;
+    cardcustsettingscategoryname: TWideStringField;
+    cm_cards: TOraclePackage;
+    cardsortsID: TFloatField;
+    cardsortsNAME: TWideStringField;
+    cardsortsDESCRIPTION: TWideStringField;
+    cardmethods: TOracleDataSet;
+    cardmethodsDatSrc: TDataSource;
+    cardmethodsID: TFloatField;
+    cardmethodsDESCRIPTION: TWideStringField;
+    cardsortsCALCMETHOD: TFloatField;
+    procedure DataModuleCreate(Sender: TObject);
+    procedure DataModuleDestroy(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  DMCardSeting: TDMCardSeting;
+
+implementation
+
+{$R *.DFM}
+
+uses sboapiDataModuleImpl;
+
+procedure TDMCardSeting.DataModuleCreate(Sender: TObject);
+begin
+   Categories.Open;
+   cardsorts.Open;
+   cardsettings.Open;
+   cardcustsettings.Open;
+   cardmethods.Open;
+end;
+
+procedure TDMCardSeting.DataModuleDestroy(Sender: TObject);
+begin
+   Categories.CloseAll;
+   cardsorts.CloseAll;
+   cardsettings.CloseAll;
+   cardcustsettings.CloseAll;
+   cardmethods.CloseAll;
+end;
+
+end.

@@ -1,0 +1,556 @@
+unit ArchiveCreditUnit;
+
+{$WARN SYMBOL_PLATFORM OFF}
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, OracleData,
+  ActiveX, AxCtrls, Archive_Credit_TLB, StdVcl, ExtCtrls, Grids, XDBGrids,ArCommonDecls , Oracle,
+  XFSCtrls, StdCtrls, Buttons, DBGridEhGrouping, GridsEh, DBGridEh;
+
+type
+  TFormArchiveCredit = class(TActiveForm, IFormArchiveCredit)
+    XFPanel1: TXFPanel;
+    XFBitBtn1: TXFBitBtn;
+    XFBitBtn2: TXFBitBtn;
+    XFBitBtn3: TXFBitBtn;
+    XFBitBtn4: TXFBitBtn;
+    XFBitBtn5: TXFBitBtn;
+    XFBitBtn6: TXFBitBtn;
+    XFBitBtn7: TXFBitBtn;
+    DBGridEh1: TDBGridEh;
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure XFBitBtn1Click(Sender: TObject);
+    procedure XFBitBtn2Click(Sender: TObject);
+    procedure XFBitBtn3Click(Sender: TObject);
+    procedure XFBitBtn4Click(Sender: TObject);
+    procedure XFBitBtn5Click(Sender: TObject);
+    procedure XFBitBtn6Click(Sender: TObject);
+    procedure XFBitBtn7Click(Sender: TObject);
+  private
+    { Private declarations }
+    FEvents: IFormArchiveCreditEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure MouseEnterEvent(Sender: TObject);
+    procedure MouseLeaveEvent(Sender: TObject);
+    procedure PaintEvent(Sender: TObject);
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_AlignDisabled: WordBool; safecall;
+    function Get_AlignWithMargins: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_BorderWidth: Integer; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_DockSite: WordBool; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_ExplicitHeight: Integer; safecall;
+    function Get_ExplicitLeft: Integer; safecall;
+    function Get_ExplicitTop: Integer; safecall;
+    function Get_ExplicitWidth: Integer; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_MouseInClient: WordBool; safecall;
+    function Get_ParentCustomHint: WordBool; safecall;
+    function Get_ParentDoubleBuffered: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PopupMode: TxPopupMode; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_ScreenSnap: WordBool; safecall;
+    function Get_SnapBuffer: Integer; safecall;
+    function Get_UseDockManager: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_AlignWithMargins(Value: WordBool); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_BorderWidth(Value: Integer); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_DockSite(Value: WordBool); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_ParentCustomHint(Value: WordBool); safecall;
+    procedure Set_ParentDoubleBuffered(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PopupMode(Value: TxPopupMode); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_ScreenSnap(Value: WordBool); safecall;
+    procedure Set_SnapBuffer(Value: Integer); safecall;
+    procedure Set_UseDockManager(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+    procedure LoadPlugin(PluginName :String;PluginParam  :String);
+  public
+    { Public declarations }
+    procedure Initialize; override;
+  end;
+
+implementation
+
+uses ComObj, ComServ, ArchiveCredUnit;
+
+{$R *.DFM}
+
+{ TFormArchiveCredit }
+
+procedure TFormArchiveCredit.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_FormArchiveCreditPage); }
+end;
+
+procedure TFormArchiveCredit.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as IFormArchiveCreditEvents;
+  inherited EventSinkChanged(EventSink);
+end;
+
+procedure TFormArchiveCredit.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnMouseEnter := MouseEnterEvent;
+  OnMouseLeave := MouseLeaveEvent;
+  OnPaint := PaintEvent;
+end;
+
+
+ procedure TFormArchiveCredit.LoadPlugin(PluginName :String;PluginParam  :String);
+var PluginHandle :THandle;
+    exportproc : procedure(s:String;k:String);
+begin
+   PluginHandle := LoadPackage(ExtractFilePath(Application.ExeName)+PluginName);
+
+   if PluginHandle > 0 then
+   begin
+      @exportproc := GetProcAddress(PluginHandle,'InitPlugin');
+      exportproc(PluginParam,'');
+   end;
+end;
+
+function TFormArchiveCredit.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TFormArchiveCredit.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TFormArchiveCredit.Get_AlignDisabled: WordBool;
+begin
+  Result := AlignDisabled;
+end;
+
+function TFormArchiveCredit.Get_AlignWithMargins: WordBool;
+begin
+  Result := AlignWithMargins;
+end;
+
+function TFormArchiveCredit.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TFormArchiveCredit.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TFormArchiveCredit.Get_BorderWidth: Integer;
+begin
+  Result := Integer(BorderWidth);
+end;
+
+function TFormArchiveCredit.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TFormArchiveCredit.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TFormArchiveCredit.Get_DockSite: WordBool;
+begin
+  Result := DockSite;
+end;
+
+function TFormArchiveCredit.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TFormArchiveCredit.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TFormArchiveCredit.Get_ExplicitHeight: Integer;
+begin
+  Result := ExplicitHeight;
+end;
+
+function TFormArchiveCredit.Get_ExplicitLeft: Integer;
+begin
+  Result := ExplicitLeft;
+end;
+
+function TFormArchiveCredit.Get_ExplicitTop: Integer;
+begin
+  Result := ExplicitTop;
+end;
+
+function TFormArchiveCredit.Get_ExplicitWidth: Integer;
+begin
+  Result := ExplicitWidth;
+end;
+
+function TFormArchiveCredit.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TFormArchiveCredit.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TFormArchiveCredit.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TFormArchiveCredit.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TFormArchiveCredit.Get_MouseInClient: WordBool;
+begin
+  Result := MouseInClient;
+end;
+
+function TFormArchiveCredit.Get_ParentCustomHint: WordBool;
+begin
+  Result := ParentCustomHint;
+end;
+
+function TFormArchiveCredit.Get_ParentDoubleBuffered: WordBool;
+begin
+  Result := ParentDoubleBuffered;
+end;
+
+function TFormArchiveCredit.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TFormArchiveCredit.Get_PopupMode: TxPopupMode;
+begin
+  Result := Ord(PopupMode);
+end;
+
+function TFormArchiveCredit.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TFormArchiveCredit.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TFormArchiveCredit.Get_ScreenSnap: WordBool;
+begin
+  Result := ScreenSnap;
+end;
+
+function TFormArchiveCredit.Get_SnapBuffer: Integer;
+begin
+  Result := SnapBuffer;
+end;
+
+function TFormArchiveCredit.Get_UseDockManager: WordBool;
+begin
+  Result := UseDockManager;
+end;
+
+function TFormArchiveCredit.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TFormArchiveCredit.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TFormArchiveCredit._Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TFormArchiveCredit.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TFormArchiveCredit.ActiveFormCreate(Sender: TObject);
+begin
+DataMArchiveCr:=TDataMArchiveCr.create(self);
+    CommonApplication := Application;
+    CommonDBGrid := DBGridEh1;
+    CommonScreen := Screen;
+end;
+
+procedure TFormArchiveCredit.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TFormArchiveCredit.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TFormArchiveCredit.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TFormArchiveCredit.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TFormArchiveCredit.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TFormArchiveCredit.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TFormArchiveCredit.MouseEnterEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnMouseEnter;
+end;
+
+procedure TFormArchiveCredit.MouseLeaveEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnMouseLeave;
+end;
+
+procedure TFormArchiveCredit.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TFormArchiveCredit.Set_AxBorderStyle(Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TFormArchiveCredit.Set_AlignWithMargins(Value: WordBool);
+begin
+  AlignWithMargins := Value;
+end;
+
+procedure TFormArchiveCredit.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TFormArchiveCredit.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TFormArchiveCredit.Set_BorderWidth(Value: Integer);
+begin
+  BorderWidth := TBorderWidth(Value);
+end;
+
+procedure TFormArchiveCredit.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TFormArchiveCredit.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TFormArchiveCredit.Set_DockSite(Value: WordBool);
+begin
+  DockSite := Value;
+end;
+
+procedure TFormArchiveCredit.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TFormArchiveCredit.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TFormArchiveCredit.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TFormArchiveCredit.Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TFormArchiveCredit.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := string(Value);
+end;
+
+procedure TFormArchiveCredit.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TFormArchiveCredit.Set_ParentCustomHint(Value: WordBool);
+begin
+  ParentCustomHint := Value;
+end;
+
+procedure TFormArchiveCredit.Set_ParentDoubleBuffered(Value: WordBool);
+begin
+  ParentDoubleBuffered := Value;
+end;
+
+procedure TFormArchiveCredit.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TFormArchiveCredit.Set_PopupMode(Value: TxPopupMode);
+begin
+  PopupMode := TPopupMode(Value);
+end;
+
+procedure TFormArchiveCredit.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TFormArchiveCredit.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TFormArchiveCredit.Set_ScreenSnap(Value: WordBool);
+begin
+  ScreenSnap := Value;
+end;
+
+procedure TFormArchiveCredit.Set_SnapBuffer(Value: Integer);
+begin
+  SnapBuffer := Value;
+end;
+
+procedure TFormArchiveCredit.Set_UseDockManager(Value: WordBool);
+begin
+  UseDockManager := Value;
+end;
+
+procedure TFormArchiveCredit.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+procedure TFormArchiveCredit.XFBitBtn1Click(Sender: TObject);
+begin
+LoadPlugin('CMAr_Conclusion.bpl','look');
+end;
+
+procedure TFormArchiveCredit.XFBitBtn2Click(Sender: TObject);
+begin
+LoadPlugin('CMAr_Guarantee.bpl','look');
+end;
+
+procedure TFormArchiveCredit.XFBitBtn3Click(Sender: TObject);
+begin
+LoadPlugin('CMAr_Statement.bpl','look');
+end;
+
+procedure TFormArchiveCredit.XFBitBtn4Click(Sender: TObject);
+begin
+LoadPlugin('CMArFilter.bpl','');
+
+end;
+
+procedure TFormArchiveCredit.XFBitBtn5Click(Sender: TObject);
+begin
+LoadPlugin('CMAr_Search.bpl','FindFirst');
+
+end;
+
+procedure TFormArchiveCredit.XFBitBtn6Click(Sender: TObject);
+begin
+LoadPlugin('CMAr_Payment.bpl','');
+
+end;
+
+procedure TFormArchiveCredit.XFBitBtn7Click(Sender: TObject);
+begin
+LoadPlugin('CMAr_Schedule.bpl','Payment');
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TFormArchiveCredit,
+    Class_FormArchiveCredit,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

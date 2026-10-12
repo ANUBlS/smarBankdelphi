@@ -1,0 +1,80 @@
+unit UntOBRDM;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, OracleData, Oracle;
+
+type
+  TDataModMain = class(TDataModule)
+    ODSLocate: TOracleDataSet;
+    DataSrcLocate: TDataSource;
+    OpackMain: TOraclePackage;
+    ODSSysKod: TOracleDataSet;
+    DataSrcSysKod: TDataSource;
+    ODSSum: TOracleDataSet;
+    DataSrcSum: TDataSource;
+    DataSrcValute: TDataSource;
+    ODSValute: TOracleDataSet;
+    ODSLocateOBR_D: TFloatField;
+    ODSLocateOBR_K: TFloatField;
+    ODSLocatePOK_OBR_D: TFloatField;
+    ODSLocatePOK_OBR_K: TFloatField;
+    ODSLocateS_ACT: TFloatField;
+    ODSLocateS_PAS: TFloatField;
+    ODSLocateP_ACT: TFloatField;
+    ODSLocateP_PAS: TFloatField;
+    ODSLocateLASTDATE: TDateTimeField;
+    ODSLocateBAL_CN: TFloatField;
+    BranchesData: TOracleDataSet;
+    ODSLocateACC_NO: TWideStringField;
+    ODSLocateBALNAME: TWideStringField;
+    ODSLocateVAL_NAME: TWideStringField;
+    ODSSysKodVALU_NAME: TWideStringField;
+    ODSSysKodVALUTE: TIntegerField;
+    BranchesDataID: TFloatField;
+    BranchesDataNAME: TWideStringField;
+    Valyuta: TOracleDataSet;
+    filial: TOracleDataSet;
+    OracleDataSet1: TOracleDataSet;
+    WideStringField1: TWideStringField;
+    WideStringField2: TWideStringField;
+    WideStringField3: TWideStringField;
+    FloatField1: TFloatField;
+    FloatField2: TFloatField;
+    FloatField3: TFloatField;
+    FloatField4: TFloatField;
+    FloatField5: TFloatField;
+    FloatField6: TFloatField;
+    FloatField7: TFloatField;
+    FloatField8: TFloatField;
+    DateTimeField1: TDateTimeField;
+    FloatField9: TFloatField;
+    ODSLocateTIPACC: TWideStringField;
+    ODSLocateKLI_ID: TFloatField;
+    Report_symb: TOracleDataSet;
+    FloatField10: TFloatField;
+    WideStringField4: TWideStringField;
+    reportsym: TOracleDataSet;
+  private
+
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  DataModMain: TDataModMain;
+
+implementation
+
+{$R *.DFM}
+
+uses sboapiDataModuleImpl, ActXObrImplUnt;
+
+const
+      cLastOprDate='GetLastOprDay';
+      cGetUserName='GetUserName';
+
+end.

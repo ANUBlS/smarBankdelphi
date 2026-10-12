@@ -1,0 +1,260 @@
+﻿unit TrancheAddFormImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+   StdCtrls, ActnList, Mask, DBCtrlsEh, DBLookupEh, ExtCtrls,
+  CMCurrencyEdit, ComCtrls, DBCtrls, DBGridEh, DB, OracleData,Variants;
+
+type
+  TTrchAddForm = class(TForm)
+    GroupBox2: TGroupBox;
+    Label1: TLabel;
+    TrancheDatePckr: TDateTimePicker;
+    Panel4: TPanel;
+    StaticText3: TStaticText;
+    AccountListCB: TDBLookupComboboxEh;
+    ActionsList: TActionList;
+    ActnProcessTranche: TAction;
+    ActnCancelTranche: TAction;
+    Label3: TLabel;
+    DBEdit1: TDBEdit;
+    TrancheSumEdit: TCMCurrencyEdit;
+    Label2: TLabel;
+    ods_partner: TOracleDataSet;
+    ods_partid: TOracleDataSet;
+    Panel2: TPanel;
+    Panel1: TPanel;
+    Label4: TLabel;
+    StaticText1: TStaticText;
+    DBLookupComboboxEh1: TDBLookupComboboxEh;
+    CMCurrencyComm: TCMCurrencyEdit;
+    Panel3: TPanel;
+    ButtonCommit: TButton;
+    ButtonCancel: TButton;
+    ods_partidID: TFloatField;
+    ods_partidPERIOD: TFloatField;
+    ods_partidFAIZ: TFloatField;
+    ods_partidSTATUS_ID: TFloatField;
+    ods_partnerPERIODCONTRACTS: TFloatField;
+    ods_partnerPAYPERIOD: TFloatField;
+    procedure ActnProcessTrancheExecute(Sender: TObject);
+    procedure ActnProcessTrancheUpdate(Sender: TObject);
+    procedure ActnCancelTrancheExecute(Sender: TObject);
+    procedure TrancheSumEditKeyPress(Sender: TObject; var Key: Char);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure DBLookupComboboxEh1Enter(Sender: TObject);
+    procedure DBLookupComboboxEh1CloseUp(Sender: TObject; Accept: Boolean);
+    procedure TrancheSumEditChange(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+  private
+    { Private declarations }
+  public
+   function RoundNew(X: Double; Precision: Integer ): Double;
+    { Public declarations }
+  end;
+
+var
+  TrchAddForm: TTrchAddForm;
+    Cash_ammount:real;
+implementation
+
+uses TranceDataModuleImpl,sboapiDataModuleImpl, CommonDecls;
+
+{$R *.DFM}
+
+procedure TTrchAddForm.ActnProcessTrancheExecute(Sender: TObject);
+resourcestring
+  rsTransactionsWillProcessed = 'Kredit tranşı ...';
+var
+  CrdID : Integer;
+  TrchDate : TDateTime;
+  Mix_acc,CustAccID : Integer;
+  TrchAmount : Real;
+  TrchAmount2:real;
+  TrchAmount3:real;
+  TrProcess : Boolean;
+  CommitTranche : Boolean;
+begin
+  CrdID := Get_SelectedCrdID;
+  TrchDate := Integer(Trunc(TrancheDatePckr.DateTime));
+  CustAccID := AccountListCB.ListSource.DataSet.FieldByName('ACCID').AsInteger;
+  Mix_acc := DBLookupComboboxEh1.ListSource.DataSet.FieldByName('ACCID').AsInteger;
+  TrchAmount := TrancheSumEdit.Value;
+
+  TrchAmount2:=CMCurrencyComm.Value;
+   TrchAmount3:=Cash_ammount;
+
+
+
+  with TrancheDataModule do
+  CM_TRANCHE.CallProcedure('Tranche_Add',[
+     'p_CreditID' ,CrdID ,
+     'p_TrchDate' ,TrchDate ,
+     'p_CustAccID' ,CustAccID ,
+     'p_TrchAmount' ,TrchAmount ,
+     'p_ProcessTransactions' ,TrProcess ,
+     'p_micacca',Mix_acc  ,
+     'TrchAmount2',TrchAmount2,
+     'Trdescrpt',''
+  ]);
+
+  try
+
+    CommitTranche := TrDelayed_Show(Self,rsTransactionsWillProcessed);
+
+    Update;
+
+    with TrancheDataModule do
+    CM_TRANCHE.CallProcedure('CommitTranche',[
+       'DoCommit' , CommitTranche
+    ]);
+
+    if CommitTranche then
+    Self.ModalResult := mrOk;
+    Self.Update;
+    
+  except
+
+    with TrancheDataModule do
+    CM_TRANCHE.CallProcedure('CommitTranche',[
+       'DoCommit' , False
+    ]);
+
+    raise;
+
+  end;
+
+end;
+
+procedure TTrchAddForm.ActnProcessTrancheUpdate(Sender: TObject);
+begin
+  (Sender as TAction).Enabled := TrancheSumEdit.Value > 0;
+end;
+
+function TTrchAddForm.RoundNew(X: Double; Precision: Integer ): Double;
+var
+  ScaledFractPart, Temp : Double;
+begin
+  ScaledFractPart := Frac(X)*Precision;
+  Temp := Frac(ScaledFractPart);
+  ScaledFractPart := Int(ScaledFractPart);
+  //if Temp >= 0.5 then ScaledFractPart := ScaledFractPart + 1; ***Closed by Hesen R.***
+  //if Temp <= -0.5 then ScaledFractPart := ScaledFractPart - 1; ***Closed by Hesen R.***
+  if Round(Temp*100) >= 50 then ScaledFractPart := ScaledFractPart + 1; //***Written by Hesen R.***
+  if Round(Temp*100) <= -50 then ScaledFractPart := ScaledFractPart - 1; //***Written by Hesen R.***
+  RoundNew := Int(X) + ScaledFractPart/Precision;
+end;
+
+procedure TTrchAddForm.DBLookupComboboxEh1CloseUp(Sender: TObject;
+  Accept: Boolean);
+  var
+  LAmmount: Currency;
+begin
+ Cash_ammount:=0;
+ CMCurrencyComm.Clear;
+
+with ods_partner do
+begin
+   close;
+    SetVariable('v_creditid',Get_SelectedCrdID);///DBLookupComboboxEh1.KeyValue);
+   open;
+
+end;
+with ods_partid do
+begin
+  close;
+   SetVariable('v_period',ods_partnerPERIODCONTRACTS.AsInteger);
+   SetVariable('v_status',ods_partnerPAYPERIOD.AsInteger);
+   open;
+ end;
+   if ods_partner.RecordCount=0 then
+      begin
+        showmessage( ' Partnyor  sazlanmayıb  !');
+      end;
+
+  if ods_partner.RecordCount=1 then
+      begin
+    LAmmount:=
+          RoundNew(TrancheSumEdit.Value-(TrancheSumEdit.Value*ods_partidFAIZ.AsFloat/100)  , 1000000);
+    CMCurrencyComm.Value:=LAmmount;
+
+  {     if not  VarIsNull(ods_partidCASH_PERCENT.AsFloat)and (ods_partidCASH_PERCENT.AsFloat>0 ) then
+
+    Cash_ammount:= RoundNew(LAmmount*ods_partidCASH_PERCENT.AsFloat/100 ,1000000);
+        }
+      end ;
+
+     if ods_partner.RecordCount>1 then
+      begin
+        showmessage( ' Eyni partnyor  1 dəfədən çox sazlanəb !');
+      end;
+
+
+
+
+end;
+
+procedure TTrchAddForm.DBLookupComboboxEh1Enter(Sender: TObject);
+begin
+DBLookupComboboxEh1.KeyField:= 'ACCID' ;
+end;
+
+procedure TTrchAddForm.ActnCancelTrancheExecute(Sender: TObject);
+begin
+  Close;
+end;
+
+procedure TTrchAddForm.TrancheSumEditChange(Sender: TObject);
+begin
+///if DBLookupComboboxEh1.Value>0 then
+if TrancheDataModule.CreditInfoCREDITTYPE.AsInteger=25 then
+DBLookupComboboxEh1CloseUp(sender,true);
+end;
+
+procedure TTrchAddForm.TrancheSumEditKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if ORD(KEY) = VK_RETURN then
+  begin
+    SelectNext(TrancheSumEdit,True,True);
+    Key := #0;
+  end;
+end;
+
+procedure TTrchAddForm.FormActivate(Sender: TObject);
+begin
+if TrancheDataModule.CreditInfoCREDITTYPE.AsInteger=25 then
+ begin
+
+ panel1.Visible:=true;
+ panel2.Visible:=true;
+
+
+TrancheDataModule.DataSource1.DataSet.Refresh;
+CMCurrencyComm.Value:=0;
+
+ end
+ else
+  begin
+ panel1.Visible:=false;
+ panel2.Visible:=false;
+
+
+  end;
+end;
+
+procedure TTrchAddForm.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+  if ORD(Key) = VK_ESCAPE then
+    ButtonCancel.Click;
+end;
+
+procedure TTrchAddForm.FormShow(Sender: TObject);
+begin
+DBLookupComboboxEh1.Value:=TrancheDataModule.OracleDataSet1ACCID.AsVariant;
+end;
+
+end.

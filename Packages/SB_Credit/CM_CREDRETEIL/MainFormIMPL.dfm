@@ -1,0 +1,869 @@
+object MainForm: TMainForm
+  Left = 0
+  Top = 0
+  BorderStyle = bsDialog
+  ClientHeight = 427
+  ClientWidth = 658
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poScreenCenter
+  OnClose = FormClose
+  OnCreate = FormCreate
+  OnKeyPress = FormKeyPress
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Panel19: TPanel
+    Left = 0
+    Top = 0
+    Width = 229
+    Height = 395
+    Align = alLeft
+    BevelOuter = bvLowered
+    BiDiMode = bdLeftToRight
+    BorderStyle = bsSingle
+    Ctl3D = False
+    ParentBiDiMode = False
+    ParentBackground = False
+    ParentCtl3D = False
+    TabOrder = 0
+    ExplicitHeight = 336
+    object Label1: TLabel
+      Left = 70
+      Top = 3
+      Width = 108
+      Height = 16
+      Caption = 'Kredit m'#601'hsullar'#305
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+    end
+    object XDBGrid1: TXDBGrid
+      Left = 3
+      Top = 19
+      Width = 223
+      Height = 372
+      ParentCustomHint = False
+      Color = clBtnFace
+      Ctl3D = False
+      Ctl3DAuto = False
+      DataColLineColor = clBtnText
+      DataSource = RtDataModule.SrcPersonLink
+      DoubleBuffered = False
+      FixedCols = 1
+      FixedTheme = ftButtons
+      FocusRect = frDefault
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clBlack
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      Gradient.EndColor = clGradientActiveCaption
+      GridStyle.DataRowSpace = 6
+      GridStyle.HeaderRowSpace = 8
+      GridStyle.TitleColMargin = 1
+      GridStyle.TitleRowSpace = 8
+      GridStyle.TotalColMargin = 0
+      GridStyle.TotalRowSpace = 2
+      GridStyle.VisualStyle = vsCustom
+      HeaderFont.Charset = DEFAULT_CHARSET
+      HeaderFont.Color = clBlue
+      HeaderFont.Height = -11
+      HeaderFont.Name = 'Tahoma'
+      HeaderFont.Style = [fsBold]
+      HighlightText = clBtnFace
+      MultiSelectOptions = [msCols]
+      Options = [dgColumnResize, dgTabs, dgConfirmDelete, dgCancelOnExit, dgExtendedSelect, dgInternalSelect, dgRowResize, dgRowScroll, dgHotButtons, dgTitleButtons, dgTitleHeaders, dgTitleWidthOff, dgMarkerAutoAlign, dgMarkerAutoToggle]
+      OptionsEx = [dgBlankRow, dgTotalHeaderBox, dgTotalValuesBox, dgTotalFieldsBox, dgTotalFooterBox, dgAutoAscendOrder, dgAutoUpdateSequence, dgDelayUpdateSequence, dgAutoUpdateTotals, dgDelayUpdateTotals, dgCalcWholeDataSet, dgDelaySelectedRows]
+      ParentBiDiMode = False
+      ParentCtl3D = False
+      ParentFont = False
+      ReadOnly = True
+      ScrollBars = ssNone
+      TabOrder = 0
+      TitleFont.Charset = DEFAULT_CHARSET
+      TitleFont.Color = clBlue
+      TitleFont.Height = -11
+      TitleFont.Name = 'Tahoma'
+      TitleFont.Style = [fsBold]
+      Totals.Color = clBtnHighlight
+      Totals.Font.Charset = DEFAULT_CHARSET
+      Totals.Font.Color = clWindowText
+      Totals.Font.Height = -11
+      Totals.Font.Name = 'Tahoma'
+      Totals.Font.Style = [fsBold]
+      OnCellDblClick = XDBGrid1CellDblClick
+      Columns = <
+        item
+          Alignment = taCenter
+          CheckBoxKind = ckCross
+          CheckBoxToggle = ctCustomToggle
+          Expanded = False
+          FieldName = 'KOD'
+          PickOptions = [poAcceptPickList]
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clBlack
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = [fsBold]
+          Visible = True
+          Width = 55
+        end
+        item
+          Expanded = False
+          FieldName = 'NAME'
+          Title.Alignment = taCenter
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clBlack
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = [fsBold]
+          Visible = True
+        end>
+    end
+  end
+  object Panel2: TPanel
+    Left = 229
+    Top = 0
+    Width = 429
+    Height = 395
+    Align = alLeft
+    BevelOuter = bvLowered
+    BiDiMode = bdLeftToRight
+    BorderStyle = bsSingle
+    Color = clWhite
+    Ctl3D = False
+    ParentBiDiMode = False
+    ParentBackground = False
+    ParentCtl3D = False
+    TabOrder = 1
+    ExplicitLeft = 333
+    ExplicitTop = 8
+    ExplicitHeight = 453
+    object R1: TPanel
+      Tag = 1
+      Left = 1
+      Top = 1
+      Width = 425
+      Height = 30
+      Align = alTop
+      BevelInner = bvLowered
+      Ctl3D = False
+      ParentBackground = False
+      ParentCtl3D = False
+      TabOrder = 0
+      object Label4: TLabel
+        Left = 6
+        Top = 9
+        Width = 29
+        Height = 14
+        Caption = 'Filial '
+        Color = clWhite
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentColor = False
+        ParentFont = False
+        Transparent = True
+      end
+      object BranchCBEh: TDBLookupComboboxEh
+        Tag = 1
+        Left = 108
+        Top = 6
+        Width = 311
+        Height = 19
+        BiDiMode = bdLeftToRight
+        ParentBiDiMode = False
+        Color = clWhite
+        DataField = 'BRANCHID'
+        DataSource = RtDataModule.SrcPersonLink
+        DropDownBox.Columns = <
+          item
+            FieldName = 'ID'
+          end
+          item
+            FieldName = 'NAME'
+          end>
+        DropDownBox.Options = [dlgColumnResizeEh, dlgColLinesEh, dlgRowLinesEh, dlgAutoSortMarkingEh, dlgMultiSortMarkingEh]
+        DropDownBox.Sizable = True
+        EditButton.Style = ebsEllipsisEh
+        EditButtons = <>
+        KeyField = 'ID'
+        ListField = 'NAME'
+        ListSource = RtDataModule.DataSrcBranches
+        TabOrder = 0
+        Visible = True
+        OnChange = BranchCBEhChange
+      end
+    end
+    object R2: TPanel
+      Tag = 2
+      Left = 1
+      Top = 31
+      Width = 425
+      Height = 30
+      Align = alTop
+      BevelInner = bvLowered
+      ParentBackground = False
+      TabOrder = 1
+      ExplicitTop = 2
+      object Label8: TLabel
+        Left = 6
+        Top = 6
+        Width = 46
+        Height = 14
+        Caption = 'Valyuta'
+        Color = clWhite
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentColor = False
+        ParentFont = False
+        Transparent = True
+      end
+      object DBLookupComboboxEh14: TDBLookupComboboxEh
+        Tag = 1
+        Left = 108
+        Top = 6
+        Width = 311
+        Height = 19
+        DataField = 'CURRENCY'
+        DataSource = RtDataModule.SrcPersonLink
+        DropDownBox.Columns = <
+          item
+            FieldName = 'VAL_NAME'
+          end
+          item
+            FieldName = 'CURRNAME'
+          end>
+        DropDownBox.Sizable = True
+        EditButton.Style = ebsEllipsisEh
+        EditButtons = <>
+        KeyField = 'CURRID'
+        ListField = 'CURRNAME'
+        ListSource = RtDataModule.DataSrcCurrencys
+        TabOrder = 0
+        Visible = True
+        OnChange = DBLookupComboboxEh14Change
+      end
+    end
+    object R3: TPanel
+      Tag = 4
+      Left = 1
+      Top = 91
+      Width = 425
+      Height = 30
+      Align = alTop
+      BevelInner = bvLowered
+      ParentBackground = False
+      TabOrder = 3
+      ExplicitTop = 61
+      object Label5: TLabel
+        Left = 6
+        Top = 8
+        Width = 92
+        Height = 14
+        Caption = 'M'#252'qavil'#601'nin '#8470
+        Color = clWhite
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentColor = False
+        ParentFont = False
+        Transparent = True
+      end
+      object DBEdit1: TDBEdit
+        Tag = 1
+        Left = 183
+        Top = 5
+        Width = 129
+        Height = 21
+        DataField = 'NUMBEROFCREDIT'
+        DataSource = RtDataModule.SrcPersonLink
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clNavy
+        Font.Height = -12
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = [fsBold]
+        ParentFont = False
+        TabOrder = 0
+      end
+    end
+    object R4: TPanel
+      Tag = 5
+      Left = 1
+      Top = 121
+      Width = 425
+      Height = 30
+      Align = alTop
+      BevelInner = bvLowered
+      ParentBackground = False
+      TabOrder = 4
+      ExplicitTop = 91
+      object Label7: TLabel
+        Left = 6
+        Top = 8
+        Width = 134
+        Height = 14
+        Caption = 'Kreditin verilm'#601' tarixi '
+        Color = clWhite
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentColor = False
+        ParentFont = False
+        Transparent = True
+      end
+      object Label2: TLabel
+        Left = 322
+        Top = 9
+        Width = 26
+        Height = 14
+        Caption = 'Ayla'
+        Color = clWhite
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentColor = False
+        ParentFont = False
+        Transparent = True
+      end
+      object DBDateTimeEditEh1: TDBDateTimeEditEh
+        Tag = 1
+        Left = 182
+        Top = 7
+        Width = 130
+        Height = 19
+        Hint = 'dd/mm/yyyy'
+        DataField = 'DATEOFCONCLUSION'
+        DataSource = RtDataModule.SrcPersonLink
+        EditButtons = <>
+        ParentShowHint = False
+        ShowHint = True
+        TabOrder = 0
+        Visible = True
+        EditFormat = ''
+      end
+      object DBNumberEditEh1: TDBNumberEditEh
+        Tag = 1
+        Left = 354
+        Top = 8
+        Width = 61
+        Height = 19
+        Alignment = taCenter
+        currency = False
+        DataField = 'PeriodContracts'
+        DataSource = RtDataModule.SrcPersonLink
+        DecimalPlaces = 4
+        EditButtons = <>
+        TabOrder = 1
+        Visible = True
+        OnChange = DBNumberEditEh1Change
+        OnClick = DBNumberEditEh1Click
+      end
+    end
+    object R5: TPanel
+      Tag = 6
+      Left = 1
+      Top = 151
+      Width = 425
+      Height = 30
+      Align = alTop
+      BevelInner = bvLowered
+      ParentBackground = False
+      TabOrder = 5
+      ExplicitTop = 121
+      object Label9: TLabel
+        Left = 6
+        Top = 8
+        Width = 94
+        Height = 14
+        Caption = 'Ba'#287'lanma tarixi'
+        Color = clWhite
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentColor = False
+        ParentFont = False
+        Transparent = True
+      end
+      object DBDateTimeEditEh2: TDBDateTimeEditEh
+        Tag = 1
+        Left = 183
+        Top = 6
+        Width = 130
+        Height = 19
+        DataField = 'DUEDATEFIRSTCONTRACT'
+        DataSource = RtDataModule.SrcPersonLink
+        EditButtons = <>
+        ParentShowHint = False
+        ShowHint = True
+        TabOrder = 0
+        Visible = True
+        OnExit = DBDateTimeEditEh2Exit
+        EditFormat = ''
+      end
+    end
+    object R6: TPanel
+      Tag = 7
+      Left = 1
+      Top = 181
+      Width = 425
+      Height = 30
+      Align = alTop
+      BevelInner = bvLowered
+      ParentBackground = False
+      TabOrder = 6
+      ExplicitTop = 151
+      object Label18: TLabel
+        Left = 6
+        Top = 6
+        Width = 102
+        Height = 14
+        Caption = 'Kreditim m'#601'bl'#601'gi'
+        Color = clWhite
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentColor = False
+        ParentFont = False
+        Transparent = True
+      end
+      object DBEdit2: TDBEdit
+        Tag = 1
+        Left = 183
+        Top = 5
+        Width = 129
+        Height = 21
+        DataField = 'CREDITLINEAMOUNT'
+        DataSource = RtDataModule.SrcPersonLink
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clNavy
+        Font.Height = -12
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = [fsBold]
+        ParentFont = False
+        TabOrder = 0
+        OnChange = DBEdit2Change
+        OnClick = DBEdit2Click
+      end
+    end
+    object R7: TPanel
+      Tag = 8
+      Left = 1
+      Top = 211
+      Width = 425
+      Height = 30
+      Align = alTop
+      BevelInner = bvLowered
+      ParentBackground = False
+      TabOrder = 7
+      ExplicitTop = 181
+      object Label20: TLabel
+        Left = 6
+        Top = 6
+        Width = 99
+        Height = 14
+        Caption = #304'llik faiz d'#601'r'#601'c'#601'si'
+        Color = clWhite
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentColor = False
+        ParentFont = False
+        Transparent = True
+      end
+      object DBNumberEditEh2: TDBNumberEditEh
+        Tag = 1
+        Left = 183
+        Top = 6
+        Width = 130
+        Height = 19
+        currency = True
+        DataField = 'ANNUALYINTERESTRATE'
+        DataSource = RtDataModule.SrcPersonLink
+        DecimalPlaces = 4
+        EditButtons = <>
+        TabOrder = 0
+        Visible = True
+      end
+    end
+    object R8: TPanel
+      Tag = 9
+      Left = 1
+      Top = 241
+      Width = 425
+      Height = 30
+      Align = alTop
+      BevelInner = bvLowered
+      ParentBackground = False
+      TabOrder = 8
+      ExplicitLeft = 3
+      object Label22: TLabel
+        Left = 5
+        Top = 7
+        Width = 133
+        Height = 14
+        Caption = 'Gecikmi'#351' faiz  d'#601'r'#601'c'#601'si'
+        Color = clWhite
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentColor = False
+        ParentFont = False
+        Transparent = True
+      end
+      object DBNumberEditEh4: TDBNumberEditEh
+        Tag = 1
+        Left = 182
+        Top = 6
+        Width = 130
+        Height = 19
+        currency = True
+        DataField = 'ANNUALYOVERDUERATE'
+        DataSource = RtDataModule.SrcPersonLink
+        DecimalPlaces = 4
+        EditButtons = <>
+        TabOrder = 0
+        Visible = True
+      end
+    end
+    object R9: TPanel
+      Tag = 10
+      Left = 1
+      Top = 271
+      Width = 425
+      Height = 30
+      Align = alTop
+      BevelInner = bvLowered
+      ParentBackground = False
+      TabOrder = 9
+      ExplicitTop = 241
+      object Label10: TLabel
+        Left = 6
+        Top = 6
+        Width = 73
+        Height = 14
+        Caption = 'C'#601'rim'#601' faizi '
+        Color = clWhite
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentColor = False
+        ParentFont = False
+        Transparent = True
+      end
+      object DBNumberEditEh5: TDBNumberEditEh
+        Tag = 1
+        Left = 183
+        Top = 6
+        Width = 130
+        Height = 19
+        currency = True
+        DataField = 'ANNUALYPENALTYRATE'
+        DataSource = RtDataModule.SrcPersonLink
+        DecimalPlaces = 4
+        EditButtons = <>
+        TabOrder = 0
+        Visible = True
+      end
+    end
+    object R10: TPanel
+      Tag = 13
+      Left = 1
+      Top = 361
+      Width = 425
+      Height = 31
+      Align = alTop
+      BevelInner = bvLowered
+      ParentBackground = False
+      TabOrder = 12
+      ExplicitTop = 271
+      object Label11: TLabel
+        Left = 6
+        Top = 8
+        Width = 117
+        Height = 14
+        Caption = 'Kreditin t'#601'minatl'#305#287#305
+        Color = clWhite
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentColor = False
+        ParentFont = False
+        Transparent = True
+      end
+      object DBLookupComboboxEh12: TDBLookupComboboxEh
+        Tag = 1
+        Left = 129
+        Top = 6
+        Width = 290
+        Height = 19
+        DataField = 'PLEDGEID_P'
+        DataSource = RtDataModule.SrcPersonLink
+        DropDownBox.Sizable = True
+        EditButtons = <>
+        KeyField = 'ID'
+        ListField = 'DESCRIPTION'
+        ListSource = RtDataModule.PldDataSrc
+        TabOrder = 0
+        Visible = True
+      end
+    end
+    object R11: TPanel
+      Tag = 2
+      Left = 1
+      Top = 302
+      Width = 425
+      Height = 31
+      BevelInner = bvLowered
+      Ctl3D = False
+      ParentBackground = False
+      ParentCtl3D = False
+      TabOrder = 13
+      object Label6: TLabel
+        Left = 6
+        Top = 8
+        Width = 90
+        Height = 14
+        Caption = #399'lav'#601' m'#601'lumat'
+        Color = clWhite
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentColor = False
+        ParentFont = False
+        Transparent = True
+      end
+      object DBEdit3: TDBEdit
+        Tag = 2
+        Left = 108
+        Top = 6
+        Width = 310
+        Height = 19
+        BevelInner = bvLowered
+        BevelOuter = bvRaised
+        Color = clBtnHighlight
+        DataField = 'PURPOSEOFCREDIT'
+        DataSource = RtDataModule.SrcPersonLink
+        TabOrder = 0
+      end
+    end
+    object Panel3: TPanel
+      Tag = 11
+      Left = 1
+      Top = 301
+      Width = 425
+      Height = 30
+      Align = alTop
+      BevelInner = bvLowered
+      ParentBackground = False
+      TabOrder = 10
+      ExplicitLeft = 7
+      ExplicitTop = 274
+      object Label3: TLabel
+        Left = 6
+        Top = 6
+        Width = 90
+        Height = 14
+        Caption = 'Komissyon faiz'
+        Color = clWhite
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentColor = False
+        ParentFont = False
+        Transparent = True
+      end
+      object DBNumberEditEh3: TDBNumberEditEh
+        Tag = 1
+        Left = 183
+        Top = 6
+        Width = 130
+        Height = 19
+        currency = True
+        DecimalPlaces = 4
+        EditButtons = <>
+        TabOrder = 0
+        Visible = True
+      end
+    end
+    object Panel4: TPanel
+      Tag = 12
+      Left = 1
+      Top = 331
+      Width = 425
+      Height = 30
+      Align = alTop
+      BevelInner = bvLowered
+      ParentBackground = False
+      TabOrder = 11
+      ExplicitLeft = 7
+      ExplicitTop = 307
+      object Label12: TLabel
+        Left = 6
+        Top = 6
+        Width = 110
+        Height = 14
+        Caption = 'Hesablama apar'#305'l'#305'r'
+        Color = clWhite
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentColor = False
+        ParentFont = False
+        Transparent = True
+      end
+    end
+    object Panel5: TPanel
+      Tag = 3
+      Left = 1
+      Top = 61
+      Width = 425
+      Height = 30
+      Align = alTop
+      BevelInner = bvLowered
+      ParentBackground = False
+      TabOrder = 2
+      ExplicitLeft = -7
+      ExplicitTop = 57
+      object Label13: TLabel
+        Left = 6
+        Top = 6
+        Width = 72
+        Height = 14
+        Caption = 'Kreditin tipi'
+        Color = clWhite
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentColor = False
+        ParentFont = False
+        Transparent = True
+      end
+    end
+  end
+  object Panel1: TPanel
+    Left = 0
+    Top = 395
+    Width = 658
+    Height = 32
+    Align = alBottom
+    BevelOuter = bvLowered
+    BiDiMode = bdLeftToRight
+    BorderStyle = bsSingle
+    Ctl3D = False
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = [fsItalic]
+    ParentBiDiMode = False
+    ParentBackground = False
+    ParentCtl3D = False
+    ParentFont = False
+    TabOrder = 2
+    Visible = False
+    ExplicitTop = 336
+    object SpeedButton1: TSpeedButton
+      Left = 229
+      Top = 2
+      Width = 68
+      Height = 27
+      Cursor = crHandPoint
+      Caption = 'Q'#601'bul'
+      Flat = True
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clNavy
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold, fsItalic]
+      ParentFont = False
+      OnClick = SpeedButton1Click
+    end
+    object SpeedButton2: TSpeedButton
+      Left = 300
+      Top = 2
+      Width = 68
+      Height = 27
+      Cursor = crHandPoint
+      Caption = 'Ba'#287'la'
+      Flat = True
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clNavy
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold, fsItalic]
+      ParentFont = False
+      OnClick = SpeedButton2Click
+    end
+    object SpeedButton3: TSpeedButton
+      Left = 132
+      Top = 2
+      Width = 80
+      Height = 27
+      Cursor = crHandPoint
+      Caption = '<-Geri qay'#305't'
+      Flat = True
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clNavy
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold, fsItalic]
+      ParentFont = False
+      OnClick = SpeedButton3Click
+    end
+  end
+  object WordApplication: TWordApplication
+    AutoConnect = False
+    ConnectKind = ckRunningOrNew
+    AutoQuit = False
+    Left = 8
+    Top = 16
+  end
+  object WordDocument: TWordDocument
+    AutoConnect = False
+    ConnectKind = ckRunningOrNew
+    Left = 8
+    Top = 64
+  end
+end

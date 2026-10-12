@@ -1,0 +1,120 @@
+unit admPluginAddImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, FileCtrl, Buttons, ExtCtrls, cFileListComboBox, ActnList,
+   ImgList, DBCtrls;
+
+type
+  TfrmPluginAdd = class(TForm)
+    Panel1: TPanel;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    btnAdd: TSpeedButton;
+    edParamName: TEdit;
+    edDescription: TEdit;
+    btnClose: TSpeedButton;
+    cbBPLS: TFileListComboBox;
+    actsPlugin: TActionList;
+    actPluginAddExec: TAction;
+    PlugAddImgs: TImageList;
+    actPluginAddClose: TAction;
+    Label4: TLabel;
+    cbPluginType: TDBLookupComboBox;
+    procedure FormCreate(Sender: TObject);
+    procedure btnAddClick(Sender: TObject);
+    procedure btnCloseExec(Sender: TObject);
+    procedure FormKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure edParamNameKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure actAddExecExecute(Sender: TObject);
+    procedure edDescriptionChange(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure edDescriptionKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  frmPluginAdd: TfrmPluginAdd;
+
+implementation
+
+uses admDataModule, admMainFormImpl;
+
+{$R *.DFM}
+
+procedure TfrmPluginAdd.FormCreate(Sender: TObject);
+begin
+  cbBPLS.Directory := ExtractFilePath(Application.ExeName);
+  cbBPLS.FillList;
+end;
+
+procedure TfrmPluginAdd.btnAddClick(Sender: TObject);
+begin
+  //btnCloseClick(Sender);
+end;
+
+procedure TfrmPluginAdd.btnCloseExec(Sender: TObject);
+begin
+  Close;
+end;
+
+procedure TfrmPluginAdd.FormKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if Key = VK_ESCAPE then
+    btnCloseExec(Sender);
+end;
+
+procedure TfrmPluginAdd.edParamNameKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if Key = VK_RETURN then
+    edDescription.SetFocus;
+end;
+
+procedure TfrmPluginAdd.actAddExecExecute(Sender: TObject);
+begin
+  with admDM do begin
+    CM_ADMIN.CallProcedure('addplugin',
+                            [cbBPLs.Text,
+                             trim(edParamName.Text),
+                             trim(edDescription.Text),
+                             cbPluginType.KeyValue
+                            ]);
+    RefreshDataSet(PluginsDataSet);
+    cbBPLs.ItemIndex := -1;
+    edParamName.Text := '';
+    edDescription.Text := '';
+  end;
+end;
+
+procedure TfrmPluginAdd.edDescriptionChange(Sender: TObject);
+begin
+  if  (Trim(cbBPLS.Text)<>'') and
+      (Trim(edDescription.Text)<>'') then
+    actPluginAddExec.Enabled := True else
+    actPluginAddExec.Enabled := False;
+end;
+
+procedure TfrmPluginAdd.FormShow(Sender: TObject);
+begin
+  cbBPLs.SetFocus;
+end;
+
+procedure TfrmPluginAdd.edDescriptionKeyDown(Sender: TObject;
+  var Key: Word; Shift: TShiftState);
+begin
+  if (Key = VK_RETURN) and (actPluginAddExec.Enabled) then
+    actAddExecExecute(Sender);
+end;
+
+end.

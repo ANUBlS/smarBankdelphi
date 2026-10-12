@@ -1,0 +1,222 @@
+﻿unit frminfo;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ExtCtrls, StdCtrls, Bnkinfo, sboapiDataModuleImpl, DB, OracleData,
+  Grids, DBGrids, Menus, Oracle;
+
+type
+  TForm23 = class(TForm)
+    ComboBox1: TComboBox;
+    Button1: TButton;
+    Panel1: TPanel;
+    bankaddinfo: TOracleDataSet;
+    DataSource1: TDataSource;
+    DBGrid1: TDBGrid;
+    bankaddinfoCN: TWideStringField;
+    bankaddinfoNAME: TWideStringField;
+    bankaddinfoSURNAME: TWideStringField;
+    bankaddinfoFNAME: TWideStringField;
+    PopupMenu1: TPopupMenu;
+    Sil1: TMenuItem;
+    Button2: TButton;
+    procedure Button1Click(Sender: TObject);
+    procedure Sil1Click(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form23: TForm23;
+
+implementation
+
+{$R *.dfm}
+
+procedure TForm23.Button1Click(Sender: TObject);
+begin
+
+
+bankaddinfo.SQL.Clear;
+bankaddinfo.SQL.Add('select a.rowid ,a.*  from bankinfo_adif a where a.kod_b=:addinfo');
+bankaddinfo.DeclareVariable('addinfo',otInteger);
+bankaddinfo.Refresh;
+
+form21:=tform21.create(self);
+
+
+
+
+if combobox1.itemindex=0 then
+begin
+bankaddinfo.close;
+bankaddinfo.sql.Clear;
+bankaddinfo.DeleteVariables;
+bankaddinfo.SQL.Add('select a.rowid ,a.* from bankinfo_adif a');
+bankaddinfo.open;
+
+end;
+
+
+if combobox1.itemindex=1 then
+begin
+ bankaddinfo.close;
+ bankaddinfo.setvariable('addinfo',1);
+ bankaddinfo.open;
+while not bankaddinfo.EOF do
+  begin
+     form21.ComboBox1.Items.Add(bankaddinfo.FieldByName('cn').AsString);
+     bankaddinfo.Next;
+   end;
+end;
+
+if combobox1.itemindex=2 then
+begin
+ bankaddinfo.close;
+ bankaddinfo.setvariable('addinfo',2);
+ bankaddinfo.open;
+while not bankaddinfo.EOF do
+  begin
+     form21.ComboBox1.Items.Add(bankaddinfo.FieldByName('cn').AsString);
+     bankaddinfo.Next;
+   end;
+end;
+
+if combobox1.itemindex=3 then
+begin
+ bankaddinfo.close;
+ bankaddinfo.setvariable('addinfo',3);
+ bankaddinfo.open;
+
+ while not bankaddinfo.EOF do
+  begin
+     form21.ComboBox1.Items.Add(bankaddinfo.FieldByName('cn').AsString);
+     bankaddinfo.Next;
+   end;
+
+
+
+end;
+
+
+if combobox1.itemindex=4 then
+begin
+ bankaddinfo.close;
+ bankaddinfo.setvariable('addinfo',4);
+ bankaddinfo.open;
+while not bankaddinfo.EOF do
+  begin
+     form21.ComboBox1.Items.Add(bankaddinfo.FieldByName('cn').AsString);
+     bankaddinfo.Next;
+   end;
+end;
+
+
+
+end;
+
+procedure TForm23.Button2Click(Sender: TObject);
+begin
+bankaddinfo.SQL.Clear;
+bankaddinfo.SQL.Add('select a.rowid ,a.*  from bankinfo_adif a where a.kod_b=:addinfo');
+bankaddinfo.DeclareVariable('addinfo',otInteger);
+bankaddinfo.Refresh;
+
+form21:=tform21.create(self);
+
+
+{*if combobox1.itemindex=0 then
+begin
+ bankaddinfo.close;
+ bankaddinfo.setvariable('addinfo',0);
+ bankaddinfo.open;
+while not bankaddinfo.EOF do
+  begin
+     form21.ComboBox1.Items.Add(bankaddinfo.FieldByName('cn').AsString);
+     bankaddinfo.Next;
+   end;
+end;       *}
+
+if combobox1.itemindex=1 then
+begin
+ bankaddinfo.close;
+ bankaddinfo.setvariable('addinfo',1);
+ bankaddinfo.open;
+while not bankaddinfo.EOF do
+  begin
+     form21.ComboBox1.Items.Add(bankaddinfo.FieldByName('cn').AsString);
+     bankaddinfo.Next;
+   end;
+end;
+
+if combobox1.itemindex=2 then
+begin
+ bankaddinfo.close;
+ bankaddinfo.setvariable('addinfo',2);
+ bankaddinfo.open;
+
+ while not bankaddinfo.EOF do
+  begin
+     form21.ComboBox1.Items.Add(bankaddinfo.FieldByName('cn').AsString);
+     bankaddinfo.Next;
+   end;
+
+
+end;
+
+
+if combobox1.itemindex=3 then
+begin
+ bankaddinfo.close;
+ bankaddinfo.setvariable('addinfo',3);
+ bankaddinfo.open;
+while not bankaddinfo.EOF do
+  begin
+     form21.ComboBox1.Items.Add(bankaddinfo.FieldByName('cn').AsString);
+     bankaddinfo.Next;
+   end;
+end;
+
+
+if combobox1.itemindex=4 then
+begin
+ bankaddinfo.close;
+ bankaddinfo.setvariable('addinfo',4);
+ bankaddinfo.open;
+
+ while not bankaddinfo.EOF do
+  begin
+     form21.ComboBox1.Items.Add(bankaddinfo.FieldByName('cn').AsString);
+     bankaddinfo.Next;
+   end;
+end;
+ form21.Caption:=ComboBox1.Text+'  Əlavə etmək';
+form21.ShowModal;// +++
+
+end;
+
+procedure TForm23.FormActivate(Sender: TObject);
+begin
+
+bankaddinfo.close;
+bankaddinfo.sql.Clear;
+bankaddinfo.DeleteVariables;
+bankaddinfo.SQL.Add('select a.rowid ,a.* from bankinfo_adif a');
+bankaddinfo.open;
+
+
+end;
+
+procedure TForm23.Sil1Click(Sender: TObject);
+begin
+if MessageDlg('Siyahıdan silinsin?',
+    mtConfirmation, [mbYes, mbNo], 0) = mrYes then bankaddinfo.Delete;
+end;
+
+end.

@@ -1,0 +1,183 @@
+unit DMMKSuggestionImpl;
+
+interface
+
+uses
+  SysUtils, Classes, DB, INSWordExporter, Oracle, OracleData;
+
+type
+  TDMMKSuggestion = class(TDataModule)
+    DSCusts: TDataSource;
+    ODSReport: TOracleDataSet;
+    ODSReportNAME: TWideStringField;
+    ODSReportINSUREDTYPE: TWideStringField;
+    ODSReportINSUREDCOLOR: TWideStringField;
+    ODSReportINSUREDOUTPUTYEAR: TIntegerField;
+    ODSReportINSUREDMODEL: TWideStringField;
+    ODSReportINSUREDSTATENUM: TWideStringField;
+    ODSReportUNDERFRAMENUM: TWideStringField;
+    ODSReportINSUREDBANNUM: TWideStringField;
+    ODSReportDRIVEACCESSPIOPLE: TWideStringField;
+    ODSReportINSUREDENGINENUM: TWideStringField;
+    ODSReportACCESSORIESNAME: TWideStringField;
+    ODSReportBEGINDATE: TWideStringField;
+    ODSReportINSDATE: TWideStringField;
+    ODSReportPOLICYNUM: TWideStringField;
+    ODSReportENDDATE: TWideStringField;
+    ODSReportTHEFT: TFloatField;
+    ODSReportFIRE: TFloatField;
+    ODSReportTRAFFICACCIDENT: TFloatField;
+    ODSReportIMPACTANYOBJECT: TFloatField;
+    ODSReportEXPLOSION: TFloatField;
+    ODSReportAGENT: TWideStringField;
+    ODSReportVALUTE: TWideStringField;
+    ODSReportBENEFICIARY: TWideStringField;
+    ODSReportLOANACC_ID: TFloatField;
+    ODSReportCURRACC_ID: TFloatField;
+    ODSReportDRIVEINTENDED: TWideStringField;
+    ODSReportSEX: TIntegerField;
+    ODSReportNUMSEATS: TWideStringField;
+    ODSReportFRANSHIZ: TFloatField;
+    ODSReportEXTRAFRANSHIZ: TWideStringField;
+    ODSReportAVTOCOST: TFloatField;
+    ODSReportINSSUMM: TFloatField;
+    ODSReportAMMOUNT: TFloatField;
+    ODSReportINSUREDADDRESS: TWideStringField;
+    ODSReportMOBILEPHONE: TWideStringField;
+    ODSReportHOMEPHONE: TWideStringField;
+    ODSReportTARIFF: TFloatField;
+    ODSReportACTIVITY: TWideStringField;
+    ODSReportSUGNUM: TWideStringField;
+    SB_ACA: TOraclePackage;
+    DSActivity: TDataSource;
+    OPSBMSG: TOraclePackage;
+    ODSActivity: TOracleDataSet;
+    ODSActivityID: TFloatField;
+    ODSActivityNAME: TWideStringField;
+    OPKASKO: TOraclePackage;
+    SuggestionReport: TINSWordExporter;
+    OPCOMMON: TOraclePackage;
+    DSRisks: TDataSource;
+    DSContracts: TDataSource;
+    ODSRisk: TOracleDataSet;
+    ODSRiskID: TFloatField;
+    ODSRiskNAME: TWideStringField;
+    ODSPolicy: TOracleDataSet;
+    ODSPolicyID: TFloatField;
+    ODSPolicyTHEFT: TFloatField;
+    ODSPolicyFIRE: TFloatField;
+    ODSPolicyEXPLOSION: TFloatField;
+    ODSPolicyTRAFFICACCIDENT: TFloatField;
+    ODSPolicyIMPACTANYOBJECT: TFloatField;
+    ODSPolicyNATCATASTROPHE: TFloatField;
+    ODSPolicyPOLICYNUM: TWideStringField;
+    ODSPolicyUNDERTABLE: TBlobField;
+    ODSPolicyCID: TFloatField;
+    ODSPolicyRISKS: TFloatField;
+    ODSPolicyNAME: TWideStringField;
+    ODSPolicyRISKADDRESS: TWideStringField;
+    ODSPolicyrisk: TWideStringField;
+    DSPolicy: TDataSource;
+    ODSContracts: TOracleDataSet;
+    ODSContractsID: TFloatField;
+    ODSContractsTYPE_ID: TFloatField;
+    ODSContractsINS_DATE: TDateTimeField;
+    ODSContractsBEGIN_DATE: TDateTimeField;
+    ODSContractsEND_DATE: TDateTimeField;
+    ODSContractsVALUTE_ID: TFloatField;
+    ODSContractsAMMOUNT: TFloatField;
+    ODSContractsCLOSE_PREFIX: TIntegerField;
+    ODSContractsKLI_ID: TFloatField;
+    ODSContractsLOANACC_ID: TFloatField;
+    ODSContractsCURRACC_ID: TFloatField;
+    ODSContractsPOLICY_NUM: TWideStringField;
+    ODSContractsINSSUMM: TFloatField;
+    ODSContractsFRANSHIZ: TFloatField;
+    ODSContractsTARIFF: TFloatField;
+    ODSContractsSTATE: TIntegerField;
+    ODSMotorKasko: TOracleDataSet;
+    ODSMotorKaskoID: TFloatField;
+    ODSMotorKaskoINSUREDTYPE: TWideStringField;
+    ODSMotorKaskoINSUREDCOLOR: TWideStringField;
+    ODSMotorKaskoINSUREDOUTPUTYEAR: TIntegerField;
+    ODSMotorKaskoINSUREDSTATENUM: TWideStringField;
+    ODSMotorKaskoUNDERFRAMENUM: TWideStringField;
+    ODSMotorKaskoINSUREDBANNUM: TWideStringField;
+    ODSMotorKaskoINSUREDENGINENUM: TWideStringField;
+    ODSMotorKaskoDRIVEINTENDED: TWideStringField;
+    ODSMotorKaskoDRIVECOST: TFloatField;
+    ODSMotorKaskoBEGINDATE: TDateTimeField;
+    ODSMotorKaskoENDDATE: TDateTimeField;
+    ODSMotorKaskoTYPEID: TIntegerField;
+    ODSMotorKaskoCLOSE_PREFIX: TIntegerField;
+    ODSMotorKaskoBANK_ID: TFloatField;
+    ODSMotorKaskoMONTH_ID: TFloatField;
+    ODSMotorKaskoINSOBJECT: TWideStringField;
+    ODSMotorKaskoINSUREDMARK: TWideStringField;
+    ODSMotorKaskoINSUREDMODEL: TWideStringField;
+    ODSMotorKaskoFRANSHIZ: TFloatField;
+    ODSMotorKaskoTARIFF: TFloatField;
+    ODSMotorKaskoINSSUMM: TFloatField;
+    ODSMotorKaskoAMMOUNT: TFloatField;
+    DSAvalute: TDataSource;
+    ODSFranshiz: TOracleDataSet;
+    ODSFranshizID: TFloatField;
+    ODSFranshizNAME: TWideStringField;
+    DSFranshiz: TDataSource;
+    DSBankinfo: TDataSource;
+    DSTemplates: TDataSource;
+    ODSBankinfo: TOracleDataSet;
+    ODSBankinfoBANK: TWideStringField;
+    ODSBankinfoAZ_NAME: TWideStringField;
+    ODSBankinfoSEHER: TWideStringField;
+    ODSBankinfoADRESS: TWideStringField;
+    ODSBankinfoTEL: TWideStringField;
+    ODSBankinfoFAX: TWideStringField;
+    ODSBankinfoEMAIL: TWideStringField;
+    ODSCusts: TOracleDataSet;
+    ODSCustsID: TIntegerField;
+    ODSCustsNAME: TWideStringField;
+    ODSCustsADDRESS: TWideStringField;
+    ODSCustsACT_ID: TIntegerField;
+    ODSTemplates: TOracleDataSet;
+    ODSTemplatesID: TFloatField;
+    ODSTemplatesNAME: TWideStringField;
+    ODSTemplatesTEMPLATE: TBlobField;
+    DataSource1: TDataSource;
+    ODSAvalute: TOracleDataSet;
+    ODSAvaluteVALUTE: TIntegerField;
+    ODSAvaluteVAL_NAME: TWideStringField;
+    ODSAvaluteVALU_NAME: TWideStringField;
+    ODSAvaluteVALU_SHORT: TWideStringField;
+    procedure DataModuleCreate(Sender: TObject);
+    procedure DataModuleDestroy(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  DMMKSuggestion: TDMMKSuggestion;
+
+implementation
+
+{$R *.dfm}
+
+   uses sboapiDataModuleImpl;
+
+procedure TDMMKSuggestion.DataModuleCreate(Sender: TObject);
+begin
+  ODSRisk.Open;
+  ODSFranshiz.Open;
+  ODSAvalute.Open;
+end;
+
+procedure TDMMKSuggestion.DataModuleDestroy(Sender: TObject);
+begin
+  ODSRisk.Destroy;
+  ODSFranshiz.Destroy;
+  ODSAvalute.Destroy;
+end;
+
+end.

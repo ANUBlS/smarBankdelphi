@@ -1,0 +1,68 @@
+unit NewDepositsFrmAccGroupsImpl;
+
+interface
+
+uses
+ Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Grids, DBGridEh, ComCtrls, ExtCtrls, DBCtrls, Db, OracleData,
+  DBGridEhGrouping, GridsEh;
+
+type
+  TNewDepositsFrmAccGroups = class(TForm)
+    acc_zone_info: TOracleDataSet;
+    acc_zone_infoZONEID: TFloatField;
+    acc_zone_infoACCGROUP: TFloatField;
+    acc_zones: TOracleDataSet;
+    acc_zonesZONEID: TFloatField;
+    acc_zonesDESCRIPTION: TWideStringField;
+    StatusBar1: TStatusBar;
+    acc_zonesDatSrc: TDataSource;
+    acc_zone_infoDatSrc: TDataSource;
+    Panel1: TPanel;
+    Panel2: TPanel;
+    DBGridEh1: TDBGridEh;
+    Panel3: TPanel;
+    DBGridEh2: TDBGridEh;
+    procedure FormCanResize(Sender: TObject; var NewWidth, NewHeight: Integer;
+      var Resize: Boolean);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  NewDepositsFrmAccGroups: TNewDepositsFrmAccGroups;
+
+implementation
+
+{$R *.dfm}
+  uses  sboapiDataModuleImpl,SBTranslateProc;
+procedure TNewDepositsFrmAccGroups.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+  Resize := False
+end;
+
+procedure TNewDepositsFrmAccGroups.FormCreate(Sender: TObject);
+begin
+   acc_zones.Open;
+   acc_zone_info.Open   ;
+   SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TNewDepositsFrmAccGroups.FormDestroy(Sender: TObject);
+begin
+  acc_zones.CloseAll;
+   acc_zone_info.CloseAll
+end;
+
+procedure TNewDepositsFrmAccGroups.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+   if Ord(Key) = VK_ESCAPE then Close;
+end;
+
+end.

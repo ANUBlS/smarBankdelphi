@@ -1,0 +1,810 @@
+unit CMExcelExport;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, DB,
+  StdCtrls,
+  OleServer, // used for TConnectKind
+  ExcelXP, // Excel97 or Excel2000
+  Variants;
+
+type
+  TFileFormat = (ffXLS, ffHTM, ffCSV, ffXL97);
+  TStyleColumnWidth = (cwDefault, cwOwnerWidth, cwAutoFit);
+  TBorderWeight = (bwThin, bwMedium, bwThick);
+//                 xlHairline
+//                 xlMedium
+//                 xlThick
+//                 xlThin
+  TBorderLineStyle = (blNone, blDash, blLine, blDoubleLine);
+//                 xlContinuous
+//                 xlDash
+//                 xlDashDot
+//                 xlDashDotDot
+//                 xlDot
+//                 xlDouble
+//                 xlSlantDashDot
+//                 xlLineStyleNone
+  TSummarySelection = (ssNone, ssValues, ssGiven);
+  TSummaryCalculation = (scSUM, scMIN, scMAX);
+  TConnectTo = (ctNewInstance, ctNewBook, ctExistBook);
+
+  TCellBorder = class(TPersistent)
+  private
+    FBackColor : TColor;
+    FBorderColor : TColor;
+    FBorderWeight : TBorderWeight;
+    FBorderLineStyle : TBorderLineStyle;
+  published
+    property BackColor : TColor read FBackColor write FBackColor default clWhite;
+    property BorderColor : TColor read FBorderColor write FBorderColor default clBlack;
+    property Weight : TBorderWeight read FBorderWeight write FBorderWeight default bwMedium;
+    property LineStyle : TBorderLineStyle read FBorderLineStyle write FBorderLineStyle default blNone;
+  end;
+
+  TCMExcelExport = class(TComponent)
+  private
+    FRecordNo : integer;
+    FExcelApplication : TExcelApplication;
+    FExcelWorkbook : TExcelWorkbook;
+    FExcelWorksheet : TExcelWorksheet;
+
+    FFieldNames : TStrings;
+    FWorksheets : TStrings;
+
+    FIntColumnWidth : Integer;
+    FStyleColumnWidth : TStyleColumnWidth;
+    FConnectTo : TConnectTo;
+
+    FFontTitles : TFont;
+    FBorderTitles : TCellBorder;
+    FFontOrientationTitles : Integer;
+
+    FFontData : TFont;
+    FBorderData : TCellBorder;
+
+    FFontSummary : TFont;
+    FBorderSummary : TCellBorder;
+    FSummarySelection : TSummarySelection;
+    FSummaryFields : TStrings;
+    FSummaryCalculation : TSummaryCalculation;
+
+    FFilename : string;
+
+    FColumnCharacters : TStrings;
+
+    LCID : Integer;
+    FVisibleFieldsOnly: Boolean;
+    FConnected : Boolean;
+    procedure SetVisibleFieldsOnly(const Value: Boolean);
+
+  protected
+    procedure SetFontTitles(Value : TFont);
+    procedure SetFontData(Value : TFont);
+    procedure SetFontSummary(Value : TFont);
+    procedure SetSummaryFields(Value : TStrings);
+
+    procedure SetColumnWidth;
+    procedure SetFontAndBorderRange(DelphiFont : TFont; Border : TCellBorder; StrBeginCell, StrEndCell : String);
+
+    function GetColumnCharacters(IntNumber : Integer) : String;
+    function CanConvertFieldToCell(Field : TField) : Boolean;
+    function IsValueField(Field : TField) : Boolean;
+
+    procedure ExportTitles(DataSet : TDataSet;SelFields :Boolean = false);
+    procedure ExportFieldData(DataSet : TDataSet;SelFields :Boolean = false);
+    procedure ExportSummary(DataSet : TDataSet);
+
+
+    function  SheetExist(const SheetName : String) : Boolean;
+    procedure InitWorksheet(const SheetName : String); virtual;
+    procedure BuildSheetsList;
+  public
+    constructor Create(Owner: TComponent); override;
+    destructor Destroy; override;
+
+    procedure Notification(AComponent: TComponent; Operation: TOperation); override;
+
+    procedure Connect; virtual;
+    procedure Disconnect; virtual;
+    procedure ShowExcel; virtual;
+
+    procedure SaveAs(const StrFileName : String; const FileFormat : TFileFormat); virtual;
+    procedure PrintPreview(const BlnPrintGridLines : Boolean); virtual;
+    property  Connected : Boolean read FConnected ;
+
+    function ExecuteMacro(const Macro : String;Arguments : array of const) : Boolean;
+
+    procedure ExportDataset(DataSet : TDataSet;SheetName : String; BlnVisible : Boolean = False; ShowSelectedFields :boolean = False); virtual;
+  published
+    property ConnectTo : TConnectTo read FConnectTo write FConnectTo default ctNewBook;
+
+
+    property StyleColumnWidth : TStyleColumnWidth read FStyleColumnWidth write FStyleColumnWidth;
+    property ColumnWidth : Integer read FIntColumnWidth write FIntColumnWidth;
+    property VisibleFieldsOnly : Boolean read FVisibleFieldsOnly write SetVisibleFieldsOnly default True;
+
+    property FontTitles : TFont read FFontTitles write SetFontTitles;
+    property BorderTitles : TCellBorder read FBorderTitles write FBorderTitles;
+    property OrientationTitles : Integer read FFontOrientationTitles write FFontOrientationTitles;
+
+    property FontData : TFont read FFontData write SetFontData;
+    property BorderData : TCellBorder read FBorderData write FBorderData;
+
+    property FontSummary : TFont read FFontSummary write SetFontSummary;
+    property BorderSummary : TCellBorder read FBorderSummary write FBorderSummary;
+    property SummaryFields : TStrings read FSummaryFields write SetSummaryFields;
+    property SummarySelection : TSummarySelection read FSummarySelection write FSummarySelection;
+    property SummaryCalculation : TSummaryCalculation read FSummaryCalculation write FSummaryCalculation;
+
+    property Filename : string read FFilename write FFilename;
+  end;
+
+procedure Register;
+
+implementation
+
+uses ComObj, ActiveX,frmExcelExportImpl;
+
+constructor TCMExcelExport.Create(Owner: TComponent);
+begin
+  inherited;
+  FFontTitles := TFont.Create;
+  FFontData := TFont.Create;
+  FFontSummary := TFont.Create;
+
+  FBorderTitles := TCellBorder.Create;
+  FBorderData := TCellBorder.Create;
+  FBorderSummary := TCellBorder.Create;
+
+  FBorderTitles.FBackColor := clWhite;
+  FBorderTitles.FBorderColor := clBlack;
+  FBorderTitles.FBorderWeight := bwMedium;
+  FBorderTitles.FBorderLineStyle := blNone;
+
+  FBorderData.FBackColor := clWhite;
+  FBorderData.FBorderColor := clBlack;
+  FBorderData.FBorderWeight := bwMedium;
+  FBorderData.FBorderLineStyle := blNone;
+
+  FBorderSummary.FBackColor := clWhite;
+  FBorderSummary.FBorderColor := clBlack;
+  FBorderSummary.FBorderWeight := bwMedium;
+  FBorderSummary.FBorderLineStyle := blNone;
+
+  FConnected := False;
+  FConnectTo := ctNewBook;
+  FStyleColumnWidth := cwDefault;
+  FVisibleFieldsOnly := True;
+  FIntColumnWidth := 0;
+  FFontOrientationTitles := 0;
+
+  FExcelApplication := TExcelApplication.Create(Self);
+  FExcelWorkbook := TExcelWorkbook.Create(Self);
+  FExcelWorksheet := TExcelWorksheet.Create(Self);
+
+  FFieldNames :=TStringList.Create;
+  FSummaryFields :=TStringList.Create;
+  FColumnCharacters :=TStringList.Create;
+  FWorksheets :=TStringList.Create;
+
+  LCID := LOCALE_USER_DEFAULT; //GetUserDefaultLCID;
+
+
+end;
+
+destructor TCMExcelExport.Destroy;
+begin
+  Disconnect;
+  FFontTitles.Free;
+  FFontData.Free;
+  FFontSummary.Free;
+
+  FBorderTitles.Free;
+  FBorderData.Free;
+  FBorderSummary.Free;
+
+  FExcelWorksheet.Free;
+  FExcelWorkbook.Free;
+  FExcelApplication.Free;
+
+  FFieldNames.Free;
+  FSummaryFields.Free;
+
+  FColumnCharacters.Free;
+  FWorksheets.Free;
+  //frmExcelExport.Free;
+  inherited;
+end;
+
+procedure TCMExcelExport.Notification(AComponent: TComponent;
+  Operation: TOperation);
+begin
+  inherited;
+end;
+
+procedure TCMExcelExport.SetFontTitles(Value : TFont);
+begin
+  FFontTitles.Assign(Value);
+end;
+
+procedure TCMExcelExport.SetFontData(Value : TFont);
+begin
+  FFontData.Assign(Value);
+end;
+
+procedure TCMExcelExport.SetFontSummary(Value : TFont);
+begin
+  FFontSummary.Assign(Value);
+end;
+
+procedure TCMExcelExport.SetSummaryFields(Value : TStrings);
+begin
+  FSummaryFields.Assign(Value);
+  FSummaryFields.Text := UpperCase(FSummaryFields.Text);
+end;
+
+procedure TCMExcelExport.SetFontAndBorderRange(DelphiFont : TFont; Border : TCellBorder; StrBeginCell, StrEndCell : String);
+begin
+  // Convert Delphi font to the Excel font
+  with FExcelWorksheet.Range[StrBeginCell, StrEndCell].Font do
+  begin
+    Name := DelphiFont.Name;
+    Size := DelphiFont.Size;
+    Color := DelphiFont.Color;
+    Bold :=  fsBold in DelphiFont.Style;
+    Italic := fsItalic in DelphiFont.Style;
+    Underline := fsUnderline in DelphiFont.Style;
+  end;
+
+  // Titles
+  if StrBeginCell = 'A1' then
+    FExcelWorksheet.Range[StrBeginCell, StrEndCell].Orientation:=FFontOrientationTitles;
+
+  if Border.FBackColor <> clWhite then
+    FExcelWorksheet.Range[StrBeginCell, StrEndCell].Interior.Color := Border.FBackColor;
+
+  if Border.LineStyle <> blNone then
+  begin
+    with FExcelWorksheet.Range[StrBeginCell, StrEndCell].Borders do
+    begin
+      Color := Border.BorderColor;
+      case Border.Weight of
+// possible values xlHairline
+//                 xlMedium
+//                 xlThick
+//                 xlThin
+// Abs to prevent warning 'Constant expression violates subrange bounds'
+        bwThin : Weight := Abs(xlThin);
+        bwMedium : Weight := Abs(xlMedium);
+        bwThick : Weight := Abs(xlThick);
+      end;
+
+      case Border.LineStyle of
+// possible values xlContinuous
+//                 xlDash
+//                 xlDashDot
+//                 xlDashDotDot
+//                 xlDot
+//                 xlDouble
+//                 xlSlantDashDot
+//                 xlLineStyleNone
+        blDash : LineStyle := Abs(xlDash);
+        blLine : LineStyle := Abs(xlContinuous);
+        blDoubleLine : LineStyle := Abs(xlDouble);
+      end;
+    end;
+  end;
+end;
+
+procedure TCMExcelExport.SetColumnWidth;
+begin
+  if FStyleColumnWidth = cwOwnerWidth then
+    FExcelWorksheet.Range['A1',GetColumnCharacters(FFieldNames.Count)+'1'].ColumnWidth:=FIntColumnWidth;
+  if FStyleColumnWidth = cwAutoFit then
+    FExcelWorksheet.Range['A1',GetColumnCharacters(FFieldNames.Count)+'1'].EntireColumn.Autofit;
+end;
+
+function TCMExcelExport.CanConvertFieldToCell(Field : TField) : Boolean;
+begin
+  Result :=
+    (Field.DataType = ftWideString) or
+    (Field.DataType = ftString) or
+    (Field.DataType = ftSmallint) or
+    (Field.DataType = ftInteger) or
+    (Field.DataType = ftWord) or
+    (Field.DataType = ftBoolean) or
+    (Field.DataType = ftFloat) or
+    (Field.DataType = ftCurrency) or
+    (Field.DataType = ftBCD) or
+    (Field.DataType = ftDate) or
+    (Field.DataType = ftTime) or
+    (Field.DataType = ftDateTime)
+end;
+
+function TCMExcelExport.IsValueField(Field : TField) : Boolean;
+begin
+  Result :=
+    (Field.DataType = ftSmallint) or
+    (Field.DataType = ftInteger) or
+    (Field.DataType = ftWord) or
+    (Field.DataType = ftFloat) or
+    (Field.DataType = ftCurrency)
+end;
+
+function TCMExcelExport.SheetExist(const SheetName : String) : Boolean;
+begin
+  Result := FWorksheets.IndexOf(SheetName) > -1;
+end;
+
+//------------------------------------------------------------------------------
+// Get Column-character for giving index
+//------------------------------------------------------------------------------
+
+function TCMExcelExport.GetColumnCharacters(IntNumber : Integer) : String;
+begin
+  if IntNumber < 1 then
+    Result:='A'
+  else
+  begin
+    if IntNumber > 702 then
+      Result:='ZZ'
+    else
+    begin
+      if IntNumber > 26 then begin
+       if (IntNumber mod 26)=0 then
+        Result:=Chr(64 + (IntNumber div 26)-1)
+       else
+        Result:=Chr(64 + (IntNumber div 26));
+         if (IntNumber mod 26)=0 then
+          result:=result+chr(64+26)
+         else
+          result:=Result+Chr(64 + (IntNumber mod 26));
+      end
+      else
+        Result:=Chr(64 + IntNumber);
+    end;
+  end;
+end;
+
+procedure TCMExcelExport.Connect;
+begin
+  try
+    frmExcelExport := TfrmExcelExport.Create(Self);
+    if Connected then Disconnect;
+    if FConnectTo = ctNewInstance then
+    begin
+      FExcelApplication.ConnectKind := ckNewInstance;//ckRunningOrNew;
+      FExcelApplication.Connect;
+      FExcelWorkbook.ConnectTo(FExcelApplication.Workbooks.Add(TOleEnum(xlWBATWorksheet), LCID));
+      FConnected := True;
+    end else
+    if FConnectTo = ctNewBook then
+    begin
+      FExcelApplication.ConnectKind := ckRunningOrNew;
+      FExcelApplication.Connect;
+      FExcelWorkbook.ConnectTo(FExcelApplication.Workbooks.Add(TOleEnum(xlWBATWorksheet), LCID));
+      FConnected := True;
+    end else
+    begin
+      FExcelApplication.ConnectKind := ckRunningOrNew;
+      FExcelApplication.Connect;
+
+      FExcelApplication.Workbooks.Open(Filename, EmptyParam, EmptyParam,
+             EmptyParam, EmptyParam, EmptyParam, EmptyParam, EmptyParam,
+             EmptyParam, EmptyParam, EmptyParam, EmptyParam, False,
+             EmptyParam, //Local
+             EmptyParam, //CorruptLoad
+             LCID
+            );
+      FConnected := True;
+      FExcelWorkbook.ConnectTo(FExcelApplication.Workbooks.Get_Item(1));
+      BuildSheetsList;
+    end;
+    
+  except
+    Disconnect;
+  end;
+
+end;
+
+procedure TCMExcelExport.ShowExcel;
+begin
+  FExcelApplication.ScreenUpdating[LCID] := Connected;
+  FExcelApplication.Visible[LCID]:=Connected;
+end;
+
+procedure TCMExcelExport.Disconnect;
+begin
+
+  if Connected then
+  try
+    if not FExcelApplication.Visible[LCID] then
+    begin
+      FExcelApplication.DisplayAlerts[LCID] := False;
+      FExcelApplication.Quit;
+    end;
+    FExcelWorkbook.Disconnect;
+    FExcelWorksheet.Disconnect;
+    FExcelApplication.Disconnect;
+    frmExcelExport.free;
+  except
+    // Do nothing
+  end;
+  
+  FWorksheets.Clear;
+  FConnected := False;
+end;
+
+procedure TCMExcelExport.BuildSheetsList;
+var
+  Index : Integer;
+begin
+  for Index := 1 to FExcelWorkbook.Worksheets.Count do
+    FWorksheets.Add((FExcelWorkbook.Worksheets.Item[Index] as _Worksheet).Name)
+end;
+
+procedure TCMExcelExport.InitWorksheet(const SheetName : String);
+begin
+  if Connected then
+  if not SheetExist(SheetName) then
+  begin
+    // Create new worksheet and give him SheetName
+    FExcelWorksheet.ConnectTo((FExcelWorkbook.WorkSheets.Add(EmptyParam,
+                                                             EmptyParam,
+                                                             EmptyParam,
+                                                             EmptyParam,
+                                                             LCID)
+      as _Worksheet));
+
+    FExcelWorksheet.Name := SheetName;
+    FWorksheets.Add(SheetName);
+  end else
+    // Connect to existing Worksheet
+    FExcelWorksheet.ConnectTo((FExcelWorkbook.Worksheets.Item[SheetName] as _Worksheet))
+
+end;
+
+procedure TCMExcelExport.ExportDataset;
+var i : integer;
+begin
+
+  with Dataset do
+  if not Active then
+    Exit;
+
+// Try to connect to Excel
+     i:=0;
+    while i <= DataSet.RecordCount do
+       begin
+  if Connected then
+  begin
+
+    Screen.Cursor := crHourGlass;
+    try
+
+      if ShowSelectedFields then
+      with frmExcelExport do begin
+
+      if not ShowExportedFields(DataSet,Self) then
+      begin
+         Disconnect;
+         exit;
+      end;
+
+      end;
+      
+      // Hiding Screen Updateing
+      FExcelApplication.ScreenUpdating[LCID] := False;
+
+      // Initialization of a new Worksheet
+
+      InitWorksheet(SheetName+inttostr(i));
+
+
+      // Export fieldnames and data and calculate summary
+      ExportTitles(DataSet,ShowSelectedFields);
+      ExportFieldData(DataSet);
+
+      // Calculation selected fields
+      if FSummarySelection <> ssNone then
+        ExportSummary(DataSet);
+
+      // Set width of columns
+      SetColumnWidth;
+
+      
+      if BlnVisible then
+        ShowExcel;
+
+    finally
+      Screen.Cursor := crDefault;
+    end;
+       inc(i,5)
+  end;
+  end; // if Connected
+
+
+end;
+
+function  TCMExcelExport.ExecuteMacro(const Macro : String ;Arguments : array of const) : Boolean;
+
+const
+  MaxArguments = 29;
+
+type
+  TArgumentArray = array [0..MaxArguments] of OleVariant;
+
+  procedure FillArray(A : TArgumentArray; Value : OleVariant);
+  var
+    I : Integer;
+  begin
+    for I := Low(A) to High(A) do
+     A[I] := Value
+  end;
+
+var
+  ArgumentArr : TArgumentArray;
+  I,J : Integer;
+begin
+  Result := Connected;
+  
+  if Result then
+  begin
+    FillArray(ArgumentArr,EmptyParam);
+
+    J := High(Arguments);
+    for I := 0 to J - 1 do
+      ArgumentArr[I] := Arguments[I].VVariant^;
+
+    try
+      // To finish :
+      // Offer an Opportunity to give parameters
+      FExcelApplication.Run(Macro
+            {ArgumentArr[0] ,
+            ArgumentArr[1] ,
+            ArgumentArr[2] ,
+            ArgumentArr[3] ,
+            ArgumentArr[4] ,
+            ArgumentArr[5] ,
+            ArgumentArr[6] ,
+            ArgumentArr[7] ,
+            ArgumentArr[8] ,
+            ArgumentArr[9] ,
+            ArgumentArr[10] ,
+            ArgumentArr[11] ,
+            ArgumentArr[12] ,
+            ArgumentArr[13] ,
+            ArgumentArr[14] ,
+            ArgumentArr[15] ,
+            ArgumentArr[16] ,
+            ArgumentArr[17] ,
+            ArgumentArr[18] ,
+            ArgumentArr[19] ,
+            ArgumentArr[20] ,
+            ArgumentArr[21] ,
+            ArgumentArr[22] ,
+            ArgumentArr[23] ,
+            ArgumentArr[24] ,
+            ArgumentArr[25] ,
+            ArgumentArr[26] ,
+            ArgumentArr[27] ,
+            ArgumentArr[28] ,
+            ArgumentArr[29]}
+            );
+    except
+      // if an exceptions exist in macro function have neqative result
+      Result := False
+    end;
+  end; //if
+end;
+
+procedure TCMExcelExport.ExportTitles;
+
+var
+  IntColumn : Integer;
+  StrCell : String;
+  StrColumn : String;
+  xlStrColumn : String;
+
+procedure GetFields(Data :TDataSet; k :integer);
+
+begin
+
+  with Data do begin
+        FFieldNames.Add(Fields[k].FieldName);
+        FColumnCharacters.Add(StrColumn);
+      //   ShowMessage(StrColumn);
+        StrColumn := GetColumnCharacters(FFieldNames.Count);
+        StrCell:=StrColumn+'1';
+        xlStrColumn := StrColumn + ':' + StrColumn;
+
+                     // Formatting Colums
+
+        case  Fields[k].DataType of
+            ftWideString :
+            begin
+          //    ShowMessage(Fields[k].FieldName+' 123');
+            FExcelWorksheet.Range[xlStrColumn,EmptyParam].NumberFormat :='@';
+            end;
+              ftSmallint ,ftInteger ,ftWord, ftLargeint, ftUnknown :
+              begin
+
+             FExcelWorksheet.Range[xlStrColumn,EmptyParam].NumberFormat :='000000';
+                end;
+             // FExcelWorksheet.Range[xlStrColumn,EmptyParam].NumberFormat :=TNumericField(Fields[k]).DisplayFormat;
+            ftFloat ,ftCurrency ,ftBCD :
+            FExcelWorksheet.Range[xlStrColumn,EmptyParam].NumberFormat :='0.00';
+              //FExcelWorksheet.Range[xlStrColumn,EmptyParam].NumberFormat :=TNumericField(Fields[k]).DisplayFormat;
+              //'#,##0.00';
+
+            ftDate,ftTime,ftDateTime:FExcelWorksheet.Range[xlStrColumn,EmptyParam].NumberFormat :=TNumericField(Fields[k]).DisplayFormat;
+            //'[$-409]d-mmm-yyyy;@';
+               //:FExcelWorksheet.Range[xlStrColumn,EmptyParam].NumberFormat :='dd/mm/yyyy h:mm';
+              // :FExcelWorksheet.Range[xlStrColumn,EmptyParam].NumberFormat :='dd/mm/yyyy h:mm';
+            ftBoolean : ;
+        end; // Case
+
+        // Use DisplayName of column if this is filled in, otherwise use FieldName
+        if Fields[k].DisplayName <> '' then
+          FExcelWorksheet.Range[StrCell,StrCell].Value[EmptyParam] := Fields[k].DisplayName
+        else
+          FExcelWorksheet.Range[StrCell,StrCell].Value[EmptyParam] := Fields[k].FieldName;
+      end;
+end;
+
+begin
+  with Dataset do
+  begin
+    FFieldNames.Clear;
+    FColumnCharacters.Clear;
+
+    for IntColumn := 1 to Fields.Count do
+    begin
+      // Only export fields which are writable in an Excel cell
+      // Don't non visible fields if VisibleFieldsOnly is True
+      // Add these fields to a list, so this list can be used
+      // when exporting data
+      if CanConvertFieldToCell(Fields[IntColumn - 1]) and
+         ((not VisibleFieldsOnly) or (VisibleFieldsOnly and Fields[IntColumn - 1].Visible))
+      then
+      begin
+        if SelFields then begin
+        if   frmExcelExport.CheckSelected(IntColumn - 1) then
+        //showmessage('asf');
+             GetFields(DataSet,IntColumn - 1)
+        end;
+
+         if not SelFields then
+         GetFields(DataSet,IntColumn - 1)
+
+    end;
+    end;
+  end;
+  SetFontAndBorderRange(FFontTitles, FBorderTitles, 'A1', GetColumnCharacters(FFieldNames.Count)+'1');
+end;
+
+procedure TCMExcelExport.ExportFieldData;
+var
+  IntColumn : Integer;
+  PtBookmark : TBookmark;
+  VarValue : Variant;
+  Matrix : Variant;
+
+begin
+
+  FRecordNo := 0;
+  with Dataset do
+  begin
+    DisableControls;
+    PtBookmark := GetBookmark;
+    try
+
+      Matrix := VarArrayCreate([1,Dataset.RecordCount,1,FFieldNames.Count],varVariant);
+      VarArrayLock(Matrix);
+
+      First;
+      while not EOF do
+      begin
+        Inc(FRecordNo);
+
+        for IntColumn := 1 to FFieldNames.Count do
+        begin
+          VarValue := FieldByName(FFieldNames[IntColumn-1]).AsVariant;
+
+          Matrix[FRecordNo,IntColumn] := VarValue;
+        end;
+
+        Next;
+      end;
+
+      FExcelWorksheet.Range['A2',GetColumnCharacters(FFieldNames.Count)+IntToStr(FRecordNo+1)].Value[EmptyParam] := Matrix;
+
+    finally
+      VarArrayUnLock(Matrix);
+      VarClear(Matrix);
+      GotoBookmark(PtBookmark);
+      FreeBookmark(PtBookmark);
+      EnableControls;
+    end;
+  end;
+
+  SetFontAndBorderRange(FFontData, FBorderData, 'A2', GetColumnCharacters(FFieldNames.Count)+IntToStr(FRecordNo + 1));
+
+end;
+
+procedure TCMExcelExport.ExportSummary;
+var
+  IntColumn : Integer;
+  StrCell : String;
+  StrCalc : String;
+  StrBeginCell, StrEndCell : String;
+begin
+  with Dataset do
+  begin
+    for IntColumn := 1 to FFieldNames.Count do
+    begin
+      if ((FSummarySelection = ssValues) and (IsValueField(FieldByName(FFieldNames[IntColumn-1])))) or
+         ((FSummarySelection = ssGiven) and (FSummaryFields.IndexOf(UpperCase(FFieldNames[IntColumn-1])) >= 0)) then
+      begin
+        StrCell:=GetColumnCharacters(IntColumn)+IntToStr(FRecordNo + 2);
+        case FSummaryCalculation of
+          scSUM : StrCalc := 'SUM';
+          scMIN : StrCalc := 'MIN';
+          scMAX : StrCalc := 'MAX';
+        end;
+
+        StrBeginCell := GetColumnCharacters(IntColumn)+'2';
+        StrEndCell := GetColumnCharacters(IntColumn)+IntToStr(FRecordNo + 1);
+        FExcelWorksheet.Range[StrCell,StrCell].Value[EmptyParam] :='='+StrCalc+'('+StrBeginCell+':'+StrEndCell+')';
+      end;
+    end;
+  end;
+  SetFontAndBorderRange(FFontSummary, FBorderSummary, 'A'+IntToStr(FRecordNo + 2), GetColumnCharacters(FFieldNames.Count)+IntToStr(FRecordNo + 2));
+end;
+
+procedure TCMExcelExport.SaveAs(const StrFileName : String; const FileFormat : TFileFormat);
+begin
+  if Connected then
+  begin
+    FExcelApplication.DisplayAlerts[LCID] := False;
+    // Export data to a file
+    case FileFormat of
+      ffXLS : FExcelWorksheet.SaveAs(StrFileName,EmptyParam);
+      // For 97 and 2000 compatible format
+      ffXL97: FExcelWorksheet.SaveAs(StrFileName,xlExcel9795);
+      ffCSV : FExcelWorksheet.SaveAs(StrFileName,xlCSV);
+  //  ffHTM : FExcelWorksheet.SaveAs(StrFileName,xlHtml);  // Only works with Excel2000
+  end;
+  end;
+end;
+
+procedure TCMExcelExport.PrintPreview(const BlnPrintGridLines : Boolean);
+begin
+  if Connected then
+  begin
+    // Show PrintPreview of Excel
+    FExcelWorksheet.PageSetup.PrintGridlines:=BlnPrintGridLines;
+    FExcelWorksheet.PageSetup.CenterHeader:=FExcelWorksheet.Name;
+    FExcelApplication.ScreenUpdating[LCID] := True;
+    FExcelApplication.Visible[LCID]:=True;
+    FExcelWorksheet.PrintPreview;
+  end;
+end;
+
+procedure TCMExcelExport.SetVisibleFieldsOnly(const Value: Boolean);
+begin
+  FVisibleFieldsOnly := Value;
+end;
+
+
+procedure Register;
+begin
+  RegisterComponents('CreditsMgr', [TCMExcelExport]);
+end;
+
+end.
+
+
+

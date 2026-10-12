@@ -1,0 +1,74 @@
+unit UnitGroupDat;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ExtCtrls, ComCtrls, StdCtrls, Buttons;
+
+type
+  TFormGroupDat = class(TForm)
+    PanelMain: TPanel;
+    BtnOk: TBitBtn;
+    DTPDat: TDateTimePicker;
+    RGroupCh: TRadioGroup;
+    DTPEndDat: TDateTimePicker;
+    procedure BtnOkClick(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormGroupDat: TFormGroupDat;
+
+implementation
+
+uses UnitData, UnitFilter, UnitRepGroupNB, UnitRepGroupNL, sboapiDataModuleImpl, SBTranslateProc;
+
+{$R *.DFM}
+
+procedure TFormGroupDat.BtnOkClick(Sender: TObject);
+var
+v_dat,v_date,v_enddat,v_enddate :TDateTime;
+begin
+
+     v_dat:=Integer(Trunc(DTPDat.DateTime));
+     v_enddat:=Integer(Trunc(DTPEndDat.DateTime));
+
+v_date:=DataModWares.SB_MAIN_RESOURCE.CallDateFunction('last_amort_date',[v_dat]);
+v_enddate:=DataModWares.SB_MAIN_RESOURCE.CallDateFunction('last_amort_date',[v_enddat]);
+   with DataModWares.ODSRepGroupAllNB do begin
+               Close;
+               SetVariable('v_amort_date',v_date);
+               SetVariable('end_date',v_enddate);
+               if  DataModWares.ODSGroups.Filter<>'' then begin
+                  Filtered:=false;
+                  Filter:=DataModWares.ODSGroups.Filter;
+                  Filtered:=true;
+               end;
+             Open;
+  end; {with}
+
+           Case RGroupCh.ItemIndex of
+           0:begin QRepGroupAll.Preview;QRepGroupAll.Refresh;end;
+           1:begin QRepGroupAllNL.Preview;QRepGroupAllNL.Refresh;end;
+           end;
+
+end;
+
+procedure TFormGroupDat.FormActivate(Sender: TObject);
+begin
+DTPDat.Date:=DataModWares.SB_MAIN_RESOURCE.CallDateFunction('get_date',[]);
+DTPEndDat.Date:=DataModWares.SB_MAIN_RESOURCE.CallDateFunction('get_date',[]);
+end;
+
+procedure TFormGroupDat.FormCreate(Sender: TObject);
+begin
+SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+end.

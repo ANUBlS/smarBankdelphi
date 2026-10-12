@@ -1,0 +1,40 @@
+object DataModXhoks: TDataModXhoks
+  OldCreateOrder = False
+  Height = 402
+  Width = 676
+  object DataCheck: TOracleDataSet
+    Optimize = False
+    Cursor = crSQLWait
+    QueryAllRecords = False
+    Session = sboapiDataModule.SBSession
+    Left = 240
+    Top = 91
+  end
+  object DataAccount: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      'a.id,a.acc_no,a.name,a.val_acc,a.filial,c.inn'
+      'from'
+      'account a,customers c'
+      'where'
+      '(a.kli_ID=c.id)and'
+      '(a.close_dat is null)'
+      'order by a.acc_no')
+    Optimize = False
+    Cursor = crSQLWait
+    QueryAllRecords = False
+    Session = sboapiDataModule.SBSession
+    Left = 40
+    Top = 269
+  end
+  object DataBankInfo: TOracleDataSet
+    SQL.Strings = (
+      'select * from bankinfo')
+    Optimize = False
+    Cursor = crSQLWait
+    QueryAllRecords = False
+    Session = sboapiDataModule.SBSession
+    Left = 56
+    Top = 69
+  end
+end

@@ -1,0 +1,688 @@
+object DmBlack: TDmBlack
+  OldCreateOrder = False
+  OnCreate = DataModuleCreate
+  OnDestroy = DataModuleDestroy
+  Height = 540
+  Width = 783
+  object MainDSet: TOracleDataSet
+    SQL.Strings = (
+      
+        'select a.*,lower(name) as v_name ,lower(lastname) as v_lastname,' +
+        'lower(middlename) as v_middlename,'
+      '(select name from DOC_TYPES where id=a.doc_type) doctip'
+      ''
+      'from CUSTOMERS_BLACK a'
+      'where 1=1'
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      '')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000180000000400000049004400010000000000080000004E0041004D00
+      4500010000000000100000004C004100530054004E0041004D00450001000000
+      0000140000004D004900440044004C0045004E0041004D004500010000000000
+      1000000044004F0043005F005400590050004500010000000000120000004400
+      4F0043005F00530045005200490045000100000000000E00000044004F004300
+      5F004E0055004D000100000000001600000043004900540049005A0045004E00
+      53004800490050000100000000001400000041004400520053005F0053005400
+      4100540045000100000000001200000041004400520053005F00430049005400
+      59000100000000000E0000004100440044005200450053005300010000000000
+      1000000044004F0043005F004400410054004500010000000000120000004400
+      4F0043005F004F005200470041004E000100000000000C000000470045004E00
+      4400450052000100000000000E00000044004F0043005F00500049004E000100
+      000000000C00000044004F0043005400490050000100000000000A0000005300
+      45005200490041000100000000000E00000050004100530050004F0052005400
+      0100000000001200000042004900520054004800440041005400450001000000
+      00001400000042004C00410043004B005F005400590050004500010000000000
+      10000000460055004C004C004E0041004D0045000100000000000C0000005600
+      5F004E0041004D0045000100000000001400000056005F004C00410053005400
+      4E0041004D0045000100000000001800000056005F004D004900440044004C00
+      45004E0041004D004500010000000000}
+    Session = sboapiDataModule.SBSession
+    Filtered = True
+    Left = 40
+    Top = 32
+    object MainDSetID: TFloatField
+      FieldName = 'ID'
+    end
+    object MainDSetNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 200
+    end
+    object MainDSetLASTNAME: TWideStringField
+      FieldName = 'LASTNAME'
+      Size = 200
+    end
+    object MainDSetMIDDLENAME: TWideStringField
+      FieldName = 'MIDDLENAME'
+      Size = 200
+    end
+    object MainDSetFULLNAME: TWideStringField
+      FieldName = 'FULLNAME'
+      Size = 250
+    end
+    object MainDSetDOC_TYPE: TIntegerField
+      FieldName = 'DOC_TYPE'
+    end
+    object MainDSetDOC_SERIE: TWideStringField
+      FieldName = 'DOC_SERIE'
+      Size = 10
+    end
+    object MainDSetDOC_NUM: TWideStringField
+      FieldName = 'DOC_NUM'
+    end
+    object MainDSetCITIZENSHIP: TWideStringField
+      FieldName = 'CITIZENSHIP'
+      Size = 100
+    end
+    object MainDSetADRS_STATE: TWideStringField
+      FieldName = 'ADRS_STATE'
+      Size = 500
+    end
+    object MainDSetADRS_CITY: TWideStringField
+      FieldName = 'ADRS_CITY'
+      Size = 100
+    end
+    object MainDSetADDRESS: TWideStringField
+      FieldName = 'ADDRESS'
+      Size = 100
+    end
+    object MainDSetDOC_DATE: TDateTimeField
+      FieldName = 'DOC_DATE'
+    end
+    object MainDSetDOC_ORGAN: TWideStringField
+      FieldName = 'DOC_ORGAN'
+      Size = 50
+    end
+    object MainDSetGENDER: TIntegerField
+      FieldName = 'GENDER'
+    end
+    object MainDSetDOC_PIN: TWideStringField
+      FieldName = 'DOC_PIN'
+      Size = 10
+    end
+    object MainDSetSERIA: TWideStringField
+      FieldName = 'SERIA'
+      Size = 10
+    end
+    object MainDSetPASPORT: TWideStringField
+      FieldName = 'PASPORT'
+      Size = 10
+    end
+    object MainDSetBIRTHDATE: TDateTimeField
+      FieldName = 'BIRTHDATE'
+    end
+    object MainDSetBLACK_TYPE: TFloatField
+      FieldName = 'BLACK_TYPE'
+    end
+    object MainDSetDOCTIP: TWideStringField
+      FieldName = 'DOCTIP'
+      Size = 600
+    end
+    object MainDSetV_NAME: TWideStringField
+      FieldName = 'V_NAME'
+      Size = 200
+    end
+    object MainDSetV_LASTNAME: TWideStringField
+      FieldName = 'V_LASTNAME'
+      Size = 200
+    end
+    object MainDSetV_MIDDLENAME: TWideStringField
+      FieldName = 'V_MIDDLENAME'
+      Size = 200
+    end
+  end
+  object MainDSrc: TDataSource
+    DataSet = MainDSet
+    Left = 120
+    Top = 32
+  end
+  object Contry: TOracleDataSet
+    SQL.Strings = (
+      'select rowid,a.* from COUNTRIES a'
+      'order by ID'
+      ''
+      '')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000B00000004000000490044000100000000001200000043004E005400
+      52005F004E0041004D0045000100000000001200000043004E00540052005F00
+      43004F004400450001000000000008000000530059004D004200010000000000
+      0A00000041004C004600410031000100000000000A00000041004C0046004100
+      320001000000000014000000500048004F004E0045005F0043004F0044004500
+      01000000000010000000430055005200520045004E0043005900010000000000
+      100000004300550052005F00530059004D0042000100000000000C0000005300
+      59004D0042004F004C000100000000001000000045004E0047005F004E004100
+      4D004500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 40
+    Top = 88
+  end
+  object CITIES: TOracleDataSet
+    SQL.Strings = (
+      'select * from CITIES'
+      ''
+      'where country_id = :country_id')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000160000003A0043004F0055004E005400520059005F004900
+      440003000000040000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000400000004000000490044000100000000001400000043004F005500
+      4E005400520059005F0049004400010000000000120000004300490054005900
+      5F004E0041004D00450001000000000014000000500048004F004E0045005F00
+      43004F0044004500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 40
+    Top = 160
+  end
+  object ContrySrc: TDataSource
+    DataSet = Contry
+    Left = 120
+    Top = 96
+  end
+  object CITIESSrc: TDataSource
+    DataSet = CITIES
+    Left = 120
+    Top = 160
+  end
+  object OraclePackage1: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'PG_CUST_BLACK'
+    ParameterMode = pmNamed
+    Left = 192
+    Top = 40
+  end
+  object Doctype: TOracleDataSet
+    SQL.Strings = (
+      'select * from DOC_TYPES')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000A0000000400000049004400010000000000080000004E0041004D00
+      45000100000000000C000000530059004D0042004F004C000100000000000C00
+      000053004500520049004500530001000000000018000000500049004E004300
+      4F00440046004F0052004300450044000100000000001600000046004F005200
+      44004F004300540059005000450053000100000000001E000000450058005000
+      52004500530053005F00530048004F00570049004E0047000100000000001400
+      0000530048004F00520054005F004E0041004D00450001000000000012000000
+      4D0049004E004C0045004E00470054004800010000000000120000004D004100
+      58004C0045004E00470054004800010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 40
+    Top = 224
+  end
+  object DtypeDataSrc: TDataSource
+    DataSet = Doctype
+    Left = 128
+    Top = 224
+  end
+  object Sex: TOracleDataSet
+    SQL.Strings = (
+      'select 1 id ,'#39'Ki'#351'i'#39' name from dual'
+      'union'
+      'select 2 id ,'#39'Qad'#305'n'#39' name from dual')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000400000049004400010000000000080000004E0041004D00
+      4500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 328
+    Top = 48
+  end
+  object SexSrc: TDataSource
+    DataSet = Sex
+    Left = 416
+    Top = 56
+  end
+  object Sysdat: TOracleDataSet
+    SQL.Strings = (
+      'select*from sysdat')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000060000000E000000540045004B005F00440041005400010000000000
+      1000000050005200450044005F004400410054000100000000000E0000004100
+      520043005F004400410059000100000000000A00000043004C004F0053004500
+      010000000000100000004E004500570052004100540045005300010000000000
+      18000000500045005200430045004E0054005F00430041004C00430001000000
+      0000}
+    Session = sboapiDataModule.SBSession
+    Left = 296
+    Top = 168
+  end
+  object SysDSrc: TDataSource
+    DataSet = Sysdat
+    Left = 408
+    Top = 160
+  end
+  object DataSource1: TDataSource
+    DataSet = OracleDataSet1
+    Left = 72
+    Top = 320
+  end
+  object OracleDataSet1: TOracleDataSet
+    SQL.Strings = (
+      'select rowid,a.*from black_countries a')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000300000004000000490044000100000000000C00000043004F004E00
+      5400490044000100000000001200000043004E00540052005F0043004F004400
+      4500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 160
+    Top = 320
+    object OracleDataSet1ID: TFloatField
+      FieldName = 'ID'
+    end
+    object OracleDataSet1CONTID: TFloatField
+      FieldName = 'CONTID'
+    end
+    object OracleDataSet1CNTR_CODE: TIntegerField
+      FieldName = 'CNTR_CODE'
+    end
+    object OracleDataSet1count_name: TWideStringField
+      DisplayWidth = 20
+      FieldKind = fkLookup
+      FieldName = 'count_name'
+      LookupDataSet = Contry
+      LookupKeyFields = 'ID'
+      LookupResultField = 'CNTR_NAME'
+      KeyFields = 'CONTID'
+      Size = 100
+      Lookup = True
+    end
+  end
+  object ExcelWorkbook1: TExcelWorkbook
+    AutoConnect = False
+    ConnectKind = ckRunningOrNew
+    Left = 656
+    Top = 8
+  end
+  object ExcelApplication1: TExcelApplication
+    AutoConnect = False
+    ConnectKind = ckNewInstance
+    AutoQuit = False
+    Left = 568
+  end
+  object OracleDataSet2: TOracleDataSet
+    SQL.Strings = (
+      'select a.rowid,a.* from customers_black a'
+      ''
+      '')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000140000000400000049004400010000000000080000004E0041004D00
+      4500010000000000100000004C004100530054004E0041004D00450001000000
+      0000140000004D004900440044004C0045004E0041004D004500010000000000
+      1000000044004F0043005F005400590050004500010000000000120000004400
+      4F0043005F00530045005200490045000100000000000E00000044004F004300
+      5F004E0055004D000100000000001600000043004900540049005A0045004E00
+      53004800490050000100000000001400000041004400520053005F0053005400
+      4100540045000100000000001200000041004400520053005F00430049005400
+      59000100000000000E0000004100440044005200450053005300010000000000
+      1000000044004F0043005F004400410054004500010000000000120000004400
+      4F0043005F004F005200470041004E000100000000000C000000470045004E00
+      4400450052000100000000000E00000044004F0043005F00500049004E000100
+      000000000A000000530045005200490041000100000000000E00000050004100
+      530050004F005200540001000000000012000000420049005200540048004400
+      4100540045000100000000001400000042004C00410043004B005F0054005900
+      5000450001000000000010000000460055004C004C004E0041004D0045000100
+      00000000}
+    Session = sboapiDataModule.SBSession
+    Left = 720
+    Top = 32
+    object OracleDataSet2ID: TFloatField
+      FieldName = 'ID'
+    end
+    object OracleDataSet2NAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 200
+    end
+    object OracleDataSet2LASTNAME: TWideStringField
+      FieldName = 'LASTNAME'
+      Size = 200
+    end
+    object OracleDataSet2MIDDLENAME: TWideStringField
+      FieldName = 'MIDDLENAME'
+      Size = 200
+    end
+    object OracleDataSet2DOC_TYPE: TIntegerField
+      FieldName = 'DOC_TYPE'
+    end
+    object OracleDataSet2DOC_SERIE: TWideStringField
+      FieldName = 'DOC_SERIE'
+      Size = 10
+    end
+    object OracleDataSet2DOC_NUM: TWideStringField
+      FieldName = 'DOC_NUM'
+    end
+    object OracleDataSet2CITIZENSHIP: TWideStringField
+      FieldName = 'CITIZENSHIP'
+      Size = 100
+    end
+    object OracleDataSet2ADRS_STATE: TWideStringField
+      FieldName = 'ADRS_STATE'
+      Size = 500
+    end
+    object OracleDataSet2ADRS_CITY: TWideStringField
+      FieldName = 'ADRS_CITY'
+      Size = 100
+    end
+    object OracleDataSet2ADDRESS: TWideStringField
+      FieldName = 'ADDRESS'
+      Size = 100
+    end
+    object OracleDataSet2DOC_DATE: TDateTimeField
+      FieldName = 'DOC_DATE'
+    end
+    object OracleDataSet2DOC_ORGAN: TWideStringField
+      FieldName = 'DOC_ORGAN'
+      Size = 50
+    end
+    object OracleDataSet2GENDER: TIntegerField
+      FieldName = 'GENDER'
+    end
+    object OracleDataSet2DOC_PIN: TWideStringField
+      FieldName = 'DOC_PIN'
+      Size = 10
+    end
+    object OracleDataSet2SERIA: TWideStringField
+      FieldName = 'SERIA'
+      Size = 10
+    end
+    object OracleDataSet2PASPORT: TWideStringField
+      FieldName = 'PASPORT'
+      Size = 10
+    end
+    object OracleDataSet2BIRTHDATE: TDateTimeField
+      FieldName = 'BIRTHDATE'
+    end
+    object OracleDataSet2BLACK_TYPE: TFloatField
+      FieldName = 'BLACK_TYPE'
+    end
+  end
+  object DataSource2: TDataSource
+    DataSet = OracleDataSet2
+    Left = 704
+    Top = 120
+  end
+  object OracleDataSet3: TOracleDataSet
+    SQL.Strings = (
+      'delete from customers_black where black_type=1')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 584
+    Top = 64
+  end
+  object OraclePackage2: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'excelpkg'
+    Left = 496
+    Top = 64
+  end
+  object dsrc_blecxml: TDataSource
+    DataSet = ods_blecxml
+    Left = 420
+    Top = 308
+  end
+  object ods_blecxml: TOracleDataSet
+    SQL.Strings = (
+      'select* from cust_black_persons where dataid is not null'
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      '')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      0500000012000000040000004900440001000000000012000000540059005000
+      45005F0043005500530054000100000000000C00000044004100540041004900
+      440001000000000014000000560045005200530049004F004E004E0055004D00
+      01000000000014000000460049005200530054005F004E0041004D0045000100
+      00000000160000005300450043004F004E0044005F004E0041004D0045000100
+      0000000014000000540048004900520044005F004E0041004D00450001000000
+      00001600000046004F0055005200540048005F004E0041004D00450001000000
+      00001800000055004E005F004C004900530054005F0054005900500045000100
+      00000000200000005200450046004500520045004E00430045005F004E005500
+      4D00420045005200010000000000120000004C00490053005400450044005F00
+      4F004E00010000000000280000004E0041004D0045005F004F00520049004700
+      49004E0041004C005F0053004300520049005000540001000000000012000000
+      43004F004D004D0045004E00540053003100010000000000220000004E004100
+      540049004F004E0041004C004900540059005F00560041004C00550045000100
+      000000001800000054005900500045005F004F0046005F004400410054004500
+      0100000000000800000059004500410052000100000000000E00000043004F00
+      55004E005400520059000100000000001000000058004D004C005F0054005900
+      50004500010000000000}
+    Session = sboapiDataModule.SBSession
+    AfterScroll = ods_blecxmlAfterScroll
+    Left = 419
+    Top = 251
+    object ods_blecxmlID: TFloatField
+      FieldName = 'ID'
+    end
+    object ods_blecxmlTYPE_CUST: TFloatField
+      FieldName = 'TYPE_CUST'
+    end
+    object ods_blecxmlVERSIONNUM: TFloatField
+      FieldName = 'VERSIONNUM'
+    end
+    object ods_blecxmlFIRST_NAME: TWideStringField
+      FieldName = 'FIRST_NAME'
+      Size = 500
+    end
+    object ods_blecxmlSECOND_NAME: TWideStringField
+      FieldName = 'SECOND_NAME'
+      Size = 500
+    end
+    object ods_blecxmlTHIRD_NAME: TWideStringField
+      FieldName = 'THIRD_NAME'
+      Size = 500
+    end
+    object ods_blecxmlFOURTH_NAME: TWideStringField
+      FieldName = 'FOURTH_NAME'
+      Size = 500
+    end
+    object ods_blecxmlUN_LIST_TYPE: TWideStringField
+      FieldName = 'UN_LIST_TYPE'
+      Size = 200
+    end
+    object ods_blecxmlREFERENCE_NUMBER: TWideStringField
+      FieldName = 'REFERENCE_NUMBER'
+      Size = 100
+    end
+    object ods_blecxmlLISTED_ON: TWideStringField
+      FieldName = 'LISTED_ON'
+      Size = 50
+    end
+    object ods_blecxmlNAME_ORIGINAL_SCRIPT: TWideStringField
+      FieldName = 'NAME_ORIGINAL_SCRIPT'
+      Size = 300
+    end
+    object ods_blecxmlCOMMENTS1: TWideMemoField
+      FieldName = 'COMMENTS1'
+      BlobType = ftWideMemo
+    end
+    object ods_blecxmlNATIONALITY_VALUE: TWideStringField
+      FieldName = 'NATIONALITY_VALUE'
+      Size = 100
+    end
+    object ods_blecxmlTYPE_OF_DATE: TWideStringField
+      FieldName = 'TYPE_OF_DATE'
+      Size = 50
+    end
+    object ods_blecxmlYEAR: TWideStringField
+      FieldName = 'YEAR'
+      Size = 50
+    end
+    object ods_blecxmlCOUNTRY: TWideStringField
+      FieldName = 'COUNTRY'
+      Size = 500
+    end
+    object ods_blecxmlDATAID: TWideStringField
+      FieldName = 'DATAID'
+      Size = 300
+    end
+    object ods_blecxmlXML_TYPE: TIntegerField
+      FieldName = 'XML_TYPE'
+    end
+  end
+  object dsrc__blecnamexml: TDataSource
+    DataSet = ods_blecnamexml
+    Left = 530
+    Top = 307
+  end
+  object ods_blecnamexml: TOracleDataSet
+    SQL.Strings = (
+      'select * from cust_black_Aliasname  where dataid=:v_dataid'
+      ''
+      '')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000120000003A0056005F004400410054004100490044000500
+      00000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      05000000040000000400000049004400010000000000080000004E0041004D00
+      45000100000000000C0000004400410054004100490044000100000000000A00
+      00004E0041004D0045003100010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 528
+    Top = 248
+    object ods_blecnamexmlID: TFloatField
+      FieldName = 'ID'
+    end
+    object ods_blecnamexmlDATAID: TWideStringField
+      FieldName = 'DATAID'
+      Size = 1000
+    end
+    object ods_blecnamexmlNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 1000
+    end
+    object ods_blecnamexmlNAME1: TWideStringField
+      FieldName = 'NAME1'
+      Size = 1000
+    end
+  end
+  object dsrc__blecpaspxml: TDataSource
+    DataSet = ods_blecpaspxml
+    Left = 649
+    Top = 307
+  end
+  object ods_blecpaspxml: TOracleDataSet
+    SQL.Strings = (
+      'select * from cust_black_contry where dataid=:v_dataid'
+      ''
+      '')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000120000003A0056005F004400410054004100490044000300
+      00000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      05000000040000000C0000004400410054004100490044000100000000000800
+      000043004900540059000100000000001C000000530054004100540045005F00
+      500052004F00560049004E00430045000100000000000E00000043004F005500
+      4E00540052005900010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 648
+    Top = 248
+    object ods_blecpaspxmlDATAID: TFloatField
+      FieldName = 'DATAID'
+    end
+    object ods_blecpaspxmlCITY: TWideStringField
+      FieldName = 'CITY'
+      Size = 200
+    end
+    object ods_blecpaspxmlSTATE_PROVINCE: TWideStringField
+      FieldName = 'STATE_PROVINCE'
+      Size = 300
+    end
+    object ods_blecpaspxmlCOUNTRY: TWideStringField
+      FieldName = 'COUNTRY'
+      Size = 300
+    end
+  end
+  object dsrc_search: TDataSource
+    DataSet = ods_search
+    Left = 312
+    Top = 312
+  end
+  object ods_search: TOracleDataSet
+    SQL.Strings = (
+      'select '
+      '*from cust_black_search where dataid is not null'
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      'order by :title'
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      '')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000C0000003A005400490054004C0045000100000007000000
+      6461746169640000000000}
+    QBEDefinition.QBEFieldDefs = {
+      05000000030000000C0000004400410054004100490044000100000000000600
+      00004E0041004D00010000000000080000004E0041004D003100010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 312
+    Top = 376
+    object ods_searchDATAID: TWideStringField
+      FieldName = 'DATAID'
+      Size = 300
+    end
+    object ods_searchNAM: TWideStringField
+      FieldName = 'NAM'
+      Size = 2003
+    end
+    object ods_searchNAM1: TWideStringField
+      FieldName = 'NAM1'
+      Size = 2001
+    end
+  end
+  object ods_truncate: TOracleDataSet
+    SQL.Strings = (
+      'truncate table cust_black_search')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 576
+    Top = 400
+  end
+  object SB_ACA: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'SB_ACA'
+    Left = 448
+    Top = 376
+  end
+end

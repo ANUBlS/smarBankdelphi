@@ -1,0 +1,220 @@
+object DataModPartialPayment: TDataModPartialPayment
+  OldCreateOrder = False
+  Left = 226
+  Top = 193
+  Height = 640
+  Width = 870
+  object Payments: TOracleDataSet
+    SQL.Strings = (
+      'SELECT rowid,a.*'
+      'FROM sbcm_tranches a'
+      'where id# = :ContractID'
+      'order by hdate')
+    Variables.Data = {
+      03000000010000000B0000003A434F4E54524143544944030000000000000000
+      000000}
+    QBEDefinition.QBEFieldDefs = {
+      040000000A000000020000004944010000000000050000004844415445010000
+      0000000400000054524944010000000000030000004944230100000000000500
+      0000544F54414C01000000000007000000524553455256450100000000000C00
+      00005041594D454E54544F54414C010000000000040000005553494401000000
+      0000060000005354415455530100000000000B0000004445534352495054494F
+      4E010000000000}
+    Cursor = crSQLWait
+    QueryAllRecords = False
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 16
+    Top = 16
+    object PaymentsID: TFloatField
+      FieldName = 'ID'
+    end
+    object PaymentsHDATE: TDateTimeField
+      FieldName = 'HDATE'
+    end
+    object PaymentsRESERVE: TFloatField
+      FieldName = 'RESERVE'
+    end
+    object PaymentsTOTAL: TFloatField
+      FieldName = 'TOTAL'
+    end
+    object PaymentsDESCRIPTION: TStringField
+      FieldName = 'DESCRIPTION'
+    end
+  end
+  object PaymentsDatSrc: TDataSource
+    DataSet = Payments
+    Left = 88
+    Top = 16
+  end
+  object DepositInfo: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      '     cust.name,'
+      '     cont.amount,'
+      '     cont.currency,'
+      '     cont.customerid'
+      'from customers cust,'
+      '     sbcm_contracts cont'
+      'where'
+      'cont.id = :ContractID and '
+      'cust.id = cont.customerid'
+      '')
+    Variables.Data = {
+      03000000010000000B0000003A434F4E54524143544944030000000000000000
+      000000}
+    QBEDefinition.QBEFieldDefs = {
+      0400000004000000040000004E414D4501000000000006000000414D4F554E54
+      0100000000000800000043555252454E43590100000000000A00000043555354
+      4F4D45524944010000000000}
+    Cursor = crSQLWait
+    DetailFields = 'CONTRACTID'
+    QueryAllRecords = False
+    Session = sboapiDataModule.SBSession
+    Left = 17
+    Top = 64
+    object DepositInfoNAME: TStringField
+      FieldName = 'NAME'
+      Size = 90
+    end
+    object DepositInfoAMOUNT: TFloatField
+      FieldName = 'AMOUNT'
+    end
+    object DepositInfoCURRENCY: TFloatField
+      FieldName = 'CURRENCY'
+    end
+    object DepositInfoCUSTOMERID: TFloatField
+      FieldName = 'CUSTOMERID'
+    end
+  end
+  object DepositInfoSrc: TDataSource
+    DataSet = DepositInfo
+    Left = 90
+    Top = 64
+  end
+  object Sysdat: TOracleDataSet
+    SQL.Strings = (
+      'select tek_dat from sysdat')
+    QBEDefinition.QBEFieldDefs = {04000000010000000700000054454B5F444154010000000000}
+    Cursor = crSQLWait
+    QueryAllRecords = False
+    Session = sboapiDataModule.SBSession
+    Left = 16
+    Top = 112
+    object SysdatTEK_DAT: TDateTimeField
+      FieldName = 'TEK_DAT'
+    end
+  end
+  object SysdatDatSrc: TDataSource
+    DataSet = Sysdat
+    Left = 91
+    Top = 112
+  end
+  object sbcm_payments: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'sbcm_payments'
+    ParameterMode = pmNamed
+    Cursor = crSQLWait
+    Left = 24
+    Top = 176
+  end
+  object DebitAccs: TOracleDataSet
+    SQL.Strings = (
+      'select '
+      '       id,'
+      '       acc_no,'
+      '       name'
+      'from account '
+      'where close_dat is null'
+      'and  bal_cn1 in ( select accgroup from sbcm_acc_zone_info '
+      'where zoneid = (select zoneid from sbcm_acc_zones'
+      'where name = '#39'Deposit'#39'))'
+      
+        'and id in(select CONTRACTACCID from sbcm_contract_accounts where' +
+        ' id#=:contractid)'
+      '')
+    Variables.Data = {
+      03000000010000000B0000003A434F4E54524143544944030000000000000000
+      000000}
+    QBEDefinition.QBEFieldDefs = {
+      0400000003000000020000004944010000000000060000004143435F4E4F0100
+      00000000040000004E414D45010000000000}
+    Cursor = crSQLWait
+    QueryAllRecords = False
+    Session = sboapiDataModule.SBSession
+    Left = 176
+    Top = 16
+  end
+  object DebitAccsDatSrc: TDataSource
+    AutoEdit = False
+    DataSet = DebitAccs
+    Left = 248
+    Top = 16
+  end
+  object CreditAccs: TOracleDataSet
+    SQL.Strings = (
+      'select '
+      '       id,'
+      '       acc_no,'
+      '       name'
+      'from account '
+      'where close_dat is null'
+      'and  bal_cn1 in ( select accgroup from sbcm_acc_zone_info '
+      'where zoneid = (select zoneid from sbcm_acc_zones'
+      'where name = '#39'Account'#39'))'
+      
+        'and id in(select CLIENTACCID from sbcm_contract_accounts where i' +
+        'd#=:contractid)'
+      '')
+    Variables.Data = {
+      03000000010000000B0000003A434F4E54524143544944030000000000000000
+      000000}
+    QBEDefinition.QBEFieldDefs = {
+      0400000003000000020000004944010000000000060000004143435F4E4F0100
+      00000000040000004E414D45010000000000}
+    Cursor = crSQLWait
+    QueryAllRecords = False
+    Session = sboapiDataModule.SBSession
+    Left = 176
+    Top = 64
+  end
+  object CreditAccsDatSrc: TDataSource
+    AutoEdit = False
+    DataSet = CreditAccs
+    Left = 248
+    Top = 64
+  end
+  object PercentAccs: TOracleDataSet
+    SQL.Strings = (
+      'select '
+      '       id,'
+      '       acc_no,'
+      '       name'
+      'from account '
+      'where close_dat is null'
+      'and  bal_cn1 in ( select accgroup from sbcm_acc_zone_info '
+      'where zoneid = (select zoneid from sbcm_acc_zones'
+      'where name = '#39'Percent'#39'))'
+      
+        'and id in(select INTERESTACCID from sbcm_contract_accounts where' +
+        ' id#=:contractid)'
+      '')
+    Variables.Data = {
+      03000000010000000B0000003A434F4E54524143544944030000000000000000
+      000000}
+    QBEDefinition.QBEFieldDefs = {
+      0400000003000000020000004944010000000000060000004143435F4E4F0100
+      00000000040000004E414D45010000000000}
+    Cursor = crSQLWait
+    QueryAllRecords = False
+    Session = sboapiDataModule.SBSession
+    Left = 176
+    Top = 112
+  end
+  object PercentAccsDatSrc: TDataSource
+    AutoEdit = False
+    DataSet = PercentAccs
+    Left = 256
+    Top = 112
+  end
+end

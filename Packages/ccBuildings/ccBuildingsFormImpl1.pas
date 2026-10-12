@@ -1,0 +1,858 @@
+﻿unit ccBuildingsFormImpl1;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActiveX, AxCtrls, ccBuildings_TLB, StdVcl, Mask, DBCtrls, Buttons,
+  StdCtrls, Grids, DBGrids, Db;
+
+type
+  TccBuildingsForm = class(TActiveForm, IccBuildingsForm)
+    GrpBoxCompanies: TGroupBox;
+    C_Searchbox: TGroupBox;
+    EditNo: TEdit;
+    EditName: TEdit;
+    C_Searchbox_: TGroupBox;
+    BtnCompanyAdd: TSpeedButton;
+    BtnCompanyEdit: TSpeedButton;
+    BtnCompanyDel: TSpeedButton;
+    SpeedButton13: TSpeedButton;
+    BtnCompanySearch: TSpeedButton;
+    BtnCompanyRefresh: TSpeedButton;
+    GrpBoxBuildings: TGroupBox;
+    B_Searchbox: TGroupBox;
+    Edit_Name: TEdit;
+    Edit_Adress: TEdit;
+    Edit_Entrance: TEdit;
+    Edit_Flats: TEdit;
+    EditID: TEdit;
+    Groupbox: TGroupBox;
+    BtnBuildingAdd: TSpeedButton;
+    BtnBuildingEdit: TSpeedButton;
+    BtnBuildingDel: TSpeedButton;
+    SpeedButton14: TSpeedButton;
+    BtnBuildingSearch: TSpeedButton;
+    BtnBuildingRefresh: TSpeedButton;
+    DBEdit1: TDBEdit;
+    GrpBoxFlats: TGroupBox;
+    F_Searchbox: TGroupBox;
+    Edit_Code: TEdit;
+    EditFlatNumber: TEdit;
+    EditEntrance: TEdit;
+    EditFloor: TEdit;
+    EditRoom: TEdit;
+    EditArea: TEdit;
+    EditPrice1: TEdit;
+    EditPriceGen: TEdit;
+    F_Searchbox_: TGroupBox;
+    BtnFlatAdd: TSpeedButton;
+    BtnFlatEdit: TSpeedButton;
+    BtnFlatDel: TSpeedButton;
+    SpeedButton15: TSpeedButton;
+    BtnFlatSearch: TSpeedButton;
+    BtnFlatRefresh: TSpeedButton;
+    DBEdit2: TDBEdit;
+    DBGrid1: TDBGrid;
+    DBGrid2: TDBGrid;
+    DBGrid3: TDBGrid;
+    Edit_Floor: TEdit;
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure DBGrid1CellClick(Column: TColumn);
+    procedure DBGrid2CellClick(Column: TColumn);
+    procedure BtnCompanyAddClick(Sender: TObject);
+    procedure BtnCompanyEditClick(Sender: TObject);
+    procedure BtnCompanyDelClick(Sender: TObject);
+    procedure BtnCompanyRefreshClick(Sender: TObject);
+    procedure BtnCompanySearchClick(Sender: TObject);
+    procedure EditNameChange(Sender: TObject);
+    procedure EditNoExit(Sender: TObject);
+    procedure EditNoChange(Sender: TObject);
+    procedure DBGrid1TitleClick(Column: TColumn);
+    procedure DBGrid1DblClick(Sender: TObject);
+    procedure BtnBuildingAddClick(Sender: TObject);
+    procedure BtnBuildingEditClick(Sender: TObject);
+    procedure BtnBuildingDelClick(Sender: TObject);
+    procedure BtnBuildingRefreshClick(Sender: TObject);
+    procedure BtnBuildingSearchClick(Sender: TObject);
+    procedure BtnFlatAddClick(Sender: TObject);
+    procedure BtnFlatEditClick(Sender: TObject);
+    procedure BtnFlatDelClick(Sender: TObject);
+    procedure BtnFlatRefreshClick(Sender: TObject);
+    procedure BtnFlatSearchClick(Sender: TObject);
+    procedure EditIDChange(Sender: TObject);
+    procedure Edit_NameChange(Sender: TObject);
+    procedure Edit_AdressChange(Sender: TObject);
+    procedure Edit_EntranceChange(Sender: TObject);
+    procedure Edit_FlatsChange(Sender: TObject);
+    procedure Edit_CodeChange(Sender: TObject);
+    procedure DBGrid2DblClick(Sender: TObject);
+    procedure DBGrid3DblClick(Sender: TObject);
+    procedure DBGrid2TitleClick(Column: TColumn);
+    procedure DBGrid3TitleClick(Column: TColumn);
+    procedure Edit_FloorChange(Sender: TObject);
+  private
+    { Private declarations }
+    FEvents: IccBuildingsFormEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+  public
+    { Public declarations }
+    procedure Initialize; override;
+    procedure InData;
+  end;
+
+var
+i:integer;
+
+implementation
+
+uses ComObj, ComServ, UnitCompany, UnitDataModccBuildings,
+ UnitBuilding, UnitFlat;
+
+{$R *.DFM}
+
+{ TccBuildingsForm }
+
+procedure TccBuildingsForm.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_ccBuildingsFormPage); }
+end;
+
+procedure TccBuildingsForm.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as IccBuildingsFormEvents;
+end;
+
+procedure TccBuildingsForm.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TccBuildingsForm.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TccBuildingsForm.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TccBuildingsForm.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TccBuildingsForm.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TccBuildingsForm.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TccBuildingsForm.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TccBuildingsForm.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TccBuildingsForm.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TccBuildingsForm.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TccBuildingsForm.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TccBuildingsForm.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TccBuildingsForm.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TccBuildingsForm.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TccBuildingsForm.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TccBuildingsForm.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TccBuildingsForm.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TccBuildingsForm.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TccBuildingsForm.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TccBuildingsForm._Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TccBuildingsForm.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TccBuildingsForm.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TccBuildingsForm.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TccBuildingsForm.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TccBuildingsForm.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TccBuildingsForm.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TccBuildingsForm.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TccBuildingsForm.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TccBuildingsForm.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TccBuildingsForm.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TccBuildingsForm.Set_AxBorderStyle(
+  Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TccBuildingsForm.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TccBuildingsForm.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TccBuildingsForm.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TccBuildingsForm.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TccBuildingsForm.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TccBuildingsForm.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TccBuildingsForm.Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TccBuildingsForm.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TccBuildingsForm.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TccBuildingsForm.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TccBuildingsForm.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TccBuildingsForm.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TccBuildingsForm.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+procedure TccBuildingsForm.InData;
+const
+   c_err_message = ' Table or View in Dataset "%s" does not exist! ';
+var
+   i: Word;
+begin
+ with DataModccBuildings do
+  for i :=0 to ComponentCount -1 do
+  if (Components[i] is TDataSet) then
+   if (Components[i] as TDataSet).Tag = 1 then
+   try
+     (Components[i] as TDataSet).Open;
+   except
+     raise Exception.Create(Format(c_err_message, [(Components[i] as TDataSet).Name]));
+   end;
+end;
+
+
+procedure TccBuildingsForm.ActiveFormCreate(Sender: TObject);
+begin
+  if not Assigned (DataModccBuildings) then
+   DataModccBuildings :=TDataModccBuildings.Create(Self);
+  Indata;
+  DBGrid1CellClick(DBGrid1.Columns[0]);
+
+  with Datamodccbuildings.CC_Buyer_Flat do begin
+   SetVariable('Title','Rownum');
+   Refresh;
+  end;
+end;
+
+procedure TccBuildingsForm.DBGrid1CellClick(Column: TColumn);
+begin
+  DBGrid2CellClick(DBGrid2.Columns[0]);
+end;
+
+procedure TccBuildingsForm.DBGrid1DblClick(Sender: TObject);
+begin
+  BtnCompanyEdit.Click;
+end;
+
+procedure TccBuildingsForm.DBGrid2CellClick(Column: TColumn);
+begin
+  with DataModccBuildings do begin
+    CC_Buyer_Flat.Close;
+    CC_Buyer_Flat.sql[3]:='';
+    CC_Buyer_Flat.sql[4]:='';
+    CC_Buyer_Flat.sql[5]:='';
+    CC_Buyer_Flat.sql[6]:='';
+    CC_Buyer_Flat.sql[7]:='';
+    CC_Buyer_Flat.sql[8]:='';
+    CC_Buyer_Flat.sql[9]:='';
+    CC_Buyer_Flat.sql[10]:='';
+    CC_Buyer_Flat.sql[11]:='';
+    CC_Buyer_Flat.Open;
+  end;
+end;
+
+procedure TccBuildingsForm.DBGrid2DblClick(Sender: TObject);
+begin
+  BtnBuildingEdit.Click;
+end;
+
+procedure TccBuildingsForm.DBGrid2TitleClick(Column: TColumn);
+var
+  TitleName :string;
+begin
+  TitleName :=Column.FieldName;
+  with Datamodccbuildings.CC_building do begin
+   SetVariable('Title',TitleName);
+   Refresh;
+  end;
+end;
+
+procedure TccBuildingsForm.DBGrid3DblClick(Sender: TObject);
+begin
+  BtnFlatEdit.Click;
+end;
+
+procedure TccBuildingsForm.DBGrid3TitleClick(Column: TColumn);
+var
+  TitleName :string;
+begin
+  TitleName :=Column.FieldName;
+  with Datamodccbuildings.CC_Buyer_Flat do begin
+   SetVariable('Title',TitleName);
+   Refresh;
+  end;
+end;
+
+procedure TccBuildingsForm.BtnCompanyAddClick(Sender: TObject);
+begin
+  try
+   FormCompany :=TFormCompany.Create(self);
+   FormCompany.AddUpd.Text:='1';
+   FormCompany.ShowModal;
+  finally
+   FormCompany.Release;
+  end;
+end;
+
+procedure TccBuildingsForm.BtnCompanyEditClick(Sender: TObject);
+begin
+  with DataModccBuildings.CC_Company do
+   if IsEmpty then begin
+    ShowMessage('Heç bir şirkət qeyd olunmayıb!');
+    Exit;
+   end
+   else begin
+   try
+    FormCompany :=TFormCompany.Create(Self);
+    FormCompany.AddUpd.Text :='2';
+    FormCompany.EditCompany.Text :=DataModccBuildings.CC_Company.FieldByName('comp_name').AsString;
+    FormCompany.ShowModal;
+   finally
+    FormCompany.Release;
+   end;
+  end;
+end;
+
+procedure TccBuildingsForm.BtnCompanyDelClick(Sender: TObject);
+var
+  p_ID :integer;
+  p_Table_Name :string;
+begin
+  with Datamodccbuildings.CC_Company do
+   if IsEmpty then begin
+    ShowMessage('Heç bir şirkət qeyd olunmayıb!');
+    Exit;
+   end
+   else begin
+    p_ID :=Datamodccbuildings.CC_Company.FieldByName('ID').AsInteger;
+    p_Table_Name :='CC_Companies';
+    if  MessageDlg(Format('Şirkət silinsin?',[p_id]),mtConfirmation,mbYesNoCancel,0)=mrYes then begin
+     Datamodccbuildings.CC_OP.CallProcedure('del_fromTable',[p_Table_Name,p_ID]);
+     Datamodccbuildings.CC_Company.Refresh;
+    end;
+   end;
+end;
+
+procedure TccBuildingsForm.BtnCompanyRefreshClick(Sender: TObject);
+begin
+with Datamodccbuildings.CC_Company do
+ if IsEmpty then
+    begin
+     ShowMessage('Heç bir şirkət qeyd olunmayıb!');
+     Exit;
+    end
+  else begin
+  Datamodccbuildings.CC_Company.close;
+    Datamodccbuildings.CC_Company.open;
+end;
+end;
+
+procedure TccBuildingsForm.BtnBuildingRefreshClick(Sender: TObject);
+begin
+  DataModccBuildings.CC_building.Close;
+  DataModccBuildings.CC_building.Open;
+end;
+
+procedure TccBuildingsForm.BtnFlatRefreshClick(Sender: TObject);
+begin
+  DataModccBuildings.CC_Buyer_Flat.Close;
+  DataModccBuildings.CC_Buyer_Flat.Open;
+end;
+
+procedure TccBuildingsForm.BtnFlatAddClick(Sender: TObject);
+begin
+  with DataModccBuildings.CC_building do
+   if IsEmpty then begin
+    ShowMessage('Heç bir bina qeyd olunmayıb!');
+    Exit;
+   end
+   else with FormFlat do begin
+    try
+     FormFlat :=TFormFlat.Create(Self);
+     AddUpd :=1;
+     ShowModal;
+    finally
+     Release;
+   end;
+  end;
+end;
+
+procedure TccBuildingsForm.BtnFlatEditClick(Sender: TObject);
+begin
+  with DataModccBuildings.CC_Buyer_Flat do
+   if IsEmpty then begin
+    ShowMessage('Heç bir mənzil qeyd olunmayıb!');
+    Exit;
+   end
+   else with FormFlat, DataModccBuildings.CC_Buyer_Flat do begin
+    try
+     FormFlat :=TFormFlat.Create(Self);
+     AddUpd :=2;
+     EditCode.Text :=FieldByName('code').AsString;
+     EditNo.Text :=FieldByName('FlatNumber').AsString;
+     EditEntrance.Text :=FieldByName('entrance').AsString;
+     EditFloor.Text :=FieldByName('ffloor').AsString;
+     EditRoom.Text :=FieldByName('rooms').AsString;
+     EditArea.Text :=FieldByName('area').AsString;
+     EditPrice1.Text :=FieldByName('price1').AsString;
+     EditPricegen.text :=FieldByName('pricegen').AsString;
+     ShowModal;
+    finally
+     Release;
+   end;
+  end;
+end;
+
+procedure TccBuildingsForm.BtnFlatDelClick(Sender: TObject);
+var
+  p_id :integer;
+  p_table_name: string;
+begin
+  with DataModccBuildings.CC_Buyer_Flat do
+   if IsEmpty then begin
+    ShowMessage('Heç bir mənzil qeyd olunmayıb!');
+    Exit;
+   end
+   else begin
+    p_id :=DataModccBuildings.CC_Buyer_Flat.FieldByName('ID').AsInteger;
+    p_table_name:='cc_flats';
+    if  MessageDlg(Format('Mənzil silinsin?',[p_id]),mtConfirmation,mbYesNoCancel,0)=mrYes then
+     with DataModccBuildings do begin
+      CC_OP.CallProcedure('del_fromTable',[p_table_name,p_id]);
+      CC_Buyer_Flat.Close;
+      CC_Buyer_Flat.Open;
+     end;
+    end;
+end;
+
+procedure TccBuildingsForm.BtnFlatSearchClick(Sender: TObject);
+begin
+  Edit_Code.Text:='';
+  EditFlatnumber.Text:='';
+  EditEntrance.Text:='';
+  EditFloor.Text:='';
+  EditRoom.Text:='';
+  EditArea.Text:='';
+  EditPrice1.Text:='';
+  EditPriceGen.Text:='';
+  if F_Searchbox.Visible =False then F_Searchbox.Visible :=True
+  else F_Searchbox.Visible :=False;
+end;
+
+procedure TccBuildingsForm.BtnBuildingAddClick(Sender: TObject);
+begin
+  with DataModccBuildings.CC_Company do
+   if IsEmpty then begin
+    ShowMessage('Heç bir şirkət qeyd olunmayıb!');
+    Exit;
+   end
+   else begin
+    try
+     FormBuilding :=TFormBuilding.Create(Self);
+     FormBuilding.AddUpd :=1;
+     FormBuilding.ShowModal;
+    finally
+     FormBuilding.Release;
+   end;
+  end;
+end;
+
+procedure TccBuildingsForm.BtnBuildingEditClick(Sender: TObject);
+begin
+  with DataModccBuildings.CC_building do
+   if IsEmpty then begin
+    ShowMessage('Heç bir bina qeyd olunmayıb!');
+    Exit;
+   end
+   else with FormBuilding, DataModccBuildings.CC_building do begin
+    try
+     FormBuilding :=TFormBuilding.Create(Self);
+     AddUpd :=2;
+     EditName.Text :=FieldByName('bld_name').AsString;
+     EditAdress.Text :=FieldByName('address').AsString;
+     EditFloor.Text :=FieldByName('floors').AsString;
+     EditEntrance.Text :=FieldByName('entrances').AsString;
+     EditFlat.Text :=FieldByName('flats').AsString;
+     ShowModal;
+    finally
+     Release;
+    end;
+   end;
+end;
+
+procedure TccBuildingsForm.BtnBuildingDelClick(Sender: TObject);
+var
+  p_id :integer;
+  p_table_name: string;
+begin
+  with DataModccBuildings.CC_building do
+   if IsEmpty then begin
+    ShowMessage('Heç bir bina qeyd olunmayıb!');
+    Exit;
+   end
+   else begin
+    p_id :=DataModccBuildings.CC_building.FieldByName('ID').AsInteger;
+    p_table_name :='cc_buildings';
+    if  MessageDlg(Format('Bina silinsin?',[p_id]),mtConfirmation,mbYesNoCancel,0)=mrYes then begin
+     DataModccBuildings.CC_OP.CallProcedure('del_fromTable',[p_table_name,p_id]);
+     DataModccBuildings.CC_building.Close;
+     DataModccBuildings.CC_building.Open;
+    end;
+   end;
+end;
+
+procedure TccBuildingsForm.BtnBuildingSearchClick(Sender: TObject);
+begin
+  if B_Searchbox.Visible=false then
+   B_Searchbox.Visible :=true
+  else
+   B_Searchbox.Visible :=false;
+end;
+
+procedure TccBuildingsForm.BtnCompanySearchClick(Sender: TObject);
+begin
+with Datamodccbuildings.CC_Company do
+ if IsEmpty then
+    begin
+     ShowMessage('Heç bir şirkət qeyd olunmayıb!');
+     Exit;
+    end
+  else begin
+  if C_Searchbox.Visible=false then
+   C_Searchbox.Visible :=true
+   else
+   C_Searchbox.Visible :=false;
+
+end;
+end;
+
+procedure TccBuildingsForm.EditIDChange(Sender: TObject);
+begin
+  if EditID.Text <>'' then
+   DataModccBuildings.CC_building.Locate
+    ('ID',EditID.Text,[loCaseInsensitive, loPartialKey]);
+  DBGrid2.Options:=[dgRowSelect, dgAlwaysShowEditor, dgTitles, dgIndicator,
+   dgColumnResize, dgColLines, dgRowLines, dgTabs,dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit, dgMultiSelect];
+end;
+
+procedure TccBuildingsForm.EditNameChange(Sender: TObject);
+begin
+  if Editname.Text<>'' then
+   Datamodccbuildings.CC_Company.Locate
+   ('comp_name',Editname.Text,[loCaseInsensitive, loPartialKey]);
+     DBGrid1.Options:=[dgRowSelect,dgAlwaysShowEditor,dgTitles,dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs,dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit, dgMultiSelect];
+end;
+
+procedure TccBuildingsForm.EditNoExit(Sender: TObject);
+begin
+  (Sender as Tedit).Text :='';
+end;
+
+procedure TccBuildingsForm.Edit_AdressChange(Sender: TObject);
+begin
+  if Edit_Adress.Text <>'' then
+   DataModccBuildings.CC_building.Locate
+    ('Address', Edit_Adress.Text, [loCaseInsensitive, loPartialKey]);
+  DBGrid2.Options :=[dgRowSelect, dgAlwaysShowEditor, dgTitles, dgIndicator,
+   dgColumnResize, dgColLines, dgRowLines, dgTabs,dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit, dgMultiSelect];
+end;
+
+procedure TccBuildingsForm.Edit_CodeChange(Sender: TObject);
+begin
+  with DataModccBuildings.CC_Buyer_Flat do begin
+   Close;
+   SQL[5] :='and nvl(code,0) like '+''''+Edit_Code.Text+'%'+''''
+    +'and nvl(flatnumber,0) like '+''''+EditFlatNumber.Text+'%'+''''
+    +'and nvl(entrance,0) like '+''''+EditEntrance.Text+'%'+''''
+    +'and nvl(ffloor,0) like '+''''+EditFloor.Text+'%'+''''
+    +'and nvl(rooms,0) like '+''''+EditRoom.Text+'%'+''''
+    +'and nvl(area,0) like '+''''+EditArea.Text+'%'+''''
+    +'and nvl(price1,0) like '+''''+EditPrice1.Text+'%'+''''
+    +'and nvl(pricegen,0) like '+''''+EditPriceGen.Text+'%'+'''';
+   Open;
+  end;
+end;
+
+procedure TccBuildingsForm.Edit_EntranceChange(Sender: TObject);
+begin
+  if Edit_Entrance.Text <>'' then
+   DataModccBuildings.CC_building.Locate
+    ('Entrances', Edit_Entrance.Text, [loCaseInsensitive, loPartialKey]);
+  DBGrid2.Options :=[dgRowSelect, dgAlwaysShowEditor, dgTitles, dgIndicator,
+   dgColumnResize, dgColLines, dgRowLines, dgTabs,dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit, dgMultiSelect];
+end;
+
+procedure TccBuildingsForm.Edit_FlatsChange(Sender: TObject);
+begin
+  if Edit_Flats.Text <>'' then
+   DataModccBuildings.CC_building.Locate
+    ('Flats', Edit_Flats.Text, [loCaseInsensitive, loPartialKey]);
+  DBGrid2.Options :=[dgRowSelect, dgAlwaysShowEditor, dgTitles, dgIndicator,
+   dgColumnResize, dgColLines, dgRowLines, dgTabs,dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit, dgMultiSelect];
+end;
+
+procedure TccBuildingsForm.Edit_FloorChange(Sender: TObject);
+begin
+  if Edit_Floor.Text <>'' then
+   DataModccBuildings.CC_building.Locate
+    ('floors', Edit_Floor.Text, [loCaseInsensitive, loPartialKey]);
+end;
+
+procedure TccBuildingsForm.Edit_NameChange(Sender: TObject);
+begin
+  if Edit_Name.Text <>'' then
+   DataModccBuildings.CC_building.Locate
+    ('bld_name', Edit_Name.Text, [loCaseInsensitive, loPartialKey]);
+  DBGrid2.Options :=[dgRowSelect, dgAlwaysShowEditor, dgTitles, dgIndicator,
+   dgColumnResize, dgColLines, dgRowLines, dgTabs,dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit, dgMultiSelect];
+end;
+
+procedure TccBuildingsForm.EditNoChange(Sender: TObject);
+begin
+  if EditNo.Text <>'' then
+   DatamodccBuildings.CC_Company.Locate
+    ('ID',EditNo.Text,[loCaseInsensitive, loPartialKey]);
+  DBGrid1.Options:=[dgRowSelect, dgAlwaysShowEditor, dgTitles, dgIndicator,
+   dgColumnResize, dgColLines, dgRowLines, dgTabs,dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit, dgMultiSelect];
+
+  with DatamodccBuildings.CC_Flat do begin
+   Close;
+   SQL.Clear;
+   SQL.Add('Select * from CC_FLATS where bld_id='''+dbEdit2.Text+''' ');
+   Open;
+  end;
+end;
+
+procedure TccBuildingsForm.DBGrid1TitleClick(Column: TColumn);
+var
+  TitleName :string;
+begin
+  TitleName :=Column.FieldName;
+  with Datamodccbuildings.CC_Company do begin
+   SetVariable('Title',TitleName);
+   Refresh;
+  end;
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TccBuildingsForm,
+    Class_ccBuildingsForm,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

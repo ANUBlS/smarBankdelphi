@@ -1,0 +1,194 @@
+unit emanatcaller;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs,IniFiles, IdBaseComponent, IdComponent, IdTCPConnection, IdTCPClient,
+  IdHTTP, StdCtrls,dbxjson, Oracle;
+
+type
+  TForm1 = class(TForm)
+    Button1: TButton;
+    IdHTTP: TIdHTTP;
+    Button2: TButton;
+    IdHTTP1: TIdHTTP;
+    OracleSession1: TOracleSession;
+    OracleQuery1: TOracleQuery;
+    procedure Button1Click(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form1: TForm1;
+
+implementation
+
+{$R *.dfm}
+
+procedure TForm1.Button1Click(Sender: TObject);
+var a,b,c:integer;
+ val :string;
+JSonObject:TJSonObject;
+   JSonValue,JsonValue1:TJSonValue;
+   JsonArray: TJSONArray;
+   ArrayElement: TJSonValue;
+   FoundValue: TJSonValue;
+
+   st:string;
+   Contract: string;
+   credamount:real;
+   ins_date:String;
+   MyText: TStringlist;
+     uname,upass,dbname,ulink,smlink,link,Websrvuser,Websrvpass:string;
+    ini: TIniFile;
+   sl: TStringList;
+
+begin
+
+   ini := TIniFile.Create('D:\Smart-bank\webservices\conn.ini');
+
+
+     dbname:= ini.ReadString('Smart', 'DataBase', 'default value');
+     uname:=  ini.ReadString('Smart', 'Username', 'default value');
+     upass:=  ini.ReadString('Smart', 'Password', 'default value');
+     ulink:=  ini.ReadString('Smart', 'Link', 'default value');
+     smlink := ini.ReadString('Smart', 'Link', 'default value');
+     Websrvuser:= ini.ReadString('Smart', 'Websrvuser', 'default value');
+     Websrvpass:= ini.ReadString('Smart', 'Websrvpass', 'default value');
+
+    sl := TStringList.Create;
+    sl.Add(FormatDateTime('YYYYMMDD',now));
+
+
+    //link:=ulink+'/';
+//hand.Host:= 'http://www.mjfinance.serverxx.com/mj_web/hs/smart/getdata/20200428';
+
+
+//showmessage(sl +'---'+smlink);
+st:=IdHTTP1.post(SMLINK,sl);
+
+
+showmessage(FormatDateTime('YYYYMMDD',now));
+end;
+
+procedure TForm1.Button2Click(Sender: TObject);
+var a,b,c:integer;
+ val :string;
+
+   JSonObject:TJSonObject;
+   JSonValue,JsonValue1:TJSonValue;
+   JsonArray: TJSONArray;
+   ArrayElement: TJSonValue;
+   FoundValue: TJSonValue;
+   st:string;
+   Contract: string;
+   credamount:real;
+   ins_date:String;
+   MyText: TStringlist;
+   uname,upass,dbname,ulink,link,Websrvuser,Websrvpass:string;
+    ini: TIniFile;
+
+
+  begin
+   MyText:= TStringlist.create;
+
+   try
+
+   ini := TIniFile.Create('D:\Smart-bank\webservices\conn.ini');
+
+
+     dbname:= ini.ReadString('Smart', 'DataBase', 'default value');
+     uname:=  ini.ReadString('Smart', 'Username', 'default value');
+     upass:=  ini.ReadString('Smart', 'Password', 'default value');
+     ulink:=  ini.ReadString('Smart', 'Link', 'default value');
+     Websrvuser:= ini.ReadString('Smart', 'Websrvuser', 'default value');
+     Websrvpass:= ini.ReadString('Smart', 'Websrvpass', 'default value');
+
+
+
+    { IdHTTP1.Request.Accept := 'application/json; charset=UTF-8';
+     IdHTTP1.Request.AcceptCharSet := 'UTF-8';
+     IdHTTP1.Request.ContentType := 'application/json';  }
+
+
+IdHTTP1.Request.BasicAuthentication:= true;
+idhttp1.Request.Username:=Websrvuser;
+idhttp1.Request.Password:=Websrvpass;
+link:=ulink+'/'+FormatDateTime('YYYYMMDD',now)+'170000';
+
+//hand.Host:= 'http://www.mjfinance.serverxx.com/mj_web/hs/smart/getdata/20200428';
+
+
+st:=IdHTTP1.get(link);
+
+JsonValue:=JSonObject.ParseJSONValue(st);
+
+// JsonValue1:=(JsonValue as TJSONObject).Get('Date').JSONValue;
+
+ins_date:=datetostr(now);
+
+//JsonValue:=(JsonValue as TJSONObject).Get('CreditInfo').JSONValue;
+JsonArray := JsonValue as TJSONArray;
+
+              OracleSession1.LogonDatabase:=dbname;
+              OracleSession1.LogonUsername:=uname;
+              OracleSession1.LogonPassword:=upass;
+              OracleSession1.Connected:=true;
+
+  if (JSONValue is TJSONArray) then
+    begin
+           //val:='1';
+     for a:=0 to (JSONValue as TJSONArray).Size-1  do
+         begin
+          Contract :=Contract+'->'+ins_date+'**'+((JSONValue as TJSONArray).get(a) as TJSonObject).Get('number').JSONValue.Value+
+
+          '='+((JSONValue as TJSONArray).get(a) as TJSonObject).Get('sum').JSONValue.Value;
+
+            //OracleQuery1.Close;
+            OracleQuery1.SetVariable('dat',((JSONValue as TJSONArray).get(a) as TJSonObject).Get('date').JSONValue.Value);
+            OracleQuery1.SetVariable('a1',((JSONValue as TJSONArray).get(a) as TJSonObject).Get('number').JSONValue.Value);
+            OracleQuery1.SetVariable('a2',((JSONValue as TJSONArray).get(a) as TJSonObject).Get('sum').JSONValue.Value);
+            OracleQuery1.SetVariable('a3',((JSONValue as TJSONArray).get(a) as TJSonObject).Get('code').JSONValue.Value);
+
+            OracleQuery1.Execute;
+            OracleSession1.Commit;
+
+        end;
+
+
+
+
+      end;
+
+
+
+ //Response.ContentType := 'application/json';
+// Response.Content:='{"code":200,"message":"SUCCESS" }';//Contract;
+
+  OracleSession1.Connected:=false;
+          application.Terminate;
+   except
+
+ //Response.ContentType := 'application/json';
+// Response.Content:= '{"code":4001,"message":"Connection to db is incorrect will processes manually " }';
+ MkDir('D:\Smart-bank\webservices\log\'+ins_date)  ;
+ MyText.Add(st);
+ MyText.SaveToFile('D:\Smart-bank\webservices\log\'+ins_date+'\log.txt');
+   end;
+
+
+
+end;
+
+procedure TForm1.FormCreate(Sender: TObject);
+begin
+button2.Click;
+end;
+
+end.

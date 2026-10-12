@@ -1,0 +1,488 @@
+﻿unit Taxrbs;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, CMExcelExport, ImgList, ComCtrls, Grids, DBGrids, StdCtrls, FileCtrl,
+  ToolWin, Buttons, ExtCtrls;
+
+type
+  TRbsdoTax = class(TForm)
+    Panel1: TPanel;
+    RefwithSel: TSpeedButton;
+    CoolBar1: TCoolBar;
+    ToolBar1: TToolBar;
+    ToolButton3: TToolButton;
+    isertbtn: TToolButton;
+    ToolButton1: TToolButton;
+    ToolButton7: TToolButton;
+    rbsdoRich: TRichEdit;
+    FileListrbsbox: TFileListBox;
+    DBGrid1: TDBGrid;
+    Animate1: TAnimate;
+    RichEdit1: TRichEdit;
+    ImageList1: TImageList;
+    CMExcelExport1: TCMExcelExport;
+    DBGrid2: TDBGrid;
+    procedure ToolButton3Click(Sender: TObject);
+    procedure isertbtnClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure DBGrid1DrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TColumn; State: TGridDrawState);
+    procedure DBGrid2DrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TColumn; State: TGridDrawState);
+    procedure ToolButton1Click(Sender: TObject);
+    procedure ToolButton7Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  RbsdoTax: TRbsdoTax;
+
+implementation
+
+uses Unit18,SBTranslateProc,sboapiDataModuleImpl;
+
+{$R *.dfm}
+
+
+function CheckFileExt(fname : string) : boolean;
+    var i, checkFileExtLen: integer;
+        fileExt : String;
+begin
+      checkFileExtLen:=0;
+      fileExt:='';
+      fileExt:= trim(ExtractFileExt(fname));
+      for i:=0 to length(fileExt) do
+        begin
+        if fileExt[i] in ['0'..'9','.'] then inc(checkFileExtLen);
+        end;
+      {check for file extention}
+      if checkFileExtLen <> length(fileext) then result:=false else result:=true;
+end;
+
+
+procedure TRbsdoTax.DBGrid1DrawColumnCell(Sender: TObject; const Rect: TRect;
+  DataCol: Integer; Column: TColumn; State: TGridDrawState);
+var
+  ImageIndex: Integer;
+begin
+ ImageIndex := -1;
+  with Sender as TDBGrid do
+  begin
+    if DataSource.DataSet.RecordCount <> 0 then
+    begin
+      case DataSource.DataSet.FieldByName('STATUS').AsInteger of
+
+      0:
+        ImageIndex :=25;
+      1:
+        ImageIndex :=3 ;
+      2:
+        ImageIndex :=26;
+
+      4:
+        ImageIndex:=13;
+
+      else
+      end;
+      if (DataCol = 1) and (ImageIndex <> -1) then
+        ImageList1.Draw(Canvas, Rect.Left, Rect.Top, ImageIndex, True)
+      else
+        DefaultDrawColumnCell(Rect, DataCol, Column, State);
+    end;
+
+
+
+end;
+
+end;
+
+procedure TRbsdoTax.DBGrid2DrawColumnCell(Sender: TObject; const Rect: TRect;
+  DataCol: Integer; Column: TColumn; State: TGridDrawState);
+
+var
+  ImageIndex: Integer;
+begin
+ ImageIndex := -1;
+  with Sender as TDBGrid do
+  begin
+    if DataSource.DataSet.RecordCount <> 0 then
+    begin
+      case DataSource.DataSet.FieldByName('STATUS').AsInteger of
+
+      0:
+        ImageIndex :=25;
+      1:
+        ImageIndex :=3 ;
+      2:
+        ImageIndex :=26;
+
+      4:
+        ImageIndex:=13;
+
+      else
+      end;
+      if (DataCol = 1) and (ImageIndex <> -1) then
+        ImageList1.Draw(Canvas, Rect.Left, Rect.Top, ImageIndex, True)
+      else
+        DefaultDrawColumnCell(Rect, DataCol, Column, State);
+    end;
+
+
+
+end;
+
+end;
+
+procedure TRbsdoTax.FormCreate(Sender: TObject);
+begin
+SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TRbsdoTax.isertbtnClick(Sender: TObject);
+var i,j,rowcount:integer;
+    STmessage,all,names,st:string;
+    f:textfile;
+    v_dir:string;
+     Test :real;
+     SysSim :string;
+     ROLLUP, CURRENCY, TOTAL_TYPE, TOTAL_AMOUNT, ISDEBET,report,report_type,
+     funds,funds_type,report_code,total_code,funds_code,proc_date,report_date,
+     TOTAL_TYPE2, TOTAL_AMOUNT2, ISDEBET2,TOTAL_TYPE3, TOTAL_AMOUNT3,
+      ISDEBET3,TOTAL_TYPE4, TOTAL_AMOUNT4, ISDEBET4:string;
+     File_Count,k, MSGCount, selst, selstF :integer;
+     pst,srchl,trtype,reqcat,accamt,totalamt,totalfee,totaltax,totalsep,trcnt :string;
+begin
+Animate1.Visible:=True;
+Animate1.Active:=True;
+Animate1.Play(0,0,1);
+
+DataMod_CARDS.mainpacket.CallProcedure('delete_rbstaxfile',[]);
+
+
+    DataMod_CARDS.rbs_tax.Open;
+
+         for i:=0 to FileListrbsbox.Items.Count-1 do
+   begin
+    Application.ProcessMessages;
+    MSGCount:=0;
+
+    if (uppercase(copy(FileListrbsbox.Items[i],0,5)) <> 'RBSTR') then Continue;
+    File_Count:=File_Count+1;
+    if CheckFileExt(FileListrbsbox.Directory+FileListrbsbox.items[i])=false then continue;
+
+     AssignFile(F,'C:\AZCARD\IN\'+FileListrbsbox.Items[i]);
+      Reset(F);
+      rowcount:=0;
+      while not eof(f) do
+      begin
+        rowcount:=rowcount+1;
+        Readln(F,Stmessage);
+      end;
+      STmessage:='';
+      Reset(f);
+
+
+
+
+  // rbsdoRich.Lines.Add('FILE NAME            :< '+FileListrbsbox.items[i]+' >   '+'Message count: '+inttostr(RowCount-14));
+                 k:=14;
+                 //  RichEdit1.Lines.LoadFromFile(FileListrbsbox.items[i]);
+
+           for j:=1 to rowcount-16 do
+      begin
+          Application.ProcessMessages;
+          Readln(F,Stmessage);
+
+          if j = 1 then Continue;
+
+        //  rbsdoRich.Lines.Add('         ');
+         // rbsdoRich.Lines.Add('---------------------------------------------------------------------------------');
+    if (trim(copy(RichEdit1.Lines[k+j],72,18))<>'') then    begin
+              if trim(copy(RichEdit1.Lines[k+j],215,3))<>'---' then    begin
+                if  trim(copy(RichEdit1.Lines[k+j],5,3))<>'RBS'  then  begin
+
+
+              if trim(copy(RichEdit1.Lines[j+6],4,5))='Trans' then begin
+
+             // ,,,,,,
+          pst:=trim(copy(RichEdit1.Lines[j-3],25,50));
+          srchl:=trim(copy(RichEdit1.Lines[j-2],25,50));
+          trtype:=trim(copy(RichEdit1.Lines[j-1],25,50));
+          reqcat:=trim(copy(RichEdit1.Lines[j],25,50));
+          accamt:=trim(copy(RichEdit1.Lines[j+1],25,50));
+          totalamt:=trim(copy(RichEdit1.Lines[j+2],25,50));
+          totalfee:=trim(copy(RichEdit1.Lines[j+3],25,50));
+          totaltax:=trim(copy(RichEdit1.Lines[j+4],25,50));
+          totalsep:=trim(copy(RichEdit1.Lines[j+5],25,50));
+          trcnt:=trim(copy(RichEdit1.Lines[j+6],25,50));
+              end;
+
+        DataMod_CARDS.mainpacket.CallProcedure('rbsTAX_insert',[
+                     FileListrbsbox.items[i],
+                     trim(copy(RichEdit1.Lines[k+j],4,29)),
+                     trim(copy(RichEdit1.Lines[k+j],33,22)),
+                     trim(copy(RichEdit1.Lines[k+j],52,17)),
+                     trim(copy(RichEdit1.Lines[k+j],70,4)),
+                     trim(copy(RichEdit1.Lines[k+j],75,22)),
+                     trim(copy(RichEdit1.Lines[k+j],97,4)),
+                     trim(copy(RichEdit1.Lines[k+j],101,1)),
+                     trim(copy(RichEdit1.Lines[k+j],103,17)),
+                     trim(copy(RichEdit1.Lines[k+j],121,8)),
+                     trim(copy(RichEdit1.Lines[k+j],130,25)),
+                     trim(copy(RichEdit1.Lines[k+j],155,6)),
+                     trim(copy(RichEdit1.Lines[k+j],162,9)),
+                     trim(copy(RichEdit1.Lines[k+j],172,12)),
+                     trim(copy(RichEdit1.Lines[k+j],184,25)),
+                     trim(copy(RichEdit1.Lines[k+j],209,3)),
+                     trim(copy(RichEdit1.Lines[k+j],212,16)),
+                     trim(copy(RichEdit1.Lines[k+j],229,8)),
+                     trim(copy(RichEdit1.Lines[k+j],237,19)),
+                     trim(copy(RichEdit1.Lines[k+j],252,17)),
+                     pst, srchl,  trtype   ,reqcat,accamt,totalamt, totalfee,totaltax  ,totalsep ,trcnt
+
+                         ]);
+
+
+
+
+                end;
+              end;
+             end;
+      end;
+
+
+
+
+    Animate1.active:=False;
+   Animate1.Visible:=False;
+   Animate1.Stop;
+      DataMod_CARDS.mainpacket.CallProcedure('rbstaxarxiv',[FileListrbsbox.Items[i]]);
+   MessageDlg('All messages are sent in base!',mtInformation,[mbOK],0);
+      CloseFile(f);
+
+   end;
+
+ //   DataMod_CARDS.mainpacket.CallProcedure('rbsdopart',[]);
+ DataMod_CARDS.rbs_tax.close;
+    DataMod_CARDS.rbs_tax.Open;
+
+
+end;
+
+procedure TRbsdoTax.ToolButton1Click(Sender: TObject);
+var
+   V,Sheet,Sheets,excel  :Variant;
+   cell,row,l,m    :Integer;
+   i,j,ids : integer;
+   formats,debet,kredit,summa,destination,vbic:string;
+   output:TextFile;
+   FileName,Swmessage,dir,edit_ref,BeginMessage,Endmesage,valu:String;
+   Index :Integer;
+   WaitNextConfirm, WillRefresh: Boolean;
+   TransactionID :Integer;
+begin
+
+
+  WaitNextConfirm :=True;
+  WillRefresh :=False;
+  if DBGrid1.CanFocus then
+  DBGrid1.SetFocus;
+
+  //Focus;
+  with  DBGrid1, SelectedRows, DataSource.DataSet, DataMod_CARDS do
+  try
+    if Count = 0 then CurrentRowSelected := True;
+
+    for  Index :=0 to  Count - 1 do
+    begin
+      GotoBookmark(Pointer(Items[Index]));
+      TransactionID :=FieldbyName('ID').AsInteger;
+
+      if  WaitNextConfirm  then
+      case MessageDlg(
+        Format('Əmaliyyat təsdiq edilsin? №',[TransactionID])
+       ,mtConfirmation
+       ,[mbYes, mbNo ,mbCancel ,mbYesToAll]
+       ,0
+       )   of
+        mrNo       : begin Continue;  end;
+        mrCancel   : begin Break; end;
+        mrYesToAll :
+          if MessageDlg(Format('%d  sayda əməliyyat təsdiq edildi?', [Count - Index]), mtConfirmation, [mbYes, mbCancel], 0) = mrYes then
+           WaitNextConfirm :=False
+          else
+           Continue;
+      end;
+      Application.ProcessMessages;
+      //------------------------------------------------------------------------------------create prows
+
+                DataMod_CARDS.mainpacket.CallProcedure('transaction_rbstax',[TransactionID]) ;
+               // DataMod_CARDS.messages.Close;
+               // DataMod_CARDS.messages2.Close;
+               // DataMod_CARDS.messages.Open;
+                //DataMod_CARDS.messages2.Open;
+      //--------------------------------------------end create prows
+
+
+
+      WillRefresh :=True;
+
+
+    end;
+  finally
+   if WillRefresh then
+
+
+   begin
+
+
+                          DBGrid1.DataSource.DataSet.close;
+                          DBGrid2.DataSource.DataSet.close;
+                          DBGrid1.DataSource.DataSet.open;
+                          DBGrid2.DataSource.DataSet.open;
+                          ShowMessage('Əməliyyatlar günün sənədlərinə göndərildi!');
+
+   end;
+
+  end;
+end;
+
+procedure TRbsdoTax.ToolButton3Click(Sender: TObject);
+var F :TextFile;
+     Test :real;
+     SysSim, Stmessage :string;
+     ROLLUP, CURRENCY, TOTAL_TYPE, TOTAL_AMOUNT, ISDEBET,report,report_type,
+     funds,funds_type,report_code,total_code,funds_code,proc_date,report_date,
+     TOTAL_TYPE2, TOTAL_AMOUNT2, ISDEBET2,TOTAL_TYPE3, TOTAL_AMOUNT3,
+      ISDEBET3,TOTAL_TYPE4, TOTAL_AMOUNT4, ISDEBET4,v_dir:string;
+     File_Count, i,j,k, MSGCount, RowCount, selst, selstF :integer;
+begin
+
+v_dir:= GetCurrentDir;
+
+
+      DataMod_CARDS.rbs_tax.close;
+   rbsdoRich.Lines.Clear;
+   //CTPanelCount.Caption:='0';
+   if not DirectoryExists('C:\AZCARD\IN') then MkDir('C:\AZCARD\IN');
+   FileListrbsbox.Directory:='C:\AZCARD\IN';
+   FileListrbsbox.Update;
+   if FileListrbsbox.Items.Count = 0 then exit;
+   {******************* AZERCARD PGP ZIP OPEN ***********************}
+   //Extract_PGP_Zip('C*.0*','C*.1*','C*.2*','C*.3*');
+   {******************* AZERCARD PGP ZIP OPEN ***********************}
+   FileListrbsbox.Mask:='*.*';
+   FileListrbsbox.Update;
+   test:=122 / 10;
+   if pos('.',floattostr(test))>0 then syssim:='.' else
+   if pos(',',floattostr(test))>0 then syssim:=',';
+
+   for i:=0 to FileListrbsbox.Items.Count-1 do
+   begin
+    Application.ProcessMessages;
+    MSGCount:=0;
+
+    if (uppercase(copy(FileListrbsbox.Items[i],0,5)) <> 'RBSTR') then Continue;
+    File_Count:=File_Count+1;
+    if CheckFileExt(FileListrbsbox.Directory+FileListrbsbox.items[i])=false then continue;
+
+     AssignFile(F,'C:\AZCARD\IN\'+FileListrbsbox.Items[i]);
+      Reset(F);
+      rowcount:=0;
+      while not eof(f) do
+      begin
+        rowcount:=rowcount+1;
+        Readln(F,Stmessage);
+      end;
+      STmessage:='';
+      Reset(f);
+
+
+
+  rbsdoRich.Lines.Add('FILE NAME            :< '+FileListrbsbox.items[i]+' >   ');
+                 k:=11;
+                   RichEdit1.Lines.LoadFromFile(FileListrbsbox.items[i]);
+
+           for j:=1 to rowcount do
+      begin
+          Application.ProcessMessages;
+          Readln(F,Stmessage);
+
+          if j = 1 then Continue;
+
+            if (trim(copy(RichEdit1.Lines[k+j],72,18))<>'') then    begin
+              if trim(copy(RichEdit1.Lines[k+j],215,3))<>'---' then    begin
+                if  trim(copy(RichEdit1.Lines[k+j],5,3))<>'RBS'  then  begin
+
+
+              if trim(copy(RichEdit1.Lines[j+6],4,5))='Trans' then begin
+
+
+          rbsdoRich.Lines.Add('Payment system          :'+trim(copy(RichEdit1.Lines[j-3],25,50)));
+          rbsdoRich.Lines.Add('Source channel          :'+trim(copy(RichEdit1.Lines[j-2],25,50)));
+          rbsdoRich.Lines.Add('Transaction type        :'+trim(copy(RichEdit1.Lines[j-1],25,50)));
+          rbsdoRich.Lines.Add('Request Category        :'+trim(copy(RichEdit1.Lines[j],25,50)));
+          rbsdoRich.Lines.Add('Account currency        :'+trim(copy(RichEdit1.Lines[j+1],25,50)));
+          rbsdoRich.Lines.Add('Total Amount            :'+trim(copy(RichEdit1.Lines[j+2],25,50)));
+          rbsdoRich.Lines.Add('BTotal Fee              :'+trim(copy(RichEdit1.Lines[j+3],25,50)));
+          rbsdoRich.Lines.Add('Tax Fee                 :'+trim(copy(RichEdit1.Lines[j+4],25,50)));
+          rbsdoRich.Lines.Add('Sep. Fee                :'+trim(copy(RichEdit1.Lines[j+5],25,50)));
+          rbsdoRich.Lines.Add('Trans. count            :'+trim(copy(RichEdit1.Lines[j+6],25,50)));
+              end;
+
+
+          rbsdoRich.Lines.Add('         ');
+
+
+
+          rbsdoRich.Lines.Add('RbsNumber               :'+trim(copy(RichEdit1.Lines[k+j],4,29)));
+          rbsdoRich.Lines.Add('Account Ammount         :'+trim(copy(RichEdit1.Lines[k+j],33,22)));
+          rbsdoRich.Lines.Add('Fee Ammount             :'+trim(copy(RichEdit1.Lines[k+j],52,17)));
+          rbsdoRich.Lines.Add('MCC codes               :'+trim(copy(RichEdit1.Lines[k+j],70,4)));
+          rbsdoRich.Lines.Add('Transaction Date        :'+trim(copy(RichEdit1.Lines[k+j],121,8)));
+        //  rbsdoRich.Lines.Add('Transaction amount      :'+StringReplace(trim(copy(RichEdit1.Lines[k+j],72,18) ),',','',[rfReplaceAll, rfIgnoreCase])+' '+ trim(copy(RichEdit1.Lines[k+j],215,3)));
+          rbsdoRich.Lines.Add('Tax Fee                 :'+trim(copy(RichEdit1.Lines[k+j],233,19)));
+            rbsdoRich.Lines.Add('---------------------------------------------------------------------------------');
+          end;
+              end;
+            end;
+
+
+      end;
+
+      rbsdoRich.SelStart:=rbsdoRich.FindText('FILE NAME',selstF,LENGTH(rbsdoRich.Text),[stMatchCase]);
+      rbsdoRich.SelLength:=38;
+      rbsdoRich.SelAttributes.Color:=clred;
+      selstF:=rbsdoRich.FindText('FILE NAME',selstF,LENGTH(rbsdoRich.Text),[stMatchCase])+1;
+      rbsdoRich.SelLength:=-1;
+      rbsdoRich.SelStart:=rbsdoRich.FindText('Message count:',selst,LENGTH(rbsdoRich.Text),[stMatchCase]);
+      rbsdoRich.SelLength:=18;
+      rbsdoRich.SelAttributes.Color:=clBlue;
+      rbsdoRich.SelAttributes.Style:=[];
+      selst:=rbsdoRich.FindText('Message count:',selst,LENGTH(rbsdoRich.Text),[stMatchCase])+1;
+      rbsdoRich.SelLength:=-1;
+      rbsdoRich.SelStart:=0;
+      CloseFile(f);
+
+
+   end;
+
+
+
+
+end;
+
+procedure TRbsdoTax.ToolButton7Click(Sender: TObject);
+begin
+ if not CMExcelExport1.Connected then CMExcelExport1.Connect;
+  CMExcelExport1.ExportDataset(DBGrid1.DataSource.DataSet,'RbsTaxFile',true);
+  CMExcelExport1.Disconnect;
+end;
+
+end.

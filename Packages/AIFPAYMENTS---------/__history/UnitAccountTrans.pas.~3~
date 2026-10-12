@@ -1,0 +1,50 @@
+unit UnitAccountTrans;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, Mask, DBCtrls, Buttons, ExtCtrls, DB, OracleData,
+  SearchEdit;
+
+type
+  TFormAccountTrans = class(TForm)
+    Panel1: TPanel;
+    SpeedButton2: TSpeedButton;
+    Panel2: TPanel;
+    SpeedButton1: TSpeedButton;
+    Label1: TLabel;
+    Panel3: TPanel;
+    DBEdit2: TDBEdit;
+    SpeedButton3: TSpeedButton;
+    Label2: TLabel;
+    Panel4: TPanel;
+    DBEdit3: TDBEdit;
+    SpeedButton4: TSpeedButton;
+    Label3: TLabel;
+    SearchEdit1: TSearchEdit;
+    OracleDataSet1: TOracleDataSet;
+    DataSource1: TDataSource;
+    procedure SpeedButton1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormAccountTrans: TFormAccountTrans;
+
+implementation
+
+{$R *.dfm}
+uses sboapiDataModuleImpl, DataAIFUnit;
+
+procedure TFormAccountTrans.SpeedButton1Click(Sender: TObject);
+var s:string;
+begin
+  s:=SearchEdit1.Text;
+  DataModuleAIF.DEL.CallProcedure('aifconfigaddaccid',[s,1]);
+end;
+
+end.

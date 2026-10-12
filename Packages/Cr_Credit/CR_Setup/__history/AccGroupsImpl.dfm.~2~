@@ -1,0 +1,196 @@
+object AccGrpForm: TAccGrpForm
+  Left = 308
+  Top = 152
+  BorderIcons = [biSystemMenu]
+  ClientHeight = 510
+  ClientWidth = 355
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poScreenCenter
+  OnKeyPress = FormKeyPress
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 14
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 355
+    Height = 244
+    Align = alTop
+    BevelOuter = bvNone
+    TabOrder = 0
+    object DBGrid1: TDBGrid
+      Left = 0
+      Top = 0
+      Width = 355
+      Height = 244
+      Align = alClient
+      DataSource = DataSource1
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      Options = [dgTitles, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit]
+      ParentFont = False
+      TabOrder = 0
+      TitleFont.Charset = DEFAULT_CHARSET
+      TitleFont.Color = clWhite
+      TitleFont.Height = -11
+      TitleFont.Name = 'Azl Sans Serif'
+      TitleFont.Style = []
+      Columns = <
+        item
+          Expanded = False
+          FieldName = 'ID'
+          Title.Caption = #8470
+          Title.Color = clNavy
+          Width = 67
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'DESCRIPTION'
+          Title.Caption = #1043#1088#1091#1087#1091#1085' '#1072#1076#1099
+          Title.Color = clNavy
+          Width = 242
+          Visible = True
+        end>
+    end
+  end
+  object StatusBar1: TStatusBar
+    Left = 0
+    Top = 491
+    Width = 355
+    Height = 19
+    Panels = <>
+  end
+  object Panel2: TPanel
+    Left = 0
+    Top = 244
+    Width = 355
+    Height = 247
+    Align = alClient
+    BevelOuter = bvNone
+    TabOrder = 2
+    object DBNavigator1: TDBNavigator
+      Left = 0
+      Top = 0
+      Width = 355
+      Height = 33
+      DataSource = DataSource2
+      Align = alTop
+      TabOrder = 0
+    end
+    object DBGrid2: TDBGrid
+      Left = 0
+      Top = 33
+      Width = 355
+      Height = 214
+      Align = alClient
+      DataSource = DataSource2
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 1
+      TitleFont.Charset = DEFAULT_CHARSET
+      TitleFont.Color = clWhite
+      TitleFont.Height = -11
+      TitleFont.Name = 'Azl Sans Serif'
+      TitleFont.Style = []
+      Columns = <
+        item
+          Expanded = False
+          FieldName = 'GROUPID'
+          ReadOnly = True
+          Title.Caption = #1043#1088#1091#1087' '#8470' '#1089#1080
+          Title.Color = clNavy
+          Width = 69
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'ACCOUNTNUMBER'
+          Title.Caption = #1041#1072#1083#1072#1085#1089' '#1097#1077#1089#1072#1073#1099
+          Title.Color = clNavy
+          Width = 100
+          Visible = True
+        end>
+    end
+  end
+  object AccGroups: TOracleDataSet
+    SQL.Strings = (
+      'select id,iname,description'
+      ' from cr_accountgroups')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000300000004000000490044000100000000000A00000049004E004100
+      4D00450001000000000016000000440045005300430052004900500054004900
+      4F004E00010000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 120
+    Top = 80
+    object AccGroupsID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object AccGroupsINAME: TWideStringField
+      FieldName = 'INAME'
+      Size = 32
+    end
+    object AccGroupsDESCRIPTION: TWideStringField
+      FieldName = 'DESCRIPTION'
+      Size = 64
+    end
+  end
+  object AccGrInfo: TOracleDataSet
+    SQL.Strings = (
+      'SELECT agi.RowID,agi.groupid, agi.accountnumber'
+      '  FROM cr_aginfo agi'
+      'WHERE agi.GROUPID=:GROUPID')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000100000003A00470052004F00550050004900440003000000
+      0000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000E000000470052004F005500500049004400010000000000
+      1A0000004100430043004F0055004E0054004E0055004D004200450052000100
+      00000000}
+    Cursor = crSQLWait
+    Master = AccGroups
+    MasterFields = 'ID'
+    DetailFields = 'GROUPID'
+    RefreshOptions = [roAfterInsert, roAfterUpdate]
+    Session = sboapiDataModule.SBSession
+    Left = 120
+    Top = 112
+    object AccGrInfoGROUPID: TFloatField
+      FieldName = 'GROUPID'
+      Required = True
+    end
+    object AccGrInfoACCOUNTNUMBER: TFloatField
+      FieldName = 'ACCOUNTNUMBER'
+      Required = True
+    end
+  end
+  object DataSource1: TDataSource
+    DataSet = AccGroups
+    Left = 160
+    Top = 80
+  end
+  object DataSource2: TDataSource
+    DataSet = AccGrInfo
+    Left = 160
+    Top = 112
+  end
+end

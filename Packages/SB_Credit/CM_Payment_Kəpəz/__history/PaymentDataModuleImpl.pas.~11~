@@ -1,0 +1,97 @@
+﻿unit PaymentDataModuleImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, NLSDialogs,
+  Db, OracleData, Oracle;
+
+type
+  TPaymentDataModule = class(TDataModule)
+    PaymentInfo: TOracleDataSet;
+    DataSrcPaymentInfo: TDataSource;
+    CustAccount: TOracleDataSet;
+    CustAccountBOOROWERACCID: TFloatField;
+    PaymentAccounts: TOracleDataSet;
+    DataSrcPaymentAccounts: TDataSource;
+    PaymentInfoID: TFloatField;
+    PaymentInfoCREDITID: TFloatField;
+    PaymentInfoPAYDATE: TDateTimeField;
+    PaymentInfoPAYEDAMT: TFloatField;
+    PaymentInfoPAYEDINTAMT: TFloatField;
+    PaymentInfoPAYEDDUEAMT: TFloatField;
+    PaymentInfoPAYEDDUEINTAMT: TFloatField;
+    PaymentAccountsACCID: TFloatField;
+    PaymentAccountsKLI_ID: TFloatField;
+    PaymentAccountsACCOUNTNUMBER: TWideStringField;
+    PaymentAccountsREST: TFloatField;
+    LoanRest: TOracleDataSet;
+    DueIntRest: TOracleDataSet;
+    DueRest: TOracleDataSet;
+    IntRest: TOracleDataSet;
+    DSLoanRest: TDataSource;
+    DSDueIntRest: TDataSource;
+    DSDueRest: TDataSource;
+    DSIntRest: TDataSource;
+    PortfInfo: TOracleDataSet;
+    DSPortfInfo: TDataSource;
+    CM_PAYMENT: TOraclePackage;
+    DueRestDUEREST: TFloatField;
+    DueRestACC_NO: TWideStringField;
+    IntRestINTERESTREST: TFloatField;
+    IntRestACC_NO: TWideStringField;
+    LoanRestREST: TFloatField;
+    LoanRestACC_NO: TWideStringField;
+    DueIntRestDUEINTERESTREST: TFloatField;
+    DueIntRestACC_NO: TWideStringField;
+    LoanRestPENALTYREST: TFloatField;
+    PeniyaPayAccounts: TOracleDataSet;
+    FloatField1: TFloatField;
+    FloatField2: TFloatField;
+    StringField1: TWideStringField;
+    FloatField3: TFloatField;
+    DSrcPeniyaPayAccounts: TDataSource;
+    cm_utils: TOraclePackage;
+    LoanRestPENALTYACCNO: TWideStringField;
+    PaymentInfoPAYEDPENALTYAMT2: TFloatField;
+    expcrdcnt_: TOracleDataSet;
+    expcrdcnt_EXDATCOUNT: TFloatField;
+    IntRestBKACC_NO: TWideStringField;
+    IntRestBKINTERESTREST: TFloatField;
+    PaymentInfoBKAMMOUNT: TFloatField;
+    PaymentAccountsVAL_NAME: TWideStringField;
+    PeniyaPayAccountsVAL_NAME: TWideStringField;
+    CM_SCHEDULE: TOraclePackage;
+    Girov: TOracleDataSet;
+    GirovSrc: TDataSource;
+    IntRestINTREST: TFloatField;
+    expcrdcnt: TOracleDataSet;
+    FloatField4: TFloatField;
+    OraclePackage1: TOraclePackage;
+    PaymentInfoREST: TFloatField;
+    PaymentInfoINTEREST: TFloatField;
+    DSRC_CUST_COMBİNED: TDataSource;
+    ODS_CUST_COMBİNED: TOracleDataSet;
+    ODS_CUST_COMBİNEDCREDITID: TFloatField;
+    ODS_CUST_COMBİNEDNAME: TWideStringField;
+    ODS_CUST_COMBİNEDCUST_ADRESS: TWideStringField;
+    ODS_CUST_COMBİNEDAMMOUNT: TFloatField;
+    ODS_CUST_COMBİNEDCUST_TEL: TWideStringField;
+    ODS_CUST_COMBİNEDID: TFloatField;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  PaymentDataModule: TPaymentDataModule;
+
+implementation
+
+{$R *.DFM}
+
+uses
+  sboapiDataModuleImpl;
+
+end.

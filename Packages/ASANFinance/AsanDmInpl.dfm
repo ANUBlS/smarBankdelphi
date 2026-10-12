@@ -1,0 +1,935 @@
+object AsanDm: TAsanDm
+  OldCreateOrder = False
+  OnCreate = DataModuleCreate
+  OnDestroy = DataModuleDestroy
+  Height = 394
+  Width = 795
+  object BankInfo: TOracleDataSet
+    SQL.Strings = (
+      
+        'select BANK,logo,az_name ,fond_reg_no from bankinfo_t where kod_' +
+        'fil=0')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000400000008000000420041004E004B00010000000000080000004C00
+      4F0047004F000000000000001600000046004F004E0044005F00520045004700
+      5F004E004F000100000000000E00000041005A005F004E0041004D0045000100
+      00000000}
+    Session = sboapiDataModule.SBSession
+    Left = 272
+    Top = 32
+    object BankInfoLOGO: TBlobField
+      FieldName = 'LOGO'
+    end
+    object BankInfoBANK: TWideStringField
+      FieldName = 'BANK'
+      Size = 80
+    end
+    object BankInfoAZ_NAME: TWideStringField
+      FieldName = 'AZ_NAME'
+      Size = 80
+    end
+    object BankInfoFOND_REG_NO: TWideStringField
+      FieldName = 'FOND_REG_NO'
+      Size = 160
+    end
+  end
+  object PrPackage: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'asan_transaction'
+    ParameterMode = pmNamed
+    Cursor = crHourGlass
+    Left = 632
+    Top = 32
+  end
+  object OracleQuery1: TOracleQuery
+    SQL.Strings = (
+      'begin'
+      '  asan_transaction.cek_asan('
+      '    :fin ,'
+      '    :service,'
+      '    :status,'
+      '    :js'
+      '    );'
+      'end;')
+    Session = sboapiDataModule.SBSession
+    Optimize = False
+    Variables.Data = {
+      0400000004000000080000003A00460049004E00050000000000000000000000
+      100000003A005300450052005600490043004500050000000000000000000000
+      060000003A004A0053000A00000000000000000000000E0000003A0053005400
+      4100540055005300050000000000000000000000}
+    Left = 48
+    Top = 16
+  end
+  object LogDSest: TOracleDataSet
+    SQL.Strings = (
+      
+        'select info from asan_log a where a.status='#39'success'#39' and service' +
+        '=:service and pin=:pin '
+      ''
+      'and  nvl(docnumber,'#39'XX'#39')= nvl(:doc,'#39'XX'#39') '
+      'and trunc(dat)>=trunc(sysdate)-3'
+      'order by id desc')
+    Optimize = False
+    Variables.Data = {
+      0400000003000000100000003A00530045005200560049004300450005000000
+      0000000000000000080000003A00500049004E00050000000000000000000000
+      080000003A0044004F004300050000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {05000000010000000800000049004E0046004F00010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 208
+    Top = 120
+  end
+  object InsAsanLog: TOracleDataSet
+    SQL.Strings = (
+      'select rowid,a.* from asan_log a where pin='#39'11111'#39)
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000A000000040000004900440001000000000006000000440041005400
+      01000000000006000000500049004E0001000000000006000000550053005200
+      0100000000000E00000053004500520056004900430045000100000000000800
+      000049004E0046004F000100000000000C000000530054004100540055005300
+      0100000000000E0000004F0053005F0055005300450052000100000000001200
+      000044004F0043004E0055004D00420045005200010000000000060000005500
+      52004C00010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 488
+    Top = 40
+    object InsAsanLogID: TFloatField
+      FieldName = 'ID'
+    end
+    object InsAsanLogDAT: TDateTimeField
+      FieldName = 'DAT'
+    end
+    object InsAsanLogPIN: TWideStringField
+      FieldName = 'PIN'
+      Size = 10
+    end
+    object InsAsanLogUSR: TWideStringField
+      FieldName = 'USR'
+    end
+    object InsAsanLogSERVICE: TWideStringField
+      FieldName = 'SERVICE'
+    end
+    object InsAsanLogINFO: TWideMemoField
+      FieldName = 'INFO'
+      BlobType = ftWideMemo
+    end
+    object InsAsanLogSTATUS: TWideStringField
+      FieldName = 'STATUS'
+    end
+    object InsAsanLogDOCNUMBER: TWideStringField
+      FieldName = 'DOCNUMBER'
+      Size = 15
+    end
+    object InsAsanLogURL: TWideStringField
+      FieldName = 'URL'
+      Size = 300
+    end
+  end
+  object IdDSet: TOracleDataSet
+    SQL.Strings = (
+      'select '
+      'seq_asan_loq.NEXTVAL id from dual')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {05000000010000000400000049004400010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 288
+    Top = 120
+    object IdDSetID: TFloatField
+      FieldName = 'ID'
+    end
+  end
+  object EmployerDataSet: TOracleDataSet
+    SQL.Strings = (
+      
+        'select s.id,a.*,nvl(a.EndDate,a.PeriodType)mqavile_bitme from as' +
+        'an_log s,JSON_TABLE(info, '#39'$.Response.Active[*]'#39' COLUMNS ('
+      '                         row_number FOR ORDINALITY  ,'
+      
+        '                          Voen VARCHAR2(20) PATH '#39'$.Employer.Voe' +
+        'n'#39','
+      
+        '                          Name VARCHAR2(100) PATH '#39'$.Employer.Na' +
+        'me'#39','
+      
+        '                          WorkerCount VARCHAR2(8) PATH '#39'$.Employ' +
+        'er.WorkerCount'#39','
+      
+        '                          LegalAddress VARCHAR2(150) PATH '#39'$.Emp' +
+        'loyer.LegalAddress'#39','
+      
+        '                          Firm_Phone VARCHAR2(150) PATH '#39'$.Emplo' +
+        'yer.Phone'#39','
+      
+        '                          EmlakNovu VARCHAR2(150) PATH '#39'$.Employ' +
+        'er.PropertyType.Description'#39','
+      '                         '
+      
+        '                          IshciAdi VARCHAR2(80) PATH '#39'$.Employee' +
+        '.Name'#39','
+      
+        '                          Surname VARCHAR2(80) PATH '#39'$.Employee.' +
+        'Surname'#39','
+      
+        '                          Patronymic VARCHAR2(90) PATH '#39'$.Employ' +
+        'ee.Patronymic'#39','
+      
+        '                          Phone  VARCHAR2(5) PATH '#39'$.Employee.Ph' +
+        'one'#39','
+      
+        '                          IshyeriNovu VARCHAR2(15) PATH '#39'$.Emplo' +
+        'yee.WorkPlaceType.Description'#39' ,'
+      
+        '                          WorkPlace VARCHAR2(200) PATH '#39'$.Employ' +
+        'ee.WorkPlace'#39',  '
+      
+        '                          Position VARCHAR2(120) PATH '#39'$.Employe' +
+        'e.Position'#39' , '
+      
+        '                          PositionLabourContract VARCHAR2(90) PA' +
+        'TH '#39'$.Employee.PositionLabourContract'#39' ,'
+      
+        '                          Salary  VARCHAR2(15) PATH '#39'$.Employee.' +
+        'Salary'#39','
+      
+        '                          WorkCasualType VARCHAR2(20) PATH '#39'$.Em' +
+        'ployee.WorkCasualType.Description'#39' ,'
+      
+        '                          SSN VARCHAR2(20) PATH '#39'$.Employee.SSN'#39 +
+        ' , '
+      
+        '                          BeginDate VARCHAR2(20) PATH '#39'$.Contrac' +
+        't.BeginDate'#39','
+      
+        '                          EndDate VARCHAR2(20) PATH '#39'$.Contract.' +
+        'EndDate'#39','
+      
+        '                          NextEndDate  VARCHAR2(20) PATH '#39'$.Cont' +
+        'ract.NextEndDate'#39','
+      
+        '                          PeriodType VARCHAR2(20) PATH '#39'$.Contra' +
+        'ct.PeriodType.Description'#39' ,'
+      
+        '                          Nomre VARCHAR2(20) PATH '#39'$.Contract.Nu' +
+        'mber'#39'            '
+      '                          )'
+      '                          )a'
+      ''
+      ''
+      'where id=:id')
+    Optimize = False
+    Variables.Data = {0400000001000000060000003A0049004400050000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000001900000004000000490044000100000000001400000052004F005700
+      5F004E0055004D004200450052000100000000000800000056004F0045004E00
+      010000000000080000004E0041004D0045000100000000001600000057004F00
+      52004B004500520043004F0055004E005400010000000000180000004C004500
+      470041004C004100440044005200450053005300010000000000120000004500
+      4D004C0041004B004E004F005600550001000000000010000000490053004800
+      430049004100440049000100000000000E0000005300550052004E0041004D00
+      45000100000000001400000050004100540052004F004E0059004D0049004300
+      0100000000001600000049005300480059004500520049004E004F0056005500
+      0100000000001200000057004F0052004B0050004C0041004300450001000000
+      00001000000050004F0053004900540049004F004E000100000000002C000000
+      50004F0053004900540049004F004E004C00410042004F005500520043004F00
+      4E00540052004100430054000100000000000C000000530041004C0041005200
+      59000100000000001C00000057004F0052004B00430041005300550041004C00
+      540059005000450001000000000006000000530053004E000100000000001200
+      000042004500470049004E0044004100540045000100000000000E0000004500
+      4E00440044004100540045000100000000001400000050004500520049004F00
+      440054005900500045000100000000000A0000004E004F004D00520045000100
+      000000000A000000500048004F004E0045000100000000001A0000004D005100
+      4100560049004C0045005F004200490054004D00450001000000000014000000
+      4600490052004D005F00500048004F004E004500010000000000160000004E00
+      45005800540045004E0044004400410054004500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 496
+    Top = 104
+    object EmployerDataSetID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object EmployerDataSetROW_NUMBER: TFloatField
+      FieldName = 'ROW_NUMBER'
+    end
+    object EmployerDataSetVOEN: TWideStringField
+      FieldName = 'VOEN'
+    end
+    object EmployerDataSetNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 100
+    end
+    object EmployerDataSetWORKERCOUNT: TWideStringField
+      FieldName = 'WORKERCOUNT'
+      Size = 8
+    end
+    object EmployerDataSetLEGALADDRESS: TWideStringField
+      FieldName = 'LEGALADDRESS'
+      Size = 150
+    end
+    object EmployerDataSetEMLAKNOVU: TWideStringField
+      FieldName = 'EMLAKNOVU'
+      Size = 150
+    end
+    object EmployerDataSetISHCIADI: TWideStringField
+      FieldName = 'ISHCIADI'
+      Size = 80
+    end
+    object EmployerDataSetSURNAME: TWideStringField
+      FieldName = 'SURNAME'
+      Size = 80
+    end
+    object EmployerDataSetPATRONYMIC: TWideStringField
+      FieldName = 'PATRONYMIC'
+      Size = 90
+    end
+    object EmployerDataSetISHYERINOVU: TWideStringField
+      FieldName = 'ISHYERINOVU'
+      Size = 15
+    end
+    object EmployerDataSetWORKPLACE: TWideStringField
+      FieldName = 'WORKPLACE'
+      Size = 200
+    end
+    object EmployerDataSetPOSITION: TWideStringField
+      FieldName = 'POSITION'
+      Size = 120
+    end
+    object EmployerDataSetPOSITIONLABOURCONTRACT: TWideStringField
+      FieldName = 'POSITIONLABOURCONTRACT'
+      Size = 90
+    end
+    object EmployerDataSetSALARY: TWideStringField
+      FieldName = 'SALARY'
+      Size = 15
+    end
+    object EmployerDataSetWORKCASUALTYPE: TWideStringField
+      FieldName = 'WORKCASUALTYPE'
+    end
+    object EmployerDataSetSSN: TWideStringField
+      FieldName = 'SSN'
+    end
+    object EmployerDataSetBEGINDATE: TWideStringField
+      FieldName = 'BEGINDATE'
+    end
+    object EmployerDataSetENDDATE: TWideStringField
+      FieldName = 'ENDDATE'
+    end
+    object EmployerDataSetPERIODTYPE: TWideStringField
+      FieldName = 'PERIODTYPE'
+    end
+    object EmployerDataSetNOMRE: TWideStringField
+      FieldName = 'NOMRE'
+    end
+    object EmployerDataSetPHONE: TWideStringField
+      FieldName = 'PHONE'
+      Size = 5
+    end
+    object EmployerDataSetMQAVILE_BITME: TWideStringField
+      FieldName = 'MQAVILE_BITME'
+    end
+    object EmployerDataSetFIRM_PHONE: TWideStringField
+      FieldName = 'FIRM_PHONE'
+      Size = 150
+    end
+    object EmployerDataSetNEXTENDDATE: TWideStringField
+      FieldName = 'NEXTENDDATE'
+    end
+  end
+  object EmployerDataSrc: TDataSource
+    DataSet = EmployerDataSet
+    Left = 416
+    Top = 104
+  end
+  object Status: TOracleDataSet
+    SQL.Strings = (
+      
+        'select s.id,a.* from asan_log s,JSON_TABLE(info, '#39'$.Status[*]'#39' C' +
+        'OLUMNS ('
+      '                          Code VARCHAR2(20) PATH '#39'$.Code'#39','
+      '                          Message VARCHAR2(200) PATH '#39'$.Message'#39
+      '                          )'
+      '                          )a'
+      ''
+      ''
+      'where id=:id'
+      '')
+    Optimize = False
+    Variables.Data = {0400000001000000060000003A0049004400050000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000300000004000000490044000100000000000800000043004F004400
+      45000100000000000E0000004D00450053005300410047004500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 56
+    Top = 96
+    object StatusID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object StatusCODE: TWideStringField
+      FieldName = 'CODE'
+    end
+    object StatusMESSAGE: TWideStringField
+      FieldName = 'MESSAGE'
+      Size = 200
+    end
+  end
+  object DeActiveEmpDSet: TOracleDataSet
+    SQL.Strings = (
+      
+        'select s.id,a.* from asan_log s,JSON_TABLE(info, '#39'$.Response.Dea' +
+        'ctive[*]'#39' COLUMNS ('
+      '                         row_number FOR ORDINALITY  ,'
+      
+        '                          Voen VARCHAR2(20) PATH '#39'$.Employer.Voe' +
+        'n'#39','
+      
+        '                          Name VARCHAR2(100) PATH '#39'$.Employer.Na' +
+        'me'#39','
+      
+        '                          Position VARCHAR2(100) PATH '#39'$.Employe' +
+        'e.Position'#39','
+      
+        '                          Salary VARCHAR2(20) PATH '#39'$.Employee.S' +
+        'alary'#39','
+      
+        '                          BeginDate VARCHAR2(100) PATH '#39'$.Contra' +
+        'ct.BeginDate'#39','
+      
+        '                          EndDate VARCHAR2(20) PATH '#39'$.Contract.' +
+        'EndDate'#39
+      '                         '
+      '                          )'
+      '                          )a'
+      ''
+      'where id=:id')
+    Optimize = False
+    Variables.Data = {0400000001000000060000003A0049004400050000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000800000004000000490044000100000000001400000052004F005700
+      5F004E0055004D004200450052000100000000000800000056004F0045004E00
+      010000000000080000004E0041004D0045000100000000001000000050004F00
+      53004900540049004F004E000100000000000C000000530041004C0041005200
+      59000100000000001200000042004500470049004E0044004100540045000100
+      000000000E00000045004E0044004400410054004500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 696
+    Top = 104
+    object DeActiveEmpDSetID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object DeActiveEmpDSetROW_NUMBER: TFloatField
+      FieldName = 'ROW_NUMBER'
+    end
+    object DeActiveEmpDSetVOEN: TWideStringField
+      FieldName = 'VOEN'
+    end
+    object DeActiveEmpDSetNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 100
+    end
+    object DeActiveEmpDSetPOSITION: TWideStringField
+      FieldName = 'POSITION'
+      Size = 100
+    end
+    object DeActiveEmpDSetSALARY: TWideStringField
+      FieldName = 'SALARY'
+    end
+    object DeActiveEmpDSetBEGINDATE: TWideStringField
+      FieldName = 'BEGINDATE'
+      Size = 100
+    end
+    object DeActiveEmpDSetENDDATE: TWideStringField
+      FieldName = 'ENDDATE'
+    end
+  end
+  object DeActiveEmpDSrc: TDataSource
+    DataSet = DeActiveEmpDSet
+    Left = 600
+    Top = 104
+  end
+  object PensionDSet: TOracleDataSet
+    SQL.Strings = (
+      
+        'select s.id,a.* from asan_log s,JSON_TABLE(info, '#39'$.Response[*]'#39 +
+        ' COLUMNS ('
+      '                          Name VARCHAR2(20) PATH '#39'$.Name'#39','
+      
+        '                          Surname VARCHAR2(20) PATH '#39'$.Surname'#39' ' +
+        ','
+      
+        '                          Patronymic VARCHAR2(20) PATH '#39'$.Patron' +
+        'ymic'#39' ,'
+      
+        '                          BirthDate VARCHAR2(20) PATH '#39'$.BirthDa' +
+        'te'#39','
+      
+        '                          AllBeginDate VARCHAR2(20) PATH '#39'$.Allo' +
+        'wance.BeginDate'#39','
+      
+        '                          AllEndDate VARCHAR2(20) PATH '#39'$.Allowa' +
+        'nce.EndDate'#39','
+      
+        '                          AllType VARCHAR2(400) PATH '#39'$.Allowanc' +
+        'e.Type.Description'#39' ,'
+      
+        '                          AllGroup VARCHAR2(400) PATH '#39'$.Allowan' +
+        'ce.Group.Description'#39','
+      
+        '                          AllAmount VARCHAR2(20) PATH '#39'$.Allowan' +
+        'ce.Amount'#39','
+      '                          '
+      
+        '                          PenLabel VARCHAR2(200) PATH '#39'$.Pension' +
+        '.Type.Label'#39','
+      
+        '                          PenDescription VARCHAR2(200) PATH '#39'$.P' +
+        'ension.Type.Description'#39','
+      
+        '                          PenStartDate VARCHAR2(20) PATH '#39'$.Pens' +
+        'ion.StartDate'#39','
+      
+        '                          PenEndDate VARCHAR2(20) PATH '#39'$.Pensio' +
+        'n.EndDate'#39', '
+      
+        '                          PenAmount VARCHAR2(20) PATH '#39'$.Pension' +
+        '.Amount'#39'    '
+      '                          )'
+      '                          )a'
+      'where id=:id')
+    Optimize = False
+    Variables.Data = {0400000001000000060000003A0049004400050000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000F0000000400000049004400010000000000080000004E0041004D00
+      45000100000000000E0000005300550052004E0041004D004500010000000000
+      1400000050004100540052004F004E0059004D00490043000100000000001200
+      0000420049005200540048004400410054004500010000000000180000004100
+      4C004C0042004500470049004E00440041005400450001000000000014000000
+      41004C004C0045004E00440044004100540045000100000000000E0000004100
+      4C004C0054005900500045000100000000001000000041004C004C0047005200
+      4F00550050000100000000001200000041004C004C0041004D004F0055004E00
+      540001000000000010000000500045004E004C004100420045004C0001000000
+      00001C000000500045004E004400450053004300520049005000540049004F00
+      4E0001000000000018000000500045004E005300540041005200540044004100
+      5400450001000000000014000000500045004E0045004E004400440041005400
+      450001000000000012000000500045004E0041004D004F0055004E0054000100
+      00000000}
+    Session = sboapiDataModule.SBSession
+    Left = 504
+    Top = 160
+    object PensionDSetID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object PensionDSetNAME: TWideStringField
+      FieldName = 'NAME'
+    end
+    object PensionDSetSURNAME: TWideStringField
+      FieldName = 'SURNAME'
+    end
+    object PensionDSetPATRONYMIC: TWideStringField
+      FieldName = 'PATRONYMIC'
+    end
+    object PensionDSetBIRTHDATE: TWideStringField
+      FieldName = 'BIRTHDATE'
+    end
+    object PensionDSetALLBEGINDATE: TWideStringField
+      FieldName = 'ALLBEGINDATE'
+    end
+    object PensionDSetALLENDDATE: TWideStringField
+      FieldName = 'ALLENDDATE'
+    end
+    object PensionDSetALLTYPE: TWideStringField
+      FieldName = 'ALLTYPE'
+    end
+    object PensionDSetALLGROUP: TWideStringField
+      FieldName = 'ALLGROUP'
+    end
+    object PensionDSetALLAMOUNT: TWideStringField
+      FieldName = 'ALLAMOUNT'
+    end
+    object PensionDSetPENLABEL: TWideStringField
+      FieldName = 'PENLABEL'
+    end
+    object PensionDSetPENDESCRIPTION: TWideStringField
+      FieldName = 'PENDESCRIPTION'
+    end
+    object PensionDSetPENSTARTDATE: TWideStringField
+      FieldName = 'PENSTARTDATE'
+    end
+    object PensionDSetPENENDDATE: TWideStringField
+      FieldName = 'PENENDDATE'
+    end
+    object PensionDSetPENAMOUNT: TWideStringField
+      FieldName = 'PENAMOUNT'
+    end
+  end
+  object PensionDSrc: TDataSource
+    DataSet = PensionDSet
+    Left = 416
+    Top = 160
+  end
+  object FarmPersonDsrc: TDataSource
+    DataSet = FarmPersonDset
+    Left = 32
+    Top = 184
+  end
+  object FarmPersonDset: TOracleDataSet
+    SQL.Strings = (
+      
+        'select s.id,a.* from asan_log s,JSON_TABLE(info, '#39'$.Response.Per' +
+        'son[*]'#39' COLUMNS ('
+      '                          Pin VARCHAR2(20) PATH '#39'$.Pin'#39','
+      
+        '                          FirstName VARCHAR2(100) PATH '#39'$.FirstN' +
+        'ame'#39','
+      
+        '                          LastName VARCHAR2(100) PATH '#39'$.LastNam' +
+        'e'#39','
+      
+        '                          FatherName VARCHAR2(100) PATH '#39'$.Fathe' +
+        'rName'#39','
+      
+        '                          BirthDate VARCHAR2(100) PATH '#39'$.BirthD' +
+        'ate'#39
+      '                          )'
+      '                          )a'
+      ''
+      ''
+      'where id=:id')
+    Optimize = False
+    Variables.Data = {0400000001000000060000003A0049004400050000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      0500000006000000040000004900440001000000000012000000420049005200
+      54004800440041005400450001000000000006000000500049004E0001000000
+      000012000000460049005200530054004E0041004D0045000100000000001000
+      00004C004100530054004E0041004D0045000100000000001400000046004100
+      54004800450052004E0041004D004500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 120
+    Top = 184
+    object FarmPersonDsetID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object FarmPersonDsetPIN: TWideStringField
+      FieldName = 'PIN'
+    end
+    object FarmPersonDsetFIRSTNAME: TWideStringField
+      FieldName = 'FIRSTNAME'
+      Size = 100
+    end
+    object FarmPersonDsetLASTNAME: TWideStringField
+      FieldName = 'LASTNAME'
+      Size = 100
+    end
+    object FarmPersonDsetFATHERNAME: TWideStringField
+      FieldName = 'FATHERNAME'
+      Size = 100
+    end
+    object FarmPersonDsetBIRTHDATE: TWideStringField
+      FieldName = 'BIRTHDATE'
+      Size = 100
+    end
+  end
+  object FarmsSrc: TDataSource
+    DataSet = FarmSet
+    Left = 24
+    Top = 280
+  end
+  object FarmSet: TOracleDataSet
+    SQL.Strings = (
+      
+        'select s.id,a.* from asan_log s,JSON_TABLE(info, '#39'$.Response[*]'#39 +
+        ' COLUMNS ('
+      '                          fId VARCHAR2(20) PATH '#39'$.Farms.Id'#39','
+      
+        '                          Name VARCHAR2(100) PATH '#39'$.Farms.Name'#39 +
+        ','
+      '                           NESTED PATH '#39'$.Farms.Fields[*]'#39
+      '                           COLUMNS(  Fields FOR ORDINALITY  ,'
+      
+        '                                   VillageName VARCHAR2(30) PATH' +
+        ' '#39'$.VillageName'#39','
+      
+        '                                   DocType VARCHAR2(30) PATH '#39'$.' +
+        'DocType'#39','
+      
+        '                                   FieldAmount VARCHAR2(30) PATH' +
+        ' '#39'$.FieldAmount'#39','
+      
+        '                                   Unit VARCHAR2(30) PATH '#39'$.Uni' +
+        't'#39
+      '                                  ,'
+      '                           NESTED PATH '#39'$.Plants[*]'#39
+      '                           COLUMNS(  Plants FOR ORDINALITY  ,'
+      
+        '                                   PlName VARCHAR2(300) PATH '#39'$.' +
+        'Name'#39','
+      
+        '                                   PlFieldAmount VARCHAR2(10) PA' +
+        'TH '#39'$.FieldAmount'#39','
+      
+        '                                   PlUnit VARCHAR2(6) PATH '#39'$.Un' +
+        'it'#39
+      '                                  )        '
+      '                          '
+      '                          )))a'
+      ''
+      ''
+      'where s.id=:id')
+    Optimize = False
+    Variables.Data = {0400000001000000060000003A0049004400050000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000C000000040000004900440001000000000006000000460049004400
+      010000000000080000004E0041004D0045000100000000000C00000046004900
+      45004C004400530001000000000016000000560049004C004C00410047004500
+      4E0041004D0045000100000000000E00000044004F0043005400590050004500
+      010000000000160000004600490045004C00440041004D004F0055004E005400
+      0100000000000800000055004E00490054000100000000000C00000050004C00
+      41004E00540053000100000000000C00000050004C004E0041004D0045000100
+      000000001A00000050004C004600490045004C00440041004D004F0055004E00
+      54000100000000000C00000050004C0055004E0049005400010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 112
+    Top = 280
+    object FarmSetID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object FarmSetFID: TWideStringField
+      FieldName = 'FID'
+    end
+    object FarmSetNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 100
+    end
+    object FarmSetFIELDS: TFloatField
+      FieldName = 'FIELDS'
+    end
+    object FarmSetVILLAGENAME: TWideStringField
+      FieldName = 'VILLAGENAME'
+      Size = 30
+    end
+    object FarmSetDOCTYPE: TWideStringField
+      FieldName = 'DOCTYPE'
+      Size = 30
+    end
+    object FarmSetFIELDAMOUNT: TWideStringField
+      FieldName = 'FIELDAMOUNT'
+      Size = 30
+    end
+    object FarmSetUNIT: TWideStringField
+      FieldName = 'UNIT'
+      Size = 30
+    end
+    object FarmSetPLANTS: TFloatField
+      FieldName = 'PLANTS'
+    end
+    object FarmSetPLNAME: TWideStringField
+      FieldName = 'PLNAME'
+      Size = 300
+    end
+    object FarmSetPLFIELDAMOUNT: TWideStringField
+      FieldName = 'PLFIELDAMOUNT'
+      Size = 6
+    end
+    object FarmSetPLUNIT: TWideStringField
+      FieldName = 'PLUNIT'
+      Size = 6
+    end
+  end
+  object XercDsrc: TDataSource
+    DataSet = XercSet
+    Left = 256
+    Top = 216
+  end
+  object XercSet: TOracleDataSet
+    SQL.Strings = (
+      
+        'select s.id,a.* from asan_log s,JSON_TABLE(info, '#39'$.Response.Exp' +
+        'enses[*]'#39' COLUMNS ('
+      '                          row_number FOR ORDINALITY  ,'
+      '                          Pin VARCHAR2(20) PATH '#39'$.Value'#39','
+      '                          Dat VARCHAR2(100) PATH '#39'$.Date'#39','
+      
+        '                          Service VARCHAR2(100) PATH '#39'$.Service'#39 +
+        ','
+      '                          Amount number PATH '#39'$.Amount'#39','
+      
+        '                          IpAddress VARCHAR2(100) PATH '#39'$.IpAddr' +
+        'ess'#39
+      '                          )'
+      '                          )a'
+      ''
+      ''
+      'where id=:id')
+    Optimize = False
+    Variables.Data = {0400000001000000060000003A0049004400050000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      0500000007000000040000004900440001000000000006000000500049004E00
+      010000000000060000004400410054000100000000000E000000530045005200
+      56004900430045000100000000000C00000041004D004F0055004E0054000100
+      0000000012000000490050004100440044005200450053005300010000000000
+      1400000052004F0057005F004E0055004D00420045005200010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 344
+    Top = 216
+    object XercSetROW_NUMBER: TFloatField
+      FieldName = 'ROW_NUMBER'
+    end
+    object XercSetID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object XercSetPIN: TWideStringField
+      FieldName = 'PIN'
+    end
+    object XercSetDAT: TWideStringField
+      FieldName = 'DAT'
+      Size = 100
+    end
+    object XercSetSERVICE: TWideStringField
+      FieldName = 'SERVICE'
+      Size = 100
+    end
+    object XercSetAMOUNT: TFloatField
+      FieldName = 'AMOUNT'
+    end
+    object XercSetIPADDRESS: TWideStringField
+      FieldName = 'IPADDRESS'
+      Size = 100
+    end
+  end
+  object VoenSrc: TDataSource
+    DataSet = VoenSet
+    Left = 192
+    Top = 272
+  end
+  object VoenSet: TOracleDataSet
+    SQL.Strings = (
+      
+        'select s.id,  json_value(info, '#39'$.Response.PayerType.Type'#39') AS p' +
+        'ayer_type,'
+      
+        '  json_value(info, '#39'$.Response.PayerType.Description'#39') AS payer_' +
+        'description,'
+      
+        '  nvl(json_value(info, '#39'$.Response.NaturalPerson.LegalAddress'#39'),' +
+        ' json_value(info, '#39'$.Response.LegalEntity.LegalAddress'#39')) AS leg' +
+        'al_address,'
+      '  json_value(info, '#39'$.Response.VOENInfo.VOEN'#39') AS voen,'
+      
+        '  json_value(info, '#39'$.Response.VOENInfo.CreateDate'#39') AS voen_cre' +
+        'ate_date,'
+      '  json_value(info, '#39'$.Response.Chief.Name'#39') AS chief_name,'
+      '  json_value(info, '#39'$.Response.Chief.Surname'#39') AS chief_surname,'
+      
+        '  json_value(info, '#39'$.Response.Chief.Patronymic'#39') AS chief_patro' +
+        'nymic,'
+      '  json_value(info, '#39'$.Response.Chief.Name'#39')||'#39' '#39'||'
+      '  json_value(info, '#39'$.Response.Chief.Surname'#39')||'#39' '#39'||'
+      '  json_value(info, '#39'$.Response.Chief.Patronymic'#39') AS full_name'
+      ' from asan_log s'
+      ''
+      'where s.id=:id')
+    Optimize = False
+    Variables.Data = {0400000001000000060000003A0049004400050000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000A000000040000004900440001000000000014000000500041005900
+      450052005F005400590050004500010000000000220000005000410059004500
+      52005F004400450053004300520049005000540049004F004E00010000000000
+      1A0000004C004500470041004C005F0041004400440052004500530053000100
+      000000000800000056004F0045004E000100000000002000000056004F004500
+      4E005F004300520045004100540045005F004400410054004500010000000000
+      14000000430048004900450046005F004E0041004D0045000100000000001A00
+      0000430048004900450046005F005300550052004E0041004D00450001000000
+      000020000000430048004900450046005F0050004100540052004F004E005900
+      4D004900430001000000000012000000460055004C004C005F004E0041004D00
+      4500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 280
+    Top = 272
+    object VoenSetID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object VoenSetPAYER_TYPE: TWideStringField
+      FieldName = 'PAYER_TYPE'
+      Size = 4000
+    end
+    object VoenSetPAYER_DESCRIPTION: TWideStringField
+      FieldName = 'PAYER_DESCRIPTION'
+      Size = 4000
+    end
+    object VoenSetLEGAL_ADDRESS: TWideStringField
+      FieldName = 'LEGAL_ADDRESS'
+      Size = 4000
+    end
+    object VoenSetVOEN: TWideStringField
+      FieldName = 'VOEN'
+      Size = 4000
+    end
+    object VoenSetVOEN_CREATE_DATE: TWideStringField
+      FieldName = 'VOEN_CREATE_DATE'
+      Size = 4000
+    end
+    object VoenSetCHIEF_NAME: TWideStringField
+      FieldName = 'CHIEF_NAME'
+      Size = 4000
+    end
+    object VoenSetCHIEF_SURNAME: TWideStringField
+      FieldName = 'CHIEF_SURNAME'
+      Size = 4000
+    end
+    object VoenSetCHIEF_PATRONYMIC: TWideStringField
+      FieldName = 'CHIEF_PATRONYMIC'
+      Size = 4000
+    end
+    object VoenSetFULL_NAME: TWideStringField
+      FieldName = 'FULL_NAME'
+      Size = 4000
+    end
+  end
+  object ods_link: TOracleDataSet
+    SQL.Strings = (
+      'select*from asan_info')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      0500000006000000040000004900440001000000000018000000500045005200
+      53004F004E0041004C0049004E0046004F000100000000001800000045004D00
+      50004C004F0059004500450049004E0046004F00010000000000160000005000
+      45004E00530049004F004E0049004E0046004F00010000000000100000004600
+      410052004D0049004E0046004F000100000000001000000056004F0045004E00
+      49004E0046004F00010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 616
+    Top = 248
+    object ods_linkID: TFloatField
+      FieldName = 'ID'
+    end
+    object ods_linkPERSONALINFO: TWideStringField
+      FieldName = 'PERSONALINFO'
+      Size = 100
+    end
+    object ods_linkEMPLOYEEINFO: TWideStringField
+      FieldName = 'EMPLOYEEINFO'
+      Size = 100
+    end
+    object ods_linkPENSIONINFO: TWideStringField
+      FieldName = 'PENSIONINFO'
+      Size = 100
+    end
+    object ods_linkFARMINFO: TWideStringField
+      FieldName = 'FARMINFO'
+      Size = 100
+    end
+    object ods_linkVOENINFO: TWideStringField
+      FieldName = 'VOENINFO'
+      Size = 100
+    end
+  end
+end

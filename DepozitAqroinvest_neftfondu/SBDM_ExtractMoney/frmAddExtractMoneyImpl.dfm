@@ -1,0 +1,491 @@
+object frmAddExtractMoney: TfrmAddExtractMoney
+  Left = 279
+  Top = 195
+  BorderIcons = [biSystemMenu]
+  ClientHeight = 230
+  ClientWidth = 565
+  Color = clBtnFace
+  Font.Charset = RUSSIAN_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poScreenCenter
+  OnCanResize = FormCanResize
+  OnKeyPress = FormKeyPress
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 14
+  object Panel2: TPanel
+    Left = 0
+    Top = 0
+    Width = 565
+    Height = 128
+    Align = alTop
+    BevelInner = bvRaised
+    BevelOuter = bvLowered
+    TabOrder = 0
+    object GroupBox5: TGroupBox
+      Left = 2
+      Top = 62
+      Width = 561
+      Height = 61
+      Align = alTop
+      Caption = 'Faiz  m'#601'bl'#601#287'i'
+      TabOrder = 0
+      object Panel4: TPanel
+        Left = 2
+        Top = 16
+        Width = 230
+        Height = 43
+        Align = alLeft
+        BevelInner = bvRaised
+        BevelOuter = bvLowered
+        TabOrder = 0
+        object StaticText2: TStaticText
+          Left = 2
+          Top = 2
+          Width = 226
+          Height = 18
+          Align = alTop
+          Alignment = taCenter
+          Caption = 'Hesab'#305'n '#8470
+          Color = clNavy
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWhite
+          Font.Height = -12
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentColor = False
+          ParentFont = False
+          TabOrder = 0
+        end
+        object DBEditEh3: TDBEditEh
+          Left = 0
+          Top = 18
+          Width = 230
+          Height = 22
+          TabStop = False
+          Alignment = taLeftJustify
+          Color = clInfoBk
+          DataField = 'INTERESTACCNO'
+          DataSource = DMExtractMoney.CustAccDatSrc
+          EditButtons = <>
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -12
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 1
+          Visible = True
+        end
+      end
+      object Panel5: TPanel
+        Left = 232
+        Top = 16
+        Width = 164
+        Height = 43
+        Align = alLeft
+        BevelInner = bvRaised
+        BevelOuter = bvLowered
+        TabOrder = 1
+        object StaticText1: TStaticText
+          Left = 2
+          Top = 2
+          Width = 160
+          Height = 18
+          Align = alTop
+          Alignment = taCenter
+          Caption = 'Qal'#305'q'
+          Color = clNavy
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWhite
+          Font.Height = -12
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentColor = False
+          ParentFont = False
+          TabOrder = 0
+        end
+        object DBEditEh4: TDBEditEh
+          Left = 0
+          Top = 18
+          Width = 163
+          Height = 22
+          TabStop = False
+          Alignment = taRightJustify
+          Color = clSilver
+          DataField = 'FACTICALINTERESTDEBT'
+          DataSource = DMExtractMoney.DepositInfoDatSrc
+          EditButtons = <>
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -12
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 1
+          Visible = True
+        end
+      end
+      object Panel6: TPanel
+        Left = 396
+        Top = 16
+        Width = 161
+        Height = 43
+        Align = alLeft
+        BevelInner = bvRaised
+        BevelOuter = bvLowered
+        TabOrder = 2
+        object StaticText4: TStaticText
+          Left = 2
+          Top = 2
+          Width = 157
+          Height = 18
+          Align = alTop
+          Alignment = taCenter
+          Caption = #214'd'#601'nil'#601'c'#601'k m'#601'bl'#601#287
+          Color = clNavy
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWhite
+          Font.Height = -12
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentColor = False
+          ParentFont = False
+          TabOrder = 0
+        end
+        object EdIntDebit: TCMCurrencyEdit
+          Tag = 1
+          Left = 1
+          Top = 19
+          Width = 157
+          Height = 22
+          Font.Charset = RUSSIAN_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -12
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 1
+          Text = '0'
+        end
+      end
+    end
+    object GroupBox1: TGroupBox
+      Left = 2
+      Top = 2
+      Width = 561
+      Height = 60
+      Align = alTop
+      Caption = #399'sas m'#601'bl'#601#287
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 1
+      object Panel3: TPanel
+        Left = 2
+        Top = 16
+        Width = 230
+        Height = 42
+        Align = alLeft
+        BevelInner = bvRaised
+        BevelOuter = bvLowered
+        TabOrder = 0
+        object StaticText5: TStaticText
+          Left = 2
+          Top = 2
+          Width = 226
+          Height = 18
+          Align = alTop
+          Alignment = taCenter
+          Caption = 'Hesab'#305'n '#8470
+          Color = clNavy
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWhite
+          Font.Height = -12
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentColor = False
+          ParentFont = False
+          TabOrder = 0
+        end
+        object DBEditEh1: TDBEditEh
+          Left = 0
+          Top = 18
+          Width = 230
+          Height = 22
+          TabStop = False
+          Alignment = taLeftJustify
+          Color = clInfoBk
+          DataField = 'CONTRACTACCNO'
+          DataSource = DMExtractMoney.CustAccDatSrc
+          EditButtons = <>
+          TabOrder = 1
+          Visible = True
+        end
+      end
+      object Panel7: TPanel
+        Left = 232
+        Top = 16
+        Width = 164
+        Height = 42
+        Align = alLeft
+        BevelInner = bvRaised
+        BevelOuter = bvLowered
+        TabOrder = 1
+        object StaticText6: TStaticText
+          Left = 2
+          Top = 2
+          Width = 160
+          Height = 18
+          Align = alTop
+          Alignment = taCenter
+          Caption = 'Qal'#305'q'
+          Color = clNavy
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWhite
+          Font.Height = -12
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentColor = False
+          ParentFont = False
+          TabOrder = 0
+        end
+        object DBEditEh2: TDBEditEh
+          Left = 0
+          Top = 18
+          Width = 163
+          Height = 22
+          TabStop = False
+          Alignment = taRightJustify
+          Color = clSilver
+          DataField = 'FACTICALDEBT'
+          DataSource = DMExtractMoney.DepositInfoDatSrc
+          EditButtons = <>
+          TabOrder = 1
+          Visible = True
+        end
+      end
+      object Panel8: TPanel
+        Left = 396
+        Top = 16
+        Width = 161
+        Height = 42
+        Align = alLeft
+        BevelInner = bvRaised
+        BevelOuter = bvLowered
+        TabOrder = 2
+        object StaticText7: TStaticText
+          Left = 2
+          Top = 2
+          Width = 157
+          Height = 18
+          Align = alTop
+          Alignment = taCenter
+          Caption = #214'd'#601'nil'#601'c'#601'k m'#601'bl'#601#287
+          Color = clNavy
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWhite
+          Font.Height = -12
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentColor = False
+          ParentFont = False
+          TabOrder = 0
+        end
+        object EdMainDebit: TCMCurrencyEdit
+          Tag = 1
+          Left = 1
+          Top = 18
+          Width = 158
+          Height = 22
+          TabOrder = 1
+          Text = '0'
+        end
+      end
+    end
+  end
+  object Button1: TButton
+    Left = 385
+    Top = 196
+    Width = 81
+    Height = 27
+    Action = Actiontr
+    Caption = 'Q'#601'bul'
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -12
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 1
+  end
+  object Button2: TButton
+    Left = 476
+    Top = 196
+    Width = 81
+    Height = 27
+    Caption = #304'mtina'
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -12
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 2
+    OnClick = Button2Click
+  end
+  object GroupBox2: TGroupBox
+    Left = 0
+    Top = 128
+    Width = 565
+    Height = 61
+    Align = alTop
+    Caption = 'Sat'#305#351'  m'#601'bl'#601#287'i'
+    TabOrder = 3
+    object Label1: TLabel
+      Left = 398
+      Top = 16
+      Width = 165
+      Height = 43
+      Align = alClient
+      Alignment = taCenter
+      Caption = #214'd'#601'ni'#351' tarixi'
+      Color = clNavy
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWhite
+      Font.Height = -12
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentColor = False
+      ParentFont = False
+      ExplicitWidth = 65
+      ExplicitHeight = 14
+    end
+    object Panel10: TPanel
+      Left = 2
+      Top = 16
+      Width = 230
+      Height = 43
+      Align = alLeft
+      BevelInner = bvRaised
+      BevelOuter = bvLowered
+      TabOrder = 0
+      object StaticText8: TStaticText
+        Left = 2
+        Top = 2
+        Width = 226
+        Height = 18
+        Align = alTop
+        Alignment = taCenter
+        Caption = 'Hesab'#305'n '#8470
+        Color = clNavy
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWhite
+        Font.Height = -12
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentColor = False
+        ParentFont = False
+        TabOrder = 0
+      end
+      object AccountListCB: TDBLookupComboboxEh
+        Left = 0
+        Top = 19
+        Width = 230
+        Height = 22
+        TabStop = False
+        DropDownBox.Sizable = True
+        EditButtons = <>
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -12
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        KeyField = 'ID'
+        ListField = 'ACC_NO'
+        ListSource = DMExtractMoney.CreditAccsDatSrc
+        ParentFont = False
+        TabOrder = 1
+        Visible = True
+      end
+    end
+    object Panel12: TPanel
+      Left = 232
+      Top = 16
+      Width = 166
+      Height = 43
+      Align = alLeft
+      BevelInner = bvRaised
+      BevelOuter = bvLowered
+      TabOrder = 1
+      object StaticText10: TStaticText
+        Left = 2
+        Top = 2
+        Width = 162
+        Height = 18
+        Align = alTop
+        Alignment = taCenter
+        Caption = 'Nominal  m'#601'bl'#601#287
+        Color = clNavy
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWhite
+        Font.Height = -12
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentColor = False
+        ParentFont = False
+        TabOrder = 0
+      end
+      object EdSaheDebit: TCMCurrencyEdit
+        Tag = 1
+        Left = 3
+        Top = 19
+        Width = 161
+        Height = 22
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -12
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 1
+        Text = '0'
+      end
+    end
+    object DTPOperation: TDBDateTimeEditEh
+      Left = 400
+      Top = 35
+      Width = 159
+      Height = 22
+      EditButtons = <>
+      Kind = dtkDateEh
+      TabOrder = 2
+      Visible = True
+    end
+  end
+  object CheckBoxTransaction: TCheckBox
+    Left = 3
+    Top = 194
+    Width = 331
+    Height = 17
+    Caption = 'G'#252'n'#252'n s'#601'n'#601'dl'#601'rin'#601' '#601'm'#601'liyyat g'#246'nd'#601'rilsin'
+    TabOrder = 4
+  end
+  object ActionList1: TActionList
+    Left = 40
+    Top = 192
+    object Actiontr: TAction
+      Caption = 'Actiontr'
+      OnExecute = ActiontrExecute
+      OnUpdate = ActiontrUpdate
+    end
+  end
+end

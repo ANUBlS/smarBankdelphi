@@ -1,0 +1,363 @@
+object PercentSetting: TPercentSetting
+  Left = 293
+  Top = 147
+  BorderIcons = [biSystemMenu]
+  ClientHeight = 471
+  ClientWidth = 418
+  Color = clBtnFace
+  Font.Charset = RUSSIAN_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poScreenCenter
+  OnCanResize = FormCanResize
+  OnKeyPress = FormKeyPress
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 14
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 418
+    Height = 435
+    Align = alTop
+    BevelInner = bvRaised
+    BevelOuter = bvLowered
+    TabOrder = 0
+    object GroupBox1: TGroupBox
+      Left = 2
+      Top = 295
+      Width = 414
+      Height = 138
+      Align = alClient
+      Caption = 'Depozitin m'#601'bl'#601#287'i'
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 0
+      object GridSetting: TDBGrid
+        Left = 2
+        Top = 16
+        Width = 410
+        Height = 120
+        Align = alClient
+        DataSource = PerSettingDatSrc
+        DrawingStyle = gdsGradient
+        TabOrder = 0
+        TitleFont.Charset = RUSSIAN_CHARSET
+        TitleFont.Color = clWindowText
+        TitleFont.Height = -12
+        TitleFont.Name = 'Tahoma'
+        TitleFont.Style = []
+        OnKeyDown = GridSettingKeyDown
+        OnKeyPress = GridSettingKeyPress
+        Columns = <
+          item
+            Expanded = False
+            FieldName = 'FIRSTAMOUNT'
+            Title.Caption = 'Ba'#351'lan'#287#305'c M'#601'b.'
+            Title.Color = clNavy
+            Title.Font.Charset = RUSSIAN_CHARSET
+            Title.Font.Color = clNavy
+            Title.Font.Height = -11
+            Title.Font.Name = 'Tahoma'
+            Title.Font.Style = []
+            Width = 90
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'LASTAMOUNT'
+            Title.Caption = 'Son M'#601'b.'
+            Title.Color = clNavy
+            Title.Font.Charset = RUSSIAN_CHARSET
+            Title.Font.Color = clNavy
+            Title.Font.Height = -11
+            Title.Font.Name = 'Tahoma'
+            Title.Font.Style = []
+            Width = 90
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'INTERESTRATE'
+            Title.Color = clNavy
+            Title.Font.Charset = RUSSIAN_CHARSET
+            Title.Font.Color = clNavy
+            Title.Font.Height = -11
+            Title.Font.Name = 'Tahoma'
+            Title.Font.Style = []
+            Width = 79
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'DUEINTRATE'
+            Title.Caption = 'Vaxt. sonrak'#305' %'
+            Title.Color = clNavy
+            Title.Font.Charset = RUSSIAN_CHARSET
+            Title.Font.Color = clNavy
+            Title.Font.Height = -11
+            Title.Font.Name = 'Tahoma'
+            Title.Font.Style = []
+            Width = 79
+            Visible = True
+          end>
+      end
+    end
+    object GroupBox2: TGroupBox
+      Left = 2
+      Top = 153
+      Width = 414
+      Height = 142
+      Align = alTop
+      Caption = 'Valyuta'
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 1
+      object DBGrid2: TDBGrid
+        Left = 2
+        Top = 16
+        Width = 410
+        Height = 124
+        Align = alClient
+        DataSource = ValutesDatSrc
+        DrawingStyle = gdsGradient
+        Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit]
+        TabOrder = 0
+        TitleFont.Charset = RUSSIAN_CHARSET
+        TitleFont.Color = clWindowText
+        TitleFont.Height = -12
+        TitleFont.Name = 'Tahoma'
+        TitleFont.Style = []
+        Columns = <
+          item
+            Expanded = False
+            FieldName = 'VAL_NAME'
+            Title.Caption = '$'
+            Title.Color = clNavy
+            Title.Font.Charset = RUSSIAN_CHARSET
+            Title.Font.Color = clNavy
+            Title.Font.Height = -11
+            Title.Font.Name = 'Tahoma'
+            Title.Font.Style = []
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'VALU_NAME'
+            Title.Caption = 'Ad'#305
+            Title.Color = clNavy
+            Title.Font.Charset = RUSSIAN_CHARSET
+            Title.Font.Color = clNavy
+            Title.Font.Height = -11
+            Title.Font.Name = 'Tahoma'
+            Title.Font.Style = []
+            Width = 282
+            Visible = True
+          end>
+      end
+    end
+    object GroupBox3: TGroupBox
+      Left = 2
+      Top = 2
+      Width = 414
+      Height = 151
+      Align = alTop
+      Caption = 'Depozitin tipi'
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 2
+      object DBGrid3: TDBGrid
+        Left = 2
+        Top = 16
+        Width = 410
+        Height = 133
+        Align = alClient
+        DataSource = DepositTypesDatSrc
+        DrawingStyle = gdsGradient
+        Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit]
+        TabOrder = 0
+        TitleFont.Charset = RUSSIAN_CHARSET
+        TitleFont.Color = clWindowText
+        TitleFont.Height = -12
+        TitleFont.Name = 'Tahoma'
+        TitleFont.Style = []
+        Columns = <
+          item
+            Expanded = False
+            FieldName = 'TYPE'
+            Title.Caption = 'Tipi'
+            Title.Color = clNavy
+            Title.Font.Charset = RUSSIAN_CHARSET
+            Title.Font.Color = clNavy
+            Title.Font.Height = -11
+            Title.Font.Name = 'Tahoma'
+            Title.Font.Style = []
+            Width = 346
+            Visible = True
+          end>
+      end
+    end
+  end
+  object BitBtn1: TBitBtn
+    Left = 327
+    Top = 440
+    Width = 81
+    Height = 27
+    Caption = 'Ba'#287'la'
+    DoubleBuffered = True
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -12
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    Glyph.Data = {
+      DE010000424DDE01000000000000760000002800000024000000120000000100
+      0400000000006801000000000000000000001000000000000000000000000000
+      80000080000000808000800000008000800080800000C0C0C000808080000000
+      FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00388888888877
+      F7F787F8888888888333333F00004444400888FFF444448888888888F333FF8F
+      000033334D5007FFF4333388888888883338888F0000333345D50FFFF4333333
+      338F888F3338F33F000033334D5D0FFFF43333333388788F3338F33F00003333
+      45D50FEFE4333333338F878F3338F33F000033334D5D0FFFF43333333388788F
+      3338F33F0000333345D50FEFE4333333338F878F3338F33F000033334D5D0FFF
+      F43333333388788F3338F33F0000333345D50FEFE4333333338F878F3338F33F
+      000033334D5D0EFEF43333333388788F3338F33F0000333345D50FEFE4333333
+      338F878F3338F33F000033334D5D0EFEF43333333388788F3338F33F00003333
+      4444444444333333338F8F8FFFF8F33F00003333333333333333333333888888
+      8888333F00003333330000003333333333333FFFFFF3333F00003333330AAAA0
+      333333333333888888F3333F00003333330000003333333333338FFFF8F3333F
+      0000}
+    ModalResult = 2
+    NumGlyphs = 2
+    ParentDoubleBuffered = False
+    ParentFont = False
+    TabOrder = 1
+  end
+  object DepositTypes: TOracleDataSet
+    SQL.Strings = (
+      'SELECT id, type'
+      '  FROM sbcm_deposit_types')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      0500000002000000040000004900440001000000000008000000540059005000
+      4500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 8
+    Top = 408
+    object DepositTypesID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object DepositTypesTYPE: TWideStringField
+      FieldName = 'TYPE'
+      Size = 256
+    end
+  end
+  object DepositTypesDatSrc: TDataSource
+    DataSet = DepositTypes
+    OnDataChange = DepositTypesDatSrcDataChange
+    Left = 40
+    Top = 408
+  end
+  object Valutes: TOracleDataSet
+    SQL.Strings = (
+      'select valute,val_name,valu_name from avalute')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000030000000C000000560041004C005500540045000100000000001000
+      0000560041004C005F004E0041004D0045000100000000001200000056004100
+      4C0055005F004E0041004D004500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 80
+    Top = 408
+    object ValutesVALUTE: TIntegerField
+      FieldName = 'VALUTE'
+      Required = True
+    end
+    object ValutesVAL_NAME: TWideStringField
+      FieldName = 'VAL_NAME'
+      Size = 10
+    end
+    object ValutesVALU_NAME: TWideStringField
+      FieldName = 'VALU_NAME'
+      Size = 25
+    end
+  end
+  object ValutesDatSrc: TDataSource
+    DataSet = Valutes
+    OnDataChange = DepositTypesDatSrcDataChange
+    Left = 112
+    Top = 408
+  end
+  object DepositPerSetting: TOracleDataSet
+    SQL.Strings = (
+      
+        'SELECT rowid,id, depositid, currencyid, interestrate,dueintrate,' +
+        'firstamount, lastamount'
+      '  FROM sbcm_depositpersetting'
+      'where DepositID = :DepID'
+      'and   CurrencyID = :CurrID')
+    Optimize = False
+    Variables.Data = {
+      04000000020000000C0000003A00440045005000490044000300000000000000
+      000000000E0000003A0043005500520052004900440003000000000000000000
+      0000}
+    Session = sboapiDataModule.SBSession
+    AfterPost = DepositPerSettingAfterPost
+    Left = 144
+    Top = 408
+    object DepositPerSettingID: TFloatField
+      FieldName = 'ID'
+      Visible = False
+    end
+    object DepositPerSettingDEPOSITID: TFloatField
+      FieldName = 'DEPOSITID'
+      Required = True
+    end
+    object DepositPerSettingCURRENCYID: TFloatField
+      FieldName = 'CURRENCYID'
+      Required = True
+    end
+    object DepositPerSettingINTERESTRATE: TFloatField
+      DisplayLabel = '%'
+      FieldName = 'INTERESTRATE'
+      Required = True
+    end
+    object DepositPerSettingDUEINTRATE: TFloatField
+      DisplayLabel = #1042#1072#1093#1090#1099#1085#1076#1072#1085' '#1089#1086#1085#1088#1072#1082#1099' %'
+      FieldName = 'DUEINTRATE'
+      Required = True
+    end
+    object DepositPerSettingFIRSTAMOUNT: TFloatField
+      DisplayLabel = #1041#1072#1096#1083#1072#1085#1100#1099#1078' '#1052#1103#1073'.'
+      FieldName = 'FIRSTAMOUNT'
+      Required = True
+    end
+    object DepositPerSettingLASTAMOUNT: TFloatField
+      DisplayLabel = #1057#1086#1085' '#1052#1103#1073'.'
+      FieldName = 'LASTAMOUNT'
+      Required = True
+    end
+  end
+  object PerSettingDatSrc: TDataSource
+    DataSet = DepositPerSetting
+    Left = 176
+    Top = 408
+  end
+end

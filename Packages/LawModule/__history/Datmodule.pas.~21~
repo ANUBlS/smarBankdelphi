@@ -1,0 +1,137 @@
+unit Datmodule;
+
+interface
+
+uses
+  SysUtils, Classes, DB, OracleData, Oracle;
+
+type
+  TDataMod = class(TDataModule)
+    Mainscrpt: TOracleDataSet;
+    Data_main: TDataSource;
+    Maincrpt_one: TOracleDataSet;
+    Maincrpt_oneID: TFloatField;
+    Maincrpt_oneCOURT_AMMOUNT: TWideStringField;
+    Maincrpt_oneCOURT_STATUS: TWideStringField;
+    Maincrpt_oneCOURT_DATE_NUM: TWideStringField;
+    Maincrpt_oneCOURT_NAME: TWideStringField;
+    Maincrpt_oneCOURT_ACCEPTED_AMMOUNT: TWideStringField;
+    Maincrpt_oneCOURT_DESC: TWideStringField;
+    Maincrpt_oneCOURT_MANAGE: TWideStringField;
+    Maincrpt_oneCOURT_LASTSTAT: TWideStringField;
+    Maincrpt_oneCOURT_MEASURE: TWideStringField;
+    Maincrpt_oneCOURT_REPLACE: TWideStringField;
+    Maincrpt_oneREPLACEMENT_COUNT: TWideStringField;
+    Maincrpt_oneINVESTIGATION_ORG: TWideStringField;
+    Maincrpt_oneINFOS: TWideStringField;
+    Maincrpt_onePROPERTY: TWideStringField;
+    Maincrpt_onePROP_DESC: TWideStringField;
+    Maincrpt_onePROP_ADDRESS: TWideStringField;
+    Maincrpt_onePORP_PASSPORT: TWideStringField;
+    Maincrpt_onePROP_PRICE: TWideStringField;
+    Maincrpt_onePROP_INFO: TWideMemoField;
+    Data_main_one: TDataSource;
+    MainscrptID: TFloatField;
+    MainscrptMUSTERIID: TFloatField;
+    MainscrptPINKOD: TWideStringField;
+    MainscrptNAMES: TWideStringField;
+    MainscrptFIL: TWideStringField;
+    MainscrptSTATUS: TFloatField;
+    filials: TOracleDataSet;
+    DataSource_filial: TDataSource;
+    Data_maincourt: TDataSource;
+    Main_court: TOracleDataSet;
+    Main_courtROWNUM: TFloatField;
+    Main_courtCREDID: TFloatField;
+    Main_courtCUSTID: TFloatField;
+    Main_courtPIN: TWideStringField;
+    Main_courtNAMES: TWideStringField;
+    Main_courtBRANCH: TFloatField;
+    Main_courtID: TFloatField;
+    Main_courtCOURT_AMMOUNT: TWideStringField;
+    Main_courtCOURT_STATUS: TWideStringField;
+    Main_courtCOURT_DATE_NUM: TWideStringField;
+    Main_courtCOURT_NAME: TWideStringField;
+    Main_courtCOURT_ACCEPTED_AMMOUNT: TWideStringField;
+    Main_courtCOURT_DESC: TWideStringField;
+    Main_courtCOURT_MANAGE: TWideStringField;
+    Main_courtCOURT_LASTSTAT: TWideStringField;
+    Main_courtCOURT_MEASURE: TWideStringField;
+    Main_courtCOURT_REPLACE: TWideStringField;
+    Main_courtREPLACEMENT_COUNT: TWideStringField;
+    Main_courtINVESTIGATION_ORG: TWideStringField;
+    Main_courtINFOS: TWideStringField;
+    Main_courtPROPERTY: TWideStringField;
+    Main_courtPROP_DESC: TWideStringField;
+    Main_courtPROP_ADDRESS: TWideStringField;
+    Main_courtPORP_PASSPORT: TWideStringField;
+    Main_courtPROP_PRICE: TWideStringField;
+    Main_courtPROP_INFO: TWideMemoField;
+    MainscrptBRANCH: TFloatField;
+    MainscrptSOURCE: TWideStringField;
+    MainscrptVALUTE: TWideStringField;
+    MainscrptLSTREST: TFloatField;
+    MainscrptFREST: TFloatField;
+    MainscrptCOURT_STATUS: TWideStringField;
+    MainscrptCOURT_LASTSTAT: TWideStringField;
+    Court_status: TOracleDataSet;
+    Data_courtstatus: TDataSource;
+    Court_laststat: TOracleDataSet;
+    Data_Court_laststat: TDataSource;
+    Court_managers: TOracleDataSet;
+    Data_courtmanagers: TDataSource;
+    pack: TOraclePackage;
+    Court_laststatID: TFloatField;
+    Court_laststatNAMES: TWideStringField;
+    Court_managersID: TFloatField;
+    Court_managersCOUR_ID: TFloatField;
+    Court_managersSTATUS: TFloatField;
+    Court_managersNAMES: TWideStringField;
+    Court_statusID: TFloatField;
+    Court_statusNAMES: TWideStringField;
+    court_stat_add: TOracleDataSet;
+    FloatField1: TFloatField;
+    WideStringField1: TWideStringField;
+    Data_addstat: TDataSource;
+    court_last_stat_add: TOracleDataSet;
+    FloatField2: TFloatField;
+    WideStringField2: TWideStringField;
+    Data_addlaststat: TDataSource;
+    court_operates_add: TOracleDataSet;
+    FloatField3: TFloatField;
+    FloatField4: TFloatField;
+    FloatField5: TFloatField;
+    WideStringField3: TWideStringField;
+    Data_court_opers: TDataSource;
+    court_opers: TOracleDataSet;
+    FloatField6: TFloatField;
+    WideStringField4: TWideStringField;
+    Data_courtopers: TDataSource;
+    Maincrpt_oneCOURT_OPERS: TWideStringField;
+    Maincrpt_oneMEDIATION_DATE: TWideStringField;
+    Maincrpt_oneMEDIATION_NUM: TWideStringField;
+    Main_courtCLOSEDATE: TDateTimeField;
+    Main_courtDUEDATEFIRSTCONTRACT: TDateTimeField;
+    MainscrptCOURT_OPERS: TWideStringField;
+    court_manager_state: TOracleDataSet;
+    FloatField7: TFloatField;
+    FloatField8: TFloatField;
+    FloatField9: TFloatField;
+    WideStringField5: TWideStringField;
+    Data_court_manager_state: TDataSource;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  DataMod: TDataMod;
+
+implementation
+
+uses SboapiDataModuleImpl;
+
+{$R *.dfm}
+
+end.

@@ -1,0 +1,1180 @@
+object ExpDataModule: TExpDataModule
+  OldCreateOrder = False
+  OnCreate = DataModuleCreate
+  Left = 158
+  Top = 181
+  Height = 738
+  Width = 969
+  object ExpBatchsDataSource: TDataSource
+    DataSet = ExpBatchsDataSet
+    Left = 136
+    Top = 16
+  end
+  object EXPESSPAC: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'EXPESS_OPERATIONS'
+    ParameterMode = pmNamed
+    Cursor = crSQLWait
+    Left = 24
+    Top = 200
+  end
+  object ExpTypeDataSet: TOracleDataSet
+    SQL.Strings = (
+      'select * from exp_type')
+    QBEDefinition.QBEFieldDefs = {
+      0400000002000000020000004944010000000000040000004E414D4501000000
+      0000}
+    Cursor = crSQLWait
+    QueryAllRecords = False
+    Session = sboapiDataModule.SBSession
+    Left = 248
+    Top = 16
+    object ExpTypeDataSetID: TIntegerField
+      FieldName = 'ID'
+    end
+    object ExpTypeDataSetNAME: TStringField
+      FieldName = 'NAME'
+      Size = 30
+    end
+  end
+  object ExpTypeDataSource: TDataSource
+    DataSet = ExpTypeDataSet
+    Left = 394
+    Top = 16
+  end
+  object PasspDataSet: TOracleDataSet
+    SQL.Strings = (
+      'select * from passdeps')
+    QBEDefinition.QBEFieldDefs = {
+      0400000002000000020000004944010000000000040000004E414D4501000000
+      0000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 32
+    Top = 64
+  end
+  object PasspDataSource: TDataSource
+    DataSet = PasspDataSet
+    Left = 135
+    Top = 64
+  end
+  object ValyutaDataSet: TOracleDataSet
+    SQL.Strings = (
+      'select * from avalute')
+    QBEDefinition.QBEFieldDefs = {
+      04000000170000000600000056414C5554450100000000000800000056414C5F
+      4E414D450100000000000900000056414C555F4E414D450100000000000A0000
+      0056414C555F53484F5254010000000000060000005553544F52470100000000
+      0006000000555354504F4B0100000000000800000056414C555F47454E010000
+      0000000700000056414C555F415A010000000000050000005553494E47010000
+      0000000A00000056414C555F4F544845520100000000000A00000056414C555F
+      494E5445520100000000000900000056414C555F42414C410100000000000900
+      0000505249535441564B4101000000000007000000434F554E54525901000000
+      0000080000005553545F504F4B31010000000000070000004F46464943414C01
+      0000000000050000004C494D4954010000000000050000004445424554010000
+      000000060000004B524544495401000000000006000000463535303150010000
+      0000000600000046353530315601000000000006000000534445424554010000
+      0000000700000053435245444954010000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 248
+    Top = 64
+  end
+  object ValyutaDataSource: TDataSource
+    DataSet = ValyutaDataSet
+    Left = 394
+    Top = 64
+  end
+  object FilialDataSet: TOracleDataSet
+    SQL.Strings = (
+      'select * from filial')
+    QBEDefinition.QBEFieldDefs = {
+      0400000003000000020000004944010000000000040000004E414D4501000000
+      00000A0000004B4F445F46494C49414C010000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 248
+    Top = 114
+  end
+  object FilialDataSource: TDataSource
+    DataSet = FilialDataSet
+    Left = 394
+    Top = 116
+  end
+  object AllFilialDataSet: TOracleDataSet
+    SQL.Strings = (
+      'select -1 as ID, '#39'ֱצעצם פטכטאככאנ'#39' as name from Dual'
+      'Union All'
+      'select ID, name from filial_t'
+      'order by ID')
+    QBEDefinition.QBEFieldDefs = {
+      0400000002000000020000004944010000000000040000004E414D4501000000
+      0000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 24
+    Top = 120
+  end
+  object AllFilialDataSource: TDataSource
+    DataSet = AllFilialDataSet
+    Left = 134
+    Top = 120
+  end
+  object SysdateDataSet: TOracleDataSet
+    SQL.Strings = (
+      'select sysdate as dat from dual')
+    QBEDefinition.QBEFieldDefs = {040000000100000003000000444154010000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 33
+    Top = 352
+    object SysdateDataSetDAT: TDateTimeField
+      FieldName = 'DAT'
+    end
+  end
+  object ExpBatchsDataSet: TOracleDataSet
+    SQL.Strings = (
+      'select e.id       ,'
+      '       e.expid    ,'
+      '       e.exp_accno,'
+      '       e.lastname ,  '
+      '       e.firstname,  '
+      '       e. midname ,  '
+      '       e.userid   ,'
+      '       (select name from user$ where id=e.userid) as username,'
+      '       e.filial   ,'
+      
+        '       (select name from filial_t where id=e.filial) as filialna' +
+        'me,'
+      '       e.kindpassport,'
+      '       e.passper,    '
+      '       e.paspnum,    '
+      '       e.paspdate,    '
+      '       e.paspplace,   '
+      '       e.pincode,'
+      '       e.adress,            '
+      '       e.blastname,'
+      '       e.bfirstname, '
+      '       e.bmidname, '
+      '       e.buserid,   '
+      '       case when e.buserid is null then '#39#39'  else '
+      
+        '       (select name from user$ where id=e.buserid) end as busern' +
+        'ame,'
+      '       e.bfilial,    '
+      '       case when e.bfilial=-1 then '#39'ֱצעצם פטכטאככאנ'#39'  else  '
+      
+        '       (select name from filial_t where id=e.bfilial)  end as bf' +
+        'ilialname, '
+      '       e.bkindpassport,'
+      '       e.bpassper    , '
+      '       e.bpaspnum    ,   '
+      '       e.bpaspdate   ,  '
+      '       e.bpaspplace  ,  '
+      '       e.bpincode    ,   '
+      '       e.badress     ,'
+      '       e.vlastname   ,'
+      '       e.vfirstname  ,'
+      '       e.vmidname    ,'
+      '       e.vfilial     ,'
+      '       case when e.vfilial=-1 then '#39'ֱצעצם פטכטאככאנ'#39'  else'
+      
+        '       (select name from filial where id=e.vfilial) end as vfili' +
+        'alname,'
+      '       e.vkindpassport,'
+      '       e.vpassper    , '
+      '       e.vpaspnum    ,   '
+      '       e.vpaspdate   ,  '
+      '       e.vpaspplace  ,  '
+      '       e.vpincode    ,   '
+      '       e.vadress     ,'
+      '       e.pfattorser, '
+      '       e.pfattornum,'
+      '       e.pfattorbdat, '
+      '       e.pfattoredat,'
+      '       e.status      ,   '
+      '       e.optype      ,     '
+      '       e.amount      ,'
+      '       e.val_cod     ,      '
+      '       e.partkey     ,     '
+      '       e.trans_ref   ,   '
+      '       e.remit_inf   ,'
+      '       e.ADD_INF     ,  '
+      '       e.senddate    ,   '
+      '       e.recdate     ,    '
+      '       e.senddatetime,'
+      '       e.recdatetime , '
+      '       e.commituserid,'
+      '       e.password,'
+      '       lastname||'#39' '#39'||firstname||'#39'  '#39'||midname as CustSend,'
+      '       blastname||'#39'  '#39'||bfirstname||'#39'  '#39'||bmidname as CustRec,'
+      '       vlastname||'#39'  '#39'||vfirstname||'#39'  '#39'||vmidname as CustVRec'
+      'from exp_batchs_today e'
+      'order by :title'
+      '      '
+      '      '
+      ''
+      '')
+    Variables.Data = {
+      0300000001000000060000003A5449544C450100000003000000696400000000
+      00}
+    QBEDefinition.QBEFieldDefs = {
+      0400000040000000020000004944010000000000090000004558505F4143434E
+      4F010000000000080000004C4153544E414D4501000000000009000000464952
+      53544E414D45010000000000070000004D49444E414D45010000000000060000
+      0046494C49414C01000000000007000000504153535045520100000000000700
+      0000504153504E554D0100000000000800000050415350444154450100000000
+      000900000050415350504C4143450100000000000700000050494E434F444501
+      000000000009000000424C4153544E414D450100000000000A00000042464952
+      53544E414D4501000000000008000000424D49444E414D450100000000000800
+      000042504153535045520100000000000800000042504153504E554D01000000
+      0000090000004250415350444154450100000000000A0000004250415350504C
+      414345010000000000080000004250494E434F44450100000000000600000053
+      5441545553010000000000060000004F50545950450100000000000600000041
+      4D4F554E5401000000000007000000504152544B455901000000000009000000
+      5452414E535F5245460100000000000900000052454D49545F494E4601000000
+      00000800000053454E4444415445010000000000070000005245434441544501
+      00000000000C00000053454E444441544554494D450100000000000B00000052
+      45434441544554494D450100000000000C000000434F4D4D4954555345524944
+      010000000000080000004355535453454E440100000000000700000043555354
+      524543010000000000070000004144445F494E46010000000000060000004144
+      5245535301000000000007000000424144524553530100000000000800000055
+      5345524E414D450100000000000900000042555345524E414D45010000000000
+      070000004246494C49414C010000000000060000005553455249440100000000
+      000A00000046494C49414C4E414D450100000000000700000042555345524944
+      0100000000000B0000004246494C49414C4E414D450100000000000800000050
+      415353574F524401000000000009000000564C4153544E414D45010000000000
+      0A0000005646495253544E414D4501000000000008000000564D49444E414D45
+      010000000000070000005646494C49414C0100000000000B0000005646494C49
+      414C4E414D450100000000000800000056504153535045520100000000000800
+      000056504153504E554D01000000000009000000565041535044415445010000
+      0000000A0000005650415350504C414345010000000000080000005650494E43
+      4F444501000000000007000000564144524553530100000000000C0000004B49
+      4E4450415353504F52540100000000000D000000424B494E4450415353504F52
+      540100000000000D000000564B494E4450415353504F52540100000000000A00
+      000050464154544F525345520100000000000A00000050464154544F524E554D
+      0100000000000B00000050464154544F52424441540100000000000B00000050
+      464154544F524544415401000000000005000000455850494401000000000007
+      00000056414C5F434F4401000000000008000000435553545652454301000000
+      0000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    AfterScroll = ExpBatchsDataSetAfterScroll
+    Left = 32
+    Top = 16
+    object ExpBatchsDataSetID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object ExpBatchsDataSetEXPID: TFloatField
+      FieldName = 'EXPID'
+    end
+    object ExpBatchsDataSetEXP_ACCNO: TStringField
+      FieldName = 'EXP_ACCNO'
+      Size = 25
+    end
+    object ExpBatchsDataSetLASTNAME: TStringField
+      FieldName = 'LASTNAME'
+      Size = 30
+    end
+    object ExpBatchsDataSetFIRSTNAME: TStringField
+      FieldName = 'FIRSTNAME'
+      Size = 30
+    end
+    object ExpBatchsDataSetMIDNAME: TStringField
+      FieldName = 'MIDNAME'
+      Size = 30
+    end
+    object ExpBatchsDataSetUSERID: TIntegerField
+      FieldName = 'USERID'
+    end
+    object ExpBatchsDataSetUSERNAME: TStringField
+      FieldName = 'USERNAME'
+      Required = True
+      Size = 30
+    end
+    object ExpBatchsDataSetFILIAL: TIntegerField
+      FieldName = 'FILIAL'
+    end
+    object ExpBatchsDataSetFILIALNAME: TStringField
+      FieldName = 'FILIALNAME'
+      Size = 90
+    end
+    object ExpBatchsDataSetKINDPASSPORT: TIntegerField
+      FieldName = 'KINDPASSPORT'
+    end
+    object ExpBatchsDataSetPASSPER: TStringField
+      FieldName = 'PASSPER'
+      Size = 3
+    end
+    object ExpBatchsDataSetPASPNUM: TStringField
+      FieldName = 'PASPNUM'
+      Size = 8
+    end
+    object ExpBatchsDataSetPASPDATE: TDateTimeField
+      FieldName = 'PASPDATE'
+    end
+    object ExpBatchsDataSetPASPPLACE: TStringField
+      FieldName = 'PASPPLACE'
+      Size = 100
+    end
+    object ExpBatchsDataSetPINCODE: TStringField
+      FieldName = 'PINCODE'
+      Size = 7
+    end
+    object ExpBatchsDataSetADRESS: TStringField
+      FieldName = 'ADRESS'
+      Size = 100
+    end
+    object ExpBatchsDataSetBLASTNAME: TStringField
+      FieldName = 'BLASTNAME'
+      Size = 30
+    end
+    object ExpBatchsDataSetBFIRSTNAME: TStringField
+      FieldName = 'BFIRSTNAME'
+      Size = 30
+    end
+    object ExpBatchsDataSetBMIDNAME: TStringField
+      FieldName = 'BMIDNAME'
+      Size = 30
+    end
+    object ExpBatchsDataSetBUSERID: TIntegerField
+      FieldName = 'BUSERID'
+    end
+    object ExpBatchsDataSetBUSERNAME: TStringField
+      FieldName = 'BUSERNAME'
+      Size = 30
+    end
+    object ExpBatchsDataSetBFILIAL: TIntegerField
+      FieldName = 'BFILIAL'
+    end
+    object ExpBatchsDataSetBFILIALNAME: TStringField
+      FieldName = 'BFILIALNAME'
+      Size = 90
+    end
+    object ExpBatchsDataSetBKINDPASSPORT: TIntegerField
+      FieldName = 'BKINDPASSPORT'
+    end
+    object ExpBatchsDataSetBPASSPER: TStringField
+      FieldName = 'BPASSPER'
+      Size = 3
+    end
+    object ExpBatchsDataSetBPASPNUM: TStringField
+      FieldName = 'BPASPNUM'
+      Size = 8
+    end
+    object ExpBatchsDataSetBPASPDATE: TDateTimeField
+      FieldName = 'BPASPDATE'
+    end
+    object ExpBatchsDataSetBPASPPLACE: TStringField
+      FieldName = 'BPASPPLACE'
+      Size = 100
+    end
+    object ExpBatchsDataSetBPINCODE: TStringField
+      FieldName = 'BPINCODE'
+      Size = 7
+    end
+    object ExpBatchsDataSetBADRESS: TStringField
+      FieldName = 'BADRESS'
+      Size = 100
+    end
+    object ExpBatchsDataSetVLASTNAME: TStringField
+      FieldName = 'VLASTNAME'
+      Size = 30
+    end
+    object ExpBatchsDataSetVFIRSTNAME: TStringField
+      FieldName = 'VFIRSTNAME'
+      Size = 30
+    end
+    object ExpBatchsDataSetVMIDNAME: TStringField
+      FieldName = 'VMIDNAME'
+      Size = 30
+    end
+    object ExpBatchsDataSetVFILIAL: TIntegerField
+      FieldName = 'VFILIAL'
+    end
+    object ExpBatchsDataSetVFILIALNAME: TStringField
+      FieldName = 'VFILIALNAME'
+      Size = 90
+    end
+    object ExpBatchsDataSetVKINDPASSPORT: TIntegerField
+      FieldName = 'VKINDPASSPORT'
+    end
+    object ExpBatchsDataSetVPASSPER: TStringField
+      FieldName = 'VPASSPER'
+      Size = 3
+    end
+    object ExpBatchsDataSetVPASPNUM: TStringField
+      FieldName = 'VPASPNUM'
+      Size = 8
+    end
+    object ExpBatchsDataSetVPASPDATE: TDateTimeField
+      FieldName = 'VPASPDATE'
+    end
+    object ExpBatchsDataSetVPASPPLACE: TStringField
+      FieldName = 'VPASPPLACE'
+      Size = 100
+    end
+    object ExpBatchsDataSetVPINCODE: TStringField
+      FieldName = 'VPINCODE'
+      Size = 7
+    end
+    object ExpBatchsDataSetVADRESS: TStringField
+      FieldName = 'VADRESS'
+      Size = 100
+    end
+    object ExpBatchsDataSetPFATTORSER: TStringField
+      FieldName = 'PFATTORSER'
+      Size = 5
+    end
+    object ExpBatchsDataSetPFATTORNUM: TStringField
+      FieldName = 'PFATTORNUM'
+      Size = 15
+    end
+    object ExpBatchsDataSetPFATTORBDAT: TDateTimeField
+      FieldName = 'PFATTORBDAT'
+    end
+    object ExpBatchsDataSetPFATTOREDAT: TDateTimeField
+      FieldName = 'PFATTOREDAT'
+    end
+    object ExpBatchsDataSetSTATUS: TIntegerField
+      FieldName = 'STATUS'
+    end
+    object ExpBatchsDataSetOPTYPE: TIntegerField
+      FieldName = 'OPTYPE'
+    end
+    object ExpBatchsDataSetAMOUNT: TFloatField
+      FieldName = 'AMOUNT'
+    end
+    object ExpBatchsDataSetVAL_COD: TIntegerField
+      FieldName = 'VAL_COD'
+    end
+    object ExpBatchsDataSetPARTKEY: TFloatField
+      FieldName = 'PARTKEY'
+      Required = True
+    end
+    object ExpBatchsDataSetTRANS_REF: TStringField
+      FieldName = 'TRANS_REF'
+      Size = 16
+    end
+    object ExpBatchsDataSetREMIT_INF: TStringField
+      FieldName = 'REMIT_INF'
+      Size = 145
+    end
+    object ExpBatchsDataSetADD_INF: TStringField
+      FieldName = 'ADD_INF'
+      Size = 300
+    end
+    object ExpBatchsDataSetSENDDATE: TDateTimeField
+      FieldName = 'SENDDATE'
+    end
+    object ExpBatchsDataSetRECDATE: TDateTimeField
+      FieldName = 'RECDATE'
+    end
+    object ExpBatchsDataSetSENDDATETIME: TDateTimeField
+      FieldName = 'SENDDATETIME'
+    end
+    object ExpBatchsDataSetRECDATETIME: TDateTimeField
+      FieldName = 'RECDATETIME'
+    end
+    object ExpBatchsDataSetCOMMITUSERID: TIntegerField
+      FieldName = 'COMMITUSERID'
+    end
+    object ExpBatchsDataSetPASSWORD: TStringField
+      FieldName = 'PASSWORD'
+      Size = 100
+    end
+    object ExpBatchsDataSetCUSTSEND: TStringField
+      FieldName = 'CUSTSEND'
+      Size = 93
+    end
+    object ExpBatchsDataSetCUSTREC: TStringField
+      FieldName = 'CUSTREC'
+      Size = 94
+    end
+    object ExpBatchsDataSetvalname: TStringField
+      FieldKind = fkLookup
+      FieldName = 'valname'
+      LookupDataSet = ValyutaDataSet
+      LookupKeyFields = 'VALUTE'
+      LookupResultField = 'VAL_NAME'
+      KeyFields = 'VAL_COD'
+      Lookup = True
+    end
+    object ExpBatchsDataSetCUSTVREC: TStringField
+      FieldName = 'CUSTVREC'
+      Size = 94
+    end
+  end
+  object ICECrypt1: TICECrypt
+    Text = 'Crypt'
+    CryptType = cHASH_CRC32
+    Left = 136
+    Top = 200
+  end
+  object SB_ACA: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'SB_ACA'
+    Cursor = crSQLWait
+    Left = 24
+    Top = 280
+  end
+  object ExpAccDataSet: TOracleDataSet
+    SQL.Strings = (
+      'SELECT x.*,v.val_name, a.acc_no, f.NAME'
+      '  FROM exp_accounts x, avalute v, ACCOUNT a, Filial f'
+      
+        ' WHERE (x.valute = v.valute) AND (x.acc_id = a.id) AND (f.id = x' +
+        '.branchid)')
+    QBEDefinition.QBEFieldDefs = {
+      04000000030000000800000056414C5F4E414D45010000000000060000004143
+      435F4E4F010000000000040000004E414D45010000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 249
+    Top = 165
+  end
+  object ExpAccDataSource: TDataSource
+    DataSet = ExpAccDataSet
+    Left = 394
+    Top = 166
+  end
+  object AccountDataSet: TOracleDataSet
+    SQL.Strings = (
+      'select * from account')
+    Cursor = crSQLWait
+    QueryAllRecords = False
+    Session = sboapiDataModule.SBSession
+    Left = 248
+    Top = 216
+  end
+  object AccountDataSource: TDataSource
+    DataSet = AccountDataSet
+    Left = 394
+    Top = 217
+  end
+  object BranchDataSet: TOracleDataSet
+    SQL.Strings = (
+      'SELECT x.*,v.Val_Name, a.Acc_No, f.Name'
+      '  FROM Exp_Branchaccount x, Avalute v, Account a, Filial f'
+      
+        ' WHERE (x.valute = v.valute) and (x.AccID = a.ID) and (f.ID = x.' +
+        'BranchID)')
+    QBEDefinition.QBEFieldDefs = {
+      04000000060000000800000056414C5F4E414D45010000000000060000004143
+      435F4E4F010000000000040000004E414D45010000000000080000004252414E
+      434849440100000000000500000041434349440100000000000600000056414C
+      555445010000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 248
+    Top = 264
+  end
+  object BranchDataSource: TDataSource
+    DataSet = BranchDataSet
+    Left = 394
+    Top = 265
+  end
+  object Repair: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'EXPESS_OPERATIONS'
+    Left = 136
+    Top = 280
+  end
+  object ExpCashboxAccDataSet: TOracleDataSet
+    SQL.Strings = (
+      'SELECT x.*,v.val_name, a.acc_no, f.NAME'
+      '  FROM EXP_CASHBOXACCOUNT x, avalute v, ACCOUNT a, Filial f'
+      
+        ' WHERE (x.valute = v.valute) AND (x.acc_id = a.id) AND (f.id = x' +
+        '.branchid)')
+    Cursor = crSQLWait
+    QueryAllRecords = False
+    Session = sboapiDataModule.SBSession
+    Left = 248
+    Top = 312
+  end
+  object ExpCashboxAccDataSource: TDataSource
+    DataSet = ExpCashboxAccDataSet
+    Left = 394
+    Top = 312
+  end
+  object ExpTransitAccDataSet: TOracleDataSet
+    SQL.Strings = (
+      'SELECT x.*,v.val_name, a.acc_no, f.NAME'
+      '  FROM EXP_TRANSITACCOUNT x, avalute v, ACCOUNT a, Filial f'
+      
+        ' WHERE (x.valute = v.valute) AND (x.accid = a.id) AND (f.id = x.' +
+        'branchid)'
+      ''
+      '')
+    Cursor = crSQLWait
+    QueryAllRecords = False
+    Session = sboapiDataModule.SBSession
+    Left = 248
+    Top = 365
+  end
+  object ExpTransitAccDataSource: TDataSource
+    DataSet = ExpTransitAccDataSet
+    Left = 393
+    Top = 364
+  end
+  object ExpComissionAccDataSet: TOracleDataSet
+    SQL.Strings = (
+      'SELECT x.*,v.val_name, a.acc_no, f.NAME'
+      '  FROM EXP_COMISSIONACCOUNT x, avalute v, ACCOUNT a, Filial f'
+      
+        ' WHERE (x.valute = v.valute) AND (x.acc_id = a.id) AND (f.id = x' +
+        '.branchid)')
+    QBEDefinition.QBEFieldDefs = {
+      0400000007000000020000004944010000000000060000004143435F49440100
+      000000000600000056414C555445010000000000080000004252414E43484944
+      0100000000000800000056414C5F4E414D45010000000000060000004143435F
+      4E4F010000000000040000004E414D45010000000000}
+    Cursor = crSQLWait
+    QueryAllRecords = False
+    Session = sboapiDataModule.SBSession
+    Left = 248
+    Top = 419
+  end
+  object ExpComissionAccDataSource: TDataSource
+    DataSet = ExpComissionAccDataSet
+    Left = 394
+    Top = 418
+  end
+  object ExpChequeAccDataSet: TOracleDataSet
+    SQL.Strings = (
+      'SELECT x.*,v.val_name, a.acc_no, f.NAME'
+      '  FROM EXP_CHEQUEACCOUNT x, avalute v, ACCOUNT a, Filial f'
+      
+        ' WHERE (x.valute = v.valute) AND (x.acc_id = a.id) AND (f.id = x' +
+        '.branchid)'
+      ''
+      '')
+    QBEDefinition.QBEFieldDefs = {
+      0400000007000000020000004944010000000000080000004252414E43484944
+      010000000000060000004143435F49440100000000000600000056414C555445
+      0100000000000800000056414C5F4E414D45010000000000060000004143435F
+      4E4F010000000000040000004E414D45010000000000}
+    Cursor = crSQLWait
+    QueryAllRecords = False
+    Session = sboapiDataModule.SBSession
+    Left = 248
+    Top = 472
+  end
+  object ExpChequeAccDataSource: TDataSource
+    DataSet = ExpChequeAccDataSet
+    Left = 394
+    Top = 472
+  end
+  object BankInfoDataSet: TOracleDataSet
+    SQL.Strings = (
+      'select * from bankinfo')
+    QBEDefinition.QBEFieldDefs = {
+      040000002A000000050000004B4F445F420100000000000400000042414E4B01
+      000000000007000000415A5F4E414D45010000000000040000004B524E4F0100
+      0000000003000000494E4E010000000000050000005345484552010000000000
+      0600000041445245535301000000000004000000534544520100000000000700
+      0000425548414C54520100000000000300000054454C01000000000003000000
+      4641580100000000000500000053574946540100000000000500000054454C45
+      5801000000000005000000454D41494C01000000000007000000504F53545F49
+      4E010000000000070000004B4F445F46494C0100000000000600000046494C49
+      414C0100000000000900000041445245535F46494C0100000000000700000054
+      454C5F46494C010000000000070000004641585F46494C010000000000090000
+      0053574946545F46494C0100000000000900000054454C45585F46494C010000
+      0000000A000000504F5354494E5F46494C010000000000090000005345484552
+      5F46494C01000000000007000000494E4E5F46494C010000000000080000004B
+      524E4F5F46494C010000000000070000005345445246494C0100000000000900
+      0000425548414C5F46494C010000000000080000004B4F445F4246494C010000
+      000000020000004E420100000000000700000056414C5F4D4F56010000000000
+      040000004C4F474F000000000000040000004C494E4B01000000000003000000
+      5344560100000000000300000053564D01000000000002000000424601000000
+      00000C0000004D414E414745525449544C450100000000000F0000004143434F
+      554E54414E545449544C450100000000000E00000053564D5F43555252454E43
+      594944010000000000070000004341504954414C010000000000090000004153
+      53495354414E540100000000000E000000415353495354414E545449544C4501
+      0000000000}
+    Cursor = crSQLWait
+    QueryAllRecords = False
+    Session = sboapiDataModule.SBSession
+    Left = 32
+    Top = 408
+  end
+  object BankInfoDataSource: TDataSource
+    DataSet = BankInfoDataSet
+    Left = 139
+    Top = 408
+  end
+  object ExpComissionDataSource: TDataSource
+    DataSet = ExpComissionDataSet
+    Left = 392
+    Top = 528
+  end
+  object ExpComissionDataSet: TOracleDataSet
+    SQL.Strings = (
+      'select e.rowid,e.* from exp_comission e'
+      'where e.expid=:expid')
+    Variables.Data = {0300000001000000060000003A4558504944030000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      0400000006000000020000004944010000000000050000004558504944010000
+      0000000700000050455243454E5401000000000006000000414D4F554E540100
+      00000000080000004D494E56414C5545010000000000080000004D415856414C
+      5545010000000000}
+    Cursor = crSQLWait
+    Master = ExpTypeDataSet
+    MasterFields = 'ID'
+    DetailFields = 'EXPID'
+    QueryAllRecords = False
+    Session = sboapiDataModule.SBSession
+    Left = 248
+    Top = 528
+    object ExpComissionDataSetID: TIntegerField
+      FieldName = 'ID'
+    end
+    object ExpComissionDataSetEXPID: TIntegerField
+      FieldName = 'EXPID'
+    end
+    object ExpComissionDataSetPERCENT: TFloatField
+      FieldName = 'PERCENT'
+    end
+    object ExpComissionDataSetAMOUNT: TFloatField
+      FieldName = 'AMOUNT'
+    end
+    object ExpComissionDataSetMINVALUE: TFloatField
+      FieldName = 'MINVALUE'
+    end
+    object ExpComissionDataSetMAXVALUE: TFloatField
+      FieldName = 'MAXVALUE'
+    end
+  end
+  object ExpBatchsArchiveDataSet: TOracleDataSet
+    SQL.Strings = (
+      'select e.id       ,'
+      '       e.expid    ,'
+      '       e.exp_accno,'
+      '       e.lastname ,  '
+      '       e.firstname,  '
+      '       e. midname ,  '
+      '       e.userid   ,'
+      '       (select name from user$ where id=e.userid) as username,'
+      '       e.filial   ,'
+      
+        '       (select name from filial where id=e.filial) as filialname' +
+        ','
+      '       e.kindpassport,'
+      '       e.passper,    '
+      '       e.paspnum,    '
+      '       e.paspdate,    '
+      '       e.paspplace,   '
+      '       e.pincode,'
+      '       e.adress,            '
+      '       e.blastname,'
+      '       e.bfirstname, '
+      '       e.bmidname, '
+      '       e.buserid,   '
+      '       case when e.buserid is null then '#39#39'  else '
+      
+        '       (select name from user$ where id=e.buserid) end as busern' +
+        'ame,'
+      '       e.bfilial,    '
+      '       case when e.bfilial=-1 then '#39'ֱצעצם פטכטאככאנ'#39'  else  '
+      
+        '       (select name from filial where id=e.bfilial)  end as bfil' +
+        'ialname, '
+      '       e.bkindpassport,'
+      '       e.bpassper    , '
+      '       e.bpaspnum    ,   '
+      '       e.bpaspdate   ,  '
+      '       e.bpaspplace  ,  '
+      '       e.bpincode    ,   '
+      '       e.badress     ,'
+      '       e.vlastname   ,'
+      '       e.vfirstname  ,'
+      '       e.vmidname    ,'
+      '       e.vfilial     ,'
+      '       case when e.vfilial=-1 then '#39'ֱצעצם פטכטאככאנ'#39'  else'
+      
+        '       (select name from filial where id=e.vfilial) end as vfili' +
+        'alname,'
+      '       e.vkindpassport,'
+      '       e.vpassper    , '
+      '       e.vpaspnum    ,   '
+      '       e.vpaspdate   ,  '
+      '       e.vpaspplace  ,  '
+      '       e.vpincode    ,   '
+      '       e.vadress     ,'
+      '       e.pfattorser, '
+      '       e.pfattornum,'
+      '       e.pfattorbdat, '
+      '       e.pfattoredat,'
+      '       e.status      ,   '
+      '       e.optype      ,     '
+      '       e.amount      ,'
+      '       e.val_cod     ,      '
+      '       e.partkey     ,     '
+      '       e.trans_ref   ,   '
+      '       e.remit_inf   ,'
+      '       e.ADD_INF     ,  '
+      '       e.senddate    ,   '
+      '       e.recdate     ,    '
+      '       e.senddatetime,'
+      '       e.recdatetime , '
+      '       e.commituserid,'
+      '       case when e.commituserid is null then '#39#39'  else '
+      
+        '       (select name from user$ where id=e.commituserid) end as v' +
+        'username,'
+      '       e.password,'
+      
+        '       lastname ||'#39'  '#39'||firstname ||'#39'  '#39'||midname    as CustSend' +
+        ','
+      '       blastname||'#39'  '#39'||bfirstname||'#39'  '#39'||bmidname   as CustRec,'
+      '       vlastname||'#39'  '#39'||vfirstname||'#39'  '#39'||vmidname   as CustTak '
+      'from EXP_BATCHS_ARCHIVE  e '
+      'where RECDATE between :bdate and :edate'
+      'order by id'
+      '      '
+      '      '
+      ''
+      ''
+      '')
+    Variables.Data = {
+      0300000002000000060000003A42444154450C00000000000000000000000600
+      00003A45444154450C0000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      0400000041000000020000004944010000000000050000004558504944010000
+      000000090000004558505F4143434E4F010000000000080000004C4153544E41
+      4D450100000000000900000046495253544E414D45010000000000070000004D
+      49444E414D450100000000000600000055534552494401000000000008000000
+      555345524E414D450100000000000600000046494C49414C0100000000000A00
+      000046494C49414C4E414D450100000000000C0000004B494E4450415353504F
+      5254010000000000070000005041535350455201000000000007000000504153
+      504E554D01000000000008000000504153504441544501000000000009000000
+      50415350504C4143450100000000000700000050494E434F4445010000000000
+      0600000041445245535301000000000009000000424C4153544E414D45010000
+      0000000A0000004246495253544E414D4501000000000008000000424D49444E
+      414D450100000000000700000042555345524944010000000000090000004255
+      5345524E414D45010000000000070000004246494C49414C0100000000000B00
+      00004246494C49414C4E414D450100000000000D000000424B494E4450415353
+      504F525401000000000008000000425041535350455201000000000008000000
+      42504153504E554D010000000000090000004250415350444154450100000000
+      000A0000004250415350504C414345010000000000080000004250494E434F44
+      45010000000000070000004241445245535301000000000009000000564C4153
+      544E414D450100000000000A0000005646495253544E414D4501000000000008
+      000000564D49444E414D45010000000000070000005646494C49414C01000000
+      00000B0000005646494C49414C4E414D450100000000000D000000564B494E44
+      50415353504F5254010000000000080000005650415353504552010000000000
+      0800000056504153504E554D0100000000000900000056504153504441544501
+      00000000000A0000005650415350504C41434501000000000008000000565049
+      4E434F444501000000000007000000564144524553530100000000000A000000
+      50464154544F525345520100000000000A00000050464154544F524E554D0100
+      000000000B00000050464154544F52424441540100000000000B000000504641
+      54544F5245444154010000000000060000005354415455530100000000000600
+      00004F505459504501000000000006000000414D4F554E540100000000000700
+      000056414C5F434F4401000000000007000000504152544B4559010000000000
+      090000005452414E535F5245460100000000000900000052454D49545F494E46
+      010000000000070000004144445F494E460100000000000800000053454E4444
+      41544501000000000007000000524543444154450100000000000C0000005345
+      4E444441544554494D450100000000000B0000005245434441544554494D4501
+      00000000000C000000434F4D4D49545553455249440100000000000800000050
+      415353574F5244010000000000080000004355535453454E4401000000000007
+      00000043555354524543010000000000070000004355535454414B0100000000
+      000900000056555345524E414D45010000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 512
+    Top = 16
+    object ExpBatchsArchiveDataSetID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object ExpBatchsArchiveDataSetEXPID: TFloatField
+      FieldName = 'EXPID'
+    end
+    object ExpBatchsArchiveDataSetEXP_ACCNO: TStringField
+      FieldName = 'EXP_ACCNO'
+      Size = 25
+    end
+    object ExpBatchsArchiveDataSetLASTNAME: TStringField
+      FieldName = 'LASTNAME'
+      Size = 30
+    end
+    object ExpBatchsArchiveDataSetFIRSTNAME: TStringField
+      FieldName = 'FIRSTNAME'
+      Size = 30
+    end
+    object ExpBatchsArchiveDataSetMIDNAME: TStringField
+      FieldName = 'MIDNAME'
+      Size = 30
+    end
+    object ExpBatchsArchiveDataSetUSERID: TIntegerField
+      FieldName = 'USERID'
+    end
+    object ExpBatchsArchiveDataSetUSERNAME: TStringField
+      FieldName = 'USERNAME'
+      Size = 30
+    end
+    object ExpBatchsArchiveDataSetFILIAL: TIntegerField
+      FieldName = 'FILIAL'
+    end
+    object ExpBatchsArchiveDataSetFILIALNAME: TStringField
+      FieldName = 'FILIALNAME'
+      Size = 90
+    end
+    object ExpBatchsArchiveDataSetKINDPASSPORT: TIntegerField
+      FieldName = 'KINDPASSPORT'
+    end
+    object ExpBatchsArchiveDataSetPASSPER: TStringField
+      FieldName = 'PASSPER'
+      Size = 3
+    end
+    object ExpBatchsArchiveDataSetPASPNUM: TStringField
+      FieldName = 'PASPNUM'
+      Size = 8
+    end
+    object ExpBatchsArchiveDataSetPASPDATE: TDateTimeField
+      FieldName = 'PASPDATE'
+    end
+    object ExpBatchsArchiveDataSetPASPPLACE: TStringField
+      FieldName = 'PASPPLACE'
+      Size = 100
+    end
+    object ExpBatchsArchiveDataSetPINCODE: TStringField
+      FieldName = 'PINCODE'
+      Size = 7
+    end
+    object ExpBatchsArchiveDataSetADRESS: TStringField
+      FieldName = 'ADRESS'
+      Size = 100
+    end
+    object ExpBatchsArchiveDataSetBLASTNAME: TStringField
+      FieldName = 'BLASTNAME'
+      Size = 30
+    end
+    object ExpBatchsArchiveDataSetBFIRSTNAME: TStringField
+      FieldName = 'BFIRSTNAME'
+      Size = 30
+    end
+    object ExpBatchsArchiveDataSetBMIDNAME: TStringField
+      FieldName = 'BMIDNAME'
+      Size = 30
+    end
+    object ExpBatchsArchiveDataSetBUSERID: TIntegerField
+      FieldName = 'BUSERID'
+    end
+    object ExpBatchsArchiveDataSetBUSERNAME: TStringField
+      FieldName = 'BUSERNAME'
+      Size = 30
+    end
+    object ExpBatchsArchiveDataSetBFILIAL: TIntegerField
+      FieldName = 'BFILIAL'
+    end
+    object ExpBatchsArchiveDataSetBFILIALNAME: TStringField
+      FieldName = 'BFILIALNAME'
+      Size = 90
+    end
+    object ExpBatchsArchiveDataSetBKINDPASSPORT: TIntegerField
+      FieldName = 'BKINDPASSPORT'
+    end
+    object ExpBatchsArchiveDataSetBPASSPER: TStringField
+      FieldName = 'BPASSPER'
+      Size = 3
+    end
+    object ExpBatchsArchiveDataSetBPASPNUM: TStringField
+      FieldName = 'BPASPNUM'
+      Size = 8
+    end
+    object ExpBatchsArchiveDataSetBPASPDATE: TDateTimeField
+      FieldName = 'BPASPDATE'
+    end
+    object ExpBatchsArchiveDataSetBPASPPLACE: TStringField
+      FieldName = 'BPASPPLACE'
+      Size = 100
+    end
+    object ExpBatchsArchiveDataSetBPINCODE: TStringField
+      FieldName = 'BPINCODE'
+      Size = 7
+    end
+    object ExpBatchsArchiveDataSetBADRESS: TStringField
+      FieldName = 'BADRESS'
+      Size = 100
+    end
+    object ExpBatchsArchiveDataSetVLASTNAME: TStringField
+      FieldName = 'VLASTNAME'
+      Size = 30
+    end
+    object ExpBatchsArchiveDataSetVFIRSTNAME: TStringField
+      FieldName = 'VFIRSTNAME'
+      Size = 30
+    end
+    object ExpBatchsArchiveDataSetVMIDNAME: TStringField
+      FieldName = 'VMIDNAME'
+      Size = 30
+    end
+    object ExpBatchsArchiveDataSetVFILIAL: TIntegerField
+      FieldName = 'VFILIAL'
+    end
+    object ExpBatchsArchiveDataSetVFILIALNAME: TStringField
+      FieldName = 'VFILIALNAME'
+      Size = 90
+    end
+    object ExpBatchsArchiveDataSetVKINDPASSPORT: TIntegerField
+      FieldName = 'VKINDPASSPORT'
+    end
+    object ExpBatchsArchiveDataSetVPASSPER: TStringField
+      FieldName = 'VPASSPER'
+      Size = 3
+    end
+    object ExpBatchsArchiveDataSetVPASPNUM: TStringField
+      FieldName = 'VPASPNUM'
+      Size = 8
+    end
+    object ExpBatchsArchiveDataSetVPASPDATE: TDateTimeField
+      FieldName = 'VPASPDATE'
+    end
+    object ExpBatchsArchiveDataSetVPASPPLACE: TStringField
+      FieldName = 'VPASPPLACE'
+      Size = 100
+    end
+    object ExpBatchsArchiveDataSetVPINCODE: TStringField
+      FieldName = 'VPINCODE'
+      Size = 7
+    end
+    object ExpBatchsArchiveDataSetVADRESS: TStringField
+      FieldName = 'VADRESS'
+      Size = 100
+    end
+    object ExpBatchsArchiveDataSetPFATTORSER: TStringField
+      FieldName = 'PFATTORSER'
+      Size = 5
+    end
+    object ExpBatchsArchiveDataSetPFATTORNUM: TStringField
+      FieldName = 'PFATTORNUM'
+      Size = 15
+    end
+    object ExpBatchsArchiveDataSetPFATTORBDAT: TDateTimeField
+      FieldName = 'PFATTORBDAT'
+    end
+    object ExpBatchsArchiveDataSetPFATTOREDAT: TDateTimeField
+      FieldName = 'PFATTOREDAT'
+    end
+    object ExpBatchsArchiveDataSetSTATUS: TIntegerField
+      FieldName = 'STATUS'
+    end
+    object ExpBatchsArchiveDataSetOPTYPE: TIntegerField
+      FieldName = 'OPTYPE'
+    end
+    object ExpBatchsArchiveDataSetAMOUNT: TFloatField
+      FieldName = 'AMOUNT'
+    end
+    object ExpBatchsArchiveDataSetVAL_COD: TIntegerField
+      FieldName = 'VAL_COD'
+    end
+    object ExpBatchsArchiveDataSetPARTKEY: TFloatField
+      FieldName = 'PARTKEY'
+      Required = True
+    end
+    object ExpBatchsArchiveDataSetTRANS_REF: TStringField
+      FieldName = 'TRANS_REF'
+      Size = 16
+    end
+    object ExpBatchsArchiveDataSetREMIT_INF: TStringField
+      FieldName = 'REMIT_INF'
+      Size = 145
+    end
+    object ExpBatchsArchiveDataSetADD_INF: TStringField
+      FieldName = 'ADD_INF'
+      Size = 300
+    end
+    object ExpBatchsArchiveDataSetSENDDATE: TDateTimeField
+      FieldName = 'SENDDATE'
+    end
+    object ExpBatchsArchiveDataSetRECDATE: TDateTimeField
+      FieldName = 'RECDATE'
+    end
+    object ExpBatchsArchiveDataSetSENDDATETIME: TDateTimeField
+      FieldName = 'SENDDATETIME'
+    end
+    object ExpBatchsArchiveDataSetRECDATETIME: TDateTimeField
+      FieldName = 'RECDATETIME'
+    end
+    object ExpBatchsArchiveDataSetCOMMITUSERID: TIntegerField
+      FieldName = 'COMMITUSERID'
+    end
+    object ExpBatchsArchiveDataSetVUSERNAME: TStringField
+      FieldName = 'VUSERNAME'
+      Size = 30
+    end
+    object ExpBatchsArchiveDataSetPASSWORD: TStringField
+      FieldName = 'PASSWORD'
+      Size = 100
+    end
+    object ExpBatchsArchiveDataSetCUSTSEND: TStringField
+      FieldName = 'CUSTSEND'
+      Size = 93
+    end
+    object ExpBatchsArchiveDataSetCUSTREC: TStringField
+      FieldName = 'CUSTREC'
+      Size = 94
+    end
+    object ExpBatchsArchiveDataSetCUSTTAK: TStringField
+      FieldName = 'CUSTTAK'
+      Size = 94
+    end
+    object ExpBatchsArchiveDataSetVALNAME: TStringField
+      FieldKind = fkLookup
+      FieldName = 'VALNAME'
+      LookupDataSet = ValyutaDataSet
+      LookupKeyFields = 'VALUTE'
+      LookupResultField = 'VAL_NAME'
+      KeyFields = 'VAL_COD'
+      Lookup = True
+    end
+  end
+  object ExpBatchsArchiveDataSource: TDataSource
+    DataSet = ExpBatchsArchiveDataSet
+    Left = 656
+    Top = 16
+  end
+  object ExpAdminDataSet: TOracleDataSet
+    SQL.Strings = (
+      'select * from Exp_Admin where USER_ID=:USER_ID')
+    Variables.Data = {
+      0300000001000000080000003A555345525F4944030000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      040000000400000007000000555345525F494401000000000009000000555345
+      525F4E414D450100000000000900000046494C49414C5F49440100000000000B
+      00000046494C49414C5F4E414D45010000000000}
+    Cursor = crSQLWait
+    Master = AdminUserDataSet
+    MasterFields = 'ID'
+    DetailFields = 'USER_ID'
+    Session = sboapiDataModule.SBSession
+    Left = 29
+    Top = 480
+  end
+  object ExpAdminDataSource: TDataSource
+    DataSet = ExpAdminDataSet
+    Left = 128
+    Top = 480
+  end
+  object AdminUserDataSet: TOracleDataSet
+    SQL.Strings = (
+      'select id,NAME from user$'
+      'where SB_ACA.checkmodaccess_int('#39'EXPRESSMANAGER'#39',name)=1'
+      'order by name')
+    QBEDefinition.QBEFieldDefs = {
+      0400000002000000020000004944010000000000040000004E414D4501000000
+      0000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 32
+    Top = 544
+  end
+  object AdminUserDataSource: TDataSource
+    DataSet = AdminUserDataSet
+    Left = 144
+    Top = 544
+  end
+end

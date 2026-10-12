@@ -1,0 +1,602 @@
+﻿unit frmReportOfturnoverDepositImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, NLSDialogs,
+  ActiveX, AxCtrls, ReportOfturnoverDeposit_TLB, StdVcl, StdCtrls,
+  CheckLst, Evanescence, ExtCtrls, Buttons, ComCtrls, Grids, DBGridEh,
+  CMExcelExport,oracle,oracledata;
+
+type
+  TfrmReportOfturnoverDeposit = class(TActiveForm, IfrmReportOfturnoverDeposit)
+    GroupBox1: TGroupBox;
+    DTPRAP: TDateTimePicker;
+    OK: TBitBtn;
+    BitBtnexp: TBitBtn;
+    Panel2: TPanel;
+    GroupBox2: TGroupBox;
+    ESource: TEvanescence;
+    CheckBox1: TCheckBox;
+    GroupBox5: TGroupBox;
+    EFilial: TEvanescence;
+    CheckBox2: TCheckBox;
+    GroupBox11: TGroupBox;
+    EValute: TEvanescence;
+    CheckBox3: TCheckBox;
+    GroupBox13: TGroupBox;
+    EType: TEvanescence;
+    CheckBox4: TCheckBox;
+    GroupBox15: TGroupBox;
+    ECalcMethod: TEvanescence;
+    CheckBox5: TCheckBox;
+    BitBtn1: TBitBtn;
+    BitBtn2: TBitBtn;
+    Memo1: TMemo;
+    GroupBox3: TGroupBox;
+    Label1: TLabel;
+    DTPBegin: TDateTimePicker;
+    Label2: TLabel;
+    DTPEnd: TDateTimePicker;
+    GroupBox4: TGroupBox;
+    MainGridMDR: TDBGridEh;
+    DBGridEh1: TDBGridEh;
+    EEMDT: TCMExcelExport;
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure CheckBox2Click(Sender: TObject);
+    procedure CheckBox1Click(Sender: TObject);
+    procedure CheckBox5Click(Sender: TObject);
+    procedure CheckBox4Click(Sender: TObject);
+    procedure CheckBox3Click(Sender: TObject);
+    procedure BitBtn1Click(Sender: TObject);
+    procedure BitBtn2Click(Sender: TObject);
+    procedure MainGridMDRDblClick(Sender: TObject);
+  private
+    { Private declarations }
+    FEvents: IfrmReportOfturnoverDepositEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+  public
+    { Public declarations }
+    procedure Initialize; override;
+  end;
+
+implementation
+
+uses ComObj, ComServ, dmReportOfturnoverDepositImpl,
+  frmDetailTurnOverDepositImpl,SBTranslateProc,sboapiDataModuleImpl;
+
+{$R *.DFM}
+
+{ TfrmReportOfturnoverDeposit }
+
+var brepdat,brepdat1,erepdat :TDateTime;
+    gdepbalspr,genStrBal,FilterStr,FilterStrB :String;
+
+procedure TfrmReportOfturnoverDeposit.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_frmReportOfturnoverDepositPage); }
+end;
+
+procedure TfrmReportOfturnoverDeposit.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as IfrmReportOfturnoverDepositEvents;
+end;
+
+procedure TfrmReportOfturnoverDeposit.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TfrmReportOfturnoverDeposit.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TfrmReportOfturnoverDeposit.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TfrmReportOfturnoverDeposit.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TfrmReportOfturnoverDeposit.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TfrmReportOfturnoverDeposit.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TfrmReportOfturnoverDeposit.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TfrmReportOfturnoverDeposit.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TfrmReportOfturnoverDeposit.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TfrmReportOfturnoverDeposit.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TfrmReportOfturnoverDeposit.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TfrmReportOfturnoverDeposit.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TfrmReportOfturnoverDeposit.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TfrmReportOfturnoverDeposit.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TfrmReportOfturnoverDeposit.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TfrmReportOfturnoverDeposit.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TfrmReportOfturnoverDeposit.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TfrmReportOfturnoverDeposit.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TfrmReportOfturnoverDeposit.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TfrmReportOfturnoverDeposit._Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TfrmReportOfturnoverDeposit.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TfrmReportOfturnoverDeposit.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TfrmReportOfturnoverDeposit.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TfrmReportOfturnoverDeposit.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TfrmReportOfturnoverDeposit.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TfrmReportOfturnoverDeposit.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TfrmReportOfturnoverDeposit.KeyPressEvent(Sender: TObject;
+  var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TfrmReportOfturnoverDeposit.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TfrmReportOfturnoverDeposit.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TfrmReportOfturnoverDeposit.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TfrmReportOfturnoverDeposit.Set_AxBorderStyle(
+  Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TfrmReportOfturnoverDeposit.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TfrmReportOfturnoverDeposit.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TfrmReportOfturnoverDeposit.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TfrmReportOfturnoverDeposit.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TfrmReportOfturnoverDeposit.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TfrmReportOfturnoverDeposit.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TfrmReportOfturnoverDeposit.Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TfrmReportOfturnoverDeposit.Set_HelpFile(
+  const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TfrmReportOfturnoverDeposit.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TfrmReportOfturnoverDeposit.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TfrmReportOfturnoverDeposit.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TfrmReportOfturnoverDeposit.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TfrmReportOfturnoverDeposit.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+procedure TfrmReportOfturnoverDeposit.ActiveFormCreate(Sender: TObject);
+begin
+  dmReportOfturnoverDeposit := TdmReportOfturnoverDeposit.Create(self);
+  frmDetailTurnOverDeposit := TfrmDetailTurnOverDeposit.Create(self);
+  DTPBegin.DateTime := dmReportOfturnoverDeposit.sysdat.FieldByName('tek_dat').AsDateTime;
+  DTPEnd.DateTime := dmReportOfturnoverDeposit.sysdat.FieldByName('tek_dat').AsDateTime;
+  EFilial.Open;
+  ESource.Open;
+  ECalcMethod.Open;
+  EType.Open;
+  EValute.Open;
+  SBTranslateProc.TranslateAllComponents(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TfrmReportOfturnoverDeposit.CheckBox2Click(Sender: TObject);
+begin
+    if CheckBox2.Checked then EFilial.CheckAll else EFilial.UnCheckAll
+end;
+
+procedure TfrmReportOfturnoverDeposit.CheckBox1Click(Sender: TObject);
+begin
+if CheckBox1.Checked then ESource.CheckAll else ESource.UnCheckAll
+end;
+
+procedure TfrmReportOfturnoverDeposit.CheckBox5Click(Sender: TObject);
+begin
+   if CheckBox5.Checked then ECalcMethod.CheckAll else ECalcMethod.UnCheckAll
+end;
+
+procedure TfrmReportOfturnoverDeposit.CheckBox4Click(Sender: TObject);
+begin
+if CheckBox4.Checked then EType.CheckAll else EType.UnCheckAll
+end;
+
+procedure TfrmReportOfturnoverDeposit.CheckBox3Click(Sender: TObject);
+begin
+if CheckBox3.Checked then EValute.CheckAll else EValute.UnCheckAll
+end;
+
+procedure TfrmReportOfturnoverDeposit.BitBtn1Click(Sender: TObject);
+
+resourcestring rs_Balgencount = 'select count(id) as cnt from account ac,archost ar where ac.id=ar.acc_id and ar.datdate=:dat and ar.ostat<>0';
+resourcestring rs_sourceBal = 'SELECT  bal_cn   FROM uaod_source_bal ';
+resourcestring rs_typeBal = 'SELECT bal_cn   FROM uaod_type_bal  ';
+resourcestring rs_dat ='select max(dat) as dat from operkurs where dat<=:pdat';
+
+var
+  genCount,depgencount,Balgencount :Integer;
+  roundint,initialAmt,genrest,genDepIntrest,genDeprest,genBalRest :real;
+  rs_genDepIntrest,rs_genDeprest,rs_roundInt, gs,sourceBal,typeBal :string;
+  
+begin
+  if EFilial.GetCheckedKeyList.Count = 0 then begin ShowMessage('Ən azı bir filial seçilməlidir!'); Exit; end;
+  if ESource.GetCheckedKeyList.Count = 0 then begin ShowMessage('Ən azı bir Mənbə seçilməlidir!'); Exit; end;
+  if EValute.GetCheckedKeyList.Count = 0 then begin ShowMessage('Ən azı bir valyuta seçilməlidir!'); Exit; end;
+  if ECalcMethod.GetCheckedKeyList.Count = 0 then begin ShowMessage('Ən azı bir % hesablanması tipi seçilməlidir!'); Exit; end;
+  if EType.GetCheckedKeyList.Count = 0 then begin ShowMessage('Ən azı bir Tip seçilməlidir!'); Exit; end;
+
+   FilterStr := '';
+   BRepDat := integer(trunc(DTPBegin.Date));
+   BRepDat1 :=integer(trunc(DTPBegin.Date));
+   ERepDat := integer(trunc(DTPEnd.Date));
+
+
+   sourceBal := rs_sourceBal+' where sourceid in ( '+ESource.GetCheckedKeyList.CommaText+')';
+   typeBal := rs_typeBal+' where typeid in ( '+EType.GetCheckedKeyList.CommaText+')';
+   genStrBal := ' ac.bal_cn1 in('+sourceBal+ ' union all '+typeBal+')';
+   //memo1.text  :=genStrBal;
+   gs := ' ac.id not in (select contractaccid from sbcm_contract_accounts)';
+
+   genStrBal := genStrBal+' and '+gs;
+   gdepbalspr := 'ac.bal_cn1 in('+sourceBal+' union all '+typeBal+')';
+
+ if  FilterStr <> '' then begin
+  FilterStr := FilterStr + ' and  p.branchid in ('
+                              +EFilial.GetCheckedKeyList.CommaText +')' ;
+  FilterStrB := FilterStrB + ' and  filial in ('
+                              +EFilial.GetCheckedKeyList.CommaText +')'
+  end else begin
+  FilterStr :=  ' and  p.branchid in ('
+                              +EFilial.GetCheckedKeyList.CommaText +')' ;
+  FilterStrB :=  ' and  filial in ('
+                              +EFilial.GetCheckedKeyList.CommaText +')' ;
+end;
+
+ if  FilterStr <> '' then begin
+  FilterStr := FilterStr + ' and  p.currency in ('
+                              +EValute.GetCheckedKeyList.CommaText +')';
+  FilterStrB := FilterStrB + ' and  val_acc in ('
+                              +EValute.GetCheckedKeyList.CommaText +')'
+end else  begin
+  FilterStr :=  ' and  p.currency in ('
+                              +EValute.GetCheckedKeyList.CommaText +')' ;
+  FilterStrB :=  ' and  val_acc in ('
+                              +EValute.GetCheckedKeyList.CommaText +')' ;
+end;
+
+
+
+if (ECalcMethod.GetCheckedKeyList.Count<>ECalcMethod.Items.Count) then begin
+    if FilterStr <> '' then FilterStr := ' and p.id in (select id# from sbcm_contract_state where CALCULATIONENABLED in ('+ ECalcMethod.GetCheckedKeyList.CommaText+')'+')'
+    else   FilterStr := '  p.id in (select id# from sbcm_contract_state where CALCULATIONENABLED in ('+ ECalcMethod.GetCheckedKeyList.CommaText+')'+')'
+end;
+
+  with dmReportOfturnoverDeposit do begin
+
+     with Queries do begin
+       DeleteVariables;
+       DeclareVariable('pdat',otDate);
+       SetVariable('pdat',BRepDat);
+       if Active then CloseAll;
+       sql.Clear;
+       sql.Add(rs_dat);
+       Open;
+       BRepDat := FieldByName('dat').AsDateTime;
+
+       if Active then CloseAll;
+       DeleteVariables;
+       DeclareVariable('pdat',otDate);
+       SetVariable('pdat',ERepDat);
+       sql.Clear;
+       sql.Add(rs_dat);
+       Open;
+       ERepDat := FieldByName('dat').AsDateTime;
+       BRepDat1 := BRepDat;
+
+       if   BRepDat1 = ERepDat then begin
+       BRepDat1 := BRepDat1-1;
+       DeleteVariables;
+       DeclareVariable('pdat',otDate);
+       SetVariable('pdat',BRepDat1);
+       if Active then CloseAll;
+       sql.Clear;
+       sql.Add(rs_dat);
+       Open;
+       BRepDat1 := FieldByName('dat').AsDateTime;
+       end;
+
+     end;
+
+      with MainMDT  do begin
+       if Active then CloseAll;
+       SetVariable('bdat',brepdat);
+       SetVariable('bdat1',brepdat1);
+       SetVariable('edat',erepdat);
+       sql[26] := FilterStr+' and ('+gdepbalspr+')';
+       sql[79] := FilterStr+' and ('+gdepbalspr+')';
+       sql[143] := FilterStr+' and ('+gdepbalspr+')';
+       sql[188] := FilterStr+' and ('+gdepbalspr+')';
+       sql[39] := FilterStrB+' and ('+genStrBal+')';
+       sql[93] := FilterStrB+' and ('+genStrBal+')';
+       sql[157] := FilterStrB+' and ('+genStrBal+')';
+       sql[201] := FilterStrB+' and ('+genStrBal+')';
+       memo1.text := sql.text;
+       Open;
+       end;
+
+      with SumMDT  do begin
+       if Active then CloseAll;
+       SetVariable('bdat',brepdat);
+       SetVariable('bdat1',brepdat1);
+       SetVariable('edat',erepdat);
+       sql[27] := FilterStr+' and ('+gdepbalspr+')';
+       sql[80] := FilterStr+' and ('+gdepbalspr+')';
+       sql[144] := FilterStr+' and ('+gdepbalspr+')';
+       sql[189] := FilterStr+' and ('+gdepbalspr+')';
+       sql[40] := FilterStrB+' and ('+genStrBal+')';
+       sql[94] := FilterStrB+' and ('+genStrBal+')';
+       sql[158] := FilterStrB+' and ('+genStrBal+')';
+       sql[202] := FilterStrB+' and ('+genStrBal+')';
+       //memo1.text := sql.text;
+       Open;
+       end;
+
+  end;
+
+  
+end;
+
+procedure TfrmReportOfturnoverDeposit.BitBtn2Click(Sender: TObject);
+begin
+   with  EEMDT do begin
+        Connect;
+        ExportDataset(dmReportOfturnoverDeposit.MainMDT,'ReportOfTurnoverDeposits',true,false);
+   end;
+end;
+
+procedure TfrmReportOfturnoverDeposit.MainGridMDRDblClick(Sender: TObject);
+var fstr,fstrB,SpecStr,SpecStrB{,gbstr }:String;
+begin
+   SpecStr := '';
+   SpecStrB := '';
+   //gbstr := '  ( ac.bal_cn1 in(SELECT  bal_cn   FROM uaod_source_bal union SELECT    bal_cn  FROM uaod_person_bal union SELECT bal_cn   FROM uaod_type_bal ))' ;
+
+   fstr := FilterStr+' and '+'('+gdepbalspr+')';
+   fstrB := FilterStrB;
+   fstrB := fstrB +' and '+'('+genStrBal+')';//ShowMessage(fstrB);
+   with dmReportOfturnoverDeposit do
+        SpecStr := 'src.id = '+IntToStr(MainMDT.FieldByName('ID').AsInteger);
+
+  if fstr = '' then fstr := SpecStr
+  else fstr := fstr + ' and ('+ SpecStr+')';
+
+   if fstrB = '' then fstrB := SpecStr
+  else fstrB := fstrB + ' and ('+ SpecStr+')';
+
+   with dmReportOfturnoverDeposit,DetailTO do begin
+        if Active then CloseAll;
+        SetVariable('bdat',brepdat);
+        SetVariable('edat',brepdat);
+        SetVariable('OrderField','acc_no');
+        if fstr <> '' then  SQL[33] :=   fstr
+        else SQL[33] := ''; //showmessage(fstrb);
+        if fstrB <> '' then  SQL[68] :=   fstrB
+        else SQL[68] := ''; //showmessage(fstrb);
+        Memo1.Text := sql.Text;
+       open;
+   end;
+
+    with frmDetailTurnOverDeposit do
+     ShowModal;
+
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TfrmReportOfturnoverDeposit,
+    Class_frmReportOfturnoverDeposit,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

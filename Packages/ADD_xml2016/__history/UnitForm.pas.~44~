@@ -1,0 +1,1037 @@
+﻿unit UnitForm;
+
+interface
+
+uses
+  {Windows, Messages, SysUtils, Variants, Classes, Graphics,Controls, Forms,
+  Dialogs, StdCtrls, Buttons, XFSCtrls, Gauges, ExtCtrls, DB, OracleData;}
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, DBGrids, ExtCtrls, Grids, XDBGrids, StdCtrls, XFSCtrls, DBCtrls,
+  Mask, DBCtrlsEh, Buttons, ComCtrls, ToolWin, PlatformDefaultStyleActnCtrls,
+  Menus, ActnPopup,DB, ExtDlgs, ImgList,jpeg, OracleData, Gauges, CMExcelExport;
+
+
+type
+  TFormXml = class(TForm)
+    XFPanel1: TXFPanel;
+    Gauge_cust: TGauge;
+    XFGroupBox1: TXFGroupBox;
+    SpeedButton1: TSpeedButton;
+    EditFile: TEdit;
+    XFBitBtn2: TXFBitBtn;
+    XFBitBtn1: TXFBitBtn;
+    XFPanel2: TXFPanel;
+    ods_sysdat: TOracleDataSet;
+    ods_sysdatTEK_DAT: TWideStringField;
+    SaveDlgKredit: TSaveDialog;
+    ods_kreditxml: TOracleDataSet;
+    DateTimBegin: TDateTimePicker;
+    XFLabel1: TXFLabel;
+    XFButton1: TXFButton;
+    CMExcelExport1: TCMExcelExport;
+    ods_kreditxmlROWNUM: TFloatField;
+    ods_kreditxmlID: TFloatField;
+    ods_kreditxmlFILIAL: TWideStringField;
+    ods_kreditxmlNAME: TWideStringField;
+    ods_kreditxmlBOOROWERID: TWideStringField;
+    ods_kreditxmlMUDR: TWideStringField;
+    ods_kreditxmlTESICI: TWideStringField;
+    ods_kreditxmlGRUP_KO: TWideStringField;
+    ods_kreditxmlTIP: TWideStringField;
+    ods_kreditxmlTRANSACTION_XET: TWideStringField;
+    ods_kreditxmlDATEOFCONCLUSION: TWideStringField;
+    ods_kreditxmlDATEOFCONCLUSION1: TWideStringField;
+    ods_kreditxmlDUEDATELASTCONTRACT: TWideStringField;
+    ods_kreditxmlUZADILMASAYI: TFloatField;
+    ods_kreditxmlVAL_NAME: TWideStringField;
+    ods_kreditxmlANNUALYINTERESTRATE: TFloatField;
+    ods_kreditxmlCREDITLINEAMOUNT: TFloatField;
+    ods_kreditxmlREST: TFloatField;
+    ods_kreditxmlDUEREST: TFloatField;
+    ods_kreditxmlCEMFAIZ: TFloatField;
+    ods_kreditxmlINTERESTREST: TFloatField;
+    ods_kreditxmlDUEINTERESTREST: TFloatField;
+    ods_kreditxmlPENALTYREST: TFloatField;
+    ods_kreditxmlPAYMENT_SCHEDULE: TFloatField;
+    ods_kreditxmlMAIN_DEBT_PAYMENT_TERM: TFloatField;
+    ods_kreditxmlOPDTARIX: TWideStringField;
+    ods_kreditxmlODMEB: TFloatField;
+    ods_kreditxmlDUEDAY: TFloatField;
+    ods_kreditxmlDUEDAY1: TFloatField;
+    ods_kreditxmlPERCENT: TFloatField;
+    ods_kreditxmlRESERVEREST: TFloatField;
+    ods_kreditxmlPERCENT1: TFloatField;
+    ods_kreditxmlRESERVEINTREST: TFloatField;
+    ods_kreditxmlRES: TWideStringField;
+    ods_kreditxmlRESDAT: TDateTimeField;
+    ods_kreditxmlRESSAY: TFloatField;
+    ods_kreditxmlKEFIYYET: TWideStringField;
+    ods_kreditxmlG1: TFloatField;
+    ods_kreditxmlG2: TFloatField;
+    ods_kreditxmlG3: TFloatField;
+    ods_kreditxmlG4: TFloatField;
+    ods_kreditxmlG5: TFloatField;
+    ods_kreditxmlG6: TFloatField;
+    ods_kreditxmlPLEDGEPRICE: TFloatField;
+    ods_kreditxmlDESCRIPTION: TWideStringField;
+    ods_kreditxmlDESCRIPTION1: TWideStringField;
+    ods_kreditxmlDESCRIPTION2: TWideStringField;
+    ods_kreditxmlPURPOSEOFCREDIT: TWideStringField;
+    ods_kreditxmlNUMBEROFCREDIT: TWideStringField;
+    ods_kreditxmlOBLIGATION: TWideStringField;
+    Ods_excel: TOracleDataSet;
+    OpenDialog1: TOpenDialog;
+    ods_exceldelet: TOracleDataSet;
+    XFButton2: TXFButton;
+    Ods_excelF1: TWideStringField;
+    Ods_excelF2: TWideStringField;
+    Ods_excelF3: TWideStringField;
+    Ods_excelF4: TWideStringField;
+    Ods_excelF5: TWideStringField;
+    Ods_excelF6: TWideStringField;
+    Ods_excelF7: TWideStringField;
+    Ods_excelF8: TWideStringField;
+    Ods_excelF9: TWideStringField;
+    Ods_excelF10: TWideStringField;
+    Ods_excelF11: TWideStringField;
+    Ods_excelF12: TWideStringField;
+    Ods_excelF13: TWideStringField;
+    Ods_excelF14: TWideStringField;
+    Ods_excelF15: TWideStringField;
+    Ods_excelF16: TWideStringField;
+    Ods_excelF17: TWideStringField;
+    Ods_excelF18: TWideStringField;
+    Ods_excelF19: TWideStringField;
+    Ods_excelF20: TWideStringField;
+    Ods_excelF21: TWideStringField;
+    Ods_excelF22: TWideStringField;
+    Ods_excelF23: TWideStringField;
+    Ods_excelF24: TWideStringField;
+    Ods_excelF25: TWideStringField;
+    Ods_excelF26: TWideStringField;
+    Ods_excelF27: TWideStringField;
+    Ods_excelF28: TWideStringField;
+    Ods_excelF29: TWideStringField;
+    Ods_excelF30: TWideStringField;
+    Ods_excelF31: TWideStringField;
+    Ods_excelF32: TWideStringField;
+    Ods_excelF33: TWideStringField;
+    Ods_excelF34: TWideStringField;
+    Ods_excelF35: TWideStringField;
+    Ods_excelF36: TWideStringField;
+    Ods_excelF37: TWideStringField;
+    Ods_excelF38: TWideStringField;
+    Ods_excelF39: TWideStringField;
+    Ods_excelF40: TWideStringField;
+    Ods_excelF41: TWideStringField;
+    Ods_excelF42: TWideStringField;
+    Ods_excelF43: TWideStringField;
+    Ods_excelF44: TWideStringField;
+    Ods_excelF45: TWideStringField;
+    Ods_excelF46: TWideStringField;
+    Ods_excelF47: TWideStringField;
+    Ods_excelF48: TWideStringField;
+    Ods_excelF49: TWideStringField;
+    Ods_excelF50: TWideStringField;
+    Ods_excelF51: TWideStringField;
+    Ods_excelF52: TWideStringField;
+    Ods_excelF53: TWideStringField;
+    Ods_excelF54: TWideStringField;
+    Ods_excelF55: TWideStringField;
+    Ods_excelF56: TWideStringField;
+    Ods_excelF57: TWideStringField;
+    ods_kreditxmlFF1: TWideStringField;
+    ods_kreditxmlFF2: TWideStringField;
+    ods_kreditxmlFF3: TWideStringField;
+    ods_kreditxmlFF4: TWideStringField;
+    ods_kreditxmlFF5: TWideStringField;
+    ods_kreditxmlFF6: TWideStringField;
+    ods_kreditxmlFF7: TWideStringField;
+    ods_kreditxmlFF8: TWideStringField;
+    Ods_excelF58: TWideStringField;
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure XFBitBtn1Click(Sender: TObject);
+    procedure WriteString(S: string);
+    procedure XFBitBtn2Click(Sender: TObject);
+    procedure XFButton1Click(Sender: TObject);
+    procedure XFButton2Click(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormXml: TFormXml;
+  f: TextFile;
+  UnusableGrops: Set Of Byte;
+  FilePAth: String;
+  procedure InitPlugin(S : String);
+  export;
+implementation
+uses  ComObj,sboapiDataModuleImpl ;
+{$R *.dfm}
+
+
+procedure InitPlugin(s:string);export;
+begin
+   FormXml.ShowModal;
+end;
+exports
+     InitPlugin;
+
+procedure TFormXml.WriteString(S: string);
+begin
+
+  AssignFile(f, FilePAth); { Assigns the Filename }
+  Append(f); { Opens the file for editing }
+  Write(f, UTF8Encode(StringReplace(S, #13 + #10, '', [rfReplaceAll])));
+  Closefile(f);
+end;
+procedure TFormXml.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+ Gauge_cust.Progress:=0;
+end;
+
+procedure TFormXml.SpeedButton1Click(Sender: TObject);
+begin
+ with SaveDlgKredit do
+    if Execute then
+      EditFile.Text:= FileName;
+      AssignFile(f, EditFile.Text);
+      Rewrite(f);
+      Closefile(f);
+end;
+
+procedure TFormXml.XFBitBtn1Click(Sender: TObject);
+var j,r,i:integer;
+ begindat ,enddat
+:TDateTime;
+begin
+ if EditFile.Text = '' then
+  begin
+    ShowMessage('      Faylı seçməmisiz!     ');
+    Exit;
+  end;
+  FilePAth := EditFile.Text;
+  AssignFile(f, FilePAth);
+  Rewrite(f);
+  Closefile(f);
+
+      WriteString('<ADD>');
+      WriteString('<REPORT_INFO>');
+
+       WriteString('<BANK_LICENSE_NUMBER>');
+       WriteString('2');
+       WriteString('</BANK_LICENSE_NUMBER>');
+
+       WriteString('<REPORT_DATE>');
+       WriteString(ods_sysdatTEK_DAT.AsString);
+       WriteString('</REPORT_DATE>');
+
+       WriteString('</REPORT_INFO>');
+
+    {  begindat:=integer(trunc(DateTimBegin.DateTime))  ;
+         with ods_kreditxml do
+         begin
+     close;
+    SetVariable('dat',begindat);
+    SetVariable('dat1',begindat);
+     open;
+     end;   }
+     Ods_excel.Open;
+      Ods_excel.Refresh;
+     r:=Ods_excel.RecordCount;
+     Ods_excel.First;
+   for I := 0 to r-1 do
+     begin
+
+     with Ods_excel  do
+     begin
+      WriteString('<REPORT>');
+
+  WriteString('<NO>');
+  WriteString(FieldByName('f1').AsString);
+  WriteString('</NO>');
+
+
+  WriteString('<BRANCH_NAME>' );
+  WriteString(FieldByName('f4').AsString);
+  WriteString('</BRANCH_NAME>');
+
+  WriteString('<BORROWER_NAME>');
+  WriteString(FieldByName('f5').AsString);
+  WriteString('</BORROWER_NAME>');
+
+ if not(FieldByName('f6').isNUll) then
+    begin
+  WriteString('<VOEN_OR_DOCNUM>');
+  WriteString(FieldByName('f6').AsString);
+  WriteString('</VOEN_OR_DOCNUM>');
+  end else
+    begin
+  WriteString('<VOEN_OR_DOCNUM>');
+  WriteString('\');
+  WriteString('</VOEN_OR_DOCNUM>');
+    end;
+
+  if not(FieldByName('f7').isNUll) then
+    begin
+  WriteString('<OWNR_NAME>');
+  WriteString(FieldByName('f7').AsString);
+  WriteString('</OWNR_NAME> ');
+    end else
+    begin
+  WriteString('<OWNR_NAME>');
+  WriteString('\');
+  WriteString('</OWNR_NAME> ');
+    end;
+
+  if not(FieldByName('f8').isNUll) then
+    begin
+  WriteString('<FOUNDER_NAME>');
+  WriteString(FieldByName('f8').AsString);
+  WriteString('</FOUNDER_NAME>');
+  end else
+    begin
+  WriteString('<FOUNDER_NAME>');
+  WriteString('\');
+  WriteString('</FOUNDER_NAME>');
+    end;
+
+  if not FieldByName('f9').isNUll then
+    begin
+  WriteString('<CONNECTED_BORROWERS_GROUP_CODE>');
+  WriteString(FieldByName('f9').AsString);
+  WriteString('</CONNECTED_BORROWERS_GROUP_CODE>');
+    end else
+    begin
+  WriteString('<CONNECTED_BORROWERS_GROUP_CODE>');
+  WriteString('\');
+  WriteString('</CONNECTED_BORROWERS_GROUP_CODE>');
+    end;
+
+
+  WriteString('<RELATED_TO_BANK>');
+  WriteString(FieldByName('f10').AsString);
+  WriteString('</RELATED_TO_BANK>');
+
+
+   if not(FieldByName('f11').IsNull) then
+   begin
+  WriteString('<TRANSACTION_NATURE>');
+  WriteString(FieldByName('f11').asstring);
+  WriteString('</TRANSACTION_NATURE>');
+
+   end
+   else
+   begin
+  WriteString('<TRANSACTION_NATURE>');
+  WriteString('1 ');
+  WriteString('</TRANSACTION_NATURE>');
+   end;
+
+  WriteString('<GRANT_DATE>');
+  WriteString(FieldByName('f12').AsString);
+  WriteString('</GRANT_DATE>');
+
+  WriteString('<REPAYMENT_DATE>');
+  WriteString(FieldByName('f13').AsString);
+  WriteString('</REPAYMENT_DATE>');
+
+  if not(FieldByName('f14').IsNull) then
+   begin
+  WriteString('<REPAYMENT_DATE2>') ;
+  WriteString(FieldByName('f14').AsString);
+  WriteString('</REPAYMENT_DATE2> ');
+    end else
+    begin
+  WriteString('<REPAYMENT_DATE2>') ;
+  WriteString('1990-01-01');
+  WriteString('</REPAYMENT_DATE2> ');
+    end;
+
+  if not(FieldByName('f15').IsNull) then
+   begin
+  WriteString('<EXTENSION_NUMBER>');
+  WriteString(FieldByName('f15').AsString);
+  WriteString('</EXTENSION_NUMBER>');
+   end else
+    begin
+  WriteString('<EXTENSION_NUMBER>');
+  WriteString('\');
+  WriteString('</EXTENSION_NUMBER>');
+  end;
+
+  WriteString('<CURRENCY>');
+  WriteString(FieldByName('f16').AsString);
+  WriteString('</CURRENCY>');
+
+  if not(FieldByName('f17').IsNull) then
+    begin
+  WriteString('<INTEREST>');
+  WriteString(FieldByName('f17').AsString);
+  WriteString(' </INTEREST> ');
+  end  else
+   begin
+  WriteString('<INTEREST>');
+  WriteString('\');
+  WriteString(' </INTEREST> ');
+ end;
+
+ if not(FieldByName('f18').IsNull) then
+ begin
+  WriteString('<INITIAL_AMOUNT>');
+  WriteString(FieldByName('f18').AsString);
+  WriteString('</INITIAL_AMOUNT>');
+   end else
+   begin
+  WriteString('<INITIAL_AMOUNT>');
+  WriteString('\');
+  WriteString('</INITIAL_AMOUNT>');
+   end;
+
+  if not(FieldByName('f19').IsNull) then
+   begin
+  WriteString('<RESIDUAL_AMOUNT>');
+  WriteString(FieldByName('f19').AsString);
+  WriteString('</RESIDUAL_AMOUNT> ');
+   end  else
+     begin
+  WriteString('<RESIDUAL_AMOUNT>');
+  WriteString('\');
+  WriteString('</RESIDUAL_AMOUNT> ');
+    end;
+
+  if not(FieldByName('f20').IsNull) then
+    begin
+  WriteString('<RESIDUAL_AMOUNT2>');
+  WriteString(FieldByName('f20').AsString);
+  WriteString('</RESIDUAL_AMOUNT2>');
+   end  else
+    begin
+  WriteString('<RESIDUAL_AMOUNT2>');
+  WriteString('\');
+  WriteString('</RESIDUAL_AMOUNT2>');
+    end;
+
+ if not(FieldByName('f21').IsNull) then
+ begin
+  WriteString('<OVERDUE_DEBT>');
+  WriteString(FieldByName('f21').AsString);
+  WriteString('</OVERDUE_DEBT>');
+     end else
+       begin
+  WriteString('<OVERDUE_DEBT>');
+  WriteString('\');
+  WriteString('</OVERDUE_DEBT>');
+ end  ;
+
+  if not(FieldByName('f22').IsNull)then
+  begin
+  WriteString('<TOTAL_INTEREST_DEBT>');
+  WriteString(FieldByName('f22').AsString);
+  WriteString('</TOTAL_INTEREST_DEBT>');
+    end else
+    begin
+  WriteString('<TOTAL_INTEREST_DEBT>');
+  WriteString('\');
+  WriteString('</TOTAL_INTEREST_DEBT>');
+    end;
+
+  if not(FieldByName('f23').IsNull )then
+  begin
+  WriteString('<CALCULATED_INTEREST_DEBT_WITHOUT_DELAYED>');
+  WriteString(FieldByName('f23').AsString);
+  WriteString('</CALCULATED_INTEREST_DEBT_WITHOUT_DELAYED> ');
+     end else
+     begin
+  WriteString('<CALCULATED_INTEREST_DEBT_WITHOUT_DELAYED>');
+  WriteString('\');
+  WriteString('</CALCULATED_INTEREST_DEBT_WITHOUT_DELAYED> ');
+   end;
+
+  if not(FieldByName('f24').IsNull) then
+ begin
+  WriteString('<CALCULATED_INTEREST_DEBT_WITH_DELAYED>');
+  WriteString(FieldByName('f24').AsString);
+  WriteString('</CALCULATED_INTEREST_DEBT_WITH_DELAYED>');
+     end  else
+      begin
+  WriteString('<CALCULATED_INTEREST_DEBT_WITH_DELAYED>');
+  WriteString('\');
+  WriteString('</CALCULATED_INTEREST_DEBT_WITH_DELAYED>');
+      end;
+
+  if not(FieldByName('f25').IsNull) then
+ begin
+  WriteString('<CALCULATED_FINE_DEBT>');
+  WriteString(FieldByName('f25').AsString);
+  WriteString('</CALCULATED_FINE_DEBT> ');
+   end else
+   begin
+  WriteString('<CALCULATED_FINE_DEBT>');
+  WriteString('\');
+  WriteString('</CALCULATED_FINE_DEBT> ');
+   end;
+
+  if not(FieldByName('f26').IsNull )then
+  begin
+  WriteString('<PAYMENT_SCHEDULE>');
+  WriteString(FieldByName('f26').AsString);
+  WriteString('</PAYMENT_SCHEDULE>');
+     end else
+     begin
+  WriteString('<PAYMENT_SCHEDULE>');
+  WriteString('\');
+  WriteString('</PAYMENT_SCHEDULE>');
+  end;
+
+  if not(FieldByName('f27').IsNull) then
+ begin
+  WriteString('<MAIN_DEBT_PAYMENT_TERM>');
+  WriteString(FieldByName('f27').AsString);
+  WriteString('</MAIN_DEBT_PAYMENT_TERM>');
+     end else
+      begin
+  WriteString('<MAIN_DEBT_PAYMENT_TERM>');
+  WriteString('\');
+  WriteString('</MAIN_DEBT_PAYMENT_TERM>');
+ end;
+
+ if not(FieldByName('f28').IsNull) then
+ begin
+  WriteString('<INTEREST_PAYMENT_TERM>');
+  WriteString(FieldByName('f28').AsString);
+  WriteString('</INTEREST_PAYMENT_TERM>');
+     end else
+      begin
+  WriteString('<INTEREST_PAYMENT_TERM>');
+  WriteString('\');
+  WriteString('</INTEREST_PAYMENT_TERM>');
+    end;
+
+  if not(FieldByName('f29').IsNull )then
+  begin
+  WriteString('<LAST_PAYMENT_DATE>');
+  WriteString(FieldByName('f29').AsString);
+  WriteString('</LAST_PAYMENT_DATE> ');
+    end else
+ begin
+  WriteString('<LAST_PAYMENT_DATE>');
+  WriteString('\');
+  WriteString('</LAST_PAYMENT_DATE> ');
+ end;
+
+  if not(FieldByName('f30').IsNull) then
+ begin
+  WriteString('<LAST_PAYMENT_AMOUNT>');
+  WriteString(FieldByName('f30').AsString);
+  WriteString('</LAST_PAYMENT_AMOUNT>');
+     end else
+ begin
+  WriteString('<LAST_PAYMENT_AMOUNT>');
+  WriteString('\');
+  WriteString('</LAST_PAYMENT_AMOUNT>');
+ end;
+
+  if not(FieldByName('f31').IsNull )then
+ begin
+  WriteString('<MAIN_DEBT_DELAYED>');
+  WriteString(FieldByName('f31').AsString);
+  WriteString('</MAIN_DEBT_DELAYED> ');
+   end else
+ begin
+  WriteString('<MAIN_DEBT_DELAYED>');
+  WriteString('\');
+  WriteString('</MAIN_DEBT_DELAYED> ');
+ end;
+
+  if not(FieldByName('f32').IsNull) then
+ begin
+  WriteString('<INTEREST_DEBT_DELAYED>');
+  WriteString(FieldByName('f32').AsString);
+  WriteString('</INTEREST_DEBT_DELAYED>');
+   end  else
+    begin
+  WriteString('<INTEREST_DEBT_DELAYED>');
+  WriteString('\');
+  WriteString('</INTEREST_DEBT_DELAYED>');
+   end;
+
+  if not(FieldByName('f33').IsNull) then
+ begin
+  WriteString('<MAIN_DEBT_RESERVE_DEGREE>');
+  WriteString(FieldByName('f33').AsString);
+  WriteString('</MAIN_DEBT_RESERVE_DEGREE> ');
+   end else
+ begin
+  WriteString('<MAIN_DEBT_RESERVE_DEGREE>');
+  WriteString('\');
+  WriteString('</MAIN_DEBT_RESERVE_DEGREE> ');
+ end;
+   if not(FieldByName('f34').IsNull) then
+ begin
+  WriteString('<MAIN_DEBT_RESERVE_AMOUNT>') ;
+  WriteString(FieldByName('f34').AsString);
+  WriteString('</MAIN_DEBT_RESERVE_AMOUNT> ');
+    end  else
+ begin
+  WriteString('<MAIN_DEBT_RESERVE_AMOUNT>') ;
+  WriteString('\');
+  WriteString('</MAIN_DEBT_RESERVE_AMOUNT> ');
+ end;
+
+  if not(FieldByName('f35').IsNull) then
+ begin
+  WriteString('<INTEREST_DEBT_RESERVE_DEGREE>');
+  WriteString(FieldByName('f35').AsString);
+  WriteString('</INTEREST_DEBT_RESERVE_DEGREE>');
+    end  else
+  begin
+  WriteString('<INTEREST_DEBT_RESERVE_DEGREE>');
+  WriteString('\');
+  WriteString('</INTEREST_DEBT_RESERVE_DEGREE>');
+    end;
+
+  if not(FieldByName('f36').IsNull) then
+ begin
+  WriteString('<INTEREST_DEBT_RESERVE_AMOUNT>');
+  WriteString(FieldByName('f36').AsString);
+  WriteString('</INTEREST_DEBT_RESERVE_AMOUNT>');
+    end else
+    begin
+  WriteString('<INTEREST_DEBT_RESERVE_AMOUNT>');
+  WriteString('\');
+  WriteString('</INTEREST_DEBT_RESERVE_AMOUNT>');
+    end;
+  if not(FieldByName('f37').IsNull) then
+ begin
+  WriteString('<RESTRUCTURATION>');
+  WriteString(FieldByName('f37').AsString);
+  WriteString('</RESTRUCTURATION>');
+  end else
+ begin
+  WriteString('<RESTRUCTURATION>');
+  WriteString('\');
+  WriteString('</RESTRUCTURATION>');
+ end;
+
+  if not(FieldByName('f38').IsNull) then
+ begin
+  WriteString('<LAST_RESTRUCTURATION_DATE>');
+  WriteString(FieldByName('f38').AsString);
+  WriteString('</LAST_RESTRUCTURATION_DATE>');
+     end else
+    begin
+  WriteString('<LAST_RESTRUCTURATION_DATE>');
+  WriteString('\');
+  WriteString('</LAST_RESTRUCTURATION_DATE>');
+ end;
+
+  if not(FieldByName('f39').IsNull) then
+ begin
+  WriteString('<RESTRUCTURATION_COUNT>');
+  WriteString(FieldByName('f39').AsString);
+  WriteString('</RESTRUCTURATION_COUNT>');
+   end  else
+ begin
+  WriteString('<RESTRUCTURATION_COUNT>');
+  WriteString('\');
+  WriteString('</RESTRUCTURATION_COUNT>');
+    end;
+
+  if not(FieldByName('f40').IsNull) then
+ begin
+  WriteString('<QUALITY_CRITERIA>') ;
+  WriteString(FieldByName('f40').AsString);
+  WriteString('</QUALITY_CRITERIA>');
+   end else
+ begin
+  WriteString('<QUALITY_CRITERIA>') ;
+  WriteString('\');
+  WriteString('</QUALITY_CRITERIA>');
+ end;
+
+  if not(FieldByName('f41').IsNull) then
+ begin
+  WriteString('<COLLATERALISED_METALS_VALUE>');
+  WriteString(FieldByName('f41').AsString);
+  WriteString('</COLLATERALISED_METALS_VALUE>');
+   end else
+ begin
+  WriteString('<COLLATERALISED_METALS_VALUE>');
+  WriteString('\');
+  WriteString('</COLLATERALISED_METALS_VALUE>');
+ end;
+
+  if not(FieldByName('f42').IsNull) then
+ begin
+  WriteString('<GUARANTEES_BY_BANKS_VALUE>');
+  WriteString(FieldByName('f42').AsString);
+  WriteString('</GUARANTEES_BY_BANKS_VALUE>');
+     end else
+ begin
+  WriteString('<GUARANTEES_BY_BANKS_VALUE>');
+  WriteString('\');
+  WriteString('</GUARANTEES_BY_BANKS_VALUE>');
+ end;
+  if not(FieldByName('f43').IsNull )then
+ begin
+  WriteString('<SECURITIES_OF_OECD_COUNTRIES>');
+  WriteString(FieldByName('f43').AsString);
+  WriteString('</SECURITIES_OF_OECD_COUNTRIES> ');
+  end else
+ begin
+  WriteString('<SECURITIES_OF_OECD_COUNTRIES>');
+  WriteString('\');
+  WriteString('</SECURITIES_OF_OECD_COUNTRIES> ');
+ end;
+
+  if not(FieldByName('f44').IsNull) then
+ begin
+  WriteString('<REAL_ESTATE_MARKET_VALUE>');
+  WriteString(FieldByName('f44').AsString);
+  WriteString('</REAL_ESTATE_MARKET_VALUE>');
+  end else
+ begin
+  WriteString('<REAL_ESTATE_MARKET_VALUE>');
+  WriteString('\');
+  WriteString('</REAL_ESTATE_MARKET_VALUE>');
+ end;
+
+  if not(FieldByName('f45').IsNull) then
+ begin
+  WriteString('<MOVABLE_PROPERTY_MARKET_VALUE>');
+  WriteString(FieldByName('f45').AsString);
+  WriteString('</MOVABLE_PROPERTY_MARKET_VALUE>');
+  end else
+ begin
+  WriteString('<MOVABLE_PROPERTY_MARKET_VALUE>');
+  WriteString('\');
+  WriteString('</MOVABLE_PROPERTY_MARKET_VALUE>');
+ end;
+
+  if not(FieldByName('f46').IsNull) then
+ begin
+  WriteString('<FOURTH_GROUP_COLLATERAL_MARKET_VALUE>');
+  WriteString(FieldByName('f46').AsString);
+  WriteString('</FOURTH_GROUP_COLLATERAL_MARKET_VALUE>');
+    end else
+ begin
+  WriteString('<FOURTH_GROUP_COLLATERAL_MARKET_VALUE>');
+  WriteString('\');
+  WriteString('</FOURTH_GROUP_COLLATERAL_MARKET_VALUE>');
+ end;
+
+  if not(FieldByName('f47').IsNull) then
+ begin
+  WriteString('<FOURTH_GROUP_COLLATERAL_TYPE>');
+  WriteString(FieldByName('f47').AsString);
+  WriteString('</FOURTH_GROUP_COLLATERAL_TYPE> ');
+  end  else
+ begin
+  WriteString('<FOURTH_GROUP_COLLATERAL_TYPE>');
+  WriteString('\');
+  WriteString('</FOURTH_GROUP_COLLATERAL_TYPE> ');
+ end;
+
+  if not(FieldByName('f48').IsNull) then
+ begin
+  WriteString('<CREDIT_TYPE>');
+  WriteString(FieldByName('f48').AsString);
+  WriteString('</CREDIT_TYPE>');
+   end else
+ begin
+  WriteString('<CREDIT_TYPE>');
+  WriteString('\');
+  WriteString('</CREDIT_TYPE>');
+ end;
+  if not(FieldByName('f49').IsNull) then
+ begin
+  WriteString('<ECONOMY_AREA>');
+  WriteString(FieldByName('f49').AsString);
+  WriteString('</ECONOMY_AREA>');
+   end else
+ begin
+  WriteString('<ECONOMY_AREA>');
+  WriteString('\');
+  WriteString('</ECONOMY_AREA>');
+ end;
+
+  if not(FieldByName('f50').IsNull) then
+ begin
+  WriteString('<REGION>');
+  WriteString(FieldByName('f50').AsString);
+  WriteString('</REGION> ');
+  end  else
+ begin
+  WriteString('<REGION>');
+  WriteString('\');
+  WriteString('</REGION> ');
+   end;
+
+  if not(FieldByName('f51').IsNull )then
+ begin
+
+  WriteString('<FUNDING_SOURCE>');
+  WriteString(FieldByName('f51').AsString);
+  WriteString('</FUNDING_SOURCE>');
+
+ end else
+  begin
+  WriteString('<FUNDING_SOURCE>');
+  WriteString('/');
+  WriteString('</FUNDING_SOURCE>');
+
+  end;
+
+   if not(FieldByName('f52').IsNull) then
+ begin
+  WriteString('<INBANK_RATING>');
+  WriteString(FieldByName('f52').AsString);
+  WriteString('</INBANK_RATING>');
+
+ end  else
+ begin
+   WriteString('<INBANK_RATING>');
+  WriteString('/');
+  WriteString('</INBANK_RATING>');
+ end;
+
+  if not(FieldByName('f53').IsNull) then
+ begin
+  WriteString('<AGENCY_RATING>');
+  WriteString(FieldByName('f53').AsString);
+  WriteString('</AGENCY_RATING>');
+
+ end else
+ begin
+  WriteString('<AGENCY_RATING>');
+  WriteString('/');
+  WriteString('</AGENCY_RATING>');
+ end;
+  if not(FieldByName('f54').IsNull )then
+ begin
+  WriteString('<RESPONSIBLE_PERSON>');
+  WriteString(FieldByName('f54').AsString);
+  WriteString('</RESPONSIBLE_PERSON>');
+
+ end else
+ begin
+ WriteString('<RESPONSIBLE_PERSON>');
+  WriteString('/');
+  WriteString('</RESPONSIBLE_PERSON>');
+ end;
+
+  if not(FieldByName('f55').IsNull) then
+ begin
+  WriteString('<NOTE>');
+  WriteString(FieldByName('f55').asstring);
+  WriteString('</NOTE> ');
+
+ end else
+  begin
+  WriteString('<NOTE>');
+  WriteString('/');
+  WriteString('</NOTE> ');
+  end;
+
+  if not(FieldByName('f56').IsNull) then
+ begin
+  WriteString('<REAL_ESTATE_LAST_EVALUATION_DATE>');
+  WriteString(FieldByName('f56').asstring);
+  WriteString('</REAL_ESTATE_LAST_EVALUATION_DATE>');
+
+ end   else
+ begin
+  WriteString('<REAL_ESTATE_LAST_EVALUATION_DATE>');
+  WriteString('/');
+  WriteString('</REAL_ESTATE_LAST_EVALUATION_DATE>');
+ end;
+
+  if not(FieldByName('f57').IsNull) then
+ begin
+  WriteString('<REAL_ESTATE_EVALUATION_COMPANY>');
+  WriteString(FieldByName('f57').asstring);
+  WriteString('</REAL_ESTATE_EVALUATION_COMPANY>');
+
+ end  else
+   begin
+  WriteString('<REAL_ESTATE_EVALUATION_COMPANY>');
+  WriteString('/');
+  WriteString('</REAL_ESTATE_EVALUATION_COMPANY>');
+   end;
+    WriteString('</REPORT>');
+      Ods_excel.next;
+       Gauge_cust.Progress := Trunc(j*100 / r);
+        j := j + 1;
+      end;end;
+      WriteString('</ADD>');
+
+
+    ShowMessage( 'İxrac qurtardı '+inttostr(r)+ '- sayda kredit ixrac olundu' );
+    MessageDlg('XML file uğurla yaradıldı', mtInformation, [mbOk], 0);
+    Gauge_cust.Progress :=0;
+    EditFile.Text:='';
+
+
+
+
+end;
+
+procedure TFormXml.XFBitBtn2Click(Sender: TObject);
+begin
+FormXml.Close;
+end;
+
+procedure TFormXml.XFButton1Click(Sender: TObject);
+ var
+ begindat:TDateTime;
+begin
+ begindat:=integer(trunc(DateTimBegin.DateTime))  ;
+with ods_kreditxml do
+     begin
+     close;
+    SetVariable('dat',begindat);
+    SetVariable('dat1',begindat);
+    open;
+
+     end;
+
+  if ods_kreditxml.RecordCount=0 then
+    begin
+
+   showmessage('Seçilmiş tarixdə heçbir məlumat mövcud deyil  !');
+    end
+    else
+    begin
+
+   with CMExcelExport1 do
+   begin
+      Connect;
+      ExportDataset( ods_kreditxml,'portfel',true);
+      Disconnect;
+   end  ;
+    end;
+end;
+
+procedure TFormXml.XFButton2Click(Sender: TObject);
+Const xlCellTypeLast=$000000B;
+var Excel:Variant;
+    k,j,m, n:Integer;
+    b:string;
+begin
+
+
+  if  not OpenDialog1.Execute then Exit;
+  Application.ProcessMessages;
+  Excel:=CreateoleObject('Excel.Application');
+  Excel.Workbooks.Open(OpenDialog1.FileName);
+
+  m := 2;
+  n := excel.ActiveCell.SpecialCells(xlCellTypeLast).Row+1;//axrinci
+
+    ods_exceldelet.open;
+    j:=0;
+    k:=0;
+  while m<>n do begin
+
+    ods_excel.Close;
+    ods_excel.Open;
+//    ShowMessage(inttostr(n));
+           if ods_excel.RecordCount>0 then
+           Gauge_cust.Progress := trunc(((ods_excel.RecordCount+3)*100)/n-2);
+    ods_excel.Insert;
+
+//   ShowMessage(inttostr(trunc((ods_excel.RecNo*100)/ods_excel.RecordCount)));
+    j := j +1;
+   Application.ProcessMessages;
+//  // ShowMessage(IntToStr(j)+'='+IntToStr(n));
+//    if (j mod trunc(n/100))=0 then
+//    begin
+//  //  showmessage(INttostr(j));
+//      k:=k+1;
+//      Gauge_cust.Progress := Trunc(k);
+//
+//    end;
+
+    ods_excel.FieldByName('f1').Value :=Excel.Cells[m, 1].value;
+    ods_excel.FieldByName('f2').Value :=Excel.Cells[m, 2].value;
+    ods_excel.FieldByName('f3').Value :=Excel.Cells[m, 3].value;
+    ods_excel.FieldByName('f4').Value :=Excel.Cells[m, 4].value;
+    ods_excel.FieldByName('f5').Value :=Excel.Cells[m, 5].value;
+    ods_excel.FieldByName('f6').Value :=Excel.Cells[m, 6].value;
+    ods_excel.FieldByName('f7').Value :=Excel.Cells[m, 7].value;
+    ods_excel.FieldByName('f8').Value :=Excel.Cells[m, 8].value;
+    ods_excel.FieldByName('f9').Value :=Excel.Cells[m, 9].value;
+    ods_excel.FieldByName('f10').Value :=Excel.Cells[m, 10].value;
+    ods_excel.FieldByName('f11').Value :=Excel.Cells[m, 11].value;
+    ods_excel.FieldByName('f12').Value :=Excel.Cells[m, 12].value;
+    ods_excel.FieldByName('f13').Value :=Excel.Cells[m, 13].value;
+    ods_excel.FieldByName('f14').Value :=Excel.Cells[m, 14].value;
+    ods_excel.FieldByName('f15').Value :=Excel.Cells[m, 15].value;
+    ods_excel.FieldByName('f16').Value :=Excel.Cells[m, 16].value;
+    ods_excel.FieldByName('f17').Value :=Excel.Cells[m, 17].value;
+    ods_excel.FieldByName('f18').Value :=Excel.Cells[m, 18].value;
+    ods_excel.FieldByName('f19').Value :=Excel.Cells[m, 19].value;
+    ods_excel.FieldByName('f20').Value :=Excel.Cells[m, 20].value;
+    ods_excel.FieldByName('f21').Value :=Excel.Cells[m, 21].value;
+    ods_excel.FieldByName('f22').Value :=Excel.Cells[m, 22].value;
+    ods_excel.FieldByName('f23').Value :=Excel.Cells[m, 23].value;
+    ods_excel.FieldByName('f24').Value :=Excel.Cells[m, 24].value;
+    ods_excel.FieldByName('f25').Value :=Excel.Cells[m, 25].value;
+    ods_excel.FieldByName('f26').Value :=Excel.Cells[m, 26].value;
+    ods_excel.FieldByName('f27').Value :=Excel.Cells[m, 27].value;
+    ods_excel.FieldByName('f28').Value :=Excel.Cells[m, 28].value;
+    ods_excel.FieldByName('f29').Value :=Excel.Cells[m, 29].value;
+    ods_excel.FieldByName('f30').Value :=Excel.Cells[m, 30].value;
+    ods_excel.FieldByName('f31').Value :=Excel.Cells[m, 31].value;
+    ods_excel.FieldByName('f32').Value :=Excel.Cells[m, 32].value;
+    ods_excel.FieldByName('f33').Value :=Excel.Cells[m, 33].value;
+    ods_excel.FieldByName('f34').Value :=Excel.Cells[m, 34].value;
+    ods_excel.FieldByName('f35').Value :=Excel.Cells[m, 35].value;
+    ods_excel.FieldByName('f36').Value :=Excel.Cells[m, 36].value;
+    ods_excel.FieldByName('f37').Value :=Excel.Cells[m, 37].value;
+    ods_excel.FieldByName('f38').Value :=Excel.Cells[m, 38].value;
+    ods_excel.FieldByName('f39').Value :=Excel.Cells[m, 39].value;
+    ods_excel.FieldByName('f40').Value :=Excel.Cells[m, 40].value;
+    ods_excel.FieldByName('f41').Value :=Excel.Cells[m, 41].value;
+    ods_excel.FieldByName('f42').Value :=Excel.Cells[m, 42].value;
+    ods_excel.FieldByName('f43').Value :=Excel.Cells[m, 43].value;
+    ods_excel.FieldByName('f44').Value :=Excel.Cells[m, 44].value;
+    ods_excel.FieldByName('f45').Value :=Excel.Cells[m, 45].value;
+    ods_excel.FieldByName('f46').Value :=Excel.Cells[m, 46].value;
+    ods_excel.FieldByName('f47').Value :=Excel.Cells[m, 47].value;
+    ods_excel.FieldByName('f48').Value :=Excel.Cells[m, 48].value;
+    ods_excel.FieldByName('f49').Value :=Excel.Cells[m, 49].value;
+    ods_excel.FieldByName('f50').Value :=Excel.Cells[m, 50].value;
+    ods_excel.FieldByName('f51').Value :=Excel.Cells[m, 51].value;
+    ods_excel.FieldByName('f52').Value :=Excel.Cells[m, 52].value;
+    ods_excel.FieldByName('f53').Value :=Excel.Cells[m, 53].value;
+    ods_excel.FieldByName('f54').Value :=Excel.Cells[m, 54].value;
+    ods_excel.FieldByName('f55').Value :=Excel.Cells[m, 55].value;
+    ods_excel.FieldByName('f56').Value :=Excel.Cells[m, 56].value;
+    ods_excel.FieldByName('f57').Value :=Excel.Cells[m, 57].value;
+    ods_excel.FieldByName('f58').Value :=Excel.Cells[m, 58].value;
+    ods_excel.Post;
+
+    inc(m);
+  end;
+
+    Gauge_cust.Progress := Trunc(100);
+  ods_excel.First;
+  ods_exceldelet.close;
+//  Gauge_cust.Progress:=0;
+  Excel.Workbooks.Close;
+  Excel.Quit;                  //sabuhi 21.10.2014
+
+
+
+end;
+
+initialization
+ FormXml := TFormXml.Create(Application);
+
+end.

@@ -1,0 +1,191 @@
+unit FilterUnitImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ExtCtrls, StdCtrls, Mask, DBCtrlsEh, ComCtrls, CMCurrencyEdit,
+   DBLookupEh, DB, DBGridEh;
+
+type
+  TFilterMainForm = class(TForm)
+    Panel1: TPanel;
+    GroupBox1: TGroupBox;
+    GroupBox2: TGroupBox;
+    CheckBox1: TCheckBox;
+    GroupBox3: TGroupBox;
+    Panel2: TPanel;
+    Panel5: TPanel;
+    GroupBox7: TGroupBox;
+    CheckBox7: TCheckBox;
+    GroupBox8: TGroupBox;
+    CheckBox9: TCheckBox;
+    GroupBox9: TGroupBox;
+    CheckBox8: TCheckBox;
+    Panel9: TPanel;
+    GroupBox10: TGroupBox;
+    CheckBox10: TCheckBox;
+    Button1: TButton;
+    Button2: TButton;
+    Button3: TButton;
+    GroupBox11: TGroupBox;
+    CheckBox11: TCheckBox;
+    DBLookupComboboxEh1: TDBLookupComboboxEh;
+    DBLookupComboboxEh2: TDBLookupComboboxEh;
+    DBLookupComboboxEh3: TDBLookupComboboxEh;
+    DBLookupComboboxEh7: TDBLookupComboboxEh;
+    DBLookupComboboxEh8: TDBLookupComboboxEh;
+    DBLookupComboboxEh9: TDBLookupComboboxEh;
+    DBLookupComboboxEh10: TDBLookupComboboxEh;
+    DBLookupComboboxEh11: TDBLookupComboboxEh;
+    CheckBox2: TCheckBox;
+    CheckBox3: TCheckBox;
+    GroupBox5: TGroupBox;
+    DBLookupComboboxEh6: TDBLookupComboboxEh;
+    CheckBox6: TCheckBox;
+    Image1: TImage;
+    CheckBox20: TCheckBox;
+    Image2: TImage;
+    CheckBox21: TCheckBox;
+    Image3: TImage;
+    CheckBox22: TCheckBox;
+    Panel3: TPanel;
+    GroupBox4: TGroupBox;
+    DBLookupComboboxEh4: TDBLookupComboboxEh;
+    CheckBox4: TCheckBox;
+    procedure Button1Click(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+    procedure Button3Click(Sender: TObject);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormCreate(Sender: TObject);
+  private
+    function BuildFilterString : String;
+    { Private declarations }
+  public
+    FFilterGrid  : TDBGridEh;
+    { Public declarations }
+  end;
+
+var
+  FilterMainForm: TFilterMainForm;
+
+
+implementation
+
+{$R *.DFM}
+
+
+uses
+  FilterDataModuleImpl, CommonDecls,SBTranslateProc,sboapiDataModuleImpl;
+
+
+function TFilterMainForm.BuildFilterString : String;
+
+  procedure ConcatFilter(var S: String; const Prefix : String; Checked : Boolean; KeyValue : Variant);
+  const
+     csFormat = '(%s=%s)';
+  var
+    Temp : String;   
+  begin
+
+    if Checked then
+    begin
+      Temp := Format(csFormat,[Prefix,Keyvalue]);
+      if S = '' then
+        S := Temp
+      else
+        S :=S + 'and ' + Temp;
+    end;
+    
+  end;  // Concat Filter
+
+  procedure ConcatFilter2(var S: String; const Prefix : String; Checked : Boolean; KeyValue : Variant);
+  const
+     csFormat = '(%s=%s)';
+  var
+    Temp : String;
+  begin
+
+    if Checked then
+    begin
+      Temp := Format(csFormat,[Prefix,Keyvalue]);
+      if S = '' then
+        S := Temp
+      else
+        S :=S + ' or ' + Temp;
+    end;
+
+  end;  // Concat Filter
+
+var
+  Temp : String;
+begin
+
+  Result := '';
+  Temp := '';
+  
+  ConcatFilter(Result,'CURRENCY',CheckBox1.Checked,DBLookupComboboxEh1.KeyValue);
+  ConcatFilter(Result,'BRANCHID',CheckBox2.Checked,DBLookupComboboxEh2.KeyValue);
+  ConcatFilter(Result,'USRGROUP',CheckBox3.Checked,DBLookupComboboxEh3.KeyValue);
+  ConcatFilter(Result,'USID',CheckBox6.Checked,DBLookupComboboxEh6.KeyValue);
+  ConcatFilter(Result,'PERSONALTYPE',CheckBox7.Checked,DBLookupComboboxEh7.KeyValue);
+  ConcatFilter(Result,'CUSTOMERTYPE',CheckBox8.Checked,DBLookupComboboxEh8.KeyValue);
+  ConcatFilter(Result,'CREDITTYPE',CheckBox9.Checked,DBLookupComboboxEh9.KeyValue);
+  ConcatFilter(Result,'PLEDGEID',CheckBox10.Checked,DBLookupComboboxEh10.KeyValue);
+  ConcatFilter(Result,'BOOROWERID',CheckBox11.Checked,DBLookupComboboxEh11.KeyValue);
+  ConcatFilter(Result,'AIM_ID',CheckBox4.Checked,DBLookupComboboxEh4.KeyValue);
+
+  ConcatFilter2(Temp,'TrProcessed',CheckBox20.Checked,0);
+  ConcatFilter2(Temp,'TrProcessed',CheckBox21.Checked,1);
+  ConcatFilter2(Temp,'TrProcessed',CheckBox22.Checked,2);
+
+  if Temp <> '' then
+  if Result <> '' then
+    Result := Result + Format(' and (%s)',[Temp])
+  else
+    Result := Temp;
+
+  LogInformation(Result);
+end;
+
+procedure TFilterMainForm.Button1Click(Sender: TObject);
+begin
+  with FFilterGrid, DataSource.DataSet do
+  begin
+    Filter := BuildFilterString;
+    Filtered := False;
+    Filtered := True;
+    SelectedRows.Clear;
+  end;
+end;
+
+procedure TFilterMainForm.Button2Click(Sender: TObject);
+begin
+  with FFilterGrid, DataSource.DataSet do
+  begin
+    Filter := '';
+    Filtered := False;
+    SelectedRows.Clear;
+  end;
+end;
+
+procedure TFilterMainForm.Button3Click(Sender: TObject);
+begin
+  Close;
+end;
+
+procedure TFilterMainForm.FormCreate(Sender: TObject);
+begin
+   SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TFilterMainForm.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+  if Ord(Key) = VK_ESCAPE then
+  begin
+    Close;
+    Key := #0;
+  end;
+end;
+
+end.

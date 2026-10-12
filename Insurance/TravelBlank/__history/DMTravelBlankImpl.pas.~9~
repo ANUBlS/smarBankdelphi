@@ -1,0 +1,130 @@
+unit DMTravelBlankImpl;
+
+interface
+
+uses
+  SysUtils, Classes, Oracle, DB, OracleData;
+
+type
+  TDMTravelBlank = class(TDataModule)
+    CustomersData: TDataSource;
+    Customers: TOracleDataSet;
+    CustomersID: TIntegerField;
+    CustomersNAME: TWideStringField;
+    CustomersADDRESS: TWideStringField;
+    CustomersMOBILEPHONE: TWideStringField;
+    CustomersFAX: TWideStringField;
+    CustomersCONTACTPERSON: TWideStringField;
+    ODSBeneficiary: TOracleDataSet;
+    ODSBeneficiaryID: TFloatField;
+    ODSBeneficiaryNAME: TWideStringField;
+    ODSBeneficiaryADDRESS: TWideStringField;
+    ODSBeneficiaryPHONE: TWideStringField;
+    ODSBeneficiaryBANKING_DETAILS: TWideStringField;
+    AgentsSource: TDataSource;
+    ODSAgents: TOracleDataSet;
+    ODSAgentsID: TFloatField;
+    ODSAgentsNAME: TWideStringField;
+    DsSysdat: TOracleDataSet;
+    DsSysdatTEK_DAT: TDateTimeField;
+    DsSysdatPRED_DAT: TDateTimeField;
+    DsSysdatARC_DAY: TDateTimeField;
+    DsSysdatCLOSE: TIntegerField;
+    DSAvalute: TDataSource;
+    ODSAvalute: TOracleDataSet;
+    ODSAvaluteVALUTE: TIntegerField;
+    ODSAvaluteVAL_NAME: TWideStringField;
+    ODSAvaluteVALU_NAME: TWideStringField;
+    ODSAvaluteVALU_SHORT: TWideStringField;
+    DSRins_contracts: TDataSource;
+    DSRins_contract_travel: TDataSource;
+    DSins_contracts: TOracleDataSet;
+    DSins_contractsID: TFloatField;
+    DSins_contractsTYPE_ID: TFloatField;
+    DSins_contractsINS_DATE: TDateTimeField;
+    DSins_contractsBEGIN_DATE: TDateTimeField;
+    DSins_contractsEND_DATE: TDateTimeField;
+    DSins_contractsVALUTE_ID: TFloatField;
+    DSins_contractsAMMOUNT: TFloatField;
+    DSins_contractsCLOSE_PREFIX: TIntegerField;
+    DSins_contractsKLI_ID: TFloatField;
+    DSins_contractsLOANACC_ID: TFloatField;
+    DSins_contractsCURRACC_ID: TFloatField;
+    DSins_contractsPOLICY_NUM: TWideStringField;
+    DSins_contractsINSSUMM: TFloatField;
+    DSins_contractsFRANSHIZ: TFloatField;
+    DSins_contractsTARIFF: TFloatField;
+    DSins_contractsSTATE: TIntegerField;
+    DSins_contractsAGENT_ID: TFloatField;
+    DSins_contractsPNUM: TFloatField;
+    DSins_contractsBEN_ID: TFloatField;
+    DSins_contractsBENEFICIARY: TWideStringField;
+    DSins_contractsCONDITIONS: TWideStringField;
+    DSins_contractsSUGNUM: TWideStringField;
+    DSins_contractsBLANK_ID: TFloatField;
+    DSins_contract_travel: TOracleDataSet;
+    DSins_contract_travelID: TFloatField;
+    DSins_contract_travelTYPEID: TFloatField;
+    DSins_contract_travelCID: TFloatField;
+    DSins_contract_travelCLOSE_PREFIX: TFloatField;
+    ins_common: TOraclePackage;
+    BeneficiarySource: TDataSource;
+    sb_aca: TOraclePackage;
+    DSRBank: TDataSource;
+    DSBank: TOracleDataSet;
+    DSBankID: TFloatField;
+    DSBankKRNO: TWideStringField;
+    DSBankNAME: TWideStringField;
+    DSBankINN: TWideStringField;
+    DSBankSWIFT: TWideStringField;
+    DSBankBANKCODE: TWideStringField;
+    DSBankSUBKRNO: TWideStringField;
+    DSBankBANK_KOD: TFloatField;
+    DSBankLICENSE_DATE: TDateTimeField;
+    DSBankTAX_REGCODE: TWideStringField;
+    DSinscust: TOracleDataSet;
+    DSinscustID: TIntegerField;
+    DSinscustCUST_ID: TIntegerField;
+    DSinscustINS_NAME: TWideStringField;
+    DSinscustCUS_NAME: TWideStringField;
+    DSRFilial: TDataSource;
+    DSFilial: TOracleDataSet;
+    DSFilialID: TFloatField;
+    DSFilialNAME: TWideStringField;
+    DSFilialKOD_FILIAL: TWideStringField;
+    procedure DataModuleCreate(Sender: TObject);
+    procedure DataModuleDestroy(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  DMTravelBlank: TDMTravelBlank;
+
+implementation
+
+{$R *.dfm}
+     uses sboapiDataModuleImpl;
+procedure TDMTravelBlank.DataModuleCreate(Sender: TObject);
+begin
+ODSAvalute.Open;
+Customers.Open;
+ODSBeneficiary.Open;
+ODSAgents.Open;
+DsSysdat.Open;
+DSBank.Open;
+end;
+
+procedure TDMTravelBlank.DataModuleDestroy(Sender: TObject);
+begin
+ODSAvalute.close;
+Customers.close;
+ODSBeneficiary.close;
+ODSAgents.close;
+DsSysdat.close;
+DSBank.close;
+end;
+
+end.

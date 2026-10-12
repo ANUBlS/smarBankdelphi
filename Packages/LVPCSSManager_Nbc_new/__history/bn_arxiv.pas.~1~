@@ -1,0 +1,164 @@
+﻿unit bn_arxiv;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Data_Unit, ExtCtrls, Grids, DBGrids, ImgList, StdCtrls, SearchEdit, Db, OracleData, Oracle,
+  ComCtrls;
+
+type
+  TArxiv = class(TForm)
+    DBGrid1: TDBGrid;
+    ImageList: TImageList;
+    ImageListFilial: TImageList;
+    Panel2: TPanel;
+    DateTimePicker1: TDateTimePicker;
+    DateTimePicker2: TDateTimePicker;
+    Button2: TButton;
+    SearchEdit1: TSearchEdit;
+    Label1: TLabel;
+    SearchEdit2: TSearchEdit;
+    Label2: TLabel;
+    procedure DBGrid1DrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TColumn; State: TGridDrawState);
+    procedure SearchEdit1KeyPress(Sender: TObject; var Key: Char);
+    procedure Button2Click(Sender: TObject);
+    procedure SearchEdit2KeyPress(Sender: TObject; var Key: Char);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Arxiv: TArxiv;
+    SearchOptions : TSearchRecordOptions;
+  SearchField : string;
+
+implementation
+
+{$R *.dfm}
+
+procedure TArxiv.Button2Click(Sender: TObject);
+begin
+with datamod.Bn_arxiv do
+begin
+      CloseAll;
+
+      SetVariable('dat1',DateTimePicker1.DateTime);
+      SetVariable('dat2',DateTimePicker2.DateTime);
+
+      open;
+
+end;
+
+
+end;
+
+procedure TArxiv.DBGrid1DrawColumnCell(Sender: TObject; const Rect: TRect;
+  DataCol: Integer; Column: TColumn; State: TGridDrawState);
+ var
+  ImageIndex,ImageIndexFilial: Integer;
+  begin
+  ImageIndex:=-1;
+  with (Sender as TDBGrid) do
+  begin
+    if (Sender as TDBGrid).DataSource.DataSet.RecordCount <> 0 then
+    begin
+      case (Sender as TDBGrid).DataSource.DataSet.FieldByName('Status').AsInteger of
+      msDefault:
+        ImageIndex := 3;
+      msCommit:
+        ImageIndex := 10;
+      msReject:
+        ImageIndex := 4;
+      msFileCreated:
+        ImageIndex := 5;
+        msReturn:
+          ImageIndex := 16;
+      end;
+      if (DataCol = 1) and (ImageIndex <> -1) then
+        ImageList.Draw(Canvas, Rect.Left, Rect.Top, ImageIndex, True);
+    end;
+  end;
+
+
+end;
+
+procedure TArxiv.SearchEdit1KeyPress(Sender: TObject; var Key: Char);
+begin
+ if Key = #13  then
+ begin
+  SearchOptions := [srIgnoreCase ,srPartialMatch ];
+
+  with Sender as TEdit  do
+  begin
+    SearchField :='ID';
+
+
+    with  TOracleDataSet(DataMod.Bn_arxiv) do
+    if  not SearchRecord(
+                  SearchField
+                 ,Text
+                 ,SearchOptions + [srFromCurrent , srForward ]
+                 ) then
+
+    if MessageDlg(
+              'Axtarış sona çatdı.'+#13+'Əvvəldən başlansın?'
+             ,mtInformation
+             ,[mbNo , mbYes]
+             ,0
+             ) = mrYes  then
+
+    if not SearchRecord(
+                 SearchField
+                ,Text
+                ,SearchOptions + [ srFromBeginning ]
+                )  then
+    MessageDlg('Yazı tapılmadı!',mtInformation,[mbOK],0);
+  end;
+ end;
+
+
+end;
+
+procedure TArxiv.SearchEdit2KeyPress(Sender: TObject; var Key: Char);
+begin
+ if Key = #13  then
+ begin
+  SearchOptions := [srIgnoreCase ,srPartialMatch ];
+
+  with Sender as TEdit  do
+  begin
+    SearchField :='referance';
+
+
+    with  TOracleDataSet(DataMod.Bn_arxiv) do
+    if  not SearchRecord(
+                  SearchField
+                 ,Text
+                 ,SearchOptions + [srFromCurrent , srForward ]
+                 ) then
+
+    if MessageDlg(
+              'Axtarış sona çatdı.'+#13+'Əvvəldən başlansın?'
+             ,mtInformation
+             ,[mbNo , mbYes]
+             ,0
+             ) = mrYes  then
+
+    if not SearchRecord(
+                 SearchField
+                ,Text
+                ,SearchOptions + [ srFromBeginning ]
+                )  then
+    MessageDlg('Yazı tapılmadı!',mtInformation,[mbOK],0);
+  end;
+ end;
+
+
+
+end;
+
+end.

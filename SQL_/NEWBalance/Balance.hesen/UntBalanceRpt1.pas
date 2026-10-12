@@ -1,0 +1,60 @@
+unit UntBalanceRpt1;
+
+interface
+
+uses Windows, SysUtils, Messages, Classes, Graphics, Controls,
+  StdCtrls, ExtCtrls, Forms, Quickrpt, QRCtrls, QRExport;
+
+type
+  TBalanceRpt1 = class(TQuickRep)
+    SummaryBand1: TQRBand;
+    QRLabel10: TQRLabel;
+    QRLSedr: TQRLabel;
+    QRLBM: TQRLabel;
+    QRExpr1: TQRExpr;
+    QRExpr2: TQRExpr;
+    QRSubDetail1: TQRSubDetail;
+    QRDBText1: TQRDBText;
+    QRDBText2: TQRDBText;
+    QRShape6: TQRShape;
+    QRShape9: TQRShape;
+    QRShape2: TQRShape;
+    QRShape7: TQRShape;
+    QRDBText3: TQRDBText;
+    QRBand1: TQRBand;
+    QRShape1: TQRShape;
+    QRShape3: TQRShape;
+    QRShape4: TQRShape;
+    QRShape5: TQRShape;
+    QRLabel5: TQRLabel;
+    QRLabel6: TQRLabel;
+    QRLabel2: TQRLabel;
+    QRLBank: TQRLabel;
+    QRLCode: TQRLabel;
+    QRLValute: TQRLabel;
+    QRLabel3: TQRLabel;
+    QRLabel11: TQRLabel;
+    QRLabel15: TQRLabel;
+    FDate: TQRLabel;
+    LDate: TQRLabel;
+    QRTextFilter1: TQRTextFilter;
+    QRDBText4: TQRDBText;
+    QRDBText5: TQRDBText;
+  private
+
+  public
+
+  end;
+
+var
+  BalanceRpt1: TBalanceRpt1;
+
+implementation
+
+uses UnitDataMod;
+
+
+
+{$R *.DFM}
+
+end.

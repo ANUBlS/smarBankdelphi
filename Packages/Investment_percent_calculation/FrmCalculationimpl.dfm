@@ -1,0 +1,272 @@
+object FrmCalculation: TFrmCalculation
+  Left = 0
+  Top = 0
+  BorderIcons = [biSystemMenu]
+  BorderStyle = bsSingle
+  Caption = 'Faiz Hesablamas'#305
+  ClientHeight = 432
+  ClientWidth = 939
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -12
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poDesktopCenter
+  OnCreate = FormCreate
+  OnKeyPress = FormKeyPress
+  PixelsPerInch = 96
+  TextHeight = 14
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 939
+    Height = 432
+    Align = alClient
+    TabOrder = 0
+    ExplicitWidth = 384
+    ExplicitHeight = 355
+    object Panel2: TPanel
+      Left = 1
+      Top = 1
+      Width = 937
+      Height = 41
+      Align = alTop
+      TabOrder = 0
+      ExplicitWidth = 994
+      object ToolBar1: TToolBar
+        Left = 1
+        Top = 1
+        Width = 935
+        Height = 39
+        Align = alClient
+        ButtonHeight = 37
+        ButtonWidth = 109
+        Caption = 'ToolBar1'
+        Images = DmCalculation.ImageList
+        ShowCaptions = True
+        TabOrder = 0
+        object ToolButton1: TToolButton
+          Left = 0
+          Top = 0
+          Caption = '   Faizl'#601'ri Hesabla   '
+          ImageIndex = 10
+        end
+        object ToolButton2: TToolButton
+          Left = 109
+          Top = 0
+          Width = 8
+          Caption = 'ToolButton2'
+          ImageIndex = 1
+          Style = tbsSeparator
+        end
+        object ToolButton3: TToolButton
+          Left = 117
+          Top = 0
+          Caption = 'Hesab L'#601#287'v et'
+          ImageIndex = 19
+        end
+        object ToolButton4: TToolButton
+          Left = 226
+          Top = 0
+          Width = 8
+          Caption = 'ToolButton4'
+          ImageIndex = 2
+          Style = tbsSeparator
+        end
+        object ToolButton5: TToolButton
+          Left = 234
+          Top = 0
+          Caption = 'Yenil'#601'm'#601'k'
+          ImageIndex = 3
+        end
+        object ToolButton6: TToolButton
+          Left = 343
+          Top = 0
+          Width = 8
+          Caption = 'ToolButton6'
+          ImageIndex = 3
+          Style = tbsSeparator
+        end
+        object ToolButton7: TToolButton
+          Left = 351
+          Top = 0
+          Caption = 'Filter'
+          ImageIndex = 12
+        end
+        object ToolButton8: TToolButton
+          Left = 460
+          Top = 0
+          Width = 8
+          Caption = 'ToolButton8'
+          ImageIndex = 4
+          Style = tbsSeparator
+        end
+        object ToolButton9: TToolButton
+          Left = 468
+          Top = 0
+          Caption = 'Excel-'#601' at'
+          ImageIndex = 15
+        end
+        object ToolButton10: TToolButton
+          Left = 577
+          Top = 0
+          Width = 8
+          Caption = 'ToolButton10'
+          ImageIndex = 5
+          Style = tbsSeparator
+        end
+        object ToolButton11: TToolButton
+          Left = 585
+          Top = 0
+          Caption = 'Ba'#287'la'
+          ImageIndex = 8
+          OnClick = ToolButton11Click
+        end
+        object GroupBox1: TGroupBox
+          Left = 694
+          Top = 0
+          Width = 143
+          Height = 37
+          Align = alTop
+          Caption = 'Tarix'
+          TabOrder = 0
+          object DateTimePicker1: TDateTimePicker
+            Left = 3
+            Top = 12
+            Width = 138
+            Height = 22
+            Date = 42189.716132442130000000
+            Time = 42189.716132442130000000
+            TabOrder = 0
+          end
+        end
+      end
+    end
+    object Panel3: TPanel
+      Left = 1
+      Top = 368
+      Width = 937
+      Height = 63
+      Align = alBottom
+      TabOrder = 1
+      object Label4: TLabel
+        Left = 4
+        Top = 11
+        Width = 106
+        Height = 14
+        Caption = 'M'#252'qavil'#601' n'#246'mr'#601'si'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -12
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object Label3: TLabel
+        Left = 179
+        Top = 6
+        Width = 88
+        Height = 14
+        Caption = 'Depozit Hesab'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -12
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object Label2: TLabel
+        Left = 322
+        Top = 6
+        Width = 95
+        Height = 14
+        Caption = 'Faiz hesab '#8470'-si'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -12
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object Label1: TLabel
+        Left = 428
+        Top = 6
+        Width = 87
+        Height = 14
+        Caption = 'M'#252#351't'#601'rinin ad'#305
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -12
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object EditCONTRACT_NAME: TEdit
+        Left = 4
+        Top = 31
+        Width = 174
+        Height = 22
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -12
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 0
+      end
+      object EditMUSTERI: TEdit
+        Left = 179
+        Top = 31
+        Width = 142
+        Height = 22
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -12
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 1
+      end
+      object EditAMMOUNT: TEdit
+        Left = 322
+        Top = 31
+        Width = 104
+        Height = 21
+        TabOrder = 2
+      end
+      object EditCONTR_TYPE: TEdit
+        Left = 428
+        Top = 31
+        Width = 233
+        Height = 21
+        Ctl3D = True
+        DoubleBuffered = True
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentCtl3D = False
+        ParentDoubleBuffered = False
+        ParentFont = False
+        TabOrder = 3
+      end
+    end
+    object DBGrid1: TDBGrid
+      Left = 1
+      Top = 42
+      Width = 937
+      Height = 326
+      Align = alClient
+      TabOrder = 2
+      TitleFont.Charset = DEFAULT_CHARSET
+      TitleFont.Color = clWindowText
+      TitleFont.Height = -12
+      TitleFont.Name = 'Tahoma'
+      TitleFont.Style = []
+    end
+  end
+end

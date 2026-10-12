@@ -1,0 +1,95 @@
+unit frmExcelExportImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, CheckLst, ExtCtrls, NLSLocalizer,DB;
+
+type
+  TfrmExcelExport = class(TForm)
+    Panel1: TPanel;
+    CheckExportList: TCheckListBox;
+    Button1: TButton;
+    Panel2: TPanel;
+    CheckBox: TCheckBox;
+    procedure Button1Click(Sender: TObject);
+    procedure CheckBoxClick(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+  private
+    { Private declarations }
+  public
+    function  ShowExportedFields(DataSet :TDataSet;AOwner :TComponent): Boolean;
+    function CheckSelected(ItemIndex :Integer):Boolean;
+  end;
+
+var
+  frmExcelExport: TfrmExcelExport;
+
+implementation
+
+{$R *.DFM}
+uses CMExcelExport;
+
+function TfrmExcelExport.CheckSelected(ItemIndex :Integer):Boolean;
+begin
+   result := CheckExportList.Checked[ItemIndex]
+end;
+
+function  TfrmExcelExport.ShowExportedFields(DataSet :TDataSet;AOwner :TComponent):Boolean;
+var I,ExportedFieldsCount :Integer;
+begin
+  with  DataSet,CheckExportList.Items do
+  begin
+    ExportedFieldsCount := FieldCount;
+    Clear;
+    for i := 0  to ExportedFieldsCount - 1  do
+     begin
+      Add(Fields[i].DisplayName);
+      CheckExportList.Checked[i] := True;
+     end;
+  end;
+  ShowModal;
+  result := ModalResult = mrOk;
+end;
+
+procedure TfrmExcelExport.Button1Click(Sender: TObject);
+begin
+   ModalResult := mrOk;
+end;
+
+procedure TfrmExcelExport.CheckBoxClick(Sender: TObject);
+var
+   i, icount: integer;
+   IsChecked: boolean;
+begin
+ IsChecked :=TCheckBox(Sender).Checked;
+ with CheckExportList do
+  begin
+   icount :=Items.Count;
+   for  i:=0 to icount-1 do
+    Checked[i] :=IsChecked;
+  end;
+
+end;
+
+procedure TfrmExcelExport.FormShow(Sender: TObject);
+begin
+   CheckBox.checked := true
+end;
+
+procedure TfrmExcelExport.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+   Resize := False
+end;
+
+procedure TfrmExcelExport.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+  IF ord(key) = VK_ESCAPE then close
+end;
+
+end.

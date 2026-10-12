@@ -1,0 +1,98 @@
+object FrmAddAccount: TFrmAddAccount
+  Left = 638
+  Top = 390
+  BorderIcons = [biSystemMenu]
+  BorderStyle = bsDialog
+  Caption = 'Hesab'
+  ClientHeight = 82
+  ClientWidth = 379
+  Color = clBtnFace
+  Font.Charset = RUSSIAN_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poMainFormCenter
+  OnCreate = FormCreate
+  OnKeyDown = FormKeyDown
+  PixelsPerInch = 96
+  TextHeight = 14
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 379
+    Height = 82
+    Align = alClient
+    TabOrder = 0
+    object GroupBox1: TGroupBox
+      Left = 1
+      Top = 1
+      Width = 377
+      Height = 51
+      Align = alTop
+      TabOrder = 0
+      DesignSize = (
+        377
+        51)
+      object ComboBox1: TComboBox
+        Left = 3
+        Top = 23
+        Width = 162
+        Height = 22
+        Style = csDropDownList
+        Anchors = [akLeft, akTop, akRight]
+        TabOrder = 0
+        OnClick = ComboBox1Click
+      end
+      object ComboBox2: TComboBox
+        Left = 165
+        Top = 23
+        Width = 208
+        Height = 22
+        Style = csDropDownList
+        Anchors = [akLeft, akTop, akRight]
+        TabOrder = 1
+      end
+      object StaticText1: TStaticText
+        Left = 5
+        Top = 6
+        Width = 119
+        Height = 14
+        Anchors = [akLeft, akTop, akRight]
+        AutoSize = False
+        Caption = #1042#1072#1083#1081#1091#1090#1072
+        TabOrder = 2
+      end
+      object StaticText2: TStaticText
+        Left = 168
+        Top = 6
+        Width = 114
+        Height = 15
+        Anchors = [akLeft, akTop, akRight]
+        AutoSize = False
+        Caption = #1065#1077#1089#1072#1073' '#1085#1102#1084#1088#1103#1089#1080
+        TabOrder = 3
+      end
+    end
+    object Button1: TButton
+      Left = 253
+      Top = 56
+      Width = 81
+      Height = 23
+      Caption = '&'#1048#1084#1090#1080#1085#1072
+      TabOrder = 1
+      OnClick = Button1Click
+    end
+    object Button2: TButton
+      Left = 166
+      Top = 56
+      Width = 80
+      Height = 23
+      Caption = #1043#1103#1073#1091#1083
+      TabOrder = 2
+      OnClick = Button2Click
+    end
+  end
+end

@@ -1,0 +1,668 @@
+﻿unit FrmMainImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, XFSCtrls, ExtCtrls, Mask, DBCtrls, ComCtrls, Buttons,
+  CMCurrencyEdit;
+
+type
+  TFrmMain = class(TForm)
+    XFPanel1: TXFPanel;
+    XFButton1: TXFButton;
+    XFButton2: TXFButton;
+    XFPanel2: TXFPanel;
+    XFLabel4: TXFLabel;
+    XFLabel5: TXFLabel;
+    XFLabel6: TXFLabel;
+    XFGroupBox1: TXFGroupBox;
+    DBEdit1: TDBEdit;
+    XFLabel1: TXFLabel;
+    XFLabel2: TXFLabel;
+    XFLabel3: TXFLabel;
+    XFLabel7: TXFLabel;
+    DBEdit2: TDBEdit;
+    DateTimePicker1: TDateTimePicker;
+    DateTimePicker2: TDateTimePicker;
+    DBEdit3: TDBEdit;
+    DateTimePicker3: TDateTimePicker;
+    XFGroupBox2: TXFGroupBox;
+    XFCheckBox1: TXFCheckBox;
+    XFCheckBox2: TXFCheckBox;
+    DateTimePicker4: TDateTimePicker;
+    DateTimePicker5: TDateTimePicker;
+    XFLabel8: TXFLabel;
+    XFLabel9: TXFLabel;
+    SpeedButton1: TSpeedButton;
+    XFLabel10: TXFLabel;
+    XFLabel11: TXFLabel;
+    DBEdit7: TDBEdit;
+    DBEdit8: TDBEdit;
+    XFButton3: TXFButton;
+    CMCurrencyEdit1: TCMCurrencyEdit;
+    CMCurrencyEdit2: TCMCurrencyEdit;
+    CMCurrencyEdit3: TCMCurrencyEdit;
+    XFButton5: TXFButton;
+    XFLabel12: TXFLabel;
+    DBLookupComboBox1: TDBLookupComboBox;
+    XFButton4: TXFButton;
+    procedure XFButton2Click(Sender: TObject);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormCreate(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure XFButton1Click(Sender: TObject);
+    procedure XFButton3Click(Sender: TObject);
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure XFButton5Click(Sender: TObject);
+    procedure XFButton4Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    companenet : String;
+  end;
+
+var
+  FrmMain: TFrmMain;
+
+implementation
+
+uses DMTerminatedImpl,ComObj,CommanParametrs,sboapiDataModuleImpl,SBTranslateProc,SBLogin;
+
+
+{$R *.dfm}
+   procedure InitPlugin(s:string);export;
+begin
+
+   if s='' then
+   begin
+   FrmMain.ShowModal;
+   end;
+  { if s='AllLost' then
+   begin
+     FrmAllLoss.showmodal;
+   end;   }
+end;
+exports
+     InitPlugin;
+procedure TFrmMain.FormCreate(Sender: TObject);
+begin
+DMTerminated:=TDMTerminated.create(self);
+end;
+
+procedure TFrmMain.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+if ord(key)=vk_escape then close
+
+end;
+
+procedure TFrmMain.FormShow(Sender: TObject);
+begin
+
+//showmessage(inttostr(contactid));
+//
+
+
+
+DMTerminated.DSContract.Close;
+DMTerminated.DSContract.SetVariable('p_id',contactid);
+DMTerminated.DSContract.Open;
+
+FrmMain.DateTimePicker1.DateTime:=DMTerminated.DSContract.FieldByName('END_DATE').AsDateTime;
+FrmMain.DateTimePicker2.DateTime:=DMTerminated.DSContract.FieldByName('BEGIN_DATE').AsDateTime;
+
+DMTerminated.DSins_c_terminated.Close;
+DMTerminated.DSins_c_terminated.SetVariable('pcid',contactid);
+DMTerminated.DSins_c_terminated.Open;
+DMTerminated.DSins_c_terminated.edit;
+
+DMTerminated.DSTerminateAmount.Close;
+DMTerminated.DSTerminateAmount.SetVariable('pter_id',DMTerminated.DSins_c_terminated.FieldByName('id').AsInteger);
+DMTerminated.DSTerminateAmount.Open;
+DMTerminated.DSTerminateAmount.edit;
+
+if DMTerminated.DSContract.FieldByName('STATE').AsInteger=6 then
+begin
+  XFButton1.Enabled:=true;
+end
+else
+begin
+   XFButton1.Enabled:=false;
+end;
+
+
+///kasko ve tam sigorta
+if DMTerminated.DSContract.FieldByName('type_id').AsInteger<>4 then
+begin
+  CMCurrencyEdit2.Visible:=false;
+  CMCurrencyEdit3.Visible:=false;
+end;
+if DMTerminated.DSContract.FieldByName('type_id').AsInteger=4 then
+begin
+
+if DMTerminated.DSContract.FieldByName('chkasko').AsInteger=1 then
+       begin
+DMTerminated.DSPayment.Close;
+DMTerminated.DSPayment.SetVariable('p_cid',contactid);
+DMTerminated.DSPayment.SetVariable('pbusproc',35);
+DMTerminated.DSPayment.Open;
+
+       end;
+
+if DMTerminated.DSContract.FieldByName('chfq').AsInteger=1 then
+       begin
+DMTerminated.DSPayment1.Close;
+DMTerminated.DSPayment1.SetVariable('p_cid',contactid);
+DMTerminated.DSPayment1.SetVariable('pbusproc',37);
+DMTerminated.DSPayment1.Open;
+XFLabel10.Visible:=true;
+DBEdit7.Visible:=true;
+XFLabel8.Visible:=true;
+CMCurrencyEdit2.Visible:=true;
+//SpeedButton2.Visible:=true;
+       end
+       else
+begin
+DMTerminated.DSPayment1.Close;
+XFLabel10.Visible:=false;
+DBEdit7.Visible:=false;
+//DBEdit7.Text:='0';
+XFLabel8.Visible:=false;
+CMCurrencyEdit2.Visible:=false;
+CMCurrencyEdit2.Value:=0;
+//SpeedButton2.Visible:=false;
+end;
+
+if DMTerminated.DSContract.FieldByName('chm').AsInteger=1 then
+       begin
+
+DMTerminated.DSPayment2.Close;
+DMTerminated.DSPayment2.SetVariable('p_cid',contactid);
+DMTerminated.DSPayment2.SetVariable('pbusproc',36);
+DMTerminated.DSPayment2.Open;
+
+XFLabel11.Visible:=true;
+DBEdit8.Visible:=true;
+XFLabel9.Visible:=true;
+CMCurrencyEdit3.Visible:=true;
+//SpeedButton3.Visible:=true;
+       end
+       else
+       begin
+DMTerminated.DSPayment2.Close;
+XFLabel11.Visible:=false;
+DBEdit8.Visible:=false;
+DBEdit8.Text:='0';
+XFLabel9.Visible:=false;
+CMCurrencyEdit3.Visible:=false;
+CMCurrencyEdit3.Value:=0;
+//SpeedButton3.Visible:=false;
+       end;
+
+
+end
+///kasko ve tam sigorta
+else
+//ferdi qeza
+if DMTerminated.DSContract.FieldByName('type_id').AsInteger=1  then
+         begin
+DMTerminated.DSPayment.Close;
+DMTerminated.DSPayment.SetVariable('p_cid',contactid);
+DMTerminated.DSPayment.SetVariable('pbusproc',36);
+DMTerminated.DSPayment.Open;
+
+  XFLabel8.Visible:=false;
+  XFLabel9.Visible:=false;
+  XFLabel10.Visible:=false;
+  XFLabel11.Visible:=false;
+
+  DBEdit7.Visible:=false;
+  DBEdit8.Visible:=false;
+
+  DBEdit7.Text:='0';
+  DBEdit8.Text:='0';
+
+  //SpeedButton2.Visible:=false;
+  //SpeedButton3.Visible:=false;
+       end;
+  //ferdi qeza
+  //tibbi
+ if DMTerminated.DSContract.FieldByName('type_id').AsInteger=2  then
+
+         begin
+DMTerminated.DSPayment.Close;
+DMTerminated.DSPayment.SetVariable('p_cid',contactid);
+DMTerminated.DSPayment.SetVariable('pbusproc',41);
+DMTerminated.DSPayment.Open;
+
+  XFLabel8.Visible:=false;
+  XFLabel9.Visible:=false;
+  XFLabel10.Visible:=false;
+  XFLabel11.Visible:=false;
+
+  DBEdit7.Visible:=false;
+  DBEdit8.Visible:=false;
+  DBEdit7.Text:='0';
+  DBEdit8.Text:='0';
+  //SpeedButton2.Visible:=false;
+  //SpeedButton3.Visible:=false;
+       end;
+  //tibbi
+  //Emlak
+ if DMTerminated.DSContract.FieldByName('type_id').AsInteger=3  then
+
+         begin
+DMTerminated.DSPayment.Close;
+DMTerminated.DSPayment.SetVariable('p_cid',contactid);
+DMTerminated.DSPayment.SetVariable('pbusproc',38);
+DMTerminated.DSPayment.Open;
+  XFLabel8.Visible:=false;
+  XFLabel9.Visible:=false;
+  XFLabel10.Visible:=false;
+  XFLabel11.Visible:=false;
+  DBEdit7.Visible:=false;
+  DBEdit8.Visible:=false;
+  DBEdit7.Text:='0';
+  DBEdit8.Text:='0';
+
+       end;
+  //Emlak
+  //YUK
+ if DMTerminated.DSContract.FieldByName('type_id').AsInteger=8  then
+
+         begin
+DMTerminated.DSPayment.Close;
+DMTerminated.DSPayment.SetVariable('p_cid',contactid);
+DMTerminated.DSPayment.SetVariable('pbusproc',39);
+DMTerminated.DSPayment.Open;
+  XFLabel8.Visible:=false;
+  XFLabel9.Visible:=false;
+  XFLabel10.Visible:=false;
+  XFLabel11.Visible:=false;
+  DBEdit7.Visible:=false;
+  DBEdit8.Visible:=false;
+  DBEdit7.Text:='0';
+  DBEdit8.Text:='0';
+  //SpeedButton2.Visible:=false;
+  //SpeedButton3.Visible:=false;
+       end;
+  //Mesuliiyet
+if DMTerminated.DSContract.FieldByName('type_id').AsInteger=13  then
+
+         begin
+DMTerminated.DSPayment.Close;
+DMTerminated.DSPayment.SetVariable('p_cid',contactid);
+DMTerminated.DSPayment.SetVariable('pbusproc',36);
+DMTerminated.DSPayment.Open;
+  XFLabel8.Visible:=false;
+  XFLabel9.Visible:=false;
+  XFLabel10.Visible:=false;
+  XFLabel11.Visible:=false;
+  DBEdit7.Visible:=false;
+  DBEdit8.Visible:=false;
+  DBEdit7.Text:='0';
+  DBEdit8.Text:='0';
+  //SpeedButton2.Visible:=false;
+  //SpeedButton3.Visible:=false;
+       end;
+  //Mesuliiyet
+  //Seyahet
+if DMTerminated.DSContract.FieldByName('type_id').AsInteger=21  then
+
+         begin
+DMTerminated.DSPayment.Close;
+DMTerminated.DSPayment.SetVariable('p_cid',contactid);
+DMTerminated.DSPayment.SetVariable('pbusproc',40);
+DMTerminated.DSPayment.Open;
+  XFLabel8.Visible:=false;
+  XFLabel9.Visible:=false;
+  XFLabel10.Visible:=false;
+  XFLabel11.Visible:=false;
+  DBEdit7.Visible:=false;
+  DBEdit8.Visible:=false;
+  DBEdit7.Text:='0';
+  DBEdit8.Text:='0';
+       end;
+
+
+
+
+if DMTerminated.DSins_c_terminated.FieldByName('stage_ok_verilib_dat').AsString='' then
+
+  DateTimePicker4.DateTime:=DMTerminated.DSSysdat.FieldByName('tek_dat').AsDateTime
+  else
+  DateTimePicker4.DateTime:= DMTerminated.DSins_c_terminated.FieldByName('STAGE_OK_VERILIB_DAT').AsDateTime;
+
+  if DMTerminated.DSins_c_terminated.FieldByName('STAGE_TESDIQ_DAT').AsString='' then
+
+  DateTimePicker5.DateTime:=DMTerminated.DSSysdat.FieldByName('tek_dat').AsDateTime
+  else
+  DateTimePicker5.DateTime:= DMTerminated.DSins_c_terminated.FieldByName('STAGE_TESDIQ_DAT').AsDateTime;
+
+    if DMTerminated.DSins_c_terminated.FieldByName('TERMINTED_DAT').AsString='' then
+
+  DateTimePicker3.DateTime:=DMTerminated.DSSysdat.FieldByName('tek_dat').AsDateTime
+  else
+  DateTimePicker3.DateTime:= DMTerminated.DSins_c_terminated.FieldByName('TERMINTED_DAT').AsDateTime;
+
+
+  if DMTerminated.DSins_c_terminated.FieldByName('INTEREST_CHARGED').AsString='' then
+             begin
+  DBEdit3.Text:='0';
+             end;
+ { else
+  DateTimePicker4.DateTime:= DMTerminated.DSins_c_terminated.FieldByName('STAGE_OK_VERILIB_DAT').AsDateTime;
+    }
+
+    if DMTerminated.DSins_c_terminated.FieldByName('stage_ok_verilib').AsInteger=1 then
+    begin
+    XFCheckBox1.Checked:=true;
+    XFCheckBox1.Enabled:=false;
+        end
+    else
+    begin
+    XFCheckBox1.Checked:=false;
+    XFCheckBox1.Enabled:=true;
+        end;
+
+
+   if DMTerminated.DSins_c_terminated.FieldByName('stage_tesdiq').AsInteger=1 then
+    begin
+    XFCheckBox2.Checked:=true;
+    XFCheckBox2.Enabled:=false;
+    XFButton3.Enabled:=true;
+    XFPanel2.Enabled:=false;
+        end
+    else
+    begin
+    XFCheckBox2.Checked:=false;
+    XFCheckBox2.Enabled:=true;
+    XFButton3.Enabled:=false;
+    XFPanel2.Enabled:=True;
+        end;
+
+        //showmessage(DMTerminated.DSTerminateAmount.FieldByName('TERMINTED_AMOUNT').AsString);
+        //showmessage(DMTerminated.DSTerminateAmount.FieldByName('TERMINTED_AMOUNT1').AsString);
+        //showmessage(DMTerminated.DSTerminateAmount.FieldByName('TERMINTED_AMOUNT2').AsString);
+    CMCurrencyEdit1.Value:=DMTerminated.DSTerminateAmount.FieldByName('TERMINTED_AMOUNT').AsFloat;
+    CMCurrencyEdit2.Value:=DMTerminated.DSTerminateAmount.FieldByName('TERMINTED_AMOUNT1').AsFloat;
+    CMCurrencyEdit3.Value:=DMTerminated.DSTerminateAmount.FieldByName('TERMINTED_AMOUNT2').AsFloat;
+
+
+end;
+
+procedure TFrmMain.SpeedButton1Click(Sender: TObject);
+begin
+companenet:='Qiymet';
+//FrmMain.XFButton1Click(Self);
+if DBEdit3.Text='' then
+begin
+  showmessage('Diqqət! Qaytarılacaq məbləğdən tutulacaq % -sahəsinə məlumat daxil edin!');
+  exit;
+end;
+
+
+with DMTerminated,ins_common do
+begin
+      CMCurrencyEdit1.Value:=CallFloatFunction('calcterminateammount',
+      [contactid,
+      strtofloat(DBEdit1.Text),
+      DateTimePicker3.DateTime,
+      strtofloat(DBEdit3.Text),0]
+      );
+end;
+
+ if CMCurrencyEdit2.Visible=true then
+begin
+with DMTerminated,ins_common do
+begin
+      CMCurrencyEdit2.Value:=CallFloatFunction('calcterminateammount',
+      [contactid,
+      strtofloat(DBEdit7.Text),
+      DateTimePicker3.DateTime,
+      strtofloat(DBEdit3.Text),1]);
+end;
+end;
+
+ if CMCurrencyEdit3.Visible=true then
+begin
+with DMTerminated,ins_common do
+begin
+      CMCurrencyEdit3.Value:=CallFloatFunction('calcterminateammount',
+      [contactid,
+      strtofloat(DBEdit8.Text),
+      DateTimePicker3.DateTime,
+      strtofloat(DBEdit3.Text),
+      13]);
+end;
+
+end;
+
+
+end;
+
+procedure TFrmMain.XFButton1Click(Sender: TObject);
+var
+status_Ok,status_tesdiq,xtrid:integer;
+status_Ok_dat,status_tesdiq_dat:Tdate;
+
+begin
+companenet:='Qebul';
+if DMTerminated.DSContract.FieldByName('state').AsInteger<>6 then
+begin
+  showmessage('Diqqət! Yalnız təsdiq olunmuş müqavilələrə xitam verilə bilər!');
+  exit;
+end;
+
+
+if DBEdit3.Text='' then
+begin
+  showmessage('Diqqət! Qaytarılacaq məbləğdən tutulacaq % sahəsi boşdur!');
+  exit;
+end;
+
+
+if StrToFloat(DBEdit3.Text)>30 then
+begin
+  showmessage('Diqqət! Qaytarılacaq məbləğdən tutulacaq faiz 30 %-dən çox olmamalıdır.!');
+  exit;
+end;
+if companenet<>'Qiymet' then
+begin
+   if CMCurrencyEdit1.Text='' then
+begin
+  showmessage('Diqqət! Xitam məbləği  sahəsi boşdur!');
+  exit;
+end;
+ if CMCurrencyEdit2.Visible=true then
+ begin
+if CMCurrencyEdit2.Text='' then
+begin
+  showmessage('Diqqət! Xitam məb (Fərdi qə.)  sahəsi boşdur!');
+  exit;
+end;
+
+ end;
+if CMCurrencyEdit3.Visible=true then
+begin
+if CMCurrencyEdit3.Text='' then
+begin
+  showmessage('Diqqət! Xitam məb (Məsuliyyət)  sahəsi boşdur!');
+  exit;
+end;
+end;
+
+end;
+
+
+
+if XFCheckBox2.Checked=true then
+begin
+  if XFCheckBox1.Checked=false then
+  begin
+    showmessage('Diqqət! "Təsdiq et" statusundan əvvəl "Ok verilib" statusu seçilməlidir.');
+    exit;
+  end;
+
+end;
+xtrid:=0;
+if XFCheckBox1.Checked=true then
+begin
+ status_Ok:=1;
+ status_Ok_dat:=DateTimePicker4.DateTime;
+end
+ else
+ begin
+ status_Ok:=0;
+ status_Ok_dat:=strtodate('30.12.1899');
+ end;
+ if XFCheckBox2.Checked=true then
+ begin
+ status_tesdiq:=1;
+ status_tesdiq_dat:=DateTimePicker5.DateTime;
+ //xtrid
+ end
+ else
+ begin
+ status_tesdiq:=0;
+ status_tesdiq_dat:=strtodate('30.12.1899');
+
+ end;
+
+  if (DMTerminated.DSins_c_terminated.FieldByName('stage_tesdiq_dat').AsString<>'') and
+  (DMTerminated.DSins_c_terminated.FieldByName('stage_tesdiq_dat').AsDateTime<>DMTerminated.DSSysdat.FieldByName('tek_dat').AsDateTime)then
+  begin
+showmessage('Diqqət! Xitamın təsdiqlənmə tarixi Sistem tarixindən fərqli olduğudan dəyişdirilə bilməz!');
+exit;
+ end;
+
+with DMTerminated do
+begin
+  DSins_c_terminated.FieldByName('cid').AsInteger:=contactid;
+  DSins_c_terminated.FieldByName('terminted_dat').AsDateTime:=DateTimePicker3.DateTime;
+  DSins_c_terminated.FieldByName('stage_ok_verilib').AsInteger:=status_Ok;
+  DSins_c_terminated.FieldByName('stage_ok_verilib_dat').AsDateTime:=status_Ok_dat;
+  DSins_c_terminated.FieldByName('stage_ok_verilib_opid').AsInteger:=Sb_GetLoginUserID;
+  DSins_c_terminated.FieldByName('stage_tesdiq').AsInteger:=status_tesdiq;
+  DSins_c_terminated.FieldByName('stage_tesdiq_dat').AsDateTime:=status_tesdiq_dat;
+  DSins_c_terminated.FieldByName('stage_tesdiq_opid').AsInteger:=Sb_GetLoginUserID;
+  if DSins_c_terminated.FieldByName('op_id').AsString='' then
+  begin
+  DSins_c_terminated.FieldByName('op_id').AsInteger:=Sb_GetLoginUserID;
+  end;
+  DSins_c_terminated.Edit;
+
+  DSins_c_terminated.Post;
+  DSins_c_terminated.RefreshRecord;
+
+    //showmessage(DSins_c_terminated.FieldByName('id').AsString);
+    DSTerminateAmount.FieldByName('TERMINTED_AMOUNT').AsFloat:=CMCurrencyEdit1.Value;
+    DSTerminateAmount.FieldByName('TERMINTED_AMOUNT1').AsFloat:=CMCurrencyEdit2.Value;
+    DSTerminateAmount.FieldByName('TERMINTED_AMOUNT2').AsFloat:=CMCurrencyEdit3.Value;
+    DSTerminateAmount.FieldByName('ter_id').AsInteger:=DSins_c_terminated.FieldByName('id').AsInteger;
+    DSTerminateAmount.Edit;
+    DSTerminateAmount.Post;
+  if status_tesdiq=1 then
+begin
+         if MessageDlg('Seçilmiş siğorta müqaviləsinə xitam verilməsinə əminsinizmi?!',mtConfirmation,
+ mbYesNoCancel, 0) = mrYes then
+
+
+   begin
+    if ins_common.CallIntegerFunction('committerminate',[contactid,CMCurrencyEdit1.Value,CMCurrencyEdit2.Value,CMCurrencyEdit3.Value,DBLookupComboBox1.KeyValue])=1 then
+    begin
+      showmessage('Müqaviləyə xitam verilidi!');
+    end;
+   end;
+ end;
+         //
+end;
+//ShowMessage('salam');
+   if companenet='Qebul' then
+        begin
+        //ShowMessage('salam1');
+       // Xcommangrid.DataSource.DataSet.Refresh;
+FrmMain.Close;
+
+        end;
+
+
+
+
+end;
+
+procedure TFrmMain.XFButton2Click(Sender: TObject);
+begin
+close
+end;
+
+procedure TFrmMain.XFButton3Click(Sender: TObject);
+begin
+DMTerminated.DSpaytercount.Close;
+DMTerminated.DSpaytercount.SetVariable('pcid',contactid);
+DMTerminated.DSpaytercount.Open;
+if DMTerminated.DSpaytercount.FieldByName('say').AsInteger>0 then
+begin
+Showmessage('Diqqət! Bu müqavilə üçün xitam ödəməsi olduğu üçün Xitama imtina vermek olmaz!');
+  exit;
+end;
+
+DMTerminated.DSBarderoSay.Close;
+DMTerminated.DSBarderoSay.SetVariable('pcid',contactid);
+DMTerminated.DSBarderoSay.Open;
+if DMTerminated.DSBarderoSay.FieldByName('say').AsInteger>0 then
+begin
+
+{PDMTerminated.DSBarderoInfo.Close;
+DMTerminated.DSBarderoInfo.SetVariable('pcid',contactid);
+DMTerminated.DSBarderoInfo.Open;}
+
+  Showmessage('Diqqət! Bu müqavilə üçün xitam barderosu yığıldığı üçün Xitama imtina vermek olmaz!');
+  exit;
+end;
+
+
+
+if DMTerminated.DSSysdat.FieldByName('tek_dat').AsDateTime<>dMTerminated.DSins_c_terminated.FieldByName('stage_tesdiq_dat').AsDateTime  then
+ begin
+   showmessage('Diqqət! Köhnə tarixdəki xitamı silmək olmaz');
+   exit
+ end;
+if DMTerminated.ins_common.CallIntegerFunction('cancelcontract_terminate',[contactid])=1 then
+begin
+showmessage('Xitam əməliyyatları ləğv olundu');
+FrmMain.Close;
+//Xcommangrid.DataSource.DataSet.Refresh;
+end;
+end;
+
+procedure TFrmMain.XFButton4Click(Sender: TObject);
+begin
+if DMTerminated.DSContract.FieldByName('state').AsInteger<>6 then
+begin
+  showmessage('Diqqət! Yalnız təsdiq olunmuş müqavilələrə xitam verilə bilər!');
+  exit;
+end;
+DMTerminated.Ds_cont_state.close;
+DMTerminated.Ds_cont_state.SetVariable('pid',contactid);
+DMTerminated.Ds_cont_state.open;
+DMTerminated.Ds_cont_state.Refresh;
+DMTerminated.Ds_cont_state.Edit;
+
+DMTerminated.Ds_cont_state.FieldByName('state').AsInteger:=8;
+DMTerminated.Ds_cont_state.Post;
+
+showmessage('Müqaviləyə xitam verilidi!');
+
+FrmMain.Close;
+end;
+
+procedure TFrmMain.XFButton5Click(Sender: TObject);
+begin
+LoadPlugin('PaymenTerminateimpl.bpl','pt');
+end;
+
+initialization
+ FrmMain :=TFrmMain.Create(Application);
+end.

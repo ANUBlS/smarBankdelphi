@@ -1,0 +1,210 @@
+object NewDepositsFormAccName: TNewDepositsFormAccName
+  Left = 0
+  Top = 0
+  Caption = 'G'#601'lir-X'#601'rc Hesablar'#305
+  ClientHeight = 299
+  ClientWidth = 679
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  PixelsPerInch = 96
+  TextHeight = 13
+  object XFPanel1: TXFPanel
+    Left = 0
+    Top = 0
+    Width = 679
+    Height = 299
+    Align = alClient
+    BevelInner = bvRaised
+    BevelKind = bkTile
+    BevelOuter = bvLowered
+    TabOrder = 0
+    ExplicitWidth = 792
+    object XDBGrid1: TXDBGrid
+      Left = 2
+      Top = 2
+      Width = 671
+      Height = 250
+      Align = alTop
+      DataSource = AccountsDatSrc
+      GridStyle.VisualStyle = vsXPStyle
+      TabOrder = 0
+      Columns = <
+        item
+          Expanded = False
+          FieldName = 'ID'
+          Title.Alignment = taCenter
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'VAL_ACC'
+          Title.Alignment = taCenter
+          Visible = True
+          Width = 42
+        end
+        item
+          Expanded = False
+          FieldName = 'ACC_NO'
+          Title.Alignment = taCenter
+          Visible = True
+          Width = 200
+        end
+        item
+          Expanded = False
+          FieldName = 'NAME'
+          Title.Alignment = taCenter
+          Visible = True
+          Width = 232
+        end
+        item
+          Expanded = False
+          FieldName = 'FILIAL'
+          Title.Alignment = taCenter
+          Visible = True
+          Width = 100
+        end>
+    end
+    object XFPanel2: TXFPanel
+      Left = 2
+      Top = 252
+      Width = 671
+      Height = 41
+      Align = alTop
+      BevelInner = bvRaised
+      BevelKind = bkTile
+      BevelOuter = bvLowered
+      TabOrder = 1
+      ExplicitWidth = 784
+      object XFPanel5: TXFPanel
+        Left = 317
+        Top = 2
+        Width = 235
+        Height = 33
+        Align = alLeft
+        BevelInner = bvRaised
+        BevelKind = bkTile
+        BevelOuter = bvLowered
+        TabOrder = 0
+        object EditName: TEdit
+          Left = 2
+          Top = 2
+          Width = 227
+          Height = 25
+          Align = alClient
+          TabOrder = 0
+          ExplicitHeight = 21
+        end
+      end
+      object XFPanel6: TXFPanel
+        Left = 2
+        Top = 2
+        Width = 93
+        Height = 33
+        Align = alLeft
+        BevelInner = bvRaised
+        BevelKind = bkTile
+        BevelOuter = bvLowered
+        TabOrder = 1
+        object EditID: TEdit
+          Left = 2
+          Top = 2
+          Width = 85
+          Height = 25
+          Align = alClient
+          TabOrder = 0
+          ExplicitHeight = 21
+        end
+      end
+      object XFPanel7: TXFPanel
+        Left = 95
+        Top = 2
+        Width = 222
+        Height = 33
+        Align = alLeft
+        BevelInner = bvRaised
+        BevelKind = bkTile
+        BevelOuter = bvLowered
+        TabOrder = 2
+        object EditACC_NO: TEdit
+          Left = 2
+          Top = 2
+          Width = 214
+          Height = 25
+          Align = alClient
+          TabOrder = 0
+          ExplicitHeight = 21
+        end
+      end
+    end
+  end
+  object AccountsDatSrc: TDataSource
+    DataSet = Accounts
+    Left = 200
+    Top = 72
+  end
+  object Accounts: TOracleDataSet
+    SQL.Strings = (
+      'select '
+      '   id,'
+      '   acc_no,'
+      '   name,'
+      '   val_acc,'
+      '   (select name from filial where id=filial)Filial'
+      'from '
+      '   account '
+      'where '
+      '   close_dat is null'
+      '  and  '
+      '   bal_cn1 in ( select accgroup from '
+      
+        '   dm_acc_zone_info where zoneid = (select zoneid from dm_acc_zo' +
+        'nes'
+      '   where name = '#39'InternalBankAccs'#39'))'
+      'order by acc_no')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000500000004000000490044000100000000000C000000410043004300
+      5F004E004F00010000000000080000004E0041004D0045000100000000000E00
+      0000560041004C005F004100430043000100000000000C000000460049004C00
+      490041004C00010000000000}
+    Cursor = crSQLWait
+    QueryAllRecords = False
+    Session = sboapiDataModule.SBSession
+    Left = 168
+    Top = 72
+    object AccountsID2: TFloatField
+      DisplayLabel = 'No'
+      FieldName = 'ID'
+      Required = True
+    end
+    object AccountsID: TFloatField
+      FieldName = 'No'
+      Required = True
+    end
+    object AccountsACC_NO: TWideStringField
+      DisplayLabel = 'Hesab'
+      FieldName = 'ACC_NO'
+      Required = True
+    end
+    object AccountsNAME: TWideStringField
+      DisplayLabel = 'Ad'#305
+      FieldName = 'NAME'
+      Size = 90
+    end
+    object AccountsVAL_ACC: TIntegerField
+      DisplayLabel = '$'
+      FieldName = 'VAL_ACC'
+      Required = True
+    end
+    object AccountsFILIAL: TWideStringField
+      DisplayLabel = 'Filial'
+      FieldName = 'FILIAL'
+      Size = 90
+    end
+  end
+end

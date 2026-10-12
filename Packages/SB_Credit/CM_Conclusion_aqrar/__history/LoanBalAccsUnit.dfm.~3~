@@ -1,0 +1,97 @@
+object FormLoanBalance: TFormLoanBalance
+  Left = 539
+  Top = 192
+  ClientHeight = 115
+  ClientWidth = 302
+  Color = clBtnFace
+  Font.Charset = RUSSIAN_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poOwnerFormCenter
+  OnClose = FormClose
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 14
+  object Label2: TLabel
+    Left = 103
+    Top = 37
+    Width = 33
+    Height = 13
+    Caption = 'M'#601'hsul'
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
+  end
+  object BitBtn1: TBitBtn
+    Left = 115
+    Top = 89
+    Width = 81
+    Height = 27
+    Caption = 'Q'#601'bul'
+    Default = True
+    DoubleBuffered = True
+    ModalResult = 1
+    NumGlyphs = 2
+    ParentDoubleBuffered = False
+    TabOrder = 0
+    OnClick = BitBtn1Click
+  end
+  object BitBtn2: TBitBtn
+    Left = 209
+    Top = 89
+    Width = 81
+    Height = 27
+    Cancel = True
+    Caption = #304'mtina'
+    DoubleBuffered = True
+    ModalResult = 2
+    NumGlyphs = 2
+    ParentDoubleBuffered = False
+    TabOrder = 1
+  end
+  object LCBLoanBalance: TDBLookupComboboxEh
+    Left = 11
+    Top = 3
+    Width = 286
+    Height = 25
+    AlwaysShowBorder = True
+    AutoSize = False
+    DropDownBox.Options = [dlgColumnResizeEh, dlgColLinesEh]
+    EditButtons = <>
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    KeyField = 'BAL_CN'
+    ListField = 'FULLNAME'
+    ListSource = DataModuleConcl.BalcnLoanDatSrc
+    ParentFont = False
+    TabOrder = 2
+    Visible = True
+  end
+  object DBLookupComboboxEh1: TDBLookupComboboxEh
+    Left = 10
+    Top = 57
+    Width = 282
+    Height = 21
+    EditButtons = <>
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    KeyField = 'ID'
+    ListField = 'NAM'
+    ListSource = DataModuleConcl.DataSrcSeynbol
+    ParentFont = False
+    TabOrder = 3
+    Visible = True
+  end
+end

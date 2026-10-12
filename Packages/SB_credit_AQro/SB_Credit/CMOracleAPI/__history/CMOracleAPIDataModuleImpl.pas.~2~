@@ -1,0 +1,98 @@
+unit CMOracleAPIDataModuleImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Oracle, Db, OracleData, OraLogon;
+
+type
+  TCMDataModule = class(TDataModule)
+    CMSession: TOracleSession;
+    DSBankDate: TOracleDataSet;
+    Branch: TOracleDataSet;
+    CM_LOGIN: TOraclePackage;
+    CMLogon: TOraLogon;
+    OracleSession1: TOracleSession;
+    procedure DataModuleCreate(Sender: TObject);
+  private
+    FCurrentDate : TDateTime;
+    FPrevDate : TDateTime;
+    FBranchID : Integer;
+    procedure Get_Defaults;
+    { Private declarations }
+  public
+    function  TryToConnect(UserName ,Password ,Database : String) : Boolean;
+    procedure Disconnect;
+    property CurrentDate : TDateTime read FCurrentDate;
+    property PrevDate : TDateTime read FPrevDate;
+    property BranchID : Integer read FBranchID;
+    function Get_UserAlert:String;
+    { Public declarations }
+  end;
+
+var
+  CMDataModule: TCMDataModule;
+
+implementation
+
+{$R *.DFM}
+
+function TCMDataModule.TryToConnect(UserName ,Password ,Database : String) : Boolean;
+begin
+  with CMLogon,Session do
+  begin
+
+   PLogonUsername := UserName;
+   PLogonDatabase := Database;
+   PLogonPassword := Password;
+   Execute;
+   Result := Connected;
+   if Result then Get_Defaults;
+  end;
+end;
+
+procedure TCMDataModule.Disconnect;
+begin
+  with CMSession do
+  if Connected then
+    LogOff;
+end;
+
+procedure TCMDataModule.Get_Defaults;
+begin
+  // Getting Current and Prev Bank Date
+  with DSBankDate do
+  begin
+    Open;
+    FCurrentDate := FieldByName('TEK_DAT').AsDateTime;
+    FPrevDate := FieldByName('PRED_DAT').AsDateTime;
+    CloseAll;    
+  end;
+  // Getting Branch ID 
+  with Branch do
+  begin
+    Open;
+    FBranchID := FieldByName('KOD_FIL').AsInteger;
+    CloseAll;
+  end;
+end;
+
+procedure TCMDataModule.DataModuleCreate(Sender: TObject);
+begin
+  FBranchID := 0;
+end;
+
+function TCMDataModule.Get_UserAlert:String;
+begin
+    with CM_LOGIN do
+    Result := callStringFunction('Get_UserAlert',[]);
+end;
+
+initialization
+  CMDataModule := TCMDataModule.Create(nil);
+
+finalization
+  CMDataModule.Free
+
+end.

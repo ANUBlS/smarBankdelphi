@@ -1,0 +1,213 @@
+﻿unit UnitNote;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, DB, OracleData, StdCtrls, DBCtrls, ExtCtrls, XFSCtrls, Grids,
+  XDBGrids, Oracle, Buttons;
+
+type
+  TFormNote = class(TForm)
+    XFPanel2: TXFPanel;
+    Ods_notetypes: TOracleDataSet;
+    Ods_commtypes: TOracleDataSet;
+    Dsrc_notetypes: TDataSource;
+    dsrc_commtypes: TDataSource;
+    Ods_notetypesID: TFloatField;
+    Ods_notetypesNAME: TWideStringField;
+    Ods_commtypesID: TFloatField;
+    Ods_commtypesNAME: TWideStringField;
+    ods_main: TOracleDataSet;
+    dsrc_main: TDataSource;
+    XFPanel3: TXFPanel;
+    XDBGrid1: TXDBGrid;
+    XFPanel1: TXFPanel;
+    XFLabel1: TXFLabel;
+    DBLook_notetypes: TDBLookupComboBox;
+    DBLook_commtypes: TDBLookupComboBox;
+    MemoNote: TMemo;
+    XFLabel2: TXFLabel;
+    ods_mainCUSTID: TFloatField;
+    ods_mainNOTE: TWideStringField;
+    ods_mainSTATUS: TFloatField;
+    ods_mainUSERINSERT: TWideStringField;
+    ods_mainCONTRACTID: TFloatField;
+    ods_mainDAT: TDateTimeField;
+    ods_mainTIM: TDateTimeField;
+    pgcust_note: TOraclePackage;
+    XFLabel3: TXFLabel;
+    XFLabel4: TXFLabel;
+    ods_mainID: TFloatField;
+    ods_mainNOTETYPE_NAME: TWideStringField;
+    ods_mainCOMMTYPE_NAME: TWideStringField;
+    ods_mainNOTETYPE: TFloatField;
+    ods_mainCOMMTYPE: TFloatField;
+    XFButton3: TXFButton;
+    New: TXFBitBtn;
+    Add: TXFButton;
+    XFLabel5: TXFLabel;
+    DBLookupComboBox1: TDBLookupComboBox;
+    OracleDataSet1: TOracleDataSet;
+    DataSource1: TDataSource;
+    ods_mainST: TWideStringField;
+    procedure FormShow(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure AddClick(Sender: TObject);
+    procedure XFButton3Click(Sender: TObject);
+    procedure XDBGrid1CellDblClick(Column: TXColumn);
+    procedure NewClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormNote: TFormNote;
+  dey:Boolean;
+implementation
+uses
+sboapiDataModuleImpl,OpenAccountImpl;
+{$R *.dfm}
+
+procedure TFormNote.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+DBLook_notetypes.KeyValue:=-1;
+DBLook_commtypes.KeyValue:=-1;
+DBLookupComboBox1.KeyValue:=-1;
+ Add.Visible:=false;
+ new.Visible:=true;
+MemoNote.Clear;
+end;
+
+procedure TFormNote.FormCreate(Sender: TObject);
+begin
+
+dey:=false;
+
+Ods_notetypes.Open;
+Ods_commtypes.Open;
+end;
+
+procedure TFormNote.FormShow(Sender: TObject);
+begin
+with ods_main do
+begin
+close;
+SetVariable('v_id',strtoint(cust_noteid));
+//SetVariable('v_CONTRACTID',strtoint(contract_id));
+open;
+end;
+   Add.Visible:=true;
+ new.Visible:=false;
+end;
+
+procedure TFormNote.XDBGrid1CellDblClick(Column: TXColumn);
+begin
+//dey:=true;
+if not ods_mainNOTETYPE.IsNull then
+ begin
+DBLook_notetypes.KeyValue:=ods_mainNOTETYPE.AsInteger;
+ end
+ else
+ DBLook_notetypes.KeyValue:=-1;
+ if not ods_mainCOMMTYPE.IsNull then
+ begin
+DBLook_commtypes.KeyValue:=ods_mainCOMMTYPE.AsInteger;
+ end
+ else
+ DBLook_commtypes.KeyValue:=-1;
+
+ if not ods_mainSTATUS.IsNull then
+ begin
+DBLookupComboBox1.KeyValue:=ods_mainSTATUS.AsInteger;
+ end
+ else
+ DBLookupComboBox1.KeyValue:=-1;
+
+ MemoNote.Text:=ods_mainNOTE.AsString;
+ Add.Visible:=false;
+ new.Visible:=true;
+end;
+
+procedure TFormNote.NewClick(Sender: TObject);
+begin
+{ dey:=false; }
+DBLook_notetypes.KeyValue:=-1;
+DBLook_commtypes.KeyValue:=-1;
+DBLookupComboBox1.KeyValue:=-1;
+MemoNote.Clear;
+ Add.Visible:=true;
+ new.Visible:=false;
+
+end;
+
+procedure TFormNote.AddClick(Sender: TObject);
+begin
+  //  showmessage(note_id);
+///showmessage(contract_id);
+   if  DBLook_notetypes.KeyValue=-1 then
+   begin
+   showmessage('Modul növü sahəsi seçilməyib  !');
+   exit
+   end;
+   if  DBLook_commtypes.KeyValue=-1 then
+   begin
+   showmessage('Əlaqə növü sahəsi seçilməyib   !');
+   exit
+   end;
+    if trim(MemoNote.text)='' then
+   begin
+   showmessage('Qeyd sahəsi doldurulmayıb  !');
+   exit
+   end;
+  // if  dey=false then
+ //  begin
+    if contract_id= '' then
+        contract_id:='0';
+
+
+      pgcust_note.CallProcedure('add_cust_notes',[ strtoint(cust_noteid),
+                                                   DBLook_notetypes.KeyValue,
+                                                   DBLook_commtypes.KeyValue,
+                                                   MemoNote.Text,
+                                                   strtoint(contract_id),
+                                                   DBLookupComboBox1.KeyValue
+                                                  ]);
+
+
+
+  // end;
+  {  if  dey=true then
+   begin
+
+    pgcust_note.CallProcedure('updat_cust_notes',[ ods_main.FieldByName('id').AsInteger,
+                                                   strtoint(cust_noteid),
+                                                   DBLook_notetypes.KeyValue,
+                                                   DBLook_commtypes.KeyValue,
+                                                   MemoNote.Text,
+                                                   strtoint(contract_id)
+                                                  ]);
+
+   dey:=false
+   end;
+          }
+    DBLook_notetypes.KeyValue:=-1;
+    DBLook_commtypes.KeyValue:=-1;
+    DBLookupComboBox1.KeyValue:=-1;
+    MemoNote.Clear;
+
+     ods_main.Refresh;
+     ods_main.Last;
+
+
+end;
+
+procedure TFormNote.XFButton3Click(Sender: TObject);
+begin
+FormNote.Close
+end;
+
+end.

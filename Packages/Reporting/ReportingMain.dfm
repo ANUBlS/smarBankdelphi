@@ -1,0 +1,846 @@
+object Reporting: TReporting
+  Left = 0
+  Top = 0
+  Width = 1236
+  Height = 687
+  Caption = 'Reporting'
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  OnCreate = ActiveFormCreate
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 1236
+    Height = 87
+    Align = alTop
+    TabOrder = 0
+    object BtnExpand: TSpeedButton
+      Left = 8
+      Top = 47
+      Width = 71
+      Height = 25
+      Caption = '<<>>'
+      OnClick = BtnExpandClick
+    end
+    object DBText1: TDBText
+      Left = 878
+      Top = 52
+      Width = 48
+      Height = 13
+      AutoSize = True
+      DataField = 'NAME'
+      DataSource = DS_Reporting
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+    end
+    object LblCount: TLabel
+      Left = 787
+      Top = 52
+      Width = 7
+      Height = 13
+      Caption = '0'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+    end
+    object BtnClear1: TSpeedButton
+      Left = 450
+      Top = 15
+      Width = 23
+      Height = 22
+      Caption = 'X'
+      OnClick = BtnClear1Click
+    end
+    object BtnClear2: TSpeedButton
+      Left = 630
+      Top = 15
+      Width = 23
+      Height = 22
+      Caption = 'X'
+      OnClick = BtnClear2Click
+    end
+    object BtnClear3: TSpeedButton
+      Left = 810
+      Top = 15
+      Width = 23
+      Height = 22
+      Caption = 'X'
+      OnClick = BtnClear3Click
+    end
+    object BtnClear4: TSpeedButton
+      Left = 990
+      Top = 15
+      Width = 23
+      Height = 22
+      Caption = 'X'
+      OnClick = BtnClear4Click
+    end
+    object BtnClear5: TSpeedButton
+      Left = 1170
+      Top = 15
+      Width = 23
+      Height = 22
+      Caption = 'X'
+      OnClick = BtnClear5Click
+    end
+    object LblTime: TLabel
+      Left = 613
+      Top = 70
+      Width = 6
+      Height = 13
+      Alignment = taRightJustify
+      Caption = '0'
+    end
+    object DTPicker1: TDateTimePicker
+      Left = 8
+      Top = 16
+      Width = 135
+      Height = 21
+      Date = 44557.554556886570000000
+      Time = 44557.554556886570000000
+      TabOrder = 0
+    end
+    object DTPicker2: TDateTimePicker
+      Left = 155
+      Top = 16
+      Width = 135
+      Height = 21
+      Date = 44557.554616967590000000
+      Time = 44557.554616967590000000
+      TabOrder = 1
+    end
+    object BtnOK: TBitBtn
+      Left = 299
+      Top = 47
+      Width = 75
+      Height = 25
+      Caption = 'Q'#601'bul'
+      DoubleBuffered = True
+      ParentDoubleBuffered = False
+      TabOrder = 2
+      OnClick = BtnOKClick
+    end
+    object BtnRefresh: TBitBtn
+      Left = 380
+      Top = 47
+      Width = 75
+      Height = 25
+      Caption = 'Yenil'#601
+      DoubleBuffered = True
+      ParentDoubleBuffered = False
+      TabOrder = 3
+      OnClick = BtnRefreshClick
+    end
+    object BtnExcel: TBitBtn
+      Left = 462
+      Top = 47
+      Width = 75
+      Height = 25
+      Caption = 'Excel'
+      DoubleBuffered = True
+      ParentDoubleBuffered = False
+      TabOrder = 4
+      OnClick = BtnExcelClick
+    end
+    object CBox1: TDBLookupComboboxEh
+      Left = 300
+      Top = 15
+      Width = 150
+      Height = 21
+      DropDownBox.Rows = 30
+      EditButtons = <>
+      ListSource = DS_Combo1
+      ParentShowHint = False
+      Style = csDropDownEh
+      TabOrder = 5
+      Visible = True
+      WordWrap = True
+    end
+    object CBox2: TDBLookupComboboxEh
+      Left = 480
+      Top = 15
+      Width = 150
+      Height = 21
+      DropDownBox.Rows = 30
+      EditButtons = <>
+      ListSource = DS_Combo2
+      Style = csDropDownEh
+      TabOrder = 6
+      Visible = True
+    end
+    object CBox3: TDBLookupComboboxEh
+      Left = 660
+      Top = 15
+      Width = 150
+      Height = 21
+      DropDownBox.Rows = 30
+      EditButtons = <>
+      ListSource = DS_Combo3
+      Style = csDropDownEh
+      TabOrder = 7
+      Visible = True
+    end
+    object CBox4: TDBLookupComboboxEh
+      Left = 840
+      Top = 15
+      Width = 150
+      Height = 21
+      DropDownBox.Rows = 30
+      EditButtons = <>
+      ListSource = DS_Combo4
+      Style = csDropDownEh
+      TabOrder = 8
+      Visible = True
+    end
+    object CBox5: TDBLookupComboboxEh
+      Left = 1020
+      Top = 15
+      Width = 150
+      Height = 21
+      DropDownBox.Rows = 30
+      EditButtons = <>
+      ListSource = DS_Combo5
+      Style = csDropDownEh
+      TabOrder = 9
+      Visible = True
+    end
+    object CBoxGroups: TDBLookupComboboxEh
+      Left = 90
+      Top = 47
+      Width = 200
+      Height = 21
+      EditButtons = <>
+      KeyField = 'ID'
+      ListField = 'NAME'
+      ListSource = DS_Groups
+      TabOrder = 10
+      Visible = True
+    end
+    object BtnPDF: TBitBtn
+      Left = 544
+      Top = 47
+      Width = 75
+      Height = 25
+      Caption = 'PDF'
+      DoubleBuffered = True
+      ParentDoubleBuffered = False
+      TabOrder = 11
+      OnClick = BtnPDFClick
+    end
+    object ProgressBar1: TProgressBar
+      Left = 299
+      Top = 75
+      Width = 237
+      Height = 8
+      TabOrder = 12
+    end
+    object ChBoxShowCount: TCheckBox
+      Left = 705
+      Top = 50
+      Width = 75
+      Height = 17
+      Caption = 'Say'#305' g'#246'st'#601'r:'
+      TabOrder = 13
+      OnClick = ChBoxShowCountClick
+    end
+    object BtnJSON: TBitBtn
+      Left = 625
+      Top = 47
+      Width = 75
+      Height = 25
+      Caption = 'JSON'
+      DoubleBuffered = True
+      ParentDoubleBuffered = False
+      TabOrder = 14
+      OnClick = BtnJSONClick
+    end
+  end
+  object DBGrid1: TDBGrid
+    Left = 0
+    Top = 87
+    Width = 290
+    Height = 456
+    Align = alLeft
+    DataSource = DS_Reporting
+    DrawingStyle = gdsGradient
+    FixedColor = clNavy
+    Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit, dgTitleClick, dgTitleHotTrack]
+    ReadOnly = True
+    TabOrder = 1
+    TitleFont.Charset = DEFAULT_CHARSET
+    TitleFont.Color = clWindowText
+    TitleFont.Height = -11
+    TitleFont.Name = 'Tahoma'
+    TitleFont.Style = []
+    OnDblClick = DBGrid1DblClick
+    Columns = <
+      item
+        Expanded = False
+        FieldName = 'NAME'
+        ReadOnly = False
+        Title.Caption = 'Hesabatlar'
+        Visible = True
+      end>
+  end
+  object DBGrid2: TDBGrid
+    Left = 290
+    Top = 87
+    Width = 946
+    Height = 456
+    Align = alClient
+    DataSource = DS_SQL
+    DrawingStyle = gdsGradient
+    TabOrder = 2
+    TitleFont.Charset = DEFAULT_CHARSET
+    TitleFont.Color = clWindowText
+    TitleFont.Height = -11
+    TitleFont.Name = 'Tahoma'
+    TitleFont.Style = []
+    OnDblClick = DBGrid2DblClick
+  end
+  object PanelParameters: TPanel
+    Left = 0
+    Top = 557
+    Width = 1236
+    Height = 130
+    Align = alBottom
+    AutoSize = True
+    TabOrder = 3
+    Visible = False
+    object LabelVar1: TLabel
+      Left = 40
+      Top = 4
+      Width = 47
+      Height = 13
+      Caption = 'LabelVar1'
+    end
+    object LabelVar2: TLabel
+      Left = 40
+      Top = 31
+      Width = 47
+      Height = 13
+      Caption = 'LabelVar2'
+    end
+    object LabelVar3: TLabel
+      Left = 40
+      Top = 58
+      Width = 47
+      Height = 13
+      Caption = 'LabelVar3'
+    end
+    object LabelVar4: TLabel
+      Left = 40
+      Top = 84
+      Width = 47
+      Height = 13
+      Caption = 'LabelVar4'
+    end
+    object LabelVar5: TLabel
+      Left = 40
+      Top = 111
+      Width = 47
+      Height = 13
+      Caption = 'LabelVar5'
+    end
+    object DBEdit1: TDBEdit
+      Left = 100
+      Top = 1
+      Width = 950
+      Height = 21
+      Hint = '1'
+      HelpType = htKeyword
+      DataField = 'VAR1'
+      DataSource = DS_Reporting
+      TabOrder = 0
+    end
+    object DBEdit2: TDBEdit
+      Left = 100
+      Top = 28
+      Width = 950
+      Height = 21
+      Hint = '2'
+      DataField = 'VAR2'
+      DataSource = DS_Reporting
+      TabOrder = 1
+    end
+    object DBEdit3: TDBEdit
+      Left = 100
+      Top = 55
+      Width = 950
+      Height = 21
+      Hint = '3'
+      DataField = 'VAR3'
+      DataSource = DS_Reporting
+      TabOrder = 2
+    end
+    object DBEdit4: TDBEdit
+      Left = 100
+      Top = 81
+      Width = 950
+      Height = 21
+      Hint = '4'
+      DataField = 'VAR4'
+      DataSource = DS_Reporting
+      TabOrder = 3
+    end
+    object DBEdit5: TDBEdit
+      Left = 100
+      Top = 108
+      Width = 950
+      Height = 21
+      Hint = '5'
+      DataField = 'VAR5'
+      DataSource = DS_Reporting
+      TabOrder = 4
+    end
+  end
+  object BtnSQLAdd: TButton
+    Left = 180
+    Top = 308
+    Width = 75
+    Height = 25
+    Caption = '+'
+    TabOrder = 4
+    Visible = False
+    OnClick = BtnSQLAddClick
+  end
+  object PanelSQLAdd: TPanel
+    Left = 800
+    Top = 120
+    Width = 409
+    Height = 289
+    Caption = 'PanelSQLAdd'
+    TabOrder = 5
+    Visible = False
+    object MemoSQLAdd: TMemo
+      Left = 1
+      Top = 1
+      Width = 407
+      Height = 287
+      Align = alClient
+      TabOrder = 0
+    end
+  end
+  object EditSQLPass: TEdit
+    Left = 53
+    Top = 310
+    Width = 121
+    Height = 21
+    PasswordChar = '*'
+    TabOrder = 6
+    Visible = False
+  end
+  object Panel2: TPanel
+    Left = 0
+    Top = 543
+    Width = 1236
+    Height = 14
+    Align = alBottom
+    TabOrder = 7
+  end
+  object PanelReportingLabels: TPanel
+    Left = 368
+    Top = 121
+    Width = 400
+    Height = 80
+    Caption = 'PanelReportingLabels'
+    TabOrder = 8
+    Visible = False
+    object BtnLabelsSave: TSpeedButton
+      Left = 375
+      Top = 35
+      Width = 23
+      Height = 22
+      Caption = 'V'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clGreen
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+      OnClick = BtnLabelsSaveClick
+    end
+    object BtnLabelsCancel: TSpeedButton
+      Left = 375
+      Top = 5
+      Width = 23
+      Height = 22
+      Caption = 'X'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+      OnClick = BtnLabelsCancelClick
+    end
+    object Label1: TLabel
+      Left = 5
+      Top = 16
+      Width = 57
+      Height = 13
+      Caption = 'S'#252'tunun ad'#305
+    end
+    object Label2: TLabel
+      Left = 320
+      Top = 16
+      Width = 44
+      Height = 13
+      Caption = 'Uzunlu'#287'u'
+    end
+    object EditDisplayLabel: TDBEdit
+      Left = 5
+      Top = 35
+      Width = 310
+      Height = 21
+      DataField = 'DISPLAYLABEL'
+      DataSource = DS_LabelsSettings
+      TabOrder = 0
+    end
+    object EditWidth: TDBEdit
+      Left = 320
+      Top = 35
+      Width = 50
+      Height = 21
+      DataField = 'WIDTH'
+      DataSource = DS_LabelsSettings
+      TabOrder = 1
+    end
+  end
+  object ODS_Date: TOracleDataSet
+    SQL.Strings = (
+      'select tek_dat from sysdat')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000010000000E000000540045004B005F00440041005400010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 240
+    Top = 176
+  end
+  object ODS_Reporting: TOracleDataSet
+    SQL.Strings = (
+      'select r.rowid, r.* from reporting r'
+      'where grp_id=:grp'
+      'order by id')
+    ReadBuffer = 100
+    Optimize = False
+    Variables.Data = {
+      0400000001000000080000003A00470052005000030000000400000000000000
+      00000000}
+    QBEDefinition.QBEFieldDefs = {
+      05000000220000000400000049004400010000000000080000004E0041004D00
+      45000100000000000E000000530051004C005400450058005400010000000000
+      10000000460049004C0045004E0041004D004500010000000000100000004600
+      49004C004500530048004F00570001000000000012000000460049004C004500
+      4E0041004D004500320001000000000008000000560041005200310001000000
+      0000080000005600410052003200010000000000080000005600410052003300
+      0100000000000800000056004100520034000100000000000800000056004100
+      520035000100000000000C000000480045004100440045005200010000000000
+      0C00000046004F004F0054004500520001000000000004000000430031000100
+      000000000C000000430031004C004900530054000100000000000A0000004300
+      31004B004500590001000000000004000000430032000100000000000C000000
+      430032004C004900530054000100000000000A000000430032004B0045005900
+      01000000000004000000430033000100000000000C000000430033004C004900
+      530054000100000000000A000000430033004B00450059000100000000000400
+      0000430034000100000000000C000000430034004C0049005300540001000000
+      00000A000000430034004B004500590001000000000004000000430035000100
+      000000000C000000430035004C004900530054000100000000000A0000004300
+      35004B0045005900010000000000080000005000410052003100010000000000
+      0800000050004100520032000100000000000800000050004100520033000100
+      0000000008000000500041005200340001000000000008000000500041005200
+      35000100000000000C0000004700520050005F0049004400010000000000}
+    QueryAllRecords = False
+    Session = sboapiDataModule.SBSession
+    AfterScroll = ODS_ReportingAfterScroll
+    Left = 312
+    Top = 176
+  end
+  object DS_Reporting: TDataSource
+    DataSet = ODS_Reporting
+    Left = 312
+    Top = 240
+  end
+  object ODS_SQL: TOracleDataSet
+    ReadBuffer = 5000
+    Optimize = False
+    QueryAllRecords = False
+    Session = sboapiDataModule.SBSession
+    Left = 400
+    Top = 184
+  end
+  object DS_SQL: TDataSource
+    DataSet = ODS_SQL
+    Left = 400
+    Top = 240
+  end
+  object QExport4Xlsx1: TQExport4Xlsx
+    About = '(About EMS AdvancedExport)'
+    _Version = '4.13.3.2'
+    Formats.DecimalSeparator = '.'
+    Formats.ThousandSeparator = ','
+    Formats.DateSeparator = '.'
+    Formats.TimeSeparator = ':'
+    Formats.BooleanTrue = 'true'
+    Formats.BooleanFalse = 'false'
+    Formats.IntegerFormat = '0'
+    Formats.FloatFormat = '#,###,##0.00'
+    Formats.DateFormat = 'dd/MM/yyyy'
+    Formats.TimeFormat = 'hh:mm'
+    Formats.DateTimeFormat = 'dd/MM/yyyy'
+    Formats.CurrencyFormat = ' #,###,##0.00'
+    AutoCalcColWidth = True
+    SheetName = 'sheet1'
+    XlsxOptions.HeaderStyle.Font.Charset = DEFAULT_CHARSET
+    XlsxOptions.HeaderStyle.Font.Color = clBlack
+    XlsxOptions.HeaderStyle.Font.Height = -20
+    XlsxOptions.HeaderStyle.Font.Name = 'Calibri'
+    XlsxOptions.HeaderStyle.Font.Style = [fsBold]
+    XlsxOptions.HeaderStyle.UseBackground = True
+    XlsxOptions.HeaderStyle.WrapText = True
+    XlsxOptions.HeaderStyle.UseBorder = True
+    XlsxOptions.CaptionRowStyle.Font.Charset = TURKISH_CHARSET
+    XlsxOptions.CaptionRowStyle.Font.Color = clBlack
+    XlsxOptions.CaptionRowStyle.Font.Height = -17
+    XlsxOptions.CaptionRowStyle.Font.Name = 'Tahoma'
+    XlsxOptions.CaptionRowStyle.Font.Style = [fsBold]
+    XlsxOptions.CaptionRowStyle.BackgroundColor = clSkyBlue
+    XlsxOptions.CaptionRowStyle.UseBackground = True
+    XlsxOptions.CaptionRowStyle.Alignment = caCenter
+    XlsxOptions.CaptionRowStyle.VerticalAligment = cvaMiddle
+    XlsxOptions.CaptionRowStyle.UseBorder = True
+    XlsxOptions.CaptionRowStyle.Border.Style = xbsHair
+    XlsxOptions.DataStyle.Font.Charset = TURKISH_CHARSET
+    XlsxOptions.DataStyle.Font.Color = clBlack
+    XlsxOptions.DataStyle.Font.Height = -15
+    XlsxOptions.DataStyle.Font.Name = 'Tahoma'
+    XlsxOptions.DataStyle.Font.Style = []
+    XlsxOptions.DataStyle.UseBackground = True
+    XlsxOptions.DataStyle.WrapText = True
+    XlsxOptions.DataStyle.UseBorder = True
+    XlsxOptions.DataStyle.Border.Style = xbsHair
+    XlsxOptions.FooterStyle.Font.Charset = DEFAULT_CHARSET
+    XlsxOptions.FooterStyle.Font.Color = clBlack
+    XlsxOptions.FooterStyle.Font.Height = -20
+    XlsxOptions.FooterStyle.Font.Name = 'Calibri'
+    XlsxOptions.FooterStyle.Font.Style = []
+    XlsxOptions.FooterStyle.WrapText = True
+    XlsxOptions.StripStyleType = ssColumn
+    XlsxOptions.StripStylesList = <>
+    OnGetDataParams = QExport4Xlsx1GetDataParams
+    Left = 520
+    Top = 184
+  end
+  object ODS_Labels: TOracleDataSet
+    SQL.Strings = (
+      'select *from reporting_labels'
+      'where rep_id=:report')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000E0000003A005200450050004F0052005400030000000000
+      000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      05000000040000000C0000005200450050005F00490044000100000000001000
+      00004600490045004C0044005F00490044000100000000001800000044004900
+      530050004C00410059004C004100420045004C00010000000000180000004400
+      4900530050004C004100590057004900440054004800010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 624
+    Top = 192
+  end
+  object ODS_Combo1: TOracleDataSet
+    SQL.Strings = (
+      'select * from :tbl')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000080000003A00540042004C00010000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      05000000040000000400000049004400010000000000080000004E0041004D00
+      4500010000000000140000004B004F0044005F00460049004C00490041004C00
+      0100000000001400000043004F004D00500041004E0059005F00490044000100
+      00000000}
+    Session = sboapiDataModule.SBSession
+    Left = 344
+    Top = 320
+  end
+  object DS_Combo1: TDataSource
+    DataSet = ODS_Combo1
+    Left = 344
+    Top = 376
+  end
+  object ODS_Combo2: TOracleDataSet
+    SQL.Strings = (
+      'select * from :tbl')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000080000003A00540042004C00010000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      05000000040000000400000049004400010000000000080000004E0041004D00
+      4500010000000000140000004B004F0044005F00460049004C00490041004C00
+      0100000000001400000043004F004D00500041004E0059005F00490044000100
+      00000000}
+    Session = sboapiDataModule.SBSession
+    Left = 424
+    Top = 320
+  end
+  object DS_Combo2: TDataSource
+    DataSet = ODS_Combo2
+    Left = 424
+    Top = 376
+  end
+  object ODS_Combo3: TOracleDataSet
+    SQL.Strings = (
+      'select * from :tbl')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000080000003A00540042004C00010000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      05000000040000000400000049004400010000000000080000004E0041004D00
+      4500010000000000140000004B004F0044005F00460049004C00490041004C00
+      0100000000001400000043004F004D00500041004E0059005F00490044000100
+      00000000}
+    Session = sboapiDataModule.SBSession
+    Left = 496
+    Top = 320
+  end
+  object DS_Combo3: TDataSource
+    DataSet = ODS_Combo3
+    Left = 496
+    Top = 376
+  end
+  object ODS_Combo4: TOracleDataSet
+    SQL.Strings = (
+      'select * from :tbl')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000080000003A00540042004C00010000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      05000000040000000400000049004400010000000000080000004E0041004D00
+      4500010000000000140000004B004F0044005F00460049004C00490041004C00
+      0100000000001400000043004F004D00500041004E0059005F00490044000100
+      00000000}
+    Session = sboapiDataModule.SBSession
+    Left = 568
+    Top = 320
+  end
+  object DS_Combo4: TDataSource
+    DataSet = ODS_Combo4
+    Left = 584
+    Top = 376
+  end
+  object ODS_Combo5: TOracleDataSet
+    SQL.Strings = (
+      'select * from :tbl')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000080000003A00540042004C00010000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      05000000040000000400000049004400010000000000080000004E0041004D00
+      4500010000000000140000004B004F0044005F00460049004C00490041004C00
+      0100000000001400000043004F004D00500041004E0059005F00490044000100
+      00000000}
+    Session = sboapiDataModule.SBSession
+    Left = 656
+    Top = 320
+  end
+  object DS_Combo5: TDataSource
+    DataSet = ODS_Combo5
+    Left = 656
+    Top = 376
+  end
+  object ODS_Groups: TOracleDataSet
+    SQL.Strings = (
+      'select * from'
+      '(select 0 id, '#39'---Hesabat qrupu---'#39' name from dual'
+      'union all'
+      'select id, name from reporting_groups'
+      ')'
+      'order by ID')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000400000049004400010000000000080000004E0041004D00
+      4500010000000000}
+    Session = sboapiDataModule.SBSession
+    AfterScroll = ODS_GroupsAfterScroll
+    Left = 700
+    Top = 191
+  end
+  object DS_Groups: TDataSource
+    DataSet = ODS_Groups
+    Left = 696
+    Top = 248
+  end
+  object CMExcelExport1: TCMExcelExport
+    StyleColumnWidth = cwDefault
+    ColumnWidth = 0
+    FontTitles.Charset = DEFAULT_CHARSET
+    FontTitles.Color = clWindowText
+    FontTitles.Height = -11
+    FontTitles.Name = 'Tahoma'
+    FontTitles.Style = []
+    OrientationTitles = 0
+    FontData.Charset = DEFAULT_CHARSET
+    FontData.Color = clWindowText
+    FontData.Height = -11
+    FontData.Name = 'Tahoma'
+    FontData.Style = []
+    FontSummary.Charset = DEFAULT_CHARSET
+    FontSummary.Color = clWindowText
+    FontSummary.Height = -11
+    FontSummary.Name = 'Tahoma'
+    FontSummary.Style = []
+    SummarySelection = ssNone
+    SummaryCalculation = scSUM
+    Left = 544
+    Top = 136
+  end
+  object OQR_PROC: TOracleQuery
+    Session = sboapiDataModule.SBSession
+    Optimize = False
+    Left = 448
+    Top = 152
+  end
+  object SB_ACA: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'SB_ACA'
+    Left = 784
+    Top = 184
+  end
+  object ODS_LabelsSettings: TOracleDataSet
+    SQL.Strings = (
+      'select l.rowid, l.*from reporting_labels l'
+      'where rep_id=:report'
+      'and field_id=:fieldid')
+    Optimize = False
+    Variables.Data = {
+      04000000020000000E0000003A005200450050004F0052005400030000000000
+      000000000000100000003A004600490045004C00440049004400030000000000
+      000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      05000000040000000C0000005200450050005F00490044000100000000001000
+      00004600490045004C0044005F00490044000100000000001800000044004900
+      530050004C00410059004C004100420045004C000100000000000A0000005700
+      4900440054004800010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 328
+    Top = 464
+  end
+  object DS_LabelsSettings: TDataSource
+    DataSet = ODS_LabelsSettings
+    Left = 408
+    Top = 472
+  end
+end

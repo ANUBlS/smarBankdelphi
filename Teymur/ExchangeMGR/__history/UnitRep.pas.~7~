@@ -1,0 +1,165 @@
+unit UnitRep;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ExtCtrls, QuickRpt, Qrctrls, grimgctrl;
+
+type
+  TFormRep = class(TForm)
+    QuickRep: TQuickRep;
+    BandDetail: TQRBand;
+    QRDBText1: TQRDBText;
+    QRDBText2: TQRDBText;
+    QRShape1: TQRShape;
+    QRDBText8: TQRDBText;
+    QRDBText4: TQRDBText;
+    QRLabel4: TQRLabel;
+    QRDBText3: TQRDBText;
+    QRLabel3: TQRLabel;
+    QRShape2: TQRShape;
+    QRLabel9: TQRLabel;
+    QRDBText9: TQRDBText;
+    QRLabel10: TQRLabel;
+    LabelBankName: TQRLabel;
+    QRShape3: TQRShape;
+    QRLabel13: TQRLabel;
+    QRLabel14: TQRLabel;
+    QRShape4: TQRShape;
+    QRLabel15: TQRLabel;
+    QRShape5: TQRShape;
+    QRLabel16: TQRLabel;
+    QRShape6: TQRShape;
+    QRLabel1: TQRLabel;
+    QRLabel7: TQRLabel;
+    QRShape7: TQRShape;
+    QRLabel17: TQRLabel;
+    QRShape8: TQRShape;
+    QRDBText6: TQRDBText;
+    QRShape9: TQRShape;
+    QRShape10: TQRShape;
+    QRShape11: TQRShape;
+    QRShape12: TQRShape;
+    QRShape13: TQRShape;
+    QRShape14: TQRShape;
+    QRLabel2: TQRLabel;
+    QRShape15: TQRShape;
+    QRDBText7: TQRDBText;
+    LabelStatus: TQRLabel;
+    QRLabel8: TQRLabel;
+    QRLabel18: TQRLabel;
+    QRShape16: TQRShape;
+    QRShape17: TQRShape;
+    QRLabel19: TQRLabel;
+    LabelDate: TQRLabel;
+    LabelTime: TQRLabel;
+    QRShape18: TQRShape;
+    QRLabel5: TQRLabel;
+    QRShape19: TQRShape;
+    QRShape20: TQRShape;
+    QRShape21: TQRShape;
+    QRShape22: TQRShape;
+    QRDBText14: TQRDBText;
+    LabelCustomer: TQRLabel;
+    LabelPassport: TQRLabel;
+    LabelDifference: TQRLabel;
+    LabelCourse: TQRLabel;
+    QRDBText5: TQRDBText;
+    Label_Cust_Giving_Member: TQRLabel;
+    QRShape23: TQRShape;
+    QRDBText10: TQRDBText;
+    QRLabel6: TQRLabel;
+    QRShape24: TQRShape;
+    QRDBText11: TQRDBText;
+    QRLabel11: TQRLabel;
+    QRLabel12: TQRLabel;
+    QRShape25: TQRShape;
+    LabelBankNameCopy: TQRLabel;
+    QRShape26: TQRShape;
+    QRLabel21: TQRLabel;
+    QRLabel22: TQRLabel;
+    QRShape27: TQRShape;
+    QRShape28: TQRShape;
+    QRDBText12: TQRDBText;
+    QRDBText13: TQRDBText;
+    QRShape29: TQRShape;
+    QRLabel23: TQRLabel;
+    QRLabel24: TQRLabel;
+    LabelDateCopy: TQRLabel;
+    QRLabel26: TQRLabel;
+    LabelTimeCopy: TQRLabel;
+    QRShape30: TQRShape;
+    QRShape31: TQRShape;
+    LabelStatusCopy: TQRLabel;
+    QRLabel29: TQRLabel;
+    QRLabel30: TQRLabel;
+    QRShape32: TQRShape;
+    QRLabel31: TQRLabel;
+    QRLabel32: TQRLabel;
+    QRShape33: TQRShape;
+    QRLabel33: TQRLabel;
+    QRShape34: TQRShape;
+    QRLabel34: TQRLabel;
+    LabelDifferenceCopy: TQRLabel;
+    QRShape35: TQRShape;
+    QRLabel28: TQRLabel;
+    QRLabel36: TQRLabel;
+    QRShape36: TQRShape;
+    QRLabel37: TQRLabel;
+    QRShape37: TQRShape;
+    QRDBText15: TQRDBText;
+    QRShape38: TQRShape;
+    QRDBText16: TQRDBText;
+    QRShape39: TQRShape;
+    LabelCourseCopy: TQRLabel;
+    QRShape40: TQRShape;
+    QRDBText17: TQRDBText;
+    QRShape41: TQRShape;
+    QRDBText18: TQRDBText;
+    QRLabel39: TQRLabel;
+    QRDBText19: TQRDBText;
+    QRShape42: TQRShape;
+    QRLabel40: TQRLabel;
+    LabelCustomerCopy: TQRLabel;
+    QRShape43: TQRShape;
+    QRLabel42: TQRLabel;
+    QRDBText20: TQRDBText;
+    QRShape44: TQRShape;
+    QRDBText21: TQRDBText;
+    LabelPassportCopy: TQRLabel;
+    QRShape45: TQRShape;
+    QRLabel44: TQRLabel;
+    QRDBText22: TQRDBText;
+    QRShape46: TQRShape;
+    QRLabel45: TQRLabel;
+    QRDBText23: TQRDBText;
+    QRShape47: TQRShape;
+    QRShape48: TQRShape;
+    QRLabel46: TQRLabel;
+    QRDBText24: TQRDBText;
+    QRShape49: TQRShape;
+    QRLabel47: TQRLabel;
+    QRLabel48: TQRLabel;
+    QRImageCopy: TQRImage;
+    QRGrDBImage1: TQRGrDBImage;
+    procedure FormCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormRep: TFormRep;
+
+implementation
+             uses UnitDateExch,sboapiDataModuleImpl, SBTranslateProc;
+{$R *.DFM}
+
+procedure TFormRep.FormCreate(Sender: TObject);
+begin
+SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+end.

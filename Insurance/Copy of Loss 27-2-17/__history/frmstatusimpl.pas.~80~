@@ -1,0 +1,954 @@
+﻿unit frmstatusimpl;
+                                       //        //test
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ExtCtrls, XFSCtrls, StdCtrls, ComCtrls;
+
+type
+  Tfrmstatus = class(TForm)
+    XFPanel1: TXFPanel;
+    XFGroupBox2: TXFGroupBox;
+    XFRadioButton11: TXFRadioButton;
+    XFRadioButton22: TXFRadioButton;
+    XFButton5: TXFButton;
+    XFRadioButton3: TXFCheckBox;
+    XFGroupBox1: TXFGroupBox;
+    CheckBox7: TCheckBox;
+    CheckBox8: TCheckBox;
+    XFButton6: TXFButton;
+    DateTimePicker4: TDateTimePicker;
+    DateTimePicker8: TDateTimePicker;
+    XFPanel4: TXFPanel;
+    DateTimePicker1: TDateTimePicker;
+    CheckBox2: TCheckBox;
+    DateTimePicker5: TDateTimePicker;
+    CheckBox1: TCheckBox;
+    CheckBox3: TCheckBox;
+    DateTimePicker6: TDateTimePicker;
+    CheckBox4: TCheckBox;
+    DateTimePicker2: TDateTimePicker;
+    CheckBox5: TCheckBox;
+    DateTimePicker7: TDateTimePicker;
+    CheckBox6: TCheckBox;
+    DateTimePicker3: TDateTimePicker;
+    XFRadioButton1: TXFCheckBox;
+    XFRadioButton2: TXFCheckBox;
+    XFButton1: TXFButton;
+    procedure XFButton5Click(Sender: TObject);
+    procedure XFRadioButton22Click(Sender: TObject);
+    procedure XFButton6Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure CheckBox8Click(Sender: TObject);
+    procedure XFRadioButton1Click(Sender: TObject);
+    procedure XFRadioButton2Click(Sender: TObject);
+    procedure XFButton1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+
+
+    dep_id:integer;
+            Forma4,Qarsi_teref_qiym_cavab,Yoxlama,OK_verilib,
+Bankin_cavabi,Qusur_Akti,Muraciet,Tesdiq,status,test:integer;
+
+    Forma4dat,Qarsi_teref_qiym_cavabdat,Yoxlamadat,OK_verilibdat,
+Bankin_cavabidat,Qusur_Aktidat,Muracietdat,Tesdiqdat,imtina_dat:Tdate;
+imtina_mebleg:real;
+
+
+  end;
+
+var
+  frmstatus: Tfrmstatus;
+  dep_id:real;
+
+implementation
+uses CommanParametrs,SBTranslateProc,sboapiDataModuleImpl,
+  DmLossImpl,FrmMainLossimpl, FrmCargo_claimimpl, FrmAddLossImpl;
+
+{$R *.dfm}
+
+procedure Tfrmstatus.CheckBox8Click(Sender: TObject);
+begin
+if CheckBox8.Checked=false then
+ begin
+if (DmLoss.DSSysdat.FieldByName('tek_dat').AsDateTime>
+DmLoss.DSclaim_status.FieldByName('stage_tesdiq_dat').AsDateTime)
+and (DmLoss.DSclaim_status.FieldByName('stage_tesdiq').AsInteger=1) then
+begin
+CheckBox8.Checked:=true;
+  showmessage('Diqqət!Köhnə tarixdə təsdiq olunmuş zərər inkar edilə bilməz!');
+  exit;
+
+end;
+end;
+
+DateTimePicker4.DateTime:=DmLoss.DSSysdat.FieldByName('tek_dat').AsDateTime;
+//DateTimePicker4.Enabled:=false;
+end;
+
+procedure Tfrmstatus.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+if ord(key)=vk_escape then close;
+end;
+
+procedure Tfrmstatus.FormShow(Sender: TObject);
+begin
+ {ShowMessage(DmLoss.DSclaim_status.FieldByName('user').AsString);
+if DmLoss.DSclaim_status.FieldByName('user').AsString='SMART'  then
+begin
+  XFButton1.Visible:=true;
+end else
+begin
+  XFButton1.Visible:=false;
+end;     }
+     XFRadioButton2.Checked:=false;
+     XFRadioButton1.Checked:=false;
+
+       dmloss.DSclaim_status.Close;
+       dmloss.DSclaim_status.SetVariable('pdep_id',FrmMainLoss.XDBGrid1.DataSource.DataSet.FieldByName('id').AsInteger);
+       dmloss.DSclaim_status.Open;
+
+     if DmLoss.DSclaim_status.FieldByName('status').AsInteger=1 then
+                begin
+                //showmessage('Salam1');
+                XFRadioButton1.Checked:=false;
+                XFRadioButton2.Checked:=true;
+
+                end;
+
+     if (DmLoss.DSclaim_status.FieldByName('status').AsInteger=0) or (DmLoss.DSclaim_status.FieldByName('status').AsInteger=2)
+            or (DmLoss.DSclaim_status.FieldByName('status').AsInteger=3) then
+                begin
+                //showmessage('Salam2');
+                XFRadioButton2.Checked:=false;
+                XFRadioButton1.Checked:=true;
+
+                end;
+          //ShowMessage(DmLoss.DSclaim_status.FieldByName('status').AsString);
+       if (DmLoss.DSclaim_status.FieldByName('status').AsInteger=3) and (DmLoss.DSclaim_status.FieldByName('user').AsString='SMART') then
+                begin
+               XFButton1.Visible:=true;
+                end else
+                begin
+                XFButton1.Visible:=false
+                end;
+
+
+  if (DmLoss.DSclaim_status.FieldByName('status').AsInteger=0) and (XFRadioButton1.Checked=true) then
+  begin
+        XFGroupBox2.Color:=clgray;
+  end;
+
+  if (DmLoss.DSclaim_status.FieldByName('status').AsInteger=2) or
+   (DmLoss.DSclaim_status.FieldByName('status').AsInteger=3) then
+  begin
+    XFButton6.Enabled:=false;
+    XFButton5.Enabled:=false;
+
+  end;
+
+
+  if DmLoss.DSclaim_status.FieldByName('status').AsInteger=0 then
+  begin
+    XFButton6.Enabled:=true;
+    XFButton5.Enabled:=true;
+  end;
+
+if DmLoss.DSclaim_status.FieldByName('stage_forma4').AsInteger=0 then
+begin
+CheckBox1.Checked:=false;
+CheckBox1.Color:=clRed
+end
+else
+begin
+CheckBox1.Checked:=true;
+{if DmLoss.DSclaim_status.FieldByName('status').AsInteger=2 then
+begin
+CheckBox1.Enabled:=False;
+end;
+       }
+CheckBox1.Color:=clGray
+
+end;
+
+if DmLoss.DSclaim_status.FieldByName('stage_bankin_cavabi').AsInteger=0 then
+begin
+CheckBox2.Checked:=false;
+CheckBox2.Color:=clRed
+end
+else
+begin
+CheckBox2.Checked:=true;
+{if DmLoss.DSclaim_status.FieldByName('status').AsInteger=2 then
+begin
+CheckBox2.Enabled:=False;
+end;
+
+CheckBox2.Color:=clGray
+                         }
+end;
+
+if DmLoss.DSclaim_status.FieldByName('stage_qarsi_teref_qiymcavab').AsInteger=0 then
+begin
+CheckBox3.Checked:=false;
+CheckBox3.Color:=clRed
+end
+else
+begin
+CheckBox3.Checked:=true;
+{if DmLoss.DSclaim_status.FieldByName('status').AsInteger=2 then
+begin
+CheckBox3.Enabled:=False;
+end;       }
+
+CheckBox3.Color:=clGray
+end;
+
+if DmLoss.DSclaim_status.FieldByName('stage_qusur_akti').AsInteger=0 then
+begin
+CheckBox4.Checked:=false;
+CheckBox4.Color:=clRed
+end
+else
+begin
+CheckBox4.Checked:=true;
+{if DmLoss.DSclaim_status.FieldByName('status').AsInteger=2 then
+begin
+CheckBox4.Enabled:=False;
+end;      }
+
+CheckBox4.Color:=clGray
+end;
+if DmLoss.DSclaim_status.FieldByName('stage_yoxlama').AsInteger=0 then
+begin
+CheckBox5.Checked:=false;
+CheckBox5.Color:=clRed
+end
+else
+begin
+CheckBox5.Checked:=true;
+{if DmLoss.DSclaim_status.FieldByName('status').AsInteger=2 then
+begin
+CheckBox5.Enabled:=False;
+end;
+          }
+CheckBox5.Color:=clGray
+end;
+
+if DmLoss.DSclaim_status.FieldByName('stage_muraciet').AsInteger=0 then
+begin
+CheckBox6.Checked:=false;
+CheckBox6.Color:=clRed
+end
+else
+begin
+CheckBox6.Checked:=true;
+{if DmLoss.DSclaim_status.FieldByName('status').AsInteger=2 then
+begin
+CheckBox6.Enabled:=False;
+end;
+            }
+CheckBox6.Color:=clGray
+end;
+if DmLoss.DSclaim_status.FieldByName('stage_ok_verilib').AsInteger=0 then
+begin
+CheckBox7.Checked:=false ;
+CheckBox7.Color:=clRed
+end
+else
+begin
+CheckBox7.Checked:=true;
+{if DmLoss.DSclaim_status.FieldByName('status').AsInteger=2 then
+begin
+CheckBox7.Enabled:=False;
+end;
+             }
+CheckBox7.Color:=clGray
+end;
+
+if DmLoss.DSclaim_status.FieldByName('stage_tesdiq').AsInteger=0 then
+begin
+CheckBox8.Checked:=false;
+CheckBox8.Color:=clRed
+end
+else
+begin
+CheckBox8.Checked:=true;
+{if DmLoss.DSclaim_status.FieldByName('status').AsInteger=2 then
+begin
+CheckBox8.Enabled:=False;
+end;      }
+CheckBox8.Color:=clGray;
+end;
+   {
+if DmLoss.DSclaim_status.FieldByName('status').AsInteger=2 then
+begin
+CheckBox8.Checked:=true ;
+CheckBox7.Color:=clgray;
+end ;}
+
+
+if DmLoss.DSclaim_status.FieldByName('stage_forma4_dat').AsString='' then
+   DateTimePicker5.DateTime:=DmLoss.DSSysdat.FieldByName('tek_dat').AsDateTime
+   else
+   DateTimePicker5.DateTime:=DmLoss.DSclaim_status.FieldByName('stage_forma4_dat').AsDateTime;
+
+
+
+   if DmLoss.DSclaim_status.FieldByName('stage_bankin_cavabi_dat').AsString='' then
+   DateTimePicker1.DateTime:=DmLoss.DSSysdat.FieldByName('tek_dat').AsDateTime
+   else
+   DateTimePicker1.DateTime:=DmLoss.DSclaim_status.FieldByName('stage_bankin_cavabi_dat').AsDateTime;
+
+   if DmLoss.DSclaim_status.FieldByName('stage_qarsi_teref_qcavab_dat').AsString='' then
+   DateTimePicker6.DateTime:=DmLoss.DSSysdat.FieldByName('tek_dat').AsDateTime
+   else
+   DateTimePicker6.DateTime:=DmLoss.DSclaim_status.FieldByName('stage_qarsi_teref_qcavab_dat').AsDateTime;
+
+
+   if DmLoss.DSclaim_status.FieldByName('stage_qusur_akti_dat').AsString='' then
+   DateTimePicker2.DateTime:=DmLoss.DSSysdat.FieldByName('tek_dat').AsDateTime
+   else
+   DateTimePicker2.DateTime:=DmLoss.DSclaim_status.FieldByName('stage_qusur_akti_dat').AsDateTime;
+
+
+   if DmLoss.DSclaim_status.FieldByName('stage_yoxlama_dat').AsString='' then
+   DateTimePicker7.DateTime:=DmLoss.DSSysdat.FieldByName('tek_dat').AsDateTime
+   else
+   DateTimePicker7.DateTime:=DmLoss.DSclaim_status.FieldByName('stage_yoxlama_dat').AsDateTime;
+
+   if DmLoss.DSclaim_status.FieldByName('stage_muraciet_dat').AsString='' then
+   DateTimePicker3.DateTime:=DmLoss.DSSysdat.FieldByName('tek_dat').AsDateTime
+   else
+   DateTimePicker3.DateTime:=DmLoss.DSclaim_status.FieldByName('stage_muraciet_dat').AsDateTime;
+
+   if DmLoss.DSclaim_status.FieldByName('stage_ok_verilib_dat').AsString='' then
+   DateTimePicker8.DateTime:=DmLoss.DSSysdat.FieldByName('tek_dat').AsDateTime
+   else
+   DateTimePicker8.DateTime:=DmLoss.DSclaim_status.FieldByName('stage_ok_verilib_dat').AsDateTime;
+
+   if DmLoss.DSclaim_status.FieldByName('stage_tesdiq_dat').AsString='' then
+   DateTimePicker4.DateTime:=DmLoss.DSSysdat.FieldByName('tek_dat').AsDateTime
+   else
+   DateTimePicker4.DateTime:=DmLoss.DSclaim_status.FieldByName('stage_tesdiq_dat').AsDateTime;
+
+
+end;
+
+procedure Tfrmstatus.XFButton1Click(Sender: TObject);
+begin
+ if CheckBox1.Checked=true then
+              begin
+               CheckBox1.Color:=clGray;
+               Forma4:=1 ;
+               //Forma4dat:=DSSysdat.FieldByName('tek_dat').AsDateTime;
+               Forma4dat:=DateTimePicker5.DateTime;
+              end
+               else
+               begin
+                CheckBox1.Color:=clRed;
+                Forma4:=0;
+                Forma4dat:=strtodate('30.12.1899');
+               end;
+
+              if CheckBox2.Checked=true then
+                begin
+               CheckBox2.Color:=clGray;
+               Bankin_cavabi:=1 ;
+               //Bankin_cavabidat:=DSSysdat.FieldByName('tek_dat').AsDateTime;
+               Bankin_cavabidat:=DateTimePicker1.DateTime;
+               end
+               else
+               begin
+               CheckBox2.Color:=clRed;
+               Bankin_cavabi:=0;
+               Bankin_cavabidat:=strtodate('30.12.1899');
+               end;
+
+              if CheckBox3.Checked=true then
+              begin
+               CheckBox3.Color:=clGray;
+               Qarsi_teref_qiym_cavab:=1 ;
+               //Qarsi_teref_qiym_cavabdat:=DSSysdat.FieldByName('tek_dat').AsDateTime;
+               Qarsi_teref_qiym_cavabdat:=DateTimePicker6.DateTime;
+              end
+               else
+               begin
+               CheckBox3.Color:=clRed;
+               Qarsi_teref_qiym_cavab:=0;
+               Qarsi_teref_qiym_cavabdat:=strtodate('30.12.1899');
+               end;
+
+              if CheckBox4.Checked=true then
+              begin
+               CheckBox4.Color:=clGray;
+               Qusur_Akti:=1 ;
+               //Qusur_Aktidat:=DSSysdat.FieldByName('tek_dat').AsDateTime;
+               Qusur_Aktidat:=DateTimePicker2.DateTime;
+              end
+               else
+               begin
+               CheckBox4.Color:=clRed;
+               Qusur_Akti:=0;
+               Qusur_Aktidat:=strtodate('30.12.1899');
+               end;
+
+              if CheckBox5.Checked=true then
+              begin
+               CheckBox5.Color:=clGray;
+               Yoxlama:=1;
+               //Yoxlamadat:=DSSysdat.FieldByName('tek_dat').AsDateTime;
+               Yoxlamadat:=DateTimePicker7.DateTime;
+              end
+               else
+               begin
+               CheckBox5.Color:=clRed;
+               Yoxlama:=0;
+               Yoxlamadat:=strtodate('30.12.1899');
+               end;
+
+              if CheckBox6.Checked=true then
+              begin
+                 Muraciet:=1 ;
+                 CheckBox6.Color:=clGray;
+                 //Muracietdat:=DSSysdat.FieldByName('tek_dat').AsDateTime;
+                 Muracietdat:=DateTimePicker3.DateTime;
+              end
+                 else
+                 begin
+               Muraciet:=0;
+               CheckBox6.Color:=clRed;
+               Muracietdat:=strtodate('30.12.1899');
+              end;
+
+
+                if CheckBox7.Checked=true then
+                  begin
+                   OK_verilib:=1;
+                   CheckBox7.Color:=clGray ;
+                   //OK_verilibdat:=DSSysdat.FieldByName('tek_dat').AsDateTime;
+                   OK_verilibdat:=DateTimePicker8.DateTime;
+                  end
+               else
+               begin
+               OK_verilib:=0;
+               CheckBox7.Color:=clRed;
+                OK_verilibdat:=strtodate('30.12.1899');
+              end;
+
+
+
+
+with DmLoss do
+    begin
+  DSclaim_status.Edit;
+        DSclaim_status.FieldByName('stage_forma4').AsInteger:=Forma4;
+        DSclaim_status.FieldByName('stage_bankin_cavabi').AsInteger:=Bankin_cavabi;
+        DSclaim_status.FieldByName('stage_qarsi_teref_qiymcavab').AsInteger:=Qarsi_teref_qiym_cavab;
+        DSclaim_status.FieldByName('stage_qusur_akti').AsInteger:=Qusur_Akti;
+        DSclaim_status.FieldByName('stage_yoxlama').AsInteger:=Yoxlama;
+        DSclaim_status.FieldByName('stage_muraciet').AsInteger:=Muraciet;
+        DSclaim_status.FieldByName('stage_ok_verilib').AsInteger:=OK_verilib;
+       // DSclaim_status.FieldByName('stage_tesdiq').AsInteger:=Tesdiq;
+
+        DSclaim_status.FieldByName('stage_forma4_dat').AsDateTime:=Forma4dat;
+        DSclaim_status.FieldByName('stage_bankin_cavabi_dat').AsDateTime:=Bankin_cavabidat;
+        DSclaim_status.FieldByName('stage_qarsi_teref_qcavab_dat').AsDateTime:=Qarsi_teref_qiym_cavabdat;
+        DSclaim_status.FieldByName('stage_qusur_akti_dat').AsDateTime:=Qusur_Aktidat;
+        DSclaim_status.FieldByName('stage_yoxlama_dat').AsDateTime:=Yoxlamadat;
+        DSclaim_status.FieldByName('stage_muraciet_dat').AsDateTime:=Muracietdat;
+        DSclaim_status.FieldByName('stage_ok_verilib_dat').AsDateTime:=OK_verilibdat;
+       // DSclaim_status.FieldByName('stage_tesdiq_dat').AsDateTime:=Tesdiqdat;
+
+        DSclaim_status.FieldByName('DEP_ID').AsInteger:=FrmMainLoss.XDBGrid1.DataSource.DataSet.FieldByName('ID').AsInteger;
+        DSclaim_status.Post;
+        DSclaim_status.RefreshRecord;
+    end;
+end;
+
+procedure Tfrmstatus.XFButton5Click(Sender: TObject);
+
+
+
+begin
+//baslangic    XFRadioButton2
+
+        // FrmMainLoss.XDBGrid1.DataSource.DataSet.Locate()  ;
+
+          if FrmMainLoss.XDBGrid1.DataSource.DataSet.RecordCount=0 then
+            begin
+              showmessage('Heç bir məlumat seçlməyib!');
+              exit;
+            end;
+
+   if XFRadioButton2.Checked=true then
+begin
+
+with DmLoss,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['LOSSREFUSAL']);
+ end;
+
+end;
+
+
+if (XFRadioButton1.Checked=true) or (XFRadioButton3.Checked=true)then
+begin
+
+with DmLoss,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['LOSSRESEARCH']);
+ end;
+
+end;
+
+with DmLoss do
+    begin
+
+        if XFRadioButton1.Checked then
+        begin
+         XFRadioButton3.Checked:=false;
+        status:=0 ;
+        //FrmCargo_claim.tr:=1;
+        //lossoperatin:=1;
+        XFGroupBox2.Color:=clGray;
+        XFGroupBox1.Enabled:=true;
+        end;
+
+        if XFRadioButton2.Checked then
+        begin
+            XFRadioButton3.Checked:=false;
+            XFGroupBox2.Color:=clred;
+            //FrmCargo_claim.ir:=1;
+            DmLoss.DSPaymentLossReal.Close;
+            DmLoss.DSPaymentLossReal.SetVariable('dpid',FrmMainLoss.XDBGrid1.DataSource.DataSet.FieldByName('ID').AsInteger);
+            DmLoss.DSPaymentLossReal.open;
+
+            if DmLoss.DSPaymentLossReal.RecordCount<>0 then
+            begin
+              showmessage('Diqqət! Bu zərər tam ödənildiyindən statusunu dəyismək olmaz!!');
+              exit;
+            end;
+
+         
+        status:=1;
+        lossstatus:=0;
+        end;
+
+        DSclaim_status.Close;
+        DSclaim_status.SetVariable('pdep_id',FrmMainLoss.XDBGrid1.DataSource.DataSet.FieldByName('ID').AsInteger);
+        DSclaim_status.Open;
+
+        if XFRadioButton2.Checked=true then
+        begin
+
+
+        if (DSclaim_status.FieldByName('stage_tesdiq').AsInteger=1)
+        
+        //and (DSclaim_status.FieldByName('stage_tesdiq_dat').AsDateTime<>DmLoss.DSSysdat.FieldByName('tek_dat').AsDateTime) 
+
+        then
+        begin
+         // showmessage('Diqqət!Sistem tarixindən fərqli tarixdə təsdiqlənmiş zərəri imtina statusuna keçirmək olmaz !');
+          showmessage('Diqqət!Təsdiq statusunda olan  zərəri imtina statusuna keçirmək olmaz !');
+           XFRadioButton1.Checked:=true ;
+          exit;
+        end;
+            //CheckBox8.Checked:=false;
+             frmstatus.close;
+
+
+             if XFRadioButton2.Checked=true then
+
+               test:=1
+               else
+               test:=0;
+
+
+             FrmMainLoss.XFButton3Click(Sender);
+              test:=0
+
+          
+        end;
+        
+        if XFRadioButton2.Checked=false then
+           begin
+
+           imtina_dat:= strtodate('30.12.1899');
+           imtina_mebleg:=0;
+           //ShowMessage(FrmMainLoss.XDBGrid1.DataSource.DataSet.FieldByName('ID').AsString);
+           //ShowMessage(floattostr(imtina_mebleg));
+        lossstatus:=0;
+        DmLoss.ins_claim_desc.Close;
+        DmLoss.ins_claim_desc.SetVariable('pid',FrmMainLoss.XDBGrid1.DataSource.DataSet.FieldByName('ID').AsInteger);
+        DmLoss.ins_claim_desc.open ;
+        DmLoss.ins_claim_desc.edit;
+          DmLoss.ins_claim_desc.FieldByName('REFUSAL_AMMOUNT').AsFloat:=imtina_mebleg;
+            DmLoss.ins_claim_desc.FieldByName('REFUSAL_DESCRIPTION').AsString:='';
+              DmLoss.ins_claim_desc.FieldByName('refusal_date').AsDateTime:=imtina_dat;
+              DmLoss.ins_claim_desc.post;
+     // DmLoss.ins_claim_desc.Close;
+      
+ 
+      
+        
+        //DSclaim_status.RefreshRecord;
+        DSclaim_status.Edit;
+        DSclaim_status.FieldByName('STATUS').AsInteger:=status;
+       // DSclaim_status.FieldByName('DEP_ID').AsInteger:=FrmMainLoss.XDBGrid1.DataSource.DataSet.FieldByName('ID').AsInteger;
+
+        DSclaim_status.Post;
+
+
+           end;
+
+         dep_id:=FrmMainLoss.XDBGrid1.DataSource.DataSet.FieldByName('id').AsInteger;
+        FrmMainLoss.XDBGrid1.DataSource.DataSet.Refresh ;
+
+
+          FrmMainLoss.XDBGrid1.DataSource.DataSet.Locate('id',dep_id,[]);
+
+
+end;
+
+
+end;   //         son
+
+procedure Tfrmstatus.XFButton6Click(Sender: TObject);
+begin
+lossimtina:=0;
+losstesdiq:=0;
+
+with DmLoss,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['LOSSSTAGE']);
+ end;
+
+
+with DmLoss do
+    begin
+
+              if FrmMainLoss.XDBGrid1.DataSource.DataSet.RecordCount=0 then
+            begin
+              showmessage('Heç bir məlumat seçlməyib!');
+              exit;
+
+            end;
+
+            if  (CheckBox8.Checked=false) then
+            begin
+            DmLoss.DSPaymentLossReal.Close;
+            DmLoss.DSPaymentLossReal.SetVariable('dpid',FrmMainLoss.XDBGrid1.DataSource.DataSet.FieldByName('ID').AsInteger);
+            DmLoss.DSPaymentLossReal.open;
+
+            if DmLoss.DSPaymentLossReal.RecordCount<>0 then
+            begin
+              showmessage('Diqqət! Bu zərər tam ödənildiyindən statusunu dəyismək olmaz!!');
+                 CheckBox8.Checked:=true;
+              exit;
+
+            end
+            end;
+
+
+
+        DSclaim_status.Close;
+        DSclaim_status.SetVariable('pdep_id',FrmMainLoss.XDBGrid1.DataSource.DataSet.FieldByName('ID').AsInteger);
+        DSclaim_status.Open;
+
+        ODSClaimDescription.Close;
+        ODSClaimDescription.SetVariable('id',FrmMainLoss.XDBGrid1.DataSource.DataSet.FieldByName('ID').AsInteger);
+        ODSClaimDescription.Open;
+
+
+              if CheckBox1.Checked=true then
+              begin
+               CheckBox1.Color:=clGray;
+               Forma4:=1 ;
+               //Forma4dat:=DSSysdat.FieldByName('tek_dat').AsDateTime;
+               Forma4dat:=DateTimePicker5.DateTime;
+              end
+               else
+               begin
+                CheckBox1.Color:=clRed;
+                Forma4:=0;
+                Forma4dat:=strtodate('30.12.1899');
+               end;
+
+              if CheckBox2.Checked=true then
+                begin
+               CheckBox2.Color:=clGray;
+               Bankin_cavabi:=1 ;
+               //Bankin_cavabidat:=DSSysdat.FieldByName('tek_dat').AsDateTime;
+               Bankin_cavabidat:=DateTimePicker1.DateTime;
+               end
+               else
+               begin
+               CheckBox2.Color:=clRed;
+               Bankin_cavabi:=0;
+               Bankin_cavabidat:=strtodate('30.12.1899');
+               end;
+
+              if CheckBox3.Checked=true then
+              begin
+               CheckBox3.Color:=clGray;
+               Qarsi_teref_qiym_cavab:=1 ;
+               //Qarsi_teref_qiym_cavabdat:=DSSysdat.FieldByName('tek_dat').AsDateTime;
+               Qarsi_teref_qiym_cavabdat:=DateTimePicker6.DateTime;
+              end
+               else
+               begin
+               CheckBox3.Color:=clRed;
+               Qarsi_teref_qiym_cavab:=0;
+               Qarsi_teref_qiym_cavabdat:=strtodate('30.12.1899');
+               end;
+
+              if CheckBox4.Checked=true then
+              begin
+               CheckBox4.Color:=clGray;
+               Qusur_Akti:=1 ;
+               //Qusur_Aktidat:=DSSysdat.FieldByName('tek_dat').AsDateTime;
+               Qusur_Aktidat:=DateTimePicker2.DateTime;
+              end
+               else
+               begin
+               CheckBox4.Color:=clRed;
+               Qusur_Akti:=0;
+               Qusur_Aktidat:=strtodate('30.12.1899');
+               end;
+
+              if CheckBox5.Checked=true then
+              begin
+               CheckBox5.Color:=clGray;
+               Yoxlama:=1;
+               //Yoxlamadat:=DSSysdat.FieldByName('tek_dat').AsDateTime;
+               Yoxlamadat:=DateTimePicker7.DateTime;
+              end
+               else
+               begin
+               CheckBox5.Color:=clRed;
+               Yoxlama:=0;
+               Yoxlamadat:=strtodate('30.12.1899');
+               end;
+
+              if CheckBox6.Checked=true then
+              begin
+                 Muraciet:=1 ;
+                 CheckBox6.Color:=clGray;
+                 //Muracietdat:=DSSysdat.FieldByName('tek_dat').AsDateTime;
+                 Muracietdat:=DateTimePicker3.DateTime;
+              end
+                 else
+                 begin
+               Muraciet:=0;
+               CheckBox6.Color:=clRed;
+               Muracietdat:=strtodate('30.12.1899');
+              end;
+
+              if CheckBox7.Checked=true then
+                  begin
+                   OK_verilib:=1;
+                   CheckBox7.Color:=clGray ;
+                   //OK_verilibdat:=DSSysdat.FieldByName('tek_dat').AsDateTime;
+                   OK_verilibdat:=DateTimePicker8.DateTime;
+                  end
+               else
+               begin
+               OK_verilib:=0;
+               CheckBox7.Color:=clRed;
+                OK_verilibdat:=strtodate('30.12.1899');
+              end;
+
+
+
+             if CheckBox8.Checked=true then
+              begin
+
+                if CheckBox7.Checked=false then
+                begin
+                 showmessage('Diqqət! "OK verilib"  statusu seçilmədən "Təsdiq" statusu seçilə bilməz!');
+                 Tesdiq:=0;
+                 CheckBox8.Color:=clRed;
+                 Tesdiqdat:=strtodate('30.12.1899');
+                 CheckBox8.Checked:=false;
+                 exit;
+                end;
+
+                           lossoperatin:=1;
+                           FrmMainLoss.status_r:=1;
+                                //FrmAddLoss.showmodal ;
+                                //ShowMessage(IntToStr(FrmCargo_claim.yuktesdiq));
+                 if FrmCargo_claim.yuktesdiq=0 then
+
+                begin
+
+               frmstatus.close;
+
+                FrmMainLoss.XFButton3Click(Sender);
+                end;
+
+              end
+
+               else
+               begin
+               lossoperatin:=0;
+               FrmMainLoss.status_r:=0;
+               Tesdiq:=0;
+               CheckBox8.Color:=clRed;
+               Tesdiqdat:=strtodate('30.12.1899');
+
+               end;
+
+               if DmLoss.DSclaim_status.FieldByName('STAGE_TESDIQ').AsInteger=0 then
+               losstesdiq:=0
+               else
+               losstesdiq:=1;
+
+        DSclaim_status.Edit;
+        DSclaim_status.FieldByName('stage_forma4').AsInteger:=Forma4;
+        DSclaim_status.FieldByName('stage_bankin_cavabi').AsInteger:=Bankin_cavabi;
+        DSclaim_status.FieldByName('stage_qarsi_teref_qiymcavab').AsInteger:=Qarsi_teref_qiym_cavab;
+        DSclaim_status.FieldByName('stage_qusur_akti').AsInteger:=Qusur_Akti;
+        DSclaim_status.FieldByName('stage_yoxlama').AsInteger:=Yoxlama;
+        DSclaim_status.FieldByName('stage_muraciet').AsInteger:=Muraciet;
+        DSclaim_status.FieldByName('stage_ok_verilib').AsInteger:=OK_verilib;
+        DSclaim_status.FieldByName('stage_tesdiq').AsInteger:=Tesdiq;
+
+        DSclaim_status.FieldByName('stage_forma4_dat').AsDateTime:=Forma4dat;
+        DSclaim_status.FieldByName('stage_bankin_cavabi_dat').AsDateTime:=Bankin_cavabidat;
+        DSclaim_status.FieldByName('stage_qarsi_teref_qcavab_dat').AsDateTime:=Qarsi_teref_qiym_cavabdat;
+        DSclaim_status.FieldByName('stage_qusur_akti_dat').AsDateTime:=Qusur_Aktidat;
+        DSclaim_status.FieldByName('stage_yoxlama_dat').AsDateTime:=Yoxlamadat;
+        DSclaim_status.FieldByName('stage_muraciet_dat').AsDateTime:=Muracietdat;
+        DSclaim_status.FieldByName('stage_ok_verilib_dat').AsDateTime:=OK_verilibdat;
+        DSclaim_status.FieldByName('stage_tesdiq_dat').AsDateTime:=Tesdiqdat;
+
+        DSclaim_status.FieldByName('DEP_ID').AsInteger:=FrmMainLoss.XDBGrid1.DataSource.DataSet.FieldByName('ID').AsInteger;
+        DSclaim_status.Post;
+        DSclaim_status.RefreshRecord;
+
+
+
+
+
+               //burdan//
+        {  if  DSclaim_status.FieldByName('trid').AsInteger<>0 then
+           begin
+         if  (CheckBox8.Checked=false) then
+            begin
+            DmLoss.DSPaymentLossReal.Close;
+            DmLoss.DSPaymentLossReal.SetVariable('dpid',FrmMainLoss.XDBGrid1.DataSource.DataSet.FieldByName('ID').AsInteger);
+            DmLoss.DSPaymentLossReal.open;
+
+            if DmLoss.DSPaymentLossReal.RecordCount<>0 then
+            begin
+              showmessage('Diqqət! Bu zərər tam ödənildiyindən statusunu dəyismək olmaz!!');
+              exit;
+            end
+            else
+            begin
+
+               if CheckBox8.Checked=false then
+               begin
+            if  DmLoss.OPCOMMON.CallIntegerFunction('cancelloss',[commoncid,FrmMainLoss.XDBGrid1.DataSource.DataSet.FieldByName('ID').AsInteger])=1 then
+             begin
+               showmessage('Zərər aid emeliyyatlar silindi!');
+               //lossoperatin :=0;
+               //lossstatus:=0;
+             end;
+             ODSClaimDescription.Edit;
+               ODSClaimDescription.FieldByName('CLAIM_NUM').AsString:='';
+               ODSClaimDescription.FieldByName('UTO_TRANSPORTATION_COSTS').Asfloat:=0;
+               ODSClaimDescription.FieldByName('EKSPERTIZA_AMOUNT').Asfloat:=0;
+               ODSClaimDescription.FieldByName('VALUE_NEW_SPARE_PARTS').Asfloat:=0;
+               ODSClaimDescription.FieldByName('FINAL_AMOUNT_LOSS').Asfloat:=0;
+               ODSClaimDescription.FieldByName('AUTO_ASSESS_COSTS').Asfloat:=0;
+               ODSClaimDescription.FieldByName('OTHER_COSTS').Asfloat:=0;
+               ODSClaimDescription.FieldByName('amortizasiya_ammount').Asfloat:=0;
+               ODSClaimDescription.FieldByName('FINAL_PAYMENT_AMOUNT_LOSS').Asfloat:=0;
+               ODSClaimDescription.FieldByName('AUTO_REAL_MARKET_VALUE').Asfloat:=0;
+               ODSClaimDescription.FieldByName('REMAINS_VALUE').Asfloat:=0;
+               ODSClaimDescription.FieldByName('BANK_ACCNO').AsString:='';
+               ODSClaimDescription.post;
+               DmLoss.Dsmain.RefreshRecord;
+
+
+
+            end;
+
+            end;
+             end;
+
+           end;
+
+          //burdan//     }
+
+          if CheckBox8.Checked=false then
+          begin
+                ODSClaimDescription.Edit;
+               ODSClaimDescription.FieldByName('CLAIM_NUM').AsString:='';
+               ODSClaimDescription.FieldByName('UTO_TRANSPORTATION_COSTS').Asfloat:=0;
+               ODSClaimDescription.FieldByName('EKSPERTIZA_AMOUNT').Asfloat:=0;
+               ODSClaimDescription.FieldByName('VALUE_NEW_SPARE_PARTS').Asfloat:=0;
+               ODSClaimDescription.FieldByName('FINAL_AMOUNT_LOSS').Asfloat:=0;
+               ODSClaimDescription.FieldByName('AUTO_ASSESS_COSTS').Asfloat:=0;
+               ODSClaimDescription.FieldByName('OTHER_COSTS').Asfloat:=0;
+               ODSClaimDescription.FieldByName('amortizasiya_ammount').Asfloat:=0;
+               ODSClaimDescription.FieldByName('FINAL_PAYMENT_AMOUNT_LOSS').Asfloat:=0;
+               ODSClaimDescription.FieldByName('AUTO_REAL_MARKET_VALUE').Asfloat:=0;
+               ODSClaimDescription.FieldByName('REMAINS_VALUE').Asfloat:=0;
+               ODSClaimDescription.FieldByName('BANK_ACCNO').AsString:='';
+               ODSClaimDescription.post;
+               DmLoss.Dsmain.RefreshRecord;
+          end;
+
+
+
+end;
+ lossimtina:=0;
+
+
+end; //son
+
+procedure Tfrmstatus.XFRadioButton1Click(Sender: TObject);
+begin
+if XFRadioButton1.Checked=true then
+begin
+  XFRadioButton2.Checked:=false;
+end;
+
+if XFRadioButton1.Checked=false then
+begin
+  XFRadioButton2.Checked:=true;
+end;
+
+end;
+
+procedure Tfrmstatus.XFRadioButton22Click(Sender: TObject);
+begin
+ if XFRadioButton2.Checked=true then
+begin
+  XFGroupBox1.Enabled:=false;
+end; 
+
+end;
+
+procedure Tfrmstatus.XFRadioButton2Click(Sender: TObject);
+begin
+if XFRadioButton2.Checked=true then
+begin
+  XFRadioButton1.Checked:=false;
+end;
+
+if XFRadioButton2.Checked=false then
+begin
+  XFRadioButton1.Checked:=true;
+end;
+end;
+
+end.

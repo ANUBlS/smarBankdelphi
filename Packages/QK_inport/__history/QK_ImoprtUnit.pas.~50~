@@ -1,0 +1,877 @@
+﻿unit QK_ImoprtUnit;
+
+{$WARN SYMBOL_PLATFORM OFF}
+
+interface
+
+uses
+{  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActiveX, AxCtrls, QKI_mport_TLB, StdVcl, ExtCtrls, XFSCtrls, StdCtrls, Grids,
+  XDBGrids, ImgList, ComCtrls, ToolWin, OleServer, ExcelXP, CMExcelExport,Variants,Mask;
+     }
+     Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActiveX, AxCtrls,QKI_mport_TLB,  StdVcl, ExtCtrls, StdCtrls,
+  ComCtrls, ToolWin, Grids, DBGrids, ImgList, ActnList, DBCtrls, OracleData,
+  Db, DBTables, Mask, Menus, SBPlgAx50_TLB, CheckLst, Buttons, Keyboard,
+  ExcelXP, OleServer, CMExcelExport, XDBGrids, XFSCtrls;
+
+
+    resourcestring
+   cs_CommitInformation = 'Ümumi əməliyyatlar: %d'+#13+'Təsdiqlənmiş əməliyyatlar: %d'+#13+'Təsdiqlənməmiş əməliyyatlar: %d';
+   cs_RejectInformation = 'Ümumi əməliyyatlar: %d'+#13+'İnkar edilmiş əməliyyatlar: %d'+#13+'İnkar edilməmiş əməliyyatlar: %d';
+
+
+
+  type
+  TQK_Import = class(TActiveForm, IQK_Import)
+    XFPanel1: TXFPanel;
+    XFPanel2: TXFPanel;
+    XFPanel3: TXFPanel;
+    XDBGrid1: TXDBGrid;
+    XDBGrid2: TXDBGrid;
+    ToolBar1: TToolBar;
+    ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
+    ToolButton3: TToolButton;
+    ToolButton4: TToolButton;
+    ToolButton5: TToolButton;
+    ImageList1: TImageList;
+    ToolButton6: TToolButton;
+    CMExcelExport1: TCMExcelExport;
+    ExcelApplication1: TExcelApplication;
+    OpenDialog: TOpenDialog;
+    ExcelWorksheet1: TExcelWorksheet;
+    ExcelWorkbook1: TExcelWorkbook;
+    ToolButton7: TToolButton;
+    ToolButton8: TToolButton;
+    ToolButton9: TToolButton;
+    PopupMenu1: TPopupMenu;
+    mliyyatlarnsilinmsi1: TMenuItem;
+    PopupMenu2: TPopupMenu;
+    Sil1: TMenuItem;
+    ExceldnOxumaq1: TMenuItem;
+    sdiqetmk1: TMenuItem;
+    Sazlama1: TMenuItem;
+    Yenileme1: TMenuItem;
+    XFPanel4: TXFPanel;
+    Edit_description: TEdit;
+    XFLabel1: TXFLabel;
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure ToolButton1Click(Sender: TObject);
+    procedure ToolButton5Click(Sender: TObject);
+    procedure ToolButton3Click(Sender: TObject);
+    procedure ToolButton7Click(Sender: TObject);
+    procedure ToolButton9Click(Sender: TObject);
+    procedure XDBGrid1DrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TXColumn; State: TGridDrawState);
+    procedure mliyyatlarnsilinmsi1Click(Sender: TObject);
+    procedure Sil1Click(Sender: TObject);
+    procedure ExceldnOxumaq1Click(Sender: TObject);
+    procedure sdiqetmk1Click(Sender: TObject);
+    procedure Sazlama1Click(Sender: TObject);
+    procedure Yenileme1Click(Sender: TObject);
+  private
+    { Private declarations }
+    FEvents: IQK_ImportEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure MouseEnterEvent(Sender: TObject);
+    procedure MouseLeaveEvent(Sender: TObject);
+    procedure PaintEvent(Sender: TObject);
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_AlignDisabled: WordBool; safecall;
+    function Get_AlignWithMargins: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_BorderWidth: Integer; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_DockSite: WordBool; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_ExplicitHeight: Integer; safecall;
+    function Get_ExplicitLeft: Integer; safecall;
+    function Get_ExplicitTop: Integer; safecall;
+    function Get_ExplicitWidth: Integer; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_MouseInClient: WordBool; safecall;
+    function Get_ParentCustomHint: WordBool; safecall;
+    function Get_ParentDoubleBuffered: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PopupMode: TxPopupMode; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_ScreenSnap: WordBool; safecall;
+    function Get_SnapBuffer: Integer; safecall;
+    function Get_UseDockManager: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_AlignWithMargins(Value: WordBool); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_BorderWidth(Value: Integer); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_DockSite(Value: WordBool); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_ParentCustomHint(Value: WordBool); safecall;
+    procedure Set_ParentDoubleBuffered(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PopupMode(Value: TxPopupMode); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_ScreenSnap(Value: WordBool); safecall;
+    procedure Set_SnapBuffer(Value: Integer); safecall;
+    procedure Set_UseDockManager(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+  public
+    { Public declarations }
+    procedure Initialize; override;
+  end;
+
+implementation
+
+uses ComObj, ComServ, QK_İmpotDataMod, FormReport,SboapiDataModuleImpl,
+  ExcelCheckImpl;
+
+{$R *.DFM}
+
+{ TQK_Import }
+
+procedure TQK_Import.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_QK_ImportPage); }
+end;
+
+procedure TQK_Import.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as IQK_ImportEvents;
+  inherited EventSinkChanged(EventSink);
+end;
+
+procedure TQK_Import.ExceldnOxumaq1Click(Sender: TObject);
+begin
+ToolButton1.Click
+end;
+
+procedure TQK_Import.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnMouseEnter := MouseEnterEvent;
+  OnMouseLeave := MouseLeaveEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TQK_Import.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TQK_Import.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TQK_Import.Get_AlignDisabled: WordBool;
+begin
+  Result := AlignDisabled;
+end;
+
+function TQK_Import.Get_AlignWithMargins: WordBool;
+begin
+  Result := AlignWithMargins;
+end;
+
+function TQK_Import.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TQK_Import.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TQK_Import.Get_BorderWidth: Integer;
+begin
+  Result := Integer(BorderWidth);
+end;
+
+function TQK_Import.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TQK_Import.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TQK_Import.Get_DockSite: WordBool;
+begin
+  Result := DockSite;
+end;
+
+function TQK_Import.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TQK_Import.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TQK_Import.Get_ExplicitHeight: Integer;
+begin
+  Result := ExplicitHeight;
+end;
+
+function TQK_Import.Get_ExplicitLeft: Integer;
+begin
+  Result := ExplicitLeft;
+end;
+
+function TQK_Import.Get_ExplicitTop: Integer;
+begin
+  Result := ExplicitTop;
+end;
+
+function TQK_Import.Get_ExplicitWidth: Integer;
+begin
+  Result := ExplicitWidth;
+end;
+
+function TQK_Import.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TQK_Import.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TQK_Import.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TQK_Import.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TQK_Import.Get_MouseInClient: WordBool;
+begin
+  Result := MouseInClient;
+end;
+
+function TQK_Import.Get_ParentCustomHint: WordBool;
+begin
+  Result := ParentCustomHint;
+end;
+
+function TQK_Import.Get_ParentDoubleBuffered: WordBool;
+begin
+  Result := ParentDoubleBuffered;
+end;
+
+function TQK_Import.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TQK_Import.Get_PopupMode: TxPopupMode;
+begin
+  Result := Ord(PopupMode);
+end;
+
+function TQK_Import.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TQK_Import.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TQK_Import.Get_ScreenSnap: WordBool;
+begin
+  Result := ScreenSnap;
+end;
+
+function TQK_Import.Get_SnapBuffer: Integer;
+begin
+  Result := SnapBuffer;
+end;
+
+function TQK_Import.Get_UseDockManager: WordBool;
+begin
+  Result := UseDockManager;
+end;
+
+function TQK_Import.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TQK_Import.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TQK_Import._Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TQK_Import.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TQK_Import.ActiveFormCreate(Sender: TObject);
+begin
+Edit_description.Text:='Yenidən qiymətləndirme' ;
+QKİmportDataMod:=TQKİmportDataMod.create(self);
+QKİmportDataMod.ods_qk_transaction.Open;
+ExcelCheck:=TExcelCheck.Create(self);
+end;
+
+procedure TQK_Import.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TQK_Import.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TQK_Import.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TQK_Import.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TQK_Import.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TQK_Import.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TQK_Import.mliyyatlarnsilinmsi1Click(Sender: TObject);
+ var
+  SelectedRowsCnt, i: Integer;
+   IDs: WideString;
+   Status, TrCount: Word;
+begin
+if QKİmportDataMod.ods_qk_transaction .RecordCount= 0then
+begin
+  showmessage('Heç bir məlumat yoxdur  !');
+exit;
+end;
+    with XDBGrid2, DataSource.DataSet do
+  begin
+
+    SelectedRowsCnt := SelectedRows.Count;
+
+    if SelectedRowsCnt > 1 then
+    begin
+    if MessageDlg(Format(inttostr(SelectedRowsCnt)+'  Sayda əməliyyat günün sənədlərindən silinsinmi  ?', []),
+      mtConfirmation, [mbYes, mbCancel], 0) = mrYes then
+
+      for I := 0 to SelectedRowsCnt -1 do
+      begin
+
+        GotoBookmark(Pointer(SelectedRows[I]));
+      QKİmportDataMod.qk_accsettings.CallProcedure('delet_qk_transaction',
+      [QKİmportDataMod.ods_qk_transaction.FieldByName('ISIN').AsString,
+      QKİmportDataMod.ods_qk_transaction.FieldByName('TR_ID').AsInteger]);
+      QKİmportDataMod.ods_qk_transaction.next;
+     end;
+
+    end else
+    begin
+     if MessageDlg(Format(inttostr(SelectedRowsCnt)+'  Sayda əməliyyat günün sənədlərindən silinsinmi  ?', []),
+     mtConfirmation, [mbYes, mbCancel], 0) = mrYes then
+
+      QKİmportDataMod.qk_accsettings.CallProcedure('delet_qk_transaction',
+      [QKİmportDataMod.ods_qk_transaction.FieldByName('ISIN').AsString,
+      QKİmportDataMod.ods_qk_transaction.FieldByName('TR_ID').AsInteger]);
+      QKİmportDataMod.ods_qk_transaction.next;
+        end;
+
+  end;
+
+   sboapiDataModule.SBSession.Commit;
+
+   QKİmportDataMod.ods_QK_Import.Refresh;
+   QKİmportDataMod.ods_qk_transaction.Refresh;
+
+end;
+
+procedure TQK_Import.MouseEnterEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnMouseEnter;
+end;
+
+procedure TQK_Import.MouseLeaveEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnMouseLeave;
+end;
+
+procedure TQK_Import.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TQK_Import.Sazlama1Click(Sender: TObject);
+begin
+ToolButton5.Click
+end;
+
+procedure TQK_Import.sdiqetmk1Click(Sender: TObject);
+begin
+ToolButton3.Click
+end;
+
+procedure TQK_Import.Set_AxBorderStyle(Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TQK_Import.Set_AlignWithMargins(Value: WordBool);
+begin
+  AlignWithMargins := Value;
+end;
+
+procedure TQK_Import.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TQK_Import.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TQK_Import.Set_BorderWidth(Value: Integer);
+begin
+  BorderWidth := TBorderWidth(Value);
+end;
+
+procedure TQK_Import.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TQK_Import.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TQK_Import.Set_DockSite(Value: WordBool);
+begin
+  DockSite := Value;
+end;
+
+procedure TQK_Import.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TQK_Import.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TQK_Import.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TQK_Import.Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TQK_Import.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := string(Value);
+end;
+
+procedure TQK_Import.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TQK_Import.Set_ParentCustomHint(Value: WordBool);
+begin
+  ParentCustomHint := Value;
+end;
+
+procedure TQK_Import.Set_ParentDoubleBuffered(Value: WordBool);
+begin
+  ParentDoubleBuffered := Value;
+end;
+
+procedure TQK_Import.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TQK_Import.Set_PopupMode(Value: TxPopupMode);
+begin
+  PopupMode := TPopupMode(Value);
+end;
+
+procedure TQK_Import.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TQK_Import.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TQK_Import.Set_ScreenSnap(Value: WordBool);
+begin
+  ScreenSnap := Value;
+end;
+
+procedure TQK_Import.Set_SnapBuffer(Value: Integer);
+begin
+  SnapBuffer := Value;
+end;
+
+procedure TQK_Import.Set_UseDockManager(Value: WordBool);
+begin
+  UseDockManager := Value;
+end;
+
+procedure TQK_Import.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+procedure TQK_Import.Sil1Click(Sender: TObject);
+
+begin
+  ToolButton9.Click
+end;
+
+procedure TQK_Import.ToolButton1Click(Sender: TObject);
+const RootCell = 2;
+var
+    V, Sheet, Sheets  :Variant;
+    Row: Integer;
+    CellStr,a,VAL_NAME:string;
+    F:boolean;
+    x,i,j:integer;
+    say,k:integer;
+  meb :real;
+begin
+  if not OpenDialog.Execute then Exit;
+ { V:=ExcelApplication1.Application;
+  ExcelApplication1.Connect;  }
+    V := CreateOleObject('Excel.Application');
+    x:=0;
+   try
+     V.Workbooks.Open(OpenDialog.FileName);
+  // V.Visible:=True;
+    //Sheet := V.Workbooks.Sheets[1].name;
+   Sheets := V.Sheets;
+  Edit_description.Text:='Yenidən qiymətləndirme' ;
+  QKİmportDataMod.qk_accsettings.CallProcedure('delet_qk_import',[]);
+  QKİmportDataMod.ODS_QK_Import.Refresh;
+  QKİmportDataMod.ods_qk_transaction.Refresh;
+ 
+     QKİmportDataMod.ODS_QK_Import_excel.Open;
+     QKİmportDataMod.ODS_QK_Import_excel.First;
+     // showmessage( V.activesheet.usedrange.rows.count);
+     with QKİmportDataMod,ODS_QK_Import_excel do
+     begin
+        Open;
+        First;
+
+      for J := 1 to V.Sheets.Count do
+      begin
+     //  ShowMessage(v.Workbooks[1].Worksheets[j].Name);
+       ExcelCheck.CheckListBox1.Items.Add(v.Workbooks[1].Worksheets[j].Name);
+       end;
+       if ExcelCheck.CheckListBox1.Items.Count>1 then
+          ExcelCheck.ShowModal;
+          if ExcelCheck.CheckListBox1.Items.Count=1 then
+          ExcelCheck.CheckListBox1.Checked[0]:=True;
+
+    //V.Workbooks[1].Worksheets['sheet1'].cells.CurrentRegion.Rows.Count;
+  //   for J := 1 to V.Sheets.Count do
+
+
+  for j := 1 to ExcelCheck.CheckListBox1.Items.Count do
+       begin
+     if ExcelCheck.CheckListBox1.Checked[j-1] then
+     begin
+     { ShowMessage('Item at index ' + IntToStr(j) + ' is selected.' +
+                  'Its value is '+ ExcelCheck.CheckListBox1.Items.Strings[j-1]);}
+        Row:=2;
+
+     for I:=0 to V.sheets[j].usedrange.rows.count  do
+         begin
+         Insert;
+           FieldByName('A').AsString                := V.Sheets[j].cells[Row,1];
+           FieldByName('B').AsString                := V.Sheets[j].cells[Row,2];
+           FieldByName('C').AsString                := V.Sheets[j].cells[Row,3];
+           FieldByName('D').AsString                := V.Sheets[j].cells[Row,4];
+           FieldByName('E').AsString                := V.Sheets[j].cells[Row,5];
+           FieldByName('F').AsString                := V.Sheets[j].cells[Row,6];
+           FieldByName('G').AsString                := V.Sheets[j].cells[Row,7];
+           FieldByName('H').AsString                := V.Sheets[j].cells[Row,8];
+           FieldByName('I').AsString                := V.Sheets[j].cells[Row,9];
+           FieldByName('I1').AsString               := V.Sheets[j].cells[Row,9];
+           try
+           meb:=V.Sheets[j].cells[Row,9];
+
+             except
+           FieldByName('I1').AsVariant                := '0';
+          x:=x+1;
+          end;
+           FieldByName('J').AsString                := V.Sheets[j].cells[Row,10];
+          Post;
+         Inc(Row);
+         end;
+
+
+
+       Next;
+     end;
+       end;
+       ExcelCheck.CheckListBox1.Clear;
+       QKİmportDataMod.qk_accsettings.CallProcedure('excel_sum',[]);
+       QKİmportDataMod.ODS_QK_import.Refresh;
+       QKİmportDataMod.ODS_QK_Import_excel.Refresh;
+       QKİmportDataMod.ods_qk_transaction.Refresh;
+
+     end;
+    //-------- ShowMessage(inttostr(x));
+   finally
+     V.Quit;
+
+     //V.Disconnect;
+   end;
+
+end;
+
+
+
+procedure TQK_Import.ToolButton3Click(Sender: TObject);
+ var
+ tt, SelectedRowsCnt, i: Integer;
+   IDs: WideString;
+   Status, TrCount: Word;
+   WaitNextConfirm:boolean;
+   transname:string;
+begin
+tt:=QKİmportDataMod.ods_qk_transaction.RecordCount;
+if QKİmportDataMod.ODS_QK_Import .RecordCount= 0then
+begin
+  showmessage('Heç bir məlumat yoxdur  !');
+exit;
+end;
+ {if Edit_description.Text='' then
+  begin
+ ShowMessage('Əməliyyatın təyinatı sahəsi boşdur  !');
+  exit;
+  end;   }
+    with XDBGrid1, DataSource.DataSet do
+  begin
+  ///--showmessage(QKİmportDataMod.ODS_QK_Import.FieldByName('c').AsString) ;
+    SelectedRowsCnt := SelectedRows.Count;
+
+    if SelectedRowsCnt > 1 then
+    begin
+   if MessageDlg(Format(inttostr(SelectedRowsCnt)+'   sayda əməliyyat təsdiq olunsunmu ? ', []),
+      mtConfirmation, [mbYes, mbCancel], 0) = mrYes then
+       begin
+      for I := 0 to SelectedRowsCnt - 1 do
+      begin
+
+      transname:=Edit_description.Text;
+      GotoBookmark(Pointer(SelectedRows[I]));
+      QKİmportDataMod.qk_accsettings.CallProcedure('tr_add',
+      [QKİmportDataMod.ods_QK_Import.FieldByName('c').AsString,
+      QKİmportDataMod.ods_QK_Import.FieldByName('i1').AsInteger,
+      transname]);
+      QKİmportDataMod.ods_QK_Import.next;
+      end;
+     end else exit;
+
+    end else
+    begin
+  // Showmessage(inttostr(SelectedRowsCnt));
+     if MessageDlg(Format(inttostr(SelectedRowsCnt)+'  sayda əməliyyat təsdiq olunsunmu ?', []),
+     mtConfirmation, [mbYes, mbCancel], 0) = mrYes then
+     begin
+
+     transname:=Edit_description.Text;
+      QKİmportDataMod.qk_accsettings.CallProcedure('tr_add',
+      [QKİmportDataMod.ods_QK_Import.FieldByName('c').AsString,
+      QKİmportDataMod.ods_QK_Import.FieldByName('i1').AsInteger,
+      transname]);
+      QKİmportDataMod.ods_QK_Import.next;
+     end else exit;
+     end;
+
+  end;
+
+   sboapiDataModule.SBSession.Commit;
+   QKİmportDataMod.ods_QK_Import.Refresh;
+   QKİmportDataMod.ods_qk_transaction.Refresh;
+   ShowMessage(inttostr(QKİmportDataMod.ods_qk_transaction.RecordCount-tt)+'  sayda əməliyyat günün sənədlərinə göndərildi ?');
+
+   end;
+
+procedure TQK_Import.ToolButton5Click(Sender: TObject);
+begin
+Form_Report:=TForm_Report.create(self);
+Form_Report.ShowModal;
+end;
+
+procedure TQK_Import.ToolButton7Click(Sender: TObject);
+begin
+QKİmportDataMod.ODS_QK_Import.close;
+QKİmportDataMod.ODS_QK_Import.open;
+QKİmportDataMod.ods_qk_transaction.close;
+QKİmportDataMod.ods_qk_transaction.open;
+end;
+
+procedure TQK_Import.ToolButton9Click(Sender: TObject);
+ var
+  SelectedRowsCnt, i: Integer;
+   IDs: WideString;
+   Status, TrCount: Word;
+begin
+    with XDBGrid1, DataSource.DataSet do
+  begin
+
+    SelectedRowsCnt := SelectedRows.Count;
+
+    if SelectedRowsCnt > 1 then
+    begin
+    if MessageDlg(Format(inttostr(SelectedRowsCnt)+'  sayda  əməliyyat silinsinmi ? ', []),
+      mtConfirmation, [mbYes, mbCancel], 0) = mrYes then
+
+      for I := 0 to SelectedRowsCnt - 1 do
+      begin
+
+        GotoBookmark(Pointer(SelectedRows[I]));
+
+     QKİmportDataMod.qk_accsettings.CallProcedure('del_QK_import',
+     [QKİmportDataMod.ODS_qk_import.FieldByName('c').AsString]);
+
+     end;
+
+    end else
+    begin
+     if MessageDlg(Format(inttostr(SelectedRowsCnt)+'  sayda  əməliyyat silinsinmi ? ', []),
+     mtConfirmation, [mbYes, mbCancel], 0) = mrYes then
+     QKİmportDataMod.qk_accsettings.CallProcedure('del_QK_import',
+     [QKİmportDataMod.ODS_qk_import.FieldByName('c').AsString]);
+
+  end;
+  end;
+
+   QKİmportDataMod.ODS_QK_import.Refresh;
+
+end;
+
+procedure TQK_Import.XDBGrid1DrawColumnCell(Sender: TObject; const Rect: TRect;
+  DataCol: Integer; Column: TXColumn; State: TGridDrawState);
+  var s:string;
+Var
+  w : Integer;
+
+begin
+  w := 5+Canvas.TextExtent(Column.Field.DisplayText).cx;
+  if w>column.Width then Column.Width := w;
+ if  (Column.FieldName='INFO')
+    then
+      begin
+
+        with  XDBGrid1,Canvas do
+          begin
+            s:=DataSource.DataSet.FieldByName('info').AsString;
+            //Brush.Color:=clWhite;
+            FillRect(Rect);
+          //  if (DataSource.DataSet.FieldByName('info').AsString='') then
+           //    begin
+                 Font.Color:=clRed;
+                 TextOut(Rect.Left- 90+
+                   Canvas.TextWidth(s),
+                   Rect.Top+2,s);
+             //  end  ;
+          end;
+      end;
+end;
+
+procedure TQK_Import.Yenileme1Click(Sender: TObject);
+begin
+ToolButton7.Click
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TQK_Import,
+    Class_QK_Import,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

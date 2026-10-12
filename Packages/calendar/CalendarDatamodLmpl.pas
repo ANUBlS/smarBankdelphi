@@ -1,0 +1,64 @@
+unit CalendarDatamodLmpl ;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, OracleData, Oracle;
+
+type
+  TCalendarDataMod = class(TDataModule)
+    DataSource1: TDataSource;
+    OracleDataSet1: TOracleDataSet;
+    OracleDataSet2: TOracleDataSet;
+    OraclePackage1: TOraclePackage;
+    OracleDataSet2JAN: TDateTimeField;
+    OracleDataSet2FEB: TDateTimeField;
+    OracleDataSet2MAR: TDateTimeField;
+    OracleDataSet2APR: TDateTimeField;
+    OracleDataSet2MAY: TDateTimeField;
+    OracleDataSet2JUN: TDateTimeField;
+    OracleDataSet2JUL: TDateTimeField;
+    OracleDataSet2AUG: TDateTimeField;
+    OracleDataSet2SEP: TDateTimeField;
+    OracleDataSet2OCT: TDateTimeField;
+    OracleDataSet2NOV: TDateTimeField;
+    OracleDataSet2DEC: TDateTimeField;
+    OracleDataSet3: TOracleDataSet;
+    DataSource2: TDataSource;
+    OracleDataSet1ID: TFloatField;
+    OracleDataSet1DESCRIPTION: TWideStringField;
+    OracleDataSet1HOLIDAY_DATE: TDateTimeField;
+    OracleDataSet3ID: TFloatField;
+    OracleDataSet3HOLIDAY_DATE: TDateTimeField;
+    OracleDataSet3DESCRIPTION: TWideStringField;
+    procedure DataModuleCreate(Sender: TObject);
+    procedure DataModuleDestroy(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  CalendarDataMod: TCalendarDataMod;
+
+implementation
+
+uses sboapiDataModuleImpl;
+
+{$R *.DFM}
+
+procedure TCalendarDataMod.DataModuleCreate(Sender: TObject);
+begin
+OracleDataSet1.open;
+OracleDataSet2.open;
+end;
+
+procedure TCalendarDataMod.DataModuleDestroy(Sender: TObject);
+begin
+ OracleDataSet1.close;
+OracleDataSet2.close;
+end;
+
+end.

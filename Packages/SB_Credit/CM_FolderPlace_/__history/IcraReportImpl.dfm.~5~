@@ -1,0 +1,102 @@
+object IcraReportFrm: TIcraReportFrm
+  Left = 0
+  Top = 0
+  Caption = 'IcraReportFrm'
+  ClientHeight = 570
+  ClientWidth = 785
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poDesktopCenter
+  OnCanResize = FormCanResize
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 785
+    Height = 35
+    Align = alTop
+    BevelOuter = bvLowered
+    Color = clGradientActiveCaption
+    ParentBackground = False
+    TabOrder = 0
+  end
+  object XDBGrid1: TXDBGrid
+    Left = 0
+    Top = 35
+    Width = 785
+    Height = 535
+    Align = alClient
+    DataSource = PRDataModule.DataSource15
+    GridStyle.VisualStyle = vsXPStyle
+    Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit, dgExtendedSelect, dgInternalSelect, dgRowResize, dgRowScroll, dgHotButtons, dgTitleButtons, dgTitleHeaders, dgTitleWidthOff, dgMarkerAutoAlign, dgMarkerAutoToggle]
+    OptionsEx = [dgBlankRow, dgTotalHeader, dgTotalValues, dgTotalFields, dgTotalColLines, dgTotalHeaderBox, dgTotalValuesBox, dgTotalFieldsBox, dgTotalFooterBox, dgAutoAscendOrder, dgAutoUpdateSequence, dgDelayUpdateSequence, dgAutoUpdateTotals, dgDelayUpdateTotals, dgCalcWholeDataSet, dgDelaySelectedRows, dgSelectedAutoHidden]
+    TabOrder = 1
+    Totals.BoxStyle = cbGray
+    Columns = <
+      item
+        AutoNumber = True
+        Expanded = False
+        Visible = True
+        Width = 25
+      end
+      item
+        Expanded = False
+        FieldName = 'ID'
+        Visible = True
+        Width = 65
+      end
+      item
+        Expanded = False
+        FieldName = 'NUMBEROFCREDIT'
+        Visible = True
+        Width = 97
+      end
+      item
+        Expanded = False
+        FieldName = 'NAME'
+        Visible = True
+        Width = 171
+      end
+      item
+        Expanded = False
+        FieldName = 'PAYDATE'
+        Visible = True
+        Width = 67
+      end
+      item
+        Expanded = False
+        FieldName = 'PAYEDAMT'
+        TotalFooter.TotalResult = trCalcValue
+        TotalHeader.TotalResult = trCalcValue
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'PAYEDDUEAMT'
+        TotalFooter.TotalResult = trCalcValue
+        TotalHeader.TotalResult = trCalcValue
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'PAYEDINTAMT'
+        TotalFooter.TotalResult = trCalcValue
+        TotalHeader.TotalResult = trCalcValue
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'PAYEDPENALTYAMT'
+        TotalFooter.TotalResult = trCalcValue
+        TotalHeader.TotalResult = trCalcValue
+        Visible = True
+        Width = 76
+      end>
+  end
+end

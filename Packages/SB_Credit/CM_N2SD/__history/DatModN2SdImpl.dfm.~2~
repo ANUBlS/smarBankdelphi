@@ -1,0 +1,266 @@
+object DatModN2Sd: TDatModN2Sd
+  OldCreateOrder = False
+  OnCreate = DataModuleCreate
+  OnDestroy = DataModuleDestroy
+  Height = 480
+  Width = 696
+  object ValDatSet: TOracleDataSet
+    SQL.Strings = (
+      'select valute,valu_name from sb_avalute')
+    Optimize = False
+    Left = 32
+    Top = 16
+  end
+  object RegDatSet: TOracleDataSet
+    SQL.Strings = (
+      'select id ,name from agro_region'
+      ''
+      ''
+      '')
+    Optimize = False
+    Left = 32
+    Top = 72
+  end
+  object BrDatSet: TOracleDataSet
+    SQL.Strings = (
+      'select id,name from sb_filial')
+    Optimize = False
+    Left = 32
+    Top = 120
+  end
+  object ResultDatSet: TOracleDataSet
+    SQL.Strings = (
+      'SELECT  '
+      '    region_name, '
+      '    sum(generalamt),'
+      'case when  sum(avgamt)=0 then '
+      ' 0 else (sum(avgamt)/sum(generalamt))*100 end as'
+      '    avgamt,'
+      ''
+      '    sum(natvalamt),'
+      'case when  sum(avgnatvalamt)=0 then '
+      '   0 else '
+      ' (sum(avgnatvalamt)/sum(natvalamt))*100 end as avgnatvalamt,'
+      ''
+      '   sum(freevalamt), '
+      'case when  sum(avgfreevalamt)=0 then '
+      
+        '   0 else ( sum(avgfreevalamt)/sum(freevalamt))*100 end as avgfr' +
+        'eevalamt ,'
+      '    sum(um_sdv_mv),'
+      'case when  sum(um_sdv_orta)=0 then '
+      
+        '    0 else (sum(um_sdv_orta)/sum(um_sdv_mv))*100 end as um_sdv_o' +
+        'rta,'
+      '   sum(expiresamt),'
+      '   sum(rest),'
+      'case when sum(intrest_orta)=0 then'
+      '    0 else '
+      '  (sum(intrest_orta)/sum(rest))*100 end as intrest_orta,'
+      '    sum(rest_mv),'
+      'case when sum(rest_mv)=0 and sum(intrest_orta_mv)=0 then '
+      '     0 else '
+      
+        '    (sum(intrest_orta_mv)/sum(rest_mv))*100 end as intrest_orta_' +
+        'mv,'
+      '    sum(rest_sdv),'
+      'case when  sum(int_sdv_orta)=0 then'
+      '     0 else '
+      '    (sum(int_sdv_orta)/sum(rest_sdv))*100 end as int_sdv_orta'
+      '  '
+      '  FROM cm_n2_sdt'
+      '  group by region_name'
+      ''
+      ''
+      '/*SELECT  '
+      '    region_name, '
+      '    sum(generalamt), '
+      'case when sum(generalamt)=0 then'
+      '0 else  (sum(generalamt)/sum(avgamt))*100'
+      '    end  as avgamt, '
+      '    sum(natvalamt), '
+      '    (sum(natvalamt)/sum(avgnatvalamt))*100 as avgnatvalamt,'
+      '    sum(freevalamt), '
+      '    sum(avgfreevalamt), '
+      '    sum(expiresamt), '
+      '    branch'
+      '  FROM cm_n2_sdt'
+      '  group by region_name,branch*/'
+      '  '
+      '')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000100000001600000052004500470049004F004E005F004E0041004D00
+      45000100000000001E000000530055004D002800470045004E00450052004100
+      4C0041004D00540029000100000000001C000000530055004D0028004E004100
+      5400560041004C0041004D00540029000100000000001E000000530055004D00
+      28004600520045004500560041004C0041004D00540029000100000000001E00
+      0000530055004D002800450058005000490052004500530041004D0054002900
+      0100000000000C00000041005600470041004D00540001000000000018000000
+      4100560047004E0041005400560041004C0041004D0054000100000000001A00
+      00004100560047004600520045004500560041004C0041004D00540001000000
+      00001C000000530055004D00280055004D005F005300440056005F004D005600
+      29000100000000001600000055004D005F005300440056005F004F0052005400
+      410001000000000012000000530055004D002800520045005300540029000100
+      000000001800000049004E00540052004500530054005F004F00520054004100
+      01000000000018000000530055004D00280052004500530054005F004D005600
+      29000100000000001E00000049004E00540052004500530054005F004F005200
+      540041005F004D0056000100000000001A000000530055004D00280052004500
+      530054005F0053004400560029000100000000001800000049004E0054005F00
+      5300440056005F004F00520054004100010000000000}
+    Left = 32
+    Top = 176
+    object ResultDatSetREGION_NAME: TStringField
+      DisplayLabel = #1056#1077#1101#1080#1086#1085#1083#1072#1088
+      FieldName = 'REGION_NAME'
+      Required = True
+      Size = 34
+    end
+    object ResultDatSetSUMREST: TFloatField
+      DisplayLabel = #1046#1103#1084#1080' '#1084#1103#1073#1083#1103#1100
+      FieldName = 'SUM(REST)'
+    end
+    object ResultDatSetINTREST_ORTA: TFloatField
+      DisplayLabel = #1054#1088#1090#1072' '#1092#1072#1080#1079' '#1076#1103#1088#1103#1098#1103#1089#1080
+      FieldName = 'INTREST_ORTA'
+      DisplayFormat = '#,##0.00'
+    end
+    object ResultDatSetSUMREST_MV: TFloatField
+      DisplayLabel = #1052#1103#1073#1083#1103#1100' '#1084#1080#1083#1083#1080' '#1074#1072#1083
+      FieldName = 'SUM(REST_MV)'
+    end
+    object ResultDatSetINTREST_ORTA_MV: TFloatField
+      DisplayLabel = #1086#1088#1090#1072' % '#1076#1103#1088#1103#1078#1103#1089#1080' '#1052'.'#1042
+      FieldName = 'INTREST_ORTA_MV'
+      DisplayFormat = '#,##0.00'
+    end
+    object ResultDatSetSUMREST_SDV: TFloatField
+      DisplayLabel = #1052#1103#1073#1083#1103#1100' '#1057#1044#1042
+      FieldName = 'SUM(REST_SDV)'
+    end
+    object ResultDatSetINT_SDV_ORTA: TFloatField
+      DisplayLabel = #1086#1088#1090#1072' % '#1076#1103#1088#1103#1078#1103#1089#1080' '#1057#1044#1042
+      FieldName = 'INT_SDV_ORTA'
+      DisplayFormat = '#,##0.00'
+    end
+    object ResultDatSetSUMGENERALAMT: TFloatField
+      DisplayLabel = #1043'.'#1052'.'#1052'.'#1042' '#1084#1103#1073#1083#1103#1100
+      FieldName = 'SUM(GENERALAMT)'
+    end
+    object ResultDatSetAVGAMT: TFloatField
+      DisplayLabel = #1043'.'#1052'.'#1052'.'#1042' '#1086#1088#1090#1072' % '#1076#1103#1088#1103#1098#1103#1089#1080
+      FieldName = 'AVGAMT'
+      DisplayFormat = '#,##0.00'
+    end
+    object ResultDatSetSUMNATVALAMT: TFloatField
+      DisplayLabel = #1043'.'#1052' '#1057#1044#1042' '#1084#1103#1073#1083#1103#1100
+      FieldName = 'SUM(NATVALAMT)'
+    end
+    object ResultDatSetAVGNATVALAMT: TFloatField
+      DisplayLabel = #1043'.'#1052' '#1057#1044#1042' '#1086#1088#1090#1072' %'
+      FieldName = 'AVGNATVALAMT'
+      DisplayFormat = '#,##0.00'
+    end
+    object ResultDatSetSUMFREEVALAMT: TFloatField
+      DisplayLabel = #1059'.'#1052'.'#1052'.'#1042' '#1084#1103#1073#1083#1103#1100#1080
+      FieldName = 'SUM(FREEVALAMT)'
+    end
+    object ResultDatSetAVGFREEVALAMT: TFloatField
+      DisplayLabel = #1059'.'#1052'.'#1052'.'#1042' '#1086#1088#1090#1072' %'
+      FieldName = 'AVGFREEVALAMT'
+      DisplayFormat = '#,##0.00'
+    end
+    object ResultDatSetSUMUM_SDV_MV: TFloatField
+      DisplayLabel = #1059'.'#1052' '#1057#1044#1042' '#1084#1103#1073#1083#1103#1100
+      FieldName = 'SUM(UM_SDV_MV)'
+    end
+    object ResultDatSetUM_SDV_ORTA: TFloatField
+      DisplayLabel = #1059'.'#1052' '#1057#1044#1042' '#1086#1088#1090#1072' %'
+      FieldName = 'UM_SDV_ORTA'
+      DisplayFormat = '#,##0.00'
+    end
+    object ResultDatSetSUMEXPIRESAMT: TFloatField
+      DisplayLabel = #1069#1077#1078#1080#1082#1084#1080#1096' '#1084#1103#1073#1083#1103#1100
+      FieldName = 'SUM(EXPIRESAMT)'
+    end
+  end
+  object ValDatSrc: TDataSource
+    DataSet = ValDatSet
+    Left = 96
+    Top = 16
+  end
+  object RegDatSrc: TDataSource
+    DataSet = RegDatSet
+    Left = 96
+    Top = 72
+  end
+  object BrDatSrc: TDataSource
+    DataSet = BrDatSet
+    Left = 96
+    Top = 120
+  end
+  object CrdinfoDatSet: TOracleDataSet
+    SQL.Strings = (
+      
+        'select id,currency,customertype,branchid ,(duedatefirstcontract ' +
+        '- dateofconclusion) as period'
+      'from  CM_portfolio '
+      '  '
+      '  '
+      '  '
+      '  '
+      '')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      0500000005000000040000004900440001000000000010000000430055005200
+      520045004E00430059000100000000001800000043005500530054004F004D00
+      450052005400590050004500010000000000100000004200520041004E004300
+      4800490044000100000000000C00000050004500520049004F00440001000000
+      0000}
+    Left = 32
+    Top = 232
+    object CrdinfoDatSetID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object CrdinfoDatSetCURRENCY: TFloatField
+      FieldName = 'CURRENCY'
+    end
+    object CrdinfoDatSetCUSTOMERTYPE: TFloatField
+      FieldName = 'CUSTOMERTYPE'
+    end
+    object CrdinfoDatSetBRANCHID: TFloatField
+      FieldName = 'BRANCHID'
+    end
+    object CrdinfoDatSetPERIOD: TFloatField
+      FieldName = 'PERIOD'
+    end
+  end
+  object CM_N3_SD: TOraclePackage
+    PackageName = 'CM_N3_SD'
+    ParameterMode = pmNamed
+    Cursor = crSQLWait
+    Left = 112
+    Top = 232
+  end
+  object PeriodDatSet: TOracleDataSet
+    SQL.Strings = (
+      'select period from ('
+      'select '
+      ' (duedatefirstcontract - dateofconclusion) as period'
+      'from cm_portfolio'
+      'order  by (duedatefirstcontract - dateofconclusion))'
+      'group by period')
+    Optimize = False
+    Left = 112
+    Top = 176
+    object PeriodDatSetPERIOD: TFloatField
+      FieldName = 'PERIOD'
+    end
+  end
+  object PeriodDatSrc: TDataSource
+    DataSet = PeriodDatSet
+    Left = 184
+    Top = 16
+  end
+end

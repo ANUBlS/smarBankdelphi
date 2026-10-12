@@ -1,0 +1,85 @@
+object DefineCalcDatMod: TDefineCalcDatMod
+  OldCreateOrder = False
+  OnCreate = DataModuleCreate
+  OnDestroy = DataModuleDestroy
+  Height = 434
+  Width = 613
+  object CM_CREDITS: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'CM_CREDIT'
+    Left = 56
+    Top = 40
+  end
+  object OracleDataSet1: TOracleDataSet
+    SQL.Strings = (
+      
+        'select  nvl(to_char(stopcalcdate),0) stopcalcdate from cm_curr_s' +
+        'tate where creditid=:creditid')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000120000003A00430052004500440049005400490044000300
+      00000000000000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 208
+    Top = 40
+  end
+  object OracleDataSet2: TOracleDataSet
+    SQL.Strings = (
+      'SELECT rowid,a.*'
+      '  FROM cm_endcalac  a'
+      'where creditid=:creditid')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000120000003A00430052004500440049005400490044000300
+      00000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      0500000007000000040000004900440001000000000010000000430052004500
+      440049005400490044000100000000000A000000480044004100540045000100
+      000000000C00000045004E004400440041005400010000000000100000004900
+      4E00540045005200450053005400010000000000160000004400550045004900
+      4E005400450052004500530054000100000000000C0000005300540041005400
+      55005300010000000000}
+    Session = sboapiDataModule.SBSession
+    OnCalcFields = OracleDataSet2CalcFields
+    Left = 216
+    Top = 152
+    object OracleDataSet2ID: TFloatField
+      FieldName = 'ID'
+    end
+    object OracleDataSet2CREDITID: TFloatField
+      FieldName = 'CREDITID'
+    end
+    object OracleDataSet2HDATE: TDateTimeField
+      FieldName = 'HDATE'
+    end
+    object OracleDataSet2ENDDAT: TDateTimeField
+      FieldName = 'ENDDAT'
+    end
+    object OracleDataSet2INTEREST: TFloatField
+      FieldName = 'INTEREST'
+    end
+    object OracleDataSet2DUEINTEREST: TFloatField
+      FieldName = 'DUEINTEREST'
+    end
+    object OracleDataSet2STATUS: TFloatField
+      FieldName = 'STATUS'
+    end
+    object OracleDataSet2faiz: TWideStringField
+      FieldKind = fkCalculated
+      FieldName = 'faiz'
+      Size = 10
+      Calculated = True
+    end
+    object OracleDataSet2duefaiz: TWideStringField
+      FieldKind = fkCalculated
+      FieldName = 'duefaiz'
+      Size = 10
+      Calculated = True
+    end
+  end
+  object DataSource1: TDataSource
+    DataSet = OracleDataSet2
+    Left = 296
+    Top = 152
+  end
+end

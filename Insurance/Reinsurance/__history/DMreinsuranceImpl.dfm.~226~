@@ -1,0 +1,1939 @@
+object DMreinsurance: TDMreinsurance
+  OldCreateOrder = False
+  OnCreate = DataModuleCreate
+  OnDestroy = DataModuleDestroy
+  Height = 603
+  Width = 1005
+  object DSRCustmers: TDataSource
+    DataSet = DSCustmers
+    Left = 140
+    Top = 11
+  end
+  object DSCustmers: TOracleDataSet
+    SQL.Strings = (
+      'select id , name from customers'
+      'where cust_type=0'
+      'and group_klie=70 '
+      'and close_dat is  NULL'
+      'order by id')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000400000049004400010000000000080000004E0041004D00
+      4500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 42
+    Top = 12
+    object DSCustmersID: TIntegerField
+      FieldName = 'ID'
+    end
+    object DSCustmersNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 250
+    end
+  end
+  object DSRins_reinsurance: TDataSource
+    DataSet = DSins_reinsurance
+    Left = 142
+    Top = 74
+  end
+  object DSins_reinsurance: TOracleDataSet
+    SQL.Strings = (
+      'select rowid,ir.* from ins_reinsurance ir'
+      'where ir.cid=:p_cid')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000C0000003A0050005F004300490044000300000000000000
+      00000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000E000000040000004900440001000000000006000000430049004400
+      0100000000000C00000043005500530054004900440001000000000014000000
+      5200450049004E0053005F005000410052005400010000000000260000005200
+      450049004E0053005F0050004100520054005F004B004F004D00490053004900
+      5900410001000000000018000000410043004300490044004F00480044004500
+      4C0049004B000100000000001800000041004300430049004400440045004200
+      490054004F0052000100000000000C0000005500530045005200490044000100
+      00000000140000004200410052004400450052004F005F004E004F0001000000
+      0000060000004400410054000100000000000C00000053005400410054005500
+      53000100000000001800000054005200490044005F005000410059004D004500
+      4E0054000100000000000E00000054005900500045005F004900440001000000
+      00000A00000054004100520049004600010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 40
+    Top = 75
+    object DSins_reinsuranceID: TFloatField
+      FieldName = 'ID'
+    end
+    object DSins_reinsuranceCID: TFloatField
+      FieldName = 'CID'
+    end
+    object DSins_reinsuranceCUSTID: TFloatField
+      FieldName = 'CUSTID'
+    end
+    object DSins_reinsuranceREINS_PART: TFloatField
+      FieldName = 'REINS_PART'
+    end
+    object DSins_reinsuranceREINS_PART_KOMISIYA: TFloatField
+      FieldName = 'REINS_PART_KOMISIYA'
+    end
+    object DSins_reinsuranceACCIDOHDELIK: TFloatField
+      FieldName = 'ACCIDOHDELIK'
+    end
+    object DSins_reinsuranceACCIDDEBITOR: TFloatField
+      FieldName = 'ACCIDDEBITOR'
+    end
+    object DSins_reinsuranceUSERID: TFloatField
+      FieldName = 'USERID'
+    end
+    object DSins_reinsuranceBARDERO_NO: TWideStringField
+      FieldName = 'BARDERO_NO'
+      Size = 200
+    end
+    object DSins_reinsuranceDAT: TDateTimeField
+      FieldName = 'DAT'
+    end
+    object DSins_reinsuranceSTATUS: TFloatField
+      FieldName = 'STATUS'
+    end
+    object DSins_reinsuranceTRID_PAYMENT: TFloatField
+      FieldName = 'TRID_PAYMENT'
+    end
+    object DSins_reinsuranceTYPE_ID: TFloatField
+      FieldName = 'TYPE_ID'
+    end
+    object DSins_reinsuranceTARIF: TFloatField
+      FieldName = 'TARIF'
+    end
+  end
+  object DSRins_reinsuranceMain: TDataSource
+    DataSet = DSins_reinsuranceMain
+    Left = 140
+    Top = 146
+  end
+  object DSins_reinsuranceMain: TOracleDataSet
+    SQL.Strings = (
+      'select ir.rowid,cust.name,ii.name as sigorta_novu,ir.* from '
+      
+        'ins_reinsurance ir,ins_contracts ic,customers cust,ins_insurance' +
+        's ii'
+      'where ir.cid=ic.id'
+      'and ir.custid=cust.id'
+      'and ir.cid=:p_cid'
+      'and ir.type_id=ii.id '
+      'and ii.obeykt_type is not null'
+      ''
+      '')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000C0000003A0050005F004300490044000300000000000000
+      00000000}
+    QBEDefinition.QBEFieldDefs = {
+      0500000010000000040000004900440001000000000006000000430049004400
+      0100000000000C00000043005500530054004900440001000000000008000000
+      4E0041004D004500010000000000140000005200450049004E0053005F005000
+      410052005400010000000000260000005200450049004E0053005F0050004100
+      520054005F004B004F004D004900530049005900410001000000000018000000
+      410043004300490044004F004800440045004C0049004B000100000000001800
+      000041004300430049004400440045004200490054004F005200010000000000
+      0C00000055005300450052004900440001000000000014000000420041005200
+      4400450052004F005F004E004F00010000000000060000004400410054000100
+      000000000C000000530054004100540055005300010000000000180000005400
+      5200490044005F005000410059004D0045004E0054000100000000000E000000
+      54005900500045005F0049004400010000000000180000005300490047004F00
+      5200540041005F004E004F00560055000100000000000A000000540041005200
+      49004600010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 40
+    Top = 123
+    object DSins_reinsuranceMainNAME: TWideStringField
+      DisplayLabel = 'T'#601'krars'#305#287'orta'#231#305'n'#305'n ad'#305
+      FieldName = 'NAME'
+      Size = 360
+    end
+    object DSins_reinsuranceMainID: TFloatField
+      FieldName = 'ID'
+    end
+    object DSins_reinsuranceMainCID: TFloatField
+      FieldName = 'CID'
+    end
+    object DSins_reinsuranceMainCUSTID: TFloatField
+      FieldName = 'CUSTID'
+    end
+    object DSins_reinsuranceMainREINS_PART: TFloatField
+      DisplayLabel = 'T'#601'krar.s '#246't'#252'r'#252'lm'#601' faiz'
+      FieldName = 'REINS_PART'
+    end
+    object DSins_reinsuranceMainREINS_PART_KOMISIYA: TFloatField
+      DisplayLabel = 'T'#601'krar.s komissiyas'#305
+      FieldName = 'REINS_PART_KOMISIYA'
+    end
+    object DSins_reinsuranceMainACCIDOHDELIK: TFloatField
+      FieldName = 'ACCIDOHDELIK'
+    end
+    object DSins_reinsuranceMainACCIDDEBITOR: TFloatField
+      FieldName = 'ACCIDDEBITOR'
+    end
+    object DSins_reinsuranceMainUSERID: TFloatField
+      FieldName = 'USERID'
+    end
+    object DSins_reinsuranceMainBARDERO_NO: TWideStringField
+      FieldName = 'BARDERO_NO'
+      Size = 200
+    end
+    object DSins_reinsuranceMainDAT: TDateTimeField
+      FieldName = 'DAT'
+    end
+    object DSins_reinsuranceMainSTATUS: TFloatField
+      FieldName = 'STATUS'
+    end
+    object DSins_reinsuranceMainTRID_PAYMENT: TFloatField
+      FieldName = 'TRID_PAYMENT'
+    end
+    object DSins_reinsuranceMainTYPE_ID: TFloatField
+      FieldName = 'TYPE_ID'
+    end
+    object DSins_reinsuranceMainSIGORTA_NOVU: TWideStringField
+      FieldName = 'SIGORTA_NOVU'
+      Size = 4000
+    end
+    object DSins_reinsuranceMainTARIF: TFloatField
+      FieldName = 'TARIF'
+    end
+  end
+  object DSins_reinsurance_upd: TOracleDataSet
+    SQL.Strings = (
+      'select rowid,ir.* from ins_reinsurance ir'
+      'where id=:p_id')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000A0000003A0050005F004900440003000000000000000000
+      0000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000E000000040000004900440001000000000006000000430049004400
+      0100000000000C00000043005500530054004900440001000000000014000000
+      5200450049004E0053005F005000410052005400010000000000260000005200
+      450049004E0053005F0050004100520054005F004B004F004D00490053004900
+      5900410001000000000018000000410043004300490044004F00480044004500
+      4C0049004B000100000000001800000041004300430049004400440045004200
+      490054004F0052000100000000000C0000005500530045005200490044000100
+      00000000140000004200410052004400450052004F005F004E004F0001000000
+      0000060000004400410054000100000000000C00000053005400410054005500
+      53000100000000001800000054005200490044005F005000410059004D004500
+      4E0054000100000000000E00000054005900500045005F004900440001000000
+      00000A00000054004100520049004600010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 48
+    Top = 216
+    object DSins_reinsurance_updID: TFloatField
+      FieldName = 'ID'
+    end
+    object DSins_reinsurance_updCID: TFloatField
+      FieldName = 'CID'
+    end
+    object DSins_reinsurance_updCUSTID: TFloatField
+      FieldName = 'CUSTID'
+    end
+    object DSins_reinsurance_updREINS_PART: TFloatField
+      FieldName = 'REINS_PART'
+    end
+    object DSins_reinsurance_updREINS_PART_KOMISIYA: TFloatField
+      FieldName = 'REINS_PART_KOMISIYA'
+    end
+    object DSins_reinsurance_updACCIDOHDELIK: TFloatField
+      FieldName = 'ACCIDOHDELIK'
+    end
+    object DSins_reinsurance_updACCIDDEBITOR: TFloatField
+      FieldName = 'ACCIDDEBITOR'
+    end
+    object DSins_reinsurance_updUSERID: TFloatField
+      FieldName = 'USERID'
+    end
+    object DSins_reinsurance_updBARDERO_NO: TWideStringField
+      FieldName = 'BARDERO_NO'
+      Size = 200
+    end
+    object DSins_reinsurance_updDAT: TDateTimeField
+      FieldName = 'DAT'
+    end
+    object DSins_reinsurance_updSTATUS: TFloatField
+      FieldName = 'STATUS'
+    end
+    object DSins_reinsurance_updTRID_PAYMENT: TFloatField
+      FieldName = 'TRID_PAYMENT'
+    end
+    object DSins_reinsurance_updTYPE_ID: TFloatField
+      FieldName = 'TYPE_ID'
+    end
+    object DSins_reinsurance_updTARIF: TFloatField
+      FieldName = 'TARIF'
+    end
+  end
+  object ins_common: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'ins_common'
+    Left = 152
+    Top = 216
+  end
+  object DSRaccounOthelik: TDataSource
+    DataSet = DSaccounOthelik
+    Left = 152
+    Top = 280
+  end
+  object DSRaccountDebitor: TDataSource
+    DataSet = DSaccountDebitor
+    Left = 152
+    Top = 328
+  end
+  object DSaccounOthelik: TOracleDataSet
+    SQL.Strings = (
+      'select id,'
+      'acc_no from account'
+      'where close_dat is null'
+      'and kli_id=:p_kli_id')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000120000003A0050005F004B004C0049005F00490044000300
+      00000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000200000004000000490044000100000000000C000000410043004300
+      5F004E004F00010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 56
+    Top = 280
+    object DSaccounOthelikID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object DSaccounOthelikACC_NO: TWideStringField
+      FieldName = 'ACC_NO'
+      Size = 448
+    end
+  end
+  object DSaccountDebitor: TOracleDataSet
+    SQL.Strings = (
+      'select id,'
+      'acc_no from account'
+      'where close_dat is null'
+      'and kli_id=:p_kli_id')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000120000003A0050005F004B004C0049005F00490044000300
+      00000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000200000004000000490044000100000000000C000000410043004300
+      5F004E004F00010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 56
+    Top = 328
+    object DSaccountDebitorID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object DSaccountDebitorACC_NO: TWideStringField
+      FieldName = 'ACC_NO'
+      Size = 448
+    end
+  end
+  object DSSysdat: TOracleDataSet
+    SQL.Strings = (
+      'select * from sysdat')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000040000000E000000540045004B005F00440041005400010000000000
+      1000000050005200450044005F004400410054000100000000000E0000004100
+      520043005F004400410059000100000000000A00000043004C004F0053004500
+      010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 272
+    Top = 16
+    object DSSysdatTEK_DAT: TDateTimeField
+      FieldName = 'TEK_DAT'
+    end
+    object DSSysdatPRED_DAT: TDateTimeField
+      FieldName = 'PRED_DAT'
+    end
+    object DSSysdatARC_DAY: TDateTimeField
+      FieldName = 'ARC_DAY'
+    end
+    object DSSysdatCLOSE: TIntegerField
+      FieldName = 'CLOSE'
+    end
+  end
+  object DSFullbardero: TOracleDataSet
+    SQL.Strings = (
+      '/*SELECT DISTINCT(ir.bardero_no),'
+      
+        '(SELECT max(status) FROM ins_reinsurance where bardero_no=ir.bar' +
+        'dero_no) as status,'
+      'CASE '
+      'WHEN  ic.begin_date<='#39'31-dec-2013'#39' Then 0'
+      
+        'WHEN ic.begin_date>'#39'31-dec-2013'#39' Then ins_common.get_reins_haqq(' +
+        'ir.bardero_no)'
+      'END as sigorta_haqqi,'
+      
+        '(select name from customers where id=(SELECT max(custid) FROM in' +
+        's_reinsurance where bardero_no=ir.bardero_no)) as cust_name'
+      'FROM ins_reinsurance ir,ins_contracts ic'
+      'where ic.id=ir.cid */'
+      ''
+      
+        'select bardero_no,(SELECT max(status) FROM ins_reinsurance where' +
+        ' bardero_no=ir.bardero_no) as status,'
+      
+        'sum(ins_reins.get_reins_haqq_one(ir.bardero_no,ir.type_id,ir.id)' +
+        ') as sigorta_haqqi,'
+      
+        '(select name from customers where id=(SELECT max(custid) FROM in' +
+        's_reinsurance where bardero_no=ir.bardero_no)) as cust_name'
+      'FROM ins_reinsurance ir ,ins_contracts ic'
+      
+        'where ic.id=ir.cid and ic.begin_date >'#39'31-dec-2013'#39'group by bard' +
+        'ero_no '
+      ''
+      '')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      0500000004000000140000004200410052004400450052004F005F004E004F00
+      0100000000001A0000005300490047004F005200540041005F00480041005100
+      510049000100000000001200000043005500530054005F004E0041004D004500
+      0100000000000C000000530054004100540055005300010000000000}
+    Session = sboapiDataModule.SBSession
+    AfterScroll = DSFullbarderoAfterScroll
+    Left = 224
+    Top = 200
+    object DSFullbarderoBARDERO_NO: TWideStringField
+      DisplayLabel = 'Bardero '#8470
+      FieldName = 'BARDERO_NO'
+      Size = 200
+    end
+    object DSFullbarderoSTATUS: TFloatField
+      DisplayLabel = ' '
+      FieldName = 'STATUS'
+    end
+    object DSFullbarderoSIGORTA_HAQQI: TFloatField
+      DisplayLabel = 'T'#601'krars'#305#287'orta haqq'#305
+      FieldName = 'SIGORTA_HAQQI'
+    end
+    object DSFullbarderoCUST_NAME: TWideStringField
+      DisplayLabel = 'T'#601'krars'#305#287'orta'#231#305
+      FieldName = 'CUST_NAME'
+      Size = 360
+    end
+  end
+  object DSRFullbardero: TDataSource
+    DataSet = DSFullbardero
+    Left = 232
+    Top = 248
+  end
+  object dsinsurance_type: TOracleDataSet
+    SQL.Strings = (
+      'select id,name from ins_insurances '
+      'where obeykt_type is not null')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000400000049004400010000000000080000004E0041004D00
+      4500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 424
+    Top = 32
+    object dsinsurance_typeID: TIntegerField
+      FieldName = 'ID'
+    end
+    object dsinsurance_typeNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 4000
+    end
+  end
+  object dsrinsurance_type: TDataSource
+    DataSet = dsinsurance_type
+    Left = 424
+    Top = 96
+  end
+  object DSRcontract: TDataSource
+    DataSet = DScontract
+    Left = 352
+    Top = 64
+  end
+  object DScontract: TOracleDataSet
+    SQL.Strings = (
+      'select id,type_id,chkasko,chm,chfq from ins_contracts'
+      'where id=:p_id')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000A0000003A0050005F004900440003000000000000000000
+      0000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000500000004000000490044000100000000000E000000540059005000
+      45005F00490044000100000000000E000000430048004B00410053004B004F00
+      01000000000006000000430048004D0001000000000008000000430048004600
+      5100010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 344
+    Top = 16
+    object DScontractID: TFloatField
+      FieldName = 'ID'
+    end
+    object DScontractTYPE_ID: TFloatField
+      FieldName = 'TYPE_ID'
+    end
+    object DScontractCHKASKO: TFloatField
+      FieldName = 'CHKASKO'
+    end
+    object DScontractCHM: TFloatField
+      FieldName = 'CHM'
+    end
+    object DScontractCHFQ: TFloatField
+      FieldName = 'CHFQ'
+    end
+  end
+  object ds_reins_info: TOracleDataSet
+    SQL.Strings = (
+      
+        'select ii.name as sigorta_novu,ir.bardero_no,ic.policy_num,cust.' +
+        'name,'
+      
+        'ins_reins.get_reins_haqq_one(ir.bardero_no,ir.type_id,ir.id) as ' +
+        'sigorta_haqqi,'
+      'ir.reins_part,ir.reins_part_komisiya'
+      
+        'from ins_reinsurance ir,ins_contracts ic,customers cust,ins_insu' +
+        'rances ii'
+      'where ir.cid=ic.id'
+      'and ir.custid=cust.id'
+      'and ir.bardero_no=:pbardero_no'
+      'and ir.type_id=ii.id '
+      ''
+      ''
+      
+        '/*select ir.rowid,cust.name,ic.policy_num,ii.name as sigorta_nov' +
+        'u,'
+      'CASE '
+      'WHEN  ic.begin_date<='#39'31.12.2013'#39' Then 0'
+      
+        'WHEN ic.begin_date>'#39'31.12.2013'#39' Then ins_reins.get_reins_haqq_on' +
+        'e(ir.bardero_no,ir.type_id,ir.id) '
+      'END as sigorta_haqqi,ir.*'
+      
+        'from ins_reinsurance ir,ins_contracts ic,customers cust,ins_insu' +
+        'rances ii'
+      'where ir.cid=ic.id'
+      'and ir.custid=cust.id'
+      'and ir.bardero_no=:pbardero_no'
+      'and ir.type_id=ii.id '
+      'and ii.obeykt_type is not null */'
+      '')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000180000003A0050004200410052004400450052004F005F00
+      4E004F00050000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      0500000012000000080000004E0041004D004500010000000000140000005000
+      4F004C004900430059005F004E0055004D000100000000001800000053004900
+      47004F005200540041005F004E004F0056005500010000000000040000004900
+      4400010000000000060000004300490044000100000000000C00000043005500
+      5300540049004400010000000000140000005200450049004E0053005F005000
+      410052005400010000000000260000005200450049004E0053005F0050004100
+      520054005F004B004F004D004900530049005900410001000000000018000000
+      410043004300490044004F004800440045004C0049004B000100000000001800
+      000041004300430049004400440045004200490054004F005200010000000000
+      0C00000055005300450052004900440001000000000014000000420041005200
+      4400450052004F005F004E004F00010000000000060000004400410054000100
+      000000000C000000530054004100540055005300010000000000180000005400
+      5200490044005F005000410059004D0045004E0054000100000000000E000000
+      54005900500045005F00490044000100000000001A0000005300490047004F00
+      5200540041005F00480041005100510049000100000000000A00000054004100
+      520049004600010000000000}
+    Master = DSFullbardero
+    MasterFields = 'bardero_no'
+    DetailFields = 'PBARDERO_NO'
+    Session = sboapiDataModule.SBSession
+    Left = 232
+    Top = 296
+    object ds_reins_infoSIGORTA_NOVU: TWideStringField
+      DisplayLabel = 'Si'#287'orta N'#246'v'#252
+      FieldName = 'SIGORTA_NOVU'
+      Size = 4000
+    end
+    object ds_reins_infoBARDERO_NO: TWideStringField
+      DisplayLabel = 'Bardero  '#8470
+      FieldName = 'BARDERO_NO'
+      Size = 200
+    end
+    object ds_reins_infoPOLICY_NUM: TWideStringField
+      DisplayLabel = 'Polis '#8470
+      FieldName = 'POLICY_NUM'
+      Size = 128
+    end
+    object ds_reins_infoNAME: TWideStringField
+      DisplayLabel = 'T'#601'krars'#305#287'orta'#231#305'n'#305'n ad'#305
+      FieldName = 'NAME'
+      Size = 360
+    end
+    object ds_reins_infoSIGORTA_HAQQI: TFloatField
+      DisplayLabel = 'T'#601'krars'#305#287'orta haqq'#305
+      FieldName = 'SIGORTA_HAQQI'
+    end
+    object ds_reins_infoREINS_PART: TFloatField
+      DisplayLabel = 'T'#601'krar.s '#246't'#252'r'#252'lm'#601' faiz'
+      FieldName = 'REINS_PART'
+    end
+    object ds_reins_infoREINS_PART_KOMISIYA: TFloatField
+      DisplayLabel = 'T'#601'krar.s komissiyas'#305
+      FieldName = 'REINS_PART_KOMISIYA'
+    end
+  end
+  object dsr_reins_info: TDataSource
+    DataSet = ds_reins_info
+    Left = 232
+    Top = 360
+  end
+  object P_ins_reins: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'ins_reins'
+    Left = 560
+    Top = 88
+  end
+  object DSRCustReins: TDataSource
+    DataSet = DSCustReins
+    Left = 528
+    Top = 144
+  end
+  object DSREins_loss_bardero: TDataSource
+    DataSet = DSins_loss_bardero
+    Left = 824
+    Top = 288
+  end
+  object DSCustReins: TOracleDataSet
+    SQL.Strings = (
+      'select id,name from customers'
+      
+        'where id in (select custid from ins_reinsurance where cid=:pcid ' +
+        ')'
+      'and close_dat is null')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000A0000003A00500043004900440003000000000000000000
+      0000}
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000400000049004400010000000000080000004E0041004D00
+      4500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 576
+    Top = 144
+    object DSCustReinsID: TIntegerField
+      FieldName = 'ID'
+    end
+    object DSCustReinsNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 360
+    end
+  end
+  object DSins_loss_bardero: TOracleDataSet
+    SQL.Strings = (
+      'SELECT a.rowid,a.id, a.bardero_no, a.dep_id, a.cust_id,a.dat'
+      '  FROM ins_loss_bardero a'
+      'where id=:pid')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000080000003A00500049004400030000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      0500000005000000040000004900440001000000000014000000420041005200
+      4400450052004F005F004E004F000100000000000C0000004400450050005F00
+      490044000100000000000E00000043005500530054005F004900440001000000
+      000006000000440041005400010000000000}
+    Session = sboapiDataModule.SBSession
+    AfterInsert = DSins_loss_barderoAfterInsert
+    Left = 824
+    Top = 240
+    object DSins_loss_barderoID: TFloatField
+      FieldName = 'ID'
+    end
+    object DSins_loss_barderoBARDERO_NO: TWideStringField
+      FieldName = 'BARDERO_NO'
+      Size = 800
+    end
+    object DSins_loss_barderoDEP_ID: TFloatField
+      FieldName = 'DEP_ID'
+    end
+    object DSins_loss_barderoCUST_ID: TFloatField
+      FieldName = 'CUST_ID'
+    end
+    object DSins_loss_barderoDAT: TDateTimeField
+      FieldName = 'DAT'
+    end
+  end
+  object DSMainLossBardero: TOracleDataSet
+    SQL.Strings = (
+      
+        'SELECT a.rowid,a.id, a.bardero_no, a.dep_id,a.cust_id,icd.claim_' +
+        'num,ic.policy_num,cus.name,a.status,ii.name as sigorta_novu'
+      
+        '  FROM ins_loss_bardero a ,ins_claim_description icd,ins_contrac' +
+        'ts ic,customers cus,ins_insurances ii'
+      '  where icd.id= a.dep_id'
+      '  and ic.id=icd.cid'
+      '  and cus.id=a.cust_id'
+      '  and ic.id=:pcid '
+      'and a.dep_id=:Pdep_id'
+      'and ii.id=icd.type')
+    Optimize = False
+    Variables.Data = {
+      04000000020000000A0000003A00500043004900440003000000000000000000
+      0000100000003A0050004400450050005F004900440003000000000000000000
+      0000}
+    QBEDefinition.QBEFieldDefs = {
+      0500000009000000040000004900440001000000000014000000420041005200
+      4400450052004F005F004E004F000100000000000C0000004400450050005F00
+      490044000100000000000E00000043005500530054005F004900440001000000
+      00001200000043004C00410049004D005F004E0055004D000100000000001400
+      000050004F004C004900430059005F004E0055004D0001000000000008000000
+      4E0041004D0045000100000000000C0000005300540041005400550053000100
+      00000000180000005300490047004F005200540041005F004E004F0056005500
+      010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 824
+    Top = 144
+    object DSMainLossBarderoID: TFloatField
+      FieldName = 'ID'
+    end
+    object DSMainLossBarderoSIGORTA_NOVU: TWideStringField
+      DisplayLabel = 'Si'#287'orta n'#246'v'#252
+      FieldName = 'SIGORTA_NOVU'
+      Size = 4000
+    end
+    object DSMainLossBarderoBARDERO_NO: TWideStringField
+      DisplayLabel = 'Bardero '#8470
+      FieldName = 'BARDERO_NO'
+      Visible = False
+      Size = 800
+    end
+    object DSMainLossBarderoPOLICY_NUM: TWideStringField
+      DisplayLabel = 'Polis '#8470
+      FieldName = 'POLICY_NUM'
+      Size = 128
+    end
+    object DSMainLossBarderoNAME: TWideStringField
+      DisplayLabel = 'T'#601'krars'#305#287'orta'#231#305'n'#305'n ad'#305
+      FieldName = 'NAME'
+      Size = 360
+    end
+    object DSMainLossBarderoDEP_ID: TFloatField
+      FieldName = 'DEP_ID'
+    end
+    object DSMainLossBarderoCUST_ID: TFloatField
+      FieldName = 'CUST_ID'
+    end
+    object DSMainLossBarderoCLAIM_NUM: TWideStringField
+      FieldName = 'CLAIM_NUM'
+      Size = 200
+    end
+    object DSMainLossBarderoSTATUS: TFloatField
+      FieldName = 'STATUS'
+      Visible = False
+    end
+  end
+  object DSRMainLossBardero: TDataSource
+    DataSet = DSMainLossBardero
+    Left = 832
+    Top = 192
+  end
+  object ds_odenmislerin_sayi: TOracleDataSet
+    SQL.Strings = (
+      'select count(*)  as say from ins_claim_payment'
+      'where dep_id=:p_id')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000A0000003A0050005F004900440003000000000000000000
+      0000}
+    QBEDefinition.QBEFieldDefs = {050000000100000006000000530041005900010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 544
+    Top = 16
+    object ds_odenmislerin_sayiSAY: TFloatField
+      FieldName = 'SAY'
+    end
+  end
+  object dsTekrar_s_say: TOracleDataSet
+    SQL.Strings = (
+      'select count(*)  as say from ins_reinsurance'
+      'where cid=:p_id')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000A0000003A0050005F004900440003000000000000000000
+      0000}
+    QBEDefinition.QBEFieldDefs = {050000000100000006000000530041005900010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 640
+    Top = 16
+    object dsTekrar_s_saySAY: TFloatField
+      FieldName = 'SAY'
+    end
+  end
+  object DSFullbardero_loss: TOracleDataSet
+    SQL.Strings = (
+      'SELECT ir.bardero_no,'
+      
+        '(SELECT max(status) FROM ins_loss_bardero where bardero_no=ir.ba' +
+        'rdero_no) as status,'
+      'ins_reins.get_reins_loss(ir.bardero_no) as sigorta_haqqi,'
+      
+        '(select name from customers where id=(SELECT max(cust_id) FROM i' +
+        'ns_loss_bardero where bardero_no=ir.bardero_no)) as cust_name'
+      ' FROM ins_loss_bardero ir'
+      ' group by ir.bardero_no')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      0500000004000000140000004200410052004400450052004F005F004E004F00
+      0100000000001A0000005300490047004F005200540041005F00480041005100
+      510049000100000000001200000043005500530054005F004E0041004D004500
+      0100000000000C000000530054004100540055005300010000000000}
+    Session = sboapiDataModule.SBSession
+    AfterScroll = DSFullbardero_lossAfterScroll
+    Left = 312
+    Top = 200
+    object WideStringField1: TWideStringField
+      DisplayLabel = 'Bardero '#8470
+      FieldName = 'BARDERO_NO'
+      Size = 200
+    end
+    object FloatField1: TFloatField
+      DisplayLabel = ' '
+      FieldName = 'STATUS'
+    end
+    object FloatField2: TFloatField
+      DisplayLabel = 'T'#601'krars'#305#287'orta z'#601'r'#601'r haqq'#305
+      FieldName = 'SIGORTA_HAQQI'
+    end
+    object WideStringField2: TWideStringField
+      DisplayLabel = 'T'#601'krars'#305#287'orta'#231#305
+      FieldName = 'CUST_NAME'
+      Size = 360
+    end
+  end
+  object DSRFullbardero_loss: TDataSource
+    DataSet = DSFullbardero_loss
+    Left = 320
+    Top = 248
+  end
+  object ds_reins_info_loss: TOracleDataSet
+    SQL.Strings = (
+      
+        'select ilb.rowid,ins_i.name,ilb.bardero_no ,cust.name as t_sigor' +
+        'taci ,ins_c.policy_num,ilb.status,'
+      
+        'ins_reins.get_reins_loss_one(ilb.bardero_no,icd.type,ilb.id) as ' +
+        'sigorta_haqqi,icd.claim_num'
+      
+        'from ins_loss_bardero ilb, ins_insurances ins_i ,ins_claim_descr' +
+        'iption icd,customers cust,ins_contracts ins_c--,ins_reinsurance ' +
+        'ir'
+      ''
+      'where ins_i.obeykt_type is not NULL'
+      'and ins_i.id=icd.type'
+      'and ilb.dep_id=icd.id'
+      'and cust.id=ilb.cust_id'
+      'and ins_c.id=icd.cid'
+      'and ilb.bardero_no=:PBARDERO_NO'
+      '--and ir.cid=ins_c.id'
+      '')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000180000003A0050004200410052004400450052004F005F00
+      4E004F00050000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      0500000007000000080000004E0041004D004500010000000000140000005000
+      4F004C004900430059005F004E0055004D000100000000001400000042004100
+      52004400450052004F005F004E004F000100000000001A000000530049004700
+      4F005200540041005F0048004100510051004900010000000000160000005400
+      5F005300490047004F0052005400410043004900010000000000120000004300
+      4C00410049004D005F004E0055004D000100000000000C000000530054004100
+      540055005300010000000000}
+    Master = DSFullbardero_loss
+    MasterFields = 'bardero_no'
+    DetailFields = 'PBARDERO_NO'
+    Session = sboapiDataModule.SBSession
+    Left = 320
+    Top = 296
+    object ds_reins_info_lossNAME: TWideStringField
+      DisplayLabel = 'Si'#287'orta N'#246'v'#252
+      FieldName = 'NAME'
+      Size = 4000
+    end
+    object ds_reins_info_lossPOLICY_NUM: TWideStringField
+      DisplayLabel = 'Polis '#8470
+      FieldName = 'POLICY_NUM'
+      Size = 128
+    end
+    object ds_reins_info_lossCLAIM_NUM: TWideStringField
+      DisplayLabel = 'Z'#601'r'#601'r '#8470
+      FieldName = 'CLAIM_NUM'
+      Size = 200
+    end
+    object ds_reins_info_lossBARDERO_NO: TWideStringField
+      DisplayLabel = 'Bardero  '#8470
+      FieldName = 'BARDERO_NO'
+      Size = 800
+    end
+    object ds_reins_info_lossT_SIGORTACI: TWideStringField
+      DisplayLabel = 'T'#601'krars'#305#287'orta'#231#305'n'#305'n ad'#305
+      FieldName = 'T_SIGORTACI'
+      Size = 360
+    end
+    object ds_reins_info_lossSIGORTA_HAQQI: TFloatField
+      DisplayLabel = 'Z'#601'r'#601'r haqq'#305
+      FieldName = 'SIGORTA_HAQQI'
+    end
+    object ds_reins_info_lossSTATUS: TFloatField
+      FieldName = 'STATUS'
+      Visible = False
+    end
+  end
+  object dsr_reins_info_loss: TDataSource
+    DataSet = ds_reins_info_loss
+    Left = 320
+    Top = 360
+  end
+  object DSKassa: TOracleDataSet
+    SQL.Strings = (
+      
+        'select id, acc_no from account where id in(select acc_id from in' +
+        's_dict_acc_payment_loss)')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000200000004000000490044000100000000000C000000410043004300
+      5F004E004F00010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 616
+    Top = 360
+    object DSKassaID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object DSKassaACC_NO: TWideStringField
+      FieldName = 'ACC_NO'
+      Size = 448
+    end
+  end
+  object TSCustacc: TOracleDataSet
+    SQL.Strings = (
+      '  select id ,acc_no from account where'
+      
+        '  kli_id=(SELECT max(custid) FROM ins_reinsurance where bardero_' +
+        'no=:p_bardero_no)'
+      
+        '  and bal_cn1 in (SELECT bal_cn  FROM ins_acc_bal_cn   where dic' +
+        't_id=4)')
+    Optimize = False
+    Variables.Data = {
+      04000000010000001A0000003A0050005F004200410052004400450052004F00
+      5F004E004F00050000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000200000004000000490044000100000000000C000000410043004300
+      5F004E004F00010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 672
+    Top = 360
+  end
+  object DSRKassa: TDataSource
+    DataSet = DSKassa
+    Left = 616
+    Top = 416
+  end
+  object TSRCustacc: TDataSource
+    DataSet = TSCustacc
+    Left = 672
+    Top = 416
+  end
+  object DSRFullBardero_terminated: TDataSource
+    DataSet = DSFullBardero_terminated
+    Left = 416
+    Top = 240
+  end
+  object DSFullBardero_terminated: TOracleDataSet
+    SQL.Strings = (
+      'SELECT ir.bardero_no,'
+      
+        '(SELECT max(status) FROM ins_terminated_bardero where bardero_no' +
+        '=ir.bardero_no) as status,'
+      'ins_reins.get_reins_terminated(ir.bardero_no) as sigorta_haqqi,'
+      
+        '(select name from customers where id=(SELECT max(cust_id) FROM i' +
+        'ns_terminated_bardero where bardero_no=ir.bardero_no)) as cust_n' +
+        'ame'
+      ' FROM ins_terminated_bardero ir'
+      ' group by ir.bardero_no')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      0500000004000000140000004200410052004400450052004F005F004E004F00
+      0100000000000C0000005300540041005400550053000100000000001A000000
+      5300490047004F005200540041005F0048004100510051004900010000000000
+      1200000043005500530054005F004E0041004D004500010000000000}
+    Session = sboapiDataModule.SBSession
+    AfterScroll = DSFullBardero_terminatedAfterScroll
+    Left = 416
+    Top = 192
+    object DSFullBardero_terminatedBARDERO_NO: TWideStringField
+      DisplayLabel = 'Bardero '#8470
+      FieldName = 'BARDERO_NO'
+      Size = 800
+    end
+    object DSFullBardero_terminatedSTATUS: TFloatField
+      DisplayLabel = ' '
+      FieldName = 'STATUS'
+    end
+    object DSFullBardero_terminatedSIGORTA_HAQQI: TFloatField
+      DisplayLabel = 'S'#305#287'orta haqq'#305
+      FieldName = 'SIGORTA_HAQQI'
+    end
+    object DSFullBardero_terminatedCUST_NAME: TWideStringField
+      DisplayLabel = 'T'#601'krars'#305#287'orta'#231#305
+      FieldName = 'CUST_NAME'
+      Size = 360
+    end
+  end
+  object DSFullBardero_ter_info: TOracleDataSet
+    SQL.Strings = (
+      
+        'select ilb.rowid,ins_i.name,ilb.bardero_no ,cust.name as t_sigor' +
+        'taci ,ins_c.policy_num,ilb.status,'
+      
+        'ins_reins.get_reins_terminated_one(ilb.bardero_no,ins_c.type_id,' +
+        'ilb.id) as sigorta_haqqi'
+      
+        'from ins_terminated_bardero ilb, ins_insurances ins_i ,customers' +
+        ' cust,'
+      
+        'ins_contracts ins_c,ins_contract_terminated ict,ins_contract_ter' +
+        'minated_detal ictd'
+      'where ins_i.obeykt_type is not NULL'
+      'and cust.id=ilb.cust_id'
+      'and ilb.bardero_no=:PBARDERO_NO'
+      'and ins_c.id=ict.cid'
+      'and ict.id=ictd.ter_id'
+      'and ilb.cid=ins_c.id'
+      'and ins_i.id=ilb.type_id')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000180000003A0050004200410052004400450052004F005F00
+      4E004F00050000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      0500000006000000080000004E0041004D004500010000000000140000004200
+      410052004400450052004F005F004E004F000100000000001600000054005F00
+      5300490047004F00520054004100430049000100000000001400000050004F00
+      4C004900430059005F004E0055004D000100000000001A000000530049004700
+      4F005200540041005F00480041005100510049000100000000000C0000005300
+      54004100540055005300010000000000}
+    Master = DSFullBardero_terminated
+    MasterFields = 'BARDERO_NO'
+    DetailFields = 'PBARDERO_NO'
+    Session = sboapiDataModule.SBSession
+    Left = 416
+    Top = 296
+    object DSFullBardero_ter_infoNAME: TWideStringField
+      DisplayLabel = 'Si'#287'orta N'#246'v'#252
+      FieldName = 'NAME'
+      Size = 4000
+    end
+    object DSFullBardero_ter_infoPOLICY_NUM: TWideStringField
+      DisplayLabel = 'Polis '#8470
+      FieldName = 'POLICY_NUM'
+      Size = 128
+    end
+    object DSFullBardero_ter_infoBARDERO_NO: TWideStringField
+      DisplayLabel = 'Bardero  '#8470
+      FieldName = 'BARDERO_NO'
+      Size = 800
+    end
+    object DSFullBardero_ter_infoT_SIGORTACI: TWideStringField
+      DisplayLabel = 'T'#601'krars'#305#287'orta'#231#305'n'#305'n ad'#305
+      FieldName = 'T_SIGORTACI'
+      Size = 360
+    end
+    object DSFullBardero_ter_infoSIGORTA_HAQQI: TFloatField
+      DisplayLabel = 'Xitam haqq'#305
+      FieldName = 'SIGORTA_HAQQI'
+    end
+    object DSFullBardero_ter_infoSTATUS: TFloatField
+      FieldName = 'STATUS'
+      Visible = False
+    end
+  end
+  object DSRFullBardero_ter_info: TDataSource
+    DataSet = DSFullBardero_ter_info
+    Left = 416
+    Top = 360
+  end
+  object TSCustaccZ: TOracleDataSet
+    SQL.Strings = (
+      '  select id ,acc_no from account where'
+      
+        '  kli_id=(SELECT max(cust_id) FROM ins_loss_bardero where barder' +
+        'o_no=:p_bardero_no)'
+      
+        '  and bal_cn1 in (SELECT bal_cn  FROM ins_acc_bal_cn   where dic' +
+        't_id=5)')
+    Optimize = False
+    Variables.Data = {
+      04000000010000001A0000003A0050005F004200410052004400450052004F00
+      5F004E004F00050000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000200000004000000490044000100000000000C000000410043004300
+      5F004E004F00010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 796
+    Top = 360
+  end
+  object TSRCustaccZ: TDataSource
+    DataSet = TSCustaccZ
+    Left = 799
+    Top = 414
+  end
+  object DSRKassaZ: TDataSource
+    DataSet = DSKassaZ
+    Left = 736
+    Top = 416
+  end
+  object DSKassaZ: TOracleDataSet
+    SQL.Strings = (
+      
+        'select id, acc_no from account where id in(select acc_id from in' +
+        's_dict_acc_payment_loss)')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000200000004000000490044000100000000000C000000410043004300
+      5F004E004F00010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 736
+    Top = 360
+    object FloatField3: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object WideStringField3: TWideStringField
+      FieldName = 'ACC_NO'
+      Size = 448
+    end
+  end
+  object ds_main_bardero_terminate: TOracleDataSet
+    SQL.Strings = (
+      
+        'SELECT a.rowid,a.id, a.bardero_no, a.cid,a.cust_id,ic.policy_num' +
+        ',cus.name,a.status,ii.name as sigorta_novu'
+      
+        '  FROM ins_terminated_bardero a ,ins_contracts ic,customers cus,' +
+        'ins_insurances ii'
+      '  where cus.id=a.cust_id'
+      '  and ic.id=a.cid'
+      '  AND a.type_id=ii.id'
+      'and ic.id=:pid')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000080000003A00500049004400030000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      0500000008000000040000004900440001000000000014000000420041005200
+      4400450052004F005F004E004F000100000000000E0000004300550053005400
+      5F00490044000100000000001400000050004F004C004900430059005F004E00
+      55004D00010000000000080000004E0041004D0045000100000000000C000000
+      5300540041005400550053000100000000000600000043004900440001000000
+      0000180000005300490047004F005200540041005F004E004F00560055000100
+      00000000}
+    Session = sboapiDataModule.SBSession
+    Left = 624
+    Top = 472
+    object ds_main_bardero_terminateSIGORTA_NOVU: TWideStringField
+      DisplayLabel = 'S'#305#287'orta n'#246'v'#252
+      FieldName = 'SIGORTA_NOVU'
+      Size = 4000
+    end
+    object WideStringField4: TWideStringField
+      DisplayLabel = 'Bardero '#8470
+      FieldName = 'BARDERO_NO'
+      Visible = False
+      Size = 800
+    end
+    object WideStringField5: TWideStringField
+      DisplayLabel = 'Polis '#8470
+      FieldName = 'POLICY_NUM'
+      Size = 128
+    end
+    object WideStringField6: TWideStringField
+      DisplayLabel = 'T'#601'krars'#305#287'orta'#231#305'n'#305'n ad'#305
+      FieldName = 'NAME'
+      Size = 360
+    end
+    object FloatField6: TFloatField
+      FieldName = 'CUST_ID'
+    end
+    object FloatField7: TFloatField
+      FieldName = 'STATUS'
+      Visible = False
+    end
+    object ds_main_bardero_terminateCID: TFloatField
+      FieldName = 'CID'
+      Visible = False
+    end
+    object FloatField4: TFloatField
+      FieldName = 'ID'
+      Visible = False
+    end
+  end
+  object dsr_main_bardero_terminate: TDataSource
+    DataSet = ds_main_bardero_terminate
+    Left = 632
+    Top = 520
+  end
+  object DSRinsurancesX: TDataSource
+    DataSet = DSinsurancesX
+    Left = 744
+    Top = 520
+  end
+  object DSRins_terminated_bardero: TDataSource
+    DataSet = DSins_terminated_bardero
+    Left = 808
+    Top = 520
+  end
+  object DSRcustomersX: TDataSource
+    DataSet = DScustomersX
+    Left = 904
+    Top = 520
+  end
+  object DSinsurancesX: TOracleDataSet
+    SQL.Strings = (
+      'select id,name from ins_insurances '
+      'where obeykt_type is not null')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000400000049004400010000000000080000004E0041004D00
+      4500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 736
+    Top = 480
+    object DSinsurancesXID: TIntegerField
+      FieldName = 'ID'
+    end
+    object DSinsurancesXNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 4000
+    end
+  end
+  object DSins_terminated_bardero: TOracleDataSet
+    SQL.Strings = (
+      
+        'SELECT a.rowid,a.id, a.bardero_no, a.cid, a.cust_id, a.dat, a.st' +
+        'atus, a.type_id'
+      '  FROM ins_terminated_bardero a'
+      'where cid=:pid')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000080000003A00500049004400030000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      0500000007000000040000004900440001000000000014000000420041005200
+      4400450052004F005F004E004F00010000000000060000004300490044000100
+      000000000E00000043005500530054005F004900440001000000000006000000
+      4400410054000100000000000C00000053005400410054005500530001000000
+      00000E00000054005900500045005F0049004400010000000000}
+    Session = sboapiDataModule.SBSession
+    AfterInsert = DSins_terminated_barderoAfterInsert
+    Left = 800
+    Top = 480
+    object DSins_terminated_barderoID: TFloatField
+      FieldName = 'ID'
+    end
+    object DSins_terminated_barderoBARDERO_NO: TWideStringField
+      FieldName = 'BARDERO_NO'
+      Size = 800
+    end
+    object DSins_terminated_barderoCID: TFloatField
+      FieldName = 'CID'
+    end
+    object DSins_terminated_barderoCUST_ID: TFloatField
+      FieldName = 'CUST_ID'
+    end
+    object DSins_terminated_barderoDAT: TDateTimeField
+      FieldName = 'DAT'
+    end
+    object DSins_terminated_barderoSTATUS: TFloatField
+      FieldName = 'STATUS'
+    end
+    object DSins_terminated_barderoTYPE_ID: TFloatField
+      FieldName = 'TYPE_ID'
+    end
+  end
+  object DScustomersX: TOracleDataSet
+    SQL.Strings = (
+      'select id,name from customers'
+      
+        'where id in (select custid from ins_reinsurance where cid=:pcid ' +
+        ')'
+      'and close_dat is null')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000A0000003A00500043004900440003000000000000000000
+      0000}
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000400000049004400010000000000080000004E0041004D00
+      4500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 904
+    Top = 480
+    object DScustomersXID: TIntegerField
+      FieldName = 'ID'
+    end
+    object DScustomersXNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 360
+    end
+  end
+  object TSCustaccX: TOracleDataSet
+    SQL.Strings = (
+      '  select id ,acc_no from account where'
+      
+        '  kli_id=(SELECT max(cust_id) FROM ins_terminated_bardero where ' +
+        'bardero_no=:p_bardero_no)'
+      
+        '  and bal_cn1 in (SELECT bal_cn  FROM ins_acc_bal_cn   where dic' +
+        't_id=5)')
+    Optimize = False
+    Variables.Data = {
+      04000000010000001A0000003A0050005F004200410052004400450052004F00
+      5F004E004F00050000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000200000004000000490044000100000000000C000000410043004300
+      5F004E004F00010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 924
+    Top = 368
+  end
+  object TSRCustaccX: TDataSource
+    DataSet = TSCustaccX
+    Left = 927
+    Top = 422
+  end
+  object DSRKassaX: TDataSource
+    DataSet = DSKassaX
+    Left = 864
+    Top = 424
+  end
+  object DSKassaX: TOracleDataSet
+    SQL.Strings = (
+      
+        'select id, acc_no from account where id in(select acc_id from in' +
+        's_dict_acc_payment_loss)')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000200000004000000490044000100000000000C000000410043004300
+      5F004E004F00010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 864
+    Top = 368
+    object FloatField5: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object WideStringField7: TWideStringField
+      FieldName = 'ACC_NO'
+      Size = 448
+    end
+  end
+  object sb_aca: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'sb_aca'
+    Left = 256
+    Top = 136
+  end
+  object DSMusteriohtek_h: TOracleDataSet
+    SQL.Strings = (
+      'select count (*) as say from account'
+      'where close_dat is null'
+      'and kli_id in (select max(custid) from ins_reinsurance'
+      'where bardero_no=:pbardero_no)'
+      'and bal_cn1 in (SELECT bal_cn'
+      '  FROM ins_acc_bal_cn '
+      '  where dict_id=4)')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000180000003A0050004200410052004400450052004F005F00
+      4E004F00050000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {050000000100000006000000530041005900010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 896
+    Top = 8
+    object DSMusteriohtek_hSAY: TFloatField
+      FieldName = 'SAY'
+    end
+  end
+  object DSMustero_BH: TOracleDataSet
+    SQL.Strings = (
+      'SELECT count(bal_cn) as say'
+      '  FROM ins_acc_bal_cn '
+      '  where dict_id=4')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {050000000100000006000000530041005900010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 896
+    Top = 56
+    object DSMustero_BHSAY: TFloatField
+      FieldName = 'SAY'
+    end
+  end
+  object DSMusteriDep_H: TOracleDataSet
+    SQL.Strings = (
+      'select count (*) as say from account'
+      'where close_dat is null'
+      'and kli_id in (select max(cust_id) from ins_loss_bardero'
+      'where bardero_no=:pbardero_no)'
+      'and bal_cn1 in (SELECT bal_cn'
+      '  FROM ins_acc_bal_cn '
+      '  where dict_id=5)')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000180000003A0050004200410052004400450052004F005F00
+      4E004F00050000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {050000000100000006000000530041005900010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 896
+    Top = 104
+    object DSMusteriDep_HSAY: TFloatField
+      FieldName = 'SAY'
+    end
+  end
+  object DSMusteriDep_BH: TOracleDataSet
+    SQL.Strings = (
+      'SELECT count(bal_cn) as say'
+      '  FROM ins_acc_bal_cn '
+      '  where dict_id=5')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {050000000100000006000000530041005900010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 896
+    Top = 145
+    object DSMusteriDep_BHSAY: TFloatField
+      FieldName = 'SAY'
+    end
+  end
+  object DSterminated: TOracleDataSet
+    SQL.Strings = (
+      'select count (*) as say from account'
+      'where close_dat is null'
+      'and kli_id in (select max(cust_id) from ins_terminated_bardero'
+      'where bardero_no=:pbardero_no)'
+      'and bal_cn1 in (SELECT bal_cn'
+      '  FROM ins_acc_bal_cn '
+      '  where dict_id=5)')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000180000003A0050004200410052004400450052004F005F00
+      4E004F00050000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {050000000100000006000000530041005900010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 896
+    Top = 189
+    object DSterminatedSAY: TFloatField
+      FieldName = 'SAY'
+    end
+  end
+  object DSRFullbardero_sub: TDataSource
+    DataSet = DSFullbardero_sub
+    Left = 536
+    Top = 256
+  end
+  object dsR_reins_info_sub: TDataSource
+    DataSet = ds_reins_info_sub
+    Left = 536
+    Top = 368
+  end
+  object DSFullbardero_sub: TOracleDataSet
+    SQL.Strings = (
+      'SELECT ir.bardero_no,'
+      
+        '(SELECT max(status) FROM ins_subraqasiya_bardero where bardero_n' +
+        'o=ir.bardero_no) as status,'
+      'ins_reins.get_reins_sub(ir.bardero_no) as sigorta_haqqi,'
+      
+        '(select name from customers where id=(SELECT max(cust_id) FROM i' +
+        'ns_subraqasiya_bardero where bardero_no=ir.bardero_no)) as cust_' +
+        'name'
+      ' FROM ins_subraqasiya_bardero ir'
+      ' group by ir.bardero_no')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      0500000004000000140000004200410052004400450052004F005F004E004F00
+      0100000000000C0000005300540041005400550053000100000000001A000000
+      5300490047004F005200540041005F0048004100510051004900010000000000
+      1200000043005500530054005F004E0041004D004500010000000000}
+    Session = sboapiDataModule.SBSession
+    AfterScroll = DSFullbardero_subAfterScroll
+    Left = 536
+    Top = 200
+    object DSFullbardero_subBARDERO_NO: TWideStringField
+      DisplayLabel = 'Bardero '#8470
+      FieldName = 'BARDERO_NO'
+      Size = 800
+    end
+    object DSFullbardero_subSTATUS: TFloatField
+      DisplayLabel = ' '
+      FieldName = 'STATUS'
+    end
+    object DSFullbardero_subSIGORTA_HAQQI: TFloatField
+      DisplayLabel = 'Subaraqasiya haqq'#305
+      FieldName = 'SIGORTA_HAQQI'
+    end
+    object DSFullbardero_subCUST_NAME: TWideStringField
+      DisplayLabel = 'T'#601'krars'#305#287'orta'#231#305
+      FieldName = 'CUST_NAME'
+      Size = 360
+    end
+  end
+  object ds_reins_info_sub: TOracleDataSet
+    SQL.Strings = (
+      
+        'select ilb.rowid,ins_i.name,ilb.bardero_no ,cust.name as t_sigor' +
+        'taci ,ins_c.policy_num,ilb.status,'
+      
+        'ins_reins.get_reins_sub_one(ilb.bardero_no,icd.type,ilb.id) as s' +
+        'igorta_haqqi,icd.claim_num'
+      
+        'from ins_subraqasiya_bardero ilb, ins_insurances ins_i ,ins_clai' +
+        'm_description icd,customers cust,ins_contracts ins_c--,ins_reins' +
+        'urance ir'
+      ''
+      'where ins_i.obeykt_type is not NULL'
+      'and ins_i.id=icd.type'
+      'and ilb.dep_id=icd.id'
+      'and cust.id=ilb.cust_id'
+      'and ins_c.id=icd.cid'
+      'and ilb.bardero_no=:PBARDERO_NO'
+      '--and ir.cid=ins_c.id')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000180000003A0050004200410052004400450052004F005F00
+      4E004F00050000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      0500000007000000080000004E0041004D004500010000000000140000004200
+      410052004400450052004F005F004E004F000100000000001600000054005F00
+      5300490047004F00520054004100430049000100000000001400000050004F00
+      4C004900430059005F004E0055004D000100000000000C000000530054004100
+      5400550053000100000000001A0000005300490047004F005200540041005F00
+      480041005100510049000100000000001200000043004C00410049004D005F00
+      4E0055004D00010000000000}
+    Master = DSFullbardero_sub
+    DetailFields = 'PBARDERO_NO'
+    Session = sboapiDataModule.SBSession
+    Left = 536
+    Top = 312
+    object ds_reins_info_subNAME: TWideStringField
+      DisplayLabel = 'Si'#287'orta N'#246'v'#252
+      FieldName = 'NAME'
+      Size = 4000
+    end
+    object ds_reins_info_subPOLICY_NUM: TWideStringField
+      DisplayLabel = 'Polis '#8470
+      FieldName = 'POLICY_NUM'
+      Size = 128
+    end
+    object ds_reins_info_subCLAIM_NUM: TWideStringField
+      DisplayLabel = 'Z'#601'r'#601'r '#8470
+      FieldName = 'CLAIM_NUM'
+      Size = 200
+    end
+    object ds_reins_info_subBARDERO_NO: TWideStringField
+      DisplayLabel = 'Bardero  '#8470
+      FieldName = 'BARDERO_NO'
+      Size = 800
+    end
+    object ds_reins_info_subT_SIGORTACI: TWideStringField
+      DisplayLabel = 'T'#601'krars'#305#287'orta'#231#305'n'#305'n ad'#305
+      FieldName = 'T_SIGORTACI'
+      Size = 360
+    end
+    object ds_reins_info_subSIGORTA_HAQQI: TFloatField
+      DisplayLabel = 'Subroqasiya haqq'#305
+      FieldName = 'SIGORTA_HAQQI'
+    end
+    object ds_reins_info_subSTATUS: TFloatField
+      FieldName = 'STATUS'
+    end
+  end
+  object DSMainSubBardero: TOracleDataSet
+    SQL.Strings = (
+      
+        'SELECT a.rowid,a.id, a.bardero_no, a.dep_id,a.cust_id,icd.claim_' +
+        'num,ic.policy_num,cus.name,a.status ,ii.name as sigortanovu'
+      
+        '  FROM ins_subraqasiya_bardero a ,ins_claim_description icd,ins_' +
+        'contracts ic,customers cus, ins_insurances ii'
+      '  where icd.id= a.dep_id'
+      '  and ic.id=icd.cid'
+      '  and cus.id=a.cust_id'
+      '  and ic.id=:pcid '
+      'and a.dep_id=:Pdep_id'
+      'and ii.id=icd.type')
+    Optimize = False
+    Variables.Data = {
+      0400000002000000100000003A0050004400450050005F004900440003000000
+      00000000000000000A0000003A00500043004900440003000000000000000000
+      0000}
+    QBEDefinition.QBEFieldDefs = {
+      0500000009000000040000004900440001000000000014000000420041005200
+      4400450052004F005F004E004F000100000000000C0000004400450050005F00
+      490044000100000000000E00000043005500530054005F004900440001000000
+      00001200000043004C00410049004D005F004E0055004D000100000000001400
+      000050004F004C004900430059005F004E0055004D0001000000000008000000
+      4E0041004D0045000100000000000C0000005300540041005400550053000100
+      00000000160000005300490047004F005200540041004E004F00560055000100
+      00000000}
+    Session = sboapiDataModule.SBSession
+    Left = 824
+    Top = 24
+    object DSMainSubBarderoID: TFloatField
+      FieldName = 'ID'
+    end
+    object DSMainSubBarderoSIGORTANOVU: TWideStringField
+      DisplayLabel = 'S'#305#287'orta n'#246'v'#252
+      FieldName = 'SIGORTANOVU'
+      Size = 4000
+    end
+    object DSMainSubBarderoPOLICY_NUM: TWideStringField
+      DisplayLabel = 'Polis '#8470
+      FieldName = 'POLICY_NUM'
+      Size = 128
+    end
+    object DSMainSubBarderoBARDERO_NO: TWideStringField
+      DisplayLabel = 'Bardero '#8470
+      FieldName = 'BARDERO_NO'
+      Size = 800
+    end
+    object DSMainSubBarderoNAME: TWideStringField
+      DisplayLabel = 'T'#601'krars'#305#287'orta'#231#305'n'#305'n ad'#305
+      FieldName = 'NAME'
+      Size = 360
+    end
+    object DSMainSubBarderoDEP_ID: TFloatField
+      FieldName = 'DEP_ID'
+    end
+    object DSMainSubBarderoCUST_ID: TFloatField
+      FieldName = 'CUST_ID'
+    end
+    object DSMainSubBarderoCLAIM_NUM: TWideStringField
+      FieldName = 'CLAIM_NUM'
+      Size = 200
+    end
+    object DSMainSubBarderoSTATUS: TFloatField
+      FieldName = 'STATUS'
+    end
+  end
+  object DSrMainSubBardero: TDataSource
+    DataSet = DSMainSubBardero
+    Left = 824
+    Top = 88
+  end
+  object DSRins_sub_bardero: TDataSource
+    DataSet = DSins_sub_bardero
+    Left = 752
+    Top = 64
+  end
+  object DSins_sub_bardero: TOracleDataSet
+    SQL.Strings = (
+      'SELECT a.rowid,a.id, a.bardero_no, a.dep_id, a.cust_id,a.dat'
+      '  FROM ins_subraqasiya_bardero a'
+      'where id=:pid')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000080000003A00500049004400030000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      0500000005000000040000004900440001000000000014000000420041005200
+      4400450052004F005F004E004F000100000000000C0000004400450050005F00
+      490044000100000000000E00000043005500530054005F004900440001000000
+      000006000000440041005400010000000000}
+    Session = sboapiDataModule.SBSession
+    AfterInsert = DSins_sub_barderoAfterInsert
+    Left = 744
+    Top = 16
+    object FloatField8: TFloatField
+      FieldName = 'ID'
+    end
+    object WideStringField8: TWideStringField
+      DisplayLabel = 'Bardero '#8470
+      FieldName = 'BARDERO_NO'
+      Size = 800
+    end
+    object FloatField9: TFloatField
+      FieldName = 'DEP_ID'
+    end
+    object FloatField10: TFloatField
+      FieldName = 'CUST_ID'
+    end
+    object DateTimeField1: TDateTimeField
+      FieldName = 'DAT'
+    end
+  end
+  object DSRCustReinssub: TDataSource
+    DataSet = DSCustReinssub
+    Left = 640
+    Top = 72
+  end
+  object DSCustReinssub: TOracleDataSet
+    SQL.Strings = (
+      'select id,name from customers'
+      
+        'where id in (select custid from ins_reinsurance where cid=:pcid ' +
+        ')'
+      'and close_dat is null')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000A0000003A00500043004900440003000000000000000000
+      0000}
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000400000049004400010000000000080000004E0041004D00
+      4500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 704
+    Top = 120
+    object IntegerField1: TIntegerField
+      FieldName = 'ID'
+    end
+    object WideStringField9: TWideStringField
+      FieldName = 'NAME'
+      Size = 360
+    end
+  end
+  object TSCustaccS: TOracleDataSet
+    SQL.Strings = (
+      '  select id ,acc_no from account where'
+      
+        '  kli_id=(SELECT max(cust_id) FROM ins_subraqasiya_bardero where' +
+        ' bardero_no=:p_bardero_no)'
+      
+        '  and bal_cn1 in (SELECT bal_cn  FROM ins_acc_bal_cn   where dic' +
+        't_id=4)')
+    Optimize = False
+    Variables.Data = {
+      04000000010000001A0000003A0050005F004200410052004400450052004F00
+      5F004E004F00050000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000200000004000000490044000100000000000C000000410043004300
+      5F004E004F00010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 716
+    Top = 168
+    object TSCustaccSID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object TSCustaccSACC_NO: TWideStringField
+      FieldName = 'ACC_NO'
+      Size = 448
+    end
+  end
+  object TSRCustaccS: TDataSource
+    DataSet = TSCustaccS
+    Left = 719
+    Top = 214
+  end
+  object DSKassaS: TOracleDataSet
+    SQL.Strings = (
+      
+        'select id, acc_no from account where id in(select acc_id from in' +
+        's_dict_acc_payment_loss)')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000200000004000000490044000100000000000C000000410043004300
+      5F004E004F00010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 624
+    Top = 304
+    object FloatField11: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object WideStringField10: TWideStringField
+      FieldName = 'ACC_NO'
+      Size = 448
+    end
+  end
+  object DSRKassaS: TDataSource
+    DataSet = DSKassaS
+    Left = 696
+    Top = 304
+  end
+  object DSins_insurances: TOracleDataSet
+    SQL.Strings = (
+      'select id,name from ins_insurances'
+      'where changeguid is not NULL')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000400000049004400010000000000080000004E0041004D00
+      4500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 56
+    Top = 384
+    object DSins_insurancesID: TIntegerField
+      FieldName = 'ID'
+    end
+    object DSins_insurancesNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 4000
+    end
+  end
+  object DSRins_insurances: TDataSource
+    DataSet = DSins_insurances
+    Left = 144
+    Top = 384
+  end
+  object dssub_custH: TOracleDataSet
+    SQL.Strings = (
+      'select count (*) as say from account'
+      'where close_dat is null'
+      'and kli_id in (select max(cust_id) from ins_subraqasiya_bardero'
+      'where bardero_no=:pbardero_no)'
+      'and bal_cn1 in (SELECT bal_cn'
+      '  FROM ins_acc_bal_cn '
+      '  where dict_id=4)')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000180000003A0050004200410052004400450052004F005F00
+      4E004F00050000000000000000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 920
+    Top = 240
+  end
+  object DS_Bardero__sub_sayi: TOracleDataSet
+    SQL.Strings = (
+      'select count (*)  as say from ins_subraqasiya_bardero'
+      'where bardero_no=:p_bardero_no')
+    Optimize = False
+    Variables.Data = {
+      04000000010000001A0000003A0050005F004200410052004400450052004F00
+      5F004E004F00050000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {050000000100000006000000530041005900010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 272
+    Top = 448
+    object DS_Bardero__sub_sayiSAY: TFloatField
+      FieldName = 'SAY'
+    end
+  end
+  object DS_Bardero__loss_sayi: TOracleDataSet
+    SQL.Strings = (
+      'select count (*)  as say from ins_loss_bardero '
+      'where bardero_no=:p_bardero_no'
+      'and dep_id=:p_dep_id')
+    Optimize = False
+    Variables.Data = {
+      04000000020000001A0000003A0050005F004200410052004400450052004F00
+      5F004E004F00050000000000000000000000120000003A0050005F0044004500
+      50005F0049004400030000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {050000000100000006000000530041005900010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 392
+    Top = 448
+    object DS_Bardero__loss_sayiSAY: TFloatField
+      FieldName = 'SAY'
+    end
+  end
+  object DS_Bardero__ter_sayi: TOracleDataSet
+    SQL.Strings = (
+      'select count(*) as say  from ins_terminated_bardero'
+      'where bardero_no=:p_bardero_no'
+      'and type_id=:p_type_id'
+      'and cid=:p_cid')
+    Optimize = False
+    Variables.Data = {
+      04000000030000001A0000003A0050005F004200410052004400450052004F00
+      5F004E004F00050000000000000000000000140000003A0050005F0054005900
+      500045005F00490044000300000000000000000000000C0000003A0050005F00
+      430049004400030000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {050000000100000006000000530041005900010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 264
+    Top = 512
+    object DS_Bardero__ter_sayiSAY: TFloatField
+      FieldName = 'SAY'
+    end
+  end
+  object DS_Sigorta_bardero_sayi: TOracleDataSet
+    SQL.Strings = (
+      'select count(*) as say  from ins_reinsurance '
+      'where bardero_no=:p_bardero_no'
+      'and type_id=:p_type_id'
+      'and cid=:p_cid')
+    Optimize = False
+    Variables.Data = {
+      04000000030000001A0000003A0050005F004200410052004400450052004F00
+      5F004E004F00050000000000000000000000140000003A0050005F0054005900
+      500045005F00490044000300000000000000000000000C0000003A0050005F00
+      430049004400030000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {050000000100000006000000530041005900010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 392
+    Top = 512
+    object DS_Sigorta_bardero_sayiSAY: TFloatField
+      FieldName = 'SAY'
+    end
+  end
+  object DS_Bardero__premiya_sogortaci: TOracleDataSet
+    SQL.Strings = (
+      'select count(*) as say from '
+      
+        'ins_reinsurance ir,ins_contracts ic,customers cust,ins_insurance' +
+        's ii'
+      'where ir.cid=ic.id'
+      'and ir.custid=cust.id'
+      'and ir.cid=:p_cid'
+      'and ir.type_id=ii.id '
+      'and ii.obeykt_type is not null'
+      'and ir.custid=:p_custid'
+      'and ir.type_id=:p_type_id')
+    Optimize = False
+    Variables.Data = {
+      04000000030000000C0000003A0050005F004300490044000300000000000000
+      00000000120000003A0050005F00430055005300540049004400030000000000
+      000000000000140000003A0050005F0054005900500045005F00490044000300
+      00000000000000000000}
+    QBEDefinition.QBEFieldDefs = {050000000100000006000000530041005900010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 136
+    Top = 456
+    object DS_Bardero__premiya_sogortaciSAY: TFloatField
+      FieldName = 'SAY'
+    end
+  end
+  object DS_Bardero_ter_sogortaci: TOracleDataSet
+    SQL.Strings = (
+      'SELECT count (*) as say'
+      
+        'FROM ins_terminated_bardero a ,ins_contracts ic,customers cus,in' +
+        's_insurances ii'
+      '  where cus.id=a.cust_id'
+      '  and ic.id=a.cid'
+      '  AND a.type_id=ii.id'
+      'and ic.id=:pid'
+      'and a.cust_id=:p_cust_id'
+      'and a.type_id=:p_type_id')
+    Optimize = False
+    Variables.Data = {
+      0400000003000000080000003A00500049004400030000000000000000000000
+      140000003A0050005F0043005500530054005F00490044000300000000000000
+      00000000140000003A0050005F0054005900500045005F004900440003000000
+      0000000000000000}
+    QBEDefinition.QBEFieldDefs = {050000000100000006000000530041005900010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 120
+    Top = 520
+    object DS_Bardero_ter_sogortaciSAY: TFloatField
+      FieldName = 'SAY'
+    end
+  end
+  object contract: TOracleDataSet
+    SQL.Strings = (
+      'select * from ins_contracts'
+      'where id=:pcid')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000A0000003A00500043004900440003000000000000000000
+      0000}
+    Session = sboapiDataModule.SBSession
+    Left = 240
+    Top = 80
+  end
+end

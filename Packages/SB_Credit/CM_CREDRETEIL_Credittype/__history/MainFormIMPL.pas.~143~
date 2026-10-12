@@ -1,0 +1,1337 @@
+﻿unit MainFormIMPL;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, Buttons, ExtCtrls, Grids, DBGridEh, XDBGrids, DBCtrlsEh,
+  DBCtrls, Mask, DBLookupEh, WordXP, OleServer, ActnList, ComCtrls,
+  CMDBSearchEdit, CMHintBox;
+
+type
+  TMainForm = class(TForm)
+    Panel1: TPanel;
+    SpeedButton1: TSpeedButton;
+    SpeedButton2: TSpeedButton;
+    SpeedButton3: TSpeedButton;
+    WordApplication: TWordApplication;
+    WordDocument: TWordDocument;
+    Panel2: TPanel;
+    Panel19: TPanel;
+    Label1: TLabel;
+    XDBGrid1: TXDBGrid;
+    PageControl1: TPageControl;
+    TabSheet1: TTabSheet;
+    TabSheet2: TTabSheet;
+    R1: TPanel;
+    Label4: TLabel;
+    BranchCBEh: TDBLookupComboboxEh;
+    R3: TPanel;
+    Label5: TLabel;
+    DBEdit1: TDBEdit;
+    R4: TPanel;
+    Label7: TLabel;
+    Label2: TLabel;
+    DBDateTimeEditEh1: TDBDateTimeEditEh;
+    DBNumberEditEh1: TDBNumberEditEh;
+    R5: TPanel;
+    Label9: TLabel;
+    DBDateTimeEditEh2: TDBDateTimeEditEh;
+    R6: TPanel;
+    Label18: TLabel;
+    R7: TPanel;
+    Label20: TLabel;
+    DBNumberEditEh2: TDBNumberEditEh;
+    R8: TPanel;
+    Label22: TLabel;
+    DBNumberEditEh4: TDBNumberEditEh;
+    R9: TPanel;
+    Label10: TLabel;
+    Panel63: TPanel;
+    Label137: TLabel;
+    Label138: TLabel;
+    Panel64: TPanel;
+    Label139: TLabel;
+    Label140: TLabel;
+    DBLookupComboboxEh3: TDBLookupComboboxEh;
+    Panel62: TPanel;
+    Label135: TLabel;
+    Label136: TLabel;
+    DBLookupComboboxEh4: TDBLookupComboboxEh;
+    Panel65: TPanel;
+    Label141: TLabel;
+    Label142: TLabel;
+    DBLookupComboboxEh5: TDBLookupComboboxEh;
+    Label8: TLabel;
+    DBLookupComboboxEh14: TDBLookupComboboxEh;
+    Panel4: TPanel;
+    Label6: TLabel;
+    Panel5: TPanel;
+    Label11: TLabel;
+    DBNumberEditEh6: TDBNumberEditEh;
+    Panel6: TPanel;
+    Label13: TLabel;
+    DBNumberEditEh7: TDBNumberEditEh;
+    Panel3: TPanel;
+    Panel15: TPanel;
+    Label25: TLabel;
+    RegionCom: TDBLookupComboboxEh;
+    RegionComdistrict: TDBLookupComboboxEh;
+    Panel69: TPanel;
+    Label12: TLabel;
+    Label156: TLabel;
+    DBLookupComboboxEh10: TDBLookupComboboxEh;
+    Panel21: TPanel;
+    Label33: TLabel;
+    Label84: TLabel;
+    DBLookupComboboxEh8: TDBLookupComboboxEh;
+    Panel9: TPanel;
+    Label31: TLabel;
+    Label3: TLabel;
+    DBLookupComboboxEh7: TDBLookupComboboxEh;
+    DBLookupComboboxEh9: TDBLookupComboboxEh;
+    Label56: TLabel;
+    Label60: TLabel;
+    Label16: TLabel;
+    Label17: TLabel;
+    DBLookupComboboxEh11: TDBLookupComboboxEh;
+    DBLookupComboboxEh2: TDBLookupComboboxEh;
+    DBNumberEditEh5: TDBNumberEditEh;
+    DBNumberEditEh3: TDBNumberEditEh;
+    DBNumberEditEh8: TDBNumberEditEh;
+    Panel44: TPanel;
+    Label161: TLabel;
+    Edit1: TEdit;
+    HBConclusion: TCMHintBox;
+    Panel7: TPanel;
+    Label15: TLabel;
+    Label14: TLabel;
+    DBLookupComboboxEh6: TDBLookupComboboxEh;
+    Label71: TLabel;
+    DBLookupComboboxEh1: TDBLookupComboboxEh;
+    Label86: TLabel;
+    Panel8: TPanel;
+    Label107: TLabel;
+    Edit2: TEdit;
+    Label19: TLabel;
+    Edit3: TEdit;
+    Label21: TLabel;
+    TabSheet3: TTabSheet;
+    Panel53: TPanel;
+    Label79: TLabel;
+    Label80: TLabel;
+    DBPortfolioType: TDBLookupComboboxEh;
+    Panel54: TPanel;
+    Label81: TLabel;
+    Label102: TLabel;
+    DBIntRateTypeCode: TDBLookupComboboxEh;
+    Panel55: TPanel;
+    Label103: TLabel;
+    Label104: TLabel;
+    DBGeneralPurposeCode: TDBLookupComboboxEh;
+    Panel57: TPanel;
+    Label105: TLabel;
+    Label115: TLabel;
+    DBBusinessEntityLegalStatus: TDBLookupComboboxEh;
+    Panel37: TPanel;
+    Label120: TLabel;
+    Label121: TLabel;
+    DBFundingSourceCode: TDBLookupComboboxEh;
+    Panel58: TPanel;
+    Label116: TLabel;
+    Label117: TLabel;
+    DBJudicialStatusCode: TDBLookupComboboxEh;
+    Panel59: TPanel;
+    Label118: TLabel;
+    Label119: TLabel;
+    DBSubsidyByGov: TDBLookupComboboxEh;
+    Panel38: TPanel;
+    Label27: TLabel;
+    Label28: TLabel;
+    DBRiskVolume: TDBLookupComboboxEh;
+    Panel12: TPanel;
+    Label40: TLabel;
+    Label37: TLabel;
+    DBRefinancedReasonCode: TDBLookupComboboxEh;
+    Panel14: TPanel;
+    Label42: TLabel;
+    Label43: TLabel;
+    DBIsSoldCollateral: TDBLookupComboboxEh;
+    Panel13: TPanel;
+    Label29: TLabel;
+    Label34: TLabel;
+    DBIsEvaluationDoc: TDBLookupComboboxEh;
+    Panel16: TPanel;
+    Label39: TLabel;
+    Label41: TLabel;
+    DBIsBehavioralModelUsed: TDBLookupComboboxEh;
+    Panel17: TPanel;
+    Label35: TLabel;
+    Label38: TLabel;
+    DBIsDocumentsPresented: TDBLookupComboboxEh;
+    Panel20: TPanel;
+    Label44: TLabel;
+    Label36: TLabel;
+    DBIsProjectFinanced: TDBLookupComboboxEh;
+    GroupBox1: TGroupBox;
+    Label23: TLabel;
+    Label24: TLabel;
+    Label45: TLabel;
+    Label46: TLabel;
+    Label47: TLabel;
+    ins_ammount: TEdit;
+    DBInsurance: TDBLookupComboboxEh;
+    DBLinsurance_status: TDBLookupComboboxEh;
+    ins_inn: TEdit;
+    Ins_dat: TDBDateTimeEditEh;
+    Panel11: TPanel;
+    Label48: TLabel;
+    Label30: TLabel;
+    DBLookupComboboxEh12: TDBLookupComboboxEh;
+    DBLookupComboboxEh13: TDBLookupComboboxEh;
+    Panel18: TPanel;
+    Label32: TLabel;
+    Label26: TLabel;
+    DBLookupComboboxEh32: TDBLookupComboboxEh;
+    HBConclusion1: TCMHintBox;
+    procedure FormCreate(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure XDBGrid1CellDblClick(Column: TXColumn);
+    procedure SpeedButton3Click(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure Label1Click(Sender: TObject);
+    procedure SpeedButton2Click(Sender: TObject);
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure ActinPrintUpdate(Sender: TObject);
+    procedure DBNumberEditEh1Change(Sender: TObject);
+    procedure DBDateTimeEditEh2Exit(Sender: TObject);
+    procedure BranchCBEhChange(Sender: TObject);
+    procedure DBNumberEditEh1Click(Sender: TObject);
+    procedure DBLookupComboboxEh2Change(Sender: TObject);
+    procedure DBLookupComboboxEh3Change(Sender: TObject);
+    procedure DBLookupComboboxEh4Change(Sender: TObject);
+    procedure RegionComChange(Sender: TObject);
+    procedure DBNumberEditEh8Change(Sender: TObject);
+    procedure Edit2Change(Sender: TObject);
+    procedure DBLinsurance_statusCloseUp(Sender: TObject; Accept: Boolean);
+  private
+   procedure exportreport(CreditID:integer);
+   function CalcFullIntpayment:Real;
+   procedure formClear;
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  MainForm: TMainForm;
+  cradd,TemplID,credit_type :integer;
+  v_type :integer;
+ rt: string  ;
+   procedure InitPlugin(s:string ;custid :string);export;
+implementation
+
+{$R *.dfm}
+uses sbsystem,RtDmImpl,retelcommon,Rtl_AzeriAbo_Impl,SBTranslateProc,sboapiDataModuleImpl;
+procedure InitPlugin(s:string;custid :string);export;
+begin
+   rt:=custid;
+   MainForm.ShowModal;
+end;
+exports
+     InitPlugin;
+
+
+
+procedure LoadPlugin1(PluginName :String;Creditid:integer);
+var PluginHandle :THandle;
+    exportproc : procedure(s:String;Creditid:integer);
+begin
+   PluginHandle := LoadPackage(ExtractFilePath(Application.ExeName)+PluginName);
+
+   if PluginHandle > 0 then
+   begin
+      @exportproc := GetProcAddress(PluginHandle,'InitPlugin');
+      exportproc(PluginName,Creditid);
+   end;
+end;
+
+
+procedure TMainForm.ActinPrintUpdate(Sender: TObject);
+begin
+//  (Sender as TAction).Enabled := Active and (RtDataModule.PersonLink.Modified)
+end;
+procedure TMainForm.formClear ;
+begin
+with RtDataModule,Percent do
+ begin
+ if Active then  close;
+ SetVariable('period',-1);
+ SetVariable('retcurid',-1);
+ SetVariable('meb',-1);
+ open;
+ end;
+ Edit2.Clear;
+ edit3.Clear;
+ DBNumberEditEh2.Clear;
+ DBNumberEditEh4.Clear;
+ DBNumberEditEh5.Clear;
+ DBNumberEditEh3.Clear;
+ DBNumberEditEh6.Clear;
+ DBNumberEditEh7.Clear;
+ DBNumberEditEh8.Clear;
+ DBNumberEditEh1.Clear;
+ Edit1.Clear;
+  DBLookupComboboxEh2.KeyValue:=-1;
+  DBLookupComboboxEh3.KeyValue:=-1;
+  DBLookupComboboxEh4.KeyValue:=-1;
+  DBLookupComboboxEh5.KeyValue:=-1;
+  DBLookupComboboxEh6.KeyValue:=-1;
+  DBLookupComboboxEh7.KeyValue:=-1;
+  DBLookupComboboxEh8.KeyValue:=-1;
+  DBLookupComboboxEh9.KeyValue:=-1;
+  DBLookupComboboxEh10.KeyValue:=-1;
+  DBLookupComboboxEh11.KeyValue:=-1;
+  RegionCom.KeyValue:=-1;
+  RegionComdistrict.KeyValue:=-1;
+  PageControl1.ActivePageIndex:=0;
+
+   DBLookupComboboxEh1.Value:=1;
+   DBLookupComboboxEh8.Value:=1;
+   DBLookupComboboxEh9.Value:=1;
+
+   DBLookupComboboxEh10.KeyValue:=-1;
+  DBLookupComboboxEh11.KeyValue:=-1;
+  DBLookupComboboxEh12.KeyValue:=-1;
+  DBLookupComboboxEh13.KeyValue:=-1;
+  DBLookupComboboxEh32.KeyValue:=-1;
+  RegionCom.KeyValue:=-1;
+  RegionComdistrict.KeyValue:=-1;
+  PageControl1.ActivePageIndex:=0;
+
+     DBLookupComboboxEh1.Value:=1;
+     DBLookupComboboxEh7.Value:=1;
+     DBLookupComboboxEh8.Value:=1;
+     DBLookupComboboxEh9.Value:=0;
+
+     DBPortfolioType.KeyValue:=-1;
+     DBIntRateTypeCode.KeyValue:=-1;
+     DBGeneralPurposeCode.KeyValue:=-1;
+     DBBusinessEntityLegalStatus.KeyValue:=-1;
+     DBFundingSourceCode.KeyValue:=-1;
+     DBJudicialStatusCode.KeyValue:=-1;
+     DBSubsidyByGov.KeyValue:=-1;
+     DBRiskVolume.KeyValue:=-1;
+    DBRefinancedReasonCode.KeyValue:=-1;
+    DBIsSoldCollateral.KeyValue:='';
+    DBIsEvaluationDoc.KeyValue:='';
+    DBIsBehavioralModelUsed.KeyValue:='';
+    DBIsDocumentsPresented.KeyValue:='';
+    DBIsProjectFinanced.KeyValue:='';
+
+    DBLinsurance_status.KeyValue:='';
+    ins_ammount.Clear;
+    ins_inn.Clear;
+    DBInsurance.KeyValue :=-1;
+    ins_dat.Clear;
+
+    ins_ammount.Enabled:=false;
+    ins_inn.Enabled:=false;
+    DBInsurance.KeyValue :=false;
+    ins_dat.Enabled:=false;
+  end;
+
+procedure TMainForm.BranchCBEhChange(Sender: TObject);
+begin
+with RtDataModule do begin
+PersonLink.FieldByName('numberofcredit').asstring:=
+     OracleDataSet2.FieldByName('num').asstring+inttostr(Branches.FieldByName('id').AsInteger);
+end;
+end;
+procedure TMainForm.DBDateTimeEditEh2Exit(Sender: TObject);
+begin
+          DBNumberEditEh1.Value
+          := RtDataModule.cm_common.CallIntegerFunction('GetPeriod',
+          [DBDateTimeEditEh1.Value,
+             DBDateTimeEditEh2.Value ]);
+
+end;
+
+procedure TMainForm.DBLinsurance_statusCloseUp(Sender: TObject;
+  Accept: Boolean);
+begin
+if DBLinsurance_status.Value ='TRUE'  then
+begin
+  ins_ammount.Enabled:=true;
+  ins_inn.Enabled:=true;
+  DBInsurance.Enabled :=true;
+  ins_dat.Enabled:=true;
+end
+else
+begin
+    ins_ammount.Clear;
+    ins_inn.Clear;
+    DBInsurance.KeyValue :=-1;
+    ins_dat.clear;
+    ins_ammount.Enabled:=false;
+    ins_inn.Enabled:=false;
+    DBInsurance.Enabled :=false;
+    ins_dat.Enabled:=false;
+end;
+end;
+
+procedure TMainForm.DBLookupComboboxEh2Change(Sender: TObject);
+begin
+
+if DBLookupComboboxEh2.KeyValue<> -1 then
+begin
+   RtDataModule.creditcatData.close;
+   RtDataModule.creditcatData.SetVariable('vid_sob',RtDataModule.EstateTypeData.fieldbyname('id').asinteger);
+   RtDataModule.creditcatData.open;
+end;
+end;
+
+procedure TMainForm.DBLookupComboboxEh3Change(Sender: TObject);
+begin
+
+   RtDataModule.DataSetActivities.close;
+   RtDataModule.DataSetActivities.SetVariable('act_id',DBLookupComboboxEh3.keyValue);
+   RtDataModule.DataSetActivities.open;
+end;
+
+procedure TMainForm.DBLookupComboboxEh4Change(Sender: TObject);
+begin
+   RtDataModule.ClientCategories.close;
+   RtDataModule.ClientCategories.SetVariable('act_id',DBLookupComboboxEh4.keyValue);
+   RtDataModule.ClientCategories.open;
+end;
+
+procedure TMainForm.DBNumberEditEh1Change(Sender: TObject);
+
+var
+a :integer;
+begin
+if DBNumberEditEh1.Text='' then
+  a:=0
+ else
+  a:=strtoint(DBNumberEditEh1.Text) ;
+
+DBDateTimeEditEh2.Value:=
+RtDataModule.cm_common.CallDateFunction('Endcontractdate',[
+           a,DBDateTimeEditEh1.Value]);
+
+end;
+
+
+procedure TMainForm.DBNumberEditEh1Click(Sender: TObject);
+begin
+if DBNumberEditEh1.Value=0 then
+DBNumberEditEh1.CLEAR;
+
+end;
+
+procedure TMainForm.DBNumberEditEh8Change(Sender: TObject);
+begin
+if DBNumberEditEh8.Text<>''then
+begin
+
+  DBNumberEditEh2.Value:=0;
+  DBNumberEditEh3.Value:=0;
+  DBNumberEditEh4.Value:=0;
+  DBNumberEditEh5.Value:=0;
+  DBNumberEditEh6.Value:=0;
+  DBNumberEditEh7.Value:=0;
+
+
+with RtDataModule,perodcurr do
+ begin
+ if Active then  close;
+ SetVariable('mehsulid',DBLookupComboboxEh6.Value);
+ SetVariable('valute',DBLookupComboboxEh14.KeyValue);
+ open;
+ end;
+// ShowMessage(inttostr(DBLookupComboboxEh14.KeyValue));
+with RtDataModule,Percent do
+ begin
+ if Active then  close;
+ SetVariable('period',DBNumberEditEh1.Value);
+ SetVariable('retcurid',RtDataModule.perodcurr.FieldByName('id').AsInteger);
+ SetVariable('meb',strtofloat(DBNumberEditEh8.value));
+ open;
+
+ DBNumberEditEh2.Text:=FieldByName('faiz').asstring;
+ DBNumberEditEh4.Text:=FieldByName('gecfaiz').asstring;
+ DBNumberEditEh5.Text:=FieldByName('penya').asstring;
+ DBNumberEditEh7.Text:=FieldByName('komissia').asstring;
+ end;
+end;
+end;
+
+procedure TMainForm.Edit2Change(Sender: TObject);
+var
+  S, Cleaned, Formatted: string;
+  I: Integer;
+  SelPos: Integer;
+begin
+  // Cari mövqeyi saxla
+  SelPos := Edit2.SelStart;
+
+  // Mətni götür, boşluqları sil
+  S := Edit2.Text;
+  Cleaned := StringReplace(S, ' ', '', [rfReplaceAll]);
+
+  // Hər 4 simvoldan sonra boşluq əlavə et
+  Formatted := '';
+  for I := 1 to Length(Cleaned) do
+  begin
+    Formatted := Formatted + Cleaned[I];
+    if (I mod 4 = 0) and (I <> Length(Cleaned)) then
+      Formatted := Formatted + ' ';
+  end;
+
+  // Əgər dəyişiklik varsa yenilə
+  if Formatted <> S then
+  begin
+    Edit2.Text := Formatted;
+    Edit2.SelStart := Length(Formatted); // Kursoru sona qoy
+  end;
+
+end;
+
+procedure TMainForm.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  with RtDataModule.PersonLink , SavedCredit do
+  begin
+     ins:=0;
+     boorowerid:=0;
+       RtDataModule.PersonLink .close;
+      RtDataModule.PersonLink.SQL[3]:='';
+
+  end;
+  width:=232;
+Panel1.Visible:=false;
+ Caption:='Smart';
+panel19.Visible:=true;
+DBEdit1.Text:='';
+if Panel1.Visible=true then
+  Panel1.Visible:=false;
+
+  RtDataModule.CreditTypes.CloseAll;
+  RtDataModule.CreditTypes.sql[4]:=' ';
+  RtDataModule.CreditTypes.open;
+ formClear;
+
+end;
+
+procedure TMainForm.FormCreate(Sender: TObject);
+begin
+
+RtDataModule:=TRtDataModule.Create(self);
+ SBTranslateProc.TranslateAllCompForms(Self, sboapiDataModule.OrPack_SL);
+end;
+
+procedure TMainForm.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+if ord(key)=27 then
+ MainForm.Close
+end;
+
+procedure TMainForm.FormShow(Sender: TObject);
+begin
+if RtDataModule = nil then
+  RtDataModule := TRtDataModule.Create(nil);
+
+  SBTranslateProc.TranslateAllCompForms(Self, sboapiDataModule.OrPack_SL);
+
+width:=232;
+ PageControl1.ActivePageIndex:=0;
+
+ {with RtDataModule.PersonLink   do
+begin
+if Active then close;
+ SetVariable('id',rt);
+ open;
+ end;
+  }
+
+  with RtDataModule.Customers do
+        begin
+       close ;
+       SetVariable('id',rt);
+       open;
+       v_type:=FieldByName('cust_type').AsInteger;
+
+     end;
+
+
+ if v_type=0 then
+begin
+with RtDataModule do
+begin
+EstateTypeData.SQL[4]:='';
+EstateTypeData.close;
+EstateTypeData.SQL[4]:=EstateTypeData.SQL[4]+' where  a.cust_type=0 ';
+EstateTypeData.open;
+DBLookupComboboxEh2.KeyValue:=102;
+ CreditTypes.Close;
+ CreditTypes.sql[4]:=CreditTypes.sql[4]+' where  cust_type in(0)';
+CreditTypes.open;
+
+end;
+  end;
+
+if v_type=1 then
+begin
+with RtDataModule do
+begin
+EstateTypeData.SQL[4]:='';
+EstateTypeData.close;
+EstateTypeData.SQL[4]:=EstateTypeData.SQL[4]+' where  a.cust_type=1';
+EstateTypeData.open;
+DBLookupComboboxEh2.KeyValue:=105;
+  //CreditTypes.sql[4]:=' ';
+  CreditTypes.Close;
+  CreditTypes.sql[4]:=CreditTypes.sql[4]+' where  cust_type in(1)';
+  CreditTypes.open;
+//--DBLookupComboboxEh4.KeyValue:=21000;
+
+end;
+  end;
+ if v_type=2 then
+begin
+with RtDataModule do
+begin
+ CreditTypes.Close;
+ CreditTypes.sql[4]:=CreditTypes.sql[4]+' where  cust_type in(0,2)';
+ CreditTypes.open;
+
+end;
+  end;
+
+  if v_type=3 then
+begin
+with RtDataModule do
+begin
+EstateTypeData.SQL[4]:='';
+EstateTypeData.close;
+EstateTypeData.SQL[4]:=EstateTypeData.SQL[4]+' where  a.cust_type in(1,2) ';
+EstateTypeData.open;
+
+
+  end;
+     end;
+
+     DBDateTimeEditEh1.Value:=trunc(RtDataModule.sysdatTEK_DAT.AsDateTime) ;
+     DBDateTimeEditEh2.Value:=trunc(RtDataModule.sysdatTEK_DAT.AsDateTime) ;
+     DBLookupComboboxEh1.Value:=1;
+     DBLookupComboboxEh8.Value:=1;
+     DBLookupComboboxEh9.Value:=1;
+end;
+
+procedure TMainForm.Label1Click(Sender: TObject);
+begin
+close
+end;
+
+procedure TMainForm.RegionComChange(Sender: TObject);
+begin
+with RtDataModule do
+begin
+ Ods_regdistrict.Close;
+  Ods_regdistrict.SetVariable('v_regid',Ods_regid.asinteger);
+ Ods_regdistrict.Open;
+
+end;
+end;
+
+procedure SaveCredit;
+begin
+  with RtDataModule.PersonLink , SavedCredit do
+  begin
+    Currency := FieldByName('Currency').AsInteger;
+    BranchID := FieldByName('BranchID').AsInteger;
+    ACTIVITIES_TYPE:=MainForm.DBLookupComboboxEh2.value ;
+    CREDITACT:= MainForm.DBLookupComboboxEh3.value;
+    ACTIVITIES:=MainForm.DBLookupComboboxEh4.value ;
+    CUSTOMERTYPE:=MainForm.DBLookupComboboxEh5.value  ;
+
+    CreditLineAmount :=MainForm.DBNumberEditEh8.value;
+    AnnualyInterestRate :=MainForm.DBNumberEditEh2.value;
+    AnnualyOverdueRate :=MainForm.DBNumberEditEh4.value;
+    AnnualyPenaltyRate :=MainForm.DBNumberEditEh5.value;
+    DateOfConclusion := MainForm.DBDateTimeEditEh1.Value;
+    DueDateFirstContract := MainForm.DBDateTimeEditEh2.Value;
+    comison:=MainForm.DBNumberEditEh7.value;
+    zerger:=MainForm.DBNumberEditEh6.value;
+    kart:= MainForm.DBNumberEditEh3.value;
+    period:=MainForm.DBNumberEditEh1.Value;
+    NumberOfCredit :=MainForm.DBEdit1.Text;
+
+    mehid :=MainForm.DBLookupComboboxEh6.value;
+    AUTOPAYMENT:=MainForm.DBLookupComboboxEh8.value;
+    RESERVEID :=MainForm.DBLookupComboboxEh7.value;
+    INTCALCMETHOD:=MainForm.DBLookupComboboxEh9.value;
+    PLEDGEID_P:=MainForm.DBLookupComboboxEh10.value;
+    AUTOEXPIRE:=MainForm.DBLookupComboboxEh1.value;
+    Expertid:=MainForm.DBLookupComboboxEh11.value;
+    PurposeOfCredit:=MainForm.Edit1.text;
+    credittype:=MainForm.XDBGrid1.DataSource.DataSet.FieldByName('id').AsInteger;
+    if MainForm.RegionCom.Value>0 then
+      REGION:=MainForm.RegionCom.Value
+      else
+    REGION:=0;
+    if MainForm.RegionComdistrict.Value>0 then
+       REGION_DISTRICT:=MainForm.RegionComdistrict.Value
+    else
+     REGION_DISTRICT:=0;
+
+    FIRSTOWNERID:=MainForm.Edit2.text;
+    FIRSTOWNEmNAME:=MainForm.Edit3.text;
+    SECONDOWNERID :=MainForm.ins_ammount.Text;
+    SECONDOWNERNAME:=MainForm.DBInsurance.Text;
+    //MainForm.edit4.text;
+
+
+     if VarIsNull(MainForm.DBLookupComboboxEh12.Value) then
+     pay_method :=-1
+      else
+     pay_method := MainForm.DBLookupComboboxEh12.Value;
+
+    boorowerid:=strtoint(rt);
+
+     if VarIsNull(MainForm.DBLookupComboboxEh13.Value) then
+     UsrGroup :=-1
+      else
+     UsrGroup := MainForm.DBLookupComboboxEh13.Value;
+
+    if VarIsNull(MainForm.DBLookupComboboxEh32.Value) then
+     aim_id :=-1
+    else
+     aim_id := MainForm.DBLookupComboboxEh32.Value;
+
+    porttype :=MainForm.DBPortfolioType.KeyValue;
+    interesttype:=MainForm.DBIntRateTypeCode.KeyValue;
+    generalpurposecode:=MainForm.DBGeneralPurposeCode.KeyValue;
+    businesstatus:=MainForm.DBBusinessEntityLegalStatus.KeyValue;
+    fundingcode :=MainForm.DBFundingSourceCode.KeyValue;
+    judicialcode :=MainForm.DBJudicialStatusCode.KeyValue;
+    subsidycode :=MainForm.DBSubsidyByGov.KeyValue;
+    riskvolume :=MainForm.DBRiskVolume.KeyValue;
+    RefinancedReasonCode:=MainForm.DBRefinancedReasonCode.KeyValue;
+    IsSoldCollateral :=MainForm.DBIsSoldCollateral.KeyValue;
+    IsEvaluationDoc :=MainForm.DBIsEvaluationDoc.KeyValue;
+    IsBehavioralModelUsed:=MainForm.DBIsBehavioralModelUsed.KeyValue;
+    IsDocumentsPresented :=MainForm.DBIsDocumentsPresented.KeyValue;
+    IsProjectFinanced :=MainForm.DBIsProjectFinanced.KeyValue;
+
+   if VarIsNull(MainForm.DBLinsurance_status.Value) then
+     insurance_status :=''
+    else
+     insurance_status := MainForm.DBLinsurance_status.Value;
+
+       insurance_inn :=MainForm.ins_inn.Text;
+
+     if VarIsNull(MainForm.Ins_dat.Value) then
+     insurance_end_dat :=null
+    else
+     insurance_end_dat := MainForm.Ins_dat.Value;
+
+
+
+
+
+
+
+      with RtDataModule,PgRetel ,SavedCredit do
+           Result := CallIntegerFunction('cred_add',[
+           'boorowerid',boorowerid,
+           'Currency',Currency,
+           'CreditLineAmount',CreditLineAmount,
+           'AnnualyInterestRate',AnnualyInterestRate,
+           'AnnualyOverdueRate',AnnualyOverdueRate,
+           'AnnualyPenaltyRate',AnnualyPenaltyRate,
+           'DateOfConclusion',DateOfConclusion,
+           'DueDateFirstContract',DueDateFirstContract,
+           'NumberOfCredit',NumberOfCredit,
+           'PurposeOfCredit',PurposeOfCredit,
+           'BranchID',BranchID,
+           'ACTIVITIES_TYPE', ACTIVITIES_TYPE,
+           'ACTIVITIES' , ACTIVITIES ,
+           'CREDITACT' ,CREDITACT ,
+           'CUSTOMERTYPE' , CUSTOMERTYPE  ,
+           'period' ,period,
+           'comison',comison,
+           'zerger' ,zerger,
+           'kart',kart,
+           'credittype',credittype,
+           'mehid',mehid,
+           'RESERVEID',RESERVEID,
+           'pldgid_t',PLEDGEID_P,
+           'AUTOPAYMENT',AUTOPAYMENT,
+           'INTCALCMETHOD',INTCALCMETHOD,
+           'AUTOEXPIRE',AUTOEXPIRE  ,
+           'Expertid', Expertid ,
+           'REGION' ,REGION ,
+           'REGION_DISTRICT',REGION_DISTRICT  ,
+           'FIRSTOWNERID',FIRSTOWNERID,
+           'FIRSTOWNEmNAME',FIRSTOWNEmNAME ,
+
+           'pay_method',pay_method ,
+           'UsrGroup',UsrGroup,
+           'aim_id',aim_id,
+           'porttype',porttype ,
+           'interesttype',interesttype ,
+           'generalpurposecode',generalpurposecode,
+           'businesstatus', businesstatus,
+           'fundingcode', fundingcode,
+           'judicialcode',judicialcode,
+           'subsidycode', subsidycode,
+           'riskvolume' ,riskvolume,
+           'RefinancedReasonCode' ,RefinancedReasonCode,
+           'IsSoldCollateral' ,IsSoldCollateral,
+           'IsEvaluationDoc', IsEvaluationDoc,
+           'IsBehavioralModelUsed' , IsBehavioralModelUsed,
+           'IsDocumentsPresented' ,IsDocumentsPresented,
+           'IsProjectFinanced' ,IsProjectFinanced ,
+           'insurance_status' ,insurance_status ,
+           'insurance_inn'   ,insurance_inn ,
+           'insurance_end_dat',insurance_end_dat
+
+         ]);
+
+        if credit_type=48 then
+        begin
+         LoadPlugin1('CM_RtlLizinq.bpl',Result)  ;
+        end;
+    ins:=1;
+
+  end;
+end;
+function TMainForm.CalcFullIntpayment:Real;
+begin
+   result := 0;
+   with RtDataModule,ScheduleData do
+   begin
+      First;
+      while not EOF do
+      begin
+       result := result+ FieldByName('INTEREST').AsFloat;
+       Next;
+      end;
+   end;
+end;
+
+
+
+
+procedure TMainForm.exportreport(CreditID:integer);
+var factint :real;
+  s :string[5];
+
+begin
+
+     with RtDataModule do
+  begin
+    with ScheduleData do
+    begin
+      ClearVariables;
+      SetVariable('CreditID',CreditID);
+      Open
+    end;
+    with BoorowerInfo do
+    begin
+      ClearVariables;
+      SetVariable('CreditID',CreditID);
+      Open
+    end;
+    with CreditInfo do
+    begin
+      ClearVariables;
+      SetVariable('ID',CreditID);
+      Open
+    end;
+
+     BankInfo.open;
+     HeadOfficeID.open;
+
+          if FilialInfo.Active then FilialInfo.CloseAll;
+          FilialInfo.SetVariable('brid',CreditInfo.FieldByName('BranchID').AsInteger);
+          FilialInfo.Open;
+
+  end;
+end;
+procedure TMainForm.SpeedButton1Click(Sender: TObject);
+  resourcestring  FilenotFound = 'Fayıl tapılmadı';
+  var
+    girov,ammount :real;
+    girovv, yazidat, valname,yaz: string;
+    dat :integer;
+         Template,Templatebool,
+         FTemplatePath,Itemindex,
+         OBookmarkCount, What, oBookMarkName: Olevariant;
+         IbookmarkCount: Integer;
+         tFieldName:String;
+         SaveChanges,
+         OriginalFormat,
+         RouteDocument: OleVariant;
+begin
+  cradd:=1 ;
+
+
+
+   if DBLookupComboboxEh6.text='' then
+   begin
+   PageControl1.ActivePageIndex:=0;
+   HBConclusion.ShowMessage('Kreditin məhsulu sahəsi boşdur !') ;
+   abort
+   end;
+
+   if trim( DBLookupComboboxEh2.text)='' then
+   begin
+   HBConclusion.ShowMessage('Borc alanın tipi (Mülkiyyət növü) sahəsi boşdur !') ;
+   abort
+   end;
+
+
+   if DBLookupComboboxEh3.text='' then
+   begin
+   HBConclusion.ShowMessage('Borc alanın sektoru sahəsi boşdur !') ;
+   PageControl1.ActivePageIndex:=0;
+   abort
+   end;
+
+   if DBLookupComboboxEh4.text='' then
+   begin
+   HBConclusion.ShowMessage('Borc alanın fəaliyyət sahəsi boşdur !') ;
+   PageControl1.ActivePageIndex:=0;
+   abort
+   end;
+
+   if DBLookupComboboxEh5.text='' then
+   begin
+   PageControl1.ActivePageIndex:=0;
+   HBConclusion.ShowMessage('Borc alanın fəaliyyət növü sahəsi boşdur !') ;
+   PageControl1.ActivePageIndex:=0;
+   abort
+   end;
+
+
+   if DBLookupComboboxEh7.text='' then
+   begin
+
+   HBConclusion.ShowMessage('Kreditin təsnifatı sahəsi boşdur !') ;
+   PageControl1.ActivePageIndex:=0;
+   abort
+   end;
+
+   if DBLookupComboboxEh8.text='' then
+   begin
+   HBConclusion.ShowMessage('Ödəmə aprılır  sahəsi boşdur !') ;
+   PageControl1.ActivePageIndex:=0;
+   abort
+   end;
+   if DBLookupComboboxEh9.text='' then
+   begin
+   HBConclusion.ShowMessage('Hesablama aparılır sahəsi boşdur !') ;
+   PageControl1.ActivePageIndex:=0;
+   abort
+   end;
+
+   if DBLookupComboboxEh10.text='' then
+   begin
+   HBConclusion.ShowMessage('Kreditin təminatlığı sahəsi boşdur !') ;
+   PageControl1.ActivePageIndex:=0;
+   abort
+   end;
+
+    if DBLookupComboboxEh11.text='' then
+   begin
+   HBConclusion.ShowMessage('Krediti cəlb edən mütəxəssis sahəsi boşdur !') ;
+   PageControl1.ActivePageIndex:=0;
+   abort
+   end;
+
+    if DBLookupComboboxEh1.text='' then
+   begin
+   HBConclusion.ShowMessage('Gecikdirilmə aprılır sahəsi boşdur !') ;
+   PageControl1.ActivePageIndex:=0;
+   abort
+   end;
+
+
+
+
+   if DBLookupComboboxEh14.KeyValue=null then
+   begin
+   ShowMessage('Valyutanı seçin!');
+    exit;
+   end;
+
+   if DBNumberEditEh1.Text='' then
+   begin
+   ShowMessage('Kreditin müddətini daxil edin ! ');
+    exit;
+   end;
+
+    if DBNumberEditEh8.Text='' then
+   begin
+   ShowMessage('Kreditin məbləğini daxil edin! ');
+    exit;
+   end;
+
+
+   if DBNumberEditEh2.Text='' then
+   begin
+   ShowMessage('Kreditin faiz dərəcəsini daxil edin ! ');
+    exit;
+   end;
+
+    if DBNumberEditEh4.Text='' then
+   begin
+   ShowMessage('Kreditin Gecikmiş faiz  dərəcəsini daxil edin ! ');
+    exit;
+   end;
+
+    if DBNumberEditEh1.Text='' then
+   begin
+   ShowMessage('Kreditin Təyyinatını  daxil edin ! ');
+    exit;
+   end;
+
+    if DBNumberEditEh5.Text='' then
+   begin
+   ShowMessage('Kreditin Cərmə faiz dərəcəsini  daxil edin ! ');
+    exit;
+   end;
+
+
+   if DBPortfolioType.text='' then
+   begin
+   HBConclusion1.ShowMessage('Kreditin portfel üzrə bölgüsü sahəsi boşdur !') ;
+   PageControl1.ActivePageIndex:=2;
+   abort
+   end;
+
+     if DBIntRateTypeCode.text='' then
+   begin
+   HBConclusion1.ShowMessage('Faiz dərəcəsinin növü sahəsi boşdur !') ;
+   PageControl1.ActivePageIndex:=2;
+   abort
+   end;
+
+     if DBGeneralPurposeCode.text='' then
+   begin
+   HBConclusion1.ShowMessage('Kreditin təyinatı sahəsi boşdur !') ;
+   PageControl1.ActivePageIndex:=2;
+   abort
+   end;
+
+     if DBBusinessEntityLegalStatus.text='' then
+   begin
+   HBConclusion1.ShowMessage('Təsərüffat subyekti olan borcalanın hüquqi statusu  sahəsi boşdur !') ;
+   PageControl1.ActivePageIndex:=2;
+   abort
+   end;
+
+     if DBFundingSourceCode.text='' then
+   begin
+   HBConclusion1.ShowMessage('Kreditin maliyyələşmə mənbəyi sahəsi boşdur !') ;
+   PageControl1.ActivePageIndex:=2;
+   abort
+   end;
+
+     if DBJudicialStatusCode.text='' then
+   begin
+   HBConclusion1.ShowMessage('Kreditin məhkəmə statusu sahəsi boşdur !') ;
+   PageControl1.ActivePageIndex:=2;
+   abort
+   end;
+
+     if DBSubsidyByGov.text='' then
+   begin
+   HBConclusion1.ShowMessage('Kreditin dövlət zəmanəti və ya subsidiyası sahəsi boşdur !') ;
+   PageControl1.ActivePageIndex:=2;
+   abort
+   end;
+
+  if DBRiskVolume.text='' then
+   begin
+   HBConclusion1.ShowMessage('Kreditin risk qrupu sahəsi boşdur !') ;
+   PageControl1.ActivePageIndex:=2;
+   abort
+   end;
+
+
+  if DBRefinancedReasonCode.text='' then
+   begin
+   HBConclusion1.ShowMessage('Kreditin yenidən maliyyələşməsi(restrukturizasiya) !') ;
+   PageControl1.ActivePageIndex:=2;
+   abort
+   end;
+
+   if DBIsSoldCollateral.text='' then
+   begin
+   HBConclusion1.ShowMessage('Əlavə ödəniş mənbələrinə zərurət !') ;
+   PageControl1.ActivePageIndex:=2;
+   abort
+   end;
+
+   if DBIsEvaluationDoc.text='' then
+   begin
+   HBConclusion1.ShowMessage('Kredit dosyesində kreditin qiymətləndirilməsi ilə bağlı sənədlər mövcuddurmu !') ;
+   PageControl1.ActivePageIndex:=2;
+   abort
+   end;
+
+   if DBIsBehavioralModelUsed.text='' then
+   begin
+   HBConclusion1.ShowMessage('Kreditin verilməsi prosesində davranış modelləri !') ;
+   PageControl1.ActivePageIndex:=2;
+   abort
+   end;
+
+   if DBIsBehavioralModelUsed.text='' then
+   begin
+   HBConclusion1.ShowMessage('Biznes kreditləri təsdiq edən sənədlərin !') ;
+   PageControl1.ActivePageIndex:=2;
+   abort
+   end;
+
+
+   if DBIsProjectFinanced.text='' then
+   begin
+   HBConclusion1.ShowMessage('Layihə maliyyələşdirilməsi krediti olması barədə məlumat(B/k) !') ;
+   PageControl1.ActivePageIndex:=2;
+   abort
+   end;
+
+
+
+     if MessageDlg('     Yeni Kredit müqaviləsi yaradılsın   ?'+#13
+       ,
+       mtConfirmation,
+       [mbYes,mbNo],
+       0) = mrYes
+     then
+     begin
+   SaveCredit;
+     end;
+
+
+     with RtDataModule.Customers do
+        begin
+       if Active then open;
+       SetVariable('id',rt);
+       open;
+       if FieldByName('cust_type').AsInteger=4 then
+        begin
+           ShowMessage('   Nominal müştəriyə kredit vermək olmaz  ! ');
+           exit;
+        end;
+
+     end;
+
+//  exportreport(Result) ;
+/////////////////////////////////////////// word \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+ {if MessageDlg('  Yeni Kredit müqaviləs yardılacaq    '+#13
+       ,
+       mtConfirmation,
+       [mbYes,mbNo],
+       0) = mrYes
+     then
+     begin
+
+
+    with RtDataModule do begin
+     TemplatesDataSet.close;
+     TemplatesDataSet.SetVariable('mehid',XDBGrid1.DataSource.DataSet.FieldByName('id').AsInteger);
+     TemplatesDataSet.open;
+
+
+     ReplaceDataSet.open;
+
+     if BookmarksDataSet.Active then BookmarksDataSet.close;
+     BookmarksDataSet.SetVariable('templid',TemplID);
+     BookmarksDataSet.Open;
+
+     if yazi.Active then yazi.close;
+     yazi.SetVariable('id', Result);
+     yazi.open;
+     ammount :=yazi.FieldByName('CREDITLINEAMOUNT').asfloat;
+     dat:=yazi.FieldByName('per').asinteger;
+     girov:=yazi.FieldByName('pledgeprice').asfloat;
+
+     valname:=yazi.FieldByName('VALU_NAME').asstring;
+     yaz:=CurrencyToHR_Azeri(ammount,0,[0],valname);
+     yazidat:=CurrencyToHR_Azeri(dat,0,[0],'ай');
+     girovv:=CurrencyToHR_Azeri(girov,0,[0],'man');
+
+     if CreditInfoDataSet.Active then CreditInfoDataSet.close;
+     CreditInfoDataSet.SetVariable('crid', Result);
+     CreditInfoDataSet.SetVariable('man', yaz);
+     CreditInfoDataSet.SetVariable('dat', yazidat);
+     CreditInfoDataSet.SetVariable('gir', girovv);
+     CreditInfoDataSet.Open;
+     end;
+
+     What := OleVariant(wdGoToBookmark);
+     FTemplatePath :=RtDataModule.TemplatesDataSet.FieldByName('Path').AsString;
+     TemplID :=RtDataModule.TemplatesDataSet.FieldByName('ID').AsInteger;
+
+     Template := EmptyParam;
+     TemplateBooL:=False;
+     Itemindex:=1;
+
+     Wordapplication.Connect;
+
+     Wordapplication.Visible := True;
+     WordApplication.Documents.Application.Caption := RtDataModule.TemplatesDataSet.FieldByName('name').AsString;
+
+     WordApplication.Options.CheckSpellingAsYouType := False;
+     WordApplication.Options.CheckGrammarAsYouType := False;
+
+     if FileExists(FTemplatePath) then
+     begin
+
+     WordApplication.Documents.Open(FTemplatePath,Template,TemplateBooL,Template,
+     Template,Template,Template,Template,Template,Template,
+     Template,Template,Template,Template,Template);
+
+     end else
+     begin
+
+        SaveChanges := WdDoNotSaveChanges;
+        OriginalFormat := UnAssigned;
+        RouteDocument := UnAssigned;
+        WordApplication.Quit(SaveChanges, OriginalFormat, RouteDocument);
+        WordApplication.Disconnect;
+        ShowMessage(FilenotFound);
+
+     end;
+
+     WordDocument.ConnectTo(WordApplication.Documents.Item(Itemindex));
+     WordDocument.Application.Get_ActiveWindow.Caption:=Caption;
+
+     try
+
+       with RtDataModule, ReplaceDataSet, WordDocument do
+
+
+       For IbookmarkCount := 1 to Bookmarks.Count do
+       begin
+
+         OBookmarkCount := IbookmarkCount ;
+         oBookMarkName := Bookmarks.Item(OBookmarkCount).Get_Name;
+         WordApplication.Selection.GoTo_(What, EmptyParam, EmptyParam, oBookMarkName);
+         ReplaceDataSet.Close;
+         SetVariable('tid', TemplID);
+         SetVariable('bname', oBookMarkName);
+         ReplaceDataSet.Open;
+         tFieldName := FIeldByName('FIELDNAME').AsString;
+         WordApplication.Selection.InsertAfter(CreditInfoDataSet.FieldByName(tFieldName).AsString);
+
+       end;
+
+     WordDocument.Disconnect;
+     Wordapplication.Disconnect;
+
+     except
+       SaveChanges := WdDoNotSaveChanges;
+        OriginalFormat := UnAssigned;
+        RouteDocument := UnAssigned;
+        WordApplication.Quit(SaveChanges, OriginalFormat, RouteDocument);
+        WordApplication.Disconnect;
+       ShowMessage('Bukmarklar daxil edilmeyib ');
+     end;
+
+ end;     }
+         formClear;
+/////////////////////////////////////////// Odeme plani \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+ if RtDataModule.PersonLinkAUTOSCEDULE.AsInteger=1 then
+  if MessageDlg('   Ödəmə planını  çap etmək istəyirsinizmi ?',
+       mtConfirmation,
+       [mbYes,mbNo],
+       0) = mrYes
+     then
+     exportreport(Result) ;
+   close;
+end;
+
+procedure TMainForm.SpeedButton2Click(Sender: TObject);
+begin
+  with RtDataModule.PersonLink , SavedCredit do
+  begin
+     ins:=0;
+     boorowerid:=0;
+     RtDataModule.PersonLink .close;
+  //   RtDataModule.PersonLink.open;
+  end;
+ close ;
+end;
+
+procedure TMainForm.SpeedButton3Click(Sender: TObject);
+begin
+width:=232;
+ with RtDataModule.PersonLink , SavedCredit do
+  begin
+     ins:=0;
+     boorowerid:=0;
+     RtDataModule.PersonLink .close;
+   end;
+Panel1.Visible:=false;
+ Caption:='Smart';
+panel19.Visible:=true;
+   PageControl1.ActivePageIndex:=0;
+//with  RtDataModule  do
+// begin
+//PersonLink.SQL[3]:='';
+//PersonLink.Refresh;
+//end;
+formClear;
+end;
+
+procedure TMainForm.XDBGrid1CellDblClick(Column: TXColumn);
+var
+i: Word;
+begin
+width:=520;
+Panel1.Visible:=true;
+
+panel19.Visible:=false;
+ Caption:= XDBGrid1.DataSource.DataSet.FieldByName('DESCRIPTION').asstring;
+credit_type:=XDBGrid1.DataSource.DataSet.FieldByName('id').AsInteger;
+
+
+
+if (credit_type=48) and (v_type=2) then
+ begin
+RtDataModule.EstateTypeData.SQL[4]:='';
+RtDataModule.EstateTypeData.close;
+RtDataModule.EstateTypeData.SQL[4]:=RtDataModule.EstateTypeData.SQL[4]+' where  a.id=106 ';
+RtDataModule.EstateTypeData.open ;
+DBLookupComboboxEh2.KeyValue:=106 ;
+ end ;
+ if (credit_type<>48) and (v_type=2) then
+   begin
+RtDataModule.EstateTypeData.SQL[4]:='';
+RtDataModule.EstateTypeData.close;
+RtDataModule.EstateTypeData.SQL[4]:=RtDataModule.EstateTypeData.SQL[4]+' where  a.cust_type=2 ';
+RtDataModule.EstateTypeData.open ;
+DBLookupComboboxEh2.KeyValue:=103 ;
+ end;
+
+
+
+with RtDataModule do
+ begin
+if PersonLink.active then PersonLink.close;
+    PersonLink.SQL[3]:=' Where credittypes_id='+inttostr(credit_type) ;
+   PersonLink.Open;
+
+end;
+
+ end;
+initialization
+ MainForm := TMainForm.Create(Application);
+end.

@@ -1,0 +1,193 @@
+unit ins_out_account;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, ExtCtrls;
+
+type
+  Tinsert_out_account = class(TForm)
+    Panel1: TPanel;
+    Button2: TButton;
+    Button5: TButton;
+    Button6: TButton;
+    box2: TGroupBox;
+    Button7: TButton;
+    Button8: TButton;
+    Button9: TButton;
+    box3: TGroupBox;
+    Button10: TButton;
+    Button11: TButton;
+    Button12: TButton;
+    box1: TGroupBox;
+    Button13: TButton;
+    Button14: TButton;
+    Button15: TButton;
+    procedure enableClick(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure Button3Click(Sender: TObject);
+    procedure Button4Click(Sender: TObject);
+    procedure Button5Click(Sender: TObject);
+    procedure Button7Click(Sender: TObject);
+    procedure Button6Click(Sender: TObject);
+    procedure Button10Click(Sender: TObject);
+    procedure Button9Click(Sender: TObject);
+    procedure Button8Click(Sender: TObject);
+    procedure Button11Click(Sender: TObject);
+    procedure Button12Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  insert_out_account: Tinsert_out_account;
+
+implementation
+
+uses AccountDataModuleImpl;
+
+{$R *.DFM}
+
+procedure Tinsert_out_account.enableClick(Sender: TObject);
+begin
+cursor :=crsqlwait;
+Application.ProcessMessages;
+out_accdatamodule.out_sbop.callprocedure('enable_triggers',[]);
+cursor :=crdefault;
+Application.Processmessages;
+showmessage('Triggerler  aktivdir!');
+end;
+
+procedure Tinsert_out_account.Button2Click(Sender: TObject);
+begin
+box2.visible :=false;
+box3.visible :=false;
+  if box1 .Visible=false
+     then box1.Visible:=true
+     else box1.Visible:=false;
+      end;
+procedure Tinsert_out_account.Button1Click(Sender: TObject);
+begin
+Cursor := crSQLWait;
+Application.ProcessMessages;
+out_accdatamodule.out_sbop.callprocedure('disable_trig_acc',[]);
+cursor :=crdefault;
+Application.Processmessages;
+showmessage('Triggerler  passivdir!');
+
+end;
+
+procedure Tinsert_out_account.Button3Click(Sender: TObject);
+begin
+cursor :=crsqlwait;
+Application.ProcessMessages;
+
+out_accdatamodule.out_sbop.callprocedure('insert_out_account',[]);
+cursor :=crdefault;
+Application.Processmessages;
+showmessage('Butun hesablar kocuruldu!');
+
+end;
+
+procedure Tinsert_out_account.Button4Click(Sender: TObject);
+begin
+cursor :=crsqlwait;
+Application.ProcessMessages;
+out_accdatamodule.out_sbop.callprocedure('enable_trig_acc',[]);
+cursor :=crdefault;
+Application.Processmessages;
+showmessage('Triggerler  aktivdir!');
+
+end;
+
+procedure Tinsert_out_account.Button5Click(Sender: TObject);
+begin
+box1.visible :=false;
+box3.visible :=false;
+  if box2.Visible=false
+     then box2.Visible:=true
+     else box2.Visible:=false;
+
+end;
+
+procedure Tinsert_out_account.Button7Click(Sender: TObject);
+begin
+Cursor := crSQLWait;
+Application.ProcessMessages;
+out_accdatamodule.out_sbop.callprocedure('disable_trig_prov',[]);
+cursor :=crdefault;
+Application.Processmessages;
+showmessage('Triggerler  passivdir!');
+
+end;
+
+procedure Tinsert_out_account.Button6Click(Sender: TObject);
+begin
+box1.visible :=false;
+box2.visible :=false;
+  if box3.Visible=false
+     then box3.Visible:=true
+     else box3.Visible:=false;
+
+end;
+
+procedure Tinsert_out_account.Button10Click(Sender: TObject);
+begin
+Cursor := crSQLWait;
+Application.ProcessMessages;
+out_accdatamodule.out_sbop.callprocedure('disable_trig_arc',[]);
+cursor :=crdefault;
+Application.Processmessages;
+showmessage('Triggerler  passivdir!');
+
+end;
+
+procedure Tinsert_out_account.Button9Click(Sender: TObject);
+begin
+cursor :=crsqlwait;
+Application.ProcessMessages;
+out_accdatamodule.out_sbop.callprocedure('enable_trig_prov',[]);
+cursor :=crdefault;
+Application.Processmessages;
+showmessage('Triggerler  aktivdir!');
+end;
+
+procedure Tinsert_out_account.Button8Click(Sender: TObject);
+begin
+cursor :=crsqlwait;
+Application.ProcessMessages;
+
+out_accdatamodule.out_sbop.callprocedure('insert_out_provarch',[]);
+cursor :=crdefault;
+Application.Processmessages;
+showmessage('Butun hesablar kocuruldu!');
+end;
+
+procedure Tinsert_out_account.Button11Click(Sender: TObject);
+begin
+cursor :=crsqlwait;
+Application.ProcessMessages;
+
+out_accdatamodule.out_sbop.callprocedure('insert_out_archost',[]);
+cursor :=crdefault;
+Application.Processmessages;
+showmessage('Butun hesablar kocuruldu!');
+end;
+
+procedure Tinsert_out_account.Button12Click(Sender: TObject);
+begin
+cursor :=crsqlwait;
+Application.ProcessMessages;
+out_accdatamodule.out_sbop.callprocedure('enable_trig_arc',[]);
+cursor :=crdefault;
+Application.Processmessages;
+showmessage('Triggerler  aktivdir!');
+
+end;
+
+end.
+

@@ -1,0 +1,185 @@
+unit dmpbf_transactionimpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, OracleData, Oracle;
+
+type
+  Tdmpbf_transaction = class(TDataModule)
+    TransactionsData: TDataSource;
+    PBFTransactions: TOracleDataSet;
+    PBFTransactionsTRANSACTIONDATE: TDateTimeField;
+    PBFTransactionsDEBITACCNO: TWideStringField;
+    PBFTransactionsCREDITACCNO: TWideStringField;
+    PBFTransactionsCREDITCURRENCYSNAME: TWideStringField;
+    PBFTransactionsDEBITAMOUNT: TFloatField;
+    PBFTransactionsCREDITAMOUNT: TFloatField;
+    PBFTransactionsLAMOUNT: TFloatField;
+    PBFTransactionsNUM: TFloatField;
+    PBFTransactionsDEBITCURRENCYSNAME: TWideStringField;
+    PBFOperationsds: TDataSource;
+    PBFOperations: TOracleDataSet;
+    PBFOperationsID: TFloatField;
+    PBFOperationsNAME: TWideStringField;
+    PBFOperationsHDATE: TDateTimeField;
+    PBFOperationsCLIENTACCID: TFloatField;
+    PBFOperationsAMOUNT: TFloatField;
+    CurrDat: TOracleDataSet;
+    CurrDatTEK_DAT: TDateTimeField;
+    CurrDatPRED_DAT: TDateTimeField;
+    PBFAccs: TOracleDataSet;
+    PBFAccsds: TDataSource;
+    PBFTransaction: TOraclePackage;
+    PBFTransactionsOPNAME: TWideStringField;
+    PBFTransactionsID: TFloatField;
+    PBFValutes: TOracleDataSet;
+    PBFFilials: TOracleDataSet;
+    PBFOptypes: TOracleDataSet;
+    pbfusers: TOracleDataSet;
+    PBFValutesVALUTE: TIntegerField;
+    PBFValutesVALU_NAME: TWideStringField;
+    PBFValutesds: TDataSource;
+    PBFFilialsID: TFloatField;
+    PBFFilialsNAME: TWideStringField;
+    PBFFilialsds: TDataSource;
+    PBFOptypesds: TDataSource;
+    PBFOptypesOPERATIONTYPE: TWideStringField;
+    pbfusersID: TFloatField;
+    pbfusersNAME: TWideStringField;
+    pbfusersds: TDataSource;
+    PBFTransactionsVAL_ACC: TFloatField;
+    PBFTransactionsDEBITFILIAL: TIntegerField;
+    PBFTransactionsCREDITFILIAL: TIntegerField;
+    PBFTransactionsFROMFILTOFIL: TWideStringField;
+    PBFTransactionsUSERNAME: TWideStringField;
+    PBFReportDs: TOracleDataSet;
+    PBFTransactionsCLIENTACCID: TFloatField;
+    PBFTransactionsNAME: TWideStringField;
+    PBFTransactionsSTATUS: TFloatField;
+    PBFTransactionsPAYMENTNO: TWideStringField;
+    PBFReportDsPE_BANK: TWideStringField;
+    PBFReportDsPE_KOD_B: TFloatField;
+    PBFReportDsPE_INN: TWideStringField;
+    PBFReportDsPE_SWIFT: TWideStringField;
+    PBFReportDsPC_ACCNO: TWideStringField;
+    PBFReportDsVALUTE: TWideStringField;
+    PBFReportDsRE_BANK: TWideStringField;
+    PBFReportDsRE_KOD_B: TFloatField;
+    PBFReportDsRE_INN: TWideStringField;
+    PBFReportDsRE_KRNO: TWideStringField;
+    PBFReportDsRE_SWIFT: TWideStringField;
+    PBFReportDsRC_NAME: TWideStringField;
+    PBFReportDsRC_ACCOUNT: TWideStringField;
+    PBFReportDsRC_INN: TWideStringField;
+    PBFReportDsSTAMP: TBlobField;
+    PBFReportDsCHIEFSIGN: TBlobField;
+    PBFReportDsACCOUTANTSIGN: TBlobField;
+    PBFReportDsPAYMENTNO: TWideStringField;
+    PBFTransactionsOPTYPE: TWideStringField;
+    PBFReportDsSEDR: TWideStringField;
+    PBFReportDsBUHALTR: TWideStringField;
+    PBFReportDspee_krno: TWideStringField;
+    kindofaccs: TOracleDataSet;
+    kindofaccsACC_NO: TWideStringField;
+    PBFOpertionTypes: TOracleDataSet;
+    PBFOpertionTypesID: TFloatField;
+    PBFOpertionTypesNAME: TWideStringField;
+    PBFDesc: TOracleDataSet;
+    PBFDescDESCRIPTION: TWideStringField;
+    PBFReportDsPE_KRNO: TWideStringField;
+    procedure DataModuleCreate(Sender: TObject);
+    procedure DataModuleDestroy(Sender: TObject);
+    procedure PBFOperationsApplyRecord(Sender: TOracleDataSet;
+      Action: Char; var Applied: Boolean; var NewRowId: String);
+    procedure PBFReportDsCalcFields(DataSet: TDataSet);
+  private
+    { Private declarations }
+  public
+    OperType :String;
+    OperType1 :String;
+    TrDat :Tdatetime;
+  end;
+
+var
+  dmpbf_transaction: Tdmpbf_transaction;
+
+implementation
+
+{$R *.DFM}
+uses sboapiDataModuleImpl;
+
+procedure Tdmpbf_transaction.DataModuleCreate(Sender: TObject);
+begin
+   CurrDat.open;
+   PBFAccs.open;
+   kindofaccs.open;
+   PBFOpertionTypes.open;
+   with PBFTransactions do
+   begin
+      SetVariable('TransactionDate',CurrDat.FieldByName('TEK_DAT').AsDateTime);
+      SetVariable('orderfield','id');
+      open;
+   end;
+end;
+
+procedure Tdmpbf_transaction.DataModuleDestroy(Sender: TObject);
+begin
+   CurrDat.Close;
+   PBFAccs.Close;
+   PBFTransactions.Close;
+end;
+
+procedure Tdmpbf_transaction.PBFOperationsApplyRecord(
+  Sender: TOracleDataSet; Action: Char; var Applied: Boolean;
+  var NewRowId: String);
+begin
+   with PBFTransaction,(Sender as TOracleDataSet) do
+   begin
+      case Action of
+      'I': begin
+           if OperType = 'KREDIT' then
+            CallProcedure('add_FullOperation',[
+            'v_name',FieldByName('name').AsString
+           ,'v_clientaccid',FieldByName('clientaccid').AsInteger
+           ,'v_amount' ,FieldByName('amount').AsFloat
+           ,'v_hdate',TrDat
+           ])
+           else
+             CallProcedure('add_OtherTypeOp',[
+            'OpType',OperType1
+           ,'amount',FieldByName('amount').AsFloat
+           ,'name' ,FieldByName('name').AsString
+           ,'v_hdate',TrDat]);
+           Applied := True;
+           end;
+
+      'U': begin
+           if OperType = 'KREDIT' then
+            CallProcedure('edit_FullOperation',[
+            'vID',FieldByName('ID').AsInteger,
+            'vname',FieldByName('name').AsString,
+            'vclientaccid',FieldByName('clientaccid').AsInteger,
+            'vamount',FieldByName('amount').AsFloat])
+            else
+            CallProcedure('edit_OtherTypeOp',[
+            'vOptype',OperType1,
+            'vID',FieldByName('ID').AsInteger,
+            'vamount',FieldByName('amount').AsFloat]);
+        Applied := True;
+
+        end;
+
+   end;
+   end;
+
+end;
+
+procedure Tdmpbf_transaction.PBFReportDsCalcFields(DataSet: TDataSet);
+begin
+  with PBFReportDs do
+  fieldbyname('pee_krno').asstring := '0'+Floattostr(fieldbyname('PE_KRNO').asfloat);
+end;
+
+end.

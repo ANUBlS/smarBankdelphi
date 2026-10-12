@@ -1,0 +1,448 @@
+﻿unit GuaranteImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ComCtrls, Buttons, ExtCtrls, StdCtrls, DBCtrlsEh, Mask, DBLookupEh, DBCtrls,
+  Oracle;
+
+type
+  TFrmGuarante = class(TForm)
+    PageControl1: TPageControl;
+    TabSheet1: TTabSheet;
+    TabSheet2: TTabSheet;
+    Panel1: TPanel;
+    SpeedButton1: TSpeedButton;
+    SpeedButton2: TSpeedButton;
+    panel2: TTabControl;
+    Panel68: TPanel;
+    Panel15: TPanel;
+    Label24: TLabel;
+    Label25: TLabel;
+    DBLookupComboboxEh7: TDBLookupComboboxEh;
+    Panel71: TPanel;
+    Label155: TLabel;
+    DBEditEh8: TDBEditEh;
+    Panel17: TPanel;
+    Label28: TLabel;
+    Label29: TLabel;
+    GroupBox7: TGroupBox;
+    DBEditEh9: TDBEditEh;
+    Panel75: TPanel;
+    Label170: TLabel;
+    DBEditEh19: TDBEditEh;
+    DBNumberEditEh5: TDBNumberEditEh;
+    Panel7: TPanel;
+    Panel67: TPanel;
+    Label154: TLabel;
+    Label157: TLabel;
+    CBPledgsorts: TDBLookupComboboxEh;
+    Panel70: TPanel;
+    Label103: TLabel;
+    DBEditEh11: TDBEditEh;
+    Panel73: TPanel;
+    InUse_rg: TRadioGroup;
+    GroupBox6: TGroupBox;
+    DBEditEh12: TDBEditEh;
+    GroupBox5: TGroupBox;
+    DBDateTimeEditEh3: TDBDateTimeEditEh;
+    Panel76: TPanel;
+    Label171: TLabel;
+    DBEditEh20: TDBEditEh;
+    Panel54: TPanel;
+    Label115: TLabel;
+    DBEditEh10: TDBEditEh;
+    GroupBox12: TGroupBox;
+    Label163: TLabel;
+    Label165: TLabel;
+    Label166: TLabel;
+    Label167: TLabel;
+    Label168: TLabel;
+    Label169: TLabel;
+    DBEditEh13: TDBEditEh;
+    GroupBox13: TGroupBox;
+    DBEditEh14: TDBEditEh;
+    DBEditEh15: TDBEditEh;
+    DBEditEh17: TDBEditEh;
+    DBEditEh18: TDBEditEh;
+    DBDateTimeEditEh7: TDBDateTimeEditEh;
+    GroupBox2: TGroupBox;
+    Panel3: TPanel;
+    Panel4: TPanel;
+    Panel5: TPanel;
+    Label1: TLabel;
+    DBEditCompany: TDBLookupComboboxEh;
+    SpeedButton3: TSpeedButton;
+    Label2: TLabel;
+    DBDateTimeEditEh1: TDBDateTimeEditEh;
+    Label3: TLabel;
+    DBEditEh2: TDBEditEh;
+    Panel57: TPanel;
+    Label116: TLabel;
+    Label117: TLabel;
+    Label152: TLabel;
+    DBEdit13: TDBEdit;
+    DBDateTimeEditEh4: TDBDateTimeEditEh;
+    DBEdit32: TDBEdit;
+    Panel58: TPanel;
+    Label118: TLabel;
+    DBLookupComboboxEh26: TDBLookupComboboxEh;
+    SpeedButton4: TSpeedButton;
+    SpeedButton5: TSpeedButton;
+    panel: TTabControl;
+    Panel6: TPanel;
+    SpeedButton6: TSpeedButton;
+    SpeedButton7: TSpeedButton;
+    SpeedButton8: TSpeedButton;
+    SpeedButton9: TSpeedButton;
+    Panel8: TPanel;
+    Panel9: TPanel;
+    Label4: TLabel;
+    DBEdit1: TDBEdit;
+    Label5: TLabel;
+    DBEdit2: TDBEdit;
+    Panel10: TPanel;
+    Label6: TLabel;
+    DBEdit3: TDBEdit;
+    Panel11: TPanel;
+    Label7: TLabel;
+    DBEdit4: TDBEdit;
+    Panel12: TPanel;
+    Label8: TLabel;
+    Label9: TLabel;
+    DBEdit6: TDBEdit;
+    Label10: TLabel;
+    DBEdit7: TDBEdit;
+    Panel13: TPanel;
+    Label11: TLabel;
+    DBEdit8: TDBEdit;
+    Panel14: TPanel;
+    Label12: TLabel;
+    DBDateTimeEditEh2: TDBDateTimeEditEh;
+    DBNumberEditEh1: TDBNumberEditEh;
+    Label13: TLabel;
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+    procedure FormCreate(Sender: TObject);
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure panel2Change(Sender: TObject);
+    procedure SpeedButton2Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure PageControl1Change(Sender: TObject);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure savechg;
+     procedure savebali;
+    procedure SpeedButton4Click(Sender: TObject);
+    procedure SpeedButton3Click(Sender: TObject);
+    procedure SpeedButton5Click(Sender: TObject);
+    procedure InUse_rgClick(Sender: TObject);
+    procedure SpeedButton6Click(Sender: TObject);
+    procedure SpeedButton7Click(Sender: TObject);
+    procedure SpeedButton8Click(Sender: TObject);
+    procedure SpeedButton9Click(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+  private
+    { Private declarations }
+     edNewName: TEdit;
+    procedure edNewNameClick(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmGuarante: TFrmGuarante;
+  creditid :integer;
+  procedure InitPlugin(s:string);export;
+implementation
+{$R *.DFM}
+uses   CommonDecls, DmImpl;
+
+  procedure InitPlugin(s:string);export;
+begin
+creditid:=Get_SelectedCrdID;
+
+if s='Bali' then
+  with GurDm.Credit do begin
+    if active then Close;
+    Open;
+    creditid:=fieldbyname('creditid').AsInteger ;
+    end;
+  FrmGuarante.ShowModal;
+  //   ShowMessage(inttostr(creditid));
+end;
+exports
+     InitPlugin;
+procedure TFrmGuarante.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+resize:=false
+end;
+
+procedure TFrmGuarante.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+PageControl1.ActivePageIndex:=0
+end;
+
+procedure TFrmGuarante.FormCreate(Sender: TObject);
+begin
+GurDm:=TGurDm.create(self);
+end;
+ procedure TFrmGuarante.SaveChg;
+begin
+ // showmessage( GurDm.MainDSetpledgename.asstring);
+  GurDm.Guarante.CallProcedure('Guarantee_Add1',[
+    creditid,
+    GurDm.MainDSetpledgeid.asinteger,
+    GurDm.MainDSetpledgename.asstring,
+    GurDm.MainDSetholdername.asstring,
+    GurDm.MainDSetholderaddress.asstring,
+    GurDm.MainDSetanyinfotodisting.asstring,
+    GurDm.MainDSetregistryno.asstring,
+    GurDm.MainDSetregistryagency.asstring,
+    GurDm.MainDSetregistrydate.asdatetime,
+    GurDm.MainDSetpledgeinuse.asinteger,
+    GurDm.MainDSetpledgeinsurant.asinteger,
+    GurDm.MainDSetinsuranceagency.asfloat,
+    GurDm.MainDSetinsuranceamount.asfloat,
+    GurDm.MainDSetinsurancedate.asdatetime,
+    GurDm.MainDSetpledgepricetorpaqha.asfloat,
+    GurDm.MainDSetpledgepriceevkv.asfloat,
+    GurDm.MainDSetinsuranceright.asfloat,
+    GurDm.MainDSetinsuranceid.asstring,
+    GurDm.MainDSetpledgeid_p.asinteger,
+    GurDm.MainDSetgqname.asstring,
+    GurDm.MainDSetgqpaspnum .asstring,
+    GurDm.MainDSetgqpaspyer.asstring,
+    GurDm.MainDSetgqpaspdate.asdatetime,
+    GurDm.MainDSetgqadress.asstring,
+    GurDm.MainDSetreyster.asstring,
+    GurDm.MainDSetseryamh.asstring,
+    GurDm.MainDSetgqtel.asstring,
+    GurDm.MainDSetpledgeprice.asfloat,
+    GurDm.MainDSetpledgsorts.asinteger,
+    GurDm.MainDSetcompany.asinteger,
+    GurDm.MainDSetcompanydat.asdatetime,
+    GurDm.MainDSetcompanyexpert.asstring,
+    GurDm.MainDSetCARDID.AsInteger
+]);
+
+
+end;
+procedure TFrmGuarante.SaveBali;
+begin
+  GurDm.Guarante.CallProcedure('add_Guarantor',[
+    creditid,
+    GurDm.BAliDSetCARDID.asinteger,
+    GurDm.BAliDSetGUARANTORNAME.asstring,
+    GurDm.BAliDSetGUARANTORID.asstring,
+    GurDm.BAliDSetGUARANTORSALARY.asstring,
+    GurDm.BAliDSetZAMINWORK1.asstring,
+    GurDm.BAliDSetZAMINADRES1.asstring,
+    GurDm.BAliDSetZAMINTEL1.asstring,
+    GurDm.BAliDSetZMPASPYER1.asstring,
+    GurDm.BAliDSetZMPASPDAT1.asdatetime,
+    GurDm.BAliDSetZMTELMOB1.asstring
+]);
+
+
+end;
+
+procedure TFrmGuarante.SpeedButton1Click(Sender: TObject);
+var
+ index :Integer;
+begin
+  savechg;
+  GurDm.Guarante.CallProcedure( 'Gur_add', [creditid] );
+
+with Panel2,GurDm.MainDSet do
+begin
+   Refresh;
+   recno:=RecordCount;
+   index:=RecordCount;
+   TabIndex :=Tabs.Add(Format('Girov №%d ', [Index-1]));
+end;
+
+end;
+ procedure TFrmGuarante.panel2Change(Sender: TObject);
+begin
+  savechg;
+  GurDm.MainDSet.RecNo := (Sender as TTabControl).TabIndex+1;
+end;
+
+procedure TFrmGuarante.SpeedButton2Click(Sender: TObject);
+var
+ Index:integer;
+begin
+ GurDm.Guarante.CallProcedure('Gur_del',[creditid, GurDm.MainDSetCARDID.AsVariant]);
+ GurDm.MainDSet.Refresh;
+ if Panel2.Tabs.Count=1 then exit;
+  Panel2.Tabs.Clear;
+ for Index := 0 to GurDm.MainDSet.RecordCount-1 do
+ panel2.Tabs.Add(Format('Girov №%d ', [Index]));
+
+end;
+
+procedure TFrmGuarante.SpeedButton3Click(Sender: TObject);
+begin
+ with edNewName do begin
+    Text := '';
+    width := 247;
+        Left := 28;
+     top :=6{(Sender as TSpeedButton).Top};
+     ctl3d:=false;
+    Visible := True;
+    SetFocus;
+  end;
+SpeedButton3.Enabled := False;
+
+end;
+
+procedure TFrmGuarante.SpeedButton4Click(Sender: TObject);
+begin
+DBEditEh8.SetFocus;
+ savechg;
+  with GurDm.MainDSet do begin
+    if active then Close;
+   // ShowMessage(IntToStr(creditid));
+    SetVariable('creditid', creditid);
+    Open;
+  end;
+end;
+
+procedure TFrmGuarante.SpeedButton5Click(Sender: TObject);
+begin
+close
+end;
+
+procedure TFrmGuarante.SpeedButton6Click(Sender: TObject);
+var
+ index :Integer;
+begin
+  SaveBali;
+
+   GurDm.Guarante.CallProcedure( 'BAli_add', [creditid] );
+
+  with panel,GurDm.BAliDSet do
+  begin
+   Refresh;
+   recno:=RecordCount;
+   index:=RecordCount;
+   TabIndex :=Tabs.Add(Format(' Zamin №%d ', [Index-1]));
+  end;
+
+
+end;
+
+procedure TFrmGuarante.SpeedButton7Click(Sender: TObject);
+var
+ Index:integer;
+begin
+ GurDm.Guarante.CallProcedure('Bali_del',[creditid, GurDm.BAliDSetCARDID.AsVariant]);
+ GurDm.BAliDSet.Refresh;
+ if Panel.Tabs.Count=1 then exit;
+  Panel.Tabs.Clear;
+ for Index := 0 to GurDm.BAliDSet.RecordCount-1 do
+ panel.Tabs.Add(Format(' Zamin №%d ', [Index]));
+
+end;
+
+procedure TFrmGuarante.SpeedButton8Click(Sender: TObject);
+begin
+ DBEdit1.SetFocus;
+  savebali;
+  with GurDm.BAliDSet do begin
+    if active then Close;
+    SetVariable('creditid', creditid);
+    Open;
+  end;
+end;
+
+procedure TFrmGuarante.SpeedButton9Click(Sender: TObject);
+begin
+close
+end;
+
+procedure TFrmGuarante.FormShow(Sender: TObject);
+begin
+// Panel2.TabIndex := 3;
+with GurDm.MainDSet do
+ begin
+   close;
+     SetVariable('CREDITID',creditid);
+     open;
+     InUse_rg.ItemIndex := FieldByName('PLEDGEINUSE').AsInteger;
+  edit;
+end;
+
+with GurDm.BAliDSet do
+ begin
+   close;
+     SetVariable('CREDITID',creditid);
+     open;
+   edit;
+end;
+
+  if not assigned(edNewName) then
+     edNewName := TEdit.Create(Self);
+
+ with edNewName do begin
+    Parent := Panel3;
+    OnKeyDown := edNewNameClick;
+    Visible := False;
+  end;
+end;
+
+procedure TFrmGuarante.InUse_rgClick(Sender: TObject);
+begin
+  with GurDm.MainDSet do
+  FieldByName('PLEDGEINUSE').AsInteger := InUse_rg.ItemIndex;
+end;
+
+procedure TFrmGuarante.PageControl1Change(Sender: TObject);
+begin
+  GurDm.MainDSet.RecNo := 1;
+  Panel2.TabIndex := 1;
+end;
+
+
+procedure TFrmGuarante.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+   if ORD(key) = VK_ESCAPE then close
+end;
+procedure TFrmGuarante.edNewNameClick;
+var
+  ProcName: String;
+  i: Integer;
+begin
+  if (Trim((Sender as TEdit).Text)<>'') and (ord(key)=VK_RETURN) then begin
+
+   ProcName:=' insert into CM_GUARCOMPANY (name) values '+'('+''''+ (Sender as TEdit).Text+''''+')';
+  GurDm.OracleQuery1.sql.text:=ProcName;
+  GurDm.OracleQuery1.Execute;
+      GurDm.OracleQuery1.sql.text:='commit';
+      GurDm.OracleQuery1.Execute;
+      GurDm.CompanyDSet.Refresh;
+
+   GurDm.maxid.open;
+    DBEditCompany.KeyValue:= GurDm.maxid.fieldbyname('mid').asinteger;
+
+    (Sender as TEdit).Visible := False;
+    for i:= 0 to ComponentCount-1 do
+      if Components[i] is TSpeedButton then
+        (Components[i] as TSpeedButton).Enabled := True;
+  end;
+  if  (ord(key)=VK_RETURN) then begin
+    (Sender as TEdit).Visible := False;
+    for i:= 0 to ComponentCount-1 do
+      if Components[i] is TSpeedButton then
+        (Components[i] as TSpeedButton).Enabled := True;
+  end;
+end;
+
+initialization
+ FrmGuarante := TFrmGuarante.Create(CommonApplication);
+
+end.
+

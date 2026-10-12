@@ -1,0 +1,11 @@
+object DefineCalcDatMod: TDefineCalcDatMod
+  OldCreateOrder = False
+  Height = 434
+  Width = 613
+  object CM_CREDITS: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'CM_CREDIT'
+    Left = 56
+    Top = 40
+  end
+end

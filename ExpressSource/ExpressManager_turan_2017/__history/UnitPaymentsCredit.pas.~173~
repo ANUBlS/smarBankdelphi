@@ -1,0 +1,1273 @@
+﻿unit UnitPaymentsCredit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, CMCurrencyEdit, SearchEdit, ExtCtrls, DBCtrls,
+  FieldSearchEdit, Buttons, DB, OracleData, Designer, Mask;
+
+type
+  TFormPaymentsCredit = class(TForm)
+    Panel2: TPanel;
+    GroupBox1: TGroupBox;
+    GroupBox2: TGroupBox;
+    Button1: TButton;
+    Button2: TButton;
+    Account: TOracleDataSet;
+    AccountDS: TDataSource;
+    Label3: TLabel;
+    Panel1: TPanel;
+    Label22: TLabel;
+    Searchpasspin: TEdit;
+    Panel3: TPanel;
+    Label76: TLabel;
+    Searchpaspnum: TEdit;
+    P4: TPanel;
+    Label102: TLabel;
+    Searchid: TEdit;
+    P5: TPanel;
+    Label103: TLabel;
+    Searchinn: TEdit;
+    Panel4: TPanel;
+    Label2: TLabel;
+    Panel5: TPanel;
+    Label1: TLabel;
+    FilialName: TEdit;
+    Panel6: TPanel;
+    Label4: TLabel;
+    EditName: TEdit;
+    Panel8: TPanel;
+    Label8: TLabel;
+    CMCurrencyEdit2: TCMCurrencyEdit;
+    Panel9: TPanel;
+    CMCurrencyEdit3: TCMCurrencyEdit;
+    Label9: TLabel;
+    Panel10: TPanel;
+    CMCurrencyEdit1: TEdit;
+    Label6: TLabel;
+    Panel11: TPanel;
+    ComboBox1: TComboBox;
+    Label7: TLabel;
+    EditDescription: TEdit;
+    Panel12: TPanel;
+    SpeedButton1: TSpeedButton;
+    Searchname: TEdit;
+    Panel13: TPanel;
+    DBLookupComboBox2: TDBLookupComboBox;
+    Label10: TLabel;
+    ExpSettingsType: TOracleDataSet;
+    ExpFilialN: TOracleDataSet;
+    PaymentsKredetDataSet: TOracleDataSet;
+    PaymentsKredetDataSource: TDataSource;
+    DSExpSettingsType: TDataSource;
+    ExpFilialNID: TFloatField;
+    ExpFilialNNAME: TWideStringField;
+    Panel14: TPanel;
+    Label11: TLabel;
+    DBLookupComboBox1: TDBLookupComboBox;
+    ODSDebet: TOracleDataSet;
+    DSDebet: TDataSource;
+    GroupBox3: TGroupBox;
+    Panel7: TPanel;
+    Label5: TLabel;
+    DBLookupComboBox3: TDBLookupComboBox;
+    Panel16: TPanel;
+    Label13: TLabel;
+    Panel17: TPanel;
+    Label14: TLabel;
+    Recipient: TEdit;
+    Panel18: TPanel;
+    RadioButton1: TRadioButton;
+    RadioButton2: TRadioButton;
+    KreditFilial: TEdit;
+    Panel19: TPanel;
+    GroupBox4: TGroupBox;
+    Panel20: TPanel;
+    Label15: TLabel;
+    KreditSearchpasspin: TEdit;
+    Panel21: TPanel;
+    Label16: TLabel;
+    KreditSearchpaspnum: TEdit;
+    Panel22: TPanel;
+    Label17: TLabel;
+    KreditSearchid: TEdit;
+    Panel23: TPanel;
+    Label18: TLabel;
+    KreditSearchinn: TEdit;
+    Panel24: TPanel;
+    Label19: TLabel;
+    KreditSearchname: TEdit;
+    procedure FormShow(Sender: TObject);
+    procedure SearchpasspinKeyPress(Sender: TObject; var Key: Char);
+    procedure Button2Click(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure DBLookupComboBox3Click(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure ComboBox1DropDown(Sender: TObject);
+    procedure ComboBox1Click(Sender: TObject);
+    procedure CMCurrencyEdit1MouseActivate(Sender: TObject;
+      Button: TMouseButton; Shift: TShiftState; X, Y, HitTest: Integer;
+      var MouseActivate: TMouseActivate);
+    procedure CMCurrencyEdit1KeyPress(Sender: TObject; var Key: Char);
+    procedure CMCurrencyEdit1Exit(Sender: TObject);
+    procedure EditDescriptionKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure DBLookupComboBox2Click(Sender: TObject);
+    procedure RadioButton1Click(Sender: TObject);
+    procedure RadioButton2Click(Sender: TObject);
+    procedure DBLookupComboBox1Click(Sender: TObject);
+    procedure KreditSearchidKeyPress(Sender: TObject; var Key: Char);
+    procedure KreditSearchpasspinKeyPress(Sender: TObject; var Key: Char);
+
+  private
+    { Private declarations }
+  public
+    procedure LoadComboData(Sender: TComboBox);
+
+
+  var
+    FForm: Integer;
+    FiledBatchs: boolean;
+    FiledIncoming: boolean;
+    FieldBatchsArchive: boolean;
+    FiledIncomingArchive: boolean;
+    Sum: real;
+    optype: Integer;
+    procedure PaymentCreditUpdate(DataSet: TOracleDataSet);
+    procedure ClearEdit;
+    procedure FormNominalCustomersClear;
+    procedure ClearSearch;
+  end;
+
+var
+  FormPaymentsCredit: TFormPaymentsCredit;
+  KeyD: Integer;
+  Hcusttype: Integer;
+  FieldKLIID: string;
+  FieldFILIALNAME: string;
+  FieldDEBETACCID: Variant;
+  FieldBKLIID: string;
+  FieldBFILIALNAME: string;
+  FieldKREDITACCID: Variant;
+  FieldAMOUNT: real;
+  FieldREMIT_INF: string;
+  FieldKSTATUS:integer;
+
+implementation
+
+uses ExpDataModuleUnit, ExpCustomersTypeUnit, ExpressDecls,
+  UnitNominalCustomers,
+  ExpUnitImpl, sboapiDataModuleImpl, ExpUnitNewImpl;
+
+{$R *.dfm}
+
+procedure TFormPaymentsCredit.PaymentCreditUpdate(DataSet: TOracleDataSet);
+begin
+  with ExpDataModule do
+  begin
+    ExpSettingsType.Close;
+    ExpSettingsType.SetVariable('stypeid', DataSet.FieldByName('optype').AsInteger);
+    ExpSettingsType.Open;
+    DBLookupComboBox2.KeyValue := ExpSettingsType.FieldByName('id').AsInteger;
+    FieldKLIID := DataSet.FieldByName('KLIID').AsString;
+    FieldBKLIID := DataSet.FieldByName('BKLIID').AsString;
+    FieldFILIALNAME := DataSet.FieldByName('FILIALNAME').AsString;
+    FieldBFILIALNAME := DataSet.FieldByName('BFILIALNAME').AsString;
+    FieldDEBETACCID:= DataSet.FieldByName('DEBETACCID').AsString;
+    FieldKREDITACCID := DataSet.FieldByName('KREDITACCID').AsString;
+    FieldAMOUNT := DataSet.FieldByName('AMOUNT').AsFloat;
+    FieldREMIT_INF := DataSet.FieldByName('REMIT_INF').AsString;
+    FieldKSTATUS:=DataSet.FieldByName('KSTATUS').AsInteger;
+
+  end;
+end;
+
+procedure TFormPaymentsCredit.RadioButton1Click(Sender: TObject);
+begin
+  KreditSearchpasspin.Clear;
+  KreditSearchpaspnum.Clear;
+  KreditSearchinn.Clear;
+  KreditSearchid.Clear;
+  KreditSearchname.Clear;
+  KreditFilial.Clear;
+  Recipient.Clear;
+  ODSDebet.Close;
+  ODSDebet.SetVariable('kli_id', -1);
+  ODSDebet.Open;
+
+
+  KreditSearchpasspin.Enabled:=False;
+  KreditSearchpasspin.Color:=clBtnFace;
+  KreditSearchpaspnum.Enabled:=False;
+  KreditSearchpaspnum.Color:=clBtnFace;
+  KreditSearchinn.Enabled:=False;
+  KreditSearchinn.Color:=clBtnFace;
+  KreditSearchname.Enabled:=False;
+  KreditSearchname.Color:=clBtnFace;
+
+  KreditSearchid.Enabled:=False;
+  KreditSearchid.Color:=clBtnFace;
+  DBLookupComboBox3.Enabled:=False;
+  DBLookupComboBox3.Color:=clBtnFace;
+
+
+
+end;
+
+procedure TFormPaymentsCredit.RadioButton2Click(Sender: TObject);
+begin
+  KreditSearchpasspin.Enabled:=True;
+  KreditSearchpasspin.Color:=clWhite;
+  KreditSearchpaspnum.Enabled:=True;
+  KreditSearchpaspnum.Color:=clWhite;
+  KreditSearchinn.Enabled:=True;
+  KreditSearchinn.Color:=clWhite;
+  KreditSearchname.Enabled:=True;
+  KreditSearchname.Color:=clWhite;
+
+
+  KreditSearchid.Enabled:=True;
+  KreditSearchid.Color:=clWhite;
+  DBLookupComboBox3.Enabled:=True;
+  DBLookupComboBox3.Color:=clWhite;
+end;
+
+procedure TFormPaymentsCredit.ClearEdit;
+begin
+  with ExpressVariables do
+  begin
+    custid := null;
+    doc_type := null;
+    doc_country := null;
+    paspdate := null;
+    passexpire := null;
+    sex := null;
+    fam_status := null;
+    birthday := null;
+    debetid := null;
+    citizenship := -1;
+    filial := -1;
+    v_nerezident := -1;
+    v_cust_type := -1;
+    work_adrs_spec := -1;
+    work_cntr := -1;
+    work_city := -1;
+    work_phone_spec := -1;
+    work_phconttype := -1;
+    work_phoppref := -1;
+    remit_inf := '';
+    passpin := '';
+    passer := '';
+    paspnum := '';
+    paspplace := '';
+    lastname := '';
+    soname := '';
+    name := '';
+    bbirthplace := '';
+    birth_state := '';
+    aadrs_state := '';
+    city := '';
+    reg_zip := '';
+    address := '';
+    phone_m := '';
+    phone_h := '';
+    e_mail := '';
+    v_inn := '';
+    work_place := '';
+    work_state := '';
+    work_zip := '';
+    work_adress := '';
+    work_phone := '';
+    work_phext := '';
+    work_phcode := '';
+  end;
+end;
+
+procedure TFormPaymentsCredit.FormNominalCustomersClear;
+BEGIN
+  WITH FormNominalCustomers DO
+  BEGIN
+    Searchid.Clear;
+    Searchpasspin.Clear;
+    Searchpaspnum.Clear;
+    RadioButton1.Checked := true;
+    Editpasspin.Clear;
+    EditLastName.Clear;
+    EditName1.Clear;
+    EditSoname.Clear;
+    EditSerial.Clear;
+    EditPassport.Clear;
+    DateEdit.Clear;
+    DateEdit1.Clear;
+    DateEdit2.Clear;
+    ZipQ.Clear;
+    EditMobil.Clear;
+    EditPhone.Clear;
+    EditEmail.Clear;
+    AdressEdit.Clear;
+    work_place.Clear;
+    db_tph_state.Clear;
+    DB_tph_zip.Clear;
+    db_tph_adress.Clear;
+    Db_tph_number.Clear;
+    Db_tph_extension.Clear;
+    Db_tph_cod.Clear;
+    CBoxPassPlace.KeyValue := -1;
+    Issue_country.KeyValue := -1;
+    DBCBox_DocTYPE.Clear;
+    DBCBox_Citizenship.KeyValue := -1;
+    CBoxSex.KeyValue := -1;
+    CBoxFamStatus.KeyValue := -1;
+    BirthPlace.KeyValue := -1;
+    EditBirthCity.KeyValue := -1;
+    Adrs_State.KeyValue := -1;
+    Adrs_City.KeyValue := -1;
+    Address_type.KeyValue := -1;
+    CountryByConctType.KeyValue := -1;
+    CityByConctType.KeyValue := -1;
+    tph_contact_type.KeyValue := -1;
+    tph_communication_type.KeyValue := -1;
+    tph_country_prefix.KeyValue := -1;
+
+  END;
+END;
+
+procedure TFormPaymentsCredit.ClearSearch;
+begin
+  Sum := 0;
+  Hcusttype := -1;
+  Searchpaspnum.Clear;
+  Searchinn.Clear;
+  Searchid.Clear;
+  Searchpasspin.Clear;
+  EditName.Clear;
+  Searchname.Clear;
+  FilialName.Clear;
+  EditDescription.Clear;
+  PaymentsKredetDataSet.Close;
+  PaymentsKredetDataSet.SetVariable('kli_id', -1);
+  PaymentsKredetDataSet.Open;
+  CMCurrencyEdit1.Text := '0.00';
+  KreditSearchpasspin.Clear;
+  KreditSearchpaspnum.Clear;
+  KreditSearchinn.Clear;
+  KreditSearchid.Clear;
+  KreditSearchname.Clear;
+  KreditFilial.Clear;
+  Recipient.Clear;
+  ODSDebet.Close;
+  ODSDebet.SetVariable('kli_id', -1);
+  ODSDebet.Open;
+
+  KreditSearchpasspin.Enabled:=False;
+  KreditSearchpasspin.Color:=clBtnFace;
+  KreditSearchpaspnum.Enabled:=False;
+  KreditSearchpaspnum.Color:=clBtnFace;
+  KreditSearchinn.Enabled:=False;
+  KreditSearchinn.Color:=clBtnFace;
+  KreditSearchname.Enabled:=False;
+  KreditSearchname.Color:=clBtnFace;
+  KreditSearchid.Enabled:=False;
+  KreditSearchid.Color:=clBtnFace;
+  DBLookupComboBox3.Enabled:=False;
+  DBLookupComboBox3.Color:=clBtnFace;
+end;
+
+procedure TFormPaymentsCredit.Button1Click(Sender: TObject);
+var
+  val_cod: Integer;
+  accid: Variant;
+  amount: real;
+  filname: Integer;
+  v_id: Integer;
+  setid: Integer;
+  kfilial: Integer;
+  kaccid:Variant;
+  kstatus:integer;
+begin
+  if RadioButton1.Checked then kstatus:=0;
+  if RadioButton2.Checked then kstatus:=1;
+
+  if EditName.Text = '' then
+  begin
+    ShowMessage('Adı sahəsi boşdur!');
+    exit;
+  end;
+
+  if DBLookupComboBox1.Text = '' then
+  begin
+    ShowMessage('Debit Hesab sahəsi seçilməyib!');
+    exit;
+  end;
+
+  if RadioButton2.Checked then
+  if DBLookupComboBox3.Text='' then
+  begin
+    ShowMessage('Kredit Hesab sahəsi seçilməyib!');
+    exit;
+  end;
+
+
+  if CMCurrencyEdit1.Text = '0.00' then
+  begin
+    ShowMessage('Məbləğ sahəsi doldurulmayıb!');
+    exit;
+  end;
+
+  if EditDescription.Text = '' then
+  begin
+    ShowMessage('Təyinat  sahəsi doldurulmayıb!');
+    exit;
+  end;
+
+  IF not(FormNominalCustomers.RH) then
+    if (Hcusttype = 0) and (kstatus=0) then
+    begin
+      ShowMessage('III-cü şəxs doldurulmayıb!');
+      exit;
+    end;
+
+
+  if DBLookupComboBox2.Text = '' then
+  begin
+    ShowMessage('Köçürmənin növü sahəsi seçilməyib!');
+    exit;
+  end;
+
+
+
+
+  v_id := 0;
+  setid := DBLookupComboBox2.KeyValue;
+  val_cod := PaymentsKredetDataSet.FieldByName('val_acc').AsInteger;
+  amount := StrToFloat(CMCurrencyEdit1.Text);
+  filname := PaymentsKredetDataSet.FieldByName('filial').AsInteger;
+  accid := PaymentsKredetDataSet.FieldByName('id').AsInteger;
+  kfilial:=ODSDebet.FieldByName('filial').AsInteger;
+  kaccid:=ODSDebet.FieldByName('id').AsInteger;
+
+
+  ExpressVariables.remit_inf := EditDescription.Text;
+
+  with ExpressVariables do
+  begin
+
+    IF FForm = 0 THEN
+    BEGIN
+      ExpDataModule.EXPESSPAC.CallProcedure('exp_payments_insert',['batchid',       v_id,
+                                                                   'v_thridperson', BoolToStr(FormNominalCustomers.RH),
+                                                                   'nominalid',     custid,
+                                                                   'v_exid',        exid,
+                                                                   'v_optype',      optype,
+                                                                   'v_setid',       setid,
+                                                                   'v_accid',       accid,
+                                                                   'v_val_cod',     val_cod,
+                                                                   'v_amount',      amount,
+                                                                   'v_filname',     filname,
+                                                                   'v_remit_inf',   remit_inf,
+                                                                   'v_doc_type',    doc_type,
+                                                                   'v_passpin',     passpin,
+                                                                   'v_passer',      passer,
+                                                                   'v_paspnum',     paspnum,
+                                                                   'v_doc_country', doc_country,
+                                                                   'v_paspplace',   paspplace,
+                                                                   'v_paspdate',    paspdate,
+                                                                   'v_passexpire',  passexpire,
+                                                                   'v_citizenship', citizenship,
+                                                                   'v_lastname',    lastname,
+                                                                   'v_soname',      soname,
+                                                                   'v_name',        name,
+                                                                   'v_sex',         sex,
+                                                                   'v_fam_status',  fam_status,
+                                                                   'v_bbirthplace', bbirthplace,
+                                                                   'v_birth_state', birth_state,
+                                                                   'v_birthday',    birthday,
+                                                                   'v_aadrs_state', aadrs_state,
+                                                                   'v_city',        city,
+                                                                   'v_reg_zip',     reg_zip,
+                                                                   'v_address',     address,
+                                                                   'v_phone_m',     phone_m,
+                                                                   'v_phone_h',     phone_h,
+                                                                   'v_e_mail',      e_mail,
+                                                                   'v_nerezident',  v_nerezident,
+                                                                   'v_work_place',  work_place,
+                                                                   'v_work_adrs_spec', work_adrs_spec,
+                                                                   'v_work_cntr',   work_cntr,
+                                                                   'v_work_city',   work_city,
+                                                                   'v_work_state',  work_state,
+                                                                   'v_work_zip',    work_zip,
+                                                                   'v_work_adress', work_adress,
+                                                                   'v_work_phone_spec',work_phone_spec,
+                                                                   'v_work_phconttype',work_phconttype,
+                                                                   'v_work_phoppref',work_phoppref,
+                                                                   'v_work_phone',   work_phone,
+                                                                   'v_work_phext',   work_phext,
+                                                                   'v_work_phcode',  work_phcode,
+                                                                   'v_kreditfilial', kfilial,
+                                                                   'v_kreditaccid',  kaccid,
+                                                                   'v_kstatus',kstatus]);
+      v_id := ExpDataModule.EXPESSPAC.GetParameter(0);
+      FormPaymentsCredit.Close;
+      ExpCustomersType.Close;
+      ExpDataModule.Expdescription.Refresh;
+      ExpDataModule.ExpBatchsDataSet.Refresh;
+      ExpDataModule.ExpBatchsDataSet.Locate('ID', v_id, []);
+    END
+    ELSE
+    begin
+      if EditName.Text = '' then
+      begin
+        ShowMessage('Adı sahəsi boşdur!');
+        exit;
+      end;
+
+      if DBLookupComboBox1.Text = '' then
+      begin
+        ShowMessage('Debit Hesab sahəsi seçilməyib!');
+        exit;
+      end;
+      if RadioButton2.Checked then
+      if DBLookupComboBox3.Text='' then
+      begin
+        ShowMessage('Kredit Hesab sahəsi seçilməyib!');
+        exit;
+      end;
+
+      if CMCurrencyEdit1.Text = '' then
+      begin
+        ShowMessage('Məbləğ sahəsi doldurulmayıb!');
+        exit;
+      end;
+
+      FormNominalCustomers.Parametr;
+      v_id := ExpDataModule.ExpBatchsDataSet.FieldByName('id').AsInteger;
+
+      ExpDataModule.EXPESSPAC.CallProcedure('exp_payments_update',
+        ['batchid', v_id, 'v_thridperson', BoolToStr(FormNominalCustomers.RH),
+        'nominalid', custid, 'v_exid', exid, 'v_optype', optype, 'v_setid',
+        setid, 'v_accid', accid, 'v_val_cod', val_cod, 'v_amount', amount,
+        'v_filname', filname, 'v_remit_inf', remit_inf, 'v_doc_type', doc_type,
+        'v_passpin', passpin, 'v_passer', passer, 'v_paspnum', paspnum,
+        'v_doc_country', doc_country, 'v_paspplace', paspplace, 'v_paspdate',
+        paspdate, 'v_passexpire', passexpire, 'v_citizenship', citizenship,
+        'v_lastname', lastname, 'v_soname', soname, 'v_name', name, 'v_sex',
+        sex, 'v_fam_status', fam_status, 'v_bbirthplace', bbirthplace,
+        'v_birth_state', birth_state, 'v_birthday', birthday, 'v_aadrs_state',
+        aadrs_state, 'v_city', city, 'v_reg_zip', reg_zip, 'v_address', address,
+        'v_phone_m', phone_m, 'v_phone_h', phone_h, 'v_e_mail', e_mail,
+        'v_nerezident', v_nerezident, 'v_work_place', work_place,
+        'v_work_adrs_spec', work_adrs_spec, 'v_work_cntr', work_cntr,
+        'v_work_city', work_city, 'v_work_state', work_state, 'v_work_zip',
+        work_zip, 'v_work_adress', work_adress, 'v_work_phone_spec',
+        work_phone_spec, 'v_work_phconttype', work_phconttype,
+        'v_work_phoppref', work_phoppref, 'v_work_phone', work_phone,
+        'v_work_phext', work_phext, 'v_work_phcode', work_phcode,'v_kreditfilial', kfilial,
+        'v_kreditaccid',  kaccid,'v_kstatus',kstatus]);
+
+      FormPaymentsCredit.Close;
+      ExpCustomersType.Close;
+      ExpDataModule.Expdescription.Refresh;
+      ExpDataModule.ExpBatchsDataSet.Refresh;
+      ExpDataModule.ExpBatchsDataSet.Locate('ID', v_id, []);
+    end;
+  end;
+end;
+
+procedure TFormPaymentsCredit.Button2Click(Sender: TObject);
+begin
+  Close;
+end;
+
+procedure TFormPaymentsCredit.LoadComboData(Sender: TComboBox);
+begin
+  with ExpDataModule.Expdescription, Sender do
+  begin
+    if not(Active) then
+      Open
+    else
+    begin
+      Refresh;
+    end;
+    if Items.Count <> RecordCount then
+    begin
+      Items.Clear;
+      First;
+      while not(EOF) do
+      begin
+        Items.Add(FieldByName('description').AsString);
+        Next;
+      end;
+    end;
+  end;
+end;
+
+
+procedure TFormPaymentsCredit.CMCurrencyEdit1Exit(Sender: TObject);
+var
+  s: Integer;
+begin
+
+  s := pos('.', CMCurrencyEdit1.Text);
+  IF s = 0 THEN
+    CMCurrencyEdit1.Text := CMCurrencyEdit1.Text + '.00';
+end;
+
+procedure TFormPaymentsCredit.CMCurrencyEdit1KeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if not(Key in [#8, '0' .. '9', FormatSettings.DecimalSeparator]) then
+    Key := #0;
+end;
+
+procedure TFormPaymentsCredit.CMCurrencyEdit1MouseActivate(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y, HitTest: Integer;
+  var MouseActivate: TMouseActivate);
+begin
+  IF CMCurrencyEdit1.Text = '0.00' then
+    CMCurrencyEdit1.Clear;
+end;
+
+procedure TFormPaymentsCredit.ComboBox1Click(Sender: TObject);
+begin
+  EditDescription.Text := (Sender as TComboBox).Text;
+end;
+
+procedure TFormPaymentsCredit.ComboBox1DropDown(Sender: TObject);
+begin
+  LoadComboData(TComboBox(Sender));
+end;
+
+procedure TFormPaymentsCredit.DBLookupComboBox3Click(Sender: TObject);
+begin
+  ExpFilialN.Close;
+  ExpFilialN.SetVariable('id', ODSDebet.FieldByName('filial').AsInteger);
+  ExpFilialN.Open;
+  KreditFilial.Text := ExpFilialN.FieldByName('name').AsString;
+  KreditSearchname.Text := DBLookupComboBox3.Text;
+end;
+
+procedure TFormPaymentsCredit.DBLookupComboBox1Click(Sender: TObject);
+begin
+  ExpFilialN.Close;
+  ExpFilialN.SetVariable('id', PaymentsKredetDataSet.FieldByName('filial').AsInteger);
+  ExpFilialN.Open;
+  FilialName.Text := ExpFilialN.FieldByName('name').AsString;
+
+  WITH ExpDataModule do
+  BEGIN
+    KreditRestDataSet.Close;
+    KreditRestDataSet.SetVariable('acc_id',PaymentsKredetDataSet.FieldByName('id').AsInteger);
+    KreditRestDataSet.Open;
+    Searchname.Text := DBLookupComboBox1.Text;
+    IF VarIsNull(KreditRestDataSet.FieldByName('rest').AsVariant) THEN CMCurrencyEdit2.Value := 0
+    ELSE
+      CMCurrencyEdit2.Value := KreditRestDataSet.FieldByName('rest').AsVariant;
+    IF VarIsNull(KreditRestDataSet.FieldByName('interestrest').AsVariant) THEN CMCurrencyEdit3.Value := 0
+    ELSE
+      CMCurrencyEdit3.Value := KreditRestDataSet.FieldByName('interestrest').AsVariant;
+  END;
+end;
+
+procedure TFormPaymentsCredit.DBLookupComboBox2Click(Sender: TObject);
+begin
+  EditDescription.Text := ExpDataModule.Exp_settingstype.FieldByName('description').AsString;
+end;
+
+procedure TFormPaymentsCredit.EditDescriptionKeyDown(Sender: TObject;
+  var Key: Word; Shift: TShiftState);
+begin
+  if Key = VK_F3 then
+    with ExpFormDestination, ExpDataModule do
+    begin
+      ShowModal;
+      if ModalResult = mrOk then
+        EditDescription.Text := Value;
+    end
+  else if Key = VK_ESCAPE then
+    Close;
+end;
+
+procedure TFormPaymentsCredit.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+  Account.Close;
+  FormPaymentsCredit.Button1.Visible := true;
+  FormNominalCustomers.Button1.Visible := true;
+  FiledBatchs := false;
+  FiledIncoming := false;
+end;
+
+procedure TFormPaymentsCredit.FormShow(Sender: TObject);
+begin
+  ClearEdit;
+  Account.Close;
+  Account.Open;
+  FormNominalCustomers.RH := false;
+  IF FForm = 0 then
+  BEGIN
+
+    ExpSettingsType.Close;
+    ExpSettingsType.SetVariable('stypeid', optype);
+    ExpSettingsType.Open;
+
+    IF ExpSettingsType.RecordCount = 1 THEN
+      DBLookupComboBox2.KeyValue := ExpSettingsType.FieldByName('id').AsInteger
+    ELSE
+      DBLookupComboBox2.KeyValue := -1;
+
+    RadioButton1.Checked:=True;
+    ClearSearch;
+    FormNominalCustomers.FTip := 0;
+    FormNominalCustomers.CBoxPassPlace.KeyValue := null;
+    FormNominalCustomers.CbBoxClick(Sender);
+  END
+  ELSE
+  BEGIN
+    FormNominalCustomers.FTip := 1;
+    FormNominalCustomers.Searchid.Clear;
+    FormNominalCustomers.Searchpasspin.Clear;
+    FormNominalCustomers.Searchpaspnum.Clear;
+    WITH ExpDataModule DO
+    BEGIN
+      IF FiledIncoming THEN
+        PaymentCreditUpdate(ExpIncomingDataSet);
+      IF FiledBatchs THEN
+        PaymentCreditUpdate(ExpBatchsDataSet);
+      IF FiledIncomingArchive THEN
+        PaymentCreditUpdate(ExpIncomingarchiveDataSet);
+      IF FieldBatchsArchive THEN
+        PaymentCreditUpdate(ExpBatchsArchiveDataSet);
+    END;
+
+
+    WITH ExpDataModule, SendToDataSet DO
+    BEGIN
+      Close;
+      SQl[1] := '';
+      IF  FieldKSTATUS=0 THEN  SQl[1] := 'where id=' + FieldBKLIID
+                         ELSE  SQl[1] := 'where id=' + FieldKLIID;
+      Open;
+
+      Searchpasspin.Text := FieldByName('passpin').AsString;
+      Searchpaspnum.Text := FieldByName('paspnum').AsString;
+      Searchid.Text := FieldByName('id').AsString;
+      Searchinn.Text := FieldByName('inn').AsString;
+      Hcusttype := FieldByName('cust_type').AsInteger;
+
+
+
+      IF FieldKSTATUS=0 THEN begin
+                               RadioButton1.Checked:=True;
+                               RadioButton1Click(Sender);
+                             end
+                        ELSE begin
+                                KreditSearchpasspin.Text := FieldByName('passpin').AsString;
+                                KreditSearchpaspnum.Text := FieldByName('paspnum').AsString;
+                                KreditSearchid.Text := FieldByName('id').AsString;
+                                KreditSearchinn.Text := FieldByName('inn').AsString;
+
+                               RadioButton2.Checked:=True;
+                               RadioButton2Click(Sender);
+                             end;
+
+
+      IF  FieldKSTATUS=0 THEN
+      BEGIN
+        FilialName.Text := FieldBFILIALNAME;
+        EditName.Text := FieldByName('custname').AsString;
+
+        PaymentsKredetDataSet.Close;
+        PaymentsKredetDataSet.SetVariable('kli_id', FieldBKLIID);
+        PaymentsKredetDataSet.Open;
+
+        DBLookupComboBox1.KeyValue := FieldKREDITACCID;
+        Searchname.Text := DBLookupComboBox1.Text;
+
+        KreditSearchpasspin.Clear;
+        KreditSearchpaspnum.Clear;
+        KreditSearchid.Clear;
+        KreditSearchinn.Clear;
+        KreditSearchname.Clear;
+        KreditSearchid.Clear;
+        KreditFilial.Clear;
+        Recipient.Clear;
+        ODSDebet.Close;
+        ODSDebet.SetVariable('kli_id', -1);
+        ODSDebet.Open;
+
+      END
+      ELSE
+      BEGIN
+
+        FilialName.Text := FieldFILIALNAME;
+        EditName.Text := FieldByName('custname').AsString;
+
+        PaymentsKredetDataSet.Close;
+        PaymentsKredetDataSet.SetVariable('kli_id', FieldKLIID);
+        PaymentsKredetDataSet.Open;
+
+        DBLookupComboBox1.KeyValue := FieldDEBETACCID;
+        Searchname.Text := DBLookupComboBox1.Text;
+
+        ODSDebet.Close;
+        ODSDebet.SetVariable('kli_id', FieldBKLIID);
+        ODSDebet.Open;
+
+         Close;
+         SQl[1] := '';
+         SQl[1] := 'where id=' + FieldBKLIID;
+         Open;
+
+        KreditSearchid.Text:=FieldBKLIID;
+        KreditFilial.Text := FieldBFILIALNAME;
+        Recipient.Text := FieldByName('custname').AsString;
+
+        DBLookupComboBox3.KeyValue := FieldKREDITACCID;
+        KreditSearchname.Text:=DBLookupComboBox3.Text;
+      END;
+
+        KreditRestDataSet.Close;
+        KreditRestDataSet.SetVariable('acc_id', FieldKREDITACCID);
+        KreditRestDataSet.Open;
+
+        CMCurrencyEdit2.Value := KreditRestDataSetREST.AsFloat;
+        CMCurrencyEdit3.Value := KreditRestDataSetINTERESTREST.AsFloat;
+        CMCurrencyEdit1.Text := FloatToStr(FieldAMOUNT);
+
+        CMCurrencyEdit1Exit(Sender);
+        EditDescription.Text := FieldREMIT_INF;
+    END;
+  END;
+
+
+    IF FieldBKLIID <> FieldKLIID THEN
+    BEGIN
+      WITH ExpDataModule, SendDataSet DO
+      BEGIN
+        Close;
+        SQl[1] := '';
+        SQl[1] := 'where id=' + FieldKLIID;
+        Open;
+        WITH FormNominalCustomers, ExpressVariables DO
+        BEGIN
+          custid := FieldKLIID;
+          Editpasspin.Text := FieldByName('passpin').AsString;
+          IF Editpasspin.Text <> '' THEN
+            FormNominalCustomers.RH := true;
+          CBoxPassPlace.KeyValue := FieldByName('doc_type').AsInteger;
+          EditLastName.Text := FieldByName('lastname').AsString;
+          EditName1.Text := FieldByName('name').AsString;
+          EditSoname.Text := FieldByName('soname').AsString;
+          EditSerial.Text := FieldByName('passer').AsString;
+          EditPassport.Text := FieldByName('paspnum').AsString;
+          Issue_country.KeyValue := FieldByName('doc_country').AsVariant;
+          DBCBox_DocTYPE.Text := FieldByName('paspplace').AsString;
+          DateEdit.Value := FieldByName('paspdate').AsVariant;
+          DateEdit1.Value := FieldByName('passexpire').AsVariant;
+          DBCBox_Citizenship.KeyValue := FieldByName('citizenship').AsInteger;
+          CBoxSex.KeyValue := FieldByName('sex').AsString;
+          CBoxFamStatus.KeyValue := FieldByName('fam_status').AsString;
+          BirthPlace.KeyValue := FieldByName('birthplace').AsString;
+          EditBirthCity.KeyValue := FieldByName('birth_state').AsString;
+          DateEdit2.Value := FieldByName('birthday').AsVariant;
+          Adrs_State.KeyValue := FieldByName('adrs_state').AsString;
+          Adrs_City.KeyValue := FieldByName('city').AsString;
+          ZipQ.Text := FieldByName('reg_zip').AsString;
+          EditMobil.Text := FieldByName('phone_m').AsString;
+          EditPhone.Text := FieldByName('phone_h').AsString;
+          EditEmail.Text := FieldByName('e_mail').AsString;
+          AdressEdit.Text := FieldByName('address').AsString;
+
+          WITH FormNominalCustomers DO
+          BEGIN
+            work_place.Text := FieldByName('work_place').AsString;
+            Address_type.KeyValue := FieldByName('work_adrs_spec').AsVariant;
+            CountryByConctType.KeyValue := FieldByName('work_cntr').AsVariant;
+            CityByConctType.KeyValue := FieldByName('work_city').AsVariant;
+            db_tph_state.Text := FieldByName('work_state').AsString;
+            DB_tph_zip.Text := FieldByName('work_zip').AsString;
+            db_tph_adress.Text := FieldByName('work_adress').AsString;
+            tph_contact_type.KeyValue := FieldByName('work_phone_spec')
+              .AsVariant;
+            tph_communication_type.KeyValue := FieldByName('work_phconttype')
+              .AsVariant;
+            tph_country_prefix.KeyValue := FieldByName('work_phoppref')
+              .AsVariant;
+            Db_tph_number.Text := FieldByName('work_phone').AsString;
+            Db_tph_extension.Text := FieldByName('work_phext').AsString;
+            Db_tph_cod.Text := FieldByName('work_phcode').AsString;
+          END
+        END
+      END
+    END
+    ELSE
+      FormNominalCustomersClear;
+
+    FormNominalCustomers.CbBoxClick(Sender);
+    Sum := ExpDataModule.Repair.CallFloatFunction('SumNominalid',
+      [ExpDataModule.ExpBatchsDataSetKLIID.AsInteger]);
+
+    IF Sum >= 20000 THEN
+    BEGIN
+      FormNominalCustomers.TabSheet2.TabVisible := true;
+      FormNominalCustomers.TabSheet3.TabVisible := true;
+    END
+    ELSE
+    BEGIN
+      FormNominalCustomers.TabSheet2.TabVisible := false;
+      FormNominalCustomers.TabSheet3.TabVisible := false;
+    END;
+
+  //END;
+
+
+end;
+
+procedure TFormPaymentsCredit.KreditSearchidKeyPress(Sender: TObject;
+  var Key: Char);
+VAR
+  s: string;
+  Accno: string;
+BEGIN
+  s := '';
+  IF Key = #13 THEN
+  BEGIN
+    s := copy((Sender as TEdit).Name, 13, length((Sender as TEdit).Name));
+    IF s = 'id' THEN s := 'c.' + s;
+    s := '(' + s + '=' + '''' + (Sender as TEdit).Text + '''' + ')';
+    WITH ExpDataModule DO
+    BEGIN
+      SearchCustDataSet.Close;
+      SearchCustDataSet.SQl[47] :='(select max(id)from custinfo  where '+s+')';
+      SearchCustDataSet.Open;
+      IF SearchCustDataSet.RecordCount = 0 THEN
+      BEGIN
+        ShowMessage('Müştəri tapılmadı');
+        EditName.Clear;
+        FilialName.Clear;
+        CMCurrencyEdit1.Text := '0.00';
+        PaymentsKredetDataSet.Close;
+        PaymentsKredetDataSet.SetVariable('kli_id', -1);
+        PaymentsKredetDataSet.Open;
+        exit;
+      END;
+      Hcusttype := SearchCustDataSetCUST_TYPE.AsInteger;
+      Recipient.Text := SearchCustDataSetNAME.AsString;
+      ODSDebet.Close;
+      ODSDebet.SetVariable('kli_id',SearchCustDataSetID.AsInteger);
+      ODSDebet.Open;
+
+      IF PaymentsKredetDataSet.RecordCount = 1 THEN
+      BEGIN
+        ExpFilialN.Close;
+        ExpFilialN.SetVariable('id', ODSDebet.FieldByName('filial').AsInteger);
+        ExpFilialN.Open;
+        KreditFilial.Text := ExpFilialN.FieldByName('name').AsString;
+        DBLookupComboBox3.KeyValue := ODSDebet.FieldByName('id').AsInteger;
+      END;
+      ClearEdit;
+    END;
+  end;
+
+
+end;
+
+procedure TFormPaymentsCredit.KreditSearchpasspinKeyPress(Sender: TObject;
+  var Key: Char);
+VAR
+  s,p: string;
+  Accno: string;
+  Psearch:string;
+BEGIN
+  s := '';
+  IF Key = #13 THEN
+  BEGIN
+    IF (Sender as TEdit).Text <> '' THEN
+    BEGIN
+      IF (Sender as TEdit).Name = 'KreditSearchname' THEN
+      BEGIN
+        Accno := (Sender as TEdit).Text;
+        Account.Close;
+        Account.SetVariable('accno', Accno);
+        Account.Open;
+        IF Account.RecordCount = 0 THEN
+        BEGIN
+          ShowMessage('Müştəri tapılmadı');
+          IF (Sender as TEdit).Name <> 'KreditSearchpaspnum' THEN  KreditSearchpaspnum.Clear;
+          IF (Sender as TEdit).Name <> 'KreditSearchinn'     THEN  KreditSearchinn.Clear;
+          IF (Sender as TEdit).Name <> 'KreditSearchid'      THEN  KreditSearchid.Clear;
+          IF (Sender as TEdit).Name <> 'KreditSearchpasspin' THEN  KreditSearchpasspin.Clear;
+          IF (Sender as TEdit).Name <> 'KreditSearchName'    THEN  KreditSearchname.Clear;
+
+          EditName.Clear;
+          FilialName.Clear;
+          EditDescription.Clear;
+          CMCurrencyEdit1.Text := '0.00';
+          PaymentsKredetDataSet.Close;
+          PaymentsKredetDataSet.SetVariable('kli_id', -1);
+          PaymentsKredetDataSet.Open;
+          exit;
+        END;
+        ExpFilialN.Close;
+        ExpFilialN.SetVariable('id', Account.FieldByName('filial').AsInteger);
+        ExpFilialN.Open;
+        FilialName.Text := ExpFilialN.FieldByName('name').AsString;
+        s := 'c.id=' + Account.FieldByName('kli_id').AsString;
+      END
+      ELSE
+      BEGIN
+        s := copy((Sender as TEdit).Name, 13, length((Sender as TEdit).Name));
+        p:=s;
+        IF s = 'id' THEN
+          s := 'c.' + s;
+        s := '(' + s + '=' + '''' + (Sender as TEdit).Text + '''' + ')';
+      END
+    END;
+    WITH ExpDataModule DO
+    BEGIN
+      if p='passpin' then Psearch:=' c.id in (select max(id) from custinfo  where '+UpperCase(s)+')'
+                     else Psearch:=UpperCase(s);
+      SearchCustDataSet.Close;
+      SearchCustDataSet.SQl[47] :=' c.id in (select max(id) from custinfo  where '+UpperCase(s)+')';
+      SearchCustDataSet.Open;
+      IF SearchCustDataSet.RecordCount = 0 THEN
+      BEGIN
+        ShowMessage('Müştəri tapılmadı');
+        IF (Sender as TEdit).Name <> 'KreditSearchpaspnum' THEN Searchpaspnum.Clear;
+        IF (Sender as TEdit).Name <> 'KreditSearchinn'     THEN Searchinn.Clear;
+        IF (Sender as TEdit).Name <> 'KreditSearchid'      THEN Searchid.Clear;
+        IF (Sender as TEdit).Name <> 'KreditSearchpasspin' THEN Searchpasspin.Clear;
+        IF (Sender as TEdit).Name <> 'KreditSearchName'    THEN Searchname.Clear;
+        EditName.Clear;
+        FilialName.Clear;
+        EditDescription.Clear;
+        CMCurrencyEdit1.Text := '0.00';
+        PaymentsKredetDataSet.Close;
+        PaymentsKredetDataSet.SetVariable('kli_id', -1);
+        PaymentsKredetDataSet.Open;
+        exit;
+      END;
+
+      KreditSearchpasspin.Text := SearchCustDataSetPASSPIN.AsString;
+      KreditSearchpaspnum.Text := SearchCustDataSetPASPNUM.AsString;
+      KreditSearchid.Text := SearchCustDataSetID.AsString;
+      KreditSearchinn.Text := SearchCustDataSetINN.AsString;
+      Hcusttype := SearchCustDataSetCUST_TYPE.AsInteger;
+      Recipient.Text := SearchCustDataSetNAME.AsString;
+      ODSDebet.Close;
+      ODSDebet.SetVariable('kli_id',SearchCustDataSetID.AsInteger);
+      ODSDebet.Open;
+
+      IF PaymentsKredetDataSet.RecordCount = 1 THEN
+      BEGIN
+        ExpFilialN.Close;
+        ExpFilialN.SetVariable('id', ODSDebet.FieldByName('filial').AsInteger);
+        ExpFilialN.Open;
+        KreditFilial.Text := ExpFilialN.FieldByName('name').AsString;
+        DBLookupComboBox3.KeyValue := ODSDebet.FieldByName('id').AsInteger;
+      END;
+      ClearEdit;
+    END;
+  end;
+
+END;
+
+
+procedure TFormPaymentsCredit.SearchpasspinKeyPress(Sender: TObject;
+  var Key: Char);
+VAR
+  s,p: string;
+  Accno: string;
+  Psearch:string;
+BEGIN
+  s := '';
+  IF Key = #13 THEN
+  BEGIN
+    IF (Sender as TEdit).Text <> '' THEN
+    BEGIN
+      IF (Sender as TEdit).Name = 'Searchname' THEN
+      BEGIN
+        Accno := (Sender as TEdit).Text;
+        Account.Close;
+        Account.SetVariable('accno', Accno);
+        Account.Open;
+        IF Account.RecordCount = 0 THEN
+        BEGIN
+          ShowMessage('Müştəri tapılmadı');
+          IF (Sender as TEdit).Name <> 'Searchpaspnum' THEN
+            Searchpaspnum.Clear;
+          IF (Sender as TEdit).Name <> 'Searchinn' THEN
+            Searchinn.Clear;
+          IF (Sender as TEdit).Name <> 'Searchid' THEN
+            Searchid.Clear;
+          IF (Sender as TEdit).Name <> 'Searchpasspin' THEN
+            Searchpasspin.Clear;
+          IF (Sender as TEdit).Name <> 'SearchName' THEN
+            Searchname.Clear;
+          EditName.Clear;
+          FilialName.Clear;
+          EditDescription.Clear;
+          CMCurrencyEdit1.Text := '0.00';
+          PaymentsKredetDataSet.Close;
+          PaymentsKredetDataSet.SetVariable('kli_id', -1);
+          PaymentsKredetDataSet.Open;
+          exit;
+        END;
+        ExpFilialN.Close;
+        ExpFilialN.SetVariable('id', Account.FieldByName('filial').AsInteger);
+        ExpFilialN.Open;
+        FilialName.Text := ExpFilialN.FieldByName('name').AsString;
+        s := 'c.id=' + Account.FieldByName('kli_id').AsString;
+      END
+      ELSE
+      BEGIN
+        s := copy((Sender as TEdit).Name, 7, length((Sender as TEdit).Name));
+        p:=s;
+        IF s = 'id' THEN
+          s := 'c.' + s;
+        s := '(' + s + '=' + '''' + (Sender as TEdit).Text + '''' + ')';
+      END
+    END;
+    WITH ExpDataModule DO
+    BEGIN
+      if p='passpin' then Psearch:=' c.id in (select max(id) from custinfo  where '+UpperCase(s)+')'
+                     else Psearch:=UpperCase(s);
+      SearchCustDataSet.Close;
+      SearchCustDataSet.SQl[47] :=Psearch;
+      SearchCustDataSet.Open;
+      IF SearchCustDataSet.RecordCount = 0 THEN
+      BEGIN
+        ShowMessage('Müştəri tapılmadı');
+        IF (Sender as TEdit).Name <> 'Searchpaspnum' THEN Searchpaspnum.Clear;
+        IF (Sender as TEdit).Name <> 'Searchinn'     THEN Searchinn.Clear;
+        IF (Sender as TEdit).Name <> 'Searchid'      THEN Searchid.Clear;
+        IF (Sender as TEdit).Name <> 'Searchpasspin' THEN Searchpasspin.Clear;
+        IF (Sender as TEdit).Name <> 'SearchName'    THEN Searchname.Clear;
+        EditName.Clear;
+        FilialName.Clear;
+        EditDescription.Clear;
+        CMCurrencyEdit1.Text := '0.00';
+        PaymentsKredetDataSet.Close;
+        PaymentsKredetDataSet.SetVariable('kli_id', -1);
+        PaymentsKredetDataSet.Open;
+        exit;
+      END;
+
+      Searchpasspin.Text := SearchCustDataSetPASSPIN.AsString;
+      Searchpaspnum.Text := SearchCustDataSetPASPNUM.AsString;
+      Searchid.Text := SearchCustDataSetID.AsString;
+      Searchinn.Text := SearchCustDataSetINN.AsString;
+      Hcusttype := SearchCustDataSetCUST_TYPE.AsInteger;
+      DBLookupComboBox1.KeyValue := Account.FieldByName('id').AsInteger;
+      EditName.Text := SearchCustDataSetNAME.AsString;
+      PaymentsKredetDataSet.Close;
+      PaymentsKredetDataSet.SetVariable('kli_id',SearchCustDataSetID.AsInteger);
+      PaymentsKredetDataSet.Open;
+
+      IF PaymentsKredetDataSet.RecordCount = 1 THEN
+      BEGIN
+        ExpFilialN.Close;
+        ExpFilialN.SetVariable('id', PaymentsKredetDataSet.FieldByName('filial').AsInteger);
+        ExpFilialN.Open;
+        FilialName.Text := ExpFilialN.FieldByName('name').AsString;
+        DBLookupComboBox1.KeyValue := PaymentsKredetDataSet.FieldByName('id').AsInteger;
+        KreditRestDataSet.Close;
+        KreditRestDataSet.SetVariable('acc_id',PaymentsKredetDataSet.FieldByName('id').AsInteger);
+        KreditRestDataSet.Open;
+        IF VarIsNull(KreditRestDataSet.FieldByName('rest').AsVariant) THEN
+          CMCurrencyEdit2.Value := 0
+        ELSE
+          CMCurrencyEdit2.Value := KreditRestDataSet.FieldByName('rest').AsVariant;
+        IF VarIsNull(KreditRestDataSet.FieldByName('interestrest').AsVariant) THEN
+          CMCurrencyEdit3.Value := 0
+        ELSE
+          CMCurrencyEdit3.Value := KreditRestDataSet.FieldByName('interestrest').AsVariant;
+        Searchname.Text := PaymentsKredetDataSet.FieldByName('acc_no').AsString;
+      END;
+
+      ClearEdit;
+
+    END;
+  end;
+
+END;
+
+procedure TFormPaymentsCredit.SpeedButton1Click(Sender: TObject);
+begin
+
+  if (StrToFloat(CMCurrencyEdit1.Text) > 0) then
+  begin
+    if StrToFloat(CMCurrencyEdit1.Text) < 20000 then
+      with FormNominalCustomers do
+      begin
+
+        Label53.Visible := false;
+        Label54.Visible := false;
+        Label55.Visible := false;
+        Label56.Visible := false;
+        Label57.Visible := false;
+        Label61.Visible := false;
+        Label62.Visible := false;
+        Label63.Visible := false;
+        Label64.Visible := false;
+        Label65.Visible := false;
+        Label66.Visible := false;
+        Label67.Visible := false;
+        Label68.Visible := false;
+        Label69.Visible := false;
+        Label70.Visible := false;
+        Label71.Visible := false;
+        Label72.Visible := false;
+        Label73.Visible := false;
+        Label74.Visible := false;
+        Label75.Visible := false;
+        Label76.Visible := false;
+        Label77.Visible := false;
+        Label78.Visible := false;
+        Label79.Visible := false;
+
+        TabSheet2.TabVisible := false;
+        TabSheet3.TabVisible := false;
+
+      end;
+    if StrToFloat(CMCurrencyEdit1.Text) >= 20000 then
+      with FormNominalCustomers do
+      begin
+        Label53.Visible := true;
+        Label54.Visible := true;
+        Label55.Visible := true;
+        Label56.Visible := true;
+        Label57.Visible := true;
+        Label61.Visible := true;
+        Label62.Visible := true;
+        Label63.Visible := true;
+        Label64.Visible := true;
+        Label65.Visible := true;
+        Label66.Visible := true;
+        Label67.Visible := true;
+        Label68.Visible := true;
+        Label69.Visible := true;
+        Label70.Visible := true;
+        Label71.Visible := true;
+        Label72.Visible := true;
+        Label73.Visible := true;
+        Label74.Visible := true;
+        Label75.Visible := true;
+        Label76.Visible := true;
+        Label77.Visible := true;
+        Label78.Visible := true;
+        Label79.Visible := true;
+        TabSheet2.TabVisible := true;
+        TabSheet3.TabVisible := true;
+      end;
+    // FormNominalCustomers.CbBoxClick(Sender);
+
+    FormNominalCustomers.ShowModal;
+  end
+  else
+    ShowMessage('Məbləği daxil edin!...');
+end;
+
+END.

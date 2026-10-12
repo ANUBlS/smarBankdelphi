@@ -1,0 +1,1601 @@
+unit EmanetS;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActiveX, AxCtrls, EmanetSH_TLB, StdVcl, Grids, DBGrids, StdCtrls,
+  Buttons, DBViewComboBox, ComCtrls, ExtCtrls, Db, OracleData, Oracle,
+  Excel97, OleServer, Gauges;
+
+type
+  TEmanet = class(TActiveForm, IEmanet)
+    PageControl1: TPageControl;
+    TabSheet1: TTabSheet;
+    GroupBox2: TGroupBox;
+    TabSheet2: TTabSheet;
+    Panel1: TPanel;
+    GroupBox1: TGroupBox;
+    GroupBox3: TGroupBox;
+    DTP1: TDateTimePicker;
+    DTP2: TDateTimePicker;
+    StaticText1: TStaticText;
+    StaticText2: TStaticText;
+    ComboBox1: TComboBox;
+    Edit1: TEdit;
+    StaticText3: TStaticText;
+    BitBtn1: TBitBtn;
+    BitBtn2: TBitBtn;
+    DBGrid1: TDBGrid;
+    OracleDataSet1: TOracleDataSet;
+    DataSource1: TDataSource;
+    GroupBox4: TGroupBox;
+    OracleDataSet2: TOracleDataSet;
+    DataSource2: TDataSource;
+    StaticText4: TStaticText;
+    Edit2: TEdit;
+    BitBtn3: TBitBtn;
+    BitBtn4: TBitBtn;
+    DBGrid2: TDBGrid;
+    OracleDataSet3: TOracleDataSet;
+    DataSource3: TDataSource;
+    DBViewComboBox1: TDBViewComboBox;
+    DBViewComboBox2: TDBViewComboBox;
+    BitBtn5: TBitBtn;
+    OracleDataSet1ID: TFloatField;
+    OracleDataSet1BAL_CN: TStringField;
+    OracleDataSet1TIP: TIntegerField;
+    OraclePackage1: TOraclePackage;
+    ExcelApplication1: TExcelApplication;
+    ExcelWorksheet1: TExcelWorksheet;
+    ExcelWorkbook1: TExcelWorkbook;
+    Gauge1: TGauge;
+    TabSheet3: TTabSheet;
+    TabSheet4: TTabSheet;
+    DBGrid3: TDBGrid;
+    GroupBox5: TGroupBox;
+    Edit3: TEdit;
+    StaticText5: TStaticText;
+    BitBtn6: TBitBtn;
+    BitBtn7: TBitBtn;
+    DBViewComboBox3: TDBViewComboBox;
+    GroupBox6: TGroupBox;
+    Edit4: TEdit;
+    StaticText6: TStaticText;
+    BitBtn8: TBitBtn;
+    BitBtn9: TBitBtn;
+    DBGrid4: TDBGrid;
+    DBViewComboBox4: TDBViewComboBox;
+    RadioButton1: TRadioButton;
+    RadioButton2: TRadioButton;
+    OracleDataSet4: TOracleDataSet;
+    OracleDataSet5: TOracleDataSet;
+    procedure ComboBox1Change(Sender: TObject);
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure Edit2KeyPress(Sender: TObject; var Key: Char);
+    procedure Edit2Enter(Sender: TObject);
+    procedure Edit1KeyPress(Sender: TObject; var Key: Char);
+    procedure Edit1Enter(Sender: TObject);
+    procedure DBViewComboBox1Change(Sender: TObject);
+    procedure BitBtn1Click(Sender: TObject);
+    procedure DBViewComboBox2Change(Sender: TObject);
+    procedure BitBtn3Click(Sender: TObject);
+    procedure TabSheet1Show(Sender: TObject);
+    procedure TabSheet2Show(Sender: TObject);
+    procedure BitBtn2Click(Sender: TObject);
+    procedure BitBtn4Click(Sender: TObject);
+    procedure BitBtn5Click(Sender: TObject);
+    procedure DTP1Change(Sender: TObject);
+    procedure DBViewComboBox3Change(Sender: TObject);
+    procedure Edit3KeyPress(Sender: TObject; var Key: Char);
+    procedure Edit3Enter(Sender: TObject);
+    procedure TabSheet3Show(Sender: TObject);
+    procedure TabSheet4Show(Sender: TObject);
+    procedure DBViewComboBox4Change(Sender: TObject);
+    procedure Edit4Enter(Sender: TObject);
+    procedure Edit4KeyPress(Sender: TObject; var Key: Char);
+    procedure RadioButton1Click(Sender: TObject);
+    procedure RadioButton2Click(Sender: TObject);
+    procedure BitBtn6Click(Sender: TObject);
+    procedure BitBtn7Click(Sender: TObject);
+    procedure DTP2Change(Sender: TObject);
+  private
+    { Private declarations }
+    FEvents: IEmanetEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+  public
+    procedure Insert_Umumi_Emanet;
+    procedure Setfilter(FType: string);
+    procedure Delete_Emanet;
+    procedure Initialize; override;
+    function  Valyutanin_Kodu(valyutanin_adi:string):integer;
+    function  Hesabin_tipi(Num:integer):string;
+  end;
+
+implementation
+
+uses ComObj, ComServ,sboapiDataModuleImpl;
+var Text:string[10];
+    Bas,Son:string;
+          F:integer;
+{$R *.DFM}
+
+{ TEmanet }
+
+procedure TEmanet.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_EmanetPage); }
+end;
+
+procedure TEmanet.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as IEmanetEvents;
+end;
+
+procedure TEmanet.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TEmanet.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TEmanet.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TEmanet.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TEmanet.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TEmanet.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TEmanet.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TEmanet.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TEmanet.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TEmanet.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TEmanet.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TEmanet.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TEmanet.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TEmanet.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TEmanet.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TEmanet.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TEmanet.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TEmanet.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TEmanet.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TEmanet._Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TEmanet.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TEmanet.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TEmanet.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TEmanet.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TEmanet.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TEmanet.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TEmanet.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TEmanet.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TEmanet.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TEmanet.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TEmanet.Set_AxBorderStyle(Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TEmanet.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TEmanet.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TEmanet.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TEmanet.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TEmanet.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TEmanet.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TEmanet.Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TEmanet.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TEmanet.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TEmanet.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TEmanet.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TEmanet.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TEmanet.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+procedure TEmanet.ComboBox1Change(Sender: TObject);
+begin
+   PageControl1.ActivePageIndex:=(Sender as TComboBox).ItemIndex;
+ { if PageControl1.ActivePageIndex=0 then
+ begin
+   OracleDataSet1.Close;
+   OracleDataSet1.SQL.Clear;
+   OracleDataSet1.SQL.Add('select * from Emanet where Tip=0  order by bal_cn ');
+   OracleDataSet1.Open;
+ end;
+  if PageControl1.ActivePageIndex=1 then
+ begin
+   OracleDataSet1.Close;
+   OracleDataSet1.SQL.Clear;
+   OracleDataSet1.SQL.Add('select * from  Emanet where Tip=1 order by bal_cn');
+   OracleDataSet1.Open;
+ end;       }
+end;
+
+procedure TEmanet.ActiveFormCreate(Sender: TObject);
+begin
+ComboBox1.ItemIndex:=0;
+DTP1.DateTime :=OraclePackage1.CallDateFunction('GetBankDay',[]);
+DTP2.DateTime :=OraclePackage1.CallDateFunction('GetBankDay',[]);
+OracleDataSet1.Active:=true;
+OracleDataSet2.Active:=true;
+F:=1;
+end;
+
+procedure TEmanet.Edit2KeyPress(Sender: TObject; var Key: Char);
+begin
+  if not(Ord(Key)=8) then
+  if ((Length((Sender as TEdit).Text)>4) and ((Sender as TEdit).SelLength=0)) or (not(key in ['0'..'9']) ) then
+  key:=#0;
+end;
+
+procedure TEmanet.Edit2Enter(Sender: TObject);
+begin
+  Edit2.Clear;
+end;
+
+procedure TEmanet.Edit1KeyPress(Sender: TObject; var Key: Char);
+begin
+  if not(Ord(Key)=8) then
+  if ((Length((Sender as TEdit).Text)>4) and ((Sender as TEdit).SelLength=0)) or (not(key in ['0'..'9']) ) then
+  key:=#0;
+end;
+
+procedure TEmanet.Edit1Enter(Sender: TObject);
+begin
+  Edit1.Clear;
+end;
+
+procedure TEmanet.DBViewComboBox1Change(Sender: TObject);
+begin
+  Text:=DBViewComboBox1.Text;
+end;
+
+procedure TEmanet.Insert_Umumi_Emanet;
+var
+ TmpBal: Integer;
+begin
+TmpBal:=StrToIntDef(Text,0);
+if TmpBal=0 then Exit;
+if OracleDataSet1.Active  then
+begin
+  if PageControl1.ActivePageIndex=0 then OraclePackage1.CallProcedure('Insert_Balans',[IntToStr(TmpBal),0]);
+  if PageControl1.ActivePageIndex=1 then OraclePackage1.CallProcedure('Insert_Balans',[IntToStr(TmpBal),1]);
+  if PageControl1.ActivePageIndex=2 then OraclePackage1.CallProcedure('Insert_Balans',[IntToStr(TmpBal),2]);
+end;
+OracleDataSet1.Refresh;
+end;
+procedure TEmanet.BitBtn1Click(Sender: TObject);
+begin
+  if Edit1.text<>'' then Text:=Edit1.Text;
+  Insert_Umumi_Emanet;
+  Edit1.clear;
+  DBViewComboBox1.Text:='';
+end;
+
+procedure TEmanet.DBViewComboBox2Change(Sender: TObject);
+begin
+  Text:=DBViewComboBox2.Text;
+end;
+
+procedure TEmanet.BitBtn3Click(Sender: TObject);
+begin
+  if Edit2.text<>'' then Text:=Edit2.Text;
+  Insert_Umumi_Emanet;
+  Edit2.clear;
+  DBViewComboBox2.Text:='';
+end;
+
+procedure TEmanet.Setfilter(FType: string);
+begin
+ OracleDataSet1.Filter:='(Tip='+FTYPE+')';
+end;
+
+procedure TEmanet.TabSheet1Show(Sender: TObject);
+begin
+  Setfilter('0');
+end;
+
+procedure TEmanet.TabSheet2Show(Sender: TObject);
+begin
+  Setfilter('1');
+end;
+
+procedure TEmanet.Delete_Emanet;
+begin
+with OracleDataSet1,OracleDataSet1ID do
+   if Active and  (AsInteger>0) then
+   OraclePackage1.CallProcedure('Delete_Balans',[OracleDataSet1ID.AsInteger]);
+OracleDataSet1.Refresh;
+end;
+procedure TEmanet.BitBtn2Click(Sender: TObject);
+begin
+  Delete_Emanet;
+end;
+
+procedure TEmanet.BitBtn4Click(Sender: TObject);
+begin
+  Delete_Emanet;
+end;
+
+procedure TEmanet.BitBtn5Click(Sender: TObject);
+var V, Sheet, Sheets   :Variant;
+    cell, row, i, j ,k,P,K1,T   :Integer;
+    RR,R1:real;
+    E_Row1,OpenedXlsCnt,VCOD:Integer;
+    VTIP,Soz:string;
+    IL: string;
+begin
+  {Bas:=FormatDateTime('dd-MMM-yyyy',trunc(DTP1.DateTime));
+  Son:=FormatDateTime('dd-MMM-yyyy',trunc(DTP2.DateTime));
+  If Son>=Bas then
+  begin }
+  ExcelApplication1.Disconnect;
+  V :=ExcelApplication1.Application;
+  ExcelApplication1.Connect;
+  //ExcelApplication1.Visible[0] :=True;
+  V.Workbooks.Open(ExtractFilePath(ExtractFilePath(ParamStr(0)))+ 'Emanetler.xls');
+  for OpenedXlsCnt :=1 to 100 do
+  try
+   Sheet := V.Workbooks[OpenedXlsCnt].Worksheets['Sheet1'];
+   Break;
+  except
+  end;
+  Sheets := V.Sheets;
+  Sheets.Item['Sheet1'].Activate;
+  IL:=FormatDateTime('yyyy',trunc(DTP1.DateTime));
+  Sheet.cells[1,2]:=IL;
+  Bas:=FormatDateTime('dd-MMM-yyyy',trunc(DTP1.DateTime));
+  Son:=FormatDateTime('dd-MMM-yyyy',trunc(DTP2.DateTime));
+  Sheet.cells[2,2]:=Bas+'_______'+son;
+
+  Sheet.cells[8,1].Font.Name :='Arial Az Lat';
+  Sheet.Cells[8,1].Font.Bold :=true;
+  Sheet.Cells[8,1].Font.size :=12;
+  Soz:=' яман€тл€р   ўаггында   ўесабат';
+  sheet.cells[8,1]:=Soz;
+
+   {********************************************* I-ci cedvel *****************************************************}
+
+  Gauge1.Progress:=1;
+  Application.ProcessMessages;
+  OraclePackage1.CallProcedure('Qaliqlar',[bas,son,0,2,P]);
+  k:=OraclePackage1.GetParameter(4);
+  Sheet.cells[11,3]:=k;
+
+  Gauge1.Progress:=2;
+  Application.ProcessMessages;
+  OraclePackage1.CallProcedure('Umumi_Hesablar',[bas,son,0,2,P]);
+  k:=OraclePackage1.GetParameter(4);
+  Sheet.cells[11,4]:=k;
+
+  Gauge1.Progress:=3;
+  Application.ProcessMessages;
+  OraclePackage1.CallProcedure('Musteriler',[bas,son,0,2,P]);
+  k:=OraclePackage1.GetParameter(4);
+  Sheet.cells[11,5]:=k;
+
+  Gauge1.Progress:=4;
+  Application.ProcessMessages;
+  OraclePackage1.CallProcedure('Qaliqlar',[bas,son,1,2,P]);
+  k:=OraclePackage1.GetParameter(4);
+  Sheet.cells[12,3]:=k;
+  Gauge1.Progress:=5;
+  Application.ProcessMessages;
+  OraclePackage1.CallProcedure('Umumi_Hesablar',[bas,son,1,2,P]);
+  k:=OraclePackage1.GetParameter(4);
+  Sheet.cells[12,4]:=k;
+
+  Gauge1.Progress:=6;
+  Application.ProcessMessages;
+  OraclePackage1.CallProcedure('Musteriler',[bas,son,1,2,P]);
+  k:=OraclePackage1.GetParameter(4);
+  Sheet.cells[12,5]:=k;
+
+  Gauge1.Progress:=7;
+  Application.ProcessMessages;
+  VTIP:=Hesabin_tipi(1);
+  OraclePackage1.CallProcedure('HQaliqlar',[bas,son,1,VTIP,P]);
+  k:=OraclePackage1.GetParameter(4);
+  Sheet.cells[15,3]:=k;
+
+  Gauge1.Progress:=8;
+  Application.ProcessMessages;
+  OraclePackage1.CallProcedure('Herif_Hesablar',[bas,son,1,VTIP,P]);
+  k:=OraclePackage1.GetParameter(4);
+  Sheet.cells[15,4]:=k;
+
+  Gauge1.Progress:=9;
+  Application.ProcessMessages;
+  OraclePackage1.CallProcedure('HMusteriler',[bas,son,1,VTIP,P]);
+  k:=OraclePackage1.GetParameter(4);
+  Sheet.cells[15,5]:=k;
+
+  Gauge1.Progress:=10;
+  Application.ProcessMessages;
+  VTIP:=Hesabin_tipi(2);
+  OraclePackage1.CallProcedure('HQaliqlar',[bas,son,1,VTIP,P]);
+  k:=OraclePackage1.GetParameter(4);
+  Sheet.cells[16,3]:=k;
+
+  Gauge1.Progress:=11;
+  Application.ProcessMessages;
+  OraclePackage1.CallProcedure('Herif_Hesablar',[bas,son,1,VTIP,P]);
+  k:=OraclePackage1.GetParameter(4);
+  Sheet.cells[16,4]:=k;
+
+  Gauge1.Progress:=12;
+  Application.ProcessMessages;
+  OraclePackage1.CallProcedure('HMusteriler',[bas,son,1,VTIP,P]);
+  k:=OraclePackage1.GetParameter(4);
+  Sheet.cells[16,5]:=k;
+
+  Gauge1.Progress:=13;
+  Application.ProcessMessages;
+  VTIP:=Hesabin_tipi(3);
+  OraclePackage1.CallProcedure('HQaliqlar',[bas,son,1,VTIP,P]);
+  k:=OraclePackage1.GetParameter(4);
+  Sheet.cells[17,3]:=k;
+
+  Gauge1.Progress:=14;
+  Application.ProcessMessages;
+  OraclePackage1.CallProcedure('Herif_Hesablar',[bas,son,1,VTIP,P]);
+  k:=OraclePackage1.GetParameter(4);
+  Sheet.cells[17,4]:=k;
+
+  Gauge1.Progress:=15;
+  Application.ProcessMessages;
+  OraclePackage1.CallProcedure('HMusteriler',[bas,son,1,VTIP,P]);
+  k:=OraclePackage1.GetParameter(4);
+  Sheet.cells[17,5]:=k;
+
+  Gauge1.Progress:=16;
+  Application.ProcessMessages;
+  k:= StrToInt(Sheet.cells[15,3])+StrToInt(Sheet.cells[16,3])+StrToInt(Sheet.cells[17,3]);
+  Sheet.cells[14,3]:=k ;
+  k:= StrToInt(Sheet.cells[15,4])+StrToInt(Sheet.cells[16,4])+StrToInt(Sheet.cells[17,4]);
+  Sheet.cells[14,4]:=k ;
+  k:= StrToInt(Sheet.cells[15,5])+StrToInt(Sheet.cells[16,5])+StrToInt(Sheet.cells[17,5]);
+  Sheet.cells[14,5]:=k ;
+
+  Gauge1.Progress:=17;
+  Application.ProcessMessages;
+  VTIP:=Hesabin_tipi(4);
+  OraclePackage1.CallProcedure('HQaliqlar',[bas,son,1,VTIP,P]);
+  k:=OraclePackage1.GetParameter(4);
+  Sheet.cells[19,3]:=k;
+
+  Gauge1.Progress:=18;
+  Application.ProcessMessages;
+  OraclePackage1.CallProcedure('Herif_Hesablar',[bas,son,1,VTIP,P]);
+  k:=OraclePackage1.GetParameter(4);
+  Sheet.cells[19,4]:=k;
+
+  Gauge1.Progress:=19;
+  Application.ProcessMessages;
+  OraclePackage1.CallProcedure('HMusteriler',[bas,son,1,VTIP,P]);
+  k:=OraclePackage1.GetParameter(4);
+  Sheet.cells[19,5]:=k;
+
+  Gauge1.Progress:=20;
+  Application.ProcessMessages;
+  VTIP:=Hesabin_tipi(5);
+  OraclePackage1.CallProcedure('HQaliqlar',[bas,son,1,VTIP,P]);
+  k:=OraclePackage1.GetParameter(4);
+  Sheet.cells[20,3]:=k;
+
+  Gauge1.Progress:=21;
+  Application.ProcessMessages;
+  OraclePackage1.CallProcedure('Herif_Hesablar',[bas,son,1,VTIP,P]);
+  k:=OraclePackage1.GetParameter(4);
+  Sheet.cells[20,4]:=k;
+
+  Gauge1.Progress:=22;
+  Application.ProcessMessages;
+  OraclePackage1.CallProcedure('HMusteriler',[bas,son,1,VTIP,P]);
+  k:=OraclePackage1.GetParameter(4);
+  Sheet.cells[20,5]:=k;
+
+  Gauge1.Progress:=23;
+  Application.ProcessMessages;
+  VTIP:=Hesabin_tipi(6);
+  OraclePackage1.CallProcedure('HQaliqlar',[bas,son,1,VTIP,P]);
+  k:=OraclePackage1.GetParameter(4);
+  Sheet.cells[21,3]:=k;
+
+  Gauge1.Progress:=24;
+  Application.ProcessMessages;
+  OraclePackage1.CallProcedure('Herif_Hesablar',[bas,son,1,VTIP,P]);
+  k:=OraclePackage1.GetParameter(4);
+  Sheet.cells[21,4]:=k;
+
+  Gauge1.Progress:=25;
+  Application.ProcessMessages;
+  OraclePackage1.CallProcedure('HMusteriler',[bas,son,1,VTIP,P]);
+  k:=OraclePackage1.GetParameter(4);
+  Sheet.cells[21,5]:=k;
+
+  Gauge1.Progress:=26;
+  Application.ProcessMessages;
+  VTIP:=Hesabin_tipi(7);
+  OraclePackage1.CallProcedure('HQaliqlar',[bas,son,1,VTIP,P]);
+  k:=OraclePackage1.GetParameter(4);
+  Sheet.cells[22,3]:=k;
+
+  Gauge1.Progress:=27;
+  Application.ProcessMessages;
+  OraclePackage1.CallProcedure('Herif_Hesablar',[bas,son,1,VTIP,P]);
+  k:=OraclePackage1.GetParameter(4);
+  Sheet.cells[22,4]:=k;
+
+  Gauge1.Progress:=28;
+  Application.ProcessMessages;
+  OraclePackage1.CallProcedure('HMusteriler',[bas,son,1,VTIP,P]);
+  k:=OraclePackage1.GetParameter(4);
+  Sheet.cells[22,5]:=k;
+
+  Gauge1.Progress:=29 ;
+  Application.ProcessMessages;
+  VTIP:=Hesabin_tipi(8);
+  OraclePackage1.CallProcedure('HQaliqlar',[bas,son,1,VTIP,P]);
+  k:=OraclePackage1.GetParameter(4);
+  Sheet.cells[23,3]:=k;
+
+  Gauge1.Progress:=30;
+  Application.ProcessMessages;
+  OraclePackage1.CallProcedure('Herif_Hesablar',[bas,son,1,VTIP,P]);
+  k:=OraclePackage1.GetParameter(4);
+  Sheet.cells[23,4]:=k;
+
+  Gauge1.Progress:=31;
+  Application.ProcessMessages;
+  OraclePackage1.CallProcedure('HMusteriler',[bas,son,1,VTIP,P]);
+  k:=OraclePackage1.GetParameter(4);
+  Sheet.cells[23,5]:=k;
+
+  Gauge1.Progress:=32;
+  Application.ProcessMessages;
+  VTIP:=Hesabin_tipi(9);
+  OraclePackage1.CallProcedure('HQaliqlar',[bas,son,1,VTIP,P]);
+  k:=OraclePackage1.GetParameter(4);
+  Sheet.cells[24,3]:=k;
+
+  Gauge1.Progress:=33;
+  Application.ProcessMessages;
+  OraclePackage1.CallProcedure('Herif_Hesablar',[bas,son,1,VTIP,P]);
+  k:=OraclePackage1.GetParameter(4);
+  Sheet.cells[24,4]:=k;
+
+  Gauge1.Progress:=34;
+  Application.ProcessMessages;
+  OraclePackage1.CallProcedure('HMusteriler',[bas,son,1,VTIP,P]);
+  k:=OraclePackage1.GetParameter(4);
+  Sheet.cells[24,5]:=k;
+
+  Gauge1.Progress:=35;
+  Application.ProcessMessages;
+  VTIP:=Hesabin_tipi(10);
+  OraclePackage1.CallProcedure('HQaliqlar',[bas,son,1,VTIP,P]);
+  k:=OraclePackage1.GetParameter(4);
+  Sheet.cells[25,3]:=k;
+
+  Gauge1.Progress:=36;
+  Application.ProcessMessages;
+  OraclePackage1.CallProcedure('Herif_Hesablar',[bas,son,1,VTIP,P]);
+  k:=OraclePackage1.GetParameter(4);
+  Sheet.cells[25,4]:=k;
+
+  Gauge1.Progress:=37;
+  Application.ProcessMessages;
+  OraclePackage1.CallProcedure('HMusteriler',[bas,son,1,VTIP,P]);
+  k:=OraclePackage1.GetParameter(4);
+  Sheet.cells[25,5]:=k;
+
+  Gauge1.Progress:=38;
+  Application.ProcessMessages;
+  VTIP:=Hesabin_tipi(11);
+  OraclePackage1.CallProcedure('HQaliqlar',[bas,son,1,VTIP,P]);
+  k:=OraclePackage1.GetParameter(4);
+  Sheet.cells[26,3]:=k;
+
+  Gauge1.Progress:=39;
+  Application.ProcessMessages;
+  OraclePackage1.CallProcedure('Herif_Hesablar',[bas,son,1,VTIP,P]);
+  k:=OraclePackage1.GetParameter(4);
+  Sheet.cells[26,4]:=k;
+
+  Gauge1.Progress:=40;
+  Application.ProcessMessages;
+  OraclePackage1.CallProcedure('HMusteriler',[bas,son,1,VTIP,P]);
+  k:=OraclePackage1.GetParameter(4);
+  Sheet.cells[26,5]:=k;
+
+  Gauge1.Progress:=41;
+  Application.ProcessMessages;
+  VTIP:=Hesabin_tipi(12);
+  OraclePackage1.CallProcedure('HQaliqlar',[bas,son,2,VTIP,P]);
+  k:=OraclePackage1.GetParameter(4);
+  Sheet.cells[27,3]:=k;
+
+  Gauge1.Progress:=42;
+  Application.ProcessMessages;
+  OraclePackage1.CallProcedure('Herif_Hesablar',[bas,son,2,VTIP,P]);
+  k:=OraclePackage1.GetParameter(4);
+  Sheet.cells[27,4]:=k;
+
+  Gauge1.Progress:=43;
+  Application.ProcessMessages;
+  OraclePackage1.CallProcedure('HMusteriler',[bas,son,2,VTIP,P]);
+  k:=OraclePackage1.GetParameter(4);
+  Sheet.cells[27,5]:=k;
+
+  Gauge1.Progress:=44;
+  Application.ProcessMessages;
+  VTIP:=Hesabin_tipi(13);
+  OraclePackage1.CallProcedure('HQaliqlar',[bas,son,2,VTIP,P]);
+  k:=OraclePackage1.GetParameter(4);
+  Sheet.cells[28,3]:=k;
+
+  Gauge1.Progress:=45;
+  Application.ProcessMessages;
+  OraclePackage1.CallProcedure('Herif_Hesablar',[bas,son,2,VTIP,P]);
+  k:=OraclePackage1.GetParameter(4);
+  Sheet.cells[28,4]:=k;
+
+  Gauge1.Progress:=46;
+  Application.ProcessMessages;
+  OraclePackage1.CallProcedure('HMusteriler',[bas,son,2,VTIP,P]);
+  k:=OraclePackage1.GetParameter(4);
+  Sheet.cells[28,5]:=k;
+
+  Gauge1.Progress:=47;
+  Application.ProcessMessages;
+
+  k:= StrToInt(Sheet.cells[19,3])+StrToInt(Sheet.cells[20,3])+ StrToInt(Sheet.cells[21,3])+StrToInt(Sheet.cells[22,3])+
+      StrToInt(Sheet.cells[23,3])+StrToInt(Sheet.cells[24,3])+ StrToInt(Sheet.cells[25,3])+
+      StrToInt(Sheet.cells[26,3])+StrToInt(Sheet.cells[27,3])+ StrToInt(Sheet.cells[28,3]);
+
+  Sheet.cells[18,3]:=k;
+
+  k:= StrToInt(Sheet.cells[19,4])+StrToInt(Sheet.cells[20,4])+ StrToInt(Sheet.cells[21,4])+StrToInt(Sheet.cells[22,4])+
+      StrToInt(Sheet.cells[23,4])+StrToInt(Sheet.cells[24,4])+ StrToInt(Sheet.cells[25,4])+
+      StrToInt(Sheet.cells[26,4])+StrToInt(Sheet.cells[27,4])+ StrToInt(Sheet.cells[28,4]);
+
+  Sheet.cells[18,4]:=k;
+
+  k:= StrToInt(Sheet.cells[19,5])+StrToInt(Sheet.cells[20,5])+ StrToInt(Sheet.cells[21,5])+StrToInt(Sheet.cells[22,5])+
+      StrToInt(Sheet.cells[23,5])+StrToInt(Sheet.cells[24,5])+ StrToInt(Sheet.cells[25,5])+
+      StrToInt(Sheet.cells[26,5])+StrToInt(Sheet.cells[27,5])+ StrToInt(Sheet.cells[28,5]);
+
+  Sheet.cells[18,5]:=k;
+
+  k:=StrToInt(Sheet.cells[12,3])-StrToInt(Sheet.cells[14,3])- StrToInt(Sheet.cells[18,3]);
+  Sheet.cells[30,3]:=k;
+
+  k:=StrToInt(Sheet.cells[12,4])-StrToInt(Sheet.cells[14,4])- StrToInt(Sheet.cells[18,4]);
+  Sheet.cells[30,4]:=k;
+
+  k:=StrToInt(Sheet.cells[12,5])-StrToInt(Sheet.cells[14,5])- StrToInt(Sheet.cells[18,5]);
+  Sheet.cells[30,5]:=k;
+
+  {********************************************* II-ci cedvel *****************************************************}
+
+  Gauge1.Progress:=48;
+  Application.ProcessMessages;
+  VCOD:= Valyutanin_Kodu('AZN');
+  OraclePackage1.CallProcedure('VAL_Qaliqlar',[bas,son,VCOD,P]);
+  k:=OraclePackage1.GetParameter(3);
+  Sheet.cells[33,4]:=k;
+
+  Gauge1.Progress:=49;
+  Application.ProcessMessages;
+  OraclePackage1.CallProcedure('Val_Hesablar',[bas,son,VCOD,P]);
+  k:=OraclePackage1.GetParameter(3);
+  Sheet.cells[33,5]:=k;
+
+  Gauge1.Progress:=50;
+  Application.ProcessMessages;
+  OraclePackage1.CallProcedure('VALMusteriler',[bas,son,VCOD,P]);
+  k:=OraclePackage1.GetParameter(3);
+  Sheet.cells[33,6]:=k;
+
+  Sheet.cells[33,8]:=1;
+
+  Gauge1.Progress:=51;
+  Application.ProcessMessages;
+  VCOD:= Valyutanin_Kodu('USD');
+  OraclePackage1.CallProcedure('VAL_Qaliqlar',[bas,son,VCOD,P]);
+  k:=OraclePackage1.GetParameter(3);
+  Sheet.cells[34,4]:=k;
+
+  Gauge1.Progress:=52;
+  Application.ProcessMessages;
+  OraclePackage1.CallProcedure('Val_Hesablar',[bas,son,VCOD,P]);
+  k:=OraclePackage1.GetParameter(3);
+  Sheet.cells[34,5]:=k;
+
+  Gauge1.Progress:=53;
+  Application.ProcessMessages;
+  OraclePackage1.CallProcedure('VALMusteriler',[bas,son,VCOD,P]);
+  k:=OraclePackage1.GetParameter(3);
+  Sheet.cells[34,6]:=k;
+
+  Gauge1.Progress:=54;
+  Application.ProcessMessages;
+  OraclePackage1.CallProcedure('Kurs',[son,VCOD,R1]);
+  RR:=OraclePackage1.GetParameter(2);
+  Sheet.cells[34,8]:=RR;
+
+  RR:=round(StrToInt(Sheet.cells[34,4])/StrToFloat(Sheet.cells[34,8]));
+  Sheet.cells[34,3]:=RR;
+
+
+  Gauge1.Progress:=55;
+  Application.ProcessMessages;
+  VCOD:= Valyutanin_Kodu('EUR');
+  OraclePackage1.CallProcedure('VAL_Qaliqlar',[bas,son,VCOD,P]);
+  k:=OraclePackage1.GetParameter(3);
+  Sheet.cells[35,4]:=k;
+
+  Gauge1.Progress:=56;
+  Application.ProcessMessages;
+  OraclePackage1.CallProcedure('Val_Hesablar',[bas,son,VCOD,P]);
+  k:=OraclePackage1.GetParameter(3);
+  Sheet.cells[35,5]:=k;
+
+  Gauge1.Progress:=57;
+  Application.ProcessMessages;
+  OraclePackage1.CallProcedure('VALMusteriler',[bas,son,VCOD,P]);
+  k:=OraclePackage1.GetParameter(3);
+  Sheet.cells[35,6]:=k;
+
+  Gauge1.Progress:=58;
+  Application.ProcessMessages;
+  OraclePackage1.CallProcedure('Kurs',[son,VCOD,R1]);
+  RR:=OraclePackage1.GetParameter(2);
+  Sheet.cells[35,8]:=RR;
+
+
+  RR:=round(StrToInt(Sheet.cells[35,4])/StrToFloat(Sheet.cells[35,8]));
+  Sheet.cells[35,3]:=RR;
+
+  Gauge1.Progress:=59;
+  Application.ProcessMessages;
+  VCOD:= Valyutanin_Kodu('RUB');
+  OraclePackage1.CallProcedure('VAL_Qaliqlar',[bas,son,VCOD,P]);
+  k:=OraclePackage1.GetParameter(3);
+  Sheet.cells[38,4]:=k;
+
+  Gauge1.Progress:=60;
+  Application.ProcessMessages;
+  OraclePackage1.CallProcedure('Val_Hesablar',[bas,son,VCOD,P]);
+  k:=OraclePackage1.GetParameter(3);
+  Sheet.cells[38,5]:=k;
+
+  Gauge1.Progress:=61;
+  Application.ProcessMessages;
+  OraclePackage1.CallProcedure('VALMusteriler',[bas,son,VCOD,P]);
+  k:=OraclePackage1.GetParameter(3);
+  Sheet.cells[38,6]:=k;
+
+  Gauge1.Progress:=62;
+  Application.ProcessMessages;
+  OraclePackage1.CallProcedure('Kurs',[son,VCOD,R1]);
+  RR:=OraclePackage1.GetParameter(2);
+  Sheet.cells[38,8]:=RR;
+
+  RR:=round(StrToInt(Sheet.cells[38,4])/StrToFloat(Sheet.cells[38,8]));
+  Sheet.cells[38,3]:=RR;
+
+  Gauge1.Progress:=63;
+  Application.ProcessMessages;
+  VCOD:= Valyutanin_Kodu('GBP');
+  OraclePackage1.CallProcedure('VAL_Qaliqlar',[bas,son,VCOD,P]);
+  k:=OraclePackage1.GetParameter(3);
+  Sheet.cells[39,4]:=k;
+
+  Gauge1.Progress:=64;
+  Application.ProcessMessages;
+  OraclePackage1.CallProcedure('Val_Hesablar',[bas,son,VCOD,P]);
+  k:=OraclePackage1.GetParameter(3);
+  Sheet.cells[39,5]:=k;
+
+  Gauge1.Progress:=65;
+  Application.ProcessMessages;
+  OraclePackage1.CallProcedure('VALMusteriler',[bas,son,VCOD,P]);
+  k:=OraclePackage1.GetParameter(3);
+  Sheet.cells[39,6]:=k;
+
+  Gauge1.Progress:=66;
+  Application.ProcessMessages;
+  OraclePackage1.CallProcedure('Kurs',[son,VCOD,R1]);
+  RR:=OraclePackage1.GetParameter(2);
+  Sheet.cells[39,8]:=RR;
+
+  RR:=round(StrToInt(Sheet.cells[39,4])/StrToFloat(Sheet.cells[39,8]));
+  Sheet.cells[39,3]:=RR;
+
+  Gauge1.Progress:=67;
+  Application.ProcessMessages;
+  if F=1 then begin
+                Sheet.cells[37,3]:='';
+                Sheet.cells[37,4]:='';
+                Sheet.cells[37,5]:='';
+                Sheet.cells[37,6]:='';
+                Sheet.cells[37,8]:='';
+                k:=StrToInt(Sheet.cells[38,4])+StrToInt(Sheet.cells[39,4]);
+                Sheet.cells[36,4]:=k;
+                k:=StrToInt(Sheet.cells[38,5])+StrToInt(Sheet.cells[39,5]);
+                Sheet.cells[36,5]:=k;
+                k:=StrToInt(Sheet.cells[38,6])+StrToInt(Sheet.cells[39,6]);
+                Sheet.cells[36,6]:=k;
+                RR:=Sheet.cells[34,8];
+                Sheet.cells[36,8]:=RR;
+                k:=round(StrToInt(Sheet.cells[36,4])/strtofloat(Sheet.cells[36,8]));
+                Sheet.cells[36,3]:=k;
+              end;
+  if F=2 then begin
+                Sheet.cells[36,3]:='';
+                Sheet.cells[36,4]:='';
+                Sheet.cells[36,5]:='';
+                Sheet.cells[36,6]:='';
+                Sheet.cells[36,8]:='';
+                k:=round(StrToInt(Sheet.cells[38,4])+StrToint(Sheet.cells[39,4]));
+                Sheet.cells[37,4]:=k;
+                k:=StrToInt(Sheet.cells[38,4])+StrToInt(Sheet.cells[39,4]);
+                Sheet.cells[37,5]:=k;
+                k:=StrToInt(Sheet.cells[38,5])+StrToInt(Sheet.cells[39,5]);
+                Sheet.cells[37,6]:=k;
+                RR:=Sheet.cells[35,8];
+                Sheet.cells[37,8]:=RR;
+                k:=round(StrToInt(Sheet.cells[37,4])/strtofloat(Sheet.cells[37,8]));
+                Sheet.cells[37,3]:=k;
+              end;
+
+  Gauge1.Progress:=68;
+  Application.ProcessMessages;
+  IF F=1 then
+  begin
+    k:=StrToInt(Sheet.cells[33,4])+StrToInt(Sheet.cells[34,4])+StrToInt(Sheet.cells[35,4])+StrToInt(Sheet.cells[36,4]);
+    Sheet.cells[45,4]:=k;
+    k:=StrToInt(Sheet.cells[33,5])+StrToInt(Sheet.cells[34,5])+StrToInt(Sheet.cells[35,5])+StrToInt(Sheet.cells[36,5]);
+    Sheet.cells[45,5]:=k;
+    k:=StrToInt(Sheet.cells[33,6])+StrToInt(Sheet.cells[34,6])+StrToInt(Sheet.cells[35,6])+StrToInt(Sheet.cells[36,6]);
+    Sheet.cells[45,6]:=k;
+  end;
+  IF F=2 then
+  begin
+    k:=StrToInt(Sheet.cells[33,4])+StrToInt(Sheet.cells[34,4])+StrToInt(Sheet.cells[35,4])+StrToInt(Sheet.cells[37,4]);
+    Sheet.cells[45,4]:=k;
+    k:=StrToInt(Sheet.cells[33,5])+StrToInt(Sheet.cells[34,5])+StrToInt(Sheet.cells[35,5])+StrToInt(Sheet.cells[37,5]);
+    Sheet.cells[45,5]:=k;
+    k:=StrToInt(Sheet.cells[33,6])+StrToInt(Sheet.cells[34,6])+StrToInt(Sheet.cells[35,6])+StrToInt(Sheet.cells[37,6]);
+    Sheet.cells[45,6]:=k;
+  end;
+
+  Gauge1.Progress:=69;
+  Application.ProcessMessages;
+  k:=Sheet.cells[33,4];
+  Sheet.cells[47,3]:=k;
+  Sheet.cells[48,3]:='0.125%';
+  k:=round(StrToInt(Sheet.cells[47,3])*0.125);
+  Sheet.cells[49,3]:=k;
+  k:=Sheet.cells[34,4];
+  Sheet.cells[47,4]:=k;
+  Sheet.cells[48,4]:='0.125%';
+  k:=round(StrToInt(Sheet.cells[47,4])*0.125);
+  Sheet.cells[49,4]:=k;
+  k:=Sheet.cells[35,4];
+  Sheet.cells[47,5]:=k;
+  Sheet.cells[48,5]:='0.125%';
+  k:=round(StrToInt(Sheet.cells[47,5])*0.125);
+  Sheet.cells[49,5]:=k;
+  IF F=1 then  begin
+                 Sheet.cells[47,7]:='';
+                 Sheet.cells[48,7]:='';
+                 Sheet.cells[49,7]:='';
+                 k:=Sheet.cells[36,4];
+                 Sheet.cells[47,6]:=k;
+                 Sheet.cells[48,6]:='0.125%';
+                 k:=round(StrToInt(Sheet.cells[47,6])*0.125);
+                 Sheet.cells[49,6]:=k;
+               end;
+  IF F=2 then  begin
+                 Sheet.cells[47,6]:='';
+                 Sheet.cells[48,6]:='';
+                 Sheet.cells[49,6]:='';
+                 k:=Sheet.cells[37,4];
+                 Sheet.cells[47,7]:=k;
+                 Sheet.cells[48,7]:='0.125%';
+                 k:=round(StrToInt(Sheet.cells[47,7])*0.125);
+                 Sheet.cells[49,7]:=k;
+               end;
+
+  {********************************************* III-ci cedvel *****************************************************}
+
+  Gauge1.Progress:=75;
+  Application.ProcessMessages;
+  VCOD:= Valyutanin_Kodu('AZN');
+  OraclePackage1.CallProcedure('Amount_Qaliqlar',[bas,son,0.01,1000,VCOD,P]);
+  k:=OraclePackage1.GetParameter(5);
+  Sheet.cells[54,3]:=k;
+  OraclePackage1.CallProcedure('Amount_Hesablar',[bas,son,0.01,1000,VCOD,P]);
+  k:=OraclePackage1.GetParameter(5);
+  Sheet.cells[54,4]:=k;
+  k:=0;
+  VCOD:= Valyutanin_Kodu('USD');
+  OraclePackage1.CallProcedure('Amount_Qaliqlar',[bas,son,0.01,1000,VCOD,P]);
+  k:=k+OraclePackage1.GetParameter(5);
+  VCOD:= Valyutanin_Kodu('EUR');
+  OraclePackage1.CallProcedure('Amount_Qaliqlar',[bas,son,0.01,1000,VCOD,P]);
+  k:=k+OraclePackage1.GetParameter(5);
+  VCOD:= Valyutanin_Kodu('RUB');
+  OraclePackage1.CallProcedure('Amount_Qaliqlar',[bas,son,0.01,1000,VCOD,P]);
+  k:=k+OraclePackage1.GetParameter(5);
+  VCOD:= Valyutanin_Kodu('GBP');
+  OraclePackage1.CallProcedure('Amount_Qaliqlar',[bas,son,0.01,1000,VCOD,P]);
+  k:=k+OraclePackage1.GetParameter(5);
+  Sheet.cells[54,5]:=k;
+  k:=0;
+  VCOD:= Valyutanin_Kodu('USD');
+  OraclePackage1.CallProcedure('Amount_Hesablar',[bas,son,0.01,1000,VCOD,P]);
+  k:=k+OraclePackage1.GetParameter(5);
+  VCOD:= Valyutanin_Kodu('EUR');
+  OraclePackage1.CallProcedure('Amount_Hesablar',[bas,son,0.01,1000,VCOD,P]);
+  k:=k+OraclePackage1.GetParameter(5);
+  VCOD:= Valyutanin_Kodu('RUB');
+  OraclePackage1.CallProcedure('Amount_Hesablar',[bas,son,0.01,1000,VCOD,P]);
+  k:=k+OraclePackage1.GetParameter(5);
+  VCOD:= Valyutanin_Kodu('GBP');
+  OraclePackage1.CallProcedure('Amount_Hesablar',[bas,son,0.01,1000,VCOD,P]);
+  k:=k+OraclePackage1.GetParameter(5);
+  Sheet.cells[54,6]:=k;
+  k:=StrToInt(Sheet.cells[54,3])+StrToInt(Sheet.cells[54,5]);
+  Sheet.cells[54,7]:=k;
+  k:=StrToInt(Sheet.cells[54,4])+StrToInt(Sheet.cells[54,6]);
+  Sheet.cells[54,8]:=k;
+  OraclePackage1.CallProcedure('AmountMusteriler',[bas,son,0.01,1000,P]);
+  k:=OraclePackage1.GetParameter(4);
+  Sheet.cells[54,9]:=k;
+
+  {******************************************************************************************************************}
+
+  Gauge1.Progress:=80;
+  Application.ProcessMessages;
+  VCOD:= Valyutanin_Kodu('AZN');
+  OraclePackage1.CallProcedure('Amount_Qaliqlar',[bas,son,1000.01,6000,VCOD,P]);
+  k:=OraclePackage1.GetParameter(5);
+  Sheet.cells[55,3]:=k;
+  OraclePackage1.CallProcedure('Amount_Hesablar',[bas,son,1000.01,6000,VCOD,P]);
+  k:=OraclePackage1.GetParameter(5);
+  Sheet.cells[55,4]:=k;
+  k:=0;
+  VCOD:= Valyutanin_Kodu('USD');
+  OraclePackage1.CallProcedure('Amount_Qaliqlar',[bas,son,1000.01,6000,VCOD,P]);
+  k:=k+OraclePackage1.GetParameter(5);
+  VCOD:= Valyutanin_Kodu('EUR');
+  OraclePackage1.CallProcedure('Amount_Qaliqlar',[bas,son,1000.01,6000,VCOD,P]);
+  k:=k+OraclePackage1.GetParameter(5);
+  VCOD:= Valyutanin_Kodu('RUB');
+  OraclePackage1.CallProcedure('Amount_Qaliqlar',[bas,son,1000.01,6000,VCOD,P]);
+  k:=k+OraclePackage1.GetParameter(5);
+  VCOD:= Valyutanin_Kodu('GBP');
+  OraclePackage1.CallProcedure('Amount_Qaliqlar',[bas,son,1000.01,6000,VCOD,P]);
+  k:=k+OraclePackage1.GetParameter(5);
+  Sheet.cells[55,5]:=k;
+  k:=0;
+  VCOD:= Valyutanin_Kodu('USD');
+  OraclePackage1.CallProcedure('Amount_Hesablar',[bas,son,1000.01,6000,VCOD,P]);
+  k:=k+OraclePackage1.GetParameter(5);
+  VCOD:= Valyutanin_Kodu('EUR');
+  OraclePackage1.CallProcedure('Amount_Hesablar',[bas,son,1000.01,6000,VCOD,P]);
+  k:=k+OraclePackage1.GetParameter(5);
+  VCOD:= Valyutanin_Kodu('RUB');
+  OraclePackage1.CallProcedure('Amount_Hesablar',[bas,son,1000.01,6000,VCOD,P]);
+  k:=k+OraclePackage1.GetParameter(5);
+  VCOD:= Valyutanin_Kodu('GBP');
+  OraclePackage1.CallProcedure('Amount_Hesablar',[bas,son,1000.01,6000,VCOD,P]);
+  k:=k+OraclePackage1.GetParameter(5);
+  Sheet.cells[55,6]:=k;
+  k:=StrToInt(Sheet.cells[55,3])+StrToInt(Sheet.cells[55,5]);
+  Sheet.cells[55,7]:=k;
+  k:=StrToInt(Sheet.cells[55,4])+StrToInt(Sheet.cells[55,6]);
+  Sheet.cells[55,8]:=k;
+  OraclePackage1.CallProcedure('AmountMusteriler',[bas,son,1000.01,6000,P]);
+  k:=OraclePackage1.GetParameter(4);
+  Sheet.cells[55,9]:=k;
+
+  {******************************************************************************************************************}
+
+  Gauge1.Progress:=85;
+  Application.ProcessMessages;
+  VCOD:= Valyutanin_Kodu('AZN');
+  OraclePackage1.CallProcedure('Amount_Qaliqlar',[bas,son,6000.01,20000,VCOD,P]);
+  k:=OraclePackage1.GetParameter(5);
+  Sheet.cells[56,3]:=k;
+  OraclePackage1.CallProcedure('Amount_Hesablar',[bas,son,6000.01,20000,VCOD,P]);
+  k:=OraclePackage1.GetParameter(5);
+  Sheet.cells[56,4]:=k;
+  k:=0;
+  VCOD:= Valyutanin_Kodu('USD');
+  OraclePackage1.CallProcedure('Amount_Qaliqlar',[bas,son,6000.01,20000,VCOD,P]);
+  k:=k+OraclePackage1.GetParameter(5);
+  VCOD:= Valyutanin_Kodu('EUR');
+  OraclePackage1.CallProcedure('Amount_Qaliqlar',[bas,son,6000.01,20000,VCOD,P]);
+  k:=k+OraclePackage1.GetParameter(5);
+  VCOD:= Valyutanin_Kodu('RUB');
+  OraclePackage1.CallProcedure('Amount_Qaliqlar',[bas,son,6000.01,20000,VCOD,P]);
+  k:=k+OraclePackage1.GetParameter(5);
+  VCOD:= Valyutanin_Kodu('GBP');
+  OraclePackage1.CallProcedure('Amount_Qaliqlar',[bas,son,6000.01,20000,VCOD,P]);
+  k:=k+OraclePackage1.GetParameter(5);
+  Sheet.cells[56,5]:=k;
+  k:=0;
+  VCOD:= Valyutanin_Kodu('USD');
+  OraclePackage1.CallProcedure('Amount_Hesablar',[bas,son,6000.01,20000,VCOD,P]);
+  k:=k+OraclePackage1.GetParameter(5);
+  VCOD:= Valyutanin_Kodu('EUR');
+  OraclePackage1.CallProcedure('Amount_Hesablar',[bas,son,6000.01,20000,VCOD,P]);
+  k:=k+OraclePackage1.GetParameter(5);
+  VCOD:= Valyutanin_Kodu('RUB');
+  OraclePackage1.CallProcedure('Amount_Hesablar',[bas,son,6000.01,20000,VCOD,P]);
+  k:=k+OraclePackage1.GetParameter(5);
+  VCOD:= Valyutanin_Kodu('GBP');
+  OraclePackage1.CallProcedure('Amount_Hesablar',[bas,son,6000.01,20000,VCOD,P]);
+  k:=k+OraclePackage1.GetParameter(5);
+  Sheet.cells[56,6]:=k;
+  k:=StrToInt(Sheet.cells[56,3])+StrToInt(Sheet.cells[56,5]);
+  Sheet.cells[56,7]:=k;
+  k:=StrToInt(Sheet.cells[56,4])+StrToInt(Sheet.cells[56,6]);
+  Sheet.cells[56,8]:=k;
+  OraclePackage1.CallProcedure('AmountMusteriler',[bas,son,6000.01,20000,P]);
+  k:=OraclePackage1.GetParameter(4);
+  Sheet.cells[56,9]:=k;
+
+  {******************************************************************************************************************}
+
+  Gauge1.Progress:=90;
+  Application.ProcessMessages;
+  VCOD:= Valyutanin_Kodu('AZN');
+  OraclePackage1.CallProcedure('Amount_Qaliqlar',[bas,son,20000.01,30000,VCOD,P]);
+  k:=OraclePackage1.GetParameter(5);
+  Sheet.cells[57,3]:=k;
+  OraclePackage1.CallProcedure('Amount_Hesablar',[bas,son,20000.01,30000,VCOD,P]);
+  k:=OraclePackage1.GetParameter(5);
+  Sheet.cells[57,4]:=k;
+  k:=0;
+  VCOD:= Valyutanin_Kodu('USD');
+  OraclePackage1.CallProcedure('Amount_Qaliqlar',[bas,son,20000.01,30000,VCOD,P]);
+  k:=k+OraclePackage1.GetParameter(5);
+  VCOD:= Valyutanin_Kodu('EUR');
+  OraclePackage1.CallProcedure('Amount_Qaliqlar',[bas,son,20000.01,30000,VCOD,P]);
+  k:=k+OraclePackage1.GetParameter(5);
+  VCOD:= Valyutanin_Kodu('RUB');
+  OraclePackage1.CallProcedure('Amount_Qaliqlar',[bas,son,20000.01,30000,VCOD,P]);
+  k:=k+OraclePackage1.GetParameter(5);
+  VCOD:= Valyutanin_Kodu('GBP');
+  OraclePackage1.CallProcedure('Amount_Qaliqlar',[bas,son,20000.01,30000,VCOD,P]);
+  k:=k+OraclePackage1.GetParameter(5);
+  Sheet.cells[57,5]:=k;
+  k:=0;
+  VCOD:= Valyutanin_Kodu('USD');
+  OraclePackage1.CallProcedure('Amount_Hesablar',[bas,son,20000.01,30000,VCOD,P]);
+  k:=k+OraclePackage1.GetParameter(5);
+  VCOD:= Valyutanin_Kodu('EUR');
+  OraclePackage1.CallProcedure('Amount_Hesablar',[bas,son,20000.01,30000,VCOD,P]);
+  k:=k+OraclePackage1.GetParameter(5);
+  VCOD:= Valyutanin_Kodu('RUB');
+  OraclePackage1.CallProcedure('Amount_Hesablar',[bas,son,20000.01,30000,VCOD,P]);
+  k:=k+OraclePackage1.GetParameter(5);
+  VCOD:= Valyutanin_Kodu('GBP');
+  OraclePackage1.CallProcedure('Amount_Hesablar',[bas,son,20000.01,30000,VCOD,P]);
+  k:=k+OraclePackage1.GetParameter(5);
+  Sheet.cells[57,6]:=k;
+  k:=StrToInt(Sheet.cells[57,3])+StrToInt(Sheet.cells[57,5]);
+  Sheet.cells[57,7]:=k;
+  k:=StrToInt(Sheet.cells[57,4])+StrToInt(Sheet.cells[57,6]);
+  Sheet.cells[57,8]:=k;
+  OraclePackage1.CallProcedure('AmountMusteriler',[bas,son,20000.01,30000,P]);
+  k:=OraclePackage1.GetParameter(4);
+  Sheet.cells[57,9]:=k;
+
+ {******************************************************************************************************************}
+
+  Gauge1.Progress:=95;
+  Application.ProcessMessages;
+  VCOD:= Valyutanin_Kodu('AZN');
+  OraclePackage1.CallProcedure('Amount_Qaliqlar',[bas,son,30000.01,40000,VCOD,P]);
+  k:=OraclePackage1.GetParameter(5);
+  Sheet.cells[58,3]:=k;
+  OraclePackage1.CallProcedure('Amount_Hesablar',[bas,son,30000.01,40000,VCOD,P]);
+  k:=OraclePackage1.GetParameter(5);
+  Sheet.cells[58,4]:=k;
+  k:=0;
+  VCOD:= Valyutanin_Kodu('USD');
+  OraclePackage1.CallProcedure('Amount_Qaliqlar',[bas,son,30000.01,40000,VCOD,P]);
+  k:=k+OraclePackage1.GetParameter(5);
+  VCOD:= Valyutanin_Kodu('EUR');
+  OraclePackage1.CallProcedure('Amount_Qaliqlar',[bas,son,30000.01,40000,VCOD,P]);
+  k:=k+OraclePackage1.GetParameter(5);
+  VCOD:= Valyutanin_Kodu('RUB');
+  OraclePackage1.CallProcedure('Amount_Qaliqlar',[bas,son,30000.01,40000,VCOD,P]);
+  k:=k+OraclePackage1.GetParameter(5);
+  VCOD:= Valyutanin_Kodu('GBP');
+  OraclePackage1.CallProcedure('Amount_Qaliqlar',[bas,son,30000.01,40000,VCOD,P]);
+  k:=k+OraclePackage1.GetParameter(5);
+  Sheet.cells[58,5]:=k;
+  k:=0;
+  VCOD:= Valyutanin_Kodu('USD');
+  OraclePackage1.CallProcedure('Amount_Hesablar',[bas,son,30000.01,40000,VCOD,P]);
+  k:=k+OraclePackage1.GetParameter(5);
+  VCOD:= Valyutanin_Kodu('EUR');
+  OraclePackage1.CallProcedure('Amount_Hesablar',[bas,son,30000.01,40000,VCOD,P]);
+  k:=k+OraclePackage1.GetParameter(5);
+  VCOD:= Valyutanin_Kodu('RUB');
+  OraclePackage1.CallProcedure('Amount_Hesablar',[bas,son,30000.01,40000,VCOD,P]);
+  k:=k+OraclePackage1.GetParameter(5);
+  VCOD:= Valyutanin_Kodu('GBP');
+  OraclePackage1.CallProcedure('Amount_Hesablar',[bas,son,30000.01,40000,VCOD,P]);
+  k:=k+OraclePackage1.GetParameter(5);
+  Sheet.cells[58,6]:=k;
+  k:=StrToInt(Sheet.cells[58,3])+StrToInt(Sheet.cells[58,5]);
+  Sheet.cells[58,7]:=k;
+  k:=StrToInt(Sheet.cells[58,4])+StrToInt(Sheet.cells[58,6]);
+  Sheet.cells[58,8]:=k;
+  OraclePackage1.CallProcedure('AmountMusteriler',[bas,son,30000.01,40000,P]);
+  k:=OraclePackage1.GetParameter(4);
+  Sheet.cells[58,9]:=k;
+
+  {******************************************************************************************************************}
+  Gauge1.Progress:=97;
+  Application.ProcessMessages;
+  VCOD:= Valyutanin_Kodu('AZN');
+  OraclePackage1.CallProcedure('Amount_Qaliqlar',[bas,son,40000.01,50000,VCOD,P]);
+  k:=OraclePackage1.GetParameter(5);
+  Sheet.cells[59,3]:=k;
+  OraclePackage1.CallProcedure('Amount_Hesablar',[bas,son,40000.01,50000,VCOD,P]);
+  k:=OraclePackage1.GetParameter(5);
+  Sheet.cells[59,4]:=k;
+  k:=0;
+  VCOD:= Valyutanin_Kodu('USD');
+  OraclePackage1.CallProcedure('Amount_Qaliqlar',[bas,son,40000.01,50000,VCOD,P]);
+  k:=k+OraclePackage1.GetParameter(5);
+  VCOD:= Valyutanin_Kodu('EUR');
+  OraclePackage1.CallProcedure('Amount_Qaliqlar',[bas,son,40000.01,50000,VCOD,P]);
+  k:=k+OraclePackage1.GetParameter(5);
+  VCOD:= Valyutanin_Kodu('RUB');
+  OraclePackage1.CallProcedure('Amount_Qaliqlar',[bas,son,40000.01,50000,VCOD,P]);
+  k:=k+OraclePackage1.GetParameter(5);
+  VCOD:= Valyutanin_Kodu('GBP');
+  OraclePackage1.CallProcedure('Amount_Qaliqlar',[bas,son,40000.01,50000,VCOD,P]);
+  k:=k+OraclePackage1.GetParameter(5);
+  Sheet.cells[59,5]:=k;
+  k:=0;
+  VCOD:= Valyutanin_Kodu('USD');
+  OraclePackage1.CallProcedure('Amount_Hesablar',[bas,son,40000.01,50000,VCOD,P]);
+  k:=k+OraclePackage1.GetParameter(5);
+  VCOD:= Valyutanin_Kodu('EUR');
+  OraclePackage1.CallProcedure('Amount_Hesablar',[bas,son,40000.01,50000,VCOD,P]);
+  k:=k+OraclePackage1.GetParameter(5);
+  VCOD:= Valyutanin_Kodu('RUB');
+  OraclePackage1.CallProcedure('Amount_Hesablar',[bas,son,40000.01,50000,VCOD,P]);
+  k:=k+OraclePackage1.GetParameter(5);
+  VCOD:= Valyutanin_Kodu('GBP');
+  OraclePackage1.CallProcedure('Amount_Hesablar',[bas,son,40000.01,50000,VCOD,P]);
+  k:=k+OraclePackage1.GetParameter(5);
+  Sheet.cells[59,6]:=k;
+  k:=StrToInt(Sheet.cells[59,3])+StrToInt(Sheet.cells[59,5]);
+  Sheet.cells[59,7]:=k;
+  k:=StrToInt(Sheet.cells[59,4])+StrToInt(Sheet.cells[59,6]);
+  Sheet.cells[59,8]:=k;
+  OraclePackage1.CallProcedure('AmountMusteriler',[bas,son,40000.01,50000,P]);
+  k:=OraclePackage1.GetParameter(4);
+  Sheet.cells[59,9]:=k;
+
+  {********************************************************************************************************}
+  Gauge1.Progress:=99;
+  Application.ProcessMessages;
+  VCOD:= Valyutanin_Kodu('AZN');
+  OraclePackage1.CallProcedure('Amount_Qaliqlar',[bas,son,50000.01,10000000000,VCOD,P]);
+  k:=OraclePackage1.GetParameter(5);
+  Sheet.cells[60,3]:=k;
+  OraclePackage1.CallProcedure('Amount_Hesablar',[bas,son,50000.01,10000000000,VCOD,P]);
+  k:=OraclePackage1.GetParameter(5);
+  Sheet.cells[60,4]:=k;
+  k:=0;
+  VCOD:= Valyutanin_Kodu('USD');
+  OraclePackage1.CallProcedure('Amount_Qaliqlar',[bas,son,50000.01,10000000000,VCOD,P]);
+  k:=k+OraclePackage1.GetParameter(5);
+  VCOD:= Valyutanin_Kodu('EUR');
+  OraclePackage1.CallProcedure('Amount_Qaliqlar',[bas,son,50000.01,10000000000,VCOD,P]);
+  k:=k+OraclePackage1.GetParameter(5);
+  VCOD:= Valyutanin_Kodu('RUB');
+  OraclePackage1.CallProcedure('Amount_Qaliqlar',[bas,son,50000.01,10000000000,VCOD,P]);
+  k:=k+OraclePackage1.GetParameter(5);
+  VCOD:= Valyutanin_Kodu('GBP');
+  OraclePackage1.CallProcedure('Amount_Qaliqlar',[bas,son,50000.01,10000000000,VCOD,P]);
+  k:=k+OraclePackage1.GetParameter(5);
+  Sheet.cells[60,5]:=k;
+  k:=0;
+  VCOD:= Valyutanin_Kodu('USD');
+  OraclePackage1.CallProcedure('Amount_Hesablar',[bas,son,50000.01,10000000000,VCOD,P]);
+  k:=k+OraclePackage1.GetParameter(5);
+  VCOD:= Valyutanin_Kodu('EUR');
+  OraclePackage1.CallProcedure('Amount_Hesablar',[bas,son,50000.01,10000000000,VCOD,P]);
+  k:=k+OraclePackage1.GetParameter(5);
+  VCOD:= Valyutanin_Kodu('RUB');
+  OraclePackage1.CallProcedure('Amount_Hesablar',[bas,son,50000.01,10000000000,VCOD,P]);
+  k:=k+OraclePackage1.GetParameter(5);
+  VCOD:= Valyutanin_Kodu('GBP');
+  OraclePackage1.CallProcedure('Amount_Hesablar',[bas,son,50000.01,10000000000,VCOD,P]);
+  k:=k+OraclePackage1.GetParameter(5);
+  Sheet.cells[60,6]:=k;
+  k:=StrToInt(Sheet.cells[59,3])+StrToInt(Sheet.cells[59,5]);
+  Sheet.cells[60,7]:=k;
+  k:=StrToInt(Sheet.cells[59,4])+StrToInt(Sheet.cells[59,6]);
+  Sheet.cells[60,8]:=k;
+  OraclePackage1.CallProcedure('AmountMusteriler',[bas,son,50000.01,10000000000,P]);
+  k:=OraclePackage1.GetParameter(4);
+  Sheet.cells[60,9]:=k;
+
+  k:=StrToInt(Sheet.cells[54,3])+StrToInt(Sheet.cells[55,3])+StrToInt(Sheet.cells[56,3])+StrToInt(Sheet.cells[57,3])+
+     StrToInt(Sheet.cells[58,3])+StrToInt(Sheet.cells[59,3])+StrToInt(Sheet.cells[60,3]);
+  Sheet.cells[61,3]:=k;
+
+  k:=StrToInt(Sheet.cells[54,4])+StrToInt(Sheet.cells[55,4])+StrToInt(Sheet.cells[56,4])+StrToInt(Sheet.cells[57,4])+
+     StrToInt(Sheet.cells[58,4])+StrToInt(Sheet.cells[59,4])+StrToInt(Sheet.cells[60,4]);
+  Sheet.cells[61,4]:=k;
+
+  k:=StrToInt(Sheet.cells[54,5])+StrToInt(Sheet.cells[55,5])+StrToInt(Sheet.cells[56,5])+StrToInt(Sheet.cells[57,5])+
+     StrToInt(Sheet.cells[58,5])+StrToInt(Sheet.cells[59,5])+StrToInt(Sheet.cells[60,5]);
+  Sheet.cells[61,5]:=k;
+
+  k:=StrToInt(Sheet.cells[54,6])+StrToInt(Sheet.cells[55,6])+StrToInt(Sheet.cells[56,6])+StrToInt(Sheet.cells[57,6])+
+     StrToInt(Sheet.cells[58,6])+StrToInt(Sheet.cells[59,6])+StrToInt(Sheet.cells[60,6]);
+  Sheet.cells[61,6]:=k;
+
+  k:=StrToInt(Sheet.cells[54,7])+StrToInt(Sheet.cells[55,7])+StrToInt(Sheet.cells[56,7])+StrToInt(Sheet.cells[57,7])+
+     StrToInt(Sheet.cells[58,7])+StrToInt(Sheet.cells[59,7])+StrToInt(Sheet.cells[60,7]);
+  Sheet.cells[61,7]:=k;
+
+  k:=StrToInt(Sheet.cells[54,8])+StrToInt(Sheet.cells[55,8])+StrToInt(Sheet.cells[56,8])+StrToInt(Sheet.cells[57,8])+
+     StrToInt(Sheet.cells[58,8])+StrToInt(Sheet.cells[59,8])+StrToInt(Sheet.cells[60,8]);
+  Sheet.cells[61,8]:=k;
+
+  k:=StrToInt(Sheet.cells[54,9])+StrToInt(Sheet.cells[55,9])+StrToInt(Sheet.cells[56,9])+StrToInt(Sheet.cells[57,9])+
+     StrToInt(Sheet.cells[58,9])+StrToInt(Sheet.cells[59,9])+StrToInt(Sheet.cells[60,9]);
+  Sheet.cells[61,9]:=k;
+
+  Gauge1.Progress:=100;
+  Gauge1.Progress:=0;
+  ExcelApplication1.Visible[0] :=True;
+  ExcelApplication1.Disconnect;
+ {end
+ else begin
+        ShowMessage('Son tarix Baslangic tarixden kicik ola bilmez');
+        exit;
+      end;  }
+
+end;
+procedure TEmanet.DTP1Change(Sender: TObject);
+begin
+  Bas:=FormatDateTime('dd-MMM-yyyy',trunc(DTP1.DateTime));
+end;
+
+procedure TEmanet.DBViewComboBox3Change(Sender: TObject);
+begin
+  Text:=DBViewComboBox3.Text;
+end;
+
+procedure TEmanet.Edit3KeyPress(Sender: TObject; var Key: Char);
+begin
+  if not(Ord(Key)=8) then
+  if ((Length((Sender as TEdit).Text)>4) and ((Sender as TEdit).SelLength=0)) or (not(key in ['0'..'9']) ) then
+  key:=#0;
+end;
+
+procedure TEmanet.Edit3Enter(Sender: TObject);
+begin
+  Edit3.Clear;
+end;
+
+procedure TEmanet.TabSheet3Show(Sender: TObject);
+begin
+  Setfilter('2');
+end;
+
+procedure TEmanet.TabSheet4Show(Sender: TObject);
+begin
+  Setfilter('4');
+end;
+
+procedure TEmanet.DBViewComboBox4Change(Sender: TObject);
+begin
+  Text:=DBViewComboBox4.Text;
+end;
+
+procedure TEmanet.Edit4Enter(Sender: TObject);
+begin
+  Edit4.Clear;
+end;
+
+procedure TEmanet.Edit4KeyPress(Sender: TObject; var Key: Char);
+begin
+  if not(Ord(Key)=8) then
+  if ((Length((Sender as TEdit).Text)>4) and ((Sender as TEdit).SelLength=0)) or (not(key in ['0'..'9']) ) then
+  key:=#0;
+end;
+
+procedure TEmanet.RadioButton1Click(Sender: TObject);
+begin
+   F:=1;
+end;
+
+procedure TEmanet.RadioButton2Click(Sender: TObject);
+begin
+  F:=2;
+end;
+
+procedure TEmanet.BitBtn6Click(Sender: TObject);
+begin
+  if Edit3.text<>'' then Text:=Edit3.Text;
+  Insert_Umumi_Emanet;
+  Edit3.clear;
+  DBViewComboBox3.Text:='';
+end;
+
+procedure TEmanet.BitBtn7Click(Sender: TObject);
+begin
+  delete_emanet;
+end;
+function  TEmanet.Valyutanin_Kodu(valyutanin_adi:string):integer;
+begin
+  OracleDataSet4.Close;
+  OracleDataSet4.SetVariable('Val_n',valyutanin_adi);
+  OracleDataSet4.Open;
+  Valyutanin_Kodu:=OracleDataSet4.Fieldbyname('VALUTE').AsInteger;
+end;
+function  TEmanet.Hesabin_tipi(Num:integer):string;
+begin
+  OracleDataSet5.Close;
+  OracleDataSet5.SetVariable('V_ID',Num);
+  OracleDataSet5.Open;
+  Hesabin_tipi:=OracleDataSet5.Fieldbyname('SIMVOL').AsString;
+end;
+procedure TEmanet.DTP2Change(Sender: TObject);
+begin
+  Son:=FormatDateTime('dd-MMM-yyyy',trunc(DTP2.DateTime));
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TEmanet,
+    Class_Emanet,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+
+
+end.

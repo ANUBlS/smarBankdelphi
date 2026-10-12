@@ -1,0 +1,284 @@
+object DatModN3SD: TDatModN3SD
+  OldCreateOrder = False
+  Height = 408
+  Width = 599
+  object N3SDDataSet: TOracleDataSet
+    SQL.Strings = (
+      'SELECT  region_name, sum(rest), sum(dm_hokid_rest),'
+      
+        '       sum(dm_enrkimteh_rest), sum(dm_neftsan_rest), sum(dm_ticx' +
+        'id_rest),'
+      
+        '       sum(dm_kendtes_rest), sum(dm_belediye_rest), sum(dm_insha' +
+        'te_rest),'
+      
+        '       sum(dm_neqliyatr_rest), sum(dm_digersah_rest), sum(oz_res' +
+        't),'
+      
+        '       sum(oz_kimya_rest), sum(oz_neft_san_rest), sum(oz_ticaret' +
+        '_xid_rest),'
+      
+        '       sum(oz_kentt_emal_rest), sum(oz_inshat_emalk_rest), sum(o' +
+        'z_ineqliyat_rab),'
+      
+        '       sum(oz_diger_sah), sum(fiziki_sexs), sum(fiziki_ipot), su' +
+        'm(diger_kredit),'
+      '       sum(maliye)'
+      '  FROM cm_n3_sdt '
+      ''
+      'group by region_name')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000170000001600000052004500470049004F004E005F004E0041004D00
+      450001000000000012000000530055004D002800520045005300540029000100
+      0000000024000000530055004D00280044004D005F0048004F004B0049004400
+      5F00520045005300540029000100000000002C000000530055004D0028004400
+      4D005F0045004E0052004B0049004D005400450048005F005200450053005400
+      290001000000000028000000530055004D00280044004D005F004E0045004600
+      5400530041004E005F0052004500530054002900010000000000260000005300
+      55004D00280044004D005F005400490043005800490044005F00520045005300
+      5400290001000000000028000000530055004D00280044004D005F004B004500
+      4E0044005400450053005F00520045005300540029000100000000002A000000
+      530055004D00280044004D005F00420045004C00450044004900590045005F00
+      5200450053005400290001000000000028000000530055004D00280044004D00
+      5F0049004E00530048004100540045005F005200450053005400290001000000
+      00002C000000530055004D00280044004D005F004E00450051004C0049005900
+      4100540052005F00520045005300540029000100000000002A00000053005500
+      4D00280044004D005F00440049004700450052005300410048005F0052004500
+      53005400290001000000000018000000530055004D0028004F005A005F005200
+      450053005400290001000000000024000000530055004D0028004F005A005F00
+      4B0049004D00590041005F00520045005300540029000100000000002A000000
+      530055004D0028004F005A005F004E004500460054005F00530041004E005F00
+      5200450053005400290001000000000030000000530055004D0028004F005A00
+      5F0054004900430041005200450054005F005800490044005F00520045005300
+      540029000100000000002E000000530055004D0028004F005A005F004B004500
+      4E00540054005F0045004D0041004C005F005200450053005400290001000000
+      000032000000530055004D0028004F005A005F0049004E005300480041005400
+      5F0045004D0041004C004B005F00520045005300540029000100000000002A00
+      0000530055004D0028004F005A005F0049004E00450051004C00490059004100
+      54005F00520041004200290001000000000022000000530055004D0028004F00
+      5A005F00440049004700450052005F0053004100480029000100000000002000
+      0000530055004D002800460049005A0049004B0049005F005300450058005300
+      290001000000000020000000530055004D002800460049005A0049004B004900
+      5F00490050004F005400290001000000000022000000530055004D0028004400
+      49004700450052005F004B005200450044004900540029000100000000001600
+      0000530055004D0028004D0041004C004900590045002900010000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 24
+    Top = 16
+    object N3SDDataSetREGION_NAME: Twidestringfield
+      DisplayLabel = #1056#1077#1101#1081#1086#1085#1091#1085' '#1072#1076#1099
+      FieldName = 'REGION_NAME'
+      Size = 50
+    end
+    object N3SDDataSetSUMREST: TFloatField
+      DisplayLabel = #1044'.'#1052' '#1078#1103#1084#1080
+      FieldName = 'SUM(REST)'
+    end
+    object N3SDDataSetSUMDM_HOKID_REST: TFloatField
+      DisplayLabel = #1044'.'#1052' '#1097#1102#1082#1084#1103#1090' '#1080#1076#1072#1088#1103#1083#1103#1088#1080
+      FieldName = 'SUM(DM_HOKID_REST)'
+    end
+    object N3SDDataSetSUMDM_ENRKIMTEH_REST: TFloatField
+      DisplayLabel = #1044'.'#1052' '#1045#1085#1077#1088#1101#1077#1090#1080#1082#1072' '#1050#1080#1084' '#1074#1103' '#1090#1103#1073' '#1077
+      FieldName = 'SUM(DM_ENRKIMTEH_REST)'
+    end
+    object N3SDDataSetSUMDM_NEFTSAN_REST: TFloatField
+      DisplayLabel = #1044'.'#1052' '#1053#1077#1092#1090' '#1089#1103#1085#1072#1081#1077#1089#1080
+      FieldName = 'SUM(DM_NEFTSAN_REST)'
+    end
+    object N3SDDataSetSUMDM_TICXID_REST: TFloatField
+      DisplayLabel = #1044'.'#1052' '#1090#1080#1078#1072#1088#1103#1090' '#1074#1103' '#1093#1080#1076#1084#1103#1090
+      FieldName = 'SUM(DM_TICXID_REST)'
+    end
+    object N3SDDataSetSUMDM_KENDTES_REST: TFloatField
+      DisplayLabel = #1044'.'#1052' '#1082#1103#1085#1090' '#1090#1103#1089' '#1074#1103' '#1077#1084#1072#1083
+      FieldName = 'SUM(DM_KENDTES_REST)'
+    end
+    object N3SDDataSetSUMDM_BELEDIYE_REST: TFloatField
+      DisplayLabel = #1044'.'#1052' '#1073#1103#1083#1103#1076#1080#1081#1081#1103#1083#1103#1088' '#1074#1103' '#1080#1095' '#1090#1103#1096
+      FieldName = 'SUM(DM_BELEDIYE_REST)'
+    end
+    object N3SDDataSetSUMDM_INSHATE_REST: TFloatField
+      DisplayLabel = #1044'.'#1052' '#1080#1085#1096#1072#1072#1090' '#1074#1103' '#1103#1084#1083#1072#1082' '
+      FieldName = 'SUM(DM_INSHATE_REST)'
+    end
+    object N3SDDataSetSUMDM_NEQLIYATR_REST: TFloatField
+      DisplayLabel = #1044'.'#1052' '#1085#1103#1075#1080#1083#1080#1081#1081#1072#1090' '#1074#1103' '#1088#1072#1073#1080#1090#1103
+      FieldName = 'SUM(DM_NEQLIYATR_REST)'
+    end
+    object N3SDDataSetSUMDM_DIGERSAH_REST: TFloatField
+      DisplayLabel = #1044'.'#1052' '#1076#1080#1101#1103#1088' '#1089#1072#1097#1103#1083#1103#1088
+      FieldName = 'SUM(DM_DIGERSAH_REST)'
+    end
+    object N3SDDataSetSUMOZ_REST: TFloatField
+      DisplayLabel = #1070'.'#1052' '#1046#1103#1084#1080
+      FieldName = 'SUM(OZ_REST)'
+    end
+    object N3SDDataSetSUMOZ_KIMYA_REST: TFloatField
+      DisplayLabel = #1070'.'#1052' '#1045#1085#1077#1088#1101#1077#1090#1080#1082#1072' '#1050#1080#1084' '#1074#1103' '#1090#1103#1073' '#1077
+      FieldName = 'SUM(OZ_KIMYA_REST)'
+    end
+    object N3SDDataSetSUMOZ_NEFT_SAN_REST: TFloatField
+      DisplayLabel = #1070'.'#1052' '#1053#1077#1092#1090' '#1089#1103#1085#1072#1081#1077#1089#1080
+      FieldName = 'SUM(OZ_NEFT_SAN_REST)'
+    end
+    object N3SDDataSetSUMOZ_TICARET_XID_REST: TFloatField
+      DisplayLabel = #1070'.'#1052' '#1090#1080#1078#1072#1088#1103#1090' '#1074#1103' '#1093#1080#1076#1084#1103#1090
+      FieldName = 'SUM(OZ_TICARET_XID_REST)'
+    end
+    object N3SDDataSetSUMOZ_KENTT_EMAL_REST: TFloatField
+      DisplayLabel = #1070'.'#1052' '#1082#1103#1085#1090' '#1090#1103#1089' '#1074#1103' '#1077#1084#1072#1083
+      FieldName = 'SUM(OZ_KENTT_EMAL_REST)'
+    end
+    object N3SDDataSetSUMOZ_INSHAT_EMALK_REST: TFloatField
+      DisplayLabel = #1070'.'#1052' '#1080#1085#1096#1072#1072#1090' '#1074#1103' '#1103#1084#1083#1072#1082
+      FieldName = 'SUM(OZ_INSHAT_EMALK_REST)'
+    end
+    object N3SDDataSetSUMOZ_INEQLIYAT_RAB: TFloatField
+      DisplayLabel = #1070'.'#1052' '#1085#1103#1075#1080#1083#1080#1081#1081#1072#1090' '#1074#1103' '#1088#1072#1073#1080#1090#1103
+      FieldName = 'SUM(OZ_INEQLIYAT_RAB)'
+    end
+    object N3SDDataSetSUMOZ_DIGER_SAH: TFloatField
+      DisplayLabel = #1070'.'#1052' '#1076#1080#1101#1103#1088' '#1089#1072#1097#1103#1083#1103#1088
+      FieldName = 'SUM(OZ_DIGER_SAH)'
+    end
+    object N3SDDataSetSUMFIZIKI_SEXS: TFloatField
+      DisplayLabel = #1060#1080#1079#1080#1082#1080' '#1096#1103#1093#1089#1083#1103#1088#1103' ('#1044'.'#1071'.'#1040') '#1082#1088
+      FieldName = 'SUM(FIZIKI_SEXS)'
+    end
+    object N3SDDataSetSUMFIZIKI_IPOT: TFloatField
+      DisplayLabel = #1044#1072#1096#1099#1085#1084#1072#1079' '#1103#1084#1083#1072#1082#1099#1085'('#1058'.'#1040')'#1048#1087' '#1082#1088#1077
+      FieldName = 'SUM(FIZIKI_IPOT)'
+    end
+    object N3SDDataSetSUMDIGER_KREDIT: TFloatField
+      DisplayLabel = #1044#1080#1101#1103#1088' '#1082#1088#1077#1076#1080#1090#1083#1103#1088
+      FieldName = 'SUM(DIGER_KREDIT)'
+    end
+    object N3SDDataSetSUMMALIYE: TFloatField
+      DisplayLabel = #1052#1072#1083#1080#1081#1081#1103' '#1080#1078#1072#1088#1103#1089#1080
+      FieldName = 'SUM(MALIYE)'
+    end
+  end
+  object CM_N3_SD: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'CM_N3_SD'
+    ParameterMode = pmNamed
+    Cursor = crSQLWait
+    Left = 24
+    Top = 272
+  end
+  object DatScrRsts: TDataSource
+    DataSet = N3SDDataSet
+    Left = 104
+    Top = 16
+  end
+  object Crdinfo: TOracleDataSet
+    SQL.Strings = (
+      'select '
+      '  crd.id,'
+      '  crd.customertype,'
+      '  crd.branchid ,'
+      '  bp.villageid,'
+      '  cust.vid_sob'
+      'from '
+      '  cm_portfolio crd,'
+      '  cm_business_plan bp,'
+      '  smart.customers cust'
+      'where '
+      '  bp.creditid = crd.id'
+      '  and cust.id = crd.boorowerid  ')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      0500000005000000040000004900440001000000000018000000430055005300
+      54004F004D004500520054005900500045000100000000001000000042005200
+      41004E00430048004900440001000000000012000000560049004C004C004100
+      47004500490044000100000000000E0000005600490044005F0053004F004200
+      010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 192
+    Top = 16
+    object CrdinfoID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object CrdinfoCUSTOMERTYPE: TFloatField
+      FieldName = 'CUSTOMERTYPE'
+      Required = True
+    end
+    object CrdinfoBRANCHID: TFloatField
+      FieldName = 'BRANCHID'
+      Required = True
+    end
+    object CrdinfoVILLAGEID: TFloatField
+      FieldName = 'VILLAGEID'
+    end
+    object CrdinfoVID_SOB: TFloatField
+      FieldName = 'VID_SOB'
+    end
+  end
+  object CatDatSet: TOracleDataSet
+    SQL.Strings = (
+      'select id,description '
+      'from cm_categories')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 24
+    Top = 64
+  end
+  object RegDatSet: TOracleDataSet
+    SQL.Strings = (
+      'select id ,name from agro_village')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 24
+    Top = 112
+  end
+  object FilialDatSet: TOracleDataSet
+    SQL.Strings = (
+      'select id,name from sb_filial')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 24
+    Top = 168
+  end
+  object CatDatSrc: TDataSource
+    DataSet = CatDatSet
+    Left = 112
+    Top = 72
+  end
+  object RegDatSrc: TDataSource
+    DataSet = RegDatSet
+    Left = 112
+    Top = 120
+  end
+  object FilialDatSrc: TDataSource
+    DataSet = FilialDatSet
+    Left = 112
+    Top = 168
+  end
+  object VidDatSet: TOracleDataSet
+    SQL.Strings = (
+      'select id,name '
+      'from smart.vid_sob'
+      'where id in (select vid_sob '
+      'from cm_sb_customers where '
+      'id in (select boorowerid from cm_portfolio)'
+      'and  vid_sob is not null )'
+      '')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 24
+    Top = 216
+  end
+  object VidDatSrc: TDataSource
+    DataSet = VidDatSet
+    Left = 112
+    Top = 216
+  end
+  object CrdInfoDatSrc: TDataSource
+    Left = 256
+    Top = 16
+  end
+end

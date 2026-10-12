@@ -1,0 +1,33 @@
+unit card_ufx;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Grids, DBGrids,unit18;
+
+type
+  TUFXFORM = class(TForm)
+    DBGrid1: TDBGrid;
+    procedure FormShow(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  UFXFORM: TUFXFORM;
+
+implementation
+
+{$R *.dfm}
+
+procedure TUFXFORM.FormShow(Sender: TObject);
+begin
+DataMod_CARDS.Card_inn.Close;
+DataMod_CARDS.Card_inn.open;
+DataMod_CARDS.Card_inn.Active:=true;
+end;
+
+end.

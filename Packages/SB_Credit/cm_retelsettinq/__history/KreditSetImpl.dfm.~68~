@@ -1,0 +1,1351 @@
+object FrmKreditSet: TFrmKreditSet
+  Left = 0
+  Top = 0
+  ClientHeight = 459
+  ClientWidth = 507
+  Color = clCaptionText
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poScreenCenter
+  OnCanResize = FormCanResize
+  OnKeyPress = FormKeyPress
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Panel1: TPanel
+    Left = 0
+    Top = 424
+    Width = 507
+    Height = 35
+    Align = alBottom
+    TabOrder = 0
+    object SpeedButton1: TSpeedButton
+      Left = 367
+      Top = 3
+      Width = 68
+      Height = 30
+      Caption = 'Q'#601'bul'
+      Flat = True
+      OnClick = SpeedButton1Click
+    end
+    object SpeedButton2: TSpeedButton
+      Left = 436
+      Top = 3
+      Width = 69
+      Height = 30
+      Caption = 'Ba'#287'la'
+      Flat = True
+      OnClick = SpeedButton2Click
+    end
+    object HBConclusion: TCMHintBox
+      Left = 5
+      Top = 8
+      Width = 188
+      Height = 22
+      AutoSize = True
+      BevelOuter = bvNone
+      Caption = 'HBConclusion'
+      Color = clYellow
+      TabOrder = 0
+      Visible = False
+      HintStyle = hsAlert
+      Timeout = 4000
+      BeepOnMessage = False
+    end
+  end
+  object PageControl1: TPageControl
+    Left = 0
+    Top = 0
+    Width = 507
+    Height = 424
+    ActivePage = TabSheet2
+    Align = alClient
+    DoubleBuffered = False
+    ParentDoubleBuffered = False
+    TabOrder = 1
+    object TabSheet2: TTabSheet
+      Caption = '         '#214'n          '
+      object Panel3: TPanel
+        Left = 0
+        Top = 0
+        Width = 766
+        Height = 387
+        Color = clWhite
+        Ctl3D = False
+        ParentBackground = False
+        ParentCtl3D = False
+        TabOrder = 0
+        object P1: TPanel
+          Tag = 1
+          Left = 1
+          Top = 1
+          Width = 764
+          Height = 30
+          Align = alTop
+          BevelInner = bvLowered
+          Color = clBtnHighlight
+          ParentBackground = False
+          TabOrder = 0
+          object Label4: TLabel
+            Left = 6
+            Top = 9
+            Width = 29
+            Height = 14
+            Caption = 'Filial '
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Tahoma'
+            Font.Style = [fsBold]
+            ParentFont = False
+          end
+          object BranchCBEh: TDBLookupComboboxEh
+            Tag = 1
+            Left = 108
+            Top = 6
+            Width = 311
+            Height = 19
+            DataField = 'BRANCHID'
+            DataSource = DmRt.SrcPersonLink
+            DropDownBox.Columns = <
+              item
+                FieldName = 'ID'
+              end
+              item
+                FieldName = 'NAME'
+              end>
+            DropDownBox.ListSource = DmRt.DataSrcBranches
+            DropDownBox.Options = [dlgColumnResizeEh, dlgColLinesEh, dlgRowLinesEh, dlgAutoSortMarkingEh, dlgMultiSortMarkingEh]
+            DropDownBox.Sizable = True
+            EditButtons = <>
+            KeyField = 'ID'
+            ListField = 'NAME'
+            ListSource = DmRt.DataSrcBranches
+            TabOrder = 0
+            Visible = True
+          end
+          object R1: TCheckBox
+            Left = 450
+            Top = 8
+            Width = 82
+            Height = 17
+            Checked = True
+            Enabled = False
+            State = cbChecked
+            TabOrder = 1
+          end
+        end
+        object Panel11: TPanel
+          Tag = 1
+          Left = 1
+          Top = 241
+          Width = 764
+          Height = 30
+          Align = alTop
+          BevelInner = bvLowered
+          Color = clWhite
+          ParentBackground = False
+          TabOrder = 1
+          object Label10: TLabel
+            Left = 6
+            Top = 6
+            Width = 70
+            Height = 14
+            Caption = 'C'#601'rm'#601' faizi '
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Tahoma'
+            Font.Style = [fsBold]
+            ParentFont = False
+          end
+          object R9: TCheckBox
+            Left = 450
+            Top = 8
+            Width = 82
+            Height = 17
+            Checked = True
+            State = cbChecked
+            TabOrder = 0
+          end
+          object DBNumberEditEh5: TDBNumberEditEh
+            Tag = 1
+            Left = 183
+            Top = 6
+            Width = 111
+            Height = 19
+            currency = True
+            DataField = 'ANNUALYPENALTYRATE'
+            DataSource = DmRt.SrcPersonLink
+            DecimalPlaces = 4
+            EditButtons = <>
+            TabOrder = 1
+            Visible = True
+          end
+          object CheckBox3: TCheckBox
+            Left = 316
+            Top = 8
+            Width = 97
+            Height = 17
+            Caption = 'd'#601'yi'#351'm'#601'k olsun?'
+            TabOrder = 2
+          end
+        end
+        object Panel6: TPanel
+          Tag = 1
+          Left = 1
+          Top = 61
+          Width = 764
+          Height = 30
+          Align = alTop
+          BevelInner = bvLowered
+          Color = clCaptionText
+          ParentBackground = False
+          TabOrder = 2
+          object Label5: TLabel
+            Left = 6
+            Top = 8
+            Width = 92
+            Height = 14
+            Caption = 'M'#252'qavil'#601'nin '#8470
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Tahoma'
+            Font.Style = [fsBold]
+            ParentFont = False
+          end
+          object DBEdit1: TDBEdit
+            Tag = 1
+            Left = 183
+            Top = 5
+            Width = 129
+            Height = 21
+            DataField = 'NUMBEROFCREDIT'
+            DataSource = DmRt.SrcPersonLink
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clNavy
+            Font.Height = -12
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = [fsBold]
+            ParentFont = False
+            TabOrder = 0
+          end
+          object R3: TCheckBox
+            Left = 450
+            Top = 8
+            Width = 82
+            Height = 17
+            TabOrder = 1
+          end
+        end
+        object Panel7: TPanel
+          Tag = 1
+          Left = 1
+          Top = 91
+          Width = 764
+          Height = 30
+          Align = alTop
+          BevelInner = bvLowered
+          Color = clCaptionText
+          ParentBackground = False
+          TabOrder = 3
+          object Label7: TLabel
+            Left = 6
+            Top = 8
+            Width = 134
+            Height = 14
+            Caption = 'Kreditin verilm'#601' tarixi '
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Tahoma'
+            Font.Style = [fsBold]
+            ParentFont = False
+          end
+          object DBDateTimeEditEh1: TDBDateTimeEditEh
+            Tag = 1
+            Left = 183
+            Top = 6
+            Width = 130
+            Height = 19
+            Hint = 'dd/mm/yyyy'
+            DataField = 'DATEOFCONCLUSION'
+            DataSource = DmRt.SrcPersonLink
+            EditButtons = <>
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 0
+            Visible = True
+            EditFormat = ''
+          end
+          object R4: TCheckBox
+            Left = 450
+            Top = 8
+            Width = 82
+            Height = 17
+            Checked = True
+            Enabled = False
+            State = cbChecked
+            TabOrder = 1
+          end
+        end
+        object Panel8: TPanel
+          Tag = 1
+          Left = 1
+          Top = 121
+          Width = 764
+          Height = 30
+          Align = alTop
+          BevelInner = bvLowered
+          Color = clCaptionText
+          ParentBackground = False
+          TabOrder = 4
+          object Label9: TLabel
+            Left = 6
+            Top = 8
+            Width = 94
+            Height = 14
+            Caption = 'Ba'#287'lanma tarixi'
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Tahoma'
+            Font.Style = [fsBold]
+            ParentFont = False
+          end
+          object DBDateTimeEditEh2: TDBDateTimeEditEh
+            Tag = 1
+            Left = 183
+            Top = 6
+            Width = 130
+            Height = 19
+            DataField = 'DUEDATEFIRSTCONTRACT'
+            DataSource = DmRt.SrcPersonLink
+            EditButtons = <>
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 0
+            Visible = True
+            EditFormat = ''
+          end
+          object R5: TCheckBox
+            Left = 450
+            Top = 8
+            Width = 82
+            Height = 17
+            Checked = True
+            Enabled = False
+            State = cbChecked
+            TabOrder = 1
+          end
+        end
+        object Panel12: TPanel
+          Tag = 1
+          Left = 1
+          Top = 151
+          Width = 764
+          Height = 30
+          Align = alTop
+          BevelInner = bvLowered
+          Color = clWhite
+          ParentBackground = False
+          TabOrder = 5
+          object Label18: TLabel
+            Left = 6
+            Top = 6
+            Width = 102
+            Height = 14
+            Caption = 'Kreditim m'#601'bl'#601'gi'
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Tahoma'
+            Font.Style = [fsBold]
+            ParentFont = False
+          end
+          object DBNumberEditEh1: TDBNumberEditEh
+            Tag = 1
+            Left = 183
+            Top = 6
+            Width = 130
+            Height = 19
+            currency = True
+            DataField = 'CREDITLINEAMOUNT'
+            DataSource = DmRt.SrcPersonLink
+            EditButtons = <>
+            TabOrder = 0
+            Visible = True
+          end
+          object R6: TCheckBox
+            Left = 450
+            Top = 8
+            Width = 82
+            Height = 17
+            Checked = True
+            Enabled = False
+            State = cbChecked
+            TabOrder = 1
+          end
+        end
+        object Panel13: TPanel
+          Tag = 1
+          Left = 1
+          Top = 181
+          Width = 764
+          Height = 30
+          Align = alTop
+          BevelInner = bvLowered
+          Color = clWhite
+          ParentBackground = False
+          TabOrder = 6
+          object Label20: TLabel
+            Left = 6
+            Top = 6
+            Width = 99
+            Height = 14
+            Caption = #304'llik faiz d'#601'r'#601'c'#601'si'
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Tahoma'
+            Font.Style = [fsBold]
+            ParentFont = False
+          end
+          object DBNumberEditEh2: TDBNumberEditEh
+            Tag = 1
+            Left = 183
+            Top = 6
+            Width = 111
+            Height = 19
+            currency = True
+            DataField = 'ANNUALYINTERESTRATE'
+            DataSource = DmRt.SrcPersonLink
+            DecimalPlaces = 4
+            EditButtons = <>
+            TabOrder = 0
+            Visible = True
+          end
+          object R7: TCheckBox
+            Left = 450
+            Top = 8
+            Width = 82
+            Height = 17
+            Checked = True
+            State = cbChecked
+            TabOrder = 1
+          end
+          object CheckBox1: TCheckBox
+            Left = 316
+            Top = 8
+            Width = 97
+            Height = 17
+            Caption = 'd'#601'yi'#351'm'#601'k olsun?'
+            TabOrder = 2
+          end
+        end
+        object Panel69: TPanel
+          Left = 1
+          Top = 271
+          Width = 764
+          Height = 31
+          Align = alTop
+          BevelInner = bvLowered
+          Color = clWhite
+          ParentBackground = False
+          TabOrder = 7
+          object Label11: TLabel
+            Left = 6
+            Top = 8
+            Width = 117
+            Height = 14
+            Caption = 'Kreditin t'#601'minatl'#305#287#305
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Tahoma'
+            Font.Style = [fsBold]
+            ParentFont = False
+          end
+          object DBLookupComboboxEh12: TDBLookupComboboxEh
+            Tag = 1
+            Left = 129
+            Top = 6
+            Width = 282
+            Height = 19
+            DataField = 'PLEDGEID_P'
+            DataSource = DmRt.SrcPersonLink
+            DropDownBox.Sizable = True
+            EditButtons = <>
+            KeyField = 'ID'
+            ListField = 'DESCRIPTION'
+            ListSource = DmRt.PldDataSrc
+            TabOrder = 0
+            Visible = True
+          end
+          object R10: TCheckBox
+            Left = 450
+            Top = 8
+            Width = 82
+            Height = 17
+            TabOrder = 1
+          end
+        end
+        object Panel10: TPanel
+          Left = 1
+          Top = 302
+          Width = 764
+          Height = 31
+          Align = alTop
+          BevelInner = bvLowered
+          Color = clWhite
+          ParentBackground = False
+          TabOrder = 8
+          object Label6: TLabel
+            Left = 6
+            Top = 8
+            Width = 107
+            Height = 14
+            Caption = 'Kreditin T'#601'yyinat'#305
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Tahoma'
+            Font.Style = [fsBold]
+            ParentFont = False
+          end
+          object DBEdit3: TDBEdit
+            Tag = 2
+            Left = 129
+            Top = 6
+            Width = 282
+            Height = 19
+            Color = clInfoBk
+            DataField = 'PURPOSEOFCREDIT'
+            DataSource = DmRt.SrcPersonLink
+            TabOrder = 0
+          end
+          object R11: TCheckBox
+            Left = 450
+            Top = 8
+            Width = 82
+            Height = 17
+            TabOrder = 1
+          end
+        end
+        object Panel14: TPanel
+          Tag = 1
+          Left = 1
+          Top = 211
+          Width = 764
+          Height = 30
+          Align = alTop
+          BevelInner = bvLowered
+          Color = clWhite
+          ParentBackground = False
+          TabOrder = 9
+          object Label22: TLabel
+            Left = 5
+            Top = 7
+            Width = 133
+            Height = 14
+            Caption = 'Gecikmi'#351' faiz  d'#601'r'#601'c'#601'si'
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Tahoma'
+            Font.Style = [fsBold]
+            ParentFont = False
+          end
+          object DBNumberEditEh4: TDBNumberEditEh
+            Tag = 1
+            Left = 183
+            Top = 6
+            Width = 111
+            Height = 19
+            currency = True
+            DataField = 'ANNUALYOVERDUERATE'
+            DataSource = DmRt.SrcPersonLink
+            DecimalPlaces = 4
+            EditButtons = <>
+            TabOrder = 0
+            Visible = True
+          end
+          object R8: TCheckBox
+            Left = 450
+            Top = 8
+            Width = 82
+            Height = 17
+            Checked = True
+            State = cbChecked
+            TabOrder = 1
+          end
+          object CheckBox2: TCheckBox
+            Left = 316
+            Top = 8
+            Width = 97
+            Height = 17
+            Caption = 'd'#601'yi'#351'm'#601'k olsun?'
+            TabOrder = 2
+          end
+        end
+        object P2: TPanel
+          Tag = 1
+          Left = 1
+          Top = 31
+          Width = 764
+          Height = 30
+          Align = alTop
+          BevelInner = bvLowered
+          Color = clWhite
+          ParentBackground = False
+          TabOrder = 10
+          object Label8: TLabel
+            Left = 6
+            Top = 6
+            Width = 42
+            Height = 15
+            Caption = 'Valyuta'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = [fsBold]
+            ParentFont = False
+          end
+          object DBLookupComboboxEh14: TDBLookupComboboxEh
+            Tag = 1
+            Left = 108
+            Top = 6
+            Width = 311
+            Height = 19
+            DataField = 'CURRENCY'
+            DataSource = DmRt.SrcPersonLink
+            DropDownBox.Columns = <
+              item
+                FieldName = 'VAL_NAME'
+              end
+              item
+                FieldName = 'CURRNAME'
+              end>
+            DropDownBox.ListSource = DmRt.DataSrcCurrencys
+            DropDownBox.Sizable = True
+            EditButtons = <>
+            KeyField = 'CURRID'
+            ListField = 'CURRNAME'
+            ListSource = DmRt.DataSrcCurrencys
+            TabOrder = 0
+            Visible = True
+          end
+          object R2: TCheckBox
+            Left = 450
+            Top = 8
+            Width = 82
+            Height = 17
+            Checked = True
+            Enabled = False
+            State = cbChecked
+            TabOrder = 1
+          end
+        end
+      end
+    end
+    object TabSheet1: TTabSheet
+      Caption = '            Arxa        '
+      ImageIndex = 1
+      object Panel2: TPanel
+        Left = 3
+        Top = 3
+        Width = 766
+        Height = 438
+        Color = clWhite
+        Ctl3D = False
+        ParentBackground = False
+        ParentCtl3D = False
+        TabOrder = 0
+        object Panel63: TPanel
+          Tag = 1
+          Left = 1
+          Top = 1
+          Width = 764
+          Height = 30
+          Align = alTop
+          BevelInner = bvLowered
+          Color = clBtnHighlight
+          Ctl3D = False
+          ParentBackground = False
+          ParentCtl3D = False
+          TabOrder = 0
+          object Label137: TLabel
+            Left = 5
+            Top = 8
+            Width = 165
+            Height = 15
+            Caption = 'Borcalan'#305'n tipi(m'#252'lkiyy'#601't n'#246'v'#252')'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = []
+            ParentFont = False
+          end
+          object DBLookupComboboxEh1: TDBLookupComboboxEh
+            Tag = 1
+            Left = 173
+            Top = 6
+            Width = 321
+            Height = 19
+            DataField = 'ACTIVITIES_TYPE'
+            DataSource = DmRt.SrcPersonLink
+            DropDownBox.AutoFitColWidths = False
+            DropDownBox.ColumnDefValues.EndEllipsis = True
+            DropDownBox.ColumnDefValues.ToolTips = True
+            DropDownBox.Columns = <
+              item
+                FieldName = 'KODU'
+                Width = 31
+              end
+              item
+                FieldName = 'NAME'
+              end>
+            DropDownBox.ListSource = DmRt.EstateType
+            DropDownBox.Options = [dlgColumnResizeEh, dlgColLinesEh, dlgRowLinesEh, dlgAutoSortMarkingEh, dlgMultiSortMarkingEh]
+            DropDownBox.Sizable = True
+            EditButtons = <>
+            KeyField = 'ID'
+            ListField = 'NAME'
+            ListSource = DmRt.EstateType
+            TabOrder = 0
+            Visible = True
+            OnChange = DBLookupComboboxEh1Change
+          end
+        end
+        object Panel64: TPanel
+          Tag = 1
+          Left = 1
+          Top = 31
+          Width = 764
+          Height = 28
+          Align = alTop
+          BevelInner = bvLowered
+          Color = clBtnHighlight
+          Ctl3D = False
+          ParentBackground = False
+          ParentCtl3D = False
+          TabOrder = 1
+          object Label139: TLabel
+            Left = 5
+            Top = 8
+            Width = 103
+            Height = 15
+            Caption = 'Borcalan'#305'n sektoru'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = []
+            ParentFont = False
+          end
+          object DBLookupComboboxEh2: TDBLookupComboboxEh
+            Tag = 1
+            Left = 173
+            Top = 6
+            Width = 321
+            Height = 19
+            DataField = 'CREDITACT'
+            DataSource = DmRt.SrcPersonLink
+            DropDownBox.AutoFitColWidths = False
+            DropDownBox.Columns = <
+              item
+                FieldName = 'KOD'
+                Width = 36
+              end
+              item
+                FieldName = 'NAME'
+              end>
+            DropDownBox.ListSource = DmRt.creditcat
+            DropDownBox.Options = [dlgColumnResizeEh, dlgColLinesEh, dlgRowLinesEh, dlgAutoSortMarkingEh, dlgMultiSortMarkingEh]
+            DropDownBox.Sizable = True
+            EditButtons = <>
+            KeyField = 'ID'
+            ListField = 'NAME'
+            ListSource = DmRt.creditcat
+            TabOrder = 0
+            Visible = True
+            OnChange = DBLookupComboboxEh2Change
+          end
+        end
+        object Panel62: TPanel
+          Tag = 1
+          Left = 1
+          Top = 59
+          Width = 764
+          Height = 28
+          Align = alTop
+          BevelInner = bvLowered
+          Color = clBtnHighlight
+          Ctl3D = False
+          ParentBackground = False
+          ParentCtl3D = False
+          TabOrder = 2
+          object Label135: TLabel
+            Left = 5
+            Top = 8
+            Width = 108
+            Height = 15
+            Caption = 'Borcalan'#305'n f'#601'aliyy'#601'ti'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = []
+            ParentFont = False
+          end
+          object DBLookupComboboxEh3: TDBLookupComboboxEh
+            Tag = 1
+            Left = 173
+            Top = 6
+            Width = 321
+            Height = 19
+            DataField = 'ACTIVITIES'
+            DataSource = DmRt.SrcPersonLink
+            DropDownBox.AutoFitColWidths = False
+            DropDownBox.Columns = <
+              item
+                FieldName = 'BANK_KOD'
+              end
+              item
+                FieldName = 'DESCRIPTION'
+              end>
+            DropDownBox.ListSource = DmRt.DataSrcActivities
+            DropDownBox.Options = [dlgColumnResizeEh, dlgColLinesEh, dlgRowLinesEh, dlgAutoSortMarkingEh, dlgMultiSortMarkingEh]
+            DropDownBox.Sizable = True
+            EditButtons = <>
+            KeyField = 'ID'
+            ListField = 'DESCRIPTION'
+            ListSource = DmRt.DataSrcActivities
+            TabOrder = 0
+            Visible = True
+            OnChange = DBLookupComboboxEh3Change
+          end
+        end
+        object Panel65: TPanel
+          Tag = 1
+          Left = 1
+          Top = 87
+          Width = 764
+          Height = 28
+          Align = alTop
+          BevelInner = bvLowered
+          Color = clBtnHighlight
+          Ctl3D = False
+          ParentBackground = False
+          ParentCtl3D = False
+          TabOrder = 3
+          object Label141: TLabel
+            Left = 5
+            Top = 8
+            Width = 134
+            Height = 15
+            Caption = 'Borcalan'#305'n f'#601'aliyy'#601't n'#246'v'#252
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = []
+            ParentFont = False
+          end
+          object DBLookupComboboxEh4: TDBLookupComboboxEh
+            Tag = 1
+            Left = 173
+            Top = 6
+            Width = 321
+            Height = 19
+            DataField = 'CUSTOMERTYPE'
+            DataSource = DmRt.SrcPersonLink
+            DropDownBox.Columns = <
+              item
+                FieldName = 'CODE'
+              end
+              item
+                FieldName = 'DESCRIPTION'
+              end>
+            DropDownBox.ListSource = DmRt.DataSrcClientCategories
+            DropDownBox.Options = [dlgColumnResizeEh, dlgColLinesEh, dlgRowLinesEh, dlgAutoSortMarkingEh, dlgMultiSortMarkingEh]
+            DropDownBox.AutoDrop = True
+            DropDownBox.Sizable = True
+            EditButtons = <>
+            KeyField = 'ID'
+            ListField = 'DESCRIPTION'
+            ListSource = DmRt.DataSrcClientCategories
+            TabOrder = 0
+            Visible = True
+          end
+        end
+        object Panel9: TPanel
+          Tag = 1
+          Left = 1
+          Top = 115
+          Width = 764
+          Height = 28
+          Align = alTop
+          BevelInner = bvLowered
+          Color = clCaptionText
+          ParentBackground = False
+          TabOrder = 4
+          object Label14: TLabel
+            Left = 5
+            Top = 8
+            Width = 61
+            Height = 14
+            Caption = 'Kreditin tipi'
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+          end
+          object DBLookupComboboxEh5: TDBLookupComboboxEh
+            Tag = 1
+            Left = 173
+            Top = 6
+            Width = 321
+            Height = 19
+            DataField = 'CREDITTYPE'
+            DataSource = DmRt.SrcPersonLink
+            DropDownBox.Sizable = True
+            EditButtons = <>
+            KeyField = 'ID'
+            ListField = 'DESCRIPTION'
+            ListSource = DmRt.DataSrcCreditTypes
+            TabOrder = 0
+            Visible = True
+          end
+        end
+        object Panel18: TPanel
+          Tag = 1
+          Left = 1
+          Top = 143
+          Width = 764
+          Height = 28
+          Align = alTop
+          BevelInner = bvLowered
+          Color = clWhite
+          ParentBackground = False
+          TabOrder = 5
+          object Label30: TLabel
+            Left = 5
+            Top = 8
+            Width = 90
+            Height = 14
+            Caption = #304'stifad'#601#231'i qurupu'
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+          end
+          object DBLookupComboboxEh6: TDBLookupComboboxEh
+            Tag = 1
+            Left = 173
+            Top = 6
+            Width = 321
+            Height = 19
+            DataField = 'USRGROUP'
+            DataSource = DmRt.SrcPersonLink
+            DropDownBox.Sizable = True
+            EditButtons = <>
+            KeyField = 'ID'
+            ListField = 'DESCRIPTION'
+            ListSource = DmRt.DataSrcUsrGroups
+            TabOrder = 0
+            Visible = True
+          end
+        end
+        object Panel66: TPanel
+          Tag = 1
+          Left = 1
+          Top = 171
+          Width = 764
+          Height = 28
+          Align = alTop
+          Alignment = taRightJustify
+          BevelInner = bvLowered
+          Color = clWhite
+          ParentBackground = False
+          TabOrder = 6
+          object Label150: TLabel
+            Left = 5
+            Top = 6
+            Width = 129
+            Height = 14
+            Caption = 'Kreditin verilm'#601' m'#601'qs'#601'di'
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+          end
+          object DBLookupComboboxEh7: TDBLookupComboboxEh
+            Tag = 1
+            Left = 173
+            Top = 6
+            Width = 321
+            Height = 19
+            DataField = 'AIM_ID'
+            DataSource = DmRt.SrcPersonLink
+            DropDownBox.Sizable = True
+            EditButtons = <>
+            KeyField = 'ID'
+            ListField = 'NAME'
+            ListSource = DmRt.AIM_Src
+            TabOrder = 0
+            Visible = True
+          end
+        end
+        object Panel19: TPanel
+          Tag = 1
+          Left = 1
+          Top = 199
+          Width = 764
+          Height = 28
+          Align = alTop
+          BevelInner = bvLowered
+          Color = clWhite
+          ParentBackground = False
+          TabOrder = 7
+          object Label2: TLabel
+            Left = 5
+            Top = 7
+            Width = 87
+            Height = 14
+            Caption = 'Kreditin t'#601'snifat'#305
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+          end
+          object DBLookupComboboxEh8: TDBLookupComboboxEh
+            Tag = 1
+            Left = 173
+            Top = 6
+            Width = 321
+            Height = 19
+            DataField = 'RESERVEID'
+            DataSource = DmRt.SrcPersonLink
+            DropDownBox.Columns = <
+              item
+                FieldName = 'PERCENT'
+              end
+              item
+                FieldName = 'DESCRIPTION'
+              end>
+            DropDownBox.ListSource = DmRt.DataSrcReserves
+            DropDownBox.Options = [dlgColumnResizeEh, dlgColLinesEh, dlgRowLinesEh, dlgAutoSortMarkingEh, dlgMultiSortMarkingEh]
+            DropDownBox.Sizable = True
+            EditButtons = <>
+            KeyField = 'ID'
+            ListField = 'DESCRIPTION'
+            ListSource = DmRt.DataSrcReserves
+            TabOrder = 0
+            Visible = True
+          end
+        end
+        object Panel33: TPanel
+          Tag = 1
+          Left = 1
+          Top = 227
+          Width = 764
+          Height = 28
+          Align = alTop
+          BevelInner = bvLowered
+          Color = clWhite
+          ParentBackground = False
+          TabOrder = 8
+          object Label3: TLabel
+            Left = 5
+            Top = 8
+            Width = 135
+            Height = 14
+            Caption = 'Kreditin gecikm'#601' t'#601'snifat'#305
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+          end
+          object DBLookupComboboxEh13: TDBLookupComboboxEh
+            Tag = 1
+            Left = 173
+            Top = 6
+            Width = 321
+            Height = 19
+            DataField = 'DUERESERVEID'
+            DataSource = DmRt.SrcPersonLink
+            DropDownBox.Columns = <
+              item
+                FieldName = 'PERCENT'
+              end
+              item
+                FieldName = 'DESCRIPTION'
+              end>
+            DropDownBox.ListSource = DmRt.DataSrcReserves
+            DropDownBox.Options = [dlgColumnResizeEh, dlgColLinesEh, dlgRowLinesEh, dlgAutoSortMarkingEh, dlgMultiSortMarkingEh]
+            DropDownBox.Sizable = True
+            EditButtons = <>
+            KeyField = 'ID'
+            ListField = 'DESCRIPTION'
+            ListSource = DmRt.DataSrcReserves
+            TabOrder = 0
+            Visible = True
+          end
+        end
+        object Panel21: TPanel
+          Tag = 1
+          Left = 1
+          Top = 255
+          Width = 764
+          Height = 28
+          Align = alTop
+          BevelInner = bvLowered
+          Color = clWhite
+          ParentBackground = False
+          TabOrder = 9
+          object Label33: TLabel
+            Left = 5
+            Top = 8
+            Width = 69
+            Height = 14
+            Caption = #214'd'#601'm'#601' apr'#305'l'#305'r'
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+          end
+          object DBLookupComboboxEh9: TDBLookupComboboxEh
+            Tag = 1
+            Left = 173
+            Top = 6
+            Width = 321
+            Height = 19
+            DataField = 'AUTOPAYMENT'
+            DataSource = DmRt.SrcPersonLink
+            DropDownBox.Sizable = True
+            EditButtons = <>
+            KeyField = 'ID'
+            ListField = 'DESCRIPTION'
+            ListSource = DmRt.DataSrcAutoPayment
+            TabOrder = 0
+            Visible = True
+          end
+        end
+        object Panel32: TPanel
+          Tag = 2
+          Left = 1
+          Top = 283
+          Width = 764
+          Height = 28
+          Align = alTop
+          BevelInner = bvLowered
+          Color = clWhite
+          ParentBackground = False
+          TabOrder = 10
+          object Label71: TLabel
+            Left = 5
+            Top = 8
+            Width = 99
+            Height = 14
+            Caption = 'Gecikdirilm'#601' apar'#305'l'#305'r'
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+          end
+          object DBLookupComboboxEh10: TDBLookupComboboxEh
+            Tag = 1
+            Left = 173
+            Top = 6
+            Width = 321
+            Height = 19
+            DataField = 'AUTOEXPIRE'
+            DataSource = DmRt.SrcPersonLink
+            DropDownBox.Sizable = True
+            EditButtons = <>
+            KeyField = 'ID'
+            ListField = 'DESCRIPTION'
+            ListSource = DmRt.DataSrcAutoExpire
+            TabOrder = 0
+            Visible = True
+          end
+        end
+        object Panel44: TPanel
+          Tag = 2
+          Left = 1
+          Top = 367
+          Width = 764
+          Height = 28
+          Align = alTop
+          BevelInner = bvLowered
+          Color = clWhite
+          ParentBackground = False
+          TabOrder = 11
+          object Label56: TLabel
+            Left = 5
+            Top = 8
+            Width = 112
+            Height = 14
+            Caption = #214'd'#601'm'#601' plan'#305' qurulur '
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+          end
+          object DBLookupComboboxEh25: TDBLookupComboboxEh
+            Tag = 1
+            Left = 174
+            Top = 5
+            Width = 321
+            Height = 19
+            DataField = 'AUTOSCEDULE'
+            DataSource = DmRt.SrcPersonLink
+            DropDownBox.Sizable = True
+            EditButtons = <>
+            KeyField = 'ID'
+            ListField = 'DESCRIPTION'
+            ListSource = DmRt.DataSrcAutoExpire
+            TabOrder = 0
+            Visible = True
+          end
+        end
+        object Panel4: TPanel
+          Tag = 2
+          Left = 1
+          Top = 311
+          Width = 764
+          Height = 28
+          Align = alTop
+          BevelInner = bvLowered
+          Color = clWhite
+          ParentBackground = False
+          TabOrder = 12
+          object Label1: TLabel
+            Left = 5
+            Top = 8
+            Width = 88
+            Height = 14
+            Caption = 'Hesablama apr'#305'l'#305'r'
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+          end
+          object DBLookupComboboxEh11: TDBLookupComboboxEh
+            Tag = 1
+            Left = 173
+            Top = 6
+            Width = 321
+            Height = 19
+            DataField = 'INTCALCMETHOD'
+            DataSource = DmRt.SrcPersonLink
+            DropDownBox.Sizable = True
+            EditButtons = <>
+            KeyField = 'ID'
+            ListField = 'DESCRIPTION'
+            ListSource = DmRt.DatSrcCalcIntMethod
+            TabOrder = 0
+            Visible = True
+          end
+        end
+        object Panel5: TPanel
+          Tag = 2
+          Left = 1
+          Top = 339
+          Width = 764
+          Height = 28
+          Align = alTop
+          BevelInner = bvLowered
+          Color = clWhite
+          ParentBackground = False
+          TabOrder = 13
+          object Label12: TLabel
+            Left = 5
+            Top = 8
+            Width = 65
+            Height = 14
+            Caption = 'Tran'#351' verilir '
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+          end
+          object Label13: TLabel
+            Left = 221
+            Top = 8
+            Width = 130
+            Height = 14
+            Caption = 'M'#252'qavil'#601'nin n'#246'mr'#601'si a'#231#305'lr'
+            Font.Charset = RUSSIAN_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+          end
+          object DBLookupComboboxEh15: TDBLookupComboboxEh
+            Tag = 1
+            Left = 70
+            Top = 6
+            Width = 139
+            Height = 19
+            DataField = 'AUTOTRANCE'
+            DataSource = DmRt.SrcPersonLink
+            DropDownBox.Sizable = True
+            EditButtons = <>
+            KeyField = 'ID'
+            ListField = 'DESCRIPTION'
+            ListSource = DmRt.DataSrcAutoExpire
+            TabOrder = 0
+            Visible = True
+          end
+          object DBLookupComboboxEh16: TDBLookupComboboxEh
+            Tag = 1
+            Left = 357
+            Top = 6
+            Width = 138
+            Height = 19
+            DataField = 'AUTOCONTRACTNO'
+            DataSource = DmRt.SrcPersonLink
+            DropDownBox.Sizable = True
+            EditButtons = <>
+            KeyField = 'ID'
+            ListField = 'DESCRIPTION'
+            ListSource = DmRt.DataSrcAutoExpire
+            TabOrder = 1
+            Visible = True
+          end
+        end
+      end
+    end
+  end
+end

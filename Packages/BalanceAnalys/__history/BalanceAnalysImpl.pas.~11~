@@ -1,0 +1,1000 @@
+unit BalanceAnalysImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActiveX, AxCtrls, BalanceAnalys_TLB, StdVcl, ExtCtrls, ComCtrls, Buttons,
+  Grids, DBGrids, StdCtrls, CheckLst, DBCtrls, Menus, ActnList, ImgList,
+  ExcelExporter, Db, OracleData, Mask;
+
+type
+  TFormBalanceAnalys = class(TActiveForm, IFormBalanceAnalys)
+    Panel1: TPanel;
+    Panel2: TPanel;
+    PageControl1: TPageControl;
+    TabSheet1: TTabSheet;
+    Panel4: TPanel;
+    Panel5: TPanel;
+    Panel6: TPanel;
+    Splitter2: TSplitter;
+    Splitter1: TSplitter;
+    DBGridBalance: TDBGrid;
+    DBGridAccount: TDBGrid;
+    Panel7: TPanel;
+    StaticText5: TStaticText;
+    Panel8: TPanel;
+    StaticText1: TStaticText;
+    DTPBeginDate: TDateTimePicker;
+    DTPEndDate: TDateTimePicker;
+    CBBranches: TCheckListBox;
+    Panel10: TPanel;
+    StaticText3: TStaticText;
+    Panel14: TPanel;
+    StaticText6: TStaticText;
+    EditBalances: TEdit;
+    Panel15: TPanel;
+    CHBCurrency: TCheckBox;
+    Panel9: TPanel;
+    StaticText2: TStaticText;
+    DBLookup2: TDBLookupComboBox;
+    Panel11: TPanel;
+    CBOperator: TCheckBox;
+    DBLookup3: TDBLookupComboBox;
+    Panel16: TPanel;
+    StaticText7: TStaticText;
+    CBBalanceView: TComboBox;
+    Panel17: TPanel;
+    StaticText8: TStaticText;
+    CBBalanceReference: TComboBox;
+    PopupMenu: TPopupMenu;
+    LocalRefresh: TMenuItem;
+    GlobalRefresh1: TMenuItem;
+    ActionList: TActionList;
+    ActionFullRefresh: TAction;
+    ImageList: TImageList;
+    ActionExcelExport: TAction;
+    N1: TMenuItem;
+    ExcelExport1: TMenuItem;
+    ExcelExporter: TExcelExporter;
+    Panel3: TPanel;
+    ProgressBar: TProgressBar;
+    Button1: TButton;
+    PanelDest: TPanel;
+    DBEdit1: TDBEdit;
+    Panel18: TPanel;
+    CBAccountName: TCheckBox;
+    CBTransactionName: TCheckBox;
+    PanelAccName: TPanel;
+    DBEdit2: TDBEdit;
+    Panel19: TPanel;
+    DBText1: TDBText;
+    PanelBalanceSummary: TPanel;
+    DBEdit3: TDBEdit;
+    DBEdit4: TDBEdit;
+    DBEdit5: TDBEdit;
+    DBEdit6: TDBEdit;
+    DBEdit7: TDBEdit;
+    DBEdit8: TDBEdit;
+    Label1: TLabel;
+    Memo1: TMemo;
+    GroupBox2: TGroupBox;
+    DBGrid2: TDBGrid;
+    GroupBox1: TGroupBox;
+    DBGrid1: TDBGrid;
+    DBGridTransaction: TDBGrid;
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure CBBranchClick(Sender: TObject);
+    procedure DTPBeginDateChange(Sender: TObject);
+    procedure DTPEndDateChange(Sender: TObject);
+    procedure EditBalancesKeyPress(Sender: TObject; var Key: Char);
+    procedure LocalRefreshClick(Sender: TObject);
+    procedure ActionFullRefreshExecute(Sender: TObject);
+    procedure DBGridBalanceEnter(Sender: TObject);
+    procedure ActionExcelExportExecute(Sender: TObject);
+    procedure DBGridTransactionTitleClick(Column: TColumn);
+    procedure CBAccountNameClick(Sender: TObject);
+    procedure DBGrid2DblClick(Sender: TObject);
+    procedure DBGrid1DblClick(Sender: TObject);
+  private
+    { Private declarations }
+    FEvents: IFormBalanceAnalysEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+  protected
+    { Protected declarations }
+    FBeginDate: TDateTime;
+    FEndDate: TDateTime;
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+    procedure SetBeginDate(Value: TDateTime);
+    procedure SetEndDate(Value: TDateTime);
+  public
+    { Public declarations }
+    FBalance: WideString;
+    FAccount: WideString;
+    FTransaction: WideString;
+    RequiredOrderField: variant;
+
+    property BeginDate: TDateTime read FBeginDate write SetBeginDate;
+    property EndDate: TDateTime read FEndDate write SetEndDate;
+
+    procedure SetAddress;
+    function GetBeginPeriod(BeginDate: TDateTime): TDateTime;
+    procedure SetSysDate;
+    procedure BuildBalance();
+    procedure BuildAccount();
+    procedure BuildTransaction();
+    procedure debtBuildTransaction();
+    procedure CredBuildTransaction();
+    procedure CredbalBuildTransaction();
+    procedure DebtbalBuildTransaction();
+    function GenerateBranchFilter: string;
+    procedure Initialize; override;
+    procedure MouseWheelHandler(var Message: TMessage); override;
+  end;
+
+var
+   FormBalanceAnalys: TFormBalanceAnalys;
+   OperationIDs, CurrencyIDs: TStringList;
+   DBGrid: TDBGrid;
+
+implementation
+
+uses ComObj, ComServ, DataModuleBalance, SBStoredProc,sboapiDataModuleImpl, SBTranslateProc ,
+   Transctionslist;
+
+{$R *.DFM}
+
+{ TFormBalanceAnalys }
+
+procedure TFormBalanceAnalys.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_FormBalanceAnalysPage); }
+end;
+
+procedure TFormBalanceAnalys.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as IFormBalanceAnalysEvents;
+end;
+
+procedure TFormBalanceAnalys.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TFormBalanceAnalys.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TFormBalanceAnalys.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TFormBalanceAnalys.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TFormBalanceAnalys.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TFormBalanceAnalys.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TFormBalanceAnalys.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TFormBalanceAnalys.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TFormBalanceAnalys.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TFormBalanceAnalys.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TFormBalanceAnalys.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TFormBalanceAnalys.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TFormBalanceAnalys.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TFormBalanceAnalys.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TFormBalanceAnalys.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TFormBalanceAnalys.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TFormBalanceAnalys.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TFormBalanceAnalys.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TFormBalanceAnalys.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TFormBalanceAnalys._Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TFormBalanceAnalys.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TFormBalanceAnalys.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TFormBalanceAnalys.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TFormBalanceAnalys.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TFormBalanceAnalys.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TFormBalanceAnalys.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TFormBalanceAnalys.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TFormBalanceAnalys.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TFormBalanceAnalys.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TFormBalanceAnalys.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TFormBalanceAnalys.Set_AxBorderStyle(
+  Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TFormBalanceAnalys.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TFormBalanceAnalys.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TFormBalanceAnalys.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TFormBalanceAnalys.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TFormBalanceAnalys.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TFormBalanceAnalys.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TFormBalanceAnalys.Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TFormBalanceAnalys.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TFormBalanceAnalys.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TFormBalanceAnalys.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TFormBalanceAnalys.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TFormBalanceAnalys.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TFormBalanceAnalys.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+procedure TFormBalanceAnalys.SetBeginDate(Value: TDateTime);
+begin
+  FBeginDate := Value;
+  DTPBeginDate.DateTime := Int(Value);
+end;
+
+procedure TFormBalanceAnalys.SetEndDate(Value: TDateTime);
+begin
+  FEndDate := Value;
+  DTPEndDate.DateTime := Int(Value);
+end;
+
+
+
+//--------------------------------------------------------------------------------------------------------------------
+
+
+
+procedure Scroll(DBGrid: TDBGrid; Delta: integer);
+begin
+ with DBGrid, DataSource, DataSet do
+  begin
+   if IsEmpty then Exit;
+   if Focused then
+    if Delta < 0 then
+     Next
+    else
+     Prior;
+  end;
+end;
+
+procedure TFormBalanceAnalys.MouseWheelHandler(var Message: TMessage);
+begin
+  inherited;
+  Scroll(DBGridBalance, TCMMouseWheel(Message).WheelDelta);
+  Scroll(DBGridAccount, TCMMouseWheel(Message).WheelDelta);
+  Scroll(DBGridTransaction, TCMMouseWheel(Message).WheelDelta);
+end;
+
+
+procedure TFormBalanceAnalys.SetSysDate;
+var
+   i: word;
+   CurrentDate: TDateTime;
+begin
+ with DataModulBalance.SysDat do
+  begin
+   Open;
+   CurrentDate := FieldByName('tek_dat').AsDateTime;
+   Close;
+  end;
+  for i :=0 to ComponentCount-1 do
+   if (Components[i] is TDateTimePicker) then
+    (Components[i] as TDateTimePicker).DateTime :=CurrentDate;
+ BeginDate :=CurrentDate;
+ EndDate :=CurrentDate;   
+end;
+
+procedure TFormBalanceAnalys.SetAddress;
+begin
+ if not(Assigned(OperationIDs)) then
+  OperationIDs:=TStringList.Create
+ else
+  OperationIDs.Clear;
+
+ if not(Assigned(CurrencyIDs)) then
+  CurrencyIDs:=TStringList.Create
+ else
+  CurrencyIDs.Clear;
+
+ CBBranches.Tag:=Integer(@OperationIDs);
+ with DataModulBalance do
+  OperationType.Execute;
+end;
+
+function TFormBalanceAnalys.GetBeginPeriod(BeginDate: TDateTime): TDateTime;
+begin
+ with DataModulBalance, PeriodData do
+  begin
+   CloseAll;
+   SetVariable('BeginDate',BeginDate);
+   Open;
+   if FieldByName('BeginPeriod').IsNull then
+    Result :=BeginDate
+   else
+    Result :=FieldByName('BeginPeriod').AsDateTime;
+  end;
+end;
+
+function TFormBalanceAnalys.GenerateBranchFilter: string;
+var
+   Condition: string;
+   i, icount: integer;
+begin
+ Condition :='';
+  with CBBranches do
+  begin
+   icount :=CBBranches.Items.Count;
+   for i :=0 to icount -1 do
+   begin
+    if Checked[i] then
+     if Condition = '' then
+      Condition :=(TStringList(Pointer(CBBranches.Tag)^).Strings[i])
+     else
+      Condition :=Condition + ',' + (TStringList(Pointer(CBBranches.Tag)^).Strings[i]);
+   end;
+ end;
+ Result :=Condition;
+end;
+
+procedure TFormBalanceAnalys.BuildBalance;
+var
+   Condition: String;
+   IsForeignBalance: Boolean;
+   BalancePlane: Word;
+begin
+ Condition :='';
+ IsForeignBalance :=(CHBCurrency.Checked) and (CBBalanceView.ItemIndex=0);
+ BalancePlane :=CBBalanceReference.ItemIndex+1;
+
+ with DataModulBalance, Balance do
+  begin
+   SQL.CommaText :=FBalance;
+   if (WillEnabled(CBBranches) and (not IsEnabled(CBBranches))) then //If all filials are checked don't set filter;
+    Condition :=' AND Ac.filial in ' +'('+GenerateBranchFilter+')';
+   if CHBCurrency.Checked then
+    if Condition='' then
+     Condition :=' AND Ac.val_acc =' + Currency.FieldByName('valute').AsString
+    else
+     Condition :=Condition + ' AND Ac.val_acc =' + Currency.FieldByName('valute').AsString;
+   if Trim(EditBalances.Text)<>'' then
+     Condition :=Condition + ' AND ' + '(b.bal_cn in ('+Trim(EditBalances.Text)+') or b.accgroup in ('+Trim(EditBalances.Text)+'))';
+    Memo1.Text := Condition;
+   if IsForeignBalance then
+    begin
+      SQL[10] := Format(SQL[10] ,['']);
+      SQL[17] := Format(SQL[17] ,['']);
+      SQL[30] := Format(SQL[30] ,['']);
+      SQL[31] := Format(SQL[31] ,['']);
+      SQL[41] := Format(SQL[41] ,['']);
+      SQL[48] := Format(SQL[48] ,['']);
+    end
+   else
+    begin
+      SQL[10] := Format(SQL[10] ,['POK_']);
+      SQL[17] := Format(SQL[17] ,['POK_']);
+      SQL[30] := Format(SQL[30] ,['POK_']);
+      SQL[31] := Format(SQL[31] ,['POK_']);
+      SQL[41] := Format(SQL[41] ,['POK_']);
+      SQL[48] := Format(SQL[48] ,['POK_']);
+    end;
+    SQL[25] :=Condition; { Currency & Branch & Srecial Balance account}
+    SQL[35] :=Condition;
+    SQL[56] :=Condition;
+
+    SQL[22] :=Format(SQL[22],[BalancePlane]); { Special Balance Plane}
+    SQL[24] :=Format(SQL[24],[BalancePlane]);
+    SQL[32] :=Format(SQL[32],[BalancePlane]);
+    SQL[34] :=Format(SQL[34],[BalancePlane]);
+    SQL[53] :=Format(SQL[53],[BalancePlane]);
+    SQL[55] :=Format(SQL[55],[BalancePlane]);
+
+   CloseAll;
+    SetVariable('BeginPeriod',GetBeginPeriod(BeginDate));
+    SetVariable('BeginDate',BeginDate);
+    SetVariable('EndDate',EndDate);
+   Open;
+  end;
+ ///  Memo1.Clear;
+//  Memo1.Text:= DataModuleBalance.DataModulBalance.Transaction.SQL.Text;
+
+end;
+
+procedure TFormBalanceAnalys.BuildAccount();
+var
+   Condition: String;
+   IsForeignBalance: Boolean;
+   BalancePlane: Word;
+begin
+ Condition :='';
+ IsForeignBalance :=(CHBCurrency.Checked) and (CBBalanceView.ItemIndex=0);
+ BalancePlane :=CBBalanceReference.ItemIndex+1;
+
+ with DataModulBalance, Account do
+  begin
+   SQL.CommaText :=FAccount;
+   if (WillEnabled(CBBranches) and (not IsEnabled(CBBranches))) then //If all filials are checked don't set filter;
+    Condition :=' RestForLastPeriod.BranchID in ' +'('+GenerateBranchFilter+') AND';
+   if CHBCurrency.Checked then
+    if Condition='' then
+     Condition :=' RestForLastPeriod.CurrencyID =' + Currency.FieldByName('valute').AsString + ' AND '
+    else
+     Condition :=Condition + ' RestForLastPeriod.CurrencyID =' + Currency.FieldByName('valute').AsString + ' AND ';
+
+   if IsForeignBalance then
+    begin
+      SQL[20] := Format(SQL[20] ,['']);
+      SQL[26] := Format(SQL[26] ,['']);
+      SQL[50] := Format(SQL[50] ,['']);
+      SQL[56] := Format(SQL[56] ,['']);
+      SQL[76] := Format(SQL[76] ,['']);
+      SQL[77] := Format(SQL[77] ,['']);
+    end
+   else
+    begin
+      SQL[20] := Format(SQL[20] ,['POK_']);
+      SQL[26] := Format(SQL[26] ,['POK_']);
+      SQL[50] := Format(SQL[50] ,['POK_']);
+      SQL[56] := Format(SQL[56] ,['POK_']);
+      SQL[76] := Format(SQL[76] ,['POK_']);
+      SQL[77] := Format(SQL[77] ,['POK_']);
+    end;
+
+    SQL[34] :=Format(SQL[34],[BalancePlane]); { Special Balance Plane}
+    SQL[37] :=Format(SQL[37],[BalancePlane]);
+    SQL[64] :=Format(SQL[64],[BalancePlane]);
+    SQL[67] :=Format(SQL[67],[BalancePlane]);
+    SQL[81] :=Format(SQL[81],[BalancePlane]);
+    SQL[84] :=Format(SQL[84],[BalancePlane]);
+
+    SQL[91] :=Condition;
+   CloseAll;
+    SetVariable('BeginPeriod',GetBeginPeriod(BeginDate));
+    SetVariable('BeginDate',BeginDate);
+    SetVariable('EndDate',EndDate);
+   Open;
+  end;
+
+end;
+
+procedure TFormBalanceAnalys.debtBuildTransaction();
+
+function BuildFilter(IsChecked: boolean; const FilterStr: String; Args: array of const): string;
+begin
+ Result :='';
+ if IsChecked then
+  Result :=Format(FilterStr, Args);
+end;
+
+var
+   Condition: String;
+begin
+ Condition :='';
+ with DataModulBalance, debtTransaction do
+  begin
+   SQL.CommaText :=FTransaction;
+   SQL[16] :=BuildFilter(CBOperator.Checked, 't.op_id = %d and ',[Operators.FieldByName('ID').AsInteger]);
+   CloseAll;
+    SetVariable('BeginDate',BeginDate);
+    SetVariable('EndDate',EndDate);
+   Open;
+   memo1.Text:=DataModulBalance.debtTransaction.SQL.Text;
+  end;
+end;
+
+
+procedure TFormBalanceAnalys.CredbalBuildTransaction();
+
+
+var
+   Condition: String;
+begin
+ Condition :='';
+ with DataModulBalance, credbal_acc do
+  begin
+  // SQL.CommaText :=FTransaction;
+ //  SQL[16] :=BuildFilter(CBOperator.Checked, 't.op_id = %d and ',[Operators.FieldByName('ID').AsInteger]);
+   CloseAll;
+    SetVariable('BeginDate',BeginDate);
+    SetVariable('EndDate',EndDate);
+    SetVariable('Kredits',DBGridAccount.DataSource.DataSet.FieldByName('ACCOUNTID').AsInteger);
+
+   Open;
+
+   memo1.Text:=DataModulBalance.credbal_acc.SQL.Text;
+  end;
+end;
+
+
+
+
+procedure TFormBalanceAnalys.DebtbalBuildTransaction();
+
+
+var
+   Condition: String;
+begin
+ Condition :='';
+ with DataModulBalance, debtbal_acc do
+  begin
+  // SQL.CommaText :=FTransaction;
+ //  SQL[16] :=BuildFilter(CBOperator.Checked, 't.op_id = %d and ',[Operators.FieldByName('ID').AsInteger]);
+   CloseAll;
+    SetVariable('BeginDate',BeginDate);
+    SetVariable('EndDate',EndDate);
+    SetVariable('debts',DBGridAccount.DataSource.DataSet.FieldByName('ACCOUNTID').AsInteger);
+
+   Open;
+
+
+  end;
+end;
+
+procedure TFormBalanceAnalys.CredBuildTransaction();
+
+function BuildFilter(IsChecked: boolean; const FilterStr: String; Args: array of const): string;
+begin
+ Result :='';
+ if IsChecked then
+  Result :=Format(FilterStr, Args);
+end;
+
+var
+   Condition: String;
+begin
+ Condition :='';
+ with DataModulBalance, credTransaction do
+  begin
+   SQL.CommaText :=FTransaction;
+   SQL[16] :=BuildFilter(CBOperator.Checked, 't.op_id = %d and ',[Operators.FieldByName('ID').AsInteger]);
+   CloseAll;
+    SetVariable('BeginDate',BeginDate);
+    SetVariable('EndDate',EndDate);
+   Open;
+   memo1.Text:=DataModulBalance.credTransaction.SQL.Text;
+  end;
+end;
+
+procedure TFormBalanceAnalys.BuildTransaction();
+
+function BuildFilter(IsChecked: boolean; const FilterStr: String; Args: array of const): string;
+begin
+ Result :='';
+ if IsChecked then
+  Result :=Format(FilterStr, Args);
+end;
+
+var
+   Condition: String;
+begin
+ Condition :='';
+ with DataModulBalance, Transaction do
+  begin
+   SQL.CommaText :=FTransaction;
+   SQL[16] :=BuildFilter(CBOperator.Checked, 't.op_id = %d and ',[Operators.FieldByName('ID').AsInteger]);
+   CloseAll;
+    SetVariable('BeginDate',BeginDate);
+    SetVariable('EndDate',EndDate);
+   Open;
+   memo1.Text:=DataModulBalance.Transaction.SQL.Text;
+  end;
+end;
+
+procedure TFormBalanceAnalys.ActiveFormCreate(Sender: TObject);
+begin
+ FormBalanceAnalys :=Self;
+ DataModulBalance :=TDataModulBalance.Create(Self);
+ SetAddress;
+ SetSysDate;
+ with DataModulBalance do
+  begin
+   FBalance :=Balance.SQL.CommaText;
+   FAccount :=Account.SQL.CommaText;
+   FTransaction :=Transaction.SQL.CommaText;
+
+  end;
+ CBBalanceView.ItemIndex :=0;
+ CBBalanceReference.ItemIndex :=0;
+ RequiredOrderField :=DataModulBalance.Transaction.GetVariable('Title');
+ SBTranslateProc.TranslateExchComponents(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TFormBalanceAnalys.CBBranchClick(Sender: TObject);
+var
+   DBLookup: TDBLookupComboBox;
+   DBLookupName: string[10];
+   DBLookupNo: string[1];
+begin
+ with TCheckBox(Sender) do
+  DBLookupNo :=IntToStr(Tag);
+  DBLookupName :='DBLookup'+DBLookupNo;
+  DBLookup :=TDBLookupComboBox(FindComponent(DBLookupName));
+
+  if TCheckBox(Sender).Checked then
+   begin
+    DBLookup.ListSource.DataSet.First;
+    DBLookup.KeyValue :=DBLookup.ListSource.DataSet.FieldByName(DBLookup.KeyField).AsInteger;
+   end
+  else
+   DBLookup.KeyValue :=-1;
+end;
+
+procedure TFormBalanceAnalys.DTPBeginDateChange(Sender: TObject);
+begin
+ BeginDate :=Int((Sender as TDateTimePicker).DateTime);
+end;
+
+procedure TFormBalanceAnalys.DTPEndDateChange(Sender: TObject);
+begin
+ EndDate :=Int((Sender as TDateTimePicker).DateTime);
+end;
+
+procedure TFormBalanceAnalys.EditBalancesKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+ if not (key in ['0'..'9',',','.',#8]) then
+   Key :=#0
+end;
+
+procedure TFormBalanceAnalys.LocalRefreshClick(Sender: TObject);
+begin
+ case TMenuItem(Sender).Tag of
+  1: BuildBalance;
+  2: BuildAccount;
+  3: BuildTransaction;
+ end;
+end;
+
+procedure TFormBalanceAnalys.ActionFullRefreshExecute(Sender: TObject);
+begin
+ DBGridBalance.DataSource.DataSet.Close;
+ DBGridAccount.DataSource.DataSet.Close;
+ DBGridTransaction.DataSource.DataSet.Close;
+ ProgressBar.Show;
+ try
+  ProgressBar.StepIt;
+  BuildBalance;
+  ProgressBar.StepIt;
+  if not DBGridBalance.DataSource.DataSet.IsEmpty then
+   BuildAccount;
+  ProgressBar.StepIt;
+  if not DBGridAccount.DataSource.DataSet.IsEmpty then
+  begin
+   //BuildTransaction;
+   debtBuildTransaction;
+   credBuildTransaction;
+   CredbalBuildTransaction;
+   DebtbalBuildTransaction;
+
+  end;
+
+ finally
+  ProgressBar.Hide;
+ end;
+end;
+
+procedure TFormBalanceAnalys.DBGrid1DblClick(Sender: TObject);
+
+var
+   AccountID: string;
+begin
+
+  if  DataModulBalance.Account.FieldByName('AccountID').AsString='' then
+  begin
+   AccountID :='-1';
+  end
+  else
+   AccountID :=DataModulBalance.Account.FieldByName('AccountID').AsString;
+
+
+
+  with DataModulBalance.credTransaction do
+  begin
+   Filtered :=False;
+   Filter :='(Kredit = ' + AccountID + '  and d.bal_cn1='+dbgrid2.DataSource.DataSet.FieldByName('DEBETBALANS').Asstring+') ';
+   Filtered :=True;
+  end;
+
+  TransactionLists:=TTransactionLists.Create(self);
+ TransactionLists.gridtransactions.DataSource:=DataModulBalance.DatacredTransaction;
+  TransactionLists.ShowModal;
+
+end;
+
+procedure TFormBalanceAnalys.DBGrid2DblClick(Sender: TObject);
+var
+   AccountID: string;
+begin
+
+  if  DataModulBalance.Account.FieldByName('AccountID').AsString='' then
+  begin
+   AccountID :='-1';
+  end
+  else
+   AccountID :=DataModulBalance.Account.FieldByName('AccountID').AsString;
+
+
+   with DataModulBalance.debtTransaction do
+  begin
+       Filtered :=False;
+   Filter :='(Debt = ' + AccountID + 'and c.bal_cn1='+dbgrid2.DataSource.DataSet.FieldByName('KREDITBALANS').Asstring+')';
+   Filtered :=True;
+
+  end;
+
+
+ TransactionLists:=TTransactionLists.Create(self);
+ TransactionLists.gridtransactions.DataSource:=DataModulBalance.DatadebtTransaction;
+  TransactionLists.ShowModal;
+
+end;
+
+procedure TFormBalanceAnalys.DBGridBalanceEnter(Sender: TObject);
+begin
+  DBGrid :=TDBGrid(Sender);
+  LocalRefresh.Tag :=TDBGrid(Sender).Tag;
+end;
+
+procedure TFormBalanceAnalys.ActionExcelExportExecute(Sender: TObject);
+var
+   FAfterScroll: TDataSetNotifyEvent;
+begin
+ with ExcelExporter do
+  begin
+   ExportSource :=DBGrid.DataSource;
+   FAfterScroll :=ExportSource.DataSet.AfterScroll;
+   ExportSource.DataSet.AfterScroll :=Nil;
+   ExportSource.DataSet.Last;
+   try
+    Report;
+   finally
+    ExportSource.DataSet.AfterScroll :=FAfterScroll;
+   end;
+  end;
+end;
+
+procedure TFormBalanceAnalys.DBGridTransactionTitleClick(Column: TColumn);
+var
+   TitleName :string;
+begin
+ if DBGridTransaction.DataSource.DataSet.IsEmpty then Exit;
+ Screen.Cursor := crHourGlass;
+ TitleName :=Column.FieldName;
+  try
+   with TOracleDataSet(DBGridTransaction.DataSource.DataSet) do
+    begin
+     SetVariable('Title',TitleName);
+     Refresh;
+     SetVariable('Title',RequiredOrderField);
+    end;
+  finally
+   Screen.Cursor := crDefault;
+  end;
+end;
+
+procedure TFormBalanceAnalys.CBAccountNameClick(Sender: TObject);
+begin
+ if TCheckBox(Sender).Tag = 1 then
+  PanelAccName.Visible :=not PanelAccName.Visible
+ else
+  PanelDest.Visible :=not PanelDest.Visible; 
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TFormBalanceAnalys,
+    Class_FormBalanceAnalys,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

@@ -1,0 +1,165 @@
+unit UnitDataModuleCourt;
+
+interface
+
+uses
+  SysUtils, Classes, DB, OracleData,sboapiDataModuleImpl, Oracle;
+
+type
+  TDataModuleCourt = class(TDataModule)
+    ODSCourt: TOracleDataSet;
+    DSCourt: TDataSource;
+    DSCourtAdmin: TDataSource;
+    ODSCourtAdmin: TOracleDataSet;
+    DSAdminGroups: TDataSource;
+    ODSAdminGroups: TOracleDataSet;
+    DSAdminIn: TDataSource;
+    ODSAdminIn: TOracleDataSet;
+    ct_control: TOraclePackage;
+    ODSGroups: TOracleDataSet;
+    DSGroups: TDataSource;
+    DSFilial: TDataSource;
+    ODSFilial: TOracleDataSet;
+    ODSFilialID: TFloatField;
+    ODSFilialNAME: TWideStringField;
+    ODSInfo: TOracleDataSet;
+    DSInfo: TDataSource;
+    ODSGroupsSend: TOracleDataSet;
+    DSGroupsSend: TDataSource;
+    ODSPdf: TOracleDataSet;
+    DSPdf: TDataSource;
+    ZaminDSetCourt: TOracleDataSet;
+    ZaminDSetCourtCREDITID: TFloatField;
+    ZaminDSetCourtCARDID: TFloatField;
+    ZaminDSetCourtGUARANTORNAME: TWideStringField;
+    ZaminDSetCourtGUARANTORID: TWideStringField;
+    ZaminDSetCourtGUARANTORSALARY: TWideStringField;
+    ZaminDSetCourtZAMINWORK1: TWideStringField;
+    ZaminDSetCourtZAMINADRES1: TWideStringField;
+    ZaminDSetCourtZAMINTEL1: TWideStringField;
+    ZaminDSetCourtZMPASPYER1: TWideStringField;
+    ZaminDSetCourtZMPASPDAT1: TDateTimeField;
+    ZaminDSetCourtZMTELMOB1: TWideStringField;
+    ZaminDSetCourtPINCODE: TWideStringField;
+    ZaminDSetCourtPERSONALTYPE: TFloatField;
+    ZaminDSetCourtCUNTRYCODE: TWideStringField;
+    ZaminDSetCourtDATEOFBIRTH: TDateTimeField;
+    ZaminDSetCourtCUNTRY: TWideStringField;
+    ZaminDSetCourtCITY: TWideStringField;
+    ZaminDSetCourtFACTADRES: TWideStringField;
+    ZaminDSrcCourt: TDataSource;
+    GirovDSetCourt: TOracleDataSet;
+    GirovDSetCourtCREDITID: TFloatField;
+    GirovDSetCourtPLEDGENAME: TWideStringField;
+    GirovDSetCourtANYINFOTODISTING: TWideStringField;
+    GirovDSetCourtREGISTRYNO: TWideStringField;
+    GirovDSetCourtREGISTRYAGENCY: TWideStringField;
+    GirovDSetCourtGQNAME: TWideStringField;
+    GirovDSetCourtGQPASPNUM: TWideStringField;
+    GirovDSetCourtGQPASPYER: TWideStringField;
+    GirovDSetCourtGQPASPDATE: TDateTimeField;
+    GirovDSetCourtGQADRESS: TWideStringField;
+    GirovDSetCourtPLEDGEPRICE: TFloatField;
+    GirovDSetCourtGQTELHOME: TWideStringField;
+    GirovDSetCourtGQTELMOB: TWideStringField;
+    GirovDSetCourtREYSTER: TWideStringField;
+    GirovDSrcCourt: TDataSource;
+    DSScheduleCourt: TDataSource;
+    ScheduleCourt: TOracleDataSet;
+    ScheduleCourtID: TFloatField;
+    ScheduleCourtCREDITID: TFloatField;
+    ScheduleCourtPAYMENTDATE: TDateTimeField;
+    ScheduleCourtPRINCIPAL: TFloatField;
+    ScheduleCourtINTEREST: TFloatField;
+    ScheduleCourtSM: TFloatField;
+    ScheduleCourtSIRA: TFloatField;
+    ScheduleCourtREST: TFloatField;
+    PaymentsCourt: TOracleDataSet;
+    PaymentsCourtSIRA: TFloatField;
+    PaymentsCourtID: TFloatField;
+    PaymentsCourtCREDITID: TFloatField;
+    PaymentsCourtPAYDATE: TDateTimeField;
+    PaymentsCourtPAYEDAMT: TFloatField;
+    PaymentsCourtPAYEDINTAMT: TFloatField;
+    PaymentsCourtPAYEDDUEAMT: TFloatField;
+    PaymentsCourtPAYEDDUEINTAMT: TFloatField;
+    PaymentsCourtPAYEDPENALTYAMT: TFloatField;
+    PaymentsCourtSM: TFloatField;
+    DSPaymentsCourt: TDataSource;
+    ReportDSrc: TDataSource;
+    PaymentReport: TOracleDataSet;
+    PaymentReportID: TFloatField;
+    PaymentReportNUMBEROFCREDIT: TWideStringField;
+    PaymentReportCUSTNAME: TWideStringField;
+    PaymentReportPAYDATE: TDateTimeField;
+    PaymentReportPAYEDAMT: TFloatField;
+    PaymentReportPAYEDINTAMT: TFloatField;
+    PaymentReportPAYEDDUEAMT: TFloatField;
+    PaymentReportPAYEDDUEINTAMT: TFloatField;
+    PaymentReportPAYEDPENALTYAMT: TFloatField;
+    PaymentReportDUEDAY: TFloatField;
+    PaymentReportNAME: TWideStringField;
+    ODSInfoROWNUM: TFloatField;
+    ODSInfoID: TFloatField;
+    ODSInfoCREDITID: TFloatField;
+    ODSInfoDAT: TDateTimeField;
+    ODSInfoUSERNAME: TWideStringField;
+    ODSInfoINFO1: TWideStringField;
+    ODSInfoDESCRIPTION: TWideStringField;
+    ODSInfoINFO: TWideMemoField;
+    DSExecutive: TDataSource;
+    ODSExecutive: TOracleDataSet;
+    DSCourtBody: TDataSource;
+    ODSCourtBody: TOracleDataSet;
+    ODSExecutiveFilter: TOracleDataSet;
+    ODSCourtBodyFilter: TOracleDataSet;
+    DSExecutiveFilter: TDataSource;
+    DSCourtBodyFilter: TDataSource;
+    ODSPdfID: TFloatField;
+    ODSPdfCREDITID: TFloatField;
+    ODSPdfNAME: TWideStringField;
+    ODSPdfDAT: TDateTimeField;
+    ODSPdfUSERID: TFloatField;
+    ODSPdfPDF: TBlobField;
+    ODSSbaObjinf: TOracleDataSet;
+    ODSPdfUSERNAME: TStringField;
+    procedure DataModuleCreate(Sender: TObject);
+    procedure DataModuleDestroy(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  DataModuleCourt: TDataModuleCourt;
+
+implementation
+
+{$R *.dfm}
+
+procedure TDataModuleCourt.DataModuleCreate(Sender: TObject);
+begin
+ODSCourt.Open;
+ODSInfo.Open;
+ODSPdf.Open;
+ODSGroupsSend.Open;
+ODSExecutive.Open;
+ODSCourtBody.Open;
+ODSExecutiveFilter.Open;
+ODSCourtBodyFilter.Open;
+end;
+
+procedure TDataModuleCourt.DataModuleDestroy(Sender: TObject);
+begin
+ODSCourt.CloseAll;
+ODSInfo.CloseAll;
+ODSPdf.CloseAll;
+ODSGroupsSend.CloseAll;
+ODSExecutive.CloseAll;
+ODSCourtBody.CloseAll;
+ODSExecutiveFilter.CloseAll;
+ODSCourtBodyFilter.CloseAll;
+end;
+
+end.

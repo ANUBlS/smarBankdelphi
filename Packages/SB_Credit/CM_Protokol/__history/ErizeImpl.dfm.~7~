@@ -1,0 +1,75 @@
+object ERizeFrm: TERizeFrm
+  Left = 0
+  Top = 0
+  ClientHeight = 543
+  ClientWidth = 1055
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poScreenCenter
+  OnCanResize = FormCanResize
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  OnKeyPress = FormKeyPress
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Panel1: TPanel
+    Left = 0
+    Top = 502
+    Width = 1055
+    Height = 41
+    Align = alBottom
+    BevelOuter = bvLowered
+    TabOrder = 0
+    ExplicitLeft = 440
+    ExplicitTop = 136
+    ExplicitWidth = 185
+  end
+  object CalcGrid: TDBGridEh
+    Left = 0
+    Top = 0
+    Width = 1055
+    Height = 502
+    Align = alClient
+    DataSource = DataSur
+    Flat = True
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    FooterColor = clBlack
+    FooterFont.Charset = RUSSIAN_CHARSET
+    FooterFont.Color = clWindowText
+    FooterFont.Height = -11
+    FooterFont.Name = 'Tahoma'
+    FooterFont.Style = []
+    Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit, dgMultiSelect]
+    OptionsEh = [dghFixed3D, dghHighlightFocus, dghClearSelection, dghAutoSortMarking, dghDblClickOptimizeColWidth, dghDialogFind]
+    ParentFont = False
+    ReadOnly = True
+    RowSizingAllowed = True
+    TabOrder = 1
+    TitleFont.Charset = DEFAULT_CHARSET
+    TitleFont.Color = clWindow
+    TitleFont.Height = -11
+    TitleFont.Name = 'Azl Sans Serif'
+    TitleFont.Style = []
+  end
+  object Erize: TOracleDataSet
+    Optimize = False
+    Session = CMDataModule.CMSession
+    Left = 600
+    Top = 112
+  end
+  object DataSur: TDataSource
+    DataSet = Erize
+    Left = 656
+    Top = 112
+  end
+end

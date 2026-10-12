@@ -1,0 +1,81 @@
+unit UnitBktBalans;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Grids, DBGrids, DBCtrls, ExtCtrls, DB, OracleData, StdCtrls,
+  CMExcelExport;
+
+type
+  TBKTBalans = class(TForm)
+    BKTBalans: TOracleDataSet;
+    DSBKTBalans: TDataSource;
+    BKTName: TOracleDataSet;
+    Panel1: TPanel;
+    Panel2: TPanel;
+    Button1: TButton;
+    Button2: TButton;
+    Button3: TButton;
+    Button4: TButton;
+    DBGrid1: TDBGrid;
+    DSBKTName: TDataSource;
+    BKTBalansBKT: TFloatField;
+    BKTBalansTIP: TIntegerField;
+    BKTBalansBALANS_H: TIntegerField;
+    BKTBalansNAME: TWideStringField;
+    BKTBalansDESCRIPTION: TWideStringField;
+    BKTBalansBALANS: TIntegerField;
+    CMExcelExport1: TCMExcelExport;
+    procedure Button3Click(Sender: TObject);
+    procedure Button4Click(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  BKTBalans: TBKTBalans;
+
+implementation
+uses sboapiDataModuleImpl, UnitBalansAdd;
+
+{$R *.dfm}
+
+procedure TBKTBalans.Button1Click(Sender: TObject);
+begin
+  FormAdd.DBLookupComboboxEh1.KeyValue:=null;
+  FormAdd.DBLookupComboboxEh2.KeyValue:=-1;
+  FormAdd.DBLookupComboboxEh3.KeyValue:=-1;
+  FormAdd.ShowModal;
+end;
+
+procedure TBKTBalans.Button2Click(Sender: TObject);
+var
+  Bkttype:variant;
+  Tip:variant;
+  Balans:variant;
+begin
+  Bkttype:=DBGrid1.DataSource.DataSet.FieldByName('bkt').AsVariant;
+  Tip:=DBGrid1.DataSource.DataSet.FieldByName('tip').AsVariant;
+  Balans:=DBGrid1.DataSource.DataSet.FieldByName('balans_h').AsVariant;
+  FormAdd.Prudensial.CallProcedure('BktDelete',[Bkttype,Tip,Balans]);
+  BKTBalans.Refresh;
+end;
+
+procedure TBKTBalans.Button3Click(Sender: TObject);
+begin
+  BKTBalans.Refresh;
+end;
+
+procedure TBKTBalans.Button4Click(Sender: TObject);
+begin
+  CMExcelExport1.Connect;
+  CMExcelExport1.ExportDataset(BKTBalans,'BKTBalans',true);
+  ShowModal;
+end;
+
+end.

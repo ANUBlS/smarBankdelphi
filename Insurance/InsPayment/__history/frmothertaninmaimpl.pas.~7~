@@ -1,0 +1,68 @@
+unit frmothertaninmaimpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ExtCtrls, XFSCtrls, StdCtrls, DBCtrls, CMCurrencyEdit, CMDBSearchEdit;
+
+type
+  TForm1 = class(TForm)
+    XFPanel1: TXFPanel;
+    XFPanel2: TXFPanel;
+    CMCurrencyEdit1: TCMCurrencyEdit;
+    Edit1: TEdit;
+    XFButton1: TXFButton;
+    XFButton2: TXFButton;
+    XFLabel1: TXFLabel;
+    XFLabel2: TXFLabel;
+    XFLabel3: TXFLabel;
+    XFLabel4: TXFLabel;
+    DBLookupComboBox1: TDBLookupComboBox;
+    DBLookupComboBox2: TDBLookupComboBox;
+    procedure XFButton2Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure XFButton1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form1: TForm1;
+
+implementation
+
+{$R *.dfm}
+ uses DMPaymentImpl, FrmAddPaymentImpl,sboapiDataModuleimpl,SBTranslateProc,CommanParametrs;
+
+procedure TForm1.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+if ord(key)=vk_escape then close
+end;
+
+procedure TForm1.FormShow(Sender: TObject);
+begin
+CMCurrencyEdit1.Value:=0;
+DBLookupComboBox1.KeyValue:='';
+DBLookupComboBox2.KeyValue:='';
+Edit1.Text:='';
+end;
+
+procedure TForm1.XFButton1Click(Sender: TObject);
+begin
+with DMPayment,OPCOMMON do
+begin
+CallProcedure('commitcontract_other');
+end;
+
+end;
+
+procedure TForm1.XFButton2Click(Sender: TObject);
+begin
+close;
+end;
+
+end.

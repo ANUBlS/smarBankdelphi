@@ -1,0 +1,263 @@
+object dmPaymentTer: TdmPaymentTer
+  OldCreateOrder = False
+  OnCreate = DataModuleCreate
+  OnDestroy = DataModuleDestroy
+  Height = 320
+  Width = 559
+  object DSRSysdat: TDataSource
+    DataSet = DSSysdat
+    Left = 104
+    Top = 8
+  end
+  object DSSysdat: TOracleDataSet
+    SQL.Strings = (
+      'select * from sysdat')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000040000000E000000540045004B005F00440041005400010000000000
+      1000000050005200450044005F004400410054000100000000000E0000004100
+      520043005F004400410059000100000000000A00000043004C004F0053004500
+      010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 24
+    Top = 8
+    object DSSysdatTEK_DAT: TDateTimeField
+      FieldName = 'TEK_DAT'
+    end
+    object DSSysdatPRED_DAT: TDateTimeField
+      FieldName = 'PRED_DAT'
+    end
+    object DSSysdatARC_DAY: TDateTimeField
+      FieldName = 'ARC_DAY'
+    end
+    object DSSysdatCLOSE: TIntegerField
+      FieldName = 'CLOSE'
+    end
+  end
+  object DSPaymentTer: TOracleDataSet
+    SQL.Strings = (
+      'select  '
+      'ict.id,'
+      'ict.cid, '
+      '/*ictd.trid,'
+      'ictd.trid1,'
+      'ictd.trid2,*/'
+      'ict.stage_tesdiq_dat,'
+      'nvl(pr.lammount,0) as mebleg,'
+      'sb_p.name'
+      'from'
+      'ins_contract_terminated ict,'
+      'ins_contract_terminated_detal ictd, '
+      'sb_business_opers sb_o,'
+      'sb_business_processes sb_p,'
+      'provarch pr'
+      'where ict.cid=:Pcid'
+      'and ictd.ter_id=ict.id'
+      
+        'and (ictd.trid=sb_o.parentid or ictd.trid1=sb_o.parentid or ictd' +
+        '.trid2=sb_o.parentid)'
+      'and  pr.id=sb_o.parentid'
+      'and  sb_o.busproc in(21,22,23,24,25,26,27)'
+      'and  sb_p.id=sb_o.busproc')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000A0000003A00500043004900440003000000000000000000
+      0000}
+    QBEDefinition.QBEFieldDefs = {
+      0500000005000000040000004900440001000000000006000000430049004400
+      01000000000020000000530054004100470045005F0054004500530044004900
+      51005F00440041005400010000000000080000004E0041004D00450001000000
+      00000C0000004D00450042004C0045004700010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 40
+    Top = 72
+    object DSPaymentTerID: TFloatField
+      FieldName = 'ID'
+      Visible = False
+    end
+    object DSPaymentTerCID: TFloatField
+      FieldName = 'CID'
+      Visible = False
+    end
+    object DSPaymentTerSTAGE_TESDIQ_DAT: TDateTimeField
+      DisplayLabel = 'Tarix'
+      FieldName = 'STAGE_TESDIQ_DAT'
+    end
+    object DSPaymentTerNAME: TWideStringField
+      DisplayLabel = #399'm'#601'liyyatin Ad'#305
+      FieldName = 'NAME'
+      Size = 600
+    end
+    object DSPaymentTerMEBLEG: TFloatField
+      DisplayLabel = 'M'#601'bl'#601#287
+      FieldName = 'MEBLEG'
+    end
+  end
+  object DSRPaymentTer: TDataSource
+    DataSet = DSPaymentTer
+    Left = 120
+    Top = 80
+  end
+  object DSTerBarderoSay: TOracleDataSet
+    SQL.Strings = (
+      'select count(*) as say from ins_terminated_bardero'
+      'where cid=:p_cid')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000C0000003A0050005F004300490044000300000000000000
+      00000000}
+    QBEDefinition.QBEFieldDefs = {050000000100000006000000530041005900010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 40
+    Top = 128
+    object DSTerBarderoSaySAY: TFloatField
+      FieldName = 'SAY'
+    end
+  end
+  object DSRPaymentLoss: TDataSource
+    Left = 37
+    Top = 176
+  end
+  object DSPaymentTerReal: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      'itp.cid,'
+      'itp.id,'
+      'itp.traid,'
+      'itp.paydate,'
+      'nvl(itp.ammount,0) as mebleg,'
+      'sb_p.name'
+      'from'
+      'ins_terminate_payment itp,'
+      'sb_business_opers sb_o,'
+      'sb_business_processes sb_p,'
+      'provarch pr'
+      'where itp.cid=:PCID'
+      'and   pr.id=itp.traid'
+      'and   itp.traid=sb_o.parentid'
+      'and   sb_o.busproc in(56)'
+      'and   sb_p.id=sb_o.busproc')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000A0000003A00500043004900440003000000000000000000
+      0000}
+    QBEDefinition.QBEFieldDefs = {
+      0500000006000000040000004900440001000000000006000000430049004400
+      0100000000000A000000540052004100490044000100000000000E0000005000
+      4100590044004100540045000100000000000C0000004D00450042004C004500
+      4700010000000000080000004E0041004D004500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 224
+    Top = 144
+    object DSPaymentTerRealCID: TFloatField
+      FieldName = 'CID'
+    end
+    object DSPaymentTerRealTRAID: TFloatField
+      DisplayLabel = #399'm'#601'liyyat '#8470
+      FieldName = 'TRAID'
+    end
+    object DSPaymentTerRealPAYDATE: TDateTimeField
+      DisplayLabel = 'Tarix'
+      FieldName = 'PAYDATE'
+    end
+    object DSPaymentTerRealNAME: TWideStringField
+      DisplayLabel = #399'm'#601'liyyatin Ad'#305
+      FieldName = 'NAME'
+      Size = 600
+    end
+    object DSPaymentTerRealMEBLEG: TFloatField
+      DisplayLabel = 'M'#601'bl'#601#287
+      FieldName = 'MEBLEG'
+    end
+    object DSPaymentTerRealID: TFloatField
+      FieldName = 'ID'
+    end
+  end
+  object DSRPaymentTerReal: TDataSource
+    DataSet = DSPaymentTerReal
+    Left = 320
+    Top = 88
+  end
+  object DSpaymentAcc: TOracleDataSet
+    SQL.Strings = (
+      
+        'select id, acc_no from account where id in(select acc_id from in' +
+        's_dict_acc_payment_loss)')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000200000004000000490044000100000000000C000000410043004300
+      5F004E004F00010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 480
+    Top = 40
+    object DSpaymentAccID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object DSpaymentAccACC_NO: TWideStringField
+      FieldName = 'ACC_NO'
+      Size = 448
+    end
+  end
+  object DSRpaymentAcc: TDataSource
+    DataSet = DSpaymentAcc
+    Left = 480
+    Top = 88
+  end
+  object sb_aca: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'sb_aca'
+    Left = 344
+    Top = 208
+  end
+  object Pins_common: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'ins_common'
+    Optimize = False
+    Left = 304
+    Top = 40
+  end
+  object DSqaliq: TOracleDataSet
+    SQL.Strings = (
+      'select (select  '
+      'sum (nvl(pr.lammount,0))'
+      'from'
+      'ins_contract_terminated ict,'
+      'ins_contract_terminated_detal ictd, '
+      'sb_business_opers sb_o,'
+      'sb_business_processes sb_p,'
+      'provarch pr'
+      'where ict.cid=:pcid'
+      'and ictd.ter_id=ict.id'
+      
+        'and (ictd.trid=sb_o.parentid or ictd.trid1=sb_o.parentid or ictd' +
+        '.trid2=sb_o.parentid)'
+      'and  pr.id=sb_o.parentid'
+      'and  sb_o.busproc in(21,22,23,24,25,26,27)'
+      'and  sb_p.id=sb_o.busproc)-'
+      '(select'
+      ''
+      'nvl(sum((itp.ammount)),0)'
+      ''
+      'from'
+      'ins_terminate_payment itp,'
+      'sb_business_opers sb_o,'
+      'sb_business_processes sb_p'
+      'where itp.cid=:pcid'
+      'and   itp.traid=sb_o.parentid'
+      'and   sb_o.busproc in(56)'
+      'and   sb_p.id=sb_o.busproc) as qaliq'
+      'from dual')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000A0000003A00500043004900440003000000000000000000
+      0000}
+    QBEDefinition.QBEFieldDefs = {05000000010000000A000000510041004C0049005100010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 40
+    Top = 232
+    object DSqaliqQALIQ: TFloatField
+      FieldName = 'QALIQ'
+    end
+  end
+end

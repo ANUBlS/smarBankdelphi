@@ -1,0 +1,111 @@
+unit CC_AccOutForm_Unit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, Mask, DBCtrls, ExtCtrls, Grids, DBGrids, Db, OracleData,
+  NLSLocalizer;
+
+type
+  TCC_AccInForm = class(TForm)
+    SettingsBrowser: TDBGrid;
+    Panel4: TPanel;
+    Panel5: TPanel;
+    DBEdit1: TDBEdit;
+    Panel6: TPanel;
+    DBEdit2: TDBEdit;
+    Panel3: TPanel;
+    ButtonRefresh: TButton;
+    ButtonClose: TButton;
+    Button3: TButton;
+    CO_In_data: TDataSource;
+    CC_InForm: TOracleDataSet;
+    CC_InFormID: TFloatField;
+    CC_InFormNAME: TStringField;
+    CC_InFormDEBT: TFloatField;
+    CC_InFormDEBITACCOUNT: TStringField;
+    CC_InFormDEBITCURRENCY: TStringField;
+    CC_InFormCREDIT: TFloatField;
+    CC_InFormCREDITACCOUNT: TStringField;
+    CC_InFormCREDITCURRENCY: TStringField;
+    CC_InFormASSIGNMENT: TStringField;
+    CC_InFormUSERID: TFloatField;
+    procedure ButtonCloseClick(Sender: TObject);
+    procedure SettingsBrowserDblClick(Sender: TObject);
+    procedure Button3Click(Sender: TObject);
+    procedure ButtonRefreshClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  procedure WMNCACTIVATE(var message:TWMNCActivate);
+  procedure WMNCPaint(var message: TWMNCPaint);
+
+  end;
+
+var
+  CC_AccInForm: TCC_AccInForm;
+
+implementation
+
+uses UnitData, CC_ACCInUnit,sboapiDataModuleImpl;
+
+{$R *.DFM}
+
+ procedure TCC_AccInForm.WMNCACTIVATE(var message:TWMNCActivate);
+var
+ S:TWMNCPaint;
+begin
+inherited;
+WMNCPaint(s);
+end;
+
+procedure TCC_AccInForm.WMNCPaint(var message: TWMNCPaint);
+const Capt = 'Комиссийа ямялиййатлары';
+var dc : hDc;
+begin
+inherited;
+Caption:='';
+dc := GetWindowDC(Handle);
+        SetBkMode(dc,Transparent);
+        SetTextColor(dc,clWhite);
+        SelectObject(dc, Font.Handle);
+        TextOut(dc, 23,6,Capt,Length(Capt));
+end;
+
+procedure TCC_AccInForm.ButtonCloseClick(Sender: TObject);
+begin
+close;
+end;
+
+procedure TCC_AccInForm.SettingsBrowserDblClick(Sender: TObject);
+begin
+ FormAccIn :=TFormAccIn.Create(self);
+ FormAccIn.Showmodal;
+close;
+            {ShowMessage(CC_AccInForm.CC_InForm.SQL[15]);
+            if CC_AccInForm.CC_InForm.SQL[15]='debt>0' then
+            ShowMessage('debit---'+CC_AccInForm.CC_InForm.fieldbyname('DEBITACCOUNT').asstring) ;
+            ShowMessage('kredit---'+DataMod_Buyers.Accno.fieldbyname('ACCNO').asstring) ;
+             FormAccIn.DebtAccSearchEdit.Text:=CC_AccInForm.CC_InForm.fieldbyname('DEBITACCOUNT').asstring;
+             FormAccIn.CreditAccSearchEdit.Text:=DataMod_Buyers.Accno.fieldbyname('ACCNO').asstring;}
+end;
+
+
+
+procedure TCC_AccInForm.Button3Click(Sender: TObject);
+begin
+ FormAccIn :=TFormAccIn.Create(self);
+ FormAccIn.Showmodal;
+Close;
+
+end;
+
+procedure TCC_AccInForm.ButtonRefreshClick(Sender: TObject);
+begin
+CC_InForm.close;
+CC_InForm.Open;
+end;
+
+end.

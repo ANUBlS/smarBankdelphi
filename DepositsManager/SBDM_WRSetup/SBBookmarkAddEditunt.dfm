@@ -1,0 +1,131 @@
+object SBBookmarkAddEditForm: TSBBookmarkAddEditForm
+  Left = 359
+  Top = 238
+  Width = 324
+  Height = 121
+  BorderIcons = [biSystemMenu]
+  Caption = 'SBBookmarkAddEditForm'
+  Color = clBtnFace
+  Font.Charset = RUSSIAN_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poOwnerFormCenter
+  OnCanResize = FormCanResize
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  OnKeyPress = FormKeyPress
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Label1: TLabel
+    Left = 1
+    Top = 8
+    Width = 37
+    Height = 13
+    Caption = '“€йинаты'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    ParentFont = False
+  end
+  object Label4: TLabel
+    Left = 159
+    Top = 6
+    Width = 67
+    Height = 13
+    Caption = 'Ѕукмаркын ады'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    ParentFont = False
+  end
+  object DBEdit3: TDBEdit
+    Left = 159
+    Top = 25
+    Width = 144
+    Height = 21
+    Color = clWhite
+    DataField = 'BOOKMARKNAME'
+    DataSource = SBWRSetupDataMod.SBWRBookmarksDSrc
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 0
+  end
+  object Button1: TButton
+    Left = 150
+    Top = 56
+    Width = 75
+    Height = 25
+    Action = ActnAccept
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    ModalResult = 1
+    ParentFont = False
+    TabOrder = 1
+  end
+  object Button2: TButton
+    Left = 230
+    Top = 56
+    Width = 75
+    Height = 25
+    Action = ActnReject
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 2
+  end
+  object DBLookupComboboxEh1: TDBLookupComboboxEh
+    Left = 1
+    Top = 24
+    Width = 145
+    Height = 21
+    Color = clCaptionText
+    DataField = 'FIELDID'
+    DataSource = SBWRSetupDataMod.SBWRBookmarksDSrc
+    DropDownBox.Sizable = True
+    EditButtons = <>
+    KeyField = 'ID'
+    ListField = 'DESCRIPTION'
+    ListSource = SBWRSetupDataMod.SBWRFieldsDSrc
+    TabOrder = 3
+    Visible = True
+  end
+  object ActionList1: TActionList
+    Top = 48
+    object ActnAccept: TAction
+      Caption = '√€бул'
+      OnExecute = ActnAcceptExecute
+    end
+    object ActnReject: TAction
+      Caption = '»мтина'
+      OnExecute = ActnRejectExecute
+    end
+  end
+  object NLSLocalizer1: TNLSLocalizer
+    Caption = '…eни'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    Left = 32
+    Top = 48
+  end
+end

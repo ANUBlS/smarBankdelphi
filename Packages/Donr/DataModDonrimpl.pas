@@ -1,0 +1,172 @@
+unit DataModDonrimpl;
+
+interface
+
+uses
+  SysUtils, Classes, DB, OracleData;
+
+type
+  TDataModDonr = class(TDataModule)
+    SysDset: TOracleDataSet;
+    FilDset: TOracleDataSet;
+    ValDset: TOracleDataSet;
+    SysDsetSrc: TDataSource;
+    FilDsetSrc: TDataSource;
+    ValDsetSrc: TDataSource;
+    DonrDset: TOracleDataSet;
+    DonrDsetSrc: TDataSource;
+    DonrDsetCONTRACTNO: TWideStringField;
+    DonrDsetCONTRACTACCNO: TWideStringField;
+    DonrDsetINTERESTACCNO: TWideStringField;
+    DonrDsetVAL_NAME: TWideStringField;
+    DonrDsetCUSTOMERNAME: TWideStringField;
+    DonrDsetOPENDATE: TDateTimeField;
+    DonrDsetCLOSEDATE: TDateTimeField;
+    DonrDsetAMOUNT: TFloatField;
+    DonrDsetEKAMOUNT: TFloatField;
+    DonrDsetINTEREST: TFloatField;
+    DonrDsetFACTICALDEBT: TFloatField;
+    DonrDsetEKFACTICALDEBT: TFloatField;
+    DonrDsetFACTICALINTERESTDEBT: TFloatField;
+    DonrDsetEKFACTICALINTERESTDEBT: TFloatField;
+    DonrDsetSTOPCALCULATIONDATE: TDateTimeField;
+    DonrDsetCURRENCY: TFloatField;
+    DonrDsetPERSONALTYPE: TFloatField;
+    DonrDsetCLIENTTYPE: TFloatField;
+    DonrDsetBRANCHID: TFloatField;
+    DonrDsetCONTRACTTYPE: TIntegerField;
+    DonrDsetSTATUS: TFloatField;
+    DonrDsetCUSTOMERID: TFloatField;
+    DonrDsetUSID: TFloatField;
+    DonrDsetID: TFloatField;
+    CredDset: TOracleDataSet;
+    CredDsetSrc: TDataSource;
+    FilDsetID: TFloatField;
+    FilDsetNAME: TWideStringField;
+    FilDsetKOD_FILIAL: TWideStringField;
+    ValDsetVALUTE: TIntegerField;
+    ValDsetVAL_NAME: TWideStringField;
+    ValDsetVALU_NAME: TWideStringField;
+    ValDsetVALU_SHORT: TWideStringField;
+    ValDsetUSTORG: TFloatField;
+    ValDsetUSTPOK: TFloatField;
+    ValDsetVALU_GEN: TWideStringField;
+    ValDsetVALU_AZ: TWideStringField;
+    ValDsetUSING: TIntegerField;
+    ValDsetVALU_OTHER: TWideStringField;
+    ValDsetVALU_INTER: TWideStringField;
+    ValDsetVALU_BALA: TWideStringField;
+    ValDsetPRISTAVKA: TFloatField;
+    ValDsetCOUNTRY: TWideStringField;
+    ValDsetUST_POK1: TFloatField;
+    ValDsetOFFICAL: TWideStringField;
+    ValDsetLIMIT: TFloatField;
+    CredDsetNUMBEROFCREDIT: TWideStringField;
+    CredDsetVAL_NAME: TWideStringField;
+    CredDsetDONRNAME: TWideStringField;
+    CredDsetNAME: TWideStringField;
+    CredDsetCUSTOMER: TWideStringField;
+    CredDsetDATEOFCONCLUSION: TDateTimeField;
+    CredDsetDUEDATEFIRSTCONTRACT: TDateTimeField;
+    CredDsetDUEDATELASTCONTRACT: TDateTimeField;
+    CredDsetDESCRIPION: TWideStringField;
+    CredDsetMNOVU: TWideStringField;
+    CredDsetBSEKTOR: TWideStringField;
+    CredDsetBFALIYYET: TWideStringField;
+    CredDsetBFALIYETNOVU: TWideStringField;
+    CredDsetTIP: TWideStringField;
+    CredDsetCREDITLINEAMOUNT: TFloatField;
+    CredDsetAMOUNTEK: TFloatField;
+    CredDsetADI: TFloatField;
+    CredDsetMEQ: TFloatField;
+    CredDsetDONVES: TFloatField;
+    CredDsetDONVESEK: TFloatField;
+    CredDsetREST: TFloatField;
+    CredDsetRESTEK: TFloatField;
+    CredDsetINTERESTREST: TFloatField;
+    CredDsetINTERESTRESTEK: TFloatField;
+    CredDsetADIMEB: TFloatField;
+    CredDsetMEQMEB: TFloatField;
+    CredDsetDUEREST: TFloatField;
+    CredDsetDUERESTEK: TFloatField;
+    CredDsetDUEINTERESTREST: TFloatField;
+    CredDsetDUEINTERESTRESTEK: TFloatField;
+    CredDsetMUTEXESIS: TWideStringField;
+    CredDsetDONID: TFloatField;
+    OracleDataSet1: TOracleDataSet;
+    OracleDataSet2: TOracleDataSet;
+    OracleDataSet1ID: TFloatField;
+    OracleDataSet1CONTRACTNO: TWideStringField;
+    OracleDataSet1CONTRACTACCNO: TWideStringField;
+    OracleDataSet1INTERESTACCNO: TWideStringField;
+    OracleDataSet1VAL_NAME: TWideStringField;
+    OracleDataSet1CUSTOMERNAME: TWideStringField;
+    OracleDataSet1OPENDATE: TDateTimeField;
+    OracleDataSet1CLOSEDATE: TDateTimeField;
+    OracleDataSet1AMOUNT: TFloatField;
+    OracleDataSet1EKAMOUNT: TFloatField;
+    OracleDataSet1INTEREST: TFloatField;
+    OracleDataSet1FACTICALDEBT: TFloatField;
+    OracleDataSet1EKFACTICALDEBT: TFloatField;
+    OracleDataSet1FACTICALINTERESTDEBT: TFloatField;
+    OracleDataSet1EKFACTICALINTERESTDEBT: TFloatField;
+    OracleDataSet1STOPCALCULATIONDATE: TDateTimeField;
+    OracleDataSet1CURRENCY: TFloatField;
+    OracleDataSet1PERSONALTYPE: TFloatField;
+    OracleDataSet1CLIENTTYPE: TFloatField;
+    OracleDataSet1BRANCHID: TFloatField;
+    OracleDataSet1CONTRACTTYPE: TIntegerField;
+    OracleDataSet1STATUS: TFloatField;
+    OracleDataSet1CUSTOMERID: TFloatField;
+    OracleDataSet1USID: TFloatField;
+    OracleDataSet1BALCIN: TWideStringField;
+    DonrDsetminus: TFloatField;
+    procedure DataModuleDestroy(Sender: TObject);
+    procedure DataModuleCreate(Sender: TObject);
+    procedure DonrDsetCalcFields(DataSet: TDataSet);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  DataModDonr: TDataModDonr;
+
+implementation
+
+{$R *.dfm}
+ uses sboapiDataModuleImpl;
+procedure TDataModDonr.DataModuleCreate(Sender: TObject);
+begin
+DonrDset.Open;
+CredDset.Open;
+FilDset.Open;
+ValDset.Open;
+SysDset.Open;
+OracleDataSet1.open;
+OracleDataSet2.Open;
+end;
+
+procedure TDataModDonr.DataModuleDestroy(Sender: TObject);
+begin
+DonrDset.Close;
+CredDset.Close;
+FilDset.Close;
+ValDset.Close;
+SysDset.Close;
+OracleDataSet1.CloseAll;
+OracleDataSet2.CloseAll
+end;
+
+procedure TDataModDonr.DonrDsetCalcFields(DataSet: TDataSet);
+begin
+
+with DonrDset do
+begin
+ FieldByName('MINUS').AsFloat:=FieldByName('AMOUNT').asfloat-FieldByName('FACTICALDEBT').asfloat ;
+
+end;
+end;
+
+end.

@@ -1,0 +1,122 @@
+unit InsNewInsurance;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Grids, DBGrids, StdCtrls, Buttons, ComObj, PlgModalContainer;
+
+type
+  TGuidError = Exception;
+  TfmNewInsurance = class(TForm)
+    GroupBox1: TGroupBox;
+    btOk: TBitBtn;
+    btCancel: TBitBtn;
+    DBGrid1: TDBGrid;
+    pmcCallNewBlank: TPlgModalContainer;
+    CheckBox1: TCheckBox;
+    procedure btOkClick(Sender: TObject);
+    procedure btCancelClick(Sender: TObject);
+    procedure CheckBox1Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+  private
+    function CallChangeForm(Params : TStringList):Integer;
+     procedure LoadPlugin1(PluginName :String;PluginParam  :String);
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  fmNewInsurance: TfmNewInsurance;
+
+implementation
+
+uses InsDataModule,sboapiDataModuleimpl,SBTranslateProc,CommanParametrs,
+  InsCustomersFormImpl;
+
+{$R *.DFM}
+
+function TfmNewInsurance.CallChangeForm(Params : TStringList):Integer;
+var
+  CallerGuid : TGUID;
+begin
+ with InsDataMod.ODSInsurances do
+ begin
+
+  if FieldByName('CHANGEGUID').AsString = '' then
+  raise   TGuidError.Create('Guid is empty');
+  CallerGuid := StringToGuid(FieldByName('CHANGEGUID').AsString);
+//  fmContainer := TfmContainer.Create(Self);
+  with pmcCallNewBlank do
+    Result :=ShowModal(CallerGuid, Params);
+
+//  fmContainer.OpenObj(CallerGuid, Params);
+
+//  Result := fmContainer.ShowModal;
+ end;
+end;
+
+procedure TfmNewInsurance.btOkClick(Sender: TObject);
+var
+  Params : TStringList;
+  p_obeykt_name,p_obeykt_type :string;
+
+begin
+     p_obeykt_type:=DBGrid1.DataSource.DataSet.FieldByName('OBEYKT_TYPE').AsString;
+     if p_obeykt_type='ocx' then
+     begin
+
+  Params := TStringList.Create;
+  with InsDataMod.ODSInsCustomers, Params do
+  try
+    Values['ÑID']:= '-1';
+    Values['Mod']:= 'Insert';
+    Values['KLI_ID']:= FloatToStr(FieldByName('ID').asFloat);
+    ModalResult := CallChangeForm(Params);
+  finally
+    Params.Free;
+  end;
+  end;
+  if p_obeykt_type='bpl'  then
+  begin
+     //commoncid:=InsCustomersForm.DBGridContracts.DataSource.DataSet.FieldByName('id').AsInteger;
+    // showmessage(inttostr(commoncid));
+    p_obeykt_name:=fmNewInsurance.DBGrid1.DataSource.DataSet.FieldByName('changeguid').AsString;
+  //loadPlugin1('InsBusinessProcesses.bpl','');
+  loadPlugin1(p_obeykt_name,'');
+
+  end;
+
+end;
+
+procedure TfmNewInsurance.LoadPlugin1(PluginName :String;PluginParam  :String);
+var PluginHandle :THandle;
+    exportproc : procedure(s:String;k:String);
+begin
+   PluginHandle := LoadPackage(ExtractFilePath(Application.ExeName)+PluginName);
+
+   if PluginHandle > 0 then
+   begin
+      @exportproc := GetProcAddress(PluginHandle,'InitPlugin');
+      exportproc(PluginParam,'');
+   end;
+end;
+
+procedure TfmNewInsurance.btCancelClick(Sender: TObject);
+begin
+  ModalResult := mrCancel
+end;
+
+procedure TfmNewInsurance.CheckBox1Click(Sender: TObject);
+begin
+{  with InsDataMod do
+    ODSInsurances.Filtered := CheckBox1.Checked;  }
+end;
+
+procedure TfmNewInsurance.FormCreate(Sender: TObject);
+begin
+SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+end.

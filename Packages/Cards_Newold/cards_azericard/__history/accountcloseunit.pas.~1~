@@ -1,0 +1,252 @@
+unit accountcloseunit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Grids, DBGrids, ComCtrls, ToolWin, Menus, CMExcelExport, ImgList,
+  OleServer, Excel97;
+
+type
+  Taccountclose = class(TForm)
+    OpenDialogCards: TOpenDialog;
+    ExcelApplication1: TExcelApplication;
+    ImageList1: TImageList;
+    CMExcelExport1: TCMExcelExport;
+    PopupMenu1: TPopupMenu;
+    N11: TMenuItem;
+    N12: TMenuItem;
+    PopupMenu2: TPopupMenu;
+    EXCEL1: TMenuItem;
+    PopupMenu3: TPopupMenu;
+    EXCEL2: TMenuItem;
+    CoolBar1: TCoolBar;
+    ToolBar1: TToolBar;
+    isertbtn: TToolButton;
+    ToolButton1: TToolButton;
+    ToolButton7: TToolButton;
+    ToolButton2: TToolButton;
+    DBGrid1: TDBGrid;
+    DBGrid2: TDBGrid;
+    SELECTALL1: TMenuItem;
+    procedure isertbtnClick(Sender: TObject);
+    procedure ToolButton1Click(Sender: TObject);
+    procedure N11Click(Sender: TObject);
+    procedure N12Click(Sender: TObject);
+    procedure EXCEL1Click(Sender: TObject);
+    procedure EXCEL2Click(Sender: TObject);
+    procedure ToolButton2Click(Sender: TObject);
+    procedure DBGrid1DrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TColumn; State: TGridDrawState);
+    procedure DBGrid2DrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TColumn; State: TGridDrawState);
+    procedure SELECTALL1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  accountclose: Taccountclose;
+
+implementation
+
+uses Unit18;
+
+{$R *.DFM}
+
+procedure Taccountclose.isertbtnClick(Sender: TObject);
+const
+    c_info = '%d record is imported!';
+var
+   V,Sheet,Sheets  :Variant;
+   cell,row,i,j    :Integer;
+begin
+DataMod_CARDS.mainpacket.CallProcedure('accdelet',[]);
+  if OpenDialogCards.Execute then begin
+//**********************
+
+
+  DataMod_CARDS.acclose.Open;
+    
+
+  //DataMod_CARDS.YENICARD1.Open;
+  V:=ExcelApplication1.Application;
+  ExcelApplication1.Connect;
+  V.Workbooks.Open( OpenDialogCards.FileName);
+  Sheet := V.Workbooks[1].Worksheets['CARDS'];
+  Sheets := V.Sheets;
+
+  DataMod_CARDS.acclose.First;
+  //for j:=10 to RecCount do
+  j:=2;
+  repeat
+   //begin
+   cell :=1;
+   DataMod_CARDS.acclose.Insert ;
+    for i:=0  to DataMod_CARDS.acclose.FieldCount-3 do
+     begin
+      Application.ProcessMessages;
+       
+      DataMod_CARDS.acclose.Fields[i].AsString :=trim(Sheet.cells[j,cell]);
+      cell:=cell+1;
+     end;
+    DataMod_CARDS.acclose.Post;
+    DataMod_CARDS.acclose.Next;
+    j:=j+1;
+  until (Sheet.cells[j,1].Text = '') and (Sheet.cells[j,2].Text = '');
+//   end;
+
+  V :=null;
+  Application.ProcessMessages;
+  ExcelApplication1.Quit;
+  ExcelApplication1.Disconnect;
+  Application.ProcessMessages;
+  DataMod_CARDS.acclose.session.Commit;
+     DataMod_CARDS.mainpacket.CallProcedure('accupdate',[]);
+  DataMod_CARDS.acclose.Refresh;
+  DataMod_CARDS.acclose2.Refresh;
+  ShowMessage(Format(c_info, [j-2]));
+//**********************
+  end; {if OpenDialogCards.Execute}
+
+  end;
+
+
+
+procedure Taccountclose.ToolButton1Click(Sender: TObject);
+begin
+DataMod_CARDS.mainpacket.CallProcedure('acccommit',[]);
+DataMod_CARDS.acclose.Refresh;
+DataMod_CARDS.acclose2.Refresh;
+end;
+
+procedure Taccountclose.N11Click(Sender: TObject);
+begin
+  if not CMExcelExport1.Connected then CMExcelExport1.Connect;
+  CMExcelExport1.ExportDataset(DataMod_CARDS.acclose,'CARDS',true);
+  CMExcelExport1.Disconnect;
+end;
+
+procedure Taccountclose.N12Click(Sender: TObject);
+begin
+  if not CMExcelExport1.Connected then CMExcelExport1.Connect;
+  CMExcelExport1.ExportDataset(DataMod_CARDS.acclose2,'CARDS',true);
+  CMExcelExport1.Disconnect;
+end;
+
+procedure Taccountclose.EXCEL1Click(Sender: TObject);
+begin
+N11.Click;
+end;
+
+procedure Taccountclose.EXCEL2Click(Sender: TObject);
+begin
+N12.Click;
+end;
+
+procedure Taccountclose.ToolButton2Click(Sender: TObject);
+begin
+DataMod_CARDS.mainpacket.CallProcedure('accdelet',[]);
+DataMod_CARDS.acclose.Refresh;
+DataMod_CARDS.acclose2.Refresh;
+end;
+
+procedure Taccountclose.DBGrid1DrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TColumn;
+  State: TGridDrawState);
+var
+  ImageIndex: Integer;
+
+begin
+
+ ImageIndex := -1;
+  with Sender as TDBGrid do
+  begin
+    if DataSource.DataSet.RecordCount <> 0 then
+    begin
+      case DataSource.DataSet.FieldByName('STATUS').AsInteger of
+
+      1:
+        ImageIndex :=25;
+      2:
+        ImageIndex :=3 ;
+      3:
+        ImageIndex :=26;
+
+      4:
+        ImageIndex:=13;  
+
+      else
+      end;
+      if (DataCol = 1) and (ImageIndex <> -1) then
+        ImageList1.Draw(Canvas, Rect.Left, Rect.Top, ImageIndex, True)
+      else
+        DefaultDrawColumnCell(Rect, DataCol, Column, State);
+    end;
+
+
+
+
+  end;
+end;
+
+procedure Taccountclose.DBGrid2DrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TColumn;
+  State: TGridDrawState);
+var
+  ImageIndex: Integer;
+
+begin
+
+ ImageIndex := -1;
+  with Sender as TDBGrid do
+  begin
+    if DataSource.DataSet.RecordCount <> 0 then
+    begin
+      case DataSource.DataSet.FieldByName('STATUS').AsInteger of
+
+      1:
+        ImageIndex :=25;
+      2:
+        ImageIndex :=3 ;
+      3:
+        ImageIndex :=26;
+
+      4:
+        ImageIndex:=13;  
+
+      else
+      end;
+      if (DataCol = 1) and (ImageIndex <> -1) then
+        ImageList1.Draw(Canvas, Rect.Left, Rect.Top, ImageIndex, True)
+      else
+        DefaultDrawColumnCell(Rect, DataCol, Column, State);
+    end;
+
+
+
+
+  end;
+end;
+
+procedure Taccountclose.SELECTALL1Click(Sender: TObject);
+begin
+ with dbgrid1, SelectedRows, DataSource.DataSet do
+  begin
+    DisableControls;
+    try
+      First;
+      while not Eof do
+       begin
+        CurrentRowSelected := True;
+        Next;
+       end;
+    finally
+      EnableControls;
+    end;
+  end;   
+end;
+
+end.

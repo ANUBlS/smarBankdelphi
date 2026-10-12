@@ -1,0 +1,216 @@
+unit co_memorial;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, Grids, DBGrids, Db, OracleData, Buttons, Mask, DBCtrls,
+  CurrencyEdit, ExtCtrls, ComCtrls;
+
+type
+  TCO_MemorialForm = class(TForm)
+    page3: TPageControl;
+    TabSheet1: TTabSheet;
+    Panel1: TPanel;
+    Label1: TLabel;
+    Label2: TLabel;
+    Bevel1: TBevel;
+    DebitAmountEdit: TCurrencyEdit;
+    DebitLAmountEdit: TCurrencyEdit;
+    Panel2: TPanel;
+    DBEdit1: TDBEdit;
+    DebitTransactionsGrid: TDBGrid;
+    TabSheet2: TTabSheet;
+    Panel5: TPanel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Bevel2: TBevel;
+    CreditAmountEdit: TCurrencyEdit;
+    CreditLAmountEdit: TCurrencyEdit;
+    Panel4: TPanel;
+    DBEdit2: TDBEdit;
+    DBGrid1: TDBGrid;
+    Panel3: TPanel;
+    Button2: TButton;
+    DBEdit3: TDBEdit;
+    DBEdit4: TDBEdit;
+    DBEdit5: TDBEdit;
+    DBEdit6: TDBEdit;
+    procedure DebetTransactionsDataAfterOpen(DataSet: TDataSet);
+    procedure DebetTransactionsDataCalcFields(DataSet: TDataSet);
+    procedure CreditTransactionsDataAfterOpen(DataSet: TDataSet);
+    procedure CreditTransactionsDataCalcFields(DataSet: TDataSet);
+    procedure Button2Click(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
+     procedure WMNCACTIVATE(var message: TWMNCActivate); message WM_NCACTIVATE;
+    procedure WMNCPaint(var message : TWMNCPaint); message WM_NCPAINT;
+    procedure DBGrid1KeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure FormCreate(Sender: TObject);
+   
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+     AccountID: Longint;
+    AccountNumber: String;
+    procedure OpenDataControls(BeginDate, EndDate: TDateTime);
+    procedure FillAmounts(DataSet: TDataSet; AmountField, LAmountField: TField;
+          AmountEdit, LAmountEdit: TCurrencyEdit);
+
+  end;
+
+var
+  CO_MemorialForm: TCO_MemorialForm;
+
+implementation
+
+uses CO_datamod_impl, MemorialRep, CO_Choose_unit, CO_MemorialRep1_unit;
+
+{$R *.DFM}
+
+procedure TCO_MEmorialForm.WMNCACTIVATE(var message:TWMNCActivate);
+var
+ S:TWMNCPaint;
+begin
+inherited;
+WMNCPaint(s);
+end;
+
+procedure TCO_MEmorialForm.WMNCPaint(var message: TWMNCPaint);
+const Capt = 'ўесабын ям€лиййатлары';
+var dc : hDc;
+begin
+inherited;
+Caption:='';
+dc := GetWindowDC(Handle);
+        SetBkMode(dc,Transparent);
+        SetTextColor(dc,clWhite);
+        SelectObject(dc, Font.Handle);
+        TextOut(dc, 23,6,Capt,Length(Capt));
+end;
+procedure TCO_MEmorialForm.OpenDataControls(BeginDate, EndDate: TDateTime);
+
+ procedure Open_(DataSet: TOracleDataSet);
+ begin
+  with DataSet do
+  begin
+   CloseAll;
+   SetVariable('AccountID', AccountID);
+   SetVariable('StartDate', BeginDate);
+   SetVariable('EndDate', EndDate);
+   Open;
+  end;
+ end;
+
+begin
+ with CO_Datamod.Account do
+  AccountID :=FieldByName('ID').AsInteger;
+
+ Open_(CO_Datamod.DebetTransactionsData);
+ Open_(CO_Datamod.CreditTransactionsData);
+
+
+
+
+
+end;
+ procedure TCO_MemorialForm.FillAmounts(DataSet: TDataSet; AmountField, LAmountField: TField;
+  AmountEdit, LAmountEdit: TCurrencyEdit);
+var
+  Amount: Currency;
+  LAmount: Currency;
+begin
+  Amount := 0.0;
+  LAmount := 0.0;
+  with DataSet do
+  begin
+    DisableControls;
+    try
+      while not Eof do
+      begin
+        Amount := Amount + AmountField.Value;
+        LAmount := LAmount + LAmountField.Value;
+        Next;
+      end;
+    finally
+      EnableControls;
+    end;
+  end;
+  AmountEdit.Value := Amount;
+  LAmountEdit.Value := LAmount;
+end;
+
+procedure TCO_MemorialForm.DebetTransactionsDataAfterOpen(
+  DataSet: TDataSet);
+begin
+  FillAmounts(
+    DataSet,
+    CO_Datamod.DebetTransactionsDataDEBITAMOUNT,
+    CO_Datamod.DebetTransactionsDataLAMOUNT,
+    DebitAmountEdit,
+    DebitLAmountEdit);
+
+end;
+
+procedure TCO_MemorialForm.DebetTransactionsDataCalcFields(
+  DataSet: TDataSet);
+begin
+ with DataSet do
+  FieldByName('DebitAccNo').AsString :=CO_Datamod.Account.FieldByName('accno').AsString;
+
+end;
+
+procedure TCO_MemorialForm.CreditTransactionsDataAfterOpen(
+  DataSet: TDataSet);
+begin
+  FillAmounts(
+    DataSet,
+    CO_Datamod.CreditTransactionsDataCreditAMOUNT,
+    CO_Datamod.CreditTransactionsDataLAMOUNT,
+    CreditAmountEdit,
+    CreditLAmountEdit);
+
+end;
+
+procedure TCO_MemorialForm.CreditTransactionsDataCalcFields(
+  DataSet: TDataSet);
+begin
+ with DataSet do
+  FieldByName('CreditAccNo').AsString :=CO_Datamod.Account.FieldByName('accno').AsString;
+
+end;
+
+
+
+procedure TCO_MemorialForm.Button2Click(Sender: TObject);
+begin
+try
+CO_Choose :=TCO_Choose.Create(self);
+  CO_Choose.Showmodal;
+  finally
+  CO_Choose.Release;
+  end;
+
+   end;
+procedure TCO_MemorialForm.FormActivate(Sender: TObject);
+begin
+CO_MemorialRep :=TCO_MemorialRep.create(self);
+CO_MemorialRep1 :=TCO_MemorialRep1.create(self);
+CO_DataMod.Account.open;
+
+end;
+
+procedure TCO_MemorialForm.DBGrid1KeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+if key=VK_Escape then
+close;
+end;
+
+procedure TCO_MemorialForm.FormCreate(Sender: TObject);
+begin
+CO_DataMod.memorial_date.open;
+end;
+
+end.

@@ -1,0 +1,123 @@
+unit SBWRBookmarksTuning_new;
+
+interface
+
+uses
+ Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, NLSDialogs,
+ ActnList, ImgList, ExtCtrls, StdCtrls, Mask, DBCtrls,
+  Grids, DBGridEh, ComCtrls, ToolWin, PluginToolBar, Buttons;
+
+type
+  TSBWRBookmarkSetup_new = class(TForm)
+    ActionList1: TActionList;
+    ActnAddBookmark: TAction;
+    ActnDeleteBookmark: TAction;
+    ActnEditBookmark: TAction;
+    ActnNewBookmark: TAction;
+    ActnClose: TAction;
+    ActionList2: TActionList;
+    ActionAddTemplare: TAction;
+    ActionEditTemplate: TAction;
+    ActionDeleteTemplate: TAction;
+    ActionRfreshTemplate: TAction;
+    ActionClose: TAction;
+    BitBtn1: TBitBtn;
+    DBGridEh1: TDBGridEh;
+    DBGridEh2: TDBGridEh;
+    GroupBox1: TGroupBox;
+    DBEdit1: TDBEdit;
+    ImageList1: TImageList;
+    Panel2: TPanel;
+    PluginToolBar2: TPluginToolBar;
+    ToolButton10: TToolButton;
+    ToolButton11: TToolButton;
+    ToolButton12: TToolButton;
+    ToolButton13: TToolButton;
+    ToolButton14: TToolButton;
+    ToolButton15: TToolButton;
+    ToolButton16: TToolButton;
+    ToolButton17: TToolButton;
+    PluginToolBar1: TPluginToolBar;
+    ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
+    ToolButton3: TToolButton;
+    ToolButton4: TToolButton;
+    ToolButton5: TToolButton;
+    ToolButton6: TToolButton;
+    ToolButton7: TToolButton;
+    ToolButton8: TToolButton;
+    procedure ActionAddTemplareExecute(Sender: TObject);
+    procedure ActionEditTemplateExecute(Sender: TObject);
+    procedure ActionDeleteTemplateExecute(Sender: TObject);
+    procedure ActionRfreshTemplateExecute(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  SBWRBookmarkSetup_new: TSBWRBookmarkSetup_new;
+
+implementation
+
+{$R *.dfm}
+  uses SBWRSetupDataModImpl_new, SBTemplateAddEditUnt_new, SBBookmarkAddEditunt_new,
+CommonDeclsImpl_new,SBTranslateProc,sboapiDataModuleimpl;
+procedure TSBWRBookmarkSetup_new.ActionAddTemplareExecute(Sender: TObject);
+
+resourcestring
+      rsTemplateCaption = 'Йени шаблон';
+var
+    i:integer;
+begin
+
+      with SBWRSetupDataMod_new.SBWRTemplatesDSet do
+           Insert;
+           SBTemplAddEditForm.Caption:= rsTemplateCaption;
+           i:=SBTemplAddEditForm.ShowModal;
+           if i=mrOK then
+           begin
+             with SBWRSetupDataMod_new.SBWRTemplatesDSet do
+                  Refresh;
+           end;
+end;
+
+procedure TSBWRBookmarkSetup_new.ActionDeleteTemplateExecute(Sender: TObject);
+
+   resourcestring
+        TempdeleteMsg='Силинмясиня яминсинизми?';
+    begin
+
+      if MessageDlg(
+                   TempdeleteMsg,
+                   mtConfirmation,
+                   [mbYes,
+                   mbNo],
+                    0) = mrYes then
+       begin
+         with SBWRSetupDataMod_new.SBWRTemplatesDSet do
+               Delete;
+        end;
+end;
+
+procedure TSBWRBookmarkSetup_new.ActionEditTemplateExecute(Sender: TObject);
+
+resourcestring
+             rsUpdTemplateCaption='Шаблонун рeдактяси';
+    begin
+
+      with SBWRSetupDataMod_new.SBWRTemplatesDSet do
+           Edit;
+           SBTemplAddEditForm.Caption:=  rsUpdTemplateCaption;
+           SBTemplAddEditForm.ShowModal;
+end;
+
+procedure TSBWRBookmarkSetup_new.ActionRfreshTemplateExecute(Sender: TObject);
+begin
+
+       with SBWRSetupDataMod_new.SBWRTemplatesDSet do
+            Refresh;
+end;
+
+end.

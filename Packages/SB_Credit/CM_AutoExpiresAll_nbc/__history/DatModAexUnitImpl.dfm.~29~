@@ -1,0 +1,1406 @@
+object DatModAex: TDatModAex
+  OldCreateOrder = False
+  OnCreate = DataModuleCreate
+  OnDestroy = DataModuleDestroy
+  Height = 480
+  Width = 696
+  object DatSetExpCredits: TOracleDataSet
+    SQL.Strings = (
+      
+        'SELECT p.ID, p.numberofcredit, p.currency, p.personaltype, p.cus' +
+        'tomertype,'
+      '       p.branchid, p.credittype, b.NAME, av.val_name,b.salary,'
+      
+        '       cm_common.accountnumber_get (a.contractaccid) AS contract' +
+        'accno,c.duerest,'
+      
+        '       cm_common.accountrest_get (a.booroweraccid) AS custaccres' +
+        't,'
+      '       cm_utils.Get_PlanPrincipal (p.ID, :PDAT) AS principal,'
+      '         cm_utils.Get_PlanPrincipal(p.ID, :PDAT)'
+      
+        '       + cm_utils.Get_IntPlanPayment(p.ID, :PDAT) AS sumamt,--gr' +
+        '.anyinfotodisting,--gr.aftono,'
+      
+        '       c.dueday as expdatcount,(select name from filial_t where ' +
+        'id=p.branchid) filial,'
+      
+        '       c.dueinterestrest+c.penaltyrest penaltyrest, c.reserveid,' +
+        ' cm_utils.get_creditplanrest (p.ID, :PDAT) AS plr,'
+      
+        '       p.dateofconclusion as opendate,p.duedatefirstcontract as ' +
+        'closedate,'
+      
+        '       p.annualyinterestrate, cm_common.get_AccountBalance(a.con' +
+        'tractaccid) as BalaccNo, p.boorowerid ,b.PHONENUMBER,'
+      
+        'case when p.duedatefirstcontract<:PDAT and nvl(p.duedatelastcont' +
+        'ract,'#39'01-jan-2002'#39')<:PDAT '
+      
+        'then '#39'Vaxti bitib '#39' else '#39' - '#39' end as creditend,c.rest,c.interes' +
+        'trest,(select description from cm_credittypes where id= p.credit' +
+        'type) kredittip'
+      
+        ', --(select name  from cm_partniyor where id=p.partid) part, (se' +
+        'lect description from cm_usergroups where id=p.usrgroup) expert,'
+      
+        '--(select name  from cm_qovluq where id=p.qovid) qovluq,(select ' +
+        'name from cm_expert where id=p.expertid) shert,'
+      'g1.guarantorname,g1.zaminwork1,g1.zamintel1,g1.zmtelmob1,'
+      
+        'g2.guarantorname name2,g2.zaminwork1 wr2,g2.zamintel1 evtel2,g2.' +
+        'zmtelmob1 mobtel2,'
+      
+        'g3.guarantorname name3,g3.zaminwork1 wr3,g3.zamintel1 evtel3,g3.' +
+        'zmtelmob1 mobtel3 ,pay.dat,pay.maxpay'
+      '  FROM cm_active_credits p,cm_guarantee gr,'
+      '       cm_boorowerinfo b,'
+      '       cm_accounts a,CM_GUARANTOR g1,'
+      '       cm_curr_state c,CM_GUARANTOR g2,CM_GUARANTOR g3,'
+      
+        '       avalute av,(SELECT creditid ,(paydate)dat,   (payedamt+ p' +
+        'ayedintamt+ payeddueamt+payeddueintamt) maxpay FROM cm_payments ' +
+        'p'
+      
+        'WHERE paydate IN(SELECT MAX(paydate) FROM cm_payments WHERE cred' +
+        'itid=p.creditid))pay'
+      '       '
+      
+        ' WHERE b.creditid = p.ID and p.id=g1.creditid(+) and g1.cardid(+' +
+        ')=1'
+      
+        '   AND a.creditid = p.ID and p.id=g2.creditid(+) and g2.cardid(+' +
+        ')=2'
+      
+        '   AND c.creditid = p.ID and p.id=g3.creditid(+) and g3.cardid(+' +
+        ')=3'
+      '   AND av.valute = p.currency and gr.creditid(+) = p.ID'
+      ' And (c.rest+c.duerest)>=0.5'
+      
+        'and c.rest+c.duerest <> 0 and  c.dueday>=0 AND p.id=pay.creditid' +
+        '(+)'
+      '--and  cm_utils.Get_PlanPrincipal (p.ID, :PDAT)>0'
+      '--and p.intcalcmethod=0'
+      'ORDER BY :orderfield'
+      ''
+      ''
+      '')
+    Optimize = False
+    Variables.Data = {
+      0400000002000000160000003A004F0052004400450052004600490045004C00
+      44000100000003000000696400000000000A0000003A0050004400410054000C
+      0000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000003200000004000000490044000100000000001C0000004E0055004D00
+      4200450052004F00460043005200450044004900540001000000000010000000
+      430055005200520045004E004300590001000000000018000000500045005200
+      53004F004E0041004C0054005900500045000100000000001800000043005500
+      530054004F004D00450052005400590050004500010000000000100000004200
+      520041004E004300480049004400010000000000140000004300520045004400
+      490054005400590050004500010000000000080000004E0041004D0045000100
+      0000000010000000560041004C005F004E0041004D0045000100000000001A00
+      000043004F004E00540052004100430054004100430043004E004F0001000000
+      0000160000004300550053005400410043004300520045005300540001000000
+      0000120000005000520049004E0043004900500041004C000100000000000C00
+      0000530055004D0041004D005400010000000000160000004500580050004400
+      4100540043004F0055004E00540001000000000016000000500045004E004100
+      4C00540059005200450053005400010000000000120000005200450053004500
+      520056004500490044000100000000000600000050004C005200010000000000
+      100000004F00500045004E004400410054004500010000000000120000004300
+      4C004F005300450044004100540045000100000000002600000041004E004E00
+      550041004C00590049004E005400450052004500530054005200410054004500
+      01000000000010000000420041004C004100430043004E004F00010000000000
+      1400000042004F004F0052004F00570045005200490044000100000000001600
+      0000500048004F004E0045004E0055004D004200450052000100000000000C00
+      0000530041004C00410052005900010000000000120000004300520045004400
+      4900540045004E00440001000000000008000000520045005300540001000000
+      00001800000049004E0054004500520045005300540052004500530054000100
+      000000000800000050004100520054000100000000000C000000450058005000
+      4500520054000100000000000C00000051004F0056004C005500510001000000
+      00000A000000530048004500520054000100000000001A000000470055004100
+      520041004E0054004F0052004E0041004D004500010000000000140000005A00
+      41004D0049004E0057004F0052004B003100010000000000120000005A004100
+      4D0049004E00540045004C003100010000000000120000005A004D0054004500
+      4C004D004F00420031000100000000000A0000004E0041004D00450032000100
+      00000000060000005700520032000100000000000C0000004500560054004500
+      4C0032000100000000000E0000004D004F004200540045004C00320001000000
+      00000A0000004E0041004D004500330001000000000006000000570052003300
+      0100000000000C00000045005600540045004C0033000100000000000E000000
+      4D004F004200540045004C0033000100000000000E0000004400550045005200
+      4500530054000100000000000C000000460049004C00490041004C0001000000
+      0000120000004B00520045004400490054005400490050000100000000002000
+      000041004E00590049004E0046004F0054004F00440049005300540049004E00
+      47000100000000000C0000004100460054004F004E004F000100000000000600
+      00004400410054000100000000000C0000004D00410058005000410059000100
+      00000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 40
+    Top = 16
+    object DatSetExpCreditsID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object DatSetExpCreditsNUMBEROFCREDIT: TWideStringField
+      DisplayLabel = #1052#1094#1075#1072#1074#1080#1083#1103#1085#1080#1085' '#8470'-'#1089#1080
+      FieldName = 'NUMBEROFCREDIT'
+      Required = True
+      Size = 32
+    end
+    object DatSetExpCreditsCONTRACTACCNO: TWideStringField
+      DisplayLabel = #1065#1077#1089#1072#1073#1099#1085' '#8470'-'#1089#1080
+      FieldName = 'CONTRACTACCNO'
+      Size = 4000
+    end
+    object DatSetExpCreditsVAL_NAME: TWideStringField
+      DisplayLabel = '$'
+      FieldName = 'VAL_NAME'
+      Size = 10
+    end
+    object DatSetExpCreditsOPENDATE: TDateTimeField
+      DisplayLabel = #1040#1095#1099#1083#1084#1072' '#1090#1072#1088#1080#1093#1080
+      FieldName = 'OPENDATE'
+      Required = True
+    end
+    object DatSetExpCreditsCLOSEDATE: TDateTimeField
+      DisplayLabel = #1041#1072#1100#1083#1072#1085#1084#1072' '#1090#1072#1088#1080#1093#1080
+      FieldName = 'CLOSEDATE'
+      Required = True
+    end
+    object DatSetExpCreditsANNUALYINTERESTRATE: TFloatField
+      DisplayLabel = #1048#1083#1083#1080#1082' %'
+      FieldName = 'ANNUALYINTERESTRATE'
+      Required = True
+    end
+    object DatSetExpCreditsBALACCNO: TFloatField
+      DisplayLabel = #1041#1072#1083#1072#1085#1089' '#1097#1077#1089#1072#1073#1099
+      FieldName = 'BALACCNO'
+    end
+    object DatSetExpCreditsFILIAL: TWideStringField
+      FieldName = 'FILIAL'
+      Size = 360
+    end
+    object DatSetExpCreditsKREDITTIP: TWideStringField
+      FieldName = 'KREDITTIP'
+      Size = 512
+    end
+    object DatSetExpCreditsREST: TFloatField
+      DisplayLabel = #1071#1089#1072#1089' '#1041#1086#1088#1078' '#1075#1072#1083#1099#1075
+      FieldName = 'REST'
+      Required = True
+    end
+    object DatSetExpCreditsDUEREST: TFloatField
+      DisplayLabel = 'Gecikmi'#351' '#601'sas'
+      FieldName = 'DUEREST'
+    end
+    object DatSetExpCreditsINTERESTREST: TFloatField
+      DisplayLabel = '% '#1073#1086#1088#1078' '#1075#1072#1083#1099#1075
+      FieldName = 'INTERESTREST'
+      Required = True
+    end
+    object DatSetExpCreditsNAME: TWideStringField
+      DisplayLabel = #1052#1094#1096#1090#1103#1088#1080#1085#1080#1085' '#1072#1076#1099
+      FieldName = 'NAME'
+      Size = 64
+    end
+    object DatSetExpCreditsPHONENUMBER: TWideStringField
+      DisplayLabel = #1058#1077#1083#1077#1092#1086#1085' '#8470
+      FieldName = 'PHONENUMBER'
+      Size = 255
+    end
+    object DatSetExpCreditsBOOROWERID: TFloatField
+      DisplayLabel = #1052#1094#1096#1090#1103#1088#1080#1085#1080#1085' '#1082#1086#1076#1091
+      FieldName = 'BOOROWERID'
+      Required = True
+    end
+    object DatSetExpCreditsCUSTACCREST: TFloatField
+      DisplayLabel = #1046#1072#1088#1080' '#1097#1077#1089#1072#1073#1099#1085' '#1075#1072#1083#1099#1100#1099
+      FieldName = 'CUSTACCREST'
+    end
+    object DatSetExpCreditsPRINCIPAL: TFloatField
+      DisplayLabel = #1071#1089#1072#1089' '#1073#1086#1088#1078#1076#1072#1085' '
+      FieldName = 'PRINCIPAL'
+      Required = True
+    end
+    object DatSetExpCreditsEXPDATCOUNT: TFloatField
+      DisplayLabel = #1068#1077#1078' . '#1100#1094#1085#1083#1103#1088#1080#1085' '#1089#1072#1081#1099
+      FieldName = 'EXPDATCOUNT'
+    end
+    object DatSetExpCreditsPENALTYREST: TFloatField
+      DisplayLabel = #1055#1077#1085#1080#1081#1072
+      FieldName = 'PENALTYREST'
+    end
+    object DatSetExpCreditsCURRENCY: TFloatField
+      FieldName = 'CURRENCY'
+      Required = True
+      Visible = False
+    end
+    object DatSetExpCreditsPERSONALTYPE: TFloatField
+      FieldName = 'PERSONALTYPE'
+      Required = True
+      Visible = False
+    end
+    object DatSetExpCreditsCUSTOMERTYPE: TFloatField
+      FieldName = 'CUSTOMERTYPE'
+      Required = True
+      Visible = False
+    end
+    object DatSetExpCreditsBRANCHID: TFloatField
+      FieldName = 'BRANCHID'
+      Required = True
+      Visible = False
+    end
+    object DatSetExpCreditsCREDITTYPE: TFloatField
+      FieldName = 'CREDITTYPE'
+      Required = True
+      Visible = False
+    end
+    object DatSetExpCreditsRESERVEID: TFloatField
+      FieldName = 'RESERVEID'
+      Required = True
+      Visible = False
+    end
+    object DatSetExpCreditsSUMAMT: TFloatField
+      DisplayLabel = #1046#1103#1084#1080
+      FieldName = 'SUMAMT'
+    end
+    object DatSetExpCreditsPLR: TFloatField
+      FieldName = 'PLR'
+      Visible = False
+    end
+    object DatSetExpCreditsSALARY: TWideStringField
+      DisplayLabel = #1048#1096' '#1081#1077#1088#1080' / '#1042#1103#1079#1080#1092#1103#1089#1080' / '#1071#1084#1103#1082' '#1097#1072#1075#1075#1099
+      FieldName = 'SALARY'
+      Size = 64
+    end
+    object DatSetExpCreditsCREDITEND: TWideStringField
+      DisplayLabel = 'Vaxt'#1099' '#1073#1080#1090#1084#1080#1096' '#1082#1088#1077#1076#1080#1090#1083#1103#1088
+      FieldName = 'CREDITEND'
+      Size = 12
+    end
+    object DatSetExpCreditsGUARANTORNAME: TWideStringField
+      DisplayLabel = '1 Zaminin ad'#305
+      FieldName = 'GUARANTORNAME'
+      Size = 200
+    end
+    object DatSetExpCreditsZAMINWORK1: TWideStringField
+      DisplayLabel = '1 Zaminin i'#351' yeri'
+      FieldName = 'ZAMINWORK1'
+      Size = 200
+    end
+    object DatSetExpCreditsZAMINTEL1: TWideStringField
+      DisplayLabel = '1 Zaminin ev tel'
+      FieldName = 'ZAMINTEL1'
+      Size = 200
+    end
+    object DatSetExpCreditsZMTELMOB1: TWideStringField
+      DisplayLabel = '1 Zaminin mob tel'
+      FieldName = 'ZMTELMOB1'
+      Size = 15
+    end
+    object DatSetExpCreditsNAME2: TWideStringField
+      DisplayLabel = '2 Zaminin ad'#305
+      FieldName = 'NAME2'
+      Size = 200
+    end
+    object DatSetExpCreditsWR2: TWideStringField
+      DisplayLabel = '2 Zaminin i'#351' yeri'
+      FieldName = 'WR2'
+      Size = 200
+    end
+    object DatSetExpCreditsEVTEL2: TWideStringField
+      DisplayLabel = '2 Zamin ev tel'
+      FieldName = 'EVTEL2'
+      Size = 200
+    end
+    object DatSetExpCreditsMOBTEL2: TWideStringField
+      DisplayLabel = '2 Zaminin mob tel'
+      FieldName = 'MOBTEL2'
+      Size = 15
+    end
+    object DatSetExpCreditsNAME3: TWideStringField
+      DisplayLabel = '3 Zaminin ad'#305
+      FieldName = 'NAME3'
+      Size = 200
+    end
+    object DatSetExpCreditsWR3: TWideStringField
+      DisplayLabel = '3 Zaminin i'#351' yeri'
+      FieldName = 'WR3'
+      Size = 200
+    end
+    object DatSetExpCreditsEVTEL3: TWideStringField
+      DisplayLabel = '3 Zaminin tel ev'
+      FieldName = 'EVTEL3'
+      Size = 200
+    end
+    object DatSetExpCreditsMOBTEL3: TWideStringField
+      DisplayLabel = '3 Zaminin mob tel'
+      FieldName = 'MOBTEL3'
+      Size = 15
+    end
+    object DatSetExpCreditsDAT: TDateTimeField
+      DisplayLabel = 'Son '#246'd'#601'ni'#351' tarixi'
+      FieldName = 'DAT'
+    end
+    object DatSetExpCreditsMAXPAY: TFloatField
+      DisplayLabel = 'C'#601'mi '#246'd'#601'ni'#351
+      FieldName = 'MAXPAY'
+    end
+  end
+  object DatSrcExpCredits: TDataSource
+    DataSet = DatSetExpCredits
+    Left = 152
+    Top = 16
+  end
+  object DatSetPayments: TOracleDataSet
+    SQL.Strings = (
+      'SELECT paydate, '
+      '       payedamt, '
+      '       payedintamt, '
+      '       payeddueamt,'
+      '       payeddueintamt,'
+      '       payedpenaltyamt'
+      '  FROM cm_payments'
+      'where creditid  = :CrdID'
+      'order by paydate')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000C0000003A00430052004400490044000300000000000000
+      00000000}
+    Session = sboapiDataModule.SBSession
+    Left = 40
+    Top = 88
+    object DatSetPaymentsPAYDATE: TDateTimeField
+      DisplayLabel = #1058#1072#1088#1080#1093
+      FieldName = 'PAYDATE'
+      Required = True
+    end
+    object DatSetPaymentsPAYEDAMT: TFloatField
+      DisplayLabel = #1071#1089#1072#1089' '#1073#1086#1088#1078#1076#1072#1085' '
+      FieldName = 'PAYEDAMT'
+      Required = True
+    end
+    object DatSetPaymentsPAYEDINTAMT: TFloatField
+      DisplayLabel = #1060#1072#1080#1079' '#1094#1079#1088#1103' '#1073#1086#1088#1078#1076#1072#1085
+      FieldName = 'PAYEDINTAMT'
+      Required = True
+    end
+    object DatSetPaymentsPAYEDDUEAMT: TFloatField
+      FieldName = 'PAYEDDUEAMT'
+      Required = True
+    end
+    object DatSetPaymentsPAYEDDUEINTAMT: TFloatField
+      FieldName = 'PAYEDDUEINTAMT'
+      Required = True
+    end
+    object DatSetPaymentsPAYEDPENALTYAMT: TFloatField
+      DisplayLabel = #1055#1077#1085#1080#1081#1072
+      FieldName = 'PAYEDPENALTYAMT'
+      Required = True
+    end
+  end
+  object DatSetSchedule: TOracleDataSet
+    SQL.Strings = (
+      'SELECT  paymentdate, '
+      '        principal, '
+      '        interest'
+      '  FROM cm_payment_schedule'
+      'where creditid = :CrdID'
+      'order by paymentdate'
+      '')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000C0000003A00430052004400490044000300000000000000
+      00000000}
+    Session = sboapiDataModule.SBSession
+    Left = 40
+    Top = 152
+    object DatSetSchedulePAYMENTDATE: TDateTimeField
+      DisplayLabel = #1058#1072#1088#1080#1093
+      FieldName = 'PAYMENTDATE'
+      Required = True
+    end
+    object DatSetSchedulePRINCIPAL: TFloatField
+      DisplayLabel = #1071#1089#1072#1089' '#1073#1086#1088#1078#1076#1072#1085' '
+      FieldName = 'PRINCIPAL'
+      Required = True
+    end
+    object DatSetScheduleINTEREST: TFloatField
+      DisplayLabel = #1060#1072#1080#1079' '#1094#1079#1088#1103' '#1073#1086#1088#1078#1076#1072#1085
+      FieldName = 'INTEREST'
+      Required = True
+    end
+  end
+  object DatSrcPayments: TDataSource
+    DataSet = DatSetPayments
+    Left = 148
+    Top = 90
+  end
+  object DatSrcSchedule: TDataSource
+    DataSet = DatSetSchedule
+    Left = 144
+    Top = 153
+  end
+  object DatSetTranches: TOracleDataSet
+    SQL.Strings = (
+      'SELECT '
+      '      tranchedate, '
+      '      trancheamount'
+      '  FROM cm_tranches'
+      'where creditid  =:CrdID'
+      'order by tranchedate')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000C0000003A00430052004400490044000300000000000000
+      00000000}
+    Session = sboapiDataModule.SBSession
+    Left = 40
+    Top = 211
+    object DatSetTranchesTRANCHEDATE: TDateTimeField
+      DisplayLabel = #1058#1072#1088#1080#1093
+      FieldName = 'TRANCHEDATE'
+      Required = True
+    end
+    object DatSetTranchesTRANCHEAMOUNT: TFloatField
+      DisplayLabel = #1052#1103#1073#1083#1103#1100
+      FieldName = 'TRANCHEAMOUNT'
+      Required = True
+    end
+  end
+  object DatSrcTranches: TDataSource
+    DataSet = DatSetTranches
+    Left = 149
+    Top = 210
+  end
+  object DatSetInterests: TOracleDataSet
+    SQL.Strings = (
+      'SELECT hdate, '
+      '       interest, '
+      '       dueinterest, '
+      '       nvl(penaltyinterest,0) as penaltyinterest'
+      '  FROM cm_interests'
+      'where CreditID = :CrdID'
+      'order by hdate ')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000C0000003A00430052004400490044000300000000000000
+      00000000}
+    Session = sboapiDataModule.SBSession
+    Left = 40
+    Top = 264
+    object DatSetInterestsHDATE: TDateTimeField
+      DisplayLabel = #1058#1072#1088#1080#1093
+      FieldName = 'HDATE'
+      Required = True
+    end
+    object DatSetInterestsINTEREST: TFloatField
+      DisplayLabel = #1060#1072#1080#1079
+      FieldName = 'INTEREST'
+      Required = True
+    end
+    object DatSetInterestsDUEINTEREST: TFloatField
+      DisplayLabel = #1069#1077#1078#1080#1082#1084#1080#1096' '#1092#1072#1080#1079
+      FieldName = 'DUEINTEREST'
+      Required = True
+    end
+    object DatSetInterestsPENALTYINTEREST: TFloatField
+      DisplayLabel = #1065#1077#1089#1072#1073#1083#1072#1085#1084#1099#1096' '#1087#1077#1085#1080#1081#1072
+      FieldName = 'PENALTYINTEREST'
+    end
+  end
+  object DatSrcInterests: TDataSource
+    DataSet = DatSetInterests
+    Left = 152
+    Top = 264
+  end
+  object DatSetReserves: TOracleDataSet
+    SQL.Strings = (
+      'SELECT id, description||'#39' - '#39'||PERCENT as description'
+      '  FROM cm_reserves')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 256
+    Top = 304
+    object DatSetReservesID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object DatSetReservesDESCRIPTION: TWideStringField
+      FieldName = 'DESCRIPTION'
+      Required = True
+      Size = 64
+    end
+  end
+  object DatSrcReserves: TDataSource
+    DataSet = DatSetReserves
+    Left = 368
+    Top = 304
+  end
+  object DatSetCategories: TOracleDataSet
+    SQL.Strings = (
+      'SELECT id,  description'
+      '  FROM cm_categories')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      0500000002000000040000004900440001000000000016000000440045005300
+      4300520049005000540049004F004E00010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 256
+    Top = 200
+    object DatSetCategoriesID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object DatSetCategoriesDESCRIPTION: TWideStringField
+      FieldName = 'DESCRIPTION'
+      Size = 128
+    end
+  end
+  object DatSrcPersons: TDataSource
+    DataSet = DatSetPersons
+    Left = 352
+    Top = 136
+  end
+  object DatSetCreditTypes: TOracleDataSet
+    SQL.Strings = (
+      'SELECT id,   description'
+      '  FROM cm_credittypes')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 264
+    Top = 256
+    object DatSetCreditTypesID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object DatSetCreditTypesDESCRIPTION: TWideStringField
+      FieldName = 'DESCRIPTION'
+      Size = 128
+    end
+  end
+  object DatSrctCategories: TDataSource
+    DataSet = DatSetCategories
+    Left = 360
+    Top = 200
+  end
+  object DatSetValute: TOracleDataSet
+    SQL.Strings = (
+      'select valute,valu_name from avalute')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 256
+    Top = 16
+    object DatSetValuteVALUTE: TIntegerField
+      FieldName = 'VALUTE'
+      Required = True
+    end
+    object DatSetValuteVALU_NAME: TWideStringField
+      FieldName = 'VALU_NAME'
+      Size = 25
+    end
+  end
+  object DatSrcCreditTypes: TDataSource
+    DataSet = DatSetCreditTypes
+    Left = 368
+    Top = 256
+  end
+  object DatSetFilials: TOracleDataSet
+    SQL.Strings = (
+      'select id,name from filial')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 256
+    Top = 80
+  end
+  object DatSrcFilials: TDataSource
+    DataSet = DatSetFilials
+    Left = 352
+    Top = 80
+  end
+  object DatSetPersons: TOracleDataSet
+    SQL.Strings = (
+      'select id,descripion from cm_persons')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 257
+    Top = 133
+    object DatSetPersonsID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object DatSetPersonsDESCRIPION: TWideStringField
+      FieldName = 'DESCRIPION'
+      Size = 64
+    end
+  end
+  object DatSrcValute: TDataSource
+    DataSet = DatSetValute
+    Left = 352
+    Top = 16
+  end
+  object DatSetExpCredits_: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      '    p.id,'
+      '    p.numberofcredit,'
+      
+        '    p.currency, p.personaltype, p.customertype,p.branchid, p.cre' +
+        'dittype,'
+      '    p.dateofconclusion as opendate,'
+      '    p.duedatefirstcontract as closedate,'
+      '    p.annualyinterestrate,p.boorowerid ,b.PHONENUMBER,b.salary,'
+      '    lacc.acc_no as contractaccno,'
+      '    cust.name,'
+      '    p.dateofconclusion,'
+      '    p.duedatefirstcontract,'
+      '    p.duedatelastcontract,'
+      '    expcrd.outdat,'
+      '    psh.planrest, '
+      '    expcrd.exdatcount,'
+      '    av.val_name,'
+      '    br.ostat as custaccrest,'
+      '   /* case '
+      
+        '    when nvl(planpay.pay,0) - nvl(realpay.realpay,0)  <= 0 then ' +
+        '0  '
+      '    else nvl(planpay.pay,0) - nvl(realpay.realpay,0) '
+      '    end as principal,'
+      ' '
+      '    case '
+      
+        '    when nvl(planpay.payint,0) - nvl(realpay.Realpayint,0)  <= 0' +
+        ' then 0  '
+      '    else nvl(planpay.payint,0) - nvl(realpay.Realpayint,0)'
+      '    end as interest,'
+      ''
+      ''
+      '    case '
+      '    when nvl(planpay.pay,0) - nvl(realpay.realpay,0) +'
+      
+        '    nvl(planpay.payint,0) - nvl(realpay.Realpayint,0)  <= 0 then' +
+        ' 0  '
+      '    else nvl(planpay.pay,0) - nvl(realpay.realpay,0) +'
+      '    nvl(planpay.payint,0) - nvl(realpay.Realpayint,0)'
+      '    end as sumamt,*/'
+      ''
+      ''
+      '    '
+      '       cm_utils.Get_PlanPrincipal (p.ID, :dat) AS principal,'
+      '       cm_utils.Get_IntPlanPayment (p.ID) AS interest,'
+      '         cm_utils.Get_PlanPrincipal(p.ID, :dat)'
+      '       + cm_utils.Get_IntPlanPayment(p.ID) AS sumamt,'
+      '    c.penaltyrest, '
+      '    c.reserveid,  '
+      '    cm_common.get_AccountBalance(a.contractaccid) as BalaccNo'
+      'from'
+      '   cm_portfolio p,'
+      '   cm_loanaccounts lacc,'
+      '   cm_sb_customers cust,'
+      '   sb_avalute av,'
+      '   cm_boorowerrest br,'
+      '   cm_boorowerinfo b,'
+      '   cm_curr_state c,'
+      '   cm_accounts a,'
+      '   '
+      ' (select '
+      '   psh.creditid,'
+      '   sum(psh.principal) as pay,'
+      '   sum(psh.interest) as payint'
+      '  from cm_payment_schedule psh '
+      '  where psh.paymentdate<=:dat '
+      'group by psh.creditid) planpay,'
+      ''
+      '(select '
+      '   pay.creditid,'
+      '   sum(pay.PAYEDAMT+pay.PAYEDDUEAMT) as Realpay,'
+      '   sum(pay.PAYEDINTAMT+pay.PAYEDDUEINTAMT) as Realpayint'
+      '  from cm_payments pay '
+      'group by pay.creditid) realpay,'
+      '      '
+      '(select  creditid, null as outdat,0 as exdatcount from('
+      'select id as creditid'
+      'from   cm_portfolio'
+      ''
+      'minus'
+      ''
+      'select psh.creditid'
+      'from   cm_payment_schedule psh ,cm_curr_state cs'
+      
+        'where  psh.rest < (cs.rest+cs.duerest) and (cs.duerest+cs.rest -' +
+        ' psh.rest >= 0.5) '
+      'and psh.creditid = cs.creditid'
+      'and psh.paymentdate <=:dat'
+      'group by psh.creditid)'
+      ''
+      'union'
+      
+        'select psh.creditid,min(psh.paymentdate)  as outdat,cm_utils.ban' +
+        'kdaysbetween (MIN (psh.paymentdate),'
+      '                                   :dat'
+      '                                  ) AS exdatcount'
+      'from   cm_payment_schedule psh ,cm_curr_state cs'
+      
+        'where  psh.rest < cs.rest+cs.duerest and (cs.duerest+cs.rest - p' +
+        'sh.rest >= 0.5) '
+      'and psh.creditid = cs.creditid'
+      'and psh.paymentdate <=:dat'
+      'group by psh.creditid'
+      ') expcrd , '
+      ''
+      ''
+      '(SELECT  creditid, rest as planrest,principal, interest'
+      '  FROM cm_payment_schedule where paymentdate = :dat'
+      '  union'
+      
+        '   select  creditid , 0 as planrest, 0 as principal, 0 as intere' +
+        'st from '
+      '  (select id as creditid '
+      '  from cm_portfolio'
+      '  minus'
+      '  SELECT  creditid'
+      '  FROM cm_payment_schedule where paymentdate = :dat)) psh'
+      ''
+      'where p.id = lacc.creditid  and '
+      '      p.boorowerid = cust.id and'
+      '      p.id = c.creditid and'
+      '      c.rest + c.duerest <> 0 and'
+      '      p.id = psh.creditid and'
+      '      br.creditid = p.id and'
+      '      expcrd.creditid = p.id and '
+      '      b.creditid = p.id and'
+      '      a.creditid = p.id and '
+      '      p.currency = av.valute and'
+      '      p.id=planpay.creditid(+) and'
+      '      p.id = realpay.creditid(+)'
+      '      order by :ORDERFIELD'
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      '')
+    Optimize = False
+    Variables.Data = {
+      0400000002000000080000003A004400410054000C0000000000000000000000
+      160000003A004F0052004400450052004600490045004C004400010000000000
+      000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000001D000000080000004E0041004D004500010000000000200000004400
+      4100540045004F00460043004F004E0043004C005500530049004F004E000100
+      0000000028000000440055004500440041005400450046004900520053005400
+      43004F004E005400520041004300540001000000000026000000440055004500
+      44004100540045004C0041005300540043004F004E0054005200410043005400
+      0100000000000C0000004F005500540044004100540001000000000010000000
+      50004C0041004E00520045005300540001000000000014000000450058004400
+      4100540043004F0055004E005400010000000000040000004900440001000000
+      00001C0000004E0055004D004200450052004F00460043005200450044004900
+      540001000000000010000000430055005200520045004E004300590001000000
+      00001800000050004500520053004F004E0041004C0054005900500045000100
+      000000001800000043005500530054004F004D00450052005400590050004500
+      010000000000100000004200520041004E004300480049004400010000000000
+      1400000043005200450044004900540054005900500045000100000000001000
+      00004F00500045004E0044004100540045000100000000001200000043004C00
+      4F005300450044004100540045000100000000002600000041004E004E005500
+      41004C00590049004E0054004500520045005300540052004100540045000100
+      000000001400000042004F004F0052004F005700450052004900440001000000
+      000016000000500048004F004E0045004E0055004D0042004500520001000000
+      00001A00000043004F004E00540052004100430054004100430043004E004F00
+      01000000000010000000560041004C005F004E0041004D004500010000000000
+      1600000043005500530054004100430043005200450053005400010000000000
+      120000005000520049004E0043004900500041004C0001000000000010000000
+      49004E005400450052004500530054000100000000000C000000530055004D00
+      41004D00540001000000000016000000500045004E0041004C00540059005200
+      4500530054000100000000001200000052004500530045005200560045004900
+      440001000000000010000000420041004C004100430043004E004F0001000000
+      00000C000000530041004C00410052005900010000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 39
+    Top = 320
+    object DatSetExpCredits_ID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object DatSetExpCredits_NUMBEROFCREDIT: TWideStringField
+      DisplayLabel = #1052#1094#1075#1072#1074#1080#1083#1103#1085#1080#1085' '#8470'-'#1089#1080
+      FieldName = 'NUMBEROFCREDIT'
+      Size = 32
+    end
+    object DatSetExpCredits_CONTRACTACCNO: TWideStringField
+      DisplayLabel = #1065#1077#1089#1072#1073#1099#1085' '#8470'-'#1089#1080
+      FieldName = 'CONTRACTACCNO'
+      Required = True
+    end
+    object DatSetExpCredits_VAL_NAME: TWideStringField
+      DisplayLabel = '$'
+      FieldName = 'VAL_NAME'
+      Size = 10
+    end
+    object DatSetExpCredits_OPENDATE: TDateTimeField
+      DisplayLabel = #1040#1095#1099#1083#1084#1072' '#1090#1072#1088#1080#1093#1080
+      FieldName = 'OPENDATE'
+      Required = True
+    end
+    object DatSetExpCredits_CLOSEDATE: TDateTimeField
+      DisplayLabel = #1041#1072#1100#1083#1072#1085#1084#1072' '#1090#1072#1088#1080#1093#1080
+      FieldName = 'CLOSEDATE'
+      Required = True
+    end
+    object DatSetExpCredits_ANNUALYINTERESTRATE: TFloatField
+      DisplayLabel = #1048#1083#1083#1080#1082' %'
+      FieldName = 'ANNUALYINTERESTRATE'
+      Required = True
+    end
+    object DatSetExpCredits_BALACCNO: TFloatField
+      DisplayLabel = #1041#1072#1083#1072#1085#1089' '#1097#1077#1089#1072#1073#1099
+      FieldName = 'BALACCNO'
+    end
+    object DatSetExpCredits_NAME: TWideStringField
+      DisplayLabel = #1052#1094#1096#1090#1103#1088#1080#1085#1080#1085' '#1072#1076#1099
+      FieldName = 'NAME'
+      Size = 90
+    end
+    object DatSetExpCredits_BOOROWERID: TFloatField
+      DisplayLabel = #1052#1094#1096#1090#1103#1088#1080#1085#1080#1085' '#1082#1086#1076#1091
+      FieldName = 'BOOROWERID'
+      Required = True
+    end
+    object DatSetExpCredits_PHONENUMBER: TWideStringField
+      DisplayLabel = #1058#1077#1083#1077#1092#1086#1085' '#8470
+      FieldName = 'PHONENUMBER'
+      Size = 255
+    end
+    object DatSetExpCredits_CUSTACCREST: TFloatField
+      DisplayLabel = #1046#1072#1088#1080' '#1097#1077#1089#1072#1073#1099#1085' '#1075#1072#1083#1099#1100#1099
+      FieldName = 'CUSTACCREST'
+    end
+    object DatSetExpCredits_PRINCIPAL: TFloatField
+      DisplayLabel = #1071#1089#1072#1089' '#1073#1086#1088#1078#1076#1072#1085' '
+      FieldName = 'PRINCIPAL'
+    end
+    object DatSetExpCredits_INTEREST: TFloatField
+      DisplayLabel = #1060#1072#1080#1079' '#1094#1079#1088#1103' '#1073#1086#1088#1078#1076#1072#1085
+      FieldName = 'INTEREST'
+    end
+    object DatSetExpCredits_PENALTYREST: TFloatField
+      DisplayLabel = #1055#1077#1085#1080#1081#1072
+      FieldName = 'PENALTYREST'
+    end
+    object DatSetExpCredits_SUMAMT: TFloatField
+      DisplayLabel = #1046#1103#1084#1080
+      FieldName = 'SUMAMT'
+    end
+    object DatSetExpCredits_OUTDAT: TDateTimeField
+      DisplayLabel = #1043#1088#1072#1092#1080#1082#1076#1103#1085' '#1082#1103#1085#1072#1088#1083#1072#1096#1084#1072' '#1090#1072#1088#1080#1093#1080
+      FieldName = 'OUTDAT'
+    end
+    object DatSetExpCredits_PLANREST: TFloatField
+      DisplayLabel = #1050#1103#1085#1072#1088#1083#1072#1096#1084#1072' '#1090#1072#1088#1080#1093#1080#1085#1076#1103' '#1087#1083#1072#1085' '#1094#1079#1088#1103' '#1086#1083#1084#1072#1083#1099'  '#1071'.'#1041'. '
+      FieldName = 'PLANREST'
+    end
+    object DatSetExpCredits_RESERVEID: TFloatField
+      FieldName = 'RESERVEID'
+      Required = True
+      Visible = False
+    end
+    object DatSetExpCredits_CURRENCY: TFloatField
+      FieldName = 'CURRENCY'
+      Required = True
+      Visible = False
+    end
+    object DatSetExpCredits_PERSONALTYPE: TFloatField
+      FieldName = 'PERSONALTYPE'
+      Required = True
+      Visible = False
+    end
+    object DatSetExpCredits_CUSTOMERTYPE: TFloatField
+      FieldName = 'CUSTOMERTYPE'
+      Required = True
+      Visible = False
+    end
+    object DatSetExpCredits_BRANCHID: TFloatField
+      FieldName = 'BRANCHID'
+      Required = True
+      Visible = False
+    end
+    object DatSetExpCredits_CREDITTYPE: TFloatField
+      FieldName = 'CREDITTYPE'
+      Required = True
+      Visible = False
+    end
+    object DatSetExpCredits_DATEOFCONCLUSION: TDateTimeField
+      FieldName = 'DATEOFCONCLUSION'
+      Required = True
+      Visible = False
+    end
+    object DatSetExpCredits_DUEDATEFIRSTCONTRACT: TDateTimeField
+      FieldName = 'DUEDATEFIRSTCONTRACT'
+      Required = True
+      Visible = False
+    end
+    object DatSetExpCredits_DUEDATELASTCONTRACT: TDateTimeField
+      FieldName = 'DUEDATELASTCONTRACT'
+      Visible = False
+    end
+    object DatSetExpCredits_EXDATCOUNT: TFloatField
+      DisplayLabel = #1068#1077#1078' . '#1100#1094#1085#1083#1103#1088#1080#1085' '#1089#1072#1081#1099
+      FieldName = 'EXDATCOUNT'
+    end
+    object DatSetExpCredits_SALARY: TWideStringField
+      DisplayLabel = #1048#1096' '#1081#1077#1088#1080' / '#1042#1103#1079#1080#1092#1103#1089#1080' / '#1071#1084#1103#1082' '#1097#1072#1075#1075#1099
+      FieldName = 'SALARY'
+      Size = 64
+    end
+  end
+  object OracleDataSet1: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      '    p.id,'
+      '    p.numberofcredit,'
+      
+        '    p.currency, p.personaltype, p.customertype,p.branchid, p.cre' +
+        'dittype,'
+      '    p.dateofconclusion as opendate,'
+      '    p.duedatefirstcontract as closedate,'
+      '    p.annualyinterestrate,p.boorowerid ,b.PHONENUMBER,'
+      '    lacc.acc_no as contractaccno,'
+      '    cust.name,'
+      '    p.dateofconclusion,'
+      '    p.duedatefirstcontract,'
+      '    p.duedatelastcontract,'
+      '    expcrd.outdat,'
+      '    psh.planrest, '
+      '    expcrd.exdatcount,'
+      '    av.val_name,'
+      '    br.ostat as custaccrest,'
+      '       cm_utils.Get_PlanPrincipal (p.ID, :DAT) AS principal,'
+      '       cm_utils.Get_IntPlanPayment (p.ID) AS interest,'
+      '         cm_utils.Get_PlanPrincipal(p.ID, :DAT)'
+      '       + cm_utils.Get_IntPlanPayment(p.ID) AS sumamt,'
+      '    c.penaltyrest, '
+      '    c.reserveid,  '
+      '    cm_common.get_AccountBalance(a.contractaccid) as BalaccNo'
+      'from'
+      '   cm_portfolio p,'
+      '   cm_loanaccounts lacc,'
+      '   cm_sb_customers cust,'
+      '   sb_avalute av,'
+      '   cm_boorowerrest br,'
+      '   cm_boorowerinfo b,'
+      '   cm_curr_state c,'
+      '   cm_accounts a,'
+      '      '
+      '(select  creditid, null as outdat,0 as exdatcount from('
+      'select id as creditid'
+      'from   cm_payment_schedule where paymentdate = :dat)/*'
+      ''
+      'minus  '
+      ''
+      'select psh.creditid'
+      'from   cm_payment_schedule psh ,cm_curr_state cs'
+      
+        'where  psh.rest < (cs.rest+cs.duerest) and (cs.duerest+cs.rest -' +
+        ' psh.rest >= 1) '
+      'and psh.creditid = cs.creditid'
+      'and psh.paymentdate <=:dat'
+      'group by psh.creditid)*/'
+      ''
+      'union'
+      
+        'select psh.creditid,min(psh.paymentdate)  as outdat,cm_utils.ban' +
+        'kdaysbetween (MIN (psh.paymentdate),'
+      '                                   :dat'
+      '                                  ) AS exdatcount'
+      'from   cm_payment_schedule psh ,cm_curr_state cs'
+      
+        'where  psh.rest < cs.rest+cs.duerest and (cs.duerest+cs.rest - p' +
+        'sh.rest >= 2) '
+      'and psh.creditid = cs.creditid'
+      'and psh.paymentdate <=:dat'
+      'group by psh.creditid'
+      ') expcrd , '
+      ''
+      ''
+      '(SELECT  creditid, rest as planrest,principal, interest'
+      '  FROM cm_payment_schedule where paymentdate = :dat'
+      '  union'
+      
+        '   select  creditid , 0 as planrest, 0 as principal, 0 as intere' +
+        'st from '
+      '  (select id as creditid '
+      '  from cm_portfolio'
+      '  minus'
+      '  SELECT  creditid'
+      '  FROM cm_payment_schedule where paymentdate = :dat)) psh'
+      ''
+      'where p.id = lacc.creditid  and '
+      '      p.boorowerid = cust.id and'
+      '      p.id = c.creditid and'
+      '      c.rest + c.duerest <> 0 and'
+      '      p.id = psh.creditid and'
+      '      br.creditid = p.id and'
+      '      expcrd.creditid = p.id and '
+      '      b.creditid = p.id and'
+      '      a.creditid = p.id and '
+      '      p.currency = av.valute --and'
+      '     -- abs(psh.planrest - c.rest)>=2 and'
+      '     -- p.intcalcmethod=0 '
+      '      ORDER BY :orderfield'
+      ''
+      ''
+      ''
+      ''
+      ''
+      '')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 144
+    Top = 328
+  end
+  object OracleDataSet2: TOracleDataSet
+    SQL.Strings = (
+      ''
+      
+        'SELECT p.ID, p.numberofcredit, p.currency, p.personaltype, p.cus' +
+        'tomertype,'
+      '       p.branchid, p.credittype, b.NAME, av.val_name,b.salary,'
+      
+        '       cm_common.accountnumber_get (a.contractaccid) AS contract' +
+        'accno,c.duerest,'
+      
+        '       cm_common.accountrest_get (a.booroweraccid) AS custaccres' +
+        't,'
+      '       cm_utils.Get_PlanPrincipal (p.ID, :PDAT) AS principal,'
+      '         cm_utils.Get_PlanPrincipal(p.ID, :PDAT)'
+      '       + cm_utils.Get_IntPlanPayment(p.ID, :PDAT) AS sumamt,'
+      
+        '        cm_utils.get_gecgun(p.ID, :PDAT) as expdatcount,(select ' +
+        'name from filial_t where id=p.branchid) filial,'
+      
+        '       c.dueinterestrest+c.penaltyrest penaltyrest, c.reserveid,' +
+        ' cm_utils.get_creditplanrest (p.ID, :PDAT) AS plr,'
+      
+        '       p.dateofconclusion as opendate,p.duedatefirstcontract as ' +
+        'closedate,'
+      
+        '       p.annualyinterestrate, cm_common.get_AccountBalance(a.con' +
+        'tractaccid) as BalaccNo, p.boorowerid ,b.PHONENUMBER,'
+      
+        'case when p.duedatefirstcontract<:PDAT and nvl(p.duedatelastcont' +
+        'ract,'#39'01-jan-2002'#39')<:PDAT '
+      
+        'then '#39'Vaxt? bitib '#39' else '#39' - '#39' end as creditend,c.rest,c.interes' +
+        'trest,(select description from cm_credittypes where id= p.credit' +
+        'type) kredittip'
+      
+        ', (select name  from cm_partniyor where id=p.partid) part, (sele' +
+        'ct description from cm_usergroups where id=p.usrgroup) expert,'
+      
+        '(select name  from cm_qovluq where id=p.qovid) qovluq,(select na' +
+        'me from cm_expert where id=p.expertid) shert,'
+      'g1.guarantorname,g1.zaminwork1,g1.zamintel1,g1.zmtelmob1,'
+      
+        'g2.guarantorname name2,g2.zaminwork1 wr2,g2.zamintel1 evtel2,g2.' +
+        'zmtelmob1 mobtel2,'
+      
+        'g3.guarantorname name3,g3.zaminwork1 wr3,g3.zamintel1 evtel3,g3.' +
+        'zmtelmob1 mobtel3'
+      '  FROM cm_active_credits p,'
+      '       cm_boorowerinfo b,'
+      '       cm_accounts a,CM_GUARANTOR g1,'
+      '       cm_curr_state c,CM_GUARANTOR g2,CM_GUARANTOR g3,'
+      '       avalute av'
+      '       '
+      
+        ' WHERE b.creditid = p.ID and p.id=g1.creditid(+) and g1.cardid(+' +
+        ')=1'
+      
+        '   AND a.creditid = p.ID and p.id=g2.creditid(+) and g2.cardid(+' +
+        ')=2'
+      
+        '   AND c.creditid = p.ID and p.id=g3.creditid(+) and g3.cardid(+' +
+        ')=3'
+      '   AND av.valute = p.currency'
+      ' And (c.rest+c.duerest)>=0.5'
+      
+        'and c.rest+c.duerest <> 0 and  cm_utils.get_gecgun(p.ID, :PDAT+1' +
+        ')>0'
+      '--and  cm_utils.Get_PlanPrincipal (p.ID, :PDAT)>0'
+      '--and p.intcalcmethod=0'
+      'ORDER BY :orderfield'
+      ''
+      ''
+      ''
+      '')
+    Optimize = False
+    Variables.Data = {
+      0400000002000000160000003A004F0052004400450052004600490045004C00
+      44000100000003000000696400000000000A0000003A0050004400410054000C
+      0000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000002E00000004000000490044000100000000001C0000004E0055004D00
+      4200450052004F00460043005200450044004900540001000000000010000000
+      430055005200520045004E004300590001000000000018000000500045005200
+      53004F004E0041004C0054005900500045000100000000001800000043005500
+      530054004F004D00450052005400590050004500010000000000100000004200
+      520041004E004300480049004400010000000000140000004300520045004400
+      490054005400590050004500010000000000080000004E0041004D0045000100
+      0000000010000000560041004C005F004E0041004D0045000100000000001A00
+      000043004F004E00540052004100430054004100430043004E004F0001000000
+      0000160000004300550053005400410043004300520045005300540001000000
+      0000120000005000520049004E0043004900500041004C000100000000000C00
+      0000530055004D0041004D005400010000000000160000004500580050004400
+      4100540043004F0055004E00540001000000000016000000500045004E004100
+      4C00540059005200450053005400010000000000120000005200450053004500
+      520056004500490044000100000000000600000050004C005200010000000000
+      100000004F00500045004E004400410054004500010000000000120000004300
+      4C004F005300450044004100540045000100000000002600000041004E004E00
+      550041004C00590049004E005400450052004500530054005200410054004500
+      01000000000010000000420041004C004100430043004E004F00010000000000
+      1400000042004F004F0052004F00570045005200490044000100000000001600
+      0000500048004F004E0045004E0055004D004200450052000100000000000C00
+      0000530041004C00410052005900010000000000120000004300520045004400
+      4900540045004E00440001000000000008000000520045005300540001000000
+      00001800000049004E0054004500520045005300540052004500530054000100
+      000000000800000050004100520054000100000000000C000000450058005000
+      4500520054000100000000000C00000051004F0056004C005500510001000000
+      00000A000000530048004500520054000100000000001A000000470055004100
+      520041004E0054004F0052004E0041004D004500010000000000140000005A00
+      41004D0049004E0057004F0052004B003100010000000000120000005A004100
+      4D0049004E00540045004C003100010000000000120000005A004D0054004500
+      4C004D004F00420031000100000000000A0000004E0041004D00450032000100
+      00000000060000005700520032000100000000000C0000004500560054004500
+      4C0032000100000000000E0000004D004F004200540045004C00320001000000
+      00000A0000004E0041004D004500330001000000000006000000570052003300
+      0100000000000C00000045005600540045004C0033000100000000000E000000
+      4D004F004200540045004C0033000100000000000E0000004400550045005200
+      4500530054000100000000000C000000460049004C00490041004C0001000000
+      0000120000004B0052004500440049005400540049005000010000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 576
+    Top = 40
+    object FloatField1: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object WideStringField1: TWideStringField
+      DisplayLabel = #1052#1094#1075#1072#1074#1080#1083#1103#1085#1080#1085' '#8470'-'#1089#1080
+      FieldName = 'NUMBEROFCREDIT'
+      Required = True
+      Size = 32
+    end
+    object WideStringField2: TWideStringField
+      DisplayLabel = #1065#1077#1089#1072#1073#1099#1085' '#8470'-'#1089#1080
+      FieldName = 'CONTRACTACCNO'
+      Size = 4000
+    end
+    object WideStringField3: TWideStringField
+      DisplayLabel = '$'
+      FieldName = 'VAL_NAME'
+      Size = 10
+    end
+    object DateTimeField1: TDateTimeField
+      DisplayLabel = #1040#1095#1099#1083#1084#1072' '#1090#1072#1088#1080#1093#1080
+      FieldName = 'OPENDATE'
+      Required = True
+    end
+    object DateTimeField2: TDateTimeField
+      DisplayLabel = #1041#1072#1100#1083#1072#1085#1084#1072' '#1090#1072#1088#1080#1093#1080
+      FieldName = 'CLOSEDATE'
+      Required = True
+    end
+    object FloatField2: TFloatField
+      DisplayLabel = #1048#1083#1083#1080#1082' %'
+      FieldName = 'ANNUALYINTERESTRATE'
+      Required = True
+    end
+    object FloatField3: TFloatField
+      DisplayLabel = #1041#1072#1083#1072#1085#1089' '#1097#1077#1089#1072#1073#1099
+      FieldName = 'BALACCNO'
+    end
+    object WideStringField4: TWideStringField
+      FieldName = 'FILIAL'
+      Size = 360
+    end
+    object WideStringField5: TWideStringField
+      FieldName = 'KREDITTIP'
+      Size = 512
+    end
+    object FloatField4: TFloatField
+      DisplayLabel = #1071#1089#1072#1089' '#1041#1086#1088#1078' '#1075#1072#1083#1099#1075
+      FieldName = 'REST'
+      Required = True
+    end
+    object FloatField5: TFloatField
+      DisplayLabel = 'Gecikmi'#351' '#601'sas'
+      FieldName = 'DUEREST'
+    end
+    object FloatField6: TFloatField
+      DisplayLabel = '% '#1073#1086#1088#1078' '#1075#1072#1083#1099#1075
+      FieldName = 'INTERESTREST'
+      Required = True
+    end
+    object WideStringField6: TWideStringField
+      DisplayLabel = #1052#1094#1096#1090#1103#1088#1080#1085#1080#1085' '#1072#1076#1099
+      FieldName = 'NAME'
+      Size = 64
+    end
+    object WideStringField7: TWideStringField
+      DisplayLabel = #1058#1077#1083#1077#1092#1086#1085' '#8470
+      FieldName = 'PHONENUMBER'
+      Size = 255
+    end
+    object FloatField7: TFloatField
+      DisplayLabel = #1052#1094#1096#1090#1103#1088#1080#1085#1080#1085' '#1082#1086#1076#1091
+      FieldName = 'BOOROWERID'
+      Required = True
+    end
+    object FloatField8: TFloatField
+      DisplayLabel = #1046#1072#1088#1080' '#1097#1077#1089#1072#1073#1099#1085' '#1075#1072#1083#1099#1100#1099
+      FieldName = 'CUSTACCREST'
+    end
+    object FloatField9: TFloatField
+      DisplayLabel = #1071#1089#1072#1089' '#1073#1086#1088#1078#1076#1072#1085' '
+      FieldName = 'PRINCIPAL'
+      Required = True
+    end
+    object FloatField10: TFloatField
+      DisplayLabel = #1068#1077#1078' . '#1100#1094#1085#1083#1103#1088#1080#1085' '#1089#1072#1081#1099
+      FieldName = 'EXPDATCOUNT'
+    end
+    object FloatField11: TFloatField
+      DisplayLabel = #1055#1077#1085#1080#1081#1072
+      FieldName = 'PENALTYREST'
+    end
+    object FloatField12: TFloatField
+      FieldName = 'CURRENCY'
+      Required = True
+      Visible = False
+    end
+    object FloatField13: TFloatField
+      FieldName = 'PERSONALTYPE'
+      Required = True
+      Visible = False
+    end
+    object FloatField14: TFloatField
+      FieldName = 'CUSTOMERTYPE'
+      Required = True
+      Visible = False
+    end
+    object FloatField15: TFloatField
+      FieldName = 'BRANCHID'
+      Required = True
+      Visible = False
+    end
+    object FloatField16: TFloatField
+      FieldName = 'CREDITTYPE'
+      Required = True
+      Visible = False
+    end
+    object FloatField17: TFloatField
+      FieldName = 'RESERVEID'
+      Required = True
+      Visible = False
+    end
+    object FloatField18: TFloatField
+      DisplayLabel = #1046#1103#1084#1080
+      FieldName = 'SUMAMT'
+    end
+    object FloatField19: TFloatField
+      FieldName = 'PLR'
+      Visible = False
+    end
+    object WideStringField8: TWideStringField
+      DisplayLabel = #1048#1096' '#1081#1077#1088#1080' / '#1042#1103#1079#1080#1092#1103#1089#1080' / '#1071#1084#1103#1082' '#1097#1072#1075#1075#1099
+      FieldName = 'SALARY'
+      Size = 64
+    end
+    object WideStringField9: TWideStringField
+      DisplayLabel = 'Vaxt'#1099' '#1073#1080#1090#1084#1080#1096' '#1082#1088#1077#1076#1080#1090#1083#1103#1088
+      FieldName = 'CREDITEND'
+      Size = 12
+    end
+    object WideStringField10: TWideStringField
+      DisplayLabel = 'Qovluq'
+      FieldName = 'QOVLUQ'
+      Size = 120
+    end
+    object WideStringField11: TWideStringField
+      DisplayLabel = 'Kreditin '#351#601'rtl'#601'ri'
+      FieldName = 'SHERT'
+      Size = 320
+    end
+    object WideStringField12: TWideStringField
+      DisplayLabel = 'Partnyor'
+      FieldName = 'PART'
+      Size = 200
+    end
+    object WideStringField13: TWideStringField
+      DisplayLabel = 'M'#252't'#601'x'#601'ssis'
+      FieldName = 'EXPERT'
+      Size = 256
+    end
+    object WideStringField14: TWideStringField
+      DisplayLabel = '1 Zaminin ad'#305
+      FieldName = 'GUARANTORNAME'
+      Size = 200
+    end
+    object WideStringField15: TWideStringField
+      DisplayLabel = '1 Zaminin i'#351' yeri'
+      FieldName = 'ZAMINWORK1'
+      Size = 200
+    end
+    object WideStringField16: TWideStringField
+      DisplayLabel = '1 Zaminin ev tel'
+      FieldName = 'ZAMINTEL1'
+      Size = 200
+    end
+    object WideStringField17: TWideStringField
+      DisplayLabel = '1 Zaminin mob tel'
+      FieldName = 'ZMTELMOB1'
+      Size = 15
+    end
+    object WideStringField18: TWideStringField
+      DisplayLabel = '2 Zaminin ad'#305
+      FieldName = 'NAME2'
+      Size = 200
+    end
+    object WideStringField19: TWideStringField
+      DisplayLabel = '2 Zaminin i'#351' yeri'
+      FieldName = 'WR2'
+      Size = 200
+    end
+    object WideStringField20: TWideStringField
+      DisplayLabel = '2 Zamin ev tel'
+      FieldName = 'EVTEL2'
+      Size = 200
+    end
+    object WideStringField21: TWideStringField
+      DisplayLabel = '2 Zaminin mob tel'
+      FieldName = 'MOBTEL2'
+      Size = 15
+    end
+    object WideStringField22: TWideStringField
+      DisplayLabel = '3 Zaminin ad'#305
+      FieldName = 'NAME3'
+      Size = 200
+    end
+    object WideStringField23: TWideStringField
+      DisplayLabel = '3 Zaminin i'#351' yeri'
+      FieldName = 'WR3'
+      Size = 200
+    end
+    object WideStringField24: TWideStringField
+      DisplayLabel = '3 Zaminin tel ev'
+      FieldName = 'EVTEL3'
+      Size = 200
+    end
+    object WideStringField25: TWideStringField
+      DisplayLabel = '3 Zaminin mob tel'
+      FieldName = 'MOBTEL3'
+      Size = 15
+    end
+  end
+end

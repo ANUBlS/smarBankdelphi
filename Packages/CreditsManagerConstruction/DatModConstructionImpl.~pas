@@ -1,0 +1,243 @@
+unit DatModConstructionImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, OracleData, Oracle;
+
+type
+  TDatModConstruction = class(TDataModule)
+    pledgetypesDatSrc: TDataSource;
+    pledgetypes: TOracleDataSet;
+    pledgetypesID: TFloatField;
+    pledgetypesTYPE: TStringField;
+    AccountsDatSrc: TDataSource;
+    Accounts_: TOracleDataSet;
+    Accounts_ID: TFloatField;
+    Accounts_NAME: TStringField;
+    Accounts_ACC_NO: TStringField;
+    CustomersDatSur: TDataSource;
+    Customers: TOracleDataSet;
+    CustomersID: TFloatField;
+    CustomersBYR_NAME: TStringField;
+    ValutesDatSrc: TDataSource;
+    Valutes: TOracleDataSet;
+    FilialsDatSrc: TDataSource;
+    Filials: TOracleDataSet;
+    FilialsID: TFloatField;
+    FilialsNAME: TStringField;
+    CreditsDatSrc: TDataSource;
+    Credits: TOracleDataSet;
+    CreditsID: TFloatField;
+    CreditsCONTNUM: TStringField;
+    CreditsACCNO: TStringField;
+    CreditsOPENDATE: TDateTimeField;
+    CreditsCLOSEDATE: TDateTimeField;
+    CreditsVAL_NAME: TStringField;
+    CreditsCREDITAMOUNT: TFloatField;
+    CreditsAMOUNTFLATKV: TFloatField;
+    CreditsCOMPANYID: TStringField;
+    CreditsBLD_NAME: TStringField;
+    CreditsFLATID: TFloatField;
+    CreditsFLATNUMBER: TStringField;
+    CreditsBRANCHID: TFloatField;
+    CreditsUSERID: TFloatField;
+    CreditsREST: TFloatField;
+    CreditPurpose: TOracleDataSet;
+    CreditPurposeCONTNUM: TStringField;
+    CreditPurposeBUYER: TFloatField;
+    CreditPurposeACCID: TFloatField;
+    CreditPurposeBRANCHID: TFloatField;
+    CreditPurposeFLATID: TFloatField;
+    CreditPurposeCONTCUR: TFloatField;
+    CreditPurposeCONTAMOUNT: TFloatField;
+    CreditPurposeOPENDATE: TDateTimeField;
+    CreditPurposeEXPDATE: TDateTimeField;
+    CreditPurposeCLOSEDATE: TDateTimeField;
+    CreditPurposeINTERESTRATE: TFloatField;
+    CreditPurposeINITIALAMOUNT: TFloatField;
+    CreditPurposeUSERID: TFloatField;
+    CreditPurposeDUEINTERESTRATE: TFloatField;
+    CreditPurposeDatSrc: TDataSource;
+    sbcm_construction: TOraclePackage;
+    Componies: TOracleDataSet;
+    ComponiesCOMP_NAME: TStringField;
+    ComponiesDatScr: TDataSource;
+    buildingsDatSrc: TDataSource;
+    buildings: TOracleDataSet;
+    buildingsID: TFloatField;
+    buildingsBLD_NAME: TStringField;
+    buildingsCOMP_ID: TFloatField;
+    FlatsDatSrc: TDataSource;
+    Flats: TOracleDataSet;
+    FlatsID: TFloatField;
+    FlatsFLATNUMBER: TStringField;
+    FlatsBLD_ID: TFloatField;
+    Users: TOracleDataSet;
+    UsersID: TFloatField;
+    UsersNAME: TStringField;
+    UsersDatSrc: TDataSource;
+    Accounts: TOracleDataSet;
+    AccountsID: TFloatField;
+    AccountsNAME: TStringField;
+    AccountsACC_NO: TStringField;
+    BldeditDataSet: TOracleDataSet;
+    SysDat: TOracleDataSet;
+    SysDatTEK_DAT: TDateTimeField;
+    SysDatPRED_DAT: TDateTimeField;
+    SysDatARC_DAY: TDateTimeField;
+    SysDatCLOSE: TIntegerField;
+    BldeditDataSetID: TFloatField;
+    BldeditDataSetBLD_ID: TFloatField;
+    BldeditDataSetFLATNUMBER: TStringField;
+    BldeditDataSetENTRANCE: TIntegerField;
+    BldeditDataSetFFLOOR: TIntegerField;
+    BldeditDataSetROOMS: TIntegerField;
+    BldeditDataSetAREA: TFloatField;
+    BldeditDataSetPRICE1: TFloatField;
+    BldeditDataSetPRICEGEN: TFloatField;
+    BldeditDataSetBUYER: TFloatField;
+    BldeditDataSetBLD_NAME: TStringField;
+    CreditsCUSTNAME: TStringField;
+    ComponiesID: TIntegerField;
+    CreditsBUILDINGID: TFloatField;
+    procedure DataModuleCreate(Sender: TObject);
+    procedure DataModuleDestroy(Sender: TObject);
+    procedure CreditPurposeApplyRecord(Sender: TOracleDataSet;
+      Action: Char; var Applied: Boolean; var NewRowId: String);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  DatModConstruction: TDatModConstruction;
+
+implementation
+
+{$R *.DFM}
+
+uses sboapiDataModuleImpl;
+
+procedure TDatModConstruction.DataModuleCreate(Sender: TObject);
+begin
+   with Credits do begin
+       SetVariable('title','ID');
+       Open;
+   end;
+   Customers.Open;
+  // CreditPurpose.Open;
+   Valutes.Open;
+   Filials.Open;
+   with Accounts do begin
+      //  SetVariable('val',0);
+        SetVariable('BID',0);
+        Open;
+   end;
+  // pledgetypes.Open;
+   Componies.open;
+   buildings.open;
+   Flats.open;
+   Users.Open;
+   sysdat.open;
+   BldeditDataSet.open;
+end;
+
+procedure TDatModConstruction.DataModuleDestroy(Sender: TObject);
+begin
+   Credits.CloseAll ;
+   Customers.CloseAll;
+   Filials.CloseAll;
+   //CreditPurpose.CloseAll;
+   Valutes.CloseAll;
+   pledgetypes.CloseAll;
+   Accounts.CloseAll;
+   Componies.CloseAll;
+   buildings.CloseAll;
+   Flats.CloseAll;
+   Users.CloseAll;
+   BldeditDataSet.close
+end;
+
+procedure TDatModConstruction.CreditPurposeApplyRecord(
+  Sender: TOracleDataSet; Action: Char; var Applied: Boolean;
+  var NewRowId: String);
+var
+      ContNum :String;
+      Buyer:Integer;
+      AccID : Integer;
+      BranchID:Integer;
+      contcur,FlatID :Integer;
+      ContAmount:Real;
+      opendate:TDATETIme;
+      ExpDate :TDATETIme;
+      closedate:TDATETIme;
+      interestrate:integer;
+      InitialAmount:Real;
+      DUEINTERESTRATE :Real;
+      Result: integer;
+
+begin
+   Result :=0;
+      with Sender do
+      begin
+      ContNum:= FieldByName('ContNum').AsString;
+      Buyer:= FieldByName('Buyer').Asinteger;
+      AccID:= FieldByName('AccID').Asinteger;
+      BranchID:= FieldByName('BranchID').Asinteger;
+      FlatID:=FieldByName('FlatID').Asinteger;
+      contcur:=FieldByName('contcur').Asinteger;
+      ContAmount:=FieldByName('ContAmount').AsFloat;
+      opendate:= FieldByName('opendate').asdatetime;
+      ExpDate:= FieldByName('ExpDate').asdatetime;
+      closedate:= FieldByName('closedate').asdatetime;
+      interestrate:= FieldByName('interestrate').asinteger;
+      InitialAmount:=FieldByName('InitialAmount').AsFloat;
+      DUEINTERESTRATE :=FieldByName('DUEINTERESTRATE').AsFloat;
+
+      end;
+
+      case Action of
+          'I':Begin
+             with sbcm_construction do
+             Result := CallIntegerFunction('add_Contract',[
+                            'p_ContNum',ContNum,
+                            'p_Buyer',Buyer,
+                            'p_AccID',AccID,
+                            'p_BranchID',BranchID,
+                            'p_FlatID',FlatID,
+                            'p_contcur',contcur,
+                            'p_ContAmount',ContAmount,
+                            'p_opendate',opendate,
+                            'p_ExpDate',ExpDate,
+                            'p_closedate',closedate,
+                            'p_interestrate',0,
+                            'p_InitialAmount',InitialAmount,
+                            'p_DUEINTERESTRATE',DUEINTERESTRATE
+                            ]);
+        Applied := True;
+       end;
+       'U':begin
+              with sbcm_construction do
+             Result := CallIntegerFunction('upd_Contracts',[
+                            'p_ID',Credits.FieldByName('ID').AsInteger,
+                            'p_ContNum',ContNum,
+                            'p_Buyer',Buyer,
+                            'p_AccID',AccID,
+                            'p_BranchID',BranchID,
+                            'p_FlatID',FlatID,
+                            'p_contcur',contcur,
+                            'p_ContAmount',ContAmount,
+                            'p_opendate',opendate,
+                            'p_ExpDate',ExpDate,
+                            'p_closedate',closedate,
+                            'p_interestrate',0,
+                            'p_InitialAmount',InitialAmount,
+                            'p_DUEINTERESTRATE',DUEINTERESTRATE]);
+        Applied := True;
+      end;
+end;
+  end;
+end.

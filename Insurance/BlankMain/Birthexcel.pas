@@ -1,0 +1,67 @@
+﻿unit Birthexcel;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ComCtrls, StdCtrls, CMExcelExport;
+
+type
+  TForm5 = class(TForm)
+    Button1: TButton;
+    DateTimePicker1: TDateTimePicker;
+    ExcelExport: TCMExcelExport;
+    Memo1: TMemo;
+    procedure Button1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form5: TForm5;
+
+implementation
+
+uses BlankDMImpl;
+
+{$R *.dfm}
+
+procedure TForm5.Button1Click(Sender: TObject);
+var aa: string  ;
+begin
+aa:=formatdatetime('DD/MM/YYYY',DateTimePicker1.DateTime);
+ BlankDM.dsbirth.CloseAll;
+BlankDM.dsbirth.SQL[21]:='  and EXTRACT( day from ics.dateofbirth)='+''''+formatdatetime('DD',DateTimePicker1.DateTime)+''''+
+' and EXTRACT( month from ics.dateofbirth)='+''''+formatdatetime('MM',DateTimePicker1.DateTime)+'''';
+
+
+Memo1.Text:=BlankDM.dsbirth.SQL.Text;
+ BlankDM.dsbirth.Open;
+
+
+        if  BlankDM.dsbirth.RecordCount=0 then
+        begin
+          ShowMessage('Seçilmiş tarixədə doğum günü olan müştəri yoxdur !!! ');
+          exit;
+        end;
+
+
+if (BlankDM.dsbirth.FieldByName('user').AsString='SEDR') or
+(BlankDM.dsbirth.FieldByName('user').AsString='SATISH_MUD')  then
+begin
+  BlankDM.dsbirth.FieldByName('mobilephone').Visible:=true;
+ BlankDM.dsbirth.FieldByName('USER_ADI').Visible:=true;
+end;
+
+ with ExcelExport do
+   begin
+      Connect;
+      ExportDataset(BlankDM.dsbirth,'Butun sıgortalar.',True,false);
+
+      Disconnect;
+   end;
+end;
+
+end.

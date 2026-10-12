@@ -1,0 +1,3377 @@
+﻿unit MoneyTtransfers;
+
+{$WARN SYMBOL_PLATFORM OFF}
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActiveX, AxCtrls, MoneyTransfersImpl_TLB, StdVcl, StdCtrls, DB, OracleData,
+  ComCtrls, Grids, XDBGrids, ExtCtrls,sboapiDataModuleImpl, Buttons, CheckLst,
+  Evanescence, Oracle;
+
+type
+  TMoneyTransfers = class(TActiveForm, IMoneyTransfers)
+    Panel1: TPanel;
+    Panel2: TPanel;
+    DSMoneyTransfer: TDataSource;
+    ODSMoneyTransfer: TOracleDataSet;
+    XDBGrid1: TXDBGrid;
+    ODSMoneyTransferOPERATIONTYPE: TWideStringField;
+    ODSMoneyTransferTRANSFERTYPE: TWideStringField;
+    ODSMoneyTransferCUSTTYPE: TWideStringField;
+    ODSMoneyTransferREZIDENT: TWideStringField;
+    ODSMoneyTransferAZN: TFloatField;
+    ODSMoneyTransferUSD: TFloatField;
+    ODSMoneyTransferEUR: TFloatField;
+    ODSMoneyTransferGBP: TFloatField;
+    ODSMoneyTransferTRY: TFloatField;
+    ODSMoneyTransferRUR: TFloatField;
+    ODSMoneyTransferGEL: TFloatField;
+    ODSMoneyTransferAED: TFloatField;
+    ODSMoneyTransferYEN: TFloatField;
+    ODSMoneyTransferNAME: TWideStringField;
+    Panel3: TPanel;
+    Bdate: TDateTimePicker;
+    Edate: TDateTimePicker;
+    Label1: TLabel;
+    Evanescence1: TEvanescence;
+    CheckBox1: TCheckBox;
+    BitBtn5: TBitBtn;
+    SBOP: TOraclePackage;
+    ODSMoneyTransferNEREZIDENT: TFloatField;
+    ODSMoneyTransferUSDEKV: TFloatField;
+    ODSMoneyTransferEUREKV: TFloatField;
+    ODSMoneyTransferGBPEKV: TFloatField;
+    ODSMoneyTransferTRYEKV: TFloatField;
+    ODSMoneyTransferRUREKV: TFloatField;
+    ODSMoneyTransferGELEKV: TFloatField;
+    ODSMoneyTransferAEDEKV: TFloatField;
+    ODSMoneyTransferYENEKV: TFloatField;
+    Button1: TButton;
+    ODSMoneyTransferCUSTTYPEID: TFloatField;
+    ODSMoneyTransferTRANSFERTYPEID: TFloatField;
+    OracleDataSet1: TOracleDataSet;
+    ODSMoneyTransferID: TFloatField;
+    OracleDataSet2: TOracleDataSet;
+    ODSKurs: TOracleDataSet;
+    ODSKursOSTAT: TFloatField;
+    ODSKursVAL_KOD: TIntegerField;
+    procedure CheckBox1Click(Sender: TObject);
+    procedure Evanescence1ClickCheck(Sender: TObject);
+    procedure BitBtn5Click(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure ActiveFormCreate(Sender: TObject);
+
+  private
+    { Private declarations }
+    FEvents: IMoneyTransfersEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure MouseEnterEvent(Sender: TObject);
+    procedure MouseLeaveEvent(Sender: TObject);
+    procedure PaintEvent(Sender: TObject);
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AlignDisabled: WordBool; safecall;
+    function Get_AlignWithMargins: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_BorderWidth: Integer; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_DockSite: WordBool; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_ExplicitHeight: Integer; safecall;
+    function Get_ExplicitLeft: Integer; safecall;
+    function Get_ExplicitTop: Integer; safecall;
+    function Get_ExplicitWidth: Integer; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_MouseInClient: WordBool; safecall;
+    function Get_ParentCustomHint: WordBool; safecall;
+    function Get_ParentDoubleBuffered: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PopupMode: TxPopupMode; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_ScreenSnap: WordBool; safecall;
+    function Get_SnapBuffer: Integer; safecall;
+    function Get_UseDockManager: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_AlignWithMargins(Value: WordBool); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_BorderWidth(Value: Integer); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_DockSite(Value: WordBool); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_ParentCustomHint(Value: WordBool); safecall;
+    procedure Set_ParentDoubleBuffered(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PopupMode(Value: TxPopupMode); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_ScreenSnap(Value: WordBool); safecall;
+    procedure Set_SnapBuffer(Value: Integer); safecall;
+    procedure Set_UseDockManager(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+  public
+    { Public declarations }
+    procedure Initialize; override;
+  end;
+
+implementation
+
+uses ComObj, ComServ;
+var F:boolean; Bas,Son:TDateTime;
+
+{$R *.DFM}
+
+{ TMoneyTransfers }
+
+procedure TMoneyTransfers.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_MoneyTransfersPage); }
+end;
+
+procedure TMoneyTransfers.Evanescence1ClickCheck(Sender: TObject);
+begin
+  if not Evanescence1.Checked[0]   then CheckBox1.Checked:=False;
+  if not Evanescence1.Checked[1]   then CheckBox1.Checked:=False;
+
+  if Evanescence1.Checked[0] and Evanescence1.Checked[1] then  CheckBox1.Checked:=True;
+
+
+end;
+
+procedure TMoneyTransfers.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as IMoneyTransfersEvents;
+  inherited EventSinkChanged(EventSink);
+end;
+
+procedure TMoneyTransfers.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnMouseEnter := MouseEnterEvent;
+  OnMouseLeave := MouseLeaveEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TMoneyTransfers.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TMoneyTransfers.Get_AlignDisabled: WordBool;
+begin
+  Result := AlignDisabled;
+end;
+
+function TMoneyTransfers.Get_AlignWithMargins: WordBool;
+begin
+  Result := AlignWithMargins;
+end;
+
+function TMoneyTransfers.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TMoneyTransfers.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TMoneyTransfers.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TMoneyTransfers.Get_BorderWidth: Integer;
+begin
+  Result := Integer(BorderWidth);
+end;
+
+function TMoneyTransfers.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TMoneyTransfers.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TMoneyTransfers.Get_DockSite: WordBool;
+begin
+  Result := DockSite;
+end;
+
+function TMoneyTransfers.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TMoneyTransfers.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TMoneyTransfers.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TMoneyTransfers.Get_ExplicitHeight: Integer;
+begin
+  Result := ExplicitHeight;
+end;
+
+function TMoneyTransfers.Get_ExplicitLeft: Integer;
+begin
+  Result := ExplicitLeft;
+end;
+
+function TMoneyTransfers.Get_ExplicitTop: Integer;
+begin
+  Result := ExplicitTop;
+end;
+
+function TMoneyTransfers.Get_ExplicitWidth: Integer;
+begin
+  Result := ExplicitWidth;
+end;
+
+function TMoneyTransfers.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TMoneyTransfers.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TMoneyTransfers.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TMoneyTransfers.Get_MouseInClient: WordBool;
+begin
+  Result := MouseInClient;
+end;
+
+function TMoneyTransfers.Get_ParentCustomHint: WordBool;
+begin
+  Result := ParentCustomHint;
+end;
+
+function TMoneyTransfers.Get_ParentDoubleBuffered: WordBool;
+begin
+  Result := ParentDoubleBuffered;
+end;
+
+function TMoneyTransfers.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TMoneyTransfers.Get_PopupMode: TxPopupMode;
+begin
+  Result := Ord(PopupMode);
+end;
+
+function TMoneyTransfers.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TMoneyTransfers.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TMoneyTransfers.Get_ScreenSnap: WordBool;
+begin
+  Result := ScreenSnap;
+end;
+
+function TMoneyTransfers.Get_SnapBuffer: Integer;
+begin
+  Result := SnapBuffer;
+end;
+
+function TMoneyTransfers.Get_UseDockManager: WordBool;
+begin
+  Result := UseDockManager;
+end;
+
+function TMoneyTransfers.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TMoneyTransfers.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TMoneyTransfers._Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TMoneyTransfers.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+
+
+procedure TMoneyTransfers.ActiveFormCreate(Sender: TObject);
+begin
+  Bdate.DateTime :=SBOP.CallDateFunction('get_date',[]);
+  Edate.DateTime :=SBOP.CallDateFunction('get_date',[]);
+  ODSMoneyTransfer.Close;
+  ODSMoneyTransfer.SetVariable('bdat',Bdate.DateTime);
+  ODSMoneyTransfer.SetVariable('edat',Edate.DateTime);
+  ODSMoneyTransfer.Open;
+  if CheckBox1.Checked then Evanescence1.CheckAll;
+
+end;
+
+procedure TMoneyTransfers.BitBtn5Click(Sender: TObject);
+var V, Sheet, Sheets,Vn,SheetN,SheetsN   :Variant;
+    Bas,Son:string;
+    k:string;
+begin
+  Bas:=FormatDateTime('dd-MMM-yyyy',trunc(Bdate.DateTime));
+  Son:=FormatDateTime('dd-MMM-yyyy',trunc(Edate.DateTime));
+  try
+    V := CreateOleObject('Excel.Application');
+  except
+    MessageBox(Handle, 'MS Excel proqramını yerinə yetirmək olmadı.Əməliyyat imtina olundu.',
+      'Səhv', MB_OK + MB_ICONERROR + MB_APPLMODAL);
+    Exit;
+  end;
+
+   V.Visible := False;
+   Sheet := V.WorkBooks.add(ExtractFilePath(ExtractFilePath(ParamStr(0)))+'PulKöçürmələri.xlsx');
+
+
+   ODSMoneyTransfer.First;
+   With ODSMoneyTransfer do
+   begin
+     while not Eof do
+     begin
+       if ODSMoneyTransferID.AsInteger=78  then  {-------------Məxaric------------------------}
+     (*------------------------------------Malların idxalı üzrə-------------------------------------------------*)
+       if ODSMoneyTransferTRANSFERTYPEID.AsInteger=0
+       then
+       if ODSMoneyTransferCUSTTYPEID.AsInteger=1
+       then
+       begin
+         if ODSMoneyTransferNEREZIDENT.AsInteger=1 then
+         begin
+           V.WorkBooks[1].WorkSheets[3].activate;
+
+           V.cells[82,4]:=ODSMoneyTransferAZN.AsFloat;
+           V.cells[82,5]:=ODSMoneyTransferUSD.AsFloat;
+           V.cells[82,6]:=ODSMoneyTransferEUR.AsFloat;
+           V.cells[82,18]:=ODSMoneyTransferGEL.AsFloat;
+           V.cells[82,21]:=ODSMoneyTransferGBP.AsFloat;
+           V.cells[82,39]:=ODSMoneyTransferRUR.AsFloat;
+           V.cells[82,43]:=ODSMoneyTransferTRY.AsFloat;
+
+           V.WorkBooks[1].WorkSheets[2].Activate;
+
+           V.cells[80,4]:=ODSMoneyTransferAZN.AsFloat;
+           V.cells[80,5]:=ODSMoneyTransferUSDEKV.AsFloat;
+           V.cells[80,6]:=ODSMoneyTransferEUREKV.AsFloat;
+           V.cells[80,18]:=ODSMoneyTransferGELEKV.AsFloat;
+           V.cells[80,21]:=ODSMoneyTransferGBPEKV.AsFloat;
+           V.cells[80,39]:=ODSMoneyTransferRUREKV.AsFloat;
+           V.cells[80,43]:=ODSMoneyTransferTRYEKV.AsFloat;
+
+         end
+         else
+         begin
+           V.WorkBooks[1].WorkSheets[3].activate;
+
+           V.cells[83,4]:=ODSMoneyTransferAZN.AsFloat;
+           V.cells[83,5]:=ODSMoneyTransferUSD.AsFloat;
+           V.cells[83,6]:=ODSMoneyTransferEUR.AsFloat;
+           V.cells[83,18]:=ODSMoneyTransferGEL.AsFloat;
+           V.cells[83,21]:=ODSMoneyTransferGBP.AsFloat;
+           V.cells[83,39]:=ODSMoneyTransferRUR.AsFloat;
+           V.cells[83,43]:=ODSMoneyTransferTRY.AsFloat;
+
+           V.WorkBooks[1].WorkSheets[2].activate;
+
+           V.cells[81,4]:=ODSMoneyTransferAZN.AsFloat;
+           V.cells[81,5]:=ODSMoneyTransferUSDEKV.AsFloat;
+           V.cells[81,6]:=ODSMoneyTransferEUREKV.AsFloat;
+           V.cells[81,18]:=ODSMoneyTransferGELEKV.AsFloat;
+           V.cells[81,21]:=ODSMoneyTransferGBPEKV.AsFloat;
+           V.cells[81,39]:=ODSMoneyTransferRUREKV.AsFloat;
+           V.cells[81,43]:=ODSMoneyTransferTRYEKV.AsFloat;
+
+
+         end
+       end
+       else
+       begin
+         if ODSMoneyTransferNEREZIDENT.AsInteger=1 then
+         begin
+           V.WorkBooks[1].WorkSheets[3].activate;
+
+           k:=V.cells[79,4];
+           if k='' then  k:='0.00';
+           V.cells[79,4]:=StrToFloat(k)+ODSMoneyTransferAZN.AsFloat;
+           k:=V.cells[79,5];
+           if k='' then  k:='0.00';
+           V.cells[79,5]:=StrToFloat(k)  +ODSMoneyTransferUSD.AsFloat;
+           k:=V.cells[79,6];
+           if k='' then  k:='0.00';
+           V.cells[79,6]:=StrToFloat(k)  +ODSMoneyTransferEUR.AsFloat;
+           k:=V.cells[79,18];
+           if k='' then  k:='0.00';
+           V.cells[79,18]:=StrToFloat(k)  +ODSMoneyTransferGEL.AsFloat;
+           k:=V.cells[79,21];
+           if k='' then  k:='0.00';
+           V.cells[79,21]:=StrToFloat(k)  +ODSMoneyTransferGBP.AsFloat;
+           k:=V.cells[79,39];
+           if k='' then  k:='0.00';
+           V.cells[79,39]:=StrToFloat(k)+ODSMoneyTransferRUR.AsFloat;
+           k:=V.cells[79,43];
+           if k='' then  k:='0.00';
+           V.cells[79,43]:=StrToFloat(k)+ODSMoneyTransferTRY.AsFloat;
+
+           V.WorkBooks[1].WorkSheets[2].activate;
+
+           k:=V.cells[77,4];
+           if k='' then  k:='0.00';
+           V.cells[77,4]:=StrToFloat(k)+ODSMoneyTransferAZN.AsFloat;
+           k:=V.cells[77,5];
+           if k='' then  k:='0.00';
+           V.cells[77,5]:=StrToFloat(k)  +ODSMoneyTransferUSDEKV.AsFloat;
+           k:=V.cells[77,6];
+           if k='' then  k:='0.00';
+           V.cells[77,6]:=StrToFloat(k)  +ODSMoneyTransferEUREKV.AsFloat;
+           k:=V.cells[77,18];
+           if k='' then  k:='0.00';
+           V.cells[77,18]:=StrToFloat(k)  +ODSMoneyTransferGELEKV.AsFloat;
+           k:=V.cells[77,21];
+           if k='' then  k:='0.00';
+           V.cells[77,21]:=StrToFloat(k)  +ODSMoneyTransferGBPEKV.AsFloat;
+           k:=V.cells[77,39];
+           if k='' then  k:='0.00';
+           V.cells[77,39]:=StrToFloat(k)+ODSMoneyTransferRUREKV.AsFloat;
+           k:=V.cells[77,43];
+           if k='' then  k:='0.00';
+           V.cells[77,43]:=StrToFloat(k)+ODSMoneyTransferTRYEKV.AsFloat;
+
+
+         end
+         else
+         begin
+           V.WorkBooks[1].WorkSheets[3].activate;
+
+           k:=V.cells[80,4];
+           if k='' then  k:='0.00';
+           V.cells[80,4]:=StrToFloat(k)+ODSMoneyTransferAZN.AsFloat;
+           k:=V.cells[80,5];
+           if k='' then  k:='0.00';
+           V.cells[80,5]:=StrToFloat(k)+ODSMoneyTransferUSD.AsFloat;
+           k:=V.cells[80,6];
+           if k='' then  k:='0.00';
+           V.cells[80,6]:=StrToFloat(k)+ODSMoneyTransferEUR.AsFloat;
+           k:=V.cells[80,18];
+           if k='' then  k:='0.00';
+           V.cells[80,18]:=StrToFloat(k)+ODSMoneyTransferGEL.AsFloat;
+           k:=V.cells[80,21];
+           if k='' then  k:='0.00';
+           V.cells[80,21]:=StrToFloat(k)+ODSMoneyTransferGBP.AsFloat;
+           k:=V.cells[80,39];
+           if k='' then  k:='0.00';
+           V.cells[80,39]:=StrToFloat(k)+ODSMoneyTransferRUR.AsFloat;
+           k:=V.cells[80,43];
+           if k='' then  k:='0.00';
+           V.cells[80,43]:=StrToFloat(k)+ODSMoneyTransferTRY.AsFloat;
+
+           V.WorkBooks[1].WorkSheets[2].activate;
+
+           k:=V.cells[78,4];
+           if k='' then  k:='0.00';
+           V.cells[78,4]:=StrToFloat(k)+ODSMoneyTransferAZN.AsFloat;
+           k:=V.cells[78,5];
+           if k='' then  k:='0.00';
+           V.cells[78,5]:=StrToFloat(k)+ODSMoneyTransferUSDEKV.AsFloat;
+           k:=V.cells[78,6];
+           if k='' then  k:='0.00';
+           V.cells[78,6]:=StrToFloat(k)+ODSMoneyTransferEUREKV.AsFloat;
+           k:=V.cells[78,18];
+           if k='' then  k:='0.00';
+           V.cells[78,18]:=StrToFloat(k)+ODSMoneyTransferGELEKV.AsFloat;
+           k:=V.cells[78,21];
+           if k='' then  k:='0.00';
+           V.cells[78,21]:=StrToFloat(k)+ODSMoneyTransferGBPEKV.AsFloat;
+           k:=V.cells[78,39];
+           if k='' then  k:='0.00';
+           V.cells[78,39]:=StrToFloat(k)+ODSMoneyTransferRUREKV.AsFloat;
+           k:=V.cells[78,43];
+           if k='' then  k:='0.00';
+           V.cells[78,43]:=StrToFloat(k)+ODSMoneyTransferTRYEKV.AsFloat;
+
+
+         end;
+       end;
+
+       (*----------------------------------------------------Akkreditivlər və qabaqcadan ödənişlər üzrə-------------------------------------------------*)
+
+       if (ODSMoneyTransferTRANSFERTYPEID.AsInteger=15) then
+       if ODSMoneyTransferCUSTTYPEID.AsInteger=1
+       then
+       begin
+         if ODSMoneyTransferNEREZIDENT.AsInteger=1 then
+         begin
+           V.WorkBooks[1].WorkSheets[3].activate;
+
+           V.cells[89,4]:=ODSMoneyTransferAZN.AsFloat;
+           V.cells[89,5]:=ODSMoneyTransferUSD.AsFloat;
+           V.cells[89,6]:=ODSMoneyTransferEUR.AsFloat;
+           V.cells[89,18]:=ODSMoneyTransferGEL.AsFloat;
+           V.cells[89,21]:=ODSMoneyTransferGBP.AsFloat;
+           V.cells[89,39]:=ODSMoneyTransferRUR.AsFloat;
+           V.cells[89,43]:=ODSMoneyTransferTRY.AsFloat;
+
+           V.WorkBooks[1].WorkSheets[2].activate;
+
+           V.cells[87,4]:=ODSMoneyTransferAZN.AsFloat;
+           V.cells[87,5]:=ODSMoneyTransferUSDEKV.AsFloat;
+           V.cells[87,6]:=ODSMoneyTransferEUREKV.AsFloat;
+           V.cells[87,18]:=ODSMoneyTransferGELEKV.AsFloat;
+           V.cells[87,21]:=ODSMoneyTransferGBPEKV.AsFloat;
+           V.cells[87,39]:=ODSMoneyTransferRUREKV.AsFloat;
+           V.cells[87,43]:=ODSMoneyTransferTRYEKV.AsFloat;
+
+         end
+         else
+         begin
+           V.WorkBooks[1].WorkSheets[3].activate;
+
+           V.cells[90,4]:=ODSMoneyTransferAZN.AsFloat;
+           V.cells[90,5]:=ODSMoneyTransferUSD.AsFloat;
+           V.cells[90,6]:=ODSMoneyTransferEUR.AsFloat;
+           V.cells[90,18]:=ODSMoneyTransferGEL.AsFloat;
+           V.cells[90,21]:=ODSMoneyTransferGBP.AsFloat;
+           V.cells[90,39]:=ODSMoneyTransferRUR.AsFloat;
+           V.cells[90,39]:=ODSMoneyTransferTRY.AsFloat;
+
+           V.WorkBooks[1].WorkSheets[2].activate;
+
+           V.cells[88,4]:=ODSMoneyTransferAZN.AsFloat;
+           V.cells[88,5]:=ODSMoneyTransferUSDEKV.AsFloat;
+           V.cells[88,6]:=ODSMoneyTransferEUREKV.AsFloat;
+           V.cells[88,18]:=ODSMoneyTransferGELEKV.AsFloat;
+           V.cells[88,21]:=ODSMoneyTransferGBPEKV.AsFloat;
+           V.cells[88,39]:=ODSMoneyTransferRUREKV.AsFloat;
+           V.cells[88,39]:=ODSMoneyTransferTRYEKV.AsFloat;
+
+
+         end
+       end
+       else
+       begin
+         if ODSMoneyTransferNEREZIDENT.AsInteger=1 then
+         begin
+           V.WorkBooks[1].WorkSheets[3].activate;
+
+           k:=V.cells[86,4];
+           if k='' then  k:='0.00';
+           V.cells[86,4]:=StrToFloat(k)+ODSMoneyTransferAZN.AsFloat;
+           k:=V.cells[86,5];
+           if k='' then  k:='0.00';
+           V.cells[86,5]:=StrToFloat(k)  +ODSMoneyTransferUSD.AsFloat;
+           k:=V.cells[86,6];
+           if k='' then  k:='0.00';
+           V.cells[86,6]:=StrToFloat(k)  +ODSMoneyTransferEUR.AsFloat;
+           k:=V.cells[86,18];
+           if k='' then  k:='0.00';
+           V.cells[86,18]:=StrToFloat(k)  +ODSMoneyTransferGEL.AsFloat;
+           k:=V.cells[86,21];
+           if k='' then  k:='0.00';
+           V.cells[86,21]:=StrToFloat(k)  +ODSMoneyTransferGBP.AsFloat;
+           k:=V.cells[86,39];
+           if k='' then  k:='0.00';
+           V.cells[86,39]:=StrToFloat(k)+ODSMoneyTransferRUR.AsFloat;
+           k:=V.cells[86,43];
+           if k='' then  k:='0.00';
+           V.cells[86,43]:=StrToFloat(k)+ODSMoneyTransferTRY.AsFloat;
+
+           V.WorkBooks[1].WorkSheets[2].activate;
+
+           k:=V.cells[84,4];
+           if k='' then  k:='0.00';
+           V.cells[84,4]:=StrToFloat(k)+ODSMoneyTransferAZN.AsFloat;
+           k:=V.cells[84,5];
+           if k='' then  k:='0.00';
+           V.cells[84,5]:=StrToFloat(k)  +ODSMoneyTransferUSDEKV.AsFloat;
+           k:=V.cells[84,6];
+           if k='' then  k:='0.00';
+           V.cells[84,6]:=StrToFloat(k)  +ODSMoneyTransferEUREKV.AsFloat;
+           k:=V.cells[84,18];
+           if k='' then  k:='0.00';
+           V.cells[84,18]:=StrToFloat(k)  +ODSMoneyTransferGELEKV.AsFloat;
+           k:=V.cells[84,21];
+           if k='' then  k:='0.00';
+           V.cells[84,21]:=StrToFloat(k)  +ODSMoneyTransferGBPEKV.AsFloat;
+           k:=V.cells[84,39];
+           if k='' then  k:='0.00';
+           V.cells[84,39]:=StrToFloat(k)+ODSMoneyTransferRUREKV.AsFloat;
+           k:=V.cells[84,43];
+           if k='' then  k:='0.00';
+           V.cells[84,43]:=StrToFloat(k)+ODSMoneyTransferTRYEKV.AsFloat;
+
+
+
+         end
+         else
+         begin
+           V.WorkBooks[1].WorkSheets[3].activate;
+
+           k:=V.cells[87,4];
+           if k='' then  k:='0.00';
+           V.cells[87,4]:=StrToFloat(k)+ODSMoneyTransferAZN.AsFloat;
+
+           k:=V.cells[87,5];
+           if k='' then  k:='0.00';
+           V.cells[87,5]:=StrToFloat(k)+ODSMoneyTransferUSD.AsFloat;
+
+           k:=V.cells[87,6];
+           if k='' then  k:='0.00';
+           V.cells[87,6]:=StrToFloat(k)  +ODSMoneyTransferEUR.AsFloat;
+
+           k:=V.cells[87,18];
+           if k='' then  k:='0.00';
+           V.cells[87,18]:=StrToFloat(k)  +ODSMoneyTransferGEL.AsFloat;
+
+           k:=V.cells[87,21];
+           if k='' then  k:='0.00';
+           V.cells[87,21]:=StrToFloat(k)+ODSMoneyTransferGBP.AsFloat;
+
+           k:=V.cells[87,39];
+           if k='' then  k:='0.00';
+           V.cells[87,39]:=StrToFloat(k)+ODSMoneyTransferRUR.AsFloat;
+
+           k:=V.cells[87,43];
+           if k='' then  k:='0.00';
+           V.cells[87,43]:=StrToFloat(k)  +ODSMoneyTransferTRY.AsFloat;
+
+           V.WorkBooks[1].WorkSheets[2].activate;
+
+           k:=V.cells[85,4];
+           if k='' then  k:='0.00';
+           V.cells[85,4]:=StrToFloat(k)+ODSMoneyTransferAZN.AsFloat;
+
+           k:=V.cells[85,5];
+           if k='' then  k:='0.00';
+           V.cells[85,5]:=StrToFloat(k)+ODSMoneyTransferUSDEKV.AsFloat;
+
+           k:=V.cells[85,6];
+           if k='' then  k:='0.00';
+           V.cells[85,6]:=StrToFloat(k)  +ODSMoneyTransferEUREKV.AsFloat;
+
+           k:=V.cells[85,18];
+           if k='' then  k:='0.00';
+           V.cells[85,18]:=StrToFloat(k)  +ODSMoneyTransferGELEKV.AsFloat;
+
+           k:=V.cells[85,21];
+           if k='' then  k:='0.00';
+           V.cells[85,21]:=StrToFloat(k)+ODSMoneyTransferGBPEKV.AsFloat;
+
+           k:=V.cells[85,39];
+           if k='' then  k:='0.00';
+           V.cells[85,39]:=StrToFloat(k)+ODSMoneyTransferRUREKV.AsFloat;
+
+           k:=V.cells[85,43];
+           if k='' then  k:='0.00';
+           V.cells[85,43]:=StrToFloat(k)  +ODSMoneyTransferTRYEKV.AsFloat;
+
+
+
+         end;
+       end;
+
+
+       (*----------------------------------------------------Xidmətlər üzrə-------------------------------------------------*)
+
+       if (ODSMoneyTransferTRANSFERTYPEID.AsInteger=16) then
+       if ODSMoneyTransferCUSTTYPEID.AsInteger=1
+       then
+       begin
+         if ODSMoneyTransferNEREZIDENT.AsInteger=1 then
+         begin
+           V.WorkBooks[1].WorkSheets[3].activate;
+
+           V.cells[96,4]:=ODSMoneyTransferAZN.AsFloat;
+           V.cells[96,5]:=ODSMoneyTransferUSD.AsFloat;
+           V.cells[96,6]:=ODSMoneyTransferEUR.AsFloat;
+           V.cells[96,18]:=ODSMoneyTransferGEL.AsFloat;
+           V.cells[96,21]:=ODSMoneyTransferGBP.AsFloat;
+           V.cells[96,39]:=ODSMoneyTransferRUR.AsFloat;
+           V.cells[96,43]:=ODSMoneyTransferTRY.AsFloat;
+
+           V.WorkBooks[1].WorkSheets[2].activate;
+
+           V.cells[94,4]:=ODSMoneyTransferAZN.AsFloat;
+           V.cells[94,5]:=ODSMoneyTransferUSDEKV.AsFloat;
+           V.cells[94,6]:=ODSMoneyTransferEUREKV.AsFloat;
+           V.cells[94,18]:=ODSMoneyTransferGELEKV.AsFloat;
+           V.cells[94,21]:=ODSMoneyTransferGBPEKV.AsFloat;
+           V.cells[94,39]:=ODSMoneyTransferRUREKV.AsFloat;
+           V.cells[94,43]:=ODSMoneyTransferTRYEKV.AsFloat;
+
+         end
+         else
+         begin
+           V.WorkBooks[1].WorkSheets[3].activate;
+
+           V.cells[97,4]:=ODSMoneyTransferAZN.AsFloat;
+           V.cells[97,5]:=ODSMoneyTransferUSD.AsFloat;
+           V.cells[97,6]:=ODSMoneyTransferEUR.AsFloat;
+           V.cells[97,18]:=ODSMoneyTransferGEL.AsFloat;
+           V.cells[97,21]:=ODSMoneyTransferGBP.AsFloat;
+           V.cells[97,39]:=ODSMoneyTransferRUR.AsFloat;
+           V.cells[97,39]:=ODSMoneyTransferTRY.AsFloat;
+
+           V.WorkBooks[1].WorkSheets[2].activate;
+
+           V.cells[95,4]:=ODSMoneyTransferAZN.AsFloat;
+           V.cells[95,5]:=ODSMoneyTransferUSDEKV.AsFloat;
+           V.cells[95,6]:=ODSMoneyTransferEUREKV.AsFloat;
+           V.cells[95,18]:=ODSMoneyTransferGELEKV.AsFloat;
+           V.cells[95,21]:=ODSMoneyTransferGBPEKV.AsFloat;
+           V.cells[95,39]:=ODSMoneyTransferRUREKV.AsFloat;
+           V.cells[95,39]:=ODSMoneyTransferTRYEKV.AsFloat;
+
+         end
+       end
+       else
+       begin
+         if ODSMoneyTransferNEREZIDENT.AsInteger=1 then
+         begin
+           V.WorkBooks[1].WorkSheets[3].activate;
+
+           k:=V.cells[93,4];
+           if k='' then  k:='0.00';
+           V.cells[93,4]:=StrToFloat(k)+ODSMoneyTransferAZN.AsFloat;
+           k:=V.cells[93,5];
+           if k='' then  k:='0.00';
+           V.cells[93,5]:=StrToFloat(k)  +ODSMoneyTransferUSD.AsFloat;
+           k:=V.cells[93,6];
+           if k='' then  k:='0.00';
+           V.cells[93,6]:=StrToFloat(k)  +ODSMoneyTransferEUR.AsFloat;
+           k:=V.cells[93,18];
+           if k='' then  k:='0.00';
+           V.cells[93,18]:=StrToFloat(k)  +ODSMoneyTransferGEL.AsFloat;
+           k:=V.cells[93,21];
+           if k='' then  k:='0.00';
+           V.cells[93,21]:=StrToFloat(k)  +ODSMoneyTransferGBP.AsFloat;
+           k:=V.cells[93,39];
+           if k='' then  k:='0.00';
+           V.cells[93,39]:=StrToFloat(k)+ODSMoneyTransferRUR.AsFloat;
+           k:=V.cells[93,43];
+           if k='' then  k:='0.00';
+           V.cells[93,43]:=StrToFloat(k)+ODSMoneyTransferTRY.AsFloat;
+
+           V.WorkBooks[1].WorkSheets[2].activate;
+
+           k:=V.cells[91,4];
+           if k='' then  k:='0.00';
+           V.cells[91,4]:=StrToFloat(k)+ODSMoneyTransferAZN.AsFloat;
+
+           k:=V.cells[91,5];
+           if k='' then  k:='0.00';
+           V.cells[91,5]:=StrToFloat(k)+ODSMoneyTransferUSDEKV.AsFloat;
+
+           k:=V.cells[91,6];
+           if k='' then  k:='0.00';
+           V.cells[91,6]:=StrToFloat(k)  +ODSMoneyTransferEUREKV.AsFloat;
+
+           k:=V.cells[91,18];
+           if k='' then  k:='0.00';
+           V.cells[91,18]:=StrToFloat(k)  +ODSMoneyTransferGELEKV.AsFloat;
+
+           k:=V.cells[91,21];
+           if k='' then  k:='0.00';
+           V.cells[91,21]:=StrToFloat(k)+ODSMoneyTransferGBPEKV.AsFloat;
+
+           k:=V.cells[91,39];
+           if k='' then  k:='0.00';
+           V.cells[91,39]:=StrToFloat(k)+ODSMoneyTransferRUREKV.AsFloat;
+
+           k:=V.cells[91,43];
+           if k='' then  k:='0.00';
+           V.cells[91,43]:=StrToFloat(k)  +ODSMoneyTransferTRYEKV.AsFloat;
+
+         end
+         else
+         begin
+           V.WorkBooks[1].WorkSheets[3].activate;
+
+           k:=V.cells[94,4];
+           if k='' then  k:='0.00';
+           V.cells[94,4]:=StrToFloat(k)+ODSMoneyTransferAZN.AsFloat;
+
+           k:=V.cells[94,5];
+           if k='' then  k:='0.00';
+           V.cells[94,5]:=StrToFloat(k)+ODSMoneyTransferUSD.AsFloat;
+
+           k:=V.cells[94,6];
+           if k='' then  k:='0.00';
+           V.cells[94,6]:=StrToFloat(k)  +ODSMoneyTransferEUR.AsFloat;
+
+           k:=V.cells[94,18];
+           if k='' then  k:='0.00';
+           V.cells[94,18]:=StrToFloat(k)  +ODSMoneyTransferGEL.AsFloat;
+
+           k:=V.cells[94,21];
+           if k='' then  k:='0.00';
+           V.cells[94,21]:=StrToFloat(k)+ODSMoneyTransferGBP.AsFloat;
+
+           k:=V.cells[94,39];
+           if k='' then  k:='0.00';
+           V.cells[94,39]:=StrToFloat(k)+ODSMoneyTransferRUR.AsFloat;
+
+           k:=V.cells[94,43];
+           if k='' then  k:='0.00';
+           V.cells[94,43]:=StrToFloat(k)  +ODSMoneyTransferTRY.AsFloat;
+
+           V.WorkBooks[1].WorkSheets[2].activate;
+
+
+           k:=V.cells[92,4];
+           if k='' then  k:='0.00';
+           V.cells[92,4]:=StrToFloat(k)+ODSMoneyTransferAZN.AsFloat;
+
+           k:=V.cells[92,5];
+           if k='' then  k:='0.00';
+           V.cells[92,5]:=StrToFloat(k)+ODSMoneyTransferUSDEKV.AsFloat;
+
+           k:=V.cells[92,6];
+           if k='' then  k:='0.00';
+           V.cells[92,6]:=StrToFloat(k)  +ODSMoneyTransferEUREKV.AsFloat;
+
+           k:=V.cells[92,18];
+           if k='' then  k:='0.00';
+           V.cells[92,18]:=StrToFloat(k)  +ODSMoneyTransferGELEKV.AsFloat;
+
+           k:=V.cells[92,21];
+           if k='' then  k:='0.00';
+           V.cells[92,21]:=StrToFloat(k)+ODSMoneyTransferGBPEKV.AsFloat;
+
+           k:=V.cells[92,39];
+           if k='' then  k:='0.00';
+           V.cells[92,39]:=StrToFloat(k)+ODSMoneyTransferRUREKV.AsFloat;
+
+           k:=V.cells[92,43];
+           if k='' then  k:='0.00';
+           V.cells[92,43]:=StrToFloat(k)  +ODSMoneyTransferTRYEKV.AsFloat;
+
+
+         end;
+       end;
+
+       (*----------------------------------------------------Xərclər üzrə-------------------------------------------------*)
+
+       if (ODSMoneyTransferTRANSFERTYPEID.AsInteger=17) then
+       if ODSMoneyTransferCUSTTYPEID.AsInteger=1
+       then
+       begin
+         if ODSMoneyTransferNEREZIDENT.AsInteger=1 then
+         begin
+           V.WorkBooks[1].WorkSheets[3].activate;
+
+           V.cells[103,4]:=ODSMoneyTransferAZN.AsFloat;
+           V.cells[103,5]:=ODSMoneyTransferUSD.AsFloat;
+           V.cells[103,6]:=ODSMoneyTransferEUR.AsFloat;
+           V.cells[103,18]:=ODSMoneyTransferGEL.AsFloat;
+           V.cells[103,21]:=ODSMoneyTransferGBP.AsFloat;
+           V.cells[103,39]:=ODSMoneyTransferRUR.AsFloat;
+           V.cells[103,43]:=ODSMoneyTransferTRY.AsFloat;
+
+           V.WorkBooks[1].WorkSheets[2].activate;
+
+           V.cells[101,4]:=ODSMoneyTransferAZN.AsFloat;
+           V.cells[101,5]:=ODSMoneyTransferUSDEKV.AsFloat;
+           V.cells[101,6]:=ODSMoneyTransferEUREKV.AsFloat;
+           V.cells[101,18]:=ODSMoneyTransferGELEKV.AsFloat;
+           V.cells[101,21]:=ODSMoneyTransferGBPEKV.AsFloat;
+           V.cells[101,39]:=ODSMoneyTransferRUREKV.AsFloat;
+           V.cells[101,43]:=ODSMoneyTransferTRYEKV.AsFloat;
+
+
+         end
+         else
+         begin
+           V.WorkBooks[1].WorkSheets[3].activate;
+
+           V.cells[104,4]:=ODSMoneyTransferAZN.AsFloat;
+           V.cells[104,5]:=ODSMoneyTransferUSDEKV.AsFloat;
+           V.cells[104,6]:=ODSMoneyTransferEUREKV.AsFloat;
+           V.cells[104,18]:=ODSMoneyTransferGELEKV.AsFloat;
+           V.cells[104,21]:=ODSMoneyTransferGBPEKV.AsFloat;
+           V.cells[104,39]:=ODSMoneyTransferRUREKV.AsFloat;
+           V.cells[104,39]:=ODSMoneyTransferTRYEKV.AsFloat;
+
+           V.WorkBooks[1].WorkSheets[2].activate;
+
+           V.cells[102,4]:=ODSMoneyTransferAZN.AsFloat;
+           V.cells[102,5]:=ODSMoneyTransferUSDEKV.AsFloat;
+           V.cells[102,6]:=ODSMoneyTransferEUREKV.AsFloat;
+           V.cells[102,18]:=ODSMoneyTransferGELEKV.AsFloat;
+           V.cells[102,21]:=ODSMoneyTransferGBPEKV.AsFloat;
+           V.cells[102,39]:=ODSMoneyTransferRUREKV.AsFloat;
+           V.cells[102,39]:=ODSMoneyTransferTRYEKV.AsFloat;
+         end
+       end
+       else
+       begin
+         if ODSMoneyTransferNEREZIDENT.AsInteger=1 then
+         begin
+           V.WorkBooks[1].WorkSheets[3].activate;
+           k:=V.cells[100,4];
+           if k='' then  k:='0.00';
+           V.cells[100,4]:=StrToFloat(k)+ODSMoneyTransferAZN.AsFloat;
+           k:=V.cells[100,5];
+           if k='' then  k:='0.00';
+           V.cells[100,5]:=StrToFloat(k)  +ODSMoneyTransferUSD.AsFloat;
+           k:=V.cells[100,6];
+           if k='' then  k:='0.00';
+           V.cells[100,6]:=StrToFloat(k)  +ODSMoneyTransferEUR.AsFloat;
+           k:=V.cells[100,18];
+           if k='' then  k:='0.00';
+           V.cells[100,18]:=StrToFloat(k)  +ODSMoneyTransferGEL.AsFloat;
+           k:=V.cells[100,21];
+           if k='' then  k:='0.00';
+           V.cells[100,21]:=StrToFloat(k)  +ODSMoneyTransferGBP.AsFloat;
+           k:=V.cells[100,39];
+           if k='' then  k:='0.00';
+           V.cells[100,39]:=StrToFloat(k)+ODSMoneyTransferRUR.AsFloat;
+           k:=V.cells[100,43];
+           if k='' then  k:='0.00';
+           V.cells[100,43]:=StrToFloat(k)+ODSMoneyTransferTRY.AsFloat;
+
+           V.WorkBooks[1].WorkSheets[2].activate;
+
+           k:=V.cells[98,4];
+           if k='' then  k:='0.00';
+           V.cells[98,4]:=StrToFloat(k)+ODSMoneyTransferAZN.AsFloat;
+           k:=V.cells[98,5];
+           if k='' then  k:='0.00';
+           V.cells[98,5]:=StrToFloat(k)  +ODSMoneyTransferUSDEKV.AsFloat;
+           k:=V.cells[98,6];
+           if k='' then  k:='0.00';
+           V.cells[98,6]:=StrToFloat(k)  +ODSMoneyTransferEUREKV.AsFloat;
+           k:=V.cells[98,18];
+           if k='' then  k:='0.00';
+           V.cells[98,18]:=StrToFloat(k)  +ODSMoneyTransferGELEKV.AsFloat;
+           k:=V.cells[98,21];
+           if k='' then  k:='0.00';
+           V.cells[98,21]:=StrToFloat(k)  +ODSMoneyTransferGBPEKV.AsFloat;
+           k:=V.cells[98,39];
+           if k='' then  k:='0.00';
+           V.cells[98,39]:=StrToFloat(k)+ODSMoneyTransferRUREKV.AsFloat;
+           k:=V.cells[98,43];
+           if k='' then  k:='0.00';
+           V.cells[98,43]:=StrToFloat(k)+ODSMoneyTransferTRYEKV.AsFloat;
+
+         end
+         else
+         begin
+           V.WorkBooks[1].WorkSheets[3].activate;
+
+           k:=V.cells[101,4];
+           if k='' then  k:='0.00';
+           V.cells[101,4]:=StrToFloat(k)+ODSMoneyTransferAZN.AsFloat;
+
+           k:=V.cells[101,5];
+           if k='' then  k:='0.00';
+           V.cells[101,5]:=StrToFloat(k)+ODSMoneyTransferUSD.AsFloat;
+
+           k:=V.cells[101,6];
+           if k='' then  k:='0.00';
+           V.cells[101,6]:=StrToFloat(k)  +ODSMoneyTransferEUR.AsFloat;
+
+           k:=V.cells[101,18];
+           if k='' then  k:='0.00';
+           V.cells[101,18]:=StrToFloat(k)  +ODSMoneyTransferGEL.AsFloat;
+
+           k:=V.cells[101,21];
+           if k='' then  k:='0.00';
+           V.cells[101,21]:=StrToFloat(k)+ODSMoneyTransferGBP.AsFloat;
+
+           k:=V.cells[101,39];
+           if k='' then  k:='0.00';
+           V.cells[101,39]:=StrToFloat(k)+ODSMoneyTransferRUR.AsFloat;
+
+           k:=V.cells[101,43];
+           if k='' then  k:='0.00';
+           V.cells[101,43]:=StrToFloat(k)  +ODSMoneyTransferTRY.AsFloat;
+
+
+           V.WorkBooks[1].WorkSheets[2].activate;
+           k:=V.cells[99,4];
+           if k='' then  k:='0.00';
+           V.cells[99,4]:=StrToFloat(k)+ODSMoneyTransferAZN.AsFloat;
+
+           k:=V.cells[99,5];
+           if k='' then  k:='0.00';
+           V.cells[99,5]:=StrToFloat(k)+ODSMoneyTransferUSDEKV.AsFloat;
+
+           k:=V.cells[99,6];
+           if k='' then  k:='0.00';
+           V.cells[99,6]:=StrToFloat(k)  +ODSMoneyTransferEUREKV.AsFloat;
+
+           k:=V.cells[99,18];
+           if k='' then  k:='0.00';
+           V.cells[99,18]:=StrToFloat(k)  +ODSMoneyTransferGELEKV.AsFloat;
+
+           k:=V.cells[99,21];
+           if k='' then  k:='0.00';
+           V.cells[99,21]:=StrToFloat(k)+ODSMoneyTransferGBPEKV.AsFloat;
+
+           k:=V.cells[99,39];
+           if k='' then  k:='0.00';
+           V.cells[99,39]:=StrToFloat(k)+ODSMoneyTransferRUREKV.AsFloat;
+
+           k:=V.cells[99,43];
+           if k='' then  k:='0.00';
+           V.cells[99,43]:=StrToFloat(k)  +ODSMoneyTransferTRYEKV.AsFloat;
+
+
+
+         end;
+       end;
+
+       (*----------------------------------------------------Cari transferlər üzrə-------------------------------------------------*)
+
+       if (ODSMoneyTransferTRANSFERTYPEID.AsInteger=18) then
+       if ODSMoneyTransferCUSTTYPEID.AsInteger=1
+       then
+       begin
+         if ODSMoneyTransferNEREZIDENT.AsInteger=1 then
+         begin
+           V.WorkBooks[1].WorkSheets[3].activate;
+
+           V.cells[110,4]:=ODSMoneyTransferAZN.AsFloat;
+           V.cells[110,5]:=ODSMoneyTransferUSD.AsFloat;
+           V.cells[110,6]:=ODSMoneyTransferEUR.AsFloat;
+           V.cells[110,18]:=ODSMoneyTransferGEL.AsFloat;
+           V.cells[110,21]:=ODSMoneyTransferGBP.AsFloat;
+           V.cells[110,39]:=ODSMoneyTransferRUR.AsFloat;
+           V.cells[110,43]:=ODSMoneyTransferTRY.AsFloat;
+
+           V.WorkBooks[1].WorkSheets[2].activate;
+
+           V.cells[108,4]:=ODSMoneyTransferAZN.AsFloat;
+           V.cells[108,5]:=ODSMoneyTransferUSDEKV.AsFloat;
+           V.cells[108,6]:=ODSMoneyTransferEUREKV.AsFloat;
+           V.cells[108,18]:=ODSMoneyTransferGELEKV.AsFloat;
+           V.cells[108,21]:=ODSMoneyTransferGBPEKV.AsFloat;
+           V.cells[108,39]:=ODSMoneyTransferRUREKV.AsFloat;
+           V.cells[108,43]:=ODSMoneyTransferTRYEKV.AsFloat;
+
+         end
+         else
+         begin
+           V.WorkBooks[1].WorkSheets[3].activate;
+
+           V.cells[111,4]:=ODSMoneyTransferAZN.AsFloat;
+           V.cells[111,5]:=ODSMoneyTransferUSD.AsFloat;
+           V.cells[111,6]:=ODSMoneyTransferEUR.AsFloat;
+           V.cells[111,18]:=ODSMoneyTransferGEL.AsFloat;
+           V.cells[111,21]:=ODSMoneyTransferGBP.AsFloat;
+           V.cells[111,39]:=ODSMoneyTransferRUR.AsFloat;
+           V.cells[111,39]:=ODSMoneyTransferTRY.AsFloat;
+
+           V.WorkBooks[1].WorkSheets[2].activate;
+
+           V.cells[109,4]:=ODSMoneyTransferAZN.AsFloat;
+           V.cells[109,5]:=ODSMoneyTransferUSDEKV.AsFloat;
+           V.cells[109,6]:=ODSMoneyTransferEUREKV.AsFloat;
+           V.cells[109,18]:=ODSMoneyTransferGELEKV.AsFloat;
+           V.cells[109,21]:=ODSMoneyTransferGBPEKV.AsFloat;
+           V.cells[109,39]:=ODSMoneyTransferRUREKV.AsFloat;
+           V.cells[109,39]:=ODSMoneyTransferTRYEKV.AsFloat;
+         end
+       end
+       else
+       begin
+         if ODSMoneyTransferNEREZIDENT.AsInteger=1 then
+         begin
+           V.WorkBooks[1].WorkSheets[3].activate;
+
+           k:=V.cells[107,4];
+           if k='' then  k:='0.00';
+           V.cells[107,4]:=StrToFloat(k)+ODSMoneyTransferAZN.AsFloat;
+           k:=V.cells[107,5];
+           if k='' then  k:='0.00';
+           V.cells[107,5]:=StrToFloat(k)  +ODSMoneyTransferUSD.AsFloat;
+           k:=V.cells[107,6];
+           if k='' then  k:='0.00';
+           V.cells[107,6]:=StrToFloat(k)  +ODSMoneyTransferEUR.AsFloat;
+           k:=V.cells[107,18];
+           if k='' then  k:='0.00';
+           V.cells[107,18]:=StrToFloat(k)  +ODSMoneyTransferGEL.AsFloat;
+           k:=V.cells[107,21];
+           if k='' then  k:='0.00';
+           V.cells[107,21]:=StrToFloat(k)  +ODSMoneyTransferGBP.AsFloat;
+           k:=V.cells[107,39];
+           if k='' then  k:='0.00';
+           V.cells[107,39]:=StrToFloat(k)+ODSMoneyTransferRUR.AsFloat;
+           k:=V.cells[107,43];
+           if k='' then  k:='0.00';
+           V.cells[107,43]:=StrToFloat(k)+ODSMoneyTransferTRY.AsFloat;
+
+           V.WorkBooks[1].WorkSheets[2].activate;
+
+           k:=V.cells[105,4];
+           if k='' then  k:='0.00';
+           V.cells[105,4]:=StrToFloat(k)+ODSMoneyTransferAZN.AsFloat;
+           k:=V.cells[105,5];
+           if k='' then  k:='0.00';
+           V.cells[105,5]:=StrToFloat(k)  +ODSMoneyTransferUSDEKV.AsFloat;
+           k:=V.cells[105,6];
+           if k='' then  k:='0.00';
+           V.cells[105,6]:=StrToFloat(k)  +ODSMoneyTransferEUREKV.AsFloat;
+           k:=V.cells[105,18];
+           if k='' then  k:='0.00';
+           V.cells[105,18]:=StrToFloat(k)  +ODSMoneyTransferGELEKV.AsFloat;
+           k:=V.cells[105,21];
+           if k='' then  k:='0.00';
+           V.cells[105,21]:=StrToFloat(k)  +ODSMoneyTransferGBPEKV.AsFloat;
+           k:=V.cells[105,39];
+           if k='' then  k:='0.00';
+           V.cells[105,39]:=StrToFloat(k)+ODSMoneyTransferRUREKV.AsFloat;
+           k:=V.cells[105,43];
+           if k='' then  k:='0.00';
+           V.cells[105,43]:=StrToFloat(k)+ODSMoneyTransferTRYEKV.AsFloat;
+
+         end
+         else
+         begin
+
+           V.WorkBooks[1].WorkSheets[3].activate;
+
+           k:=V.cells[108,4];
+           if k='' then  k:='0.00';
+           V.cells[108,4]:=StrToFloat(k)+ODSMoneyTransferAZN.AsFloat;
+
+           k:=V.cells[108,5];
+           if k='' then  k:='0.00';
+           V.cells[108,5]:=StrToFloat(k)+ODSMoneyTransferUSD.AsFloat;
+
+           k:=V.cells[108,6];
+           if k='' then  k:='0.00';
+           V.cells[108,6]:=StrToFloat(k)  +ODSMoneyTransferEUR.AsFloat;
+
+           k:=V.cells[108,18];
+           if k='' then  k:='0.00';
+           V.cells[108,18]:=StrToFloat(k)  +ODSMoneyTransferGEL.AsFloat;
+
+           k:=V.cells[108,21];
+           if k='' then  k:='0.00';
+           V.cells[108,21]:=StrToFloat(k)+ODSMoneyTransferGBP.AsFloat;
+
+           k:=V.cells[108,39];
+           if k='' then  k:='0.00';
+           V.cells[108,39]:=StrToFloat(k)+ODSMoneyTransferRUR.AsFloat;
+
+           k:=V.cells[108,43];
+           if k='' then  k:='0.00';
+           V.cells[108,43]:=StrToFloat(k)  +ODSMoneyTransferTRY.AsFloat;
+
+
+           V.WorkBooks[1].WorkSheets[2].activate;
+
+           k:=V.cells[106,4];
+           if k='' then  k:='0.00';
+           V.cells[106,4]:=StrToFloat(k)+ODSMoneyTransferAZN.AsFloat;
+
+           k:=V.cells[106,5];
+           if k='' then  k:='0.00';
+           V.cells[106,5]:=StrToFloat(k)+ODSMoneyTransferUSDEKV.AsFloat;
+
+           k:=V.cells[106,6];
+           if k='' then  k:='0.00';
+           V.cells[106,6]:=StrToFloat(k)  +ODSMoneyTransferEUREKV.AsFloat;
+
+           k:=V.cells[106,18];
+           if k='' then  k:='0.00';
+           V.cells[106,18]:=StrToFloat(k)  +ODSMoneyTransferGELEKV.AsFloat;
+
+           k:=V.cells[106,21];
+           if k='' then  k:='0.00';
+           V.cells[106,21]:=StrToFloat(k)+ODSMoneyTransferGBPEKV.AsFloat;
+
+           k:=V.cells[106,39];
+           if k='' then  k:='0.00';
+           V.cells[106,39]:=StrToFloat(k)+ODSMoneyTransferRUREKV.AsFloat;
+
+           k:=V.cells[106,43];
+           if k='' then  k:='0.00';
+           V.cells[106,43]:=StrToFloat(k)  +ODSMoneyTransferTRYEKV.AsFloat;
+         end;
+       end;
+
+       (*----------------------------------------------------Kapital transferləri üzrə-------------------------------------------------*)
+
+       if (ODSMoneyTransferTRANSFERTYPEID.AsInteger=19) then
+       if ODSMoneyTransferCUSTTYPEID.AsInteger=1
+       then
+       begin
+         V.WorkBooks[1].WorkSheets[3].activate;
+
+         if ODSMoneyTransferNEREZIDENT.AsInteger=1 then
+         begin
+          V.cells[117,4]:=ODSMoneyTransferAZN.AsFloat;
+          V.cells[117,5]:=ODSMoneyTransferUSD.AsFloat;
+          V.cells[117,6]:=ODSMoneyTransferEUR.AsFloat;
+          V.cells[117,18]:=ODSMoneyTransferGEL.AsFloat;
+          V.cells[117,21]:=ODSMoneyTransferGBP.AsFloat;
+          V.cells[117,39]:=ODSMoneyTransferRUR.AsFloat;
+          V.cells[117,43]:=ODSMoneyTransferTRY.AsFloat;
+
+          V.WorkBooks[1].WorkSheets[2].activate;
+
+          V.cells[115,4]:=ODSMoneyTransferAZN.AsFloat;
+          V.cells[115,5]:=ODSMoneyTransferUSDEKV.AsFloat;
+          V.cells[115,6]:=ODSMoneyTransferEUREKV.AsFloat;
+          V.cells[115,18]:=ODSMoneyTransferGELEKV.AsFloat;
+          V.cells[115,21]:=ODSMoneyTransferGBPEKV.AsFloat;
+          V.cells[115,39]:=ODSMoneyTransferRUREKV.AsFloat;
+          V.cells[115,43]:=ODSMoneyTransferTRYEKV.AsFloat;
+
+
+         end
+         else
+         begin
+           V.WorkBooks[1].WorkSheets[3].activate;
+
+           V.cells[118,4]:=ODSMoneyTransferAZN.AsFloat;
+           V.cells[118,5]:=ODSMoneyTransferUSD.AsFloat;
+           V.cells[118,6]:=ODSMoneyTransferEUR.AsFloat;
+           V.cells[118,18]:=ODSMoneyTransferGEL.AsFloat;
+           V.cells[118,21]:=ODSMoneyTransferGBP.AsFloat;
+           V.cells[118,39]:=ODSMoneyTransferRUR.AsFloat;
+           V.cells[118,39]:=ODSMoneyTransferTRY.AsFloat;
+
+           V.WorkBooks[1].WorkSheets[2].activate;
+
+           V.cells[116,4]:=ODSMoneyTransferAZN.AsFloat;
+           V.cells[116,5]:=ODSMoneyTransferUSDEKV.AsFloat;
+           V.cells[116,6]:=ODSMoneyTransferEUREKV.AsFloat;
+           V.cells[116,18]:=ODSMoneyTransferGELEKV.AsFloat;
+           V.cells[116,21]:=ODSMoneyTransferGBPEKV.AsFloat;
+           V.cells[116,39]:=ODSMoneyTransferRUREKV.AsFloat;
+           V.cells[116,39]:=ODSMoneyTransferTRYEKV.AsFloat;
+
+
+         end
+       end
+       else
+       begin
+         if ODSMoneyTransferNEREZIDENT.AsInteger=1 then
+         begin
+           V.WorkBooks[1].WorkSheets[3].activate;
+
+           k:=V.cells[114,4];
+           if k='' then  k:='0.00';
+           V.cells[114,4]:=StrToFloat(k)+ODSMoneyTransferAZN.AsFloat;
+           k:=V.cells[114,5];
+           if k='' then  k:='0.00';
+           V.cells[114,5]:=StrToFloat(k)  +ODSMoneyTransferUSD.AsFloat;
+           k:=V.cells[114,6];
+           if k='' then  k:='0.00';
+           V.cells[114,6]:=StrToFloat(k)  +ODSMoneyTransferEUR.AsFloat;
+           k:=V.cells[114,18];
+           if k='' then  k:='0.00';
+           V.cells[114,18]:=StrToFloat(k)  +ODSMoneyTransferGEL.AsFloat;
+           k:=V.cells[114,21];
+           if k='' then  k:='0.00';
+           V.cells[114,21]:=StrToFloat(k)  +ODSMoneyTransferGBP.AsFloat;
+           k:=V.cells[114,39];
+           if k='' then  k:='0.00';
+           V.cells[114,39]:=StrToFloat(k)+ODSMoneyTransferRUR.AsFloat;
+           k:=V.cells[114,43];
+           if k='' then  k:='0.00';
+           V.cells[114,43]:=StrToFloat(k)+ODSMoneyTransferTRY.AsFloat;
+
+
+           V.WorkBooks[1].WorkSheets[2].activate;
+
+           k:=V.cells[112,4];
+           if k='' then  k:='0.00';
+           V.cells[112,4]:=StrToFloat(k)+ODSMoneyTransferAZN.AsFloat;
+           k:=V.cells[112,5];
+           if k='' then  k:='0.00';
+           V.cells[112,5]:=StrToFloat(k)  +ODSMoneyTransferUSDEKV.AsFloat;
+           k:=V.cells[112,6];
+           if k='' then  k:='0.00';
+           V.cells[112,6]:=StrToFloat(k)  +ODSMoneyTransferEUREKV.AsFloat;
+           k:=V.cells[112,18];
+           if k='' then  k:='0.00';
+           V.cells[112,18]:=StrToFloat(k)  +ODSMoneyTransferGELEKV.AsFloat;
+           k:=V.cells[112,21];
+           if k='' then  k:='0.00';
+           V.cells[112,21]:=StrToFloat(k)  +ODSMoneyTransferGBPEKV.AsFloat;
+           k:=V.cells[112,39];
+           if k='' then  k:='0.00';
+           V.cells[112,39]:=StrToFloat(k)+ODSMoneyTransferRUREKV.AsFloat;
+           k:=V.cells[112,43];
+           if k='' then  k:='0.00';
+           V.cells[112,43]:=StrToFloat(k)+ODSMoneyTransferTRYEKV.AsFloat;
+
+
+         end
+         else
+         begin
+
+           V.WorkBooks[1].WorkSheets[3].activate;
+
+           k:=V.cells[115,4];
+           if k='' then  k:='0.00';
+           V.cells[115,4]:=StrToFloat(k)+ODSMoneyTransferAZN.AsFloat;
+
+           k:=V.cells[115,5];
+           if k='' then  k:='0.00';
+           V.cells[115,5]:=StrToFloat(k)+ODSMoneyTransferUSD.AsFloat;
+
+           k:=V.cells[115,6];
+           if k='' then  k:='0.00';
+           V.cells[115,6]:=StrToFloat(k)  +ODSMoneyTransferEUR.AsFloat;
+
+           k:=V.cells[115,18];
+           if k='' then  k:='0.00';
+           V.cells[115,18]:=StrToFloat(k)  +ODSMoneyTransferGEL.AsFloat;
+
+           k:=V.cells[115,21];
+           if k='' then  k:='0.00';
+           V.cells[115,21]:=StrToFloat(k)+ODSMoneyTransferGBP.AsFloat;
+
+           k:=V.cells[115,39];
+           if k='' then  k:='0.00';
+           V.cells[115,39]:=StrToFloat(k)+ODSMoneyTransferRUR.AsFloat;
+
+           k:=V.cells[115,43];
+           if k='' then  k:='0.00';
+           V.cells[115,43]:=StrToFloat(k)  +ODSMoneyTransferTRY.AsFloat;
+
+           V.WorkBooks[1].WorkSheets[2].activate;
+
+           k:=V.cells[113,4];
+           if k='' then  k:='0.00';
+           V.cells[113,4]:=StrToFloat(k)+ODSMoneyTransferAZN.AsFloat;
+
+           k:=V.cells[113,5];
+           if k='' then  k:='0.00';
+           V.cells[113,5]:=StrToFloat(k)+ODSMoneyTransferUSDEKV.AsFloat;
+
+           k:=V.cells[113,6];
+           if k='' then  k:='0.00';
+           V.cells[113,6]:=StrToFloat(k)  +ODSMoneyTransferEUREKV.AsFloat;
+
+           k:=V.cells[113,18];
+           if k='' then  k:='0.00';
+           V.cells[113,18]:=StrToFloat(k)  +ODSMoneyTransferGELEKV.AsFloat;
+
+           k:=V.cells[113,21];
+           if k='' then  k:='0.00';
+           V.cells[113,21]:=StrToFloat(k)+ODSMoneyTransferGBPEKV.AsFloat;
+
+           k:=V.cells[113,39];
+           if k='' then  k:='0.00';
+           V.cells[113,39]:=StrToFloat(k)+ODSMoneyTransferRUREKV.AsFloat;
+
+           k:=V.cells[113,43];
+           if k='' then  k:='0.00';
+           V.cells[113,43]:=StrToFloat(k)  +ODSMoneyTransferTRYEKV.AsFloat;
+
+         end;
+       end;
+
+     (*----------------------------------------------------İnvestisiyalar  üzrə-------------------------------------------------*)
+
+       if (ODSMoneyTransferTRANSFERTYPEID.AsInteger=20) then
+       if ODSMoneyTransferCUSTTYPEID.AsInteger=1
+       then
+       begin
+         if ODSMoneyTransferNEREZIDENT.AsInteger=1 then
+         begin
+          V.WorkBooks[1].WorkSheets[3].activate;
+
+          V.cells[124,4]:=ODSMoneyTransferAZN.AsFloat;
+          V.cells[124,5]:=ODSMoneyTransferUSD.AsFloat;
+          V.cells[124,6]:=ODSMoneyTransferEUR.AsFloat;
+          V.cells[124,18]:=ODSMoneyTransferGEL.AsFloat;
+          V.cells[124,21]:=ODSMoneyTransferGBP.AsFloat;
+          V.cells[124,39]:=ODSMoneyTransferRUR.AsFloat;
+          V.cells[124,43]:=ODSMoneyTransferTRY.AsFloat;
+
+          V.WorkBooks[1].WorkSheets[2].activate;
+
+          V.cells[122,4]:=ODSMoneyTransferAZN.AsFloat;
+          V.cells[122,5]:=ODSMoneyTransferUSDEKV.AsFloat;
+          V.cells[122,6]:=ODSMoneyTransferEUREKV.AsFloat;
+          V.cells[122,18]:=ODSMoneyTransferGELEKV.AsFloat;
+          V.cells[122,21]:=ODSMoneyTransferGBPEKV.AsFloat;
+          V.cells[122,39]:=ODSMoneyTransferRUREKV.AsFloat;
+          V.cells[122,43]:=ODSMoneyTransferTRYEKV.AsFloat;
+
+         end
+         else
+         begin
+           V.WorkBooks[1].WorkSheets[3].activate;
+
+           V.cells[125,4]:=ODSMoneyTransferAZN.AsFloat;
+           V.cells[125,5]:=ODSMoneyTransferUSD.AsFloat;
+           V.cells[125,6]:=ODSMoneyTransferEUR.AsFloat;
+           V.cells[125,18]:=ODSMoneyTransferGEL.AsFloat;
+           V.cells[125,21]:=ODSMoneyTransferGBP.AsFloat;
+           V.cells[125,39]:=ODSMoneyTransferRUR.AsFloat;
+           V.cells[125,39]:=ODSMoneyTransferTRY.AsFloat;
+
+           V.WorkBooks[1].WorkSheets[2].activate;
+
+           V.cells[123,4]:=ODSMoneyTransferAZN.AsFloat;
+           V.cells[123,5]:=ODSMoneyTransferUSDEKV.AsFloat;
+           V.cells[123,6]:=ODSMoneyTransferEUREKV.AsFloat;
+           V.cells[123,18]:=ODSMoneyTransferGELEKV.AsFloat;
+           V.cells[123,21]:=ODSMoneyTransferGBPEKV.AsFloat;
+           V.cells[123,39]:=ODSMoneyTransferRUREKV.AsFloat;
+           V.cells[123,39]:=ODSMoneyTransferTRYEKV.AsFloat;
+         end
+       end
+       else
+       begin
+         if ODSMoneyTransferNEREZIDENT.AsInteger=1 then
+         begin
+           V.WorkBooks[1].WorkSheets[3].activate;
+
+           k:=V.cells[121,4];
+           if k='' then  k:='0.00';
+           V.cells[121,4]:=StrToFloat(k)+ODSMoneyTransferAZN.AsFloat;
+           k:=V.cells[121,5];
+           if k='' then  k:='0.00';
+           V.cells[121,5]:=StrToFloat(k)  +ODSMoneyTransferUSD.AsFloat;
+           k:=V.cells[121,6];
+           if k='' then  k:='0.00';
+           V.cells[121,6]:=StrToFloat(k)  +ODSMoneyTransferEUR.AsFloat;
+           k:=V.cells[121,18];
+           if k='' then  k:='0.00';
+           V.cells[121,18]:=StrToFloat(k)  +ODSMoneyTransferGEL.AsFloat;
+           k:=V.cells[121,21];
+           if k='' then  k:='0.00';
+           V.cells[121,21]:=StrToFloat(k)  +ODSMoneyTransferGBP.AsFloat;
+           k:=V.cells[121,39];
+           if k='' then  k:='0.00';
+           V.cells[121,39]:=StrToFloat(k)+ODSMoneyTransferRUR.AsFloat;
+           k:=V.cells[121,43];
+           if k='' then  k:='0.00';
+           V.cells[121,43]:=StrToFloat(k)+ODSMoneyTransferTRY.AsFloat;
+
+           V.WorkBooks[1].WorkSheets[2].activate;
+
+           k:=V.cells[119,4];
+           if k='' then  k:='0.00';
+           V.cells[119,4]:=StrToFloat(k)+ODSMoneyTransferAZN.AsFloat;
+           k:=V.cells[119,5];
+           if k='' then  k:='0.00';
+           V.cells[119,5]:=StrToFloat(k)  +ODSMoneyTransferUSDEKV.AsFloat;
+           k:=V.cells[119,6];
+           if k='' then  k:='0.00';
+           V.cells[119,6]:=StrToFloat(k)  +ODSMoneyTransferEUREKV.AsFloat;
+           k:=V.cells[119,18];
+           if k='' then  k:='0.00';
+           V.cells[119,18]:=StrToFloat(k)  +ODSMoneyTransferGELEKV.AsFloat;
+           k:=V.cells[119,21];
+           if k='' then  k:='0.00';
+           V.cells[119,21]:=StrToFloat(k)  +ODSMoneyTransferGBPEKV.AsFloat;
+           k:=V.cells[119,39];
+           if k='' then  k:='0.00';
+           V.cells[119,39]:=StrToFloat(k)+ODSMoneyTransferRUREKV.AsFloat;
+           k:=V.cells[119,43];
+           if k='' then  k:='0.00';
+           V.cells[119,43]:=StrToFloat(k)+ODSMoneyTransferTRYEKV.AsFloat;
+
+
+         end
+         else
+         begin
+
+           V.WorkBooks[1].WorkSheets[3].activate;
+
+           k:=V.cells[122,4];
+           if k='' then  k:='0.00';
+           V.cells[122,4]:=StrToFloat(k)+ODSMoneyTransferAZN.AsFloat;
+
+           k:=V.cells[122,5];
+           if k='' then  k:='0.00';
+           V.cells[122,5]:=StrToFloat(k)+ODSMoneyTransferUSD.AsFloat;
+
+           k:=V.cells[122,6];
+           if k='' then  k:='0.00';
+           V.cells[122,6]:=StrToFloat(k)  +ODSMoneyTransferEUR.AsFloat;
+
+           k:=V.cells[122,18];
+           if k='' then  k:='0.00';
+           V.cells[122,18]:=StrToFloat(k)  +ODSMoneyTransferGEL.AsFloat;
+
+           k:=V.cells[122,21];
+           if k='' then  k:='0.00';
+           V.cells[122,21]:=StrToFloat(k)+ODSMoneyTransferGBP.AsFloat;
+
+           k:=V.cells[122,39];
+           if k='' then  k:='0.00';
+           V.cells[122,39]:=StrToFloat(k)+ODSMoneyTransferRUR.AsFloat;
+
+           k:=V.cells[122,43];
+           if k='' then  k:='0.00';
+           V.cells[122,43]:=StrToFloat(k)  +ODSMoneyTransferTRY.AsFloat;
+
+           V.WorkBooks[1].WorkSheets[2].activate;
+
+           k:=V.cells[120,4];
+           if k='' then  k:='0.00';
+           V.cells[120,4]:=StrToFloat(k)+ODSMoneyTransferAZN.AsFloat;
+
+           k:=V.cells[120,5];
+           if k='' then  k:='0.00';
+           V.cells[120,5]:=StrToFloat(k)+ODSMoneyTransferUSDEKV.AsFloat;
+
+           k:=V.cells[120,6];
+           if k='' then  k:='0.00';
+           V.cells[120,6]:=StrToFloat(k)  +ODSMoneyTransferEUREKV.AsFloat;
+
+           k:=V.cells[120,18];
+           if k='' then  k:='0.00';
+           V.cells[120,18]:=StrToFloat(k)  +ODSMoneyTransferGELEKV.AsFloat;
+
+           k:=V.cells[120,21];
+           if k='' then  k:='0.00';
+           V.cells[120,21]:=StrToFloat(k)+ODSMoneyTransferGBPEKV.AsFloat;
+
+           k:=V.cells[120,39];
+           if k='' then  k:='0.00';
+           V.cells[120,39]:=StrToFloat(k)+ODSMoneyTransferRUREKV.AsFloat;
+
+           k:=V.cells[120,43];
+           if k='' then  k:='0.00';
+           V.cells[120,43]:=StrToFloat(k)  +ODSMoneyTransferTRYEKV.AsFloat;
+
+         end;
+       end;
+
+     (*----------------------------------------------------Hasilatın pay bölgüsü müqavilələri üzrə-------------------------------------------------*)
+
+       if (ODSMoneyTransferTRANSFERTYPEID.AsInteger=23) then
+       if ODSMoneyTransferCUSTTYPEID.AsInteger=1
+       then
+       begin
+         if ODSMoneyTransferNEREZIDENT.AsInteger=1 then
+         begin
+           V.WorkBooks[1].WorkSheets[3].activate;
+
+          V.cells[145,4]:=ODSMoneyTransferAZN.AsFloat;
+          V.cells[145,5]:=ODSMoneyTransferUSD.AsFloat;
+          V.cells[145,6]:=ODSMoneyTransferEUR.AsFloat;
+          V.cells[145,18]:=ODSMoneyTransferGEL.AsFloat;
+          V.cells[145,21]:=ODSMoneyTransferGBP.AsFloat;
+          V.cells[145,39]:=ODSMoneyTransferRUR.AsFloat;
+          V.cells[145,43]:=ODSMoneyTransferTRY.AsFloat;
+
+          V.WorkBooks[1].WorkSheets[2].activate;
+
+          V.cells[143,4]:=ODSMoneyTransferAZN.AsFloat;
+          V.cells[143,5]:=ODSMoneyTransferUSDEKV.AsFloat;
+          V.cells[143,6]:=ODSMoneyTransferEUREKV.AsFloat;
+          V.cells[143,18]:=ODSMoneyTransferGELEKV.AsFloat;
+          V.cells[143,21]:=ODSMoneyTransferGBPEKV.AsFloat;
+          V.cells[143,39]:=ODSMoneyTransferRUREKV.AsFloat;
+          V.cells[143,43]:=ODSMoneyTransferTRYEKV.AsFloat;
+
+         end
+         else
+         begin
+           V.WorkBooks[1].WorkSheets[3].activate;
+
+           V.cells[146,4]:=ODSMoneyTransferAZN.AsFloat;
+           V.cells[146,5]:=ODSMoneyTransferUSD.AsFloat;
+           V.cells[146,6]:=ODSMoneyTransferEUR.AsFloat;
+           V.cells[146,18]:=ODSMoneyTransferGEL.AsFloat;
+           V.cells[146,21]:=ODSMoneyTransferGBP.AsFloat;
+           V.cells[146,39]:=ODSMoneyTransferRUR.AsFloat;
+           V.cells[146,39]:=ODSMoneyTransferTRY.AsFloat;
+
+           V.WorkBooks[1].WorkSheets[2].activate;
+
+           V.cells[144,4]:=ODSMoneyTransferAZN.AsFloat;
+           V.cells[144,5]:=ODSMoneyTransferUSDEKV.AsFloat;
+           V.cells[144,6]:=ODSMoneyTransferEUREKV.AsFloat;
+           V.cells[144,18]:=ODSMoneyTransferGELEKV.AsFloat;
+           V.cells[144,21]:=ODSMoneyTransferGBPEKV.AsFloat;
+           V.cells[144,39]:=ODSMoneyTransferRUREKV.AsFloat;
+           V.cells[144,39]:=ODSMoneyTransferTRYEKV.AsFloat;
+
+         end
+       end
+       else
+       begin
+         if ODSMoneyTransferNEREZIDENT.AsInteger=1 then
+         begin
+           V.WorkBooks[1].WorkSheets[3].activate;
+
+           k:=V.cells[142,4];
+           if k='' then  k:='0.00';
+           V.cells[142,4]:=StrToFloat(k)+ODSMoneyTransferAZN.AsFloat;
+           k:=V.cells[142,5];
+           if k='' then  k:='0.00';
+           V.cells[142,5]:=StrToFloat(k)  +ODSMoneyTransferUSD.AsFloat;
+           k:=V.cells[142,6];
+           if k='' then  k:='0.00';
+           V.cells[142,6]:=StrToFloat(k)  +ODSMoneyTransferEUR.AsFloat;
+           k:=V.cells[142,18];
+           if k='' then  k:='0.00';
+           V.cells[142,18]:=StrToFloat(k)  +ODSMoneyTransferGEL.AsFloat;
+           k:=V.cells[142,21];
+           if k='' then  k:='0.00';
+           V.cells[142,21]:=StrToFloat(k)  +ODSMoneyTransferGBP.AsFloat;
+           k:=V.cells[142,39];
+           if k='' then  k:='0.00';
+           V.cells[142,39]:=StrToFloat(k)+ODSMoneyTransferRUR.AsFloat;
+           k:=V.cells[142,43];
+           if k='' then  k:='0.00';
+           V.cells[142,43]:=StrToFloat(k)+ODSMoneyTransferTRY.AsFloat;
+
+           V.WorkBooks[1].WorkSheets[2].activate;
+
+           k:=V.cells[140,4];
+           if k='' then  k:='0.00';
+           V.cells[140,4]:=StrToFloat(k)+ODSMoneyTransferAZN.AsFloat;
+           k:=V.cells[140,5];
+           if k='' then  k:='0.00';
+           V.cells[140,5]:=StrToFloat(k)  +ODSMoneyTransferUSDEKV.AsFloat;
+           k:=V.cells[140,6];
+           if k='' then  k:='0.00';
+           V.cells[140,6]:=StrToFloat(k)  +ODSMoneyTransferEUREKV.AsFloat;
+           k:=V.cells[140,18];
+           if k='' then  k:='0.00';
+           V.cells[140,18]:=StrToFloat(k)  +ODSMoneyTransferGELEKV.AsFloat;
+           k:=V.cells[140,21];
+           if k='' then  k:='0.00';
+           V.cells[140,21]:=StrToFloat(k)  +ODSMoneyTransferGBPEKV.AsFloat;
+           k:=V.cells[140,39];
+           if k='' then  k:='0.00';
+           V.cells[140,39]:=StrToFloat(k)+ODSMoneyTransferRUREKV.AsFloat;
+           k:=V.cells[140,43];
+           if k='' then  k:='0.00';
+           V.cells[140,43]:=StrToFloat(k)+ODSMoneyTransferTRYEKV.AsFloat;
+
+         end
+         else
+         begin
+           V.WorkBooks[1].WorkSheets[3].activate;
+
+           k:=V.cells[143,4];
+           if k='' then  k:='0.00';
+           V.cells[143,4]:=StrToFloat(k)+ODSMoneyTransferAZN.AsFloat;
+
+           k:=V.cells[143,5];
+           if k='' then  k:='0.00';
+           V.cells[143,5]:=StrToFloat(k)+ODSMoneyTransferUSD.AsFloat;
+
+           k:=V.cells[143,6];
+           if k='' then  k:='0.00';
+           V.cells[143,6]:=StrToFloat(k)  +ODSMoneyTransferEUR.AsFloat;
+
+           k:=V.cells[143,18];
+           if k='' then  k:='0.00';
+           V.cells[143,18]:=StrToFloat(k)  +ODSMoneyTransferGEL.AsFloat;
+
+           k:=V.cells[143,21];
+           if k='' then  k:='0.00';
+           V.cells[143,21]:=StrToFloat(k)+ODSMoneyTransferGBP.AsFloat;
+
+           k:=V.cells[143,39];
+           if k='' then  k:='0.00';
+           V.cells[143,39]:=StrToFloat(k)+ODSMoneyTransferRUR.AsFloat;
+
+           k:=V.cells[143,43];
+           if k='' then  k:='0.00';
+           V.cells[143,43]:=StrToFloat(k)  +ODSMoneyTransferTRY.AsFloat;
+
+           V.WorkBooks[1].WorkSheets[2].activate;
+
+           k:=V.cells[141,4];
+           if k='' then  k:='0.00';
+           V.cells[141,4]:=StrToFloat(k)+ODSMoneyTransferAZN.AsFloat;
+
+           k:=V.cells[141,5];
+           if k='' then  k:='0.00';
+           V.cells[141,5]:=StrToFloat(k)+ODSMoneyTransferUSDEKV.AsFloat;
+
+           k:=V.cells[141,6];
+           if k='' then  k:='0.00';
+           V.cells[141,6]:=StrToFloat(k)+ODSMoneyTransferEUREKV.AsFloat;
+
+           k:=V.cells[141,18];
+           if k='' then  k:='0.00';
+           V.cells[141,18]:=StrToFloat(k)  +ODSMoneyTransferGELEKV.AsFloat;
+
+           k:=V.cells[141,21];
+           if k='' then  k:='0.00';
+           V.cells[141,21]:=StrToFloat(k)+ODSMoneyTransferGBPEKV.AsFloat;
+
+           k:=V.cells[141,39];
+           if k='' then  k:='0.00';
+           V.cells[141,39]:=StrToFloat(k)+ODSMoneyTransferRUREKV.AsFloat;
+
+           k:=V.cells[141,43];
+           if k='' then  k:='0.00';
+           V.cells[141,43]:=StrToFloat(k)+ODSMoneyTransferTRYEKV.AsFloat;
+
+
+         end;
+       end
+     else
+        (*------------------------------------Malların ixracı üzrə-------------------------------------------------*)
+       if ODSMoneyTransferTRANSFERTYPEID.AsInteger=-1
+       then
+       if ODSMoneyTransferCUSTTYPEID.AsInteger=1
+       then
+       begin
+         if ODSMoneyTransferNEREZIDENT.AsInteger=1 then
+         begin
+           V.WorkBooks[1].WorkSheets[3].activate;
+
+           V.cells[11,4]:=ODSMoneyTransferAZN.AsFloat;
+           V.cells[11,5]:=ODSMoneyTransferUSD.AsFloat;
+           V.cells[11,6]:=ODSMoneyTransferEUR.AsFloat;
+           V.cells[11,18]:=ODSMoneyTransferGEL.AsFloat;
+           V.cells[11,21]:=ODSMoneyTransferGBP.AsFloat;
+           V.cells[11,39]:=ODSMoneyTransferRUR.AsFloat;
+           V.cells[11,43]:=ODSMoneyTransferTRY.AsFloat;
+
+           V.WorkBooks[1].WorkSheets[2].Activate;
+
+           V.cells[9,4]:=ODSMoneyTransferAZN.AsFloat;
+           V.cells[9,5]:=ODSMoneyTransferUSDEKV.AsFloat;
+           V.cells[9,6]:=ODSMoneyTransferEUREKV.AsFloat;
+           V.cells[9,18]:=ODSMoneyTransferGELEKV.AsFloat;
+           V.cells[9,21]:=ODSMoneyTransferGBPEKV.AsFloat;
+           V.cells[9,39]:=ODSMoneyTransferRUREKV.AsFloat;
+           V.cells[9,43]:=ODSMoneyTransferTRYEKV.AsFloat;
+
+         end
+         else
+         begin
+           V.WorkBooks[1].WorkSheets[3].activate;
+
+           V.cells[12,4]:=ODSMoneyTransferAZN.AsFloat;
+           V.cells[12,5]:=ODSMoneyTransferUSD.AsFloat;
+           V.cells[12,6]:=ODSMoneyTransferEUR.AsFloat;
+           V.cells[12,18]:=ODSMoneyTransferGEL.AsFloat;
+           V.cells[12,21]:=ODSMoneyTransferGBP.AsFloat;
+           V.cells[12,39]:=ODSMoneyTransferRUR.AsFloat;
+           V.cells[12,43]:=ODSMoneyTransferTRY.AsFloat;
+
+           V.WorkBooks[1].WorkSheets[2].activate;
+
+           V.cells[10,4]:=ODSMoneyTransferAZN.AsFloat;
+           V.cells[10,5]:=ODSMoneyTransferUSDEKV.AsFloat;
+           V.cells[10,6]:=ODSMoneyTransferEUREKV.AsFloat;
+           V.cells[10,18]:=ODSMoneyTransferGELEKV.AsFloat;
+           V.cells[10,21]:=ODSMoneyTransferGBPEKV.AsFloat;
+           V.cells[10,39]:=ODSMoneyTransferRUREKV.AsFloat;
+           V.cells[10,43]:=ODSMoneyTransferTRYEKV.AsFloat;
+         end
+       end
+         else
+       begin
+         if ODSMoneyTransferNEREZIDENT.AsInteger=1 then
+         begin
+           V.WorkBooks[1].WorkSheets[3].activate;
+
+           k:=V.cells[8,4];
+           if k='' then  k:='0.00';
+           V.cells[8,4]:=StrToFloat(k)+ODSMoneyTransferAZN.AsFloat;
+           k:=V.cells[8,5];
+           if k='' then  k:='0.00';
+           V.cells[8,5]:=StrToFloat(k)  +ODSMoneyTransferUSD.AsFloat;
+           k:=V.cells[8,6];
+           if k='' then  k:='0.00';
+           V.cells[8,6]:=StrToFloat(k)  +ODSMoneyTransferEUR.AsFloat;
+           k:=V.cells[8,18];
+           if k='' then  k:='0.00';
+           V.cells[8,18]:=StrToFloat(k)  +ODSMoneyTransferGEL.AsFloat;
+           k:=V.cells[8,21];
+           if k='' then  k:='0.00';
+           V.cells[8,21]:=StrToFloat(k)  +ODSMoneyTransferGBP.AsFloat;
+           k:=V.cells[8,39];
+           if k='' then  k:='0.00';
+           V.cells[8,39]:=StrToFloat(k)+ODSMoneyTransferRUR.AsFloat;
+           k:=V.cells[8,43];
+           if k='' then  k:='0.00';
+           V.cells[8,43]:=StrToFloat(k)+ODSMoneyTransferTRY.AsFloat;
+
+           V.WorkBooks[1].WorkSheets[2].activate;
+
+           k:=V.cells[6,4];
+           if k='' then  k:='0.00';
+           V.cells[6,4]:=StrToFloat(k)+ODSMoneyTransferAZN.AsFloat;
+           k:=V.cells[6,5];
+           if k='' then  k:='0.00';
+           V.cells[6,5]:=StrToFloat(k)+ODSMoneyTransferUSDEKV.AsFloat;
+           k:=V.cells[6,6];
+           if k='' then  k:='0.00';
+           V.cells[6,6]:=StrToFloat(k)+ODSMoneyTransferEUREKV.AsFloat;
+           k:=V.cells[6,18];
+           if k='' then  k:='0.00';
+           V.cells[6,18]:=StrToFloat(k)+ODSMoneyTransferGELEKV.AsFloat;
+           k:=V.cells[6,21];
+           if k='' then  k:='0.00';
+           V.cells[6,21]:=StrToFloat(k)+ODSMoneyTransferGBPEKV.AsFloat;
+           k:=V.cells[6,39];
+           if k='' then  k:='0.00';
+           V.cells[6,39]:=StrToFloat(k)+ODSMoneyTransferRUREKV.AsFloat;
+           k:=V.cells[6,43];
+           if k='' then  k:='0.00';
+           V.cells[6,43]:=StrToFloat(k)+ODSMoneyTransferTRYEKV.AsFloat;
+
+
+         end
+         else
+         begin
+           V.WorkBooks[1].WorkSheets[3].activate;
+
+           k:=V.cells[9,4];
+           if k='' then  k:='0.00';
+           V.cells[9,4]:=StrToFloat(k)+ODSMoneyTransferAZN.AsFloat;
+           k:=V.cells[9,5];
+           if k='' then  k:='0.00';
+           V.cells[9,5]:=StrToFloat(k)+ODSMoneyTransferUSD.AsFloat;
+           k:=V.cells[9,6];
+           if k='' then  k:='0.00';
+           V.cells[9,6]:=StrToFloat(k)+ODSMoneyTransferEUR.AsFloat;
+           k:=V.cells[9,18];
+           if k='' then  k:='0.00';
+           V.cells[9,18]:=StrToFloat(k)+ODSMoneyTransferGEL.AsFloat;
+           k:=V.cells[9,21];
+           if k='' then  k:='0.00';
+           V.cells[9,21]:=StrToFloat(k)+ODSMoneyTransferGBP.AsFloat;
+           k:=V.cells[9,39];
+           if k='' then  k:='0.00';
+           V.cells[9,39]:=StrToFloat(k)+ODSMoneyTransferRUR.AsFloat;
+           k:=V.cells[9,43];
+           if k='' then  k:='0.00';
+           V.cells[9,43]:=StrToFloat(k)+ODSMoneyTransferTRY.AsFloat;
+
+           V.WorkBooks[1].WorkSheets[2].activate;
+
+           k:=V.cells[7,4];
+           if k='' then  k:='0.00';
+           V.cells[7,4]:=StrToFloat(k)+ODSMoneyTransferAZN.AsFloat;
+           k:=V.cells[7,5];
+           if k='' then  k:='0.00';
+           V.cells[7,5]:=StrToFloat(k)+ODSMoneyTransferUSDEKV.AsFloat;
+           k:=V.cells[7,6];
+           if k='' then  k:='0.00';
+           V.cells[7,6]:=StrToFloat(k)+ODSMoneyTransferEUREKV.AsFloat;
+           k:=V.cells[7,18];
+           if k='' then  k:='0.00';
+           V.cells[7,18]:=StrToFloat(k)+ODSMoneyTransferGELEKV.AsFloat;
+           k:=V.cells[7,21];
+           if k='' then  k:='0.00';
+           V.cells[7,21]:=StrToFloat(k)+ODSMoneyTransferGBPEKV.AsFloat;
+           k:=V.cells[7,39];
+           if k='' then  k:='0.00';
+           V.cells[7,39]:=StrToFloat(k)+ODSMoneyTransferRUREKV.AsFloat;
+           k:=V.cells[7,43];
+           if k='' then  k:='0.00';
+           V.cells[7,43]:=StrToFloat(k)+ODSMoneyTransferTRYEKV.AsFloat;
+
+
+         end;
+       end;
+
+       (*----------------------------------------------------Akkreditivlər və qabaqcadan ödənişlər üzrə-------------------------------------------------*)
+
+       if (ODSMoneyTransferTRANSFERTYPEID.AsInteger=3) then
+       if ODSMoneyTransferCUSTTYPEID.AsInteger=1
+       then
+       begin
+         if ODSMoneyTransferNEREZIDENT.AsInteger=1 then
+         begin
+           V.WorkBooks[1].WorkSheets[3].activate;
+
+           V.cells[11,4]:=ODSMoneyTransferAZN.AsFloat;
+           V.cells[11,5]:=ODSMoneyTransferUSD.AsFloat;
+           V.cells[11,6]:=ODSMoneyTransferEUR.AsFloat;
+           V.cells[11,18]:=ODSMoneyTransferGEL.AsFloat;
+           V.cells[11,21]:=ODSMoneyTransferGBP.AsFloat;
+           V.cells[11,39]:=ODSMoneyTransferRUR.AsFloat;
+           V.cells[11,43]:=ODSMoneyTransferTRY.AsFloat;
+
+           V.WorkBooks[1].WorkSheets[2].activate;
+
+           V.cells[16,4]:=ODSMoneyTransferAZN.AsFloat;
+           V.cells[16,5]:=ODSMoneyTransferUSDEKV.AsFloat;
+           V.cells[16,6]:=ODSMoneyTransferEUREKV.AsFloat;
+           V.cells[16,18]:=ODSMoneyTransferGELEKV.AsFloat;
+           V.cells[16,21]:=ODSMoneyTransferGBPEKV.AsFloat;
+           V.cells[16,39]:=ODSMoneyTransferRUREKV.AsFloat;
+           V.cells[16,43]:=ODSMoneyTransferTRYEKV.AsFloat;
+
+         end
+         else
+         begin
+           V.WorkBooks[1].WorkSheets[3].activate;
+
+           V.cells[12,4]:=ODSMoneyTransferAZN.AsFloat;
+           V.cells[12,5]:=ODSMoneyTransferUSD.AsFloat;
+           V.cells[12,6]:=ODSMoneyTransferEUR.AsFloat;
+           V.cells[12,18]:=ODSMoneyTransferGEL.AsFloat;
+           V.cells[12,21]:=ODSMoneyTransferGBP.AsFloat;
+           V.cells[12,39]:=ODSMoneyTransferRUR.AsFloat;
+           V.cells[12,39]:=ODSMoneyTransferTRY.AsFloat;
+
+           V.WorkBooks[1].WorkSheets[2].activate;
+
+           V.cells[17,4]:=ODSMoneyTransferAZN.AsFloat;
+           V.cells[17,5]:=ODSMoneyTransferUSDEKV.AsFloat;
+           V.cells[17,6]:=ODSMoneyTransferEUREKV.AsFloat;
+           V.cells[17,18]:=ODSMoneyTransferGELEKV.AsFloat;
+           V.cells[17,21]:=ODSMoneyTransferGBPEKV.AsFloat;
+           V.cells[17,39]:=ODSMoneyTransferRUREKV.AsFloat;
+           V.cells[17,39]:=ODSMoneyTransferTRYEKV.AsFloat;
+
+
+         end
+       end
+       else
+       begin
+         if ODSMoneyTransferNEREZIDENT.AsInteger=1 then
+         begin
+           V.WorkBooks[1].WorkSheets[3].activate;
+
+           k:=V.cells[15,4];
+           if k='' then  k:='0.00';
+           V.cells[15,4]:=StrToFloat(k)+ODSMoneyTransferAZN.AsFloat;
+           k:=V.cells[15,5];
+           if k='' then  k:='0.00';
+           V.cells[15,5]:=StrToFloat(k)  +ODSMoneyTransferUSD.AsFloat;
+           k:=V.cells[15,6];
+           if k='' then  k:='0.00';
+           V.cells[15,6]:=StrToFloat(k)  +ODSMoneyTransferEUR.AsFloat;
+           k:=V.cells[15,18];
+           if k='' then  k:='0.00';
+           V.cells[15,18]:=StrToFloat(k)  +ODSMoneyTransferGEL.AsFloat;
+           k:=V.cells[15,21];
+           if k='' then  k:='0.00';
+           V.cells[15,21]:=StrToFloat(k)  +ODSMoneyTransferGBP.AsFloat;
+           k:=V.cells[15,39];
+           if k='' then  k:='0.00';
+           V.cells[15,39]:=StrToFloat(k)+ODSMoneyTransferRUR.AsFloat;
+           k:=V.cells[15,43];
+           if k='' then  k:='0.00';
+           V.cells[15,43]:=StrToFloat(k)+ODSMoneyTransferTRY.AsFloat;
+
+           V.WorkBooks[1].WorkSheets[2].activate;
+
+           k:=V.cells[13,4];
+           if k='' then  k:='0.00';
+           V.cells[13,4]:=StrToFloat(k)+ODSMoneyTransferAZN.AsFloat;
+           k:=V.cells[13,5];
+           if k='' then  k:='0.00';
+           V.cells[13,5]:=StrToFloat(k)  +ODSMoneyTransferUSDEKV.AsFloat;
+           k:=V.cells[13,6];
+           if k='' then  k:='0.00';
+           V.cells[13,6]:=StrToFloat(k)  +ODSMoneyTransferEUREKV.AsFloat;
+           k:=V.cells[13,18];
+           if k='' then  k:='0.00';
+           V.cells[13,18]:=StrToFloat(k)  +ODSMoneyTransferGELEKV.AsFloat;
+           k:=V.cells[13,21];
+           if k='' then  k:='0.00';
+           V.cells[13,21]:=StrToFloat(k)  +ODSMoneyTransferGBPEKV.AsFloat;
+           k:=V.cells[13,39];
+           if k='' then  k:='0.00';
+           V.cells[13,39]:=StrToFloat(k)+ODSMoneyTransferRUREKV.AsFloat;
+           k:=V.cells[13,43];
+           if k='' then  k:='0.00';
+           V.cells[13,43]:=StrToFloat(k)+ODSMoneyTransferTRYEKV.AsFloat;
+
+
+
+         end
+         else
+         begin
+           V.WorkBooks[1].WorkSheets[3].activate;
+
+           k:=V.cells[16,4];
+           if k='' then  k:='0.00';
+           V.cells[16,4]:=StrToFloat(k)+ODSMoneyTransferAZN.AsFloat;
+
+           k:=V.cells[16,5];
+           if k='' then  k:='0.00';
+           V.cells[16,5]:=StrToFloat(k)+ODSMoneyTransferUSD.AsFloat;
+
+           k:=V.cells[16,6];
+           if k='' then  k:='0.00';
+           V.cells[16,6]:=StrToFloat(k)  +ODSMoneyTransferEUR.AsFloat;
+
+           k:=V.cells[16,18];
+           if k='' then  k:='0.00';
+           V.cells[16,18]:=StrToFloat(k)  +ODSMoneyTransferGEL.AsFloat;
+
+           k:=V.cells[16,21];
+           if k='' then  k:='0.00';
+           V.cells[16,21]:=StrToFloat(k)+ODSMoneyTransferGBP.AsFloat;
+
+           k:=V.cells[16,39];
+           if k='' then  k:='0.00';
+           V.cells[16,39]:=StrToFloat(k)+ODSMoneyTransferRUR.AsFloat;
+
+           k:=V.cells[16,43];
+           if k='' then  k:='0.00';
+           V.cells[16,43]:=StrToFloat(k)  +ODSMoneyTransferTRY.AsFloat;
+
+           V.WorkBooks[1].WorkSheets[2].activate;
+
+           k:=V.cells[14,4];
+           if k='' then  k:='0.00';
+           V.cells[14,4]:=StrToFloat(k)+ODSMoneyTransferAZN.AsFloat;
+
+           k:=V.cells[14,5];
+           if k='' then  k:='0.00';
+           V.cells[14,5]:=StrToFloat(k)+ODSMoneyTransferUSDEKV.AsFloat;
+
+           k:=V.cells[14,6];
+           if k='' then  k:='0.00';
+           V.cells[14,6]:=StrToFloat(k)  +ODSMoneyTransferEUREKV.AsFloat;
+
+           k:=V.cells[14,18];
+           if k='' then  k:='0.00';
+           V.cells[14,18]:=StrToFloat(k)  +ODSMoneyTransferGELEKV.AsFloat;
+
+           k:=V.cells[14,21];
+           if k='' then  k:='0.00';
+           V.cells[14,21]:=StrToFloat(k)+ODSMoneyTransferGBPEKV.AsFloat;
+
+           k:=V.cells[14,39];
+           if k='' then  k:='0.00';
+           V.cells[14,39]:=StrToFloat(k)+ODSMoneyTransferRUREKV.AsFloat;
+
+           k:=V.cells[14,43];
+           if k='' then  k:='0.00';
+           V.cells[14,43]:=StrToFloat(k)  +ODSMoneyTransferTRYEKV.AsFloat;
+
+         end;
+       end;
+
+       (*----------------------------------------------------Xidmətlər üzrə-------------------------------------------------*)
+
+       if (ODSMoneyTransferTRANSFERTYPEID.AsInteger=4) then
+       if ODSMoneyTransferCUSTTYPEID.AsInteger=1
+       then
+       begin
+         if ODSMoneyTransferNEREZIDENT.AsInteger=1 then
+         begin
+           V.WorkBooks[1].WorkSheets[3].activate;
+
+           V.cells[25,4]:=ODSMoneyTransferAZN.AsFloat;
+           V.cells[25,5]:=ODSMoneyTransferUSD.AsFloat;
+           V.cells[25,6]:=ODSMoneyTransferEUR.AsFloat;
+           V.cells[25,18]:=ODSMoneyTransferGEL.AsFloat;
+           V.cells[25,21]:=ODSMoneyTransferGBP.AsFloat;
+           V.cells[25,39]:=ODSMoneyTransferRUR.AsFloat;
+           V.cells[25,43]:=ODSMoneyTransferTRY.AsFloat;
+
+           V.WorkBooks[1].WorkSheets[2].activate;
+
+           V.cells[23,4]:=ODSMoneyTransferAZN.AsFloat;
+           V.cells[23,5]:=ODSMoneyTransferUSDEKV.AsFloat;
+           V.cells[23,6]:=ODSMoneyTransferEUREKV.AsFloat;
+           V.cells[23,18]:=ODSMoneyTransferGELEKV.AsFloat;
+           V.cells[23,21]:=ODSMoneyTransferGBPEKV.AsFloat;
+           V.cells[23,39]:=ODSMoneyTransferRUREKV.AsFloat;
+           V.cells[23,43]:=ODSMoneyTransferTRYEKV.AsFloat;
+
+         end
+         else
+         begin
+           V.WorkBooks[1].WorkSheets[3].activate;
+
+           V.cells[26,4]:=ODSMoneyTransferAZN.AsFloat;
+           V.cells[26,5]:=ODSMoneyTransferUSD.AsFloat;
+           V.cells[26,6]:=ODSMoneyTransferEUR.AsFloat;
+           V.cells[26,18]:=ODSMoneyTransferGEL.AsFloat;
+           V.cells[26,21]:=ODSMoneyTransferGBP.AsFloat;
+           V.cells[26,39]:=ODSMoneyTransferRUR.AsFloat;
+           V.cells[26,39]:=ODSMoneyTransferTRY.AsFloat;
+
+           V.WorkBooks[1].WorkSheets[2].activate;
+
+           V.cells[24,4]:=ODSMoneyTransferAZN.AsFloat;
+           V.cells[24,5]:=ODSMoneyTransferUSDEKV.AsFloat;
+           V.cells[24,6]:=ODSMoneyTransferEUREKV.AsFloat;
+           V.cells[24,18]:=ODSMoneyTransferGELEKV.AsFloat;
+           V.cells[24,21]:=ODSMoneyTransferGBPEKV.AsFloat;
+           V.cells[24,39]:=ODSMoneyTransferRUREKV.AsFloat;
+           V.cells[24,39]:=ODSMoneyTransferTRYEKV.AsFloat;
+
+         end
+       end
+       else
+       begin
+         if ODSMoneyTransferNEREZIDENT.AsInteger=1 then
+         begin
+           V.WorkBooks[1].WorkSheets[3].activate;
+
+           k:=V.cells[22,4];
+           if k='' then  k:='0.00';
+           V.cells[22,4]:=StrToFloat(k)+ODSMoneyTransferAZN.AsFloat;
+           k:=V.cells[22,5];
+           if k='' then  k:='0.00';
+           V.cells[22,5]:=StrToFloat(k)  +ODSMoneyTransferUSD.AsFloat;
+           k:=V.cells[22,6];
+           if k='' then  k:='0.00';
+           V.cells[22,6]:=StrToFloat(k)  +ODSMoneyTransferEUR.AsFloat;
+           k:=V.cells[22,18];
+           if k='' then  k:='0.00';
+           V.cells[22,18]:=StrToFloat(k)  +ODSMoneyTransferGEL.AsFloat;
+           k:=V.cells[22,21];
+           if k='' then  k:='0.00';
+           V.cells[22,21]:=StrToFloat(k)  +ODSMoneyTransferGBP.AsFloat;
+           k:=V.cells[22,39];
+           if k='' then  k:='0.00';
+           V.cells[22,39]:=StrToFloat(k)+ODSMoneyTransferRUR.AsFloat;
+           k:=V.cells[22,43];
+           if k='' then  k:='0.00';
+           V.cells[22,43]:=StrToFloat(k)+ODSMoneyTransferTRY.AsFloat;
+
+           V.WorkBooks[1].WorkSheets[2].activate;
+
+           k:=V.cells[20,4];
+           if k='' then  k:='0.00';
+           V.cells[20,4]:=StrToFloat(k)+ODSMoneyTransferAZN.AsFloat;
+
+           k:=V.cells[20,5];
+           if k='' then  k:='0.00';
+           V.cells[20,5]:=StrToFloat(k)+ODSMoneyTransferUSDEKV.AsFloat;
+
+           k:=V.cells[20,6];
+           if k='' then  k:='0.00';
+           V.cells[20,6]:=StrToFloat(k)  +ODSMoneyTransferEUREKV.AsFloat;
+
+           k:=V.cells[20,18];
+           if k='' then  k:='0.00';
+           V.cells[20,18]:=StrToFloat(k)  +ODSMoneyTransferGELEKV.AsFloat;
+
+           k:=V.cells[20,21];
+           if k='' then  k:='0.00';
+           V.cells[20,21]:=StrToFloat(k)+ODSMoneyTransferGBPEKV.AsFloat;
+
+           k:=V.cells[20,39];
+           if k='' then  k:='0.00';
+           V.cells[20,39]:=StrToFloat(k)+ODSMoneyTransferRUREKV.AsFloat;
+
+           k:=V.cells[20,43];
+           if k='' then  k:='0.00';
+           V.cells[20,43]:=StrToFloat(k)  +ODSMoneyTransferTRYEKV.AsFloat;
+
+         end
+         else
+         begin
+           V.WorkBooks[1].WorkSheets[3].activate;
+
+           k:=V.cells[23,4];
+           if k='' then  k:='0.00';
+           V.cells[23,4]:=StrToFloat(k)+ODSMoneyTransferAZN.AsFloat;
+
+           k:=V.cells[23,5];
+           if k='' then  k:='0.00';
+           V.cells[23,5]:=StrToFloat(k)+ODSMoneyTransferUSD.AsFloat;
+
+           k:=V.cells[23,6];
+           if k='' then  k:='0.00';
+           V.cells[23,6]:=StrToFloat(k)  +ODSMoneyTransferEUR.AsFloat;
+
+           k:=V.cells[23,18];
+           if k='' then  k:='0.00';
+           V.cells[23,18]:=StrToFloat(k)  +ODSMoneyTransferGEL.AsFloat;
+
+           k:=V.cells[23,21];
+           if k='' then  k:='0.00';
+           V.cells[23,21]:=StrToFloat(k)+ODSMoneyTransferGBP.AsFloat;
+
+           k:=V.cells[23,39];
+           if k='' then  k:='0.00';
+           V.cells[23,39]:=StrToFloat(k)+ODSMoneyTransferRUR.AsFloat;
+
+           k:=V.cells[23,43];
+           if k='' then  k:='0.00';
+           V.cells[23,43]:=StrToFloat(k)  +ODSMoneyTransferTRY.AsFloat;
+
+           V.WorkBooks[1].WorkSheets[2].activate;
+
+
+           k:=V.cells[21,4];
+           if k='' then  k:='0.00';
+           V.cells[21,4]:=StrToFloat(k)+ODSMoneyTransferAZN.AsFloat;
+
+           k:=V.cells[21,5];
+           if k='' then  k:='0.00';
+           V.cells[21,5]:=StrToFloat(k)+ODSMoneyTransferUSDEKV.AsFloat;
+
+           k:=V.cells[21,6];
+           if k='' then  k:='0.00';
+           V.cells[21,6]:=StrToFloat(k)  +ODSMoneyTransferEUREKV.AsFloat;
+
+           k:=V.cells[21,18];
+           if k='' then  k:='0.00';
+           V.cells[21,18]:=StrToFloat(k)  +ODSMoneyTransferGELEKV.AsFloat;
+
+           k:=V.cells[21,21];
+           if k='' then  k:='0.00';
+           V.cells[21,21]:=StrToFloat(k)+ODSMoneyTransferGBPEKV.AsFloat;
+
+           k:=V.cells[21,39];
+           if k='' then  k:='0.00';
+           V.cells[21,39]:=StrToFloat(k)+ODSMoneyTransferRUREKV.AsFloat;
+
+           k:=V.cells[21,43];
+           if k='' then  k:='0.00';
+           V.cells[21,43]:=StrToFloat(k)  +ODSMoneyTransferTRYEKV.AsFloat;
+
+
+         end;
+       end;
+       (*----------------------------------------------------Gəlirlər üzrə-------------------------------------------------*)
+
+       if (ODSMoneyTransferTRANSFERTYPEID.AsInteger=5) then
+       if ODSMoneyTransferCUSTTYPEID.AsInteger=1
+       then
+       begin
+         if ODSMoneyTransferNEREZIDENT.AsInteger=1 then
+         begin
+           V.WorkBooks[1].WorkSheets[3].activate;
+
+           V.cells[32,4]:=ODSMoneyTransferAZN.AsFloat;
+           V.cells[32,5]:=ODSMoneyTransferUSD.AsFloat;
+           V.cells[32,6]:=ODSMoneyTransferEUR.AsFloat;
+           V.cells[32,18]:=ODSMoneyTransferGEL.AsFloat;
+           V.cells[32,21]:=ODSMoneyTransferGBP.AsFloat;
+           V.cells[32,39]:=ODSMoneyTransferRUR.AsFloat;
+           V.cells[32,43]:=ODSMoneyTransferTRY.AsFloat;
+
+           V.WorkBooks[1].WorkSheets[2].activate;
+
+           V.cells[30,4]:=ODSMoneyTransferAZN.AsFloat;
+           V.cells[30,5]:=ODSMoneyTransferUSDEKV.AsFloat;
+           V.cells[30,6]:=ODSMoneyTransferEUREKV.AsFloat;
+           V.cells[30,18]:=ODSMoneyTransferGELEKV.AsFloat;
+           V.cells[30,21]:=ODSMoneyTransferGBPEKV.AsFloat;
+           V.cells[30,39]:=ODSMoneyTransferRUREKV.AsFloat;
+           V.cells[30,43]:=ODSMoneyTransferTRYEKV.AsFloat;
+
+
+         end
+         else
+         begin
+           V.WorkBooks[1].WorkSheets[3].activate;
+
+           V.cells[33,4]:=ODSMoneyTransferAZN.AsFloat;
+           V.cells[33,5]:=ODSMoneyTransferUSDEKV.AsFloat;
+           V.cells[33,6]:=ODSMoneyTransferEUREKV.AsFloat;
+           V.cells[33,18]:=ODSMoneyTransferGELEKV.AsFloat;
+           V.cells[33,21]:=ODSMoneyTransferGBPEKV.AsFloat;
+           V.cells[33,39]:=ODSMoneyTransferRUREKV.AsFloat;
+           V.cells[33,39]:=ODSMoneyTransferTRYEKV.AsFloat;
+
+           V.WorkBooks[1].WorkSheets[2].activate;
+
+           V.cells[31,4]:=ODSMoneyTransferAZN.AsFloat;
+           V.cells[31,5]:=ODSMoneyTransferUSDEKV.AsFloat;
+           V.cells[31,6]:=ODSMoneyTransferEUREKV.AsFloat;
+           V.cells[31,18]:=ODSMoneyTransferGELEKV.AsFloat;
+           V.cells[31,21]:=ODSMoneyTransferGBPEKV.AsFloat;
+           V.cells[31,39]:=ODSMoneyTransferRUREKV.AsFloat;
+           V.cells[31,39]:=ODSMoneyTransferTRYEKV.AsFloat;
+         end
+       end
+       else
+       begin
+         if ODSMoneyTransferNEREZIDENT.AsInteger=1 then
+         begin
+           V.WorkBooks[1].WorkSheets[3].activate;
+           k:=V.cells[29,4];
+           if k='' then  k:='0.00';
+           V.cells[29,4]:=StrToFloat(k)+ODSMoneyTransferAZN.AsFloat;
+           k:=V.cells[29,5];
+           if k='' then  k:='0.00';
+           V.cells[29,5]:=StrToFloat(k)  +ODSMoneyTransferUSD.AsFloat;
+           k:=V.cells[29,6];
+           if k='' then  k:='0.00';
+           V.cells[29,6]:=StrToFloat(k)  +ODSMoneyTransferEUR.AsFloat;
+           k:=V.cells[29,18];
+           if k='' then  k:='0.00';
+           V.cells[29,18]:=StrToFloat(k)  +ODSMoneyTransferGEL.AsFloat;
+           k:=V.cells[29,21];
+           if k='' then  k:='0.00';
+           V.cells[29,21]:=StrToFloat(k)  +ODSMoneyTransferGBP.AsFloat;
+           k:=V.cells[29,39];
+           if k='' then  k:='0.00';
+           V.cells[29,39]:=StrToFloat(k)+ODSMoneyTransferRUR.AsFloat;
+           k:=V.cells[29,43];
+           if k='' then  k:='0.00';
+           V.cells[29,43]:=StrToFloat(k)+ODSMoneyTransferTRY.AsFloat;
+
+           V.WorkBooks[1].WorkSheets[2].activate;
+
+           k:=V.cells[27,4];
+           if k='' then  k:='0.00';
+           V.cells[27,4]:=StrToFloat(k)+ODSMoneyTransferAZN.AsFloat;
+           k:=V.cells[27,5];
+           if k='' then  k:='0.00';
+           V.cells[27,5]:=StrToFloat(k)  +ODSMoneyTransferUSDEKV.AsFloat;
+           k:=V.cells[27,6];
+           if k='' then  k:='0.00';
+           V.cells[27,6]:=StrToFloat(k)  +ODSMoneyTransferEUREKV.AsFloat;
+           k:=V.cells[27,18];
+           if k='' then  k:='0.00';
+           V.cells[27,18]:=StrToFloat(k)  +ODSMoneyTransferGELEKV.AsFloat;
+           k:=V.cells[27,21];
+           if k='' then  k:='0.00';
+           V.cells[27,21]:=StrToFloat(k)  +ODSMoneyTransferGBPEKV.AsFloat;
+           k:=V.cells[27,39];
+           if k='' then  k:='0.00';
+           V.cells[27,39]:=StrToFloat(k)+ODSMoneyTransferRUREKV.AsFloat;
+           k:=V.cells[27,43];
+           if k='' then  k:='0.00';
+           V.cells[27,43]:=StrToFloat(k)+ODSMoneyTransferTRYEKV.AsFloat;
+
+         end
+         else
+         begin
+           V.WorkBooks[1].WorkSheets[3].activate;
+           k:=V.cells[30,4];
+           if k='' then  k:='0.00';
+           V.cells[30,4]:=StrToFloat(k)+ODSMoneyTransferAZN.AsFloat;
+
+           k:=V.cells[30,5];
+           if k='' then  k:='0.00';
+           V.cells[30,5]:=StrToFloat(k)+ODSMoneyTransferUSD.AsFloat;
+
+           k:=V.cells[30,6];
+           if k='' then  k:='0.00';
+           V.cells[30,6]:=StrToFloat(k)  +ODSMoneyTransferEUR.AsFloat;
+
+           k:=V.cells[30,18];
+           if k='' then  k:='0.00';
+           V.cells[30,18]:=StrToFloat(k)  +ODSMoneyTransferGEL.AsFloat;
+
+           k:=V.cells[30,21];
+           if k='' then  k:='0.00';
+           V.cells[30,21]:=StrToFloat(k)+ODSMoneyTransferGBP.AsFloat;
+
+           k:=V.cells[30,39];
+           if k='' then  k:='0.00';
+           V.cells[30,39]:=StrToFloat(k)+ODSMoneyTransferRUR.AsFloat;
+
+           k:=V.cells[30,43];
+           if k='' then  k:='0.00';
+           V.cells[30,43]:=StrToFloat(k)  +ODSMoneyTransferTRY.AsFloat;
+
+           V.WorkBooks[1].WorkSheets[2].activate;
+           k:=V.cells[28,4];
+           if k='' then  k:='0.00';
+           V.cells[28,4]:=StrToFloat(k)+ODSMoneyTransferAZN.AsFloat;
+
+           k:=V.cells[28,5];
+           if k='' then  k:='0.00';
+           V.cells[28,5]:=StrToFloat(k)+ODSMoneyTransferUSDEKV.AsFloat;
+
+           k:=V.cells[28,6];
+           if k='' then  k:='0.00';
+           V.cells[28,6]:=StrToFloat(k)  +ODSMoneyTransferEUREKV.AsFloat;
+
+           k:=V.cells[28,18];
+           if k='' then  k:='0.00';
+           V.cells[28,18]:=StrToFloat(k)  +ODSMoneyTransferGELEKV.AsFloat;
+
+           k:=V.cells[28,21];
+           if k='' then  k:='0.00';
+           V.cells[28,21]:=StrToFloat(k)+ODSMoneyTransferGBPEKV.AsFloat;
+
+           k:=V.cells[28,39];
+           if k='' then  k:='0.00';
+           V.cells[28,39]:=StrToFloat(k)+ODSMoneyTransferRUREKV.AsFloat;
+
+           k:=V.cells[28,43];
+           if k='' then  k:='0.00';
+           V.cells[28,43]:=StrToFloat(k)  +ODSMoneyTransferTRYEKV.AsFloat;
+
+
+
+         end;
+       end;
+
+     (*----------------------------------------------------Cari transferlər üzrə-------------------------------------------------*)
+
+       if (ODSMoneyTransferTRANSFERTYPEID.AsInteger=6) then
+       if ODSMoneyTransferCUSTTYPEID.AsInteger=1
+       then
+       begin
+         if ODSMoneyTransferNEREZIDENT.AsInteger=1 then
+         begin
+           V.WorkBooks[1].WorkSheets[3].activate;
+
+           V.cells[39,4]:=ODSMoneyTransferAZN.AsFloat;
+           V.cells[39,5]:=ODSMoneyTransferUSD.AsFloat;
+           V.cells[39,6]:=ODSMoneyTransferEUR.AsFloat;
+           V.cells[39,18]:=ODSMoneyTransferGEL.AsFloat;
+           V.cells[39,21]:=ODSMoneyTransferGBP.AsFloat;
+           V.cells[39,39]:=ODSMoneyTransferRUR.AsFloat;
+           V.cells[39,43]:=ODSMoneyTransferTRY.AsFloat;
+
+           V.WorkBooks[1].WorkSheets[2].activate;
+
+           V.cells[37,4]:=ODSMoneyTransferAZN.AsFloat;
+           V.cells[37,5]:=ODSMoneyTransferUSDEKV.AsFloat;
+           V.cells[37,6]:=ODSMoneyTransferEUREKV.AsFloat;
+           V.cells[37,18]:=ODSMoneyTransferGELEKV.AsFloat;
+           V.cells[37,21]:=ODSMoneyTransferGBPEKV.AsFloat;
+           V.cells[37,39]:=ODSMoneyTransferRUREKV.AsFloat;
+           V.cells[37,43]:=ODSMoneyTransferTRYEKV.AsFloat;
+
+         end
+         else
+         begin
+           V.WorkBooks[1].WorkSheets[3].activate;
+
+           V.cells[40,4]:=ODSMoneyTransferAZN.AsFloat;
+           V.cells[40,5]:=ODSMoneyTransferUSD.AsFloat;
+           V.cells[40,6]:=ODSMoneyTransferEUR.AsFloat;
+           V.cells[40,18]:=ODSMoneyTransferGEL.AsFloat;
+           V.cells[40,21]:=ODSMoneyTransferGBP.AsFloat;
+           V.cells[40,39]:=ODSMoneyTransferRUR.AsFloat;
+           V.cells[40,39]:=ODSMoneyTransferTRY.AsFloat;
+
+           V.WorkBooks[1].WorkSheets[2].activate;
+
+           V.cells[38,4]:=ODSMoneyTransferAZN.AsFloat;
+           V.cells[38,5]:=ODSMoneyTransferUSDEKV.AsFloat;
+           V.cells[38,6]:=ODSMoneyTransferEUREKV.AsFloat;
+           V.cells[38,18]:=ODSMoneyTransferGELEKV.AsFloat;
+           V.cells[38,21]:=ODSMoneyTransferGBPEKV.AsFloat;
+           V.cells[38,39]:=ODSMoneyTransferRUREKV.AsFloat;
+           V.cells[38,39]:=ODSMoneyTransferTRYEKV.AsFloat;
+         end
+       end
+       else
+       begin
+         if ODSMoneyTransferNEREZIDENT.AsInteger=1 then
+         begin
+           V.WorkBooks[1].WorkSheets[3].activate;
+
+           k:=V.cells[36,4];
+           if k='' then  k:='0.00';
+           V.cells[36,4]:=StrToFloat(k)+ODSMoneyTransferAZN.AsFloat;
+           k:=V.cells[36,5];
+           if k='' then  k:='0.00';
+           V.cells[36,5]:=StrToFloat(k)  +ODSMoneyTransferUSD.AsFloat;
+           k:=V.cells[36,6];
+           if k='' then  k:='0.00';
+           V.cells[36,6]:=StrToFloat(k)  +ODSMoneyTransferEUR.AsFloat;
+           k:=V.cells[36,18];
+           if k='' then  k:='0.00';
+           V.cells[36,18]:=StrToFloat(k)  +ODSMoneyTransferGEL.AsFloat;
+           k:=V.cells[36,21];
+           if k='' then  k:='0.00';
+           V.cells[36,21]:=StrToFloat(k)  +ODSMoneyTransferGBP.AsFloat;
+           k:=V.cells[36,39];
+           if k='' then  k:='0.00';
+           V.cells[36,39]:=StrToFloat(k)+ODSMoneyTransferRUR.AsFloat;
+           k:=V.cells[36,43];
+           if k='' then  k:='0.00';
+           V.cells[36,43]:=StrToFloat(k)+ODSMoneyTransferTRY.AsFloat;
+
+           V.WorkBooks[1].WorkSheets[2].activate;
+
+           k:=V.cells[34,4];
+           if k='' then  k:='0.00';
+           V.cells[34,4]:=StrToFloat(k)+ODSMoneyTransferAZN.AsFloat;
+           k:=V.cells[34,5];
+           if k='' then  k:='0.00';
+           V.cells[34,5]:=StrToFloat(k)  +ODSMoneyTransferUSDEKV.AsFloat;
+           k:=V.cells[34,6];
+           if k='' then  k:='0.00';
+           V.cells[34,6]:=StrToFloat(k)  +ODSMoneyTransferEUREKV.AsFloat;
+           k:=V.cells[34,18];
+           if k='' then  k:='0.00';
+           V.cells[34,18]:=StrToFloat(k)  +ODSMoneyTransferGELEKV.AsFloat;
+           k:=V.cells[34,21];
+           if k='' then  k:='0.00';
+           V.cells[34,21]:=StrToFloat(k)  +ODSMoneyTransferGBPEKV.AsFloat;
+           k:=V.cells[34,39];
+           if k='' then  k:='0.00';
+           V.cells[34,39]:=StrToFloat(k)+ODSMoneyTransferRUREKV.AsFloat;
+           k:=V.cells[34,43];
+           if k='' then  k:='0.00';
+           V.cells[34,43]:=StrToFloat(k)+ODSMoneyTransferTRYEKV.AsFloat;
+
+         end
+         else
+         begin
+
+           V.WorkBooks[1].WorkSheets[3].activate;
+
+           k:=V.cells[37,4];
+           if k='' then  k:='0.00';
+           V.cells[37,4]:=StrToFloat(k)+ODSMoneyTransferAZN.AsFloat;
+
+           k:=V.cells[37,5];
+           if k='' then  k:='0.00';
+           V.cells[37,5]:=StrToFloat(k)+ODSMoneyTransferUSD.AsFloat;
+
+           k:=V.cells[37,6];
+           if k='' then  k:='0.00';
+           V.cells[37,6]:=StrToFloat(k)  +ODSMoneyTransferEUR.AsFloat;
+
+           k:=V.cells[37,18];
+           if k='' then  k:='0.00';
+           V.cells[37,18]:=StrToFloat(k)  +ODSMoneyTransferGEL.AsFloat;
+
+           k:=V.cells[37,21];
+           if k='' then  k:='0.00';
+           V.cells[37,21]:=StrToFloat(k)+ODSMoneyTransferGBP.AsFloat;
+
+           k:=V.cells[37,39];
+           if k='' then  k:='0.00';
+           V.cells[37,39]:=StrToFloat(k)+ODSMoneyTransferRUR.AsFloat;
+
+           k:=V.cells[37,43];
+           if k='' then  k:='0.00';
+           V.cells[37,43]:=StrToFloat(k)  +ODSMoneyTransferTRY.AsFloat;
+
+
+           V.WorkBooks[1].WorkSheets[2].activate;
+
+           k:=V.cells[35,4];
+           if k='' then  k:='0.00';
+           V.cells[35,4]:=StrToFloat(k)+ODSMoneyTransferAZN.AsFloat;
+
+           k:=V.cells[35,5];
+           if k='' then  k:='0.00';
+           V.cells[35,5]:=StrToFloat(k)+ODSMoneyTransferUSDEKV.AsFloat;
+
+           k:=V.cells[35,6];
+           if k='' then  k:='0.00';
+           V.cells[35,6]:=StrToFloat(k)  +ODSMoneyTransferEUREKV.AsFloat;
+
+           k:=V.cells[35,18];
+           if k='' then  k:='0.00';
+           V.cells[35,18]:=StrToFloat(k)  +ODSMoneyTransferGELEKV.AsFloat;
+
+           k:=V.cells[35,21];
+           if k='' then  k:='0.00';
+           V.cells[35,21]:=StrToFloat(k)+ODSMoneyTransferGBPEKV.AsFloat;
+
+           k:=V.cells[35,39];
+           if k='' then  k:='0.00';
+           V.cells[35,39]:=StrToFloat(k)+ODSMoneyTransferRUREKV.AsFloat;
+
+           k:=V.cells[35,43];
+           if k='' then  k:='0.00';
+           V.cells[35,43]:=StrToFloat(k)  +ODSMoneyTransferTRYEKV.AsFloat;
+         end;
+       end;
+
+      (*----------------------------------------------------Kapital transferləri üzrə-------------------------------------------------*)
+
+       if (ODSMoneyTransferTRANSFERTYPEID.AsInteger=7) then
+       if ODSMoneyTransferCUSTTYPEID.AsInteger=1
+       then
+       begin
+         if ODSMoneyTransferNEREZIDENT.AsInteger=1 then
+         begin
+          V.cells[46,4]:=ODSMoneyTransferAZN.AsFloat;
+          V.cells[46,5]:=ODSMoneyTransferUSD.AsFloat;
+          V.cells[46,6]:=ODSMoneyTransferEUR.AsFloat;
+          V.cells[46,18]:=ODSMoneyTransferGEL.AsFloat;
+          V.cells[46,21]:=ODSMoneyTransferGBP.AsFloat;
+          V.cells[46,39]:=ODSMoneyTransferRUR.AsFloat;
+          V.cells[46,43]:=ODSMoneyTransferTRY.AsFloat;
+
+          V.WorkBooks[1].WorkSheets[2].activate;
+
+          V.cells[44,4]:=ODSMoneyTransferAZN.AsFloat;
+          V.cells[44,5]:=ODSMoneyTransferUSDEKV.AsFloat;
+          V.cells[44,6]:=ODSMoneyTransferEUREKV.AsFloat;
+          V.cells[44,18]:=ODSMoneyTransferGELEKV.AsFloat;
+          V.cells[44,21]:=ODSMoneyTransferGBPEKV.AsFloat;
+          V.cells[44,39]:=ODSMoneyTransferRUREKV.AsFloat;
+          V.cells[44,43]:=ODSMoneyTransferTRYEKV.AsFloat;
+
+         end
+         else
+         begin
+           V.cells[47,4]:=ODSMoneyTransferAZN.AsFloat;
+           V.cells[47,5]:=ODSMoneyTransferUSD.AsFloat;
+           V.cells[47,6]:=ODSMoneyTransferEUR.AsFloat;
+           V.cells[47,18]:=ODSMoneyTransferGEL.AsFloat;
+           V.cells[47,21]:=ODSMoneyTransferGBP.AsFloat;
+           V.cells[47,39]:=ODSMoneyTransferRUR.AsFloat;
+           V.cells[47,39]:=ODSMoneyTransferTRY.AsFloat;
+
+           V.WorkBooks[1].WorkSheets[2].activate;
+
+           V.cells[45,4]:=ODSMoneyTransferAZN.AsFloat;
+           V.cells[45,5]:=ODSMoneyTransferUSDEKV.AsFloat;
+           V.cells[45,6]:=ODSMoneyTransferEUREKV.AsFloat;
+           V.cells[45,18]:=ODSMoneyTransferGELEKV.AsFloat;
+           V.cells[45,21]:=ODSMoneyTransferGBPEKV.AsFloat;
+           V.cells[45,39]:=ODSMoneyTransferRUREKV.AsFloat;
+           V.cells[45,39]:=ODSMoneyTransferTRYEKV.AsFloat;
+
+         end
+       end
+       else
+       begin
+         if ODSMoneyTransferNEREZIDENT.AsInteger=1 then
+         begin
+           k:=V.cells[43,4];
+           if k='' then  k:='0.00';
+           V.cells[43,4]:=StrToFloat(k)+ODSMoneyTransferAZN.AsFloat;
+           k:=V.cells[43,5];
+           if k='' then  k:='0.00';
+           V.cells[43,5]:=StrToFloat(k)  +ODSMoneyTransferUSD.AsFloat;
+           k:=V.cells[43,6];
+           if k='' then  k:='0.00';
+           V.cells[43,6]:=StrToFloat(k)  +ODSMoneyTransferEUR.AsFloat;
+           k:=V.cells[43,18];
+           if k='' then  k:='0.00';
+           V.cells[43,18]:=StrToFloat(k)  +ODSMoneyTransferGEL.AsFloat;
+           k:=V.cells[43,21];
+           if k='' then  k:='0.00';
+           V.cells[43,21]:=StrToFloat(k)  +ODSMoneyTransferGBP.AsFloat;
+           k:=V.cells[43,39];
+           if k='' then  k:='0.00';
+           V.cells[43,39]:=StrToFloat(k)+ODSMoneyTransferRUR.AsFloat;
+           k:=V.cells[43,43];
+           if k='' then  k:='0.00';
+           V.cells[43,43]:=StrToFloat(k)+ODSMoneyTransferTRY.AsFloat;
+
+           V.WorkBooks[1].WorkSheets[2].activate;
+
+           k:=V.cells[41,4];
+           if k='' then  k:='0.00';
+           V.cells[41,4]:=StrToFloat(k)+ODSMoneyTransferAZN.AsFloat;
+           k:=V.cells[41,5];
+           if k='' then  k:='0.00';
+           V.cells[41,5]:=StrToFloat(k)  +ODSMoneyTransferUSDEKV.AsFloat;
+           k:=V.cells[41,6];
+           if k='' then  k:='0.00';
+           V.cells[41,6]:=StrToFloat(k)  +ODSMoneyTransferEUREKV.AsFloat;
+           k:=V.cells[41,18];
+           if k='' then  k:='0.00';
+           V.cells[41,18]:=StrToFloat(k)  +ODSMoneyTransferGELEKV.AsFloat;
+           k:=V.cells[41,21];
+           if k='' then  k:='0.00';
+           V.cells[41,21]:=StrToFloat(k)  +ODSMoneyTransferGBPEKV.AsFloat;
+           k:=V.cells[41,39];
+           if k='' then  k:='0.00';
+           V.cells[41,39]:=StrToFloat(k)+ODSMoneyTransferRUREKV.AsFloat;
+           k:=V.cells[41,43];
+           if k='' then  k:='0.00';
+           V.cells[41,43]:=StrToFloat(k)+ODSMoneyTransferTRYEKV.AsFloat;
+
+         end
+         else
+         begin
+           V.WorkBooks[1].WorkSheets[3].activate;
+
+           k:=V.cells[44,4];
+           if k='' then  k:='0.00';
+           V.cells[44,4]:=StrToFloat(k)+ODSMoneyTransferAZN.AsFloat;
+
+           k:=V.cells[44,5];
+           if k='' then  k:='0.00';
+           V.cells[44,5]:=StrToFloat(k)+ODSMoneyTransferUSD.AsFloat;
+
+           k:=V.cells[44,6];
+           if k='' then  k:='0.00';
+           V.cells[44,6]:=StrToFloat(k)  +ODSMoneyTransferEUR.AsFloat;
+
+           k:=V.cells[44,18];
+           if k='' then  k:='0.00';
+           V.cells[44,18]:=StrToFloat(k)  +ODSMoneyTransferGEL.AsFloat;
+
+           k:=V.cells[44,21];
+           if k='' then  k:='0.00';
+           V.cells[44,21]:=StrToFloat(k)+ODSMoneyTransferGBP.AsFloat;
+
+           k:=V.cells[44,39];
+           if k='' then  k:='0.00';
+           V.cells[44,39]:=StrToFloat(k)+ODSMoneyTransferRUR.AsFloat;
+
+           k:=V.cells[44,43];
+           if k='' then  k:='0.00';
+           V.cells[44,43]:=StrToFloat(k)  +ODSMoneyTransferTRY.AsFloat;
+
+           V.WorkBooks[1].WorkSheets[2].activate;
+
+           k:=V.cells[42,4];
+           if k='' then  k:='0.00';
+           V.cells[42,4]:=StrToFloat(k)+ODSMoneyTransferAZN.AsFloat;
+
+           k:=V.cells[42,5];
+           if k='' then  k:='0.00';
+           V.cells[42,5]:=StrToFloat(k)+ODSMoneyTransferUSDEKV.AsFloat;
+
+           k:=V.cells[42,6];
+           if k='' then  k:='0.00';
+           V.cells[42,6]:=StrToFloat(k)  +ODSMoneyTransferEUREKV.AsFloat;
+
+           k:=V.cells[42,18];
+           if k='' then  k:='0.00';
+           V.cells[42,18]:=StrToFloat(k)  +ODSMoneyTransferGELEKV.AsFloat;
+
+           k:=V.cells[42,21];
+           if k='' then  k:='0.00';
+           V.cells[42,21]:=StrToFloat(k)+ODSMoneyTransferGBPEKV.AsFloat;
+
+           k:=V.cells[42,39];
+           if k='' then  k:='0.00';
+           V.cells[42,39]:=StrToFloat(k)+ODSMoneyTransferRUREKV.AsFloat;
+
+           k:=V.cells[42,43];
+           if k='' then  k:='0.00';
+           V.cells[42,43]:=StrToFloat(k)  +ODSMoneyTransferTRYEKV.AsFloat;
+
+
+
+         end;
+       end;
+
+     (*----------------------------------------------------İnvestisiyalar  üzrə-------------------------------------------------*)
+
+       if (ODSMoneyTransferTRANSFERTYPEID.AsInteger=8) then
+       if ODSMoneyTransferCUSTTYPEID.AsInteger=1
+       then
+       begin
+         V.WorkBooks[1].WorkSheets[3].activate;
+
+         if ODSMoneyTransferNEREZIDENT.AsInteger=1 then
+         begin
+          V.cells[53,4]:=ODSMoneyTransferAZN.AsFloat;
+          V.cells[53,5]:=ODSMoneyTransferUSD.AsFloat;
+          V.cells[53,6]:=ODSMoneyTransferEUR.AsFloat;
+          V.cells[53,18]:=ODSMoneyTransferGEL.AsFloat;
+          V.cells[53,21]:=ODSMoneyTransferGBP.AsFloat;
+          V.cells[53,39]:=ODSMoneyTransferRUR.AsFloat;
+          V.cells[53,43]:=ODSMoneyTransferTRY.AsFloat;
+
+          V.WorkBooks[1].WorkSheets[2].activate;
+
+          V.cells[51,4]:=ODSMoneyTransferAZN.AsFloat;
+          V.cells[51,5]:=ODSMoneyTransferUSDEKV.AsFloat;
+          V.cells[51,6]:=ODSMoneyTransferEUREKV.AsFloat;
+          V.cells[51,18]:=ODSMoneyTransferGELEKV.AsFloat;
+          V.cells[51,21]:=ODSMoneyTransferGBPEKV.AsFloat;
+          V.cells[51,39]:=ODSMoneyTransferRUREKV.AsFloat;
+          V.cells[51,43]:=ODSMoneyTransferTRYEKV.AsFloat;
+
+         end
+         else
+         begin
+           V.WorkBooks[1].WorkSheets[3].activate;
+
+           V.cells[54,4]:=ODSMoneyTransferAZN.AsFloat;
+           V.cells[54,5]:=ODSMoneyTransferUSD.AsFloat;
+           V.cells[54,6]:=ODSMoneyTransferEUR.AsFloat;
+           V.cells[54,18]:=ODSMoneyTransferGEL.AsFloat;
+           V.cells[54,21]:=ODSMoneyTransferGBP.AsFloat;
+           V.cells[54,39]:=ODSMoneyTransferRUR.AsFloat;
+           V.cells[54,39]:=ODSMoneyTransferTRY.AsFloat;
+
+           V.WorkBooks[1].WorkSheets[2].activate;
+
+           V.cells[52,4]:=ODSMoneyTransferAZN.AsFloat;
+           V.cells[52,5]:=ODSMoneyTransferUSDEKV.AsFloat;
+           V.cells[52,6]:=ODSMoneyTransferEUREKV.AsFloat;
+           V.cells[52,18]:=ODSMoneyTransferGELEKV.AsFloat;
+           V.cells[52,21]:=ODSMoneyTransferGBPEKV.AsFloat;
+           V.cells[52,39]:=ODSMoneyTransferRUREKV.AsFloat;
+           V.cells[52,39]:=ODSMoneyTransferTRYEKV.AsFloat;
+
+
+         end
+       end
+       else
+       begin
+         if ODSMoneyTransferNEREZIDENT.AsInteger=1 then
+         begin
+
+           V.WorkBooks[1].WorkSheets[3].activate;
+
+           k:=V.cells[50,4];
+           if k='' then  k:='0.00';
+           V.cells[50,4]:=StrToFloat(k)+ODSMoneyTransferAZN.AsFloat;
+           k:=V.cells[50,5];
+           if k='' then  k:='0.00';
+           V.cells[50,5]:=StrToFloat(k)  +ODSMoneyTransferUSD.AsFloat;
+           k:=V.cells[50,6];
+           if k='' then  k:='0.00';
+           V.cells[50,6]:=StrToFloat(k)  +ODSMoneyTransferEUR.AsFloat;
+           k:=V.cells[50,18];
+           if k='' then  k:='0.00';
+           V.cells[50,18]:=StrToFloat(k)  +ODSMoneyTransferGEL.AsFloat;
+           k:=V.cells[50,21];
+           if k='' then  k:='0.00';
+           V.cells[50,21]:=StrToFloat(k)  +ODSMoneyTransferGBP.AsFloat;
+           k:=V.cells[50,39];
+           if k='' then  k:='0.00';
+           V.cells[50,39]:=StrToFloat(k)+ODSMoneyTransferRUR.AsFloat;
+           k:=V.cells[50,43];
+           if k='' then  k:='0.00';
+           V.cells[50,43]:=StrToFloat(k)+ODSMoneyTransferTRY.AsFloat;
+
+           V.WorkBooks[1].WorkSheets[2].activate;
+
+           k:=V.cells[48,4];
+           if k='' then  k:='0.00';
+           V.cells[48,4]:=StrToFloat(k)+ODSMoneyTransferAZN.AsFloat;
+           k:=V.cells[48,5];
+           if k='' then  k:='0.00';
+           V.cells[48,5]:=StrToFloat(k)  +ODSMoneyTransferUSDEKV.AsFloat;
+           k:=V.cells[48,6];
+           if k='' then  k:='0.00';
+           V.cells[48,6]:=StrToFloat(k)  +ODSMoneyTransferEUREKV.AsFloat;
+           k:=V.cells[48,18];
+           if k='' then  k:='0.00';
+           V.cells[48,18]:=StrToFloat(k)  +ODSMoneyTransferGELEKV.AsFloat;
+           k:=V.cells[48,21];
+           if k='' then  k:='0.00';
+           V.cells[48,21]:=StrToFloat(k)  +ODSMoneyTransferGBPEKV.AsFloat;
+           k:=V.cells[48,39];
+           if k='' then  k:='0.00';
+           V.cells[48,39]:=StrToFloat(k)+ODSMoneyTransferRUREKV.AsFloat;
+           k:=V.cells[48,43];
+           if k='' then  k:='0.00';
+           V.cells[48,43]:=StrToFloat(k)+ODSMoneyTransferTRYEKV.AsFloat;
+         end
+         else
+         begin
+           V.WorkBooks[1].WorkSheets[3].activate;
+
+           k:=V.cells[51,4];
+           if k='' then  k:='0.00';
+           V.cells[51,4]:=StrToFloat(k)+ODSMoneyTransferAZN.AsFloat;
+
+           k:=V.cells[51,5];
+           if k='' then  k:='0.00';
+           V.cells[51,5]:=StrToFloat(k)+ODSMoneyTransferUSD.AsFloat;
+
+           k:=V.cells[51,6];
+           if k='' then  k:='0.00';
+           V.cells[51,6]:=StrToFloat(k)  +ODSMoneyTransferEUR.AsFloat;
+
+           k:=V.cells[51,18];
+           if k='' then  k:='0.00';
+           V.cells[51,18]:=StrToFloat(k)  +ODSMoneyTransferGEL.AsFloat;
+
+           k:=V.cells[51,21];
+           if k='' then  k:='0.00';
+           V.cells[51,21]:=StrToFloat(k)+ODSMoneyTransferGBP.AsFloat;
+
+           k:=V.cells[51,39];
+           if k='' then  k:='0.00';
+           V.cells[51,39]:=StrToFloat(k)+ODSMoneyTransferRUR.AsFloat;
+
+           k:=V.cells[51,43];
+           if k='' then  k:='0.00';
+           V.cells[51,43]:=StrToFloat(k)  +ODSMoneyTransferTRY.AsFloat;
+
+
+           V.WorkBooks[1].WorkSheets[2].activate;
+
+
+           k:=V.cells[49,4];
+           if k='' then  k:='0.00';
+           V.cells[49,4]:=StrToFloat(k)+ODSMoneyTransferAZN.AsFloat;
+
+           k:=V.cells[49,5];
+           if k='' then  k:='0.00';
+           V.cells[49,5]:=StrToFloat(k)+ODSMoneyTransferUSDEKV.AsFloat;
+
+           k:=V.cells[49,6];
+           if k='' then  k:='0.00';
+           V.cells[49,6]:=StrToFloat(k)  +ODSMoneyTransferEUREKV.AsFloat;
+
+           k:=V.cells[49,18];
+           if k='' then  k:='0.00';
+           V.cells[49,18]:=StrToFloat(k)  +ODSMoneyTransferGELEKV.AsFloat;
+
+           k:=V.cells[49,21];
+           if k='' then  k:='0.00';
+           V.cells[49,21]:=StrToFloat(k)+ODSMoneyTransferGBPEKV.AsFloat;
+
+           k:=V.cells[49,39];
+           if k='' then  k:='0.00';
+           V.cells[49,39]:=StrToFloat(k)+ODSMoneyTransferRUREKV.AsFloat;
+
+           k:=V.cells[49,43];
+           if k='' then  k:='0.00';
+           V.cells[49,43]:=StrToFloat(k)  +ODSMoneyTransferTRYEKV.AsFloat;
+         end;
+       end;
+
+     (*----------------------------------------------------Hasilatın pay bölgüsü müqavilələri üzrə-------------------------------------------------*)
+
+       if (ODSMoneyTransferTRANSFERTYPEID.AsInteger=11) then
+       if ODSMoneyTransferCUSTTYPEID.AsInteger=1
+       then
+       begin
+         if ODSMoneyTransferNEREZIDENT.AsInteger=1 then
+         begin
+           V.WorkBooks[1].WorkSheets[3].activate;
+
+          V.cells[74,4]:=ODSMoneyTransferAZN.AsFloat;
+          V.cells[74,5]:=ODSMoneyTransferUSD.AsFloat;
+          V.cells[74,6]:=ODSMoneyTransferEUR.AsFloat;
+          V.cells[74,18]:=ODSMoneyTransferGEL.AsFloat;
+          V.cells[74,21]:=ODSMoneyTransferGBP.AsFloat;
+          V.cells[74,39]:=ODSMoneyTransferRUR.AsFloat;
+          V.cells[74,43]:=ODSMoneyTransferTRY.AsFloat;
+
+          V.WorkBooks[1].WorkSheets[2].activate;
+
+          V.cells[72,4]:=ODSMoneyTransferAZN.AsFloat;
+          V.cells[72,5]:=ODSMoneyTransferUSDEKV.AsFloat;
+          V.cells[72,6]:=ODSMoneyTransferEUREKV.AsFloat;
+          V.cells[72,18]:=ODSMoneyTransferGELEKV.AsFloat;
+          V.cells[72,21]:=ODSMoneyTransferGBPEKV.AsFloat;
+          V.cells[72,39]:=ODSMoneyTransferRUREKV.AsFloat;
+          V.cells[72,43]:=ODSMoneyTransferTRYEKV.AsFloat;
+
+         end
+         else
+         begin
+           V.WorkBooks[1].WorkSheets[3].activate;
+
+           V.cells[75,4]:=ODSMoneyTransferAZN.AsFloat;
+           V.cells[75,5]:=ODSMoneyTransferUSD.AsFloat;
+           V.cells[75,6]:=ODSMoneyTransferEUR.AsFloat;
+           V.cells[75,18]:=ODSMoneyTransferGEL.AsFloat;
+           V.cells[75,21]:=ODSMoneyTransferGBP.AsFloat;
+           V.cells[75,39]:=ODSMoneyTransferRUR.AsFloat;
+           V.cells[75,39]:=ODSMoneyTransferTRY.AsFloat;
+
+           V.WorkBooks[1].WorkSheets[2].activate;
+
+           V.cells[73,4]:=ODSMoneyTransferAZN.AsFloat;
+           V.cells[73,5]:=ODSMoneyTransferUSDEKV.AsFloat;
+           V.cells[73,6]:=ODSMoneyTransferEUREKV.AsFloat;
+           V.cells[73,18]:=ODSMoneyTransferGELEKV.AsFloat;
+           V.cells[73,21]:=ODSMoneyTransferGBPEKV.AsFloat;
+           V.cells[73,39]:=ODSMoneyTransferRUREKV.AsFloat;
+           V.cells[73,39]:=ODSMoneyTransferTRYEKV.AsFloat;
+
+         end
+       end
+       else
+       begin
+         if ODSMoneyTransferNEREZIDENT.AsInteger=1 then
+         begin
+           V.WorkBooks[1].WorkSheets[3].activate;
+
+           k:=V.cells[71,4];
+           if k='' then  k:='0.00';
+           V.cells[71,4]:=StrToFloat(k)+ODSMoneyTransferAZN.AsFloat;
+           k:=V.cells[71,5];
+           if k='' then  k:='0.00';
+           V.cells[71,5]:=StrToFloat(k)  +ODSMoneyTransferUSD.AsFloat;
+           k:=V.cells[71,6];
+           if k='' then  k:='0.00';
+           V.cells[71,6]:=StrToFloat(k)  +ODSMoneyTransferEUR.AsFloat;
+           k:=V.cells[71,18];
+           if k='' then  k:='0.00';
+           V.cells[71,18]:=StrToFloat(k)  +ODSMoneyTransferGEL.AsFloat;
+           k:=V.cells[71,21];
+           if k='' then  k:='0.00';
+           V.cells[71,21]:=StrToFloat(k)  +ODSMoneyTransferGBP.AsFloat;
+           k:=V.cells[71,39];
+           if k='' then  k:='0.00';
+           V.cells[71,39]:=StrToFloat(k)+ODSMoneyTransferRUR.AsFloat;
+           k:=V.cells[71,43];
+           if k='' then  k:='0.00';
+           V.cells[71,43]:=StrToFloat(k)+ODSMoneyTransferTRY.AsFloat;
+
+           V.WorkBooks[1].WorkSheets[2].activate;
+
+           k:=V.cells[69,4];
+           if k='' then  k:='0.00';
+           V.cells[69,4]:=StrToFloat(k)+ODSMoneyTransferAZN.AsFloat;
+           k:=V.cells[69,5];
+           if k='' then  k:='0.00';
+           V.cells[69,5]:=StrToFloat(k)  +ODSMoneyTransferUSDEKV.AsFloat;
+           k:=V.cells[69,6];
+           if k='' then  k:='0.00';
+           V.cells[69,6]:=StrToFloat(k)  +ODSMoneyTransferEUREKV.AsFloat;
+           k:=V.cells[69,18];
+           if k='' then  k:='0.00';
+           V.cells[69,18]:=StrToFloat(k)  +ODSMoneyTransferGELEKV.AsFloat;
+           k:=V.cells[69,21];
+           if k='' then  k:='0.00';
+           V.cells[69,21]:=StrToFloat(k)  +ODSMoneyTransferGBPEKV.AsFloat;
+           k:=V.cells[69,39];
+           if k='' then  k:='0.00';
+           V.cells[69,39]:=StrToFloat(k)+ODSMoneyTransferRUREKV.AsFloat;
+           k:=V.cells[69,43];
+           if k='' then  k:='0.00';
+           V.cells[69,43]:=StrToFloat(k)+ODSMoneyTransferTRYEKV.AsFloat;
+
+         end
+         else
+         begin
+            V.WorkBooks[1].WorkSheets[3].activate;
+
+           k:=V.cells[72,4];
+           if k='' then  k:='0.00';
+           V.cells[72,4]:=StrToFloat(k)+ODSMoneyTransferAZN.AsFloat;
+
+           k:=V.cells[72,5];
+           if k='' then  k:='0.00';
+           V.cells[72,5]:=StrToFloat(k)+ODSMoneyTransferUSD.AsFloat;
+
+           k:=V.cells[72,6];
+           if k='' then  k:='0.00';
+           V.cells[72,6]:=StrToFloat(k)  +ODSMoneyTransferEUR.AsFloat;
+
+           k:=V.cells[72,18];
+           if k='' then  k:='0.00';
+           V.cells[72,18]:=StrToFloat(k)  +ODSMoneyTransferGEL.AsFloat;
+
+           k:=V.cells[72,21];
+           if k='' then  k:='0.00';
+           V.cells[72,21]:=StrToFloat(k)+ODSMoneyTransferGBP.AsFloat;
+
+           k:=V.cells[72,39];
+           if k='' then  k:='0.00';
+           V.cells[72,39]:=StrToFloat(k)+ODSMoneyTransferRUR.AsFloat;
+
+           k:=V.cells[72,43];
+           if k='' then  k:='0.00';
+           V.cells[72,43]:=StrToFloat(k)  +ODSMoneyTransferTRY.AsFloat;
+
+           V.WorkBooks[1].WorkSheets[2].activate;
+
+           k:=V.cells[70,4];
+           if k='' then  k:='0.00';
+           V.cells[70,4]:=StrToFloat(k)+ODSMoneyTransferAZN.AsFloat;
+
+           k:=V.cells[70,5];
+           if k='' then  k:='0.00';
+           V.cells[70,5]:=StrToFloat(k)+ODSMoneyTransferUSDEKV.AsFloat;
+
+           k:=V.cells[70,6];
+           if k='' then  k:='0.00';
+           V.cells[70,6]:=StrToFloat(k)  +ODSMoneyTransferEUREKV.AsFloat;
+
+           k:=V.cells[70,18];
+           if k='' then  k:='0.00';
+           V.cells[70,18]:=StrToFloat(k)  +ODSMoneyTransferGELEKV.AsFloat;
+
+           k:=V.cells[70,21];
+           if k='' then  k:='0.00';
+           V.cells[70,21]:=StrToFloat(k)+ODSMoneyTransferGBPEKV.AsFloat;
+
+           k:=V.cells[70,39];
+           if k='' then  k:='0.00';
+           V.cells[70,39]:=StrToFloat(k)+ODSMoneyTransferRUREKV.AsFloat;
+
+           k:=V.cells[70,43];
+           if k='' then  k:='0.00';
+           V.cells[70,43]:=StrToFloat(k)  +ODSMoneyTransferTRYEKV.AsFloat;
+
+         end;
+       end;
+
+
+
+     Next;
+     end;
+   end;
+   ODSKurs.First;
+   With ODSKurs do
+   begin
+     Close;
+     SetVariable('dat',Son);
+     Open;
+     while not Eof do
+     begin
+       V.WorkBooks[1].WorkSheets[4].activate;
+       if ODSKursVAL_KOD.AsInteger=1   then  V.cells[4,2]:=ODSKursOSTAT.AsFloat;
+       if ODSKursVAL_KOD.AsInteger=2   then  V.cells[26,2]:=ODSKursOSTAT.AsFloat;
+       if ODSKursVAL_KOD.AsInteger=16  then  V.cells[47,2]:=ODSKursOSTAT.AsFloat;
+       if ODSKursVAL_KOD.AsInteger=45  then  V.cells[5,2]:=ODSKursOSTAT.AsFloat;
+       if ODSKursVAL_KOD.AsInteger=48  then  V.cells[38,2]:=ODSKursOSTAT.AsFloat;
+       if ODSKursVAL_KOD.AsInteger=50  then  V.cells[20,2]:=ODSKursOSTAT.AsFloat;
+       if ODSKursVAL_KOD.AsInteger=792 then  V.cells[42,2]:=ODSKursOSTAT.AsFloat;
+     end;
+   end;
+
+
+
+   V.Visible :=True;
+
+
+end;
+
+procedure TMoneyTransfers.Button1Click(Sender: TObject);
+begin
+  With ODSMoneyTransfer do
+  begin
+    Close;
+    SetVariable('bdat',Bdate.DateTime);
+    SetVariable('edat',Edate.DateTime);
+    if not(CheckBox1.Checked and Evanescence1.Checked[0] and Evanescence1.Checked[1]) then begin SQL[110] :='WHERE id = -1'; end;
+    if not(CheckBox1.Checked) and Evanescence1.Checked[0] then begin SQL[110] :='WHERE id = 133'; end;
+    if not(CheckBox1.Checked) and Evanescence1.Checked[1] then begin SQL[110] :='WHERE id = 78'; end;
+    if CheckBox1.Checked and Evanescence1.Checked[0] and Evanescence1.Checked[1] then begin SQL[110]:='WHERE id in(78,133)'; end;
+    Open;
+  end;
+end;
+
+procedure TMoneyTransfers.CheckBox1Click(Sender: TObject);
+begin
+  if CheckBox1.Checked then  Evanescence1.CheckAll;
+  if not CheckBox1.Checked  and  Evanescence1.Checked[0] and Evanescence1.Checked[1] then Evanescence1.UncheckAll;
+end;
+
+procedure TMoneyTransfers.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TMoneyTransfers.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TMoneyTransfers.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TMoneyTransfers.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TMoneyTransfers.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TMoneyTransfers.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TMoneyTransfers.MouseEnterEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnMouseEnter;
+end;
+
+procedure TMoneyTransfers.MouseLeaveEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnMouseLeave;
+end;
+
+procedure TMoneyTransfers.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TMoneyTransfers.Set_AlignWithMargins(Value: WordBool);
+begin
+  AlignWithMargins := Value;
+end;
+
+procedure TMoneyTransfers.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TMoneyTransfers.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TMoneyTransfers.Set_AxBorderStyle(Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TMoneyTransfers.Set_BorderWidth(Value: Integer);
+begin
+  BorderWidth := TBorderWidth(Value);
+end;
+
+procedure TMoneyTransfers.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TMoneyTransfers.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TMoneyTransfers.Set_DockSite(Value: WordBool);
+begin
+  DockSite := Value;
+end;
+
+procedure TMoneyTransfers.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TMoneyTransfers.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TMoneyTransfers.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TMoneyTransfers.Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TMoneyTransfers.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := string(Value);
+end;
+
+procedure TMoneyTransfers.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TMoneyTransfers.Set_ParentCustomHint(Value: WordBool);
+begin
+  ParentCustomHint := Value;
+end;
+
+procedure TMoneyTransfers.Set_ParentDoubleBuffered(Value: WordBool);
+begin
+  ParentDoubleBuffered := Value;
+end;
+
+procedure TMoneyTransfers.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TMoneyTransfers.Set_PopupMode(Value: TxPopupMode);
+begin
+  PopupMode := TPopupMode(Value);
+end;
+
+procedure TMoneyTransfers.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TMoneyTransfers.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TMoneyTransfers.Set_ScreenSnap(Value: WordBool);
+begin
+  ScreenSnap := Value;
+end;
+
+procedure TMoneyTransfers.Set_SnapBuffer(Value: Integer);
+begin
+  SnapBuffer := Value;
+end;
+
+procedure TMoneyTransfers.Set_UseDockManager(Value: WordBool);
+begin
+  UseDockManager := Value;
+end;
+
+procedure TMoneyTransfers.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TMoneyTransfers,
+    Class_MoneyTransfers,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

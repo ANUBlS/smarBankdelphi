@@ -1,0 +1,120 @@
+unit DMDepositManagerImpl_new;
+
+interface
+
+uses
+    Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, OracleData, Oracle;
+
+type
+  TDMDepositsManager_new = class(TDataModule)
+    DepositsData: TOracleDataSet;
+    DepositsDataID: TFloatField;
+    DepositsDataCONTRACTNO: TWideStringField;
+    DepositsDataCONTRACTACCNO: TWideStringField;
+    DepositsDataVAL_NAME: TWideStringField;
+    DepositsDataCUSTOMERNAME: TWideStringField;
+    DepositsDataINTERESTACCNO: TWideStringField;
+    DepositsDataOPENDATE: TDateTimeField;
+    DepositsDataCLOSEDATE: TDateTimeField;
+    DepositsDataAMOUNT: TFloatField;
+    DepositsDataEKAMOUNT: TFloatField;
+    DepositsDataINTEREST: TWideStringField;
+    DepositsDataFACTICALDEBT: TFloatField;
+    DepositsDataEKFACTICALDEBT: TFloatField;
+    DepositsDataFACTICALINTERESTDEBT: TFloatField;
+    DepositsDataEKFACTICALINTERESTDEBT: TFloatField;
+    DepositsDataSTOPCALCULATIONDATE: TDateTimeField;
+    DepositsDataCURRENCY: TFloatField;
+    DepositsDataPERSONALTYPE: TFloatField;
+    DepositsDataCLIENTTYPE: TFloatField;
+    DepositsDataBRANCHID: TFloatField;
+    DepositsDataCONTRACTTYPE: TIntegerField;
+    DepositsDataSTATUS: TFloatField;
+    DepositsDataCUSTOMERID: TFloatField;
+    DepositsDataUSID: TFloatField;
+    DepositsDataSrc: TDataSource;
+    Valutes: TOracleDataSet;
+    ValutesVALUTE: TIntegerField;
+    ValutesVALU_NAME: TWideStringField;
+    ValutesDatSrc: TDataSource;
+    Filials: TOracleDataSet;
+    FilialsID: TFloatField;
+    FilialsNAME: TWideStringField;
+    FilialsDatSrc: TDataSource;
+    DepositTypes: TOracleDataSet;
+    DepositTypesID: TFloatField;
+    DepositTypesTYPE: TWideStringField;
+    DepositTypesDatSrc: TDataSource;
+    Categories: TOracleDataSet;
+    CategoriesID: TFloatField;
+    CategoriesCATEGORY: TWideStringField;
+    CategoriesDatSrc: TDataSource;
+    persons: TOracleDataSet;
+    personsID: TFloatField;
+    personsNAME: TWideStringField;
+    personsDatSrc: TDataSource;
+    BankDate: TOracleDataSet;
+    BankDateTEK_DAT: TDateTimeField;
+    BankDateDatSrc: TDataSource;
+    FilialID: TOracleDataSet;
+    FilialIDKOD_FIL: TIntegerField;
+    FilialIDDatSrc: TDataSource;
+    Stored_Programs: TOraclePackage;
+    users: TOracleDataSet;
+    usersID: TFloatField;
+    usersNAME: TWideStringField;
+    usersDatSrc: TDataSource;
+    Tranches: TOracleDataSet;
+    TranchesTOTAL: TFloatField;
+    TranchesHDATE: TDateTimeField;
+    TranchesRESERVE: TFloatField;
+    procedure DataModuleCreate(Sender: TObject);
+    procedure DataModuleDestroy(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  DMDepositsManager_new: TDMDepositsManager_new;
+
+implementation
+
+{$R *.dfm}
+  uses sboapiDataModuleImpl;
+procedure TDMDepositsManager_new.DataModuleCreate(Sender: TObject);
+begin
+  with  DepositsData do
+  begin
+    SetVariable('OrderField','cont.id');
+    Open;
+  end;
+
+   BankDate.Open;
+   FilialID.Open;
+   Valutes.Open;
+   Filials.Open;
+   DepositTypes.Open;
+   Categories.Open;
+   persons.Open;
+   users.Open;
+   Tranches.Open;
+end;
+
+procedure TDMDepositsManager_new.DataModuleDestroy(Sender: TObject);
+begin
+   DepositsData.CloseAll;
+   BankDate.Open;
+   FilialID.Open;
+   Valutes.CloseAll;
+   Filials.CloseAll;
+   DepositTypes.CloseAll;
+   Categories.CloseAll;
+   persons.CloseAll;
+   users.CloseAll;
+   Tranches.CloseAll;
+end;
+
+end.

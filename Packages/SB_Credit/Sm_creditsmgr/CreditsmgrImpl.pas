@@ -1,0 +1,800 @@
+﻿unit CreditsmgrImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActiveX, AxCtrls, Creditsmgr_TLB, StdVcl, ComCtrls, PluginToolBar,
+  ToolWin, ExtCtrls, Grids, DBGridEh, StdCtrls,Oracle ,OracleData,
+  PluginIni, Menus, PluginMenu, PluginPopupMenu, AppEvnts, ImgList,CommonDecls,
+  DBGridEhGrouping, GridsEh;
+
+  const
+  SHintFont = 'Tahoma';
+  SHintSize = 10;
+type
+
+  EAccessDenied = class (Exception);
+
+  TNLSHintWindow = class(THintWindow)
+    constructor Create(AOwner : TComponent);override;
+  end;
+  TCreditsmgr_sb = class(TActiveForm, ICreditsmgr_sb)
+     PanelToolBar: TPanel;
+    MainGrid: TDBGridEh;
+    HSplitter: TSplitter;
+    PopupMenuIniLocation: TMenuIni;
+    CreditsPopupMenu: TPluginPopupMenu;
+    Toolbar1MenuIni: TMenuIni;
+    Toolbar2MenuIni: TMenuIni;
+    ImageList1: TImageList;
+    ApplicationEvents: TApplicationEvents;
+    BottomDockPanel: TPanel;
+    StatusImages: TImageList;
+    CoolBar1: TCoolBar;
+    PluginToolBar: TPluginToolBar;
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure MainGridTitleBtnClick(Sender: TObject; ACol: Integer;
+      Column: TColumnEh);
+    procedure CreditsMainMenuBeforeLoadPlugin(Sender: TObject; Plugin,
+      Param: String; var Load: Boolean);
+    procedure ApplicationEventsException(Sender: TObject; E: Exception);
+    procedure BottomDockPanelDockDrop(Sender: TObject;
+      Source: TDragDockObject; X, Y: Integer);
+    procedure BottomDockPanelDockOver(Sender: TObject;
+      Source: TDragDockObject; X, Y: Integer; State: TDragState;
+      var Accept: Boolean);
+    procedure BottomDockPanelGetSiteInfo(Sender: TObject;
+      DockClient: TControl; var InfluenceRect: TRect; MousePos: TPoint;
+      var CanDock: Boolean);
+    procedure BottomDockPanelUnDock(Sender: TObject; Client: TControl;
+      NewTarget: TWinControl; var Allow: Boolean);
+    procedure PluginToolBarBeforeLoadPlugin(Sender: TObject; Plugin,
+      Param: string; var Load: Boolean);
+    procedure MainGridDrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TColumnEh; State: TGridDrawState);
+    procedure MainGridDblClick(Sender: TObject);
+    procedure ActiveFormActivate(Sender: TObject);
+    procedure MainGridCellClick(Column: TColumnEh);
+  private
+     FApplicationDir : String;
+    FLibraryDir : String;
+    { Private declarations }
+    FEvents: ICreditsmgr_sbEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+     procedure LoadPlugin(PluginName :String;PluginParam  :String);
+  public
+    procedure ShowDockPanel(APanel: TPanel; MakeVisible: Boolean; Client: TControl);
+    procedure OnLogOutputClose(Sender : TObject;
+      var Action : TCloseAction);
+    procedure OnLogoutputShow(Sender : TObject);
+    { Public declarations }
+    procedure Initialize; override;
+
+  end;
+
+implementation
+
+uses ComObj, ComServ, CMMainUnitImpl, LogoutputImpl, sboapiDataModuleImpl, SBTranslateProc;
+
+{$R *.DFM}
+
+{ TCreditsmgr_sb }
+const
+  LoadingFailed : Boolean = True;
+  DataColIndex : Integer = 1;
+var
+  BlnCircular : Boolean;
+
+constructor TNLSHintWindow.Create(AOwner : TComponent);
+begin
+  inherited Create(AOwner);
+  with Canvas.Font do
+  begin
+    Name := SHintFont;
+    Size := SHintSize;
+  end;
+end;
+procedure TCreditsmgr_sb.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_Creditsmgr_sbPage); }
+end;
+
+procedure TCreditsmgr_sb.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as ICreditsmgr_sbEvents;
+end;
+
+procedure TCreditsmgr_sb.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TCreditsmgr_sb.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TCreditsmgr_sb.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TCreditsmgr_sb.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TCreditsmgr_sb.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TCreditsmgr_sb.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TCreditsmgr_sb.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TCreditsmgr_sb.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TCreditsmgr_sb.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TCreditsmgr_sb.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TCreditsmgr_sb.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TCreditsmgr_sb.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TCreditsmgr_sb.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TCreditsmgr_sb.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TCreditsmgr_sb.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TCreditsmgr_sb.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TCreditsmgr_sb.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TCreditsmgr_sb.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TCreditsmgr_sb.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TCreditsmgr_sb._Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TCreditsmgr_sb.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TCreditsmgr_sb.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TCreditsmgr_sb.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TCreditsmgr_sb.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TCreditsmgr_sb.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TCreditsmgr_sb.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TCreditsmgr_sb.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TCreditsmgr_sb.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TCreditsmgr_sb.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TCreditsmgr_sb.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TCreditsmgr_sb.Set_AxBorderStyle(Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TCreditsmgr_sb.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TCreditsmgr_sb.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TCreditsmgr_sb.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TCreditsmgr_sb.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TCreditsmgr_sb.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TCreditsmgr_sb.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TCreditsmgr_sb.Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TCreditsmgr_sb.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TCreditsmgr_sb.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TCreditsmgr_sb.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TCreditsmgr_sb.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TCreditsmgr_sb.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TCreditsmgr_sb.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+procedure TCreditsmgr_sb.LoadPlugin(PluginName :String;PluginParam  :String);
+var PluginHandle :THandle;
+    exportproc : procedure(s:String;k:String);
+begin
+   PluginHandle := LoadPackage(ExtractFilePath(Application.ExeName)+PluginName);
+
+   if PluginHandle > 0 then
+   begin
+      @exportproc := GetProcAddress(PluginHandle,'InitPlugin');
+      exportproc(PluginParam,'');
+   end;
+end;
+procedure TCreditsmgr_sb.ActiveFormActivate(Sender: TObject);
+begin
+// LoadPlugin('CMCrdFilter.bpl','');
+end;
+
+procedure TCreditsmgr_sb.ActiveFormCreate(Sender: TObject);
+resourcestring
+    rsSession = '  -  [Sesiya %s@%s]';
+    rsDate = '  [Tarix %s]';
+
+const
+  sLib = 'Lib';
+  sBin = 'Bin';
+procedure SetCommonDecls;
+  begin
+
+   { CommonApplication := Application;
+    CommonDBGrid := MainGrid;
+    CommonScreen := Screen;
+    CommonPanel:=PanelToolBar;
+    }
+     CommonApplication := Application;
+     CommonDBGrid := MainGrid;
+    CommonScreen := Screen;
+  end;
+
+
+ {  procedure InitMainMenu;
+  const
+    sMainMenuIniLocation = 'CMMainMenu.ini';
+  begin
+    with MainMenuIniLocation do
+    begin
+      IniLocation :=  ExtractFilePath(Application.ExeName)+ sMainMenuIniLocation;
+    //  ShowMessage(IniLocation) ;
+      IniSection := 'Menu';
+      Active := True;
+
+    end;
+
+    CreditsMainMenu.Active  := True;
+  end;
+          }
+ procedure InitPopupMenu;
+  const
+    sMainMenuIniLocation = 'CMPopupMenu.ini';
+  begin
+    with PopupMenuIniLocation do
+    begin
+
+      IniLocation := ExtractFilePath(Application.ExeName) + sMainMenuIniLocation;
+      IniSection := 'Menu';
+      Active := True;
+    end;
+    CreditsPopupMenu.Active  := True;
+  end;
+
+  procedure InitToolBar;
+  const
+    sMainMenuIniLocation = 'CMToolBarTop.ini';
+  begin
+    with PluginToolBar.MenuIni do
+    begin
+      IniLocation := ExtractFilePath(Application.ExeName) + sMainMenuIniLocation;
+      IniSection := 'ToolBar';
+      Active := True;
+    end;
+    PluginToolBar.Active := True;
+   end;
+procedure InitToolBar1;
+  const
+    sMainMenuIniLocation = 'CMToolBarBootom.ini';
+  begin
+    with PluginToolBar.MenuIni do
+    begin
+      IniLocation := ExtractFilePath(Application.ExeName) + sMainMenuIniLocation;
+      IniSection := 'ToolBar';
+      Active := True;
+    end;
+    PluginToolBar.Active := True;
+  end;
+  procedure LoadFieldsList;
+
+    function FindColumnIndexByFieldName(const AFieldName : String) : Integer;
+    begin
+      Result := 0;
+      with MainGrid do
+      while ( Result < Columns.Count )
+         and( Columns.Items[Result].FieldName <> AFieldName) do
+       // showmessage(inttostr(Result));
+       INC(Result);
+     //  showmessage(inttostr(INC(Result)));
+    end;
+
+  var
+    I : Integer;
+    AFieldName : String;
+    FrozenColsCount : Integer;
+  begin
+    FrozenColsCount := 0;
+    with CreditsMgrMainDataModule.VisibleFieldsData, MainGrid do
+    begin
+      FrozenCols := 0;
+      Open;
+      First;
+      while not EOF do
+      begin
+        AFieldName := FieldByName('FieldName').AsString;
+
+        I := FindColumnIndexByFieldName(AFieldName);
+       //showmessage(AFieldName+inttostr(I));
+        {
+        LogInformation(AFieldName);
+        LogInformation(IntToStr(I));
+        LogInformation(IntToStr(RecNo - 1));
+        }
+        FrozenColsCount := FrozenColsCount + FieldByName('FROZEN').AsInteger;
+
+     Columns[I].Visible := FieldByName('VISIBLE').AsInteger = 0;
+        //Columns[I].Title.Caption := FieldByName('FIELDDESC').AsString;
+      Columns[I].Index := RecNo - 1;
+        {
+        if FieldByName('VISIBLE').AsInteger = 0 then
+        LogInformation('Visible');
+        }
+        Next;
+      end;
+      FrozenCols := FrozenColsCount;
+      CloseAll;
+    end;
+
+  end;
+
+begin
+
+ // InitMainMenu;
+  InitPopupMenu ;
+//  InitToolBar;
+  InitToolBar1 ;
+  CreditsMgrMainDataModule:=TCreditsMgrMainDataModule.Create(Self);
+
+  SetCommonDecls;
+
+
+  frmLogOutput := TfrmLogOutput.Create(Application);
+ LoadFieldsList;
+  with frmLogOutput do
+  begin
+    OnClose := OnLogOutputClose;
+    OnShow  := OnLogoutputShow;
+  end;
+
+ // BlnCircular := False;
+
+ with  CreditsMgrMainDataModule.CR_ACTIVE do
+  begin
+    SetVariable('OrderField','id');
+ //   Open;
+  end;
+  frmLogOutput.HostDockSite := BottomDockPanel;
+  LogInformation(' © Smart Systems Technology ltd. ',True);
+// SBTranslateProc.TranslateExchComponents(Self,sboapiDataModule.OrPack_SL);
+//----------LoadPlugin('CMCrdFilter.bpl','');
+end;
+
+procedure TCreditsmgr_sb.MainGridCellClick(Column: TColumnEh);
+begin
+CommonDBGrid := MainGrid;
+end;
+
+procedure TCreditsmgr_sb.MainGridDblClick(Sender: TObject);
+resourcestring
+  rsAccessDenied = 'Bu modula giriş qadağandır! Əlavə məlumat üçün sistem administratoruna müraciət edin.';
+
+const
+  cNone = 'NONE';
+
+var
+  PluginID  : Integer;
+  AccessRes : Boolean;
+
+begin
+  with CreditsMgrMainDataModule, CR_ADMIN do
+  begin
+    PluginID  := CallIntegerFunction('getpluginid', ['CM_Conclusion.bpl', 'Edit']);
+    AccessRes := CallBooleanFunction('pluginaccess', [pluginid]);
+
+   if not AccessRes then
+   begin
+      LogWarning(rsAccessDenied);
+      exit;
+   end;
+  end;
+LoadPlugin('CM_Conclusion.bpl','Edit');
+end;
+
+procedure TCreditsmgr_sb.MainGridDrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TColumnEh;
+  State: TGridDrawState);
+var
+    ImageIndex :Integer;
+begin
+CreditsMgrMainDataModule.SeqDataSet.open;
+  with Sender as TDBGridEh do
+  begin
+    if DataSource.DataSet.RecordCount > 0 then
+    begin
+  // showmessage( IntToStr(MainDataModule.SeqDataSet.FieldByName('seqno').AsInteger));
+      ImageIndex := DataSource.DataSet.FieldByName('STATUS').AsInteger;
+      if  (DataCol = CreditsMgrMainDataModule.SeqDataSet.FieldByName('seqno').AsInteger) then
+      StatusImages.Draw(Canvas, Rect.Left, Rect.Top, ImageIndex, True)
+      else
+      DefaultDrawColumnCell(Rect, DataCol, Column, State);
+
+    end;
+  end;
+
+end;
+
+procedure TCreditsmgr_sb.MainGridTitleBtnClick(Sender: TObject;
+  ACol: Integer; Column: TColumnEh);
+  var
+ SortField : String;
+begin
+  SortField := Column.FieldName;
+  if Column.Title.SortMarker = smDownEh then
+    SortField := SortField + ' DESC';
+  with Sender as TDBGridEh , TOracleDataSet(DataSource.DataSet) do
+  begin
+    ClearVariables;
+    SetVariable('OrderField',SortField);
+   // SafeRefresh(True,rmLocateAfterRefresh);
+       RefResh;
+    Screen.Cursor := crDefault;
+  end;
+
+
+end;
+
+procedure TCreditsmgr_sb.CreditsMainMenuBeforeLoadPlugin(Sender: TObject;
+  Plugin, Param: String; var Load: Boolean);
+resourcestring
+  rsAccessDenied = 'Bu modula giriş qadağandır! Əlavə məlumat üçün sistem administratoruna müraciət edin.';
+
+const
+  cNone = 'NONE';
+    
+var
+  PluginID  : Integer;
+  AccessRes : Boolean;
+  
+begin
+if Param = '' then
+    Param := cNone;
+
+  with CreditsMgrMainDataModule, CR_ADMIN do
+  begin
+    PluginID  := CallIntegerFunction('getpluginid', [Plugin, Param]);
+    AccessRes := CallBooleanFunction('pluginaccess', [pluginid]);
+
+   if not AccessRes then
+      LogWarning(rsAccessDenied);
+  end;
+
+ Load := AccessRes;
+ //   LoadPlugin('CMCrdFilter.bpl','');
+end;
+procedure TCreditsmgr_sb.ShowDockPanel(APanel: TPanel; MakeVisible: Boolean; Client: TControl);
+begin
+
+  //Client - the docked client to show if we are re-showing the panel.
+  //Client is ignored if hidiShowDockPanelng the panel.
+
+  //Since docking to a non-visible docksite isn't allowed, instead of setting
+  //Visible for the panels we set the width to zero. The default InfluenceRect
+  //for a control extends a few pixels beyond it's boundaries, so it is possible
+  //to dock to zero width controls.
+
+  //Don't try to hide a panel which has visible dock clients.
+  if not MakeVisible and (APanel.VisibleDockClientCount > 1) then
+    Exit;
+
+    HSplitter.Visible := MakeVisible;
+
+    if MakeVisible then
+      begin
+        APanel.Height := ClientHeight div 11;
+        HSplitter.Top := ClientHeight - APanel.Height - HSplitter.Width;
+      end
+    else
+      APanel.Height := 0;
+end;
+
+procedure TCreditsmgr_sb.OnLogOutputClose(Sender : TObject;
+            var Action : TCloseAction);
+begin
+  if (frmLogOutput.HostDockSite <> nil) and (frmLogOutput.HostDockSite is TPanel) then
+    ShowDockPanel(frmLogOutput.HostDockSite as TPanel, False, nil);
+  BlnCircular := False;
+end;
+
+procedure TCreditsmgr_sb.OnLogoutputShow(Sender : TObject);
+begin
+  if not BlnCircular then
+  if (frmLogoutput.HostDockSite <> nil) and (frmLogoutput.HostDockSite is TPanel)
+    and ((frmLogoutput.HostDockSite.Height = 0) or (frmLogoutput.HostDockSite.Width = 0)) then
+  ShowDockPanel(frmLogoutput.HostDockSite as TPanel, True, nil);
+  BlnCircular := True;
+end;
+procedure TCreditsmgr_sb.ApplicationEventsException(Sender: TObject;
+  E: Exception);
+begin
+  LogError(E.Message)
+end;
+
+procedure TCreditsmgr_sb.BottomDockPanelDockDrop(Sender: TObject;
+  Source: TDragDockObject; X, Y: Integer);
+begin
+  //OnDockDrop gets called AFTER the client has actually docked,
+  //so we check for DockClientCount = 1 before making the dock panel visible.
+  if (Sender as TPanel).DockClientCount = 1 then
+    ShowDockPanel(Sender as TPanel, True, nil);
+  (Sender as TPanel).DockManager.ResetBounds(True);
+  //Make DockManager repaints it's clients.
+end;
+
+procedure TCreditsmgr_sb.BottomDockPanelDockOver(Sender: TObject;
+  Source: TDragDockObject; X, Y: Integer; State: TDragState;
+  var Accept: Boolean);
+var
+  ARect: TRect;
+begin
+  Accept := Source.Control is TfrmLogOutput;//TDockableForm;
+  if Accept then
+  begin
+    //Modify the DockRect to preview dock area.
+    ARect.TopLeft := BottomDockPanel.ClientToScreen(
+      Point(0, -Self.ClientHeight div 11));
+    ARect.BottomRight := BottomDockPanel.ClientToScreen(
+      Point(BottomDockPanel.Width, BottomDockPanel.Height));
+    Source.DockRect := ARect;
+  end;
+
+end;
+
+procedure TCreditsmgr_sb.BottomDockPanelGetSiteInfo(Sender: TObject;
+  DockClient: TControl; var InfluenceRect: TRect; MousePos: TPoint;
+  var CanDock: Boolean);
+begin
+  CanDock := DockClient is TfrmLogOutput
+end;
+
+procedure TCreditsmgr_sb.BottomDockPanelUnDock(Sender: TObject;
+  Client: TControl; NewTarget: TWinControl; var Allow: Boolean);
+begin
+  if (Sender as TPanel).DockClientCount = 1 then
+    ShowDockPanel(Sender as TPanel, False, nil);
+end;
+
+
+
+procedure TCreditsmgr_sb.PluginToolBarBeforeLoadPlugin(Sender: TObject;
+  Plugin, Param: String; var Load: Boolean);
+resourcestring
+  rsAccessDenied = 'Bu modula giriş qadağandır! Əlavə məlumat üçün sistem administratoruna müraciət edin.';
+
+const
+  cNone = 'NONE';
+    
+var
+  PluginID  : Integer;
+  AccessRes : Boolean;
+  
+begin
+  if Param = '' then
+    Param := cNone;
+
+  with CreditsMgrMainDataModule, CR_ADMIN do
+  begin
+    PluginID  := CallIntegerFunction('getpluginid', [Plugin, Param]);
+    AccessRes := CallBooleanFunction('pluginaccess', [pluginid]);
+
+    if not AccessRes then
+      LogWarning(rsAccessDenied);
+  end;
+  
+  Load := AccessRes;
+end;
+
+
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TCreditsmgr_sb,
+    Class_Creditsmgr_sb,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

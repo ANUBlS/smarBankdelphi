@@ -1,0 +1,45 @@
+unit multiform;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, DBGridEh, StdCtrls, Mask, DBCtrlsEh, DBLookupEh;
+
+type
+  TMultiCurrency = class(TForm)
+    DBLookupComboBox6: TDBLookupComboboxEh;
+    DBLookupComboboxEh1: TDBLookupComboboxEh;
+    Edit1: TEdit;
+    Edit2: TEdit;
+    procedure DBLookupComboBox6Change(Sender: TObject);
+    procedure DBLookupComboboxEh1Change(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  MultiCurrency: TMultiCurrency;
+
+implementation
+
+uses Unit18, Unitclient2;
+
+{$R *.dfm}
+
+procedure TMultiCurrency.DBLookupComboBox6Change(Sender: TObject);
+begin
+edit1.Text:=DataMod_CARDS.hesab.FieldByName('currencyname').AsString;
+
+
+end;
+
+procedure TMultiCurrency.DBLookupComboboxEh1Change(Sender: TObject);
+begin
+edit2.Text:=DataMod_CARDS.hesab.FieldByName('currencyname').AsString;
+
+end;
+
+end.

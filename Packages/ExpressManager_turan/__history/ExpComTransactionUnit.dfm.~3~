@@ -1,0 +1,209 @@
+object ExpComTransactionForm: TExpComTransactionForm
+  Left = 838
+  Top = 427
+  BorderStyle = bsDialog
+  ClientHeight = 533
+  ClientWidth = 434
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'MS Sans Serif'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poScreenCenter
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 434
+    Height = 533
+    Align = alClient
+    TabOrder = 0
+    object DBGrid1: TDBGrid
+      Left = 1
+      Top = 1
+      Width = 432
+      Height = 208
+      Align = alTop
+      DataSource = ExpDataModule.ExpTypeDataSource
+      FixedColor = clActiveCaption
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      Options = [dgTitles, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit]
+      ParentFont = False
+      TabOrder = 0
+      TitleFont.Charset = DEFAULT_CHARSET
+      TitleFont.Color = clWindowText
+      TitleFont.Height = -11
+      TitleFont.Name = 'MS Sans Serif'
+      TitleFont.Style = []
+      Columns = <
+        item
+          Expanded = False
+          FieldName = 'NAME'
+          Title.Alignment = taCenter
+          Title.Caption = #1071#1084#1103#1083#1080#1081#1081#1072#1090#1099#1085' '#1090#1080#1087#1080
+          Title.Color = clNavy
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = []
+          Width = 226
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'GROUPS'
+          Title.Color = clWhite
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Tahoma'
+          Title.Font.Style = []
+          Visible = True
+        end>
+    end
+    object DBGrid2: TDBGrid
+      Left = 1
+      Top = 261
+      Width = 432
+      Height = 252
+      Align = alClient
+      DataSource = ExpDataModule.ExpComissionDataSource
+      FixedColor = clActiveCaption
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      Options = [dgEditing, dgTitles, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgConfirmDelete, dgCancelOnExit]
+      ParentFont = False
+      TabOrder = 1
+      TitleFont.Charset = DEFAULT_CHARSET
+      TitleFont.Color = clWindowText
+      TitleFont.Height = -11
+      TitleFont.Name = 'MS Sans Serif'
+      TitleFont.Style = []
+      OnKeyPress = DBGrid2KeyPress
+      Columns = <
+        item
+          Expanded = False
+          FieldName = 'EXPID'
+          Title.Alignment = taCenter
+          Title.Caption = #8470
+          Title.Color = clNavy
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = []
+          Width = 54
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'AMOUNT'
+          Title.Alignment = taCenter
+          Title.Caption = #1052#1103#1073#1083#1103#1100
+          Title.Color = clNavy
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = []
+          Width = 110
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'PERCENT'
+          Title.Alignment = taCenter
+          Title.Caption = '%'
+          Title.Color = clNavy
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = []
+          Width = 32
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'MMINVALUE'
+          Title.Alignment = taCenter
+          Title.Caption = #1052#1080#1085'.'#1084#1103#1073#1083#1103#1100
+          Title.Color = clNavy
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = []
+          Width = 110
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'MMAXVALUE'
+          Title.Alignment = taCenter
+          Title.Caption = #1052#1072#1093'.'#1084#1103#1073#1083#1103#1100
+          Title.Color = clNavy
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = []
+          Width = 110
+          Visible = True
+        end>
+    end
+    object GroupBox1: TGroupBox
+      Left = 1
+      Top = 209
+      Width = 432
+      Height = 52
+      Align = alTop
+      Caption = #1058#1072#1088#1080#1092' '#1080#1085#1090#1077#1088#1074#1072#1083#1083#1072#1088#1099
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 2
+      object Panel2: TPanel
+        Left = 2
+        Top = 15
+        Width = 428
+        Height = 33
+        Align = alTop
+        BevelInner = bvLowered
+        ParentShowHint = False
+        ShowHint = False
+        TabOrder = 0
+        object DBNavigator1: TDBNavigator
+          Left = 3
+          Top = 2
+          Width = 410
+          Height = 29
+          DataSource = ExpDataModule.ExpComissionDataSource
+          TabOrder = 0
+          OnClick = DBNavigator1Click
+        end
+      end
+    end
+    object StatusBar1: TStatusBar
+      Left = 1
+      Top = 513
+      Width = 432
+      Height = 19
+      Panels = <>
+    end
+  end
+end

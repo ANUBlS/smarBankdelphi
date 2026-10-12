@@ -1,0 +1,45 @@
+unit NewDepositsPercentSetting;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, CategoryButtons, ComCtrls, ExtCtrls, XFSCtrls, Grids, XDBGrids,
+  StdCtrls;
+
+type
+  TNewPercentSettings = class(TForm)
+    XFGroupBox1: TXFGroupBox;
+    XDBGrid1: TXDBGrid;
+    XFPanel1: TXFPanel;
+    PageControl1: TPageControl;
+    TabSheet1: TTabSheet;
+    XFGroupBox2: TXFGroupBox;
+    XDBGrid2: TXDBGrid;
+    XFGroupBox4: TXFGroupBox;
+    XFGroupBox8: TXFGroupBox;
+    XDBGrid7: TXDBGrid;
+    XFGroupBox9: TXFGroupBox;
+    XDBGrid4: TXDBGrid;
+    XFGroupBox5: TXFGroupBox;
+    XDBGrid5: TXDBGrid;
+    XFGroupBox6: TXFGroupBox;
+    XDBGrid6: TXDBGrid;
+    TabSheet2: TTabSheet;
+    XFGroupBox3: TXFGroupBox;
+    XDBGrid3: TXDBGrid;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  NewPercentSettings: TNewPercentSettings;
+
+implementation
+
+
+{$R *.dfm}
+
+end.

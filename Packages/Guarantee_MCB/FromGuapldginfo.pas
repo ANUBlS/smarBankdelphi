@@ -1,0 +1,46 @@
+unit FromGuapldginfo;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Buttons, DBLookupEh, StdCtrls, Mask, DBCtrlsEh, ExtCtrls;
+
+type
+  TFormGuarpldginfo = class(TForm)
+    Image1: TImage;
+    Panel2: TPanel;
+    Label1: TLabel;
+    DBEditEh13: TDBEditEh;
+    Panel1: TPanel;
+    Label2: TLabel;
+    DBEditEh1: TDBEditEh;
+    Panel4: TPanel;
+    Label4: TLabel;
+    DBEditEh3: TDBEditEh;
+    Panel3: TPanel;
+    Label3: TLabel;
+    DBEditEh2: TDBEditEh;
+    Panel5: TPanel;
+    GroupBox1: TGroupBox;
+    Label26: TLabel;
+    Label27: TLabel;
+    Label5: TLabel;
+    DBLookupComboboxEh3: TDBLookupComboboxEh;
+    DBLookupComboboxEh4: TDBLookupComboboxEh;
+    DBEditEh16: TDBEditEh;
+    SpeedButton1: TSpeedButton;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormGuarpldginfo: TFormGuarpldginfo;
+
+implementation
+
+{$R *.DFM}
+
+end.

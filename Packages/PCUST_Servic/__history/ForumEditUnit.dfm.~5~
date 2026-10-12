@@ -1,0 +1,268 @@
+object FormEdit: TFormEdit
+  Left = 0
+  Top = 0
+  ClientHeight = 144
+  ClientWidth = 628
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poDesktopCenter
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object XFPanel1: TXFPanel
+    Left = 0
+    Top = 103
+    Width = 628
+    Height = 41
+    Align = alBottom
+    BevelInner = bvRaised
+    BevelKind = bkSoft
+    TabOrder = 0
+    ExplicitLeft = 24
+    ExplicitTop = 106
+    object XFLabel3: TXFLabel
+      Left = 6
+      Top = 10
+      Width = 11
+      Height = 13
+      Caption = 'ID'
+      Color = clRed
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clRed
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentColor = False
+      ParentFont = False
+    end
+    object XFLableTRid: TXFLabel
+      Left = 27
+      Top = 11
+      Width = 3
+      Height = 13
+      Color = clRed
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clRed
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentColor = False
+      ParentFont = False
+    end
+    object XFButton1: TXFButton
+      Left = 514
+      Top = 7
+      Width = 75
+      Height = 25
+      Caption = 'Q'#601'bul'
+      DoubleBuffered = True
+      ParentDoubleBuffered = False
+      TabOrder = 0
+      OnClick = XFButton1Click
+    end
+  end
+  object XFPanel2: TXFPanel
+    Left = 0
+    Top = 0
+    Width = 628
+    Height = 103
+    Align = alClient
+    BevelInner = bvLowered
+    BevelKind = bkFlat
+    BevelOuter = bvSpace
+    TabOrder = 1
+    ExplicitTop = 3
+    ExplicitWidth = 1006
+    ExplicitHeight = 280
+    object XFPanel3: TXFPanel
+      Left = 2
+      Top = 49
+      Width = 620
+      Height = 47
+      Align = alTop
+      Alignment = taLeftJustify
+      BevelInner = bvLowered
+      BevelKind = bkFlat
+      Caption = ' '#399'. t'#601'snifat kodu:'
+      TabOrder = 0
+      ExplicitLeft = 321
+      ExplicitTop = 51
+      ExplicitWidth = 625
+      object XFLabel2: TXFLabel
+        Left = 99
+        Top = 11
+        Width = 6
+        Height = 13
+        Caption = '*'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clRed
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+      end
+      object DBLC_MMX_reportcode: TDBLookupComboBox
+        Left = 192
+        Top = 10
+        Width = 421
+        Height = 21
+        KeyField = 'NAME'
+        ListField = 'DESCRIPTION'
+        ListSource = Dsrc_mmx_reportcode
+        TabOrder = 0
+        OnCloseUp = DBLC_MMX_reportcodeCloseUp
+      end
+      object Editreportcode: TEdit
+        Left = 118
+        Top = 10
+        Width = 74
+        Height = 21
+        CharCase = ecUpperCase
+        TabOrder = 1
+        OnKeyPress = EditreportcodeKeyPress
+      end
+    end
+    object XFPanel4: TXFPanel
+      Left = 2
+      Top = 2
+      Width = 620
+      Height = 47
+      Align = alTop
+      Alignment = taLeftJustify
+      BevelInner = bvLowered
+      BevelKind = bkFlat
+      Caption = ' '#399'm'#601'liyyat'#305'n n'#246'v'#252':'
+      TabOrder = 1
+      ExplicitLeft = 201
+      ExplicitTop = 8
+      ExplicitWidth = 625
+      object XFLabel1: TXFLabel
+        Left = 99
+        Top = 11
+        Width = 6
+        Height = 13
+        Caption = '*'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clRed
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+      end
+      object EditTransModeCode: TEdit
+        Left = 118
+        Top = 11
+        Width = 74
+        Height = 21
+        TabOrder = 0
+        OnKeyPress = EditTransModeCodeKeyPress
+      end
+      object DBLC_MMX_Transmode: TDBLookupComboBox
+        Left = 192
+        Top = 11
+        Width = 421
+        Height = 21
+        KeyField = 'NAME'
+        ListField = 'DESCRIPTION'
+        ListSource = DS_MMX_TRANSMODE
+        TabOrder = 1
+        OnCloseUp = DBLC_MMX_TransmodeCloseUp
+      end
+    end
+  end
+  object ODS_MMX_TRANSMODE: TOracleDataSet
+    SQL.Strings = (
+      'select * from mmx_transmode')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000030000000400000049004400010000000000080000004E0041004D00
+      4500010000000000160000004400450053004300520049005000540049004F00
+      4E00010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 112
+    Top = 8
+    object ODS_MMX_TRANSMODEID: TIntegerField
+      FieldName = 'ID'
+    end
+    object ODS_MMX_TRANSMODENAME: TIntegerField
+      FieldName = 'NAME'
+    end
+    object ODS_MMX_TRANSMODEDESCRIPTION: TWideStringField
+      FieldName = 'DESCRIPTION'
+      Size = 400
+    end
+  end
+  object Ods_mmx_reportcode: TOracleDataSet
+    SQL.Strings = (
+      'select*from mmx_reportcode order by id')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000030000000400000049004400010000000000080000004E0041004D00
+      4500010000000000160000004400450053004300520049005000540049004F00
+      4E00010000000000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 216
+    Top = 5
+    object Ods_mmx_reportcodeID: TIntegerField
+      FieldName = 'ID'
+    end
+    object Ods_mmx_reportcodeNAME: TWideStringField
+      FieldName = 'NAME'
+    end
+    object Ods_mmx_reportcodeDESCRIPTION: TWideStringField
+      FieldName = 'DESCRIPTION'
+      Size = 600
+    end
+  end
+  object Dsrc_mmx_reportcode: TDataSource
+    DataSet = Ods_mmx_reportcode
+    Left = 296
+    Top = 7
+  end
+  object DS_MMX_TRANSMODE: TDataSource
+    DataSet = ODS_MMX_TRANSMODE
+    Left = 352
+    Top = 8
+  end
+  object ods_trinf: TOracleDataSet
+    SQL.Strings = (
+      
+        'select transid , transmode_code, report_code from mmx_transinfo ' +
+        ' where transid=:v_trid')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000E0000003A0056005F005400520049004400030000000000
+      000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      05000000030000000E0000005400520041004E00530049004400010000000000
+      1C0000005400520041004E0053004D004F00440045005F0043004F0044004500
+      010000000000160000005200450050004F00520054005F0043004F0044004500
+      010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 56
+    Top = 24
+    object ods_trinfTRANSID: TFloatField
+      FieldName = 'TRANSID'
+    end
+    object ods_trinfTRANSMODE_CODE: TIntegerField
+      FieldName = 'TRANSMODE_CODE'
+    end
+    object ods_trinfREPORT_CODE: TWideStringField
+      FieldName = 'REPORT_CODE'
+      Size = 80
+    end
+  end
+  object OP_MMXX: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'MMX'
+    Left = 488
+    Top = 16
+  end
+end

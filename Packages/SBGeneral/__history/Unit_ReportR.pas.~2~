@@ -1,0 +1,198 @@
+unit Unit_ReportR;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ExtCtrls, QuickRpt, Qrctrls;
+
+type
+  TFormRepR = class(TForm)
+    QRep: TQuickRep;
+    QRBandDetail: TQRBand;
+    QRShapeH: TQRShape;
+    QRShapeV: TQRShape;
+    QRLabelDat: TQRLabel;
+    QRLabel_Val: TQRLabel;
+    QRLabelPairAcc: TQRLabel;
+    QRLabelDebt: TQRLabel;
+    QRLabelCredit: TQRLabel;
+    QRLabelSpec: TQRLabel;
+    QRLabelAcc_No: TQRLabel;
+    QRDBText_AccNo: TQRDBText;
+    DBTextOpenDate: TQRDBText;
+    QRLabelMBeg: TQRLabel;
+    QRLabelMEnd: TQRLabel;
+    DBImageBank: TQRDBImage;
+    QRLabelAcc_Name: TQRLabel;
+    QRDBTextAccMame: TQRDBText;
+    QRLabelVoin: TQRLabel;
+    DBTextVoin: TQRDBText;
+    QRLabelVal: TQRLabel;
+    DBTextVal: TQRDBText;
+    QRLabelDateInterval: TQRLabel;
+    QRD_Begin: TQRLabel;
+    QRD_End: TQRLabel;
+    QRLabelLastOpDATE: TQRLabel;
+    DBTextLastOpDate: TQRDBText;
+    QRLabelFirstOstat: TQRLabel;
+    QRExprValBeg: TQRExpr;
+    QRLabelValBeg: TQRLabel;
+    QRExprManBeg: TQRExpr;
+    QRLabelManBeg: TQRLabel;
+    QRExprMezBeg: TQRExpr;
+    QRRateBeg: TQRLabel;
+    QRDBTextBank: TQRDBText;
+    DBTextApBeg: TQRDBText;
+    QRSubDetail: TQRSubDetail;
+    QRDBTextDat: TQRDBText;
+    QRDBTextCurr: TQRDBText;
+    QRDBTextPairAcc: TQRDBText;
+    QRDBTextLDebit: TQRDBText;
+    QRDBTextLKredit: TQRDBText;
+    QRDBTextTey: TQRDBText;
+    GroupFooterBand: TQRBand;
+    QRExprSumLDebit: TQRExpr;
+    QRExprSumLKredit: TQRExpr;
+    QRExprSumKredit: TQRExpr;
+    QRExprSumDebit: TQRExpr;
+    QRShapeFooter: TQRShape;
+    QRShapeBottom: TQRShape;
+    QRLabelLastOstat: TQRLabel;
+    QRExprValEnd: TQRExpr;
+    QRExprManEnd: TQRExpr;
+    QRExprMezEnd: TQRExpr;
+    QRLabelCount: TQRLabel;
+    QRExprCount: TQRExpr;
+    DBTextApEnd: TQRDBText;
+    QRLabelValEnd: TQRLabel;
+    QRLabelManEnd: TQRLabel;
+    QRRateEnd: TQRLabel;
+    ChBand: TQRChildBand;
+    DBTextDebit: TQRDBText;
+    DBTextKredit: TQRDBText;
+    procedure QRSubDetailAfterPrint(Sender: TQRCustomBand;
+      BandPrinted: Boolean);
+    procedure QRBandDetailAfterPrint(Sender: TQRCustomBand;
+      BandPrinted: Boolean);
+    procedure QRBandDetailBeforePrint(Sender: TQRCustomBand;
+      var PrintBand: Boolean);
+    procedure QRepBeforePrint(Sender: TCustomQuickRep;
+      var PrintReport: Boolean);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormRepR: TFormRepR;
+
+implementation
+
+uses UnitDataModPCustService, SBTranslateProc, sboapiDataModuleImpl;
+
+{$R *.DFM}
+
+procedure TFormRepR.QRSubDetailAfterPrint(Sender: TQRCustomBand;
+  BandPrinted: Boolean);
+begin
+
+  if (DataModPCustService.ODSExtractTrans.FieldByName('DEBIT').AsCurrency = 0)
+    and (DataModPCustService.ODSExtractTrans.FieldByName('KREDIT')
+    .AsCurrency = 0) then
+    ChBand.Enabled := False
+
+  else if (DataModPCustService.ODSExtractTrans.FieldByName('PairCurrencyid')
+    .AsInteger = 0) and
+    (DataModPCustService.ODSExtractTrans.FieldByName('Currencyid')
+    .AsInteger = 0) then
+    ChBand.Enabled := False
+  else
+
+    ChBand.Enabled := True;
+
+  if (QRExprSumDebit.Value.dblResult = 0) and
+    (QRExprSumKredit.Value.dblResult = 0) then
+  begin
+    QRExprSumDebit.Enabled := False;
+    QRExprSumKredit.Enabled := False
+  end
+  else if (QRExprSumLDebit.Value.dblResult = QRExprSumDebit.Value.dblResult) and
+    (QRExprSumLKredit.Value.dblResult = QRExprSumKredit.Value.dblResult) then
+  begin
+    QRExprSumDebit.Enabled := False;
+    QRExprSumKredit.Enabled := False
+  end
+  else
+  begin
+    QRExprSumDebit.Enabled := True;
+    QRExprSumKredit.Enabled := True
+  end;
+
+end;
+
+procedure TFormRepR.QRBandDetailAfterPrint(Sender: TQRCustomBand;
+  BandPrinted: Boolean);
+begin
+  QRExprSumDebit.Reset;
+  QRExprSumKredit.Reset;
+  QRExprSumLDebit.Reset;
+  QRExprSumLKredit.Reset;
+end;
+
+procedure TFormRepR.QRBandDetailBeforePrint(Sender: TQRCustomBand;
+  var PrintBand: Boolean);
+begin
+
+  if Sender.ControlCount = 0 then
+    with QRBandDetail do
+      While ControlCount > 0 do
+        Controls[0].Parent := Sender;
+
+  if QRD_Begin.Caption = QRD_End.Caption then
+    QRD_End.Caption := '';
+
+  QRLabelValBeg.Caption := FormatFloat('#,##0.00',
+    ABS(DataModPCustService.ODSMainState.FieldByName('Ostat').AsCurrency));
+  QRLabelValEnd.Caption := FormatFloat('#,##0.00',
+    ABS(DataModPCustService.ODSMainState.FieldByName('EndOstat').AsCurrency));
+  QRRateBeg.Caption := FormatFloat('#,##0.0000',
+    ABS(DataModPCustService.RatesDataSetBegin.FieldByName('Ostat').AsCurrency));
+  QRRateEnd.Caption := FormatFloat('#,##0.0000',
+    ABS(DataModPCustService.RatesDataSet.FieldByName('Ostat').AsCurrency));
+
+  if DataModPCustService.ODSMainState.FieldByName('CurrencyId')
+    .AsCurrency = 0 then
+  begin
+    QRLabelManBeg.Enabled := False;
+    QRLabelManEnd.Enabled := False;
+    QRRateBeg.Enabled := False;
+    QRRateEnd.Enabled := False;
+
+  end
+  else
+  begin
+    QRLabelManBeg.Enabled := True;
+    QRLabelManEnd.Enabled := True;
+    QRRateBeg.Enabled := True;
+    QRRateEnd.Enabled := True;
+
+    QRLabelManBeg.Caption := FormatFloat('#,##0.00',
+      ABS(DataModPCustService.ODSMainState.FieldByName('PokOstat').AsCurrency));
+    QRLabelManEnd.Caption := FormatFloat('#,##0.00',
+      ABS(DataModPCustService.ODSMainState.FieldByName('EndPokOstat')
+      .AsCurrency));
+  end
+
+end;
+
+procedure TFormRepR.QRepBeforePrint(Sender: TCustomQuickRep;
+  var PrintReport: Boolean);
+var
+  i: integer;
+begin
+  SBTranslateProc.TranslateAllCompQuickRep(QRep, sboapiDataModule.OrPack_SL);
+end;
+
+end.

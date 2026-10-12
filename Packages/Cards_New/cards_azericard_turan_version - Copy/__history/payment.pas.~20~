@@ -1,0 +1,561 @@
+﻿unit payment;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ComCtrls, StdCtrls, ExtCtrls, Grids, DBGrids, Menus, CMExcelExport,oRACLEdATA,
+  DBCtrls,lDialogs,filectrl;
+
+type
+  TPayments = class(TForm)
+    Panel1: TPanel;
+    Panel2: TPanel;
+    DBGrid1: TDBGrid;
+    Panel3: TPanel;
+    DateTimePicker1: TDateTimePicker;
+    Button1: TButton;
+    Button2: TButton;
+    Button3: TButton;
+    Button4: TButton;
+    Panel4: TPanel;
+    Edit1: TEdit;
+    Edit2: TEdit;
+    Edit3: TEdit;
+    DateTimePicker2: TDateTimePicker;
+    PopupMenu1: TPopupMenu;
+    selectall1: TMenuItem;
+    CMExcelExport1: TCMExcelExport;
+    DBLookupComboBox1: TDBLookupComboBox;
+    DBLookupComboBox2: TDBLookupComboBox;
+    FileListBox1: TFileListBox;
+    Button5: TButton;
+    CheckBox1: TCheckBox;
+    procedure FormCreate(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure Edit1Exit(Sender: TObject);
+    procedure selectall1Click(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+    procedure Button4Click(Sender: TObject);
+    procedure DBGrid1TitleClick(Column: TColumn);
+    procedure Edit1Change(Sender: TObject);
+    procedure Edit2Change(Sender: TObject);
+    procedure Edit3Change(Sender: TObject);
+    procedure DBLookupComboBox1Enter(Sender: TObject);
+    procedure DBLookupComboBox2Enter(Sender: TObject);
+    procedure DBLookupComboBox2Click(Sender: TObject);
+    procedure DBLookupComboBox1Click(Sender: TObject);
+    procedure Button3Click(Sender: TObject);
+    procedure Button5Click(Sender: TObject);
+    procedure CheckBox1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Payments: TPayments;
+
+implementation
+
+uses balans, CARDS_TLB, customers, MAINFORMImpl1, Unit18, applicationpas,
+  atmendpos, balhs, banksettings, cfilepas, comp, crdtype, creditinfopas,
+  datclose, dilingUnit, domesticbank, dpforms, filialaccounts, klirinqUnit,
+  newcard, poscomission, rezform, setac, sms, U9, Unit155, UnitDxxx,
+  Unitintfile, UnitRvisa,SBTranslateProc,sboapiDataModuleImpl;
+
+{$R *.DFM}
+
+procedure TPayments.FormCreate(Sender: TObject);
+var
+tarix:TDateTime;
+begin
+DateTimePicker2.DateTime:=DataMod_CARDS.tarix.fieldbyname('TEK_DAT').asdatetime;
+//DateTimePicker1.DateTime:=DateTimePicker2.DateTime-7;
+DateTimePicker1.DateTime:=DateTimePicker2.DateTime;
+  SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TPayments.Button1Click(Sender: TObject);
+var
+tarix:TDateTime;
+vidop:string;
+begin
+
+
+DataMod_CARDS.payment.Close;
+DataMod_CARDS.payment.SetVariable('dat1',integer(trunc(DateTimePicker1.DateTime)));
+DataMod_CARDS.payment.SetVariable('dat2',integer(trunc(DateTimePicker2.DateTime)));
+
+
+DataMod_CARDS.payment.SetVariable('date1',trunc(DateTimePicker1.DateTime));
+DataMod_CARDS.payment.SetVariable('date2',trunc(DateTimePicker2.DateTime));
+
+//DataMod_CARDS.payment.SetVariable('vidop',DataMod_CARDS.Card_vidopVIDOP.AsVariant);
+
+DataMod_CARDS.payment.Open;
+
+
+
+ end;
+
+procedure TPayments.Edit1Exit(Sender: TObject);
+begin
+TEdit(Sender).Text :='';
+end;
+
+procedure TPayments.selectall1Click(Sender: TObject);
+begin
+ with dbgrid1, SelectedRows, DataSource.DataSet do
+  begin
+    DisableControls;
+    try
+      First;
+      while not Eof do
+       begin
+        CurrentRowSelected := True;
+        Next;
+       end;
+    finally
+      EnableControls;
+    end;
+  end;
+end;
+
+procedure TPayments.Button2Click(Sender: TObject);
+begin
+selectall1.Click;
+end;
+
+procedure TPayments.Button4Click(Sender: TObject);
+begin
+  if not CMExcelExport1.Connected then CMExcelExport1.Connect;
+  CMExcelExport1.ExportDataset(DataMod_CARDS.payment,'payment',true);
+  CMExcelExport1.Disconnect;
+end;
+
+procedure TPayments.DBGrid1TitleClick(Column: TColumn);
+var
+   TitleName :string;
+   SortPosition: word;
+begin
+ SortPosition :=100;
+ //OrderedTitle :=Column.FieldName; //H.R. 24.06.2008
+ if (DBGrid1.DataSource.DataSet.IsEmpty) or (Column.FieldName = EmptyStr) then Exit;
+ Screen.Cursor :=crHourGlass;
+ TitleName :=Column.FieldName;
+ with TOracleDataSet(DBGrid1.DataSource.DataSet) do
+  try
+  
+   SortPosition :=SQL.Add('ORDER BY '+ TitleName);
+   Refresh;
+  finally
+   SQL[SortPosition] :=EmptyStr;
+   Screen.Cursor :=crDefault;
+  end;
+end;
+
+procedure TPayments.Edit1Change(Sender: TObject);
+begin
+  with DataMod_CARDS.payment do begin
+  Filter := 'iD = '''+Edit1.Text+('*')+'''';
+end;
+END;
+procedure TPayments.Edit2Change(Sender: TObject);
+begin
+  with DataMod_CARDS.payment do begin
+  Filter := 'CARDNUMBER = '''+Edit2.Text+('*')+'''';
+end
+end;
+
+procedure TPayments.Edit3Change(Sender: TObject);
+begin
+  with DataMod_CARDS.payment do begin
+  Filter := 'RBSNUMBER_1 = '''+Edit3.Text+('*')+'''';
+end
+end;
+
+procedure TPayments.DBLookupComboBox1Enter(Sender: TObject);
+begin
+with DataMod_CARDS.payment do begin
+  Filter := 'FILIAL = '''+DBLookupComboBox1.Text+('*')+'''';
+  end;
+end;
+
+procedure TPayments.DBLookupComboBox2Enter(Sender: TObject);
+begin
+with DataMod_CARDS.payment do begin
+  Filter := 'CURRENCY = '''+DBLookupComboBox2.Text+('*')+'''';
+  end;
+end;
+
+procedure TPayments.DBLookupComboBox2Click(Sender: TObject);
+begin
+with DataMod_CARDS.payment do begin
+  Filter := 'CURRENCY = '''+DBLookupComboBox2.Text+('*')+'''';
+  end;
+end;
+
+procedure TPayments.DBLookupComboBox1Click(Sender: TObject);
+begin
+with DataMod_CARDS.payment do begin
+  Filter := 'FILIAL = '''+DBLookupComboBox1.Text+('*')+'''';
+  end;
+end;
+  function whenday:integer;
+  const yan=31;mar=31;apr=30;may=31;jun=30;jul=31;avg=31;seb=30;okt=31;nov=30;dec=31;
+  var   wday,feb:integer;
+ begin
+  wday:=0;
+  if IsLeapYear(strtoint(FormatDateTime('yyyy',date))) then feb:=29 else feb:=28;
+  case strtoint(FormatDateTime('mm',date)) of
+                                              1:wday:=StrToInt(FormatDateTime('dd',date));
+                                              2:wday:=yan+StrToInt(FormatDateTime('dd',date));
+                                              3:wday:=yan+feb+StrToInt(FormatDateTime('dd',date));
+                                              4:wday:=yan+feb+mar+StrToInt(FormatDateTime('dd',date));
+                                              5:wday:=yan+feb+mar+apr+StrToInt(FormatDateTime('dd',date));
+                                              6:wday:=yan+feb+mar+apr+may+StrToInt(FormatDateTime('dd',date));
+                                              7:wday:=yan+feb+mar+apr+may+jun+StrToInt(FormatDateTime('dd',date));
+                                              8:wday:=yan+feb+mar+apr+may+jun+jul+StrToInt(FormatDateTime('dd',date));
+                                              9:wday:=yan+feb+mar+apr+may+jun+jul+avg+StrToInt(FormatDateTime('dd',date));
+                                             10:wday:=yan+feb+mar+apr+may+jun+jul+avg+seb+StrToInt(FormatDateTime('dd',date));
+                                             11:wday:=yan+feb+mar+apr+may+jun+jul+avg+seb+okt+StrToInt(FormatDateTime('dd',date));
+                                             12:wday:=yan+feb+mar+apr+may+jun+jul+avg+seb+okt+nov+StrToInt(FormatDateTime('dd',date));
+  end;
+  Result:=wday;
+ end;
+
+ Function when2Str(wday:integer): string;
+  var
+  wd: string;
+
+ begin
+  wd:=InttoStr(wday);
+  case length(wd) of
+                    1: wd:='00'+wd;
+                    2: wd:='0'+wd;
+  end;
+  when2Str:=wd;
+ end;
+
+
+
+
+
+procedure TPayments.Button3Click(Sender: TObject);
+
+begin
+Button5.Click;
+end;
+
+procedure TPayments.Button5Click(Sender: TObject);
+var
+  F:TextFile;
+  SumOfBalance, SumOfBalanceRD :Real;
+  BHCount, {BHRecordCount,} RDCount, {RDRecordCount,} RowCount, Nom, i, j,v_send :Integer;
+  FileName, FHeader, {FFooter,} STMessage, RowNum, all, TempSTR, TempCUR, TempDIR :String;
+
+  v_ammo1,v_ammo2,v_ammo3,final_ammo,tranammo:real;
+begin
+
+  if DataMod_CARDS.payment.RecordCount=0 then exit;
+  if DBGrid1.SelectedRows.Count=0 then exit;
+  {FILE NAME}
+  if not DirectoryExists('C:\AZCARD\OUT\'+FormatDateTime('DDMMYY',DATE))
+   then MkDir('C:\AZCARD\OUT\'+FormatDateTime('DDMMYY',DATE));
+  FileListBox1.Directory:='C:\AZCARD\OUT\'+FormatDateTime('DDMMYY',DATE);
+  FileListBox1.Update;
+  Nom :=0;
+  for i :=1 to 999 do begin
+   all :='';
+   for j :=Length(IntToStr(i)) to 2 do all :='_'+all;
+   FileName:='C:\AZCARD\OUT\'+FormatDateTime('DDMMYY',DATE)+'\P'+DataMod_CARDS.settings.fieldbyname('bankid').asstring +all+IntToStr(i)+'.'+when2Str(WhenDay);
+   if not(FileExists(FileName)) then begin Nom:=i; Break; end;
+  end;{for i :=1 to 999}
+  AssignFile(F,Filename);
+  Rewrite(F);
+
+  {FH File Header}
+  FHeader :='';
+  all :=IntToStr(Nom);
+  for j :=length(all) to 1 do all :='0'+all;
+  FHeader :='FH000001PAYMENT   12 ' + DataMod_CARDS.settings.fieldbyname('bankid').asstring + '  ' + FormatDateTime('yyyymmdd',date) + FormatDateTime('hhmmss',time)+ '00' + all + DataMod_CARDS.settings.fieldbyname('bankid').asstring + '  RRNBD N';
+  for j :=59 to 203 do FHeader :=FHeader+' ';
+  FHeader :=FHeader+'*'; Writeln(F, FHeader);
+
+  DataMod_CARDS.payment.First;
+  SumOfBalance :=0;
+  BHCount :=0;
+  i :=0;
+  while (i<DBGrid1.SelectedRows.Count) do begin
+   DataMod_CARDS.Payment.GotoBookmark(pointer(DBGrid1.SelectedRows.Items[i]));
+
+   {FILE MESSAGE}
+   STmessage:='';
+   RowCount :=0;
+   BHCount :=BHCount+1;
+   RDCount :=0;
+   SumOfBalanceRD :=0;
+   Reset(F);
+   while not eof(F) do begin RowCount :=RowCount+1; Readln(F); end;
+   {BH Batch Header}
+   Append(F);
+   RowNum :=IntToStr(RowCount+1);
+   for j :=Length(RowNum) to 5 do RowNum :='0'+RowNum;
+   RDCount :=0;
+   TempCUR :=DataMod_CARDS.Payment.FieldByName('Currency').AsString;
+   TempDIR :=DataMod_CARDS.Payment.FieldByName('TIP').AsString;
+   STmessage :='BH' + RowNum;
+   RowNum :=IntToStr(BHCount);
+   for j :=Length(RowNum) to 5 do RowNum :='0'+RowNum;
+   if DataMod_CARDS.Payment.FieldByName('TIP').AsString='D' then TempSTR :='PAYFACC'
+    else TempSTR :='PAYACC';
+   for j :=Length(TempSTR) to 11 do TempSTR :=TempSTR+' ';
+   STMessage :=STMessage+RowNum+'    '+TempSTR+{P}' ';
+   STMessage :=STMessage+'    ';
+   STMessage :=STMessage+DataMod_CARDS.Payment.FieldByName('TIP').AsString;
+   STMessage :=STMessage+DataMod_CARDS.Payment.FieldByName('Currency').AsString;
+   for j :=41 to 204 do STMessage :=STMessage+' ';
+   STMessage :=STMessage+'*';
+   if not DataMod_CARDS.Payment.Eof then
+   Writeln(F,STmessage);
+   {RD Message Structure}
+   TempCUR :=DataMod_CARDS.Payment.FieldByName('Currency').AsString;
+   TempDIR :=DataMod_CARDS.Payment.FieldByName('TIP').AsString;
+   while ((i <DBGrid1.SelectedRows.Count)
+     and (TempCUR =DataMod_CARDS.Payment.FieldByName('Currency').AsString)
+     and (TempDIR =DataMod_CARDS.Payment.FieldByName('TIP').AsString)) do begin
+
+
+           {/*************************S.M 04.05.2018**************************************/}
+                  v_ammo1:= DBGrid1.DataSource.DataSet.FieldByName('num1').AsFloat;
+                  v_ammo2:= DBGrid1.DataSource.DataSet.FieldByName('num2').AsFloat;
+                  v_ammo3:= DBGrid1.DataSource.DataSet.FieldByName('ammount').AsFloat;
+                  tranammo := DBGrid1.DataSource.DataSet.FieldByName('ammount').AsFloat;
+
+    if   DataMod_CARDS.Payment.FieldByName('TIP').AsString='C'   then
+           begin
+                 {
+                if (v_ammo1>v_ammo2) and (v_ammo2=0) then
+                begin
+                 // final_ammo:= v_ammo1+v_ammo2-v_ammo3;
+                    final_ammo:=  v_ammo3 ;
+
+                    ShowMessage('1');
+
+                   { ShowMessage(floattostr(v_ammo1));
+                    ShowMessage(floattostr(v_ammo2));
+                    ShowMessage(floattostr(v_ammo3));
+                    ShowMessage(floattostr(final_ammo)); }
+               // end;
+
+                { if v_ammo1<v_ammo2 then begin
+                    final_ammo:=  v_ammo1;
+                   ShowMessage('3'); }
+
+                  {  ShowMessage(floattostr(v_ammo1));
+                    ShowMessage(floattostr(v_ammo2));
+                    ShowMessage(floattostr(v_ammo3));
+                    ShowMessage(floattostr(final_ammo));}
+                 {     if v_ammo1>v_ammo3 then begin
+                        final_ammo:=  v_ammo3;
+                          ShowMessage('9');
+
+                   { ShowMessage(floattostr(v_ammo1));
+                    ShowMessage(floattostr(v_ammo2));
+                    ShowMessage(floattostr(v_ammo3));
+                    ShowMessage(floattostr(final_ammo)); }
+                 //     end;
+
+                // end;
+
+                   {  if v_ammo1<v_ammo3 then begin
+                    final_ammo:=  v_ammo1;
+                     ShowMessage('4');}
+
+                    {ShowMessage(floattostr(v_ammo1));
+                    ShowMessage(floattostr(v_ammo2));
+                    ShowMessage(floattostr(v_ammo3));
+                    ShowMessage(floattostr(final_ammo)); }
+                    // end;
+
+
+                 {   if (v_ammo1>v_ammo3) and (v_ammo2<v_ammo3)  then  begin
+                    final_ammo:=  v_ammo3-v_ammo2;
+
+
+
+                     ShowMessage('5');
+                              end;
+
+                    {ShowMessage(floattostr(v_ammo1));
+                    ShowMessage(floattostr(v_ammo2));
+                    ShowMessage(floattostr(v_ammo3));
+                    ShowMessage(floattostr(final_ammo));     }
+                  //  end;
+
+
+                  if v_ammo2=0 then   begin
+                           final_ammo:=  v_ammo3  ;
+                           v_send:=0
+                  end
+                         else  begin
+                          final_ammo:=  v_ammo3-v_ammo2 ;
+                          v_send:=1;
+                         end;
+
+                    ShowMessage('Karta göndərilək məbləğ:'+floattostr(final_ammo));
+           end;
+
+
+               if   DataMod_CARDS.Payment.FieldByName('TIP').AsString='D'
+               then
+                begin
+
+                 if v_ammo2=0 then   begin
+                           final_ammo:=  v_ammo3  ;
+                           v_send:=0
+                  end
+                         else  begin
+                          final_ammo:=  v_ammo3-v_ammo2 ;
+                          v_send:=1;
+                         end;
+
+
+                    ShowMessage('Karta göndərilək məbləğ:'+floattostr(final_ammo));
+
+                end;
+
+               {/***********************************}
+
+
+    RowCount :=RowCount+1;
+    RDCount :=RDCount+1;
+    RowNum :=IntToStr(RowCount+1);
+    for j :=Length(RowNum) to 5 do RowNum :='0'+RowNum;
+    STMessage :='RD'+RowNum;
+    RowNum :=IntToStr(RDCount);
+    for j :=Length(RowNum) to 5 do RowNum :='0'+RowNum;
+    STMessage :=STMessage+RowNum;
+    RowNum :=FloatToStr((final_ammo{DataMod_CARDS.Payment.FieldByName('Ammount').AsFloat})*100); {Transaction amount}
+    SumOfBalanceRD :=SumOfBalanceRD+StrToFloat(RowNum);
+    for j :=Length(RowNum) to 14 do RowNum :='0'+RowNum;
+    STMessage :=STMessage+RowNum;
+    RowNum :=DataMod_CARDS.Payment.FieldByName('RBSNumber_1').AsString; {Contract number}
+    for j :=Length(RowNum) to 31 do RowNum :=RowNum+' ';
+    STMessage :=STMessage+RowNum;
+    for j :=62 to 203 do STMessage :=STMessage+' ';
+    STMessage :=STMessage+'*';
+    Writeln(F,STmessage);
+    {------------------------------Payment-Filter-----------------------------}
+    //   DataMod.OP_Payment.CallProcedure('ADD_PAYMENT_FILTER',[
+                              //       DataMod.ODSPayments.FieldByName('id').AsString
+                              //                                  ]);
+                             //
+
+                             with    DataMod_CARDS.payment do begin
+                                   DataMod_CARDS.mainpacket.CallProcedure('delete_payment',[]);
+                                    DataMod_CARDS.payment.Open;
+
+
+                                   DataMod_CARDS.mainpacket.CallProcedure('insert_payment',[FieldbyName('id').asinteger,
+                                                                         FieldbyName('CARDNUMBER').AsString,
+                                                                         FieldbyName('RBSNUMBER_1').AsString,
+                                                                         FieldbyName('ACCID').AsiNTEGER,
+                                                                         FieldbyName('CURRENCY').AsString,
+                                                                        final_ammo,// FieldbyName('AMMOUNT').AsiNTEGER,
+                                                                         FieldbyName('LAMMOUNT').AsiNTEGER,
+                                                                         FieldbyName('NAME').AsString,
+                                                                         FieldbyName('TIP').AsString,
+                                                                         FieldbyName('DAT').AsDATETIME,
+                                                                         FieldbyName('OPID').AsString,
+                                                                         FieldbyName('COMMITEDOPID').AsString,
+                                                                         FieldbyName('FILIAL').AsString,
+                                                                         FieldbyName('TIM').ASDATETIME,
+                                                                         tranammo,
+                                                                         v_send]) ;   end;
+
+
+
+    {------------------------------Payment-Filter-----------------------------}
+    i:=i+1;
+    if i<DBGrid1.SelectedRows.Count then
+     DataMod_CARDS.Payment.GotoBookmark(pointer(DBGrid1.SelectedRows.Items[i]));
+   end;{while i and TempCUR and TempDIR}
+   {RD close}
+   RowCount :=RowCount+1;
+   RowNum :=IntToStr(RowCount+1);
+   for j :=Length(RowNum) to 5 do RowNum :='0'+RowNum;
+   STMessage :='BT'+RowNum;
+   RowNum:=IntToStr(RDCount);
+   for j :=Length(RowNum) to 5 do RowNum :='0'+RowNum;
+   STMessage :=STMessage+RowNum;
+   RowNum :=FloatToStr(SumOfBalanceRD);
+   for j :=Length(RowNum) to 17 do RowNum :='0'+RowNum;
+   STMessage :=STMessage+RowNum;
+   for j :=33 to 203 do STMessage :=STMessage+' ';
+   STMessage :=STMessage+'*';
+   Writeln(F,STMessage);
+   SumOfBalance :=SumOfBalance+SumOfBalanceRD;
+   {BH close}
+  end;{while (i<DBGridPayment.SelectedRows.Count)}
+  {File footer}
+  RowCount :=RowCount+1;
+  RowNum :=IntToStr(RowCount+1);
+  for j :=Length(RowNum) to 5 do RowNum :='0'+RowNum;
+  STMessage :='FT'+RowNum;
+  RowNum :=IntToStr(BHCount);
+  for j :=Length(RowNum) to 5 do RowNum :='0'+RowNum;
+  STMessage :=STMessage+RowNum;
+  RowNum :=FloatToStr(SumOfBalance);
+  for j :=Length(RowNum) to 17 do RowNum :='0'+RowNum;
+  STMessage :=STMessage+RowNum;
+  for j :=33 to 203 do STMessage :=STMessage+' ';
+  STMessage :=STMessage+'*';
+  Writeln(F,STMessage);
+  CloseFile(F);
+  {------------------------------------------------}
+   // ActRefreshExecute(Sender);
+  {------------------------------------------------}
+ 
+  DataMod_CARDS.payment.Refresh;
+  ShowMessage('PAYMENT FILE CREATED');
+
+end;
+
+
+procedure TPayments.CheckBox1Click(Sender: TObject);
+begin
+if CheckBox1.Checked then
+begin
+//DataMod_CARDS.payment.Filtered:=True;
+Edit1.Enabled:=True;
+Edit2.Enabled:=True;
+Edit3.Enabled:=True;
+DBLookupComboBox1.Enabled:=True;
+DBLookupComboBox1.KeyValue:=0;
+DBLookupComboBox2.Enabled:=True;
+DBLookupComboBox2.KeyValue:=0;
+with DataMod_CARDS.payment do begin
+  Filter := 'FILIAL = '''+DBLookupComboBox1.Text+('*')+'''';
+  end;
+end
+else
+begin
+//DataMod_CARDS.payment.Filtered:=false;
+//DataMod_CARDS.payment.Filtered:=false;
+Edit1.Enabled:=false;
+Edit2.Enabled:=false;
+Edit3.Enabled:=false;
+DBLookupComboBox1.Enabled:=false;
+DBLookupComboBox1.KeyValue:=0;
+DBLookupComboBox2.Enabled:=false;
+DBLookupComboBox2.Keyvalue:=0;
+with DataMod_CARDS.payment do begin
+  Filter := 'FILIAL = '''+DBLookupComboBox1.Text+('*')+'''';
+  end;
+end;
+end;
+
+end.

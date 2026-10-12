@@ -1,0 +1,100 @@
+unit DMPenaltySettImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, OracleData, Oracle;
+
+type
+  TDMPenaltySett = class(TDataModule)
+    Valutes: TOracleDataSet;
+    ValutesVALUTE: TIntegerField;
+    ValutesVAL_NAME: TStringField;
+    ValutesVALU_NAME: TStringField;
+    ValutesDatSrc: TDataSource;
+    Accounts: TOracleDataSet;
+    AccountsDatSrc: TDataSource;
+    Branches: TOracleDataSet;
+    AccountsID: TFloatField;
+    AccountsACC_NO: TStringField;
+    BranchesDatSrc: TDataSource;
+    PenaltySettings: TOracleDataSet;
+    BranchesID: TFloatField;
+    BranchesNAME: TStringField;
+    PenaltySettingsDatSrc: TDataSource;
+    PenaltySettingsID: TFloatField;
+    PenaltySettingsBRANCHID: TFloatField;
+    PenaltySettingsCURRENCYID: TFloatField;
+    PenaltySettingsACCID: TFloatField;
+    PenaltySettingsAccno: TStringField;
+    PenaltySettingsFilial: TStringField;
+    cm_setup: TOraclePackage;
+    avalutes: TOracleDataSet;
+    IntegerField1: TIntegerField;
+    StringField1: TStringField;
+    StringField2: TStringField;
+    avalutesDatSourc: TDataSource;
+    procedure DataModuleCreate(Sender: TObject);
+    procedure DataModuleDestroy(Sender: TObject);
+    procedure PenaltySettingsApplyRecord(Sender: TOracleDataSet;
+      Action: Char; var Applied: Boolean; var NewRowId: String);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  DMPenaltySett: TDMPenaltySett;
+
+implementation
+
+{$R *.DFM}
+uses cmoracleapiDataModuleImpl;
+
+procedure TDMPenaltySett.DataModuleCreate(Sender: TObject);
+begin
+    Valutes.Open;
+    Accounts.Open;
+    Branches.OPen;
+    PenaltySettings.OPen;
+    avalutes.Open
+end;
+
+procedure TDMPenaltySett.DataModuleDestroy(Sender: TObject);
+begin
+    Valutes.CloseAll;
+    Accounts.CloseAll;
+    Branches.CloseAll;
+    PenaltySettings.CloseAll;
+    avalutes.CloseAll
+end;
+
+procedure TDMPenaltySett.PenaltySettingsApplyRecord(Sender: TOracleDataSet;
+  Action: Char; var Applied: Boolean; var NewRowId: String);
+
+var FilialID ,
+    CurrencyID ,
+    ACCID ,
+    SetID:integer;
+begin
+
+      with Sender do
+      begin
+         FilialID := FieldByName('Branchid').AsInteger;
+         CurrencyID :=  FieldByName('CurrencyID').AsInteger;
+         ACCID :=  FieldByName('ACCID').AsInteger;
+         SetID := FieldByName('ID').AsInteger;
+      end;
+
+      case Action of
+          'I':DMPenaltySett.cm_setup.CallProcedure('Add_PenaltySett',[FilialID,CurrencyID,ACCID]);
+
+           'U':DMPenaltySett.cm_setup.CallProcedure('upd_PenaltySett',[SetID,FilialID,CurrencyID,ACCID]);
+      end;
+
+      Applied := True;
+end;
+
+end.

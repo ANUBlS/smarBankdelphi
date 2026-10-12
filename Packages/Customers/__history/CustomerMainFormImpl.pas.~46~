@@ -1,0 +1,867 @@
+﻿unit CustomerMainFormImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActiveX, AxCtrls, Customers_TLB, StdVcl, ToolWin, ComCtrls, ExtCtrls,
+  Grids, DBGrids, ActnList, ImgList, StdCtrls, DBCtrls, Menus, SBOInitPkg,
+  DB, DBViewComboBox, OracleData, SBPlgAx50_TLB, SearchCombo;
+
+type
+  TAccOrder = (aotAccNo, aotAccName, aotAccCurrency, aotAccOpenDate, aotNoOrder);
+
+  TCustomerMainForm = class(
+      TActiveForm,
+      ICustomerMainForm,
+      IIconExporter)
+    ActionList1: TActionList;
+    Add: TAction;
+    Close: TAction;
+    Edit: TAction;
+    StatusBar: TStatusBar;
+    ImageList1: TImageList;
+    Order: TAction;
+    PopupMenu1: TPopupMenu;
+    Refresh: TAction;
+    Accounts: TDataSource;
+    ActiveAccountList: TOracleDataSet;
+    ActiveAccountListID: TFloatField;
+    ActiveAccountListOPENDATE: TDateTimeField;
+    ActiveAccountListBALANCE: TFloatField;
+    ActiveAccountListLBALANCE: TFloatField;
+    InfoView: TAction;
+    N1: TMenuItem;
+    N2: TMenuItem;
+    N3: TMenuItem;
+    N4: TMenuItem;
+    N5: TMenuItem;
+    N6: TMenuItem;
+    InfoView1: TMenuItem;
+    Panel3: TPanel;
+    CustomerGB: TGroupBox;
+    ControlBar1: TControlBar;
+    CustomerToolBar: TToolBar;
+    ToolButton1: TToolButton;
+    ToolButton3: TToolButton;
+    ToolButton2: TToolButton;
+    ToolButton4: TToolButton;
+    ToolButton5: TToolButton;
+    ToolButton6: TToolButton;
+    Panel1: TPanel;
+    CustomerSearchBar: TToolBar;
+    EditID: TEdit;
+    EditINN: TEdit;
+    EditNAME: TEdit;
+    EditOPEN_DAT: TEdit;
+    CustomerGrid: TDBGrid;
+    AccountsGB: TGroupBox;
+    AccountGrid: TDBGrid;
+    ControlBar2: TControlBar;
+    AccountViewSettingsPanel: TPanel;
+    AccountsOrderPanel: TPanel;
+    Label1: TLabel;
+    AccOrderCB: TComboBox;
+    AccountCurrencyPanel: TPanel;
+    Label2: TLabel;
+    AccCurrencyCB: TComboBox;
+    Panel2: TPanel;
+    EditAccNo: TEdit;
+    EditAccName: TEdit;
+    Splitter1: TSplitter;
+    ControlBar3: TControlBar;
+    CoolBar1: TCoolBar;
+    Panel4: TPanel;
+    Label3: TLabel;
+    scbFilial: TSearchCombo;
+    cbOrderCus: TComboBox;
+    Label4: TLabel;
+    Bevel1: TBevel;
+    actSettings: TAction;
+    N7: TMenuItem;
+    Secimler1: TMenuItem;
+    Button1: TButton;
+    ActiveAccountListACCNO: TWideStringField;
+    ActiveAccountListACCNAME: TWideStringField;
+    ActiveAccountListCURRENCYSNAME: TWideStringField;
+    EditNAME1: TEdit;
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure AddExecute(Sender: TObject);
+    procedure CloseExecute(Sender: TObject);
+    procedure RefreshExecute(Sender: TObject);
+    procedure EditExecute(Sender: TObject);
+    procedure EditINNChange(Sender: TObject);
+    procedure EditAccNoChange(Sender: TObject);
+    procedure EditINNExit(Sender: TObject);
+    procedure AccCurrencyCBDrawItem(Control: TWinControl; Index: Integer;
+      Rect: TRect; State: TOwnerDrawState);
+    procedure AccOrderCBChange(Sender: TObject);
+    procedure AccCurrencyCBChange(Sender: TObject);
+    procedure CustomerGridDblClick(Sender: TObject);
+    procedure InfoViewExecute(Sender: TObject);
+    procedure FilterByFilialsExecute(Sender: TObject);
+    procedure cbOrderCusChange(Sender: TObject);
+    procedure actSettingsExecute(Sender: TObject);
+    procedure AccountGridDblClick(Sender: TObject);
+    procedure EditAccNoKeyPress(Sender: TObject; var Key: Char);
+    procedure CustomerGridTitleClick(Column: TColumn);
+    procedure ActionSpeedSearchExecute(Sender: TObject);
+    procedure EditNAMEKeyPress(Sender: TObject; var Key: Char);
+    procedure EditIDKeyPress(Sender: TObject; var Key: Char);
+  private
+    { Private declarations }
+    FEvents: ICustomerMainFormEvents;
+    FUseAccOrder: Boolean;
+    FAccOrder: TAccOrder;
+    CanRefresh: Boolean;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;  function ICustomerMainForm.Get_Color = ICustomerMainForm_Get_Color;
+    function ICustomerMainForm.Get_Font = ICustomerMainForm_Get_Font;
+    procedure ICustomerMainForm._Set_Font = ICustomerMainForm__Set_Font;
+    procedure ICustomerMainForm.Set_Color = ICustomerMainForm_Set_Color;
+    procedure ICustomerMainForm.Set_Font = ICustomerMainForm_Set_Font;
+    function ICustomerMainForm_Get_Color: OLE_COLOR; safecall;
+    function ICustomerMainForm_Get_Font: IFontDisp; safecall;
+    procedure ICustomerMainForm__Set_Font(var Value: IFontDisp); safecall;
+    procedure ICustomerMainForm_Set_Color(Value: OLE_COLOR); safecall;
+    procedure ICustomerMainForm_Set_Font(const Value: IFontDisp); safecall;
+    function Get_Icon: OLE_HANDLE; safecall;
+  public
+    { Public declarations }
+    procedure Initialize; override;
+    property UseAccOrder: Boolean read FUseAccOrder;
+    property AccOrder: TAccOrder read FAccOrder;
+    function BuildAccQuery: String;
+    procedure RebuildAccQuery;
+    function BuildCusQuery: string;
+  end;
+
+implementation
+
+uses    ComObj, ComServ, CustomerDataModuleImpl, CustomerPropertiesForm_Unit,
+        SBCore, SBCustomer, sboapiDataModuleImpl, CustomerInfoFormImpl,
+  UnitFrmZoom, uSettingsImpl, SBTranslateProc;
+
+{$R *.DFM}
+
+type
+  TAccOrderIndex = 0..4;
+
+ResourceString
+  SAOAccNo        = 'AccNo';
+  SAOAccName      = 'AccName';
+  SAOAccCurrency  = 'CurrencySName';
+  SAOAccOpenDate  = 'OpenDate';
+  SAONoOrder      = 'unused';
+
+const
+  AccOrderFields: array[TAccOrder] of String = (SAOAccNo, SAOAccName, SAOAccCurrency, SAOAccOpenDate, SAONoOrder);
+  AccOrderToIndexMap: array[TAccOrder] of Integer = (
+    {aotAccNo =>        } 1,
+    {aotAccName =>      } 2,
+    {aotAccCurrency =>  } 4,
+    {aotAccOpenDate =>  } 3,
+    {aotNoOrder =>      } 0
+  );
+
+  AccIndexToOrderMap: array[TAccOrderIndex] of TAccOrder = (
+    {0 => } aotNoOrder,
+    {1 => } aotAccNo,
+    {2 => } aotAccName,
+    {3 => } aotAccOpenDate,
+    {4 => } aotAccCurrency
+  );
+
+ResourceString
+  { Additional expressions may be added on runtime to this query
+    For example CurrencyID filter, or ORDER statement
+    See BuildAccQuery function for details
+  }
+  SGetCustomerAccsQuery =
+    'SELECT acc.ID, acc.ACC_NO as AccNo, acc.NAME as AccName, acc.OPEN_DAT as OpenDate,'#13#10+
+    ' Currency.VAL_NAME as CurrencySName, T.OSTAT as Balance, T.POK_OSTAT as LBalance'#13#10+
+    'FROM'#13#10+
+    ' Account acc,'#13#10+
+    ' AVALUTE Currency,'#13#10+
+    ' tenostat t'#13#10+
+    'WHERE'#13#10+
+    ' (CLOSE_DAT IS NULL)'#13#10+
+    ' AND (acc.KLI_ID = :ID)'#13#10+
+    ' AND (Currency.VALUTE = acc.VAL_ACC)'#13#10+
+    ' AND (T.ACC_ID = acc.ID)'#13#10+
+    ' UNION ALL ' +
+    'SELECT acc.ID, acc.ACC_NO as AccNo, acc.NAME as AccName, acc.OPEN_DAT as OpenDate,'#13#10+
+    ' Currency.VAL_NAME as CurrencySName, T.OSTAT as Balance, T.POK_OSTAT as LBalance'#13#10+
+    'FROM'#13#10+
+    ' out_Account acc,'#13#10+
+    ' AVALUTE Currency,'#13#10+
+    ' out_tenostat t'#13#10+
+    'WHERE'#13#10+
+    ' (CLOSE_DAT IS NULL)'#13#10+
+    ' AND (acc.KLI_ID = :ID)'#13#10+
+    ' AND (Currency.VALUTE = acc.VAL_ACC)'#13#10+
+    ' AND (T.ACC_ID = acc.ID)'#13#10;
+
+  SGetCusQuery =
+   'select customers.rowID,id, op_id, open_dat, close_dat, nerezident,prinad_kod, name, short_name, group_klie, vid_sob, org_sob, sfera_dey, otrasl, nalog_kod, kod_okpro,inn, dat_nal, dat_ustav, bik ,'
+   + '  translate(name, ''IiİiIı'', ''``````'') as name1,'+
+    'decode(c.cust_type,null,'+''''+'Hüquqi'+''''+', 1, '+''''+'Fiziki'+''''+', 2, '+''''+'f.s.'+''''+') tip from CUSTOMERS C'#13#10+
+   'where CLOSE_DAT IS NULL'#13#10;
+
+
+{ TCustomerMainForm }
+
+procedure TCustomerMainForm.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_CustomerMainFormPage); }
+end;
+
+procedure TCustomerMainForm.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as ICustomerMainFormEvents;
+end;
+
+procedure TCustomerMainForm.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TCustomerMainForm.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TCustomerMainForm.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TCustomerMainForm.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TCustomerMainForm.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TCustomerMainForm.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TCustomerMainForm.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TCustomerMainForm.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TCustomerMainForm.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TCustomerMainForm.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TCustomerMainForm.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TCustomerMainForm.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TCustomerMainForm.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TCustomerMainForm.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TCustomerMainForm.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TCustomerMainForm.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TCustomerMainForm.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TCustomerMainForm.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TCustomerMainForm.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TCustomerMainForm._Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TCustomerMainForm.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TCustomerMainForm.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TCustomerMainForm.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TCustomerMainForm.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TCustomerMainForm.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TCustomerMainForm.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TCustomerMainForm.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TCustomerMainForm.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TCustomerMainForm.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TCustomerMainForm.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TCustomerMainForm.Set_AxBorderStyle(
+  Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TCustomerMainForm.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TCustomerMainForm.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TCustomerMainForm.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TCustomerMainForm.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TCustomerMainForm.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TCustomerMainForm.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TCustomerMainForm.Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TCustomerMainForm.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TCustomerMainForm.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TCustomerMainForm.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TCustomerMainForm.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TCustomerMainForm.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TCustomerMainForm.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+procedure TCustomerMainForm.ActiveFormCreate(Sender: TObject);
+begin
+  CustomerDataModuleImpl.Initialize;
+  CustomerPropertiesForm := TCustomerPropertiesForm.Create(Self);
+
+  CustomerDataModule.ActiveCustomerList.Open;
+  with CustomerDataModule.CurrencyData do
+  begin
+    First;
+    while not Eof do
+    begin
+      AccCurrencyCB.Items.Add(FieldByName('VALU_NAME').AsString);
+      Next;
+    end;
+  end;
+
+  AccCurrencyCB.ItemIndex := 0;
+  AccOrderCB.ItemIndex := 0;
+  CanRefresh:=False;
+  cbOrderCus.ItemIndex:=0;
+  scbFilial.ItemIndex:=0;
+  CanRefresh:=True;
+  RebuildAccQuery;
+SBTranslateProc.TranslateAllComponents(Self,sboapiDataModule.OrPack_SL);
+
+end;
+
+procedure TCustomerMainForm.AddExecute(Sender: TObject);
+begin
+  if CustomerPropertiesForm.New then
+    Refresh.Execute;
+end;
+
+procedure TCustomerMainForm.CloseExecute(Sender: TObject);
+begin
+  if ActiveAccountList.RecordCount <> 0 then
+    MessageDlg('Aktiv hesabları olan müştərini bağlamaq olmaz', mtError, [mbOk], 0)
+  else
+  if MessageDlg('Müştəri bağlansın?', mtConfirmation, [mbYes, mbCancel], 0) = mrYes then
+  begin
+    Sb_CloseCustomer(CustomerDataModule.Customers.DataSet.FieldByName('ID').AsInteger);
+    Refresh.Execute;
+  end;
+end;
+
+procedure TCustomerMainForm.RefreshExecute(Sender: TObject);
+var
+  SavedPos: Integer;
+begin
+  with CustomerDataModule.ActiveCustomerList do
+  begin
+    SavedPos := RecNo;
+    Close;
+    SQL.Text := BuildCusQuery;
+    Session := sboapiDataModule.SBSession;
+    Open;
+    if SavedPos > RecordCount then
+      RecNo := RecordCount
+    else
+      RecNo := SavedPos;
+  end;
+end;
+
+procedure TCustomerMainForm.EditExecute(Sender: TObject);
+begin
+  CustomerPropertiesForm.Edit(CustomerDataModule.Customers.DataSet.FieldByName('ID').AsInteger);
+  Refresh.Execute;
+end;
+
+procedure TCustomerMainForm.EditIDKeyPress(Sender: TObject; var Key: Char);
+begin
+if key=#13 then
+ ActionSpeedSearchExecute(Sender);
+end;
+
+procedure TCustomerMainForm.EditINNChange(Sender: TObject);
+begin
+
+{  with Sender as TEdit do
+    if Text <> '' then
+      CustomerDataModule.Customers.DataSet.Locate(
+        Copy(Name, 9, Length(Name)-18),
+        Text,
+        [loCaseInsensitive, loPartialKey]); }
+end;
+
+procedure TCustomerMainForm.EditAccNoChange(Sender: TObject);
+begin
+  {with Sender as TEdit do
+    if Text <> '' then
+      Accounts.DataSet.Locate(
+        Copy(Name, 1, Length(Name)-10),
+        Text,
+        [loCaseInsensitive, loPartialKey]);  }
+
+end;
+
+procedure TCustomerMainForm.EditAccNoKeyPress(Sender: TObject;
+  var Key: Char);
+var
+  SearchField : string;
+  SearchOptions : TSearchRecordOptions;
+begin
+
+  if Key = #13  then
+ begin
+  SearchOptions := [srIgnoreCase ,srPartialMatch ];
+
+  with Sender as TEdit  do
+  begin
+    SearchField :=copy(Name,5,length(Name));
+    with  TOracleDataSet(AccountGrid.DataSource.DataSet) do
+    if  not SearchRecord(
+                  SearchField
+                 ,Text
+                 ,SearchOptions + [srFromCurrent , srForward ]
+                 ) then
+
+    if MessageDlg(
+              'Axtarış sona çatdı.'+#13+'Əvvəldən başlansın?'
+             ,mtInformation
+             ,[mbNo , mbYes]
+             ,0
+             ) = mrYes  then
+
+    if not SearchRecord(
+                 SearchField
+                ,Text
+                ,SearchOptions + [ srFromBeginning ]
+                )  then
+    MessageDlg('Yazı tapılmadı!',mtInformation,[mbOK],0);
+  end;
+ end;
+
+end;
+
+procedure TCustomerMainForm.EditINNExit(Sender: TObject);
+begin
+  (Sender as TEdit).Text := '';
+end;
+
+procedure TCustomerMainForm.EditNAMEKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if Key = #13  then
+  begin
+      //New Addition
+      EditNAME1.Text := EditName.Text;
+      {  Replace I, i, İ, i  }
+      with EditNAME1 do
+      begin
+          Text := StringReplace(Text, 'i', '`', [rfReplaceAll]);
+          Text := StringReplace(Text, 'I', '`', [rfReplaceAll]);
+          Text := StringReplace(Text, 'İ', '`', [rfReplaceAll]);
+          Text := StringReplace(Text, 'I', '`', [rfReplaceAll]);
+          Text := StringReplace(Text, 'ı', '`', [rfReplaceAll]);
+      end;
+
+       //ActionSpeedSearchExecute(Sender);
+       ActionSpeedSearchExecute(EditNAME1);
+  end;
+end;
+
+procedure TCustomerMainForm.AccCurrencyCBDrawItem(Control: TWinControl;
+  Index: Integer; Rect: TRect; State: TOwnerDrawState);
+begin
+  with Control as TComboBox do
+  begin
+    Canvas.FillRect(Rect);
+    if (Index = 0) and (not (odComboBoxEdit in State)) then
+      if odSelected in State then
+        Canvas.Font.Color := clWhite
+      else
+        Canvas.Font.Color := clRed;
+    Canvas.TextOut(Rect.Left+2, Rect.Top+2, Items[Index]);
+  end;
+end;
+
+procedure TCustomerMainForm.AccOrderCBChange(Sender: TObject);
+begin
+  FAccOrder := AccIndexToOrderMap[(Sender as TComboBox).ItemIndex];
+  FUseAccOrder := AccOrder <> aotNoOrder;
+  RebuildAccQuery;
+end;
+
+function TCustomerMainForm.BuildAccQuery: String;
+begin
+ Result := SGetCustomerAccsQuery;
+  if AccCurrencyCB.ItemIndex <> 0 then
+    Result := Format('%sAND (acc.VAL_ACC = %d)'#13#10, [
+      Result,
+      CustomerDataModule.CurrencyIDByIndex(AccCurrencyCB.ItemIndex)]);
+  if UseAccOrder then
+    Result := Format('%sORDER BY %s', [Result, AccOrderFields[AccOrder]]);
+end;
+
+procedure TCustomerMainForm.RebuildAccQuery;
+begin
+  with ActiveAccountList do
+  begin
+    Close;
+    with SQL do
+      Text := BuildAccQuery;
+    Open;
+  end;
+end;
+
+function TCustomerMainForm.BuildCusQuery: string;
+begin
+Result:=SGetCusQuery;
+
+if scbFilial.ItemIndex>0 then
+  Result := Format('%sAND ID in(select KLI_ID from ACCOUNT where FILIAL=%d)'#13#10, [
+      Result,
+      CustomerDataModule.FilialsData.FieldByName('Id').AsInteger]);
+
+ case cbOrderCus.ItemIndex of
+  2: Result:=Result+#13#10'order by C.NAME';
+  3: Result:=Result+#13#10'order by C.OPEN_DAT';
+ else
+  Result:=Result+#13#10'order by C.ID';
+ end;
+end;
+
+procedure TCustomerMainForm.AccCurrencyCBChange(Sender: TObject);
+begin
+  RebuildAccQuery;
+end;
+
+function TCustomerMainForm.ICustomerMainForm_Get_Color: OLE_COLOR;
+begin
+
+end;
+
+function TCustomerMainForm.ICustomerMainForm_Get_Font: IFontDisp;
+begin
+
+end;
+
+procedure TCustomerMainForm.ICustomerMainForm__Set_Font(var Value: IFontDisp);
+begin
+
+end;
+
+procedure TCustomerMainForm.ICustomerMainForm_Set_Color(Value: OLE_COLOR);
+begin
+
+end;
+
+procedure TCustomerMainForm.ICustomerMainForm_Set_Font(const Value: IFontDisp);
+begin
+
+end;
+
+procedure TCustomerMainForm.CustomerGridDblClick(Sender: TObject);
+begin
+  Edit.Execute;
+end;
+
+procedure TCustomerMainForm.CustomerGridTitleClick(Column: TColumn);
+var
+  TitleName: string;
+begin
+  TitleName := Column.FieldName;
+  with CustomerDataModule.ActiveCustomerList do
+  begin
+    SetVariable('Title', TitleName);
+    Refresh;
+  end;
+end;
+
+function TCustomerMainForm.Get_Icon: OLE_HANDLE;
+const
+  IconIndex = 14;
+begin
+  ImageList1.GetIcon(IconIndex, Icon);
+  Result := Icon.Handle;
+end;
+
+procedure TCustomerMainForm.InfoViewExecute(Sender: TObject);
+begin
+  with TCustomerInfoForm.Create(Self) do
+  try
+    ViewCustInfo(CustomerDataModule.Customers.DataSet.FieldByName('ID').AsInteger);
+  finally
+    Release;
+  end;
+end;
+
+procedure TCustomerMainForm.FilterByFilialsExecute(Sender: TObject);
+begin
+  with Sender as TAction do
+    Checked := not Checked;
+//  Refresh.Execute;
+end;
+
+procedure TCustomerMainForm.cbOrderCusChange(Sender: TObject);
+begin
+if CanRefresh then
+begin
+ Refresh.Execute;
+ CustomerGrid.SetFocus;
+end;
+end;
+
+procedure TCustomerMainForm.actSettingsExecute(Sender: TObject);
+begin
+  if not assigned(frmsettings) then
+  frmSettings := TfrmSettings.create(self);
+   frmSettings.ShowModal
+end;
+
+
+procedure TCustomerMainForm.AccountGridDblClick(Sender: TObject);
+begin
+  EditAccNo.text:=ActiveAccountListACCNO.AsString;
+end;
+
+
+procedure TCustomerMainForm.ActionSpeedSearchExecute(Sender: TObject);
+var
+  SearchField : string;
+  SearchOptions : TSearchRecordOptions;
+begin
+  SearchOptions := [srIgnoreCase ,srPartialMatch ];
+
+  with Sender as TEdit  do
+  begin
+    SearchField := copy(Name,5,length(Name));
+    with  TOracleDataSet(CustomerGrid.DataSource.DataSet) do
+    if  not SearchRecord(
+                  SearchField
+                 ,Text
+                 ,SearchOptions + [srFromCurrent , srForward ]
+                 ) then
+
+    if MessageDlg(
+              'Axtarış sona çatdı. '+#13+'Əvvəldən başlansın?'
+             ,mtInformation
+             ,[mbNo , mbYes]
+             ,0
+             ) = mrYes  then
+
+    if not SearchRecord(
+                 SearchField
+                ,Text
+                ,SearchOptions + [ srFromBeginning ]
+                )  then
+    MessageDlg('Yazı tapılmadı',mtInformation,[mbOK],0);
+ end;
+
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TCustomerMainForm,
+    Class_CustomerMainForm,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

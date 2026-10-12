@@ -1,0 +1,443 @@
+﻿unit FormGuarAddlmpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+   DBCtrls, DBCtrlsEh, ExtCtrls, StdCtrls, DBLookupEh, Mask,
+  Buttons, jpeg, Db, OracleData, Oracle, HintBox, DBGridEh;
+
+type
+  TFormGuarAdd = class(TForm)
+    Panel8: TPanel;
+    Image1: TImage;
+    SpeedButton37: TSpeedButton;
+    SpeedButton38: TSpeedButton;
+    SpeedButton39: TSpeedButton;
+    GroupBox5: TGroupBox;
+    Panel16: TPanel;
+    Label17: TLabel;
+    spcompany: TSpeedButton;
+    DBEdit8: TDBLookupComboboxEh;
+    Panel19: TPanel;
+    SpeedButton33: TSpeedButton;
+    SpeedButton34: TSpeedButton;
+    Label22: TLabel;
+    DBEditEh12: TDBEditEh;
+    Panel20: TPanel;
+    SpeedButton35: TSpeedButton;
+    SpeedButton36: TSpeedButton;
+    Label23: TLabel;
+    DBDateTimeEditEh4: TDBDateTimeEditEh;
+    CompanySrc: TDataSource;
+    CompanySet: TOracleDataSet;
+    PgCompany: TOraclePackage;
+    HintBox1: THintBox;
+    Panel13: TPanel;
+    SpeedButton17: TSpeedButton;
+    SpeedButton18: TSpeedButton;
+    Label6: TLabel;
+    Label8: TLabel;
+    DBEditEh3: TDBEditEh;
+    DBEditEh4: TDBEditEh;
+    Panel14: TPanel;
+    SpeedButton13: TSpeedButton;
+    SpeedButton14: TSpeedButton;
+    Label35: TLabel;
+    Panel15: TPanel;
+    SpeedButton15: TSpeedButton;
+    SpeedButton16: TSpeedButton;
+    Label157: TLabel;
+    Label154: TLabel;
+    DBLookupComboboxEh2: TDBLookupComboboxEh;
+    Panel1: TPanel;
+    SpeedButton19: TSpeedButton;
+    SpeedButton20: TSpeedButton;
+    Label7: TLabel;
+    DBEditEh1: TDBEditEh;
+    InUse_rg: TRadioGroup;
+    GroupBox1: TGroupBox;
+    DBEditEh2: TDBEditEh;
+    GroupBox2: TGroupBox;
+    DBDateTimeEditEh3: TDBDateTimeEditEh;
+    DBEditEh9: TDBEditEh;
+    Panel9: TPanel;
+    SpeedButton1: TSpeedButton;
+    SpeedButton10: TSpeedButton;
+    Panel10: TPanel;
+    SpeedButton2: TSpeedButton;
+    SpeedButton3: TSpeedButton;
+    Label24: TLabel;
+    Label25: TLabel;
+    DBLookupComboboxEh1: TDBLookupComboboxEh;
+    Panel11: TPanel;
+    SpeedButton4: TSpeedButton;
+    SpeedButton5: TSpeedButton;
+    Label155: TLabel;
+    Label5: TLabel;
+    DBEditEh8: TDBEditEh;
+    Panel12: TPanel;
+    SpeedButton11: TSpeedButton;
+    SpeedButton12: TSpeedButton;
+    Label29: TLabel;
+    Label28: TLabel;
+    DBNumberEditEh5: TDBNumberEditEh;
+    GroupBox3: TGroupBox;
+    DBEditEh10: TDBEditEh;
+    GroupBox11: TGroupBox;
+    Label34: TLabel;
+    MaskEdit2: TMaskEdit;
+    Label42: TLabel;
+    DBEditEh18: TDBEditEh;
+    GroupBox4: TGroupBox;
+    Panel2: TPanel;
+    SpeedButton23: TSpeedButton;
+    SpeedButton24: TSpeedButton;
+    Label9: TLabel;
+    DBEditEh5: TDBEditEh;
+    Panel3: TPanel;
+    SpeedButton25: TSpeedButton;
+    SpeedButton26: TSpeedButton;
+    Label10: TLabel;
+    DBEditEh6: TDBEditEh;
+    Panel21: TPanel;
+    SpeedButton27: TSpeedButton;
+    SpeedButton28: TSpeedButton;
+    Label12: TLabel;
+    DBEditEh7: TDBEditEh;
+    Panel22: TPanel;
+    SpeedButton29: TSpeedButton;
+    SpeedButton30: TSpeedButton;
+    Label11: TLabel;
+    DBDateTimeEditEh1: TDBDateTimeEditEh;
+    GroupBox9: TGroupBox;
+    Label13: TLabel;
+    Label14: TLabel;
+    Label26: TLabel;
+    DBEditEh11: TDBEditEh;
+    DBEditEh14: TDBEditEh;
+    DBEditEh15: TDBEditEh;
+    GroupBox10: TGroupBox;
+    Label27: TLabel;
+    Label30: TLabel;
+    Label31: TLabel;
+    DBLookupComboboxEh3: TDBLookupComboboxEh;
+    DBLookupComboboxEh4: TDBLookupComboboxEh;
+    DBEditEh16: TDBEditEh;
+    GroupBox6: TGroupBox;
+    Label116: TLabel;
+    Label152: TLabel;
+    Label117: TLabel;
+    Label118: TLabel;
+    DBEdit13: TDBEdit;
+    DBEdit32: TDBEdit;
+    DBDateTimeEditEh5: TDBDateTimeEditEh;
+    DBLookupComboboxEh26: TDBLookupComboboxEh;
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormShow(Sender: TObject);
+    procedure SpeedButton40Click(Sender: TObject);
+    procedure spcompanyClick(Sender: TObject);
+    procedure SpeedButton38Click(Sender: TObject);
+    procedure SpeedButton39Click(Sender: TObject);
+    procedure DBEdit1KeyPress(Sender: TObject; var Key: Char);
+    procedure DBLookupComboboxEh6KeyValueChanged(Sender: TObject);
+     procedure savechg;
+     procedure  CheckFields;
+  private
+   edNewName: TEdit;
+    procedure edNewNameClick(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormGuarAdd: TFormGuarAdd;
+
+implementation
+
+uses DataMGuarantee,sboapiDataModuleImpl, FormGuarpldginfolmpl,GuaranteeMgrImpl,SBTranslateProc;
+
+{$R *.DFM}
+
+procedure TFormGuarAdd.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+ resize := false
+end;
+
+procedure TFormGuarAdd.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+  with DataMGuarante.DataSetGuarantee do
+//    if State = dsCancel then
+    begin
+      Cancel;
+      CancelUpdates;
+end;
+    end;
+procedure TFormGuarAdd.FormCreate(Sender: TObject);
+begin
+SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+with DataMGuarante do
+  begin
+   Gura_taypcal.open;
+  //GuaraClientAccs.open;
+  // GuaraCreditAccs.open
+   end ;
+   CompanySet.open;
+end;
+
+procedure TFormGuarAdd.FormDestroy(Sender: TObject);
+begin
+ with DataMGuarante do
+  begin
+   Gura_taypcal.closeall;
+
+end;
+ CompanySet.closeall;
+    end;
+procedure TFormGuarAdd.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+ if ord(key) = VK_ESCAPE then close;
+end;
+
+procedure TFormGuarAdd.FormShow(Sender: TObject);
+begin
+ with DataMGuarante,DataSetGuarantee do
+ begin
+ open;
+//fieldbyname('REGISTRYDATE').AsDateTime:= OracleDataSet1.FieldbyName('TEK_DAT').asDateTime;
+//fieldbyname('GQPASPDATE').AsDateTime:= OracleDataSet1.FieldbyName('TEK_DAT').asDateTime;
+ end;
+  if not assigned(edNewName) then
+     edNewName := TEdit.Create(Self);
+  //   ShowMessage('fdfdf');
+ with edNewName do begin
+    Parent := Panel16;
+    OnKeyDown := edNewNameClick;
+    Visible := False;
+  end;
+end;
+procedure TFormGuarAdd.DBEdit1KeyPress(Sender: TObject; var Key: Char);
+begin
+ if ORD(Key) = VK_RETURN then
+  begin
+  if Sender is TWinControl then
+  with Sender as TWinControl do
+  case Tag of
+    1 : SelectNext(Sender as TWinControl ,True ,True);
+    end   ;
+     Key := #0;
+      end   ;
+end;
+
+procedure TFormGuarAdd.DBLookupComboboxEh6KeyValueChanged(Sender: TObject);
+begin
+  with (Sender as TDBLookupComboboxEh) do
+  if DataSource.DataSet.Active then
+   UpdateData;
+end;
+
+procedure TFormGuarAdd.edNewNameClick;
+var
+  ProcName: String;
+  i: Integer;
+begin
+  if (Trim((Sender as TEdit).Text)<>'') and (ord(key)=VK_RETURN) then begin
+   // if (Sender as TEdit).Left>200 then
+      ProcName := 'AddComp' ;
+
+      PgCompany.CallProcedure(ProcName,[(Sender as TEdit).Text]);
+
+      CompanySet.Refresh;
+    (Sender as TEdit).Visible := False;
+    for i:= 0 to ComponentCount-1 do
+      if Components[i] is TSpeedButton then
+        (Components[i] as TSpeedButton).Enabled := True;
+  end;
+  if  (ord(key)=VK_RETURN) then begin
+    (Sender as TEdit).Visible := False;
+    for i:= 0 to ComponentCount-1 do
+      if Components[i] is TSpeedButton then
+        (Components[i] as TSpeedButton).Enabled := True;
+  end;
+end;
+procedure TFormGuarAdd.SpeedButton40Click(Sender: TObject);
+begin
+if not assigned(FormGuarpldginfo) then
+ with  TFormGuarpldginfo.Create(self) do
+  try
+  ShowModal;
+  finally
+    Release;
+  end;
+end;
+
+procedure TFormGuarAdd.spcompanyClick(Sender: TObject);
+var
+  DataSetName: String[30];
+  i: Integer;
+begin
+  DataSetName :=Copy((Sender as TComponent).Name,4,length((Sender as TComponent).Name)-3);
+ with edNewName do begin
+    Text := '';
+    width := 216;
+        Left := 31;
+     top :=4{(Sender as TSpeedButton).Top};
+    Visible := True;
+  end;
+  for i:= 0 to ComponentCount-1 do
+    if Components[i] is TSpeedButton then
+      (Components[i] as TSpeedButton).Enabled := False;
+end;
+ procedure TFormGuarAdd.CheckFields;
+
+resourcestring rs_checkfields = '"%s" - sahəsi boşdur!';
+
+procedure ShowMsg(Message :String);
+begin
+   HintBox1.ShowMessage(Message);
+   Abort;
+end;
+
+procedure CheckFieldByName(FieldName :TField);
+begin
+   if FieldName.IsNull then
+      ShowMsg(Format(rs_checkfields,[FieldName.DisplayName]))
+end;
+procedure CheckFieldByNames;
+begin
+with   DataMGuarante do
+begin
+//CheckFieldByName(MainDSetPLEDGEID);
+//CheckFieldByName(MainDSetPLEDGENAME);
+//CheckFieldByName(MainDSetPLEDGEPRICE);
+//CheckFieldByName(MainDSetPLEDGSORTS);
+
+{if (DBLookupComboboxEh1.KeyValue<>1) or(DBLookupComboboxEh1.KeyValue<>66) then
+ CheckFieldByName(MainDSetOUTCOLLATERALACCID);
+  }
+end;
+end;
+begin
+ CheckFieldByNames
+end;
+ procedure TFormGuarAdd.SaveChg;
+begin
+if DataMGuarante.MainDSetpledgeid.asinteger<>1 then
+ CheckFields;
+    DataMGuarante.Guarante.CallProcedure('Guarantee_Add1',[
+    DataMGuarante.MainDSetid.asinteger,
+    0,
+    DataMGuarante.MainDSetpledgeid.asinteger,
+    DataMGuarante.MainDSetpledgename.asstring,
+    DataMGuarante.MainDSetholdername.asstring,
+    DataMGuarante.MainDSetholderaddress.asstring,
+    DataMGuarante.MainDSetanyinfotodisting.asstring,
+    DataMGuarante.MainDSetregistryno.asstring,
+    DataMGuarante.MainDSetregistryagency.asstring,
+    DataMGuarante.MainDSetregistrydate.asdatetime,
+    DataMGuarante.MainDSetpledgeinuse.asinteger,
+    DataMGuarante.MainDSetpledgeinsurant.asinteger,
+    DataMGuarante.MainDSetinsuranceagency.asfloat,
+    DataMGuarante.MainDSetinsuranceamount.asfloat,
+    DataMGuarante.MainDSetinsurancedate.asdatetime,
+    DataMGuarante.MainDSetpledgepricetorpaqha.asfloat,
+    DataMGuarante.MainDSetpledgepriceevkv.asfloat,
+    DataMGuarante.MainDSetinsuranceright.asfloat,
+    DataMGuarante.MainDSetinsuranceid.asstring,
+    DataMGuarante.MainDSetpledgeid_p.asinteger,
+    DataMGuarante.MainDSetgqname.asstring,
+    DataMGuarante.MainDSetgqpaspnum .asstring,
+    DataMGuarante.MainDSetgqpaspyer.asstring,
+    DataMGuarante.MainDSetgqpaspdate.asdatetime,
+    DataMGuarante.MainDSetgqadress.asstring,
+    DataMGuarante.MainDSetreyster.asstring,
+    DataMGuarante.MainDSetseryamh.asstring,
+    DataMGuarante.MainDSetgqtel.asstring,
+    DataMGuarante.MainDSetpledgeprice.asfloat,
+    DataMGuarante.MainDSetpledgsorts.asinteger,
+    DataMGuarante.MainDSetcompany.asinteger,
+    DataMGuarante.MainDSetcompanydat.asdatetime,
+    DataMGuarante.MainDSetcompanyexpert.asstring,
+    DataMGuarante.MainDSetCARDID.AsInteger,
+    DataMGuarante.MainDSetOUTCOLLATERALACCID.AsInteger,
+    DataMGuarante.MainDSetDECASTATUS.AsInteger,
+    DataMGuarante.MainDSetGQTELMOB.Asstring,
+    DataMGuarante.MainDSetGQTELHOME.Asstring,
+    DataMGuarante.MainDSetGQTELWORK.Asstring,
+    MaskEdit2.Text,
+    DataMGuarante.MainDSetREZERVEAMMOUNT.asfloat ,
+    DataMGuarante.MainDSetFAIZ.asfloat,
+    DataMGuarante.MainDSetGQCITY.asfloat,
+    DataMGuarante.MainDSetGQVILLAGE.asfloat,
+    DataMGuarante.MainDSetAFTOBANNO.Asstring ,
+    1
+    ]);
+
+end;
+
+procedure TFormGuarAdd.SpeedButton38Click(Sender: TObject);
+
+ var
+  str_field : string;
+  cnt : integer;
+begin
+DataMGuarante.MainDSetpledgeinuse.asinteger:=FormGuarAdd.InUse_rg.ItemIndex;
+ cnt:= 0;
+
+if  DBEditEh8.text='' then
+  begin
+    cnt:= cnt+1;
+    str_field:=str_field + 'Girovun adı,'
+  end;
+   cnt:= 0;
+ if   DBLookupComboboxEh2.text='' then
+ begin
+
+ cnt:=cnt+1;
+ str_field:=str_field+'Çeşidi,'
+end;
+cnt:= 0;
+if DBNumberEditEh5.text='' then
+begin
+cnt:=cnt+1;
+str_field:=str_field+'Girovun bazar dəyəri,'
+end;
+cnt:= 0;
+if DBEditEh10.text='' then
+begin
+cnt:=cnt+1;
+str_field:=str_field+'Girovu fəriqləndirən istənilən məlumat,'
+end;
+
+str_field:= str_field+ ' Seçilməyib! ';
+
+if cnt=0  then
+  begin
+  DBEdit13.SetFocus;
+  SaveChg;
+
+  DataMGuarante.DataSetGuarantee.refresh
+    end
+   else
+    begin
+         HintBox1.ShowMessage('Verilənlər  '+#13' '+str_field)  ;
+    exit ;
+    end;
+close
+end;
+
+procedure TFormGuarAdd.SpeedButton39Click(Sender: TObject);
+begin
+close;
+end;
+
+end.

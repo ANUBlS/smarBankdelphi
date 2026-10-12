@@ -1,0 +1,275 @@
+object FormAddGroups: TFormAddGroups
+  Left = 899
+  Top = 436
+  BorderStyle = bsDialog
+  Caption = 'AddGroups'
+  ClientHeight = 204
+  ClientWidth = 532
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'MS Sans Serif'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poScreenCenter
+  OnActivate = FormActivate
+  OnCreate = FormCreate
+  OnKeyPress = FormKeyPress
+  PixelsPerInch = 96
+  TextHeight = 13
+  object PanelM: TPanel
+    Left = 0
+    Top = 0
+    Width = 532
+    Height = 204
+    Align = alClient
+    BevelInner = bvRaised
+    BevelOuter = bvLowered
+    TabOrder = 0
+    object GroupBoxName: TGroupBox
+      Left = 2
+      Top = 2
+      Width = 528
+      Height = 39
+      Align = alTop
+      Caption = #1043#1088#1091#1087#1091#1085' '#1072#1076#1099
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clBlack
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 0
+      object EditGroupName: TEdit
+        Left = 1
+        Top = 16
+        Width = 528
+        Height = 22
+        TabOrder = 0
+      end
+    end
+    object GroupBoxNBPercent: TGroupBox
+      Left = 2
+      Top = 39
+      Width = 266
+      Height = 37
+      Caption = 'Faiz('#1052#1072#1083#1080#1081#1081#1103')'
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 1
+      object EditPercentNB: TEdit
+        Left = 2
+        Top = 14
+        Width = 263
+        Height = 22
+        TabOrder = 0
+      end
+    end
+    object GroupBoxNLPercent: TGroupBox
+      Left = 268
+      Top = 40
+      Width = 263
+      Height = 37
+      Caption = 'Faiz(Vergi)'
+      TabOrder = 2
+      object EditPercentNL: TEdit
+        Left = 2
+        Top = 13
+        Width = 258
+        Height = 21
+        TabOrder = 0
+      end
+    end
+    object GroupBoxDebtAcc: TGroupBox
+      Left = 2
+      Top = 82
+      Width = 266
+      Height = 47
+      Caption = #1061#1103#1088#1078'/'#1044#1077#1073#1080#1090' '#1097#1077#1089#1072#1073
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 3
+      object CBoxDebtAcc: TComboBox
+        Left = 72
+        Top = 19
+        Width = 193
+        Height = 22
+        TabOrder = 0
+        OnChange = CBoxDebtAccChange
+      end
+      object Edit1: TEdit
+        Left = 3
+        Top = 19
+        Width = 63
+        Height = 22
+        TabOrder = 1
+        OnChange = Edit1Change
+        OnEnter = Edit1Enter
+      end
+    end
+    object GroupBoxCredAcc: TGroupBox
+      Left = 2
+      Top = 129
+      Width = 266
+      Height = 47
+      Caption = #1040#1084#1086#1088#1090#1080#1079#1072#1089#1080#1081#1072'/'#1050#1088#1077#1076#1080#1090' '#1097#1077#1089#1072#1073
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 4
+      object CBoxCredAcc: TComboBox
+        Left = 72
+        Top = 20
+        Width = 193
+        Height = 22
+        TabOrder = 0
+        OnChange = CBoxDebtAccChange
+      end
+      object Edit3: TEdit
+        Left = 3
+        Top = 20
+        Width = 63
+        Height = 22
+        TabOrder = 1
+        OnChange = Edit3Change
+        OnEnter = Edit3Enter
+      end
+    end
+    object GroupBox_main_acc: TGroupBox
+      Left = 268
+      Top = 82
+      Width = 263
+      Height = 47
+      Caption = #1071#1089#1072#1089' '#1074#1103#1089#1072#1080#1090' '#1097#1077#1089#1072#1073#1099
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 5
+      object CB_main_acc1: TDBLookupComboBox
+        Left = 75
+        Top = 19
+        Width = 255
+        Height = 22
+        KeyField = 'ID'
+        ListField = 'ACC_NO'
+        ListSource = DataModWares.DSViewGr
+        TabOrder = 0
+        Visible = False
+      end
+      object CB_main_acc: TDBLookupComboboxEh
+        Left = 74
+        Top = 19
+        Width = 186
+        Height = 22
+        EditButtons = <>
+        KeyField = 'ID'
+        ListField = 'ACC_NO'
+        ListSource = DataModWares.DSViewGr
+        TabOrder = 1
+        Visible = True
+      end
+      object Edit2: TEdit
+        Left = 6
+        Top = 19
+        Width = 63
+        Height = 22
+        TabOrder = 2
+        OnChange = Edit2Change
+        OnEnter = Edit2Enter
+      end
+      object ComboBox2: TComboBox
+        Left = 71
+        Top = 19
+        Width = 189
+        Height = 22
+        TabOrder = 3
+        OnChange = ComboBox2Change
+      end
+    end
+    object GroupBox_sale_acc: TGroupBox
+      Left = 268
+      Top = 129
+      Width = 263
+      Height = 47
+      Caption = #1040#1083#1075#1099' - '#1057#1072#1090#1075#1099' / '#1047#1103#1088#1103#1088
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 6
+      object CB_sale_acc1: TDBLookupComboBox
+        Left = 73
+        Top = 23
+        Width = 187
+        Height = 22
+        KeyField = 'ID'
+        ListField = 'ACC_NO'
+        ListSource = DataModWares.DSViewGr1
+        TabOrder = 0
+        Visible = False
+      end
+      object CB_sale_acc: TDBLookupComboboxEh
+        Left = 73
+        Top = 23
+        Width = 187
+        Height = 21
+        EditButtons = <>
+        KeyField = 'ID'
+        ListField = 'ACC_NO'
+        ListSource = DataModWares.DSViewGr1
+        TabOrder = 1
+        Visible = True
+      end
+      object Edit4: TEdit
+        Left = 4
+        Top = 21
+        Width = 63
+        Height = 22
+        TabOrder = 2
+        OnChange = Edit4Change
+        OnEnter = Edit4Enter
+      end
+      object ComboBox4: TComboBox
+        Left = 73
+        Top = 20
+        Width = 189
+        Height = 22
+        TabOrder = 3
+        OnChange = ComboBox4Change
+      end
+    end
+    object Button1: TButton
+      Left = 5
+      Top = 177
+      Width = 523
+      Height = 25
+      Caption = 'OK'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -16
+      Font.Name = 'MS Sans Serif'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 7
+      OnClick = Button1Click
+    end
+  end
+end

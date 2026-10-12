@@ -1,0 +1,2196 @@
+﻿unit UMKBlank;
+        ////ODSdrAccessPeople
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, LDialogs,Dialogs,
+  ActiveX, AxCtrls, MKBlank_TLB, StdVcl, StdCtrls, DBCtrls, Mask, Buttons,
+  ExtCtrls, Db, OracleData, SBPlgAx50_TLB, Oracle, DBViewComboBox, HintBox,
+  CurrencyEdit, ComCtrls, PlgModalContainer, Grids, DBGrids,
+  INSWordExporter,variants, XDBGrids, XFSCtrls, DBGridEhGrouping, GridsEh,
+  DBGridEh;
+
+
+const
+   WM_ModalResult = WM_USER+139;
+   fmCaption = 'Kasko sigortasi anket formasi: (%s)';
+   pBlankDone = 1;
+type
+  TConversionExcept = Exception;
+  TCalcException = Exception;
+  TOutputYear = Exception;
+
+  TfmMKBlank = class(
+             TActiveForm,
+             IfmMKBlank,
+             IUIObject,
+             IParamInput //,
+             // ISBPlgAc50BufferForm
+             )
+            // ISBPlgAc50BufferForm    tale
+    Panel1: TPanel;
+    btOk: TBitBtn;
+    BitBtn2: TBitBtn;
+    hbErrMsg: THintBox;
+    btSuggestion: TBitBtn;
+    btApply: TBitBtn;
+    pmcSuggestion: TPlgModalContainer;
+    Suggest: TBitBtn;
+    INSWordExporter1: TINSWordExporter;
+    PageControl2: TPageControl;
+    TabSheet3: TTabSheet;
+    TabSheet4: TTabSheet;
+    Panel2: TPanel;
+    lbDrAccessPeople1: TGroupBox;
+    Panel3: TPanel;
+    gdDrAccessPeople: TDBGrid;
+    XFPanel2: TXFPanel;
+    SpeedButton2: TSpeedButton;
+    SpeedButton3: TSpeedButton;
+    SpeedButton4: TSpeedButton;
+    SpeedButton5: TSpeedButton;
+    GroupBox3: TGroupBox;
+    DBGrid1: TDBGrid;
+    XDBGrid1: TXDBGrid;
+    XFPanel1: TXFPanel;
+    SpeedButton12: TSpeedButton;
+    sbtnSave: TSpeedButton;
+    SpeedButton14: TSpeedButton;
+    SpeedButton15: TSpeedButton;
+    sbtnInsert: TSpeedButton;
+    XFPanel3: TXFPanel;
+    SpeedButton1: TSpeedButton;
+    XFLabel1: TXFLabel;
+    XFLabel2: TXFLabel;
+    XFLabel3: TXFLabel;
+    XFLabel4: TXFLabel;
+    edIns_Date: TDateTimePicker;
+    edBeginDate: TDateTimePicker;
+    DBMonths: TDBLookupComboBox;
+    edEndDate: TDateTimePicker;
+    XFPanel4: TXFPanel;
+    XFLabel5: TXFLabel;
+    XFLabel6: TXFLabel;
+    XFLabel7: TXFLabel;
+    XFLabel20: TXFLabel;
+    DBCBCustName: TDBLookupComboBox;
+    dbBeneficiary: TDBEdit;
+    DBBanks: TDBLookupComboBox;
+    DBAgents: TDBLookupComboBox;
+    XFRadioButton1: TXFRadioButton;
+    rbBank: TXFRadioButton;
+    rbBeneficiary: TXFRadioButton;
+    DBEdit1: TDBEdit;
+    DBEdit12: TDBEdit;
+    XFPanel6: TXFPanel;
+    XFLabel8: TXFLabel;
+    XFLabel9: TXFLabel;
+    XFLabel10: TXFLabel;
+    XFLabel11: TXFLabel;
+    XFLabel12: TXFLabel;
+    XFLabel13: TXFLabel;
+    XFLabel14: TXFLabel;
+    DBEdit4: TDBEdit;
+    DBEdit2: TDBEdit;
+    DBEdit3: TDBEdit;
+    DBEdit5: TDBEdit;
+    DBEdit7: TDBEdit;
+    DBEdit6: TDBEdit;
+    DBComboBox1: TDBComboBox;
+    XFPanel7: TXFPanel;
+    XFBitBtn1: TXFBitBtn;
+    BitBtn3: TBitBtn;
+    btnNew: TBitBtn;
+    BitBtn1: TBitBtn;
+    btnCondition: TBitBtn;
+    XFGroupBox2: TXFGroupBox;
+    XFGroupBox3: TXFGroupBox;
+    XFButton2: TXFButton;
+    DBGrid3: TDBGrid;
+    XFButton1: TXFButton;
+    DBGrid2: TDBGrid;
+    XFGroupBox4: TXFGroupBox;
+    edAmmount: TDBEdit;
+    SpeedButton7: TSpeedButton;
+    edInsSumm: TDBEdit;
+    XFLabel15: TXFLabel;
+    XFLabel17: TXFLabel;
+    DBEdit8: TDBEdit;
+    XFLabel18: TXFLabel;
+    DBEdit9: TDBEdit;
+    XFLabel19: TXFLabel;
+    DBEdit10: TDBEdit;
+    XFLabel21: TXFLabel;
+    DBEdit11: TDBEdit;
+    XFLabel22: TXFLabel;
+    DBEdit13: TDBEdit;
+    XFLabel23: TXFLabel;
+    XFLabel24: TXFLabel;
+    DBEdit14: TDBEdit;
+    DBEdit15: TDBEdit;
+    XFLabel25: TXFLabel;
+    DBEdit16: TDBEdit;
+    XFLabel26: TXFLabel;
+    XFGroupBox1: TXFGroupBox;
+    Label2: TLabel;
+    edFranshiz: TDBComboBox;
+    edExtraFranshiz: TDBEdit;
+    edTariff: TDBComboBox;
+    XFLabel16: TXFLabel;
+    XFLabel27: TXFLabel;
+    XFLabel28: TXFLabel;
+    XFCheckBox3: TXFCheckBox;
+    XFCheckBox2: TXFCheckBox;
+    XFCheckBox1: TXFCheckBox;
+    XFButton3: TXFButton;
+    XFLabel29: TXFLabel;
+    DBLookupComboBox2: TDBLookupComboBox;
+    dbAvalute: TDBLookupComboBox;
+    procedure btOkClick(Sender: TObject);
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure ActiveFormDestroy(Sender: TObject);
+    procedure BitBtn2Click(Sender: TObject);
+    procedure edDBCBCustNameChange(Sender: TObject);
+    procedure edDBCBCustNameKeyPress(Sender: TObject; var Key: Char);
+    procedure btApplyClick(Sender: TObject);
+    procedure btSuggestionClick(Sender: TObject);
+    procedure edDrIntendChange(Sender: TObject);
+    procedure edBeginDateChange(Sender: TObject);
+    procedure DBBentypeClick(Sender: TObject);
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure DBMonthsClick(Sender: TObject);
+    procedure DBMonthsKeyPress(Sender: TObject; var Key: Char);
+    procedure DBFranshizClick(Sender: TObject);
+    procedure DBFranshizKeyPress(Sender: TObject; var Key: Char);
+    procedure edFranshizClick(Sender: TObject);
+    procedure ODSFranshizAfterOpen(DataSet: TDataSet);
+    procedure SpeedButton2Click(Sender: TObject);
+    procedure SpeedButton3Click(Sender: TObject);
+    procedure SpeedButton4Click(Sender: TObject);
+    procedure SpeedButton5Click(Sender: TObject);
+    procedure ODSdrAccessPeopleAfterInsert(DataSet: TDataSet);
+    procedure ODSdrAccessPeopleBeforePost(DataSet: TDataSet);
+    procedure ODSdrAccessPeopleBeforeDelete(DataSet: TDataSet);
+    procedure cbBenTypeChange(Sender: TObject);
+    procedure DBBanksClick(Sender: TObject);
+    procedure DBBanksKeyPress(Sender: TObject; var Key: Char);
+    procedure edFranshizChange(Sender: TObject);
+    procedure SpeedButton7Click(Sender: TObject);
+    procedure BitBtn1Click(Sender: TObject);
+    procedure edIns_DateChange(Sender: TObject);
+    procedure DBAgentsClick(Sender: TObject);
+    procedure BitBtn3Click(Sender: TObject);
+    procedure SuggestClick(Sender: TObject); 
+    procedure sbtnInsertClick(Sender: TObject);
+    procedure SpeedButton11Click(Sender: TObject);
+    procedure sbtnSaveClick(Sender: TObject);
+    procedure btnConditionClick(Sender: TObject);
+    procedure btnNewClick(Sender: TObject);
+    procedure edTariffChange(Sender: TObject);
+    procedure DBEdit4KeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure rbBankClick(Sender: TObject);
+    procedure rbBeneficiaryClick(Sender: TObject);
+    procedure dbAvalute1Click(Sender: TObject);
+    procedure XFBitBtn1Click(Sender: TObject);
+    procedure SpeedButton12Click(Sender: TObject);
+    procedure SpeedButton15Click(Sender: TObject);
+    procedure SpeedButton10Click(Sender: TObject);
+    procedure XFButton1Click(Sender: TObject);
+    procedure XFButton2Click(Sender: TObject);
+    procedure XFCheckBox1Click(Sender: TObject);
+    procedure XFCheckBox2Click(Sender: TObject);
+    procedure XFCheckBox3Click(Sender: TObject);
+    //procedure Button1Click(Sender: TObject);
+  private
+    { Private declarations }
+    FParams: TStrings;
+    FEvents: IfmMKBlankEvents;
+    FOwnerHandle : Integer;
+    IsSaved,ch : Boolean;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+    function  SaveData():Boolean;
+    function  AssignVariables(Valname : String; Value : Variant;
+                                      Valtype:Integer; var Varbl:Variant):Integer;
+    procedure CalcMonth();
+    procedure CalcEndDate();
+    procedure DisableControls(ControlName : TCustomControl; disable : boolean = true);
+    procedure MakeFranshizList();
+    procedure MakeTariffList();
+    procedure CalcAccessories;
+
+
+
+//    procedure LoadValues(var params : TStringlist);
+  protected
+    { Protected declarations }
+
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+    function  Get_Owner:Integer; safecall;
+    procedure Set_Owner(val : Integer);  safecall;
+    {IParamInput}
+    function  Get_Params(const Name: WideString): OleVariant; safecall;
+    procedure Set_Params(const Name: WideString; Value: OleVariant); safecall;
+    property Params[const Name: WideString]: OleVariant read Get_Params write Set_Params;
+    {IInstance}
+    function InstanceInitialize: HResult; safecall;
+    function IUIObject.Initialize = InstanceInitialize;
+    function Cleanup: HResult; safecall;
+    {IUIObject}
+//    function  Get_Icon: OLE_HANDLE; safecall;
+    function UIObjectActivate: HResult; safecall;
+    function IUIObject.Activate = UIObjectActivate;
+    function QueryDeactivate: HResult; safecall;
+    function UIObjectDeactivate: HResult; safecall;
+    function IUIObject.Deactivate = UIObjectDeactivate;
+    function SaveState: HResult; safecall;
+    function  Get_Height : Integer; safecall;
+    function  Get_Width  : Integer; safecall;
+    procedure aEditCustExecute(Sender: TObject);
+    function  ShowfmAddMKBlank():Integer;
+     procedure SaveCustData();
+    procedure BlankInitialization;
+
+  public
+    { Public declarations }
+    CID : Integer;
+      s:string;
+      op_type :string;
+    procedure Initialize; override;
+  end;
+
+var
+  fmMKBlank : TfmMKBlank;
+
+implementation
+
+uses ComObj, ComServ, sboapiDataModuleImpl, UMKDataMod,UMKAccesories,
+     UClaims, UConditions, UNotes,  SBTranslateProc, fmAddMKBlankImpl,UPlgContainer,CommanParametrs;
+
+{$R *.DFM}
+
+{ TfmMKBlank }
+
+
+
+procedure TfmMKBlank.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_fmMKBlankPage); }
+end;
+
+procedure TfmMKBlank.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as IfmMKBlankEvents;
+end;
+
+procedure TfmMKBlank.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TfmMKBlank.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TfmMKBlank.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TfmMKBlank.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TfmMKBlank.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TfmMKBlank.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TfmMKBlank.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TfmMKBlank.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TfmMKBlank.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TfmMKBlank.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TfmMKBlank.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TfmMKBlank.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TfmMKBlank.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TfmMKBlank.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TfmMKBlank.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TfmMKBlank.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TfmMKBlank.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TfmMKBlank.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TfmMKBlank.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TfmMKBlank._Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TfmMKBlank.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TfmMKBlank.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TfmMKBlank.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TfmMKBlank.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TfmMKBlank.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TfmMKBlank.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TfmMKBlank.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TfmMKBlank.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TfmMKBlank.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TfmMKBlank.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TfmMKBlank.Set_AxBorderStyle(Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TfmMKBlank.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TfmMKBlank.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TfmMKBlank.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TfmMKBlank.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TfmMKBlank.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TfmMKBlank.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TfmMKBlank.Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TfmMKBlank.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TfmMKBlank.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TfmMKBlank.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TfmMKBlank.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TfmMKBlank.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TfmMKBlank.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+
+function  TfmMKBlank.Get_Owner:Integer;
+begin
+  Result := handle;
+end;
+
+procedure TfmMKBlank.Set_Owner(val : Integer);
+begin
+  if val > 0 then
+     FOwnerHandle := val;
+end;
+
+
+function  TfmMKBlank.Get_Params(const Name: WideString): OleVariant;
+begin
+  Result := FParams.Values[Name];
+  //showmessage(inttostr(Result));
+end;
+
+procedure TfmMKBlank.Set_Params(const Name: WideString; Value: OleVariant);
+begin
+  FParams.Values[Name] := Value;
+end;
+
+function TfmMKBlank.InstanceInitialize: HResult;
+begin
+  Result := S_OK;
+end;
+
+function TfmMKBlank.Cleanup: HResult;
+begin
+  Result := S_OK;
+end;
+
+procedure TfmMKBlank.DisableControls(ControlName : TCustomControl; disable : boolean = true);
+
+  procedure DisableControl(CName : TCustomControl);
+  var i : Integer;
+  a:string;
+  begin
+    with CName do
+      for i := 0 to ControlCount -1 do begin
+        //ShowMessage(Controls[i].name);
+        if (Controls[i] is TCustomControl) then
+          DisableControl(Controls[i] as TCustomControl);
+        Controls[i].Enabled := disable;
+
+      end
+  end;
+var a:integer;
+begin
+  with InsMKDataMod do
+  //a:=InsMKDataMod.OPCOMMON.CallIntegerFunction('disablepolicies', []);
+  //showmessage(inttostr(a));
+  if InsMKDataMod.OPCOMMON.CallIntegerFunction('disablepolicies', []) = 0 then
+    Exit;
+
+  DisableControl(ControlName);
+
+  btApply.Enabled := Disable;
+  btOk.Enabled := Disable;
+
+end;
+
+procedure TfmMKBlank.BlankInitialization;
+begin
+
+    CID := Get_Params('СID');
+    contactid:=CID;
+    gridmesuliyyet:=DBGrid2;
+    gridferdiqeza :=DBGrid3;
+    //showmessage (inttostr(CID));
+
+    with InsMKDataMod do begin
+    ODSMotorKasko.Close;
+      ODSMotorKasko.SetVariable('CID', CID);
+      ODSMotorKasko.Open;
+
+      {ODSdrAccessPeople.Close;
+      ODSdrAccessPeople.SetVariable('id',ODSMotorKaskoID.value);
+      ODSdrAccessPeople.Open; }
+      ODSContracts.Close;
+      ODSContracts.SetVariable('CID', CID);
+      ODSContracts.Open;
+
+      ODSCusts.Locate('id',ODSContractsKli_ID.Value,[]);
+
+
+    end;
+
+    CalcAccessories;
+end;
+
+function TfmMKBlank.UIObjectActivate: HResult;
+begin
+         PageControl2.ActivePageIndex:=0 ;
+
+          fmMKBlank.XFCheckBox1Click(Self);
+          fmMKBlank.XFCheckBox2Click(Self);
+          fmMKBlank.XFCheckBox3Click(Self);
+        //showmessage(inttostr(instype_id));
+
+         BlankInitialization;
+
+     op_type:= Get_Params('Mod');
+    if Get_Params('Mod') = 'Insert' then begin
+
+  if instype_id=13 then
+ begin
+   XFCheckBox1.Checked:=false;
+   XFCheckBox1.Visible:=false;
+   XFGroupBox4.Visible:=false;
+   XFCheckBox2.Checked:=false;
+   XFCheckBox2.Visible:=false;
+   XFGroupBox3.Visible:=false;
+   XFCheckBox3.Visible:=true;
+ end;
+  if instype_id=1 then
+ begin
+   XFCheckBox1.Checked:=false;
+   XFCheckBox1.Visible:=false;
+   XFGroupBox4.Visible:=false;
+   XFCheckBox3.Checked:=false;
+   XFCheckBox3.Visible:=false;
+   XFGroupBox2.Visible:=false;
+   XFCheckBox2.Visible:=true;
+ end;
+
+          //XFGroupBox1.Enabled:=false;
+       with InsMKDataMod do begin
+           ODSMarks.close;
+           ODSMarks.Open;
+
+            //ODSModels.SetVariable('mark_id', CID);
+         ODSModels.Open;
+         ODSMotorkasko.Insert;
+         ODSContracts.Insert;
+           DSrespon.close;
+           DSrespon.SetVariable('p_cid',-1);
+           DSrespon.open;
+
+           DSrespon.insert;
+
+            DSins_contr_per_acc_motor.close;
+            DSins_contr_per_acc_motor.SetVariable('PCID',-1);
+            DSins_contr_per_acc_motor.open;
+            DSins_contr_per_acc_motor.insert;
+
+       end;
+       XFCheckBox1.Checked:=false;
+       XFCheckBox2.Checked:=false;
+       XFCheckBox3.Checked:=false;
+       edIns_Date.DateTime := InsMKDataMod.DSSysdat.FieldByName('TEK_DAT').AsDateTime;
+       edBeginDate.DateTime := InsMKDataMod.DSSysdat.FieldByName('TEK_DAT').AsDateTime;
+       edEndDate.DateTime := InsMKDataMod.DSSysdat.FieldByName('TEK_DAT').AsDateTime;
+    //   dbAvalute.KeyValue:=0;
+          Caption := format(fmCaption, ['Yeni anket']);
+
+       DBCBCustName.KeyValue :=  StrToInt(Get_Params('KLI_ID'));
+       
+       with InsMKDataMod do
+        ODSContracts.FieldByName('KLI_ID').AsInteger :=StrToInt(Get_Params('KLI_ID'));
+         //showmessage(inttostr(cid));
+    end;
+    if Get_Params('Mod') = 'Edit' then begin
+       Caption := format(fmCaption, ['Redakte']);
+
+
+        if (InsMKDataMod.ODSContracts.FieldByName('TYPE_ID').AsInteger=13)
+ and (InsMKDataMod.ODSContracts.FieldByName('CHM').AsInteger=1) then
+ begin
+   XFCheckBox1.Checked:=false;
+   XFCheckBox1.Visible:=false;
+   XFGroupBox4.Visible:=false;
+   XFCheckBox2.Checked:=false;
+   XFCheckBox2.Visible:=false;
+   XFGroupBox3.Visible:=false;
+ end;
+  if (InsMKDataMod.ODSContracts.FieldByName('TYPE_ID').AsInteger=1)
+ and (InsMKDataMod.ODSContracts.FieldByName('CHFQ').AsInteger=1) then
+ begin
+   XFCheckBox1.Checked:=false;
+   XFCheckBox1.Visible:=false;
+   XFGroupBox4.Visible:=false;
+
+   XFCheckBox3.Checked:=false;
+   XFCheckBox3.Visible:=false;
+   XFGroupBox2.Visible:=false;
+ end;
+
+
+
+        //XFGroupBox1.Enabled:=true;
+       //dbAvalute.KeyValue:=0;
+       //showmessage(InsMKDataMod.ODSContracts.FieldByName('CHM').AsString);
+  if InsMKDataMod.ODSContracts.FieldByName('CHKASKO').AsInteger=0 then
+     XFCheckBox1.Checked:=false
+     else
+     XFCheckBox1.Checked:=true;
+  if InsMKDataMod.ODSContracts.FieldByName('CHM').AsInteger=0 then
+       XFCheckBox3.Checked:=false
+       else
+       XFCheckBox3.Checked:=true;
+if InsMKDataMod.ODSContracts.FieldByName('CHFQ').AsInteger=0 then
+       XFCheckBox2.Checked:=false
+       else
+       XFCheckBox2.Checked:=true;
+
+       with InsMKDataMod do
+       begin
+
+           DSrespon.close;
+           DSrespon.SetVariable('p_cid',contactid);
+           DSrespon.open;
+           DSrespon.RefreshRecord;
+           DSrespon.Edit;
+
+            DSins_contr_per_acc_motor.close;
+            DSins_contr_per_acc_motor.SetVariable('PCID',contactid);
+            DSins_contr_per_acc_motor.open;
+            DSins_contr_per_acc_motor.RefreshRecord;
+            DSins_contr_per_acc_motor.Edit;
+
+
+            ODSMarks.Close;
+            ODSMarks.Open;
+            ODSModels.Close;
+            ODSModels.SetVariable('mark_id', CID);
+            ODSModels.Open;
+
+            ODSReliaseDates.Close;
+            ODSReliaseDates.SetVariable('state_id', ODSMarks.fieldbyName('state_id').asInteger);
+            ODSReliaseDates.SetVariable('releaseyear',ODSMotorKasko.FieldByName('InsuredOutputYear').AsInteger);
+            ODSReliaseDates.Open;
+
+            ODSMonths.Close;
+            ODSMonths.SetVariable('release_id',ODSReliaseDatesID.AsInteger);
+            ODSMonths.Open;
+
+            ODSFranshiz.Close;
+            ODSFranshiz.SetVariable('month_id',ODSMonthsID.AsInteger);
+            ODSFranshiz.Open;
+
+            ODSTariffs.Close;
+            ODSTariffs.SetVariable('franshiz_id',ODSFranshizID.AsInteger);
+            ODSTariffs.Open;
+
+
+       end;
+
+       with InsMKDataMod, ODSdrAccessPeople do
+       begin
+            SetVariable('ID', CID);
+            Open;
+       end;
+       with InsMKDataMod, ODSContracts do
+       begin
+            rbBank.Checked := FieldByName('ben_id').asInteger = 0;
+            rbBeneficiary.Checked := FieldByName('ben_id').asInteger = 1;
+            XFRadioButton1.Checked := FieldByName('ben_id').asInteger = 2;
+       end;
+
+
+
+
+       with InsMKDataMod, ODSContracts do
+       begin
+            ODSMotorkasko.Edit;
+            ODSContracts.Edit;
+            edIns_Date.DateTime := fieldByName('INS_DATE').asDateTime;
+            edBeginDate.DateTime := fieldByName('BEGIN_DATE').asDateTime;
+            edEndDate.DateTime := fieldByName('END_DATE').asDateTime;
+            //showmessage(inttostr(fieldByName('id').asinteger));
+       end;
+       //SpeedButton1Click(SpeedButton1);
+         btSuggestion.Enabled := True;
+         //diger sigorta teminatlari haqqinda--
+         //PageControl1.ActivePageIndex:=0;
+
+         with InsMKDataMod do
+       begin
+       //showmessage(inttostr(cid));
+           DSmesuli.Close;
+           DSmesuli.SetVariable('pcid',cid);
+           DSmesuli.Open ;
+
+           DSFqeza.Close;
+           DSFqeza.SetVariable('pcid',cid);
+           DSFqeza.Open ;
+
+       end;
+         //diger sigorta teminatlari haqqinda--
+       //-----------Disable controls -------------
+        if (p_contractstate=6) or (p_contractstate=7) or(p_contractstate=8)  then
+        begin
+        //owmessage('salam1');
+          fmMKBlank.btApply.Enabled:=false;
+          fmMKBlank.btOk.Enabled:=false;
+        end
+        else
+        begin
+         //owmessage('salam2');
+          fmMKBlank.btApply.Enabled:=true;
+          fmMKBlank.btOk.Enabled:=true;
+        end;
+           with InsMKDataMod, OPCOMMON do
+         if CallIntegerFunction('get_state',[CID]) = 6 {is disable?} then
+
+       DisableControls(Panel2, false);
+
+
+    end;
+  Result := S_OK;
+end;
+
+function TfmMKBlank.QueryDeactivate: HResult;
+begin
+  Result := S_OK;
+end;
+
+function TfmMKBlank.UIObjectDeactivate: HResult;
+begin
+  Result := S_OK;
+end;
+
+procedure TfmMKBlank.XFBitBtn1Click(Sender: TObject);
+begin
+   loadPlugin('Reinsurance.bpl','');
+end;
+
+procedure TfmMKBlank.XFButton1Click(Sender: TObject);
+begin
+  loadPlugin('OtherProvisions.bpl','');   //Frmpersonal_acc
+end;
+
+procedure TfmMKBlank.XFButton2Click(Sender: TObject);
+begin
+  loadPlugin('OtherProvisions.bpl','Frmpersonal_acc');   //
+end;
+
+procedure TfmMKBlank.XFCheckBox1Click(Sender: TObject);
+begin
+if XFCheckBox1.Checked=false then
+begin
+  edInsSumm.Text:='';
+  edAmmount.Text:='';
+  edInsSumm.Enabled:=false;
+  edAmmount.Enabled:=false;
+end
+else
+begin
+edInsSumm.Enabled:=true;
+edAmmount.Enabled:=true
+
+end;
+end;
+
+procedure TfmMKBlank.XFCheckBox2Click(Sender: TObject);
+begin
+if XFCheckBox2.Checked=false then
+begin
+  DBEdit10.Text:='';
+  DBEdit11.Text:='';
+  DBEdit13.Text:='';
+  DBEdit14.Text:='';
+  DBEdit15.Text:='';
+  DBEdit16.Text:='';
+  DBEdit10.Enabled:=false;
+  DBEdit11.Enabled:=false;
+  DBEdit13.Enabled:=false;
+  DBEdit14.Enabled:=false ;
+  DBEdit15.Enabled:=false;
+  DBEdit16.Enabled:=false;
+end
+else
+begin
+  DBEdit10.Enabled:=true;
+  DBEdit11.Enabled:=true;
+  DBEdit13.Enabled:=true;
+  DBEdit14.Enabled:=true ;
+  DBEdit15.Enabled:=true;
+  DBEdit16.Enabled:=true;
+end;
+end;
+
+procedure TfmMKBlank.XFCheckBox3Click(Sender: TObject);
+begin
+if XFCheckBox3.Checked=false then
+begin
+  DBEdit9.Text:='';
+  DBEdit8.Text:='';
+  DBEdit9.Enabled:=false;
+  DBEdit8.Enabled:=false ;
+end
+else
+begin
+  DBEdit9.Enabled:=true;
+  DBEdit8.Enabled:=true ;
+
+end;
+end;
+
+function TfmMKBlank.SaveState: HResult;
+begin
+  Result := S_OK;
+end;
+
+function  TfmMKBlank.Get_Height : Integer;
+begin
+  Result := Height;
+end;
+
+function  TfmMKBlank.Get_Width  : Integer;
+begin
+  Result := Width;
+end;
+
+function TfmMKBlank.SaveData():Boolean;
+var
+  str : String;
+  s,s1:double;
+  c_acc,a,i:integer;
+  say:integer;
+
+begin
+     with InsMKDataMod,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['SAVECONTRACT_KASKO']);
+ end;
+
+   if contractstatus=1 then
+ begin
+   showmessage('Diqqət! Bu müqavilə bağlanmış müqavilə olduğundan heç bir deyişiklik oluna bilməz.');
+   exit;
+ end;
+
+ if (XFCheckBox1.Checked=false) and (XFCheckBox2.Checked=false)and (XFCheckBox3.Checked=false) then
+begin
+  showmessage('Diqqət! Sığorta növlərindən heç biri seçilməyib!');
+  exit;
+end;
+
+ Result := false;
+    //say :=XDBGrid1.DataSource.DataSet.FieldByName('id').AsInteger;
+   say := XDBGrid1.DataSource.DataSet.RecordCount ;
+    //showmessage(inttostr(say));
+    //exit;
+
+ if DBEdit12.Text='' then
+   begin
+    showmessage('Polis №  sahəsi boşdur!');
+    exit;
+   end;
+
+ if DBAgents.Text='' then
+   begin
+    showmessage('Agent  sahəsi boşdur!');
+    exit;
+   end;
+
+ if say=0 then
+ begin
+  showmessage('Cədvəl avtomobilləri daxil edin!');
+    exit;
+ end;
+
+
+
+ if say<>0 then
+      begin
+  if DBEdit4.Text='' then
+   begin
+    showmessage('Avto. dəyəri  sahəsi boşdur!');
+    exit;
+   end;
+
+   if DBEdit5.Text='' then
+   begin
+    showmessage('Şassi №-si sahəsi boşdur!');
+    exit;
+   end;
+
+   if DBEdit2.Text='' then
+   begin
+    showmessage('Otracaqların sayı sahəsi boşdur!');
+    exit;
+   end;
+
+   if DBEdit7.Text='' then
+   begin
+    showmessage('Mühərrik №-si sahəsi boşdur!');
+    exit;
+   end;
+
+      if DBEdit3.Text='' then
+   begin
+    showmessage('Dövlət № -si sahəsi boşdur!');
+    exit;
+   end;
+
+   if DBEdit6.Text='' then
+   begin
+    showmessage('Ban №-si sahəsi boşdur!');
+    exit;
+   end;
+
+   if DBComboBox1.Text='' then
+   begin
+    showmessage('Mühərrik həcmi sahəsi boşdur!');
+    exit;
+   end;
+ ////////////////////////////////////////
+     if edFranshiz.Text='' then
+   begin
+    showmessage(' Franşiza sahəsi boşdur!');
+    exit;
+   end;
+
+       if edExtraFranshiz.Text='' then
+   begin
+    showmessage(' % sahəsi boşdur!');
+    exit;
+   end;
+
+       if edTariff.Text='' then
+   begin
+    showmessage(' Tarif sahəsi boşdur!');
+    exit;
+   end;
+
+       if XFCheckBox1.Checked=true then
+    begin
+
+
+    if edInsSumm.Text='' then
+   begin
+    showmessage('Sığorta məbləği sahəsi boşdur!');
+    exit;
+   end;
+
+    if edAmmount.Text='' then
+   begin
+    showmessage('Sığorta haqqı sahəsi boşdur!');
+    exit;
+   end;
+
+     end;
+
+
+
+    if XFCheckBox3.Checked=true then
+    begin
+ if DBEdit9.Text='' then
+begin
+  Showmessage('Diqqət! Məsuliyyət sığ. məbləği sahəsi boşdur.');
+  exit;
+end;
+
+
+if DBEdit8.Text='' then
+begin
+  Showmessage('Diqqət! Məsuliyyət sığ. haqqı sahəsi boşdur.');
+  exit;
+end;
+
+    end;
+
+    if XFCheckBox2.Checked=true then
+begin
+
+if DBEdit10.Text='' then
+begin
+  Showmessage('Diqqət! Fərdi qəza: Sığorta olunanların sayı sahəsi boşdur.');
+  exit;
+end;
+
+
+if DBEdit16.Text='' then
+begin
+  Showmessage('Diqqət!Fərdi qəza: Bir sığ. olunan üçün sığ.məbləği sahəsi boşdur.');
+  exit;
+end;
+
+
+if DBEdit13.Text='' then
+begin
+  Showmessage('Diqqət!Fərdi qəza:Bir hadisə üçün sığ. məbləği sahəsi boşdur.');
+  exit;
+end;
+
+if DBEdit11.Text='' then
+begin
+  Showmessage('Diqqət!Fərdi qəza:Bir sığ. olunan üçün max. tibbi xərclər sahəsi boşdur.');
+  exit;
+end;
+
+if DBEdit15.Text='' then
+begin
+  Showmessage('Diqqət!Fərdi qəza:Bir sığ. Hadisəsi üçün max. tibbi xərclər sahəsi boşdur.');
+  exit;
+end;
+
+if DBEdit14.Text='' then
+begin
+  Showmessage('Diqqət! Fərdi qəza:Sığorta haqqı sahəsi boşdur.');
+  exit;
+end;
+
+end;
+
+      end;
+ ////////////////////////////////////////
+   with InsMKDataMod, OPCOMMON do
+   begin
+   if XFCheckBox1.Checked=true then
+     begin
+     a:=CallIntegerFunction('get_acc_balanc_hesab',[4]);
+
+     if a=0 then
+     begin
+       showmessage('Diqqət ! Bu müqavilə tipində avtomatik hesabların açılası üçün balans hesabları sazlanmayıb!.');
+       exit;
+     end;
+     end;
+
+        if XFCheckBox2.Checked=true then
+     begin
+     a:=CallIntegerFunction('get_acc_balanc_hesab',[1]);
+
+     if a=0 then
+     begin
+       showmessage('Diqqət ! Bu müqavilə tipində avtomatik hesabların açılası üçün balans hesabları sazlanmayıb!.');
+       exit;
+     end;
+     end;
+
+        if XFCheckBox3.Checked=true then
+     begin
+     a:=CallIntegerFunction('get_acc_balanc_hesab',[13]);
+
+     if a=0 then
+     begin
+       showmessage('Diqqət ! Bu müqavilə tipində avtomatik hesabların açılası üçün balans hesabları sazlanmayıb!.');
+       exit;
+     end;
+     end;
+   end;
+          // showmessage(op_type);
+//-----------------------------
+ s:=0; s1:=0;
+  try
+
+   with InsMKDataMod, ODSContracts do
+   if State in [dsEdit, dsInsert] then
+   begin
+      FieldByName('AGENT_ID').AsFloat := ODSAgentID.value;
+      FieldByName('Ins_Date').AsDateTime := Integer(trunc(edIns_Date.Date));
+      FieldByName('Begin_Date').AsDateTime := Integer(trunc(edBeginDate.Date));
+      FieldByName('End_Date').AsDateTime := Integer(trunc(edEndDate.Date));
+
+      //FieldByName('ben_id').asInteger := Integer(not rbBank.Checked);
+      if rbBank.Checked=true then
+      begin
+      FieldByName('ben_id').asInteger := 0;
+      end;
+
+      if rbBeneficiary.Checked=true then
+      begin
+      FieldByName('ben_id').asInteger := 1;
+      end;
+
+
+      if XFRadioButton1.Checked=true then
+      begin
+      FieldByName('ben_id').asInteger := 2;
+      end;
+
+      if op_type='Edit' then
+      begin
+      FieldByName('state').asInteger :=0;
+      end;
+
+
+   if XFCheckBox1.Checked=false then
+InsMKDataMod.ODSContracts.FieldByName('CHKASKO').AsInteger:=0
+     else
+InsMKDataMod.ODSContracts.FieldByName('CHKASKO').AsInteger:=1;
+
+  if XFCheckBox3.Checked=false then
+InsMKDataMod.ODSContracts.FieldByName('CHM').AsInteger:=0
+       else
+InsMKDataMod.ODSContracts.FieldByName('CHM').AsInteger:=1;
+
+  if XFCheckBox2.Checked=false then
+       InsMKDataMod.ODSContracts.FieldByName('CHFQ').AsInteger:=0
+       else
+       InsMKDataMod.ODSContracts.FieldByName('CHFQ').AsInteger:=1 ;
+
+
+     InsMKDataMod.ODSContracts.FieldByName('TYPE_ID').asInteger :=4;
+
+   if (fmMKBlank.XFCheckBox1.Checked=false)
+   and (fmMKBlank.XFCheckBox2.Checked=false)
+   and (fmMKBlank.XFCheckBox3.Checked=true) then
+   begin
+  // showmessage('M');
+   InsMKDataMod.ODSContracts.FieldByName('TYPE_ID').asInteger :=13;
+   end;
+
+   if (fmMKBlank.XFCheckBox1.Checked=false)
+   and (fmMKBlank.XFCheckBox2.Checked=true)
+   and (fmMKBlank.XFCheckBox3.Checked=false) then
+   begin
+   //showmessage('F');
+   InsMKDataMod.ODSContracts.FieldByName('TYPE_ID').asInteger :=1;
+   end;
+
+
+      Post;
+      RefreshRecord;
+      CID := FieldByName('id').asInteger;
+      contactid:=cid;
+      Edit;
+   end;
+
+    with InsMKDataMod, ODSMotorkasko do
+    if State in [dsEdit, dsInsert] then
+    begin
+        FieldByName('CID').AsInteger := CID;
+      //  FieldByName('Tariff').AsFloat := ODSTariffsAmmount.AsFloat;
+        ODSBanks.Locate('name',DBBanks.KeyValue,[]);
+        if rbBank.Checked then
+           ODSMotorkaskoBank_Id.Value:=ODSBanksID.Value;
+        // FieldByName('ben_id').asInteger := Integer(not rbBank.Checked);
+        // FieldByName('INSUREDCOLOR').asString := DBInsColors.Text;
+         Post;
+         RefreshRecord;
+         ODSContracts.Edit;
+    end;
+
+    with InsMKDataMod, ODSMotorkasko do
+    begin
+         First;
+         for i:=1 to RecordCount do
+         begin
+             s:=s+FieldByName('inssumm').AsFloat;
+             s1:=s1+FieldByName('ammount').AsFloat;
+             next;
+         end;
+    end;
+    with InsMKDataMod, ODSContracts do
+     if State in [dsEdit, dsInsert] then
+     begin                  
+          ODSContractsAmmount.Value:=s1;
+          ODSContractsInssumm.Value:=s;
+          ODSContractsFranshiz.Value:=InsMKDataMod.ODSMotorKaskoFranshiz.Value;
+          ODSContractsTariff.Value:=InsMKDataMod.ODSMotorKaskoTariff.Value;
+          Post;
+          RefreshRecord;
+     end;
+         // showmessage('Salam1');
+     if gdDrAccessPeople.DataSource.DataSet.RecordCount>0 then
+     begin
+          //showmessage('Salam2');
+    with InsMKDataMod, ODSdrAccessPeople,ODSAccessories do
+     if State in [dsEdit, dsInsert] then
+       begin
+
+         Post;
+         RefreshRecord;
+       end;
+
+           with InsMKDataMod ,ODSdrAccessPeo do
+           begin
+           ODSdrAccessPeo.Close;
+           ODSdrAccessPeo.SetVariable('p_id',ODSMotorkaskoID.Value);
+           ODSdrAccessPeo.Open;
+           ODSdrAccessPeo.Edit;
+       //if State in [Edit, Insert] then
+      // begin
+           //showmessage(inttostr(cid));
+         ODSdrAccessPeo.FieldByName('CID').AsInteger:=CID;
+         ODSdrAccessPeo.Post;
+         ODSdrAccessPeo.RefreshRecord;
+
+      // end;
+       end;
+          end;
+
+      with InsMKDataMod,ODSAccessories do
+     if State in [dsEdit, dsInsert] then
+       begin
+
+         Post;
+         RefreshRecord;
+       end;
+
+if XFCheckBox3.Checked=true then
+begin
+
+with InsMKDataMod, DSrespon do
+   if State in [dsEdit, dsInsert] then
+   begin
+        FieldByName('TYPEID').AsInteger:=4;
+        FieldByName('CID').AsInteger:=contactid;
+        FieldByName('CLOSE_PREFIX').AsInteger:=0;
+        FieldByName('resp_pilisnum').AsString:='';
+        FieldByName('resp_cid').AsFloat:=-1;
+
+      DSrespon.Post;
+
+          DSrespon.RefreshRecord;
+   end;
+end;
+     if XFCheckBox2.Checked=true then
+        //showmessage('Salam');
+begin
+
+   with InsMKDataMod, DSins_contr_per_acc_motor do
+   if State in [dsEdit, dsInsert] then
+   begin
+        FieldByName('TYPEID').AsInteger:=4;
+        FieldByName('CID').AsInteger:=contactid;
+        //FieldByName('CLOSE_PREFIX').AsInteger:=0;
+        FieldByName('ACCIDENT_POLISNUM').AsString:='';
+        FieldByName('ACCIDENT_CID').AsFloat:=-1;
+
+      DSins_contr_per_acc_motor.Post;
+
+          DSins_contr_per_acc_motor.RefreshRecord;
+
+end;
+
+
+end;
+
+   with InsMKDataMod, OPCOMMON do
+   begin
+     c_acc:=CallIntegerFunction('get_acc_id',[CID]);
+
+     if c_acc=0 then
+       begin
+       //showmessage(inttostr(CID));
+    CallProcedure('account_open',[CID]);
+       end;
+
+
+    IsSaved := True;
+    Result := True;
+
+
+
+   end;
+  except
+  on E:Exception do hbErrMsg.ShowMessage(E.message);
+  end;
+end;
+
+procedure TfmMKBlank.btOkClick(Sender: TObject);
+begin
+
+  //if SaveData() or IsSaved then begin
+  if SaveData() then begin
+
+   PostMessage(FOwnerHandle, WM_ModalResult, mrOk, 0);
+  end;
+end;
+
+
+
+
+procedure TfmMKBlank.ActiveFormCreate(Sender: TObject);
+begin
+  fmMKBlank := Self;
+  FParams := TStringList.Create;
+  InsMKDataMod := TInsMKDataMod.Create(Self);
+  isSaved := False;
+    SBTranslateProc.TranslateAllComponents(Self,sboapiDataModule.OrPack_SL);
+
+
+ // if ch then rbBeneficiary.Checked:=false;
+end;
+
+
+procedure TfmMKBlank.ActiveFormDestroy(Sender: TObject);
+begin
+   InsMKDataMod.free;
+   FParams.Free;
+end;
+
+procedure TfmMKBlank.BitBtn2Click(Sender: TObject);
+begin
+  with InsMKDataMod do begin
+    ODSMotorkasko.Cancel;
+    ODSContracts.Cancel;
+    ODSdrAccessPeople.Cancel;
+  end;
+  PostMessage(FOwnerHandle, WM_ModalResult, mrCancel, 0);
+
+  Application.ProcessMessages;
+
+  //fmclose;
+  //fmMKBlank.Close;
+
+  //fmContainer.Close;
+end;
+
+function ReplaceStr(Substr: string; S: string):String;
+var res : String;
+    p : Integer;
+begin
+  p := pos (SubStr, S);
+  Res := 'lb'+copy(S, p+2, Length(S));
+  Result := Res;
+end;
+
+function TfmMKBlank.AssignVariables(Valname : String; Value : Variant;
+                                      Valtype:Integer; var Varbl:Variant):Integer;
+begin
+  try
+    ///if TVarData(varbl).VType = Valtype;
+    varCast(varbl, value, valtype);
+{    case Valtype of
+      varInteger   : Varbl := StrToInt(Value);
+      varString    : Varbl := Value;
+      varDate      : Varbl := StrToDate(Value);
+      varCurrency  : Varbl := StrToCurr(Value);
+    end;  }
+    Result := mrOk;
+  except
+   on E:Exception do begin
+    raise TConversionExcept.Create((FindComponent(ReplaceStr('ed', Valname)) as TLabel).Caption+
+                                    '-səhv daxil edilib'#13+E.message);
+   end;
+  end;
+end;
+
+
+procedure TfmMKBlank.edDBCBCustNameChange(Sender: TObject);
+var key : Char;
+begin
+edDBCBCustNameKeyPress(Sender, key);
+end;
+
+procedure TfmMKBlank.edDBCBCustNameKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if Key = #13 then
+     begin
+       FindNextControl(ActiveControl,true,true,false).SetFocus;
+       Key := #0
+     end else
+     begin
+     if True then
+
+      btApply.Enabled := True;
+     end;
+  //IsSaved := not btApply.Enabled;
+end;
+
+procedure TfmMKBlank.btApplyClick(Sender: TObject);
+begin
+   if SaveData=true then begin
+     Suggest.Enabled := True;
+      btSuggestion.Enabled := True;
+     //  btApply.Enabled := False;
+      //XFGroupBox1.Enabled:=true;
+  end;
+  InsMKDataMod.ODSMarks.RefreshRecord;
+
+end;
+
+procedure TfmMKBlank.btSuggestionClick(Sender: TObject);
+{var
+   params : TStringList;
+begin
+   with InsMKDataMod, OPCOMMON do
+     CallBooleanFunction('change_state', [CID, pBlankDone]);
+   params := TStringList.Create;
+   with InsMKDataMod, ODSMotorkasko do
+    params.Values['MK_ID'] := IntToStr(FieldByName('ID').asInteger);
+   with InsMKDataMod, ODSCusts do
+   params.Values['KLI_ID'] := IntToStr(FieldByName('ID').asInteger);
+//   LoadValues(params);
+   with pmcSuggestion do begin
+     ShowModal(StringToGuid('{D5269FCA-2559-4984-A565-16C0EE110CF6'),params )
+   end;
+   params.Free;}
+var
+  PolicFormGuid : TGuid;
+  Params : TStringList;
+begin
+with InsMKDataMod,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['POLISCONTRACT_KASKO']);
+ end;
+  SaveData;
+  //Params := TStringList.Create;
+  //PolicFormGuid := StringToGUID('{3C454A4C-C304-4633-AAAD-4C46C68BB8EE}');
+ // with InsMKDataMod do
+   // Params.Values['CID'] := FloatToStr(ODSContractsID.Value);
+  //with pmcSuggestion do
+   //ShowModal(PolicFormGuid, Params);
+  //Params.Free;
+        loadPlugin('MKPolicybpl.bpl','');
+
+end;
+
+
+procedure TfmMKBlank.edDrIntendChange(Sender: TObject);
+var key : Char;
+begin
+  edDBCBCustNameKeyPress(Sender, key);
+end;
+
+procedure TfmMKBlank.CalcMonth();
+begin
+  with InsMKDataMod do
+    ODSMonths.Locate('count',
+       IntToStr(trunc((edEndDate.DateTime - edBeginDate.DateTime)/30)), [] );
+end;
+
+procedure TfmMKBlank.CalcEndDate();
+begin
+  with InsMKDataMod do
+   edEndDate.DateTime :=
+       IncMonth(edBeginDate.DateTime, ODSMonths.fieldbyname('COUNT').asInteger);
+end;
+
+procedure TfmMKBlank.edBeginDateChange(Sender: TObject);
+var key : Char;
+begin
+   CalcEndDate();
+   edDBCBCustNameKeyPress(Sender, key);
+end;
+
+
+procedure TfmMKBlank.DBBentypeClick(Sender: TObject);
+var key : Char;
+begin
+  edDBCBCustNameKeyPress(Sender, key);
+end;
+
+procedure TfmMKBlank.DBEdit4KeyUp(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+
+var
+say: integer;
+begin
+    say :=XDBGrid1.DataSource.DataSet.FieldByName('id').AsInteger;
+    //showmessage(inttostr(say));
+    //exit;
+ //-----------------------------
+
+ if say=0 then
+ begin
+  showmessage('Avtomobilləri daxil edin!');
+  DBEdit4.Text:='';
+    exit;
+ end;
+end;
+
+procedure TfmMKBlank.MakeFranshizList();
+begin
+
+  with InsMKDataMod, ODSFranshiz do
+  begin
+    edFranshiz.Items.Clear;
+    First;
+    while not EOF do begin
+      edFranshiz.Items.Add(FloatToStr(FieldByName('FRANSHIZ').asFloat));
+      Next;
+    end;
+    First
+  end;
+
+end;
+
+procedure TfmMKBlank.SpeedButton1Click(Sender: TObject);
+var
+    begindate,enddate:String;
+begin
+  with InsMKDataMod, ODSReliaseDates do
+  try        
+    Close;
+    if (ODSMarks.FieldByName('calcoptions').asInteger = 1)  then
+         raise TCalcException.Create('Verilmiş avtomabil markası üçün tarif hesablanmır!');
+    if trim(ODSMotorKasko.FieldByName('InsuredOutputYear').AsString) = '' then
+         raise TOutputYear.Create('Avtomobilin buraxılış ilini daxil edin!');
+    SetVariable('state_id', ODSMarks.fieldbyName('state_id').asInteger);
+    SetVariable('releaseyear',ODSMotorKasko.FieldByName('InsuredOutputYear').AsInteger);
+    Open;
+
+    begindate:=FormatDateTime('YYYY',ODSReliaseDatesBeginDate.value);
+    enddate:=FormatDateTime('YYYY',ODSReliaseDatesEndDate.value);
+    //showmessage(inttostr(ODSMarks.fieldbyName('state_id').asInteger));
+    //showmessage(begindate);
+    //showmessage(enddate);
+    //showmessage(ODSMotorKasko.FieldByName('InsuredOutputYear').AsString);
+
+
+    if (ODSMotorKasko.FieldByName('InsuredOutputYear').AsString<begindate) or
+       (ODSMotorKasko.FieldByName('InsuredOutputYear').AsString>enddate)  then
+         raise TCalcException.Create('Verilmiş avtomabil markasının buraxılış ilinə uyğun tarif hesablanmır!');
+
+    ODSMonths.Close;
+    ODSMonths.SetVariable('release_id',ODSReliaseDatesID.AsInteger);
+    ODSMonths.Open;
+
+    ODSFranshiz.Close;
+    ODSFranshiz.SetVariable('month_id',ODSMonthsID.AsInteger);
+    ODSFranshiz.Open;
+
+    MakeFranshizList;
+  except
+   on E : Exception do
+    MessageDlg(E.Message , mtInformation, [mbOK], 0);
+  end;
+end;
+
+procedure TfmMKBlank.DBMonthsClick(Sender: TObject);
+var key : Char;
+begin
+  edDBCBCustNameKeyPress(Sender, key);
+  CalcEndDate();
+  MakeFranshizList;
+  with InsMKDataMod do
+  begin
+       ODSTariffs.Close;
+       ODSTariffs.SetVariable('franshiz_id',ODSFranshizID.AsInteger);
+       ODSTariffs.Open;
+  end;
+  MakeTariffList;
+end;
+
+procedure TfmMKBlank.DBMonthsKeyPress(Sender: TObject; var Key: Char);
+begin
+  edDBCBCustNameKeyPress(Sender, key);
+  CalcEndDate();
+end;
+
+procedure TfmMKBlank.DBFranshizClick(Sender: TObject);
+var key : Char;
+begin
+  edDBCBCustNameKeyPress(Sender, key);
+//  edInsFranshiz.text := FloatToStr((Sender as TOracleDataSet).fieldbyName('ammount').asFloat);
+end;
+
+procedure TfmMKBlank.DBFranshizKeyPress(Sender: TObject; var Key: Char);
+begin
+  edDBCBCustNameKeyPress(Sender, key);
+//  edInsFranshiz.text := FloatToStr((Sender as TOracleDataSet).fieldbyName('ammount').asFloat);
+end;
+
+procedure TfmMKBlank.edFranshizClick(Sender: TObject);
+var key : Char;
+begin
+   with InsMKDataMod, ODSFranshiz do begin
+     First;
+     Locate('FRANSHIZ', StrToFloat(edFranshiz.Text), []);
+     edTariff.Text := FloatToStr( FieldByName('tariff').asFloat);
+   end;
+   edDBCBCustNameKeyPress(Sender, key);
+end;
+
+procedure TfmMKBlank.ODSFranshizAfterOpen(DataSet: TDataSet);
+begin
+   edFranshiz.Items.Clear;
+   with DataSet do
+     while not EOF do begin
+       edFranshiz.Items.Add(FloatToStr(FieldByName('FRANSHIZ').asFloat));
+       Next;
+     end;
+end;
+
+procedure TfmMKBlank.SpeedButton2Click(Sender: TObject);
+begin
+  //sbtnSaveClick(Sender);
+  with InsMKDataMod.ODSdrAccessPeople do
+  begin
+    {if Active then Insert
+     else begin
+       ShowMessage(FloatToStr(cid));}
+       if CID = -1 then if MessageDlg('Məlumatlar yadda saxlanılsın?',
+                mtConfirmation, [mbYes, mbNo], 0) = mrYes then SaveData else Exit;
+        SetVariable('ID', InsMKDataMod.ODSMotorKaskoid.value);
+        //ShowMessage(FloatToStr(InsMKDataMod.ODSMotorKaskoid.value));
+        Open;
+        if not(state in [dsInsert]) then Insert;
+        FieldByName('ID').AsFloat:= InsMKDataMod.ODSMotorKaskoid.value;
+  end;
+end;
+
+procedure TfmMKBlank.SpeedButton3Click(Sender: TObject);
+begin
+  with InsMKDataMod.ODSdrAccessPeople do
+    if Active then
+      Edit else hbErrMsg.ShowMessage('Can''t change the data.');
+end;
+
+procedure TfmMKBlank.SpeedButton4Click(Sender: TObject);
+begin
+  with InsMKDataMod.ODSdrAccessPeople do
+    if Active then
+    begin
+      if MessageDlg('Məlumatlar silinsin?',
+                mtConfirmation, [mbYes, mbNo], 0) = mrYes then
+      Delete;
+    end
+      else hbErrMsg.ShowMessage('Can''t change the data.');
+end;
+
+procedure TfmMKBlank.SpeedButton5Click(Sender: TObject);
+begin
+  with InsMKDataMod.ODSdrAccessPeople do
+    if Active then
+      Refresh else hbErrMsg.ShowMessage('Can''t change the data.');
+end;
+
+procedure TfmMKBlank.ODSdrAccessPeopleAfterInsert(DataSet: TDataSet);
+begin
+ with InsMKDataMod, DataSet do
+  FieldByName('CID').asInteger := CID;
+end;
+
+procedure TfmMKBlank.ODSdrAccessPeopleBeforePost(DataSet: TDataSet);
+var
+  exp : TdateTime;
+  procedure ShowMsg(Msg : String);
+  begin
+     hbErrMsg.ShowMessage(Msg);
+     Raise Exception.Create('goto');
+  end;
+begin
+
+    try
+     with InsMKDataMod,  ODSdrAccessPeople do begin
+       exp := FieldByName('DREXPERIENCE').AsDateTime;
+       if  (exp - FieldByName('BIRTHDAY').AsDateTime) <= 0 then
+           ShowMsg('Sürücülük təcrübəsi doğum tarixindən kiçik ola bilməz!');
+       if  ((exp - FieldByName('BIRTHDAY').AsDateTime) / 364) < 18 then
+           ShowMsg('18 yaşdan aşağı səxslərin sürücülük vəsiqəsi ola bilməz!');
+       exp := FieldByName('BIRTHDAY').AsDateTime;
+       if  ((now - exp) / 364) < 18 then
+           ShowMsg('18 yaşdan aşağı səxslərin sürücülük vəsiqəsi ola bilməz!');
+     end;
+    except
+      Abort;
+    end;
+
+end;
+
+procedure TfmMKBlank.ODSdrAccessPeopleBeforeDelete(DataSet: TDataSet);
+begin
+  if MessageDlg('Seçilmiş sürücü pozulacaq!',
+                       mtWarning, [mbYes, mbNo], 0) = mrNo then Abort;
+
+end;
+
+procedure TfmMKBlank.cbBenTypeChange(Sender: TObject);
+var
+   str:String;
+begin
+
+  with InsMKDataMod, ODSContracts do
+  begin
+    ODSReport.Close;
+    ODSReport.SetVariable('CID', CID);
+    ODSReport.Open;
+    if ODSReportSex.Value=0 then str:='oğlu'
+    else if ODSReportSex.Value=1 then str:='qızı';
+
+    if rbBeneficiary.Checked then
+    begin
+      FieldByName('BENEFICIARY').AsString := ODSCusts.FieldByName('Name').asString+' '+str;
+    end;
+
+    if XFRadioButton1.Checked then
+    begin
+    with InsMKDataMod do
+  begin
+     DSSigortaetdiren.Close;
+     DSSigortaetdiren.SetVariable('pid',DBCBCustName.KeyValue);
+     DSSigortaetdiren.Open;
+  end;
+
+      FieldByName('BENEFICIARY').AsString := DSSigortaetdiren.FieldByName('Name').asString;
+    end;
+
+    dbBanks.enabled := rbBank.Checked;
+    dbBeneficiary.Enabled := rbBeneficiary.Checked;
+    DBEdit1.enabled := XFRadioButton1.Checked;
+    btApply.Enabled := True;
+    Edit;
+  end;
+
+
+
+end;
+
+procedure TfmMKBlank.DBBanksClick(Sender: TObject);
+var key : Char;
+begin
+  edDBCBCustNameKeyPress(Sender, key);
+  
+  with InsMKDataMod, ODSContracts do
+     FieldByName('BENEFICIARY').AsString := ODSBanks.fieldbyname('NAME').asString;
+end;
+
+procedure TfmMKBlank.DBBanksKeyPress(Sender: TObject; var Key: Char);
+begin
+  if Key = #13 then
+     begin
+       DBBanksClick(DBBanks);
+       FindNextControl(ActiveControl,true,true,false).SetFocus;
+       Key := #0
+     end else btApply.Enabled := True;
+  IsSaved := not btApply.Enabled;
+end;
+
+procedure TfmMKBlank.edFranshizChange(Sender: TObject);
+begin
+  with InsMKDataMod, ODSFranshiz do begin
+    Locate('FRANSHIZ', ODSContracts.FieldByName('FRANSHIZ').asFloat, []);
+    ODSContracts.FieldByName('TARIFF').asFloat :=  FieldByName('TARIFF').asFloat;
+  end;  
+end;
+
+procedure TfmMKBlank.SpeedButton7Click(Sender: TObject);
+begin
+  ThousandSeparator := ' '; 
+  edAmmount.SetFocus;
+  with InsMKDataMod, ODSMotorKasko do
+  begin
+     FieldByName('AMMOUNT').asFloat :=
+                round((FieldByName('INSSUMM').asFloat / 100) *FieldByName('TARIFF').asFloat);
+   { ODSContracts.FieldByName('AMMOUNT').asFloat :=
+                (FieldByName('INSSUMM').asFloat / 100) * FieldByName('TARIFF').asFloat;  }
+  end;                 
+end;
+
+procedure TfmMKBlank.BitBtn1Click(Sender: TObject);
+begin
+
+with InsMKDataMod,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['ACCESSORIESCONTRACT_KASKO']);
+ end;
+
+    with InsMKDataMod.ODSAccessories do begin
+       if CID = -1 then
+       if MessageDlg('Məlumatlar yadda saxlansın?',
+                mtConfirmation, [mbYes, mbNo], 0) = mrYes then SaveData
+                else exit;//Generating New CID
+       SetVariable('CID', CID);
+       Open;
+       frmAccessories:=TfrmAccessories.Create(Self);
+       frmAccessories.ShowModal;
+       Close;
+       CalcAccessories;
+    end;
+
+end;
+
+procedure TfmMKBlank.CalcAccessories;
+var
+  value : Currency;
+begin
+ with InsMKDataMod, pkgMotorKasco do begin
+  value := CallFloatFunction('getAccessoriesSum', [CID]);
+ end;
+end;
+
+procedure TfmMKBlank.edIns_DateChange(Sender: TObject);
+var key : Char;
+begin
+ with InsMKDataMod, ODSContracts do
+  if state in [dsInsert] then
+   edBeginDate.DateTime := (Sender as TdateTimePicker).DateTime;
+   edDBCBCustNameKeyPress(Sender, key);
+
+end;
+
+procedure TfmMKBlank.rbBankClick(Sender: TObject);
+begin
+   sbtnSave.Enabled:=false;
+   with InsMKDataMod do
+   begin
+   end;
+   cbBenTypeChange(Sender);
+   Suggest.Enabled:=rbBeneficiary.Checked;
+end;
+
+procedure TfmMKBlank.DBAgentsClick(Sender: TObject);
+begin
+   edDBCBCustNameChange(Sender);
+end;
+
+procedure TfmMKBlank.dbAvalute1Click(Sender: TObject);
+begin
+     with InsMKDataMod,ODSContracts do
+ begin
+      ODSContracts.RefreshRecord;
+
+ end;
+end;
+
+procedure TfmMKBlank.BitBtn3Click(Sender: TObject);
+begin
+
+
+ if InsMKDataMod.ODSContracts.FieldByName('type_id').AsInteger=4 then
+ begin
+ with InsMKDataMod,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['SEELOSSKASKO']);
+ end;
+ end;
+
+ if InsMKDataMod.ODSContracts.FieldByName('type_id').AsInteger=1 then
+ begin
+ with InsMKDataMod,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['SEELOSSFQ']);
+ end;
+ end;
+
+ if InsMKDataMod.ODSContracts.FieldByName('type_id').AsInteger=13 then
+ begin
+ with InsMKDataMod,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['SEELOSSMES']);
+ end;
+ end;
+     loadPlugin('loss.bpl','');
+end;
+
+procedure TfmMKBlank.SuggestClick(Sender: TObject);
+var
+  PolicFormGuid : TGuid;
+  Params : TStringList;
+begin
+with InsMKDataMod,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['SUGGESTIONCONTRACT_KASKO']);
+ end;
+  SaveData;
+  with InsMKDataMod do
+  begin
+
+     contactid:=InsMKDataMod.ODSContracts.FieldByName('id').AsInteger;
+     ins_cutsid:=InsMKDataMod.ODSContracts.FieldByName('kli_id').AsInteger;
+  end;
+       loadPlugin('MKSuggestionbpl.bpl','');
+
+end;
+
+
+
+procedure TfmMKBlank.sbtnInsertClick(Sender: TObject);
+begin
+
+opetion_avto:='Insert';
+
+if DBAgents.text='' then
+begin
+  showmessage('Agenti daxil edin!');
+  exit;
+end;
+if rbBank.Checked=false  then
+begin
+if rbBeneficiary.Checked=false then
+ begin
+ if XFRadioButton1.Checked=false then
+ begin
+  showmessage('Faydagötürəni daxil edin!');
+  exit;
+ end;
+end;
+end;
+  with InsMKDataMod.ODSMotorKasko do
+    begin
+        SetVariable('CID', CID);
+        Open;
+        InsMKDataMod.ODSCusts.Locate('id',InsMKDataMod.ODSContractsKli_ID.Value,[]);
+
+        if  ShowfmAddMKBlank() = mrOk then SaveCustData() else Cancel
+    end;
+ end;
+
+ procedure TfmMKBlank.SaveCustData();
+begin
+   with InsMKDataMod.ODSMotorKasko do
+    try
+      Post;
+       except
+      aEditCustExecute(nil)
+    end;
+end;
+
+procedure TfmMKBlank.aEditCustExecute(Sender: TObject);
+begin
+  with InsMKDataMod, ODSMotorKasko do
+     begin
+      ODSCustTypes.Open;
+      Edit();
+        //opetion:='ins';
+      if  ShowfmAddMKBlank() = mrOk then SaveCustData() else Cancel
+     end
+end;
+function TfmMKBlank.ShowfmAddMKBlank():Integer;
+var
+//bura
+   fmAddMKBlank : TfmAddMKBlank;
+begin
+  fmAddMKBlank := TfmAddMKBlank.Create(self);
+  try
+     Result := fmAddMKBlank.ShowModal;
+   finally
+    fmAddMKBlank.Free;
+  end;
+
+end;
+procedure TfmMKBlank.SpeedButton10Click(Sender: TObject);
+begin
+   loadPlugin('OtherProvisions.bpl','');
+end;
+
+procedure TfmMKBlank.SpeedButton11Click(Sender: TObject);
+begin
+    with InsMKDataMod.ODSMotorKasko do
+    if Active then
+      Refresh else hbErrMsg.ShowMessage('Can''t change the data.');
+end;
+
+procedure TfmMKBlank.SpeedButton12Click(Sender: TObject);
+begin
+opetion_avto:='Edit';
+     with InsMKDataMod.ODSMotorKasko do
+     begin
+    //if Active then
+          Edit();
+        if  ShowfmAddMKBlank() = mrOk then SaveCustData() else Cancel ;
+     end;
+       //else hbErrMsg.ShowMessage('Can''t change the data.');
+end;
+
+procedure TfmMKBlank.SpeedButton15Click(Sender: TObject);
+begin
+    with InsMKDataMod.ODSMotorKasko do
+    if Active then
+    begin
+      if MessageDlg('Məlumatlar silinsin?',
+                mtConfirmation, [mbYes, mbNo], 0) = mrYes then
+      Delete;
+    end
+      else hbErrMsg.ShowMessage('Can''t change the data.');
+end;
+
+procedure TfmMKBlank.sbtnSaveClick(Sender: TObject);
+begin
+    with InsMKDataMod.ODSMotorKasko do
+    if Active and (State in [dsEdit, dsInsert]) then
+    begin
+       Post;
+       RefreshRecord;
+    end
+       else hbErrMsg.ShowMessage('Can''t change the data or there''re no changes.');
+end;
+
+procedure TfmMKBlank.rbBeneficiaryClick(Sender: TObject);
+begin
+cbBenTypeChange(Sender);
+   Suggest.Enabled:=rbBeneficiary.Checked;
+   sbtnInsert.Enabled:=true;
+   sbtnSave.Enabled:=true;
+end;
+
+procedure TfmMKBlank.btnConditionClick(Sender: TObject);
+begin
+with InsMKDataMod,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['CONDITIONSCONTRACT_KASKO']);
+ end;
+       with TfrmCond.Create(Self) do
+          ShowModal;
+end;
+
+procedure TfmMKBlank.btnNewClick(Sender: TObject);
+begin
+with InsMKDataMod,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['NOTESCONTRACT_KASKO']);
+ end;
+
+     with TfrmNotes.Create(Self) do
+          ShowModal;
+end;
+
+procedure TfmMKBlank.MakeTariffList;
+begin
+  with InsMKDataMod, ODSTariffs do
+  begin
+    Open;
+    edTariff.Items.Clear;
+    First;
+    while not EOF do
+    begin
+       edTariff.Items.Add(FloatToStr(FieldByName('Ammount').asFloat));
+       Next;
+    end;
+    First
+  end;
+end;
+
+procedure TfmMKBlank.edTariffChange(Sender: TObject);
+begin
+    with InsMKDataMod, ODSTariffs do
+    begin
+         Locate('FRANSHIZ_ID',ODSFranshizID.AsInteger, []);
+         ODSContracts.FieldByName('tariff').asFloat :=  FieldByName('ammount').asFloat;
+    end;
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TfmMKBlank,
+    Class_fmMKBlank,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

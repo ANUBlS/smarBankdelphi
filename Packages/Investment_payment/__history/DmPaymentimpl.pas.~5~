@@ -1,0 +1,67 @@
+unit DmPaymentimpl;
+
+interface
+
+uses
+  SysUtils, Classes, DB, OracleData;
+
+type
+  TDmPayment = class(TDataModule)
+    DsSysdat: TOracleDataSet;
+    DsSysdatTEK_DAT: TDateTimeField;
+    DsRcontracts: TDataSource;
+    Dscontracts: TOracleDataSet;
+    DscontractsID: TFloatField;
+    DscontractsAMMOUNT: TFloatField;
+    DscontractsMUSTERI: TWideStringField;
+    DscontractsCONTRACT_NAME: TWideStringField;
+    DscontractsSTATUS: TIntegerField;
+    DscontractsMAIN_ACC_ID: TWideStringField;
+    DscontractsPER_ACC_ID: TWideStringField;
+    DscontractsESAS_QALIQ: TFloatField;
+    DscontractsFAIZ_QALIQ: TFloatField;
+    DsRMain: TDataSource;
+    DsMain: TOracleDataSet;
+    DsMainID: TFloatField;
+    DsMainCID: TFloatField;
+    DsMainAMMOUNT: TFloatField;
+    DsMainDAT: TDateTimeField;
+    DsMainCONTRACT_NAME: TWideStringField;
+    ds_kassa: TOracleDataSet;
+    ds_kassaACC_NO: TWideStringField;
+    ds_kassaID: TFloatField;
+    dsr_kassa: TDataSource;
+    dsr_gelir_acc: TDataSource;
+    ds_gelir_acc: TOracleDataSet;
+    WideStringField1: TWideStringField;
+    FloatField1: TFloatField;
+    ds_xerc_acc: TOracleDataSet;
+    WideStringField2: TWideStringField;
+    FloatField2: TFloatField;
+    dsr_xerc_acc: TDataSource;
+    procedure DataModuleCreate(Sender: TObject);
+    procedure DataModuleDestroy(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  DmPayment: TDmPayment;
+
+implementation
+
+{$R *.dfm}
+uses  CommanParametrs,sboapiDataModuleImpl;
+procedure TDmPayment.DataModuleCreate(Sender: TObject);
+begin
+DsMain.Open;
+end;
+
+procedure TDmPayment.DataModuleDestroy(Sender: TObject);
+begin
+DsMain.Close;
+end;
+
+end.

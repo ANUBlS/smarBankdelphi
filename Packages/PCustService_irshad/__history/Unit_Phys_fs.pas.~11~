@@ -1,0 +1,81 @@
+﻿unit Unit_Phys_fs;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, XFSCtrls, ExtCtrls;
+
+type
+  TFormPyhsFs = class(TForm)
+    XFPanel1: TXFPanel;
+    XFRadioGroupPhysFs: TXFRadioGroup;
+    procedure XFRadioGroupPhysFsClick(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormPyhsFs: TFormPyhsFs;
+
+implementation
+
+uses UnitDataModPCustService, AccountPropertiesLmpl, AccountPropertiesFLmpl,
+  PCustServiceFormImpl1;
+
+{$R *.dfm}
+
+procedure TFormPyhsFs.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+PCustServiceForm.CustSearch1.Click;
+end;
+
+procedure TFormPyhsFs.XFRadioGroupPhysFsClick(Sender: TObject);
+begin
+  if XFRadioGroupPhysFs.ItemIndex=0 then
+  PCustServiceForm.XFRadioGroupCust_type.ItemIndex:=1
+  else
+ if XFRadioGroupPhysFs.ItemIndex=1 then
+  PCustServiceForm.XFRadioGroupCust_type.ItemIndex:=2;
+  case XFRadioGroupPhysFs.ItemIndex of
+
+  0,1:begin
+      DataModPCustService.ODS_Bal_spr.Close;
+    DataModPCustService.ODS_Bal_spr.SetVariable('cus_tip',PCustServiceForm.XFRadioGroupCust_type.ItemIndex);
+    DataModPCustService.ODS_Bal_spr.SetVariable('resd',
+    DataModPCustService.ODS_CUSTOMERS_PHYS_FS.FieldByName('nerezident').asinteger);
+
+
+
+  if PCustServiceForm.XFRadioGroupCust_type.ItemIndex<>1 then
+    begin
+  DataModPCustService.ODS_Bal_spr.SetVariable('sferad_ey',
+  DataModPCustService.ODS_CUSTOMERS_PHYS_FS.FieldByName('sfera_dey').asstring);
+
+  DataModPCustService.ODS_Bal_spr.SetVariable('govern_ment',
+  DataModPCustService.ODS_CUSTOMERS_PHYS_FS.FieldByName('vid_sob').asstring);
+
+    end
+        else
+        begin
+         DataModPCustService.ODS_Bal_spr.SetVariable('sferad_ey',
+  '%%');
+
+  DataModPCustService.ODS_Bal_spr.SetVariable('govern_ment',
+  '%%');
+       end;
+    if not assigned(AccountPropertiesF) then
+   AccountProperties:=TAccountProperties.Create(self);
+    AccountProperties.ShowModal;
+
+   end;
+
+end;
+
+  end;
+
+
+end.

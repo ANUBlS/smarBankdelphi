@@ -1,0 +1,364 @@
+unit UntArchive;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ToolWin, ComCtrls, Grids, DBGrids, ExtCtrls, StdCtrls, ImgList, Mask,
+  DBCtrls, Menus;
+
+type
+  TFrmArchive = class(TForm)
+    Panel1: TPanel;
+    DBArchiveGrid: TDBGrid;
+    ToolBar1: TToolBar;
+    Panel2: TPanel;
+    ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
+    ToolButton4: TToolButton;
+    ToolButton5: TToolButton;
+    ToolButton6: TToolButton;
+    ToolButton7: TToolButton;
+    ToolButton8: TToolButton;
+    Assignment: TDBEdit;
+    ImageList: TImageList;
+    ToolButton9: TToolButton;
+    RBOnce: TRadioButton;
+    RBCopy: TRadioButton;
+    ToolButton10: TToolButton;
+    ToolButton3: TToolButton;
+    PopupMenu: TPopupMenu;
+    N1: TMenuItem;
+    N2: TMenuItem;
+    N3: TMenuItem;
+    N4: TMenuItem;
+    N5: TMenuItem;
+    N6: TMenuItem;
+    N7: TMenuItem;
+    N8: TMenuItem;
+    procedure ToolButton1Click(Sender: TObject);
+    procedure ToolButton2Click(Sender: TObject);
+    procedure ToolButton6Click(Sender: TObject);
+    procedure ToolButton8Click(Sender: TObject);
+    procedure FormKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure DBArchiveGridTitleClick(Column: TColumn);
+    procedure MouseWheelHandler(var Message: TMessage); override;
+    procedure Button1Click(Sender: TObject);
+    procedure N1DrawItem(Sender: TObject; ACanvas: TCanvas; ARect: TRect;
+      Selected: Boolean);
+    procedure N7Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmArchive: TFrmArchive;
+
+implementation
+
+uses PaymentDataModul, PaymentDecreeImpl,CurrencyToHR_Azeri_Impl,
+  UntMainReport, UntSecondReport;
+
+{$R *.DFM}
+
+procedure TFrmArchive.ToolButton1Click(Sender: TObject);
+var
+   deleteID: Integer;
+   PaymentNumber: String;
+   RecordNo: Integer;
+begin
+ PaymentNumber :=PaymentDataMod.ODSArchive.FieldByName('PNUM').AsString;
+ if MessageDlg(Format('Do you want to delete payment ¹%s?',[PaymentNumber]),mtConfirmation,mbYesNoCancel,0)=mrYes then
+ with PaymentDataMod.ODSArchive,PaymentDataMod.OPPayment do
+  begin
+   RecordNo :=RecNo;
+   deleteID :=FieldByName('ID').AsInteger;
+   CallProcedure('delete_payment',[deleteID]);
+   Refresh;
+   RecNo :=RecordNo;
+  end;
+end;
+
+procedure TFrmArchive.MouseWheelHandler(var Message: TMessage);
+begin
+ Inherited;
+ if DBArchiveGrid.Focused then
+  with TCMMouseWheel(Message), DBArchiveGrid.DataSource.DataSet do
+    if WheelDelta < 0 then
+      Next
+    else
+      Prior;
+  // DBArchiveGrid.Repaint;
+end;
+
+procedure TFrmArchive.ToolButton2Click(Sender: TObject);
+begin
+ with PaymentDecree,PaymentDataMod.ODSArchive do
+  if IsEmpty then
+    begin
+     ShowMessage('There are not data!');
+     Exit;
+    end
+  else
+   begin
+    CBDANum.text :=FieldByName('DACC_NO').AsString;
+    EDAName.text :=FieldByName('DACCNAME').AsString;
+    EDAInn.text :=FieldByName('DACCINN').AsString;
+
+    CBKBName.text :=FieldByName('KBNAME').AsString;
+    EKBCod.text :=FieldByName('KBCOD').AsString;
+    EKBInn.text :=FieldByName('KBINN').AsString;
+    EKBCorAcc.text :=FieldByName('KBCORACC').AsString;
+    EKBSwift.text :=FieldByName('KBSWIFT').AsString;
+
+    EKANum.text :=FieldByName('KACC_NO').AsString;
+    EKAName.text :=FieldByName('KACCNAME').AsString;
+    EKAInn.text :=FieldByName('KACCINN').AsString;
+
+    EAmmount.text :=FieldByName('AMMOUNT').AsString;
+    EAmmountW.text :=CurrencyToHR_Azeri(FieldByName('AMMOUNT').AsInteger,0,[0]);
+    EAssignment.Text :=FieldByName('ASSIGNMENT').AsString;
+    EExtra.text :=FieldByName('EXTRA').AsString;
+    EPNum.text :=FieldByName('PNUM').AsString;
+    DTPayment.DateTime :=FieldByName('PDATE').AsDateTime;
+   end;
+ Close;
+end;
+
+procedure TFrmArchive.ToolButton6Click(Sender: TObject);
+begin
+ PaymentDecree.isUpdate :=true;
+  with PaymentDataMod.ODSArchive,PaymentDecree do
+  if IsEmpty then
+    begin
+     ShowMessage('There are not data!');
+     Exit;
+    end
+  else
+   begin
+    CBDANum.text :=FieldByName('DACC_NO').AsString;
+    EDAName.text :=FieldByName('DACCNAME').AsString;
+    EDAInn.text :=FieldByName('DACCINN').AsString;
+
+    CBKBName.text :=FieldByName('KBNAME').AsString;
+    EKBCod.text :=FieldByName('KBCOD').AsString;
+    EKBInn.text :=FieldByName('KBINN').AsString;
+    EKBCorAcc.text :=FieldByName('KBCORACC').AsString;
+    EKBSwift.text :=FieldByName('KBSWIFT').AsString;
+
+    EKANum.text :=FieldByName('KACC_NO').AsString;
+    EKAName.text :=FieldByName('KACCNAME').AsString;
+    EKAInn.text :=FieldByName('KACCINN').AsString;
+
+    EAmmount.text :=FieldByName('AMMOUNT').AsString;
+    EAmmountW.text :=CurrencyToHR_Azeri(Trunc(FieldByName('AMMOUNT').AsFloat),0,[0]);
+    EAssignment.Text :=FieldByName('ASSIGNMENT').AsString;
+    EExtra.text :=FieldByName('EXTRA').AsString;
+    EPNum.text :=FieldByName('PNUM').AsString;
+    DTPayment.DateTime :=FieldByName('PDATE').AsDateTime;
+   end;
+ Close;
+end;
+
+procedure TFrmArchive.ToolButton8Click(Sender: TObject);
+var
+   ID :String;
+   DateTime :TDateTime;
+begin
+ ID :=PaymentDataMod.ODSArchive.FieldByName('ID').AsString;
+ if RBCopy.Checked then
+  begin
+   try
+    with QRMainReport,PaymentDataMod.ODSArchive do
+     begin
+      DateTime :=FieldByName('PDATE').AsDateTime;
+      QRDate1.caption :=PaymentDecree.ExtractMonth(DateTime,' ');
+      QRDate2.caption :=PaymentDecree.ExtractMonth(DateTime,' ');
+      QRNum1.Caption :='Þäÿíèø òàïøûðûüû ¹'+FieldByName('PNum').AsString;
+      QRNum2.Caption :='Þäÿíèø òàïøûðûüû ¹'+FieldByName('PNum').AsString;
+
+      QRAmmount1.caption :=FormatCurr('#,##.00',StrToCurr(FieldByName('Ammount').AsString));
+      QRAmmount2.caption :=FormatCurr('#,##.00',StrToCurr(FieldByName('Ammount').AsString));
+
+      QRAmmountW1.caption := PaymentDecree.WithCoin(FieldByName('Ammount').AsString);
+      QRAmmountW2.caption :=PaymentDecree.WithCoin(FieldByName('Ammount').AsString);
+
+      Filter:=' ID= '+ID;
+      Filtered :=true;
+
+      Preview;
+     end;
+   finally
+     PaymentDataMod.ODSArchive.Filtered :=false;
+   end;
+  end
+ else
+  begin
+   try
+    with QRCommonReport,PaymentDataMod.ODSArchive do
+     begin
+      DateTime :=FieldByName('PDATE').AsDateTime;
+      QRDate.caption :=PaymentDecree.ExtractMonth(DateTime,' ');
+      QRNum.Caption :='Þäÿíèø òàïøûðûüû ¹'+FieldByName('PNum').AsString;
+      QRAmmount.caption :=FormatCurr('#,##.00',StrToCurr(FieldByName('Ammount').AsString));
+      QRAmmountW.caption := PaymentDecree.WithCoin(FieldByName('Ammount').AsString);
+      Filter:=' ID= '+ID;
+      Filtered :=true;
+
+      Preview;
+     end;
+   finally
+    PaymentDataMod.ODSArchive.Filtered :=false;
+   end;
+  end;
+ DBArchiveGrid.DataSource.DataSet.Locate('ID',ID,[]);
+end;
+
+procedure TFrmArchive.FormKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if (key = VK_ESCAPE) then Close;
+end;
+
+procedure TFrmArchive.DBArchiveGridTitleClick(Column: TColumn);
+var
+   TitleName :string;
+begin
+ TitleName :=Column.FieldName;
+  with PaymentDataMod.ODSArchive do
+   begin
+    SetVariable('Title',TitleName);
+    Refresh;
+   end;
+end;
+
+procedure TFrmArchive.Button1Click(Sender: TObject);
+var
+   ID :String;
+   DateTime :TDateTime;
+begin
+ ID :=PaymentDataMod.ODSArchive.FieldByName('ID').AsString;
+ try
+  with QRCommonReport,PaymentDataMod.ODSArchive do
+   begin
+    DateTime :=FieldByName('PDATE').AsDateTime;
+    QRDate.caption :=PaymentDecree.ExtractMonth(DateTime,' ');
+    QRNum.Caption :='Þäÿíèø òàïøûðûüû¹'+FieldByName('PNum').AsString;
+
+    QRAmmount.caption :=FormatCurr('#,##.00',StrToCurr(FieldByName('Ammount').AsString));
+    QRAmmountW.caption := PaymentDecree.WithCoin(FieldByName('Ammount').AsString);
+
+    Filter:=' ID= '+ID;
+    Filtered :=true;
+
+    Preview;
+   end;
+ finally
+   PaymentDataMod.ODSArchive.Filtered :=false;
+ end;
+end;
+
+procedure TFrmArchive.N1DrawItem(Sender: TObject; ACanvas: TCanvas;
+  ARect: TRect; Selected: Boolean);
+var
+  LineBottom: Integer;
+  SText: String;
+  Bar: TRect;
+begin
+  with ACanvas, Sender as TMenuItem do
+  begin
+    with ACanvas.Font do
+    begin
+      Charset := DEFAULT_CHARSET;
+      Name := 'Azl Sans Serif';
+      if Default then
+        Style := [fsBold];
+    end;
+    if Caption = '-' then
+    begin
+      Pen.Color := clBlack;
+      LineBottom := (ARect.Top + (ARect.Bottom - ARect.Top) div 2)-1;
+      MoveTo(ARect.Left, LineBottom);
+      LineTo(ARect.Right, LineBottom);
+      inc(LineBottom);
+      Pen.Color := clWhite;
+      MoveTo(ARect.Left, LineBottom);
+      LineTo(ARect.Right, LineBottom);
+    end
+    else
+    begin
+      if Selected then
+      begin
+        Brush.Color := clNavy;
+        if Enabled then
+          Font.Color := clWhite
+        else
+          Font.Color := clSilver;
+      end
+      else
+      begin
+        Brush.Color := clBtnFace;
+        if Enabled then
+          Font.Color := clBlack
+        else
+          Font.Color := clGrayText;
+      end;
+      Bar := ARect;
+      Inc(Bar.Left, 22);
+      FillRect(Bar);
+      TextOut(ARect.Left+{17}22, ARect.Top+1, Caption);
+    end;
+    // draw shortcut
+    SText := ShortCutToText(ShortCut);
+    TextOut(ARect.Right-TextWidth(SText)-7, ARect.Top+1, SText);
+    if ImageIndex <> -1 then
+      with GetParentMenu do
+        if Assigned(Images) then
+        begin
+          if Checked then
+          begin
+            Bar.Left := ARect.Left + 1;
+            Bar.Right := Bar.Left + 16;
+            Bar.Top := ARect.Top + 1;
+            Bar.Bottom := Bar.Top + 16;
+
+            ACanvas.Brush.Color := clBtnShadow;
+            ACanvas.FrameRect(Bar);
+
+            Inc(Bar.Left, 2);
+            Inc(Bar.Right, 2);
+            Inc(Bar.Top, 2);
+            Inc(Bar.Bottom, 2);
+
+            ACanvas.Brush.Color := clBtnHighlight;
+            ACanvas.FrameRect(Bar);
+
+            Dec(Bar.Left, 1);
+            Dec(Bar.Right, 1);
+            Dec(Bar.Top, 1);
+            Dec(Bar.Bottom, 1);
+
+            if Selected then
+              ACanvas.Brush.Color := clBtnFace
+            else
+              ACanvas.Brush.Color := clBtnHighlight;
+            ACanvas.FillRect(Bar);
+          end;
+
+          Images.Draw(ACanvas, ARect.Left, ARect.Top, ImageIndex, Enabled);
+        end;
+  end;
+end;
+
+procedure TFrmArchive.N7Click(Sender: TObject);
+begin
+ if TMenuItem(Sender).Tag =0 then
+  DBArchiveGrid.DataSource.DataSet.First
+ else
+  DBArchiveGrid.DataSource.DataSet.Last;
+end;
+
+end.

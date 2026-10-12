@@ -1,0 +1,67 @@
+unit FPTurnOversDataModImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, OracleData;
+
+type
+  TTurnOversDataMod = class(TDataModule)
+    CurrencyData: TOracleDataSet;
+    BranchData: TOracleDataSet;
+    DataSrcCurrency: TDataSource;
+    DataSrcBranch: TDataSource;
+    TurnOversData: TOracleDataSet;
+    DataSrcTurnOvers: TDataSource;
+    SYSDAT: TOracleDataSet;
+    CurrencyDataCURRENCYID: TIntegerField;
+    BranchDataBRANCHID: TFloatField;
+    SYSDATTEK_DAT: TDateTimeField;
+    PeriodPrefixData: TOracleDataSet;
+    PeriodPrefixDataPERIODPREFIX: TDateTimeField;
+    BankInfo: TOracleDataSet;
+    TurnOversDataACCOUNTID: TFloatField;
+    TurnOversDataCURRENCYID: TIntegerField;
+    TurnOversDataBEGINACTIVE: TFloatField;
+    TurnOversDataLBEGINACTIVE: TFloatField;
+    TurnOversDataBEGINPASSIVE: TFloatField;
+    TurnOversDataLBEGINPASSIVE: TFloatField;
+    TurnOversDataDTURNOVER: TFloatField;
+    TurnOversDataLDTURNOVER: TFloatField;
+    TurnOversDataCTURNOVER: TFloatField;
+    TurnOversDataLCTURNOVER: TFloatField;
+    TurnOversDataENDACTIVE: TFloatField;
+    TurnOversDataLENDACTIVE: TFloatField;
+    TurnOversDataENDPASSIVE: TFloatField;
+    TurnOversDataLENDPASSIVE: TFloatField;
+    TurnOversDataBRANCHID: TIntegerField;
+    BankInfoLOGO: TBlobField;
+    CurrencyDataCURRLNAME: TWideStringField;
+    BranchDataBRANCHNAME: TWideStringField;
+    BankInfoBANK: TWideStringField;
+    BankInfoINN: TWideStringField;
+    BankInfoMANAGERTITLE: TWideStringField;
+    BankInfoACCOUNTANTTITLE: TWideStringField;
+    BankInfoMANAGER: TWideStringField;
+    BankInfoACCOUNTANT: TWideStringField;
+    TurnOversDataACC_NAME: TStringField;
+    TurnOversDataBALANCENO: TFloatField;
+    TurnOversDataACCNO: TWideStringField;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  TurnOversDataMod: TTurnOversDataMod;
+
+implementation
+
+{$R *.DFM}
+
+uses
+  sboapiDataModuleImpl;
+
+end.

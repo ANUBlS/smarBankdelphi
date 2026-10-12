@@ -1,0 +1,1090 @@
+﻿unit FormTransaction3Lmpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, CurrencyEdit, DBCtrls, StdCtrls, ExtCtrls, Buttons, XFSCtrls, Mask,
+  DBCtrlsEh, DBLookupEh, OracleData, DBGridEh, DB;
+
+type
+  TFormTransaction3 = class(TForm)
+    Panel1: TPanel;
+    Label7: TLabel;
+    Label10: TLabel;
+    Label11: TLabel;
+    Label12: TLabel;
+    Label13: TLabel;
+    Edit1: TEdit;
+    Edit6: TEdit;
+    Edit4: TEdit;
+    Edit5: TEdit;
+    Panel3: TPanel;
+    CurrencyEdit1: TCurrencyEdit;
+    CurrencyEdit2: TCurrencyEdit;
+    Label3: TLabel;
+    Label5: TLabel;
+    Label21: TLabel;
+    CurrencyEdit3: TCurrencyEdit;
+    Panel4: TPanel;
+    Label2: TLabel;
+    Label23: TLabel;
+    Label24: TLabel;
+    DBLookupCEh_contrsName: TDBLookupComboBox;
+    Panel5: TPanel;
+    XFBitBtn1: TXFBitBtn;
+    XFBitBtn2: TXFBitBtn;
+    XFBitBtn3: TXFBitBtn;
+    XFBitBtn4: TXFBitBtn;
+    XFBitBtn5: TXFBitBtn;
+    XFBitBtn6: TXFBitBtn;
+    DBEdit1: TDBEdit;
+    DBLookupComboboxEh_A1: TDBLookupComboboxEh;
+    DBLookupComboboxEh2: TDBLookupComboboxEh;
+    EditRate_A: TCurrencyEdit;
+    DBLookupComboboxEh5: TDBLookupComboboxEh;
+    Label6: TLabel;
+    Edit_AccName_A: TEdit;
+    DBEdit4: TDBEdit;
+    Label25: TLabel;
+    Label9: TLabel;
+    Edit3: TEdit;
+    Label1: TLabel;
+    DBCBoxAccNo_A: TDBLookupComboboxEh;
+    Edit9: TEdit;
+    DBEdit2: TDBEdit;
+    Panel2: TPanel;
+    Label15: TLabel;
+    Label18: TLabel;
+    Label19: TLabel;
+    Label20: TLabel;
+    Label22: TLabel;
+    Label14: TLabel;
+    Label8: TLabel;
+    Label17: TLabel;
+    Label4: TLabel;
+    Label16: TLabel;
+    Edit8: TEdit;
+    Edit18: TEdit;
+    EditRate_B: TCurrencyEdit;
+    Edit7: TEdit;
+    Edit11: TEdit;
+    DBLookupComboboxEh3: TDBLookupComboboxEh;
+    DBLookupComboboxEh_B1: TDBLookupComboboxEh;
+    Edit_AccName_B: TEdit;
+    DBEdit3: TDBEdit;
+    DBCBoxAccNo_B: TDBLookupComboboxEh;
+    Edit10: TEdit;
+    Edit2: TEdit;
+    Edit12: TEdit;
+    RadioBu_jur: TRadioButton;
+    RadioBu_phys: TRadioButton;
+    RadioBu_fs: TRadioButton;
+    XFButton1: TXFButton;
+    Edit_description: TEdit;
+    DBLookupComboboxEh_description: TDBLookupComboboxEh;
+    EditDescription: TEdit;
+    Label26: TLabel;
+    Label27: TLabel;
+    Edit_ostatA: TEdit;
+    Edit_ostatB: TEdit;
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure XFBitBtn4Click(Sender: TObject);
+    procedure Edit1KeyPress(Sender: TObject; var Key: Char);
+    procedure FormShow(Sender: TObject);
+    procedure DBCBoxAccNo_AlCloseUp(Sender: TObject);
+    procedure DBCBoxAccNo_ACloseUp(Sender: TObject; Accept: Boolean);
+    procedure DBLookupComboboxEh_A1CloseUp(Sender: TObject; Accept: Boolean);
+    procedure DBCBoxAccNo_AChange(Sender: TObject);
+    procedure XFBitBtn5Click(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure Edit8KeyPress(Sender: TObject; var Key: Char);
+    procedure DBCBoxAccNo_BChange(Sender: TObject);
+    procedure DBCBoxAccNo_BCloseUp(Sender: TObject; Accept: Boolean);
+    procedure DBLookupComboboxEh_B1CloseUp(Sender: TObject; Accept: Boolean);
+    procedure CurrencyEdit1KeyUp(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure CurrencyEdit2KeyUp(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure CurrencyEdit3KeyUp(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure FormCreate(Sender: TObject);
+    procedure FormCanResize(Sender: TObject; var NewWidth, NewHeight: Integer;
+      var Resize: Boolean);
+    procedure DBLookupComboboxEh2CloseUp(Sender: TObject; Accept: Boolean);
+    procedure DBLookupComboboxEh3CloseUp(Sender: TObject; Accept: Boolean);
+    procedure CurrencyEdit1Click(Sender: TObject);
+    procedure CurrencyEdit2Click(Sender: TObject);
+    procedure CurrencyEdit3Click(Sender: TObject);
+    procedure CurrencyEdit1KeyPress(Sender: TObject; var Key: Char);
+    procedure CurrencyEdit2KeyPress(Sender: TObject; var Key: Char);
+    procedure CurrencyEdit3KeyPress(Sender: TObject; var Key: Char);
+    procedure DBLookupComboboxEh_A1Change(Sender: TObject);
+    procedure Edit8Change(Sender: TObject);
+    procedure RadioBu_fsClick(Sender: TObject);
+    procedure RadioBu_physClick(Sender: TObject);
+    procedure XFButton1Click(Sender: TObject);
+    procedure Edit2Change(Sender: TObject);
+    procedure Edit2KeyPress(Sender: TObject; var Key: Char);
+    procedure Edit_descriptionExit(Sender: TObject);
+    procedure Edit_descriptionKeyPress(Sender: TObject; var Key: Char);
+    procedure DBLookupComboboxEh_descriptionChange(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormTransaction3: TFormTransaction3;
+  v_ostat: Real;
+
+implementation
+
+uses UnitDataBussProc,SBTranslateProc, sboapiDataModuleImpl,
+  CustomersImpl;
+{$R *.dfm}
+
+procedure TFormTransaction3.CurrencyEdit1Click(Sender: TObject);
+begin
+  CurrencyEdit1.Text := '';
+end;
+
+procedure TFormTransaction3.CurrencyEdit1KeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if (not (Key in ['0'..'9',#46,Chr(8)])) then Key:=#0;
+end;
+
+procedure TFormTransaction3.CurrencyEdit1KeyUp(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+var
+  deb_rate, kred_rate: Real;
+  DebitAmmount, CreditAmmount, LAmmount: Currency;
+begin
+  with DataModPCustService do
+  begin
+    if (ODS_AccNO_A.active) and (ODS_AccNO_A.RecordCount <> 0) and
+      (not(ODS_AccNO_A.FieldByName('id').IsNull)) and (ODS_AccNO_B.active) and
+      (ODS_AccNO_B.RecordCount <> 0) and
+      (not(ODS_AccNO_B.FieldByName('id').IsNull)) and
+      (CurrencyEdit1.Value > 0) then
+    begin
+      v_ostat := PG_PCustService.CallFloatFunction('get_rate',
+        [-1, ODS_AccNO_A.FieldByName('ID').AsInteger,
+        ODS_AccNO_B.FieldByName('ID').AsInteger, '-1', '-1']);
+      XFBitBtn5.Enabled := True;
+
+      deb_rate := PG_PCustService.GetParameter(3);
+      kred_rate := PG_PCustService.GetParameter(4);
+
+      CurrencyEdit3.Value := (CurrencyEdit1.Value) * deb_rate;
+      if deb_rate = kred_rate then
+        CurrencyEdit2.Value := CurrencyEdit1.Value
+      else
+        CurrencyEdit2.Value := (CurrencyEdit3.Value) / kred_rate;
+    end
+    else
+      XFBitBtn5.Enabled := False;
+  end;
+end;
+
+procedure TFormTransaction3.CurrencyEdit2Click(Sender: TObject);
+begin
+  CurrencyEdit2.Text := '';
+end;
+
+procedure TFormTransaction3.CurrencyEdit2KeyPress(Sender: TObject;
+  var Key: Char);
+begin
+if (not (Key in ['0'..'9',#46,Chr(8)])) then Key:=#0;
+end;
+
+procedure TFormTransaction3.CurrencyEdit2KeyUp(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+var
+  deb_rate, kred_rate: Real;
+begin
+  with DataModPCustService do
+  begin
+    if (ODS_AccNO_A.active) and (ODS_AccNO_A.RecordCount <> 0) and
+      (not(ODS_AccNO_A.FieldByName('id').IsNull)) and (ODS_AccNO_B.active) and
+      (ODS_AccNO_B.RecordCount <> 0) and
+      (not(ODS_AccNO_B.FieldByName('id').IsNull)) and
+      (CurrencyEdit2.Value > 0) then
+    begin
+      v_ostat := PG_PCustService.CallFloatFunction('get_rate',
+        [-1, ODS_AccNO_A.FieldByName('ID').AsInteger,
+        ODS_AccNO_B.FieldByName('ID').AsInteger, '-1', '-1']);
+      XFBitBtn5.Enabled := True;
+      deb_rate := PG_PCustService.GetParameter(3);
+      kred_rate := PG_PCustService.GetParameter(4);
+      CurrencyEdit3.Value := (CurrencyEdit2.Value) * kred_rate;
+      if deb_rate = kred_rate then
+        CurrencyEdit1.Value := (CurrencyEdit2.Value)
+      else
+        CurrencyEdit1.Value := (CurrencyEdit3.Value) / deb_rate;
+
+    end
+    else
+      XFBitBtn5.Enabled := False;
+  end;
+end;
+
+procedure TFormTransaction3.CurrencyEdit3Click(Sender: TObject);
+begin
+  CurrencyEdit3.Text := '';
+end;
+
+procedure TFormTransaction3.CurrencyEdit3KeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if (not (Key in ['0'..'9',#46,Chr(8)])) then Key:=#0;
+end;
+
+procedure TFormTransaction3.CurrencyEdit3KeyUp(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+var
+  deb_rate, kred_rate: Real;
+begin
+  with DataModPCustService do
+  begin
+    if (ODS_AccNO_A.active) and (ODS_AccNO_A.RecordCount <> 0) and
+      (not(ODS_AccNO_A.FieldByName('id').IsNull)) and (ODS_AccNO_B.active) and
+      (ODS_AccNO_B.RecordCount <> 0) and
+      (not(ODS_AccNO_B.FieldByName('id').IsNull)) and
+      (CurrencyEdit3.Value > 0) then
+    begin
+      v_ostat := PG_PCustService.CallFloatFunction('get_rate',
+        [-1, ODS_AccNO_A.FieldByName('ID').AsInteger,
+        ODS_AccNO_B.FieldByName('ID').AsInteger, '-1', '-1']);
+      XFBitBtn5.Enabled := True;
+      deb_rate := PG_PCustService.GetParameter(3);
+      kred_rate := PG_PCustService.GetParameter(4);
+
+      if deb_rate = 1 then
+        CurrencyEdit1.Value := (CurrencyEdit3.Value);
+      if kred_rate = 1 then
+        CurrencyEdit2.Value := (CurrencyEdit3.Value)
+    end
+    else
+      XFBitBtn5.Enabled := False;
+  end;
+end;
+
+procedure TFormTransaction3.DBCBoxAccNo_AChange(Sender: TObject);
+var
+  deb_rate, kred_rate: Real;
+begin
+ with DataModPCustService do
+begin
+ Ods_Tenostat_A.Close;
+ Ods_Tenostat_A.SetVariable('id',ODS_AccNO_A.FieldByName('id').AsInteger );
+ Ods_Tenostat_A.Open;
+ Edit_ostatA.Text:= Ods_Tenostat_A.FieldByName('ostat').AsString;
+end;
+edit9.Text:=DataModPCustService.ODS_AccNO_A.FieldByName('bal_cn1').AsString;
+  EditRate_A.Text := DataModPCustService.ODS_AccNO_A.FieldByName
+    ('ostat').AsString;
+  Edit_AccName_A.Text := DataModPCustService.ODS_AccNO_A.FieldByName
+    ('name').AsString;
+  with DataModPCustService do
+  begin
+    if (DBCBoxAccNo_A.KeyValue <> '') and (CurrencyEdit1.Value > 0) and
+      (ODS_AccNO_A.RecordCount <> 0) and
+      (not(ODS_AccNO_A.FieldByName('id').IsNull)) and (ODS_AccNO_B.active) and
+      (ODS_AccNO_B.RecordCount <> 0) and
+      (not(ODS_AccNO_B.FieldByName('id').IsNull)) then
+    begin
+      v_ostat := PG_PCustService.CallFloatFunction('get_rate',
+        [-1, ODS_AccNO_A.FieldByName('ID').AsInteger,
+        ODS_AccNO_B.FieldByName('ID').AsInteger, '-1', '-1']);
+      XFBitBtn5.Enabled := True;
+
+      deb_rate := PG_PCustService.GetParameter(3);
+      kred_rate := PG_PCustService.GetParameter(4);
+
+      { CurrencyEdit3.Value := (CurrencyEdit1.Value) * deb_rate;
+        if deb_rate = kred_rate then
+        CurrencyEdit2.Value := CurrencyEdit1.Value
+        else
+        CurrencyEdit2.Value := (CurrencyEdit3.Value) / kred_rate; }
+      CurrencyEdit1.Clear;
+      CurrencyEdit2.Clear;
+      CurrencyEdit3.Clear;
+    end
+    else
+      XFBitBtn5.Enabled := False;
+
+  end;
+end;
+
+procedure TFormTransaction3.DBCBoxAccNo_ACloseUp(Sender: TObject;
+  Accept: Boolean);
+begin
+//  if DBCBoxAccNo_A.KeyValue <> '' then
+{if DataModPCustService.ODS_AccNO_A.FieldByName('symb').IsNull then
+
+  begin
+      DBLookupComboboxEh_A1.KeyValue :=
+      DataModPCustService.ODS_AccNO_A.FieldByName('symb').AsString;
+      DBLookupComboboxEh2.KeyValue := DataModPCustService.ODS_AccNO_A.FieldByName
+      ('filial').AsInteger;
+
+
+  DBLookupComboboxEh_A1.KeyValue := DataModPCustService.ODS_AccNO_A.FieldByName
+  ('symb').AsString;
+
+  end;}
+  if DataModPCustService.ODS_AccNO_A.FieldByName('symb').isnull then
+  begin
+   DBLookupComboboxEh_A1.KeyValue:=DataModPCustService.ODS_account_symbols_A.FieldByName('symbol').AsString;
+   DBLookupComboboxEh2.KeyValue := DataModPCustService.ODS_AccNO_A.FieldByName
+      ('filial').AsInteger;
+  end
+  else
+  DBLookupComboboxEh_A1.KeyValue := DataModPCustService.ODS_AccNO_A.FieldByName
+  ('symb').AsString;
+  end;
+
+procedure TFormTransaction3.DBCBoxAccNo_AlCloseUp(Sender: TObject);
+begin
+  DBLookupComboboxEh_A1.KeyValue := DataModPCustService.ODS_AccNO_A.FieldByName
+    ('symb').AsString;
+end;
+
+procedure TFormTransaction3.DBCBoxAccNo_BChange(Sender: TObject);
+
+var
+  deb_rate, kred_rate: Real;
+
+begin
+ with DataModPCustService do
+begin
+ Ods_Tenostat_B.Close;
+ Ods_Tenostat_B.SetVariable('id',ODS_AccNO_B.FieldByName('id').AsInteger );
+ Ods_Tenostat_B.Open;
+ Edit_ostatB.Text:= Ods_Tenostat_B.FieldByName('ostat').AsString;
+end;
+  edit2.Text:=DataModPCustService.ODS_AccNO_B.FieldByName('bal_cn1').AsString;
+  EditRate_B.Text := DataModPCustService.ODS_AccNO_B.FieldByName('ostat').AsString;
+  Edit_AccName_B.Text := DataModPCustService.ODS_AccNO_B.FieldByName
+    ('name').AsString;
+  with DataModPCustService do
+  begin
+      if (DBCBoxAccNo_A.KeyValue <> '') and (CurrencyEdit1.Value > 0) and
+      (ODS_AccNO_A.RecordCount <> 0) and
+      (not(ODS_AccNO_A.FieldByName('id').IsNull)) and (ODS_AccNO_A.active) and
+      (ODS_AccNO_B.RecordCount <> 0) and
+      (not(ODS_AccNO_B.FieldByName('id').IsNull)) then
+    begin
+      v_ostat := PG_PCustService.CallFloatFunction('get_rate',
+        [-1, ODS_AccNO_A.FieldByName('ID').AsInteger,
+        ODS_AccNO_B.FieldByName('ID').AsInteger, '-1', '-1']);
+      XFBitBtn5.Enabled := True;
+
+      deb_rate := PG_PCustService.GetParameter(3);
+      kred_rate := PG_PCustService.GetParameter(4);
+
+      { CurrencyEdit3.Value := (CurrencyEdit2.Value) * deb_rate;
+        if deb_rate = kred_rate then
+        CurrencyEdit1.Value := CurrencyEdit2.Value
+        else
+        CurrencyEdit1.Value := (CurrencyEdit2.Value) / kred_rate; }
+      CurrencyEdit1.Clear;
+      CurrencyEdit2.Clear;
+      CurrencyEdit3.Clear;
+    end
+    else
+      XFBitBtn5.Enabled := False;
+  end;
+
+end;
+
+procedure TFormTransaction3.DBCBoxAccNo_BCloseUp(Sender: TObject;
+  Accept: Boolean);
+begin
+{  DBLookupComboboxEh_B1.KeyValue := DataModPCustService.ODS_AccNO_B.FieldByName
+    ('symb').AsString;
+  DBLookupComboboxEh3.KeyValue := DataModPCustService.ODS_AccNO_B.FieldByName
+    ('filial').AsInteger;   }
+ case  DataModPCustService.ODS_AccNO_B.FieldByName('cust_type').AsInteger  of
+ 1:begin
+ RadioBu_phys.Checked:=true;
+ end;
+ 2:begin
+ RadioBu_fs.Checked:=true;
+
+ end;
+ end;
+  if DataModPCustService.ODS_AccNO_B.FieldByName('symb').isnull then
+  begin
+   DBLookupComboboxEh_B1.KeyValue:=DataModPCustService.ODS_account_symbols_B.FieldByName('symbol').AsString;
+   DBLookupComboboxEh3.KeyValue := DataModPCustService.ODS_AccNO_B.FieldByName
+      ('filial').AsInteger;
+  end
+  else
+  DBLookupComboboxEh_B1.KeyValue := DataModPCustService.ODS_AccNO_B.FieldByName
+  ('symb').AsString;
+end;
+
+procedure TFormTransaction3.DBLookupComboboxEh2CloseUp(Sender: TObject;
+  Accept: Boolean);
+var
+  a, b, s: string;
+begin
+  if (DBLookupComboboxEh_A1.KeyValue <> '') then
+  begin
+    with DataModPCustService, ODS_AccNO_A do
+    begin
+      s := '';
+      a := DBLookupComboboxEh_A1.KeyValue; // ='hhh';
+      b := inttostr(DBLookupComboboxEh2.KeyValue);
+      if a <> 'hhh' then
+        s := 'and  a.symb like  ''%' + a + '%''';
+      if b <> '-1' then
+        s := s + ' and a.filial=' + b;
+      close;
+      // ShowMessage(s);
+      sql[13] := s;
+      open;
+    end;
+  end;
+  { if DBLookupComboboxEh2.KeyValue <> -1 then
+    with DataModPCustService.ODS_AccNO_A do
+    begin
+    Filtered := False;
+    Filter := 'filial=' + inttostr(DBLookupComboboxEh2.KeyValue);
+    Filtered := True;
+
+    DataModPCustService.ODS_AccNO_A.First;
+    DBCBoxAccNo_A.KeyValue := DataModPCustService.ODS_AccNO_A.FieldByName
+    ('acc_no').AsString;
+    DBLookupComboboxEh_A1.KeyValue :=
+    DataModPCustService.ODS_AccNO_A.FieldByName('symb').AsString;
+    end
+    else
+    DataModPCustService.ODS_AccNO_A.Filtered := False;
+    if DBLookupComboboxEh2.KeyValue=-1 then
+    begin
+    with DataModPCustService.ODS_AccNO_A do
+    begin
+    close;
+    sql[13]:='';
+    open;
+    end
+    end; }
+
+end;
+
+procedure TFormTransaction3.DBLookupComboboxEh3CloseUp(Sender: TObject;
+  Accept: Boolean);
+var
+  a, b, s: string;
+begin
+  if (DBLookupComboboxEh_B1.KeyValue <> '') then
+  begin
+    with DataModPCustService, ODS_AccNO_B do
+    begin
+      s := '';
+      a := DBLookupComboboxEh_B1.KeyValue; // ='hhh';
+      b := inttostr(DBLookupComboboxEh3.KeyValue);
+      if a <> 'hhh' then
+        s := 'and  a.symb like  ''%' + a + '%''';
+      if b <> '-1' then
+        s := s + ' and a.filial=' + b;
+      close;
+      sql[13] := s;
+      open;
+    end;
+  end;
+end;
+
+procedure TFormTransaction3.DBLookupComboboxEh_A1Change(Sender: TObject);
+var
+  s: string;
+begin
+  { with DataModPCustService,ODS_AccNO_A do
+    begin
+    if DBLookupComboboxEh_A1.KeyValue='hhh' then
+    begin
+    s:=''  ;
+    DataModPCustService.ODS_AccNO_A.Filtered := False;
+    DBLookupComboboxEh2.KeyValue:=-1;
+    end
+    else
+    s:=  'and  a.symb like  ''%'+DBLookupComboboxEh_A1.KeyValue+'%''';
+    // ShowMessage(s);
+    close;
+    sql[13]:=s;
+    open;
+    end; }
+end;
+
+procedure TFormTransaction3.DBLookupComboboxEh_A1CloseUp(Sender: TObject;
+  Accept: Boolean);
+var
+  a, b, s: string;
+begin
+  if (DBLookupComboboxEh_A1.KeyValue <> '') then
+  begin
+    with DataModPCustService, ODS_AccNO_A do
+    begin
+      s := '';
+      a := DBLookupComboboxEh_A1.KeyValue; // ='hhh';
+      b := inttostr(DBLookupComboboxEh2.KeyValue);
+      if a <> 'hhh' then
+        s := 'and  a.symb like  ''%' + a + '%''';
+      if b <> '-1' then
+        s := s + ' and a.filial=' + b;
+      close;
+      // ShowMessage(s);
+      sql[13] := s;
+      open;
+      if RecordCount=1 then
+      DBCBoxAccNo_A.KeyValue:=DataModPCustService.ODS_AccNO_A.FieldByName('acc_no').AsString
+
+    else
+    begin
+    DBCBoxAccNo_A.KeyValue:='';
+    end;
+    end;
+    { if  then
+      begin
+
+      DataModPCustService.ODS_AccNO_A.Filtered := False;
+      DBLookupComboboxEh2.KeyValue:=-1;
+      end
+      else
+
+      with DataModPCustService.ODS_AccNO_A do
+      begin
+      if not SearchRecord('symb', DBLookupComboboxEh_A1.KeyValue,
+      [srIgnoreCase, srPartialMatch, srFromBeginning]) then
+      DBCBoxAccNo_A.KeyValue := ' '
+      else
+      DBCBoxAccNo_A.KeyValue := FieldByName('acc_no').AsString;
+
+
+      end; }
+  end;
+end;
+
+procedure TFormTransaction3.DBLookupComboboxEh_B1CloseUp(Sender: TObject;
+  Accept: Boolean);
+var
+  a, b, s: string;
+begin
+  if (DBLookupComboboxEh_B1.KeyValue <> '') then
+  begin
+    with DataModPCustService, ODS_AccNO_B do
+    begin
+      s := '';
+      a := DBLookupComboboxEh_B1.KeyValue; // ='hhh';
+      b := inttostr(DBLookupComboboxEh3.KeyValue);
+      if a <> 'hhh' then
+        s := 'and  a.symb like  ''%' + a + '%''';
+      if b <> '-1' then
+        s := s + ' and a.filial=' + b;
+      close;
+
+      sql[13] := s;
+      open;
+    end;
+
+  end;
+   with DataModPCustService, ODS_AccNO_B do
+    begin
+       if RecordCount=1 then
+      DBCBoxAccNo_B.KeyValue:=DataModPCustService.ODS_AccNO_B.FieldByName('acc_no').AsString
+      else
+        begin
+        DBCBoxAccNo_B.KeyValue:='';
+     end;
+      { begin
+        with DataModPCustService.ODS_AccNO_B do
+        begin
+        if not SearchRecord('symb', DBLookupComboboxEh_B1.KeyValue,
+        [srIgnoreCase, srPartialMatch, srFromBeginning]) then
+        DBCBoxAccNo_B.KeyValue := ' '
+        else
+        DBCBoxAccNo_B.KeyValue := FieldByName('acc_no').AsString; }
+
+
+
+    end;
+end;
+
+procedure TFormTransaction3.DBLookupComboboxEh_descriptionChange(
+  Sender: TObject);
+begin
+if not(DBLookupComboboxEh_description.KeyValue = null) then
+    Edit_description.Text := DBLookupComboboxEh_description.KeyValue;
+    EditDescription.Text:=DBLookupComboboxEh_description.text ;
+
+end;
+
+procedure TFormTransaction3.Edit1KeyPress(Sender: TObject; var Key: Char);
+var
+  v_cust_type_id: Integer;
+begin
+  if ord(Key) = 13 then
+  begin
+    with DataModPCustService.ODS_CUSTOMERS_PHYS_FS do
+    begin
+      close;
+      sql[8] := ' ';
+      if Edit1.Text <> '' then
+        sql[8] := sql[8] + ' and c.ID = ' + Edit1.Text;
+      open;
+      if RecordCount = 0 then
+      begin
+        ShowMessage('Belə müştəri yoxdu  !');
+        // exit;
+        Edit1.Clear;
+      end;
+      Edit3.Text := FieldByName('cust_name').AsString;
+
+      with DataModPCustService.ODS_AccNO_A do
+      begin
+        close;
+        SetVariable('CustID', strtoint(Edit1.Text));
+
+        open;
+      end;
+      end;
+    if DataModPCustService.ODS_AccNO_A.RecordCount <= 2 then
+    begin
+      DataModPCustService.ODS_AccNO_A.First;
+      DBCBoxAccNo_A.KeyValue := DataModPCustService.ODS_AccNO_A.FieldByName
+        ('acc_no').AsString;
+      DBLookupComboboxEh_A1.KeyValue :=
+        DataModPCustService.ODS_AccNO_A.FieldByName('symb').AsString;
+    end
+    else
+      BEGIN DataModPCustService.ODS_AccNO_A.Last;
+    DBLookupComboboxEh_A1.KeyValue := ' ';
+  END;
+  CurrencyEdit1.Clear;
+  CurrencyEdit2.Clear;
+  CurrencyEdit3.Clear;
+  EditDescription.Clear;
+  EditRate_A.Clear;
+end;
+end;
+
+procedure TFormTransaction3.Edit2Change(Sender: TObject);
+begin
+
+
+  {with DataModPCustService,ODS_AccNO_B do
+  begin
+  close;
+    SQL[14]:='and bal_cn1 like '''+FormTransaction3.Edit2.Text+'%''';
+  open;
+  end; }
+  end;
+
+procedure TFormTransaction3.Edit2KeyPress(Sender: TObject; var Key: Char);
+begin
+if ord(key)=13 then
+ XFButton1.Click
+end;
+
+procedure TFormTransaction3.Edit8Change(Sender: TObject);
+begin
+ with DataModPCustService.ODS_AccNO_B do
+begin
+  close;
+SetVariable('custtype', ' in (0,1,2)');
+ open;
+
+end;
+
+RadioBu_phys.Checked:=false;
+RadioBu_jur.Checked:= false;
+RadioBu_fs.Checked:=false;
+
+RadioBu_phys.Enabled:=true;
+RadioBu_jur.Enabled:= true;
+RadioBu_fs.Enabled:=true;
+end;
+
+procedure TFormTransaction3.Edit8KeyPress(Sender: TObject; var Key: Char);
+var
+  v_cust_type_id: Integer;
+
+  begin
+  if ord(Key) = 13 then
+  begin
+    with DataModPCustService.ODS_CUSTOMERS_PHYS_FS1 do
+    begin
+      close;
+      sql[8] := ' ';
+      if Edit8.Text <> '' then
+        sql[8] := sql[8] + ' and c.ID = ' + Edit8.Text;
+      open;
+      if RecordCount = 0 then
+      begin
+       ShowMessage('Belə müştəri yoxdu  !');
+        // exit;
+        Edit8.Clear;
+      end;
+      Edit10.Text := FieldByName('cust_name').AsString;
+
+      with DataModPCustService.ODS_AccNO_B do
+      begin
+        close;
+        SetVariable('CustID', strtoint(Edit8.Text));
+        open;
+      end;
+
+      v_cust_type_id := DataModPCustService.ODS_CUSTOMERS_PHYS_FS1.FieldByName
+        ('CUST_TYPE').AsInteger;
+      if v_cust_type_id in [0, 2] then
+      begin
+        Edit11.Visible := True;
+        Edit11.Text := FieldByName('inn').AsString;
+        Edit7.Visible := False;
+        Edit18.Visible := False;
+        Label18.Caption := 'Vöen';
+        edit12.Visible:=false;
+        Label16.Visible:=false;
+      end
+      else
+      begin
+        Edit7.Visible := True;
+        Edit18.Visible := True;
+      end;
+
+      if v_cust_type_id = 1 then
+      begin
+        Edit7.Visible := True;
+        Edit18.Visible := True;
+        Edit7.Text := FieldByName('passport').AsString;
+        Edit18.Text := FieldByName('passp_number').AsString;
+        Edit11.Visible := False;
+        Label18.Caption := 'Pasport seriyasi'  ;
+        edit12.Visible:=false  ;
+        Label16.Visible:=false
+      end
+      else if v_cust_type_id = 3 then
+      begin
+
+        Edit7.Visible := True;
+        Edit18.Visible := True;
+        Edit7.Text := FieldByName('passport').AsString;
+        Edit18.Text := FieldByName('passp_number').AsString;
+        Edit11.Visible := False;
+        Label18.Caption := 'Pasport seriyasi';
+        Label16.Visible:=true;
+        edit12.Visible:=true;
+        Edit12.Text := FieldByName('inn').AsString;
+
+      end
+      else
+        Edit11.Visible := True;
+    end;
+
+    if DataModPCustService.ODS_AccNO_B.RecordCount <= 2 then
+    begin
+      DataModPCustService.ODS_AccNO_B.First;
+       DBLookupComboboxEh_B1.KeyValue :=
+        DataModPCustService.ODS_AccNO_B.FieldByName('symb').AsString;
+    end
+    else
+      BEGIN DataModPCustService.ODS_AccNO_B.Last;
+    DBLookupComboboxEh_B1.KeyValue := ' ';
+  END;
+
+     with DataModPCustService.ODS_AccNO_B do
+  begin
+    if RecordCount = 2 then
+   DBCBoxAccNo_B.KeyValue :=DataModPCustService.ODS_AccNO_B.FieldByName
+        ('acc_no').AsString
+    else
+   DBCBoxAccNo_B.KeyValue := ' ';
+    end;
+
+  case DataModPCustService.ODS_CUSTOMERS_PHYS_FS1.FieldByName('cust_type').AsInteger of
+  0:begin
+    RadioBu_jur.Checked:=true;
+    RadioBu_phys.Enabled:=false;
+    RadioBu_fs.Enabled:=false;
+   end;
+
+  1:begin
+    RadioBu_phys.Checked:=true ;
+   RadioBu_jur.Enabled:=false;
+   RadioBu_fs.Enabled:=false;
+   end;
+  2:begin
+  if  RadioBu_fs.Checked=false then
+     RadioBu_fs.Checked:=true
+     else
+   RadioBu_fs.Checked:=true;
+   RadioBu_jur.Enabled:=false;
+   RadioBu_phys.Enabled:=false;
+  end;
+  3:begin
+     RadioBu_phys.Checked:=false;
+     RadioBu_fs.Checked:=false;
+     RadioBu_jur.Enabled:=false;
+  end;
+
+  end;
+        end;
+
+  { CurrencyEdit1.Clear;
+    CurrencyEdit2.Clear;
+    CurrencyEdit3.Clear;
+    EditDescription.Clear;
+    Edit2_A.Clear; }
+end;
+
+
+
+procedure TFormTransaction3.Edit_descriptionExit(Sender: TObject);
+begin
+if Edit_description.Text <> '' then
+    DBLookupComboboxEh_description.KeyValue := Edit_description.Text;
+end;
+
+procedure TFormTransaction3.Edit_descriptionKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+if Key = #13 then
+  begin
+    DBLookupComboboxEh_description.KeyValue := Edit_description.Text;
+end;
+end;
+
+procedure TFormTransaction3.FormCanResize(Sender: TObject;
+  var NewWidth, NewHeight: Integer; var Resize: Boolean);
+begin
+  Resize := False;
+end;
+
+procedure TFormTransaction3.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+ with DataModPCustService.ODS_AccNO_B do
+      begin
+        close;
+        SetVariable('CustID', -1);
+        open;
+      end;
+ Label16.Visible:=false;
+ edit12.visible:=false;
+ edit2.Clear;
+ Edit_AccName_B.Clear;
+ DBCBoxAccNo_B.KeyValue := '';
+
+  DBLookupComboboxEh_B1.KeyValue := '';
+  DBLookupComboboxEh3.KeyValue := '';
+  DBLookupComboboxEh5.KeyValue:=-1;
+  Edit8.Clear;
+  Edit10.Clear;
+  Edit11.Clear;
+  Edit7.Clear;
+  Edit18.Clear;
+  CurrencyEdit1.Value := 0;
+  CurrencyEdit2.Value := 0;
+  CurrencyEdit3.Value := 0;
+  EditRate_A.Value := 0;
+  EditRate_B.Value := 0;
+  Edit_description.Clear;
+  DBLookupComboboxEh_description.KeyValue:=-1;
+   SBTranslateProc.TranslateAllCompForms(Self, sboapiDataModule.OrPack_SL);
+end;
+
+procedure TFormTransaction3.FormCreate(Sender: TObject);
+begin
+  DataModPCustService.ConvertationSymbols.open;
+  DataModPCustService.ODS_contrs3.open;
+  DataModPCustService.ODS_CUSTOMERS_PHYS_FS1.open;
+end;
+
+procedure TFormTransaction3.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+  if ord(Key) = 27 then
+    close;
+
+end;
+
+procedure TFormTransaction3.FormShow(Sender: TObject);
+var
+SPos:integer;
+a,s:string;
+begin
+  SPos := DataModPCustService.SBOP.CallIntegerFunction('get_acc_no_sub',[]);
+  DataModPCustService.ODS_AccNO_A.SetVariable('ACCSRCHPOS', SPos);
+  SPos := DataModPCustService.SBOP.CallIntegerFunction('get_acc_no_sub',[]);
+  DataModPCustService.ODS_AccNO_B.SetVariable('ACCSRCHPOS', SPos);
+  DBLookupCEh_contrsName.KeyValue:=1;
+  with DataModPCustService.ODS_AccNO_A do
+  begin
+    if RecordCount = 2 then
+      DBCBoxAccNo_A.KeyValue := DataModPCustService.ODS_AccNO_A.FieldByName('acc_no').AsString
+    else
+      DBCBoxAccNo_A.KeyValue := '';
+  end;
+
+  Edit1.Text := DataModPCustService.ODS_CUSTOMERS_PHYS_FS.FieldByName
+    ('id').AsString;
+  Edit3.Text := DataModPCustService.ODS_CUSTOMERS_PHYS_FS.FieldByName
+    ('cust_name').AsString;
+
+if DataModPCustService.ODS_CUSTOMERS_PHYS_FS.FieldByName('cust_type').AsInteger in[0,2] then
+  begin
+    Edit5.Visible := True;
+    Edit5.Text := DataModPCustService.ODS_CUSTOMERS_PHYS_FS.FieldByName
+      ('inn').AsString;
+    Edit4.Visible := False;
+    Edit6.Visible := False;
+    Label10.Caption := 'VÖEN';
+    end
+    else
+    begin
+    Edit4.Visible := True;
+    Edit6.Visible := True;
+    Edit4.Text := DataModPCustService.ODS_CUSTOMERS_PHYS_FS.FieldByName
+      ('passport').AsString;
+    Edit6.Text := DataModPCustService.ODS_CUSTOMERS_PHYS_FS.FieldByName
+      ('passp_number').AsString;
+    Edit5.Visible := False;
+    Label10.Caption := 'Pasport seriyasi'
+  end;
+  if DataModPCustService.ODS_CUSTOMERS_PHYS_FS.FieldByName('cust_type').AsInteger=3 then
+  begin
+  if PCustServiceForm.XFRadioGroup1.ItemIndex=1   then
+  begin
+    Edit5.Visible := True;
+    Edit5.Text := DataModPCustService.ODS_CUSTOMERS_PHYS_FS.FieldByName
+      ('inn').AsString;
+    Edit4.Visible := False;
+    Edit6.Visible := False;
+    Label10.Caption := 'VÖEN';
+    end
+    else
+    begin
+    Edit4.Visible := True;
+    Edit6.Visible := True;
+    Edit4.Text := DataModPCustService.ODS_CUSTOMERS_PHYS_FS.FieldByName
+      ('passport').AsString;
+    Edit6.Text := DataModPCustService.ODS_CUSTOMERS_PHYS_FS.FieldByName
+      ('passp_number').AsString;
+    Edit5.Visible := False;
+    Label10.Caption := 'Pasport seriyasi'
+  end;
+
+  end;
+  CurrencyEdit1.Clear;
+  CurrencyEdit2.Clear;
+  CurrencyEdit3.Clear;
+  EditDescription.Clear;
+  DBLookupComboboxEh_A1.KeyValue := 'hhh';
+  DBLookupComboboxEh2.KeyValue := -1;
+  DBLookupComboboxEh_B1.KeyValue := 'hhh';
+  DBLookupComboboxEh3.KeyValue := -1;
+  if (DBLookupComboboxEh_A1.KeyValue <> '') then
+  begin
+    with DataModPCustService, ODS_AccNO_A do
+    begin
+      s := '';
+      a := DBLookupComboboxEh_A1.KeyValue; // ='hhh';
+
+      if a <> 'hhh' then
+        s := 'and  a.symb like  ''%' + a + '%''';
+      close;
+      sql[13] := s;
+      open;
+      if RecordCount=1 then
+      DBCBoxAccNo_A.KeyValue:=DataModPCustService.ODS_AccNO_A.FieldByName('acc_no').AsString
+
+      else
+        begin
+        DBCBoxAccNo_A.KeyValue:='';
+     end;
+    end;
+  end;
+
+end;
+
+procedure TFormTransaction3.RadioBu_fsClick(Sender: TObject);
+var x:integer ;
+begin
+if DataModPCustService.ODS_CUSTOMERS_PHYS_FS1.FieldByName('cust_type').AsInteger=3 then
+
+      with DataModPCustService.ODS_AccNO_B do
+      begin
+      close;
+      SetVariable('custtype',' in 2');
+      open;
+      end  ;
+        with DataModPCustService, ODS_AccNO_B do
+    begin
+       if RecordCount=1 then
+      DBCBoxAccNo_B.KeyValue:=DataModPCustService.ODS_AccNO_B.FieldByName('acc_no').AsString
+      else
+        begin
+        DBCBoxAccNo_B.KeyValue:='';
+     end;
+    end;
+
+end;
+
+procedure TFormTransaction3.RadioBu_physClick(Sender: TObject);
+
+ begin
+if DataModPCustService.ODS_CUSTOMERS_PHYS_FS1.FieldByName('cust_type').AsInteger=3 then
+
+       with DataModPCustService.ODS_AccNO_B do
+       begin
+
+       close;
+       SetVariable('custtype','in 1');
+       open;
+       end;
+  with DataModPCustService, ODS_AccNO_B do
+    begin
+       if RecordCount=1 then
+      DBCBoxAccNo_B.KeyValue:=DataModPCustService.ODS_AccNO_B.FieldByName('acc_no').AsString
+      else
+        begin
+        DBCBoxAccNo_B.KeyValue:='';
+     end;
+    end;
+end;
+
+procedure TFormTransaction3.XFBitBtn4Click(Sender: TObject);
+begin
+  close;
+end;
+
+procedure TFormTransaction3.XFBitBtn5Click(Sender: TObject);
+var
+  aa: string;
+begin
+
+    DataModPCustService.OPG_BusProc.CallProcedure('ExecBProcess',
+    [DataModPCustService.ODS_BusProc.FieldByName('ID').AsInteger,
+    strtoint(Edit1.Text), DataModPCustService.ODS_AccNO_A.FieldByName('ID')
+    .AsInteger, DataModPCustService.ODS_AccNO_B.FieldByName('ID').AsInteger, 0,
+    CurrencyEdit1.Value, CurrencyEdit2.Value, CurrencyEdit3.Value, 0,
+    DBLookupComboboxEh5.KeyValue, EditDescription.Text, 0,
+    DBLookupCEh_contrsName.KeyValue, EditRate_A.Value, EditRate_B.Value, 0,0]);
+
+  FormTransaction3.close;
+
+end;
+
+procedure TFormTransaction3.XFButton1Click(Sender: TObject);
+begin
+   cust_elaqe_Transaction:=2;
+    if not assigned(FormCustomers) then
+    FormCustomers := TFormCustomers.Create(Self);
+    FormCustomers.ShowModal;
+end;
+
+end.

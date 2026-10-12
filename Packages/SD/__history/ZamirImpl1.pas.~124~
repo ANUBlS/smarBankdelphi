@@ -1,0 +1,5260 @@
+﻿        unit ZamirImpl1;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
+  ActiveX, AxCtrls, Project2_TLB, StdVcl, Db,Grids, DBGrids,
+  ComCtrls, StdCtrls,Buttons, ExtCtrls, Gauges, Menus,
+  ActnList, Oracle, OracleData,comobj, ComServ,OleServer,  DBCtrls,
+  ImgList, OleCtnrs,unthsd,inifiles,  Dialogs, ExcelXP,Variants;
+
+type
+  TSDHesabat = class(TActiveForm, IZamir)
+    ORAPAK: TOraclePackage;
+    ODialog: TOpenDialog;
+    DataSource1: TDataSource;
+    OraDatBook: TOracleDataSet;
+    DataSource2: TDataSource;
+    DTP: TDateTimePicker;
+    DTP1: TDateTimePicker;
+    OraDatSheet: TOracleDataSet;
+    DataSource3: TDataSource;
+    OraDatCell: TOracleDataSet;
+    DataSource4: TDataSource;
+    OraLoadFilial: TOracleDataSet;
+    OraLoadSimvol: TOracleDataSet;
+    OraPrimer: TOracleDataSet;
+    ODSLoadPok: TOracleDataSet;
+    oradatviewresult: TOracleDataSet;
+    OraSumma: TOracleDataSet;
+    DataSource5: TDataSource;
+    OrasmartDate: TOracleDataSet;
+    OracleDataSet1: TOracleDataSet;
+    Panel2: TPanel;
+    Xlapp1: TExcelApplication;
+    oradatgetsum: TOracleDataSet;
+    OraDatProvCell: TOracleDataSet;
+    DataSource6: TDataSource;
+    oradatprov: TOracleDataSet;
+    DataSource7: TDataSource;
+    OracleDataSet2: TOracleDataSet;
+    DataSource8: TDataSource;
+    cbP: TCheckBox;
+    cbpr: TCheckBox;
+    Bevel1: TBevel;
+    oradatsdbal_cn: TOracleDataSet;
+    DataSource9: TDataSource;
+    ImageList1: TImageList;
+    oradatdepsd: TOracleDataSet;
+    DataSource10: TDataSource;
+    DataSource11: TDataSource;
+    oradatdepcell_: TOracleDataSet;
+    oradatkrecell: TOracleDataSet;
+    DataSource12: TDataSource;
+    gbcalc: TGroupBox;
+    Label4: TLabel;
+    cmbbookname: TComboBox;
+    Label1: TLabel;
+    pb: TGauge;
+    pb1: TGauge;
+    btnbookcalc: TButton;
+    btnbookview: TButton;
+    lblinfo: TLabel;
+    oradatkredit: TOracleDataSet;
+    Label2: TLabel;
+    GroupBox1: TGroupBox;
+    PageControl1: TPageControl;
+    TabSheet1: TTabSheet;
+    Bevel3: TBevel;
+    DBGrid3: TDBGrid;
+    DBGrid4: TDBGrid;
+    edacc_no: TEdit;
+    edbalcn1: TEdit;
+    edval_acc: TEdit;
+    edtipacc: TEdit;
+    eddatdate: TEdit;
+    edsumost: TEdit;
+    edsump_ost: TEdit;
+    edobr_d: TEdit;
+    edobr_k: TEdit;
+    edpok_obr_d: TEdit;
+    edpok_obr_k: TEdit;
+    GroupBox2: TGroupBox;
+    btncellcalc: TButton;
+    btncelldel: TButton;
+    btncelledit: TButton;
+    btnCellAdd: TButton;
+    TabSheet2: TTabSheet;
+    DBGrid5: TDBGrid;
+    DBGrid6: TDBGrid;
+    GroupBox3: TGroupBox;
+    btnprovcellcalc: TButton;
+    btnprovcelldel: TButton;
+    btnprovcelledit: TButton;
+    btnprovcelladd: TButton;
+    TabSheet5: TTabSheet;
+    DBGrid1: TDBGrid;
+    GroupBox6: TGroupBox;
+    btnbookdel: TButton;
+    btnbookedit: TButton;
+    btnbookadd: TButton;
+    TabSheet6: TTabSheet;
+    DBGrid2: TDBGrid;
+    GroupBox7: TGroupBox;
+    btnsheetcalc: TButton;
+
+    cm_sd: TOraclePackage;
+    SBCM_REPORT: TOraclePackage;
+    Memo1: TMemo;
+    Memo3: TMemo;
+    Oradatdepcell: TOracleDataSet;
+    OraDatBookCAPTION: TWideStringField;
+    OraDatBookADRESS: TWideStringField;
+    OraDatSheetSHEET_ID: TWideStringField;
+    OraDatSheetCAPTION: TWideStringField;
+    OraDatSheetBOOK_CAPTION: TWideStringField;
+    OraDatSheetNISBAT: TFloatField;
+    re: TButton;
+    OradarDepozit: TOracleDataSet;
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure edacc_noKeyPress(Sender: TObject; var Key: Char);
+    procedure edbalcn1KeyPress(Sender: TObject; var Key: Char);
+    procedure edval_accKeyPress(Sender: TObject; var Key: Char);
+    procedure edtipaccKeyPress(Sender: TObject; var Key: Char);
+    procedure eddatdateKeyPress(Sender: TObject; var Key: Char);
+    procedure DBGrid1CellClick(Column: TColumn);
+    procedure DBGrid1KeyPress(Sender: TObject; var Key: Char);
+    procedure DBGrid2CellClick(Column: TColumn);
+    procedure DBGrid2KeyPress(Sender: TObject; var Key: Char);
+    procedure DBGrid3KeyPress(Sender: TObject; var Key: Char);
+    procedure btncellAddClick(Sender: TObject);
+    procedure btncellEditClick(Sender: TObject);
+    procedure btncelldelClick(Sender: TObject);
+    procedure btncellCalcClick(Sender: TObject);
+    procedure btnSheetCalcClick(Sender: TObject);
+    procedure btnBookCalcClick(Sender: TObject);
+    procedure btnBookAddClick(Sender: TObject);
+    procedure btnBookDelClick(Sender: TObject);
+    procedure DBGrid3CellClick(Column: TColumn);
+    procedure btnprovcelladdClick(Sender: TObject);
+    procedure DBGrid5CellClick(Column: TColumn);
+    procedure DBGrid5KeyPress(Sender: TObject; var Key: Char);
+    procedure btnprovcelleditClick(Sender: TObject);
+    procedure btnprovcelldelClick(Sender: TObject);
+    procedure btnprovcellcalcClick(Sender: TObject);
+    procedure DBGrid2DblClick(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+    procedure ActiveFormDestroy(Sender: TObject);
+    procedure ActiveFormKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure btndepaddClick(Sender: TObject);
+    procedure btndepcalcClick(Sender: TObject);
+    procedure ed_balcnKeyPress(Sender: TObject; var Key: Char);
+    procedure btndepeditClick(Sender: TObject);
+    procedure DBGrid8CellClick(Column: TColumn);
+    procedure DBGrid8KeyPress(Sender: TObject; var Key: Char);
+    procedure btndepdelClick(Sender: TObject);
+    procedure btnkrecalcClick(Sender: TObject);
+    procedure btnkreaddClick(Sender: TObject);
+    procedure DBGrid9CellClick(Column: TColumn);
+    procedure DBGrid9KeyPress(Sender: TObject; var Key: Char);
+    procedure btnkreeditClick(Sender: TObject);
+    procedure btnkredelClick(Sender: TObject);
+    procedure DBGrid8KeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure DBGrid9KeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure DBGrid5KeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure DBGrid3KeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure OleContainer1MouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
+    procedure cmbbooknameClick(Sender: TObject);
+    procedure btnbookeditClick(Sender: TObject);
+    procedure btnbookviewClick(Sender: TObject);
+    procedure ActiveFormActivate(Sender: TObject);
+    procedure redakteClick(Sender: TObject);
+    procedure reClick(Sender: TObject);
+  private
+    { Private declarations }
+
+    FEvents: IZamirEvents;
+
+    Procedure Cell;
+    Procedure ProvCell;
+    Procedure DepCell;
+    procedure krecell;
+    Procedure GetSum;
+    procedure unique;
+    //Procedure OleShowe;
+    procedure readbookname;
+    Procedure oradatcell_edit;
+    Procedure oradatprovcell_edit;
+    Procedure oradatdepcell_edit;
+    Procedure oradatkrecell_edit;
+    Procedure Connect_Excel;
+    Procedure addpicklist_cell;
+    Procedure addpicklist_provcell;
+    Procedure addpicklist_depcell;
+    Procedure addpicklist_krecell;
+    procedure Yenile(key: Word; Shift: TShiftState);
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+     procedure depozitrecell;
+
+
+  public
+     Kill:Boolean;
+     Confirm,ProExcel,CellExit,chkreport:integer;
+     mypotstart:Boolean;
+
+     Function  UpdateStr(InpStr:string):string;
+
+
+    { Public declarations }
+    procedure Initialize; override;
+
+
+
+  end;
+
+  var
+      SDHesabat: TSDHesabat;
+      oradat:toracledataset;
+      stopFlag : Boolean;
+      OleWorkBook:Variant;
+      Hdate :TDateTime;
+      Sdate,MinDate,MaxDate:TDateTime;
+      XlApp:OLEVariant;
+      ppbook,Sheet,Row,ind,SheetCount,count1,count2,count3,cellcount,i,L,k,G,N,NisNumber,pokOST,LoadTime,timetake:integer;
+
+      FileName:String;
+      U,C,R,T,H,Z,z1,V,J,D,E,P,X,Y,w,Seperator,deb,dbc,SimV,accsql,SinSql,QrupSql,SimSql,valsql,RezSql,FilSql,Eb,Eh,Es,Eq,BalSql,HesSql:string;
+      ac,ba,va,ti,da,comment:string;
+      Kredit,Debet,Sell,LCell:Real;
+      Un_check,posti:Integer;
+      clip_shid,clip_cap:string;
+
+      StartDate ,FinDate ,
+      v_StartDate ,v_FinDate ,
+      r_StartDate ,r_FinDate :TDateTime;
+
+implementation
+
+uses  sboapiDataModuleImpl,uninfo,SBTranslateProc ;
+
+{$R *.DFM}
+
+{ TZamir }
+procedure TSDHesabat.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_ZamirPage); }
+end;
+
+procedure TSDHesabat.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as IZamirEvents;
+end;
+
+
+
+function TSDHesabat.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TSDHesabat.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TSDHesabat.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TSDHesabat.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TSDHesabat.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TSDHesabat.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TSDHesabat.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TSDHesabat.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TSDHesabat.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TSDHesabat.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TSDHesabat.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TSDHesabat.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TSDHesabat.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TSDHesabat.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TSDHesabat.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TSDHesabat.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TSDHesabat.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TSDHesabat.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TSDHesabat._Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TSDHesabat.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TSDHesabat.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TSDHesabat.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TSDHesabat.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TSDHesabat.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TSDHesabat.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TSDHesabat.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TSDHesabat.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TSDHesabat.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TSDHesabat.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TSDHesabat.Set_AxBorderStyle(Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TSDHesabat.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TSDHesabat.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TSDHesabat.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TSDHesabat.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TSDHesabat.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TSDHesabat.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TSDHesabat.Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TSDHesabat.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TSDHesabat.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TSDHesabat.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TSDHesabat.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TSDHesabat.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TSDHesabat.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+procedure TSDHesabat.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+
+
+
+Function TSDHesabat.UpdateStr(InpStr:string):string;
+var
+  TempString, EndString:String;
+  flag,TempCount ,i, Count, Beg_Index, k : Integer;
+const
+  Commas='''';
+  Comma=',';
+  begin
+    Result:= InpStr;
+    if Result<>'' then
+{}    begin
+    TempString:= '';
+    EndString:= '';
+    Beg_Index:= 1;
+    k:= Length(Result);
+    TempCount:=0;
+    flag:=1;
+    for i:=1 to k do
+      if Result[i] <> ' ' then
+        TempString:= TempString + Result[i];
+    InpStr:= TempString;
+    Result:= InpStr;
+    TempString:= '';
+    k:= Length(Result);
+    for i:=1 to k do
+      begin
+        if Result[i] = ',' then
+          begin
+            Count:= (i-1)-TempCount;
+            Result:= Copy(Result, Beg_Index, Count);
+            TempString:= TempString + Result+Commas+Comma+Commas;
+            Result:= InpStr;
+            Beg_Index:= i+1;
+            TempCount:=i;
+            flag:=0;
+          end;
+        if flag=1 then
+          EndString:= EndString+Result[i]
+        else
+          begin
+            EndString:= '';
+            flag:= 1;
+          end;
+      end;
+      Result:= Commas + TempString + EndString + Commas;
+
+{}    end
+    else
+      Result:= ''' ''';
+  end;
+
+  //------------------------------------------------//
+procedure tsdhesabat.Connect_Excel;
+begin
+   try
+      xlapp1.Connect;
+      Xlapp:=GetActiveOleObject('Excel.Application') ;
+   Except
+      showmessage('Komputerdə EXCEL qoşulmayıb.')
+   End;
+      XLApp.DisplayAlerts:=TRUE;
+
+  try
+       XLApp.WorkBooks.Open(oradatbook.FieldByName('Adress').AsString);
+  Except
+       beep;
+       showmessage(oradatbook.FieldByName('Adress').AsString+' Ünvandakı fayl tapılmadı. ' );
+       xlapp:=Unassigned;
+       xlapp1.Disconnect;
+
+       screen.Cursor:=crdefault;
+       Abort;
+  End;
+end;
+ //------------------------------------------------//
+procedure tsdhesabat.readbookname;
+begin
+cmbbookname.clear;
+   with oradatbook do
+    begin
+        close;
+        open;
+        while not eof do
+         begin
+            cmbbookname.items.add(fieldbyname('caption').asstring);
+            Next;
+         end;
+        // cmbbookname.ItemIndex:=0;
+    end;
+end;
+ //------------------------------------------------//
+Procedure tsdhesabat.oradatcell_edit;
+begin
+  with oradatcell do
+     begin
+      Close;
+      sql.Clear;
+      Sql.Text:='select s.rowid,s.* from CELL s where sheet_id='+oradatsheet.fieldbyname('sheet_id').Asstring+'and Book_Caption='''+oradatbook.fieldbyname('Caption').AsString+'''';
+      open;
+     end;
+end;
+Procedure tsdhesabat.oradatprovcell_edit;
+begin
+     with oradatprovcell do
+      begin
+            Close;
+            sql.clear;
+            sql.text:='select s.rowid,s.* from ProvCELL s where sheet_id='+oradatsheet.fieldbyname('sheet_id').AsString+'and Book_Caption='''+oradatbook.fieldbyname('Caption').AsString+'''';;
+            Open;
+       end;
+end;
+Procedure tsdhesabat.oradatdepcell_edit;
+begin
+     with oradatdepcell do
+      begin
+           Close;
+           sql.clear;
+           sql.text:='select s.rowid,s.* from DepCELL s where sheet_id='+oradatsheet.fieldbyname('sheet_id').AsString+'and Book_Caption='''+oradatbook.fieldbyname('Caption').AsString+'''';;
+           open;
+      end;
+end;
+Procedure tsdhesabat.oradatkrecell_edit;
+begin
+   with oradatkrecell do
+    begin
+        Close;
+        Sql.clear;
+        sql.text:='select s.rowid,s.* from krecell s where sheet_id='+oradatsheet.fieldbyname('sheet_id').AsString+'and Book_Caption='''+oradatbook.fieldbyname('Caption').AsString+'''';;
+        open;
+   end;
+end;
+
+Procedure oradatsheet_edit;
+begin
+   with sdhesabat.oradatsheet do
+    begin
+        Close;
+        Sql.clear;
+        sql.text:='select s.rowid, s.* from sheet s';
+        open;
+   end;
+end;
+
+Procedure tsdhesabat.addpicklist_cell;
+begin
+  { with OraPrimer do
+    begin
+     dbgrid3.Columns[7].PickList.Clear;
+      dbgrid3.Columns[7].PickList.Add('');
+      open;
+         while not eof do
+           begin
+             with
+               dbgrid3.Columns[7].PickList do
+               add(FieldByName('Val_Name').asstring);
+            Next;
+           end;
+      Close;
+    end;   }
+  with oraloadfilial do
+    begin
+      dbgrid3.Columns[10].PickList.Clear;
+      open;
+      dbgrid3.Columns[10].PickList.Add('Bütün filiallar');
+          while not eof do
+            begin
+              with
+                dbgrid3.Columns[10].PickList do
+                add(Fieldbyname('NAME').asstring);
+             Next;
+            end;
+     close;
+   end;
+
+ application.ProcessMessages;   { begin load symbol}
+     with oraloadsimvol do
+       begin
+         open;
+         dbgrid3.Columns[6].PickList.Clear;
+          while not eof do
+           begin
+             with
+               dbgrid3.Columns[6].PickList do
+               add(FieldByName('Symbol').asstring);
+               Next;
+             end;
+        Close;
+       end;            { end load symbol}
+end;
+
+Procedure tsdhesabat.addpicklist_provcell;
+ var oradatcntr,oradatrpt,oradatcnvrt: toracleDataset;
+begin
+   oradatcntr:=ToracleDataset.Create(self);
+   oradatcntr.Session:=sboapiDataModule.SBSession;
+   oradatrpt:=ToracleDataset.Create(self);
+   oradatrpt.Session:=sboapiDataModule.SBSession;
+   oradatcnvrt:=ToracleDataset.Create(self);
+   oradatcnvrt.Session:=sboapiDataModule.SBSession;
+
+  with oraloadfilial do
+    begin
+      dbgrid5.Columns[7].PickList.Clear;
+      dbgrid5.Columns[13].PickList.Clear;
+
+      open;
+      dbgrid5.Columns[7].PickList.Add('Bütün filiallar');
+          while not eof do
+            begin
+              with
+                dbgrid5.Columns[7].PickList do
+                add(Fieldbyname('NAME').asstring);
+             Next;
+            end;
+        First;
+       dbgrid5.Columns[13].PickList.Add('Bütün filiallar');
+         while not eof do
+            begin
+              with
+                dbgrid5.Columns[13].PickList do
+                add(Fieldbyname('NAME').asstring);
+             Next;
+            end;
+     close;
+   end;
+
+   application.ProcessMessages;   { begin load symbol}
+       with oraloadsimvol do
+        begin
+          open;
+          dbgrid5.Columns[5].PickList.Clear;
+          dbgrid5.Columns[11].PickList.Clear;
+          while not eof do
+           begin
+             with
+               dbgrid5.Columns[5].PickList do
+               add(FieldByName('Symbol').asstring);
+               Next;
+             end;
+      First;
+            while not eof do
+              begin
+               with
+                  dbgrid5.Columns[11].PickList do
+                  add(FieldByName('Symbol').asstring);
+                  Next;
+              end;
+         Close;
+       end;            { end load symbol}
+
+    application.ProcessMessages;      { begin load country name }
+      with oradatcntr do
+      begin
+         close;
+         sql.Text:='Select CNTR_Name from Countries'  ;
+         Open;
+         dbgrid5.Columns[17].PickList.clear;
+         while not eof do
+         begin
+          with
+            dbgrid5.Columns[17].PickList do
+            add(fieldbyname('CNTR_Name').AsString);
+            Next;
+         end;{while end}
+      end; {with end}
+                                 {end load country name}
+
+    application.ProcessMessages;      { begin load convetrasiya name }
+      with oradatcnvrt do
+      begin
+         close;
+         sql.Text:='Select FullPath from Convert_Assignments'  ;
+         Open;
+         dbgrid5.Columns[18].PickList.clear;
+         while not eof do
+         begin
+          with
+            dbgrid5.Columns[18].PickList do
+            add(fieldbyname('FullPath').AsString);
+            Next;
+         end;{while end}
+      end; {with end}               {end load convertasiya  name}
+
+
+    application.ProcessMessages;      { begin load Hesabat name }
+      with oradatrpt do
+      begin
+         close;
+         sql.Text:='Select Name from ReportDescs'  ;
+         Open;
+         dbgrid5.Columns[19].PickList.clear;
+         while not eof do
+         begin
+          with
+            dbgrid5.Columns[19].PickList do
+            add(fieldbyname('Name').AsString);
+            Next;
+         end;{while end}
+      end; {with end}               {end load Hesabat  name}
+
+end;
+procedure tsdhesabat.addpicklist_depcell;
+begin
+ {  with oradat do
+     begin
+       close;
+       sql.clear;
+       sql.Text:='Select contractno from sbcm_contracts';
+       open;
+       dbgrid8.Columns[14].PickList.Clear;
+       screen.Cursor:=crappstart;
+         while not eof do
+           begin
+               with dbgrid8.Columns[14].PickList do
+                    add (fieldbyname('contractno').AsString);
+       Next;
+           end;
+                   screen.Cursor:=crdefault;
+                   Close;
+     end;   }
+
+
+
+
+ { with OraPrimer do
+    begin
+      dbgrid8.Columns[17].PickList.Clear;
+      dbgrid8.Columns[17].PickList.Add('');
+      open;
+
+         while not eof do
+           begin
+             with
+               dbgrid8.Columns[17].PickList do
+               add(FieldByName('Val_Name').asstring);
+            Next;
+           end;
+      Close;
+    end;     }
+
+
+
+               screen.Cursor:=crdefault;
+
+
+end;
+procedure tsdhesabat.addpicklist_krecell;
+begin
+ {  with oradat do
+     begin
+       close;
+       sql.clear;
+       sql.Text:='Select contractno from sbcm_contracts';
+       open;
+       dbgrid8.Columns[14].PickList.Clear;
+       screen.Cursor:=crappstart;
+         while not eof do
+           begin
+               with dbgrid8.Columns[14].PickList do
+                    add (fieldbyname('contractno').AsString);
+       Next;
+           end;
+                   screen.Cursor:=crdefault;
+                   Close;
+     end;   }
+
+
+
+{ with OraPrimer do
+    begin
+      dbgrid9.Columns[18].PickList.Clear;
+      dbgrid9.Columns[18].PickList.Add('');
+      open;
+
+         while not eof do
+           begin
+             with
+               dbgrid9.Columns[18].PickList do
+               add(FieldByName('Val_Name').asstring);
+            Next;
+           end;
+      Close;
+    end;  }
+
+
+
+
+
+
+
+               screen.Cursor:=crdefault;
+
+
+end;
+Procedure tsdhesabat.yenile(key: Word; Shift: TShiftState);
+begin
+     if (key=vk_f5) and (shift=[]) then
+      Begin
+
+           with oradatcell do
+            begin
+                 close;
+                 sql.Clear;
+                 Sql.Text:='select s.rowid,s.* from v_CELL s where sheet_id='+oradatsheet.fieldbyname('sheet_id').AsString+'and Book_Caption='''+oradatbook.fieldbyname('Caption').AsString+'''';
+                 //ShowMessage(sql.text);
+                 open;
+            end;
+
+           with oradatprovcell do
+            begin
+                 close;
+                 sql.Clear;
+                 Sql.Text:='select s.rowid,s.* from v_ProvCELL s where sheet_id='+oradatsheet.fieldbyname('sheet_id').AsString+'and Book_Caption='''+oradatbook.fieldbyname('Caption').AsString+'''';
+                 open;
+                // showmessage(sql.text);
+            end;
+
+      end;
+end;
+
+Procedure TSDHesabat.GetSum;     {For Prudensial}
+var i,j,h,y,n,m:extended;
+begin
+
+ i:=0; j:=0;h:=0; y:=0;n:=0; m:=0;
+
+ edsumost.Text:='';
+ edsump_ost.Text:='';
+ edobr_d.Text:='';
+ edobr_k.Text:='';
+ edpok_obr_d.Text:='';
+ edpok_obr_k.Text:='';
+
+
+      ba:='''and ac.bal_cn1 like'''+edbalcn1.Text+'%';
+      ti:='''and ac.tipacc like'''+'%'+uppercase(edtipacc.Text)+'%';
+      da:='''and ar.datdate='''+eddatdate.Text;
+      va:='''and ac.val_acc='''+edval_acc.text;
+      if edbalcn1.Text=''  then ba:='';
+      if edtipacc.text=''  then ti:='';
+      if eddatdate.Text='' then da:='';
+      if edval_acc.text='' then va:='';
+      with oradatgetsum do
+          begin
+            Close;
+            Sql.Clear;
+            sql.Text:='Select sum(ostat) as ost,sum(pok_ostat) as post ,sum(obr_d) as od,sum(obr_k) as ok ,sum(pok_obr_d) as pobrd ,sum(pok_obr_k) as pobrk from archost ar,account ac where acc_no like'''+
+                              edacc_no.text+'%'+ba+ti+da+va+''''+'and ac.id=ar.acc_id';
+            Open;
+                   //   showmessage(sql.text);
+
+            i:=fieldbyname('ost').asfloat;
+            j:=fieldbyname('post').asfloat;
+            h:=fieldbyname('od').asfloat;
+            y:=fieldbyname('ok').asfloat;
+            n:=fieldbyname('pobrd').asfloat;
+            m:=fieldbyname('pobrk').asfloat;
+
+            edsumost.Text:=floattostr(i);
+            edsump_ost.Text:=floattostr(j);
+            edobr_d.Text:=floattostr(h);
+            edobr_k.Text:=floattostr(y);
+            edpok_obr_d.Text:=floattostr(n);
+            edpok_obr_k.Text:=floattostr(m);
+          end;
+
+end;
+procedure TSDHesabat.Cell;
+ var prover,t:integer;
+     k,pc:string; vdtp,vdtp1: TdateTime;
+     sum,sum1 :integer;
+begin
+seperator:=',';
+SimSql:='';
+BalSql:='';
+HesSql:='';
+filsql:='';
+valsql:='';
+RezSql:='';
+J:='';
+Z:='';
+R:='';
+X:='';
+P:='';
+Y:='';
+W:='';
+U:='';
+eb:='';
+eh:='';
+es:='';
+eq:='';
+debet:=0;
+kredit:=0;
+Sell:=0;
+LCell:=0;
+pokost:=0;
+C:='';
+Z:='';
+Z1:='';
+k:='';
+with oradatcell do
+begin
+if     (fieldbyname('Cell_balance').AsString='')
+   and (fieldbyname('Cell_Account').AsString='')
+   and (fieldbyname('Cell_Valyuta').AsString='')
+   and (fieldbyname('Filial').AsString='')
+   and (fieldbyname('Cell_symbol').AsString='')
+   and (fieldbyname('Reznorez').AsString='')
+then
+begin
+  showmessage('Parametrlərdən heç biri daxil edilməyib!!!');
+  Abort;
+end;{then end}
+end;{with end}
+hdate:= integer(trunc(dtp.datetime));
+Sdate:= integer(trunc(dtp1.datetime));
+oradatcell.RecNo:=posti;
+Sheet:=oradatsheet.fieldbyname('Sheet_id').AsInteger;
+NisNumber:=oradatsheet.fieldbyname('Nisbat').AsInteger;
+
+R:=OraDatCell.fieldbyname('Cell_Balance').asstring+',';
+C:=OraDatCell.fieldbyname('Cell_Balance').asstring;
+H:=OraDatCell.fieldbyname('Cell_Account').asstring;
+U:=OraDatCell.fieldbyname('Cell_Account').asstring+',';
+
+if oradatcell.FieldByName('cell_balance').AsString<>'' then
+begin
+  while pos(seperator,R)>0 do begin
+     //  Showmessage(R);
+    //   Showmessage(IntToStr(pos(seperator,R)));
+        z:=copy(R,1,pos(seperator,R)-1);
+     //  Showmessage(z);
+        delete(R,1,pos(seperator,R));
+     //   Showmessage(Z);     end;
+      if pos(seperator,r)>0 then
+
+                  balsql:=balsql+'  (ac.bal_cn1 like to_char('+Z+')||''%'') or '
+                   else
+                    balsql:=balsql+'  (ac.bal_cn1 like to_char('+z+')||''%'')'; // Modified by
+       end;  {while end}
+           balsql:=' and ('+balsql+')' ;
+
+
+        // ShowMessage(balsql);
+         end;
+         z :='';
+
+  //     balsql:=' and  ac.bal_cn1 in ('+oradatcell.fieldbyname('Cell_Balance').AsString+')';
+//end;{if end}
+if oradatcell.FieldByName('cell_account').AsString<>'' then
+begin
+    while pos(seperator,U)>0 do begin
+        z:=copy(U,1,pos(seperator,U)-1);
+        delete(U,1,pos(seperator,U));
+      if pos(seperator,U)>0 then
+       HesSql:=HesSql+' ac.acc_no like '''+Z+'%'' or '
+                   else
+                    HesSql:=HesSql+'  ac.acc_no like '''+z+'%''';
+       end;  {while end}
+           HesSql:=' and '+HesSql+'' ; //ShowMessage(hessql);
+ // HesSql:=Hessql+'or ac.id in ('+oradatcell.fieldbyname('Cell_account').AsString+')' ;
+
+end;
+
+
+//------------------------ Symbol -------------------------------------
+        if oradatcell.FieldByName('Cell_Symbol').asstring<>''  then
+        begin
+                SimSql:=' and ac.tipacc like  '+   ''''+'%'+oradatcell.FieldByName('Cell_Symbol').asstring+'%'+'''';
+        end;
+//------------------------ Valyuta --------------------------------------
+        if oradatcell.FieldByName('Cell_valyuta').AsString<>'' then
+        begin
+                valsql:=' and  val_acc in (select valute from avalute where val_name in( '+
+                updatestr(oradatcell.fieldbyname('Cell_Valyuta').AsString)+'))';
+        end;
+//------------------------ Rezident ------------------------------------------
+        if oradatcell.FieldByName('Reznorez').AsString<>'' then
+        begin
+                rezsql:=' and  ac.KLI_ID in (select id from customers where nerezident='+oradatcell.fieldbyname('reznorez').asstring+')';
+        end;
+//------------------------ Filial -------------------------------------------
+        if (oradatcell.FieldByName('Filial').asstring<>'')  or (oradatcell.FieldByName('Filial').AsString <> 'Bütün filiallar') then
+        Begin
+                with odsloadpok do
+                begin
+                        Close;
+                        Sql.Clear;
+                        Sql.Text:='Select id from filial_t where name='''+oradatcell.fieldbyname('Filial').AsString+'''' ;
+                        Open;
+                        filSql:=' and ac.Filial='''+fieldbyname('id').AsString+'''';
+                end;
+        end;
+
+        if (oradatcell.FieldByName('Filial').AsString = 'Bütün filiallar') then filSql:='';
+//-------------------------------------------------------------------------------
+        With odsloadpok do
+        begin
+                Close;
+                Sql.clear;
+                Sql.Text:='Select max(datdate) as  mindate from archost where datdate<'+''''+formatdatetime('dd-mmm-yyyy',dtp.DateTime)+'''';
+                Open;
+                Mindate:=odsloadpok.fieldbyname('Mindate').asdatetime;
+        end;
+//----------------------------------------------------------------------------
+        with odsloadpok do
+        begin
+                Close;
+                Sql.clear;
+                Sql.Text:='Select Max(datdate) as MaxDate from archost where datdate<='+''''+formatdatetime('dd-mmm-yyyy',dtp1.DateTime)+'''';
+                Open;
+                Maxdate:=odsloadpok.fieldbyname('maxdate').AsDateTime;
+        end;
+//---------------------------------------------------------------------------
+        if  oradatcell.FieldByName('Cell_Ekvivalent').AsString='pok_ostat' then  pokost:=1;
+        if  oradatcell.FieldByName('Cell_Ekvivalent').AsString='ostat' then  pokost:=2;
+
+
+//----------------------------------------------------------------------------
+case POKOST of
+  1: begin                               {POK OSTAT}
+     if  (oradatcell.FieldByName('Debet').asstring<>'') OR (oradatcell.FieldByName('Kredit').asstring<>'') then
+     begin
+     with  odsloadpok do
+     begin
+       Close;
+       Sql.Clear;
+       Sql.Text:='select  SUM (pok_obr_k) as kredit, SUM (pok_obr_d) as debet from archost ar,account ac where  datdate between'+
+                 ''''+formatdatetime('dd-mmm-yyyy',dtp.datetime)+''''+
+                 'and '+''''+formatdatetime('dd-mmm-yyyy',dtp1.datetime)+''''+
+                 'and ac.id=ar.acc_id '+BalSql+hessql+SimSql+valsql+Rezsql+Filsql;
+//       memo1.Text:=sql.Text;
+       Open;
+       debet:=0;
+       kredit:=0;
+       debet:=odsloadpok.fieldbyname('debet').Asfloat;
+       kredit:=odsloadpok.fieldbyname('kredit').Asfloat;
+     end;{with end}
+     end;{if end}
+     if oradatcell.FieldByName('Sell').asstring<>'' then
+     Begin
+     with    odsloadpok do
+     begin
+       Close;
+       Sql.Clear;
+       Sql.Text:='select sum(pok_ostat) as Sell from archost ar,account ac where  datdate='''+
+                 formatdatetime('dd-mmm-yyyy',(MinDate))+''''+
+                 'and ac.id=ar.acc_id '+BalSql+hessql+SimSql+valsql+rezsql+FilSql;
+
+       memo3.Text:=sql.Text;
+       Open;
+   // vdtp :=Integer(trunc(dtp.datetime));
+   // vdtp1 :=integer(trunc(dtp1.datetime));
+  //  Sum :=Orapak.Callintegerfunction('calc_by_acc',[vdtp,vdtp1,oradatcell.fieldbyname('Cell_account').asstring]);
+   //  Sum1 :=Orapak.Callintegerfunction('calc_by_balcn',[vdtp,vdtp1,oradatcell.FieldByName('cell_balance').asstring]);
+   //        Sell:=Sum+Sum1;
+   Sell :=0;
+      Sell:=odsloadpok.fieldbyname('Sell').Asfloat;
+      // SHOWMESSAGE(floattostr(sell));
+    //  showmessage(oradatcell.fieldbyname('Cell_account').AsString);
+     //  abort;
+     end; {with end}
+     end; {if end}
+     if oradatcell.FieldByName('LCell').asstring<>'' then
+     Begin
+     with    odsloadpok do
+     begin
+       Close;
+       Sql.Clear;
+       Sql.Text:='select sum(pok_ostat) LCell from archost ar,account ac where  datdate='''+
+                 formatdatetime('dd-mmm-yyyy',(MaxDate))+''''+
+                 'and ac.id=ar.acc_id '+BalSql+hessql+SimSql+valsql+rezsql+FilSql;
+
+      memo3.Text:=sql.Text;
+       Open;
+       LCell:=0;
+       LCell:=odsloadpok.fieldbyname('LCell').Asfloat;
+     end; {with end}
+     end; {if end}
+     end; {1 end}
+   2: begin                              {OSTAT}
+      if  (oradatcell.FieldByName('Debet').asstring<>'') OR (oradatcell.FieldByName('Kredit').asstring<>'') then
+      begin
+      with    odsloadpok do
+      begin
+        Close;
+        Sql.Clear;
+        Sql.Text:='select  SUM (obr_k) as kredit, SUM (obr_d) as debet from archost ar,account ac where datdate between'+
+                 ''''+formatdatetime('dd-mmm-yyyy',dtp.datetime)+''''+
+                 'and '+''''+formatdatetime('dd-mmm-yyyy',dtp1.datetime)+''''+
+                  'and ac.id=ar.acc_id '+BalSql+hessql+SimSql+valsql+rezsql+FilSql;
+        Open;
+          memo3.Text:=sql.Text;
+        debet:=0;
+        kredit:=0;
+        debet:=odsloadpok.fieldbyname('debet').Asfloat;
+        kredit:=odsloadpok.fieldbyname('kredit').Asfloat;
+      end;{with end}
+      if oradatcell.FieldByName('Sell').asstring<>'' then
+      Begin
+      with    odsloadpok do
+      begin
+        Close;
+        Sql.Clear;
+        Sql.Text:='select sum(ostat) as Sell from archost ar,account ac where  datdate='''+
+                  formatdatetime('dd-mmm-yyyy',(MinDate))+''''+
+                  'and ac.id=ar.acc_id '+BalSql+hessql+SimSql+valsql+rezsql+FilSql;
+        Open;
+        Sell:=0;
+        Sell:=odsloadpok.fieldbyname('Sell').Asfloat;
+      end; {with end}
+      end; {if end}
+      if oradatcell.FieldByName('LCell').asstring<>'' then
+      Begin
+      with    odsloadpok do
+      begin
+        Close;
+        Sql.Clear;
+        Sql.Text:= 'select sum(ostat) as LCell from archost ar,account ac where  datdate='''+
+                   formatdatetime('dd-mmm-yyyy',(MaxDate))+''''+
+                  'and ac.id=ar.acc_id '+BalSql+Hessql+SimSql+valsql+rezsql+FilSql;
+        Open;
+        lCell:=0;
+        LCell:=odsloadpok.fieldbyname('LCell').Asfloat;
+      end; {with}
+      end; {if ed}
+      end;
+      end;
+    end; {Case End}
+
+
+         if oradatcell.FieldByName('Sell').AsString<>''then
+         begin
+           XLApp.ActiveWorkBook.WorkSheets[Sheet].Range(oradatcell.FieldByName('Sell').AsString):=abs(Sell/nisnumber);
+           XLApp.ActiveWorkBook.WorkSheets[Sheet].Range[oradatcell.FieldByName('Sell').AsString].clearcomments;
+
+           deb:='';
+           dbc:='';
+           deb:=oradatcell.FieldByName('Sell').AsString;
+           for i :=0 to length(deb) do
+           begin
+           if  deb[i] in ['A'..'Z'] then
+           begin
+             dbc:=dbc+deb[i];
+             XLApp.ActiveWorkBook.WorkSheets[sheet].Columns[dbc].NumberFormat := '0.00' ;
+             XLApp.ActiveWorkBook.WorkSheets[sheet].Columns[dbc].ColumnWidth := length(floattostr(Sell))+3;
+           end;  {IF END}
+           end;  {for end}
+           end;
+
+           if oradatcell.FieldByName('Debet').AsString<>''then
+           begin
+             XLApp.ActiveWorkBook.WorkSheets[Sheet].Range(oradatcell.FieldByName('Debet').AsString):= abs(Debet/nisnumber);
+             XLApp.ActiveWorkBook.WorkSheets[Sheet].Range[oradatcell.FieldByName('Debet').AsString].clearcomments;
+             deb:='';
+             dbc:='';
+             deb:=oradatcell.FieldByName('Debet').AsString;
+           for i :=0 to length(deb) do
+           begin
+
+           if  deb[i] in ['A'..'Z'] then
+           begin
+             dbc:=dbc+deb[i];
+             XLApp.ActiveWorkBook.WorkSheets[sheet].Columns[dbc].NumberFormat := '0.00' ;
+             XLApp.ActiveWorkBook.WorkSheets[sheet].Columns[dbc].ColumnWidth := length(floattostr(debet))+3;
+           end;{if end}
+           end; {for end}
+           end; {if end}
+
+//---------------------------------------Kredit------------------------------------------------
+
+           if oradatcell.FieldByName('Kredit').AsString<>''then
+           begin
+             XLApp.ActiveWorkBook.WorkSheets[Sheet].Range(oradatcell.FieldByName('Kredit').AsString):= abs(Kredit/nisnumber);
+             XLApp.ActiveWorkBook.WorkSheets[Sheet].Range[oradatcell.FieldByName('Kredit').AsString].clearcomments;
+             dbc:='';
+             deb:='';
+             deb:=oradatcell.FieldByName('Kredit').AsString;
+           for i :=0 to length(deb) do
+           begin
+           if  deb[i] in ['A'..'Z'] then
+           begin
+             dbc:=dbc+deb[i];
+             XLApp.ActiveWorkBook.WorkSheets[sheet].Columns[dbc].NumberFormat := '0.00' ;
+             XLApp.ActiveWorkBook.WorkSheets[sheet].Columns[dbc].ColumnWidth := length(floattostr(kredit))+3;
+           end; {if end}
+           end; {for end}
+           end; {if end}
+
+           //--------------------------------------------------------------------------------------------------
+
+           if oradatcell.FieldByName('LCell').AsString<>''then
+           begin
+             XLApp.ActiveWorkBook.WorkSheets[Sheet].Range(oradatcell.FieldByName('LCell').AsString):= abs(LCell/nisnumber);
+             XLApp.ActiveWorkBook.WorkSheets[Sheet].Range[oradatcell.FieldByName('LCell').AsString].clearcomments;
+             dbc:='';
+             deb:='';
+             deb:=oradatcell.FieldByName('LCell').AsString;
+           for i :=0 to length(deb) do
+           begin
+           if  deb[i] in ['A'..'Z'] then
+           begin
+             dbc:=dbc+deb[i];
+             XLApp.ActiveWorkBook.WorkSheets[sheet].Columns[dbc].NumberFormat := '0.00' ;
+             XLApp.ActiveWorkBook.WorkSheets[sheet].Columns[dbc].ColumnWidth := length(floattostr(LCell))+3;
+           end; {if end}
+           end; {for end}
+           end; {if end}
+                                         {-------ADD COMMENT TO EXCEL-------}
+             yenile(vk_f5,[]);
+             oradatcell.RecNo:=posti;
+             Eb:='balans- '+OraDatCell.fieldbyname('Cell_Balance').asstring+',';
+             Eh:='Hesab- '+OraDatCell.fieldbyname('Cell_Account').asstring+',';
+           if OraDatCell.fieldbyname('Cell_Balance').asstring='' then Eb:='';
+           if OraDatCell.fieldbyname('Cell_Account').asstring='' then Eh:='';
+              comment:=Eb+Eh;
+           if oradatcell.FieldByName('Sell').AsString>'' then
+              XLApp.ActiveWorkBook.WorkSheets[Sheet].Range[oradatcell.FieldByName('Sell').AsString].AddComment(copy(comment,1,length(comment)-1)) ;
+           if oradatcell.FieldByName('debet').AsString>'' then
+              XLApp.ActiveWorkBook.WorkSheets[Sheet].Range[oradatcell.FieldByName('Debet').AsString].AddComment(copy(comment,1,length(comment)-1)) ;
+           if oradatcell.FieldByName('kredit').AsString>'' then
+              XLApp.ActiveWorkBook.WorkSheets[Sheet].Range[oradatcell.FieldByName('Kredit').AsString].AddComment(copy(comment,1,length(comment)-1)) ;
+           if oradatcell.FieldByName('Lcell').AsString>'' then
+              XLApp.ActiveWorkBook.WorkSheets[Sheet].Range[oradatcell.FieldByName('LCell').AsString].AddComment(copy(comment,1,length(comment)-1)) ;
+end;
+
+         //-----------------------------------------------------------------------------------------//
+
+Procedure Tsdhesabat.provcell;
+   var Seperator,pr_d_bal,pr_d_acc,pr_D_simvol,pr_d_rez,pr_d_filial,pr_d_valyuta,pr_k_bal,pr_k_acc,pr_k_simvol,pr_k_rez,pr_k_filial,pr_k_valyuta,pc,pr_d_balSql,pr_d_accSql,pr_k_balSql,pr_k_accSql:string;
+       pr_d_simsql,pr_d_rezsql,pr_d_filsql,pr_d_valsql,pr_k_simsql,pr_k_rezsql,pr_k_filsql,pr_k_valsql,pr_cntr_name,pr_rpt_name,pr_cnvrt_name:string;
+       deb_sum,kre_sum,ekv_sum:extended;
+       comment,com_d_bal,com_d_acc,com_k_bal,com_k_acc,dbc,deb:string;
+       i:integer;
+Begin
+
+   seperator:=',';
+   pc:='';
+
+   pr_d_balsql:='';
+   pr_d_accsql:='';
+   pr_d_simsql:='';
+   pr_d_rezsql:='';
+   pr_d_filsql:='';
+   pr_d_valsql:='';
+
+   pr_k_balsql:='';
+   pr_k_accsql:='';
+   pr_k_simsql:='';
+   pr_k_rezsql:='';
+   pr_k_filsql:='';
+   pr_k_valsql:='';
+   pr_cntr_name:='';
+   pr_rpt_name:='';
+   pr_cnvrt_name:='';
+
+
+
+      with oradatprovcell do
+      begin
+             if     (fieldbyname('deb_balcn1').AsString='')
+                and (fieldbyname('deb_accno').AsString='')
+                and (fieldbyname('deb_simvol').AsString='')
+                and (fieldbyname('deb_valyuta').AsString='')
+                and (fieldbyname('deb_rez').AsString='')
+                and (fieldbyname('deb_filial').AsString='')
+                and (fieldbyname('kre_balcn1').AsString='')
+                and (fieldbyname('kre_accno').AsString='')
+                and (fieldbyname('kre_simvol').AsString='')
+                and (fieldbyname('kre_valyuta').AsString='')
+                and (fieldbyname('kre_rez').AsString='')
+                and (fieldbyname('kre_filial').AsString='')
+                and (fieldbyname('report_id').AsString='')
+                and (fieldbyname('cntr_name').AsString='')
+                and (fieldbyname('kassa_z').AsString='')
+
+
+             then
+                    begin
+                          showmessage('Parametrl?rd?n he? biri daxil edilm?yib!!!');
+                          Abort;
+                    end;
+    end;   {with end}
+
+
+   Sheet:=oradatsheet.fieldbyname('sheet_id').AsInteger;
+   NisNumber:=oradatsheet.fieldbyname('nisbat').AsInteger;
+
+   pr_d_bal:=oradatprovcell.fieldbyname('deb_balcn1').AsString+',' ;
+   pr_d_acc:=oradatprovcell.fieldbyname('deb_accno').AsString+',' ;
+   pr_d_simvol:=oradatprovcell.fieldbyname('Deb_Simvol').asstring;
+   pr_d_rez:=oradatprovcell.fieldbyname('deb_rez').asstring;
+   pr_d_filial:=oradatprovcell.fieldbyname('Deb_Filial').asstring;
+   pr_d_valyuta:=oradatprovcell.fieldbyname('Deb_Valyuta').asstring;
+
+   pr_k_bal:=oradatprovcell.fieldbyname('kre_balcn1').AsString+',' ;
+   pr_k_acc:=oradatprovcell.fieldbyname('kre_accno').AsString+',' ;
+   pr_k_simvol:=oradatprovcell.fieldbyname('Kre_Simvol').asstring;
+   pr_k_rez:=oradatprovcell.fieldbyname('kre_rez').asstring;
+   pr_k_filial:=oradatprovcell.fieldbyname('kre_Filial').asstring;
+   pr_k_valyuta:=oradatprovcell.fieldbyname('Kre_Valyuta').asstring;
+   pr_cntr_name:=oradatprovcell.fieldbyname('cntr_name').asstring;
+
+
+//------------------------------Debet Balans------------------------------------
+
+  if oradatprovcell.FieldByName('deb_balcn1').AsString<>'' then
+  begin
+     while pos(seperator,pr_d_bal)>0 do
+       Begin
+         pc:=copy(pr_d_bal,1,pos(seperator,pr_d_bal)-1);
+         Delete(pr_d_bal,1,Pos(Seperator,pr_d_bal));
+
+         if pos(seperator,pr_d_bal)>0 then
+            pr_d_balSql:=pr_d_balSql+'  (a1.bal_cn1 like to_char('+pc+')||''%'') or '
+         else
+            pr_d_balSql:=pr_d_balSql+'  (a1.bal_cn1 like to_char('+pc+')||''%'')';
+       end;  {while end}
+           pr_d_balsql:=' and ('+pr_d_balsql+')' ;
+  end;
+  
+//------------------------------Kredit Balans-----------------------------------
+
+  if oradatprovcell.FieldByName('kre_balcn1').AsString<>'' then
+  begin
+     while pos(seperator,pr_k_bal)>0 do
+       Begin
+         pc:=copy(pr_k_bal,1,pos(seperator,pr_k_bal)-1);
+         Delete(pr_k_bal,1,Pos(Seperator,pr_k_bal));
+
+         if pos(seperator,pr_k_bal)>0 then
+            pr_k_balSql:=pr_k_balSql+'  (a2.bal_cn1 like to_char('+pc+')||''%'') or '
+         else
+            pr_k_balSql:=pr_k_balSql+'  (a2.bal_cn1 like to_char('+pc+')||''%'')';
+       end;  {while end}
+           pr_k_balsql:=' and ('+pr_k_balsql+')' ;
+  end;
+
+
+     pc:='';
+
+//---------------------------------Debet Hesab----------------------------------
+
+      if oradatprovcell.FieldByName('deb_accno').AsString<>'' then
+   begin
+      while pos(seperator,pr_d_acc)>0 do
+        Begin
+          pc:=copy(pr_d_acc,1,pos(seperator,pr_d_acc)-1);
+          Delete(pr_d_acc,1,Pos(Seperator,pr_d_acc));
+
+         if pos(seperator,pr_d_acc)>0 then
+            pr_d_accSql:=pr_d_accSql+' a1.acc_no like '''+pc+'%'' or '
+         else
+            pr_d_accSql:=pr_d_accSql+' a1.acc_no like '''+pc+'%''';
+        end;   {while end}
+             pr_d_accsql:=' and ('+ pr_d_accsql+')'   ;
+            // ShowMessage('debt  '+pr_d_accsql);
+   end;
+
+//---------------------------------Kredit Hesab---------------------------------
+
+      if oradatprovcell.FieldByName('kre_accno').AsString<>'' then
+   begin
+      while pos(seperator,pr_k_acc)>0 do
+        Begin
+          pc:=copy(pr_k_acc,1,pos(seperator,pr_k_acc)-1);
+          Delete(pr_k_acc,1,Pos(Seperator,pr_k_acc));
+
+         if pos(seperator,pr_k_acc)>0 then
+            pr_k_accSql:=pr_k_accSql+' a2.acc_no like '''+pc+'%'' or '
+         else
+            pr_k_accSql:=pr_k_accSql+' a2.acc_no like '''+pc+'%''';
+        end;   {while end}
+             pr_k_accsql:=' and ('+ pr_k_accsql+')'   ;
+            // ShowMessage('kredit  '+pr_k_accsql);
+   end;
+
+//--------------------------------Debet Simvol----------------------------------
+
+  if oradatprovcell.FieldByName('deb_simvol').AsString<>'' then
+    begin
+        pr_d_simsql:=' and  a1.tipacc='''+oradatprovcell.fieldbyname('deb_simvol').AsString+'''';
+    end;
+//--------------------------------Debet Rezident--------------------------------
+  if oradatprovcell.FieldByName('deb_rez').AsString<>'' then
+    begin
+         pr_d_rezsql:=' and cu.nerezident='''+oradatprovcell.fieldbyname('deb_rez').AsString+'''';
+    end;
+
+//--------------------------------Debet Filial----------------------------------
+  if (oradatprovcell.FieldByName('deb_filial').AsString<>'') or
+      (oradatprovcell.FieldByName('deb_filial').AsString<>'Bütün filiallar') then
+   begin
+       with odsloadpok do
+         begin
+           Close;
+           Sql.Clear;
+           Sql.Text:='Select id from filial_t where name='''+oradatprovcell.fieldbyname('deb_filial').AsString+'''' ;
+           Open;
+           pr_d_filSql:=' and a1.Filial='''+fieldbyname('id').AsString+'''';
+        end;    {with end}
+   end;
+
+  if (oradatprovcell.FieldByName('deb_filial').AsString='Bütün filiallar') or (oradatprovcell.FieldByName('deb_filial').AsString='') then pr_d_filSql:='';
+
+//----------------------------------Debet Valyuta-------------------------------
+  if oradatprovcell.FieldByName('Deb_Valyuta').AsString<>'' then
+   begin
+       pr_d_valsql:=' and a1.val_acc in (select valute from avalute where val_name in ('+ updatestr(oradatprovcell.fieldbyname('Deb_Valyuta').AsString)+'))'  ;
+   end;
+
+      pc:='';
+
+//--------------------------------Kredit Simvol---------------------------------
+   if oradatprovcell.FieldByName('kre_simvol').AsString<>'' then
+    begin
+        pr_k_simsql:=' and  a2.tipacc='''+oradatprovcell.fieldbyname('kre_simvol').AsString+'''';
+    end;
+
+//--------------------------------Kredit Rezident-------------------------------
+  if oradatprovcell.FieldByName('kre_rez').AsString<>'' then
+    begin
+         pr_k_rezsql:=' and cu.nerezident='''+oradatprovcell.fieldbyname('kre_rez').AsString+'''';
+    end;
+
+//--------------------------------Kredit Filial---------------------------------
+  if (oradatprovcell.FieldByName('kre_filial').AsString<>'') or (oradatprovcell.FieldByName('kre_filial').AsString<>'Bütün filiallar') then
+   begin
+       with odsloadpok do
+         begin
+           Close;
+           Sql.Clear;
+           Sql.Text:='Select id from filial_t where name='''+oradatprovcell.fieldbyname('kre_filial').AsString+'''' ;
+           Open;
+           pr_k_filSql:='and a2.Filial='''+fieldbyname('id').AsString+'''';
+        end;    {with end}
+   end;
+
+  if (oradatprovcell.FieldByName('kre_filial').AsString='Bütün filiallar') or (oradatprovcell.FieldByName('kre_filial').AsString='') then pr_k_filSql:='';
+
+//-------------------------------Kredit Valyuta---------------------------------
+
+  if oradatprovcell.FieldByName('kre_Valyuta').AsString<>'' then
+   begin
+       pr_k_valsql:=' and a2.val_acc in  (select valute from avalute where val_name in('+  updatestr(oradatprovcell.fieldbyname('kre_Valyuta').AsString)+'))'  ;
+   end;
+
+//---------------------------------Countries------------------------------------
+
+ if oradatprovcell.FieldByName('cntr_name').AsString<>'' then
+   begin
+      with odsloadpok do
+      begin
+        Close;
+        sql.Clear;
+        sql.Text:='Select id from countries where cntr_name='''+oradatprovcell.fieldbyname('cntr_name').AsString+'''';
+        Open;
+        pr_cntr_name:=' and pr.countrid='''+fieldbyname('id').AsString+'''';
+      end; {with end}
+   end;   {if end}
+
+//------------------------------------------------------------------------------
+ if oradatprovcell.FieldByName('report_id').AsString<>'' then
+   begin
+       { with odsloadpok do
+        begin
+            Close;
+            sql.Clear;
+            sql.Text:='select id from reportdescs where name='''+oradatprovcell.fieldbyname('report_id').AsString+'''';
+            Open;
+            pr_rpt_name:=' and pr.reportid='''+fieldbyname('id').AsString+'''';
+       end; }
+       pr_rpt_name:=' and pr.name='''+oradatprovcell.fieldbyname('report_id').AsString+'''';
+   end;
+//------------------------------------------------------------------------------
+ if oradatprovcell.FieldByName('kassa_z').AsString<>'' then
+ begin
+      with odsloadpok do
+      begin
+         Close;
+         sql.Clear;
+         sql.Text:='select id from convert_assignments where fullpath='''+oradatprovcell.fieldbyname('kassa_z').AsString+'''';
+         Open;
+         pr_cnvrt_name:=' and pr.kassa_z='''+fieldbyname('id').AsString+'''';
+      end;
+    // pr_cnvrt_name:=' and pr.kassa_z='''+oradatprovcell.fieldbyname('kassa_z').AsString+'''';
+ end;
+
+ deb_sum:=0;
+ kre_sum:=0;
+ ekv_sum:=0;
+                                      {begin calculate for excel}
+  if    (oradatprovcell.fieldbyname('Deb_balcn1').asstring<>'')
+    or  (oradatprovcell.fieldbyname('deb_accno').AsString<>'')
+    or  (oradatprovcell.fieldbyname('deb_simvol').AsString<>'')
+    or  (oradatprovcell.fieldbyname('deb_rez').AsString<>'')
+    or  (oradatprovcell.fieldbyname('deb_filial').AsString<>'')
+    or  (oradatprovcell.fieldbyname('kre_balcn1').asstring<>'')
+    or  (oradatprovcell.fieldbyname('kre_accno').AsString<>'')
+    or  (oradatprovcell.fieldbyname('kre_simvol').AsString<>'')
+    or  (oradatprovcell.fieldbyname('kre_rez').AsString<>'')
+    or  (oradatprovcell.fieldbyname('kre_filial').AsString<>'')
+    or  (oradatprovcell.fieldbyname('kre_valyuta').AsString<>'')
+    or  (oradatprovcell.fieldbyname('cntr_name').AsString<>'')
+    or  (oradatprovcell.fieldbyname('REPORT_ID').AsString<>'')
+    or  (oradatprovcell.fieldbyname('KASSA_Z').AsString<>'')
+
+ then
+    Begin
+        With oradatprov do
+         Begin
+             Close;
+             Sql.Clear;
+           {  Sql.Text:='Select Sum(Ammount) as D ,sum(Ammount_c) as K,sum(Lammount) as Ekv from Provarch pr, account ac,customers cu where  pr.dat between'+
+                  ''''+formatdatetime('dd-mmm-yyyy',dtp.datetime)+''''+
+                  'and '+''''+formatdatetime('dd-mmm-yyyy',dtp1.datetime)+''''+
+                       'and ac.id=pr.debt and ac.kli_id=cu.id'+pr_d_balsql+pr_d_accSql+pr_d_simsql+pr_d_rezsql+pr_d_filSql;
+            //            pr_d_balsql+pr_d_accsql+pr_d_simsql+pr_d_rezsql+pr_d_filsql+pr_d_valsql+pr_cntr_name+pr_rpt_name+pr_cnvrt_name;}
+
+              Sql.Text:='Select Sum(pr.Ammount) as D ,sum(pr.Ammount_c) as K,sum(pr.Lammount) as Ekv from Provarch pr, account a1,account a2 where  pr.dat between'+
+                  ''''+formatdatetime('dd-mmm-yyyy',dtp.datetime)+''''+
+                  'and '+''''+formatdatetime('dd-mmm-yyyy',dtp1.datetime)+''''+
+                       'and a1.ID = pr.debt and a2.ID = pr.kredit'+pr_d_balsql+pr_k_balsql+pr_d_accSql+pr_k_accSql+pr_d_simsql+pr_k_simsql{+pr_d_rezsql}+pr_d_filSql+pr_k_filSql+pr_d_valsql+pr_k_valsql+pr_cntr_name+pr_rpt_name+pr_cnvrt_name+pr_d_simsql+pr_k_simsql;
+
+             memo1.Text:=sql.text;
+             Open;
+
+
+                        deb_sum:=fieldbyname('D').Asfloat;
+                        kre_sum:=fieldbyname('K').asfloat;
+                        ekv_sum:=fieldbyname('Ekv').Asfloat;
+
+          End;
+     End;
+
+
+                              { end calculate for excel}
+
+
+   if oradatprovcell.FieldByName('deb_val').AsString<>''then
+            begin
+              XLApp.ActiveWorkBook.WorkSheets[sheet].Range(oradatprovcell.FieldByName('deb_val').AsString):= abs(deb_sum/nisnumber);
+
+               dbc:='';
+               deb:='';
+               deb:=oradatprovcell.FieldByName('deb_val').AsString;
+                for i :=0 to length(deb) do
+                  begin
+                  if  deb[i] in ['A'..'Z'] then     {column nastr}
+                     begin
+                       dbc:=dbc+deb[i];
+                       XLApp.ActiveWorkBook.WorkSheets[sheet].Columns[dbc].NumberFormat := '0.00' ;
+                       XLApp.ActiveWorkBook.WorkSheets[sheet].Columns[dbc].ColumnWidth := length(floattostr(deb_sum))+3;
+                     end;
+                 end;
+                   end;
+   if oradatprovcell.FieldByName('Ekv').AsString <>'' then
+            Begin
+                XLApp.ActiveWorkBook.WorkSheets[Sheet].Range(oradatprovcell.FieldByName('ekv').AsString):= abs(ekv_sum/nisnumber);
+                dbc:='';
+                deb:='';
+                deb:=oradatprovcell.FieldByName('ekv').AsString;
+                  for i :=0 to length(deb) do
+                      begin
+                        if  deb[i] in ['A'..'Z'] then     {column nastr}
+                           begin
+                            dbc:=dbc+deb[i];
+                            XLApp.ActiveWorkBook.WorkSheets[sheet].Columns[dbc].NumberFormat := '0.00' ;
+                            XLApp.ActiveWorkBook.WorkSheets[sheet].Columns[dbc].ColumnWidth := length(floattostr(ekv_sum))+3;
+                           end;
+                     end;
+                 end;
+
+    if oradatprovcell.FieldByName('kre_val').AsString<>''then
+            begin
+               XLApp.ActiveWorkBook.WorkSheets[Sheet].Range(oradatprovcell.FieldByName('kre_val').AsString):= abs(kre_sum/nisnumber);
+
+               dbc:='';
+               deb:='';
+               deb:=oradatprovcell.FieldByName('kre_val').AsString;
+                for i :=0 to length(deb) do
+                  begin
+                   if  deb[i] in ['A'..'Z'] then   {column nastr}
+                     begin
+                       dbc:=dbc+deb[i];
+                       XLApp.ActiveWorkBook.WorkSheets[sheet].Columns[dbc].NumberFormat := '0.00' ;
+                       XLApp.ActiveWorkBook.WorkSheets[sheet].Columns[dbc].ColumnWidth := length(floattostr(kre_sum))+3;
+                     end;
+                   end;
+              end;
+
+     {---------ADD COMMENT TO EXCEL----------}
+
+          YENILE(VK_F5,[]);
+          oradatprovcell.RecNo:=posti;
+
+       with oradatprovcell do
+        Begin
+
+               com_d_bal:=fieldbyname('deb_balcn1').AsString+',';
+               com_d_acc:=fieldbyname('deb_accno').AsString+',';
+               com_k_bal:=fieldbyname('kre_balcn1').AsString+',';
+               com_k_acc:=fieldbyname('kre_accno').AsString+',';
+
+              if fieldbyname('Deb_balcn1').asstring='' then com_d_bal:='00';
+              if fieldbyname('deb_accno').AsString='' then  com_d_acc:='00';
+              if fieldbyname('kre_balcn1').asstring='' then com_k_bal:='00';
+              if fieldbyname('kre_accno').AsString='' then  com_k_acc:='00';
+
+
+              if oradatprovcell.fieldbyname('deb_val').AsString<>'' then
+                Begin
+                       comment:='';
+                       comment:='DEBET BALANS- '+copy(com_d_bal,1,length(com_d_bal)-1)+' DEBET HESAB- '+copy(com_d_acc,1,length(com_d_acc)-1)+' KREDIT BALANS- '+copy(com_k_bal,1,length(com_k_bal)-1)+' KREDIT HESAB- '+copy(com_k_acc,1,length(com_k_acc)-1);
+                       XLApp.ActiveWorkBook.WorkSheets[Sheet].Range[oradatprovcell.FieldByName('deb_val').AsString].clearcomments;
+                       XLApp.ActiveWorkBook.WorkSheets[Sheet].Range[oradatprovcell.FieldByName('deb_val').AsString].AddComment(comment) ;
+                end;
+
+              if fieldbyname('kre_val').Asstring<>'' then
+                begin  comment:='';
+                       comment:='DEBET BALANS- '+copy(com_d_bal,1,length(com_d_bal)-1)+' DEBE? HESAB- '+copy(com_d_acc,1,length(com_d_acc)-1)+' KREDIT BALANS- '+copy(com_k_bal,1,length(com_k_bal)-1)+' KREDIT HESAB- '+copy(com_k_acc,1,length(com_k_acc)-1);
+                       XLApp.ActiveWorkBook.WorkSheets[Sheet].Range[oradatprovcell.FieldByName('kre_val').AsString].clearcomments;
+                       XLApp.ActiveWorkBook.WorkSheets[Sheet].Range[FieldByName('kre_val').AsString].AddComment(comment) ;
+
+                end;{if }
+
+               if fieldbyname('ekv').Asstring<>'' then
+                begin  comment:='';
+                       comment:='DEBET BALANS- '+copy(com_d_bal,1,length(com_d_bal)-1)+' DEBET HESAB- '+copy(com_d_acc,1,length(com_d_acc)-1)+' KREDIT BALANS- '+copy(com_k_bal,1,length(com_k_bal)-1)+' KREDIT HESAB- '+copy(com_k_acc,1,length(com_k_acc)-1);
+                       XLApp.ActiveWorkBook.WorkSheets[Sheet].Range[oradatprovcell.FieldByName('ekv').AsString].clearcomments;
+                       XLApp.ActiveWorkBook.WorkSheets[Sheet].Range[FieldByName('ekv').AsString].AddComment(comment) ;
+
+                end;{if }
+           end;{with end}
+end;
+Procedure tsdhesabat.depcell;
+var oradatcalc:toracledataset;
+     persql,pertpsql,val_id,a1,a2,a3,a4,a5,deptypesql:string;
+     brest,brestin,brest_ekv,brestin_ekv,tramt,deq,deq_ekv,deqin,deqin_ekv,
+     deok,deok_ekv,deokin,deokin_ekv,devk,devk_ekv,dsk,dsk_ekv,dskin,
+     dskin_ekv,vkk,vkk_ekv,PAYAMT,EINTREST,EREST,BDifDate,TrDifDate,PayDifDate,EDifDate:real;
+begin
+
+ with oradatcalc do
+   begin
+    oradatcalc:=toracledataset.Create(self);           {create oradat file}
+    session:= oradatbook.Session;
+   end;
+
+
+  Sheet:=oradatsheet.fieldbyname('sheet_id').AsInteger;
+  NisNumber:=oradatsheet.fieldbyname('nisbat').AsInteger;
+
+  R:='';
+  C:='';
+  H:='';
+  U:='';
+  z1:='';
+  z:='';
+  balsql:='';
+  hessql:='';
+  valsql:='';
+  filsql:='';
+  persql:='';
+  pertpsql:='';
+  seperator:=',';
+  val_id:='';
+
+ oradatdepcell.RecNo:=posti;
+
+  with oradatdepcell do
+    begin
+             if     (fieldbyname('Balno').AsString='')
+                and (fieldbyname('Accno').AsString='')
+                and (fieldbyname('Valyuta').AsString='')
+                and (fieldbyname('fil').AsString='')
+                and (fieldbyname('Rez').AsString='')
+             then
+                    begin
+                          showmessage('Parametrlərdən heç biri daxil edilməyib!!!');
+                          Abort;
+                    end;
+   end;     {with end}
+ R:=oradatdepcell.fieldbyname('balno').asstring+',';
+ C:=oradatdepcell.fieldbyname('balno').asstring;
+ H:=oradatdepcell.fieldbyname('accno').asstring;
+ U:=oradatdepcell.fieldbyname('accno').asstring+',';
+
+  if oradatdepcell.FieldByName('balno').AsString<>'' then
+begin
+  while pos(seperator,R)>0 do begin
+     //  Showmessage(R);
+    //   Showmessage(IntToStr(pos(seperator,R)));
+        z:=copy(R,1,pos(seperator,R)-1);
+     //  Showmessage(z);
+        delete(R,1,pos(seperator,R));
+     //   Showmessage(Z);     end;
+      if pos(seperator,r)>0 then
+
+                  balsql:=balsql+'  (BAL_CN like to_char('+Z+')||''%'') or '
+                   else
+                    balsql:=balsql+'  (BAL_CN like to_char('+z+')||''%'')';
+                    
+       end;  {while end}
+           balsql:=' ('+balsql+')' ;
+
+  end;
+
+
+    if oradatdepcell.FieldByName('accno').AsString<>'' then
+begin
+  while pos(seperator,U)>0 do begin
+     //  Showmessage(R);
+    //   Showmessage(IntToStr(pos(seperator,R)));
+        z:=copy(U,1,pos(seperator,U)-1);
+     //  Showmessage(z);
+        delete(U,1,pos(seperator,U));
+     //   Showmessage(Z);     end;
+      if pos(seperator,U)>0 then
+
+               // hessql:=hessql+'   id in (select creditid from cm_accounts '+
+              //          ' where contractaccid in (select id from account '+
+              //          '  where acc_no like to_char('+Z+')||''%'') or '
+             //   else
+            //    hessql:=hessql+'  id in (select creditid from cm_accounts '+
+            //            ' where contractaccid in (select id from account '+
+            //            ' where acc_no like to_char('+Z+')||''%'')))';
+
+                  hessql:=hessql+'  (SBCM_REPORT.get_depositbalance(p.id) like to_char('+Z+')||''%'') or '
+                   else
+                    hessql:=hessql+'  (SBCM_REPORT.get_depositbalance(p.id) like to_char('+z+')||''%'')';
+       end;  {while end}
+          hessql:='or'+hessql;
+
+  end;
+
+ if oradatdepcell.FieldByName('valyuta').AsString<>'' then
+     begin
+           valsql:='  and  CURRENCY_NAME in  ('+
+                  updatestr(oradatdepcell.fieldbyname('Valyuta').AsString)+')';
+
+     end;
+
+  if oradatdepcell.FieldByName('Rez').AsString<>'' then
+      begin
+          rezsql:='  and sbcm_stored_programs.Get_ContractCustomerID(p.id) in (select id from customers where nerezident in ('+
+                    oradatdepcell.fieldbyname('Rez').asstring+'))'
+
+      end;
+//-------------------------------Filial-------------------------------------
+  if (oradatdepcell.FieldByName('Fil').AsString<>'') or (oradatdepcell.FieldByName('Fil').AsString <> 'Bütün filiallar') then
+
+      begin
+           filsql:=' and branchid in ( select id from filial_t where name='''+
+                  oradatdepcell.fieldbyname('fil').AsString+''')'
+
+      end;
+  if (oradatdepcell.FieldByName('Fil').AsString = 'Bütün filiallar') or (oradatdepcell.FieldByName('Fil').AsString='')
+  then filsql:='';
+//--------------------------------Period-------------------------------------
+  if oradatdepcell.FieldByName('Period').AsString<>'' then
+
+       begin
+            persql:=' and PERIOD_NAME = '''+oradatdepcell.fieldbyname('period').asstring+''''
+
+       end;
+//------------------------------Tip-------------------------------------
+  if oradatdepcell.FieldByName('Pertype').AsString<>'' then
+
+       begin
+
+                pertpsql:= ' and SBCM_REPORT.get_period(p.id,:bdat ) in '''+oradatdepcell.fieldbyname('pertype').asstring+''''
+
+        end;
+
+    if oradatdepcell.FieldByName('deptype').AsString<>'' then
+
+       begin
+            deptypesql:=' and DEPTYPE = '''+oradatdepcell.fieldbyname('deptype').asstring+''''
+
+       end;
+
+    if balsql='' then balsql:=' BAL_CN is not null' ;
+
+  if (oradatdepcell.FieldByName('brest').AsString<>'') or
+   (oradatdepcell.FieldByName('brestin').AsString<>'')
+
+
+ then
+
+      with oradardepozit do
+      begin
+         close;
+         sql.Clear;
+         
+         SQL.Text:='select '+
+       ' SUM (brest) AS brest,'+
+       ' SUM (tranches) AS Tramt,'+
+       ' SUM (payments) AS PayAmt,'+
+       ' SUM (erest) AS erest, '+
+       ' trunc(sum(brest*intrate)/SBCM_REPORT.get_divzero(SUM (brest)),2)  as BintRate, '+
+       ' trunc(sum(tranches*intrate)/SBCM_REPORT.get_divzero(SUM (tranches)),2)  as TrintRate, '+
+       ' trunc(sum(payments*intrate)/SBCM_REPORT.get_divzero(SUM (payments)),2)  as PayintRate, '+
+       ' trunc(sum(erest*intrate)/SBCM_REPORT.get_divzero(SUM (erest)),2)  as EintRate, '+
+
+       ' trunc(sum(brest*difdate)/SBCM_REPORT.get_divzero(SUM (brest)),2)  as BDifDate, '+
+       ' trunc(sum(tranches*difdate)/SBCM_REPORT.get_divzero(SUM (tranches)),2)  as TrDifDate, '+
+       ' trunc(sum(payments*difdate)/SBCM_REPORT.get_divzero(SUM (payments)),2)  as PayDifDate, '+
+       ' trunc(sum(erest*difdate)/SBCM_REPORT.get_divzero(SUM (erest)),2)  as EDifDate '+
+       ' FROM sbcm_reportsd where '+
+       balsql+hessql+valsql+rezsql+filsql+persql+deptypesql{+pertpsql};
+
+     Open;
+
+      brest :=oradardepozit.fieldbyname('Erest').asfloat;
+      brest_ekv :=oradardepozit.fieldbyname('Brest').asinteger;
+      brestin_ekv :=oradardepozit.fieldbyname('Tramt').asinteger;
+      brestin :=oradardepozit.fieldbyname('PayAmt').asinteger;
+      tramt :=oradardepozit.fieldbyname('BintRate').asinteger;
+      EINTREST :=oradardepozit.fieldbyname('PayintRate').asinteger;
+      EREST :=oradardepozit.fieldbyname('PayintRate').asinteger;
+      PAYAMT :=oradardepozit.fieldbyname('PayintRate').asinteger;
+
+      BDifDate:=oradardepozit.fieldbyname('BDifDate').asinteger;
+      TrDifDate:=oradardepozit.fieldbyname('TrDifDate').asinteger;
+      PayDifDate:=oradardepozit.fieldbyname('PayDifDate').asinteger;
+      EDifDate:=oradardepozit.fieldbyname('EDifDate').asinteger;
+
+
+      end;
+
+     if oradatdepcell.FieldByName('EDifDate').AsString<>''then
+         begin
+           XLApp.ActiveWorkBook.WorkSheets[Sheet].Range(oradatdepcell.FieldByName('EDifDate').AsString):=abs(EDifDate/nisnumber);
+           XLApp.ActiveWorkBook.WorkSheets[Sheet].Range[oradatdepcell.FieldByName('EDifDate').AsString].clearcomments;
+           deb:='';
+           dbc:='';
+           deb:=oradatdepcell.FieldByName('EDifDate').AsString;
+           for i :=0 to length(deb) do
+           begin
+           if  deb[i] in ['A'..'Z'] then
+           begin
+             dbc:=dbc+deb[i];
+             XLApp.ActiveWorkBook.WorkSheets[sheet].Columns[dbc].NumberFormat := '0.00' ;
+             XLApp.ActiveWorkBook.WorkSheets[sheet].Columns[dbc].ColumnWidth := length(floattostr(EDifDate))+3;
+           end;  {IF END}
+           end;  {for end}
+           end;
+
+     if oradatdepcell.FieldByName('PayDifDate').AsString<>''then
+         begin
+           XLApp.ActiveWorkBook.WorkSheets[Sheet].Range(oradatdepcell.FieldByName('PayDifDate').AsString):=abs(PayDifDate/nisnumber);
+           XLApp.ActiveWorkBook.WorkSheets[Sheet].Range[oradatdepcell.FieldByName('PayDifDate').AsString].clearcomments;
+           deb:='';
+           dbc:='';
+           deb:=oradatdepcell.FieldByName('PayDifDate').AsString;
+           for i :=0 to length(deb) do
+           begin
+           if  deb[i] in ['A'..'Z'] then
+           begin
+             dbc:=dbc+deb[i];
+             XLApp.ActiveWorkBook.WorkSheets[sheet].Columns[dbc].NumberFormat := '0.00' ;
+             XLApp.ActiveWorkBook.WorkSheets[sheet].Columns[dbc].ColumnWidth := length(floattostr(PayDifDate))+3;
+           end;  {IF END}
+           end;  {for end}
+           end;
+
+     if oradatdepcell.FieldByName('TrDifDate').AsString<>''then
+         begin
+           XLApp.ActiveWorkBook.WorkSheets[Sheet].Range(oradatdepcell.FieldByName('TrDifDate').AsString):=abs(TrDifDate/nisnumber);
+           XLApp.ActiveWorkBook.WorkSheets[Sheet].Range[oradatdepcell.FieldByName('TrDifDate').AsString].clearcomments;
+           deb:='';
+           dbc:='';
+           deb:=oradatdepcell.FieldByName('TrDifDate').AsString;
+           for i :=0 to length(deb) do
+           begin
+           if  deb[i] in ['A'..'Z'] then
+           begin
+             dbc:=dbc+deb[i];
+             XLApp.ActiveWorkBook.WorkSheets[sheet].Columns[dbc].NumberFormat := '0.00' ;
+             XLApp.ActiveWorkBook.WorkSheets[sheet].Columns[dbc].ColumnWidth := length(floattostr(TrDifDate))+3;
+           end;  {IF END}
+           end;  {for end}
+           end;
+
+      if oradatdepcell.FieldByName('BDifDate').AsString<>''then
+         begin
+           XLApp.ActiveWorkBook.WorkSheets[Sheet].Range(oradatdepcell.FieldByName('BDifDate').AsString):=abs(BDifDate/nisnumber);
+           XLApp.ActiveWorkBook.WorkSheets[Sheet].Range[oradatdepcell.FieldByName('BDifDate').AsString].clearcomments;
+           deb:='';
+           dbc:='';
+           deb:=oradatdepcell.FieldByName('BDifDate').AsString;
+           for i :=0 to length(deb) do
+           begin
+           if  deb[i] in ['A'..'Z'] then
+           begin
+             dbc:=dbc+deb[i];
+             XLApp.ActiveWorkBook.WorkSheets[sheet].Columns[dbc].NumberFormat := '0.00' ;
+             XLApp.ActiveWorkBook.WorkSheets[sheet].Columns[dbc].ColumnWidth := length(floattostr(BDifDate))+3;
+           end;  {IF END}
+           end;  {for end}
+           end;
+             //ShowMessage('ssssssssssssss');
+       if oradatdepcell.FieldByName('EREST').AsString<>''then
+         begin
+           XLApp.ActiveWorkBook.WorkSheets[Sheet].Range(oradatdepcell.FieldByName('EREST').AsString):=abs(EREST);
+           XLApp.ActiveWorkBook.WorkSheets[Sheet].Range[oradatdepcell.FieldByName('EREST').AsString].clearcomments;
+           deb:='';
+           dbc:='';
+           deb:=oradatdepcell.FieldByName('EREST').AsString;
+           for i :=0 to length(deb) do
+           begin
+           if  deb[i] in ['A'..'Z'] then
+           begin
+             dbc:=dbc+deb[i];
+             XLApp.ActiveWorkBook.WorkSheets[sheet].Columns[dbc].NumberFormat := '0.00' ;
+             XLApp.ActiveWorkBook.WorkSheets[sheet].Columns[dbc].ColumnWidth := length(floattostr(EREST))+3;
+           end;  {IF END}
+           end;  {for end}
+           end;
+
+        if oradatdepcell.FieldByName('EINTREST').AsString<>''then
+         begin
+           XLApp.ActiveWorkBook.WorkSheets[Sheet].Range(oradatdepcell.FieldByName('EINTREST').AsString):=abs(EINTREST);
+           XLApp.ActiveWorkBook.WorkSheets[Sheet].Range[oradatdepcell.FieldByName('EINTREST').AsString].clearcomments;
+           deb:='';
+           dbc:='';
+           deb:=oradatdepcell.FieldByName('EINTREST').AsString;
+           for i :=0 to length(deb) do
+           begin
+           if  deb[i] in ['A'..'Z'] then
+           begin
+             dbc:=dbc+deb[i];
+             XLApp.ActiveWorkBook.WorkSheets[sheet].Columns[dbc].NumberFormat := '0.00' ;
+             XLApp.ActiveWorkBook.WorkSheets[sheet].Columns[dbc].ColumnWidth := length(floattostr(EINTREST))+3;
+           end;  {IF END}
+           end;  {for end}
+           end;
+
+        if oradatdepcell.FieldByName('PAYAMT').AsString<>''then
+         begin
+           XLApp.ActiveWorkBook.WorkSheets[Sheet].Range(oradatdepcell.FieldByName('PAYAMT').AsString):=abs(PAYAMT);
+           XLApp.ActiveWorkBook.WorkSheets[Sheet].Range[oradatdepcell.FieldByName('PAYAMT').AsString].clearcomments;
+           deb:='';
+           dbc:='';
+           deb:=oradatdepcell.FieldByName('PAYAMT').AsString;
+           for i :=0 to length(deb) do
+           begin
+           if  deb[i] in ['A'..'Z'] then
+           begin
+             dbc:=dbc+deb[i];
+             XLApp.ActiveWorkBook.WorkSheets[sheet].Columns[dbc].NumberFormat := '0.00' ;
+             XLApp.ActiveWorkBook.WorkSheets[sheet].Columns[dbc].ColumnWidth := length(floattostr(PAYAMT))+3;
+           end;  {IF END}
+           end;  {for end}
+           end;
+
+        if oradatdepcell.FieldByName('brest').AsString<>''then
+         begin
+           XLApp.ActiveWorkBook.WorkSheets[Sheet].Range(oradatdepcell.FieldByName('brest').AsString):=abs(brest/nisnumber);
+           XLApp.ActiveWorkBook.WorkSheets[Sheet].Range[oradatdepcell.FieldByName('brest').AsString].clearcomments;
+           deb:='';
+           dbc:='';
+           deb:=oradatdepcell.FieldByName('brest').AsString;
+           for i :=0 to length(deb) do
+           begin
+           if  deb[i] in ['A'..'Z'] then
+           begin
+             dbc:=dbc+deb[i];
+             XLApp.ActiveWorkBook.WorkSheets[sheet].Columns[dbc].NumberFormat := '0.00' ;
+             XLApp.ActiveWorkBook.WorkSheets[sheet].Columns[dbc].ColumnWidth := length(floattostr(brest))+3;
+           end;  {IF END}
+           end;  {for end}
+           end;
+
+      if oradatdepcell.FieldByName('brest_ekv').AsString<>''then
+         begin
+           XLApp.ActiveWorkBook.WorkSheets[Sheet].Range(oradatdepcell.FieldByName('brest_ekv').AsString):=abs(brest_ekv/nisnumber);
+           XLApp.ActiveWorkBook.WorkSheets[Sheet].Range[oradatdepcell.FieldByName('brest_ekv').AsString].clearcomments;
+           deb:='';
+           dbc:='';
+           deb:=oradatdepcell.FieldByName('brest_ekv').AsString;
+           for i :=0 to length(deb) do
+           begin
+           if  deb[i] in ['A'..'Z'] then
+           begin
+             dbc:=dbc+deb[i];
+             XLApp.ActiveWorkBook.WorkSheets[sheet].Columns[dbc].NumberFormat := '0.00' ;
+             XLApp.ActiveWorkBook.WorkSheets[sheet].Columns[dbc].ColumnWidth := length(floattostr(brest_ekv))+3;
+           end;  {IF END}
+           end;  {for end}
+           end;
+
+     if oradatdepcell.FieldByName('brestin').AsString<>''then
+         begin
+           XLApp.ActiveWorkBook.WorkSheets[Sheet].Range(oradatdepcell.FieldByName('brestin').AsString):=abs(brestin/nisnumber);
+           XLApp.ActiveWorkBook.WorkSheets[Sheet].Range[oradatdepcell.FieldByName('brestin').AsString].clearcomments;
+           deb:='';
+           dbc:='';
+           deb:=oradatdepcell.FieldByName('brestin').AsString;
+           for i :=0 to length(deb) do
+           begin
+           if  deb[i] in ['A'..'Z'] then
+           begin
+             dbc:=dbc+deb[i];
+             XLApp.ActiveWorkBook.WorkSheets[sheet].Columns[dbc].NumberFormat := '0.00' ;
+             XLApp.ActiveWorkBook.WorkSheets[sheet].Columns[dbc].ColumnWidth := length(floattostr(brestin))+3;
+           end;  {IF END}
+           end;  {for end}
+           end;
+   if oradatdepcell.FieldByName('brestin_ekv').AsString<>''then
+         begin
+           XLApp.ActiveWorkBook.WorkSheets[Sheet].Range(oradatdepcell.FieldByName('brestin_ekv').AsString):=abs(brestin_ekv/nisnumber);
+           XLApp.ActiveWorkBook.WorkSheets[Sheet].Range[oradatdepcell.FieldByName('brestin_ekv').AsString].clearcomments;
+           deb:='';
+           dbc:='';
+           deb:=oradatdepcell.FieldByName('brestin_ekv').AsString;
+           for i :=0 to length(deb) do
+           begin
+           if  deb[i] in ['A'..'Z'] then
+           begin
+             dbc:=dbc+deb[i];
+             XLApp.ActiveWorkBook.WorkSheets[sheet].Columns[dbc].NumberFormat := '0.00' ;
+             XLApp.ActiveWorkBook.WorkSheets[sheet].Columns[dbc].ColumnWidth := length(floattostr(brestin_ekv))+3;
+           end;  {IF END}
+           end;  {for end}
+           end;
+
+       if oradatdepcell.FieldByName('tramt').AsString<>''then
+         begin
+           XLApp.ActiveWorkBook.WorkSheets[Sheet].Range(oradatdepcell.FieldByName('tramt').AsString):=abs(tramt);
+           XLApp.ActiveWorkBook.WorkSheets[Sheet].Range[oradatdepcell.FieldByName('tramt').AsString].clearcomments;
+           deb:='';
+           dbc:='';
+           deb:=oradatdepcell.FieldByName('tramt').AsString;
+           for i :=0 to length(deb) do
+           begin
+           if  deb[i] in ['A'..'Z'] then
+           begin
+             dbc:=dbc+deb[i];
+             XLApp.ActiveWorkBook.WorkSheets[sheet].Columns[dbc].NumberFormat := '0.00' ;
+             XLApp.ActiveWorkBook.WorkSheets[sheet].Columns[dbc].ColumnWidth := length(floattostr(tramt))+3;
+           end;  {IF END}
+           end;  {for end}
+           end;
+
+                                      {------------------work with excel------------------------}
+
+            yenile(vk_f5,[]);
+
+            oradatdepcell.RecNo:=posti;
+            Eb:='balans- '+oradatdepcell.fieldbyname('BALNO').asstring+',';
+            Eh:='Hesab- '+oradatdepcell.fieldbyname('ACCNO').asstring+',';
+
+            if oradatdepcell.fieldbyname('BALNO').asstring='' then Eb:='';
+            if oradatdepcell.fieldbyname('ACCNO').asstring='' then Eh:='';
+
+            comment:=Eb+Eh;
+
+            if oradatdepcell.FieldByName('brest').AsString<>'' then
+                 XLApp.ActiveWorkBook.WorkSheets[Sheet].Range[oradatdepcell.FieldByName('brest').AsString].AddComment(copy(comment,1,length(comment)-1)) ;
+
+            if oradatdepcell.FieldByName('brest_ekv').AsString<>'' then
+                 XLApp.ActiveWorkBook.WorkSheets[Sheet].Range[oradatdepcell.FieldByName('brest_ekv').AsString].AddComment(copy(comment,1,length(comment)-1)) ;
+
+            if oradatdepcell.FieldByName('brestin').AsString<>'' then
+                 XLApp.ActiveWorkBook.WorkSheets[Sheet].Range[oradatdepcell.FieldByName('brestin').AsString].AddComment(copy(comment,1,length(comment)-1)) ;
+
+
+            if oradatdepcell.FieldByName('brestin_ekv').AsString<>'' then
+                 XLApp.ActiveWorkBook.WorkSheets[Sheet].Range[oradatdepcell.FieldByName('brestin_ekv').AsString].AddComment(copy(comment,1,length(comment)-1)) ;
+
+
+           if oradatdepcell.FieldByName('tramt').AsString<>'' then
+                 XLApp.ActiveWorkBook.WorkSheets[Sheet].Range[oradatdepcell.FieldByName('tramt').AsString].AddComment(copy(comment,1,length(comment)-1)) ;
+
+           if oradatdepcell.FieldByName('PAYAMT').AsString<>'' then
+                 XLApp.ActiveWorkBook.WorkSheets[Sheet].Range[oradatdepcell.FieldByName('PAYAMT').AsString].AddComment(copy(comment,1,length(comment)-1)) ;
+
+
+           if oradatdepcell.FieldByName('EINTREST').AsString<>'' then
+                 XLApp.ActiveWorkBook.WorkSheets[Sheet].Range[oradatdepcell.FieldByName('EINTREST').AsString].AddComment(copy(comment,1,length(comment)-1)) ;
+
+
+           if oradatdepcell.FieldByName('EREST').AsString<>'' then
+                 XLApp.ActiveWorkBook.WorkSheets[Sheet].Range[oradatdepcell.FieldByName('EREST').AsString].AddComment(copy(comment,1,length(comment)-1)) ;
+
+
+
+           if oradatdepcell.FieldByName('BDifDate').AsString<>'' then
+                 XLApp.ActiveWorkBook.WorkSheets[Sheet].Range[oradatdepcell.FieldByName('BDifDate').AsString].AddComment(copy(comment,1,length(comment)-1)) ;
+
+           if oradatdepcell.FieldByName('TrDifDate').AsString<>'' then
+                 XLApp.ActiveWorkBook.WorkSheets[Sheet].Range[oradatdepcell.FieldByName('TrDifDate').AsString].AddComment(copy(comment,1,length(comment)-1)) ;
+
+           if oradatdepcell.FieldByName('PayDifDate').AsString<>'' then
+                 XLApp.ActiveWorkBook.WorkSheets[Sheet].Range[oradatdepcell.FieldByName('PayDifDate').AsString].AddComment(copy(comment,1,length(comment)-1)) ;
+
+           if oradatdepcell.FieldByName('EDifDate').AsString<>'' then
+                 XLApp.ActiveWorkBook.WorkSheets[Sheet].Range[oradatdepcell.FieldByName('EDifDate').AsString].AddComment(copy(comment,1,length(comment)-1)) ;
+           
+          end;
+
+
+procedure tsdhesabat.krecell;
+ var oradatcalc:toracledataset;
+     persql,pertpsql,val_id,a1,a2,a3,a4,a5,reservesql:string;
+     deq,deq_ekv,deqin,deqin_ekv,deok,deok_ekv,deokin,deokin_ekv,devk,devk_ekv,dsk,dsk_ekv,dskin,dskin_ekv,vkk,vkk_ekv:real;
+begin
+
+ with oradatcalc do
+   begin
+    oradatcalc:=toracledataset.Create(self);           {create oradat file}
+    session:= oradatbook.Session;
+   end;
+
+
+  Sheet:=oradatsheet.fieldbyname('sheet_id').AsInteger;
+  NisNumber:=oradatsheet.fieldbyname('nisbat').AsInteger;
+
+
+  R:='';
+  C:='';
+  H:='';
+  U:='';
+  z1:='';
+  z:='';
+  balsql:='';
+  hessql:='';
+  valsql:='';
+  filsql:='';
+  persql:='';
+  pertpsql:='';
+  seperator:=',';
+  val_id:='';
+
+
+ Oradatkrecell.RecNo:=posti;
+
+  with oradatkrecell do
+    begin
+             if     (fieldbyname('Balno').AsString='')
+                and (fieldbyname('Accno').AsString='')
+                and (fieldbyname('Valyuta').AsString='')
+                and (fieldbyname('Filial').AsString='')
+                and (fieldbyname('Rez').AsString='')
+             then
+                    begin
+                          showmessage('Parametrlərdən heç biri daxil edilməyib!!!');
+                          Abort;
+                    end;
+   end;     {with end}
+ R:=OraDatkreCell.fieldbyname('balno').asstring+',';
+ C:=OraDatkreCell.fieldbyname('balno').asstring;
+ H:=OraDatkreCell.fieldbyname('accno').asstring;
+ U:=OraDatkreCell.fieldbyname('accno').asstring+',';
+
+
+    if OraDatkreCell.FieldByName('balno').AsString<>'' then
+begin
+  while pos(seperator,R)>0 do begin
+
+    //   Showmessage(IntToStr(pos(seperator,R)));
+        z:=copy(R,1,pos(seperator,R)-1);
+
+        delete(R,1,pos(seperator,R));
+
+      if pos(seperator,r)>0 then
+
+                  balsql:=balsql+'  (BAL_CN like to_char('+Z+')||''%'') or '
+                   else
+                    balsql:=balsql+'  (BAL_CN like to_char('+z+')||''%'')';
+       end;  {while end}
+           balsql:=' ('+balsql+')' ;
+
+  end;
+
+
+    if OraDatkreCell.FieldByName('accno').AsString<>'' then
+begin
+  while pos(seperator,U)>0 do begin
+
+    //   Showmessage(IntToStr(pos(seperator,R)));
+        z:=copy(U,1,pos(seperator,U)-1);
+
+        delete(U,1,pos(seperator,U));
+
+      if pos(seperator,U)>0 then
+
+               // hessql:=hessql+'   id in (select creditid from cm_accounts '+
+              //          ' where contractaccid in (select id from account '+
+              //          '  where acc_no like to_char('+Z+')||''%'') or '
+             //   else
+            //    hessql:=hessql+'  id in (select creditid from cm_accounts '+
+            //            ' where contractaccid in (select id from account '+
+            //            ' where acc_no like to_char('+Z+')||''%'')))';
+
+                  hessql:=hessql+'  ((CM_SD.get_creditbalance(p.id) like to_char('+Z+')||''%'') or '
+                   else
+                    hessql:=hessql+'  ((CM_SD.get_creditbalance(p.id) like to_char('+z+')||''%'')';
+       end;  {while end}
+          hessql:='or'+hessql;
+
+  end;
+
+   if oradatkrecell.FieldByName('valyuta').AsString<>'' then
+     begin
+           valsql:='  and  CURRENCY_NAME in  ('+
+                  updatestr(oradatkrecell.fieldbyname('Valyuta').AsString)+')';
+
+     end;
+
+   if oradatkrecell.FieldByName('Rez').AsString<>'' then
+      begin
+          rezsql:='  and p.boorowerid in (select id from customers where nerezident in ('+
+                    oradatkrecell.fieldbyname('Rez').asstring+'))'
+
+      end;
+   if (oradatkrecell.FieldByName('Filial').AsString<>'') or (oradatkrecell.FieldByName('Filial').AsString<>'Bütün filiallar') then
+
+      begin
+           filsql:=' and branchid in ( select id from filial_t where name='''+
+                  oradatkrecell.fieldbyname('filial').AsString+''')'
+
+      end;
+      
+   if (oradatkrecell.FieldByName('Filial').AsString='Bütün filiallar') then filsql:='';
+
+   if oradatkrecell.FieldByName('Period').AsString<>'' then
+
+       begin
+            persql:=' and PERIOD_NAME = '''+oradatkrecell.fieldbyname('period').asstring+''''
+
+       end;
+   if oradatkrecell.FieldByName('Pertype').AsString<>'' then
+
+       begin
+
+                pertpsql:= ' and zsd_1.get_pertp(p.id) in '''+oradatkrecell.fieldbyname('pertype').asstring+''''
+
+        end;
+   if oradatkrecell.FieldByName('reserve').AsString<>'' then
+
+       begin
+
+                reservesql:= ' and RESERVE = '''+oradatkrecell.fieldbyname('reserve').asstring+''''
+
+       end;
+   if oradatkrecell.FieldByName('REGION').AsString<>'' then
+
+       begin
+
+                reservesql:= ' and REGION = '''+oradatkrecell.fieldbyname('REGION').asstring+''''
+
+       end;
+
+   if balsql='' then balsql:=' BAL_CN is not null';
+
+   if (oradatkrecell.FieldByName('deq').AsString<>'') or
+   (oradatkrecell.FieldByName('deq_ekv').AsString<>'')
+    then
+      with oradatkredit do
+      begin
+         close;
+         sql.Clear;
+
+         SQL.Text:='select '+
+       ' SUM (brest) AS brest,'+
+       ' SUM (tranches) AS Tramt,'+
+       ' SUM (payments) AS PayAmt,'+
+       ' SUM (erest) AS erest, '+
+       ' trunc(sum(brest*intrate)/cm_sd.get_divzero(SUM (brest)),2)  as BintRate, '+
+       ' trunc(sum(tranches*intrate)/cm_sd.get_divzero(SUM (tranches)),2)  as TrintRate, '+
+       ' trunc(sum(payments*intrate)/cm_sd.get_divzero(SUM (payments)),2)  as PayintRate, '+
+       ' trunc(sum(erest*intrate)/cm_sd.get_divzero(SUM (erest)),2)  as EintRate '+
+       ' FROM sbcm_report_sd where '+
+       balsql+hessql+valsql{+rezsql}+persql+reservesql+filsql{+pertpsql};
+
+    //memo2.Text:=sql.Text;
+    Open;
+     deq :=oradatkredit.fieldbyname('Erest').asinteger;
+     deq_ekv :=oradatkredit.fieldbyname('Brest').asinteger;
+     dsk :=oradatkredit.fieldbyname('Tramt').asinteger;
+     dsk_ekv :=oradatkredit.fieldbyname('PayAmt').asinteger;
+     DEQIN :=oradatkredit.fieldbyname('BintRate').asinteger;
+     dskin :=oradatkredit.fieldbyname('EintRate').asinteger;
+     DEVK :=oradatkredit.fieldbyname('TrintRate').asinteger;
+     DEOKIN :=oradatkredit.fieldbyname('PayintRate').asinteger;
+
+
+      end;
+
+
+       if oradatkrecell.FieldByName('DEOKIN').AsString<>''then
+         begin
+           XLApp.ActiveWorkBook.WorkSheets[Sheet].Range(oradatkrecell.FieldByName('DEOKIN').AsString):=abs(DEOKIN);
+           XLApp.ActiveWorkBook.WorkSheets[Sheet].Range[oradatkrecell.FieldByName('DEOKIN').AsString].clearcomments;
+           deb:='';
+           dbc:='';
+           deb:=oradatkrecell.FieldByName('DEOKIN').AsString;
+           for i :=0 to length(deb) do
+           begin
+           if  deb[i] in ['A'..'Z'] then
+           begin
+             dbc:=dbc+deb[i];
+             XLApp.ActiveWorkBook.WorkSheets[sheet].Columns[dbc].NumberFormat := '0.00' ;
+             XLApp.ActiveWorkBook.WorkSheets[sheet].Columns[dbc].ColumnWidth := length(floattostr(DEOKIN))+3;
+           end;  {IF END}
+           end;  {for end}
+           end;
+
+
+        if oradatkrecell.FieldByName('DEVK').AsString<>''then
+         begin
+           XLApp.ActiveWorkBook.WorkSheets[Sheet].Range(oradatkrecell.FieldByName('DEVK').AsString):=abs(DEVK);
+           XLApp.ActiveWorkBook.WorkSheets[Sheet].Range[oradatkrecell.FieldByName('DEVK').AsString].clearcomments;
+           deb:='';
+           dbc:='';
+           deb:=oradatkrecell.FieldByName('DEVK').AsString;
+           for i :=0 to length(deb) do
+           begin
+           if  deb[i] in ['A'..'Z'] then
+           begin
+             dbc:=dbc+deb[i];
+             XLApp.ActiveWorkBook.WorkSheets[sheet].Columns[dbc].NumberFormat := '0.00' ;
+             XLApp.ActiveWorkBook.WorkSheets[sheet].Columns[dbc].ColumnWidth := length(floattostr(DEVK))+3;
+           end;  {IF END}
+           end;  {for end}
+           end;
+
+        if oradatkrecell.FieldByName('dskin').AsString<>''then
+         begin
+           XLApp.ActiveWorkBook.WorkSheets[Sheet].Range(oradatkrecell.FieldByName('dskin').AsString):=abs(dskin);
+           XLApp.ActiveWorkBook.WorkSheets[Sheet].Range[oradatkrecell.FieldByName('dskin').AsString].clearcomments;
+           deb:='';
+           dbc:='';
+           deb:=oradatkrecell.FieldByName('dskin').AsString;
+           for i :=0 to length(deb) do
+           begin
+           if  deb[i] in ['A'..'Z'] then
+           begin
+             dbc:=dbc+deb[i];
+             XLApp.ActiveWorkBook.WorkSheets[sheet].Columns[dbc].NumberFormat := '0.00' ;
+             XLApp.ActiveWorkBook.WorkSheets[sheet].Columns[dbc].ColumnWidth := length(floattostr(dskin))+3;
+           end;  {IF END}
+           end;  {for end}
+           end;
+
+        if oradatkrecell.FieldByName('DEQIN').AsString<>''then
+         begin
+           XLApp.ActiveWorkBook.WorkSheets[Sheet].Range(oradatkrecell.FieldByName('DEQIN').AsString):=abs(dskin);
+           XLApp.ActiveWorkBook.WorkSheets[Sheet].Range[oradatkrecell.FieldByName('DEQIN').AsString].clearcomments;
+           deb:='';
+           dbc:='';
+           deb:=oradatkrecell.FieldByName('DEQIN').AsString;
+           for i :=0 to length(deb) do
+           begin
+           if  deb[i] in ['A'..'Z'] then
+           begin
+             dbc:=dbc+deb[i];
+             XLApp.ActiveWorkBook.WorkSheets[sheet].Columns[dbc].NumberFormat := '0.00' ;
+             XLApp.ActiveWorkBook.WorkSheets[sheet].Columns[dbc].ColumnWidth := length(floattostr(DEQIN))+3;
+           end;  {IF END}
+           end;  {for end}
+           end;
+
+
+      if oradatkrecell.FieldByName('dsk_ekv').AsString<>''then
+         begin
+           XLApp.ActiveWorkBook.WorkSheets[Sheet].Range(oradatkrecell.FieldByName('dsk_ekv').AsString):=abs(dsk_ekv/nisnumber);
+           XLApp.ActiveWorkBook.WorkSheets[Sheet].Range[oradatkrecell.FieldByName('dsk_ekv').AsString].clearcomments;
+           deb:='';
+           dbc:='';
+           deb:=oradatkrecell.FieldByName('dsk_ekv').AsString;
+           for i :=0 to length(deb) do
+           begin
+           if  deb[i] in ['A'..'Z'] then
+           begin
+             dbc:=dbc+deb[i];
+             XLApp.ActiveWorkBook.WorkSheets[sheet].Columns[dbc].NumberFormat := '0.00' ;
+             XLApp.ActiveWorkBook.WorkSheets[sheet].Columns[dbc].ColumnWidth := length(floattostr(dsk_ekv))+3;
+           end;  {IF END}
+           end;  {for end}
+           end;
+
+
+
+  if oradatkrecell.FieldByName('deq').AsString<>'' then
+         begin
+           XLApp.ActiveWorkBook.WorkSheets[Sheet].Range(oradatkrecell.FieldByName('deq').AsString):=abs(deq/nisnumber);
+           XLApp.ActiveWorkBook.WorkSheets[Sheet].Range[oradatkrecell.FieldByName('deq').AsString].clearcomments;
+           deb:='';
+           dbc:='';
+           deb:=oradatkrecell.FieldByName('deq').AsString;
+           for i :=0 to length(deb) do
+           begin
+           if  deb[i] in ['A'..'Z'] then
+           begin
+             dbc:=dbc+deb[i];
+             XLApp.ActiveWorkBook.WorkSheets[sheet].Columns[dbc].NumberFormat := '0.00' ;
+             XLApp.ActiveWorkBook.WorkSheets[sheet].Columns[dbc].ColumnWidth := length(floattostr(deq))+3;
+           end;  {IF END}
+           end;  {for end}
+           end;
+   if oradatkrecell.FieldByName('dsk').AsString<>''then
+         begin
+           XLApp.ActiveWorkBook.WorkSheets[Sheet].Range(oradatkrecell.FieldByName('dsk').AsString):=abs(dsk/nisnumber);
+           XLApp.ActiveWorkBook.WorkSheets[Sheet].Range[oradatkrecell.FieldByName('dsk').AsString].clearcomments;
+           deb:='';
+           dbc:='';
+           deb:=oradatkrecell.FieldByName('dsk').AsString;
+           for i :=0 to length(deb) do
+           begin
+           if  deb[i] in ['A'..'Z'] then
+           begin
+             dbc:=dbc+deb[i];
+             XLApp.ActiveWorkBook.WorkSheets[sheet].Columns[dbc].NumberFormat := '0.00' ;
+             XLApp.ActiveWorkBook.WorkSheets[sheet].Columns[dbc].ColumnWidth := length(floattostr(dsk))+3;
+           end;  {IF END}
+           end;  {for end}
+           end;
+
+ if oradatkrecell.FieldByName('deq_ekv').AsString<>''then
+         begin
+           XLApp.ActiveWorkBook.WorkSheets[Sheet].Range(oradatkrecell.FieldByName('deq_ekv').AsString):=abs(deq_ekv/nisnumber);
+           XLApp.ActiveWorkBook.WorkSheets[Sheet].Range[oradatkrecell.FieldByName('deq_ekv').AsString].clearcomments;
+           deb:='';
+           dbc:='';
+           deb:=oradatkrecell.FieldByName('deq_ekv').AsString;
+           for i :=0 to length(deb) do
+           begin
+           if  deb[i] in ['A'..'Z'] then
+           begin
+             dbc:=dbc+deb[i];
+             XLApp.ActiveWorkBook.WorkSheets[sheet].Columns[dbc].NumberFormat := '0.00' ;
+             XLApp.ActiveWorkBook.WorkSheets[sheet].Columns[dbc].ColumnWidth := length(floattostr(deq_ekv))+3;
+           end;  {IF END}
+           end;  {for end}
+           end;
+
+                                      {------------------work with excel------------------------}
+
+            yenile(vk_f5,[]);
+
+            oradatkrecell.RecNo:=posti;
+            Eb:='balans- '+oradatkrecell.fieldbyname('BALNO').asstring+',';
+            Eh:='Hesab- '+oradatkrecell.fieldbyname('ACCNO').asstring+',';
+
+            if oradatkrecell.fieldbyname('BALNO').asstring='' then Eb:='';
+            if oradatkrecell.fieldbyname('ACCNO').asstring='' then Eh:='';
+
+            comment:=Eb+Eh;
+        //        ShowMessage('Odenilmish:'+ floattostr(DEOKIN)+ ', Verilmish:' +floattostr(DEVK));
+
+        {     if oradatkrecell.FieldByName('DEOKIN').AsString<>'' then
+                 XLApp.ActiveWorkBook.WorkSheets[Sheet].Range[oradatkrecell.FieldByName('DEOKIN').AsString].AddComment(copy(comment,1,length(comment)-1)) ;
+         }
+            if oradatkrecell.FieldByName('DEVK').AsString<>'' then
+                 XLApp.ActiveWorkBook.WorkSheets[Sheet].Range[oradatkrecell.FieldByName('DEVK').AsString].AddComment(copy(comment,1,length(comment)-1)) ;
+
+            if oradatkrecell.FieldByName('deq').AsString<>'' then
+                 XLApp.ActiveWorkBook.WorkSheets[Sheet].Range[oradatkrecell.FieldByName('deq').AsString].AddComment(copy(comment,1,length(comment)-1)) ;
+
+            if oradatkrecell.FieldByName('deq_ekv').AsString<>'' then
+                 XLApp.ActiveWorkBook.WorkSheets[Sheet].Range[oradatkrecell.FieldByName('deq_ekv').AsString].AddComment(copy(comment,1,length(comment)-1)) ;
+
+            if oradatkrecell.FieldByName('deqin').AsString<>'' then
+                 XLApp.ActiveWorkBook.WorkSheets[Sheet].Range[oradatkrecell.FieldByName('deqin').AsString].AddComment(copy(comment,1,length(comment)-1)) ;
+
+            if oradatkrecell.FieldByName('deqin_ekv').AsString<>'' then
+                 XLApp.ActiveWorkBook.WorkSheets[Sheet].Range[oradatkrecell.FieldByName('deqin_ekv').AsString].AddComment(copy(comment,1,length(comment)-1)) ;
+
+
+            if oradatkrecell.FieldByName('deokin').AsString<>'' then
+                 XLApp.ActiveWorkBook.WorkSheets[Sheet].Range[oradatkrecell.FieldByName('deokin').AsString].AddComment(copy(comment,1,length(comment)-1)) ;
+
+
+           if oradatkrecell.FieldByName('dsk').AsString<>'' then
+                 XLApp.ActiveWorkBook.WorkSheets[Sheet].Range[oradatkrecell.FieldByName('dsk').AsString].AddComment(copy(comment,1,length(comment)-1)) ;
+
+           if oradatkrecell.FieldByName('dsk_ekv').AsString<>'' then
+                 XLApp.ActiveWorkBook.WorkSheets[Sheet].Range[oradatkrecell.FieldByName('dsk_ekv').AsString].AddComment(copy(comment,1,length(comment)-1)) ;
+
+           if oradatkrecell.FieldByName('dskin').AsString<>'' then
+                 XLApp.ActiveWorkBook.WorkSheets[Sheet].Range[oradatkrecell.FieldByName('dskin').AsString].AddComment(copy(comment,1,length(comment)-1)) ;
+
+           if oradatkrecell.FieldByName('dskin_ekv').AsString<>'' then
+                 XLApp.ActiveWorkBook.WorkSheets[Sheet].Range[oradatkrecell.FieldByName('dskin_ekv').AsString].AddComment(copy(comment,1,length(comment)-1)) ;
+
+      //     if oradatkrecell.FieldByName('vkk').AsString<>'' then
+      //           XLApp.ActiveWorkBook.WorkSheets[Sheet].Range[oradatkrecell.FieldByName('vkk').AsString].AddComment(copy(comment,1,length(comment)-1)) ;
+
+      //    if oradatkrecell.FieldByName('vkk_ekv').AsString<>'' then
+      //           XLApp.ActiveWorkBook.WorkSheets[Sheet].Range[oradatkrecell.FieldByName('vkk_ekv').AsString].AddComment(copy(comment,1,length(comment)-1)) ;
+ end;
+
+
+
+
+
+
+
+ procedure tsdhesabat.depozitrecell;
+ var oradatcalc:toracledataset;
+     persql,pertpsql,val_id,a1,a2,a3,a4,a5:string;
+     deq,deq_ekv,deqin,deqin_ekv,deok,deok_ekv,deokin,deokin_ekv,devk,devk_ekv,dsk,dsk_ekv,dskin,dskin_ekv,vkk,vkk_ekv:real;
+begin
+
+ with oradatcalc do
+   begin
+    oradatcalc:=toracledataset.Create(self);           {create oradat file}
+    session:= oradatbook.Session;
+   end;
+
+
+  Sheet:=oradatsheet.fieldbyname('sheet_id').AsInteger;
+  NisNumber:=oradatsheet.fieldbyname('nisbat').AsInteger;
+
+  R:='';
+  C:='';
+  H:='';
+  U:='';
+  z1:='';
+  z:='';
+  balsql:='';
+  hessql:='';
+  valsql:='';
+  filsql:='';
+  persql:='';
+  pertpsql:='';
+  seperator:=',';
+  val_id:='';
+
+
+ oradatdepcell.RecNo:=posti;
+
+  with oradatdepcell do
+    begin
+             if     (fieldbyname('Balno').AsString='')
+                and (fieldbyname('Accno').AsString='')
+                and (fieldbyname('Valyuta').AsString='')
+                and (fieldbyname('Filial').AsString='')
+                and (fieldbyname('Rez').AsString='')
+             then
+                    begin
+                          showmessage('Parametrlərdən heç biri daxil edilməyib!!!');
+                          Abort;
+                    end;
+   end;     {with end}
+ R:=oradatdepcell.fieldbyname('balno').asstring+',';
+ C:=oradatdepcell.fieldbyname('balno').asstring;
+ H:=oradatdepcell.fieldbyname('accno').asstring;
+ U:=oradatdepcell.fieldbyname('accno').asstring+',';
+
+
+  {While Pos(Seperator,U)>0 do
+   Begin
+      Z1:=Copy(U,1,Pos(Seperator,U)-1);
+      Delete(U,1,Pos(Seperator,U));
+      if pos(seperator,u)>0 then
+         begin
+            HesSql:=Hessql+' acc_no like to_char('+Z1+')||''%''or';
+         end
+       else
+         begin
+            HesSql:=Hessql+' acc_no like to_char('+Z1+')||''%''';
+         end;
+   End;}
+
+   //while end
+
+   {while pos(seperator,R)>0 do
+    begin
+      z:=copy(R,1,pos(seperator,R)-1);
+
+      delete(R,1,pos(seperator,R));
+      if pos(seperator,R)>0 then
+         begin
+            balsql:=balsql+' bal_cn1 like to_char('+Z+')||''%''or';
+         end
+       else
+         begin
+            balsql:=balsql+' bal_cn1 like to_char('+Z+')||''%''';
+         end;
+
+
+    end;}
+
+    //while end
+
+
+    if OraDatkreCell.fieldbyname('balno').asstring<>'' then
+             begin
+           balsql:='  CM_SD.get_creditbalance(p.id) in ('+ OraDatkreCell.fieldbyname('balno').asstring+')';
+        end;
+    if OraDatkreCell.fieldbyname('accno').asstring<>'' then
+ begin
+
+                hessql:=hessql+' and id in (select creditid from cm_accounts '+
+                        ' where contractaccid in (select id from account '+
+                        ' where acc_no in ('+updatestr(oradatkrecell.FieldByName('accno').AsString)+')))'  ;
+
+      end;
+
+
+  if oradatkrecell.FieldByName('valyuta').AsString<>'' then
+     begin
+           valsql:='  and  CM_SD.get_CreditCurrency(p.currency) in  ('+
+                  updatestr(oradatkrecell.fieldbyname('Valyuta').AsString)+')';
+
+     end;
+
+  if oradatkrecell.FieldByName('Rez').AsString<>'' then
+      begin
+          rezsql:='  and p.boorowerid in (select id from customers where nerezident in ('+
+                    oradatkrecell.fieldbyname('Rez').asstring+'))'
+
+      end;
+   if oradatkrecell.FieldByName('Filial').AsString<>'' then
+
+      begin
+           filsql:=' and p.branchid in ( select id from filial_t where name='''+
+                  oradatkrecell.fieldbyname('filial').AsString+''')'
+
+      end;
+
+    if oradatkrecell.FieldByName('Period').AsString<>'' then
+
+       begin
+            persql:=' and CM_SD.get_period(p.id,:bdat ) = '''+oradatkrecell.fieldbyname('period').asstring+''''
+
+       end;
+    if oradatkrecell.FieldByName('Pertype').AsString<>'' then
+
+       begin
+
+                pertpsql:= ' and zsd_1.get_pertp(p.id) in '''+oradatkrecell.fieldbyname('pertype').asstring+''''
+
+        end;
+ if (oradatkrecell.FieldByName('deq').AsString<>'') or
+   (oradatkrecell.FieldByName('deq_ekv').AsString<>'')
+ then
+      with oradatkredit do
+      begin
+         close;
+         sql.Clear;
+         sql.text:='select '+
+   ' CM_SD.get_creditbalance(p.id) as balance,'+
+   ' P.ANNUALYINTERESTRATE as intrate,'+
+   ' CM_SD.get_period(p.id,:bdat ) as period,'+
+   ' CM_SD.get_CreditCurrency(p.currency) as valute,'+
+   ' CM_SD.get_creditrest(p.id,:bdat) as BRest,'+
+   ' CM_SD.get_credittranche(p.id,:bdat,:edat) as TrAmt,'+
+   ' CM_SD.get_creditpayment(p.id,:bdat,:edat) as PayAmt,'+
+   ' CM_SD.get_creditrest(p.id,:edat) as ERest'+
+   ' from cm_portfolio p where '+ balsql+hessql+valsql+rezsql+filsql+persql+pertpsql;
+
+     open;
+     deq :=oradatkredit.fieldbyname('INTRATE').asinteger;
+     deq_ekv :=oradatkredit.fieldbyname('balance').asinteger;
+
+      end;
+
+
+ if oradatkrecell.FieldByName('deq').AsString<>''then
+         begin
+           XLApp.ActiveWorkBook.WorkSheets[Sheet].Range(oradatkrecell.FieldByName('deq').AsString):=abs(deq/nisnumber);
+           XLApp.ActiveWorkBook.WorkSheets[Sheet].Range[oradatkrecell.FieldByName('deq').AsString].clearcomments;
+           deb:='';
+           dbc:='';
+           deb:=oradatkrecell.FieldByName('deq').AsString;
+           for i :=0 to length(deb) do
+           begin
+           if  deb[i] in ['A'..'Z'] then
+           begin
+             dbc:=dbc+deb[i];
+             XLApp.ActiveWorkBook.WorkSheets[sheet].Columns[dbc].NumberFormat := '0.00' ;
+             XLApp.ActiveWorkBook.WorkSheets[sheet].Columns[dbc].ColumnWidth := length(floattostr(deq))+3;
+           end;  {IF END}
+           end;  {for end}
+           end;
+ if oradatkrecell.FieldByName('deq_ekv').AsString<>''then
+         begin
+           XLApp.ActiveWorkBook.WorkSheets[Sheet].Range(oradatkrecell.FieldByName('deq_ekv').AsString):=abs(deq_ekv/nisnumber);
+           XLApp.ActiveWorkBook.WorkSheets[Sheet].Range[oradatkrecell.FieldByName('deq_ekv').AsString].clearcomments;
+           deb:='';
+           dbc:='';
+           deb:=oradatkrecell.FieldByName('deq_ekv').AsString;
+           for i :=0 to length(deb) do
+           begin
+           if deb[i] in ['A'..'Z'] then
+           begin
+             dbc:=dbc+deb[i];
+             XLApp.ActiveWorkBook.WorkSheets[sheet].Columns[dbc].NumberFormat := '0.00' ;
+             XLApp.ActiveWorkBook.WorkSheets[sheet].Columns[dbc].ColumnWidth := length(floattostr(deq_ekv))+3;
+           end;  {IF END}
+           end;  {for end}
+           end;
+
+                                      {------------------work with excel------------------------}
+
+            yenile(vk_f5,[]);
+
+            oradatkrecell.RecNo:=posti;
+            Eb:='balans- '+oradatkrecell.fieldbyname('BALNO').asstring+',';
+            Eh:='Hesab- '+oradatkrecell.fieldbyname('ACCNO').asstring+',';
+
+            if oradatkrecell.fieldbyname('BALNO').asstring='' then Eb:='';
+            if oradatkrecell.fieldbyname('ACCNO').asstring='' then Eh:='';
+
+            comment:=Eb+Eh;
+
+            if oradatkrecell.FieldByName('deq').AsString<>'' then
+                 XLApp.ActiveWorkBook.WorkSheets[Sheet].Range[oradatkrecell.FieldByName('deq').AsString].AddComment(copy(comment,1,length(comment)-1)) ;
+
+            if oradatkrecell.FieldByName('deq_ekv').AsString<>'' then
+                 XLApp.ActiveWorkBook.WorkSheets[Sheet].Range[oradatkrecell.FieldByName('deq_ekv').AsString].AddComment(copy(comment,1,length(comment)-1)) ;
+
+            if oradatkrecell.FieldByName('deqin').AsString<>'' then
+                 XLApp.ActiveWorkBook.WorkSheets[Sheet].Range[oradatkrecell.FieldByName('deqin').AsString].AddComment(copy(comment,1,length(comment)-1)) ;
+
+            if oradatkrecell.FieldByName('deqin_ekv').AsString<>'' then
+                 XLApp.ActiveWorkBook.WorkSheets[Sheet].Range[oradatkrecell.FieldByName('deqin_ekv').AsString].AddComment(copy(comment,1,length(comment)-1)) ;
+
+            if oradatkrecell.FieldByName('deok').AsString<>'' then
+                 XLApp.ActiveWorkBook.WorkSheets[Sheet].Range[oradatkrecell.FieldByName('deok').AsString].AddComment(copy(comment,1,length(comment)-1)) ;
+
+            if oradatkrecell.FieldByName('deok_ekv').AsString<>'' then
+                 XLApp.ActiveWorkBook.WorkSheets[Sheet].Range[oradatkrecell.FieldByName('deok_ekv').AsString].AddComment(copy(comment,1,length(comment)-1)) ;
+
+
+            if oradatkrecell.FieldByName('deokin').AsString<>'' then
+                 XLApp.ActiveWorkBook.WorkSheets[Sheet].Range[oradatkrecell.FieldByName('deokin').AsString].AddComment(copy(comment,1,length(comment)-1)) ;
+
+            if oradatkrecell.FieldByName('deokin_ekv').AsString<>'' then
+                 XLApp.ActiveWorkBook.WorkSheets[Sheet].Range[oradatkrecell.FieldByName('deokin_ekv').AsString].AddComment(copy(comment,1,length(comment)-1)) ;
+
+            if oradatkrecell.FieldByName('devk').AsString<>'' then
+                 XLApp.ActiveWorkBook.WorkSheets[Sheet].Range[oradatkrecell.FieldByName('devk').AsString].AddComment(copy(comment,1,length(comment)-1)) ;
+
+
+            if oradatkrecell.FieldByName('devk_ekv').AsString<>'' then
+                 XLApp.ActiveWorkBook.WorkSheets[Sheet].Range[oradatkrecell.FieldByName('devk_ekv').AsString].AddComment(copy(comment,1,length(comment)-1)) ;
+
+           if oradatkrecell.FieldByName('dsk').AsString<>'' then
+                 XLApp.ActiveWorkBook.WorkSheets[Sheet].Range[oradatkrecell.FieldByName('dsk').AsString].AddComment(copy(comment,1,length(comment)-1)) ;
+
+           if oradatkrecell.FieldByName('dsk_ekv').AsString<>'' then
+                 XLApp.ActiveWorkBook.WorkSheets[Sheet].Range[oradatkrecell.FieldByName('dsk_ekv').AsString].AddComment(copy(comment,1,length(comment)-1)) ;
+
+           if oradatkrecell.FieldByName('dskin').AsString<>'' then
+                 XLApp.ActiveWorkBook.WorkSheets[Sheet].Range[oradatkrecell.FieldByName('dskin').AsString].AddComment(copy(comment,1,length(comment)-1)) ;
+
+           if oradatkrecell.FieldByName('dskin_ekv').AsString<>'' then
+                 XLApp.ActiveWorkBook.WorkSheets[Sheet].Range[oradatkrecell.FieldByName('dskin_ekv').AsString].AddComment(copy(comment,1,length(comment)-1)) ;
+
+           if oradatkrecell.FieldByName('vkk').AsString<>'' then
+                 XLApp.ActiveWorkBook.WorkSheets[Sheet].Range[oradatkrecell.FieldByName('vkk').AsString].AddComment(copy(comment,1,length(comment)-1)) ;
+
+          if oradatkrecell.FieldByName('vkk_ekv').AsString<>'' then
+                 XLApp.ActiveWorkBook.WorkSheets[Sheet].Range[oradatkrecell.FieldByName('vkk_ekv').AsString].AddComment(copy(comment,1,length(comment)-1)) ;
+ end;
+
+
+ { procedure tsdhesabat.FormMouseWheel(Sender: TObject; Shift: TShiftState;
+  WheelDelta: Integer; MousePos: TPoint; var Handled: Boolean);
+begin
+  PostMessage( ////memo1.Handle, EM_SCROLL, SB_LINEUP, 0);
+  Handled := True;
+end;   }
+procedure TSDHesabat.ActiveFormCreate(Sender: TObject);
+  var st:tstringlist;
+begin
+SBTranslateProc.TranslateAllComponents(Self,sboapiDataModule.OrPack_SL);
+//try
+
+
+  // if st.Strings[0][1]='[' then showmessage('ok') ;
+//except showmessage('ini fayldan oxuya bilmedi');
+//end;
+
+
+
+mypotstart:=false;
+stopFlag := false;
+with orapak do
+begin
+ //if  CallBooleanFunction('check_adm_user',[]) then
+     pagecontrol1.Visible:=true
+// else
+   //  pagecontrol1.Visible:=false;
+end;{with end}
+readbookname;
+cmbbookname.ItemIndex:=0;
+oradat:=toracledataset.Create(self);
+oradat.Session:=oradatcell.Session;
+
+OrasmartDate.Session:=sboapiDataModule.SBSession;
+//OrasmartDate.Active:=true;
+OracleDataSet1.Session:=sboapiDataModule.SBSession;
+//OracleDataSet1.Active:=true;
+OraDatBook.Session:=sboapiDataModule.SBSession;
+OraDatBook.Active:=false;
+OraDatBook.Active:=true;
+OraDatCell.Session:=sboapiDataModule.SBSession;
+oradatcell.Active:=false;
+OraDatCell.Active:=true;
+OraDatProvCell.Session:=sboapiDataModule.SBSession;
+oradatprovcell.Active:=false;
+OraDatProvCell.Active:=true;
+oradatsdbal_cn.Session:=sboapiDataModule.SBSession;
+//oradatsdbal_cn.Active:=true;
+//oradatdepcell.Session:=sboapiDataModule.SBSession;
+//oradatdepcell.Active:=false;
+//.Active:=true;
+//oradatdepsd.Session:=sboapiDataModule.SBSession;
+//oradatdepsd.Active:=true;
+OraDatSheet.Session:=sboapiDataModule.SBSession;
+oradatsheet.active:=false;
+OraDatSheet.Active:=true;
+oradatgetsum.Session:=sboapiDataModule.SBSession;
+//oradatgetsum.Active:=true;
+OraPrimer.Session:= sboapiDataModule.SBSession;
+//OraPrimer.Active:=true;
+OraLoadFilial.Session:=sboapiDataModule.SBSession;
+//OraLoadFilial.Active:=true;
+ODSLoadPok.Session:= sboapiDataModule.SBSession;
+//ODSLoadPok.Active:=true;
+OraLoadSimvol.Session:= sboapiDataModule.SBSession;
+//OraLoadSimvol.Active:=true;
+oradatviewresult.Session:= sboapiDataModule.SBSession;
+//oradatviewresult.Active:=true;
+OraSumma.Session:= sboapiDataModule.SBSession;
+//OraSumma.Active:=true;
+oradatprov.Session:= sboapiDataModule.SBSession;
+//oradatprov.Active:=true;
+OracleDataSet2.Session:=sboapiDataModule.SBSession;
+//OracleDataSet2.Active:=true;
+ORAPAK.Session:=sboapiDataModule.SBSession;
+
+{---------------------------------}
+kill:=true;
+if dbgrid1.Fields[0].Text<>'' then
+   begin
+      dbgrid1.OnCellClick(dbgrid1.Columns[1]);
+   end;
+with  orasmartdate do
+ begin
+   Close;
+   Sql.Clear;
+   sql.Text:='select tek_dat from sysdat';
+   Open;
+   dtp.DateTime:=fieldbyname('tek_dat').AsDateTime;
+   dtp1.dateTime:=dtp.DateTime;
+   //Close;
+ end;
+
+ {--------------------------INI FILE--------------------}
+
+try
+ st:=tstringlist.create;
+
+ st.loadfromfile(extractfilepath(application.exename)+'menu.ini');
+ if st.strings[1]='0' then
+except
+end;
+end;
+
+procedure TSDHesabat.edacc_noKeyPress(Sender: TObject; var Key: Char);
+var i,j,h,y,n,m:extended;
+begin
+
+ i:=0; j:=0;h:=0; y:=0;n:=0; m:=0;
+
+ edsumost.Text:='';
+ edsump_ost.Text:='';
+ edobr_d.Text:='';
+ edobr_k.Text:='';
+ edpok_obr_d.Text:='';
+ edpok_obr_k.Text:='';
+
+if key=#13 then
+  begin
+      ba:='''and balcn1 like'''+edbalcn1.Text+'%';
+      ti:='''and tipacc like'''+'%'+uppercase(edtipacc.Text)+'%';
+      da:='''and datdate='''+eddatdate.Text;
+      va:='''and val_acc='''+edval_acc.text;
+      if edbalcn1.Text=''  then ba:='';
+     if edtipacc.text=''  then ti:='';
+      if eddatdate.Text='' then da:='';
+      if edval_acc.text='' then va:='';
+
+       with oradatviewresult do
+          begin
+            Close;
+            Sql.Clear;
+            sql.Text:='Select s.rowid,s.* from temparchost s where acc_no like'''+edacc_no.text+'%'+ba+ti+da+va+'''';
+            Open;
+          end;
+              GETSUM;
+
+   end;
+
+end;
+
+procedure TSDHesabat.edbalcn1KeyPress(Sender: TObject; var Key: Char);
+var i,j,h,y,n,m:extended;
+begin
+ i:=0;
+ j:=0;
+ h:=0;
+ y:=0;
+ n:=0;
+ m:=0;
+
+ edsumost.Text:='';
+ edsump_ost.Text:='';
+ edobr_d.Text:='';
+ edobr_k.Text:='';
+ edpok_obr_d.Text:='';
+ edpok_obr_k.Text:='';
+if key=#13 then
+  begin
+      ac:='''and acc_no like'''+edacc_no.text+'%';
+      ti:='''and tipacc like'''+'%'+uppercase(edtipacc.Text)+'%';
+      da:='''and datdate='''+eddatdate.Text;
+      va:='''and val_acc='''+edval_acc.Text;
+
+      if edacc_no.Text = ''  then  ac:='';
+      if edtipacc.text = ''  then  ti:='';
+      if eddatdate.Text= ''  then  da:='';
+      if edval_acc.Text= ''  then  va:='';
+
+       application.ProcessMessages;
+    {  with oraloadtemparchost do
+          begin
+            Close;
+            Sql.Clear;
+            sql.Text:='Select s.rowid,s.* from temparchost s where balcn1 like'''+edbalcn1.Text+'%'+ti+ac+da+va+'''';
+            Open;
+          end;
+                GETSUM;  }
+  end;
+end;
+
+procedure TSDHesabat.edval_accKeyPress(Sender: TObject; var Key: Char);
+var i,j,h,y,n,m:extended;
+begin
+ i:=0;
+ j:=0;
+ h:=0;
+ y:=0;
+ n:=0;
+ m:=0;
+
+ edsumost.Text:='';
+ edsump_ost.Text:='';
+ edobr_d.Text:='';
+ edobr_k.Text:='';
+ edpok_obr_d.Text:='';
+ edpok_obr_k.Text:='';
+if key=#13 then
+  begin
+      ba:='''and balcn1 like'''+edbalcn1.Text+'%';
+      ac:='''and acc_no like'''+edacc_no.text+'%';
+      ti:='''and tipacc like'''+'%'+uppercase(edtipacc.Text)+'%';
+      da:='''and datdate='''+eddatdate.Text;
+
+      if edbalcn1.Text=''  then ba:='';
+      if edacc_no.Text = ''  then  ac:='';
+      if edtipacc.text = ''  then  ti:='';
+      if eddatdate.Text= ''  then  da:='';
+
+     {  with oraloadtemparchost do
+          begin
+            Close;
+            Sql.Clear;
+            sql.Text:='Select s.rowid,s.* from temparchost s where val_acc= '''+edval_acc.Text+ti+ac+da+ba+'''';
+            Open;
+          end;
+              GETSUM;     }
+  end;   
+
+end;
+
+procedure TSDHesabat.edtipaccKeyPress(Sender: TObject; var Key: Char);
+var i,j,h,y,n,m:extended;
+begin
+ i:=0;
+ j:=0;
+ h:=0;
+ y:=0;
+ n:=0;
+ m:=0;
+
+ edsumost.Text:='';
+ edsump_ost.Text:='';
+ edobr_d.Text:='';
+ edobr_k.Text:='';
+ edpok_obr_d.Text:='';
+ edpok_obr_k.Text:='';
+if key=#13 then
+  begin
+      ac:='''and acc_no like'''+edacc_no.text+'%';
+      ba:='''and balcn1 like'''+edbalcn1.Text+'%';
+      da:='''and datdate='''   +eddatdate.Text;
+      va:='''and val_acc='''   +edval_acc.Text;
+
+      if edacc_no.Text = ''  then  ac:='';
+      if edbalcn1.Text = ''  then  ba:='';
+      if eddatdate.Text= ''  then  da:='';
+      if edval_acc.Text= ''  then  va:='';
+
+
+        application.ProcessMessages;
+       // LoadData;
+   { with oraloadtemparchost do
+      begin
+        Close;
+        Sql.Clear;
+        Sql.Text:='Select s.rowid,s.* from temparchost s where tipacc like'''+'%'+uppercase(edtipacc.Text)+'%'+ac+da+ba+va+'''';
+        Open;
+     end;
+          GETSUM; }
+ end;
+
+end;
+
+procedure TSDHesabat.eddatdateKeyPress(Sender: TObject; var Key: Char);
+var i,j,h,y,n,m:extended;
+begin
+ i:=0;
+ j:=0;
+ h:=0;
+ y:=0;
+ n:=0;
+ m:=0;
+
+ edsumost.Text:='';
+ edsump_ost.Text:='';
+ edobr_d.Text:='';
+ edobr_k.Text:='';
+ edpok_obr_d.Text:='';
+ edpok_obr_k.Text:='';
+if key=#13 then
+  begin
+      ac:='''and acc_no like'''+edacc_no.text+'%';
+      ba:='''and balcn1 like'''+edbalcn1.Text+'%';
+      ti:='''and tipacc like'''+'%'+uppercase(edtipacc.Text)+'%';
+      va:='''and val_acc='''+edval_acc.Text;
+
+      if edacc_no.Text = ''  then  ac:='';
+      if edbalcn1.Text = ''  then  ba:='';
+      if edtipacc.Text = ''  then  ti:='';
+      if edval_acc.Text= ''  then  va:='';
+end;
+
+end;
+{procedure tsdhesabat.oleshowe;
+begin
+ xlapp:='';
+  if oradatbook.RecordCount>0 then
+    begin
+          try
+             xlapp:=getactiveoleobject('Excel.Application');
+          except
+             olecontainer1.CreateObjectFromFile(oradatbook.fieldbyname('adress').AsString,false);
+             panel1.Visible:=true;
+          end;
+    end;
+end;  }
+
+procedure TSDHesabat.DBGrid1CellClick(Column: TColumn);
+ var lcap:integer;
+begin
+application.ProcessMessages;
+if oradatbook.RecordCount>0 then
+ begin
+ //dbgrid2.Columns[2].Title.caption:='Вяряг ады';
+ //lcap:=length(oradatbook.fieldbyname('Caption').AsString);
+
+
+ case lcap of
+  0..7 : dbgrid2.Columns[2].Title.caption:=dbgrid2.Columns[2].Title.caption+'    ('+uppercase(oradatbook.fieldbyname('caption').AsString)+')';
+  8..100: dbgrid2.Columns[2].Title.caption:=dbgrid2.Columns[2].Title.caption+'    ('+copy(uppercase(oradatbook.fieldbyname('caption').AsString),1,5)+'...)';
+ End;{case end}
+ with oradatsheet do
+   Begin
+        Close;
+        Sql.Clear;
+        sql.Text:='select s.rowid, s.* from sheet s where Book_caption='''+trim(oradatbook.FieldByName('Caption').asstring)+'''';
+        Open;
+        First;
+        sheetcount:=recordcount;
+   end;
+        dbgrid2.OnCellClick(dbgrid2.columns[1]);
+end;{if end}
+end;
+
+procedure tsdhesabat.unique ;
+const
+     fields1: array[0..3]  of string=('sell','debet','kredit','lcell');
+     fields2: array[0..2]  of string=('deb_val','kre_val','ekv');
+     fields3: array[0..13] of string=('brest','brest_ekv','brestin','brestin_ekv','tramt','tramt_ekv','payamt','payamt_ekv','payintamt','payintamt_ekv','erest','erest_ekv','eintrest','eintrest_ekv') ;
+     fields4: array[0..15] of string=('deq','deq_ekv','deqin','deqin_ekv','deok','deok_ekv','deokin','deokin_ekv','devk','devk_ekv','dsk','dsk_ekv','dskin','dskin_ekv','vkk','vkk_ekv') ;
+
+Var
+     book_cap,sheet_i,param:string;
+     i:integer;
+Function cell_format( var s:string): boolean;
+ var i:integer;
+begin
+   result:=false;
+   for i:=1 to length(s) do
+       if    (s[i] in ['0'..'9'])
+         and (s[i+1] in ['A'..'Z'])
+       then  Result:=true;
+end;
+begin
+book_cap:=oradatbook.fieldbyname('Caption').AsString;
+sheet_i:=oradatsheet.fieldbyname('Sheet_id').asstring;
+
+case un_check of
+ 0: begin
+         i:=0;
+         while i<4 do
+          Begin
+             param:='';
+             param:=oradatcell.Fieldbyname(fields1[i]).AsString;
+           //  showmessage(inttostr(i));
+             if cell_format(param) then
+             begin
+               lblinfo.Caption:='Excel formati deyil !';
+               abort;
+               //exit;
+            end;
+         with orapak do
+           Begin
+               if  CallBooleanFunction('check_unique',[book_cap,sheet_i,param])=false then
+                 Begin
+                    Yenile(vk_f5,[]);
+                  if  btncelladd.Caption='Təsdiqlə'     then    btnprovcelladd.Caption:='Əlavə Et';
+                  if  btnprovcelladd.Caption='Təsdiqlə' then    btnprovcelladd.Caption:='Əlavə Et';
+                      Showmessage('Daxil etdiyiniz xanadan var!');
+                      Abort;
+                 End;{if }
+          end;{with}
+         inc(i);
+         end;{while}
+      end;{0}
+ 1: Begin
+          i:=0;
+          while i<3 do
+           Begin
+            param:='';
+            param:=oradatprovcell.Fieldbyname(fields2[i]).AsString;
+            if cell_format(param)=false then
+            begin
+              showmessage('Еxcel xanasını düzgün yazın. Еxcel formatına uyğun deyil.');
+              Abort;
+            end;
+          with orapak do
+            Begin
+                 if  CallBooleanFunction('check_unique',[book_cap,sheet_i,param])=false then
+                  Begin
+                       Yenile(vk_f5,[]);
+                   if  btncelladd.Caption='Təsdiqlə'     then    btnprovcelladd.Caption:='Əlavə Et';
+                   if  btnprovcelladd.Caption='Təsdiqlə' then    btnprovcelladd.Caption:='Əlavə Et';
+                       showmessage('Daxil etdiyiniz xanadan var!');
+                       Abort;
+                  End;  {if }
+          end; {with}
+
+          inc(i);
+           end;{while}
+      end;   {1}
+ 2: Begin
+         i:=0;
+         while i<4 do
+          Begin
+             param:='';
+             param:=oradatcell.Fieldbyname(fields1[i]).AsString;
+          if cell_format(param)=false then
+          begin
+              showmessage('Еxcel xanasını düzgün yazın. Еxcel formatına uyğun deyil.');
+              Exit;
+          end;
+
+         inc(i);
+         end;{while}
+    end;{2}
+  3: begin
+         i:=0;
+          while i<3 do
+           Begin
+            param:='';
+            param:=oradatprovcell.Fieldbyname(fields2[i]).AsString;
+
+
+          inc(i);
+           end;{while}
+     end;{3}
+  4: begin
+           i:=0;
+           while i<14 do
+             begin
+                   param:='';
+                   param:=oradatdepcell.fieldbyname(fields3[i]).asstring;
+          
+               inc(i);
+          end;{while end}
+     end;{4 end}
+  5: begin
+           i:=0;
+           while i<16 do
+             begin
+                   param:='';
+                   param:=oradatkrecell.fieldbyname(fields4[i]).asstring;
+
+               inc(i);
+          end;{while end}
+     end;   
+ end;{case}     
+end;
+
+
+procedure TSDHesabat.DBGrid1KeyPress(Sender: TObject; var Key: Char);
+begin
+if key=#13 then
+  begin
+     dbgrid1.OnCellClick(dbgrid1.Columns[1]);
+  end;
+end;
+
+procedure TSDHesabat.DBGrid2CellClick(Column: TColumn);
+begin
+yenile(vk_f5,[]);
+end;
+
+procedure TSDHesabat.DBGrid2KeyPress(Sender: TObject; var Key: Char);
+begin
+if not (key in['0'..'9',#13,#27,#8]) then key:=#0;
+if key =#13 then
+  Begin
+    with oradatsheet do
+        Begin
+          Edit;
+          FieldByName('Nisbat').AsString:=FieldByName('Nisbat').AsString;
+          oradatsheet.FieldByName('sheet_id').AsString:=clip_shid;
+          oradatsheet.fieldbyname('caption').AsString:=clip_cap;
+          Post;
+          dbgrid2.Options:= [dgTitles,dgIndicator,dgColumnResize,dgColLines,dgRowLines,dgTabs,dgRowSelect,dgAlwaysShowSelection,dgConfirmDelete,dgCancelOnExit]
+        end;{with end}
+  end;{if end}
+        dbgrid2.OnCellClick(dbgrid2.columns[1]);
+end;
+
+procedure TSDHesabat.DBGrid3KeyPress(Sender: TObject; var Key: Char);
+begin
+//if (key =#13)  and (btnCellAdd.Caption='Тястигля') then   btnCellAdd.OnClick(self) ;
+//if (key =#13)  and (btnCellEdit.Caption='Тястигля') then   btnCellEdit.OnClick(self) ;
+if Key = #13 then
+   begin
+     if DBGrid3.Columns.Grid.SelectedIndex < DBGrid3.Columns.Count - 1 then
+       DBGrid3.Columns[DBGrid3.Columns.grid.SelectedIndex + 1].Field.FocusControl
+     else
+     begin
+       Oradatcell.Next;
+       DBGrid3.Columns[0].field.FocusControl;
+     end;
+   end;
+
+end;
+
+procedure TSDHesabat.btncellAddClick(Sender: TObject);
+ var j,k,l,Stop:integer;
+     ora:Toracledataset;
+     f,s,t,ft:string;
+begin
+dbgrid3.Fields[0].FocusControl;
+un_check:=0;
+if btncelladd.Caption='Əlavə Et' then   k:=0
+else k:=1;
+case k of
+0:begin
+       btncelladd.Caption:='';
+       btncelladd.Caption:='Təsdiqlə' ;
+       dbgrid3.Options:=[dgEditing,dgTitles,dgIndicator,dgColumnResize,dgColLines,dgRowLines,dgTabs,dgConfirmDelete,dgCancelOnExit];
+       ORADATCELL_EDIT;
+       oradatcell.First;
+       oradatcell.Insert;
+       oradatcell. FieldByName('Sheet_id').asinteger:=strtoint(oradatsheet.fieldbyname('sheet_id').AsString);
+       oradatcell. FieldByName('Book_caption').asstring:=oradatbook.FieldByName('Caption').asstring;
+       ADDPICKLIST_CELL;
+       btncelledit.Enabled:=false;
+       btncelldel.Enabled:=false;
+       btncellcalc.Enabled:=false;
+
+  end;  {Case End}
+
+1:begin
+      unique ;
+      btncelledit.Enabled:=true;
+      btncelldel.Enabled:=true;
+      btncellcalc.Enabled:=true;
+      dbgrid3.Options:=[dgTitles,dgIndicator,dgColumnResize,dgColLines,dgRowLines,dgTabs,dgConfirmDelete,dgCancelOnExit];
+
+     if (oradatcell.fieldbyname('CEll_Ekvivalent').AsString='') and (oradatcell.fieldbyname('CELL_VALYUTA').AsString='') then  l:=0;
+     if (oradatcell.fieldbyname('cell_valyuta').AsString=Trim('AZN')) and (oradatcell.fieldbyname('Filial').AsString='')  then l:=1;
+     if (oradatcell.fieldbyname('cell_valyuta').AsString<>Trim('AZN')) and  (oradatcell.fieldbyname('Filial').asstring<>'') and  (oradatcell.fieldbyname('CEll_Ekvivalent').AsString='')  then    l:=2;
+     if (oradatcell.fieldbyname('cell_valyuta').AsString<>Trim('AZN')) and (oradatcell.fieldbyname('CEll_Ekvivalent').AsString='pok_ostat')  then    l:=3;
+     if (oradatcell.fieldbyname('cell_valyuta').AsString=Trim('AZN')) and (oradatcell.fieldbyname('CEll_Ekvivalent').AsString='ostat')  then   l:=4 ;
+
+     case l of
+      0:begin
+         oradatcell.fieldbyname('CEll_Ekvivalent').AsString:='pok_ostat';
+         oradatcell.fieldbyname('cell_valyuta').AsString:=Trim('AZN');
+        end;
+      1: oradatcell.fieldbyname('CEll_Ekvivalent').AsString:='pok_ostat';
+      2: oradatcell.fieldbyname('CEll_Ekvivalent').AsString:='ostat';
+      3: oradatcell.fieldbyname('CEll_Ekvivalent').AsString:='pok_ostat';
+      4: oradatcell.fieldbyname('CEll_Ekvivalent').AsString:='ostat';
+     end; {Case End}
+       if oradatcell.FieldByName('filial').Asstring='' then
+         begin                                   
+              oradatcell.FieldByName('filial').Asstring:='Bütün Filiallar';
+         end;
+       with oradatcell do
+        Begin
+              If     (fieldbyname('sell').IsNull)
+                and  (fieldbyname('Debet').IsNull)
+                and  (fieldbyname('Kredit').IsNull)
+                and  (fieldbyname('Lcell').IsNull)
+                and  (fieldbyname('Cell_Balance').IsNull)
+                and  (fieldbyname('Cell_Account').IsNull)
+                and  (fieldbyname('Cell_Symbol').IsNull)
+                and  (fieldbyname('Reznorez').IsNull)
+
+             Then
+                 Begin
+                      btncelladd.Caption:='';
+                      btncelladd.Caption:='Əlavə Et' ;
+                      btncelledit.Enabled:=true;
+                      btncelldel.Enabled:=true;
+                      btncellcalc.Enabled:=true;
+                      screen.Cursor:=crdefault;
+                      YENILE(vk_f5,[]);
+                      Abort;
+                 End;
+
+
+
+
+              if     (FieldByName('sell').AsString='')
+                and  (FieldByName('Debet').AsString='')
+                and  (FieldByName('Kredit').AsString='')
+                and  (FieldByName('LCell').AsString='')
+             then
+
+               Begin
+                     Showmessage('Şablona düşəcək heç bir xana daxil edilməyib.');
+                     Yenile(vk_f5,[]);
+                     screen.Cursor:=crdefault;
+                     Abort;
+               End;
+
+
+               FieldByName('sell').AsString:=uppercase(oradatCell.FieldByName('sell').AsString);
+               FieldByName('debet').AsString:=uppercase(oradatCell.FieldByName('debet').AsString);
+               FieldByName('kredit').AsString:=uppercase(oradatCell.FieldByName('kredit').AsString);
+               FieldByName('lcell').AsString:=uppercase(oradatCell.FieldByName('lcell').AsString);
+               FieldByName('cell_valyuta').AsString:=uppercase(oradatCell.FieldByName('cell_valyuta').AsString);
+
+              Post;
+              Refresh;
+              btncelladd.Caption:='';
+              btncelladd.Caption:='Əlavə Et' ;
+       end; {with}
+
+              yenile(vk_f5,[]);
+    end;{1}
+ end;   {case end}
+end;
+procedure TSDHesabat.btncellEditClick(Sender: TObject);
+ var k:integer;
+     ora:Toracledataset;
+begin
+un_check:=2;
+if btncelledit.Caption='Redaktə Et' then
+   k:=0
+else
+   k:=1;
+case k of
+ 0:Begin
+    btncelledit.Caption:='';
+    btncelledit.Caption:='Təsdiqlə' ;
+    dbgrid3.Options:=[dgEditing,dgTitles,dgIndicator,dgColumnResize,dgColLines,dgRowLines,dgTabs,dgConfirmDelete,dgCancelOnExit];
+    posti:=oradatcell.RecNo;
+    ORADATCELL_EDIT;
+    oradatcell.RecNo:=posti;
+    oradatcell.Edit;
+    ADDPICKLIST_CELL;
+    btncelladd.Enabled:=false;
+    btncelldel.Enabled:=false;
+   end; {0}
+ 1:begin
+    With OradatCell do
+    Begin
+      FieldByName('sell').AsString:=uppercase(FieldByName('sell').AsString);
+      FieldByName('debet').AsString:=uppercase(FieldByName('debet').AsString);
+      FieldByName('kredit').AsString:=uppercase(FieldByName('kredit').AsString);
+      FieldByName('lcell').AsString:=uppercase(FieldByName('lcell').AsString);
+      Fieldbyname('cell_valyuta').asstring:=uppercase(FieldByName('cell_valyuta').AsString);
+      //Unique;
+      Post;
+      YENILE(vk_f5,[]);
+    end;{with}
+        btncelladd.Enabled:=true;
+        btncelldel.Enabled:=true;
+        btncelledit.Caption:='';
+        btncelledit.Caption:='Redaktə Et';
+        dbgrid3.Options:=[dgTitles,dgIndicator,dgColumnResize,dgColLines,dgRowLines,dgTabs,dgConfirmDelete,dgCancelOnExit];
+    end; {1}
+end;  {case}
+end;
+
+procedure TSDHesabat.btncelldelClick(Sender: TObject);
+begin
+ posti:=oradatcell.RecNo;
+ ORADATCELL_EDIT;
+ oradatcell.RecNo:=posti;
+if oradatcell.RecordCount>0 then
+if MessageDlg('Seçdiyiniz sətri silək?', mtConfirmation, [mbYes, mbNo], 0) = mrYes then
+     begin
+          oradatcell.delete;
+
+     end;
+            Yenile(vk_f5,[]);
+
+end;
+procedure TSDHesabat.btncellCalcClick(Sender: TObject);
+const
+     a: array[0..1] of string=('cell','provcell')    ;
+ var oradat: Toracledataset;
+     mypotok:ThSD;
+begin
+
+try
+// mypotok:=thsd.Create(true);   //CREATE PATOK
+// mypotok.Priority:=tpNormal;
+// mypotok.FreeOnTerminate := True;
+// mypotok.Resume;
+ btnbookcalc.Enabled:=false;
+// btncellcalc.Enabled:=false;
+ DoubleBuffered:=true;
+ oradat:=toracledataset.Create(self);
+ oradat.Session:=oradatbook.Session;
+  if     (cbp.Checked=false)
+     and (cbpr.checked=false)
+     //and (cbd.Checked=false)
+     //and (cbk.Checked=false)
+  then
+     Begin
+          showmessage('Heç bir əməliyyat seçilməyib');
+          Exit;
+     end;
+  screen.Cursor:=crappstart;
+
+  CONNECT_EXCEL;
+  XLApp.WorkBooks.Open(oradatbook.FieldByName('adress').asstring);
+  sheet:=0;
+
+  oradatsheet.Refresh;
+  oradatcell.Refresh;
+  oradatprovcell.Refresh;
+  //oradatdepcell.Refresh;
+  //oradatkrecell.Refresh;
+  pb.maxvalue:=sheetcount;
+  pb.Visible:=true;
+   //ShowMessage('1');
+  cellcount:=oradatcell.RecordCount+oradatprovcell.RecordCount;
+  pb1.Maxvalue:=cellcount;
+  oradatsheet.First;
+
+ while not oradatsheet.Eof do
+   Begin
+       cellcount:=0;
+       for i:=0 to 1 do
+         begin
+          with oradat do
+           begin
+            close;
+            sql.Clear;
+            sql.Text:='Select count(*) as count_cell from '+a[i] + ' where sheet_id='+oradatsheet.fieldbyname('sheet_id').Asstring+'and Book_Caption='''+oradatbook.fieldbyname('Caption').AsString+'''';
+            open;
+            cellcount:=cellcount+fieldbyname('count_cell').asinteger;
+          end;  {with end}
+       end;{for end}
+
+       application.ProcessMessages;
+       //dbgrid2.OnCellClick(dbgrid2.Columns[1]);
+       Sheet:=oradatsheet.fieldbyname('Sheet_Id').AsInteger;
+       NisNumber:=oradatsheet.fieldbyname('Nisbat').AsInteger;
+       application.ProcessMessages;
+       pb.Progress:=pb.Progress+1;
+  if cbp.Checked then
+    Begin
+
+        pagecontrol1.ActivePageIndex:=0;
+        ORADATCELL_EDIT;
+        posti:=oradatcell.RecNo;
+      While not oradatcell.Eof do
+         begin
+          pb1.Visible:=True;
+
+          try
+
+          CELL;          {-----calculate  cell ----------}
+         // ShowMessage('3');
+          except
+            //showmessage('Галыглар щесабланмады!');
+          end;
+          ORADATCELL_EDIT;
+          oradatcell.recno:=posti;
+          oradatcell.Next;
+          posti:=oradatcell.RecNo;
+          pb1.progress:=pb1.Progress+1;
+           //memo3.Text:=oradatcell.SQL.Text;
+         end;  {while}
+
+      End;  {if}
+ { if cbpr.Checked then
+   begin
+        pagecontrol1.ActivePageIndex:=1;
+        ORADATPROVCELL_EDIT;
+        posti:=oradatprovcell.RecNo;
+     While not oradatprovcell.Eof do
+         begin
+          pb1.Visible:=True;
+          try
+          PROVCELL;
+          except
+            showmessage('Emeliyyat hesablanmadi');
+          end;
+          ORADATPROVCELL_EDIT;
+          oradatprovcell.recno:=posti;
+          oradatprovcell.Next;
+          posti:=oradatprovcell.RecNo;
+          pb1.progress:=pb1.Progress+1;
+         end;
+  End;
+
+  {if cbd.Checked then
+   begin
+         pagecontrol1.ActivePageIndex:=2;
+         ORADATDEPCELL_EDIT;
+         posti:=oradatdepcell.RecNo;
+     While not oradatdepcell.Eof do
+         begin
+          pb1.Visible:=True;
+         try
+          DEPCELL;
+         except
+            showmessage('Depozit hesablanmadi');
+          end;
+          ORADATDEPCELL_EDIT;
+          oradatdepcell.recno:=posti;
+          oradatdepcell.Next;
+          posti:=oradatdepcell.RecNo;
+          pb1.progress:=pb1.Progress+1;
+         end;
+   end;
+
+ { if cbk.Checked then
+   begin
+         pagecontrol1.ActivePageIndex:=3;
+         ORADATkreCELL_EDIT;
+         posti:=oradatkrecell.RecNo;
+     While not oradatkrecell.Eof do
+         begin
+          pb1.Visible:=True;
+         try
+           KRECELL;
+         except
+           showmessage('Kredit hesablanmadi.');
+          end;
+          ORADATkreCELL_EDIT;
+          oradatkrecell.recno:=posti;
+          oradatkrecell.Next;
+          posti:=oradatkrecell.RecNo;
+          pb1.progress:=pb1.Progress+1;
+         end;
+   end;  }
+          application.ProcessMessages;
+          pb1.Progress:=0;
+          if cellcount>0 then
+             begin
+              xlapp.activeworkbook.worksheets[sheet].select;
+             end ;
+          oradatsheet.Next;
+          dbgrid2.OnCellClick(dbgrid2.Columns[1]);
+  end; {while end}
+
+       pb.Progress:=0;
+    //   pb.Visible:=false;
+    //   pb1.Visible:=false;
+       XLApp.Visible:=true;
+       Xlapp:=Unassigned;
+       Xlapp1.Disconnect;
+       Screen.Cursor:=crDefault;
+//End;
+//finally
+  btnbookcalc.Enabled:=true;
+//end;
+except
+  xlapp:= unassigned;
+  xlapp1.Disconnect;
+  xlapp1.Quit;
+end;
+cmbbooknameclick(Sender);
+end;
+
+procedure TSDHesabat.btnSheetCalcClick(Sender: TObject);
+begin
+if     not(cbp.Checked)
+   and not(cbpr.checked)
+   //and not(cbd.Checked)
+   then
+  Begin
+          showmessage('Heç bir əməliyyat seçilməyib');
+          Exit;
+  end;
+
+ Screen.Cursor:=crappstart;
+ CONNECT_EXCEL;
+ oradatcell.Refresh;
+ oradatprovcell.Refresh;
+ oradatdepcell.Refresh;
+ oradatkrecell.Refresh;
+ sheet:=oradatsheet.fieldbyname('Sheet_id').asinteger;
+ nisnumber:=oradatsheet.fieldbyname('Nisbat').asinteger;
+ Pb.maxvalue:=sheetcount;
+ cellcount:=oradatcell.RecordCount+oradatprovcell.RecordCount+oradatdepcell.RecordCount;
+ pb1.Maxvalue:=cellcount;
+
+if cbp.Checked then
+ Begin
+    pagecontrol1.ActivePageIndex:=0;
+    ORADATCELL_EDIT;
+    posti:=oradatcell.RecNo;
+    while not oradatcell.Eof do
+         begin
+          pb1.Visible:=True;
+          CELL;                         {-----calculate  cell ----------}
+          ORADATCELL_EDIT;
+          oradatcell.recno:=posti;
+          oradatcell.Next;
+          posti:=oradatcell.RecNo;
+          pb1.progress:=pb1.Progress+1;
+        End;
+ end;
+
+if cbpr.Checked then
+begin
+    pagecontrol1.ActivePageIndex:=1;
+    ORADATPROVCELL_EDIT;
+    posti:=oradatprovcell.RecNo;
+    while not oradatprovcell.Eof do
+       begin
+          pb1.Visible:=True;
+          PROVCELL;                         {-----calculate  cell ----------}
+          ORADATPROVCELL_EDIT;
+          oradatprovcell.recno:=posti;
+          oradatprovcell.Next;
+          posti:=oradatprovcell.RecNo;
+          pb1.progress:=pb1.Progress+1;
+        End;
+ End;
+//if cbd.Checked then
+{ begin
+     pagecontrol1.ActivePageIndex:=2;
+     oradatdepcell_edit;
+     posti:=oradatdepcell.RecNo;
+      while not oradatdepcell.Eof do
+        begin
+            pb1.Visible:=true;
+            depcell;
+            oradatdepcell_edit;
+            oradatdepcell.RecNo:=posti;
+            oradatdepcell.Next;
+            posti:=oradatdepcell.RecNo;
+            pb1.Progress:=pb1.Progress+1;
+        end;
+ end; }
+{if cbk.Checked then
+ begin
+     pagecontrol1.ActivePageIndex:=3;
+     oradatkrecell_edit;
+     posti:=oradatkrecell.RecNo;
+      while not oradatkrecell.Eof do
+        begin
+            pb1.Visible:=true;
+            krecell;
+            oradatkrecell_edit;
+            oradatkrecell.RecNo:=posti;
+            oradatkrecell.Next;
+            posti:=oradatkrecell.RecNo;
+            pb1.Progress:=pb1.Progress+1;
+        end;
+ end; }
+
+ pb1.Progress:=0;
+ pb1.Visible:=false;
+
+ xlapp.activeworkbook.worksheets[sheet].select;
+ XLApp.Visible:=true;
+ xlapp:=Unassigned;
+ xlapp1.Disconnect;
+ Screen.Cursor:=crdefault;
+ Dbgrid2.OnCellClick(dbgrid2.columns[1]);
+
+end;
+
+procedure TSDHesabat.btnBookCalcClick(Sender: TObject);
+ const
+     a: array[0..1] of string=('cell','provcell')    ;
+ var oradat: Toracledataset;
+     mypotok:ThSD;
+begin
+   StartDate := integer(trunc(DTP.DateTime));
+   FinDate := integer(trunc(DTP1.DateTime));
+
+
+
+
+
+  { with SBCM_REPORT do
+   begin
+       CallProcedure('prepare_sddata',[StartDate,FinDate,v_StartDate,v_FinDate]);
+       r_StartDate := GetParameter(2);
+       r_FinDate := GetParameter(3);
+       CallProcedure('ins_report_sd',[r_StartDate,r_FinDate]);
+   end;   }
+
+
+       {     with cm_sd do
+   begin
+       CallProcedure('prepare_sddata',[StartDate,FinDate,v_StartDate,v_FinDate]);
+       r_StartDate := GetParameter(2);
+       r_FinDate := GetParameter(3);
+       CallProcedure('ins_report_sd',[r_StartDate,r_FinDate]);
+   end;     }
+
+
+
+try
+// mypotok:=thsd.Create(true);   //CREATE PATOK
+// mypotok.Priority:=tpNormal;
+// mypotok.FreeOnTerminate := True;
+// mypotok.Resume;
+ btnbookcalc.Enabled:=false;
+ DoubleBuffered:=true;
+ oradat:=toracledataset.Create(self);
+ oradat.Session:=oradatbook.Session;
+  if     (cbp.Checked=false)
+     and (cbpr.checked=false)
+     //and (cbd.Checked=false)
+    // and (cbk.Checked=false)
+  then
+     Begin
+          showmessage('Heç bir əməliyyat seçilməyib');
+          Exit;
+     end;
+  screen.Cursor:=crappstart;
+  CONNECT_EXCEL;
+  XLApp.WorkBooks.Open(oradatbook.FieldByName('adress').asstring);
+  sheet:=0;
+ // oradatsheet.Refresh;
+  //oradatcell.Refresh;
+ //oradatprovcell.Refresh;
+ // oradatdepcell.Refresh;
+ // oradatkrecell.Refresh;
+  pb.maxvalue:=sheetcount;
+  pb.Visible:=true;
+
+  cellcount:=oradatcell.RecordCount+oradatprovcell.RecordCount;
+  pb1.Maxvalue:=cellcount;
+  oradatsheet.First;
+ while not oradatsheet.Eof do
+   Begin
+       cellcount:=0;
+       for i:=0 to 3 do
+         begin
+          with oradat do
+           begin
+            close;
+            sql.Clear;
+            sql.Text:='Select count(*) as count_cell from '+a[i] + ' where sheet_id='+oradatsheet.fieldbyname('sheet_id').Asstring+'and Book_Caption='''+oradatbook.fieldbyname('Caption').AsString+'''';
+            open;
+            cellcount:=cellcount+fieldbyname('count_cell').asinteger;
+          end;  {with end}
+       end;{for end}
+
+       application.ProcessMessages;
+       dbgrid2.OnCellClick(dbgrid2.Columns[1]);
+       Sheet:=oradatsheet.fieldbyname('Sheet_Id').AsInteger;
+       NisNumber:=oradatsheet.fieldbyname('Nisbat').AsInteger;
+       application.ProcessMessages;
+       pb.Progress:=pb.Progress+1;
+  if cbp.Checked then
+    Begin
+        pagecontrol1.ActivePageIndex:=0;
+        ORADATCELL_EDIT;
+        posti:=oradatcell.RecNo;
+      While not oradatcell.Eof do
+         begin
+          pb1.Visible:=True;
+          try
+          CELL;          {-----calculate  cell ----------}
+
+          except
+           // showmessage('Галыглар щесабланмады');
+          end;
+          ORADATCELL_EDIT;
+          oradatcell.recno:=posti;
+          oradatcell.Next;
+          posti:=oradatcell.RecNo;
+          pb1.progress:=pb1.Progress+1;
+
+         end;  {while}
+
+      End;  {if}
+  if cbpr.Checked then
+   begin
+        pagecontrol1.ActivePageIndex:=1;
+        ORADATPROVCELL_EDIT;
+        posti:=oradatprovcell.RecNo;
+     While not oradatprovcell.Eof do
+         begin
+          pb1.Visible:=True;
+          try
+          PROVCELL;  {-----calculate  cell ----------}
+          except
+            //showmessage('Ямялиййатлар щесабланмады!');
+          end;
+          ORADATPROVCELL_EDIT;
+          oradatprovcell.recno:=posti;
+          oradatprovcell.Next;
+          posti:=oradatprovcell.RecNo;
+          pb1.progress:=pb1.Progress+1;
+         end;  {while}
+  End;   {if}
+
+ { if cbd.Checked then
+   begin
+         pagecontrol1.ActivePageIndex:=2;
+         ORADATDEPCELL_EDIT;
+         posti:=oradatdepcell.RecNo;
+     While not oradatdepcell.Eof do
+         begin
+          pb1.Visible:=True;
+         try
+          DEPCELL;  {-----calculate  cell ----------}
+      {   except
+            //showmessage('Depozit щесабланмады!');
+          end;
+          ORADATDEPCELL_EDIT;
+          oradatdepcell.recno:=posti;
+          oradatdepcell.Next;
+          posti:=oradatdepcell.RecNo;
+          pb1.progress:=pb1.Progress+1;
+         end;  {while}
+ {  end; }
+
+  {if cbk.Checked then
+   begin
+         pagecontrol1.ActivePageIndex:=3;
+         ORADATkreCELL_EDIT;
+         posti:=oradatkrecell.RecNo;
+     While not oradatkrecell.Eof do
+         begin
+          pb1.Visible:=True;
+         //try
+           KRECELL;  {-----calculate  cell ----------}
+         //except
+           //showmessage('Kredit щесабланмады!');
+         // end;
+         { ORADATkreCELL_EDIT;
+          oradatkrecell.recno:=posti;
+          oradatkrecell.Next;
+          posti:=oradatkrecell.RecNo;
+          pb1.progress:=pb1.Progress+1;
+         end;}  {while}
+   {end;}
+          application.ProcessMessages;
+          pb1.Progress:=0;
+          if cellcount>0 then
+             begin
+              xlapp.activeworkbook.worksheets[sheet].select;
+             end ;
+          oradatsheet.Next;
+          dbgrid2.OnCellClick(dbgrid2.Columns[1]);
+  end; {while end}
+
+       pb.Progress:=0;
+   //    pb.Visible:=false;
+   //    pb1.Visible:=false;
+       XLApp.Visible:=true;
+       Xlapp:=Unassigned;
+       Xlapp1.Disconnect;
+       Screen.Cursor:=crDefault;
+//End;
+//finally
+  btnbookcalc.Enabled:=true;
+//end;
+except
+  xlapp:= unassigned;
+  xlapp1.Disconnect;
+  xlapp1.Quit;
+end;
+cmbbooknameclick(Sender);
+end;
+
+procedure TSDHesabat.btnBookAddClick(Sender: TObject);
+var i,j:integer;
+begin
+if odialog.Execute then
+ begin
+  With oradatbook do
+   begin
+     close;
+     open;
+      for i:=0 to recordcount do
+       Begin
+         if trim(FieldByName('adress').asstring)=trim(ODialog.FileName) then
+           begin
+               screen.Cursor:=crdefault;
+               exit;
+           end;
+     Next;
+       end;
+       if ODialog.FileName<>'' then
+        Begin
+          application.ProcessMessages;
+          close;
+          Open;
+          Insert;
+          FieldByName('Adress').asstring:=ODialog.FileName;
+          FieldByName('Caption').asstring:=trim(ExtractFileName(copy(ODialog.FileName,1,pos('.',ODialog.FileName)-1)));
+          OraDatSheet.FieldByName('Book_Caption').asstring:=FieldByName('Caption').asstring;
+          Post;
+       End
+     else
+        begin
+          screen.Cursor:=crdefault;
+          Exit;
+        end;
+  end;
+
+      screen.Cursor:=crappstart;
+      application.ProcessMessages;
+      try
+        xlapp1.Connect;
+        Xlapp:=GetActiveOleObject('Excel.Application') ;
+      Except
+      showmessage('Excel export etmək mümkün deyil!');
+      End;
+
+      XLApp.DisplayAlerts:=False;
+      XLApp.WorkBooks.Open(oradatbook.FieldByName('Adress').asstring);
+
+      sheetcount:=XLApp.Worksheets.count;
+       for  j:=1 to sheetcount do
+          with oradatsheet do
+            begin
+              close;
+              open;
+              insert;
+              Fieldbyname('Sheet_Id').asstring:=inttostr(j);
+              FieldByName('Caption').asstring:=XLApp.ActiveWorkBook.Sheets[j].Name;
+              FieldByName('Book_caption').asstring:=trim(oradatbook.FieldByName('Caption').asstring);
+              FieldByName('Nisbat').asinteger:=strtoint('1');
+              Post;
+              oradatsheet.Next;
+            end;
+                 screen.Cursor:=crdefault;
+                try
+                    XLApp.ActiveWorkBook.SaveAs(oradatbook.FieldByName('adress').asstring);
+                Except
+                      Showmessage('Can`t saved in Excel file. It may be Protected');
+                End;
+    dbgrid1.OnCellClick(dbgrid1.Columns.Items[1]);
+    dbgrid2.OnCellClick(dbgrid2.Columns.Items[1]);
+    readbookname;
+  try
+    xlapp:=Unassigned;
+    xlapp1.Disconnect;
+    xlapp1.Quit;
+
+  except
+       showmessage('error');
+  end;
+end;
+
+end;
+
+procedure TSDHesabat.btnBookDelClick(Sender: TObject);
+begin
+{if oradatbook.RecordCount>0 then
+begin
+
+if MessageDlg('Сечдийиниз '+oradatbook.fieldbyname('caption').AsString+ ' шаблонуну силяк?', mtConfirmation, [mbYes, mbNo], 0) = mrYes then
+ begin
+    application.ProcessMessages;
+      with oradatcell do
+       Begin
+        Close;
+        Sql.Clear;
+        Sql.Text:='Select s.rowid,s.* from CELL s where Book_Caption='''+oradatbook.fieldbyname('Caption').AsString+'''';
+        Open;
+        //showmessage(sql.text+'1');
+        First;
+             while  recordcount>0 do
+               Delete;
+               Next;
+       end;
+     with oradatprovcell do
+       Begin
+        Close;
+        Sql.Clear;
+        Sql.Text:='Select s.rowid,s.* from PROVCELL s where Book_Caption='''+oradatbook.fieldbyname('Caption').AsString+'''';
+        Open;
+       // showmessage(sql.text+'2');
+        First;
+             while  recordcount>0 do
+               Delete;
+               Next;
+       end;
+
+      with oradatdepcell do
+       Begin
+        Close;
+        Sql.Clear;
+        Sql.Text:='Select s.rowid,s.* from DEPCELL s where Book_Caption='''+oradatbook.fieldbyname('Caption').AsString+'''';
+        Open;
+        //showmessage(sql.text+'2');
+        First;
+             while  recordcount>0 do
+               Delete;
+               Next;
+       end;
+
+      with oradatkrecell do
+       Begin
+        Close;
+        Sql.Clear;
+        Sql.Text:='Select s.rowid,s.* from KRECELL s where Book_Caption='''+oradatbook.fieldbyname('Caption').AsString+'''';
+        Open;
+      //  showmessage(sql.text+'2');
+        First;
+             while  recordcount>0 do
+               Delete;
+               Next;
+       end;
+      with oradatSheet do
+       Begin
+        Close;
+        Sql.Clear;
+        Sql.Text:='Select s.rowid,s.* from SHEET s where Book_Caption='''+oradatbook.fieldbyname('Caption').AsString+'''';
+        Open;
+        //showmessage(sql.text+'2');
+        First;
+             while recordcount>0 do
+               Delete;
+               Next;
+      end;
+     with oradat do
+      Begin
+       Close;
+       Sql.Clear;
+       Sql.Text:='select  rowid,caption,adress from BOOK  where Caption='''+oradatbook.fieldbyname('Caption').asstring+'''';
+       Open;
+      // showmessage(sql.text+'2');
+       First;
+            while recordcount>0 do
+                 Delete;
+                 Next;
+     end;
+        // showmessage('ok1');
+            Yenile(vk_f5,[]);
+         //  showmessage('ok2');
+           oradatbook.close;
+           oradatbook.Open;
+          readbookname;
+           dbgrid1.OnCellClick(dbgrid1.columns[1]);
+          //showmessage('ok3');
+ end
+ELSE
+     Exit;
+end;
+end;
+ }
+ with oradatbook do begin
+ delete;
+ end;
+end;
+procedure TSDHesabat.DBGrid3CellClick(Column: TColumn);
+begin
+{application.HintColor:=clinfobk;
+application.HintPause:=1;
+application.HintHidePause:=3000;
+dbgrid3.ShowHint:=true;
+dbgrid3.Hint:='';
+dbgrid3.Hint:=oradatcell.FieldByName(dbgrid3.SelectedField.DisplayName).AsString;
+ }
+end;
+
+
+procedure TSDHesabat.btnprovcelladdClick(Sender: TObject);
+var k,l:integer;
+begin
+dbgrid5.Fields[0].FocusControl;
+un_check:=1;
+if btnprovcelladd.Caption='Əlavə Et' then   k:=0
+   else k:=1;
+
+case k of
+0:begin
+       btnprovcelladd.Caption:='';
+       btnprovcelladd.Caption:='Təsdiqlə' ;
+       btnprovcelledit.Enabled:=false;
+       btnprovcelldel.Enabled:=false;
+       btnprovcellcalc.Enabled:=false;
+       dbgrid5.Options:=[dgEditing,dgTitles,dgIndicator,dgColumnResize,dgColLines,dgRowLines,dgTabs,dgConfirmDelete,dgCancelOnExit];
+
+       ORADATPROVCELL_EDIT;
+       oradatprovcell.First;
+       oradatprovcell.Insert;
+       oradatprovCell.FieldByName('Sheet_id').asinteger:=strtoint(dbgrid2.Fields[1].Text);
+       oradatprovCell.FieldByName('Book_caption').asstring:=oradatbook.FieldByName('Caption').asstring;
+       ADDPICKLIST_PROVCELL;
+  end;  {0 End}
+1:begin
+      if oradatprovcell.FieldByName('deb_filial').Asstring='' then
+         begin
+              oradatprovcell.FieldByName('deb_filial').Asstring:='Bütün filiallar';
+         end;
+      if oradatprovcell.FieldByName('kre_filial').Asstring='' then
+         begin
+              oradatprovcell.FieldByName('kre_filial').Asstring:='Bütün filiallar';
+         end;
+      with oradatprovcell do
+        Begin
+
+
+                  if     (FieldByName('deb_val').IsNull)
+                     and (Fieldbyname('kre_val').IsNull)
+                     and (Fieldbyname('ekv').IsNull)
+                     and (Fieldbyname('deb_balcn1').IsNull)
+                     and (FieldByName('deb_accno').Isnull)
+                     and (Fieldbyname('deb_simvol').IsNull)
+                     and (Fieldbyname('deb_rez').IsNull)
+                     and (Fieldbyname('deb_filial').IsNull)
+                     and (Fieldbyname('deb_valyuta').IsNull)
+                     and (Fieldbyname('kre_balcn1').IsNull)
+                     and (FieldByName('kre_accno').Isnull)
+                     and (Fieldbyname('kre_simvol').IsNull)
+                     and (Fieldbyname('kre_rez').IsNull)
+                     and (Fieldbyname('kre_filial').IsNull)
+                     and (Fieldbyname('kre_valyuta').IsNull)
+                then
+                   begin
+                        btnprovcelladd.Caption:='';
+                        btnprovcelladd.Caption:='?lav? Et';
+                        btnprovcelledit.Enabled:=true;
+                        btnprovcelldel.Enabled:=true;
+                        btnprovcellcalc.Enabled:=true;
+                        Yenile(vk_f5,[]);
+                        screen.Cursor:=crdefault;
+                        Abort;
+                   end;
+
+                 if    (FieldByName('deb_val').AsString='')
+                   and (FieldByName('kre_val').AsString='')
+                   and (FieldByName('ekv').AsString='')
+                 then
+                   Begin
+                     showmessage('Şablona düşəcək xana daxil edilməyib.');
+                     Abort;
+                   End;
+
+
+           FieldByName('deb_val').AsString:=uppercase(oradatprovCell.FieldByName('deb_val').AsString);
+           FieldByName('kre_val').AsString:=uppercase(oradatprovCell.FieldByName('kre_val').AsString);
+           FieldByName('ekv').AsString:=uppercase(oradatprovCell.FieldByName('ekv').AsString);
+           //  FieldByName('deb_valyuta').AsString:=uppercase(oradatCell.FieldByName('deb_valyuta').AsString);
+           //    FieldByName('kre_valyuta').AsString:=uppercase(oradatCell.FieldByName('kre_valyuta').AsString);
+
+          // UNIQUE;
+           Post;
+           Refresh;
+           YENILE(VK_F5,[]);
+           btnprovcelladd.Caption:='';
+           btnprovcelladd.Caption:='Əlavə Et' ;
+           btnprovcelledit.Enabled:=true;
+           btnprovcelldel.Enabled:=true;
+           btnprovcellcalc.Enabled:=true;
+           dbgrid5.Options:=[dgTitles,dgIndicator,dgColumnResize,dgColLines,dgRowLines,dgTabs,dgConfirmDelete,dgCancelOnExit];
+       End;
+  end; {1 end}
+end;{case end}
+end;
+
+procedure TSDHesabat.DBGrid5CellClick(Column: TColumn);
+begin
+application.HintColor:=clinfobk;
+application.HintPause:=1;
+application.HintHidePause:=3000;
+dbgrid5.ShowHint:=true;
+dbgrid5.Hint:=oradatprovcell.FieldByName(dbgrid5.SelectedField.DisplayName).AsString;
+end;
+
+procedure TSDHesabat.DBGrid5KeyPress(Sender: TObject; var Key: Char);
+begin
+//if (key =#13)  and (btnProvCellAdd.Caption='Тястигля')  then   btnProvCellAdd.OnClick(self) ;
+//if (key =#13)  and (btnProvCellEdit.Caption='Тястигля') then   btnProvCellEdit.OnClick(self) ;
+if Key = #13 then
+   begin
+     if DBGrid5.Columns.Grid.SelectedIndex < DBGrid5.Columns.Count - 1 then
+       DBGrid5.Columns[DBGrid5.Columns.grid.SelectedIndex + 1].Field.FocusControl
+     else
+     begin
+       Oradatcell.Next;
+       DBGrid5.Columns[0].field.FocusControl;
+     end;
+   end;
+
+end;
+
+procedure TSDHesabat.btnprovcelleditClick(Sender: TObject);
+var k:integer;
+begin
+un_check:=3;
+if btnprovcelledit.Caption='Redaktə Et' then  k:=0
+   else  k:=1;
+
+case k of
+ 0:Begin
+    btnprovcelledit.Caption:='';
+    btnprovcelledit.Caption:='Təsdiqlə' ;
+    dbgrid5.Options:=[dgEditing,dgTitles,dgIndicator,dgColumnResize,dgColLines,dgRowLines,dgTabs,dgConfirmDelete,dgCancelOnExit];
+    Posti:=oradatprovcell.RecNo;
+    oradatprovcell_edit;
+    oradatprovcell.Edit;
+    oradatprovcell.RecNo:=Posti;
+    ADDPICKLIST_PROVCELL;
+    btnprovcelladd.Enabled:=false;
+    btnprovcelldel.Enabled:=false;
+   end; {Case end}
+
+ 1:begin
+
+       With OradatProvCell do
+       Begin
+         oradatprovcell.edit;
+         FieldByName('deb_val').AsString:=uppercase(oradatprovCell.FieldByName('deb_val').AsString);
+         FieldByName('kre_val').AsString:=uppercase(oradatprovCell.FieldByName('kre_val').AsString);
+         FieldByName('ekv').AsString:=uppercase(oradatprovCell.FieldByName('ekv').AsString);
+          // FieldByName('deb_valyuta').AsString:=uppercase(oradatCell.FieldByName('deb_valyuta').AsString);
+          //     FieldByName('kre_valyuta').AsString:=uppercase(oradatCell.FieldByName('kre_valyuta').AsString);
+
+       //  showmessage('1');
+         oradatprovcell.Post;
+       //  showmessage('2');
+         yenile(vk_f5,[]);
+       //  showmessage('3');
+       End;
+    btnprovcelladd.Enabled:=true;
+    btnprovcelldel.Enabled:=true;
+    btnprovcelledit.Caption:='';
+    btnprovcelledit.Caption:='Redaktə Et';
+    dbgrid5.Options:=[dgTitles,dgIndicator,dgColumnResize,dgColLines,dgRowLines,dgTabs,dgConfirmDelete,dgCancelOnExit];
+
+   end
+ end;{Case END}
+
+end;
+ //........................................................//
+procedure TSDHesabat.btnprovcelldelClick(Sender: TObject);
+begin
+posti:=oradatprovcell.RecNo;
+ORADATPROVCELL_EDIT;
+oradatprovcell.RecNo:=Posti;
+if oradatprovcell.RecordCount>0 then
+  begin
+   if MessageDlg('Seçdiyiniz sətri silək?', mtConfirmation, [mbYes, mbNo], 0) = mrYes then
+      begin
+        oradatProvcell.Delete;
+
+      End;
+            yenile(vk_f5,[]);
+ end;
+end;
+
+procedure TSDHesabat.btnprovcellcalcClick(Sender: TObject);
+const
+     a: array[0..1] of string=('cell','provcell')    ;
+ var oradat: Toracledataset;
+     mypotok:ThSD;
+begin
+////memo1.Clear;
+try
+// mypotok:=thsd.Create(true);   //CREATE PATOK
+// mypotok.Priority:=tpNormal;
+// mypotok.FreeOnTerminate := True;
+// mypotok.Resume;
+ btnbookcalc.Enabled:=false;
+ DoubleBuffered:=true;
+ oradat:=toracledataset.Create(self);
+ oradat.Session:=oradatbook.Session;
+  if     (cbp.Checked=false)
+     and (cbpr.checked=false)
+    // and (cbd.Checked=false)
+     //and (cbk.Checked=false)
+  then
+     Begin
+          showmessage('Heç bir əməliyyat seçilməyib');
+          Exit;
+     end;
+  screen.Cursor:=crappstart;
+  CONNECT_EXCEL;
+  XLApp.WorkBooks.Open(oradatbook.FieldByName('adress').asstring);
+  sheet:=0;
+  oradatsheet.Refresh;
+  oradatcell.Refresh;
+  oradatprovcell.Refresh;
+  //oradatdepcell.Refresh;
+  //oradatkrecell.Refresh;
+  pb.maxvalue:=sheetcount;
+  pb.Visible:=true;
+
+  cellcount:=oradatcell.RecordCount+oradatprovcell.RecordCount;
+  pb1.Maxvalue:=cellcount;
+  oradatsheet.First;
+  //........................................................//
+ while not oradatsheet.Eof do
+   Begin
+       cellcount:=0;
+       for i:=0 to 1 do
+         begin
+          with oradat do
+           begin
+            close;
+            sql.Clear;
+            sql.Text:='Select count(*) as count_cell from '+a[i] + ' where sheet_id='+oradatsheet.fieldbyname('sheet_id').Asstring+'and Book_Caption='''+oradatbook.fieldbyname('Caption').AsString+'''';
+            open;
+            cellcount:=cellcount+fieldbyname('count_cell').asinteger;
+          end;  {with end}
+       end;{for end}
+  //........................................................//
+       application.ProcessMessages;
+       dbgrid2.OnCellClick(dbgrid2.Columns[1]);
+       Sheet:=oradatsheet.fieldbyname('Sheet_Id').AsInteger;
+       NisNumber:=oradatsheet.fieldbyname('Nisbat').AsInteger;
+       application.ProcessMessages;
+       pb.Progress:=pb.Progress+1;
+ { if cbp.Checked then
+    Begin
+        pagecontrol1.ActivePageIndex:=0;
+        ORADATCELL_EDIT;
+        posti:=oradatcell.RecNo;
+      While not oradatcell.Eof do
+         begin
+          pb1.Visible:=True;
+          try
+          CELL;
+
+          except
+            showmessage('Qaliqlar hesablanmadi');
+          end;
+          ORADATCELL_EDIT;
+          oradatcell.recno:=posti;
+          oradatcell.Next;
+          posti:=oradatcell.RecNo;
+          pb1.progress:=pb1.Progress+1;
+
+         end;
+
+      End; }
+  if cbpr.Checked then
+   begin
+        pagecontrol1.ActivePageIndex:=1;
+        ORADATPROVCELL_EDIT;
+        posti:=oradatprovcell.RecNo;
+     While not oradatprovcell.Eof do
+         begin
+          pb1.Visible:=True;
+        
+         try
+          PROVCELL;
+          except
+         //   showmessage('Emeliyyat hesablanmadi');
+          end;
+
+          ORADATPROVCELL_EDIT;
+          oradatprovcell.recno:=posti;
+          oradatprovcell.Next;
+          posti:=oradatprovcell.RecNo;
+          pb1.progress:=pb1.Progress+1;
+         end;
+  End;
+
+  {if cbd.Checked then
+   begin
+         pagecontrol1.ActivePageIndex:=2;
+         ORADATDEPCELL_EDIT;
+         posti:=oradatdepcell.RecNo;
+     While not oradatdepcell.Eof do
+         begin
+          pb1.Visible:=True;
+         try
+          DEPCELL;
+         except
+            showmessage('Depozit hesablanmadi');
+          end;
+          ORADATDEPCELL_EDIT;
+          oradatdepcell.recno:=posti;
+          oradatdepcell.Next;
+          posti:=oradatdepcell.RecNo;
+          pb1.progress:=pb1.Progress+1;
+         end;
+   end;
+
+ { if cbk.Checked then
+   begin
+         pagecontrol1.ActivePageIndex:=3;
+         ORADATkreCELL_EDIT;
+         posti:=oradatkrecell.RecNo;
+     While not oradatkrecell.Eof do
+         begin
+          pb1.Visible:=True;
+         try
+           KRECELL;
+         except
+           showmessage('Kredit hesablanmadi.');
+          end;
+          ORADATkreCELL_EDIT;
+          oradatkrecell.recno:=posti;
+          oradatkrecell.Next;
+          posti:=oradatkrecell.RecNo;
+          pb1.progress:=pb1.Progress+1;
+         end;
+   end;  }
+          application.ProcessMessages;
+          pb1.Progress:=0;
+          if cellcount>0 then
+             begin
+              xlapp.activeworkbook.worksheets[sheet].select;
+             end ;
+          oradatsheet.Next;
+          dbgrid2.OnCellClick(dbgrid2.Columns[1]);
+  end; {while end}
+
+       pb.Progress:=0;
+   //    pb.Visible:=false;
+   //    pb1.Visible:=false;
+       XLApp.Visible:=true;
+       Xlapp:=Unassigned;
+       Xlapp1.Disconnect;
+       Screen.Cursor:=crDefault;
+//End;
+//finally
+  btnbookcalc.Enabled:=true;
+//end;
+except
+  xlapp:= unassigned;
+  xlapp1.Disconnect;
+  xlapp1.Quit;
+end;
+cmbbooknameclick(Sender);
+oradatprovcell.Open;
+end;
+
+procedure TSDHesabat.DBGrid2DblClick(Sender: TObject);
+begin
+dbgrid2.Options:=[dgEditing,dgTitles,dgIndicator,dgColumnResize,dgColLines,dgRowLines,dgTabs,dgAlwaysShowSelection,dgConfirmDelete,dgCancelOnExit];
+clip_shid:=oradatsheet.FieldByName('sheet_id').AsString;
+clip_cap:=oradatsheet.fieldbyname('caption').AsString;
+end;
+
+procedure TSDHesabat.Button2Click(Sender: TObject);
+begin
+xlapp1.Disconnect;
+end;
+
+procedure TSDHesabat.ActiveFormDestroy(Sender: TObject);
+begin
+{Destroy all create dataset files}
+
+//oradat.Free;
+
+{Destroy all create dataset files}
+//olecontainer1.Close;
+//olecontainer1.free;
+application.Destroy;
+end;
+
+procedure TSDHesabat.ActiveFormKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+if( key=vk_f5) and (shift=[]) then
+   YENILE(VK_F5,[]);
+end;
+
+procedure TSDHesabat.btndepaddClick(Sender: TObject);
+
+const
+        a: array [0..13]   of string=('brest','brest_ekv','brestin','brestin_ekv','tramt','tramt_ekv','payamt','payamt_ekv','payintamt','payintamt_ekv','erest','erest_ekv','eintrest','eintrest_ekv');
+var
+        i:integer;
+begin
+
+
+
+
+
+end;
+procedure TSDHesabat.btndepcalcClick(Sender: TObject);
+const
+     a: array[0..3] of string=('cell','provcell','depcell','krecell')    ;
+ var oradat: Toracledataset;
+     mypotok:ThSD;
+begin
+   StartDate := integer(trunc(DTP.DateTime));
+   FinDate := integer(trunc(DTP1.DateTime));
+  with SBCM_REPORT do
+   begin
+       CallProcedure('prepare_sddata',[StartDate,FinDate,v_StartDate,v_FinDate]);
+       r_StartDate := GetParameter(2);
+       r_FinDate := GetParameter(3);
+       CallProcedure('ins_report_sd',[StartDate,FinDate]);
+   end;
+////memo1.Clear;
+//try
+// mypotok:=thsd.Create(true);   //CREATE PATOK
+// mypotok.Priority:=tpNormal;
+// mypotok.FreeOnTerminate := True;
+// mypotok.Resume;
+ btnbookcalc.Enabled:=false;
+ DoubleBuffered:=true;
+ oradat:=toracledataset.Create(self);
+ oradat.Session:=oradatbook.Session;
+  if     (cbp.Checked=false)
+     and (cbpr.checked=false)
+    // and (cbd.Checked=false)
+     //and (cbk.Checked=false)
+  then
+     Begin
+          showmessage('Heç bir əməliyyat seçilməyib');
+          Exit;
+     end;
+  screen.Cursor:=crappstart;
+  CONNECT_EXCEL;
+  XLApp.WorkBooks.Open(oradatbook.FieldByName('adress').asstring);
+  sheet:=0;
+  oradatsheet.Refresh;
+  oradatcell.Refresh;
+  oradatprovcell.Refresh;
+  oradatdepcell.Refresh;
+  oradatkrecell.Refresh;
+  pb.maxvalue:=sheetcount;
+  pb.Visible:=true;
+
+  cellcount:=oradatcell.RecordCount+oradatprovcell.RecordCount+oradatdepcell.RecordCount+oradatkrecell.RecordCount;
+  pb1.Maxvalue:=cellcount;
+  oradatsheet.First;
+ while not oradatsheet.Eof do
+   Begin
+       cellcount:=0;
+       for i:=0 to 3 do
+         begin
+          with oradat do
+           begin
+            close;
+            sql.Clear;
+            sql.Text:='Select count(*) as count_cell from '+a[i] + ' where sheet_id='+oradatsheet.fieldbyname('sheet_id').Asstring+'and Book_Caption='''+oradatbook.fieldbyname('Caption').AsString+'''';
+            open;
+            cellcount:=cellcount+fieldbyname('count_cell').asinteger;
+          end;  {with end}
+       end;{for end}
+
+       application.ProcessMessages;
+       dbgrid2.OnCellClick(dbgrid2.Columns[1]);
+       Sheet:=oradatsheet.fieldbyname('Sheet_Id').AsInteger;
+       NisNumber:=oradatsheet.fieldbyname('Nisbat').AsInteger;
+       application.ProcessMessages;
+       pb.Progress:=pb.Progress+1;
+
+  //if cbd.Checked then
+   begin
+         pagecontrol1.ActivePageIndex:=2;
+         ORADATDEPCELL_EDIT;
+         posti:=oradatdepcell.RecNo;
+     While not oradatdepcell.Eof do
+         begin
+          pb1.Visible:=True;
+        // try
+
+
+          DEPCELL;
+        { except
+            showmessage('Depozit hesablanmadi');
+          end;}
+          ORADATDEPCELL_EDIT;
+          oradatdepcell.recno:=posti;
+          oradatdepcell.Next;
+          posti:=oradatdepcell.RecNo;
+          pb1.progress:=pb1.Progress+1;
+         end;
+   end;
+
+          application.ProcessMessages;
+          pb1.Progress:=0;
+          if cellcount>0 then
+             begin
+              xlapp.activeworkbook.worksheets[sheet].select;
+             end ;
+          oradatsheet.Next;
+          dbgrid2.OnCellClick(dbgrid2.Columns[1]);
+  end; {while end}
+
+       pb.Progress:=0;
+    //   pb.Visible:=false;
+    //   pb1.Visible:=false;
+       XLApp.Visible:=true;
+       Xlapp:=Unassigned;
+       Xlapp1.Disconnect;
+       Screen.Cursor:=crDefault;
+//End;
+//finally
+  btnbookcalc.Enabled:=true;
+//end;
+{except
+  xlapp:= unassigned;
+  xlapp1.Disconnect;
+  xlapp1.Quit;
+end;
+cmbbooknameclick(Sender); }
+end;
+procedure TSDHesabat.ed_balcnKeyPress(Sender: TObject; var Key: Char);
+begin
+if key=#13 then
+ begin
+
+ end;
+end;
+
+procedure TSDHesabat.btndepeditClick(Sender: TObject);
+const
+        a: array [0..13]   of string=('brest','brest_ekv','brestin','brestin_ekv','tramt','tramt_ekv','payamt','payamt_ekv','payintamt','payintamt_ekv','erest','erest_ekv','eintrest','eintrest_ekv');
+var
+        i:integer;
+
+begin
+
+
+
+end;
+
+procedure TSDHesabat.DBGrid8CellClick(Column: TColumn);
+begin
+application.HintColor:=clinfobk;
+application.HintPause:=1;
+application.HintHidePause:=3000;
+
+end;
+
+procedure TSDHesabat.DBGrid8KeyPress(Sender: TObject; var Key: Char);
+begin
+//if (key =#13)  and (btndepAdd.Caption='Тястигля') then   btndepAdd.OnClick(self) ;
+//if (key =#13)  and (btndepEdit.Caption='Тястигля') then   btndepEdit.OnClick(self)  ;
+if Key = #13 then
+   begin
+
+  end;
+end;
+
+procedure TSDHesabat.btndepdelClick(Sender: TObject);
+begin
+ posti:=oradatdepcell.RecNo;
+ ORADATDEPCELL_EDIT;
+ oradatdepcell.RecNo:=posti;
+if oradatdepcell.RecordCount>0 then
+ begin
+   if MessageDlg('Seçdiyiniz sətri silək?', mtConfirmation, [mbYes, mbNo], 0) = mrYes then
+      begin
+          oradatdepcell.delete;
+      end ;
+            Yenile(vk_f5,[]);
+
+ end;
+end;
+
+procedure TSDHesabat.btnkrecalcClick(Sender: TObject);
+const
+     a: array[0..3] of string=('cell','provcell','depcell','krecell')    ;
+ var oradat: Toracledataset;
+     mypotok:ThSD;
+
+begin
+   StartDate := integer(trunc(DTP.DateTime));
+   FinDate := integer(trunc(DTP1.DateTime));
+
+  with cm_sd do
+   begin
+       CallProcedure('prepare_sddata',[StartDate,FinDate,v_StartDate,v_FinDate]);
+       r_StartDate := GetParameter(2);
+       r_FinDate := GetParameter(3);
+       CallProcedure('ins_report_sd',[r_StartDate,r_FinDate]);
+   end;
+
+//try
+// mypotok:=thsd.Create(true);   //CREATE PATOK
+// mypotok.Priority:=tpNormal;
+// mypotok.FreeOnTerminate := True;
+// mypotok.Resume;
+ btnbookcalc.Enabled:=false;
+ DoubleBuffered:=true;
+ oradat:=toracledataset.Create(self);
+ oradat.Session:=oradatbook.Session;
+  if     (cbp.Checked=false)
+     and (cbpr.checked=false)
+     //and (cbd.Checked=false)
+     //and (cbk.Checked=false)
+  then
+     Begin
+          showmessage('Heç bir əməliyyat seçilməyib');
+          Exit;
+     end;
+  screen.Cursor:=crappstart;
+  CONNECT_EXCEL;
+  XLApp.WorkBooks.Open(oradatbook.FieldByName('adress').asstring);
+  sheet:=0;
+  oradatsheet.Refresh;
+  oradatcell.Refresh;
+  oradatprovcell.Refresh;
+  oradatdepcell.Refresh;
+  oradatkrecell.Refresh;
+  pb.maxvalue:=sheetcount;
+  pb.Visible:=true;
+
+  cellcount:=oradatcell.RecordCount+oradatprovcell.RecordCount+oradatdepcell.RecordCount+oradatkrecell.RecordCount;
+  pb1.Maxvalue:=cellcount;
+  oradatsheet.First;
+
+  while not oradatsheet.Eof do
+   Begin
+       cellcount:=0;
+       for i:=0 to 3 do
+         begin
+          with oradat do
+           begin
+            close;
+            sql.Clear;
+            sql.Text:='Select count(*) as count_cell from '+a[i] + ' where sheet_id='+oradatsheet.fieldbyname('sheet_id').Asstring+'and Book_Caption='''+oradatbook.fieldbyname('Caption').AsString+'''';
+            open;
+            cellcount:=cellcount+fieldbyname('count_cell').asinteger;
+          end;  {with end}
+       end;{for end}
+
+
+ {while not oradatsheet.Eof do
+   Begin
+       cellcount:=0;
+       for i:=0 to 3 do
+         begin
+          with oradat do
+           begin
+            close;
+            sql.Clear;
+            sql.Text:='Select count(*) as count_cell from '+a[i] + ' where sheet_id='+oradatsheet.fieldbyname('sheet_id').Asstring+'and Book_Caption='''+oradatbook.fieldbyname('Caption').AsString+'''';
+            open;
+            cellcount:=cellcount+fieldbyname('count_cell').asinteger;
+          end;  
+       end;{for end}
+
+       application.ProcessMessages;
+       dbgrid2.OnCellClick(dbgrid2.Columns[1]);
+       Sheet:=oradatsheet.fieldbyname('Sheet_Id').AsInteger;
+       NisNumber:=oradatsheet.fieldbyname('Nisbat').AsInteger;
+       application.ProcessMessages;
+       pb.Progress:=pb.Progress+1;
+
+ // if cbk.Checked then
+   begin
+         pagecontrol1.ActivePageIndex:=3;
+         ORADATkreCELL_EDIT;
+         posti:=oradatkrecell.RecNo;
+     While not oradatkrecell.Eof do
+         begin
+          pb1.Visible:=True;
+         //try
+           KRECELL;
+         //except
+         //  showmessage('Kredit hesablanmadi.');
+         // end;
+          ORADATkreCELL_EDIT;
+          oradatkrecell.recno:=posti;
+          oradatkrecell.Next;
+          posti:=oradatkrecell.RecNo;
+          pb1.progress:=pb1.Progress+1;
+         end;
+   end;
+          application.ProcessMessages;
+          pb1.Progress:=0;
+          if cellcount>0 then
+             begin
+              xlapp.activeworkbook.worksheets[sheet].select;
+             end ;
+          oradatsheet.Next;
+          dbgrid2.OnCellClick(dbgrid2.Columns[1]);
+  end; {while end}
+
+       pb.Progress:=0;
+     //  pb.Visible:=false;
+     //  pb1.Visible:=false;
+       XLApp.Visible:=true;
+       Xlapp:=Unassigned;
+       Xlapp1.Disconnect;
+       Screen.Cursor:=crDefault;
+//End;
+//finally
+  btnbookcalc.Enabled:=true;
+//end;
+{except
+  xlapp:= unassigned;
+  xlapp1.Disconnect;
+  xlapp1.Quit;
+end; }
+cmbbooknameclick(Sender);
+end;
+
+
+
+procedure TSDHesabat.btnkreaddClick(Sender: TObject);
+ const a: array [0..15]  of string=('DEQ','DEQ_EKV','DEQIN','DEQIN_EKV','DEOK','DEOK_EKV','DEOKIN','DEOKIN_EKV','DEVK','DEVK_EKV','DSK','DSK_EKV','DSKIN','DSKIN_EKV','VKK','VKK_EKV');
+ var   i:integer;
+begin
+
+
+end;
+
+procedure TSDHesabat.DBGrid9CellClick(Column: TColumn);
+begin
+application.HintColor:=clinfobk;
+application.HintPause:=1;
+application.HintHidePause:=3000;
+end;
+
+procedure TSDHesabat.DBGrid9KeyPress(Sender: TObject; var Key: Char);
+begin
+//if (key =#13)  and (btnkreAdd.Caption='Тястигля') then   btnkreAdd.OnClick(self) ;
+//if (key =#13)  and (btnkreEdit.Caption='Тястигля') then   btnkreEdit.OnClick(self)  ;
+if Key = #13 then
+   begin
+
+ end;
+end;
+
+procedure TSDHesabat.btnkreeditClick(Sender: TObject);
+ const a: array [0..15]  of string=('DEQ','DEQ_EKV','DEQIN','DEQIN_EKV','DEOK','DEOK_EKV','DEOKIN','DEOKIN_EKV','DEVK','DEVK_EKV','DSK','DSK_EKV','DSKIN','DSKIN_EKV','VKK','VKK_EKV');
+ var   i:integer;
+begin
+
+
+end;
+
+procedure TSDHesabat.btnkredelClick(Sender: TObject);
+begin
+ posti:=oradatkrecell.RecNo;
+ ORADATKRECELL_EDIT;
+ oradatkrecell.RecNo:=posti;
+if oradatkrecell.RecordCount>0 then
+  begin
+     if MessageDlg('Se?diyiniz sətri silək?', mtConfirmation, [mbYes, mbNo], 0) = mrYes then
+      begin
+         oradatkrecell.delete;
+      end;
+           Yenile(vk_f5,[]);
+ end;
+end;
+
+procedure TSDHesabat.DBGrid8KeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+if (ssctrl in shift) and (key=vk_delete) then key:=0;
+end;
+
+procedure TSDHesabat.DBGrid9KeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+if (ssctrl in shift) and (key=vk_delete) then key:=0;
+end;
+
+procedure TSDHesabat.DBGrid5KeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+if (ssctrl in shift) and (key=vk_delete) then key:=0;
+end;
+
+procedure TSDHesabat.DBGrid3KeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+if (ssctrl in shift) and (key=vk_delete) then key:=0;
+end;
+
+procedure TSDHesabat.OleContainer1MouseDown(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+begin
+
+   { for i:=2 to  olecontainer1.OleObject.commandbars.count do
+      begin
+         if olecontainer1.Oleobject.commandbars.item[i].visible then
+          olecontainer1.Oleobject.commandbars.item[i].visible:=false;
+        end;      }
+
+
+
+
+end;
+
+procedure TSDHesabat.cmbbooknameClick(Sender: TObject);
+begin
+with oradatbook do
+ begin
+     close;
+     sql.Clear;
+     sql.Text:='select * from book where caption='''+cmbbookname.text+'''';
+     open;
+     dbgrid1.OnCellClick(dbgrid1.columns[1]);
+ end;
+
+end;
+ function GridSelectAll(Grid: TDBGrid): Longint;
+begin
+  Result := 0;
+  Grid.SelectedRows.Clear;
+  with Grid.Datasource.DataSet do
+  begin
+    First;
+    DisableControls;
+    try
+      while not EOF do
+      begin
+        Grid.SelectedRows.CurrentRowSelected := True;
+        inc(Result);
+        Next;
+      end;
+    finally
+      EnableControls;
+    end;
+  end;
+end;
+
+
+procedure TSDHesabat.btnbookeditClick(Sender: TObject);
+ var k:integer;
+     S:String;
+begin
+ S:='';
+ showmessage(oradatbook.fieldbyname('Caption').AsString);
+ if btnbookedit.Caption='Redaktə' then k:=1
+ else k:=0;
+ case k of
+    1: Begin
+         dbgrid1.Fields[0].FocusControl;
+         S:=oradatbook.fieldbyname('Caption').AsString;
+         btnbookedit.Caption:='Təsdiqlə';
+         btnbookadd.Enabled:=false;
+         btnbookdel.Enabled:=false;
+         oradatbook.open;
+         oradatbook.Edit;
+         dbgrid1.Options:=[dgEditing,dgTitles,dgIndicator,dgColumnResize,dgColLines,dgRowLines,dgTabs,dgConfirmDelete,dgCancelOnExit];
+       end;{1 end}
+    0: Begin
+         with oradatsheet do
+          Begin
+            Close;
+            Sql.Clear;
+            Sql.Text:='Select s.rowid,s.* from sheet s where book_caption ='''+S+'''';
+            Open;
+            showmessage(sql.text);
+            If recordcount>0 then
+            Begin
+              for i:=1 to recordcount do
+               Edit;
+               Fieldbyname('Book_Caption').Asstring:=oradatbook.fieldbyname('Caption').AsString;
+               Post;
+               Next;
+            End;{while end}
+          end;{with}
+         btnbookedit.Caption:='Redaktə';
+         dbgrid1.Options:=[dgTitles,dgIndicator,dgColumnResize,dgColLines,dgRowLines,dgTabs,dgConfirmDelete,dgCancelOnExit];
+         oradatbook.Post;
+         btnbookadd.Enabled:=true;
+         btnbookdel.Enabled:=true;
+       end;{0 end}
+ end; {case end}
+end;
+
+procedure TSDHesabat.btnbookviewClick(Sender: TObject);
+ var k:integer;
+begin
+if btnbookview.Caption='Şablonu göstər' then  k:=1 else k:=0;
+case k of
+ 1: begin
+      btnbookview.Caption:='Şablonu gizlət';
+      connect_excel;
+      xlapp.visible:=true;
+      xlapp:=unassigned;
+     end;{1 end}
+ 0: begin
+      btnbookview.Caption:='Şablonu göstər';
+     try
+      xlapp1.Disconnect;
+      xlapp1.Quit;
+     except
+     end;
+    end; {0 end}
+end;{case end}
+end;
+
+procedure TSDHesabat.ActiveFormActivate(Sender: TObject);
+begin
+application.ProcessMessages;
+DoubleBuffered:=true;
+{read for ini files}
+
+
+
+end;
+
+procedure TSDHesabat.redakteClick(Sender: TObject);
+
+var
+  x: word;
+  TempBookmark: TBookMark;
+begin
+  DBGrid1.Datasource.Dataset.DisableControls;
+  with DBgrid1.SelectedRows do
+    if Count > 0 then
+    begin
+      TempBookmark := DBGrid1.Datasource.Dataset.GetBookmark;
+      for x := 0 to Count - 1 do
+      begin
+        if IndexOf(Items[x]) > -1 then
+        begin
+          DBGrid1.Datasource.Dataset.Bookmark := Items[x];
+          showmessage(DBGrid1.Datasource.Dataset.Fields[1].AsString);
+        end;
+      end;
+    end;
+  DBGrid1.Datasource.Dataset.GotoBookmark(TempBookmark);
+  DBGrid1.Datasource.Dataset.FreeBookmark(TempBookmark);
+  DBGrid1.Datasource.Dataset.EnableControls;
+end;
+
+
+
+
+
+
+procedure TSDHesabat.reClick(Sender: TObject);
+begin
+ if re.Caption='Redaktə Et' then  k:=0
+ else  k:=1;
+ case k of
+ 0: begin
+      
+      re.Caption:='Təsdiqlə';
+      dbgrid2.Options:=[dgEditing,dgTitles,dgIndicator,dgColumnResize,dgColLines,dgRowLines,dgTabs,dgConfirmDelete,dgCancelOnExit];
+      //posti:=oradatsheet.RecNo;
+      //oradatsheet_edit;
+      //oradatsheet.RecNo:=posti;
+
+
+ 
+    end; {0 end}
+//OraDatSheet.Edit;
+
+ 1: begin
+With OraDatSheet do
+ begin
+  FieldByName('NISBAT').AsString:=uppercase(FieldByName('NISBAT').AsString);
+    Post;
+     Yenile(vk_f5,[]);
+    dbgrid2.Options:=[dgTitles,dgIndicator,dgColumnResize,dgColLines,dgRowLines,dgTabs,dgConfirmDelete,dgCancelOnExit];
+   re.Caption:='Redaktə Et';
+
+      end;
+   end;
+   end;
+end;
+
+initialization
+
+TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TSDHesabat,
+    Class_SDHesabat,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

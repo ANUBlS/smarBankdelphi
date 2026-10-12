@@ -1,0 +1,57 @@
+library customer_operations;
+
+uses
+  ComServ,
+  customer_operations_TLB in 'customer_operations_TLB.pas',
+  customers_operation_impl in 'customers_operation_impl.pas' {CO_Main: TActiveForm} {ActiveFormX: CoClass},
+  CO_datamod_impl in 'CO_datamod_impl.pas' {CO_DataMod: TDataModule},
+  co_report_unit in 'co_report_unit.pas' {FormReport},
+  co_st_check in 'co_st_check.pas' {CO_St_Form},
+  co_memorial in 'co_memorial.pas' {CO_MemorialForm},
+  Rep_unit in 'Rep_unit.pas' {FormRep},
+  RepR_unit in 'RepR_unit.pas' {FormRepR},
+  transview_unit in 'transview_unit.pas' {FormTransView},
+  CO_Statement_impl in 'CO_Statement_impl.pas' {CO_Statement_Form},
+  CO_Interval_unit in 'CO_Interval_unit.pas' {FormInterval},
+  forms in 'forms.pas',
+  MemorialRep in 'MemorialRep.pas' {CO_MemorialRep: TQuickRep},
+  CO_MemorialRep1_unit in 'CO_MemorialRep1_unit.pas' {CO_MemorialRep1: TQuickRep},
+  CO_Choose_unit in 'CO_Choose_unit.pas' {CO_Choose},
+  CO_In_Unit in 'CO_In_Unit.pas' {CO_TransTypeIncOut},
+  FormAcc_Unit in 'FormAcc_Unit.pas' {FormAccount},
+  CO_reportUnit in 'CO_reportUnit.pas' {CO_Report: TQuickRep},
+  CurrencyToHR_Azeri_Impl in 'CurrencyToHR_Azeri_Impl.pas',
+  CO_AccFlags in 'CO_AccFlags.pas' {AccFlags},
+  CO_AccSettings_Unit in 'CO_AccSettings_Unit.pas' {CO_AccSettings},
+  P_AccState_Unit in 'P_AccState_Unit.pas' {P_AccState},
+  P_AccTransaction_Unit in 'P_AccTransaction_Unit.pas' {FormAccTransaction},
+  P_Interval_Unit in 'P_Interval_Unit.pas' {P_Interval},
+  CO_Transact_Unitp in 'CO_Transact_Unitp.pas' {CO_Transactions},
+  co_properties_unit in 'co_properties_unit.pas' {co_properties},
+  UnitCustProps in 'UnitCustProps.pas' {FrmCustProps},
+  CustInfoFormImpl in 'CustInfoFormImpl.pas' {CustomerInfoForm},
+  uAccViewFormImpl in '..\commonforms\uAccViewFormImpl.pas' {frmAccInfo},
+  uTrViewFormImpl in '..\commonforms\uTrViewFormImpl.pas' {frmTrView},
+  UnitBProc in 'UnitBProc.pas' {FormBProc},
+  co_Order_Rep_unit in 'co_Order_Rep_unit.pas' {QRep_Order: TQuickRep},
+  co_order_qrep_unit in 'co_order_qrep_unit.pas' {QuickRep_Order: TQuickRep},
+  BookmarkSetup in 'BookmarkSetup.pas' {CO_BookmarkSetup},
+  CO_TemplateAddEditUnt in 'CO_TemplateAddEditUnt.pas' {CO_TemplAddEditForm},
+  CO_BookmarkAddEditunt in 'CO_BookmarkAddEditunt.pas' {CO_BookmarkAddEditForm},
+  CO_frmWReportImpl in 'CO_frmWReportImpl.pas' {CO_frmWReport},
+  UnitOrderInfo in 'UnitOrderInfo.pas' {FormOrderInfo};
+
+{$E ocx}
+
+exports
+  DllGetClassObject,
+  DllCanUnloadNow,
+  DllRegisterServer,
+  DllUnregisterServer;
+
+{$R *.TLB}
+
+{$R *.RES}
+
+begin
+end.

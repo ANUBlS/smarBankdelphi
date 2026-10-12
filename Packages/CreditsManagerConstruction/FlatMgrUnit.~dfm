@@ -1,0 +1,502 @@
+object FlatsMgrForm: TFlatsMgrForm
+  Left = 355
+  Top = 109
+  Width = 565
+  Height = 527
+  Caption = 'FlatsMgrForm'
+  Color = clBtnFace
+  Font.Charset = RUSSIAN_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poOwnerFormCenter
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  OnKeyPress = FormKeyPress
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 557
+    Height = 458
+    Align = alTop
+    BevelInner = bvRaised
+    BevelOuter = bvLowered
+    TabOrder = 0
+    object Panel2: TPanel
+      Left = 2
+      Top = 259
+      Width = 553
+      Height = 197
+      Align = alClient
+      BevelInner = bvRaised
+      BevelOuter = bvLowered
+      TabOrder = 0
+      object DBGrid3: TDBGrid
+        Left = 2
+        Top = 2
+        Width = 549
+        Height = 193
+        Align = alClient
+        DataSource = flatsDatSrc
+        Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit]
+        TabOrder = 0
+        TitleFont.Charset = RUSSIAN_CHARSET
+        TitleFont.Color = clWindowText
+        TitleFont.Height = -11
+        TitleFont.Name = 'Azl Sans Serif'
+        TitleFont.Style = []
+        OnDrawColumnCell = DBGrid3DrawColumnCell
+        Columns = <
+          item
+            Expanded = False
+            FieldName = 'FLATNUMBER'
+            Title.Caption = '№'
+            Title.Color = clNavy
+            Title.Font.Charset = RUSSIAN_CHARSET
+            Title.Font.Color = clWhite
+            Title.Font.Height = -11
+            Title.Font.Name = 'Azl Sans Serif'
+            Title.Font.Style = []
+            Width = 87
+            Visible = True
+          end
+          item
+            Expanded = False
+            Title.Color = clNavy
+            Width = 23
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'ENTRANCE'
+            Title.Caption = 'Эириш'
+            Title.Color = clNavy
+            Title.Font.Charset = RUSSIAN_CHARSET
+            Title.Font.Color = clWhite
+            Title.Font.Height = -11
+            Title.Font.Name = 'Azl Sans Serif'
+            Title.Font.Style = []
+            Width = 72
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'FFLOOR'
+            Title.Caption = 'Мяртябя'
+            Title.Color = clNavy
+            Title.Font.Charset = RUSSIAN_CHARSET
+            Title.Font.Color = clWhite
+            Title.Font.Height = -11
+            Title.Font.Name = 'Azl Sans Serif'
+            Title.Font.Style = []
+            Width = 74
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'ROOMS'
+            Title.Caption = 'Отаг'
+            Title.Color = clNavy
+            Title.Font.Charset = RUSSIAN_CHARSET
+            Title.Font.Color = clWhite
+            Title.Font.Height = -11
+            Title.Font.Name = 'Azl Sans Serif'
+            Title.Font.Style = []
+            Width = 73
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'AREA'
+            Title.Caption = 'Сащяси'
+            Title.Color = clNavy
+            Title.Font.Charset = RUSSIAN_CHARSET
+            Title.Font.Color = clWhite
+            Title.Font.Height = -11
+            Title.Font.Name = 'Azl Sans Serif'
+            Title.Font.Style = []
+            Width = 70
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'PRICE1'
+            Title.Caption = '1 м2 гиймяти'
+            Title.Color = clNavy
+            Title.Font.Charset = RUSSIAN_CHARSET
+            Title.Font.Color = clWhite
+            Title.Font.Height = -11
+            Title.Font.Name = 'Azl Sans Serif'
+            Title.Font.Style = []
+            Width = 73
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'PRICEGEN'
+            Title.Caption = 'Цмуми гиймяти'
+            Title.Color = clNavy
+            Title.Font.Charset = RUSSIAN_CHARSET
+            Title.Font.Color = clWhite
+            Title.Font.Height = -11
+            Title.Font.Name = 'Azl Sans Serif'
+            Title.Font.Style = []
+            Visible = True
+          end>
+      end
+    end
+    object Panel3: TPanel
+      Left = 2
+      Top = 119
+      Width = 553
+      Height = 140
+      Align = alTop
+      BevelInner = bvRaised
+      BevelOuter = bvLowered
+      TabOrder = 1
+      object DBGrid2: TDBGrid
+        Left = 2
+        Top = 2
+        Width = 549
+        Height = 136
+        Align = alClient
+        DataSource = buildingsDatSrc
+        Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit]
+        TabOrder = 0
+        TitleFont.Charset = RUSSIAN_CHARSET
+        TitleFont.Color = clWindowText
+        TitleFont.Height = -11
+        TitleFont.Name = 'Azl Sans Serif'
+        TitleFont.Style = []
+        Columns = <
+          item
+            Expanded = False
+            FieldName = 'BLD_NAME'
+            Title.Caption = 'Бина'
+            Title.Color = clNavy
+            Title.Font.Charset = RUSSIAN_CHARSET
+            Title.Font.Color = clWhite
+            Title.Font.Height = -11
+            Title.Font.Name = 'Azl Sans Serif'
+            Title.Font.Style = []
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'ADRESS'
+            Title.Caption = 'Цнваны'
+            Title.Color = clNavy
+            Title.Font.Charset = RUSSIAN_CHARSET
+            Title.Font.Color = clWhite
+            Title.Font.Height = -11
+            Title.Font.Name = 'Azl Sans Serif'
+            Title.Font.Style = []
+            Width = 273
+            Visible = True
+          end>
+      end
+    end
+    object Panel4: TPanel
+      Left = 2
+      Top = 2
+      Width = 553
+      Height = 117
+      Align = alTop
+      BevelInner = bvRaised
+      BevelOuter = bvLowered
+      TabOrder = 2
+      object DBGrid1: TDBGrid
+        Left = 2
+        Top = 2
+        Width = 549
+        Height = 113
+        Align = alClient
+        DataSource = companiesDatSrc
+        Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit]
+        TabOrder = 0
+        TitleFont.Charset = RUSSIAN_CHARSET
+        TitleFont.Color = clWindowText
+        TitleFont.Height = -11
+        TitleFont.Name = 'Azl Sans Serif'
+        TitleFont.Style = []
+        Columns = <
+          item
+            Color = clWhite
+            Expanded = False
+            FieldName = 'COMP_NAME'
+            Title.Caption = 'Ширкят'
+            Title.Color = clNavy
+            Title.Font.Charset = RUSSIAN_CHARSET
+            Title.Font.Color = clWhite
+            Title.Font.Height = -11
+            Title.Font.Name = 'Azl Sans Serif'
+            Title.Font.Style = []
+            Width = 392
+            Visible = True
+          end>
+      end
+    end
+  end
+  object BitBtn1: TBitBtn
+    Left = 284
+    Top = 466
+    Width = 75
+    Height = 25
+    Caption = 'Гябул'
+    Default = True
+    TabOrder = 1
+    OnClick = BitBtn1Click
+    Glyph.Data = {
+      DE010000424DDE01000000000000760000002800000024000000120000000100
+      0400000000006801000000000000000000001000000000000000000000000000
+      80000080000000808000800000008000800080800000C0C0C000808080000000
+      FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00333333333333
+      3333333333333333333333330000333333333333333333333333F33333333333
+      00003333344333333333333333388F3333333333000033334224333333333333
+      338338F3333333330000333422224333333333333833338F3333333300003342
+      222224333333333383333338F3333333000034222A22224333333338F338F333
+      8F33333300003222A3A2224333333338F3838F338F33333300003A2A333A2224
+      33333338F83338F338F33333000033A33333A222433333338333338F338F3333
+      0000333333333A222433333333333338F338F33300003333333333A222433333
+      333333338F338F33000033333333333A222433333333333338F338F300003333
+      33333333A222433333333333338F338F00003333333333333A22433333333333
+      3338F38F000033333333333333A223333333333333338F830000333333333333
+      333A333333333333333338330000333333333333333333333333333333333333
+      0000}
+    NumGlyphs = 2
+  end
+  object BitBtn2: TBitBtn
+    Left = 376
+    Top = 466
+    Width = 75
+    Height = 25
+    Caption = 'Имтина'
+    TabOrder = 2
+    Kind = bkCancel
+  end
+  object StatusImages: TImageList
+    Left = 136
+    Top = 304
+    Bitmap = {
+      494C010103000400040010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      0000000000003600000028000000400000001000000001001000000000000008
+      000000000000000000000000000000000000000000000000000000000000FF7F
+      FF7FFF7F00000000000000000000000000000000000000000000000000000000
+      0000000000001000000000000000000000000000000000000000000010420000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000000000000000FF7F000000000000
+      0000000000000000FF7F000000000000000000000000000000000000846C8410
+      00000064006400641000000000000000000000000000000000000000FF7FFF7F
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000000000000000000000000000FF7F0000000000000000
+      00001700170017000000FF7F000000000000000000000000000000000064846C
+      10420064006400640064100000000000000000000000000000001042FF7FFF7F
+      FF7FFF7F00000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000FF7F17001700170000001700
+      170017001700170000000000FF7F00000000000000008C6D003C003C00640064
+      0064006400640064006400641000000000000000000000000000FF7F17001700
+      FF7FFF7FFF7FFF7F000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000170017001700170017001863
+      FF7FFF7F1863170017000000000000000000000000004A290064006400640064
+      E07FE07F00640064006400640064100000000000000000001042FF7FFF7FFF7F
+      1700FF7FFF7FFF7FFF7FFF7F0000000000000000000000000000000000000000
+      000000000000000000000000000000000000FF7F17001700170017001F001700
+      FF7FFF7F17001700000000000000FF7F00000000C61808210064006400640064
+      E07FE07F0064006400640064006400640000000000000000FF7FFF7FFF7F1042
+      FF7F104200001863186318630000186318630000000000000000000000000000
+      00000000000000000000000000000000000017001700170017001F0017001700
+      FF7FFF7F1F001700170000000000000000000821006400640064006400640064
+      E07DE07DE07D006400640064006400640064000000001042FF7FFF7F1042FF7F
+      FF7FFF7FE07F1700FF7FFF7F0000000000000000000000000000000000000000
+      00000000000000000000000000000000000017001700170017001F0017001700
+      FF7FFF7F17001F00170000000000000000000000001C846C0064006400640064
+      E07FE07F003C00640064006400640064006400000000FF7FFF7FFF7F1042FF7F
+      FF7F1700FF7FFF7F1F0010420000000000000000000000000000000000000000
+      00000000000000000000000000000000000017001700170017001F001F00FF7F
+      FF7FFF7F17001700170017000000000000000000842C846C0064006400640064
+      E07FE07F003C006400640064006400644A4500001042FF7FFF7F1042FF7FFF7F
+      1700FF7FFF7FFF7FFF7F1F000000000000000000000000000000000000000000
+      0000000000000000000000000000000000001700170017001F001F001F001F00
+      1F0017001700170017000000000000000000842C006400640064006400640064
+      E07FE07F003C006400640064844CC61800000000FF7FFF7FFF7F1042FF7FFF7F
+      1700FF7F1700FF7FFF7F17001F00000000000000000000000000000000000000
+      000000000000000000000000000000000000FF7F17001700170017001F001F00
+      FF7F1F0017001F00170000000000FF7F0000000000004A450064006400640064
+      E07FE07F003C006400640064C674000000001042FF7F0000FF7FFF7FFF7F1700
+      FF7FFF7FFF7FFF7F00000000FF7F1F0000000000000000000000000000000000
+      0000000000000000000000000000000000000000170017001700170017001863
+      FF7FFF7F170017001700170000000000000000000000844C0064006400640064
+      E07FE07F005C0064006400640064844C0000FF7FFF7FFF7F00000000FF7FFF7F
+      FF7F1700FF7F0000000000000000FF7F17000000000000000000000000000000
+      0000000000000000000000000000000000000000FF7F1700170017001F001F00
+      186317001700170000000000FF7F000000000000C618846CC654005C00640064
+      00640064006400640064003C003C842C000000001042FF7FFF7FFF7F00000000
+      FF7FFF7FFF7F0000000000000000000000000000000000000000000000000000
+      00000000000000000000000000000000000000000000FF7F1700170017001700
+      17001700170017000000FF7F0000000000000000000000000000003C0064006C
+      005C0064C674C674006400000000000000000000000000001042FF7FFF7FFF7F
+      FF7FFF7F00000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000000000000000FF7F170017001700
+      1700170000000000FF7F00000000000000000000000000000000842CC6740010
+      4A2900644A290000842CC618000000000000000000000000000000001042FF7F
+      FF7FFF7F00000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000000000000000000000000000FF7F
+      FF7FFF7F00000000000000000000000000000000000000000000C61800000000
+      0000105E00000000000000000000000000000000000000000000000000000000
+      1042000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000424D3E000000000000003E000000
+      2800000040000000100000000100010000000000800000000000000000000000
+      000000000000000000000000FFFFFF00FC7FFFDFFBFF0000E00FF90FF8FF0000
+      C007F807F03F00008003C003F00F00008003C001E003000000018001E0000000
+      00010000C007000000018000C007000000018000800700000001000180030000
+      0001C003001900008003C001001C000080038001803F0000C007F00FE03F0000
+      E00FF027F87F0000FC7FF77FFE7F000000000000000000000000000000000000
+      000000000000}
+  end
+  object companie: TOracleDataSet
+    SQL.Strings = (
+      'SELECT id, comp_name'
+      '  FROM cc_companies')
+    QBEDefinition.QBEFieldDefs = {
+      040000000200000002000000494401000000000009000000434F4D505F4E414D
+      45010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 32
+    Top = 303
+    object companieCOMP_NAME: TStringField
+      FieldName = 'COMP_NAME'
+      Size = 80
+    end
+    object companieID: TIntegerField
+      FieldName = 'ID'
+    end
+  end
+  object building: TOracleDataSet
+    SQL.Strings = (
+      'SELECT id, comp_id, bld_name,entrances, ADDRESS,flats'
+      '  FROM cc_buildings'
+      'where comp_id = :comp_id')
+    Variables.Data = {
+      0300000001000000080000003A434F4D505F4944040000000800000000000000
+      0000F03F00000000}
+    QBEDefinition.QBEFieldDefs = {
+      040000000600000002000000494401000000000007000000434F4D505F494401
+      000000000008000000424C445F4E414D45010000000000070000004144445245
+      535301000000000009000000454E5452414E4345530100000000000500000046
+      4C415453010000000000}
+    Master = companie
+    MasterFields = 'ID'
+    DetailFields = 'COMP_ID'
+    Session = sboapiDataModule.SBSession
+    Left = 64
+    Top = 303
+    object buildingID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object buildingCOMP_ID: TFloatField
+      FieldName = 'COMP_ID'
+      Required = True
+    end
+    object buildingBLD_NAME: TStringField
+      FieldName = 'BLD_NAME'
+    end
+    object buildingENTRANCES: TFloatField
+      FieldName = 'ENTRANCES'
+    end
+    object buildingADDRESS: TStringField
+      FieldName = 'ADDRESS'
+      Size = 50
+    end
+    object buildingFLATS: TFloatField
+      FieldName = 'FLATS'
+    end
+  end
+  object flat: TOracleDataSet
+    SQL.Strings = (
+      
+        'select id, bld_id, flatnumber, entrance, ffloor, rooms, area, pr' +
+        'ice1,'
+      
+        '       pricegen, buyer,userid, CC_general.get_buyername(buyer) a' +
+        's Buyer_status from cc_flats'
+      'where '
+      'bld_id=:bld_id and'
+      '(buyer is null) or( buyer=0)')
+    Variables.Data = {
+      0300000001000000070000003A424C445F494404000000080000000000000000
+      00F03F00000000}
+    QBEDefinition.QBEFieldDefs = {
+      040000000C00000002000000494401000000000006000000424C445F49440100
+      000000000A000000464C41544E554D42455201000000000008000000454E5452
+      414E43450100000000000600000046464C4F4F5201000000000005000000524F
+      4F4D530100000000000400000041524541010000000000060000005052494345
+      3101000000000008000000505249434547454E01000000000005000000425559
+      4552010000000000060000005553455249440100000000000C00000042555945
+      525F535441545553010000000000}
+    Master = building
+    MasterFields = 'ID'
+    DetailFields = 'BLD_ID'
+    Session = sboapiDataModule.SBSession
+    Left = 98
+    Top = 304
+    object flatID: TFloatField
+      FieldName = 'ID'
+    end
+    object flatBLD_ID: TFloatField
+      FieldName = 'BLD_ID'
+    end
+    object flatFLATNUMBER: TStringField
+      FieldName = 'FLATNUMBER'
+      Size = 5
+    end
+    object flatENTRANCE: TIntegerField
+      FieldName = 'ENTRANCE'
+    end
+    object flatFFLOOR: TIntegerField
+      FieldName = 'FFLOOR'
+    end
+    object flatROOMS: TIntegerField
+      FieldName = 'ROOMS'
+    end
+    object flatAREA: TFloatField
+      FieldName = 'AREA'
+    end
+    object flatPRICE1: TFloatField
+      FieldName = 'PRICE1'
+    end
+    object flatPRICEGEN: TFloatField
+      FieldName = 'PRICEGEN'
+    end
+    object flatBUYER: TFloatField
+      FieldName = 'BUYER'
+    end
+    object flatUSERID: TFloatField
+      FieldName = 'USERID'
+    end
+    object flatBUYER_STATUS: TStringField
+      FieldName = 'BUYER_STATUS'
+      Size = 4000
+    end
+  end
+  object companiesDatSrc: TDataSource
+    DataSet = companie
+    Left = 31
+    Top = 335
+  end
+  object buildingsDatSrc: TDataSource
+    DataSet = building
+    Left = 63
+    Top = 336
+  end
+  object flatsDatSrc: TDataSource
+    DataSet = flat
+    Left = 97
+    Top = 337
+  end
+end

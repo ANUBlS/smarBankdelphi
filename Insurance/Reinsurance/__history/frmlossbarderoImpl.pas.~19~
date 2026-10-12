@@ -1,0 +1,80 @@
+﻿unit frmlossbarderoImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Grids, XDBGrids, StdCtrls, XFSCtrls, ExtCtrls;
+
+type
+  Tfrmlossbardero = class(TForm)
+    XFPanel1: TXFPanel;
+    XFPanel2: TXFPanel;
+    XFButton2: TXFButton;
+    XFGroupBox1: TXFGroupBox;
+    XDBGrid1: TXDBGrid;
+    XFButton4: TXFButton;
+    XFButton5: TXFButton;
+    XFButton3: TXFButton;
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure XFButton2Click(Sender: TObject);
+    procedure XFButton5Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure XFButton3Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  frmlossbardero: Tfrmlossbardero;
+
+implementation
+
+uses frmaddloss_BarderoImpl,DMreinsuranceImpl,CommanParametrs, FrmreinsuranceImpl,sboapiDataModuleImpl;
+
+{$R *.dfm}
+
+procedure Tfrmlossbardero.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+if ord(key)=vk_escape then  close;
+
+end;
+
+procedure Tfrmlossbardero.FormShow(Sender: TObject);
+begin
+DMreinsurance.DSMainLossBardero.Close;
+DMreinsurance.DSMainLossBardero.SetVariable('pcid',contactid);
+DMreinsurance.DSMainLossBardero.SetVariable('Pdep_id',commandepid);
+DMreinsurance.DSMainLossBardero.Open;
+
+end;
+
+procedure Tfrmlossbardero.XFButton2Click(Sender: TObject);
+begin
+close;
+end;
+
+procedure Tfrmlossbardero.XFButton3Click(Sender: TObject);
+begin
+  opetion:='upd';
+frmaddloss_Bardero.showmodal;
+end;
+
+procedure Tfrmlossbardero.XFButton5Click(Sender: TObject);
+begin
+DMreinsurance.ds_odenmislerin_sayi.close;
+DMreinsurance.ds_odenmislerin_sayi.SetVariable('p_id',commandepid);
+DMreinsurance.ds_odenmislerin_sayi.open;
+if DMreinsurance.ds_odenmislerin_sayi.FieldByName('say').AsInteger=0  then
+begin
+  showmessage('Diqqət!Seçilmiş Zərər ödənməyib.Zərər barderosu yığıla bilməz.');
+  exit;
+end;
+
+opetion:='ins';
+frmaddloss_Bardero.showmodal;
+end;
+
+end.

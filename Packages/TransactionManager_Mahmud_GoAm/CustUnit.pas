@@ -1,0 +1,131 @@
+unit CustUnit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, DB, OracleData, Grids, XDBGrids, ExtCtrls, XFSCtrls, StdCtrls;
+
+type
+  TFormCust = class(TForm)
+    XFPanel1: TXFPanel;
+    XDBGrid1: TXDBGrid;
+    ODS_CUSTOMERS: TOracleDataSet;
+    DsrcCust: TDataSource;
+    CBSearch: TComboBox;
+    EditSearch: TEdit;
+    ODS_CUSTOMERSID: TIntegerField;
+    ODS_CUSTOMERSFULLNAME: TWideStringField;
+    ODS_CUSTOMERSSONAME: TWideStringField;
+    ODS_CUSTOMERSNAME: TWideStringField;
+    ODS_CUSTOMERSLASTNAME: TWideStringField;
+    XFButton1: TXFButton;
+    Monexs: TXFButton;
+    procedure EditSearchChange(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure XDBGrid1DblClick(Sender: TObject);
+    procedure XFButton1Click(Sender: TObject);
+    procedure MonexsClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormCust: TFormCust;
+
+implementation
+ uses
+ sboapidatamoduleimpl,TransactionManagerImpl, TransactionPropertiesImpl,
+  Unitmonxs;
+{$R *.dfm}
+
+procedure TFormCust.EditSearchChange(Sender: TObject);
+begin
+ if Length(EditSearch.Text)<>0 then
+  begin
+  ODS_CUSTOMERS.Close;
+  case CBSearch.ItemIndex of
+  0:ODS_CUSTOMERS.SQL[3]:='and c.ID like '''+EditSearch.Text+'%''';
+  1:ODS_CUSTOMERS.SQL[3]:='and upper(c.name) like upper(''%'+EditSearch.Text+'%'')';
+  2:ODS_CUSTOMERS.SQL[3]:='and upper(ci.'+ODS_CUSTOMERS.Fields[CBSearch.ItemIndex].FieldName+') like upper(''%'+EditSearch.Text+'%'')';
+  3:ODS_CUSTOMERS.SQL[3]:='and upper(ci.'+ODS_CUSTOMERS.Fields[CBSearch.ItemIndex].FieldName+') like upper(''%'+EditSearch.Text+'%'')';
+  4:ODS_CUSTOMERS.SQL[3]:='and upper(ci.'+ODS_CUSTOMERS.Fields[CBSearch.ItemIndex].FieldName+') like upper(''%'+EditSearch.Text+'%'')';
+  end;
+  ODS_CUSTOMERS.Open;
+  end
+  else
+  begin
+  ODS_CUSTOMERS.Close;
+  ODS_CUSTOMERS.SQL[3]:='';
+  ODS_CUSTOMERS.Open;
+  end;
+end;
+
+procedure TFormCust.FormShow(Sender: TObject);
+var i,vCustId:integer;
+begin
+CBSearch.Clear;
+for i := 0 to XDBGrid1.Columns.Count-1 do
+CBSearch.Items.Add(XDBGrid1.Columns[i].Title.Caption);
+
+ CBSearch.ItemIndex:=0;
+  if not(ODS_CUSTOMERS.Active = True) then
+    ODS_CUSTOMERS.Open
+  else
+    ODS_CUSTOMERS.Refresh;
+  vCustId := -1;
+end;
+
+procedure TFormCust.MonexsClick(Sender: TObject);
+begin
+FormMonxs:=TFormMonxs.create(self);
+FormMonxs.ShowModal;
+end;
+
+procedure TFormCust.XDBGrid1DblClick(Sender: TObject);
+var
+ key:char;
+begin
+if nocustId=true then
+begin
+  vCustId := ODS_CUSTOMERSID.AsInteger;
+  FormCust.Close;
+  TransactionEditForm.Edit_DCustId.Text:=inttostr(vCustId) ;
+key:=#13;
+TransactionEditForm.Edit_DCustIdKeyPress(Sender,Key);
+end;
+if nocustId=false then
+begin
+  vCustId := ODS_CUSTOMERSID.AsInteger;
+  FormCust.Close;
+  TransactionEditForm.Edit_CCustId.Text:=inttostr(vCustId) ;
+key:=#13;
+TransactionEditForm.Edit_CCustIdKeyPress(Sender,Key);
+end;
+end;
+
+procedure TFormCust.XFButton1Click(Sender: TObject);
+var
+ key:char;
+begin
+if nocustId=true then
+begin
+  vCustId := ODS_CUSTOMERSID.AsInteger;
+  FormCust.Close;
+  TransactionEditForm.Edit_DCustId.Text:=inttostr(vCustId) ;
+key:=#13;
+TransactionEditForm.Edit_DCustIdKeyPress(Sender,Key);
+end;
+if nocustId=false then
+begin
+  vCustId := ODS_CUSTOMERSID.AsInteger;
+  FormCust.Close;
+  TransactionEditForm.Edit_CCustId.Text:=inttostr(vCustId) ;
+key:=#13;
+TransactionEditForm.Edit_CCustIdKeyPress(Sender,Key);
+end;
+end;
+
+end.

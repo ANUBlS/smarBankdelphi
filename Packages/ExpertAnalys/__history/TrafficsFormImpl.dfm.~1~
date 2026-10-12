@@ -1,0 +1,333 @@
+object TrafficsForm: TTrafficsForm
+  Left = 33
+  Top = -18
+  Width = 951
+  Height = 672
+  Caption = 'Traffics By Accounts'
+  Color = clBtnFace
+  Font.Charset = RUSSIAN_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poMainFormCenter
+  WindowState = wsMaximized
+  OnKeyDown = FormKeyDown
+  PixelsPerInch = 96
+  TextHeight = 13
+  object TrafficsViewer: TDBGrid
+    Left = 0
+    Top = 0
+    Width = 943
+    Height = 614
+    Align = alClient
+    DataSource = ExpertDataModul.TrafficsData
+    Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit]
+    TabOrder = 0
+    TitleFont.Charset = RUSSIAN_CHARSET
+    TitleFont.Color = clWindowText
+    TitleFont.Height = -11
+    TitleFont.Name = 'Azl Sans Serif'
+    TitleFont.Style = []
+    Columns = <
+      item
+        Expanded = False
+        FieldName = 'RecordNo'
+        Title.Alignment = taRightJustify
+        Title.Caption = '№'
+        Title.Color = clNavy
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clWhite
+        Title.Font.Height = -11
+        Title.Font.Name = 'Azl Sans Serif'
+        Title.Font.Style = []
+        Visible = False
+      end
+      item
+        Color = clGray
+        Expanded = False
+        FieldName = 'BAL_CN'
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = [fsBold]
+        Title.Alignment = taRightJustify
+        Title.Caption = 'Баланс'
+        Title.Color = clNavy
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clWhite
+        Title.Font.Height = -11
+        Title.Font.Name = 'Azl Sans Serif'
+        Title.Font.Style = []
+        Visible = False
+      end
+      item
+        Alignment = taCenter
+        Color = clSilver
+        Expanded = False
+        FieldName = 'TYPE'
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clNavy
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        Title.Alignment = taCenter
+        Title.Caption = 'Тип'
+        Title.Color = clNavy
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clWhite
+        Title.Font.Height = -11
+        Title.Font.Name = 'Azl Sans Serif'
+        Title.Font.Style = []
+        Width = 20
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'ACC_NO'
+        Title.Color = clNavy
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clWhite
+        Title.Font.Height = -11
+        Title.Font.Name = 'Azl Sans Serif'
+        Title.Font.Style = []
+        Width = 120
+        Visible = True
+      end
+      item
+        Alignment = taCenter
+        Color = clSilver
+        Expanded = False
+        FieldName = 'VAL_NAME'
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clNavy
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        Title.Alignment = taCenter
+        Title.Caption = '$'
+        Title.Color = clNavy
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clWhite
+        Title.Font.Height = -11
+        Title.Font.Name = 'Azl Sans Serif'
+        Title.Font.Style = []
+        Width = 30
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'BEGINREST'
+        Title.Alignment = taRightJustify
+        Title.Caption = 'Илкин Галыг'
+        Title.Color = clNavy
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clWhite
+        Title.Font.Height = -11
+        Title.Font.Name = 'Azl Sans Serif'
+        Title.Font.Style = []
+        Width = 100
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'BEGINLREST'
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clNavy
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        Title.Alignment = taRightJustify
+        Title.Caption = 'И.Г.Еквивалент'
+        Title.Color = clNavy
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clWhite
+        Title.Font.Height = -11
+        Title.Font.Name = 'Azl Sans Serif'
+        Title.Font.Style = []
+        Width = 100
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'DEBTTURNOVER'
+        Title.Alignment = taRightJustify
+        Title.Caption = 'Д. Дювриййя'
+        Title.Color = clNavy
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clWhite
+        Title.Font.Height = -11
+        Title.Font.Name = 'Azl Sans Serif'
+        Title.Font.Style = []
+        Width = 100
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'DEBTPOKTURNOVER'
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clNavy
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        Title.Alignment = taRightJustify
+        Title.Caption = 'Д.Дювриййя(Аз)'
+        Title.Color = clNavy
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clWhite
+        Title.Font.Height = -11
+        Title.Font.Name = 'Azl Sans Serif'
+        Title.Font.Style = []
+        Width = 100
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'CREDITTURNOVER'
+        Title.Alignment = taRightJustify
+        Title.Caption = 'К. Дювриййя'
+        Title.Color = clNavy
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clWhite
+        Title.Font.Height = -11
+        Title.Font.Name = 'Azl Sans Serif'
+        Title.Font.Style = []
+        Width = 100
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'CREDITPOKTURNOVER'
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clNavy
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        Title.Alignment = taRightJustify
+        Title.Caption = 'К.Дювриййя(Аз)'
+        Title.Color = clNavy
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clWhite
+        Title.Font.Height = -11
+        Title.Font.Name = 'Azl Sans Serif'
+        Title.Font.Style = []
+        Width = 100
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'LASTREST'
+        Title.Caption = 'Сон Галыг'
+        Title.Color = clNavy
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clWhite
+        Title.Font.Height = -11
+        Title.Font.Name = 'Azl Sans Serif'
+        Title.Font.Style = []
+        Width = 100
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'LASTLREST'
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clNavy
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        Title.Caption = 'С.Г.Еквивалент'
+        Title.Color = clNavy
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clWhite
+        Title.Font.Height = -11
+        Title.Font.Name = 'Azl Sans Serif'
+        Title.Font.Style = []
+        Width = 100
+        Visible = True
+      end>
+  end
+  object GroupBox1: TGroupBox
+    Left = 0
+    Top = 614
+    Width = 943
+    Height = 31
+    Align = alBottom
+    TabOrder = 1
+    object SpeedButton1: TSpeedButton
+      Left = 918
+      Top = 7
+      Width = 23
+      Height = 22
+      Flat = True
+      Glyph.Data = {
+        36040000424D3604000000000000360000002800000010000000100000000100
+        2000000000000004000000000000000000000000000000000000FF00FF00FF00
+        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF000084
+        0000008400000084000000840000008400000084000000840000008400000084
+        00000084000000840000008400000084000000840000FF00FF00FF00FF000084
+        0000008400000084000000840000008400000084000000840000008400000084
+        00000084000000840000008400000084000000840000FF00FF00FF00FF000084
+        0000FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF000084000000840000FF00FF00FF00FF000084
+        0000FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF000084000000840000FF00FF00FF00FF000084
+        0000FFFFFF000084000000840000008400000084000000840000008400000084
+        00000084000000840000008400000084000000840000FF00FF00FF00FF000084
+        0000FFFFFF000084000000840000008400000084000000840000FFFFFF000084
+        00000084000000840000FFFFFF000084000000840000FF00FF00FF00FF000084
+        0000FFFFFF00FFFFFF00008400000084000000840000FFFFFF00008400000084
+        00000084000000840000FFFFFF000084000000840000FF00FF00FF00FF000084
+        0000FFFFFF00FFFFFF00FFFFFF0000840000FFFFFF0000840000008400000084
+        0000FFFFFF00FFFFFF00FFFFFF000084000000840000FF00FF00FF00FF000084
+        0000FFFFFF00FFFFFF00FFFFFF00FFFFFF000084000000840000008400000084
+        0000FFFFFF00FFFFFF00FFFFFF000084000000840000FF00FF00FF00FF000084
+        0000FFFFFF00FFFFFF00FFFFFF00008400000084000000840000008400000084
+        000000840000FFFFFF00FFFFFF000084000000840000FF00FF00FF00FF000084
+        0000FFFFFF00FFFFFF00008400000084000000840000FFFFFF00008400000084
+        00000084000000840000FFFFFF000084000000840000FF00FF00FF00FF000084
+        0000FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF000084000000840000FF00FF00FF00FF000084
+        0000FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF000084000000840000FF00FF00FF00FF000084
+        0000008400000084000000840000008400000084000000840000008400000084
+        00000084000000840000008400000084000000840000FF00FF00FF00FF00FF00
+        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00}
+      OnClick = SpeedButton1Click
+    end
+    object DBEdit1: TDBEdit
+      Left = 2
+      Top = 7
+      Width = 726
+      Height = 21
+      Anchors = [akLeft, akTop, akRight]
+      Color = clSilver
+      DataField = 'NAME'
+      DataSource = ExpertDataModul.TrafficsData
+      ReadOnly = True
+      TabOrder = 0
+    end
+    object CheckBox1: TCheckBox
+      Left = 733
+      Top = 9
+      Width = 67
+      Height = 17
+      Caption = 'Сыра №'
+      TabOrder = 1
+      OnClick = CheckBox1Click
+    end
+    object CheckBox2: TCheckBox
+      Left = 813
+      Top = 9
+      Width = 97
+      Height = 17
+      Caption = 'Баланс щесабы'
+      TabOrder = 2
+      OnClick = CheckBox2Click
+    end
+  end
+end

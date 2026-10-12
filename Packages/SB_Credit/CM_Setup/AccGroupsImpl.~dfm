@@ -1,0 +1,195 @@
+object AccGrpForm: TAccGrpForm
+  Left = 341
+  Top = 135
+  Width = 363
+  Height = 544
+  BorderIcons = [biSystemMenu]
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  OnKeyPress = FormKeyPress
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 355
+    Height = 227
+    Align = alTop
+    BevelOuter = bvNone
+    TabOrder = 0
+    object DBGrid1: TDBGrid
+      Left = 0
+      Top = 0
+      Width = 355
+      Height = 227
+      Align = alClient
+      DataSource = DataSource1
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      Options = [dgTitles, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit]
+      ParentFont = False
+      TabOrder = 0
+      TitleFont.Charset = DEFAULT_CHARSET
+      TitleFont.Color = clWhite
+      TitleFont.Height = -11
+      TitleFont.Name = 'Azl Sans Serif'
+      TitleFont.Style = []
+      Columns = <
+        item
+          Expanded = False
+          FieldName = 'ID'
+          Title.Caption = '№'
+          Title.Color = clNavy
+          Width = 67
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'DESCRIPTION'
+          Title.Caption = 'Групун ады'
+          Title.Color = clNavy
+          Width = 242
+          Visible = True
+        end>
+    end
+  end
+  object StatusBar1: TStatusBar
+    Left = 0
+    Top = 491
+    Width = 355
+    Height = 19
+    Panels = <>
+    SimplePanel = False
+  end
+  object Panel2: TPanel
+    Left = 0
+    Top = 227
+    Width = 355
+    Height = 264
+    Align = alClient
+    BevelOuter = bvNone
+    TabOrder = 2
+    object DBNavigator1: TDBNavigator
+      Left = 0
+      Top = 0
+      Width = 355
+      Height = 31
+      DataSource = DataSource2
+      Align = alTop
+      TabOrder = 0
+    end
+    object DBGrid2: TDBGrid
+      Left = 0
+      Top = 31
+      Width = 355
+      Height = 233
+      Align = alClient
+      DataSource = DataSource2
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 1
+      TitleFont.Charset = DEFAULT_CHARSET
+      TitleFont.Color = clWhite
+      TitleFont.Height = -11
+      TitleFont.Name = 'Azl Sans Serif'
+      TitleFont.Style = []
+      Columns = <
+        item
+          Expanded = False
+          FieldName = 'GROUPID'
+          ReadOnly = True
+          Title.Caption = 'Груп № си'
+          Title.Color = clNavy
+          Width = 69
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'ACCOUNTNUMBER'
+          Title.Caption = 'Баланс щесабы'
+          Title.Color = clNavy
+          Width = 100
+          Visible = True
+        end>
+    end
+  end
+  object Localizer: TNLSLocalizer
+    Caption = 'Щесаб груплары'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    Left = 216
+    Top = 32
+  end
+  object AccGroups: TOracleDataSet
+    SQL.Strings = (
+      'SELECT id, iname, description'
+      '  FROM cm_accountgroups')
+    Cursor = crSQLWait
+    Session = CMDataModule.CMSession
+    Left = 120
+    Top = 80
+    object AccGroupsID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object AccGroupsINAME: TStringField
+      FieldName = 'INAME'
+      Size = 32
+    end
+    object AccGroupsDESCRIPTION: TStringField
+      FieldName = 'DESCRIPTION'
+      Size = 64
+    end
+  end
+  object AccGrInfo: TOracleDataSet
+    SQL.Strings = (
+      'SELECT agi.RowID,agi.groupid, agi.accountnumber'
+      '  FROM cm_aginfo agi'
+      'WHERE agi.GROUPID=:GROUPID')
+    Variables.Data = {
+      0300000001000000080000003A47524F55504944030000000000000000000000}
+    Cursor = crSQLWait
+    Master = AccGroups
+    MasterFields = 'ID'
+    DetailFields = 'GROUPID'
+    RefreshOptions = [roAfterInsert, roAfterUpdate]
+    Session = CMDataModule.CMSession
+    Left = 120
+    Top = 112
+    object AccGrInfoGROUPID: TFloatField
+      FieldName = 'GROUPID'
+      Required = True
+    end
+    object AccGrInfoACCOUNTNUMBER: TFloatField
+      FieldName = 'ACCOUNTNUMBER'
+      Required = True
+    end
+  end
+  object DataSource1: TDataSource
+    DataSet = AccGroups
+    Left = 160
+    Top = 80
+  end
+  object DataSource2: TDataSource
+    DataSet = AccGrInfo
+    Left = 160
+    Top = 112
+  end
+end

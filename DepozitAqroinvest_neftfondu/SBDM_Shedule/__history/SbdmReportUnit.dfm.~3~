@@ -1,0 +1,79 @@
+object FormReport: TFormReport
+  Left = 0
+  Top = 0
+  Caption = 'FormReport'
+  ClientHeight = 114
+  ClientWidth = 184
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poOwnerFormCenter
+  PixelsPerInch = 96
+  TextHeight = 13
+  object RGReport: TRadioGroup
+    Left = 0
+    Top = 0
+    Width = 184
+    Height = 66
+    Align = alTop
+    Caption = 'Se'#231'im'
+    ItemIndex = 0
+    Items.Strings = (
+      'Hesabat'
+      'Exel')
+    TabOrder = 0
+  end
+  object BitBtn2: TBitBtn
+    Left = 8
+    Top = 82
+    Width = 75
+    Height = 25
+    Caption = 'Q'#601'bul'
+    DoubleBuffered = True
+    Kind = bkOK
+    NumGlyphs = 2
+    ParentDoubleBuffered = False
+    TabOrder = 1
+    OnClick = BitBtn2Click
+  end
+  object BitBtn1: TBitBtn
+    Left = 99
+    Top = 82
+    Width = 75
+    Height = 25
+    Caption = #304'mtina'
+    DoubleBuffered = True
+    Kind = bkCancel
+    NumGlyphs = 2
+    ParentDoubleBuffered = False
+    TabOrder = 2
+  end
+  object Exportdata: TCMExcelExport
+    StyleColumnWidth = cwDefault
+    ColumnWidth = 0
+    FontTitles.Charset = DEFAULT_CHARSET
+    FontTitles.Color = clWindowText
+    FontTitles.Height = -11
+    FontTitles.Name = 'Tahoma'
+    FontTitles.Style = []
+    OrientationTitles = 0
+    FontData.Charset = DEFAULT_CHARSET
+    FontData.Color = clWindowText
+    FontData.Height = -11
+    FontData.Name = 'Tahoma'
+    FontData.Style = []
+    FontSummary.Charset = DEFAULT_CHARSET
+    FontSummary.Color = clWindowText
+    FontSummary.Height = -11
+    FontSummary.Name = 'Tahoma'
+    FontSummary.Style = []
+    SummarySelection = ssNone
+    SummaryCalculation = scSUM
+    Left = 96
+    Top = 24
+  end
+end

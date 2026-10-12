@@ -1,0 +1,644 @@
+﻿unit KrdInfoFrmImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ComCtrls, ExtCtrls, DBGridEhGrouping, GridsEh, DBGridEh, Buttons,
+  XFSCtrls, StdCtrls, DBCtrls, XDBCtrls, DBCtrlsEh, Mask, Grids, DBGrids;
+
+type
+  TKrdInfoFrm = class(TForm)
+    Panel1: TPanel;
+    PageControl1: TPageControl;
+    TabSheet1: TTabSheet;
+    TabSheet2: TTabSheet;
+    TabSheet3: TTabSheet;
+    TabSheet4: TTabSheet;
+    Panel11: TPanel;
+    SpeedButton2: TSpeedButton;
+    DBGridEh1: TDBGridEh;
+    Panel12: TPanel;
+    SpeedButton3: TSpeedButton;
+    SpeedButton4: TSpeedButton;
+    DBGridEh2: TDBGridEh;
+    XFPanel2: TXFPanel;
+    XFLabel3: TXFLabel;
+    XFLabel4: TXFLabel;
+    DBEdit3: TDBEdit;
+    DBEdit4: TDBEdit;
+    XFPanel5: TXFPanel;
+    XFLabel9: TXFLabel;
+    XFLabel10: TXFLabel;
+    DBEdit7: TDBEdit;
+    DBEdit8: TDBEdit;
+    XFPanel4: TXFPanel;
+    XFLabel7: TXFLabel;
+    XFLabel8: TXFLabel;
+    DBEdit1: TDBEdit;
+    DBDateTimeEditEh1: TDBDateTimeEditEh;
+    XFPanel1: TXFPanel;
+    XFLabel1: TXFLabel;
+    XFLabel2: TXFLabel;
+    DBEdit2: TDBEdit;
+    DBDateTimeEditEh2: TDBDateTimeEditEh;
+    XFPanel3: TXFPanel;
+    XFLabel5: TXFLabel;
+    XFLabel6: TXFLabel;
+    DBEdit5: TDBEdit;
+    DBEdit6: TDBEdit;
+    XFPanel6: TXFPanel;
+    XFLabel11: TXFLabel;
+    XFLabel12: TXFLabel;
+    DBEdit9: TDBEdit;
+    DBEdit10: TDBEdit;
+    XFPanel7: TXFPanel;
+    XFLabel13: TXFLabel;
+    XFLabel14: TXFLabel;
+    DBEdit11: TDBEdit;
+    DBEdit12: TDBEdit;
+    XFPanel8: TXFPanel;
+    XFLabel15: TXFLabel;
+    XFLabel16: TXFLabel;
+    DBEdit13: TDBEdit;
+    DBEdit14: TDBEdit;
+    XFPanel9: TXFPanel;
+    XFLabel17: TXFLabel;
+    XFLabel18: TXFLabel;
+    DBEdit15: TDBEdit;
+    DBEdit16: TDBEdit;
+    XFPanel10: TXFPanel;
+    XFLabel19: TXFLabel;
+    XFLabel20: TXFLabel;
+    DBEdit17: TDBEdit;
+    DBEdit18: TDBEdit;
+    BitBtn1: TBitBtn;
+    XFPanel11: TXFPanel;
+    XFLabel21: TXFLabel;
+    XFPanel12: TXFPanel;
+    XFLabel23: TXFLabel;
+    XFLabel24: TXFLabel;
+    DBEdit21: TDBEdit;
+    DBEdit22: TDBEdit;
+    XFPanel13: TXFPanel;
+    XFLabel25: TXFLabel;
+    XFLabel26: TXFLabel;
+    DBEdit23: TDBEdit;
+    DBEdit24: TDBEdit;
+    XFPanel14: TXFPanel;
+    XFLabel27: TXFLabel;
+    XFLabel28: TXFLabel;
+    DBEdit25: TDBEdit;
+    DBEdit26: TDBEdit;
+    DBMemo1: TDBMemo;
+    XFPanel15: TXFPanel;
+    XFLabel22: TXFLabel;
+    DBMemo2: TDBMemo;
+    Zaminlər: TTabSheet;
+    Girovlar: TTabSheet;
+    XFPanel16: TXFPanel;
+    XFLabel29: TXFLabel;
+    XFLabel30: TXFLabel;
+    DBEdit19: TDBEdit;
+    DBEdit20: TDBEdit;
+    DBGrid1: TDBGrid;
+    XFPanel18: TXFPanel;
+    XFLabel33: TXFLabel;
+    DBEdit29: TDBEdit;
+    XFPanel17: TXFPanel;
+    XFLabel31: TXFLabel;
+    XFLabel32: TXFLabel;
+    DBEdit27: TDBEdit;
+    DBEdit28: TDBEdit;
+    XFPanel19: TXFPanel;
+    XFLabel35: TXFLabel;
+    XFLabel36: TXFLabel;
+    DBEdit31: TDBEdit;
+    DBEdit32: TDBEdit;
+    XFPanel20: TXFPanel;
+    XFLabel37: TXFLabel;
+    XFLabel38: TXFLabel;
+    DBEdit33: TDBEdit;
+    DBEdit34: TDBEdit;
+    XFPanel21: TXFPanel;
+    XFLabel39: TXFLabel;
+    XFLabel40: TXFLabel;
+    DBEdit35: TDBEdit;
+    DBEdit36: TDBEdit;
+    XFPanel22: TXFPanel;
+    XFLabel34: TXFLabel;
+    XFLabel41: TXFLabel;
+    DBEdit30: TDBEdit;
+    DBEdit37: TDBEdit;
+    XFPanel23: TXFPanel;
+    XFLabel42: TXFLabel;
+    XFLabel43: TXFLabel;
+    DBEdit38: TDBEdit;
+    DBEdit39: TDBEdit;
+    XFPanel24: TXFPanel;
+    XFLabel44: TXFLabel;
+    XFLabel45: TXFLabel;
+    DBEdit40: TDBEdit;
+    DBEdit41: TDBEdit;
+    procedure SpeedButton2Click(Sender: TObject);
+    procedure SpeedButton3Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure XFPanel4Resize(Sender: TObject);
+    procedure FormCanResize(Sender: TObject; var NewWidth, NewHeight: Integer;
+      var Resize: Boolean);
+    procedure BitBtn1Click(Sender: TObject);
+
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  KrdInfoFrm: TKrdInfoFrm;
+  Exl, Sheet: Variant;
+
+implementation
+ uses PrCmDMImpl,ComObj, SendFrmİmpl;
+{$R *.dfm}
+
+
+procedure TKrdInfoFrm.BitBtn1Click(Sender: TObject);
+begin
+SendFrm.showmodal
+end;
+
+procedure TKrdInfoFrm.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+resize:=false;
+end;
+
+procedure TKrdInfoFrm.FormShow(Sender: TObject);
+begin
+PageControl1.TabIndex:= 0
+end;
+
+procedure TKrdInfoFrm.SpeedButton2Click(Sender: TObject);
+
+ var
+ RestsStr,chpayStr: String;
+ ADDITIONALPARAMS,FilterStr,CheckStr:String;
+ sysdat :Tdatetime;
+
+const
+number_format='#,##0.00';
+number_format_r='#,##0.00%';
+n='yyy';
+d=2;
+f=3;
+
+
+procedure CreateSheet;
+begin
+  try
+   Exl := CreateOleObject('Excel.Application');
+   Exl.WorkBooks.add;
+   Sheet := Exl.Application.Worksheets.Item[1];
+  except
+  end;
+end;
+ procedure DestroySheet;
+begin
+  try
+   Finalize(Sheet);
+   Finalize(Exl);
+  except
+
+  end;
+end;
+procedure ShowSheet;
+begin
+  try
+     Exl.Visible := True;
+  except
+     DestroySheet;
+   end;
+  end;
+var
+s,l,cell, r,i , j , k ,m ,w :Integer;
+tt,dat,dd :tdatetime;
+rc,t_val :integer;
+bash: string;
+ll,vv,ss :real;
+begin
+
+          CreateSheet;
+ try
+
+     Sheet.Range['A1:A60000'].ColumnWidth:=10;
+     Sheet.Range['B1:B60000'].ColumnWidth:=15;
+     Sheet.Range['C1:C60000'].ColumnWidth:=25;
+     Sheet.Range['D1:D60000'].ColumnWidth:=25;
+    Sheet.Range['E1:E60000'].ColumnWidth:=25;
+     Sheet.Range['F1:F60000'].ColumnWidth:=35;
+    Sheet.Range['G1:G60000'].ColumnWidth:=15;
+    { Sheet.Range['P1:A60000'].ColumnWidth:=35; }
+
+ /////////////////////////////////////////////////////////////////////////// /
+ Sheet.Cells[2,6]:='';
+   Sheet.Cells[2,6].Font.Name:='Azl Sans Serif';
+   Sheet.Cells[2,6].Font.Bold :=true;
+   Sheet.Cells[2,6].Font.Color:=clolive;
+   Sheet.Cells[2,6].Font.size :=22;
+/////////////////////////////////////////////////////////////////////////////
+       k:=7 ; i:=0;
+
+      sheet.Cells[i+3,1]:='Ödəməlidir ';
+      Sheet.Cells[i+3,1].Font.Name:='tahoma';
+      Sheet.Cells[i+3,1].Font.Bold :=true;
+      Sheet.Cells[i+3,1].Font.Color:=clred;
+      Sheet.Cells[i+3,1].Font.size :=13;
+
+          sheet.Cells[i+4,3]:=' Müqavilənin № si:';
+          Sheet.Cells[i+4,3].Font.Name:='tahoma';
+          Sheet.Cells[i+4,3].Font.Bold :=true;
+          Sheet.Cells[i+4,3].Font.Color:=clred;
+          Sheet.Cells[i+4,3].Font.size :=13;
+
+          sheet.Cells[i+4,4]:=' '+PrCmDM.IntCache.FieldByName('numberofcredit').asstring;
+          Sheet.Cells[i+4,4].Font.Name:='tahoma';
+          Sheet.Cells[i+4,4].Font.Bold :=true;
+          Sheet.Cells[i+4,4].Font.Color:=clblack;
+       //   Sheet.Cells[i+4,4].NumberFormat:='##########';
+
+          sheet.Cells[i+4,5]:=' Borcalanın adı:';
+          Sheet.Cells[i+4,5].Font.Name:='tahoma';
+          Sheet.Cells[i+4,5].Font.Bold :=true;
+          Sheet.Cells[i+4,5].Font.Color:=clred;
+          Sheet.Cells[i+4,5].Font.size :=13;
+
+          sheet.Cells[i+4,6]:=PrCmDM.IntCache.FieldByName('name').asstring;
+          Sheet.Cells[i+4,6].Font.Name:='tahoma';
+          Sheet.Cells[i+4,6].Font.Bold :=true;
+          Sheet.Cells[i+4,6].Font.Color:=clblack;
+ ///////////////////////////////////====================//////////////////
+
+          Sheet.Cells[i+k+1,1]:='Sıra №';
+          Sheet.Cells[i+k+1,1].Font.Name:='tahoma';
+          Sheet.Cells[i+k+1,1].Font.Bold :=true;
+          Sheet.Cells[i+k+1,1].Font.Color:=clBlue;
+
+          Sheet.Cells[i+k+1,2].Value:=' Tarix';
+          Sheet.Cells[i+k+1,2].Font.Name:='tahoma';
+          Sheet.Cells[i+k+1,2].Font.Bold :=true;
+          Sheet.Cells[i+k+1,2].Font.Color:=clBlue;
+
+          Sheet.Cells[i+k+1,3]:=' Qalıq';
+          Sheet.Cells[i+k+1,3].Font.Name:='tahoma';
+          Sheet.Cells[i+k+1,3].Font.Bold :=true;
+          Sheet.Cells[i+k+1,3].Font.Color:=clBlue;
+
+          Sheet.Cells[i+k+1,4].Value:=' Əsas borcdan';
+          Sheet.Cells[i+k+1,4].Font.Name:='tahoma';
+          Sheet.Cells[i+k+1,4].Font.Bold :=true;
+          Sheet.Cells[i+k+1,4].Font.Color:=clBlue;
+
+          Sheet.Cells[i+k+1,5]:=' Hesablanmış % dən';
+          Sheet.Cells[i+k+1,5].Font.Name:='tahoma';
+          Sheet.Cells[i+k+1,5].Font.Bold :=true;
+          Sheet.Cells[i+k+1,5].Font.Color:=clBlue;
+
+          Sheet.Cells[i+k+1,6]:=' Cəmi';
+          Sheet.Cells[i+k+1,6].Font.Name:='tahoma';
+          Sheet.Cells[i+k+1,6].Font.Bold :=true;
+          Sheet.Cells[i+k+1,6].Font.Color:=clBlue;
+         PrCmDM.Schedule.first;
+         ShowSheet;
+       ss:=0; vv:=0;
+       rc:=PrCmDM.Schedule.RecordCount ;
+      for i:=1 to rc do  begin
+
+        Sheet.Cells[i+k+1,1].Font.Name:='tahoma';
+        Sheet.Cells[i+k+1,1].Font.Bold :=true;
+        Sheet.Cells[i+k+1,1]:=PrCmDM.Schedule.FieldByName('sira').asinteger;
+
+        Sheet.Cells[i+k+1,2].Font.Name:='tahoma';
+        Sheet.Cells[i+k+1,2].Font.Bold :=true;
+        Sheet.Cells[i+k+1,2]:=PrCmDM.Schedule.FieldByName('PAYMENTDATE').asdatetime;
+
+        Sheet.Cells[i+k+1,3].Font.Name:='tahoma';
+        Sheet.Cells[i+k+1,3].Font.Bold :=true;
+        Sheet.Cells[i+k+1,3]:=PrCmDM.Schedule.FieldByName('rest').asfloat;
+
+        Sheet.Cells[i+k+1,4].Font.Name:='tahoma';
+        Sheet.Cells[i+k+1,4].Font.Bold :=true;
+        Sheet.Cells[i+k+1,4]:=PrCmDM.Schedule.FieldByName('principal').asfloat;
+
+        Sheet.Cells[i+k+1,5].Font.Name:='tahoma';
+        Sheet.Cells[i+k+1,5].Font.Bold :=true;
+        Sheet.Cells[i+k+1,5]:=PrCmDM.Schedule.FieldByName('interest').asfloat;
+
+
+
+        Sheet.Cells[i+k+1,6].Font.Name:='tahoma';
+        Sheet.Cells[i+k+1,6].Font.Bold :=true;
+        Sheet.Cells[i+k+1,6]:=PrCmDM.Schedule.FieldByName('sm').asfloat;
+        Sheet.Cells[i+k+1,6].Font.Color:=clred;
+
+        ss:=ss+PrCmDM.Schedule.FieldByName('principal').asfloat;
+        vv:=vv+PrCmDM.Schedule.FieldByName('interest').asfloat;
+        ll:=ll+PrCmDM.Schedule.FieldByName('sm').asfloat;
+      //  Sheet.Cells[i+k+1,5].Font.Bold :=true;
+      //  Sheet.Cells[i+k+2,5]:=
+
+        PrCmDM.Schedule.Next;
+       end;
+        Sheet.Cells[rc+k+2,1].Font.Name:='tahoma';
+        Sheet.Cells[rc+k+2,1].Font.Bold :=true;
+        Sheet.Cells[rc+k+2,1]:='Cəm';
+        Sheet.Cells[rc+k+2,1].Font.Color:=clGreen;
+
+        Sheet.Cells[rc+k+1,3].Font.Name:='tahoma';
+        Sheet.Cells[rc+k+1,3].Font.Bold :=true;
+        Sheet.Cells[rc+k+2,3].Font.Color:=clGreen;
+        Sheet.Cells[rc+k+2,3]:=ss;
+
+        Sheet.Cells[rc+k+1,4].Font.Name:='tahoma';
+        Sheet.Cells[rc+k+1,4].Font.Bold :=true;
+        Sheet.Cells[rc+k+2,4].Font.Color:=clGreen;
+        Sheet.Cells[rc+k+2,4]:=vv;
+
+        Sheet.Cells[rc+k+1,5].Font.Name:='tahoma';
+        Sheet.Cells[rc+k+1,5].Font.Bold :=true;
+        Sheet.Cells[rc+k+2,5].Font.Color:=clGreen;
+        Sheet.Cells[rc+k+2,5]:=ll;
+
+        Sheet.Cells[rc+k+1,6].Font.Name:='tahoma';
+        Sheet.Cells[rc+k+1,6].Font.Bold :=true;
+        Sheet.Cells[rc+k+2,6].Font.Color:=clGreen;
+        Sheet.Cells[rc+k+2,6]:=ll;
+                   bash:=inttostr(k+1);
+
+     // ShowMessage(inttostr(m)); exit;
+      Exl.Range['A'+bash+':F'+inttostr(m+k+1)].select;
+      Sheet.Range['A'+bash+':F'+inttostr(m+k+1)].Borders.Color:=clBlack;
+
+  finally
+
+   Exl.Range['A1:A1'].Select;
+
+   Screen.Cursor := crDefault;
+   DestroySheet;
+  PrCmDM.Schedule.EnableControls;
+  end;
+
+
+end;
+
+procedure TKrdInfoFrm.SpeedButton3Click(Sender: TObject);
+
+ var
+ RestsStr,chpayStr: String;
+ ADDITIONALPARAMS,FilterStr,CheckStr:String;
+ sysdat :Tdatetime;
+
+const
+number_format='#,##0.00';
+number_format_r='#,##0.00%';
+n='yyy';
+d=2;
+f=3;
+
+
+procedure CreateSheet;
+begin
+  try
+   Exl := CreateOleObject('Excel.Application');
+   Exl.WorkBooks.add;
+   Sheet := Exl.Application.Worksheets.Item[1];
+  except
+  end;
+end;
+ procedure DestroySheet;
+begin
+  try
+   Finalize(Sheet);
+   Finalize(Exl);
+  except
+
+  end;
+end;
+procedure ShowSheet;
+begin
+  try
+     Exl.Visible := True;
+  except
+     DestroySheet;
+   end;
+  end;
+var
+s,l,cell, r,i , j , k ,m ,w :Integer;
+tt,dat,dd :tdatetime;
+rc,t_val :integer;
+bash: string;
+ll,vv,ss :real;
+begin
+
+          CreateSheet;
+ try
+
+     Sheet.Range['A1:A60000'].ColumnWidth:=10;
+     Sheet.Range['B1:B60000'].ColumnWidth:=15;
+     Sheet.Range['C1:C60000'].ColumnWidth:=15;
+     Sheet.Range['D1:D60000'].ColumnWidth:=15;
+    Sheet.Range['E1:E60000'].ColumnWidth:=15;
+     Sheet.Range['F1:F60000'].ColumnWidth:=35;
+    {  Sheet.Range['G1:A60000'].ColumnWidth:=35;
+     Sheet.Range['P1:A60000'].ColumnWidth:=35; }
+
+ /////////////////////////////////////////////////////////////////////////// /
+ Sheet.Cells[2,5]:='';
+   Sheet.Cells[2,5].Font.Name:='tahoma';
+   Sheet.Cells[2,5].Font.Bold :=true;
+   Sheet.Cells[2,5].Font.Color:=clolive;
+   Sheet.Cells[2,5].Font.size :=22;
+/////////////////////////////////////////////////////////////////////////////
+       k:=7 ; i:=0;
+
+      sheet.Cells[i+3,1]:='Ödəmişdir ';
+      Sheet.Cells[i+3,1].Font.Name:='tahoma';
+      Sheet.Cells[i+3,1].Font.Bold :=true;
+      Sheet.Cells[i+3,1].Font.Color:=clred;
+      Sheet.Cells[i+3,1].Font.size :=13;
+
+          sheet.Cells[i+4,3]:=' Müqavilənin № si:';
+          Sheet.Cells[i+4,3].Font.Name:='tahoma';
+          Sheet.Cells[i+4,3].Font.Bold :=true;
+          Sheet.Cells[i+4,3].Font.Color:=clred;
+          Sheet.Cells[i+4,3].Font.size :=13;
+
+          sheet.Cells[i+4,4]:=' '+PrCmDM.IntCache.FieldByName('numberofcredit').asstring;
+          Sheet.Cells[i+4,4].Font.Name:='tahoma';
+          Sheet.Cells[i+4,4].Font.Bold :=true;
+          Sheet.Cells[i+4,4].Font.Color:=clblack;
+       //   Sheet.Cells[i+4,4].NumberFormat:='##########';
+
+          sheet.Cells[i+4,5]:=' Borcalanın adı:';
+          Sheet.Cells[i+4,5].Font.Name:='tahoma';
+          Sheet.Cells[i+4,5].Font.Bold :=true;
+          Sheet.Cells[i+4,5].Font.Color:=clred;
+          Sheet.Cells[i+4,5].Font.size :=13;
+
+          sheet.Cells[i+4,6]:=PrCmDM.IntCache.FieldByName('name').asstring;
+          Sheet.Cells[i+4,6].Font.Name:='tahoma';
+          Sheet.Cells[i+4,6].Font.Bold :=true;
+          Sheet.Cells[i+4,6].Font.Color:=clblack;
+ ///////////////////////////////////====================//////////////////
+
+          Sheet.Cells[i+k+1,1]:='Sıra №';
+          Sheet.Cells[i+k+1,1].Font.Name:='tahoma';
+          Sheet.Cells[i+k+1,1].Font.Bold :=true;
+          Sheet.Cells[i+k+1,1].Font.Color:=clBlue;
+
+          Sheet.Cells[i+k+1,2].Value:=' Tarix';
+          Sheet.Cells[i+k+1,2].Font.Name:='tahoma';
+          Sheet.Cells[i+k+1,2].Font.Bold :=true;
+          Sheet.Cells[i+k+1,2].Font.Color:=clBlue;
+
+          Sheet.Cells[i+k+1,3].Value:=' Əsas borucdan';
+          Sheet.Cells[i+k+1,3].Font.Name:='tahoma';
+          Sheet.Cells[i+k+1,3].Font.Bold :=true;
+          Sheet.Cells[i+k+1,3].Font.Color:=clBlue;
+
+          Sheet.Cells[i+k+1,4]:='Əsas borc. faizdən';
+          Sheet.Cells[i+k+1,4].Font.Name:='tahoma';
+          Sheet.Cells[i+k+1,4].Font.Bold :=true;
+          Sheet.Cells[i+k+1,4].Font.Color:=clBlue;
+
+          Sheet.Cells[i+k+1,5]:=' Gecikmiş borcdan';
+          Sheet.Cells[i+k+1,5].Font.Name:='tahoma';
+          Sheet.Cells[i+k+1,5].Font.Bold :=true;
+          Sheet.Cells[i+k+1,5].Font.Color:=clBlue;
+
+          Sheet.Cells[i+k+1,6]:=' Gecikmiş B faizdən';
+          Sheet.Cells[i+k+1,6].Font.Name:='tahoma';
+          Sheet.Cells[i+k+1,6].Font.Bold :=true;
+          Sheet.Cells[i+k+1,6].Font.Color:=clBlue;
+
+          Sheet.Cells[i+k+1,7]:=' Penya';
+          Sheet.Cells[i+k+1,7].Font.Name:='tahoma';
+          Sheet.Cells[i+k+1,7].Font.Bold :=true;
+          Sheet.Cells[i+k+1,7].Font.Color:=clred;
+
+          Sheet.Cells[i+k+1,8]:=' Cəmi';
+          Sheet.Cells[i+k+1,8].Font.Name:='tahoma';
+          Sheet.Cells[i+k+1,8].Font.Bold :=true;
+          Sheet.Cells[i+k+1,8].Font.Color:=clred;
+
+
+       ss:=0; vv:=0;
+       PrCmDM.Payments.first;
+       rc:=PrCmDM.Payments.RecordCount ;
+      // showmessage(inttostr(rc));exit;
+         ShowSheet;
+      for i:=1 to rc do  begin
+
+        Sheet.Cells[i+k+1,1].Font.Name:='tahoma';
+        Sheet.Cells[i+k+1,1].Font.Bold :=true;
+        Sheet.Cells[i+k+1,1]:=PrCmDM.Payments.FieldByName('sira').asinteger;
+
+        Sheet.Cells[i+k+1,2].Font.Name:='tahoma';
+        Sheet.Cells[i+k+1,2].Font.Bold :=true;
+        Sheet.Cells[i+k+1,2]:=PrCmDM.Payments.FieldByName('paydate').asdatetime;
+
+        Sheet.Cells[i+k+1,3].Font.Name:='tahoma';
+        Sheet.Cells[i+k+1,3].Font.Bold :=true;
+        Sheet.Cells[i+k+1,3]:=PrCmDM.Payments.FieldByName('payedamt').asfloat;
+
+        Sheet.Cells[i+k+1,4].Font.Name:='tahoma';
+        Sheet.Cells[i+k+1,4].Font.Bold :=true;
+        Sheet.Cells[i+k+1,4]:=PrCmDM.Payments.FieldByName('payedintamt').asfloat;
+
+        Sheet.Cells[i+k+1,5].Font.Name:='tahoma';
+        Sheet.Cells[i+k+1,5].Font.Bold :=true;
+        Sheet.Cells[i+k+1,5]:=PrCmDM.Payments.FieldByName('payeddueamt').asfloat;
+
+        Sheet.Cells[i+k+1,6].Font.Name:='tahoma';
+        Sheet.Cells[i+k+1,6].Font.Bold :=true;
+        Sheet.Cells[i+k+1,6]:=PrCmDM.Payments.FieldByName('payeddueintamt').asfloat;
+
+        Sheet.Cells[i+k+1,7].Font.Name:='tahoma';
+        Sheet.Cells[i+k+1,7].Font.Bold :=true;
+        Sheet.Cells[i+k+1,7]:=PrCmDM.Payments.FieldByName('PAYEDPENALTYAMT').asfloat;
+
+
+        Sheet.Cells[i+k+1,8].Font.Name:='tahoma';
+        Sheet.Cells[i+k+1,8].Font.Bold :=true;
+        Sheet.Cells[i+k+1,8]:=PrCmDM.Payments.FieldByName('sm').asfloat;
+        Sheet.Cells[i+k+1,8].Font.Color:=clred;
+
+        ss:=ss+PrCmDM.Payments.FieldByName('payedamt').asfloat;
+        vv:=vv+PrCmDM.Payments.FieldByName('payedintamt').asfloat;
+        ll:=ll+PrCmDM.Payments.FieldByName('sm').asfloat;
+      //  Sheet.Cells[i+k+1,5].Font.Bold :=true;
+      //  Sheet.Cells[i+k+2,5]:=
+
+        PrCmDM.Payments.Next;
+       end;
+        Sheet.Cells[rc+k+2,1].Font.Name:='tahoma';
+        Sheet.Cells[rc+k+2,1].Font.Bold :=true;
+        Sheet.Cells[rc+k+2,1]:='Cəm';
+        Sheet.Cells[rc+k+2,1].Font.Color:=clGreen;
+
+        Sheet.Cells[rc+k+1,3].Font.Name:='tahoma';
+        Sheet.Cells[rc+k+1,3].Font.Bold :=true;
+        Sheet.Cells[rc+k+2,3].Font.Color:=clGreen;
+        Sheet.Cells[rc+k+2,3]:=ss;
+
+        Sheet.Cells[rc+k+1,4].Font.Name:='tahoma';
+        Sheet.Cells[rc+k+1,4].Font.Bold :=true;
+        Sheet.Cells[rc+k+2,4].Font.Color:=clGreen;
+        Sheet.Cells[rc+k+2,4]:=vv;
+
+        Sheet.Cells[rc+k+1,5].Font.Name:='tahoma';
+        Sheet.Cells[rc+k+1,5].Font.Bold :=true;
+        Sheet.Cells[rc+k+2,5].Font.Color:=clGreen;
+        Sheet.Cells[rc+k+2,5]:='=sum(E9:E'+inttostr(rc+8)+')';
+
+        Sheet.Cells[rc+k+1,6].Font.Name:='tahoma';
+        Sheet.Cells[rc+k+1,6].Font.Bold :=true;
+        Sheet.Cells[rc+k+2,6].Font.Color:=clGreen;
+        Sheet.Cells[rc+k+2,6]:='=sum(F9:F'+inttostr(rc+8)+')';
+
+        Sheet.Cells[rc+k+1,7].Font.Name:='tahoma';
+        Sheet.Cells[rc+k+1,7].Font.Bold :=true;
+        Sheet.Cells[rc+k+2,7].Font.Color:=clGreen;
+        Sheet.Cells[rc+k+2,7]:='=sum(G9:G'+inttostr(rc+8)+')';
+
+        Sheet.Cells[rc+k+1,8].Font.Name:='tahoma';
+        Sheet.Cells[rc+k+1,8].Font.Bold :=true;
+        Sheet.Cells[rc+k+2,8].Font.Color:=clGreen;
+        Sheet.Cells[rc+k+2,8]:=ll;
+                   bash:=inttostr(k+1);
+
+     // ShowMessage(inttostr(m)); exit;
+       Exl.Range['A'+inttostr(rc+8)+':H'+inttostr(m+k+1)].select;
+      Sheet.Range['A'+inttostr(rc+8)+':H'+inttostr(m+k+1)].Borders.Color:=clBlack;
+  finally
+
+   Exl.Range['A1:A1'].Select;
+
+   Screen.Cursor := crDefault;
+   DestroySheet;
+   PrCmDM.Payments.EnableControls;
+  end;
+
+
+end;
+
+procedure TKrdInfoFrm.XFPanel4Resize(Sender: TObject);
+begin
+      //   ShowMessage(inttostr(clientwidth));
+// XFPanel2.Width := XFPanel4.Width div 2;
+// XFPanel4.Align:=alClient;
+ //XFPanel2.Width := clientwidth div 2;
+
+end;
+
+end.

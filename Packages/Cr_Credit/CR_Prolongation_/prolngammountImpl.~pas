@@ -1,0 +1,86 @@
+unit prolngammountImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, NLSDialogs,
+  NLSLocalizer, StdCtrls, ComCtrls, Mask, DBCtrlsEh, DBCtrls;
+
+type
+  TForm2 = class(TForm)
+    GroupBox2: TGroupBox;
+    GroupBox1: TGroupBox;
+    ButtonOK: TButton;
+    Localizer: TNLSLocalizer;
+    DBEdit1: TDBEdit;
+    Edit1: TEdit;
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure ButtonOKClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form2: TForm2;
+
+implementation
+ uses ProlongDataModuleImpl, sbSystem, CommonDecls;
+{$R *.DFM}
+
+procedure TForm2.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+Resize:=false;
+end;
+
+procedure TForm2.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+  if Ord(Key) = VK_ESCAPE then
+    ModalResult := mrCancel
+end;
+
+procedure TForm2.ButtonOKClick(Sender: TObject);
+resourcestring
+  rsInvalidDate = 'Ìÿáëÿüè äöçýöí äàõèë åäèí !';
+var
+  OpDate: TDateTime;
+  CrdID : Integer;
+ oldammount,  newammount : real;
+
+begin
+
+  OpDate := Get_CurrentDate;
+  newammount:=strtofloat(Edit1.text );
+  oldammount := ProlongDataMod.CreditInfo.FieldByName('dueammount').Asfloat;
+  CrdID := Get_SelectedCrdID;
+  
+  if oldammount >= newammount then
+    MessageDlg(rsInvalidDate, mtError, [mbOK],0)
+  else
+  begin
+      with ProlongDataMod.CR_PROLONGATION do
+      CallProcedure('ProlongationAmmount_Add',[
+       CrdID ,
+       oldammount,
+       newammount,
+       OpDate
+       ]);
+
+      with ProlongDataMod do
+      begin
+        OracleDataSet1.Refresh;
+        CreditInfo.Refresh;
+      end;
+
+      ModalResult := mrOk;
+
+   end;
+
+
+end;
+
+end.

@@ -1,0 +1,491 @@
+object frmReport: TfrmReport
+  Left = 307
+  Top = 187
+  Width = 450
+  Height = 252
+  BorderIcons = [biSystemMenu]
+  Caption = 'frmReport'
+  Color = clBtnFace
+  Font.Charset = RUSSIAN_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  OnCanResize = FormCanResize
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  OnKeyPress = FormKeyPress
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 442
+    Height = 60
+    Align = alTop
+    TabOrder = 0
+    object GroupBox1: TGroupBox
+      Left = 1
+      Top = 1
+      Width = 216
+      Height = 58
+      Align = alLeft
+      Caption = 'Валйута'
+      TabOrder = 0
+      object CheckBox1: TCheckBox
+        Left = 5
+        Top = 38
+        Width = 97
+        Height = 17
+        Caption = 'Тятбиг ет'
+        TabOrder = 0
+      end
+      object DBLookupComboboxEh1: TDBLookupComboboxEh
+        Left = 5
+        Top = 14
+        Width = 204
+        Height = 21
+        DropDownBox.Sizable = True
+        EditButtons = <>
+        KeyField = 'VALUTE'
+        ListField = 'VALU_NAME'
+        ListSource = ValutesDatSrc
+        TabOrder = 1
+        Visible = True
+      end
+    end
+    object GroupBox3: TGroupBox
+      Left = 217
+      Top = 1
+      Width = 216
+      Height = 58
+      Align = alLeft
+      Caption = 'Филиал'
+      TabOrder = 1
+      object DBLookupComboboxEh2: TDBLookupComboboxEh
+        Left = 5
+        Top = 14
+        Width = 204
+        Height = 21
+        DropDownBox.Sizable = True
+        EditButtons = <>
+        KeyField = 'ID'
+        ListField = 'NAME'
+        ListSource = FilialsDatSrc
+        TabOrder = 0
+        Visible = True
+      end
+      object CheckBox2: TCheckBox
+        Left = 6
+        Top = 38
+        Width = 97
+        Height = 17
+        Caption = 'Тятбиг ет'
+        TabOrder = 1
+      end
+    end
+  end
+  object Panel5: TPanel
+    Left = 0
+    Top = 60
+    Width = 442
+    Height = 60
+    Align = alTop
+    TabOrder = 1
+    object GroupBox7: TGroupBox
+      Left = 1
+      Top = 1
+      Width = 216
+      Height = 58
+      Align = alLeft
+      Caption = 'Мцштяринин  типи'
+      TabOrder = 0
+      object CheckBox7: TCheckBox
+        Left = 5
+        Top = 38
+        Width = 97
+        Height = 17
+        Caption = 'Тятбиг ет'
+        TabOrder = 0
+      end
+      object DBLookupComboboxEh7: TDBLookupComboboxEh
+        Left = 5
+        Top = 14
+        Width = 204
+        Height = 21
+        DropDownBox.Sizable = True
+        EditButtons = <>
+        KeyField = 'ID'
+        ListField = 'CATEGORY'
+        ListSource = CustTypeDatSrc
+        TabOrder = 1
+        Visible = True
+      end
+    end
+    object GroupBox9: TGroupBox
+      Left = 217
+      Top = 1
+      Width = 216
+      Height = 58
+      Align = alLeft
+      Caption = 'Мцштяринин категорйасы'
+      TabOrder = 1
+      object CheckBox8: TCheckBox
+        Left = 5
+        Top = 38
+        Width = 97
+        Height = 17
+        Caption = 'Тятбиг ет'
+        TabOrder = 0
+      end
+      object DBLookupComboboxEh8: TDBLookupComboboxEh
+        Left = 5
+        Top = 14
+        Width = 204
+        Height = 21
+        DropDownBox.Sizable = True
+        EditButtons = <>
+        KeyField = 'ID'
+        ListField = 'NAME'
+        ListSource = PersonsDatSrc
+        TabOrder = 1
+        Visible = True
+      end
+    end
+  end
+  object Panel9: TPanel
+    Left = 0
+    Top = 120
+    Width = 442
+    Height = 60
+    Align = alTop
+    TabOrder = 2
+    object GroupBox10: TGroupBox
+      Left = 1
+      Top = 1
+      Width = 216
+      Height = 58
+      Align = alLeft
+      Caption = 'Депозитин  новц'
+      TabOrder = 0
+      object CheckBox10: TCheckBox
+        Left = 5
+        Top = 38
+        Width = 97
+        Height = 17
+        Caption = 'Тятбиг ет'
+        TabOrder = 0
+      end
+      object DBLookupComboboxEh9: TDBLookupComboboxEh
+        Left = 5
+        Top = 14
+        Width = 204
+        Height = 21
+        DropDownBox.Sizable = True
+        EditButtons = <>
+        KeyField = 'ID'
+        ListField = 'TYPE'
+        ListSource = CredTypeDatScr
+        TabOrder = 1
+        Visible = True
+      end
+    end
+    object GroupBox11: TGroupBox
+      Left = 217
+      Top = 1
+      Width = 224
+      Height = 58
+      Align = alClient
+      Caption = 'Тарих'
+      TabOrder = 1
+      object Label1: TLabel
+        Left = 7
+        Top = 35
+        Width = 41
+        Height = 13
+        Caption = 'Сон тарих'
+      end
+      object Label2: TLabel
+        Left = 6
+        Top = 15
+        Width = 68
+        Height = 13
+        Caption = 'Башланьыж тарих'
+      end
+      object BeginDate: TDateTimePicker
+        Left = 92
+        Top = 7
+        Width = 116
+        Height = 21
+        CalAlignment = dtaLeft
+        Date = 39134.682371956
+        Time = 39134.682371956
+        DateFormat = dfShort
+        DateMode = dmComboBox
+        Kind = dtkDate
+        ParseInput = False
+        TabOrder = 0
+      end
+      object EndDate: TDateTimePicker
+        Left = 92
+        Top = 33
+        Width = 116
+        Height = 21
+        CalAlignment = dtaLeft
+        Date = 39134.682371956
+        Time = 39134.682371956
+        DateFormat = dfShort
+        DateMode = dmComboBox
+        Kind = dtkDate
+        ParseInput = False
+        TabOrder = 1
+      end
+    end
+  end
+  object BitBtn1: TBitBtn
+    Left = 260
+    Top = 188
+    Width = 75
+    Height = 25
+    Caption = 'Гябул'
+    TabOrder = 3
+    OnClick = BitBtn1Click
+  end
+  object BitBtn2: TBitBtn
+    Left = 348
+    Top = 188
+    Width = 75
+    Height = 25
+    Caption = 'Имтина'
+    TabOrder = 4
+    OnClick = BitBtn2Click
+  end
+  object Valutes: TOracleDataSet
+    SQL.Strings = (
+      'select valute,valu_name from avalute_t')
+    Session = sboapiDataModule.SBSession
+    Left = 5
+    Top = 184
+    object ValutesVALUTE: TIntegerField
+      FieldName = 'VALUTE'
+      Required = True
+    end
+    object ValutesVALU_NAME: TStringField
+      FieldName = 'VALU_NAME'
+      Size = 25
+    end
+  end
+  object Filials: TOracleDataSet
+    SQL.Strings = (
+      'select id,name from filial')
+    Session = sboapiDataModule.SBSession
+    Left = 36
+    Top = 184
+    object FilialsID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object FilialsNAME: TStringField
+      FieldName = 'NAME'
+      Size = 90
+    end
+  end
+  object CustomerTypes: TOracleDataSet
+    SQL.Strings = (
+      'select id,CATEGORY from sbcm_categories')
+    Session = sboapiDataModule.SBSession
+    Left = 66
+    Top = 185
+    object CustomerTypesID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object CustomerTypesCATEGORY: TStringField
+      FieldName = 'CATEGORY'
+      Size = 128
+    end
+  end
+  object Persons: TOracleDataSet
+    SQL.Strings = (
+      'select * from sbcm_persons')
+    Session = sboapiDataModule.SBSession
+    Left = 97
+    Top = 184
+    object PersonsID: TFloatField
+      FieldName = 'ID'
+    end
+    object PersonsNAME: TStringField
+      FieldName = 'NAME'
+    end
+  end
+  object CreditTypes: TOracleDataSet
+    SQL.Strings = (
+      'SELECT id, type'
+      '  FROM sbcm_deposit_types')
+    Session = sboapiDataModule.SBSession
+    Left = 128
+    Top = 184
+    object CreditTypesID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object CreditTypesTYPE: TStringField
+      FieldName = 'TYPE'
+      Required = True
+      Size = 256
+    end
+  end
+  object Results: TOracleDataSet
+    SQL.Strings = (
+      'select '
+      '   p.contractno,'
+      '   p.opendate,'
+      '   p.closedate,'
+      '   SBCM_REPORT.get_depositbalance(p.id) as balance,'
+      '   SBCM_REPORT.get_depositInterest(p.id) as intrate,'
+      '   SBCM_REPORT.get_period(p.id,:bdat ) as period,'
+      '   SBCM_REPORT.get_DepositCurrency(p.currency) as valute,'
+      '   SBCM_REPORT.get_depositrest(p.id,:bdat) as BRest,'
+      '   SBCM_REPORT.get_deposittranche(p.id,:bdat,:edat) as TrAmt,'
+      '   SBCM_REPORT.get_depositpayment(p.id,:bdat,:edat) as PayAmt,'
+      
+        '   SBCM_REPORT.get_depositrest(p.id,:edat) as ERest,round((SBCM_' +
+        'REPORT.get_depositInterest(p.id)*SBCM_REPORT.get_depositrest(p.i' +
+        'd,:edat)/:sm)*100,2) as roundint'
+      ' from sbcm_contracts p '
+      ' ')
+    Variables.Data = {
+      0300000003000000050000003A424441540C0000000000000000000000050000
+      003A454441540C0000000000000000000000030000003A534D04000000000000
+      0000000000}
+    QBEDefinition.QBEFieldDefs = {
+      040000000C0000000A000000434F4E54524143544E4F01000000000008000000
+      4F50454E4441544501000000000009000000434C4F5345444154450100000000
+      000700000042414C414E434501000000000007000000494E5452415445010000
+      00000006000000504552494F440100000000000600000056414C555445010000
+      000000050000004252455354010000000000050000005452414D540100000000
+      0006000000504159414D54010000000000050000004552455354010000000000
+      08000000524F554E44494E54010000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 206
+    Top = 187
+    object ResultsCONTRACTNO: TStringField
+      DisplayLabel = 'Мцгавилянин №-си'
+      FieldName = 'CONTRACTNO'
+      Size = 64
+    end
+    object ResultsOPENDATE: TDateTimeField
+      DisplayLabel = 'Ачылма тарихи'
+      FieldName = 'OPENDATE'
+      Required = True
+    end
+    object ResultsCLOSEDATE: TDateTimeField
+      DisplayLabel = 'Баьланма тарихи'
+      FieldName = 'CLOSEDATE'
+      Required = True
+    end
+    object ResultsBALANCE: TFloatField
+      DisplayLabel = 'Баланс'
+      FieldName = 'BALANCE'
+    end
+    object ResultsINTRATE: TFloatField
+      DisplayLabel = '%'
+      FieldName = 'INTRATE'
+    end
+    object ResultsPERIOD: TStringField
+      DisplayLabel = 'Период'
+      FieldName = 'PERIOD'
+      Size = 4000
+    end
+    object ResultsVALUTE: TStringField
+      DisplayLabel = '$'
+      FieldName = 'VALUTE'
+      Size = 4000
+    end
+    object ResultsBREST: TFloatField
+      DisplayLabel = 'Д .Я Мябляь'
+      FieldName = 'BREST'
+    end
+    object ResultsTRAMT: TFloatField
+      DisplayLabel = 'Йатырылмыш мябляь'
+      FieldName = 'TRAMT'
+    end
+    object ResultsPAYAMT: TFloatField
+      DisplayLabel = 'Юдянилмиш мябляь'
+      FieldName = 'PAYAMT'
+    end
+    object ResultsEREST: TFloatField
+      DisplayLabel = 'Д.С Мябляь'
+      FieldName = 'EREST'
+    end
+    object ResultsROUNDINT: TFloatField
+      DisplayLabel = 'Орта %'
+      FieldName = 'ROUNDINT'
+    end
+  end
+  object ExcelExport: TCMExcelExport
+    StyleColumnWidth = cwDefault
+    ColumnWidth = 0
+    FontTitles.Charset = RUSSIAN_CHARSET
+    FontTitles.Color = clWindowText
+    FontTitles.Height = -11
+    FontTitles.Name = 'Azl Sans Serif'
+    FontTitles.Style = []
+    OrientationTitles = 0
+    FontData.Charset = RUSSIAN_CHARSET
+    FontData.Color = clWindowText
+    FontData.Height = -11
+    FontData.Name = 'Azl Sans Serif'
+    FontData.Style = []
+    FontSummary.Charset = RUSSIAN_CHARSET
+    FontSummary.Color = clWindowText
+    FontSummary.Height = -11
+    FontSummary.Name = 'Azl Sans Serif'
+    FontSummary.Style = []
+    SummarySelection = ssNone
+    SummaryCalculation = scSUM
+    Left = 168
+    Top = 184
+  end
+  object CredTypeDatScr: TDataSource
+    DataSet = CreditTypes
+    Left = 130
+    Top = 216
+  end
+  object PersonsDatSrc: TDataSource
+    DataSet = Persons
+    Left = 98
+    Top = 215
+  end
+  object CustTypeDatSrc: TDataSource
+    DataSet = CustomerTypes
+    Left = 67
+    Top = 217
+  end
+  object FilialsDatSrc: TDataSource
+    DataSet = Filials
+    Left = 37
+    Top = 216
+  end
+  object ValutesDatSrc: TDataSource
+    DataSet = Valutes
+    Left = 4
+    Top = 216
+  end
+  object query: TOracleDataSet
+    SQL.Strings = (
+      'select sum(FACTICALDEBT) as smr from sbcm_contract_state'
+      '')
+    QBEDefinition.QBEFieldDefs = {040000000100000003000000534D52010000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 65
+    Top = 49
+    object querySMR: TFloatField
+      FieldName = 'SMR'
+    end
+  end
+end

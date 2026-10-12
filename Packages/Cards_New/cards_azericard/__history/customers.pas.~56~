@@ -1,0 +1,1437 @@
+﻿unit customers;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+   ComCtrls, ToolWin, ImgList, ExtCtrls, Grids, DBGrids,
+  StdCtrls, DBCtrls,OracleData, ActnList,comobj, CMExcelExport,
+  Menus,Variants, OleServer, ExcelXP;
+
+type
+  Tclients = class(TForm)
+    Panel1: TPanel;
+    ImageList1: TImageList;
+    Panel2: TPanel;
+    Panel3: TPanel;
+    CoolBar1: TCoolBar;
+    ToolBar1: TToolBar;
+    isertbtn: TToolButton;
+    ToolButton2: TToolButton;
+    ToolButton4: TToolButton;
+    ToolButton5: TToolButton;
+    ToolButton3: TToolButton;
+    ToolButton6: TToolButton;
+    ToolButton8: TToolButton;
+    ToolButton9: TToolButton;
+    ToolButton1: TToolButton;
+    ToolButton10: TToolButton;
+    ToolButton11: TToolButton;
+    ToolButton12: TToolButton;
+    ToolButton7: TToolButton;
+    DBGrid1: TDBGrid;
+    ToolButton13: TToolButton;
+    ToolButton14: TToolButton;
+    ToolButton15: TToolButton;
+    ToolButton16: TToolButton;
+    ToolButton17: TToolButton;
+    ToolButton18: TToolButton;
+    ToolButton19: TToolButton;
+    ToolButton20: TToolButton;
+    ActionList1: TActionList;
+    toexcel: TAction;
+    CMExcelExport1: TCMExcelExport;
+    Panel4: TPanel;
+    EditCARDNUMBER: TEdit;
+    Panel5: TPanel;
+    ToolButton21: TToolButton;
+    ToolButton22: TToolButton;
+    ToolButton23: TToolButton;
+    ToolButton24: TToolButton;
+    Label1: TLabel;
+    EditRBSNUMBER: TEdit;
+    Label2: TLabel;
+    Label3: TLabel;
+    EditFNAME: TEdit;
+    Label4: TLabel;
+    EditLNAME: TEdit;
+    Label5: TLabel;
+    EditCARDHOLDER: TEdit;
+    Label6: TLabel;
+    EditCREDIT_LIM: TEdit;
+    Label7: TLabel;
+    GroupBox1: TGroupBox;
+    DateTimePicker1: TDateTimePicker;
+    DateTimePicker2: TDateTimePicker;
+    Label8: TLabel;
+    Label9: TLabel;
+    CheckBox1: TCheckBox;
+    GroupBox2: TGroupBox;
+    CheckBox2: TCheckBox;
+    DBLookupComboBox1: TDBLookupComboBox;
+    GroupBox3: TGroupBox;
+    CheckBox3: TCheckBox;
+    DBLookupComboBox2: TDBLookupComboBox;
+    GroupBox4: TGroupBox;
+    CheckBox4: TCheckBox;
+    DBLookupComboBox3: TDBLookupComboBox;
+    GroupBox5: TGroupBox;
+    CheckBox5: TCheckBox;
+    DBLookupComboBox4: TDBLookupComboBox;
+    GroupBox6: TGroupBox;
+    CheckBox6: TCheckBox;
+    DBLookupComboBox5: TDBLookupComboBox;
+    Button1: TButton;
+    Memo1: TMemo;
+    ToolButton25: TToolButton;
+    ToolButton26: TToolButton;
+    ToolButton27: TToolButton;
+    PopupMenu1: TPopupMenu;
+    N11: TMenuItem;
+    EditOLD_ACC_NO: TEdit;
+    Label10: TLabel;
+    dbGrid2: TDBGrid;
+    procedure isertbtnClick(Sender: TObject);
+    procedure ToolButton3Click(Sender: TObject);
+    procedure DBGrid1DblClick(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
+    procedure EditRBSNUMBERChange(Sender: TObject);
+    procedure EditCARDHOLDERChange(Sender: TObject);
+    procedure Edit3Change(Sender: TObject);
+    procedure DBLookupComboBox2Click(Sender: TObject);
+    procedure DBLookupComboBox4Click(Sender: TObject);
+    procedure ActionSpeedSearchExecute(Sender: TObject);
+    procedure EditCARDHOLDERKeyPress(Sender: TObject; var Key: Char);
+    procedure ToolButton13Click(Sender: TObject);
+    procedure EditCARDNUMBERExit(Sender: TObject);
+    procedure DBGrid1TitleClick(Column: TColumn);
+    procedure ToolButton14Click(Sender: TObject);
+    procedure DBGrid1KeyPress(Sender: TObject; var Key: Char);
+    procedure DBGrid1KeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure toexcelExecute(Sender: TObject);
+    procedure ToolButton7Click(Sender: TObject);
+    procedure ToolButton21Click(Sender: TObject);
+    procedure EditCARDNUMBERChange(Sender: TObject);
+    procedure EditFNAMEChange(Sender: TObject);
+    procedure EditLNAMEChange(Sender: TObject);
+    procedure EditCREDIT_LIMChange(Sender: TObject);
+    procedure CheckBox1Click(Sender: TObject);
+    procedure CheckBox2Click(Sender: TObject);
+    procedure CheckBox3Click(Sender: TObject);
+    procedure CheckBox4Click(Sender: TObject);
+    procedure CheckBox5Click(Sender: TObject);
+    procedure CheckBox6Click(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure ToolButton1Click(Sender: TObject);
+    procedure ToolButton25Click(Sender: TObject);
+    procedure DBGrid1DrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TColumn; State: TGridDrawState);
+    procedure ToolButton26Click(Sender: TObject);
+    procedure tamyenile1Click(Sender: TObject);
+    procedure tamyenile1DrawItem(Sender: TObject; ACanvas: TCanvas;
+      ARect: TRect; Selected: Boolean);
+    procedure N11Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure EditOLD_ACC_NOChange(Sender: TObject);
+    procedure EditFNAMEKeyPress(Sender: TObject; var Key: Char);
+    procedure dbGrid2DrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TColumn; State: TGridDrawState);
+    procedure dbGrid2TitleClick(Column: TColumn);
+    procedure dbGrid2KeyPress(Sender: TObject; var Key: Char);
+    procedure EditCARDNUMBERKeyPress(Sender: TObject; var Key: Char);
+    procedure EditRBSNUMBERKeyPress(Sender: TObject; var Key: Char);
+    procedure EditOLD_ACC_NOKeyPress(Sender: TObject; var Key: Char);
+    procedure EditLNAMEKeyPress(Sender: TObject; var Key: Char);
+    procedure EditCREDIT_LIMKeyPress(Sender: TObject; var Key: Char);
+    procedure dbGrid2DblClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  clients: Tclients;
+
+  SearchField : string;
+  SearchOptions : TSearchRecordOptions;
+
+implementation
+
+uses balans, CARDS_TLB, MAINFORMImpl1, payment, Unit18, newcard,
+  applicationpas, cfilepas, creditinfopas, dpforms, rezform, Unitclient2,SBTranslateProc,sboapiDataModuleImpl;
+
+
+{$R *.DFM}
+
+ var
+  num :integer;
+ //num:=1;
+procedure Tclients.ActionSpeedSearchExecute(
+  Sender: TObject);
+var
+  SearchField : string;
+  SearchOptions : TSearchRecordOptions;
+begin
+  SearchOptions := [srIgnoreCase ,srPartialMatch ];
+
+  with Sender as TEdit  do
+  begin
+    SearchField := copy(Name,5,length(Name));
+    with  TOracleDataSet(dbgrid2.DataSource.DataSet) do
+    if  not SearchRecord(
+                  SearchField
+                 ,Text
+                 ,SearchOptions + [srFromCurrent , srForward ]
+                 ) then
+    if MessageDlg(
+              'Ахтарыш сона чатды.'+#13+'Яввялдян башлансын?'
+             ,mtInformation
+             ,[mbNo , mbYes]
+             ,0
+             ) = mrYes  then
+    if not SearchRecord(
+                 SearchField
+                ,Text
+                ,SearchOptions + [ srFromBeginning ]
+                )  then
+    MessageDlg('Йазы тапылмайыб!',mtInformation,[mbOK],0);
+ end;
+
+end;
+
+
+
+
+procedure Tclients.isertbtnClick(Sender: TObject);
+begin
+DataMod_CARDS.SB_ACA.CallProcedure('CheckAdvancedObjectAccess', ['card_madd']);
+
+//   DataMod_CARDS.Clients.Insert;
+  //Customer_new.Edit1.Text:='NEW';
+  //Customer_new.ShowModal;
+  //Customer_new.Caption:='  NEW CARD';
+  clients2:=Tclients2.Create(self);
+  clients2.Edit1.Text:='NEW';
+
+
+  clients2.ShowModal;
+
+  clients2.Caption:='  NEW CARD';
+
+
+
+  end;
+
+procedure Tclients.ToolButton3Click(Sender: TObject);
+begin
+DataMod_CARDS.SB_ACA.CallProcedure('CheckAdvancedObjectAccess', ['card_medit']);
+   clients2:=Tclients2.Create(Self);
+
+ {
+Customer_new.Edit1.Text:='EDIT';
+Customer_new.ShowModal;
+Customer_new.Caption:='  EDIT CARD';
+ }
+
+
+
+
+
+
+
+ DataMod_CARDS.cliencards.close;
+ DataMod_CARDS.cliencards.SetVariable('numb',DataMod_CARDS.Clients.fieldbyname('multi_acc').ASSTRING);
+DataMod_CARDS.cliencards.Open;
+
+DataMod_CARDS.CARDOPERATION.Close;
+DataMod_CARDS.CARDOPERATION.SetVariable('RBS',DataMod_CARDS.Clients.fieldbyname('multi_acc').ASSTRING) ;
+DataMod_CARDS.CARDOPERATION.Open;
+
+
+ clients2.Edit1.Text:='EDIT';
+ clients2.Caption:='  EDIT CARD';
+
+clients2.ShowModal;
+end;
+
+procedure Tclients.DBGrid1DblClick(Sender: TObject);
+begin
+//ToolButton3.Click;
+
+//Customer_new.Edit1.Text:='EDIT';
+//Customer_new.ShowModal;
+//DataMod_CARDS.CUSTINFO.SetVariable('ACCID',DataMod_CARDS.Clients.FIELDBYNAME('ACCID').AsInteger);
+//DataMod_CARDS.CUSTINFO.Open;
+
+end;
+
+procedure Tclients.FormActivate(Sender: TObject);
+begin
+
+DataMod_CARDS.Clients.Open;
+DataMod_CARDS.CARDSTYPE.open;
+DataMod_CARDS.CARDTYPES.open;
+DataMod_CARDS.statuscard.open;
+DataMod_CARDS.apptype.open;
+//DataMod_CARDS.Clients.refresh;
+num:=1;
+end;
+
+procedure Tclients.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+CMExcelExport1.Disconnect;
+end;
+
+procedure Tclients.FormCreate(Sender: TObject);
+begin
+  SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure Tclients.EditRBSNUMBERChange(Sender: TObject);
+begin
+ with DataMod_CARDS.Clients do begin
+  Filter := 'RBSNUMBER = '''+editRBSNUMBER.Text+('*')+'''';
+end;
+end;
+
+procedure Tclients.EditRBSNUMBERKeyPress(Sender: TObject; var Key: Char);
+begin
+
+  if Key = #13  then
+ begin
+  SearchOptions := [srIgnoreCase ,srPartialMatch ];
+
+  with Sender as TEdit  do
+  begin
+    SearchField :=copy(Name,5,length(Name));
+
+
+    with  TOracleDataSet(Dbgrid2.DataSource.DataSet) do
+    if  not SearchRecord(
+                  SearchField
+                 ,Text
+                 ,SearchOptions + [srFromCurrent , srForward ]
+                 ) then
+
+    if MessageDlg(
+              'Axtarış sona çatdı.'+#13+'Əvvəldən başlansın?'
+             ,mtInformation
+             ,[mbNo , mbYes]
+             ,0
+             ) = mrYes  then
+
+    if not SearchRecord(
+                 SearchField
+                ,Text
+                ,SearchOptions + [ srFromBeginning ]
+                )  then
+    MessageDlg('Yazı tapılmadı!',mtInformation,[mbOK],0);
+  end;
+ end;
+
+
+end;
+
+procedure Tclients.EditCARDHOLDERChange(Sender: TObject);
+begin
+ with DataMod_CARDS.Clients do begin
+   Filter := 'CARDHOLDER = '''+editCARDHOLDER.Text+('*')+'''';
+  end;
+
+
+end;
+
+procedure Tclients.Edit3Change(Sender: TObject);
+begin
+  //with DataMod_CARDS.Clients do begin
+ //  Filter := 'CARDNUMBER = '''+edit3.Text+('*')+'''';
+ // end;
+  //  edit2.Text:='';
+  //editRBSNUMBER.Text:='';
+end;
+
+procedure Tclients.DBLookupComboBox2Click(Sender: TObject);
+begin
+  with DataMod_CARDS.Clients do begin
+  // Filter := 'CARDNUMBER = '''+DBLookupComboBox2.Text+('*')+'''';
+  end;
+end;
+
+procedure Tclients.DBLookupComboBox4Click(Sender: TObject);
+begin
+  with DataMod_CARDS.Clients do begin
+   //Filter := 'CARDNUMBER = '''+DBLookupComboBox4.Text+('*')+'''';
+  end;
+end;
+
+
+
+
+
+procedure Tclients.EditCARDHOLDERKeyPress(Sender: TObject; var Key: Char);
+begin
+
+  if Key = #13  then
+ begin
+  SearchOptions := [srIgnoreCase ,srPartialMatch ];
+
+  with Sender as TEdit  do
+  begin
+    SearchField :=copy(Name,5,length(Name));
+
+
+    with  TOracleDataSet(Dbgrid2.DataSource.DataSet) do
+    if  not SearchRecord(
+                  SearchField
+                 ,Text
+                 ,SearchOptions + [srFromCurrent , srForward ]
+                 ) then
+
+    if MessageDlg(
+              'Axtarış sona çatdı.'+#13+'Əvvəldən başlansın?'
+             ,mtInformation
+             ,[mbNo , mbYes]
+             ,0
+             ) = mrYes  then
+
+    if not SearchRecord(
+                 SearchField
+                ,Text
+                ,SearchOptions + [ srFromBeginning ]
+                )  then
+    MessageDlg('Yazı tapılmadı!',mtInformation,[mbOK],0);
+  end;
+ end;
+
+
+end;
+
+procedure Tclients.ToolButton13Click(Sender: TObject);
+begin
+ if   panel5.Visible=false then
+begin
+ToolButton13.Down:=True;
+Panel5.Visible:=True;
+exit;
+end
+else
+
+if panel5.Visible=true then
+begin
+ToolButton13.Down:=false;
+Panel5.Visible:=false;
+end;
+
+
+//end;
+
+
+
+end;
+
+
+
+
+
+
+
+
+
+
+
+
+
+//if   panel5.Visible=false then
+//begin
+//ToolButton13.Down:=True;
+//Panel5.Visible:=True;
+//exit;
+//end
+//else
+
+//if panel5.Visible=true then
+//begin
+//ToolButton13.Down:=false;
+//Panel5.Visible:=false;
+//end;
+
+
+//end;
+
+procedure Tclients.EditCARDNUMBERExit(Sender: TObject);
+begin
+//TEdit(Sender).Text :='';
+end;
+
+procedure Tclients.EditCARDNUMBERKeyPress(Sender: TObject; var Key: Char);
+begin
+
+  if Key = #13  then
+ begin
+  SearchOptions := [srIgnoreCase ,srPartialMatch ];
+
+  with Sender as TEdit  do
+  begin
+    SearchField :=copy(Name,5,length(Name));
+
+
+    with  TOracleDataSet(Dbgrid2.DataSource.DataSet) do
+    if  not SearchRecord(
+                  SearchField
+                 ,Text
+                 ,SearchOptions + [srFromCurrent , srForward ]
+                 ) then
+
+    if MessageDlg(
+              'Axtarış sona çatdı.'+#13+'Əvvəldən başlansın?'
+             ,mtInformation
+             ,[mbNo , mbYes]
+             ,0
+             ) = mrYes  then
+
+    if not SearchRecord(
+                 SearchField
+                ,Text
+                ,SearchOptions + [ srFromBeginning ]
+                )  then
+    MessageDlg('Yazı tapılmadı!',mtInformation,[mbOK],0);
+  end;
+ end;
+
+end;
+
+procedure Tclients.DBGrid1TitleClick(Column: TColumn);
+var
+
+   TitleName :string;
+   SortPosition: word;
+begin
+
+ SortPosition :=100;
+ //OrderedTitle :=Column.FieldName; //H.R. 24.06.2008
+ if (DBGrid1.DataSource.DataSet.IsEmpty) or (Column.FieldName = EmptyStr) then Exit;
+ Screen.Cursor :=crHourGlass;
+ TitleName :=Column.FieldName;
+ with TOracleDataSet(DBGrid1.DataSource.DataSet) do
+  try
+    if num=1 then
+    begin
+   SortPosition :=SQL.Add('ORDER BY '+ TitleName);
+   num:=2;
+   end else
+   begin
+   SortPosition :=SQL.Add('ORDER BY '+ TitleName+'  desc');
+   num:=1;
+   end;
+   Refresh;
+  finally
+   SQL[SortPosition] :=EmptyStr;
+   Screen.Cursor :=crDefault;
+  end;
+end;
+
+procedure Tclients.dbGrid2DblClick(Sender: TObject);
+begin
+DBGrid2.Options := DBGrid1.Options - [dgRowSelect];
+DBGrid2.Options := DBGrid1.Options + [dgEditing];
+end;
+
+procedure Tclients.dbGrid2DrawColumnCell(Sender: TObject; const Rect: TRect;
+  DataCol: Integer; Column: TColumn; State: TGridDrawState);
+begin
+  if (DBGrid2.DataSource.DataSet.FieldByName('expiry').AsDateTime-DataMod_CARDS.settings.FieldByName('dateclose').asinteger) <date
+        then
+       begin
+
+         DBGrid2.Canvas.Brush.Color:=Claqua;
+         DBGrid2.DefaultDrawColumnCell(rect,datacol,column,state);
+       end;
+
+     if  (DBGrid2.DataSource.DataSet.FieldByName('expiry').AsDateTime <date) then
+     begin
+              DBGrid2.Canvas.Brush.Color:=clFuchsia;
+         DBGrid2.DefaultDrawColumnCell(rect,datacol,column,state);
+     end;
+
+end;
+
+procedure Tclients.dbGrid2KeyPress(Sender: TObject; var Key: Char);
+begin
+if key=#1 then
+    begin
+     begin
+ with dbgrid2, SelectedRows, DataSource.DataSet do
+  begin
+    DisableControls;
+    try
+      First;
+      while not Eof do
+       begin
+
+        CurrentRowSelected := True;
+        Next;
+       end;
+    finally
+      EnableControls;
+    end;
+  end;
+
+    end;
+
+    //ShowMessage('Ctrl+t is pressed!');
+
+end;
+end;
+
+procedure Tclients.dbGrid2TitleClick(Column: TColumn);
+
+var
+
+   TitleName :string;
+   SortPosition: word;
+begin
+
+ SortPosition :=100;
+ //OrderedTitle :=Column.FieldName; //H.R. 24.06.2008
+ if (DBGrid2.DataSource.DataSet.IsEmpty) or (Column.FieldName = EmptyStr) then Exit;
+ Screen.Cursor :=crHourGlass;
+ TitleName :=Column.FieldName;
+ with TOracleDataSet(DBGrid2.DataSource.DataSet) do
+  try
+    if num=1 then
+    begin
+
+   SortPosition :=SQL.Add('ORDER BY '+ TitleName);
+
+
+  num:=2;
+   end else
+   begin
+
+   SortPosition :=SQL.Add('ORDER BY '+ TitleName+'  desc');
+   num:=1;
+   end;
+   Refresh;
+  finally
+   SQL[SortPosition] :=EmptyStr;
+   Screen.Cursor :=crDefault;
+  end;
+end;
+
+procedure Tclients.ToolButton14Click(Sender: TObject);
+begin
+  with DataMod_CARDS.Clients do begin
+  Filter := 'RBSNUMBER = '''+''+('*')+'''';
+end;
+//DBGrid1.DataSource.DataSet.Filtered:=False;
+//DBGrid1.DataSource.DataSet.Refresh;
+//DBGrid1.DataSource.DataSet.Filtered:=True;
+DBGrid2.DataSource.dataset.close;
+DBGrid2.DataSource.dataset.open;
+end;
+
+
+
+
+procedure Tclients.DBGrid1KeyPress(Sender: TObject; var Key: Char);
+begin
+if key=#1 then
+    begin
+     begin
+ with dbgrid1, SelectedRows, DataSource.DataSet do
+  begin
+    DisableControls;
+    try
+      First;
+      while not Eof do
+       begin
+
+        CurrentRowSelected := True;
+        Next;
+       end;
+    finally
+      EnableControls;
+    end;
+  end;
+
+    end;
+
+    //ShowMessage('Ctrl+t is pressed!');
+end;
+end;
+
+procedure Tclients.DBGrid1KeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+//if key in (ssCtrl + 'A' ) then ShowMessage('test');
+end;
+
+procedure Tclients.toexcelExecute(Sender: TObject);
+var
+
+
+   V,Sheet,Sheets,excel  :Variant;
+   cell,row,l,m    :Integer;
+   i,j,ids : integer;
+   formats,debet,kredit,summa,destination,vbic:string;
+   output:TextFile;
+   FileName,Swmessage,dir,edit_ref,BeginMessage,Endmesage,valu:String;
+   Index :Integer;
+   WaitNextConfirm, WillRefresh: Boolean;
+   TransactionID :Integer;
+begin
+
+
+
+
+    Excel := CreateOleObject('Excel.Application');
+    Excel.Workbooks.Add;
+             excel.Cells[1,1]:=' #';
+             excel.Cells[1,2]:='RBSNUMBER';
+             excel.Cells[1,3]:='CARDHOLDER';
+             excel.Cells[1,4]:='CARDNUMBER';
+             excel.Cells[1,5]:='FIRST NAME';
+             excel.Cells[1,6]:='LAST NAME';
+             excel.Cells[1,7]:='CURRENCY';
+             excel.Cells[1,8]:='CARDTYPE';
+             excel.Cells[1,9]:='CARDSTATUS';
+             excel.Cells[1,10]:='PASSPORT';
+             excel.Cells[1,11]:='ISSUED_BY';
+             excel.Cells[1,12]:='DOC_SINCE';
+             excel.Cells[1,13]:='BIRTHDAY';
+             excel.Cells[1,14]:='HOMEPHONE';
+             excel.Cells[1,15]:='WORKPHONE';
+             excel.Cells[1,16]:='CREDIT_LIM';
+             excel.Cells[1,17]:='RESIDENT';
+             excel.Cells[1,18]:='COUNTRY';
+             excel.Cells[1,19]:='CITY';
+             excel.Cells[1,20]:='ADDRESS';
+             excel.Cells[1,21]:='DATEOPEN';
+             excel.Cells[1,22]:='EXPIRY';
+             excel.Cells[1,23]:='REFERENCE';
+             excel.Cells[1,24]:='EMBOSSNAME';
+             excel.Cells[1,25]:='COMPANY';
+             excel.Cells[1,26]:='CONTRACT_NUM';
+             excel.Cells[1,27]:='TYPES';
+             excel.Cells[1,28]:='OLD_ACCOUNT';
+             Excel.Range[Excel.Cells[1, 1], Excel.Cells[1,28]].Select;
+             Excel.Selection.Font.BOLD:=TRUE;
+             Excel.Selection.Font.COLOR:=CLRED;
+  //Focus;
+                  DBGrid2.DataSource.DataSet.First;
+      //------------------------------------------------------------------------------------create prows
+             for index:=0 to DBGrid2.DataSource.DataSet.RecordCount-1 do
+               begin
+             excel.Cells[index+2,1]:=Index+1;
+             excel.Cells[index+2,2].NUMBERFORMAT:=AnsiChar('@');
+             excel.Cells[index+2,2]:=DBGrid2.DataSource.DataSet.FieldByName('rbsnumber').asstring;      //2
+             excel.Cells[index+2,2].ColumnWidth:=20;
+             excel.Cells[index+2,3]:=DBGrid2.DataSource.DataSet.FieldByName('CARDHOLDER').asstring;     //3
+             excel.Cells[index+2,3].ColumnWidth:=20;
+             excel.Cells[index+2,4].NUMBERFORMAT:=AnsiChar('@');                                                  //4
+             excel.Cells[index+2,4].ColumnWidth:=20;
+             excel.Cells[index+2,4]:=DBGrid2.DataSource.DataSet.FieldByName('CARDNUMBER').asstring;     //4
+             excel.Cells[index+2,5].NUMBERFORMAT:=AnsiChar('@');
+             excel.Cells[index+2,5]:=DBGrid2.DataSource.DataSet.FieldByName('FNAME').asstring;          //5
+             excel.Cells[index+2,6]:=DBGrid2.DataSource.DataSet.FieldByName('LNAME').asstring;          //6
+             excel.Cells[index+2,7]:=DBGrid2.DataSource.DataSet.FieldByName('CURRENCY').asstring;       //7
+             excel.Cells[index+2,8]:=DBGrid2.DataSource.DataSet.FieldByName('CARDTYPE').asstring;       //8
+             excel.Cells[index+2,8].ColumnWidth:=20;
+             excel.Cells[index+2,9]:=DBGrid2.DataSource.DataSet.FieldByName('CARDSTATUS').asstring;     //9
+             excel.Cells[index+2,10]:=DBGrid2.DataSource.DataSet.FieldByName('PASSPORT').asstring;      //10
+             excel.Cells[index+2,11]:=DBGrid2.DataSource.DataSet.FieldByName('ISSUED_BY').asstring;     //11
+             excel.Cells[index+2,12]:=DBGrid2.DataSource.DataSet.FieldByName('DOC_SINCE').asstring;     //12
+             excel.Cells[index+2,13]:=DBGrid2.DataSource.DataSet.FieldByName('BIRTHDAY').asstring;      //13
+             excel.Cells[index+2,14]:=DBGrid2.DataSource.DataSet.FieldByName('HOMEPHONE').asstring;     //14
+             excel.Cells[index+2,15]:=DBGrid2.DataSource.DataSet.FieldByName('WORKPHONE').asstring;     //15
+             excel.Cells[index+2,16]:=DBGrid2.DataSource.DataSet.FieldByName('CREDIT_LIM').asstring;    //16
+             excel.Cells[index+2,17]:=DBGrid2.DataSource.DataSet.FieldByName('RESIDENT').asstring;      //17
+             excel.Cells[index+2,18]:=DBGrid2.DataSource.DataSet.FieldByName('COUNTRY').asstring;       //18
+             excel.Cells[index+2,19]:=DBGrid2.DataSource.DataSet.FieldByName('CITY').asstring;          //19
+             excel.Cells[index+2,20]:=DBGrid2.DataSource.DataSet.FieldByName('ADDRESS').asstring;       //20
+             excel.Cells[index+2,21]:=DBGrid2.DataSource.DataSet.FieldByName('DATEOPEN').AsDateTime;      //21
+             excel.Cells[index+2,22]:=DBGrid2.DataSource.DataSet.FieldByName('EXPIRY').AsDateTime;        //22
+             excel.Cells[index+2,23]:=DBGrid2.DataSource.DataSet.FieldByName('REFERENCE').asstring;     //23
+             excel.Cells[index+2,24]:=DBGrid2.DataSource.DataSet.FieldByName('EMBOSSNAME').asstring;    //24
+             excel.Cells[index+2,25]:=DBGrid2.DataSource.DataSet.FieldByName('COMPANY').asstring;       //25
+             excel.Cells[index+2,26]:=DBGrid2.DataSource.DataSet.FieldByName('CONTRACT_NUM').asstring;  //26
+             excel.Cells[index+2,27]:=DBGrid2.DataSource.DataSet.FieldByName('TYPES').asstring;         //27
+             excel.Cells[index+2,28]:=DBGrid2.DataSource.DataSet.FieldByName('old_acc_no').asstring;
+             excel.Cells[index+2,28].NUMBERFORMAT:=AnsiChar('@');        //28
+                DBGrid2.DataSource.DataSet.Next;
+              end;
+      //--------------------------------------------end create prows
+
+        excel.visible:=true;
+
+
+
+
+
+end;
+
+procedure Tclients.ToolButton7Click(Sender: TObject);
+//var Excel: Variant;
+  //  i:integer;
+begin
+
+//DataMod_CARDS.SB_ACA.CallProcedure('CheckAdvancedObjectAccess', ['card_mexcel']);
+//  if not CMExcelExport1.Connected then CMExcelExport1.Connect;
+ // CMExcelExport1.ExportDataset(DataMod_CARDS.Clients,'CARDS',true);
+ // CMExcelExport1.Disconnect;
+
+  //-------------------------------
+{ Excel := CreateOleObject('Excel.Application');
+ Excel.Workbooks.Add;
+ Excel.Sheets.Item[1].Name:='CARDS';
+ Excel.WorkBooks[1].WorkSheets[1].Columns[1].ColumnWidth := 5;
+ Excel.WorkBooks[1].WorkSheets[1].Columns[2].ColumnWidth := 12;
+ Excel.WorkBooks[1].WorkSheets[1].Columns[3].ColumnWidth := 12;
+ Excel.WorkBooks[1].WorkSheets[1].Columns[4].ColumnWidth := 10;
+ Excel.WorkBooks[1].WorkSheets[1].Columns[5].ColumnWidth := 10;
+ Excel.WorkBooks[1].WorkSheets[1].Columns[6].ColumnWidth := 20;
+ Excel.WorkBooks[1].WorkSheets[1].Columns[7].ColumnWidth := 10;
+ Excel.WorkBooks[1].WorkSheets[1].Columns[8].ColumnWidth := 20;
+ Excel.WorkBooks[1].WorkSheets[1].Columns[9].ColumnWidth := 20;
+ Excel.WorkBooks[1].WorkSheets[1].Columns[10].ColumnWidth := 20;
+ Excel.WorkBooks[1].WorkSheets[1].Columns[11].ColumnWidth := 20;
+ Excel.WorkBooks[1].WorkSheets[1].Columns[12].ColumnWidth := 20;
+ Excel.Range['a1']:='#';
+ Excel.Range['b1']:='Ad';
+ Excel.Range['c1']:='Soyad';
+ Excel.Range['d1']:='Dogum Tarixi';
+ Excel.Range['e1']:='Shexsiyyet vesiqesi ID';
+ Excel.Range['f1']:='Rezident Q/Rezident';
+ Excel.Range['g1']:='Shexsi kod';
+ Excel.Range['h1']:='Telefon';
+ Excel.Range['i1']:='Kart Novu';
+ Excel.Range['j1']:='Hesab Nomresi';
+ Excel.Range['k1']:='Address';
+ Excel.Range['l1']:='Şirkət adı'; }
+    // Excel.Range['a1:l100'].Font.Name :='Arial AzLat' ;
+// Excel.Range['a1:l100'].Font.Bold:=true;
+// Excel.Range['a1:l100'].Borders.LineStyle := 1;
+
+
+    //Excel.Range['a1:u1000'].clear;
+ // Excel.Range['a1:u1000'].AutoFormat(1, 0, true, 0, 0, 0, 1);
+ // Excel.Range['a1:u1000'].NumberFormat:='@';
+ //DBGrid1.DataSource.DataSet.First;
+// for I := 1 to DBGrid1.DataSource.DataSet.RecordCount do
+
+  // begin
+
+  // Excel.Cells[i, 2].NumberFormat:='@@';
+
+    // if DBGrid1.DataSource.DataSet.FieldByName('CARDNUMBER').AsString<>'' then
+
+    // Excel.Cells[i, 2]:=DBGrid1.DataSource.DataSet.FieldByName('CARDNUMBER').AsString;
+    // DBGrid1.DataSource.DataSet.Next;
+  // end;
+
+
+
+ //  Excel.Visible := True;
+
+
+
+  //------------------------------
+
+
+
+
+//CMExcelExport1.Connect;
+//CMExcelExport1
+      DataMod_CARDS.Clients.QueryAllRecords:=true;
+DataMod_CARDS.Clients.Refresh;
+toexcel.Execute;
+DataMod_CARDS.Clients.QueryAllRecords:=False;
+DataMod_CARDS.Clients.Refresh;
+//DataMod_CARDS.Clients.QueryAllRecords:=False;
+
+end;
+
+procedure Tclients.ToolButton21Click(Sender: TObject);
+begin
+ if   panel4.Visible=false then
+begin
+ToolButton21.Down:=True;
+Panel4.Visible:=True;
+exit;
+end
+else
+
+if panel4.Visible=true then
+begin
+ToolButton21.Down:=false;
+Panel4.Visible:=false;
+end;
+end;
+
+procedure Tclients.EditCARDNUMBERChange(Sender: TObject);
+begin
+
+
+  with DataMod_CARDS.Clients do begin
+  Filter := 'CARDNUMBER = '''+editCARDNUMBER.Text+('*')+'''';
+end;
+end;
+
+procedure Tclients.EditFNAMEChange(Sender: TObject);
+begin
+    with  DataMod_CARDS.Clients
+  do begin
+             Filter := 'FNAME = '''+editFNAME.Text+('*')+'''';
+             memo1.Text:=Filter;
+  end;
+
+
+END;
+
+procedure Tclients.EditFNAMEKeyPress(Sender: TObject; var Key: Char);
+var
+  SearchField : string;
+  SearchOptions : TSearchRecordOptions;
+begin
+
+  if Key = #13  then
+ begin
+  SearchOptions := [srIgnoreCase ,srPartialMatch ];
+
+  with Sender as TEdit  do
+  begin
+    SearchField :=copy(Name,5,length(Name));
+
+
+    with  TOracleDataSet(Dbgrid2.DataSource.DataSet) do
+    if  not SearchRecord(
+                  SearchField
+                 ,Text
+                 ,SearchOptions + [srFromCurrent , srForward ]
+                 ) then
+
+    if MessageDlg(
+              'Axtarış sona çatdı.'+#13+'Əvvəldən başlansın?'
+             ,mtInformation
+             ,[mbNo , mbYes]
+             ,0
+             ) = mrYes  then
+
+    if not SearchRecord(
+                 SearchField
+                ,Text
+                ,SearchOptions + [ srFromBeginning ]
+                )  then
+    MessageDlg('Yazı tapılmadı!',mtInformation,[mbOK],0);
+  end;
+ end;
+
+
+end;
+
+procedure Tclients.EditLNAMEChange(Sender: TObject);
+begin
+  with DataMod_CARDS.Clients do begin
+  Filter := 'LNAME = '''+editLNAME.Text+('*')+'''';
+end;
+end;
+
+procedure Tclients.EditLNAMEKeyPress(Sender: TObject; var Key: Char);
+begin
+
+  if Key = #13  then
+ begin
+  SearchOptions := [srIgnoreCase ,srPartialMatch ];
+
+  with Sender as TEdit  do
+  begin
+    SearchField :=copy(Name,5,length(Name));
+
+
+    with  TOracleDataSet(Dbgrid2.DataSource.DataSet) do
+    if  not SearchRecord(
+                  SearchField
+                 ,Text
+                 ,SearchOptions + [srFromCurrent , srForward ]
+                 ) then
+
+    if MessageDlg(
+              'Axtarış sona çatdı.'+#13+'Əvvəldən başlansın?'
+             ,mtInformation
+             ,[mbNo , mbYes]
+             ,0
+             ) = mrYes  then
+
+    if not SearchRecord(
+                 SearchField
+                ,Text
+                ,SearchOptions + [ srFromBeginning ]
+                )  then
+    MessageDlg('Yazı tapılmadı!',mtInformation,[mbOK],0);
+  end;
+ end;
+
+
+end;
+
+procedure Tclients.EditOLD_ACC_NOChange(Sender: TObject);
+begin
+  with DataMod_CARDS.Clients do begin
+  Filter := 'old_acc_no = '''+EditOLD_ACC_NO.Text+('*')+'''';
+end;
+end;
+
+procedure Tclients.EditOLD_ACC_NOKeyPress(Sender: TObject; var Key: Char);
+begin
+
+  if Key = #13  then
+ begin
+  SearchOptions := [srIgnoreCase ,srPartialMatch ];
+
+  with Sender as TEdit  do
+  begin
+    SearchField :=copy(Name,5,length(Name));
+
+
+    with  TOracleDataSet(Dbgrid2.DataSource.DataSet) do
+    if  not SearchRecord(
+                  SearchField
+                 ,Text
+                 ,SearchOptions + [srFromCurrent , srForward ]
+                 ) then
+
+    if MessageDlg(
+              'Axtarış sona çatdı.'+#13+'Əvvəldən başlansın?'
+             ,mtInformation
+             ,[mbNo , mbYes]
+             ,0
+             ) = mrYes  then
+
+    if not SearchRecord(
+                 SearchField
+                ,Text
+                ,SearchOptions + [ srFromBeginning ]
+                )  then
+    MessageDlg('Yazı tapılmadı!',mtInformation,[mbOK],0);
+  end;
+ end;
+
+
+end;
+
+procedure Tclients.EditCREDIT_LIMChange(Sender: TObject);
+begin
+  with DataMod_CARDS.Clients do begin
+   Filter := 'CREDIT_LIM = '''+editCREDIT_LIM.Text+('*')+'''';
+  end;
+end;
+
+procedure Tclients.EditCREDIT_LIMKeyPress(Sender: TObject; var Key: Char);
+begin
+
+  if Key = #13  then
+ begin
+  SearchOptions := [srIgnoreCase ,srPartialMatch ];
+
+  with Sender as TEdit  do
+  begin
+    SearchField :=copy(Name,5,length(Name));
+
+
+    with  TOracleDataSet(Dbgrid2.DataSource.DataSet) do
+    if  not SearchRecord(
+                  SearchField
+                 ,Text
+                 ,SearchOptions + [srFromCurrent , srForward ]
+                 ) then
+
+    if MessageDlg(
+              'Axtarış sona çatdı.'+#13+'Əvvəldən başlansın?'
+             ,mtInformation
+             ,[mbNo , mbYes]
+             ,0
+             ) = mrYes  then
+
+    if not SearchRecord(
+                 SearchField
+                ,Text
+                ,SearchOptions + [ srFromBeginning ]
+                )  then
+    MessageDlg('Yazı tapılmadı!',mtInformation,[mbOK],0);
+  end;
+ end;
+
+
+end;
+
+procedure Tclients.CheckBox1Click(Sender: TObject);
+begin
+IF CheckBox1.Checked then begin
+DateTimePicker1.Enabled:=True;
+DateTimePicker2.Enabled:=True;
+end else begin
+DateTimePicker1.Enabled:=False;
+DateTimePicker2.Enabled:=False;
+end;
+end;
+
+procedure Tclients.CheckBox2Click(Sender: TObject);
+begin
+IF CheckBox2.Checked then begin
+DBLookupComboBox1.Enabled:=True;
+
+end else begin
+DBLookupComboBox1.Enabled:=False;
+
+end;
+end;
+
+procedure Tclients.CheckBox3Click(Sender: TObject);
+begin
+IF CheckBox3.Checked then begin
+DBLookupComboBox2.Enabled:=True;
+
+end else begin
+DBLookupComboBox2.Enabled:=False;
+
+end;
+end;
+
+procedure Tclients.CheckBox4Click(Sender: TObject);
+begin
+IF CheckBox4.Checked then begin
+DBLookupComboBox3.Enabled:=True;
+
+end else begin
+DBLookupComboBox3.Enabled:=False;
+
+end;
+end;
+
+procedure Tclients.CheckBox5Click(Sender: TObject);
+begin
+IF CheckBox5.Checked then begin
+DBLookupComboBox4.Enabled:=True;
+
+end else begin
+DBLookupComboBox4.Enabled:=False;
+
+end;
+end;
+
+procedure Tclients.CheckBox6Click(Sender: TObject);
+begin
+IF CheckBox6.Checked then begin
+DBLookupComboBox5.Enabled:=True;
+
+end else begin
+DBLookupComboBox5.Enabled:=False;
+
+end;
+end;
+
+procedure Tclients.Button1Click(Sender: TObject);
+var
+ a,tax1 ,tax2,tax,fax,vax,knax,ksax,cax,f1,f2,f3,f4,f5,f6:string;
+begin
+  if CheckBox1.Checked then
+  begin
+   tax1:=  'DATEOPEN >= '''+DATETOSTR(DateTimePicker1.DateTime)+ '''' ;
+   tax2:=  'EXPIRY <= '''+DATETOSTR(DateTimePicker2.DateTime)+'''' ;
+   tax:='('+tax1+')'+' and ('+tax2+')';
+
+
+   end;
+
+
+
+
+if CheckBox2.Checked then
+begin
+fax:='FIL = '''+DBLookupComboBox1.Text+ '''' ;
+end;
+if CheckBox3.Checked then
+begin
+vax:='CURRENCY = '''+DBLookupComboBox2.Text+ '''' ;
+end;
+
+if CheckBox4.Checked then
+begin
+knax:='CARDTYPE = '''+DBLookupComboBox3.Text+ '''' ;
+end;
+
+if CheckBox5.Checked then
+begin
+ksax:='CARDSTATUS = '''+DBLookupComboBox4.Text+ '''' ;
+end;
+
+
+if CheckBox6.Checked then
+begin
+cax:='COMPANY = '''+DBLookupComboBox5.Text+ '''' ;
+end;
+ if CheckBox1.Checked then
+ f1:=tax;
+ if not CheckBox1.Checked and CheckBox2.Checked then
+ f1:=fax;
+ if not CheckBox1.Checked and not CheckBox2.Checked and CheckBox3.Checked then
+ f1:=vax;
+ if not CheckBox1.Checked and not CheckBox2.Checked and not CheckBox3.Checked and CheckBox4.Checked  then
+ f1:=knax;
+ if not CheckBox1.Checked and not CheckBox2.Checked and not CheckBox3.Checked and not CheckBox4.Checked and CheckBox5.Checked  then
+ f1:=ksax;
+ if not CheckBox1.Checked and not CheckBox2.Checked and not CheckBox3.Checked and not CheckBox4.Checked and not CheckBox5.Checked and CheckBox6.Checked  then
+ f1:=cax;
+
+
+ if CheckBox1.Checked and CheckBox2.Checked then
+ f2:=fax;
+ if (not CheckBox1.Checked and CheckBox2.Checked and CheckBox3.Checked)
+ or ( CheckBox1.Checked and not CheckBox2.Checked and CheckBox3.Checked) then
+ f2:=vax;
+ if (not CheckBox1.Checked and not CheckBox2.Checked and CheckBox3.Checked and CheckBox4.Checked)
+ or (not CheckBox1.Checked and  CheckBox2.Checked and not CheckBox3.Checked and CheckBox4.Checked)
+ or (CheckBox1.Checked and   not CheckBox2.Checked and not CheckBox3.Checked and CheckBox4.Checked) then
+ f2:=knax;
+ if (not CheckBox1.Checked and not CheckBox2.Checked and not CheckBox3.Checked and CheckBox4.Checked and CheckBox5.Checked)
+ or (not CheckBox1.Checked and not CheckBox2.Checked and CheckBox3.Checked and not CheckBox4.Checked and CheckBox5.Checked)
+ or (not CheckBox1.Checked and CheckBox2.Checked and not CheckBox3.Checked and not CheckBox4.Checked and CheckBox5.Checked)
+ or (CheckBox1.Checked and not CheckBox2.Checked and not CheckBox3.Checked and not CheckBox4.Checked and CheckBox5.Checked)
+ then
+ f2:=ksax;
+ if (not CheckBox1.Checked and not CheckBox2.Checked and not CheckBox3.Checked and not CheckBox4.Checked and CheckBox5.Checked and CheckBox6.Checked)
+ or (not CheckBox1.Checked and not CheckBox2.Checked and not CheckBox3.Checked and CheckBox4.Checked and not CheckBox5.Checked and CheckBox6.Checked)
+ or (not CheckBox1.Checked and not CheckBox2.Checked and CheckBox3.Checked and not CheckBox4.Checked and not CheckBox5.Checked and CheckBox6.Checked)
+ or (not CheckBox1.Checked and CheckBox2.Checked and not CheckBox3.Checked and not CheckBox4.Checked and not CheckBox5.Checked and CheckBox6.Checked)
+ or (CheckBox1.Checked and not CheckBox2.Checked and not CheckBox3.Checked and not CheckBox4.Checked and not CheckBox5.Checked and CheckBox6.Checked)
+
+ then
+ f2:=cax;
+
+ if CheckBox1.Checked and CheckBox2.Checked and CheckBox3.Checked then
+ f3:=vax;
+ if not CheckBox1.Checked and CheckBox2.Checked and CheckBox3.Checked and CheckBox4.Checked  then
+ f3:=knax;
+ if not CheckBox1.Checked and not CheckBox2.Checked and CheckBox3.Checked and CheckBox4.Checked and CheckBox5.Checked  then
+ f3:=ksax;
+ if not CheckBox1.Checked and not CheckBox2.Checked and not CheckBox3.Checked and CheckBox4.Checked and CheckBox5.Checked and CheckBox6.Checked  then
+ f3:=cax;
+
+
+ if CheckBox1.Checked and CheckBox2.Checked and CheckBox3.Checked and CheckBox4.Checked  then
+ f4:=knax;
+ if not CheckBox1.Checked and CheckBox2.Checked and CheckBox3.Checked and CheckBox4.Checked and CheckBox5.Checked  then
+ f4:=ksax;
+ if not CheckBox1.Checked and not CheckBox2.Checked and CheckBox3.Checked and CheckBox4.Checked and CheckBox5.Checked and CheckBox6.Checked  then
+ f4:=cax;
+
+  if CheckBox1.Checked and CheckBox2.Checked and CheckBox3.Checked and CheckBox4.Checked and CheckBox5.Checked  then
+ f5:=ksax;
+ if not CheckBox1.Checked and CheckBox2.Checked and CheckBox3.Checked and CheckBox4.Checked and CheckBox5.Checked and CheckBox6.Checked  then
+ f5:=cax;
+
+ if CheckBox1.Checked and CheckBox2.Checked and CheckBox3.Checked and CheckBox4.Checked and CheckBox5.Checked and CheckBox6.Checked  then
+ f6:=cax;
+
+
+ if (f1<>'') and (f1<>tax) then
+ if CheckBox2.Checked or  CheckBox3.Checked  or  CheckBox4.Checked or CheckBox5.Checked  or CheckBox6.Checked  then
+ f1:='('+f1+')';
+ if f2<>'' then
+  f2:=' and ('+f2+')';
+ if f3<>'' then
+  f3:=' and ('+f3+')';
+ if f4<>'' then
+  f4:=' and ('+f4+')';
+ if f5<>'' then
+  f5:=' and ('+f5+')';
+ if f6<>'' then
+  f6:=' and ('+f6+')';
+
+  Memo1.Text :=f1+f2+f3+f4+f5+f6;
+ with DataMod_CARDS.Clients do begin
+
+
+  Filter := f1+f2+f3+f4+f5+f6;
+    // tax:='('+tax1+')'+' and ('+tax2+')'; //+' and '+tax2;
+  Filtered :=true;
+   
+//end;
+
+
+
+
+
+END;
+
+end;
+
+procedure Tclients.ToolButton1Click(Sender: TObject);
+begin
+DataMod_CARDS.SB_ACA.CallProcedure('CheckAdvancedObjectAccess', ['card_mdelete']);
+
+if MessageDlg('Silmək istəyirsiniz?',mtconfirmation,[mbyes,mbno],0)=mryes then
+DataMod_CARDS.mainpacket.CallProcedure('delnew',[DBGrid2.DataSource.DataSet.fieldbyname('id').asinteger]);
+DBGrid2.DataSource.DataSet.Refresh;
+end;
+
+procedure Tclients.ToolButton25Click(Sender: TObject);
+begin
+clients2.Edit1.Text:='EDIT';
+clients2.ShowModal;
+//Customer_new.Caption:='  EDIT CARD';
+end;
+
+procedure Tclients.DBGrid1DrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TColumn;
+  State: TGridDrawState);
+begin
+
+       if (DBGrid1.DataSource.DataSet.FieldByName('expiry').AsDateTime-DataMod_CARDS.settings.FieldByName('dateclose').asinteger) <date
+        then
+       begin
+
+         DBGrid1.Canvas.Brush.Color:=Claqua;
+         DBGrid1.DefaultDrawColumnCell(rect,datacol,column,state);
+       end;
+
+     if  (DBGrid1.DataSource.DataSet.FieldByName('expiry').AsDateTime <date) then
+     begin
+              DBGrid1.Canvas.Brush.Color:=clFuchsia;
+         DBGrid1.DefaultDrawColumnCell(rect,datacol,column,state);
+     end;
+
+
+end;
+
+procedure Tclients.ToolButton26Click(Sender: TObject);
+begin
+ShowMessage(datetostr(date-DataMod_CARDS.settings.FieldByName('dateclose').asinteger));
+end;
+
+procedure Tclients.tamyenile1Click(Sender: TObject);
+begin
+ToolButton14.Click;
+        DataMod_CARDS.hesab.Close;
+        DataMod_CARDS.hesab.SetVariable('CID', null);
+        DataMod_CARDS.hesab.SetVariable('p_AccNO', '%%');
+        DataMod_CARDS.hesab.Open;
+end;
+
+procedure Tclients.tamyenile1DrawItem(Sender: TObject; ACanvas: TCanvas;
+  ARect: TRect; Selected: Boolean);
+      
+  var
+  LineBottom: Integer;
+  SText: String;
+  Bar: TRect;
+ begin
+
+  with ACanvas, Sender as TMenuItem do
+  begin
+    with ACanvas.Font do
+    begin
+      Charset := DEFAULT_CHARSET;
+      Name := 'Azl Sans Serif';
+      if Default then
+        Style := [fsBold];
+    end;
+    if Caption = '-' then
+    begin
+      Pen.Color := clBlack;
+      LineBottom := (ARect.Top + (ARect.Bottom - ARect.Top) div 2)-1;
+      MoveTo(ARect.Left, LineBottom);
+      LineTo(ARect.Right, LineBottom);
+      inc(LineBottom);
+      Pen.Color := clWhite;
+      MoveTo(ARect.Left, LineBottom);
+      LineTo(ARect.Right, LineBottom);
+    end
+    else
+    begin
+      if Selected then
+      begin
+        Brush.Color := clNavy;
+        if Enabled then
+          Font.Color := clWhite
+        else
+          Font.Color := clSilver;
+      end
+      else
+      begin
+        Brush.Color := clBtnFace;
+        if Enabled then
+          Font.Color := clBlack
+        else
+          Font.Color := clGrayText;
+      end;
+      Bar := ARect;
+      Inc(Bar.Left, 22);
+      FillRect(Bar);
+      TextOut(ARect.Left+{17}22, ARect.Top+1, Caption);
+    end;
+    // draw shortcut
+    SText := ShortCutToText(ShortCut);
+    TextOut(ARect.Right-TextWidth(SText)-7, ARect.Top+1, SText);
+    if ImageIndex <> -1 then
+      with GetParentMenu do
+        if Assigned(Images) then
+        begin
+          if Checked then
+          begin
+            Bar.Left := ARect.Left + 1;
+            Bar.Right := Bar.Left + 10;
+            Bar.Top := ARect.Top + 1;
+            Bar.Bottom := Bar.Top + 10;
+
+            ACanvas.Brush.Color := clBtnShadow;
+            ACanvas.FrameRect(Bar);
+
+            Inc(Bar.Left, 2);
+            Inc(Bar.Right, 2);
+            Inc(Bar.Top, 2);
+            Inc(Bar.Bottom, 2);
+
+            ACanvas.Brush.Color := clBtnHighlight;
+            ACanvas.FrameRect(Bar);
+
+            Dec(Bar.Left, 1);
+            Dec(Bar.Right, 1);
+            Dec(Bar.Top, 1);
+            Dec(Bar.Bottom, 1);
+
+            if Selected then
+              ACanvas.Brush.Color := clBtnFace
+            else
+              ACanvas.Brush.Color := clBtnHighlight;
+            ACanvas.FillRect(Bar);
+          end;
+
+          Images.Draw(ACanvas, ARect.Left, ARect.Top, ImageIndex, Enabled);
+        end;
+  end;
+
+end;
+
+
+procedure Tclients.N11Click(Sender: TObject);
+begin
+        DataMod_CARDS.hesab.Close;
+        DataMod_CARDS.hesab.SetVariable('CID', null);
+        DataMod_CARDS.hesab.SetVariable('p_AccNO', '%%');
+        DataMod_CARDS.hesab.Open;
+          with DataMod_CARDS.Clients do begin
+  Filter := 'RBSNUMBER = '''+''+('*')+'''';
+end;
+//DBGrid1.DataSource.DataSet.Filtered:=False;
+//DBGrid1.DataSource.DataSet.Refresh;
+//DBGrid1.DataSource.DataSet.Filtered:=True;
+DBGrid2.DataSource.dataset.close;
+DBGrid2.DataSource.dataset.open;
+        //ToolButton14.Click;
+end;
+
+end.

@@ -1,0 +1,48 @@
+unit Unit9Form_other;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, DB, OracleData, StdCtrls, XFSCtrls, Grids, XDBGrids, ExtCtrls;
+
+type
+  TFormcust_other = class(TForm)
+    procedure FormShow(Sender: TObject);
+
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Formcust_other: TFormcust_other;
+
+implementation
+
+uses P_Datamod_Unit, UnitFormcust_other_change;
+
+{$R *.dfm}
+
+procedure TFormcust_other.FormShow(Sender: TObject);
+
+var
+c_custid :integer;
+begin
+{
+c_custid:=P_DataModule.Customers.FieldByName('id').AsInteger;
+
+P_DataModule.PG_PCustService.CallProcedure
+                                                ('cust_other_info_add',
+                                                 [c_custid]);
+                                                 OracleDataSet2.Close;
+                                                 OracleDataSet2.SetVariable('v_id',c_custid);
+                                                 OracleDataSet2.Open
+                                                 }
+
+end;
+
+
+
+end.

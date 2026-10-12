@@ -1,0 +1,339 @@
+﻿unit BalansImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,ComObj,
+  Dialogs, StdCtrls, DBCtrls, ComCtrls;
+
+type
+  TBalansFrm = class(TForm)
+    GroupBox1: TGroupBox;
+    DateTimePicker1: TDateTimePicker;
+    DateTimePicker2: TDateTimePicker;
+    GroupBox2: TGroupBox;
+    DBLookupComboBox1: TDBLookupComboBox;
+    Button1: TButton;
+    Button2: TButton;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Edit1: TEdit;
+    Memo1: TMemo;
+    procedure FormCreate(Sender: TObject);
+    procedure FormCanResize(Sender: TObject; var NewWidth, NewHeight: Integer;
+      var Resize: Boolean);
+    procedure Button2Click(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  BalansFrm: TBalansFrm;
+
+   Exl, Sheet: Variant;
+implementation
+
+uses Dmbudgetimpl;
+
+{$R *.dfm}
+    procedure DestroySheet;
+begin
+  try
+   Finalize(Sheet);
+   Finalize(Exl);
+  except
+
+  end;
+end;
+procedure ShowSheet;
+begin
+  try
+     Exl.Visible := True;
+  except
+     DestroySheet;
+   end;
+end;
+procedure TBalansFrm.Button1Click(Sender: TObject);
+
+ const
+number_format='#,##0.00';
+number_format_r='#,##0.00%';
+n='yyy';
+d=2;
+f=3;
+
+
+procedure CreateSheet;
+begin
+  try
+   Exl := CreateOleObject('Excel.Application');
+   Exl.WorkBooks.add;
+   Sheet := Exl.Application.Worksheets.Item[1];
+  except
+  end;
+end;
+
+
+var
+ cell, row,i , j , k ,m ,www :Integer;
+x,t_val :integer;
+percent,ss,s,s1,s2,s3, a: real;
+xdate, bdate ,edate :TDateTime;
+xer,gel, sql,bash: string;
+begin
+percent:=StrToFloat(Edit1.Text);
+Label3.Caption:=' Hesabat alinir.....';
+DMBudget.ArtDataSetExcl.Close;
+DMBudget.ArtDataSetExcl.SQL[3]:='where cont.status =2'  ;
+DMBudget.ArtDataSetExcl.open;
+DMBudget.ItmDataSetExcl.open;
+DMBudget.ArtDataSetExcl.First;
+ bdate:=Integer(Trunc(DateTimePicker1.DateTime))  ;
+ edate:=Integer(Trunc(DateTimePicker2.DateTime))  ;
+ xdate:=Integer(Trunc(DateTimePicker2.DateTime-364))  ;
+ try
+     DMBudget.ArtDataSet.DisableControls;
+     CreateSheet;
+     Sheet.Range['A1:A60000'].ColumnWidth:=11;
+     Sheet.Range['B1:B60000'].ColumnWidth:=23;
+     Sheet.Range['C1:C60000'].ColumnWidth:=10;
+     Sheet.Range['D1:D60000'].ColumnWidth:=10;
+     Sheet.Range['E1:E60000'].ColumnWidth:=10;
+     Sheet.Range['F1:F60000'].ColumnWidth:=12;
+     Sheet.Range['G1:G60000'].ColumnWidth:=12;
+
+     k:=1;
+     a:=0;
+  with DMBudget do  begin
+                     i:=0;
+
+           Sheet.Cells[i+k,3].Font.Bold :=true;
+           Sheet.Cells[i+k,3].Font.size :=16;
+           Sheet.Cells[i+k,3]:=
+         '"TuranBank" ASC üzrə '+  DateToStr( SYSDAT.FieldByName('tek_dat').AsDateTime)+'-ci il BALANS HESABATI (Min manatla Azn) ';
+
+          Sheet.Cells[i+k+1,1]:='№';
+          Sheet.Cells[i+k+1,1].Font.Bold :=true;
+          Sheet.Cells[i+k+1,1].Interior.ColorIndex:=34;
+
+          Sheet.Cells[i+k+1,2].Value:='Maddalərin adı';
+          Sheet.Cells[i+k+1,2].Font.Bold :=true;
+          Sheet.Cells[i+k+1,2].Interior.ColorIndex:=34;
+
+          Sheet.Cells[i+k+1,3]:=DateToStr(DateTimePicker2.DateTime);
+          Sheet.Cells[i+k+1,3].Font.Bold :=true;
+          Sheet.Cells[i+k+1,3].Interior.ColorIndex:=34;
+          Sheet.Cells[i+k+1,3].WrapText := true;
+
+          Sheet.Cells[i+k+1,4]:=DateToStr(DateTimePicker1.DateTime);
+          Sheet.Cells[i+k+1,4].Font.Bold :=true;
+          Sheet.Cells[i+k+1,4].Interior.ColorIndex:=34;
+          Sheet.Cells[i+k+1,4].WrapText := true;
+
+          Sheet.Cells[i+k+1,5]:=DateToStr(DateTimePicker2.DateTime);
+          Sheet.Cells[i+k+1,5].Font.Bold :=true;
+          Sheet.Cells[i+k+1,5].Interior.ColorIndex:=19;
+          Sheet.Cells[i+k+1,5].WrapText := true;
+          Sheet.Cells[i+k+1,5].HorizontalAlignment := 3;
+
+          Sheet.Cells[i+k+1,6]:='Fərq ('+DateToStr(DateTimePicker1.DateTime-364)+')';
+          Sheet.Cells[i+k+1,6].Font.Bold :=true;
+          Sheet.Cells[i+k+1,6].Interior.ColorIndex:=34;
+          Sheet.Cells[i+k+1,6].WrapText := true;
+          Sheet.Cells[i+k+1,6].HorizontalAlignment := 3;
+
+          Sheet.Cells[i+k+1,7]:='Fərq ('+DateToStr(DateTimePicker2.DateTime)+')';
+          Sheet.Cells[i+k+1,7].Font.Bold :=true;
+          Sheet.Cells[i+k+1,7].Interior.ColorIndex:=34;
+          Sheet.Cells[i+k+1,7].WrapText := true;
+          Sheet.Cells[i+k+1,7].HorizontalAlignment := 3;
+
+         for i:=1 to  ArtDataSetExcl.RecordCount do begin
+          bash:=inttostr(i+k);
+          Sheet.Cells[i+k+2,1].Font.Name:='Tahoma';
+          Sheet.Cells[i+k+2,1].Font.Bold :=true;
+          Sheet.Cells[i+k+2,1]:=ArtDataSetExcl.FieldByName('NUMBEROFARTICLE').AsString+'   '+ArtDataSetExcl.FieldByName('stat').AsString;
+
+           Sheet.Cells[i+k+2,2].Font.Bold :=true;
+           Sheet.Cells[i+k+2,2].Font.size :=10;
+           Sheet.Cells[i+k+2,2].Value:=ArtDataSetExcl.FieldByName('name').AsString;
+           x:=ArtDataSetExcl.FieldByName('status').asinteger;
+      for j:=1 to ItmDataSetExcl.RecordCount do begin
+         begin
+        /////////////////////////////////////Balans////////////////////////
+       s2:=0; s1:=0;  s3:=0;  s:=0; ss:=0;
+          Sheet.Cells[i+k+j+d,2]:=ItmDataSetExcl.FieldByName('NUMBEROFITEM').Asstring+'  '+ItmDataSetExcl.FieldByName('name').AsString;
+          sql:=ArticlesPkg.CallStringFunction('Balans',[ItmDataSetExcl.FieldByName('bal_cns').Asstring,'bal_cn1',edate,DBLookupComboBox1.KeyValue])  ;
+
+          if sql<>'' then
+          begin
+          OracleDataSet5.Close;
+          OracleDataSet5.SQL.Text:=sql;
+          OracleDataSet5.open;
+          s1:= OracleDataSet5.FieldByName('d').AsFloat;
+          end ;
+
+          sql:=ArticlesPkg.CallStringFunction('Balans',[ItmDataSetExcl.FieldByName('accounts').Asstring,'acc_no',edate,DBLookupComboBox1.KeyValue])  ;
+           Memo1.Text:=sql;
+          if sql<>'' then
+          begin
+          OracleDataSet5.Close;
+          OracleDataSet5.SQL.Text:=sql;
+          OracleDataSet5.open;
+          s2:= OracleDataSet5.FieldByName('d').AsFloat;
+          end ;
+          sql:=ArticlesPkg.CallStringFunction('Balans',[ItmDataSetExcl.FieldByName('DNT_ACCOUNTS').Asstring,'acc_no',edate,DBLookupComboBox1.KeyValue])  ;
+          if sql<>'' then
+          begin
+          OracleDataSet5.Close;
+          OracleDataSet5.SQL.Text:=sql;
+          OracleDataSet5.open;
+          s3:= OracleDataSet5.FieldByName('d').AsFloat;
+          end ;
+           s:=s1+s2-s3;
+          Sheet.Cells[i+k+j+d,3]:=s;
+ ///////////////////////////////
+    s2:=0; s1:=0;  s3:=0;
+        sql:=ArticlesPkg.CallStringFunction('Balans',[ItmDataSetExcl.FieldByName('bal_cns').Asstring,'bal_cn1',bdate,DBLookupComboBox1.KeyValue])  ;
+          if sql<>'' then
+          begin
+          OracleDataSet5.Close;
+          OracleDataSet5.SQL.Text:=sql;
+          OracleDataSet5.open;
+          s1:= OracleDataSet5.FieldByName('d').AsFloat;
+          end ;
+
+          sql:=ArticlesPkg.CallStringFunction('Balans',[ItmDataSetExcl.FieldByName('accounts').Asstring,'acc_no',bdate,DBLookupComboBox1.KeyValue])  ;
+          if sql<>'' then
+          begin
+          OracleDataSet5.Close;
+          OracleDataSet5.SQL.Text:=sql;
+          OracleDataSet5.open;
+          s2:= OracleDataSet5.FieldByName('d').AsFloat;
+          end ;
+          sql:=ArticlesPkg.CallStringFunction('Balans',[ItmDataSetExcl.FieldByName('DNT_ACCOUNTS').Asstring,'acc_no',bdate,DBLookupComboBox1.KeyValue])  ;
+          if sql<>'' then
+          begin
+          OracleDataSet5.Close;
+          OracleDataSet5.SQL.Text:=sql;
+          OracleDataSet5.open;
+          s3:= OracleDataSet5.FieldByName('d').AsFloat;
+          end;
+           ss:=s1+s2-s3;
+          Sheet.Cells[i+k+j+d,4]:=ss;
+     ////////////////////////////////////////////////
+        s:=0;
+     sql:=ArticlesPkg.CallStringFunction('Balans',[ItmDataSetExcl.FieldByName('bal_cns').Asstring,'bal_cn1',xdate,DBLookupComboBox1.KeyValue])  ;
+
+           if sql<>'' then
+          begin
+          OracleDataSet5.Close;
+          OracleDataSet5.SQL.Text:=sql;
+          OracleDataSet5.open;
+          s1:= OracleDataSet5.FieldByName('d').AsFloat;
+          end ;
+
+          sql:=ArticlesPkg.CallStringFunction('Balans',[ItmDataSetExcl.FieldByName('accounts').Asstring,'acc_no',xdate,DBLookupComboBox1.KeyValue])  ;
+           Memo1.Text:=sql;
+          if sql<>'' then
+          begin
+          OracleDataSet5.Close;
+          OracleDataSet5.SQL.Text:=sql;
+          OracleDataSet5.open;
+          s2:= OracleDataSet5.FieldByName('d').AsFloat;
+          end ;
+          sql:=ArticlesPkg.CallStringFunction('Balans',[ItmDataSetExcl.FieldByName('DNT_ACCOUNTS').Asstring,'acc_no',xdate,DBLookupComboBox1.KeyValue])  ;
+          if sql<>'' then
+          begin
+          OracleDataSet5.Close;
+          OracleDataSet5.SQL.Text:=sql;
+          OracleDataSet5.open;
+          s3:= OracleDataSet5.FieldByName('d').AsFloat;
+          end ;
+           s:=s1+s2-s3;
+          Sheet.Cells[i+k+j+d,3]:=s;
+         end;
+
+          ItmDataSetExcl.Next;
+
+             end;
+              Sheet.Cells[i+k+j+d,1]:='Cemi :';
+              Sheet.Cells[i+k+j+d,1].Font.Bold :=true;
+              Sheet.Cells[i+k+j+d,1].Font.Color:=clRed;
+              Sheet.Cells[i+k+j+d,1].Interior.ColorIndex:=19;
+              Sheet.Cells[i+k+j+d,2].Interior.ColorIndex:=19;
+              Sheet.Cells[i+k+j+d,3]:='=SUM(C'+inttostr(i+k+j+d-1)+':C'+inttostr(i+k+j+d-ItmDataSetExcl.RecordCount)+')';
+              Sheet.Cells[i+k+j+d,3].Interior.ColorIndex:=19;
+
+              Sheet.Cells[i+k+j+d,4]:='=SUM(D'+inttostr(i+k+j+d-1)+':D'+inttostr(i+k+j+d-ItmDataSetExcl.RecordCount)+')';
+              Sheet.Cells[i+k+j+d,4].Interior.ColorIndex:=19;
+
+              Sheet.Cells[i+k+j+d,5]:='=SUM(E'+inttostr(i+k+j+d-1)+':E'+inttostr(i+k+j+d-ItmDataSetExcl.RecordCount)+')';
+              Sheet.Cells[i+k+j+d,5].Interior.ColorIndex:=19;
+
+             Sheet.Cells[i+k+j+d,6]:='=(E'+inttostr(i+k+j+d)+'/C'+inttostr(i+k+j+d)+')*'+edit1.Text+'*0.01';
+             Sheet.Cells[i+k+j+d,6].Interior.ColorIndex:=19;
+
+             Sheet.Cells[i+k+j+d,7]:='=E'+inttostr(i+k+j+d)+'/'+edit1.Text;
+             Sheet.Cells[i+k+j+d,7].Interior.ColorIndex:=19;
+
+              Sheet.Cells[i+k+j+d,8]:='=SUM(H'+inttostr(i+k+j+d-1)+':H'+inttostr(i+k+j+d-ItmDataSetExcl.RecordCount)+')';
+              Sheet.Cells[i+k+j+d,8].Interior.ColorIndex:=19;
+
+             Sheet.Cells[i+k+j+d,9]:='=(E'+inttostr(i+k+j+d)+'-H'+inttostr(i+k+j+d)+')/H'+inttostr(i+k+j+d);
+             Sheet.Cells[i+k+j+d,9].Interior.ColorIndex:=19;
+
+             Sheet.Cells[i+k+j+d,10]:='=H'+inttostr(i+k+j+d)+'/'+edit1.Text;
+             Sheet.Cells[i+k+j+d,10].Interior.ColorIndex:=19;
+
+              if ArtDataSetExcl.FieldByName('status').AsInteger=0 then
+              gel:=inttostr(i+k+j+d);
+
+              if ArtDataSetExcl.FieldByName('status').AsInteger=1 then
+              xer:=inttostr(i+k+j+d);
+
+              m:=ItmDataSetExcl.RecordCount;
+              Exl.Range['A'+bash+':J'+inttostr(i+k+m+d+2)].select;
+              Sheet.Range['A'+bash+':J'+inttostr(i+k+m+d)].Borders.Color:=clBlack;
+          k:=k+d+m-1;
+
+          ArtDataSetExcl.Next;
+
+            end;
+     end;
+
+     ShowSheet;
+     Label3.Caption:='';
+  finally
+
+   Exl.Range['A1:A1'].Select;
+
+   Screen.Cursor := crDefault;
+   DestroySheet;
+   DMBudget.ArtDataSet.EnableControls;
+  end;
+end;
+
+procedure TBalansFrm.Button2Click(Sender: TObject);
+begin
+close;
+end;
+
+procedure TBalansFrm.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+Resize:=false
+end;
+
+procedure TBalansFrm.FormCreate(Sender: TObject);
+begin
+ DMBudget.DSetFilial.open;
+ DateTimePicker1.DateTime:=DMBudget.SYSDAT.FieldByName('tek_dat').AsDateTime;
+ DateTimePicker2.DateTime:=DMBudget.SYSDAT.FieldByName('tek_dat').AsDateTime;
+end;
+
+end.

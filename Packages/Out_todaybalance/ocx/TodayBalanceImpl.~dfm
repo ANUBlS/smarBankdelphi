@@ -1,0 +1,289 @@
+object FrmTodayBalance: TFrmTodayBalance
+  Left = 192
+  Top = 133
+  Width = 696
+  Height = 480
+  Caption = 'FrmTodayBalance'
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'MS Sans Serif'
+  Font.Style = []
+  OldCreateOrder = False
+  OnCreate = ActiveFormCreate
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 688
+    Height = 453
+    Align = alClient
+    Color = clGray
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 0
+    object Panel2: TPanel
+      Left = 1
+      Top = 1
+      Width = 307
+      Height = 451
+      Align = alLeft
+      BevelOuter = bvNone
+      TabOrder = 0
+      object GroupBox1: TGroupBox
+        Left = 0
+        Top = 0
+        Width = 307
+        Height = 42
+        Align = alTop
+        Caption = 'Тарих'
+        Color = clBtnFace
+        ParentColor = False
+        TabOrder = 0
+        object DTPTargetDate: TDateTimePicker
+          Left = 9
+          Top = 16
+          Width = 128
+          Height = 21
+          CalAlignment = dtaLeft
+          Date = 37893.5197079282
+          Time = 37893.5197079282
+          DateFormat = dfShort
+          DateMode = dmComboBox
+          Kind = dtkDate
+          ParseInput = False
+          TabOrder = 0
+          OnChange = DTPTargetDateChange
+        end
+      end
+      object GroupBox2: TGroupBox
+        Left = 0
+        Top = 42
+        Width = 307
+        Height = 227
+        Align = alTop
+        Caption = 'Сечмяляр'
+        Color = clBtnFace
+        ParentColor = False
+        TabOrder = 1
+        object GroupBox3: TGroupBox
+          Left = 2
+          Top = 15
+          Width = 303
+          Height = 42
+          Align = alTop
+          Caption = 'Валйута'
+          Color = clBtnFace
+          ParentColor = False
+          TabOrder = 0
+          object Currencys: TSearchCombo
+            Left = 8
+            Top = 15
+            Width = 236
+            Height = 22
+            ItemHeight = 16
+            TabOrder = 0
+            OnChange = CurrencysChange
+            DataSource = out_balancedatamodule.DataSrcCurrencyInfo
+            ViewField = 'CurrLName'
+            DefaultString = 'Бцтцн валйуталар'
+            DefaultStringUse = True
+            DefaultStringColor = clNavy
+          end
+        end
+        object GroupBox4: TGroupBox
+          Left = 2
+          Top = 141
+          Width = 303
+          Height = 42
+          Align = alTop
+          Caption = 'Щесабатын формасы'
+          Color = clBtnFace
+          ParentColor = False
+          TabOrder = 3
+          object CBReportType: TComboBox
+            Left = 8
+            Top = 16
+            Width = 236
+            Height = 21
+            Style = csDropDownList
+            ItemHeight = 13
+            TabOrder = 0
+            Items.Strings = (
+              'Галыглар балансы'
+              'Галыглар балансы (Щесаб адлары иля)'
+              'Галыг доврцййя балансы')
+          end
+        end
+        object GroupBox5: TGroupBox
+          Left = 2
+          Top = 99
+          Width = 303
+          Height = 42
+          Align = alTop
+          Caption = 'Баланс алынсын'
+          Color = clBtnFace
+          ParentColor = False
+          TabOrder = 2
+          object CBAmountType: TComboBox
+            Left = 8
+            Top = 16
+            Width = 236
+            Height = 21
+            Style = csDropDownList
+            ItemHeight = 13
+            TabOrder = 0
+            OnChange = CBAmountTypeChange
+            Items.Strings = (
+              'Сечилмиш валйута иля'
+              'Милли валйута еквивалентиндя')
+          end
+        end
+        object GroupBox6: TGroupBox
+          Left = 2
+          Top = 57
+          Width = 303
+          Height = 42
+          Align = alTop
+          Caption = 'Филиаллар'
+          Color = clBtnFace
+          ParentColor = False
+          TabOrder = 1
+          object Branches: TSearchCombo
+            Left = 8
+            Top = 15
+            Width = 236
+            Height = 22
+            ItemHeight = 16
+            TabOrder = 0
+            OnChange = BranchesChange
+            DataSource = out_balancedatamodule.DataSrcBranchesInfo
+            ViewField = 'BranchName'
+            DefaultString = 'Цмуми банк цзря'
+            DefaultStringUse = True
+            DefaultStringColor = clNavy
+          end
+        end
+        object GroupBox7: TGroupBox
+          Left = 2
+          Top = 183
+          Width = 303
+          Height = 42
+          Align = alTop
+          Caption = 'Йалныз сечилмиш баланс щесаблары  цзря'
+          Color = clBtnFace
+          ParentColor = False
+          TabOrder = 4
+          object AccountsListEdit: TEdit
+            Left = 2
+            Top = 16
+            Width = 294
+            Height = 21
+            TabOrder = 0
+            OnChange = AccountsListEditChange
+          end
+        end
+      end
+      object Panel3: TPanel
+        Left = 0
+        Top = 269
+        Width = 307
+        Height = 66
+        Align = alTop
+        BevelInner = bvRaised
+        BevelOuter = bvLowered
+        TabOrder = 2
+        object SBExecute: TSpeedButton
+          Left = 204
+          Top = 14
+          Width = 81
+          Height = 41
+          Flat = True
+          Glyph.Data = {
+            36010000424D3601000000000000760000002800000015000000100000000100
+            040000000000C000000000000000000000001000000000000000000000000000
+            80000080000000808000800000008000800080800000C0C0C000808080000000
+            FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00333333333333
+            333333333000333333333333333333333000338FF3FF3333333333333000338C
+            F38CFF33333333333000338CF38CCCFF333333333000338CF38CCCCCFF333333
+            3000338CF38CCCCCCCFF33333000338CF38CCCCCCCCCFF333000338CF38CCCCC
+            CCCC88F33000338CF38CCCCCCC8833333000338CF38CCCCC883333333000338C
+            F38CCC88333333333000338CF38C88333333333330003388F388333333333333
+            3000333333333333333333333000333333333333333333333000}
+          Spacing = 5
+          OnClick = SBExecuteClick
+        end
+        object RGReportFormat: TRadioGroup
+          Left = 2
+          Top = 2
+          Width = 159
+          Height = 62
+          Align = alLeft
+          ItemIndex = 0
+          Items.Strings = (
+            'Щесабат'
+            'Анализ'
+            'Excel')
+          TabOrder = 0
+        end
+      end
+      object Panel4: TPanel
+        Left = 0
+        Top = 335
+        Width = 307
+        Height = 116
+        Align = alClient
+        BevelOuter = bvNone
+        Color = clGray
+        TabOrder = 3
+        object LogMemo: TMemo
+          Left = 0
+          Top = 20
+          Width = 307
+          Height = 96
+          Align = alClient
+          Lines.Strings = (
+            'LogMemo')
+          TabOrder = 0
+          Visible = False
+        end
+        object Panel5: TPanel
+          Left = 0
+          Top = 0
+          Width = 307
+          Height = 20
+          Align = alTop
+          TabOrder = 1
+          object CBRest: TCheckBox
+            Left = 3
+            Top = 2
+            Width = 262
+            Height = 17
+            Caption = 'Галыьы вя йа дорцййяси олан щесаблар(Анализ формасы)'
+            Checked = True
+            State = cbChecked
+            TabOrder = 0
+          end
+        end
+      end
+    end
+  end
+  object BalanceExporter: TExcelExporter
+    ExportSource = out_balancedatamodule.DataSrcBalanceData
+    SheetName = 'TodayBalance'
+    ShowTitles = True
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'MS Sans Serif'
+    Font.Style = []
+    Left = 259
+    Top = 150
+  end
+end

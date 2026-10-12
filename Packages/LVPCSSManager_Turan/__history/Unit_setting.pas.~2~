@@ -1,0 +1,116 @@
+unit Unit_setting;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, NLSDialogs,
+  Buttons, Grids, DBGrids, StdCtrls, ExtCtrls, NLSLocalizer;
+
+type
+  TForm_Setting = class(TForm)
+    Panel1: TPanel;
+    GroupBox1: TGroupBox;
+    Edit_Balans_hesabi: TEdit;
+    Label1: TLabel;
+    DBG_Balans_Hesablari: TDBGrid;
+    Panel2: TPanel;
+    SB_OK: TSpeedButton;
+    SB_DEL: TSpeedButton;
+    Button_Exit: TButton;
+    Panel3: TPanel;
+    Memo1: TMemo;
+    procedure Button_ExitClick(Sender: TObject);
+    procedure SB_OKClick(Sender: TObject);
+    procedure SB_DELClick(Sender: TObject);
+    procedure Edit_Balans_hesabiKeyPress(Sender: TObject; var Key: Char);
+    procedure Edit_Balans_hesabiEnter(Sender: TObject);
+    procedure DBG_Balans_HesablariCellClick(Column: TColumn);
+    procedure DBG_Balans_HesablariKeyPress(Sender: TObject; var Key: Char);
+    procedure Edit_Balans_hesabiKeyUp(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form_Setting: TForm_Setting;
+
+implementation
+
+uses LVPCSSImpl,Data_Unit;
+{$R *.DFM}
+
+procedure TForm_Setting.Button_ExitClick(Sender: TObject);
+begin
+   close;
+end;
+
+procedure TForm_Setting.SB_OKClick(Sender: TObject);
+begin
+   if Length(Edit_Balans_hesabi.Text)=4 then
+   begin
+      DataMod.Ins.CallProcedure('xs_Filter_Account_add'
+                            ,[strtoint(Edit_Balans_hesabi.Text)]
+                            );
+      DataMod.ODS_XS_Filter.Refresh;
+      Edit_Balans_hesabi.Clear;
+   end else
+   begin
+      ShowMessage('¡‡Î‡ÌÒ ˘ÂÒ‡·˚Ì˚ ƒ÷«›÷Õ …¿«€Õ!');
+   end;
+end;
+
+procedure TForm_Setting.SB_DELClick(Sender: TObject);
+begin
+   if Length(Edit_Balans_hesabi.Text)=4 then
+   begin
+      DataMod.Ins.CallProcedure('xs_Filter_Account_Delete'
+                            ,[StrToInt(Edit_Balans_hesabi.Text)]
+                            );
+      DataMod.ODS_XS_Filter.Refresh;
+      Edit_Balans_hesabi.Clear;
+   end else
+   begin
+      ShowMessage('¡‡Î‡ÌÒ ˘ÂÒ‡·˚Ì˚ ƒ÷«›÷Õ …¿«€Õ!');
+   end;
+end;
+
+procedure TForm_Setting.Edit_Balans_hesabiKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+   if (not (key in ['0'..'9'])) and (ord(key)<>8) then
+   begin
+      if ord(key)=13 then
+         SB_OKClick(Sender);
+      key:=chr(0);
+   end;
+end;
+
+procedure TForm_Setting.Edit_Balans_hesabiEnter(Sender: TObject);
+begin
+   Edit_Balans_hesabi.Clear;
+end;
+
+procedure TForm_Setting.DBG_Balans_HesablariCellClick(Column: TColumn);
+begin
+     Edit_Balans_hesabi.Text := Column.Field.AsString;
+end;
+
+procedure TForm_Setting.DBG_Balans_HesablariKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+   Edit_Balans_hesabi.Text:= DataMod.ODS_XS_Filter.Fields[0].AsString;
+end;
+
+procedure TForm_Setting.Edit_Balans_hesabiKeyUp(Sender: TObject;
+  var Key: Word; Shift: TShiftState);
+begin
+   if key=46 then
+      SB_DELClick(Sender);
+end;
+
+end.
+
+

@@ -1,0 +1,195 @@
+﻿unit CreditInfo;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, DBGridEhGrouping, StdCtrls, Grids, DBGrids, GridsEh, DBGridEh,
+  Buttons, ExtCtrls, DBCtrlsEh, Mask, DBCtrls, XFSCtrls, ComCtrls;
+
+type
+  TFormCreditInfo = class(TForm)
+    XFPanel1: TXFPanel;
+    PageControl1: TPageControl;
+    TabSheet1: TTabSheet;
+    XFPanel11: TXFPanel;
+    XFLabel21: TXFLabel;
+    DBMemo1: TDBMemo;
+    XFPanel12: TXFPanel;
+    XFLabel23: TXFLabel;
+    XFLabel24: TXFLabel;
+    DBEdit21: TDBEdit;
+    DBEdit22: TDBEdit;
+    XFPanel13: TXFPanel;
+    XFLabel25: TXFLabel;
+    XFLabel26: TXFLabel;
+    DBEdit23: TDBEdit;
+    DBEdit24: TDBEdit;
+    XFPanel14: TXFPanel;
+    XFLabel27: TXFLabel;
+    XFLabel28: TXFLabel;
+    DBEdit25: TDBEdit;
+    DBEdit26: TDBEdit;
+    XFPanel15: TXFPanel;
+    XFLabel22: TXFLabel;
+    DBMemo2: TDBMemo;
+    XFPanel22: TXFPanel;
+    XFLabel34: TXFLabel;
+    XFLabel41: TXFLabel;
+    DBEdit30: TDBEdit;
+    DBEdit37: TDBEdit;
+    TabSheet2: TTabSheet;
+    XFPanel2: TXFPanel;
+    XFLabel3: TXFLabel;
+    XFLabel4: TXFLabel;
+    DBEdit3: TDBEdit;
+    DBEdit4: TDBEdit;
+    XFPanel5: TXFPanel;
+    XFLabel9: TXFLabel;
+    XFLabel10: TXFLabel;
+    DBEdit7: TDBEdit;
+    DBEdit8: TDBEdit;
+    XFPanel4: TXFPanel;
+    XFLabel7: TXFLabel;
+    XFLabel8: TXFLabel;
+    DBEdit1: TDBEdit;
+    DBDateTimeEditEh1: TDBDateTimeEditEh;
+    XFPanel3: TXFPanel;
+    XFLabel1: TXFLabel;
+    XFLabel2: TXFLabel;
+    DBEdit2: TDBEdit;
+    DBDateTimeEditEh2: TDBDateTimeEditEh;
+    XFPanel6: TXFPanel;
+    XFLabel5: TXFLabel;
+    XFLabel6: TXFLabel;
+    DBEdit5: TDBEdit;
+    DBEdit6: TDBEdit;
+    XFPanel7: TXFPanel;
+    XFLabel11: TXFLabel;
+    XFLabel12: TXFLabel;
+    DBEdit9: TDBEdit;
+    DBEdit10: TDBEdit;
+    XFPanel8: TXFPanel;
+    XFLabel13: TXFLabel;
+    XFLabel14: TXFLabel;
+    DBEdit11: TDBEdit;
+    DBEdit12: TDBEdit;
+    XFPanel9: TXFPanel;
+    XFLabel15: TXFLabel;
+    XFLabel16: TXFLabel;
+    DBEdit13: TDBEdit;
+    DBEdit14: TDBEdit;
+    XFPanel10: TXFPanel;
+    XFLabel17: TXFLabel;
+    XFLabel18: TXFLabel;
+    DBEdit15: TDBEdit;
+    DBEdit16: TDBEdit;
+    XFPanel16: TXFPanel;
+    XFLabel19: TXFLabel;
+    XFLabel20: TXFLabel;
+    DBEdit17: TDBEdit;
+    DBEdit18: TDBEdit;
+    XFPanel17: TXFPanel;
+    XFLabel29: TXFLabel;
+    XFLabel30: TXFLabel;
+    DBEdit19: TDBEdit;
+    DBEdit20: TDBEdit;
+    TabSheet3: TTabSheet;
+    Panel11: TPanel;
+    SpeedButton2: TSpeedButton;
+    DBGridEh1: TDBGridEh;
+    TabSheet4: TTabSheet;
+    Panel12: TPanel;
+    SpeedButton3: TSpeedButton;
+    SpeedButton4: TSpeedButton;
+    DBGridEh2: TDBGridEh;
+    Zaminlər: TTabSheet;
+    DBGrid1: TDBGrid;
+    XFPanel18: TXFPanel;
+    XFLabel33: TXFLabel;
+    XFLabel49: TXFLabel;
+    DBEdit29: TDBEdit;
+    DBEdit45: TDBEdit;
+    XFPanel19: TXFPanel;
+    XFLabel31: TXFLabel;
+    XFLabel32: TXFLabel;
+    DBEdit27: TDBEdit;
+    DBEdit28: TDBEdit;
+    XFPanel20: TXFPanel;
+    XFLabel35: TXFLabel;
+    XFLabel36: TXFLabel;
+    DBEdit31: TDBEdit;
+    DBEdit32: TDBEdit;
+    XFPanel21: TXFPanel;
+    XFLabel37: TXFLabel;
+    XFLabel38: TXFLabel;
+    DBEdit33: TDBEdit;
+    DBEdit34: TDBEdit;
+    XFPanel23: TXFPanel;
+    XFLabel39: TXFLabel;
+    XFLabel40: TXFLabel;
+    DBEdit35: TDBEdit;
+    DBEdit36: TDBEdit;
+    Girovlar: TTabSheet;
+    XFPanel24: TXFPanel;
+    XFLabel42: TXFLabel;
+    XFLabel43: TXFLabel;
+    DBEdit38: TDBEdit;
+    DBEdit39: TDBEdit;
+    XFPanel25: TXFPanel;
+    XFLabel44: TXFLabel;
+    XFLabel45: TXFLabel;
+    DBEdit40: TDBEdit;
+    DBEdit41: TDBEdit;
+    GroupBox1: TGroupBox;
+    XFPanel26: TXFPanel;
+    XFLabel46: TXFLabel;
+    XFLabel47: TXFLabel;
+    DBEdit42: TDBEdit;
+    DBEdit43: TDBEdit;
+    XFPanel27: TXFPanel;
+    XFLabel48: TXFLabel;
+    DBEdit44: TDBEdit;
+    XFPanel28: TXFPanel;
+    XFLabel50: TXFLabel;
+    XFLabel51: TXFLabel;
+    DBEdit46: TDBEdit;
+    DBEdit47: TDBEdit;
+    XFPanel29: TXFPanel;
+    XFLabel52: TXFLabel;
+    XFLabel53: TXFLabel;
+    DBEdit48: TDBEdit;
+    DBEdit49: TDBEdit;
+    XFPanel30: TXFPanel;
+    XFLabel54: TXFLabel;
+    DBEdit50: TDBEdit;
+    Panel1: TPanel;
+    BitBtn1: TBitBtn;
+    procedure FormShow(Sender: TObject);
+    procedure FormCanResize(Sender: TObject; var NewWidth, NewHeight: Integer;
+      var Resize: Boolean);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormCreditInfo: TFormCreditInfo;
+
+implementation
+  uses UnitDataModuleCourt;
+{$R *.dfm}
+
+procedure TFormCreditInfo.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+  resize:=false;
+end;
+
+procedure TFormCreditInfo.FormShow(Sender: TObject);
+begin
+  PageControl1.TabIndex:= 0
+end;
+
+end.

@@ -1,0 +1,193 @@
+object DMExtractMoney: TDMExtractMoney
+  OldCreateOrder = False
+  Left = 64
+  Top = 146
+  Height = 471
+  Width = 696
+  object Payments: TOracleDataSet
+    SQL.Strings = (
+      'SELECT id,  hdate, facticaldebt, interestdebt, trid, inttrid'
+      '  FROM sbcm_payments'
+      '  where id# = :ContractID'
+      'order by hdate')
+    Variables.Data = {
+      03000000010000000B0000003A434F4E54524143544944030000000000000000
+      000000}
+    Session = sboapiDataModule.SBSession
+    Left = 32
+    Top = 32
+    object PaymentsID: TFloatField
+      DisplayLabel = '№'
+      FieldName = 'ID'
+      Required = True
+    end
+    object PaymentsHDATE: TDateTimeField
+      DisplayLabel = 'Тарих'
+      FieldName = 'HDATE'
+      Required = True
+    end
+    object PaymentsFACTICALDEBT: TFloatField
+      DisplayLabel = 'Ясас мябляьдян'
+      FieldName = 'FACTICALDEBT'
+      DisplayFormat = '#,##0.00'
+    end
+    object PaymentsINTERESTDEBT: TFloatField
+      DisplayLabel = 'Фаиз мябляьиндян'
+      FieldName = 'INTERESTDEBT'
+      DisplayFormat = '#,##0.00'
+    end
+    object PaymentsTRID: TFloatField
+      FieldName = 'TRID'
+      Visible = False
+    end
+    object PaymentsINTTRID: TFloatField
+      FieldName = 'INTTRID'
+      Visible = False
+    end
+  end
+  object PaymentsDatSrc: TDataSource
+    DataSet = Payments
+    Left = 120
+    Top = 24
+  end
+  object CreditAccsDatSrc: TDataSource
+    DataSet = CreditAccs
+    Left = 104
+    Top = 88
+  end
+  object CreditAccs: TOracleDataSet
+    SQL.Strings = (
+      '/*select id,'
+      '       acc_no,'
+      '       name'
+      'from account '
+      'where close_dat is null'
+      'and kli_id =:KliID'
+      'and  bal_cn1 in ( select accgroup from '
+      
+        'sbcm_acc_zone_info where zoneid = (select zoneid from sbcm_acc_z' +
+        'ones'
+      'where name = '#39'Account'#39'))'
+      'union all*/'
+      'select '
+      '       /*+ FIRST_ROWS_200(account) */'
+      '       id,'
+      '       acc_no,'
+      '       name'
+      'from account '
+      'where close_dat is null'
+      'and  bal_cn1 in ( select accgroup from '
+      
+        'sbcm_acc_zone_info where zoneid = (select zoneid from sbcm_acc_z' +
+        'ones'
+      'where name = '#39'InternalBankAccs'#39'))'
+      'order by acc_no'
+      ''
+      ''
+      '')
+    Cursor = crSQLWait
+    QueryAllRecords = False
+    Session = sboapiDataModule.SBSession
+    Left = 32
+    Top = 88
+    object CreditAccsID: TFloatField
+      FieldName = 'ID'
+    end
+    object CreditAccsACC_NO: TStringField
+      FieldName = 'ACC_NO'
+      Size = 4000
+    end
+    object CreditAccsNAME: TStringField
+      FieldName = 'NAME'
+      Size = 4000
+    end
+  end
+  object sbcm_payment: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'sbcm_payment'
+    ParameterMode = pmNamed
+    Left = 32
+    Top = 152
+  end
+  object DepositInfo: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      '     cust.name,'
+      '     cont.amount,'
+      '     cont.currency,'
+      '     cont.customerid,'
+      '     cs.facticaldebt,'
+      '     cs.facticalinterestdebt'
+      'from customers cust,'
+      '     sbcm_contract_state cs,'
+      '     sbcm_contracts cont'
+      'where'
+      'cont.id = :ContractID and '
+      'cust.id = cont.customerid'
+      'and cs.id# = :ContractID ')
+    Variables.Data = {
+      03000000010000000B0000003A434F4E54524143544944030000000000000000
+      000000}
+    Session = sboapiDataModule.SBSession
+    Left = 232
+    Top = 24
+    object DepositInfoNAME: TStringField
+      FieldName = 'NAME'
+      Size = 90
+    end
+    object DepositInfoAMOUNT: TFloatField
+      FieldName = 'AMOUNT'
+    end
+    object DepositInfoCURRENCY: TFloatField
+      FieldName = 'CURRENCY'
+    end
+    object DepositInfoCUSTOMERID: TFloatField
+      FieldName = 'CUSTOMERID'
+    end
+    object DepositInfoFACTICALDEBT: TFloatField
+      FieldName = 'FACTICALDEBT'
+    end
+    object DepositInfoFACTICALINTERESTDEBT: TFloatField
+      FieldName = 'FACTICALINTERESTDEBT'
+    end
+  end
+  object CustAcc: TOracleDataSet
+    SQL.Strings = (
+      'select clientaccid '
+      
+        '       ,sbcm_stored_programs.Get_ContractAccount(ContractAccID) ' +
+        'as ContractAccNo'
+      
+        '       ,sbcm_stored_programs.Get_ContractAccount(InterestAccID) ' +
+        'as InterestAccNo'
+      'from sbcm_contract_accounts'
+      'where id# = :Contractid')
+    Variables.Data = {
+      03000000010000000B0000003A434F4E54524143544944030000000000000000
+      000000}
+    Session = sboapiDataModule.SBSession
+    Left = 240
+    Top = 80
+    object CustAccCLIENTACCID: TFloatField
+      FieldName = 'CLIENTACCID'
+    end
+    object CustAccCONTRACTACCNO: TStringField
+      FieldName = 'CONTRACTACCNO'
+      Size = 4000
+    end
+    object CustAccINTERESTACCNO: TStringField
+      FieldName = 'INTERESTACCNO'
+      Size = 4000
+    end
+  end
+  object DepositInfoDatSrc: TDataSource
+    DataSet = DepositInfo
+    Left = 312
+    Top = 24
+  end
+  object CustAccDatSrc: TDataSource
+    DataSet = CustAcc
+    Left = 320
+    Top = 80
+  end
+end

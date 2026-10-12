@@ -1,0 +1,979 @@
+unit UMainCProperty;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, LDialogs,
+  ActiveX, AxCtrls, PMainCProperty_TLB, StdVcl,SBPlgAx50_TLB, Db, OracleData,
+  ImgList, PlgModalContainer, Grids, DBGrids, ToolWin, ComCtrls, ActnList,
+  Menus, INSWordExporter, Oracle;
+
+type
+  TfrmMainCProperty = class(TActiveForm, IMainCProperty,IUIObject,
+             IParamInput,
+             ISBPlgAc50BufferForm)
+    ToolBar1: TToolBar;
+    CPropertyGrid: TDBGrid;
+    PlgBlank: TPlgModalContainer;
+    ImageList: TImageList;
+    ODSContracts: TOracleDataSet;
+    ODSContractsID: TFloatField;
+    ODSContractsTYPE_ID: TFloatField;
+    ODSContractsBLANK_ID: TFloatField;
+    ODSContractsSUGG_ID: TFloatField;
+    ODSContractsPOLICY_ID: TFloatField;
+    ODSContractsINS_DATE: TDateTimeField;
+    ODSContractsBEGIN_DATE: TDateTimeField;
+    ODSContractsEND_DATE: TDateTimeField;
+    ODSContractsVALUTE_ID: TFloatField;
+    ODSContractsAMMOUNT: TFloatField;
+    ODSContractsCLOSE_PREFIX: TIntegerField;
+    ODSContractsKLI_ID: TFloatField;
+    ODSContractsLOANACC_ID: TFloatField;
+    ODSContractsCURRACC_ID: TFloatField;
+    ODSContractsPOLICY_NUM: TStringField;
+    DSContracts: TDataSource;
+    ODSCProperty: TOracleDataSet;
+    ODSCPropertyID: TFloatField;
+    ODSCPropertyKLI_ID: TFloatField;
+    ODSCPropertyFULLDESCRIPTION: TStringField;
+    ODSCPropertyLOCATIONOBJ: TStringField;
+    ODSCPropertyYEARSINBUSINESS: TStringField;
+    ODSCPropertyBUILDINGUSAGE: TStringField;
+    ODSCPropertyCONSTYEAR: TDateTimeField;
+    ODSCPropertyFLOORSNUM: TIntegerField;
+    ODSCPropertyWALLSM: TStringField;
+    ODSCPropertyCEILINGSM: TStringField;
+    ODSCPropertyROOFM: TStringField;
+    ODSCPropertyAREA: TFloatField;
+    ODSCPropertyAPPLICANTSPACE: TFloatField;
+    ODSCPropertyEARTHQUAKEDETAILS: TStringField;
+    ODSCPropertyFLAMABLE: TStringField;
+    ODSCPropertySURROINDINGDETAILS: TStringField;
+    ODSCPropertySITUETED: TStringField;
+    ODSCPropertyGUARD: TStringField;
+    ODSCPropertyALARM: TStringField;
+    ODSCPropertyLOCKS: TStringField;
+    ODSCPropertySECURITYLOCKS: TStringField;
+    ODSCPropertyBARS: TStringField;
+    ODSCPropertyOTHER: TStringField;
+    ODSCPropertySETTINGS: TStringField;
+    ODSCPropertyREPAIR: TStringField;
+    ODSCPropertyHEATED: TStringField;
+    ODSCPropertyRISKID: TFloatField;
+    ODSCPropertyANNUAL: TFloatField;
+    ODSCPropertyWAGES: TFloatField;
+    ODSCPropertyRENT: TFloatField;
+    ODSCPropertyEMPLOYES: TFloatField;
+    ODSCPropertyEXPIRITY: TDateTimeField;
+    ODSCPropertyLOSSHISTORY: TStringField;
+    ODSCPropertyRENEWAL: TStringField;
+    ODSCPropertyTHIRDPARTY: TStringField;
+    ODSCPropertyOTHERINF: TStringField;
+    ODSCPropertyINDEMINITY: TStringField;
+    ODSCPropertyVALUETYPE: TStringField;
+    ODSCPropertyBUILDINGS: TFloatField;
+    ODSCPropertyCONTENT: TFloatField;
+    ODSCPropertyEQUIPMENT: TFloatField;
+    ODSCPropertyGLASS: TFloatField;
+    ODSCPropertyCASH: TFloatField;
+    ODSCPropertyWAREHOUSE: TFloatField;
+    ODSCPropertySTOCK: TFloatField;
+    ODSCPropertyPRODUCTS: TFloatField;
+    ODSCPropertyWORKINPROGRESS: TFloatField;
+    ODSCPropertyRAWMATERIALS: TFloatField;
+    ODSCPropertyCLOSE_PREFIX: TIntegerField;
+    ODSCPropertyTYPEID: TIntegerField;
+    ODSCPropertyPROFITID: TFloatField;
+    CPropertySource: TDataSource;
+    ODSCustomers: TOracleDataSet;
+    CustomersSource: TDataSource;
+    ODSBeneficiary: TOracleDataSet;
+    BeneficiarySource: TDataSource;
+    ODSRisks: TOracleDataSet;
+    RiskSource: TDataSource;
+    ODSRiskType: TOracleDataSet;
+    ODSRiskTypeID: TFloatField;
+    ODSRiskTypeNAME: TStringField;
+    RiskTypeData: TDataSource;
+    ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
+    ToolButton3: TToolButton;
+    ToolButton4: TToolButton;
+    ToolButton5: TToolButton;
+    ActionList1: TActionList;
+    AInsert: TAction;
+    AEdit: TAction;
+    ADelete: TAction;
+    AReport: TAction;
+    ARefresh: TAction;
+    AFullRefresh: TAction;
+    ASuggestion: TAction;
+    APolicy: TAction;
+    ToolButton6: TToolButton;
+    plgSuggest: TPlgModalContainer;
+    ToolButton7: TToolButton;
+    PopupMenu2: TPopupMenu;
+    N2: TMenuItem;
+    N3: TMenuItem;
+    N4: TMenuItem;
+    N5: TMenuItem;
+    N6: TMenuItem;
+    N9: TMenuItem;
+    N7: TMenuItem;
+    N8: TMenuItem;
+    PopupMenu1: TPopupMenu;
+    N1: TMenuItem;
+    CPropertyExporter: TINSWordExporter;
+    ODSCustomersID: TIntegerField;
+    ODSCustomersNAME: TStringField;
+    ODSCustomersADDRESS: TStringField;
+    ODSCustomersMOBILEPHONE: TStringField;
+    ODSCustomersFAX: TStringField;
+    ODSCustomersCONTACTPERSON: TStringField;
+    ODSCustomersCONTACTPERSONPHONE: TStringField;
+    ODSBeneficiaryID: TFloatField;
+    ODSBeneficiaryNAME: TStringField;
+    ODSBeneficiaryADDRESS: TStringField;
+    ODSBeneficiaryPHONE: TStringField;
+    ODSBeneficiaryBANKING_DETAILS: TStringField;
+    ODSRisksID: TFloatField;
+    ODSRisksNAME: TStringField;
+    PolicyContainer: TPlgModalContainer;
+    ODSCPropertyAGENTID: TFloatField;
+    ODSCPropertySuggest: TOracleDataSet;
+    ODSCPropertySuggestID: TFloatField;
+    ODSCPropertySuggestBID: TFloatField;
+    ODSCPropertySuggestRISKADDRESS: TStringField;
+    ODSCPropertySuggestINSURANCEAMMOUNT: TFloatField;
+    ODSCPropertySuggestENDDATE: TDateTimeField;
+    ODSCPropertySuggestRISK_ID: TFloatField;
+    ODSCPropertySuggestFRZ_ID: TFloatField;
+    ODSCPropertySuggestCNDT_ID: TFloatField;
+    ODSCPropertySuggestVAL_ID: TFloatField;
+    ODSCPropertySuggestINSURANCESUM: TFloatField;
+    CPSuggestSource: TDataSource;
+    PINS_CPROPERTY: TOraclePackage;
+    OPCOMMON: TOraclePackage;
+    ASearch: TAction;
+    ToolButton8: TToolButton;
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure AInsertExecute(Sender: TObject);
+    procedure AEditExecute(Sender: TObject);
+    procedure ADeleteExecute(Sender: TObject);
+    procedure ARefreshExecute(Sender: TObject);
+    procedure N2DrawItem(Sender: TObject; ACanvas: TCanvas; ARect: TRect;
+      Selected: Boolean);
+    procedure AFullRefreshExecute(Sender: TObject);
+    procedure AReportExecute(Sender: TObject);
+    procedure ASuggestionExecute(Sender: TObject);
+    procedure APolicyExecute(Sender: TObject);
+    procedure CPropertyGridTitleClick(Column: TColumn);
+    procedure ASearchExecute(Sender: TObject);
+  private
+    { Private declarations }
+    id : Integer;
+    FParams: TStrings;
+    FOwnerHandle : Integer;
+    FEvents: IMainCPropertyEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+    procedure DeleteInfo(id:longint);
+    procedure FullRefresh(DataSetName:String);
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+
+    function  Get_Owner:Integer; safecall;
+    procedure Set_Owner(val : Integer);  safecall;
+    {IParamInput}
+    function  Get_Params(const Name: WideString): OleVariant; safecall;
+    procedure Set_Params(const Name: WideString; Value: OleVariant); safecall;
+    property Params[const Name: WideString]: OleVariant read Get_Params write Set_Params;
+    {IInstance}
+    function InstanceInitialize: HResult; safecall;
+    function IUIObject.Initialize = InstanceInitialize;
+    function Cleanup: HResult; safecall;
+    {IUIObject}
+//    function  Get_Icon: OLE_HANDLE; safecall;
+    function UIObjectActivate: HResult; safecall;
+    function IUIObject.Activate = UIObjectActivate;
+    function QueryDeactivate: HResult; safecall;
+    function UIObjectDeactivate: HResult; safecall;
+    function IUIObject.Deactivate = UIObjectDeactivate;
+    function SaveState: HResult; safecall;
+    function  Get_Height : Integer; safecall;
+    function  Get_Width  : Integer; safecall;
+  public
+    { Public declarations }
+    procedure Initialize; override;
+  end;
+
+var
+    frmMainCProperty:TfrmMainCProperty;
+
+implementation
+
+uses ComObj, ComServ,sboapidatamoduleimpl, USearch;
+
+{$R *.DFM}
+
+{ TMainCProperty }
+
+procedure TfrmMainCProperty.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_MainCPropertyPage); }
+end;
+
+procedure TfrmMainCProperty.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as IMainCPropertyEvents;
+end;
+
+procedure TfrmMainCProperty.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TfrmMainCProperty.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TfrmMainCProperty.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TfrmMainCProperty.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TfrmMainCProperty.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TfrmMainCProperty.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TfrmMainCProperty.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TfrmMainCProperty.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TfrmMainCProperty.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TfrmMainCProperty.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TfrmMainCProperty.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TfrmMainCProperty.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TfrmMainCProperty.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TfrmMainCProperty.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TfrmMainCProperty.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TfrmMainCProperty.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TfrmMainCProperty.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TfrmMainCProperty.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TfrmMainCProperty.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TfrmMainCProperty._Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TfrmMainCProperty.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TfrmMainCProperty.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TfrmMainCProperty.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TfrmMainCProperty.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TfrmMainCProperty.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TfrmMainCProperty.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TfrmMainCProperty.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TfrmMainCProperty.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TfrmMainCProperty.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TfrmMainCProperty.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TfrmMainCProperty.Set_AxBorderStyle(Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TfrmMainCProperty.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TfrmMainCProperty.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TfrmMainCProperty.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TfrmMainCProperty.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TfrmMainCProperty.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TfrmMainCProperty.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TfrmMainCProperty.Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TfrmMainCProperty.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TfrmMainCProperty.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TfrmMainCProperty.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TfrmMainCProperty.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TfrmMainCProperty.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TfrmMainCProperty.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+function  TfrmMainCProperty.Get_Owner:Integer;
+begin
+  Result := handle;
+end;
+
+procedure TfrmMainCProperty.Set_Owner(val : Integer);
+begin
+  if val > 0 then
+     FOwnerHandle := val;
+end;
+
+
+function  TfrmMainCProperty.Get_Params(const Name: WideString): OleVariant;
+begin
+  Result := FParams.Values[Name];
+end;
+
+procedure TfrmMainCProperty.Set_Params(const Name: WideString; Value: OleVariant);
+begin
+  FParams.Values[Name] := Value;
+end;
+
+function TfrmMainCProperty.InstanceInitialize: HResult;
+begin
+  Result := S_OK;
+end;
+
+function TfrmMainCProperty.Cleanup: HResult;
+begin
+  Result := S_OK;
+end;
+
+function TfrmMainCProperty.UIObjectActivate: HResult;
+begin
+       {if  Get_Params('Mod') = 'Insert' then
+       begin
+           //id := StrToInt(Get_Params('ID'));
+           //Showmessage(inttostr(id));
+           //ODSConstruction.SetVariable('ID',id);
+           if not ODSCProperty.Active then ODSCProperty.Open;
+           ODSCProperty.Insert;
+           edBeginDate.DateTime := Now;
+           edEndDate.DateTime := Now;
+           InsLookupComboBox.KeyValue :=  StrToInt(Get_Params('KLI_ID'));
+       end;
+       if Get_Params('Mod')='Edit' then
+       begin
+          Suggest.Enabled:=true;
+          Report.Enabled:=true;
+          id := StrToInt(Get_Params('ID'));
+          ShowMessage(Floattostr(id));
+          ODSCProperty.Close;
+          ODSCProperty.SetVariable('ID',id);
+          ODSCProperty.Open;
+          LoadData;
+          ODSContracts.Close;
+          ODSContracts.SetVariable('blankid',ODSCPropertyID.value);
+          ODSContracts.Open;
+          ODSCProperty.Edit;
+          edBeginDate.DateTime :=ODSContractsbegin_date.AsDateTime;
+          edEndDate.DateTime :=ODSContractsEnd_date.AsDateTime;   }
+
+
+          {ShowMessage(Get_Params('ID'));
+          ShowMessage(Floattostr(ODSCPropertyID.Value)+' edit ');  }
+      { end;  }
+       Result := S_OK;
+end;
+
+function TfrmMainCProperty.QueryDeactivate: HResult;
+begin
+  Result := S_OK;
+end;
+
+function TfrmMainCProperty.UIObjectDeactivate: HResult;
+begin
+  Result := S_OK;
+end;
+
+function TfrmMainCProperty.SaveState: HResult;
+begin
+  Result := S_OK;
+end;
+
+function  TfrmMainCProperty.Get_Height : Integer;
+begin
+  Result := Height;
+end;
+
+function  TfrmMainCProperty.Get_Width  : Integer;
+begin
+  Result := Width;
+end;
+
+procedure TfrmMainCProperty.ActiveFormCreate(Sender: TObject);
+begin
+     frmMainCProperty:=self;
+     FParams := TStringList.Create;
+end;
+
+procedure TfrmMainCProperty.AInsertExecute(Sender: TObject);
+var
+   p : TStringList;
+begin
+     p:= TStringList.Create;
+     p.Values['KLI_ID']:=FloatToStr(ODSCPropertyKLI_ID.Value);
+     p.Values['Mod']:='Insert';
+    // p.Values['ID'] := IntToStr(PINS_CONSTRUCTION.CallIntegerFunction('generateID',[]));
+    // INS_CONSTRUCTION.Insert;
+     with plgBlank do
+         ShowModal(StringToGuid('{9174F6E6-DEF4-4861-8301-61919D456EC5}'),p );
+     p.Free;
+
+
+end;
+
+procedure TfrmMainCProperty.AEditExecute(Sender: TObject);
+var
+   p : TStringList;
+begin
+    if ODSCProperty.IsEmpty then
+    begin
+       ShowMessage('∆€дв€лд€ м€лумат йохдур !');
+       exit;
+    end;
+    p:= TStringList.Create;
+    p.Values['Mod']:='Edit';
+    p.Values['ID']:=FloatToStr(ODSCPropertyID.Value);
+    with plgBlank do
+         ShowModal(StringToGuid('{9174F6E6-DEF4-4861-8301-61919D456EC5}'),p );
+    p.Free;
+
+end;
+
+procedure TfrmMainCProperty.ADeleteExecute(Sender: TObject);
+var
+    id:longint;
+    i: Integer;
+    WaitNextConfirm, WillRefresh: Boolean;
+begin
+    WaitNextConfirm :=True;
+    WillRefresh :=False;
+    with CPropertyGrid,SelectedRows,ODSCProperty do
+    try
+       if Count = 0 then  CurrentRowSelected := True;
+         for  I:=0 to  Count - 1 do
+    begin
+      GotoBookmark(Pointer(Items[I]));
+      ID :=FieldbyName('ID').AsInteger;
+
+      if  WaitNextConfirm  then
+      case MessageDlg('ћ€луматлар силинсин ?'
+               ,mtConfirmation
+       ,[mbYes, mbNo ,mbCancel ,mbYesToAll]
+       ,0
+       )   of
+        mrNo       : Continue;
+        mrCancel   : Break;
+        mrYesToAll :
+          if MessageDlg(Format('%d  сайда м€лумат силинсин?', [Count - I]), mtConfirmation, [mbYes, mbCancel], 0) = mrYes then
+             WaitNextConfirm :=False
+          else
+             Continue;
+      end;
+      Application.ProcessMessages;
+      DeleteInfo(id);
+      WillRefresh :=True;
+    end;
+     ARefreshExecute(sender);
+
+   finally
+      if WillRefresh then
+      ARefreshExecute(Sender);
+
+  end;
+
+end;
+
+procedure TfrmMainCProperty.ARefreshExecute(Sender: TObject);
+var
+    ID: Longint;
+begin
+    with ODSCProperty do
+    begin
+        ID :=FieldByName('ID').AsInteger;
+        CloseAll;
+        Open;
+        Locate('ID',ID,[]);
+    end;
+
+
+end;
+
+procedure TfrmMainCProperty.DeleteInfo(id: longint);
+begin
+    try
+       OPCommon.CallBooleanFunction('del_ins',[id,5]);
+    except on E:EOracleError do
+    case E.ErrorCode of
+          20001: ShowMessage('јсылы щесабларда галыг сыфырдан ф€рглидир!');
+          20002: ShowMessage('явв€лж€ асылы щесаблары баьлайын!');
+    end;
+    end;
+end;
+
+procedure TfrmMainCProperty.N2DrawItem(Sender: TObject; ACanvas: TCanvas;
+  ARect: TRect; Selected: Boolean);
+var
+    LineBottom: Integer;
+    SText: String;
+    Bar: TRect;
+begin
+    with ACanvas, Sender as TMenuItem do
+  begin
+    with Font do
+    begin
+      Name := 'Azl Sans Serif';
+      Charset := RUSSIAN_CHARSET;
+      if Default then
+        Style := [fsBold];
+    end;
+    if Caption = '-' then
+    begin
+      Pen.Color := clBlack;
+      LineBottom := (ARect.Top + (ARect.Bottom - ARect.Top) div 2)-1;
+      MoveTo(ARect.Left, LineBottom);
+      LineTo(ARect.Right, LineBottom);
+      inc(LineBottom);
+      Pen.Color := clWhite;
+      MoveTo(ARect.Left, LineBottom);
+      LineTo(ARect.Right, LineBottom);
+    end
+    else
+    begin
+      if Selected then
+      begin
+        Brush.Color := clNavy;
+        if Enabled then
+          Font.Color := clWhite
+        else
+          Font.Color := clSilver;
+      end
+      else
+      begin
+        Brush.Color := clBtnFace;
+        if Enabled then
+          Font.Color := clBlack
+        else
+          Font.Color := clGrayText;
+      end;
+      Bar := ARect;
+      Inc(Bar.Left, 22);
+      FillRect(Bar);
+      TextOut(ARect.Left+{17}22, ARect.Top+1, Caption);
+    end;
+    // draw shortcut
+    SText := ShortCutToText(ShortCut);
+    TextOut(ARect.Right-TextWidth(SText)-2, ARect.Top+1, SText);
+    if ImageIndex <> -1 then
+      with GetParentMenu do
+        if Assigned(Images) then
+        begin
+          if Checked then
+          begin
+            Bar.Left := ARect.Left + 1;
+            Bar.Right := Bar.Left + 16;
+            Bar.Top := ARect.Top + 1;
+            Bar.Bottom := Bar.Top + 16;
+
+            ACanvas.Brush.Color := clBtnShadow;
+            ACanvas.FrameRect(Bar);
+
+            Inc(Bar.Left, 2);
+            Inc(Bar.Right, 2);
+            Inc(Bar.Top, 2);
+            Inc(Bar.Bottom, 2);
+
+            ACanvas.Brush.Color := clBtnHighlight;
+            ACanvas.FrameRect(Bar);
+
+            Dec(Bar.Left, 1);
+            Dec(Bar.Right, 1);
+            Dec(Bar.Top, 1);
+            Dec(Bar.Bottom, 1);
+
+            if Selected then
+              ACanvas.Brush.Color := clBtnFace
+            else
+              ACanvas.Brush.Color := clBtnHighlight;
+            ACanvas.FillRect(Bar);
+          end;
+
+          Images.Draw(ACanvas, ARect.Left, ARect.Top, ImageIndex, Enabled);
+        end;
+  end;
+
+end;
+
+procedure TfrmMainCProperty.FullRefresh(DataSetName: String);
+const
+     c_err_message = ' Table or View in Dataset "%s" does not exist! ';
+var
+     i: Word;
+begin
+     for i :=0 to ComponentCount- 1 do
+     if (Components[i] is TOracleDataSet) and (Components[i].Name <> DataSetName) then
+     try
+        (Components[i] as TOracleDataSet).Close;
+        (Components[i] as TOracleDataSet).Open;
+     except
+         raise Exception.Create(Format(c_err_message, [(Components[i] as TDataSet).Name]));
+     end;
+
+end;
+
+procedure TfrmMainCProperty.AFullRefreshExecute(Sender: TObject);
+begin
+    FullRefresh('');
+end;
+
+procedure TfrmMainCProperty.AReportExecute(Sender: TObject);
+begin
+     if ODSCProperty.IsEmpty then
+     begin
+        ShowMessage('∆€дв€лд€ м€лумат йохдур !');
+        exit;
+     end;
+     ODSContracts.Close;
+     ODSContracts.SetVariable('blankid',ODSCPropertyID.Value);
+     ODSContracts.Open;
+     ODSCustomers.Locate('id',ODSCPropertyKLI_ID.Value,[]);
+     ODSBeneficiary.Locate('id',ODSCPropertyProfitID.Value,[]);
+     ODSRisks.Locate('id',ODSCPropertyRiskID.Value,[]);
+     try
+        with CPropertyExporter do
+        begin
+             FileName:=ExtractFilePath(Application.ExeName)+ '\CPropertyppl.doc';
+             Open(False);
+             SetBookmark('Insured',ODSCustomersName.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('AInsured',ODSCustomersAddress.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('TInsured',ODSCustomersMobilePhone.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('FInsured',ODSCustomersFax.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('RPeriod',DateToStr(ODSContractsBegin_Date.value)+' - '+DateToStr(ODSContractsEnd_Date.value), false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Beneficiary',ODSBeneficiaryName.value, True, false, False, false, 10, 'Arial AzLat', False);
+             SetBookmark('BAddress',ODSBeneficiaryAddress.value, True, false, False, false, 10, 'Arial AzLat', False);
+             SetBookmark('BTel',ODSBeneficiaryPhone.value, True, false, False, false, 10, 'Arial AzLat', False);
+             SetBookmark('BBank',ODSBeneficiaryBanking_details.value, True, false, False, false, 10, 'Arial AzLat', False);
+             SetBookmark('FullDesc',ODSCPropertyFullDescription.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Location',ODSCPropertyLocationObj.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Yearsinb',ODSCPropertyYEARSINBUSINESS.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('CPerson',ODSCustomersContactPerson.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('TCPerson',ODSCustomersContactPersonPhone.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('BUsage',ODSCPropertyBuildingusage.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('YearConst',DateToStr(ODSCPropertyconstyear.value), false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('FloorsNum',IntToStr(ODSCPropertyFloorsNum.value), false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('WallsM',ODSCPropertyWallsM.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('CeilingsM',ODSCPropertyCeilingsM.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('RoofM',ODSCPropertyRoofM.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Area',FloatToStr(ODSCPropertyArea.value), false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('AppArea',FloatToStr(ODSCPropertyApplicantSpace.value), false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Earthquake',ODSCPropertyEARTHQUAKEDETAILS.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Flamable',ODSCPropertyFlamable.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Surroinding',ODSCPropertySURROINDINGDETAILS.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Situeted',ODSCPropertySitueted.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Issecure',ODSCPropertyGuard.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Alarm',ODSCPropertyAlarm.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Locks',ODSCPropertyLocks.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('SLocks',ODSCPropertySecurityLocks.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Bars',ODSCPropertyBars.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Other',ODSCPropertyOther.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Settings',ODSCPropertySettings.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Repair',ODSCPropertyRepair.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('RepairDetail',ODSCPropertyRepair.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Heated',ODSCPropertyHeated.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Risks',ODSRisksName.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('ValueType',ODSCPropertyValueType.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Buildings',floatToStr(ODSCPropertyBuildings.value), false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Contents',floatToStr(ODSCPropertyContent.value), false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Equipments',floatToStr(ODSCPropertyEquipment.value), false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Glass',floatToStr(ODSCPropertyGlass.value), false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Cash',floatToStr(ODSCPropertyCash.value), false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Warehouse',floatToStr(ODSCPropertyWarehouse.value), false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Stock',floatToStr(ODSCPropertyStock.value), false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Products',floatToStr(ODSCPropertyProducts.value), false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('WProqress',floatToStr(ODSCPropertyWorkinprogress.value), false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Raw',floatToStr(ODSCPropertyRawmaterials.value), false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Annual',floatToStr(ODSCPropertyAnnual.value), false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Wages',floatToStr(ODSCPropertyWages.value), false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Rent',floatToStr(ODSCPropertyRent.value), false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Employes',floatToStr(ODSCPropertyEmployes.value), false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Indeminity',ODSCPropertyIndeminity.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Expirity',DateToStr(ODSCPropertyExpirity.value), false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('LHistory',ODSCPropertyLossHistory.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('OtherInf',ODSCPropertyRenewal.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('Thirdp',ODSCPropertyThirdParty.value, false, false, False, false, 8, 'Arial AzLat', False);
+             SetBookmark('OtherInform',ODSCPropertyOtherInf.value, false, false, False, false, 8, 'Arial AzLat', False);
+         end;
+     finally
+        CPropertyExporter.Show;
+     end;
+end;
+
+procedure TfrmMainCProperty.ASuggestionExecute(Sender: TObject);
+var
+   p : TStringList;
+begin
+    if ODSCProperty.IsEmpty then
+    begin
+       ShowMessage('явв€лж€ анкет формасы щазырланмалыдыр !');
+       exit;
+    end;
+    p:= TStringList.Create;
+    p.Values['ID']:=FloatToStr(ODSCPropertyID.Value);
+    with plgSuggest do
+         ShowModal(StringToGuid('{3918AA1B-6A5D-4559-8F6E-826F4E72F309}'),p );
+    p.Free;
+
+end;
+
+procedure TfrmMainCProperty.APolicyExecute(Sender: TObject);
+var
+   p : TStringList;
+begin
+   {if ODSCProperty.IsEmpty or ODSCPropertySuggest.IsEmpty then
+   begin
+       ShowMessage('явв€лж€ анкет формасы в€ т€клифнам€ щазырланмалыдыр !');
+       exit;
+    end;  }
+   p:= TStringList.Create;
+   p.Values['ID']:=FloatToStr(ODSCPropertyId.value);
+   with PolicyContainer do begin
+     ShowModal(StringToGuid('{0F2A35A4-7A65-4085-BED1-BDCBC55C5836}'),p );
+   end;
+   p.Free;
+
+end;
+
+procedure TfrmMainCProperty.CPropertyGridTitleClick(Column: TColumn);
+var
+   TitleName :string;
+begin
+   if Column.Field.Calculated then Exit;
+   TitleName :=Column.FieldName;
+   with ODSCProperty do
+   begin
+        Screen.Cursor :=crSQLWait;
+        SetVariable('title',TitleName);
+        Refresh;
+        Screen.Cursor :=crDefault;
+   end;
+
+end;
+
+procedure TfrmMainCProperty.ASearchExecute(Sender: TObject);
+begin
+      if not Assigned(frmSearch) then
+      frmSearch := TfrmSearch.Create(Self);
+      frmSearch.ShowModal;
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TfrmMainCProperty,
+    CLASS_MainCProperty,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

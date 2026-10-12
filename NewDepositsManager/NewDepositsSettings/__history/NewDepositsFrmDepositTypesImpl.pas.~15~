@@ -1,0 +1,171 @@
+﻿unit NewDepositsFrmDepositTypesImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, LDialogs,
+  ComCtrls, ToolWin, ExtCtrls, ImgList, Grids, DBGridEh,
+  StdCtrls, Buttons, Db, OracleData, ActnList, Oracle, DBGridEhGrouping, GridsEh,
+  XFSCtrls;
+
+type
+  TNewDepositsFrmDepositTypes = class(TForm)
+    ActionList1: TActionList;
+    AddTypesForColl: TOracleDataSet;
+    AddTypesForCollID: TFloatField;
+    AddTypesForCollWITHDRTYPE: TWideStringField;
+    AddTypesForCollWITHDRTYPEDESC: TWideStringField;
+    AddTypesForWith: TOracleDataSet;
+    FloatField1: TFloatField;
+    StringField3: TWideStringField;
+    StringField4: TWideStringField;
+    DepositTypes: TOracleDataSet;
+    ImageList1: TImageList;
+    Panel2: TPanel;
+    DBGridEh1: TDBGridEh;
+    dm_stored_programs: TOraclePackage;
+    DepositTypesDatSrc: TDataSource;
+    AddTypesForcollDatSrc: TDataSource;
+    ToolBar2: TToolBar;
+    BtnCust: TToolButton;
+    ToolButton9: TToolButton;
+    ToolButton10: TToolButton;
+    ToolButton11: TToolButton;
+    BtnDelete: TToolButton;
+    ToolButton16: TToolButton;
+    ToolButton12: TToolButton;
+    XFButton1: TXFButton;
+    ToolButton1: TToolButton;
+    procedure FormCanResize(Sender: TObject; var NewWidth, NewHeight: Integer;
+      var Resize: Boolean);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure DepositTypesApplyRecord(Sender: TOracleDataSet; Action: Char;
+      var Applied: Boolean; var NewRowId: string);
+    procedure ToolButton3Click(Sender: TObject);
+    procedure BtnCustClick(Sender: TObject);
+    procedure ToolButton10Click(Sender: TObject);
+    procedure BtnDeleteClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    FAdditionalType :String;
+    FWithdrawtype :String;
+    FIns:integer;
+    Dtpid:integer;
+  end;
+
+var
+  NewDepositsFrmDepositTypes: TNewDepositsFrmDepositTypes;
+
+implementation
+
+{$R *.dfm}
+uses  sboapiDataModuleImpl,NewDepositsFrmAddEditDepositTypesImpl,SBTranslateProc;
+procedure TNewDepositsFrmDepositTypes.BtnCustClick(Sender: TObject);
+begin
+  with NewDepositsFrmAddEditDepositTypes do
+  begin
+    FIns:=0;
+    Caption := 'Yeni';
+    ShowModal;
+  end;
+  DepositTypes.Refresh;
+  DepositTypes.Locate('id',Dtpid,[])
+end;
+
+procedure TNewDepositsFrmDepositTypes.DepositTypesApplyRecord(Sender: TOracleDataSet;
+  Action: Char; var Applied: Boolean; var NewRowId: string);
+var
+  Aa,Ab,Ac,Ad,Dbe:string;
+begin
+ { With NewDepositsFrmAddEditDepositTypes do
+  begin
+    Aa:=a;
+    Ab:=b;
+    Ac:=c;
+    Ad:=d;
+    Dbe:=Db;
+  end;
+  with dm_stored_programs do
+  begin
+    case Action of
+        'I' : begin
+                Dtpid:=-1;
+                CallProcedure('AddDepositTypes',[Dtpid,Dbe,Aa,Ab,Ac,Ad]);
+               // Applied:=true;
+                Dtpid:=GetParameter(0);
+              end;
+        'U' : begin
+                CallProcedure('UpdDepositTypes',[Dtpid,Dbe,Aa,Ab,Ac,Ad]);
+               // Applied:=true;
+              end;
+      end;
+    end;  }
+end;
+
+procedure TNewDepositsFrmDepositTypes.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+  Resize := False;
+end;
+
+procedure TNewDepositsFrmDepositTypes.FormCreate(Sender: TObject);
+begin
+  DepositTypes.Open;
+  AddTypesForColl.Open;
+  AddTypesForWith.Open;
+  NewDepositsFrmAddEditDepositTypes := TNewDepositsFrmAddEditDepositTypes.Create(Self);
+  SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TNewDepositsFrmDepositTypes.FormDestroy(Sender: TObject);
+begin
+  DepositTypes.CloseAll;
+  AddTypesForColl.CloseAll;
+  AddTypesForWith.CloseAll;
+  NewDepositsFrmAddEditDepositTypes.Free;
+end;
+
+procedure TNewDepositsFrmDepositTypes.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+   if Ord(Key) = VK_ESCAPE then Close;
+end;
+
+procedure TNewDepositsFrmDepositTypes.BtnDeleteClick(Sender: TObject);
+begin
+ if   MessageDlg('Silinməsinə əminsinizmi?'
+              ,mtConfirmation
+              ,[mbYes,mbNo],0
+              )<>mrYes then Exit;
+
+    with dm_stored_programs do
+         CallProcedure('DelDepositTypes',[DepositTypes.FieldByName('ID').AsInteger]) ;
+
+
+    DepositTypes.Refresh;
+end;
+
+procedure TNewDepositsFrmDepositTypes.ToolButton10Click(Sender: TObject);
+begin
+  if NewDepositsFrmDepositTypes.DBGridEh1.DataSource.DataSet.RecordCount>0 then
+  begin
+    Dtpid:=DBGridEh1.DataSource.DataSet.FieldByName('id').AsInteger;
+    With NewDepositsFrmAddEditDepositTypes do
+    begin
+      FIns:=1;
+      Caption := 'Redaktə';
+      ShowModal;
+    end;
+    DepositTypes.Refresh;
+    DepositTypes.Locate('id',Dtpid,[]);
+  end;
+end;
+
+procedure TNewDepositsFrmDepositTypes.ToolButton3Click(Sender: TObject);
+begin
+  DepositTypes.Refresh
+end;
+
+end.

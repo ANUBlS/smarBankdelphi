@@ -1,0 +1,119 @@
+unit NewDepositDataModule;
+
+interface
+
+uses
+  SysUtils, Classes, Oracle, DB, OracleData;
+
+type
+  TNewDepsitDataModule = class(TDataModule)
+    Valutes: TOracleDataSet;
+    ValutesVALUTE: TIntegerField;
+    ValutesVALU_NAME: TWideStringField;
+    ValutesDatSrc: TDataSource;
+    Filials: TOracleDataSet;
+    FilialsID: TFloatField;
+    FilialsNAME: TWideStringField;
+    FilialsDatSrc: TDataSource;
+    dm_types: TOracleDataSet;
+    dm_typesID: TFloatField;
+    dm_typesTYPE: TWideStringField;
+    dm_typesDatSrc: TDataSource;
+    dm_categories: TOracleDataSet;
+    dm_categoriesID: TFloatField;
+    dm_categoriesCATEGORY: TWideStringField;
+    dm_categoriesDatSrc: TDataSource;
+    dm_persons: TOracleDataSet;
+    dm_personsID: TFloatField;
+    dm_personsNAME: TWideStringField;
+    dm_personsDatSrc: TDataSource;
+    BankDate: TOracleDataSet;
+    BankDateTEK_DAT: TDateTimeField;
+    BankDateDatSrc: TDataSource;
+    FilialID: TOracleDataSet;
+    FilialIDKOD_FIL: TIntegerField;
+    FilialIDDatSrc: TDataSource;
+    dm_stored_programs: TOraclePackage;
+    users: TOracleDataSet;
+    usersID: TFloatField;
+    usersNAME: TWideStringField;
+    usersDatSrc: TDataSource;
+    dm_tranches: TOracleDataSet;
+    dm_tranchesTOTAL: TFloatField;
+    dm_tranchesHDATE: TDateTimeField;
+    dm_tranchesRESERVE: TFloatField;
+    sb_aca: TOraclePackage;
+    DMDataSrc: TDataSource;
+    DmDataSet: TOracleDataSet;
+    DmDataSetID: TFloatField;
+    DmDataSetCONTRACTNO: TWideStringField;
+    DmDataSetVAL_NAME: TWideStringField;
+    DmDataSetCUSTOMERNAME: TWideStringField;
+    DmDataSetOPENDATE: TDateTimeField;
+    DmDataSetCLOSEDATE: TDateTimeField;
+    DmDataSetAMOUNT: TFloatField;
+    DmDataSetINTEREST: TFloatField;
+    DmDataSetFACTICALDEBT: TFloatField;
+    DmDataSetFACTICALINTERESTDEBT: TFloatField;
+    DmDataSetCURRENCY: TFloatField;
+    DmDataSetPERSONALTYPE: TFloatField;
+    DmDataSetCLIENTTYPE: TFloatField;
+    DmDataSetBRANCHID: TFloatField;
+    DmDataSetCONTRACTTYPE: TIntegerField;
+    DmDataSetCUSTOMERID: TFloatField;
+    DmDataSetUSID: TFloatField;
+    DmDataSetFilial: TStringField;
+    DmDataSetOSTAT: TFloatField;
+    DmDataSetPROLONGATIONDATE: TDateTimeField;
+    DmDataSetSTOPCALCDATE: TDateTimeField;
+    DmDataSetCONTRACTTYPENAME: TWideStringField;
+    DmDataSetUSERNAME: TWideStringField;
+    procedure DataModuleCreate(Sender: TObject);
+    procedure DataModuleDestroy(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  NewDepsitDataModule: TNewDepsitDataModule;
+
+implementation
+
+{$R *.dfm}
+
+uses sboapiDataModuleImpl;
+
+procedure TNewDepsitDataModule.DataModuleCreate(Sender: TObject);
+begin
+  with  DmDataSet do
+  begin
+    SetVariable('OrderField','cont.id');
+    Open;
+  end;
+
+   BankDate.Open;
+   FilialID.Open;
+   Valutes.Open;
+   Filials.Open;
+   dm_types.Open;
+   dm_categories.Open;
+   dm_persons.Open;
+   users.Open;
+end;
+
+procedure TNewDepsitDataModule.DataModuleDestroy(Sender: TObject);
+begin
+  DmDataSet.CloseAll;
+  BankDate.Open;
+  FilialID.Open;
+  Valutes.CloseAll;
+  Filials.CloseAll;
+  dm_types.CloseAll;
+  dm_categories.CloseAll;
+  dm_persons.CloseAll;
+  users.CloseAll;
+end;
+
+end.

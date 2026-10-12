@@ -1,0 +1,193 @@
+﻿unit Creditİmpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Grids, DBGridEh, ExtCtrls, StdCtrls, XFSCtrls, DBGridEhGrouping,
+  GridsEh;
+
+type
+  TCreditFrm = class(TForm)
+    MainGrid: TDBGridEh;
+    XFPanel1: TXFPanel;
+    TimerButton: TXFButton;
+    XFButton2: TXFButton;
+    XFButton1: TXFButton;
+    Returngoods: TXFButton;
+    XFButton3: TXFButton;
+    XFButton4: TXFButton;
+    XFButton5: TXFButton;
+    procedure FormCanResize(Sender: TObject; var NewWidth, NewHeight: Integer;
+      var Resize: Boolean);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormCreate(Sender: TObject);
+    procedure TimerButtonClick(Sender: TObject);
+    procedure XFButton1Click(Sender: TObject);
+    procedure XFButton3Click(Sender: TObject);
+    procedure XFButton2Click(Sender: TObject);
+    procedure ReturngoodsClick(Sender: TObject);
+    procedure MainGridDblClick(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure MainGridKeyPress(Sender: TObject; var Key: Char);
+    procedure XFButton4Click(Sender: TObject);
+    procedure XFButton5Click(Sender: TObject);
+
+
+
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  CreditFrm: TCreditFrm;
+
+implementation
+
+{$R *.dfm}
+ uses UnitDataModPCustService,cuCommonDecls,SBTranslateProc, sboapiDataModuleImpl,
+  companycreditpayment;
+
+
+procedure TCreditFrm.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+resize:=false;
+end;
+
+procedure LoadPlugin(PluginName :String;PluginParam :String);
+var PluginHandle :THandle;
+    exportproc : procedure(s:String);
+begin
+   PluginHandle := LoadPackage(ExtractFilePath(Application.ExeName)+PluginName);
+
+   if PluginHandle > 0 then
+   begin
+      @exportproc := GetProcAddress(PluginHandle,'InitPlugin');
+      exportproc(PluginParam);
+   end;
+end;
+
+procedure TCreditFrm.FormCreate(Sender: TObject);
+begin
+    CommonApplication := Application;
+    cuCommonDBGrid := MainGrid;
+    CommonScreen := Screen;
+    SBTranslateProc.TranslateAllCompForms(Self, sboapiDataModule.OrPack_SL);
+end;
+
+procedure TCreditFrm.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+if ord(key)=27 then
+close;
+end;
+
+
+
+procedure TCreditFrm.FormShow(Sender: TObject);
+ var tt,aa,bb,cc:integer;
+begin
+  tt:=DataModPCustService.PG_PCustService.CallIntegerFunction('get_Modle_comp',['PCustService','PCustServiceForm','XFButton3']);
+
+
+   if tt=0
+     then XFButton3.Visible:=false
+     else
+          XFButton3.Visible:=true;
+
+   aa:=DataModPCustService.PG_PCustService.CallIntegerFunction('get_Modle_comp',['PCustService','PCustServiceForm','TimerButton']);
+
+     if aa=0
+     then TimerButton.Visible:=false
+     else
+          TimerButton.Visible:=true;
+
+   bb:=DataModPCustService.PG_PCustService.CallIntegerFunction('get_Modle_comp',['PCustService','PCustServiceForm','XFButton1']);
+
+    if bb=0
+     then XFButton1.Visible:=false
+     else
+          XFButton1.Visible:=true;
+
+
+   cc:=DataModPCustService.PG_PCustService.CallIntegerFunction('get_Modle_comp',['PCustService','PCustServiceForm','XFButton4']);
+       if cc=0
+     then XFButton4.Visible:=false
+     else
+          XFButton4.Visible:=true;
+
+
+end;
+
+procedure TCreditFrm.MainGridDblClick(Sender: TObject);
+begin
+LoadPlugin('CM_Conclusion.bpl','look')
+end;
+
+procedure TCreditFrm.MainGridKeyPress(Sender: TObject; var Key: Char);
+begin
+if key=#13 then
+   LoadPlugin('CU_Statement.bpl','');
+end;
+
+procedure TCreditFrm.TimerButtonClick(Sender: TObject);
+begin
+ LoadPlugin('CU_Statement.bpl','');
+end;
+
+procedure TCreditFrm.XFButton1Click(Sender: TObject);
+begin
+LoadPlugin('CM_Conclusion.bpl','look')
+end;
+
+procedure TCreditFrm.XFButton2Click(Sender: TObject);
+begin
+ LoadPlugin('CU_Schedule.bpl','Payment');
+end;
+
+procedure TCreditFrm.XFButton3Click(Sender: TObject);
+begin
+
+ LoadPlugin('CU_Paymentcompany.bpl','');
+
+end;
+
+procedure TCreditFrm.XFButton4Click(Sender: TObject);
+begin
+
+Paymentcompany:=TPaymentcompany.Create(self);
+
+   Paymentcompany.clientname.Text:=maingrid.DataSource.DataSet.FieldByName('name').AsString;
+   Paymentcompany.mainrest.Text:=inttostr(maingrid.DataSource.DataSet.FieldByName('rest').AsInteger);
+   Paymentcompany.penaltyam.Text:=inttostr(maingrid.DataSource.DataSet.FieldByName('PENALTYREST').AsInteger);
+   Paymentcompany.edit4.Text:=inttostr(maingrid.DataSource.DataSet.FieldByName('gecgun').AsInteger);
+   Paymentcompany.edit1.Text:=inttostr(maingrid.DataSource.DataSet.FieldByName('id').AsInteger);
+   if maingrid.DataSource.DataSet.FieldByName('prin').AsInteger<>0 then
+    Paymentcompany.edit5.Text:=inttostr(maingrid.DataSource.DataSet.FieldByName('prin').AsInteger);
+
+    Paymentcompany.showmodal;
+
+
+
+end;
+
+procedure TCreditFrm.XFButton5Click(Sender: TObject);
+begin
+LoadPlugin('CU_WReport.bpl','AGREE');
+end;
+
+procedure TCreditFrm.ReturngoodsClick(Sender: TObject);
+begin
+  DataModPCustService.SB_ACA.CallProcedure('CheckObjectAccess', ['PCUSTSERVICE','RETURING']);
+
+ DataModPCustService.returng_good.CallProcedure('returng_good',
+ [DataModPCustService.CreditDSet.FieldByName('boorowerid').AsInteger,DataModPCustService.CreditDSet.FieldByName('numberofcredit').AsInteger]);
+
+ ShowMessage('Əməliyyat Uğurla Geri qaytarıldı!!!');
+
+
+end;
+
+end.

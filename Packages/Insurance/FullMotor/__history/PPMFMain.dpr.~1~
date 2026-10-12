@@ -1,0 +1,22 @@
+library PPMFMain;
+
+uses
+  ComServ,
+  PPMFMain_TLB in 'PPMFMain_TLB.pas',
+  UPMFMain in 'UPMFMain.pas' {PMFMain: TActiveForm} {PMFMain: CoClass},
+  USearch in 'USearch.pas' {frmSearch};
+
+{$E ocx}
+
+exports
+  DllGetClassObject,
+  DllCanUnloadNow,
+  DllRegisterServer,
+  DllUnregisterServer;
+
+{$R *.TLB}
+
+{$R *.RES}
+
+begin
+end.

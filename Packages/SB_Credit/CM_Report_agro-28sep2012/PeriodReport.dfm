@@ -1,0 +1,701 @@
+object PeriodReportForm: TPeriodReportForm
+  Left = 550
+  Top = 248
+  BorderIcons = [biSystemMenu]
+  ClientHeight = 166
+  ClientWidth = 704
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poMainFormCenter
+  OnCanResize = FormCanResize
+  OnCreate = FormCreate
+  PixelsPerInch = 96
+  TextHeight = 14
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 704
+    Height = 65
+    Align = alTop
+    TabOrder = 0
+    object GroupBox1: TGroupBox
+      Left = 1
+      Top = 1
+      Width = 233
+      Height = 63
+      Align = alLeft
+      Caption = #1042#1072#1083#1081#1091#1090#1072
+      TabOrder = 0
+      object CheckBox1: TCheckBox
+        Left = 5
+        Top = 41
+        Width = 105
+        Height = 18
+        Caption = #1058#1103#1090#1073#1080#1075' '#1077#1090
+        TabOrder = 0
+      end
+      object DBLookupComboboxEh1: TDBLookupComboboxEh
+        Left = 5
+        Top = 15
+        Width = 220
+        Height = 22
+        EditButtons = <>
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -12
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        KeyField = 'VALUTE'
+        ListField = 'VALU_NAME'
+        ListSource = DSCurrencys
+        ParentFont = False
+        TabOrder = 1
+        Visible = True
+      end
+    end
+    object GroupBox2: TGroupBox
+      Left = 466
+      Top = 1
+      Width = 237
+      Height = 63
+      Align = alClient
+      Caption = #1048#1089#1090#1080#1092#1072#1076#1103#1095#1080' '#1075#1088#1091#1087#1091
+      TabOrder = 1
+      object DBLookupComboboxEh3: TDBLookupComboboxEh
+        Left = 5
+        Top = 15
+        Width = 220
+        Height = 22
+        EditButtons = <>
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -12
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        KeyField = 'ID'
+        ListField = 'DESCRIPTION'
+        ListSource = DSUserGroups
+        ParentFont = False
+        TabOrder = 0
+        Visible = True
+      end
+      object CheckBox3: TCheckBox
+        Left = 5
+        Top = 41
+        Width = 105
+        Height = 18
+        Caption = #1058#1103#1090#1073#1080#1075' '#1077#1090
+        TabOrder = 1
+      end
+    end
+    object GroupBox3: TGroupBox
+      Left = 234
+      Top = 1
+      Width = 232
+      Height = 63
+      Align = alLeft
+      Caption = #1060#1080#1083#1080#1072#1083
+      TabOrder = 2
+      object DBLookupComboboxEh2: TDBLookupComboboxEh
+        Left = 5
+        Top = 15
+        Width = 220
+        Height = 22
+        EditButtons = <>
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -12
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        KeyField = 'ID'
+        ListField = 'NAME'
+        ListSource = DSBranches
+        ParentFont = False
+        TabOrder = 0
+        Visible = True
+      end
+      object CheckBox2: TCheckBox
+        Left = 6
+        Top = 41
+        Width = 105
+        Height = 18
+        Caption = #1058#1103#1090#1073#1080#1075' '#1077#1090
+        TabOrder = 1
+      end
+    end
+  end
+  object Panel5: TPanel
+    Left = 0
+    Top = 65
+    Width = 704
+    Height = 64
+    Align = alTop
+    TabOrder = 1
+    object GroupBox7: TGroupBox
+      Left = 1
+      Top = 1
+      Width = 233
+      Height = 62
+      Align = alLeft
+      Caption = #1041#1086#1088#1078#1072#1083#1072#1085#1099#1085' '#1090#1080#1087#1080
+      TabOrder = 0
+      ExplicitHeight = 63
+      object CheckBox7: TCheckBox
+        Left = 5
+        Top = 41
+        Width = 105
+        Height = 18
+        Caption = #1058#1103#1090#1073#1080#1075' '#1077#1090
+        TabOrder = 0
+      end
+      object DBLookupComboboxEh7: TDBLookupComboboxEh
+        Left = 5
+        Top = 15
+        Width = 220
+        Height = 22
+        EditButtons = <>
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -12
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        KeyField = 'ID'
+        ListField = 'DESCRIPION'
+        ListSource = DSPersons
+        ParentFont = False
+        TabOrder = 1
+        Visible = True
+      end
+    end
+    object GroupBox9: TGroupBox
+      Left = 234
+      Top = 1
+      Width = 232
+      Height = 62
+      Align = alLeft
+      Caption = #1041#1086#1088#1078#1072#1083#1072#1085#1099#1085' '#1082#1072#1090#1077#1075#1086#1088#1081#1072#1089#1099
+      TabOrder = 1
+      ExplicitHeight = 63
+      object CheckBox8: TCheckBox
+        Left = 5
+        Top = 41
+        Width = 105
+        Height = 18
+        Caption = #1058#1103#1090#1073#1080#1075' '#1077#1090
+        TabOrder = 0
+      end
+      object DBLookupComboboxEh8: TDBLookupComboboxEh
+        Left = 5
+        Top = 15
+        Width = 220
+        Height = 22
+        EditButtons = <>
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -12
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        KeyField = 'ID'
+        ListField = 'DESCRIPTION'
+        ListSource = DSCategories
+        ParentFont = False
+        TabOrder = 1
+        Visible = True
+      end
+    end
+    object GroupBox4: TGroupBox
+      Left = 466
+      Top = 1
+      Width = 233
+      Height = 62
+      Align = alLeft
+      Caption = #1065#1077#1089#1072#1073#1072#1090' '#1072#1088#1072#1083#1099#1100#1099
+      TabOrder = 2
+      ExplicitHeight = 63
+      object Label1: TLabel
+        Left = 9
+        Top = 17
+        Width = 82
+        Height = 14
+        Caption = #1044#1102#1074#1088#1094#1085' '#1103#1074#1074#1103#1083#1080
+      end
+      object Label2: TLabel
+        Left = 9
+        Top = 41
+        Width = 68
+        Height = 14
+        Caption = #1044#1102#1074#1088#1094#1085' '#1089#1086#1085#1091
+      end
+      object BDateP: TDateTimePicker
+        Left = 89
+        Top = 13
+        Width = 136
+        Height = 21
+        Date = 38477.593060798600000000
+        Time = 38477.593060798600000000
+        TabOrder = 0
+      end
+      object EDateP: TDateTimePicker
+        Left = 89
+        Top = 37
+        Width = 136
+        Height = 21
+        Date = 38477.593068935200000000
+        Time = 38477.593068935200000000
+        TabOrder = 1
+      end
+    end
+  end
+  object Button1: TButton
+    Left = 518
+    Top = 138
+    Width = 81
+    Height = 27
+    Caption = #1043#1103#1073#1091#1083
+    TabOrder = 2
+    OnClick = Button1Click
+  end
+  object Button2: TButton
+    Left = 604
+    Top = 138
+    Width = 81
+    Height = 27
+    Caption = #1041#1072#1100#1083#1072
+    ModalResult = 2
+    TabOrder = 3
+  end
+  object CreditsDS: TOracleDataSet
+    SQL.Strings = (
+      'select ID '
+      '  from CM_PORTFOLIO'
+      ' ')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {05000000010000000400000049004400010000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 216
+    Top = 88
+  end
+  object CM_AK_REPORTS: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'CM_AK_REPORTS'
+    ParameterMode = pmNamed
+    Cursor = crHourGlass
+    Left = 344
+    Top = 120
+  end
+  object DSCurrencys: TDataSource
+    DataSet = Currencys
+    Left = 8
+    Top = 128
+  end
+  object Currencys: TOracleDataSet
+    SQL.Strings = (
+      'SELECT valute,  valu_name'
+      '  FROM AVALUTE'
+      'ORDER BY VALUTE')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000C000000560041004C005500540045000100000000001200
+      0000560041004C0055005F004E0041004D004500010000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 8
+    Top = 88
+  end
+  object DSBranches: TDataSource
+    DataSet = Branches
+    Left = 48
+    Top = 128
+  end
+  object Branches: TOracleDataSet
+    SQL.Strings = (
+      'SELECT id, name'
+      '  FROM filial')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000400000049004400010000000000080000004E0041004D00
+      4500010000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 48
+    Top = 88
+  end
+  object DSUserGroups: TDataSource
+    DataSet = UserGroups
+    Left = 168
+    Top = 128
+  end
+  object UserGroups: TOracleDataSet
+    SQL.Strings = (
+      'SELECT id, description'
+      '  FROM cm_usergroups')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      0500000002000000040000004900440001000000000016000000440045005300
+      4300520049005000540049004F004E00010000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 168
+    Top = 88
+  end
+  object DSPersons: TDataSource
+    DataSet = Persons
+    Left = 88
+    Top = 128
+  end
+  object Persons: TOracleDataSet
+    SQL.Strings = (
+      'SELECT id,  descripion'
+      '  FROM cm_persons')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      0500000002000000040000004900440001000000000014000000440045005300
+      430052004900500049004F004E00010000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 88
+    Top = 88
+  end
+  object DSCategories: TDataSource
+    DataSet = Categories
+    Left = 128
+    Top = 128
+  end
+  object Categories: TOracleDataSet
+    SQL.Strings = (
+      'SELECT id, description'
+      '  FROM cm_categories')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      0500000002000000040000004900440001000000000016000000440045005300
+      4300520049005000540049004F004E00010000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 128
+    Top = 88
+  end
+  object ResultDS: TOracleDataSet
+    SQL.Strings = (
+      'SELECT p.id,p.numberofcredit, '
+      '      r.*, '
+      '      CM_AK_REPORTS.get_balcn(r.contractno) as balcn,'
+      '       b.name,p.annualyinterestrate,'
+      '       h.descripion person,'
+      '       g.description project,'
+      '       --f.name filial ,'
+      '       get_filialname(p.branchid) filial,'
+      '       V.Val_name,'
+      '       p.DATEOFCONCLUSION,'
+      '       p.DUEDATEFIRSTCONTRACT'
+      ' FROM CM_REPORT_SD1 r,'
+      '      cm_boorowerinfo b,'
+      '      cm_portfolio p,'
+      '      cm_persons h,'
+      '      cm_usergroups g,'
+      '  --    sb_filial f,'
+      '      AVALUTE V'
+      ' where '
+      '      r.creditid = b.creditid'
+      '   and r.creditid = p.id'
+      '   and  v.Valute = p.Currency'
+      '   and h.id = p.personaltype'
+      '   and g.id = p.usrgroup'
+      ' --  and f.id = p.branchid  '
+      '')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000002D00000004000000490044000100000000001C0000004E0055004D00
+      4200450052004F00460043005200450044004900540001000000000010000000
+      430052004500440049005400490044000100000000001400000043004F004E00
+      540052004100430054004E004F000100000000001A00000049004E0054004500
+      52004500530054004100430043004E004F000100000000001800000044005500
+      45004C004F0041004E004100430043004E004F00010000000000200000004400
+      5500450049004E005400450052004500530054004100430043004E004F000100
+      000000001200000050005200450053004100430043004E004F00010000000000
+      1800000053004500430052004500530054004100430043004E004F0001000000
+      00000C000000500042004D00410049004E000100000000000E00000050004500
+      42004D00410049004E000100000000000A0000005000420049004E0054000100
+      000000000C00000050004500420049004E005400010000000000120000005000
+      42004400550045004D00410049004E0001000000000014000000500045004200
+      4400550045004D00410049004E00010000000000100000005000420044005500
+      450049004E005400010000000000120000005000450042004400550045004900
+      4E0054000100000000000E0000005000410059004D00410049004E0001000000
+      00001000000045005000410059004D00410049004E000100000000000C000000
+      50004100590049004E0054000100000000000E00000045005000410059004900
+      4E0054000100000000000C000000500041005900440055004500010000000000
+      0E00000045005000410059004400550045000100000000001200000050004100
+      590044005500450049004E005400010000000000140000004500500041005900
+      44005500450049004E005400010000000000160000005400520041004E004300
+      480045004D00410049004E000100000000001800000045005400520041004E00
+      4300480045004D00410049004E000100000000000C000000500045004D004100
+      49004E000100000000000E0000004500500045004D00410049004E0001000000
+      00000A0000005000450049004E0054000100000000000C000000450050004500
+      49004E00540001000000000012000000500045004400550045004D0041004900
+      4E00010000000000140000004500500045004400550045004D00410049004E00
+      010000000000100000005000450044005500450049004E005400010000000000
+      1200000045005000450044005500450049004E00540001000000000012000000
+      43005200440050004500520049004F0044000100000000000A00000042004100
+      4C0043004E00010000000000080000004E0041004D0045000100000000002600
+      000041004E004E00550041004C00590049004E00540045005200450053005400
+      52004100540045000100000000000C00000050004500520053004F004E000100
+      000000000E000000500052004F004A004500430054000100000000000C000000
+      460049004C00490041004C0001000000000010000000560041004C005F004E00
+      41004D0045000100000000002000000044004100540045004F00460043004F00
+      4E0043004C005500530049004F004E0001000000000028000000440055004500
+      44004100540045004600490052005300540043004F004E005400520041004300
+      5400010000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 216
+    Top = 120
+    object ResultDSCREDITID: TFloatField
+      FieldName = 'CREDITID'
+      Required = True
+    end
+    object ResultDSNUMBEROFCREDIT: TWideStringField
+      DisplayLabel = #1052#1094#1075'. '#8470
+      FieldName = 'NUMBEROFCREDIT'
+      Size = 32
+    end
+    object ResultDSNAME: TWideStringField
+      DisplayLabel = #1041#1086#1088#1078#1072#1083#1072#1085
+      FieldName = 'NAME'
+      Size = 64
+    end
+    object ResultDSDUEDATEFIRSTCONTRACT: TDateTimeField
+      DisplayLabel = #1041#1072#1100#1083#1072#1085#1084#1072' '#1090#1072#1088#1080#1093#1080
+      FieldName = 'DUEDATEFIRSTCONTRACT'
+      Required = True
+    end
+    object ResultDSDATEOFCONCLUSION: TDateTimeField
+      DisplayLabel = #1040#1095#1099#1083#1084#1072' '#1090#1072#1088#1080#1093#1080
+      FieldName = 'DATEOFCONCLUSION'
+      Required = True
+    end
+    object ResultDSANNUALYINTERESTRATE: TFloatField
+      DisplayLabel = '%  '#1076#1103#1088#1103#1078#1103#1089#1080
+      FieldName = 'ANNUALYINTERESTRATE'
+      Required = True
+    end
+    object ResultDSCONTRACTNO: TWideStringField
+      DisplayLabel = #1057#1089#1091#1076#1072' '#1065#1077#1089#1072#1073#1099#1085' '#8470'-'#1089#1080
+      FieldName = 'CONTRACTNO'
+    end
+    object ResultDSBALCN: TFloatField
+      DisplayLabel = #1041#1072#1083#1072#1085#1089' '#1065#1077#1089#1072#1073#1099
+      FieldName = 'BALCN'
+    end
+    object ResultDSVAL_NAME: TWideStringField
+      DisplayLabel = #1042#1072#1083#1081#1091#1090#1072
+      FieldName = 'VAL_NAME'
+      Size = 10
+    end
+    object ResultDSDUELOANACCNO: TWideStringField
+      DisplayLabel = #1068#1077#1078' '#1057#1089#1091#1076#1072' '#1065#1077#1089#1072#1073#1099#1085' '#8470'-'#1089#1080
+      FieldName = 'DUELOANACCNO'
+    end
+    object ResultDSINTERESTACCNO: TWideStringField
+      DisplayLabel = #1060#1072#1080#1079' '#1065#1077#1089#1072#1073#1099#1085' '#8470'-'#1089#1080
+      FieldName = 'INTERESTACCNO'
+    end
+    object ResultDSDUEINTERESTACCNO: TWideStringField
+      DisplayLabel = #1068#1077#1078' '#1060#1072#1080#1079' '#1065#1077#1089#1072#1073#1099#1085' '#8470'-'#1089#1080
+      FieldName = 'DUEINTERESTACCNO'
+    end
+    object ResultDSPRESACCNO: TWideStringField
+      DisplayLabel = #1045#1097#1090#1080#1081#1081#1072#1090' '#1065#1077#1089#1072#1073#1099#1085' '#8470'-'#1089#1080
+      FieldName = 'PRESACCNO'
+    end
+    object ResultDSSECRESTACCNO: TWideStringField
+      DisplayLabel = #1052#1103#1075' '#1045#1097#1090#1080#1081#1081#1072#1090' '#1065#1077#1089#1072#1073#1099#1085' '#8470'-'#1089#1080
+      FieldName = 'SECRESTACCNO'
+    end
+    object ResultDSPBMAIN: TFloatField
+      DisplayLabel = #1044'.'#1071'.'#1071#1089#1072#1089' '#1073'.'
+      FieldName = 'PBMAIN'
+      Required = True
+    end
+    object ResultDSPEBMAIN: TFloatField
+      DisplayLabel = #1045#1082#1074#1080#1074#1072#1083#1077#1085#1090
+      FieldName = 'PEBMAIN'
+      Required = True
+    end
+    object ResultDSPBINT: TFloatField
+      DisplayLabel = #1044'.'#1071'. '#1060#1072#1080#1079' '#1073
+      FieldName = 'PBINT'
+      Required = True
+    end
+    object ResultDSPEBINT: TFloatField
+      DisplayLabel = #1045#1082#1074#1080#1074#1072#1083#1077#1085#1090
+      FieldName = 'PEBINT'
+      Required = True
+    end
+    object ResultDSPBDUEMAIN: TFloatField
+      DisplayLabel = #1044'.'#1071'. '#1069#1077#1078'. '#1103#1089#1072#1089' '#1073
+      FieldName = 'PBDUEMAIN'
+      Required = True
+    end
+    object ResultDSPEBDUEMAIN: TFloatField
+      DisplayLabel = #1045#1082#1074#1080#1074#1072#1083#1077#1085#1090
+      FieldName = 'PEBDUEMAIN'
+      Required = True
+    end
+    object ResultDSPBDUEINT: TFloatField
+      DisplayLabel = #1044'.'#1071'. '#1069#1077#1078' '#1092#1072#1080#1079' '#1073
+      FieldName = 'PBDUEINT'
+      Required = True
+    end
+    object ResultDSPEBDUEINT: TFloatField
+      DisplayLabel = #1045#1082#1074#1080#1074#1072#1083#1077#1085#1090
+      FieldName = 'PEBDUEINT'
+      Required = True
+    end
+    object ResultDSPAYMAIN: TFloatField
+      DisplayLabel = #1070#1076#1103#1085'. '#1071#1089#1072#1089' '#1073
+      FieldName = 'PAYMAIN'
+      Required = True
+    end
+    object ResultDSEPAYMAIN: TFloatField
+      DisplayLabel = #1045#1082#1074#1080#1074#1072#1083#1077#1085#1090
+      FieldName = 'EPAYMAIN'
+      Required = True
+    end
+    object ResultDSPAYINT: TFloatField
+      DisplayLabel = #1070#1076#1103#1085'. '#1060#1072#1080#1079' '#1073
+      FieldName = 'PAYINT'
+      Required = True
+    end
+    object ResultDSEPAYINT: TFloatField
+      DisplayLabel = #1045#1082#1074#1080#1074#1072#1083#1077#1085#1090
+      FieldName = 'EPAYINT'
+      Required = True
+    end
+    object ResultDSPAYDUE: TFloatField
+      DisplayLabel = #1070#1076#1103#1085'. '#1069#1077#1078'. '#1071#1089#1072#1089' '#1073
+      FieldName = 'PAYDUE'
+      Required = True
+    end
+    object ResultDSEPAYDUE: TFloatField
+      DisplayLabel = #1045#1082#1074#1080#1074#1072#1083#1077#1085#1090
+      FieldName = 'EPAYDUE'
+      Required = True
+    end
+    object ResultDSPAYDUEINT: TFloatField
+      DisplayLabel = #1070#1076#1103#1085'. '#1069#1077#1078' '#1092#1072#1080#1079' '#1073
+      FieldName = 'PAYDUEINT'
+      Required = True
+    end
+    object ResultDSEPAYDUEINT: TFloatField
+      DisplayLabel = #1045#1082#1074#1080#1074#1072#1083#1077#1085#1090
+      FieldName = 'EPAYDUEINT'
+      Required = True
+    end
+    object ResultDSTRANCHEMAIN: TFloatField
+      DisplayLabel = #1042#1077#1088#1080#1083#1084#1080#1096' '#1084#1103#1073'.'
+      FieldName = 'TRANCHEMAIN'
+      Required = True
+    end
+    object ResultDSETRANCHEMAIN: TFloatField
+      DisplayLabel = #1045#1082#1074#1080#1074#1072#1083#1077#1085#1090
+      FieldName = 'ETRANCHEMAIN'
+      Required = True
+    end
+    object ResultDSPEMAIN: TFloatField
+      DisplayLabel = #1044'.'#1057'.'#1071#1089#1072#1089' '#1073'.'
+      FieldName = 'PEMAIN'
+      Required = True
+    end
+    object ResultDSEPEMAIN: TFloatField
+      DisplayLabel = #1045#1082#1074#1080#1074#1072#1083#1077#1085#1090
+      FieldName = 'EPEMAIN'
+      Required = True
+    end
+    object ResultDSPEINT: TFloatField
+      DisplayLabel = #1044'.'#1057'.'#1060#1072#1080#1079' '#1073'.'
+      FieldName = 'PEINT'
+      Required = True
+    end
+    object ResultDSEPEINT: TFloatField
+      DisplayLabel = #1045#1082#1074#1080#1074#1072#1083#1077#1085#1090
+      FieldName = 'EPEINT'
+      Required = True
+    end
+    object ResultDSPEDUEMAIN: TFloatField
+      DisplayLabel = #1044'.'#1057'. '#1069#1077#1078' '#1071#1089#1072#1089' '#1073'.'
+      FieldName = 'PEDUEMAIN'
+      Required = True
+    end
+    object ResultDSEPEDUEMAIN: TFloatField
+      DisplayLabel = #1045#1082#1074#1080#1074#1072#1083#1077#1085#1090
+      FieldName = 'EPEDUEMAIN'
+      Required = True
+    end
+    object ResultDSPEDUEINT: TFloatField
+      DisplayLabel = #1044'.'#1057'. '#1069#1077#1078' '#1060#1072#1080#1079' '#1073'.'
+      FieldName = 'PEDUEINT'
+      Required = True
+    end
+    object ResultDSEPEDUEINT: TFloatField
+      DisplayLabel = #1045#1082#1074#1080#1074#1072#1083#1077#1085#1090
+      FieldName = 'EPEDUEINT'
+      Required = True
+    end
+    object ResultDSCRDPERIOD: TFloatField
+      DisplayLabel = #1052#1094#1076#1076#1103#1090
+      FieldName = 'CRDPERIOD'
+      Required = True
+    end
+    object ResultDSPERSON: TWideStringField
+      DisplayLabel = #1052#1094#1096#1090#1103#1088#1080#1085#1080#1085' '#1082#1072#1090#1077#1100#1086#1088#1080#1081#1072#1089#1099
+      FieldName = 'PERSON'
+      Size = 64
+    end
+    object ResultDSPROJECT: TWideStringField
+      DisplayLabel = #1051#1072#1081#1080#1097#1103
+      FieldName = 'PROJECT'
+      Size = 64
+    end
+    object ResultDSFILIAL: TWideStringField
+      DisplayLabel = 'Filial'
+      FieldName = 'FILIAL'
+      Size = 4000
+    end
+  end
+  object CMExcelExport1: TCMExcelExport
+    StyleColumnWidth = cwDefault
+    ColumnWidth = 0
+    FontTitles.Charset = DEFAULT_CHARSET
+    FontTitles.Color = clWindowText
+    FontTitles.Height = -11
+    FontTitles.Name = 'Tahoma'
+    FontTitles.Style = []
+    OrientationTitles = 0
+    FontData.Charset = DEFAULT_CHARSET
+    FontData.Color = clWindowText
+    FontData.Height = -11
+    FontData.Name = 'Tahoma'
+    FontData.Style = []
+    FontSummary.Charset = DEFAULT_CHARSET
+    FontSummary.Color = clWindowText
+    FontSummary.Height = -11
+    FontSummary.Name = 'Tahoma'
+    FontSummary.Style = []
+    SummarySelection = ssNone
+    SummaryCalculation = scSUM
+    Left = 328
+    Top = 16
+  end
+end

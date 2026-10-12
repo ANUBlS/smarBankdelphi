@@ -1,0 +1,199 @@
+unit DMMKPolicyImpl;
+
+interface
+
+uses
+  SysUtils, Classes, Oracle, DB, OracleData;
+
+type
+  TDMMKPolicy = class(TDataModule)
+    DSCustomers: TDataSource;
+    ODSRisk: TOracleDataSet;
+    ODSRiskID: TFloatField;
+    ODSRiskNAME: TWideStringField;
+    ODSAvalute: TOracleDataSet;
+    ODSAvaluteVALUTE: TIntegerField;
+    ODSAvaluteVAL_NAME: TWideStringField;
+    ODSAvaluteVALU_NAME: TWideStringField;
+    ODSAvaluteVALU_SHORT: TWideStringField;
+    DSTemplates: TDataSource;
+    ODSCustTypes: TOracleDataSet;
+    ODSCustTypesID: TFloatField;
+    ODSCustTypesNAME: TWideStringField;
+    DSAvalute: TDataSource;
+    ODSAvtoIntend: TOracleDataSet;
+    ODSAvtoIntendID: TFloatField;
+    ODSAvtoIntendNAME: TWideStringField;
+    ODSMotorkasko: TOracleDataSet;
+    ODSMotorkaskoID: TFloatField;
+    ODSMotorkaskoCID: TFloatField;
+    ODSMotorkaskoINSUREDTYPE: TWideStringField;
+    ODSMotorkaskoINSUREDCOLOR: TWideStringField;
+    ODSMotorkaskoINSUREDOUTPUTYEAR: TIntegerField;
+    ODSMotorkaskoINSUREDSTATENUM: TWideStringField;
+    ODSMotorkaskoUNDERFRAMENUM: TWideStringField;
+    ODSMotorkaskoINSUREDBANNUM: TWideStringField;
+    ODSMotorkaskoINSUREDENGINENUM: TWideStringField;
+    ODSMotorkaskoDRIVEINTENDED: TWideStringField;
+    ODSMotorkaskoDRIVECOST: TFloatField;
+    ODSMotorkaskoBEGINDATE: TDateTimeField;
+    ODSMotorkaskoENDDATE: TDateTimeField;
+    ODSMotorkaskoTYPEID: TIntegerField;
+    ODSMotorkaskoCLOSE_PREFIX: TIntegerField;
+    ODSMotorkaskoBANK_ID: TFloatField;
+    ODSMotorkaskoMONTH_ID: TFloatField;
+    ODSMotorkaskoINSUREDMARK: TWideStringField;
+    ODSMotorkaskoINSUREDMODEL: TWideStringField;
+    ODSMotorkaskoCLAIM_DATE: TDateTimeField;
+    ODSMotorkaskoCLAIM_NUM: TWideStringField;
+    ODSMotorkaskoAREA: TWideStringField;
+    ODSMotorkaskoFRANSHIZ: TFloatField;
+    ODSMotorkaskoTARIFF: TFloatField;
+    ODSMotorkaskoINSSUMM: TFloatField;
+    ODSMotorkaskoAMMOUNT: TFloatField;
+    ODSMotorkaskoNUMSEATS: TWideStringField;
+    ODSReport: TOracleDataSet;
+    ODSReportNAME: TWideStringField;
+    ODSReportINSUREDTYPE: TWideStringField;
+    ODSReportINSUREDCOLOR: TWideStringField;
+    ODSReportINSUREDOUTPUTYEAR: TIntegerField;
+    ODSReportINSUREDMODEL: TWideStringField;
+    ODSReportINSUREDSTATENUM: TWideStringField;
+    ODSReportUNDERFRAMENUM: TWideStringField;
+    ODSReportINSUREDBANNUM: TWideStringField;
+    ODSReportDRIVEACCESSPIOPLE: TWideStringField;
+    ODSReportINSUREDENGINENUM: TWideStringField;
+    ODSReportACCESSORIESNAME: TWideStringField;
+    ODSReportBEGINDATE: TWideStringField;
+    ODSReportINSDATE: TWideStringField;
+    ODSReportENDDATE: TWideStringField;
+    ODSReportPOLICYNUM: TWideStringField;
+    ODSReportTHEFT: TFloatField;
+    ODSReportFIRE: TFloatField;
+    ODSReportTRAFFICACCIDENT: TFloatField;
+    ODSReportIMPACTANYOBJECT: TFloatField;
+    ODSReportEXPLOSION: TFloatField;
+    ODSReportAGENT: TWideStringField;
+    ODSReportVALUTE: TWideStringField;
+    ODSReportBENEFICIARY: TWideStringField;
+    ODSReportLOANACC_ID: TFloatField;
+    ODSReportCURRACC_ID: TFloatField;
+    ODSReportDRIVEINTENDED: TWideStringField;
+    ODSReportSEX: TIntegerField;
+    ODSReportavtointend: TWideStringField;
+    ODSReportNUMSEATS: TWideStringField;
+    ODSReportFRANSHIZ: TFloatField;
+    ODSReportEXTRAFRANSHIZ: TWideStringField;
+    ODSReportAVTOCOST: TFloatField;
+    ODSReportINSSUMM: TFloatField;
+    ODSReportAMMOUNT: TFloatField;
+    ODSReportINSUREDADDRESS: TWideStringField;
+    ODSReportMOBILEPHONE: TWideStringField;
+    ODSReportHOMEPHONE: TWideStringField;
+    ODSReportINSCOLOR: TWideStringField;
+    ODSReportVAL_NAME: TWideStringField;
+    ODSTemplates: TOracleDataSet;
+    ODSTemplatesID: TFloatField;
+    ODSTemplatesNAME: TWideStringField;
+    ODSTemplatesTEMPLATE: TBlobField;
+    ODSCustomers: TOracleDataSet;
+    ODSCustomersID: TIntegerField;
+    ODSCustomersINSURED_TYPEID: TIntegerField;
+    ODSCustomersNAME: TWideStringField;
+    OPCOMMON: TOraclePackage;
+    OPMKKASCO: TOraclePackage;
+    SB_aca: TOraclePackage;
+    ODSOperkurs: TOracleDataSet;
+    ODSOperkursVALUTE_ID: TFloatField;
+    ODSOperkursVALUTE: TIntegerField;
+    ODSOperkursVAL_NAME: TWideStringField;
+    ODSOperkursOSTAT: TFloatField;
+    ODSPolicy: TOracleDataSet;
+    ODSPolicyID: TFloatField;
+    ODSPolicyTHEFT: TFloatField;
+    ODSPolicyFIRE: TFloatField;
+    ODSPolicyEXPLOSION: TFloatField;
+    ODSPolicyTRAFFICACCIDENT: TFloatField;
+    ODSPolicyIMPACTANYOBJECT: TFloatField;
+    ODSPolicyNATCATASTROPHE: TFloatField;
+    ODSPolicyPOLICYNUM: TWideStringField;
+    ODSPolicyUNDERTABLE: TBlobField;
+    ODSPolicyCID: TFloatField;
+    ODSPolicyRISKS: TFloatField;
+    ODSPolicyNAME: TWideStringField;
+    ODSPolicyrisk: TWideStringField;
+    DSPolicy: TDataSource;
+    ODSContracts: TOracleDataSet;
+    ODSContractsID: TFloatField;
+    ODSContractsTYPE_ID: TFloatField;
+    ODSContractsINS_DATE: TDateTimeField;
+    ODSContractsBEGIN_DATE: TDateTimeField;
+    ODSContractsEND_DATE: TDateTimeField;
+    ODSContractsVALUTE_ID: TFloatField;
+    ODSContractsAMMOUNT: TFloatField;
+    ODSContractsCLOSE_PREFIX: TIntegerField;
+    ODSContractsKLI_ID: TFloatField;
+    ODSContractsLOANACC_ID: TFloatField;
+    ODSContractsCURRACC_ID: TFloatField;
+    ODSContractsPOLICY_NUM: TWideStringField;
+    ODSContractsINSSUMM: TFloatField;
+    ODSContractsFRANSHIZ: TFloatField;
+    ODSContractsTARIFF: TFloatField;
+    ODSContractsSTATE: TIntegerField;
+    ODSContractsBENEFICIARY: TWideStringField;
+    ODSContractsSUGNUM: TWideStringField;
+    DSContracts: TDataSource;
+    procedure ODSContractsAfterEdit(DataSet: TDataSet);
+    procedure ODSPolicyAfterEdit(DataSet: TDataSet);
+    procedure ODSPolicyAfterInsert(DataSet: TDataSet);
+    procedure DataModuleCreate(Sender: TObject);
+    procedure DataModuleDestroy(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  DMMKPolicy: TDMMKPolicy;
+
+implementation
+
+uses UMKPolicyImpl,CommanParametrs,sboapiDataModuleImpl;
+
+{$R *.dfm}
+
+procedure TDMMKPolicy.DataModuleCreate(Sender: TObject);
+begin
+ODSCustTypes.Open;
+ODSRisk.Open;
+ODSOperkurs.Open;
+ODSAvalute.Open;
+end;
+
+procedure TDMMKPolicy.DataModuleDestroy(Sender: TObject);
+begin
+
+ODSCustTypes.close;
+ODSRisk.close;
+ODSOperkurs.close;
+ODSAvalute.close;
+end;
+
+procedure TDMMKPolicy.ODSContractsAfterEdit(DataSet: TDataSet);
+begin
+
+  fmMKPolicy.btApply.Enabled := True;
+end;
+
+procedure TDMMKPolicy.ODSPolicyAfterEdit(DataSet: TDataSet);
+begin
+    fmMKPolicy.btApply.Enabled := True;
+end;
+
+procedure TDMMKPolicy.ODSPolicyAfterInsert(DataSet: TDataSet);
+begin
+    DataSet.Fieldbyname('CID').AsInteger := contactid;
+end;
+
+end.

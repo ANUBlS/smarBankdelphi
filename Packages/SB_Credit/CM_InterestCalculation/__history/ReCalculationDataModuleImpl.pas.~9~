@@ -1,0 +1,84 @@
+﻿unit ReCalculationDataModuleImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, NLSDialogs,
+  Oracle, Db, OracleData, Grids;
+
+type
+  TPRDataModule = class(TDataModule)
+    CalculatorPackage: TOraclePackage;
+    IntCache: TOracleDataSet;
+    DataSrcIntCache: TDataSource;
+    IntCacheID: TFloatField;
+    IntCacheCURRENCY: TFloatField;
+    IntCacheBOOROWERID: TFloatField;
+    IntCacheNUMBEROFCREDIT: TWideStringField;
+    IntCacheUSRGROUP: TFloatField;
+    IntCacheBRANCHID: TFloatField;
+    IntCacheUSID: TFloatField;
+    IntCacheSTOPCALCDATE: TDateTimeField;
+    IntCacheREST: TFloatField;
+    IntCacheINTERESTREST: TFloatField;
+    IntCacheDUEREST: TFloatField;
+    IntCacheDUEINTERESTREST: TFloatField;
+    IntCacheCONTRACTACCNO: TWideStringField;
+    IntCacheVAL_NAME: TWideStringField;
+    IntCacheINTEREST: TFloatField;
+    IntCacheDUEINTEREST: TFloatField;
+    IntCacheTRPROCESSED: TFloatField;
+    IntCacheCUSTOMERTYPE: TFloatField;
+    IntCachePERSONALTYPE: TFloatField;
+    IntCacheCREDITTYPE: TFloatField;
+    cm_autoexp: TOraclePackage;
+    IntCachePENALTYINTEREST: TFloatField;
+    IntCacheNAME: TWideStringField;
+    IntCacheENDDAT: TDateTimeField;
+    IntCacheINT: TFloatField;
+    IntCacheDUEINT: TFloatField;
+    IntCacheSTATUS: TFloatField;
+    IntCacheestatus: TWideStringField;
+    IntCacheANNUALYINTERESTRATE: TFloatField;
+    IntCacheDATEOFCONCLUSION: TDateTimeField;
+    IntCacheCRTYPE: TWideStringField;
+    IntCacheAIM_ID: TFloatField;
+    procedure DataModuleCreate(Sender: TObject);
+    procedure IntCacheCalcFields(DataSet: TDataSet);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  PRDataModule: TPRDataModule;
+
+implementation
+
+{$R *.DFM}
+
+uses sboapiDataModuleImpl;
+
+procedure TPRDataModule.DataModuleCreate(Sender: TObject);
+begin
+  with IntCache do
+  Open;
+end;
+
+procedure TPRDataModule.IntCacheCalcFields(DataSet: TDataSet);
+begin
+if IntCacheSTATUS.AsInteger=1 then
+ IntCacheestatus.AsString:='Hesablama tam dayandırılıb ';
+
+ if (IntCacheINT.AsInteger=1)and (IntCacheDUEINT.AsInteger=1) then
+    IntCacheestatus.AsString:='Hər ikisi dayandırılıb ';
+
+     if (IntCacheINT.AsInteger=1)and (IntCacheDUEINT.AsInteger=0)then
+    IntCacheestatus.AsString:='Faiz hesablaması dayandırılıb ';
+
+     if  (IntCacheDUEINT.AsInteger=1)and (IntCacheINT.AsInteger=0) then
+    IntCacheestatus.AsString:='Penya hesablaması  dayandırılıb ';
+end;
+
+end.

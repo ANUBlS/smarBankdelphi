@@ -1,0 +1,160 @@
+object DataModule1: TDataModule1
+  OldCreateOrder = False
+  Height = 0
+  Width = 0
+  object MakeTable_OP: TOraclePackage
+    Session = OracleSession1
+    Debug = False
+    PackageName = 'p_extraction'
+    ParameterMode = pmPositional
+    Cursor = crDefault
+    Optimize = True
+    Left = 32
+    Top = 16
+  end
+  object OracleSession1: TOracleSession
+    Cursor = crHourGlass
+    DesignConnection = False
+    LogonUsername = 'smart'
+    LogonPassword = 'sm'
+    LogonDatabase = 'SB'
+    ThreadSafe = False
+    Preferences.FloatPrecision = 0
+    Preferences.IntegerPrecision = 0
+    Preferences.SmallIntPrecision = -1
+    Preferences.UseOCI7 = False
+    Preferences.ConvertCRLF = True
+    Preferences.TrimStringFields = True
+    Preferences.MaxStringFieldSize = 0
+    Preferences.ZeroDateIsNull = True
+    Connected = True
+    RollbackOnDisconnect = False
+    NullValue = nvUnAssigned
+    SQLTrace = stUnchanged
+    OptimizerGoal = ogUnchanged
+    IsolationLevel = ilUnchanged
+    BytesPerCharacter = bc1Byte
+    Left = 120
+    Top = 16
+  end
+  object OracleLogon1: TOracleLogon
+    Session = OracleSession1
+    Retries = 2
+    Options = [ldDatabase]
+    AliasDropDownCount = 8
+    HistorySize = 6
+    HistoryWithPassword = False
+    Left = 208
+    Top = 16
+  end
+  object P_Balance_OP: TOraclePackage
+    Session = OracleSession1
+    Debug = False
+    PackageName = 'P_BALANCE'
+    ParameterMode = pmPositional
+    Cursor = crDefault
+    Optimize = True
+    Left = 32
+    Top = 80
+  end
+  object Extraction_ODSt: TOracleDataSet
+    SQL.Strings = (
+      'select *'
+      'from '
+      'extraction_smart')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = OracleSession1
+    DesignActivation = False
+    Active = True
+    Left = 120
+    Top = 80
+  end
+  object ExtractionTrans_ODSt: TOracleDataSet
+    SQL.Strings = (
+      'select *'
+      'from extractiontrans_smart')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = OracleSession1
+    DesignActivation = False
+    Active = True
+    Left = 120
+    Top = 136
+  end
+  object Bankm_ODSt: TOracleDataSet
+    SQL.Strings = (
+      'select *'
+      'from Bankm')
+    ReadBuffer = 25
+    Optimize = True
+    Debug = False
+    StringFieldsOnly = False
+    SequenceField.ApplyMoment = amOnPost
+    OracleDictionary.EnforceConstraints = False
+    OracleDictionary.UseMessageTable = False
+    OracleDictionary.DefaultValues = False
+    OracleDictionary.DynamicDefaults = False
+    OracleDictionary.FieldKinds = False
+    OracleDictionary.DisplayFormats = False
+    OracleDictionary.RangeValues = False
+    QBEDefinition.SaveQBEValues = True
+    QBEDefinition.AllowFileWildCards = True
+    Cursor = crDefault
+    ReadOnly = False
+    LockingMode = lmCheckImmediate
+    QueryAllRecords = True
+    CountAllRecords = False
+    RefreshOptions = []
+    CommitOnPost = True
+    CachedUpdates = False
+    QBEMode = False
+    Session = OracleSession1
+    DesignActivation = False
+    Active = True
+    Left = 120
+    Top = 192
+  end
+end

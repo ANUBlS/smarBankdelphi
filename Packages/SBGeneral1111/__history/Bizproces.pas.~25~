@@ -1,0 +1,238 @@
+﻿unit Bizproces;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, DBGridEh, DB, OracleData, StdCtrls, ExtCtrls, Mask, DBCtrlsEh,
+  DBLookupEh, DBCtrls;
+
+type
+  TForm10 = class(TForm)
+    Panel1: TPanel;
+    Edit2: TEdit;
+    Label3: TLabel;
+    Edit3: TEdit;
+    Button1: TButton;
+    Edit4: TEdit;
+    Edit5: TEdit;
+    Button2: TButton;
+    Edit7: TEdit;
+    Edit8: TEdit;
+    ComboBox1: TComboBox;
+    Edit1: TEdit;
+    procedure Edit2KeyPress(Sender: TObject; var Key: Char);
+    procedure Edit1KeyPress(Sender: TObject; var Key: Char);
+    procedure Edit3KeyPress(Sender: TObject; var Key: Char);
+    procedure Button2Click(Sender: TObject);
+    procedure Edit4Enter(Sender: TObject);
+    procedure Edit5Enter(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure Edit6KeyPress(Sender: TObject; var Key: Char);
+    procedure DBLookupComboBox3CloseUp(Sender: TObject);
+    procedure DBLookupComboBox1CloseUp(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure ComboBox1Change(Sender: TObject);
+    procedure Edit9KeyPress(Sender: TObject; var Key: Char);
+    procedure Edit8KeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure Edit7KeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form10: TForm10;
+
+implementation
+
+uses CustomersImpl, UnitbussProc, UnitDataBussProc, unitsearch;
+
+{$R *.dfm}
+
+procedure TForm10.Button1Click(Sender: TObject);
+begin
+
+DataModule_bussProc.orproc.CallProcedure('bizproc_bokt',
+[edit1.Text,strtofloat(edit4.Text),edit8.Text,edit7.Text,edit5.Text,combobox1.Text]);
+showmessage('Əməliyyat əlavə olundu');
+
+close;
+
+end;
+
+procedure TForm10.Button2Click(Sender: TObject);
+begin
+
+Close;
+end;
+
+procedure TForm10.ComboBox1Change(Sender: TObject);
+var  ke:char;
+begin
+edit2.Text:='';
+edit3.Text:='';
+edit7.Text:='';
+edit8.Text:='';
+
+if combobox1.Text='AZN' then
+begin
+ke:=char(13);
+edit2.Text:='15010';
+edit3.Text:='45270';
+end;
+
+
+if combobox1.Text='USD' then
+begin
+ke:=char(13);
+edit2.Text:='15020';
+edit3.Text:='45280';
+end;
+
+
+
+end;
+
+procedure TForm10.DBLookupComboBox1CloseUp(Sender: TObject);
+begin
+edit8.Text:=DataModule_bussProc.Hesab1.FieldByName('name').AsString;
+end;
+
+procedure TForm10.DBLookupComboBox3CloseUp(Sender: TObject);
+begin
+edit7.Text:=DataModule_bussProc.Hesab2.FieldByName('name').AsString;
+
+//DBLookupComboBox2.KeyValue:= DataModule_bussProc.Hesab2.FieldByName('Filial').AsString;
+end;
+
+procedure TForm10.Edit1KeyPress(Sender: TObject; var Key: Char);
+begin
+{DataModule_bussProc.Hesab1.CloseAll;
+DataModule_bussProc.Hesab1.SetVariable('kid',strtoint(edit1.Text));
+DataModule_bussProc.Hesab1.Open;
+
+edit2.Text:= DataModule_bussProc.Hesab1.FieldByName('bal_cn1').AsVariant; }
+end;
+
+procedure TForm10.Edit2KeyPress(Sender: TObject; var Key: Char);
+begin
+if key=#13 then
+begin
+{DataModule_bussProc.Hesab1.CloseAll;
+DataModule_bussProc.Hesab1.SetVariable('balcn',strtoint(edit2.Text));
+DataModule_bussProc.Hesab1.Open;
+edit1.Text:= DataModule_bussProc.Hesab1.FieldByName('kli_id').AsVariant; }
+end;
+end;
+
+procedure TForm10.Edit3KeyPress(Sender: TObject; var Key: Char);
+begin
+
+if key=#13 then
+begin
+
+
+{DataModule_bussProc.Hesab2.CloseAll;
+DataModule_bussProc.Hesab2.SetVariable('balcn',strtoint(edit3.Text));
+DataModule_bussProc.Hesab2.Open;  }
+end;
+
+
+
+end;
+
+procedure TForm10.Edit4Enter(Sender: TObject);
+begin
+edit4.Clear;
+end;
+
+procedure TForm10.Edit5Enter(Sender: TObject);
+begin
+edit5.Clear;
+end;
+
+procedure TForm10.Edit6KeyPress(Sender: TObject; var Key: Char);
+begin
+  {
+if key=#13 then
+begin
+with DataModule_bussProc.Hesab2 do begin
+   Filter := 'name = '''+edit6.Text+('*')+'''';
+  end;
+
+if edit6.Text='' then
+begin
+    DataModule_bussProc.Hesab2.Filtered:=false;
+  end;
+
+
+DataModule_bussProc.Hesab2.Refresh;
+end;
+                                      }
+end;
+
+procedure TForm10.Edit7KeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+if Key=VK_F3 then
+begin
+FormSearch := TFormSearch.Create(Self);
+
+if edit3.Text='45270' then
+ FormSearch.Edit2.Text:='3';
+
+if edit3.Text='45280' then
+ FormSearch.Edit2.Text:='4';
+
+
+FormSearch.ShowModal;
+end;
+
+end;
+
+procedure TForm10.Edit8KeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+if Key=VK_F3 then
+begin
+FormSearch := TFormSearch.Create(Self);
+if edit2.Text='15010' then
+ FormSearch.Edit2.Text:='1';
+if edit2.Text='15020' then
+ FormSearch.Edit2.Text:='2';
+
+FormSearch.ShowModal;
+end;
+end;
+
+procedure TForm10.Edit9KeyPress(Sender: TObject; var Key: Char);
+begin
+  {
+if key=#13 then
+begin
+with DataModule_bussProc.Hesab2 do begin
+   sql[2] := 'and acc_no = '+edit9.Text;
+  end;
+
+if edit9.Text='' then
+begin
+  DataModule_bussProc.Hesab2.sql[2] :='';
+
+  end;
+
+
+DataModule_bussProc.Hesab2.Refresh;
+end;   }
+
+end;
+
+procedure TForm10.FormDestroy(Sender: TObject);
+begin
+DataModule_bussProc.Hesab2.CloseAll;
+DataModule_bussProc.Hesab1.CloseAll;
+DataModule_bussProc.Hesab2.sql[4]:='';
+end;
+
+end.

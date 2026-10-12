@@ -1,0 +1,391 @@
+object CustomerPropertiesForm: TCustomerPropertiesForm
+  Left = 295
+  Top = 209
+  Width = 540
+  Height = 369
+  Caption = 'CustomerPropertiesForm'
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -9
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poScreenCenter
+  OnClose = FormClose
+  OnKeyDown = FormKeyDown
+  OnKeyPress = FormKeyPress
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Label3: TLabel
+    Tag = 17
+    Left = 7
+    Top = 5
+    Width = 100
+    Height = 13
+    Caption = 'Гейдиййата алынмышдыр:'
+  end
+  object Label5: TLabel
+    Tag = 22
+    Left = 7
+    Top = 27
+    Width = 68
+    Height = 13
+    Caption = 'Мцштяринин ады:'
+  end
+  object Label7: TLabel
+    Tag = 23
+    Left = 7
+    Top = 50
+    Width = 41
+    Height = 13
+    Caption = 'Гыса ады:'
+  end
+  object Label9: TLabel
+    Tag = 25
+    Left = 7
+    Top = 96
+    Width = 32
+    Height = 13
+    Caption = 'Групу:'
+  end
+  object Label10: TLabel
+    Tag = 26
+    Left = 7
+    Top = 119
+    Width = 74
+    Height = 13
+    Caption = 'Мцлкиййят нювц:'
+  end
+  object Label11: TLabel
+    Tag = 27
+    Left = 7
+    Top = 142
+    Width = 76
+    Height = 13
+    Caption = 'Тяшкилат формасы:'
+  end
+  object Label12: TLabel
+    Tag = 28
+    Left = 7
+    Top = 166
+    Width = 77
+    Height = 13
+    Caption = 'Фяалиййят сащяси:'
+  end
+  object Label13: TLabel
+    Tag = 29
+    Left = 7
+    Top = 188
+    Width = 28
+    Height = 13
+    Caption = 'Сащя:'
+  end
+  object Label15: TLabel
+    Tag = 30
+    Left = 7
+    Top = 211
+    Width = 60
+    Height = 13
+    Caption = 'ОКПО коду:'
+  end
+  object Label16: TLabel
+    Tag = 31
+    Left = 7
+    Top = 234
+    Width = 77
+    Height = 13
+    Caption = 'Верэи муфяттишлийи:'
+  end
+  object Label17: TLabel
+    Tag = 32
+    Left = 7
+    Top = 257
+    Width = 29
+    Height = 13
+    Caption = 'ВЮИН:'
+  end
+  object Label18: TLabel
+    Tag = 33
+    Left = 7
+    Top = 281
+    Width = 119
+    Height = 13
+    Caption = 'ДВМ-дя гейдя алынмышдыр:'
+  end
+  object Label19: TLabel
+    Tag = 34
+    Left = 262
+    Top = 281
+    Width = 142
+    Height = 13
+    Caption = 'Низамнамяси гейдя алынмышдыр:'
+  end
+  object Bevel1: TBevel
+    Left = 2
+    Top = 300
+    Width = 526
+    Height = 4
+  end
+  object Label6: TLabel
+    Tag = 21
+    Left = 7
+    Top = 73
+    Width = 64
+    Height = 13
+    Caption = 'Мянсубиййяти:'
+  end
+  object Label8: TLabel
+    Tag = 24
+    Left = 343
+    Top = 257
+    Width = 20
+    Height = 13
+    Caption = 'БИК:'
+  end
+  object OpenDateEdit: TDateTimePicker
+    Left = 138
+    Top = 1
+    Width = 94
+    Height = 21
+    CalAlignment = dtaLeft
+    Date = 37342.5538890394
+    Time = 37342.5538890394
+    DateFormat = dfShort
+    DateMode = dmComboBox
+    Kind = dtkDate
+    ParseInput = False
+    TabOrder = 0
+  end
+  object OkButton: TButton
+    Left = 377
+    Top = 308
+    Width = 72
+    Height = 24
+    Caption = 'Ok'
+    TabOrder = 15
+    OnClick = OkButtonClick
+  end
+  object CancelButton: TButton
+    Left = 454
+    Top = 308
+    Width = 72
+    Height = 24
+    Caption = '&Cancel'
+    TabOrder = 16
+    OnClick = CancelButtonClick
+  end
+  object NameEdit: TDBEdit
+    Left = 138
+    Top = 23
+    Width = 392
+    Height = 21
+    DataField = 'NAME'
+    DataSource = CustomerDataModule.Customers
+    TabOrder = 3
+  end
+  object RelationCB: TDBLookupComboBox
+    Left = 138
+    Top = 69
+    Width = 392
+    Height = 21
+    DataField = 'PRINAD_KOD'
+    DataSource = CustomerDataModule.Customers
+    KeyField = 'ID'
+    ListField = 'NAME'
+    ListSource = CustomerDataModule.Relation
+    TabOrder = 5
+  end
+  object GroupCB: TDBLookupComboBox
+    Left = 138
+    Top = 92
+    Width = 392
+    Height = 21
+    DataField = 'GROUP_KLIE'
+    DataSource = CustomerDataModule.Customers
+    KeyField = 'ID'
+    ListField = 'NAME'
+    ListSource = CustomerDataModule.ClientGroup
+    TabOrder = 6
+  end
+  object EstateTypeCB: TDBLookupComboBox
+    Left = 138
+    Top = 115
+    Width = 392
+    Height = 21
+    DataField = 'VID_SOB'
+    DataSource = CustomerDataModule.Customers
+    KeyField = 'ID'
+    ListField = 'NAME'
+    ListSource = CustomerDataModule.EstateType
+    TabOrder = 7
+  end
+  object OrganizationTypeCB: TDBLookupComboBox
+    Left = 138
+    Top = 138
+    Width = 392
+    Height = 21
+    DataField = 'ORG_SOB'
+    DataSource = CustomerDataModule.Customers
+    KeyField = 'ID'
+    ListField = 'NAME'
+    ListSource = CustomerDataModule.OrganizationType
+    TabOrder = 8
+  end
+  object ActionAreaCB: TDBLookupComboBox
+    Left = 138
+    Top = 161
+    Width = 392
+    Height = 21
+    DataField = 'SFERA_DEY'
+    DataSource = CustomerDataModule.Customers
+    KeyField = 'ID'
+    ListField = 'NAME'
+    ListSource = CustomerDataModule.ActionArea
+    TabOrder = 9
+  end
+  object BranchCB: TDBLookupComboBox
+    Left = 138
+    Top = 184
+    Width = 392
+    Height = 21
+    DataField = 'OTRASL'
+    DataSource = CustomerDataModule.Customers
+    KeyField = 'ID'
+    ListField = 'NAME'
+    ListSource = CustomerDataModule.Branch
+    TabOrder = 10
+  end
+  object ClientClosedCB: TCheckBox
+    Left = 238
+    Top = 2
+    Width = 139
+    Height = 17
+    Caption = 'Гейдиййатдан чыхарылмышдыр'
+    TabOrder = 1
+    OnClick = ClientClosedCBClick
+  end
+  object ClientClosedPanel: TPanel
+    Left = 384
+    Top = 0
+    Width = 146
+    Height = 23
+    Alignment = taLeftJustify
+    BevelOuter = bvNone
+    Caption = 'Тарих:'
+    TabOrder = 2
+    object CloseDateEdit: TDateTimePicker
+      Left = 31
+      Top = 0
+      Width = 114
+      Height = 21
+      CalAlignment = dtaLeft
+      Date = 37354.8721204514
+      Time = 37354.8721204514
+      DateFormat = dfShort
+      DateMode = dmComboBox
+      Kind = dtkDate
+      ParseInput = False
+      TabOrder = 0
+    end
+  end
+  object IsNotResidentCB: TDBCheckBox
+    Tag = 20
+    Left = 409
+    Top = 49
+    Width = 88
+    Height = 15
+    Caption = 'Резидент'
+    DataField = 'NEREZIDENT'
+    DataSource = CustomerDataModule.Customers
+    TabOrder = 4
+    ValueChecked = '1'
+    ValueUnchecked = '0'
+  end
+  object OKPOCodeEdit: TDBEdit
+    Left = 138
+    Top = 207
+    Width = 391
+    Height = 21
+    DataField = 'KOD_OKPRO'
+    DataSource = CustomerDataModule.Customers
+    TabOrder = 11
+  end
+  object TazAreaCB: TDBLookupComboBox
+    Left = 138
+    Top = 230
+    Width = 391
+    Height = 21
+    DataField = 'NALOG_KOD'
+    DataSource = CustomerDataModule.Customers
+    KeyField = 'ID'
+    ListField = 'NAME'
+    ListSource = CustomerDataModule.TaxArea
+    TabOrder = 12
+  end
+  object TaxIDEdit: TDBEdit
+    Left = 138
+    Top = 253
+    Width = 199
+    Height = 21
+    DataField = 'INN'
+    DataSource = CustomerDataModule.Customers
+    TabOrder = 13
+  end
+  object BankIDEdit: TDBEdit
+    Left = 376
+    Top = 253
+    Width = 153
+    Height = 21
+    DataField = 'BIK'
+    DataSource = CustomerDataModule.Customers
+    TabOrder = 14
+  end
+  object DBEdit1: TDBEdit
+    Left = 138
+    Top = 46
+    Width = 199
+    Height = 21
+    DataField = 'SHORT_NAME'
+    DataSource = CustomerDataModule.Customers
+    TabOrder = 17
+  end
+  object DBEdit3: TDBEdit
+    Left = 138
+    Top = 276
+    Width = 121
+    Height = 21
+    DataField = 'DAT_NAL'
+    DataSource = CustomerDataModule.Customers
+    TabOrder = 18
+  end
+  object DBEdit4: TDBEdit
+    Left = 408
+    Top = 276
+    Width = 121
+    Height = 21
+    DataField = 'DAT_USTAV'
+    DataSource = CustomerDataModule.Customers
+    TabOrder = 19
+  end
+  object Button1: TButton
+    Left = 2
+    Top = 307
+    Width = 143
+    Height = 25
+    Action = InfoView
+    TabOrder = 20
+  end
+  object ActionList1: TActionList
+    Left = 344
+    Top = 304
+    object InfoView: TAction
+      Caption = 'Ялавя информасийа'
+      OnExecute = InfoViewExecute
+    end
+    object IpInfoView: TAction
+      Caption = 'Боржаланын информасийасы'
+    end
+  end
+end

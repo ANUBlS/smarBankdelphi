@@ -1,0 +1,51 @@
+﻿unit CreateCMAccountsImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Grids, DBGrids,  Buttons, StdCtrls, ExtCtrls, Mask,
+  DBCtrlsEh, DBLookupEh, Oracle, DB, OracleData;
+
+type
+  TFormCreateCMAccounts = class(TForm)
+    Panel2: TPanel;
+    DBGrid1: TDBGrid;
+    DataSource1: TDataSource;
+    OracleDataSet1: TOracleDataSet;
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+    procedure FormCreate(Sender: TObject);
+
+
+  private
+    CustID :Integer;
+    CustName :String;
+  public
+    { Public declarations }
+  end;
+
+var
+  FormCreateCMAccounts: TFormCreateCMAccounts;
+
+implementation
+
+uses DataModuleConclusion,ConclusionMainUnitImpl,LoanBalAccsUnit,
+   SBTranslateProc,sboapiDataModuleImpl,CommonDecls;
+
+{$R *.DFM}
+
+procedure TFormCreateCMAccounts.FormCanResize(Sender: TObject;
+  var NewWidth, NewHeight: Integer; var Resize: Boolean);
+begin
+   Resize := False;
+end;
+
+
+
+procedure TFormCreateCMAccounts.FormCreate(Sender: TObject);
+begin
+SBTranslateProc.TranslateAllCompForms(Self, sboapiDataModule.OrPack_SL);
+end;
+
+end.

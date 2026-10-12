@@ -1,0 +1,464 @@
+﻿unit TransInfoImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, DBCtrls,  CommonDecls, StdCtrls, ComCtrls, Mask, CurrencyEdit;
+
+type
+  TTransInfo = class(TForm)
+    GroupBox1: TGroupBox;
+    Label8: TLabel;
+    Label7: TLabel;
+    DBLCB_mmx_transaction_item_type: TDBLookupComboBox;
+    GroupBox2: TGroupBox;
+    DBLCB_mmx_fromfunds: TDBLookupComboBox;
+    DBLCB_mmx_reportcode: TDBLookupComboBox;
+    DBLCB_mmx_transmode: TDBLookupComboBox;
+    Reason_Memo: TMemo;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Memo_transmode_comment: TMemo;
+    Memo_fromfundsComment: TMemo;
+    Label5: TLabel;
+    Label6: TLabel;
+    Label9: TLabel;
+    Memo_ItemDesc: TMemo;
+    Edit_ItemMake: TEdit;
+    Label10: TLabel;
+    Label11: TLabel;
+    Edit_previously_registered_to: TEdit;
+    Edit_presently_registered_to: TEdit;
+    Label12: TLabel;
+    Label13: TLabel;
+    DBLCB_MMX_TRANS_ITEM_STATUS: TDBLookupComboBox;
+    Label14: TLabel;
+    Memo_status_comments: TMemo;
+    Label15: TLabel;
+    Label16: TLabel;
+    Label17: TLabel;
+    Edit_item_size: TEdit;
+    Edit_item_size_uom: TEdit;
+    GroupBox3: TGroupBox;
+    Label18: TLabel;
+    Label19: TLabel;
+    Label20: TLabel;
+    Label21: TLabel;
+    Edit_registration_number: TEdit;
+    Edit_Identification_number: TEdit;
+    Memo_ItemComments: TMemo;
+    DTP_item_registration_date: TDateTimePicker;
+    Label22: TLabel;
+    Label23: TLabel;
+    Label24: TLabel;
+    Label25: TLabel;
+    Label26: TLabel;
+    Label27: TLabel;
+    DBLCB_mmx_contact_type: TDBLookupComboBox;
+    Edit_ItemAdress: TEdit;
+    DBLCB_ItemCity: TDBLookupComboBox;
+    Edit_ItemState: TEdit;
+    Edit_ItemZip: TEdit;
+    BtnOk: TButton;
+    DBLCB_ItemCountry: TDBLookupComboBox;
+    Label28: TLabel;
+    DBLCB_mmx_tofunds: TDBLookupComboBox;
+    Memo_tofundsComment: TMemo;
+    Label29: TLabel;
+    Label30: TLabel;
+    Label31: TLabel;
+    Label32: TLabel;
+    Label33: TLabel;
+    Label34: TLabel;
+    Label35: TLabel;
+    Label36: TLabel;
+    Label37: TLabel;
+    Label38: TLabel;
+    BtnCancel: TButton;
+    Edit1: TEdit;
+    Label39: TLabel;
+    Label40: TLabel;
+    Label41: TLabel;
+    Label42: TLabel;
+    Edit_estimated_value: TCurrencyEdit;
+    Edit_disposed_value: TCurrencyEdit;
+    procedure FormShow(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure SaveTransInfo;
+    procedure BtnOkClick(Sender: TObject);
+    procedure BtnCancelClick(Sender: TObject);
+    procedure ClearAmmounts;
+    procedure ShowTransInfo;
+    procedure UpdateTransInfo;
+    procedure Edit_disposed_valueKeyPress(Sender: TObject; var Key: Char);
+    procedure Edit_estimated_valueKeyPress(Sender: TObject; var Key: Char);
+   // function check_fields():boolean;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    p_reportcode, p_Reason,  p_transmode_comment, p_fromfunds_code,
+      p_fromfundsComment,p_tofunds_code,p_tofundsComment, p_contact_type,
+      p_ItemAdress,p_ItemCountry,p_ItemState, p_ItemZip, p_transaction_item_type,
+      p_ItemMake, p_ItemDesc, p_previously_registered_to, p_presently_registered_to,
+      p_TRANS_ITEM_STATUS, p_status_comments, p_item_size_uom,
+      p_registration_number,p_Identification_number, p_ItemComments,p_ItemCity: String;
+      p_estimated_value, p_item_size, p_disposed_value,p_transmode_code,v_trID: Real;
+      p_transaction_id:Integer;
+      p_item_registration_date: TdateTime;
+      isedit:Boolean;
+  end;
+
+var
+  TransInfo: TTransInfo;
+  isOk:Boolean;
+procedure InitPlugin(s: string); export;
+
+implementation
+uses DMTransInfo;
+{$R *.dfm}
+
+procedure InitPlugin(s: string); export;
+begin
+  if s = 'TransInfoImpl' then
+    TransInfo.Showmodal;
+end;
+
+exports
+  InitPlugin;
+
+procedure TTransInfo.BtnCancelClick(Sender: TObject);
+begin
+clearAmmounts;
+TransInfo.Close;
+end;
+
+procedure TTransInfo.BtnOkClick(Sender: TObject);
+begin
+if isEdit=True then
+begin
+UpdateTransInfo;
+  if isOK then
+  begin
+  ClearAmmounts;
+  TransInfo.Close;
+  end;
+end
+else
+begin
+SaveTransInfo;
+  if isOK then
+  begin
+  ClearAmmounts;
+  TransInfo.Close;
+  end;
+end;
+end;
+
+procedure TTransInfo.Edit_disposed_valueKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+if not (key in ['0'..'9',#46,#8]) then key:=#0;
+end;
+
+procedure TTransInfo.Edit_estimated_valueKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+if not (key in ['0'..'9',#46,#8]) then key:=#0;
+end;
+
+procedure TTransInfo.FormCreate(Sender: TObject);
+begin
+  DM := TDm.Create(self);
+end;
+
+procedure TTransInfo.FormShow(Sender: TObject);
+begin
+  with DM do
+  begin
+    // ODS_mmx_account_status.Open;
+    // ODS_mmx_account_type.Open;
+    // ODS_mmx_communication_type.Open;
+    ODS_mmx_transaction_item_type.Open;
+    ODS_mmx_reportcode.Open;
+    ODS_mmx_transmode.Open;
+    ODS_mmx_contact_type.Open;
+    ODS_mmx_fromfunds.Open;
+    ODS_mmx_tofunds.Open;
+    ODS_MMX_TRANS_ITEM_STATUS.Open;
+    ODS_Countries.Open;
+    ODS_Cityes.Open;
+  end;
+  if isEdit=True then
+  ShowTransInfo
+  else
+  ClearAmmounts;
+end;
+ procedure TTransInfo.ClearAmmounts;
+ begin
+   DBLCB_mmx_reportcode.Keyvalue:=null;
+   Reason_Memo.Clear;
+   DBLCB_mmx_transmode.KeyValue:=null;
+   Memo_transmode_comment.Clear;
+   DBLCB_mmx_fromfunds.KeyValue:=null;
+   Memo_fromfundsComment.Clear;
+   DBLCB_mmx_tofunds.KeyValue:=null;
+   Memo_tofundsComment.Clear;
+   DBLCB_mmx_contact_type.KeyValue:=Null;
+   Edit_ItemAdress.Clear;
+   DBLCB_ItemCountry.KeyValue:=null;
+   DBLCB_ItemCity.KeyValue:=null;
+   Edit_ItemState.Clear;
+   Edit_ItemZip.Clear;
+   DBLCB_mmx_transaction_item_type.KeyValue:=null;
+   Edit_ItemMake.Clear;
+   Memo_ItemDesc.Clear;
+   Edit_previously_registered_to.Clear;
+   Edit_presently_registered_to.Clear;
+   Edit_estimated_value.Value:=0;
+   DBLCB_MMX_TRANS_ITEM_STATUS.KeyValue:=null;
+   Memo_status_comments.Clear;
+   Edit_disposed_value.Value:=0;
+   Edit_item_size.Text:='0';
+   Edit_item_size_uom.Clear;
+   DTP_item_registration_date.DateTime:=date;
+   Edit_registration_number.Clear;
+   Edit_Identification_number.Clear;
+   Memo_ItemComments.Clear;
+ end;
+
+ procedure  TTransInfo.ShowTransInfo;
+ begin
+   with DM.ODS_TransInfo do
+   begin
+   Close;
+   SetVariable('v_TransID',v_trID);
+   Open;
+
+  {transid,submission_code, entity_reference, fiu_ref_number}
+
+   DBLCB_mmx_reportcode.Keyvalue:=FieldByName('report_code').AsString;
+   Reason_Memo.Text:=FieldByName('reason').AsString;
+   DBLCB_mmx_transmode.KeyValue:=FieldByName('transmode_code').asString;
+   Memo_transmode_comment.Text:=FieldByName('transmode_comment').asString;
+   DBLCB_mmx_fromfunds.KeyValue:=FieldByName('from_funds_code').asString;
+   Memo_fromfundsComment.Text:=FieldByName('from_funds_comment').asString;
+   DBLCB_mmx_tofunds.KeyValue:=FieldByName('to_funds_code').asString;
+   Memo_tofundsComment.Text:=FieldByName('to_funds_comment').asString;
+   DBLCB_mmx_contact_type.KeyValue:=FieldByName('contact_type').asString;
+   Edit_ItemAdress.Text:=FieldByName('itemadress').asString;
+   DBLCB_ItemCountry.KeyValue:=FieldByName('itemcountry').asString;
+   DBLCB_ItemCity.KeyValue:=FieldByName('itemcity').asString;
+   Edit_ItemState.Text:=FieldByName('itemstate').asString;
+   Edit_ItemZip.Text:=FieldByName('itemzip').asString;
+   DBLCB_mmx_transaction_item_type.KeyValue:=FieldByName('item_type').asString;
+   Edit_ItemMake.Text:=FieldByName('item_make').asString;
+   Memo_ItemDesc.Text:=FieldByName('description').asString;
+   Edit_previously_registered_to.Text:=FieldByName('previously_registered_to').asString;
+   Edit_presently_registered_to.Text:=FieldByName('presently_registered_to').asString;
+   Edit_estimated_value.Value:=FieldByName('estimated_value').asFloat;
+   DBLCB_MMX_TRANS_ITEM_STATUS.KeyValue:=FieldByName('status_code').asString;
+   Memo_status_comments.Text:=FieldByName('status_comments').asString;
+   Edit_disposed_value.Value:=FieldByName('disposed_value').asFloat;
+   Edit_item_size.Text:=FieldByName('item_size').asString;
+   Edit_item_size_uom.Text:=FieldByName('item_size_uom').asString;
+   DTP_item_registration_date.DateTime:=FieldByName('item_registration_date').asDateTime;
+   Edit_registration_number.Text:=FieldByName('item_registration_number').asString;
+   Edit_Identification_number.Text:=FieldByName('item_identification_number').asString;
+   Memo_ItemComments.Text:=FieldByName('item_comments').asString;
+   end;
+ end;
+
+ procedure TTransInfo.SaveTransInfo;
+ begin
+   isOk:=False;
+  if not (DBLCB_mmx_reportcode.KeyValue = null) then
+    p_reportcode := DBLCB_mmx_reportcode.KeyValue
+   else
+  begin
+    showmessage('Məlumatın növü daxil edilməlidir!');
+    Exit;
+   // p_reportcode := '';
+  end;
+
+  if DM.ODS_mmx_reportcodeNAME.Text='STR' then
+  if trim(Reason_Memo.Text) <> '' then
+  p_Reason := Reason_Memo.Text
+  else
+  begin
+  showmessage('Məlumatın göndərilməsi üçün səbəbin nə olduğunu daxil edilməlidir!');
+  Exit;
+  end;
+
+  if not (DBLCB_mmx_transmode.KeyValue = null) then
+    p_transmode_code := DBLCB_mmx_transmode.KeyValue
+  else
+  begin
+    showmessage('Əməliyyatın növü daxil edilməlidir!');
+    Exit;
+   //p_transmode_code := null;
+  end;
+
+  if DM.ODS_mmx_transmodeNAME.AsInteger=9999 then
+   if trim(Memo_transmode_comment.Text) <> '' then
+   p_transmode_comment := Memo_transmode_comment.Text
+  else
+  begin
+  showmessage('Əməliyyatın növünün izahı daxil edilməlidir!');
+  Exit;
+  end;
+
+  if not (DBLCB_mmx_fromfunds.KeyValue = null) then
+    p_fromfunds_code := DBLCB_mmx_fromfunds.KeyValue
+  else
+  begin
+    showmessage('Əməliyyatın predmeti olan vəsaitlərin növü daxil edilməlidir!');
+    Exit;
+//    p_fromfunds_code := '';
+  end;
+
+   if DM.ODS_mmx_fromfundsSYMBOL.Text='O' then
+  if trim(Memo_fromfundsComment.Text) <> '' then
+  p_fromfundsComment := Memo_fromfundsComment.Text
+  else
+  begin
+  showmessage('Vəsaitin növünün izahı daxil edilməlidir!');
+  Exit;
+  end;
+
+   if not (DBLCB_mmx_tofunds.KeyValue = null) then
+    p_tofunds_code := DBLCB_mmx_tofunds.KeyValue
+  else
+   begin
+    showmessage('Əməliyyatın predmeti olan vəsaitlərin növü daxil edilməlidir!');
+    Exit;
+//  p_tofunds_code := '';
+   end;
+
+
+  if DM.ODS_mmx_tofundsSYMBOL.Text='O' then
+    if trim(Memo_tofundsComment.Text) <> '' then
+    p_tofundsComment := Memo_tofundsComment.Text
+    else
+    begin
+    showmessage('Vəsaitin növünün izahı daxil edilməlidir!');
+    Exit;
+    end;
+
+  if not (DBLCB_mmx_contact_type.KeyValue = null) then
+    p_contact_type := DBLCB_mmx_contact_type.KeyValue
+  else
+   begin
+    showmessage('Əşyanın yerləşdiyi adress tipi daxil edilməlidir!');
+    Exit;
+//  p_contact_type := '';
+   end;
+
+  p_ItemAdress := Edit_ItemAdress.Text;
+
+   if not (DBLCB_ItemCountry.KeyValue = null) then
+    p_ItemCountry := DBLCB_ItemCountry.KeyValue
+  else
+  begin
+    showmessage('Ölkə daxil edilməlidir!');
+    Exit;
+//  p_ItemCountry := '';
+   end;
+
+   {  if not (DBLCB_ItemCity.KeyValue = null) then
+    p_ItemCity := DBLCB_ItemCity.KeyValue
+  else
+    p_ItemCity := -1;  }
+    p_ItemCity:=DM.ODS_Cityes.FieldByName('city_name').AsString;
+
+  p_ItemState := Edit_ItemState.Text;
+  p_ItemZip := Edit_ItemZip.Text;
+
+   if not (DBLCB_mmx_transaction_item_type.KeyValue = null) then
+    p_transaction_item_type := DBLCB_mmx_transaction_item_type.KeyValue
+  else
+  begin
+    showmessage('Əşyanın növü daxil edilməlidir!');
+    Exit;
+//      p_transaction_item_type := '';
+   end;
+
+  p_ItemMake := Edit_ItemMake.Text;
+  p_ItemDesc := Memo_ItemDesc.Text;
+  p_previously_registered_to := Edit_previously_registered_to.Text;
+  p_presently_registered_to := Edit_presently_registered_to.Text;
+
+  p_estimated_value := Edit_estimated_value.Value;
+
+   if not (DBLCB_MMX_TRANS_ITEM_STATUS.KeyValue = null) then
+    p_TRANS_ITEM_STATUS := DBLCB_MMX_TRANS_ITEM_STATUS.KeyValue
+  else
+  begin
+    showmessage('Əşyanın statusu daxil edilməlidir!');
+    Exit;
+//    p_TRANS_ITEM_STATUS := '';
+  end;
+
+  p_status_comments := Memo_status_comments.Text;
+  p_disposed_value := Edit_disposed_value.Value;
+  p_item_size := strtofloat(Edit_item_size.Text);
+  p_item_size_uom := Edit_item_size_uom.Text;
+  p_item_registration_date := DTP_item_registration_date.Date;
+  p_registration_number := Edit_registration_number.Text;
+  p_Identification_number := Edit_Identification_number.Text;
+  p_ItemComments := Memo_ItemComments.Text;
+  p_transaction_id:=-1;
+  isOk:=True;
+ end;
+
+ procedure TTransInfo.UpdateTransInfo;
+ begin
+ with DM.ODS_TransInfo do
+   begin
+   Close;
+   SetVariable('v_TransID',v_trID);
+   Open;
+   Edit;
+  {transid,submission_code, entity_reference, fiu_ref_number}
+
+   FieldByName('report_code').AsString:=DBLCB_mmx_reportcode.Keyvalue;
+   FieldByName('reason').AsString:=Reason_Memo.Text;
+   FieldByName('transmode_code').asString:=DBLCB_mmx_transmode.KeyValue;
+   FieldByName('transmode_comment').asString:=Memo_transmode_comment.Text;
+   FieldByName('from_funds_code').asString:=DBLCB_mmx_fromfunds.KeyValue;
+   FieldByName('from_funds_comment').asString:=Memo_fromfundsComment.Text;
+   FieldByName('to_funds_code').asString:=DBLCB_mmx_tofunds.KeyValue;
+   FieldByName('to_funds_comment').asString:=Memo_tofundsComment.Text;
+   FieldByName('contact_type').asString:=DBLCB_mmx_contact_type.KeyValue;
+   FieldByName('itemadress').asString:=Edit_ItemAdress.Text;
+   FieldByName('itemcountry').asString:=DBLCB_ItemCountry.KeyValue;
+   FieldByName('itemcity').asString:=DBLCB_ItemCity.KeyValue;
+   FieldByName('itemstate').asString:=Edit_ItemState.Text;
+   FieldByName('itemzip').asString:=Edit_ItemZip.Text;
+   FieldByName('item_type').asString:=DBLCB_mmx_transaction_item_type.KeyValue;
+   FieldByName('item_make').asString:=Edit_ItemMake.Text;
+   FieldByName('description').asString:=Memo_ItemDesc.Text;
+   FieldByName('previously_registered_to').asString:=Edit_previously_registered_to.Text;
+   FieldByName('presently_registered_to').asString:=Edit_presently_registered_to.Text;
+   FieldByName('estimated_value').asFloat:=Edit_estimated_value.Value;
+   FieldByName('status_code').asString:=DBLCB_MMX_TRANS_ITEM_STATUS.KeyValue;
+   FieldByName('status_comments').asString:=Memo_status_comments.Text;
+   FieldByName('disposed_value').asFloat:=Edit_disposed_value.Value;
+   FieldByName('item_size').asString:=Edit_item_size.Text;
+   FieldByName('item_size_uom').asString:=Edit_item_size_uom.Text;
+   FieldByName('item_registration_date').asDateTime:=DTP_item_registration_date.DateTime;
+   FieldByName('item_registration_number').asString:=Edit_registration_number.Text;
+   FieldByName('item_identification_number').asString:=Edit_Identification_number.Text;
+   FieldByName('item_comments').asString:=Memo_ItemComments.Text;
+   Post;
+   end;
+  end;
+
+initialization
+
+TransInfo := TTransInfo.Create(commonapplication);
+
+end.

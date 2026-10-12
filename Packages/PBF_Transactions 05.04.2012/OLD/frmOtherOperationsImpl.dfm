@@ -1,0 +1,118 @@
+object frmOtherOperations: TfrmOtherOperations
+  Left = 468
+  Top = 220
+  BorderIcons = [biSystemMenu]
+  BorderStyle = bsDialog
+  Caption = 'frmOtherOperations'
+  ClientHeight = 125
+  ClientWidth = 215
+  Color = clBtnFace
+  Font.Charset = RUSSIAN_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poScreenCenter
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Label1: TLabel
+    Left = 4
+    Top = 41
+    Width = 63
+    Height = 13
+    Caption = 'Юдяниш нювц:'
+  end
+  object Label2: TLabel
+    Left = 4
+    Top = 67
+    Width = 38
+    Height = 13
+    Caption = 'Мябляь:'
+  end
+  object Label4: TLabel
+    Left = 69
+    Top = 8
+    Width = 23
+    Height = 13
+    Caption = 'Тарих'
+  end
+  object ComboBox1: TComboBox
+    Left = 67
+    Top = 38
+    Width = 145
+    Height = 21
+    Style = csDropDownList
+    ItemHeight = 13
+    TabOrder = 0
+    OnChange = ComboBox1Change
+    Items.Strings = (
+      'AZERCELL'
+      'BAKCELL'
+      'GAS'
+      'LIGHT'
+      'NAR'
+      'WATER')
+  end
+  object DBEditEh1: TDBEditEh
+    Left = 67
+    Top = 64
+    Width = 145
+    Height = 21
+    DataField = 'AMOUNT'
+    DataSource = dmpbf_transaction.PBFOperationsds
+    EditButtons = <>
+    TabOrder = 1
+    Visible = True
+  end
+  object BitBtn1: TBitBtn
+    Left = 48
+    Top = 92
+    Width = 75
+    Height = 25
+    Caption = 'Гябул'
+    TabOrder = 2
+    OnClick = BitBtn1Click
+  end
+  object BitBtn2: TBitBtn
+    Left = 136
+    Top = 92
+    Width = 75
+    Height = 25
+    Caption = 'Имтина'
+    ModalResult = 2
+    TabOrder = 3
+    OnClick = BitBtn2Click
+  end
+  object DateTimePicker1: TDateTimePicker
+    Left = 101
+    Top = 6
+    Width = 106
+    Height = 21
+    CalAlignment = dtaLeft
+    Date = 40139.5161877894
+    Time = 40139.5161877894
+    DateFormat = dfShort
+    DateMode = dmComboBox
+    Enabled = False
+    Kind = dtkDate
+    ParseInput = False
+    TabOrder = 4
+  end
+  object OPTypes: TOracleDataSet
+    SQL.Strings = (
+      'SELECT  name'
+      '  FROM pbf_otheroptypes '
+      '  order by id ')
+    QBEDefinition.QBEFieldDefs = {0400000001000000040000004E414D45010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 24
+    Top = 8
+    object OPTypesNAME: TStringField
+      FieldName = 'NAME'
+      Size = 23
+    end
+  end
+end

@@ -1,0 +1,53 @@
+unit DMSec;
+
+interface
+
+uses
+  SysUtils, Classes, DB, OracleData, ImgList, Controls, Oracle;
+
+type
+  TDmexpired_sec = class(TDataModule)
+    OracleSession1: TOracleSession;
+    ImageList: TImageList;
+    dsravalute: TDataSource;
+    Avalute: TOracleDataSet;
+    Sysdat: TOracleDataSet;
+    SysdatTEK_DAT: TDateTimeField;
+    AvaluteVALUTE: TIntegerField;
+    AvaluteVAL_NAME: TWideStringField;
+    AvaluteVALU_NAME: TWideStringField;
+    AvaluteVALU_SHORT: TWideStringField;
+    dsexp_sec_ins: TOracleDataSet;
+    dsrexp_sec_ins: TDataSource;
+    dsexp_sec_insID: TFloatField;
+    dsexp_sec_insNAME: TWideStringField;
+    dsexp_sec_insACC_BAL: TWideStringField;
+    dsexp_sec_insISIN: TWideStringField;
+    dsexp_sec_insVAL_NAME: TWideStringField;
+    dsexp_sec_insOBTAIN_DATE: TDateTimeField;
+    dsexp_sec_insRETURN_DATE: TDateTimeField;
+    dsexp_sec_insNOMINAL_AMMOUNT: TFloatField;
+    dsexp_sec_insERASE_DATE: TDateTimeField;
+    OPCOMMON: TOraclePackage;
+    procedure DataModuleCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+
+    { Public declarations }
+  end;
+
+var
+
+  Dmexpired_sec: TDmexpired_sec;
+
+implementation
+
+{$R *.dfm}
+
+procedure TDmexpired_sec.DataModuleCreate(Sender: TObject);
+begin
+dsexp_sec_ins.Open;
+end;
+
+end.

@@ -1,0 +1,1731 @@
+﻿unit FrmMainLossImpl;
+                      //CheckBox
+                      //yuktesdiq
+                      //lossoperatin
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, XFSCtrls, ExtCtrls, Grids, XDBGrids, db,oracle,ComCtrls,StdVcl, DBCtrls,
+  Menus, ImgList;
+
+
+
+type
+  TFrmMainLoss = class(TForm)
+    XFPanel1: TXFPanel;
+    XFPanel2: TXFPanel;
+    XDBGrid1: TXDBGrid;
+    XFPanel3: TXFPanel;
+    XFGroupBox1: TXFGroupBox;
+    CheckBox7: TCheckBox;
+    CheckBox8: TCheckBox;
+    XFGroupBox2: TXFGroupBox;
+    XFRadioButton1: TXFRadioButton;
+    XFRadioButton2: TXFRadioButton;
+    XFButton5: TXFButton;
+    XFButton6: TXFButton;
+    DateTimePicker4: TDateTimePicker;
+    DateTimePicker8: TDateTimePicker;
+    XFPanel4: TXFPanel;
+    DateTimePicker1: TDateTimePicker;
+    CheckBox2: TCheckBox;
+    DateTimePicker5: TDateTimePicker;
+    CheckBox1: TCheckBox;
+    CheckBox3: TCheckBox;
+    DateTimePicker6: TDateTimePicker;
+    CheckBox4: TCheckBox;
+    DateTimePicker2: TDateTimePicker;
+    CheckBox5: TCheckBox;
+    DateTimePicker7: TDateTimePicker;
+    CheckBox6: TCheckBox;
+    DateTimePicker3: TDateTimePicker;
+    MainZerer: TPopupMenu;
+    Yeni1: TMenuItem;
+    Redakt1: TMenuItem;
+    Silmk1: TMenuItem;
+    N1: TMenuItem;
+    N2: TMenuItem;
+    dm1: TMenuItem;
+    N3: TMenuItem;
+    XFRadioButton3: TXFCheckBox;
+    N4: TMenuItem;
+    Yenilmk1: TMenuItem;
+    XFPanel5: TXFPanel;
+    XFButton8: TXFButton;
+    XFButton7: TXFButton;
+    XFButton3: TXFButton;
+    XFButton4: TXFButton;
+    XFButton2: TXFButton;
+    XFGroupBox3: TXFGroupBox;
+    XFButton1: TXFButton;
+    ComboBox1: TComboBox;
+    XFButton9: TXFButton;
+    XFButton10: TXFButton;
+    ImageList2: TImageList;
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormCreate(Sender: TObject);
+    procedure XFButton2Click(Sender: TObject);
+    procedure XFButton1Click(Sender: TObject);
+    procedure XFButton3Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure XFButton4Click(Sender: TObject);
+    procedure XFButton5Click(Sender: TObject);
+    procedure XFButton6Click(Sender: TObject);
+    procedure XFRadioButton2Click(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure CheckBox8Click(Sender: TObject);
+    procedure XFButton7Click(Sender: TObject);
+    procedure Yenilmk1Click(Sender: TObject);
+    procedure XFButton8Click(Sender: TObject);
+    procedure XFButton9Click(Sender: TObject);
+    procedure XFButton10Click(Sender: TObject);
+
+  private
+    { Private declarations }
+
+  public
+    { Public declarations }
+            ptype,op_type,frmname:String;
+            dep_id:integer;
+            Forma4,Qarsi_teref_qiym_cavab,Yoxlama,OK_verilib,
+Bankin_cavabi,Qusur_Akti,Muraciet,Tesdiq,status,status_r:integer;
+
+Forma4dat,Qarsi_teref_qiym_cavabdat,Yoxlamadat,OK_verilibdat,
+Bankin_cavabidat,Qusur_Aktidat,Muracietdat,Tesdiqdat:Tdate;
+pteyinat :string;
+           // procedure status(Sender: TObject);
+
+
+  end;
+
+var
+  FrmMainLoss: TFrmMainLoss;
+
+implementation
+
+ uses ComObj,CommanParametrs,sboapiDataModuleImpl,SBTranslateProc,
+  DmLossImpl, FrmAddLossImpl, FrmotherImpl, FrmCargo_claimimpl, frmMedlossImpl,
+  FrmAllLossImpl, FrmTravelImpl, FrmPropertyImpl,frmstatusimpl;
+
+{$R *.dfm}
+   procedure InitPlugin(s:string);export;
+begin
+
+
+//showmessage(s);
+   if s='' then
+   begin
+   FrmMainLoss.ShowModal;
+   end;
+   if s='AllLost' then
+   begin
+   //FrmAllLoss:=TFrmAllLoss.Create(self);
+     FrmAllLoss.showmodal;
+   end;
+end;
+exports
+     InitPlugin;
+procedure TFrmMainLoss.CheckBox8Click(Sender: TObject);
+begin
+{if CheckBox8.Checked=false then
+ begin
+if (DmLoss.DSSysdat.FieldByName('tek_dat').AsDateTime>
+DmLoss.DSclaim_status.FieldByName('stage_tesdiq_dat').AsDateTime)
+and (DmLoss.DSclaim_status.FieldByName('stage_tesdiq').AsInteger=1) then
+begin
+CheckBox8.Checked:=true;
+  showmessage('Diqqət!Köhnə tarixdə təsdiq olunmuş zərər inkar edilə bilməz!');
+  exit;
+
+end;
+ end;    }
+
+{DateTimePicker4.DateTime:=DmLoss.DSSysdat.FieldByName('tek_dat').AsDateTime;
+DateTimePicker4.Enabled:=false;  }
+
+{if CheckBox8.Checked=true then
+begin
+  if DmLoss.DSclaim_status.FieldByName('stage_tesdiq').AsInteger=1 then
+  begin
+    XFButton6.Enabled:=false;
+  end
+  else
+   begin
+    XFButton6.Enabled:=true;
+  end;
+end
+else
+  if DmLoss.DSclaim_status.FieldByName('stage_tesdiq').AsInteger=1 then
+  begin
+    XFButton6.Enabled:=true;
+  end
+  else
+   begin
+    XFButton6.Enabled:=true;
+  end;    }
+
+end;
+
+procedure TFrmMainLoss.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+ComboBox1.Items.Clear;
+end;
+
+procedure TFrmMainLoss.FormCreate(Sender: TObject);
+begin
+
+//showmessage('Salam');
+DmLoss:=TDmLoss.create(self);
+
+FrmAllLoss:=TFrmAllLoss.Create(self);
+
+   DmLoss.DSALLMain.Open;
+   FilterStr1:=DmLoss.DSALLMain.sql.text;
+frmstatus:=Tfrmstatus.Create(self);
+FrmAddLoss:=TFrmAddLoss.create(self);
+Frmother:=TFrmother.create(self);
+FrmCargo_claim:=TFrmCargo_claim.create(self);
+frmMedloss:=TfrmMedloss.create(self);
+FrmTravel:=TFrmTravel.Create(self);
+FrmProperty:=TFrmProperty.Create(self);
+SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+contactid:=commoncid;
+//showmessage('Salam1');
+end;
+
+procedure TFrmMainLoss.FormDestroy(Sender: TObject);
+begin
+ComboBox1.Items.Clear;
+end;
+
+procedure TFrmMainLoss.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+if ord(key)=vk_escape then close;
+
+end;
+  procedure TFrmMainLoss.FormShow(Sender: TObject);
+begin
+status_r:=0;
+ FrmCargo_claim.yuktesdiq:=0;
+//FrmMainLoss.ComboBox1.Items.AddStrings('Kasko');
+//showmessage(inttostr(contactid));
+
+
+
+     DmLoss.DSmesuli.Close;
+     DmLoss.DSmesuli.SetVariable('pcid',commoncid);
+     DmLoss.DSmesuli.Open;
+
+     DmLoss.DSFqeza.Close;
+     DmLoss.DSFqeza.SetVariable('pcid',commoncid);
+     DmLoss.DSFqeza.Open;
+
+     DmLoss.ODSContracts.Close;
+     DmLoss.ODSContracts.SetVariable('cid',commoncid);
+     DmLoss.ODSContracts.Open;
+
+   contractstatus1:=DmLoss.ODSContracts.FieldByName('state').AsInteger;
+               //burdan
+
+if contractstatus1=6 then
+begin
+  XFButton5.Enabled:=true;
+  XFButton6.Enabled:=true;
+  XFButton4.Enabled:=true;
+  XFButton1.Enabled:=true;
+end
+else
+begin
+  XFButton5.Enabled:=false;
+  XFButton6.Enabled:=false;
+  XFButton4.Enabled:=false;
+  XFButton1.Enabled:=false;
+end;
+                 //bura
+     //if True then
+
+
+ if DmLoss.ODSContracts.FieldByName('type_id').AsFloat=4 then
+ begin
+  FrmMainLoss.ComboBox1.Items.Clear;
+
+if DmLoss.ODSContracts.FieldByName('chkasko').AsFloat<>0 then
+begin
+FrmMainLoss.ComboBox1.Items.Add('Kasko');
+end;
+{ if (DmLoss.DSFqeza.FieldByName('INS_PREMIUM').AsFloat<>0)
+ or (DmLoss.DSFqeza.FieldByName('accident_polisnum').AsString<>'')then  }
+
+ if DmLoss.ODSContracts.FieldByName('chfq').AsFloat<>0 then
+begin
+FrmMainLoss.ComboBox1.Items.Add('Fərdi qəza');
+end;
+{ if (DmLoss.DSmesuli.FieldByName('RESP_PREMIUM').AsFloat<>0)
+ or (DmLoss.DSmesuli.FieldByName('resp_pilisnum').AsString<>'') then     }
+if DmLoss.ODSContracts.FieldByName('chm').AsFloat<>0 then
+begin
+FrmMainLoss.ComboBox1.Items.Add('Məsuliyyət');
+end;
+end;
+
+
+if DmLoss.ODSContracts.FieldByName('type_id').AsFloat=1 then
+begin
+ FrmMainLoss.ComboBox1.Items.Clear;
+ FrmMainLoss.ComboBox1.Items.Add('Fərdi qəza');
+end;
+
+if DmLoss.ODSContracts.FieldByName('type_id').AsFloat=13 then
+begin
+ FrmMainLoss.ComboBox1.Items.Clear;
+FrmMainLoss.ComboBox1.Items.Add('Məsuliyyət');
+end;
+
+if DmLoss.ODSContracts.FieldByName('type_id').AsFloat=8 then
+begin
+ FrmMainLoss.ComboBox1.Items.Clear;
+  FrmMainLoss.ComboBox1.Items.Add('Yük');
+end;
+
+if DmLoss.ODSContracts.FieldByName('type_id').AsFloat=2 then
+begin
+ FrmMainLoss.ComboBox1.Items.Clear;
+  FrmMainLoss.ComboBox1.Items.Add('Tibbi');
+end;
+
+if DmLoss.ODSContracts.FieldByName('type_id').AsFloat=21 then
+begin
+ FrmMainLoss.ComboBox1.Items.Clear;
+  FrmMainLoss.ComboBox1.Items.Add('Səyahət');
+end;
+
+if DmLoss.ODSContracts.FieldByName('type_id').AsFloat=3 then
+begin
+ FrmMainLoss.ComboBox1.Items.Clear;
+  FrmMainLoss.ComboBox1.Items.Add('Əmlak');
+end;
+
+
+  FrmMainLoss.ComboBox1.ItemIndex:=0;
+    //showmessage(inttostr(commoncid));
+    //showmessage(inttostr(commoncid));
+
+DmLoss.Dsmain.Close;
+DmLoss.Dsmain.SetVariable('p_cid',commoncid);
+DmLoss.Dsmain.Open;
+
+DmLoss.DSMaincount.Close;
+DmLoss.DSMaincount.SetVariable('p_cid',commoncid);
+DmLoss.DSMaincount.Open;
+
+DmLoss.DScontr_type.close;
+DmLoss.DScontr_type.SetVariable('pid',commoncid);
+DmLoss.DScontr_type.OPEN;
+
+ DmLoss.DSclaim_status.Close;
+ DmLoss.DSclaim_status.SetVariable('pdep_id',XDBGrid1.DataSource.DataSet.FieldByName('ID').AsInteger);
+ DmLoss.DSclaim_status.Open;
+
+
+  {//burdan
+ if DmLoss.DSclaim_status.FieldByName('status').AsInteger=0 then
+ begin
+   XFRadioButton1.Checked:=true;
+        XFGroupBox2.Color:=clGray;
+ end;
+
+  if DmLoss.DSclaim_status.FieldByName('status').AsInteger=1 then
+ begin
+   XFRadioButton2.Checked:=true;
+   XFGroupBox2.Color:=clred;
+ end;
+
+  if DmLoss.DSclaim_status.FieldByName('status').AsInteger=2 then
+ begin
+   //XFRadioButton3.Checked:=true;
+   XFRadioButton1.Checked:=true;
+   XFGroupBox2.Color:=clGray;
+ end;
+
+if DmLoss.DSMaincount.FieldByName('say').AsInteger=0 then
+begin
+ CheckBox1.Checked:=false;
+ CheckBox2.Checked:=false;
+ CheckBox3.Checked:=false;
+ CheckBox4.Checked:=false;
+ CheckBox5.Checked:=false;
+ CheckBox6.Checked:=false;
+ CheckBox7.Checked:=false;
+ CheckBox8.Checked:=false;
+
+ CheckBox1.color:=clRed;
+ CheckBox2.color:=clRed;
+ CheckBox3.color:=clRed;
+ CheckBox4.color:=clRed;
+ CheckBox5.color:=clRed;
+ CheckBox6.color:=clRed;
+ CheckBox7.color:=clRed;
+ CheckBox8.color:=clRed;
+
+end
+else
+begin
+
+if DmLoss.DSclaim_status.FieldByName('stage_forma4').AsInteger=0 then
+begin
+CheckBox1.Checked:=false;
+CheckBox1.Color:=clRed
+end
+else
+begin
+CheckBox1.Checked:=true;
+CheckBox1.Color:=clGray
+
+end;
+
+if DmLoss.DSclaim_status.FieldByName('stage_bankin_cavabi').AsInteger=0 then
+begin
+CheckBox2.Checked:=false;
+CheckBox2.Color:=clRed
+end
+else
+begin
+CheckBox2.Checked:=true;
+CheckBox2.Color:=clGray
+
+end;
+
+if DmLoss.DSclaim_status.FieldByName('stage_qarsi_teref_qiymcavab').AsInteger=0 then
+begin
+CheckBox3.Checked:=false;
+CheckBox3.Color:=clRed
+end
+else
+begin
+CheckBox3.Checked:=true;
+CheckBox3.Color:=clGray
+end;
+
+if DmLoss.DSclaim_status.FieldByName('stage_qusur_akti').AsInteger=0 then
+begin
+CheckBox4.Checked:=false;
+CheckBox4.Color:=clRed
+end
+else
+begin
+CheckBox4.Checked:=true;
+CheckBox4.Color:=clGray
+end;
+if DmLoss.DSclaim_status.FieldByName('stage_yoxlama').AsInteger=0 then
+begin
+CheckBox5.Checked:=false;
+CheckBox5.Color:=clRed
+end
+else
+begin
+CheckBox5.Checked:=true;
+CheckBox5.Color:=clGray
+end;
+
+if DmLoss.DSclaim_status.FieldByName('stage_muraciet').AsInteger=0 then
+begin
+CheckBox6.Checked:=false;
+CheckBox6.Color:=clRed
+end
+else
+begin
+CheckBox6.Checked:=true;
+CheckBox6.Color:=clGray
+end;
+if DmLoss.DSclaim_status.FieldByName('stage_ok_verilib').AsInteger=0 then
+begin
+CheckBox7.Checked:=false ;
+CheckBox7.Color:=clRed
+end
+else
+begin
+CheckBox7.Checked:=true;
+CheckBox7.Color:=clGray
+end;
+
+if DmLoss.DSclaim_status.FieldByName('stage_tesdiq').AsInteger=0 then
+begin
+CheckBox8.Checked:=false;
+CheckBox8.Color:=clRed
+end
+else
+begin
+CheckBox8.Checked:=true;
+CheckBox8.Color:=clGray;
+//XFButton6.Enabled:=false;
+end;
+
+
+end;
+
+
+
+
+if DmLoss.DSclaim_status.FieldByName('stage_forma4_dat').AsString='' then
+   DateTimePicker5.DateTime:=DmLoss.DSSysdat.FieldByName('tek_dat').AsDateTime
+   else
+   DateTimePicker5.DateTime:=DmLoss.DSclaim_status.FieldByName('stage_forma4_dat').AsDateTime;
+
+     //showmessage(DmLoss.DSclaim_status.FieldByName('stage_bankin_cavabi_dat').AsString);
+
+   if DmLoss.DSclaim_status.FieldByName('stage_bankin_cavabi_dat').AsString='' then
+   DateTimePicker1.DateTime:=DmLoss.DSSysdat.FieldByName('tek_dat').AsDateTime
+   else
+   DateTimePicker1.DateTime:=DmLoss.DSclaim_status.FieldByName('stage_bankin_cavabi_dat').AsDateTime;
+
+   if DmLoss.DSclaim_status.FieldByName('stage_qarsi_teref_qcavab_dat').AsString='' then
+   DateTimePicker6.DateTime:=DmLoss.DSSysdat.FieldByName('tek_dat').AsDateTime
+   else
+   DateTimePicker6.DateTime:=DmLoss.DSclaim_status.FieldByName('stage_qarsi_teref_qcavab_dat').AsDateTime;
+
+
+   if DmLoss.DSclaim_status.FieldByName('stage_qusur_akti_dat').AsString='' then
+   DateTimePicker2.DateTime:=DmLoss.DSSysdat.FieldByName('tek_dat').AsDateTime
+   else
+   DateTimePicker2.DateTime:=DmLoss.DSclaim_status.FieldByName('stage_qusur_akti_dat').AsDateTime;
+
+
+   if DmLoss.DSclaim_status.FieldByName('stage_yoxlama_dat').AsString='' then
+   DateTimePicker7.DateTime:=DmLoss.DSSysdat.FieldByName('tek_dat').AsDateTime
+   else
+   DateTimePicker7.DateTime:=DmLoss.DSclaim_status.FieldByName('stage_yoxlama_dat').AsDateTime;
+
+   if DmLoss.DSclaim_status.FieldByName('stage_muraciet_dat').AsString='' then
+   DateTimePicker3.DateTime:=DmLoss.DSSysdat.FieldByName('tek_dat').AsDateTime
+   else
+   DateTimePicker3.DateTime:=DmLoss.DSclaim_status.FieldByName('stage_muraciet_dat').AsDateTime;
+
+   if DmLoss.DSclaim_status.FieldByName('stage_ok_verilib_dat').AsString='' then
+   DateTimePicker8.DateTime:=DmLoss.DSSysdat.FieldByName('tek_dat').AsDateTime
+   else
+   DateTimePicker8.DateTime:=DmLoss.DSclaim_status.FieldByName('stage_ok_verilib_dat').AsDateTime;
+
+   if DmLoss.DSclaim_status.FieldByName('stage_tesdiq_dat').AsString='' then
+   DateTimePicker4.DateTime:=DmLoss.DSSysdat.FieldByName('tek_dat').AsDateTime
+   else
+   DateTimePicker4.DateTime:=DmLoss.DSclaim_status.FieldByName('stage_tesdiq_dat').AsDateTime;
+       //bura     }
+end;
+
+procedure TFrmMainLoss.XFButton10Click(Sender: TObject);
+begin
+
+dmloss.DSclaim_status.Close;
+        dmloss.DSclaim_status.SetVariable('pdep_id',FrmMainLoss.XDBGrid1.DataSource.DataSet.FieldByName('ID').AsInteger);
+        dmloss.DSclaim_status.Open;
+
+          dmloss.ODSClaimDescription.Close;
+        dmloss.ODSClaimDescription.SetVariable('id',FrmMainLoss.XDBGrid1.DataSource.DataSet.FieldByName('ID').AsInteger);
+        dmloss.ODSClaimDescription.Open;
+
+
+    if dmloss. DSclaim_status.FieldByName('trid').AsInteger<>0 then
+           begin
+            DmLoss.DSPaymentLossReal.Close;
+            DmLoss.DSPaymentLossReal.SetVariable('dpid',FrmMainLoss.XDBGrid1.DataSource.DataSet.FieldByName('ID').AsInteger);
+            DmLoss.DSPaymentLossReal.open;
+
+            if DmLoss.DSPaymentLossReal.RecordCount<>0 then
+            begin
+              showmessage('Diqqət! Bu zərər tam ödənildiyindən statusunu dəyismək olmaz!!');
+              exit;
+            end
+            else
+            begin
+
+
+            if  DmLoss.OPCOMMON.CallIntegerFunction('cancelloss',[commoncid,FrmMainLoss.XDBGrid1.DataSource.DataSet.FieldByName('ID').AsInteger])=1 then
+             begin
+               showmessage('Zərər aid emeliyyatlar silindi!');
+               //lossoperatin :=0;
+               //lossstatus:=0;
+             end;
+             XDBGrid1.DataSource.DataSet.Refresh;
+
+
+
+             {with dmloss do begin
+             ODSClaimDescription.Edit;
+               ODSClaimDescription.FieldByName('CLAIM_NUM').AsString:='';
+               ODSClaimDescription.FieldByName('UTO_TRANSPORTATION_COSTS').Asfloat:=0;
+               ODSClaimDescription.FieldByName('EKSPERTIZA_AMOUNT').Asfloat:=0;
+               ODSClaimDescription.FieldByName('VALUE_NEW_SPARE_PARTS').Asfloat:=0;
+               ODSClaimDescription.FieldByName('FINAL_AMOUNT_LOSS').Asfloat:=0;
+               ODSClaimDescription.FieldByName('AUTO_ASSESS_COSTS').Asfloat:=0;
+               ODSClaimDescription.FieldByName('OTHER_COSTS').Asfloat:=0;
+               ODSClaimDescription.FieldByName('amortizasiya_ammount').Asfloat:=0;
+               ODSClaimDescription.FieldByName('FINAL_PAYMENT_AMOUNT_LOSS').Asfloat:=0;
+               ODSClaimDescription.FieldByName('AUTO_REAL_MARKET_VALUE').Asfloat:=0;
+               ODSClaimDescription.FieldByName('REMAINS_VALUE').Asfloat:=0;
+               ODSClaimDescription.FieldByName('BANK_ACCNO').AsString:='';
+               ODSClaimDescription.post;
+               DmLoss.Dsmain.RefreshRecord;
+
+
+
+            end;    }
+               end;
+
+            end;
+
+
+end;
+
+procedure TFrmMainLoss.XFButton1Click(Sender: TObject);
+begin
+if DmLoss.ODSContracts.FieldByName('state').AsInteger<>6 then
+begin
+showmessage('Diqqət!Yalnız Təsdiq olunmuş müqavilə üçün yeni zərər əməliyytı vermək olar!');
+    exit;
+end;
+
+lossstatus:=0;
+lossoperatin:=0;
+
+ptype:=ComboBox1.Text;
+op_type:='Insert';
+frmname:='FrmMainLoss';
+
+ if ComboBox1.Text='Kasko' then
+ begin
+  with DmLoss,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['ADDLOSSKASKO']);
+ end;
+
+     with DmLoss do
+    begin
+         DSclaim_status.close;
+         DSclaim_status.SetVariable('pdep_id',XDBGrid1.DataSource.DataSet.FieldByName('id').asinteger);
+         DSclaim_status.open;
+
+
+         ODSClaims.Close;
+         ODSClaims.SetVariable('id',ODSMotorkaskoId.value);
+         ODSClaims.SetVariable('p_desc_id',-1);
+         ODSClaims.Open;
+         //ODSClaims.Edit;
+
+         ODSClaimSal.Close;
+         ODSClaimSal.SetVariable('eid',ODSMotorkaskoId.value);
+         ODSClaimSal.SetVariable('p_desc_id',-1);
+         ODSClaimSal.Open;
+         //ODSClaimSal.Edit;
+
+        ODSClaimDescription.Close;
+         ODSClaimDescription.SetVariable('id',-1);
+         ODSClaimDescription.Open;
+         //ODSClaimDescription.insert;
+
+         //ODSMarks.Open;
+
+         dep_id:=-1;
+
+    end;
+
+
+ FrmAddLoss.ShowModal;
+ //FrmAddLoss.DBEdit1.Enabled:=true;
+
+ end;
+
+  if ComboBox1.Text='Fərdi qəza' then
+ begin
+
+   with DmLoss,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['ADDLOSSFQ']);
+ end;
+
+  Frmother.Edit1.Text:='Fərdi qəza';
+         DmLoss.ODSClaimDescription.Close;
+         DmLoss.ODSClaimDescription.SetVariable('id',-1);
+         DmLoss.ODSClaimDescription.Open;
+         DmLoss.ODSClaimDescription.insert;
+
+         DmLoss.DSother_Claim.Close;
+         DmLoss.DSother_Claim.SetVariable('pdep_id',-1);
+         DmLoss.DSother_Claim.Open;
+
+
+
+         dep_id:=-1;
+     Frmother.Caption:='Fərdi qəza(zərər)';
+     Frmother.DateTimePicker1.DateTime:=DmLoss.DSSysdat.FieldByName('tek_dat').AsDateTime;
+     Frmother.XFButton1.Enabled:=true;
+     Frmother.ShowModal;
+
+
+ end;
+
+   if ComboBox1.Text='Məsuliyyət' then
+ begin
+
+   with DmLoss,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['ADDLOSSMES']);
+ end;
+      Frmother.Edit1.Text:='Məsuliyyət';
+         DmLoss.ODSClaimDescription.Close;
+         DmLoss.ODSClaimDescription.SetVariable('id',-1);
+         DmLoss.ODSClaimDescription.Open;
+         DmLoss.ODSClaimDescription.insert;
+
+         DmLoss.DSother_Claim.Close;
+         DmLoss.DSother_Claim.SetVariable('pdep_id',-1);
+         DmLoss.DSother_Claim.Open;
+
+      Frmother.Caption:='Məsuliyyət(zərər)';
+      Frmother.DateTimePicker1.DateTime:=DmLoss.DSSysdat.FieldByName('tek_dat').AsDateTime;
+      Frmother.XFButton1.Enabled:=true;
+     Frmother.ShowModal;
+
+
+ end;
+
+ if ComboBox1.Text='Yük' then
+ begin
+
+   with DmLoss,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['ADDLOSSYUK']);
+ end;
+         DmLoss.ODSClaimDescription.Close;
+         DmLoss.ODSClaimDescription.SetVariable('id',-1);
+         DmLoss.ODSClaimDescription.Open;
+         DmLoss.ODSClaimDescription.insert;
+
+         DmLoss.DSClaimCargo.Close;
+         DmLoss.DSClaimCargo.SetVariable('pdepid',-1);
+         DmLoss.DSClaimCargo.Open;
+         DmLoss.DSClaimCargo.insert;
+
+         FrmCargo_claim.DateTimePicker1.DateTime:=DmLoss.DSSysdat.FieldByName('tek_dat').AsDateTime;
+         FrmCargo_claim.XFButton1.Enabled:=true;
+         FrmCargo_claim.ShowModal;
+
+ end;
+
+
+  if ComboBox1.Text='Tibbi' then
+ begin
+
+    with DmLoss,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['ADDLOSSTIBB']);
+ end;
+
+         DmLoss.ODSClaimDescription.Close;
+         DmLoss.ODSClaimDescription.SetVariable('id',-1);
+         DmLoss.ODSClaimDescription.Open;
+         DmLoss.ODSClaimDescription.insert;
+
+         DmLoss.DSclaimmed.Close;
+         DmLoss.DSclaimmed.SetVariable('pdepid',-1);
+         DmLoss.DSclaimmed.Open;
+         DmLoss.DSclaimmed.insert;
+
+         frmMedloss.DateTimePicker1.DateTime:=DmLoss.DSSysdat.FieldByName('tek_dat').AsDateTime;
+         {frmMedloss.DBEdit3.DataSource.DataSet.FieldByName('AMOUNT_MEDICAL_SERVICES').AsFloat:=0;
+         frmMedloss.DBEdit4.DataSource.DataSet.FieldByName('AMOUNT_MEDICINE_USED').AsFloat:=0;
+         frmMedloss.DBEdit5.DataSource.DataSet.FieldByName('AMOUNT_SERVICE_STOMOTALOJI').AsFloat:=0;
+         frmMedloss.DBEdit6.DataSource.DataSet.FieldByName('FINAL_AMOUNT_LOSS').AsFloat:=0;    }
+         frmMedloss.XFButton1.Enabled:=true;
+         frmMedloss.ShowModal;
+ end;
+
+
+  if ComboBox1.Text='Səyahət' then
+ begin
+    with DmLoss,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['ADDLOSSSEYAHET']);
+ end;
+         DmLoss.ODSClaimDescription.Close;
+         DmLoss.ODSClaimDescription.SetVariable('id',-1);
+         DmLoss.ODSClaimDescription.Open;
+         DmLoss.ODSClaimDescription.insert;
+         FrmTravel.DateTimePicker1.DateTime:=DmLoss.DSSysdat.FieldByName('tek_dat').AsDateTime;
+         FrmTravel.XFButton1.Enabled:=true;
+         FrmTravel.ShowModal;
+ end;
+
+   if ComboBox1.Text='Əmlak' then
+ begin
+    with DmLoss,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['ADDLOSSEMLAK']);
+ end;
+         DmLoss.ODSClaimDescription.Close;
+         DmLoss.ODSClaimDescription.SetVariable('id',-1);
+         DmLoss.ODSClaimDescription.Open;
+         DmLoss.ODSClaimDescription.insert;
+         FrmProperty.DateTimePicker1.DateTime:=DmLoss.DSSysdat.FieldByName('tek_dat').AsDateTime;
+         FrmProperty.XFButton1.Enabled:=true;
+         FrmProperty.ShowModal;
+ end;
+
+end;
+
+procedure TFrmMainLoss.XFButton2Click(Sender: TObject);
+begin
+
+close;
+end;
+
+procedure TFrmMainLoss.XFButton3Click(Sender: TObject);
+begin
+//lossoperatin:=0;
+//lossstatus:=1;
+frmloss:=0;
+op_type:='Edit';
+          DmLoss.DSclaim_status.close;
+          DmLoss.DSclaim_status.SetVariable('pdep_id',XDBGrid1.DataSource.DataSet.FieldByName('id').asinteger);
+          DmLoss.DSclaim_status.open;
+
+    // showmessage(XDBGrid1.DataSource.DataSet.FieldByName('id').AsString);
+     //showmessage(XDBGrid1.DataSource.DataSet.FieldByName('STAGE_TESDIQ').AsString);
+    // showmessage(DmLoss.DSclaim_status.FieldByName('stage_tesdiq').AsString);
+
+   //  showmessage(DmLoss.DSclaim_status.FieldByName('STAGE_TESDIQ').AsString);
+ if (DmLoss.DSclaim_status.FieldByName('STAGE_TESDIQ').AsInteger=1) or (status_r=1) then
+ begin
+    lossoperatin:=1;
+              end
+                    else
+               begin
+    lossoperatin:=0;
+ end;
+
+
+      status_r:=0;
+
+
+            {  if frmstatus.CheckBox8.Checked=true then
+              begin
+              lossoperatin:=1;
+              end
+                    else
+               begin
+               lossoperatin:=0;
+              end;
+                       }
+
+
+frmname:='FrmMainLoss';
+     with DmLoss do
+    begin
+
+          DSMaincount.Close;
+          DSMaincount.SetVariable('p_cid',commoncid);
+          DSMaincount.Open;
+
+          if DSMaincount.FieldByName('say').AsInteger=0 then
+            begin
+              showmessage('Heç bir məlumat seçlməyib!');
+              exit;
+            end;
+
+         ODSClaims.Close;
+         ODSClaims.SetVariable('id',ODSMotorkaskoId.value);
+         ODSClaims.SetVariable('p_desc_id',FrmMainLoss.XDBGrid1.DataSource.DataSet.FieldByName('id').AsInteger);
+         ODSClaims.Open;
+         ODSClaims.Edit;
+
+         ODSClaimSal.Close;
+         ODSClaimSal.SetVariable('eid',ODSMotorkaskoId.value);
+         ODSClaimSal.SetVariable('p_desc_id',FrmMainLoss.XDBGrid1.DataSource.DataSet.FieldByName('id').AsInteger);
+         ODSClaimSal.Open;
+         ODSClaimSal.Edit;
+
+
+         ODSClaimDescription.Close;
+         ODSClaimDescription.SetVariable('id',FrmMainLoss.XDBGrid1.DataSource.DataSet.FieldByName('id').AsInteger);
+         ODSClaimDescription.Open;
+         ODSClaimDescription.Edit;
+
+         DmLoss.DSclaim_status.Close;
+         DmLoss.DSclaim_status.SetVariable('pdep_id',XDBGrid1.DataSource.DataSet.FieldByName('ID').AsInteger);
+         DmLoss.DSclaim_status.Open;
+
+
+        // showmessage(ODSClaimDescription.FieldByName('MARK').AsString);
+        // showmessage(ODSClaimDescription.FieldByName('MODELID').AsString);
+            oDSMarks.Open;
+
+            ODSModels.Close;
+            ODSModels.SetVariable('pmark_id',ODSClaimDescription.FieldByName('MARKAID').AsInteger);
+            ODSModels.open;
+
+
+            FrmAddLoss.DBLookupComboBox2.ListFieldIndex:= ODSClaimDescription.FieldByName('MODELID').AsInteger;
+            FrmAddLoss.DBLookupComboBox2.KeyValue:= ODSClaimDescription.FieldByName('MODELID').AsInteger;
+           dep_id:=FrmMainLoss.XDBGrid1.DataSource.DataSet.FieldByName('id').AsInteger;
+
+    end;
+
+
+    if (DmLoss.DSclaim_status.FieldByName('STATUS').AsInteger=1) or (frmstatus.XFRadioButton2.Checked=true)  then
+
+          lossstatus:=1
+          else
+          lossstatus:=0;
+
+
+    if (DmLoss.ODSClaimDescription.FieldByName('c_type').AsInteger=4) and (DmLoss.ODSClaimDescription.FieldByName('type').AsInteger=4)then
+    begin
+     with DmLoss,sb_aca do
+   begin
+      CallProcedure('checkadvancedobjectaccess',['EDITLOSSKASKO']);
+   end;
+
+    if DmLoss.DSclaim_status.FieldByName('stage_tesdiq').AsInteger=1 then
+     FrmAddLoss.BitBtn1.Enabled:=false
+    else
+     FrmAddLoss.BitBtn1.Enabled:=true;
+
+    
+
+
+     FrmAddLoss.ShowModal;
+    end;
+
+    if (DmLoss.ODSClaimDescription.FieldByName('c_type').AsInteger=4) and ((DmLoss.ODSClaimDescription.FieldByName('type').AsInteger=13)or (DmLoss.ODSClaimDescription.FieldByName('type').AsInteger=1))then
+    begin
+
+ if  (DmLoss.ODSClaimDescription.FieldByName('type').AsInteger=13)then
+  begin
+
+  with DmLoss,sb_aca do
+   begin
+      CallProcedure('checkadvancedobjectaccess',['EDITLOSSMES']);
+   end;
+         DmLoss.DSother_Claim.Close;
+         DmLoss.DSother_Claim.SetVariable('pdep_id',FrmMainLoss.XDBGrid1.DataSource.DataSet.FieldByName('id').AsInteger);
+         DmLoss.DSother_Claim.Open;
+
+    Frmother.Edit1.Text:='Məsuliyyət';
+    Frmother.Caption:='Məsuliyyət(zərər)';
+
+     {  if DmLoss.ODSClaimDescription.FieldByName('subraqasiya').AsInteger=0 then
+     Frmother.XFCheckBox1.Checked:=false
+     else
+     Frmother.XFCheckBox1.Checked:=true;}
+
+    if DmLoss.DSclaim_status.FieldByName('stage_tesdiq').AsInteger=1 then
+     Frmother.XFButton1.Enabled:=false
+    else
+       Frmother.XFButton1.Enabled:=true;
+
+     Frmother.ShowModal;
+
+  end;
+  if (DmLoss.ODSClaimDescription.FieldByName('type').AsInteger=1) then
+  begin
+      with DmLoss,sb_aca do
+   begin
+      CallProcedure('checkadvancedobjectaccess',['EDITLOSSFQ']);
+   end;
+         DmLoss.DSother_Claim.Close;
+         DmLoss.DSother_Claim.SetVariable('pdep_id',FrmMainLoss.XDBGrid1.DataSource.DataSet.FieldByName('id').AsInteger);
+         DmLoss.DSother_Claim.Open;
+
+       Frmother.Edit1.Text:='Fərdi qəza';
+     Frmother.Caption:='Fərdi qəza(zərər)';
+
+       { if DmLoss.ODSClaimDescription.FieldByName('subraqasiya').AsInteger=0 then
+     Frmother.XFCheckBox1.Checked:=false
+     else
+     Frmother.XFCheckBox1.Checked:=true;  }
+
+     if DmLoss.DSclaim_status.FieldByName('stage_tesdiq').AsInteger=1 then
+     Frmother.XFButton1.Enabled:=false
+    else
+       Frmother.XFButton1.Enabled:=true;
+
+     Frmother.ShowModal;
+  end;
+  end;
+
+
+    if (DmLoss.ODSClaimDescription.FieldByName('type').AsInteger=13) and (DmLoss.ODSClaimDescription.FieldByName('c_type').AsInteger=13) then
+    begin
+    with DmLoss,sb_aca do
+   begin
+      CallProcedure('checkadvancedobjectaccess',['EDITLOSSMES']);
+   end;
+         DmLoss.DSother_Claim.Close;
+         DmLoss.DSother_Claim.SetVariable('pdep_id',FrmMainLoss.XDBGrid1.DataSource.DataSet.FieldByName('id').AsInteger);
+         DmLoss.DSother_Claim.Open;
+
+    Frmother.Edit1.Text:='Məsuliyyət';
+    Frmother.Caption:='Məsuliyyət(zərər)';
+
+      { if DmLoss.ODSClaimDescription.FieldByName('subraqasiya').AsInteger=0 then
+     Frmother.XFCheckBox1.Checked:=false
+     else
+     Frmother.XFCheckBox1.Checked:=true;   }
+
+    if DmLoss.DSclaim_status.FieldByName('stage_tesdiq').AsInteger=1 then
+     Frmother.XFButton1.Enabled:=false
+    else
+       Frmother.XFButton1.Enabled:=true;
+
+     Frmother.ShowModal;
+
+
+
+    end;
+
+
+  if (DmLoss.ODSClaimDescription.FieldByName('type').AsInteger=1) and (DmLoss.ODSClaimDescription.FieldByName('c_type').AsInteger=1) then
+  begin
+
+    with DmLoss,sb_aca do
+   begin
+      CallProcedure('checkadvancedobjectaccess',['EDITLOSSFQ']);
+   end;
+         DmLoss.DSother_Claim.Close;
+         DmLoss.DSother_Claim.SetVariable('pdep_id',FrmMainLoss.XDBGrid1.DataSource.DataSet.FieldByName('id').AsInteger);
+         DmLoss.DSother_Claim.Open;
+
+       Frmother.Edit1.Text:='Fərdi qəza';
+     Frmother.Caption:='Fərdi qəza(zərər)';
+
+
+  { if DmLoss.ODSClaimDescription.FieldByName('subraqasiya').AsInteger=0 then
+     Frmother.XFCheckBox1.Checked:=false
+     else
+     Frmother.XFCheckBox1.Checked:=true;   }
+
+     if DmLoss.DSclaim_status.FieldByName('stage_tesdiq').AsInteger=1 then
+     Frmother.XFButton1.Enabled:=false
+    else
+       Frmother.XFButton1.Enabled:=true;
+     Frmother.ShowModal;
+
+  end;
+
+
+     if (DmLoss.ODSClaimDescription.FieldByName('type').AsInteger=8) then
+  begin
+  with DmLoss,sb_aca do
+   begin
+      CallProcedure('checkadvancedobjectaccess',['EDITLOSSYUK']);
+   end;
+
+    with DmLoss do
+  begin
+  DSClaimCargo.Close;
+  DSClaimCargo.SetVariable('pdepid',ODSClaimDescription.FieldByName('id').AsInteger);
+  DSClaimCargo.Open;
+  DSClaimCargo.Edit;
+  end;
+
+  { if DmLoss.ODSClaimDescription.FieldByName('subraqasiya').AsInteger=0 then
+     FrmCargo_claim.XFCheckBox1.Checked:=false
+     else
+     FrmCargo_claim.XFCheckBox1.Checked:=true; }
+
+     if DmLoss.DSclaim_status.FieldByName('stage_tesdiq').AsInteger=1 then
+     FrmCargo_claim.XFButton1.Enabled:=false
+    else
+       FrmCargo_claim.XFButton1.Enabled:=true;
+      FrmCargo_claim.ShowModal;
+
+  end;
+
+       if (DmLoss.ODSClaimDescription.FieldByName('type').AsInteger=21) then
+  begin
+
+    with DmLoss,sb_aca do
+   begin
+      CallProcedure('checkadvancedobjectaccess',['EDITLOSSSEYAHET']);
+   end;
+
+   {if DmLoss.ODSClaimDescription.FieldByName('subraqasiya').AsInteger=0 then
+     FrmTravel.XFCheckBox1.Checked:=false
+     else
+     FrmTravel.XFCheckBox1.Checked:=true; }
+
+     if DmLoss.DSclaim_status.FieldByName('stage_tesdiq').AsInteger=1 then
+     FrmTravel.XFButton1.Enabled:=false
+    else
+       FrmTravel.XFButton1.Enabled:=true;
+      FrmTravel.ShowModal;
+
+  end;
+
+         if (DmLoss.ODSClaimDescription.FieldByName('type').AsInteger=3) then
+  begin
+      with DmLoss,sb_aca do
+   begin
+      CallProcedure('checkadvancedobjectaccess',['EDITLOSSEMLAK']);
+   end;
+
+ {  if DmLoss.ODSClaimDescription.FieldByName('subraqasiya').AsInteger=0 then
+     FrmProperty.XFCheckBox1.Checked:=false
+     else
+     FrmProperty.XFCheckBox1.Checked:=true;  }
+     if DmLoss.DSclaim_status.FieldByName('stage_tesdiq').AsInteger=1 then
+     FrmProperty.XFButton1.Enabled:=false
+    else
+       FrmProperty.XFButton1.Enabled:=true;
+      FrmProperty.ShowModal;
+
+  end;
+
+
+         if (DmLoss.ODSClaimDescription.FieldByName('type').AsInteger=2) then
+  begin
+        with DmLoss,sb_aca do
+   begin
+      CallProcedure('checkadvancedobjectaccess',['EDITLOSSTIBB']);
+   end;
+  with DmLoss do
+  begin
+  DSclaimmed.Close;
+  DSclaimmed.SetVariable('pdepid',ODSClaimDescription.FieldByName('id').AsInteger);
+  DSclaimmed.Open;
+  DSclaimmed.Edit;
+  end;
+   {  if DmLoss.ODSClaimDescription.FieldByName('subraqasiya').AsInteger=0 then
+     frmMedloss.XFCheckBox2.Checked:=false
+     else
+     frmMedloss.XFCheckBox2.Checked:=true;    }
+
+      if DmLoss.DSclaim_status.FieldByName('stage_tesdiq').AsInteger=1 then
+     frmMedloss.XFButton1.Enabled:=false
+    else
+       frmMedloss.XFButton1.Enabled:=true;
+
+      frmMedloss.ShowModal;
+
+  end;
+
+end;
+
+procedure TFrmMainLoss.XFButton4Click(Sender: TObject);
+begin
+
+if XDBGrid1.DataSource.DataSet.RecordCount=0 then
+begin
+  showmessage('Heç bir müqavilə seçilməyib!');
+  exit;
+end;
+with DmLoss,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['DELLLOSS']);
+ end;
+
+            DmLoss.DSPaymentLossReal.Close;
+            DmLoss.DSPaymentLossReal.SetVariable('dpid',XDBGrid1.DataSource.DataSet.FieldByName('ID').AsInteger);
+            DmLoss.DSPaymentLossReal.open;
+
+            if DmLoss.DSPaymentLossReal.RecordCount<>0 then
+            begin
+              showmessage('Diqqət! Bu zərər tam ödənildiyindən statusunu dəyismək olmaz!!');
+                 CheckBox8.Checked:=true;
+              exit;
+
+            end ;
+
+
+ DmLoss.DSLossBarderoSay.Close;
+ DmLoss.DSLossBarderoSay.SetVariable('pdep_id',XDBGrid1.DataSource.DataSet.FieldByName('id').AsInteger);
+ DmLoss.DSLossBarderoSay.open;
+
+ if  DmLoss.DSLossBarderoSay.FieldByName('say').AsInteger>0 then
+ begin
+ Showmessage('Diqqət! Bu müqavilə üçün zərər barderosu yığıldığı üçün zərəri silmək olmaz!');
+   exit;
+ end;
+
+
+  with DmLoss do
+begin
+
+if XDBGrid1.DataSource.DataSet.FieldByName('stage_tesdiq_dat').AsString<>'' then
+   begin
+   //showmessage(XDBGrid1.DataSource.DataSet.FieldByName('stage_tesdiq_dat').AsString);
+    //showmessage(DSSysdat.FieldByName('tek_dat').AsString);
+if  DSSysdat.FieldByName('tek_dat').AsDateTime>XDBGrid1.DataSource.DataSet.FieldByName('stage_tesdiq_dat').AsDateTime
+  then
+  begin
+    showmessage('Diqqət! Kohne tarixdə təsdiqlənmiş zərəri silmək olmaz!');
+    exit;
+  end;
+   end;
+end;
+
+
+with DmLoss,OPCOMMON do
+begin
+if MessageDlg('Seçilmiş Sığortanın zərərinin ləğv olunmasına əminsinizmi?!',mtConfirmation,
+ mbYesNoCancel, 0) = mrYes then
+ begin
+
+  CallProcedure('del_loss',[FrmMainLoss.XDBGrid1.DataSource.DataSet.FieldByName('id').AsInteger]);
+  FrmMainLoss.XDBGrid1.DataSource.DataSet.Refresh;
+end;
+end;
+end;
+
+                                                    //XFGroupBox2
+procedure TFrmMainLoss.XFButton5Click(Sender: TObject);
+
+begin
+{  //burdan
+if XFRadioButton2.Checked=true then
+begin
+
+with DmLoss,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['LOSSREFUSAL']);
+ end;
+
+end;
+
+
+if (XFRadioButton1.Checked=true) or (XFRadioButton3.Checked=true)then
+begin
+
+with DmLoss,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['LOSSRESEARCH']);
+ end;
+
+end;
+
+
+with DmLoss do
+    begin
+
+          if XDBGrid1.DataSource.DataSet.RecordCount=0 then
+            begin
+              showmessage('Heç bir məlumat seçlməyib!');
+              exit;
+            end;
+
+        if XFRadioButton1.Checked then
+        begin
+         XFRadioButton3.Checked:=false;
+        status:=0 ;
+        XFGroupBox2.Color:=clGray;
+        XFGroupBox1.Enabled:=true;
+        end;
+
+        if XFRadioButton2.Checked then
+        begin
+            XFRadioButton3.Checked:=false;
+            DmLoss.DSPaymentLossReal.Close;
+            DmLoss.DSPaymentLossReal.SetVariable('dpid',XDBGrid1.DataSource.DataSet.FieldByName('ID').AsInteger);
+            DmLoss.DSPaymentLossReal.open;
+            if DmLoss.DSPaymentLossReal.RecordCount<>0 then
+            begin
+              showmessage('Diqqət! Bu zərər tam ödənildiyindən statusunu dəyismək olmaz!!');
+              exit;
+            end;
+
+        status:=1;
+        lossstatus:=0;
+        end;
+        if XFRadioButton3.Checked=true then
+        begin
+        lossstatus:=2;
+        status:=2;
+        XFGroupBox2.Color:=clGray;
+        XFGroupBox1.Enabled:=true;
+        //XFRadioButton3.Color:=clGray;
+        //showmessage('odenis='+inttostr(status));
+        end;
+
+        DSclaim_status.Close;
+        DSclaim_status.SetVariable('pdep_id',XDBGrid1.DataSource.DataSet.FieldByName('ID').AsInteger);
+        DSclaim_status.Open;
+
+
+
+
+
+
+
+        if XFRadioButton2.Checked=true then
+        begin
+
+
+        if (DSclaim_status.FieldByName('stage_tesdiq').AsInteger=1)
+        and (DSclaim_status.FieldByName('stage_tesdiq_dat').AsDateTime<>DmLoss.DSSysdat.FieldByName('tek_dat').AsDateTime) then
+        begin
+          showmessage('Diqqət!Sistem tarixindən fərqli tarixdə təsdiqlənmiş zərəri imtina statusuna keçirmək olmaz !');
+          exit;
+        end; //bura    }
+
+            {CheckBox1.Checked:=false;
+            CheckBox2.Checked:=false;
+            CheckBox3.Checked:=false;
+            CheckBox4.Checked:=false;
+            CheckBox5.Checked:=false;
+            CheckBox6.Checked:=false;
+            CheckBox7.Checked:=false;}
+               // FrmMainLoss.CheckBox8.Checked:=false;
+                //FrmMainLoss.CheckBox8.Checked:=false;
+                //FrmMainLoss.XFGroupBox2.Color:=clred;
+            //FrmMainLoss.XFButton6Click(self);
+
+          { //burdan
+               FrmMainLoss.CheckBox8.Checked:=false;
+            FrmMainLoss.XFButton3Click(Sender);
+
+
+        end;
+        ///showmessage(inttostr(status));
+        if XFRadioButton2.Checked=false then
+           begin
+
+        DSclaim_status.RefreshRecord;
+        DSclaim_status.Edit;
+        DSclaim_status.FieldByName('STATUS').AsInteger:=status;
+        DSclaim_status.FieldByName('DEP_ID').AsInteger:=XDBGrid1.DataSource.DataSet.FieldByName('ID').AsInteger;
+
+        DSclaim_status.Post;
+
+
+           end;
+
+
+end;
+          //bura     }
+
+end;
+
+
+
+procedure TFrmMainLoss.XFButton6Click(Sender: TObject);
+ begin
+{    //burdan
+lossimtina:=0;
+losstesdiq:=0;
+with DmLoss,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['LOSSSTAGE']);
+ end;
+
+
+with DmLoss do
+    begin
+
+          //DSMaincount.Close;
+          //DSMaincount.SetVariable('p_cid',contactid);
+          //DSMaincount.Open;
+
+          if XDBGrid1.DataSource.DataSet.RecordCount=0 then
+            begin
+              showmessage('Heç bir məlumat seçlməyib!');
+              exit;
+
+            end;
+
+            if  (CheckBox8.Checked=false) then
+            begin
+            DmLoss.DSPaymentLossReal.Close;
+            DmLoss.DSPaymentLossReal.SetVariable('dpid',XDBGrid1.DataSource.DataSet.FieldByName('ID').AsInteger);
+            DmLoss.DSPaymentLossReal.open;
+
+            if DmLoss.DSPaymentLossReal.RecordCount<>0 then
+            begin
+              showmessage('Diqqət! Bu zərər tam ödənildiyindən statusunu dəyismək olmaz!!');
+                 CheckBox8.Checked:=true;
+              exit;
+
+            end
+            end;
+
+
+
+        DSclaim_status.Close;
+        DSclaim_status.SetVariable('pdep_id',XDBGrid1.DataSource.DataSet.FieldByName('ID').AsInteger);
+        DSclaim_status.Open;
+
+        ODSClaimDescription.Close;
+        ODSClaimDescription.SetVariable('id',XDBGrid1.DataSource.DataSet.FieldByName('ID').AsInteger);
+        ODSClaimDescription.Open;
+
+
+              if CheckBox1.Checked=true then
+              begin
+               CheckBox1.Color:=clGray;
+               Forma4:=1 ;
+               //Forma4dat:=DSSysdat.FieldByName('tek_dat').AsDateTime;
+               Forma4dat:=DateTimePicker5.DateTime;
+              end
+               else
+               begin
+                CheckBox1.Color:=clRed;
+                Forma4:=0;
+                Forma4dat:=strtodate('30.12.1899');
+               end;
+
+              if CheckBox2.Checked=true then
+                begin
+               CheckBox2.Color:=clGray;
+               Bankin_cavabi:=1 ;
+               //Bankin_cavabidat:=DSSysdat.FieldByName('tek_dat').AsDateTime;
+               Bankin_cavabidat:=DateTimePicker1.DateTime;
+               end
+               else
+               begin
+               CheckBox2.Color:=clRed;
+               Bankin_cavabi:=0;
+               Bankin_cavabidat:=strtodate('30.12.1899');
+               end;
+
+              if CheckBox3.Checked=true then
+              begin
+               CheckBox3.Color:=clGray;
+               Qarsi_teref_qiym_cavab:=1 ;
+               //Qarsi_teref_qiym_cavabdat:=DSSysdat.FieldByName('tek_dat').AsDateTime;
+               Qarsi_teref_qiym_cavabdat:=DateTimePicker6.DateTime;
+              end
+               else
+               begin
+               CheckBox3.Color:=clRed;
+               Qarsi_teref_qiym_cavab:=0;
+               Qarsi_teref_qiym_cavabdat:=strtodate('30.12.1899');
+               end;
+
+              if CheckBox4.Checked=true then
+              begin
+               CheckBox4.Color:=clGray;
+               Qusur_Akti:=1 ;
+               //Qusur_Aktidat:=DSSysdat.FieldByName('tek_dat').AsDateTime;
+               Qusur_Aktidat:=DateTimePicker2.DateTime;
+              end
+               else
+               begin
+               CheckBox4.Color:=clRed;
+               Qusur_Akti:=0;
+               Qusur_Aktidat:=strtodate('30.12.1899');
+               end;
+
+              if CheckBox5.Checked=true then
+              begin
+               CheckBox5.Color:=clGray;
+               Yoxlama:=1;
+               //Yoxlamadat:=DSSysdat.FieldByName('tek_dat').AsDateTime;
+               Yoxlamadat:=DateTimePicker7.DateTime;
+              end
+               else
+               begin
+               CheckBox5.Color:=clRed;
+               Yoxlama:=0;
+               Yoxlamadat:=strtodate('30.12.1899');
+               end;
+
+              if CheckBox6.Checked=true then
+              begin
+                 Muraciet:=1 ;
+                 CheckBox6.Color:=clGray;
+                 //Muracietdat:=DSSysdat.FieldByName('tek_dat').AsDateTime;
+                 Muracietdat:=DateTimePicker3.DateTime;
+              end
+                 else
+                 begin
+               Muraciet:=0;
+               CheckBox6.Color:=clRed;
+               Muracietdat:=strtodate('30.12.1899');
+              end;
+
+              if CheckBox7.Checked=true then
+                  begin
+                   OK_verilib:=1;
+                   CheckBox7.Color:=clGray ;
+                   //OK_verilibdat:=DSSysdat.FieldByName('tek_dat').AsDateTime;
+                   OK_verilibdat:=DateTimePicker8.DateTime;
+                  end
+               else
+               begin
+               OK_verilib:=0;
+               CheckBox7.Color:=clRed;
+                OK_verilibdat:=strtodate('30.12.1899');
+              end;    //bura
+                                }
+
+
+             { if CheckBox8.Checked=true then
+              begin
+
+               Tesdiq:=1;
+                CheckBox8.Color:=clGray;
+                //Tesdiqdat:=DSSysdat.FieldByName('tek_dat').AsDateTime;
+                Tesdiqdat:=DateTimePicker4.DateTime;
+                if CheckBox7.Checked=false then
+                begin
+                 showmessage('Diqqət! "OK verilib"  statusu seçilmədən "Təsdiq" statusu seçilə bilməz!');
+                 Tesdiq:=0;
+                 CheckBox8.Color:=clRed;
+                 Tesdiqdat:=strtodate('30.12.1899');
+                 CheckBox8.Checked:=false;
+                end;
+
+
+                if ODSClaimDescription.FieldByName('claim_status').AsInteger=1 then
+               begin
+                if (ODSClaimDescription.FieldByName('auto_real_market_value').AsString='') or
+                (ODSClaimDescription.FieldByName('remains_value').AsString='') or
+                (ODSClaimDescription.FieldByName('bank_accno').AsString='')  then
+                begin
+                  showmessage('Diqqət! Tam məvhalına uyğun məlumatlar tam yığılmadığindan təsdiqlənə bilməz!');
+                 Tesdiq:=0;
+                 CheckBox8.Color:=clRed;
+                 Tesdiqdat:=strtodate('30.12.1899');
+                 CheckBox8.Checked:=false;
+                 // exit;
+                end   ;
+               end;
+              end
+               else
+               begin
+               Tesdiq:=0;
+                CheckBox8.Color:=clRed;
+                 Tesdiqdat:=strtodate('30.12.1899');
+
+               end; }
+
+
+              { //burdan
+
+
+               if CheckBox8.Checked=true then
+              begin
+
+                if FrmMainLoss.CheckBox7.Checked=false then
+                begin
+                 showmessage('Diqqət! "OK verilib"  statusu seçilmədən "Təsdiq" statusu seçilə bilməz!');
+                 FrmMainLoss.Tesdiq:=0;
+                 FrmMainLoss.CheckBox8.Color:=clRed;
+                 FrmMainLoss.Tesdiqdat:=strtodate('30.12.1899');
+                 FrmMainLoss.CheckBox8.Checked:=false;
+                 exit;
+                end;
+
+                if frmstatus.XFRadioButton2.Checked=true then
+                       begin
+                 lossoperatin:=0;
+                       end;
+
+                                //FrmAddLoss.showmodal ;
+                 if FrmCargo_claim.yuktesdiq=0 then
+                begin
+                FrmMainLoss.XFButton3Click(Sender);
+                end;
+
+              end
+
+               else
+               begin
+               lossoperatin:=0;
+               Tesdiq:=0;
+               CheckBox8.Color:=clRed;
+               Tesdiqdat:=strtodate('30.12.1899');
+
+               end;
+
+               if DmLoss.DSclaim_status.FieldByName('STAGE_TESDIQ').AsInteger=0 then
+               losstesdiq:=0
+               else
+               losstesdiq:=1;
+
+        DSclaim_status.Edit;
+        DSclaim_status.FieldByName('stage_forma4').AsInteger:=Forma4;
+        DSclaim_status.FieldByName('stage_bankin_cavabi').AsInteger:=Bankin_cavabi;
+        DSclaim_status.FieldByName('stage_qarsi_teref_qiymcavab').AsInteger:=Qarsi_teref_qiym_cavab;
+        DSclaim_status.FieldByName('stage_qusur_akti').AsInteger:=Qusur_Akti;
+        DSclaim_status.FieldByName('stage_yoxlama').AsInteger:=Yoxlama;
+        DSclaim_status.FieldByName('stage_muraciet').AsInteger:=Muraciet;
+        DSclaim_status.FieldByName('stage_ok_verilib').AsInteger:=OK_verilib;
+        DSclaim_status.FieldByName('stage_tesdiq').AsInteger:=Tesdiq;
+
+        DSclaim_status.FieldByName('stage_forma4_dat').AsDateTime:=Forma4dat;
+        DSclaim_status.FieldByName('stage_bankin_cavabi_dat').AsDateTime:=Bankin_cavabidat;
+        DSclaim_status.FieldByName('stage_qarsi_teref_qcavab_dat').AsDateTime:=Qarsi_teref_qiym_cavabdat;
+        DSclaim_status.FieldByName('stage_qusur_akti_dat').AsDateTime:=Qusur_Aktidat;
+        DSclaim_status.FieldByName('stage_yoxlama_dat').AsDateTime:=Yoxlamadat;
+        DSclaim_status.FieldByName('stage_muraciet_dat').AsDateTime:=Muracietdat;
+        DSclaim_status.FieldByName('stage_ok_verilib_dat').AsDateTime:=OK_verilibdat;
+        DSclaim_status.FieldByName('stage_tesdiq_dat').AsDateTime:=Tesdiqdat;
+
+        DSclaim_status.FieldByName('DEP_ID').AsInteger:=XDBGrid1.DataSource.DataSet.FieldByName('ID').AsInteger;
+        DSclaim_status.Post;
+        DSclaim_status.RefreshRecord;
+
+
+
+           if  DSclaim_status.FieldByName('trid').AsInteger<>0 then
+           begin
+         if  (CheckBox8.Checked=false) then
+            begin
+            DmLoss.DSPaymentLossReal.Close;
+            DmLoss.DSPaymentLossReal.SetVariable('dpid',XDBGrid1.DataSource.DataSet.FieldByName('ID').AsInteger);
+            DmLoss.DSPaymentLossReal.open;
+
+            if DmLoss.DSPaymentLossReal.RecordCount<>0 then
+            begin
+              showmessage('Diqqət! Bu zərər tam ödənildiyindən statusunu dəyismək olmaz!!');
+              exit;
+            end
+            else
+            begin
+
+
+
+            if  DmLoss.OPCOMMON.CallIntegerFunction('cancelloss',[commoncid,XDBGrid1.DataSource.DataSet.FieldByName('ID').AsInteger])=1 then
+             begin
+               showmessage('Zərər aid emeliyyatlar silindi!');
+                    ODSClaimDescription.Edit;
+               ODSClaimDescription.FieldByName('CLAIM_NUM').AsString:='';
+               ODSClaimDescription.FieldByName('UTO_TRANSPORTATION_COSTS').Asfloat:=0;
+               ODSClaimDescription.FieldByName('EKSPERTIZA_AMOUNT').Asfloat:=0;
+               ODSClaimDescription.FieldByName('VALUE_NEW_SPARE_PARTS').Asfloat:=0;
+               ODSClaimDescription.FieldByName('FINAL_AMOUNT_LOSS').Asfloat:=0;
+               ODSClaimDescription.FieldByName('AUTO_ASSESS_COSTS').Asfloat:=0;
+               ODSClaimDescription.FieldByName('OTHER_COSTS').Asfloat:=0;
+               ODSClaimDescription.FieldByName('amortizasiya_ammount').Asfloat:=0;
+               ODSClaimDescription.FieldByName('FINAL_PAYMENT_AMOUNT_LOSS').Asfloat:=0;
+               ODSClaimDescription.FieldByName('AUTO_REAL_MARKET_VALUE').Asfloat:=0;
+               ODSClaimDescription.FieldByName('REMAINS_VALUE').Asfloat:=0;
+               ODSClaimDescription.FieldByName('BANK_ACCNO').AsString:='';
+               ODSClaimDescription.post;
+               DmLoss.Dsmain.RefreshRecord;
+
+
+            end;
+
+            end;
+             end;
+
+           end;
+
+
+
+
+
+end;
+ lossimtina:=0;  //bura  }
+end;
+
+procedure TFrmMainLoss.XFButton7Click(Sender: TObject);
+begin
+with DmLoss,sb_aca do
+ begin
+      CallProcedure('checkadvancedobjectaccess',['SEEPAYMENTLOSS']);
+ end;
+
+       dmloss. DSclaim_status.Close;
+       dmloss.DSclaim_status.SetVariable('pdep_id',FrmMainLoss.XDBGrid1.DataSource.DataSet.FieldByName('id').AsInteger);
+       dmloss.DSclaim_status.Open;
+
+       if dmloss.DSclaim_status.FieldByName('status').AsInteger<>2 then begin
+         ShowMessage('Yalnız tanınmış zərəri ödəmək olar!!!');
+         exit;
+       end;
+
+
+
+
+          plossid:=XDBGrid1.DataSource.DataSet.FieldByName('id').AsInteger;
+          contractstatus:=contractstatus1;
+     loadPlugin('Paymentloss.bpl','');
+
+end;
+
+procedure TFrmMainLoss.XFButton8Click(Sender: TObject);
+begin
+      { dmloss. DSclaim_status.Close;
+       dmloss.DSclaim_status.SetVariable('pdep_id',DmLoss.Dsmain.fieldbyname('cid').asinteger);
+       dmloss.DSclaim_status.Open;      }
+
+       dmloss. DSclaim_status.Close;
+       dmloss.DSclaim_status.SetVariable('pdep_id',XDBGrid1.DataSource.DataSet.FieldByName('id').AsInteger);
+       dmloss.DSclaim_status.Open;
+
+     { if   (DmLoss.DSclaim_status.FieldByName('STAGE_TESDIQ').AsInteger=1) or (status_r=1) then
+      begin
+
+         frmstatus.XFButton6.Enabled:=false
+         end
+       else
+       begin
+        frmstatus.XFButton6.Enabled:=true ;
+        end;
+                      }
+
+       //ShowMessage(IntToStr(XDBGrid1.DataSource.DataSet.FieldByName('id').AsInteger));
+
+     {
+  if DmLoss.DSclaim_status.FieldByName('status').AsInteger=1 then
+ begin
+   frmstatus.XFRadioButton2.Checked:=true;
+   frmstatus.XFGroupBox2.Color:=clred;
+ end;
+
+
+     // ShowMessage(IntToStr(DmLoss.DSclaim_status.FieldByName('status').AsInteger));
+
+  if DmLoss.DSclaim_status.FieldByName('status').AsInteger=2 then
+ begin
+   //XFRadioButton3.Checked:=true;
+   frmstatus.XFRadioButton1.Checked:=true;
+   frmstatus.XFGroupBox2.Color:=clGray;
+
+ end; }
+
+frmstatus.ShowModal;
+
+
+end;
+
+procedure TFrmMainLoss.XFButton9Click(Sender: TObject);
+begin
+
+      if frmstatus.Tesdiq=0 then
+      begin
+        ShowMessage('Zərər statusu təsdiqlənməmiş taninma etmək olmaz');
+        exit;
+      end;
+
+
+
+ if (frmstatus.Tesdiq=1)and (frmstatus.CheckBox8.Checked=true)and (FrmMainLoss.op_type<>'Insert') then
+            begin
+            if  DmLoss.OPCOMMON.CallIntegerFunction('commitloss',[contactid,FrmMainLoss.XDBGrid1.DataSource.DataSet.FieldByName('ID').AsInteger])=1 then
+             begin
+               showmessage('Zərər tanınma statusuna keçdi!');
+               end;
+             end;
+             XDBGrid1.DataSource.DataSet.Refresh;
+end;
+
+procedure TFrmMainLoss.XFRadioButton2Click(Sender: TObject);
+begin
+{if XFRadioButton2.Checked=true then
+begin
+  XFGroupBox1.Enabled:=false;
+end; }
+end;
+
+procedure TFrmMainLoss.Yenilmk1Click(Sender: TObject);
+begin
+XDBGrid1.DataSource.DataSet.Refresh;
+end;
+
+initialization
+ FrmMainLoss :=TFrmMainLoss.Create(Application);
+end.

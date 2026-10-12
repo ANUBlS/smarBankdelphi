@@ -1,0 +1,78 @@
+unit out_TransactionDestinationForm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, ExtCtrls, DBCtrls, Grids, DBGrids, Db, OracleData;
+
+type
+  TTransactionDestinationForm = class(TForm)
+    GridDest: TDBGrid;
+    DBNavigator1: TDBNavigator;
+    ButtonOk: TButton;
+    ButtonCancel: TButton;
+    TrDest: TOracleDataSet;
+    TrDestData: TDataSource;
+    procedure GridDestDblClick(Sender: TObject);
+    procedure FormKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure FormCreate(Sender: TObject);
+  private
+    { Private declarations }
+       function GetValue: String;
+  public
+    { Public declarations }
+    procedure MouseWheelHandler(var Message: TMessage);
+        property Value: String read GetValue;
+  end;
+
+var
+  TransactionDestinationForm: TTransactionDestinationForm;
+
+implementation
+
+{$R *.DFM}
+uses sboapiDataModuleImpl,TransactionDataModuleUnit;
+ function TTransactionDestinationForm.GetValue: String;
+begin
+  Result := TrDest.FieldByName('NAME').AsString;
+end;
+
+procedure TTransactionDestinationForm.MouseWheelHandler(var Message: TMessage);
+begin
+ inherited;
+ if GridDest.Focused then
+  begin
+   GridDest.SelectedRows.Clear;
+   with TCMMouseWheel(Message), GridDest.DataSource.DataSet do
+    if WheelDelta < 0 then
+      Next
+    else
+      Prior;
+   GridDest.Repaint;   
+  end;
+end;
+
+procedure TTransactionDestinationForm.GridDestDblClick(Sender: TObject);
+begin
+ if not (GridDest.DataSource.State in [dsInsert, dsEdit]) then
+  ModalResult :=mrOk;
+end;
+
+procedure TTransactionDestinationForm.FormKeyDown(Sender: TObject;
+  var Key: Word; Shift: TShiftState);
+begin
+if Ord(Key) = VK_RETURN then
+  ModalResult :=mrOk
+ else 
+ if Key = VK_ESCAPE then
+  Close;
+end;
+
+procedure TTransactionDestinationForm.FormCreate(Sender: TObject);
+begin
+TrDest.active :=true;
+end;
+
+end.

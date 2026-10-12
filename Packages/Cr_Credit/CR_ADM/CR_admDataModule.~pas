@@ -1,0 +1,126 @@
+unit admDataModule;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, OracleData, Oracle;
+
+type
+  TadmDM = class(TDataModule)
+    PluginsDataSet: TOracleDataSet;
+    PluginsDataSrc: TDataSource;
+    CR_ADMIN: TOraclePackage;
+    PluginsDataSetID: TFloatField;
+    PluginsDataSetPLUGINNAME: TStringField;
+    PluginsDataSetPARAMNAME: TStringField;
+    PluginsDataSetDESCRIPTION: TStringField;
+    CredUsersDataSet: TOracleDataSet;
+    CredUsersDataSrc: TDataSource;
+    CredUsersDataSetID: TFloatField;
+    CredUsersDataSetSYSTEMID: TFloatField;
+    CredUsersDataSetNAME: TStringField;
+    SmartUsersDataSet: TOracleDataSet;
+    SmartUsersDataSrc: TDataSource;
+    SmartUsersDataSetID: TFloatField;
+    SmartUsersDataSetNAME: TStringField;
+    LAZIM: TOracleDataSet;
+    LAZIMDESCRIPTION: TStringField;
+    LAZIMPLUGINNAME: TStringField;
+    LAZIMPARAMNAME: TStringField;
+    LAZIMGRANTHAV: TFloatField;
+    UserGrantsDataSrc: TDataSource;
+    OtherGrantsDataSet: TOracleDataSet;
+    OtherGrantsDataSrc: TDataSource;
+    UserGrantsDataSet: TOracleDataSet;
+    UserGrantsDataSetID: TFloatField;
+    UserGrantsDataSetDESCRIPTION: TStringField;
+    OtherGrantsDataSetID: TFloatField;
+    OtherGrantsDataSetDESCRIPTION: TStringField;
+    GroupsDataSet: TOracleDataSet;
+    GroupsDataSrc: TDataSource;
+    GroupsDataSetID: TFloatField;
+    GroupsDataSetNAME: TStringField;
+    GroupsDataSetGROUPTYPE: TStringField;
+    GroupManagerDataSet: TOracleDataSet;
+    GroupManagerDataSrc: TDataSource;
+    UserInGroupDataSet: TOracleDataSet;
+    UserInGroupDataSrc: TDataSource;
+    UserInGroupDataSetUSERTYPE: TStringField;
+    UserInGroupDataSetGROUPNAME: TStringField;
+    UserInGroupDataSetGROUPTYPE: TStringField;
+    UserInGroupDataSetGROUPDESC: TStringField;
+    GroupsDataSetDESCRIPTION: TStringField;
+    GroupTypeDataSet: TOracleDataSet;
+    GroupTypeDataSrc: TDataSource;
+    GroupTypeDataSetID: TFloatField;
+    GroupTypeDataSetNAME: TStringField;
+    GroupUsersDataSet: TOracleDataSet;
+    GroupUsersDataSrc: TDataSource;
+    GroupUsersDataSetNAME: TStringField;
+    GroupUsersDataSetDESCRIPTION: TStringField;
+    GroupUsersDataSetGROUPID: TFloatField;
+    UserInGroupDataSetUSERID: TFloatField;
+    GrMasterUsers: TOracleDataSet;
+    GrMasterUsersNAME: TStringField;
+    GrMasterUsersGROUPID: TFloatField;
+    GrSlaveUsers: TOracleDataSet;
+    GrNeutralUsers: TOracleDataSet;
+    GrSlaveUsersNAME: TStringField;
+    GrSlaveUsersGROUPID: TFloatField;
+    GrNeutralUsersNAME: TStringField;
+    GrNeutralUsersGROUPID: TFloatField;
+    CredUsersDataSetCREATEDATE: TDateTimeField;
+    CredUsersDataSetDESCRIPTION: TStringField;
+    CredUsersDataSetFULLNAME: TStringField;
+    CredUsersDataSetFILIAL: TStringField;
+    PluginsDataSetTYPEID: TFloatField;
+    CredUsersDataSetTYPEID: TFloatField;
+    PluginsDataSetNAME: TStringField;
+    PluginTypesDataSet: TOracleDataSet;
+    PluginTypesDataSetID: TFloatField;
+    PluginTypesDataSetNAME: TStringField;
+    PluginTypesDataSrc: TDataSource;
+    UserTypeDataSet: TOracleDataSet;
+    UserTypeDataSrc: TDataSource;
+    UserTypeDataSetTYPEID: TFloatField;
+    UserTypeDataSetNAME: TStringField;
+    AdditionSrcGr: TDataSource;
+    AdditionSrcGRDSet: TOracleDataSet;
+    AdditionDSet: TOracleDataSet;
+    AdditionSrc: TDataSource;
+    procedure DataModuleCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    procedure RefreshDataSet(DataSet: TDataSet);
+  end;
+
+var
+  admDM: TadmDM;
+
+implementation
+
+{$R *.DFM}
+
+uses sboapiDataModuleImpl;
+
+procedure TadmDM.RefreshDataSet;
+begin          
+  DataSet.Close;
+  DataSet.Open;
+
+end;
+
+procedure TadmDM.DataModuleCreate(Sender: TObject);
+var
+i: integer;
+begin
+  for i:= 0 to ComponentCount-1 do
+    if (Components[i].Tag = 1) then begin
+      //(Components[i] as TOracleDataSet).Session := CMDataModule.CMSession;
+      (Components[i] as TOracleDataSet).Open;
+    end;
+end;
+
+end.

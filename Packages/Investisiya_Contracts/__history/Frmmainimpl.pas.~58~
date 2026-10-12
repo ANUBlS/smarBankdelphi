@@ -1,0 +1,474 @@
+﻿unit Frmmainimpl;
+
+interface                          //Button2
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ComCtrls, Mask, DBCtrls, StdCtrls, dblookup, ExtCtrls, XFSCtrls,
+  ImgList, CurrencyEdit;
+
+type
+  TFrmContratcs = class(TForm)
+    XFPanel1: TXFPanel;
+    XFPanel2: TXFPanel;
+    Button2: TButton;
+    Button1: TButton;
+    XFGroupBox1: TXFGroupBox;
+    XFGroupBox2: TXFGroupBox;
+    DBLookupComboBox2: TDBLookupComboBox;
+    DBLookupComboBox3: TDBLookupComboBox;
+    DBLCB_cust_list: TDBLookupComboBox;
+    Label9: TLabel;
+    DBLookupComboBox1: TDBLookupComboBox;
+    XFLabel2: TXFLabel;
+    XFLabel3: TXFLabel;
+    XFLabel4: TXFLabel;
+    XFLabel5: TXFLabel;
+    XFLabel6: TXFLabel;
+    XFLabel7: TXFLabel;
+    XFLabel8: TXFLabel;
+    XFLabel9: TXFLabel;
+    DateTimePicker1: TDateTimePicker;
+    DateTimePicker2: TDateTimePicker;
+    ImageList1: TImageList;
+    DBEdit1: TDBEdit;
+    Edit1: TEdit;
+    XFLabel10: TXFLabel;
+    Edit4: TEdit;
+    Edit5: TEdit;
+    XFLabel1: TXFLabel;
+    Edit3: TEdit;
+    ED_Contract_no: TEdit;
+    Edit2: TCurrencyEdit;
+    DBLookupComboBox4: TDBLookupComboBox;
+    DBLookupComboBox5: TDBLookupComboBox;
+    XFLabel11: TXFLabel;
+    XFLabel12: TXFLabel;
+    XFLabel14: TXFLabel;
+    XFLabel13: TXFLabel;
+    Edit6: TEdit;
+    Edit7: TEdit;
+    XFLabel15: TXFLabel;
+    DBLookupComboBox6: TDBLookupComboBox;
+    procedure FormCreate(Sender: TObject);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure Button1Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+    procedure DBLCB_cust_listKeyPress(Sender: TObject; var Key: Char);
+    procedure DBEdit1KeyPress(Sender: TObject; var Key: Char);
+    procedure DBLookupComboBox1KeyPress(Sender: TObject; var Key: Char);
+    procedure DBLookupComboBox3KeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure DBLookupComboBox3KeyUp(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure DBLookupComboBox1KeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure DBLookupComboBox1KeyUp(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure DBLookupComboBox3Click(Sender: TObject);
+    procedure DBLookupComboBox1Click(Sender: TObject);
+    procedure DBLookupComboBox2Click(Sender: TObject);
+    procedure Edit1KeyPress(Sender: TObject; var Key: Char);
+    procedure Edit1Change(Sender: TObject);
+    procedure DBLCB_cust_listCloseUp(Sender: TObject);
+    procedure DBEdit1Change(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+CID:integer;
+ FrmContratcs: TFrmContratcs;
+
+implementation
+
+{$R *.dfm}
+ uses CommanParametrs,sboapiDataModuleImpl,Dm_Contracts_Investisiyaimpl;
+  procedure InitPlugin(s:string);export;
+begin
+
+   if s='' then
+   begin
+   FrmContratcs.ShowModal;
+   end;
+
+end;
+exports
+     InitPlugin;
+procedure TFrmContratcs.Button1Click(Sender: TObject);
+begin
+close;
+end;
+
+procedure TFrmContratcs.Button2Click(Sender: TObject);
+begin
+
+if ED_Contract_no.text='' then
+  begin
+    showmessage('Diqqət! Müqavilə nömrəsi sahesi boşdu') ;
+    exit;
+  end;
+
+  if DBLCB_cust_list.Text='' then
+  begin
+     showmessage('Diqqət! Müştəri adı  sahəsi boşdu');
+     exit;
+  end;
+
+   if DBLookupComboBox3.KeyValue=null then
+  begin
+    showmessage('Diqqət! İnvestisiya növü sahesi boşdu') ;
+    exit;
+  end;
+
+  if DBLookupComboBox2.KeyValue=null then
+  begin
+    showmessage('Diqqət!İnvestisiyanın müddəti sahesi boşdu') ;
+    exit;
+  end;
+
+  if DBLookupComboBox1.KeyValue=null then
+  begin
+    showmessage('Diqqət! Valyuta sahesi boşdu') ;
+    exit;
+  end;
+
+   if Edit2.Text='' then
+  begin
+     showmessage('Diqqət! Məbləğ  sahəsi boşdu');
+     exit;
+  end;
+  if (DBLookupComboBox3.KeyValue=6)or(DBLookupComboBox3.KeyValue=21) then
+  begin
+  if Edit1.text='' then
+  begin
+    showmessage('Diqqət! Faiz sahesi boşdu') ;
+    exit;
+  end;
+  end;
+
+
+ With Dm_Contracts_Investisiya  do
+begin
+if opetion= 'ins' then
+begin
+
+
+  Dm_Contracts_Investisiya.ds_ostat.Close;
+  Dm_Contracts_Investisiya.ds_ostat.SetVariable('p_acc_id',DBLookupComboBox4.KeyValue);
+  Dm_Contracts_Investisiya.ds_ostat.Open;
+
+  Ds_invest_contracts.open;
+  Ds_invest_contracts.edit;
+  Ds_invest_contracts.FieldByName('ostat_main').AsInteger:=Dm_Contracts_Investisiya.ds_ostat.FieldByName('ostat').AsInteger;
+  Ds_invest_contracts.FieldByName('Status').AsInteger:=0;
+  Ds_invest_contracts.FieldByName('close_prefix').AsInteger:=0;
+  Ds_invest_contracts.FieldByName('CONTRACT_NAME').AsString:=FrmContratcs.ED_Contract_no.Text;
+  Ds_invest_contracts.FieldByName('filial').AsInteger:=0;
+  Ds_invest_contracts.FieldByName('PER_AMMOUNT').AsFloat:=StrToFloat(edit7.Text);
+
+  //Ds_invest_contracts.FieldByName('PER_AMMOUNT').AsFloat:=StrToFloat(Edit7.Text);
+
+  if (DBLookupComboBox3.KeyValue=6) or (DBLookupComboBox3.KeyValue=21) then
+  begin
+  Ds_invest_contracts.FieldByName('AMMOUNT').Asfloat:=Edit2.Value;
+  Ds_invest_contracts.FieldByName('Percent').AsInteger:=StrToInt(Edit1.Text);
+  end else
+  begin
+  Ds_invest_contracts.FieldByName('AMMOUNT').AsFloat:=Edit2.Value;
+    Ds_invest_contracts.FieldByName('Percent').AsVariant:=null;
+  end;
+
+  Ds_invest_contracts.FieldByName('BEGIN_DATE').AsDateTime:=DateTimePicker1.DateTime;
+
+  if DBLookupComboBox2.KeyValue=2 then  begin
+  Ds_invest_contracts.FieldByName('END_DATE').AsVariant:=null;
+  end else
+  begin
+  Ds_invest_contracts.FieldByName('END_DATE').AsDateTime:=DateTimePicker2.DateTime;
+  end;
+  end;
+
+if opetion= 'upd' then
+begin
+  Ds_invest_contracts.open;
+  Ds_invest_contracts.Edit;
+  //Ds_invest_contracts.FieldByName('Status').AsInteger:=0;
+  Ds_invest_contracts.FieldByName('CONTRACT_NAME').AsString:=FrmContratcs.ED_Contract_no.Text;
+  Ds_invest_contracts.FieldByName('PER_AMMOUNT').AsFloat:=StrToFloat(Edit7.Text);
+
+      if (Ds_invest_contracts.FieldByName('invest_type_id').AsInteger=6) or (Ds_invest_contracts.FieldByName('invest_type_id').AsInteger=21) then
+  begin
+  Ds_invest_contracts.FieldByName('AMMOUNT').AsFloat:=Edit2.Value;
+  Ds_invest_contracts.FieldByName('Percent').AsInteger:=StrToInt(Edit1.Text);
+  end else
+  begin
+  Ds_invest_contracts.FieldByName('AMMOUNT').AsFloat:=Edit2.Value;
+  Ds_invest_contracts.FieldByName('Percent').AsVariant:=null;
+  end;
+
+
+  //Ds_invest_contracts.FieldByName('AMMOUNT').AsInteger:=StrToInt(Edit2.Text);
+  //Ds_invest_contracts.FieldByName('Percent').AsInteger:=StrToInt(Edit1.Text);
+  Ds_invest_contracts.FieldByName('BEGIN_DATE').AsDateTime:=DateTimePicker1.DateTime;
+  //Ds_invest_contracts.FieldByName('END_DATE').AsDateTime:=DateTimePicker2.DateTime;
+
+if DBLookupComboBox2.KeyValue=2 then  begin
+Ds_invest_contracts.FieldByName('END_DATE').AsVariant:=null;
+end else
+begin
+Ds_invest_contracts.FieldByName('END_DATE').AsDateTime:=DateTimePicker2.DateTime;
+end;
+
+end;
+      Ds_invest_contracts.Post;
+      Ds_invest_contracts.RefreshRecord;
+      CID := Ds_invest_contracts.FieldByName('id').asInteger;
+      //Maininvestgrid.Refresh;
+      FrmContratcs.Close;
+     // commandataset.Locate('id',Ds_invest_contractsid.Value,[]);
+      commandataset.Refresh;
+   end;
+end;
+
+procedure TFrmContratcs.DBEdit1Change(Sender: TObject);
+begin
+Dm_Contracts_Investisiya.Ds_Main_Account.close;
+Dm_Contracts_Investisiya.Ds_Main_Account.SetVariable('p_kli_id',DBLCB_cust_list.KeyValue);
+Dm_Contracts_Investisiya.Ds_Main_Account.Open;
+
+Dm_Contracts_Investisiya.Ds_per_account.close;
+Dm_Contracts_Investisiya.Ds_per_account.SetVariable('p_kli_id',DBLCB_cust_list.KeyValue);
+Dm_Contracts_Investisiya.Ds_per_account.Open;
+
+Dm_Contracts_Investisiya.Ds_cur_account.close;
+Dm_Contracts_Investisiya.Ds_cur_account.SetVariable('p_kli_id',DBLCB_cust_list.KeyValue);
+Dm_Contracts_Investisiya.Ds_cur_account.Open;
+
+
+end;
+
+procedure TFrmContratcs.DBEdit1KeyPress(Sender: TObject; var Key: Char);
+begin
+ if Key = #13 then
+     begin
+       FindNextControl(ActiveControl,true,true,false).SetFocus;
+       Key := #0
+     end;
+end;
+
+procedure TFrmContratcs.DBLCB_cust_listCloseUp(Sender: TObject);
+begin
+Dm_Contracts_Investisiya.Ds_Main_Account.close;
+Dm_Contracts_Investisiya.Ds_Main_Account.SetVariable('p_kli_id',DBLCB_cust_list.KeyValue);
+Dm_Contracts_Investisiya.Ds_Main_Account.Open;
+
+Dm_Contracts_Investisiya.Ds_per_account.close;
+Dm_Contracts_Investisiya.Ds_per_account.SetVariable('p_kli_id',DBLCB_cust_list.KeyValue);
+Dm_Contracts_Investisiya.Ds_per_account.Open;
+
+Dm_Contracts_Investisiya.Ds_cur_account.close;
+Dm_Contracts_Investisiya.Ds_cur_account.SetVariable('p_kli_id',DBLCB_cust_list.KeyValue);
+Dm_Contracts_Investisiya.Ds_cur_account.Open;
+
+
+end;
+
+procedure TFrmContratcs.DBLCB_cust_listKeyPress(Sender: TObject; var Key: Char);
+begin
+ if Key = #13 then
+     begin
+       FindNextControl(ActiveControl,true,true,false).SetFocus;
+       Key := #0
+     end;
+end;
+
+procedure TFrmContratcs.DBLookupComboBox1Click(Sender: TObject);
+begin
+Edit5.Text:=IntToStr(Dm_Contracts_Investisiya.ODSAvalute.FieldByName('valute').AsInteger);
+end;
+
+procedure TFrmContratcs.DBLookupComboBox1KeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+Edit5.Text:=IntToStr(Dm_Contracts_Investisiya.ODSAvalute.FieldByName('valute').AsInteger);
+end;
+
+procedure TFrmContratcs.DBLookupComboBox1KeyPress(Sender: TObject;
+  var Key: Char);
+begin
+Edit5.Text:=IntToStr(Dm_Contracts_Investisiya.ODSAvalute.FieldByName('valute').AsInteger);
+end;
+
+procedure TFrmContratcs.DBLookupComboBox1KeyUp(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+Edit5.Text:=IntToStr(Dm_Contracts_Investisiya.ODSAvalute.FieldByName('valute').AsInteger);
+end;
+
+procedure TFrmContratcs.DBLookupComboBox2Click(Sender: TObject);
+begin
+{Dm_Contracts_Investisiya.DsSysdat.close;
+Dm_Contracts_Investisiya.DsSysdat.open;  }
+
+if DBLookupComboBox2.KeyValue=2 then  begin
+  DateTimePicker2.Enabled:=false;
+end else
+begin
+ DateTimePicker2.Enabled:=true;
+end;
+end;
+
+procedure TFrmContratcs.DBLookupComboBox3Click(Sender: TObject);
+begin
+//ShowMessage(DBLookupComboBox3.KeyValue);
+Edit4.Text:=IntToStr(Dm_Contracts_Investisiya.Ds_invest_contracts.FieldByName('invest_type_id').AsInteger);
+ if (DBLookupComboBox3.KeyValue=6)or(DBLookupComboBox3.KeyValue=21) then begin
+   Edit1.Enabled:=true;
+  end else
+  begin
+     Edit1.Enabled:=false;
+  end;
+
+end;
+
+procedure TFrmContratcs.DBLookupComboBox3KeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+Edit4.Text:=IntToStr(Dm_Contracts_Investisiya.Ds_invest_contracts.FieldByName('invest_type_id').AsInteger);
+end;
+
+procedure TFrmContratcs.DBLookupComboBox3KeyUp(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+Edit4.Text:=IntToStr(Dm_Contracts_Investisiya.Ds_invest_contracts.FieldByName('invest_type_id').AsInteger);
+end;
+
+procedure TFrmContratcs.Edit1Change(Sender: TObject);
+begin
+if TEdit(Sender).Text =EmptyStr then TEdit(Sender).Text :='0';
+if (strtofloat(Edit1.Text)>0) and (not VarIsNull(Edit2.Value)) then
+Edit7.Text:=FloatToStr((Edit2.Value)*(StrToInt(Edit1.Text))/100);
+
+end;
+
+procedure TFrmContratcs.Edit1KeyPress(Sender: TObject; var Key: Char);
+begin
+if not (Key in ['0'..'9',#8,#188,#190,#110])then begin Key:=#0; end;
+end;
+
+procedure TFrmContratcs.FormCreate(Sender: TObject);
+begin
+Dm_Contracts_Investisiya:=TDm_Contracts_Investisiya.Create(self);
+end;
+
+procedure TFrmContratcs.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+if ord(key)=vk_escape then  close;
+end;
+
+procedure TFrmContratcs.FormShow(Sender: TObject);
+begin
+
+//ShowMessage(IntToStr(contactid));
+ //showMessage(Dm_Contracts_Investisiya.Ds_invest_contracts.FieldByName('id').AsString);
+ //  ShowMessage(opetion);
+
+
+if (Dm_Contracts_Investisiya.Ds_invest_contracts.FieldByName('invest_type_id').AsInteger=6)
+or (Dm_Contracts_Investisiya.Ds_invest_contracts.FieldByName('invest_type_id').AsInteger=21)then  begin
+Edit1.Enabled:=true;
+end else
+begin
+Edit1.Enabled:=false;
+end;
+
+
+//ShowMessage(opetion);
+//ShowMessage(Dm_Contracts_Investisiya.Ds_invest_contracts.FieldByName('id').AsString);
+
+if opetion='ins' then
+begin
+
+ if Dm_Contracts_Investisiya.Ds_invest_contracts.FieldByName('invest_time').AsInteger=2 then  begin
+  DateTimePicker2.Enabled:=false;
+end else
+begin
+ DateTimePicker2.Enabled:=true;
+ DateTimePicker2.DateTime:=Dm_Contracts_Investisiya.DsSysdat.FieldByName('tek_dat').AsDateTime;
+end;
+
+Edit6.Text:=Dm_Contracts_Investisiya.DSFilial.FieldByName('name').AsString;
+
+ED_Contract_no.Text:='';
+DBEdit1.Text:='';
+Edit3.Text:='';
+Edit4.Text:='';
+Edit5.Text:='';
+Edit7.Text:='';
+DBLCB_cust_list.KeyValue:=null;
+DBLookupComboBox1.KeyValue:=null;
+DBLookupComboBox2.KeyValue:=null;
+DBLookupComboBox3.KeyValue:=null;
+DBLookupComboBox4.KeyValue:=null;
+DBLookupComboBox5.KeyValue:=null;
+DBLookupComboBox6.KeyValue:=null;
+Edit2.Text:='';
+Edit1.Text:=IntToStr(0);
+DateTimePicker1.DateTime:=Dm_Contracts_Investisiya.DsSysdat.FieldByName('tek_dat').AsDateTime;
+DateTimePicker2.DateTime:=Dm_Contracts_Investisiya.DsSysdat.FieldByName('tek_dat').AsDateTime;
+end;
+
+if opetion='upd' then
+begin
+
+
+Dm_Contracts_Investisiya.Ds_invest_contracts.Close;
+Dm_Contracts_Investisiya.Ds_invest_contracts.SetVariable('cid',contactid);
+Dm_Contracts_Investisiya.Ds_invest_contracts.Open;
+
+{ if Dm_Contracts_Investisiya.Ds_invest_contracts.FieldByName('STATUS').AsInteger=1 then
+ begin
+   Button2.Visible:=false;
+ end
+ else  begin
+ Button2.Visible:=true;
+ end;}
+
+
+ if Dm_Contracts_Investisiya.Ds_invest_contracts.FieldByName('invest_time').AsInteger=2 then  begin
+  DateTimePicker2.Enabled:=false;
+end else
+begin
+ DateTimePicker2.Enabled:=true;
+end;
+
+if (Dm_Contracts_Investisiya.Ds_invest_contracts.FieldByName('invest_type_id').AsInteger=6)
+or (Dm_Contracts_Investisiya.Ds_invest_contracts.FieldByName('invest_type_id').AsInteger=21)then  begin
+Edit1.Enabled:=true;
+end else
+begin
+Edit1.Enabled:=false;
+end;
+Edit7.Text:=Dm_Contracts_Investisiya.Ds_invest_contracts.FieldByName('per_ammount').AsString;
+Edit6.Text:=Dm_Contracts_Investisiya.DSFilial.FieldByName('name').AsString;
+Edit4.Text:=IntToStr(Dm_Contracts_Investisiya.Ds_invest_contracts.FieldByName('invest_type_id').AsInteger);
+Edit5.Text:=IntToStr(Dm_Contracts_Investisiya.ODSAvalute.FieldByName('valute').AsInteger);
+Edit3.Text:=IntToStr(Dm_Contracts_Investisiya.Ds_invest_contracts.FieldByName('id').AsInteger);
+ED_Contract_no.Text:=Dm_Contracts_Investisiya.Ds_invest_contracts.FieldByName('contract_name').AsString;
+Edit2.Value:=Dm_Contracts_Investisiya.Ds_invest_contracts.FieldByName('ammount').AsFloat;
+Edit1.Text:=IntToStr(Dm_Contracts_Investisiya.Ds_invest_contracts.FieldByName('percent').AsInteger);
+DateTimePicker1.DateTime:=Dm_Contracts_Investisiya.Ds_invest_contracts.FieldByName('begin_date').AsDateTime;
+DateTimePicker2.DateTime:=Dm_Contracts_Investisiya.Ds_invest_contracts.FieldByName('end_date').AsDateTime;
+end;
+
+
+
+end;
+
+initialization
+ FrmContratcs :=TFrmContratcs.Create(Application);
+end.

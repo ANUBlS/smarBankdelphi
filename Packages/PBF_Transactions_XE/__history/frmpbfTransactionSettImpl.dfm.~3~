@@ -1,0 +1,835 @@
+object frmpbfTransactionSett: TfrmpbfTransactionSett
+  Left = 293
+  Top = 205
+  BorderIcons = [biSystemMenu]
+  Caption = 'frmpbfTransactionSett'
+  ClientHeight = 411
+  ClientWidth = 517
+  Color = clBtnFace
+  Font.Charset = RUSSIAN_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poMainFormCenter
+  OnCanResize = FormCanResize
+  OnCreate = FormCreate
+  OnKeyPress = FormKeyPress
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 14
+  object StatusBar1: TStatusBar
+    Left = 0
+    Top = 392
+    Width = 517
+    Height = 19
+    Panels = <>
+  end
+  object PageControl1: TPageControl
+    Left = 0
+    Top = 0
+    Width = 517
+    Height = 392
+    ActivePage = TabSheet2
+    Align = alClient
+    TabOrder = 1
+    object TabSheet1: TTabSheet
+      Caption = #1050#1088#1077#1076#1080#1090' '#1102#1076#1103#1085#1080#1096#1083#1103#1088#1080
+      object GroupBox1: TGroupBox
+        Left = 0
+        Top = 0
+        Width = 509
+        Height = 140
+        Align = alTop
+        Caption = #1060#1080#1083#1080#1072#1083#1083#1072#1088' '#1094#1079#1088#1103
+        TabOrder = 0
+        object DBGridEh1: TDBGridEh
+          Left = 2
+          Top = 16
+          Width = 505
+          Height = 122
+          Align = alTop
+          DataSource = pbfsettingds
+          FooterColor = clWindow
+          FooterFont.Charset = RUSSIAN_CHARSET
+          FooterFont.Color = clWindowText
+          FooterFont.Height = -11
+          FooterFont.Name = 'Azl Sans Serif'
+          FooterFont.Style = []
+          TabOrder = 0
+          TitleFont.Charset = RUSSIAN_CHARSET
+          TitleFont.Color = clWindowText
+          TitleFont.Height = -11
+          TitleFont.Name = 'Azl Sans Serif'
+          TitleFont.Style = []
+          VertScrollBar.VisibleMode = sbNeverShowEh
+          Columns = <
+            item
+              EditButtons = <>
+              FieldName = 'FROMFILIAL'
+              Footers = <>
+              PickList.Strings = (
+                'HEADOFFICE'
+                'FILIAL')
+              Title.Color = clNavy
+              Title.Font.Charset = RUSSIAN_CHARSET
+              Title.Font.Color = clWhite
+              Title.Font.Height = -12
+              Title.Font.Name = 'Azl Sans Serif'
+              Title.Font.Style = []
+              Width = 83
+            end
+            item
+              EditButtons = <>
+              FieldName = 'TOFILIAL'
+              Footers = <>
+              PickList.Strings = (
+                'HEADOFFICE'
+                'FILIAL')
+              Title.Color = clNavy
+              Title.Font.Charset = RUSSIAN_CHARSET
+              Title.Font.Color = clWhite
+              Title.Font.Height = -12
+              Title.Font.Name = 'Azl Sans Serif'
+              Title.Font.Style = []
+              Width = 81
+            end>
+        end
+      end
+      object GroupBox2: TGroupBox
+        Left = 0
+        Top = 140
+        Width = 509
+        Height = 223
+        Align = alClient
+        Caption = #1071#1084#1103#1083#1080#1081#1081#1072#1090#1083#1072#1088
+        TabOrder = 1
+        object DBGridEh2: TDBGridEh
+          Left = 2
+          Top = 16
+          Width = 505
+          Height = 205
+          Align = alClient
+          DataSource = pbfsettingchildsds
+          FooterColor = clWindow
+          FooterFont.Charset = RUSSIAN_CHARSET
+          FooterFont.Color = clWindowText
+          FooterFont.Height = -11
+          FooterFont.Name = 'Azl Sans Serif'
+          FooterFont.Style = []
+          TabOrder = 0
+          TitleFont.Charset = RUSSIAN_CHARSET
+          TitleFont.Color = clWindowText
+          TitleFont.Height = -11
+          TitleFont.Name = 'Azl Sans Serif'
+          TitleFont.Style = []
+          VertScrollBar.VisibleMode = sbNeverShowEh
+          OnKeyDown = DBGridEh2KeyDown
+          Columns = <
+            item
+              EditButtons = <>
+              FieldName = 'DEBITFILIAL'
+              Footers = <>
+              PickList.Strings = (
+                'SELF'
+                'OTHER'
+                'HEAD')
+              Title.Color = clNavy
+              Title.Font.Charset = RUSSIAN_CHARSET
+              Title.Font.Color = clWhite
+              Title.Font.Height = -12
+              Title.Font.Name = 'Azl Sans Serif'
+              Title.Font.Style = []
+              Width = 65
+            end
+            item
+              EditButtons = <>
+              FieldName = 'DEBIT'
+              Footers = <>
+              PickList.Strings = (
+                '10ACCOUNT'
+                '45ACCOUNT'
+                '28ACCOUNT'
+                '48ACCOUNT'
+                '38ACCOUNT'
+                '45HACCOUNT'
+                '28HACCOUNT'
+                '48HACCOUNT'
+                '')
+              Title.Color = clNavy
+              Title.Font.Charset = RUSSIAN_CHARSET
+              Title.Font.Color = clWhite
+              Title.Font.Height = -12
+              Title.Font.Name = 'Azl Sans Serif'
+              Title.Font.Style = []
+              Width = 91
+            end
+            item
+              EditButtons = <>
+              FieldName = 'KREDITFILIAL'
+              Footers = <>
+              PickList.Strings = (
+                'SELF'
+                'OTHER'
+                'HEAD')
+              Title.Color = clNavy
+              Title.Font.Charset = RUSSIAN_CHARSET
+              Title.Font.Color = clWhite
+              Title.Font.Height = -12
+              Title.Font.Name = 'Azl Sans Serif'
+              Title.Font.Style = []
+              Width = 65
+            end
+            item
+              EditButtons = <>
+              FieldName = 'CREDIT'
+              Footers = <>
+              PickList.Strings = (
+                '10ACCOUNT'
+                '45ACCOUNT'
+                '28ACCOUNT'
+                '48ACCOUNT'
+                '38ACCOUNT'
+                '45HACCOUNT'
+                '28HACCOUNT'
+                '48HACCOUNT'
+                '')
+              Title.Color = clNavy
+              Title.Font.Charset = RUSSIAN_CHARSET
+              Title.Font.Color = clWhite
+              Title.Font.Height = -12
+              Title.Font.Name = 'Azl Sans Serif'
+              Title.Font.Style = []
+              Width = 91
+            end
+            item
+              EditButtons = <>
+              FieldName = 'DESCRIPTION'
+              Footers = <>
+              Title.Color = clNavy
+              Title.Font.Charset = RUSSIAN_CHARSET
+              Title.Font.Color = clWhite
+              Title.Font.Height = -12
+              Title.Font.Name = 'Azl Sans Serif'
+              Title.Font.Style = []
+              Width = 167
+            end>
+        end
+      end
+    end
+    object TabSheet2: TTabSheet
+      Caption = #1044#1080#1101#1103#1088' '#1102#1076#1103#1085#1080#1096#1083#1103#1088
+      ImageIndex = 1
+      object GroupBox3: TGroupBox
+        Left = 0
+        Top = 0
+        Width = 509
+        Height = 140
+        Align = alTop
+        Caption = #1070#1076#1103#1085#1080#1096#1080#1085' '#1085#1102#1074#1094
+        TabOrder = 0
+        object DBGridEh3: TDBGridEh
+          Left = 2
+          Top = 16
+          Width = 505
+          Height = 122
+          Align = alTop
+          DataSource = dspbfotypes
+          FooterColor = clWindow
+          FooterFont.Charset = RUSSIAN_CHARSET
+          FooterFont.Color = clWindowText
+          FooterFont.Height = -11
+          FooterFont.Name = 'Azl Sans Serif'
+          FooterFont.Style = []
+          Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit]
+          TabOrder = 0
+          TitleFont.Charset = RUSSIAN_CHARSET
+          TitleFont.Color = clWindowText
+          TitleFont.Height = -11
+          TitleFont.Name = 'Azl Sans Serif'
+          TitleFont.Style = []
+          VertScrollBar.VisibleMode = sbNeverShowEh
+          Columns = <
+            item
+              EditButtons = <>
+              FieldName = 'NAME'
+              Footers = <>
+              Title.Color = clNavy
+              Title.Font.Charset = RUSSIAN_CHARSET
+              Title.Font.Color = clWhite
+              Title.Font.Height = -12
+              Title.Font.Name = 'Azl Sans Serif'
+              Title.Font.Style = []
+              Width = 127
+            end>
+        end
+      end
+      object GroupBox4: TGroupBox
+        Left = 0
+        Top = 140
+        Width = 509
+        Height = 223
+        Align = alClient
+        Caption = #1071#1084#1103#1083#1080#1081#1081#1072#1090#1083#1072#1088
+        TabOrder = 1
+        object DBGridEh4: TDBGridEh
+          Left = 2
+          Top = 16
+          Width = 505
+          Height = 205
+          Align = alClient
+          DataSource = pbfotypeoperationsds
+          FooterColor = clWindow
+          FooterFont.Charset = RUSSIAN_CHARSET
+          FooterFont.Color = clWindowText
+          FooterFont.Height = -11
+          FooterFont.Name = 'Azl Sans Serif'
+          FooterFont.Style = []
+          TabOrder = 0
+          TitleFont.Charset = RUSSIAN_CHARSET
+          TitleFont.Color = clWindowText
+          TitleFont.Height = -11
+          TitleFont.Name = 'Azl Sans Serif'
+          TitleFont.Style = []
+          VertScrollBar.VisibleMode = sbNeverShowEh
+          OnKeyDown = DBGridEh2KeyDown
+          Columns = <
+            item
+              EditButtons = <>
+              FieldName = 'DEBITFILIAL'
+              Footers = <>
+              PickList.Strings = (
+                'SELF'
+                'OTHER'
+                'HEAD')
+              Title.Color = clNavy
+              Title.Font.Charset = RUSSIAN_CHARSET
+              Title.Font.Color = clWhite
+              Title.Font.Height = -12
+              Title.Font.Name = 'Azl Sans Serif'
+              Title.Font.Style = []
+              Width = 65
+            end
+            item
+              EditButtons = <>
+              FieldName = 'DEBIT'
+              Footers = <>
+              PickList.Strings = (
+                '10ACCOUNT'
+                '45ACCOUNT'
+                '28ACCOUNT'
+                '48ACCOUNT'
+                '38ACCOUNT'
+                '45HACCOUNT'
+                '28HACCOUNT'
+                '48HACCOUNT'
+                '45AZERCELLACC'
+                '45BAKCELLACC'
+                '45NARACC'
+                '45GASACC'
+                '45LIGHTACC'
+                '45WATERACC'
+                '48AZERCELLACC'
+                '48BAKCELLACC'
+                '48NARACC'
+                '48GASACC'
+                '48LIGHTACC'
+                '48WATERACC'
+                '45HEEDAZERCELLACC'
+                '45HEEDBAKCELLACC'
+                '45HEEDNARACC'
+                '45HEEDGASACC'
+                '45HEEDLIGHTACC'
+                '45HEEDWATERACC'
+                '45HEEDSELFAZERCELLACC'
+                '45HEEDSELFBAKCELLACC'
+                '45HEEDSELFNARACC'
+                '45HEEDSELFGASACC'
+                '45HEEDSELFLIGHTACC'
+                '45HEEDSELFWATERACC'
+                '45HEEDSELFLIGHTACC1'
+                '45LIGHT1ACC'
+                '45HEEDLIGHT1ACC'
+                '45LIGHT2ACC'
+                '45HEEDLIGHT2ACC'
+                '45LIGHT3ACC'
+                '45HEEDLIGHT3ACC'
+                '45LIGHT4ACC'
+                '45HEEDLIGHT4ACC')
+              Title.Color = clNavy
+              Title.Font.Charset = RUSSIAN_CHARSET
+              Title.Font.Color = clWhite
+              Title.Font.Height = -12
+              Title.Font.Name = 'Azl Sans Serif'
+              Title.Font.Style = []
+              Width = 150
+            end
+            item
+              EditButtons = <>
+              FieldName = 'KREDITFILIAL'
+              Footers = <>
+              PickList.Strings = (
+                'SELF'
+                'OTHER'
+                'HEAD')
+              Title.Color = clNavy
+              Title.Font.Charset = RUSSIAN_CHARSET
+              Title.Font.Color = clWhite
+              Title.Font.Height = -12
+              Title.Font.Name = 'Azl Sans Serif'
+              Title.Font.Style = []
+              Width = 65
+            end
+            item
+              EditButtons = <>
+              FieldName = 'CREDIT'
+              Footers = <>
+              PickList.Strings = (
+                '10ACCOUNT'
+                '45ACCOUNT'
+                '28ACCOUNT'
+                '48ACCOUNT'
+                '38ACCOUNT'
+                '45HACCOUNT'
+                '28HACCOUNT'
+                '48HACCOUNT'
+                '45AZERCELLACC'
+                '45BAKCELLACC'
+                '45NARACC'
+                '45GASACC'
+                '45LIGHTACC'
+                '45WATERACC'
+                '48AZERCELLACC'
+                '48BAKCELLACC'
+                '48NARACC'
+                '48GASACC'
+                '48LIGHTACC'
+                '48WATERACC'
+                '45HEEDAZERCELLACC'
+                '45HEEDBAKCELLACC'
+                '45HEEDNARACC'
+                '45HEEDGASACC'
+                '45HEEDLIGHTACC'
+                '45HEEDWATERACC'
+                '45HEEDSELFAZERCELLACC'
+                '45HEEDSELFBAKCELLACC'
+                '45HEEDSELFNARACC'
+                '45HEEDSELFGASACC'
+                '45HEEDSELFLIGHTACC'
+                '45HEEDSELFWATERACC'
+                '45HEEDSELFLIGHTACC1'
+                '45LIGHT1ACC'
+                '45HEEDLIGHT1ACC'
+                '45LIGHT2ACC'
+                '45HEEDLIGHT2ACC'
+                '45LIGHT3ACC'
+                '45HEEDLIGHT3ACC'
+                '45LIGHT4ACC'
+                '45HEEDLIGHT4ACC')
+              Title.Color = clNavy
+              Title.Font.Charset = RUSSIAN_CHARSET
+              Title.Font.Color = clWhite
+              Title.Font.Height = -12
+              Title.Font.Name = 'Azl Sans Serif'
+              Title.Font.Style = []
+              Width = 151
+            end
+            item
+              EditButtons = <>
+              FieldName = 'DESCRIPTION'
+              Footers = <>
+              Title.Color = clNavy
+              Title.Font.Charset = RUSSIAN_CHARSET
+              Title.Font.Color = clWhite
+              Title.Font.Height = -12
+              Title.Font.Name = 'Azl Sans Serif'
+              Title.Font.Style = []
+              Width = 86
+            end>
+        end
+      end
+    end
+    object TabSheet3: TTabSheet
+      Caption = #1044#1080#1101#1103#1088
+      ImageIndex = 2
+      object Label1: TLabel
+        Left = 26
+        Top = 155
+        Width = 36
+        Height = 14
+        Caption = #1052#1102#1097#1094#1088
+      end
+      object Label2: TLabel
+        Left = 172
+        Top = 157
+        Width = 86
+        Height = 14
+        Caption = #1052#1094#1076#1080#1088#1080#1085' '#1080#1084#1079#1072#1089#1099
+      end
+      object Label3: TLabel
+        Left = 291
+        Top = 156
+        Width = 100
+        Height = 14
+        Caption = #1052#1094#1097#1072#1089#1080#1073#1080#1085' '#1080#1084#1079#1072#1089#1099
+      end
+      object DBGridEh5: TDBGridEh
+        Left = 0
+        Top = 27
+        Width = 527
+        Height = 121
+        DataSource = PbfOSFilialsds
+        FooterColor = clWindow
+        FooterFont.Charset = RUSSIAN_CHARSET
+        FooterFont.Color = clWindowText
+        FooterFont.Height = -11
+        FooterFont.Name = 'Azl Sans Serif'
+        FooterFont.Style = []
+        TabOrder = 0
+        TitleFont.Charset = RUSSIAN_CHARSET
+        TitleFont.Color = clWindowText
+        TitleFont.Height = -11
+        TitleFont.Name = 'Azl Sans Serif'
+        TitleFont.Style = []
+        Columns = <
+          item
+            EditButtons = <>
+            FieldName = 'NAME'
+            Footers = <>
+            Title.Color = clNavy
+            Title.Font.Charset = RUSSIAN_CHARSET
+            Title.Font.Color = clWhite
+            Title.Font.Height = -12
+            Title.Font.Name = 'Azl Sans Serif'
+            Title.Font.Style = []
+            Width = 265
+          end>
+      end
+      object DBNavigator1: TDBNavigator
+        Left = 0
+        Top = 0
+        Width = 509
+        Height = 27
+        DataSource = pbfothersettingsds
+        Align = alTop
+        Flat = True
+        TabOrder = 1
+      end
+      object DBImage1: TDBImage
+        Left = 4
+        Top = 219
+        Width = 113
+        Height = 105
+        DataField = 'STAMP'
+        DataSource = pbfothersettingsds
+        TabOrder = 2
+      end
+      object DBImage2: TDBImage
+        Left = 146
+        Top = 219
+        Width = 114
+        Height = 105
+        DataField = 'CHIEFSIGN'
+        DataSource = pbfothersettingsds
+        TabOrder = 3
+      end
+      object DBImage3: TDBImage
+        Left = 288
+        Top = 219
+        Width = 113
+        Height = 105
+        DataField = 'ACCOUTANTSIGN'
+        DataSource = pbfothersettingsds
+        TabOrder = 4
+      end
+      object BitBtn1: TBitBtn
+        Left = 9
+        Top = 181
+        Width = 80
+        Height = 27
+        Caption = 'Ok'
+        DoubleBuffered = True
+        ParentDoubleBuffered = False
+        TabOrder = 5
+        OnClick = BitBtn1Click
+      end
+      object BitBtn2: TBitBtn
+        Left = 164
+        Top = 181
+        Width = 80
+        Height = 27
+        Caption = 'Ok'
+        DoubleBuffered = True
+        ParentDoubleBuffered = False
+        TabOrder = 6
+        OnClick = BitBtn2Click
+      end
+      object BitBtn3: TBitBtn
+        Left = 302
+        Top = 181
+        Width = 80
+        Height = 27
+        Caption = 'Ok'
+        DoubleBuffered = True
+        ParentDoubleBuffered = False
+        TabOrder = 7
+        OnClick = BitBtn3Click
+      end
+    end
+  end
+  object pbfsetting: TOracleDataSet
+    SQL.Strings = (
+      'SELECT rowid,id, fromfilial, tofilial'
+      '  FROM pbf_settings '
+      '  order by id')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 24
+    Top = 65
+    object pbfsettingFROMFILIAL: TWideStringField
+      DisplayLabel = #1070#1076#1103#1081#1103#1085
+      FieldName = 'FROMFILIAL'
+      Required = True
+      Size = 10
+    end
+    object pbfsettingTOFILIAL: TWideStringField
+      DisplayLabel = #1070#1076#1103#1085#1080#1083#1103#1085
+      FieldName = 'TOFILIAL'
+      Required = True
+      Size = 10
+    end
+    object pbfsettingID: TFloatField
+      FieldName = 'ID'
+    end
+  end
+  object pbfsettingchilds: TOracleDataSet
+    SQL.Strings = (
+      
+        'SELECT rowid, id,mainid, debit, credit, description,debitfilial,' +
+        'kreditfilial'
+      '  FROM pbf_settingchilds '
+      ''
+      'where mainid = :mainid'
+      'and nvl(type,0)=0')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000E0000003A004D00410049004E0049004400040000000800
+      0000000000000000F03F00000000}
+    Master = pbfsetting
+    MasterFields = 'ID'
+    DetailFields = 'MAINID'
+    Session = sboapiDataModule.SBSession
+    Left = 24
+    Top = 114
+    object pbfsettingchildsID: TFloatField
+      FieldName = 'ID'
+    end
+    object pbfsettingchildsMAINID: TFloatField
+      FieldName = 'MAINID'
+      Required = True
+    end
+    object pbfsettingchildsDEBITFILIAL: TWideStringField
+      DisplayLabel = #1044'.'#1060#1080#1083#1080#1072#1083
+      FieldName = 'DEBITFILIAL'
+      Size = 25
+    end
+    object pbfsettingchildsDEBIT: TWideStringField
+      DisplayLabel = #1044#1077#1073#1077#1090
+      FieldName = 'DEBIT'
+      Required = True
+      Size = 10
+    end
+    object pbfsettingchildsKREDITFILIAL: TWideStringField
+      DisplayLabel = #1050'.'#1060#1080#1083#1080#1072#1083
+      FieldName = 'KREDITFILIAL'
+      Size = 25
+    end
+    object pbfsettingchildsCREDIT: TWideStringField
+      DisplayLabel = #1050#1088#1077#1076#1080#1090
+      FieldName = 'CREDIT'
+      Required = True
+      Size = 10
+    end
+    object pbfsettingchildsDESCRIPTION: TWideStringField
+      DisplayLabel = #1058#1103#1081#1080#1085#1072#1090#1099
+      FieldName = 'DESCRIPTION'
+      Required = True
+      Size = 60
+    end
+  end
+  object pbfsettingds: TDataSource
+    DataSet = pbfsetting
+    Left = 56
+    Top = 66
+  end
+  object pbfsettingchildsds: TDataSource
+    DataSet = pbfsettingchilds
+    Left = 56
+    Top = 115
+  end
+  object pbfotypes: TOracleDataSet
+    SQL.Strings = (
+      'SELECT a.id, a.name'
+      '  FROM pbf_otheroptypes a'
+      'order by id')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 148
+    Top = 64
+    object pbfotypesNAME: TWideStringField
+      DisplayLabel = #1070#1076#1103#1085#1080#1096
+      FieldName = 'NAME'
+      Size = 23
+    end
+    object pbfotypesID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+  end
+  object dspbfotypes: TDataSource
+    DataSet = pbfotypes
+    Left = 180
+    Top = 64
+  end
+  object pbfotypeoperationsds: TDataSource
+    DataSet = pbfotypeoperations
+    Left = 180
+    Top = 98
+  end
+  object pbfotypeoperations: TOracleDataSet
+    SQL.Strings = (
+      
+        'SELECT rowid, id,mainid, debit, credit, description,debitfilial,' +
+        'kreditfilial,type'
+      '  FROM pbf_settingchilds '
+      ''
+      'where mainid = :mainid'
+      'and nvl(type,0)=1')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000E0000003A004D00410049004E0049004400040000000800
+      0000000000000000F03F00000000}
+    Master = pbfotypes
+    MasterFields = 'ID'
+    DetailFields = 'MAINID'
+    Session = sboapiDataModule.SBSession
+    BeforePost = pbfotypeoperationsBeforePost
+    Left = 146
+    Top = 98
+    object pbfotypeoperationsID: TFloatField
+      FieldName = 'ID'
+    end
+    object pbfotypeoperationsMAINID: TFloatField
+      FieldName = 'MAINID'
+      Required = True
+    end
+    object pbfotypeoperationsDEBITFILIAL: TWideStringField
+      DisplayLabel = #1044'.'#1060#1080#1083#1080#1072#1083
+      FieldName = 'DEBITFILIAL'
+      Size = 25
+    end
+    object pbfotypeoperationsDEBIT: TWideStringField
+      DisplayLabel = #1044#1077#1073#1077#1090
+      DisplayWidth = 100
+      FieldName = 'DEBIT'
+      Required = True
+      Size = 100
+    end
+    object pbfotypeoperationsKREDITFILIAL: TWideStringField
+      DisplayLabel = #1050'.'#1060#1080#1083#1080#1072#1083
+      FieldName = 'KREDITFILIAL'
+      Size = 25
+    end
+    object pbfotypeoperationsCREDIT: TWideStringField
+      DisplayLabel = #1050#1088#1077#1076#1080#1090
+      DisplayWidth = 100
+      FieldName = 'CREDIT'
+      Required = True
+      Size = 100
+    end
+    object pbfotypeoperationsDESCRIPTION: TWideStringField
+      DisplayLabel = #1058#1103#1081#1080#1085#1072#1090#1099
+      FieldName = 'DESCRIPTION'
+      Required = True
+      Size = 60
+    end
+    object pbfotypeoperationsTYPE: TFloatField
+      FieldName = 'TYPE'
+    end
+  end
+  object pbfothersettings: TOracleDataSet
+    SQL.Strings = (
+      
+        'SELECT a.id, a.rowid, a.filialid,  a.stamp, a.chiefsign, a.accou' +
+        'tantsign'
+      '  FROM pbf_othersettings a'
+      ''
+      'where filialid = :filialid')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000120000003A00460049004C00490041004C00490044000400
+      00000000000000000000}
+    Master = PbfOSFilials
+    MasterFields = 'ID'
+    DetailFields = 'FILIALID'
+    Session = sboapiDataModule.SBSession
+    Left = 388
+    Top = 56
+    object pbfothersettingsID: TFloatField
+      FieldName = 'ID'
+    end
+    object pbfothersettingsFILIALID: TFloatField
+      FieldName = 'FILIALID'
+      Required = True
+    end
+    object pbfothersettingsSTAMP: TBlobField
+      DisplayLabel = #1052#1102#1097#1094#1088
+      FieldName = 'STAMP'
+      BlobType = ftOraBlob
+    end
+    object pbfothersettingsCHIEFSIGN: TBlobField
+      DisplayLabel = #1052#1094#1076#1080#1088#1080#1085' '#1080#1084#1079#1072#1089#1099
+      FieldName = 'CHIEFSIGN'
+      BlobType = ftOraBlob
+    end
+    object pbfothersettingsACCOUTANTSIGN: TBlobField
+      DisplayLabel = #1052#1094#1097#1072#1089#1080#1073#1080#1085' '#1080#1084#1079#1072#1089#1099
+      FieldName = 'ACCOUTANTSIGN'
+      BlobType = ftOraBlob
+    end
+  end
+  object PbfOSFilials: TOracleDataSet
+    SQL.Strings = (
+      'select id,name from smart.filial_t'
+      'order by id')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 428
+    Top = 56
+    object PbfOSFilialsID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object PbfOSFilialsNAME: TWideStringField
+      DisplayLabel = #1060#1080#1083#1080#1072#1083
+      FieldName = 'NAME'
+      Size = 90
+    end
+  end
+  object pbfothersettingsds: TDataSource
+    DataSet = pbfothersettings
+    Left = 388
+    Top = 88
+  end
+  object PbfOSFilialsds: TDataSource
+    DataSet = PbfOSFilials
+    Left = 428
+    Top = 88
+  end
+  object OpenPictureDialog1: TOpenPictureDialog
+    Left = 372
+    Top = 192
+  end
+end

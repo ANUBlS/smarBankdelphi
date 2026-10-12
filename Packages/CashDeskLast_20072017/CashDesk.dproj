@@ -1,0 +1,211 @@
+﻿	<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+		<PropertyGroup>
+			<ProjectGuid>{6B77B83B-2D4D-4AEB-8DF8-3B87D691031E}</ProjectGuid>
+			<MainSource>CashDesk.dpr</MainSource>
+			<Config Condition="'$(Config)'==''">Debug</Config>
+			<DCC_DCCCompiler>DCC32</DCC_DCCCompiler>
+			<ProjectVersion>12.3</ProjectVersion>
+			<Base>True</Base>
+			<Platform>Win32</Platform>
+			<AppType>Library</AppType>
+			<FrameworkType>None</FrameworkType>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Config)'=='Base' or '$(Base)'!=''">
+			<Base>true</Base>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Config)'=='Release' or '$(Cfg_1)'!=''">
+			<Cfg_1>true</Cfg_1>
+			<CfgParent>Base</CfgParent>
+			<Base>true</Base>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Config)'=='Debug' or '$(Cfg_2)'!=''">
+			<Cfg_2>true</Cfg_2>
+			<CfgParent>Base</CfgParent>
+			<Base>true</Base>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Base)'!=''">
+			<DCC_DependencyCheckOutputName>..\..\..\Bin\CashDesk.ocx</DCC_DependencyCheckOutputName>
+			<DCC_ExeOutput>D:\Smart-Bank\Bin</DCC_ExeOutput>
+			<DCC_UsePackage>Vcl;Vcldb;dclbde;sbplg50;sboapi50;doa41dXE;SBCMVcl50;SBExcelExporter;QR5RunDXE;SBTranslate</DCC_UsePackage>
+			<DCC_ImageBase>00400000</DCC_ImageBase>
+			<DCC_UnitAlias>WinTypes=Windows;WinProcs=Windows;DbiTypes=BDE;DbiProcs=BDE;DbiErrs=BDE;WinTypes=Windows;WinProcs=Windows;$(DCC_UnitAlias)</DCC_UnitAlias>
+			<DCC_Alignment>1</DCC_Alignment>
+			<DCC_Platform>x86</DCC_Platform>
+			<UsePackages>true</UsePackages>
+			<DCC_N>true</DCC_N>
+			<DCC_K>false</DCC_K>
+			<GenDll>true</GenDll>
+			<DCC_S>false</DCC_S>
+			<DCC_SymbolReferenceInfo>1</DCC_SymbolReferenceInfo>
+			<DCC_WriteableConstants>true</DCC_WriteableConstants>
+			<DCC_F>false</DCC_F>
+			<DCC_E>false</DCC_E>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Cfg_1)'!=''">
+			<DCC_LocalDebugSymbols>false</DCC_LocalDebugSymbols>
+			<DCC_Define>RELEASE;$(DCC_Define)</DCC_Define>
+			<DCC_SymbolReferenceInfo>0</DCC_SymbolReferenceInfo>
+			<DCC_DebugInformation>false</DCC_DebugInformation>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Cfg_2)'!=''">
+			<DCC_Define>DEBUG;$(DCC_Define)</DCC_Define>
+		</PropertyGroup>
+		<ItemGroup>
+			<DelphiCompile Include="CashDesk.dpr">
+				<MainSource>MainSource</MainSource>
+			</DelphiCompile>
+			<DCCReference Include="CashDesk_TLB.pas"/>
+			<DCCReference Include="CashDeskImpl.pas">
+				<Form>FrmCashDesk</Form>
+				<DesignClass>TActiveForm</DesignClass>
+				<CoClasses>FrmCashDesk</CoClasses>
+			</DCCReference>
+			<DCCReference Include="CashDataModule.pas">
+				<Form>CashDataMod</Form>
+				<DesignClass>TDataModule</DesignClass>
+			</DCCReference>
+			<DCCReference Include="CashReportMain.pas">
+				<Form>MainCashReport</Form>
+				<DesignClass>TQuickRep</DesignClass>
+			</DCCReference>
+			<DCCReference Include="UntCashRpt.pas">
+				<Form>CashRpt</Form>
+				<DesignClass>TQuickRep</DesignClass>
+			</DCCReference>
+			<DCCReference Include="UntIOCome.pas">
+				<Form>IOCome</Form>
+				<DesignClass>TQuickRep</DesignClass>
+			</DCCReference>
+			<DCCReference Include="UntLOICome.pas">
+				<Form>LOICome</Form>
+				<DesignClass>TQuickRep</DesignClass>
+			</DCCReference>
+			<DCCReference Include="UntOrderRpt.pas">
+				<Form>QuickRptOrder</Form>
+				<DesignClass>TQuickRep</DesignClass>
+			</DCCReference>
+			<DCCReference Include="UntLOrederRpt.pas">
+				<Form>QRTotalReport</Form>
+				<DesignClass>TQuickRep</DesignClass>
+			</DCCReference>
+			<DCCReference Include="UntChecksRpt.pas">
+				<Form>QRptCheks</Form>
+				<DesignClass>TQuickRep</DesignClass>
+			</DCCReference>
+			<DCCReference Include="UntQRReceiptOrder.pas">
+				<Form>QRPTReceiptOrder</Form>
+				<DesignClass>TQuickRep</DesignClass>
+			</DCCReference>
+			<DCCReference Include="UntFrmInfo.pas">
+				<Form>FrmInfo</Form>
+			</DCCReference>
+			<DCCReference Include="UntCashSettings.pas">
+				<Form>FormCashSettings</Form>
+			</DCCReference>
+			<DCCReference Include="UntFinalResultReport.pas">
+				<Form>QRResultReport</Form>
+				<DesignClass>TQuickRep</DesignClass>
+			</DCCReference>
+			<DCCReference Include="UntCashBook.pas">
+				<Form>QRp_CashBook</Form>
+				<DesignClass>TQuickRep</DesignClass>
+			</DCCReference>
+			<DCCReference Include="..\payment_rep\PhotoImpl.pas">
+				<Form>FormPhoto</Form>
+			</DCCReference>
+			<DCCReference Include="CurrencyToHR_Azeri_Impl.pas"/>
+			<RidlCompile Include="CashDesk.ridl"/>
+			<BuildConfiguration Include="Debug">
+				<Key>Cfg_2</Key>
+				<CfgParent>Base</CfgParent>
+			</BuildConfiguration>
+			<BuildConfiguration Include="Base">
+				<Key>Base</Key>
+			</BuildConfiguration>
+			<BuildConfiguration Include="Release">
+				<Key>Cfg_1</Key>
+				<CfgParent>Base</CfgParent>
+			</BuildConfiguration>
+		</ItemGroup>
+		<Import Condition="Exists('$(BDS)\Bin\CodeGear.Delphi.Targets')" Project="$(BDS)\Bin\CodeGear.Delphi.Targets"/>
+		<Import Condition="Exists('$(APPDATA)\Embarcadero\$(BDSAPPDATABASEDIR)\$(PRODUCTVERSION)\UserTools.proj')" Project="$(APPDATA)\Embarcadero\$(BDSAPPDATABASEDIR)\$(PRODUCTVERSION)\UserTools.proj"/>
+		<ProjectExtensions>
+			<Borland.Personality>Delphi.Personality.12</Borland.Personality>
+			<Borland.ProjectType>VCLApplication</Borland.ProjectType>
+			<BorlandProject>
+				<Delphi.Personality>
+					<Source>
+						<Source Name="MainSource">CashDesk.dpr</Source>
+					</Source>
+					<Parameters>
+						<Parameters Name="RunParams">/LocalIniSourceLocation=winini:\Smart-Bank\Bin\SBLocal.ini /SystemIniSourceLocation=winini:\Smart-Bank\Bin\SmartBank.ini</Parameters>
+						<Parameters Name="HostApplication">D:\Smart-Bank\Bin\SmartBank.exe</Parameters>
+					</Parameters>
+					<Language>
+						<Language Name="ProjectLang">$00000409</Language>
+					</Language>
+					<VersionInfo>
+						<VersionInfo Name="IncludeVerInfo">True</VersionInfo>
+						<VersionInfo Name="AutoIncBuild">True</VersionInfo>
+						<VersionInfo Name="MajorVer">1</VersionInfo>
+						<VersionInfo Name="MinorVer">0</VersionInfo>
+						<VersionInfo Name="Release">0</VersionInfo>
+						<VersionInfo Name="Build">613</VersionInfo>
+						<VersionInfo Name="Debug">False</VersionInfo>
+						<VersionInfo Name="PreRelease">False</VersionInfo>
+						<VersionInfo Name="Special">False</VersionInfo>
+						<VersionInfo Name="Private">False</VersionInfo>
+						<VersionInfo Name="DLL">True</VersionInfo>
+						<VersionInfo Name="Locale">1033</VersionInfo>
+						<VersionInfo Name="CodePage">1252</VersionInfo>
+					</VersionInfo>
+					<VersionInfoKeys>
+						<VersionInfoKeys Name="CompanyName"/>
+						<VersionInfoKeys Name="FileDescription"/>
+						<VersionInfoKeys Name="FileVersion">1.0.0.613</VersionInfoKeys>
+						<VersionInfoKeys Name="InternalName"/>
+						<VersionInfoKeys Name="LegalCopyright"/>
+						<VersionInfoKeys Name="LegalTrademarks"/>
+						<VersionInfoKeys Name="OriginalFilename"/>
+						<VersionInfoKeys Name="ProductName"/>
+						<VersionInfoKeys Name="ProductVersion">1.0.0.0</VersionInfoKeys>
+						<VersionInfoKeys Name="Comments"/>
+						<VersionInfoKeys Name="OleSelfRegister">1</VersionInfoKeys>
+					</VersionInfoKeys>
+					<Excluded_Packages>
+						<Excluded_Packages Name="D:\Smart-Bank\Bin\Ehlib50.bpl">EhLib 3.3</Excluded_Packages>
+						<Excluded_Packages Name="D:\work_nur\pd\Program\DclEhlib50.bpl">File D:\work_nur\pd\Program\DclEhlib50.bpl not found</Excluded_Packages>
+						<Excluded_Packages Name="D:\Smart-Bank\Bin\SBDialogs.bpl">Smart - Common Components, Functions and Classes</Excluded_Packages>
+						<Excluded_Packages Name="D:\Smart-Bank\Bin\SBAnalys.bpl">(untitled)</Excluded_Packages>
+						<Excluded_Packages Name="D:\Smart-Bank\Bin\FieldSearch.bpl">File D:\Smart-Bank\Bin\FieldSearch.bpl not found</Excluded_Packages>
+						<Excluded_Packages Name="C:\Program Files\DevExpress VCL\Library\Delphi15\dclcxPivotGridChartD15.bpl">File C:\Program Files\DevExpress VCL\Library\Delphi15\dclcxPivotGridChartD15.bpl not found</Excluded_Packages>
+						<Excluded_Packages Name="C:\Program Files\DevExpress VCL\Library\Delphi15\dclcxSchedulerGridD15.bpl">File C:\Program Files\DevExpress VCL\Library\Delphi15\dclcxSchedulerGridD15.bpl not found</Excluded_Packages>
+						<Excluded_Packages Name="C:\Documents and Settings\All Users\Documents\RAD Studio\8.0\Bpl\dclcxSchedulerD15.bpl">File C:\Documents and Settings\All Users\Documents\RAD Studio\8.0\Bpl\dclcxSchedulerD15.bpl not found</Excluded_Packages>
+						<Excluded_Packages Name="C:\Program Files\DevExpress VCL\Library\Delphi15\dcldxSBD15.bpl">File C:\Program Files\DevExpress VCL\Library\Delphi15\dcldxSBD15.bpl not found</Excluded_Packages>
+						<Excluded_Packages Name="C:\Program Files\DevExpress VCL\Library\Delphi15\dcldxSpellCheckerD15.bpl">File C:\Program Files\DevExpress VCL\Library\Delphi15\dcldxSpellCheckerD15.bpl not found</Excluded_Packages>
+						<Excluded_Packages Name="C:\Program Files\DevExpress VCL\Library\Delphi15\dclcxSpreadSheetD15.bpl">File C:\Program Files\DevExpress VCL\Library\Delphi15\dclcxSpreadSheetD15.bpl not found</Excluded_Packages>
+						<Excluded_Packages Name="C:\Program Files\DevExpress VCL\Library\Delphi15\dcldxPSPrVwAdvD15.bpl">File C:\Program Files\DevExpress VCL\Library\Delphi15\dcldxPSPrVwAdvD15.bpl not found</Excluded_Packages>
+						<Excluded_Packages Name="C:\Program Files\DevExpress VCL\Library\Delphi15\dcldxPSPrVwRibbonD15.bpl">File C:\Program Files\DevExpress VCL\Library\Delphi15\dcldxPSPrVwRibbonD15.bpl not found</Excluded_Packages>
+						<Excluded_Packages Name="$(BDSBIN)\dclDataSnapIndy10ServerTransport150.bpl">Embarcadero DBExpress DataSnap Server Transport Components</Excluded_Packages>
+						<Excluded_Packages Name="$(BDSBIN)\dclDataSnapProviderClient150.bpl">Embarcadero DBExpress DataSnap Provider Client Components</Excluded_Packages>
+						<Excluded_Packages Name="$(BDSBIN)\dclDataSnapClient150.bpl">Embarcadero DBExpress DataSnap Client Components</Excluded_Packages>
+						<Excluded_Packages Name="$(BDSBIN)\dclDataSnapServer150.bpl">Embarcadero DBExpress DataSnap Server Components</Excluded_Packages>
+						<Excluded_Packages Name="$(BDSBIN)\dcldbxcds150.bpl">Embarcadero SimpleDataset Component (DBX)</Excluded_Packages>
+						<Excluded_Packages Name="C:\Program Files\dataweb\TurboDB 6 for VCL\Lib\Delphi15\dclturbodb6d15.bpl">dataweb TurboDB 6 VCL</Excluded_Packages>
+						<Excluded_Packages Name="C:\Program Files\DevExpress VCL\Library\Delphi15\dcldxdbtrD15.bpl">ExpressDBTree by Developer Express Inc.</Excluded_Packages>
+						<Excluded_Packages Name="C:\Program Files\DevExpress VCL\Library\Delphi15\dcldxDockingD15.bpl">File C:\Program Files\DevExpress VCL\Library\Delphi15\dcldxDockingD15.bpl not found</Excluded_Packages>
+						<Excluded_Packages Name="C:\Program Files\DevExpress VCL\Library\Delphi15\dcldxFlowChartD15.bpl">ExpressFlowChart by Developer Express Inc.</Excluded_Packages>
+						<Excluded_Packages Name="C:\Program Files\DevExpress VCL\Library\Delphi15\dcldxDBOrD15.bpl">File C:\Program Files\DevExpress VCL\Library\Delphi15\dcldxDBOrD15.bpl not found</Excluded_Packages>
+						<Excluded_Packages Name="$(BDSBIN)\dcloffice2k150.bpl">Microsoft Office 2000 Sample Automation Server Wrapper Components</Excluded_Packages>
+					</Excluded_Packages>
+				</Delphi.Personality>
+				<ActiveXProjectInfo>
+					<version>1</version>
+				</ActiveXProjectInfo>
+				<Platforms>
+					<Platform value="Win32">True</Platform>
+				</Platforms>
+			</BorlandProject>
+			<ProjectFileVersion>12</ProjectFileVersion>
+		</ProjectExtensions>
+	</Project>

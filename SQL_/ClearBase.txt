@@ -1,0 +1,333 @@
+truncate table PROVARCH;
+truncate table out_PROVARCH;
+truncate table LAZYTRANSACTION;
+truncate table out_LAZYTRANSACTION;
+truncate table DELETED_TRANS;
+truncate table out_ARCHOST;
+truncate table LAZYREST;
+truncate table out_LAZYREST;
+truncate table XS_BATCHS;
+truncate table XS_BATCHS_ARCHIVE;
+truncate table XS_BENEFICIARY;
+truncate table XS_BENEFICIARY_ARCHIVE;
+truncate table XS_BENEFICIARY_SHABLON;
+truncate table XS_INCOMING;
+truncate table CARD_CLIENTS;
+truncate table CARD_CLIENTSCLOSED;
+truncate table CARD_CLIENTSDELETED;
+truncate table CARD_DELETED;
+truncate table CARD_DFILES_ARCHIVE;
+truncate table CARD_DXXXFILES_ARCHIVE;
+truncate table CARD_MESSAGES_C_ARCHIVE;
+truncate table CARD_INTRETALIFILES;
+truncate table CARD_INTRETALIFILES_ARCHIVE;
+truncate table SW_OUT_NEW_T;
+truncate table SW_IN_T;
+truncate table SW_TEMPLATES;
+truncate table SW_BUSPROC_SETT_IN;
+truncate table SW_BUSPROC_SETT_OUT;
+truncate table AZIPS_BP_PROCCES_ACC;
+truncate table AZIPS_BP_PROCCES_ACC_IN;
+truncate table AZP205_SETT;
+truncate table AZP205_SETT_IN;
+truncate table CM_PORTFOLIO;
+truncate table CM_GUARANTEE_CREDIT;
+truncate table CM_BOOROWERINFO;
+truncate table CM_ACCOUNTS;
+truncate table CM_HISTORY;
+truncate table CM_INTERESTS;
+truncate table CM_CARDTRCHINTRESTS;
+truncate table CM_CARDTRCHRESTS;
+truncate table CM_PAYMENTS;
+truncate table CM_TRANCHES;
+truncate table CR_PORTFOLIO;
+truncate table CR_BOOROWERINFO;
+truncate table CR_ACCOUNTS;
+truncate table CR_HISTORY;
+truncate table CR_INTERESTS;
+truncate table CR_CARDTRCHINTRESTS;
+truncate table CR_CARDTRCHRESTS;
+truncate table CR_PAYMENTS;
+truncate table CR_TRANCHES;
+truncate table DM_CONTRACT_HISTORY;
+truncate table DM_CONTRACT_INTERESTS;
+truncate table DM_CONTRACT_ACCOUNTS;
+truncate table DM_CONTRACTS;
+truncate table DM_TRANCHES;
+truncate table PAYMENTDECREE_T;
+truncate table mmx_transinfo;  
+truncate table WS_CHECKING_PAYMENTS     ;         
+truncate table WS_REQUEST_MILLION2;              
+truncate table WS_RESPONSE_MILLION;               
+truncate table WS_ACCOUNT_INFO;                   
+truncate table WS_ERR_LOG ;                      
+truncate table WS_ERR_LOG_MILLION  ;              
+truncate table WS_HESABLAR_EMANAT;                
+truncate table WS_PAYMENT_EMANAT  ;               
+truncate table WS_PAYMENT_MILLION2 ;         
+truncate table WS_ACCOUNT_INFO_MILLION ;          
+truncate table WS_BILLING_REQUEST_MILLION ;       
+truncate table WS_ACCOUNT_INFO_EMANAT  ;          
+truncate table WS_BILLING_RESPONSE_EMANAT ; 
+truncate table WS_BILLING_REQUEST_EMANAT;         
+truncate table WS_REQUEST_EMANAT     ;            
+truncate table WS_TEMPPAYMENT_MILLION2 ;          
+truncate table WS_BILLING_RESPONSE   ;            
+truncate table WS_TEMPPAYMENT_EMANAT ;            
+truncate table WS_TEMPPAYMENT_MILLION ;           
+truncate table WS_CASHIN_EMANAT      ;              
+truncate table WS_BILLING_REQUEST_MILLION2 ;      
+truncate table WS_CASHIN_MILLION     ;            
+truncate table WS_PAYMENT       ;                 
+truncate table WS_PAYMENT_EMANAT_COPY   ;         
+truncate table WS_SETTINGS            ;           
+truncate table WS_BILLING_RESPONSE_MILLION2 ;     
+truncate table WS_CHECKING_PAYMENTS_EMANAT ;      
+truncate table WS_REQUEST         ;               
+truncate table WS_BILLING_REQUEST   ;             
+truncate table WS_REQUEST_MILLION    ;            
+truncate table WS_BILLING_RESPONSE_MILLION ;      
+truncate table WS_ERR_LOG_EMANAT         ;        
+truncate table WS_PAYMENT_MILLION      ;          
+truncate table WS_SETTINGS_MILLION      ;         
+truncate table WS_TEMPPAYMENT        ;            
+truncate table WS_SETTINGS_EMANAT     ;       
+truncate table WS_yigim     ; 
+   
+
+delete from BANKINFO_T where kod_fil not in (0,10);
+delete from BANKPROPERTIES where filialid not in (0,10);
+delete from FILIAL_T where id not in (0,10);
+delete from OPERKURS where dat<(select arc_day from sysdat);
+
+truncate table ACCOUNT;
+truncate table out_ACCOUNT;
+truncate table CUSTINFO;
+truncate table CUSTIMAGE;
+truncate table CUSTOMERS;
+
+truncate table asan_log;
+truncate table wares_all;
+truncate table ct_admin_in;
+truncate table ct_folderplace_info;
+truncate table ct_court_doc;
+
+DECLARE
+ CURSOR user_cursor
+  IS
+  SELECT obj name
+         FROM sba_objinf
+         where obj <> 'SMART' and type='U'; 
+ l_name   user_cursor%ROWTYPE;
+BEGIN
+  OPEN user_cursor;
+  LOOP
+    FETCH user_cursor INTO l_name;
+    EXIT WHEN user_cursor%NOTFOUND;    
+    execute immediate 'delete from sba_objinf where OBJ = '''||l_name.name||'''';
+    execute immediate 'drop user '||l_name.name||' cascade'; 
+  END LOOP;
+  CLOSE user_cursor;
+  commit;
+END;
+
+DROP SEQUENCE tr_seg_provarch;
+CREATE SEQUENCE tr_seg_provarch
+  INCREMENT BY 1
+  START WITH 1
+  MINVALUE 1
+  MAXVALUE 999999999999999999999999999
+  NOCYCLE
+  NOORDER
+  NOCACHE
+;
+DROP SEQUENCE tr_seg_archost;
+CREATE SEQUENCE tr_seg_archost
+  INCREMENT BY 1
+  START WITH 1
+  MINVALUE 1
+  MAXVALUE 999999999999999999999999999
+  NOCYCLE
+  NOORDER
+  NOCACHE
+;
+DROP SEQUENCE XS_BATCHS_ID_GEN;
+CREATE SEQUENCE XS_BATCHS_ID_GEN
+  INCREMENT BY 1
+  START WITH 1
+  MINVALUE 1
+  MAXVALUE 999999999999999999999999999
+  NOCYCLE
+  NOORDER
+  NOCACHE
+;
+DROP SEQUENCE xs_beneficiary_id_gen;
+CREATE SEQUENCE xs_beneficiary_id_gen
+  INCREMENT BY 1
+  START WITH 1
+  MINVALUE 1
+  MAXVALUE 999999999999999999999999999
+  NOCYCLE
+  NOORDER
+  NOCACHE
+;
+DROP SEQUENCE xs_INCOMING_ID_GEN;
+CREATE SEQUENCE xs_INCOMING_ID_GEN
+  INCREMENT BY 1
+  START WITH 1
+  MINVALUE 1
+  MAXVALUE 999999999999999999999999999
+  NOCYCLE
+  NOORDER
+  NOCACHE
+;
+DROP SEQUENCE card_card_dfiles_id;
+CREATE SEQUENCE card_card_dfiles_id
+  INCREMENT BY 1
+  START WITH 1
+  MINVALUE 1
+  MAXVALUE 999999999999999999999999999
+  NOCYCLE
+  NOORDER
+  NOCACHE
+;
+DROP SEQUENCE card_intmes_id;
+CREATE SEQUENCE card_intmes_id
+  INCREMENT BY 1
+  START WITH 1
+  MINVALUE 1
+  MAXVALUE 999999999999999999999999999
+  NOCYCLE
+  NOORDER
+  NOCACHE
+;
+DROP SEQUENCE sw_id;
+CREATE SEQUENCE sw_id
+  INCREMENT BY 1
+  START WITH 1
+  MINVALUE 1
+  MAXVALUE 999999999999999999999999999
+  NOCYCLE
+  NOORDER
+  NOCACHE
+;
+DROP SEQUENCE sw_in_id;
+CREATE SEQUENCE sw_in_id
+  INCREMENT BY 1
+  START WITH 1
+  MINVALUE 1
+  MAXVALUE 999999999999999999999999999
+  NOCYCLE
+  NOORDER
+  NOCACHE
+;
+DROP SEQUENCE sw_tmp_id;
+CREATE SEQUENCE sw_tmp_id
+  INCREMENT BY 1
+  START WITH 1
+  MINVALUE 1
+  MAXVALUE 999999999999999999999999999
+  NOCYCLE
+  NOORDER
+  NOCACHE
+;
+DROP SEQUENCE seq_cm_portfolio;
+CREATE SEQUENCE seq_cm_portfolio
+  INCREMENT BY 1
+  START WITH 1
+  MINVALUE 1
+  MAXVALUE 999999999999999999999999999
+  NOCYCLE
+  NOORDER
+  NOCACHE
+;
+DROP SEQUENCE seq_guarantee;
+CREATE SEQUENCE seq_guarantee
+  INCREMENT BY 1
+  START WITH 1
+  MINVALUE 1
+  MAXVALUE 999999999999999999999999999
+  NOCYCLE
+  NOORDER
+  NOCACHE
+;
+DROP SEQUENCE seq_cm_payments;
+CREATE SEQUENCE seq_cm_payments
+  INCREMENT BY 1
+  START WITH 1
+  MINVALUE 1
+  MAXVALUE 999999999999999999999999999
+  NOCYCLE
+  NOORDER
+  NOCACHE
+;
+DROP SEQUENCE seq_cm_tranches;
+CREATE SEQUENCE seq_cm_tranches
+  INCREMENT BY 1
+  START WITH 1
+  MINVALUE 1
+  MAXVALUE 999999999999999999999999999
+  NOCYCLE
+  NOORDER
+  NOCACHE
+;
+DROP SEQUENCE seq_cr_portfolio;
+CREATE SEQUENCE seq_cr_portfolio
+  INCREMENT BY 1
+  START WITH 1
+  MINVALUE 1
+  MAXVALUE 999999999999999999999999999
+  NOCYCLE
+  NOORDER
+  NOCACHE
+;
+DROP SEQUENCE seq_dm_tranches_new;
+CREATE SEQUENCE seq_dm_tranches_new
+  INCREMENT BY 1
+  START WITH 1
+  MINVALUE 1
+  MAXVALUE 999999999999999999999999999
+  NOCYCLE
+  NOORDER
+  NOCACHE
+;
+DROP SEQUENCE seq_paymentdecree;
+CREATE SEQUENCE seq_paymentdecree
+  INCREMENT BY 1
+  START WITH 1
+  MINVALUE 1
+  MAXVALUE 999999999999999999999999999
+  NOCYCLE
+  NOORDER
+  NOCACHE
+;
+DROP SEQUENCE tr_seg_account;
+CREATE SEQUENCE tr_seg_account
+  INCREMENT BY 1
+  START WITH 1
+  MINVALUE 1
+  MAXVALUE 999999999999999999999999999
+  NOCYCLE
+  NOORDER
+  NOCACHE
+;
+DROP SEQUENCE tr_seg_custinfo;
+CREATE SEQUENCE tr_seg_custinfo
+  INCREMENT BY 1
+  START WITH 1
+  MINVALUE 1
+  MAXVALUE 999999999999999999999999999
+  NOCYCLE
+  NOORDER
+  NOCACHE
+;
+DROP SEQUENCE tr_seg_customer;
+CREATE SEQUENCE tr_seg_customer
+  INCREMENT BY 1
+  START WITH 1
+  MINVALUE 1
+  MAXVALUE 999999999999999999999999999
+  NOCYCLE
+  NOORDER
+  NOCACHE
+;

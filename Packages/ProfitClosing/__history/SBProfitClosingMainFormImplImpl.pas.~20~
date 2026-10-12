@@ -1,0 +1,477 @@
+﻿unit SBProfitClosingMainFormImplImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActiveX, AxCtrls, ProfitClosing_TLB, StdVcl, StdCtrls, Db, OracleData,
+  Grids, DBGrids, ExtCtrls, ActnList,SBPlgAx50_TLB, ImgList, Oracle;
+
+type
+  TSBProfitClosingMainForm = class(TActiveForm, ISBProfiClosingMainForm,IIconExporter)
+    Panel1: TPanel;
+    GroupBox1: TGroupBox;
+    DataSource1: TDataSource;
+    DayProfitsData: TOracleDataSet;
+    DBGrid1: TDBGrid;
+    DayProfitsDataID: TFloatField;
+    DayProfitsDataOSTAT: TFloatField;
+    DayProfitsDataPOK_OSTAT: TFloatField;
+    DayProfitsDataBAL_CN1: TFloatField;
+    Button1: TButton;
+    Panel2: TPanel;
+    Label1: TLabel;
+    Label2: TLabel;
+    RefreshButton: TButton;
+    DayProfitsDataActivePassiveChar: TStringField;
+    DayProfitsDataAMOUNT: TFloatField;
+    DayProfitsDataLAMOUNT: TFloatField;
+    ActionList1: TActionList;
+    ProfitsClose: TAction;
+    ImageList1: TImageList;
+    BtnCoinsRefresh: TButton;
+    OrDS_Coins: TOracleDataSet;
+    OrDS_CoinsID: TFloatField;
+    OrDS_CoinsDEBET: TFloatField;
+    OrDS_CoinsKREDIT: TFloatField;
+    OrDS_CoinsOSTAT: TFloatField;
+    OrDS_CoinsPOK_OSTAT: TFloatField;
+    OrDS_CoinsFILIAL: TIntegerField;
+    DS_Coins: TDataSource;
+    BtnCoinOperations: TButton;
+    GridCoins: TDBGrid;
+    CoinClose: TAction;
+    OrPackCloseCoin: TOraclePackage;
+    DayProfitsDataACC_NO: TWideStringField;
+    DayProfitsDataVAL_ACC: TIntegerField;
+    DayProfitsDataVAL_NAME: TWideStringField;
+    OrDS_CoinsACC_NO: TWideStringField;
+    OrDS_CoinsVAL_ACC: TIntegerField;
+    OrDS_CoinsVAL_NAME: TWideStringField;
+    procedure ProfitsCloseExecute(Sender: TObject);
+    procedure RefreshButtonClick(Sender: TObject);
+    procedure DayProfitsDataCalcFields(DataSet: TDataSet);
+    procedure ProfitsCloseUpdate(Sender: TObject);
+    procedure BtnCoinsRefreshClick(Sender: TObject);
+    procedure CoinCloseExecute(Sender: TObject);
+    procedure ActiveFormCreate(Sender: TObject);
+  private
+    { Private declarations }
+    FEvents: ISBProfiClosingMainFormEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+  protected
+    { Protected declarations }
+    function Get_Icon: OLE_HANDLE; safecall;
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+  public
+    { Public declarations }
+    procedure Initialize; override;
+  end;
+
+implementation
+
+uses ComObj, ComServ, sboapiDataModuleImpl, SBSystem, TemporaryTransactionCommitFormImpl,SBTranslateProc;
+
+{$R *.DFM}
+
+{ TSBProfiClosingMainFormImpl }
+function TSBProfitClosingMainForm.Get_Icon: OLE_HANDLE;
+const
+  ImageIndex = 0;  // позиция иконки в списке ImageList1
+begin
+  ImageList1.GetIcon(ImageIndex, Icon);
+  Result := Icon.Handle;
+end;
+
+procedure TSBProfitClosingMainForm.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_SBProfiClosingMainFormImplPage); }
+end;
+
+procedure TSBProfitClosingMainForm.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as ISBProfiClosingMainFormEvents;
+end;
+
+procedure TSBProfitClosingMainForm.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TSBProfitClosingMainForm.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TSBProfitClosingMainForm.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TSBProfitClosingMainForm.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TSBProfitClosingMainForm.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TSBProfitClosingMainForm.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TSBProfitClosingMainForm.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TSBProfitClosingMainForm.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TSBProfitClosingMainForm.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TSBProfitClosingMainForm.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TSBProfitClosingMainForm.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TSBProfitClosingMainForm.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TSBProfitClosingMainForm.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TSBProfitClosingMainForm.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TSBProfitClosingMainForm.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TSBProfitClosingMainForm.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TSBProfitClosingMainForm.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TSBProfitClosingMainForm.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TSBProfitClosingMainForm.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TSBProfitClosingMainForm._Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TSBProfitClosingMainForm.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TSBProfitClosingMainForm.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TSBProfitClosingMainForm.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TSBProfitClosingMainForm.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TSBProfitClosingMainForm.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TSBProfitClosingMainForm.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TSBProfitClosingMainForm.KeyPressEvent(Sender: TObject;
+  var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TSBProfitClosingMainForm.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TSBProfitClosingMainForm.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TSBProfitClosingMainForm.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TSBProfitClosingMainForm.Set_AxBorderStyle(
+  Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TSBProfitClosingMainForm.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TSBProfitClosingMainForm.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TSBProfitClosingMainForm.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TSBProfitClosingMainForm.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TSBProfitClosingMainForm.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TSBProfitClosingMainForm.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TSBProfitClosingMainForm.Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TSBProfitClosingMainForm.Set_HelpFile(
+  const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TSBProfitClosingMainForm.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TSBProfitClosingMainForm.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TSBProfitClosingMainForm.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TSBProfitClosingMainForm.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TSBProfitClosingMainForm.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+procedure TSBProfitClosingMainForm.ProfitsCloseExecute(Sender: TObject);
+var
+  TempID: Integer;
+begin
+ {TempID := Sb_CloseDayProfits;
+  with TTemporaryTransactionCommitForm.Create(Self) do
+  try
+    if Execute(TempID, 'Galir-zararin baglanmasi', False, True, FilterNone-[tfLAmount, tfCreditAmount]) then
+      ShowMessage(Format('Gəlir-xərc hesabları bağlandı. %d əməliyyat günün sənədlərinə daxil oldu', [TransactionsCount]));
+   sboapiDataModule.SBSession.Commit;   
+  finally
+    Release;
+  end;
+  DayProfitsData.Refresh;}
+  {closed by H. R. 04.02.2015}
+
+  {H. R. 04.02.2015}
+  try
+  if MessageDlg(IntToStr(DayProfitsData.RecordCount) +
+   ' sayda əməliyyat günün sənədlərinə daxil olacaq. Gəlir-xərc hesabları bağlansın?',
+    mtConfirmation, [mbYes, mbNo, mbCancel], 0) = mrYes then
+  begin
+   Screen.Cursor := crHourGlass;
+   TempID := OrPackCloseCoin.CallIntegerFunction('close_day_profits',[]);
+   Screen.Cursor := crDefault;
+   ShowMessage('Gəlir-xərc hesabları bağlandı. Əməliyyatlar günün sənədlərinə daxil oldu');
+   DayProfitsData.Refresh;
+  end;
+  finally
+   Screen.Cursor := crDefault;
+  end;
+  {*** H. R. 04.02.2015 ***}
+end;
+
+procedure TSBProfitClosingMainForm.RefreshButtonClick(Sender: TObject);
+begin
+  DayProfitsData.Refresh;
+end;
+
+procedure TSBProfitClosingMainForm.DayProfitsDataCalcFields(
+  DataSet: TDataSet);
+var
+  LAmount: Currency;
+  APChar: String;
+begin
+  with Dataset do
+  begin
+    LAmount := FieldByName('POK_OSTAT').AsCurrency;
+    if LAmount < 0 then
+      APChar := 'A'
+    else
+    if LAmount > 0 then
+      APChar := 'P'
+    else
+      APChar := 'Zero';
+    FieldByName('ActivePassiveChar').AsString := APChar;
+  end;
+end;
+
+procedure TSBProfitClosingMainForm.ProfitsCloseUpdate(Sender: TObject);
+begin
+  with Sender as TAction do
+  begin
+    Enabled := DayProfitsData.Active;
+    if Enabled then
+      Enabled := DayProfitsData.RecordCount > 0;
+  end;
+end;
+
+procedure TSBProfitClosingMainForm.ActiveFormCreate(Sender: TObject);
+begin
+OrDS_Coins.Open;
+SBTranslateProc.TranslateAllComponents(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TSBProfitClosingMainForm.BtnCoinsRefreshClick(Sender: TObject);
+begin
+  OrDS_Coins.Close;
+  OrDS_Coins.Open;
+end;
+
+procedure TSBProfitClosingMainForm.CoinCloseExecute(Sender: TObject);
+begin
+  if MessageDlg('Qəpiklər məzənnə fərqi hesabları ilə bağlansın?',
+    mtConfirmation, [mbYes, mbNo, mbCancel], 0) = mrYes then
+  begin
+   OrPackCloseCoin.CallProcedure('CloseCoins',[]);
+   OrDS_Coins.Refresh;
+  end;
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TSBProfitClosingMainForm,
+    CLASS_SBProfiClosingMainForm,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

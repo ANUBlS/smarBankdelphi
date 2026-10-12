@@ -1,0 +1,161 @@
+object TrchAddForm: TTrchAddForm
+  Left = 322
+  Top = 332
+  BorderIcons = [biSystemMenu]
+  ClientHeight = 138
+  ClientWidth = 476
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poOwnerFormCenter
+  OnClose = FormClose
+  OnKeyPress = FormKeyPress
+  PixelsPerInch = 96
+  TextHeight = 13
+  object GroupBox2: TGroupBox
+    Left = 0
+    Top = 0
+    Width = 476
+    Height = 105
+    Align = alTop
+    Caption = #1058#1088#1072#1085#1096
+    TabOrder = 0
+    object Label1: TLabel
+      Left = 277
+      Top = 44
+      Width = 71
+      Height = 13
+      Caption = #1042#1077#1088#1080#1083#1084#1103' '#1058#1072#1088#1080#1093#1080' : '
+    end
+    object Label2: TLabel
+      Left = 277
+      Top = 72
+      Width = 71
+      Height = 13
+      Caption = #1052#1103#1073#1083#1103#1100'          : '
+    end
+    object Label3: TLabel
+      Left = 7
+      Top = 20
+      Width = 45
+      Height = 13
+      Caption = #1070#1097#1076#1103#1083#1080#1082' : '
+    end
+    object TrancheDatePckr: TDateTimePicker
+      Left = 349
+      Top = 40
+      Width = 122
+      Height = 21
+      Date = 38195.537546400500000000
+      Time = 38195.537546400500000000
+      Enabled = False
+      TabOrder = 0
+    end
+    object TrancheSumEdit: TCMCurrencyEdit
+      Left = 349
+      Top = 68
+      Width = 122
+      Height = 21
+      TabOrder = 1
+      Text = '0'
+      OnKeyPress = TrancheSumEditKeyPress
+    end
+    object CBPrcessTransactions: TCheckBox
+      Left = 6
+      Top = 85
+      Width = 267
+      Height = 17
+      Caption = #1071#1084#1103#1083#1080#1081#1081#1072#1090' '#1072#1087#1072#1088#1099#1083#1089#1099#1085
+      Checked = True
+      Enabled = False
+      State = cbChecked
+      TabOrder = 2
+    end
+    object Panel4: TPanel
+      Left = 3
+      Top = 43
+      Width = 271
+      Height = 41
+      TabOrder = 3
+      object StaticText3: TStaticText
+        Left = 1
+        Top = 1
+        Width = 269
+        Height = 17
+        Align = alTop
+        Alignment = taCenter
+        Caption = #399'm'#601'liyyat hesab'#305
+        Color = clNavy
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clWindow
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentColor = False
+        ParentFont = False
+        TabOrder = 0
+        ExplicitWidth = 86
+      end
+      object AccountListCB: TDBLookupComboboxEh
+        Left = 1
+        Top = 17
+        Width = 268
+        Height = 21
+        TabStop = False
+        DropDownBox.Sizable = True
+        EditButtons = <>
+        KeyField = 'ACCID'
+        ListField = 'ACCOUNTNUMBER'
+        ListSource = TrancheDataModule.DataSrcTrancheAccounts
+        TabOrder = 1
+        Visible = True
+      end
+    end
+    object DBEdit1: TDBEdit
+      Left = 53
+      Top = 16
+      Width = 151
+      Height = 21
+      TabStop = False
+      Color = clInfoBk
+      DataField = 'OBLIGATION'
+      DataSource = TrancheDataModule.DataSrcCreditInfo
+      ReadOnly = True
+      TabOrder = 4
+    end
+  end
+  object ButtonCommit: TButton
+    Left = 311
+    Top = 112
+    Width = 75
+    Height = 25
+    Action = ActnProcessTranche
+    TabOrder = 1
+  end
+  object ButtonCancel: TButton
+    Left = 387
+    Top = 112
+    Width = 75
+    Height = 25
+    Action = ActnCancelTranche
+    TabOrder = 2
+  end
+  object ActionsList: TActionList
+    Left = 72
+    Top = 104
+    object ActnProcessTranche: TAction
+      Caption = '&'#1043#1103#1073#1091#1083
+      OnExecute = ActnProcessTrancheExecute
+      OnUpdate = ActnProcessTrancheUpdate
+    end
+    object ActnCancelTranche: TAction
+      Caption = #1048'&'#1084#1090#1080#1085#1072
+      OnExecute = ActnCancelTrancheExecute
+    end
+  end
+end

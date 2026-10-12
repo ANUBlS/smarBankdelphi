@@ -1,0 +1,620 @@
+object frmIPINFO: TfrmIPINFO
+  Left = 233
+  Top = 208
+  BorderIcons = [biSystemMenu]
+  BorderStyle = bsSingle
+  Caption = 'Additional Information'
+  ClientHeight = 350
+  ClientWidth = 546
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  OldCreateOrder = False
+  OnCreate = FormCreate
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object GroupBox1: TGroupBox
+    Left = 0
+    Top = 0
+    Width = 273
+    Height = 308
+    Align = alLeft
+    Caption = 'Цмуми мялумат'
+    TabOrder = 0
+    object Label2: TLabel
+      Left = 8
+      Top = 16
+      Width = 60
+      Height = 13
+      Caption = 'Аиля вязиййяти'
+      FocusControl = DBEdit2
+    end
+    object Label3: TLabel
+      Left = 8
+      Top = 56
+      Width = 46
+      Height = 13
+      Caption = 'Айлыг эялири'
+      FocusControl = DBEdit3
+    end
+    object Label5: TLabel
+      Left = 8
+      Top = 96
+      Width = 136
+      Height = 13
+      Caption = 'Шяхсиййяти тясдиг едян сяняд'
+      FocusControl = DBEdit5
+    end
+    object Label7: TLabel
+      Left = 8
+      Top = 136
+      Width = 140
+      Height = 13
+      Caption = 'Аид олдуьу эцзяштли категорийа'
+      FocusControl = DBEdit7
+    end
+    object Label12: TLabel
+      Left = 8
+      Top = 176
+      Width = 103
+      Height = 13
+      Caption = 'Уникал сыьорта нюмряси'
+    end
+    object Label25: TLabel
+      Left = 8
+      Top = 216
+      Width = 26
+      Height = 13
+      Caption = 'ВЮИН'
+      FocusControl = DBEdit25
+    end
+    object Label26: TLabel
+      Left = 8
+      Top = 256
+      Width = 142
+      Height = 13
+      Caption = 'Боржаланла гощумлуг дяряжяси'
+      FocusControl = DBEdit26
+    end
+    object DBEdit2: TDBLookupComboBox
+      Left = 8
+      Top = 32
+      Width = 250
+      Height = 21
+      DataField = 'MARRIAGE'
+      DataSource = IpInfo
+      KeyField = 'ID'
+      ListField = 'NAME'
+      ListSource = Marriage1
+      TabOrder = 0
+      OnCloseUp = DBEdit3Change
+    end
+    object DBEdit3: TDBEdit
+      Left = 8
+      Top = 72
+      Width = 250
+      Height = 21
+      DataField = 'MONTHLYPROFIT'
+      DataSource = IpInfo
+      TabOrder = 1
+      OnChange = DBEdit3Change
+    end
+    object DBEdit5: TDBLookupComboBox
+      Left = 8
+      Top = 112
+      Width = 250
+      Height = 21
+      DataField = 'PASSTYPE'
+      DataSource = IpInfo
+      KeyField = 'ID'
+      ListField = 'NAME'
+      ListSource = PassType1
+      TabOrder = 2
+      OnCloseUp = DBEdit3Change
+    end
+    object DBEdit7: TDBLookupComboBox
+      Left = 8
+      Top = 152
+      Width = 250
+      Height = 21
+      DataField = 'SOCCATEGORY'
+      DataSource = IpInfo
+      KeyField = 'ID'
+      ListField = 'NAME'
+      ListSource = SocCategory1
+      TabOrder = 3
+      OnCloseUp = DBEdit3Change
+    end
+    object DBEdit10: TDBEdit
+      Left = 8
+      Top = 192
+      Width = 250
+      Height = 21
+      DataField = 'UNIQUEINSID'
+      DataSource = IpInfo
+      TabOrder = 4
+      OnChange = DBEdit3Change
+    end
+    object DBEdit25: TDBEdit
+      Left = 8
+      Top = 232
+      Width = 250
+      Height = 21
+      DataField = 'BB_INN'
+      DataSource = IpInfo
+      TabOrder = 5
+      OnChange = DBEdit3Change
+    end
+    object DBEdit26: TDBLookupComboBox
+      Left = 8
+      Top = 272
+      Width = 250
+      Height = 21
+      DataField = 'BB_FAMILYSTATUS'
+      DataSource = IpInfo
+      KeyField = 'ID'
+      ListField = 'NAME'
+      ListSource = Family
+      TabOrder = 6
+      OnCloseUp = DBEdit3Change
+    end
+  end
+  object GroupBox2: TGroupBox
+    Left = 273
+    Top = 0
+    Width = 273
+    Height = 308
+    Align = alRight
+    Caption = 'Ялавя мялумат'
+    TabOrder = 1
+    object Label8: TLabel
+      Left = 8
+      Top = 16
+      Width = 234
+      Height = 13
+      Caption = 'Боржаланы fярди гязалардан сыьорталайан ширкятин ады'
+      FocusControl = DBEdit8
+    end
+    object Label9: TLabel
+      Left = 8
+      Top = 56
+      Width = 112
+      Height = 13
+      Caption = 'Сыьорта полисинин нюмряси'
+      FocusControl = DBEdit9
+    end
+    object Label10: TLabel
+      Left = 8
+      Top = 136
+      Width = 123
+      Height = 13
+      Caption = 'Сыьорта мцгавилясинин тарихи'
+      FocusControl = cb_INSCONTRACTDATE
+    end
+    object Label11: TLabel
+      Left = 8
+      Top = 216
+      Width = 139
+      Height = 13
+      Caption = 'Сыьорта мцгавилясинин мцддяти'
+      FocusControl = cb_INSCONTRACTPREIOD
+    end
+    object Label13: TLabel
+      Left = 6
+      Top = 176
+      Width = 151
+      Height = 13
+      Caption = 'Сыьорта мцгавилясинин битмя тарихи'
+      FocusControl = cb_INSCONTRLASTDATE
+    end
+    object Label14: TLabel
+      Left = 8
+      Top = 256
+      Width = 121
+      Height = 13
+      Caption = 'Сыьорта юдянишинин периоду'
+      FocusControl = DBLookupComboBox1
+    end
+    object Label15: TLabel
+      Left = 8
+      Top = 96
+      Width = 72
+      Height = 13
+      Caption = 'Сыьорта мябляьи'
+      FocusControl = DBEdit11
+    end
+    object DBEdit8: TDBLookupComboBox
+      Left = 8
+      Top = 32
+      Width = 250
+      Height = 21
+      DataField = 'INSURANCECOMP'
+      DataSource = IpInfo
+      KeyField = 'ID'
+      ListField = 'DESCRIPTION'
+      ListSource = Insurances
+      TabOrder = 0
+      OnCloseUp = DBEdit3Change
+    end
+    object DBEdit9: TDBEdit
+      Left = 8
+      Top = 72
+      Width = 250
+      Height = 21
+      DataField = 'INSPOLICNUM'
+      DataSource = IpInfo
+      TabOrder = 1
+      OnChange = DBEdit3Change
+    end
+    object cb_INSCONTRACTDATE: TDateTimePicker
+      Left = 8
+      Top = 152
+      Width = 250
+      Height = 21
+      CalAlignment = dtaLeft
+      Date = 38896.4930893634
+      Time = 38896.4930893634
+      DateFormat = dfShort
+      DateMode = dmComboBox
+      Kind = dtkDate
+      ParseInput = False
+      TabOrder = 2
+      OnChange = DBEdit3Change
+    end
+    object cb_INSCONTRACTPREIOD: TDateTimePicker
+      Left = 8
+      Top = 232
+      Width = 250
+      Height = 21
+      CalAlignment = dtaLeft
+      Date = 39001.6579354745
+      Time = 39001.6579354745
+      DateFormat = dfShort
+      DateMode = dmComboBox
+      Kind = dtkDate
+      ParseInput = False
+      TabOrder = 3
+      OnChange = DBEdit3Change
+    end
+    object cb_INSCONTRLASTDATE: TDateTimePicker
+      Left = 7
+      Top = 192
+      Width = 250
+      Height = 21
+      CalAlignment = dtaLeft
+      Date = 38896.4930893634
+      Time = 38896.4930893634
+      DateFormat = dfShort
+      DateMode = dmComboBox
+      Kind = dtkDate
+      ParseInput = False
+      TabOrder = 4
+      OnChange = DBEdit3Change
+    end
+    object DBLookupComboBox1: TDBLookupComboBox
+      Left = 8
+      Top = 272
+      Width = 250
+      Height = 21
+      DataField = 'INSPERIODID'
+      DataSource = IpInfo
+      KeyField = 'ID'
+      ListField = 'NAME'
+      ListSource = Periods
+      TabOrder = 5
+      OnCloseUp = DBEdit3Change
+    end
+    object DBEdit11: TDBEdit
+      Left = 8
+      Top = 112
+      Width = 250
+      Height = 21
+      DataField = 'INSAMOUNT'
+      DataSource = IpInfo
+      TabOrder = 6
+      OnChange = DBEdit3Change
+    end
+  end
+  object Panel1: TPanel
+    Left = 0
+    Top = 308
+    Width = 546
+    Height = 42
+    Align = alBottom
+    BevelInner = bvRaised
+    BevelOuter = bvLowered
+    TabOrder = 2
+    object Label6: TLabel
+      Left = 112
+      Top = 136
+      Width = 123
+      Height = 13
+      Caption = 'Сянядин серийа вя нюмряси'
+      FocusControl = DBEdit6
+    end
+    object Label4: TLabel
+      Left = 112
+      Top = 96
+      Width = 31
+      Height = 13
+      Caption = 'Пешяси'
+      FocusControl = DBEdit4
+    end
+    object Label1: TLabel
+      Left = 112
+      Top = 56
+      Width = 58
+      Height = 13
+      Caption = 'Доьум тарихи'
+      FocusControl = cb_BDATE
+    end
+    object Button1: TButton
+      Left = 272
+      Top = 8
+      Width = 129
+      Height = 25
+      Caption = 'Йаддаша йаз'
+      Default = True
+      Enabled = False
+      TabOrder = 0
+      OnClick = Button1Click
+    end
+    object Button2: TButton
+      Left = 408
+      Top = 8
+      Width = 115
+      Height = 25
+      Cancel = True
+      Caption = 'Баьла'
+      ModalResult = 2
+      TabOrder = 1
+    end
+    object DBEdit6: TDBEdit
+      Left = 112
+      Top = 152
+      Width = 41
+      Height = 21
+      DataField = 'PASSSERIE'
+      DataSource = IpInfo
+      TabOrder = 2
+      OnChange = DBEdit3Change
+    end
+    object DBEdit1: TDBEdit
+      Left = 160
+      Top = 152
+      Width = 201
+      Height = 21
+      DataField = 'PASSNUM'
+      DataSource = IpInfo
+      TabOrder = 3
+      OnChange = DBEdit3Change
+    end
+    object DBEdit4: TDBEdit
+      Left = 112
+      Top = 112
+      Width = 250
+      Height = 21
+      DataField = 'PROFESSION'
+      DataSource = IpInfo
+      TabOrder = 4
+      OnChange = DBEdit3Change
+    end
+    object cb_BDATE: TDateTimePicker
+      Left = 112
+      Top = 72
+      Width = 250
+      Height = 21
+      CalAlignment = dtaLeft
+      Date = 38896.4930631481
+      Time = 38896.4930631481
+      DateFormat = dfShort
+      DateMode = dmComboBox
+      Kind = dtkDate
+      ParseInput = False
+      TabOrder = 5
+      OnChange = DBEdit3Change
+    end
+  end
+  object ODSIpInfo: TOracleDataSet
+    SQL.Strings = (
+      'select i.rowid,i.* from custipinfo i'
+      'where custid=:custid'
+      'and cardid=:cardid')
+    Variables.Data = {
+      0300000002000000070000003A43555354494403000000000000000000000007
+      0000003A434152444944030000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      0400000014000000060000004355535449440100000000000500000042444154
+      45010000000000080000004D415252494147450100000000000D0000004D4F4E
+      54484C5950524F4649540100000000000A00000050524F46455353494F4E0100
+      0000000008000000504153535459504501000000000009000000504153535345
+      5249450100000000000B000000534F4343415445474F52590100000000000D00
+      0000494E535552414E4345434F4D500100000000000B000000494E53504F4C49
+      434E554D0100000000000F000000494E53434F4E545241435444415445010000
+      00000011000000494E53434F4E5452414354505245494F440100000000000600
+      000042425F494E4E0100000000000F00000042425F46414D494C595354415455
+      5301000000000007000000504153534E554D0100000000000600000043415244
+      49440100000000000B000000554E49515545494E534944010000000000100000
+      00494E53434F4E54524C415354444154450100000000000B000000494E535045
+      52494F44494401000000000009000000494E53414D4F554E54010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 504
+    Top = 24
+    object ODSIpInfoCUSTID: TFloatField
+      FieldName = 'CUSTID'
+    end
+    object ODSIpInfoBDATE: TDateTimeField
+      FieldName = 'BDATE'
+    end
+    object ODSIpInfoMARRIAGE: TFloatField
+      FieldName = 'MARRIAGE'
+    end
+    object ODSIpInfoMONTHLYPROFIT: TFloatField
+      FieldName = 'MONTHLYPROFIT'
+    end
+    object ODSIpInfoPROFESSION: TStringField
+      FieldName = 'PROFESSION'
+      Size = 63
+    end
+    object ODSIpInfoPASSTYPE: TFloatField
+      FieldName = 'PASSTYPE'
+    end
+    object ODSIpInfoPASSSERIE: TStringField
+      FieldName = 'PASSSERIE'
+      Size = 7
+    end
+    object ODSIpInfoSOCCATEGORY: TFloatField
+      FieldName = 'SOCCATEGORY'
+    end
+    object ODSIpInfoINSURANCECOMP: TFloatField
+      FieldName = 'INSURANCECOMP'
+    end
+    object ODSIpInfoINSPOLICNUM: TStringField
+      FieldName = 'INSPOLICNUM'
+      Size = 0
+    end
+    object ODSIpInfoINSCONTRACTDATE: TDateTimeField
+      FieldName = 'INSCONTRACTDATE'
+    end
+    object ODSIpInfoINSCONTRACTPREIOD: TDateTimeField
+      FieldName = 'INSCONTRACTPREIOD'
+    end
+    object ODSIpInfoBB_INN: TStringField
+      FieldName = 'BB_INN'
+      Size = 15
+    end
+    object ODSIpInfoBB_FAMILYSTATUS: TFloatField
+      FieldName = 'BB_FAMILYSTATUS'
+    end
+    object ODSIpInfoPASSNUM: TStringField
+      FieldName = 'PASSNUM'
+      Size = 15
+    end
+    object ODSIpInfoCARDID: TFloatField
+      FieldName = 'CARDID'
+    end
+    object ODSIpInfoUNIQUEINSID: TStringField
+      FieldName = 'UNIQUEINSID'
+    end
+    object ODSIpInfoINSCONTRLASTDATE: TDateTimeField
+      FieldName = 'INSCONTRLASTDATE'
+    end
+    object ODSIpInfoINSPERIODID: TFloatField
+      FieldName = 'INSPERIODID'
+    end
+    object ODSIpInfoINSAMOUNT: TFloatField
+      FieldName = 'INSAMOUNT'
+    end
+  end
+  object IpInfo: TDataSource
+    DataSet = ODSIpInfo
+    Left = 474
+    Top = 26
+  end
+  object ODSMarriage: TOracleDataSet
+    Tag = 3
+    SQL.Strings = (
+      'select 0 id, '#39'Evli'#39' name from dual'
+      'union select 1 id, '#39'Subay'#39' name from dual')
+    Session = sboapiDataModule.SBSession
+    Left = 505
+    Top = 56
+  end
+  object Marriage1: TDataSource
+    DataSet = ODSMarriage
+    Left = 441
+    Top = 56
+  end
+  object Marriage2: TDataSource
+    DataSet = ODSMarriage
+    Left = 473
+    Top = 56
+  end
+  object ODSInsurance: TOracleDataSet
+    Tag = 3
+    SQL.Strings = (
+      'select * from ip_insurances'
+      'order by id')
+    Session = sboapiDataModule.SBSession
+    Left = 505
+    Top = 176
+  end
+  object PassType1: TDataSource
+    DataSet = ODSPassTypes
+    Left = 441
+    Top = 89
+  end
+  object PassType2: TDataSource
+    DataSet = ODSPassTypes
+    Left = 473
+    Top = 89
+  end
+  object ODSPassTypes: TOracleDataSet
+    Tag = 3
+    SQL.Strings = (
+      'select 0 id, '#39'Шяхсиййят вясигяси'#39' name from dual'
+      'union select 1 id, '#39'Щярби билет'#39' name from dual')
+    Session = sboapiDataModule.SBSession
+    Left = 505
+    Top = 89
+  end
+  object Insurances: TDataSource
+    DataSet = ODSInsurance
+    Left = 473
+    Top = 176
+  end
+  object SocCategory1: TDataSource
+    DataSet = ODSSocCategories
+    Left = 441
+    Top = 142
+  end
+  object ODSSocCategories: TOracleDataSet
+    Tag = 3
+    SQL.Strings = (
+      'select * from custsoccategories'
+      'order by id')
+    Session = sboapiDataModule.SBSession
+    Left = 505
+    Top = 142
+  end
+  object SocCategory2: TDataSource
+    DataSet = ODSSocCategories
+    Left = 473
+    Top = 142
+  end
+  object Family: TDataSource
+    DataSet = ODSFamily
+    Left = 473
+    Top = 210
+  end
+  object ODSFamily: TOracleDataSet
+    Tag = 3
+    SQL.Strings = (
+      'select * from custfamily'
+      'order by id')
+    Session = sboapiDataModule.SBSession
+    Left = 505
+    Top = 210
+  end
+  object Periods: TDataSource
+    DataSet = ODSPeriods
+    Left = 473
+    Top = 245
+  end
+  object ODSPeriods: TOracleDataSet
+    Tag = 3
+    SQL.Strings = (
+      'select * from ip_insperiods'
+      'order by name')
+    QBEDefinition.QBEFieldDefs = {
+      0400000002000000020000004944010000000000040000004E414D4501000000
+      0000}
+    Session = sboapiDataModule.SBSession
+    Left = 505
+    Top = 245
+  end
+end

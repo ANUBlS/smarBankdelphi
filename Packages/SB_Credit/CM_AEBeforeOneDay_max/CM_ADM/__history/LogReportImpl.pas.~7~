@@ -1,0 +1,49 @@
+unit LogReportImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ComCtrls, StdCtrls, Buttons, DBCtrls;
+
+type
+  TFrmLogReport = class(TForm)
+    BitBtn1: TBitBtn;
+    BitBtn2: TBitBtn;
+    GroupBox1: TGroupBox;
+    DateTimePicker2: TDateTimePicker;
+    DateTimePicker1: TDateTimePicker;
+    GroupBox2: TGroupBox;
+    DBComboBox1: TDBComboBox;
+    procedure FormCanResize(Sender: TObject; var NewWidth, NewHeight: Integer;
+      var Resize: Boolean);
+    procedure FormCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmLogReport: TFrmLogReport;
+
+implementation
+
+uses admDataModule;
+
+{$R *.dfm}
+
+procedure TFrmLogReport.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+Resize:=False
+end;
+
+procedure TFrmLogReport.FormCreate(Sender: TObject);
+begin
+  admDM := TadmDM.Create(Self);
+DateTimePicker1.DateTime:=admDM.sysdat.fieldbyname('TEK_DAT').asdatetime;
+DateTimePicker2.DateTime:=admDM.sysdat.fieldbyname('TEK_DAT').asdatetime;
+end;
+
+end.

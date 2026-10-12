@@ -1,0 +1,92 @@
+object DMBusinessProcessesPr: TDMBusinessProcessesPr
+  OldCreateOrder = False
+  OnCreate = DataModuleCreate
+  OnDestroy = DataModuleDestroy
+  Height = 258
+  Width = 578
+  object DSRsb_business_processes: TDataSource
+    DataSet = DSsb_business_processes
+    Left = 208
+    Top = 32
+  end
+  object DSsb_business_processes: TOracleDataSet
+    SQL.Strings = (
+      'SELECT a.id, a.name, a.accbalcn_a, a.accsymb_a, a.acccurr_a,'
+      '       a.accbalcn_b, a.accsymb_b, a.acccurr_b, a.accbalcn_c,'
+      
+        '       a.accsymb_c, a.acccurr_c, a.formnum, a.classid, a.cust_ty' +
+        'pe'
+      '  FROM sb_business_processes a')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000E0000000400000049004400010000000000080000004E0041004D00
+      450001000000000014000000410043004300420041004C0043004E005F004100
+      01000000000012000000410043004300530059004D0042005F00410001000000
+      00001200000041004300430043005500520052005F0041000100000000001400
+      0000410043004300420041004C0043004E005F00420001000000000012000000
+      410043004300530059004D0042005F0042000100000000001200000041004300
+      430043005500520052005F004200010000000000140000004100430043004200
+      41004C0043004E005F0043000100000000001200000041004300430053005900
+      4D0042005F004300010000000000120000004100430043004300550052005200
+      5F0043000100000000000E00000046004F0052004D004E0055004D0001000000
+      00000E00000043004C0041005300530049004400010000000000120000004300
+      5500530054005F005400590050004500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 56
+    Top = 32
+    object DSsb_business_processesID: TFloatField
+      DisplayLabel = #8470
+      FieldName = 'ID'
+    end
+    object DSsb_business_processesNAME: TWideStringField
+      DisplayLabel = 'Ad'#305
+      FieldName = 'NAME'
+      Size = 600
+    end
+    object DSsb_business_processesACCBALCN_A: TWideStringField
+      FieldName = 'ACCBALCN_A'
+      Size = 400
+    end
+    object DSsb_business_processesACCSYMB_A: TWideStringField
+      FieldName = 'ACCSYMB_A'
+      Size = 80
+    end
+    object DSsb_business_processesACCCURR_A: TWideStringField
+      FieldName = 'ACCCURR_A'
+      Size = 80
+    end
+    object DSsb_business_processesACCBALCN_B: TWideStringField
+      FieldName = 'ACCBALCN_B'
+      Size = 400
+    end
+    object DSsb_business_processesACCSYMB_B: TWideStringField
+      FieldName = 'ACCSYMB_B'
+      Size = 80
+    end
+    object DSsb_business_processesACCCURR_B: TWideStringField
+      FieldName = 'ACCCURR_B'
+      Size = 80
+    end
+    object DSsb_business_processesACCBALCN_C: TWideStringField
+      FieldName = 'ACCBALCN_C'
+      Size = 400
+    end
+    object DSsb_business_processesACCSYMB_C: TWideStringField
+      FieldName = 'ACCSYMB_C'
+      Size = 80
+    end
+    object DSsb_business_processesACCCURR_C: TWideStringField
+      FieldName = 'ACCCURR_C'
+      Size = 80
+    end
+    object DSsb_business_processesFORMNUM: TIntegerField
+      FieldName = 'FORMNUM'
+    end
+    object DSsb_business_processesCLASSID: TIntegerField
+      FieldName = 'CLASSID'
+    end
+    object DSsb_business_processesCUST_TYPE: TIntegerField
+      FieldName = 'CUST_TYPE'
+    end
+  end
+end

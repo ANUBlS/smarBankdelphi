@@ -1,0 +1,221 @@
+object OpenAccountForm: TOpenAccountForm
+  Left = 0
+  Top = 0
+  Caption = 'OpenAccount'
+  ClientHeight = 456
+  ClientWidth = 612
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poDesktopCenter
+  OnCanResize = FormCanResize
+  OnCreate = FormCreate
+  PixelsPerInch = 96
+  TextHeight = 13
+  object XFPanel1: TXFPanel
+    Left = 0
+    Top = 0
+    Width = 612
+    Height = 33
+    Align = alTop
+    BevelKind = bkFlat
+    BevelOuter = bvNone
+    TabOrder = 0
+    object XFLabel1: TXFLabel
+      Left = 11
+      Top = 8
+      Width = 30
+      Height = 16
+      Caption = 'Sinif:'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+    end
+    object XFLabel2: TXFLabel
+      Left = 172
+      Top = 12
+      Width = 33
+      Height = 16
+      Caption = 'Qrup:'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+    end
+    object XFLabel3: TXFLabel
+      Left = 335
+      Top = 12
+      Width = 42
+      Height = 16
+      Caption = 'Balans:'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Edit1: TEdit
+      Left = 45
+      Top = 5
+      Width = 90
+      Height = 21
+      Enabled = False
+      TabOrder = 0
+    end
+    object Edit2: TEdit
+      Left = 239
+      Top = 5
+      Width = 90
+      Height = 21
+      Enabled = False
+      TabOrder = 1
+    end
+    object Edit3: TEdit
+      Left = 389
+      Top = 5
+      Width = 90
+      Height = 21
+      Enabled = False
+      TabOrder = 2
+    end
+  end
+  object XFPanel2: TXFPanel
+    Left = 0
+    Top = 33
+    Width = 612
+    Height = 141
+    Align = alTop
+    TabOrder = 1
+    object Edit4: TEdit
+      Left = 1
+      Top = 116
+      Width = 610
+      Height = 21
+      Align = alTop
+      TabOrder = 0
+      OnChange = Edit4Change
+      OnKeyPress = Edit4KeyPress
+    end
+    object XDBGrid1: TXDBGrid
+      Left = 1
+      Top = 1
+      Width = 610
+      Height = 115
+      Align = alTop
+      DataSource = OpenAccount_DataModule.DSRC_bal_spr_parts
+      GridStyle.VisualStyle = vsXPStyle
+      TabOrder = 1
+      Columns = <
+        item
+          Expanded = False
+          FieldName = 'PART'
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'PARTNAME'
+          Visible = True
+        end>
+    end
+  end
+  object XFPanel3: TXFPanel
+    Left = 0
+    Top = 315
+    Width = 612
+    Height = 141
+    Align = alTop
+    TabOrder = 2
+    object Edit5: TEdit
+      Left = 1
+      Top = 116
+      Width = 610
+      Height = 21
+      Align = alTop
+      TabOrder = 0
+      OnChange = Edit5Change
+    end
+    object XDBGrid2: TXDBGrid
+      Left = 1
+      Top = 1
+      Width = 610
+      Height = 115
+      Align = alTop
+      DataSource = OpenAccount_DataModule.DSRC_bal_spr1
+      GridStyle.VisualStyle = vsXPStyle
+      StretchMode = True
+      TabOrder = 1
+      Columns = <
+        item
+          Expanded = False
+          FieldName = 'BAL_CN'
+          Visible = True
+          Width = 4785
+        end
+        item
+          Expanded = False
+          FieldName = 'BALNAME'
+          Visible = True
+          Width = 28541
+        end>
+    end
+  end
+  object XFPanel4: TXFPanel
+    Left = 0
+    Top = 174
+    Width = 612
+    Height = 141
+    Align = alTop
+    TabOrder = 3
+    object Edit6: TEdit
+      Left = 1
+      Top = 116
+      Width = 610
+      Height = 21
+      Align = alTop
+      TabOrder = 0
+      OnChange = Edit6Change
+    end
+    object XDBGrid3: TXDBGrid
+      Left = 1
+      Top = 1
+      Width = 610
+      Height = 115
+      Align = alTop
+      DataSource = OpenAccount_DataModule.DSRC_bal_spr_groups
+      GridStyle.VisualStyle = vsXPStyle
+      TabOrder = 1
+      Columns = <
+        item
+          Expanded = False
+          FieldName = 'GRP'
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'GRPNAME'
+          Visible = True
+        end>
+    end
+    object Memo1: TMemo
+      Left = 427
+      Top = 40
+      Width = 185
+      Height = 47
+      Lines.Strings = (
+        'Memo1')
+      TabOrder = 2
+      Visible = False
+    end
+  end
+end

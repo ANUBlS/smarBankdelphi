@@ -1,0 +1,37 @@
+object WebModule1: TWebModule1
+  OldCreateOrder = False
+  Actions = <
+    item
+      Default = True
+      Name = 'DefaultHandler'
+      PathInfo = '/'
+      OnAction = WebModule1DefaultHandlerAction
+    end
+    item
+      Name = 'creditlist'
+      PathInfo = '/sendcrlst'
+      OnAction = WebModule1creditlistAction
+    end>
+  Height = 378
+  Width = 709
+  object OracleSession1: TOracleSession
+    LogonUsername = 'smart'
+    LogonPassword = 'oracledb'
+    LogonDatabase = 'PDBNBC'
+    Preferences.ConvertUTF = cuUTF8ToUTF16
+    Connected = True
+    Left = 72
+    Top = 144
+  end
+  object OracleQuery1: TOracleQuery
+    SQL.Strings = (
+      'insert into a2(test,test2) values (:a1,:a2)')
+    Session = OracleSession1
+    Optimize = False
+    Variables.Data = {
+      0400000002000000060000003A00410031000500000000000000000000000600
+      00003A0041003200050000000000000000000000}
+    Left = 72
+    Top = 80
+  end
+end

@@ -1,0 +1,1426 @@
+object MISForm: TMISForm
+  Left = 91
+  Top = 121
+  BorderIcons = [biSystemMenu]
+  BorderStyle = bsSingle
+  ClientHeight = 497
+  ClientWidth = 763
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poScreenCenter
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 763
+    Height = 497
+    Align = alClient
+    BevelInner = bvLowered
+    BorderStyle = bsSingle
+    TabOrder = 0
+    object GroupBox1: TGroupBox
+      Left = 2
+      Top = 2
+      Width = 755
+      Height = 382
+      Align = alClient
+      Caption = '‘илтер'
+      TabOrder = 0
+      object Label2: TLabel
+        Left = 8
+        Top = 52
+        Width = 35
+        Height = 13
+        Caption = 'Valyuta'
+      end
+      object Label3: TLabel
+        Left = 7
+        Top = 212
+        Width = 72
+        Height = 13
+        Caption = 'Istifad€чi qrupu'
+      end
+      object Label4: TLabel
+        Left = 236
+        Top = 212
+        Width = 50
+        Height = 13
+        Caption = 'Mцшt€ri tipi'
+      end
+      object Label5: TLabel
+        Left = 241
+        Top = 52
+        Width = 20
+        Height = 13
+        Caption = 'Filial'
+      end
+      object LookValute: TEvanescence
+        Tag = 3112
+        Left = 8
+        Top = 68
+        Width = 238
+        Height = 132
+        ItemHeight = 13
+        TabOrder = 1
+        DataSource = srcValute
+        ListField = 'VALU_NAME'
+        KeyField = 'VALUTE'
+      end
+      object LookUsrGrp: TEvanescence
+        Tag = 3112
+        Left = 8
+        Top = 228
+        Width = 237
+        Height = 148
+        ItemHeight = 13
+        TabOrder = 3
+        DataSource = srcUsrGrp
+        ListField = 'DESCRIPTION'
+        KeyField = 'ID'
+      end
+      object LookPersonelType: TEvanescence
+        Tag = 3112
+        Left = 248
+        Top = 228
+        Width = 260
+        Height = 145
+        ItemHeight = 13
+        TabOrder = 4
+        DataSource = srcPersonelType
+        ListField = 'DESCRIPTION'
+        KeyField = 'ID'
+      end
+      object LookBranch: TEvanescence
+        Tag = 3112
+        Left = 250
+        Top = 68
+        Width = 256
+        Height = 134
+        ItemHeight = 13
+        TabOrder = 2
+        DataSource = srcBranch
+        ListField = 'NAME'
+        KeyField = 'ID'
+      end
+      object Panel2: TPanel
+        Left = 2
+        Top = 15
+        Width = 751
+        Height = 30
+        Align = alTop
+        BevelInner = bvLowered
+        TabOrder = 0
+        object Label1: TLabel
+          Left = 5
+          Top = 9
+          Width = 32
+          Height = 13
+          Caption = 'Tarix : '
+        end
+        object Tarix: TDateTimePicker
+          Left = 42
+          Top = 5
+          Width = 131
+          Height = 21
+          CalAlignment = dtaLeft
+          Date = 38258.6053962268
+          Time = 38258.6053962268
+          DateFormat = dfShort
+          DateMode = dmComboBox
+          Kind = dtkDate
+          ParseInput = False
+          TabOrder = 0
+        end
+      end
+      object challValute: TButton
+        Left = 79
+        Top = 49
+        Width = 67
+        Height = 17
+        Caption = 'Hamыsыnы seч'
+        TabOrder = 5
+        OnClick = CheckAllValuteClick
+      end
+      object unchallValute: TButton
+        Left = 151
+        Top = 49
+        Width = 67
+        Height = 17
+        Caption = 'T€mizl€'
+        TabOrder = 6
+        OnClick = UnCheckAllValuteClick
+      end
+      object challUsrGrp: TButton
+        Left = 87
+        Top = 210
+        Width = 66
+        Height = 17
+        Caption = 'Hamыsыnы seч'
+        TabOrder = 7
+        OnClick = challUsrGrpClick
+      end
+      object unchallUsrGrp: TButton
+        Left = 159
+        Top = 210
+        Width = 66
+        Height = 17
+        Caption = 'T€mizl€'
+        TabOrder = 8
+        OnClick = unchallUsrGrpClick
+      end
+      object Panel5: TPanel
+        Left = 512
+        Top = 45
+        Width = 241
+        Height = 335
+        Align = alRight
+        BevelOuter = bvLowered
+        TabOrder = 9
+        object Panel6: TPanel
+          Left = 1
+          Top = 269
+          Width = 239
+          Height = 67
+          Align = alTop
+          BevelInner = bvLowered
+          TabOrder = 0
+          object GroupBox8: TGroupBox
+            Left = 2
+            Top = 2
+            Width = 235
+            Height = 63
+            Align = alClient
+            Caption = ' редитин новц'
+            TabOrder = 0
+            object CheckBox9: TCheckBox
+              Left = 5
+              Top = 38
+              Width = 97
+              Height = 17
+              Caption = '“€тбиг ет'
+              TabOrder = 0
+            end
+            object DBLookupComboboxEh9: TDBLookupComboboxEh
+              Left = 5
+              Top = 14
+              Width = 224
+              Height = 21
+              DropDownBox.Sizable = True
+              EditButtons = <>
+              KeyField = 'ID'
+              ListField = 'DESCRIPTION'
+              ListSource = DSCreditTypes
+              TabOrder = 1
+              Visible = True
+            end
+          end
+        end
+        object Panel7: TPanel
+          Left = 1
+          Top = 202
+          Width = 239
+          Height = 67
+          Align = alTop
+          BevelInner = bvLowered
+          TabOrder = 1
+          object GroupBox10: TGroupBox
+            Left = 2
+            Top = 2
+            Width = 235
+            Height = 63
+            Align = alLeft
+            Caption = 'Ёиров'
+            TabOrder = 0
+            object CheckBox10: TCheckBox
+              Left = 5
+              Top = 38
+              Width = 97
+              Height = 17
+              Caption = '“€тбиг ет'
+              TabOrder = 0
+            end
+            object DBLookupComboboxEh10: TDBLookupComboboxEh
+              Left = 5
+              Top = 14
+              Width = 224
+              Height = 21
+              DropDownBox.Sizable = True
+              EditButtons = <>
+              KeyField = 'ID'
+              ListField = 'DESCRIPTION'
+              ListSource = DSPledges
+              TabOrder = 1
+              Visible = True
+            end
+          end
+        end
+        object Panel8: TPanel
+          Left = 1
+          Top = 135
+          Width = 239
+          Height = 67
+          Align = alTop
+          BevelInner = bvLowered
+          TabOrder = 2
+          object GroupBox7: TGroupBox
+            Left = 2
+            Top = 2
+            Width = 234
+            Height = 63
+            Align = alLeft
+            Caption = 'Ѕоржаланын типи'
+            TabOrder = 0
+            object CheckBox7: TCheckBox
+              Left = 5
+              Top = 38
+              Width = 97
+              Height = 17
+              Caption = '“€тбиг ет'
+              TabOrder = 0
+            end
+            object DBLookupComboboxEh7: TDBLookupComboboxEh
+              Left = 5
+              Top = 14
+              Width = 225
+              Height = 21
+              DropDownBox.Sizable = True
+              EditButtons = <>
+              KeyField = 'ID'
+              ListField = 'DESCRIPION'
+              ListSource = DSPersons
+              TabOrder = 1
+              Visible = True
+            end
+          end
+        end
+        object Panel9: TPanel
+          Left = 1
+          Top = 68
+          Width = 239
+          Height = 67
+          Align = alTop
+          BevelInner = bvLowered
+          TabOrder = 3
+          object GroupBox3: TGroupBox
+            Left = 2
+            Top = 2
+            Width = 233
+            Height = 63
+            Align = alLeft
+            Caption = 'Ёежикмиш т€снифат'
+            TabOrder = 0
+            object DBLookupComboboxEh2: TDBLookupComboboxEh
+              Left = 5
+              Top = 14
+              Width = 224
+              Height = 21
+              DropDownBox.Sizable = True
+              EditButtons = <>
+              KeyField = 'ID'
+              ListField = 'FULLDESC'
+              ListSource = DSSReserves
+              TabOrder = 0
+              Visible = True
+            end
+            object CheckBox2: TCheckBox
+              Left = 7
+              Top = 38
+              Width = 97
+              Height = 17
+              Caption = '“€тбиг ет'
+              TabOrder = 1
+            end
+          end
+        end
+        object Panel10: TPanel
+          Left = 1
+          Top = 1
+          Width = 239
+          Height = 67
+          Align = alTop
+          BevelInner = bvLowered
+          TabOrder = 4
+          object GroupBox6: TGroupBox
+            Left = 2
+            Top = 2
+            Width = 234
+            Height = 63
+            Align = alLeft
+            Caption = '“€снифат'
+            TabOrder = 0
+            object CheckBox5: TCheckBox
+              Left = 5
+              Top = 38
+              Width = 97
+              Height = 17
+              Caption = '“€тбиг ет'
+              TabOrder = 0
+            end
+            object DBLookupComboboxEh5: TDBLookupComboboxEh
+              Left = 5
+              Top = 14
+              Width = 225
+              Height = 21
+              DropDownBox.Sizable = True
+              EditButtons = <>
+              KeyField = 'ID'
+              ListField = 'FULLDESC'
+              ListSource = DSPReserves
+              TabOrder = 1
+              Visible = True
+            end
+          end
+        end
+      end
+    end
+    object challBranch: TButton
+      Left = 323
+      Top = 51
+      Width = 67
+      Height = 17
+      Caption = 'Hamыsыnы seч'
+      TabOrder = 1
+      OnClick = challBranchClick
+    end
+    object unchallBranch: TButton
+      Left = 395
+      Top = 51
+      Width = 67
+      Height = 17
+      Caption = 'T€mizl€'
+      TabOrder = 2
+      OnClick = unchallBranchClick
+    end
+    object challPersonalType: TButton
+      Left = 325
+      Top = 210
+      Width = 67
+      Height = 17
+      Caption = 'Hamыsыnы seч'
+      TabOrder = 3
+      OnClick = challPersonalTypeClick
+    end
+    object unchallPersonalType: TButton
+      Left = 397
+      Top = 210
+      Width = 67
+      Height = 17
+      Caption = 'T€mizl€'
+      TabOrder = 4
+      OnClick = unchallPersonalTypeClick
+    end
+    object Panel3: TGroupBox
+      Left = 2
+      Top = 384
+      Width = 755
+      Height = 107
+      Align = alBottom
+      Caption = 
+        '                                                                ' +
+        '            —ыралама:                                           ' +
+        '                                                                ' +
+        '                              '
+      TabOrder = 5
+      object ButtonExport: TBitBtn
+        Left = 674
+        Top = 30
+        Width = 76
+        Height = 25
+        Anchors = []
+        Caption = '»храж ет'
+        Default = True
+        TabOrder = 0
+        OnClick = ButtonExportClick
+        Glyph.Data = {
+          DE010000424DDE01000000000000760000002800000024000000120000000100
+          0400000000006801000000000000000000001000000000000000000000000000
+          80000080000000808000800000008000800080800000C0C0C000808080000000
+          FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00333333333333
+          3333333333333333333333330000333333333333333333333333F33333333333
+          00003333344333333333333333388F3333333333000033334224333333333333
+          338338F3333333330000333422224333333333333833338F3333333300003342
+          222224333333333383333338F3333333000034222A22224333333338F338F333
+          8F33333300003222A3A2224333333338F3838F338F33333300003A2A333A2224
+          33333338F83338F338F33333000033A33333A222433333338333338F338F3333
+          0000333333333A222433333333333338F338F33300003333333333A222433333
+          333333338F338F33000033333333333A222433333333333338F338F300003333
+          33333333A222433333333333338F338F00003333333333333A22433333333333
+          3338F38F000033333333333333A223333333333333338F830000333333333333
+          333A333333333333333338330000333333333333333333333333333333333333
+          0000}
+        NumGlyphs = 2
+      end
+      object CloseBtn: TBitBtn
+        Left = 674
+        Top = 65
+        Width = 76
+        Height = 25
+        Anchors = []
+        Cancel = True
+        Caption = 'Baьla'
+        ModalResult = 2
+        TabOrder = 1
+        Glyph.Data = {
+          DE010000424DDE01000000000000760000002800000024000000120000000100
+          0400000000006801000000000000000000001000000000000000000000000000
+          80000080000000808000800000008000800080800000C0C0C000808080000000
+          FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00333333333333
+          333333333333333333333333000033338833333333333333333F333333333333
+          0000333911833333983333333388F333333F3333000033391118333911833333
+          38F38F333F88F33300003339111183911118333338F338F3F8338F3300003333
+          911118111118333338F3338F833338F3000033333911111111833333338F3338
+          3333F8330000333333911111183333333338F333333F83330000333333311111
+          8333333333338F3333383333000033333339111183333333333338F333833333
+          00003333339111118333333333333833338F3333000033333911181118333333
+          33338333338F333300003333911183911183333333383338F338F33300003333
+          9118333911183333338F33838F338F33000033333913333391113333338FF833
+          38F338F300003333333333333919333333388333338FFF830000333333333333
+          3333333333333333333888330000333333333333333333333333333333333333
+          0000}
+        NumGlyphs = 2
+      end
+      object SBListBox: TKeyListBox
+        Left = 511
+        Top = 16
+        Width = 130
+        Height = 88
+        ItemHeight = 13
+        Items.Strings = (
+          '¬алйутайа эюр€'
+          'ћцшт€ри типин€ эюр€'
+          'ћцшт€ринин адына эюр€'
+          '‘илиала эюр€')
+        TabOrder = 2
+        Keys.Strings = (
+          'J.VAL_NAME'
+          'B.PERSONALTYPE'
+          'L.NAME'
+          'B.BRANCHID')
+      end
+      object Panel4: TPanel
+        Left = 643
+        Top = 15
+        Width = 26
+        Height = 90
+        BevelOuter = bvNone
+        TabOrder = 3
+        object spUP: TSpeedButton
+          Left = 3
+          Top = 15
+          Width = 23
+          Height = 22
+          Glyph.Data = {
+            42020000424D4202000000000000420000002800000010000000100000000100
+            1000030000000002000000000000000000000000000000000000007C0000E003
+            00001F0000001F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C
+            1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C
+            1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C
+            1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C
+            1F7C1F7C1F7C1F7C1F7C1F7C1F7C1042104200001F7C1F7C1F7C1F7C1F7C1F7C
+            1F7C1F7C1F7C1F7C1F7C1F7C1F7C1042186300001F7C1F7C1F7C1F7C1F7C1F7C
+            1F7C1F7C1F7C1F7C1F7C1F7C1F7C1042186300001F7C1F7C1F7C1F7C1F7C1F7C
+            1F7C1F7C1F7C1F7C1F7C1F7C1F7C1042186300001F7C1F7C1F7C1F7C1F7C1F7C
+            1F7C1F7C1F7C1F7C1F7C10421042104218631042104200001F7C1F7C1F7C1F7C
+            1F7C1F7C1F7C1F7C1F7C1F7C1042FF7F1863104200001F7C1F7C1F7C1F7C1F7C
+            1F7C1F7C1F7C1F7C1F7C1F7C1F7C1042186300001F7C1F7C1F7C1F7C1F7C1F7C
+            1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C00001F7C1F7C1F7C1F7C1F7C1F7C1F7C
+            1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C
+            1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C
+            1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C
+            1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C
+            1F7C1F7C1F7C}
+          OnClick = spUPClick
+        end
+        object spDown: TSpeedButton
+          Left = 3
+          Top = 52
+          Width = 23
+          Height = 22
+          Glyph.Data = {
+            42020000424D4202000000000000420000002800000010000000100000000100
+            1000030000000002000000000000000000000000000000000000007C0000E003
+            00001F0000001F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C
+            1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C
+            1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C
+            1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C
+            1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C00001F7C1F7C1F7C1F7C1F7C1F7C1F7C
+            1F7C1F7C1F7C1F7C1F7C1F7C1F7C1042186300001F7C1F7C1F7C1F7C1F7C1F7C
+            1F7C1F7C1F7C1F7C1F7C1F7C1042FF7F1863104200001F7C1F7C1F7C1F7C1F7C
+            1F7C1F7C1F7C1F7C1F7C10421042104218631042104200001F7C1F7C1F7C1F7C
+            1F7C1F7C1F7C1F7C1F7C1F7C1F7C1042186300001F7C1F7C1F7C1F7C1F7C1F7C
+            1F7C1F7C1F7C1F7C1F7C1F7C1F7C1042186300001F7C1F7C1F7C1F7C1F7C1F7C
+            1F7C1F7C1F7C1F7C1F7C1F7C1F7C1042186300001F7C1F7C1F7C1F7C1F7C1F7C
+            1F7C1F7C1F7C1F7C1F7C1F7C1F7C1042104200001F7C1F7C1F7C1F7C1F7C1F7C
+            1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C
+            1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C
+            1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C
+            1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C
+            1F7C1F7C1F7C}
+          OnClick = spDownClick
+        end
+      end
+      object Panel11: TPanel
+        Left = 95
+        Top = 15
+        Width = 142
+        Height = 90
+        Align = alLeft
+        BevelInner = bvLowered
+        TabOrder = 4
+        object Label6: TLabel
+          Left = 8
+          Top = 18
+          Width = 97
+          Height = 13
+          Caption = 'ўесабланан кредитл€р'
+        end
+        object Label7: TLabel
+          Left = 10
+          Top = 54
+          Width = 106
+          Height = 13
+          Caption = 'ўесаб.дайан. кредитл€р'
+        end
+        object ChBCalcInt: TCheckBox
+          Left = 120
+          Top = 18
+          Width = 18
+          Height = 17
+          Checked = True
+          State = cbChecked
+          TabOrder = 0
+        end
+        object ChBStopInt: TCheckBox
+          Left = 120
+          Top = 54
+          Width = 19
+          Height = 17
+          Checked = True
+          State = cbChecked
+          TabOrder = 1
+        end
+      end
+      object Panel12: TPanel
+        Left = 2
+        Top = 15
+        Width = 93
+        Height = 90
+        Align = alLeft
+        BevelInner = bvLowered
+        TabOrder = 5
+        object Label9: TLabel
+          Left = 8
+          Top = 14
+          Width = 64
+          Height = 13
+          Caption = 'јктив кредитл€р'
+        end
+        object Label10: TLabel
+          Left = 9
+          Top = 52
+          Width = 63
+          Height = 13
+          Caption = 'Ѕаьлы кредитл€р'
+        end
+        object ChBActCrd: TCheckBox
+          Left = 77
+          Top = 15
+          Width = 14
+          Height = 17
+          Checked = True
+          State = cbChecked
+          TabOrder = 0
+        end
+        object ChBClosCrd: TCheckBox
+          Left = 76
+          Top = 50
+          Width = 14
+          Height = 17
+          Checked = True
+          State = cbChecked
+          TabOrder = 1
+        end
+      end
+      object GroupBox2: TGroupBox
+        Left = 237
+        Top = 11
+        Width = 138
+        Height = 94
+        TabOrder = 6
+        object CheckBoxPayDate: TCheckBox
+          Left = 4
+          Top = 12
+          Width = 132
+          Height = 17
+          Caption = 'ёд€ниш мцдд€тин€ ьюр€'
+          TabOrder = 0
+        end
+        object DTPB: TDateTimePicker
+          Left = 4
+          Top = 33
+          Width = 129
+          Height = 20
+          CalAlignment = dtaLeft
+          Date = 38960.5695681366
+          Time = 38960.5695681366
+          DateFormat = dfShort
+          DateMode = dmComboBox
+          Kind = dtkDate
+          ParseInput = False
+          TabOrder = 1
+        end
+        object DTPE: TDateTimePicker
+          Left = 4
+          Top = 62
+          Width = 129
+          Height = 20
+          CalAlignment = dtaLeft
+          Date = 38960.5695681366
+          Time = 38960.5695681366
+          DateFormat = dfShort
+          DateMode = dmComboBox
+          Kind = dtkDate
+          ParseInput = False
+          TabOrder = 2
+        end
+      end
+      object GroupBox4: TGroupBox
+        Left = 374
+        Top = 11
+        Width = 138
+        Height = 94
+        Caption = 'Proqnoz'
+        TabOrder = 7
+        object Label8: TLabel
+          Left = 6
+          Top = 48
+          Width = 29
+          Height = 13
+          Caption = 'ямсал'
+        end
+        object DTPProq: TDateTimePicker
+          Left = 4
+          Top = 18
+          Width = 129
+          Height = 20
+          CalAlignment = dtaLeft
+          Date = 38960.5695681366
+          Time = 38960.5695681366
+          DateFormat = dfShort
+          DateMode = dmComboBox
+          Kind = dtkDate
+          ParseInput = False
+          TabOrder = 0
+        end
+        object EditProq: TEdit
+          Left = 4
+          Top = 65
+          Width = 121
+          Height = 21
+          TabOrder = 1
+          Text = '0'
+        end
+      end
+    end
+  end
+  object MISData: TOracleDataSet
+    SQL.Strings = (
+      'select  '
+      '     p.id ,'
+      '     p.numberofcredit,'
+      '     p.creditlineamount,                                  '
+      
+        '     p.annualyinterestrate,                                     ' +
+        '     '
+      
+        '     p.dateofconclusion ,                                       ' +
+        '     '
+      
+        '     p.duedatefirstcontract,                                    ' +
+        '  '
+      
+        '     p.duedatelastcontract,                                     ' +
+        '  '
+      
+        '     p.purposeofcredit,                                         ' +
+        '  '
+      '     p.annualypenaltyrate, '
+      '     p.intcalcmethod ,'
+      '     cat.description, '
+      '     h.rest,'
+      '     h.rest*o.ostat  AS ekrest,'
+      '     h.interestrest ,'
+      '     h.interestrest*o.ostat AS ekint,'
+      '     h.duerest,'
+      '     h.duerest*ostat AS ekduerest,'
+      '     h.dueinterestrest,'
+      '     h.dueinterestrest*ostat as ekdueint,'
+      '     h.penaltyrest ,                 '
+      '     h.penaltyrest*o.ostat as ekpen,'
+      '     h.givenamount ,'
+      '     h.givenamount *o.ostat as  ekgivenamount,'
+      '     h.pledgeprice,'
+      '     h.stopcalcdate,'
+      '     e1.percent,'
+      '     e2.percent as duepercent,'
+      '     acc.acc_no as contractaccno,'
+      '     intacc.acc_no as interestaccno,'
+      '     resacc.acc_no as reserveaccno,'
+      '     dueacc.acc_no as duecontractaccno,'
+      '     dueintacc.acc_no as dueinterestaccno,'
+      '     dueresacc.acc_no as duereserveaccno ,'
+      '     av.val_name,'
+      '     l.name,'
+      '     LastintPaydate.paydat as lastintpaydate ,'
+      '     LastMainPaydate.paydat as lastmainpaydate ,'
+      
+        '    -- cm_common.get_lastintpaydate (p.ID, :hdat) as lastintpayd' +
+        'ate,'
+      
+        '    -- cm_common.get_lastmainpaydate (p.ID, :hdat) as lastmainpa' +
+        'ydate,'
+      #9' restpr.principal ,'
+      #9' restpr.interest,'
+      '     g.pledgename, '
+      #9' g.holdername, '
+      #9'   g.registryno,'
+      '       g.anyinfotodisting                '
+      '                         ,'
+      '       g.registryagency                             '
+      '                       ,'
+      '       g.registrydate                                      '
+      '                     ,'
+      '       g.insuranceamount                                 '
+      '                        ,'
+      '       g.insuranceagency                               '
+      '                        ,'
+      '       g.insurancedate ,                                    '
+      '       l.boorowerid, '
+      '       l.address, '
+      '       l.phonenumber,'#9' '
+      '       pl.description,'
+      '       ps.name as psname'
+      'from cm_portfolio p,'
+      '     cm_history h,'
+      '     cm_categories cat,'
+      '     cm_boorowerinfo l,'
+      '     cm_guarantee g,'
+      '     cm_pledges pl,'
+      '     cm_pledgsorts ps,'
+      '     sb_avalute av,'
+      '     sb_operkurs o,'
+      '   cm_loanaccounts acc,'
+      '   cm_intaccounts intacc,'
+      '   cm_reserveaccounts resacc,'
+      '   cm_dueloanaccounts dueacc ,'
+      '   cm_dueintaccounts dueintacc ,'
+      '   cm_dueresaccounts dueresacc  ,'
+      '   cm_reserve_types e1,'
+      '   cm_reserve_types e2 ,'
+      '(SELECT 0 AS principal,0 AS interest, creditid'
+      '  FROM (SELECT ID AS creditid'
+      '          FROM cm_portfolio'
+      '        MINUS'
+      '        SELECT creditid'
+      '          FROM cm_payment_schedule'
+      '         WHERE paymentdate BETWEEN TO_DATE (   '#39'01'#39
+      '                                            || '#39'-'#39
+      
+        '                                            || TO_CHAR (TO_DATE ' +
+        '(:pdat),'
+      '                                                        '#39'MON'#39
+      '                                                       )'
+      '                                            || '#39'-'#39
+      
+        '                                            || TO_CHAR (TO_DATE ' +
+        '(:pdat),'
+      '                                                        '#39'YYYY'#39
+      '                                                       )'
+      '                                           )'
+      '                               AND LAST_DAY (TO_DATE (:pdat)))'
+      'UNION'
+      'SELECT principal,interest, creditid'
+      '  FROM cm_payment_schedule'
+      ' WHERE paymentdate BETWEEN TO_DATE (   '#39'01'#39
+      '                                    || '#39'-'#39
+      
+        '                                    || TO_CHAR (TO_DATE (:pdat),' +
+        ' '#39'MON'#39')'
+      '                                    || '#39'-'#39
+      
+        '                                    || TO_CHAR (TO_DATE (:pdat),' +
+        ' '#39'YYYY'#39')'
+      '                                   )'
+      '                       AND LAST_DAY (TO_DATE (:pdat))) restpr,'
+      '                       '
+      '      ((select '
+      '          id as creditid,'
+      '          null as paydat'
+      '        from cm_portfolio'
+      '       minus'
+      '       select '
+      '       creditid ,'
+      '       null as paydat from cm_payments'
+      '      where PAYEDINTAMT<>0  '
+      '      and PAYDATE <= :hdat'
+      '      group by creditid)'
+      '      union'
+      '      select '
+      '       creditid ,'
+      '       max(PAYDATE) as paydat from cm_payments'
+      '      where PAYEDINTAMT<>0  '
+      '      and PAYDATE <= :hdat'
+      '      group by creditid) LastintPaydate,'
+      ''
+      '     '
+      '      ((select '
+      '          id as creditid,'
+      '          null as paydat'
+      '        from cm_portfolio'
+      '       minus'
+      '       select '
+      '       creditid ,'
+      '       null as paydat from cm_payments'
+      '      where payedamt<>0  '
+      '      and PAYDATE <= :hdat'
+      '      group by creditid)'
+      '      union'
+      '      select '
+      '       creditid ,'
+      '       max(PAYDATE) as paydat from cm_payments'
+      '      where payedamt<>0  '
+      '      and PAYDATE <= :hdat'
+      '      group by creditid) LastMainPaydate      '
+      '        '
+      ''
+      'where '
+      '  h.creditid = p.id '
+      '  and e1.id = h.reserveid'
+      '  and e2.id = h.duereserveid'
+      '  and h.hdate = :hdat'
+      '  and cat.id = p.customertype'
+      '  and p.id = l.creditid'
+      '  and p.id = g.creditid'
+      '  and pl.id = g.pledgeid'
+      '  and ps.id = p.pledgsorts'
+      '  and av.valute = p.currency'
+      '  and o.dat = :hdat'
+      '  and o.val_kod = p.currency'
+      '  and  p.id = acc.creditid '
+      '  and  p.id = intacc.creditid '
+      '  and  p.id = resacc.creditid '
+      '  and  p.id = dueacc.creditid  '
+      '  and  p.id = dueintacc.creditid  '
+      '  and  p.id = dueresacc.creditid '
+      '  and restpr.creditid = p.id '
+      '  and LastintPaydate.creditid = p.id'
+      '  and LastMainPaydate.creditid = p.id'
+      '  '
+      '  '
+      ''
+      ''
+      '  '
+      '     ')
+    Variables.Data = {
+      0300000002000000050000003A484441540C0000000000000000000000050000
+      003A504441540C0000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      04000000350000000200000049440100000000000E0000004E554D4245524F46
+      435245444954010000000000100000004352454449544C494E45414D4F554E54
+      01000000000013000000414E4E55414C59494E54455245535452415445010000
+      00000010000000444154454F46434F4E434C5553494F4E010000000000140000
+      00445545444154454649525354434F4E54524143540100000000001300000044
+      5545444154454C415354434F4E54524143540100000000000F00000050555250
+      4F53454F4643524544495401000000000012000000414E4E55414C5950454E41
+      4C5459524154450100000000000B0000004445534352495054494F4E01000000
+      0000040000005245535401000000000006000000454B52455354010000000000
+      0C000000494E5445524553545245535401000000000005000000454B494E5401
+      0000000000070000004455455245535401000000000009000000454B44554552
+      4553540100000000000F000000445545494E5445524553545245535401000000
+      000008000000454B445545494E540100000000000B00000050454E414C545952
+      45535401000000000005000000454B50454E0100000000000B00000047495645
+      4E414D4F554E540100000000000D000000454B474956454E414D4F554E540100
+      000000000B000000504C4544474550524943450100000000000C00000053544F
+      5043414C43444154450100000000000700000050455243454E54010000000000
+      0A00000044554550455243454E540100000000000D000000434F4E5452414354
+      4143434E4F0100000000000D000000494E5445524553544143434E4F01000000
+      00000C000000524553455256454143434E4F0100000000001000000044554543
+      4F4E54524143544143434E4F01000000000010000000445545494E5445524553
+      544143434E4F0100000000000F000000445545524553455256454143434E4F01
+      00000000000800000056414C5F4E414D45010000000000040000004E414D4501
+      00000000000E0000004C415354494E54504159444154450100000000000F0000
+      004C4153544D41494E50415944415445010000000000090000005052494E4349
+      50414C01000000000008000000494E5445524553540100000000000A00000050
+      4C454447454E414D450100000000000A000000484F4C4445524E414D45010000
+      0000000A00000052454749535452594E4F01000000000010000000414E59494E
+      464F544F44495354494E470100000000000E0000005245474953545259414745
+      4E43590100000000000C0000005245474953545259444154450100000000000F
+      000000494E535552414E4345414D4F554E540100000000000F000000494E5355
+      52414E43454147454E43590100000000000D000000494E535552414E43454441
+      54450100000000000A000000424F4F524F574552494401000000000007000000
+      414444524553530100000000000B00000050484F4E454E554D42455201000000
+      00000D0000004445534352495054494F4E5F310100000000000600000050534E
+      414D450100000000000D000000494E5443414C434D4554484F44010000000000}
+    Cursor = crSQLWait
+    Session = CMDataModule.CMSession
+    Left = 600
+    Top = 8
+    object MISDataID: TFloatField
+      FieldName = 'ID'
+      Visible = False
+    end
+    object MISDataNUMBEROFCREDIT: TStringField
+      DisplayLabel = 'є'
+      FieldName = 'NUMBEROFCREDIT'
+      Size = 32
+    end
+    object MISDataCONTRACTACCNO: TStringField
+      DisplayLabel = 'ўесаб є'
+      FieldName = 'CONTRACTACCNO'
+      Size = 4000
+    end
+    object MISDataINTERESTACCNO: TStringField
+      DisplayLabel = '‘аиз ўесаб є'
+      FieldName = 'INTERESTACCNO'
+      Size = 4000
+    end
+    object MISDataDUECONTRACTACCNO: TStringField
+      DisplayLabel = '№ежикмиш  —суда ўесаб є'
+      FieldName = 'DUECONTRACTACCNO'
+      Size = 4000
+    end
+    object MISDataDUEINTERESTACCNO: TStringField
+      DisplayLabel = '№ежикмиш  ‘аиз ўесаб є'
+      FieldName = 'DUEINTERESTACCNO'
+    end
+    object MISDataRESERVEACCNO: TStringField
+      DisplayLabel = '≈щтиййат ўесаб є'
+      FieldName = 'RESERVEACCNO'
+      Size = 4000
+    end
+    object MISDataDUERESERVEACCNO: TStringField
+      DisplayLabel = '№ежикмиш  ≈щтиййат ўесаб є'
+      FieldName = 'DUERESERVEACCNO'
+      Size = 4000
+    end
+    object MISDataVAL_NAME: TStringField
+      DisplayLabel = '$'
+      FieldName = 'VAL_NAME'
+      Size = 10
+    end
+    object MISDataNAME: TStringField
+      DisplayLabel = 'Ѕоржалан'
+      FieldName = 'NAME'
+      Size = 64
+    end
+    object MISDataDATEOFCONCLUSION: TDateTimeField
+      DisplayLabel = '¬ерилм€ тарихи'
+      FieldName = 'DATEOFCONCLUSION'
+      Required = True
+    end
+    object MISDataDUEDATEFIRSTCONTRACT: TDateTimeField
+      DisplayLabel = 'Ѕаьланма тарихи'
+      FieldName = 'DUEDATEFIRSTCONTRACT'
+      Required = True
+    end
+    object MISDataDUEDATELASTCONTRACT: TDateTimeField
+      DisplayLabel = '”задылма тарихи'
+      FieldName = 'DUEDATELASTCONTRACT'
+    end
+    object MISDataCREDITLINEAMOUNT: TFloatField
+      DisplayLabel = 'ћ€бл€ь'
+      FieldName = 'CREDITLINEAMOUNT'
+      Required = True
+    end
+    object MISDataANNUALYINTERESTRATE: TFloatField
+      DisplayLabel = '%'
+      FieldName = 'ANNUALYINTERESTRATE'
+      Required = True
+    end
+    object MISDataREST: TFloatField
+      DisplayLabel = '√алыг'
+      FieldName = 'REST'
+      Required = True
+    end
+    object MISDataEKREST: TFloatField
+      DisplayLabel = '≈квивалент'
+      FieldName = 'EKREST'
+    end
+    object MISDataINTERESTREST: TFloatField
+      DisplayLabel = '‘аиз боржу'
+      FieldName = 'INTERESTREST'
+      Required = True
+    end
+    object MISDataEKINT: TFloatField
+      DisplayLabel = '≈квивалент'
+      FieldName = 'EKINT'
+    end
+    object MISDataDUEREST: TFloatField
+      DisplayLabel = 'Ёежикмиш €сас борж'
+      FieldName = 'DUEREST'
+      Required = True
+    end
+    object MISDataEKDUEREST: TFloatField
+      DisplayLabel = '≈квивалент'
+      FieldName = 'EKDUEREST'
+    end
+    object MISDataDUEINTERESTREST: TFloatField
+      DisplayLabel = 'Ёежикмиш ‘аиз боржу'
+      FieldName = 'DUEINTERESTREST'
+      Required = True
+    end
+    object MISDataEKDUEINT: TFloatField
+      DisplayLabel = '≈квивалент'
+      FieldName = 'EKDUEINT'
+    end
+    object MISDataGIVENAMOUNT: TFloatField
+      DisplayLabel = '∆€ми верилмиш м€бл€ь'
+      FieldName = 'GIVENAMOUNT'
+      Required = True
+    end
+    object MISDataEKGIVENAMOUNT: TFloatField
+      DisplayLabel = '≈квивалент'
+      FieldName = 'EKGIVENAMOUNT'
+    end
+    object MISDataPERCENT: TFloatField
+      DisplayLabel = '≈щтйат %'
+      FieldName = 'PERCENT'
+      Required = True
+    end
+    object MISDataDUEPERCENT: TFloatField
+      DisplayLabel = '№ежикмиш ≈щтйат %'
+      FieldName = 'DUEPERCENT'
+    end
+    object MISDataDESCRIPTION: TStringField
+      DisplayLabel = 'Ёировун типи'
+      FieldName = 'DESCRIPTION'
+      Size = 64
+    end
+    object MISDataPLEDGEPRICE: TFloatField
+      DisplayLabel = 'Ёировун д€й€ри'
+      FieldName = 'PLEDGEPRICE'
+      Required = True
+    end
+    object MISDataPURPOSEOFCREDIT: TStringField
+      DisplayLabel = '“€йинат'
+      FieldName = 'PURPOSEOFCREDIT'
+      Size = 128
+    end
+    object MISDataPLEDGENAME: TStringField
+      DisplayLabel = '№ировун ады'
+      FieldName = 'PLEDGENAME'
+      Size = 128
+    end
+    object MISDataHOLDERNAME: TStringField
+      DisplayLabel = '№ирову сахлайан ш€хс'
+      FieldName = 'HOLDERNAME'
+      Size = 128
+    end
+    object MISDataREGISTRYNO: TStringField
+      DisplayLabel = '№ировун гейдийат нюмр€си'
+      FieldName = 'REGISTRYNO'
+      Size = 32
+    end
+    object MISDataBOOROWERID: TStringField
+      DisplayLabel = 'ћцшт€ринин …ƒ-си'
+      FieldName = 'BOOROWERID'
+      Size = 32
+    end
+    object MISDataADDRESS: TStringField
+      DisplayLabel = '÷нваны'
+      FieldName = 'ADDRESS'
+      Size = 128
+    end
+    object MISDataANYINFOTODISTING: TStringField
+      DisplayLabel = '№ирову ф€ргл€ндир€н щ€р-щансы €лам€т'
+      FieldName = 'ANYINFOTODISTING'
+      Size = 128
+    end
+    object MISDataREGISTRYAGENCY: TStringField
+      DisplayLabel = '√ейдийатдан кеч€н орган'
+      FieldName = 'REGISTRYAGENCY'
+      Size = 64
+    end
+    object MISDataREGISTRYDATE: TDateTimeField
+      DisplayLabel = '√ейдийат тарихи'
+      FieldName = 'REGISTRYDATE'
+    end
+    object MISDataINSURANCEAMOUNT: TFloatField
+      DisplayLabel = '—ыьортанын м€бл€ьи'
+      FieldName = 'INSURANCEAMOUNT'
+    end
+    object MISDataINSURANCEAGENCY: TStringField
+      DisplayLabel = '—ыьорта ед€н ширк€т'
+      FieldName = 'INSURANCEAGENCY'
+      Size = 128
+    end
+    object MISDataINSURANCEDATE: TDateTimeField
+      DisplayLabel = '—ыьорта тарихи'
+      FieldName = 'INSURANCEDATE'
+    end
+    object MISDataPHONENUMBER: TStringField
+      DisplayLabel = '“елефон'
+      FieldName = 'PHONENUMBER'
+      Size = 16
+    end
+    object MISDataANNUALYPENALTYRATE: TFloatField
+      DisplayLabel = '∆€рим€ %'
+      FieldName = 'ANNUALYPENALTYRATE'
+      Required = True
+    end
+    object MISDataPENALTYREST: TFloatField
+      DisplayLabel = '∆€рим€'
+      FieldName = 'PENALTYREST'
+    end
+    object MISDataEKPEN: TFloatField
+      DisplayLabel = '≈квивалент'
+      FieldName = 'EKPEN'
+    end
+    object MISDataSTOPCALCDATE: TDateTimeField
+      DisplayLabel = 'ўесаблама нын дайандырылма тарихи'
+      FieldName = 'STOPCALCDATE'
+    end
+    object MISDataLASTINTPAYDATE: TDateTimeField
+      DisplayLabel = '‘аиз боржу цзр€ сон €м€лиййат тарихи'
+      FieldName = 'LASTINTPAYDATE'
+    end
+    object MISDataLASTMAINPAYDATE: TDateTimeField
+      DisplayLabel = 'ясас борж цзр€ сон €м€лиййат тарихи'
+      FieldName = 'LASTMAINPAYDATE'
+    end
+    object MISDataPRINCIPAL: TFloatField
+      DisplayLabel = 'я.Ѕ цзр€ прагноз'
+      FieldName = 'PRINCIPAL'
+    end
+    object MISDataINTEREST: TFloatField
+      DisplayLabel = '‘аиз цзр€ прагноз'
+      FieldName = 'INTEREST'
+    end
+    object MISDataPSNAME: TStringField
+      DisplayLabel = 'Ёировун чешиди'
+      FieldName = 'PSNAME'
+      Required = True
+      Size = 80
+    end
+    object MISDataDESCRIPTION_1: TStringField
+      DisplayLabel = ' атеьорийа'
+      FieldName = 'DESCRIPTION_1'
+      Size = 64
+    end
+    object MISDataINTCALCMETHOD: TFloatField
+      DisplayLabel = 'ўесаблама гайдасы'
+      FieldName = 'INTCALCMETHOD'
+    end
+  end
+  object Localizer: TNLSLocalizer
+    Caption = 'ћис щесабаты'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    Left = 632
+    Top = 8
+  end
+  object MISExporter: TCMExcelExport
+    ConnectTo = ctNewInstance
+    StyleColumnWidth = cwAutoFit
+    ColumnWidth = 0
+    FontTitles.Charset = DEFAULT_CHARSET
+    FontTitles.Color = clGreen
+    FontTitles.Height = -11
+    FontTitles.Name = 'Azl Sans Serif'
+    FontTitles.Style = [fsBold]
+    OrientationTitles = 0
+    FontData.Charset = RUSSIAN_CHARSET
+    FontData.Color = clWindowText
+    FontData.Height = -11
+    FontData.Name = 'Azl Sans Serif'
+    FontData.Style = []
+    FontSummary.Charset = DEFAULT_CHARSET
+    FontSummary.Color = clWindowText
+    FontSummary.Height = -11
+    FontSummary.Name = 'Azl Sans Serif'
+    FontSummary.Style = []
+    SummarySelection = ssNone
+    SummaryCalculation = scSUM
+    Left = 664
+    Top = 8
+  end
+  object ValuteDataSet: TOracleDataSet
+    SQL.Strings = (
+      '  SELECT VALUTE, VALU_NAME'
+      '    FROM SMART.AVALUTE'
+      'ORDER BY VALUTE')
+    Session = CMDataModule.CMSession
+    Left = 160
+    Top = 240
+  end
+  object srcValute: TDataSource
+    DataSet = ValuteDataSet
+    Left = 128
+    Top = 240
+  end
+  object srcUsrGrp: TDataSource
+    DataSet = UsrGrpDataSet
+    Left = 128
+    Top = 296
+  end
+  object UsrGrpDataSet: TOracleDataSet
+    SQL.Strings = (
+      '  SELECT id, description'
+      '    FROM creditsmgr.cm_usergroups')
+    Session = CMDataModule.CMSession
+    Left = 160
+    Top = 296
+  end
+  object PersonelTypeDataSet: TOracleDataSet
+    SQL.Strings = (
+      ''
+      'SELECT id, description'
+      '  FROM creditsmgr.cm_categories')
+    Session = CMDataModule.CMSession
+    Left = 160
+    Top = 184
+  end
+  object srcPersonelType: TDataSource
+    DataSet = PersonelTypeDataSet
+    Left = 128
+    Top = 184
+  end
+  object srcBranch: TDataSource
+    DataSet = BranchDataSet
+    Left = 128
+    Top = 136
+  end
+  object BranchDataSet: TOracleDataSet
+    SQL.Strings = (
+      'SELECT id, name'
+      '  FROM sb_filial')
+    Session = CMDataModule.CMSession
+    Left = 160
+    Top = 136
+  end
+  object SReserves: TOracleDataSet
+    SQL.Strings = (
+      'SELECT id, percent, description'
+      '  FROM cm_reserves'
+      'ORDER BY percent')
+    Cursor = crSQLWait
+    Session = CMDataModule.CMSession
+    OnCalcFields = SReservesCalcFields
+    Left = 24
+    Top = 106
+    object SReservesID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object SReservesPERCENT: TFloatField
+      FieldName = 'PERCENT'
+      Required = True
+    end
+    object SReservesDESCRIPTION: TStringField
+      FieldName = 'DESCRIPTION'
+      Required = True
+      Size = 64
+    end
+    object SReservesFULLDESC: TStringField
+      FieldKind = fkCalculated
+      FieldName = 'FULLDESC'
+      Size = 255
+      Calculated = True
+    end
+  end
+  object PReserves: TOracleDataSet
+    SQL.Strings = (
+      'SELECT id, percent, description'
+      '  FROM cm_reserves'
+      'ORDER BY percent')
+    Cursor = crSQLWait
+    Session = CMDataModule.CMSession
+    OnCalcFields = SReservesCalcFields
+    Left = 25
+    Top = 283
+    object PReservesID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object PReservesPERCENT: TFloatField
+      FieldName = 'PERCENT'
+      Required = True
+    end
+    object PReservesDESCRIPTION: TStringField
+      FieldName = 'DESCRIPTION'
+      Required = True
+      Size = 64
+    end
+    object PReservesFULLDESC: TStringField
+      FieldKind = fkCalculated
+      FieldName = 'FULLDESC'
+      Size = 255
+      Calculated = True
+    end
+  end
+  object CreditTypes: TOracleDataSet
+    SQL.Strings = (
+      'SELECT id,  description'
+      '  FROM cm_credittypes')
+    Cursor = crSQLWait
+    Session = CMDataModule.CMSession
+    Left = 25
+    Top = 369
+  end
+  object Persons: TOracleDataSet
+    SQL.Strings = (
+      'SELECT id,  descripion'
+      '  FROM cm_persons')
+    Cursor = crSQLWait
+    Session = CMDataModule.CMSession
+    Left = 25
+    Top = 456
+  end
+  object DSSReserves: TDataSource
+    DataSet = SReserves
+    Left = 24
+    Top = 68
+  end
+  object DSPReserves: TDataSource
+    DataSet = PReserves
+    Left = 25
+    Top = 235
+  end
+  object DSCreditTypes: TDataSource
+    DataSet = CreditTypes
+    Left = 25
+    Top = 321
+  end
+  object DSPersons: TDataSource
+    DataSet = Persons
+    Left = 25
+    Top = 408
+  end
+  object Pledges: TOracleDataSet
+    SQL.Strings = (
+      'SELECT id,  description'
+      '  FROM cm_pledges')
+    Cursor = crSQLWait
+    Session = CMDataModule.CMSession
+    Left = 24
+    Top = 144
+  end
+  object DSPledges: TDataSource
+    DataSet = Pledges
+    Left = 24
+    Top = 180
+  end
+end

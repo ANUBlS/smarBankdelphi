@@ -1,0 +1,83 @@
+unit rbsdostatement;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, DB, OracleData, DBCtrls, StdCtrls, ComCtrls, Menus,SBTranslateProc,sboapiDataModuleImpl,
+  Buttons;
+
+type
+  Trbsdostate = class(TForm)
+    GroupBox1: TGroupBox;
+    DateTimePicker1: TDateTimePicker;
+    Label1: TLabel;
+    Label2: TLabel;
+    DateTimePicker2: TDateTimePicker;
+    Label3: TLabel;
+    GroupBox2: TGroupBox;
+    CBCurrency: TCheckBox;
+    DBLCBavalute: TDBLookupComboBox;
+    avalute: TOracleDataSet;
+    DataSource1: TDataSource;
+    EditCli_Id: TEdit;
+    LabelCli_Id: TLabel;
+    BtnOk: TBitBtn;
+    Memo1: TMemo;
+    procedure CBCurrencyClick(Sender: TObject);
+    procedure BtnOkClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  rbsdostate: Trbsdostate;
+
+implementation
+
+uses rbsdoreport, rbsdofile, Unit18;
+
+{$R *.dfm}
+
+procedure Trbsdostate.BtnOkClick(Sender: TObject);
+begin
+card_state:=Tcard_state.Create(self);
+
+   with DataMod_CARDS.rbsdofilerep
+   do begin
+
+   Close;
+   SetVariable('dat1',trunc(DateTimePicker1.Date));
+   SetVariable('dat2',trunc(DateTimePicker2.Date));
+   SetVariable('dev',EditCli_Id.Text);
+
+
+     {if CBCurrency.Checked=true then
+       SetVariable('curr',DBLCBavalute.KeyValue); }
+    open;
+   memo1.Text:= sql.Text;
+   end;
+
+    ShowMessage(DataMod_CARDS.rbsdofilerep.GetVariable(0));
+      ShowMessage(DataMod_CARDS.rbsdofilerep.GetVariable(1));
+        ShowMessage(DataMod_CARDS.rbsdofilerep.GetVariable(2));
+ card_state.QRD_Begin.Caption:=DateToStr(DateTimePicker1.Date);
+ card_state.QRD_End.Caption:=DateToStr(DateTimePicker2.Date);
+ card_state.QRep.Preview;
+
+
+end;
+
+procedure Trbsdostate.CBCurrencyClick(Sender: TObject);
+begin
+if CBCurrency.Checked=true then
+  dblcbavalute.KeyValue:=0
+else
+  dblcbavalute.KeyValue:=-1;
+
+
+end;
+
+end.

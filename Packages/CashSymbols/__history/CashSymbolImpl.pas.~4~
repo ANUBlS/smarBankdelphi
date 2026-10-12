@@ -1,0 +1,449 @@
+unit CashSymbolImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActiveX, AxCtrls, CashSymbols_TLB, StdVcl, StdCtrls, Grids, DBGrids, Db,
+  OracleData, Menus, ActnList, Oracle, ExtCtrls, ImgList;
+
+type
+  TOperationMode =(omAdd,omEdit);
+  TCashSymbolX = class(TActiveForm, ICashSymbolX)
+    ODSCashSymbols: TOracleDataSet;
+    DSCashSymbols: TDataSource;
+    ODSCashSymbolsNAME: TWideStringField;
+    DBGrid1: TDBGrid;
+    ODSCashSymbolsAssignment: TWideStringField;
+    ODSCashSymbolsMEDIOCRITY: TFloatField;
+    PopupMenu: TPopupMenu;
+    ActionList: TActionList;
+    ActionAdd: TAction;
+    ActionUpdate: TAction;
+    ActionDelete: TAction;
+    OPCashSymbols: TOraclePackage;
+    Add1: TMenuItem;
+    N1: TMenuItem;
+    Update1: TMenuItem;
+    N2: TMenuItem;
+    Delete1: TMenuItem;
+    PanelAdd: TPanel;
+    Panel1: TPanel;
+    ESymbol: TEdit;
+    EName: TEdit;
+    CBAssignment: TComboBox;
+    LSymbol: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Button1: TButton;
+    ImageList: TImageList;
+    ODSCashSymbolsSYMBOL: TWideStringField;
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure ODSCashSymbolsCalcFields(DataSet: TDataSet);
+    procedure ActionAddExecute(Sender: TObject);
+    procedure ActionUpdateExecute(Sender: TObject);
+    procedure ActionDeleteExecute(Sender: TObject);
+    procedure ODSCashSymbolsAfterScroll(DataSet: TDataSet);
+  private
+    { Private declarations }
+    FEvents: ICashSymbolXEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+  public
+    { Public declarations }
+    OperationState :TOperationMode;
+    procedure Initialize; override;
+  end;
+
+var CashSymbolX :TCashSymbolX;
+
+implementation
+
+
+uses ComObj, ComServ,sboapiDataModuleImpl, SBTranslateProc;
+
+{$R *.DFM}
+
+{ TCashSymbolX }
+
+procedure TCashSymbolX.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_CashSymbolXPage); }
+end;
+
+procedure TCashSymbolX.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as ICashSymbolXEvents;
+end;
+
+procedure TCashSymbolX.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TCashSymbolX.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TCashSymbolX.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TCashSymbolX.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TCashSymbolX.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TCashSymbolX.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TCashSymbolX.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TCashSymbolX.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TCashSymbolX.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TCashSymbolX.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TCashSymbolX.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TCashSymbolX.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TCashSymbolX.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TCashSymbolX.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TCashSymbolX.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TCashSymbolX.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TCashSymbolX.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TCashSymbolX.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TCashSymbolX.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TCashSymbolX._Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TCashSymbolX.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TCashSymbolX.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TCashSymbolX.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TCashSymbolX.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TCashSymbolX.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TCashSymbolX.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TCashSymbolX.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TCashSymbolX.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TCashSymbolX.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TCashSymbolX.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TCashSymbolX.Set_AxBorderStyle(Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TCashSymbolX.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TCashSymbolX.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TCashSymbolX.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TCashSymbolX.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TCashSymbolX.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TCashSymbolX.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TCashSymbolX.Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TCashSymbolX.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TCashSymbolX.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TCashSymbolX.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TCashSymbolX.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TCashSymbolX.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TCashSymbolX.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+procedure TCashSymbolX.ActiveFormCreate(Sender: TObject);
+begin
+ CashSymbolX :=Self;
+ ODSCashSymbols.Open;
+ CBAssignment.ItemIndex :=0;
+ SBTranslateProc.TranslateAllComponents(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TCashSymbolX.Button1Click(Sender: TObject);
+begin
+ case OperationState of
+   omAdd :
+      with OPCashSymbols ,ODSCashSymbols do
+       begin
+        CallProcedure('AddCashSymbols',[{StrToInt}(ESymbol.text),EName.text,CBAssignment.ItemIndex]);
+        Refresh;
+       end;
+   omEdit:
+      with OPCashSymbols ,ODSCashSymbols do
+       begin
+        CallProcedure('UpdateCashSymbols',[FieldByName('Symbol').Value,{StrToInt}(ESymbol.text),EName.text,CBAssignment.ItemIndex]);
+        Refresh;
+       end;
+ end;
+ PanelAdd.Visible :=False;
+end;
+
+procedure TCashSymbolX.ODSCashSymbolsCalcFields(DataSet: TDataSet);
+begin
+ with DataSet do
+  begin
+   if FieldByName('mediocrity').value = 0 then
+     FieldByName('Assignment').value :='Мядахил'
+   else
+    if FieldByName('mediocrity').value = 1 then
+     FieldByName('Assignment').value :='Мяхариж';
+  end;
+end;
+
+procedure TCashSymbolX.ActionAddExecute(Sender: TObject);
+begin
+ OperationState :=omAdd;
+ PanelAdd.Visible :=True;
+ EName.Text :='';
+ ESymbol.Text :='';
+ CBAssignment.ItemIndex :=0;
+end;
+
+procedure TCashSymbolX.ActionUpdateExecute(Sender: TObject);
+begin
+ OperationState :=omEdit;
+ PanelAdd.Visible :=True;
+ with ODSCashSymbols do
+  begin
+   ESymbol.Text :=FieldByName('Symbol').AsString;
+   EName.Text :=FieldByName('Name').AsString;
+   CBAssignment.ItemIndex :=FieldByName('Mediocrity').AsInteger;
+  end;
+end;
+
+procedure TCashSymbolX.ActionDeleteExecute(Sender: TObject);
+begin
+ if MessageDlg('Do you want delete this cash symbol?',mtConfirmation,mbYesNoCancel,0)=mrYes then
+   with OPCashSymbols ,ODSCashSymbols do
+    begin
+     CallProcedure('DeleteCashSymbols',[FieldByName('Symbol').Value]);
+     Refresh;
+    end;
+end;
+
+procedure TCashSymbolX.ODSCashSymbolsAfterScroll(DataSet: TDataSet);
+begin
+with DataSet do
+ begin
+  ESymbol.Text :=FieldByName('Symbol').AsString;
+  EName.Text :=FieldByName('Name').AsString;
+  CBAssignment.ItemIndex :=FieldByName('Mediocrity').AsInteger;
+ end;
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TCashSymbolX,
+    Class_CashSymbolX,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

@@ -1,0 +1,4416 @@
+﻿unit NominalCust;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, DBGrids, ExtCtrls, Grids, XDBGrids, StdCtrls, XFSCtrls, DBCtrls,
+  Mask, DBCtrlsEh, Buttons, ComCtrls, ToolWin, PlatformDefaultStyleActnCtrls,
+  Menus, ActnPopup,db, ExtDlgs, ImgList,jpeg;
+
+type
+  TNomCust = class(TForm)
+    XFPanel1: TXFPanel;
+    PageControl1: TPageControl;
+    TabSheet7: TTabSheet;
+    XFPanel4: TXFPanel;
+    XFPanelTeyp: TXFPanel;
+    XFLabel7: TXFLabel;
+    EditID: TEdit;
+    XFPanel12: TXFPanel;
+    XFLabel41: TXFLabel;
+    XFLabel42: TXFLabel;
+    XFLaCBoxDocType1: TXFLabel;
+    XFLaDocSer1: TXFLabel;
+    RBtnNoResident: TXFRadioButton;
+    CBoxDocType1: TDBLookupComboBox;
+    EditDocSerie1: TEdit;
+    EditDocNumber1: TEdit;
+    RBtnResident: TXFRadioButton;
+    XFPanel11: TXFPanel;
+    XFLaEditITN: TXFLabel;
+    XFLEPINCode1: TXFLabel;
+    XFLabel92: TXFLabel;
+    XFRadioGroupCust_type: TXFRadioGroup;
+    EditITN: TEdit;
+    EditPINCode1: TEdit;
+    XFRadioGroupCust_type1: TXFRadioGroup;
+    Memo1: TMemo;
+    TabSheet8: TTabSheet;
+    XFPanel3: TXFPanel;
+    XFLabel2: TXFLabel;
+    XFLabel3: TXFLabel;
+    XFLabel5: TXFLabel;
+    XFLabel6: TXFLabel;
+    XFLabel24: TXFLabel;
+    XFLabel37: TXFLabel;
+    XFLabel61: TXFLabel;
+    XFLabel62: TXFLabel;
+    XFLabel63: TXFLabel;
+    XFLabel64: TXFLabel;
+    XFLabel65: TXFLabel;
+    XFLabel66: TXFLabel;
+    XFLabel67: TXFLabel;
+    XFLabel91: TXFLabel;
+    EditFullName: TEdit;
+    OrganizationTypeCB: TComboBox;
+    BranchCB: TComboBox;
+    TaXAreaCB: TComboBox;
+    EditShort_name: TEdit;
+    DBLC_INCORP_CNTR: TDBLookupComboBox;
+    Dtp_Ustav: TDateTimePicker;
+    DB_INCORP_STATE: TEdit;
+    incor_number: TEdit;
+    EditBic: TEdit;
+    TabSheet1: TTabSheet;
+    XFLabel1: TXFLabel;
+    XFPanel5: TXFPanel;
+    XFLaEditFirstName: TXFLabel;
+    XFLabel9: TXFLabel;
+    XFLaEditPatronymic: TXFLabel;
+    XFLabel10: TXFLabel;
+    XFLaEditLastName: TXFLabel;
+    XFLabel11: TXFLabel;
+    XFLabel35: TXFLabel;
+    XFLabel36: TXFLabel;
+    BtnFullNameGenerator: TSpeedButton;
+    XFLabel13: TXFLabel;
+    XFLabel72: TXFLabel;
+    XFLabel73: TXFLabel;
+    XFLabel86: TXFLabel;
+    EditLastName: TEdit;
+    EditPatronymic: TEdit;
+    EditFirstName: TEdit;
+    Edit10: TEdit;
+    EditShort_name1: TEdit;
+    DBCBox_Citizenship3: TDBLookupComboBox;
+    DBCBox_Citizenship2: TDBLookupComboBox;
+    CBoxCitizenship: TComboBox;
+    TabSheet10: TTabSheet;
+    XFPanel20: TXFPanel;
+    XFLaCBox: TXFLabel;
+    XFLaCBoxGroup: TXFLabel;
+    XFLaComboBox3: TXFLabel;
+    XFLabel4: TXFLabel;
+    XFLabel89: TXFLabel;
+    XFLabel90: TXFLabel;
+    XFLabel93: TXFLabel;
+    XFLabel94: TXFLabel;
+    XFLabel95: TXFLabel;
+    XFLabel96: TXFLabel;
+    CBox: TComboBox;
+    CBoxGroup: TComboBox;
+    ComboBox3: TComboBox;
+    ActionAreaCB: TComboBox;
+    ComboBox_risk: TDBLookupComboBox;
+    DateTi_samelydate: TDBDateTimeEditEh;
+    Comb_riskdescid: TDBLookupComboBox;
+    TabSheet2: TTabSheet;
+    XFPanel6: TXFPanel;
+    XFGroupBox3: TXFGroupBox;
+    XFLaCBoxBirthCity: TXFLabel;
+    XFLabel16: TXFLabel;
+    XFLaCBoxBirthState: TXFLabel;
+    XFLabel81: TXFLabel;
+    XFLabel82: TXFLabel;
+    DTPickerBirthDate: TDateTimePicker;
+    CBoxBirthState: TDBLookupComboBox;
+    CBoxBirthCity: TDBLookupComboBox;
+    XFGroupBox4: TXFGroupBox;
+    XFLabel17: TXFLabel;
+    XFLabel18: TXFLabel;
+    XFLabel19: TXFLabel;
+    XFLabel80: TXFLabel;
+    XFLabel83: TXFLabel;
+    XFLabel84: TXFLabel;
+    EditAddress: TEdit;
+    CBoxAddressState: TDBLookupComboBox;
+    CBoxAddressCity: TDBLookupComboBox;
+    XFGroupBox5: TXFGroupBox;
+    XFLabel20: TXFLabel;
+    XFLabel50: TXFLabel;
+    XFLabel68: TXFLabel;
+    XFLabel69: TXFLabel;
+    XFLabel70: TXFLabel;
+    XFLabel71: TXFLabel;
+    Fakt_Adrs_State: TDBLookupComboBox;
+    Fakt_Adrs_City: TDBLookupComboBox;
+    ZipFakt: TEdit;
+    EditAddressFactical: TEdit;
+    TabSheet3: TTabSheet;
+    XFPanel7: TXFPanel;
+    XFLaCBoxDocType: TXFLabel;
+    XFLaDocSer: TXFLabel;
+    XFLaCBoxDocPlace: TXFLabel;
+    XFLabel14: TXFLabel;
+    XFLabel15: TXFLabel;
+    XFLabel29: TXFLabel;
+    XFLabel74: TXFLabel;
+    XFLabel75: TXFLabel;
+    XFLabel85: TXFLabel;
+    XFLabel87: TXFLabel;
+    EditDocSerie: TEdit;
+    EditDocNumber: TEdit;
+    DTPickerDocDate: TDateTimePicker;
+    DTPickerDocExpiryDate: TDateTimePicker;
+    CBoxDocType: TDBLookupComboBox;
+    EditPINCode: TEdit;
+    issue_country1: TDBLookupComboBox;
+    CBoxDocPlace5: TComboBox;
+    TabSheet11: TTabSheet;
+    XFGroupBox2: TXFGroupBox;
+    XFLabel38: TXFLabel;
+    XFLabel39: TXFLabel;
+    XFLabel40: TXFLabel;
+    XFLabel43: TXFLabel;
+    XFLabel44: TXFLabel;
+    XFLabel45: TXFLabel;
+    XFLabel46: TXFLabel;
+    XFLabel47: TXFLabel;
+    XFLabel48: TXFLabel;
+    XFLabel49: TXFLabel;
+    XFLabel51: TXFLabel;
+    XFLabel52: TXFLabel;
+    XFLabel54: TXFLabel;
+    XFLabel55: TXFLabel;
+    XFLabel56: TXFLabel;
+    XFLabel57: TXFLabel;
+    XFLabel58: TXFLabel;
+    XFLabel59: TXFLabel;
+    XFLabel60: TXFLabel;
+    XFLabel23: TXFLabel;
+    XFLabel53: TXFLabel;
+    XFLabel88: TXFLabel;
+    Address_type: TDBLookupComboBox;
+    CityByConctType: TDBLookupComboBox;
+    CountryByConctType: TDBLookupComboBox;
+    DBEdit_CountryCode: TDBEdit;
+    tph_country_prefix: TDBLookupComboBox;
+    tph_contact_type: TDBLookupComboBox;
+    tph_communication_type: TDBLookupComboBox;
+    db_tph_adress: TEdit;
+    DB_tph_zip: TEdit;
+    Db_tph_number: TEdit;
+    Db_tph_extension: TEdit;
+    db_tph_state: TEdit;
+    EditEmail: TEdit;
+    Edit1: TEdit;
+    Edit_url: TEdit;
+    TabSheet5: TTabSheet;
+    XFPanel9: TXFPanel;
+    XFLabel21: TXFLabel;
+    XFLabel22: TXFLabel;
+    XFLaCBoxGender: TXFLabel;
+    XFLaCBoxFamStatus: TXFLabel;
+    EditPhoneMob: TEdit;
+    EditPhoneCity: TEdit;
+    CBoxGender: TComboBox;
+    CBoxFamStatus: TComboBox;
+    XFGroupBox1: TXFGroupBox;
+    XFLabel76: TXFLabel;
+    XFLabel77: TXFLabel;
+    XFLabel78: TXFLabel;
+    XFLabel79: TXFLabel;
+    Work_Place: TEdit;
+    Work_Post: TEdit;
+    Work_Address: TEdit;
+    Work_Phone: TEdit;
+    TabSheet4: TTabSheet;
+    XFPanel8: TXFPanel;
+    MemoNotes: TMemo;
+    XFPanel14: TXFPanel;
+    XFLabel30: TXFLabel;
+    TabSheet6: TTabSheet;
+    XFPanel17: TXFPanel;
+    SpeedButton3: TSpeedButton;
+    SpeedButton1: TSpeedButton;
+    SpeedButton2: TSpeedButton;
+    XFLabel31: TXFLabel;
+    XFLabel32: TXFLabel;
+    XFLabel33: TXFLabel;
+    XFLabel34: TXFLabel;
+    Image1: TImage;
+    Image2: TImage;
+    Image4: TImage;
+    DBGrid1: TDBGrid;
+    XFPanel2: TXFPanel;
+    XFPanel13: TXFPanel;
+    MainGrid: TXDBGrid;
+    XFButton4: TXFButton;
+    XFButton5: TXFButton;
+    XFBitBtn2: TXFBitBtn;
+    XFCust: TXFBitBtn;
+    XFBitcontinue: TXFBitBtn;
+    ToolBar1: TToolBar;
+    BtnCust: TToolButton;
+    LabelSamelyDate: TXFLabel;
+    PopUpCustomers: TPopupActionBar;
+    CustSearch1: TMenuItem;
+    CustAdd1: TMenuItem;
+    CustEdit1: TMenuItem;
+    CustClose1: TMenuItem;
+    CustClear1: TMenuItem;
+    Timer1: TTimer;
+    Cus_ImageList: TImageList;
+    OpenPictureDialog1: TOpenPictureDialog;
+    Image3: TImage;
+    procedure MainGridDblClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure CustSearch1Click(Sender: TObject);
+    procedure XFButton4Click(Sender: TObject);
+    procedure CustAdd1Click(Sender: TObject);
+    procedure CustEdit1Click(Sender: TObject);
+    procedure CustClose1Click(Sender: TObject);
+    procedure CustClear1Click(Sender: TObject);
+    procedure XFBitcontinueClick(Sender: TObject);
+    procedure XFCustClick(Sender: TObject);
+     procedure CustAdd;
+     procedure Timer1Timer(Sender: TObject);
+    procedure XFButton5Click(Sender: TObject);
+    procedure XFBitBtn2Click(Sender: TObject);
+    procedure XFRadioGroupCust_typeClick(Sender: TObject);
+    procedure XFRadioGroupCust_type1Click(Sender: TObject);
+    procedure EditIDChange(Sender: TObject);
+    procedure EditIDKeyPress(Sender: TObject; var Key: Char);
+    procedure EditITNKeyPress(Sender: TObject; var Key: Char);
+    procedure EditPINCode1Change(Sender: TObject);
+    procedure RBtnResidentClick(Sender: TObject);
+    procedure RBtnNoResidentClick(Sender: TObject);
+    procedure RBtnResidentKeyPress(Sender: TObject; var Key: Char);
+    procedure RBtnNoResidentKeyPress(Sender: TObject; var Key: Char);
+    procedure CBoxDocType1CloseUp(Sender: TObject);
+    procedure EditDocSerie1Change(Sender: TObject);
+    procedure EditDocNumber1Change(Sender: TObject);
+    procedure EditFullNameChange(Sender: TObject);
+    procedure EditFullNameKeyPress(Sender: TObject; var Key: Char);
+    procedure EditShort_nameChange(Sender: TObject);
+    procedure EditShort_nameKeyPress(Sender: TObject; var Key: Char);
+    procedure EditLastNameKeyPress(Sender: TObject; var Key: Char);
+    procedure EditFirstNameKeyPress(Sender: TObject; var Key: Char);
+    procedure EditPatronymicKeyPress(Sender: TObject; var Key: Char);
+    procedure Edit10Change(Sender: TObject);
+    procedure Edit10KeyPress(Sender: TObject; var Key: Char);
+    procedure BtnFullNameGeneratorClick(Sender: TObject);
+    procedure EditShort_name1Change(Sender: TObject);
+    procedure EditPINCodeChange(Sender: TObject);
+    procedure CBoxDocTypeCloseUp(Sender: TObject);
+    procedure EditDocSerieChange(Sender: TObject);
+    procedure EditDocNumberChange(Sender: TObject);
+    procedure EditEmailKeyPress(Sender: TObject; var Key: Char);
+    procedure Edit1KeyPress(Sender: TObject; var Key: Char);
+    procedure FormShow(Sender: TObject);
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure SpeedButton3Click(Sender: TObject);
+    procedure SpeedButton2Click(Sender: TObject);
+  private
+
+    { Private declarations }
+      public
+    { Public declarations }
+
+  end;
+
+var
+    NomCust: TNomCust;
+    Path, Path_B: String;
+    tg,risk_descPERIOD:integer;
+    ConvertNominalToCust:Boolean;
+
+
+
+procedure InitPlugin(s:string);export;
+implementation
+uses   NomCustDataImpl,addcombobox;
+
+
+{$R *.dfm}
+procedure TNomCust.Timer1Timer(Sender: TObject);
+begin
+if LabelSamelyDate.Font.Color=clblack then
+LabelSamelyDate.Font.Color:=clRed
+else
+LabelSamelyDate.Font.Color:=clblack;
+end;
+
+
+ procedure GetPath;
+var
+  ImagesPath: String;
+
+begin
+  ImagesPath := Format('%s\..\Env\Customers', [ExtractFilePath(ParamStr(0))]);
+  Path := Format('%s\temp.jpg', [ImagesPath]);
+  Path_B := Format('%s\blank.jpg', [ImagesPath]);
+end;
+
+  procedure Fill_Edit;
+   var
+  F: File of byte;
+  begin
+  GetPath;
+   if ( CustNomData.DScustimageStamp.IsNull) then
+  begin
+    NomCust.Image2.Picture.LoadFromFile(Path_B);
+    { --no record - godda empty Image1-- }
+  end
+  else
+  begin
+    CustNomData.DScustimageStamp.SaveToFile(Path);
+    AssignFile(F, Path);
+    Reset(F);
+    if FileSize(F) > 0 then
+    begin
+      CloseFile(F);
+      NomCust.Image2.Picture.LoadFromFile(Path);
+
+    end
+    else
+    begin
+      CloseFile(F);
+      NomCust.Image2.Picture.LoadFromFile(Path_B);
+    end;
+  end;
+
+   if (CustNomData.DScustimageCUSTSIGN.IsNull) then
+  begin
+    NomCust.Image1.Picture.LoadFromFile(Path_B);
+   end
+  else
+  begin
+    CustNomData.DScustimageCUSTSIGN.SaveToFile(Path);
+    AssignFile(F, Path);
+    Reset(F);
+    if FileSize(F) > 0 then
+    begin
+      CloseFile(F);
+      NomCust.Image1.Picture.LoadFromFile(Path);
+     end
+    else
+    begin
+      CloseFile(F);
+      NomCust.Image1.Picture.LoadFromFile(Path_B);
+    end;
+  end;
+    if (CustNomData.DScustimagePhoto.IsNull) then
+  begin
+    NomCust.Image3.Picture.LoadFromFile(Path_B);
+   end
+  else
+  begin
+    CustNomData.DScustimagephoto.SaveToFile(Path);
+    AssignFile(F, Path);
+    Reset(F);
+    if FileSize(F) > 0 then
+    begin
+      CloseFile(F);
+      NomCust.Image3.Picture.LoadFromFile(Path);
+    end
+    else
+    begin
+      CloseFile(F);
+      NomCust.Image3.Picture.LoadFromFile(Path_B);
+    end;
+  end;
+
+  end;
+
+
+procedure InitPlugin(s:string);export;
+begin
+   NomCust.ShowModal;
+end;
+exports
+     InitPlugin;
+
+
+
+  procedure TNomCust.BtnFullNameGeneratorClick(Sender: TObject);
+begin
+ if ( EditFirstName.Text='')and(EditPatronymic.Text='')and( EditLastName.Text='') then
+   edit10.Text:=''
+   else
+  Edit10.Text := EditLastName.Text+ ' ' +EditFirstName.Text + ' ' + EditPatronymic.Text;
+end;
+
+procedure TNomCust.CBoxDocType1CloseUp(Sender: TObject);
+begin
+CustNomData.odsPassDeps.Close;
+ CustNomData.odsPassDeps.SetVariable('v_doctype',CustNomData.OdsDoctaypes.FieldByName('ID').AsInteger);
+ CustNomData.odsPassDeps.Open;
+  if tg<>1 then
+    begin
+    NomCust.CBoxDocPlace5.Clear;
+   combobox_add(CustNomData.odsPassDeps, NomCust.CBoxDocPlace5, 'NAME');
+
+    end;
+   if not (CustNomData.OdsDoctaypes.FieldByName('Series').isnull) then
+   NomCust.EditDocSerie.Text:=  CustNomData.OdsDoctaypes.FieldByName('Series').AsString;
+
+
+Case  CustNomData.OdsDoctaypes.FieldByName('FORDOCTYPES').AsInteger of
+0:begin
+  CustNomData.DS_issue_country.Locate('SYMB','AZ',[loCaseInsensitive,loPartialKey]);
+   NomCust.issue_country1.KeyValue:=CustNomData.DS_issue_country.FieldByName('ID').AsInteger;
+  NomCust.issue_country1.Enabled:=False;
+  end;
+1:begin
+  //DS_issue_country.Locate('CNTR_NAME','b',[loCaseInsensitive,loPartialKey]);
+  NomCust.issue_country1.Enabled:=True;
+  end;
+End;
+
+
+
+ CBoxDocType.KeyValue := CBoxDocType1.KeyValue;
+  if CBoxDocType1.text =CustNomData.OdsDoctaypes.FieldByName('name').AsString then
+  begin
+    EditDocSerie1.Text := CustNomData.OdsDoctaypes.FieldByName
+      ('series').AsString;
+  end
+end;
+
+procedure TNomCust.CBoxDocTypeCloseUp(Sender: TObject);
+begin
+  CBoxDocType1.KeyValue := CBoxDocType.KeyValue;
+   if CBoxDocType.text =CustNomData.OdsDoctaypes.FieldByName('name').AsString then
+  begin
+    EditDocSerie.Text := CustNomData.OdsDoctaypes.FieldByName
+      ('series').AsString;
+
+  end
+end;
+
+procedure TNomCust.CustAdd;
+var
+  c_name: string;
+  c_open_dat: TDateTime;
+  c_op_id: Integer;
+  c_inn: string;
+  c_group_klie: Integer;
+  c_close_dat: TDateTime;
+  c_nerezident: Integer;
+  c_vid_sob: Integer;
+  c_prinad_kod: Integer;
+  c_cust_type: Integer;
+  c_cust_jur:variant;
+  c_cust_phys:variant;
+  c_cust_fs:variant;
+  c_risk_categ:integer;
+  c_riskdescid:integer;
+  c_samelydate :TDateTime  ;
+  c_bik :string;
+  c_category: Integer;
+  C_Address_typee:string;
+  d_name: string;
+  d_soname: string;
+  d_lastname: string;
+  d_passer: string;
+  d_birthday: TDateTime;
+  d_birthplace: string;
+  d_fam_status: Integer;
+  d_address: string;
+  d_fakt_adress: string;
+  d_phone_h: string;
+  d_e_mail: string;
+  d_sex: Integer;
+  d_paspnum: string;
+  d_adrs_state: string;
+  d_city: string;
+  d_doc_type: Integer;
+
+  d_birth_state: string;
+  d_phone_m: string;
+  d_paspdate: TDateTime;
+  d_paspplace: string;
+  d_passPIN: string;
+  d_citizenship: Integer;
+  d_passexpire: TDateTime;
+  d_note:string;
+  c_org_sob:integer;
+  c_sfera_dey:integer;
+  c_otrasl:integer;
+  c_nalog_kod:integer;
+  c_short_name:string;
+   ms: TMemoryStream;
+   a,b,c :integer;
+   c_dat_ustav:TDateTime;
+   c_incorporation_number:string;
+   c_tph_contact_type :string;
+   c_tph_communication_type:string;
+   c_tph_number :string;
+   c_address_type:string;
+   c_address :string;
+   c_city:variant;
+   c_country_code:variant;
+   c_director_id :integer;
+   c_email:string;
+   c_url:string;
+   c_incorporation_state:string;
+   c_incorporation_cntr:variant;
+   c_tph_extension :string;
+   c_tph_zip :string;
+   c_tph_country_prefix:string;
+   c_tph_state :string;
+   d_tph_contact_type :string;
+   d_tph_country :string{};
+   d_tph_country_code :string;
+   d_tph_city:string{};
+   d_tph_state:string;
+   d_tph_zip:string;
+   d_tph_country_prefix:string;
+   d_tph_adress :string;
+   d_tph_communication_type:string;
+   d_tph_number:string;
+   d_tph_extension :string;
+   d_contact_type :string;
+   d_url:string;
+   d_doc_country:integer;
+   d_citizenship2:integer;
+   d_citizenship3:integer;
+   d_fakt_country:integer;
+   d_fakt_city:integer;
+   d_fakt_zip:string;
+   d_work_place:string;
+   d_work_post:string;
+   d_work_adress:string;
+   d_work_phone :string;
+
+begin
+  c_cust_type := -1;
+  c_nerezident := 1; // default 1 yani rezident
+
+
+
+  if XFRadioGroupCust_type1.ItemIndex=-1 then
+  begin
+  ShowMessage(' Yeni müştərini əlavə etmək üçün onun tipini seçin  !');
+  exit;
+  end;
+    case XFRadioGroupCust_type.ItemIndex of
+ 0:begin
+   if trim(EditITN.Text)='' then
+   begin
+     showmessage('VÖEN sahəsi boşdur');
+     exit;
+   end;
+ end;
+ 1,4:begin
+   if trim(EditPINCode1.Text)='' then
+   begin
+     showmessage('Pinkod sahəsi boşdur');
+     exit;
+ end;
+ end;
+ 2:begin
+     if (trim(EditITN.Text)='')and (trim(EditPINCode1.Text)='') then
+   begin
+     showmessage('VÖEN ve ya Pinkod sahəsi boşdur');
+     exit;
+   end
+  end;
+  end;
+
+  if (RBtnResident.Checked=false) and( RBtnNoResident.Checked=false) then
+  begin
+    ShowMessage(' Rezident və ya  Qeyr Rezident Sahəsi seçilməyib  ! ');
+    exit;
+  end;
+
+  case XFRadioGroupCust_type.ItemIndex  of
+  0: begin
+
+   if trim(EditFullName.Text) = '' then
+  begin
+    ShowMessage('Müştərinin adını daxil edin !');
+    exit;
+  end
+  else
+  if DBLC_INCORP_CNTR.KeyValue = -1 then
+  begin
+    ShowMessage('Hüquqi şəxsin mənsub olduğu ölkə sahəsi seçilməyib  !');
+    exit;
+  end
+  else
+   if trim(incor_number.text) = '' then
+  begin
+    ShowMessage('Dövlət qeydiyyat nömrəsi sahəsi doldurulmayıb !');
+    exit;
+  end
+  else
+   if trim(ComboBox_risk.text) = '' then
+  begin
+    ShowMessage('Müştərinin risk kateqoriyası sahəsi doldurulmayıb !');
+    exit;
+   end
+   else
+   if trim(Comb_riskdescid.text) = '' then
+        begin
+
+        showmessage('Müştərinin risk kateqoriyasının təyinatı  sahəsi doldurulmayıb!');
+        Exit;
+        end
+        else
+      if  DateTi_samelydate.value = null then          //Integer
+        begin
+      showmessage('Müştərinin eyniləşdirmə tarixi daxil edilməlidir!');
+        Exit;
+        end
+        else
+  if Address_type.text ='' then
+   begin
+    ShowMessage('əlaqə növü sahəsi  seçilməyib !');
+    exit;
+      end
+      else
+    if CountryByConctType.text ='' then
+    begin
+    ShowMessage('Əlaqə növünə görə  Ölkə sahəsi seçilməyib  !');
+    exit;
+      end
+       else
+   if CityByConctType.text ='' then
+    begin
+    ShowMessage('Əlaqə növünə görə  Şəhər sahəsi seçilməyib  !');
+    exit;
+    end
+    else
+   if trim(db_tph_adress.text) ='' then
+    begin
+    ShowMessage('Əlaqə növünə görə  Ünvan  sahəsi doldurulmayıb  !');
+    exit;
+    end
+    else
+
+   if tph_contact_type.text ='' then
+    begin
+    ShowMessage('Əlaqə növünə görə telefon nömrəsinin tipi  sahəsi seçilməyib  !');
+    exit;
+    end
+    else
+   if tph_communication_type.text ='' then
+    begin
+    ShowMessage('Rabitə növünə görə telefon nömrəsinin tipi sahəsi seçilməyib  !');
+    exit;
+    end
+    else
+   if trim(Db_tph_number.text) ='' then
+    begin
+    ShowMessage('Əlaqə növünə görə  Nömrə  sahəsi doldurulmayıb  !');
+    exit
+    end
+  end;
+
+  1,2,4:begin
+
+  if trim( EditLastName.Text) = '' then
+  begin
+    ShowMessage('Soy adını daxil edin  !');
+    exit;
+    end
+   else
+  if trim(EditFirstName.Text )= '' then
+  begin
+    ShowMessage('Müştərinin adını daxil edin !');
+    exit;
+  end
+  else
+
+  if trim( EditPatronymic.Text) = '' then
+  begin
+    ShowMessage('Atasının adını daxil edin  !');
+    exit;
+  end
+  else
+
+  if CBoxCitizenship.text='' then
+  begin
+    ShowMessage('Vətəndaşlığını daxil edin  !');
+    exit;
+
+  end
+  else
+    if trim(ComboBox_risk.text) = '' then
+  begin
+    ShowMessage('Müştərinin risk kateqoriyası sahəsi doldurulmayıb !');
+    exit;
+  end
+  else
+  if Comb_riskdescid.text = '' then
+        begin
+
+  showmessage('Müştərinin risk kateqoriyasının təyinatı  sahəsi doldurulmayıb!');
+  Exit;
+  end
+  else
+  if  DateTi_samelydate.value = null then          //Integer
+  begin
+  showmessage('Müştərinin eyniləşdirmə tarixi daxil edilməlidir!');
+  Exit;
+  end
+  else
+
+  if CBoxBirthState.KeyValue= '' then
+  begin
+  showmessage('Doğum haqqında məlumatın ölkəsini daxil edin  !');
+  exit;
+  end
+  else
+  if CBoxBirthCity.KeyValue= '' then
+  begin
+  showmessage('Doğum haqqında məlumatın şəhərini daxil edin  !');
+  exit;
+  end
+  else
+  if CBoxAddressState.KeyValue=''then
+  begin
+  showmessage('Qeydiyyat ünvanın ölkəsini daxil edin  !');
+  exit;
+  end
+  else
+   if CBoxAddressCity.KeyValue=''then
+  begin
+  showmessage('Qeydiyyat ünvanın şəhərini daxil edin  !');
+  exit;
+  end
+  else
+  if EditAddress.Text=''then
+  begin
+  showmessage('Qeydiyyat ünvanı sahəsi doldurulmayib !');
+  exit;
+  end
+  else
+  if Fakt_Adrs_State.Text=''then
+  begin
+  showmessage('Faktiki ünvanın ölkəsini daxil edin  !');
+  exit;
+  end
+  else
+  if Fakt_Adrs_City.Text=''then
+  begin
+  showmessage('Faktiki ünvanın şəhərini daxil edin  !');
+  exit;
+  end
+  else
+   if  CBoxDocType.Text=''then
+  begin
+  showmessage('Sənədin növünü  daxil edin  !');
+  exit;
+  end
+  else
+  if  issue_country1.Text=''then
+  begin
+  showmessage('Sənədin verildiyi ölkəni daxil edin  !');
+  exit;
+  end
+  else
+  if  CBoxDocPlace5.text=''then
+  begin
+  showmessage('Sənədin verildiyi yeri daxil edin  !');
+  exit;
+  end
+  else
+  if Address_type.text ='' then
+   begin
+    ShowMessage('əlaqə növü sahəsi  seçilməyib !');
+    exit;
+      end
+      else
+    if CountryByConctType.text ='' then
+    begin
+    ShowMessage('Əlaqə növünə görə  Ölkə sahəsi seçilməyib  !');
+    exit;
+      end
+       else
+   if CityByConctType.text ='' then
+    begin
+    ShowMessage('Əlaqə növünə görə  Şəhər sahəsi seçilməyib  !');
+    exit;
+    end
+    else
+   if trim(db_tph_adress.text) ='' then
+    begin
+    ShowMessage('Əlaqə növünə görə  Ünvan  sahəsi doldurulmayıb  !');
+    exit;
+    end
+    else
+
+   if tph_contact_type.text ='' then
+    begin
+    ShowMessage('Əlaqə növünə görə telefon nömrəsinin tipi  sahəsi seçilməyib  !');
+    exit;
+    end
+    else
+   if tph_communication_type.text ='' then
+    begin
+    ShowMessage('Rabitə növünə görə telefon nömrəsinin tipi sahəsi seçilməyib  !');
+    exit;
+    end
+    else
+   if trim(Db_tph_number.text) ='' then
+    begin
+    ShowMessage('Əlaqə növünə görə  Nömrə  sahəsi doldurulmayıb  !');
+    exit
+    end
+  end;
+  end;
+  // c_open_dat:=
+  // c_op_id:=
+   if (EditITN.Text <> '') then
+  begin
+   a:=CustNomData.PG_PCustService.CallIntegerFunction('get_Add_cust_yoxlama',['p_inn',EditITN.Text]);
+  if a<>-1 then begin showmessage(inttostr(a)+' -ID li Müştəri üçün  ' +EditITN.Text+'  VÖEN mövcuddur!');
+   Exit;end;
+    end;
+  c_inn := EditITN.Text;
+
+  if CBoxGroup.ItemIndex <> -1 then
+  begin
+    CustNomData.ClientGroupData.Locate('name', CBoxGroup.Text, []);
+    c_group_klie := CustNomData.ClientGroupData.FieldByName('ID')
+      .AsInteger;
+  end
+  else
+    c_group_klie := 0;
+  // ShowMessage(IntToStr(c_group_klie));
+  // c_close_dat
+
+  { if not(RBtnResident.Checked and RBtnNoResident.Checked) then
+    showmessage  ('Musterinin rezident ve ya qeyri rezident oldugun secin!')
+    else
+  }
+  if RBtnResident.Checked then
+    c_nerezident := 1;
+
+  if RBtnNoResident.Checked then
+    c_nerezident := 0;
+
+  if CBox.ItemIndex <> -1 then
+  begin
+    CustNomData.EstateTypeData.Locate('name', CBox.Text, []);
+    c_vid_sob := CustNomData.EstateTypeData.FieldByName('ID').AsInteger;
+  end
+  else
+    c_vid_sob := 0;
+
+  if ComboBox3.ItemIndex <> -1 then
+  begin
+    CustNomData.RelationData.Locate('name', ComboBox3.Text, []);
+    c_prinad_kod := CustNomData.RelationData.FieldByName('ID')
+      .AsInteger;
+  end
+  else
+    c_prinad_kod := 0;
+
+ case XFRadioGroupCust_type.ItemIndex of
+ 0:begin
+    c_cust_type := 0;
+    c_cust_jur:=1;
+    c_cust_phys:='';
+    c_cust_fs:='';
+ end;
+ 1:begin
+    c_cust_type := 1;
+    c_cust_jur:='';
+    c_cust_phys:=1;
+    c_cust_fs:='';
+ end;
+  2:begin
+    c_cust_type := 2;
+    c_cust_jur:='';
+    c_cust_phys:='';
+    c_cust_fs:=1;
+  end;
+ 3:begin
+   { c_cust_type := 3;
+    c_cust_jur:='';
+    c_cust_phys:=1;
+    c_cust_fs:=1;  }
+    showmessage('Fiziki şəxs və fiziki sahibkara əlavə etmek olmaz');
+    exit;
+  end;
+  4:begin
+    c_cust_type:=4;
+    c_cust_jur:='';
+    c_cust_phys:='';
+    c_cust_fs:='';
+  end;
+  end;
+  d_name := EditFirstName.Text;
+  d_soname := EditPatronymic.Text;
+  d_lastname := EditLastName.Text;
+
+  if EditDocSerie1.Enabled=false then
+  EditDocSerie.Text:=''
+  else
+  if  EditDocSerie.Enabled=false then
+  else
+  if  EditDocSerie.Text='' then
+  begin
+  ShowMessage('Sənədin Seriya / N_si sahəsi tam doldurulmayıb     !');
+   exit;
+  end
+  else
+  d_passer := EditDocSerie.Text;
+
+  if EditDocNumber1.Enabled=false then
+  EditDocNumber.Text:=''
+  else
+  if EditDocNumber1.Enabled=false  then
+    else
+  if  EditDocNumber.Text='' then
+  begin
+  ShowMessage('Sənədin Seriya / N_si sahəsi tam doldurulmayıb     !');
+   exit;
+  end
+  else
+  d_paspnum := EditDocNumber.Text;
+
+ if (EditDocSerie1.Text+EditDocNumber1.Text)<>'' then
+  begin
+  c:= CustNomData.PG_PCustService.CallIntegerFunction('get_Add_cust_yoxlama',['p_passer_panum',EditDocSerie1.Text+EditDocNumber1.Text,CBoxDocType1.KeyValue]);
+  if c<>-1 then begin showmessage(inttostr(c)+' -ID li Müştəri üçün '+EditDocSerie1.Text+' /'+ EditDocNumber1.Text+'  Sənədin  seryasi mövcuddur!');
+  Exit;end;
+  end;
+
+ if (EditPINCode1.Text <> '') then
+  begin
+  b:= CustNomData.PG_PCustService.CallIntegerFunction('get_Add_cust_yoxlama',['p_passpin',EditPINCode1.Text]);
+   if b<>-1 then begin showmessage(inttostr(b)+' -ID li Müştəri üçün ' +EditPINCode1.Text+'  Pinkod mövcuddur!');
+   Exit;end;
+  end;
+    d_passPIN := EditPINCode.Text;
+
+   if   EditFullName.Text<>'' then
+     c_name := EditFullName.Text
+     else
+    c_name:= EditLastName.Text+ ' ' +EditFirstName.Text + ' ' + EditPatronymic.Text ;
+
+
+  c_short_name:=EditShort_name.text;
+  ///----if XFCheckBox3.Checked=true then
+  d_birthday := Integer(Trunc(DTPickerBirthDate.DateTime)) ;
+ //------- else d_birthday :=null;
+  d_birthplace := CBoxBirthState.KeyValue;
+
+  if CBoxFamStatus.ItemIndex <> -1 then
+  begin
+    CustNomData.OdsFamstatus.Locate('name', CBoxFamStatus.Text, []);
+    d_fam_status := CustNomData.OdsFamstatus.FieldByName('ID')
+      .AsInteger;
+  end
+  else
+    d_fam_status := 0;
+
+  d_address := EditAddress.Text;
+  d_fakt_adress := EditAddressFactical.Text;
+  d_phone_h := EditPhoneCity.Text;
+
+
+
+  if CBoxGender.ItemIndex <> -1 then
+  begin
+    CustNomData.OdsGender.Locate('name', CBoxGender.Text, []);
+    d_sex := CustNomData.OdsGender.FieldByName('id').AsInteger;
+  end
+  else
+    d_sex := 0;
+
+  d_adrs_state := CBoxAddressState.KeyValue;
+  d_city := CBoxAddressCity.KeyValue;
+
+  d_paspplace := CBoxDocPlace5.text;
+
+  if CBoxDocType1.Enabled=false then
+  CBoxDocType.KeyValue:=-1
+  // d_doc_type := 0
+   else
+  if CBoxDocType.KeyValue <> -1 then
+  begin
+    CustNomData.OdsDoctaypes.Locate('name', CBoxDocType.Text, []);
+    d_doc_type := CustNomData.OdsDoctaypes.FieldByName('ID').AsInteger;
+  end
+  else
+    d_doc_type := 0;
+
+  d_birth_state := CBoxBirthCity.KeyValue;
+  d_phone_m := EditPhoneMob.Text;
+
+  d_paspdate := Integer(Trunc(DTPickerDocDate.DateTime));
+
+  d_note:= MemoNotes.Text;
+
+  if CBoxCitizenship.ItemIndex <> -1 then
+  begin
+    CustNomData.Odscountries.Locate('CNTR_NAME',
+      CBoxCitizenship.Text, []);
+    d_citizenship := CustNomData.Odscountries.FieldByName('ID')
+      .AsInteger;
+  end
+  else
+    d_citizenship := 0;
+  // showmessage(inttostr(d_citizenship));
+  d_passexpire := Integer(Trunc(DTPickerDocExpiryDate.DateTime));
+  // c_category:=
+  if OrganizationTypeCB.ItemIndex<>-1 then
+  begin
+    CustNomData.OrganizationTypeData.Locate('name',
+    OrganizationTypeCB.Text,[]);
+     c_org_sob:= CustNomData.OrganizationTypeData.FieldByName('id').AsInteger;
+  end
+  else
+    c_org_sob:=0;
+
+ if ActionAreaCB.ItemIndex<>-1 then
+  begin
+    CustNomData.ActionAreaData.Locate('name',
+    ActionAreaCB.Text,[]);
+     c_sfera_dey:= CustNomData.ActionAreaData.FieldByName('id').AsInteger;
+  end
+  else
+    c_sfera_dey:=0;
+
+
+  if ComboBox_risk.KeyValue <> -1 then
+  begin
+    CustNomData.ODS_risk.Locate('name', ComboBox_risk.Text, []);
+    c_risk_categ := CustNomData.ODS_risk.FieldByName('ID').AsInteger;
+  end
+  else
+    c_risk_categ := 0;
+
+
+
+ if Comb_riskdescid.KeyValue<>-1 then
+  begin
+    CustNomData.ODS_CUST_RISK_DESC.Locate('name',
+    Comb_riskdescid.Text,[]);
+    c_riskdescid:=CustNomData.ODS_CUST_RISK_DESC.FieldByName('id').AsInteger;
+    end
+    else
+    c_riskdescid:=0;
+
+
+  if BranchCB.ItemIndex<>-1 then
+  begin
+    CustNomData.BranchData.Locate('name',
+    BranchCB.Text,[]);
+     c_otrasl:= CustNomData.BranchData.FieldByName('id').AsInteger;
+  end
+  else
+    c_otrasl:=0;
+
+      if TaXAreaCB.ItemIndex<>-1 then
+  begin
+    CustNomData.TaxAreaData.Locate('name',
+    TaXAreaCB.Text,[]);
+     c_nalog_kod:= CustNomData.TaxAreaData.FieldByName('id').AsInteger;
+  end
+  else
+    c_nalog_kod:=0;
+
+    d_doc_country:=issue_country1.KeyValue;
+    if  DBCBox_Citizenship2.KeyValue <>null then
+    d_citizenship2:=DBCBox_Citizenship2.KeyValue
+    else
+    d_citizenship2:=0;
+
+    if DBCBox_Citizenship3.KeyValue then
+    d_citizenship3:=DBCBox_Citizenship3.KeyValue
+    else
+    d_citizenship3:=0;
+
+    c_samelydate :=integer(trunc(DateTi_samelydate.Value));
+    d_fakt_country :=Fakt_Adrs_State.KeyValue;
+    d_fakt_city:=Fakt_Adrs_City.KeyValue;
+    d_fakt_zip:=ZipFakt.Text;
+    d_work_place:=Work_Place.Text;
+    d_work_post :=Work_Post.Text;
+    d_work_adress:=Work_Address.Text;
+    d_work_phone:=Work_Phone.Text;
+     c_dat_ustav:=Integer(Trunc(Dtp_Ustav.DateTime));
+     c_incorporation_number:=incor_number.Text;
+     c_tph_contact_type:=tph_contact_type.KeyValue;
+     c_tph_communication_type:=tph_communication_type.KeyValue;
+     c_tph_number:=Db_tph_number.Text;
+     c_address_type:= Address_type.KeyValue;
+     c_address:=db_tph_adress.Text;
+     c_city:=CityByConctType.KeyValue;
+     c_country_code:=CountryByConctType.KeyValue;
+  //-   c_email:=E_mail.Text;
+     c_email := EditEmail.Text + '@' + Edit1.Text;
+     c_url  :=Edit_url.Text;
+     c_incorporation_state:=DB_INCORP_STATE.Text;
+     c_incorporation_cntr:= DBLC_INCORP_CNTR.KeyValue;
+     c_tph_extension:=Db_tph_extension.Text;
+     c_tph_zip:=DB_tph_zip.Text;
+     c_tph_country_prefix:=tph_country_prefix.KeyValue;
+     c_tph_state:=db_tph_state.Text;
+
+     d_tph_contact_type:=tph_contact_type.KeyValue;
+     d_tph_country:= CountryByConctType.KeyValue;
+     d_tph_country_code:=DBEdit_CountryCode.Text;
+     d_tph_city:=CityByConctType.KeyValue;
+     d_tph_state:=db_tph_state.Text;
+     d_tph_zip:=DB_tph_zip.Text;
+     d_tph_country_prefix:=tph_country_prefix.KeyValue;
+     d_tph_adress:=db_tph_adress.Text;
+     d_tph_communication_type:=tph_communication_type.KeyValue;
+     d_tph_number:=db_tph_number.Text;
+     d_tph_extension :=db_tph_extension.Text;
+     d_contact_type:=Address_type.KeyValue;
+     d_e_mail := EditEmail.Text + '@' + Edit1.Text;
+     d_url:=Edit_url.Text;
+
+ if MessageDlg('Yeni Mustərini yaddaşa yazmaq istəyirsinizmi ?',
+   mtConfirmation, mbYesNoCancel, 0) = mrYes then
+
+     begin
+
+     case XFRadioGroupCust_type.ItemIndex of
+     0:
+     begin
+     c_incorporation_number:=incor_number.Text;
+     c_tph_contact_type:=tph_contact_type.KeyValue;
+     c_tph_communication_type:=tph_communication_type.KeyValue;
+     c_tph_number:=Db_tph_number.Text;
+     c_address_type:= Address_type.KeyValue;
+     c_address:=db_tph_adress.Text;
+     c_city:=CityByConctType.KeyValue;
+     c_country_code:=CountryByConctType.KeyValue;
+     c_dat_ustav:=Integer(Trunc(Dtp_Ustav.DateTime));
+    // c_email:=E_mail.Text;
+     c_email := EditEmail.Text + '@' + Edit1.Text;
+     c_url  :=Edit_url.Text;
+     c_incorporation_state:=DB_INCORP_STATE.Text;
+     c_incorporation_cntr:= DBLC_INCORP_CNTR.KeyValue;
+     c_tph_extension:=Db_tph_extension.Text;
+     c_tph_zip:=DB_tph_zip.Text;
+     c_tph_country_prefix:=tph_country_prefix.KeyValue;
+     c_tph_state:=db_tph_state.Text;
+     c_bik:=editbic.Text ;
+     d_tph_contact_type :='';
+     d_tph_country :='';
+     d_tph_country_code :='';
+     d_tph_city:='';
+     d_tph_state:='';
+     d_tph_zip:='';
+     d_tph_country_prefix:='';
+     d_tph_adress :='';
+     d_tph_communication_type:='';
+     d_tph_number:='';
+     d_tph_extension :='';
+     d_contact_type :='';
+     d_e_mail:='';
+     d_url:='';
+     end;
+     1,2,3,4:
+     begin
+     d_tph_contact_type:=tph_contact_type.KeyValue;
+     d_tph_country:= CountryByConctType.KeyValue;
+     d_tph_country_code:=DBEdit_CountryCode.Text;
+     d_tph_city:=CityByConctType.KeyValue;
+     d_tph_state:=db_tph_state.Text;
+     d_tph_zip:=DB_tph_zip.Text;
+     d_tph_country_prefix:=tph_country_prefix.KeyValue;
+     d_tph_adress:=db_tph_adress.Text;
+     d_tph_communication_type:=tph_communication_type.KeyValue;
+     d_tph_number:=db_tph_number.Text;
+     d_tph_extension :=db_tph_extension.Text;
+     d_contact_type:=Address_type.KeyValue;
+     d_e_mail := EditEmail.Text + '@' + Edit1.Text;
+     d_url:=Edit_url.Text;
+     c_bik:='';
+     c_incorporation_number :='';
+     c_tph_contact_type :='';
+     c_tph_communication_type :='';
+     c_tph_number :='';
+     c_address_type :='';
+     c_address :='';
+     c_city:='';
+     c_country_code:='';
+     c_email:='';
+     c_url:='';
+     c_incorporation_state:='';
+     c_incorporation_cntr:='';
+     c_tph_extension :='';
+     c_tph_zip:='';
+     c_tph_country_prefix:='';
+     c_tph_state:='';
+    // c_dat_ustav:=null;
+     c_email:='';
+     end;
+     end;
+       CustNomData.PG_PCustService.CallProcedure('add_customers_prosess',
+     [c_name,
+      c_short_name,
+      date,
+      c_inn,
+      c_group_klie,
+      date,
+      c_nerezident,
+      c_vid_sob,
+      c_prinad_kod,
+      c_cust_type,
+      c_cust_jur,
+      c_cust_phys,
+      c_cust_fs,
+      c_bik,
+      c_risk_categ,
+      c_riskdescid ,
+      c_samelydate,
+      c_category,
+      d_name,
+      d_soname,
+      d_lastname,
+      d_passer,
+      d_birthday,
+      d_birthplace,
+      d_fam_status,
+      d_address,
+      d_fakt_adress,
+      d_doc_country,
+      d_citizenship2,
+      d_citizenship3,
+      d_fakt_country ,
+      d_fakt_city,
+      d_fakt_zip,
+      d_work_place,
+      d_work_post ,
+        d_work_adress ,
+        d_work_phone,
+        d_phone_h,
+        d_e_mail,
+        d_sex,
+        d_paspnum,
+        d_adrs_state,
+        d_city,
+        d_doc_type,
+        d_birth_state,
+        d_phone_m,
+        d_paspdate,
+        d_paspplace,
+        d_passPIN,
+        d_citizenship,
+        d_passexpire,
+        d_note,
+        c_org_sob,
+        c_sfera_dey,
+        c_otrasl,
+        c_nalog_kod,
+        c_incorporation_number ,
+        c_tph_contact_type         ,
+        c_tph_communication_type  ,
+        c_tph_number            ,
+        c_address_type          ,
+        c_address             ,
+        c_city             ,
+        c_country_code   ,
+        c_dat_ustav,
+        c_email    ,
+        c_url    ,
+        c_incorporation_state ,
+        c_incorporation_cntr ,
+        c_tph_extension ,
+        c_tph_zip    ,
+        c_tph_country_prefix  ,
+        c_tph_state,
+        d_tph_contact_type ,
+        d_tph_country  ,
+        d_tph_country_code ,
+        d_tph_city,
+        d_tph_state,
+        d_tph_zip  ,
+        d_tph_country_prefix,
+        d_tph_adress ,
+        d_tph_communication_type,
+        d_tph_number,
+        d_tph_extension ,
+        d_contact_type,
+        d_url   ]);
+  // DataModPCustService.ODS_CUSTOMERS_PHYS_FS.close;
+
+     CustSearch1.Click;
+     //CustClear1.Click;
+     CustNomData.ODS_CUSTOMERS_PHYS_FS.Close;
+     CustNomData.ODS_CUSTOMERS_PHYS_FS.Open;
+   /////////////elaelendirmenin refresh/////////////////
+     CustNomData.ODS_CUSTOMERS_PHYS_FS2.Close;
+     CustNomData.ODS_CUSTOMERS_PHYS_FS2.Open;
+   ////////////////////////////////////////////////////
+     CustNomData.ODS_CUSTOMERS_PHYS_FS.Last;
+     PageControl1.TabIndex:=0;
+       XFCust.Visible:=false;
+       XFButton4.Visible:=true;
+       XFButton5.Visible:=true;
+       XFPanelTeyp.Visible:=true;
+   end
+   {  else
+         CustClear1.Click; }
+
+
+end;
+
+
+procedure TNomCust.CustAdd1Click(Sender: TObject);
+begin
+    CustClear1.Click;
+    XFRadioGroupCust_type1.controls[3].Enabled:=false;
+    PageControl1.Pages[1].TabVisible := false;
+    PageControl1.Pages[2].TabVisible := false;
+    PageControl1.Pages[3].TabVisible := false;
+    PageControl1.Pages[4].TabVisible := false;
+    PageControl1.Pages[5].TabVisible := false;
+    PageControl1.Pages[6].TabVisible := false;
+    PageControl1.Pages[7].TabVisible := false;
+    PageControl1.Pages[8].TabVisible := false;
+    PageControl1.Pages[9].TabVisible := false ;
+
+   // XFPanel12.Visible:=false;
+    XFBitcontinue.Visible:=true;
+    XFRadioGroupCust_type.Visible:=false;
+    XFRadioGroupCust_type1.Visible:=true;
+    XFButton4.Visible:=false;
+    XFButton5.Visible:=false;
+    XFPanelTeyp.Visible:=false;
+end;
+
+procedure TNomCust.CustClear1Click(Sender: TObject);
+var i:integer;
+a,n:string;
+begin
+
+
+
+XFRadioGroupCust_type.Enabled:=true;
+Comb_riskdescid.KeyValue:=-1;
+ComboBox_risk.KeyValue:=-1;
+ DateTi_samelydate.Value:=null;
+ LabelSamelyDate.Visible:=False;
+  EditBic.Clear;
+  CBox.Enabled:=true;
+  ActionAreaCB.Enabled:=true;
+  XFButton4.Visible:=true;
+  XFButton5.Visible:=true;
+XFRadioGroupCust_type.Visible:=true;
+XFRadioGroupCust_type1.Visible:=false;
+XFRadioGroupCust_type1.ItemIndex:=-1;
+XFRadioGroupCust_type.ItemIndex:=-1;
+XFCust.Visible:=false;
+XFBitcontinue.Visible:=false;
+ PageControl1.TabIndex:=0;
+  EditID.Clear;
+  EditFirstName.Clear;
+  EditPatronymic.Clear;
+  EditLastName.Clear;
+  EditFullName.Clear;
+  EditPINCode.Clear;
+  EditITN.Clear;
+  EditITN.Enabled:=true;
+  XFLaEditITN.Enabled:=true;
+  // CBoxCitizenship.SelText:='';
+  CBoxCitizenship.ItemIndex := -1;
+  CBoxGender.ItemIndex := -1;
+  CBoxFamStatus.ItemIndex := -1;
+  CBoxGroup.ItemIndex := -1;
+  CBox.ItemIndex := -1;
+  ComboBox3.ItemIndex := -1;
+  CBoxDocType.KeyValue := -1;
+  CBoxDocType1.KeyValue := -1;
+  EditDocSerie.Clear;
+  EditDocNumber.Clear;
+  CBoxDocPlace5.text:='';
+  CBoxBirthState.KeyValue := '';
+  CBoxBirthCity.KeyValue := '';
+  CBoxAddressState.KeyValue := '';
+  CBoxAddressCity.KeyValue := '';
+  OrganizationTypeCB.ItemIndex := -1;
+  ActionAreaCB.ItemIndex := -1;
+  BranchCB.ItemIndex := -1;
+  TaXAreaCB.ItemIndex := -1;
+  EditAddress.Clear;
+  EditAddressFactical.Clear;
+  EditPhoneMob.Clear;
+  EditPhoneCity.Clear;
+  EditEmail.Clear;
+  Edit1.Clear;
+  RBtnResident.Checked := False;
+  RBtnNoResident.Checked := False;
+   CustNomData.ODS_CUSTOMERS_PHYS_FS.Active:=false;
+//  XFCheckBox1.Checked := False;
+//  XFCheckBox2.Checked := False;
+//  XFCheckBox3.Checked := False;
+  DTPickerDocDate.DateTime := CustNomData.ODS_SYSDATE.FieldByName
+    ('tek_dat').asdatetime;
+  DTPickerDocExpiryDate.DateTime := CustNomData.ODS_SYSDATE.FieldByName
+    ('tek_dat').asdatetime;
+  DTPickerBirthDate.DateTime := CustNomData.ODS_SYSDATE.FieldByName
+    ('tek_dat').asdatetime;
+ Dtp_Ustav.DateTime := CustNomData.ODS_SYSDATE.FieldByName
+    ('tek_dat').asdatetime;
+
+
+
+    MemoNotes.Clear;
+    PageControl1.Pages[1].TabVisible := true;
+    PageControl1.Pages[2].TabVisible := true;
+    PageControl1.Pages[3].TabVisible := true;
+    PageControl1.Pages[4].TabVisible := true;
+    PageControl1.Pages[5].TabVisible := true;
+    PageControl1.Pages[6].TabVisible := true;
+    PageControl1.Pages[7].TabVisible := true;
+    PageControl1.Pages[8].TabVisible := true;
+    PageControl1.Pages[9].TabVisible := false  ;
+
+     XFPanelTeyp.Visible:=true;
+    XFLaCBoxDocType1.Enabled:=true;
+    CBoxDocType1.Enabled:=true;
+    XFLaDocSer1.Enabled:=true;
+    EditDocSerie1.Enabled:=true;
+    EditDocNumber1.Enabled:=true;
+    XFLEPINCode1.Enabled:=true;
+    EditPINCode1.Enabled:=true;
+     XFBitBtn2.Visible:=false;
+
+
+
+    incor_number.Clear;
+    tph_contact_type.KeyValue:=-1;
+    tph_communication_type.KeyValue:=-1;
+    Db_tph_number.Clear;
+    Address_type.KeyValue:=-1;
+    db_tph_adress.clear;
+    CityByConctType.KeyValue:=-1;
+    CountryByConctType.KeyValue:=-1;
+
+    Edit_url.Clear;
+    DB_INCORP_STATE.Clear;
+    DBLC_INCORP_CNTR.KeyValue:=-1;
+    Db_tph_extension.Clear;
+    DB_tph_zip.Clear;
+    tph_country_prefix.KeyValue:=-1;
+    db_tph_state.Clear;
+
+
+    issue_country1.KeyValue:=-1;
+    DBCBox_Citizenship2.KeyValue:=-1;
+    DBCBox_Citizenship3.KeyValue:=-1 ;
+    Fakt_Adrs_State.KeyValue:=-1;
+    Fakt_Adrs_City.KeyValue:=-1;
+    ZipFakt.Clear;
+    Work_Place.Clear;
+    Work_Post.Clear;
+    Work_Address.Clear;
+    Work_Phone.Clear;
+
+end;
+
+procedure TNomCust.CustClose1Click(Sender: TObject);
+begin
+if CustNomData.ODS_CUSTOMERS_PHYS_FS.FieldByName('cust_type').AsInteger=4 then
+ begin
+   showmessage('Nominal müştəriyi bağlamaq  olmaz     !');
+   exit;
+ end;
+  if MessageDlg(Format(' Müştərini bağlamaq istəyirsinizmi    ? ', ['c_id']),
+    mtConfirmation, mbYesNoCancel, 0) = mrYes then
+  begin
+    CustNomData.PG_PCustService.CallProcedure('close_customers_prosess',
+      [CustNomData.ODS_CUSTOMERS_PHYS_FS.FieldByName('id').AsInteger]);
+      CustNomData.ODS_CUSTOMERS_PHYS_FS.Refresh;
+  end;
+end;
+
+procedure TNomCust.CustEdit1Click(Sender: TObject);
+var
+  c_id: Integer;
+  c_name: string;
+  c_open_dat: TDate;
+  c_op_id: Integer;
+  c_inn: string;
+  c_group_klie: Integer;
+  c_close_dat: TDate;
+  c_nerezident: Integer;
+  c_vid_sob: Integer;
+  c_prinad_kod: Integer;
+  c_cust_type: Integer;
+  c_cust_jur:variant;
+  c_cust_phys:variant;
+  c_cust_fs:variant;
+  c_bik:string;
+  c_risk_categ:integer;
+  c_riskdescid:integer;
+  c_samelydate :TDateTime  ;
+  c_category: Integer;
+  d_name: string;
+  d_soname: string;
+  d_lastname: string;
+  d_passer: string;
+  d_birthday: TDate;
+  d_birthplace: string;
+  d_fam_status: Integer;
+  d_address: string;
+  d_fakt_adress: string;
+  d_phone_h: string;
+  d_e_mail: string;
+  d_sex: Integer;
+  d_paspnum: string;
+  d_adrs_state: string;
+  d_city: string;
+  d_doc_type: Integer;
+  d_birth_state: string;
+  d_phone_m: string;
+  d_paspdate: TDate;
+  d_paspplace: string;
+  d_passPIN: string;
+  d_citizenship: Integer;
+  d_passexpire: TDate;
+  d_note:string;
+  c_editid: Integer;
+  c_org_sob:integer;
+  c_sfera_dey:integer;
+  c_otrasl:integer;
+  c_nalog_kod:integer;
+  c_short_name:string;
+  a,b,c:integer;
+  c_incorporation_number:string;
+   c_tph_contact_type :string;
+   c_tph_communication_type:string;
+   c_tph_number :string;
+   c_address_type:string;
+   c_address :string;
+   c_city:variant;
+   c_country_code:variant;
+   c_director_id :integer;
+   c_dat_ustav:TDateTime;
+   c_email:string;
+   c_url:string;
+   c_incorporation_state:string;
+   c_incorporation_cntr:variant;
+   c_tph_extension :string;
+   c_tph_zip :string;
+   c_tph_country_prefix:string;
+   c_tph_state :string;
+   d_tph_contact_type :string;
+   d_tph_country :variant;
+   d_tph_country_code :string;
+   d_tph_city:variant;
+   d_tph_state:string;
+   d_tph_zip:string;
+   d_tph_country_prefix:string;
+   d_tph_adress :string;
+   d_tph_communication_type:string;
+   d_tph_number:string;
+   d_tph_extension :string;
+   d_contact_type :string;
+   d_url:string;
+   d_doc_country:integer;
+   d_citizenship2:integer;
+   d_citizenship3:integer;
+   d_fakt_country:integer;
+   d_fakt_city:integer;
+   d_fakt_zip:string;
+   d_work_place:string;
+   d_work_post:string;
+   d_work_adress:string;
+   d_work_phone :string;
+begin
+tg:=1;
+if trim(EditID.Text) = '' then
+  begin
+    ShowMessage('Müştəri seseçilməyib !');
+    exit;
+  end;
+   // ShowMessage(inttostr(DataModPCustService.ODS_CUSTOMERS_PHYS_FS.FieldByName('cust_type').AsInteger));
+  //  ShowMessage(inttostr(XFRadioGroupCust_type.ItemIndex));
+
+    if (CustNomData.ODS_CUSTOMERS_PHYS_FS.FieldByName('cust_type').AsInteger=3) and
+       (XFRadioGroupCust_type.ItemIndex<>3)  then
+   begin
+   showmessage('Fiziki şəxs və sahibkarı Fiziki şəxsə və sahibkara çevirmek olmaz !') ;
+    exit;
+    end;
+
+
+if (CustNomData.ODS_CUSTOMERS_PHYS_FS.FieldByName('cust_type').AsInteger=4) and (ConvertNominalToCust=False) then
+ begin
+ if XFRadioGroupCust_type.ItemIndex in[0,1,2,3]then
+  begin
+   showmessage('Nominal müştəriyi Bankın müştərisinə çevirmək olmaz     !');
+   exit;
+  end;
+ end
+ else
+ if CustNomData.ODS_CUSTOMERS_PHYS_FS.FieldByName('cust_type').AsInteger in[0,1,2,3]then
+ begin
+ if XFRadioGroupCust_type.ItemIndex=4 then
+  begin
+ ShowMessage('Bankın müştərisini Nominal Müştəriyə çevirmək olmaz! ');
+ exit;
+  end;
+ end;
+
+if XFRadioGroupCust_type.ItemIndex=-1 then
+  begin
+  ShowMessage(' Müştərinin tipi seçilməyib !');
+  exit;
+  end;
+
+    case XFRadioGroupCust_type.ItemIndex of
+
+ 0:begin
+   if (EditITN.Text='') then
+   begin
+     showmessage('VÖEN sahəsi boşdur');
+     exit;
+   end;
+ end;
+
+ 1,4:begin
+   if (EditPINCode1.Text='') then
+   begin
+     showmessage('Pinkod sahəsi boşdur');
+     exit;
+
+ end;
+
+ end;
+  2:begin
+     if (trim(EditITN.Text)='')and (trim(EditPINCode1.Text)='') then
+   begin
+     showmessage('VÖEN ve ya Pinkod sahəsi boşdur');
+     exit;
+   end
+  end;
+  end;
+
+  with CustNomData.Ods_Customers_PhysFS_yoxlama do
+    begin
+    close;
+    SetVariable('ID_YOXLAMA', strtoint(EditID.Text));
+    Open;
+     end;
+
+    if EditITN.Text <>CustNomData.Ods_Customers_PhysFS_yoxlama.FieldByName('inn').AsString then
+   if (EditITN.Text <> '')
+   then
+  begin
+    if (EditITN.Text <> '') then
+    a:=CustNomData.PG_PCustService.CallIntegerFunction('get_Add_cust_yoxlama',['p_inn',EditITN.Text]);
+  if a<>-1 then
+  begin
+   showmessage(inttostr(a)+' -ID li Müştəri üçün  ' +EditITN.Text+'  VÖEN mövcuddur!');
+   Exit;end;
+       end;
+  if EditPINCode1.Text <>CustNomData.Ods_Customers_PhysFS_yoxlama.FieldByName('passpin').AsString then
+  if (EditPINCode1.Text <> '') then
+  begin
+  b:= CustNomData.PG_PCustService.CallIntegerFunction('get_Add_cust_yoxlama',['p_passpin',EditPINCode1.Text]);
+   if b<>-1 then
+    begin
+    showmessage(inttostr(b)+' -ID li Müştəri üçün ' +EditPINCode1.Text+'  Pinkod mövcuddur!');
+   Exit;end;
+  end;
+   if EditDocSerie1.Text <>CustNomData.Ods_Customers_PhysFS_yoxlama.FieldByName('passport').AsString then
+   if EditDocNumber1.Text <>CustNomData.Ods_Customers_PhysFS_yoxlama.FieldByName('passp_number').AsString then
+   if (EditDocSerie1.Enabled=false)or(EditDocNumber1.Enabled=false) then
+   else
+   if (trim(EditDocSerie1.Text)='')or(trim(EditDocNumber1.Text)='') then
+   begin
+     ShowMessage('Sənədin Seriya / N_si sahəsi tam doldurulmayıb     !');
+   exit ;
+   end
+   else
+  if (EditDocSerie1.Text+EditDocNumber1.Text)<>'' then
+  begin
+  c:= CustNomData.PG_PCustService.CallIntegerFunction('get_Add_cust_yoxlama',['p_passer_panum',EditDocSerie1.Text+EditDocNumber1.Text,CBoxDocType1.KeyValue]);
+  if c<>-1 then
+   begin
+   showmessage(inttostr(c)+' -ID li Müştəri üçün '+EditDocSerie1.Text+' /'+ EditDocNumber1.Text+'  Sənədin  seryasi mövcuddur!');
+  Exit;end;
+
+  end;
+
+
+  if EditDocSerie1.Enabled=false then
+  EditDocSerie.Text:=''
+  else
+  if  EditDocSerie1.Enabled=false then
+  else
+   if trim( EditDocSerie.Text)='' then
+  begin
+  ShowMessage('Sənədin Seriya / N_si sahəsi tam doldurulmayıb   !');
+   exit;
+  end
+  else
+  d_passer := EditDocSerie.Text;
+
+  if EditDocNumber1.Enabled=false then
+  EditDocNumber.Text:=''
+ else
+ if EditDocNumber1.Enabled=false  then
+  else
+  if trim( EditDocNumber.Text)='' then
+  begin
+  ShowMessage('Sənədin Seriya / N_si sahəsi tam doldurulmayıb    !');
+   exit;
+  end
+  else
+  d_paspnum := EditDocNumber.Text;
+
+
+
+
+   case XFRadioGroupCust_type.ItemIndex  of
+  0: begin
+    if trim(EditFullName.Text) = '' then
+  begin
+    ShowMessage('Müştərinin adını daxil edin !');
+    exit;
+  end
+  else
+  if DBLC_INCORP_CNTR.KeyValue = -1 then
+  begin
+    ShowMessage('Hüquqi şəxsin mənsub olduğu ölkə sahəsi seçilməyib  !');
+    exit;
+  end
+  else
+   if trim(incor_number.text) = '' then
+  begin
+    ShowMessage('Dövlət qeydiyyat nömrəsi sahəsi doldurulmayıb  !');
+    exit;
+  end
+  else
+   if trim(ComboBox_risk.text) = '' then
+
+  begin
+    ShowMessage('Müştərinin risk kateqoriyası sahəsi doldurulmayıb !');
+    exit;
+  end
+  else
+   if trim(Comb_riskdescid.text) = '' then
+        begin
+
+        showmessage('Müştərinin risk kateqoriyasının təyinatı  sahəsi doldurulmayıb!');
+        Exit;
+        end
+        else
+      if  DateTi_samelydate.value = null then          //Integer
+        begin
+      showmessage('Müştərinin eyniləşdirmə tarixi daxil edilməlidir!');
+        Exit;
+        end
+        else
+  if Address_type.text ='' then
+   begin
+    ShowMessage('əlaqə növü sahəsi  seçilməyib !');
+    exit;
+      end
+      else
+    if CountryByConctType.text ='' then
+    begin
+    ShowMessage('Əlaqə növünə görə  Ölkə sahəsi seçilməyib  !');
+    exit;
+      end
+       else
+   if CityByConctType.text ='' then
+    begin
+    ShowMessage('Əlaqə növünə görə  Şəhər sahəsi seçilməyib  !');
+    exit;
+    end
+    else
+   if trim(db_tph_adress.text) ='' then
+    begin
+    ShowMessage('Əlaqə növünə görə  Ünvan  sahəsi doldurulmayıb  !');
+    exit;
+    end
+    else
+
+   if tph_contact_type.text ='' then
+    begin
+    ShowMessage('Əlaqə növünə görə telefon nömrəsinin tipi  sahəsi seçilməyib  !');
+    exit;
+    end
+    else
+   if tph_communication_type.text ='' then
+    begin
+    ShowMessage('Rabitə növünə görə telefon nömrəsinin tipi sahəsi seçilməyib  !');
+    exit;
+    end
+    else
+   if trim(Db_tph_number.text) ='' then
+    begin
+    ShowMessage('Əlaqə növünə görə  Nömrə  sahəsi doldurulmayıb  !');
+    exit
+    end
+   end;
+
+  1,2,3,4:begin
+
+   if trim( EditLastName.Text) = '' then
+  begin
+    ShowMessage('Soy adını daxil edin  !');
+    exit;
+
+  end
+  else
+
+  if trim(EditFirstName.Text )= '' then
+  begin
+    ShowMessage('Müştərinin adını daxil edin !');
+    exit;
+  end
+  else
+
+  if trim( EditPatronymic.Text) = '' then
+  begin
+    ShowMessage('Atasının adını daxil edin  !');
+    exit;
+  end
+  else
+ if CBoxCitizenship.text='' then
+  begin
+    ShowMessage('Vətəndaşlığını daxil edin  !');
+    exit;
+
+  end
+  else
+    if trim(ComboBox_risk.text) = '' then
+  begin
+    ShowMessage('Müştərinin risk kateqoriyası sahəsi doldurulmayıb !');
+    exit;
+  end
+  else
+  if Comb_riskdescid.text = '' then
+        begin
+
+  showmessage('Müştərinin risk kateqoriyasının təyinatı  sahəsi doldurulmayıb!');
+  Exit;
+  end
+  else
+  if  DateTi_samelydate.value = null then          //Integer
+  begin
+  showmessage('Müştərinin eyniləşdirmə tarixi daxil edilməlidir!');
+  Exit;
+  end
+  else
+
+  if CBoxBirthState.KeyValue= '' then
+  begin
+  showmessage('Doğum haqqında məlumatın ölkəsini daxil edin  !');
+  exit;
+  end
+  else
+  if CBoxBirthCity.KeyValue= '' then
+  begin
+  showmessage('Doğum haqqında məlumatın şəhərini daxil edin  !');
+  exit;
+  end
+  else
+  if CBoxAddressState.KeyValue=''then
+  begin
+  showmessage('Qeydiyyat ünvanın ölkəsini daxil edin  !');
+  exit;
+  end
+  else
+   if CBoxAddressCity.KeyValue=''then
+  begin
+  showmessage('Qeydiyyat ünvanın şəhərini daxil edin  !');
+  exit;
+  end
+  else
+  if EditAddress.Text=''then
+  begin
+  showmessage('Qeydiyyat ünvanı sahəsi doldurulmayib !');
+  exit;
+  end
+  else
+  if Fakt_Adrs_State.Text=''then
+  begin
+  showmessage('Faktiki ünvanın ölkəsini daxil edin  !');
+  exit;
+  end
+  else
+  if Fakt_Adrs_City.Text=''then
+  begin
+  showmessage('Faktiki ünvanın şəhərini daxil edin  !');
+  exit;
+  end
+  else
+   if  CBoxDocType.Text=''then
+  begin
+  showmessage('Sənədin növünü  daxil edin  !');
+  exit;
+  end
+  else
+  if  issue_country1.Text=''then
+  begin
+  showmessage('Sənədin verildiyi ölkəni daxil edin  !');
+  exit;
+  end
+  else
+  if  CBoxDocPlace5.text=''then
+  begin
+  showmessage('Sənədin verildiyi yeri daxil edin  !');
+  exit;
+  end
+  else
+  if Address_type.text ='' then
+   begin
+    ShowMessage('əlaqə növü sahəsi  seçilməyib !');
+    exit;
+      end
+      else
+    if CountryByConctType.text ='' then
+    begin
+    ShowMessage('Əlaqə növünə görə  Ölkə sahəsi seçilməyib  !');
+    exit;
+      end
+       else
+   if CityByConctType.text ='' then
+    begin
+    ShowMessage('Əlaqə növünə görə  Şəhər sahəsi seçilməyib  !');
+    exit;
+    end
+    else
+   if trim(db_tph_adress.text) ='' then
+    begin
+    ShowMessage('Əlaqə növünə görə  Ünvan  sahəsi doldurulmayıb  !');
+    exit;
+    end
+    else
+
+   if tph_contact_type.text ='' then
+    begin
+    ShowMessage('Əlaqə növünə görə telefon nömrəsinin tipi  sahəsi seçilməyib  !');
+    exit;
+    end
+    else
+   if tph_communication_type.text ='' then
+    begin
+    ShowMessage('Rabitə növünə görə telefon nömrəsinin tipi sahəsi seçilməyib  !');
+    exit;
+    end
+    else
+   if trim(Db_tph_number.text) ='' then
+    begin
+    ShowMessage('Əlaqə növünə görə  Nömrə  sahəsi doldurulmayıb  !');
+    exit
+    end
+  end;
+  end;
+
+
+
+  c_name := EditFullName.Text;
+
+  // c_open_dat:=
+  // c_op_id:=
+  c_inn := EditITN.Text;
+  c_short_name:=EditShort_name.Text;
+ { if Editid.Text = '' then
+  begin
+    ShowMessage('ID daxil edin  !');
+    exit;
+  end;  }
+   c_id := strtoint(EditID.Text);
+
+  CustNomData.ClientGroupData.Locate('name', CBoxGroup.Text, []);
+  c_group_klie := CustNomData.ClientGroupData.FieldByName('ID')
+    .AsInteger;
+  // ShowMessage(IntToStr(c_group_klie));
+  // c_close_dat
+
+  if RBtnResident.Checked = True then
+    c_nerezident := 1;
+
+  if RBtnNoResident.Checked = True then
+    c_nerezident := 0;
+
+  CustNomData.EstateTypeData.Locate('name', CBox.Text, []);
+  c_vid_sob := CustNomData.EstateTypeData.FieldByName('ID').AsInteger;
+
+  CustNomData.RelationData.Locate('name', ComboBox3.Text, []);
+  c_prinad_kod := CustNomData.RelationData.FieldByName('ID').AsInteger;
+
+  if ComboBox_risk.KeyValue <> -1 then
+  begin
+    CustNomData.ODS_risk.Locate('name', ComboBox_risk.Text, []);
+    c_risk_categ := CustNomData.ODS_risk.FieldByName('ID').AsInteger;
+  end
+  else
+    c_risk_categ := 0;
+
+
+
+  CustNomData.ods_risk.Locate('name', ComboBox_risk.Text, []);
+  c_risk_categ := CustNomData.ods_risk.FieldByName('ID').AsInteger;
+
+  CustNomData.ODS_CUST_RISK_DESC.Locate('name', Comb_riskdescid.Text, []);
+  c_riskdescid := CustNomData.ODS_CUST_RISK_DESC.FieldByName('ID').AsInteger;
+  c_samelydate :=integer(trunc(DateTi_samelydate.Value));
+
+  case XFRadioGroupCust_type.ItemIndex of
+ 0:begin
+    c_cust_type := 0;
+   EditPINCode1.Text:='';
+   c_cust_jur:=1;
+   c_cust_phys:='';
+   c_cust_fs:='';
+ end;
+ 1:begin
+    c_cust_type := 1;
+    EditITN.Text:='';
+    c_cust_jur:='';
+    c_cust_phys:=1;
+    c_cust_fs:='';
+ end;
+  2:begin
+    c_cust_type := 2;
+    c_cust_jur:='';
+    c_cust_phys:='';
+    c_cust_fs:=1;
+
+  end;
+3:begin
+    c_cust_type := 3;
+     c_cust_jur:='';
+     c_cust_phys:=1;
+     c_cust_fs:=1;
+
+    end;
+   4:begin
+   c_cust_type := 4;
+   c_cust_jur:='';
+   c_cust_phys:='';
+   c_cust_fs:='';
+  end;
+  end;
+  if (CustNomData.ODS_CUSTOMERS_PHYS_FS.FieldByName('cust_phys').AsInteger=1)
+  and (CustNomData.ODS_CUSTOMERS_PHYS_FS.FieldByName('cust_fs').isnull)and
+     ( XFRadioGroupCust_type.ItemIndex=2) then
+  begin
+  XFRadioGroupCust_type.ItemIndex:=3;
+   c_cust_phys:=1;
+   c_cust_fs:=1;
+   c_cust_type:=3;
+  end;
+
+
+
+
+
+
+  d_name := EditFirstName.Text;
+  d_soname := EditPatronymic.Text;
+  d_lastname := EditLastName.Text;
+
+   {  c_name:= EditFirstName.Text + ' ' + EditPatronymic.Text + ' ' +
+    EditLastName.Text;   }
+
+  d_birthday := Integer(Trunc(DTPickerBirthDate.DateTime));
+  d_birthplace := CBoxBirthState.KeyValue;
+
+  CustNomData.OdsFamstatus.Locate('name', CBoxFamStatus.Text, []);
+  d_fam_status := CustNomData.OdsFamstatus.FieldByName('ID').AsInteger;
+
+  d_address := EditAddress.Text;
+  d_fakt_adress := EditAddressFactical.Text;
+  d_phone_h := EditPhoneCity.Text;
+  d_e_mail :=  EditEmail.Text + '@' + Edit1.Text;
+
+  CustNomData.OdsGender.Locate('name', CBoxGender.Text, []);
+  d_sex := CustNomData.OdsGender.FieldByName('id').AsInteger;
+
+  d_adrs_state := CBoxAddressState.KeyValue;
+  d_city := CBoxAddressCity.KeyValue;
+
+  if CBoxDocType1.Enabled=false then
+  begin
+   CBoxDocType.KeyValue:=-1;
+   d_doc_type:=0;
+    CustNomData.OdsDoctaypes.Locate('name', CBoxDocType1.Text, []);
+ // d_doc_type := DataModPCustService.OdsDoctaypes.FieldByName('ID').AsInteger;
+  end
+    else
+  begin //   d_doc_type := -1;
+  CustNomData.OdsDoctaypes.Locate('name', CBoxDocType1.Text, []);
+
+  if CBoxDocType1.Text='' then
+   d_doc_type :=0
+  else
+  d_doc_type := CustNomData.OdsDoctaypes.FieldByName('ID').AsInteger;
+   end;
+ { DataModPCustService.OdsDoctaypes.Locate('name', CBoxDocType1.Text, []);
+  d_doc_type := DataModPCustService.OdsDoctaypes.FieldByName('ID').AsInteger ;  }
+
+  d_birth_state := CBoxBirthCity.KeyValue;
+  d_phone_m := EditPhoneMob.Text;
+  d_paspdate := Integer(Trunc(DTPickerDocDate.DateTime));
+
+  d_paspplace := CBoxDocPlace5.text;
+  d_passPIN := EditPINCode.Text;
+  d_note:=MemoNotes.Text;
+  CustNomData.Odscountries.Locate('CNTR_NAME',
+    CBoxCitizenship.Text, []);
+  d_citizenship := CustNomData.Odscountries.FieldByName('ID').AsInteger;
+
+  d_passexpire := Integer(Trunc(DTPickerDocExpiryDate.DateTime));
+  // c_category:=
+
+  c_editid := StrToInt(EditID.Text);
+
+    CustNomData.OrganizationTypeData.Locate('name',
+    OrganizationTypeCB.Text,[]);
+     c_org_sob:= CustNomData.OrganizationTypeData.FieldByName('id').AsInteger;
+
+
+    CustNomData.ActionAreaData.Locate('name',
+    ActionAreaCB.Text,[]);
+     c_sfera_dey:= CustNomData.ActionAreaData.FieldByName('id').AsInteger;
+
+
+
+    CustNomData.BranchData.Locate('name',
+    BranchCB.Text,[]);
+     c_otrasl:= CustNomData.BranchData.FieldByName('id').AsInteger;
+
+
+
+    CustNomData.TaxAreaData.Locate('name',
+    TaxAreaCB.Text,[]);
+     c_nalog_kod:= CustNomData.TaxAreaData.FieldByName('id').AsInteger;
+
+    d_doc_country:=issue_country1.KeyValue;
+
+    if DBCBox_Citizenship2.KeyValue<>null then
+    d_citizenship2:=DBCBox_Citizenship2.KeyValue
+    else
+    d_citizenship2:=0;
+    if DBCBox_Citizenship3.KeyValue<>null then
+    d_citizenship3:=DBCBox_Citizenship3.KeyValue
+    else
+    d_citizenship3:=0;
+    d_fakt_country :=Fakt_Adrs_State.KeyValue;
+    d_fakt_city:=Fakt_Adrs_City.KeyValue;
+    d_fakt_zip:=ZipFakt.Text;
+    d_work_place:=Work_Place.Text;
+    d_work_post :=Work_Post.Text;
+    d_work_adress:=Work_Address.Text;
+    d_work_phone:=Work_Phone.Text;
+
+     c_dat_ustav:=Integer(Trunc(Dtp_Ustav.DateTime));
+     c_incorporation_number:=incor_number.Text;
+     c_tph_contact_type:=tph_contact_type.KeyValue;
+     c_tph_communication_type:=tph_communication_type.KeyValue;
+     c_tph_number:=Db_tph_number.Text;
+     c_address_type:= Address_type.KeyValue;
+     c_address:=db_tph_adress.Text;
+     c_city:=CityByConctType.KeyValue;
+     c_country_code:=CountryByConctType.KeyValue;
+     c_email := EditEmail.Text + '@' + Edit1.Text;
+     c_url  :=Edit_url.Text;
+     c_incorporation_state:=DB_INCORP_STATE.Text;
+     c_incorporation_cntr:= DBLC_INCORP_CNTR.KeyValue;
+     c_tph_extension:=Db_tph_extension.Text;
+     c_tph_zip:=DB_tph_zip.Text;
+     c_tph_country_prefix:=tph_country_prefix.KeyValue;
+     c_tph_state:=db_tph_state.Text;
+
+     d_tph_contact_type:=tph_contact_type.KeyValue;
+     d_tph_country:= CountryByConctType.KeyValue;
+     d_tph_country_code:=DBEdit_CountryCode.Text;
+     d_tph_city:=CityByConctType.KeyValue;
+     d_tph_state:=db_tph_state.Text;
+     d_tph_zip:=DB_tph_zip.Text;
+     d_tph_country_prefix:=tph_country_prefix.KeyValue;
+     d_tph_adress:=db_tph_adress.Text;
+     d_tph_communication_type:=tph_communication_type.KeyValue;
+     d_tph_number:=db_tph_number.Text;
+     d_tph_extension :=db_tph_extension.Text;
+     d_contact_type:=Address_type.KeyValue;
+     d_e_mail := EditEmail.Text + '@' + Edit1.Text;
+     d_url:=Edit_url.Text;
+    if MessageDlg('Dəyşikliki Yadda saxlanılsınmı ?',
+   mtConfirmation, mbYesNoCancel, 0) = mrYes then
+   begin
+
+     case XFRadioGroupCust_type.ItemIndex of
+     0:begin
+     c_incorporation_number:=incor_number.Text;
+     c_tph_contact_type:=tph_contact_type.KeyValue;
+     c_tph_communication_type:=tph_communication_type.KeyValue;
+     c_tph_number:=Db_tph_number.Text;
+     c_address_type:= Address_type.KeyValue;
+     c_address:=db_tph_adress.Text;
+     c_city:=CityByConctType.KeyValue;
+     c_country_code:=CountryByConctType.KeyValue;
+     c_dat_ustav:=Integer(Trunc(Dtp_Ustav.DateTime));
+    // c_email:=E_mail.Text;
+     c_email := EditEmail.Text + '@' + Edit1.Text;
+     c_url  :=Edit_url.Text;
+     c_incorporation_state:=DB_INCORP_STATE.Text;
+     c_incorporation_cntr:= DBLC_INCORP_CNTR.KeyValue;
+     c_tph_extension:=Db_tph_extension.Text;
+     c_tph_zip:=DB_tph_zip.Text;
+     c_tph_country_prefix:=tph_country_prefix.KeyValue;
+     c_tph_state:=db_tph_state.Text;
+     c_bik:= EditBic.text;
+     d_tph_contact_type :='';
+     d_tph_country :='';
+     d_tph_country_code :='';
+     d_tph_city:='';
+     d_tph_state:='';
+     d_tph_zip:='';
+     d_tph_country_prefix:='';
+     d_tph_adress :='';
+     d_tph_communication_type:='';
+     d_tph_number:='';
+     d_tph_extension :='';
+     d_contact_type :='';
+     d_e_mail:='';
+     d_url:=''
+     end;
+     1,2,3,4:begin
+     d_tph_contact_type:=tph_contact_type.KeyValue;
+     d_tph_country:= CountryByConctType.KeyValue;
+     d_tph_country_code:=DBEdit_CountryCode.Text;
+     d_tph_city:=CityByConctType.KeyValue;
+     d_tph_state:=db_tph_state.Text;
+     d_tph_zip:=DB_tph_zip.Text;
+     d_tph_country_prefix:=tph_country_prefix.KeyValue;
+     d_tph_adress:=db_tph_adress.Text;
+     d_tph_communication_type:=tph_communication_type.KeyValue;
+     d_tph_number:=db_tph_number.Text;
+     d_tph_extension :=db_tph_extension.Text;
+     d_contact_type:=Address_type.KeyValue;
+     d_e_mail := EditEmail.Text + '@' + Edit1.Text;
+     d_url:=edit_url.Text;
+      c_bik:= ''   ;
+     c_incorporation_number :='';
+     c_tph_contact_type :='';
+     c_tph_communication_type :='';
+     c_tph_number :='';
+     c_address_type :='';
+     c_address :='';
+     c_city:='';
+     c_country_code:='';
+     c_email:='';
+     c_url:='';
+     c_incorporation_state:='';
+     c_incorporation_cntr:='';
+     c_tph_extension :='';
+     c_tph_zip:='';
+     c_tph_country_prefix:='';
+     c_tph_state:='';
+     //c_dat_ustav:=null;    eks hali
+     c_email:='';
+     end;
+     end;
+    CustNomData.PG_PCustService.CallProcedure('edit_customers_prosess',
+      [ c_id,
+        c_name,
+        c_short_name,
+        date, c_inn,
+        c_group_klie,
+        c_nerezident,
+        c_vid_sob,
+        c_prinad_kod,
+        c_cust_type,
+        c_cust_jur,
+        c_cust_phys,
+        c_cust_fs,
+        c_bik,
+        c_risk_categ,
+        c_riskdescid,
+        DateTimeToStr(c_samelydate),
+        c_category,
+        d_name,
+        d_soname,
+        d_lastname,
+        d_passer,
+        DateTimeToStr(d_birthday),
+        d_birthplace,
+        d_fam_status,
+        d_address,
+        d_fakt_adress,
+        d_doc_country,
+        d_citizenship2,
+        d_citizenship3,
+        d_fakt_country ,
+        d_fakt_city,
+        d_fakt_zip,
+        d_work_place,
+        d_work_post ,
+        d_work_adress ,
+        d_work_phone,
+        d_phone_h,
+        d_e_mail,
+        d_sex,
+        d_paspnum,
+        d_adrs_state,
+        d_city,
+        d_doc_type,
+        d_birth_state,
+        d_phone_m,
+        DateTimeToStr( d_paspdate),
+        d_paspplace,
+        d_passPIN,
+        d_citizenship,
+        DateTimeToStr( d_passexpire),
+        d_note,c_org_sob,
+        c_sfera_dey,
+        c_otrasl,
+        c_nalog_kod,
+        c_incorporation_number ,
+        c_tph_contact_type         ,
+        c_tph_communication_type  ,
+        c_tph_number            ,
+        c_address_type          ,
+        c_address             ,
+        c_city             ,
+        c_country_code   ,
+        c_dat_ustav,
+        c_email    ,
+        c_url    ,
+        c_incorporation_state ,
+        c_incorporation_cntr ,
+        c_tph_extension ,
+        c_tph_zip    ,
+        c_tph_country_prefix  ,
+        c_tph_state,
+        d_tph_contact_type ,
+        d_tph_country  ,
+        d_tph_country_code ,
+        d_tph_city,
+        d_tph_state,
+        d_tph_zip  ,
+        d_tph_country_prefix,
+        d_tph_adress ,
+        d_tph_communication_type,
+        d_tph_number,
+        d_tph_extension ,
+        d_contact_type,
+        d_url  ]);
+  CustNomData.ODS_CUSTOMERS_PHYS_FS.Refresh;
+  CustNomData.ODS_CUSTOMERS_PHYS_FS.Locate('id', c_id, []);
+  // BtnSearch.Click;
+   /////////////elaelendirmenin refresh/////////////////
+     CustNomData.ODS_CUSTOMERS_PHYS_FS2.Close;
+     CustNomData.ODS_CUSTOMERS_PHYS_FS2.Open;
+   ////////////////////////////////////////////////////
+  CustSearch1.Click;
+  //XFBitBtn2.Visible:=true;
+end;
+
+end;
+
+procedure TNomCust.CustSearch1Click(Sender: TObject);
+
+var
+  v_citizen_countries: String;
+  v_sex: string;
+  v_fam_status: string;
+  v_vid_sob: string;
+  v_group_klie: string;
+  v_PRINAD: string;
+  v_doc_types: string;
+  v_PASPDATE: string;
+  v_passexpire: string;
+  v_birthdate: string;
+  v_nerezident: string;
+  v_CUST_TYPE: string;
+  c_org_sob:string;
+  c_sfera_dey:string;
+  c_otrasl:string;
+  c_nalog_kod:string;
+  D: variant;
+begin
+
+ { if (EditID.Text = '') and (ChBoxJuridical.Checked = False) and
+    (ChBoxPhysical.Checked = False) and (ChBoxPhysicalFS.Checked = False) then
+  begin
+    ShowMessage('Müştərinin tipi  seçilmeyib !');
+    exit;
+  end;   }
+
+
+
+  if not((CBoxCitizenship.ItemIndex = 0) or
+    (CBoxCitizenship.ItemIndex = -1)) then
+  begin
+    CustNomData.Odscountries.Locate('CNTR_NAME',
+      CBoxCitizenship.Text, []);
+    v_citizen_countries := ' and nvl(citizenship,0)=' +
+      CustNomData.Odscountries.FieldByName('ID').AsString;
+
+  end
+  else
+    v_citizen_countries := '';
+
+  if ((CBoxGender.Text <> '') or (CBoxGender.ItemIndex <> -1)) then
+  begin
+    CustNomData.OdsGender.Locate('name', CBoxGender.Text, []);
+    v_sex := ' and nvl(sex,0)=' + CustNomData.OdsGender.FieldByName
+      ('ID').asstring;
+  end
+  else
+    v_sex := '';
+
+  if ((CBoxFamStatus.Text <> '') or (CBoxFamStatus.ItemIndex <> -1)) then
+  begin
+    CustNomData.OdsFamstatus.Locate('name', CBoxFamStatus.Text, []);
+    v_fam_status := ' and nvl(fam_status,0)=' +
+      CustNomData.OdsFamstatus.FieldByName('ID').AsString;
+  end
+  else
+    v_fam_status :='';
+
+  if not((CBoxGroup.ItemIndex = 0) or (CBoxGroup.ItemIndex = -1)) then
+  begin
+    CustNomData.ClientGroupData.Locate('name', CBoxGroup.Text, []);
+    v_group_klie := ' and nvl(group_klie,0)=' +
+      CustNomData.ClientGroupData.FieldByName('ID').AsString;
+  end
+  else
+    v_group_klie := '';
+
+  if not((CBox.ItemIndex = 0) or (CBox.ItemIndex = -1)) then
+  begin
+    CustNomData.EstateTypeData.Locate('name', CBox.Text, []);
+    v_vid_sob := ' and nvl(vid_sob,0)=' + CustNomData.EstateTypeData.
+      FieldByName('ID').AsString;
+  end
+  else
+    v_vid_sob := '';
+
+
+
+     if not  ((OrganizationTypeCB.ItemIndex=null) or(OrganizationTypeCB.ItemIndex=-1))
+    then
+  begin
+    CustNomData.OrganizationTypeData.Locate('name',OrganizationTypeCB.Text,[]);
+     C_org_sob :=' and+ nvl(org_sob ,0)='+CustNomData.OrganizationTypeData.
+     FieldByName('ID').AsString;
+     end
+  else
+    C_org_sob:='';
+
+if not ((ActionAreaCB.ItemIndex=null)or(ActionAreaCB.ItemIndex=-1))
+    then
+  begin
+  CustNomData.ActionAreaData.Locate('name',ActionAreaCB.Text,[]);
+  c_sfera_dey:=' and+ nvl(sfera_dey ,0)='+CustNomData.ActionAreaData.
+     FieldByName('ID').AsString;
+  end
+  else
+   c_sfera_dey:='';
+
+  if not ((BranchCB.ItemIndex=null)or(BranchCB.ItemIndex=-1)) then
+  begin
+  CustNomData.BranchData.Locate('name',BranchCB.Text,[]);
+  c_otrasl:=' and+ nvl(otrasl,0)='+CustNomData.BranchData.
+  FieldByName('ID').AsString
+     end
+  else
+    c_otrasl:='';
+
+      if not ((TaxAreaCb.ItemIndex=null)or(TaxAreaCb.ItemIndex=-1))
+       then
+  begin
+
+  CustNomData.TaxAreaData.locate('name',TaxAreaCb.Text,[]);
+  c_nalog_kod:=' and+nvl(nalog_kod,0)='+CustNomData.TaxAreaData.
+  FieldByName('ID').asstring
+   end
+  else
+    c_nalog_kod:='';
+
+
+
+
+
+  if not((ComboBox3.ItemIndex = 0) or (ComboBox3.ItemIndex = -1)) then
+  begin
+    CustNomData.RelationData.Locate('name', ComboBox3.Text, []);
+    v_PRINAD := ' and nvl(prinad_kod,0)=' + CustNomData.RelationData.
+      FieldByName('ID').AsString;
+  end
+  else
+    v_PRINAD := '';
+
+
+    if CBoxDocType1.Enabled=false then
+    CBoxDocType.KeyValue:=-1
+    else
+   D := CBoxDocType1.KeyValue;
+ if (D = null) or (VarToStr(D) = '') or (D = -1) then
+    v_doc_types := ''
+  else
+    v_doc_types := ' and doc_type=' + VarToStr(D);
+
+
+ { if XFCheckBox1.Checked = True then
+    v_PASPDATE := 'and d.PASPDATE=' + '''' + FormatDatetime('dd-mmm-yyyy',
+      DTPickerDocDate.DateTime) + ''''
+
+  else
+    v_PASPDATE := '';
+
+  if XFCheckBox2.Checked = True then
+    v_passexpire := ' and d.passexpire=' + '''' + FormatDatetime('dd-mmm-yyyy',
+      DTPickerDocExpiryDate.DateTime) + ''''
+
+  else
+    v_passexpire := ' ';   }
+
+ { if XFCheckBox3.Checked = True then
+    v_birthdate := ' and d.birthday =' + '''' + FormatDatetime('dd-mmm-yyyy',
+      DTPickerBirthDate.DateTime) + ''''
+
+  else
+    v_birthdate := ' ';    }
+
+  if RBtnResident.Checked = True then
+    v_nerezident := ' and  nerezident=1'
+  else if RBtnNoResident.Checked = True then
+    v_nerezident := ' and  nerezident=0'
+  else
+    v_nerezident :='';
+
+   case XFRadioGroupCust_type.ItemIndex of
+  0 :begin
+    v_CUST_TYPE := 'and cust_type=0' ;
+
+  end;
+  1:begin
+   v_CUST_TYPE := 'and cust_phys =1';
+
+
+   end;
+
+  2:begin
+   v_CUST_TYPE := 'and cust_fs =1' ;
+
+   end;
+  3:begin
+  v_CUST_TYPE := 'and cust_type=3'
+  end;
+  4:begin
+    v_cust_type:='and cust_type =4'
+  end;
+   end;
+
+ { if ((ChBoxJuridical.Checked) and (ChBoxPhysical.Checked) and
+    (ChBoxPhysicalFS.Checked)) then
+    v_CUST_TYPE := 'and c.cust_type in (0,1,2,3)'
+  else if ((ChBoxJuridical.Checked) and (ChBoxPhysical.Checked)) then
+    v_CUST_TYPE := 'and c.cust_type in (0,1)'
+  else if ((ChBoxJuridical.Checked) and (ChBoxPhysicalFS.Checked)) then
+    v_CUST_TYPE := 'and c.cust_type in (0,2)'
+  else if ((ChBoxPhysical.Checked) and (ChBoxPhysicalFS.Checked)) then
+    v_CUST_TYPE := 'and c.cust_type in (2,3)'
+  else if ChBoxJuridical.Checked then
+
+  else if ChBoxPhysical.Checked then
+    v_CUST_TYPE := 'and c.cust_type=1'
+  else if ChBoxPhysicalFS.Checked then
+    v_CUST_TYPE := 'and c.cust_type=2'
+  else
+    v_CUST_TYPE := '';  }
+
+  with CustNomData.ODS_CUSTOMERS_PHYS_FS do
+  begin
+   Sql[8]:='';
+    // if EditID.Text<>'' then SetVariable('p_ID', EditID.Text);
+    { SetVariable('p_FirstName', '%'+EditFirstName.Text+'%');
+      SetVariable('p_Patronymic', '%'+EditPatronymic.Text+'%');
+      SetVariable('p_LastName', '%'+EditLastName.Text+'%');
+      SetVariable('p_CustName', '%'+EditFullName.Text+'%'); }
+
+    //SQL[8] := ' and d.idcust = c.id';
+//    showmessage(sql.text);
+
+       if EditID.Text <> '' then
+      SQL[8] := SQL[8] + ' and ID = ' + EditID.Text;
+
+    if EditFirstName.Text <> '' then
+      SQL[8] := SQL[8] + ' and nvl(upper(FIRSTNAME),0) like upper (''%' +
+        EditFirstName.Text + '%'')';
+
+    if EditPatronymic.Text <> '' then
+      SQL[8] := SQL[8] + ' and nvl(upper(PATRONYMIC),0) like upper (''%' +
+        EditPatronymic.Text + '%'')';
+    if EditLastName.Text <> '' then
+      SQL[8] := SQL[8] + ' and nvl(upper(LastName),0) like upper (''%' +
+        EditLastName.Text + '%'')';
+   if EditFullName.Text <> '' then
+      SQL[8] := SQL[8] + ' and nvl(upper(Cust_Name),0) like upper (''%' +
+        EditFullName.Text + '%'')';
+    if EditShort_name.Text=
+     CustNomData.ODS_CUSTOMERS_PHYS_FS.FieldByName('Short_name').AsString then
+     if EditShort_name.Text <> '' then
+      SQL[8] := SQL[8] + ' and nvl(upper(Short_name),0) like upper (''%' +
+        EditShort_name.Text + '%'')';
+  {  if EditPINCode.Text <> '' then
+      SQL[8] := SQL[8] + ' and nvl(upper(d.passPIN),0) like upper (''%' +
+        EditPINCode.Text + '%'')';  }
+
+        if EditPINCode1.Text <> '' then
+      SQL[8] := SQL[8] + ' and passPIN in('+''''+EditPINCode1.Text+''''+')';
+   {     if EditPINCode1.Text <> '' then
+      SQL[8] := SQL[8] + ' and nvl(upper(d.passPIN),0) like upper (''%' +
+        EditPINCode1.Text + '%'')'; }
+
+
+     if EditITN.Text <> '' then
+      SQL[8] := SQL[8] + ' and inn ='+''''+EditITN.Text+'''';
+
+    SQL[8] := SQL[8] + v_citizen_countries;
+    SQL[8] := SQL[8] + v_sex;
+    SQL[8] := SQL[8] + v_fam_status;
+    SQL[8] := SQL[8] + v_vid_sob;
+    SQL[8] := SQL[8] + v_group_klie;
+    SQL[8] := SQL[8] + v_PRINAD;
+
+    SQL[8] := SQL[8] + v_doc_types;
+    SQL[8] := SQL[8] + c_org_sob;
+    SQL[8] := SQL[8] + c_sfera_dey;
+    SQL[8] := SQL[8] + c_otrasl;
+    SQL[8] := SQL[8] + c_nalog_kod;
+
+    if EditDocSerie1.Enabled=false then
+    EditDocSerie.Text:=''
+   else
+    if EditDocSerie.Text <> '' then
+      SQL[8] := SQL[8] + ' and nvl(upper(passport),0) like upper(''%' +
+        EditDocSerie.Text + '%'')';
+
+    if EditDocNumber.Text <> '' then
+      SQL[8] := SQL[8] + ' and nvl(upper(passp_number),0) like upper(''%' +
+        EditDocNumber.Text + '%'')';
+    if CBoxDocPlace5.text <> '' then
+      SQL[8] := SQL[8] + ' and nvl(upper(paspplace),0) like  upper(''%' +
+        CBoxDocPlace5.text + '%'')';
+    SQL[8] := SQL[8] + v_PASPDATE;
+    SQL[8] := SQL[8] + v_passexpire;
+    SQL[8] := SQL[8] + v_birthdate;
+    if CBoxBirthState.KeyValue <> '' then
+      SQL[8] := SQL[8] + ' and nvl(upper(birthplace),0) like upper (''%' +
+        CBoxBirthState.text + '%'')';
+    if CBoxBirthCity.KeyValue <> '' then
+      SQL[8] := SQL[8] + ' and nvl(upper(BIRTH_STATE),0) like upper (''%' +
+        CBoxBirthCity.text + '%'')';
+    if CBoxAddressState.KeyValue <> '' then
+      SQL[8] := SQL[8] + ' and nvl(upper(adrs_state),0) like upper (''%' +
+        CBoxAddressState.text + '%'')';
+    if CBoxAddressCity.KeyValue <> '' then
+      SQL[8] := SQL[8] + ' and nvl(upper(adrs_city),0) like upper (''%' +
+        CBoxAddressCity.text + '%'')';
+
+    if EditAddress.Text <> '' then
+      SQL[8] := SQL[8] + ' and nvl(upper(adress ),0) like upper (''%' +
+        EditAddress.Text + '%'')';
+    if EditAddressFactical.Text <> '' then
+      SQL[8] := SQL[8] + ' and nvl(upper(fakt_adress),0) like upper (''%' +
+        EditAddressFactical.Text + '%'')';
+    if EditPhoneMob.Text <> '' then
+      SQL[8] := SQL[8] + ' and nvl(upper(phone_mob),0) like upper (''%' +
+        EditPhoneMob.Text + '%'')';
+    if EditPhoneCity.Text <> '' then
+      SQL[8] := SQL[8] + ' and nvl(upper(phone),0) like upper (''%' +
+        EditPhoneCity.Text + '%'')';
+
+
+     { if EditEmail.Text <> '' then
+      SQL[8] := SQL[8] + ' and nvl(upper(email_cust),0) like upper (''%' +
+        EditEmail.Text + '%'')';
+
+        }
+
+
+    SQL[8] := SQL[8] + v_nerezident;
+   //-- showmessage(v_CUST_TYPE);
+    SQL[8] := SQL[8] + v_CUST_TYPE;
+     Memo1.Text := SQL.Text+SQL[8];
+
+    if Active then
+       Refresh
+    else
+      Open;
+    if RecordCount = 0 then
+      if MessageDlg('Müştəri tapılmadı?',
+        mtConfirmation, [mbYes, mbNo], 0, mbYes) = mrYes then
+        begin
+         // CustClear1.Click;
+            exit;
+               end;
+
+       // yeni muwterini elave etmek CustAdd1.Click;
+       //procedure TPCustServiceForm.modify_grids;
+        //showmessage(inttostr(recordcount));
+
+      if (RecordCount = 1) then
+      MainGridDblClick(Sender);
+      XFCust.Visible:=false;
+
+end;
+
+ case XFRadioGroupCust_type.ItemIndex of
+  0 :begin
+    v_CUST_TYPE := 'and cust_type=0' ;
+
+  end;
+  1:begin
+   v_CUST_TYPE := 'and cust_phys =1';
+
+
+   end;
+
+  2:begin
+   v_CUST_TYPE := 'and cust_fs =1' ;
+
+
+   end;
+  3:begin
+  v_CUST_TYPE := 'and cust_type=3'
+  end;
+  4:begin
+    v_cust_type:='and cust_type =4'
+  end;
+   end;
+
+  end;
+
+
+
+procedure TNomCust.Edit10Change(Sender: TObject);
+begin
+EditFullName.Text:=edit10.Text;
+end;
+
+procedure TNomCust.Edit10KeyPress(Sender: TObject; var Key: Char);
+begin
+if ord(Key) = 13 then
+  begin
+    with Sender as TWinControl do
+   SelectNext(Sender as TWinControl, True, True);
+   CustSearch1.Click;
+  end;
+end;
+
+procedure TNomCust.Edit1KeyPress(Sender: TObject; var Key: Char);
+begin
+if ord(Key) = 13 then
+  begin
+    with Sender as TWinControl do
+
+      SelectNext(Sender as TWinControl, True, True);
+
+     CustSearch1.Click;
+     end;
+end;
+
+procedure TNomCust.EditDocNumber1Change(Sender: TObject);
+begin
+ EditDocNumber.Text := EditDocNumber1.Text;
+end;
+
+procedure TNomCust.EditDocNumberChange(Sender: TObject);
+begin
+ EditDocNumber1.Text := EditDocNumber.Text;
+end;
+
+procedure TNomCust.EditDocSerie1Change(Sender: TObject);
+begin
+EditDocSerie.Text := EditDocSerie1.Text;
+end;
+
+procedure TNomCust.EditDocSerieChange(Sender: TObject);
+begin
+ EditDocSerie1.Text := EditDocSerie.Text;
+end;
+
+procedure TNomCust.EditEmailKeyPress(Sender: TObject; var Key: Char);
+begin
+if ord(Key) = 13 then
+  begin
+    with Sender as TWinControl do
+
+      SelectNext(Sender as TWinControl, True, True);
+
+     CustSearch1.Click;
+     end;
+end;
+
+procedure TNomCust.EditFirstNameKeyPress(Sender: TObject; var Key: Char);
+begin
+if ord(Key) = 13 then
+  begin
+   with Sender as TWinControl do
+
+    SelectNext(Sender as TWinControl, True, True);
+     CustSearch1.Click;
+     end;
+end;
+
+procedure TNomCust.EditFullNameChange(Sender: TObject);
+begin
+ if EditFullName.Text<>'' then
+ begin
+EditShort_name.Text:=CustNomData.convertpack.CallstringFunction('CONVERT_INT',[EditFullName.Text]);
+edit10.Text:=EditFullName.Text;
+ end
+ else
+ EditShort_name.Text:='';
+end;
+
+procedure TNomCust.EditFullNameKeyPress(Sender: TObject; var Key: Char);
+begin
+if ord(Key) = 13 then
+  begin
+    with Sender as TWinControl do
+
+      SelectNext(Sender as TWinControl, True, True);
+
+     CustSearch1.Click;
+     end;
+end;
+
+procedure TNomCust.EditIDChange(Sender: TObject);
+begin
+if (editid.Text=inttostr(CustNomData.ODS_CUSTOMERS_PHYS_FS.FieldByName('id').AsInteger))
+    then
+  begin
+   CustSearch1.Click;
+end;
+end;
+
+procedure TNomCust.EditIDKeyPress(Sender: TObject; var Key: Char);
+begin
+if ord(Key) = 13 then
+  begin
+    with Sender as TWinControl do
+
+      SelectNext(Sender as TWinControl, True, True);
+     CustSearch1.Click;
+     end;
+
+      if (upcase(Key)<'0')or(Upcase(Key)>'9')  then
+       if  (ord(key)<>8)then
+         key:=#0;
+end;
+
+procedure TNomCust.EditITNKeyPress(Sender: TObject; var Key: Char);
+begin
+ if ord(Key) = 13 then
+  begin
+    with Sender as TWinControl do
+
+      SelectNext(Sender as TWinControl, True, True);
+    CustSearch1.Click;
+
+  end;
+
+  if (upcase(Key) < '0') or (upcase(Key) > '9') then
+  if (ord(Key) <> 8) then
+         Key := #0;
+end;
+
+procedure TNomCust.EditLastNameKeyPress(Sender: TObject; var Key: Char);
+begin
+if ord(Key) = 13 then
+  begin
+    with Sender as TWinControl do
+
+      SelectNext(Sender as TWinControl, True, True);
+     CustSearch1.Click;
+     end;
+end;
+
+procedure TNomCust.EditPatronymicKeyPress(Sender: TObject; var Key: Char);
+begin
+if ord(Key) = 13 then
+  begin
+   with Sender as TWinControl do
+
+    SelectNext(Sender as TWinControl, True, True);
+     CustSearch1.Click;
+     end;
+end;
+
+procedure TNomCust.EditPINCode1Change(Sender: TObject);
+begin
+EditPINCode.Text:=EditPINCode1.Text;
+end;
+
+procedure TNomCust.EditPINCodeChange(Sender: TObject);
+begin
+EditPINCode1.Text:=EditPINCode.Text;
+end;
+
+procedure TNomCust.EditShort_name1Change(Sender: TObject);
+begin
+EditShort_name.Text:=EditShort_name1.Text;
+end;
+
+procedure TNomCust.EditShort_nameChange(Sender: TObject);
+begin
+EditShort_name1.Text:=EditShort_name.Text;
+end;
+
+procedure TNomCust.EditShort_nameKeyPress(Sender: TObject; var Key: Char);
+begin
+if ord(Key) = 13 then
+  begin
+    with Sender as TWinControl do
+
+      SelectNext(Sender as TWinControl, True, True);
+
+     CustSearch1.Click;
+     end;
+end;
+
+procedure TNomCust.FormCreate(Sender: TObject);
+ var
+  i: Integer;
+   a,n:string;
+  begin
+   CustNomData:=TCustNomData.Create(self);
+ //   NomCust := self;
+ {
+ //SBTranslateProc.TranslateAllCompForms(Self, sboapiDataModule.OrPack_SL);
+ // SBTranslateProc.TranslateAllComponents(Self, sboapiDataModule.OrPack_SL);
+  LabelSamelyDate.Visible:=False;
+  XFRadioGroupCust_type.ItemIndex:=1;
+  RBtnResident.Checked:=true;
+
+
+  PageControl1.TabIndex := 0;
+  Fill_Edit ;
+  ConvertNominalToCust:=False;
+
+  if CBoxCitizenship.Items.Count = 0 then
+  begin
+    CustNomData.Odscountries.First;
+    for i := 0 to CustNomData.Odscountries.RecordCount - 1 do
+    begin
+      CBoxCitizenship.Items.Add(CustNomData.Odscountries.FieldByName
+        ('CNTR_NAME').AsString);
+      CustNomData.Odscountries.Next;
+    end;
+  end;
+
+  if CBoxGender.Items.Count = 0 then
+  begin
+    CustNomData.OdsGender.First;
+    for i := 0 to CustNomData.OdsGender.RecordCount - 1 do
+    begin
+      CBoxGender.Items.Add(CustNomData.OdsGender.FieldByName('name')
+        .AsString);
+      CustNomData.OdsGender.Next;
+    end;
+  end;
+
+  if OrganizationTypeCB.Items.Count = 0 then
+  begin
+    CustNomData.OrganizationTypeData.First;
+    for i := 0 to CustNomData.OrganizationTypeData.RecordCount - 1 do
+    begin
+      OrganizationTypeCB.Items.Add
+        (CustNomData.OrganizationTypeData.FieldByName('name').AsString);
+      CustNomData.OrganizationTypeData.Next;
+    end;
+  end;
+  if ActionAreaCB.Items.Count = 0 then
+  begin
+    CustNomData.ActionAreaData.First;
+    for i := 0 to CustNomData.ActionAreaData.RecordCount - 1 do
+    begin
+      ActionAreaCB.Items.Add(CustNomData.ActionAreaData.FieldByName
+        ('name').AsString);
+      CustNomData.ActionAreaData.Next;
+    end;
+  end;
+  if BranchCB.Items.Count = 0 then
+  begin
+    CustNomData.BranchData.First;
+    for i := 0 to CustNomData.BranchData.RecordCount - 1 do
+    begin
+      BranchCB.Items.Add(CustNomData.BranchData.FieldByName('name')
+        .AsString);
+      CustNomData.BranchData.Next;
+    end;
+  end;
+  if TaXAreaCB.Items.Count = 0 then
+  begin
+    CustNomData.TaxAreaData.First;
+    for i := 0 to CustNomData.TaxAreaData.RecordCount - 1 do
+    begin
+      TaXAreaCB.Items.Add(CustNomData.TaxAreaData.FieldByName('name')
+        .AsString);
+      CustNomData.TaxAreaData.Next;
+    end;
+  end;
+  if CBoxFamStatus.Items.Count = 0 then
+  begin
+    CustNomData.OdsFamstatus.First;
+    for i := 0 to CustNomData.OdsFamstatus.RecordCount - 1 do
+    begin
+      CBoxFamStatus.Items.Add(CustNomData.OdsFamstatus.FieldByName
+        ('name').AsString);
+      CustNomData.OdsFamstatus.Next;
+    end;
+  end;
+
+  if CBoxGroup.Items.Count = 0 then
+  begin
+    CustNomData.ClientGroupData.First;
+    for i := 0 to CustNomData.ClientGroupData.RecordCount - 1 do
+    begin
+      CBoxGroup.Items.Add(CustNomData.ClientGroupData.FieldByName
+        ('NAME').AsString);
+      CustNomData.ClientGroupData.Next;
+    end;
+  end;
+
+  if CBox.Items.Count = 0 then
+  begin
+    CustNomData.EstateTypeData.First;
+    for i := 0 to CustNomData.EstateTypeData.RecordCount - 1 do
+    begin
+      CBox.Items.Add(CustNomData.EstateTypeData.FieldByName('NAME')
+        .AsString);
+      CustNomData.EstateTypeData.Next;
+    end;
+  end;
+  if ComboBox3.Items.Count = 0 then
+  begin
+    CustNomData.RelationData.First;
+    for i := 0 to CustNomData.RelationData.RecordCount - 1 do
+    begin
+      ComboBox3.Items.Add(CustNomData.RelationData.FieldByName('NAME')
+        .AsString);
+      CustNomData.RelationData.Next;
+    end;
+
+  end;
+
+
+  if CBoxDocPlace5.Items.Count = 0 then
+  begin
+    CustNomData.odsPassDeps.First;
+    for i := 0 to CustNomData.odsPassDeps.RecordCount - 1 do
+    begin
+      CBoxDocPlace5.Items.Add(CustNomData.odsPassDeps.FieldByName('name')
+        .AsString);
+      CustNomData.odsPassDeps.Next;
+
+    end;
+
+  end;
+
+
+
+  DTPickerDocDate.DateTime := CustNomData.ODS_SYSDATE.FieldByName
+    ('tek_dat').asdatetime;
+  DTPickerDocExpiryDate.DateTime := CustNomData.ODS_SYSDATE.FieldByName
+    ('tek_dat').asdatetime;
+  DTPickerBirthDate.DateTime := CustNomData.ODS_SYSDATE.FieldByName
+    ('tek_dat').asdatetime;
+  Dtp_Ustav.DateTime:= CustNomData.ODS_SYSDATE.FieldByName
+    ('tek_dat').asdatetime;
+ // DateTi_samelydate.Value:=DataModPCustService.ODS_SYSDATE.FieldByName
+   // ('tek_dat').AsDateTime;
+     }
+end;
+
+procedure TNomCust.FormShow(Sender: TObject);
+var
+  i: Integer;
+   a,n:string;
+  begin
+
+ //   NomCust := self;
+
+ //SBTranslateProc.TranslateAllCompForms(Self, sboapiDataModule.OrPack_SL);
+ // SBTranslateProc.TranslateAllComponents(Self, sboapiDataModule.OrPack_SL);
+  LabelSamelyDate.Visible:=False;
+  XFRadioGroupCust_type.ItemIndex:=1;
+  RBtnResident.Checked:=true;
+
+
+  PageControl1.TabIndex := 0;
+  Fill_Edit ;
+  ConvertNominalToCust:=False;
+
+  if CBoxCitizenship.Items.Count = 0 then
+  begin
+    CustNomData.Odscountries.First;
+    for i := 0 to CustNomData.Odscountries.RecordCount - 1 do
+    begin
+      CBoxCitizenship.Items.Add(CustNomData.Odscountries.FieldByName
+        ('CNTR_NAME').AsString);
+      CustNomData.Odscountries.Next;
+    end;
+  end;
+
+  if CBoxGender.Items.Count = 0 then
+  begin
+    CustNomData.OdsGender.First;
+    for i := 0 to CustNomData.OdsGender.RecordCount - 1 do
+    begin
+      CBoxGender.Items.Add(CustNomData.OdsGender.FieldByName('name')
+        .AsString);
+      CustNomData.OdsGender.Next;
+    end;
+  end;
+
+  if OrganizationTypeCB.Items.Count = 0 then
+  begin
+    CustNomData.OrganizationTypeData.First;
+    for i := 0 to CustNomData.OrganizationTypeData.RecordCount - 1 do
+    begin
+      OrganizationTypeCB.Items.Add
+        (CustNomData.OrganizationTypeData.FieldByName('name').AsString);
+      CustNomData.OrganizationTypeData.Next;
+    end;
+  end;
+  if ActionAreaCB.Items.Count = 0 then
+  begin
+    CustNomData.ActionAreaData.First;
+    for i := 0 to CustNomData.ActionAreaData.RecordCount - 1 do
+    begin
+      ActionAreaCB.Items.Add(CustNomData.ActionAreaData.FieldByName
+        ('name').AsString);
+      CustNomData.ActionAreaData.Next;
+    end;
+  end;
+  if BranchCB.Items.Count = 0 then
+  begin
+    CustNomData.BranchData.First;
+    for i := 0 to CustNomData.BranchData.RecordCount - 1 do
+    begin
+      BranchCB.Items.Add(CustNomData.BranchData.FieldByName('name')
+        .AsString);
+      CustNomData.BranchData.Next;
+    end;
+  end;
+  if TaXAreaCB.Items.Count = 0 then
+  begin
+    CustNomData.TaxAreaData.First;
+    for i := 0 to CustNomData.TaxAreaData.RecordCount - 1 do
+    begin
+      TaXAreaCB.Items.Add(CustNomData.TaxAreaData.FieldByName('name')
+        .AsString);
+      CustNomData.TaxAreaData.Next;
+    end;
+  end;
+  if CBoxFamStatus.Items.Count = 0 then
+  begin
+    CustNomData.OdsFamstatus.First;
+    for i := 0 to CustNomData.OdsFamstatus.RecordCount - 1 do
+    begin
+      CBoxFamStatus.Items.Add(CustNomData.OdsFamstatus.FieldByName
+        ('name').AsString);
+      CustNomData.OdsFamstatus.Next;
+    end;
+  end;
+
+  if CBoxGroup.Items.Count = 0 then
+  begin
+    CustNomData.ClientGroupData.First;
+    for i := 0 to CustNomData.ClientGroupData.RecordCount - 1 do
+    begin
+      CBoxGroup.Items.Add(CustNomData.ClientGroupData.FieldByName
+        ('NAME').AsString);
+      CustNomData.ClientGroupData.Next;
+    end;
+  end;
+
+  if CBox.Items.Count = 0 then
+  begin
+    CustNomData.EstateTypeData.First;
+    for i := 0 to CustNomData.EstateTypeData.RecordCount - 1 do
+    begin
+      CBox.Items.Add(CustNomData.EstateTypeData.FieldByName('NAME')
+        .AsString);
+      CustNomData.EstateTypeData.Next;
+    end;
+  end;
+  if ComboBox3.Items.Count = 0 then
+  begin
+    CustNomData.RelationData.First;
+    for i := 0 to CustNomData.RelationData.RecordCount - 1 do
+    begin
+      ComboBox3.Items.Add(CustNomData.RelationData.FieldByName('NAME')
+        .AsString);
+      CustNomData.RelationData.Next;
+    end;
+
+  end;
+
+
+  if CBoxDocPlace5.Items.Count = 0 then
+  begin
+    CustNomData.odsPassDeps.First;
+    for i := 0 to CustNomData.odsPassDeps.RecordCount - 1 do
+    begin
+      CBoxDocPlace5.Items.Add(CustNomData.odsPassDeps.FieldByName('name')
+        .AsString);
+      CustNomData.odsPassDeps.Next;
+
+    end;
+
+  end;
+
+
+
+  DTPickerDocDate.DateTime := CustNomData.ODS_SYSDATE.FieldByName
+    ('tek_dat').asdatetime;
+  DTPickerDocExpiryDate.DateTime := CustNomData.ODS_SYSDATE.FieldByName
+    ('tek_dat').asdatetime;
+  DTPickerBirthDate.DateTime := CustNomData.ODS_SYSDATE.FieldByName
+    ('tek_dat').asdatetime;
+  Dtp_Ustav.DateTime:= CustNomData.ODS_SYSDATE.FieldByName
+    ('tek_dat').asdatetime;
+ // DateTi_samelydate.Value:=DataModPCustService.ODS_SYSDATE.FieldByName
+   // ('tek_dat').AsDateTime;
+
+
+end;
+
+procedure TNomCust.MainGridDblClick(Sender: TObject);
+begin
+
+ with CustNomData.DScustimage do
+    begin
+    close;
+    SetVariable('cust_id', CustNomData.ODS_CUSTOMERS_PHYS_FSIDCUSTINFO.AsInteger);
+    Open;
+    end;
+   if CustNomData.ODS_CUSTOMERS_PHYS_FS.Active then
+
+    with CustNomData.ODS_CUSTOMERS_PHYS_FS do
+    begin
+      if RecordCount > 0 then
+      begin
+
+        EditID.Text := FieldByName('ID').AsString;
+        EditFirstName.Text := FieldByName('FirstName').AsString;
+        EditPatronymic.Text := FieldByName('Patronymic').AsString;
+        EditLastName.Text := FieldByName('LastName').AsString;
+        EditFullName.Text := FieldByName('Cust_Name').AsString;
+        EditPINCode.Text := FieldByName('passPIN').AsString;
+        EditITN.Text := FieldByName('inn').AsString;
+
+        { wekil DataModPCustService.DScustimage.Close;
+          DataModPCustService.DScustimage.SetVariable('cust_id',
+          DataModPCustService.ODS_CUSTOMERS_PHYS_FS.FieldByName('ID').AsInteger);
+          DataModPCustService.DScustimage.Open; }
+
+        case CustNomData.ODS_CUSTOMERS_PHYS_FS.FieldByName('Nerezident')
+          .AsInteger of
+          0:
+            RBtnNoResident.Checked := True;
+          1:
+            RBtnResident.Checked := True;
+        end;
+
+
+        if not CustNomData.ODS_CUSTOMERS_PHYS_FS.FieldByName
+          ('CUST_type').isNull then
+        begin
+          XFRadioGroupCust_type.ItemIndex:=CustNomData.ODS_CUSTOMERS_PHYS_FS.FieldByName
+            ('CUST_type').AsInteger;
+        end;
+
+      if not CustNomData.ODS_CUSTOMERS_PHYS_FS.FieldByName
+        ('citizenship').isNull then
+      begin
+        CBoxCitizenship.ItemIndex :=
+          combobox_open(CustNomData.ODS_CUSTOMERS_PHYS_FS,
+          CustNomData.Odscountries, CBoxCitizenship, 'citizenship',
+          'ID', 'CNTR_NAME');
+
+      end
+      else
+        CBoxCitizenship.ItemIndex := -1;
+
+      //CBoxGender.ItemIndex := FieldByName('sex').AsInteger;
+     // CBoxFamStatus.ItemIndex := FieldByName('fam_status').AsInteger;
+
+
+      if not CustNomData.ODS_CUSTOMERS_PHYS_FS.FieldByName('sex')
+        .isNull then
+        CBoxGender.ItemIndex :=
+          combobox_open(CustNomData.ODS_CUSTOMERS_PHYS_FS,
+          CustNomData.OdsGender, CBoxGender, 'sex',
+          'ID', 'name')
+      else
+        CBoxGender.ItemIndex := -1;
+
+     if not CustNomData.ODS_CUSTOMERS_PHYS_FS.FieldByName('fam_status')
+        .isNull then
+        CBoxFamStatus.ItemIndex :=
+          combobox_open(CustNomData.ODS_CUSTOMERS_PHYS_FS,
+          CustNomData.OdsFamstatus, CBoxFamStatus, 'fam_status',
+          'ID', 'name')
+      else
+        CBoxFamStatus.ItemIndex := -1;
+
+
+
+      if not CustNomData.ODS_CUSTOMERS_PHYS_FS.FieldByName('group_klie')
+        .isNull then
+        CBoxGroup.ItemIndex :=
+          combobox_open(CustNomData.ODS_CUSTOMERS_PHYS_FS,
+          CustNomData.ClientGroupData, CBoxGroup, 'group_klie',
+          'ID', 'name')
+      else
+        CBoxGroup.ItemIndex := -1;
+
+      if not CustNomData.ODS_CUSTOMERS_PHYS_FS.FieldByName('vid_sob')
+        .isNull then
+        CBox.ItemIndex :=
+          combobox_open(CustNomData.ODS_CUSTOMERS_PHYS_FS,
+          CustNomData.EstateTypeData, CBox, 'vid_sob', 'ID', 'name')
+      else
+        CBox.ItemIndex := -1;
+      if not CustNomData.ODS_CUSTOMERS_PHYS_FS.FieldByName('prinad_kod')
+        .isNull then
+        ComboBox3.ItemIndex :=
+          combobox_open(CustNomData.ODS_CUSTOMERS_PHYS_FS,
+          CustNomData.RelationData, ComboBox3, 'prinad_kod',
+          'ID', 'name')
+      else
+        ComboBox3.ItemIndex := -1;
+      if not CustNomData.ODS_CUSTOMERS_PHYS_FS.FieldByName('DOC_TYPE')
+        .isNull then
+      begin
+        CBoxDocType.KeyValue := CustNomData.ODS_CUSTOMERS_PHYS_FS.
+          FieldByName('DOC_TYPE').AsInteger;
+        CBoxDocType1.KeyValue := CustNomData.ODS_CUSTOMERS_PHYS_FS.
+          FieldByName('DOC_TYPE').AsInteger;
+
+      end
+      else
+      begin
+        CBoxDocType.KeyValue := -1;
+        CBoxDocType1.KeyValue := -1;
+
+        end;
+
+     if not CustNomData.ODS_CUSTOMERS_PHYS_FS.FieldByName('doc_country').IsNull then
+      issue_country1.KeyValue:=CustNomData.ODS_CUSTOMERS_PHYS_FS .
+      FieldByName('doc_country').AsString
+      else
+      issue_country1.KeyValue:=-1;
+
+      if not CustNomData.ODS_CUSTOMERS_PHYS_FS.FieldByName('risk_categ').isnull then
+      ComboBox_risk.KeyValue:=CustNomData.ODS_Customers_Phys_FS.FieldByName('risk_categ').AsInteger
+       else
+      ComboBox_risk.KeyValue:=-1;
+
+      if not CustNomData.ODS_CUSTOMERS_PHYS_FS.FieldByName('riskdescid').isnull then
+      Comb_riskdescid.KeyValue:=CustNomData.ODS_Customers_Phys_FS.FieldByName('riskdescid').AsInteger
+       else
+      Comb_riskdescid.KeyValue:=-1;
+
+
+
+      if not CustNomData.ODS_CUSTOMERS_PHYS_FS.FieldByName('citizenship2').IsNull then
+      DBCBox_Citizenship2.KeyValue:=CustNomData.ODS_CUSTOMERS_PHYS_FS .
+      FieldByName('citizenship2').AsString
+      else
+      DBCBox_Citizenship2.KeyValue:=-1;
+
+       if not CustNomData.ODS_CUSTOMERS_PHYS_FS.FieldByName('citizenship3').IsNull then
+      DBCBox_Citizenship3.KeyValue:=CustNomData.ODS_CUSTOMERS_PHYS_FS .
+      FieldByName('citizenship3').AsString
+      else
+      DBCBox_Citizenship3.KeyValue:=-1;
+
+      if not CustNomData.ODS_CUSTOMERS_PHYS_FS.FieldByName('fakt_country').IsNull then
+      Fakt_Adrs_State.KeyValue:=CustNomData.ODS_CUSTOMERS_PHYS_FS .
+      FieldByName('fakt_country').AsString
+      else
+      Fakt_Adrs_State.KeyValue:=-1;
+
+      if not CustNomData.ODS_CUSTOMERS_PHYS_FS.FieldByName('fakt_city').IsNull then
+      Fakt_Adrs_City.KeyValue:=CustNomData.ODS_CUSTOMERS_PHYS_FS .
+      FieldByName('fakt_city').AsString
+      else
+      Fakt_Adrs_City.KeyValue:=-1;
+
+    ZipFakt.Text:=FieldByName('fakt_zip').AsString;
+    Work_Place.Text:=FieldByName('work_place').AsString;
+    Work_Post.Text:=FieldByName('work_post').AsString;;
+    Work_Address.Text:=FieldByName('work_adress').AsString;
+    Work_Phone.Text:=FieldByName('work_phone').AsString;
+
+      case XFRadioGroupCust_type.ItemIndex of
+      0:begin
+      if not CustNomData.ODS_CUSTOMERS_PHYS_FS.FieldByName('Address_type').IsNull then
+      Address_type.KeyValue:=CustNomData.ODS_CUSTOMERS_PHYS_FS .
+      FieldByName('Address_type').AsString
+      else
+      Address_type.KeyValue:=-1;
+
+      if not CustNomData.ODS_CUSTOMERS_PHYS_FS.FieldByName('tph_contact_type').IsNull then
+      tph_contact_type.KeyValue:=CustNomData.ODS_CUSTOMERS_PHYS_FS .
+      FieldByName('tph_contact_type').AsString
+      else
+       tph_contact_type.KeyValue:=-1;
+
+      if not CustNomData.ODS_CUSTOMERS_PHYS_FS.FieldByName('tph_communication_type').IsNull then
+      tph_communication_type.KeyValue:=CustNomData.ODS_CUSTOMERS_PHYS_FS .
+      FieldByName('tph_communication_type').AsString
+      else
+      tph_communication_type.KeyValue:=-1 ;
+
+       if not CustNomData.ODS_CUSTOMERS_PHYS_FS.FieldByName('country_code_cust').IsNull then
+      CountryByConctType.KeyValue:=CustNomData.ODS_CUSTOMERS_PHYS_FS .
+      FieldByName('country_code_cust').AsString
+      else
+      CountryByConctType.KeyValue:=-1;
+
+      if not CustNomData.ODS_CUSTOMERS_PHYS_FS.FieldByName('city_cust').IsNull then
+      CityByConctType.KeyValue:=CustNomData.ODS_CUSTOMERS_PHYS_FS .
+      FieldByName('city_cust').AsString
+      else
+      CityByConctType.KeyValue:=-1;
+
+      if not CustNomData.ODS_CUSTOMERS_PHYS_FS.FieldByName('incorporation_cntr').IsNull then
+      DBLC_INCORP_CNTR.KeyValue:=CustNomData.ODS_CUSTOMERS_PHYS_FS .
+      FieldByName('incorporation_cntr').AsString
+      else
+      DBLC_INCORP_CNTR.KeyValue:=-1;
+
+      if not CustNomData.ODS_CUSTOMERS_PHYS_FS.FieldByName('tph_country_prefix').IsNull then
+      tph_country_prefix.KeyValue:=CustNomData.ODS_CUSTOMERS_PHYS_FS .
+      FieldByName('tph_country_prefix').AsString
+      else
+      tph_country_prefix.KeyValue:=-1;
+
+      incor_number.Text:=FieldByName('incorporation_number').AsString;
+      Db_tph_number.Text:=FieldByName('TPH_NUMBER').AsString;
+      db_tph_adress.Text:=FieldByName('ADDRESS_CUST').AsString;
+     /// E_mail.Text:=FieldByName('email_cust').AsString;
+      Edit_url.Text:=FieldByName('url_cust').AsString;
+      DB_INCORP_STATE.Text:=FieldByName('incorporation_state').AsString;
+      Db_tph_extension.Text:=FieldByName('tph_extension').AsString;
+      DB_tph_zip.Text:=FieldByName('tph_zip').AsString;
+      db_tph_state.Text:=FieldByName('TPH_STATE').AsString;
+      EditEmail.Text := copy(FieldByName('email_cust').AsString, 0,
+        pos('@', FieldByName('email_cust').AsString) - 1);
+        Edit1.Text := copy(FieldByName('email_cust').AsString,
+        pos('@', FieldByName('email_cust').AsString) + 1,
+              length(FieldByName('email_cust').AsString));
+      EditBic.text:=FieldByName('bik').AsString;
+     end;
+
+     1,2,3,4:begin
+
+      if not CustNomData.ODS_CUSTOMERS_PHYS_FS.FieldByName('info_tph_contact_type').IsNull then
+      tph_contact_type.KeyValue:=CustNomData.ODS_CUSTOMERS_PHYS_FS .
+      FieldByName('info_tph_contact_type').AsString
+      else
+      tph_contact_type.KeyValue:=-1;
+
+      if not CustNomData.ODS_CUSTOMERS_PHYS_FS.FieldByName('info_tph_country').IsNull then
+      CountryByConctType.KeyValue:=CustNomData.ODS_CUSTOMERS_PHYS_FS .
+      FieldByName('info_tph_country').AsString
+      else
+      CountryByConctType.KeyValue:=-1;
+
+      if not CustNomData.ODS_CUSTOMERS_PHYS_FS.FieldByName('info_tph_city').IsNull then
+      CityByConctType.KeyValue:=CustNomData.ODS_CUSTOMERS_PHYS_FS .
+      FieldByName('info_tph_city').AsString
+      else
+      CityByConctType.KeyValue:=-1;
+
+      if not CustNomData.ODS_CUSTOMERS_PHYS_FS.FieldByName('info_tph_country_prefix').IsNull then
+      tph_country_prefix.KeyValue:=CustNomData.ODS_CUSTOMERS_PHYS_FS .
+      FieldByName('info_tph_country_prefix').AsString
+      else
+      tph_country_prefix.KeyValue:=-1;
+
+      if not CustNomData.ODS_CUSTOMERS_PHYS_FS.FieldByName('info_tph_communication_type').IsNull then
+      tph_communication_type.KeyValue:=CustNomData.ODS_CUSTOMERS_PHYS_FS .
+      FieldByName('info_tph_communication_type').AsString
+      else
+      tph_communication_type.KeyValue:=-1;
+
+       if not CustNomData.ODS_CUSTOMERS_PHYS_FS.FieldByName('info_contact_type').IsNull then
+      Address_type.KeyValue:=CustNomData.ODS_CUSTOMERS_PHYS_FS .
+      FieldByName('info_contact_type').AsString
+      else
+      Address_type.KeyValue:=-1;
+
+       DBEdit_CountryCode.Text:=FieldByName('info_tph_country_prefix').AsString;
+       db_tph_state.Text:=FieldByName('info_tph_state').AsString;
+       DB_tph_zip.Text:=FieldByName('info_tph_zip').AsString;
+       db_tph_adress.Text:=FieldByName('info_tph_adress').AsString;
+       db_tph_number.Text:=FieldByName('info_tph_number').AsString;
+       db_tph_extension.Text:=FieldByName('info_tph_extension').AsString;
+        EditEmail.Text := copy(FieldByName('email').AsString, 0,
+        pos('@', FieldByName('email').AsString) - 1);
+        Edit1.Text := copy(FieldByName('email').AsString,
+        pos('@', FieldByName('email').AsString) + 1,
+              length(FieldByName('email').AsString));
+        Edit_url.Text:=FieldByName('url').AsString;
+
+
+     end;
+     end;
+
+
+
+      if not CustNomData.ODS_CUSTOMERS_PHYS_FS.FieldByName
+   ('org_sob').IsNull then
+  begin
+ { ShowMessage(inttostr(combobox_open(DataModPCustService.ODS_custinfo,
+     DataModPCustService.OrganizationTypeData,OrganizationTypeCB,'org_sob','id','name')));}
+     OrganizationTypeCB.ItemIndex:=
+     combobox_open(CustNomData.ODS_CUSTOMERS_PHYS_FS,
+     CustNomData.OrganizationTypeData,OrganizationTypeCB,'org_sob','id','name')
+  end
+  else
+    OrganizationTypeCB.ItemIndex:=-1;
+
+ if not CustNomData.ODS_CUSTOMERS_PHYS_FS.FieldByName
+   ('sfera_dey').IsNull then
+  begin
+  ActionAreaCB.ItemIndex:=
+  combobox_open(CustNomData.ODS_CUSTOMERS_PHYS_FS,
+     CustNomData.ActionAreaData,ActionAreaCB,'sfera_dey','id','name')
+  end
+  else
+   ActionAreaCB.ItemIndex:=-1;
+
+  if not CustNomData.ODS_CUSTOMERS_PHYS_FS.FieldByName
+  ('otrasl').isnull then
+  begin
+  BranchCB.ItemIndex:=
+  combobox_open(CustNomData.ODS_CUSTOMERS_PHYS_FS,
+  CustNomData.BranchData,BranchCB,'otrasl','id','name')
+   end
+  else
+    BranchCB.ItemIndex:=-1;
+
+
+      if not CustNomData.ODS_CUSTOMERS_PHYS_FS.FieldByName
+      ('nalog_kod').isnull then
+  begin
+    TaxAreaCb.ItemIndex:=
+   combobox_open(CustNomData.ODS_CUSTOMERS_PHYS_FS,
+  CustNomData.TaxAreaData,TaxAreaCb,'nalog_kod','id','name'   )
+   end
+  else
+    TaxAreaCb.ItemIndex:=-1;
+
+      CBoxDocPlace5.Text := FieldByName('paspplace').AsString;
+      EditShort_name.Text:=FieldByName('Short_name').AsString;
+      EditDocSerie.Text := FieldByName('passport').AsString;
+      EditDocNumber.Text := FieldByName('passp_number').AsString;
+      MemoNotes.Text:=FieldByName('note').AsString;
+      if not FieldByName('paspdate').isNull then
+        DTPickerDocDate.DateTime := FieldByName('paspdate').asdatetime;
+
+      if not FieldByName('passexpire').isNull then
+        DTPickerDocExpiryDate.DateTime := FieldByName('passexpire').asdatetime;
+
+      if not FieldByName('birthdate').isNull then
+        DTPickerBirthDate.DateTime := FieldByName('birthdate').asdatetime;
+
+      if not FieldByName('dat_ustav').isNull then
+        Dtp_Ustav.DateTime := FieldByName('dat_ustav').asdatetime;
+
+      CBoxBirthState.KeyValue := FieldByName('birthplace').AsString;
+      CBoxBirthCity.KeyValue := FieldByName('BIRTH_STATE').AsString;
+      CBoxAddressState.KeyValue := FieldByName('adrs_state').AsString;
+      CBoxAddressCity.KeyValue := FieldByName('adrs_city').AsString;
+      EditAddress.Text := FieldByName('adress').AsString;
+      EditAddressFactical.Text := FieldByName('fakt_adress').AsString;
+      EditPhoneMob.Text := FieldByName('PHONE_MOB').AsString;
+      EditPhoneCity.Text := FieldByName('phone').AsString;
+     Fill_Edit;
+    DateTi_samelydate.Value:=FieldByName('SAMELYDATE').AsDateTime;
+     ///////////////////////////////////////////////////////////
+  risk_descPERIOD:=CustNomData.ODS_CUST_RISK_DESCDATE_PERIOD.AsInteger;
+
+    if not (FieldByName('SAMELYDATE').isNUll) then
+    DateTi_samelydate.Value := FieldByName('SAMELYDATE').AsDateTime
+    else
+    DateTi_samelydate.Value := null;
+
+    if not (FieldByName('SAMELYDATE').isNUll) then
+    begin
+
+    if
+   CustNomData.ods_SysdateTEK_DAT.AsDateTime=
+    IncMonth(FieldByName('SAMELYDATE').AsDatetime,risk_descPERIOD)
+     then
+    begin
+    LabelSamelyDate.Caption:='Diqqət: Bugün bu müştərinin eyniləşdirmə tarixidir!';
+    LabelSamelyDate.Visible:=True;
+    Timer1.Enabled:=True;
+
+    end
+    else
+
+    if
+   CustNomData.ods_SysdateTEK_DAT.AsDateTime>
+    IncMonth(FieldByName('SAMELYDATE').AsDatetime,risk_descPERIOD) then
+    begin
+    LabelSamelyDate.Caption:='Diqqət: Müştərinin eyniləşdirmə tarixi bitmişdir!';
+    LabelSamelyDate.Visible:=True;
+    Timer1.Enabled:=True;
+
+    end
+    else
+    begin
+    LabelSamelyDate.Visible:=False;
+    Timer1.Enabled:=False;
+    end;
+
+    end
+    else
+    begin
+    LabelSamelyDate.Visible:=False;
+    Timer1.Enabled:=False;
+    end;
+
+
+
+     ///////////////////////////////////////////////////////////
+
+
+
+         //////// eleave et//////////////////////////
+               XFPanelTeyp.Visible:=true;
+            //   XFPanel12.Visible:=true;
+               XFBitcontinue.Visible:=false;
+               XFButton4.Visible:=true;
+               XFButton5.Visible:=true;
+               XFRadioGroupCust_type.Visible:=true;
+               XFRadioGroupCust_type1.Visible:=false;
+             if EditID.Text<>'' then
+   //  PageControl1.pages[9].TabVisible:=true;
+          ///////////////////////////////////////////////
+
+  case XFRadioGroupCust_type.ItemIndex of
+  0:begin
+    XFBitBtn2.Visible:=false  ;
+    MainGrid.Columns.Items[2].Visible := False;
+    MainGrid.Columns.Items[3].Visible := False;
+    MainGrid.Columns.Items[4].Visible := False;
+    MainGrid.Columns.Items[5].Visible := False;
+    MainGrid.Columns.Items[6].Visible := False;
+    MainGrid.Columns.Items[7].Visible := False;
+    MainGrid.Columns.Items[8].Visible := False;
+    MainGrid.Columns.Items[9].Visible := False;
+    MainGrid.Columns.Items[1].Visible := True;
+    MainGrid.Columns.Items[11].Visible := True;
+    /// //////////////////////////////////////////////////////
+    PageControl1.pages[9].TabVisible:=true;
+
+  end ;
+  1:begin
+    XFBitBtn2.Visible:=false;
+    MainGrid.columns.Items[2].Visible := True;
+    MainGrid.columns.Items[3].Visible := True;
+    MainGrid.columns.Items[4].Visible := True;
+    MainGrid.columns.Items[5].Visible := True;
+    MainGrid.columns.Items[6].Visible := True;
+    MainGrid.columns.Items[7].Visible := True;
+    MainGrid.columns.Items[8].Visible := True;
+    MainGrid.columns.Items[9].Visible := True;
+    MainGrid.columns.Items[1].Visible := False;
+    MainGrid.columns.Items[11].Visible := False;
+    /// //////////////////////////////////////////////////
+
+    PageControl1.pages[9].TabVisible:=true;
+
+  end;
+
+  /// /////////////////////////////////////////////////////////
+
+   2:begin
+    XFBitBtn2.Visible:=false;
+    MainGrid.Columns.Items[2].Visible := True;
+    MainGrid.Columns.Items[3].Visible := True;
+    MainGrid.Columns.Items[4].Visible := True;
+    MainGrid.Columns.Items[5].Visible := True;
+    MainGrid.Columns.Items[6].Visible := True;
+    MainGrid.Columns.Items[7].Visible := True;
+    MainGrid.Columns.Items[8].Visible := True;
+    MainGrid.Columns.Items[9].Visible := True;
+    MainGrid.Columns.Items[1].Visible := False;
+  //  if ChBoxPhysical.Checked then
+    MainGrid.Columns.Items[11].Visible := True;
+
+    // MainGrid.FieldColumns['inn'].Visible:=FAlse ;
+    /// ///////////////////////////////////////////////////////
+
+    PageControl1.pages[9].TabVisible:=true;
+
+    end;
+    3 :begin
+    XFBitBtn2.Visible:=false;
+    MainGrid.Columns.Items[2].Visible := True;
+    MainGrid.Columns.Items[3].Visible := True;
+    MainGrid.Columns.Items[4].Visible := True;
+    MainGrid.Columns.Items[5].Visible := True;
+    MainGrid.Columns.Items[6].Visible := True;
+    MainGrid.Columns.Items[7].Visible := True;
+    MainGrid.Columns.Items[8].Visible := True;
+    MainGrid.Columns.Items[9].Visible := True;
+    MainGrid.Columns.Items[1].Visible := False;
+  //  if ChBoxPhysical.Checked then
+    MainGrid.Columns.Items[11].Visible := True;
+
+    // MainGrid.FieldColumns['inn'].Visible:=FAlse ;
+    /// ///////////////////////////////////////////////////////
+
+     PageControl1.pages[9].TabVisible:=true;
+
+    end;
+    4 :begin
+    XFBitBtn2.Visible:=true;
+    MainGrid.Columns.Items[2].Visible := True;
+    MainGrid.Columns.Items[3].Visible := True;
+    MainGrid.Columns.Items[4].Visible := True;
+    MainGrid.Columns.Items[5].Visible := True;
+    MainGrid.Columns.Items[6].Visible := True;
+    MainGrid.Columns.Items[7].Visible := True;
+    MainGrid.Columns.Items[8].Visible := True;
+    MainGrid.Columns.Items[9].Visible := True;
+    MainGrid.Columns.Items[1].Visible := False;
+  //  if ChBoxPhysical.Checked then
+    MainGrid.Columns.Items[11].Visible := True;
+
+    // MainGrid.FieldColumns['inn'].Visible:=FAlse ;
+    /// ///////////////////////////////////////////////////////
+
+     PageControl1.pages[9].TabVisible:=true;
+    
+  end;
+
+  end;
+
+
+      // CBoxCitizenship.Text:=FieldByName('').AsString;
+      // CBoxCitizenship.Text:=FieldByName('').AsString;
+
+      // CBoxDocPlace.Text:=FieldByName('paspplace').AsString;
+      // CBoxGroup.Text:=FieldByName('group_klie').AsString;
+  ////////////////////////////////---biznes pross////////////////////////////
+    end;
+
+    end;
+
+    ////////////////////////////////---biznes pross////////////////////////////
+  end;
+
+   procedure TNomCust.RBtnNoResidentClick(Sender: TObject);
+begin
+EditDocSerie.Text := '';
+    CBoxDocType1.KeyValue := -1;
+    CBoxDocType.KeyValue :=-1;
+end;
+
+procedure TNomCust.RBtnNoResidentKeyPress(Sender: TObject; var Key: Char);
+begin
+  if ord(Key) = 13 then
+  begin
+    with Sender as TWinControl do
+
+      SelectNext(Sender as TWinControl, True, True);
+     CustSearch1.Click;
+     end;
+
+      if (upcase(Key)<'0')or(Upcase(Key)>'9')  then
+       if  (ord(key)<>8)then
+         key:=#0;
+end;
+
+procedure TNomCust.RBtnResidentClick(Sender: TObject);
+begin
+ if RBtnResident.Checked = True then
+  begin
+   // EditPINCode.Text := '';
+    EditPINCode.MaxLength := 10;
+    {CBoxAddressState.Text := 'Azərbaycan';
+    CBoxAddressCity.Text := 'Bakı';
+
+    CBoxCitizenship.ItemIndex :=1;  }
+    EditDocSerie.Text := 'AZE';
+    CBoxDocType1.KeyValue :=1 ;
+    CBoxDocType.KeyValue :=1;
+  end;
+end;
+
+procedure TNomCust.RBtnResidentKeyPress(Sender: TObject; var Key: Char);
+begin
+  if ord(Key) = 13 then
+  begin
+    with Sender as TWinControl do
+
+      SelectNext(Sender as TWinControl, True, True);
+     CustSearch1.Click;
+     end;
+
+      if (upcase(Key)<'0')or(Upcase(Key)>'9')  then
+       if  (ord(key)<>8)then
+         key:=#0;
+end;
+
+procedure TNomCust.SpeedButton1Click(Sender: TObject);
+type
+  TJPEGQualityRange = 1..100;
+var
+    CUSTSIGN: TPicture;
+    Jpg: TJpegImage;
+    Bmp: TBitmap;
+    ExtS:String;
+begin
+    jpg := TJpegImage.Create;
+    bmp := TBitmap.Create;
+    CUSTSIGN:=TPicture.Create;
+
+  if OpenPictureDialog1.Execute then
+   begin
+
+       ExtS := copy(AnsiUpperCase(ExtractFileExt(OpenPictureDialog1.FileName)),2,MaxLongInt);
+       if ExtS = 'BMP' then
+        begin
+
+          Bmp.LoadFromFile(OpenPictureDialog1.FileName);
+          Jpg.CompressionQuality := 100;
+          Jpg.Assign(bmp);
+          Jpg.SaveToFile(Path);
+          Image1.Picture.LoadFromFile(Path);
+
+      CustNomData.DScustimage.Edit;
+      Image1.Picture.SaveToFile(Path);
+      TBlobField( CustNomData.DScustimage.FieldByName('CUSTSIGN')).LoadFromFile(Path);
+      CustNomData.DScustimage.Post;
+        end;
+   end;
+
+end;
+
+procedure TNomCust.SpeedButton2Click(Sender: TObject);
+ type
+  TJPEGQualityRange = 1..100;
+var
+    Photo: TPicture;
+    Jpg: TJpegImage;
+    Bmp: TBitmap;
+    ExtS:String;
+begin
+    jpg := TJpegImage.Create;
+    bmp := TBitmap.Create;
+    Photo := TPicture.Create;
+
+  if OpenPictureDialog1.Execute then
+   begin
+
+       ExtS := copy(AnsiUpperCase(ExtractFileExt(OpenPictureDialog1.FileName)),2,MaxLongInt);
+       if ExtS = 'BMP' then
+        begin
+
+          Bmp.LoadFromFile(OpenPictureDialog1.FileName);
+          Jpg.CompressionQuality := 100;
+          Jpg.Assign(bmp);
+          Jpg.SaveToFile(Path);
+          Image3.Picture.LoadFromFile(Path);
+
+       CustNomData.DScustimage.Edit;
+      Image3.Picture.SaveToFile(Path);
+      TBlobField( CustNomData.DScustimage.FieldByName('Photo')).LoadFromFile(Path);
+      CustNomData.DScustimage.Post;
+        end;
+   end;
+
+end;
+
+procedure TNomCust.SpeedButton3Click(Sender: TObject);
+type
+  TJPEGQualityRange = 1..100;
+var
+    STAMP: TPicture;
+    Jpg: TJpegImage;
+    Bmp: TBitmap;
+    ExtS:String;
+begin
+    jpg := TJpegImage.Create;
+    bmp := TBitmap.Create;
+    STAMP := TPicture.Create;
+
+  if OpenPictureDialog1.Execute then
+   begin
+
+       ExtS := copy(AnsiUpperCase(ExtractFileExt(OpenPictureDialog1.FileName)),2,MaxLongInt);
+       if ExtS = 'BMP' then
+        begin
+
+          Bmp.LoadFromFile(OpenPictureDialog1.FileName);
+          Jpg.CompressionQuality := 100;
+          Jpg.Assign(bmp);
+          Jpg.SaveToFile(Path);
+          Image2.Picture.LoadFromFile(Path);
+
+       CustNomData.DScustimage.Edit;
+      Image2.Picture.SaveToFile(Path);
+      TBlobField( CustNomData.DScustimage.FieldByName('STAMP')).LoadFromFile(Path);
+      CustNomData.DScustimage.Post;
+        end;
+   end;
+
+end;
+
+procedure TNomCust.XFBitBtn2Click(Sender: TObject);
+var
+p_id :integer; d_passPIN:string;
+p_cust_type,b:integer;
+begin
+ //if XFRadioGroupCust_type.ItemIndex=4 then
+ if CustNomData.ODS_CUSTOMERS_PHYS_FS.FieldByName('cust_type').AsInteger=1 then
+     XFBitBtn2.Visible:=false;
+
+if XFRadioGroupCust_type.ItemIndex=4then
+  begin
+ShowMessage('Nominal Müştəriyi  Bankın  müştərisinə çevirmek üçün onun tipini seçin  ! ');
+exit;
+  end;
+
+ if MessageDlg('Nominal Müştəriyi  Bankın  müştərisi kimi qeyd etmek isteyirsinizmi   ?',
+   mtConfirmation, mbYesNoCancel, 0) = mrYes then
+  begin
+  ConvertNominalToCust:=True;
+  CustEdit1.Click;
+
+       // XFBitBtn2.Visible:=false;
+        CustNomData.ODS_CUSTOMERS_PHYS_FS.Refresh;
+  end;
+
+end;
+
+procedure TNomCust.XFBitcontinueClick(Sender: TObject);
+var
+s,a,b,c ,d_doc_type:integer  ;
+begin
+  if  (XFRadioGroupCust_type1.ItemIndex =-1) then
+   begin
+     showmessage(' Yeni müştərini daxil etmək üçün onun tipini seçin   !');
+     exit;
+   end;
+
+  case XFRadioGroupCust_type1.ItemIndex of
+ 0:begin
+   if (EditITN.Text='') then
+   begin
+     showmessage('VÖEN sahəsi boşdur');
+     exit;
+   end;
+ end;
+ 1,4:begin
+   if (EditPINCode1.Text='') then
+   begin
+     showmessage('Pinkod sahəsi boşdur');
+     exit;
+ end;
+ if EditPINCode1.Text=EditDocNumber1.Text then
+begin
+  showmessage('PİN Kod və Senedin  Seriya nömresi eynidir  !');
+  exit;
+end;
+ end;
+ 2:begin
+     if (EditITN.Text='')and (EditPINCode1.Text='') then
+   begin
+     showmessage('VÖEN ve ya Pinkod sahəsi boşdur');
+     exit;
+   end  ;
+   if EditPINCode1.Text=EditITN.Text then
+begin
+  showmessage('VÖEN və PİN Kod  eynidir  !');
+  exit;
+end;
+  end;
+  end;
+
+ if (EditITN.Text <> '') then
+  begin
+   a:=CustNomData.PG_PCustService.CallIntegerFunction('get_Add_cust_yoxlama',['p_inn',EditITN.Text]);
+  if a<>-1 then begin showmessage(inttostr(a)+' -ID li Müştəri üçün  ' +EditITN.Text+'  VÖEN mövcuddur!');
+   Exit;end;
+    end;
+ { if (EditPINCode1.Text <> '') then
+  begin
+  b:= DataModPCustService.PG_PCustService.CallIntegerFunction('get_Add_nominal_yoxlama',['p_passpin',EditPINCode1.Text]);
+   if b<>-1 then begin showmessage(inttostr(b)+' -ID li Müştəri üçün ' +EditPINCode1.Text+' Nominal müştəridə Pinkod mövcuddur!');
+   Exit;end;
+  end;
+         }
+   if (EditPINCode1.Text <> '') then
+  begin
+  b:= CustNomData.PG_PCustService.CallIntegerFunction('get_Add_cust_yoxlama',['p_passpin',EditPINCode1.Text]);
+   if b<>-1 then begin showmessage(inttostr(b)+' -ID li Müştəri üçün ' +EditPINCode1.Text+'  Pinkod mövcuddur!');
+   Exit;end;
+  end;
+ if (RBtnResident.Checked=false) and( RBtnNoResident.Checked=false) then
+  begin
+    ShowMessage(' Rezident və ya  Qeyr Rezident Sahəsi seçilməyib  ! ');
+    exit;
+  end;
+
+
+ if (EditDocSerie1.Enabled=false)or(EditDocNumber1.Enabled=false) then
+   else
+   if (EditDocSerie1.Text='')or(EditDocNumber1.Text='') then
+   begin
+     ShowMessage('Sənədin Seriya / N_si sahəsi tam doldurulmayıb     !');
+
+    exit ;
+   end
+   else
+  if (EditDocSerie1.Text+EditDocNumber1.Text)<>'' then
+  begin
+  c:= CustNomData.PG_PCustService.CallIntegerFunction('get_Add_cust_yoxlama',['p_passer_panum',EditDocSerie1.Text+EditDocNumber1.Text,CBoxDocType1.KeyValue]);
+  if c<>-1 then begin showmessage(inttostr(c)+' -ID li Müştəri üçün '+EditDocSerie1.Text+' /'+ EditDocNumber1.Text+'  Sənədin  seryasi mövcuddur!');
+  Exit;end;
+
+  end;
+
+
+
+
+
+ {  if (EditDocSerie1.Enabled=false)or(EditDocNumber1.Enabled=false) then
+   else
+   if (EditDocSerie1.Text='')or(EditDocNumber1.Text='') then
+   begin
+     ShowMessage('Sənədin Seriya / N_si sahəsi tam doldurulmayıb     !');
+
+    exit ;
+   end
+   else
+  if (EditDocSerie1.Text+EditDocNumber1.Text)<>'' then
+  begin
+  c:= DataModPCustService.PG_PCustService.CallIntegerFunction('get_Add_nominal_yoxlama',['p_passer_panum',EditDocSerie1.Text+EditDocNumber1.Text,CBoxDocType1.KeyValue]);
+  if c<>-1 then begin showmessage(inttostr(c)+' -ID li Müştəri üçün '+EditDocSerie1.Text+' /'+ EditDocNumber1.Text+' Nominal müştəridə  Sənədin  seryasi mövcuddur!');
+
+
+         }
+
+    XFBitcontinue.Visible:=false;
+    XFCust.Visible:=true;
+    XFPanelTeyp.Visible:=false;
+    //XFPanel12.Visible:=true;
+    XFButton4.Visible:=false;
+    XFButton5.Visible:=false;
+
+
+    XFRadioGroupCust_type.Visible:=true;
+    XFRadioGroupCust_type1.Visible:=false;
+    XFRadioGroupCust_type.ItemIndex:=XFRadioGroupCust_type1.ItemIndex;
+    case   XFRadioGroupCust_type1.ItemIndex of
+    0:begin
+    TabSheet8.Show;
+
+       end;
+    1,2,3,4:
+    begin
+       TabSheet1.Show;
+    end;
+    end;
+    MainGridDblClick(Sender);
+
+end;
+
+procedure TNomCust.XFButton4Click(Sender: TObject);
+begin
+CustSearch1.Click;
+end;
+
+procedure TNomCust.XFButton5Click(Sender: TObject);
+begin
+CustClear1.Click;
+end;
+
+procedure TNomCust.XFCustClick(Sender: TObject);
+begin
+tg:=1;
+CustAdd;
+end;
+
+procedure TNomCust.XFRadioGroupCust_type1Click(Sender: TObject);
+begin
+case XFRadioGroupCust_type1.ItemIndex of
+    0:begin
+
+    XFLaEditITN.Enabled:= true;
+    EditITN.Enabled:=true;
+    XFLaCBoxDocType1.Enabled:=false;
+    CBoxDocType1.Enabled:=false;
+    XFLaDocSer1.Enabled:=false;
+    EditDocSerie1.Enabled:=false;
+    EditDocNumber1.Enabled:=false;
+    XFLEPINCode1.Enabled:=false;
+    EditPINCode1.Enabled:=false;
+    EditPINCode1.clear;
+  end;
+    1,4:begin
+    EditITN.Enabled := false;
+    XFLaEditITN.Enabled :=false;
+    XFLaCBoxDocType1.Enabled:=true;
+    CBoxDocType1.Enabled:=true;
+    XFLaDocSer1.Enabled:=true;
+    EditDocSerie1.Enabled:=true;
+    EditDocNumber1.Enabled:=true;
+    XFLEPINCode1.Enabled:=true;
+    EditPINCode1.Enabled:=true;
+
+   end;
+    2:begin
+    EditITN.Enabled := true;
+    XFLaEditITN.Enabled :=true;
+    XFLaCBoxDocType1.Enabled:=true;
+    CBoxDocType1.Enabled:=true;
+    XFLaDocSer1.Enabled:=true;
+    EditDocSerie1.Enabled:=true;
+    EditDocNumber1.Enabled:=true;
+    XFLEPINCode1.Enabled:=true;
+    EditPINCode1.Enabled:=true;
+    EditPINCode1.clear;
+    EditITN.Clear;
+
+    end;
+    end;
+
+end;
+
+procedure TNomCust.XFRadioGroupCust_typeClick(Sender: TObject);
+var
+i:integer;
+begin
+{    PageControl1.Pages[1].TabVisible := False;
+    PageControl1.Pages[2].TabVisible := False;
+    PageControl1.Pages[3].TabVisible := False;
+    PageControl1.Pages[4].TabVisible := False;
+    PageControl1.Pages[5].TabVisible := False;
+    PageControl1.Pages[6].TabVisible := False;
+    PageControl1.Pages[7].TabVisible := False;
+    PageControl1.Pages[8].TabVisible := False;
+    PageControl1.Pages[9].TabVisible := False; }
+
+
+    case XFRadioGroupCust_type.ItemIndex of
+    0:begin
+
+  {  if DataModPCustService.ODS_CUSTOMERS_PHYS_FS.Active=true then
+    DataModPCustService.ODS_CUSTOMERS_PHYS_FS.Close;
+  for I := 0 to 11 do
+   begin
+    MainGrid.columns.Items[i].Visible := true;
+   end;
+    if DataModPCustService.ODS_custinfo.Active=true then
+    DataModPCustService.ODS_custinfo.Close;
+
+   for I := 0 to 11 do
+   begin
+    MainGrid2.columns.Items[i].Visible := true;
+   end;
+             }
+
+    XFLaEditITN.Enabled:= true;
+    EditITN.Enabled:=true;
+    XFLaCBoxDocType1.Enabled:=false;
+    CBoxDocType1.Enabled:=false;
+    XFLaDocSer1.Enabled:=false;
+    EditDocSerie1.Enabled:=false;
+    EditDocNumber1.Enabled:=false;
+    XFLEPINCode1.Enabled:=false;
+    EditPINCode1.Enabled:=false;
+    EditPINCode1.clear;
+    CBox.Enabled:=true;
+     ActionAreaCB.Enabled:=true;
+    PageControl1.Pages[1].TabVisible := true;
+    PageControl1.Pages[2].TabVisible := False;
+    PageControl1.Pages[3].TabVisible := true;
+    PageControl1.Pages[4].TabVisible := False;
+    PageControl1.Pages[5].TabVisible := False;
+    PageControl1.Pages[6].TabVisible := true;
+    PageControl1.Pages[7].TabVisible := false;
+    PageControl1.Pages[8].TabVisible := true;
+   // PageControl1.Pages[9].TabVisible := true ;
+
+
+    MainGrid.Columns.Items[2].Visible := False;
+    MainGrid.Columns.Items[3].Visible := False;
+    MainGrid.Columns.Items[4].Visible := False;
+    MainGrid.Columns.Items[5].Visible := False;
+    MainGrid.Columns.Items[6].Visible := False;
+    MainGrid.Columns.Items[7].Visible := False;
+    MainGrid.Columns.Items[8].Visible := False;
+    MainGrid.Columns.Items[9].Visible := False;
+    MainGrid.Columns.Items[1].Visible := True;
+    MainGrid.Columns.Items[11].Visible := True;
+
+  end;
+    1,4:begin
+   { if DataModPCustService.ODS_CUSTOMERS_PHYS_FS.Active=true then
+    DataModPCustService.ODS_CUSTOMERS_PHYS_FS.Close;
+  for I := 0 to 11 do
+   begin
+    MainGrid.columns.Items[i].Visible := true;
+   end;
+    if DataModPCustService.ODS_custinfo.Active=true then
+    DataModPCustService.ODS_custinfo.Close;
+
+   for I := 0 to 11 do
+   begin
+    MainGrid2.columns.Items[i].Visible := true;
+   end;
+              }
+    EditITN.Enabled := false;
+    XFLaEditITN.Enabled :=false;
+    XFLaCBoxDocType1.Enabled:=true;
+    CBoxDocType1.Enabled:=true;
+    XFLaDocSer1.Enabled:=true;
+    EditDocSerie1.Enabled:=true;
+    EditDocNumber1.Enabled:=true;
+    XFLEPINCode1.Enabled:=true;
+    EditPINCode1.Enabled:=true;
+    // EditITN.Clear;
+     CBox.Enabled:=false;
+     ActionAreaCB.Enabled:=false;
+    PageControl1.Pages[1].TabVisible := false;
+    PageControl1.Pages[2].TabVisible := true;
+    PageControl1.Pages[3].TabVisible := true;
+    PageControl1.Pages[4].TabVisible := true;
+    PageControl1.Pages[5].TabVisible := true;
+    PageControl1.Pages[6].TabVisible := true;
+    PageControl1.Pages[7].TabVisible := true;
+    PageControl1.Pages[8].TabVisible := true;
+    //PageControl1.Pages[9].TabVisible := true;
+   
+    MainGrid.columns.Items[2].Visible := True;
+    MainGrid.columns.Items[3].Visible := True;
+    MainGrid.columns.Items[4].Visible := True;
+    MainGrid.columns.Items[5].Visible := True;
+    MainGrid.columns.Items[6].Visible := True;
+    MainGrid.columns.Items[7].Visible := True;
+    MainGrid.columns.Items[8].Visible := True;
+    MainGrid.columns.Items[9].Visible := True;
+    MainGrid.columns.Items[1].Visible := False;
+    MainGrid.columns.Items[11].Visible := False;
+    /// //////////////////////////////////////////////////
+
+     end;
+    2:begin
+    EditITN.Enabled := true;
+    XFLaEditITN.Enabled :=true;
+    XFLaCBoxDocType1.Enabled:=true;
+    CBoxDocType1.Enabled:=true;
+    XFLaDocSer1.Enabled:=true;
+    EditDocSerie1.Enabled:=true;
+    EditDocNumber1.Enabled:=true;
+    XFLEPINCode1.Enabled:=true;
+    EditPINCode1.Enabled:=true;
+    CBox.Enabled:=true;
+     ActionAreaCB.Enabled:=true;
+    PageControl1.Pages[1].TabVisible := false;
+    PageControl1.Pages[2].TabVisible := true;
+    PageControl1.Pages[3].TabVisible := true;
+    PageControl1.Pages[4].TabVisible := true;
+    PageControl1.Pages[5].TabVisible := true;
+    PageControl1.Pages[6].TabVisible := true;
+    PageControl1.Pages[7].TabVisible := true;
+    PageControl1.Pages[8].TabVisible := true;
+  //  PageControl1.Pages[9].TabVisible := true  ;
+
+
+    MainGrid.Columns.Items[2].Visible := True;
+    MainGrid.Columns.Items[3].Visible := True;
+    MainGrid.Columns.Items[4].Visible := True;
+    MainGrid.Columns.Items[5].Visible := True;
+    MainGrid.Columns.Items[6].Visible := True;
+    MainGrid.Columns.Items[7].Visible := True;
+    MainGrid.Columns.Items[8].Visible := True;
+    MainGrid.Columns.Items[9].Visible := True;
+    MainGrid.Columns.Items[1].Visible := False;
+  //  if ChBoxPhysical.Checked then
+    MainGrid.Columns.Items[11].Visible := True;
+
+
+    end;
+    3:begin
+    EditITN.Enabled := true;
+    XFLaEditITN.Enabled :=true;
+    XFLaCBoxDocType1.Enabled:=true;
+    CBoxDocType1.Enabled:=true;
+    XFLaDocSer1.Enabled:=true;
+    EditDocSerie1.Enabled:=true;
+    EditDocNumber1.Enabled:=true;
+    XFLEPINCode1.Enabled:=true;
+    EditPINCode1.Enabled:=true;
+     CBox.Enabled:=true;
+     ActionAreaCB.Enabled:=true;
+    PageControl1.Pages[1].TabVisible := false;
+    PageControl1.Pages[2].TabVisible := true;
+    PageControl1.Pages[3].TabVisible := true;
+    PageControl1.Pages[4].TabVisible := true;
+    PageControl1.Pages[5].TabVisible := true;
+    PageControl1.Pages[6].TabVisible := true;
+    PageControl1.Pages[7].TabVisible := true;
+    PageControl1.Pages[8].TabVisible := true;
+
+   
+   // PageControl1.Pages[9].TabVisible := true;
+
+
+    MainGrid.Columns.Items[2].Visible := True;
+    MainGrid.Columns.Items[3].Visible := True;
+    MainGrid.Columns.Items[4].Visible := True;
+    MainGrid.Columns.Items[5].Visible := True;
+    MainGrid.Columns.Items[6].Visible := True;
+    MainGrid.Columns.Items[7].Visible := True;
+    MainGrid.Columns.Items[8].Visible := True;
+    MainGrid.Columns.Items[9].Visible := True;
+    MainGrid.Columns.Items[1].Visible := False;
+  //  if ChBoxPhysical.Checked then
+    MainGrid.Columns.Items[11].Visible := True;
+
+    // MainGrid.FieldColumns['inn'].Visible:=FAlse ;
+    /// ///////////////////////////////////////////////////////
+
+
+    end;
+  {  4:begin
+    PageControl1.Pages[1].TabVisible := true;
+    PageControl1.Pages[2].TabVisible := true;
+    PageControl1.Pages[3].TabVisible := true;
+    PageControl1.Pages[4].TabVisible := true;
+    PageControl1.Pages[5].TabVisible := true;
+    PageControl1.Pages[6].TabVisible := true;
+    PageControl1.Pages[7].TabVisible := false;
+    PageControl1.Pages[8].TabVisible := true;
+
+        }
+
+    end;
+
+
+end;
+
+// ------if DataModPCustService.ODS_CUSTOMERS_PHYS_FS activi yoxla
+
+initialization
+ NomCust := TNomCust.Create(Application);
+
+
+end.

@@ -1,0 +1,152 @@
+unit rbsdostatement;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, DB, OracleData, DBCtrls, StdCtrls, ComCtrls, Menus,SBTranslateProc,sboapiDataModuleImpl,
+  Buttons, QExport4, QExport4Xlsx;
+
+type
+  Trbsdostate = class(TForm)
+    GroupBox1: TGroupBox;
+    DateTimePicker1: TDateTimePicker;
+    Label1: TLabel;
+    Label2: TLabel;
+    DateTimePicker2: TDateTimePicker;
+    Label3: TLabel;
+    GroupBox2: TGroupBox;
+    CBCurrency: TCheckBox;
+    DBLCBavalute: TDBLookupComboBox;
+    avalute: TOracleDataSet;
+    DataSource1: TDataSource;
+    EditCli_Id: TEdit;
+    LabelCli_Id: TLabel;
+    BtnOk: TBitBtn;
+    Memo1: TMemo;
+    avaluteVALUTE: TIntegerField;
+    avaluteVAL_NAME: TWideStringField;
+    avaluteVALU_NAME: TWideStringField;
+    avaluteVALU_SHORT: TWideStringField;
+    avaluteUSTORG: TFloatField;
+    avaluteUSTPOK: TFloatField;
+    avaluteVALU_GEN: TWideStringField;
+    avaluteVALU_AZ: TWideStringField;
+    avaluteUSING: TIntegerField;
+    avaluteVALU_OTHER: TWideStringField;
+    avaluteVALU_INTER: TWideStringField;
+    avaluteVALU_BALA: TWideStringField;
+    avalutePRISTAVKA: TFloatField;
+    avaluteCOUNTRY: TWideStringField;
+    avaluteUST_POK1: TFloatField;
+    avaluteOFFICAL: TWideStringField;
+    avaluteLIMIT: TFloatField;
+    avaluteDEBET: TFloatField;
+    avaluteKREDIT: TFloatField;
+    avaluteF5501P: TFloatField;
+    avaluteF5501V: TFloatField;
+    avaluteSDEBET: TFloatField;
+    avaluteSCREDIT: TFloatField;
+    DBLookupComboBox1: TDBLookupComboBox;
+    RadioButton1: TRadioButton;
+    RadioButton2: TRadioButton;
+    QExport4Xlsx1: TQExport4Xlsx;
+    procedure CBCurrencyClick(Sender: TObject);
+    procedure BtnOkClick(Sender: TObject);
+    procedure DBLookupComboBox1CloseUp(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  rbsdostate: Trbsdostate;
+
+implementation
+
+uses rbsdoreport, rbsdofile, Unit18,ShlObj;
+
+{$R *.dfm}
+
+function DesktopPath:string;
+var zpath: array [0..MAX_PATH] of char;
+ begin
+ SHGetFolderPath(0, CSIDL_DESKTOP, 0, SHGFP_TYPE_CURRENT, @zpath);
+ result:=   (zpath);
+end ;
+
+procedure Trbsdostate.BtnOkClick(Sender: TObject);
+begin
+if RadioButton1.Checked then
+  begin
+card_state:=Tcard_state.Create(self);
+   with DataMod_CARDS.rbsdofilerep
+   do begin
+
+   Close;
+   SetVariable('dat1',trunc(DateTimePicker1.Date));
+   SetVariable('dat2',trunc(DateTimePicker2.Date));
+   sql[4]:=  ' and device in ('+EditCli_Id.Text +')' ;
+   //SetVariable('dev',EditCli_Id.Text);
+     if CBCurrency.Checked=true then
+       sql[5]:=' and accoutcurr in (''' + DBLCBavalute.Text+''')';
+
+    open;
+   memo1.Text:= sql.Text;
+   end;
+
+
+//    ShowMessage(DataMod_CARDS.rbsdofilerep.GetVariable(0));
+//      ShowMessage(DataMod_CARDS.rbsdofilerep.GetVariable(1));
+//        ShowMessage(DataMod_CARDS.rbsdofilerep.GetVariable(2));
+ card_state.QRD_Begin.Caption:=DateToStr(DateTimePicker1.Date);
+ card_state.QRD_End.Caption:=DateToStr(DateTimePicker2.Date);
+ card_state.QRep.Preview;
+
+ end;
+
+   if radiobutton2.Checked then
+   begin
+      card_state:=Tcard_state.Create(self);
+   with DataMod_CARDS.rbsdofilerep
+   do begin
+
+   Close;
+   SetVariable('dat1',trunc(DateTimePicker1.Date));
+   SetVariable('dat2',trunc(DateTimePicker2.Date));
+   sql[4]:=  ' and device in ('+EditCli_Id.Text +')' ;
+   open;
+   //SetVariable('dev',EditCli_Id.Text);
+     if CBCurrency.Checked=true then
+       sql[5]:=' and accoutcurr in (''' + DBLCBavalute.Text+''')';
+   end;
+
+
+    QExport4Xlsx1.FileName  :=DesktopPath+'\Analiz.xlsx';
+   QExport4Xlsx1.DataSet:= DataMod_CARDS.rbsdofilerep;
+    QExport4Xlsx1.ShowFile:=true;
+    QExport4Xlsx1.Execute;
+   end;
+
+
+
+
+end;
+
+procedure Trbsdostate.CBCurrencyClick(Sender: TObject);
+begin
+if CBCurrency.Checked=true then
+  dblcbavalute.KeyValue:=0
+else
+  dblcbavalute.KeyValue:=-1;
+
+
+end;
+
+procedure Trbsdostate.DBLookupComboBox1CloseUp(Sender: TObject);
+begin
+EditCli_Id.Text:=DBLookupComboBox1.KeyValue;
+end;
+
+end.

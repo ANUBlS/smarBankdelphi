@@ -1,0 +1,180 @@
+object FlagsEditor: TFlagsEditor
+  Left = 235
+  Top = 173
+  Width = 678
+  Height = 441
+  Caption = 'FlagsEditor'
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'MS Sans Serif'
+  Font.Style = []
+  OldCreateOrder = False
+  OnCreate = ActiveFormCreate
+  PixelsPerInch = 96
+  TextHeight = 13
+  object FlagsEditor: TDBGrid
+    Left = 0
+    Top = 0
+    Width = 678
+    Height = 441
+    Align = alClient
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 0
+    TitleFont.Charset = DEFAULT_CHARSET
+    TitleFont.Color = clWindow
+    TitleFont.Height = -11
+    TitleFont.Name = 'MS Sans Serif'
+    TitleFont.Style = []
+    Columns = <
+      item
+        Expanded = False
+        FieldName = 'SYMBOL'
+        Title.Caption = #1057#1080#1084
+        Title.Color = clNavy
+        Title.Font.Charset = DEFAULT_CHARSET
+        Title.Font.Color = clWindow
+        Title.Font.Height = -11
+        Title.Font.Name = 'Azl Sans Serif'
+        Title.Font.Style = []
+        Width = 35
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'NAME'
+        Title.Color = clNavy
+        Width = 112
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'DESCRIPTION'
+        Title.Caption = #1058#1103#1081#1080#1085#1072#1090#1099
+        Title.Color = clNavy
+        Title.Font.Charset = DEFAULT_CHARSET
+        Title.Font.Color = clWindow
+        Title.Font.Height = -11
+        Title.Font.Name = 'Azl Sans Serif'
+        Title.Font.Style = []
+        Width = 390
+        Visible = True
+      end>
+  end
+  object DBGrid1: TDBGrid
+    Left = 0
+    Top = 0
+    Width = 678
+    Height = 441
+    Align = alClient
+    DataSource = DataSrcAccTypes
+    DrawingStyle = gdsGradient
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 1
+    TitleFont.Charset = DEFAULT_CHARSET
+    TitleFont.Color = clWindow
+    TitleFont.Height = -11
+    TitleFont.Name = 'MS Sans Serif'
+    TitleFont.Style = []
+    Columns = <
+      item
+        Color = clWhite
+        Expanded = False
+        FieldName = 'SYMBOL'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        Title.Caption = #1057#1080#1084#1074#1086#1083
+        Title.Color = clNavy
+        Title.Font.Charset = DEFAULT_CHARSET
+        Title.Font.Color = clNavy
+        Title.Font.Height = -11
+        Title.Font.Name = 'Tahoma'
+        Title.Font.Style = []
+        Width = 42
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'NAME'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        Title.Caption = #1040#1076#1099
+        Title.Color = clNavy
+        Title.Font.Charset = RUSSIAN_CHARSET
+        Title.Font.Color = clNavy
+        Title.Font.Height = -11
+        Title.Font.Name = 'Tahoma'
+        Title.Font.Style = []
+        Width = 112
+        Visible = True
+      end
+      item
+        Color = clWhite
+        Expanded = False
+        FieldName = 'DESCRIPTION'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        Title.Caption = #1058#1103#1081#1080#1085#1072#1090#1099
+        Title.Color = clNavy
+        Title.Font.Charset = DEFAULT_CHARSET
+        Title.Font.Color = clNavy
+        Title.Font.Height = -11
+        Title.Font.Name = 'Tahoma'
+        Title.Font.Style = []
+        Width = 390
+        Visible = True
+      end>
+  end
+  object Account_Types: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      '  AT.* ,'
+      '  AT.RowID'
+      'from'
+      '  Out_Account_Flags AT  ')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    AfterOpen = Account_TypesAfterOpen
+    AfterPost = Account_TypesAfterPost
+    Left = 296
+    Top = 152
+    object Account_TypesSYMBOL: TWideStringField
+      FieldName = 'SYMBOL'
+      Required = True
+      Size = 1
+    end
+    object Account_TypesNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 32
+    end
+    object Account_TypesDESCRIPTION: TWideStringField
+      FieldName = 'DESCRIPTION'
+      Size = 128
+    end
+  end
+  object DataSrcAccTypes: TDataSource
+    DataSet = Account_Types
+    Left = 336
+    Top = 152
+  end
+end

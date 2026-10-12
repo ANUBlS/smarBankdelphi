@@ -1,0 +1,71 @@
+unit PersonalQrFmImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, QRCtrls, QuickRpt, ExtCtrls,ASANFinanceImpl;
+
+type
+  TPersonalQrFm = class(TForm)
+    PersonalRep: TQuickRep;
+    QrBand: TQRBand;
+    QRDBImage1: TQRDBImage;
+    QRDBText1: TQRDBText;
+    PIN: TQRLabel;
+    QRImage1: TQRImage;
+    DocumentNumber: TQRLabel;
+    Name: TQRLabel;
+    Surname: TQRLabel;
+    Patronymic: TQRLabel;
+    BirthDate: TQRLabel;
+    BirthAddress: TQRLabel;
+    Gender: TQRLabel;
+    RegistrationAddress: TQRLabel;
+    GivenDate: TQRLabel;
+    ExpireDate: TQRLabel;
+    MaritalStatus: TQRLabel;
+    GivenOrganization: TQRLabel;
+    Citizenship: TQRLabel;
+    MilitaryStatus: TQRLabel;
+    BloodType: TQRLabel;
+    EyeColor: TQRLabel;
+    Height: TQRLabel;
+    procedure PersonalRepBeforePrint(Sender: TCustomQuickRep;
+      var PrintReport: Boolean);
+  private
+    { Private declarations }
+
+  public
+      procedure Print(txt: String;name :String);
+    { Public declarations }
+  end;
+
+var
+  PersonalQrFm: TPersonalQrFm;
+
+implementation
+uses AsanDmInpl;
+{$R *.dfm}
+    procedure TPersonalQrFm.PersonalRepBeforePrint(Sender: TCustomQuickRep;
+  var PrintReport: Boolean);
+  var
+  i:integer;
+begin
+
+
+end;
+    procedure TPersonalQrFm.Print(txt: String;name :String);
+    var
+    s :integer;
+    begin
+     try
+        (FindComponent(name) as TQRLabel).Caption := txt;
+     except
+    on Exception do
+      s:=0;
+   end;
+
+    end;
+end .
+

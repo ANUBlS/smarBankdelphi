@@ -1,0 +1,201 @@
+﻿unit AutoPymtMainFormImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, dialogs,
+  ExtCtrls, StdCtrls,  ActnList;
+
+type
+  TAutoPymtMainForm = class(TForm)
+    PanelInfo: TPanel;
+    Button1: TButton;
+    CheckBox1: TCheckBox;
+    PayActionList: TActionList;
+    ActionPayAuto: TAction;
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure ActionPayAutoUpdate(Sender: TObject);
+    procedure ActionPayAutoExecute(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+  private
+    procedure ShowAutoPaymentForm;
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  AutoPymtMainForm: TAutoPymtMainForm;
+
+procedure InitPlugin(S:String); export;
+
+implementation
+
+{$R *.DFM}
+
+uses
+  CMOracleAPIDataModuleImpl, CommonDecls, SystemState, AutoPymtDataModuleImpl,
+  AutoPayProgressFormImpl;
+
+var
+  RefreshBeforeClose : Boolean;  
+
+procedure TAutoPymtMainForm.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+  Resize := False;
+end;
+
+procedure TAutoPymtMainForm.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+  if Ord(Key) = VK_ESCAPE then
+    Close;
+end;
+
+procedure TAutoPymtMainForm.FormCreate(Sender: TObject);
+begin
+  AutoPymtDataMod := TAutoPymtDataMod.Create(Self);
+  ProgressForm := TProgressForm.Create(Self);
+end;
+
+procedure TAutoPymtMainForm.FormDestroy(Sender: TObject);
+begin
+  ProgressForm.Free;
+  AutoPymtDataMod.Free;
+end;
+
+procedure TAutoPymtMainForm.ShowAutoPaymentForm;
+resourcestring
+  rsCreditReadyForPayment = '%d - sayda kreditin ödənilməsi aftomatik aparılmalıdır ';
+var
+  CrdCount : Integer;
+begin
+  RefreshBeforeClose := False;
+  with AutoPymtDataMod do
+  begin
+    AutoPaymentableLoans.Open;
+    CrdCount := AutoPaymentableLoans.RecordCount;
+  end;
+  PanelInfo.Caption := Format(rsCreditReadyForPayment,[CrdCount]);
+
+  ShowModal;
+end;
+
+procedure TAutoPymtMainForm.ActionPayAutoUpdate(Sender: TObject);
+begin
+  with AutoPymtDataMod.AutoPaymentableLoans do
+  (Sender as TAction).Enabled := Active and (RecordCount > 0);
+end;
+
+procedure TAutoPymtMainForm.ActionPayAutoExecute(Sender: TObject);
+resourcestring
+  rsUserSure = 'Ödəmələrin aftomatik aparılması biraz vaxt alacaq  ! Aparılsın?';
+  rsSuccesMsg = '%d ödəmə aftomatik aparıldı!';
+  rsUnSuccesMsg = '%d Ödəmə aparıla bilmədi!';
+  rsEndMsg = 'Əmzliyyat başa çatdı.';
+
+var
+  CreditID : Integer;
+  ADate : TDateTime;
+  PayedSuccesfulCount ,PayedUnSuccesfulCount : Integer;
+begin
+
+  if MessageDlg(
+      rsUserSure,
+      mtConfirmation,
+      [mbYes,mbNo],0) <> mrYes
+  then                   EXIT;
+
+  with ProgressForm do
+  begin
+    FCancelOrder := False;
+    FCancelGranted := False;
+    ProgressShower.Position := 0;
+    ProgressShower.Step := 1;
+  end;
+
+  ADate := Integer(Trunc(Get_CurrentDate));
+  PayedSuccesfulCount := 0;
+  PayedUnSuccesfulCount := 0;
+
+  with AutoPymtDataMod ,AutoPaymentableLoans do
+  begin
+  
+    First;
+
+    ProgressForm.ProgressShower.Max := RecordCount;
+    ProgressForm.Show;
+
+    while not EOF do
+    begin
+
+      CreditID := FieldByName('ID').AsInteger;
+      
+      try
+
+        CM_PAYMENT.CallProcedure('PayAuto',[
+          'p_CreditID' , CreditID ,
+          'p_Date' , ADate ,
+          'p_ShowTransactions' , False
+        ]);
+      
+        PayedSuccesfulCount := PayedSuccesfulCount + 1;
+
+      except
+        on E : Exception do
+        begin
+          LogError(Format('ID = %d  : ',[CreditID]) + E.Message);
+          PayedUnSuccesfulCount := PayedUnSuccesfulCount + 1;
+        end;
+      end;
+
+      Next;
+
+      //Application.ProcessMessages;
+
+      ProgressForm.ProgressShower.Position := RecNo;
+    end;
+
+  end;
+  
+  ProgressForm.Close;
+
+  if PayedUnSuccesfulCount > 0 then
+  MessageDlg(Format(rsUnSuccesMsg,[PayedUnSuccesfulCount]),mtWarning,[mbOK],0);
+  
+  if PayedSuccesfulCount > 0 then
+  begin
+    MessageDlg(Format(rsSuccesMsg,[PayedSuccesfulCount]),mtInformation,[mbOK],0);
+    RefreshBeforeClose := True;
+  end;
+
+  MessageDlg(rsEndMsg,mtInformation,[mbOK],0);
+
+end;
+
+procedure TAutoPymtMainForm.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+  with AutoPymtDataMod do
+    AutoPaymentableLoans.CloseAll;
+
+  if RefreshBeforeClose then
+    SafeRefresh(True,rmRefreshOnly);
+end;
+
+procedure InitPlugin(S:String); export;
+begin
+  AutoPymtMainForm.ShowAutoPaymentForm;
+end;
+
+exports
+  InitPlugin;
+
+initialization
+  AutoPymtMainForm := TAutoPymtMainForm.Create(CommonApplication);
+
+end.

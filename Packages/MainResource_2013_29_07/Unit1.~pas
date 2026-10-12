@@ -1,0 +1,102 @@
+unit Unit1;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls;
+
+type
+  TFormMeans = class(TForm)
+    Button1: TButton;
+    Closed: TRadioButton;
+    Stopped: TRadioButton;
+    Aktive: TRadioButton;
+    All: TRadioButton;
+    procedure Button1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormMeans: TFormMeans;
+
+implementation
+
+uses UnitData;
+
+{$R *.DFM}
+
+procedure TFormMeans.Button1Click(Sender: TObject);
+begin
+if  all.Checked  then
+ begin
+   with DataModWares.ODSWares do
+      begin
+        Close;
+        filtered:=false;
+        filter:='' ;
+        filtered:=true;
+        Open;
+       end;
+      DataModWares.ODSSumWares.Close;
+      DataModWares.ODSSumWares.SQL[16]:='';
+      DataModWares.ODSSumWares.Open;
+
+ end;
+
+if Closed.Checked then
+    begin
+      with DataModWares.ODSWares do
+      begin
+        Close;
+        filtered:=false;
+        filter:='CLOSE_FORMAT=2' ;
+        filtered:=true;
+        Open;
+       end;
+
+      DataModWares.ODSSumWares.Close;
+      DataModWares.ODSSumWares.SQL[16]:=' and  CLOSE_FORMAT=2';
+      DataModWares.ODSSumWares.Open;
+
+    end;
+if Stopped.Checked then
+          begin
+      with DataModWares.ODSWares do
+      begin
+        Close;
+        filtered:=false;
+        filter:='CLOSE_FORMAT=3' ;
+        filtered:=true;
+        Open;
+       end;
+       DataModWares.ODSSumWares.Close;
+      DataModWares.ODSSumWares.SQL[16]:=' and  CLOSE_FORMAT=3';
+      DataModWares.ODSSumWares.Open;
+
+
+       end;
+if Aktive.Checked then
+    begin
+      with DataModWares.ODSWares do
+      begin
+        Close;
+        filtered:=false;
+        filter:='((CLOSE_FORMAT=1) or (CLOSE_FORMAT=0))' ;
+        filtered:=true;
+      //  ShowMessage(sql.Text);
+        Open;
+
+        end;
+        DataModWares.ODSSumWares.Close;
+        DataModWares.ODSSumWares.SQL[16]:=' and (CLOSE_FORMAT=1 or CLOSE_FORMAT=0)';
+        DataModWares.ODSSumWares.Open;
+
+      end;
+
+    FormMeans.Close;
+      end;
+end.

@@ -1,0 +1,47 @@
+unit UntTooling;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, Mask, DBCtrls, ExtCtrls, Grids, DBGrids;
+
+type
+  TFrmTool = class(TForm)
+    Panel1: TPanel;
+    GroupBox1: TGroupBox;
+    DBNavigator1: TDBNavigator;
+    Panel2: TPanel;
+    DBEdit1: TDBEdit;
+    Panel3: TPanel;
+    DBEdit2: TDBEdit;
+    procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure FormCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmTool: TFrmTool;
+
+implementation
+
+uses ExcangeDataModule, sboapiDataModuleImpl, SBTranslateProc;
+
+{$R *.DFM}
+
+procedure TFrmTool.FormCreate(Sender: TObject);
+begin
+  SBTranslateProc.TranslateAllCompForms(Self, sboapiDataModule.OrPack_SL);
+end;
+
+procedure TFrmTool.FormKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if (Key = VK_ESCAPE) then
+    Close;
+end;
+
+end.

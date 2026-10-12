@@ -1,0 +1,198 @@
+﻿unit frmAccountTurningImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ComCtrls, ToolWin, ExtCtrls, ImgList, Grids, DBGridEh, Db,
+  OracleData, Oracle, ActnList, StdCtrls, DBGrids;
+
+type
+  TfrmAccountTurning = class(TForm)
+    ImageList1: TImageList;
+    Panel2: TPanel;
+    ToolBar1: TToolBar;
+    ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
+    ToolButton3: TToolButton;
+    ToolButton4: TToolButton;
+    ToolButton5: TToolButton;
+    ToolButton9: TToolButton;
+    ToolButton8: TToolButton;
+    ToolButton7: TToolButton;
+    ToolButton6: TToolButton;
+    Panel1: TPanel;
+    DBGridEh1: TDBGridEh;
+    Panel3: TPanel;
+    DBGridEh2: TDBGridEh;
+    Panel4: TPanel;
+    DBGridEh3: TDBGridEh;
+    ActionList1: TActionList;
+    ActnAdd: TAction;
+    ActnEdit: TAction;
+    ActnDel: TAction;
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure ToolButton8Click(Sender: TObject);
+    procedure ActnAddExecute(Sender: TObject);
+    procedure ActnEditExecute(Sender: TObject);
+    procedure ActnDelExecute(Sender: TObject);
+    procedure ToolButton7Click(Sender: TObject);
+    procedure ActnEditUpdate(Sender: TObject);
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure settingsApplyRecord(Sender: TOracleDataSet; Action: Char;
+      var Applied: Boolean; var NewRowId: String);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  frmAccountTurning: TfrmAccountTurning;
+
+implementation
+
+{$R *.DFM}
+
+uses  sboapiDataModuleImpl,frmAddEditAccTurningImpl, DMReferences;
+
+procedure TfrmAccountTurning.FormCreate(Sender: TObject);
+begin
+    DataModReferences:=TDataModReferences.create(self);
+
+     with DataModReferences do
+     begin
+       Categories.Open;
+       Accounts.Open;
+       Filials.Open;
+       Valute.Open;
+       movie_names.Open;
+       settings.Open;
+    end;
+     frmAddEditAccTurning := TfrmAddEditAccTurning.Create(Self);
+end;
+
+procedure TfrmAccountTurning.FormDestroy(Sender: TObject);
+begin
+  with DataModReferences do
+  begin
+     Categories.CloseAll;
+     Accounts.CloseAll;
+     Filials.CloseAll;
+     Valute.CloseAll;
+     movie_names.CloseAll;
+     settings.CloseAll;
+  end;
+     frmAddEditAccTurning.Free;
+end;
+
+procedure TfrmAccountTurning.ToolButton8Click(Sender: TObject);
+begin
+  with DataModReferences do
+   begin
+     Categories.Refresh;
+     Accounts.Refresh;
+     movie_names.Refresh;
+     settings.Refresh;
+   end;
+end;
+
+procedure TfrmAccountTurning.ActnAddExecute(Sender: TObject);
+begin
+   with DataModReferences,settings do
+         Insert;
+
+    with DataModReferences,frmAddEditAccTurning do
+    begin
+       Caption := 'Yeni';
+       ShowModal;
+    end;
+
+   with DataModReferences,settings do
+         Refresh;
+
+end;
+
+procedure TfrmAccountTurning.ActnEditExecute(Sender: TObject);
+begin
+   with DataModReferences,settings do
+         Edit;
+
+    with frmAddEditAccTurning do
+    begin
+       Caption := 'Redaktə';
+       ShowModal;
+    end;
+
+   with DataModReferences,settings do
+         Refresh;
+
+end;
+
+procedure TfrmAccountTurning.ActnDelExecute(Sender: TObject);
+begin
+      if   MessageDlg('Silinməsinə  əminsiniz?'
+              ,mtConfirmation
+              ,[mbYes,mbNo],0
+              )<>mrYes then Exit;
+
+   with DataModReferences,settings do
+   begin
+      Delete;
+      Refresh;
+   end;
+
+end;
+
+procedure TfrmAccountTurning.ToolButton7Click(Sender: TObject);
+begin
+  Close
+end;
+
+procedure TfrmAccountTurning.ActnEditUpdate(Sender: TObject);
+begin
+   with (Sender as TAction) do
+        Enabled := DataModReferences.settings.RecordCount > 0
+end;
+
+procedure TfrmAccountTurning.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+   Resize := false
+end;
+
+procedure TfrmAccountTurning.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+   if Ord(Key) = VK_ESCAPE then Close;
+end;
+
+procedure TfrmAccountTurning.settingsApplyRecord(Sender: TOracleDataSet;
+  Action: Char; var Applied: Boolean; var NewRowId: String);
+
+  var
+    p_id ,p_PARENTID,p_CurrencyID,
+    p_AccID,p_branchid :Integer;
+
+begin
+     with DataModReferences,settings do begin
+        p_id := fieldbyname('ID').AsInteger;
+        p_PARENTID := fieldbyname('PARENTID').AsInteger;
+        p_CurrencyID := fieldbyname('CurrencyID').AsInteger;
+        p_AccID := fieldbyname('AccID').AsInteger;
+        p_branchid := fieldbyname('branchid').AsInteger;
+     end;
+
+    { with sbcm_ds do begin
+     case Action of
+        'I':CallProcedure('InsSettings',[p_PARENTID,p_CurrencyID,p_AccID,p_branchid]);
+        'U':CallProcedure('UpdSettings',[p_id,p_PARENTID,p_CurrencyID,p_AccID,p_branchid]);
+
+     end;
+     Applied := True;
+     end;}
+end;
+
+end.

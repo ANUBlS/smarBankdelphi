@@ -1,0 +1,24 @@
+unit UnitImage;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, GIFImg, ExtCtrls;
+
+type
+  TFormImage = class(TForm)
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormImage: TFormImage;
+
+implementation
+
+{$R *.dfm}
+
+end.

@@ -1,0 +1,113 @@
+﻿unit FrmFilterBlankMainImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ExtCtrls, XFSCtrls, StdCtrls, ComCtrls, DBCtrls, DB, OracleData,
+  Buttons;
+
+type
+  TFrmFilterBlankMain = class(TForm)
+    XFPanel1: TXFPanel;
+    XFButton3: TXFButton;
+    DataSource1: TDataSource;
+    XFPanel2: TXFPanel;
+    XFGroupBox1: TXFGroupBox;
+    Edit1: TEdit;
+    XFLabel1: TXFLabel;
+    XFLabel2: TXFLabel;
+    XFBitBtn1: TXFBitBtn;
+    DBLookupComboBox1: TDBLookupComboBox;
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure XFButton3Click(Sender: TObject);
+    procedure XFBitBtn1Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+  private
+      procedure ActionFilterExecute(Sender: TObject);
+     // procedure ActionSpeedSearchExecute(Sender: TObject);
+    { Private declarations }
+  public
+    { Public declarations }
+    var
+
+  end;
+
+var
+  FrmFilterBlankMain: TFrmFilterBlankMain;
+
+implementation
+
+uses BlankMainImpl,sboapiDataModuleimpl, BlankDMImpl;
+
+{$R *.dfm}
+
+procedure TFrmFilterBlankMain.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+if ord(key)=vk_escape then
+             close;
+end;
+
+procedure TFrmFilterBlankMain.FormShow(Sender: TObject);
+begin
+FrmFilterBlankMain.Edit1.Text;
+ FrmFilterBlankMain.DBLookupComboBox1.KeyValue:=null;
+
+end;
+
+procedure TFrmFilterBlankMain.ActionFilterExecute(Sender: TObject);
+
+begin
+
+end;
+
+procedure TFrmFilterBlankMain.XFBitBtn1Click(Sender: TObject);
+
+  //if Key = #13  then
+  //begin
+   //ActionSpeedSearchExecute(Sender);
+
+
+//BlankDM.DSFullContarct;
+
+var
+  SearchField : string;
+  SearchOptions : TSearchRecordOptions;
+   Key:char;
+begin
+if Key = #13  then
+  SearchOptions := [srIgnoreCase ,srPartialMatch ];
+
+ // with Sender as TDBLookupComboBox  do
+ // begin
+    SearchField := copy(DBLookupComboBox1.KeyValue,5,length(Name));
+   // showmessage(SearchField);
+
+    with  TOracleDataSet(BlankDM.DSFullContarct) do
+    if  not SearchRecord(
+                  SearchField
+                 ,edit1.Text
+                 ,SearchOptions + [srFromCurrent , srForward ]
+                 ) then
+    if MessageDlg(
+              'Axtarış sona çatdı.'+#13+'Əvvəldən başlansın?'
+             ,mtInformation
+             ,[mbNo , mbYes]
+             ,0
+             ) = mrYes  then
+    if not SearchRecord(
+                 SearchField
+                ,Text
+                ,SearchOptions + [ srFromBeginning ]
+                )  then
+    MessageDlg('Yazı tapılmayıb!',mtInformation,[mbOK],0);
+ //end;
+end;
+
+
+procedure TFrmFilterBlankMain.XFButton3Click(Sender: TObject);
+begin
+   Close
+end;
+
+end.

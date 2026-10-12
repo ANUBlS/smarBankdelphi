@@ -1,0 +1,817 @@
+unit UInsFullMotorCasco;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, LDialogs,
+  ActiveX, AxCtrls, PInsFullMotorCasco_TLB, StdVcl, ExtCtrls, StdCtrls,
+  ToolWin, ComCtrls, ImgList, Grids, DBGrids, ActnList, Menus,DB,OracleData,
+  INSWordExporter;
+
+type
+  TInsFullMotorCasco = class(TActiveForm,IInsFullMotorCasco)
+    ToolBar1: TToolBar;
+    GroupBox1: TGroupBox;
+    GridMotor: TDBGrid;
+    ToolButton1: TToolButton;
+    ActionList1: TActionList;
+    ActionInsert: TAction;
+    ImageList: TImageList;
+    ToolButton3: TToolButton;
+    ToolButton5: TToolButton;
+    ActionEdit: TAction;
+    ActionRefresh: TAction;
+    ActionFullRefresh: TAction;
+    PopupMenu1: TPopupMenu;
+    N1: TMenuItem;
+    ActionSearch: TAction;
+    ActionSpeedSearch: TAction;
+    ActionDelete: TAction;
+    ToolButton8: TToolButton;
+    PanelAcc: TPanel;
+    DBGrid1: TDBGrid;
+    Label2: TLabel;
+    Label3: TLabel;
+    GridMore: TDBGrid;
+    ToolButton2: TToolButton;
+    Report: TAction;
+    ActionSuggestion: TAction;
+    ActionPolicy: TAction;
+    ToolButton4: TToolButton;
+    PopupMenu2: TPopupMenu;
+    N2: TMenuItem;
+    N3: TMenuItem;
+    N4: TMenuItem;
+    N5: TMenuItem;
+    N6: TMenuItem;
+    N7: TMenuItem;
+    N8: TMenuItem;
+    ToolButton6: TToolButton;
+    ActionExtra: TAction;
+    ToolButton7: TToolButton;
+    N9: TMenuItem;
+    INSWordExporter1: TINSWordExporter;
+    lbBookmarks: TListBox;
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure ActionInsertExecute(Sender: TObject);
+    procedure ActionRefreshExecute(Sender: TObject);
+    procedure ActionEditExecute(Sender: TObject);
+    procedure ActionFullRefreshExecute(Sender: TObject);
+    procedure N1DrawItem(Sender: TObject; ACanvas: TCanvas; ARect: TRect;
+      Selected: Boolean);
+    procedure GridMotorTitleClick(Column: TColumn);
+    procedure ActionDeleteExecute(Sender: TObject);
+    procedure ReportExecute(Sender: TObject);
+    procedure ActionSuggestionExecute(Sender: TObject);
+    procedure DBGrid1DblClick(Sender: TObject);
+    procedure GridMoreDblClick(Sender: TObject);
+   
+    procedure ActionPolicyExecute(Sender: TObject);
+    procedure ActionExtraExecute(Sender: TObject);
+  private
+    { Private declarations }
+    FEvents: IInsFullMotorCascoEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+    function  ShowPolicy():Integer;
+    function  ShowSuggestion():Integer;
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+
+  public
+    { Public declarations }
+
+    procedure Initialize; override;
+    procedure InitData;
+    procedure MouseWheelHandler(var Message: TMessage); override;
+    procedure ActionCall(sender:TObject);
+
+  end;
+var
+    InsFullMotorCasco :TInsFullMotorCasco;
+    f:boolean=true;
+implementation
+
+uses ComObj, ComServ, DataUnitFullMotor, UInsAppMotor, UReport, UInsSuggest,
+  UMotorInsPolicy;
+
+{$R *.DFM}
+
+{ TInsFullMotorCasco }
+
+procedure TInsFullMotorCasco.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_InsFullMotorCascoPage); }
+end;
+
+procedure TInsFullMotorCasco.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as IInsFullMotorCascoEvents;
+end;
+
+procedure TInsFullMotorCasco.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TInsFullMotorCasco.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TInsFullMotorCasco.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TInsFullMotorCasco.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TInsFullMotorCasco.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TInsFullMotorCasco.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TInsFullMotorCasco.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TInsFullMotorCasco.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TInsFullMotorCasco.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TInsFullMotorCasco.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TInsFullMotorCasco.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TInsFullMotorCasco.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TInsFullMotorCasco.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TInsFullMotorCasco.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TInsFullMotorCasco.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TInsFullMotorCasco.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TInsFullMotorCasco.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TInsFullMotorCasco.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TInsFullMotorCasco.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TInsFullMotorCasco._Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TInsFullMotorCasco.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TInsFullMotorCasco.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TInsFullMotorCasco.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TInsFullMotorCasco.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TInsFullMotorCasco.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TInsFullMotorCasco.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TInsFullMotorCasco.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TInsFullMotorCasco.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TInsFullMotorCasco.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TInsFullMotorCasco.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TInsFullMotorCasco.Set_AxBorderStyle(
+  Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TInsFullMotorCasco.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TInsFullMotorCasco.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TInsFullMotorCasco.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TInsFullMotorCasco.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TInsFullMotorCasco.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TInsFullMotorCasco.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TInsFullMotorCasco.Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TInsFullMotorCasco.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TInsFullMotorCasco.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TInsFullMotorCasco.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TInsFullMotorCasco.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TInsFullMotorCasco.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TInsFullMotorCasco.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+procedure TInsFullMotorCasco.MouseWheelHandler(var Message: TMessage);
+begin
+ inherited;
+ if GridMotor.Focused then
+  begin
+   GridMotor.SelectedRows.Clear;
+   with TCMMouseWheel(Message), GridMotor.DataSource.DataSet do
+    if WheelDelta < 0 then
+      Next
+    else
+      Prior;
+  end;
+end;
+procedure TInsFullMotorCasco.InitData;
+const
+   c_err_message = ' Table or View in Dataset "%s" does not exist! ';
+var
+   i: Word;
+begin
+ with DataModuleFullMotor do
+  for i :=0 to ComponentCount -1 do
+  if (Components[i] is TDataSet) then
+   if (Components[i] as TDataSet).Tag = 1 then
+   try
+     (Components[i] as TDataSet).Open;
+   except
+     raise Exception.Create(Format(c_err_message, [(Components[i] as TDataSet).Name]));
+   end;
+end;
+
+procedure TInsFullMotorCasco.ActiveFormCreate(Sender: TObject);
+begin
+ PanelAcc.Visible:=false;
+ InsFullMotorCasco:=Self ;
+ DataModuleFullMotor:=TDataModuleFullMotor.Create(Self);
+ FullCascoForm:=TFullCascoForm.Create(Self);
+ InitData;
+
+end;
+
+procedure TInsFullMotorCasco.ActionInsertExecute(Sender: TObject);
+begin
+       DataModuleFullMotor.Ins_MotorFull.Insert;
+       FullCascoForm.Back.Enabled:=false;
+       FullCascoForm.Next.Enabled:=true;
+       FullCascoForm.ShowModal;
+end;
+
+procedure TInsFullMotorCasco.ActionRefreshExecute(Sender: TObject);
+var
+    MotorID: Longint;
+begin
+    with DataModuleFullMotor.Ins_MotorFull do
+    begin
+        MotorID :=FieldByName('ID').AsInteger;
+         CloseAll;
+         Open;
+         Locate('ID', MotorID, []);
+    end;
+end;
+
+procedure TInsFullMotorCasco.ActionEditExecute(Sender: TObject);
+begin
+    if DataModuleFullMotor.Ins_MotorFull.IsEmpty then
+    begin
+       ShowMessage('∆€дв€лд€ м€лумат йохдур !');
+       exit;
+    end;
+     with DataModuleFullMotor do
+     begin
+          Ins_MotorFull.Edit;
+          Accesories.Edit;
+          MorethanOne.Edit;
+     end;
+     FullCascoForm.Back.Enabled:=false;
+     FullCascoForm.Next.Enabled:=true;
+     FullCascoForm.ShowModal;
+
+end;
+
+procedure TInsFullMotorCasco.ActionFullRefreshExecute(Sender: TObject);
+begin
+     DataModuleFullMotor.FullRefresh('');
+end;
+
+procedure TInsFullMotorCasco.N1DrawItem(Sender: TObject; ACanvas: TCanvas;
+  ARect: TRect; Selected: Boolean);
+var
+    LineBottom: Integer;
+    SText: String;
+    Bar: TRect;
+begin
+    with ACanvas, Sender as TMenuItem do
+  begin
+    with Font do
+    begin
+      Name := 'Azl Sans Serif';
+      Charset := RUSSIAN_CHARSET;
+      if Default then
+        Style := [fsBold];
+    end;
+    if Caption = '-' then
+    begin
+      Pen.Color := clBlack;
+      LineBottom := (ARect.Top + (ARect.Bottom - ARect.Top) div 2)-1;
+      MoveTo(ARect.Left, LineBottom);
+      LineTo(ARect.Right, LineBottom);
+      inc(LineBottom);
+      Pen.Color := clWhite;
+      MoveTo(ARect.Left, LineBottom);
+      LineTo(ARect.Right, LineBottom);
+    end
+    else
+    begin
+      if Selected then
+      begin
+        Brush.Color := clNavy;
+        if Enabled then
+          Font.Color := clWhite
+        else
+          Font.Color := clSilver;
+      end
+      else
+      begin
+        Brush.Color := clBtnFace;
+        if Enabled then
+          Font.Color := clBlack
+        else
+          Font.Color := clGrayText;
+      end;
+      Bar := ARect;
+      Inc(Bar.Left, 22);
+      FillRect(Bar);
+      TextOut(ARect.Left+{17}22, ARect.Top+1, Caption);
+    end;
+    // draw shortcut
+    SText := ShortCutToText(ShortCut);
+    TextOut(ARect.Right-TextWidth(SText)-2, ARect.Top+1, SText);
+    if ImageIndex <> -1 then
+      with GetParentMenu do
+        if Assigned(Images) then
+        begin
+          if Checked then
+          begin
+            Bar.Left := ARect.Left + 1;
+            Bar.Right := Bar.Left + 16;
+            Bar.Top := ARect.Top + 1;
+            Bar.Bottom := Bar.Top + 16;
+
+            ACanvas.Brush.Color := clBtnShadow;
+            ACanvas.FrameRect(Bar);
+
+            Inc(Bar.Left, 2);
+            Inc(Bar.Right, 2);
+            Inc(Bar.Top, 2);
+            Inc(Bar.Bottom, 2);
+
+            ACanvas.Brush.Color := clBtnHighlight;
+            ACanvas.FrameRect(Bar);
+
+            Dec(Bar.Left, 1);
+            Dec(Bar.Right, 1);
+            Dec(Bar.Top, 1);
+            Dec(Bar.Bottom, 1);
+
+            if Selected then
+              ACanvas.Brush.Color := clBtnFace
+            else
+              ACanvas.Brush.Color := clBtnHighlight;
+            ACanvas.FillRect(Bar);
+          end;
+
+          Images.Draw(ACanvas, ARect.Left, ARect.Top, ImageIndex, Enabled);
+        end;
+  end;
+end;
+
+procedure TInsFullMotorCasco.GridMotorTitleClick(Column: TColumn);
+var
+   TitleName :string;
+begin
+   if Column.Field.Calculated then Exit;
+   TitleName :=Column.FieldName;
+   with DataModuleFullMotor.Ins_MotorFull do
+   begin
+        Screen.Cursor :=crSQLWait;
+        SetVariable('Title',TitleName);
+        Refresh;
+        Screen.Cursor :=crDefault;
+   end;
+end;
+
+procedure TInsFullMotorCasco.ActionDeleteExecute(Sender: TObject);
+var
+    id:longint;
+    i: Integer;
+    WaitNextConfirm, WillRefresh: Boolean;
+begin
+    WaitNextConfirm :=True;
+    WillRefresh :=False;
+
+    with GridMotor, SelectedRows,DataModuleFullMotor,Ins_MotorFull do
+    try
+       if Count = 0 then  CurrentRowSelected := True;
+         for  I:=0 to  Count - 1 do
+    begin
+      GotoBookmark(Pointer(Items[I]));
+      ID :=FieldbyName('ID').AsInteger;
+
+      if  WaitNextConfirm  then
+      case MessageDlg('ћ€луматлар силинсин ?'
+               ,mtConfirmation
+       ,[mbYes, mbNo ,mbCancel ,mbYesToAll]
+       ,0
+       )   of
+        mrNo       : Continue;
+        mrCancel   : Break;
+        mrYesToAll :
+          if MessageDlg(Format('%d  сайда м€лумат силинсин?', [Count - I]), mtConfirmation, [mbYes, mbCancel], 0) = mrYes then
+           WaitNextConfirm :=False
+          else
+           Continue;
+      end;
+      Application.ProcessMessages;
+      DeleteMotorInfo(ID);
+      WillRefresh :=True;
+    end;
+     ActionRefreshExecute(sender);
+
+   finally
+      if WillRefresh then
+      ActionRefreshExecute(Sender);
+
+  end;
+end;
+
+procedure TINSFULLMotorCasco.ActionCall(sender:TObject);
+begin
+     ActionDeleteExecute(sender);
+end;
+
+procedure TInsFullMotorCasco.ReportExecute(Sender: TObject);
+var
+      i:integer;
+      insid:longint;
+      s:string;
+begin
+      with GridMotor, DataModuleFullMotor.Ins_MotorFull do
+      begin
+         if SelectedRows.Count=0 then
+            SelectedRows.CurrentRowSelected:=true;
+         GotoBookMark(Pointer(SelectedRows.items[0]));
+         insid:=FieldByName('id').AsInteger;
+         s:='id= '+IntToStr(insid);
+         for i:=1 to SelectedRows.Count-1 do
+         begin
+             GoToBookMark(Pointer(SelectedRows.Items[i]));
+             insid:=FieldByName('id').AsInteger;
+             s:=s+' or '+'id = '+IntToStr(insid);
+         end;
+         with DataModuleFullMotor.Ins_Report do
+         begin
+             Close;
+             SQL.Clear;
+             Sql.Text:='select id, PINS_FullMotor.returnName(kli_id) as name,Pins_FullMotor.returnAddress(kli_id) as Address,PINS_FullMotor.returnPhone(kli_id) as phone,'+
+             'PINS_FullMotor.returnFax(kli_id) as fax,contact_person, banking_details,profitid,'+
+             'insuredmodel,insuredtype,' +
+              'insuredstatenum, insuredcolor,insuredoutputyear,insurednumseats,insuredenginenum,'+
+             'insuredchassisnum,insuredactualvalue,transmission_type,presence_alarm,motor_usage,'+
+             'motorstorageplace,existingdamage,insurancegeographicallimit from ins_motorfull where '+s;
+             Open;
+         end;
+       with INSWordExporter1 do
+       begin
+          FileName:=ExtractFilePath(Application.ExeName)+ '\MotorFullApplicationForm.doc';
+          Open(False);
+          for i:=0 to lbBookmarks.Items.Count-1 do
+          begin
+             if DataModuleFullMotor.Ins_Report.Fields[i+1].IsNull then Continue;
+             SetBookmark(lbBookmarks.Items[i], DataModuleFullMotor.Ins_Report.Fields[i+1].value, True, false, False, false, 10, 'Arial AzLat', False);
+          end;
+          SetBookmark('ContactP',DataModuleFullMotor.CustomersContactperson.value, True, false, False, false, 10, 'Arial AzLat', False);
+          SetBookmark('Beneficiary', DataModuleFullMotor.ODSBeneficiaryName.value, True, false, False, false, 10, 'Arial AzLat', False);
+          SetBookmark('BeneficiaryA', DataModuleFullMotor.ODSBeneficiaryAddress.value, True, false, False, false, 10, 'Arial AzLat', False);
+          SetBookmark('BeneficiaryT', DataModuleFullMotor.ODSBeneficiaryPhone.value, True, false, False, false, 10, 'Arial AzLat', False);
+          SetBookmark('BeneficiaryB', DataModuleFullMotor.ODSBeneficiaryBanking_details.value, True, false, False, false, 10, 'Arial AzLat', False);
+          DataModuleFullMotor.Accesories_Report.First;
+          for i:=0 to DataModuleFullMotor.Accesories_Report.RecordCount-1 do
+          begin
+              if DataModuleFullMotor.Accesories_Report.Fields[i].IsNull then continue;
+              SetBookmark('AType',DataModuleFullMotor.Accesories_ReportType.value+','+#13#10,false, false, False, false, 10, 'Arial AzLat', False);
+              SetBookmark('AMake',DataModuleFullMotor.Accesories_ReportMake.value+','+#13#10,false, false, False, false, 10, 'Arial AzLat', False);
+              SetBookmark('AValues',FloatToStr(DataModuleFullMotor.Accesories_ReportValue.value)+','+#13#10,false, false, False, false, 10, 'Arial AzLat', False);
+              SetBookmark('Hcreated',DataModuleFullMotor.Accesories_ReportHowcreated.value+','+#13#10,false, false, False, false, 10, 'Arial AzLat', False);
+              DataModuleFullMotor.Accesories_Report.Next;
+          end;
+          DataModuleFullMotor.More_Report.First;
+          for i:=0 to DataModuleFullMotor.More_Report.RecordCount-1 do
+          begin
+              if DataModuleFullMotor.More_Report.Fields[i].IsNull then continue;
+              SetBookmark('MName',DataModuleFullMotor.More_ReportName.value+','+#13#10,false, false, False, false, 10, 'Arial AzLat', False);
+              SetBookmark('MAge',IntToStr(DataModuleFullMotor.More_ReportAge.value)+','+#13#10,false, false, False, false, 10, 'Arial AzLat', False);
+              SetBookmark('MExp',DataModuleFullMotor.More_ReportExperience.value+','+#13#10,false, false, False, false, 10, 'Arial AzLat', False);
+              SetBookmark('MHist',DataModuleFullMotor.More_ReportHistory.value+','+#13#10,false, false, False, false, 10, 'Arial AzLat', False);
+              DataModuleFullMotor.More_Report.Next;
+          end;
+          Show;
+       end;
+       end;
+
+end;
+
+function TInsFullMotorCasco.ShowSuggestion(): Integer;
+begin
+     FormSuggestion := TFormSuggestion.Create(self);
+     try
+         Result := FormSuggestion.ShowModal;
+     finally
+         FormSuggestion.Free;
+     end;
+end;
+
+procedure TInsFullMotorCasco.ActionSuggestionExecute(Sender: TObject);
+begin
+    with DataModuleFullMotor do
+     begin
+      if Ins_MotorFull.IsEmpty then Exit;
+      Customers.Locate('id', ins_motorfullkli_id.Value, []);
+      Suggestion.SetVariable('MK_ID', INS_MotorFullID.Value);
+      Suggestion.Open;
+      if Suggestion.RecordCount < 0 then
+      begin
+            ShowMessage('Insert');
+            SuggestionID.Value :=INS_MotorFullID.Value;
+            Suggestion.Insert();
+      end
+      else
+        begin
+            Suggestion.Edit;
+            //FormSuggestion.btPrint.Enabled:=true;
+           // FormSuggestion.btApply.Enabled:=true;
+        end;
+     // SuggestionID.Value :=INS_MotorFullID.Value;
+      if  not (ShowSuggestion() = mrOk) then Suggestion.Cancel;
+      Suggestion.Close;
+     end
+end;
+
+
+
+procedure TInsFullMotorCasco.DBGrid1DblClick(Sender: TObject);
+begin
+     with DataModuleFullMotor do
+     begin
+          Ins_MotorFull.Edit;
+          Accesories.Edit;
+          MorethanOne.Edit;
+     end;
+     FullCascoForm.MotorAppPageControl.ActivePageIndex:=2;
+     FullCascoForm.ShowModal;
+
+end;
+
+procedure TInsFullMotorCasco.GridMoreDblClick(Sender: TObject);
+begin
+     with DataModuleFullMotor do
+     begin
+          Ins_MotorFull.Edit;
+          Accesories.Edit;
+          MorethanOne.Edit;
+     end;
+     FullCascoForm.MotorAppPageControl.ActivePageIndex:=2;
+     FullCascoForm.ShowModal;
+end;
+
+
+function TInsFullMotorCasco.ShowPolicy(): Integer;
+begin
+     FormPolicy := TFormPolicy.Create(self);
+     try
+         Result := FormPolicy.ShowModal;
+     finally
+         FormPolicy.Free;
+     end;
+end;
+
+procedure TInsFullMotorCasco.ActionPolicyExecute(Sender: TObject);
+begin
+      with DataModuleFullMotor do
+     begin
+      if Ins_MotorFull.IsEmpty then Exit;
+      Customers.Locate('id', ins_motorfullkli_id.Value, []);
+      Suggestion.SetVariable('MK_ID', INS_MotorFullID.Value);
+      Suggestion.Open;
+      if Suggestion.IsEmpty then
+      begin
+           MessageDlg('явв€лж€ т€клифнам€ щазырланмалыдыр !'
+               ,mtWarning,[mbOk],0);
+           Exit;
+      end;
+      Policy.SetVariable('MS_ID', SuggestionID.Value);
+      Policy.Open;
+      if Policy.RecordCount < 0 then Policy.Insert()
+      else Policy.Edit;
+      PolicyID.Value := SuggestionID.Value;
+      if  not (ShowPolicy() = mrOk) then Policy.Cancel;
+      Policy.Close;
+      Suggestion.close;
+     end
+end;
+
+procedure TInsFullMotorCasco.ActionExtraExecute(Sender: TObject);
+begin
+      PanelAcc.Visible:=not PanelAcc.Visible;
+end;
+
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TInsFullMotorCasco,
+    Class_InsFullMotorCasco,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

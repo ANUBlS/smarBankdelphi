@@ -1,0 +1,40 @@
+unit Checkacc;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, Unit2;
+
+type
+  TCheckinacc = class(TForm)
+    Edit1: TEdit;
+    Label1: TLabel;
+    Label2: TLabel;
+    Edit2: TEdit;
+    Button1: TButton;
+    procedure Button1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Checkinacc: TCheckinacc;
+
+implementation
+
+{$R *.dfm}
+
+procedure TCheckinacc.Button1Click(Sender: TObject);
+begin
+SWDataModule.acc_check.Close;
+SWDataModule.acc_check.SetVariable('acc',edit1.Text);
+SWDataModule.acc_check.open;
+edit2.Text:= SWDataModule.acc_check.FieldByName('name').AsString;
+//edit3.Text:= SWDataModule.acc_check.FieldByName('name').AsString;
+
+end;
+
+end.

@@ -1,0 +1,359 @@
+﻿unit SMSFormİmpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, Buttons, XFSCtrls, ExtCtrls, ComCtrls, DB, OracleData,
+  InvokeRegistry, Rio, SOAPHTTPClient, DBCtrls, ExtDlgs;
+
+type
+  TSMSForm = class(TForm)
+    PageControl1: TPageControl;
+    TabSheet1: TTabSheet;
+    TabSheet2: TTabSheet;
+    XFPanel2: TXFPanel;
+    SMSMemo: TMemo;
+    XFPanel3: TXFPanel;
+    XFPanel1: TXFPanel;
+    XFLabel1: TXFLabel;
+    XFBitBtn1: TXFBitBtn;
+    XFPanel4: TXFPanel;
+    XFBitBtn2: TXFBitBtn;
+    XFPanel5: TXFPanel;
+    EmailMemo: TMemo;
+    Edit1: TEdit;
+    XFRadioButton1: TXFRadioButton;
+    XFRadioButton2: TXFRadioButton;
+    XFPanel6: TXFPanel;
+    XFRadioButton3: TXFRadioButton;
+    XFRadioButton4: TXFRadioButton;
+    sms: TOracleDataSet;
+    ODS_FilesPath: TOracleDataSet;
+    ODS_FilesPathDESCRIPTION: TWideStringField;
+    DTP1: TDateTimePicker;
+    sys: TOracleDataSet;
+    HTTPRIO1: THTTPRIO;
+    Edit2: TEdit;
+    sysSYSDATE: TDateTimeField;
+    Memo1: TMemo;
+    DBLookupComboBox1: TDBLookupComboBox;
+    XFLabel2: TXFLabel;
+    Ods_sms: TOracleDataSet;
+    Dsrc_sms: TDataSource;
+    Ods_smsID: TFloatField;
+    Ods_smsNAME: TWideStringField;
+    Ods_smsTEMPLATE: TWideStringField;
+    Ods_smsDESCRIPTION: TWideStringField;
+    Ods_smsTIP: TFloatField;
+    XFButton1: TXFButton;
+    Button1: TButton;
+    smsPHONE_MOB: TWideStringField;
+    smsID: TIntegerField;
+    OpenDialog1: TOpenDialog;
+    procedure SMSMemoChange(Sender: TObject);
+    procedure FormCanResize(Sender: TObject; var NewWidth, NewHeight: Integer;
+      var Resize: Boolean);
+    procedure XFBitBtn1Click(Sender: TObject);
+    procedure createfiles;
+    procedure WriteLnString(S: string);
+    procedure WriteString(S: string);
+    procedure CreateXmlFile();
+    procedure FormCreate(Sender: TObject);
+    procedure DBLookupComboBox1CloseUp(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure XFButton1Click(Sender: TObject);
+  private
+
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  SMSForm: TSMSForm;
+   FilePAth: String;
+  f: TextFile;
+implementation
+ uses  SBTranslateProc, sboapiDataModuleImpl,SmsSending1,
+  UnitDataModPCustService, PCustServiceFormImpl1;
+{$R *.dfm}
+ procedure TSMSForm.WriteLnString(S: string);
+begin
+
+  AssignFile(f, FilePAth); { Assigns the Filename }
+  Append(f); { Opens the file for editing }
+  Writeln(f, UTF8Encode(StringReplace(S, #13 + #10, '', [rfReplaceAll])));
+  memo1.Lines.Add(UTF8Encode(StringReplace(S, #13 + #10, '', [rfReplaceAll])))  ;
+  Closefile(f);
+end;
+procedure TSMSForm.WriteString(S: string);
+begin
+
+  AssignFile(f, FilePAth); { Assigns the Filename }
+  Append(f); { Opens the file for editing }
+  Write(f, UTF8Encode(StringReplace(S, #13 + #10, '', [rfReplaceAll])));
+  memo1.Lines.Add(UTF8Encode(StringReplace(S, #13 + #10, '', [rfReplaceAll])))  ;
+  Closefile(f);
+end;
+procedure TSMSForm.CreateXmlFile();
+var i:integer;
+begin
+
+   // showmessage(inttostr(sms.RecordCount));
+ //   exit;
+   if sms.RecordCount>1{ XFRadioButton1.Checked }then
+      begin
+               showmessage('sdsdsdsdsdsd');
+    WriteLnString('<request>');
+     WriteLnString('<head>');
+     WriteString('<operation>');
+     WriteString('submit');
+     WriteLnString('</operation>');
+
+     WriteString('<login>');
+     WriteString('login');
+     WriteLnString('</login>');
+
+     WriteString('<password>');
+     WriteString('password');
+     WriteLnString('</password>');
+
+     WriteString('<title>');
+     WriteString('title');
+     WriteLnString('</title>');
+
+     WriteString('<bulkmessage>');
+     WriteString(SMSMemo.text);
+     WriteLnString('</bulkmessage>');
+     showmessage(sys.FieldByName('sysdate').AsString);
+     WriteString('<scheduled>');
+     WriteString(sys.FieldByName('sysdate').AsString);
+     WriteLnString('</scheduled>');
+
+     WriteString('<isbulk>');
+     WriteString('true');
+     WriteLnString('</isbulk>');
+
+     WriteString('<controlid>');
+     WriteString('111');
+     WriteLnString('</controlid>');
+
+    WriteString('</head>');
+    with sms do
+  begin
+   sms.First;
+   for I :=0  to sms.RecordCount - 1 do
+   begin
+     WriteLnString ('<body>');
+    WriteString('<msisdn>');
+     WriteString(FieldByName('PHONE_MOB').AsString);
+     WriteLnString('</msisdn>');
+    WriteString('</body>');
+     sms.Next;
+     end;
+  end;
+     //WriteString('</request>');
+      end;
+
+  if sms.RecordCount=1{XFRadioButton2.Checked} then
+      begin
+      showmessage('dd');
+     WriteLnString('<request>');
+     WriteLnString('<head>');
+     WriteString('<operation>');
+     WriteString('submit');
+     WriteLnString('</operation>');
+
+     WriteString('<login>');
+     WriteString('login');
+     WriteLnString('</login>');
+
+     WriteString('<password>');
+     WriteString('password');
+     WriteLnString('</password>');
+
+     WriteString('<title>');
+     WriteString('title');
+     WriteLnString('</title>');
+
+     WriteString('<scheduled>');
+     WriteString(sys.FieldByName('sysdate').AsString);
+     WriteLnString('</scheduled>');
+
+     WriteString('<isbulk>');
+     WriteString('false');
+     WriteLnString('</isbulk>');
+
+    WriteString('<controlid>');
+     WriteString('111');
+     WriteLnString('</controlid>');
+
+    WriteString('</head>');
+
+
+     WriteLnString ('<body>');
+
+     WriteString('<msisdn>');
+     WriteString(sms.FieldByName('PHONE_MOB').AsString);
+     WriteLnString('</msisdn>');
+
+     WriteString('<message>');
+     WriteString(SMSMemo.text);
+     WriteLnString('</message>');
+
+     WriteString('</body>');
+    end;
+
+     WriteString('</request>');
+
+
+
+end;
+
+procedure TSMSForm.DBLookupComboBox1CloseUp(Sender: TObject);
+begin
+
+
+SMSMemo.Text:=ods_sms.FieldByName('template').AsString;
+
+end;
+
+procedure TSMSForm.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+Resize:=false;
+ SBTranslateProc.TranslateAllCompForms(Self, sboapiDataModule.OrPack_SL);
+end;
+ procedure TSMSForm.FormCreate(Sender: TObject);
+begin
+Ods_sms.Open;
+end;
+
+procedure TSMSForm.FormShow(Sender: TObject);
+var
+
+i:integer;
+ ID: integer;
+ WillRefresh: Boolean;
+ s,a:string;
+begin
+
+ with DataModPCustService,PCustServiceForm, MainGrid, SelectedRows, DataSource.DataSet do
+  begin
+  ///sms.SQL[2]:='';
+ if Count = 0 then CurrentRowSelected := True;
+    for  I :=0 to  Count - 1 do
+    begin
+
+      GotoBookmark(Pointer(Items[I]));
+      ID :=FieldbyName('ID').AsInteger;
+      if s='' then
+      s := inttostr(id)
+      else
+      s := s+',' +inttostr(id);
+
+
+     end;
+    //     ShowMessage(' and id in (substr(' +s +',2,10000000))');
+    sms.Close;
+    sms.SQL[2]:=' and id in ('+s +')';
+    sms.Open;
+  end;
+
+end;
+
+procedure TSMSForm.Button1Click(Sender: TObject);
+begin
+showmessage(sms.SQL.Text);
+end;
+
+procedure TSMSForm.createfiles;
+var
+  formattedDateTime, dir: String;
+
+begin
+
+  if not DirectoryExists(ODS_FilesPathDESCRIPTION.AsWideString) then
+    MkDir(ODS_FilesPathDESCRIPTION.AsWideString);
+
+  DateTimeToString(formattedDateTime, 'yyyyddmm', DTP1.Date);
+  dir := ODS_FilesPathDESCRIPTION.AsWideString +
+    formattedDateTime + '\';
+
+  if not DirectoryExists(dir) then
+    MkDir(dir);
+
+  DateTimeToString(formattedDateTime, 'yyyyddmm', DTP1.Date);
+  FilePAth := dir+ '.txt';
+
+  AssignFile(f, FilePAth);
+  Rewrite(f);
+  Closefile(f);
+  CreateXmlFile;
+
+end;
+procedure TSMSForm.SMSMemoChange(Sender: TObject);
+var
+x:integer;
+begin
+x:=148;
+edit1.text:= inttostr( x-(Length(SMSMemo.text)));
+end;
+
+procedure TSMSForm.XFBitBtn1Click(Sender: TObject);
+var
+  i: Integer;
+  id:integer;
+ a, s:string;
+   Port: SmsSending;
+begin
+if (XFRadioButton1.Checked=False)and (XFRadioButton2.Checked=False) then
+begin
+  showmessage('Göndərilmə tipini seçin !');
+  exit;
+end;
+
+if trim(SMSMemo.Text)='' then
+begin
+  showmessage('Texsti boş göndərmək olmaz  !');
+  exit;
+   end;
+   createfiles;
+    Port := HTTPRIO1 as SmsSending;
+edit2.Text:=port.send(Memo1.Text) ;
+  {
+  if ODS_FilesPath.RecordCount <> 0 then
+  begin
+
+ sms.First;
+
+  for i := 0 to sms.RecordCount - 1 do
+    begin
+      //showmessage(inttostr(DBGridTransactions1.DataSource.DataSet.RecordCount));
+      with sms do
+      begin
+        if Active = True then
+          close;    // showmessage(inttostr(DBGridTransactions1.DataSource.DataSet.FieldByName('id').AsInteger));
+        //SetVariable('v_id', DBGridTransactions1.DataSource.DataSet.FieldByName('id').AsInteger);
+        Open;
+      end;
+
+     sms.Next;
+    end;
+  end;  }
+
+end;
+
+procedure TSMSForm.XFButton1Click(Sender: TObject);
+
+begin
+ if OpenDialog1.Execute then begin
+  SMSForm.Caption := OpenDialog1.FileName;
+   SMSMemo.Lines.LoadFromFile
+  (OpenDialog1.FileName);
+  SMSMemo.SelStart := 0;
+ end;
+end;
+end.

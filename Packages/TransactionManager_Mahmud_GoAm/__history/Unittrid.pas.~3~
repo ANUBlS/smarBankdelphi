@@ -1,0 +1,70 @@
+﻿unit Unittrid;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls;
+
+type
+  TFormtrid = class(TForm)
+    Panel1: TPanel;
+    Panel2: TPanel;
+    Button1: TButton;
+    Label1: TLabel;
+    edit1: TEdit;
+    GroupBox1: TGroupBox;
+    Label2: TLabel;
+    edit2: TEdit;
+    Label3: TLabel;
+    edit3: TEdit;
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure Button1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Formtrid: TFormtrid;
+
+implementation
+
+uses TransactionPropertiesImpl, TransactionDataModuleUnit;
+
+{$R *.dfm}
+
+procedure TFormtrid.Button1Click(Sender: TObject);
+var
+in_out:integer;
+begin
+ if  TransactionEditForm.DBLC_MMX_Transmode.KeyValue='1002' then
+    begin
+    in_out:=2;
+    Formtrid.Caption:='Alan tərəf'
+    end
+  else
+  begin
+    in_out:=1;
+    Formtrid.Caption:='Göndərən tərəf'
+  end;
+
+   TransactionDataModule.OP_MMX.CallProcedure('up_mmx_transinfo',[ in_out,
+                                                                   edit1.Text,
+                                                                   edit2.Text,
+                                                                   edit3.Text
+                                                                    ]);
+
+   Formtrid.Close;
+end;
+
+
+procedure TFormtrid.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+edit1.Clear ;
+edit2.Clear;
+edit3.Clear ;
+end;
+
+end.

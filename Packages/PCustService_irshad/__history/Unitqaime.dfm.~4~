@@ -1,0 +1,265 @@
+object FormQaime: TFormQaime
+  Left = 0
+  Top = 0
+  Caption = 'FormQaime'
+  ClientHeight = 432
+  ClientWidth = 1270
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poMainFormCenter
+  OnCreate = FormCreate
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 1270
+    Height = 49
+    Align = alTop
+    TabOrder = 0
+    object Button1: TButton
+      Left = 48
+      Top = 18
+      Width = 75
+      Height = 25
+      Caption = 'Button1'
+      TabOrder = 0
+      OnClick = Button1Click
+    end
+  end
+  object XDBGrid1: TXDBGrid
+    Left = 0
+    Top = 49
+    Width = 1270
+    Height = 383
+    Align = alClient
+    DataSource = DataSource4
+    GridStyle.VisualStyle = vsXPStyle
+    TabOrder = 1
+    Columns = <
+      item
+        Alignment = taLeftJustify
+        Expanded = False
+        FieldName = 'TRANS_ID'
+        Title.Alignment = taCenter
+        Title.Caption = 'TRANS ID'
+        Visible = True
+        Width = 90
+      end
+      item
+        Expanded = False
+        FieldName = 'TRANS_DATE'
+        Title.Alignment = taCenter
+        Title.Caption = #399' tarixi'
+        Visible = True
+        Width = 120
+      end
+      item
+        Expanded = False
+        FieldName = 'INV_NUM'
+        Title.Alignment = taCenter
+        Title.Caption = 'Qaim'#601' '#8470
+        Visible = True
+        Width = 100
+      end
+      item
+        Expanded = False
+        FieldName = 'INV_DATE'
+        Title.Alignment = taCenter
+        Title.Caption = 'Tarix'
+        Visible = True
+        Width = 120
+      end
+      item
+        Expanded = False
+        FieldName = 'PAR6'
+        Title.Alignment = taCenter
+        Title.Caption = '  Y'#252'k g'#246'nd'#601'r'#601'n M'#252#601'ssis'#601' '
+        Visible = True
+        Width = 200
+      end
+      item
+        Expanded = False
+        FieldName = 'PAR3'
+        Title.Alignment = taCenter
+        Title.Caption = '   Avtomobiliin '#8470
+        Visible = True
+        Width = 120
+      end
+      item
+        Expanded = False
+        FieldName = 'PAR4'
+        Title.Alignment = taCenter
+        Title.Caption = ' Qo'#351'qunun  '#8470
+        Visible = True
+        Width = 120
+      end
+      item
+        Alignment = taLeftJustify
+        Expanded = False
+        FieldName = 'PAR11'
+        Title.Alignment = taCenter
+        Title.Caption = #199#601'ki'
+        Visible = True
+        Width = 80
+      end
+      item
+        Alignment = taLeftJustify
+        Expanded = False
+        FieldName = 'PAR12'
+        Title.Alignment = taCenter
+        Title.Caption = 'M'#601'bl'#601#287
+        Visible = True
+        Width = 100
+      end
+      item
+        Expanded = False
+        FieldName = 'TARIF'
+        Title.Alignment = taCenter
+        Title.Caption = 'Tarif'
+        Visible = True
+        Width = 200
+      end
+      item
+        Expanded = False
+        FieldName = 'PAR1'
+        Title.Alignment = taCenter
+        Title.Caption = '  Da'#351#305'y'#305'c'#305
+        Visible = True
+        Width = 250
+      end
+      item
+        Expanded = False
+        FieldName = 'PAR2'
+        Title.Alignment = taCenter
+        Title.Caption = 'Hesab '#8470
+        Visible = True
+        Width = 180
+      end
+      item
+        Expanded = False
+        FieldName = 'PAR5'
+        Title.Alignment = taCenter
+        Title.Caption = 'Y'#252'k'#252' t'#601'hvil alan'
+        Visible = True
+        Width = 200
+      end
+      item
+        Expanded = False
+        FieldName = 'PAR7'
+        Title.Alignment = taCenter
+        Title.Caption = 'Al'#305'c'#305
+        Visible = True
+        Width = 200
+      end
+      item
+        Expanded = False
+        FieldName = 'PAR8'
+        Title.Alignment = taCenter
+        Title.Caption = 'Material'
+        Visible = True
+      end>
+  end
+  object OracleDataSet4: TOracleDataSet
+    SQL.Strings = (
+      'SELECT  bp_id, inv_num,trunc(inv_date) inv_date,  '
+      
+        '       trans_id, trunc(trans_date) trans_date, par1, par2, par3,' +
+        ' par4, par5,'
+      
+        '       par6, par7, par8, par13||'#39'***'#39'|| par9 as tarif,par11, par' +
+        '12,par13'
+      '     '
+      
+        '  FROM invoices i, account a where i.debit=a.id and a.kli_id=:v_' +
+        'kliid')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000100000003A0056005F004B004C0049004900440003000000
+      0000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      05000000110000000A000000420050005F00490044000100000000000E000000
+      49004E0056005F004E0055004D000100000000001000000049004E0056005F00
+      4400410054004500010000000000100000005400520041004E0053005F004900
+      4400010000000000140000005400520041004E0053005F004400410054004500
+      0100000000000800000050004100520031000100000000000800000050004100
+      5200320001000000000008000000500041005200330001000000000008000000
+      5000410052003400010000000000080000005000410052003500010000000000
+      0800000050004100520036000100000000000800000050004100520037000100
+      000000000800000050004100520038000100000000000A000000500041005200
+      310032000100000000000A000000540041005200490046000100000000000A00
+      0000500041005200310031000100000000000A00000050004100520031003300
+      010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 64
+    Top = 278
+    object OracleDataSet4INV_NUM: TWideStringField
+      FieldName = 'INV_NUM'
+    end
+    object OracleDataSet4INV_DATE: TDateTimeField
+      FieldName = 'INV_DATE'
+    end
+    object OracleDataSet4TRANS_ID: TFloatField
+      FieldName = 'TRANS_ID'
+    end
+    object OracleDataSet4TRANS_DATE: TDateTimeField
+      FieldName = 'TRANS_DATE'
+    end
+    object OracleDataSet4PAR1: TWideStringField
+      FieldName = 'PAR1'
+      Size = 50
+    end
+    object OracleDataSet4PAR2: TWideStringField
+      FieldName = 'PAR2'
+      Size = 50
+    end
+    object OracleDataSet4PAR3: TWideStringField
+      FieldName = 'PAR3'
+      Size = 50
+    end
+    object OracleDataSet4PAR4: TWideStringField
+      FieldName = 'PAR4'
+      Size = 50
+    end
+    object OracleDataSet4PAR5: TWideStringField
+      FieldName = 'PAR5'
+      Size = 50
+    end
+    object OracleDataSet4PAR6: TWideStringField
+      FieldName = 'PAR6'
+      Size = 50
+    end
+    object OracleDataSet4PAR7: TWideStringField
+      FieldName = 'PAR7'
+      Size = 50
+    end
+    object OracleDataSet4PAR8: TWideStringField
+      FieldName = 'PAR8'
+      Size = 50
+    end
+    object OracleDataSet4PAR12: TFloatField
+      FieldName = 'PAR12'
+    end
+    object OracleDataSet4TARIF: TWideStringField
+      FieldName = 'TARIF'
+      Size = 112
+    end
+    object OracleDataSet4PAR11: TFloatField
+      FieldName = 'PAR11'
+    end
+    object OracleDataSet4PAR13: TFloatField
+      FieldName = 'PAR13'
+    end
+  end
+  object DataSource4: TDataSource
+    DataSet = OracleDataSet4
+    Left = 144
+    Top = 278
+  end
+end

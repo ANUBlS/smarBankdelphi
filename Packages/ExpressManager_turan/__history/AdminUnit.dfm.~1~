@@ -1,0 +1,206 @@
+object AdminForm: TAdminForm
+  Left = 395
+  Top = 143
+  AutoSize = True
+  Caption = 'AdminForm'
+  ClientHeight = 538
+  ClientWidth = 337
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'MS Sans Serif'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poScreenCenter
+  OnClose = FormClose
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object XFGroupBox1: TXFGroupBox
+    Left = 0
+    Top = 0
+    Width = 169
+    Height = 538
+    Caption = #304'stifad'#601#231'il'#601'r'
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    Gradient.StartColor = clBtnFace
+    ParentFont = False
+    TabOrder = 0
+    object XDBGrid1: TXDBGrid
+      Left = 0
+      Top = 16
+      Width = 164
+      Height = 520
+      Color = clSilver
+      DataSource = AdminUserDataSource
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      Gradient.EndColor = clActiveCaption
+      Gradient.HotColor = clActiveCaption
+      Gradient.StartColor = clActiveCaption
+      GridStyle.VisualStyle = vsXPStyle
+      Options = [dgEditing, dgTitles, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgConfirmDelete, dgCancelOnExit, dgExtendedSelect, dgInternalSelect, dgRowResize, dgRowScroll, dgHotButtons, dgTitleButtons, dgTitleHeaders, dgTitleWidthOff, dgMarkerAutoAlign, dgMarkerAutoToggle]
+      ParentFont = False
+      TabOrder = 0
+      OnKeyPress = XDBGrid1KeyPress
+      Columns = <
+        item
+          Expanded = False
+          FieldName = 'NAME'
+          Title.Alignment = taCenter
+          Title.Caption = #304'stifad'#601#231'i'
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = []
+          Visible = True
+          Width = 121
+        end>
+    end
+  end
+  object XFGroupBox2: TXFGroupBox
+    Left = 168
+    Top = 0
+    Width = 169
+    Height = 538
+    Caption = 'Filial'
+    Color = clBtnFace
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    Gradient.StartColor = clBtnFace
+    ParentColor = False
+    ParentFont = False
+    TabOrder = 1
+    object XDBGrid2: TXDBGrid
+      Left = 3
+      Top = 16
+      Width = 164
+      Height = 185
+      Color = clSilver
+      DataSource = ExpDataModule.AllFilialDataSource
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      Gradient.EndColor = clActiveCaption
+      Gradient.HotColor = clActiveCaption
+      Gradient.StartColor = clActiveCaption
+      GridStyle.VisualStyle = vsXPStyle
+      Options = [dgEditing, dgTitles, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgConfirmDelete, dgCancelOnExit, dgExtendedSelect, dgInternalSelect, dgRowResize, dgRowScroll, dgHotButtons, dgTitleButtons, dgTitleHeaders, dgTitleWidthOff, dgMarkerAutoAlign, dgMarkerAutoToggle]
+      ParentFont = False
+      TabOrder = 0
+      OnDblClick = XDBGrid2DblClick
+      OnKeyPress = XDBGrid2KeyPress
+      Columns = <
+        item
+          Expanded = False
+          FieldName = 'NAME'
+          Title.Alignment = taCenter
+          Title.Caption = 'B'#252't'#252'n Filiallar'
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = []
+          Visible = True
+          Width = 121
+        end>
+    end
+    object XDBGrid3: TXDBGrid
+      Left = 3
+      Top = 204
+      Width = 163
+      Height = 332
+      Color = clSilver
+      DataSource = ExpAdminDataSource
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      Gradient.EndColor = clActiveCaption
+      Gradient.HotColor = clActiveCaption
+      Gradient.StartColor = clActiveCaption
+      GridStyle.VisualStyle = vsXPStyle
+      Options = [dgEditing, dgTitles, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgConfirmDelete, dgCancelOnExit, dgExtendedSelect, dgInternalSelect, dgRowResize, dgRowScroll, dgHotButtons, dgTitleButtons, dgTitleHeaders, dgTitleWidthOff, dgMarkerAutoAlign, dgMarkerAutoToggle]
+      ParentFont = False
+      TabOrder = 1
+      OnDblClick = XDBGrid3DblClick
+      OnKeyDown = XDBGrid3KeyDown
+      OnKeyPress = XDBGrid3KeyPress
+      Columns = <
+        item
+          Expanded = False
+          FieldName = 'FILIAL_NAME'
+          Title.Alignment = taCenter
+          Title.Caption = 'Se'#231'ilmi'#351' Filiallar'
+          Title.Font.Charset = RUSSIAN_CHARSET
+          Title.Font.Color = clWhite
+          Title.Font.Height = -11
+          Title.Font.Name = 'Azl Sans Serif'
+          Title.Font.Style = []
+          Visible = True
+          Width = 121
+        end>
+    end
+  end
+  object AdminUserDataSet: TOracleDataSet
+    SQL.Strings = (
+      'select id,NAME from user$'
+      'where SB_ACA.checkmodaccess_int('#39'EXPRESSMANAGER'#39',name)=1'
+      'order by name')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000400000049004400010000000000080000004E0041004D00
+      4500010000000000}
+    Cursor = crSQLWait
+    QueryAllRecords = False
+    Session = sboapiDataModule.SBSession
+    Left = 40
+    Top = 69
+  end
+  object AdminUserDataSource: TDataSource
+    DataSet = AdminUserDataSet
+    Left = 216
+    Top = 69
+  end
+  object ExpAdminDataSet: TOracleDataSet
+    SQL.Strings = (
+      'select * from Exp_Admin where USER_ID=:USER_ID')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000100000003A0055005300450052005F004900440003000000
+      0000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      05000000040000000E00000055005300450052005F0049004400010000000000
+      1200000055005300450052005F004E0041004D00450001000000000012000000
+      460049004C00490041004C005F00490044000100000000001600000046004900
+      4C00490041004C005F004E0041004D004500010000000000}
+    Cursor = crSQLWait
+    Master = AdminUserDataSet
+    MasterFields = 'ID'
+    DetailFields = 'USER_ID'
+    QueryAllRecords = False
+    Session = sboapiDataModule.SBSession
+    Left = 37
+    Top = 125
+  end
+  object ExpAdminDataSource: TDataSource
+    DataSet = ExpAdminDataSet
+    Left = 217
+    Top = 125
+  end
+end

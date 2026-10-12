@@ -1,0 +1,49 @@
+unit QRPTransactionView;
+
+interface
+
+uses Windows, SysUtils, Messages, Classes, Graphics, Controls,
+  StdCtrls, ExtCtrls, Forms, Quickrpt, QRCtrls;
+
+type
+  TQTransactionView = class(TQuickRep)
+    QRGroup1: TQRGroup;
+    QRDBText1: TQRDBText;
+    QRBand1: TQRBand;
+    QRDBText2: TQRDBText;
+    QRDBText3: TQRDBText;
+    QRDBText4: TQRDBText;
+    QRExpr3: TQRExpr;
+    QRExpr5: TQRExpr;
+    QRDBText5: TQRDBText;
+    QRDBText6: TQRDBText;
+    QRDBText7: TQRDBText;
+    QRBand2: TQRBand;
+    QRExpr4: TQRExpr;
+    QRExpr1: TQRExpr;
+    QRBand3: TQRBand;
+    QRLabel1: TQRLabel;
+    QRShape1: TQRShape;
+    QRExpr2: TQRExpr;
+    procedure QuickRepBeforePrint(Sender: TCustomQuickRep;
+      var PrintReport: Boolean);
+  private
+
+  public
+
+  end;
+
+var
+  QTransactionView: TQTransactionView;
+
+implementation
+   uses untdatamod, sboapiDataModuleImpl, SBTranslateProc;
+{$R *.DFM}
+
+procedure TQTransactionView.QuickRepBeforePrint(Sender: TCustomQuickRep;
+  var PrintReport: Boolean);
+begin
+SBTranslateProc.TranslateAllCompQuickRep(Self,sboapiDataModule.OrPack_SL);
+end;
+
+end.

@@ -1,0 +1,72 @@
+unit PledgImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  NLSLocalizer, DBCtrls, Db, OracleData, ExtCtrls, Grids, DBGridEh;
+
+type
+  TPledgForm = class(TForm)
+    NLSLocalizer1: TNLSLocalizer;
+    Panel1: TPanel;
+    DataSourcePlegds: TDataSource;
+    Plegds: TOracleDataSet;
+    DBNavigator1: TDBNavigator;
+    DBGridEh1: TDBGridEh;
+    PlegdsTYPECODE: TStringField;
+    PlegdsDESCRIPTION: TStringField;
+    PlegdsNEEDPLACEOUT: TFloatField;
+    Panel2: TPanel;
+    DBNavigator2: TDBNavigator;
+    DBGridEh2: TDBGridEh;
+    DataSource1: TDataSource;
+    OracleDataSet1: TOracleDataSet;
+    OracleDataSet1DESCRIPTION: TStringField;
+    OracleDataSet1ID: TFloatField;
+    OracleDataSet1TYPECODE: TStringField;
+    PlegdsTEMID: TFloatField;
+    procedure FormShow(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  PledgForm: TPledgForm;
+
+implementation
+
+{$R *.DFM}
+
+uses CMOracleAPIDataModuleImpl;
+
+procedure TPledgForm.FormShow(Sender: TObject);
+begin
+OracleDataSet1.open;
+  Plegds.open;
+end;
+
+procedure TPledgForm.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+ Plegds.CloseAll;
+ OracleDataSet1.closeall;
+end;
+
+procedure TPledgForm.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+  Resize := False
+end;
+
+procedure TPledgForm.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+  if ord(Key) = VK_ESCAPE then close
+end;
+
+end.

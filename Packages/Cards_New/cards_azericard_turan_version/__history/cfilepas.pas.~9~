@@ -1,0 +1,779 @@
+﻿unit cfilepas;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ComCtrls, ToolWin, ExtCtrls, ImgList, StdCtrls, FileCtrl, Buttons, Grids,
+  DBGrids, CMExcelExport,OracleData, Menus;
+
+type
+  Tcfile = class(TForm)
+    ImageList1: TImageList;
+    Panel1: TPanel;
+    CoolBar1: TCoolBar;
+    ToolBar1: TToolBar;
+    isertbtn: TToolButton;
+    ToolButton1: TToolButton;
+    ToolButton3: TToolButton;
+    ToolButton7: TToolButton;
+    CTInboxRich: TRichEdit;
+    FileListBox1: TFileListBox;
+    RefwithSel: TSpeedButton;
+    DBGrid1: TDBGrid;
+    Animate1: TAnimate;
+    CMExcelExport1: TCMExcelExport;
+    DBGrid2: TDBGrid;
+    PopupMenu1: TPopupMenu;
+    selectall1: TMenuItem;
+    procedure ToolButton3Click(Sender: TObject);
+    procedure isertbtnClick(Sender: TObject);
+    procedure ToolButton1Click(Sender: TObject);
+    procedure ToolButton7Click(Sender: TObject);
+    procedure DBGrid1TitleClick(Column: TColumn);
+    procedure DBGrid2TitleClick(Column: TColumn);
+    procedure DBGrid1DrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TColumn; State: TGridDrawState);
+    procedure selectall1Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  cfile: Tcfile;
+
+implementation
+
+uses Unit18, balans, CARDS_TLB, customers, MAINFORMImpl1, newcard, payment,SBTranslateProc,sboapiDataModuleImpl;
+
+{$R *.DFM}
+
+
+function CheckFileExt(fname : string) : boolean;
+    var i, checkFileExtLen: integer;
+        fileExt : String;
+begin
+      checkFileExtLen:=0;
+      fileExt:='';
+      fileExt:= trim(ExtractFileExt(fname));
+      for i:=0 to length(fileext) do
+        begin
+        if fileExt[i] in ['0'..'9','.'] then inc(checkFileExtLen);
+        end;
+      {check for file extention}
+      if checkFileExtLen <> length(fileext) then result:=false else result:=true;
+end;
+
+function DirectoryExists(const Name: string): Boolean;
+var
+  Code: Integer;
+begin
+  Code := GetFileAttributes(PChar(Name));
+  Result := (Code <> -1) and (FILE_ATTRIBUTE_DIRECTORY and Code <> 0);
+end;
+
+procedure Tcfile.ToolButton3Click(Sender: TObject);
+type Tclient = record
+     cardnumber:string;
+     RBSnumber:string;
+     terminal:String;
+     trantime:string;
+     trandate:string;
+     TranAmount:Real;
+     AcountAmount:real;
+     feeamount:Real;
+     Trancurrency:String;
+     Tranbalanssign:String;
+     Acccurrency:String;
+     Accbalanssign:String;
+     Feecurrency:String;
+     Feebalanssign:String;
+
+     end;
+
+var i,j,k,h,z,rowcount,selst,selstF,lengthofTA,msgcount :integer;
+    all,all1,STmessage,currency,syssim,fileExt:String;
+    test,transummUSD,amountsummUSD,feeamounsummUSD:real;
+    transummAZM,amountsummAZM,feeamounsummAZM:real;
+    transummEUR,amountsummEUR,feeamounsummEUR:real;
+    Client : array[1..100] of Tclient;
+    go:boolean;
+    f:textfile;
+    v_dir:string;
+begin
+
+v_dir:= GetCurrentDir;
+
+   //..CTButtonRefresh.Enabled:=false;
+ try
+   CTInboxRich.Lines.Clear;
+   //CTPanelCount.Caption:='0';
+   if not DirectoryExists('C:\AZCARD\IN') then MkDir('C:\AZCARD\IN');
+   FileListBox1.Directory:='C:\AZCARD\IN';
+   FileListBox1.Update;
+   if FileListBox1.Items.Count = 0 then exit;
+   {******************* AZERCARD PGP ZIP OPEN ***********************}
+   //Extract_PGP_Zip('C*.0*','C*.1*','C*.2*','C*.3*');
+   {******************* AZERCARD PGP ZIP OPEN ***********************}
+   FileListBox1.Mask:='*.*';
+   FileListBox1.Update;
+   test:=122 / 10;
+   if pos('.',floattostr(test))>0 then syssim:='.' else
+   if pos(',',floattostr(test))>0 then syssim:=',';
+   for i:=0 to FileListBox1.items.Count-1 do
+   begin
+      Application.ProcessMessages;
+      msgcount:=0;
+      if (copy(FileListBox1.items[i],0,1) <> 'C')and((copy(FileListBox1.items[i],0,1) <> 'c')) then Continue;
+
+      {check for file extention}
+      if CheckFileExt(FileListBox1.Directory+FileListBox1.items[i])=false then continue;
+
+      {LINK TO FILE}
+      AssignFile(F,'C:\AZCARD\IN\'+FileListBox1.Items[i]);
+      Reset(F);
+      rowcount:=0;
+      while not eof(f) do
+      begin
+        rowcount:=rowcount+1;
+        Readln(F,Stmessage);
+        if trim(copy(STmessage,19,3)) <> 'BAL'  then  msgcount:=msgcount+1;
+//        ShowMessage(IntToStr(msgcount));
+      end;
+      STmessage:='';
+      Reset(f);
+      {VIEW FILE NAME}
+
+      if  RefwithSel.Down = false then
+      begin
+      //CTPanelCount.Caption:=IntToStr(strtoint(CTPanelCount.Caption)+1);
+      CTInboxRich.Lines.Add('FILE NAME            :< '+FileListBox1.items[i]+' >   '+'Message count: '+inttostr(msgcount-2));
+      {VIEW FILE MESSAGE}
+      for j:=1 to rowcount-1 do
+      begin
+          Application.ProcessMessages;
+          Readln(F,Stmessage);
+          if j = 1 then Continue;
+          if trim(copy(STmessage,19,3)) = 'BAL'  then Continue;
+          //ShowMessage(trim(copy(STmessage,95,32))) ;
+
+          CTInboxRich.Lines.Add('CONTRACT NUMBER      :'+trim(copy(STmessage,71,24)));
+          CTInboxRich.Lines.Add('RBS NUMBER           :'+trim(copy(STmessage,95,32)));
+          CTInboxRich.Lines.Add('TRANSACTION DETAILS  :'+trim(copy(STmessage,374,30)));
+          CTInboxRich.Lines.Add('TERMINAL             :'+copy(STmessage,221,24)); //trim(FloatToStr(strtofloat(copy(STmessage,221,24)))));
+          CTInboxRich.Lines.Add('TRANSACTION DATE     :'+trim(copy(STmessage,245,8)));
+          CTInboxRich.Lines.Add('TRANSACTION TIME     :'+trim(copy(STmessage,253,6)));
+          {}
+          all:='';
+          ALL:=FloatToStr(StrToFloat(copy(STmessage,269,15)));
+          Insert(syssim,all,length(all)-1);
+          for k:=length(all) to 14 do all:=all+' ';
+          if copy(STmessage,259,1) = 'C' then begin all:=all+'   CREDIT'; end else
+          if copy(STmessage,259,1) = 'D' then begin all:=all+'   DEBET ';  end else
+          if copy(STmessage,259,1) = ' ' then begin all:=all+'         ';  end;
+
+          if copy(STmessage,260,3) = '944' then currency := 'AZN' else if copy(STmessage,260,3) = '840' then currency := 'USD'
+             else if copy(STmessage,260,3) = '978' then currency := 'EUR' ;
+          CTInboxRich.Lines.Add('TRANSACTION AMOUNT   :'+all+' '+currency);
+          {}
+          all:='';
+          ALL:=FloatToStr(StrToFloat(copy(STmessage,299,15)));
+          Insert(syssim,all,length(all)-1);
+          for k:=length(all) to 14 do all:=all+' ';
+          if copy(STmessage,314,1) = 'C' then begin all:=all+'   CREDIT'; end else
+          if copy(STmessage,314,1) = 'D' then begin all:=all+'   DEBET ';  end else
+          if copy(STmessage,314,1) = ' ' then begin all:=all+'         ';  end;
+          if copy(STmessage,266,3) = '944' then currency := 'AZN' else if copy(STmessage,266,3) = '840' then currency := 'USD'
+            else if copy(STmessage,266,3) = '978' then currency := 'EUR';
+          CTInboxRich.Lines.Add('ACCOUNT AMOUNT       :'+all+' '+currency);
+          {}
+          aLL:='';
+          all:=FloatToStr(StrToFloat(copy(STmessage,315,15))/100);
+          if pos(syssim,all)=0 then  Insert(syssim+'00',all,length(all)+1);
+          if copy(STmessage,266,3) = '944' then currency := 'AZN' else if copy(STmessage,266,3) = '840' then currency := 'USD'
+             else if copy(STmessage,266,3) = '978' then currency := 'EUR' ;
+          for k:=length(all) to 23 do all:=all+' ';
+          CTInboxRich.Lines.Add('FEE AMOUNT           :'+ ALL+' '+currency);
+          {}
+          CTInboxRich.Lines.Add('---------------------------------------------------------------------------------');
+      end;
+      end else
+{IF WITH SELECT BUTTON DOWN}
+      if RefwithSel.Down then
+      begin
+      //CTPanelCount.Caption:=IntToStr(strtoint(CTPanelCount.Caption)+1);
+      CTInboxRich.Lines.Add('FILE NAME            :< '+FileListBox1.items[i]+' >');
+      {INSERT INTO ARRAY CLIENT}
+      for j:=1 to rowcount-1 do
+      begin
+          Readln(F,Stmessage);
+          if j = 1 then Continue;
+          if trim(copy(STmessage,19,3)) = 'BAL'  then Continue;
+          {}
+          Client[j].cardnumber:=trim(copy(STmessage,71,24));
+          Client[j].RBSnumber:=trim(copy(STmessage,95,32));
+          Client[j].terminal:=floattostr(strtofloat(trim(copy(STmessage,221,24))));
+          Client[j].Trandate:=trim(copy(STmessage,245,8));
+          Client[j].trantime:=trim(copy(STmessage,253,6));
+          {TRANS}
+          all:='';
+          ALL:=FloatToStr(StrToFloat(copy(STmessage,269,15))/100);
+          Client[j].TranAmount:=StrToFloat(all);
+          all:='';
+          if copy(STmessage,259,1) = 'C' then begin all:='   CREDIT';Client[j].TranAmount:=Client[j].TranAmount*(-1) end else
+          if copy(STmessage,259,1) = 'D' then begin all:='   DEBET ';  end;
+          client[j].Tranbalanssign:=all;
+          all:='';
+          if copy(STmessage,260,3) = '944' then currency := 'AZN' else if copy(STmessage,260,3) = '840' then currency := 'USD'
+              else if copy(STmessage,260,3) = '978' then currency := 'EUR' ;
+          Client[j].Trancurrency:=currency;
+          {}
+          all:='';
+          ALL:=FloatToStr(StrToFloat(copy(STmessage,299,15))/100);
+          Client[j].AcountAmount:=StrToFloat(all);
+          all:='';
+          if copy(STmessage,314,1) = 'C' then begin all:='   CREDIT';Client[j].AcountAmount:=Client[j].AcountAmount*(-1) end else
+          if copy(STmessage,314,1) = 'D' then begin all:='   DEBET ';  end;
+          Client[j].Accbalanssign:=all;
+          all:='';
+          if copy(STmessage,266,3) = '944' then currency := 'AZN' else if copy(STmessage,266,3) = '840' then currency := 'USD'
+             else  if copy(STmessage,266,3) = '978' then currency := 'EUR' ;
+          Client[j].Acccurrency:=currency;
+          {}
+          aLL:='';
+          client[j].feeamount:=StrToFloat(copy(STmessage,315,15))/100;
+
+          if copy(STmessage,314,1) = 'C' then begin all:='   CREDIT';client[j].feeamount:=client[j].feeamount*(-1);end else
+          if copy(STmessage,314,1) = 'D' then begin all:='   DEBET ';  end;
+          Client[j].Feebalanssign:=all;
+          if copy(STmessage,266,3) = '944' then currency := 'AZN' else if copy(STmessage,266,3) = '840' then currency := 'USD'
+             else if copy(STmessage,266,3) = '978' then currency := 'EUR' ;
+          Client[j].Feecurrency:=currency;
+      end;
+      Reset(f);
+      {VIEW FILE MESSAGE}
+      for j:=2 to rowcount-1 do
+      begin
+          transummUSD:=0;
+          transummAZM:=0;
+          transummEUR:=0;
+          amountsummUSD:=0;
+          amountsummAZM:=0;
+          amountsummEUR:=0;
+          feeamounsummUSD:=0;
+          feeamounsummAZM:=0;
+          feeamounsummEUR:=0;
+          go:=false;
+          for z:=2 to j-1 do if (Client[j].cardnumber = Client[z].cardnumber) then begin go:=true; break;end;
+          if go then Continue;
+          if Client[j].Trancurrency = 'USD' then transummUSD:=client[j].TranAmount else if Client[j].Trancurrency = 'AZN' then transummAZM:=client[j].TranAmount
+          else  if Client[j].Trancurrency = 'EUR' then transummEUR:=client[j].TranAmount;
+          if Client[j].Acccurrency = 'USD' then amountsummUSD:=client[j].AcountAmount else if Client[j].Acccurrency = 'AZN' then amountsummAZM:=client[j].AcountAmount
+          else  if Client[j].Acccurrency = 'EUR' then amountsummEUR:=client[j].AcountAmount ;
+          if Client[j].Feecurrency = 'USD' then feeamounsummUSD:=client[j].feeamount else if Client[j].Feecurrency = 'AZN' then feeamounsummAZM:=client[j].feeamount
+          else  if Client[j].Feecurrency = 'EUR' then feeamounsummEUR:=client[j].feeamount ;
+
+          for h:=j+1 to rowcount-1 do
+          begin
+              if Client[j].cardnumber = Client[h].cardnumber then
+              begin
+                 {}
+                    if Client[h].Trancurrency = 'USD'  then
+                    transummUSD:=transummUSD+client[h].TranAmount
+                    else
+                    if Client[h].Trancurrency = 'AZN'  then
+                    transummAZM:=transummAZM+client[h].TranAmount
+                    else
+                    if Client[h].Trancurrency = 'EUR'  then
+                    transummEUR:=transummEUR+client[h].TranAmount;
+                 {}
+                    if Client[h].Acccurrency = 'USD'  then
+                    amountsummUSD:=amountsummUSD+client[h].AcountAmount
+                    else
+                    if Client[h].Acccurrency = 'AZN'  then
+                    amountsummAZM:=amountsummAZM+client[h].AcountAmount
+                    else
+                    if Client[h].Acccurrency = 'EUR'  then
+                    amountsummEUR:=amountsummEUR+client[h].AcountAmount;
+                 {}
+                    if Client[h].Feecurrency = 'USD' then
+                    feeamounsummUSD:=feeamounsummUSD+client[h].feeamount
+                    else
+                    if Client[h].Feecurrency = 'AZN' then
+                    feeamounsummAZM:=feeamounsummAZM+client[h].feeamount
+                    else
+                    if Client[h].Feecurrency = 'EUR' then
+                    feeamounsummEUR:=feeamounsummEUR+client[h].feeamount;
+              end;
+      end;
+      CTInboxRich.Lines.Add('CONTRACT NUMBER      :'+client[j].cardnumber);
+      CTInboxRich.Lines.Add('RBS NUMBER           :'+Client[j].RBSnumber);
+      CTInboxRich.Lines.Add('TERMINAL             :'+client[j].terminal);
+      CTInboxRich.Lines.Add('TRANSACTION DATE     :'+client[j].trandate);
+      CTInboxRich.Lines.Add('TRANSACTION TIME     :'+client[j].trantime);
+      {TRANS}
+      all1:='';
+      all1:=FloatToStr(abs(transummUSD));
+      if pos(syssim,all1)=0 then Insert(syssim+'00',all1,length(all1)+1);
+      for k:=length(all1) to 14 do all1:=all1+' ';
+      if transummUSD < 0 then all1:=all1+'  CREDIT' else all1:=all1+'  DEBIT ';
+      all1:='['+all1+' USD]';
+      //*//
+      all:='';
+      all:=FloatToStr(abs(transummAZM));
+      if pos(syssim,all)=0 then Insert(syssim+'00',all,length(all)+1);
+      for k:=length(all) to 14 do all:=all+' ';
+      if transummAZM < 0 then all:=all+'  CREDIT' else all:=all+'  DEBIT ';
+      all:='['+all+' AZN]';
+      all:='';
+      all:=FloatToStr(abs(transummEUR));
+      if pos(syssim,all)=0 then Insert(syssim+'00',all,length(all)+1);
+      for k:=length(all) to 14 do all:=all+' ';
+      if transummEUR < 0 then all:=all+'  CREDIT' else all:=all+'  DEBIT ';
+      all:='['+all+' EUR]';
+      all:=all+' + '+all1;
+      CTInboxRich.Lines.Add('TRANSACTION AMOUNT   :'+all);
+      {AMOUNT}
+      all:='';
+      all:=FloatToStr(abs(amountsummAZM)+abs(amountsummUSD)+abs(amountsummEUR));
+      if pos(syssim,all)=0 then Insert(syssim+'00',all,length(all)+1);
+      for k:=length(all) to 14 do all:=all+' ';
+      if (amountsummAZM+amountsummUSD+amountsummEUR)< 0 then all:=all+'  CREDIT' else all:=all+'  DEBIT ';
+      all:='['+all+' '+client[j].Acccurrency+']';
+      all:=all;
+      CTInboxRich.Lines.Add('ACCOUNT AMOUNT       :'+all);
+      {FEE}
+      all:='';
+      all:=FloatToStr(abs(feeamounsummAZM)+abs(feeamounsummUSD)+abs(feeamounsummAZM));
+      if pos(syssim,all)=0 then Insert(syssim+'00',all,length(all)+1);
+      for k:=length(all) to 14 do all:=all+' ';
+      if (feeamounsummAZM+feeamounsummUSD+feeamounsummEUR)< 0 then all:=all+'  CREDIT' else all:=all+'  DEBIT ';
+      all:='['+all+' '+client[j].Feecurrency+']';
+      all:=all;
+      CTInboxRich.Lines.Add('FEE AMOUNT           :'+all);
+      CTInboxRich.Lines.Add('-----------------------------------------------------------------------------------');
+      end;
+      end;
+      if RefwithSel.Down = false then
+      begin
+      CTInboxRich.SelStart:=CTInboxRich.FindText('Message count:',selst,LENGTH(CTInboxRich.Text),[stMatchCase]);
+      CTInboxRich.SelLength:=18;
+      CTInboxRich.SelAttributes.Color:=clBlue;
+      CTInboxRich.SelAttributes.Style:=[];
+      selst:=CTInboxRich.FindText('Message count:',selst,LENGTH(CTInboxRich.Text),[stMatchCase])+1;
+      CTInboxRich.SelLength:=-1;
+      end;
+      CTInboxRich.SelStart:=CTInboxRich.FindText('FILE NAME',selstF,LENGTH(CTInboxRich.Text),[stMatchCase]);
+      CTInboxRich.SelLength:=38;
+      CTInboxRich.SelAttributes.Color:=clred;
+      selstF:=CTInboxRich.FindText('FILE NAME',selstF,LENGTH(CTInboxRich.Text),[stMatchCase])+1;
+      CTInboxRich.SelLength:=-1;
+      CloseFile(F);
+   end;
+   CTInboxRich.SelStart:=0;
+   FINALLY
+      //CTButtonRefresh.Enabled:=true;
+      //Delete_PGP_Zip;
+   END;
+SendMessage(CTInboxRich.Handle, EM_LINESCROLL, 0,(-1)*(CTInboxRich.Lines.Count-1));
+FileListBox1.Directory:=v_dir;
+end;
+
+
+procedure Tcfile.isertbtnClick(Sender: TObject);
+var i,j,rowcount:integer;
+    STmessage,all,names:string;
+    f:textfile;
+    v_dir:string;
+begin
+DataMod_CARDS.mainpacket.CallProcedure('delete_trancaction_c',[]);
+  v_dir:=GetCurrentDir;
+
+   if not DirectoryExists('C:\AZCARD\IN') then MkDir('C:\AZCARD\IN');
+   FileListBox1.Directory:='C:\AZCARD\IN';
+   FileListBox1.Update;
+   if FileListBox1.Items.Count = 0 then exit;
+   {******************* AZERCARD PGP ZIP OPEN ***********************}
+  // Extract_PGP_Zip('C*.0*','C*.1*','C*.2*','C*.3*');
+   {******************* AZERCARD PGP ZIP OPEN ***********************}
+   FileListBox1.Mask:='*.*';
+   FileListBox1.Update;
+   Datamod_cards.UMUMI.Active:=false;
+   Datamod_cards.UMUMI.SQL.Clear;
+   Datamod_cards.UMUMI.SQL.Add('select card_messages_c.rowid,card_messages_c.* from card_messages_c');
+   Datamod_cards.UMUMI.Active:=true;
+   if CTInboxRich.Lines.Count = 0 then exit;
+   for i:=0 to FileListBox1.items.Count-1 do
+   begin
+      Application.ProcessMessages;
+      if (copy(FileListBox1.items[i],0,1) <> 'C')and((copy(FileListBox1.items[i],0,1) <> 'c')) then Continue;
+      Datamod_cards.UMUMI1.Active:=false;
+      Datamod_cards.UMUMI1.SQL.Clear;
+      Datamod_cards.UMUMI1.SQL.Add('select * from card_messages_c where file_name = '''+FileListBox1.items[i]+'''');
+      Datamod_cards.UMUMI1.Active:=true;
+      if Datamod_cards.UMUMI1.RecordCount>0 then
+      case MessageDlg('The file "'+FileListBox1.items[i]+'" already exits, do you want replace it!? ',mtConfirmation,[mbyes,mbno],0) of
+           mryes:begin
+                 Datamod_cards.UMUMI1.Active:=false;
+                 Datamod_cards.UMUMI1.SQL.Clear;
+                 Datamod_cards.UMUMI1.SQL.Add('delete from card_messages_c where file_name = '''+FileListBox1.items[i]+'''');
+                 Datamod_cards.UMUMI1.ExecSQL;
+                end;
+           mrno:continue;
+           end;
+
+Animate1.Visible:=True;
+Animate1.Active:=True;
+Animate1.Play(0,0,1);
+      {LINK TO FILE}
+      AssignFile(F,'C:\AZCARD\IN\'+FileListBox1.Items[i]);
+
+      Reset(F);
+      rowcount:=0;
+      while not eof(f) do begin rowcount:=rowcount+1;Readln(f);end;
+      STmessage:='';
+      Reset(f);
+      {VIEW FILE MESSAGE}
+      for j:=1 to rowcount-1 do
+      begin
+
+
+
+          Application.ProcessMessages;
+          Readln(F,Stmessage);
+          if j = 1 then Continue;
+          if trim(copy(STmessage,19,3)) = 'BAL'  then Continue;
+
+
+          Datamod_cards.UMUMI.Append;
+          Datamod_cards.UMUMI.FieldByName('File_name').AsString := FileListBox1.Items[i];
+          names:=FileListBox1.Items[i];
+          Datamod_cards.UMUMI.FieldByName('cardNumber').AsString := trim(copy(STmessage,71,24)); //--
+          Datamod_cards.UMUMI.FieldByName('rbsNumber').AsString := trim(copy(STmessage,95,32));  //--
+          Datamod_cards.UMUMI.FieldByName('send').AsInteger :=0;
+          {}
+          all:='';
+          all:=trim(copy(STmessage,245,8));
+          Datamod_cards.UMUMI.FieldByName('tranDate').AsDateTime :=EncodeDate(strtoint(copy(all,0,4)),strtoint(copy(all,5,2)),strtoint(copy(all,7,2)));
+          {}
+          Datamod_cards.UMUMI.FieldByName('tranTime').AsString := trim(copy(STmessage,253,6));//StrToDateTime(formatdatetime(ShortTimeFormat,EncodeTime(strtoint(copy(all,0,2)),strtoint(copy(all,3,2)),strtoint(copy(all,5,2)),0)));
+          {}
+          all:='';
+          ALL:=FloatToStr(StrToFloat(copy(STmessage,269,15)));  //--
+          Insert(DecimalSeparator,all,length(all)-1);
+          Datamod_cards.UMUMI.FieldByName('tranAmount').AsFloat := StrToFloat(all);
+          Datamod_cards.UMUMI.FieldByName('currency').AsString := trim(copy(STmessage,260,3));
+          Datamod_cards.UMUMI.FieldByName('balan_sign').AsString := trim(copy(STmessage,259,1));
+          {}
+          aLL:='';
+
+          all:=FloatToStr(StrToFloat(copy(STmessage,315,15))/100); //--
+          Datamod_cards.UMUMI.FieldByName('feeAmount').AsFloat :=strtofloat(all);
+          Datamod_cards.UMUMI.FieldByName('fee_cur').AsString := trim(copy(STmessage,266,3));
+          {OTHER FIELDS}
+
+
+//*************************************************************************\\
+{3}       Datamod_cards.UMUMI.FieldByName('tran_num').AsString :=trim(copy(STmessage,9,10));  //--
+{4}       Datamod_cards.UMUMI.FieldByName('reg_num').AsString :=trim(copy(STmessage,19,30));  //--
+{5}       Datamod_cards.UMUMI.FieldByName('tran_type').AsString :=trim(copy(STmessage,49,8)); //--
+{7}       Datamod_cards.UMUMI.FieldByName('contract_t').AsString :=trim(copy(STmessage,67,4));//--
+{10}      Datamod_cards.UMUMI.FieldByName('org_num').AsString :=trim(copy(STmessage,127,24)); //--
+{12}      Datamod_cards.UMUMI.FieldByName('cont_en12').AsString :=trim(copy(STmessage,161,4)); //--
+{13}      Datamod_cards.UMUMI.FieldByName('cont_en13').AsString :=trim(copy(STmessage,165,24)); //--
+{15}      Datamod_cards.UMUMI.FieldByName('org_con').AsString :=trim(copy(STmessage,221,24)); //--
+{18}      Datamod_cards.UMUMI.FieldByName('tran_dir').AsString :=trim(copy(STmessage,259,1)); //--
+{19}      Datamod_cards.UMUMI.FieldByName('tran_cur').AsString :=trim(copy(STmessage,260,3)); //--
+{20}      Datamod_cards.UMUMI.FieldByName('sett_cur').AsString :=trim(copy(STmessage,263,3));  //--
+{21}      Datamod_cards.UMUMI.FieldByName('acc_cur').AsString :=trim(copy(STmessage,266,3));   //--
+{23}      Datamod_cards.UMUMI.FieldByName('sett_am').AsString :=trim(copy(STmessage,284,15));  //--
+{24}      Datamod_cards.UMUMI.FieldByName('acc_amount').AsString :=trim(copy(STmessage,299,15)); //--
+{25}      Datamod_cards.UMUMI.FieldByName('fee_dir').AsString :=trim(copy(STmessage,314,1));  //--
+{27}      Datamod_cards.UMUMI.FieldByName('acc_type').AsString :=trim(copy(STmessage,330,3));  //--
+{29}      Datamod_cards.UMUMI.FieldByName('expry_date').AsString :=trim(copy(STmessage,336,4)); //--
+{30}      Datamod_cards.UMUMI.FieldByName('merch_id').AsString :=trim(copy(STmessage,340,15));   //--
+{31}      Datamod_cards.UMUMI.FieldByName('trancoutry').AsString :=trim(copy(STmessage,355,3));  //--
+{32}      Datamod_cards.UMUMI.FieldByName('tran_city').AsString :=trim(copy(STmessage,358,16));  //--
+{33}      Datamod_cards.UMUMI.FieldByName('tran_detal').AsString :=trim(copy(STmessage,374,30)); //--
+{34}      Datamod_cards.UMUMI.FieldByName('value_date').AsString :=trim(copy(STmessage,404,8));  //--
+{38}      Datamod_cards.UMUMI.FieldByName('sett_date').AsString :=trim(copy(STmessage,443,8));  //--
+{39}      Datamod_cards.UMUMI.FieldByName('merch_code').AsString :=trim(copy(STmessage,451,4)); //--
+{42}      Datamod_cards.UMUMI.FieldByName('rec_cur').AsString :=trim(copy(STmessage,479,3));    //--
+{43}      Datamod_cards.UMUMI.FieldByName('rec_amount').AsString :=trim(copy(STmessage,482,15));  //--
+{44}      Datamod_cards.UMUMI.FieldByName('ROWNUMS').AsString :=trim(copy(STmessage,3,6));
+{45}      Datamod_cards.UMUMI.FieldByName('RESERVED1').AsString :=trim(copy(STmessage,57,10));
+{46}      Datamod_cards.UMUMI.FieldByName('RESERVED2').AsString :=trim(copy(STmessage,151,10));
+{47}      Datamod_cards.UMUMI.FieldByName('RESERVED3').AsString :=trim(copy(STmessage,189,32));
+{48}      Datamod_cards.UMUMI.FieldByName('RESERVED4').AsString :=trim(copy(STmessage,333,3));
+{49}      Datamod_cards.UMUMI.FieldByName('REGISTR_NUMBER').AsString :=trim(copy(STmessage,412,10));
+{50}      Datamod_cards.UMUMI.FieldByName('AVTORIZASION_NUMBER').AsString :=trim(copy(STmessage,422,6));
+{51}      Datamod_cards.UMUMI.FieldByName('AVTORIZASION_AMOUNT').AsString :=trim(copy(STmessage,428,15));
+{52}      Datamod_cards.UMUMI.FieldByName('CONTRA_ENTRY').AsString :=trim(copy(STmessage,455,1));
+{53}      Datamod_cards.UMUMI.FieldByName('REFERENCE_NUMBER').AsString :=trim(copy(STmessage,456,23));
+{54}      Datamod_cards.UMUMI.FieldByName('ISUED_REFERENCE_NUMBER').AsString :=trim(copy(STmessage,497,10));
+{55}      Datamod_cards.UMUMI.FieldByName('RETRIVAL_REFERENC_NUMBER').AsString :=trim(copy(STmessage,507,12));
+{56}      Datamod_cards.UMUMI.FieldByName('TRANSACTION_CONDITION').AsString :=trim(copy(STmessage,519,4));
+{57}      Datamod_cards.UMUMI.FieldByName('CUSTOM_FEE_DIRECTION').AsString :=trim(copy(STmessage,523,1));
+{58}      Datamod_cards.UMUMI.FieldByName('CUSTOM_FEE_AMOUNT').AsString :=trim(copy(STmessage,524,15));
+{59}      Datamod_cards.UMUMI.FieldByName('GLDATE').AsString :=trim(copy(STmessage,539,8));
+{60}      Datamod_cards.UMUMI.FieldByName('DEVICE_FINANCIAL_NUMBER').AsString :=trim(copy(STmessage,547,10));
+{61}      Datamod_cards.UMUMI.FieldByName('RSERVED_5_1').AsString :=trim(copy(STmessage,557,1));
+{62}      Datamod_cards.UMUMI.FieldByName('RSERVED_5_2').AsString :=trim(copy(STmessage,558,18));
+{63}      Datamod_cards.UMUMI.FieldByName('RSERVED_5_3').AsString :=trim(copy(STmessage,576,68));
+{64}      Datamod_cards.UMUMI.FieldByName('RSERVED_5_3').AsString :=trim(copy(STmessage,644,4));
+{66}      Datamod_cards.UMUMI.FieldByName('NewFee').AsString :=trim(copy(STmessage,629,15));
+{65}      DataMod_CARDS.UMUMI.FieldByName('STATUS').AsInteger:=1;
+
+
+          {}
+
+
+          Datamod_cards.UMUMI.Post;
+         
+     end;
+      DataMod_CARDS.mainpacket.CallProcedure('carxiv',[FileListBox1.Items[i]]);
+     CloseFile(F);
+   end;
+   //Delete_PGP_Zip;
+   //DataMod.OraPak_Trans_Phone.CallProcedure('c_trans_phone',[]);
+   Animate1.active:=False;
+   Animate1.Visible:=False;
+
+
+
+   Animate1.Stop;
+   MessageDlg('All messages are sent in base!',mtInformation,[mbOK],0);
+    FileListBox1.Directory:=v_dir;
+   DataMod_CARDS.messages.Close;
+   DataMod_CARDS.messages.Open;
+   DataMod_CARDS.messages2.Close;
+   DataMod_CARDS.messages2.Open;
+
+end;
+
+procedure Tcfile.ToolButton1Click(Sender: TObject);
+var
+
+
+   V,Sheet,Sheets,excel  :Variant;
+   cell,row,l,m    :Integer;
+   i,j,ids : integer;
+   formats,debet,kredit,summa,destination,vbic:string;
+   output:TextFile;
+   FileName,Swmessage,dir,edit_ref,BeginMessage,Endmesage,valu:String;
+   Index :Integer;
+   WaitNextConfirm, WillRefresh: Boolean;
+   TransactionID :Integer;
+begin
+
+
+  WaitNextConfirm :=True;
+  WillRefresh :=False;
+  if DBGrid1.CanFocus then
+  DBGrid1.SetFocus;
+
+  //Focus;
+  with  DBGrid1, SelectedRows, DataSource.DataSet, DataMod_CARDS do
+  try
+    if Count = 0 then CurrentRowSelected := True;
+
+
+
+    for  Index :=0 to  Count - 1 do
+    begin
+      GotoBookmark(Pointer(Items[Index]));
+      TransactionID :=FieldbyName('ID').AsInteger;
+
+      if  WaitNextConfirm  then
+      case MessageDlg(
+        Format('Əmaliyyat təsdiq edilsin? №',[TransactionID])
+       ,mtConfirmation
+       ,[mbYes, mbNo ,mbCancel ,mbYesToAll]
+       ,0
+       )   of
+        mrNo       : begin Continue;  end;
+        mrCancel   : begin Break; end;
+        mrYesToAll :
+          if MessageDlg(Format('%d  sayda əməliyyat təsdiq edildi?', [Count - Index]), mtConfirmation, [mbYes, mbCancel], 0) = mrYes then
+           WaitNextConfirm :=False
+          else
+           Continue;
+      end;
+      Application.ProcessMessages;
+      //------------------------------------------------------------------------------------create prows
+
+      {   DataMod_CARDS.ufxchecking.Close;
+       DataMod_CARDS.ufxchecking.SetVariable('v_rrn',dbgrid1.DataSource.DataSet.FieldByName('reg_num').AsString );
+       DataMod_CARDS.ufxchecking.Open;       }
+
+
+
+      //    if DataMod_CARDS.ufxchecking.FieldByName('cnt').AsInteger=0 then
+      //    begin
+                DataMod_CARDS.mainpacket.CallProcedure('transaction_c',[TransactionID]) ;
+           //     end;
+               // DataMod_CARDS.messages.Close;
+               // DataMod_CARDS.messages2.Close;
+               // DataMod_CARDS.messages.Open;
+                //DataMod_CARDS.messages2.Open;
+      //--------------------------------------------end create prows
+
+
+
+      WillRefresh :=True;
+
+
+    end;
+  finally
+   if WillRefresh then
+
+
+   begin
+
+
+
+
+                            // Excel.Range[Excel.Cells[1, 1], Excel.Cells[index+1,27]].Select;
+                            // excel.Cells[index+1,27].SELECT;
+                           // Excel.Selection.Borders.LineStyle:=1;
+                           // excel.Selection.HorizontalAlignment:=2;
+
+
+                            // Excel.Visible := True;
+
+                          DBGrid1.DataSource.DataSet.Refresh;
+                          DBGrid2.DataSource.DataSet.Refresh;
+                          ShowMessage('Əməliyyatlar günün sənədlərinə göndərildi!');
+
+
+
+
+   end; //else Excel.Workbooks.close;
+
+  end;
+
+end;
+
+procedure Tcfile.ToolButton7Click(Sender: TObject);
+begin
+  if not CMExcelExport1.Connected then CMExcelExport1.Connect;
+  CMExcelExport1.ExportDataset(DataMod_CARDS.messages,'CFILES',true);
+  CMExcelExport1.Disconnect;
+end;
+
+procedure Tcfile.DBGrid1TitleClick(Column: TColumn);
+var
+   TitleName :string;
+   SortPosition: word;
+begin
+ SortPosition :=100;
+ //OrderedTitle :=Column.FieldName; //H.R. 24.06.2008
+ if (DBGrid1.DataSource.DataSet.IsEmpty) or (Column.FieldName = EmptyStr) then Exit;
+ Screen.Cursor :=crHourGlass;
+ TitleName :=Column.FieldName;
+ with TOracleDataSet(DBGrid1.DataSource.DataSet) do
+  try
+  
+   SortPosition :=SQL.Add('ORDER BY '+ TitleName);
+   Refresh;
+  finally
+   SQL[SortPosition] :=EmptyStr;
+   Screen.Cursor :=crDefault;
+  end;
+end;
+
+procedure Tcfile.DBGrid2TitleClick(Column: TColumn);
+var
+   TitleName :string;
+   SortPosition: word;
+begin
+ SortPosition :=100;
+ //OrderedTitle :=Column.FieldName; //H.R. 24.06.2008
+ if (DBGrid2.DataSource.DataSet.IsEmpty) or (Column.FieldName = EmptyStr) then Exit;
+ Screen.Cursor :=crHourGlass;
+ TitleName :=Column.FieldName;
+ with TOracleDataSet(DBGrid2.DataSource.DataSet) do
+  try
+  
+   SortPosition :=SQL.Add('ORDER BY '+ TitleName);
+   Refresh;
+  finally
+   SQL[SortPosition] :=EmptyStr;
+   Screen.Cursor :=crDefault;
+  end;
+end;
+
+procedure Tcfile.DBGrid1DrawColumnCell(Sender: TObject; const Rect: TRect;
+  DataCol: Integer; Column: TColumn; State: TGridDrawState);
+var
+  ImageIndex: Integer;
+
+begin
+
+ ImageIndex := -1;
+  with Sender as TDBGrid do
+  begin
+    if DataSource.DataSet.RecordCount <> 0 then
+    begin
+      case DataSource.DataSet.FieldByName('STATUS').AsInteger of
+
+      1:
+        ImageIndex :=25;
+      2:
+        ImageIndex :=3 ;
+      3:
+        ImageIndex :=26;
+
+      4:
+        ImageIndex:=13;  
+
+      else
+      end;
+      if (DataCol = 1) and (ImageIndex <> -1) then
+        ImageList1.Draw(Canvas, Rect.Left, Rect.Top, ImageIndex, True)
+      else
+        DefaultDrawColumnCell(Rect, DataCol, Column, State);
+    end;
+
+
+
+
+  end;
+end;
+
+procedure Tcfile.selectall1Click(Sender: TObject);
+begin
+ with dbgrid1, SelectedRows, DataSource.DataSet do
+  begin
+    DisableControls;
+    try
+      First;
+      while not Eof do
+       begin
+        CurrentRowSelected := True;
+        Next;
+       end;
+    finally
+      EnableControls;
+    end;
+  end;   
+end;
+
+procedure Tcfile.FormCreate(Sender: TObject);
+begin
+SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure Tcfile.FormShow(Sender: TObject);
+begin
+//DataMod_CARDS.mainpacket.CallProcedure('delete_trancaction_c',[]);
+//DBGrid1.DataSource.DataSet.Refresh;
+//DBGrid2.DataSource.DataSet.Refresh;
+//CTInboxRich.Clear;
+end;
+
+end.

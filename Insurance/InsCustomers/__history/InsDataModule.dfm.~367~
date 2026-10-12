@@ -1,0 +1,5544 @@
+﻿object InsDataMod: TInsDataMod
+  OldCreateOrder = False
+  OnCreate = DataModuleCreate
+  OnDestroy = DataModuleDestroy
+  Height = 846
+  HorizontalOffset = 24
+  Width = 1002
+  object DSInsCustomers: TDataSource
+    DataSet = ODSInsCustomers
+    Left = 40
+    Top = 64
+  end
+  object ODSInsCustomers: TOracleDataSet
+    SQL.Strings = (
+      
+        'select ic.rowid,trim(ic.surname||'#39' '#39'||ic.name||'#39' '#39'||ic.fathernam' +
+        'e) as fullname,ic.*,trim(translate(ic.surname||'#39' '#39'||ic.name||'#39' '#39 +
+        '||ic.fathername, '#39'Ii'#304'iI'#305#39', '#39'``````'#39')) as name1 from ins_Customer' +
+        's ic'
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      'order by :TITLE')
+    ReadBuffer = 5000
+    Optimize = False
+    Variables.Data = {
+      04000000010000000C0000003A005400490054004C0045000100000003000000
+      69640000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000002700000004000000490044000100000000000E000000430055005300
+      54005F0049004400010000000000080000004E0041004D004500010000000000
+      0E0000005300550052004E0041004D0045000100000000001400000046004100
+      54004800450052004E0041004D0045000100000000001200000048004F004D00
+      4500500048004F004E0045000100000000001200000057004F0052004B005000
+      48004F004E004500010000000000160000004D004F00420049004C0045005000
+      48004F004E004500010000000000060000004600410058000100000000000E00
+      0000410044004400520045005300530001000000000016000000440041005400
+      45004F004600420049005200540048000100000000001800000050004C004100
+      430045004F004600420049005200540048000100000000000600000041004700
+      4500010000000000060000005300450058000100000000001200000050004100
+      530050004F00520054004E004F000100000000000A0000004D0053005F004900
+      44000100000000000800000043004900540059000100000000000C0000004900
+      4E004400450058005F000100000000001C0000004D00410049004C0049004E00
+      470041004400440052004500530053000100000000000C0000004F0043004300
+      5F00490044000100000000000A000000450044005F0049004400010000000000
+      0A000000530054004100540045000100000000000C0000004100430054005F00
+      490044000100000000001A00000043004F004E00540041004300540050004500
+      520053004F004E000100000000002400000043004F004E005400410043005400
+      50004500520053004F004E00500048004F004E00450001000000000018000000
+      43004C004F00530045005F005000520045004600490058000100000000001C00
+      000049004E00530055005200450044005F005400590050004500490044000100
+      000000000C0000005000410053005300450052000100000000001A0000004400
+      4F00430055004D0045004E0054005F0054005900500045000100000000000600
+      000049004E004E0001000000000010000000460055004C004C004E0041004D00
+      45000100000000001400000045004E005400450052005F004400410054004500
+      010000000000080000004D00410049004C000100000000001000000053005400
+      4100540045005F00490044000100000000000E00000043004900540059005F00
+      49004400010000000000140000004400520049005600450052005F0044004100
+      54000100000000000A0000004E0041004D004500310001000000000016000000
+      55005300450052005F0049004E0053005F00490044000100000000000C000000
+      530059005300440041005400010000000000}
+    Session = sboapiDataModule.SBSession
+    BeforeDelete = ODSInsCustomersBeforeDelete
+    AfterScroll = ODSInsCustomersAfterScroll
+    Left = 24
+    Top = 8
+    object ODSInsCustomersNAME: TWideStringField
+      DisplayLabel = 'Ad'#305
+      FieldName = 'NAME'
+      Size = 128
+    end
+    object ODSInsCustomersSURNAME: TWideStringField
+      DisplayLabel = 'Soyad'#305
+      FieldName = 'SURNAME'
+      Size = 128
+    end
+    object ODSInsCustomersFATHERNAME: TWideStringField
+      DisplayLabel = 'Atas'#305' Ad'#305
+      FieldName = 'FATHERNAME'
+      Size = 128
+    end
+    object ODSInsCustomersMOBILEPHONE: TWideStringField
+      DisplayLabel = 'Mobil tel.'#8470
+      FieldName = 'MOBILEPHONE'
+      Size = 128
+    end
+    object ODSInsCustomersHOMEPHONE: TWideStringField
+      DisplayLabel = 'Ev n'#246'mr'#601'si'
+      FieldName = 'HOMEPHONE'
+      Size = 64
+    end
+    object ODSInsCustomersWORKPHONE: TWideStringField
+      DisplayLabel = #304#351' n'#246'mr'#601'si'
+      FieldName = 'WORKPHONE'
+      Size = 64
+    end
+    object ODSInsCustomersFAX: TWideStringField
+      DisplayLabel = 'Faks'
+      FieldName = 'FAX'
+      Size = 32
+    end
+    object ODSInsCustomersADDRESS: TWideStringField
+      DisplayLabel = 'Daimi(h'#252'quqi) '#252'nvan'
+      FieldName = 'ADDRESS'
+      Size = 1024
+    end
+    object ODSInsCustomersMAILINGADDRESS: TWideStringField
+      DisplayLabel = 'Faktiki '#252'nvan'
+      FieldName = 'MAILINGADDRESS'
+      Size = 1024
+    end
+    object ODSInsCustomersPASSER: TWideStringField
+      DisplayLabel = 'Seriya'
+      FieldName = 'PASSER'
+      Size = 120
+    end
+    object ODSInsCustomersPASPORTNO: TWideStringField
+      DisplayLabel = 'Pasport '#8470
+      FieldName = 'PASPORTNO'
+      Size = 64
+    end
+    object ODSInsCustomersSTATE: TWideStringField
+      DisplayLabel = #214'lk'#601
+      FieldName = 'STATE'
+      Size = 64
+    end
+    object ODSInsCustomersCITY: TWideStringField
+      DisplayLabel = #350#601'h'#601'r'
+      FieldName = 'CITY'
+      Size = 64
+    end
+    object ODSInsCustomersINDEX_: TWideStringField
+      DisplayLabel = #304'ndeks'
+      FieldName = 'INDEX_'
+      Size = 32
+    end
+    object ODSInsCustomersINN: TWideStringField
+      DisplayLabel = 'V'#214'EN'
+      FieldName = 'INN'
+      Size = 800
+    end
+    object ODSInsCustomersDATEOFBIRTH: TDateTimeField
+      DisplayLabel = 'T'#601'v'#601'll'#252'd'
+      FieldName = 'DATEOFBIRTH'
+    end
+    object ODSInsCustomersENTER_DATE: TDateTimeField
+      DisplayLabel = 'Daxil olunma tarixi'
+      FieldName = 'ENTER_DATE'
+    end
+    object ODSInsCustomersCONTACTPERSON: TWideStringField
+      DisplayLabel = 'M'#601'sul '#351#601'xs'
+      FieldName = 'CONTACTPERSON'
+      Size = 256
+    end
+    object ODSInsCustomersCONTACTPERSONPHONE: TWideStringField
+      DisplayLabel = 'M'#601'sul '#351#601'xs tel.'
+      FieldName = 'CONTACTPERSONPHONE'
+      Size = 32
+    end
+    object ODSInsCustomersINSURED_TYPEID: TIntegerField
+      FieldName = 'INSURED_TYPEID'
+      Visible = False
+    end
+    object ODSInsCustomersDOCUMENT_TYPE: TFloatField
+      FieldName = 'DOCUMENT_TYPE'
+      Visible = False
+    end
+    object ODSInsCustomersFULLNAME: TWideStringField
+      FieldName = 'FULLNAME'
+      Visible = False
+      Size = 1538
+    end
+    object ODSInsCustomersACT_ID: TIntegerField
+      FieldName = 'ACT_ID'
+      Visible = False
+    end
+    object ODSInsCustomersED_ID: TIntegerField
+      FieldName = 'ED_ID'
+      Visible = False
+    end
+    object ODSInsCustomersCLOSE_PREFIX: TIntegerField
+      FieldName = 'CLOSE_PREFIX'
+      Visible = False
+    end
+    object ODSInsCustomersOCC_ID: TIntegerField
+      FieldName = 'OCC_ID'
+      Visible = False
+    end
+    object ODSInsCustomersSEX: TIntegerField
+      FieldName = 'SEX'
+      Visible = False
+    end
+    object ODSInsCustomersCUST_ID: TIntegerField
+      FieldName = 'CUST_ID'
+      Visible = False
+    end
+    object ODSInsCustomersID: TIntegerField
+      FieldName = 'ID'
+      Visible = False
+    end
+    object ODSInsCustomersPLACEOFBIRTH: TWideStringField
+      FieldName = 'PLACEOFBIRTH'
+      Visible = False
+      Size = 256
+    end
+    object ODSInsCustomersMS_ID: TIntegerField
+      FieldName = 'MS_ID'
+      Visible = False
+    end
+    object ODSInsCustomersAGE: TIntegerField
+      FieldName = 'AGE'
+      Visible = False
+    end
+    object ODSInsCustomersMAIL: TWideStringField
+      FieldName = 'MAIL'
+      Size = 200
+    end
+    object ODSInsCustomersSTATE_ID: TFloatField
+      FieldName = 'STATE_ID'
+      Visible = False
+    end
+    object ODSInsCustomersCITY_ID: TFloatField
+      FieldName = 'CITY_ID'
+      Visible = False
+    end
+    object ODSInsCustomersDRIVER_DAT: TDateTimeField
+      FieldName = 'DRIVER_DAT'
+    end
+    object ODSInsCustomersNAME1: TWideStringField
+      FieldName = 'NAME1'
+      Size = 4000
+    end
+  end
+  object DSCustomers: TDataSource
+    DataSet = ODSCustomers
+    Left = 120
+    Top = 64
+  end
+  object ODSCustomers: TOracleDataSet
+    SQL.Strings = (
+      'select id, name from customers'
+      'where close_dat is null')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000400000049004400010000000000080000004E0041004D00
+      4500010000000000}
+    AfterFetchRecord = ODSCustomersAfterFetchRecord
+    Session = sboapiDataModule.SBSession
+    Left = 144
+    Top = 8
+    object ODSCustomersID: TIntegerField
+      FieldName = 'ID'
+      Required = True
+    end
+    object ODSCustomersNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 90
+    end
+  end
+  object ODSAccount: TOracleDataSet
+    Tag = 1
+    SQL.Strings = (
+      'SELECT   '
+      
+        '   acc.RowID, ID, kli_id, op_id, acc_no, val_acc, NAME, open_dat' +
+        ', close_dat,'
+      
+        '   DECODE (close_dat, NULL, 1, 2) AS status, bal_cn1, bal_cn2, b' +
+        'al_cn3,'
+      
+        '   bal_cn4, filial, sim_otcet, tipacc, LIMIT, old_acc_no, pair_a' +
+        'cc,'
+      '   insider, ownid, t.ostat, t.pok_ostat'
+      'FROM ACCOUNT  acc, tenostat t'
+      'where  t.acc_id = acc.id'
+      'and'
+      ' ownid = :ownid'
+      'and acc.close_dat is null'
+      'ORDER BY '
+      '   id')
+    ReadBuffer = 10000
+    Optimize = False
+    Variables.Data = {
+      04000000010000000C0000003A004F0057004E00490044000400000008000000
+      0000000000D0744000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000001700000004000000490044000100000000000C0000004B004C004900
+      5F00490044000100000000000A0000004F0050005F0049004400010000000000
+      0C0000004100430043005F004E004F000100000000000E000000560041004C00
+      5F00410043004300010000000000080000004E0041004D004500010000000000
+      100000004F00500045004E005F00440041005400010000000000120000004300
+      4C004F00530045005F004400410054000100000000000C000000530054004100
+      5400550053000100000000000E000000420041004C005F0043004E0031000100
+      000000000E000000420041004C005F0043004E0032000100000000000E000000
+      420041004C005F0043004E0033000100000000000E000000420041004C005F00
+      43004E0034000100000000000C000000460049004C00490041004C0001000000
+      000012000000530049004D005F004F0054004300450054000100000000000C00
+      00005400490050004100430043000100000000000A0000004C0049004D004900
+      5400010000000000140000004F004C0044005F004100430043005F004E004F00
+      0100000000001000000050004100490052005F00410043004300010000000000
+      0E00000049004E00530049004400450052000100000000000A0000004F005700
+      4E00490044000100000000000A0000004F005300540041005400010000000000
+      1200000050004F004B005F004F005300540041005400010000000000}
+    Master = ODSContracts
+    MasterFields = 'id'
+    DetailFields = 'ownid'
+    QueryAllRecords = False
+    AfterFetchRecord = ODSAccountAfterFetchRecord
+    Session = sboapiDataModule.SBSession
+    BeforeDelete = ODSAccountBeforeDelete
+    OnCalcFields = ODSAccountCalcFields
+    Left = 200
+    Top = 16
+    object ODSAccountID: TFloatField
+      FieldName = 'ID'
+    end
+    object ODSAccountKLI_ID: TFloatField
+      FieldName = 'KLI_ID'
+      Required = True
+    end
+    object ODSAccountOP_ID: TFloatField
+      FieldName = 'OP_ID'
+    end
+    object ODSAccountACC_NO: TWideStringField
+      DisplayLabel = #1065#1077#1089#1072#1073' '#8470
+      FieldName = 'ACC_NO'
+      Required = True
+      Size = 35
+    end
+    object ODSAccountVAL_ACC: TIntegerField
+      DisplayLabel = '$'
+      FieldName = 'VAL_ACC'
+      Required = True
+    end
+    object ODSAccountNAME: TWideStringField
+      DisplayLabel = #1065#1077#1089#1072#1073#1099#1085' '#1072#1076#1099
+      FieldName = 'NAME'
+      Size = 90
+    end
+    object ODSAccountOPEN_DAT: TDateTimeField
+      DisplayLabel = #1040#1095#1099#1083#1084#1072' '#1090#1072#1088#1080#1093#1080
+      FieldName = 'OPEN_DAT'
+      Required = True
+    end
+    object ODSAccountCLOSE_DAT: TDateTimeField
+      DisplayLabel = #1041#1072#1100#1083#1072#1085#1084#1072' '#1090#1072#1088#1080#1093#1080
+      FieldName = 'CLOSE_DAT'
+    end
+    object ODSAccountSTATUS: TFloatField
+      FieldName = 'STATUS'
+    end
+    object ODSAccountBAL_CN1: TFloatField
+      DisplayLabel = #1041#1072#1083#1072#1085#1089' '#8470
+      FieldName = 'BAL_CN1'
+      Required = True
+    end
+    object ODSAccountBAL_CN2: TFloatField
+      FieldName = 'BAL_CN2'
+    end
+    object ODSAccountBAL_CN3: TFloatField
+      FieldName = 'BAL_CN3'
+    end
+    object ODSAccountBAL_CN4: TFloatField
+      FieldName = 'BAL_CN4'
+    end
+    object ODSAccountFILIAL: TIntegerField
+      FieldName = 'FILIAL'
+    end
+    object ODSAccountSIM_OTCET: TFloatField
+      FieldName = 'SIM_OTCET'
+    end
+    object ODSAccountTIPACC: TWideStringField
+      FieldName = 'TIPACC'
+    end
+    object ODSAccountLIMIT: TFloatField
+      FieldName = 'LIMIT'
+    end
+    object ODSAccountOLD_ACC_NO: TWideStringField
+      FieldName = 'OLD_ACC_NO'
+    end
+    object ODSAccountPAIR_ACC: TFloatField
+      FieldName = 'PAIR_ACC'
+    end
+    object ODSAccountINSIDER: TWideStringField
+      FieldName = 'INSIDER'
+      Size = 1
+    end
+    object ODSAccountVAL_NAME: TWideStringField
+      FieldKind = fkCalculated
+      FieldName = 'VAL_NAME'
+      ReadOnly = True
+      Size = 10
+      Calculated = True
+    end
+    object ODSAccountOWNID: TFloatField
+      FieldName = 'OWNID'
+    end
+    object ODSAccountOSTAT: TFloatField
+      FieldName = 'OSTAT'
+      DisplayFormat = '#,##0.00'
+    end
+    object ODSAccountPOK_OSTAT: TFloatField
+      FieldName = 'POK_OSTAT'
+      DisplayFormat = '#,##0.00'
+    end
+  end
+  object DSAccount: TDataSource
+    DataSet = ODSAccount
+    Left = 192
+    Top = 64
+  end
+  object BalAcc: TOracleDataSet
+    Tag = 1
+    SQL.Strings = (
+      ''
+      'select to_char(bal_cn) bal_cn, BalName from bal_spr1'
+      'order by bal_cn'
+      '')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000C000000420041004C005F0043004E000100000000000E00
+      0000420041004C004E0041004D004500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 272
+    Top = 9
+    object BalAccBAL_CN: TWideStringField
+      FieldName = 'BAL_CN'
+      Size = 40
+    end
+    object BalAccBALNAME: TWideStringField
+      FieldName = 'BALNAME'
+      Size = 181
+    end
+  end
+  object BalAccData: TDataSource
+    DataSet = BalAcc
+    Left = 272
+    Top = 61
+  end
+  object Currency: TOracleDataSet
+    Tag = 1
+    SQL.Strings = (
+      'select * from Avalute'
+      'Order by valute')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000170000000C000000560041004C005500540045000100000000001200
+      0000560041004C0055005F004E0041004D004500010000000000100000005600
+      41004C005F004E0041004D00450001000000000014000000560041004C005500
+      5F00530048004F00520054000100000000000A00000044004500420045005400
+      0100000000000C0000004B00520045004400490054000100000000000C000000
+      5500530054004F00520047000100000000000C00000055005300540050004F00
+      4B0001000000000010000000560041004C0055005F00470045004E0001000000
+      00000E000000560041004C0055005F0041005A000100000000000A0000005500
+      530049004E00470001000000000014000000560041004C0055005F004F005400
+      48004500520001000000000014000000560041004C0055005F0049004E005400
+      4500520001000000000012000000560041004C0055005F00420041004C004100
+      0100000000001200000050005200490053005400410056004B00410001000000
+      00000E00000043004F0055004E00540052005900010000000000100000005500
+      530054005F0050004F004B0031000100000000000C0000004600350035003000
+      310050000100000000000C000000460035003500300031005600010000000000
+      0C0000005300440045004200450054000100000000000E000000530043005200
+      45004400490054000100000000000E0000004F00460046004900430041004C00
+      0100000000000A0000004C0049004D0049005400010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 336
+    Top = 5
+    object CurrencyVALUTE: TIntegerField
+      FieldName = 'VALUTE'
+      Required = True
+    end
+    object CurrencyVAL_NAME: TWideStringField
+      FieldName = 'VAL_NAME'
+      Size = 10
+    end
+    object CurrencyVALU_NAME: TWideStringField
+      FieldName = 'VALU_NAME'
+      Size = 25
+    end
+    object CurrencyVALU_SHORT: TWideStringField
+      FieldName = 'VALU_SHORT'
+      Size = 10
+    end
+  end
+  object CurrencyData: TDataSource
+    DataSet = Currency
+    Left = 336
+    Top = 61
+  end
+  object Tenostat: TOracleDataSet
+    SQL.Strings = (
+      'select '
+      '  acc_id, ostat, pok_ostat '
+      'from '
+      '  tenostat '
+      'where acc_id=:acc_id')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000E0000003A004100430043005F0049004400030000000400
+      0000A347000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      05000000030000000C0000004100430043005F00490044000100000000000A00
+      00004F0053005400410054000100000000001200000050004F004B005F004F00
+      5300540041005400010000000000}
+    MasterFields = 'id'
+    DetailFields = 'acc_id'
+    Session = sboapiDataModule.SBSession
+    Left = 32
+    Top = 136
+    object TenostatOSTAT: TFloatField
+      FieldName = 'OSTAT'
+      DisplayFormat = '#,##0.00'
+    end
+    object TenostatPOK_OSTAT: TFloatField
+      FieldName = 'POK_OSTAT'
+      DisplayFormat = '#,##0.00'
+    end
+    object TenostatACC_ID: TFloatField
+      FieldName = 'ACC_ID'
+      Required = True
+    end
+  end
+  object DataTenostat: TDataSource
+    DataSet = Tenostat
+    Left = 32
+    Top = 184
+  end
+  object PairAccount: TOracleDataSet
+    SQL.Strings = (
+      'select'
+      '  ID,'
+      '  acc_no,'
+      '  DECODE (close_dat, NULL, 1, 2) AS status'
+      'from'
+      '  Account'
+      'order by acc_no'
+      ' ')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000300000004000000490044000100000000000C000000410043004300
+      5F004E004F000100000000000C00000053005400410054005500530001000000
+      0000}
+    Session = sboapiDataModule.SBSession
+    Left = 120
+    Top = 136
+  end
+  object PairAccountData: TDataSource
+    DataSet = PairAccount
+    Left = 120
+    Top = 184
+  end
+  object ODSContracts: TOracleDataSet
+    SQL.Strings = (
+      
+        'SELECT ic.rowid, ic.ID , ic.kli_id, ic.loanacc_id, ic.curracc_id' +
+        ', '
+      
+        '                 ii.NAME, ii.mainformguid, ii.changeguid,ic.comm' +
+        'itop_id,ic.commit_date,ic.cancelopid,ic.canceldate,'
+      
+        '                 ii.suggestionguid, ii.policyguid, ii.mainformna' +
+        'me AS tablename, ic.policy_num,'
+      
+        '                 trunc(ic.ins_date) as ins_date, ins_report.get_' +
+        'S_haqq(ic.id) as ammount, ic.begin_date, ic.end_date, av.val_nam' +
+        'e,'
+      
+        '                  ins_report.get_s_mebleg(ic.id) as inssumm, ic.' +
+        'tariff, ic.franshiz, ic.state, ic.type_id ,ic.close_prefix,ic.co' +
+        'mission,ic.insured '
+      
+        '                 FROM ins_contracts ic, ins_insurances ii, avalu' +
+        'te av,ins_contract_responsibility r,ins_contr_per_acc_motor p'
+      '                 WHERE ic.KLI_ID =:KLI_ID'
+      
+        '                 and ii.ID = ic.type_id and r.cid(+)=ic.id and p' +
+        '.cid(+)=ic.id'
+      '               '
+      '                 --and ic.close_prefix=0'
+      '                 and ic.valute_id = av.valute(+)')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000E0000003A004B004C0049005F0049004400030000000000
+      000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000001C0000000400000049004400010000000000080000004E0041004D00
+      4500010000000000180000004D00410049004E0046004F0052004D0047005500
+      49004400010000000000140000004300480041004E0047004500470055004900
+      44000100000000001C000000530055004700470045005300540049004F004E00
+      47005500490044000100000000001400000050004F004C004900430059004700
+      5500490044000100000000000C0000004B004C0049005F004900440001000000
+      0000120000005400410042004C0045004E0041004D0045000100000000001400
+      00004C004F0041004E004100430043005F004900440001000000000014000000
+      43005500520052004100430043005F0049004400010000000000140000005000
+      4F004C004900430059005F004E0055004D000100000000001000000049004E00
+      53005F0044004100540045000100000000000E00000041004D004D004F005500
+      4E0054000100000000001400000042004500470049004E005F00440041005400
+      45000100000000001000000045004E0044005F00440041005400450001000000
+      000010000000560041004C005F004E0041004D0045000100000000000E000000
+      49004E005300530055004D004D000100000000000C0000005400410052004900
+      46004600010000000000100000004600520041004E005300480049005A000100
+      000000000A000000530054004100540045000100000000000E00000054005900
+      500045005F00490044000100000000001800000043004C004F00530045005F00
+      5000520045004600490058000100000000001600000043004F004D004D004900
+      54004F0050005F00490044000100000000001600000043004F004D004D004900
+      54005F00440041005400450001000000000014000000430041004E0043004500
+      4C004F0050004900440001000000000014000000430041004E00430045004C00
+      44004100540045000100000000001200000043004F004D004900530053004900
+      4F004E000100000000000E00000049004E005300550052004500440001000000
+      0000}
+    Master = ODSInsCustomers
+    MasterFields = 'id'
+    DetailFields = 'kli_id'
+    Session = sboapiDataModule.SBSession
+    AfterScroll = ODSContractsAfterScroll
+    OnCalcFields = ODSContractsCalcFields
+    Left = 120
+    Top = 360
+    object ODSContractsID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object ODSContractsKLI_ID: TFloatField
+      FieldName = 'KLI_ID'
+    end
+    object ODSContractsNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 1024
+    end
+    object ODSContractsMAINFORMGUID: TWideStringField
+      FieldName = 'MAINFORMGUID'
+      Size = 38
+    end
+    object ODSContractsCHANGEGUID: TWideStringField
+      FieldName = 'CHANGEGUID'
+      Size = 38
+    end
+    object ODSContractsSUGGESTIONGUID: TWideStringField
+      FieldName = 'SUGGESTIONGUID'
+      Size = 38
+    end
+    object ODSContractsPOLICYGUID: TWideStringField
+      FieldName = 'POLICYGUID'
+      Size = 38
+    end
+    object ODSContractsTABLENAME: TWideStringField
+      FieldName = 'TABLENAME'
+      Size = 32
+    end
+    object ODSContractsLOANACC_ID: TFloatField
+      FieldName = 'LOANACC_ID'
+    end
+    object ODSContractsCURRACC_ID: TFloatField
+      FieldName = 'CURRACC_ID'
+    end
+    object ODSContractsPOLICY_NUM: TWideStringField
+      FieldName = 'POLICY_NUM'
+      Size = 32
+    end
+    object ODSContractsINS_DATE: TDateTimeField
+      FieldName = 'INS_DATE'
+    end
+    object ODSContractsSUGGESTION: TWideStringField
+      FieldKind = fkCalculated
+      FieldName = 'SUGGESTION'
+      Calculated = True
+    end
+    object ODSContractsAMMOUNT: TFloatField
+      FieldName = 'AMMOUNT'
+      DisplayFormat = '#,##0.00'
+    end
+    object ODSContractsBEGIN_DATE: TDateTimeField
+      FieldName = 'BEGIN_DATE'
+    end
+    object ODSContractsEND_DATE: TDateTimeField
+      FieldName = 'END_DATE'
+    end
+    object ODSContractsVAL_NAME: TWideStringField
+      FieldName = 'VAL_NAME'
+      Size = 10
+    end
+    object ODSContractsINSSUMM: TFloatField
+      FieldName = 'INSSUMM'
+      DisplayFormat = '#,##0.00'
+    end
+    object ODSContractsTARIFF: TFloatField
+      FieldName = 'TARIFF'
+      DisplayFormat = '#,##0.00'
+    end
+    object ODSContractsFRANSHIZ: TFloatField
+      FieldName = 'FRANSHIZ'
+      DisplayFormat = '#,##0.00'
+    end
+    object ODSContractsSTATE: TIntegerField
+      FieldName = 'STATE'
+    end
+    object ODSContractsTYPE_ID: TFloatField
+      FieldName = 'TYPE_ID'
+      Required = True
+    end
+    object ODSContractsCLOSE_PREFIX: TIntegerField
+      FieldName = 'CLOSE_PREFIX'
+      Visible = False
+    end
+    object ODSContractsCOMMITOP_ID: TFloatField
+      FieldName = 'COMMITOP_ID'
+    end
+    object ODSContractsCOMMIT_DATE: TDateTimeField
+      FieldName = 'COMMIT_DATE'
+    end
+    object ODSContractsCANCELOPID: TFloatField
+      FieldName = 'CANCELOPID'
+    end
+    object ODSContractsCANCELDATE: TDateTimeField
+      FieldName = 'CANCELDATE'
+    end
+    object ODSContractsCOMISSION: TFloatField
+      FieldName = 'COMISSION'
+    end
+    object ODSContractsINSURED: TWideStringField
+      FieldName = 'INSURED'
+      Size = 120
+    end
+  end
+  object DSContracts: TDataSource
+    DataSet = ODSContracts
+    Left = 88
+    Top = 424
+  end
+  object ODSInsurances: TOracleDataSet
+    SQL.Strings = (
+      
+        'select ii.rowid, ii.id, ii.name, ii.mainformname, ii.mainformgui' +
+        'd, ii.changeguid,'
+      
+        '       ii.suggestionguid, ii.policyguid, ii.loan_bal_cn, ii.curr' +
+        '_bal_cn,'
+      
+        '       ii.prefix, ii.profit_acc_id, ii.obeykt_type, ii.comman_ac' +
+        'c_id,'
+      
+        '       (select name from filial where id=ii.branch) as brach fro' +
+        'm ins_insurances ii'
+      
+        'where ii.changeguid is not NULL  and ii.branch=(select filialid ' +
+        'from sba_objinf where obj=user)'
+      'and ii.obeykt_type is not null'
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      'order by id')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000E0000000400000049004400010000000000080000004E0041004D00
+      4500010000000000180000004D00410049004E0046004F0052004D004E004100
+      4D004500010000000000180000004D00410049004E0046004F0052004D004700
+      550049004400010000000000140000004300480041004E004700450047005500
+      490044000100000000001C000000530055004700470045005300540049004F00
+      4E0047005500490044000100000000001400000050004F004C00490043005900
+      4700550049004400010000000000160000004C004F0041004E005F0042004100
+      4C005F0043004E000100000000001600000043005500520052005F0042004100
+      4C005F0043004E000100000000000C0000005000520045004600490058000100
+      000000001A000000500052004F004600490054005F004100430043005F004900
+      4400010000000000160000004F004200450059004B0054005F00540059005000
+      45000100000000001A00000043004F004D004D0041004E005F00410043004300
+      5F00490044000100000000000A00000042005200410043004800010000000000}
+    Session = sboapiDataModule.SBSession
+    Filter = 'CHANGEGUID > 0'
+    Filtered = True
+    Left = 112
+    Top = 248
+    object ODSInsurancesID: TIntegerField
+      FieldName = 'ID'
+      Required = True
+    end
+    object ODSInsurancesNAME: TWideStringField
+      FieldName = 'NAME'
+      ReadOnly = True
+      Size = 1024
+    end
+    object ODSInsurancesCHANGEGUID: TWideStringField
+      FieldName = 'CHANGEGUID'
+      Size = 38
+    end
+    object ODSInsurancesLOAN_BAL_CN: TFloatField
+      FieldName = 'LOAN_BAL_CN'
+    end
+    object ODSInsurancesCURR_BAL_CN: TFloatField
+      FieldName = 'CURR_BAL_CN'
+    end
+    object ODSInsurancesPROFIT_ACC_ID: TFloatField
+      FieldName = 'PROFIT_ACC_ID'
+    end
+    object ODSInsurancesAcc_list: TWideStringField
+      FieldKind = fkLookup
+      FieldName = 'Acc_list'
+      LookupDataSet = ODSAccList
+      LookupKeyFields = 'ID'
+      LookupResultField = 'ACC_NO'
+      KeyFields = 'PROFIT_ACC_ID'
+      Lookup = True
+    end
+    object ODSInsurancesMAINFORMNAME: TWideStringField
+      FieldName = 'MAINFORMNAME'
+      Size = 128
+    end
+    object ODSInsurancesMAINFORMGUID: TWideStringField
+      FieldName = 'MAINFORMGUID'
+      Size = 152
+    end
+    object ODSInsurancesSUGGESTIONGUID: TWideStringField
+      FieldName = 'SUGGESTIONGUID'
+      Size = 152
+    end
+    object ODSInsurancesPOLICYGUID: TWideStringField
+      FieldName = 'POLICYGUID'
+      Size = 152
+    end
+    object ODSInsurancesPREFIX: TWideStringField
+      FieldName = 'PREFIX'
+      Size = 40
+    end
+    object ODSInsurancesOBEYKT_TYPE: TWideStringField
+      FieldName = 'OBEYKT_TYPE'
+      Size = 40
+    end
+    object ODSInsurancesCOMMAN_ACC_ID: TFloatField
+      FieldName = 'COMMAN_ACC_ID'
+    end
+    object ODSInsurancesBRACH: TWideStringField
+      FieldName = 'BRACH'
+      Size = 90
+    end
+  end
+  object DSInsurances: TDataSource
+    DataSet = ODSInsurances
+    Left = 120
+    Top = 296
+  end
+  object OPINS: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'INS_PKG_MOTORKASCO'
+    Left = 584
+    Top = 64
+  end
+  object DSOccupations: TDataSource
+    DataSet = ODSOccupations
+    Left = 280
+    Top = 184
+  end
+  object ODSOccupations: TOracleDataSet
+    SQL.Strings = (
+      'select ido.rowid, ido.* from ins_dict_occupations ido')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000400000049004400010000000000080000004E0041004D00
+      4500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 280
+    Top = 136
+  end
+  object ODSEducations: TOracleDataSet
+    SQL.Strings = (
+      'select ido.rowid, ido.* from ins_dict_educations ido')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000400000049004400010000000000080000004E0041004D00
+      4500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 352
+    Top = 128
+  end
+  object DSEducations: TDataSource
+    DataSet = ODSEducations
+    Left = 352
+    Top = 176
+  end
+  object DSActivity: TDataSource
+    DataSet = ODSActivity
+    Left = 192
+    Top = 184
+  end
+  object ODSActivity: TOracleDataSet
+    SQL.Strings = (
+      'select ido.rowid, ido.* from ins_dict_activity ido')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000400000049004400010000000000080000004E0041004D00
+      4500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 192
+    Top = 136
+  end
+  object ODSAcc_types: TOracleDataSet
+    SQL.Strings = (
+      'Select iat.rowid, iat.* from ins_acc_types iat')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      0500000002000000080000004E0041004D004500010000000000040000004900
+      4400010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 192
+    Top = 248
+    object ODSAcc_typesID: TFloatField
+      FieldName = 'ID'
+    end
+    object ODSAcc_typesNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 128
+    end
+  end
+  object DSAcc_types: TDataSource
+    DataSet = ODSAcc_types
+    Left = 192
+    Top = 296
+  end
+  object ODSBal_cn: TOracleDataSet
+    SQL.Strings = (
+      'Select a.rowid, a.* from ins_acc_bal_cn a'
+      ''
+      'where dict_id = :dict_id')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000100000003A0044004900430054005F004900440004000000
+      08000000000000000000F03F00000000}
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000E00000044004900430054005F0049004400010000000000
+      0C000000420041004C005F0043004E00010000000000}
+    Master = ODSAcc_types
+    MasterFields = 'ID'
+    DetailFields = 'DICT_ID'
+    Session = sboapiDataModule.SBSession
+    BeforeInsert = ODSBal_cnBeforeInsert
+    Left = 416
+    Top = 8
+    object ODSBal_cnDICT_ID: TFloatField
+      FieldName = 'DICT_ID'
+    end
+    object ODSBal_cnBAL_CN: TFloatField
+      FieldName = 'BAL_CN'
+    end
+  end
+  object DSBal_cn: TDataSource
+    DataSet = ODSBal_cn
+    Left = 416
+    Top = 56
+  end
+  object ODSLoanAccLists: TOracleDataSet
+    SQL.Strings = (
+      'SELECT ID, acc_no, bal_cn1, name'
+      '  FROM ACCOUNT'
+      ' WHERE close_dat is null and bal_cn1 IN (SELECT bal_cn'
+      '                    FROM ins_acc_bal_cn'
+      '                   WHERE dict_id = (SELECT MAX (value)'
+      '                                      FROM ins_settings'
+      '                                     WHERE NAME = '#39'LOANID'#39'))')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000400000004000000490044000100000000000C000000410043004300
+      5F004E004F000100000000000E000000420041004C005F0043004E0031000100
+      00000000080000004E0041004D004500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 360
+    Top = 248
+    object ODSLoanAccListsID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object ODSLoanAccListsACC_NO: TWideStringField
+      FieldName = 'ACC_NO'
+      Required = True
+    end
+    object ODSLoanAccListsBAL_CN1: TFloatField
+      FieldName = 'BAL_CN1'
+      Required = True
+    end
+    object ODSLoanAccListsNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 90
+    end
+  end
+  object DSLoanAccLists: TDataSource
+    DataSet = ODSLoanAccLists
+    Left = 360
+    Top = 296
+  end
+  object ODSCurrAccList: TOracleDataSet
+    SQL.Strings = (
+      'SELECT ID, acc_no, bal_cn1,name'
+      '  FROM ACCOUNT'
+      ' WHERE close_dat is null and bal_cn1 IN (SELECT bal_cn'
+      '                    FROM ins_acc_bal_cn'
+      '                   WHERE dict_id = (SELECT MAX (value)'
+      '                                      FROM ins_settings'
+      '                                     WHERE NAME = '#39'CURRID'#39'))')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000400000004000000490044000100000000000C000000410043004300
+      5F004E004F000100000000000E000000420041004C005F0043004E0031000100
+      00000000080000004E0041004D004500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 280
+    Top = 248
+    object ODSCurrAccListID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object ODSCurrAccListACC_NO: TWideStringField
+      FieldName = 'ACC_NO'
+      Required = True
+    end
+    object ODSCurrAccListBAL_CN1: TFloatField
+      FieldName = 'BAL_CN1'
+      Required = True
+    end
+    object ODSCurrAccListNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 90
+    end
+  end
+  object DSCurrAccList: TDataSource
+    DataSet = ODSCurrAccList
+    Left = 280
+    Top = 296
+  end
+  object OPCOMMON: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'INS_COMMON'
+    Left = 584
+    Top = 112
+  end
+  object ODSPayPlan: TOracleDataSet
+    SQL.Strings = (
+      'SELECT a.rowid, a.*'
+      '  FROM ins_payment_plan a'
+      'where a.ins_id = :insid'
+      'order by pay_date ')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000C0000003A0049004E005300490044000400000000000000
+      00000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000500000004000000490044000100000000000C00000049004E005300
+      5F0049004400010000000000100000005000410059005F004400410054004500
+      0100000000000E00000041004D004D004F0055004E0054000100000000000C00
+      0000530054004100540055005300010000000000}
+    Session = sboapiDataModule.SBSession
+    OnCalcFields = ODSPayPlanCalcFields
+    Left = 280
+    Top = 464
+    object ODSPayPlanID: TFloatField
+      DisplayLabel = #8470
+      FieldName = 'ID'
+    end
+    object ODSPayPlanPAY_DATE: TDateTimeField
+      DisplayLabel = 'Tarix'
+      FieldName = 'PAY_DATE'
+      EditMask = '!90/90/00;1;_'
+    end
+    object ODSPayPlanAMMOUNT: TFloatField
+      DisplayLabel = 'M'#601'b'#601#287
+      FieldName = 'AMMOUNT'
+    end
+    object ODSPayPlanSTATUS: TIntegerField
+      FieldName = 'STATUS'
+      Visible = False
+    end
+    object ODSPayPlanINS_ID: TFloatField
+      FieldName = 'INS_ID'
+      Visible = False
+    end
+    object ODSPayPlanISPAYED: TWideStringField
+      FieldKind = fkCalculated
+      FieldName = 'ISPAYED'
+      Visible = False
+      Calculated = True
+    end
+  end
+  object DSPayPlan: TDataSource
+    DataSet = ODSPayPlan
+    Left = 280
+    Top = 512
+  end
+  object ODSAgents: TOracleDataSet
+    SQL.Strings = (
+      'select ia.rowid, ia.* from ins_agents ia')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000040000000400000049004400010000000000080000004E0041004D00
+      45000100000000000E0000005300550052004E0041004D004500010000000000
+      140000004600410054004800450052004E0041004D004500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 32
+    Top = 240
+    object ODSAgentsID: TFloatField
+      DisplayLabel = 'Kod'
+      FieldName = 'ID'
+    end
+    object ODSAgentsNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 128
+    end
+    object ODSAgentsSURNAME: TWideStringField
+      FieldName = 'SURNAME'
+      Size = 128
+    end
+    object ODSAgentsFATHERNAME: TWideStringField
+      FieldName = 'FATHERNAME'
+      Size = 128
+    end
+  end
+  object DSAgents: TDataSource
+    DataSet = ODSAgents
+    Left = 32
+    Top = 288
+  end
+  object ODSBeneficiary: TOracleDataSet
+    SQL.Strings = (
+      'select ib.rowid, ib.* from INS_BENEFICIARY ib')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000050000000400000049004400010000000000080000004E0041004D00
+      45000100000000000E0000004100440044005200450053005300010000000000
+      0A000000500048004F004E0045000100000000001E000000420041004E004B00
+      49004E0047005F00440045005400410049004C005300010000000000}
+    Session = sboapiDataModule.SBSession
+    BeforeDelete = ODSBeneficiaryBeforeDelete
+    Left = 432
+    Top = 128
+    object ODSBeneficiaryID: TFloatField
+      FieldName = 'ID'
+    end
+    object ODSBeneficiaryNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 128
+    end
+    object ODSBeneficiaryADDRESS: TWideStringField
+      FieldName = 'ADDRESS'
+      Size = 128
+    end
+    object ODSBeneficiaryPHONE: TWideStringField
+      FieldName = 'PHONE'
+      Size = 64
+    end
+    object ODSBeneficiaryBANKING_DETAILS: TWideStringField
+      FieldName = 'BANKING_DETAILS'
+      Size = 128
+    end
+  end
+  object DSBeneficiary: TDataSource
+    DataSet = ODSBeneficiary
+    Left = 432
+    Top = 176
+  end
+  object ODSStates: TOracleDataSet
+    SQL.Strings = (
+      'select ids.* from ins_dict_states ids'
+      'order by name')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000400000049004400010000000000080000004E0041004D00
+      4500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 280
+    Top = 360
+    object ODSStatesID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object ODSStatesNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 256
+    end
+  end
+  object ODSTariffs: TOracleDataSet
+    SQL.Strings = (
+      'select it.rowid, it.* from INS_TARIFFS it'
+      ''
+      'where franshiz_id = :franshiz_id')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000180000003A004600520041004E005300480049005A005F00
+      49004400040000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      0500000003000000040000004900440001000000000016000000460052004100
+      4E005300480049005A005F00490044000100000000000E00000041004D004D00
+      4F0055004E005400010000000000}
+    Master = ODSFranshiza
+    MasterFields = 'ID'
+    DetailFields = 'FRANSHIZ_ID'
+    Session = sboapiDataModule.SBSession
+    AfterPost = ODSTariffsAfterPost
+    Left = 504
+    Top = 8
+    object ODSTariffsID: TFloatField
+      FieldName = 'ID'
+    end
+    object ODSTariffsFRANSHIZ_ID: TFloatField
+      FieldName = 'FRANSHIZ_ID'
+    end
+    object ODSTariffsAMMOUNT: TFloatField
+      FieldName = 'AMMOUNT'
+    end
+  end
+  object DSStates: TDataSource
+    DataSet = ODSStates
+    Left = 280
+    Top = 408
+  end
+  object DSTariffs: TDataSource
+    DataSet = ODSTariffs
+    Left = 504
+    Top = 64
+  end
+  object ODSBankm: TOracleDataSet
+    SQL.Strings = (
+      'select * from ins_bank')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000400000049004400010000000000080000004E0041004D00
+      4500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 440
+    Top = 248
+    object ODSBankmID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object ODSBankmNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 255
+    end
+  end
+  object DSBankm: TDataSource
+    DataSet = ODSBankm
+    Left = 440
+    Top = 296
+  end
+  object Sysdat: TOracleDataSet
+    Tag = 1
+    SQL.Strings = (
+      'Select tek_dat from sysdat')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000010000000E000000540045004B005F00440041005400010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 584
+    Top = 16
+    object SysdatTEK_DAT: TDateTimeField
+      FieldName = 'TEK_DAT'
+      Required = True
+    end
+  end
+  object ODSTarifStates: TOracleDataSet
+    SQL.Strings = (
+      'select its.rowid, its.* from ins_tarif_states its'
+      ''
+      'where bank_id = :bank_id')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000100000003A00420041004E004B005F004900440004000000
+      080000000000000000F09B4000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000500000004000000490044000100000000000E000000420041004E00
+      4B005F004900440001000000000010000000530054004100540045005F004900
+      44000100000000001A000000460049005200530054005F0041004D004D004F00
+      55004E005400010000000000160000004C004100530054005F0041004D004F00
+      55004E005400010000000000}
+    Master = ODSBankm
+    MasterFields = 'ID'
+    DetailFields = 'BANK_ID'
+    Session = sboapiDataModule.SBSession
+    AfterPost = ODSTariffsAfterPost
+    Left = 360
+    Top = 360
+    object ODSTarifStatesID: TFloatField
+      FieldName = 'ID'
+      Visible = False
+    end
+    object ODSTarifStatesBANK_ID: TFloatField
+      FieldName = 'BANK_ID'
+      Visible = False
+    end
+    object ODSTarifStatesSTATE_ID: TFloatField
+      FieldName = 'STATE_ID'
+      Visible = False
+    end
+    object ODSTarifStatesStates: TWideStringField
+      FieldKind = fkLookup
+      FieldName = 'States'
+      LookupDataSet = ODSStates
+      LookupKeyFields = 'ID'
+      LookupResultField = 'NAME'
+      KeyFields = 'STATE_ID'
+      Visible = False
+      Lookup = True
+    end
+    object ODSTarifStatesFIRST_AMMOUNT: TFloatField
+      FieldName = 'FIRST_AMMOUNT'
+    end
+    object ODSTarifStatesLAST_AMOUNT: TFloatField
+      FieldName = 'LAST_AMOUNT'
+    end
+  end
+  object DSTarifStates: TDataSource
+    DataSet = ODSTarifStates
+    Left = 360
+    Top = 408
+  end
+  object ODSReportSymbols: TOracleDataSet
+    SQL.Strings = (
+      'select * from report_symbol')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000030000000400000049004400010000000000080000004E0041004D00
+      4500010000000000060000004B004F004400010000000000}
+    MasterFields = 'ID'
+    Session = sboapiDataModule.SBSession
+    AfterPost = ODSTariffsAfterPost
+    Left = 528
+    Top = 360
+    object ODSReportSymbolsID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object ODSReportSymbolsNAME: TWideStringField
+      FieldName = 'NAME'
+      Required = True
+      Size = 256
+    end
+  end
+  object DSReportSymbols: TDataSource
+    DataSet = ODSReportSymbols
+    Left = 528
+    Top = 408
+  end
+  object ODSMonths: TOracleDataSet
+    SQL.Strings = (
+      'select itm.rowid, itm.* from ins_tarif_months itm'
+      ''
+      'where release_id = :release_id')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000160000003A00520045004C0045004100530045005F004900
+      4400040000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      0500000003000000040000004900440001000000000014000000520045004C00
+      45004100530045005F00490044000100000000000A00000043004F0055004E00
+      5400010000000000}
+    Master = ODSReleaseDate
+    MasterFields = 'ID'
+    DetailFields = 'RELEASE_ID'
+    Session = sboapiDataModule.SBSession
+    AfterPost = ODSTariffsAfterPost
+    Left = 504
+    Top = 128
+    object ODSMonthsID: TFloatField
+      FieldName = 'ID'
+    end
+    object ODSMonthsRELEASE_ID: TFloatField
+      FieldName = 'RELEASE_ID'
+    end
+    object ODSMonthsCOUNT: TFloatField
+      FieldName = 'COUNT'
+    end
+  end
+  object DSMonths: TDataSource
+    DataSet = ODSMonths
+    Left = 504
+    Top = 184
+  end
+  object ODSFranshiza: TOracleDataSet
+    SQL.Strings = (
+      'select itf.rowid, itf.* from ins_tarif_franshiz itf'
+      ''
+      'where month_id = :month_id')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000120000003A004D004F004E00540048005F00490044000400
+      00000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      05000000030000000400000049004400010000000000100000004D004F004E00
+      540048005F00490044000100000000000E00000041004D004D004F0055004E00
+      5400010000000000}
+    Master = ODSMonths
+    MasterFields = 'ID'
+    DetailFields = 'MONTH_ID'
+    Session = sboapiDataModule.SBSession
+    AfterPost = ODSTariffsAfterPost
+    Left = 520
+    Top = 248
+    object ODSFranshizaID: TFloatField
+      FieldName = 'ID'
+    end
+    object ODSFranshizaMONTH_ID: TFloatField
+      FieldName = 'MONTH_ID'
+    end
+    object ODSFranshizaAMMOUNT: TFloatField
+      FieldName = 'AMMOUNT'
+    end
+  end
+  object DSFranshiza: TDataSource
+    DataSet = ODSFranshiza
+    Left = 520
+    Top = 304
+  end
+  object ODSBranches: TOracleDataSet
+    Tag = 1
+    SQL.Strings = (
+      'select -1 as ID, '#39'B'#252't'#252'n Filiallar'#39' as name from Dual'
+      'Union All'
+      'select ID, name from filial '
+      'order by ID')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000400000049004400010000000000080000004E0041004D00
+      4500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 37
+    Top = 357
+    object ODSBranchesID: TFloatField
+      FieldName = 'ID'
+    end
+    object ODSBranchesNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 90
+    end
+  end
+  object DSBranches: TDataSource
+    DataSet = ODSBranches
+    Left = 40
+    Top = 413
+  end
+  object ODSReleaseDate: TOracleDataSet
+    SQL.Strings = (
+      'select ird.rowid, ird.* from ins_release_date ird'
+      ''
+      'where state_id = :state_id')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000120000003A00530054004100540045005F00490044000400
+      00000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      0500000004000000040000004900440001000000000012000000420045004700
+      49004E0044004100540045000100000000000E00000045004E00440044004100
+      5400450001000000000010000000530054004100540045005F00490044000100
+      00000000}
+    Master = ODSTarifStates
+    MasterFields = 'ID'
+    DetailFields = 'STATE_ID'
+    Session = sboapiDataModule.SBSession
+    AfterPost = ODSTariffsAfterPost
+    Left = 440
+    Top = 360
+    object FloatField1: TFloatField
+      FieldName = 'ID'
+    end
+    object DateTimeField1: TDateTimeField
+      FieldName = 'BEGINDATE'
+    end
+    object DateTimeField2: TDateTimeField
+      FieldName = 'ENDDATE'
+    end
+    object FloatField2: TFloatField
+      FieldName = 'STATE_ID'
+    end
+  end
+  object DSReleaseDate: TDataSource
+    DataSet = ODSReleaseDate
+    Left = 440
+    Top = 408
+  end
+  object DSCustTypes: TDataSource
+    DataSet = ODSCustTypes
+    Left = 584
+    Top = 224
+  end
+  object ODSCustTypes: TOracleDataSet
+    SQL.Strings = (
+      'select ict.rowid, ict.* from ins_dict_custtypes ict order by id')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000400000049004400010000000000080000004E0041004D00
+      4500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 584
+    Top = 176
+    object ODSCustTypesNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 256
+    end
+    object ODSCustTypesID: TFloatField
+      FieldName = 'ID'
+    end
+  end
+  object ODSPolicyNums: TOracleDataSet
+    SQL.Strings = (
+      'SELECT a.rowid,a.* ,ii.id, ii.name'
+      '  FROM ins_policynums a,ins_insurances ii '
+      'where '
+      '  a.typeid=ii.id '
+      'and ii.obeykt_type is not  null')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000A0000000400000049004400010000000000080000004E0041004D00
+      45000100000000000C0000005400590050004500490044000100000000000C00
+      000043004F0055004E00540053000100000000000C00000046004F0052004D00
+      410054000100000000000C000000500052004500460049005800010000000000
+      0E000000490043004F0055004E00540053000100000000000E00000043004300
+      4F0055004E005400530001000000000016000000500052004500460049005800
+      5F004C004F005300530001000000000020000000500052004500460049005800
+      5F004C004F00530053005F00460055004C004C00010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 600
+    Top = 280
+    object ODSPolicyNumsID: TIntegerField
+      FieldName = 'ID'
+      Required = True
+    end
+    object ODSPolicyNumsNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 4000
+    end
+    object ODSPolicyNumsTYPEID: TFloatField
+      FieldName = 'TYPEID'
+      Required = True
+    end
+    object ODSPolicyNumsCOUNTS: TFloatField
+      FieldName = 'COUNTS'
+    end
+    object ODSPolicyNumsFORMAT: TWideStringField
+      FieldName = 'FORMAT'
+      Size = 32
+    end
+    object ODSPolicyNumsPREFIX: TWideStringField
+      FieldName = 'PREFIX'
+      Size = 32
+    end
+    object ODSPolicyNumsICOUNTS: TFloatField
+      FieldName = 'ICOUNTS'
+    end
+    object ODSPolicyNumsCCOUNTS: TFloatField
+      FieldName = 'CCOUNTS'
+    end
+    object ODSPolicyNumsPREFIX_LOSS: TWideStringField
+      DisplayLabel = 'Adi zerer'
+      FieldName = 'PREFIX_LOSS'
+      Size = 128
+    end
+    object ODSPolicyNumsPREFIX_LOSS_FULL: TWideStringField
+      DisplayLabel = 'Tam zerer'
+      FieldName = 'PREFIX_LOSS_FULL'
+      Size = 128
+    end
+  end
+  object DSPolicyNums: TDataSource
+    DataSet = ODSPolicyNums
+    Left = 600
+    Top = 328
+  end
+  object ODSAccList: TOracleDataSet
+    SQL.Strings = (
+      'select id, acc_no from account'
+      'where open_dat is not null'
+      'and bal_cn1 in (select bal_cn1 from ins_balans_acc'
+      'where type_id='#39'Gelir hesabi'#39')'
+      'order by acc_no')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000200000004000000490044000100000000000C000000410043004300
+      5F004E004F00010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 608
+    Top = 376
+  end
+  object DSAccList: TDataSource
+    DataSet = ODSAccList
+    Left = 608
+    Top = 424
+  end
+  object OdsDoctaypes: TOracleDataSet
+    SQL.Strings = (
+      
+        'SELECT a.id, a.name, a.symbol, a.series, a.pincodforced, a.fordo' +
+        'ctypes'
+      '  FROM doc_types a'
+      ' order by a.symbol')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000060000000400000049004400010000000000080000004E0041004D00
+      45000100000000000C000000530059004D0042004F004C000100000000000C00
+      000053004500520049004500530001000000000018000000500049004E004300
+      4F00440046004F0052004300450044000100000000001600000046004F005200
+      44004F00430054005900500045005300010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 672
+    Top = 216
+    object OdsDoctaypesID: TFloatField
+      FieldName = 'ID'
+    end
+    object OdsDoctaypesNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 120
+    end
+    object OdsDoctaypesSYMBOL: TWideStringField
+      FieldName = 'SYMBOL'
+      Size = 4
+    end
+    object OdsDoctaypesSERIES: TWideStringField
+      FieldName = 'SERIES'
+    end
+    object OdsDoctaypesPINCODFORCED: TIntegerField
+      FieldName = 'PINCODFORCED'
+    end
+    object OdsDoctaypesFORDOCTYPES: TIntegerField
+      FieldName = 'FORDOCTYPES'
+    end
+  end
+  object DsrcDoctaypes: TDataSource
+    DataSet = OdsDoctaypes
+    Left = 760
+    Top = 216
+  end
+  object DSCust_Type: TOracleDataSet
+    SQL.Strings = (
+      'select ict.rowid, ict.* from ins_dict_custtypes ict order by id')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000400000049004400010000000000080000004E0041004D00
+      4500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 672
+    Top = 32
+    object DSCust_TypeID: TFloatField
+      FieldName = 'ID'
+    end
+    object DSCust_TypeNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 1024
+    end
+  end
+  object DSRCust_Type: TDataSource
+    DataSet = DSCust_Type
+    Left = 752
+    Top = 32
+  end
+  object DSRActivity_f: TDataSource
+    DataSet = DSActivity_f
+    Left = 760
+    Top = 96
+  end
+  object DSActivity_f: TOracleDataSet
+    SQL.Strings = (
+      'select ido.rowid, ido.* from ins_dict_activity ido')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000400000049004400010000000000080000004E0041004D00
+      4500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 672
+    Top = 96
+    object DSActivity_fID: TFloatField
+      FieldName = 'ID'
+    end
+    object DSActivity_fNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 360
+    end
+  end
+  object DSRSex_type: TDataSource
+    DataSet = DSSex_type
+    Left = 760
+    Top = 160
+  end
+  object DSSex_type: TOracleDataSet
+    SQL.Strings = (
+      'select 0 as id ,'#39'Kisi'#39' as name from dual'
+      'union '
+      'select 1 as id ,'#39'Qadin'#39' as name from dual')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000400000049004400010000000000080000004E0041004D00
+      4500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 672
+    Top = 160
+    object DSSex_typeID: TFloatField
+      FieldName = 'ID'
+    end
+    object DSSex_typeNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 5
+    end
+  end
+  object DSRins_insurances: TDataSource
+    DataSet = DSins_insurances
+    Left = 768
+    Top = 272
+  end
+  object DSins_insurances: TOracleDataSet
+    SQL.Strings = (
+      'select * from ins_insurances'
+      'where --changeguid is not NULL and'
+      'obeykt_type is not null'
+      'order by id')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000B0000000400000049004400010000000000080000004E0041004D00
+      4500010000000000180000004D00410049004E0046004F0052004D004E004100
+      4D004500010000000000180000004D00410049004E0046004F0052004D004700
+      550049004400010000000000140000004300480041004E004700450047005500
+      490044000100000000001C000000530055004700470045005300540049004F00
+      4E0047005500490044000100000000001400000050004F004C00490043005900
+      4700550049004400010000000000160000004C004F0041004E005F0042004100
+      4C005F0043004E000100000000001600000043005500520052005F0042004100
+      4C005F0043004E000100000000000C0000005000520045004600490058000100
+      000000001A000000500052004F004600490054005F004100430043005F004900
+      4400010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 680
+    Top = 280
+    object DSins_insurancesID: TIntegerField
+      FieldName = 'ID'
+    end
+    object DSins_insurancesNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 4000
+    end
+    object DSins_insurancesMAINFORMNAME: TWideStringField
+      FieldName = 'MAINFORMNAME'
+      Size = 128
+    end
+    object DSins_insurancesMAINFORMGUID: TWideStringField
+      FieldName = 'MAINFORMGUID'
+      Size = 152
+    end
+    object DSins_insurancesCHANGEGUID: TWideStringField
+      FieldName = 'CHANGEGUID'
+      Size = 152
+    end
+    object DSins_insurancesSUGGESTIONGUID: TWideStringField
+      FieldName = 'SUGGESTIONGUID'
+      Size = 152
+    end
+    object DSins_insurancesPOLICYGUID: TWideStringField
+      FieldName = 'POLICYGUID'
+      Size = 152
+    end
+    object DSins_insurancesLOAN_BAL_CN: TFloatField
+      FieldName = 'LOAN_BAL_CN'
+    end
+    object DSins_insurancesCURR_BAL_CN: TFloatField
+      FieldName = 'CURR_BAL_CN'
+    end
+    object DSins_insurancesPREFIX: TWideStringField
+      FieldName = 'PREFIX'
+      Size = 40
+    end
+    object DSins_insurancesPROFIT_ACC_ID: TFloatField
+      FieldName = 'PROFIT_ACC_ID'
+    end
+  end
+  object DSRCust_Ins: TDataSource
+    DataSet = DSCust_Ins
+    Left = 776
+    Top = 336
+  end
+  object DSCust_Ins: TOracleDataSet
+    SQL.Strings = (
+      'select id, name from customers'
+      'where id in (SELECT cust_id  FROM ins_customers)')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000400000049004400010000000000080000004E0041004D00
+      4500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 680
+    Top = 336
+    object DSCust_InsID: TIntegerField
+      FieldName = 'ID'
+    end
+    object DSCust_InsNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 360
+    end
+  end
+  object DScountries: TOracleDataSet
+    SQL.Strings = (
+      
+        'select c.rowid,c.* from  countries c where lower(c.cntr_name) <>' +
+        ' lower('#39'yox'#39')'
+      'order by c.cntr_name')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000A00000004000000490044000100000000001200000043004E005400
+      52005F004E0041004D0045000100000000001200000043004E00540052005F00
+      43004F004400450001000000000008000000530059004D004200010000000000
+      0A00000041004C004600410031000100000000000A00000041004C0046004100
+      320001000000000014000000500048004F004E0045005F0043004F0044004500
+      01000000000010000000430055005200520045004E0043005900010000000000
+      100000004300550052005F00530059004D0042000100000000000C0000005300
+      59004D0042004F004C00010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 680
+    Top = 400
+    object DScountriesID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object DScountriesCNTR_NAME: TWideStringField
+      FieldName = 'CNTR_NAME'
+      Size = 80
+    end
+    object DScountriesCNTR_CODE: TIntegerField
+      FieldName = 'CNTR_CODE'
+    end
+    object DScountriesSYMB: TWideStringField
+      FieldName = 'SYMB'
+      Size = 2
+    end
+    object DScountriesALFA1: TWideStringField
+      FieldName = 'ALFA1'
+      Size = 5
+    end
+    object DScountriesALFA2: TWideStringField
+      FieldName = 'ALFA2'
+      Size = 5
+    end
+    object DScountriesPHONE_CODE: TIntegerField
+      FieldName = 'PHONE_CODE'
+    end
+    object DScountriesCURRENCY: TWideStringField
+      FieldName = 'CURRENCY'
+      Size = 30
+    end
+    object DScountriesCUR_SYMB: TWideStringField
+      FieldName = 'CUR_SYMB'
+      Size = 3
+    end
+  end
+  object DScities: TOracleDataSet
+    SQL.Strings = (
+      'select * from cities'
+      'where COUNTRY_ID = nvl(:CID,0)'
+      'order by ID')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000080000003A00430049004400030000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000400000004000000490044000100000000001400000043004F005500
+      4E005400520059005F0049004400010000000000120000004300490054005900
+      5F004E0041004D00450001000000000014000000500048004F004E0045005F00
+      43004F0044004500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 680
+    Top = 456
+  end
+  object DSRcountries: TDataSource
+    DataSet = DScountries
+    Left = 784
+    Top = 400
+  end
+  object DSRcities: TDataSource
+    DataSet = DScities
+    Left = 784
+    Top = 456
+  end
+  object DSins_insurances_acc: TOracleDataSet
+    SQL.Strings = (
+      ' select * from ins_insurances'
+      'where id=:p_id')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000A0000003A0050005F004900440003000000000000000000
+      0000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000B0000000400000049004400010000000000080000004E0041004D00
+      4500010000000000180000004D00410049004E0046004F0052004D004E004100
+      4D004500010000000000180000004D00410049004E0046004F0052004D004700
+      550049004400010000000000140000004300480041004E004700450047005500
+      490044000100000000001C000000530055004700470045005300540049004F00
+      4E0047005500490044000100000000001400000050004F004C00490043005900
+      4700550049004400010000000000160000004C004F0041004E005F0042004100
+      4C005F0043004E000100000000001600000043005500520052005F0042004100
+      4C005F0043004E000100000000000C0000005000520045004600490058000100
+      000000001A000000500052004F004600490054005F004100430043005F004900
+      4400010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 688
+    Top = 520
+    object DSins_insurances_accID: TIntegerField
+      FieldName = 'ID'
+    end
+    object DSins_insurances_accNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 4000
+    end
+    object DSins_insurances_accMAINFORMNAME: TWideStringField
+      FieldName = 'MAINFORMNAME'
+      Size = 128
+    end
+    object DSins_insurances_accMAINFORMGUID: TWideStringField
+      FieldName = 'MAINFORMGUID'
+      Size = 152
+    end
+    object DSins_insurances_accCHANGEGUID: TWideStringField
+      FieldName = 'CHANGEGUID'
+      Size = 152
+    end
+    object DSins_insurances_accSUGGESTIONGUID: TWideStringField
+      FieldName = 'SUGGESTIONGUID'
+      Size = 152
+    end
+    object DSins_insurances_accPOLICYGUID: TWideStringField
+      FieldName = 'POLICYGUID'
+      Size = 152
+    end
+    object DSins_insurances_accLOAN_BAL_CN: TFloatField
+      FieldName = 'LOAN_BAL_CN'
+    end
+    object DSins_insurances_accCURR_BAL_CN: TFloatField
+      FieldName = 'CURR_BAL_CN'
+    end
+    object DSins_insurances_accPREFIX: TWideStringField
+      FieldName = 'PREFIX'
+      Size = 40
+    end
+    object DSins_insurances_accPROFIT_ACC_ID: TFloatField
+      FieldName = 'PROFIT_ACC_ID'
+    end
+  end
+  object DSContract: TOracleDataSet
+    SQL.Strings = (
+      'select ic.rowid, ic.* from ins_contracts ic'
+      'where ic.id=:p_id'
+      'and ic.reins=0')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000A0000003A0050005F004900440003000000000000000000
+      0000}
+    QBEDefinition.QBEFieldDefs = {
+      050000002400000004000000490044000100000000000E000000540059005000
+      45005F00490044000100000000001000000049004E0053005F00440041005400
+      45000100000000001400000042004500470049004E005F004400410054004500
+      0100000000001000000045004E0044005F004400410054004500010000000000
+      12000000560041004C005500540045005F00490044000100000000000E000000
+      41004D004D004F0055004E0054000100000000001800000043004C004F005300
+      45005F005000520045004600490058000100000000000C0000004B004C004900
+      5F0049004400010000000000140000004C004F0041004E004100430043005F00
+      490044000100000000001400000043005500520052004100430043005F004900
+      44000100000000001400000050004F004C004900430059005F004E0055004D00
+      0100000000000E00000049004E005300530055004D004D000100000000001000
+      00004600520041004E005300480049005A000100000000000C00000054004100
+      52004900460046000100000000000A0000005300540041005400450001000000
+      0000100000004100470045004E0054005F004900440001000000000008000000
+      50004E0055004D000100000000000C000000420045004E005F00490044000100
+      0000000016000000420045004E00450046004900430049004100520059000100
+      000000001400000043004F004E0044004900540049004F004E00530001000000
+      00000C0000005300550047004E0055004D000100000000001000000042004C00
+      41004E004B005F00490044000100000000000A0000004F0050005F0049004400
+      0100000000000A0000005200450049004E0053000100000000000E0000004300
+      48004B00410053004B004F0001000000000006000000430048004D0001000000
+      00000800000043004800460051000100000000001600000043004F004D004D00
+      490054004F0050005F00490044000100000000001600000043004F004D004D00
+      490054005F00440041005400450001000000000014000000430041004E004300
+      45004C004F0050004900440001000000000014000000430041004E0043004500
+      4C0044004100540045000100000000000C000000460049004C00490041004C00
+      0100000000001000000042004E0046005F005400590050004500010000000000
+      14000000550053004500520049004E0053004500520054000100000000000E00
+      000049004E0053005500520045004400010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 792
+    Top = 520
+    object DSContractID: TFloatField
+      FieldName = 'ID'
+    end
+    object DSContractTYPE_ID: TFloatField
+      FieldName = 'TYPE_ID'
+    end
+    object DSContractINS_DATE: TDateTimeField
+      FieldName = 'INS_DATE'
+    end
+    object DSContractBEGIN_DATE: TDateTimeField
+      FieldName = 'BEGIN_DATE'
+    end
+    object DSContractEND_DATE: TDateTimeField
+      FieldName = 'END_DATE'
+    end
+    object DSContractVALUTE_ID: TFloatField
+      FieldName = 'VALUTE_ID'
+    end
+    object DSContractAMMOUNT: TFloatField
+      FieldName = 'AMMOUNT'
+    end
+    object DSContractCLOSE_PREFIX: TIntegerField
+      FieldName = 'CLOSE_PREFIX'
+    end
+    object DSContractKLI_ID: TFloatField
+      FieldName = 'KLI_ID'
+    end
+    object DSContractLOANACC_ID: TFloatField
+      FieldName = 'LOANACC_ID'
+    end
+    object DSContractCURRACC_ID: TFloatField
+      FieldName = 'CURRACC_ID'
+    end
+    object DSContractPOLICY_NUM: TWideStringField
+      FieldName = 'POLICY_NUM'
+      Size = 128
+    end
+    object DSContractINSSUMM: TFloatField
+      FieldName = 'INSSUMM'
+    end
+    object DSContractFRANSHIZ: TFloatField
+      FieldName = 'FRANSHIZ'
+    end
+    object DSContractTARIFF: TFloatField
+      FieldName = 'TARIFF'
+    end
+    object DSContractSTATE: TIntegerField
+      FieldName = 'STATE'
+    end
+    object DSContractAGENT_ID: TFloatField
+      FieldName = 'AGENT_ID'
+    end
+    object DSContractPNUM: TFloatField
+      FieldName = 'PNUM'
+    end
+    object DSContractBEN_ID: TFloatField
+      FieldName = 'BEN_ID'
+    end
+    object DSContractBENEFICIARY: TWideStringField
+      FieldName = 'BENEFICIARY'
+      Size = 4000
+    end
+    object DSContractCONDITIONS: TWideStringField
+      FieldName = 'CONDITIONS'
+      Size = 4000
+    end
+    object DSContractSUGNUM: TWideStringField
+      FieldName = 'SUGNUM'
+      Size = 128
+    end
+    object DSContractBLANK_ID: TFloatField
+      FieldName = 'BLANK_ID'
+    end
+    object DSContractOP_ID: TFloatField
+      FieldName = 'OP_ID'
+    end
+    object DSContractREINS: TFloatField
+      FieldName = 'REINS'
+    end
+    object DSContractCHKASKO: TFloatField
+      FieldName = 'CHKASKO'
+    end
+    object DSContractCHM: TFloatField
+      FieldName = 'CHM'
+    end
+    object DSContractCHFQ: TFloatField
+      FieldName = 'CHFQ'
+    end
+    object DSContractCOMMITOP_ID2: TFloatField
+      FieldName = 'COMMITOP_ID'
+    end
+    object DSContractCOMMIT_DATE: TDateTimeField
+      FieldName = 'COMMIT_DATE'
+    end
+    object c: TFloatField
+      FieldName = 'CANCELOPID'
+    end
+    object DSContractCANCELDATE: TDateTimeField
+      FieldName = 'CANCELDATE'
+    end
+    object DSContractFILIAL: TFloatField
+      FieldName = 'FILIAL'
+    end
+    object DSContractBNF_TYPE: TFloatField
+      FieldName = 'BNF_TYPE'
+    end
+    object DSContractUSERINSERT: TWideStringField
+      FieldName = 'USERINSERT'
+      Size = 40
+    end
+    object DSContractINSURED: TWideStringField
+      FieldName = 'INSURED'
+      Size = 120
+    end
+    object DSContractcomission: TIntegerField
+      FieldName = 'comission'
+    end
+  end
+  object Psbop: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'sbop'
+    ParameterMode = pmNamed
+    Left = 600
+    Top = 544
+  end
+  object sb_aca: TOraclePackage
+    Session = sboapiDataModule.SBSession
+    PackageName = 'sb_aca'
+    Left = 528
+    Top = 544
+  end
+  object DSins_insur: TOracleDataSet
+    SQL.Strings = (
+      'select * from ins_insurances'
+      'where id=:p_id '
+      'and changeguid is not NULL'
+      'and obeykt_type is not null'
+      'order by id')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000A0000003A0050005F004900440003000000000000000000
+      0000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000C0000000400000049004400010000000000080000004E0041004D00
+      4500010000000000180000004D00410049004E0046004F0052004D004E004100
+      4D004500010000000000180000004D00410049004E0046004F0052004D004700
+      550049004400010000000000140000004300480041004E004700450047005500
+      490044000100000000001C000000530055004700470045005300540049004F00
+      4E0047005500490044000100000000001400000050004F004C00490043005900
+      4700550049004400010000000000160000004C004F0041004E005F0042004100
+      4C005F0043004E000100000000001600000043005500520052005F0042004100
+      4C005F0043004E000100000000000C0000005000520045004600490058000100
+      000000001A000000500052004F004600490054005F004100430043005F004900
+      4400010000000000160000004F004200450059004B0054005F00540059005000
+      4500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 136
+    Top = 464
+    object DSins_insurID: TIntegerField
+      FieldName = 'ID'
+    end
+    object DSins_insurNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 4000
+    end
+    object DSins_insurMAINFORMNAME: TWideStringField
+      FieldName = 'MAINFORMNAME'
+      Size = 128
+    end
+    object DSins_insurMAINFORMGUID: TWideStringField
+      FieldName = 'MAINFORMGUID'
+      Size = 152
+    end
+    object DSins_insurCHANGEGUID: TWideStringField
+      FieldName = 'CHANGEGUID'
+      Size = 152
+    end
+    object DSins_insurSUGGESTIONGUID: TWideStringField
+      FieldName = 'SUGGESTIONGUID'
+      Size = 152
+    end
+    object DSins_insurPOLICYGUID: TWideStringField
+      FieldName = 'POLICYGUID'
+      Size = 152
+    end
+    object DSins_insurLOAN_BAL_CN: TFloatField
+      FieldName = 'LOAN_BAL_CN'
+    end
+    object DSins_insurCURR_BAL_CN: TFloatField
+      FieldName = 'CURR_BAL_CN'
+    end
+    object DSins_insurPREFIX: TWideStringField
+      FieldName = 'PREFIX'
+      Size = 40
+    end
+    object DSins_insurPROFIT_ACC_ID: TFloatField
+      FieldName = 'PROFIT_ACC_ID'
+    end
+    object DSins_insurOBEYKT_TYPE: TWideStringField
+      FieldName = 'OBEYKT_TYPE'
+      Size = 40
+    end
+  end
+  object DSCustomersIndividual: TOracleDataSet
+    SQL.Strings = (
+      
+        'select  case c.cust_type when 0 then c.name else ci.name  end as' +
+        ' ad,ci.lastname as soyad,'
+      '        ci.soname as ataadi,ci.passer as seriya,'
+      '        ci.paspnum as seriyano,ci.sex as cinsi,'
+      '        c.inn as voin,ci.birthday as tevellud,'
+      
+        '        ci.address qeydiyyatunvani,ci.fakt_adress as faktikiunva' +
+        'n,ci.doc_type,'
+      
+        '        ci.e_mail as mail,ci.phone_w as istel,ci.phone_h as evte' +
+        'l,ci.phone_m as mobtel,c.cust_type'
+      '         from customers c,custinfo ci'
+      'where c.id=ci.idcust'
+      'and  c.id=:p_id')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000A0000003A0050005F004900440003000000000000000000
+      0000}
+    QBEDefinition.QBEFieldDefs = {
+      050000001000000004000000410044000100000000000A00000053004F005900
+      410044000100000000000C000000410054004100410044004900010000000000
+      0C00000053004500520049005900410001000000000010000000530045005200
+      4900590041004E004F000100000000000A000000430049004E00530049000100
+      000000000800000056004F0049004E0001000000000010000000540045005600
+      45004C004C00550044000100000000001E000000510045005900440049005900
+      59004100540055004E00560041004E0049000100000000001800000046004100
+      4B00540049004B00490055004E00560041004E00010000000000080000004D00
+      410049004C000100000000000A00000049005300540045004C00010000000000
+      0A00000045005600540045004C000100000000000C0000004D004F0042005400
+      45004C000100000000001200000043005500530054005F005400590050004500
+      0100000000001000000044004F0043005F005400590050004500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 208
+    Top = 368
+    object DSCustomersIndividualAD: TWideStringField
+      FieldName = 'AD'
+      Size = 120
+    end
+    object DSCustomersIndividualSOYAD: TWideStringField
+      FieldName = 'SOYAD'
+      Size = 120
+    end
+    object DSCustomersIndividualATAADI: TWideStringField
+      FieldName = 'ATAADI'
+      Size = 120
+    end
+    object DSCustomersIndividualSERIYA: TWideStringField
+      FieldName = 'SERIYA'
+      Size = 120
+    end
+    object DSCustomersIndividualSERIYANO: TWideStringField
+      FieldName = 'SERIYANO'
+      Size = 120
+    end
+    object DSCustomersIndividualCINSI: TIntegerField
+      FieldName = 'CINSI'
+    end
+    object DSCustomersIndividualVOIN: TWideStringField
+      FieldName = 'VOIN'
+      Size = 80
+    end
+    object DSCustomersIndividualTEVELLUD: TDateTimeField
+      FieldName = 'TEVELLUD'
+    end
+    object DSCustomersIndividualQEYDIYYATUNVANI: TWideStringField
+      FieldName = 'QEYDIYYATUNVANI'
+      Size = 400
+    end
+    object DSCustomersIndividualFAKTIKIUNVAN: TWideStringField
+      FieldName = 'FAKTIKIUNVAN'
+      Size = 200
+    end
+    object DSCustomersIndividualMAIL: TWideStringField
+      FieldName = 'MAIL'
+      Size = 120
+    end
+    object DSCustomersIndividualISTEL: TWideStringField
+      FieldName = 'ISTEL'
+      Size = 120
+    end
+    object DSCustomersIndividualEVTEL: TWideStringField
+      FieldName = 'EVTEL'
+      Size = 120
+    end
+    object DSCustomersIndividualMOBTEL: TWideStringField
+      FieldName = 'MOBTEL'
+      Size = 120
+    end
+    object DSCustomersIndividualCUST_TYPE: TIntegerField
+      FieldName = 'CUST_TYPE'
+    end
+    object DSCustomersIndividualDOC_TYPE: TFloatField
+      FieldName = 'DOC_TYPE'
+    end
+  end
+  object DSRdict_emp_acc: TDataSource
+    DataSet = DSdict_emp_acc
+    Left = 776
+    Top = 584
+  end
+  object DSdict_emp_acc: TOracleDataSet
+    SQL.Strings = (
+      'SELECT a.rowid,a.id, a.name'
+      '  FROM ins_dict_employee_accident a')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 696
+    Top = 576
+  end
+  object DSRservic: TDataSource
+    DataSet = DSservic
+    Left = 88
+    Top = 496
+  end
+  object DSservic: TOracleDataSet
+    SQL.Strings = (
+      'SELECT a.rowid,a.id, a.name'
+      '  FROM ins_dict_autoservice a')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000400000049004400010000000000080000004E0041004D00
+      4500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 24
+    Top = 496
+    object DSservicID: TFloatField
+      FieldName = 'ID'
+    end
+    object DSservicNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 200
+    end
+  end
+  object DSRins_dict_companie: TDataSource
+    DataSet = DSins_dict_companie
+    Left = 96
+    Top = 552
+  end
+  object DSins_dict_companie: TOracleDataSet
+    SQL.Strings = (
+      'SELECT a.rowid,a.id, a.name'
+      '  FROM ins_dict_companie a')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000400000049004400010000000000080000004E0041004D00
+      4500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 24
+    Top = 552
+    object DSins_dict_companieID: TFloatField
+      FieldName = 'ID'
+    end
+    object DSins_dict_companieNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 200
+    end
+  end
+  object DSRdict_med_institut: TDataSource
+    DataSet = DSdict_med_institut
+    Left = 608
+    Top = 608
+  end
+  object DSdict_med_institut: TOracleDataSet
+    SQL.Strings = (
+      'SELECT a.rowid,a.id, a.name'
+      '  FROM ins_dict_med_institution a')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000400000049004400010000000000080000004E0041004D00
+      4500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 504
+    Top = 489
+    object DSdict_med_institutID: TFloatField
+      FieldName = 'ID'
+      Visible = False
+    end
+    object DSdict_med_institutNAME: TWideStringField
+      DisplayLabel = 'Ad'#305
+      FieldName = 'NAME'
+      Size = 200
+    end
+  end
+  object DSRplancontract: TDataSource
+    DataSet = DSplancontract
+    Left = 360
+    Top = 512
+  end
+  object DSplancontract: TOracleDataSet
+    SQL.Strings = (
+      'select a.rowid ,a.* from ins_contracts a'
+      'where a.id=:p_id')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000A0000003A0050005F004900440003000000000000000000
+      0000}
+    QBEDefinition.QBEFieldDefs = {
+      050000002000000004000000490044000100000000000E000000540059005000
+      45005F00490044000100000000001000000049004E0053005F00440041005400
+      45000100000000001400000042004500470049004E005F004400410054004500
+      0100000000001000000045004E0044005F004400410054004500010000000000
+      12000000560041004C005500540045005F00490044000100000000000E000000
+      41004D004D004F0055004E0054000100000000001800000043004C004F005300
+      45005F005000520045004600490058000100000000000C0000004B004C004900
+      5F0049004400010000000000140000004C004F0041004E004100430043005F00
+      490044000100000000001400000043005500520052004100430043005F004900
+      44000100000000001400000050004F004C004900430059005F004E0055004D00
+      0100000000000E00000049004E005300530055004D004D000100000000001000
+      00004600520041004E005300480049005A000100000000000C00000054004100
+      52004900460046000100000000000A0000005300540041005400450001000000
+      0000100000004100470045004E0054005F004900440001000000000008000000
+      50004E0055004D000100000000000C000000420045004E005F00490044000100
+      0000000016000000420045004E00450046004900430049004100520059000100
+      000000001400000043004F004E0044004900540049004F004E00530001000000
+      00000C0000005300550047004E0055004D000100000000001000000042004C00
+      41004E004B005F00490044000100000000000A0000004F0050005F0049004400
+      0100000000000A0000005200450049004E0053000100000000000E0000004300
+      48004B00410053004B004F0001000000000006000000430048004D0001000000
+      00000800000043004800460051000100000000001600000043004F004D004D00
+      490054004F0050005F00490044000100000000001600000043004F004D004D00
+      490054005F00440041005400450001000000000014000000430041004E004300
+      45004C004F0050004900440001000000000014000000430041004E0043004500
+      4C004400410054004500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 360
+    Top = 464
+    object DSplancontractID: TFloatField
+      FieldName = 'ID'
+    end
+    object DSplancontractTYPE_ID: TFloatField
+      FieldName = 'TYPE_ID'
+    end
+    object DSplancontractINS_DATE: TDateTimeField
+      FieldName = 'INS_DATE'
+    end
+    object DSplancontractBEGIN_DATE: TDateTimeField
+      FieldName = 'BEGIN_DATE'
+    end
+    object DSplancontractEND_DATE: TDateTimeField
+      FieldName = 'END_DATE'
+    end
+    object DSplancontractVALUTE_ID: TFloatField
+      FieldName = 'VALUTE_ID'
+    end
+    object DSplancontractAMMOUNT: TFloatField
+      FieldName = 'AMMOUNT'
+    end
+    object DSplancontractCLOSE_PREFIX: TIntegerField
+      FieldName = 'CLOSE_PREFIX'
+    end
+    object DSplancontractKLI_ID: TFloatField
+      FieldName = 'KLI_ID'
+    end
+    object DSplancontractLOANACC_ID: TFloatField
+      FieldName = 'LOANACC_ID'
+    end
+    object DSplancontractCURRACC_ID: TFloatField
+      FieldName = 'CURRACC_ID'
+    end
+    object DSplancontractPOLICY_NUM: TWideStringField
+      FieldName = 'POLICY_NUM'
+      Size = 128
+    end
+    object DSplancontractINSSUMM: TFloatField
+      FieldName = 'INSSUMM'
+    end
+    object DSplancontractFRANSHIZ: TFloatField
+      FieldName = 'FRANSHIZ'
+    end
+    object DSplancontractTARIFF: TFloatField
+      FieldName = 'TARIFF'
+    end
+    object DSplancontractSTATE: TIntegerField
+      FieldName = 'STATE'
+    end
+    object DSplancontractAGENT_ID: TFloatField
+      FieldName = 'AGENT_ID'
+    end
+    object DSplancontractPNUM: TFloatField
+      FieldName = 'PNUM'
+    end
+    object DSplancontractBEN_ID: TFloatField
+      FieldName = 'BEN_ID'
+    end
+    object DSplancontractBENEFICIARY: TWideStringField
+      FieldName = 'BENEFICIARY'
+      Size = 4000
+    end
+    object DSplancontractCONDITIONS: TWideStringField
+      FieldName = 'CONDITIONS'
+      Size = 4000
+    end
+    object DSplancontractSUGNUM: TWideStringField
+      FieldName = 'SUGNUM'
+      Size = 128
+    end
+    object DSplancontractBLANK_ID: TFloatField
+      FieldName = 'BLANK_ID'
+    end
+    object DSplancontractOP_ID: TFloatField
+      FieldName = 'OP_ID'
+    end
+    object DSplancontractREINS: TFloatField
+      FieldName = 'REINS'
+    end
+    object DSplancontractCHKASKO: TFloatField
+      FieldName = 'CHKASKO'
+    end
+    object DSplancontractCHM: TFloatField
+      FieldName = 'CHM'
+    end
+    object DSplancontractCHFQ: TFloatField
+      FieldName = 'CHFQ'
+    end
+    object DSplancontractCOMMITOP_ID: TFloatField
+      FieldName = 'COMMITOP_ID'
+    end
+    object DSplancontractCOMMIT_DATE: TDateTimeField
+      FieldName = 'COMMIT_DATE'
+    end
+    object DSplancontractCANCELOPID: TFloatField
+      FieldName = 'CANCELOPID'
+    end
+    object DSplancontractCANCELDATE: TDateTimeField
+      FieldName = 'CANCELDATE'
+    end
+  end
+  object DSRPaymentsetting: TDataSource
+    DataSet = DSPaymentsetting
+    Left = 432
+    Top = 512
+  end
+  object DSPaymentsetting: TOracleDataSet
+    SQL.Strings = (
+      'select a.rowid,a.* from ins_payment_plan_setting a'
+      'where a.cid=:pcid')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000A0000003A00500043004900440003000000000000000000
+      0000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000A000000040000004900440001000000000006000000430049004400
+      010000000000180000005000410059004D0045004E0054005F00540059005000
+      45000100000000000E000000500045005200430045004E005400010000000000
+      12000000500045005200430045004E0054005F00460001000000000012000000
+      500045005200430045004E0054005F004D000100000000000A0000004F005000
+      5F00490044000100000000001200000041004D004D004F0055004E0054005F00
+      46000100000000001200000041004D004D004F0055004E0054005F004D000100
+      000000000E00000041004D004D004F0055004E005400010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 432
+    Top = 464
+    object DSPaymentsettingID: TFloatField
+      FieldName = 'ID'
+    end
+    object DSPaymentsettingCID: TFloatField
+      FieldName = 'CID'
+    end
+    object DSPaymentsettingPAYMENT_TYPE: TFloatField
+      FieldName = 'PAYMENT_TYPE'
+    end
+    object DSPaymentsettingPERCENT: TFloatField
+      FieldName = 'PERCENT'
+    end
+    object DSPaymentsettingPERCENT_F: TFloatField
+      FieldName = 'PERCENT_F'
+    end
+    object DSPaymentsettingPERCENT_M: TFloatField
+      FieldName = 'PERCENT_M'
+    end
+    object DSPaymentsettingOP_ID: TFloatField
+      FieldName = 'OP_ID'
+    end
+    object DSPaymentsettingAMMOUNT_F: TFloatField
+      FieldName = 'AMMOUNT_F'
+    end
+    object DSPaymentsettingAMMOUNT_M: TFloatField
+      FieldName = 'AMMOUNT_M'
+    end
+    object DSPaymentsettingAMMOUNT: TFloatField
+      FieldName = 'AMMOUNT'
+    end
+  end
+  object DSRPaymentInfo: TDataSource
+    DataSet = DSPaymentInfo
+    Left = 208
+    Top = 512
+  end
+  object DSPaymentInfo: TOracleDataSet
+    SQL.Strings = (
+      'select count(*) as say from ins_payment_plan'
+      'where ins_id=:pcid')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000A0000003A00500043004900440003000000000000000000
+      0000}
+    QBEDefinition.QBEFieldDefs = {050000000100000006000000530041005900010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 208
+    Top = 464
+    object DSPaymentInfoSAY: TFloatField
+      FieldName = 'SAY'
+    end
+  end
+  object DSPaymentSettingInfo: TOracleDataSet
+    SQL.Strings = (
+      'select count(*) as say from ins_payment_plan_setting '
+      'where cid=:pcid')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000A0000003A00500043004900440003000000000000000000
+      0000}
+    QBEDefinition.QBEFieldDefs = {050000000100000006000000530041005900010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 208
+    Top = 568
+    object DSPaymentSettingInfoSAY: TFloatField
+      FieldName = 'SAY'
+    end
+  end
+  object DSRPaymentSettingInfo: TDataSource
+    DataSet = DSPaymentSettingInfo
+    Left = 280
+    Top = 568
+  end
+  object DSReportDuePayment: TOracleDataSet
+    SQL.Strings = (
+      
+        'select ins_cust.surname||'#39' '#39'||ins_cust.name||'#39' '#39'||ins_cust.fathe' +
+        'rname as sigortali,'
+      
+        '(select ii.name from ins_insurances ii where ii.id=c.type_id) as' +
+        ' M_novu,'
+      
+        '(select acnt.acc_no from account acnt where acnt.bal_cn1=211 and' +
+        ' acnt.ownid=c.id) as hesab_211,'
+      
+        'c.policy_num,(select name from ins_bnf_type where id=c.bnf_type)' +
+        ' as faydagoturen_status,'
+      
+        'a.surname||'#39' '#39'||a.name||'#39' '#39'||a.fathername as Agent_adi,c.ins_dat' +
+        'e,c.begin_date,c.end_date,'
+      
+        '(select case when payment_type=1 then '#39'Tam odenis'#39' else '#39'Hissele' +
+        'rle odenis'#39' end from ins_payment_plan_setting where cid=c.id) as' +
+        ' odenis_novu,'
+      
+        'nvl((select nvl(p.ammount,0) as ammount from ins_payments p,sb_b' +
+        'usiness_processes sb_p,sb_business_opers sb_o,provarch pr'
+      'where p.traid=sb_o.parentid '
+      'and sb_o.busproc=sb_p.id '
+      'and  p.ins_id=c.id '
+      'and sb_o.busproc in(14,15,16,17,18,19,20,63) '
+      'and pr.id=sb_o.parentid),0) as tam_siq_haqqi,'
+      
+        'nvl((SELECT sum(ammount) from ins_payment_plan where ins_id=c.id' +
+        ' and pay_date<=sbop.get_date),0) as plan_uzreodenmeli_mebleg,'
+      
+        'nvl((select nvl(sum(p.ammount),0) from  ins_payments p,sb_busine' +
+        'ss_processes sb_p,sb_business_opers sb_o,provarch pr'
+      'where p.traid=sb_o.parentid'
+      'and  sb_o.busproc=sb_p.id'
+      'and  ins_id=c.id'
+      'and  p.planid=1'
+      'and paydate<=sbop.get_date()'
+      'and sb_o.busproc in(35,36,37,38,39,40,41,64)'
+      'and pr.id in(sb_o.parentid)),0) as plan_uzre_odenmis_M,'
+      
+        'nvl((SELECT sum(ammount) from ins_payment_plan where ins_id=c.id' +
+        ' and pay_date<=sbop.get_date),0)-'
+      
+        'nvl((select nvl(sum(p.ammount),0) from  ins_payments p,sb_busine' +
+        'ss_processes sb_p,sb_business_opers sb_o,provarch pr'
+      'where p.traid=sb_o.parentid'
+      'and  sb_o.busproc=sb_p.id'
+      'and  ins_id=c.id'
+      'and  p.planid=1'
+      'and paydate<=sbop.get_date()'
+      'and sb_o.busproc in(35,36,37,38,39,40,41,64)'
+      'and pr.id in(sb_o.parentid)),0) as gecikme_meblegi,'
+      'ins_common.get_due_day(c.id) as gecikme_gunleri'
+      'from ins_contracts c,'
+      '--ins_payment_plan p,'
+      'ins_payment_plan_setting ps,'
+      'ins_agents a,'
+      'ins_customers ins_cust,'
+      'customers cust ,archost ar'
+      'where  ps.cid=c.id'
+      'and ps.payment_type=2'
+      'and a.id=c.agent_id(+)'
+      'and c.kli_id=ins_cust.id'
+      'and ins_cust.cust_id=cust.id'
+      
+        'and c.close_prefix=0 and abs(ar.pok_ostat)>0 and ar.datdate=sbop' +
+        '.get_date() and c.loanacc_id=ar.acc_id'
+      'and c.state=6'
+      
+        'and nvl((SELECT sum(ammount) from ins_payment_plan where ins_id=' +
+        'c.id and pay_date<=sbop.get_date),0)-'
+      
+        '    nvl((select nvl(sum(p.ammount),0) from  ins_payments p,sb_bu' +
+        'siness_processes sb_p,sb_business_opers sb_o,provarch pr'
+      'where p.traid=sb_o.parentid'
+      'and  sb_o.busproc=sb_p.id'
+      'and  ins_id=c.id'
+      'and  p.planid=1'
+      'and paydate<=sbop.get_date()'
+      'and sb_o.busproc in(35,36,37,38,39,40,41,64) '
+      'and pr.id in(sb_o.parentid)),0)>0'
+      ''
+      'union'
+      ''
+      
+        'select ins_cust.surname||'#39' '#39'||ins_cust.name||'#39' '#39'||ins_cust.fathe' +
+        'rname as sigortali,(select ii.name from ins_insurances ii where ' +
+        'ii.id=c.type_id) as M_novu,'
+      
+        '(select acnt.acc_no from account acnt where acnt.bal_cn1=211 and' +
+        ' acnt.ownid=c.id) as hesab_211,'
+      
+        'c.policy_num,(select name from ins_bnf_type where id=c.bnf_type)' +
+        ' as faydagoturen_status,'
+      
+        'a.surname||'#39' '#39'||a.name||'#39' '#39'||a.fathername as Agent_adi,c.ins_dat' +
+        'e,c.begin_date,c.end_date,'
+      
+        '(select case when payment_type=1 then '#39'Tam odenis'#39' else '#39'Hissele' +
+        'rle odenis'#39' end from ins_payment_plan_setting where cid=c.id) as' +
+        ' odenis_novu,'
+      ''
+      
+        'nvl((select nvl(p.ammount,0) as ammount from ins_payments p,sb_b' +
+        'usiness_processes sb_p,sb_business_opers sb_o,provarch pr'
+      'where p.traid=sb_o.parentid '
+      'and sb_o.busproc=sb_p.id '
+      'and  p.ins_id=c.id '
+      'and sb_o.busproc in(14,15,16,17,18,19,20,63) '
+      'and pr.id=sb_o.parentid),0) as tam_siq_haqqi,'
+      
+        'nvl((select nvl(sum(p.ammount),0) from  ins_payments p,sb_busine' +
+        'ss_processes sb_p,sb_business_opers sb_o,provarch pr'
+      'where p.traid=sb_o.parentid'
+      'and  sb_o.busproc=sb_p.id '
+      'and  ins_id=c.id '
+      'and p.planid=1 '
+      'and paydate<=sbop.get_date() '
+      'and sb_o.busproc in(14,15,16,17,18,19,20,63) '
+      'and pr.id in(sb_o.parentid)),0) as plan_uzreodenmeli_mebleg,'
+      
+        'nvl((select nvl(sum(p.ammount),0) from  ins_payments p,sb_busine' +
+        'ss_processes sb_p,sb_business_opers sb_o,provarch pr'
+      'where p.traid=sb_o.parentid'
+      'and  sb_o.busproc=sb_p.id'
+      'and  ins_id=c.id'
+      'and  p.planid=1'
+      'and paydate<=sbop.get_date()'
+      'and sb_o.busproc in(35,36,37,38,39,40,41,64)'
+      'and pr.id in(sb_o.parentid)),0) as plan_uzre_odenmis_M,'
+      ''
+      
+        'nvl((select nvl(sum(p.ammount),0) from  ins_payments p,sb_busine' +
+        'ss_processes sb_p,sb_business_opers sb_o,provarch pr'
+      'where p.traid=sb_o.parentid'
+      'and  sb_o.busproc=sb_p.id '
+      'and  ins_id=c.id '
+      'and p.planid=1 '
+      'and paydate<=sbop.get_date() '
+      'and sb_o.busproc in(14,15,16,17,18,19,20,63) '
+      'and pr.id in(sb_o.parentid)),0)'
+      '-'
+      
+        'nvl((select nvl(sum(p.ammount),0) from  ins_payments p,sb_busine' +
+        'ss_processes sb_p,sb_business_opers sb_o,provarch pr'
+      'where p.traid=sb_o.parentid'
+      'and  sb_o.busproc=sb_p.id'
+      'and  ins_id=c.id'
+      'and  p.planid=1'
+      'and paydate<=sbop.get_date()'
+      'and sb_o.busproc in(35,36,37,38,39,40,41,64)'
+      'and pr.id in(sb_o.parentid)),0) as gecikme_meblegi,'
+      ''
+      'ins_common.get_due_day(c.id) as gecikme_gunleri'
+      'from ins_contracts c,'
+      '--ins_payment_plan p,'
+      'ins_payment_plan_setting ps,'
+      'ins_agents a,'
+      'ins_customers ins_cust,'
+      'customers cust ,archost ar'
+      'where  ps.cid=c.id'
+      'and ps.payment_type=1'
+      'and a.id=c.agent_id(+)'
+      'and c.kli_id=ins_cust.id'
+      'and ins_cust.cust_id=cust.id'
+      
+        'and c.close_prefix=0 and abs(ar.pok_ostat)>0 and ar.datdate=sbop' +
+        '.get_date() and c.loanacc_id=ar.acc_id'
+      'and c.state=6'
+      ''
+      
+        'and nvl((select nvl(sum(p.ammount),0) from  ins_payments p,sb_bu' +
+        'siness_processes sb_p,sb_business_opers sb_o,provarch pr where p' +
+        '.traid=sb_o.parentid'
+      
+        'and  sb_o.busproc=sb_p.id and  ins_id=c.id and  p.planid=1 and p' +
+        'aydate<=sbop.get_date() and sb_o.busproc in(14,15,16,17,18,19,20' +
+        ',63) and pr.id in(sb_o.parentid)),0)'
+      '---------'
+      '- '
+      
+        'nvl((select nvl(sum(p.ammount),0) from  ins_payments p,sb_busine' +
+        'ss_processes sb_p,sb_business_opers sb_o,provarch pr where p.tra' +
+        'id=sb_o.parentid'
+      
+        'and  sb_o.busproc=sb_p.id and  ins_id=c.id and  p.planid=1 and p' +
+        'aydate<=sbop.get_date() and sb_o.busproc in(35,36,37,38,39,40,41' +
+        ',64) and pr.id in(sb_o.parentid)),0)>0')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000F0000001400000050004F004C004900430059005F004E0055004D00
+      0100000000003000000050004C0041004E005F0055005A00520045004F004400
+      45004E004D0045004C0049005F004D00450042004C0045004700010000000000
+      1E00000047004500430049004B004D0045005F004D00450042004C0045004700
+      4900010000000000120000004100470045004E0054005F004100440049000100
+      00000000120000005300490047004F005200540041004C004900010000000000
+      1E00000047004500430049004B004D0045005F00470055004E004C0045005200
+      49000100000000000C0000004D005F004E004F00560055000100000000001600
+      00004F00440045004E00490053005F004E004F00560055000100000000002600
+      000050004C0041004E005F0055005A00520045005F004F00440045004E004D00
+      490053005F004D00010000000000260000004600410059004400410047004F00
+      54005500520045004E005F005300540041005400550053000100000000001000
+      000049004E0053005F0044004100540045000100000000001400000042004500
+      470049004E005F0044004100540045000100000000001000000045004E004400
+      5F0044004100540045000100000000001A000000540041004D005F0053004900
+      51005F0048004100510051004900010000000000120000004800450053004100
+      42005F00320031003100010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 872
+    Top = 32
+    object DSReportDuePaymentSIGORTALI: TWideStringField
+      DisplayLabel = 'S'#305#287'ortal'#305
+      FieldName = 'SIGORTALI'
+      Size = 1538
+    end
+    object DSReportDuePaymentM_NOVU: TWideStringField
+      DisplayLabel = 'M'#252'qavil'#601' N'#246'v'#252
+      FieldName = 'M_NOVU'
+      Size = 4000
+    end
+    object DSReportDuePaymentHESAB_211: TWideStringField
+      DisplayLabel = #8220'211'#8221' sayl'#305' hesab'
+      FieldName = 'HESAB_211'
+      Size = 448
+    end
+    object DSReportDuePaymentPOLICY_NUM: TWideStringField
+      DisplayLabel = 'Polis '#8470
+      FieldName = 'POLICY_NUM'
+      Size = 128
+    end
+    object DSReportDuePaymentFAYDAGOTUREN_STATUS: TWideStringField
+      DisplayLabel = 'Faydag'#246't'#252'r'#601'n statusu'
+      FieldName = 'FAYDAGOTUREN_STATUS'
+      Size = 512
+    end
+    object DSReportDuePaymentAGENT_ADI: TWideStringField
+      DisplayLabel = 'Agent'
+      FieldName = 'AGENT_ADI'
+      Size = 1538
+    end
+    object DSReportDuePaymentINS_DATE: TDateTimeField
+      DisplayLabel = 'Yaz'#305'lma Tarixi '
+      FieldName = 'INS_DATE'
+    end
+    object DSReportDuePaymentBEGIN_DATE: TDateTimeField
+      DisplayLabel = 'Ba'#351'lama Tarixi '
+      FieldName = 'BEGIN_DATE'
+    end
+    object DSReportDuePaymentEND_DATE: TDateTimeField
+      DisplayLabel = 'Bitm'#601' Tarixi'
+      FieldName = 'END_DATE'
+    end
+    object DSReportDuePaymentODENIS_NOVU: TWideStringField
+      DisplayLabel = #214'd'#601'ni'#351' N'#246'v'#252
+      FieldName = 'ODENIS_NOVU'
+      Size = 23
+    end
+    object DSReportDuePaymentTAM_SIQ_HAQQI: TFloatField
+      DisplayLabel = 'C'#601'mi s'#305#287'orta haqlar'#305
+      FieldName = 'TAM_SIQ_HAQQI'
+    end
+    object DSReportDuePaymentPLAN_UZREODENMELI_MEBLEG: TFloatField
+      DisplayLabel = 'Plan '#252'zr'#601' '#246'd'#601'nm'#601'li s'#305#287'orta haqq'#305
+      FieldName = 'PLAN_UZREODENMELI_MEBLEG'
+    end
+    object DSReportDuePaymentPLAN_UZRE_ODENMIS_M: TFloatField
+      DisplayLabel = 'Plan '#252'zr'#601' '#246'd'#601'nmi'#351' s'#305#287'orta haqq'#305
+      FieldName = 'PLAN_UZRE_ODENMIS_M'
+    end
+    object DSReportDuePaymentGECIKME_MEBLEGI: TFloatField
+      DisplayLabel = 'Gecikmi'#351' m'#601'bl'#601#287
+      FieldName = 'GECIKME_MEBLEGI'
+    end
+    object DSReportDuePaymentGECIKME_GUNLERI: TFloatField
+      DisplayLabel = 'Gecikm'#601' g'#252'nl'#601'rinin say'#305
+      FieldName = 'GECIKME_GUNLERI'
+    end
+  end
+  object DSPay_loss_acc: TOracleDataSet
+    SQL.Strings = (
+      'select id, acc_no from account'
+      'where id in(SELECT acc_id'
+      '  FROM ins_dict_acc_payment_loss) '
+      'and close_dat is null')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000200000004000000490044000100000000000C000000410043004300
+      5F004E004F00010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 872
+    Top = 96
+    object DSPay_loss_accID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object DSPay_loss_accACC_NO: TWideStringField
+      FieldName = 'ACC_NO'
+      Size = 448
+    end
+  end
+  object DSRPay_loss_acc: TDataSource
+    DataSet = DSPay_loss_acc
+    Left = 872
+    Top = 144
+  end
+  object DSRAccountPayment: TDataSource
+    DataSet = DSAccountPayment
+    Left = 888
+    Top = 232
+  end
+  object DSAccountPayment: TOracleDataSet
+    SQL.Strings = (
+      'select id,acc_no from account'
+      'where bal_cn1 in(221,222,223,211,536)'
+      'and  close_dat is  null')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000200000004000000490044000100000000000C000000410043004300
+      5F004E004F00010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 880
+    Top = 192
+    object DSAccountPaymentID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object DSAccountPaymentACC_NO: TWideStringField
+      FieldName = 'ACC_NO'
+      Size = 448
+    end
+  end
+  object dsacc_pay_los: TOracleDataSet
+    SQL.Strings = (
+      'select a.rowid,a.* from ins_dict_acc_payment_loss a')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000200000004000000490044000100000000000C000000410043004300
+      5F0049004400010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 872
+    Top = 288
+    object dsacc_pay_losID: TFloatField
+      FieldName = 'ID'
+    end
+    object dsacc_pay_losACC_ID: TFloatField
+      FieldName = 'ACC_ID'
+    end
+  end
+  object DSmesuliyyetShaqqi: TOracleDataSet
+    SQL.Strings = (
+      
+        'select nvl(resp_premium,0) as SighaqqiM from ins_contract_respon' +
+        'sibility'
+      'where cid=:pcid')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000A0000003A00500043004900440003000000000000000000
+      0000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000100000012000000530049004700480041005100510049004D000100
+      00000000}
+    Session = sboapiDataModule.SBSession
+    Left = 872
+    Top = 360
+    object DSmesuliyyetShaqqiSIGHAQQIM: TFloatField
+      FieldName = 'SIGHAQQIM'
+    end
+  end
+  object DSFerdiqezaShaqqi: TOracleDataSet
+    SQL.Strings = (
+      'select nvl(ins_premium,0) SighaqqiF from ins_contr_per_acc_motor'
+      'where cid=:pcid')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000A0000003A00500043004900440003000000000000000000
+      0000}
+    QBEDefinition.QBEFieldDefs = {
+      0500000001000000120000005300490047004800410051005100490046000100
+      00000000}
+    Session = sboapiDataModule.SBSession
+    Left = 880
+    Top = 424
+    object DSFerdiqezaShaqqiSIGHAQQIF: TFloatField
+      FieldName = 'SIGHAQQIF'
+    end
+  end
+  object DSRins_dict_next_per: TDataSource
+    DataSet = DSins_dict_next_per
+    Left = 897
+    Top = 515
+  end
+  object DSins_dict_next_per: TOracleDataSet
+    SQL.Strings = (
+      'SELECT a.rowid,a.percent'
+      '  FROM ins_dict_next_event_percent a')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000010000000E000000500045005200430045004E005400010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 897
+    Top = 467
+    object DSins_dict_next_perPERCENT: TFloatField
+      DisplayLabel = 'N'#246'vb'#601'ti hadis'#601'y'#601' g'#246'r'#601' '#601'lav'#601' tarif'
+      FieldName = 'PERCENT'
+    end
+  end
+  object DSMedEmploes: TOracleDataSet
+    SQL.Strings = (
+      'select * from ins_employees ie'
+      'where med_id in (select id from ins_medical'
+      'where cid=:pcid'
+      ')')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000A0000003A00500043004900440003000000000000000000
+      0000}
+    Session = sboapiDataModule.SBSession
+    Left = 376
+    Top = 560
+  end
+  object dspaymentpercent: TOracleDataSet
+    SQL.Strings = (
+      'SELECT a.rowid,a.percent'
+      '  FROM ins_dict_initial_payment a')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000010000000E000000500045005200430045004E005400010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 864
+    Top = 567
+    object dspaymentpercentPERCENT: TFloatField
+      DisplayLabel = #304'lkin '#246'd'#601'ni'#351' faiz d'#601'r'#601'c'#601'si'
+      FieldName = 'PERCENT'
+    end
+  end
+  object dsrpaymentpercent: TDataSource
+    DataSet = dspaymentpercent
+    Left = 936
+    Top = 576
+  end
+  object DSRBankSetting: TDataSource
+    DataSet = DSBankSetting
+    Left = 952
+    Top = 72
+  end
+  object DSBankSetting: TOracleDataSet
+    SQL.Strings = (
+      'select * from bankm'
+      'where id in (select BANK_ID from ins_bank_setting)'
+      'order by name')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000A0000000400000049004400010000000000080000004B0052004E00
+      4F00010000000000080000004E0041004D004500010000000000060000004900
+      4E004E000100000000000A000000530057004900460054000100000000001000
+      0000420041004E004B0043004F00440045000100000000000E00000053005500
+      42004B0052004E004F0001000000000010000000420041004E004B005F004B00
+      4F004400010000000000180000004C004900430045004E00530045005F004400
+      410054004500010000000000160000005400410058005F005200450047004300
+      4F0044004500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 952
+    Top = 16
+    object DSBankSettingID: TFloatField
+      FieldName = 'ID'
+    end
+    object DSBankSettingKRNO: TWideStringField
+      FieldName = 'KRNO'
+      Size = 448
+    end
+    object DSBankSettingNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 4000
+    end
+    object DSBankSettingINN: TWideStringField
+      FieldName = 'INN'
+      Size = 512
+    end
+    object DSBankSettingSWIFT: TWideStringField
+      FieldName = 'SWIFT'
+      Size = 2048
+    end
+    object DSBankSettingBANKCODE: TWideStringField
+      FieldName = 'BANKCODE'
+      Size = 512
+    end
+    object DSBankSettingSUBKRNO: TWideStringField
+      FieldName = 'SUBKRNO'
+      Size = 448
+    end
+    object DSBankSettingBANK_KOD: TFloatField
+      FieldName = 'BANK_KOD'
+    end
+    object DSBankSettingLICENSE_DATE: TDateTimeField
+      FieldName = 'LICENSE_DATE'
+    end
+    object DSBankSettingTAX_REGCODE: TWideStringField
+      FieldName = 'TAX_REGCODE'
+    end
+  end
+  object DSRBanksList: TDataSource
+    DataSet = DSBanksList
+    Left = 960
+    Top = 184
+  end
+  object DSBanksList: TOracleDataSet
+    SQL.Strings = (
+      'select id,name from bankm'
+      'where id not in (select BANK_ID from ins_bank_setting)'
+      'order by name')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000400000049004400010000000000080000004E0041004D00
+      4500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 952
+    Top = 128
+    object DSBanksListID: TFloatField
+      FieldName = 'ID'
+    end
+    object DSBanksListNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 4000
+    end
+  end
+  object DSins_balans_acc: TOracleDataSet
+    SQL.Strings = (
+      'select a.rowid,a.* from ins_balans_acc a'
+      'order by a.type_id ')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000E000000420041004C005F0043004E003100010000000000
+      0E00000054005900500045005F0049004400010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 952
+    Top = 304
+    object DSins_balans_accBAL_CN1: TFloatField
+      FieldName = 'BAL_CN1'
+    end
+    object DSins_balans_accTYPE_ID: TWideStringField
+      FieldName = 'TYPE_ID'
+      Size = 800
+    end
+  end
+  object DSRins_balans_acc: TDataSource
+    DataSet = DSins_balans_acc
+    Left = 952
+    Top = 360
+  end
+  object DSRCommanAcc_list: TDataSource
+    DataSet = DSCommanAcc_list
+    Left = 616
+    Top = 480
+  end
+  object DSCommanAcc_list: TOracleDataSet
+    SQL.Strings = (
+      'select id, acc_no from account'
+      'where open_dat is not null'
+      'and bal_cn1 in (select bal_cn1 from ins_balans_acc'
+      'where type_id='#39'Umumi hesab'#39')'
+      'order by acc_no')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000200000004000000490044000100000000000C000000410043004300
+      5F004E004F00010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 560
+    Top = 448
+    object DSCommanAcc_listID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object DSCommanAcc_listACC_NO: TWideStringField
+      FieldName = 'ACC_NO'
+      Size = 448
+    end
+  end
+  object DSOperkurs: TOracleDataSet
+    SQL.Strings = (
+      'select count(*) as say from operkurs'
+      'where val_kod=:pval_kod'
+      'and dat=:pdat')
+    Optimize = False
+    Variables.Data = {
+      0400000002000000120000003A005000560041004C005F004B004F0044000300
+      000000000000000000000A0000003A0050004400410054000C00000000000000
+      00000000}
+    Session = sboapiDataModule.SBSession
+    Left = 952
+    Top = 424
+  end
+  object DScontractcommit: TOracleDataSet
+    SQL.Strings = (
+      'select * from ins_contracts'
+      'where id=:pid')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000080000003A00500049004400030000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000002100000004000000490044000100000000000E000000540059005000
+      45005F00490044000100000000001000000049004E0053005F00440041005400
+      45000100000000001400000042004500470049004E005F004400410054004500
+      0100000000001000000045004E0044005F004400410054004500010000000000
+      12000000560041004C005500540045005F00490044000100000000000E000000
+      41004D004D004F0055004E0054000100000000001800000043004C004F005300
+      45005F005000520045004600490058000100000000000C0000004B004C004900
+      5F0049004400010000000000140000004C004F0041004E004100430043005F00
+      490044000100000000001400000043005500520052004100430043005F004900
+      44000100000000001400000050004F004C004900430059005F004E0055004D00
+      0100000000000E00000049004E005300530055004D004D000100000000001000
+      00004600520041004E005300480049005A000100000000000C00000054004100
+      52004900460046000100000000000A0000005300540041005400450001000000
+      0000100000004100470045004E0054005F004900440001000000000008000000
+      50004E0055004D000100000000000C000000420045004E005F00490044000100
+      0000000016000000420045004E00450046004900430049004100520059000100
+      000000001400000043004F004E0044004900540049004F004E00530001000000
+      00000C0000005300550047004E0055004D000100000000001000000042004C00
+      41004E004B005F00490044000100000000000A0000004F0050005F0049004400
+      0100000000000A0000005200450049004E0053000100000000000E0000004300
+      48004B00410053004B004F0001000000000006000000430048004D0001000000
+      00000800000043004800460051000100000000001600000043004F004D004D00
+      490054004F0050005F00490044000100000000001600000043004F004D004D00
+      490054005F00440041005400450001000000000014000000430041004E004300
+      45004C004F0050004900440001000000000014000000430041004E0043004500
+      4C0044004100540045000100000000000C000000460049004C00490041004C00
+      010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 968
+    Top = 480
+    object DScontractcommitID: TFloatField
+      FieldName = 'ID'
+    end
+    object DScontractcommitTYPE_ID: TFloatField
+      FieldName = 'TYPE_ID'
+    end
+    object DScontractcommitINS_DATE: TDateTimeField
+      FieldName = 'INS_DATE'
+    end
+    object DScontractcommitBEGIN_DATE: TDateTimeField
+      FieldName = 'BEGIN_DATE'
+    end
+    object DScontractcommitEND_DATE: TDateTimeField
+      FieldName = 'END_DATE'
+    end
+    object DScontractcommitVALUTE_ID: TFloatField
+      FieldName = 'VALUTE_ID'
+    end
+    object DScontractcommitAMMOUNT: TFloatField
+      FieldName = 'AMMOUNT'
+    end
+    object DScontractcommitCLOSE_PREFIX: TIntegerField
+      FieldName = 'CLOSE_PREFIX'
+    end
+    object DScontractcommitKLI_ID: TFloatField
+      FieldName = 'KLI_ID'
+    end
+    object DScontractcommitLOANACC_ID: TFloatField
+      FieldName = 'LOANACC_ID'
+    end
+    object DScontractcommitCURRACC_ID: TFloatField
+      FieldName = 'CURRACC_ID'
+    end
+    object DScontractcommitPOLICY_NUM: TWideStringField
+      FieldName = 'POLICY_NUM'
+      Size = 128
+    end
+    object DScontractcommitINSSUMM: TFloatField
+      FieldName = 'INSSUMM'
+    end
+    object DScontractcommitFRANSHIZ: TFloatField
+      FieldName = 'FRANSHIZ'
+    end
+    object DScontractcommitTARIFF: TFloatField
+      FieldName = 'TARIFF'
+    end
+    object DScontractcommitSTATE: TIntegerField
+      FieldName = 'STATE'
+    end
+    object DScontractcommitAGENT_ID: TFloatField
+      FieldName = 'AGENT_ID'
+    end
+    object DScontractcommitPNUM: TFloatField
+      FieldName = 'PNUM'
+    end
+    object DScontractcommitBEN_ID: TFloatField
+      FieldName = 'BEN_ID'
+    end
+    object DScontractcommitBENEFICIARY: TWideStringField
+      FieldName = 'BENEFICIARY'
+      Size = 4000
+    end
+    object DScontractcommitCONDITIONS: TWideStringField
+      FieldName = 'CONDITIONS'
+      Size = 4000
+    end
+    object DScontractcommitSUGNUM: TWideStringField
+      FieldName = 'SUGNUM'
+      Size = 128
+    end
+    object DScontractcommitBLANK_ID: TFloatField
+      FieldName = 'BLANK_ID'
+    end
+    object DScontractcommitOP_ID: TFloatField
+      FieldName = 'OP_ID'
+    end
+    object DScontractcommitREINS: TFloatField
+      FieldName = 'REINS'
+    end
+    object DScontractcommitCHKASKO: TFloatField
+      FieldName = 'CHKASKO'
+    end
+    object DScontractcommitCHM: TFloatField
+      FieldName = 'CHM'
+    end
+    object DScontractcommitCHFQ: TFloatField
+      FieldName = 'CHFQ'
+    end
+    object DScontractcommitCOMMITOP_ID: TFloatField
+      FieldName = 'COMMITOP_ID'
+    end
+    object DScontractcommitCOMMIT_DATE: TDateTimeField
+      FieldName = 'COMMIT_DATE'
+    end
+    object DScontractcommitCANCELOPID: TFloatField
+      FieldName = 'CANCELOPID'
+    end
+    object DScontractcommitCANCELDATE: TDateTimeField
+      FieldName = 'CANCELDATE'
+    end
+    object DScontractcommitFILIAL: TFloatField
+      FieldName = 'FILIAL'
+    end
+  end
+  object DSPaymentReal: TOracleDataSet
+    SQL.Strings = (
+      
+        'select p.rowid,p.id,p.ins_id,p.traid,p.ammount,p.paydate ,sb_p.n' +
+        'ame,p.planid,'
+      ''
+      ' decode( p.planid, 2,'#39'Hadiseye gore'#39','
+      '                   1,'#39'Plan uzre'#39')as plantype'
+      
+        'from ins_payments p,sb_business_processes sb_p,sb_business_opers' +
+        ' sb_o'
+      'where p.traid=sb_o.parentid'
+      'and sb_o.busproc=sb_p.id'
+      'and  p.ins_id=:pcid'
+      'and sb_o.busproc in(35,36,37,38,39,40,41)')
+    Optimize = False
+    Variables.Data = {
+      04000000010000000A0000003A00500043004900440003000000000000000000
+      0000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000800000004000000490044000100000000000C00000049004E005300
+      5F00490044000100000000000A00000054005200410049004400010000000000
+      0E00000041004D004D004F0055004E0054000100000000000E00000050004100
+      59004400410054004500010000000000080000004E0041004D00450001000000
+      00000C00000050004C0041004E00490044000100000000001000000050004C00
+      41004E005400590050004500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 96
+    Top = 624
+    object DSPaymentRealID: TFloatField
+      FieldName = 'ID'
+    end
+    object DSPaymentRealINS_ID: TFloatField
+      FieldName = 'INS_ID'
+    end
+    object DSPaymentRealTRAID: TFloatField
+      FieldName = 'TRAID'
+    end
+    object DSPaymentRealAMMOUNT: TFloatField
+      FieldName = 'AMMOUNT'
+    end
+    object DSPaymentRealPAYDATE: TDateTimeField
+      FieldName = 'PAYDATE'
+    end
+    object DSPaymentRealNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 600
+    end
+    object DSPaymentRealPLANID: TFloatField
+      FieldName = 'PLANID'
+    end
+    object DSPaymentRealPLANTYPE: TWideStringField
+      FieldName = 'PLANTYPE'
+      Size = 13
+    end
+  end
+  object DSMain: TDataSource
+    DataSet = ODSMain
+    Left = 28
+    Top = 704
+  end
+  object ODSStates1: TOracleDataSet
+    SQL.Strings = (
+      'select * from ins_dict_states order by id asc')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000400000049004400010000000000080000004E0041004D00
+      4500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 20
+    Top = 752
+    object FloatField3: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object WideStringField1: TWideStringField
+      FieldName = 'NAME'
+      Size = 256
+    end
+  end
+  object DataSource1: TDataSource
+    DataSet = ODSStates1
+    Left = 92
+    Top = 752
+  end
+  object ODSCalcOptions: TOracleDataSet
+    SQL.Strings = (
+      'select 0 as id, '#39'Hesablan'#305'r'#39' as name from dual'
+      'union all'
+      'select 1 as id, '#39'X'#252'susi'#39' as name from dual'
+      '')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000020000000400000049004400010000000000080000004E0041004D00
+      4500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 180
+    Top = 752
+    object ODSCalcOptionsID: TFloatField
+      FieldName = 'ID'
+    end
+    object ODSCalcOptionsNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 11
+    end
+  end
+  object ODSMain: TOracleDataSet
+    SQL.Strings = (
+      'select m.rowid, m.* from ins_dict_marks m')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000040000000400000049004400010000000000080000004E0041004D00
+      450001000000000010000000530054004100540045005F004900440001000000
+      000016000000430041004C0043004F005000540049004F004E00530001000000
+      0000}
+    Session = sboapiDataModule.SBSession
+    Left = 68
+    Top = 704
+    object ODSMainID: TFloatField
+      FieldName = 'ID'
+    end
+    object ODSMainNAME: TWideStringField
+      DisplayLabel = 'Avtomobill'#601'rin markalar'#305
+      FieldName = 'NAME'
+      Size = 256
+    end
+    object ODSMainSTATE_ID: TFloatField
+      FieldName = 'STATE_ID'
+    end
+    object ODSMainState: TWideStringField
+      FieldKind = fkLookup
+      FieldName = 'State'
+      LookupDataSet = ODSStates1
+      LookupKeyFields = 'ID'
+      LookupResultField = 'NAME'
+      KeyFields = 'STATE_ID'
+      Lookup = True
+    end
+    object ODSMainCALCOPTIONS: TIntegerField
+      FieldName = 'CALCOPTIONS'
+    end
+    object ODSMainCalcOptList: TWideStringField
+      DisplayLabel = #350#601'rtl'#601'r'
+      FieldKind = fkLookup
+      FieldName = 'CalcOptList'
+      LookupDataSet = ODSCalcOptions
+      LookupKeyFields = 'ID'
+      LookupResultField = 'NAME'
+      KeyFields = 'CALCOPTIONS'
+      Lookup = True
+    end
+  end
+  object ODSChilde: TOracleDataSet
+    SQL.Strings = (
+      'select c.rowid, c.* from ins_dict_models c'
+      ''
+      'where mark_id = :mark_id')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000100000003A004D00410052004B005F004900440004000000
+      08000000000000000000544000000000}
+    QBEDefinition.QBEFieldDefs = {
+      05000000040000000400000049004400010000000000080000004E0041004D00
+      45000100000000000E0000004D00410052004B005F0049004400010000000000
+      16000000430041004C0043004F005000540049004F004E005300010000000000}
+    Master = ODSMain
+    MasterFields = 'ID'
+    DetailFields = 'MARK_ID'
+    Session = sboapiDataModule.SBSession
+    Left = 188
+    Top = 692
+    object ODSChildeID: TFloatField
+      FieldName = 'ID'
+    end
+    object ODSChildeNAME: TWideStringField
+      DisplayLabel = 'Avtomobill'#601'rin modell'#601'ri'
+      FieldName = 'NAME'
+      Size = 256
+    end
+    object ODSChildeMARK_ID: TFloatField
+      FieldName = 'MARK_ID'
+    end
+    object ODSChildeCALCOPTIONS: TIntegerField
+      FieldName = 'CALCOPTIONS'
+    end
+    object ODSChildeCalcOpt: TWideStringField
+      DisplayLabel = #350#601'rtl'#601'r'
+      FieldKind = fkLookup
+      FieldName = 'CalcOpt'
+      LookupDataSet = ODSCalcOptions
+      LookupKeyFields = 'ID'
+      LookupResultField = 'NAME'
+      KeyFields = 'CALCOPTIONS'
+      Lookup = True
+    end
+  end
+  object DSChilde: TDataSource
+    DataSet = ODSChilde
+    Left = 140
+    Top = 700
+  end
+  object fff: TOracleDataSet
+    SQL.Strings = (
+      'select * from user$'
+      'where id=:pid')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000080000003A00500049004400030000000000000000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 280
+    Top = 672
+  end
+  object DSReportDuePayment_old: TOracleDataSet
+    SQL.Strings = (
+      
+        'select c.policy_num,nvl((SELECT sum(ammount) from ins_payment_pl' +
+        'an where ins_id=c.id and pay_date<=sbop.get_date),0) as plan_uzr' +
+        'eodenmeli_mebleg,'
+      
+        'nvl((select nvl(sum(p.ammount),0) from  ins_payments p,sb_busine' +
+        'ss_processes sb_p,sb_business_opers sb_o,provarch pr'
+      'where p.traid=sb_o.parentid'
+      'and  sb_o.busproc=sb_p.id'
+      'and  ins_id=c.id'
+      'and  p.planid=1'
+      'and paydate<=sbop.get_date()'
+      'and sb_o.busproc in(35,36,37,38,39,40,41)'
+      'and pr.id in(sb_o.parentid)),0) as plan_uzre_osenmis_M,'
+      
+        'nvl((SELECT sum(ammount) from ins_payment_plan where ins_id=c.id' +
+        ' and pay_date<=sbop.get_date),0)-'
+      
+        'nvl((select nvl(sum(p.ammount),0) from  ins_payments p,sb_busine' +
+        'ss_processes sb_p,sb_business_opers sb_o,provarch pr'
+      'where p.traid=sb_o.parentid'
+      'and  sb_o.busproc=sb_p.id'
+      'and  ins_id=c.id'
+      'and  p.planid=1'
+      'and paydate<=sbop.get_date()'
+      'and sb_o.busproc in(35,36,37,38,39,40,41)'
+      'and pr.id in(sb_o.parentid)),0) as gecikme_meblegi,'
+      'a.surname||'#39' '#39'||a.name||'#39' '#39'||a.fathername as Agent_adi,'
+      'cust.name as Sigortaetdiren,'
+      
+        'ins_cust.surname||'#39' '#39'||ins_cust.name||'#39' '#39'||ins_cust.fathername a' +
+        's sigortali,'
+      ''
+      'ins_common.get_due_day(c.id) as gecikme_gunleri'
+      'from ins_contracts c,'
+      '--ins_payment_plan p,'
+      'ins_payment_plan_setting ps,'
+      'ins_agents a,'
+      'ins_customers ins_cust,'
+      'customers cust'
+      ''
+      'where  ps.cid=c.id'
+      'and ps.payment_type=2'
+      'and a.id=c.agent_id(+)'
+      'and c.kli_id=ins_cust.id'
+      'and ins_cust.cust_id=cust.id'
+      'and c.close_prefix=0'
+      'and '
+      
+        'nvl((SELECT sum(ammount) from ins_payment_plan where ins_id=c.id' +
+        ' and pay_date<=sbop.get_date),0)-'
+      
+        'nvl((select nvl(sum(p.ammount),0) from  ins_payments p,sb_busine' +
+        'ss_processes sb_p,sb_business_opers sb_o,provarch pr'
+      'where p.traid=sb_o.parentid'
+      'and  sb_o.busproc=sb_p.id'
+      'and  ins_id=c.id'
+      'and  p.planid=1'
+      'and paydate<=sbop.get_date()'
+      'and sb_o.busproc in(35,36,37,38,39,40,41)'
+      'and pr.id in(sb_o.parentid)),0)>0')
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 784
+    Top = 8
+  end
+  object Partly_payments: TOracleDataSet
+    SQL.Strings = (
+      
+        'select distinct ic.id as muq_id,(select acc_no from account wher' +
+        'e ownid=ic.id and bal_cn1=211 and close_dat is null) as acc_no,i' +
+        'ns_cust.surname||'#39' '#39'||ins_cust.name||'#39' '#39'||ins_cust.fathername as' +
+        ' musteri,ic.policy_num,'
+      
+        'ins_cust.mobilephone as mobil,ii.name as siq_novu,(select name f' +
+        'rom ins_bnf_type where id=ic.bnf_type) as fayda_goturen,'
+      
+        'ia.surname||'#39' '#39'||ia.name||'#39' '#39'||ia.fathername as agent,ic.ammount' +
+        ' siq_haqqi,ic.inssumm siq_meb,ic.franshiz,ic.tariff,ic.begin_dat' +
+        'e,ic.end_date,'
+      
+        'ipps.ammount ilkin_odenis,(select count(*)  from ins_payment_pla' +
+        'n where ins_id=ic.id) as hisse_sayi,'
+      ''
+      
+        'nvl((select nvl(p.ammount,0) as ammount from ins_payments p,sb_b' +
+        'usiness_processes sb_p,sb_business_opers sb_o,provarch pr'
+      
+        'where p.traid=sb_o.parentid and sb_o.busproc=sb_p.id and  p.ins_' +
+        'id=ic.id and sb_o.busproc in(14,15,16,17,18,19,20) and pr.id=sb_' +
+        'o.parentid),0)'
+      '-'
+      
+        'nvl((select sum(p.ammount) as ammount from ins_payments p,sb_bus' +
+        'iness_processes sb_p,sb_business_opers sb_o'
+      
+        'where p.traid=sb_o.parentid and sb_o.busproc=sb_p.id and  p.ins_' +
+        'id=ic.id and sb_o.busproc in(35,36,37,38,39,40,41)),0) as Qaliq,'
+      'ins_common.get_due_day(ic.id) as gecikme_gunleri'
+      
+        'from ins_contracts ic,ins_customers ins_cust,ins_insurances ii,i' +
+        'ns_agents ia,ins_payment_plan_setting ipps,ins_payment_plan ipp'
+      ''
+      ''
+      'where ic.kli_id=ins_cust.id'
+      'and ii.id=ic.type_id'
+      'and ic.agent_id=ia.id'
+      'and ic.id=ipps.cid'
+      'and ipp.ins_id=ic.id'
+      'and ic.close_prefix=0'
+      'and ic.state <>8'
+      'order by ic.id desc')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000120000000C0000004D00550051005F00490044000100000000000E00
+      00004D005500530054004500520049000100000000001400000050004F004C00
+      4900430059005F004E0055004D000100000000000A0000004D004F0042004900
+      4C00010000000000100000005300490051005F004E004F005600550001000000
+      00001A000000460041005900440041005F0047004F0054005500520045004E00
+      0100000000000A0000004100470045004E005400010000000000120000005300
+      490051005F00480041005100510049000100000000000E000000530049005100
+      5F004D0045004200010000000000100000004600520041004E00530048004900
+      5A000100000000000C0000005400410052004900460046000100000000001400
+      000042004500470049004E005F00440041005400450001000000000010000000
+      45004E0044005F0044004100540045000100000000001800000049004C004B00
+      49004E005F004F00440045004E00490053000100000000001400000048004900
+      5300530045005F0053004100590049000100000000001E000000470045004300
+      49004B004D0045005F00470055004E004C004500520049000100000000000A00
+      0000510041004C00490051000100000000000C0000004100430043005F004E00
+      4F00010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 448
+    Top = 584
+    object Partly_paymentsACC_NO: TWideStringField
+      DisplayLabel = 'Hesab n'#246'mr'#601'l'#601'ri'
+      FieldName = 'ACC_NO'
+      Size = 448
+    end
+    object Partly_paymentsMUQ_ID: TFloatField
+      DisplayLabel = 'M'#252'qavil'#601' '#304'd-si'
+      FieldName = 'MUQ_ID'
+    end
+    object Partly_paymentsMUSTERI: TWideStringField
+      DisplayLabel = 'M'#252#351't'#601'ri'
+      FieldName = 'MUSTERI'
+      Size = 1600
+    end
+    object Partly_paymentsPOLICY_NUM: TWideStringField
+      DisplayLabel = 'Polis n'#246'mr'#601'si'
+      FieldName = 'POLICY_NUM'
+      Size = 128
+    end
+    object Partly_paymentsMOBIL: TWideStringField
+      DisplayLabel = 'Mobil n'#246'mr'#601
+      FieldName = 'MOBIL'
+      Size = 512
+    end
+    object Partly_paymentsSIQ_NOVU: TWideStringField
+      DisplayLabel = 'S'#305#287'orta n'#246'v'#252
+      FieldName = 'SIQ_NOVU'
+      Size = 4000
+    end
+    object Partly_paymentsFAYDA_GOTUREN: TWideStringField
+      DisplayLabel = 'Fayda g'#246't'#252'r'#601'n'
+      FieldName = 'FAYDA_GOTUREN'
+      Size = 30
+    end
+    object Partly_paymentsAGENT: TWideStringField
+      DisplayLabel = 'Agent'
+      FieldName = 'AGENT'
+      Size = 1600
+    end
+    object Partly_paymentsSIQ_HAQQI: TFloatField
+      DisplayLabel = 'S'#305#287'orta haqq'#305
+      FieldName = 'SIQ_HAQQI'
+    end
+    object Partly_paymentsSIQ_MEB: TFloatField
+      DisplayLabel = 'Si'#287'orta m'#601'bl'#601#287'i'
+      FieldName = 'SIQ_MEB'
+    end
+    object Partly_paymentsTARIFF: TFloatField
+      DisplayLabel = 'Tarif'
+      FieldName = 'TARIFF'
+    end
+    object Partly_paymentsFRANSHIZ: TFloatField
+      DisplayLabel = 'Fran'#351'iza'
+      FieldName = 'FRANSHIZ'
+    end
+    object Partly_paymentsBEGIN_DATE: TDateTimeField
+      DisplayLabel = 'Ba'#351'lanma tarixi'
+      FieldName = 'BEGIN_DATE'
+    end
+    object Partly_paymentsEND_DATE: TDateTimeField
+      DisplayLabel = 'Bitm'#601' tarixi'
+      FieldName = 'END_DATE'
+    end
+    object Partly_paymentsILKIN_ODENIS: TFloatField
+      DisplayLabel = #304'lkin '#246'd'#601'ni'#351
+      FieldName = 'ILKIN_ODENIS'
+    end
+    object Partly_paymentsHISSE_SAYI: TFloatField
+      DisplayLabel = 'Hiss'#601'l'#601'rin say'#305
+      FieldName = 'HISSE_SAYI'
+    end
+    object Partly_paymentsQALIQ: TFloatField
+      DisplayLabel = 'Qaliq borc'
+      FieldName = 'QALIQ'
+    end
+    object Partly_paymentsGECIKME_GUNLERI: TFloatField
+      DisplayLabel = 'Gecikm'#601' g'#252'nl'#601'ri'
+      FieldName = 'GECIKME_GUNLERI'
+    end
+  end
+  object DsExcel_customers: TOracleDataSet
+    SQL.Strings = (
+      'select * from ins_customers'
+      'order by id ')
+    ReadBuffer = 1000
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000002500000004000000490044000100000000000E000000430055005300
+      54005F0049004400010000000000080000004E0041004D004500010000000000
+      0E0000005300550052004E0041004D0045000100000000001400000046004100
+      54004800450052004E0041004D0045000100000000001200000048004F004D00
+      4500500048004F004E0045000100000000001200000057004F0052004B005000
+      48004F004E004500010000000000160000004D004F00420049004C0045005000
+      48004F004E004500010000000000060000004600410058000100000000000E00
+      0000410044004400520045005300530001000000000016000000440041005400
+      45004F004600420049005200540048000100000000001800000050004C004100
+      430045004F004600420049005200540048000100000000000600000041004700
+      4500010000000000060000005300450058000100000000001200000050004100
+      530050004F00520054004E004F000100000000000A0000004D0053005F004900
+      44000100000000000800000043004900540059000100000000000C0000004900
+      4E004400450058005F000100000000001C0000004D00410049004C0049004E00
+      470041004400440052004500530053000100000000000C0000004F0043004300
+      5F00490044000100000000000A000000450044005F0049004400010000000000
+      0A000000530054004100540045000100000000000C0000004100430054005F00
+      490044000100000000001A00000043004F004E00540041004300540050004500
+      520053004F004E000100000000002400000043004F004E005400410043005400
+      50004500520053004F004E00500048004F004E00450001000000000018000000
+      43004C004F00530045005F005000520045004600490058000100000000001C00
+      000049004E00530055005200450044005F005400590050004500490044000100
+      000000000C0000005000410053005300450052000100000000001A0000004400
+      4F00430055004D0045004E0054005F0054005900500045000100000000000600
+      000049004E004E000100000000001400000045004E005400450052005F004400
+      410054004500010000000000080000004D00410049004C000100000000001000
+      0000530054004100540045005F00490044000100000000000E00000043004900
+      540059005F004900440001000000000014000000440052004900560045005200
+      5F004400410054000100000000001600000055005300450052005F0049004E00
+      53005F00490044000100000000000C0000005300590053004400410054000100
+      00000000}
+    Session = sboapiDataModule.SBSession
+    Left = 88
+    object DsExcel_customersCUST_ID: TIntegerField
+      DisplayLabel = 'M'#252#351't'#601'ri No'
+      FieldName = 'CUST_ID'
+    end
+    object DsExcel_customersNAME: TWideStringField
+      DisplayLabel = 'Ad'#305
+      FieldName = 'NAME'
+      Size = 512
+    end
+    object DsExcel_customersSURNAME: TWideStringField
+      DisplayLabel = 'Soyad'#305
+      FieldName = 'SURNAME'
+      Size = 512
+    end
+    object DsExcel_customersFATHERNAME: TWideStringField
+      DisplayLabel = 'Atas'#305' Ad'#305
+      FieldName = 'FATHERNAME'
+      Size = 512
+    end
+    object DsExcel_customersMOBILEPHONE: TWideStringField
+      DisplayLabel = 'Mobil tel.'#8470
+      FieldName = 'MOBILEPHONE'
+      Size = 512
+    end
+    object DsExcel_customersHOMEPHONE: TWideStringField
+      DisplayLabel = 'Ev n'#246'mr'#601'si'
+      FieldName = 'HOMEPHONE'
+      Size = 128
+    end
+    object DsExcel_customersWORKPHONE: TWideStringField
+      DisplayLabel = #304#351' n'#246'mr'#601'si'
+      FieldName = 'WORKPHONE'
+      Size = 128
+    end
+    object DsExcel_customersFAX: TWideStringField
+      DisplayLabel = 'Faks'
+      FieldName = 'FAX'
+      Size = 128
+    end
+    object DsExcel_customersADDRESS: TWideStringField
+      DisplayLabel = 'Daimi(h'#252'quqi) '#252'nvan'
+      FieldName = 'ADDRESS'
+      Size = 4000
+    end
+    object DsExcel_customersMAILINGADDRESS: TWideStringField
+      DisplayLabel = 'Faktiki '#252'nvan'
+      FieldName = 'MAILINGADDRESS'
+      Size = 4000
+    end
+    object DsExcel_customersPASSER: TWideStringField
+      DisplayLabel = 'Seriya'
+      FieldName = 'PASSER'
+      Size = 120
+    end
+    object DsExcel_customersPASPORTNO: TWideStringField
+      DisplayLabel = 'Pasport '#8470
+      FieldName = 'PASPORTNO'
+      Size = 256
+    end
+    object DsExcel_customersSTATE: TWideStringField
+      DisplayLabel = #214'lk'#601
+      FieldName = 'STATE'
+      Size = 256
+    end
+    object DsExcel_customersCITY: TWideStringField
+      DisplayLabel = #350#601'h'#601'r'
+      FieldName = 'CITY'
+      Size = 256
+    end
+    object DsExcel_customersINDEX_: TWideStringField
+      DisplayLabel = #304'ndeks'
+      FieldName = 'INDEX_'
+      Size = 128
+    end
+    object DsExcel_customersINN: TWideStringField
+      DisplayLabel = 'V'#214'EN'
+      FieldName = 'INN'
+      Size = 800
+    end
+    object DsExcel_customersDATEOFBIRTH: TDateTimeField
+      DisplayLabel = 'T'#601'v'#601'll'#252'd'
+      FieldName = 'DATEOFBIRTH'
+    end
+    object DsExcel_customersENTER_DATE: TDateTimeField
+      DisplayLabel = 'Daxil olunma tarixi'
+      FieldName = 'ENTER_DATE'
+    end
+    object DsExcel_customersCONTACTPERSON: TWideStringField
+      DisplayLabel = 'M'#601'sul '#351#601'xs'
+      FieldName = 'CONTACTPERSON'
+      Size = 1024
+    end
+    object DsExcel_customersCONTACTPERSONPHONE: TWideStringField
+      DisplayLabel = 'M'#601'sul '#351#601'xs tel.'
+      FieldName = 'CONTACTPERSONPHONE'
+      Size = 128
+    end
+    object DsExcel_customersPLACEOFBIRTH: TWideStringField
+      FieldName = 'PLACEOFBIRTH'
+      Visible = False
+      Size = 1024
+    end
+    object DsExcel_customersAGE: TIntegerField
+      FieldName = 'AGE'
+      Visible = False
+    end
+    object DsExcel_customersSEX: TIntegerField
+      FieldName = 'SEX'
+      Visible = False
+    end
+    object DsExcel_customersMS_ID: TIntegerField
+      FieldName = 'MS_ID'
+      Visible = False
+    end
+    object DsExcel_customersOCC_ID: TIntegerField
+      FieldName = 'OCC_ID'
+      Visible = False
+    end
+    object DsExcel_customersED_ID: TIntegerField
+      FieldName = 'ED_ID'
+      Visible = False
+    end
+    object DsExcel_customersACT_ID: TIntegerField
+      FieldName = 'ACT_ID'
+      Visible = False
+    end
+    object DsExcel_customersCLOSE_PREFIX: TIntegerField
+      FieldName = 'CLOSE_PREFIX'
+      Visible = False
+    end
+    object DsExcel_customersINSURED_TYPEID: TIntegerField
+      FieldName = 'INSURED_TYPEID'
+      Visible = False
+    end
+    object DsExcel_customersDOCUMENT_TYPE: TFloatField
+      FieldName = 'DOCUMENT_TYPE'
+      Visible = False
+    end
+    object DsExcel_customersMAIL: TWideStringField
+      FieldName = 'MAIL'
+      Visible = False
+      Size = 200
+    end
+    object DsExcel_customersSTATE_ID: TFloatField
+      FieldName = 'STATE_ID'
+      Visible = False
+    end
+    object DsExcel_customersCITY_ID: TFloatField
+      FieldName = 'CITY_ID'
+      Visible = False
+    end
+    object DsExcel_customersDRIVER_DAT: TDateTimeField
+      FieldName = 'DRIVER_DAT'
+      Visible = False
+    end
+    object DsExcel_customersUSER_INS_ID: TFloatField
+      FieldName = 'USER_INS_ID'
+      Visible = False
+    end
+    object DsExcel_customersSYSDAT: TDateTimeField
+      FieldName = 'SYSDAT'
+      Visible = False
+    end
+  end
+  object Ds_ostat: TOracleDataSet
+    SQL.Strings = (
+      '/*'
+      
+        'select trim(ins_cust.surname||'#39' '#39'||ins_cust.name||'#39' '#39'||ins_cust.' +
+        'fathername) as fullname,ic.ammount,ic.ins_date,'
+      
+        '(select ii.name from ins_insurances ii where ii.id=ic.type_id) a' +
+        's M_novu,ic.policy_num as M_nomu,ic.begin_date,ic.end_date,ic.id' +
+        ','
+      
+        'case when ic.bnf_type=0 then '#39'Bank'#39'else '#39'Kenar'#39' end fx,a.acc_no,' +
+        '(select ia.name from ins_agents ia where ia.id=ic.agent_id) as A' +
+        'gent,t.ostat,'
+      
+        '(select case when payment_type=1 then '#39'Tam odenis'#39' else '#39'Hissele' +
+        'rle odenis'#39' end from ins_payment_plan_setting where cid=ic.id) a' +
+        's odenis_novu,'
+      'ins_common.get_due_day(ic.id) as gecikme_gunleri'
+      ''
+      
+        'from ins_Customers ins_cust,ins_contracts ic,tenostat t,account ' +
+        'a'
+      'where ic.kli_id=ins_cust.id'
+      'and ic.close_prefix=0'
+      'and ic.state <>8'
+      'and ic.id=a.ownid'
+      'and a.id=t.acc_id'
+      'and t.ostat<0'
+      'order by ic.id desc'
+      '*/'
+      ''
+      '/*'
+      
+        'select trim(ins_cust.surname||'#39' '#39'||ins_cust.name||'#39' '#39'||ins_cust.' +
+        'fathername) as fullname,ic.ammount,ic.ins_date,'
+      
+        '(select ii.name from ins_insurances ii where ii.id=ic.type_id) a' +
+        's M_novu,ic.policy_num as M_nomu,ic.begin_date,ic.end_date,ic.id' +
+        ','
+      
+        'case when ic.bnf_type=0 then '#39'Bank'#39'else '#39'Kenar'#39' end fx,a.acc_no,' +
+        '(select ia.name from ins_agents ia where ia.id=ic.agent_id) as A' +
+        'gent,r.ostat,'
+      
+        '(select case when payment_type=1 then '#39'Tam odenis'#39' else '#39'Hissele' +
+        'rle odenis'#39' end from ins_payment_plan_setting where cid=ic.id) a' +
+        's odenis_novu,'
+      
+        'ins_common.get_due_day(ic.id) as gecikme_gunleri,ipps.ammount il' +
+        'kin_odenis,(select count(*)  from ins_payment_plan where ins_id=' +
+        'ic.id) as hisse_sayi'
+      ''
+      
+        ' from account a,archost r,ins_contracts ic,ins_Customers ins_cus' +
+        't,ins_payment_plan_setting ipps'
+      
+        'where a.bal_cn1=211  and a.val_acc=0 and a.close_dat is null and' +
+        ' ic.id=a.ownid and ic.kli_id=ins_cust.id and  ic.close_prefix=0 ' +
+        ' and ic.state <>8'
+      
+        'and a.id=r.acc_id and r.datdate='#39'30-dec-2016'#39' and r.lastopdate<=' +
+        #39'30-dec-2016'#39' AND r.ostat<>0 and ic.id=ipps.cid'
+      'order by acc_no'
+      '*/ '
+      '/*'
+      ''
+      ''
+      
+        'select trim(ins_cust.surname||'#39' '#39'||ins_cust.name||'#39' '#39'||ins_cust.' +
+        'fathername) as fullname, round(ins_report.get_S_haqq(ic.id),2) a' +
+        's ammount,round(ins_report.get_s_mebleg(ic.id),2) as inssumm,ic.' +
+        'ins_date,'
+      
+        '(select ii.name from ins_insurances ii where ii.id=ic.type_id) a' +
+        's M_novu,ic.policy_num as M_nomu,ic.begin_date,ic.end_date,ic.id' +
+        ','
+      
+        '(select name from ins_bnf_type where id=ic.bnf_type)as fayda_got' +
+        'uren,a.acc_no,(select ia.name from ins_agents ia where ia.id=ic.' +
+        'agent_id) as Agent,abs(r.ostat) as ostat,'
+      
+        '(select case when payment_type=1 then '#39'Tam odenis'#39' else '#39'Hissele' +
+        'rle odenis'#39' end from ins_payment_plan_setting where cid=ic.id) a' +
+        's odenis_novu,'
+      
+        'ins_common.get_due_day(ic.id) as gecikme_gunleri,ipps.ammount il' +
+        'kin_odenis,(select count(*)  from ins_payment_plan where ins_id=' +
+        'ic.id) as hisse_sayi'
+      ''
+      
+        ' from account a,tenostat r,ins_contracts ic,ins_Customers ins_cu' +
+        'st,ins_payment_plan_setting ipps'
+      
+        'where a.bal_cn1=211  and a.val_acc=0 and a.close_dat is null and' +
+        ' ic.id=a.ownid and ic.kli_id=ins_cust.id and  ic.close_prefix=0 ' +
+        ' and ic.state <>8'
+      'and a.id=r.acc_id  AND r.ostat<0 and ic.id=ipps.cid'
+      'order by acc_no*/'
+      ''
+      ''
+      ''
+      
+        'select trim(ins_cust.surname||'#39' '#39'||ins_cust.name||'#39' '#39'||ins_cust.' +
+        'fathername) as fullname, ic.insured ,'
+      
+        '(select  insuredstatenum from ins_motorkasco where cid=ic.id)as ' +
+        'dqn,'
+      'round(ins_report.get_S_haqq(ic.id),2) as ammount,'
+      'round(ins_report.get_s_mebleg(ic.id),2) as inssumm,ic.ins_date,'
+      
+        '(select ii.name from ins_insurances ii where ii.id=ic.type_id) a' +
+        's M_novu,'
+      'ic.policy_num as M_nomu,ic.begin_date,ic.end_date,ic.id,'
+      
+        '(select name from ins_bnf_type where id=ic.bnf_type)as fayda_got' +
+        'uren,'
+      
+        '(select ia.name from ins_agents ia where ia.id=ic.agent_id) as A' +
+        'gent,abs(r.ostat) as ostat,'
+      
+        '(select case when payment_type=1 then '#39'Tam odenis'#39' else '#39'Hissele' +
+        'rle odenis'#39' end from ins_payment_plan_setting where cid=ic.id) a' +
+        's odenis_novu,'
+      'ins_common.get_due_day(ic.id) as gecikme_gunleri,'
+      'ipps.ammount ilkin_odenis,'
+      
+        '(select count(*)  from ins_payment_plan where ins_id=ic.id) as h' +
+        'isse_sayi'
+      ''
+      
+        ' from tenostat r,ins_contracts ic,ins_Customers ins_cust,ins_pay' +
+        'ment_plan_setting ipps'
+      
+        'where /*a.bal_cn1=211 and a.id=r.acc_id  and ic.valute_id=0 and ' +
+        'a.close_dat is null and ic.id=a.ownid and*/ ic.kli_id=ins_cust.i' +
+        'd and  ic.close_prefix=0  and ic.state <>8'
+      
+        '  AND r.ostat<0 and ic.id=ipps.cid and r.datdate=sbop.get_date()' +
+        ' and ic.loanacc_id=r.acc_id')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000001200000010000000460055004C004C004E0041004D00450001000000
+      00000C0000004D005F004E004F00560055000100000000000C0000004D005F00
+      4E004F004D0055000100000000001400000042004500470049004E005F004400
+      4100540045000100000000001000000045004E0044005F004400410054004500
+      01000000000004000000490044000100000000000A0000004100470045004E00
+      54000100000000000A0000004F00530054004100540001000000000016000000
+      4F00440045004E00490053005F004E004F00560055000100000000000E000000
+      41004D004D004F0055004E0054000100000000001000000049004E0053005F00
+      44004100540045000100000000001E00000047004500430049004B004D004500
+      5F00470055004E004C004500520049000100000000000E00000049004E005300
+      530055004D004D000100000000001A000000460041005900440041005F004700
+      4F0054005500520045004E000100000000000E00000049004E00530055005200
+      4500440001000000000006000000440051004E00010000000000180000004900
+      4C004B0049004E005F004F00440045004E004900530001000000000014000000
+      480049005300530045005F005300410059004900010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 392
+    Top = 672
+    object Ds_ostatFULLNAME: TWideStringField
+      DisplayLabel = 'S'#305#287'ortal'#305'lar'#305'n ad'#305',soyad'#305
+      FieldName = 'FULLNAME'
+      Size = 1600
+    end
+    object Ds_ostatINSURED: TWideStringField
+      DisplayLabel = 'S'#305#287'orta olunanlar'
+      FieldName = 'INSURED'
+      Size = 120
+    end
+    object Ds_ostatDQN: TWideStringField
+      DisplayLabel = 'Avtomobilin DQN'
+      FieldName = 'DQN'
+      Size = 128
+    end
+    object Ds_ostatM_NOVU: TWideStringField
+      DisplayLabel = 'M'#252'qavil'#601'nin n'#246'v'#252
+      FieldName = 'M_NOVU'
+      Size = 4000
+    end
+    object h: TWideStringField
+      DisplayLabel = 'M'#252'qavil'#601'nin n'#246'mr'#601'si'
+      FieldName = 'M_NOMU'
+      Size = 128
+    end
+    object Ds_ostatFAYDA_GOTUREN: TWideStringField
+      DisplayLabel = 'Fayda G'#246't'#252'r'#601'n'
+      FieldName = 'FAYDA_GOTUREN'
+      Size = 512
+    end
+    object Ds_ostatINS_DATE: TDateTimeField
+      DisplayLabel = 'Yaz'#305'lma tarixi'
+      FieldName = 'INS_DATE'
+    end
+    object Ds_ostatBEGIN_DATE: TDateTimeField
+      DisplayLabel = 'Ba'#351'lama tarixi'
+      FieldName = 'BEGIN_DATE'
+    end
+    object Ds_ostatEND_DATE: TDateTimeField
+      DisplayLabel = 'Bitm'#601' tarixi'
+      FieldName = 'END_DATE'
+    end
+    object Ds_ostatODENIS_NOVU: TWideStringField
+      DisplayLabel = #214'd'#601'ni'#351' n'#246'v'#252
+      FieldName = 'ODENIS_NOVU'
+      Size = 17
+    end
+    object Ds_ostatGECIKME_GUNLERI: TFloatField
+      DisplayLabel = 'Gecikm'#601' g'#252'nl'#601'ri'
+      FieldName = 'GECIKME_GUNLERI'
+    end
+    object Ds_ostatAMMOUNT: TFloatField
+      DisplayLabel = 'S'#305#287'orta Haqq'#305
+      FieldName = 'AMMOUNT'
+    end
+    object Ds_ostatINSSUMM: TFloatField
+      DisplayLabel = 'S'#305#287'orta M'#601'bl'#601#287#305
+      FieldName = 'INSSUMM'
+    end
+    object Ds_ostatOSTAT: TFloatField
+      DisplayLabel = 'Qaliq'
+      FieldName = 'OSTAT'
+    end
+    object Ds_ostatAGENT: TWideStringField
+      DisplayLabel = 'Agent'
+      FieldName = 'AGENT'
+      Size = 512
+    end
+    object Ds_ostatID: TFloatField
+      FieldName = 'ID'
+      Visible = False
+    end
+    object Ds_ostatILKIN_ODENIS: TFloatField
+      DisplayLabel = #304'lkin '#246'd'#601'ni'#351
+      FieldName = 'ILKIN_ODENIS'
+    end
+    object Ds_ostatHISSE_SAYI2: TFloatField
+      DisplayLabel = 'Hiss'#601' say'#305
+      FieldName = 'HISSE_SAYI'
+    end
+  end
+  object Ds_ins_draccesspeople: TOracleDataSet
+    SQL.Strings = (
+      
+        'SELECT a.id,a.policy_num,cus.name as sigortaetdiren, ins_cus.sur' +
+        'name||'#39' '#39'||ins_cus.name||'#39' '#39'||ins_cus.fathername as sigortali,'
+      
+        '       a.ins_date, a.begin_date, a.end_date,a.ammount,a.inssumm,' +
+        ' a.franshiz, a.tariff,a.beneficiary,'
+      
+        '        im.insuredmark,im.insuredmodel,im.insuredtype,im.insured' +
+        'color,im.insuredoutputyear,im.insuredbannum,im.insuredenginenum,' +
+        '     '
+      
+        '     (select terminted_dat from ins_contract_terminated where ci' +
+        'd=a.id) as xitam_tarixi,     '
+      
+        ' case a.bnf_type when 0 then '#39'Bank'#39' when 1 then '#39'Kenar'#39' end as f' +
+        'ayda_got_status,'
+      
+        ' id.surname ||'#39' '#39'|| id.name ||'#39' '#39'|| id.fathername as asa ,id.bir' +
+        'thday,id.drexperience as tecrube,case id.sex when '#39'K'#39' then '#39'Kisi' +
+        #39' when '#39'Q'#39' then '#39'Qadin'#39' end as cinsi ,id.ins_date as daxil_etme,' +
+        'id.phone'
+      
+        ' FROM ins_contracts a,ins_customers ins_cus, customers cus, ins_' +
+        'motorkasco im,ins_draccesspeople id '
+      
+        ' where cus.id=ins_cus.cust_id and a.kli_id=ins_cus.id and im.cid' +
+        '=a.id and a.id(+)=id.cid  and a.type_id=4 --order by a.id desc')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000001B00000004000000490044000100000000001400000050004F004C00
+      4900430059005F004E0055004D000100000000001C0000005300490047004F00
+      5200540041004500540044004900520045004E00010000000000120000005300
+      490047004F005200540041004C0049000100000000001000000049004E005300
+      5F0044004100540045000100000000001400000042004500470049004E005F00
+      44004100540045000100000000001000000045004E0044005F00440041005400
+      45000100000000000E00000041004D004D004F0055004E005400010000000000
+      0E00000049004E005300530055004D004D000100000000001000000046005200
+      41004E005300480049005A000100000000000C00000054004100520049004600
+      460001000000000016000000420045004E004500460049004300490041005200
+      59000100000000001600000049004E00530055005200450044004D0041005200
+      4B000100000000001800000049004E00530055005200450044004D004F004400
+      45004C000100000000001600000049004E005300550052004500440054005900
+      500045000100000000001800000049004E005300550052004500440043004F00
+      4C004F0052000100000000002200000049004E00530055005200450044004F00
+      5500540050005500540059004500410052000100000000001A00000049004E00
+      53005500520045004400420041004E004E0055004D0001000000000020000000
+      49004E005300550052004500440045004E00470049004E0045004E0055004D00
+      0100000000001800000058004900540041004D005F0054004100520049005800
+      490001000000000020000000460041005900440041005F0047004F0054005F00
+      5300540041005400550053000100000000000600000041005300410001000000
+      000010000000420049005200540048004400410059000100000000000E000000
+      54004500430052005500420045000100000000000A000000430049004E005300
+      49000100000000001400000044004100580049004C005F00450054004D004500
+      0100000000000A000000500048004F004E004500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 896
+    Top = 648
+    object Ds_ins_draccesspeopleID: TFloatField
+      FieldName = 'ID'
+      Visible = False
+    end
+    object Ds_ins_draccesspeoplePOLICY_NUM: TWideStringField
+      DisplayLabel = 'Polis '#8470
+      FieldName = 'POLICY_NUM'
+      Size = 128
+    end
+    object Ds_ins_draccesspeopleSIGORTAETDIREN: TWideStringField
+      DisplayLabel = 'S'#305#287'orta etdir'#601'n'
+      FieldName = 'SIGORTAETDIREN'
+      Size = 360
+    end
+    object Ds_ins_draccesspeopleSIGORTALI: TWideStringField
+      DisplayLabel = 'S'#305#287'ortal'#305
+      FieldName = 'SIGORTALI'
+      Size = 1600
+    end
+    object Ds_ins_draccesspeopleINS_DATE: TDateTimeField
+      DisplayLabel = 'Daxil edilm'#601' tarixi'
+      FieldName = 'INS_DATE'
+    end
+    object Ds_ins_draccesspeopleBEGIN_DATE: TDateTimeField
+      DisplayLabel = 'Ba'#351'lanma tarixi'
+      FieldName = 'BEGIN_DATE'
+    end
+    object Ds_ins_draccesspeopleEND_DATE: TDateTimeField
+      DisplayLabel = 'Bitm'#601' tarixi'
+      FieldName = 'END_DATE'
+    end
+    object Ds_ins_draccesspeopleAMMOUNT: TFloatField
+      DisplayLabel = 'Kasko S'#305#287'. haqq'#305
+      FieldName = 'AMMOUNT'
+    end
+    object Ds_ins_draccesspeopleINSSUMM: TFloatField
+      DisplayLabel = 'Kasko S'#305#287'. M'#601'bl'#601#287'i'
+      FieldName = 'INSSUMM'
+    end
+    object Ds_ins_draccesspeopleFRANSHIZ: TFloatField
+      DisplayLabel = 'Fransiza'
+      FieldName = 'FRANSHIZ'
+    end
+    object Ds_ins_draccesspeopleTARIFF: TFloatField
+      DisplayLabel = 'Tarif'
+      FieldName = 'TARIFF'
+    end
+    object Ds_ins_draccesspeopleBENEFICIARY: TWideStringField
+      DisplayLabel = 'Faydag'#246't'#252'r'#601'n'
+      FieldName = 'BENEFICIARY'
+      Size = 4000
+    end
+    object Ds_ins_draccesspeopleINSUREDMARK: TWideStringField
+      DisplayLabel = 'Marka'
+      FieldName = 'INSUREDMARK'
+      Size = 128
+    end
+    object Ds_ins_draccesspeopleINSUREDMODEL: TWideStringField
+      DisplayLabel = 'Model'
+      FieldName = 'INSUREDMODEL'
+      Size = 128
+    end
+    object Ds_ins_draccesspeopleINSUREDTYPE: TWideStringField
+      DisplayLabel = 'Tipi'
+      FieldName = 'INSUREDTYPE'
+      Size = 512
+    end
+    object Ds_ins_draccesspeopleINSUREDCOLOR: TWideStringField
+      DisplayLabel = 'R'#601'ngi'
+      FieldName = 'INSUREDCOLOR'
+      Size = 128
+    end
+    object Ds_ins_draccesspeopleINSUREDOUTPUTYEAR: TIntegerField
+      DisplayLabel = 'Buraxl'#305#351' ili'
+      FieldName = 'INSUREDOUTPUTYEAR'
+    end
+    object Ds_ins_draccesspeopleINSUREDBANNUM: TWideStringField
+      DisplayLabel = 'D'#246'vl'#601't qeydiyyat '#8470
+      FieldName = 'INSUREDBANNUM'
+      Size = 128
+    end
+    object Ds_ins_draccesspeopleINSUREDENGINENUM: TWideStringField
+      DisplayLabel = 'M'#252'h'#601'rrik '#8470
+      FieldName = 'INSUREDENGINENUM'
+      Size = 128
+    end
+    object Ds_ins_draccesspeopleXITAM_TARIXI: TDateTimeField
+      DisplayLabel = 'Xitam tarixi '
+      FieldName = 'XITAM_TARIXI'
+    end
+    object Ds_ins_draccesspeopleFAYDA_GOT_STATUS: TWideStringField
+      DisplayLabel = 'Fayda g'#246't'#252'r'#601'n status'
+      FieldName = 'FAYDA_GOT_STATUS'
+      Size = 5
+    end
+    object Ds_ins_draccesspeopleASA: TWideStringField
+      DisplayLabel = 'S'#252'r'#252'c'#252'l'#252'k h'#252'ququ olanlar ASA'
+      FieldName = 'ASA'
+      Size = 448
+    end
+    object Ds_ins_draccesspeopleBIRTHDAY: TDateTimeField
+      DisplayLabel = 'Do'#287'um tarixi'
+      FieldName = 'BIRTHDAY'
+    end
+    object Ds_ins_draccesspeopleTECRUBE: TDateTimeField
+      DisplayLabel = 'S'#252'r'#252'c'#252'l'#252'k t'#601'cr'#252'b'#601#305'si'
+      FieldName = 'TECRUBE'
+    end
+    object Ds_ins_draccesspeopleCINSI: TWideStringField
+      DisplayLabel = 'Cinsi'
+      FieldName = 'CINSI'
+      Size = 5
+    end
+    object Ds_ins_draccesspeopleDAXIL_ETME: TDateTimeField
+      DisplayLabel = 'Daxil olma tarixi'
+      FieldName = 'DAXIL_ETME'
+    end
+    object Ds_ins_draccesspeoplePHONE: TWideStringField
+      DisplayLabel = 'Mobil n'#246'mr'#601'si'
+      FieldName = 'PHONE'
+      Size = 128
+    end
+  end
+  object Ds_Aktiv_Muq: TOracleDataSet
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000060000000E00000054005900500045005F0049004400010000000000
+      060000005300410059000100000000001800000054005900500045005F004900
+      44005F004E0041004D004500010000000000120000005300490051005F004800
+      4100510051004900010000000000140000005300490051005F004D0045004200
+      4C00450051000100000000001E0000004F005200540041005F00530049005100
+      5F00540041005200490046004900010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 488
+    Top = 712
+  end
+  object Ds_Aktiv_full: TOracleDataSet
+    SQL.Strings = (
+      'select '
+      'distinct'
+      '(select count(ic.id) from ins_contracts ic,customers c '
+      
+        'where state=6 and type_id=:TYPE_ID and ic.kli_id=c.id and c.cust' +
+        '_type=1 ) as fiziki_count,'
+      ''
+      '(select count(ic.id) from ins_contracts ic,customers c '
+      
+        'where state=6 and type_id=:TYPE_ID and ic.kli_id=c.id and c.cust' +
+        '_type=1 and ic.bnf_type=0) as f_bnf0_count,'
+      ''
+      '(select count(ic.id) from ins_contracts ic,customers c '
+      
+        'where state=6 and type_id=:TYPE_ID and ic.kli_id=c.id and c.cust' +
+        '_type=1 and ic.bnf_type=1) as f_bnf1_count,'
+      ''
+      '(select count(ic.id) from ins_contracts ic,customers c '
+      
+        'where state=6 and type_id=:TYPE_ID and ic.kli_id=c.id and c.cust' +
+        '_type=0 ) as huquqi_count,'
+      ''
+      '(select count(ic.id) from ins_contracts ic,customers c '
+      
+        'where state=6 and type_id=:TYPE_ID and ic.kli_id=c.id and c.cust' +
+        '_type=0 and ic.bnf_type=0) as h_bnf0_count,'
+      ''
+      '(select count(ic.id) from ins_contracts ic,customers c '
+      
+        'where state=6 and type_id=:TYPE_ID and ic.kli_id=c.id and c.cust' +
+        '_type=0 and ic.bnf_type=1) as h_bnf1_count,'
+      ''
+      'nvl((select sum(ammount) from ins_contracts ic,customers c '
+      
+        'where state=6 and type_id=:TYPE_ID and ic.kli_id=c.id and c.cust' +
+        '_type=0),0) as h_sum_ammount,'
+      ''
+      'nvl((select sum(ammount) from ins_contracts ic,customers c '
+      
+        'where state=6 and type_id=:TYPE_ID and ic.kli_id=c.id and c.cust' +
+        '_type=0 and bnf_type=0),0) as h_sum_ammount_bnf0,'
+      ''
+      'nvl((select sum(ammount) from ins_contracts ic,customers c '
+      
+        'where state=6 and type_id=:TYPE_ID and ic.kli_id=c.id and c.cust' +
+        '_type=0 and bnf_type=1),0) as h_sum_ammount_bnf1,'
+      ''
+      'nvl((select sum(ammount) from ins_contracts ic,customers c '
+      
+        'where state=6 and type_id=:TYPE_ID and ic.kli_id=c.id and c.cust' +
+        '_type=1),0) as f_sum_ammount,'
+      ''
+      'nvl((select sum(ammount) from ins_contracts ic,customers c '
+      
+        'where state=6 and type_id=:TYPE_ID and ic.kli_id=c.id and c.cust' +
+        '_type=1 and bnf_type=0),0) as f_sum_ammount_bnf0,'
+      ''
+      'nvl((select sum(ammount) from ins_contracts ic,customers c '
+      
+        'where state=6 and type_id=:TYPE_ID and ic.kli_id=c.id and c.cust' +
+        '_type=1 and bnf_type=1),0) as f_sum_ammount_bnf1,'
+      ''
+      
+        'ic.type_id,count(ic.id) as say,(select name from ins_insurances ' +
+        'where id = ic.type_id) as type_id_name,'
+      'sum(ic.ammount) as siq_haqqi, sum(ic.inssumm) as siq_mebleq,'
+      
+        'round(((sum(ic.ammount)/sum(ic.inssumm))*100),2) as orta_siq_tar' +
+        'ifi,'
+      ''
+      
+        '(select count(*) from ins_contracts ic,customers c where ic.stat' +
+        'e=6 and ic.type_id in(1,3,4,8,13,21) and ic.kli_id=c.id) as cemi' +
+        '_say,'
+      ''
+      
+        '(select sum(ammount) from ins_contracts ic,customers c where ic.' +
+        'state=6 and ic.type_id in(1,3,4,8,13,21) and ic.kli_id=c.id) as ' +
+        'cemi_siq_haqq,'
+      
+        '(select sum(inssumm) from ins_contracts ic,customers c where ic.' +
+        'state=6 and ic.type_id in(1,3,4,8,13,21) and ic.kli_id=c.id) as ' +
+        'cemi_siq_mebleq,'
+      ' '
+      
+        'round(((select sum(ammount) from ins_contracts ic,customers c wh' +
+        'ere ic.state=6 and ic.type_id in(1,3,4,8,13,21) and ic.kli_id=c.' +
+        'id)/'
+      
+        '(select sum(inssumm) from ins_contracts ic,customers c where ic.' +
+        'state=6 and ic.type_id in(1,3,4,8,13,21) and ic.kli_id=c.id)*100' +
+        '),2) as cem_orta_siq_tarifi,'
+      ''
+      
+        '(select count(ic.id) from ins_contracts ic,customers c where sta' +
+        'te=6 and type_id in(1,3,4,8,13,21) and ic.kli_id=c.id and c.cust' +
+        '_type=0 ) as huquqi_cem_count,'
+      
+        '(select count(ic.id) from ins_contracts ic,customers c where sta' +
+        'te=6 and type_id in(1,3,4,8,13,21) and ic.kli_id=c.id and c.cust' +
+        '_type=1 ) as fiziki_cem_count,'
+      ''
+      
+        '(select sum(ammount) from ins_contracts ic,customers c where sta' +
+        'te=6 and type_id in(1,3,4,8,13,21) and ic.kli_id=c.id and c.cust' +
+        '_type=0 ) as huquqi_cem_sum_ammount,'
+      
+        '(select  sum(ammount) from ins_contracts ic,customers c where st' +
+        'ate=6 and type_id in(1,3,4,8,13,21) and ic.kli_id=c.id and c.cus' +
+        't_type=1 ) as fiziki_cem_sum_ammount,'
+      ''
+      
+        '(select count(ic.id) from ins_contracts ic,customers c where sta' +
+        'te=6 and type_id in(1,3,4,8,13,21)and ic.kli_id=c.id and c.cust_' +
+        'type=0 and ic.bnf_type=0) as h_bnf0_cem_count,'
+      ''
+      
+        '(select count(ic.id) from ins_contracts ic,customers c where sta' +
+        'te=6 and type_id in(1,3,4,8,13,21)and ic.kli_id=c.id and c.cust_' +
+        'type=0 and ic.bnf_type=1) as h_bnf1_cem_count,'
+      ''
+      
+        '(select count(ic.id) from ins_contracts ic,customers c where sta' +
+        'te=6 and type_id in(1,3,4,8,13,21)and ic.kli_id=c.id and c.cust_' +
+        'type=1 and ic.bnf_type=0) as f_bnf0_cem_count,'
+      ''
+      
+        '(select count(ic.id) from ins_contracts ic,customers c where sta' +
+        'te=6 and type_id in(1,3,4,8,13,21)and ic.kli_id=c.id and c.cust_' +
+        'type=1 and ic.bnf_type=1) as f_bnf1_cem_count,'
+      ''
+      ''
+      
+        '(select sum(ammount) from ins_contracts ic,customers c where ic.' +
+        'state=6 and ic.type_id in(1,3,4,8,13,21) and ic.kli_id=c.id and ' +
+        'c.cust_type=0 and ic.bnf_type=0) as h_cemi_bnf_0_siq_haqq,'
+      
+        '(select sum(ammount) from ins_contracts ic,customers c where ic.' +
+        'state=6 and ic.type_id in(1,3,4,8,13,21) and ic.kli_id=c.id and ' +
+        'c.cust_type=0 and ic.bnf_type=1) as h_cemi_bnf_1_siq_haqq,'
+      
+        '(select sum(ammount) from ins_contracts ic,customers c where ic.' +
+        'state=6 and ic.type_id in(1,3,4,8,13,21) and ic.kli_id=c.id and ' +
+        'c.cust_type=1 and ic.bnf_type=0) as f_cemi_bnf_0_siq_haqq,'
+      
+        '(select sum(ammount) from ins_contracts ic,customers c where ic.' +
+        'state=6 and ic.type_id in(1,3,4,8,13,21) and ic.kli_id=c.id and ' +
+        'c.cust_type=1 and ic.bnf_type=1) as f_cemi_bnf_1_siq_haqq,'
+      ''
+      ''
+      
+        'round(((select count(ic.id) from ins_contracts ic,customers c wh' +
+        'ere state=6 and type_id in(1,3,4,8,13,21) and ic.kli_id=c.id and' +
+        ' c.cust_type=0)/'
+      
+        '(select count(*) from ins_contracts ic,customers c where ic.stat' +
+        'e=6 and ic.type_id in(1,3,4,8,13,21) and ic.kli_id=c.id)*100),2)' +
+        ' as h_count_faiz,'
+      ''
+      
+        'round(((select count(ic.id) from ins_contracts ic,customers c wh' +
+        'ere state=6 and type_id in(1,3,4,8,13,21) and ic.kli_id=c.id and' +
+        ' c.cust_type=1)/'
+      
+        '(select count(*) from ins_contracts ic,customers c where ic.stat' +
+        'e=6 and ic.type_id in(1,3,4,8,13,21) and ic.kli_id=c.id)*100),2)' +
+        ' as f_count_faiz,'
+      ''
+      
+        'round(((select sum(ammount) from ins_contracts ic,customers c wh' +
+        'ere state=6 and type_id in(1,3,4,8,13,21) and ic.kli_id=c.id and' +
+        ' c.cust_type=0 )/'
+      ''
+      
+        '(select sum(ammount) from ins_contracts ic,customers c where ic.' +
+        'state=6 and ic.type_id in(1,3,4,8,13,21) and ic.kli_id=c.id)*100' +
+        '),2)as h_cem_siq_faiz,'
+      ''
+      ''
+      
+        'round(((select sum(ammount) from ins_contracts ic,customers c wh' +
+        'ere state=6 and type_id in(1,3,4,8,13,21) and ic.kli_id=c.id and' +
+        ' c.cust_type=1 )/'
+      ''
+      
+        '(select sum(ammount) from ins_contracts ic,customers c where ic.' +
+        'state=6 and ic.type_id in(1,3,4,8,13,21) and ic.kli_id=c.id)*100' +
+        '),2)as f_cem_siq_faiz,'
+      ''
+      ''
+      ''
+      
+        'round(((select count(ic.id) from ins_contracts ic,customers c wh' +
+        'ere state=6 and type_id in(1,3,4,8,13,21)and ic.kli_id=c.id and ' +
+        'c.cust_type=0 and ic.bnf_type=0)/'
+      
+        '(select count(*) from ins_contracts ic,customers c where ic.stat' +
+        'e=6 and ic.type_id in(1,3,4,8,13,21) and ic.kli_id=c.id)*100),2)' +
+        ' as h_bnf0_cem_count_faiz,'
+      ''
+      
+        'round(((select count(ic.id) from ins_contracts ic,customers c wh' +
+        'ere state=6 and type_id in(1,3,4,8,13,21)and ic.kli_id=c.id and ' +
+        'c.cust_type=0 and ic.bnf_type=1)/'
+      
+        '(select count(*) from ins_contracts ic,customers c where ic.stat' +
+        'e=6 and ic.type_id in(1,3,4,8,13,21) and ic.kli_id=c.id)*100),2)' +
+        ' as h_bnf1_cem_count_faiz,'
+      ''
+      ''
+      
+        'round(((select count(ic.id) from ins_contracts ic,customers c wh' +
+        'ere state=6 and type_id in(1,3,4,8,13,21)and ic.kli_id=c.id and ' +
+        'c.cust_type=1 and ic.bnf_type=0)/'
+      
+        '(select count(*) from ins_contracts ic,customers c where ic.stat' +
+        'e=6 and ic.type_id in(1,3,4,8,13,21) and ic.kli_id=c.id)*100),2)' +
+        ' as f_bnf0_cem_count_faiz,'
+      ''
+      
+        'round(((select count(ic.id) from ins_contracts ic,customers c wh' +
+        'ere state=6 and type_id in(1,3,4,8,13,21)and ic.kli_id=c.id and ' +
+        'c.cust_type=1 and ic.bnf_type=1)/'
+      
+        '(select count(*) from ins_contracts ic,customers c where ic.stat' +
+        'e=6 and ic.type_id in(1,3,4,8,13,21) and ic.kli_id=c.id)*100),2)' +
+        ' as f_bnf1_cem_count_faiz,'
+      ''
+      ''
+      ''
+      
+        'round(((select sum(ammount) from ins_contracts ic,customers c wh' +
+        'ere ic.state=6 and ic.type_id in(1,3,4,8,13,21) and ic.kli_id=c.' +
+        'id and c.cust_type=0 and ic.bnf_type=0)/'
+      ' '
+      
+        '(select sum(ammount) from ins_contracts ic,customers c where ic.' +
+        'state=6 and ic.type_id in(1,3,4,8,13,21) and ic.kli_id=c.id)*100' +
+        '),2) as h_cemi_bnf_0_siq_haqq_faiz,'
+      ''
+      
+        'round(((select sum(ammount) from ins_contracts ic,customers c wh' +
+        'ere ic.state=6 and ic.type_id in(1,3,4,8,13,21) and ic.kli_id=c.' +
+        'id and c.cust_type=0 and ic.bnf_type=1)/'
+      ' '
+      
+        '(select sum(ammount) from ins_contracts ic,customers c where ic.' +
+        'state=6 and ic.type_id in(1,3,4,8,13,21) and ic.kli_id=c.id)*100' +
+        '),2) as h_cemi_bnf_1_siq_haqq_faiz,'
+      ''
+      ''
+      
+        'round(((select sum(ammount) from ins_contracts ic,customers c wh' +
+        'ere ic.state=6 and ic.type_id in(1,3,4,8,13,21) and ic.kli_id=c.' +
+        'id and c.cust_type=1 and ic.bnf_type=0)/'
+      ' '
+      
+        '(select sum(ammount) from ins_contracts ic,customers c where ic.' +
+        'state=6 and ic.type_id in(1,3,4,8,13,21) and ic.kli_id=c.id)*100' +
+        '),2) as f_cemi_bnf_0_siq_haqq_faiz,'
+      ''
+      
+        'round(((select sum(ammount) from ins_contracts ic,customers c wh' +
+        'ere ic.state=6 and ic.type_id in(1,3,4,8,13,21) and ic.kli_id=c.' +
+        'id and c.cust_type=1 and ic.bnf_type=1)/'
+      ' '
+      
+        '(select sum(ammount) from ins_contracts ic,customers c where ic.' +
+        'state=6 and ic.type_id in(1,3,4,8,13,21) and ic.kli_id=c.id)*100' +
+        '),2) as f_cemi_bnf_1_siq_haqq_faiz'
+      
+        'from ins_contracts ic,customers c where ic.state=6 and ic.type_i' +
+        'd=:TYPE_ID and ic.kli_id=c.id  group by ic.type_id')
+    Optimize = False
+    Variables.Data = {
+      0400000001000000100000003A0054005900500045005F004900440003000000
+      0000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000002E00000018000000460049005A0049004B0049005F0043004F005500
+      4E0054000100000000001800000046005F0042004E00460030005F0043004F00
+      55004E0054000100000000001800000046005F0042004E00460031005F004300
+      4F0055004E005400010000000000180000004800550051005500510049005F00
+      43004F0055004E0054000100000000001800000048005F0042004E0046003000
+      5F0043004F0055004E0054000100000000001800000048005F0042004E004600
+      31005F0043004F0055004E0054000100000000001A00000048005F0053005500
+      4D005F0041004D004D004F0055004E0054000100000000002400000048005F00
+      530055004D005F0041004D004D004F0055004E0054005F0042004E0046003000
+      0100000000002400000048005F00530055004D005F0041004D004D004F005500
+      4E0054005F0042004E00460031000100000000001A00000046005F0053005500
+      4D005F0041004D004D004F0055004E0054000100000000002400000046005F00
+      530055004D005F0041004D004D004F0055004E0054005F0042004E0046003000
+      0100000000002400000046005F00530055004D005F0041004D004D004F005500
+      4E0054005F0042004E00460031000100000000000E0000005400590050004500
+      5F00490044000100000000000600000053004100590001000000000018000000
+      54005900500045005F00490044005F004E0041004D0045000100000000001200
+      00005300490051005F0048004100510051004900010000000000140000005300
+      490051005F004D00450042004C00450051000100000000001E0000004F005200
+      540041005F005300490051005F00540041005200490046004900010000000000
+      10000000430045004D0049005F005300410059000100000000001A0000004300
+      45004D0049005F005300490051005F0048004100510051000100000000001E00
+      0000430045004D0049005F005300490051005F004D00450042004C0045005100
+      01000000000026000000430045004D005F004F005200540041005F0053004900
+      51005F0054004100520049004600490001000000000020000000480055005100
+      5500510049005F00430045004D005F0043004F0055004E005400010000000000
+      20000000460049005A0049004B0049005F00430045004D005F0043004F005500
+      4E0054000100000000002C0000004800550051005500510049005F0043004500
+      4D005F00530055004D005F0041004D004D004F0055004E005400010000000000
+      2C000000460049005A0049004B0049005F00430045004D005F00530055004D00
+      5F0041004D004D004F0055004E0054000100000000002000000048005F004200
+      4E00460030005F00430045004D005F0043004F0055004E005400010000000000
+      2000000048005F0042004E00460031005F00430045004D005F0043004F005500
+      4E0054000100000000002000000046005F0042004E00460030005F0043004500
+      4D005F0043004F0055004E0054000100000000002000000046005F0042004E00
+      460031005F00430045004D005F0043004F0055004E0054000100000000002A00
+      000048005F00430045004D0049005F0042004E0046005F0030005F0053004900
+      51005F0048004100510051000100000000002A00000048005F00430045004D00
+      49005F0042004E0046005F0031005F005300490051005F004800410051005100
+      0100000000002A00000046005F00430045004D0049005F0042004E0046005F00
+      30005F005300490051005F0048004100510051000100000000002A0000004600
+      5F00430045004D0049005F0042004E0046005F0031005F005300490051005F00
+      48004100510051000100000000001800000048005F0043004F0055004E005400
+      5F004600410049005A000100000000001800000046005F0043004F0055004E00
+      54005F004600410049005A000100000000001C00000048005F00430045004D00
+      5F005300490051005F004600410049005A000100000000001C00000046005F00
+      430045004D005F005300490051005F004600410049005A000100000000002A00
+      000048005F0042004E00460030005F00430045004D005F0043004F0055004E00
+      54005F004600410049005A000100000000002A00000048005F0042004E004600
+      31005F00430045004D005F0043004F0055004E0054005F004600410049005A00
+      0100000000002A00000046005F0042004E00460030005F00430045004D005F00
+      43004F0055004E0054005F004600410049005A000100000000002A0000004600
+      5F0042004E00460031005F00430045004D005F0043004F0055004E0054005F00
+      4600410049005A000100000000003400000048005F00430045004D0049005F00
+      42004E0046005F0030005F005300490051005F0048004100510051005F004600
+      410049005A000100000000003400000048005F00430045004D0049005F004200
+      4E0046005F0031005F005300490051005F0048004100510051005F0046004100
+      49005A000100000000003400000046005F00430045004D0049005F0042004E00
+      46005F0030005F005300490051005F0048004100510051005F00460041004900
+      5A000100000000003400000046005F00430045004D0049005F0042004E004600
+      5F0031005F005300490051005F0048004100510051005F004600410049005A00
+      010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 576
+    Top = 720
+  end
+  object odsfilial: TOracleDataSet
+    SQL.Strings = (
+      'select * from filial')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      05000000030000000400000049004400010000000000080000004E0041004D00
+      4500010000000000140000004B004F0044005F00460049004C00490041004C00
+      010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 728
+    Top = 400
+  end
+  object ins_prognose: TOracleDataSet
+    SQL.Strings = (
+      
+        'select c.id,ins_cust.surname||'#39' '#39'||ins_cust.name||'#39' '#39'||ins_cust.' +
+        'fathername as sigortali,'
+      
+        '(select ii.name from ins_insurances ii where ii.id=c.type_id) as' +
+        ' M_novu,'
+      
+        'mot.insuredstatenum nomre ,mot.insuredmark marka,mot.insuredmode' +
+        'l model,'
+      
+        'c.policy_num,(select name from ins_bnf_type where id=c.bnf_type)' +
+        ' as faydagoturen_status,'
+      
+        'a.surname||'#39' '#39'||a.name||'#39' '#39'||a.fathername as Agent_adi,c.ins_dat' +
+        'e   M'#252'qavil'#601'nin_yazilma ,c.begin_date  M'#252'qavil'#601'nin_ba'#351'lama ,c.en' +
+        'd_date  M'#252'qavil'#601'nin_bitm'#601','
+      
+        '(select case when payment_type=1 then '#39'Tam odenis'#39' else '#39'Hissele' +
+        'rle odenis'#39' end from ins_payment_plan_setting where cid=c.id) as' +
+        ' odenis_novu,'
+      'ins_common.progammount(c.id,:dat2)'
+      ''
+      '  '#214'd'#601'nilm'#601'li_m'#601'bl'#601#287' ,'
+      
+        ' case when (select max(pl.pay_date) from ins_payment_plan pl whe' +
+        're pl.pay_date between :dat1 and :dat2 and pl.ins_id=c.id) is nu' +
+        'll then'
+      '  trunc(sbop.get_date)'
+      
+        '    else (select max(pl.pay_date) from ins_payment_plan pl where' +
+        ' pl.pay_date between :dat1 and :dat2 and pl.ins_id=c.id)'
+      '  end  '#214'd'#601'm'#601'_tarixi  '
+      'from'
+      'ins_contracts c,'
+      'ins_agents a,'
+      'ins_customers ins_cust,'
+      'customers cust,archost ar,'
+      '--ins_payment_plan pl,'
+      'ins_payment_plan_setting st,'
+      'ins_motorkasco mot'
+      ''
+      
+        'where  a.id  =c.agent_id and st.cid=c.id and ins_common.progammo' +
+        'unt(c.id,:dat2)>0'
+      'and c.kli_id=ins_cust.id '
+      
+        'and ins_cust.cust_id=cust.id and abs(ar.pok_ostat)>0 and ar.datd' +
+        'ate=sbop.get_date() and c.loanacc_id=ar.acc_id'
+      ' --and pl.ins_id=c.id '
+      
+        '-- and pl.pay_date between '#39'01-jul-2019'#39' and '#39'31-jul-2019'#39' --tru' +
+        'nc(last_day(ADD_MONTHS(sbop.get_date,1))-1, '#39'mm'#39') and last_day(A' +
+        'DD_MONTHS(sbop.get_date,1))*/'
+      'and mot.cid (+) =c.id'
+      ''
+      'union '
+      ''
+      'select'
+      
+        ' c.id,ins_cust.surname||'#39' '#39'||ins_cust.name||'#39' '#39'||ins_cust.father' +
+        'name as sigortali,'
+      
+        '(select ii.name from ins_insurances ii where ii.id=c.type_id) as' +
+        ' M_novu,'
+      
+        'mot.insuredstatenum nomre ,mot.insuredmark marka,mot.insuredmode' +
+        'l model,'
+      
+        'c.policy_num,(select name from ins_bnf_type where id=c.bnf_type)' +
+        ' as faydagoturen_status,'
+      
+        'a.surname||'#39' '#39'||a.name||'#39' '#39'||a.fathername as Agent_adi,c.ins_dat' +
+        'e   M'#252'qavil'#601'nin_yazilma ,c.begin_date  M'#252'qavil'#601'nin_ba'#351'lama ,c.en' +
+        'd_date  M'#252'qavil'#601'nin_bitm'#601','
+      
+        '(select case when payment_type=1 then '#39'Tam odenis'#39' else '#39'Hissele' +
+        'rle odenis'#39' end from ins_payment_plan_setting where cid=c.id) as' +
+        ' odenis_novu,'
+      'abs(ar.ostat)  '#214'd'#601'nilm'#601'li_m'#601'bl'#601#287',trunc(sbop.get_date)'
+      ''
+      'from'
+      'ins_contracts c,'
+      'ins_agents a,'
+      'ins_customers ins_cust,'
+      'customers cust,tenostat ar,'
+      'ins_payment_plan_setting st,'
+      'ins_motorkasco mot'
+      ''
+      'where  a.id  =c.agent_id and st.cid=c.id and st.payment_type=1'
+      'and c.kli_id=ins_cust.id '
+      
+        'and ins_cust.cust_id=cust.id and ar.ostat<0  and c.loanacc_id=ar' +
+        '.acc_id and mot.cid (+) =c.id'
+      ''
+      '')
+    Optimize = False
+    Variables.Data = {
+      04000000020000000A0000003A0044004100540031000C000000000000000000
+      00000A0000003A0044004100540032000C0000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000C000000040000004900440001000000000012000000530049004700
+      4F005200540041004C0049000100000000000C0000004D005F004E004F005600
+      55000100000000001400000050004F004C004900430059005F004E0055004D00
+      010000000000260000004600410059004400410047004F005400550052004500
+      4E005F0053005400410054005500530001000000000012000000410047004500
+      4E0054005F00410044004900010000000000160000004F00440045004E004900
+      53005F004E004F0056005500010000000000260000004D00DC00510041005600
+      49004C008F014E0049004E005F00590041005A0049004C004D00410001000000
+      0000260000004D00DC0051004100560049004C008F014E0049004E005F004200
+      41005E014C0041004D004100010000000000220000004D00DC00510041005600
+      49004C008F014E0049004E005F004200490054004D008F010100000000002200
+      0000D60044008F014E0049004C004D008F014C0049005F004D008F0142004C00
+      8F011E0101000000000018000000D60044008F014D008F015F00540041005200
+      490058004900010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 720
+    Top = 664
+    object ins_prognoseID: TFloatField
+      FieldName = 'ID'
+    end
+    object ins_prognoseSIGORTALI: TWideStringField
+      FieldName = 'SIGORTALI'
+      Size = 1600
+    end
+    object ins_prognoseM_NOVU: TWideStringField
+      FieldName = 'M_NOVU'
+      Size = 4000
+    end
+    object ins_prognosemarka: TWideStringField
+      DisplayLabel = 'Marka'
+      FieldName = 'marka'
+      Size = 160
+    end
+    object ins_prognosemodel: TWideStringField
+      DisplayLabel = 'Mmodel'
+      FieldName = 'model'
+      Size = 160
+    end
+    object ins_prognosenomre: TWideStringField
+      DisplayLabel = 'Nomre'
+      FieldName = 'nomre'
+      Size = 120
+    end
+    object ins_prognosePOLICY_NUM: TWideStringField
+      FieldName = 'POLICY_NUM'
+      Size = 128
+    end
+    object ins_prognoseFAYDAGOTUREN_STATUS: TWideStringField
+      FieldName = 'FAYDAGOTUREN_STATUS'
+      Size = 512
+    end
+    object ins_prognoseAGENT_ADI: TWideStringField
+      FieldName = 'AGENT_ADI'
+      Size = 1600
+    end
+    object ins_prognoseMÜQAVILƏNIN_YAZILMA: TDateTimeField
+      FieldName = 'M'#220'QAVIL'#399'NIN_YAZILMA'
+    end
+    object ins_prognoseMÜQAVILƏNIN_BAŞLAMA: TDateTimeField
+      FieldName = 'M'#220'QAVIL'#399'NIN_BA'#350'LAMA'
+    end
+    object ins_prognoseMÜQAVILƏNIN_BITMƏ: TDateTimeField
+      FieldName = 'M'#220'QAVIL'#399'NIN_BITM'#399
+    end
+    object ins_prognoseODENIS_NOVU: TWideStringField
+      FieldName = 'ODENIS_NOVU'
+      Size = 17
+    end
+    object ins_prognoseÖDƏNILMƏLI_MƏBLƏĞ: TFloatField
+      FieldName = #214'D'#399'NILM'#399'LI_M'#399'BL'#399#286
+    end
+    object ins_prognoseÖDƏMƏ_TARIXI: TDateTimeField
+      FieldName = #214'D'#399'M'#399'_TARIXI'
+    end
+  end
+  object duepaynew: TOracleDataSet
+    SQL.Strings = (
+      
+        'select ins_cust.surname||'#39' '#39'||ins_cust.name||'#39' '#39'||ins_cust.fathe' +
+        'rname as sigortali,'
+      
+        '(select ii.name from ins_insurances ii where ii.id=c.type_id) as' +
+        ' M_novu,'
+      
+        '(select acnt.acc_no from account acnt where acnt.bal_cn1=211 and' +
+        ' acnt.ownid=c.id) as hesab_211,'
+      
+        'c.policy_num,(select name from ins_bnf_type where id=c.bnf_type)' +
+        ' as faydagoturen_status,'
+      
+        'a.surname||'#39' '#39'||a.name||'#39' '#39'||a.fathername as Agent_adi,c.ins_dat' +
+        'e,c.begin_date,c.end_date,'
+      ''
+      
+        '(select case when payment_type=1 then '#39'Tam odenis'#39' else '#39'Hissele' +
+        'rle odenis'#39' end from ins_payment_plan_setting where cid=c.id) as' +
+        ' odenis_novu,'
+      ''
+      
+        '/*nvl((select nvl(p.ammount,0) as ammount from ins_payments p,sb' +
+        '_business_processes sb_p,sb_business_opers sb_o,provarch pr'
+      'where p.traid=sb_o.parentid '
+      'and sb_o.busproc=sb_p.id '
+      'and  p.ins_id=c.id '
+      'and sb_o.busproc in(14,15,16,17,18,19,20,63) '
+      
+        'and pr.id=sb_o.parentid),0)*/ ins_report.get_S_haqq(c.id)  as ta' +
+        'm_siq_haqqi,'
+      ''
+      
+        'nvl((SELECT sum(ammount) from ins_payment_plan where ins_id=c.id' +
+        ' and pay_date<=sbop.get_date),0) as plan_uzreodenmeli_mebleg,'
+      ''
+      
+        '/*nvl((select nvl(sum(p.ammount),0) from  ins_payments p,sb_busi' +
+        'ness_processes sb_p,sb_business_opers sb_o,provarch pr'
+      'where p.traid=sb_o.parentid'
+      'and  sb_o.busproc=sb_p.id'
+      'and  ins_id=c.id'
+      'and  p.planid=1'
+      'and paydate<=sbop.get_date()'
+      'and sb_o.busproc in(35,36,37,38,39,40,41,64)'
+      'and pr.id in(sb_o.parentid)),0)*/'
+      ''
+      ''
+      
+        '--nvl((select sum(ammount) from ins_payments where ins_id=c.id a' +
+        'nd id not in (select min(id) from ins_payments where ins_id=c.id' +
+        ' )),0)'
+      
+        '(ins_report.get_S_haqq(c.id) -abs(ar.pok_ostat)) as plan_uzre_od' +
+        'enmis_M,---od'
+      ''
+      
+        'nvl((SELECT sum(ammount) from ins_payment_plan where ins_id=c.id' +
+        ' and pay_date<=sbop.get_date),0)-'
+      '(ins_report.get_S_haqq(c.id) -abs(ar.pok_ostat))'
+      
+        '--nvl((select sum(ammount) from ins_payments where ins_id=c.id a' +
+        'nd id not in (select min(id) from ins_payments where ins_id=c.id' +
+        ' )),0) '
+      ''
+      
+        '/*nvl((select nvl(sum(p.ammount),0) from  ins_payments p,sb_busi' +
+        'ness_processes sb_p,sb_business_opers sb_o,provarch pr'
+      'where p.traid=sb_o.parentid'
+      'and  sb_o.busproc=sb_p.id'
+      'and  ins_id=c.id'
+      'and  p.planid=1'
+      'and paydate<=sbop.get_date()'
+      'and sb_o.busproc in(35,36,37,38,39,40,41,64)'
+      'and pr.id in(sb_o.parentid)),0)*/ as gecikme_meblegi,'
+      ''
+      'ins_common.get_due_day(c.id) as gecikme_gunleri'
+      'from ins_contracts c,'
+      '--ins_payment_plan p,'
+      'ins_payment_plan_setting ps,'
+      'ins_agents a,'
+      'ins_customers ins_cust,'
+      'customers cust ,tenostat ar'
+      'where  ps.cid=c.id'
+      'and ps.payment_type=2'
+      'and a.id=c.agent_id'
+      'and c.kli_id=ins_cust.id'
+      'and ins_cust.cust_id=cust.id'
+      
+        'and c.close_prefix=0 and abs(ar.pok_ostat)>0 and ar.datdate=sbop' +
+        '.get_date() and c.loanacc_id=ar.acc_id'
+      'and c.state=6 and'
+      ''
+      
+        'nvl((SELECT sum(ammount) from ins_payment_plan where ins_id=c.id' +
+        ' and pay_date<=sbop.get_date),0)-'
+      
+        '--nvl((select sum(ammount) from ins_payments where ins_id=c.id a' +
+        'nd id not in (select min(id) from ins_payments where ins_id=c.id' +
+        ' )),0) '
+      '(ins_report.get_S_haqq(c.id) -abs(ar.pok_ostat))>0'
+      
+        '/*and nvl((SELECT sum(ammount) from ins_payment_plan where ins_i' +
+        'd=c.id and pay_date<=sbop.get_date),0)-'
+      
+        '    nvl((select nvl(sum(p.ammount),0) from  ins_payments p,sb_bu' +
+        'siness_processes sb_p,sb_business_opers sb_o,provarch pr'
+      'where p.traid=sb_o.parentid'
+      'and  sb_o.busproc=sb_p.id'
+      'and  ins_id=c.id'
+      'and  p.planid=1'
+      'and paydate<=sbop.get_date()'
+      'and sb_o.busproc in(35,36,37,38,39,40,41,64) '
+      'and pr.id in(sb_o.parentid)),0)>0*/'
+      ''
+      'union'
+      ''
+      
+        'select ins_cust.surname||'#39' '#39'||ins_cust.name||'#39' '#39'||ins_cust.fathe' +
+        'rname as sigortali,(select ii.name from ins_insurances ii where ' +
+        'ii.id=c.type_id) as M_novu,'
+      
+        '(select acnt.acc_no from account acnt where acnt.bal_cn1=211 and' +
+        ' acnt.ownid=c.id) as hesab_211,'
+      
+        'c.policy_num,(select name from ins_bnf_type where id=c.bnf_type)' +
+        ' as faydagoturen_status,'
+      
+        'a.surname||'#39' '#39'||a.name||'#39' '#39'||a.fathername as Agent_adi,c.ins_dat' +
+        'e,c.begin_date,c.end_date,'
+      
+        '(select case when payment_type=1 then '#39'Tam odenis'#39' else '#39'Hissele' +
+        'rle odenis'#39' end from ins_payment_plan_setting where cid=c.id) as' +
+        ' odenis_novu,'
+      ''
+      
+        '/*nvl((select nvl(p.ammount,0) as ammount from ins_payments p,sb' +
+        '_business_processes sb_p,sb_business_opers sb_o,provarch pr'
+      'where p.traid=sb_o.parentid '
+      'and sb_o.busproc=sb_p.id '
+      'and  p.ins_id=c.id '
+      'and sb_o.busproc in(14,15,16,17,18,19,20,63) '
+      
+        'and pr.id=sb_o.parentid),0)*/ ins_report.get_S_haqq(c.id)  as ta' +
+        'm_siq_haqqi,---'
+      ''
+      
+        '/*nvl((select nvl(sum(p.ammount),0) from  ins_payments p,sb_busi' +
+        'ness_processes sb_p,sb_business_opers sb_o,provarch pr'
+      'where p.traid=sb_o.parentid'
+      'and  sb_o.busproc=sb_p.id '
+      'and  ins_id=c.id '
+      'and p.planid=1 '
+      'and paydate<=sbop.get_date() '
+      'and sb_o.busproc in(14,15,16,17,18,19,20,63) '
+      
+        'and pr.id in(sb_o.parentid)),0)*/ ins_report.get_S_haqq(c.id)  a' +
+        's plan_uzreodenmeli_mebleg,-----ooo'
+      ''
+      
+        '/*nvl((select nvl(sum(p.ammount),0) from  ins_payments p,sb_busi' +
+        'ness_processes sb_p,sb_business_opers sb_o,provarch pr'
+      'where p.traid=sb_o.parentid'
+      'and  sb_o.busproc=sb_p.id'
+      'and  ins_id=c.id'
+      'and  p.planid=1'
+      'and paydate<=sbop.get_date()'
+      'and sb_o.busproc in(35,36,37,38,39,40,41,64)'
+      'and pr.id in(sb_o.parentid)),0)*/'
+      
+        '-- nvl((select sum(ammount) from ins_payments where ins_id=c.id ' +
+        'and id not in (select min(id) from ins_payments where ins_id=c.i' +
+        'd )),0)'
+      ' (ins_report.get_S_haqq(c.id) -abs(ar.pok_ostat))'
+      '  as plan_uzre_odenmis_M,---od'
+      ''
+      
+        '/*nvl((select nvl(sum(p.ammount),0) from  ins_payments p,sb_busi' +
+        'ness_processes sb_p,sb_business_opers sb_o,provarch pr'
+      'where p.traid=sb_o.parentid'
+      'and  sb_o.busproc=sb_p.id '
+      'and  ins_id=c.id '
+      'and p.planid=1 '
+      'and paydate<=sbop.get_date() '
+      'and sb_o.busproc in(14,15,16,17,18,19,20,63) '
+      'and pr.id in(sb_o.parentid)),0)*/ins_report.get_S_haqq(c.id) '
+      '-'
+      '(ins_report.get_S_haqq(c.id) -abs(ar.pok_ostat))'
+      
+        '--nvl((select sum(ammount) from ins_payments where ins_id=c.id a' +
+        'nd id not in (select min(id) from ins_payments where ins_id=c.id' +
+        ' )),0)'
+      ''
+      
+        '/*nvl((select nvl(sum(p.ammount),0) from  ins_payments p,sb_busi' +
+        'ness_processes sb_p,sb_business_opers sb_o,provarch pr'
+      'where p.traid=sb_o.parentid'
+      'and  sb_o.busproc=sb_p.id'
+      'and  ins_id=c.id'
+      'and  p.planid=1'
+      'and paydate<=sbop.get_date()'
+      'and sb_o.busproc in(35,36,37,38,39,40,41,64)'
+      'and pr.id in(sb_o.parentid)),0)*/ as gecikme_meblegi,'
+      ''
+      'ins_common.get_due_day(c.id) as gecikme_gunleri'
+      'from ins_contracts c,'
+      '--ins_payment_plan p,'
+      'ins_payment_plan_setting ps,'
+      'ins_agents a,'
+      'ins_customers ins_cust,'
+      'customers cust ,tenostat ar'
+      'where  ps.cid=c.id'
+      'and ps.payment_type=1'
+      'and a.id=c.agent_id'
+      'and c.kli_id=ins_cust.id'
+      'and ins_cust.cust_id=cust.id'
+      
+        'and c.close_prefix=0 and abs(ar.pok_ostat)>0 and ar.datdate=sbop' +
+        '.get_date() and c.loanacc_id=ar.acc_id'
+      'and c.state=6 '
+      'and'
+      'ins_report.get_S_haqq(c.id) '
+      '-'
+      '(ins_report.get_S_haqq(c.id) -abs(ar.pok_ostat))>0'
+      
+        '--nvl((select sum(ammount) from ins_payments where ins_id=c.id a' +
+        'nd id not in (select min(id) from ins_payments where ins_id=c.id' +
+        ' )),0)')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000F000000120000005300490047004F005200540041004C0049000100
+      000000000C0000004D005F004E004F0056005500010000000000120000004800
+      45005300410042005F003200310031000100000000001400000050004F004C00
+      4900430059005F004E0055004D00010000000000260000004600410059004400
+      410047004F0054005500520045004E005F005300540041005400550053000100
+      00000000120000004100470045004E0054005F00410044004900010000000000
+      1000000049004E0053005F004400410054004500010000000000140000004200
+      4500470049004E005F0044004100540045000100000000001000000045004E00
+      44005F004400410054004500010000000000160000004F00440045004E004900
+      53005F004E004F00560055000100000000001A000000540041004D005F005300
+      490051005F00480041005100510049000100000000003000000050004C004100
+      4E005F0055005A00520045004F00440045004E004D0045004C0049005F004D00
+      450042004C00450047000100000000002600000050004C0041004E005F005500
+      5A00520045005F004F00440045004E004D00490053005F004D00010000000000
+      1E00000047004500430049004B004D0045005F004D00450042004C0045004700
+      49000100000000001E00000047004500430049004B004D0045005F0047005500
+      4E004C00450052004900010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 800
+    Top = 720
+    object duepaynewSIGORTALI: TWideStringField
+      FieldName = 'SIGORTALI'
+      Size = 1538
+    end
+    object duepaynewM_NOVU: TWideStringField
+      FieldName = 'M_NOVU'
+      Size = 4000
+    end
+    object duepaynewHESAB_211: TWideStringField
+      FieldName = 'HESAB_211'
+      Size = 448
+    end
+    object duepaynewPOLICY_NUM: TWideStringField
+      FieldName = 'POLICY_NUM'
+      Size = 128
+    end
+    object duepaynewFAYDAGOTUREN_STATUS: TWideStringField
+      FieldName = 'FAYDAGOTUREN_STATUS'
+      Size = 512
+    end
+    object duepaynewAGENT_ADI: TWideStringField
+      FieldName = 'AGENT_ADI'
+      Size = 1538
+    end
+    object duepaynewINS_DATE: TDateTimeField
+      FieldName = 'INS_DATE'
+    end
+    object duepaynewBEGIN_DATE: TDateTimeField
+      FieldName = 'BEGIN_DATE'
+    end
+    object duepaynewEND_DATE: TDateTimeField
+      FieldName = 'END_DATE'
+    end
+    object duepaynewODENIS_NOVU: TWideStringField
+      FieldName = 'ODENIS_NOVU'
+      Size = 17
+    end
+    object duepaynewTAM_SIQ_HAQQI: TFloatField
+      FieldName = 'TAM_SIQ_HAQQI'
+    end
+    object duepaynewPLAN_UZREODENMELI_MEBLEG: TFloatField
+      FieldName = 'PLAN_UZREODENMELI_MEBLEG'
+    end
+    object duepaynewPLAN_UZRE_ODENMIS_M: TFloatField
+      FieldName = 'PLAN_UZRE_ODENMIS_M'
+    end
+    object duepaynewGECIKME_MEBLEGI: TFloatField
+      FieldName = 'GECIKME_MEBLEGI'
+    end
+    object duepaynewGECIKME_GUNLERI: TFloatField
+      FieldName = 'GECIKME_GUNLERI'
+    end
+  end
+  object ins_bonushesabat: TOracleDataSet
+    SQL.Strings = (
+      
+        'select pr.dat Tarix ,smart.ins_common.insbenef(a2.ownid) as sigo' +
+        'rtali ,'
+      
+        '(select name||'#39' '#39'||surname ||'#39' '#39'||fathername from ins_customers ' +
+        'where id  in (select kli_id from ins_contracts where id=a2.ownid' +
+        ')) as sigorta_olunan ,'
+      
+        '(select name from ins_insurances where id=(select type_id from i' +
+        'ns_contracts where id=a2.ownid) and branch=(select filialid from' +
+        ' sba_objinf where obj=(select user from dual)) ) as sigortaNovu,'
+      'a1.name  as debethesabadi,'
+      'a1.acc_no as debthesab,'
+      'a2.name  as kreditname,'
+      'a2.acc_no  as kredithesab,'
+      
+        '(select name||'#39' '#39'||surname  from ins_agents where id=(select age' +
+        'nt_id from ins_contracts where id=a2.ownid)) as agent_Adi,'
+      ' ins_report.get_s_mebleg(a2.ownid) as sigortameble'#287'i,'
+      'smart.ins_report.get_S_haqq(a2.ownid) as sigorta_haqq,'
+      'pr.ammount as '#246'denilmis,'
+      ''
+      
+        '(select comission from ins_contracts where id=a2.ownid ) as komm' +
+        'isiya,'
+      
+        'pr.ammount *(select comission from ins_contracts where id=a2.own' +
+        'id )/100 as kommisiya_meblegi,'
+      
+        'smart.ins_report.get_S_haqq(a2.ownid) *(select comission from in' +
+        's_contracts where id=a2.ownid )/100 as hesablanmis_kom,'
+      ''
+      
+        '(select ins_date from ins_contracts where id=a2.ownid)  as daxil' +
+        'etme_tarixi,'
+      
+        '(select begin_date from ins_contracts where id=a2.ownid) as basl' +
+        'ama_tarixi ,'
+      
+        '(select end_date from ins_contracts where id=a2.ownid) as bitme_' +
+        'tarixi,'
+      'smart.ins_common.inspolis(a2.ownid) as polis,'
+      
+        '(select name from ins_bnf_type where id=(select bnf_type from in' +
+        's_contracts where id=a2.ownid)) as FaydaGoturen,'
+      '(select name from filial where id=a2.filial)'
+      
+        ' as filial, decode (cust.cust_type,0,'#39'Huquqi'#39',1,'#39'Fiziki'#39') as Mus' +
+        'teri_novu'
+      'from provarch pr,account a1,account a2,customers cust'
+      'where pr.dat between :dat1 and :dat2 '
+      'and a1.id=pr.debt and a2.id=pr.kredit and  a2.kli_id=cust.id'
+      'and a2.bal_cn1 in (:krbalcn)'
+      'and a1.bal_cn1 in (:dbbalcn)'
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      '')
+    Optimize = False
+    Variables.Data = {
+      04000000040000000A0000003A0044004100540031000C000000000000000000
+      00000A0000003A0044004100540032000C000000000000000000000010000000
+      3A004B005200420041004C0043004E0001000000040000003231310000000000
+      100000003A0044004200420041004C0043004E00010000000400000032323200
+      00000000}
+    QBEDefinition.QBEFieldDefs = {
+      05000000160000000A0000005400410052004900580001000000000012000000
+      5300490047004F005200540041004C0049000100000000001600000053004900
+      47004F005200540041004E004F00560055000100000000001A00000044004500
+      4200450054004800450053004100420041004400490001000000000012000000
+      440045004200540048004500530041004200010000000000140000004B005200
+      45004400490054004E0041004D004500010000000000160000004B0052004500
+      4400490054004800450053004100420001000000000012000000410047004500
+      4E0054005F004100440049000100000000001C0000005300490047004F005200
+      540041004D00450042004C0045001E0149000100000000001800000053004900
+      47004F005200540041005F00480041005100510001000000000012000000D600
+      440045004E0049004C004D004900530001000000000020000000440041005800
+      49004C00450054004D0045005F00540041005200490058004900010000000000
+      1C0000004200410053004C0041004D0041005F00540041005200490058004900
+      010000000000180000004200490054004D0045005F0054004100520049005800
+      49000100000000000A00000050004F004C004900530001000000000018000000
+      4600410059004400410047004F0054005500520045004E000100000000000C00
+      0000460049004C00490041004C000100000000001C0000005300490047004F00
+      5200540041005F004F004C0055004E0041004E00010000000000120000004B00
+      4F004D004D0049005300490059004100010000000000220000004B004F004D00
+      4D00490053004900590041005F004D00450042004C0045004700490001000000
+      00001E000000480045005300410042004C0041004E004D00490053005F004B00
+      4F004D00010000000000180000004D005500530054004500520049005F004E00
+      4F0056005500010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 680
+    Top = 728
+    object ins_bonushesabatTARIX: TDateTimeField
+      FieldName = 'TARIX'
+    end
+    object ins_bonushesabatSIGORTALI: TWideStringField
+      FieldName = 'SIGORTALI'
+      Size = 4000
+    end
+    object ins_bonushesabatSIGORTA_OLUNAN: TWideStringField
+      DisplayLabel = 'SIGORTA OLUNAN'
+      FieldName = 'SIGORTA_OLUNAN'
+      Size = 1600
+    end
+    object ins_bonushesabatSIGORTANOVU: TWideStringField
+      DisplayLabel = 'SIGORTA NOVU'
+      FieldName = 'SIGORTANOVU'
+      Size = 4000
+    end
+    object ins_bonushesabatDEBETHESABADI: TWideStringField
+      DisplayLabel = 'DEBET HESABIN ADI'
+      FieldName = 'DEBETHESABADI'
+      Size = 1440
+    end
+    object ins_bonushesabatDEBTHESAB: TWideStringField
+      DisplayLabel = 'DEBET HESAB'
+      FieldName = 'DEBTHESAB'
+      Size = 448
+    end
+    object ins_bonushesabatKREDITNAME: TWideStringField
+      DisplayLabel = 'KRED'#304'T HESABIN ADI'
+      FieldName = 'KREDITNAME'
+      Size = 1440
+    end
+    object ins_bonushesabatKREDITHESAB: TWideStringField
+      DisplayLabel = 'KRED'#304'T HESAB'
+      FieldName = 'KREDITHESAB'
+      Size = 448
+    end
+    object ins_bonushesabatAGENT_ADI: TWideStringField
+      DisplayLabel = 'AGENT ADI'
+      FieldName = 'AGENT_ADI'
+      Size = 1056
+    end
+    object ins_bonushesabatSIGORTAMEBLEĞI: TFloatField
+      DisplayLabel = 'SIGORTA MEBLE'#286'I'
+      FieldName = 'SIGORTAMEBLE'#286'I'
+    end
+    object ins_bonushesabatSIGORTA_HAQQ: TFloatField
+      DisplayLabel = 'SIGORTA HAQQI'
+      FieldName = 'SIGORTA_HAQQ'
+    end
+    object ins_bonushesabatÖDENILMIS: TFloatField
+      DisplayLabel = #214'D'#399'NILMI'#350
+      FieldName = #214'DENILMIS'
+    end
+    object ins_bonushesabatKOMMISIYA: TFloatField
+      FieldName = 'KOMMISIYA'
+    end
+    object ins_bonushesabatKOMMISIYA_MEBLEGI: TFloatField
+      FieldName = 'KOMMISIYA_MEBLEGI'
+    end
+    object ins_bonushesabatHESABLANMIS_KOM: TFloatField
+      FieldName = 'HESABLANMIS_KOM'
+    end
+    object ins_bonushesabatDAXILETME_TARIXI: TDateTimeField
+      DisplayLabel = 'DAXILETME TARIXI'
+      FieldName = 'DAXILETME_TARIXI'
+      EditMask = '!90/00/0000;1;_'
+    end
+    object ins_bonushesabatBASLAMA_TARIXI: TDateTimeField
+      DisplayLabel = 'BA'#350'LAMA TARIXI'
+      FieldName = 'BASLAMA_TARIXI'
+    end
+    object ins_bonushesabatBITME_TARIXI: TDateTimeField
+      DisplayLabel = 'BITME TARIXI'
+      FieldName = 'BITME_TARIXI'
+    end
+    object ins_bonushesabatPOLIS: TWideStringField
+      DisplayLabel = 'POLIS '#8470
+      FieldName = 'POLIS'
+      Size = 4000
+    end
+    object ins_bonushesabatFAYDAGOTUREN: TWideStringField
+      DisplayLabel = 'FAYDA G'#214'TUR'#399'N'
+      FieldName = 'FAYDAGOTUREN'
+      Size = 512
+    end
+    object ins_bonushesabatFILIAL: TWideStringField
+      FieldName = 'FILIAL'
+      Size = 360
+    end
+    object ins_bonushesabatMUSTERI_NOVU: TWideStringField
+      FieldName = 'MUSTERI_NOVU'
+      Size = 32
+    end
+  end
+  object OracleQuery1: TOracleQuery
+    Session = sboapiDataModule.SBSession
+    Optimize = False
+    Left = 864
+    Top = 744
+  end
+  object OracleDataSet1: TOracleDataSet
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 944
+    Top = 712
+  end
+  object OracleDataSet2: TOracleDataSet
+    SQL.Strings = (
+      'select * from gecikmeler where gecikme_gunleri>0')
+    Optimize = False
+    QBEDefinition.QBEFieldDefs = {
+      050000000F000000120000005300490047004F005200540041004C0049000100
+      000000000C0000004D005F004E004F0056005500010000000000120000004800
+      45005300410042005F003200310031000100000000001400000050004F004C00
+      4900430059005F004E0055004D00010000000000260000004600410059004400
+      410047004F0054005500520045004E005F005300540041005400550053000100
+      00000000120000004100470045004E0054005F00410044004900010000000000
+      1000000049004E0053005F004400410054004500010000000000140000004200
+      4500470049004E005F0044004100540045000100000000001000000045004E00
+      44005F004400410054004500010000000000160000004F00440045004E004900
+      53005F004E004F00560055000100000000001A000000540041004D005F005300
+      490051005F00480041005100510049000100000000003000000050004C004100
+      4E005F0055005A00520045004F00440045004E004D0045004C0049005F004D00
+      450042004C00450047000100000000002600000050004C0041004E005F005500
+      5A00520045005F004F00440045004E004D00490053005F004D00010000000000
+      1E00000047004500430049004B004D0045005F004D00450042004C0045004700
+      49000100000000001E00000047004500430049004B004D0045005F0047005500
+      4E004C00450052004900010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 744
+    Top = 768
+    object WideStringField2: TWideStringField
+      FieldName = 'SIGORTALI'
+      Size = 1538
+    end
+    object WideStringField3: TWideStringField
+      FieldName = 'M_NOVU'
+      Size = 4000
+    end
+    object WideStringField4: TWideStringField
+      FieldName = 'HESAB_211'
+      Size = 448
+    end
+    object WideStringField5: TWideStringField
+      FieldName = 'POLICY_NUM'
+      Size = 128
+    end
+    object WideStringField6: TWideStringField
+      FieldName = 'FAYDAGOTUREN_STATUS'
+      Size = 512
+    end
+    object WideStringField7: TWideStringField
+      FieldName = 'AGENT_ADI'
+      Size = 1538
+    end
+    object DateTimeField3: TDateTimeField
+      FieldName = 'INS_DATE'
+    end
+    object DateTimeField4: TDateTimeField
+      FieldName = 'BEGIN_DATE'
+    end
+    object DateTimeField5: TDateTimeField
+      FieldName = 'END_DATE'
+    end
+    object WideStringField8: TWideStringField
+      FieldName = 'ODENIS_NOVU'
+      Size = 17
+    end
+    object FloatField4: TFloatField
+      FieldName = 'TAM_SIQ_HAQQI'
+    end
+    object FloatField5: TFloatField
+      FieldName = 'PLAN_UZREODENMELI_MEBLEG'
+    end
+    object FloatField6: TFloatField
+      FieldName = 'PLAN_UZRE_ODENMIS_M'
+    end
+    object FloatField7: TFloatField
+      FieldName = 'GECIKME_MEBLEGI'
+    end
+    object FloatField8: TFloatField
+      FieldName = 'GECIKME_GUNLERI'
+    end
+  end
+end

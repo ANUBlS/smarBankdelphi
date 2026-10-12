@@ -1,0 +1,282 @@
+﻿unit frmAddMoneynewImpl;
+           //PercentEdit
+           //DBEditEh1
+           //ButtonCommit
+           //MoneySumEdit
+           //fkCalculated
+
+
+interface
+
+uses
+   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, NLSDialogs,
+  ExtCtrls, StdCtrls, Mask, DBCtrlsEh, DBLookupEh, CMCurrencyEdit, ComCtrls,
+   ActnList;
+
+type
+  TfrmAddMoneynew = class(TForm)
+    ActionList1: TActionList;
+    ActnTransaction: TAction;
+    ButtonCancel: TButton;
+    ButtonCommit: TButton;
+    Panel1: TPanel;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    DBEditEh1: TDBEditEh;
+    Panel4: TPanel;
+    StaticText3: TStaticText;
+    AccountListCB: TDBLookupComboboxEh;
+    AccnameListCB: TDBLookupComboboxEh;
+    OperationDatePckr: TDateTimePicker;
+    MoneySumEdit: TCMCurrencyEdit;
+    PercentEdit: TEdit;
+    procedure FormCanResize(Sender: TObject; var NewWidth, NewHeight: Integer;
+      var Resize: Boolean);
+    procedure FormCreate(Sender: TObject);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure ActnTransactionExecute(Sender: TObject);
+    procedure ActnTransactionUpdate(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure AccnameListCBChange(Sender: TObject);
+    procedure AccountListCBChange(Sender: TObject);
+    procedure ButtonCommitClick(Sender: TObject);
+
+
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  frmAddMoneynew: TfrmAddMoneynew;
+  counttransh:integer;
+
+implementation
+
+{$R *.dfm}
+    uses CommonDeclsImpl_new,DMApplyMoneynewImpl,TemporaryTransactionsFormImpl_new,SBTranslateProc,sboapiDataModuleimpl;
+procedure TfrmAddMoneynew.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+  Resize := False
+end;
+
+procedure TfrmAddMoneynew.FormCreate(Sender: TObject);
+begin
+SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TfrmAddMoneynew.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+   if ord(key) = VK_ESCAPE then close
+end;
+
+  procedure TfrmAddMoneynew.FormShow(Sender: TObject);
+
+begin
+//
+   with DMApplyMoney_new,DepositInfo,sbcm_tranches do begin
+   Refresh;
+   //PercentEdit.Text := FloatToStr(FieldByName('interest').AsFloat);
+   PercentEdit.Text := FloatToStr(CallFloatFunction('getpersentTransh',['ContractID',Get_SelectedContID]));
+    counttransh:=CallIntegerFunction('counttranch',['p_contractid',Get_SelectedContID]);
+
+   end;
+
+
+   OperationDatePckr.DateTime := Get_BankDate;
+   MoneySumEdit.Value := 0;
+end;
+
+procedure TfrmAddMoneynew.AccnameListCBChange(Sender: TObject);
+begin
+AccountListCB.KeyValue :=AccnameListCB.KeyValue;
+end;
+
+procedure TfrmAddMoneynew.AccountListCBChange(Sender: TObject);
+begin
+AccnameListCB.KeyValue := AccountListCB.KeyValue;
+end;
+
+procedure TfrmAddMoneynew.ActnTransactionExecute(Sender: TObject);
+resourcestring
+  rsTransactionsWillProcessed = 'Depozit yatrımı ...';
+
+var ClientAccID :Integer;
+    Total : Real;
+    Percent :Real;
+    CommitDepositMoney : Boolean;
+    p_check1 :integer;
+    p_check2 :integer;
+    p_check3 :integer;
+begin
+   ClientAccID := AccountListCB.ListSource.DataSet.FieldByName('ID').AsInteger;
+   Total := MoneySumEdit.Value;
+   Percent := StrToFloat(PercentEdit.Text);
+
+
+   if Percent=0 then
+   begin
+   showmessage('Yatrımın % dərəcəsi 0 ola bilməz.');
+   exit;
+   end;
+
+
+
+   with DMApplyMoney_new,sbcm_tranches do
+   begin
+        p_check1:=CallIntegerFunction('checkedtranch',[
+                                            'p_contractid',Get_SelectedContID,
+                                            'p_amuont',Total]);
+
+        p_check2:=CallIntegerFunction('checkedaddtranch',[
+                                            'p_contractid',Get_SelectedContID,
+                                            'p_amuont',Total]);
+
+
+        p_check3:=CallIntegerFunction('checkedtranch_max_limit',[
+                                            'p_contractid',Get_SelectedContID,
+                                            'p_amuont',Total]);
+
+
+        if counttransh=0 then
+        begin
+       if p_check1=0 then
+       begin
+       showmessage('Bu depozit tipi üçün ilk yatrım üçün daxil edilən yatrım məbləğinə uyğun sazlama aralığı mövcud deyil.');
+       exit;
+       end;
+
+       if p_check1=2 then
+       begin
+       showmessage('Bu depozit tipi üçün ilk yatrım üçün daxil edilən yatrım məbləğinə uyğun cox sayda sazlama aralığı mövcuddur.');
+       exit;
+       end;
+        end ;
+
+       if counttransh>0 then
+        begin
+       if p_check2=0 then
+       begin
+       showmessage('Bu depozit tipi üçün növbəti yatrımlar üçün sazlama  mövcuddur deyil.');
+       exit;
+       end;
+
+
+       if p_check2=1 then
+       begin
+       showmessage('Bu depozitdə seçilmiş depozit tipinə və digər sazlamalara,bu tarixe ve daxil olunan yeni yatrim məbəlğinə uygun sazlama movcud deyil.');
+       exit;
+       end;
+
+
+       if p_check2=2 then
+       begin
+       showmessage('Bu müqavilə üçün seçilmiş depozit tipinə və digər sazlamalara bu məbləğ yatrım məbləği aralığına uyğun olmadığından bu məbləğdğ Yatrım edə bilmərsiz.');
+       exit;
+       end;
+
+       if p_check2=4 then
+       begin
+       showmessage('Seçilmiş depozit tipinə və digər sazlamalara ,bu tarixə və bu məbləğə uyğun yatrım edə bilmərsiz. Daxil olunan məbləğ sazamada göstərilən ilkin məbləğin % hissələri aralığında deyildir');
+       exit;
+       end;
+
+       if p_check2=6 then
+       begin
+       showmessage('Bu müqavilə üçün seçilmiş depozit tipinə və digər parametrlərə görə bu tarixə uyğun sazlamda məbəğ(min),məbəğ(max),məbəğ%(min),məbəğ%(max)=0 olduğundan yatrım etmək olmaz!');
+       exit;
+       end;
+
+       if p_check2=7 then
+       begin
+       showmessage('Bu müqavilə üçün seçilmiş depozit tipinə və digər parametrlərə görə bu tarixə uyğun cox sayda sazlama olduğundan yatrım etmək olmaz!');
+       exit;
+       end;
+
+    if p_check3=0 then
+    begin
+     showmessage('Bu tip depozit üçün meblegin sazlanmasi movcud deyil!');
+     exit;
+    end;
+
+    if p_check3=1 then
+    begin
+     showmessage('Bu tip depozit üçün meblegin çox sayda sazlanma movcuddur!');
+     exit;
+    end;
+
+   if p_check3=2 then
+    begin
+     showmessage('Faizlərin sazlanmasında meblegler bölümündə Meb.artımı(max)və Meb.artımı(max)% bölümlərindən yalnız biri daxil edilməlidir!');
+     exit;
+    end;
+
+
+   if p_check3=3 then
+    begin
+     showmessage('Yeni daxil edilən yatrım və əvvəlki yatrımların cəmi sazlamdakı Meb.artımı(max)-dən böyükdür!');
+     exit;
+    end;
+
+    if p_check3=4 then
+    begin
+     showmessage('Yeni daxil edilən yatrım və əvvəlki yatrımların cəmi sazlamdakı Meb.artımı(max)%-dən böyükdür!');
+     exit;
+    end;
+        end;
+   end;
+
+
+   with DMApplyMoney_new,sbcm_tranches do
+        CallProcedure('depositmoney',[
+                      'P_ClientAccID',ClientAccID,
+                      'contractid',Get_SelectedContID,
+                      'hdate',Get_BankDate,
+                      'total',Total,
+                      'PERCENT',Percent,
+                      'Trname','null',
+                      'usetransaction',true]);
+
+  try
+
+    CommitDepositMoney := TrDelayed_Show(Self,rsTransactionsWillProcessed);
+
+    Update;
+
+    DMApplyMoney_new.sbcm_tranches.CallProcedure('CommitDepositMoney',['DoCommit',
+       CommitDepositMoney
+    ]);
+
+    if CommitDepositMoney then
+    Self.ModalResult := mrOk;
+    Self.Update;
+  except
+
+
+    DMApplyMoney_new.sbcm_tranches.CallProcedure('CommitDepositMoney',['DoCommit',
+        False
+    ]);
+
+    raise;
+  end;
+
+  end;
+
+    procedure TfrmAddMoneynew.ActnTransactionUpdate(Sender: TObject);
+begin
+  with (Sender as TAction) do
+         Enabled := MoneySumEdit.Value > 0
+end;
+
+
+
+procedure TfrmAddMoneynew.ButtonCommitClick(Sender: TObject);
+begin
+           ActnTransactionExecute(sender);
+end;
+
+end.

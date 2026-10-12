@@ -1,0 +1,252 @@
+unit SecurityBrowserImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, 
+  Grids, DBGrids, StdCtrls, Db, DBCGrids, OracleData, Oracle, ExtCtrls,
+  ImgList, CheckLst, ComCtrls, ToolWin, ActnList, DBCtrls, AccessSelectFormImpl,
+  SBSecurity, UserSelectFormImpl;
+
+type
+  TSecurityBrowserForm = class(TForm)
+    SidToAccess: TDataSource;
+    ImageList1: TImageList;
+    SecurityClientsGB: TGroupBox;
+    DBGrid1: TDBGrid;
+    ActionList1: TActionList;
+    SecurityDetailedData: TOracleDataSet;
+    SecurityDetailedSource: TDataSource;
+    ToolBar1: TToolBar;
+    ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
+    Panel1: TPanel;
+    Button1: TButton;
+    Button2: TButton;
+    ApplyChanges: TAction;
+    CancelChanges: TAction;
+    AddSecurityClient: TAction;
+    DropSecurityClient: TAction;
+    Splitter1: TSplitter;
+    GroupBox1: TGroupBox;
+    DBGrid2: TDBGrid;
+    ToolBar2: TToolBar;
+    ToolButton3: TToolButton;
+    ToolButton4: TToolButton;
+    AddClientAccess: TAction;
+    DropClientAccess: TAction;
+    SecurityDetailedDataID: TFloatField;
+    SecurityDetailedDataLINK: TFloatField;
+    SidToAccessData: TOracleDataSet;
+    SidToAccessDataID: TFloatField;
+    SidToAccessDataCLIENT: TFloatField;
+    SidToAccessDataTYPE: TFloatField;
+    SidToAccessDataNAME: TWideStringField;
+    SecurityDetailedDataDESCRIPTION: TWideStringField;
+    procedure DBGrid1DrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TColumn; State: TGridDrawState);
+    procedure FormKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure AddClientAccessExecute(Sender: TObject);
+    procedure ApplyChangesExecute(Sender: TObject);
+    procedure CancelChangesExecute(Sender: TObject);
+    procedure SecurityDetailedDataApplyRecord(Sender: TOracleDataSet;
+      Action: Char; var Applied: Boolean; var NewRowId: String);
+    procedure DropClientAccessExecute(Sender: TObject);
+    procedure AddSecurityClientExecute(Sender: TObject);
+    procedure SidToAccessDataAfterPost(DataSet: TDataSet);
+    procedure SidToAccessDataApplyRecord(Sender: TOracleDataSet;
+      Action: Char; var Applied: Boolean; var NewRowId: String);
+    procedure DropSecurityClientExecute(Sender: TObject);
+  private
+    { Private declarations }
+    FCommited: Boolean;
+    FSid: Integer;
+    procedure AddAccess(Sender: TAccessSelectForm; AccessID: Integer);
+    procedure AddUser(Sender: TUserSelectForm; UserID: Integer);
+  public
+    { Public declarations }
+    property Commited: Boolean read FCommited;
+    property Sid: Integer read FSid;
+    procedure View(Sid: Integer; ReadOnly: Boolean);
+  end;
+
+var
+  SecurityBrowserForm: TSecurityBrowserForm;
+
+implementation
+
+{$R *.DFM}
+
+uses sboapiDataModuleImpl;
+
+procedure TSecurityBrowserForm.View(Sid: Integer; ReadOnly: Boolean);
+begin
+  FSid := Sid;
+  with SidToAccessData do
+  begin
+    Close;
+    SetVariable('SID', Sid);
+    Open;
+  end;
+  ShowModal;
+end;
+
+procedure TSecurityBrowserForm.DBGrid1DrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TColumn;
+  State: TGridDrawState);
+var
+  Bar: TRect;
+begin
+  with Sender as TDBgrid do
+  begin
+    DefaultDrawColumnCell(Rect, DataCol, Column, State);
+    if DataCol = 0 then
+    begin
+      Bar := Rect;
+      inc(Bar.Left, 10);
+      inc(Bar.Top);
+      Bar.Right := Bar.Left + 18;
+      Canvas.Brush.Color := clWhite;
+      Canvas.FillRect(Bar);
+
+      ImageList1.Draw(
+        Canvas,
+        Rect.Left+10,
+        Rect.Top+1,
+        DataSource.DataSet.FieldByName('type#').AsInteger-1+2);
+    end;
+  end;
+end;
+
+procedure TSecurityBrowserForm.FormKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if Key = VK_ESCAPE then
+    Close;
+end;
+
+procedure TSecurityBrowserForm.AddClientAccessExecute(Sender: TObject);
+begin
+  with TAccessSelectForm.Create(Self) do
+  try
+    OnAddAccess := AddAccess;
+    ViewPermissions(Sid, SidToAccessData.FieldByName('ID').AsInteger);
+  finally
+    Release;
+  end;
+end;
+
+procedure TSecurityBrowserForm.AddAccess(Sender: TAccessSelectForm; AccessID: Integer);
+begin
+  with SecurityDetailedData do
+  begin
+    Insert;
+    FieldByName('ID').AsInteger := AccessID;
+    FieldByName('Description').AsString := Sb_GetAccessDescription(AccessID);
+    Post;
+  end;
+end;
+
+procedure TSecurityBrowserForm.AddUser(Sender: TUserSelectForm; UserID: Integer);
+begin
+  with SidToAccessData do
+  begin
+    Insert;
+    FieldByName('Client#').AsInteger := UserID;
+    FieldByName('NAME').AsString := Sb_GetUserName(UserID);
+    Post;
+  end;
+end;
+
+procedure TSecurityBrowserForm.ApplyChangesExecute(Sender: TObject);
+begin
+  with SidToAccessData do
+  begin
+    ApplyUpdates([aaInsert, aaUpdate, aaDelete]);
+    CommitUpdates;
+  end;
+  with SecurityDetailedData do
+  begin
+    ApplyUpdates([aaInsert, aaUpdate, aaDelete]);
+    CommitUpdates;
+  end;
+  Close;
+end;
+
+procedure TSecurityBrowserForm.CancelChangesExecute(Sender: TObject);
+begin
+  with SidToAccessData do
+    CancelUpdates;
+  with SecurityDetailedData do
+    CancelUpdates;
+  Close;
+end;
+
+procedure TSecurityBrowserForm.SecurityDetailedDataApplyRecord(
+  Sender: TOracleDataSet; Action: Char; var Applied: Boolean;
+  var NewRowId: String);
+var
+  ClientID: TUser;
+  AccessID: TAccess;
+begin
+  ClientID := SidToAccessData.FieldByName('Client#').AsInteger;
+  AccessID := Sender.FieldByName('ID').AsInteger;
+  Applied := True;
+  case Action of
+  'I':
+    Sb_GrantUserAccess(Sid, ClientID, AccessID);
+  'D':
+    Sb_RevokeUserAccess(Sid, ClientID, AccessID);
+  else
+    Applied := False;
+  end;
+end;
+
+procedure TSecurityBrowserForm.DropClientAccessExecute(Sender: TObject);
+begin
+  SecurityDetailedData.Delete;
+end;
+
+procedure TSecurityBrowserForm.AddSecurityClientExecute(Sender: TObject);
+begin
+  with TUserSelectForm.Create(Self) do
+  try
+    OnAddUser := AddUser;
+    ViewUsers(Sid);
+  finally
+    Release;
+  end;
+end;
+
+procedure TSecurityBrowserForm.SidToAccessDataAfterPost(DataSet: TDataSet);
+begin
+  with DataSet as TOracleDataSet do
+  begin
+    ApplyUpdates([aaInsert, aaDelete]);
+    CommitUpdates;
+    Refresh;
+  end;
+end;
+
+procedure TSecurityBrowserForm.SidToAccessDataApplyRecord(
+  Sender: TOracleDataSet; Action: Char; var Applied: Boolean;
+  var NewRowId: String);
+begin
+  Applied := True;
+  case Action of
+  'I':
+    Sb_AddSecurityLink(Sid, Sender.FieldByName('client#').AsInteger);
+  'D':
+    Sb_RemoveSecurityLink(Sender.FieldByName('ID').AsInteger);
+  else
+    Applied := False;
+  end;
+end;
+
+procedure TSecurityBrowserForm.DropSecurityClientExecute(Sender: TObject);
+begin
+  SidToAccessData.Delete;
+end;
+
+end.

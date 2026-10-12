@@ -1,0 +1,67 @@
+unit ExpComTransactionUnit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Grids, DBGrids, ExtCtrls, ComCtrls, DBCtrls, StdCtrls, Db;
+
+type
+  TExpComTransactionForm = class(TForm)
+    Panel1: TPanel;
+    DBGrid1: TDBGrid;
+    DBGrid2: TDBGrid;
+    GroupBox1: TGroupBox;
+    Panel2: TPanel;
+    DBNavigator1: TDBNavigator;
+    StatusBar1: TStatusBar;
+    DBGrid3: TDBGrid;
+    Panel3: TPanel;
+    procedure DBNavigator1Click(Sender: TObject; Button: TNavigateBtn);
+    procedure DBGrid2KeyPress(Sender: TObject; var Key: Char);
+    procedure FormShow(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  ExpComTransactionForm: TExpComTransactionForm;
+
+implementation
+
+uses ExpDataModuleUnit;
+
+{$R *.DFM}
+
+procedure TExpComTransactionForm.DBNavigator1Click(Sender: TObject;
+  Button: TNavigateBtn);
+begin
+  if Button = nbpost then
+    ExpDataModule.ExpComissionDataSet.Refresh;
+end;
+
+procedure TExpComTransactionForm.FormShow(Sender: TObject);
+begin
+  ExpDataModule.ExpTypeDataSet.First;
+end;
+
+procedure TExpComTransactionForm.DBGrid2KeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  with ExpDataModule, ExpComissionDataSet do
+  begin
+    if UpdateStatus in [usInserted, usModified] then
+    begin
+      if (DBGrid2.SelectedIndex = 1) and
+        (FieldByName('amount').AsFloat > 0) then
+        FieldByName('percent').AsFloat := 0
+      else if (DBGrid2.SelectedIndex = 2) and
+        (FieldByName('percent').AsFloat > 0) then
+        FieldByName('amount').AsFloat := 0;
+    end;
+  end;
+end;
+
+end.

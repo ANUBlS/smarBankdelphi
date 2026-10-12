@@ -1,0 +1,53 @@
+object AccFlags: TAccFlags
+  Left = 384
+  Top = 214
+  Caption = 'AccFlags'
+  ClientHeight = 341
+  ClientWidth = 342
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'MS Sans Serif'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poDesktopCenter
+  OnActivate = FormActivate
+  OnCreate = FormCreate
+  PixelsPerInch = 96
+  TextHeight = 13
+  object CLBAccFlags: TCheckListBox
+    Left = 0
+    Top = 0
+    Width = 342
+    Height = 300
+    Align = alClient
+    Color = clSilver
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clNavy
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    ItemHeight = 13
+    ParentFont = False
+    TabOrder = 0
+  end
+  object Panel1: TPanel
+    Left = 0
+    Top = 300
+    Width = 342
+    Height = 41
+    Align = alBottom
+    TabOrder = 1
+    object ButtonApply: TButton
+      Left = 133
+      Top = 8
+      Width = 75
+      Height = 25
+      Caption = '&OK'
+      ModalResult = 1
+      TabOrder = 0
+      OnClick = ButtonApplyClick
+    end
+  end
+end

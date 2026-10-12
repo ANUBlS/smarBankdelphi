@@ -1,0 +1,674 @@
+object OrderForm: TOrderForm
+  Left = 103
+  Top = 13
+  Width = 696
+  Height = 540
+  Caption = 'SERENCAM'
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  OldCreateOrder = False
+  OnCreate = ActiveFormCreate
+  PixelsPerInch = 96
+  TextHeight = 13
+  object PageControl1: TPageControl
+    Left = 0
+    Top = 0
+    Width = 688
+    Height = 513
+    ActivePage = TabSheet2
+    Align = alClient
+    TabOrder = 0
+    object TabSheet2: TTabSheet
+      Caption = '      Сярянжам        '
+      ImageIndex = 1
+      object Panel1: TPanel
+        Left = 8
+        Top = 0
+        Width = 680
+        Height = 466
+        BevelOuter = bvNone
+        Color = clScrollBar
+        TabOrder = 0
+        object Label4: TLabel
+          Left = 16
+          Top = 378
+          Width = 94
+          Height = 13
+          Caption = 'Идаря щейятинин сядри'
+        end
+        object Label7: TLabel
+          Left = 16
+          Top = 408
+          Width = 104
+          Height = 13
+          Caption = 'Кредит шюбясинин мцдири'
+        end
+        object Label8: TLabel
+          Left = 16
+          Top = 440
+          Width = 125
+          Height = 13
+          Caption = 'Кредит шюбясинин игдисадчысы'
+        end
+        object GroupBox1: TGroupBox
+          Left = 0
+          Top = 0
+          Width = 680
+          Height = 41
+          Align = alTop
+          TabOrder = 0
+          object Label1: TLabel
+            Left = 24
+            Top = 16
+            Width = 14
+            Height = 16
+            Caption = '№'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -13
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = []
+            ParentFont = False
+          end
+          object Label2: TLabel
+            Left = 176
+            Top = 16
+            Width = 39
+            Height = 16
+            Caption = 'ТАРИХ'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -13
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = []
+            ParentFont = False
+          end
+          object Label5: TLabel
+            Left = 392
+            Top = 16
+            Width = 45
+            Height = 16
+            Caption = 'Валйута'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -13
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = []
+            ParentFont = False
+          end
+          object ContractNumEdit: TEdit
+            Left = 48
+            Top = 11
+            Width = 102
+            Height = 21
+            TabOrder = 0
+          end
+          object DTPSysdate: TDateTimePicker
+            Left = 226
+            Top = 11
+            Width = 128
+            Height = 21
+            CalAlignment = dtaLeft
+            Date = 37776.5157285301
+            Time = 37776.5157285301
+            DateFormat = dfShort
+            DateMode = dmComboBox
+            Kind = dtkDate
+            ParseInput = False
+            TabOrder = 1
+          end
+          object CBCurrencys: TDBViewComboBox
+            Left = 449
+            Top = 11
+            Width = 65
+            Height = 21
+            Style = csDropDownList
+            ItemHeight = 13
+            TabOrder = 2
+            OnChange = CBCurrencysChange
+            ListSource = DataModOrder.DataSrcCurrency
+            ListFields = 'Val_Name'
+            FieldInterval = 5
+            DropDownOnEnter = False
+            FirstAfterOpen = True
+          end
+          object STRate: TStaticText
+            Left = 519
+            Top = 12
+            Width = 110
+            Height = 20
+            Alignment = taRightJustify
+            AutoSize = False
+            BorderStyle = sbsSunken
+            Color = clSilver
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clNavy
+            Font.Height = -11
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = []
+            ParentColor = False
+            ParentFont = False
+            TabOrder = 3
+            Visible = False
+          end
+        end
+        object p5: TPanel
+          Left = 0
+          Top = 41
+          Width = 680
+          Height = 69
+          Align = alTop
+          BevelInner = bvLowered
+          TabOrder = 1
+          object RBUserType: TRadioGroup
+            Left = 2
+            Top = 2
+            Width = 111
+            Height = 65
+            Align = alLeft
+            Caption = 'Мцштяринин типи'
+            Items.Strings = (
+              'Физики шяхс  '
+              'Щцгуги шяхс  ')
+            TabOrder = 0
+          end
+          object Panel3: TPanel
+            Left = 113
+            Top = 2
+            Width = 565
+            Height = 65
+            Align = alClient
+            BevelInner = bvLowered
+            TabOrder = 1
+            object Panel5: TPanel
+              Left = 2
+              Top = 2
+              Width = 561
+              Height = 32
+              Align = alTop
+              BevelInner = bvLowered
+              TabOrder = 0
+              object Label3: TLabel
+                Left = 6
+                Top = 10
+                Width = 112
+                Height = 13
+                Caption = 'Щесаблашма Щесабы'
+                Font.Charset = DEFAULT_CHARSET
+                Font.Color = clNavy
+                Font.Height = -11
+                Font.Name = 'Azl Sans Serif'
+                Font.Style = [fsBold]
+                ParentFont = False
+              end
+              object DBEdit2: TDBEdit
+                Left = 297
+                Top = 5
+                Width = 256
+                Height = 21
+                TabStop = False
+                Color = clSilver
+                DataField = 'NAME'
+                DataSource = DataModOrder.DataSrcClientAccs
+                Font.Charset = DEFAULT_CHARSET
+                Font.Color = clNavy
+                Font.Height = -11
+                Font.Name = 'Azl Sans Serif'
+                Font.Style = []
+                ParentFont = False
+                TabOrder = 0
+              end
+              object ContractAccounts: TSearchEdit
+                Left = 123
+                Top = 5
+                Width = 169
+                Height = 21
+                TabOrder = 1
+                OnKeyPress = ContractAccountsKeyPress
+                DataSource = DataModOrder.DataSrcClientAccs
+                SearchField = 'Acc_No'
+              end
+            end
+            object Panel6: TPanel
+              Left = 2
+              Top = 34
+              Width = 561
+              Height = 32
+              Align = alTop
+              BevelInner = bvLowered
+              TabOrder = 1
+              object Label6: TLabel
+                Left = 7
+                Top = 8
+                Width = 89
+                Height = 13
+                Caption = 'Ещтиййат Щесабы'
+                Font.Charset = DEFAULT_CHARSET
+                Font.Color = clNavy
+                Font.Height = -11
+                Font.Name = 'Azl Sans Serif'
+                Font.Style = [fsBold]
+                ParentFont = False
+              end
+              object DBEdit3: TDBEdit
+                Left = 298
+                Top = 5
+                Width = 256
+                Height = 21
+                TabStop = False
+                Color = clSilver
+                DataField = 'NAME'
+                DataSource = DataModOrder.DataSrcReserveAccs
+                Font.Charset = DEFAULT_CHARSET
+                Font.Color = clNavy
+                Font.Height = -11
+                Font.Name = 'Azl Sans Serif'
+                Font.Style = []
+                ParentFont = False
+                TabOrder = 0
+              end
+              object ReserveAccounts: TSearchEdit
+                Left = 124
+                Top = 5
+                Width = 169
+                Height = 21
+                TabOrder = 1
+                DataSource = DataModOrder.DataSrcReserveAccs
+                SearchField = 'Acc_No'
+              end
+            end
+          end
+        end
+        object p4: TPanel
+          Left = 0
+          Top = 194
+          Width = 680
+          Height = 28
+          Align = alTop
+          TabOrder = 5
+          object p43: TPanel
+            Left = 617
+            Top = 1
+            Width = 62
+            Height = 26
+            Align = alRight
+            TabOrder = 2
+            object c4: TEdit
+              Left = 2
+              Top = 2
+              Width = 57
+              Height = 21
+              TabOrder = 0
+            end
+          end
+          object p42: TPanel
+            Left = 585
+            Top = 1
+            Width = 32
+            Height = 26
+            Align = alRight
+            TabOrder = 1
+            object s4: TEdit
+              Left = 2
+              Top = 2
+              Width = 27
+              Height = 21
+              TabOrder = 0
+              Text = ' - '
+            end
+          end
+          object p41: TPanel
+            Left = 433
+            Top = 1
+            Width = 152
+            Height = 26
+            Align = alRight
+            TabOrder = 0
+            object PenaltyEdit: TEdit
+              Left = 2
+              Top = 2
+              Width = 147
+              Height = 21
+              TabOrder = 0
+            end
+          end
+          object StaticText1: TStaticText
+            Left = 3
+            Top = 4
+            Width = 116
+            Height = 20
+            BorderStyle = sbsSunken
+            Caption = 'Жяримя Санксийасы'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -13
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = []
+            ParentFont = False
+            TabOrder = 3
+          end
+          object CBP: TCheckBox
+            Left = 152
+            Top = 8
+            Width = 17
+            Height = 17
+            TabStop = False
+            TabOrder = 4
+          end
+        end
+        object p3: TPanel
+          Left = 0
+          Top = 166
+          Width = 680
+          Height = 28
+          Align = alTop
+          TabOrder = 4
+          object p33: TPanel
+            Left = 617
+            Top = 1
+            Width = 62
+            Height = 26
+            Align = alRight
+            TabOrder = 2
+            object c3: TEdit
+              Left = 2
+              Top = 2
+              Width = 57
+              Height = 21
+              TabOrder = 0
+            end
+          end
+          object p32: TPanel
+            Left = 585
+            Top = 1
+            Width = 32
+            Height = 26
+            Align = alRight
+            TabOrder = 1
+            object s3: TEdit
+              Left = 2
+              Top = 2
+              Width = 27
+              Height = 21
+              TabOrder = 0
+              Text = ' - '
+            end
+          end
+          object p31: TPanel
+            Left = 433
+            Top = 1
+            Width = 152
+            Height = 26
+            Align = alRight
+            TabOrder = 0
+            object ReserveDebtEdit: TEdit
+              Left = 2
+              Top = 2
+              Width = 147
+              Height = 21
+              TabOrder = 0
+            end
+          end
+          object StaticText2: TStaticText
+            Left = 3
+            Top = 4
+            Width = 136
+            Height = 20
+            BorderStyle = sbsSunken
+            Caption = 'Ещтиййат Щесабындан  '
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -13
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = []
+            ParentFont = False
+            TabOrder = 3
+          end
+          object CBR: TCheckBox
+            Left = 152
+            Top = 8
+            Width = 17
+            Height = 17
+            TabStop = False
+            TabOrder = 4
+          end
+        end
+        object p2: TPanel
+          Left = 0
+          Top = 138
+          Width = 680
+          Height = 28
+          Align = alTop
+          TabOrder = 3
+          object p23: TPanel
+            Left = 617
+            Top = 1
+            Width = 62
+            Height = 26
+            Align = alRight
+            TabOrder = 2
+            object c2: TEdit
+              Left = 2
+              Top = 2
+              Width = 57
+              Height = 21
+              TabOrder = 0
+            end
+          end
+          object p22: TPanel
+            Left = 585
+            Top = 1
+            Width = 32
+            Height = 26
+            Align = alRight
+            TabOrder = 1
+            object s2: TEdit
+              Left = 2
+              Top = 2
+              Width = 27
+              Height = 21
+              TabOrder = 0
+              Text = ' - '
+            end
+          end
+          object p21: TPanel
+            Left = 433
+            Top = 1
+            Width = 152
+            Height = 26
+            Align = alRight
+            TabOrder = 0
+            object InterestDebtEdit: TEdit
+              Left = 2
+              Top = 2
+              Width = 147
+              Height = 21
+              TabOrder = 0
+            end
+          end
+          object StaticText3: TStaticText
+            Left = 3
+            Top = 4
+            Width = 96
+            Height = 20
+            BorderStyle = sbsSunken
+            Caption = 'Фаиз боржундан'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -13
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = []
+            ParentFont = False
+            TabOrder = 3
+          end
+          object CBI: TCheckBox
+            Left = 152
+            Top = 8
+            Width = 17
+            Height = 17
+            TabStop = False
+            Checked = True
+            State = cbChecked
+            TabOrder = 4
+          end
+        end
+        object p1: TPanel
+          Left = 0
+          Top = 110
+          Width = 680
+          Height = 28
+          Align = alTop
+          TabOrder = 2
+          object p13: TPanel
+            Left = 617
+            Top = 1
+            Width = 62
+            Height = 26
+            Align = alRight
+            TabOrder = 2
+            object C1: TEdit
+              Left = 2
+              Top = 2
+              Width = 57
+              Height = 21
+              TabOrder = 0
+            end
+          end
+          object p12: TPanel
+            Left = 585
+            Top = 1
+            Width = 32
+            Height = 26
+            Align = alRight
+            TabOrder = 1
+            object S1: TEdit
+              Left = 2
+              Top = 2
+              Width = 27
+              Height = 21
+              TabOrder = 0
+              Text = ' - '
+            end
+          end
+          object p11: TPanel
+            Left = 433
+            Top = 1
+            Width = 152
+            Height = 26
+            Align = alRight
+            TabOrder = 0
+            object FacticalDebtEdit: TEdit
+              Left = 2
+              Top = 2
+              Width = 147
+              Height = 21
+              TabOrder = 0
+            end
+          end
+          object StaticText4: TStaticText
+            Left = 3
+            Top = 4
+            Width = 103
+            Height = 20
+            BorderStyle = sbsSunken
+            Caption = 'Ясас боржундан'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -13
+            Font.Name = 'Azl Sans Serif'
+            Font.Style = []
+            ParentFont = False
+            TabOrder = 3
+          end
+          object CBF: TCheckBox
+            Left = 152
+            Top = 8
+            Width = 17
+            Height = 17
+            TabStop = False
+            Checked = True
+            State = cbChecked
+            TabOrder = 4
+          end
+        end
+        object Panel23: TPanel
+          Left = 0
+          Top = 222
+          Width = 680
+          Height = 100
+          Align = alTop
+          TabOrder = 6
+          object RGDescription: TRadioGroup
+            Left = 1
+            Top = 1
+            Width = 296
+            Height = 98
+            Align = alLeft
+            ItemIndex = 0
+            Items.Strings = (
+              'кредитдян щисся щисся  '
+              'кредити там  '
+              'йалныз фаизи  ')
+            TabOrder = 0
+          end
+          object RGReserveDescription: TRadioGroup
+            Left = 297
+            Top = 1
+            Width = 232
+            Height = 98
+            Align = alLeft
+            Items.Strings = (
+              '  № ли баланс щесабындан азалдасыныз'
+              '  № ли баланс щесабындан артырасыз ')
+            TabOrder = 1
+          end
+        end
+        object Panel24: TPanel
+          Left = 0
+          Top = 322
+          Width = 680
+          Height = 41
+          Align = alTop
+          TabOrder = 7
+          object Button1: TButton
+            Left = 582
+            Top = 9
+            Width = 75
+            Height = 25
+            Caption = 'Сярянжам'
+            TabOrder = 0
+            OnClick = Button1Click
+          end
+        end
+        object Edit1: TEdit
+          Left = 176
+          Top = 376
+          Width = 321
+          Height = 21
+          TabOrder = 8
+          Text = 'Щцсейнов С.Щ.'
+        end
+        object Edit2: TEdit
+          Left = 176
+          Top = 408
+          Width = 321
+          Height = 21
+          TabOrder = 9
+          Text = 'Сяфяров Х.М.'
+        end
+        object Edit3: TEdit
+          Left = 176
+          Top = 440
+          Width = 321
+          Height = 21
+          TabOrder = 10
+          Text = 'Мустафайев  П.Щ.'
+        end
+      end
+    end
+  end
+end

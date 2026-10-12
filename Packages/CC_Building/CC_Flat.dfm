@@ -1,0 +1,255 @@
+object CC_Add_flats: TCC_Add_flats
+  Left = 375
+  Top = 302
+  ActiveControl = Editno
+  BorderStyle = bsDialog
+  Caption = #1052#1103#1085#1079#1080#1083
+  ClientHeight = 338
+  ClientWidth = 311
+  Color = clBtnFace
+  Font.Charset = RUSSIAN_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = [fsBold]
+  OldCreateOrder = False
+  Position = poDesktopCenter
+  OnActivate = FormActivate
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 311
+    Height = 338
+    Align = alClient
+    TabOrder = 0
+    object GroupBox1: TGroupBox
+      Left = 1
+      Top = 1
+      Width = 304
+      Height = 280
+      Caption = #1052#1103#1083#1091#1084#1072#1090
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 0
+      object Label1: TLabel
+        Left = 47
+        Top = 57
+        Width = 11
+        Height = 13
+        Caption = #8470
+      end
+      object Label2: TLabel
+        Left = 42
+        Top = 86
+        Width = 20
+        Height = 13
+        Caption = #1069#1080#1088#1080#1096
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ParentFont = False
+      end
+      object Label3: TLabel
+        Left = 37
+        Top = 118
+        Width = 39
+        Height = 13
+        Caption = #1052#1103#1088#1090#1103#1073#1103
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ParentFont = False
+      end
+      object Label4: TLabel
+        Left = 38
+        Top = 150
+        Width = 23
+        Height = 13
+        Caption = #1054#1090#1072#1075
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ParentFont = False
+      end
+      object Label5: TLabel
+        Left = 32
+        Top = 181
+        Width = 32
+        Height = 13
+        Caption = #1057#1072#1097#1103#1089#1080
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ParentFont = False
+      end
+      object Label6: TLabel
+        Left = 19
+        Top = 216
+        Width = 58
+        Height = 13
+        Caption = '1 '#1084'2 '#1075#1080#1081#1084#1103#1090#1080
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ParentFont = False
+      end
+      object Label7: TLabel
+        Left = 16
+        Top = 250
+        Width = 67
+        Height = 13
+        Caption = #1062#1084#1091#1084#1080' '#1075#1080#1081#1084#1103#1090#1080
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Azl Sans Serif'
+        Font.Style = []
+        ParentFont = False
+      end
+      object Label8: TLabel
+        Left = 24
+        Top = 25
+        Width = 65
+        Height = 13
+        Caption = #1052#1103#1085#1079#1080#1083#1080#1085' '#1082#1086#1076#1091
+      end
+      object Editno: TEdit
+        Tag = 1
+        Left = 112
+        Top = 54
+        Width = 177
+        Height = 21
+        TabOrder = 1
+        OnKeyPress = EditnoKeyPress
+      end
+      object Editfloor: TEdit
+        Tag = 1
+        Left = 112
+        Top = 118
+        Width = 177
+        Height = 21
+        TabOrder = 3
+        OnKeyPress = EditfloorKeyPress
+      end
+      object Editroom: TEdit
+        Tag = 1
+        Left = 112
+        Top = 150
+        Width = 178
+        Height = 21
+        TabOrder = 4
+        OnKeyPress = EditroomKeyPress
+      end
+      object Editarea: TEdit
+        Tag = 1
+        Left = 112
+        Top = 182
+        Width = 178
+        Height = 21
+        TabOrder = 5
+        OnKeyPress = EditareaKeyPress
+      end
+      object Editprice1: TEdit
+        Tag = 1
+        Left = 112
+        Top = 214
+        Width = 177
+        Height = 21
+        TabOrder = 6
+        OnKeyPress = Editprice1KeyPress
+      end
+      object Editpricegen: TEdit
+        Tag = 1
+        Left = 112
+        Top = 246
+        Width = 179
+        Height = 21
+        TabOrder = 7
+        OnKeyPress = EditpricegenKeyPress
+      end
+      object Editentrance: TEdit
+        Tag = 1
+        Left = 112
+        Top = 86
+        Width = 177
+        Height = 21
+        TabOrder = 2
+        OnKeyPress = EditentranceKeyPress
+      end
+      object EditCode: TEdit
+        Left = 112
+        Top = 21
+        Width = 177
+        Height = 21
+        TabOrder = 0
+      end
+    end
+    object GroupBox2: TGroupBox
+      Left = 0
+      Top = 280
+      Width = 305
+      Height = 57
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Azl Sans Serif'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 1
+      object Editid: TEdit
+        Left = 56
+        Top = 16
+        Width = 57
+        Height = 21
+        TabOrder = 0
+        Text = 'Editid'
+        Visible = False
+      end
+      object Button1: TButton
+        Tag = 1
+        Left = 128
+        Top = 16
+        Width = 75
+        Height = 25
+        Caption = #1043#1103#1073#1091#1083
+        TabOrder = 1
+        OnClick = Button1Click
+      end
+      object Button2: TButton
+        Tag = 1
+        Left = 216
+        Top = 16
+        Width = 75
+        Height = 25
+        Caption = #1048#1084#1090#1080#1085#1072
+        TabOrder = 2
+        OnClick = Button2Click
+      end
+    end
+  end
+  object NLSLocalizer1: TNLSLocalizer
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = [fsBold]
+    Left = 9
+    Top = 33
+  end
+end

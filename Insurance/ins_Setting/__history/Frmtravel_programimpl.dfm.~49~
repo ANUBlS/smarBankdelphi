@@ -1,0 +1,349 @@
+object Frmtravel_program: TFrmtravel_program
+  Left = 0
+  Top = 0
+  BorderIcons = [biSystemMenu]
+  BorderStyle = bsSingle
+  ClientHeight = 426
+  ClientWidth = 455
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -12
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poDesktopCenter
+  OnKeyPress = FormKeyPress
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 14
+  object PageControl1: TPageControl
+    Left = 0
+    Top = 0
+    Width = 455
+    Height = 426
+    ActivePage = TabSheet1
+    Align = alClient
+    TabOrder = 0
+    OnChange = PageControl1Change
+    ExplicitWidth = 391
+    object TabSheet1: TTabSheet
+      Caption = 'Programlara g'#246'r'#601' s'#305#287'orta haqlar'#305
+      ExplicitWidth = 281
+      ExplicitHeight = 164
+      object GroupBox1: TGroupBox
+        Left = 0
+        Top = 0
+        Width = 447
+        Height = 115
+        Align = alTop
+        Caption = 'S'#601'yah'#601't s'#305#287'orta proqram'#305
+        TabOrder = 0
+        ExplicitWidth = 339
+        object DBGrid1: TDBGrid
+          Left = 2
+          Top = 16
+          Width = 443
+          Height = 97
+          Align = alClient
+          DataSource = DMMain.DSRins_travel_programs
+          DrawingStyle = gdsGradient
+          TabOrder = 0
+          TitleFont.Charset = DEFAULT_CHARSET
+          TitleFont.Color = clWindowText
+          TitleFont.Height = -12
+          TitleFont.Name = 'Tahoma'
+          TitleFont.Style = []
+          OnCellClick = DBGrid1CellClick
+          OnDrawColumnCell = DBGrid1DrawColumnCell
+          Columns = <
+            item
+              Expanded = False
+              FieldName = 'ID'
+              Visible = False
+            end
+            item
+              Expanded = False
+              FieldName = 'NAME'
+              Title.Caption = 'Ad'
+              Width = 200
+              Visible = True
+            end>
+        end
+      end
+      object GroupBox2: TGroupBox
+        Left = 0
+        Top = 115
+        Width = 447
+        Height = 134
+        Align = alTop
+        Caption = 'G'#252'nl'#601'r say'#305' v'#601' s'#305#287'orta m'#601'bl'#601#287'l'#601'ri'
+        TabOrder = 1
+        ExplicitLeft = 2
+        ExplicitTop = 119
+        ExplicitWidth = 383
+        object DBGrid2: TDBGrid
+          Left = 2
+          Top = 16
+          Width = 185
+          Height = 116
+          Align = alLeft
+          DataSource = DMMain.DSRins_travel_day1
+          DrawingStyle = gdsGradient
+          TabOrder = 0
+          TitleFont.Charset = DEFAULT_CHARSET
+          TitleFont.Color = clWindowText
+          TitleFont.Height = -12
+          TitleFont.Name = 'Tahoma'
+          TitleFont.Style = []
+          OnCellClick = DBGrid1CellClick
+          OnDrawColumnCell = DBGrid1DrawColumnCell
+          Columns = <
+            item
+              Expanded = False
+              FieldName = 'ID'
+              Visible = False
+            end
+            item
+              Expanded = False
+              FieldName = 'NAME'
+              Title.Caption = 'Ad'
+              Width = 150
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'VAL1'
+              Visible = False
+            end
+            item
+              Expanded = False
+              FieldName = 'VAL2'
+              Visible = False
+            end>
+        end
+        object DBGrid3: TDBGrid
+          Left = 187
+          Top = 16
+          Width = 258
+          Height = 116
+          Align = alClient
+          DataSource = DMMain.DSRins_travel_limit1
+          DrawingStyle = gdsGradient
+          TabOrder = 1
+          TitleFont.Charset = DEFAULT_CHARSET
+          TitleFont.Color = clWindowText
+          TitleFont.Height = -12
+          TitleFont.Name = 'Tahoma'
+          TitleFont.Style = []
+          OnCellClick = DBGrid1CellClick
+          OnDrawColumnCell = DBGrid1DrawColumnCell
+          Columns = <
+            item
+              Expanded = False
+              FieldName = 'ID'
+              Visible = False
+            end
+            item
+              Expanded = False
+              FieldName = 'AMMOUNT_LIMIT'
+              Title.Caption = 'Limit'
+              Width = 150
+              Visible = True
+            end>
+        end
+      end
+      object GroupBox3: TGroupBox
+        Left = 0
+        Top = 249
+        Width = 447
+        Height = 148
+        Align = alTop
+        Caption = 'S'#305#287'orta haqq'#305
+        TabOrder = 2
+        ExplicitTop = 253
+        ExplicitWidth = 383
+        object DBGrid4: TDBGrid
+          Left = 2
+          Top = 41
+          Width = 443
+          Height = 105
+          Align = alClient
+          DataSource = DMMain.DSRins_travel_setting
+          DrawingStyle = gdsGradient
+          TabOrder = 0
+          TitleFont.Charset = DEFAULT_CHARSET
+          TitleFont.Color = clWindowText
+          TitleFont.Height = -12
+          TitleFont.Name = 'Tahoma'
+          TitleFont.Style = []
+          Columns = <
+            item
+              Expanded = False
+              FieldName = 'ID'
+              Visible = False
+            end
+            item
+              Expanded = False
+              FieldName = 'DAY_ID'
+              Visible = False
+            end
+            item
+              Expanded = False
+              FieldName = 'LIMIT_ID'
+              Visible = False
+            end
+            item
+              Expanded = False
+              FieldName = 'PROGRAM_ID'
+              Visible = False
+            end
+            item
+              Expanded = False
+              FieldName = 'AMOUNT'
+              Title.Caption = 'S'#305#287'orta haqq'#305
+              Width = 100
+              Visible = True
+            end>
+        end
+        object DBNavigator3: TDBNavigator
+          Left = 2
+          Top = 16
+          Width = 443
+          Height = 25
+          DataSource = DMMain.DSRins_travel_setting
+          Align = alTop
+          TabOrder = 1
+          ExplicitLeft = 48
+          ExplicitWidth = 240
+        end
+      end
+    end
+    object TabSheet2: TTabSheet
+      Caption = 'G'#252'nl'#601'r v'#601' s'#305#287'orta m'#601'bl'#601#287'l'#601'rinin sazlanmas'#305
+      ImageIndex = 1
+      ExplicitLeft = 8
+      ExplicitTop = 29
+      ExplicitWidth = 383
+      object GroupBox4: TGroupBox
+        Left = 0
+        Top = 177
+        Width = 447
+        Height = 220
+        Align = alClient
+        Caption = 'S'#305#287'orta m'#601'bl'#601#287'l'#601'ri'
+        TabOrder = 0
+        ExplicitTop = 0
+        ExplicitWidth = 339
+        ExplicitHeight = 115
+        object DBGrid5: TDBGrid
+          Left = 2
+          Top = 41
+          Width = 443
+          Height = 177
+          Align = alClient
+          DataSource = DMMain.DSRins_travel_limit
+          DrawingStyle = gdsGradient
+          TabOrder = 0
+          TitleFont.Charset = DEFAULT_CHARSET
+          TitleFont.Color = clWindowText
+          TitleFont.Height = -12
+          TitleFont.Name = 'Tahoma'
+          TitleFont.Style = []
+          Columns = <
+            item
+              Expanded = False
+              FieldName = 'ID'
+              Visible = False
+            end
+            item
+              Expanded = False
+              FieldName = 'AMMOUNT_LIMIT'
+              Title.Caption = 'Limit'
+              Width = 200
+              Visible = True
+            end>
+        end
+        object DBNavigator2: TDBNavigator
+          Left = 2
+          Top = 16
+          Width = 443
+          Height = 25
+          DataSource = DMMain.DSRins_travel_limit
+          Align = alTop
+          TabOrder = 1
+          ExplicitLeft = 48
+          ExplicitTop = 40
+          ExplicitWidth = 240
+        end
+      end
+      object GroupBox5: TGroupBox
+        Left = 0
+        Top = 0
+        Width = 447
+        Height = 177
+        Align = alTop
+        Caption = 'G'#252'nl'#601'r'
+        TabOrder = 1
+        ExplicitLeft = 2
+        ExplicitTop = -6
+        ExplicitWidth = 432
+        object DBGrid6: TDBGrid
+          Left = 2
+          Top = 41
+          Width = 443
+          Height = 134
+          Align = alClient
+          DataSource = DMMain.DSRins_travel_day
+          DrawingStyle = gdsGradient
+          TabOrder = 0
+          TitleFont.Charset = DEFAULT_CHARSET
+          TitleFont.Color = clWindowText
+          TitleFont.Height = -12
+          TitleFont.Name = 'Tahoma'
+          TitleFont.Style = []
+          Columns = <
+            item
+              Expanded = False
+              FieldName = 'ID'
+              Visible = False
+            end
+            item
+              Expanded = False
+              FieldName = 'NAME'
+              Title.Caption = 'Ad'
+              Width = 200
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'VAL1'
+              Title.Caption = 'Qiym'#601't1'
+              Width = 50
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'VAL2'
+              Title.Caption = 'Qiym'#601't2'
+              Width = 50
+              Visible = True
+            end>
+        end
+        object DBNavigator1: TDBNavigator
+          Left = 2
+          Top = 16
+          Width = 443
+          Height = 25
+          DataSource = DMMain.DSRins_travel_day
+          Align = alTop
+          TabOrder = 1
+          ExplicitLeft = 48
+          ExplicitTop = 24
+          ExplicitWidth = 240
+        end
+      end
+    end
+  end
+end

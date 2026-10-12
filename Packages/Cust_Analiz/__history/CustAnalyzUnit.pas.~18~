@@ -1,0 +1,651 @@
+﻿unit CustAnalyzUnit;
+
+{$WARN SYMBOL_PLATFORM OFF}
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActiveX, AxCtrls, CustAnalyz_TLB, StdVcl, StdCtrls, ExtCtrls, XFSCtrls, Grids,
+  XDBGrids, Mask, DBCtrls, DBCtrlsEh, Buttons, DBGridEh, DBLookupEh;
+
+type
+  TCustAnalyz = class(TActiveForm, ICustAnalyz)
+    XFPanel1: TXFPanel;
+    XFPanel2: TXFPanel;
+    XFLabel1: TXFLabel;
+    CBSearch: TComboBox;
+    EditSearch: TEdit;
+    XFRadioButton1: TXFRadioButton;
+    XFLabel2: TXFLabel;
+    XFPanel4: TXFPanel;
+    XFPanel5: TXFPanel;
+    XFGroupBox1: TXFGroupBox;
+    XFLabel3: TXFLabel;
+    DBEdit1: TDBEdit;
+    XFLabel4: TXFLabel;
+    XFLabel8: TXFLabel;
+    XFLabel7: TXFLabel;
+    DBEdit2: TDBEdit;
+    DBEdit3: TDBEdit;
+    DBEdit4: TDBEdit;
+    DBEdit5: TDBEdit;
+    XFGroupBox2: TXFGroupBox;
+    XDBGrid3: TXDBGrid;
+    Girovlar: TXFGroupBox;
+    XFGroupBox3: TXFGroupBox;
+    XDBGrid1: TXDBGrid;
+    XDBGrid4: TXDBGrid;
+    XFGroupBox4: TXFGroupBox;
+    XDBGrid2: TXDBGrid;
+    XFGroupBox5: TXFGroupBox;
+    XFLabel13: TXFLabel;
+    XFLabel14: TXFLabel;
+    XFLabel15: TXFLabel;
+    XFLabel16: TXFLabel;
+    XFLabel17: TXFLabel;
+    XFBitBtn1: TXFBitBtn;
+    DBEdit12: TDBEdit;
+    DBEdit13: TDBEdit;
+    DBEdit14: TDBEdit;
+    DBEdit15: TDBEdit;
+    DBEdit16: TDBEdit;
+    XFGroupBox6: TXFGroupBox;
+    XFLabel18: TXFLabel;
+    XFLabel19: TXFLabel;
+    XFBitBtn2: TXFBitBtn;
+    DBEdit17: TDBEdit;
+    DBEdit18: TDBEdit;
+    XFGroupBox7: TXFGroupBox;
+    XFLabel5: TXFLabel;
+    DBEdit6: TDBEdit;
+    XFLabel9: TXFLabel;
+    DBEdit8: TDBEdit;
+    XFLabel10: TXFLabel;
+    XFLabel23: TXFLabel;
+    DBEdit21: TDBEdit;
+    XFLabel12: TXFLabel;
+    DBEdit22: TDBEdit;
+    XFLabel21: TXFLabel;
+    DBEdit20: TDBEdit;
+    DBEdit10: TDBEdit;
+    XFLabel11: TXFLabel;
+    XFLabel22: TXFLabel;
+    DBEdit11: TDBEdit;
+    DBMemo1: TDBMemo;
+    DBEdit7: TDBEdit;
+    XFLabel6: TXFLabel;
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure EditSearchChange(Sender: TObject);
+    procedure XDBGrid1DrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TXColumn; State: TGridDrawState);
+    procedure XFBitBtn2Click(Sender: TObject);
+    procedure XFBitBtn1Click(Sender: TObject);
+  private
+    { Private declarations }
+    FEvents: ICustAnalyzEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure MouseEnterEvent(Sender: TObject);
+    procedure MouseLeaveEvent(Sender: TObject);
+    procedure PaintEvent(Sender: TObject);
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_AlignDisabled: WordBool; safecall;
+    function Get_AlignWithMargins: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_BorderWidth: Integer; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_DockSite: WordBool; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_ExplicitHeight: Integer; safecall;
+    function Get_ExplicitLeft: Integer; safecall;
+    function Get_ExplicitTop: Integer; safecall;
+    function Get_ExplicitWidth: Integer; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_MouseInClient: WordBool; safecall;
+    function Get_ParentCustomHint: WordBool; safecall;
+    function Get_ParentDoubleBuffered: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PopupMode: TxPopupMode; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_ScreenSnap: WordBool; safecall;
+    function Get_SnapBuffer: Integer; safecall;
+    function Get_UseDockManager: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_AlignWithMargins(Value: WordBool); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_BorderWidth(Value: Integer); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_DockSite(Value: WordBool); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_ParentCustomHint(Value: WordBool); safecall;
+    procedure Set_ParentDoubleBuffered(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PopupMode(Value: TxPopupMode); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_ScreenSnap(Value: WordBool); safecall;
+    procedure Set_SnapBuffer(Value: Integer); safecall;
+    procedure Set_UseDockManager(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+  public
+   vCustId: Integer;
+    { Public declarations }
+    procedure Initialize; override;
+  end;
+
+implementation
+
+uses ComObj, ComServ, DataAnalyz, SeduleUnit, PaymentsUnit1pas;
+
+{$R *.DFM}
+
+{ TCustAnalyz }
+
+procedure TCustAnalyz.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_CustAnalyzPage); }
+end;
+
+procedure TCustAnalyz.EditSearchChange(Sender: TObject);
+begin
+ with DataModCustAnalyz do
+   begin
+ if Length(EditSearch.Text)<>0 then
+  begin
+   ODS_CUST.Close;
+  case CBSearch.ItemIndex of
+  0:ODS_CUST.SQL[3]:='and ID like '''+EditSearch.Text+'%''';
+  1:ODS_CUST.SQL[3]:='and upper(cust_name)  like upper('''+EditSearch.Text+'%'')';
+  2:ODS_CUST.SQL[3]:='and upper(firstname ) like upper('''+EditSearch.Text+'%'')';
+  3:ODS_CUST.SQL[3]:='and upper(lastname)   like upper('''+EditSearch.Text+'%'')';
+  4:ODS_CUST.SQL[3]:='and upper(patronymic) like upper('''+EditSearch.Text+'%'')';
+  5:ODS_CUST.SQL[3]:='and upper(cust_type) like upper('''+EditSearch.Text+'%'')';
+  end;
+  ODS_CUST.Open;
+  end
+  else
+  begin
+  ODS_CUST.Close;
+  ODS_CUST.SQL[3]:='';
+  ODS_CUST.Open;
+
+  end;
+   end;
+end;
+
+
+procedure TCustAnalyz.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as ICustAnalyzEvents;
+  inherited EventSinkChanged(EventSink);
+end;
+
+procedure TCustAnalyz.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnMouseEnter := MouseEnterEvent;
+  OnMouseLeave := MouseLeaveEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TCustAnalyz.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TCustAnalyz.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TCustAnalyz.Get_AlignDisabled: WordBool;
+begin
+  Result := AlignDisabled;
+end;
+
+function TCustAnalyz.Get_AlignWithMargins: WordBool;
+begin
+  Result := AlignWithMargins;
+end;
+
+function TCustAnalyz.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TCustAnalyz.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TCustAnalyz.Get_BorderWidth: Integer;
+begin
+  Result := Integer(BorderWidth);
+end;
+
+function TCustAnalyz.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TCustAnalyz.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TCustAnalyz.Get_DockSite: WordBool;
+begin
+  Result := DockSite;
+end;
+
+function TCustAnalyz.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TCustAnalyz.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TCustAnalyz.Get_ExplicitHeight: Integer;
+begin
+  Result := ExplicitHeight;
+end;
+
+function TCustAnalyz.Get_ExplicitLeft: Integer;
+begin
+  Result := ExplicitLeft;
+end;
+
+function TCustAnalyz.Get_ExplicitTop: Integer;
+begin
+  Result := ExplicitTop;
+end;
+
+function TCustAnalyz.Get_ExplicitWidth: Integer;
+begin
+  Result := ExplicitWidth;
+end;
+
+function TCustAnalyz.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TCustAnalyz.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TCustAnalyz.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TCustAnalyz.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TCustAnalyz.Get_MouseInClient: WordBool;
+begin
+  Result := MouseInClient;
+end;
+
+function TCustAnalyz.Get_ParentCustomHint: WordBool;
+begin
+  Result := ParentCustomHint;
+end;
+
+function TCustAnalyz.Get_ParentDoubleBuffered: WordBool;
+begin
+  Result := ParentDoubleBuffered;
+end;
+
+function TCustAnalyz.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TCustAnalyz.Get_PopupMode: TxPopupMode;
+begin
+  Result := Ord(PopupMode);
+end;
+
+function TCustAnalyz.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TCustAnalyz.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TCustAnalyz.Get_ScreenSnap: WordBool;
+begin
+  Result := ScreenSnap;
+end;
+
+function TCustAnalyz.Get_SnapBuffer: Integer;
+begin
+  Result := SnapBuffer;
+end;
+
+function TCustAnalyz.Get_UseDockManager: WordBool;
+begin
+  Result := UseDockManager;
+end;
+
+function TCustAnalyz.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TCustAnalyz.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TCustAnalyz._Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TCustAnalyz.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TCustAnalyz.ActiveFormCreate(Sender: TObject);
+ var i:integer;
+ a:string;
+begin
+DataModCustAnalyz:=TDataModCustAnalyz.create(self);
+FormSedule:=TFormSedule.create(self);
+FormPayments:=TFormPayments.create(self);
+ CBSearch.Clear;
+for i := 0 to DataModCustAnalyz.Ods_cust.FieldCount-1 do
+CBSearch.Items.Add(DataModCustAnalyz.Ods_cust.Fields.Fields[i].fieldName);
+ CBSearch.ItemIndex:=0;
+  if not(DataModCustAnalyz.ODS_CUST.Active = True) then
+    DataModCustAnalyz.ODS_CUST.Open
+  else
+    DataModCustAnalyz.ODS_CUST.Refresh;
+  vCustId := -1;
+ {showmessage(DataModCustAnalyz.Ods_custID.AsString);
+  with  DataModCustAnalyz do
+  begin
+   Ods_portfol.Close;
+   Ods_portfol.SetVariable('v_boorowerid',Ods_custID.AsInteger);
+   Ods_portfol.open;
+  end;  }
+end;
+
+procedure TCustAnalyz.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TCustAnalyz.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TCustAnalyz.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TCustAnalyz.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TCustAnalyz.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TCustAnalyz.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TCustAnalyz.MouseEnterEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnMouseEnter;
+end;
+
+procedure TCustAnalyz.MouseLeaveEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnMouseLeave;
+end;
+
+procedure TCustAnalyz.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TCustAnalyz.Set_AxBorderStyle(Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TCustAnalyz.Set_AlignWithMargins(Value: WordBool);
+begin
+  AlignWithMargins := Value;
+end;
+
+procedure TCustAnalyz.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TCustAnalyz.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TCustAnalyz.Set_BorderWidth(Value: Integer);
+begin
+  BorderWidth := TBorderWidth(Value);
+end;
+
+procedure TCustAnalyz.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TCustAnalyz.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TCustAnalyz.Set_DockSite(Value: WordBool);
+begin
+  DockSite := Value;
+end;
+
+procedure TCustAnalyz.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TCustAnalyz.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TCustAnalyz.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TCustAnalyz.Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TCustAnalyz.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := string(Value);
+end;
+
+procedure TCustAnalyz.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TCustAnalyz.Set_ParentCustomHint(Value: WordBool);
+begin
+  ParentCustomHint := Value;
+end;
+
+procedure TCustAnalyz.Set_ParentDoubleBuffered(Value: WordBool);
+begin
+  ParentDoubleBuffered := Value;
+end;
+
+procedure TCustAnalyz.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TCustAnalyz.Set_PopupMode(Value: TxPopupMode);
+begin
+  PopupMode := TPopupMode(Value);
+end;
+
+procedure TCustAnalyz.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TCustAnalyz.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TCustAnalyz.Set_ScreenSnap(Value: WordBool);
+begin
+  ScreenSnap := Value;
+end;
+
+procedure TCustAnalyz.Set_SnapBuffer(Value: Integer);
+begin
+  SnapBuffer := Value;
+end;
+
+procedure TCustAnalyz.Set_UseDockManager(Value: WordBool);
+begin
+  UseDockManager := Value;
+end;
+
+procedure TCustAnalyz.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+procedure TCustAnalyz.XDBGrid1DrawColumnCell(Sender: TObject; const Rect: TRect;
+  DataCol: Integer; Column: TXColumn; State: TGridDrawState);
+begin
+with DataModCustAnalyz do
+begin
+case  Ods_custMUSTERI_TIPI.AsInteger of
+0:begin
+ XFRadioButton1.Caption:='Hüquqi şəxs'
+
+end;
+1:begin
+ XFRadioButton1.Caption:='Fiziki şəxs';
+// ShowMessage(XFRadioButton1.Caption);
+end;
+2:begin
+ XFRadioButton1.Caption:='Fiziki sahibkar'
+end;
+3:begin
+ XFRadioButton1.Caption:='Fiziki şəxs və sahibkar'
+end;
+end;
+end;
+  with  DataModCustAnalyz do
+  begin
+
+   Ods_zamin.Close;
+   Ods_zamin.SetVariable('v_creditid',Ods_portfolid.AsInteger);
+   Ods_zamin.open;
+  end;
+  with  DataModCustAnalyz do
+  begin
+   Ods_girov.Close;
+   Ods_girov.SetVariable('v_creditid',Ods_portfolid.AsInteger);
+   Ods_girov.open;
+  end;
+
+
+end;
+
+procedure TCustAnalyz.XFBitBtn1Click(Sender: TObject);
+begin
+FormPayments.ShowModal
+end;
+
+procedure TCustAnalyz.XFBitBtn2Click(Sender: TObject);
+begin
+FormSedule.ShowModal;
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TCustAnalyz,
+    Class_CustAnalyz,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

@@ -1,0 +1,57 @@
+unit UUnderTable;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, OleCtnrs, StdCtrls, Mask, DBCtrls, HintBox, Buttons, ExtCtrls,db;
+
+type
+  TfmUndertable = class(TForm)
+    Panel1: TPanel;
+    BitBtn1: TBitBtn;
+    BitBtn2: TBitBtn;
+    RadioButton1: TRadioButton;
+    RadioButton2: TRadioButton;
+    hbError: THintBox;
+    DBEdit1: TDBEdit;
+    OleContainer1: TOleContainer;
+    Panel2: TPanel;
+    BitBtn3: TBitBtn;
+    procedure OleContainer1Exit(Sender: TObject);
+    procedure Panel1DblClick(Sender: TObject);
+    procedure BitBtn2Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  fmUndertable: TfmUndertable;
+
+implementation
+
+uses DMMKPolicyImpl;
+
+{$R *.dfm}
+
+procedure TfmUndertable.BitBtn2Click(Sender: TObject);
+begin
+  with DMMKPolicy, ODSTemplates do
+   Cancel;
+end;
+
+procedure TfmUndertable.OleContainer1Exit(Sender: TObject);
+begin
+    with OleContainer1 do
+    Close //DoVerb(ovDiscardUndoState);
+end;
+
+procedure TfmUndertable.Panel1DblClick(Sender: TObject);
+begin
+  with DMMKPolicy, ODSTemplates do
+    if State = dsEdit then hbError.ShowMessage('edit') else hbError.ShowMessage('Insert');
+end;
+
+end.

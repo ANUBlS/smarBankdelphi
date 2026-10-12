@@ -1,0 +1,174 @@
+﻿unit fmAddMKBlankImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ExtCtrls, XFSCtrls, StdCtrls, Mask, DBCtrls, ComCtrls,
+
+   AxCtrls, MKBlank_TLB, StdVcl,  Buttons,
+  Db, OracleData, SBPlgAx50_TLB, Oracle, DBViewComboBox, HintBox,
+  CurrencyEdit,  PlgModalContainer, Grids, DBGrids,
+  INSWordExporter, XDBGrids;
+type
+  TfmAddMKBlank = class(TForm)
+    XFPanel1: TXFPanel;
+    XFButton1: TXFButton;
+    XFButton2: TXFButton;
+    XFPanel2: TXFPanel;
+    XFLabel1: TXFLabel;
+    XFLabel2: TXFLabel;
+    XFLabel3: TXFLabel;
+    XFLabel4: TXFLabel;
+    XFLabel5: TXFLabel;
+    XFLabel6: TXFLabel;
+    DBLookupComboBox1: TDBLookupComboBox;
+    DBLookupComboBox2: TDBLookupComboBox;
+    DBLookupComboBox3: TDBLookupComboBox;
+    DBLookupComboBox4: TDBLookupComboBox;
+    DBEdit1: TDBEdit;
+    DBLookupComboBox5: TDBLookupComboBox;
+    DSMarka: TOracleDataSet;
+    DSModel: TOracleDataSet;
+    DSTipi: TOracleDataSet;
+    DSReng: TOracleDataSet;
+    DSMarkaID: TFloatField;
+    DSMarkaNAME: TWideStringField;
+    DSMarkaSTATE_ID: TFloatField;
+    DSMarkaCALCOPTIONS: TIntegerField;
+    DSModelID: TFloatField;
+    DSModelNAME: TWideStringField;
+    DSModelMARK_ID: TFloatField;
+    DSModelCALCOPTIONS: TIntegerField;
+    DSTipiID: TFloatField;
+    DSTipiNAME: TWideStringField;
+    DSRengID: TFloatField;
+    DSRengNAME: TWideStringField;
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure XFButton2Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure XFButton1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  fmAddMKBlank: TfmAddMKBlank;
+
+implementation
+
+uses UMKBlank,UMKDataMod,sboapiDataModuleImpl,CommanParametrs;
+
+{$R *.dfm}
+
+procedure TfmAddMKBlank.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+if ord(key)=vk_escape then close;
+
+end;
+
+procedure TfmAddMKBlank.FormShow(Sender: TObject);
+begin
+if fmMKBlank.s='I' then
+begin
+  DBLookupComboBox1.KeyValue:=null;
+  DBLookupComboBox2.KeyValue:=null;
+  DBLookupComboBox3.KeyValue:=null;
+  DBLookupComboBox4.KeyValue:=null;
+  DBEdit1.Text:='';
+  //DateTimePicker1.DateTime:=InsMKDataMod.DSSysdat.FieldByName('tek_dat').AsDateTime;
+end;
+
+end;
+
+procedure TfmAddMKBlank.XFButton1Click(Sender: TObject);
+begin
+if contractstatus=1 then
+ begin
+   showmessage('Diqqət! Bu müqavilə bağlanmış müqavilə olduğundan heç bir deyişiklik oluna bilməz.');
+   exit;
+ end;
+
+if DBLookupComboBox1.KeyValue=null then
+begin
+  showmessage('Markası sahəsi boşdur!');
+  exit;
+
+end;
+
+if DBLookupComboBox2.KeyValue=null then
+begin
+  showmessage('Modeli sahəsi boşdur!');
+  exit;
+
+end;
+
+if DBLookupComboBox3.KeyValue=null then
+begin
+  showmessage('Tipi sahəsi boşdur!');
+  exit;
+
+end;
+
+if DBLookupComboBox4.KeyValue=null then
+begin
+  showmessage('Rəngi sahəsi boşdur!');
+  exit;
+
+end;
+if DBLookupComboBox5.KeyValue=null then
+begin
+  showmessage('Buraxılış ili sahəsi boşdur!');
+  exit;
+
+end;
+
+{if DBEdit1.Text='' then
+begin
+  showmessage('İstifadə xarakteri sahəsi boşdur!');
+  exit;
+
+end;}
+  // showmessage(DBLookupComboBox1.text);
+   DSMarka.Close;
+   DSMarka.SetVariable('p_name',DBLookupComboBox1.text);
+   DSMarka.Open;
+   //showmessage(inttostr(DSMarka.FieldByName('id').AsInteger));
+   DSModel.Close;
+   DSModel.SetVariable('p_name',DBLookupComboBox2.text);
+   DSModel.Open;
+
+   DSTipi.Close;
+   DSTipi.SetVariable('p_name',DBLookupComboBox3.text);
+   DSTipi.Open;
+
+   DSReng.Close;
+   DSReng.SetVariable('p_name',DBLookupComboBox4.text);
+   DSReng.Open;
+
+
+    with InsMKDataMod.ODSMotorKasko do
+    if Active and (State in [dsEdit, dsInsert]) then
+    begin
+    //showmessage(inttostr(InsMKDataMod.ODSMarks.FieldByName('id').AsInteger));
+
+   FieldByName('marka_id').AsInteger:=DSMarka.FieldByName('id').AsInteger;
+   FieldByName('model_id').AsInteger:=DSModel.FieldByName('id').AsInteger;
+   FieldByName('color_id').AsInteger:=DSTipi.FieldByName('id').AsInteger;
+   FieldByName('insuredtype_id').AsInteger:=DSReng.FieldByName('id').AsInteger;
+       Post;
+       RefreshRecord;
+      // fmAddMKBlank.Close;
+      fmAddMKBlank.Free;
+    end;
+    showmessage('Məlumat yadda saxlandı.');
+end;
+
+procedure TfmAddMKBlank.XFButton2Click(Sender: TObject);
+begin
+Close;
+end;
+
+end.

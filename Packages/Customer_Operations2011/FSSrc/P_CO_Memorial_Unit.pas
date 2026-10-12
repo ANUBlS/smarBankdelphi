@@ -1,0 +1,141 @@
+unit P_CO_Memorial_Unit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, NLSDialogs,Oracledata, Oracle,Db,
+  StdCtrls, Grids, DBGrids, Mask, DBCtrls, CurrencyEdit, ExtCtrls, ComCtrls,
+  NLSLocalizer;
+
+type
+  TP_CO_MemorialForm = class(TForm)
+    page3: TPageControl;
+    TabSheet1: TTabSheet;
+    Panel1: TPanel;
+    Label1: TLabel;
+    Label2: TLabel;
+    Bevel1: TBevel;
+    DebitAmountEdit: TCurrencyEdit;
+    DebitLAmountEdit: TCurrencyEdit;
+    DBEdit5: TDBEdit;
+    DBEdit6: TDBEdit;
+    Panel2: TPanel;
+    DBEdit1: TDBEdit;
+    DebitTransactionsGrid: TDBGrid;
+    TabSheet2: TTabSheet;
+    Panel5: TPanel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Bevel2: TBevel;
+    CreditAmountEdit: TCurrencyEdit;
+    CreditLAmountEdit: TCurrencyEdit;
+    DBEdit3: TDBEdit;
+    DBEdit4: TDBEdit;
+    Panel4: TPanel;
+    DBEdit2: TDBEdit;
+    DBGrid1: TDBGrid;
+    Panel3: TPanel;
+    Button2: TButton;
+    NLSLocalizer1: TNLSLocalizer;
+    procedure Button2Click(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+
+  
+
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+      AccountID: Longint;
+    AccountNumber: String;
+    procedure OpenDataControls(BeginDate, EndDate: TDateTime);
+    procedure FillAmounts(DataSet: TDataSet; AmountField, LAmountField: TField;
+          AmountEdit, LAmountEdit: TCurrencyEdit);
+  end;
+
+var
+  P_CO_MemorialForm: TP_CO_MemorialForm;
+
+implementation
+
+uses P_Datamod_Unit, P_ch_Unit, P_Co_MemorialRep_Unit,
+  P_CO_MemorialRep1_Unit;
+
+{$R *.DFM}
+
+
+procedure TP_CO_MemorialForm.OpenDataControls(BeginDate, EndDate: TDateTime);
+
+ procedure Open_(DataSet: TOracleDataSet);
+ begin
+  with DataSet do
+  begin
+   CloseAll;
+   SetVariable('AccountID', AccountID);
+   SetVariable('StartDate', BeginDate);
+   SetVariable('EndDate', EndDate);
+   Open;
+  end;
+ end;
+
+begin
+ with P_DataModuleFS.Account do
+  AccountID :=FieldByName('ID').AsInteger;
+
+ Open_(P_DataModuleFS.DebetTransactionsData);
+ Open_(P_DataModuleFS.CreditTransactionsData);
+
+
+
+
+
+end;
+ procedure TP_CO_MemorialForm.FillAmounts(DataSet: TDataSet; AmountField, LAmountField: TField;
+  AmountEdit, LAmountEdit: TCurrencyEdit);
+var
+  Amount: Currency;
+  LAmount: Currency;
+begin
+  Amount := 0.0;
+  LAmount := 0.0;
+  with DataSet do
+  begin
+    DisableControls;
+    try
+      while not Eof do
+      begin
+        Amount := Amount + AmountField.Value;
+        LAmount := LAmount + LAmountField.Value;
+        Next;
+      end;
+    finally
+      EnableControls;
+    end;
+  end;
+  AmountEdit.Value := Amount;
+  LAmountEdit.Value := LAmount;
+end;
+procedure TP_CO_MemorialForm.Button2Click(Sender: TObject);
+begin
+try
+P_ch_Form :=TP_ch_Form.Create(self);
+  P_ch_Form.Showmodal;
+  finally
+  P_ch_Form.Release;
+  end;
+end;
+
+procedure TP_CO_MemorialForm.FormActivate(Sender: TObject);
+begin
+P_CO_MemorialRep :=TP_CO_MemorialRep.create(self);
+P_CO_MemorialRep1 :=TP_CO_MemorialRep1.create(self);
+P_DataModuleFS.Account.open;
+end;
+
+procedure TP_CO_MemorialForm.FormCreate(Sender: TObject);
+begin
+P_DataModuleFS.memorial_date.open;
+end;
+
+end.

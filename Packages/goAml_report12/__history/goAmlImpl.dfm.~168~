@@ -1,0 +1,315 @@
+object goAml: TgoAml
+  Left = 0
+  Top = 0
+  Width = 993
+  Height = 460
+  Caption = 'goAml'
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  OnCreate = ActiveFormCreate
+  PixelsPerInch = 96
+  TextHeight = 13
+  object RE_Errors: TRichEdit
+    Left = 0
+    Top = 358
+    Width = 993
+    Height = 102
+    Align = alBottom
+    Font.Charset = TURKISH_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
+    PopupMenu = PM_RE_Errors
+    ReadOnly = True
+    ScrollBars = ssVertical
+    TabOrder = 0
+  end
+  object PC1: TPageControl
+    Left = 0
+    Top = 0
+    Width = 993
+    Height = 358
+    ActivePage = TabSheet1
+    Align = alClient
+    DoubleBuffered = False
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -12
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
+    MultiLine = True
+    ParentDoubleBuffered = False
+    ParentFont = False
+    TabOrder = 1
+    object TabSheet1: TTabSheet
+      Caption = 'Cari '#601'm'#601'liyyatlar (101-CTR)'
+      object Panel1: TPanel
+        Left = 0
+        Top = 34
+        Width = 985
+        Height = 295
+        Align = alClient
+        BevelInner = bvLowered
+        TabOrder = 0
+        object Panel2: TPanel
+          Left = 2
+          Top = 2
+          Width = 981
+          Height = 291
+          Align = alClient
+          TabOrder = 0
+          object DBGrid2: TDBGrid
+            Left = 1
+            Top = 1
+            Width = 979
+            Height = 81
+            Align = alClient
+            DrawingStyle = gdsGradient
+            Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit, dgTitleClick, dgTitleHotTrack]
+            PopupMenu = PopupMenu1
+            TabOrder = 0
+            TitleFont.Charset = DEFAULT_CHARSET
+            TitleFont.Color = clWindowText
+            TitleFont.Height = -12
+            TitleFont.Name = 'Tahoma'
+            TitleFont.Style = [fsBold]
+            OnCellClick = DBGrid2CellClick
+          end
+          object DBGridTransactions1: TDBGrid
+            Left = 1
+            Top = 82
+            Width = 979
+            Height = 208
+            Align = alBottom
+            DrawingStyle = gdsGradient
+            Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit, dgTitleClick, dgTitleHotTrack]
+            TabOrder = 1
+            TitleFont.Charset = DEFAULT_CHARSET
+            TitleFont.Color = clWindowText
+            TitleFont.Height = -12
+            TitleFont.Name = 'Tahoma'
+            TitleFont.Style = [fsBold]
+            Columns = <
+              item
+                Expanded = False
+                FieldName = 'TRANSACTIONNUMBER'
+                Title.Caption = #8470
+                Visible = True
+              end
+              item
+                Expanded = False
+                FieldName = 'DATE_TRANSACTION'
+                Title.Caption = 'Tarix'
+                Visible = True
+              end
+              item
+                Expanded = False
+                FieldName = 'ACTION'
+                Title.Caption = 'Status'
+                Visible = True
+              end
+              item
+                Expanded = False
+                FieldName = 'TRANSMODE_CODE'
+                Title.Caption = #399'm'#601'liyyat'#305'n n'#246'v'#252
+                Width = 85
+                Visible = True
+              end
+              item
+                Expanded = False
+                FieldName = 'REPORT_CODE'
+                Title.Caption = 'Hesabat kodu'
+                Width = 75
+                Visible = True
+              end
+              item
+                Expanded = False
+                FieldName = 'DEBTCUSTNAME'
+                Title.Caption = 'D. M'#252#351't'#601'rinin ad'#305
+                Width = 180
+                Visible = True
+              end
+              item
+                Expanded = False
+                FieldName = 'DEBITACCNO'
+                Title.Caption = 'Debet'
+                Width = 190
+                Visible = True
+              end
+              item
+                Alignment = taCenter
+                Expanded = False
+                FieldName = 'DEBITCURRENCYSNAME'
+                Title.Alignment = taCenter
+                Title.Caption = '$'
+                Width = 30
+                Visible = True
+              end
+              item
+                Expanded = False
+                FieldName = 'CREDCUSTNAME'
+                Title.Caption = 'K. M'#252#351't'#601'rinin ad'#305
+                Width = 180
+                Visible = True
+              end
+              item
+                Expanded = False
+                FieldName = 'CREDITACCNO'
+                Title.Caption = 'Kredit'
+                Width = 190
+                Visible = True
+              end
+              item
+                Alignment = taCenter
+                Expanded = False
+                FieldName = 'CREDITCURRENCYSNAME'
+                Title.Alignment = taCenter
+                Title.Caption = '$'
+                Width = 30
+                Visible = True
+              end
+              item
+                Expanded = False
+                FieldName = 'D_FOREIGN_AMOUNT'
+                Title.Caption = 'D. M'#601'bl'#601#287
+                Visible = True
+              end
+              item
+                Expanded = False
+                FieldName = 'C_FOREIGN_AMOUNT'
+                Title.Caption = 'K. M'#601'bl'#601#287
+                Visible = True
+              end
+              item
+                Expanded = False
+                FieldName = 'AMOUNT_LOCAL'
+                Title.Caption = 'Ekvivalent'
+                Visible = True
+              end
+              item
+                Expanded = False
+                FieldName = 'DEBITBALANCE'
+                Title.Caption = 'D. Balance'
+                Visible = True
+              end
+              item
+                Expanded = False
+                FieldName = 'CREDITBALANCE'
+                Title.Caption = 'K. Balans'
+                Visible = True
+              end
+              item
+                Expanded = False
+                FieldName = 'TRANSACTION_DESCRIPTION'
+                Title.Caption = 'T'#601'yinat'#305
+                Width = 100
+                Visible = True
+              end
+              item
+                Expanded = False
+                FieldName = 'KASSANOVU'
+                Visible = True
+              end
+              item
+                Expanded = False
+                FieldName = 'dcustid'
+                Title.Caption = 'D.Musteri'
+                Visible = True
+              end
+              item
+                Expanded = False
+                FieldName = 'KCUSTID'
+                Title.Caption = 'K.Musteri'
+                Visible = True
+              end
+              item
+                Expanded = False
+                FieldName = 'NOMDCUSTID'
+                Title.Caption = 'Nom.Musteri'
+                Visible = True
+              end>
+          end
+        end
+      end
+      object GroupBox1: TGroupBox
+        Left = 0
+        Top = 0
+        Width = 985
+        Height = 34
+        Align = alTop
+        TabOrder = 1
+        object DTP1: TDateTimePicker
+          Left = 4
+          Top = 9
+          Width = 129
+          Height = 22
+          Date = 41054.236583101860000000
+          Time = 41054.236583101860000000
+          TabOrder = 0
+        end
+        object DBLookupComboboxEh1: TDBLookupComboboxEh
+          Left = 160
+          Top = 9
+          Width = 225
+          Height = 22
+          EditButtons = <>
+          KeyField = 'COD'
+          ListField = 'NAME'
+          TabOrder = 1
+          Visible = True
+          OnCloseUp = DBLookupComboboxEh1CloseUp
+        end
+      end
+    end
+  end
+  object SaveDlg: TSaveDialog
+    Filter = '*.xml|*.xml'
+    Options = [ofHideReadOnly, ofPathMustExist, ofEnableSizing]
+    Title = '*.xml'
+    Left = 760
+    Top = 112
+  end
+  object PopupMenu1: TPopupMenu
+    Left = 224
+    Top = 192
+    object mliyyatlarabax1: TMenuItem
+      Caption = #399'm'#601'liyyat(lar)a bax'
+    end
+    object Faylhazrla1: TMenuItem
+      Caption = 'Fayl'#305' haz'#305'rla'
+      OnClick = Faylhazrla1Click
+    end
+  end
+  object PopupMenu2: TPopupMenu
+    Left = 304
+    Top = 200
+    object mliyyatlarabax2: TMenuItem
+      Caption = #399'm'#601'liyyat(lar)a bax'
+    end
+    object Faylhazrla2: TMenuItem
+      Caption = 'Fayl'#305' haz'#305'rla'
+    end
+  end
+  object PM_RE_Errors: TPopupMenu
+    Left = 384
+    Top = 200
+    object mizl1: TMenuItem
+      Caption = 'T'#601'mizl'#601
+      OnClick = mizl1Click
+    end
+  end
+  object PopupMenu3: TPopupMenu
+    Left = 480
+    Top = 184
+    object Emeeee1: TMenuItem
+      Caption = 'Emeeee'
+    end
+  end
+end

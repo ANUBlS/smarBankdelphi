@@ -1,0 +1,38 @@
+unit MainUnit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs;
+
+type
+  TMainForm = class(TForm)
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  MainForm: TMainForm;
+   procedure InitPlugin(s:string);export;
+
+implementation
+   uses  sboapiDataModuleImpl,CommonDecls;
+
+
+procedure InitPlugin(s:string);export;
+begin
+   MainForm.ShowModal;
+end;
+exports
+     InitPlugin;
+
+
+initialization
+
+ MainForm := TMainForm.Create(Application);
+{$R *.dfm}
+
+end.

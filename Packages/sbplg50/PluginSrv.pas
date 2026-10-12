@@ -1,0 +1,976 @@
+unit PluginSrv;
+
+{ TODO -cHigh : Обнуление InPlaceTarget при удалении её с формы }
+
+interface
+
+uses Windows, classes, SysUtils, Dialogs, ActnList, graphics, CustomInst,
+    IniSource, ComObj, OleCtrls, controls, SBPlgAx50_TLB, ActiveX, Variants;
+
+type
+  EPluginManagerError = class(Exception);
+  EPluginSyntaxError = class(EPluginManagerError);
+  EPluginManagerInternalError = class(EPluginManagerError);
+  EPlgActionError = class(Exception);
+
+  TPlgAction = class(TAction{, IAction})
+  private
+    FPicture: TPicture;
+    FLastAssignedAction: TAction;
+    FIDString: String;
+//    FController: IAction;
+  public
+    procedure Assign(Source: TPersistent); override;
+    property Picture: TPicture read FPicture;
+    function Update: Boolean; override;
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+    property IDString: String read FIDString;
+{    property Controller: IAction read FController
+      implements IAction;}
+  end;
+
+  TActionCollectionItem = class(TCollectionItem)
+  private
+    FAction       : TPlgAction;
+  public
+    constructor Create(Collection: TCollection); override;
+    destructor Destroy; override;
+    property Action: TPlgAction read FAction write FAction;
+  end;
+
+  TActionChangeEvent = procedure(Sender: TObject; Action: TAction) of object;
+
+  TActions = class(TCollection)
+  private
+    FActionList       : TActionList;
+    function GetItem(Index: Integer): TPlgAction;
+  public
+    constructor Create(ItemClass: TCollectionItemClass); virtual;
+    destructor Destroy; override;
+    property Items[Index: Integer]: TPlgAction read GetItem; default;
+    function ActionByName(const AName: String): TPlgAction;
+    function Add: TPlgAction;
+  end;
+
+  TPlugin = class;
+  TActionNotify = procedure(Plugin: TPlugin; Action: TAction) of object;
+
+  TPluginManager = class;
+
+  TPlugin = class(TCustomInstance)
+  private
+    FLocation: String;
+    FActions: TActions;
+    FBeforeActionAdd: TActionNotify;
+    FAfterActionAdd: TActionNotify;
+    FBeforeActionDrop: TActionNotify;
+    FAfterActionDrop: TActionNotify;
+    FEvents: TActions;
+    FName: String;
+    FManager: TPluginManager;
+    FOverlapped: Boolean;
+    FCaption: String;
+    FParams: TStringList;
+    FIndex: Integer;
+    procedure CallActionEvent(Event: TActionNotify; Action: TAction);
+  protected
+    procedure DoSelectActions; virtual; abstract;
+    procedure DoOpen; override;
+    procedure DoClose; override;
+    procedure SetLocation(const Value: String); virtual;
+    function GetParam(const Name: String): Variant; virtual;
+    procedure SetParam(const Name: String; Value: Variant); virtual;
+    function GetParamsAsString: String; virtual;
+    procedure SetParamsAsString(const Value: String); virtual;
+    procedure PutParam(const Name: String; Value: Variant); virtual; abstract;
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+    procedure AddAction(Action: TAction); virtual;
+    procedure DropAction(Action: TAction); virtual;
+    procedure AddEvent(const EventName: String; Action: TAction);
+    procedure DropEvent(const EventName: String; Action: TAction);
+    procedure CallEvent(const EventName: String; const Args: array of const); virtual;
+    procedure WriteParams;
+    property Actions: TActions read FActions;
+    property Events: TActions read FEvents;
+    property Manager: TPluginManager read FManager;
+    property Overlapped: Boolean read FOverlapped write FOverlapped;
+    property Params[const Name: String]: Variant read GetParam write SetParam;
+    property ParamsAsString: String read GetParamsAsString write SetParamsAsString;
+    property Index: Integer read FIndex;
+  published
+    property Location: String read FLocation write SetLocation;
+    property Name: String read FName write FName;
+    property Caption: String read FCaption;
+    property BeforeActionAdd: TActionNotify read FBeforeActionAdd write FBeforeActionAdd;
+    property AfterActionAdd: TActionNotify read FAfterActionAdd write FAfterActionAdd;
+    property BeforeActionDrop: TActionNotify read FBeforeActionDrop write FBeforeActionDrop;
+    property AfterActionDrop: TActionNotify read FAfterActionDrop write FAfterActionDrop;
+  end;
+
+  TBplPlugin = class(TPlugin)
+  private
+    FModuleHandle           : HMODULE;
+  protected
+    procedure DoOpen; override;
+    procedure DoClose; override;
+    procedure DoSelectActions; override;
+  public
+    property ModuleHandle: HMODULE read FModuleHandle;
+  end;
+
+  TInPlaceEvent = procedure(Sender: TObject; const Action: String) of object;
+
+  TInPlacePlugin = class(TPlugin)
+  private
+    FClassID: TGuid;
+    FEventIID: TGuid;
+    FOleObject: TOleControl;
+    FInPlaceTarget: TWinControl;
+    FAfterInlaceActivate: TInPlaceEvent;
+  protected
+    procedure SetLocation(const Value: String); override;
+    procedure DoOpen; override;
+    procedure DoClose; override;
+    procedure DoSelectActions; override;
+    procedure SetInPlaceTarget(Value: TWinControl);
+    procedure Notification(AComponent: TComponent; Operation: TOperation); override;
+    procedure PutParam(const Name: String; Value: Variant); override;
+    procedure SetParam(const Name: String; Value: Variant); override;
+  public
+    procedure CallEvent(const EventName: String; const Args: array of const); override;
+    property ClassID: TGuid read FClassID write FClassId;
+    property EventIID: TGuid read FEventIID;
+    property OleObject: TOleControl read FOleObject;
+    property InPlaceTarget: TWinControl read FInPlaceTarget write SetInPlaceTarget;
+  published
+    property AfterInPlaceActivate: TInPlaceEvent read FAfterInlaceActivate write FAfterInlaceActivate;
+  end;
+
+  TPlgRegProc = procedure(Plugin: TPlugin);
+  TPlgNotifyProc = procedure(Sender: TObject; Plugin: TPlugin) of object;
+
+  TPluginClass = class of TPlugin;
+
+  TPlugins = class(TPersistent)
+  private
+    FPlugins        : TList;
+    FManager        : TPluginManager;
+    function GetItem(Index: Integer): TPlugin;
+    function GetCount: Integer;
+  protected
+    procedure InitiaizePlugin(Plugin: TPlugin); virtual;
+  public
+    constructor Create; virtual;
+    destructor Destroy; override;
+    function Add(PluginClass: TPluginClass): TPlugin;
+    procedure Delete(Index: Integer);
+    procedure Clear;
+    property Items[Index: Integer]: TPlugin read GetItem; default;
+    property Count: Integer read GetCount;
+    property Manager: TPluginManager read FManager write FManager;
+  end;
+
+  TErrorNotifyEvent = procedure(Sender: TPluginManager; Plugin: TPlugin; E: Exception; var DoBreak: Boolean) of object;
+
+  TPluginManager = class(TCustomInstance)
+  private
+    FPlugins                : TPlugins;
+    FIniSource              : TIniSource;
+    FSection                : String;
+    FBeforePluginOpen       : TPlgNotifyProc;
+    FAfterPluginOpen        : TPlgNotifyProc;
+    FBeforePluginClose      : TPlgNotifyProc;
+    FAfterPluginClose       : TPlgNotifyProc;
+    FPluginOpenError        : TErrorNotifyEvent;
+    FPluginLoadError        : TErrorNotifyEvent;
+    FInPlaceTarget          : TWinControl;
+    procedure CallPluginEvent(PluginNotifyProc: TPlgNotifyProc; Plugin: TPlugin);
+    procedure SetInPlaceTarget(Value: TWinControl);
+  protected
+    procedure DoOpen; override;
+    procedure DoClose; override;
+    procedure Notification(AComponent: TComponent; Operation: TOperation); override;
+    procedure CallBeforePluginOpen(Plugin: TPlugin); virtual;
+    procedure CallAfterPluginOpen(Plugin: TPlugin); virtual;
+    procedure CallPluginError(ErrorNotifyEvent: TErrorNotifyEvent; Plugin: TPlugin; E: Exception; var DoBreak: Boolean); virtual;
+  public
+    property Plugins: TPlugins read FPlugins;
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+    procedure CallEvent(const EventName: String; const Args: array of const);
+    function FindPlugin(const AName: String): TPlugin;
+    function PluginByName(const AName: String): TPlugin;
+    function PluginByLocation(const ALocation: String): TPlugin;
+  published
+    property IniSource: TIniSource read FIniSource write FIniSource;
+    property Section: String read FSection write FSection;
+    property PluginBeforeOpen: TPlgNotifyProc read FBeforePluginOpen write FBeforePluginOpen;
+    property PluginAfterOpen: TPlgNotifyProc read FAfterPluginOpen write FAfterPluginOpen;
+    property PluginBeforeClose: TPlgNotifyProc read FBeforePluginClose write FBeforePluginClose;
+    property PluginAfterClose: TPlgNotifyProc read FAfterPluginClose write FAfterPluginClose;
+    property OnPluginOpenError: TErrorNotifyEvent read FPluginOpenError write FPluginOpenError;
+    property OnPluginLoadError: TErrorNotifyEvent read FPluginLoadError write FPluginLoadError;
+    property InPlaceTarget: TWinControl read FInPlaceTarget write SetInPlaceTarget;
+  end;
+
+const
+  Event_AfterPluginOpen = 'After TPlugin.DoOpen';
+  Event_AfterPluginActionAdd = 'After TPlugin.AddAction';
+
+implementation
+
+  { TPlgAction }
+
+uses
+  AxLoader,
+  ObjectEventManager;
+
+(*procedure TPlgAction.AxExecute;
+begin
+  Execute;
+end;
+
+procedure TPlgAction.AxUpdate;
+begin
+  Update;
+end;
+
+function  TPlgAction.AxGetEnabled: WordBool;
+begin
+  Result := WordBool(Enabled); 
+end;
+
+function  TPlgAction.AxGetIcon: OLE_HANDLE;
+begin
+  { TODO : Icon from Images }
+  Result := 0;
+end;
+
+function TPlgAction.AxGetName: WideString;
+begin
+  Result := WideString(Name);
+end;
+
+function TPlgAction.AxGetDisplayName: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TPlgAction.AxGetIDString: WideString;
+begin
+  Result := WideString(IDString);
+end;*)
+
+procedure TPlgAction.Assign(Source: TPersistent);
+//var
+//  Bitmap: TBitmap;
+//  SourceAction: IAction;
+begin
+  {TODO: add IAction support}
+(*  if Source.GetInterface(IAction, SourceAction) then
+  begin
+    FController := SourceAction;
+    Enabled := SourceAction.Enabled;
+    { TODO : Checked := SourceAction.Checked; }
+    Caption := SourceAction.DisplayName;
+    { TODO : Hint := SourceAction.Hint; }
+    Picture.Icon.Handle := SourceAction.Icon;
+    { TODO : ShortCut := SourceAction.ShortCut; }
+    { TODO : Visible := SourceAction.Visible; }
+  end
+  else*)
+  if Source is TAction then
+  begin
+    with TAction(Source) do
+    begin
+      Self.OnExecute := OnExecute;
+      Self.OnUpdate := OnUpdate;
+      Self.Caption := Caption;
+      Self.Name := Name;
+      Self.Category := Category;
+
+      if Source is TPlgAction then
+      begin
+        with Source as TPlgAction do
+          if not Picture.Bitmap.Empty then
+            Self.Picture.Bitmap.Assign(Picture.Bitmap);
+      end
+      else
+        if (ImageIndex <> -1) and (ImageIndex <= ActionList.Images.Count) then
+        begin
+//          Bitmap := TBitmap.Create;
+//          try
+            ActionList.Images.GetBitmap(ImageIndex, Picture.Bitmap);
+//            Self.Bitmap.Assign(Bitmap);
+//          finally
+//            Bitmap.Destroy;
+//          end;
+        end;
+
+      Self.Enabled := Enabled;
+    end;
+    FLastAssignedAction := TAction(Source);
+  end;
+
+  inherited AssignTo(Source);
+end;
+
+constructor TPlgAction.Create(AOwner: TComponent);
+begin
+  inherited;
+  FPicture := TPicture.Create;
+end;
+
+destructor TPlgAction.Destroy;
+begin
+  FPicture.Free;
+  ActionList := nil;
+  inherited;
+end;
+
+function TPlgAction.Update: Boolean;
+begin
+  if Assigned(FLastAssignedAction) then
+    Result := FLastAssignedAction.Update
+  {TODO: add IAction support - uncomment this lines}
+{  else
+  if Assigned(Controller) then
+    Result := Controller.Update}
+  else
+    raise EPlgActionError.Create('Unable to update. Action not assigned');
+  Enabled := FLastAssignedAction.Enabled and ((not FLastAssignedAction.DisableIfNoHandler) or Assigned(FLastAssignedAction.OnExecute));
+  Checked := FLastAssignedAction.Checked;
+  Caption := FLastAssignedAction.Caption;
+end;
+
+  { TActionCollectionItem }
+
+constructor TActionCollectionItem.Create(Collection: TCollection);
+begin
+  inherited;
+  FAction := TPlgAction.Create(nil);               
+end;
+
+destructor TActionCollectionItem.Destroy;
+begin
+  inherited;
+  FAction.Free;
+end;
+
+  { TActions }
+
+constructor TActions.Create(ItemClass: TCollectionItemClass);
+begin
+  FActionList := TActionList.Create(nil);
+  inherited;
+end;
+
+destructor TActions.Destroy;
+begin
+  {TODO: Destroy FActionList}
+//  FActionList.Free;
+  inherited;
+end;
+
+function TActions.GetItem(Index: Integer): TPlgAction;
+begin
+  Result := TActionCollectionItem(inherited Items[Index]).Action;
+end;
+
+function TActions.ActionByName(const AName: String): TPlgAction;
+var
+  i       : Integer;
+begin
+  for i:=0 to Count-1 do
+  begin
+    Result := Items[i];
+    if Result.Name = AName then
+      exit;
+  end;
+  Result := nil;
+end;
+
+function TActions.Add: TPlgAction;
+begin
+  Result := TActionCollectionItem(inherited Add).Action;
+  Result.ActionList := FActionList;
+end;
+
+  { TPlugin }
+
+constructor TPlugin.Create(AOwner: TComponent);
+begin
+  inherited;
+  FActions := TActions.Create(TActionCollectionItem);
+  FEvents := TActions.Create(TActionCollectionItem);
+  FParams := TStringList.Create;
+  if AOwner is TPluginManager then
+    FManager := AOwner as TPluginManager;
+end;
+
+destructor TPlugin.Destroy;
+begin
+  Close;
+  FActions.Destroy;
+  FEvents.Destroy;
+  FParams.Free;
+  inherited;
+end;
+
+procedure TPlugin.SetLocation(const Value: String);
+begin
+  if Active then
+    Close;
+  FLocation := Value;
+end;
+
+procedure TPlugin.CallActionEvent(Event: TActionNotify; Action: TAction);
+begin
+  if Assigned(Event) then
+    Event(Self, Action);
+end;
+
+procedure TPlugin.AddAction(Action: TAction);
+var
+  PlgAction     : TPlgAction;
+begin
+  CallActionEvent(FBeforeActionAdd, Action);
+  PlgAction := Actions.Add;
+  PlgAction.Assign(Action);
+  CallActionEvent(FAfterActionAdd, Action);
+  GlobalEventManager.CallEvent(Event_AfterPluginActionAdd, Self, [PlgAction]);
+end;
+
+procedure TPlugin.DropAction(Action: TAction);
+begin
+  CallActionEvent(FBeforeActionDrop, Action);
+  Action.Free;
+  CallActionEvent(FAfterActionDrop, nil);
+end;
+
+procedure TPlugin.AddEvent(const EventName: String; Action: TAction);
+var
+  PlgAction     : TPlgAction;
+begin
+  PlgAction := Events.Add;
+  PlgAction.Assign(Action);
+  PlgAction.Category := EventName;
+end;
+
+procedure TPlugin.DropEvent(const EventName: String; Action: TAction);
+begin
+  Events.Delete(Events.ActionByName(Action.Name).Index);
+end;
+
+procedure TPlugin.CallEvent(const EventName: String; const Args: array of const);
+var
+  i       : Integer;
+begin
+  with Events do
+    for i:=0 to Count-1 do
+      with Items[i] do
+        if Category = EventName then
+          Execute;
+end;
+
+procedure TPlugin.DoOpen;
+begin
+  OutputDebugString(PChar(Format('PLUGIN.DOOPEN self=%p loc="%s"',
+    [Pointer(Self), Location])));
+  DoSelectActions;
+  FName := ChangeFileExt(ExtractFileName(Location), '');
+  GlobalEventManager.CallEvent(Event_AfterPluginOpen, Self, []);
+end;
+
+procedure TPlugin.DoClose;
+var
+  i: Integer;
+begin
+  OutputDebugString(PChar(Format('PLUGIN.DOCLOSE self=%p loc="%s"',
+    [Pointer(Self), Location])));
+  with Actions do  begin
+    for i:=0 to Count-1 do
+      DropAction(TActionCollectionItem(Items[i]).Action);
+    Clear;
+  end;
+end;
+
+function TPlugin.GetParam(const Name: String): Variant;
+begin
+  Result := FParams.Values[Name];
+end;
+
+procedure TPlugin.SetParam(const Name: String; Value: Variant);
+begin
+  FParams.Values[Name] := Value;
+end;
+
+function TPlugin.GetParamsAsString: String;
+begin
+  Result := FParams.CommaText;
+end;
+
+procedure TPlugin.SetParamsAsString(const Value: String);
+begin
+  FParams.CommaText := Value;
+end;
+
+procedure TPlugin.WriteParams;
+var
+  Index: Integer;
+  Name: String;
+begin
+  for Index := 0 to FParams.Count-1 do
+  begin
+    Name := FParams.Names[Index];
+    PutParam(Name, FParams.Values[Name]);
+  end;
+end;
+
+  { TBplPlugin }
+
+procedure TBplPlugin.DoOpen;
+begin
+  FModuleHandle := LoadPackage(Location);
+  inherited;
+end;
+
+procedure TBplPlugin.DoClose;
+begin
+  UnLoadPackage(FModuleHandle);
+  inherited;
+end;
+
+procedure TBplPlugin.DoSelectActions;
+var
+  RegProc       : TPlgRegProc;
+resourcestring
+  sPlgRegProcName = 'RegisterPlugin';
+begin
+  @RegProc := GetProcAddress(FModuleHandle, PChar(sPlgRegProcName));
+  if @RegProc = nil then
+    RaiseLastWin32Error;
+  RegProc(Self);
+end;
+
+  { TInPlacePlugin }
+
+procedure TInPlacePlugin.SetLocation(const Value: String);
+begin
+  FClassID := StringToGuid(Value);
+  inherited;
+end;
+
+procedure TInPlacePlugin.DoOpen;
+{var
+  SBPlugin: IPlugin;}
+begin
+  FOleObject := TActiveFormX.CreateObject(InPlaceTarget, ClassID, EventIID);
+  if Assigned(InPlaceTarget) then
+    FOleObject.Parent := InPlaceTarget;
+  FCaption := FOleObject.OleObject.Caption;
+{  with IUnknown(TVarData(FOleObject.OleObject).VUnknown) do
+    if QueryInterface(IPlugin, SBPlugin) = S_OK then
+      SBPlugin.InitializePlugin;}
+  inherited;
+  WriteParams;
+  if Assigned(InPlaceTarget) then
+    CallEvent('InPlaceActivate', ['']);
+end;
+
+procedure TInPlacePlugin.DoClose;
+{var
+  SBPlugin: IPlugin;}
+var
+  Instance: IPlugin;
+begin
+  inherited;
+{  if not VarIsEmpty(FOleObject.OleObject) then
+    with IUnknown(TVarData(FOleObject.OleObject).VUnknown) do
+      if QueryInterface(IPlugin, SBPlugin) = S_OK then
+        SBPlugin.CleanupPlugin;}
+  if not VarIsEmpty(FOleObject.OleObject) then
+    with IUnknown(TVarData(FOleObject.OleObject).VUnknown) do
+      if QueryInterface(IPlugin, Instance) = S_OK then
+        Instance.Cleanup;
+  FOleObject.Free;
+end;
+
+procedure TInPlacePlugin.DoSelectActions;
+  {TODO: add IAction support - uncomment this lines}
+{var
+  ActionProvider: IActionProvider;
+  Index: Integer;}
+begin
+{  if IUnknown(TVarData(FOleObject.OleObject).VUnknown).QueryInterface(IActionProvider, ActionProvider) = S_OK then
+    for Index := 0 to ActionProvider.ActionCount-1 do
+      with Actions.Add do
+        ActionProvider.Actions[Index]}
+end;
+
+procedure TInPlacePlugin.SetInPlaceTarget(Value: TWinControl);
+begin
+  if Assigned(OleObject) then
+    OleObject.Parent := Value;
+  FInPlaceTarget := Value;
+  if Active then
+    CallEvent('InPlaceActivate', ['']);
+end;
+
+procedure TInPlacePlugin.Notification(AComponent: TComponent; Operation: TOperation);
+begin
+  if Operation = opRemove then
+    if AComponent = InPlaceTarget then
+      InPlaceTarget := nil
+    else
+    if AComponent = FOleObject then
+      Close;
+  inherited;
+end;
+
+procedure TInPlacePlugin.CallEvent(const EventName: String; const Args: array of const);
+begin
+  if EventName = 'InPlaceActivate' then
+    if Assigned(FAfterInlaceActivate) then
+      FAfterInlaceActivate(Self, Args[0].VPChar);
+  inherited;
+end;
+
+procedure TInPlacePlugin.SetParam(const Name: String; Value: Variant);
+begin
+  inherited;
+  if Active then
+    PutParam(Name, Value);
+end;
+
+procedure TInPlacePlugin.PutParam(const Name: String; Value: Variant);
+var
+  ParamInput: IParamInput;
+begin
+{  if not Active then
+    raise EPluginManagerError.Create('Plugin not open');}
+  if IUnknown(TVarData(FOleObject.OleObject).VUnknown).QueryInterface(
+    IID_IParamInput, ParamInput) = S_OK
+  then
+    ParamInput.Params[Name] := Value;
+end;
+
+      { TPlugins }
+
+constructor TPlugins.Create;
+begin
+  FPlugins := TList.Create;
+  inherited;
+end;
+
+destructor TPlugins.Destroy;
+begin
+  FPlugins.Destroy;
+  inherited;
+end;
+
+function TPlugins.Add(PluginClass: TPluginClass): TPlugin;
+begin
+  Result := PluginClass.Create(Manager);
+  Result.FIndex := FPlugins.Add(Result);
+end;
+
+procedure TPlugins.Delete(Index: Integer);
+var
+  I: Integer;
+begin
+  Items[Index].Destroy;
+  FPlugins.Delete(Index);
+  for I := Index to Count-1 do
+    Dec(Items[I].FIndex); 
+end;
+
+procedure TPlugins.Clear;
+begin
+  while Count > 0 do
+    Delete(Count-1);
+end;
+
+function TPlugins.GetItem(Index: Integer): TPlugin;
+begin
+  Result := FPlugins[Index];
+end;
+
+function TPlugins.GetCount: Integer;
+begin
+  Result := FPlugins.Count;
+end;
+
+procedure TPlugins.InitiaizePlugin(Plugin: TPlugin);
+begin
+end;
+
+  { TPluginManager }
+
+constructor TPluginManager.Create(AOwner: TComponent);
+begin
+  inherited;
+  FPlugins := TPlugins.Create;
+  FPlugins.Manager := Self;
+  GlobalEventManager.CallEvent('TPluginManager.Create', Self, []);
+end;
+
+destructor TPluginManager.Destroy;
+begin
+  GlobalEventManager.CallEvent('TPluginManager.Destroy', Self, []);
+  {TODO: WARNING!!!}
+//  Close;
+  FPlugins.Destroy;
+  inherited;
+end;
+
+procedure TPluginManager.CallEvent(const EventName: String; const Args: array of const);
+var
+  i       : Integer;
+begin
+  for i:=0 to Plugins.Count-1 do
+    Plugins[i].CallEvent(EventName, Args);
+end;
+
+function TPluginManager.FindPlugin(const AName: String): TPlugin;
+var
+  i         : Integer;
+begin
+  for i:=0 to Plugins.Count-1 do
+  begin
+    Result := Plugins[i];
+    if Result.Name = AName then
+      exit;
+  end;
+  Result := nil;
+end;
+
+function TPluginManager.PluginByName(const AName: String): TPlugin;
+begin
+  Result := FindPlugin(AName);
+  if Result = nil then
+    raise EPluginManagerError.CreateFmt('Plugin named "%s" not found', [AName]);
+end;
+
+function TPluginManager.PluginByLocation(const ALocation: String): TPlugin;
+var
+  Index: Integer;
+begin
+  for Index := 0 to Plugins.Count - 1 do
+  begin
+    Result := Plugins[Index];
+    with Result do
+      if Location = ALocation then
+        exit;
+  end;
+  raise EPluginManagerError.CreateFmt('Plugin with location set to "%s" not found', [ALocation]);
+end;
+
+procedure TPluginManager.CallPluginEvent(PluginNotifyProc: TPlgNotifyProc; Plugin: TPlugin);
+begin
+  if Assigned(PluginNotifyProc) then
+    PluginNotifyProc(Self, Plugin);
+end;
+
+procedure TPluginManager.SetInPlaceTarget(Value: TWinControl);
+var
+  PluginIndex: Integer;
+  Plugin: TPlugin;
+begin
+  for PluginIndex := 0 to Plugins.Count-1 do
+  begin
+    Plugin := Plugins[PluginIndex];
+    if Plugin is TInPlacePlugin then
+      (Plugin as TInPlacePlugin).InPlaceTarget := Value;
+  end;
+  FInPlaceTarget := Value;
+end;
+
+procedure TPluginManager.DoOpen;
+
+type
+  TPlgLoadMethod = (lmBpl, lmAxInPlace);
+
+  TLoadOptions = record
+    Overlapped        : Boolean;    // overlapped loading
+  end;
+
+var
+  LoadOptions       : TLoadOptions;
+
+var
+  PluginIndex       : Integer;
+
+  procedure PluginSyntaxError(const DetailedMessage: String);
+  resourcestring
+    sPlgSyntaxIncorrectMessage = 'In definition of plugin #%d syntax is incorrect. %s. Syntax = <LoadMethod> ":" <PluginLocation>';
+  begin
+    raise EPluginSyntaxError.CreateFmt(
+      sPlgSyntaxIncorrectMessage,
+      [PluginIndex, DetailedMessage])
+  end;
+
+  procedure ExpandPlgID(
+    const PlgID: String;
+    var LoadMethodS, PlgLocation: String;
+    Options: TStrings);
+  var
+    DelimiterPos      : Integer;
+  begin
+    DelimiterPos := Pos(':', PlgID);
+    if DelimiterPos = 0 then
+      PluginSyntaxError('expected ":"');
+    if DelimiterPos = 1 then
+      PluginSyntaxError('Bad specification of LoadMethod');
+    LoadMethodS := Copy(PlgID, 1, DelimiterPos-1);
+    if Length(PlgID) = DelimiterPos then
+      PluginSyntaxError('PluginLocation must be non-zero string');
+    Options.CommaText := Copy(PlgID, DelimiterPos+1, Length(PlgID));
+    PlgLocation := Options.Strings[0];
+    Options.Delete(0);
+  end;
+
+  procedure SetupLoadOptions(
+    const PlgID: String;
+    var LoadMethod: TPlgLoadMethod;
+    var PlgLoacation: String;
+    var LoadOptions: TLoadOptions);
+  var
+    LoadMethodS       : String;
+    LLoadOptions      : TStringList;
+  begin
+    LLoadOptions := TStringList.Create;
+    try
+      ExpandPlgID(PlgID, LoadMethodS, PlgLoacation, LLoadOptions);
+
+      if LoadMethodS = 'bpl' then
+        LoadMethod := lmBpl
+      else
+      if LoadMethodS = 'axinplace' then
+        LoadMethod := lmAxInPlace
+      else
+        PluginSyntaxError('Unimplemented load method');
+
+      with LoadOptions do
+        Overlapped := LLoadOptions.IndexOf('overlapped') <> -1;
+
+    finally
+      LLoadOptions.Free;
+    end;
+  end;
+
+var
+  IniSectionName    : String;
+
+  PlgID             : String;
+  LoadMethod        : TPlgLoadMethod;
+  PlgLocation       : String;
+
+  Plugin            : TPlugin;
+  DoBreak           : Boolean;
+  PluginClass       : TPluginClass;
+begin
+  if Assigned(IniSource) then
+    with IniSource do
+      if Active then
+      begin
+        if Self.Section <> '' then
+          IniSectionName := Format('%s\Packages', [Self.Section])
+        else
+          IniSectionName := Self.Name;
+
+        for PluginIndex := 0 to ReadValue(IniSectionName, 'Count', 0) - 1 do
+        begin
+
+          PlgID := ReadValue(IniSectionName, Format('Item%d', [PluginIndex]), '');
+          if PlgID = '' then
+            PluginSyntaxError('Specification must be non-zero string. Probarly, plugins count more than defined');
+
+          SetupLoadOptions(PlgID, LoadMethod, PlgLocation, LoadOptions);
+          case LoadMethod of
+            lmBpl: PluginClass := TBplPlugin;
+            lmAxInPlace: PluginClass := TInPlacePlugin;
+          else
+            raise EPluginManagerInternalError.Create('LoadMethod not initialized');
+          end;
+
+          Plugin := Plugins.Add(PluginClass);
+          Plugin.Overlapped := LoadOptions.Overlapped;
+          if Plugin is TInPlacePlugin then
+            with Plugin as TInPlacePlugin do
+              InPlaceTarget := Self.InPlaceTarget;
+
+          with Plugin do
+          begin
+            Location := PlgLocation;
+            CallBeforePluginOpen(Plugin);
+            try
+              if not Overlapped then
+                Open;
+              CallAfterPluginOpen(Plugin);
+            except
+              on E: Exception do
+              begin
+                if E is EWin32Error then
+                  CallPluginError(FPluginOpenError, Plugin, E, DoBreak)  // file not found, etc.
+                else
+                  CallPluginError(FPluginLoadError, Plugin, E, DoBreak); // unable to load. logical error
+                if DoBreak then
+                  raise;  // break requested
+              end;
+            end;  // try
+          end;  // with
+
+        end;  // for
+    end;  // with
+end;
+
+procedure TPluginManager.DoClose;
+begin
+  with Plugins do
+    while Count > 0 do
+    begin
+      CallPluginEvent(FBeforePluginClose, Items[Count-1]);
+      Items[Count-1].Close;
+      CallPluginEvent(FAfterPluginClose, Items[Count-1]);
+      Delete(Count-1);
+    end;
+  Plugins.Clear;
+end;
+
+procedure TPluginManager.Notification(AComponent: TComponent; Operation: TOperation);
+begin
+  if Operation = opRemove then
+    if AComponent = IniSource then
+      IniSource := nil
+{    else
+    if AComponent = InPlaceTarget then
+      InPlaceTarget := nil};
+  inherited;
+end;
+
+procedure TPluginManager.CallBeforePluginOpen(Plugin: TPlugin);
+begin
+  CallPluginEvent(FBeforePluginOpen, Plugin);
+end;
+
+procedure TPluginManager.CallAfterPluginOpen(Plugin: TPlugin);
+begin
+  CallPluginEvent(FAfterPluginOpen, Plugin);
+end;
+
+procedure TPluginManager.CallPluginError(
+  ErrorNotifyEvent: TErrorNotifyEvent;
+  Plugin: TPlugin;
+  E: Exception;
+  var DoBreak: Boolean);
+begin
+  DoBreak := True;
+  if Assigned(ErrorNotifyEvent) then
+    ErrorNotifyEvent(Self, Plugin, E, DoBreak);
+end;
+
+end.

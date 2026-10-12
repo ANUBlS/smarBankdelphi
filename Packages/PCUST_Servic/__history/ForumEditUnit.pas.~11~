@@ -1,0 +1,275 @@
+﻿unit ForumEditUnit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Grids, XDBGrids, ExtCtrls, XFSCtrls, StdCtrls, DBCtrls, DB,
+  OracleData, Oracle, Mask;
+
+type
+  TFormEdit = class(TForm)
+    XFPanel1: TXFPanel;
+    XFButton1: TXFButton;
+    XFPanel2: TXFPanel;
+    ODS_MMX_TRANSMODE: TOracleDataSet;
+    ODS_MMX_TRANSMODEID: TIntegerField;
+    ODS_MMX_TRANSMODENAME: TIntegerField;
+    ODS_MMX_TRANSMODEDESCRIPTION: TWideStringField;
+    Ods_mmx_reportcode: TOracleDataSet;
+    Ods_mmx_reportcodeID: TIntegerField;
+    Ods_mmx_reportcodeNAME: TWideStringField;
+    Ods_mmx_reportcodeDESCRIPTION: TWideStringField;
+    Dsrc_mmx_reportcode: TDataSource;
+    DS_MMX_TRANSMODE: TDataSource;
+    XFPanel3: TXFPanel;
+    XFLabel2: TXFLabel;
+    DBLC_MMX_reportcode: TDBLookupComboBox;
+    Editreportcode: TEdit;
+    XFPanel4: TXFPanel;
+    XFLabel1: TXFLabel;
+    EditTransModeCode: TEdit;
+    DBLC_MMX_Transmode: TDBLookupComboBox;
+    ods_trinf: TOracleDataSet;
+    XFLabel3: TXFLabel;
+    XFLableTRid: TXFLabel;
+    ods_trinfTRANSID: TFloatField;
+    ods_trinfTRANSMODE_CODE: TIntegerField;
+    ods_trinfREPORT_CODE: TWideStringField;
+    OP_MMXX: TOraclePackage;
+    ods_monex: TOracleDataSet;
+    dsrc_monex: TDataSource;
+    ods_monexID: TFloatField;
+    ods_monexNAME: TWideStringField;
+    ods_monexLAST_NAME: TWideStringField;
+    ods_trinfMONEX_ID: TFloatField;
+    XFGroupBox1: TXFGroupBox;
+    XFPanel5: TXFPanel;
+    XFLabel4: TXFLabel;
+    XFLabel5: TXFLabel;
+    Editname: TEdit;
+    Editlastname: TEdit;
+    XFButton2: TXFButton;
+    XFGroupBox2: TXFGroupBox;
+    XFLabel6: TXFLabel;
+    XFLabel7: TXFLabel;
+    Editdbtid: TEdit;
+    Editcredid: TEdit;
+    XDBGrid1: TXDBGrid;
+    ods_trinfDCUSTID: TFloatField;
+    ods_trinfCCUSTID: TFloatField;
+    DBEditdname: TDBEdit;
+    DBEditkname: TDBEdit;
+    ods_custdb: TOracleDataSet;
+    ods_custcr: TOracleDataSet;
+    ods_custdbID: TIntegerField;
+    ods_custdbNAME: TWideStringField;
+    ods_custcrID: TIntegerField;
+    ods_custcrNAME: TWideStringField;
+    dsrc_custdb: TDataSource;
+    dsrc_custcr: TDataSource;
+    MonexName: TXFLabel;
+    odsmon: TOracleDataSet;
+    odsmonFULL: TWideStringField;
+    procedure FormShow(Sender: TObject);
+    procedure EditTransModeCodeKeyPress(Sender: TObject; var Key: Char);
+    procedure DBLC_MMX_TransmodeCloseUp(Sender: TObject);
+    procedure EditreportcodeKeyPress(Sender: TObject; var Key: Char);
+    procedure DBLC_MMX_reportcodeCloseUp(Sender: TObject);
+    procedure XFButton1Click(Sender: TObject);
+    procedure XFButton2Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure XDBGrid1CellClick(Column: TXColumn);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure EditdbtidKeyPress(Sender: TObject; var Key: Char);
+    procedure EditcredidKeyPress(Sender: TObject; var Key: Char);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormEdit: TFormEdit;
+ mon_id:integer;
+implementation
+
+uses GoAml_serviceImpl,sboapiDataModuleImpl, DatUnit;
+
+{$R *.dfm}
+
+procedure TFormEdit.DBLC_MMX_reportcodeCloseUp(Sender: TObject);
+begin
+if DBLC_MMX_reportcode.KeyVAlue<>null then
+Editreportcode.Text:=DBLC_MMX_reportcode.KeyVAlue;
+
+end;
+
+procedure TFormEdit.DBLC_MMX_TransmodeCloseUp(Sender: TObject);
+begin
+if DBLC_MMX_Transmode.KeyVAlue<>null then
+EditTransModeCode.Text:=DBLC_MMX_Transmode.KeyVAlue;
+end;
+
+procedure TFormEdit.EditcredidKeyPress(Sender: TObject; var Key: Char);
+begin
+
+
+ if Editcredid.Text<>'' then
+    begin
+    ods_custcr.Close;
+   ods_custcr.SetVariable('v_custid',strtoint(Editcredid.Text));
+    ods_custcr.Open;
+    end;
+
+
+
+
+
+end;
+
+procedure TFormEdit.EditdbtidKeyPress(Sender: TObject; var Key: Char);
+begin
+if trim(Editdbtid.text)<>'' then
+begin
+ ods_custdb.Close;
+   ods_custdb.SetVariable('v_custid',strtoint(Editdbtid.Text));
+    ods_custdb.Open;
+    ods_custcr.Close;
+end;
+end;
+
+procedure TFormEdit.EditreportcodeKeyPress(Sender: TObject; var Key: Char);
+begin
+if key=#13 then
+
+ DBLC_MMX_reportcode.KeyValue:=Editreportcode.Text;
+end;
+
+procedure TFormEdit.EditTransModeCodeKeyPress(Sender: TObject; var Key: Char);
+begin
+if key=#13 then
+begin
+if trim(EditTransModeCode.Text)<>'' then
+DBLC_MMX_Transmode.KeyValue:=EditTransModeCode.Text;
+
+DBLC_MMX_Transmode.SetFocus;
+end;
+end;
+
+procedure TFormEdit.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+Editname.Text:='';
+Editlastname.Text:='';
+end;
+
+procedure TFormEdit.FormCreate(Sender: TObject);
+begin
+ods_monex.Open;
+end;
+
+procedure TFormEdit.FormShow(Sender: TObject);
+var
+mon_id :integer;  //MonexName
+begin
+ods_trinf.close;
+ods_trinf.SetVariable('v_trid',GoAml_ServiceForm.DBGridTransactions1.DataSource.DataSet.FieldByName('transactionnumber').AsString );
+ods_trinf.open;
+      MonexName.Caption:='';
+      mon_id:= ods_trinf.FieldByName('MONEX_ID').AsInteger;
+      odsmon.Close;
+      odsmon.SetVariable('v_id',mon_id);
+      odsmon.Open;
+     // showmessage(odsmon.FieldByName('full').AsString);
+      MonexName.Caption:='Monex müştərisi:  '+ odsmon.FieldByName('full').AsString;
+
+
+    DBLC_MMX_Transmode.KeyValue:=ods_trinf.FieldByName('TRANSMODE_CODE').AsInteger;
+    EditTransModeCode.Text:=ods_trinf.FieldByName('TRANSMODE_CODE').AsString;
+
+    DBLC_MMX_reportcode.KeyValue:=ods_trinf.FieldByName('report_code').Asstring;
+    Editreportcode.Text:=ods_trinf.FieldByName('report_code').AsString;
+    XFLableTRid.Caption:= ods_trinf.FieldByName('TRANSID').AsString;
+    ods_custdb.Close;
+   ods_custdb.SetVariable('v_custid',ods_trinf.FieldByName('dcustid').AsInteger);
+    ods_custdb.Open;
+
+    ods_custcr.Close;
+   ods_custcr.SetVariable('v_custid',ods_trinf.FieldByName('ccustid').AsInteger);
+    ods_custcr.Open;
+
+    Editdbtid.Text:= ods_trinf.FieldByName('dcustid').AsString;
+    Editcredid.Text:= ods_trinf.FieldByName('ccustid').AsString;
+end;
+
+procedure TFormEdit.XDBGrid1CellClick(Column: TXColumn);
+begin
+
+ case ods_trinf.FieldByName('transmode_code').AsInteger  of
+  1000:begin
+
+ mon_id:=ods_monex.FieldByName('id').AsInteger;
+
+  end;
+  1001:begin
+
+ mon_id:=ods_monex.FieldByName('id').AsInteger;
+
+  end;
+ end;
+
+
+end;
+
+procedure TFormEdit.XFButton1Click(Sender: TObject);
+begin
+
+OP_MMXX.CallProcedure('update_mmxtransinfo' ,[ ods_trinf.FieldByName('TRANSID').AsInteger
+                                             , strtoint(EditTransModeCode.Text)
+                                             , Editreportcode.Text
+                                             , mon_id
+                                             , strtoint(Editdbtid.text)
+                                             , strtoint(Editcredid.Text)
+
+
+                                           ]);
+     //GoAml_ServiceForm.DBGrid2.DataSource.DataSet.First;
+     GoAml_ServiceForm.DBGridTransactions1.DataSource.DataSet.Refresh;
+     GoAml_ServiceForm.DBGrid2.DataSource.DataSet.Refresh;
+     DM_goAml.ODS_Rep.Locate('transmode_code',strtoint(EditTransModeCode.Text),[loCaseInsensitive]);
+                                           FormEdit.Close;
+
+end;
+
+procedure TFormEdit.XFButton2Click(Sender: TObject);
+begin
+if (ods_trinf.FieldByName('transmode_code').AsInteger = 1000) or
+   (ods_trinf.FieldByName('transmode_code').AsInteger = 1001)
+  then   begin
+
+if trim(Editname.Text)='' then
+   begin
+     showmessage('Adı sahəsi boşdur');
+     exit;
+ end;
+ if trim(Editlastname.Text)='' then
+   begin
+     showmessage('Soyadı sahəsi boşdur');
+     exit;
+ end;
+
+
+DM_goAml.PG_PCustService.CallProcedure('add_cust_monxs',
+                                                                [Editname.Text,
+                                                                 Editlastname.Text
+                                                                 ]);
+
+                                              ods_monex.Refresh;
+                                            //  showmessage(ods_monex.FieldByName('id').asstring);
+                                            mon_id:=ods_monex.FieldByName('id').AsInteger;
+                                              Editname.Text:='';
+                                              Editlastname.Text:='';
+end;
+
+end;
+end.

@@ -1,0 +1,443 @@
+unit OldRatesFormImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActiveX, AxCtrls, OldRatesProj_TLB, StdVcl, StdCtrls, Db, OracleData,
+  Grids, DBGrids, ExtCtrls, ComCtrls, Buttons, Oracle;
+
+type
+  TFrmOldCourses = class(TActiveForm, IOldRatesFormX)
+    Panel1: TPanel;
+    DBGrid1: TDBGrid;
+    ODSCourses: TOracleDataSet;
+    DSCourses: TDataSource;
+    ODSCoursesVAL_KOD: TIntegerField;
+    ODSCoursesOSTAT: TFloatField;
+    ODSCoursesDAT: TDateTimeField;
+    Panel2: TPanel;
+    GroupBox1: TGroupBox;
+    EOstat: TEdit;
+    EDat: TEdit;
+    EVal_kod: TEdit;
+    EVal_name: TEdit;
+    GroupBox3: TGroupBox;
+    DTP_END: TDateTimePicker;
+    ODSFiltr: TOracleDataSet;
+    DSFiltr: TDataSource;
+    ODSValute: TOracleDataSet;
+    OraclePackage: TOraclePackage;
+    ODSCoursesVAL_NAME: TWideStringField;
+    DTP_BEG: TDateTimePicker;
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure ActiveFormDestroy(Sender: TObject);
+    procedure EVal_nameChange(Sender: TObject);
+    procedure EVal_kodChange(Sender: TObject);
+    procedure EOstatChange(Sender: TObject);
+    procedure EDatChange(Sender: TObject);
+    procedure BitBtn1Click(Sender: TObject);
+    procedure ODSCoursesBeforeOpen(DataSet: TDataSet);
+    procedure DTP_BEGChange(Sender: TObject);
+    procedure DTP_ENDChange(Sender: TObject);
+    procedure DBGrid1TitleClick(Column: TColumn);
+  private
+    { Private declarations }
+    FEvents: IOldRatesFormXEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+  public
+    { Public declarations }
+    procedure Initialize; override;
+  end;
+
+implementation
+
+uses ComObj, ComServ,sboapiDataModuleImpl,SBTranslateProc;
+
+{$R *.DFM}
+
+{ TOldRatesFormX }
+
+procedure TFrmOldCourses.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_FirstFormXPage); }
+end;
+
+procedure TFrmOldCourses.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as IOldRatesFormXEvents;
+end;
+
+procedure TFrmOldCourses.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TFrmOldCourses.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TFrmOldCourses.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TFrmOldCourses.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TFrmOldCourses.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TFrmOldCourses.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TFrmOldCourses.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TFrmOldCourses.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TFrmOldCourses.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TFrmOldCourses.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TFrmOldCourses.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TFrmOldCourses.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TFrmOldCourses.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TFrmOldCourses.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TFrmOldCourses.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TFrmOldCourses.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TFrmOldCourses.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TFrmOldCourses.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TFrmOldCourses.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TFrmOldCourses._Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TFrmOldCourses.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TFrmOldCourses.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TFrmOldCourses.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TFrmOldCourses.DBGrid1TitleClick(Column: TColumn);
+begin
+ODSCourses.Close;
+ODSCourses.SetVariable('Title_ORDER',Column.FieldName);
+ODSCourses.Open;
+end;
+
+procedure TFrmOldCourses.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TFrmOldCourses.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TFrmOldCourses.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TFrmOldCourses.DTP_BEGChange(Sender: TObject);
+begin
+  ODSCourses.Close;
+  ODSCourses.Open;
+end;
+
+procedure TFrmOldCourses.DTP_ENDChange(Sender: TObject);
+begin
+  ODSCourses.Close;
+  ODSCourses.Open;
+end;
+
+procedure TFrmOldCourses.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TFrmOldCourses.ODSCoursesBeforeOpen(DataSet: TDataSet);
+begin
+   with ODSCourses do
+   begin
+   setVariable('beg_dat',DTP_BEG.Date);
+   setVariable('end_dat',DTP_END.Date);
+   end;
+end;
+
+procedure TFrmOldCourses.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TFrmOldCourses.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TFrmOldCourses.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TFrmOldCourses.Set_AxBorderStyle(Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TFrmOldCourses.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TFrmOldCourses.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TFrmOldCourses.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TFrmOldCourses.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TFrmOldCourses.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TFrmOldCourses.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TFrmOldCourses.Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TFrmOldCourses.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TFrmOldCourses.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TFrmOldCourses.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TFrmOldCourses.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TFrmOldCourses.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TFrmOldCourses.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+
+procedure TFrmOldCourses.ActiveFormCreate(Sender: TObject);
+begin
+  SBTranslateProc.TranslateAllComponents(Self,sboapiDataModule.OrPack_SL);
+
+  DTP_BEG.DateTime :=OraclePackage.CallDateFunction('Get_Date',[]);
+  DTP_END.DateTime :=OraclePackage.CallDateFunction('Get_Date',[]);
+
+ ODSCourses.open;
+ ODSValute.Open;
+ ODSValute.first;
+ end;
+
+procedure TFrmOldCourses.ActiveFormDestroy(Sender: TObject);
+begin
+ ODSCourses.Close;
+end;
+
+procedure TFrmOldCourses.EVal_nameChange(Sender: TObject);
+begin
+ ODSCourses.Locate('val_name',EVal_name.text,[loCaseInsensitive, loPartialKey]);
+end;
+
+procedure TFrmOldCourses.EVal_kodChange(Sender: TObject);
+begin
+ ODSCourses.Locate('val_kod',EVal_kod.text,[loCaseInsensitive, loPartialKey]);
+end;
+
+procedure TFrmOldCourses.EOstatChange(Sender: TObject);
+begin
+  ODSCourses.Locate('Ostat',EOstat.text,[loCaseInsensitive, loPartialKey]);
+end;
+
+procedure TFrmOldCourses.EDatChange(Sender: TObject);
+begin
+ ODSCourses.Locate('dat',EDat.text,[loCaseInsensitive, loPartialKey]);
+end;
+
+{var
+   V:Variant;
+Begin
+ V:=Integer(Trunc(DateTimePicker.DateTime));
+ ODSFiltr.Close;
+ ODSFiltr.SetVariable('VDate',V);
+ ODSFiltr.Open;
+ DBGrid1.DataSource:=DSFiltr;
+// ShowMessage(ODSFiltr.sql.Text);
+ }
+
+procedure TFrmOldCourses.BitBtn1Click(Sender: TObject);
+Begin
+//  DBGrid1.DataSource:=DSCourses;
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TFrmOldCourses,
+    Class_OldRatesFormX,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

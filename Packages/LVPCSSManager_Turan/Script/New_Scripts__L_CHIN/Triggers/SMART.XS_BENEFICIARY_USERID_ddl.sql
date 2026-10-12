@@ -1,0 +1,19 @@
+-- Start of DDL Script for Trigger SMART.XS_BENEFICIARY_USERID
+-- Generated 20-May-2006 14:27:37 from SMART@SB
+
+CREATE OR REPLACE TRIGGER "SMART".xs_beneficiary_userid
+ BEFORE
+  INSERT
+ ON xs_beneficiary
+REFERENCING NEW AS NEW OLD AS OLD
+ FOR EACH ROW
+BEGIN
+   :NEW.USERID:=SBLOGIN.USERID;
+END;
+
+
+-- End of DDL Script for Table SMART.HOXMESSAGE_OUT
+/
+
+-- End of DDL Script for Trigger SMART.XS_BENEFICIARY_USERID
+

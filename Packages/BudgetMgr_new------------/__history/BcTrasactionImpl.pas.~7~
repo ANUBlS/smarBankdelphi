@@ -1,0 +1,78 @@
+﻿unit BcTrasactionImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Grids, DBGrids, ExtCtrls, StdCtrls, Buttons, CMExcelExport, ComCtrls;
+
+type
+  TFrmTrasaction = class(TForm)
+    DBGrid1: TDBGrid;
+    Panel1: TPanel;
+    BitBtn1: TBitBtn;
+    BitBtn2: TBitBtn;
+    CMExcelExport1: TCMExcelExport;
+    Panel2: TPanel;
+    Label1: TLabel;
+    DateTimePicker1: TDateTimePicker;
+    DateTimePicker2: TDateTimePicker;
+    BitBtn3: TBitBtn;
+    procedure FormCanResize(Sender: TObject; var NewWidth, NewHeight: Integer;
+      var Resize: Boolean);
+    procedure BitBtn1Click(Sender: TObject);
+    procedure DBGrid1DblClick(Sender: TObject);
+    procedure DBGrid1CellClick(Column: TColumn);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure BitBtn2Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmTrasaction: TFrmTrasaction;
+
+implementation
+
+{$R *.dfm}
+ uses DmBudcetImpl;
+procedure TFrmTrasaction.BitBtn1Click(Sender: TObject);
+begin
+close;
+end;
+
+procedure TFrmTrasaction.BitBtn2Click(Sender: TObject);
+begin
+with CMExcelExport1 do
+  begin
+    Connect;
+    ExportDataset(DmBudcet.TrDataSet,'Əməliyyatlar',True,false);
+    Disconnect;
+  end;
+end;
+
+procedure TFrmTrasaction.DBGrid1CellClick(Column: TColumn);
+begin
+DBGrid1.Options := DBGrid1.Options - [dgRowSelect];
+DBGrid1.Options := DBGrid1.Options + [dgEditing];
+end;
+
+procedure TFrmTrasaction.DBGrid1DblClick(Sender: TObject);
+begin
+  DBGrid1.SelectedRows.Clear;
+end;
+
+procedure TFrmTrasaction.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+Resize:=false;
+end;
+
+procedure TFrmTrasaction.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+DBGrid1.Options := DBGrid1.Options + [dgRowSelect];
+end;
+
+end.

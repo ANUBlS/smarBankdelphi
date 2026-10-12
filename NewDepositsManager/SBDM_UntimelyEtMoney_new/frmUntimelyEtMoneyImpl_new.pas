@@ -1,0 +1,231 @@
+﻿unit NewFrmUntimelyEtMoneyImpl;
+
+interface
+
+uses
+   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+   DBCtrlsEh, StdCtrls, ComCtrls, Mask, DBLookupEh, ExtCtrls,
+  DBCtrls, Db, OracleData, Oracle, XFSCtrls;
+
+type
+  TNewFrmUntimelyEtMoney = class(TForm)
+    Button1: TButton;
+    Button2: TButton;
+    CreditAccs: TOracleDataSet;
+    CreditAccsID: TFloatField;
+    CreditAccsACC_NO: TWideStringField;
+    CreditAccsNAME: TWideStringField;
+    DepositAccno: TOracleDataSet;
+    DepositAccnoID: TFloatField;
+    DepositAccnoACC_NO: TWideStringField;
+    DepositAccnoVAL_NAME: TWideStringField;
+    DepositInfo: TOracleDataSet;
+    DepositInfoNAME: TWideStringField;
+    DepositInfoOPENDATE: TDateTimeField;
+    DepositInfoCLOSEDATE: TDateTimeField;
+    DepositInfoANNUALINT: TWideStringField;
+    DepositInfoOVERDUEANNUALINT: TFloatField;
+    DepositInfoCONTRACTACCNO: TWideStringField;
+    DepositInfoCLIENTACCNO: TWideStringField;
+    DepositInfoINTERESTACCNO: TWideStringField;
+    DepositInfoFACTICALDEBT: TFloatField;
+    DepositInfoFACTICALINTERESTDEBT: TFloatField;
+    Panel1: TPanel;
+    Panel2: TPanel;
+    Panel3: TPanel;
+    Panel4: TPanel;
+    StaticText1: TStaticText;
+    AccountListCB: TDBLookupComboboxEh;
+    DBEditEh8: TDBEditEh;
+    Panel16: TPanel;
+    StaticText13: TStaticText;
+    DTPBankDate: TDateTimePicker;
+    Panel5: TPanel;
+    Panel8: TPanel;
+    StaticText2: TStaticText;
+    DBEditEh3: TDBEditEh;
+    Panel9: TPanel;
+    StaticText6: TStaticText;
+    DBEditEh4: TDBEditEh;
+    Panel10: TPanel;
+    Panel11: TPanel;
+    StaticText7: TStaticText;
+    DBEditEh5: TDBEditEh;
+    Panel12: TPanel;
+    StaticText8: TStaticText;
+    DBEditEh6: TDBEditEh;
+    Panel13: TPanel;
+    Panel14: TPanel;
+    StaticText9: TStaticText;
+    DTPCalcPercent: TDateTimePicker;
+    Panel15: TPanel;
+    StaticText10: TStaticText;
+    DBEditEh1: TDBEditEh;
+    Panel6: TPanel;
+    StaticText3: TStaticText;
+    DBEdit2: TDBEdit;
+    Panel7: TPanel;
+    StaticText5: TStaticText;
+    DBDateTimeEditEh3: TDBDateTimeEditEh;
+    StaticText4: TStaticText;
+    DBDateTimeEditEh1: TDBDateTimeEditEh;
+    StaticText11: TStaticText;
+    StaticText12: TStaticText;
+    DBEditEh2: TDBEditEh;
+    DBEditEh7: TDBEditEh;
+    sbcm_payment: TOraclePackage;
+    DSDepositAccno: TDataSource;
+    CreditAccsDatSrc: TDataSource;
+    DepositInfoDatSrc: TDataSource;
+    XFCheckBox1: TXFCheckBox;
+    procedure FormCanResize(Sender: TObject; var NewWidth, NewHeight: Integer;
+      var Resize: Boolean);
+    procedure FormCreate(Sender: TObject);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure Button1Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  NewFrmUntimelyEtMoney: TNewFrmUntimelyEtMoney;
+    procedure exportproc(S :String);export;
+implementation
+
+{$R *.dfm}
+  uses sboapiDataModuleImpl,CommonDeclsImpl_new,SBTranslateProc;
+
+  procedure exportproc(S :String);export;
+var ContractID :Integer;
+begin
+   ContractID := Get_SelectedContID;
+
+   with frmUntimelyEtMoney_new do
+   begin
+
+      with DepositInfo do
+      begin
+         if Active then Close;
+         SetVariable ('ContractID',ContractID);
+         Open;
+      end;
+
+      with CreditAccs do
+      begin
+         Open;
+         AccountListCB.KeyValue := FieldByName('ID').AsInteger;
+      end;
+
+        with DepositAccno do
+        begin
+         if Active then Close;
+         SetVariable ('ContractID',ContractID);
+         Open;
+        end;
+
+      Caption := Get_SelectedContNo+' nömrəli depozitin vaxtından əvvəl ödənilməsi';
+
+      ShowModal;
+   end;
+end;
+exports
+   exportproc;
+
+procedure TNewFrmUntimelyEtMoney.Button1Click(Sender: TObject);
+
+resourcestring
+  rsTransactionsWillProcessed = 'Depozitin vaxtından əvvəl ödənilməsi ...';
+var
+    CommitUntimeExtMoney :Boolean;
+    CalcPercentDate : TDateTime;
+    CreditAccID : Integer;
+    faizinodenmesisecimi: Integer;
+    p_FACTICALINTERESTDEBT :real;
+
+begin
+
+if XFCheckBox1.Checked=true then
+begin
+   faizinodenmesisecimi:=1;
+end;
+
+if XFCheckBox1.Checked=false then
+begin
+   faizinodenmesisecimi:=0;
+end;
+
+
+    CalcPercentDate := integer(trunc(DTPCalcPercent.DateTime));
+    CreditAccID := DepositAccno.FieldByName('ID').AsInteger;
+    p_FACTICALINTERESTDEBT:= DepositInfo.FieldByName('FACTICALINTERESTDEBT').AsFloat;
+
+    with sbcm_payment do
+
+
+     CallProcedure('UntimeWithDrawMoney',['ContractID',Get_SelectedContID,
+                                           'p_CalcPercentDate',CalcPercentDate,
+                                           'p_CreditAccID',CreditAccID,
+                                           'p_checdpercentpeyment',faizinodenmesisecimi,
+                                           'p_FACTICALINTDEBT',p_FACTICALINTERESTDEBT]);
+
+
+    try
+    CommitUntimeExtMoney := TrDelayed_Show(Self,rsTransactionsWillProcessed);
+
+    Update;
+
+    SBCM_PAYMENT.CallProcedure('CommitWithDrawMoney',[
+       'DoCommit',CommitUntimeExtMoney
+    ]);
+
+    if CommitUntimeExtMoney then
+    Self.ModalResult := mrOk;
+    Self.Update;
+  except
+
+
+    SBCM_PAYMENT.CallProcedure('CommitWithDrawMoney',['DoCommit',
+        False
+    ]);
+
+    raise;
+
+  end;
+
+end;
+
+procedure TNewFrmUntimelyEtMoney.Button2Click(Sender: TObject);
+begin
+   sbcm_payment.Session.Rollback;
+   Close;
+end;
+
+procedure TNewFrmUntimelyEtMoney.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+  Resize := False;
+end;
+
+procedure TNewFrmUntimelyEtMoney.FormCreate(Sender: TObject);
+begin
+SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TNewFrmUntimelyEtMoney.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+  if ord(Key) = VK_ESCAPE then Close
+end;
+
+procedure TNewFrmUntimelyEtMoney.FormShow(Sender: TObject);
+begin
+   DTPCalcPercent.DateTime := DepositInfo.FieldByName('OpenDate').AsDateTime;
+   DTPBankDate.DateTime := Get_BankDate;
+end;
+
+initialization
+   frmUntimelyEtMoney_new := TNewFrmUntimelyEtMoney.Create(CommonApplication);
+end.

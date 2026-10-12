@@ -1,0 +1,73 @@
+object ResultForm: TResultForm
+  Left = 192
+  Top = 107
+  Caption = 'Result of Query'
+  ClientHeight = 453
+  ClientWidth = 688
+  Color = clBtnFace
+  Font.Charset = RUSSIAN_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 688
+    Height = 63
+    Align = alTop
+    TabOrder = 0
+    object Button1: TButton
+      Left = 8
+      Top = 8
+      Width = 161
+      Height = 49
+      Caption = 'Export Result ...'
+      TabOrder = 0
+      OnClick = Button1Click
+    end
+    object Button2: TButton
+      Left = 176
+      Top = 6
+      Width = 161
+      Height = 49
+      Caption = 'Close'
+      TabOrder = 1
+      OnClick = Button2Click
+    end
+  end
+  object DBGrid1: TDBGrid
+    Left = 0
+    Top = 63
+    Width = 688
+    Height = 390
+    Align = alClient
+    DataSource = DataSrcResult
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 1
+    TitleFont.Charset = DEFAULT_CHARSET
+    TitleFont.Color = clWindowText
+    TitleFont.Height = -11
+    TitleFont.Name = 'MS Sans Serif'
+    TitleFont.Style = []
+  end
+  object ResultQuery: TOracleDataSet
+    Optimize = False
+    Session = sboapiDataModule.SBSession
+    Left = 528
+    Top = 40
+  end
+  object DataSrcResult: TDataSource
+    DataSet = ResultQuery
+    Left = 456
+    Top = 40
+  end
+end

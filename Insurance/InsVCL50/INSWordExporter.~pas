@@ -1,0 +1,155 @@
+unit INSWordExporter;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Word97, ComObj, OleServer;
+
+type
+  TINSWordExporter = class(TComponent)
+  private
+    FFileName:OleVariant;
+    FWordApl : variant;
+    procedure SetFileName(Name : TFileName);
+    function  GetFileName:TFileName;
+    procedure WordSearch(data:string);
+    procedure WordInsert(info:string;_bold,_italic,_StrikeThrough,_Underline:boolean;
+                     _Size:integer;_Name:String;_center:boolean);
+  protected
+    { Protected declarations }
+  public
+    constructor Create(Owner : TComponent);override;
+    destructor Destroy; override;
+    procedure Open(Show : Boolean);
+    procedure Close;    
+    procedure Show;
+    procedure SetBookmark(Name : String; Value : String; FontBold, FontItalic, FontStrikeThrough, FontUnderline:boolean;
+                     FontSize:integer; FontName:String; FontCenter:boolean);
+    procedure Paste;
+  published
+    property FileName :TFileName read GetFileName write SetFileName ;
+    { Published declarations }
+  end;
+
+procedure Register;
+
+implementation
+
+procedure Register;
+begin
+  RegisterComponents('Smart', [TINSWordExporter]);
+end;
+
+procedure TINSWordExporter.WordSearch(data:string);
+var What,Which,Count,Name:OLEVariant;
+begin
+  What:=-1;
+  Which:=unAssigned;
+  Count:=unAssigned;
+  Name:=data;
+
+  FWordApl.Selection.GoTo(What,Which,Count,Name);
+end;
+
+
+procedure TINSWordExporter.WordInsert(info:string;_bold,_italic,_StrikeThrough,_Underline:boolean;                     _Size:integer;_Name:String;_center:boolean);begin
+  try
+    begin
+      if _bold then
+      FWordApl.Selection.Font.Bold:=5;
+      FWordApl.Selection.Font.italic:=_italic;
+      FWordApl.Selection.Font.StrikeThrough:=_StrikeThrough;
+      FWordApl.Selection.Font.Underline:=_Underline;
+      FWordApl.Selection.Font.Size:=_Size;
+      FWordApl.Selection.Font.Name:=_Name;
+      if _center=true then FWordApl.Selection.ParagraphFormat.Alignment:=1;
+      FWordApl.selection.TypeText(info);
+    end;
+  except
+    begin
+    end;
+  end;
+end;
+
+procedure TINSWordExporter.SetFileName(Name : TFileName);
+begin
+ if Name <> '' then
+  FFileName := Name;
+end;
+
+function TINSWordExporter.GetFileName:TFileName;
+begin
+  Result := String(FFileName);
+end;
+
+procedure TINSWordExporter.Close;
+begin
+  if not VarIsEmpty( FWordApl ) then
+   try
+     FWordApl := unAssigned;
+   finally
+     Finalize(FWordApl);
+   end;
+end;
+
+procedure TINSWordExporter.SetBookmark(Name : String; Value : String; FontBold, FontItalic, FontStrikeThrough, FontUnderline:boolean;
+                     FontSize:integer; FontName:String; FontCenter:boolean);
+begin
+  if (name = '') or (value ='') then exit;
+  WordSearch(Name);
+  WordInsert(Value, FontBold, FontItalic, FontStrikeThrough, FontUnderline,
+                     FontSize, FontName, FontCenter);
+end;
+
+procedure TINSWordExporter.Show;
+begin
+  FWordApl.Visible:=True;
+end;
+
+procedure TINSWordExporter.Paste;
+begin
+  FWordApl.Selection.PasteAndFormat(1);
+end;
+
+procedure TINSWordExporter.Open(Show : Boolean);
+begin
+  Screen.Cursor := crHourGlass;
+  FWordApl:=CreateoleObject('Word.Application');
+  try
+    FWordApl.Documents.Open(FFileName,
+      EmptyParam,EmptyParam,EmptyParam,
+      EmptyParam,EmptyParam,EmptyParam,
+      EmptyParam,EmptyParam,EmptyParam);
+      if Show then Self.Show;
+  except
+     on E : EOleException do begin
+     case E.ErrorCode of
+      2 : ShowMessage('File not found!');
+      3 : ShowMessage('Wrong file name!');
+      4 : ShowMessage('Too many open files!');
+      5 : ShowMessage('Access denied!');
+      100 : ShowMessage('EOF!');
+      101 : ShowMessage('Disk full!');
+      106 : ShowMessage('Invalid input!');
+     end;
+     Screen.Cursor := crDefault;
+     Close;
+    end;
+   end;
+  Screen.Cursor := crDefault;   
+end;
+
+constructor TINSWordExporter.Create(Owner : TComponent);
+begin
+  inherited Create(Owner);
+end;
+
+destructor TINSWordExporter.Destroy;
+begin
+  Close();
+  inherited Destroy;
+end;
+
+end.
+ 

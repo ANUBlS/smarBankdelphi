@@ -1,0 +1,43 @@
+unit Unit3;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, CMExcelExport, StdCtrls, ComCtrls;
+
+type
+  TForm3 = class(TForm)
+    Edit1: TEdit;
+    Edit2: TEdit;
+    DateTimePicker1: TDateTimePicker;
+    DateTimePicker2: TDateTimePicker;
+    Button1: TButton;
+    ExcelExport: TCMExcelExport;
+    procedure Button1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form3: TForm3;
+
+implementation
+
+uses BlankDMImpl;
+
+{$R *.dfm}
+
+procedure TForm3.Button1Click(Sender: TObject);
+begin
+ with ExcelExport do
+   begin
+      Connect;
+      ExportDataset(BlankDM.ins_bonushesabat,'Bonus Hesabatý.',True,false);
+      Disconnect;
+   end;
+end;
+
+end.

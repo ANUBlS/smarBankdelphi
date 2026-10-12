@@ -1,0 +1,351 @@
+﻿unit AReportImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ComCtrls, Buttons,comobj;
+
+type
+  TReportFrm = class(TForm)
+    SpeedButton1: TSpeedButton;
+    DateTimePicker1: TDateTimePicker;
+    Label1: TLabel;
+    SpeedButton2: TSpeedButton;
+    procedure FormCanResize(Sender: TObject; var NewWidth, NewHeight: Integer;
+      var Resize: Boolean);
+    procedure FormCreate(Sender: TObject);
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure SpeedButton2Click(Sender: TObject);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  ReportFrm: TReportFrm;
+  exl,sheet:variant ;
+implementation
+ uses DatModConstructionImpl;
+{$R *.dfm}
+
+procedure TReportFrm.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+resize:=false;
+end;
+
+procedure TReportFrm.FormCreate(Sender: TObject);
+begin
+DateTimePicker1.DateTime:=DatModConstruction.sysdat.fieldbyname('tek_dat').asdatetime;
+end;
+
+procedure TReportFrm.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+if ord(key)=VK_RETURN then
+ SpeedButton1.Click;
+end;
+
+procedure TReportFrm.SpeedButton1Click(Sender: TObject);
+ var
+ RestsStr,chpayStr: String;
+ ADDITIONALPARAMS,FilterStr,CheckStr:String;
+ sysdat :Tdatetime;
+ creid :integer;
+const
+number_format='#,##0.00';
+number_format_r='#,##0.00%';
+n='yyy';
+d=2;
+f=3;
+
+
+procedure CreateSheet;
+begin
+  try
+   Exl := CreateOleObject('Excel.Application');
+   Exl.WorkBooks.add;
+   Sheet := Exl.Application.Worksheets.Item[1];
+  except
+  end;
+end;
+ procedure DestroySheet;
+begin
+  try
+   Finalize(Sheet);
+   Finalize(Exl);
+  except
+
+  end;
+end;
+procedure ShowSheet;
+begin
+  try
+     Exl.Visible := True;
+  except
+     DestroySheet;
+   end;
+  end;
+var
+s,l,cell, r,i , j , k ,m ,w :Integer;
+tt,dat,dd :tdatetime;
+rc,t_val :integer;
+bash: string;
+ll,vv,ss :real;
+
+begin
+Sysdat:= Integer(trunc(DateTimePicker1.Date));
+creid:=DatModConstruction.Credits.FieldByName('id').AsInteger;
+DatModConstruction.sbcm_construction.CallProcedure('report',['p_id',creid,
+                                                             'p_dat',Sysdat]);
+  DatModConstruction.reppay.Close;
+  DatModConstruction.reppay.open;
+
+          CreateSheet;
+ try
+
+     Sheet.Range['A1:A60000'].ColumnWidth:=3;
+     Sheet.Range['B1:B60000'].ColumnWidth:=10;
+     Sheet.Range['C1:C60000'].ColumnWidth:=10;
+     Sheet.Range['D1:D60000'].ColumnWidth:=13;
+     Sheet.Range['E1:E60000'].ColumnWidth:=18;
+     Sheet.Range['F1:F60000'].ColumnWidth:=8;
+     Sheet.Range['G1:G60000'].ColumnWidth:=10;
+     Sheet.Range['H1:H60000'].ColumnWidth:=8;
+     Sheet.Range['I1:I60000'].ColumnWidth:=18;
+     Sheet.Range['J1:J60000'].ColumnWidth:=7;
+     Sheet.Range['K1:K60000'].ColumnWidth:=9;
+
+    { Sheet.Range['P1:A60000'].ColumnWidth:=35; }
+
+ /////////////////////////////////////////////////////////////////////////// /
+    Sheet.Cells[2,5]:='Alıcının fərdi ödəniş cədvəli  '+datetostr(Sysdat)+' tarixinə vəziyyət';
+   Sheet.Cells[2,5].Font.Bold :=true;
+   Sheet.Cells[2,5].Font.Color:=clolive;
+   Sheet.Cells[2,5].Font.size :=17;
+/////////////////////////////////////////////////////////////////////////////
+       k:=12 ; i:=0;
+
+      sheet.Cells[i+3,3]:='S.S.A :';
+      Sheet.Cells[i+3,3].Font.Bold :=true;
+      Sheet.Cells[i+3,3].Font.Color:=clNavy;
+      Sheet.Cells[i+3,3].Font.size :=13;
+
+      Sheet.Cells[i+3,4].Font.Bold :=true;
+      Sheet.Cells[i+3,4].Font.size :=12;
+      sheet.Cells[i+3,4]:=DatModConstruction.Credits.FieldByName('custname').AsString;
+
+      sheet.Cells[i+4,3]:='Kod :';
+      Sheet.Cells[i+4,3].Font.Bold :=true;
+      Sheet.Cells[i+4,3].Font.Color:=clNavy;
+      Sheet.Cells[i+4,3].Font.size :=13;
+
+      Sheet.Cells[i+4,4].Font.Bold :=true;
+      Sheet.Cells[i+4,4].Font.size :=12;
+      sheet.Cells[i+4,4]:=DatModConstruction.Credits.FieldByName('code').AsString;
+      //Sheet.Cells[i+4,4].textFormat;
+
+      sheet.Cells[i+5,3]:='Müqavilə :';
+      Sheet.Cells[i+5,3].Font.Bold :=true;
+      Sheet.Cells[i+5,3].Font.Color:=clNavy;
+      Sheet.Cells[i+5,3].Font.size :=13;
+
+      Sheet.Cells[i+5,4].Font.Bold :=true;
+      Sheet.Cells[i+5,4].Font.size :=12;
+      sheet.Cells[i+5,4]:=DatModConstruction.Credits.FieldByName('ContNum').AsString+' ,tarix: '+
+      datetostr( DatModConstruction.Credits.FieldByName('opendate').AsDateTime);
+
+      sheet.Cells[i+6,3]:='Ünvan :';
+      Sheet.Cells[i+6,3].Font.Bold :=true;
+      Sheet.Cells[i+6,3].Font.Color:=clNavy;
+      Sheet.Cells[i+6,3].Font.size :=13;
+
+      Sheet.Cells[i+6,4].Font.Bold :=true;
+      Sheet.Cells[i+6,4].Font.size :=12;
+      sheet.Cells[i+6,4]:=DatModConstruction.Credits.FieldByName('address').AsString;
+
+      sheet.Cells[i+7,3]:='Aylıq ödəniş :';
+      Sheet.Cells[i+7,3].Font.Bold :=true;
+      Sheet.Cells[i+7,3].Font.Color:=clNavy;
+      Sheet.Cells[i+7,3].Font.size :=13;
+
+      Sheet.Cells[i+7,4].Font.Bold :=true;
+      Sheet.Cells[i+7,4].Font.size :=12;
+      sheet.Cells[i+7,4]:=DatModConstruction.Credits.FieldByName('monthpay').asfloat;
+
+      sheet.Cells[i+8,3]:='Ödəniş günü:';
+      Sheet.Cells[i+8,3].Font.Bold :=true;
+      Sheet.Cells[i+8,3].Font.Color:=clNavy;
+      Sheet.Cells[i+8,3].Font.size :=13;
+
+      Sheet.Cells[i+8,4].Font.Bold :=true;
+      Sheet.Cells[i+8,4].Font.size :=12;
+      sheet.Cells[i+8,4]:=30;
+
+      sheet.Cells[i+10,3]:='Mənzilin dəyəri';
+      Sheet.Cells[i+10,3].Font.Bold :=true;
+      Sheet.Cells[i+10,3].Font.size :=11;
+
+      sheet.Cells[i+11,3]:=DatModConstruction.Credits.FieldByName('CREDITAMOUNT').asfloat;
+      Sheet.Cells[i+11,3].Font.size :=10;
+
+      sheet.Cells[i+10,4]:='Sahə üzrə ödənilib';
+      Sheet.Cells[i+10,4].Font.Bold :=true;
+      Sheet.Cells[i+10,4].Font.size :=11;
+
+      sheet.Cells[i+11,4]:=DatModConstruction.Credits.FieldByName('INITIALAMOUNT').asfloat;
+      Sheet.Cells[i+11,4].Font.size :=10;
+
+      sheet.Cells[i+10,5]:='Kredit üzrə ödənilib';
+      Sheet.Cells[i+10,5].Font.Bold :=true;
+      Sheet.Cells[i+10,5].Font.size :=11;
+
+      sheet.Cells[i+10,6]:='Qalıq:';
+      Sheet.Cells[i+10,6].Font.Bold :=true;
+      Sheet.Cells[i+10,6].Font.size :=11;
+
+      sheet.Cells[i+11,6]:='=sum(C11-(D11+E11))';
+      Sheet.Cells[i+11,6].Font.size :=10;
+
+      Sheet.Range['C'+IntToStr(10)+':F'+inttostr(11)].Borders.Color:=clred;
+
+    ShowSheet; i:=1;
+          Sheet.Cells[i+k,1]:='S/N';
+          Sheet.Cells[i+k,1].Font.Bold :=true;
+          Sheet.Cells[i+k,1].Font.Color:=clblack;
+
+          Sheet.Cells[i+k,2]:='Tarix';
+          Sheet.Cells[i+k,2].Font.Bold :=true;
+          Sheet.Cells[i+k,2].Font.Color:=clblack;
+
+          Sheet.Cells[i+k,3]:='Ödənilməli';
+          Sheet.Cells[i+k,3].Font.Bold :=true;
+          Sheet.Cells[i+k,3].Font.Color:=clblack;
+
+          Sheet.Cells[i+k,4]:='Ödənilib';
+          Sheet.Cells[i+k,4].Font.Bold :=true;
+          Sheet.Cells[i+k,4].Font.Color:=clblack;
+
+          Sheet.Cells[i+k,5]:='Ödəmə növü';
+          Sheet.Cells[i+k,5].Font.Bold :=true;
+          Sheet.Cells[i+k,5].Font.Color:=clblack;
+
+
+          Sheet.Cells[i+k,6]:='Gecikmə günləri';
+          Sheet.Cells[i+k,6].Font.Bold :=true;
+          Sheet.Cells[i+k,6].Font.Color:=clblack;
+          Sheet.Cells[i+k,6].WrapText := true;
+
+          Sheet.Cells[i+k,7]:='Hesablanmış cərimə';
+          Sheet.Cells[i+k,7].Font.Bold :=true;
+          Sheet.Cells[i+k,7].Font.Color:=clblack;
+          Sheet.Cells[i+k,7].WrapText := true;
+
+          Sheet.Cells[i+k,8]:=' Ödənilmiş cərimə';
+          Sheet.Cells[i+k,8].Font.Bold :=true;
+          Sheet.Cells[i+k,8].Font.Color:=clblack;
+          Sheet.Cells[i+k,8].WrapText := true;
+
+          Sheet.Cells[i+k,9]:='Ödəmə növü';
+          Sheet.Cells[i+k,9].Font.Bold :=true;
+          Sheet.Cells[i+k,9].Font.Color:=clblack;
+          Sheet.Cells[i+k,9].WrapText := true;
+
+          Sheet.Cells[i+k,10]:='Cərimə borcu';
+          Sheet.Cells[i+k,10].Font.Bold :=true;
+          Sheet.Cells[i+k,10].Font.Color:=clblack;
+          Sheet.Cells[i+k,10].WrapText := true;
+
+          Sheet.Cells[i+k,11]:='Cəmi borc';
+          Sheet.Cells[i+k,11].Font.Bold :=true;
+          Sheet.Cells[i+k,11].Font.Color:=clblack;
+
+       rc:=DatModConstruction.reppay.RecordCount ;
+      for i:=1 to rc do  begin
+        if DatModConstruction.reppay.FieldByName('kod').asinteger<>0 then
+        begin
+          Sheet.Cells[i+k+1,2].Font.Color:=clBlue;
+          Sheet.Cells[i+k+1,2].Font.Bold :=true;
+          Sheet.Cells[i+k+1,3].Font.Color:=clBlue;
+          Sheet.Cells[i+k+1,4].Font.Color:=clBlue;
+        end;
+        Sheet.Cells[i+k+1,1].Font.Bold :=true;
+        Sheet.Cells[i+k+1,1]:=i;
+
+        Sheet.Cells[i+k+1,2]:=DatModConstruction.reppay.FieldByName('dat').asdatetime;
+
+        Sheet.Cells[i+k+1,3]:=DatModConstruction.reppay.FieldByName('MONTHSPAY').AsFloat;
+
+        Sheet.Cells[i+k+1,4]:=DatModConstruction.reppay.FieldByName('PAYAMMOUNT').AsFloat;
+
+        Sheet.Cells[i+k+1,5]:=DatModConstruction.reppay.FieldByName('MAINDESCRIPTION').AsString;
+        Sheet.Cells[i+k+1,5].WrapText := true;
+
+        Sheet.Cells[i+k+1,6]:=DatModConstruction.reppay.FieldByName('duedaycount').AsInteger;
+
+        Sheet.Cells[i+k+1,7]:=DatModConstruction.reppay.FieldByName('persenammount').AsFloat;
+
+       Sheet.Cells[i+k+1,8]:=DatModConstruction.reppay.FieldByName('paydueammount').AsFloat;
+
+       Sheet.Cells[i+k+1,9]:=DatModConstruction.reppay.FieldByName('duedecription').AsString;
+        Sheet.Cells[i+k+1,9].WrapText := true;
+       Sheet.Cells[i+k+1,10]:=DatModConstruction.reppay.FieldByName('cermeborc').AsFloat ;
+
+       Sheet.Cells[i+k+1,11]:=DatModConstruction.reppay.FieldByName('sumdueammount').AsFloat;
+      //  Sheet.Cells[i+k+1,5].Font.Bold :=true;
+      //  Sheet.Cells[i+k+2,5]:=
+
+       DatModConstruction.reppay.Next;
+       end;
+        Sheet.Cells[rc+k+2,1].Font.Bold :=true;
+        Sheet.Cells[rc+k+2,1]:='Cəmi';
+        Sheet.Cells[rc+k+2,1].Font.Color:=clGreen;
+
+        Sheet.Cells[rc+k+2,3].Font.Bold :=true;
+        Sheet.Cells[rc+k+2,3].Font.Color:=clGreen;
+        Sheet.Cells[rc+k+2,3]:='=sum(C14:C'+inttostr(rc+13)+')';
+
+        Sheet.Cells[rc+k+2,4].Font.Bold :=true;
+        Sheet.Cells[rc+k+2,4].Font.Color:=clGreen;
+        Sheet.Cells[rc+k+2,4]:='=sum(D14:D'+inttostr(rc+13)+')';
+
+      sheet.Cells[11,5]:='=sum(D14:D'+inttostr(rc+13)+')';
+      Sheet.Cells[11,5].Font.size :=10;
+     {   Sheet.Cells[rc+k+1,4].Font.Name:='Azl Sans Serif';
+        Sheet.Cells[rc+k+1,4].Font.Bold :=true;
+        Sheet.Cells[rc+k+2,4].Font.Color:=clGreen;
+        Sheet.Cells[rc+k+2,4]:=vv;
+
+        Sheet.Cells[rc+k+1,5].Font.Name:='Azl Sans Serif';
+        Sheet.Cells[rc+k+1,5].Font.Bold :=true;
+        Sheet.Cells[rc+k+2,5].Font.Color:=clGreen;
+        Sheet.Cells[rc+k+2,5]:=ll;
+    }               bash:=inttostr(k+1);
+
+     // ShowMessage(inttostr(m)); exit;
+   //   Exl.Range['A'+bash+':K'+inttostr(m+k+1)].select;
+      Sheet.Range['A'+bash+':K'+inttostr(m+k+1+rc)].Borders.Color:=clBlack;
+
+  finally
+
+   Exl.Range['A1:A1'].Select;
+
+   Screen.Cursor := crDefault;
+   DestroySheet;
+  DatModConstruction.reppay.EnableControls;
+  end;
+  DatModConstruction.reppay.Session.Commit;
+ DatModConstruction.reppay.close;
+
+end;
+
+
+
+procedure TReportFrm.SpeedButton2Click(Sender: TObject);
+begin
+close
+end;
+
+end.

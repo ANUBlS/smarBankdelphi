@@ -1,0 +1,26 @@
+unit FixedDataModule;
+
+interface
+
+uses
+  SysUtils, Classes, DB, OracleData;
+
+type
+  TDataModuleFixed = class(TDataModule)
+    DFixed: TDataSource;
+    ODSFixed: TOracleDataSet;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  DataModuleFixed: TDataModuleFixed;
+
+implementation
+
+{$R *.dfm}
+ uses sboapiDataModuleImpl;
+end.
+

@@ -1,0 +1,146 @@
+object frmServAddEdit: TfrmServAddEdit
+  Left = 450
+  Top = 292
+  BorderIcons = [biSystemMenu]
+  BorderStyle = bsSingle
+  ClientHeight = 249
+  ClientWidth = 264
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poScreenCenter
+  OnCreate = FormCreate
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Label1: TLabel
+    Left = 8
+    Top = 44
+    Width = 35
+    Height = 13
+    Caption = 'Мябляь'
+  end
+  object Label2: TLabel
+    Left = 8
+    Top = 76
+    Width = 35
+    Height = 13
+    Caption = 'Валйута'
+  end
+  object Label3: TLabel
+    Left = 16
+    Top = 108
+    Width = 29
+    Height = 13
+    Caption = 'Сервис'
+  end
+  object Label4: TLabel
+    Left = 16
+    Top = 140
+    Width = 30
+    Height = 13
+    Caption = 'Метод'
+  end
+  object Label5: TLabel
+    Left = 8
+    Top = 12
+    Width = 23
+    Height = 13
+    Caption = 'Tarix'
+  end
+  object DBLookupComboBox1: TDBLookupComboBox
+    Left = 56
+    Top = 72
+    Width = 145
+    Height = 21
+    KeyField = 'ID'
+    ListField = 'NAME'
+    ListSource = DataModCable.dsValutes
+    TabOrder = 0
+  end
+  object DBLookupComboBox2: TDBLookupComboBox
+    Left = 56
+    Top = 104
+    Width = 145
+    Height = 21
+    KeyField = 'ID'
+    ListField = 'NAME'
+    ListSource = DataModCable.dsServices
+    TabOrder = 1
+  end
+  object CurrencyEdit1: TCurrencyEdit
+    Left = 56
+    Top = 40
+    Width = 145
+    Height = 21
+    TabOrder = 2
+    Text = '0'
+  end
+  object Button1: TButton
+    Left = 40
+    Top = 207
+    Width = 75
+    Height = 25
+    Caption = 'Йаддаша йаз'
+    ModalResult = 1
+    TabOrder = 3
+  end
+  object Button2: TButton
+    Left = 128
+    Top = 207
+    Width = 75
+    Height = 25
+    Caption = 'Баьла'
+    ModalResult = 2
+    TabOrder = 4
+  end
+  object cbMeth: TComboBox
+    Left = 56
+    Top = 136
+    Width = 145
+    Height = 21
+    Style = csDropDownList
+    ItemHeight = 13
+    TabOrder = 5
+    Items.Strings = (
+      'Kassa'
+      'Bank')
+  end
+  object tpTime: TDateTimePicker
+    Left = 56
+    Top = 8
+    Width = 146
+    Height = 21
+    CalAlignment = dtaLeft
+    Date = 39218.4532671412
+    Time = 39218.4532671412
+    DateFormat = dfShort
+    DateMode = dmComboBox
+    Kind = dtkDate
+    ParseInput = False
+    TabOrder = 6
+  end
+  object CBoxFrmAnthrAcc: TDBLookupComboBox
+    Left = 110
+    Top = 172
+    Width = 121
+    Height = 21
+    KeyField = 'ID'
+    ListField = 'CONTRACT_NUM'
+    ListSource = DataModCable.DS_fullContracts
+    TabOrder = 7
+  end
+  object ChBoxFrmAnthrAcc: TCheckBox
+    Left = 8
+    Top = 176
+    Width = 92
+    Height = 17
+    Alignment = taLeftJustify
+    Caption = 'Диэяр щесабдан'
+    TabOrder = 8
+    OnClick = ChBoxFrmAnthrAccClick
+  end
+end

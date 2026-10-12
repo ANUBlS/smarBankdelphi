@@ -1,0 +1,87 @@
+unit korreportUnit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Grids, DBGrids, StdCtrls, ComCtrls, ToolWin, ExtCtrls, Db, OracleData,
+  CMExcelExport, ImgList;
+
+type
+  TKorrReport = class(TForm)
+    ImageList1: TImageList;
+    CMExcelExport1: TCMExcelExport;
+    OracleDataSet1: TOracleDataSet;
+    Panel3: TPanel;
+    CoolBar1: TCoolBar;
+    ToolBar1: TToolBar;
+    ToolButton1: TToolButton;
+    ToolButton10: TToolButton;
+    ToolButton11: TToolButton;
+    ToolButton20: TToolButton;
+    ToolButton14: TToolButton;
+    ToolButton15: TToolButton;
+    ToolButton17: TToolButton;
+    ToolButton3: TToolButton;
+    ToolButton6: TToolButton;
+    ToolButton2: TToolButton;
+    ToolButton4: TToolButton;
+    ToolButton5: TToolButton;
+    RadioButton1: TRadioButton;
+    RadioButton2: TRadioButton;
+    Panel1: TPanel;
+    DBGrid1: TDBGrid;
+    DataSource1: TDataSource;
+    procedure ToolButton1Click(Sender: TObject);
+    procedure ToolButton14Click(Sender: TObject);
+    procedure ToolButton6Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  KorrReport: TKorrReport;
+
+implementation
+ 
+
+
+{$R *.DFM}
+
+ uses
+ sboapiDataModuleImpl,SBTranslateProc;
+
+procedure TKorrReport.ToolButton1Click(Sender: TObject);
+begin
+OracleDataSet1.Open;
+end;
+
+procedure TKorrReport.FormCreate(Sender: TObject);
+begin
+SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TKorrReport.ToolButton14Click(Sender: TObject);
+begin
+OracleDataSet1.close;
+end;
+
+procedure TKorrReport.ToolButton6Click(Sender: TObject);
+begin
+OracleDataSet1.open;
+   with CMExcelExport1 do
+   begin
+      Connect;
+      ExportDataset( OracleDataSet1,'FileReport',True);
+      Disconnect;
+  {
+  if not CMExcelExport1.Connected then CMExcelExport1.Connect;
+  CMExcelExport1.ExportDataset(dbgrid1.datasource.dataset,'KorReport',true,true);
+  CMExcelExport1.Disconnect;}
+end;
+end;
+
+end.

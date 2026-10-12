@@ -1,0 +1,290 @@
+﻿unit Unitsalary;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Grids, DBGrids, ComCtrls, ToolWin, ImgList, CMExcelExport, Menus,
+  OleServer, ExcelXP,oracledata,Variants;
+
+type
+  TSalary = class(TForm)
+    PopupMenu3: TPopupMenu;
+    EXCEL2: TMenuItem;
+    PopupMenu2: TPopupMenu;
+    EXCEL1: TMenuItem;
+    PopupMenu1: TPopupMenu;
+    N11: TMenuItem;
+    N12: TMenuItem;
+    CMExcelExport1: TCMExcelExport;
+    ImageList1: TImageList;
+    CoolBar1: TCoolBar;
+    ToolBar1: TToolBar;
+    isertbtn: TToolButton;
+    ToolButton1: TToolButton;
+    ToolButton7: TToolButton;
+    ToolButton2: TToolButton;
+    DBGrid1: TDBGrid;
+    DBGrid2: TDBGrid;
+    OpenDialogCards: TOpenDialog;
+    ExcelApplication1: TExcelApplication;
+    procedure FormActivate(Sender: TObject);
+    procedure isertbtnClick(Sender: TObject);
+    procedure DBGrid1DrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TColumn; State: TGridDrawState);
+    procedure DBGrid2DrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TColumn; State: TGridDrawState);
+    procedure DBGrid1TitleClick(Column: TColumn);
+    procedure DBGrid2TitleClick(Column: TColumn);
+    procedure N11Click(Sender: TObject);
+    procedure N12Click(Sender: TObject);
+    procedure EXCEL1Click(Sender: TObject);
+    procedure EXCEL2Click(Sender: TObject);
+    procedure ToolButton2Click(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure ToolButton1Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Salary: TSalary;
+
+implementation
+
+uses Unit18,sboapiDataModuleImpl, SBTranslateProc;
+
+{$R *.DFM}
+
+procedure TSalary.FormActivate(Sender: TObject);
+begin
+DataMod_CARDS.salarybase.Open;
+DataMod_CARDS.salarybase2.Open;
+end;
+
+procedure TSalary.isertbtnClick(Sender: TObject);
+const
+    c_info = '%d record is imported!';
+var
+   V,Sheet,Sheets  :Variant;
+   cell,row,i,j    :Integer;
+begin
+  if OpenDialogCards.Execute then begin
+//**********************
+
+
+  DataMod_CARDS.salarybase.Open;
+  V:=ExcelApplication1.Application;
+  ExcelApplication1.Connect;
+  V.Workbooks.Open( OpenDialogCards.FileName);
+  Sheet := V.Workbooks[1].Worksheets['CARDS'];
+  Sheets := V.Sheets;
+
+  DataMod_CARDS.salarybase.First;
+  //for j:=10 to RecCount do
+  j:=10;
+  repeat
+   //begin
+   cell :=2;
+   DataMod_CARDS.salarybase.Insert ;
+    for i:=0  to DataMod_CARDS.salarybase.FieldCount-4 do
+     begin
+      Application.ProcessMessages;
+      
+      DataMod_CARDS.salarybase.Fields[i].AsString :=Sheet.cells[j,cell];
+      cell:=cell+1;
+     end;
+    DataMod_CARDS.salarybase.Post;
+    DataMod_CARDS.salarybase.Next;
+    j:=j+1;
+  until Sheet.cells[j,2].Text = '';
+//   end;
+  V :=null;
+  Application.ProcessMessages;
+  ExcelApplication1.Quit;
+  ExcelApplication1.Disconnect;
+  Application.ProcessMessages;
+  DataMod_CARDS.salarybase.session.Commit;
+  ShowMessage(Format(c_info, [j-10]));
+//**********************
+  end; {if OpenDialogCards.Execute}
+
+  DataMod_CARDS.salarybase.Refresh;
+  DataMod_CARDS.salarybase2.Refresh;
+  end;
+
+
+procedure TSalary.DBGrid1DrawColumnCell(Sender: TObject; const Rect: TRect;
+  DataCol: Integer; Column: TColumn; State: TGridDrawState);
+var
+  ImageIndex: Integer;
+
+begin
+
+ ImageIndex := -1;
+  with Sender as TDBGrid do
+  begin
+    if DataSource.DataSet.RecordCount <> 0 then
+    begin
+      case DataSource.DataSet.FieldByName('STATUS').AsInteger of
+
+      1:
+        ImageIndex :=25;
+      2:
+        ImageIndex :=3 ;
+      3:
+        ImageIndex :=26;
+
+      4:
+        ImageIndex:=13;  
+
+      else
+      end;
+      if (DataCol = 1) and (ImageIndex <> -1) then
+        ImageList1.Draw(Canvas, Rect.Left, Rect.Top, ImageIndex, True)
+      else
+        DefaultDrawColumnCell(Rect, DataCol, Column, State);
+    end;
+
+
+
+
+  end;
+end;
+
+procedure TSalary.DBGrid2DrawColumnCell(Sender: TObject; const Rect: TRect;
+  DataCol: Integer; Column: TColumn; State: TGridDrawState);
+var
+  ImageIndex: Integer;
+
+begin
+
+ ImageIndex := -1;
+  with Sender as TDBGrid do
+  begin
+    if DataSource.DataSet.RecordCount <> 0 then
+    begin
+      case DataSource.DataSet.FieldByName('STATUS').AsInteger of
+
+      1:
+        ImageIndex :=25;
+      2:
+        ImageIndex :=3 ;
+      3:
+        ImageIndex :=26;
+
+      4:
+        ImageIndex:=13;  
+
+      else
+      end;
+      if (DataCol = 1) and (ImageIndex <> -1) then
+        ImageList1.Draw(Canvas, Rect.Left, Rect.Top, ImageIndex, True)
+      else
+        DefaultDrawColumnCell(Rect, DataCol, Column, State);
+    end;
+
+
+
+
+  end;
+end;
+
+procedure TSalary.DBGrid1TitleClick(Column: TColumn);
+var
+   TitleName :string;
+   SortPosition: word;
+begin
+ SortPosition :=100;
+ //OrderedTitle :=Column.FieldName; //H.R. 24.06.2008
+ if (DBGrid1.DataSource.DataSet.IsEmpty) or (Column.FieldName = EmptyStr) then Exit;
+ Screen.Cursor :=crHourGlass;
+ TitleName :=Column.FieldName;
+ with TOracleDataSet(DBGrid1.DataSource.DataSet) do
+  try
+  
+   SortPosition :=SQL.Add('ORDER BY '+ TitleName);
+   Refresh;
+  finally
+   SQL[SortPosition] :=EmptyStr;
+   Screen.Cursor :=crDefault;
+  end;
+end;
+
+procedure TSalary.DBGrid2TitleClick(Column: TColumn);
+var
+   TitleName :string;
+   SortPosition: word;
+begin
+ SortPosition :=100;
+ //OrderedTitle :=Column.FieldName; //H.R. 24.06.2008
+ if (DBGrid2.DataSource.DataSet.IsEmpty) or (Column.FieldName = EmptyStr) then Exit;
+ Screen.Cursor :=crHourGlass;
+ TitleName :=Column.FieldName;
+ with TOracleDataSet(DBGrid2.DataSource.DataSet) do
+  try
+  
+   SortPosition :=SQL.Add('ORDER BY '+ TitleName);
+   Refresh;
+  finally
+   SQL[SortPosition] :=EmptyStr;
+   Screen.Cursor :=crDefault;
+  end;
+end;
+
+procedure TSalary.N11Click(Sender: TObject);
+begin
+  if not CMExcelExport1.Connected then CMExcelExport1.Connect;
+  CMExcelExport1.ExportDataset(DataMod_CARDS.salarybase,'salary',true);
+  CMExcelExport1.Disconnect;
+end;
+
+procedure TSalary.N12Click(Sender: TObject);
+begin
+  if not CMExcelExport1.Connected then CMExcelExport1.Connect;
+  CMExcelExport1.ExportDataset(DataMod_CARDS.salarybase2,'salary',true);
+  CMExcelExport1.Disconnect;
+end;
+
+procedure TSalary.EXCEL1Click(Sender: TObject);
+begin
+N11.Click;
+end;
+
+procedure TSalary.EXCEL2Click(Sender: TObject);
+begin
+N12.Click;
+end;
+
+procedure TSalary.ToolButton2Click(Sender: TObject);
+begin
+DataMod_CARDS.mainpacket.CallProcedure('delete_salary',[]);
+DataMod_CARDS.salarybase.Refresh;
+DataMod_CARDS.salarybase2.Refresh;
+end;
+
+procedure TSalary.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+DataMod_CARDS.mainpacket.CallProcedure('delete_salary',[]);
+DataMod_CARDS.salarybase.Refresh;
+DataMod_CARDS.salarybase2.Refresh;
+end;
+
+procedure TSalary.FormCreate(Sender: TObject);
+begin
+SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TSalary.ToolButton1Click(Sender: TObject);
+begin
+if MessageDlg('əməliyyatları təsdiq etmək istəyirsinizmi?',mtinformation,[mbyes,mbno],0)=mryes
+then
+DataMod_CARDS.mainpacket.CallProcedure('transaction_salary',[]);
+DataMod_CARDS.salarybase.refresh;
+DataMod_CARDS.salarybase2.refresh;
+end;
+
+end.

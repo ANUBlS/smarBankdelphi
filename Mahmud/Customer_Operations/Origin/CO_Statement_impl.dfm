@@ -1,0 +1,310 @@
+object CO_Statement_Form: TCO_Statement_Form
+  Left = 278
+  Top = 161
+  ActiveControl = GrBoxMain
+  BorderStyle = bsDialog
+  ClientHeight = 390
+  ClientWidth = 520
+  Color = clBtnFace
+  Font.Charset = RUSSIAN_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Azl Sans Serif'
+  Font.Style = [fsBold]
+  OldCreateOrder = False
+  OnActivate = FormActivate
+  OnCreate = FormCreate
+  OnKeyDown = FormKeyDown
+  PixelsPerInch = 96
+  TextHeight = 13
+  object GrBoxMain: TGroupBox
+    Left = 0
+    Top = 0
+    Width = 516
+    Height = 348
+    Caption = 'ўесабдан чыхарыш'
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Azl Sans Serif'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 0
+    object GrBoxDate: TGroupBox
+      Left = 3
+      Top = 17
+      Width = 511
+      Height = 49
+      Caption = '“арих аралыьы:'
+      TabOrder = 0
+      object LabelBegDate: TLabel
+        Left = 4
+        Top = 30
+        Width = 33
+        Height = 13
+        Caption = 'явв€ли:'
+      end
+      object LabelEndDate: TLabel
+        Left = 156
+        Top = 30
+        Width = 28
+        Height = 13
+        Caption = 'Sonu:'
+      end
+      object DTP_Begin: TDateTimePicker
+        Left = 41
+        Top = 24
+        Width = 104
+        Height = 21
+        CalAlignment = dtaLeft
+        Date = 38840.7168453704
+        Time = 38840.7168453704
+        DateFormat = dfShort
+        DateMode = dmComboBox
+        Kind = dtkDate
+        ParseInput = False
+        TabOrder = 0
+      end
+      object DTP_End: TDateTimePicker
+        Left = 189
+        Top = 24
+        Width = 109
+        Height = 21
+        CalAlignment = dtaLeft
+        Date = 38840.7204324769
+        Time = 38840.7204324769
+        DateFormat = dfShort
+        DateMode = dmComboBox
+        Kind = dtkDate
+        ParseInput = False
+        TabOrder = 1
+      end
+      object CBTurnOver: TCheckBox
+        Left = 365
+        Top = 10
+        Width = 105
+        Height = 17
+        Caption = 'ƒюврийй€си оланлар'
+        Checked = True
+        State = cbChecked
+        TabOrder = 2
+      end
+      object CBRateDiff: TCheckBox
+        Left = 365
+        Top = 28
+        Width = 96
+        Height = 17
+        Caption = ' урс ‘€рги »л€'
+        TabOrder = 3
+      end
+    end
+    object GrBoxChecking: TGroupBox
+      Left = 3
+      Top = 67
+      Width = 510
+      Height = 278
+      Caption = '„ыхарыш сечимл€ри'
+      TabOrder = 1
+      object Label_Acc_No: TLabel
+        Left = 10
+        Top = 128
+        Width = 73
+        Height = 13
+        Caption = 'ўесаб нюмр€си:'
+      end
+      object Label_Bal_Cn: TLabel
+        Left = 8
+        Top = 168
+        Width = 66
+        Height = 13
+        Caption = 'Ѕаланс щесабы'
+      end
+      object LabelCli_Id: TLabel
+        Left = 11
+        Top = 88
+        Width = 75
+        Height = 13
+        Caption = 'ћцшт€ринин коду'
+      end
+      object Edit_Acc_No: TEdit
+        Left = 10
+        Top = 144
+        Width = 494
+        Height = 21
+        TabOrder = 0
+      end
+      object Edit_Bal_Cn: TEdit
+        Left = 9
+        Top = 185
+        Width = 494
+        Height = 21
+        TabOrder = 1
+      end
+      object BtnOk: TBitBtn
+        Left = 392
+        Top = 238
+        Width = 113
+        Height = 26
+        Caption = 'Ok'
+        TabOrder = 2
+        OnClick = BtnOkClick
+        Glyph.Data = {
+          36010000424D3601000000000000760000002800000015000000100000000100
+          040000000000C000000000000000000000001000000000000000000000000000
+          80000080000000808000800000008000800080800000C0C0C000808080000000
+          FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00333333333333
+          333333333000333333333333333333333000338FF3FF3333333333333000338C
+          F38CFF33333333333000338CF38CCCFF333333333000338CF38CCCCCFF333333
+          3000338CF38CCCCCCCFF33333000338CF38CCCCCCCCCFF333000338CF38CCCCC
+          CCCC88F33000338CF38CCCCCCC8833333000338CF38CCCCC883333333000338C
+          F38CCC88333333333000338CF38C88333333333330003388F388333333333333
+          3000333333333333333333333000333333333333333333333000}
+      end
+      object CBoxExtractCheck: TComboBox
+        Left = 392
+        Top = 214
+        Width = 113
+        Height = 21
+        Style = csDropDownList
+        ItemHeight = 13
+        TabOrder = 3
+        Items.Strings = (
+          'baxmaq'
+          'файла йаз'
+          'ехжел'
+          'с€н€дл€р'
+          '')
+      end
+      object EditCli_Id: TEdit
+        Left = 11
+        Top = 104
+        Width = 493
+        Height = 21
+        TabOrder = 4
+      end
+      object RGroupPrintMode: TRadioGroup
+        Left = 8
+        Top = 208
+        Width = 177
+        Height = 57
+        Caption = '„ап ш€кли'
+        ItemIndex = 0
+        Items.Strings = (
+          'Ѕир с€щиф€д€ ардыжыл'
+          'јйры-айры с€щиф€л€рд€')
+        TabOrder = 5
+      end
+      object CBCurrency: TCheckBox
+        Left = 12
+        Top = 31
+        Width = 97
+        Height = 17
+        Caption = 'Valyuta'
+        TabOrder = 6
+        OnClick = CBCurrencyClick
+      end
+      object DBLCBavalute: TDBLookupComboBox
+        Left = 11
+        Top = 49
+        Width = 141
+        Height = 21
+        KeyField = 'VALUTE'
+        ListField = 'VALU_NAME'
+        ListSource = CO_DataMod.DSCurrency
+        TabOrder = 7
+      end
+      object DBLCBfilial: TDBLookupComboBox
+        Left = 187
+        Top = 49
+        Width = 143
+        Height = 21
+        KeyField = 'ID'
+        ListField = 'NAME'
+        ListSource = CO_DataMod.DSFilial
+        TabOrder = 8
+      end
+      object CBFilial: TCheckBox
+        Left = 187
+        Top = 31
+        Width = 97
+        Height = 17
+        Caption = 'Filial'
+        TabOrder = 9
+        OnClick = CBFilialClick
+      end
+      object CBUser: TCheckBox
+        Left = 365
+        Top = 30
+        Width = 72
+        Height = 17
+        Caption = 'Operator'
+        TabOrder = 10
+        OnClick = CBUserClick
+      end
+      object dblcbUser: TDBLookupComboBox
+        Left = 364
+        Top = 49
+        Width = 140
+        Height = 21
+        KeyField = 'ID'
+        ListField = 'NAME'
+        ListSource = CO_DataMod.DSUsers
+        TabOrder = 11
+      end
+      object RGroupSetting: TRadioGroup
+        Left = 195
+        Top = 208
+        Width = 182
+        Height = 58
+        Caption = '“€йинатын мювгейи'
+        ItemIndex = 0
+        Items.Strings = (
+          '—аь т€р€фд€'
+          'јшаьыда')
+        TabOrder = 12
+      end
+    end
+  end
+  object PanelProgress: TPanel
+    Left = 0
+    Top = 349
+    Width = 517
+    Height = 41
+    BevelInner = bvRaised
+    BevelOuter = bvLowered
+    TabOrder = 1
+    Visible = False
+    object PrBarParent: TGauge
+      Left = 2
+      Top = 21
+      Width = 512
+      Height = 17
+      BackColor = clScrollBar
+      ForeColor = clHighlight
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWhite
+      Font.Height = -11
+      Font.Name = 'MS Sans Serif'
+      Font.Style = []
+      ParentFont = False
+      Progress = 0
+    end
+    object PrBarChild: TProgressBar
+      Left = 2
+      Top = 4
+      Width = 511
+      Height = 16
+      Min = 0
+      Max = 100
+      TabOrder = 0
+    end
+  end
+  object SaveDialog: TSaveDialog
+    Left = 64
+    Top = 512
+  end
+  object QRTextFilter: TQRTextFilter
+    Left = 104
+    Top = 512
+  end
+end

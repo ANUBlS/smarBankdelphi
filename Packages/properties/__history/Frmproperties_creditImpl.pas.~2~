@@ -1,0 +1,184 @@
+unit Frmproperties_creditImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, CheckLst, Evanescence, Oracle,Db, Buttons, Grids, DBGrids,
+  ExtCtrls, ImgList, ComCtrls, ToolWin, CMDBSearchEdit;
+
+type
+  TFrmproperties_credit = class(TForm)
+    DBGrid1: TDBGrid;
+    Panel1: TPanel;
+    AddOtherPAPERNO: TEvanescence;
+    Panel2: TPanel;
+    Panel3: TPanel;
+    CoolBar1: TCoolBar;
+    ToolBar1: TToolBar;
+    ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
+    ToolButton3: TToolButton;
+    ImageList1: TImageList;
+    SpeedButton1: TSpeedButton;
+    SpeedButton2: TSpeedButton;
+    Label1: TLabel;
+    ToolButton4: TToolButton;
+    ToolButton5: TToolButton;
+    CMSearchEdit1: TCMSearchEdit;
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure ToolButton3Click(Sender: TObject);
+    procedure ToolButton1Click(Sender: TObject);
+    procedure ToolButton2Click(Sender: TObject);
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure SpeedButton2Click(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure CMSearchEdit1KeyPress(Sender: TObject; var Key: Char);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Frmproperties_credit: TFrmproperties_credit;
+  propid:integer;
+implementation
+ uses DMprop,sboapiDataModuleImpl;
+{$R *.DFM}
+
+procedure TFrmproperties_credit.FormCanResize(Sender: TObject;
+  var NewWidth, NewHeight: Integer; var Resize: Boolean);
+begin
+   Resize := False
+end;
+
+
+procedure TFrmproperties_credit.FormKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if ord(key) = VK_ESCAPE then close
+end;
+procedure TFrmproperties_credit.ToolButton3Click(Sender: TObject);
+begin
+close;
+end;
+
+procedure TFrmproperties_credit.ToolButton1Click(Sender: TObject);
+var
+ i: Integer;
+{ RCount : Integer;
+  s:string;
+  BookmarkList : TBookmarkList;
+  Bookmark     : TBookmarkStr;
+  BegDat,EndDat:TDateTime;  }
+begin
+   propid:=DMproperties.DataSetPropIns.FieldByname('id').asinteger;
+
+   with DMproperties,AddOtherPAPERNO do
+   begin
+       for i:= 0 to Items.Count-1 do
+       begin
+            if Checked[i] then
+             OraclePackage2.CallProcedure('add_prop_credit', ['p_propid',propid,
+                                          'p_numberofcredit',Items[i]]);
+       end;
+        DataSetCredit.Refresh;
+        DSet_Prop_Kredit.Refresh;
+        RefreshList;
+{  RCount := DBGrid1.SelectedRows.Count - 1;
+   Bookmark     := DMproperties.OracleDataSet1.Bookmark;
+   BookmarkList := DBGrid1.SelectedRows;
+
+   s:=''  ;
+    for i := 0 to BookmarkList.Count -1 do
+      with DMproperties,OracleDataSet2 do begin
+     Bookmark := BookmarkList[i];
+
+     if s='' then s:=s+inttostr(Fields[0].asinteger )
+     else s:=inttostr(Fields[0].asinteger );
+
+  //   if  DBGrid1.SelectedRows.Count>0 else
+      OraclePackage2.CallProcedure('add_prop_credit', ['p_propid',propid,
+                                             'p_numberofcredit',s]);
+                        }
+
+
+   end;
+
+
+end;
+
+procedure TFrmproperties_credit.ToolButton2Click(Sender: TObject);
+begin
+  Panel3.Visible :=not Panel3.Visible;
+   ToolButton2.Down := Panel3.Visible;
+end;
+
+procedure TFrmproperties_credit.SpeedButton1Click(Sender: TObject);
+var
+a:string;
+s: string;
+begin
+ a:='and numberofcredit=';
+ s:=CMSearchEdit1.text;
+ if s<>'' then
+  with DMproperties,DataSetCredit do
+ begin
+  close;
+  SQL[10]:=a+''''+s+'''';
+ // ShowMessage(a+''''+s+'''');
+  open ;
+
+  AddOtherPAPERNO.RefreshList;
+
+ end   ;
+ CMSearchEdit1.text:=''
+end;
+
+procedure TFrmproperties_credit.SpeedButton2Click(Sender: TObject);
+begin
+ with DMproperties,DataSetCredit do
+ begin
+  close;
+  SQL[10]:='';
+ // ShowMessage(a+''''+s+'''');
+  open ;
+ // refresh;
+  AddOtherPAPERNO.RefreshList;
+  end
+end;
+
+procedure TFrmproperties_credit.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+ with DMproperties,DataSetCredit do
+ begin
+  close;
+  SQL[10]:='';
+ // ShowMessage(a+''''+s+'''');
+  open ;
+ //refresh;
+ // AddOtherPAPERNO.RefreshList;
+  end
+end;
+
+procedure TFrmproperties_credit.CMSearchEdit1KeyPress(Sender: TObject;
+  var Key: Char);
+begin
+if ORD(Key) = VK_RETURN then
+  if Sender is TWinControl then
+  with Sender as TWinControl do
+
+  begin
+  case Tag of
+    1,3 : SelectNext(Sender as TWinControl ,True ,True);
+  //  2 :DBLCBValutes.SetFocus;
+  end;
+   Key := #0;
+  end;
+end;
+
+end.

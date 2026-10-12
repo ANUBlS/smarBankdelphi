@@ -1,0 +1,39 @@
+unit Correct_Tr_Py_Unit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ExtCtrls;
+
+type
+  TCTPMainForm = class(TForm)
+    Panel1: TPanel;
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  CTPMainForm: TCTPMainForm;
+
+implementation
+
+{$R *.DFM}
+
+procedure TCTPMainForm.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+  If ord(Key) = VK_ESCAPE then Close;  
+end;
+
+procedure TCTPMainForm.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+   Resize := False;
+end;
+
+end.

@@ -1,0 +1,84 @@
+object DataModule5: TDataModule5
+  OldCreateOrder = False
+  Height = 415
+  Width = 823
+  object Paymentdata: TOracleDataSet
+    SQL.Strings = (
+      
+        'select * from emanat_credit_inserts where trunc(systemdate) betw' +
+        'een :dat1 and :dat2')
+    Optimize = False
+    Variables.Data = {
+      04000000020000000A0000003A0044004100540031000C000000000000000000
+      00000A0000003A0044004100540032000C0000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000A00000004000000490044000100000000000C000000530054004100
+      54005500530001000000000014000000530059005300540045004D0044004100
+      540045000100000000002400000043004F004E00540052004100430054005F00
+      530045004E0044005F0044004100540045000100000000001200000043004F00
+      4E0054004100430054004E004F000100000000001C00000043004F004E005400
+      520041004300540041004D004F0055004E0054000100000000000E0000004500
+      5200520043004F0044004500010000000000100000004500520052005F004900
+      4E0046004F000100000000001C0000005400520041004E005300410043005400
+      49004F004E005F004900440001000000000006000000520052004E0001000000
+      0000}
+    Session = sboapiDataModule.SBSession
+    Active = True
+    Left = 56
+    Top = 88
+  end
+  object Payment_source: TDataSource
+    DataSet = Paymentdata
+    Left = 56
+    Top = 160
+  end
+  object OracleDataSet1: TOracleDataSet
+    SQL.Strings = (
+      'select  '
+      ''
+      
+        '(select policy_num from ins_contracts where id=contractnum) Poli' +
+        's,'
+      
+        'amount mebleg,customer musteri,respdatetime odenis_tarixi,sys_da' +
+        'te sistem_tarixi,0'
+      ' from ws_payment_million where sys_date between :dat1 and :dat2'
+      ' union all '
+      ' '
+      ' select  '
+      ''
+      
+        '(select policy_num from ins_contracts where id=contract_num) Pol' +
+        'is,'
+      
+        'amount mebleg,customer musteri,respdatetime odenis_tarixi,sys_da' +
+        'te sistem_tarixi,1'
+      ' from ws_temppayment_million'
+      'sys_date between :dat1 and :dat2'
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      '')
+    Optimize = False
+    Variables.Data = {
+      04000000020000000A0000003A0044004100540031000C000000000000000000
+      00000A0000003A0044004100540032000C0000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      050000000A00000004000000490044000100000000000C000000530054004100
+      54005500530001000000000014000000530059005300540045004D0044004100
+      540045000100000000002400000043004F004E00540052004100430054005F00
+      530045004E0044005F0044004100540045000100000000001200000043004F00
+      4E0054004100430054004E004F000100000000001C00000043004F004E005400
+      520041004300540041004D004F0055004E0054000100000000000E0000004500
+      5200520043004F0044004500010000000000100000004500520052005F004900
+      4E0046004F000100000000001C0000005400520041004E005300410043005400
+      49004F004E005F004900440001000000000006000000520052004E0001000000
+      0000}
+    Session = sboapiDataModule.SBSession
+    Left = 360
+    Top = 96
+  end
+end

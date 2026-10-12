@@ -1,0 +1,1038 @@
+object dmReportOfturnoverDeposit: TdmReportOfturnoverDeposit
+  OldCreateOrder = False
+  OnCreate = DataModuleCreate
+  Left = 208
+  Top = 170
+  Height = 480
+  Width = 698
+  object FilialMDT: TOracleDataSet
+    SQL.Strings = (
+      'select id,name from filial'
+      'order by id')
+    QBEDefinition.QBEFieldDefs = {
+      0400000002000000020000004944010000000000040000004E414D4501000000
+      0000}
+    Session = sboapiDataModule.SBSession
+    Left = 32
+    Top = 24
+    object FilialMDTID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object FilialMDTNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 90
+    end
+  end
+  object SourceMDT: TOracleDataSet
+    SQL.Strings = (
+      'SELECT a.id, a.name'
+      '  FROM uaod_source a'
+      '  order by id')
+    QBEDefinition.QBEFieldDefs = {
+      0400000002000000020000004944010000000000040000004E414D4501000000
+      0000}
+    Session = sboapiDataModule.SBSession
+    Left = 32
+    Top = 72
+    object SourceMDTID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object SourceMDTNAME: TWideStringField
+      FieldName = 'NAME'
+      Required = True
+      Size = 80
+    end
+  end
+  object TypeMDT: TOracleDataSet
+    SQL.Strings = (
+      'SELECT a.id, a.name'
+      '  FROM uaod_type a'
+      '  order by id')
+    QBEDefinition.QBEFieldDefs = {
+      0400000002000000020000004944010000000000040000004E414D4501000000
+      0000}
+    Session = sboapiDataModule.SBSession
+    Left = 32
+    Top = 128
+    object TypeMDTID: TFloatField
+      FieldName = 'ID'
+      Required = True
+    end
+    object TypeMDTNAME: TWideStringField
+      FieldName = 'NAME'
+      Required = True
+      Size = 80
+    end
+  end
+  object ValuteMDT: TOracleDataSet
+    SQL.Strings = (
+      'select valute,valu_name as val_name from avalute'
+      'order by valute')
+    QBEDefinition.QBEFieldDefs = {
+      04000000020000000600000056414C5554450100000000000800000056414C5F
+      4E414D45010000000000}
+    Session = sboapiDataModule.SBSession
+    Left = 32
+    Top = 176
+    object ValuteMDTVALUTE: TIntegerField
+      FieldName = 'VALUTE'
+      Required = True
+    end
+    object ValuteMDTVAL_NAME: TWideStringField
+      FieldName = 'VAL_NAME'
+      Size = 25
+    end
+  end
+  object CalcStatusMDT: TOracleDataSet
+    SQL.Strings = (
+      'select 1 as ID,'#39'Щесабланан'#39' as name  from dual'
+      'union'
+      'select 0 as ID,'#39'Щесабланмайан'#39' as name from dual')
+    QBEDefinition.QBEFieldDefs = {
+      0400000002000000020000004944010000000000040000004E414D4501000000
+      0000}
+    Session = sboapiDataModule.SBSession
+    Left = 32
+    Top = 232
+    object CalcStatusMDTID: TFloatField
+      FieldName = 'ID'
+    end
+    object CalcStatusMDTNAME: TWideStringField
+      FieldName = 'NAME'
+      Size = 13
+    end
+  end
+  object FilialMDds: TDataSource
+    DataSet = FilialMDT
+    Left = 96
+    Top = 24
+  end
+  object SourceMDds: TDataSource
+    DataSet = SourceMDT
+    Left = 96
+    Top = 71
+  end
+  object TypeMDds: TDataSource
+    DataSet = TypeMDT
+    Left = 96
+    Top = 128
+  end
+  object ValuteMDds: TDataSource
+    DataSet = ValuteMDT
+    Left = 96
+    Top = 176
+  end
+  object CalcStatusMDds: TDataSource
+    DataSet = CalcStatusMDT
+    Left = 115
+    Top = 232
+  end
+  object Queries: TOracleDataSet
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 420
+    Top = 8
+  end
+  object sysdat: TOracleDataSet
+    SQL.Strings = (
+      'select tek_dat from sysdat')
+    Session = sboapiDataModule.SBSession
+    Left = 456
+    Top = 8
+  end
+  object MainMDT: TOracleDataSet
+    SQL.Strings = (
+      
+        'select id,name,nvl(BCOUNTDEP,0) as BCOUNTDEP, nvl(BEGINREST,0) a' +
+        's BEGINREST,nvl(BEGININTREST,0) as BEGININTREST,nvl(TRCOUNTDEP,0' +
+        ') as TRCOUNTDEP,nvl(TRAMOUNT,0) as TRAMOUNT,nvl(CAPAMOUNT,0) as ' +
+        'CAPAMOUNT,nvl(PAYCOUNTDEP,0) as PAYCOUNTDEP ,nvl(MAINPAY,0) as M' +
+        'AINPAY,nvl(INTPAY,0) as INTPAY,nvl(ECOUNTDEP,0) as ECOUNTDEP,nvl' +
+        '(ENDREST,0) as ENDREST,nvl(ENDINTREST,0) as ENDINTREST'
+      ''
+      'from '
+      ' uaod_source src,'
+      ' '
+      ' (select '
+      ' sum(BcountDep) as BcountDep,'
+      ' sum(beginRest) as beginRest,'
+      ' sum(beginIntRest) as beginIntRest,'
+      ' SourceID'
+      ' from '
+      ' (select '
+      '   count(p.id) as BcountDep,'
+      '   round(sum(h.facticaldebt*o.ostat),4) as beginRest,'
+      '   round(sum(h.facticalinterestdebt*o.ostat),4) as beginIntRest,'
+      '   src.SourceID'
+      'from '
+      '  sbcm_contracts p,'
+      '  sbcm_contract_history h,'
+      '  operkurs o,'
+      '  sbcm_accounts ac,uaod_source_bal src'
+      'where'
+      'p.type# in (3,4) and src.bal_cn = ac.bal_cn1 and'
+      'p.id = h.id# and h.hdate = :bdat1 and h.facticaldebt <> 0 and'
+      'p.currency = o.val_kod and o.dat = :bdat1 and'
+      'ac.id# = p.id'
+      ''
+      'group by src.SourceID'
+      ''
+      'union all'
+      ''
+      'select'
+      '  count(ac.id) as BcountDep,'
+      '  sum(abs(ar.pok_ostat)) as beginRest,'
+      '  0 as beginIntRest,'
+      '  src.SourceID'
+      'from account ac ,archost ar,uaod_source_bal src'
+      'where ac.id = ar.acc_id and ac.bal_cn1 = src.bal_cn and'
+      'ar.datdate = :bdat1 and ar.ostat <> 0'
+      ''
+      'group by src.SourceID '
+      ') '
+      'group by SourceID'
+      ')BRest ,'
+      ''
+      '('
+      'select '
+      '  sum(TrcountDep) as TrcountDep,'
+      '  sum(TrAmount) as TrAmount,'
+      '  sum(CapAmount) as CapAmount,'
+      '  SourceID'
+      'from (  '
+      '/*select'
+      '   count(p.id) as TrcountDep,'
+      '   round(sum(tr.total*o.ostat),4) as TrAmount,'
+      
+        '   round(sum(usaid_report.get_CaptAmt(p.id,:bdat,:edat)*o.ostat)' +
+        ',4) as CapAmount,'
+      '   src.SourceID'
+      'from '
+      '  sbcm_contracts p,'
+      '  sbcm_tranches tr,'
+      '  --sbcm_capitalization c,'
+      '  operkurs o,'
+      '  sbcm_accounts ac,uaod_source_bal src'
+      'where p.type# in (3,4) and src.bal_cn=ac.bal_cn1 and'
+      'p.id = tr.id#  and p.id = ac.id# and'
+      'p.currency = o.val_kod and o.dat = tr.hdate and'
+      'tr.hdate between :bdat and :edat'
+      ''
+      'group by src.SourceID*/'
+      ''
+      'select '
+      '   count(ac1.id) as TrcountDep,'
+      '   sum(abs(ar.pok_obr_k)) as TrAmount,'
+      '   0 as CapAmount,'
+      '   src.SourceID'
+      'from'
+      
+        '  account ac1, archost ar,uaod_source_bal src,sbcm_contracts p,s' +
+        'bcm_accounts ac'
+      
+        'where ac1.id = ar.acc_id and (ar.datdate between :bdat and :edat' +
+        ') and /*ar.ostat <> 0 and*/ ac1.bal_cn1=src.bal_cn  and'
+      
+        '      p.type# in (3,4) and p.id = ac.id# and ac.BAL_CN1 = src.ba' +
+        'l_cn and ac.contractaccid = ac1.id'
+      ''
+      'group by src.SourceID'
+      ''
+      'union all'
+      ''
+      'select '
+      '   count(ac.id) as TrcountDep,'
+      '   sum(abs(ar.pok_obr_k)) as TrAmount,'
+      '   0 as CapAmount,'
+      '   src.SourceID'
+      'from'
+      '  account ac, archost ar,uaod_source_bal src'
+      'where'
+      
+        '  ac.id = ar.acc_id and (ar.datdate between :bdat and :edat) and' +
+        ' /*ar.ostat <> 0 and*/ ac.bal_cn1=src.bal_cn '
+      ''
+      'group by src.SourceID'
+      ') '
+      'group by SourceID'
+      ')Tranches,'
+      ''
+      '('
+      'select '
+      ' sum(PaycountDep) as PaycountDep,'
+      ' sum(MainPay) as MainPay,'
+      ' sum(IntPay) as IntPay,'
+      ' SourceID'
+      ' from'
+      ' ('
+      '/*select'
+      '   count(p.id) as PaycountDep,'
+      '   round(sum(pay.facticaldebt*o.ostat),4) as MainPay,'
+      '   round(sum(pay.interestdebt*o.ostat),4) as IntPay,'
+      '   src.SourceID'
+      'from'
+      '   sbcm_contracts p,'
+      '   sbcm_payments pay,'
+      '   operkurs o,'
+      '   sbcm_accounts ac,uaod_source_bal src'
+      'where  '
+      'p.type# in (3,4) and ac.bal_cn1=src.bal_cn and'
+      'p.id = pay.id# and'
+      '(pay.hdate between :bdat and :edat) and'
+      'p.currency = o.val_kod and o.dat = pay.hdate and'
+      'p.id = ac.id#'
+      ''
+      'group by src.SourceID*/'
+      ''
+      'select '
+      '   count(*) as PaycountDep,'
+      '   sum(abs(ar1.pok_obr_d)) as MainPay,'
+      '   sum(abs(ar2.pok_obr_d)) as IntPay,'
+      '   src.SourceID'
+      'from'
+      '  sbcm_contract_accounts ac1,  '
+      '  sbcm_contract_accounts ac2,'
+      '  archost ar1,'
+      '  archost ar2,'
+      '  uaod_source_bal src,'
+      '  sbcm_contracts p,'
+      '  sbcm_accounts ac'
+      
+        'where ac1.contractaccid = ar1.acc_id and (ar1.datdate between :b' +
+        'dat and :edat) and --ar1.pok_obr_d <> 0 and '
+      
+        '      ac2.interestaccid = ar2.acc_id and (ar2.datdate between :b' +
+        'dat and :edat) and --ar2.pok_obr_d <> 0 and '
+      
+        '      p.type# in (3,4) and p.id = ac.id# and ac.BAL_CN1 = src.ba' +
+        'l_cn and ac.contractaccid = ac1.contractaccid and ac.contractacc' +
+        'id = ac2.contractaccid'
+      '      and p.id = ac2.id# and  p.id = ac1.id# '
+      ''
+      'group by src.SourceID'
+      ''
+      'union all'
+      ''
+      'select '
+      '   count(ac.id) as PaycountDep,'
+      '   sum(abs(ar.pok_obr_d)) as MainPay,'
+      '   0 as IntPay,'
+      '   src.SourceID'
+      'from'
+      '  account ac, archost ar,uaod_source_bal src'
+      'where'
+      
+        '  ac.id = ar.acc_id and (ar.datdate between :bdat and :edat) /*a' +
+        'nd ar.pok_obr_d <> 0*/ and src.bal_cn=ac.bal_cn1 '
+      ''
+      'group by src.SourceID'
+      ''
+      ')'
+      'group by SourceID'
+      ')'
+      'payments ,  '
+      ''
+      ''
+      '('
+      'select '
+      'sum(EcountDep) as EcountDep,'
+      'sum(endRest) as endRest,'
+      'sum(endIntRest) as endIntRest,'
+      'SourceID'
+      'from ('
+      'select '
+      '   count(p.id) as EcountDep,'
+      '   round(sum(h.facticaldebt*o.ostat),4) as endRest,'
+      '   round(sum(h.facticalinterestdebt*o.ostat),4) as endIntRest,'
+      '   src.SourceID'
+      'from '
+      '  sbcm_contracts p,'
+      '  sbcm_contract_history h,'
+      '  operkurs o,'
+      '  sbcm_accounts ac,uaod_source_bal src'
+      'where'
+      'p.type# in (3,4) and src.bal_cn = ac.bal_cn1 and '
+      'p.id = h.id# and h.hdate = :edat and h.facticaldebt <> 0 and'
+      'p.currency = o.val_kod and o.dat = :edat and'
+      'ac.id# = p.id '
+      ''
+      'group by src.SourceID'
+      ''
+      'union all'
+      ''
+      'select'
+      '  count(ac.id) as EcountDep,'
+      '  sum(abs(ar.pok_ostat)) as endRest,'
+      '  0 as endIntRest,'
+      '  src.SourceID'
+      'from account ac ,archost ar,uaod_source_bal src'
+      'where ac.id = ar.acc_id and '
+      'ar.datdate = :edat and ar.ostat <> 0 and src.bal_cn=ac.bal_cn1 '
+      ''
+      'group by src.SourceID '
+      ') '
+      'group by SourceID'
+      ')'
+      'ERest'
+      ''
+      ''
+      ''
+      'where'
+      ''
+      ''
+      'src.id =  BRest.sourceID(+) and'
+      'src.id =  Tranches.sourceID(+) and'
+      'src.id =  Payments.sourceID(+) and'
+      'src.id =  ERest.sourceID(+)'
+      ''
+      '--order by :OrderField'
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      '')
+    Variables.Data = {
+      0300000004000000050000003A424441540C0000000000000000000000050000
+      003A454441540C00000000000000000000000B0000003A4F524445524649454C
+      44010000000000000000000000060000003A42444154310C0000000000000000
+      000000}
+    QBEDefinition.QBEFieldDefs = {
+      0400000012000000020000004944010000000000040000004E414D4501000000
+      00000900000042434F554E5444455001000000000009000000424547494E5245
+      53540100000000000C000000424547494E494E54524553540100000000000800
+      0000534F5552434549440100000000000A0000005452434F554E544445500100
+      00000000080000005452414D4F554E5401000000000009000000434150414D4F
+      554E540100000000000A000000534F5552434549445F310100000000000B0000
+      00504159434F554E54444550010000000000070000004D41494E504159010000
+      00000006000000494E545041590100000000000A000000534F5552434549445F
+      320100000000000900000045434F554E5444455001000000000007000000454E
+      44524553540100000000000A000000454E44494E54524553540100000000000A
+      000000534F5552434549445F33010000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 200
+    Top = 24
+    object MainMDTID: TFloatField
+      FieldName = 'ID'
+      Required = True
+      Visible = False
+    end
+    object MainMDTNAME: TWideStringField
+      DisplayLabel = 'Мянбя'
+      FieldName = 'NAME'
+      Required = True
+      Size = 80
+    end
+    object MainMDTBCOUNTDEP: TFloatField
+      DisplayLabel = 'Сай'
+      FieldName = 'BCOUNTDEP'
+    end
+    object MainMDTBEGINREST: TFloatField
+      DisplayLabel = 'ДЯ ясас мяб.'
+      FieldName = 'BEGINREST'
+      DisplayFormat = '#,##0.00'
+    end
+    object MainMDTBEGININTREST: TFloatField
+      DisplayLabel = 'ДЯ % мяб.'
+      FieldName = 'BEGININTREST'
+      DisplayFormat = '#,##0.00'
+    end
+    object MainMDTTRCOUNTDEP: TFloatField
+      DisplayLabel = 'Сай'
+      FieldName = 'TRCOUNTDEP'
+    end
+    object MainMDTTRAMOUNT: TFloatField
+      DisplayLabel = 'Мядахил ясас мяб.'
+      FieldName = 'TRAMOUNT'
+      DisplayFormat = '#,##0.00'
+    end
+    object MainMDTCAPAMOUNT: TFloatField
+      DisplayLabel = 'Мядахил % мяб.'
+      FieldName = 'CAPAMOUNT'
+      DisplayFormat = '#,##0.00'
+    end
+    object MainMDTPAYCOUNTDEP: TFloatField
+      DisplayLabel = 'Сай'
+      FieldName = 'PAYCOUNTDEP'
+    end
+    object MainMDTMAINPAY: TFloatField
+      DisplayLabel = 'Мяхариж ясас мяб.'
+      FieldName = 'MAINPAY'
+      DisplayFormat = '#,##0.00'
+    end
+    object MainMDTINTPAY: TFloatField
+      DisplayLabel = 'Мяхариж % мяб.'
+      FieldName = 'INTPAY'
+      DisplayFormat = '#,##0.00'
+    end
+    object MainMDTECOUNTDEP: TFloatField
+      DisplayLabel = 'Сай'
+      FieldName = 'ECOUNTDEP'
+    end
+    object MainMDTENDREST: TFloatField
+      DisplayLabel = 'ДС ясас мяб.'
+      FieldName = 'ENDREST'
+      DisplayFormat = '#,##0.00'
+    end
+    object MainMDTENDINTREST: TFloatField
+      DisplayLabel = 'ДС % мяб.'
+      FieldName = 'ENDINTREST'
+      DisplayFormat = '#,##0.00'
+    end
+  end
+  object MainMDTds: TDataSource
+    DataSet = MainMDT
+    Left = 256
+    Top = 24
+  end
+  object SumMDTds: TDataSource
+    DataSet = SumMDT
+    Left = 264
+    Top = 80
+  end
+  object SumMDT: TOracleDataSet
+    SQL.Strings = (
+      
+        'select sum(BCOUNTDEP) as BCOUNTDEP, round(sum(BEGINREST),2) as B' +
+        'EGINREST,round(sum(BEGININTREST),2) as BEGININTREST,round(sum(nv' +
+        'l(TRCOUNTDEP,0)),2) as TRCOUNTDEP,round(sum(nvl(TRAMOUNT,0)),2) ' +
+        'as TRAMOUNT,round(sum(nvl(CAPAMOUNT,0) ),2)as CAPAMOUNT,round(su' +
+        'm(nvl(PAYCOUNTDEP,0) ),2) as PAYCOUNTDEP ,round(sum(nvl(MAINPAY,' +
+        '0) ),2) as MAINPAY,round(sum(nvl(INTPAY,0) ),2) as INTPAY,round(' +
+        'sum(nvl(ECOUNTDEP,0) ),2) as ECOUNTDEP,round(sum(nvl(ENDREST,0) ' +
+        '),2) as ENDREST,round(sum(nvl(ENDINTREST,0) ),2) as ENDINTREST f' +
+        'rom '
+      
+        '(select id,name,nvl(BCOUNTDEP,0) as BCOUNTDEP, nvl(BEGINREST,0) ' +
+        'as BEGINREST,nvl(BEGININTREST,0) as BEGININTREST,nvl(TRCOUNTDEP,' +
+        '0) as TRCOUNTDEP,nvl(TRAMOUNT,0) as TRAMOUNT,nvl(CAPAMOUNT,0) as' +
+        ' CAPAMOUNT,nvl(PAYCOUNTDEP,0) as PAYCOUNTDEP ,nvl(MAINPAY,0) as ' +
+        'MAINPAY,nvl(INTPAY,0) as INTPAY,nvl(ECOUNTDEP,0) as ECOUNTDEP,nv' +
+        'l(ENDREST,0) as ENDREST,nvl(ENDINTREST,0) as ENDINTREST'
+      ''
+      'from '
+      ' uaod_source src,'
+      ' '
+      ' (select '
+      ' sum(BcountDep) as BcountDep,'
+      ' sum(beginRest) as beginRest,'
+      ' sum(beginIntRest) as beginIntRest,'
+      ' SourceID'
+      ' from '
+      ' (select '
+      '   count(p.id) as BcountDep,'
+      '   round(sum(h.facticaldebt*o.ostat),4) as beginRest,'
+      '   round(sum(h.facticalinterestdebt*o.ostat),4) as beginIntRest,'
+      '   src.SourceID'
+      'from '
+      '  sbcm_contracts p,'
+      '  sbcm_contract_history h,'
+      '  operkurs o,'
+      '  sbcm_accounts ac,uaod_source_bal src'
+      'where'
+      'p.type# in (3,4) and src.bal_cn = ac.bal_cn1 and'
+      'p.id = h.id# and h.hdate = :bdat1 and h.facticaldebt <> 0 and'
+      'p.currency = o.val_kod and o.dat = :bdat1 and'
+      'ac.id# = p.id'
+      ''
+      'group by src.SourceID'
+      ''
+      'union all'
+      ''
+      'select'
+      '  count(ac.id) as BcountDep,'
+      '  sum(abs(ar.pok_ostat)) as beginRest,'
+      '  0 as beginIntRest,'
+      '  src.SourceID'
+      'from account ac ,archost ar,uaod_source_bal src'
+      'where ac.id = ar.acc_id and ac.bal_cn1 = src.bal_cn and'
+      'ar.datdate = :bdat1 and ar.ostat <> 0'
+      ''
+      'group by src.SourceID '
+      ') '
+      'group by SourceID'
+      ')BRest ,'
+      ''
+      '('
+      'select '
+      '  sum(TrcountDep) as TrcountDep,'
+      '  sum(TrAmount) as TrAmount,'
+      '  sum(CapAmount) as CapAmount,'
+      '  SourceID'
+      'from (  '
+      '/*select'
+      '   count(p.id) as TrcountDep,'
+      '   round(sum(tr.total*o.ostat),4) as TrAmount,'
+      
+        '   round(sum(usaid_report.get_CaptAmt(p.id,:bdat,:edat)*o.ostat)' +
+        ',4) as CapAmount,'
+      '   src.SourceID'
+      'from '
+      '  sbcm_contracts p,'
+      '  sbcm_tranches tr,'
+      '  --sbcm_capitalization c,'
+      '  operkurs o,'
+      '  sbcm_accounts ac,uaod_source_bal src'
+      'where p.type# in (3,4) and src.bal_cn=ac.bal_cn1 and'
+      'p.id = tr.id#  and p.id = ac.id# and'
+      'p.currency = o.val_kod and o.dat = tr.hdate and'
+      'tr.hdate between :bdat and :edat'
+      ''
+      'group by src.SourceID*/'
+      ''
+      'select '
+      '   count(ac1.id) as TrcountDep,'
+      '   sum(abs(ar.pok_obr_k)) as TrAmount,'
+      '   0 as CapAmount,'
+      '   src.SourceID'
+      'from'
+      
+        '  account ac1, archost ar,uaod_source_bal src,sbcm_contracts p,s' +
+        'bcm_accounts ac'
+      
+        'where ac1.id = ar.acc_id and (ar.datdate between :bdat and :edat' +
+        ') /*and ar.ostat <> 0 */and ac1.bal_cn1=src.bal_cn  and'
+      
+        '      p.type# in (3,4) and p.id = ac.id# and ac.BAL_CN1 = src.ba' +
+        'l_cn and ac.contractaccid = ac1.id '
+      ''
+      'group by src.SourceID'
+      ''
+      'union all'
+      ''
+      'select '
+      '   count(ac.id) as TrcountDep,'
+      '   sum(abs(ar.pok_obr_k)) as TrAmount,'
+      '   0 as CapAmount,'
+      '   src.SourceID'
+      'from'
+      '  account ac, archost ar,uaod_source_bal src'
+      'where'
+      
+        '  ac.id = ar.acc_id and (ar.datdate between :bdat and :edat) /*a' +
+        'nd ar.ostat <> 0*/ and ac.bal_cn1=src.bal_cn '
+      ''
+      'group by src.SourceID'
+      ') '
+      'group by SourceID'
+      ')Tranches,'
+      ''
+      '('
+      'select '
+      ' sum(PaycountDep) as PaycountDep,'
+      ' sum(MainPay) as MainPay,'
+      ' sum(IntPay) as IntPay,'
+      ' SourceID'
+      ' from'
+      ' ('
+      '/*select'
+      '   count(p.id) as PaycountDep,'
+      '   round(sum(pay.facticaldebt*o.ostat),4) as MainPay,'
+      '   round(sum(pay.interestdebt*o.ostat),4) as IntPay,'
+      '   src.SourceID'
+      'from'
+      '   sbcm_contracts p,'
+      '   sbcm_payments pay,'
+      '   operkurs o,'
+      '   sbcm_accounts ac,uaod_source_bal src'
+      'where  '
+      'p.type# in (3,4) and ac.bal_cn1=src.bal_cn and'
+      'p.id = pay.id# and'
+      '(pay.hdate between :bdat and :edat) and'
+      'p.currency = o.val_kod and o.dat = pay.hdate and'
+      'p.id = ac.id#'
+      ''
+      'group by src.SourceID*/'
+      ''
+      'select '
+      '   count(*) as PaycountDep,'
+      '   sum(abs(ar1.pok_obr_d)) as MainPay,'
+      '   sum(abs(ar2.pok_obr_d)) as IntPay,'
+      '   src.SourceID'
+      'from'
+      '  sbcm_contract_accounts ac1,  '
+      '  sbcm_contract_accounts ac2,'
+      '  archost ar1,'
+      '  archost ar2,'
+      '  uaod_source_bal src,'
+      '  sbcm_contracts p,'
+      '  sbcm_accounts ac'
+      
+        'where ac1.contractaccid = ar1.acc_id and (ar1.datdate between :b' +
+        'dat and :edat) and --ar1.pok_ostat <> 0 and '
+      
+        '      ac2.interestaccid = ar2.acc_id and (ar2.datdate between :b' +
+        'dat and :edat) and --ar2.pok_ostat <> 0 and '
+      
+        '      p.type# in (3,4) and p.id = ac.id# and ac.BAL_CN1 = src.ba' +
+        'l_cn and ac.contractaccid = ac1.contractaccid and ac.contractacc' +
+        'id = ac2.contractaccid'
+      '      and p.id = ac2.id# and  p.id = ac1.id# '
+      ''
+      'group by src.SourceID'
+      ''
+      'union all'
+      ''
+      'select '
+      '   count(ac.id) as PaycountDep,'
+      '   sum(abs(ar.obr_k)) as MainPay,'
+      '   0 as IntPay,'
+      '   src.SourceID'
+      'from'
+      '  account ac, archost ar,uaod_source_bal src'
+      'where'
+      
+        '  ac.id = ar.acc_id and (ar.datdate between :bdat and :edat) /*a' +
+        'nd ar.ostat <> 0*/ and src.bal_cn=ac.bal_cn1 '
+      ''
+      'group by src.SourceID'
+      ''
+      ')'
+      'group by SourceID'
+      ')'
+      'payments ,  '
+      ''
+      ''
+      '('
+      'select '
+      'sum(EcountDep) as EcountDep,'
+      'sum(endRest) as endRest,'
+      'sum(endIntRest) as endIntRest,'
+      'SourceID'
+      'from ('
+      'select '
+      '   count(p.id) as EcountDep,'
+      '   round(sum(h.facticaldebt*o.ostat),4) as endRest,'
+      '   round(sum(h.facticalinterestdebt*o.ostat),4) as endIntRest,'
+      '   src.SourceID'
+      'from '
+      '  sbcm_contracts p,'
+      '  sbcm_contract_history h,'
+      '  operkurs o,'
+      '  sbcm_accounts ac,uaod_source_bal src'
+      'where'
+      'p.type# in (3,4) and src.bal_cn = ac.bal_cn1 and '
+      'p.id = h.id# and h.hdate = :edat and h.facticaldebt <> 0 and'
+      'p.currency = o.val_kod and o.dat = :edat and'
+      'ac.id# = p.id '
+      ''
+      'group by src.SourceID'
+      ''
+      'union all'
+      ''
+      'select'
+      '  count(ac.id) as EcountDep,'
+      '  sum(abs(ar.pok_ostat)) as endRest,'
+      '  0 as endIntRest,'
+      '  src.SourceID'
+      'from account ac ,archost ar,uaod_source_bal src'
+      'where ac.id = ar.acc_id and '
+      'ar.datdate = :edat and ar.ostat <> 0 and src.bal_cn=ac.bal_cn1 '
+      ''
+      'group by src.SourceID '
+      ') '
+      'group by SourceID'
+      ')'
+      'ERest'
+      ''
+      ''
+      ''
+      'where'
+      ''
+      ''
+      'src.id =  BRest.sourceID(+) and'
+      'src.id =  Tranches.sourceID(+) and'
+      'src.id =  Payments.sourceID(+) and'
+      'src.id =  ERest.sourceID(+)'
+      ')'
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      ''
+      '')
+    Variables.Data = {
+      0300000003000000050000003A424441540C0000000000000000000000050000
+      003A454441540C0000000000000000000000060000003A42444154310C000000
+      0000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      040000000C0000000900000042434F554E544445500100000000000900000042
+      4547494E524553540100000000000C000000424547494E494E54524553540100
+      000000000A0000005452434F554E54444550010000000000080000005452414D
+      4F554E5401000000000009000000434150414D4F554E540100000000000B0000
+      00504159434F554E54444550010000000000070000004D41494E504159010000
+      00000006000000494E545041590100000000000900000045434F554E54444550
+      01000000000007000000454E44524553540100000000000A000000454E44494E
+      5452455354010000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 200
+    Top = 80
+    object SumMDTBCOUNTDEP: TFloatField
+      DisplayLabel = 'Сай'
+      FieldName = 'BCOUNTDEP'
+    end
+    object SumMDTBEGINREST: TFloatField
+      DisplayLabel = 'ДЯ ясас мяб.'
+      FieldName = 'BEGINREST'
+      DisplayFormat = '#,##0.00'
+    end
+    object SumMDTBEGININTREST: TFloatField
+      DisplayLabel = 'ДЯ % мяб.'
+      FieldName = 'BEGININTREST'
+      DisplayFormat = '#,##0.00'
+    end
+    object SumMDTTRCOUNTDEP: TFloatField
+      DisplayLabel = 'Сай'
+      FieldName = 'TRCOUNTDEP'
+    end
+    object SumMDTTRAMOUNT: TFloatField
+      DisplayLabel = 'Мядахил ясас мяб.'
+      FieldName = 'TRAMOUNT'
+      DisplayFormat = '#,##0.00'
+    end
+    object SumMDTCAPAMOUNT: TFloatField
+      DisplayLabel = 'Мядахил % мяб.'
+      FieldName = 'CAPAMOUNT'
+      DisplayFormat = '#,##0.00'
+    end
+    object SumMDTPAYCOUNTDEP: TFloatField
+      DisplayLabel = 'Сай'
+      FieldName = 'PAYCOUNTDEP'
+    end
+    object SumMDTMAINPAY: TFloatField
+      DisplayLabel = 'Мяхариж ясас мяб.'
+      FieldName = 'MAINPAY'
+      DisplayFormat = '#,##0.00'
+    end
+    object SumMDTINTPAY: TFloatField
+      DisplayLabel = 'Мяхариж % мяб.'
+      FieldName = 'INTPAY'
+      DisplayFormat = '#,##0.00'
+    end
+    object SumMDTECOUNTDEP: TFloatField
+      DisplayLabel = 'Сай'
+      FieldName = 'ECOUNTDEP'
+    end
+    object SumMDTENDREST: TFloatField
+      DisplayLabel = 'ДС ясас мяб.'
+      FieldName = 'ENDREST'
+      DisplayFormat = '#,##0.00'
+    end
+    object SumMDTENDINTREST: TFloatField
+      DisplayLabel = 'ДС % мяб.'
+      FieldName = 'ENDINTREST'
+      DisplayFormat = '#,##0.00'
+    end
+  end
+  object DetailTO: TOracleDataSet
+    SQL.Strings = (
+      'select * from (select'
+      '     ac.acc_no,'
+      '     cust.name as custname,'
+      '     round(h1.facticaldebt*o1.ostat,4) as beginRest,'
+      '     round(h1.facticalinterestdebt*o1.ostat,4) as beginIntRest,'
+      
+        '     usaid_report.get_KreditTurnoverForAcc(ac.contractaccid,:bda' +
+        't,:edat) as KreditTO,'
+      
+        '     usaid_report.get_DebetTurnoverForAcc(ac.contractaccid,:bdat' +
+        ',:edat) as DebetTO,'
+      
+        '     usaid_report.get_DebetTurnoverForAcc(ac.Interestaccid,:bdat' +
+        ',:edat) as DebetIntTO,'
+      '     round(h2.facticaldebt*o2.ostat,4) as EndRest,'
+      '     round(h2.facticalinterestdebt*o2.ostat,4) as EndIntRest,'
+      '     ac.bal_cn1,'
+      '     intr.interest as annualInt ,'
+      '     src.name as srcname,'
+      '     p.opendate,'
+      '     p.closedate,av.val_name,f.name as filialname'
+      'from sbcm_contracts p,'
+      '     sbcm_contract_history h1,'
+      '     sbcm_contract_history h2,'
+      '     operkurs o1,operkurs o2,'
+      '     sbcm_accounts ac,'
+      '     uaod_source src,'
+      '     uaod_source_bal src_bal,'
+      '     customers cust, '
+      '     avalute av,'
+      '     filial f, '
+      '     sbcm_interests intr'
+      'where '
+      
+        '   p.id = h1.id# and h1.hdate = :bdat and h1.facticaldebt <> 0 a' +
+        'nd'
+      
+        '   p.id = h2.id# and h2.hdate = :edat and h2.facticaldebt <> 0 a' +
+        'nd'
+      '   p.currency = o1.val_kod and o1.dat = :bdat and'
+      '   p.currency = o2.val_kod and o2.dat = :edat and'
+      
+        '   p.id = ac.id# and src.id = src_bal.sourceid and src_bal.bal_c' +
+        'n = ac.bal_cn1 and'
+      
+        '   p.customerid = cust.id and p.currency = av.valute and p.branc' +
+        'hid = f.id and p.id = intr.id# '
+      '   '
+      '   '
+      'union all'
+      ''
+      'select     '
+      '    ac.acc_no,'
+      '    cust.name as custname,'
+      '    abs(ar1.pok_ostat) as beginRest,'
+      '    0 as beginIntRest,'
+      
+        '    usaid_report.get_KreditTurnoverForAcc(ac.id,:bdat,:edat) as ' +
+        'KreditTO,'
+      
+        '    usaid_report.get_DebetTurnoverForAcc(ac.id,:bdat,:edat) as D' +
+        'ebetTO,'
+      '    0 as DebetIntTO,'
+      '    abs(ar2.pok_ostat) as EndRest,'
+      '    0 as EndIntRest,'
+      '    ac.bal_cn1,'
+      '    0 as annualInt ,'
+      '    src.name as srcname,'
+      '    null as opendate,'
+      '    null ,av.val_name,f.name as filialname'
+      ''
+      ''
+      'from account ac,'
+      '     archost ar1,'
+      '     archost ar2,'
+      '     uaod_source src,'
+      '     uaod_source_bal src_bal,'
+      '     customers cust, '
+      '     avalute av,'
+      '     filial f'
+      'where '
+      
+        '    ac.id = ar1.acc_id and ar1.datdate = :bdat and ar1.ostat<>0 ' +
+        'and'
+      
+        '    ac.id = ar2.acc_id and ar2.datdate = :edat and ar2.ostat <>0' +
+        ' and'
+      
+        '    src.id = src_bal.sourceid and src_bal.bal_cn = ac.bal_cn1 an' +
+        'd'
+      '    ac.kli_id = cust.id and '
+      '    ac.val_acc = av.valute and ac.filial= f.id'
+      ''
+      ')'
+      'order by :OrderField'
+      '   ')
+    Variables.Data = {
+      0300000003000000050000003A424441540C0000000000000000000000050000
+      003A454441540C00000000000000000000000B0000003A4F524445524649454C
+      44010000000000000000000000}
+    QBEDefinition.QBEFieldDefs = {
+      0400000010000000060000004143435F4E4F0100000000000800000043555354
+      4E414D4501000000000009000000424547494E524553540100000000000C0000
+      00424547494E494E5452455354010000000000080000004B5245444954544F01
+      0000000000070000004445424554544F0100000000000A000000444542455449
+      4E54544F01000000000007000000454E44524553540100000000000A00000045
+      4E44494E54524553540100000000000700000042414C5F434E31010000000000
+      09000000414E4E55414C494E54010000000000070000005352434E414D450100
+      00000000080000004F50454E4441544501000000000009000000434C4F534544
+      4154450100000000000800000056414C5F4E414D450100000000000A00000046
+      494C49414C4E414D45010000000000}
+    Cursor = crSQLWait
+    Session = sboapiDataModule.SBSession
+    Left = 200
+    Top = 136
+    object DetailTOACC_NO: TWideStringField
+      DisplayLabel = 'Щесаб №'
+      FieldName = 'ACC_NO'
+    end
+    object DetailTOCUSTNAME: TWideStringField
+      DisplayLabel = 'Мцштяри'
+      FieldName = 'CUSTNAME'
+      Size = 90
+    end
+    object DetailTOBEGINREST: TFloatField
+      DisplayLabel = 'ДЯ ясас мяб.'
+      FieldName = 'BEGINREST'
+      DisplayFormat = '#,##0.00'
+    end
+    object DetailTOBEGININTREST: TFloatField
+      DisplayLabel = 'ДЯ % мяб.'
+      FieldName = 'BEGININTREST'
+      DisplayFormat = '#,##0.00'
+    end
+    object DetailTOKREDITTO: TFloatField
+      DisplayLabel = 'Мядахил ясас мяб.'
+      FieldName = 'KREDITTO'
+      DisplayFormat = '#,##0.00'
+    end
+    object DetailTODEBETTO: TFloatField
+      DisplayLabel = 'Мяхариж ясас мяб.'
+      FieldName = 'DEBETTO'
+      DisplayFormat = '#,##0.00'
+    end
+    object DetailTODEBETINTTO: TFloatField
+      DisplayLabel = 'Мяхариж % мяб.'
+      FieldName = 'DEBETINTTO'
+      DisplayFormat = '#,##0.00'
+    end
+    object DetailTOENDREST: TFloatField
+      DisplayLabel = 'ДС ясас мяб.'
+      FieldName = 'ENDREST'
+      DisplayFormat = '#,##0.00'
+    end
+    object DetailTOENDINTREST: TFloatField
+      DisplayLabel = 'ДС % мяб.'
+      FieldName = 'ENDINTREST'
+      DisplayFormat = '#,##0.00'
+    end
+    object DetailTOBAL_CN1: TFloatField
+      DisplayLabel = 'Баланс'
+      FieldName = 'BAL_CN1'
+    end
+    object DetailTOANNUALINT: TFloatField
+      DisplayLabel = 'Иллик %'
+      FieldName = 'ANNUALINT'
+    end
+    object DetailTOSRCNAME: TWideStringField
+      DisplayLabel = 'Мянбя'
+      FieldName = 'SRCNAME'
+      Size = 80
+    end
+    object DetailTOOPENDATE: TDateTimeField
+      DisplayLabel = 'Ачылма тарихи'
+      FieldName = 'OPENDATE'
+    end
+    object DetailTOCLOSEDATE: TDateTimeField
+      DisplayLabel = 'Баьланма тарихи'
+      FieldName = 'CLOSEDATE'
+    end
+    object DetailTOVAL_NAME: TWideStringField
+      DisplayLabel = '$'
+      FieldName = 'VAL_NAME'
+      Size = 10
+    end
+    object DetailTOFILIALNAME: TWideStringField
+      DisplayLabel = 'Филиал'
+      FieldName = 'FILIALNAME'
+      Size = 90
+    end
+  end
+  object DetailTOds: TDataSource
+    DataSet = DetailTO
+    Left = 264
+    Top = 136
+  end
+end

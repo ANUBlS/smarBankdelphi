@@ -1,0 +1,773 @@
+﻿unit UnitDayByDayBalanceImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, CheckLst, Evanescence, ExtCtrls, ComCtrls, Oracle,
+  ExcelExporter, Db, OracleData, Grids, DBGrids ,
+  ActiveX, AxCtrls, DayByDayBalance_TLB, StdVcl, Buttons,
+  Variants, CMExcelExport;
+
+  resourcestring
+  rsErrorSinvol       = 'Simvol seçin!';
+  rsErrorValute       = 'Valyuta seçin!';
+
+type
+  TFrmDayByDayBalance = class(TActiveForm, IFrmDayByDayBalance)
+    Panel1: TPanel;
+    DBGrid1: TDBGrid;
+    BalanceData: TOracleDataSet;
+    DataSrcBalance: TDataSource;
+    SYSDAT: TOracleDataSet;
+    SYSDATTEK_DAT: TDateTimeField;
+    NEDPackage: TOraclePackage;
+    BalanceDataADATE: TDateTimeField;
+    BalanceDataACCOUNTNUM: TWideStringField;
+    BalanceDataACCOUNTNAME: TWideStringField;
+    BalanceDataACTIVE: TFloatField;
+    BalanceDataPASSIVE: TFloatField;
+    BalanceDataDEBT_TURNOVER: TFloatField;
+    BalanceDataCREDIT_TURNOVER: TFloatField;
+    BalanceDataID: TIntegerField;
+    Branches: TOracleDataSet;
+    BranchesID: TFloatField;
+    GroupBox2: TGroupBox;
+    CBBranches: TComboBox;
+    GroupBox1: TGroupBox;
+    DTPBegin: TDateTimePicker;
+    DTPEnd: TDateTimePicker;
+    RG1: TRadioGroup;
+    EditDebt: TEdit;
+    Label1: TLabel;
+    GroupBox3: TGroupBox;
+    CheckBox2: TCheckBox;
+    GroupBox4: TGroupBox;
+    CheckBox3: TCheckBox;
+    DataSrcSinvol: TDataSource;
+    DataSetSinvol: TOracleDataSet;
+    DataSetSinvolSYMBOL: TWideStringField;
+    DataSetSinvolDESCRIPTION: TWideStringField;
+    DataSetValute: TOracleDataSet;
+    DataSetValuteVALUTE: TIntegerField;
+    DataSetValuteVALU_NAME: TWideStringField;
+    DSrcValute: TDataSource;
+    LookSimvol: TEvanescence;
+    LookValute: TEvanescence;
+    RefreshButton: TSpeedButton;
+    BtnExcel: TSpeedButton;
+    out_balance: TCheckBox;
+    full_dbbalance: TOracleDataSet;
+    Ds_fulldbbalance: TDataSource;
+    full_dbbalanceADATE: TDateTimeField;
+    full_dbbalanceACCOUNTNUM: TWideStringField;
+    full_dbbalanceACCOUNTNAME: TWideStringField;
+    full_dbbalanceACTIVE: TFloatField;
+    full_dbbalancePASSIVE: TFloatField;
+    full_dbbalanceDEBT_TURNOVER: TFloatField;
+    full_dbbalanceCREDIT_TURNOVER: TFloatField;
+    BranchesNAME: TWideStringField;
+    Label2: TLabel;
+    ComboBox1: TComboBox;
+    out_nedpackage: TOraclePackage;
+    out_dbdbalancem: TOracleDataSet;
+    out_dbdbalancemADATE: TDateTimeField;
+    out_dbdbalancemACCOUNTNUM: TWideStringField;
+    out_dbdbalancemACCOUNTNAME: TWideStringField;
+    out_dbdbalancemACTIVE: TFloatField;
+    out_dbdbalancemPASSIVE: TFloatField;
+    out_dbdbalancemDEBT_TURNOVER: TFloatField;
+    out_dbdbalancemCREDIT_TURNOVER: TFloatField;
+    CMExcel: TCMExcelExport;
+    DataSource1: TDataSource;
+    OracleDataSet1: TOracleDataSet;
+    DataSource2: TDataSource;
+    out_dbdbalancemID: TIntegerField;
+    OracleDataSet1ADATE: TDateTimeField;
+    OracleDataSet1ACCOUNTNUM: TWideStringField;
+    OracleDataSet1ACCOUNTNAME: TWideStringField;
+    OracleDataSet1ACTIVE: TFloatField;
+    OracleDataSet1PASSIVE: TFloatField;
+    OracleDataSet1DEBT_TURNOVER: TFloatField;
+    OracleDataSet1CREDIT_TURNOVER: TFloatField;
+    OracleDataSet1Id: TIntegerField;
+    full_dbbalanceID: TIntegerField;
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure BalanceDataCalcFields(DataSet: TDataSet);
+    procedure ActiveFormDestroy(Sender: TObject);
+    procedure CheckBox2Click(Sender: TObject);
+    procedure CheckBox3Click(Sender: TObject);
+    procedure RefreshButtonClick(Sender: TObject);
+    procedure BtnExcelClick(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure RG1Click(Sender: TObject);
+    procedure out_dbdbalancemCalcFields(DataSet: TDataSet);
+    procedure OracleDataSet1CalcFields(DataSet: TDataSet);
+    procedure full_dbbalanceCalcFields(DataSet: TDataSet);
+ //   procedure ComboBox1Change(Sender: TObject);
+  private
+    { Private declarations }
+    FEvents: IFrmDayByDayBalanceEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure PaintEvent(Sender: TObject);
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_Cursor: Smallint; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_Cursor(Value: Smallint); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+   public
+    { Public declarations }
+    BrancheIDs : array of integer;
+    procedure Initialize; override;
+  end;
+
+implementation
+
+uses ComObj, ComServ, sboapiDataModuleImpl, SBStoredProc, SBTranslateProc;
+
+{$R *.DFM}
+
+{ TFrmDayByDayBalance }
+
+procedure TFrmDayByDayBalance.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_FrmDayByDayBalancePage); }
+end;
+
+procedure TFrmDayByDayBalance.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as IFrmDayByDayBalanceEvents;
+end;
+
+procedure TFrmDayByDayBalance.full_dbbalanceCalcFields(DataSet: TDataSet);
+const
+  UniqueValue = 1000000;
+var
+  d,m,y : word;
+  CurrDate : TDateTime ;
+begin
+  with  DataSet  do
+  begin
+    CurrDate := FieldByName('ADate').AsDateTime;
+    DecodeDate(CurrDate,y,m,d);
+    FieldByName('ID').AsInteger := FieldByName('AccountNUM').AsInteger+UniqueValue*D;
+  end;
+end;
+
+procedure TFrmDayByDayBalance.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TFrmDayByDayBalance.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TFrmDayByDayBalance.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TFrmDayByDayBalance.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TFrmDayByDayBalance.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TFrmDayByDayBalance.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TFrmDayByDayBalance.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TFrmDayByDayBalance.Get_Cursor: Smallint;
+begin
+  Result := Smallint(Cursor);
+end;
+
+function TFrmDayByDayBalance.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TFrmDayByDayBalance.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TFrmDayByDayBalance.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TFrmDayByDayBalance.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TFrmDayByDayBalance.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TFrmDayByDayBalance.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TFrmDayByDayBalance.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TFrmDayByDayBalance.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TFrmDayByDayBalance.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TFrmDayByDayBalance.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TFrmDayByDayBalance.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TFrmDayByDayBalance._Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TFrmDayByDayBalance.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TFrmDayByDayBalance.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+
+
+procedure TFrmDayByDayBalance.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TFrmDayByDayBalance.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TFrmDayByDayBalance.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TFrmDayByDayBalance.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TFrmDayByDayBalance.KeyPressEvent(Sender: TObject;
+  var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TFrmDayByDayBalance.OracleDataSet1CalcFields(DataSet: TDataSet);
+const
+  UniqueValue = 1000000;
+var
+  d,m,y : word;
+  CurrDate : TDateTime ;
+begin
+  with  DataSet  do
+  begin
+    CurrDate := FieldByName('ADate').AsDateTime;
+    DecodeDate(CurrDate,y,m,d);
+    FieldByName('ID').AsInteger := FieldByName('AccountNUM').AsInteger+UniqueValue*D;
+  end;
+end;
+
+procedure TFrmDayByDayBalance.out_dbdbalancemCalcFields(DataSet: TDataSet);
+const
+  UniqueValue = 1000000;
+var
+  d,m,y : word;
+  CurrDate : TDateTime ;
+begin
+  with  DataSet  do
+  begin
+    CurrDate := FieldByName('ADate').AsDateTime;
+    DecodeDate(CurrDate,y,m,d);
+    FieldByName('ID').AsInteger := FieldByName('AccountNUM').AsInteger+UniqueValue*D;
+  end;
+end;
+
+procedure TFrmDayByDayBalance.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TFrmDayByDayBalance.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TFrmDayByDayBalance.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TFrmDayByDayBalance.Set_AxBorderStyle(
+  Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TFrmDayByDayBalance.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TFrmDayByDayBalance.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TFrmDayByDayBalance.Set_Cursor(Value: Smallint);
+begin
+  Cursor := TCursor(Value);
+end;
+
+procedure TFrmDayByDayBalance.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TFrmDayByDayBalance.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TFrmDayByDayBalance.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TFrmDayByDayBalance.Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TFrmDayByDayBalance.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := String(Value);
+end;
+
+procedure TFrmDayByDayBalance.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TFrmDayByDayBalance.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TFrmDayByDayBalance.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TFrmDayByDayBalance.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TFrmDayByDayBalance.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+function ErrorInCheck(Look: TEvanescence; ErrorMsg: String=''):Boolean;
+ begin
+  Result := True;
+  if Look.GetCheckedKeyList.Count = 0 then Result := False;
+  if (ErrorMsg <> '') and (not Result)then ShowMessage(ErrorMsg);
+ end;
+
+procedure TFrmDayByDayBalance.ActiveFormCreate(Sender: TObject);
+var
+i:integer;
+
+  procedure FillBranches;
+  var
+     IDIndex : integer;
+  begin
+    with  Branches do
+    begin
+      Open;
+      First;
+      SetLength(BrancheIDs,RecordCount+1);
+      with CBBranches.Items do
+      begin
+        ADD('Bütün filiallar');
+        IDIndex := 0;
+        BrancheIDs[IDIndex] := -1;
+        while not EOF do
+        begin
+          INC(IDIndex);
+          ADD(FieldByName('Name').AsString);
+          BrancheIDs[IDIndex] := FieldByName('ID').AsInteger;
+          Next;
+        end;
+      end;
+    end;
+  end;
+begin
+ CheckBox2.Checked:=true ;
+ CheckBox3.Checked:=true ;
+
+    for i := 0 to ComponentCount - 1 do
+       if Components[i].Tag = 3112 then
+     begin
+      (Components[i] as TEvanescence).Open;
+      (Components[i] as TEvanescence).CheckAll;
+     end;
+   SYSDAT.Open;
+  FillBranches;
+  CBBranches.ItemIndex := 0;
+  DTPBegin.DateTime := SYSDAT.FieldByName('TEK_DAT').AsDateTime;
+  DTPEnd  .DateTime := SYSDAT.FieldByName('TEK_DAT').AsDateTime;
+  //RefreshButton.Click;
+
+  SBTranslateProc.TranslateAllComponents(Self,sboapiDataModule.OrPack_SL);
+
+end;
+
+
+procedure TFrmDayByDayBalance.BalanceDataCalcFields(DataSet: TDataSet);
+const
+  UniqueValue = 1000000;
+var
+  d,m,y : word;
+  CurrDate : TDateTime ;
+begin
+  with  DataSet  do
+  begin
+    CurrDate := FieldByName('ADate').AsDateTime;
+    DecodeDate(CurrDate,y,m,d);
+    FieldByName('ID').AsInteger := FieldByName('AccountNUM').AsInteger+UniqueValue*D;
+  end;
+end;
+
+procedure TFrmDayByDayBalance.ActiveFormDestroy(Sender: TObject);
+begin
+  if Assigned(BrancheIDs) then
+  Finalize(BrancheIDs);
+end;
+
+procedure TFrmDayByDayBalance.CheckBox2Click(Sender: TObject);
+begin
+if CheckBox2.Checked=true  then
+ LookSimvol.CheckAll
+ else
+  LookSimvol.UncheckAll;
+end;
+
+procedure TFrmDayByDayBalance.CheckBox3Click(Sender: TObject);
+begin
+if CheckBox3.Checked=true  then
+   LookValute.CheckAll
+  else
+   LookValute.UncheckAll;
+end;
+
+procedure TFrmDayByDayBalance.RefreshButtonClick(Sender: TObject);
+var
+  FirstDate , LastDate : TDateTime;
+  ADDITIONALPARAMS,symbols,faiz: String;
+  RestsStr,chpayStr,t: String;
+  BalansH,SsudaH, a,FilterStr,CheckStr:String;
+  i: Integer;
+  Ssuda1, Ssuda2, Ssuda3, Ssuda4, Ssuda5 :string;  {H.R. 05.04.2017}
+  Ssuda6, Ssuda7, Ssuda8, Ssuda9, Ssuda10 :string; {H.R. 05.04.2017}
+begin
+  t:=IntToStr(ComboBox1.ItemIndex + 1);
+  if t='0' then t:='1';
+  DBGrid1.DataSource := DataSrcBalance;
+  RefreshButton.Down:=true;
+  FirstDate := Trunc(DTPBegin.DateTime);
+  LastDate  := Trunc(DTPEnd  .DateTime);
+
+  FilterStr:='' ;
+  CheckStr := '';
+  chpayStr := '';
+
+  if (CheckStr<>'') and (FilterStr<>'') then
+   FilterStr := FilterStr+' AND '+CheckStr;
+
+  if (CheckStr<>'') and (FilterStr='') then
+   FilterStr := CheckStr;
+
+  FilterStr := FilterStr+ chpayStr;
+  if FilterStr<>'' then ADDITIONALPARAMS:=' AND '+FilterStr
+  else ADDITIONALPARAMS:='';
+
+  if not ErrorInCheck(LookSimvol,rsErrorSinvol) then   Exit;
+  if not ErrorInCheck(LookValute,rsErrorValute) then   Exit;
+
+  if (LookValute.GetCheckedKeyList.Count<>LookValute.Items.Count) then
+  ADDITIONALPARAMS := ADDITIONALPARAMS + ' AND ac.VAL_ACC in ('
+                   +LookValute.GetCheckedKeyList.CommaText+')' ;
+
+  if (LookSimvol.GetCheckedKeyList.Count<>LookSimvol.Items.Count) then begin
+   symbols:=LookSimvol.GetCheckedKeyList.CommaText;
+   faiz:='%'') or ac.tipacc like  (''%';
+   symbols:=StringReplace(symbols,',',faiz,[rfReplaceAll]);
+
+   ADDITIONALPARAMS := ADDITIONALPARAMS + ' and (ac.tipacc like ('
+                   +'''%'
+                   +symbols
+                   +'%'''
+                   +'))'
+                   +#13#10;
+
+  end;
+
+  if RestsStr <> ''  then ADDITIONALPARAMS := ADDITIONALPARAMS+' and '+RestsStr ;
+  BalansH:= 'and (ac.bal_cn'+ t +' IN ('+ EditDebt.Text + '))';
+  SsudaH:=  'and (ac.acc_no IN ('+ StrToComma(EditDebt.Text) + '))';
+
+  {H.R. 05.04.2017}
+  Ssuda1 := Copy(SsudaH, 1, 1000);
+  Ssuda2 := Copy(SsudaH, 1001, 1000);
+  Ssuda3 := Copy(SsudaH, 2001, 1000);
+  Ssuda4 := Copy(SsudaH, 3001, 1000);
+  Ssuda5 := Copy(SsudaH, 4001, 1000);
+  Ssuda6 := Copy(SsudaH, 5001, 1000);
+  Ssuda7 := Copy(SsudaH, 6001, 1000);
+  Ssuda8 := Copy(SsudaH, 7001, 1000);
+  Ssuda9 := Copy(SsudaH, 8001, 1000);
+  Ssuda10 := Copy(SsudaH, 9001, 1000);
+  {*H.R. 05.04.2017*}
+
+  try
+   if EditDebt.Text<>'' then
+    case RG1.ItemIndex of
+     0:
+      begin
+       if out_balance.Checked then
+           out_NEDPackage.CallProcedure('NON_EXSIST_DATES',[FirstDate,LastDate,BrancheIDs[CBBranches.ItemIndex],null,null,ADDITIONALPARAMS,BalansH,null,t]) ;
+           NEDPackage.CallProcedure('NON_EXSIST_DATES',[FirstDate,LastDate,BrancheIDs[CBBranches.ItemIndex],null,null,ADDITIONALPARAMS,
+           BalansH,null,null,null,null,null,null,null,null,null,null,t]) ;
+      end;
+     1:
+      begin
+       if out_balance.Checked then
+         out_NEDPackage.CallProcedure('NON_EXSIST_DATES',[FirstDate,LastDate,BrancheIDs[CBBranches.ItemIndex],null,null,ADDITIONALPARAMS,SsudaH,null,t]) ;
+         NEDPackage.CallProcedure('NON_EXSIST_DATES',
+         [FirstDate,LastDate,BrancheIDs[CBBranches.ItemIndex],null,null,ADDITIONALPARAMS,
+         Ssuda1,Ssuda2,Ssuda3,Ssuda4,Ssuda5,Ssuda6,Ssuda7,Ssuda8,Ssuda9,Ssuda10,null,t]) ;
+      end;
+   end
+   else
+    begin
+     if out_balance.Checked then
+       out_NEDPackage.CallProcedure('NON_EXSIST_DATES',[FirstDate,LastDate,BrancheIDs[CBBranches.ItemIndex],null,null,null,null,null,t]) ;
+       NEDPackage.CallProcedure('NON_EXSIST_DATES',[FirstDate,LastDate,BrancheIDs[CBBranches.ItemIndex],null,null,ADDITIONALPARAMS,
+       null,null,null,null,null,null,null,null,null,null,null,t]) ;
+   end;
+   if out_balance.Checked then
+   begin
+    full_dbbalance.CloseAll ;
+    full_dbbalance.open;
+    dbgrid1.DataSource:=ds_fulldbbalance;
+    end;
+
+  with  BalanceData  do
+  begin
+    if Active  then  CloseAll;
+    Open;
+  end;
+  finally
+    Screen.Cursor := crDefault;
+  end;
+end;
+
+ procedure TFrmDayByDayBalance.RG1Click(Sender: TObject);
+begin
+
+end;
+
+{ try
+  NEDPackage.CallProcedure('NON_EXSIST_DATES',[FirstDate,LastDate,BrancheIDs[CBBranches.ItemIndex],null,null,ADDITIONALPARAMS]) ;
+
+  with  BalanceData  do  begin
+  if EditDebt.Text<>'' then
+  case RG1.ItemIndex of
+  0:
+  begin
+   Close;
+    // SQL[6] := ADDITIONALPARAMS;
+     SQL[7] := 'and (a.Abal_cn1 IN ('+EditDebt.Text + '))';
+    // SQL[8] := EditDebt.Text + '))';
+   Open;
+  end;
+  1:
+    begin
+   Close;
+    // SQL[6] := ADDITIONALPARAMS;
+    // SQL[7] := 'and (a.aacc_no IN ('+StrToComma(EditDebt.Text) + '))';
+    // SQL[8] := StrToComma(EditDebt.Text) + '))'
+   Open;
+  end;
+  end
+  else
+  begin
+   Close;
+   //  SQL[6] := ADDITIONALPARAMS;
+     SQL[7] := '';
+     SQL[8] := '';
+   Open;
+  end;
+   end;
+  finally
+   RefreshButton.Down:=false;
+   //Screen.Cursor := crDefault;
+  end;
+end;}
+
+procedure TFrmDayByDayBalance.BtnExcelClick(Sender: TObject);
+begin
+  BtnExcel.Down:=true;
+  {if dbgrid1.DataSource=ds_fulldbbalance
+  then
+  BalanceExporter.ExportSource:= ds_fulldbbalance
+  else  BalanceExporter.ExportSource := datasrcbalance;
+  BalanceExporter.Report;
+ if dbgrid1.DataSource=ds_fulldbbalance then
+  begin
+  out_dbdbalancem.Open;
+  out_dbdbalancem.Refresh;
+  BalanceExporter.ExportSource:= datasource1;
+  BalanceExporter.Report;
+  end;    }
+
+  CMExcel.Connect;
+
+
+    if   dbgrid1.DataSource=Ds_fulldbbalance   then
+
+    begin
+
+
+
+       OracleDataSet1.Open;
+     CMExcel.ExportDataset(full_dbbalance,'Balans_1',true);
+      //CMExcel.ExportDataset(full_dbbalance,'Balans_1',true);
+    // out_dbdbalancem.Open;
+    // out_dbdbalancem.Refresh;
+    // CMExcel.ExportDataset(out_dbdbalancem,'Balans_2',true);
+     end;
+    if  dbgrid1.DataSource=datasrcbalance then
+  CMExcel.ExportDataset(balancedata,'Balans_1',true);
+  CMExcel.Disconnect;
+  BtnExcel.Down:=false;
+end;
+
+procedure TFrmDayByDayBalance.Button1Click(Sender: TObject);
+begin
+    dbgrid1.DataSource:=datasource1;
+    out_dbdbalancem.open;
+       
+
+     //BalanceExporter.ExportSource :=datasource1;
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TFrmDayByDayBalance,
+    Class_FrmDayByDayBalance,
+    1,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+
+
+end.
+

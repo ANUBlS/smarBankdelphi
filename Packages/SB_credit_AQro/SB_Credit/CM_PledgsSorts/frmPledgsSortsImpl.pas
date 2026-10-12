@@ -1,0 +1,89 @@
+unit frmPledgsSortsImpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ExtCtrls,  Grids, DBGridEh, StdCtrls, Buttons, Db,
+  OracleData, DBCtrls, NLSLocalizer;
+
+type
+  TfrmPledgsSorts = class(TForm)
+    Panel1: TPanel;
+    DBGridEh1: TDBGridEh;
+    BitBtn1: TBitBtn;
+    PledgsortsDatSrc: TDataSource;
+    Pledgsorts: TOracleDataSet;
+    PledgsortsID: TFloatField;
+    DBNavigator1: TDBNavigator;
+    PledgsortsNAME: TWideStringField;
+    procedure FormCanResize(Sender: TObject; var NewWidth,
+      NewHeight: Integer; var Resize: Boolean);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure PledgsortsAfterPost(DataSet: TDataSet);
+  private
+    procedure RefreshPldg;
+  public
+    { Public declarations }
+  end;
+
+var
+  frmPledgsSorts: TfrmPledgsSorts;
+
+  Procedure InitPlugin(S:String);export;
+implementation
+
+{$R *.DFM}
+
+uses sboapiDataModuleImpl,CommonDecls;
+
+Procedure InitPlugin(S:String);export;
+begin
+  frmPledgsSorts.ShowModal;
+end;
+
+exports
+   InitPlugin;
+
+procedure TfrmPledgsSorts.RefreshPldg;
+begin
+   Pledgsorts.Refresh;   
+end;
+
+procedure TfrmPledgsSorts.FormCanResize(Sender: TObject; var NewWidth,
+  NewHeight: Integer; var Resize: Boolean);
+begin
+   Resize := False
+end;
+
+procedure TfrmPledgsSorts.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+  If Ord(Key) = VK_ESCAPE  then close
+end;
+
+procedure TfrmPledgsSorts.FormCreate(Sender: TObject);
+begin
+   Pledgsorts.Open
+end;
+
+procedure TfrmPledgsSorts.FormDestroy(Sender: TObject);
+begin
+   Pledgsorts.CloseAll;
+end;
+
+ procedure TfrmPledgsSorts.PledgsortsAfterPost(DataSet: TDataSet);
+var SaveBookmark :TBookmark;
+begin
+   with DataSet do
+   begin
+        SaveBookmark := GetBookmark;
+        Refresh;
+        GotoBookmark(SaveBookmark);
+   end;
+end;
+
+initialization
+   frmPledgsSorts := TfrmPledgsSorts.Create(CommonApplication);
+end.

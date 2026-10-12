@@ -1,0 +1,121 @@
+unit FileSend_Unit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Grids, DBGrids, StdCtrls, Buttons,sboapiDataModuleImpl, Db, OracleData,FileCtrl,shellapi,
+  ExtCtrls, ComCtrls;
+
+type
+  TSendFileForm = class(TForm)
+    DBGrid1: TDBGrid;
+    But_cancel: TBitBtn;
+    SentInfo: TOracleDataSet;
+    Mt150_DataSource: TDataSource;
+    ForCheck: TOracleDataSet;
+    Panel1: TPanel;
+    DateTimePicker1: TDateTimePicker;
+    DateTimePicker2: TDateTimePicker;
+    Label1: TLabel;
+    Label2: TLabel;
+    BitBtn1: TBitBtn;
+    procedure But_cancelClick(Sender: TObject);
+    procedure DBGrid1DblClick(Sender: TObject);
+    procedure BitBtn1Click(Sender: TObject);
+    procedure RefDate;
+    procedure FormKeyUp(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure FormConstrainedResize(Sender: TObject; var MinWidth,
+      MinHeight, MaxWidth, MaxHeight: Integer);
+    procedure DBGrid1DrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TColumn; State: TGridDrawState);
+
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  SendFileForm: TSendFileForm;
+
+implementation
+
+uses LVPCSSImpl;
+
+{$R *.DFM}
+procedure TSendFileForm.RefDate;
+var
+  Dtst,dtEnd:TDateTime;
+begin
+  Dtst:=trunc(DateTimePicker1.DateTime);
+  dtEnd:=trunc(DateTimePicker2.DateTime);
+  SentInfo.Close;
+  SentInfo.SetVariable('BeginDate',Dtst);
+  SentInfo.SetVariable('EndDate',dtEnd);
+  SentInfo.Open;
+
+end;
+
+procedure TSendFileForm.But_cancelClick(Sender: TObject);
+begin
+ close;
+end;
+
+procedure TSendFileForm.DBGrid1DblClick(Sender: TObject);
+  var filename : string;
+begin
+   if SentInfo.RecordCount = 0 then exit;
+   ForCheck.Open;
+   if SentInfo.FieldByName('batchfile').AsInteger = 0 then
+      filename:=ForCheck.fieldbyname('out_dir').AsString+'\'+FormatDateTime('ddmmyy',date)+'\'+SentInfo.fieldbyname('user_reference').AsString+'.xml'
+   else
+      filename:=ForCheck.fieldbyname('out_dir').AsString+'\'+FormatDateTime('ddmmyy',date)+'\Batches\'+SentInfo.fieldbyname('user_reference').AsString+'.xml';
+//   ShowMessage(filename);
+   if FileExists(filename) then
+   ShellExecute(Application.Handle,'open',pchar(filename),nil,nil,SW_SHOW)
+   else
+   MessageDlg(format('File %s not found !',[SentInfo.fieldbyname('user_reference').AsString+'.xml']),mtInformation,[mbok],0);
+end;
+
+procedure TSendFileForm.BitBtn1Click(Sender: TObject);
+begin
+RefDate;
+end;
+
+procedure TSendFileForm.FormKeyUp(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+   if key = Vk_escape then close;
+end;
+
+procedure TSendFileForm.FormConstrainedResize(Sender: TObject;
+  var MinWidth, MinHeight, MaxWidth, MaxHeight: Integer);
+begin
+  MinWidth:= 334;
+  MinHeight:=363;
+end;
+
+procedure TSendFileForm.DBGrid1DrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TColumn;
+  State: TGridDrawState);
+var
+  ImageIndex: Integer;
+begin
+  ImageIndex:=-1;
+  with (Sender as TDBGrid) do
+  begin
+    if (Sender as TDBGrid).DataSource.DataSet.RecordCount <> 0 then
+    begin
+      case (Sender as TDBGrid).DataSource.DataSet.FieldByName('batchfile').AsInteger of
+      0:  ImageIndex := 5;
+      end;
+      if (DataCol = 1) and (ImageIndex <> -1) then
+        LVPCSSForm.ImageList.Draw(Canvas, Rect.Left, Rect.Top, ImageIndex, True)
+      else
+        DefaultDrawColumnCell(Rect, DataCol, Column, State);
+     end;
+    end;
+    end;
+end.

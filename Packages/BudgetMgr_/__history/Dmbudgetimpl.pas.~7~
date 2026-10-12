@@ -1,0 +1,386 @@
+unit Dmbudgetimpl;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, OracleData, Oracle;
+
+type
+  TDMBudget = class(TDataModule)
+    ArticlesDS: TDataSource;
+    ArticlesDST: TOracleDataSet;
+    ItemsofArticlesDS: TDataSource;
+    ItemsofArticlesDST: TOracleDataSet;
+    ItemsofArticlesDSTID: TFloatField;
+    ItemsofArticlesDSTID_ARTICL: TFloatField;
+    ItemsofArticlesDSTNAME: TWideStringField;
+    ItemsofArticlesDSTAMOUNTOFBEGINYEAR: TFloatField;
+    ItemsofArticlesDSTACCID: TFloatField;
+    ItemsofArticlesDSTNUMBEROFITEM: TWideStringField;
+    ItemsofArticlesDSTAMOUNTOFFIRSTQUARTER: TFloatField;
+    ItemsofArticlesDSTAMOUNTOFSECONDQUARTER: TFloatField;
+    ItemsofArticlesDSTAMOUNTOFTHRIDQUARTER: TFloatField;
+    ItemsofArticlesDSTAMOUNTOFFOURTHQUARTER: TFloatField;
+    ItemsofArticlesDSTAMOUNTOFENDYEAR: TFloatField;
+    AddArtDatSrc: TDataSource;
+    AddArt: TOracleDataSet;
+    AddArtID: TFloatField;
+    AddArtNAME: TWideStringField;
+    AddArtNUMBEROFARTICLE: TWideStringField;
+    AddArtSTATUS: TFloatField;
+    AddItemsDatSrc: TDataSource;
+    AddItems: TOracleDataSet;
+    AddItemsID: TFloatField;
+    AddItemsID_ARTICL: TFloatField;
+    AddItemsNAME: TWideStringField;
+    AddItemsACCID: TFloatField;
+    ArticlesPkg: TOraclePackage;
+    Accs: TOracleDataSet;
+    AccsDatSrc: TDataSource;
+    AccsID: TFloatField;
+    AccsACC_NO: TWideStringField;
+    AddItemsNUMBEROFITEM: TWideStringField;
+    AddItemsa: TWideStringField;
+    ItmDataSet: TOracleDataSet;
+    ArtDataSet: TOracleDataSet;
+    ArtDataSrc: TDataSource;
+    ItmDataSrc: TDataSource;
+    ArtDataSetID: TFloatField;
+    ArtDataSetNAME: TWideStringField;
+    ArtDataSetNUMBEROFARTICLE: TWideStringField;
+    ArtDataSetSTATUS: TFloatField;
+    ArticlesDSTID: TFloatField;
+    ArticlesDSTNAME: TWideStringField;
+    ArticlesDSTNUMBEROFARTICLE: TWideStringField;
+    IncomeDst: TOracleDataSet;
+    IncomeDstID: TFloatField;
+    ArticlesDSTSTATUS: TFloatField;
+    ArticlesDSTst: TWideStringField;
+    SetingDatSrc: TDataSource;
+    SetigDatSet: TOracleDataSet;
+    SetigDatSetNAME: TWideStringField;
+    SetigDatSetAMOUNTOFBEGINYEAR: TFloatField;
+    SetigDatSetNUMBEROFITEM: TWideStringField;
+    SetigDatSetAMOUNTOFFIRSTQUARTER: TFloatField;
+    SetigDatSetAMOUNTOFSECONDQUARTER: TFloatField;
+    SetigDatSetAMOUNTOFTHRIDQUARTER: TFloatField;
+    SetigDatSetAMOUNTOFFOURTHQUARTER: TFloatField;
+    SetigDatSetAMOUNTOFENDYEAR: TFloatField;
+    ArtDatSet: TOracleDataSet;
+    ArtDatSrc: TDataSource;
+    SYSDAT: TOracleDataSet;
+    ArtDatSetID: TFloatField;
+    ArtDatSetBEGINDAT: TDateTimeField;
+    ArtDatSetENDDAT: TDateTimeField;
+    SYSDATBEGINDAT: TDateTimeField;
+    SYSDATENDDAT: TDateTimeField;
+    ArtDataSetstatu: TWideStringField;
+    SetigDatSetID: TFloatField;
+    SetigDatSetID_ARTICL: TFloatField;
+    SetigDatSetACCID: TFloatField;
+    SetigDatSetID_ARTDAT: TFloatField;
+    sysdatSrc: TDataSource;
+    articles_accSrc: TDataSource;
+    articles_accs: TOracleDataSet;
+    articles_accgroup: TOracleDataSet;
+    articles_accgroupSrc: TDataSource;
+    articles_accsACC: TFloatField;
+    articles_accgroupID: TFloatField;
+    articles_accgroupNAME: TWideStringField;
+    articles_accgroupDESCRIPTION: TWideStringField;
+    articles_accsGROUPID: TFloatField;
+    accrestDatSrc: TDataSource;
+    accrest: TOracleDataSet;
+    ItmDataSetID: TFloatField;
+    ItmDataSetID_ARTICL: TFloatField;
+    ItmDataSetNAME: TWideStringField;
+    ItmDataSetAMOUNTOFBEGINYEAR: TFloatField;
+    ItmDataSetACCID: TFloatField;
+    ItmDataSetNUMBEROFITEM: TWideStringField;
+    ItmDataSetAMOUNTOFFIRSTQUARTER: TFloatField;
+    ItmDataSetAMOUNTOFSECONDQUARTER: TFloatField;
+    ItmDataSetAMOUNTOFTHRIDQUARTER: TFloatField;
+    ItmDataSetAMOUNTOFFOURTHQUARTER: TFloatField;
+    ItmDataSetAMOUNTOFENDYEAR: TFloatField;
+    ItmDataSetID_ARTDAT: TFloatField;
+    ItmDataSetACCNO: TWideStringField;
+    accrestACC_ID: TFloatField;
+    accrestSM: TFloatField;
+    ItmDataSetr: TFloatField;
+    ItmDataSetsumamount: TFloatField;
+    ItmDataSetReate: TFloatField;
+    ItmDataSetDifference: TFloatField;
+    ArtDataSetExcl: TOracleDataSet;
+    ItmDataSetExcl: TOracleDataSet;
+    ItmDataSetExclNAME: TWideStringField;
+    ItmDataSetExclNUMBEROFITEM: TWideStringField;
+    ItmDataSetExclAMOUNTOFFIRSTQUARTER: TFloatField;
+    ItmDataSetExclAMOUNTOFSECONDQUARTER: TFloatField;
+    ItmDataSetExclAMOUNTOFTHRIDQUARTER: TFloatField;
+    ItmDataSetExclAMOUNTOFFOURTHQUARTER: TFloatField;
+    ItmDataSetExclAMOUNTOFENDYEAR: TFloatField;
+    ItmDataSetExclACCNO: TWideStringField;
+    ItmDataSetExclsumamount_e: TFloatField;
+    ItmDataSetExclBudcet_rest: TFloatField;
+    ItmDataSetExclACCID: TFloatField;
+    ItmDataSetExclDispatry: TFloatField;
+    ItmDataSetExclfaiz: TFloatField;
+    ItmDataSetExclreat: TFloatField;
+    ArtDataSetExclNAME: TWideStringField;
+    ArtDataSetExclNUMBEROFARTICLE: TWideStringField;
+    ArtDataSetExclSTATUS: TFloatField;
+    ArtDataSetExclstat: TWideStringField;
+    ArtDataSetExclID: TFloatField;
+    OracleDataSet1: TOracleDataSet;
+    OracleDataSet2: TOracleDataSet;
+    OracleDataSet3: TOracleDataSet;
+    OracleDataSet1ACC_ID: TFloatField;
+    OracleDataSet1SM: TFloatField;
+    OracleDataSet2ACC_ID: TFloatField;
+    OracleDataSet2SM1: TFloatField;
+    OracleDataSet3ACC_ID: TFloatField;
+    OracleDataSet3SM2: TFloatField;
+    ItmDataSetExclID: TFloatField;
+    ItmDataSetExclAMOUNTOFFIRSTQUARTER_REAL: TFloatField;
+    ItmDataSetExclAMOUNTOFSECONDQUARTER_REAL: TFloatField;
+    ItmDataSetExclAMOUNTOFTHRIDQUARTER_REAL: TFloatField;
+    OracleDataSet4: TOracleDataSet;
+    OracleDataSet4ACC_ID: TFloatField;
+    OracleDataSet4SM3: TFloatField;
+    ItmDataSetExclAMOUNTOFFOURTHQUARTER_REAL: TFloatField;
+    IncomeDstNAME: TWideStringField;
+    AddItemsBAL_CNS: TWideStringField;
+    AddItemsACCOUNTS: TWideStringField;
+    AddItemsDNT_ACCOUNTS: TWideStringField;
+    AddItemsPROGNOZ: TFloatField;
+    AddItemsPERCENT: TFloatField;
+    procedure AddArtApplyRecord(Sender: TOracleDataSet; Action: Char;
+      var Applied: Boolean; var NewRowId: String);
+    procedure DataModuleCreate(Sender: TObject);
+    procedure AddItemsBeforePost(DataSet: TDataSet);
+    procedure AddItemsAfterPost(DataSet: TDataSet);
+    procedure ArtDataSetApplyRecord(Sender: TOracleDataSet; Action: Char;
+      var Applied: Boolean; var NewRowId: String);
+    procedure ItmDataSetAfterPost(DataSet: TDataSet);
+    procedure ItmDataSetBeforePost(DataSet: TDataSet);
+    procedure ArticlesDSTApplyRecord(Sender: TOracleDataSet; Action: Char;
+      var Applied: Boolean; var NewRowId: String);
+    procedure ArticlesDSTAfterPost(DataSet: TDataSet);
+    procedure ArtDataSetAfterPost(DataSet: TDataSet);
+    procedure ItmDataSetCalcFields(DataSet: TDataSet);
+    procedure SetigDatSetBeforeInsert(DataSet: TDataSet);
+    procedure SetigDatSetAfterInsert(DataSet: TDataSet);
+    procedure accrestAfterPost(DataSet: TDataSet);
+    procedure DataModuleDestroy(Sender: TObject);
+    procedure ItmDataSetExclCalcFields(DataSet: TDataSet);
+  private
+    { Private declarations }
+  public
+
+    status:integer;
+    ArticleID :Integer;
+  end;
+
+var
+  DMBudget: TDMBudget;
+  
+implementation
+
+{$R *.DFM}
+
+uses sboapiDataModuleImpl;
+
+procedure TDMBudget.AddArtApplyRecord(Sender: TOracleDataSet; Action: Char;
+  var Applied: Boolean; var NewRowId: String);
+  var
+  pname:string;
+  numberofarticle:string;
+
+begin
+  with AddArt do
+    begin
+       pname := FieldbyName('name').AsString;
+       numberofarticle := FieldbyName('numberofarticle').AsString;
+    end;
+
+     Applied := true;
+  case Action of
+      'I': ArticleID := ArticlesPkg.CallIntegerFunction('add_art',[status,pname]);
+     // 'U': ArticlesPkg.callprocedure('edit_art', [ArticlesDST.Fieldbyname('id').asInteger,status,pname]) ;
+
+       else  Applied := false
+  end ;
+
+   end;
+
+
+procedure TDMBudget.DataModuleCreate(Sender: TObject);
+begin
+   accs.open;
+   ArtDataSet.open ;
+   ItmDataSet.open;
+   accrest.open;
+    ArticlesDST.open ;
+    AddItems.open
+end;
+
+procedure TDMBudget.AddItemsBeforePost(DataSet: TDataSet);
+begin
+   AddItems.FieldByName('ID_ARTICL').AsInteger := ArticlesDST.Fieldbyname('id').asInteger
+end;
+
+procedure TDMBudget.AddItemsAfterPost(DataSet: TDataSet);
+begin
+ AddItems.Refresh;
+end;
+
+procedure TDMBudget.ArtDataSetApplyRecord(Sender: TOracleDataSet;
+  Action: Char; var Applied: Boolean; var NewRowId: String);
+  var
+   pname:string;
+  numberofarticle:string;
+     begin
+with AddArt do
+    begin
+       pname := FieldbyName('name').AsString;
+       numberofarticle := FieldbyName('numberofarticle').AsString;
+    end;
+
+     Applied := true;
+  case Action of
+      'I': ArticleID := ArticlesPkg.CallIntegerFunction('add_art',[status,pname]);
+      'U': ArticlesPkg.callprocedure('edit_art', [ArticlesDST.Fieldbyname('id').asInteger,status,pname]) ;
+      
+       else  Applied := false
+  end ;     
+end;
+
+procedure TDMBudget.ItmDataSetAfterPost(DataSet: TDataSet);
+begin
+  ItmDataSet.Refresh;
+end;
+
+procedure TDMBudget.ItmDataSetBeforePost(DataSet: TDataSet);
+begin
+ItmDataSet.FieldByName('ID_ARTICL').AsInteger := ArticlesDST.Fieldbyname('id').asInteger
+end;
+
+procedure TDMBudget.ArticlesDSTApplyRecord(Sender: TOracleDataSet;
+  Action: Char; var Applied: Boolean; var NewRowId: String);
+ var
+  pname:string;
+  numberofarticle:string;
+   pstatus:integer;
+begin
+  with ArticlesDST do
+    begin
+       pname := FieldbyName('name').AsString;
+       pstatus:= FieldbyName('status').Asinteger;
+       numberofarticle := FieldbyName('numberofarticle').AsString;
+    end;
+
+     Applied := true;
+  case Action of
+      'I': ArticleID := ArticlesPkg.CallIntegerFunction('add_art',[pstatus,pname]);
+     //'U': ArticlesPkg.callprocedure('edit_art', [ArticlesDST.Fieldbyname('id').asInteger,status,pname]) ;
+
+       else  Applied := false
+  end ;                         
+  end;
+
+procedure TDMBudget.ArticlesDSTAfterPost(DataSet: TDataSet);
+begin
+ ArticlesDST.Refresh;
+end;
+
+procedure TDMBudget.ArtDataSetAfterPost(DataSet: TDataSet);
+begin
+ArtDataSet.Refresh;
+end;
+
+procedure TDMBudget.ItmDataSetCalcFields(DataSet: TDataSet);
+begin
+
+  with ItmDataSet do
+   begin
+        FieldByName('sumamount').asFloat :=
+        FieldByName('AMOUNTOFFIRSTQUARTER').asFloat + FieldByName('AMOUNTOFSECONDQUARTER').asFloat+
+        FieldByName('AMOUNTOFTHRIDQUARTER').asFloat + FieldByName('AMOUNTOFFOURTHQUARTER').asFloat;
+        // ItmDataSet.FieldByName('RATE').asFloat:=
+      //  FieldByName('AMOUNTOFFIRSTQUARTER_real').asFloat + FieldByName('AMOUNTOFSECONDQUARTER_real').asFloat+
+      //  FieldByName('AMOUNTOFTHRIDQUARTER_real').asFloat + FieldByName('AMOUNTOFFOURTHQUARTER_real').asFloat;
+
+          FieldByName('reate').asFloat :=
+          FieldByName('sumamount').asFloat - FieldByName('r').asFloat;
+
+         FieldByName('difference').asFloat :=
+         FieldByName('AMOUNTOFENDYEAR').asFloat- FieldByName('sumamount').asFloat;
+
+         {  if FieldByName('Dispatry').asFloat=0 then
+        FieldByName('faiz').asFloat := 0
+        else  if FieldByName('sumamount').asFloat=0 then
+         FieldByName('faiz').asFloat := 0
+         else
+          FieldByName('faiz').asFloat :=
+        ( FieldByName('Dispatry').asFloat)/(FieldByName('sumamount').asFloat )*100
+               end;
+          {if ArtDataSet.FieldByName('status').asinteger=0 then
+           ItmDataSet. FieldByName('RestDisparity').asFloat :=0
+            else      }
+      end;          
+       
+end;
+
+procedure TDMBudget.SetigDatSetBeforeInsert(DataSet: TDataSet);
+begin
+//SetigDatSet.Cancel
+end;
+
+procedure TDMBudget.SetigDatSetAfterInsert(DataSet: TDataSet);
+begin
+SetigDatSet.Cancel
+end;
+
+procedure TDMBudget.accrestAfterPost(DataSet: TDataSet);
+begin
+accrest.refresh;
+end;
+
+procedure TDMBudget.DataModuleDestroy(Sender: TObject);
+begin
+   accs.close;
+   ArtDataSet.close ;
+   ItmDataSet.close;
+   accrest.close;
+   ArticlesDST.close
+ //  ArtDataSetExcl.close ;
+  // ItmDataSetExcl.close;
+end;
+
+procedure TDMBudget.ItmDataSetExclCalcFields(DataSet: TDataSet);
+begin
+with ItmDataSetExcl do
+   begin
+        FieldByName('sumamount_e').asFloat :=
+        FieldByName('AMOUNTOFFIRSTQUARTER').asFloat + FieldByName('AMOUNTOFSECONDQUARTER').asFloat+
+        FieldByName('AMOUNTOFTHRIDQUARTER').asFloat + FieldByName('AMOUNTOFFOURTHQUARTER').asFloat;
+
+         FieldByName('Budcet_rest').asFloat :=
+         FieldByName('sumamount_e').asFloat -ItmDataSetExcl.FieldByName('reat').asFloat;
+
+          FieldByName('Dispatry').asFloat :=
+          FieldByName('AMOUNTOFENDYEAR').asFloat- FieldByName('sumamount_e').asFloat;
+
+        if FieldByName('Dispatry').asFloat=0 then
+        FieldByName('faiz').asFloat := 0
+        else  if FieldByName('sumamount_e').asFloat=0 then
+         FieldByName('faiz').asFloat := 0
+         else
+            FieldByName('faiz').asFloat :=
+        ( FieldByName('Dispatry').asFloat)/(FieldByName('sumamount_e').asFloat )*100
+
+          end;
+
+ end;
+end.

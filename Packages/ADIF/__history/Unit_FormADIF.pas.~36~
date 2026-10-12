@@ -1,0 +1,605 @@
+﻿unit Unit_FormADIF;
+
+{$WARN SYMBOL_PLATFORM OFF}
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ActiveX, AxCtrls, ProjectADIF_TLB, StdVcl, StdCtrls, XFSCtrls, ComCtrls,
+  ToolWin, ExtCtrls, Grids, XDBGrids, DBGridEhGrouping, GridsEh, DBGridEh,
+  Buttons, Mask, DBCtrlsEh, DBCtrls, DBGrids;
+
+type
+  TFormADIF = class(TActiveForm, IFormADIF)
+    XFButton1: TXFButton;
+    XFButton2: TXFButton;
+    Müştərilər: TPageControl;
+    TabSheet1: TTabSheet;
+    Hesablar: TTabSheet;
+    TabSheet2: TTabSheet;
+    Panel1: TPanel;
+    DBGridEh1: TDBGridEh;
+    BitBtn1: TBitBtn;
+    BitBtn2: TBitBtn;
+    XFPanel1: TXFPanel;
+    TabSheet3: TTabSheet;
+    Button1: TButton;
+    Button2: TButton;
+    DBGridEh2: TDBGridEh;
+    XFPanel3: TXFPanel;
+    MainGrid: TXDBGrid;
+    XFButton3: TXFButton;
+    XFBitBtn1: TXFBitBtn;
+    TabSheet4: TTabSheet;
+    XFPanel5: TXFPanel;
+    XFBitBtn2: TXFBitBtn;
+    XFBitBtn3: TXFBitBtn;
+    XFPanel2: TXFPanel;
+    XDBGrid1: TXDBGrid;
+    Button3: TButton;
+    Button4: TButton;
+    Panel2: TPanel;
+    Panel3: TPanel;
+    DBGrid1: TDBGrid;
+    procedure ActiveFormCreate(Sender: TObject);
+    procedure BitBtn2Click(Sender: TObject);
+    procedure XFBitBtn1Click(Sender: TObject);
+    procedure XFButton3Click(Sender: TObject);
+    procedure XFBitBtn2Click(Sender: TObject);
+    procedure XFBitBtn3Click(Sender: TObject);
+    procedure Button4Click(Sender: TObject);
+    procedure Button3Click(Sender: TObject);
+  private
+    { Private declarations }
+    FEvents: IFormADIFEvents;
+    procedure ActivateEvent(Sender: TObject);
+    procedure ClickEvent(Sender: TObject);
+    procedure CreateEvent(Sender: TObject);
+    procedure DblClickEvent(Sender: TObject);
+    procedure DeactivateEvent(Sender: TObject);
+    procedure DestroyEvent(Sender: TObject);
+    procedure KeyPressEvent(Sender: TObject; var Key: Char);
+    procedure MouseEnterEvent(Sender: TObject);
+    procedure MouseLeaveEvent(Sender: TObject);
+    procedure PaintEvent(Sender: TObject);
+  protected
+    { Protected declarations }
+    procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); override;
+    procedure EventSinkChanged(const EventSink: IUnknown); override;
+    function Get_Active: WordBool; safecall;
+    function Get_AxBorderStyle: TxActiveFormBorderStyle; safecall;
+    function Get_AlignDisabled: WordBool; safecall;
+    function Get_AlignWithMargins: WordBool; safecall;
+    function Get_AutoScroll: WordBool; safecall;
+    function Get_AutoSize: WordBool; safecall;
+    function Get_BorderWidth: Integer; safecall;
+    function Get_Caption: WideString; safecall;
+    function Get_Color: OLE_COLOR; safecall;
+    function Get_DockSite: WordBool; safecall;
+    function Get_DoubleBuffered: WordBool; safecall;
+    function Get_DropTarget: WordBool; safecall;
+    function Get_ExplicitHeight: Integer; safecall;
+    function Get_ExplicitLeft: Integer; safecall;
+    function Get_ExplicitTop: Integer; safecall;
+    function Get_ExplicitWidth: Integer; safecall;
+    function Get_Enabled: WordBool; safecall;
+    function Get_Font: IFontDisp; safecall;
+    function Get_HelpFile: WideString; safecall;
+    function Get_KeyPreview: WordBool; safecall;
+    function Get_MouseInClient: WordBool; safecall;
+    function Get_ParentCustomHint: WordBool; safecall;
+    function Get_ParentDoubleBuffered: WordBool; safecall;
+    function Get_PixelsPerInch: Integer; safecall;
+    function Get_PopupMode: TxPopupMode; safecall;
+    function Get_PrintScale: TxPrintScale; safecall;
+    function Get_Scaled: WordBool; safecall;
+    function Get_ScreenSnap: WordBool; safecall;
+    function Get_SnapBuffer: Integer; safecall;
+    function Get_UseDockManager: WordBool; safecall;
+    function Get_Visible: WordBool; safecall;
+    function Get_VisibleDockClientCount: Integer; safecall;
+    procedure _Set_Font(var Value: IFontDisp); safecall;
+    procedure Set_AxBorderStyle(Value: TxActiveFormBorderStyle); safecall;
+    procedure Set_AlignWithMargins(Value: WordBool); safecall;
+    procedure Set_AutoScroll(Value: WordBool); safecall;
+    procedure Set_AutoSize(Value: WordBool); safecall;
+    procedure Set_BorderWidth(Value: Integer); safecall;
+    procedure Set_Caption(const Value: WideString); safecall;
+    procedure Set_Color(Value: OLE_COLOR); safecall;
+    procedure Set_DockSite(Value: WordBool); safecall;
+    procedure Set_DoubleBuffered(Value: WordBool); safecall;
+    procedure Set_DropTarget(Value: WordBool); safecall;
+    procedure Set_Enabled(Value: WordBool); safecall;
+    procedure Set_Font(const Value: IFontDisp); safecall;
+    procedure Set_HelpFile(const Value: WideString); safecall;
+    procedure Set_KeyPreview(Value: WordBool); safecall;
+    procedure Set_ParentCustomHint(Value: WordBool); safecall;
+    procedure Set_ParentDoubleBuffered(Value: WordBool); safecall;
+    procedure Set_PixelsPerInch(Value: Integer); safecall;
+    procedure Set_PopupMode(Value: TxPopupMode); safecall;
+    procedure Set_PrintScale(Value: TxPrintScale); safecall;
+    procedure Set_Scaled(Value: WordBool); safecall;
+    procedure Set_ScreenSnap(Value: WordBool); safecall;
+    procedure Set_SnapBuffer(Value: Integer); safecall;
+    procedure Set_UseDockManager(Value: WordBool); safecall;
+    procedure Set_Visible(Value: WordBool); safecall;
+  public
+    { Public declarations }
+    procedure Initialize; override;
+  end;
+ var
+  dey:boolean;
+  f: TextFile;
+implementation
+
+uses ComObj,IniFiles, ComServ,UnitAdifData, KretitXmlExpImpl, UnitAdd_Edit,
+  Unit_interval, Unit_accfile;
+
+{$R *.DFM}
+
+{ TFormADIF }
+
+procedure TFormADIF.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage);
+begin
+  { Define property pages here.  Property pages are defined by calling
+    DefinePropertyPage with the class id of the page.  For example,
+      DefinePropertyPage(Class_FormADIFPage); }
+end;
+
+procedure TFormADIF.EventSinkChanged(const EventSink: IUnknown);
+begin
+  FEvents := EventSink as IFormADIFEvents;
+  inherited EventSinkChanged(EventSink);
+end;
+
+procedure TFormADIF.Initialize;
+begin
+  inherited Initialize;
+  OnActivate := ActivateEvent;
+  OnClick := ClickEvent;
+  OnCreate := CreateEvent;
+  OnDblClick := DblClickEvent;
+  OnDeactivate := DeactivateEvent;
+  OnDestroy := DestroyEvent;
+  OnKeyPress := KeyPressEvent;
+  OnMouseEnter := MouseEnterEvent;
+  OnMouseLeave := MouseLeaveEvent;
+  OnPaint := PaintEvent;
+end;
+
+function TFormADIF.Get_Active: WordBool;
+begin
+  Result := Active;
+end;
+
+function TFormADIF.Get_AxBorderStyle: TxActiveFormBorderStyle;
+begin
+  Result := Ord(AxBorderStyle);
+end;
+
+function TFormADIF.Get_AlignDisabled: WordBool;
+begin
+  Result := AlignDisabled;
+end;
+
+function TFormADIF.Get_AlignWithMargins: WordBool;
+begin
+  Result := AlignWithMargins;
+end;
+
+function TFormADIF.Get_AutoScroll: WordBool;
+begin
+  Result := AutoScroll;
+end;
+
+function TFormADIF.Get_AutoSize: WordBool;
+begin
+  Result := AutoSize;
+end;
+
+function TFormADIF.Get_BorderWidth: Integer;
+begin
+  Result := Integer(BorderWidth);
+end;
+
+function TFormADIF.Get_Caption: WideString;
+begin
+  Result := WideString(Caption);
+end;
+
+function TFormADIF.Get_Color: OLE_COLOR;
+begin
+  Result := OLE_COLOR(Color);
+end;
+
+function TFormADIF.Get_DockSite: WordBool;
+begin
+  Result := DockSite;
+end;
+
+function TFormADIF.Get_DoubleBuffered: WordBool;
+begin
+  Result := DoubleBuffered;
+end;
+
+function TFormADIF.Get_DropTarget: WordBool;
+begin
+  Result := DropTarget;
+end;
+
+function TFormADIF.Get_ExplicitHeight: Integer;
+begin
+  Result := ExplicitHeight;
+end;
+
+function TFormADIF.Get_ExplicitLeft: Integer;
+begin
+  Result := ExplicitLeft;
+end;
+
+function TFormADIF.Get_ExplicitTop: Integer;
+begin
+  Result := ExplicitTop;
+end;
+
+function TFormADIF.Get_ExplicitWidth: Integer;
+begin
+  Result := ExplicitWidth;
+end;
+
+function TFormADIF.Get_Enabled: WordBool;
+begin
+  Result := Enabled;
+end;
+
+function TFormADIF.Get_Font: IFontDisp;
+begin
+  GetOleFont(Font, Result);
+end;
+
+function TFormADIF.Get_HelpFile: WideString;
+begin
+  Result := WideString(HelpFile);
+end;
+
+function TFormADIF.Get_KeyPreview: WordBool;
+begin
+  Result := KeyPreview;
+end;
+
+function TFormADIF.Get_MouseInClient: WordBool;
+begin
+  Result := MouseInClient;
+end;
+
+function TFormADIF.Get_ParentCustomHint: WordBool;
+begin
+  Result := ParentCustomHint;
+end;
+
+function TFormADIF.Get_ParentDoubleBuffered: WordBool;
+begin
+  Result := ParentDoubleBuffered;
+end;
+
+function TFormADIF.Get_PixelsPerInch: Integer;
+begin
+  Result := PixelsPerInch;
+end;
+
+function TFormADIF.Get_PopupMode: TxPopupMode;
+begin
+  Result := Ord(PopupMode);
+end;
+
+function TFormADIF.Get_PrintScale: TxPrintScale;
+begin
+  Result := Ord(PrintScale);
+end;
+
+function TFormADIF.Get_Scaled: WordBool;
+begin
+  Result := Scaled;
+end;
+
+function TFormADIF.Get_ScreenSnap: WordBool;
+begin
+  Result := ScreenSnap;
+end;
+
+function TFormADIF.Get_SnapBuffer: Integer;
+begin
+  Result := SnapBuffer;
+end;
+
+function TFormADIF.Get_UseDockManager: WordBool;
+begin
+  Result := UseDockManager;
+end;
+
+function TFormADIF.Get_Visible: WordBool;
+begin
+  Result := Visible;
+end;
+
+function TFormADIF.Get_VisibleDockClientCount: Integer;
+begin
+  Result := VisibleDockClientCount;
+end;
+
+procedure TFormADIF._Set_Font(var Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TFormADIF.ActivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnActivate;
+end;
+
+procedure TFormADIF.ActiveFormCreate(Sender: TObject);
+begin
+
+Adif_Data:=tAdif_Data.Create(self);
+Formcust_file:=TFormcust_file.create(self);
+FormAcc_file:=TFormAcc_file.create(self);
+Form_Interval:=TForm_Interval.create(self);
+Kredit:=TKredit.Create(self);
+end;
+
+procedure TFormADIF.BitBtn2Click(Sender: TObject);
+begin
+kredit.ShowModal;
+end;
+
+procedure WriteString(S: string);
+begin
+
+  AssignFile(f, FilePAth); { Assigns the Filename }
+  Append(f); { Opens the file for editing }
+  Write(f, UTF8Encode(StringReplace(S, #13 + #10, '', [rfReplaceAll])));
+  Closefile(f);
+end;
+
+procedure TFormADIF.Button3Click(Sender: TObject);
+begin
+DBGrid1.DataSource.DataSet.Refresh;
+end;
+
+procedure TFormADIF.Button4Click(Sender: TObject);
+var filename,dir:string;
+  value1,value2 : string;
+begin
+
+InputQuery('Xml Fayl', 'XML FAylın adını daxil edin', value1)  ;
+if not DirectoryExists('C:\ADIF\REPORT\') then
+                    MKDIR('C:\ADIF\REPORT\');
+
+dir:='C:\ADIF\REPORT\';
+FileName:=dir+value1+'.xml' ;
+
+    AssignFile(f,filename);
+   Rewrite(f);
+Writeln(f,'<?xml version="1.0" encoding="UTF-8" ?>');
+Writeln(f,'</SWIFT_msg_fields>');
+   CloseFile(f);
+
+
+end;
+
+procedure TFormADIF.ClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnClick;
+end;
+
+procedure TFormADIF.CreateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnCreate;
+end;
+
+procedure TFormADIF.DblClickEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDblClick;
+end;
+
+procedure TFormADIF.DeactivateEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDeactivate;
+end;
+
+procedure TFormADIF.DestroyEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnDestroy;
+end;
+
+procedure TFormADIF.KeyPressEvent(Sender: TObject; var Key: Char);
+var
+  TempKey: Smallint;
+begin
+  TempKey := Smallint(Key);
+  if FEvents <> nil then FEvents.OnKeyPress(TempKey);
+  Key := Char(TempKey);
+end;
+
+procedure TFormADIF.MouseEnterEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnMouseEnter;
+end;
+
+procedure TFormADIF.MouseLeaveEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnMouseLeave;
+end;
+
+procedure TFormADIF.PaintEvent(Sender: TObject);
+begin
+  if FEvents <> nil then FEvents.OnPaint;
+end;
+
+procedure TFormADIF.Set_AxBorderStyle(Value: TxActiveFormBorderStyle);
+begin
+  AxBorderStyle := TActiveFormBorderStyle(Value);
+end;
+
+procedure TFormADIF.Set_AlignWithMargins(Value: WordBool);
+begin
+  AlignWithMargins := Value;
+end;
+
+procedure TFormADIF.Set_AutoScroll(Value: WordBool);
+begin
+  AutoScroll := Value;
+end;
+
+procedure TFormADIF.Set_AutoSize(Value: WordBool);
+begin
+  AutoSize := Value;
+end;
+
+procedure TFormADIF.Set_BorderWidth(Value: Integer);
+begin
+  BorderWidth := TBorderWidth(Value);
+end;
+
+procedure TFormADIF.Set_Caption(const Value: WideString);
+begin
+  Caption := TCaption(Value);
+end;
+
+procedure TFormADIF.Set_Color(Value: OLE_COLOR);
+begin
+  Color := TColor(Value);
+end;
+
+procedure TFormADIF.Set_DockSite(Value: WordBool);
+begin
+  DockSite := Value;
+end;
+
+procedure TFormADIF.Set_DoubleBuffered(Value: WordBool);
+begin
+  DoubleBuffered := Value;
+end;
+
+procedure TFormADIF.Set_DropTarget(Value: WordBool);
+begin
+  DropTarget := Value;
+end;
+
+procedure TFormADIF.Set_Enabled(Value: WordBool);
+begin
+  Enabled := Value;
+end;
+
+procedure TFormADIF.Set_Font(const Value: IFontDisp);
+begin
+  SetOleFont(Font, Value);
+end;
+
+procedure TFormADIF.Set_HelpFile(const Value: WideString);
+begin
+  HelpFile := string(Value);
+end;
+
+procedure TFormADIF.Set_KeyPreview(Value: WordBool);
+begin
+  KeyPreview := Value;
+end;
+
+procedure TFormADIF.Set_ParentCustomHint(Value: WordBool);
+begin
+  ParentCustomHint := Value;
+end;
+
+procedure TFormADIF.Set_ParentDoubleBuffered(Value: WordBool);
+begin
+  ParentDoubleBuffered := Value;
+end;
+
+procedure TFormADIF.Set_PixelsPerInch(Value: Integer);
+begin
+  PixelsPerInch := Value;
+end;
+
+procedure TFormADIF.Set_PopupMode(Value: TxPopupMode);
+begin
+  PopupMode := TPopupMode(Value);
+end;
+
+procedure TFormADIF.Set_PrintScale(Value: TxPrintScale);
+begin
+  PrintScale := TPrintScale(Value);
+end;
+
+procedure TFormADIF.Set_Scaled(Value: WordBool);
+begin
+  Scaled := Value;
+end;
+
+procedure TFormADIF.Set_ScreenSnap(Value: WordBool);
+begin
+  ScreenSnap := Value;
+end;
+
+procedure TFormADIF.Set_SnapBuffer(Value: Integer);
+begin
+  SnapBuffer := Value;
+end;
+
+procedure TFormADIF.Set_UseDockManager(Value: WordBool);
+begin
+  UseDockManager := Value;
+end;
+
+procedure TFormADIF.Set_Visible(Value: WordBool);
+begin
+  Visible := Value;
+end;
+
+procedure TFormADIF.XFBitBtn1Click(Sender: TObject);
+begin
+if dey=true then
+begin
+Formcust_file.ShowModal;
+end
+else
+Showmessage('  Heçbir məlumat yoxdu   ..!');
+
+end;
+
+procedure TFormADIF.XFBitBtn2Click(Sender: TObject);
+ var
+ a1,a2:string;
+begin
+Form_Interval.ShowModal;
+end;
+
+procedure TFormADIF.XFBitBtn3Click(Sender: TObject);
+begin
+FormAcc_file.ShowModal;
+end;
+
+procedure TFormADIF.XFButton3Click(Sender: TObject);
+begin
+dey:=true;
+Adif_Data.ods_cust.Open;
+if Adif_Data.ods_cust.RecordCount>0 then
+begin
+Adif_Data.ods_cust.refresh;
+Adif_Data.ods_cust.first;
+
+end;
+end;
+
+initialization
+  TActiveFormFactory.Create(
+    ComServer,
+    TActiveFormControl,
+    TFormADIF,
+    Class_FormADIF,
+    2,
+    '',
+    OLEMISC_SIMPLEFRAME or OLEMISC_ACTSLIKELABEL,
+    tmApartment);
+end.

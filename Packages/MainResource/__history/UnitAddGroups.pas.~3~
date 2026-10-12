@@ -1,0 +1,103 @@
+unit UnitAddGroups;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ExtCtrls, NLSLocalizer, StdCtrls, Buttons, DBCtrls;
+
+type
+  TFormAddGroups = class(TForm)
+    PanelM: TPanel;
+    GroupBoxName: TGroupBox;
+    EditGroupName: TEdit;
+    GroupBoxNBPercent: TGroupBox;
+    GroupBoxNLPercent: TGroupBox;
+    EditPercentNB: TEdit;
+    EditPercentNL: TEdit;
+    GroupBoxDebtAcc: TGroupBox;
+    GroupBoxCredAcc: TGroupBox;
+    BtnAdd: TBitBtn;
+    CBoxDebtAcc: TComboBox;
+    CBoxCredAcc: TComboBox;
+    GroupBox_main_acc: TGroupBox;
+    GroupBox_sale_acc: TGroupBox;
+    CB_main_acc: TDBLookupComboBox;
+    CB_sale_acc: TDBLookupComboBox;
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormActivate(Sender: TObject);
+    procedure BtnAddClick(Sender: TObject);
+    procedure CBoxDebtAccChange(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormAddGroups: TFormAddGroups;
+
+implementation
+           uses unitdata,sboapiDataModuleImpl, SBTranslateProc;
+{$R *.DFM}
+
+procedure TFormAddGroups.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+ if (ORD(Key) =VK_ESCAPE) then Close;
+end;
+
+procedure TFormAddGroups.FormActivate(Sender: TObject);
+var
+rec :integer;
+begin
+        DataModWares.ODSViewGr.Close;
+        DataModWares.ODSViewGr.Open;
+
+          CBoxDebtAcc.Clear;
+          CBoxCredAcc.Clear;
+      for rec := 1 to DataModWares.ODSViewGr.RecordCount do
+      begin
+        CBoxDebtAcc.Items.Add(DataModWares.ODSViewGr.FieldByName('Acc_No').AsString);
+        CBoxCredAcc.Items.Add(DataModWares.ODSViewGr.FieldByName('Acc_No').AsString);
+      DataModWares.ODSViewGr.Next;
+      end;
+
+end;
+
+procedure TFormAddGroups.FormCreate(Sender: TObject);
+begin
+SBTranslateProc.TranslateAllCompForms(Self,sboapiDataModule.OrPack_SL);
+end;
+
+procedure TFormAddGroups.BtnAddClick(Sender: TObject);
+begin
+   if (EditGroupName.Text<>'') and (EditPercentNB.Text<>'') and
+   (EditPercentNB.Text<>'')
+   and (EditPercentNL.Text<>'') and (CBoxCredAcc.Text<>'') and
+   (CBoxDebtAcc.Text<>'')
+   then
+   begin
+  DataModWares.SB_MAIN_RESOURCE.CallProcedure('add_groups',[EditGroupName.Text,
+                                  strtofloat(EditPercentNB.Text),
+                                                       CB_main_acc.KeyValue,
+                                                       CBoxDebtAcc.tag,
+                                                       CBoxCredAcc.tag,
+                                                       CB_sale_acc.KeyValue,
+                                                        strtofloat(EditPercentNL.Text)]);
+
+                             DataModWares.ODSGroups.Refresh;
+                           close;
+   end
+   else ShowMessage('Бош галан ханалар вар!');
+end;
+
+procedure TFormAddGroups.CBoxDebtAccChange(Sender: TObject);
+begin
+ with DataModWares.SB_MAIN_RESOURCE do
+  begin
+   (Sender as TComboBox).Tag:=CallIntegerFunction('GetAccountID',[(Sender as TComboBox).Text]);
+  end;
+end;
+
+end.

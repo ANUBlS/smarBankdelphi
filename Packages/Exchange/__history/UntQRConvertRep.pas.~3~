@@ -1,0 +1,34 @@
+unit UntQRConvertRep;
+
+interface
+
+uses Windows, SysUtils, Messages, Classes, Graphics, Controls,
+  StdCtrls, ExtCtrls, Forms, Quickrpt, QRCtrls;
+
+type
+  TQRConvertRep = class(TQuickRep)
+    procedure QuickRepBeforePrint(Sender: TCustomQuickRep;
+      var PrintReport: Boolean);
+  private
+
+  public
+
+  end;
+
+var
+  QRConvertRep: TQRConvertRep;
+
+implementation
+
+uses ExcangeDataModule,sboapiDataModuleImpl, SBTranslateProc;
+
+{$R *.DFM}
+
+procedure TQRConvertRep.QuickRepBeforePrint(Sender: TCustomQuickRep;
+  var PrintReport: Boolean);
+begin
+SBTranslateProc.TranslateAllCompQuickRep(Self,sboapiDataModule.OrPack_SL);
+
+end;
+
+end.
